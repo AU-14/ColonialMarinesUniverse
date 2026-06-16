@@ -4,7 +4,7 @@
   id: AU14JobWeaponsSpecialistBaseAbstract
   name: au14-job-name-govforweaponsspecialist
   description: au14-job-description-govforweaponsspecialist
-  icon: "AU14JobIconGovRifleman"
+  icon: "AU14JobIconGovWeaponsSpecialist"
   spawnMenuRoleName: Weapons Specialist (GOVFOR)
   startingGear: AU14GearGOVFORWeaponsSpecialist
   dummyStartingGear: AU14GearGOVFORRiflemanDummy
@@ -43,7 +43,7 @@
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_AU14/Interface/au14govforhud.rsi
-        state: govfor_background
+        state: govfor_ws
 
 - type: playTimeTracker
   id: AU14JobGOVFORWeaponsSpecialist

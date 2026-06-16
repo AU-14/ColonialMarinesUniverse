@@ -7,6 +7,9 @@
     color: "#8b36a6"
     jobs:
     - CMXenoBoiler
+    # CMU14
+    - CMXenoBull
+    # CMU14
     - CMXenoBurrower
     - CMXenoCarrier
     - CMXenoCrusher
@@ -23,6 +26,9 @@
     - CMXenoRunner
     - CMXenoSentinel
     - CMXenoSpitter
+    # CMU14
+    - CMXenoWarlock
+    # CMU14
     - CMXenoWarrior
 
 - type: entity
@@ -52,3 +58,6 @@
     - CMXenoCrusher
     - CMXenoPraetorian
     - CMXenoRavager
+    # CMU14
+    - CMXenoWarlock
+    # CMU14

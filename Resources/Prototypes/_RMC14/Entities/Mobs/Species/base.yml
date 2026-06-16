@@ -374,6 +374,9 @@
       8: 8
   - type: XenoToggleChargingKnockback
   - type: XenoToggleChargingParalyze
+  # CMU14
+  - type: CMUXenoBullChargeTarget
+  # CMU14
   - type: RMCMobStateDrawDepth
     drawDepths:
       Dead: BelowMobs

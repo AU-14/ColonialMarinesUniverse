@@ -4,7 +4,7 @@
   id: AU14JobRadioTelephoneOperatorBaseAbstract
   name: au14-job-name-radiotelephoneoperator
   description: au14-job-description-radiotelephoneoperator
-  icon: "AU14JobIconRTO"
+  icon: "AU14JobIconPlatoonSarge"
   spawnMenuRoleName: Fireteam Leader (GOVFOR)
   startingGear: AU14GearGOVFORRadioTelephoneOperator
   dummyStartingGear: AU14GearGOVFORRadioTelephoneOperatorDummy
@@ -40,7 +40,7 @@
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_AU14/Interface/au14govforhud.rsi
-        state: govfor_rto
+        state: govfor_ftl
 
 - type: playTimeTracker
   id: AU14JobGOVFORRadioTelephoneOperator

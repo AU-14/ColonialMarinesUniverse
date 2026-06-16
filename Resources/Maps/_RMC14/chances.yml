@@ -98629,7 +98629,7 @@ entities:
     - type: Transform
       pos: 7.5,33.5
       parent: 1
-- proto: RMCPickaxe
+- proto: AU14ToolPickaxe
   entities:
   - uid: 10201
     components:

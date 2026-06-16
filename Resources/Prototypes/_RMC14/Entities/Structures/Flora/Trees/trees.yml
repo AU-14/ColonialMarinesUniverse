@@ -13,7 +13,6 @@
     sprite: Objects/Decoration/Flora/flora_trees.rsi
     drawdepth: Overdoors
     offset: 0,0.9
-
   - type: Appearance
   - type: Flamability
     chance: 1.0
@@ -31,6 +30,9 @@
         density: 1000
         layer:
         - WallLayer
+  - type: Tag
+    tags:
+    - Tree
   - type: Damageable
     damageContainer: Inorganic
     damageModifierSet: Wood

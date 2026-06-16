@@ -55,7 +55,7 @@ public sealed partial class GeneralAnnounceSystem
             Preset = PresetAres,
             Target = AnnouncementTarget.All,
             Source = source,
-            SpeakerNameOverride = "A.R.E.S.",
+            SpeakerNameOverride = "APOLLO",
             SoundOverride = sound
         };
 

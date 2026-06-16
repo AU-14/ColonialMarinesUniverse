@@ -2164,7 +2164,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 20.5,-5.5
       parent: 1
-- proto: RMCPickaxe
+- proto: AU14ToolPickaxe
   entities:
   - uid: 253
     components:

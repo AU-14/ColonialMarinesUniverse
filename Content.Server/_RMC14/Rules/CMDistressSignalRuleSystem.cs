@@ -279,7 +279,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
     private void OnMapLoading(LoadingMapsEvent ev)
     {
 
-       // SelectRandomPlanet();
+        // SelectRandomPlanet();
         //Just in case the info text is not updated previousely
         GameTicker.UpdateInfoText();
     }
@@ -423,9 +423,9 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                 return xenoEnt;
             }
 
-            var totalXenos = (int) Math.Round(Math.Max(1, ev.PlayerPool.Count / _marinesPerXeno));
-            var totalSurvivors = (int) Math.Round(ev.PlayerPool.Count / _marinesPerSurvivor);
-            totalSurvivors = (int) Math.Clamp(totalSurvivors, _minimumSurvivors, _maximumSurvivors);
+            var totalXenos = (int)Math.Round(Math.Max(1, ev.PlayerPool.Count / _marinesPerXeno));
+            var totalSurvivors = (int)Math.Round(ev.PlayerPool.Count / _marinesPerSurvivor);
+            totalSurvivors = (int)Math.Clamp(totalSurvivors, _minimumSurvivors, _maximumSurvivors);
             var marines = ev.PlayerPool.Count - totalXenos - totalSurvivors;
             var jobSlotScaling = _config.GetCVar(RMCCVars.RMCJobSlotScaling);
             if (comp.DoJobSlotScaling && marines > 0 && jobSlotScaling)
@@ -488,7 +488,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                 if (jobPriorities.TryGetValue(comp.QueenJob, out var priority) &&
                     priority > JobPriority.Never)
                 {
-                    xenoCandidates[(int) priority].Add(id);
+                    xenoCandidates[(int)priority].Add(id);
                 }
             }
 
@@ -529,7 +529,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                     if (jobPriorities.TryGetValue(comp.XenoSelectableJob, out var priority) &&
                         priority > JobPriority.Never)
                     {
-                        xenoCandidates[(int) priority].Add(id);
+                        xenoCandidates[(int)priority].Add(id);
                     }
                 }
 
@@ -1129,7 +1129,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
             {
                 if (_prefsManager.TryGetCachedPreferences(player.UserId, out var preferences))
                 {
-                    var profile = (HumanoidCharacterProfile) preferences.GetProfile(preferences.SelectedCharacterIndex);
+                    var profile = (HumanoidCharacterProfile)preferences.GetProfile(preferences.SelectedCharacterIndex);
                     var jobPriorities = profile.GetJobPrioritiesForGamemode("DistressSignal");
                     if (jobPriorities.TryGetValue(distress.XenoSelectableJob, out var xenoPriority) &&
                         xenoPriority > JobPriority.Never)
@@ -1656,7 +1656,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
             component.AresGreetingDone = true;
 
             if (component.StartARESAnnouncements)
-                _marineAnnounce.AnnounceARESStaging(default, "ARES. Online. Good morning, marines.", component.AresGreetingAudio,"rmc-announcement-ares-online");
+                _marineAnnounce.AnnounceARESStaging(default, "APOLLO Nominal. Low-power standby concluded. Crew awakening from transit cryosleep. Good morning.", component.AresGreetingAudio, "rmc-announcement-ares-online");
         }
 
         if (!component.AresMapDone && announcementTime >= component.AresMapDelay)

@@ -1,8 +1,6 @@
 - type: job
   parent: AU14JobPlatoonCorpsmanBase
   id: AU14JobOpforPlatoonCorpsman
-  name: au14-job-name-opforplatooncorpsman
-  description: au14-job-description-opforplatooncorpsman
   icon: "AU14JobIconOPFORCorpsman"
   spawnMenuRoleName: Hospital Coprsman (OPFOR)
   supervisors: au14-job-supervisors-opfor

@@ -86952,7 +86952,7 @@ entities:
     - type: Transform
       pos: 62.5,89.5
       parent: 1
-- proto: RMCPickaxe
+- proto: AU14ToolPickaxe
   entities:
   - uid: 7368
     components:

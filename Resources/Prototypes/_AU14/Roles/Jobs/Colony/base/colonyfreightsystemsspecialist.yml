@@ -9,7 +9,7 @@
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCivilianFreightSystemsSpecialist
-  icon: "CMJobIconEmpty"
+  icon: "AU14JobIconCivilianFreightSystemsSpecialist"
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonyadministrator

@@ -2,11 +2,11 @@ rmc-announcement-author = Command
 rmc-announcement-author-shipside = Command Ship
 rmc-announcement-author-highcommand = UNMC High Command
 rmc-announcement-author-queen-mother = The Queen Mother
-rmc-announcement-message = [font size=16][bold][color=#CECECE]{$author} Announcement[/color][/bold][/font][font size=16][color=red]
+rmc-announcement-message = [font size=16][bold][color=#CECECE]{$author} Priority Announcement[/color][/bold][/font][font size=16][color=red]
 
     {$message}
 
-rmc-announcement-message-signed = [font size=16][bold][color=#CECECE]{$author} Announcement[/color][/bold][/font][font size=16][color=red]
+rmc-announcement-message-signed = [font size=16][bold][color=#CECECE]{$author} Priority Announcement[/color][/bold][/font][font size=16][color=red]
 
     {$message}[italic]
 
@@ -17,7 +17,7 @@ rmc-announcement-message-raw = [font size=16][bold][color=#CECECE]{$author}[/col
 
     {$message}
 
-rmc-announcement-ares-message = [color=#CECECE][font size=16][bold]ARES v3.2 Operation Staging Order[/bold][/font][/color][color=red][font size=16][bold]
+rmc-announcement-ares-message = [color=#CECECE][font size=16][bold]APOLLO MK.II - Priority Operational Broadcast[/bold][/font][/color][color=red][font size=16][bold]
 
     {$message}[/bold][/font][/color]
 
@@ -25,7 +25,7 @@ rmc-announcement-ares-lz-designated = Command Order Issued:
 
     {$name} has been designated as the primary landing zone.
 
-rmc-announcement-ares-online = [color=#CECECE][font size=16][bold]ARES Online[/bold][/font][/color][color=red][font size=16][bold]
+rmc-announcement-ares-online = [color=#CECECE][font size=16][bold]APOLLO Central A.I. - System Online[/bold][/font][/color][color=red][font size=16][bold]
 
     {$message}[/bold][/font][/color]
 
@@ -50,7 +50,7 @@ rmc-announcement-dropship-hijack = Unscheduled dropship departure detected from 
 
 rmc-announcement-dropship-hijack-hive = The Queen has commanded the metal bird to depart for the metal hive in the sky! Rejoice!
 
-rmc-announcement-ares-command = [color=#CECECE][font size=16][bold]ARES v3.2[/bold][/font][/color][color=red][font size=16]
+rmc-announcement-ares-command = [color=#CECECE][font size=16][bold]APOLLO MK.II[/bold][/font][/color][color=red][font size=16]
 
     {$message}[/font][/color]
 

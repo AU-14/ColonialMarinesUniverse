@@ -1,0 +1,19 @@
+- type: entity
+  parent: ActionXenoBase
+  id: CMUActionXenoZJump
+  name: Z-Jump
+  description: Leap upward and forward, crossing to the Z level above if the path is clear.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: pounce
+    useDelay: 10
+  - type: TargetAction
+    range: 7
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:CMUXenoZJumpActionEvent
+  - type: ActionBlockIfResting
+  - type: RMCDazeableAction

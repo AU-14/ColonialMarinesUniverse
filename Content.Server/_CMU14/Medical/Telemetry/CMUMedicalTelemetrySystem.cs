@@ -13,6 +13,7 @@ using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared._RMC14.Medical.Defibrillator;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared.Body.Part;
+using Content.Shared.Damage;
 using Content.Shared.GameTicking;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Log;
@@ -49,12 +50,12 @@ public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
         SubscribeLocalEvent<HitLocationComponent, HitLocationResolvedEvent>(OnHitResolved);
         SubscribeLocalEvent<Content.Shared._CMU14.Medical.BodyPart.BodyPartHealthComponent, BoneFracturedEvent>(OnFractureSpawn);
         SubscribeLocalEvent<OrganStageChangedEvent>(OnOrganStage);
-        SubscribeLocalEvent<CMSurgeryCompleteEvent>(OnSurgeryDone);
-        SubscribeLocalEvent<RMCDefibrillatorAttemptEvent>(OnDefibAttempt);
+        SubscribeLocalEvent<CMSurgeryTargetComponent, CMSurgeryCompleteEvent>(OnSurgeryDone);
+        SubscribeLocalEvent<DamageableComponent, RMCDefibrillatorAttemptEvent>(OnDefibAttempt);
         SubscribeLocalEvent<CMUPainShockStatusComponent, ComponentStartup>(OnPainShockEntered);
         SubscribeLocalEvent<BodyPartComponent, BodyPartSeveredEvent>(OnBodyPartSevered);
         SubscribeLocalEvent<InternalBleedingChangedEvent>(OnInternalBleedingChanged);
-        SubscribeLocalEvent<CMUShrapnelChangedEvent>(OnShrapnelChanged);
+        SubscribeLocalEvent<Content.Shared._CMU14.Medical.BodyPart.BodyPartHealthComponent, CMUShrapnelChangedEvent>(OnShrapnelChanged);
         SubscribeLocalEvent<RoundEndSummaryStatsEvent>(OnRoundEndStats);
 
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundEnd);
@@ -80,7 +81,7 @@ public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
         _organStageTransitions[args.Body] = prior + 1;
     }
 
-    private void OnSurgeryDone(ref CMSurgeryCompleteEvent args)
+    private void OnSurgeryDone(Entity<CMSurgeryTargetComponent> ent, ref CMSurgeryCompleteEvent args)
     {
         _surgeriesPerMarine.TryGetValue(args.Patient, out var prior);
         _surgeriesPerMarine[args.Patient] = prior + 1;
@@ -89,7 +90,7 @@ public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
             _limbsReattached++;
     }
 
-    private void OnDefibAttempt(RMCDefibrillatorAttemptEvent ev)
+    private void OnDefibAttempt(Entity<DamageableComponent> ent, ref RMCDefibrillatorAttemptEvent ev)
     {
         _defibAttempts++;
         if (ev.Cancelled)
@@ -116,7 +117,7 @@ public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
             _internalBleedsStarted++;
     }
 
-    private void OnShrapnelChanged(ref CMUShrapnelChangedEvent args)
+    private void OnShrapnelChanged(Entity<Content.Shared._CMU14.Medical.BodyPart.BodyPartHealthComponent> ent, ref CMUShrapnelChangedEvent args)
     {
         if (args.Removed)
             _shrapnelExtracted++;

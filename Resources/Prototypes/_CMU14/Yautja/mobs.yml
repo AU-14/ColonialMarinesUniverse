@@ -93,6 +93,7 @@
     - CMUYautjaPain
     emoteCooldown: 8
     hiddenFromChatWindow: true
+  - type: MotionDetectorTracked
 
 - type: entity
   parent: CMUMobYautja

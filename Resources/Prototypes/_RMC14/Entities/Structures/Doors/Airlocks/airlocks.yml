@@ -12,9 +12,6 @@
   - type: Occluder
   - type: PaintableAirlock
     department: CMSquad
-  - type: Tag
-    tags:
-      - ForceNoFixRotations
 
 - type: entity
   parent: CMAirlock

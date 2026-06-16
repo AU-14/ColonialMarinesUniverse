@@ -4,8 +4,14 @@ engine_version = "v277.0.0"
 [game]
 defaultpreset = "ColonyFall"
 # Straight in-game baby
+# map= "USSBushRedux"
+# lobbyenabled = false
 lobbyenabled = true
 role_timers = false
+
+[rmc]
+distress_xenos_minimum = 0  # stop blocking distress testing
+lobby_min_players = 1       # localhost
 
 [events]
 enabled = false

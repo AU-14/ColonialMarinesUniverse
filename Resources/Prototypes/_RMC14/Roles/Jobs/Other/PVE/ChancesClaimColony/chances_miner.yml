@@ -41,7 +41,7 @@
     jumpsuit: RMCJumpsuitCivilianRed
     outerClothing: CMUtilityVest
     mask: RMCMaskRebreather
-    belt: RMCPickaxe
+    belt: AU14ToolPickaxe
 
 - type: entity
   parent: CMSpawnPointJobBase

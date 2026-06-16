@@ -73,6 +73,9 @@
     canEvolveWithoutGranter: true
     max: 200
     evolvesTo:
+    # CMU14
+    - CMXenoBull
+    # CMU14
     - CMXenoLurker
     evolvesToWithoutPoints:
     - CMXenoQueen

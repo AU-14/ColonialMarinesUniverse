@@ -1,9 +1,7 @@
 - type: job
   parent: AU14JobSectionSergeantBase
   id: AU14JobOpforSectionSergeant
-  name: au14-job-name-opforSSG
-  description: au14-job-description-opforSSG
-  icon: "AU14JobIconOPFORPlatoonSarge"
+  icon: "AU14JobIconOPFORPlatoonSarge" # shares the same id as the opfor squad sergeant (platoonsquadsergeant.yml)
   spawnMenuRoleName: Platoon Sergeant (OPFOR)
   supervisors: au14-job-supervisors-opfor
   startingGear: AU14GearopforSectionSergeant

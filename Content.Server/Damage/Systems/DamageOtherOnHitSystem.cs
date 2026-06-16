@@ -15,6 +15,7 @@ using Content.Shared.Effects;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Throwing;
 using Content.Shared.Humanoid;
+using Content.Shared.Whitelist;
 using Content.Shared.Wires;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
@@ -33,6 +34,7 @@ namespace Content.Server.Damage.Systems
         [Dependency] private RMCReagentSystem _reagent = default!;
         [Dependency] private SharedCameraRecoilSystem _sharedCameraRecoil = default!;
         [Dependency] private SharedColorFlashEffectSystem _color = default!;
+        [Dependency] private EntityWhitelistSystem _whitelist = default!;
 
         public override void Initialize()
         {
@@ -44,6 +46,10 @@ namespace Content.Server.Damage.Systems
         private void OnDoHit(EntityUid uid, DamageOtherOnHitComponent component, ThrowDoHitEvent args)
         {
             if (TerminatingOrDeleted(args.Target))
+                return;
+
+            if (TryComp<DamageOtherBlacklistComponent>(uid, out var blacklist)
+                && _whitelist.IsValid(blacklist.Blacklist, args.Target))
                 return;
 
             var damage = GetThrownHitDamage(uid, args.Target, component.Damage);

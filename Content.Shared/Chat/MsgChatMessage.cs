@@ -111,6 +111,26 @@ namespace Content.Shared.Chat
             Display = display ?? CreateDefaultDisplay(channel);
         }
 
+        // CMU14
+        public ChatMessage(ChatMessage copyFrom)
+        {
+            Channel = copyFrom.Channel;
+            Message = copyFrom.Message;
+            WrappedMessage = copyFrom.WrappedMessage;
+            SenderEntity = copyFrom.SenderEntity;
+            SenderKey = copyFrom.SenderKey;
+            HideChat = copyFrom.HideChat;
+            MessageColorOverride = copyFrom.MessageColorOverride;
+            AudioPath = copyFrom.AudioPath;
+            AudioVolume = copyFrom.AudioVolume;
+            Display = copyFrom.Display;
+            HidePopup = copyFrom.HidePopup;
+            SpeechStyleClass = copyFrom.SpeechStyleClass;
+            RepeatCheckSender = copyFrom.RepeatCheckSender;
+            Read = copyFrom.Read;
+        }
+        // CMU14
+
         private static ChatDisplayMetadata CreateDefaultDisplay(ChatChannel channel)
         {
             return new ChatDisplayMetadata(channel switch

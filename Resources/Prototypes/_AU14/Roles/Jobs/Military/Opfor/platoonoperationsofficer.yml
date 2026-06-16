@@ -1,8 +1,6 @@
 - type: job
   parent: AU14JobPlatOpBase
   id: AU14JobOpforPlatOp
-  name: au14-job-name-opforplatop
-  description: au14-job-description-opforplatop
   icon: "AU14JobIconOPFOROpsOfc"
   spawnMenuRoleName: Junior Officer (OPFOR)
   supervisors: au14-job-supervisors-opfor

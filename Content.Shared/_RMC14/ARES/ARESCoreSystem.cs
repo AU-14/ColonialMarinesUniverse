@@ -171,17 +171,17 @@ public sealed partial class ARESCoreSystem : EntitySystem
     }
 
     /// <summary>
-    /// Will return the marine ARES core if none exists it will spawn an entity with the name ARES v3.2 and use it for announcements.
+    /// Will return the marine ARES core if none exists it will spawn an entity with the name APOLLO and use it for announcements.
     /// </summary>
     /// <returns></returns>
     [Obsolete("Use TryGetARES() Methods")]
     public EntityUid EnsureMarineARES()
     {
-        if (TryGetARES(MarineFaction , out var alert) && alert != null)
+        if (TryGetARES(MarineFaction, out var alert) && alert != null)
             return alert.Value;
 
         var uid = Spawn();
-        _metaData.SetEntityName(uid, "ARES v3.2");
+        _metaData.SetEntityName(uid, "APOLLO MK.II");
         return (uid);
     }
 

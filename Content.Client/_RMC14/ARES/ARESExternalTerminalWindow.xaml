@@ -7,8 +7,8 @@
     MinSize="900 600">
     <Control Name="LoginScreen" Access="Public">
         <BoxContainer Orientation="Vertical" VerticalAlignment="Center">
-            <RichTextLabel Text="[font size= 20]ARES v3.2 Interface" HorizontalAlignment="Center"/>
-            <RichTextLabel Text="[font size= 15]We-Ya Management" HorizontalAlignment="Center"/>
+            <RichTextLabel Text="[font size= 20]APOLLO Interface" HorizontalAlignment="Center"/>
+            <RichTextLabel Text="[font size= 15]We-Yu Management" HorizontalAlignment="Center"/>
             <Control SetHeight="30"/>
             <RichTextLabel Text="[font size= 15]Version 6.6.6" HorizontalAlignment="Center"/>
             <Control SetHeight="30"/>
@@ -102,7 +102,7 @@
                                         <Button Text="ASRS Logs" SetHeight="30" SetWidth="200" Margin="2.5 0 2.5 0" StyleClasses="OpenBoth"/>
                                         <Button Text="Announcement Logs" SetHeight="30" SetWidth="200" Margin="2.5 0 2.5 0" StyleClasses="OpenBoth"/>
                                         <Button Text="Medical Logs" SetHeight="30" SetWidth="200" Margin="2.5 0 2.5 0" StyleClasses="OpenBoth"/>
-                                        <Button Text="ARES Logs" SetHeight="30" SetWidth="200" Margin="2.5 0 2.5 0" StyleClasses="OpenBoth"/>
+                                        <Button Text="APOLLO Logs" SetHeight="30" SetWidth="200" Margin="2.5 0 2.5 0" StyleClasses="OpenBoth"/>
                                     </BoxContainer>
                                 </BoxContainer>
                         </BoxContainer>

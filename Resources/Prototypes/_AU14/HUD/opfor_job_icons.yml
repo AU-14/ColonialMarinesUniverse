@@ -14,6 +14,13 @@
 
 - type: jobIcon
   parent: CMJobIconBase
+  id: AU14JobIconOPFORDoctor
+  icon:
+    sprite: _AU14/Interface/au14opforjobicons.rsi
+    state: doctor
+
+- type: jobIcon
+  parent: CMJobIconBase
   id: AU14JobIconOPFORDCC
   icon:
     sprite: _AU14/Interface/au14opforjobicons.rsi
@@ -38,7 +45,7 @@
   id: AU14JobIconOPFORPlatoonSarge
   icon:
     sprite: _AU14/Interface/au14opforjobicons.rsi
-    state: platoonsergeant
+    state: sergeant
 
 - type: jobIcon
   parent: CMJobIconBase
@@ -52,21 +59,21 @@
   id: AU14JobIconOPFORRFN
   icon:
     sprite: _AU14/Interface/au14opforjobicons.rsi
-    state: rfn
+    state: mp
 
 - type: jobIcon
   parent: CMJobIconBase
   id: AU14JobIconOPFORSarge
   icon:
     sprite: _AU14/Interface/au14opforjobicons.rsi
-    state: sergeant
+    state: ftl
 
 - type: jobIcon
   parent: CMJobIconBase
   id: AU14JobIconOPFORRTO
   icon:
     sprite: _AU14/Interface/au14opforjobicons.rsi
-    state: rto
+    state: auxtech
 
 - type: jobIcon
   parent: CMJobIconBase

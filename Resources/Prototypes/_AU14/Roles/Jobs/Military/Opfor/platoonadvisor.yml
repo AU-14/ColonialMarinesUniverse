@@ -1,8 +1,6 @@
 - type: job
   parent: AU14JobadvisorBase
   id: AU14JobOPFORadvisor
-  name: au14-job-name-opforadvisor
-  description: au14-job-description-opforadvisor
   icon: "AU14JobIconOPFORAdvisor"
   spawnMenuRoleName: Platoon Advisor (OPFOR)
   startingGear: AU14GearOPFORadvisor

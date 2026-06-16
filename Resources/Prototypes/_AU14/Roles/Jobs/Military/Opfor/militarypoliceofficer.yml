@@ -23,7 +23,7 @@
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_AU14/Interface/au14opforhud.rsi
-        state: rfn
+        state: mp
 
 - type: startingGear
   id: AU14GearOPFORMilitaryPoliceMan

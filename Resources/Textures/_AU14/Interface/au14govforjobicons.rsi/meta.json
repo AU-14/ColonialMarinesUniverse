@@ -1,20 +1,29 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "github.com/cmss13-devs/cmss13/blob/56fbf11f797463f88aac015cafef04d6d99499ec/icons/mob/hud/marine_hud.dmi, upp_co upp_com upp_commed upp_comsl upp_doc upp_lt upp_med upp_mp upp_pvt upp_sapper upp_sl upp_sl_a upp_slt upp_spec upp_synth upp_vc upp_xo edited by Sigma Draconis, freelancer icons provost team lead icon tse icons and pve icons by github noctynral. rmc_adjutant made by crazy1112345 (discord), based on staff_officer, hudsquad_spec_sniper taken from https://github.com/cmss13-devs/cmss13/blob/2a8e4b86f79b1b75ffa94bf5a721fb5c52b51598/icons/mob/hud/marine_hud.dmi, working_joe, rifleman by potatoed on Discord.",
+  "copyright": "github.com/cmss13-devs/cmss13/blob/56fbf11f797463f88aac015cafef04d6d99499ec/icons/mob/hud/marine_hud.dmi, upp_co upp_com upp_commed upp_comsl upp_doc upp_lt upp_med upp_mp upp_pvt upp_sapper upp_sl upp_sl_a upp_slt upp_spec upp_synth upp_vc upp_xo edited by Sigma Draconis (nickname), freelancer icons provost team lead icon tse icons and pve icons by noctynral (github). rmc_adjutant made by crazy1112345, based on staff_officer, hudsquad_spec_sniper taken from https://github.com/cmss13-devs/cmss13/blob/2a8e4b86f79b1b75ffa94bf5a721fb5c52b51598/icons/mob/hud/marine_hud.dmi | As of commit https://github.com/AU-14/ColonialMarinesUniverse/commit/891bf8fd14acca5b6211c746a926f99a52c3467f , almost all sprites in this folder have been changed, reworked or updated in some way by hutcrime. Appearance of a sprite name or reference in the following list indicates no visual change, or any change at all made in said sprite as of mentioned commit; govfor_dcc, govfor_k9handler, govfor_po. | Following sprites have been renamed: govfor_rto to govfor_auxtech, govfor_rfn to govfor_mp, govfor_platoonsergeant to govfor_ftl. | govfor_doctor, govfor_ws made by hutcrime. | rifleman, working_joe made by potatoed. | All authors mentioned are mentioned as their usernames (preferrably), or nicknames (if their username is unknown), on Discord.",
   "size": {
     "x": 16,
     "y": 16
   },
   "states": [
     {
+      "name": "govfor_adj"
+    },
+    {
+      "name": "govfor_advisor"
+    },
+    {
       "name": "govfor_afn"
     },
     {
-      "name": "govfor_corpsman"
+      "name": "govfor_auxtech"
     },
     {
-      "name": "govfor_k9handler"
+      "name": "govfor_background"
+    },
+    {
+      "name": "govfor_corpsman"
     },
     {
       "name": "govfor_ct"
@@ -23,46 +32,67 @@
       "name": "govfor_dcc"
     },
     {
-      "name": "govfor_opsofc"
-    },
-    {
-      "name": "govfor_advisor"
-    },
-    {
-      "name": "govfor_syn"
-    },
-    {
-      "name": "govfor_platco"
-    },
-    {
-      "name": "govfor_platoonsergeant"
-    },
-    {
-      "name": "govfor_po"
-    },
-    {
-      "name": "govfor_rto"
-    },
-    {
-      "name": "govfor_rfn"
-    },
-    {
-      "name": "govfor_sergeant"
-    },
-    {
-      "name": "working_joe"
-    },
-    {
-      "name": "rifleman"
-    },
-    {
-      "name": "govfor_adj"
+      "name": "govfor_doctor"
     },
     {
       "name": "govfor_eo"
     },
     {
+      "name": "govfor_ftl"
+    },
+    {
       "name": "govfor_io"
+    },
+    {
+      "name": "govfor_k9handler"
+    },
+    {
+      "name": "govfor_mp"
+    },
+    {
+      "name": "govfor_opsofc"
+    },
+    {
+      "name": "govfor_platco"
+    },
+    {
+      "name": "govfor_po"
+    },
+    {
+      "name": "govfor_sergeant"
+    },
+    {
+      "name": "govfor_synth"
+    },
+	{
+      "name": "govfor_ws"
+    },
+	{
+      "name": "rifleman"
+    },
+	{
+      "name": "working_joe"
+    },
+	{
+      "name": "old_govfor_afn"
+    },
+	{
+      "name": "old_govfor_opsofc"
+    },
+	{
+      "name": "old_govfor_platco"
+    },
+	{
+      "name": "old_govfor_platoonsergeant"
+    },
+	{
+      "name": "old_govfor_rfn"
+    },
+	{
+      "name": "old_govfor_rto"
+    },
+	{
+      "name": "old_govfor_sergeant"
     }
   ]
 }

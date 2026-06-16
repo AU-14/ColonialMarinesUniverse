@@ -62,7 +62,7 @@
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_AU14/Interface/au14govforhud.rsi
-        state: govfor_rfn
+        state: govfor_mp
 
 - type: playTimeTracker
   id: AU14JobGOVFORMilitaryPoliceMan

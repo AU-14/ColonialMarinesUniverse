@@ -7,6 +7,13 @@
 
 - type: jobIcon
   parent: CMJobIconBase
+  id: AU14JobIconDoctor
+  icon:
+    sprite: _AU14/Interface/au14govforjobicons.rsi
+    state: govfor_doctor
+
+- type: jobIcon
+  parent: CMJobIconBase
   id: AU14JobIconCorpsman
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
@@ -38,7 +45,7 @@
   id: AU14JobIconPlatoonSarge
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
-    state: govfor_platoonsergeant
+    state: govfor_ftl
 
 - type: jobIcon
   parent: CMJobIconBase
@@ -52,7 +59,7 @@
   id: AU14JobIconRFN
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
-    state: govfor_rfn
+    state: govfor_mp
 
 - type: jobIcon
   parent: CMJobIconBase
@@ -66,7 +73,7 @@
   id: AU14JobIconRTO
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
-    state: govfor_rto
+    state: govfor_auxtech
 
 - type: jobIcon
   parent: CMJobIconBase
@@ -80,7 +87,7 @@
   id: AU14JobIconGovSynth
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
-    state: govfor_syn
+    state: govfor_synth
 
 - type: jobIcon
   parent: CMJobIconBase
@@ -123,3 +130,10 @@
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
     state: govfor_io
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconGovWeaponsSpecialist
+  icon:
+    sprite: _AU14/Interface/au14govforjobicons.rsi
+    state: govfor_ws

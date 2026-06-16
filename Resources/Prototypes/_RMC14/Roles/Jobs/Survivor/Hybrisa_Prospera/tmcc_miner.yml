@@ -24,7 +24,7 @@
   parent: RMCGearSurvivorBaseNoBackpack
   id: RMCGearSurvivorHybrisaTMCCMiner
   inhand:
-    - RMCPickaxe
+    - AU14ToolPickaxe
 
 - type: entity
   parent: CMSpawnPointJobBase
