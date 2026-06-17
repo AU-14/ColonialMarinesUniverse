@@ -165,6 +165,7 @@ public abstract partial class SharedChatSystem : EntitySystem
         if (input.Length == 0)
             return false;
 
+        var hive = _hive.GetHive(source);
         // TODO RMC14 replace all of this with something else when chat code isnt a joke
         if (input.StartsWith(RadioCommonPrefix))
         {
@@ -175,7 +176,7 @@ public abstract partial class SharedChatSystem : EntitySystem
 
             // RMC14
             if (channel?.ID == HivemindChannel.Id &&
-                !_xenoEvolution.HasLiving<XenoEvolutionGranterComponent>(1))
+                !_xenoEvolution.HasLiving<XenoEvolutionGranterComponent>(1, null, hive))
             {
                 if (!quiet)
                     _popup.PopupEntity(Loc.GetString("rmc-no-queen-hivemind-chat"), source, source, PopupType.LargeCaution);
@@ -196,7 +197,7 @@ public abstract partial class SharedChatSystem : EntitySystem
         if (input.Length < 2 || char.IsWhiteSpace(input[1]))
         {
             output = SanitizeMessageCapital(input[1..].TrimStart());
-            if (HasComp<XenoComponent>(source))
+            if (HasComp<XenoComponent>(source) && !IsHivebrokenXeno(source))
                 return false;
 
             if (!quiet)
@@ -242,7 +243,7 @@ public abstract partial class SharedChatSystem : EntitySystem
         RaiseLocalEvent(source, ref prefixEv);
         channel = prefixEv.Channel;
 
-        if (HasComp<XenoComponent>(source) && channel == null)
+        if (HasComp<XenoComponent>(source) && !IsHivebrokenXeno(source) && channel == null)
             return false;
         // RMC14
 
@@ -349,7 +350,12 @@ public abstract partial class SharedChatSystem : EntitySystem
     /// Injects a tag around all found instances of a specific string in a ChatMessage.
     /// Excludes strings inside other tags and brackets.
     /// </summary>
-    public static string InjectTagAroundString(ChatMessage message, string targetString, string tag, string? tagParameter)
+    public static string InjectTagAroundString(
+        ChatMessage message,
+        string targetString,
+        string tag,
+        string? tagParameter,
+        bool targetIsRegex = false)
     {
         var rawmsg = message.WrappedMessage;
         var targetPattern = targetIsRegex ? targetString : Regex.Escape(targetString);
