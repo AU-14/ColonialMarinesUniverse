@@ -1,5 +1,5 @@
 using Content.Server.Administration.Logs;
-using Content.Shared._CMU14.Medical.BodyPart.Events;
+using Content.Shared._CMU14.Medical.Human.Damage.Events;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Xenonids;

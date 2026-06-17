@@ -80176,7 +80176,7 @@ entities:
     - type: Transform
       pos: 110.5,236.5
       parent: 1
-- proto: CMUAutodocConsole
+- proto: CMUBodyScannerConsole
   entities:
   - uid: 2527
     components:
@@ -80190,7 +80190,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 16.5,23.5
       parent: 1
-- proto: CMUAutodocPod
+- proto: CMOperatingTable
   entities:
   - uid: 2529
     components:

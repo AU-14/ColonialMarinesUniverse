@@ -11365,7 +11365,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: -9.5,-35.5
       parent: 1
-- proto: CMUAutodocConsole
+- proto: CMUBodyScannerConsole
   entities:
   - uid: 456
     components:
@@ -11379,7 +11379,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -15.5,48.5
       parent: 1
-- proto: CMUAutodocPod
+- proto: CMOperatingTable
   entities:
   - uid: 1839
     components:
@@ -11553,8 +11553,6 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
-      nextRegenTick: 44.3006421
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11562,8 +11560,6 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
-      nextRegenTick: 44.3006421
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11571,8 +11567,6 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
-      nextRegenTick: 44.3006421
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11582,8 +11576,6 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
-      nextRegenTick: 44.3006421
     - type: Heart
       nextPulseUpdate: 39.3006421
     - type: Physics
@@ -11593,8 +11585,6 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
-      nextRegenTick: 44.3006421
     - type: Heart
       nextPulseUpdate: 39.3006421
     - type: Physics
@@ -11604,8 +11594,6 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
-      nextRegenTick: 44.3006421
     - type: Heart
       nextPulseUpdate: 39.3006421
     - type: Physics
@@ -11617,8 +11605,6 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
-      nextRegenTick: 44.3006421
     - type: Kidneys
       nextSelfDamageTick: 35.3006421
     - type: Physics
@@ -11628,8 +11614,6 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
-      nextRegenTick: 44.3006421
     - type: Kidneys
       nextSelfDamageTick: 35.3006421
     - type: Physics
@@ -11639,8 +11623,6 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
-      nextRegenTick: 44.3006421
     - type: Kidneys
       nextSelfDamageTick: 35.3006421
     - type: Physics
@@ -11652,8 +11634,6 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
-      nextRegenTick: 44.3006421
     - type: Liver
       nextSelfDamageTick: 35.3006421
     - type: Physics
@@ -11663,8 +11643,6 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
-      nextRegenTick: 44.3006421
     - type: Liver
       nextSelfDamageTick: 35.3006421
     - type: Physics
@@ -11674,8 +11652,6 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
-      nextRegenTick: 44.3006421
     - type: Liver
       nextSelfDamageTick: 35.3006421
     - type: Physics
@@ -11687,8 +11663,6 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
-      nextRegenTick: 44.3006421
     - type: Lungs
       nextAsphyxTick: 35.3006421
     - type: Physics
@@ -11698,8 +11672,6 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
-      nextRegenTick: 44.3006421
     - type: Lungs
       nextAsphyxTick: 35.3006421
     - type: Physics
@@ -11709,8 +11681,6 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
-      nextRegenTick: 44.3006421
     - type: Lungs
       nextAsphyxTick: 35.3006421
     - type: Physics
@@ -11722,8 +11692,6 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
-      nextRegenTick: 44.3006421
     - type: CMUStomach
       nextVomitCheck: 44.3006421
     - type: Physics
@@ -11733,8 +11701,6 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
-      nextRegenTick: 44.3006421
     - type: CMUStomach
       nextVomitCheck: 44.3006421
     - type: Physics
@@ -11744,8 +11710,6 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
-      nextRegenTick: 44.3006421
     - type: CMUStomach
       nextVomitCheck: 44.3006421
     - type: Physics

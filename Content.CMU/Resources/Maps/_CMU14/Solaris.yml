@@ -123249,7 +123249,7 @@ entities:
     - type: Transform
       pos: 86.5,-134.5
       parent: 1
-- proto: CMSemioticAutodoc
+- proto: CMSemioticMedical
   entities:
   - uid: 2731
     components:
