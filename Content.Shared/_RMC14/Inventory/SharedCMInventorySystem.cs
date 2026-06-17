@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Input;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Xenonids.Devour;
 using Content.Shared.Administration.Logs;
+using Content.Shared.Blocking;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Database;
@@ -81,6 +82,7 @@ public abstract partial class SharedCMInventorySystem : EntitySystem
 
         SubscribeLocalEvent<GunComponent, IsUnholsterableEvent>(AllowUnholster);
         SubscribeLocalEvent<MeleeWeaponComponent, IsUnholsterableEvent>(AllowUnholster);
+        SubscribeLocalEvent<BlockingComponent, IsUnholsterableEvent>(AllowUnholster);
 
         SubscribeLocalEvent<CMItemSlotsComponent, MapInitEvent>(OnSlotsFillMapInit);
         SubscribeLocalEvent<CMItemSlotsComponent, AfterAutoHandleStateEvent>(OnSlotsComponentHandleState);
