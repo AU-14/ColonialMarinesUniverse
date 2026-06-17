@@ -1073,7 +1073,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         if (TryComp(bracer, out YautjaBracerComponent? masterBracer))
             return masterBracer.LockSound;
 
-        return new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_bracer.wav");
+        return new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav");
     }
 
     private void SendPrivateChat(EntityUid source, EntityUid target, string text)

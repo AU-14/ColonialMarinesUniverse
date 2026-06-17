@@ -584412,7 +584412,7 @@ entities:
     - type: Transform
       pos: -62.5,-27.5
       parent: 1
-- proto: RMCPickaxe
+- proto: AU14ToolPickaxe
   entities:
   - uid: 86618
     components:

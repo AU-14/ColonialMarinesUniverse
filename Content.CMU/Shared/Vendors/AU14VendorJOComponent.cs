@@ -1,4 +1,4 @@
-﻿using Robust.Shared.GameStates;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using System.Collections.Generic;
 using Content.Shared._RMC14.Vendors;
@@ -13,5 +13,5 @@ namespace Content.Shared._AU14.Vendors;
 public sealed partial class AU14VendorJOComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public Dictionary<int, int> GlobalSharedVends = new Dictionary<int, int>();
+    public Dictionary<EntProtoId, int> GlobalSharedVends = new();
 }

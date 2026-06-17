@@ -125,9 +125,6 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
             case YautjaBracerPanelCommand.CreateHumanStabilisingCrystal:
                 _utility.TryCreateHumanStabilisingCrystal(ent, args.Actor);
                 break;
-            case YautjaBracerPanelCommand.CreateHealingCapsule:
-                _utility.TryCreateHealingCapsule(ent, args.Actor);
-                break;
             case YautjaBracerPanelCommand.CreateHuntingTrap:
                 _utility.TryCreateHuntingTrap(ent, args.Actor);
                 break;
