@@ -1,11 +1,11 @@
 meta:
   format: 7
   category: Map
-  engineVersion: 277.0.0
+  engineVersion: v264.0.2-fix-physics
   forkId: ""
   forkVersion: ""
-  time: 06/10/2026 04:29:20
-  entityCount: 40160
+  time: 06/10/2026 03:20:02
+  entityCount: 40163
 maps:
 - 1
 grids:
@@ -303,6 +303,33 @@ entities:
     - type: MetaData
       name: Mapping LV-327 Port Neroid
     - type: Transform
+    - type: DayNightCycle
+      timeEntries:
+      - time: 0.04
+        colorHex: '#02020B'
+      - time: 0.08
+        colorHex: '#241A13'
+      - time: 0.17
+        colorHex: '#3B2A1E'
+      - time: 0.25
+        colorHex: '#7A5436'
+      - time: 0.33
+        colorHex: '#DCA865'
+      - time: 0.42
+        colorHex: '#FFF4E3'
+      - time: 0.5
+      - time: 0.58
+        colorHex: '#F7F7F7'
+      - time: 0.67
+        colorHex: '#F6C07E'
+      - time: 0.75
+        colorHex: '#DC8F42'
+      - time: 0.83
+        colorHex: '#5A3A69'
+      - time: 0.92
+        colorHex: '#02020B'
+      - time: 1
+        colorHex: '#000000'
     - type: RMCWeatherCycle
       minTimeBetweenEvents: 20
       weatherEvents:
@@ -452,7 +479,7 @@ entities:
           version: 7
         3,2:
           ind: 3,2
-          tiles: AgAAAAAAAAIAAAAAAAAMAQAAAAAADAEAAAAAAGcAAAAAAABoAAAAAAAAJAAAAAAAADQAAAAAAABpAAAAAAAAaQAAAAAAAGkAAAAAAAAFAAAAAAAADAEAAAAAAA0BAAAAAAANAQAAAAAADgEAAAAAAAwBAAAAAAACAAAAAAAADAEAAAAAAAwBAAAAAABnAAAAAAAAaAAAAAAAAAwBAAAAAABqAAAAAAAAMgAAAAAAADIAAAAAAAAyAAAAAAAAawAAAAAAAAwBAAAAAAANAQAAAAAADQEAAAAAAA4BAAAAAAAMAQAAAAAAIQAAAAAAAAwBAAAAAAAMAQAAAAAAZwAAAAAAAGgAAAAAAAAMAQAAAAAAAgAAAAAAAAIAAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAAZAAAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAGcAAAAAAABoAAAAAAAADAEAAAAAAGwAAAAAAABtAAAAAAAADAEAAAAAAB8AAAAAAAAfAAAAAAAAHwAAAAAAAB8AAAAAAAAMAQAAAAAAGwAAAAAAAG4AAAAAAABuAAAAAAAAbgAAAAAAAG4AAAAAAABvAAAAAAAAaAAAAAAAAAwBAAAAAAA0AAAAAAAANQAAAAAAAG0AAAAAAAAfAAAAAAAAHwAAAAAAAB8AAAAAAAAfAAAAAAAADAEAAAAAABsAAAAAAABxAAAAAAAAcQAAAAAAAHEAAAAAAABxAAAAAAAAcQAAAAAAAHIAAAAAAAAMAQAAAAAANAAAAAAAAAwBAAAAAAAFAAAAAAAAHwAAAAAAAB8AAAAAAAAfAAAAAAAAHwAAAAAAAAwBAAAAAAAbAAAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAAKQAAAAAAACkAAAAAAAApAAAAAAAADAEAAAAAADQAAAAAAAAMAQAAAAAABQAAAAAAAB8AAAAAAAAfAAAAAAAAHwAAAAAAAB8AAAAAAAAMAQAAAAAAGwAAAAAAAHMAAAAAAAB0AAAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAA0AAAAAAAADAEAAAAAADUAAAAAAABtAAAAAAAAHwAAAAAAAB8AAAAAAAAfAAAAAAAADAEAAAAAABsAAAAAAAACAAAAAAAAdQAAAAAAAHMAAAAAAABzAAAAAAAAcwAAAAAAAHQAAAAAAAAMAQAAAAAANAAAAAAAAAIAAAAAAAACAAAAAAAANQAAAAAAADYAAAAAAAA2AAAAAAAAbQAAAAAAAAIAAAAAAAAbAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAB2AAAAAAAAAgAAAAAAADQAAAAAAAAMAQAAAAAADAEAAAAAADEAAAAAAAAyAAAAAAAAMgAAAAAAAGsAAAAAAAACAAAAAAAAGwAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAAdgAAAAAAAAIAAAAAAAA0AAAAAAAAAgAAAAAAAAIAAAAAAAAFAAAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAABsAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAHYAAAAAAAAMAQAAAAAAagAAAAAAADIAAAAAAAAyAAAAAAAAawAAAAAAAAwBAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAAbAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAB2AAAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAAGwAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEQAAAAAAAAwBAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAABsAAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAABzAAAAAAAAcwAAAAAAAAwBAAAAAAAMAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAAbAAAAAAAAFgAAAAAAABYAAAAAAAAWAAAAAAAAFgAAAAAAABYAAAAAAAAWAAAAAAAAGwAAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAAGwAAAAAAAA==
+          tiles: DAEAAAAAAAIAAAAAAAAMAQAAAAAADAEAAAAAAGcAAAAAAABoAAAAAAAAJAAAAAAAADQAAAAAAABpAAAAAAAAaQAAAAAAAGkAAAAAAAAFAAAAAAAADAEAAAAAAA0BAAAAAAANAQAAAAAADgEAAAAAAAwBAAAAAAACAAAAAAAADAEAAAAAAAwBAAAAAABnAAAAAAAAaAAAAAAAAAwBAAAAAABqAAAAAAAAMgAAAAAAADIAAAAAAAAyAAAAAAAAawAAAAAAAAwBAAAAAAANAQAAAAAADQEAAAAAAA4BAAAAAAAMAQAAAAAAIQAAAAAAAAwBAAAAAAAMAQAAAAAAZwAAAAAAAGgAAAAAAAAMAQAAAAAAAgAAAAAAAAIAAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAAZAAAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAGcAAAAAAABoAAAAAAAADAEAAAAAAGwAAAAAAABtAAAAAAAADAEAAAAAAB8AAAAAAAAfAAAAAAAAHwAAAAAAAB8AAAAAAAAMAQAAAAAAGwAAAAAAAG4AAAAAAABuAAAAAAAAbgAAAAAAAG4AAAAAAABvAAAAAAAAaAAAAAAAAAwBAAAAAAA0AAAAAAAANQAAAAAAAG0AAAAAAAAfAAAAAAAAHwAAAAAAAB8AAAAAAAAfAAAAAAAADAEAAAAAABsAAAAAAABxAAAAAAAAcQAAAAAAAHEAAAAAAABxAAAAAAAAcQAAAAAAAHIAAAAAAAAMAQAAAAAANAAAAAAAAAwBAAAAAAAFAAAAAAAAHwAAAAAAAB8AAAAAAAAfAAAAAAAAHwAAAAAAAAwBAAAAAAAbAAAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAAKQAAAAAAACkAAAAAAAApAAAAAAAADAEAAAAAADQAAAAAAAAMAQAAAAAABQAAAAAAAB8AAAAAAAAfAAAAAAAAHwAAAAAAAB8AAAAAAAAMAQAAAAAAGwAAAAAAAHMAAAAAAAB0AAAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAA0AAAAAAAADAEAAAAAADUAAAAAAABtAAAAAAAAHwAAAAAAAB8AAAAAAAAfAAAAAAAADAEAAAAAABsAAAAAAAACAAAAAAAAdQAAAAAAAHMAAAAAAABzAAAAAAAAcwAAAAAAAHQAAAAAAAAMAQAAAAAANAAAAAAAAAIAAAAAAAACAAAAAAAANQAAAAAAADYAAAAAAAA2AAAAAAAAbQAAAAAAAAIAAAAAAAAbAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAB2AAAAAAAAAgAAAAAAADQAAAAAAAAMAQAAAAAADAEAAAAAADEAAAAAAAAyAAAAAAAAMgAAAAAAAGsAAAAAAAACAAAAAAAAGwAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAAdgAAAAAAAAIAAAAAAAA0AAAAAAAAAgAAAAAAAAIAAAAAAAAFAAAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAABsAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAHYAAAAAAAAMAQAAAAAAagAAAAAAADIAAAAAAAAyAAAAAAAAawAAAAAAAAwBAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAAbAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAB2AAAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAAGwAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEQAAAAAAAAwBAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAABsAAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAABzAAAAAAAAcwAAAAAAAAwBAAAAAAAMAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAAbAAAAAAAAFgAAAAAAABYAAAAAAAAWAAAAAAAAFgAAAAAAABYAAAAAAAAWAAAAAAAAGwAAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAAGwAAAAAAAA==
           version: 7
         3,1:
           ind: 3,1
@@ -468,7 +495,7 @@ entities:
           version: 7
         2,2:
           ind: 2,2
-          tiles: DQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAAWAAAAAAAAFgAAAAAAABYAAAAAAAAMAQAAAAAAewAAAAAAAHwAAAAAAAAMAQAAAAAADAEAAAAAAAIAAAAAAAACAAAAAAAAAgAAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADAEAAAAAAA4AAAAAAAAMAQAAAAAADAEAAAAAAHsAAAAAAAB8AAAAAAAADAEAAAAAAAwBAAAAAAACAAAAAAAADAEAAAAAAAwBAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAAwBAAAAAAAOAAAAAAAADgAAAAAAAAwBAAAAAAB7AAAAAAAAfAAAAAAAAAwBAAAAAAAMAQAAAAAAIQAAAAAAAAwBAAAAAAAMAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAA4AAAAAAAAMAQAAAAAAewAAAAAAAHwAAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAAMAQAAAAAADgAAAAAAAAwBAAAAAAAOAAAAAAAADAEAAAAAAHsAAAAAAAB9AAAAAAAAbgAAAAAAAG4AAAAAAABuAAAAAAAAbgAAAAAAAG4AAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADAEAAAAAAA4AAAAAAAAOAAAAAAAADgAAAAAAAA4AAAAAAAB+AAAAAAAAcQAAAAAAAHEAAAAAAABxAAAAAAAAcQAAAAAAAHEAAAAAAABxAAAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAAfAAAAAAAAHwAAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADAEAAAAAAAsAAAAAAAALAAAAAAAADAEAAAAAAH8AAAAAAABzAAAAAAAAcwAAAAAAAHMAAAAAAABzAAAAAAAAcwAAAAAAAHMAAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAAwBAAAAAAALAAAAAAAACwAAAAAAAB8AAAAAAAATAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAIAAAAAAAAACAAAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAACBAAAAAAAABgAAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADAEAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAMAQAAAAAAgQAAAAAAAAYAAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAAwBAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAADAEAAAAAAIEAAAAAAAAGAAAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAAMAQAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAACBAAAAAAAABgAAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADAEAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAMAQAAAAAAEwAAAAAAABAAAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAAcAAAAAAAAFgAAAAAAABYAAAAAAAAWAAAAAAAAFgAAAAAAAA==
+          tiles: DQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAAWAAAAAAAAFgAAAAAAABYAAAAAAAAMAQAAAAAAewAAAAAAAHwAAAAAAAAMAQAAAAAADAEAAAAAAAIAAAAAAAAMAQAAAAAADAEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADAEAAAAAAA4AAAAAAAAMAQAAAAAADAEAAAAAAHsAAAAAAAB8AAAAAAAADAEAAAAAAAwBAAAAAAACAAAAAAAADAEAAAAAAAwBAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAAwBAAAAAAAOAAAAAAAADgAAAAAAAAwBAAAAAAB7AAAAAAAAfAAAAAAAAAwBAAAAAAAMAQAAAAAAIQAAAAAAAAwBAAAAAAAMAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAA4AAAAAAAAMAQAAAAAAewAAAAAAAHwAAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAAMAQAAAAAADgAAAAAAAAwBAAAAAAAOAAAAAAAADAEAAAAAAHsAAAAAAAB9AAAAAAAAbgAAAAAAAG4AAAAAAABuAAAAAAAAbgAAAAAAAG4AAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADAEAAAAAAA4AAAAAAAAOAAAAAAAADgAAAAAAAA4AAAAAAAB+AAAAAAAAcQAAAAAAAHEAAAAAAABxAAAAAAAAcQAAAAAAAHEAAAAAAABxAAAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAAfAAAAAAAAHwAAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADAEAAAAAAAsAAAAAAAALAAAAAAAADAEAAAAAAH8AAAAAAABzAAAAAAAAcwAAAAAAAHMAAAAAAABzAAAAAAAAcwAAAAAAAHMAAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAAwBAAAAAAALAAAAAAAACwAAAAAAAB8AAAAAAAATAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAIAAAAAAAAACAAAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAACBAAAAAAAABgAAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADAEAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAMAQAAAAAAgQAAAAAAAAYAAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAAwBAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAADAEAAAAAAIEAAAAAAAAGAAAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAAMAQAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAACBAAAAAAAABgAAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADAEAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAMAQAAAAAAEwAAAAAAABAAAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADAEAAAAAAAwBAAAAAAAMAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAANAQAAAAAADQEAAAAAAA0BAAAAAAAcAAAAAAAAFgAAAAAAABYAAAAAAAAWAAAAAAAAFgAAAAAAAA==
           version: 7
         2,1:
           ind: 2,1
@@ -9819,12 +9846,12 @@ entities:
         31,21: RMCAreaPortNereidSouthWestJungle
         31,20: RMCAreaPortNereidSouthWestJungle
         31,19: RMCAreaPortNereidSouthWestJungle
-        31,18: CMUAreaPortNereidSouthLZ1Comms
-        31,17: CMUAreaPortNereidSouthLZ1Comms
-        31,16: CMUAreaPortNereidSouthLZ1Comms
-        31,15: CMUAreaPortNereidSouthLZ1Comms
-        31,14: CMUAreaPortNereidSouthLZ1Comms
-        31,13: CMUAreaPortNereidSouthLZ1Comms
+        31,18: RMCAreaPortNereidSouthWestJungle
+        31,17: RMCAreaPortNereidSouthWestJungle
+        31,16: RMCAreaPortNereidSouthWestJungle
+        31,15: RMCAreaPortNereidSouthWestJungle
+        31,14: RMCAreaPortNereidSouthWestJungle
+        31,13: RMCAreaPortNereidSouthWestJungle
         31,12: RMCAreaPortNereidSouthWestJungle
         31,11: RMCAreaPortNereidSouthWestJungle
         31,10: RMCAreaPortNereidSouthWestJungle
@@ -9852,12 +9879,12 @@ entities:
         32,21: RMCAreaPortNereidSouthWestJungle
         32,20: RMCAreaPortNereidSouthWestJungle
         32,19: RMCAreaPortNereidSouthWestJungle
-        32,18: CMUAreaPortNereidSouthLZ1Comms
-        32,17: CMUAreaPortNereidSouthLZ1Comms
-        32,16: CMUAreaPortNereidSouthLZ1Comms
-        32,15: CMUAreaPortNereidSouthLZ1Comms
-        32,14: CMUAreaPortNereidSouthLZ1Comms
-        32,13: CMUAreaPortNereidSouthLZ1Comms
+        32,18: RMCAreaPortNereidSouthWestJungle
+        32,17: RMCAreaPortNereidSouthWestJungle
+        32,16: RMCAreaPortNereidSouthWestJungle
+        32,15: RMCAreaPortNereidSouthWestJungle
+        32,14: RMCAreaPortNereidSouthWestJungle
+        32,13: RMCAreaPortNereidSouthWestJungle
         32,12: RMCAreaPortNereidSouthWestJungle
         32,11: RMCAreaPortNereidSouthWestJungle
         32,10: RMCAreaPortNereidSouthWestJungle
@@ -9885,12 +9912,12 @@ entities:
         33,21: RMCAreaPortNereidSouthWestJungle
         33,20: RMCAreaPortNereidSouthWestJungle
         33,19: RMCAreaPortNereidSouthWestJungle
-        33,18: CMUAreaPortNereidSouthLZ1Comms
-        33,17: CMUAreaPortNereidSouthLZ1Comms
-        33,16: CMUAreaPortNereidSouthLZ1Comms
-        33,15: CMUAreaPortNereidSouthLZ1Comms
-        33,14: CMUAreaPortNereidSouthLZ1Comms
-        33,13: CMUAreaPortNereidSouthLZ1Comms
+        33,18: RMCAreaPortNereidSouthWestJungle
+        33,17: RMCAreaPortNereidSouthWestJungle
+        33,16: RMCAreaPortNereidSouthWestJungle
+        33,15: RMCAreaPortNereidSouthWestJungle
+        33,14: RMCAreaPortNereidSouthWestJungle
+        33,13: RMCAreaPortNereidSouthWestJungle
         33,12: RMCAreaPortNereidSouthWestJungle
         33,11: RMCAreaPortNereidSouthWestJungle
         33,10: RMCAreaPortNereidSouthWestJungle
@@ -9918,12 +9945,12 @@ entities:
         34,21: RMCAreaPortNereidSouthWestJungle
         34,20: RMCAreaPortNereidSouthWestJungle
         34,19: RMCAreaPortNereidSouthWestJungle
-        34,18: CMUAreaPortNereidSouthLZ1Comms
-        34,17: CMUAreaPortNereidSouthLZ1Comms
-        34,16: CMUAreaPortNereidSouthLZ1Comms
-        34,15: CMUAreaPortNereidSouthLZ1Comms
-        34,14: CMUAreaPortNereidSouthLZ1Comms
-        34,13: CMUAreaPortNereidSouthLZ1Comms
+        34,18: RMCAreaPortNereidSouthWestJungle
+        34,17: RMCAreaPortNereidSouthWestJungle
+        34,16: RMCAreaPortNereidSouthWestJungle
+        34,15: RMCAreaPortNereidSouthWestJungle
+        34,14: RMCAreaPortNereidSouthWestJungle
+        34,13: RMCAreaPortNereidSouthWestJungle
         34,12: RMCAreaPortNereidSouthWestJungle
         34,11: RMCAreaPortNereidSouthWestJungle
         34,10: RMCAreaPortNereidSouthWestJungle
@@ -9951,12 +9978,12 @@ entities:
         35,21: RMCAreaPortNereidSouthWestJungle
         35,20: RMCAreaPortNereidSouthWestJungle
         35,19: RMCAreaPortNereidSouthWestJungle
-        35,18: CMUAreaPortNereidSouthLZ1Comms
-        35,17: CMUAreaPortNereidSouthLZ1Comms
-        35,16: CMUAreaPortNereidSouthLZ1Comms
-        35,15: CMUAreaPortNereidSouthLZ1Comms
-        35,14: CMUAreaPortNereidSouthLZ1Comms
-        35,13: CMUAreaPortNereidSouthLZ1Comms
+        35,18: RMCAreaPortNereidSouthWestJungle
+        35,17: RMCAreaPortNereidSouthWestJungle
+        35,16: RMCAreaPortNereidSouthWestJungle
+        35,15: RMCAreaPortNereidSouthWestJungle
+        35,14: RMCAreaPortNereidSouthWestJungle
+        35,13: RMCAreaPortNereidSouthWestJungle
         35,12: RMCAreaPortNereidSouthWestJungle
         35,11: RMCAreaPortNereidSouthWestJungle
         35,10: RMCAreaPortNereidSouthWestJungle
@@ -10648,12 +10675,12 @@ entities:
         36,21: RMCAreaPortNereidSouthWestJungle
         36,20: RMCAreaPortNereidSouthWestJungle
         36,19: RMCAreaPortNereidSouthWestJungle
-        36,18: CMUAreaPortNereidSouthLZ1Comms
-        36,17: CMUAreaPortNereidSouthLZ1Comms
-        36,16: CMUAreaPortNereidSouthLZ1Comms
-        36,15: CMUAreaPortNereidSouthLZ1Comms
-        36,14: CMUAreaPortNereidSouthLZ1Comms
-        36,13: CMUAreaPortNereidSouthLZ1Comms
+        36,18: RMCAreaPortNereidSouthWestJungle
+        36,17: RMCAreaPortNereidSouthWestJungle
+        36,16: RMCAreaPortNereidSouthWestJungle
+        36,15: RMCAreaPortNereidSouthWestJungle
+        36,14: RMCAreaPortNereidSouthWestJungle
+        36,13: RMCAreaPortNereidSouthWestJungle
         36,12: RMCAreaPortNereidSouthWestJungle
         36,11: RMCAreaPortNereidSouthWestJungle
         36,10: RMCAreaPortNereidSouthWestJungle
@@ -12025,7 +12052,7 @@ entities:
         110,41: RMCAreaPortNereidSpaceport
         110,40: RMCAreaPortNereidSpaceport
         110,39: RMCAreaPortNereidSpaceport
-        111,63: CMUAreaPortNereidNorthLZ2Comms
+        111,63: RMCAreaPortNereidSpaceport
         111,62: RMCAreaPortNereidSpaceport
         111,61: RMCAreaPortNereidSpaceport
         111,60: RMCAreaPortNereidSpaceport
@@ -12050,7 +12077,7 @@ entities:
         111,41: RMCAreaPortNereidSpaceport
         111,40: RMCAreaPortNereidSpaceport
         111,39: RMCAreaPortNereidSpaceport
-        112,63: CMUAreaPortNereidNorthLZ2Comms
+        112,63: RMCAreaPortNereidSpaceport
         112,62: RMCAreaPortNereidSpaceport
         112,61: RMCAreaPortNereidSpaceport
         112,60: RMCAreaPortNereidSpaceport
@@ -12075,7 +12102,7 @@ entities:
         112,41: RMCAreaPortNereidSpaceport
         112,40: RMCAreaPortNereidSpaceport
         112,39: RMCAreaPortNereidSpaceport
-        113,63: CMUAreaPortNereidNorthLZ2Comms
+        113,63: RMCAreaPortNereidSpaceport
         113,62: RMCAreaPortNereidSpaceport
         113,61: RMCAreaPortNereidSpaceport
         113,60: RMCAreaPortNereidSpaceport
@@ -12100,7 +12127,7 @@ entities:
         113,41: RMCAreaPortNereidSpaceport
         113,40: RMCAreaPortNereidSpaceport
         113,39: RMCAreaPortNereidSpaceport
-        114,63: CMUAreaPortNereidNorthLZ2Comms
+        114,63: RMCAreaPortNereidSpaceport
         114,62: RMCAreaPortNereidSpaceport
         114,61: RMCAreaPortNereidSpaceport
         114,60: RMCAreaPortNereidSpaceport
@@ -13484,53 +13511,53 @@ entities:
         110,66: RMCAreaPortNereidSouthEastJungle
         110,64: RMCAreaPortNereidSouthEastJungle
         111,70: RMCAreaPortNereidSouthEastJungle
-        111,69: CMUAreaPortNereidNorthLZ2Comms
-        111,68: CMUAreaPortNereidNorthLZ2Comms
-        111,67: CMUAreaPortNereidNorthLZ2Comms
-        111,66: CMUAreaPortNereidNorthLZ2Comms
+        111,69: RMCAreaPortNereidSouthEastJungle
+        111,68: RMCAreaPortNereidSouthEastJungle
+        111,67: RMCAreaPortNereidSouthEastJungle
+        111,66: RMCAreaPortNereidSouthEastJungle
         111,71: RMCAreaPortNereidSouthEastJungle
-        111,65: CMUAreaPortNereidNorthLZ2Comms
+        111,65: RMCAreaPortNereidSouthEastJungle
         112,71: RMCAreaPortNereidSouthEastJungle
         112,70: RMCAreaPortNereidSouthEastJungle
-        111,64: CMUAreaPortNereidNorthLZ2Comms
-        112,69: CMUAreaPortNereidNorthLZ2Comms
-        112,67: CMUAreaPortNereidNorthLZ2Comms
-        112,68: CMUAreaPortNereidNorthLZ2Comms
-        112,65: CMUAreaPortNereidNorthLZ2Comms
-        112,64: CMUAreaPortNereidNorthLZ2Comms
+        111,64: RMCAreaPortNereidSouthEastJungle
+        112,69: RMCAreaPortNereidSouthEastJungle
+        112,67: RMCAreaPortNereidSouthEastJungle
+        112,68: RMCAreaPortNereidSouthEastJungle
+        112,65: RMCAreaPortNereidSouthEastJungle
+        112,64: RMCAreaPortNereidSouthEastJungle
         113,70: RMCAreaPortNereidSouthEastJungle
         113,71: RMCAreaPortNereidSouthEastJungle
-        112,66: CMUAreaPortNereidNorthLZ2Comms
-        113,69: CMUAreaPortNereidNorthLZ2Comms
-        113,67: CMUAreaPortNereidNorthLZ2Comms
-        113,68: CMUAreaPortNereidNorthLZ2Comms
-        113,66: CMUAreaPortNereidNorthLZ2Comms
-        113,65: CMUAreaPortNereidNorthLZ2Comms
-        113,64: CMUAreaPortNereidNorthLZ2Comms
+        112,66: RMCAreaPortNereidSouthEastJungle
+        113,69: RMCAreaPortNereidSouthEastJungle
+        113,67: RMCAreaPortNereidSouthEastJungle
+        113,68: RMCAreaPortNereidSouthEastJungle
+        113,66: RMCAreaPortNereidSouthEastJungle
+        113,65: RMCAreaPortNereidSouthEastJungle
+        113,64: RMCAreaPortNereidSouthEastJungle
         114,71: RMCAreaPortNereidSouthEastJungle
         114,70: RMCAreaPortNereidSouthEastJungle
-        114,69: CMUAreaPortNereidNorthLZ2Comms
-        114,68: CMUAreaPortNereidNorthLZ2Comms
-        114,67: CMUAreaPortNereidNorthLZ2Comms
-        114,66: CMUAreaPortNereidNorthLZ2Comms
-        114,65: CMUAreaPortNereidNorthLZ2Comms
-        114,64: CMUAreaPortNereidNorthLZ2Comms
+        114,69: RMCAreaPortNereidSouthEastJungle
+        114,68: RMCAreaPortNereidSouthEastJungle
+        114,67: RMCAreaPortNereidSouthEastJungle
+        114,66: RMCAreaPortNereidSouthEastJungle
+        114,65: RMCAreaPortNereidSouthEastJungle
+        114,64: RMCAreaPortNereidSouthEastJungle
         115,71: RMCAreaPortNereidSouthEastJungle
         115,70: RMCAreaPortNereidSouthEastJungle
-        115,69: CMUAreaPortNereidNorthLZ2Comms
-        115,68: CMUAreaPortNereidNorthLZ2Comms
-        115,67: CMUAreaPortNereidNorthLZ2Comms
-        115,66: CMUAreaPortNereidNorthLZ2Comms
-        115,65: CMUAreaPortNereidNorthLZ2Comms
-        115,64: CMUAreaPortNereidNorthLZ2Comms
+        115,69: RMCAreaPortNereidSouthEastJungle
+        115,68: RMCAreaPortNereidSouthEastJungle
+        115,67: RMCAreaPortNereidSouthEastJungle
+        115,66: RMCAreaPortNereidSouthEastJungle
+        115,65: RMCAreaPortNereidSouthEastJungle
+        115,64: RMCAreaPortNereidSouthEastJungle
         116,71: RMCAreaPortNereidSouthEastJungle
         116,70: RMCAreaPortNereidSouthEastJungle
-        116,69: CMUAreaPortNereidNorthLZ2Comms
-        116,68: CMUAreaPortNereidNorthLZ2Comms
-        116,67: CMUAreaPortNereidNorthLZ2Comms
-        116,66: CMUAreaPortNereidNorthLZ2Comms
-        116,65: CMUAreaPortNereidNorthLZ2Comms
-        116,64: CMUAreaPortNereidNorthLZ2Comms
+        116,69: RMCAreaPortNereidSouthEastJungle
+        116,68: RMCAreaPortNereidSouthEastJungle
+        116,67: RMCAreaPortNereidSouthEastJungle
+        116,66: RMCAreaPortNereidSouthEastJungle
+        116,65: RMCAreaPortNereidSouthEastJungle
+        116,64: RMCAreaPortNereidSouthEastJungle
         117,71: RMCAreaPortNereidSouthEastJungle
         117,70: RMCAreaPortNereidSouthEastJungle
         117,69: RMCAreaPortNereidSouthEastJungle
@@ -17282,12 +17309,12 @@ entities:
         78,14: RMCAreaPortNereidSouthEastJungle
         78,15: RMCAreaPortNereidSouthEastJungle
         78,16: RMCAreaPortNereidSouthEastJungle
-        78,17: CMUAreaPortNereidSouthLZ2Comms
-        78,18: CMUAreaPortNereidSouthLZ2Comms
-        78,19: CMUAreaPortNereidSouthLZ2Comms
-        78,20: CMUAreaPortNereidSouthLZ2Comms
-        78,21: CMUAreaPortNereidSouthLZ2Comms
-        78,22: CMUAreaPortNereidSouthLZ2Comms
+        78,17: RMCAreaPortNereidSouthEastJungle
+        78,18: RMCAreaPortNereidSouthEastJungle
+        78,19: RMCAreaPortNereidSouthEastJungle
+        78,20: RMCAreaPortNereidSouthEastJungle
+        78,21: RMCAreaPortNereidSouthEastJungle
+        78,22: RMCAreaPortNereidSouthEastJungle
         78,23: RMCAreaPortNereidSouthEastJungle
         78,24: RMCAreaPortNereidSouthEastJungle
         78,25: RMCAreaPortNereidSouthEastJungle
@@ -17316,12 +17343,12 @@ entities:
         77,14: RMCAreaPortNereidSouthEastJungle
         77,15: RMCAreaPortNereidSouthEastJungle
         77,16: RMCAreaPortNereidSouthEastJungle
-        77,17: CMUAreaPortNereidSouthLZ2Comms
-        77,18: CMUAreaPortNereidSouthLZ2Comms
-        77,19: CMUAreaPortNereidSouthLZ2Comms
-        77,20: CMUAreaPortNereidSouthLZ2Comms
-        77,21: CMUAreaPortNereidSouthLZ2Comms
-        77,22: CMUAreaPortNereidSouthLZ2Comms
+        77,17: RMCAreaPortNereidSouthEastJungle
+        77,18: RMCAreaPortNereidSouthEastJungle
+        77,19: RMCAreaPortNereidSouthEastJungle
+        77,20: RMCAreaPortNereidSouthEastJungle
+        77,21: RMCAreaPortNereidSouthEastJungle
+        77,22: RMCAreaPortNereidSouthEastJungle
         77,23: RMCAreaPortNereidSouthEastJungle
         77,24: RMCAreaPortNereidSouthEastJungle
         77,25: RMCAreaPortNereidSouthEastJungle
@@ -17350,12 +17377,12 @@ entities:
         76,14: RMCAreaPortNereidSouthEastJungle
         76,15: RMCAreaPortNereidSouthEastJungle
         76,16: RMCAreaPortNereidSouthEastJungle
-        76,17: CMUAreaPortNereidSouthLZ2Comms
-        76,18: CMUAreaPortNereidSouthLZ2Comms
-        76,19: CMUAreaPortNereidSouthLZ2Comms
-        76,20: CMUAreaPortNereidSouthLZ2Comms
-        76,21: CMUAreaPortNereidSouthLZ2Comms
-        76,22: CMUAreaPortNereidSouthLZ2Comms
+        76,17: RMCAreaPortNereidSouthEastJungle
+        76,18: RMCAreaPortNereidSouthEastJungle
+        76,19: RMCAreaPortNereidSouthEastJungle
+        76,20: RMCAreaPortNereidSouthEastJungle
+        76,21: RMCAreaPortNereidSouthEastJungle
+        76,22: RMCAreaPortNereidSouthEastJungle
         76,23: RMCAreaPortNereidSouthEastJungle
         76,24: RMCAreaPortNereidSouthEastJungle
         76,25: RMCAreaPortNereidSouthEastJungle
@@ -17384,12 +17411,12 @@ entities:
         75,14: RMCAreaPortNereidSouthEastJungle
         75,15: RMCAreaPortNereidSouthEastJungle
         75,16: RMCAreaPortNereidSouthEastJungle
-        75,17: CMUAreaPortNereidSouthLZ2Comms
-        75,18: CMUAreaPortNereidSouthLZ2Comms
-        75,19: CMUAreaPortNereidSouthLZ2Comms
-        75,20: CMUAreaPortNereidSouthLZ2Comms
-        75,21: CMUAreaPortNereidSouthLZ2Comms
-        75,22: CMUAreaPortNereidSouthLZ2Comms
+        75,17: RMCAreaPortNereidSouthEastJungle
+        75,18: RMCAreaPortNereidSouthEastJungle
+        75,19: RMCAreaPortNereidSouthEastJungle
+        75,20: RMCAreaPortNereidSouthEastJungle
+        75,21: RMCAreaPortNereidSouthEastJungle
+        75,22: RMCAreaPortNereidSouthEastJungle
         75,23: RMCAreaPortNereidSouthEastJungle
         75,24: RMCAreaPortNereidSouthEastJungle
         75,25: RMCAreaPortNereidSouthEastJungle
@@ -17418,12 +17445,12 @@ entities:
         74,14: RMCAreaPortNereidSouthEastJungle
         74,15: RMCAreaPortNereidSouthEastJungle
         74,16: RMCAreaPortNereidSouthEastJungle
-        74,17: CMUAreaPortNereidSouthLZ2Comms
-        74,18: CMUAreaPortNereidSouthLZ2Comms
-        74,19: CMUAreaPortNereidSouthLZ2Comms
-        74,20: CMUAreaPortNereidSouthLZ2Comms
-        74,21: CMUAreaPortNereidSouthLZ2Comms
-        74,22: CMUAreaPortNereidSouthLZ2Comms
+        74,17: RMCAreaPortNereidSouthEastJungle
+        74,18: RMCAreaPortNereidSouthEastJungle
+        74,19: RMCAreaPortNereidSouthEastJungle
+        74,20: RMCAreaPortNereidSouthEastJungle
+        74,21: RMCAreaPortNereidSouthEastJungle
+        74,22: RMCAreaPortNereidSouthEastJungle
         74,23: RMCAreaPortNereidSouthEastJungle
         74,24: RMCAreaPortNereidSouthEastJungle
         74,25: RMCAreaPortNereidSouthEastJungle
@@ -17452,12 +17479,12 @@ entities:
         73,14: RMCAreaPortNereidSouthEastJungle
         73,15: RMCAreaPortNereidSouthEastJungle
         73,16: RMCAreaPortNereidSouthEastJungle
-        73,17: CMUAreaPortNereidSouthLZ2Comms
-        73,18: CMUAreaPortNereidSouthLZ2Comms
-        73,19: CMUAreaPortNereidSouthLZ2Comms
-        73,20: CMUAreaPortNereidSouthLZ2Comms
-        73,21: CMUAreaPortNereidSouthLZ2Comms
-        73,22: CMUAreaPortNereidSouthLZ2Comms
+        73,17: RMCAreaPortNereidSouthEastJungle
+        73,18: RMCAreaPortNereidSouthEastJungle
+        73,19: RMCAreaPortNereidSouthEastJungle
+        73,20: RMCAreaPortNereidSouthEastJungle
+        73,21: RMCAreaPortNereidSouthEastJungle
+        73,22: RMCAreaPortNereidSouthEastJungle
         73,23: RMCAreaPortNereidSouthEastJungle
         73,24: RMCAreaPortNereidSouthEastJungle
         73,25: RMCAreaPortNereidSouthEastJungle
@@ -23841,12 +23868,12 @@ entities:
         -20,101: RMCAreaPortNereidNorthWestJungle
         -20,102: RMCAreaPortNereidNorthWestJungle
         -19,90: RMCAreaPortNereidNorthWestJungle
-        -19,91: CMUAreaPortNereidNorthJungleComms
-        -19,92: CMUAreaPortNereidNorthJungleComms
-        -19,93: CMUAreaPortNereidNorthJungleComms
-        -19,94: CMUAreaPortNereidNorthJungleComms
-        -19,95: CMUAreaPortNereidNorthJungleComms
-        -19,96: CMUAreaPortNereidNorthJungleComms
+        -19,91: RMCAreaPortNereidNorthWestJungle
+        -19,92: RMCAreaPortNereidNorthWestJungle
+        -19,93: RMCAreaPortNereidNorthWestJungle
+        -19,94: RMCAreaPortNereidNorthWestJungle
+        -19,95: RMCAreaPortNereidNorthWestJungle
+        -19,96: RMCAreaPortNereidNorthWestJungle
         -19,97: RMCAreaPortNereidNorthWestJungle
         -19,98: RMCAreaPortNereidNorthWestJungle
         -19,99: RMCAreaPortNereidNorthWestJungle
@@ -23854,12 +23881,12 @@ entities:
         -19,101: RMCAreaPortNereidNorthWestJungle
         -19,102: RMCAreaPortNereidNorthWestJungle
         -18,90: RMCAreaPortNereidNorthWestJungle
-        -18,91: CMUAreaPortNereidNorthJungleComms
-        -18,92: CMUAreaPortNereidNorthJungleComms
-        -18,93: CMUAreaPortNereidNorthJungleComms
-        -18,94: CMUAreaPortNereidNorthJungleComms
-        -18,95: CMUAreaPortNereidNorthJungleComms
-        -18,96: CMUAreaPortNereidNorthJungleComms
+        -18,91: RMCAreaPortNereidNorthWestJungle
+        -18,92: RMCAreaPortNereidNorthWestJungle
+        -18,93: RMCAreaPortNereidNorthWestJungle
+        -18,94: RMCAreaPortNereidNorthWestJungle
+        -18,95: RMCAreaPortNereidNorthWestJungle
+        -18,96: RMCAreaPortNereidNorthWestJungle
         -18,97: RMCAreaPortNereidNorthWestJungle
         -18,98: RMCAreaPortNereidNorthWestJungle
         -18,99: RMCAreaPortNereidNorthWestJungle
@@ -23867,12 +23894,12 @@ entities:
         -18,101: RMCAreaPortNereidNorthWestJungle
         -18,102: RMCAreaPortNereidNorthWestJungle
         -17,90: RMCAreaPortNereidNorthWestJungle
-        -17,91: CMUAreaPortNereidNorthJungleComms
-        -17,92: CMUAreaPortNereidNorthJungleComms
-        -17,93: CMUAreaPortNereidNorthJungleComms
-        -17,94: CMUAreaPortNereidNorthJungleComms
-        -17,95: CMUAreaPortNereidNorthJungleComms
-        -17,96: CMUAreaPortNereidNorthJungleComms
+        -17,91: RMCAreaPortNereidNorthWestJungle
+        -17,92: RMCAreaPortNereidNorthWestJungle
+        -17,93: RMCAreaPortNereidNorthWestJungle
+        -17,94: RMCAreaPortNereidNorthWestJungle
+        -17,95: RMCAreaPortNereidNorthWestJungle
+        -17,96: RMCAreaPortNereidNorthWestJungle
         -17,97: RMCAreaPortNereidNorthWestJungle
         -17,98: RMCAreaPortNereidNorthWestJungle
         -17,99: RMCAreaPortNereidNorthWestJungle
@@ -23880,12 +23907,12 @@ entities:
         -17,101: RMCAreaPortNereidNorthWestJungle
         -17,102: RMCAreaPortNereidNorthWestJungle
         -16,90: RMCAreaPortNereidNorthWestJungle
-        -16,91: CMUAreaPortNereidNorthJungleComms
-        -16,92: CMUAreaPortNereidNorthJungleComms
-        -16,93: CMUAreaPortNereidNorthJungleComms
-        -16,94: CMUAreaPortNereidNorthJungleComms
-        -16,95: CMUAreaPortNereidNorthJungleComms
-        -16,96: CMUAreaPortNereidNorthJungleComms
+        -16,91: RMCAreaPortNereidNorthWestJungle
+        -16,92: RMCAreaPortNereidNorthWestJungle
+        -16,93: RMCAreaPortNereidNorthWestJungle
+        -16,94: RMCAreaPortNereidNorthWestJungle
+        -16,95: RMCAreaPortNereidNorthWestJungle
+        -16,96: RMCAreaPortNereidNorthWestJungle
         -16,97: RMCAreaPortNereidNorthWestJungle
         -16,98: RMCAreaPortNereidNorthWestJungle
         -16,99: RMCAreaPortNereidNorthWestJungle
@@ -23893,12 +23920,12 @@ entities:
         -16,101: RMCAreaPortNereidNorthWestJungle
         -16,102: RMCAreaPortNereidNorthWestJungle
         -15,90: RMCAreaPortNereidNorthWestJungle
-        -15,91: CMUAreaPortNereidNorthJungleComms
-        -15,92: CMUAreaPortNereidNorthJungleComms
-        -15,93: CMUAreaPortNereidNorthJungleComms
-        -15,94: CMUAreaPortNereidNorthJungleComms
-        -15,95: CMUAreaPortNereidNorthJungleComms
-        -15,96: CMUAreaPortNereidNorthJungleComms
+        -15,91: RMCAreaPortNereidNorthWestJungle
+        -15,92: RMCAreaPortNereidNorthWestJungle
+        -15,93: RMCAreaPortNereidNorthWestJungle
+        -15,94: RMCAreaPortNereidNorthWestJungle
+        -15,95: RMCAreaPortNereidNorthWestJungle
+        -15,96: RMCAreaPortNereidNorthWestJungle
         -15,97: RMCAreaPortNereidNorthWestJungle
         -15,98: RMCAreaPortNereidNorthWestJungle
         -15,99: RMCAreaPortNereidNorthWestJungle
@@ -23906,12 +23933,12 @@ entities:
         -15,101: RMCAreaPortNereidNorthWestJungle
         -15,102: RMCAreaPortNereidNorthWestJungle
         -14,90: RMCAreaPortNereidNorthWestJungle
-        -14,91: CMUAreaPortNereidNorthJungleComms
-        -14,92: CMUAreaPortNereidNorthJungleComms
-        -14,93: CMUAreaPortNereidNorthJungleComms
-        -14,94: CMUAreaPortNereidNorthJungleComms
-        -14,95: CMUAreaPortNereidNorthJungleComms
-        -14,96: CMUAreaPortNereidNorthJungleComms
+        -14,91: RMCAreaPortNereidNorthWestJungle
+        -14,92: RMCAreaPortNereidNorthWestJungle
+        -14,93: RMCAreaPortNereidNorthWestJungle
+        -14,94: RMCAreaPortNereidNorthWestJungle
+        -14,95: RMCAreaPortNereidNorthWestJungle
+        -14,96: RMCAreaPortNereidNorthWestJungle
         -14,97: RMCAreaPortNereidNorthWestJungle
         -14,98: RMCAreaPortNereidNorthWestJungle
         -14,99: RMCAreaPortNereidNorthWestJungle
@@ -96620,17 +96647,17 @@ entities:
   - uid: 22460
     components:
     - type: Transform
-      pos: 116.5,67.5
+      pos: 116.5,65.5
       parent: 1
   - uid: 22642
     components:
     - type: Transform
-      pos: 115.5,66.5
+      pos: 116.5,67.5
       parent: 1
   - uid: 22649
     components:
     - type: Transform
-      pos: 116.5,65.5
+      pos: 115.5,66.5
       parent: 1
   - uid: 22650
     components:
@@ -178723,7 +178750,7 @@ entities:
     - type: CMDoubleDoor
       lastOpeningAt: 17408.4159249
     - type: Door
-      secondsUntilStateChange: -50967.52
+      secondsUntilStateChange: -50527.23
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -178737,7 +178764,7 @@ entities:
     - type: CMDoubleDoor
       lastOpeningAt: 17408.4159249
     - type: Door
-      secondsUntilStateChange: -50967.52
+      secondsUntilStateChange: -50527.23
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -193038,6 +193065,23 @@ entities:
     - type: Transform
       pos: 26.540997,154.55894
       parent: 1
+- proto: RMCGeneratorFusion
+  entities:
+  - uid: 21369
+    components:
+    - type: Transform
+      pos: 48.5,32.5
+      parent: 1
+  - uid: 21370
+    components:
+    - type: Transform
+      pos: 47.5,32.5
+      parent: 1
+  - uid: 21371
+    components:
+    - type: Transform
+      pos: 46.5,32.5
+      parent: 1
 - proto: RMCGeneratorFusionCell
   entities:
   - uid: 21372
@@ -207228,7 +207272,7 @@ entities:
     - type: Transform
       pos: 47.5,160.5
       parent: 1
-- proto: AU14ToolPickaxe
+- proto: RMCPickaxe
   entities:
   - uid: 23925
     components:
