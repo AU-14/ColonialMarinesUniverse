@@ -4,6 +4,20 @@
   categories: [ HideSpawnMenu ]
 
 - type: entity
+  parent: BaseItem
+  id: CMUDeployableZLevelLadder
+  name: deployable ladder
+  description: A compact ladder kit that can be deployed between connected Z-levels.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/ladder.rsi
+    state: ladderup
+  - type: Item
+    size: Large
+    sprite: _RMC14/Structures/ladder.rsi
+  - type: CMUDeployableZLevelLadder
+
+- type: entity
   id: CMUMultiZStairs
   name: multi-Z stairs
   description: A stairway that connects Z-levels.
