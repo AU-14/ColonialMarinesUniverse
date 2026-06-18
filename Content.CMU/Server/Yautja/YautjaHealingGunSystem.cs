@@ -1,7 +1,8 @@
 using Content.Shared._CMU14.Yautja;
-using Content.Shared._CMU14.Medical.Bones;
-using Content.Shared._CMU14.Medical.Items;
-using Content.Shared._CMU14.Medical.Wounds;
+using Content.Shared._CMU14.Medical.Human.Components;
+using Content.Shared._CMU14.Medical.Human.Data;
+using Content.Shared._CMU14.Medical.Human.Systems;
+using Content.Shared._CMU14.Medical.Human.Care;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
@@ -19,17 +20,15 @@ namespace Content.Server._CMU14.Yautja;
 
 public sealed partial class YautjaHealingGunSystem : EntitySystem
 {
-    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
-    [Dependency] private SharedBodySystem _body = default!;
-    [Dependency] private SharedBoneSystem _bone = default!;
     [Dependency] private DamageableSystem _damageable = default!;
-    [Dependency] private SharedFractureSystem _fracture = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private SharedHumanMedicalSystem _medical = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private HumanTreatmentSystem _treatment = default!;
     [Dependency] private UseDelaySystem _useDelay = default!;
-    [Dependency] private SharedCMUWoundsSystem _wounds = default!;
 
     public override void Initialize()
     {
@@ -102,11 +101,15 @@ public sealed partial class YautjaHealingGunSystem : EntitySystem
                 _bloodstream.TryModifyBloodLevel((target, bloodstream), gun.Comp.ModifyBloodLevel);
         }
 
-        if (gun.Comp.TreatsWounds)
-            TreatWounds(target);
+        if (TryComp(target, out HumanMedicalComponent? medical))
+        {
+            if (gun.Comp.TreatsWounds)
+                TreatWounds(target, medical);
 
-        if (gun.Comp.RepairsFractures)
-            RepairFractures(target);
+            if (gun.Comp.RepairsFractures)
+                RepairFractures(target, medical);
+        }
+
         var healed = _damageable.TryChangeDamage(target, gun.Comp.Damage * _damageable.UniversalTopicalsHealModifier, true, origin: user);
         var total = healed?.GetTotal() ?? FixedPoint2.Zero;
 
@@ -131,11 +134,17 @@ public sealed partial class YautjaHealingGunSystem : EntitySystem
 
     private bool HasDamage(Entity<YautjaHealingGunComponent> gun, Entity<DamageableComponent> target)
     {
-        if (gun.Comp.TreatsWounds && HasUntreatedWounds(target.Owner))
-            return true;
+        if (TryComp(target.Owner, out HumanMedicalComponent? medical))
+        {
+            if (gun.Comp.TreatsWounds && HasUntreatedWounds(medical))
+                return true;
 
-        if (gun.Comp.RepairsFractures && HasFractures(target.Owner))
-            return true;
+            if (gun.Comp.RepairsFractures && HasSkeletalDamage(medical))
+                return true;
+
+            if (gun.Comp.BloodlossModifier < 0 && HasActiveBleeding(medical))
+                return true;
+        }
 
         foreach (var (type, amount) in gun.Comp.Damage.DamageDict)
         {
@@ -152,72 +161,153 @@ public sealed partial class YautjaHealingGunSystem : EntitySystem
                bloodstream.BleedAmount > 0;
     }
 
-    private bool TreatWounds(EntityUid target)
+    private bool TreatWounds(EntityUid target, HumanMedicalComponent medical)
     {
         var changed = false;
-        foreach (var (partUid, _) in _body.GetBodyChildren(target))
+        for (var i = 0; i < medical.BleedSources.Count; i++)
         {
-            var guard = 0;
-            while (guard++ < 128 && _wounds.TryTreatWound(partUid, out _))
+            var source = medical.BleedSources[i];
+            if (!source.Active)
+                continue;
+
+            changed |= source.Kind switch
             {
-                changed = true;
+                BleedKind.Internal => _treatment.TryApplyTreatment(
+                    target,
+                    new TreatmentAttempt(
+                        TreatmentKind.ClampBleed,
+                        source.Region,
+                        BleedSourceId: source.Id),
+                    medical).Applied,
+
+                BleedKind.Stump => _treatment.TryApplyTreatment(
+                    target,
+                    new TreatmentAttempt(
+                        TreatmentKind.Suture,
+                        source.Region,
+                        InjuryId: source.SourceInjuryId,
+                        BleedSourceId: source.Id),
+                    medical).Applied,
+
+                _ => _treatment.TryApplyTreatment(
+                    target,
+                    new TreatmentAttempt(
+                        TreatmentKind.Gauze,
+                        source.Region,
+                        BleedSourceId: source.Id),
+                    medical).Applied,
+            };
+        }
+
+        for (var i = 0; i < medical.Injuries.Count; i++)
+        {
+            var injury = medical.Injuries[i];
+            if (injury.Flags.HasFlag(InjuryFlags.Closed) ||
+                injury.Flags.HasFlag(InjuryFlags.Sutured))
+            {
+                continue;
             }
-        }
 
-        return changed;
-    }
-
-    private bool RepairFractures(EntityUid target)
-    {
-        var changed = false;
-        foreach (var (partUid, _) in _body.GetBodyChildren(target))
-        {
-            if (!TryComp<FractureComponent>(partUid, out var fracture))
-                continue;
-
-            if (TryComp<BoneComponent>(partUid, out var bone))
-                _bone.RestoreIntegrity((partUid, bone), bone.IntegrityMax);
-
-            _fracture.SetSeverity((partUid, fracture), FractureSeverity.None, forceUpgrade: false);
-            RemComp<CMUSplintedComponent>(partUid);
-            RemComp<CMUCastComponent>(partUid);
-            RemComp<CMUMalunionComponent>(partUid);
-            RemComp<CMUPostOpBoneSetComponent>(partUid);
-            _wounds.RecomputeInternalBleed(partUid);
-            changed = true;
-        }
-
-        return changed;
-    }
-
-    private bool HasUntreatedWounds(EntityUid target)
-    {
-        foreach (var (partUid, _) in _body.GetBodyChildren(target))
-        {
-            if (!TryComp<BodyPartWoundComponent>(partUid, out var wounds))
-                continue;
-
-            foreach (var wound in wounds.Wounds)
+            if (injury.Kind == InjuryKind.Burn)
             {
-                if (!wound.Treated)
+                if (injury.Flags.HasFlag(InjuryFlags.Salved))
+                    continue;
+
+                changed |= _treatment.TryApplyTreatment(
+                    target,
+                    new TreatmentAttempt(
+                        TreatmentKind.Salve,
+                        injury.Region,
+                        InjuryId: injury.Id),
+                    medical).Applied;
+                continue;
+            }
+
+            if (!IsSuturable(injury.Kind))
+                continue;
+
+            changed |= _treatment.TryApplyTreatment(
+                target,
+                new TreatmentAttempt(
+                    TreatmentKind.Suture,
+                    injury.Region,
+                    InjuryId: injury.Id),
+                medical).Applied;
+        }
+
+        return changed;
+    }
+
+    private bool RepairFractures(EntityUid target, HumanMedicalComponent medical)
+    {
+        var result = HumanMedicalLedger.RepairAllSkeletalDamage(medical);
+        if (!result.Applied)
+            return false;
+
+        Dirty(target, medical);
+        _medical.NotifyLedgerChanged((target, medical), result);
+
+        return true;
+    }
+
+    private static bool HasUntreatedWounds(HumanMedicalComponent medical)
+    {
+        for (var i = 0; i < medical.BleedSources.Count; i++)
+        {
+            if (medical.BleedSources[i].Active)
+                return true;
+        }
+
+        for (var i = 0; i < medical.Injuries.Count; i++)
+        {
+            var injury = medical.Injuries[i];
+            if (injury.Kind == InjuryKind.Burn)
+            {
+                if (!injury.Flags.HasFlag(InjuryFlags.Salved))
                     return true;
+
+                continue;
             }
-        }
 
-        return false;
-    }
-
-    private bool HasFractures(EntityUid target)
-    {
-        foreach (var (partUid, _) in _body.GetBodyChildren(target))
-        {
-            if (TryComp<FractureComponent>(partUid, out var fracture) &&
-                fracture.Severity != FractureSeverity.None)
+            if (IsSuturable(injury.Kind) &&
+                !injury.Flags.HasFlag(InjuryFlags.Closed) &&
+                !injury.Flags.HasFlag(InjuryFlags.Sutured))
             {
                 return true;
             }
         }
 
         return false;
+    }
+
+    private static bool HasSkeletalDamage(HumanMedicalComponent medical)
+    {
+        for (var i = 1; i < medical.Regions.Length; i++)
+        {
+            var skeletal = medical.Regions[i].Skeletal;
+            if (skeletal.Flags != SkeletalStateFlags.None ||
+                skeletal.KnittingSecondsRemaining > FixedPoint2.Zero)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool HasActiveBleeding(HumanMedicalComponent medical)
+    {
+        for (var i = 0; i < medical.BleedSources.Count; i++)
+        {
+            if (medical.BleedSources[i].Active)
+                return true;
+        }
+
+        return false;
+    }
+
+    private static bool IsSuturable(InjuryKind kind)
+    {
+        return kind is InjuryKind.Cut or InjuryKind.Stump or InjuryKind.SurgicalIncision;
     }
 }

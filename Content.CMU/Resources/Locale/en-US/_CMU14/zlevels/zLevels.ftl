@@ -25,3 +25,9 @@ cmu-zlevel-ladder-start-self = You start climbing the ladder.
 cmu-zlevel-ladder-start-others = {$user} starts climbing the ladder.
 cmu-zlevel-ladder-finish-self = You climb the ladder.
 cmu-zlevel-ladder-finish-others = {$user} climbs the ladder.
+
+cmu-deployable-z-ladder-no-level = There is no reachable Z-level above.
+cmu-deployable-z-ladder-blocked = You cannot deploy the ladder here.
+cmu-deployable-z-ladder-success = You deploy the ladder.
+cmu-deployable-z-ladder-pack-verb = Pack up
+cmu-deployable-z-ladder-pack-success = You pack up the ladder.
