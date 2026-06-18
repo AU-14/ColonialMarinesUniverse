@@ -1034,9 +1034,7 @@ public sealed partial class ScalingViewport
         if (_stairPreviewViewport is null)
             return;
 
-        CopyZEye(_stairPreviewEye, sourceEye);
-        _stairPreviewEye.DrawFov = false;
-        _stairPreviewEye.ConfigureVisibleEntityIndicators(false, _zOpeningBounds);
+        ConfigureStairPreviewRenderEye(_stairPreviewEye, sourceEye, _zOpeningBounds);
 
         _stairPreviewViewport.Eye = _stairPreviewEye;
         _stairPreviewViewport.ClearColor = Color.Transparent;
@@ -1155,6 +1153,14 @@ public sealed partial class ScalingViewport
         target.Scale = source.Scale;
         target.VisualZOffset = source.VisualZOffset;
         target.BlurCurrentLevel = source.BlurCurrentLevel;
+    }
+
+    internal static void ConfigureStairPreviewRenderEye(ZEye target, ZEye source, List<Box2> visibilityBounds)
+    {
+        CopyZEye(target, source);
+        target.DrawFov = false;
+        target.DrawLight = false;
+        target.ConfigureVisibleEntityIndicators(false, visibilityBounds);
     }
 
     private void DrawZLevelComposites(IRenderHandle handle, UIBox2i drawBox)
