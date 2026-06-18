@@ -31,6 +31,12 @@
   ranks:
     RMCRankCivilian: []
   chevrons:
+    RMCRankGunnerySergeant:
+      entity: AU14ChevronUSCMGunnerySergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORSquadSergeant
+        time: 262000 # 70 hours
     RMCRankStaffSergeant:
       entity: AU14ChevronUSCMStaffSergeant
       requirements:
