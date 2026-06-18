@@ -7,8 +7,6 @@
   playTimeTracker: AU14JobCivilianCMBDeputy
   basePlaytimeTracker: true
   icon: "RMCJobIconBureauDeputy"
-  hidden: false
-
 
 - type: playTimeTracker
   id: AU14JobCivilianCMBDeputy

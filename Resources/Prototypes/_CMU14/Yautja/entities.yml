@@ -744,7 +744,7 @@
     kind: Shield
 
 - type: entity
-  parent: CMUpgradedTraumaKit1
+  parent: CMTraumaKit1
   id: CMUYautjaAdvancedBruisePack
   name: predator advanced trauma pack
   description: A compact alien poultice for closing savage wounds.
@@ -764,7 +764,7 @@
     selfTargetDoAfterMultiplier: 1
 
 - type: entity
-  parent: CMUpgradedBurnKit1
+  parent: CMBurnKit1
   id: CMUYautjaAdvancedOintment
   name: predator advanced ointment
   description: A cool alien salve for sealing burns and caustic injuries.

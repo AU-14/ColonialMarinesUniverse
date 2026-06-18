@@ -5,7 +5,6 @@
   icon: "AU14JobIconGovWorkingJoe"
   spawnMenuRoleName: Working Joe (GOVFOR)
   supervisors: au14-job-supervisors-workingjoe-military
-  dummyStartingGear: AU14GearGOVFORWorkingJoe
   usePlayerProfile: false
   jobEntity: AU14MobWorkingJoeGOVFOR
   accessGroups:
@@ -56,16 +55,10 @@
       - CanPilot
       - FootstepSound
       - DoorBumpOpener
-
-- type: startingGear
-  parent: AU14GearWorkingJoeBase
-  id: AU14GearGOVFORWorkingJoe
-  equipment:
-    id: AU14IDCardGOVFORWorkingJoe
-    ears: AU14HeadsetWorkingJoe
-    ears2: RMCM5CameraGear
-    back: AU14IMPBackpackMarine
-    pocket1: AU14StampJoe
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+        state: working_joe
 
 - type: entity
   parent: CMSpawnPointJobBase

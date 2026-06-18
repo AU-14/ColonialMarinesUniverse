@@ -30176,7 +30176,7 @@ entities:
     - type: Transform
       pos: -60.5,-56.5
       parent: 1
-- proto: CMSemioticAutodoc
+- proto: CMSemioticMedical
   entities:
   - uid: 1461
     components:

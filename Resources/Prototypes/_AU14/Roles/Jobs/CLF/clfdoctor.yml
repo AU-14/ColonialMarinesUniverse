@@ -48,12 +48,11 @@
       mindRole: MindRoleCLFPhysician
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
+        sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+        state: colonist
     - type: ShowMarineIcons
       factions:
       - CLF
-  hidden: false
 
 - type: startingGear
   id: AU14GearCLFPhysician

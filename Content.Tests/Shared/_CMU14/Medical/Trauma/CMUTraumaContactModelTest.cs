@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Medical.Trauma;
+using Content.Shared._CMU14.Medical.Human.Damage;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;

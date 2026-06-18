@@ -1,6 +1,6 @@
 using Content.Shared._RMC14.Evasion;
 using Content.Shared._RMC14.Marines.Squads;
-using Content.Shared._CMU14.Medical.StatusEffects;
+using Content.Shared._CMU14.Medical.Human.Effects;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Actions;

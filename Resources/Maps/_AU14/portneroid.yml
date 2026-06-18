@@ -92148,7 +92148,7 @@ entities:
     - type: Transform
       pos: -20.5,109.5
       parent: 1
-- proto: CMUAutodocPod
+- proto: CMOperatingTable
   entities:
   - uid: 6683
     components:

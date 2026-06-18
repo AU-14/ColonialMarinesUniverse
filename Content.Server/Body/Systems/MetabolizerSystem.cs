@@ -1,6 +1,6 @@
 using Content.Server.Body.Components;
-using Content.Shared._CMU14.Medical;
-using Content.Shared._CMU14.Medical.Metabolism.Events;
+using Content.Shared._CMU14.Medical.Human.Components;
+using Content.Shared._CMU14.Medical.Chemistry.Events;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Administration.Logs;
@@ -145,7 +145,7 @@ namespace Content.Server.Body.Systems
 
             var medicalBody = ent.Comp2?.Body ?? ent.Owner;
             var actualEntity = ent.Comp2?.Body ?? solutionEntityUid.Value;
-            var isCMUHuman = HasComp<CMUHumanMedicalComponent>(medicalBody);
+            var isCMUHuman = HasComp<HumanMedicalComponent>(medicalBody);
             if (isCMUHuman)
                 _cmuRateMultiplierCache.Clear();
 

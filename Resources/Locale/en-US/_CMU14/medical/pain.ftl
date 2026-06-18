@@ -22,6 +22,14 @@ cmu-medical-pain-reflection-shock-1 = Too much. Too much. Make it stop.
 cmu-medical-pain-reflection-shock-2 = Pain. Help. Now. Now.
 cmu-medical-pain-reflection-shock-3 = Can't think. Can't breathe. Make it stop.
 
+cmu-medical-pain-brute-low = Your { $part } hurts.
+cmu-medical-pain-brute-medium = Your { $part } hurts badly.
+cmu-medical-pain-brute-high = OH GOD! Your { $part } is hurting terribly!
+cmu-medical-pain-burn-low = Your { $part } burns.
+cmu-medical-pain-burn-medium = Your { $part } burns badly.
+cmu-medical-pain-burn-high = OH GOD! Your { $part } is on fire!
+cmu-medical-pain-fumble = You fumble what you are holding as pain shoots through you!
+
 cmu-medical-pain-relief-1 = The painkiller starts to take the edge off.
 cmu-medical-pain-relief-2 = The pain dulls. You can breathe a little easier.
 cmu-medical-pain-relief-3 = The worst of it softens, for now.
@@ -34,3 +42,14 @@ cmu-medical-shrapnel-extract-finish = Removed { $count } embedded fragment{ $cou
    *[other] s
 }.
 cmu-medical-shrapnel-movement-pain = Embedded shrapnel shifts painfully.
+
+cmu-medical-splint-break = The splint on your { $part } comes apart!
+cmu-medical-internal-rip = You feel something rip in your { $part }!
+cmu-medical-wound-widened = A wound in your { $part } tears wider!
+cmu-medical-wound-widened-audible = You hear a nasty ripping noise from your { $part }!
+cmu-medical-shrapnel-movement-jostle = Your movement jostles embedded shrapnel in your { $part } painfully.
+cmu-medical-shrapnel-movement-detonation = Something embedded inside you detonates!
+
+cmu-medical-fracture-bones-moving = You feel broken bones moving in your { $part }!
+cmu-medical-fracture-bones-cutting = You feel broken bones cutting at you in your { $part }!
+cmu-medical-fracture-broken-legs-drop = You can't stand on broken legs!

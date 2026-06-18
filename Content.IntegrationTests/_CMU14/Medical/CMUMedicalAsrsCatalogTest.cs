@@ -32,9 +32,9 @@ public sealed class CMUMedicalAsrsCatalogTest
 
     private static readonly Dictionary<EntProtoId, int> ExpectedFieldTreatmentContents = new()
     {
-        ["CMUPlainTraumaDressing10"] = 1,
-        ["CMUCoagulantPowder"] = 1,
-        ["CMUBurnGel"] = 1,
+        ["CMTraumaKit10"] = 1,
+        ["CMTraumaKit10"] = 1,
+        ["CMBurnKit10"] = 1,
         ["CMBloodPackFull"] = 1,
         ["CMBloodPack"] = 1,
     };

@@ -66,13 +66,12 @@
       prefix: au14-job-prefix-wyguard
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
+        sprite: _RMC14/Interface/cm_job_icons.rsi
+        state: weya_goon_standard
     - type: AssignSquad
       whitelist:
         tags:
         - SquadPMC
-  hidden: false
 
 - type: startingGear
   id: AU14GearWYGuard

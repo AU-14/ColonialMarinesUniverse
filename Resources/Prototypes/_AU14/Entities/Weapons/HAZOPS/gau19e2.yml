@@ -5,7 +5,7 @@
   description: A beast of a weapon. Once mounted on aircraft hardpoints, this minigun has been made handheld, though IFF systems couldn't be safely implemented into the gun. Unmatched RPM and ammo capacity, but the caliber had to be downgraded to make the gun actually useable, resulting in lacking AP and stopping power.
   components:
   - type: RMCSelectiveFire
-    baseFireRate: 9.5
+    baseFireRate: 11
   - type: Sprite
     sprite: _AU14/Weapons/Guns/HAZOPS/GAU19E2.rsi
     layers:
@@ -35,6 +35,8 @@
           - SmartGunBattery
   - type: GunIFF
     enabled: false
+  - type: IFFToggle
+    showToggleAction: false
 
 
 - type: entity
@@ -85,7 +87,7 @@
     - range: 12
       falloff: 9999
       ignoreModifiers: true
-    - range: 4.5
+    - range: 10
       falloff: 4
 
 - type: Tag

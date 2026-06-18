@@ -158,6 +158,16 @@ namespace Content.Client.Examine
             // since there's probably one open already if it's coming in from the server.
             var entity = GetEntity(ev.EntityUid);
 
+            // CMU14 start
+            // Stale examine responses can arrive after the target is gone or after a zero NetEntity
+            // response. Dropping them avoids verb range checks against EntityUid 0.
+            if (!Exists(entity))
+            {
+                CloseTooltip();
+                return;
+            }
+            // CMU14 end
+
             OpenTooltip(player.Value, entity, ev.CenterAtCursor, ev.OpenAtOldTooltip, ev.KnowTarget);
             UpdateTooltipInfo(player.Value, entity, ev.Message, ev.Verbs, getVerbs: false);
         }

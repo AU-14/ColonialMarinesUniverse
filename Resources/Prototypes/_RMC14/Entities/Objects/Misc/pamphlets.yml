@@ -100,11 +100,11 @@
     giveMapBlip:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: spotter
-    jobWhitelists:
-    - popup: rmc-pamphlets-rifleman-warning
-      jobProto: CMRifleman
-    - popup: rmc-pamphlets-rifleman-warning
-      jobProto: CMPVERifleman
+    # jobWhitelists:
+    # - popup: rmc-pamphlets-rifleman-warning
+    #   jobProto: CMRifleman
+    # - popup: rmc-pamphlets-rifleman-warning
+    #   jobProto: CMPVERifleman
 
 - type: entity
   parent: CMPamphlet
@@ -213,11 +213,11 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: loader
     bypassLimit: true
-    jobWhitelists:
-    - popup: rmc-pamphlets-rifleman-warning
-      jobProto: CMRifleman
-    - popup: rmc-pamphlets-rifleman-warning
-      jobProto: CMPVERifleman
+    # jobWhitelists:
+    # - popup: rmc-pamphlets-rifleman-warning
+    #   jobProto: CMRifleman
+    # - popup: rmc-pamphlets-rifleman-warning
+    #   jobProto: CMPVERifleman
 
 - type: entity
   parent: CMPamphlet
@@ -244,11 +244,11 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: mortar
     bypassLimit: true
-    jobWhitelists:
-    - popup: rmc-pamphlets-rifleman-warning
-      jobProto: CMRifleman
-    - popup: rmc-pamphlets-rifleman-warning
-      jobProto: CMPVERifleman
+    # jobWhitelists:
+    # - popup: rmc-pamphlets-rifleman-warning
+    #   jobProto: CMRifleman
+    # - popup: rmc-pamphlets-rifleman-warning
+    #   jobProto: CMPVERifleman
 
 - type: entity
   parent: CMPamphlet
@@ -286,9 +286,9 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: honorguard
     bypassLimit: true
-    jobWhitelists:
-    - popup: rmc-pamphlets-mp-warning
-      jobProto: CMMilitaryPolice
+    # jobWhitelists:
+    # - popup: rmc-pamphlets-mp-warning
+    #   jobProto: CMMilitaryPolice
 
 # LANGUAGE / bypasses limit
 

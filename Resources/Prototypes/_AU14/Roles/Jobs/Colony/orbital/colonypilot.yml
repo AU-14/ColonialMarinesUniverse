@@ -50,9 +50,8 @@
       prefix: au14-job-prefix-civiliancolonypilot
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: pilot
-  hidden: false
+        sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+        state: colony_pilot
 
 - type: startingGear
   id: AU14GearCivilianColonyPilot

@@ -14251,7 +14251,7 @@ entities:
       parent: 1
     - type: Toilet
       toggleSeat: True
-- proto: CMUAutodocConsole
+- proto: CMUBodyScannerConsole
   entities:
   - uid: 5444
     components:
@@ -14265,7 +14265,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -28.5,15.5
       parent: 1
-- proto: CMUAutodocPod
+- proto: CMOperatingTable
   entities:
   - uid: 4238
     components:

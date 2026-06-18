@@ -1,0 +1,139 @@
+- type: emote
+  id: WorkingJoeCalmDown
+  name: emote-name-workingjoe-calm-down
+  category: Positive
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-calm-down
+  chatTriggers:
+    - calm down
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeComeWithMePlease
+  name: emote-name-workingjoe-come-with-me-please
+  category: Positive
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-come-with-me-please
+  chatTriggers:
+    - come with me please
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeDoNotPanic
+  name: emote-name-workingjoe-do-not-panic
+  category: Positive
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-do-not-panic
+  chatTriggers:
+    - do not panic
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeFollowMePlease
+  name: emote-name-workingjoe-follow-me-please
+  category: Positive
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-follow-me-please
+  chatTriggers:
+    - follow me please
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIJustWantToHelp
+  name: emote-name-workingjoe-i-just-want-to-help
+  category: Positive
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-i-just-want-to-help
+  chatTriggers:
+    - i just want to help
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeKeepCalmItsJustAnAlarm
+  name: emote-name-workingjoe-keep-calm-its-just-an-alarm
+  category: Positive
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-keep-calm-its-just-an-alarm
+  chatTriggers:
+    - keep calm its just an alarm
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeLetMeHelpYou
+  name: emote-name-workingjoe-let-me-help-you
+  category: Positive
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-let-me-help-you
+  chatTriggers:
+    - let me help you
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoePlease
+  name: emote-name-workingjoe-please
+  category: Positive
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-please
+  chatTriggers:
+    - please
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThereCouldBeSomeoneWhoRequiresAssistance
+  name: emote-name-workingjoe-there-could-be-someone-who-requires-assistance
+  category: Positive
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-there-could-be-someone-who-requires-assistance
+  chatTriggers:
+    - there could be someone who requires assistance
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeTheresNoReasonToBeShy
+  name: emote-name-workingjoe-theres-no-reason-to-be-shy
+  category: Positive
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-theres-no-reason-to-be-shy
+  chatTriggers:
+    - theres no reason to be shy
+  whitelist:
+    tags:
+      - WorkingJoe

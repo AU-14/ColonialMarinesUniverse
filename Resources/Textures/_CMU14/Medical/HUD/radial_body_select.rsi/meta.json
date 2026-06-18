@@ -1,0 +1,176 @@
+{
+  "version": 1,
+  "license": "CC-BY-NC-SA-3.0",
+  "copyright": "Taken from tgstation/TerraGov-Marine-Corps icons/mob/radial.dmi at commit 3fc0dc2bf1dd46b3396c2dc3168b0098ff5a2d18; filtered to body-select radial states and converted to RSI for CMU14. TGMC README identifies icon assets as CC-BY-NC-SA.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "radial_head_un"
+    },
+    {
+      "name": "radial_head_surgery"
+    },
+    {
+      "name": "radial_head_brute"
+    },
+    {
+      "name": "radial_head_burn"
+    },
+    {
+      "name": "radial_head_both"
+    },
+    {
+      "name": "radial_chest_un"
+    },
+    {
+      "name": "radial_chest_surgery"
+    },
+    {
+      "name": "radial_chest_brute"
+    },
+    {
+      "name": "radial_chest_burn"
+    },
+    {
+      "name": "radial_chest_both"
+    },
+    {
+      "name": "radial_groin_un"
+    },
+    {
+      "name": "radial_groin_surgery"
+    },
+    {
+      "name": "radial_groin_brute"
+    },
+    {
+      "name": "radial_groin_burn"
+    },
+    {
+      "name": "radial_groin_both"
+    },
+    {
+      "name": "radial_l_arm_un"
+    },
+    {
+      "name": "radial_l_arm_surgery"
+    },
+    {
+      "name": "radial_l_arm_brute"
+    },
+    {
+      "name": "radial_l_arm_burn"
+    },
+    {
+      "name": "radial_l_arm_both"
+    },
+    {
+      "name": "radial_l_hand_un"
+    },
+    {
+      "name": "radial_l_hand_surgery"
+    },
+    {
+      "name": "radial_l_hand_brute"
+    },
+    {
+      "name": "radial_l_hand_burn"
+    },
+    {
+      "name": "radial_l_hand_both"
+    },
+    {
+      "name": "radial_r_arm_un"
+    },
+    {
+      "name": "radial_r_arm_surgery"
+    },
+    {
+      "name": "radial_r_arm_brute"
+    },
+    {
+      "name": "radial_r_arm_burn"
+    },
+    {
+      "name": "radial_r_arm_both"
+    },
+    {
+      "name": "radial_r_hand_un"
+    },
+    {
+      "name": "radial_r_hand_surgery"
+    },
+    {
+      "name": "radial_r_hand_brute"
+    },
+    {
+      "name": "radial_r_hand_burn"
+    },
+    {
+      "name": "radial_r_hand_both"
+    },
+    {
+      "name": "radial_l_leg_un"
+    },
+    {
+      "name": "radial_l_leg_surgery"
+    },
+    {
+      "name": "radial_l_leg_brute"
+    },
+    {
+      "name": "radial_l_leg_burn"
+    },
+    {
+      "name": "radial_l_leg_both"
+    },
+    {
+      "name": "radial_l_foot_un"
+    },
+    {
+      "name": "radial_l_foot_surgery"
+    },
+    {
+      "name": "radial_l_foot_brute"
+    },
+    {
+      "name": "radial_l_foot_burn"
+    },
+    {
+      "name": "radial_l_foot_both"
+    },
+    {
+      "name": "radial_r_leg_un"
+    },
+    {
+      "name": "radial_r_leg_surgery"
+    },
+    {
+      "name": "radial_r_leg_brute"
+    },
+    {
+      "name": "radial_r_leg_burn"
+    },
+    {
+      "name": "radial_r_leg_both"
+    },
+    {
+      "name": "radial_r_foot_un"
+    },
+    {
+      "name": "radial_r_foot_surgery"
+    },
+    {
+      "name": "radial_r_foot_brute"
+    },
+    {
+      "name": "radial_r_foot_burn"
+    },
+    {
+      "name": "radial_r_foot_both"
+    }
+  ]
+}

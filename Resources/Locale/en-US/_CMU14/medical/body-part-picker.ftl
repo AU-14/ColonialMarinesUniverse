@@ -1,0 +1,12 @@
+cmu-body-part-picker-head = Head
+cmu-body-part-picker-chest = Chest
+cmu-body-part-picker-groin = Groin
+cmu-body-part-picker-left-arm = Left arm
+cmu-body-part-picker-right-arm = Right arm
+cmu-body-part-picker-left-hand = Left hand
+cmu-body-part-picker-right-hand = Right hand
+cmu-body-part-picker-left-leg = Left leg
+cmu-body-part-picker-right-leg = Right leg
+cmu-body-part-picker-left-foot = Left foot
+cmu-body-part-picker-right-foot = Right foot
+cmu-body-part-picker-wounds = {$part} ({$count} wound(s))

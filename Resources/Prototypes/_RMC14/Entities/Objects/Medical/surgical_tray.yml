@@ -27,9 +27,10 @@
       - CMTraumaKit
       - CMSurgicalLine
       - CMSynthGraft
+      - CMUFixOVein
+      - CMUNanopaste
       components:
       - CMSurgeryTool
-# TODO Should also be able to have PICT FixOVein and Nanopaste
   - type: PhysicalComposition
     materialComposition:
       RMCPlastic: 3000
@@ -56,3 +57,17 @@
     - id: CMUOrganClampItem
     - id: CMSurgicalLine
     - id: CMSynthGraft
+    - id: CMUFixOVein
+
+- type: entity
+  parent: RMCSurgicalTrayEmpty
+  id: CMUAdvancedSurgicalTray
+  name: advanced surgical tray
+  suffix: Filled, Advanced Tools
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMScalpelPICT
+    - id: CMScalpelManager
+    - id: CMUNanopaste
+    - id: CMUFixOVein

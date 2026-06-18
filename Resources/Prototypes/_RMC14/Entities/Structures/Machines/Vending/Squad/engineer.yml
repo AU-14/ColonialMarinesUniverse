@@ -7,8 +7,7 @@
   description: An automated gear rack for combat technicians.
   components:
   - type: AccessReader
-    access:
-    - [ "CMAccessCombatTechPrep" ]
+    access: [["CMAccessCombatTechPrep"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"]]
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/combat_technician_gear.rsi
   - type: CMAutomatedVendor
@@ -212,8 +211,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: AccessReader
-    access:
-    - [ "CMAccessCombatTechPrep" ]
+    access: [["CMAccessCombatTechPrep"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"]]
   - type: CMAutomatedVendor
     jobs:
     - CMCombatTech
@@ -336,8 +334,7 @@
   description: A vending machine that stores various extra tools that are useful on the field.
   components:
   - type: AccessReader
-    access:
-    - [ "CMAccessCombatTechPrep" ]
+    access: [["CMAccessCombatTechPrep"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"]]
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/tool.rsi
     layers:
@@ -346,8 +343,7 @@
     - state: "normal-unshaded"
       map: [ "enum.VendingMachineVisualLayers.BaseUnshaded" ]
   - type: CMAutomatedVendor
-    access:
-    - "CMAccessCombatTechPrep"
+    access: ["CMAccessCombatTechPrep", "AU14AccessGovforEngineering", "AU14AccessOpforEngineering"]
     hackable: true
     jobs:
     - CMCombatTech

@@ -50,6 +50,7 @@
     sprite: _AU14/Clothing/USCMC/Mask/cbrn.rsi
   - type: Clothing
     sprite: _AU14/Clothing/USCMC/Mask/cbrn.rsi
+  - type: BreathMask
   - type: Item
     storedRotation: -90
   - type: HideLayerClothing

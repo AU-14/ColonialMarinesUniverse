@@ -205,24 +205,6 @@
   description: Painkillers active.
 
 - type: alert
-  id: CMUSplinted
-  category: CMUMedical
-  icons:
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
-    state: bleed1
-  name: Splinted
-  description: A fractured limb is splinted.
-
-- type: alert
-  id: CMUCast
-  category: CMUMedical
-  icons:
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
-    state: bleed2
-  name: In Cast
-  description: A fractured limb is set in a cast.
-
-- type: alert
   id: CMUBoneRegenBoost
   category: CMUMedical
   icons:

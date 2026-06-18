@@ -17,12 +17,8 @@
       entries:
       - id: CMOintment10
         amount: 40
-      - id: CMUPlainTraumaDressing10
+      - id: CMTraumaKit10
         amount: 30
-      - id: CMUCoagulantPowder
-        amount: 20
-      - id: CMUBurnGel
-        amount: 20
       - id: AU14HemostaticGauzePacket
         amount: 40
       - id: AU14Tourniquet

@@ -55,7 +55,6 @@
     skill: 2
     add:
     - type: CMUReattachComplete
-  - type: CMUSurgeryStepReattachLimbEffect
   - type: Sprite
     sprite: Objects/Tools/cable-coils.rsi
     state: coil-30
@@ -76,23 +75,3 @@
   - type: Sprite
     sprite: _RMC14/Objects/Tools/welder.rsi
     state: icon
-
-- type: cmuSurgeryStepMetadata
-  id: RMCSynthSurgeryStepMetaReattachLimb
-  surgery: RMCSynthSurgeryReattachLimb
-  displayName: Reattach Synth Limb
-  validParts: [Arm, Leg]
-  category: reattach
-  steps:
-  - stepId: RMCSynthSurgeryStepCutChassis
-    label: Cut Chassis Open
-    toolCategory: blowtorch
-  - stepId: RMCSynthSurgeryStepStripWires
-    label: Strip Damaged Wiring
-    toolCategory: cable_coil
-  - stepId: RMCSynthSurgeryStepReattachLimb
-    label: Reattach Synth Limb
-    toolCategory: severed_limb
-  - stepId: RMCSynthSurgeryStepWeldChassis
-    label: Weld Chassis Shut
-    toolCategory: blowtorch

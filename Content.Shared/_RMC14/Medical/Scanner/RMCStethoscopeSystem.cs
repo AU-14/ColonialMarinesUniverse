@@ -1,5 +1,7 @@
 using System.Linq;
+using Content.Shared._CMU14.Medical.Human.Diagnostics;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.UniformAccessories;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Damage;
@@ -43,9 +45,18 @@ public sealed partial class RMCStethoscopeSystem : EntitySystem
             return;
         if (!HasStethoscope(args.User, out _))
             return;
-        if (args.Target == null)
+        if (args.Target is not { } target)
             return;
-        ShowStethoPopup(args.User, args.Target.Value);
+
+        var cmuLedgerAttempt = new CMUStethoscopeLedgerAttemptEvent((uid, comp), args.User, target);
+        RaiseLocalEvent(uid, ref cmuLedgerAttempt);
+        if (cmuLedgerAttempt.Handled)
+        {
+            args.Handled = true;
+            return;
+        }
+
+        ShowStethoPopup(args.User, target);
         args.Handled = true;
     }
 
@@ -113,6 +124,12 @@ public sealed partial class RMCStethoscopeSystem : EntitySystem
         if (_mobState.IsDead(target))
         {
             msg.AddMarkupOrThrow(Loc.GetString("rmc-stethoscope-dead"));
+            return msg;
+        }
+
+        if (HasComp<SynthComponent>(target))
+        {
+            msg.AddMarkupOrThrow(Loc.GetString("rmc-stethoscope-synth"));
             return msg;
         }
 

@@ -75,7 +75,7 @@ public sealed partial class VictimInfectedComponent : Component
     /// <summary>
     ///     Used by larva removal surgery.
     /// </summary>
-    [DataField, AutoNetworkedField, Access(typeof(SharedCMSurgerySystem))]
+    [DataField, AutoNetworkedField, Access(typeof(SharedCMSurgerySystem), typeof(SharedXenoParasiteSystem))] // CMU14
     public bool RootsCut;
 
     /// <summary>

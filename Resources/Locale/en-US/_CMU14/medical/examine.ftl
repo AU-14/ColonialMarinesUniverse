@@ -10,3 +10,5 @@ cmu-medical-detailed-examine-none = No obvious injuries found.
 cmu-medical-detailed-examine-window-title = Injuries - { $target }
 cmu-medical-detailed-examine-window-heading = Injury report
 cmu-medical-detailed-examine-window-bleeding = Bleeding: { $tier }
+cmu-medical-examine-suppressed-bleed-needs-surgery = bleeding is temporarily suppressed but still needs surgery
+cmu-medical-detailed-examine-suppressed-bleed-needs-surgery = { $kind } bleeding suppressed, surgery still required

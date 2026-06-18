@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Medical;
+using Content.Shared._CMU14.Medical.Human.Components;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Slow;
@@ -336,7 +336,7 @@ public sealed partial class XenoAlchemistSystem : EntitySystem
 
     private bool TryInjectMixture(EntityUid target, AlchemistMixture mixture, int potency)
     {
-        if (!HasComp<CMUHumanMedicalComponent>(target) ||
+        if (!HasComp<HumanMedicalComponent>(target) ||
             HasComp<SynthComponent>(target) ||
             HasComp<XenoComponent>(target))
         {

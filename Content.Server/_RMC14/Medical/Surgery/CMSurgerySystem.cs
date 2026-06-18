@@ -1,11 +1,9 @@
-using Content.Server._CMU14.Medical.Surgery;
 using Content.Server._RMC14.Medical.Wounds;
 using Content.Server.Body.Systems;
 using Content.Server.Chat.Systems;
 using Content.Server.Popups;
-using Content.Shared._CMU14.Medical;
-using Content.Shared._CMU14.Medical.Surgery;
-using Content.Shared._CMU14.Medical.StatusEffects;
+using Content.Shared._CMU14.Medical.Human.Components;
+using Content.Shared._CMU14.Medical.Human.Effects;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Conditions;
@@ -18,10 +16,6 @@ using Content.Shared._RMC14.Xenonids.Organs;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Interaction;
 using Content.Shared.Prototypes;
-using Content.Shared.Tools.Components;
-using Content.Shared.Tools.Systems;
-using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
@@ -32,8 +26,6 @@ namespace Content.Server._RMC14.Medical.Surgery;
 
 public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
 {
-    private const string SynthSurgeryOpenQuality = "Screwing";
-
     [Dependency] private BodySystem _body = default!;
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private SharedContainerSystem _container = default!;
@@ -42,12 +34,7 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
-    [Dependency] private SharedSynthSystem _synth = default!;
-    [Dependency] private SharedToolSystem _tool = default!;
-    [Dependency] private RMCRepairableSystem _repairable = default!;
     [Dependency] private WoundsSystem _wounds = default!;
-    [Dependency] private CMUSurgeryDispatchSystem _cmuDispatch = default!;
-    [Dependency] private CMUSurgeryFlowSystem _cmuFlow = default!;
     [Dependency] private SharedPainShockSystem _cmuPain = default!;
 
     private readonly List<EntProtoId> _surgeries = new();
@@ -57,8 +44,6 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
         base.Initialize();
 
         SubscribeLocalEvent<CMSurgeryToolComponent, AfterInteractEvent>(OnToolAfterInteract);
-        SubscribeLocalEvent<SynthComponent, RMCSynthRepairToolUseAttemptEvent>(OnSynthRepairToolUseAttempt);
-        SubscribeLocalEvent<ToolComponent, AfterInteractEvent>(OnSynthScrewdriverAfterInteract);
 
         SubscribeLocalEvent<CMSurgeryStepBleedEffectComponent, CMSurgeryStepEvent>(OnStepBleedComplete);
         SubscribeLocalEvent<CMSurgeryClampBleedEffectComponent, CMSurgeryStepEvent>(OnStepClampBleedComplete);
@@ -72,51 +57,19 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
         LoadPrototypes();
     }
 
-    private void OnSynthRepairToolUseAttempt(Entity<SynthComponent> ent, ref RMCSynthRepairToolUseAttemptEvent args)
-    {
-        if (args.Handled || args.User == ent.Owner || !HasComp<CMSurgeryTargetComponent>(ent.Owner))
-            return;
-
-        if (IsSynthReattachStepTool(args.Used)
-            && TryComp<CMUSurgeryArmedStepComponent>(ent.Owner, out var armed)
-            && armed.Surgeon == args.User
-            && armed.LeafSurgeryId == "RMCSynthSurgeryReattachLimb")
-        {
-            if (!_cmuFlow.ToolMatchesCategory(args.Used, armed.RequiredToolCategory))
-            {
-                _popup.PopupEntity(Loc.GetString("cmu-medical-surgery-wrong-tool"), ent.Owner, args.User);
-                args.Handled = true;
-                return;
-            }
-
-            if (_cmuFlow.TryHandleArmedToolUse(ent.Owner, armed, args.User, args.Used, ent.Owner, out var handled, out _))
-                args.Handled = handled;
-            return;
-        }
-
-        if (IsSynthRepairToolForCurrentDamage(ent, args.User, args.Used))
-            return;
-
-        if (!HasMissingSynthLimbSlot(ent.Owner))
-            return;
-
-        if (!IsSynthSurgeryOpenTool(args.Used) && !IsSynthReattachStepTool(args.Used))
-            return;
-
-        if (!_cmuDispatch.TryDispatch(args.User, ent.Owner, args.Used))
-            return;
-
-        args.Handled = true;
-    }
-
     protected override void RefreshUI(EntityUid body)
     {
         if (!HasComp<CMSurgeryTargetComponent>(body))
             return;
-        if (HasComp<CMUHumanMedicalComponent>(body))
+        if (HasComp<HumanMedicalComponent>(body))
             return;
 
         var isSynth = HasComp<SynthComponent>(body);
+        // CMU14 start - synth limb surgery uses direct CMU interactions, not the old RMC surgery UI.
+        if (isSynth)
+            return;
+        // CMU14 end
+
         var surgeries = new Dictionary<NetEntity, List<EntProtoId>>();
         foreach (var surgery in _surgeries)
         {
@@ -141,75 +94,6 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
         _ui.SetUiState(body, CMSurgeryUIKey.Key, new CMSurgeryBuiState(surgeries));
     }
 
-    private void OnSynthScrewdriverAfterInteract(Entity<ToolComponent> ent, ref AfterInteractEvent args)
-    {
-        if (args.Handled || !args.CanReach || args.Target is not { } target)
-            return;
-
-        if (!IsSynthSurgeryOpenTool(ent.Owner, ent.Comp))
-            return;
-
-        if (!HasComp<SynthComponent>(target) || !HasComp<CMSurgeryTargetComponent>(target))
-            return;
-
-        if (args.User == target)
-            return;
-
-        if (!HasMissingSynthLimbSlot(target))
-            return;
-
-        if (!_cmuDispatch.TryDispatch(args.User, target, ent.Owner))
-            return;
-
-        args.Handled = true;
-    }
-
-    private bool IsSynthSurgeryOpenTool(EntityUid used, ToolComponent? tool = null)
-    {
-        return _tool.HasQuality(used, SynthSurgeryOpenQuality, tool);
-    }
-
-    private bool IsSynthReattachStepTool(EntityUid used)
-    {
-        return HasComp<BlowtorchComponent>(used) ||
-               HasComp<RMCCableCoilComponent>(used) ||
-               HasComp<BodyPartComponent>(used);
-    }
-
-    private bool IsSynthRepairToolForCurrentDamage(Entity<SynthComponent> synth, EntityUid user, EntityUid used)
-    {
-        if (HasComp<RMCCableCoilComponent>(used))
-            return _synth.HasDamage(synth.Owner, synth.Comp.CableCoilDamageGroup);
-
-        if (HasComp<BlowtorchComponent>(used) &&
-            _tool.HasQuality(used, synth.Comp.RepairQuality) &&
-            _synth.HasDamage(synth.Owner, synth.Comp.WelderDamageGroup))
-        {
-            return _repairable.UseFuel(used, user, 5, true);
-        }
-
-        return false;
-    }
-
-    private bool HasMissingSynthLimbSlot(EntityUid patient)
-    {
-        if (_body.GetRootPartOrNull(patient) is not { } root)
-            return false;
-
-        foreach (var (slotId, slot) in root.BodyPart.Children)
-        {
-            if (slot.Type is not (BodyPartType.Arm or BodyPartType.Leg))
-                continue;
-
-            var containerId = SharedBodySystem.GetPartSlotContainerId(slotId);
-            if (!_container.TryGetContainer(root.Entity, containerId, out var container))
-                return true;
-            if (container.ContainedEntities.Count == 0)
-                return true;
-        }
-
-        return false;
-    }
 
     private void OnToolAfterInteract(Entity<CMSurgeryToolComponent> ent, ref AfterInteractEvent args)
     {
@@ -222,6 +106,14 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
             return;
         }
 
+        if (HasComp<HumanMedicalComponent>(args.Target.Value))
+            return;
+
+        // CMU14 start - synth limb surgery is handled by CMUSynthLimbSurgerySystem.
+        if (HasComp<SynthComponent>(args.Target.Value))
+            return;
+        // CMU14 end
+
         if (HasComp<RMCCableCoilComponent>(ent.Owner))
             return;
 
@@ -233,25 +125,7 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
 
         if (user == args.Target)
         {
-            if (_cmuDispatch.TryDispatch(user, args.Target.Value, ent.Owner))
-            {
-                args.Handled = true;
-                return;
-            }
-
             _popup.PopupEntity(Loc.GetString("cmu-medical-surgery-self-not-allowed"), user, user);
-            args.Handled = true;
-            return;
-        }
-
-        if (_cmuDispatch.TryDispatch(user, args.Target.Value, ent.Owner))
-        {
-            args.Handled = true;
-            return;
-        }
-
-        if (HasComp<CMUHumanMedicalComponent>(args.Target.Value))
-        {
             args.Handled = true;
             return;
         }
@@ -274,9 +148,6 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
 
     private void OnStepScreamComplete(Entity<CMSurgeryStepEmoteEffectComponent> ent, ref CMSurgeryStepEvent args)
     {
-        if (HasComp<CMUAutodocContainedPatientComponent>(args.Body))
-            return;
-
         if (HasComp<SynthComponent>(args.Body))
             return;
 

@@ -52,11 +52,6 @@
         Piercing: 5
   - type: CMSurgeryTool
   - type: CMHemostat
-  - type: CMUImprovisedSurgeryTool
-    delayMultiplier: 2.1
-    mishapChance: 0.16
-    mishapDamageType: Piercing
-    mishapDamageAmount: 3
 
 - type: entity
   parent: UtensilBasePlastic

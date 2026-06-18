@@ -1,0 +1,253 @@
+- type: decal
+  abstract: true
+  parent: CMDecalBase
+  id: CMUCM13BloodBase
+  showMenu: false
+  defaultCleanable: true
+  defaultSnap: false
+  tags: ["station", "markings"]
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13BloodFloor1
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: mfloor1
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13BloodFloor2
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: mfloor2
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13BloodFloor3
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: mfloor3
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13BloodFloor4
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: mfloor4
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13BloodFloor5
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: mfloor5
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13BloodFloor6
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: mfloor6
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13BloodFloor7
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: mfloor7
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13BloodSplatter1
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: mgibbl1
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13BloodSplatter2
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: mgibbl2
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13BloodSplatter3
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: mgibbl3
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13BloodSplatter4
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: mgibbl4
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13BloodSplatter5
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: mgibbl5
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13BloodTrack1
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: tracks_1
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13BloodTrack2
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: tracks_2
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13BloodTrack3
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: tracks_3
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13BloodTrack4
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: tracks_4
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13BloodTrack5
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: tracks_5
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13BloodTrack6
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: tracks_6
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13BloodTrack7
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: tracks_7
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13BloodTrack8
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: tracks_8
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13XenoBloodTrack1
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: xtracks_1
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13XenoBloodTrack2
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: xtracks_2
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13XenoBloodTrack3
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: xtracks_3
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13XenoBloodTrack4
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: xtracks_4
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13XenoBloodTrack5
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: xtracks_5
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13XenoBloodTrack6
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: xtracks_6
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13XenoBloodTrack7
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: xtracks_7
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13XenoBloodTrack8
+  sprite:
+    sprite: _CMU14/Decals/CM13/blood.rsi
+    state: xtracks_8
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13HumanFootprintIn
+  sprite:
+    sprite: _CMU14/Decals/CM13/fluidtracks.rsi
+    state: human1
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13HumanFootprintOut
+  sprite:
+    sprite: _CMU14/Decals/CM13/fluidtracks.rsi
+    state: human2
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13PawprintIn
+  sprite:
+    sprite: _CMU14/Decals/CM13/fluidtracks.rsi
+    state: paw1
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13PawprintOut
+  sprite:
+    sprite: _CMU14/Decals/CM13/fluidtracks.rsi
+    state: paw2
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13ClawprintIn
+  sprite:
+    sprite: _CMU14/Decals/CM13/fluidtracks.rsi
+    state: claw1
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13ClawprintOut
+  sprite:
+    sprite: _CMU14/Decals/CM13/fluidtracks.rsi
+    state: claw2
+
+- type: decal
+  parent: CMUCM13BloodBase
+  id: CMUCM13WheelTrack
+  sprite:
+    sprite: _CMU14/Decals/CM13/fluidtracks.rsi
+    state: wheels

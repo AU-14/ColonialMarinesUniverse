@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   save: false
   parent: BaseMobSpecies
   id: RMCBaseMobSpeciesOrganic
@@ -112,7 +112,8 @@
     prototype: CMUHumanBody
     requiredLegs: 2
   - type: BodyZoneTargeting
-  - type: CMUHumanMedical
+  - type: HumanMedical
+  - type: HumanMedicalSummary
   - type: HitLocation
   - type: PainShock
   - type: CMUPainFeedback
@@ -151,7 +152,6 @@
     damage:
       types:
         Blunt: 5
-  - type: CMSurgeryTarget
   - type: UserInterface
     interfaces:
       enum.VoiceMaskUIKey.Key:
@@ -160,8 +160,6 @@
         type: HumanoidMarkingModifierBoundUserInterface
       enum.StrippingUiKey.Key:
         type: StrippableBoundUserInterface
-      enum.CMSurgeryUIKey.Key:
-        type: CMSurgeryBui
       enum.HolocardChangeUIKey.Key:
         type: HolocardChangeBoundUserInterface
         interactionRange: 0
@@ -179,14 +177,6 @@
         type: ViewIntelObjectivesBui
       enum.BodyPartPickerUIKey.Key:
         type: BodyPartPickerBui
-      enum.CMUSurgeryUIKey.Key:
-        type: CMUSurgeryBui
-      enum.CMUTraumaGovernorUI.Key:
-        type: CMUTraumaGovernorBui
-        requireInputValidation: false
-      enum.CMUMedicalFieldCraftingUI.Key:
-        type: CMUMedicalFieldCraftingBui
-        requireInputValidation: false
   - type: Infectable
   - type: Tackleable
   - type: XenoNestable

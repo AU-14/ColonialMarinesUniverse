@@ -44,6 +44,18 @@ public sealed partial class FootPrintsComponent : Component
     };
 
     [ViewVariables(VVAccess.ReadOnly), DataField]
+    public ProtoId<DecalPrototype> LeftBareDecal = "FootprintBareLeft";
+
+    [ViewVariables(VVAccess.ReadOnly), DataField]
+    public ProtoId<DecalPrototype> RightBareDecal = "FootprintBareRight";
+
+    [ViewVariables(VVAccess.ReadOnly), DataField]
+    public ProtoId<DecalPrototype> ShoesDecal = "FootprintShoes";
+
+    [ViewVariables(VVAccess.ReadOnly), DataField]
+    public ProtoId<DecalPrototype> SuitDecal = "FootprintSuit";
+
+    [ViewVariables(VVAccess.ReadOnly), DataField]
     public EntProtoId<FootPrintComponent> StepProtoId = "Footstep";
 
     [ViewVariables(VVAccess.ReadOnly), DataField]

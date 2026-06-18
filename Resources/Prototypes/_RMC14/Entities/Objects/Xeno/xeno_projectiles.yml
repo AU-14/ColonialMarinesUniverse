@@ -202,6 +202,9 @@
     damage:
       types:
         Slash: 10
+  - type: CMUProjectileShrapnel
+    severity: 8
+    removalDepth: Surface
   - type: XenoProjectile
     deleteOnFriendlyXeno: false
   - type: ProjectileMaxRange
@@ -221,6 +224,7 @@
         Slash: 8
   - type: CMUProjectileShrapnel
     severity: 8
+    removalDepth: Surface
   - type: ProjectileMaxRange
     max: 5
 

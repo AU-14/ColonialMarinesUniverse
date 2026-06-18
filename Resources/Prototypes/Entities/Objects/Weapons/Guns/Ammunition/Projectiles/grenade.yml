@@ -31,6 +31,10 @@
     damage:
       types:
         Piercing: 45
+  - type: CMUProjectileShrapnel
+    severity: 14
+    moveDamagePerFragment: 0.75
+    removalDepth: Deep
   - type: TimedDespawn
     lifetime: 0.25
 

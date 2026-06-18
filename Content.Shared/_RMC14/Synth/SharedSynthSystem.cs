@@ -7,6 +7,8 @@ using Content.Shared._RMC14.Repairable;
 using Content.Shared._RMC14.StatusEffect;
 using Content.Shared.Actions;
 using Content.Shared.Bed.Sleep;
+using Content.Shared.Body.Components;
+using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -25,6 +27,7 @@ using Content.Shared.Tools.Components;
 using Content.Shared.Tools.Systems;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Whitelist;
+using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
@@ -33,10 +36,13 @@ namespace Content.Shared._RMC14.Synth;
 
 public abstract partial class SharedSynthSystem : EntitySystem
 {
+    private static readonly TimeSpan AssistedRepairMinimumTime = TimeSpan.FromSeconds(0.3);
     private static readonly TimeSpan UnableUsePopupCooldown = TimeSpan.FromSeconds(1);
 
     [Dependency] private RMCRepairableSystem _repairable = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedToolSystem _tool = default!;
@@ -222,6 +228,9 @@ public abstract partial class SharedSynthSystem : EntitySystem
         if (args.Handled)
             return;
 
+        if (!synth.Comp.Initialized)
+            MakeSynth(synth);
+
         // TODO
         // When limb damage is released, make this systefsm re-used for prosthetic limbs. They use the exact same values in CM13.
         // Give synths robot limbs
@@ -239,7 +248,11 @@ public abstract partial class SharedSynthSystem : EntitySystem
         }
 
         var ev = new RMCSynthRepairEvent();
-        var repairTime = selfRepair ? synth.Comp.SelfRepairTime : synth.Comp.RepairTime;
+        var repairTime = selfRepair
+            ? synth.Comp.SelfRepairTime
+            : synth.Comp.RepairTime > AssistedRepairMinimumTime
+                ? synth.Comp.RepairTime
+                : AssistedRepairMinimumTime;
         var doAfter = new DoAfterArgs(EntityManager, user, repairTime, ev, synth, used: args.Used)
         {
             BreakOnMove = true,
@@ -256,6 +269,8 @@ public abstract partial class SharedSynthSystem : EntitySystem
 
                 if (_doAfter.TryStartDoAfter(doAfter))
                 {
+                    PlayRepairToolSound(used, user);
+
                     var selfMsg = Loc.GetString("rmc-synth-repair-brute-start-self", ("user", user), ("target", synth), ("tool", used), ("limb", "chest"));
                     var othersMsg = Loc.GetString("rmc-synth-repair-brute-start-others", ("user", user), ("target", synth), ("tool", used), ("limb", "chest"));
 
@@ -267,6 +282,11 @@ public abstract partial class SharedSynthSystem : EntitySystem
             }
             else
             {
+                // CMU14 start - missing synth limbs are handled by CMU direct limb surgery.
+                if (HasMissingSynthLimbSlot(synth.Owner))
+                    return;
+                // CMU14 end
+
                 _popup.PopupClient(Loc.GetString("rmc-repairable-not-damaged", ("target", synth)), user, user, PopupType.SmallCaution);
             }
         }
@@ -278,6 +298,8 @@ public abstract partial class SharedSynthSystem : EntitySystem
 
                 if (_doAfter.TryStartDoAfter(doAfter))
                 {
+                    PlayRepairToolSound(used, user);
+
                     var selfMsg = Loc.GetString("rmc-synth-repair-burn-start-self", ("user", user), ("target", synth), ("tool", used), ("limb", "chest"));
                     var othersMsg = Loc.GetString("rmc-synth-repair-burn-start-others", ("user", user), ("target", synth), ("tool", used), ("limb", "chest"));
 
@@ -290,6 +312,52 @@ public abstract partial class SharedSynthSystem : EntitySystem
             // No damage: leave InteractUsing unhandled so AfterInteract can open synth surgery dispatch.
         }
     }
+
+    private void PlayRepairToolSound(EntityUid used, EntityUid user)
+    {
+        if (!TryComp<ToolComponent>(used, out var tool))
+            return;
+
+        _tool.PlayToolSound(used, tool, user);
+    }
+
+    // CMU14 start - suppress generic repair feedback while CMU synth limb surgery is available.
+    private bool HasMissingSynthLimbSlot(EntityUid patient)
+    {
+        foreach (var (parentUid, parentPart) in _body.GetBodyChildren(patient))
+        {
+            foreach (var (slotId, slot) in parentPart.Children)
+            {
+                if (!IsSynthReattachableSlot(slotId, slot.Type) ||
+                    (_containers.TryGetContainer(parentUid, SharedBodySystem.GetPartSlotContainerId(slotId), out var container) &&
+                     container.ContainedEntities.Count > 0))
+                {
+                    continue;
+                }
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool IsSynthReattachableSlot(string slotId, BodyPartType type)
+    {
+        return slotId == "head" ||
+            (type is BodyPartType.Arm or BodyPartType.Hand or BodyPartType.Leg or BodyPartType.Foot &&
+             SymmetryForSlot(slotId) != BodyPartSymmetry.None);
+    }
+
+    private static BodyPartSymmetry SymmetryForSlot(string slotId)
+    {
+        return slotId.StartsWith("left_", StringComparison.Ordinal)
+            ? BodyPartSymmetry.Left
+            : slotId.StartsWith("right_", StringComparison.Ordinal)
+                ? BodyPartSymmetry.Right
+                : BodyPartSymmetry.None;
+    }
+    // CMU14 end
 
     private void OnSynthRepairDoAfter(Entity<SynthComponent> synth, ref RMCSynthRepairEvent args)
     {
@@ -306,8 +374,11 @@ public abstract partial class SharedSynthSystem : EntitySystem
 
         if (HasComp<BlowtorchComponent>(used) && _repairable.UseFuel(used.Value, user, 5))
         {
-            if (synth.Comp.WelderDamageToRepair != null)
-                _damageable.TryChangeDamage(synth, synth.Comp.WelderDamageToRepair, true, false, origin: user);
+            TryApplySynthRepair(
+                synth,
+                synth.Comp.WelderDamageToRepair,
+                synth.Comp.WelderDamageGroup,
+                user);
 
             var selfMsg = Loc.GetString("rmc-synth-repair-brute-finish-self", ("user", user), ("target", synth), ("tool", used), ("limb", "chest"));
             var othersMsg = Loc.GetString("rmc-synth-repair-brute-finish", ("user", user), ("target", synth), ("tool", used), ("limb", "chest"));
@@ -315,8 +386,11 @@ public abstract partial class SharedSynthSystem : EntitySystem
         }
         else if (HasComp<RMCCableCoilComponent>(args.Used) && _stack.Use(args.Used.Value, 1))
         {
-            if (synth.Comp.CableCoilDamageToRepair != null)
-                _damageable.TryChangeDamage(synth, synth.Comp.CableCoilDamageToRepair, true, false, origin: args.User);
+            TryApplySynthRepair(
+                synth,
+                synth.Comp.CableCoilDamageToRepair,
+                synth.Comp.CableCoilDamageGroup,
+                args.User);
 
             var selfMsg = Loc.GetString("rmc-synth-repair-burn-finish-self", ("user", user), ("target", synth), ("tool", used), ("limb", "chest"));
             var othersMsg = Loc.GetString("rmc-synth-repair-burn-finish", ("user", user), ("target", synth), ("tool", used), ("limb", "chest"));
@@ -352,7 +426,21 @@ public abstract partial class SharedSynthSystem : EntitySystem
 
     public bool HasDamage(EntityUid synth, ProtoId<DamageGroupPrototype> group)
     {
-        if (!TryComp<DamageableComponent>(synth, out var damageable))
+        if (HasDamageOnEntity(synth, group))
+            return true;
+
+        foreach (var (partUid, _) in _body.GetBodyChildren(synth))
+        {
+            if (HasDamageOnEntity(partUid, group))
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool HasDamageOnEntity(EntityUid uid, ProtoId<DamageGroupPrototype> group)
+    {
+        if (!TryComp<DamageableComponent>(uid, out var damageable))
             return false;
 
         if (damageable.Damage.Empty)
@@ -364,6 +452,40 @@ public abstract partial class SharedSynthSystem : EntitySystem
         if (groupDmg <= FixedPoint2.Zero)
             return false;
 
+        return true;
+    }
+
+    private bool TryApplySynthRepair(
+        Entity<SynthComponent> synth,
+        DamageSpecifier? repair,
+        ProtoId<DamageGroupPrototype> group,
+        EntityUid user)
+    {
+        if (repair == null)
+            return false;
+
+        if (TryApplySynthRepairToEntity(synth.Owner, repair, group, user))
+            return true;
+
+        foreach (var (partUid, _) in _body.GetBodyChildren(synth.Owner))
+        {
+            if (TryApplySynthRepairToEntity(partUid, repair, group, user))
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool TryApplySynthRepairToEntity(
+        EntityUid uid,
+        DamageSpecifier repair,
+        ProtoId<DamageGroupPrototype> group,
+        EntityUid user)
+    {
+        if (!HasDamageOnEntity(uid, group))
+            return false;
+
+        _damageable.TryChangeDamage(uid, repair, true, false, origin: user);
         return true;
     }
 

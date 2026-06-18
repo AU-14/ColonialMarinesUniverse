@@ -1,0 +1,29 @@
+- type: entity
+  parent: CMBaseHealingItem
+  id: CMUFixOVein
+  name: Fix-o-vein
+  description: A single-use vein-sealing applicator used during surgery to repair internal bleeding.
+  components:
+  - type: Tag
+    tags:
+    - CMUFixOVein
+  - type: CMSurgeryTool
+    startSound:
+      path: "/Audio/_RMC14/Medical/bandage.ogg"
+    endSound:
+      path: "/Audio/Items/Medical/brutepack_end.ogg"
+  - type: CMUFixOVein
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/healing.rsi
+    state: fixovein
+  - type: Item
+    size: Small
+    sprite: _RMC14/Objects/Medical/Surgery/healing.rsi
+    inhandVisuals:
+      left:
+      - state: inhand-left
+      right:
+      - state: inhand-right
+
+- type: Tag
+  id: CMUFixOVein

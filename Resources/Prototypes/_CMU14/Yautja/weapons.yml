@@ -753,6 +753,10 @@
       types:
         Piercing: 24
         Slash: 6
+  - type: CMUProjectileShrapnel
+    severity: 14
+    moveDamagePerFragment: 0.75
+    removalDepth: Deep
 
 - type: entity
   parent: BaseItem

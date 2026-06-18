@@ -3925,51 +3925,6 @@
 
 - type: entity
   parent: CMUYautjaStructureBase
-  id: CMUYautjaStructureYautjaMachinesAutodocClosed
-  name: yautja autodoc closed
-  description: An ancient Yautja hunting-ground structure.
-  components:
-    - type: Sprite
-      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
-      drawdepth: Objects
-      layers:
-        - state: "autodoc_closed"
-    - type: Icon
-      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
-      state: "autodoc_closed"
-
-- type: entity
-  parent: CMUYautjaStructureBase
-  id: CMUYautjaStructureYautjaMachinesAutodocOpen
-  name: yautja autodoc open
-  description: An ancient Yautja hunting-ground structure.
-  components:
-    - type: Sprite
-      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
-      drawdepth: Objects
-      layers:
-        - state: "autodoc_open"
-    - type: Icon
-      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
-      state: "autodoc_open"
-
-- type: entity
-  parent: CMUYautjaStructureBase
-  id: CMUYautjaStructureYautjaMachinesAutodocOperate
-  name: yautja autodoc operate
-  description: An ancient Yautja hunting-ground structure.
-  components:
-    - type: Sprite
-      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
-      drawdepth: Objects
-      layers:
-        - state: "autodoc_operate"
-    - type: Icon
-      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
-      state: "autodoc_operate"
-
-- type: entity
-  parent: CMUYautjaStructureBase
   id: CMUYautjaStructureYautjaMachinesSleeperOpen
   name: yautja sleeper open
   description: An ancient Yautja hunting-ground structure.

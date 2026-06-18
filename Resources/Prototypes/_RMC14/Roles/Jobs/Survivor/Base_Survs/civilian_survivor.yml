@@ -159,9 +159,9 @@
         9: 16 # 4%
       CMPacketGrenadeHighExplosiveFilled:
         17: 26 # 5%
-      CMUpgradedTraumaKit10:
+      CMTraumaKit10:
         27: 38 # 6%
-      CMUpgradedBurnKit10:
+      CMBurnKit10:
         39: 54 # 8%
       RMCAttachmentSuppressor:
         55: 74 # 10% TODO Attachments box

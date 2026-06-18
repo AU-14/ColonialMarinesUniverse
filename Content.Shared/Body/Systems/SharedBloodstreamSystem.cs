@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared._RMC14.Medical.Wounds;
+using Content.Shared._CMU14.Medical.Presentation;
 using Content.Shared.Alert;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Events;
@@ -402,7 +403,12 @@ public abstract partial class SharedBloodstreamSystem : EntitySystem
                 tempSolution.AddSolution(temp, _prototypeManager);
             }
 
-            _puddle.TrySpillAt(ent.Owner, tempSolution, out _, sound: false);
+            // CMU14 begin - present biological blood loss as CM13/RMC-style decals instead of generic puddles.
+            var spillEv = new CMUBloodSpillAttemptEvent(ent.Owner, tempSolution, false);
+            RaiseLocalEvent(ent.Owner, ref spillEv);
+            if (!spillEv.Handled)
+                _puddle.TrySpillAt(ent.Owner, tempSolution, out _, sound: false);
+            // CMU14 end
 
             tempSolution.RemoveAllSolution();
         }
@@ -468,7 +474,12 @@ public abstract partial class SharedBloodstreamSystem : EntitySystem
             SolutionContainer.RemoveAllSolution(ent.Comp.TemporarySolution.Value);
         }
 
-        _puddle.TrySpillAt(ent, tempSol, out _);
+        // CMU14 begin - present biological blood loss as CM13/RMC-style decals instead of generic puddles.
+        var spillEv = new CMUBloodSpillAttemptEvent(ent.Owner, tempSol, true);
+        RaiseLocalEvent(ent.Owner, ref spillEv);
+        if (!spillEv.Handled)
+            _puddle.TrySpillAt(ent, tempSol, out _);
+        // CMU14 end
     }
 
     /// <summary>

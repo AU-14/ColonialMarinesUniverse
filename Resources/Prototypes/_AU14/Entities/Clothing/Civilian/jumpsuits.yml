@@ -139,6 +139,19 @@
 
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14JoeHazmat
+  name: Working Joe Hazardous Uniform
+  description: A reinforced uniform used for Synthetic labor in hazardous areas. Tomorrow, Together. Its vital tracker and tracking beacon appear to be enabled.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Civilian/Uniforms/joehazmat.rsi
+  - type: CMArmor
+    bio: 20
+    explosionArmor: 15
+    melee: 10
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianParamedicClothesRed
   name: Red Paramedic Clothes
   description: Clothes designed for paramedics.

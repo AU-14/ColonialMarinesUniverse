@@ -1018,6 +1018,7 @@
     canUseUnskilled: true
     skills:
       RMCSkillMedical: 2
+    cmuStopsArterialBleeding: true
     cmuMechanisms: 7
     cmuTreatmentQuality: Optimal
     cmuCleanupClears: 16

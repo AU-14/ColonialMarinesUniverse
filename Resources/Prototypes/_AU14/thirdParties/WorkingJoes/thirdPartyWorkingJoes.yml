@@ -3,7 +3,7 @@
   leadersToSpawn:
     AU14AICoreApolloCivilian: 1
   gruntsToSpawn:
-    AU14MobWorkingJoe: 2
+    AU14MobWorkingJoeColony: 2
   scalewithpop: false
   spawnTogether: true
 
@@ -20,9 +20,9 @@
 - type: partySpawn
   id: WorkingJoesNoAPOLLO
   leadersToSpawn:
-    AU14MobWorkingJoe: 1
+    AU14MobWorkingJoeColony: 1
   gruntsToSpawn:
-    AU14MobWorkingJoe: 1
+    AU14MobWorkingJoeColony: 1
   scalewithpop: false
   spawnTogether: true
 

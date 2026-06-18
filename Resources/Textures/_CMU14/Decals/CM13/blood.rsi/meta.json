@@ -1,0 +1,95 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from CM-SS13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/effects/blood.dmi and converted to RSI for CMU14.",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "tracks_1"
+        },
+        {
+            "name": "tracks_2"
+        },
+        {
+            "name": "tracks_3"
+        },
+        {
+            "name": "tracks_4"
+        },
+        {
+            "name": "tracks_5"
+        },
+        {
+            "name": "tracks_6"
+        },
+        {
+            "name": "tracks_7"
+        },
+        {
+            "name": "tracks_8"
+        },
+        {
+            "name": "xtracks_1"
+        },
+        {
+            "name": "xtracks_2"
+        },
+        {
+            "name": "xtracks_3"
+        },
+        {
+            "name": "xtracks_4"
+        },
+        {
+            "name": "xtracks_5"
+        },
+        {
+            "name": "xtracks_6"
+        },
+        {
+            "name": "xtracks_7"
+        },
+        {
+            "name": "xtracks_8"
+        },
+        {
+            "name": "mgibbl1"
+        },
+        {
+            "name": "mgibbl2"
+        },
+        {
+            "name": "mgibbl3"
+        },
+        {
+            "name": "mgibbl4"
+        },
+        {
+            "name": "mgibbl5"
+        },
+        {
+            "name": "mfloor1"
+        },
+        {
+            "name": "mfloor2"
+        },
+        {
+            "name": "mfloor3"
+        },
+        {
+            "name": "mfloor4"
+        },
+        {
+            "name": "mfloor5"
+        },
+        {
+            "name": "mfloor6"
+        },
+        {
+            "name": "mfloor7"
+        }
+    ]
+}

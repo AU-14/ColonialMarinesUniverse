@@ -1,4 +1,40 @@
 - type: decal
+  id: FootprintBareLeft
+  showMenu: false
+  defaultCleanable: true
+  defaultSnap: false
+  sprite:
+    sprite: Effects/footprints.rsi
+    state: footprint-left-bare-human
+
+- type: decal
+  id: FootprintBareRight
+  showMenu: false
+  defaultCleanable: true
+  defaultSnap: false
+  sprite:
+    sprite: Effects/footprints.rsi
+    state: footprint-right-bare-human
+
+- type: decal
+  id: FootprintShoes
+  showMenu: false
+  defaultCleanable: true
+  defaultSnap: false
+  sprite:
+    sprite: Effects/footprints.rsi
+    state: footprint-shoes
+
+- type: decal
+  id: FootprintSuit
+  showMenu: false
+  defaultCleanable: true
+  defaultSnap: false
+  sprite:
+    sprite: Effects/footprints.rsi
+    state: footprint-suit
+
+- type: decal
   id: FootprintDragging1
   showMenu: false
   defaultCleanable: true

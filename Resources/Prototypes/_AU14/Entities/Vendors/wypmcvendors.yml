@@ -317,12 +317,8 @@
         amount: 60
       - id: CMOintment10
         amount: 60
-      - id: CMUPlainTraumaDressing10
+      - id: CMTraumaKit10
         amount: 40
-      - id: CMUCoagulantPowder
-        amount: 30
-      - id: CMUBurnGel
-        amount: 30
       - id: CMBurnKit10
         amount: 30
       - id: CMTraumaKit10

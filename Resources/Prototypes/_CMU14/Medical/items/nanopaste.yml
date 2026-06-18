@@ -1,0 +1,21 @@
+- type: entity
+  parent: CMBaseHealingItem
+  id: CMUNanopaste
+  name: nanopaste
+  description: A rare self-setting repair paste used to restore damaged prosthetic limb frames and circuitry.
+  components:
+  - type: Tag
+    tags:
+    - CMUNanopaste
+  - type: CMUNanopaste
+    uses: 3
+    repairAmount: 20
+  - type: Sprite
+    state: ointment
+  - type: Item
+    heldPrefix: ointment
+  - type: StackPrice
+    price: 60
+
+- type: Tag
+  id: CMUNanopaste

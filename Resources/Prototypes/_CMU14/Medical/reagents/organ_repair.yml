@@ -1,5 +1,60 @@
 - type: reagent
   parent: CMReagentMedicine
+  id: CMAlkysine
+  name: reagent-name-cmalkysine
+  desc: reagent-desc-cmalkysine
+  flavor: medicine
+  physicalDesc: reagent-physical-desc-fizzy
+  color: "#c8a5dc"
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.05
+      effects:
+      - !type:HumanChemicalLedgerEffect
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentThreshold
+          min: 30
+        damage:
+          types:
+            Poison: 1
+      - !type:GenericStatusEffect
+        conditions:
+        - !type:ReagentThreshold
+          min: 50
+        key: Stun
+        component: Stunned
+        time: 1
+        type: Add
+        refresh: true
+
+- type: reagent
+  parent: CMReagentMedicine
+  id: CMPeridaxon
+  name: reagent-name-cmperidaxon
+  desc: reagent-desc-cmperidaxon
+  flavor: medicine
+  physicalDesc: reagent-physical-desc-viscous
+  color: "#80c0a0"
+  overdose: 15
+  criticalOverdose: 25
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.05
+      effects:
+      - !type:HumanChemicalLedgerEffect
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentThreshold
+          min: 25
+        damage:
+          types:
+            Poison: 6
+
+- type: reagent
+  parent: CMReagentMedicine
   id: CMUHepatocytin
   name: reagent-name-cmu-hepatocytin
   desc: reagent-desc-cmu-hepatocytin

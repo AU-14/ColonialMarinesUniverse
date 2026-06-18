@@ -13,6 +13,9 @@
     - HeadTop
     - HeadSide
     - Snout
+  - type: BreathMask
+  - type: Item
+    size: Small
   - type: Tag
     tags:
     - GasMask

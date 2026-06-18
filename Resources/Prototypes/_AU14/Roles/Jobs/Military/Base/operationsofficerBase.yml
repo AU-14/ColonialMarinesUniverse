@@ -52,8 +52,8 @@
       prefix: au14-job-prefix-govforplatop
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_AU14/Interface/au14govforhud.rsi
-        state: govfor_po
+        sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+        state: old_govfor_platco
 
 - type: playTimeTracker
   id: AU14JobGOVFORPlatOp

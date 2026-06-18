@@ -32,11 +32,6 @@
     - WhitelistChameleon
   - type: CMSurgeryTool
   - type: CMUOrganClamp
-  - type: CMUImprovisedSurgeryTool
-    delayMultiplier: 2.5
-    mishapChance: 0.14
-    mishapDamageType: Blunt
-    mishapDamageAmount: 2
 
 - type: entity
   parent: [ClothingHeadBandBase, ClothingMaskBandBlack]

@@ -151,7 +151,13 @@ namespace Content.Client.Input
             human.AddFunction(CMKeyFunctions.RMCRest);
             human.AddFunction(CMUKeyFunctions.CMUCycleBodyZoneTarget);
             human.AddFunction(CMUKeyFunctions.CMUCycleBodyZoneTargetReverse);
-            human.AddFunction(CMUKeyFunctions.CMUOpenMedicalCraftingMenu);
+            human.AddFunction(CMUKeyFunctions.CMUTargetBodyZoneHead);
+            human.AddFunction(CMUKeyFunctions.CMUTargetBodyZoneTorso);
+            human.AddFunction(CMUKeyFunctions.CMUTargetBodyZoneLeftArm);
+            human.AddFunction(CMUKeyFunctions.CMUTargetBodyZoneRightArm);
+            human.AddFunction(CMUKeyFunctions.CMUTargetBodyZoneLeftLeg);
+            human.AddFunction(CMUKeyFunctions.CMUTargetBodyZoneRightLeg);
+            human.AddFunction(CMUKeyFunctions.CMUToggleSurgeryMode);
             human.AddFunction(CMUKeyFunctions.CMUToggleShootDownZLevel);
 
             //Xenonid

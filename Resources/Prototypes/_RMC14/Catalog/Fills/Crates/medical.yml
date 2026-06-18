@@ -124,9 +124,8 @@
   components:
   - type: StorageFill
     contents:
-      - id: CMUPlainTraumaDressing10
-      - id: CMUCoagulantPowder
-      - id: CMUBurnGel
+      - id: CMTraumaKit10
+      - id: CMBurnKit10
       - id: CMBloodPackFull
       - id: CMBloodPack
 

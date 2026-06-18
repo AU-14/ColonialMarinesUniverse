@@ -3,8 +3,8 @@ using Content.Server.Atmos.EntitySystems;
 using Content.Server.Body.Components;
 using Content.Server.Chat.Systems;
 using Content.Server.EntityEffects;
-using Content.Shared._CMU14.Medical;
-using Content.Shared._CMU14.Medical.Organs.Lungs.Events;
+using Content.Shared._CMU14.Medical.Human.Components;
+using Content.Shared._CMU14.Medical.Human.Organs.Lungs.Events;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Alert;
@@ -142,7 +142,7 @@ public sealed partial class RespiratorSystem : EntitySystem
         }
 
         var efficiencyMultiplier = 1.0f;
-        if (HasComp<CMUHumanMedicalComponent>(entity.Owner))
+        if (HasComp<HumanMedicalComponent>(entity.Owner))
         {
             var efficiencyEv = new LungEfficiencyMultiplyEvent(entity.Owner, efficiencyMultiplier);
             RaiseLocalEvent(entity, ref efficiencyEv);

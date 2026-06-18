@@ -33,6 +33,10 @@
       types:
         Piercing: 25
     deleteOnCollide: true
+  - type: CMUProjectileShrapnel
+    severity: 12
+    moveDamagePerFragment: 0.75
+    removalDepth: Deep
   - type: CMArmorPiercing
     amount: 20
   - type: TimedDespawn

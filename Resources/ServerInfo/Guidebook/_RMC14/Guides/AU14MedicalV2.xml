@@ -1,37 +1,25 @@
 <Document>
 
-  # Medical V2
+  # Medical V3
 
   ## Overview
-  - The medical system has heavily changed.
-  - Patients now suffer specific wounds on their limbs.
-  - Untreated wounds reduce the maximum health of the affected limb.
-  - Trauma kits, gauze, burn kits, ointment, and hemostatic gauze treat wounds normally.
-  - Once every wound on a limb is treated, the wounds passively recover and the limb can return to full health.
+  - Marines now suffer wounds, bleeding, fractures, organ damage, embedded shrapnel, severance, and surgery state on specific body regions.
+  - Field treatment only works on the selected body region. If the selected region cannot be helped, the body selector opens so you can choose a useful target.
+  - Treated wounds still leave damage behind. Corpsmen stabilize the patient in the field; doctors and surgeons finish internal bleeding, organs, fractures, shrapnel, and limb work.
+  - Medical crafting for packed gauze, coagulant powder, burn gel, and plain trauma dressings has been removed.
 
-  ## Field treatment crafting
-  - Use [keybind="CMUOpenMedicalCraftingMenu"] to fast craft medical treatments.
-  - Crafting uses one ingredient and one packed trauma kit.
-  - Coagulant powder and a packed trauma kit create a normal trauma kit.
-  - Burn gel and a packed trauma kit create a normal burn kit.
-
-  ## Ingredients
+  ## Field Treatments
   <Box>
-    <GuideEntityEmbed Entity="CMUCoagulantPowder1"/>
-    <GuideEntityEmbed Entity="CMUBurnGel1"/>
-  </Box>\n
-
-  ## Base items
-  <Box>
-    <GuideEntityEmbed Entity="CMUPlainTraumaDressing10"/>
+    <GuideEntityEmbed Entity="CMGauze10"/>
+    <GuideEntityEmbed Entity="CMOintment10"/>
     <GuideEntityEmbed Entity="CMTraumaKit10"/>
     <GuideEntityEmbed Entity="CMBurnKit10"/>
   </Box>
 
   ## Surgical line and synth graft
-  - Surgical line now heals limb health only.
-  - Synth graft now heals limb health only.
-  - Neither item treats wounds or restores maximum limb health by itself.
-  - Treat wounds first, then use line or graft when the limb still needs health.
+  - Surgical line is a temporary brute bleed suppression tool for a chosen body region.
+  - Synth graft is a temporary burn suppression tool for a chosen body region.
+  - Both stop the field problem long enough to move the patient, but they do not replace proper wound treatment or surgery.
+  - Internal bleeding, fractures, organs, shrapnel, and severed limbs still need the correct surgical procedure.
 
 </Document>

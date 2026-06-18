@@ -36,6 +36,7 @@ public sealed partial class RMCDefibrillatorSystem : EntitySystem
         // wipe the heal so DefibrillatorSystem.Zap's TryChangeDamage no-ops.
         var attempt = new RMCDefibrillatorAttemptEvent(args.Target);
         RaiseLocalEvent(args.Target, attempt);
+        RaiseLocalEvent(attempt); // CMU14: broadcast final attempt state for telemetry.
         if (attempt.Cancelled)
         {
             args.Heal = new DamageSpecifier();

@@ -1,0 +1,276 @@
+<Document>
+# Surgery
+
+Surgery is for injuries that field medicine cannot finish: internal bleeding, fractured bones, damaged organs, embedded shrapnel, eschar, alien embryos, missing limbs, and prosthetic work. Start by selecting the correct body part, enabling surgery mode, and using the next listed tool on the patient.
+
+The patient should be on a surgery table or otherwise secured. Anesthesia or strong pain control prevents pain interruptions. Dead or unconscious patients do not suffer pain failures, but they still need the correct access and tools.
+
+<Box>
+  <GuideEntityEmbed Entity="CMScalpel"/>
+  <GuideEntityEmbed Entity="CMHemostat"/>
+  <GuideEntityEmbed Entity="CMRetractor"/>
+  <GuideEntityEmbed Entity="CMCautery"/>
+  <GuideEntityEmbed Entity="CMSurgicalDrill"/>
+  <GuideEntityEmbed Entity="CMCircularSaw"/>
+  <GuideEntityEmbed Entity="CMBonesetter"/>
+  <GuideEntityEmbed Entity="CMBoneGel"/>
+</Box>
+
+<Box>
+  <GuideEntityEmbed Entity="CMTraumaKit10"/>
+  <GuideEntityEmbed Entity="CMBurnKit10"/>
+  <GuideEntityEmbed Entity="CMSurgicalLine"/>
+  <GuideEntityEmbed Entity="CMSynthGraft"/>
+  <GuideEntityEmbed Entity="CMUFixOVein"/>
+</Box>
+
+## Surgical Access
+
+Most surgery begins with surgical access:
+
+1. Scalpel: open an incision.
+2. Hemostat: clamp surgical bleeders.
+3. Retractor: retract the incision for shallow access.
+
+On arms, hands, legs, feet, and groin, shallow access is enough for internal bleeding repair, fracture work, shrapnel removal if it is not buried behind bone, eschar removal, stump sealing, and closing.
+
+The chest and head may need deep access:
+
+1. Scalpel: open an incision.
+2. Hemostat: clamp surgical bleeders.
+3. Retractor: retract the incision.
+4. Circular saw or surgical drill: open bone access.
+
+Compound or shattered fractures in the head or chest can provide deep access after the incision is opened and retracted. Do not skip the incision. Bone damage can remove the need to saw or drill through intact bone, but it does not let you operate through closed skin.
+
+To close up:
+
+1. Fix anything still exposed.
+2. If bone access was opened, use bone gel, bone setter, then bone gel to close the bone access.
+3. Use cautery to close the incision.
+
+If you close an incision without clamping surgical bleeders first, the surgical bleeding can become internal bleeding.
+
+## Common Repairs
+
+### Wound Suturing
+
+Access needed: no full incision route. Target the wounded body part and use surgical line.
+
+Wound suturing is for closing treated brute wounds. It does not remove internal bleeding, repair fractures, fix organs, or restore missing limbs. Trauma kits are field wound care, not the surgical suturing step.
+
+### Internal Bleeding
+
+Access needed: shallow access. Chest and head internal bleeding can also be repaired from shallow access if the bleed is reachable.
+
+Steps:
+
+1. Open incision with a scalpel.
+2. Clamp surgical bleeders with a hemostat.
+3. Retract with a retractor.
+4. Repair the bleed with Fix-o-vein.
+5. Close with cautery when no exposed repair remains.
+
+Surgical line can seal the bleed in an emergency, but Fix-o-vein is the proper surgical tool.
+
+### Broken Bones
+
+Access needed: shallow access on limbs and extremities. Chest and head need deep access unless the existing fracture is compound or shattered.
+
+Hairline, simple, and compound repair:
+
+1. Open incision.
+2. Clamp bleeders.
+3. Retract.
+4. Apply bone gel.
+5. Set the bone with a bone setter.
+6. Apply bone gel again.
+7. Close.
+
+Shattered repair:
+
+1. Open incision.
+2. Clamp bleeders.
+3. Retract.
+4. Apply bone gel.
+5. Set the bone.
+6. Insert a bone graft.
+7. Set the grafted bone.
+8. Apply bone gel again.
+9. Close.
+
+Casts are post-operative support. Use them after surgery to stop malunion while the limb finishes knitting.
+
+<Box>
+  <GuideEntityEmbed Entity="CMBoneGel"/>
+  <GuideEntityEmbed Entity="CMBonesetter"/>
+  <GuideEntityEmbed Entity="CMUBoneGraftItem"/>
+</Box>
+
+### Organ Repair
+
+Access needed: deep access for chest and head organs.
+
+General organ repair uses the exposed organ step after the incision and bone access are opened. Serious organ vessel work uses an organ vessel clamp. Eye and brain surgery are head procedures and require trained surgery skill.
+
+Organ removal and transplant work follows the same access rule: open the patient, reach deep access, clamp or free the organ as needed, remove or insert the organ, then close bone access and close the incision. Do not remove heart, brain, lungs, kidneys, liver, or stomach unless the patient can survive the consequence or receive a replacement.
+
+Heart and brain loss are life-threatening. Removing or losing critical organs is not just cosmetic; stabilize, repair, or replace quickly.
+
+<Box>
+  <GuideEntityEmbed Entity="CMUOrganClampItem"/>
+  <GuideEntityEmbed Entity="CMUFixOVein"/>
+</Box>
+
+### Foreign Object Removal
+
+Surface and deep shrapnel can be removed with the correct extraction tool. Surgical shrapnel needs surgical access first.
+
+1. Open and retract if the object is deep enough to need surgery.
+2. Use hemostat or scalpel extraction.
+3. Close the incision if one was opened.
+
+Embedded fragments hurt when the patient moves and can cause more damage. Remove them before sending the patient back out.
+
+### Eschar Removal
+
+Access needed: shallow access.
+
+1. Open incision.
+2. Clamp bleeders.
+3. Retract.
+4. Debride the eschar with a scalpel.
+5. Close.
+
+Burn kits and synth grafts can substitute, but proper surgical debridement is cleaner.
+
+### Alien Embryo Removal
+
+Access needed: deep torso access and trained surgery skill.
+
+1. Open incision.
+2. Clamp bleeders.
+3. Retract.
+4. Open bone access.
+5. Cut embryo roots with a scalpel.
+6. Remove the embryo with a hemostat.
+7. Close bone access.
+8. Close the incision.
+
+Move quickly. A bursting embryo can make surgery impossible.
+
+## Limb Surgery
+
+### Amputation
+
+Amputation is deliberate surgery. It requires a valid limb or extremity target and proper access. If you begin the cut and need to back out, Fix-o-vein or surgical line can cancel the amputation route and return you to the retracted access state.
+
+Steps:
+
+1. Open incision.
+2. Clamp bleeders.
+3. Retract.
+4. Use a scalpel to sever muscle and prepare the cut.
+5. Use a circular saw or drill to remove the limb.
+6. Seal the stump or prepare for reattachment.
+
+### Stump Sealing
+
+A severed hand or foot leaves a stump on that extremity. A severed arm or leg leaves a stump on that limb. A lost head leaves a stump at the chest.
+
+1. Target the stump region.
+2. Open incision if needed.
+3. Clamp bleeders.
+4. Retract.
+5. Seal the stump with a stump-sealing tool.
+6. Finish the vessel seal with Fix-o-vein or surgical line if needed.
+7. Close.
+
+Sealing the stump stops stump bleeding, but it does not restore the missing limb.
+
+### Reattaching Limbs
+
+After the stump is sealed, target the missing region and use the matching detached limb as the surgical tool. Biological limbs return biological function. Robotic prosthetics return prosthetic function and visual prosthetic overlays.
+
+Whole robotic arms and legs bring their robotic hand or foot with them. Robotic limbs do not use normal biological wounds, fractures, or internal bleeding.
+
+Steps:
+
+1. Seal the stump first.
+2. Target the missing region.
+3. Use the matching detached biological limb to reattach flesh, or the matching robotic limb to fit a prosthetic.
+4. Check the analyzer and examine text after attachment; repaired limbs should no longer read as missing or severed.
+
+### Removing Prosthetics
+
+Use a circular saw for the ideal prosthetic removal route. A surgical drill can substitute, but it is worse. Prosthetic damage is repaired with a lit welder for brute frame damage and cable coil for burn or wiring damage.
+
+<Box>
+  <GuideEntityEmbed Entity="CMCircularSaw"/>
+  <GuideEntityEmbed Entity="CMSurgicalDrill"/>
+  <GuideEntityEmbed Entity="RMCWelderIndustrial"/>
+  <GuideEntityEmbed Entity="RMCCableCoil"/>
+</Box>
+
+## Synthetic Patients
+
+Synths are not biological patients. They should not receive normal wounds, fractures, internal bleeding, organ trauma, or biological surgery. Their repair loop is:
+
+- Brute chassis damage: lit welder.
+- Burn or wiring damage: cable coil.
+- Missing synthetic limb: attach the matching limb or robotic replacement.
+- Prosthetic surgery and synthetic limb surgery still show surgical examine information when surgery mode is active.
+
+## Rare Surgical Tools
+
+The PICT system is a rare scalpel that also functions as a cautery. The incision management system is a rare tool that prepares an incision quickly. Nanopaste is for prosthetic limb repair, not biological wound healing.
+
+<Box>
+  <GuideEntityEmbed Entity="CMScalpelPICT"/>
+  <GuideEntityEmbed Entity="CMScalpelManager"/>
+  <GuideEntityEmbed Entity="CMUNanopaste"/>
+</Box>
+
+## Ghetto Surgery
+
+When the perfect tool is missing, some steps accept substitutes. The system grades tools roughly as ideal, suboptimal, substitute, bad substitute, or awful. Worse tools are more likely to cause surgical trauma, pain reactions, long delays, or outright failure.
+
+### Access Tools
+
+- Incision: scalpel is required. Laser scalpels, advanced laser scalpels, the PICT system, and the incision management system count as scalpel-family tools. The incision management system is rare and exists to quickly prepare access, not to replace every repair step.
+- Clamp surgical bleeders: hemostat is required.
+- Retract incision: retractor is ideal. Hemostat is suboptimal. Scalpel is an awful retraction tool, but it can be forced in a ghetto emergency.
+- Deep bone access: circular saw is ideal. Surgical drill is an accepted substitute, but worse.
+- Close bone access: bone gel, bone setter, and bone graft are the bone-access tool family. Use the ordered fracture or closure step shown by the surgery examine.
+- Close incision: cautery is required. Laser scalpels and the PICT system count if they provide cautery behavior.
+
+### Repair Tools
+
+- Wound suturing: surgical line is ideal. Fix-o-vein is suboptimal. Cable coil is a poor substitute. Trauma kits treat brute wounds in field care, but they are not the surgical suture tool.
+- Internal bleeding: Fix-o-vein is ideal. Surgical line is a substitute. Cable coil is a bad substitute and should only be used when you have nothing else.
+- Eye surgery: Fix-o-vein is the repair tool after the head has the needed access.
+- Brain damage surgery: Fix-o-vein repairs the brain damage after the head has the needed access. If surgical shrapnel is blocking the work, remove it first.
+- Organ repair: organ vessel clamp is the dedicated tool for serious organ vessel work. Fix-o-vein is used for some organ-adjacent repair steps such as eye and brain repair.
+- Foreign object or shrapnel removal: hemostat is ideal. Scalpel-family extraction is suboptimal where the object can be reached. Surgical shrapnel still needs surgical access first.
+- Eschar removal: scalpel is ideal. Burn kit and synth graft are suboptimal. Cautery is an accepted substitute, but worse than a scalpel.
+- Stump sealing: cautery, hemostat, Fix-o-vein, and surgical line are accepted stump-sealing tools after shallow access. Fix-o-vein and surgical line are the cleanest vessel-seal options.
+- Amputation cancel: Fix-o-vein or surgical line can stop the amputation route after the muscle-cut stage and return the limb to the retracted access state.
+
+### Bone Tools
+
+- Hairline, simple, or compound fracture: bone gel, bone setter, then bone gel.
+- Shattered fracture: bone gel, bone setter, bone graft, bone setter, then bone gel.
+- Chest or head access through intact bone: circular saw is ideal. Surgical drill substitutes.
+- Chest or head with compound or shattered fracture: the broken bone can provide deep access after an incision and retraction, but the surgeon must still open the skin first.
+
+### Limb And Prosthetic Tools
+
+- Biological reattachment: use the matching detached biological limb as the tool after the stump is sealed.
+- Robotic prosthetic fitting: use the matching robotic limb after the stump is sealed.
+- Prosthetic removal: circular saw is ideal. Surgical drill is suboptimal.
+- Prosthetic brute frame repair: lit welder.
+- Prosthetic burn or wiring repair: cable coil.
+- Nanopaste: rare prosthetic repair paste. It is for robotic/prosthetic limb damage, not human wounds.
+
+If the guide says a tool is accepted but the surgery examine does not offer that step, check access first. Most failed ghetto attempts are not tool problems; they are missing incision, unclamped bleeders, unretracted skin, intact bone access on head or chest, wrong body part target, armor blocking the region, or an unsealed stump.
+</Document>

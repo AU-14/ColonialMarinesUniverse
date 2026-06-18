@@ -29,7 +29,6 @@
   - type: ContainerContainer
     containers:
       rmc_universal_recorder_tape: !type:ContainerSlot {}
-  - type: ItemSlots
   - type: UserInterface
     interfaces:
       enum.UniversalRecorderUiKey.Recorder:
@@ -119,6 +118,9 @@
   components:
   - type: Sprite
     state: box
+  - type: Item
+    size: Small
+    shape: null
 
 - type: entity
   parent: RMCBoxRegulationTapesEmpty
@@ -129,3 +131,14 @@
     contents:
     - id: RMCUniversalRecorderTape
       amount: 5
+
+- type: entity
+  parent: RMCBoxRegulationTapesEmpty
+  id: RMCBoxRegulationTapesFull
+  name: box of regulation tapes (x7)
+  suffix: FullyFilled
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCUniversalRecorderTape
+      amount: 7

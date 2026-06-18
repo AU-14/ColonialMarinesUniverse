@@ -1,0 +1,31 @@
+- type: job
+  parent: AU14JobColonyWorkingJoe
+  id: AU14JobColonyWorkingJoeHazmat
+  spawnMenuRoleName: Working Joe (Hazmat)
+  inheritAddComponentSpecials: true
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Loadout
+      prototypes: [ AU14GearColonyWorkingJoeHazmat ]
+  dummyStartingGear: AU14GearColonyWorkingJoeHazmat
+
+- type: startingGear
+  parent: AU14GearWorkingJoeBase
+  id: AU14GearColonyWorkingJoeHazmat
+  equipment:
+    shoes: AU14BootsCBRN
+    gloves: RMCHandsVeteranCBRN
+    jumpsuit: AU14JoeHazmat
+  inhand:
+  - CMFireExtinguisher
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointWorkingJoeHazmat
+  name: Spawn Point Working Joe (Hazmat)
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobColonyWorkingJoeHazmat
+  - type: Sprite
+    state: syn_spawn

@@ -114,8 +114,8 @@
   components:
   - type: StorageFill # todo: randomization (35% probability to spawn 1-4 trauma, and 35% to spawn 1-4 burn)
     contents:
-    - id: CMUpgradedTraumaKit10
-    - id: CMUpgradedBurnKit10
+    - id: CMTraumaKit10
+    - id: CMBurnKit10
 
 - type: entity
   parent: RMCBeltPMC

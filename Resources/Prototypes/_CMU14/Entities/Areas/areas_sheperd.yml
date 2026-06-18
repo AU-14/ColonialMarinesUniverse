@@ -209,6 +209,173 @@
 
 - type: entity
   parent: CMUAreaShepIndoors
+  id: CMUAreaShepMil
+  name: Military Base
+  components:
+  - type: Sprite
+    state: military
+  - type: Area
+    minimapColor: '#445A6BCC'
+
+- type: entity
+  parent: CMUAreaShepMil
+  id: CMUAreaShepMilBarracks
+  name: Military Base - Barracks
+  components:
+  - type: Sprite
+    state: military_barracks
+
+- type: entity
+  parent: CMUAreaShepMil
+  id: CMUAreaShepMilBaths
+  name: Military Base - Baths
+  components:
+  - type: Sprite
+    state: military_baths
+
+- type: entity
+  parent: CMUAreaShepMil
+  id: CMUAreaShepMilBriefing
+  name: Military Base - Briefing
+  components:
+  - type: Sprite
+    state: military_briefing
+
+- type: entity
+  parent: CMUAreaShepMil
+  id: CMUAreaShepMilBrig
+  name: Military Base - Brig
+  components:
+  - type: Sprite
+    state: military_brig
+
+- type: entity
+  parent: CMUAreaShepMil
+  id: CMUAreaShepMilCIC
+  name: Military Base - CIC
+  components:
+  - type: Sprite
+    state: military_cic
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepMilCheckpoint
+  name: Military Base - Checkpoint
+  components:
+  - type: Sprite
+    state: military_checkpoint
+  - type: Area
+    minimapColor: '#445A6BCC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepMilEastGate
+  name: Military Base - East Gate
+  components:
+  - type: Sprite
+    state: military_checkpoint
+  - type: Area
+    minimapColor: '#445A6BCC'
+
+- type: entity
+  parent: CMUAreaShepMil
+  id: CMUAreaShepMilGarage
+  name: Military Base - Garage
+  components:
+  - type: Sprite
+    state: military_garage
+
+- type: entity
+  parent: CMUAreaShepMil
+  id: CMUAreaShepMilHospital
+  name: Military Base - Hospital
+  components:
+  - type: Sprite
+    state: military_hospital
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepMilLZ1
+  name: Military Base - LZ1
+  components:
+  - type: Sprite
+    state: military_lz1
+  - type: Area
+    resinAllowed: false
+    minimapColor: '#EBE5E5EE'
+
+- type: entity
+  parent: CMUAreaShepMil
+  id: CMUAreaShepMilMess
+  name: Military Base - Mess
+  components:
+  - type: Sprite
+    state: military_mess
+
+- type: entity
+  parent: CMUAreaShepMil
+  id: CMUAreaShepMilPlatoonCommander
+  name: Military Base - Platoon Commander
+  components:
+  - type: Sprite
+    state: military_platoon_commander
+
+- type: entity
+  parent: CMUAreaShepMil
+  id: CMUAreaShepMilPrep
+  name: Military Base - Prep
+  components:
+  - type: Sprite
+    state: military_prep
+
+- type: entity
+  parent: CMUAreaShepMil
+  id: CMUAreaShepMilWaste
+  name: Military Base - Waste Treatment
+  components:
+  - type: Sprite
+    state: military_waste
+
+- type: entity
+  parent: CMUAreaShepMil
+  id: CMUAreaShepMilWestObservation
+  name: Military Base - West Observation
+  components:
+  - type: Sprite
+    state: military_w_observe
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepMilPerimeter
+  name: Military Base - Perimeter
+  components:
+  - type: Sprite
+    state: military_perimeter
+  - type: Area
+    minimapColor: '#445A6BCC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepMilYard
+  name: Military Base - Yard
+  components:
+  - type: Sprite
+    state: military_yard
+  - type: Area
+    minimapColor: '#445A6BCC'
+
+- type: entity
+  parent: CMUAreaShepOOB
+  id: CMUAreaShepMilOOB
+  name: Military Base - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: military
+    - state: oob
+
+- type: entity
+  parent: CMUAreaShepIndoors
   id: CMUAreaShepNorthColonyDorms
   name: North Colony
   components:
@@ -226,6 +393,16 @@
     state: n_colony_dorms
   - type: Area
     minimapColor: '#92673ECC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepNorthColonyBoat
+  name: North Colony - Boat
+  components:
+  - type: Sprite
+    state: n_colony
+  - type: Area
+    minimapColor: '#211101CC'
 
 - type: entity
   parent: CMUAreaShepIndoors
@@ -353,6 +530,18 @@
     state: eal_storage
   - type: Area
     minimapColor: '#92673ECC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepEALLZ3
+  name: 'LZ3: Engineering & Logistics'
+  components:
+  - type: Sprite
+    state: eal_lz3
+  - type: Area
+    resinAllowed: false
+    minimapColor: '#92673ECC'
+    linkedLz: dropship_lz3
 
 - type: entity
   parent: CMUAreaShepIndoors
@@ -641,11 +830,41 @@
 
 - type: entity
   parent: CMUAreaShepOutdoors
+  id: CMUAreaShepNWCLF
+  name: Northwest Jungle - CLF
+  components:
+  - type: Sprite
+    state: clf
+  - type: Area
+    minimapColor: '#295B43CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
   id: CMUAreaShepWJungle
   name: West Jungle
   components:
   - type: Sprite
     state: w_jungle
+  - type: Area
+    minimapColor: '#295B43CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepWCLF
+  name: West Jungle - CLF
+  components:
+  - type: Sprite
+    state: clf
+  - type: Area
+    minimapColor: '#295B43CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepNCLF
+  name: North Jungle - CLF
+  components:
+  - type: Sprite
+    state: clf
   - type: Area
     minimapColor: '#295B43CC'
 
@@ -688,6 +907,36 @@
     state: se_jungle
   - type: Area
     minimapColor: '#295B43CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepCaveNE
+  name: Northeast Cave
+  components:
+  - type: Sprite
+    state: cave
+  - type: Area
+    minimapColor: '#141D25CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepCaveSE
+  name: Southeast Cave
+  components:
+  - type: Sprite
+    state: cave
+  - type: Area
+    minimapColor: '#141D25CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepCaveW
+  name: West Cave
+  components:
+  - type: Sprite
+    state: cave
+  - type: Area
+    minimapColor: '#141D25CC'
 
 - type: entity
   parent: CMUAreaShepOutdoors

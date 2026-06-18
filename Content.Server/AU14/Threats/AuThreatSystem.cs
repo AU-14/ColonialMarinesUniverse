@@ -1,27 +1,24 @@
-using System.Collections.Generic;
 using System.Linq;
+using Content.Server.AU14.Round;
+using Content.Server.GameTicking;
 using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Mind.Commands;
 using Content.Shared.AU14.Threats;
-using Content.Server.AU14.Round;
-using Robust.Shared.Timing;
 using Content.Shared.AU14.util;
-using Robust.Shared.Prototypes;
-using Robust.Shared.Map;
-using Content.Shared.Roles;
+using Content.Shared.Ghost;
 using Content.Shared.Mind;
-using Content.Server.GameTicking;
-using Robust.Shared.Network;
+using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Prototypes;
 using Content.Shared.NPC.Systems;
-using Content.Shared.Ghost;
-using Content.Shared.NPC.Components;
 using Content.Shared.Players;
+using Content.Shared.Roles;
 using Robust.Server.Player;
-using Robust.Shared.Player;
 using Robust.Shared.Enums;
-using Robust.Shared.Log;
+using Robust.Shared.Map;
+using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 using Robust.Shared.Random;
 
 namespace Content.Server.AU14.Threats;
@@ -307,10 +304,13 @@ public sealed partial class AuThreatSystem : EntitySystem
                     var marker = markers.Count > 0 ? markers[i % markers.Count] : EntityUid.Invalid;
                     if (marker != EntityUid.Invalid)
                     {
-                        var ent = _entityManager.SpawnEntity(protoId,
-                            _entityManager.GetComponent<TransformComponent>(marker).Coordinates);
-                        spawnedLeaders.Add(ent);
-                        Logger.GetSawmill("au14.threat").Debug($"[DEBUG] Spawned leader entity {ent} at marker {marker}");
+                        try
+                        {
+                            EntityUid ent = _entityManager.SpawnEntity(protoId, _entityManager.GetComponent<TransformComponent>(marker).Coordinates);
+                            spawnedLeaders.Add(ent);
+                            Logger.GetSawmill("au14.threat").Debug($"[DEBUG] Spawned leader entity {ent} at marker {marker}");
+                        }
+                        catch (Exception ex) { Logger.GetSawmill("au14.threat").Error($"[AuThreatSystem] Failed to spawn leader ({protoId})! {ex.Message}"); }
                     }
                 }
             }
@@ -327,10 +327,13 @@ public sealed partial class AuThreatSystem : EntitySystem
                     var marker = markers.Count > 0 ? markers[i % markers.Count] : EntityUid.Invalid;
                     if (marker != EntityUid.Invalid)
                     {
-                        var ent = _entityManager.SpawnEntity(protoId,
-                            _entityManager.GetComponent<TransformComponent>(marker).Coordinates);
-                        spawnedMembers.Add(ent);
-                        Logger.GetSawmill("au14.threat").Debug($"[DEBUG] Spawned member entity {ent} at marker {marker}");
+                        try
+                        {
+                            EntityUid ent = _entityManager.SpawnEntity(protoId, _entityManager.GetComponent<TransformComponent>(marker).Coordinates);
+                            spawnedMembers.Add(ent);
+                            Logger.GetSawmill("au14.threat").Debug($"[DEBUG] Spawned member entity {ent} at marker {marker}");
+                        }
+                        catch (Exception ex) { Logger.GetSawmill("au14.threat").Error($"[AuThreatSystem] Failed to spawn member ({protoId})! {ex.Message}"); }
                     }
                 }
             }
@@ -349,11 +352,13 @@ public sealed partial class AuThreatSystem : EntitySystem
                     var marker = markers.Count > 0 ? markers[i % markers.Count] : EntityUid.Invalid;
                     if (marker != EntityUid.Invalid)
                     {
-                        _entityManager.SpawnEntity(protoId,
-                            _entityManager.GetComponent<TransformComponent>(marker).Coordinates);
-                        spawnedEntities++;
-                        Logger.GetSawmill("au14.threat").Debug(
-                            $"[DEBUG] Spawned other entity of protoId {protoId} at marker {marker}");
+                        try
+                        {
+                            _entityManager.SpawnEntity(protoId, _entityManager.GetComponent<TransformComponent>(marker).Coordinates);
+                            spawnedEntities++;
+                            Logger.GetSawmill("au14.threat").Debug($"[DEBUG] Spawned other entity of protoId {protoId} at marker {marker}");
+                        }
+                        catch (Exception ex) { Logger.GetSawmill("au14.threat").Error($"[AuThreatSystem] Failed to spawn entity ({protoId})! {ex.Message}"); }
                     }
                 }
             }

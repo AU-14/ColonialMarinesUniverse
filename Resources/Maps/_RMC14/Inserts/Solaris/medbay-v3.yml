@@ -1505,7 +1505,7 @@ entities:
     - type: Transform
       pos: 1.5,4.5
       parent: 1
-- proto: CMSemioticAutodoc
+- proto: CMSemioticMedical
   entities:
   - uid: 431
     components:

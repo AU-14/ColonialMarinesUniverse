@@ -1,4 +1,7 @@
 cmu-medical-heal-organ-guidebook            = Heals { $amount } HP per cycle on the patient's { $organ }.
+cmu-medical-human-chemical-ledger-guidebook = Applies CM13 human medical ledger effects for this medicine.
+cmu-medical-human-ledger-condition          = the target is using the CMU human medical ledger
+cmu-medical-non-human-ledger-condition      = the target is not using the CMU human medical ledger
 cmu-medical-pain-suppression-guidebook       = Suppresses { $percent }% of pain accumulation, masks { $tiers } pain tier(s), and adds { $decay } pain/sec decay for { $seconds } seconds per unit. Effect weakens by { $decrease } per max-pain fraction; non-additive profiles keep the strongest active profile.
 cmu-medical-bone-regen-boost-guidebook       = Multiplies bone healing rate by { $multiplier } while active.
 cmu-medical-restart-heart-guidebook          = { $chance }% chance per cycle to restart a stopped heart (only on hearts that are not yet at the Dead stage).
@@ -7,6 +10,10 @@ cmu-medical-defib-no-heart                   = No heart detected in patient.
 cmu-medical-defib-heart-destroyed            = Heart is destroyed; cannot revive.
 cmu-medical-defib-heart-beating              = Heart is already beating.
 
+reagent-name-cmalkysine                      = Alkysine
+reagent-desc-cmalkysine                      = A neurological medicine that repairs brain damage in human patients.
+reagent-name-cmperidaxon                     = Peridaxon
+reagent-desc-cmperidaxon                     = A stabilizing medicine that suppresses organ symptoms without repairing the underlying organ damage.
 reagent-name-cmu-hepatocytin                 = Hepatocytin
 reagent-desc-cmu-hepatocytin                 = A regenerative compound for liver tissue repair.
 reagent-name-cmu-pulmovine                   = Pulmovine

@@ -99,7 +99,7 @@ public sealed partial class SynthComponent : Component
     /// The time it takes to repair the synth.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public TimeSpan RepairTime = TimeSpan.FromSeconds(0);
+    public TimeSpan RepairTime = TimeSpan.FromSeconds(0.3);
 
     /// <summary>
     /// The time it takes to repair the synth, if you are the synth.

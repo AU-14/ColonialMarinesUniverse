@@ -67,6 +67,34 @@
   - type: ClothingSpeedModifier # SLOWDOWN_ARMOR_LOWHEAVY
     walkModifier: 0.64
     sprintModifier: 0.64
+  - type: AllowSuitStorage
+    whitelist:
+      components:
+      - RMCLighter
+      - Bible
+      - Gun
+      - CassettePlayer
+      tags:
+      - GasTank
+      - Flashlight
+      - DiscreteHealthAnalyzer
+      - CigPack
+      - Knife
+      - RMCG8Pouch
+      - RMCMacheteScabbard
+      - RMCScabbardKatana
+      - RMCM82FHolster
+      - RMCSmartPistolHolster
+      - RMCSMGHolster
+      - RMCSMGPouchHolster
+      - RMCGeneralPistolHolster
+      - RMCGeneralRevolverHolster
+      - RMCBeltHolsterM13
+      - RMCXM51Holster
+      - RMCDetector
+      - RMCMatebaHolster
+      - RMCFoldingBarricade
+      - AU14BallisticShield
 
 - type: entity
   parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]

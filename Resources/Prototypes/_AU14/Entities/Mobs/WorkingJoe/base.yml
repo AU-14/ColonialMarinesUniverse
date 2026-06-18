@@ -107,6 +107,8 @@
     damage:
       types:
         Blunt: 60
+  - type: Bloodstream
+    bloodReagent: RMCSynthBlood
   - type: Synth
     generation: "rmc-species-synth-generation-first"
     critThreshold: 299

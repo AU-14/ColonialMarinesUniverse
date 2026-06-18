@@ -3,6 +3,7 @@ using Content.Server.Chemistry.TileReactions;
 using Content.Server.Fluids.Components;
 using Content.Server.Spreader;
 using Content.Shared.ActionBlocker;
+using Content.Shared._CMU14.Medical.Presentation;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Components;
@@ -661,6 +662,16 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
             puddleUid = EntityUid.Invalid;
             return false;
         }
+
+        // CMU14 begin - Blood spills use CM13 decal presentation instead of generic puddle sprites.
+        var bloodPuddleEv = new CMUBloodPuddleAttemptEvent(tileRef, solution);
+        RaiseLocalEvent(ref bloodPuddleEv);
+        if (bloodPuddleEv.Handled)
+        {
+            puddleUid = EntityUid.Invalid;
+            return true;
+        }
+        // CMU14 end
 
         // Get normalized co-ordinate for spill location and spill it in the centre
         // TODO: Does SnapGrid or something else already do this?

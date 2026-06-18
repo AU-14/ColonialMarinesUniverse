@@ -12,8 +12,9 @@
   icon: "AU14JobIconColonyWorkingJoe"
   spawnMenuRoleName: Working Joe (Colony)
   supervisors: au14-job-supervisors-workingjoe-colony
-  dummyStartingGear: AU14GearColonyWorkingJoe
   usePlayerProfile: false
+  jobEntity: AU14MobWorkingJoeColony
+  jobPreviewEntity: AU14MobWorkingJoeDummy
   hasIcon: false
   accessGroups:
   - auadmin
@@ -41,15 +42,10 @@
       - Colonist
       - AUPrisonStaff
       - auwy
-
-- type: startingGear
-  parent: AU14GearWorkingJoeBase
-  id: AU14GearColonyWorkingJoe
-  equipment:
-    id: AU14IDCardColonyWorkingJoe
-    ears: AU14HeadsetWorkingJoe
-    back: AU14IMPBackpackMarine
-    pocket1: AU14StampJoe
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14govforhud.rsi
+        state: working_joe
 
 - type: entity
   parent: CMSpawnPointJobBase

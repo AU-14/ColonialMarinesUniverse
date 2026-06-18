@@ -1,11 +1,8 @@
 cmu-medical-scanner-body-map-header        = Body Map
-cmu-medical-scanner-pulse-label            = Pulse:
 cmu-medical-scanner-body-parts-header      = Body parts
 cmu-medical-scanner-organs-header          = Organs
 cmu-medical-scanner-fractures-header       = Fractures
 cmu-medical-scanner-bleeds-header          = Internal bleeding
-cmu-medical-scanner-pulse-stopped          = [color=red][bold]No pulse — heart stopped[/bold][/color]
-cmu-medical-scanner-pulse-bpm              = { $bpm } BPM
 cmu-medical-scanner-part-line              = { $part }: { $current }/{ $max } HP
 cmu-medical-scanner-part-suffix-splinted   = (splinted)
 cmu-medical-scanner-part-suffix-cast       = (in cast)
@@ -45,13 +42,6 @@ cmu-medical-scanner-pain-mild              = Pain: Mild
 cmu-medical-scanner-pain-moderate          = Pain: Moderate
 cmu-medical-scanner-pain-severe            = Pain: Severe
 cmu-medical-scanner-pain-shock             = Pain: Shock
-cmu-medical-scanner-pain-risk-unknown      = ?
-cmu-medical-scanner-pain-risk-low          = Low
-cmu-medical-scanner-pain-risk-elevated     = Elevated
-cmu-medical-scanner-pain-risk-high         = High
-cmu-medical-scanner-pain-risk-imminent     = Imminent
-cmu-medical-scanner-pain-risk-active       = Active
-cmu-medical-scanner-pain-risk-suppressed-suffix =  (supp.)
 
 # V2-ε Stat-sheet redesign — dark cards + status banner + body chart
 cmu-medical-scanner-card-body              = Body
@@ -64,12 +54,20 @@ cmu-medical-scanner-loading                = Receiving scan telemetry
 cmu-medical-scanner-loading-subtext        = resolving server state
 
 cmu-medical-scanner-stat-health            = HEALTH
-cmu-medical-scanner-stat-pulse             = PULSE BPM
 cmu-medical-scanner-stat-blood             = BLOOD
 cmu-medical-scanner-stat-temp              = TEMP °C
+cmu-medical-scanner-stat-pulse             = PULSE BPM
 cmu-medical-scanner-stat-shock-risk        = SHOCK RISK
-cmu-medical-scanner-stat-pulse-stopped     = 0
 cmu-medical-scanner-stat-deceased-short    = DEAD
+cmu-medical-scanner-stat-no-pulse-short    = NO PULSE
+
+cmu-medical-scanner-shock-risk-unknown     = --
+cmu-medical-scanner-shock-risk-none        = NONE
+cmu-medical-scanner-shock-risk-low         = LOW
+cmu-medical-scanner-shock-risk-elevated    = ELEVATED
+cmu-medical-scanner-shock-risk-high        = HIGH
+cmu-medical-scanner-shock-risk-shock       = SHOCK
+cmu-medical-scanner-shock-risk-suppressed  = SUPPRESSED
 
 cmu-medical-scanner-status-stable          = STABLE
 cmu-medical-scanner-status-serious         = SERIOUS
@@ -87,6 +85,7 @@ cmu-medical-scanner-chip-suppressed-suffix =  (suppr.)
 cmu-medical-scanner-chip-bleed             = IB
 cmu-medical-scanner-chip-bleeding          = Bleeding
 cmu-medical-scanner-chip-shrapnel          = { $count } frag.
+cmu-medical-scanner-chip-prosthetic        = Prosthetic
 cmu-medical-scanner-chip-splint            = Splint
 cmu-medical-scanner-chip-cast              = Cast
 cmu-medical-scanner-chip-tourniquet        = TQ
@@ -118,6 +117,19 @@ cmu-medical-scanner-chip-wounds            = { $count } wound{ $count ->
 # knows whether to study up rather than assuming the patient is fine.
 cmu-medical-scanner-skill-hint-fractures   = Insufficient training to detect fractures or internal bleeding (Med-1 required).
 cmu-medical-scanner-skill-hint-organs      = Insufficient training to assess organ damage (Med-2 required).
+cmu-medical-scanner-ledger-summary-only    = Detailed anatomical telemetry unavailable.
+cmu-medical-scanner-ledger-alert-internal-bleeding = Internal bleeding
+cmu-medical-scanner-ledger-alert-active-bleeding = Active bleeding
+cmu-medical-scanner-ledger-alert-broken-limb = Broken limb
+cmu-medical-scanner-ledger-alert-organ-damage = Organ damage
+cmu-medical-scanner-ledger-alert-open-stump = Open stump
+cmu-medical-scanner-ledger-alert-missing-limb = Missing limb
+cmu-medical-scanner-ledger-alert-open-incision = Open incision
+cmu-medical-scanner-ledger-alert-tourniquet = Tourniquet
+cmu-medical-scanner-ledger-alert-necrotic-region = Necrotic limb
+cmu-medical-scanner-ledger-alert-core-fracture = Core fracture
+cmu-medical-scanner-ledger-alert-suppressed-bleeding = Bleed suppressed, surgery needed
+cmu-medical-scanner-ledger-alert-severe-burn = Severe burn
 cmu-medical-scanner-synthetic-physiology   = Synthetic physiology detected
 cmu-medical-scanner-stabilizer-missing     = Stabilizer: missing
 cmu-medical-scanner-stabilizer-ready       = Stabilizer: ready

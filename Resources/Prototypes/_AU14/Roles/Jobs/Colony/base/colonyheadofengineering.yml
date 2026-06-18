@@ -51,9 +51,8 @@
       prefix: au14-job-prefix-headofengineering
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-  hidden: false
+        sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+        state: head_of_engineering
 
 - type: startingGear
   id: AU14GearCivilianHeadOfEngineering

@@ -27,14 +27,15 @@
       - id: CMTraumaKit10
         points: 2
         recommended: true
-      - id: CMUPlainTraumaDressing10
+      - id: CMTraumaKit10
         points: 2
-      - id: CMUCoagulantPowder
-        points: 4
-      - id: CMUBurnGel
-        points: 4
-    #    CMMedicalSplints: 1P
-#        recommended: true
+      - id: CMTraumaKit10
+        points: 2
+      - id: CMBurnKit10
+        points: 2
+      - id: CMUSplintItem
+        points: 2
+        recommended: true
       - id: CMBloodPackFull # TODO RMC14 O-
         name: blood bag (O-)
         points: 4
@@ -69,9 +70,11 @@
         recommended: true
 #      - id: CMPillCanisterPeridaxon
 #        points: 5
-#      - id: CMPillCanisterTramadol
-#        points: 5
-#        recommended: true
+      - id: AU14PillCanisterTramadol
+        points: 5
+        recommended: true
+      - id: AU14PillCanisterOxycodone
+        points: 8
     - name: Autoinjectors
       entries:
       - id: CMBicaridineAutoInjector
@@ -84,23 +87,30 @@
         points: 1
       - id: CMKelotaneAutoInjector
         points: 1
-#      - id: CMAutoinjectorOxycodone
-#        points: 2
-#      - id: CMAutoinjectorTramadol
-#        points: 1
+      - id: AU14OxycodoneAutoInjector
+        points: 2
+      - id: AU14TramadolAutoInjector
+        points: 1
       - id: CMTricordrazineAutoInjector
         points: 1
     - name: Medical Utilities
       entries:
       - id: CMMiniTank
         points: 6
-     # FixOVien: 7P
+      - id: CMUFixOVein
+        points: 7
       - id: CMRollerBedSpawnFolded
         points: 4
       - id: CMHealthAnalyzer
         points: 4
       - id: CMStasisBagFolded
         points: 6
+      - id: AU14CMDefibrillator
+        points: 12
+      - id: CMSurgicalLine
+        points: 6
+      - id: CMSurgicalCaseFilled
+        points: 12
     - name: Explosives
       entries:
       - id: CMPacketGrenadeHighExplosiveFilled

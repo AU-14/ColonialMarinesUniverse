@@ -1,5 +1,9 @@
 using Content.Server.Body.Systems;
-using Content.Shared._CMU14.Medical;
+using Content.Shared._CMU14.Medical.Chemistry;
+using Content.Shared._CMU14.Medical.Human.Components;
+using Content.Shared._CMU14.Medical.Human.Effects;
+using Content.Shared._CMU14.Medical.Human.Surgery;
+using Content.Shared._CMU14.Medical.Presentation;
 using Content.Shared._RMC14.Humanoid;
 using Content.Shared._RMC14.Medical.HUD.Components;
 using Content.Shared._RMC14.Synth;
@@ -20,11 +24,8 @@ public sealed partial class SynthSystem : SharedSynthSystem
 
     protected override void MakeSynth(Entity<SynthComponent> ent)
     {
+        var wasInitialized = ent.Comp.Initialized;
         base.MakeSynth(ent);
-
-        // Remove DNA and Fingerprint components if present
-        RemComp<Content.Shared.Forensics.Components.DnaComponent>(ent.Owner);
-        RemComp<Content.Shared.Forensics.Components.FingerprintComponent>(ent.Owner);
 
         if (TryComp<DamageableComponent>(ent.Owner, out var damageable))
             _damageable.SetDamageModifierSetId(ent.Owner, ent.Comp.NewDamageModifier, damageable);
@@ -35,6 +36,32 @@ public sealed partial class SynthSystem : SharedSynthSystem
             _bloodstream.SetBloodLossThreshold((ent, bloodstream), 0f);
             _bloodstream.ChangeBloodReagent((ent, bloodstream), ent.Comp.NewBloodReagent);
         }
+
+        // CMU14 start - synths use RMC synthetic damage/repair, never the human ledger.
+        RemComp<HumanMedicalComponent>(ent.Owner);
+        RemComp<HumanMedicalSummaryComponent>(ent.Owner);
+        RemComp<HumanMedicalVisualsComponent>(ent.Owner);
+        RemComp<ActiveBleedingComponent>(ent.Owner);
+        RemComp<ActiveOrganSymptomsComponent>(ent.Owner);
+        RemComp<ActiveBoneKnittingComponent>(ent.Owner);
+        RemComp<ActiveUnsplintedFractureRiskComponent>(ent.Owner);
+        RemComp<ActiveEmbeddedObjectMovementComponent>(ent.Owner);
+        RemComp<ActiveTourniquetComponent>(ent.Owner);
+        RemComp<ActiveTreatedWoundHealingComponent>(ent.Owner);
+        RemComp<ActiveMedicalSummaryDirtyComponent>(ent.Owner);
+        RemComp<ActiveHumanSurgeryOperationComponent>(ent.Owner);
+        RemComp<HumanChemicalOrganStasisComponent>(ent.Owner);
+        RemComp<PainShockComponent>(ent.Owner);
+        RemComp<CMUPainFeedbackComponent>(ent.Owner);
+        RemComp<ActivePainFeedbackComponent>(ent.Owner);
+        // CMU14 end
+
+        if (wasInitialized)
+            return;
+
+        // Remove DNA and Fingerprint components if present
+        RemComp<Content.Shared.Forensics.Components.DnaComponent>(ent.Owner);
+        RemComp<Content.Shared.Forensics.Components.FingerprintComponent>(ent.Owner);
 
         var repOverrideComp = EnsureComp<RMCHumanoidRepresentationOverrideComponent>(ent);
         if (!ent.Comp.HideGeneration)
@@ -59,10 +86,6 @@ public sealed partial class SynthSystem : SharedSynthSystem
                 [RMCHealthIconTypes.HCDead] = "CMHealthIconHCDead",
             };
         }
-
-        // CMU medical bodies define organ-health slots that synth diagnostics and surgery expect.
-        if (HasComp<CMUHumanMedicalComponent>(ent.Owner))
-            return;
 
         if (!TryComp<BodyComponent>(ent.Owner, out var body))
             return;

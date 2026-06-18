@@ -1,0 +1,228 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Gauze and splint overlay states taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/humans/onmob/med_human.dmi and repacked for CMU14. Prosthetic states taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/robotic.dmi and repacked for CMU14. Cast states are CMU14 medical presentation overlays.",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "splint_l_hand",
+            "directions": 4
+        },
+        {
+            "name": "splint_r_hand",
+            "directions": 4
+        },
+        {
+            "name": "splint_l_arm",
+            "directions": 4
+        },
+        {
+            "name": "splint_r_arm",
+            "directions": 4
+        },
+        {
+            "name": "splint_l_foot",
+            "directions": 4
+        },
+        {
+            "name": "splint_r_foot",
+            "directions": 4
+        },
+        {
+            "name": "splint_l_leg",
+            "directions": 4
+        },
+        {
+            "name": "splint_r_leg",
+            "directions": 4
+        },
+        {
+            "name": "splint_torso_1",
+            "directions": 4
+        },
+        {
+            "name": "splint_torso_2",
+            "directions": 4
+        },
+        {
+            "name": "splint_torso_3",
+            "directions": 4
+        },
+        {
+            "name": "splint_torso_4",
+            "directions": 4
+        },
+        {
+            "name": "splint_groin",
+            "directions": 4
+        },
+        {
+            "name": "splint_head_1",
+            "directions": 4
+        },
+        {
+            "name": "splint_head_2",
+            "directions": 4
+        },
+        {
+            "name": "splint_head_3",
+            "directions": 4
+        },
+        {
+            "name": "splint_head_4",
+            "directions": 4
+        },
+        {
+            "name": "gauze_l_hand",
+            "directions": 4
+        },
+        {
+            "name": "gauze_r_hand",
+            "directions": 4
+        },
+        {
+            "name": "gauze_l_arm",
+            "directions": 4
+        },
+        {
+            "name": "gauze_r_arm",
+            "directions": 4
+        },
+        {
+            "name": "gauze_l_foot",
+            "directions": 4
+        },
+        {
+            "name": "gauze_r_foot",
+            "directions": 4
+        },
+        {
+            "name": "gauze_l_leg",
+            "directions": 4
+        },
+        {
+            "name": "gauze_r_leg",
+            "directions": 4
+        },
+        {
+            "name": "gauze_head_1",
+            "directions": 4
+        },
+        {
+            "name": "gauze_head_2",
+            "directions": 4
+        },
+        {
+            "name": "gauze_head_3",
+            "directions": 4
+        },
+        {
+            "name": "gauze_head_4",
+            "directions": 4
+        },
+        {
+            "name": "gauze_torso_1",
+            "directions": 4
+        },
+        {
+            "name": "gauze_torso_2",
+            "directions": 4
+        },
+        {
+            "name": "gauze_torso_3",
+            "directions": 4
+        },
+        {
+            "name": "gauze_torso_4",
+            "directions": 4
+        },
+        {
+            "name": "gauze_groin_1",
+            "directions": 4
+        },
+        {
+            "name": "gauze_groin_2",
+            "directions": 4
+        },
+        {
+            "name": "cast_head"
+        },
+        {
+            "name": "cast_chest"
+        },
+        {
+            "name": "cast_groin"
+        },
+        {
+            "name": "cast_l_arm"
+        },
+        {
+            "name": "cast_r_arm"
+        },
+        {
+            "name": "cast_l_hand"
+        },
+        {
+            "name": "cast_r_hand"
+        },
+        {
+            "name": "cast_l_leg"
+        },
+        {
+            "name": "cast_r_leg"
+        },
+        {
+            "name": "cast_l_foot"
+        },
+        {
+            "name": "cast_r_foot"
+        },
+        {
+            "name": "prosthetic_head",
+            "directions": 4
+        },
+        {
+            "name": "prosthetic_chest",
+            "directions": 4
+        },
+        {
+            "name": "prosthetic_groin",
+            "directions": 4
+        },
+        {
+            "name": "prosthetic_l_arm",
+            "directions": 4
+        },
+        {
+            "name": "prosthetic_r_arm",
+            "directions": 4
+        },
+        {
+            "name": "prosthetic_l_hand",
+            "directions": 4
+        },
+        {
+            "name": "prosthetic_r_hand",
+            "directions": 4
+        },
+        {
+            "name": "prosthetic_l_leg",
+            "directions": 4
+        },
+        {
+            "name": "prosthetic_r_leg",
+            "directions": 4
+        },
+        {
+            "name": "prosthetic_l_foot",
+            "directions": 4
+        },
+        {
+            "name": "prosthetic_r_foot",
+            "directions": 4
+        }
+    ]
+}

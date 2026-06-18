@@ -1,8 +1,8 @@
 using System.Linq;
-using Content.Shared._CMU14.Medical.Shrapnel;
+using Content.Shared._CMU14.Medical.Human.Damage.Shrapnel;
+using Content.Shared._CMU14.Medical.Human.Data;
+using Content.Shared._CMU14.Medical.Human.Surgery;
 using Content.Shared._RMC14.Medical.Defibrillator;
-using Content.Shared._RMC14.Medical.Surgery;
-using Content.Shared.Body.Systems;
 using Content.Shared.GameTicking;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -21,30 +21,36 @@ public sealed class MedicalTelemetryIntegrationTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var body = entMan.System<SharedBodySystem>();
             var patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var surgeon = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
 
             try
             {
-                var part = body.GetBodyChildren(patient).First().Id;
                 var baselineStats = GetSummaryStats(entMan);
                 var baselineSurgeries = GetStatValue(baselineStats.InjuryStats, "round-end-summary-window-stat-surgeries");
                 var baselineDefibs = GetStatValue(baselineStats.InjuryStats, "round-end-summary-window-stat-defibs");
                 var baselineShrapnelEmbedded = GetStatValue(baselineStats.OddityStats, "round-end-summary-window-stat-shrapnel-embedded");
                 var baselineShrapnelExtracted = GetStatValue(baselineStats.OddityStats, "round-end-summary-window-stat-shrapnel-extracted");
 
-                var surgery = new CMSurgeryCompleteEvent(patient, surgeon, "CMUTelemetryTestSurgery");
+                var attempt = new SurgeryAttempt(
+                    BodyRegion.Chest,
+                    SurgeryStepKind.OpenIncision,
+                    ProcedureId: SurgeryProcedureId.SurgicalAccess);
+                var result = new SurgeryResult(
+                    Applied: true,
+                    DirtyFlags: MedicalDirtyFlags.Summary,
+                    FailureReason: string.Empty);
+                var surgery = new HumanSurgeryAppliedEvent(attempt, result, surgeon);
                 entMan.EventBus.RaiseLocalEvent(patient, ref surgery);
 
                 var defib = new RMCDefibrillatorAttemptEvent(patient);
-                entMan.EventBus.RaiseLocalEvent(patient, defib);
+                entMan.EventBus.RaiseEvent(EventSource.Local, defib);
 
-                var embedded = new CMUShrapnelChangedEvent(patient, part, false);
-                entMan.EventBus.RaiseLocalEvent(part, ref embedded);
+                var embedded = new CMUShrapnelChangedEvent(patient, BodyRegion.Chest, false);
+                entMan.EventBus.RaiseLocalEvent(patient, ref embedded);
 
-                var extracted = new CMUShrapnelChangedEvent(patient, part, true);
-                entMan.EventBus.RaiseLocalEvent(part, ref extracted);
+                var extracted = new CMUShrapnelChangedEvent(patient, BodyRegion.Chest, true);
+                entMan.EventBus.RaiseLocalEvent(patient, ref extracted);
 
                 var stats = GetSummaryStats(entMan);
 

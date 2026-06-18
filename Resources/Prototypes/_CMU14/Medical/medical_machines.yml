@@ -2,7 +2,7 @@
   parent: BaseStructure
   id: CMUAutodocPod
   name: autodoc pod
-  description: An automated surgical pod. A trained surgeon can queue procedures from its linked console.
+  description: An automated surgical pod for queued medical procedures.
   placement:
     mode: SnapgridCenter
   components:
@@ -41,6 +41,7 @@
   - type: InteractionOutline
   - type: CMOperatingTable
   - type: CMUAutodocPod
+    stepDelay: 8
   - type: ContainerContainer
     containers:
       cmu-autodoc-bodyContainer: !type:ContainerSlot
@@ -218,7 +219,7 @@
   parent: BaseStructure
   id: CMULimbPrinter
   name: limb printer
-  description: A surgical bioprinter that grows replacement human arms and legs from matrix reagent and a blood sample.
+  description: A surgical printer that grows organic replacement limbs or fabricates robotic prosthetics from metal and cable.
   placement:
     mode: SnapgridCenter
   components:
@@ -272,10 +273,22 @@
         whitelist:
           tags:
           - Syringe
+      cmu-limb-printer-metalSlot:
+        name: cmu-limb-printer-slot-metal
+        whitelist:
+          tags:
+          - Metal
+      cmu-limb-printer-cableSlot:
+        name: cmu-limb-printer-slot-cable
+        whitelist:
+          tags:
+          - CableCoil
   - type: ContainerContainer
     containers:
       cmu-limb-printer-beakerSlot: !type:ContainerSlot
       cmu-limb-printer-syringeSlot: !type:ContainerSlot
+      cmu-limb-printer-metalSlot: !type:ContainerSlot
+      cmu-limb-printer-cableSlot: !type:ContainerSlot
   - type: CMULimbPrinter
   - type: Appearance
   - type: GenericVisualizer
@@ -291,6 +304,8 @@
     containers:
     - cmu-limb-printer-beakerSlot
     - cmu-limb-printer-syringeSlot
+    - cmu-limb-printer-metalSlot
+    - cmu-limb-printer-cableSlot
   - type: Damageable
     damageContainer: StructuralInorganic
     damageModifierSet: Electronic

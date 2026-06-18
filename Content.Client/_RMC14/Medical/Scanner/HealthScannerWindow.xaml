@@ -1,7 +1,7 @@
 <scanner:HealthScannerWindow
     xmlns="https://spacestation14.io"
     xmlns:scanner="clr-namespace:Content.Client._RMC14.Medical.Scanner"
-    xmlns:cmui="clr-namespace:Content.Client._CMU14.Medical.UI"
+    xmlns:cmui="clr-namespace:Content.Client._CMU14.Medical.Presentation"
     xmlns:cooldown="clr-namespace:Content.Client.Cooldown"
     xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
@@ -78,19 +78,19 @@
                                     <Label Text="{Loc cmu-medical-scanner-stat-health}" Modulate="#7CA5B3" />
                                 </BoxContainer>
                                 <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="0 0 10 0">
-                                    <Label Name="CMUBigPulseValue" Access="Public"
-                                           Text="--" StyleClasses="LabelHeading" />
-                                    <Label Text="{Loc cmu-medical-scanner-stat-pulse}" Modulate="#7CA5B3" />
-                                </BoxContainer>
-                                <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="0 0 10 0">
                                     <Label Name="CMUBigBloodValue" Access="Public"
                                            Text="--" StyleClasses="LabelHeading" />
                                     <Label Text="{Loc cmu-medical-scanner-stat-blood}" Modulate="#7CA5B3" />
                                 </BoxContainer>
-                                <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="0 0 10 0">
+                                <BoxContainer Orientation="Vertical" HorizontalExpand="True">
                                     <Label Name="CMUBigTempValue" Access="Public"
                                            Text="--" StyleClasses="LabelHeading" />
                                     <Label Text="{Loc cmu-medical-scanner-stat-temp}" Modulate="#7CA5B3" />
+                                </BoxContainer>
+                                <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="10 0 10 0">
+                                    <Label Name="CMUBigPulseValue" Access="Public"
+                                           Text="--" StyleClasses="LabelHeading" />
+                                    <Label Text="{Loc cmu-medical-scanner-stat-pulse}" Modulate="#7CA5B3" />
                                 </BoxContainer>
                                 <BoxContainer Orientation="Vertical" HorizontalExpand="True">
                                     <Label Name="CMUBigShockRiskValue" Access="Public"
@@ -195,10 +195,6 @@
                     <BoxContainer Orientation="Horizontal" Visible="False">
                         <Label Text="Body Temperature:" MinWidth="160" Modulate="#7CA5B3" />
                         <cmui:CMUScaledRichTextLabel Name="BodyTemperatureLabel" Access="Public" />
-                    </BoxContainer>
-                    <BoxContainer Orientation="Horizontal" Visible="False">
-                        <Label Text="Pulse:" MinWidth="160" Modulate="#7CA5B3" />
-                        <cmui:CMUScaledRichTextLabel Name="PulseLabel" Access="Public" />
                     </BoxContainer>
                     <Label Text="{Loc cm-wounds-brackets-translators-note}" Visible="False" />
                 </BoxContainer>

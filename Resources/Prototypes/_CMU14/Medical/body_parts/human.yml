@@ -2,21 +2,8 @@
   parent: TorsoHuman
   id: CMUPartHumanTorso
   components:
-  - type: BodyPartHealth
-    max: 150
-    current: 150
-    severanceThreshold: 999999  # safety lock — torso never severs
-    resistance:
-      Brute: 0.9
-  - type: Bone
-    integrity: 120
-    integrityMax: 120
-    bruteAbsorbFraction: 0.65
-    fractureThresholds:
-      Hairline: 80
-      Simple: 50
-      Compound: 25
-      Comminuted: 5
+  - type: AnatomyRegion
+    region: Chest
   - type: Sprite
     drawdepth: Items
 
@@ -24,21 +11,8 @@
   parent: HeadHuman
   id: CMUPartHumanHead
   components:
-  - type: BodyPartHealth
-    max: 60
-    current: 60
-    severanceThreshold: 999999  # safety lock — head never severs
-    resistance:
-      Brute: 0.85
-  - type: Bone
-    integrity: 80
-    integrityMax: 80
-    bruteAbsorbFraction: 0.7
-    fractureThresholds:
-      Hairline: 65
-      Simple: 40
-      Compound: 20
-      Comminuted: 5
+  - type: AnatomyRegion
+    region: Head
   - type: Sprite
     drawdepth: Items
 
@@ -46,19 +20,8 @@
   parent: LeftArmHuman
   id: CMUPartHumanLeftArm
   components:
-  - type: BodyPartHealth
-    max: 80
-    current: 80
-    severanceThreshold: 90
-  - type: Bone
-    integrity: 90
-    integrityMax: 90
-    bruteAbsorbFraction: 0.6
-    fractureThresholds:
-      Hairline: 65
-      Simple: 40
-      Compound: 20
-      Comminuted: 5
+  - type: AnatomyRegion
+    region: LeftArm
   - type: Sprite
     drawdepth: Items
 
@@ -66,19 +29,26 @@
   parent: RightArmHuman
   id: CMUPartHumanRightArm
   components:
-  - type: BodyPartHealth
-    max: 80
-    current: 80
-    severanceThreshold: 90
-  - type: Bone
-    integrity: 90
-    integrityMax: 90
-    bruteAbsorbFraction: 0.6
-    fractureThresholds:
-      Hairline: 65
-      Simple: 40
-      Compound: 20
-      Comminuted: 5
+  - type: AnatomyRegion
+    region: RightArm
+  - type: Sprite
+    drawdepth: Items
+
+- type: entity
+  parent: LeftHandHuman
+  id: CMUPartHumanLeftHand
+  components:
+  - type: AnatomyRegion
+    region: LeftHand
+  - type: Sprite
+    drawdepth: Items
+
+- type: entity
+  parent: RightHandHuman
+  id: CMUPartHumanRightHand
+  components:
+  - type: AnatomyRegion
+    region: RightHand
   - type: Sprite
     drawdepth: Items
 
@@ -86,19 +56,8 @@
   parent: LeftLegHuman
   id: CMUPartHumanLeftLeg
   components:
-  - type: BodyPartHealth
-    max: 90
-    current: 90
-    severanceThreshold: 90
-  - type: Bone
-    integrity: 100
-    integrityMax: 100
-    bruteAbsorbFraction: 0.65
-    fractureThresholds:
-      Hairline: 70
-      Simple: 45
-      Compound: 22
-      Comminuted: 5
+  - type: AnatomyRegion
+    region: LeftLeg
   - type: Sprite
     drawdepth: Items
 
@@ -106,17 +65,129 @@
   parent: RightLegHuman
   id: CMUPartHumanRightLeg
   components:
-  - type: BodyPartHealth
-    max: 90
-    current: 90
-    severanceThreshold: 90
-  - type: Bone
-    integrity: 100
-    integrityMax: 100
-    bruteAbsorbFraction: 0.65
-    fractureThresholds:
-      Hairline: 70
-      Simple: 45
-      Compound: 22
-      Comminuted: 5
+  - type: AnatomyRegion
+    region: RightLeg
+  - type: Sprite
+    drawdepth: Items
 
+- type: entity
+  parent: LeftFootHuman
+  id: CMUPartHumanLeftFoot
+  components:
+  - type: AnatomyRegion
+    region: LeftFoot
+  - type: Sprite
+    drawdepth: Items
+
+- type: entity
+  parent: RightFootHuman
+  id: CMUPartHumanRightFoot
+  components:
+  - type: AnatomyRegion
+    region: RightFoot
+  - type: Sprite
+    drawdepth: Items
+
+- type: entity
+  parent: LeftArmHuman
+  id: CMUPartRoboticLeftArm
+  name: robotic left arm
+  components:
+  - type: CMUProstheticLimb
+  - type: AnatomyRegion
+    region: LeftArm
+  - type: Sprite
+    sprite: _CMU14/Medical/Prosthetics/robotic_limbs.rsi
+    state: l_arm
+    drawdepth: Items
+
+- type: entity
+  parent: RightArmHuman
+  id: CMUPartRoboticRightArm
+  name: robotic right arm
+  components:
+  - type: CMUProstheticLimb
+  - type: AnatomyRegion
+    region: RightArm
+  - type: Sprite
+    sprite: _CMU14/Medical/Prosthetics/robotic_limbs.rsi
+    state: r_arm
+    drawdepth: Items
+
+- type: entity
+  parent: LeftHandHuman
+  id: CMUPartRoboticLeftHand
+  name: robotic left hand
+  components:
+  - type: CMUProstheticLimb
+  - type: AnatomyRegion
+    region: LeftHand
+  - type: Sprite
+    sprite: _CMU14/Medical/Prosthetics/robotic_limbs.rsi
+    state: l_hand
+    drawdepth: Items
+
+- type: entity
+  parent: RightHandHuman
+  id: CMUPartRoboticRightHand
+  name: robotic right hand
+  components:
+  - type: CMUProstheticLimb
+  - type: AnatomyRegion
+    region: RightHand
+  - type: Sprite
+    sprite: _CMU14/Medical/Prosthetics/robotic_limbs.rsi
+    state: r_hand
+    drawdepth: Items
+
+- type: entity
+  parent: LeftLegHuman
+  id: CMUPartRoboticLeftLeg
+  name: robotic left leg
+  components:
+  - type: CMUProstheticLimb
+  - type: AnatomyRegion
+    region: LeftLeg
+  - type: Sprite
+    sprite: _CMU14/Medical/Prosthetics/robotic_limbs.rsi
+    state: l_leg
+    drawdepth: Items
+
+- type: entity
+  parent: RightLegHuman
+  id: CMUPartRoboticRightLeg
+  name: robotic right leg
+  components:
+  - type: CMUProstheticLimb
+  - type: AnatomyRegion
+    region: RightLeg
+  - type: Sprite
+    sprite: _CMU14/Medical/Prosthetics/robotic_limbs.rsi
+    state: r_leg
+    drawdepth: Items
+
+- type: entity
+  parent: LeftFootHuman
+  id: CMUPartRoboticLeftFoot
+  name: robotic left foot
+  components:
+  - type: CMUProstheticLimb
+  - type: AnatomyRegion
+    region: LeftFoot
+  - type: Sprite
+    sprite: _CMU14/Medical/Prosthetics/robotic_limbs.rsi
+    state: l_foot
+    drawdepth: Items
+
+- type: entity
+  parent: RightFootHuman
+  id: CMUPartRoboticRightFoot
+  name: robotic right foot
+  components:
+  - type: CMUProstheticLimb
+  - type: AnatomyRegion
+    region: RightFoot
+  - type: Sprite
+    sprite: _CMU14/Medical/Prosthetics/robotic_limbs.rsi
+    state: r_foot
+    drawdepth: Items

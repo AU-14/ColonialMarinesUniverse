@@ -7,4 +7,7 @@ public sealed partial class XenoMeleeSeverComponent : Component
 {
     [DataField, AutoNetworkedField]
     public float Chance = 0.4f;
+
+    [DataField, AutoNetworkedField]
+    public float ArmoredChance = 0.2f;
 }

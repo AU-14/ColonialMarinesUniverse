@@ -42,7 +42,7 @@
       prefix: au14-job-prefix-govforweaponsspecialist
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_AU14/Interface/au14govforhud.rsi
+        sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
         state: govfor_ws
 
 - type: playTimeTracker

@@ -33,9 +33,9 @@
       connections:
       - left_hand
     right_hand:
-      part: RightHandHuman
+      part: CMUPartHumanRightHand
     left_hand:
-      part: LeftHandHuman
+      part: CMUPartHumanLeftHand
     right_leg:
       part: CMUPartHumanRightLeg
       connections:
@@ -45,6 +45,6 @@
       connections:
       - left_foot
     right_foot:
-      part: RightFootHuman
+      part: CMUPartHumanRightFoot
     left_foot:
-      part: LeftFootHuman
+      part: CMUPartHumanLeftFoot

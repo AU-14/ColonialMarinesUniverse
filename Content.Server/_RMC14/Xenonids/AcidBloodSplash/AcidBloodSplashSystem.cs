@@ -13,7 +13,7 @@ using Robust.Shared.Player;
 using Content.Shared._RMC14.Xenonids;
 using Robust.Shared.Audio.Systems;
 using System.Linq;
-using Content.Shared._CMU14.Medical.BodyPart;
+using Content.Shared._CMU14.Medical.Targeting;
 using Content.Server._RMC14.Decals;
 using Content.Server.Spawners.Components;
 using Content.Shared.Body.Events;

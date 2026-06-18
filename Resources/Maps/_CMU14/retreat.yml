@@ -146624,7 +146624,7 @@ entities:
     - type: EmitSoundOnCollide
     - type: Physics
       canCollide: False
-- proto: CMUAutodocConsole
+- proto: CMUBodyScannerConsole
   entities:
   - uid: 42
     components:
@@ -146663,7 +146663,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -28.5,-43.5
       parent: 1
-- proto: CMUAutodocPod
+- proto: CMOperatingTable
   entities:
   - uid: 40
     components:

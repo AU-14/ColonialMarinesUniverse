@@ -1,7 +1,7 @@
 - type: job
   parent: AU14JobRadioTelephoneOperatorBase
   id: AU14JobOpforRadioTelephoneOperator
-  icon: "AU14JobIconOPFORSarge"
+  icon: "AU14JobIconOPFORFTL"
   startingGear: AU14GearopforRadioTelephoneOperator
   dummyStartingGear: AU14GearopforRadioTelephoneOperatorDummy
   spawnMenuRoleName: Fireteam Leader (OPFOR)
@@ -21,7 +21,7 @@
       - OPFOR
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_AU14/Interface/au14opforhud.rsi
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
         state: ftl
 
 - type: startingGear

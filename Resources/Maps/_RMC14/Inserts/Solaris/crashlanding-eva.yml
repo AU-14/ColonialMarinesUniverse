@@ -760,7 +760,7 @@ entities:
     - type: Transform
       pos: -3.5,18.5
       parent: 1
-- proto: CMUpgradedTraumaKit1
+- proto: CMTraumaKit1
   entities:
   - uid: 277
     components:

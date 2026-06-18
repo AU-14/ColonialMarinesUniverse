@@ -1,8 +1,6 @@
-using Content.Shared._CMU14.Medical;
-using Content.Shared._CMU14.Medical.Bones;
-using Content.Shared._CMU14.Medical.Wounds;
-using Content.Shared._RMC14.Medical.Wounds;
-using Content.Shared.Body.Systems;
+using Content.Shared._CMU14.Medical.Foundation;
+using Content.Shared._CMU14.Medical.Human.Components;
+using Content.Shared._CMU14.Medical.Human.Data;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Examine;
@@ -16,7 +14,6 @@ namespace Content.Shared._RMC14.HealthExaminable;
 public sealed partial class RMCHealthExaminableSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _cfg = default!;
-    [Dependency] private SharedBodySystem _body = default!;
 
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
@@ -46,8 +43,8 @@ public sealed partial class RMCHealthExaminableSystem : EntitySystem
 
         using (args.PushGroup(nameof(RMCHealthExaminableSystem), -1))
         {
-            (bool Brute, bool Burn) suppress = HasComp<CMUHumanMedicalComponent>(ent)
-                ? GetCmuLocalizedSuppressions(ent)
+            (bool Brute, bool Burn) suppress = TryComp<HumanMedicalComponent>(ent, out var humanMedical)
+                ? GetCmuLocalizedSuppressions(humanMedical)
                 : default;
 
             foreach (var group in ent.Comp.Groups)
@@ -75,7 +72,7 @@ public sealed partial class RMCHealthExaminableSystem : EntitySystem
         }
     }
 
-    private (bool Brute, bool Burn) GetCmuLocalizedSuppressions(EntityUid body)
+    private (bool Brute, bool Burn) GetCmuLocalizedSuppressions(HumanMedicalComponent medical)
     {
         if (!_cfg.GetCVar(CMUMedicalCCVars.Enabled))
             return default;
@@ -85,33 +82,41 @@ public sealed partial class RMCHealthExaminableSystem : EntitySystem
         var brute = false;
         var burn = false;
 
-        foreach (var (partUid, _) in _body.GetBodyChildren(body))
+        foreach (var region in medical.Regions)
         {
-            if (showBones
-                && TryComp<FractureComponent>(partUid, out var fracture)
-                && fracture.Severity != FractureSeverity.None)
-            {
+            if (showBones && region.Skeletal.Broken)
                 brute = true;
-            }
 
-            if (showWounds
-                && TryComp<BodyPartWoundComponent>(partUid, out var wounds)
-                && wounds.Wounds.Count > 0)
+            if (showWounds)
             {
-                foreach (var wound in wounds.Wounds)
-                {
-                    if (wound.Type == WoundType.Burn)
-                        burn = true;
-                    else
-                        brute = true;
-                }
+                if (region.BruteDamage > FixedPoint2.Zero)
+                    brute = true;
+                if (region.BurnDamage > FixedPoint2.Zero)
+                    burn = true;
             }
-
-            if (showWounds && HasComp<CMUEscharComponent>(partUid))
-                burn = true;
 
             if (brute && burn)
                 break;
+        }
+
+        if (showWounds && (!brute || !burn))
+        {
+            foreach (var injury in medical.Injuries)
+            {
+                if (injury.Flags.HasFlag(InjuryFlags.Closed) ||
+                    injury.Flags.HasFlag(InjuryFlags.Sutured))
+                {
+                    continue;
+                }
+
+                if (injury.Kind == InjuryKind.Burn)
+                    burn = true;
+                else
+                    brute = true;
+
+                if (brute && burn)
+                    break;
+            }
         }
 
         return (brute, burn);
