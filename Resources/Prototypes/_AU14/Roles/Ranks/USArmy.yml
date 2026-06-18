@@ -94,31 +94,31 @@
   id: USArmy_WarrantOfficer1
   name: Warrant Officer 1
   prefix: WO1.
-  paygrade: W1
+  paygrade: WO1
 
 - type: rank
   id: USArmy_ChiefWarrantOfficer2
   name: Chief Warrant Officer 2
   prefix: CW2.
-  paygrade: W2
+  paygrade: CW2
 
 - type: rank
   id: USArmy_ChiefWarrantOfficer3
   name: Chief Warrant Officer 3
   prefix: CW3.
-  paygrade: W3
+  paygrade: CW3
 
 - type: rank
   id: USArmy_ChiefWarrantOfficer4
   name: Chief Warrant Officer 4
   prefix: CW4.
-  paygrade: W4
+  paygrade: CW4
 
 - type: rank
   id: USArmy_ChiefWarrantOfficer5
   name: Chief Warrant Officer 5
   prefix: CW5.
-  paygrade: W5
+  paygrade: CW5
 
 # officers
 

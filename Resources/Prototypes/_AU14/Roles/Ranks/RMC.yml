@@ -40,13 +40,13 @@
   id: RMC_WarrantOfficer2
   name: Warrant Officer Class 2
   prefix: WO2.
-  paygrade: W1
+  paygrade: WO1
 
 - type: rank
   id: RMC_WarrantOfficer1
   name: Warrant Officer Class 1
   prefix: WO1.
-  paygrade: W2
+  paygrade: WO2
 
 # officers
 - type: rank
