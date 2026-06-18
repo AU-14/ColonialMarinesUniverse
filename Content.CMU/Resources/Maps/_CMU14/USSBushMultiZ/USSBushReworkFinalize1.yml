@@ -1,10 +1,10 @@
 meta:
   format: 7
   category: Map
-  engineVersion: v264.0.2-fix-physics
+  engineVersion: v277.0.0
   forkId: ""
   forkVersion: ""
-  time: 06/09/2026 12:15:06
+  time: 06/17/2026 23:50:13
   entityCount: 4805
 maps:
 - 1
@@ -9848,10 +9848,20 @@ entities:
     - type: Transform
       pos: -20.5,51.5
       parent: 1
+  - uid: 1839
+    components:
+    - type: Transform
+      pos: -14.5,46.5
+      parent: 1
   - uid: 2032
     components:
     - type: Transform
       pos: -7.5,43.5
+      parent: 1
+  - uid: 2185
+    components:
+    - type: Transform
+      pos: -14.5,48.5
       parent: 1
 - proto: CMPaper
   entities:
@@ -11367,37 +11377,17 @@ entities:
       parent: 1
 - proto: CMUBodyScannerConsole
   entities:
-  - uid: 456
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -15.5,46.5
-      parent: 1
-  - uid: 2189
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -15.5,48.5
-      parent: 1
-- proto: CMOperatingTable
-  entities:
-  - uid: 1839
-    components:
-    - type: Transform
-      pos: -14.5,46.5
-      parent: 1
-  - uid: 2185
-    components:
-    - type: Transform
-      pos: -14.5,48.5
-      parent: 1
-- proto: CMUBodyScannerConsole
-  entities:
   - uid: 345
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -20.5,48.5
+      parent: 1
+  - uid: 456
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -15.5,46.5
       parent: 1
   - uid: 603
     components:
@@ -11416,6 +11406,12 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -20.5,38.5
+      parent: 1
+  - uid: 2189
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -15.5,48.5
       parent: 1
   - uid: 3158
     components:
@@ -11577,7 +11573,7 @@ entities:
     - type: Transform
       parent: 1670
     - type: Heart
-      nextPulseUpdate: 39.3006421
+      nextPulseUpdate: 5427.7358132
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11586,7 +11582,7 @@ entities:
     - type: Transform
       parent: 1670
     - type: Heart
-      nextPulseUpdate: 39.3006421
+      nextPulseUpdate: 5427.7358132
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11595,7 +11591,7 @@ entities:
     - type: Transform
       parent: 1670
     - type: Heart
-      nextPulseUpdate: 39.3006421
+      nextPulseUpdate: 5427.7358132
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11606,7 +11602,7 @@ entities:
     - type: Transform
       parent: 1670
     - type: Kidneys
-      nextSelfDamageTick: 35.3006421
+      nextSelfDamageTick: 5423.7358132
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11615,7 +11611,7 @@ entities:
     - type: Transform
       parent: 1670
     - type: Kidneys
-      nextSelfDamageTick: 35.3006421
+      nextSelfDamageTick: 5423.7358132
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11624,7 +11620,7 @@ entities:
     - type: Transform
       parent: 1670
     - type: Kidneys
-      nextSelfDamageTick: 35.3006421
+      nextSelfDamageTick: 5423.7358132
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11635,7 +11631,7 @@ entities:
     - type: Transform
       parent: 1670
     - type: Liver
-      nextSelfDamageTick: 35.3006421
+      nextSelfDamageTick: 5423.7358132
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11644,7 +11640,7 @@ entities:
     - type: Transform
       parent: 1670
     - type: Liver
-      nextSelfDamageTick: 35.3006421
+      nextSelfDamageTick: 5423.7358132
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11653,7 +11649,7 @@ entities:
     - type: Transform
       parent: 1670
     - type: Liver
-      nextSelfDamageTick: 35.3006421
+      nextSelfDamageTick: 5423.7358132
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11664,7 +11660,7 @@ entities:
     - type: Transform
       parent: 1670
     - type: Lungs
-      nextAsphyxTick: 35.3006421
+      nextAsphyxTick: 5423.7358132
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11673,7 +11669,7 @@ entities:
     - type: Transform
       parent: 1670
     - type: Lungs
-      nextAsphyxTick: 35.3006421
+      nextAsphyxTick: 5423.7358132
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11682,7 +11678,7 @@ entities:
     - type: Transform
       parent: 1670
     - type: Lungs
-      nextAsphyxTick: 35.3006421
+      nextAsphyxTick: 5423.7358132
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11693,7 +11689,7 @@ entities:
     - type: Transform
       parent: 1670
     - type: CMUStomach
-      nextVomitCheck: 44.3006421
+      nextVomitCheck: 5432.7358132
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11702,7 +11698,7 @@ entities:
     - type: Transform
       parent: 1670
     - type: CMUStomach
-      nextVomitCheck: 44.3006421
+      nextVomitCheck: 5432.7358132
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11711,7 +11707,7 @@ entities:
     - type: Transform
       parent: 1670
     - type: CMUStomach
-      nextVomitCheck: 44.3006421
+      nextVomitCheck: 5432.7358132
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -25097,7 +25093,7 @@ entities:
       pos: -1.5,-35.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -41702.914
+      secondsUntilStateChange: -42606.035
       state: Closing
   - uid: 1021
     components:
