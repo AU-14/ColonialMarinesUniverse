@@ -174170,7 +174170,7 @@ entities:
   - uid: 344695
     components:
     - type: MetaData
-      name: Cold Storage
+      name: Botany
     - type: Transform
       rot: 4.71238898038469 rad
       pos: 67.5,-155.5
@@ -174180,6 +174180,8 @@ entities:
       - - AU14AccessCorporateWEYU
   - uid: 344755
     components:
+    - type: MetaData
+      name: Assistant Quarters
     - type: Transform
       pos: 78.5,-147.5
       parent: 1
