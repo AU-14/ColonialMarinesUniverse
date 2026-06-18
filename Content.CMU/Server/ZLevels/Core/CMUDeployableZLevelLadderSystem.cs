@@ -33,6 +33,7 @@ public sealed partial class CMUDeployableZLevelLadderSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<CMUDeployableZLevelLadderComponent, AfterInteractEvent>(OnAfterInteract);
+        SubscribeLocalEvent<CMUDeployableZLevelLadderComponent, ActivateInWorldEvent>(OnActivateInWorld);
         SubscribeLocalEvent<CMUDeployableZLevelLadderComponent, UseInHandEvent>(OnUseInHand);
         SubscribeLocalEvent<CMUPackableZLevelLadderComponent, GetVerbsEvent<AlternativeVerb>>(OnPackableGetAltVerbs);
     }
@@ -44,6 +45,15 @@ public sealed partial class CMUDeployableZLevelLadderSystem : EntitySystem
 
         args.Handled = true;
         TryDeploy(ent, args.User, args.ClickLocation);
+    }
+
+    private void OnActivateInWorld(Entity<CMUDeployableZLevelLadderComponent> ent, ref ActivateInWorldEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        args.Handled = true;
+        TryDeploy(ent, args.User, _transform.GetMoverCoordinates(ent));
     }
 
     private void OnUseInHand(Entity<CMUDeployableZLevelLadderComponent> ent, ref UseInHandEvent args)
