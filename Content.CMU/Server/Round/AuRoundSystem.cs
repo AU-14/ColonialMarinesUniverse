@@ -33,6 +33,8 @@ namespace Content.Server.AU14.Round
     /// </summary>
     public sealed partial class AuRoundSystem : EntitySystem
     {
+        private const string DistressSignalPresetId = "DistressSignal";
+
         [Dependency] private IVoteManager _voteManager = default!;
         [Dependency] private IConfigurationManager _cfg = default!;
         [Dependency] private IPrototypeManager _prototypeManager = default!;
@@ -73,8 +75,13 @@ namespace Content.Server.AU14.Round
         public static bool IsPostRoundstartThreatVotePreset(string? presetId)
         {
             return presetId != null &&
-                   (presetId.Equals("DistressSignal", StringComparison.OrdinalIgnoreCase) ||
+                   (presetId.Equals(DistressSignalPresetId, StringComparison.OrdinalIgnoreCase) ||
                     presetId.Equals("ColonyFall", StringComparison.OrdinalIgnoreCase));
+        }
+
+        internal static bool ShouldPreselectThirdPartiesForPreset(string? presetId)
+        {
+            return !string.Equals(presetId, DistressSignalPresetId, StringComparison.OrdinalIgnoreCase);
         }
 
         private List<AuThirdPartyPrototype> _selectedThirdParties = new();
@@ -393,6 +400,8 @@ namespace Content.Server.AU14.Round
             _selectedThirdParties.Clear();
             if (_selectedPreset == null || _selectedPlanet == null)
                 return;
+            if (!ShouldPreselectThirdPartiesForPreset(_selectedPreset.ID))
+                return;
             if (_selectedthreat == null)
                 return;
 
@@ -690,12 +699,11 @@ namespace Content.Server.AU14.Round
             mapSystem.InitializeMap((map, map));
 
             // Attach RMCPlanetComponent, TacticalMapComponent, etc. (if not already present)
+            // TODO: Look at how multiple Z levels tackle this
             if (!_entityManager.HasComponent<RMCPlanetComponent>(map))
                 _entityManager.AddComponent<RMCPlanetComponent>(map);
             if (!_entityManager.HasComponent<TacticalMapComponent>(map))
                 _entityManager.AddComponent<TacticalMapComponent>(map);
-
-
         }
 
         public void SetOpfor(string opfor)

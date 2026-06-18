@@ -1,35 +1,53 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from cmss13-pve at https://github.com/cmss13-devs/cmss13-pve/blob/279b570b35c7715d45541ad752f57a94eba8f949/icons/mob/hud/marine_hud.dmi and modified by Blackburn for use in AU14, working joe by potatoed on Discord.",
+  "copyright": "All sprites (unless stated otherwise further in the copyright) were originally taken from cmss13-pve at https://github.com/cmss13-devs/cmss13-pve/blob/279b570b35c7715d45541ad752f57a94eba8f949/icons/mob/hud/marine_hud.dmi and modified by Blackburn (nickname) for use in AU14. | As of commit https://github.com/AU-14/ColonialMarinesUniverse/commit/c00734db4327fa5672cbc11494cd2a0cc0e50453 , almost all sprites in this folder have been changed, reworked or updated in some way by hutcrime. Appearance of a sprite name or reference in the following list indicates no visual change, or any change at all made in said sprite as of mentioned commit; govfor_dcc, govfor_k9handler, govfor_po. | Following sprites have been renamed: govfor_rto to govfor_auxtech, govfor_rfn to govfor_mp, govfor_platoonsergeant to govfor_ftl. | Sprites govfor_doctor and govfor_ws made, and rifleman added from /Resources/Textures/_AU14/Interface/au14govforjobicons.rsi by hutcrime. | working_joe made by potatoed. | All authors mentioned are mentioned as their usernames (preferrably), or nicknames (if their username is unknown), on Discord.",
   "size": {
     "x": 32,
     "y": 32
   },
   "states": [
     {
+      "name": "govfor_adj"
+    },
+    {
+      "name": "govfor_advisor"
+    },
+    {
       "name": "govfor_afn"
+    },
+    {
+      "name": "govfor_auxtech"
     },
     {
       "name": "govfor_background"
     },
     {
-      "name": "govfor_k9handler"
+      "name": "govfor_corpsman"
     },
     {
       "name": "govfor_ct"
     },
     {
-      "name": "govfor_corpsman"
-    },
-    {
       "name": "govfor_dcc"
     },
     {
-      "name": "govfor_syn"
+      "name": "govfor_doctor"
     },
     {
-      "name": "govfor_advisor"
+      "name": "govfor_eo"
+    },
+    {
+      "name": "govfor_ftl"
+    },
+    {
+      "name": "govfor_io"
+    },
+    {
+      "name": "govfor_k9handler"
+    },
+    {
+      "name": "govfor_mp"
     },
     {
       "name": "govfor_opsofc"
@@ -37,23 +55,47 @@
     {
       "name": "govfor_platco"
     },
-    {
-      "name": "govfor_rto"
-    },
-    {
-      "name": "govfor_platoonsergeant"
-    },
-    {
+	{
       "name": "govfor_po"
     },
-    {
-      "name": "govfor_rfn"
-    },
-    {
+	{
       "name": "govfor_sergeant"
     },
-    {
+	{
+      "name": "govfor_synth"
+    },
+	{
+      "name": "govfor_syn"
+    },
+	{
+      "name": "govfor_ws"
+    },
+	{
+      "name": "rifleman"
+    },
+	{
       "name": "working_joe"
+    },
+	{
+      "name": "govfor_platoonsergeant"
+    },
+	{
+      "name": "old_govfor_afn"
+    },
+	{
+      "name": "old_govfor_opsofc"
+    },
+	{
+      "name": "old_govfor_platco"
+    },
+	{
+      "name": "old_govfor_rfn"
+    },
+	{
+      "name": "old_govfor_rto"
+    },
+	{
+      "name": "old_govfor_sergeant"
     }
   ]
 }

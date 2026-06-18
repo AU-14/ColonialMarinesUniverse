@@ -1,6 +1,6 @@
 using Content.Server.Administration.Logs;
 using Content.Server.Chat.Managers;
-using Content.Shared._CMU14.Medical.BodyPart.Events;
+using Content.Shared._CMU14.Medical.Human.Damage.Events;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Stealth;
