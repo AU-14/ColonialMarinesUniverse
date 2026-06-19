@@ -245,7 +245,10 @@ public sealed partial class YautjaHealingGunSystem : EntitySystem
             return false;
 
         Dirty(target, medical);
-        _medical.NotifyLedgerChanged((target, medical), result);
+        _medical.RefreshActiveMarkers(target, medical);
+
+        var ev = new HumanMedicalLedgerChangedEvent(target, result);
+        RaiseLocalEvent(ref ev);
 
         return true;
     }
