@@ -163123,14 +163123,14 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: CMUBodyScannerConsole
+- proto: CMUAutodocConsole
   entities:
   - uid: 3346
     components:
     - type: Transform
       pos: -2.5,-16.5
       parent: 1
-- proto: CMOperatingTable
+- proto: CMUAutodocPod
   entities:
   - uid: 3347
     components:

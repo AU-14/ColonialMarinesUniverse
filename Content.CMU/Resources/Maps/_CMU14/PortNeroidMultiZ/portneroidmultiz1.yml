@@ -6678,8 +6678,37 @@ entities:
     - type: Transform
       pos: -20.5,70.5
       parent: 1
+- proto: CMUAutodocConsole
+  entities:
+<<<<<<< HEAD
+=======
+  - uid: 24356
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 89.5,113.5
+      parent: 1
+  - uid: 24357
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 89.5,111.5
+      parent: 1
+- proto: CMUAutodocPod
+  entities:
+  - uid: 10671
+    components:
+    - type: Transform
+      pos: 90.5,111.5
+      parent: 1
+  - uid: 10672
+    components:
+    - type: Transform
+      pos: 90.5,113.5
+      parent: 1
 - proto: CMUBodyScannerConsole
   entities:
+>>>>>>> upstream/master
   - uid: 10289
     components:
     - type: Transform
