@@ -172,13 +172,7 @@ namespace Content.Client.Options.UI.Tabs
             AddHeader("ui-options-header-cmu-medical");
             AddButton(CMUKeyFunctions.CMUCycleBodyZoneTarget);
             AddButton(CMUKeyFunctions.CMUCycleBodyZoneTargetReverse);
-            AddButton(CMUKeyFunctions.CMUTargetBodyZoneHead);
-            AddButton(CMUKeyFunctions.CMUTargetBodyZoneTorso);
-            AddButton(CMUKeyFunctions.CMUTargetBodyZoneLeftArm);
-            AddButton(CMUKeyFunctions.CMUTargetBodyZoneRightArm);
-            AddButton(CMUKeyFunctions.CMUTargetBodyZoneLeftLeg);
-            AddButton(CMUKeyFunctions.CMUTargetBodyZoneRightLeg);
-            AddButton(CMUKeyFunctions.CMUToggleSurgeryMode);
+            AddButton(CMUKeyFunctions.CMUOpenMedicalCraftingMenu);
 
             AddHeader("ui-options-header-cmu-zlevels");
             AddButton(CMUKeyFunctions.CMUToggleShootDownZLevel);

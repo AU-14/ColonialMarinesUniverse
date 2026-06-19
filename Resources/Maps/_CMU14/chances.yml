@@ -66799,7 +66799,7 @@ entities:
     - type: Transform
       pos: 46.749325,-6.4548483
       parent: 1
-- proto: CMOperatingTable
+- proto: CMUAutodocPod
   entities:
   - uid: 4494
     components:

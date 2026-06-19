@@ -33,8 +33,6 @@ namespace Content.Server.AU14.Round
     /// </summary>
     public sealed partial class AuRoundSystem : EntitySystem
     {
-        private const string DistressSignalPresetId = "DistressSignal";
-
         [Dependency] private IVoteManager _voteManager = default!;
         [Dependency] private IConfigurationManager _cfg = default!;
         [Dependency] private IPrototypeManager _prototypeManager = default!;
@@ -75,13 +73,8 @@ namespace Content.Server.AU14.Round
         public static bool IsPostRoundstartThreatVotePreset(string? presetId)
         {
             return presetId != null &&
-                   (presetId.Equals(DistressSignalPresetId, StringComparison.OrdinalIgnoreCase) ||
+                   (presetId.Equals("DistressSignal", StringComparison.OrdinalIgnoreCase) ||
                     presetId.Equals("ColonyFall", StringComparison.OrdinalIgnoreCase));
-        }
-
-        internal static bool ShouldPreselectThirdPartiesForPreset(string? presetId)
-        {
-            return !string.Equals(presetId, DistressSignalPresetId, StringComparison.OrdinalIgnoreCase);
         }
 
         private List<AuThirdPartyPrototype> _selectedThirdParties = new();
@@ -399,8 +392,6 @@ namespace Content.Server.AU14.Round
         {
             _selectedThirdParties.Clear();
             if (_selectedPreset == null || _selectedPlanet == null)
-                return;
-            if (!ShouldPreselectThirdPartiesForPreset(_selectedPreset.ID))
                 return;
             if (_selectedthreat == null)
                 return;

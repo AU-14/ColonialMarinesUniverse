@@ -4,7 +4,6 @@
   text: "/ServerInfo/Guidebook/Medical/Medical.xml"
   children:
   - MedicalDoctor
-  - MedicalSurgery
   - Chemist
   - Cloning
   - Cryogenics
@@ -13,12 +12,6 @@
   id: MedicalDoctor
   name: guide-entry-medicaldoctor
   text: "/ServerInfo/Guidebook/Medical/MedicalDoctor.xml"
-
-- type: guideEntry
-  id: MedicalSurgery
-  isCM: true
-  name: guide-entry-medical-surgery
-  text: "/ServerInfo/Guidebook/Medical/Surgery.xml"
 
 - type: guideEntry
   id: Cloning

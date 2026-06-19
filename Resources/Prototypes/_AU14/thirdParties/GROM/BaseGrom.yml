@@ -183,7 +183,9 @@
     contents:
     - id: CMBurnKit10
       amount: 1
-    - id: CMTraumaKit10
+    - id: CMUPlainTraumaDressing10
+    - id: CMUCoagulantPowder
+    - id: CMUBurnGel
     - id: CMHandsLatex
     - id: CMSyringe
     - id: CMPillCanisterBicaridine
@@ -198,7 +200,9 @@
     contents:
     - id: CMSurgicalLine
     - id: CMSynthGraft
-    - id: CMTraumaKit10
+    - id: CMUPlainTraumaDressing10
+    - id: CMUCoagulantPowder
+    - id: CMUBurnGel
     - id: CMPillCanisterBicaridine
     - id: CMPillCanisterKelotane
 

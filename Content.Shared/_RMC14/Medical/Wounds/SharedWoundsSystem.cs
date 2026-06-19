@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
-using Content.Shared._CMU14.Medical.Human.Components;
-using Content.Shared._CMU14.Medical.Human.Care;
+using Content.Shared._CMU14.Medical;
+using Content.Shared._CMU14.Medical.Wounds.Events;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Damage;
@@ -124,7 +124,7 @@ public abstract partial class SharedWoundsSystem : EntitySystem
 
     private void OnWoundTreaterUseInHand(Entity<WoundTreaterComponent> ent, ref UseInHandEvent args)
     {
-        if (HasComp<HumanMedicalComponent>(args.User))
+        if (HasComp<CMUHumanMedicalComponent>(args.User))
         {
             var ev = new CMUWoundTreaterInterceptEvent(args.User, ent.Owner, args.User);
             RaiseLocalEvent(ref ev);
@@ -144,8 +144,8 @@ public abstract partial class SharedWoundsSystem : EntitySystem
         if (!args.CanReach || args.Target == null)
             return;
 
-        if (HasComp<HumanMedicalComponent>(args.Target.Value)
-            && (HasComp<HumanMedicalComponent>(args.User)
+        if (HasComp<Content.Shared._CMU14.Medical.CMUHumanMedicalComponent>(args.Target.Value)
+            && (HasComp<Content.Shared._CMU14.Medical.CMUHumanMedicalComponent>(args.User)
                 || HasComp<YautjaMedicalItemComponent>(ent.Owner)))
         {
             var hasSkills = _skills.HasAllSkills(args.User, ent.Comp.Skills);
@@ -155,7 +155,7 @@ public abstract partial class SharedWoundsSystem : EntitySystem
                 return;
             }
 
-            var ev = new CMUWoundTreaterInterceptEvent(
+            var ev = new Content.Shared._CMU14.Medical.Wounds.Events.CMUWoundTreaterInterceptEvent(
                 args.User, ent.Owner, args.Target.Value);
             RaiseLocalEvent(ref ev);
             if (ev.Handled)
@@ -595,7 +595,7 @@ public abstract partial class SharedWoundsSystem : EntitySystem
     }
 
     private bool CanCreateRMCWounds(EntityUid uid)
-        => !HasComp<HumanMedicalComponent>(uid);
+        => !HasComp<CMUHumanMedicalComponent>(uid);
 
     public void RemoveWounds(Entity<WoundedComponent?> wounded, WoundType type)
     {

@@ -31,8 +31,7 @@
       - CMOintment
       - Brutepack
       - Bloodpack
-      - CMUSplintItem
-      - CMUCastItem
+      #      - TODO RMC14 splint
       - RMCPenlight
       - CMAutoInjector
       - RMCSyringeCase
@@ -102,8 +101,7 @@
       - CMOintment
       - Brutepack
       - Bloodpack
-      - CMUSplintItem
-      - CMUCastItem
+      #      - TODO RMC14 splint
       - RMCPenlight
       - CMAutoInjector
       - RMCSyringeCase
@@ -132,8 +130,7 @@
     - id: CMInaprovalineAutoInjector
     - id: CMGauze10
     - id: CMOintment10
-    - id: CMUSplintItem
-    - id: AU14TramadolAutoInjector
+#    - id: CMMedicalSplint5
 
 - type: entity
   parent: CMFirstAidKit
@@ -145,10 +142,10 @@
     - id: CMHealthAnalyzer
     - id: CMPillCanisterBicaridine
     - id: CMPillCanisterKelotane
-    - id: AU14PillCanisterTramadol
+    #    - id: CMPillCanisterTramadol # TODO RMC14
     - id: CMGauze10
     - id: CMBurnKit10
-    - id: CMUSplintItem
+#    - id: CMSplints5 # TODO RMC14
 
 - type: entity
   parent: CMFirstAidKitSurgery
@@ -163,7 +160,8 @@
     - id: CMScalpel
     - id: CMHemostat
     - id: CMRetractor
-    - id: AU14OxycodoneAutoInjector
+#    - id: CMOxycodoneAutoinjector # TODO RMC14
+#    - id: CMOxycodoneAutoinjector # TODO RMC14
 
 - type: entity
   parent: CMFirstAidKit
@@ -250,7 +248,7 @@
       amount: 3
     - id: CMBurnKit10
       amount: 2
-    - id: CMUSplintItem
+#    - id: CMMedicalSplints5
 
 - type: entity
   parent: CMFirstAidKit
@@ -331,8 +329,8 @@
     - id: CMTraumaKit10
     - id: CMBurnKit10
     - id: CMBurnKit10
-    - id: CMUSplintItem
-    - id: AU14OxycodoneAutoInjector
+#   - id: CMMedicalSplint5
+#   - id: CMOxycodoneAutoInjector
     - id: CMDexalinPlusAutoInjector
 
 - type: entity
@@ -359,7 +357,7 @@
     - id: CMTraumaKit10
     - id: CMTraumaKit10
     - id: CMTraumaKit10
-    - id: CMUSplintItem
+#   - id: CMMedicalSplint5
     - id: CMSurgicalLine
     - id: RMCIronAutoInjector
     - id: CMBicaridineAutoInjector

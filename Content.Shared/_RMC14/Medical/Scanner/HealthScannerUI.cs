@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Content.Shared._CMU14.Medical.Foundation;
-using Content.Shared._CMU14.Medical.Human.Data;
-using Content.Shared._CMU14.Medical.Human.Diagnostics;
-using Content.Shared._CMU14.Medical.Human.Organs;
+using Content.Shared._CMU14.Medical.Bones;
+using Content.Shared._CMU14.Medical.Organs;
+using Content.Shared._CMU14.Medical.Stabilizers;
+using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared.Body.Part;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.FixedPoint;
@@ -27,18 +27,17 @@ public sealed class HealthScannerBuiState(
     public readonly float? Temperature = temperature;
     public readonly Solution? Chemicals = chemicals;
     public readonly bool Bleeding = bleeding;
-    public List<CMUBodyPartReadout>? CMUParts;
+    public Dictionary<BodyPartType, CMUBodyPartReadout>? CMUParts;
     public List<CMUOrganReadout>? CMUOrgans;
     public List<CMUFractureReadout>? CMUFractures;
     public List<CMUInternalBleedReadout>? CMUInternalBleeds;
-    public MedicalSummary? CMUHumanMedicalSummary;
-    public HumanMedicalLedgerDetail? CMUHumanMedicalLedger;
+    public int? CMUHeartBpm;
+    public bool? CMUHeartStopped;
+    public CMUTraumaGovernorReadout? CMUTraumaGovernor;
+    public CMUPainShockRisk? CMUPainShockRisk;
+    public bool CMUPainShockSuppressed;
     public bool CMUExternalBleeding;
     public bool CMUSyntheticPhysiology;
-    public int? CMUPulseBpm;
-    public bool CMUNoPulse;
-    public HealthScannerShockRisk CMUShockRisk = HealthScannerShockRisk.Unknown;
-    public int CMUShockRiskPercent;
     public HealthScannerDamageReadout Damage = new();
     public HealthScannerAdviceReadout Advice = new();
     public MobState MobState;
@@ -98,9 +97,7 @@ public readonly record struct CMUBodyPartReadout(
     bool Eschar,
     bool Splinted,
     bool Cast,
-    bool Tourniquet,
-    bool Removed = false,
-    bool Prosthetic = false);
+    bool Tourniquet);
 
 [Serializable, NetSerializable]
 public readonly record struct CMUOrganReadout(
@@ -126,15 +123,13 @@ public readonly record struct CMUInternalBleedReadout(
     float BloodlossPerSecond);
 
 [Serializable, NetSerializable]
-public enum HealthScannerShockRisk : byte
+public enum CMUPainShockRisk : byte
 {
-    Unknown,
-    None,
     Low,
     Elevated,
     High,
-    Shock,
-    Suppressed,
+    Imminent,
+    Active,
 }
 
 [Serializable, NetSerializable]

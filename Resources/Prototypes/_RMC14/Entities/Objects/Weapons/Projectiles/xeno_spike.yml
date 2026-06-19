@@ -28,8 +28,5 @@
     damage:
       types:
         Brute: 5
-  - type: CMUProjectileShrapnel
-    severity: 6
-    removalDepth: Surface
   - type: TimedDespawn
     lifetime: 10

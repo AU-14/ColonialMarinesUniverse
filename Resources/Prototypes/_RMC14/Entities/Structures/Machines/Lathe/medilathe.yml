@@ -133,7 +133,7 @@
   - CMBloodPack
   - RMCBeakerHighCapacity
   - CMBonesetter
-  - CMUFixOVein
+  #    - FixOVein (5000 Plastic)->(6250)
   - CMStasisBag
   - CMRollerBed
   - AU14PortableSurgicalBed

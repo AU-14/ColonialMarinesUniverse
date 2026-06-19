@@ -1,5 +1,5 @@
-using Content.Shared._RMC14.Marines.Skills;
-using Content.Shared._CMU14.Medical.Foundation;
+﻿using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._CMU14.Medical.Wounds;
 using System.Collections.Generic;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DoAfter;
@@ -46,9 +46,6 @@ public sealed partial class WoundTreaterComponent : Component
 
     [DataField("cmuStopsArterialBleeding"), AutoNetworkedField]
     public bool CMUStopsArterialBleeding;
-
-    [DataField("cmuMedicalAction")]
-    public MedicalActionKind? CMUMedicalAction;
 
     [DataField(required: true), AutoNetworkedField]
     public ProtoId<DamageGroupPrototype> Group;

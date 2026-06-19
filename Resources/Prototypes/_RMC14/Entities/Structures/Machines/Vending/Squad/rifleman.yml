@@ -84,8 +84,12 @@
       - id: RMCPouchPistol
     - name: Field Medical Supplies
       entries:
-      - id: CMTraumaKit10
+      - id: CMUPlainTraumaDressing10
         points: 8
+      - id: CMUCoagulantPowder
+        points: 15
+      - id: CMUBurnGel
+        points: 15
     - name: Mask
       choices: { CMMask: 1 }
       entries:

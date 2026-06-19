@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Content.Server.AU14.Round;
 using Content.Server.AU14.Threats;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Maps;
@@ -22,14 +21,6 @@ public sealed class DistressSignalThreatMarkerTest
     private static readonly ProtoId<ThreatPrototype> TribalThreat = "TribalsThreat";
     private const string DistressSignalPreset = "DistressSignal";
     private const int MarkerValidationPlayerCount = 100;
-
-    [Test]
-    public void DistressSignalDoesNotAutomaticallyQueueThirdParties()
-    {
-        Assert.That(AuRoundSystem.ShouldPreselectThirdPartiesForPreset(DistressSignalPreset), Is.False);
-        Assert.That(AuRoundSystem.ShouldPreselectThirdPartiesForPreset("distresssignal"), Is.False);
-        Assert.That(AuRoundSystem.ShouldPreselectThirdPartiesForPreset("ColonyFall"), Is.True);
-    }
 
     [Test]
     public async Task TribalThreatIsNotAvailableForDistressSignal()

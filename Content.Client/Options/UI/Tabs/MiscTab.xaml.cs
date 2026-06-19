@@ -2,7 +2,6 @@ using System.Linq;
 using Content.Client._RMC14.LinkAccount;
 using Content.Client.UserInterface.Screens;
 using Content.Shared._Mono.CCVar;
-using Content.Shared._CMU14.Medical.Foundation;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.NightVision;
 using Content.Shared.CCVar;
@@ -74,7 +73,6 @@ public sealed partial class MiscTab : Control
         Control.AddOptionCheckBox(RMCCVars.RMCDamageYourself, RMCDamageYourself);
         Control.AddOptionCheckBox(RMCCVars.RMCShowNewPlayerIcons, RMCShowNewPlayerIcons);
         Control.AddOptionDropDown(RMCCVars.RMCXenoDefaultNightVision, RMCXenoNightVisionDefault, xenoNightVisionEntries);
-        Control.AddOptionCheckBox(CMUMedicalCCVars.DisableWoundTreatmentRadial, CMUDisableWoundTreatmentRadial);
         Control.AddOptionCheckBox(MonoCVars.AreaEchoEnabled, AreaEchoCheckBox); // Mono
         Control.AddOptionCheckBox(MonoCVars.AreaEchoHighResolution, AreaEchoHighResolutionCheckBox); // Mono
 

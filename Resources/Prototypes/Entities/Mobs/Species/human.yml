@@ -20,12 +20,11 @@
     hideLayersOnEquip:
     - Hair
     - Snout
-  - type: HumanMedical
-  - type: HumanMedicalSummary
-  - type: Internals
+  - type: CMUHumanMedical
   - type: HitLocation
   - type: PainShock
   - type: BodyZoneTargeting
+  - type: CMSurgeryTarget
   - type: Body
     prototype: CMUHumanBody
     requiredLegs: 2
@@ -35,6 +34,8 @@
         type: HumanoidMarkingModifierBoundUserInterface
       enum.StrippingUiKey.Key:
         type: StrippableBoundUserInterface
+      enum.CMSurgeryUIKey.Key:
+        type: CMSurgeryBui
   - type: Inventory
     femaleDisplacements:
       jumpsuit:
@@ -49,11 +50,11 @@
   id: MobHumanDummy
   categories: [ HideSpawnMenu ]
   components:
-  - type: HumanMedical
-  - type: HumanMedicalSummary
+  - type: CMUHumanMedical
   - type: HitLocation
   - type: PainShock
   - type: BodyZoneTargeting
+  - type: CMSurgeryTarget
   - type: Body
     prototype: CMUHumanBody
     requiredLegs: 2

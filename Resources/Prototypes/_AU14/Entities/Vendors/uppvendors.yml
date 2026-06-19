@@ -388,8 +388,12 @@
         amount: 60
       - id: CMOintment10
         amount: 60
-      - id: CMTraumaKit10
+      - id: CMUPlainTraumaDressing10
         amount: 40
+      - id: CMUCoagulantPowder
+        amount: 30
+      - id: CMUBurnGel
+        amount: 30
       - id: CMBurnKit10
         amount: 30
       - id: CMTraumaKit10
@@ -977,8 +981,6 @@
         points: 8
       - id: RMCMagazineSMGNailgun
         points: 5
-      - id: CMUDeployableZLevelLadder
-        points: 10
     #- id: CMES11MobileFuelCanister
     #  points: 4
     - name: Explosives

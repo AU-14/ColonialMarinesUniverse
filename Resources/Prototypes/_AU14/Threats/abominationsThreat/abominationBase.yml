@@ -139,8 +139,8 @@
         volume: -3
     angle: 0
     animation: RMCWeaponArcXenoClaw
-    # Big base value. Guarantees a strong sever push on every hit, since
-    # severance scales with Brute (Slash) damage in the human medical ledger.
+    # Big base value — guarantees a strong sever push on every hit, since
+    # severance scales with Brute (Slash) damage in CMUBodyPartHealthSystem.
     damage:
       types:
         Slash: 29

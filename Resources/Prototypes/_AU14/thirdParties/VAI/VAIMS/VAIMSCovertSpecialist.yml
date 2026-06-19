@@ -79,7 +79,9 @@
     - RMCPillCanisterIron
     - CMPillCanisterBicaridine
     - CMPillCanisterKelotane
-    - CMTraumaKit10
+    - CMUPlainTraumaDressing10
+    - CMUCoagulantPowder
+    - CMUBurnGel
     - CMEpinephrineAutoInjector
     - AU14NaloxoneAutoInjector
     - CMHealthAnalyzer

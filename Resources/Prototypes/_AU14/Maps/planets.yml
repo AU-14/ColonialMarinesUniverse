@@ -434,10 +434,10 @@
 
 - type: entity
   id: AUPlanetLV327
-  name: Port Neroid
+  name: Port Nereid
   components:
   - type: RMCPlanetMapPrototype
-    votename: "Port Neroid"
+    votename: "Port Nereid"
     mapId: portneroid
     lorePrimer: AU14PrimerPlanetLV327
     Allegiance: UA
@@ -1006,7 +1006,7 @@
 
 - type: lorePrimer
   id: AU14PrimerPlanetLV327
-  planetText: "Date 2181 - Port Neroid, valuable waterport on a frontier world, UA controlled."
+  planetText: "Date 2181 - Port Nereid, a valuable waterport on a frontier world, UA controlled."
 
 - type: lorePrimer
   id: AU14PrimerPlanetCorsatStation

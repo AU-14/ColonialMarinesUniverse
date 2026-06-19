@@ -2,6 +2,7 @@ using Content.Server.Atmos.EntitySystems;
 using Content.Server.Body.Components;
 using Content.Server.Popups;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared.Alert;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Body.Components;
@@ -15,6 +16,7 @@ namespace Content.Server.Body.Systems;
 
 public sealed partial class InternalsSystem : SharedInternalsSystem
 {
+    [Dependency] private AlertsSystem _alerts = default!;
     [Dependency] private GasTankSystem _gasTank = default!;
     [Dependency] private RespiratorSystem _respirator = default!;
 
@@ -60,7 +62,7 @@ public sealed partial class InternalsSystem : SharedInternalsSystem
             var gasTank = Comp<GasTankComponent>(ent.Comp.GasTankEntity!.Value);
             args.Gas = _gasTank.RemoveAirVolume((ent.Comp.GasTankEntity.Value, gasTank), args.Respirator.BreathVolume);
             // TODO: Should listen to gas tank updates instead I guess?
-            ShowInternalsAlert(ent, GetSeverity(ent));
+            _alerts.ShowAlert(ent, ent.Comp.InternalsAlert, GetSeverity(ent));
         }
     }
 }

@@ -31,6 +31,7 @@
       tags:
       - Flare
       - RMCShellShotgun
+      - RMCShellShotgunHDSG
       - CMMagazinePistol
       - RMCMagazineRevolver
       - CMMagazineRifle
@@ -50,6 +51,7 @@
       tags:
       - CMMagazineRifle
       - RMCMagazineShotgun
+      - RMCShellShotgunHDSG
       - CMMagazineSmg
   - type: FixedItemSizeStorage
   - type: ItemCamouflage
@@ -316,6 +318,7 @@
       - PowerCell
       - CMFireExtinguisherPortable
       - RMCShellShotgun
+      - RMCShellShotgunHDSG
       - RMCNailgunCompact
       - RMCNailgunTactical
       - RMCSynthResetKey
@@ -515,6 +518,7 @@
       - CMMagazineSniper
       - RMCMagazineSmartGun
       - RMCShellShotgun
+      - RMCShellShotgunHDSG
       - Flare
   - type: FixedItemSizeStorage
   - type: IgnoreContentsSize
@@ -1448,6 +1452,7 @@
       - RMCWeaponShotgunXM51
       - RMCMagazineShotgunXM51
       - RMCShellShotgun # TODO RMC14 bullet handfuls
+      - RMCShellShotgunHDSG
   - type: FixedItemSizeStorage
   - type: CMHolster
     whitelist:
@@ -2409,6 +2414,7 @@
     whitelist:
       tags:
       - RMCShellShotgun
+      - RMCShellShotgunHDSG
   - type: FixedItemSizeStorage
   - type: CMHolster
   - type: LimitedStorage
@@ -2493,6 +2499,7 @@
       - Flashlight
       - CMMagazinePistol
       - RMCShellShotgun
+      - RMCShellShotgunHDSG
       - RMCMagazineRevolver
       - Donut
       - RMCGrenadeFlashBang

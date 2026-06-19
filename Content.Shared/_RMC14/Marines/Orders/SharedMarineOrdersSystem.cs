@@ -1,6 +1,6 @@
 using Content.Shared._RMC14.Evasion;
 using Content.Shared._RMC14.Marines.Squads;
-using Content.Shared._CMU14.Medical.Human.Effects;
+using Content.Shared._CMU14.Medical.StatusEffects;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Actions;
@@ -164,7 +164,12 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
 
         var leadershipSkill = _skills.GetSkill(orders.Owner, orders.Comp.Skill);
         if (leadershipSkill <= 0 && !HasComp<SquadLeaderComponent>(orders.Owner))
+        {
+            _actions.RemoveAction(orders.Owner, orders.Comp.FocusActionEntity);
+            _actions.RemoveAction(orders.Owner, orders.Comp.HoldActionEntity);
+            _actions.RemoveAction(orders.Owner, orders.Comp.MoveActionEntity);
             return false;
+        }
 
         var level = Math.Max(1, leadershipSkill);
         var duration = orders.Comp.Duration * (level + 1);

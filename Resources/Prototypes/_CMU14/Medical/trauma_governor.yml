@@ -1,0 +1,46 @@
+- type: entity
+  parent: RMCUtilityBase
+  id: CMUTraumaGovernorAttachment
+  name: trauma governor
+  description: A compact armor-mounted emergency stabilizer that can bridge one damaged organ long enough to withdraw.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/stethoscope.rsi
+    state: icon
+  - type: UniformAccessory
+    category: Utility
+    limit: 1
+    hidden: true
+    playerSprite:
+      sprite: _RMC14/Objects/Medical/stethoscope.rsi
+      state: icon
+  - type: CMUTraumaGovernorAttachment
+
+- type: entity
+  parent: BaseItem
+  id: CMUTraumaGovernorVial
+  name: stabilizer bypass vial
+  description: A sealed catalyst vial for overriding a trauma governor cooldown once.
+  components:
+  - type: Item
+    size: Tiny
+  - type: Sprite
+    sprite: _RMC14/Objects/Chemistry/vials.rsi
+    layers:
+    - state: vial
+    - state: vial1
+    - state: vial-lid
+  - type: CMUTraumaGovernorVial
+
+- type: entity
+  id: CMUActionTraumaGovernor
+  name: Activate trauma governor
+  description: Select an organ to temporarily stabilize.
+  components:
+  - type: Action
+    itemIconStyle: BigItem
+    icon:
+      sprite: _RMC14/Objects/Medical/stethoscope.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:CMUTraumaGovernorActionEvent

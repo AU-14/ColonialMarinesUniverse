@@ -4194,5 +4194,61 @@
   id: 300
   time: '2026-06-18T00:20:11.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1357
+- author: Arcticular1
+  changes:
+  - message: Added 2x M240 Flamer (800$) to ASRS
+    type: Add
+  - message: Added 4x UT Fuel (200$) to ASRS
+    type: Add
+  - message: Added 2x UT Fuel 2x BGEL Fuel mixed crate (350$) to ASRS
+    type: Add
+  - message: Added 4x BGEL Fuel (500$) to ASRS
+    type: Add
+  - message: Removed M240-T from asrs.
+    type: Remove
+  id: 301
+  time: '2026-06-19T03:40:55.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1361
+- author: sunzu432
+  changes:
+  - message: 'Hope''s Retreat: A second gate to the southern entry point of the Octanis
+      Complex, allowing the security post to control access both ways.'
+    type: Add
+  - message: 'Hope''s Retreat: Vehicle lift placed inside the Fort Beauregard Vehicle
+      Pool.'
+    type: Add
+  - message: 'Hope''s Retreat: Additional flanking routes along the central "Smuggler''s
+      Tunnel" to prevent that choke from stalling gameplay.'
+    type: Add
+  - message: 'Hope''s Retreat: The central wall should look a lot more natural, as
+      well as now having invisible walls to prevent it from being passable by armored
+      vehicles, as well as more visual language to convey that it is not intended
+      to be passable terrain to new players.'
+    type: Tweak
+  - message: 'Hope''s Retreat: The Octanis Complex''s southern gatehouse is now outdoors,
+      allowing CAS and mortars to support Marine efforts to breach the first set of
+      blast doors on the map''s south.'
+    type: Tweak
+  - message: 'Hope''s Retreat: Substantially widened and expanded the size of the
+      cave network, making map choke points less difficult to contest for Marines.'
+    type: Tweak
+  - message: 'Hope''s Retreat: The location of the Vehicle Pool in Fort Beauregard
+      has been moved.'
+    type: Tweak
+  - message: Fixes some roof areas.
+    type: Fix
+  id: 302
+  time: '2026-06-19T05:01:53.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1370
+- author: maertayn
+  changes:
+  - message: Fixed being able to use MarineOrders without cooldown as promoted SL
+    type: Fix
+  - message: RMCShellShotgunHDSG was not able to be put in storage like other shells
+      (pouches/vests etc.)
+    type: Fix
+  id: 303
+  time: '2026-06-19T05:41:17.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1380
 Name: CMU
 Order: -1

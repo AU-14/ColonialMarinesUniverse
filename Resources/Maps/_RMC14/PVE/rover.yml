@@ -4208,7 +4208,7 @@ entities:
     - type: Transform
       pos: -26.541563,7.304098
       parent: 1
-- proto: CMSemioticMedical
+- proto: CMSemioticAutodoc
   entities:
   - uid: 666
     components:

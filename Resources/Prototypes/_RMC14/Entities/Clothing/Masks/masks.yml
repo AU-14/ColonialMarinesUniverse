@@ -27,7 +27,6 @@
     slots:
     - Mask
     - Suitstorage
-  - type: BreathMask
   - type: ItemCamouflage
     colors:
       Jungle: "#ccd08d"
@@ -57,7 +56,6 @@
     - HeadTop
     - HeadSide
     - Snout
-  - type: BreathMask
   - type: Item
     size: Small
   - type: Tag
@@ -111,7 +109,6 @@
     sprite: _RMC14/Objects/Clothing/Mask/breath.rsi
     slots:
     - Mask
-  - type: BreathMask
   - type: Item
     size: Small
 
@@ -127,7 +124,6 @@
     sprite: _RMC14/Objects/Clothing/Mask/rebreather.rsi
     slots:
     - Mask
-  - type: BreathMask
   - type: Item
     size: Small
 
@@ -143,7 +139,6 @@
     sprite: _RMC14/Objects/Clothing/Mask/kutjevo_respirator.rsi
     slots:
     - Mask
-  - type: BreathMask
   - type: Item
     size: Small
 
@@ -312,7 +307,6 @@
     sprite: _RMC14/Objects/Clothing/Mask/swat_mask.rsi
     slots:
     - Mask
-  - type: BreathMask
   - type: Item
     size: Small
 

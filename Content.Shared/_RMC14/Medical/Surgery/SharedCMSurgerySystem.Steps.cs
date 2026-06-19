@@ -9,6 +9,8 @@ using Content.Shared.Inventory;
 using Content.Shared.Popups;
 using Robust.Shared.Prototypes;
 
+using CMUAutodocContainedPatientComponent = Content.Shared._CMU14.Medical.Surgery.CMUAutodocContainedPatientComponent;
+
 namespace Content.Shared._RMC14.Medical.Surgery;
 
 public abstract partial class SharedCMSurgerySystem
@@ -36,7 +38,8 @@ public abstract partial class SharedCMSurgerySystem
 
     private void OnToolStep(Entity<CMSurgeryStepComponent> ent, ref CMSurgeryStepEvent args)
     {
-        if (ent.Comp.Tool != null)
+        var automated = HasComp<CMUAutodocContainedPatientComponent>(args.Body);
+        if (ent.Comp.Tool != null && !automated)
         {
             foreach (var reg in ent.Comp.Tool.Values)
             {

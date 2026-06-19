@@ -4,6 +4,7 @@ using Content.Client.Message;
 using Content.Shared.Atmos;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Alert;
+using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Humanoid;
@@ -51,7 +52,8 @@ namespace Content.Client.HealthAnalyzer.UI
         {
             var target = _entityManager.GetEntity(msg.TargetEntity);
 
-            if (target == null || msg.Damage == null)
+            if (target == null
+                || !_entityManager.TryGetComponent<DamageableComponent>(target, out var damageable))
             {
                 NoPatientDataText.Visible = true;
                 return;
@@ -105,7 +107,7 @@ namespace Content.Client.HealthAnalyzer.UI
 
             // Total Damage
 
-            DamageLabel.Text = msg.Damage.Total.ToString();
+            DamageLabel.Text = damageable.TotalDamage.ToString();
 
             // Alerts
 
@@ -136,10 +138,10 @@ namespace Content.Client.HealthAnalyzer.UI
             // Damage Groups
 
             var damageSortedGroups =
-                msg.Damage.DamagePerGroup.OrderByDescending(damage => damage.Value)
+                damageable.DamagePerGroup.OrderByDescending(damage => damage.Value)
                     .ToDictionary(x => x.Key, x => x.Value);
 
-            IReadOnlyDictionary<string, FixedPoint2> damagePerType = msg.Damage.DamagePerType;
+            IReadOnlyDictionary<string, FixedPoint2> damagePerType = damageable.Damage.DamageDict;
 
             DrawDiagnosticGroups(damageSortedGroups, damagePerType);
         }

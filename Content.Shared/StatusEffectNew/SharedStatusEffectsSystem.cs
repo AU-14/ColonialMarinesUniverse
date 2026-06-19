@@ -25,8 +25,6 @@ public abstract partial class SharedStatusEffectsSystem : EntitySystem
 
     private EntityQuery<StatusEffectContainerComponent> _containerQuery;
     private EntityQuery<StatusEffectComponent> _effectQuery;
-    private readonly List<ExpiredStatusEffect> _expiredStatusEffects = new();
-    private readonly List<EntityUid> _staleStatusEffects = new();
 
     public override void Initialize()
     {
@@ -45,31 +43,12 @@ public abstract partial class SharedStatusEffectsSystem : EntitySystem
 
     private void OnGetState(Entity<StatusEffectContainerComponent> ent, ref ComponentGetState args)
     {
-        _staleStatusEffects.Clear();
-        var active = new HashSet<NetEntity>();
-
-        foreach (var effect in ent.Comp.ActiveStatusEffects)
-        {
-            if (Deleted(effect) || !_effectQuery.HasComp(effect) || !TryComp(effect, out MetaDataComponent? _))
-            {
-                _staleStatusEffects.Add(effect);
-                continue;
-            }
-
-            active.Add(GetNetEntity(effect));
-        }
-
-        foreach (var stale in _staleStatusEffects)
-            ent.Comp.ActiveStatusEffects.Remove(stale);
-
-        args.State = new StatusEffectContainerComponentState(active);
+        args.State = new StatusEffectContainerComponentState(GetNetEntitySet(ent.Comp.ActiveStatusEffects));
     }
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-
-        _expiredStatusEffects.Clear();
 
         var query = EntityQueryEnumerator<StatusEffectComponent>();
         while (query.MoveNext(out var ent, out var effect))
@@ -87,11 +66,8 @@ public abstract partial class SharedStatusEffectsSystem : EntitySystem
             if (meta.EntityPrototype is null)
                 continue;
 
-            _expiredStatusEffects.Add(new ExpiredStatusEffect(effect.AppliedTo.Value, meta.EntityPrototype));
+            TryRemoveStatusEffect(effect.AppliedTo.Value, meta.EntityPrototype);
         }
-
-        foreach (var expired in _expiredStatusEffects)
-            TryRemoveStatusEffect(expired.Target, expired.EffectProto);
     }
 
     private void AddStatusEffectTime(EntityUid effect, TimeSpan delta)
@@ -243,10 +219,6 @@ public abstract partial class SharedStatusEffectsSystem : EntitySystem
             );
         }
     }
-
-    private readonly record struct ExpiredStatusEffect(
-        EntityUid Target,
-        EntProtoId EffectProto);
 }
 
 /// <summary>

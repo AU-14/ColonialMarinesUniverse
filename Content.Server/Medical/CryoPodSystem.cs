@@ -40,7 +40,6 @@ public sealed partial class CryoPodSystem : SharedCryoPodSystem
 {
     [Dependency] private AtmosphereSystem _atmosphereSystem = default!;
     [Dependency] private GasCanisterSystem _gasCanisterSystem = default!;
-    [Dependency] private HealthAnalyzerSystem _healthAnalyzer = default!;
     [Dependency] private ClimbSystem _climbSystem = default!;
     [Dependency] private ItemSlotsSystem _itemSlotsSystem = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
@@ -184,19 +183,31 @@ public sealed partial class CryoPodSystem : SharedCryoPodSystem
 
     private void OnActivateUI(Entity<CryoPodComponent> entity, ref AfterActivatableUIOpenEvent args)
     {
-        if (entity.Comp.BodyContainer.ContainedEntity is not { } patient)
+        if (!entity.Comp.BodyContainer.ContainedEntity.HasValue)
             return;
+
+        TryComp<TemperatureComponent>(entity.Comp.BodyContainer.ContainedEntity, out var temp);
+        TryComp<BloodstreamComponent>(entity.Comp.BodyContainer.ContainedEntity, out var bloodstream);
 
         if (TryComp<HealthAnalyzerComponent>(entity, out var healthAnalyzer))
         {
-            healthAnalyzer.ScannedEntity = patient;
+            healthAnalyzer.ScannedEntity = entity.Comp.BodyContainer.ContainedEntity;
         }
 
         // TODO: This should be a state my dude
         _uiSystem.ServerSendUiMessage(
             entity.Owner,
             HealthAnalyzerUiKey.Key,
-            _healthAnalyzer.BuildScannedUserMessage(entity.Owner, patient, null));
+            new HealthAnalyzerScannedUserMessage(GetNetEntity(entity.Comp.BodyContainer.ContainedEntity),
+            temp?.CurrentTemperature ?? 0,
+            (bloodstream != null && _solutionContainerSystem.ResolveSolution(entity.Comp.BodyContainer.ContainedEntity.Value,
+                bloodstream.BloodSolutionName, ref bloodstream.BloodSolution, out var bloodSolution))
+                ? bloodSolution.FillFraction
+                : 0,
+            null,
+            null,
+            null
+        ));
     }
 
     private void OnInteractUsing(Entity<CryoPodComponent> entity, ref InteractUsingEvent args)

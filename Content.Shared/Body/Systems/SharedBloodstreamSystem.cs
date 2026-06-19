@@ -1,10 +1,7 @@
+using Content.Shared._CMU14.Medical;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared._RMC14.Medical.Wounds;
-// CMU14
-using Content.Shared._CMU14.Medical.Human.Components;
-// CMU14
-using Content.Shared._CMU14.Medical.Presentation;
 using Content.Shared.Alert;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Events;
@@ -406,12 +403,7 @@ public abstract partial class SharedBloodstreamSystem : EntitySystem
                 tempSolution.AddSolution(temp, _prototypeManager);
             }
 
-            // CMU14 begin - present biological blood loss as CM13/RMC-style decals instead of generic puddles.
-            var spillEv = new CMUBloodSpillAttemptEvent(ent.Owner, tempSolution, false);
-            RaiseLocalEvent(ent.Owner, ref spillEv);
-            if (!spillEv.Handled)
-                _puddle.TrySpillAt(ent.Owner, tempSolution, out _, sound: false);
-            // CMU14 end
+            _puddle.TrySpillAt(ent.Owner, tempSolution, out _, sound: false);
 
             tempSolution.RemoveAllSolution();
         }
@@ -430,7 +422,7 @@ public abstract partial class SharedBloodstreamSystem : EntitySystem
             return false;
 
         // CMU14
-        if (amount > 0f && HasComp<HumanMedicalComponent>(ent.Owner))
+        if (amount > 0f && HasComp<CMUHumanMedicalComponent>(ent.Owner))
             return false;
         // CMU14
 
@@ -495,12 +487,7 @@ public abstract partial class SharedBloodstreamSystem : EntitySystem
             SolutionContainer.RemoveAllSolution(ent.Comp.TemporarySolution.Value);
         }
 
-        // CMU14 begin - present biological blood loss as CM13/RMC-style decals instead of generic puddles.
-        var spillEv = new CMUBloodSpillAttemptEvent(ent.Owner, tempSol, true);
-        RaiseLocalEvent(ent.Owner, ref spillEv);
-        if (!spillEv.Handled)
-            _puddle.TrySpillAt(ent, tempSol, out _);
-        // CMU14 end
+        _puddle.TrySpillAt(ent, tempSol, out _);
     }
 
     /// <summary>

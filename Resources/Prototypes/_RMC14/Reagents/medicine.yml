@@ -9,29 +9,12 @@
   criticalOverdose: 50
   metabolisms:
     Medicine:
-      metabolismRate: 0.2
+      metabolismRate: 0.1
       effects:
       - !type:Antitoxic
         potency: 2
       - !type:Antihallucinogenic
         potency: 2
-      - !type:HumanChemicalLedgerEffect
-      - !type:HealthChange
-        conditions:
-        - !type:ReagentThreshold
-          min: 50
-        damage:
-          types:
-            Poison: 2
-      - !type:GenericStatusEffect
-        conditions:
-        - !type:ReagentThreshold
-          min: 50
-        key: Unconscious
-        component: RMCUnconscious
-        time: 4
-        type: Add
-        refresh: true
 
 # TODO RMC14 other effects
 - type: reagent
@@ -44,24 +27,10 @@
   criticalOverdose: 50
   metabolisms:
     Medicine:
-      metabolismRate: 0.2
+      metabolismRate: 0.1
       effects:
       - !type:Focusing
         potency: 3
-      - !type:HealthChange
-        conditions:
-        - !type:ReagentThreshold
-          min: 30
-        damage:
-          types:
-            Poison: 1.5
-      - !type:HealthChange
-        conditions:
-        - !type:ReagentThreshold
-          min: 50
-        damage:
-          types:
-            Poison: 6
 
 # TODO RMC14 other effects
 - type: reagent
@@ -74,7 +43,7 @@
   criticalOverdose: 25
   metabolisms:
     Medicine:
-      metabolismRate: 0.05
+      metabolismRate: 0.03
       effects:
       - !type:Antitoxic
         potency: 1
@@ -91,20 +60,10 @@
   criticalOverdose: 50
   metabolisms:
     Medicine:
-      metabolismRate: 0.2
+      metabolismRate: 0.1
       effects:
       - !type:Neogenetic
-        conditions:
-        - !type:CMUNonHumanMedicalLedgerCondition
         potency: 2
-      - !type:HumanChemicalLedgerEffect
-      - !type:HealthChange
-        conditions:
-        - !type:ReagentThreshold
-          min: 50
-        damage:
-          types:
-            Poison: 2
 
 # TODO RMC14 other effects
 - type: reagent
@@ -115,33 +74,18 @@
   color: "#4acaca"
   metabolisms:
     Medicine:
-      metabolismRate: 0.2
+      metabolismRate: 0.1
       effects:
       - !type:EqualHealthChange
         conditions:
         - !type:Temperature
           max: 170
-        - !type:CMUNonHumanMedicalLedgerCondition
         damage:
-        - Brute: -3
-        - Burn: -3
-        - Toxin: -3
-        - Airloss: -1
-        - Genetic: -3
-      - !type:HumanChemicalLedgerEffect
-        conditions:
-        - !type:Temperature
-          max: 170
-      - !type:HealthChange
-        conditions:
-        - !type:Temperature
-          max: 170
-        - !type:CMUHumanMedicalLedgerCondition
-        damage:
-          groups:
-            Toxin: -3
-            Airloss: -1
-            Genetic: -3
+        - Brute: -1
+        - Burn: -1
+        - Toxin: -1.5
+        - Airloss: -0.5
+        - Genetic: -1
 
 - type: reagent
   parent: [ CMReagentMedicine, Dermaline ]
@@ -153,27 +97,10 @@
   criticalOverdose: 25
   metabolisms:
     Medicine:
-      metabolismRate: 0.2
+      metabolismRate: 0.1
       effects:
       - !type:Anticorrosive
-        conditions:
-        - !type:CMUNonHumanMedicalLedgerCondition
         potency: 3
-      - !type:HumanChemicalLedgerEffect
-      - !type:HealthChange
-        conditions:
-        - !type:ReagentThreshold
-          min: 15
-        damage:
-          types:
-            Poison: 1.5
-      - !type:HealthChange
-        conditions:
-        - !type:ReagentThreshold
-          min: 25
-        damage:
-          types:
-            Poison: 1.5
 
 - type: reagent
   parent: [ CMReagentMedicine, Dexalin ]
@@ -185,25 +112,10 @@
   criticalOverdose: 50
   metabolisms:
     Medicine:
-      metabolismRate: 0.2
+      metabolismRate: 0.1
       effects:
       - !type:Oxygenating
         potency: 4
-      - !type:HumanChemicalLedgerEffect
-      - !type:HealthChange
-        conditions:
-        - !type:ReagentThreshold
-          min: 30
-        damage:
-          types:
-            Poison: 2
-      - !type:HealthChange
-        conditions:
-        - !type:ReagentThreshold
-          min: 50
-        damage:
-          types:
-            Poison: 8
 
 - type: reagent
   parent: [ CMReagentMedicine, DexalinPlus ]
@@ -215,25 +127,10 @@
   criticalOverdose: 25
   metabolisms:
     Medicine:
-      metabolismRate: 0.2
+      metabolismRate: 0.1
       effects:
       - !type:Oxygenating
         potency: 6
-      - !type:HumanChemicalLedgerEffect
-      - !type:HealthChange
-        conditions:
-        - !type:ReagentThreshold
-          min: 15
-        damage:
-          types:
-            Poison: 1.5
-      - !type:HealthChange
-        conditions:
-        - !type:ReagentThreshold
-          min: 25
-        damage:
-          types:
-            Poison: 7.5
 
 # TODO RMC14 other effects (pain)
 # TODO RMC14 injected only
@@ -247,7 +144,7 @@
   criticalOverdose: 20
   metabolisms:
     Medicine:
-      metabolismRate: 0.4
+      metabolismRate: 0.2
       effects:
       - !type:Electrogenetic
         potency: 2
@@ -264,14 +161,14 @@
           min: 10.5
         damage:
           groups:
-            Toxin: 2
+            Toxin: 0.38
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
           min: 20
         damage:
           types:
-            Asphyxiation: 3
+            Asphyxiation: 1.5
 
 # TODO RMC14 other effects (heart damage) (pain)
 # TODO RMC14 allow breathing in crit instead of reducing asphyxiation
@@ -281,21 +178,18 @@
   name: reagent-name-cminaprovaline
   desc: reagent-desc-cminaprovaline
   color: "#fe33cb"
-  overdose: 60
-  criticalOverdose: 100
+  overdose: 110
   metabolisms:
     Medicine:
-      metabolismRate: 0.2
+      metabolismRate: 0.5
       effects:
       - !type:HealthChange
         conditions:
         - !type:MobStateCondition
           mobstate: Critical
-        - !type:CMUNonHumanMedicalLedgerCondition
         damage:
           types:
             Asphyxiation: -1
-      - !type:HumanChemicalLedgerEffect
       - !type:CMUApplyPainSuppressionEffect
         accumulationSuppression: 0.3
         tierSuppression: 2
@@ -306,14 +200,14 @@
       - !type:Jitter
         conditions:
         - !type:ReagentThreshold
-          min: 60
+          min: 110
       - !type:GenericStatusEffect
         conditions:
         - !type:ReagentThreshold
-          min: 100
-        key: Stun
-        component: Stunned
-        time: 2
+          min: 110
+        key: Unconscious
+        component: RMCUnconscious
+        time: 10 #Yes, it's this much.
         type: Add
         refresh: true
 
@@ -327,27 +221,10 @@
   criticalOverdose: 50
   metabolisms:
     Medicine:
-      metabolismRate: 0.2
+      metabolismRate: 0.1
       effects:
       - !type:Anticorrosive
-        conditions:
-        - !type:CMUNonHumanMedicalLedgerCondition
         potency: 2
-      - !type:HumanChemicalLedgerEffect
-      - !type:HealthChange
-        conditions:
-        - !type:ReagentThreshold
-          min: 30
-        damage:
-          types:
-            Poison: 1
-      - !type:HealthChange
-        conditions:
-        - !type:ReagentThreshold
-          min: 50
-        damage:
-          types:
-            Poison: 5.5
 
 # TODO RMC14 other effects
 - type: reagent
@@ -360,19 +237,10 @@
   criticalOverdose: 50
   metabolisms:
     Medicine:
-      metabolismRate: 0.2
+      metabolismRate: 0.1
       effects:
       - !type:Thermostabilizing
         potency: 2
-      - !type:GenericStatusEffect
-        conditions:
-        - !type:ReagentThreshold
-          min: 30
-        key: Unconscious
-        component: RMCUnconscious
-        time: 4
-        type: Add
-        refresh: true
 
 # TODO RMC14 other effects
 - type: reagent
@@ -385,44 +253,16 @@
   criticalOverdose: 50
   metabolisms:
     Medicine:
-      metabolismRate: 0.2
+      metabolismRate: 0.1
       effects:
       - !type:Neogenetic
-        conditions:
-        - !type:CMUNonHumanMedicalLedgerCondition
         potency: 1
       - !type:Anticorrosive
-        conditions:
-        - !type:CMUNonHumanMedicalLedgerCondition
         potency: 1
       - !type:Antitoxic
         potency: 1
       - !type:Oxygenating
         potency: 1
-      - !type:HumanChemicalLedgerEffect
-      - !type:HealthChange
-        conditions:
-        - !type:ReagentThreshold
-          min: 30
-        damage:
-          types:
-            Poison: 0.25
-      - !type:HealthChange
-        conditions:
-        - !type:ReagentThreshold
-          min: 50
-        damage:
-          types:
-            Poison: 4
-      - !type:GenericStatusEffect
-        conditions:
-        - !type:ReagentThreshold
-          min: 50
-        key: Unconscious
-        component: RMCUnconscious
-        time: 4
-        type: Add
-        refresh: true
 
 - type: reagent
   parent: [ CMReagentMedicine, CMBicaridine ]
@@ -434,23 +274,14 @@
   criticalOverdose: 25
   metabolisms:
     Medicine:
-      metabolismRate: 0.2
+      metabolismRate: 0.1
       effects:
       - !type:Neogenetic
-        conditions:
-        - !type:CMUNonHumanMedicalLedgerCondition
         potency: 3
-      - !type:HumanChemicalLedgerEffect
-      - !type:HealthChange
-        conditions:
-        - !type:ReagentThreshold
-          min: 25
-        damage:
-          types:
-            Poison: 3
 
 # TODO RMC14 other effects
 # TODO RMC14 progressive eye healing
+# TODO RMC14 brain damage over 50u
 - type: reagent
   parent: [ CMReagentMedicine, CMDylovene ]
   id: CMImidazoline
@@ -461,46 +292,25 @@
   criticalOverdose: 50
   metabolisms:
     Medicine:
-      metabolismRate: 0.2
+      metabolismRate: 0.1
       effects:
       - !type:ChemHealEyeDamage
-        conditions:
-        - !type:CMUNonHumanMedicalLedgerCondition
-      - !type:HumanChemicalLedgerEffect
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
           min: 30
-        - !type:CMUNonHumanMedicalLedgerCondition
         damage:
           groups:
-            Toxin: 1
+            Toxin: 0.5
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
-          min: 30
-        - !type:CMUHumanMedicalLedgerCondition
+          min: 50 #TODO 0.5 brain damage/s
         damage:
           groups:
-            Toxin: 1
-      - !type:HealthChange
-        conditions:
-        - !type:ReagentThreshold
-          min: 50
-        - !type:CMUNonHumanMedicalLedgerCondition
-        damage:
-          groups:
-            Brute: 1
-            Burn: 1
-            Toxin: 4
-      - !type:HealthChange
-        conditions:
-        - !type:ReagentThreshold
-          min: 50
-        - !type:CMUHumanMedicalLedgerCondition
-        damage:
-          groups:
-            Toxin: 4
+            Brute: 0.5
+            Burn: 0.5
+            Toxin: 1.5
 
 # TODO RMC14 other effects
 - type: reagent
@@ -511,31 +321,17 @@
   color: "#51b4db"
   metabolisms:
     Medicine:
-      metabolismRate: 0.2
+      metabolismRate: 0.1
       effects:
       - !type:EqualHealthChange
         conditions:
         - !type:Temperature
           max: 170
-        - !type:CMUNonHumanMedicalLedgerCondition
         damage:
-        - Brute: -6
-        - Burn: -6
-        - Toxin: -6
-        - Genetic: -6
-      - !type:HumanChemicalLedgerEffect
-        conditions:
-        - !type:Temperature
-          max: 170
-      - !type:HealthChange
-        conditions:
-        - !type:Temperature
-          max: 170
-        - !type:CMUHumanMedicalLedgerCondition
-        damage:
-          groups:
-            Toxin: -6
-            Genetic: -6
+        - Brute: -2.25
+        - Burn: -2.25
+        - Toxin: -3
+        - Genetic: -1.5
 
 # TODO RMC14 other effects
 - type: reagent
@@ -548,7 +344,7 @@
   criticalOverdose: 30
   metabolisms:
     Medicine:
-      metabolismRate: 1
+      metabolismRate: 0.5
       effects:
       - !type:Antitoxic
         potency: 1

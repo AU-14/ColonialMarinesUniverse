@@ -111,9 +111,7 @@ public abstract partial class SharedStatusEffectsSystem
 
         foreach (var effect in container.ActiveStatusEffects)
         {
-            if (!TryComp(effect, out MetaDataComponent? meta))
-                continue;
-
+            var meta = MetaData(effect);
             if (meta.EntityPrototype is not null && meta.EntityPrototype == effectProto)
             {
                 if (!_effectQuery.TryComp(effect, out var effectComp))
@@ -142,9 +140,7 @@ public abstract partial class SharedStatusEffectsSystem
 
         foreach (var effect in container.ActiveStatusEffects)
         {
-            if (!TryComp(effect, out MetaDataComponent? meta))
-                continue;
-
+            var meta = MetaData(effect);
             if (meta.EntityPrototype is not null && meta.EntityPrototype == effectProto)
                 return true;
         }
@@ -198,9 +194,7 @@ public abstract partial class SharedStatusEffectsSystem
 
         foreach (var effect in container.ActiveStatusEffects)
         {
-            if (!TryComp(effect, out MetaDataComponent? meta))
-                continue;
-
+            var meta = MetaData(effect);
             if (meta.EntityPrototype is not null && meta.EntityPrototype == effectProto)
             {
                 if (!_effectQuery.TryComp(effect, out var effectComp))
@@ -261,9 +255,7 @@ public abstract partial class SharedStatusEffectsSystem
 
         foreach (var effect in container.ActiveStatusEffects)
         {
-            if (!TryComp(effect, out MetaDataComponent? meta))
-                continue;
-
+            var meta = MetaData(effect);
             if (meta.EntityPrototype is not null && meta.EntityPrototype == effectProto)
             {
                 AddStatusEffectTime(effect, time);
@@ -287,9 +279,7 @@ public abstract partial class SharedStatusEffectsSystem
 
         foreach (var effect in container.ActiveStatusEffects)
         {
-            if (!TryComp(effect, out MetaDataComponent? meta))
-                continue;
-
+            var meta = MetaData(effect);
             if (meta.EntityPrototype is not null && meta.EntityPrototype == effectProto)
             {
                 SetStatusEffectTime(effect, time);

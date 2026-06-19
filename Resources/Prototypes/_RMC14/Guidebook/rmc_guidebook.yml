@@ -12,7 +12,6 @@
   children:
   - RMCGuideNewPlayer
   - RMCGuideMarineRoles
-  - AU14MedicalV2
   - RMCGuideMarineStructures
   - RMCGuideXenonidRoles
   - RMCGuideXenonidStructures
@@ -55,6 +54,7 @@
   children:
   - RMCSurvivor
   - RMCMedical
+  - AU14MedicalV2
   - RMCRequisitions
   - RMCIntel
   - RMCGuideRoleMilitaryPolice
@@ -86,10 +86,8 @@
   parent: RMC
   id: AU14MedicalV2
   priority: 2
-  name: "Medical V3"
+  name: "Medical V2"
   text: "/ServerInfo/Guidebook/_RMC14/Guides/AU14MedicalV2.xml"
-  children:
-  - MedicalSurgery
 
 - type: guideEntry
   parent: RMC

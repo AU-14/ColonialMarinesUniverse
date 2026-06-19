@@ -24,7 +24,6 @@
       icon:
         sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
         state: synth
-    - type: Synth
 
 - type: startingGear
   id: AU14GearOPFORAuxSupportSynth

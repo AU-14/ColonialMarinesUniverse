@@ -1,8 +1,8 @@
 - type: entity
+  abstract: true
   save: false
   parent: RMCBaseMobSpeciesOrganic
   id: AU14MobWorkingJoe
-  categories: [ HideSpawnMenu ]
   name: Urist McJoe
   suffix: AU14, Base
   components:

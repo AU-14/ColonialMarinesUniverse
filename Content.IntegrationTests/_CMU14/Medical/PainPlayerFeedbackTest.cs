@@ -1,4 +1,5 @@
-using Content.Shared._CMU14.Medical.Human.Effects;
+using Content.Shared._CMU14.Medical.StatusEffects;
+using Content.Shared._CMU14.Medical.TemporaryBlurryVision;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Damage;
 using Content.Shared.Eye.Blinding.Components;
@@ -15,7 +16,7 @@ namespace Content.IntegrationTests._CMU14.Medical;
 public sealed class PainPlayerFeedbackTest
 {
     [Test]
-    public async Task SeverePainAppliesStatusFeedback()
+    public async Task SeverePainAppliesBlurOnly()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -39,14 +40,14 @@ public sealed class PainPlayerFeedbackTest
 
             Assert.Multiple(() =>
             {
-                Assert.That(oldStatus.HasStatusEffect(human, "Stutter"), Is.True);
-                Assert.That(oldStatus.HasStatusEffect(human, "Drunk"), Is.True);
-                Assert.That(oldStatus.HasStatusEffect(human, "SlurredSpeech"), Is.True);
+                Assert.That(oldStatus.HasStatusEffect(human, "Stutter"), Is.False);
+                Assert.That(oldStatus.HasStatusEffect(human, "Drunk"), Is.False);
+                Assert.That(oldStatus.HasStatusEffect(human, "SlurredSpeech"), Is.False);
                 Assert.That(entMan.HasComponent<BlurryVisionComponent>(human), Is.True);
                 Assert.That(entMan.GetComponent<BlurryVisionComponent>(human).Magnitude,
                     Is.EqualTo(feedback.SevereBlurStartAmount));
                 Assert.That(feedback.SevereBlurStartAmount, Is.LessThan(0.5f));
-                Assert.That(damageable.Damage.DamageDict["Asphyxiation"], Is.GreaterThan(FixedPoint2.Zero));
+                Assert.That(damageable.Damage.DamageDict["Asphyxiation"], Is.EqualTo(FixedPoint2.Zero));
             });
 
             entMan.DeleteEntity(human);
@@ -165,7 +166,7 @@ public sealed class PainPlayerFeedbackTest
         {
             var entMan = server.EntMan;
             human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            SetPainValue(entMan, human, (FixedPoint2)64);
+            SetPainValue(entMan, human, (FixedPoint2)84);
         });
 
         await pair.RunTicksSync(pair.SecondsToTicks(2));
@@ -230,7 +231,7 @@ public sealed class PainPlayerFeedbackTest
     private static float GetExpectedPainBlur(CMUPainFeedbackComponent feedback, float equivalentPain)
     {
         const float severeThreshold = 60f;
-        const float shockThreshold = 80f;
+        const float shockThreshold = 85f;
         var severeAmount = GetMaxSeverePainBlur(feedback);
         var progress = Math.Clamp(
             (equivalentPain - severeThreshold) / (shockThreshold - severeThreshold),
@@ -318,7 +319,7 @@ public sealed class PainPlayerFeedbackTest
             Assert.Multiple(() =>
             {
                 Assert.That(shockDamage, Is.GreaterThan(severeDamage));
-                Assert.That(oldStatus.TryGetTime(severe, "Drunk", out _), Is.True);
+                Assert.That(oldStatus.TryGetTime(severe, "Drunk", out _), Is.False);
                 Assert.That(oldStatus.TryGetTime(shock, "Drunk", out var shockDrunkTime), Is.True);
                 Assert.That(shockDrunkTime!.Value.Item2, Is.GreaterThan(TimeSpan.Zero));
                 Assert.That(oldStatus.HasStatusEffect(shock, "SlurredSpeech"), Is.True);
@@ -330,39 +331,6 @@ public sealed class PainPlayerFeedbackTest
 
             entMan.DeleteEntity(severe);
             entMan.DeleteEntity(shock);
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task ShockPainFeedbackDoesNotKeepPatientKnockedDown()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        EntityUid human = default;
-
-        await server.WaitPost(() =>
-        {
-            var entMan = server.EntMan;
-            human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            SetPainTier(entMan, human, PainTier.Shock);
-        });
-
-        await pair.RunTicksSync(pair.SecondsToTicks(4));
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var oldStatus = entMan.System<StatusEffectQuerySystem>();
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(oldStatus.HasStatusEffect(human, "KnockedDown"), Is.False);
-                Assert.That(oldStatus.HasStatusEffect(human, "Stun"), Is.False);
-            });
-
-            entMan.DeleteEntity(human);
         });
 
         await pair.CleanReturnAsync();
@@ -390,9 +358,9 @@ public sealed class PainPlayerFeedbackTest
         pain.Pain = tier switch
         {
             PainTier.None => FixedPoint2.Zero,
-            PainTier.Mild => PainTierThresholds.UpwardThresholds[(int) PainTier.Mild - 1],
-            PainTier.Moderate => PainTierThresholds.UpwardThresholds[(int) PainTier.Moderate - 1],
-            PainTier.Severe => PainTierThresholds.UpwardThresholds[(int) PainTier.Severe - 1],
+            PainTier.Mild => PainTierThresholds.UpwardThresholds[0],
+            PainTier.Moderate => PainTierThresholds.UpwardThresholds[1],
+            PainTier.Severe => PainTierThresholds.UpwardThresholds[2],
             PainTier.Shock => pain.PainMax,
             _ => FixedPoint2.Zero,
         };

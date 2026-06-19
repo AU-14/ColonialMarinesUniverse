@@ -1,9 +1,5 @@
 using System.Runtime.InteropServices;
 using Content.Server.Body.Systems;
-// CMU14 start
-using Content.Shared._CMU14.Medical.Human.Components;
-using Content.Shared._CMU14.Medical.Human.Systems;
-// CMU14 end
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared.Body.Components;
@@ -66,15 +62,6 @@ public sealed partial class WoundsSystem : SharedWoundsSystem
             var dead = _mobStateQuery.TryComp(uid, out var mobState) &&
                        mobState.CurrentState == MobState.Dead;
             comp.UpdateAt = time + (dead ? DeadWoundUpdateCooldown : comp.UpdateCooldown);
-
-            // CMU14 start - human medical ledger owns human wounds and bloodstream bleed rate.
-            if (TryComp<HumanMedicalComponent>(uid, out var humanMedical))
-            {
-                ReconcileCmuHumanBleeding(uid, humanMedical);
-                RemCompDeferred<WoundedComponent>(uid);
-                continue;
-            }
-            // CMU14 end
 
             if (dead)
             {
@@ -158,19 +145,4 @@ public sealed partial class WoundsSystem : SharedWoundsSystem
             }
         }
     }
-
-    // CMU14 start
-    private void ReconcileCmuHumanBleeding(EntityUid uid, HumanMedicalComponent medical)
-    {
-        if (!_bloodstreamQuery.TryComp(uid, out var bloodstream))
-            return;
-
-        var tick = HumanBleedingSystem.CalculateBleedingTick(medical);
-        var desired = Math.Clamp(tick.TotalRate.Float(), 0f, bloodstream.MaxBleedAmount);
-        if (MathF.Abs(desired - bloodstream.BleedAmount) < 0.001f)
-            return;
-
-        _bloodstream.TrySetBleedAmount(uid, desired);
-    }
-    // CMU14 end
 }

@@ -13,9 +13,7 @@
       Female: RMCFemaleHuman
   - type: FixedIdentity
     name: cm-chatsan-replacement-human
-  - type: HumanMedical
-  - type: HumanMedicalSummary
-  - type: Internals
+  - type: CMUHumanMedical
   - type: YautjaTrophySource
   - type: HitLocation
   - type: PainShock
@@ -31,6 +29,8 @@
         type: HumanoidMarkingModifierBoundUserInterface
       enum.StrippingUiKey.Key:
         type: StrippableBoundUserInterface
+      enum.CMSurgeryUIKey.Key:
+        type: CMSurgeryBui
       enum.HolocardChangeUIKey.Key:
         type: HolocardChangeBoundUserInterface
         interactionRange: 0
@@ -48,3 +48,8 @@
         type: ViewIntelObjectivesBui
       enum.BodyPartPickerUIKey.Key:
         type: BodyPartPickerBui
+      enum.CMUSurgeryUIKey.Key:
+        type: CMUSurgeryBui
+      enum.CMUMedicalFieldCraftingUI.Key:
+        type: CMUMedicalFieldCraftingBui
+        requireInputValidation: false
