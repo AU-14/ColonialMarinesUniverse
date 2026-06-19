@@ -11,6 +11,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Input.Binding;
+using Robust.Shared.Timing;
 using MainViewport = Content.Client.UserInterface.Controls.MainViewport;
 using ClientBodyZoneTargetingSystem = Content.Client._CMU14.Medical.Targeting.BodyZoneTargetingSystem;
 
@@ -26,9 +27,13 @@ public sealed partial class BodyZoneTargetWidgetController :
     [Dependency] private IInputManager _input = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IGameTiming _timing = default!;
     [UISystemDependency] private ClientBodyZoneTargetingSystem _bodyZone = default!;
 
     private BodyZoneTargetWidget? _widget;
+    private TimeSpan _nextCycleAt;
+
+    private static readonly TimeSpan CycleInterval = TimeSpan.FromMilliseconds(75);
 
     private static readonly TargetBodyZone[] CycleOrder =
     {
@@ -149,6 +154,8 @@ public sealed partial class BodyZoneTargetWidgetController :
 
     private void CycleSelectedZone(int direction)
     {
+        if (_timing.CurTime < _nextCycleAt)
+            return;
         if (!ShouldShow())
             return;
         if (_player.LocalEntity is not { } local)
@@ -156,7 +163,8 @@ public sealed partial class BodyZoneTargetWidgetController :
         if (!_entMan.TryGetComponent<BodyZoneTargetingComponent>(local, out var aim))
             return;
 
-        SelectZone(CycleZone(aim.Selected, direction));
+        if (SelectZone(CycleZone(aim.Selected, direction)))
+            _nextCycleAt = _timing.CurTime + CycleInterval;
     }
 
     private void SelectSingleZone(TargetBodyZone zone)
@@ -164,7 +172,7 @@ public sealed partial class BodyZoneTargetWidgetController :
         if (!ShouldShow())
             return;
 
-        SelectZone(zone);
+        _ = SelectZone(zone);
     }
 
     private void SelectZoneGroup(TargetBodyZone primary, TargetBodyZone secondary)
@@ -180,18 +188,20 @@ public sealed partial class BodyZoneTargetWidgetController :
             ? (TargetBodyZone?) null
             : aim.Selected;
 
-        SelectZone(current == primary ? secondary : primary);
+        _ = SelectZone(current == primary ? secondary : primary);
     }
 
-    private void SelectZone(TargetBodyZone zone)
+    private bool SelectZone(TargetBodyZone zone)
     {
-        if (_player.LocalEntity is { } local &&
-            _entMan.HasComponent<BodyZoneTargetingComponent>(local))
-        {
-            _bodyZone.SelectZone(local, zone);
-        }
+        if (_player.LocalEntity is not { } local ||
+            !_entMan.TryGetComponent<BodyZoneTargetingComponent>(local, out var aim))
+            return false;
+
+        if (!_bodyZone.SelectZone((local, aim), zone, dirty: false))
+            return false;
 
         _net.SendSystemNetworkMessage(new BodyZoneTargetSelectedMessage(zone));
+        return true;
     }
 
     private static TargetBodyZone CycleZone(TargetBodyZone current, int direction)
