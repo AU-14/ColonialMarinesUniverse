@@ -38,42 +38,6 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         _sawmill = _logMan.GetSawmill("reagent");
         
     }
-    /*
-    protected void OnCleanup(RoundRestartCleanupEvent args)
-    {
-        if (_generatedRecipes.Count > 0)
-        {
-            _sawmill.Info("Clearing procedural reagent recipes.");
-            foreach (var recipe in _generatedRecipes)
-            {
-                _protoMan.TryDelete<ReactionPrototype>(recipe.ID);
-                _generatedRecipes.Remove(recipe);
-            }
-            DebugTools.Assert(_generatedRecipes.Count == 0);
-        }
-        if (_generatedReagents.Count > 0)
-        {
-            _sawmill.Info("Clearing procedural reagents.");
-            foreach (var reagent in _generatedReagents)
-            {
-                _protoMan.TryDelete<ReagentPrototype>(reagent.ID);
-                _generatedReagents.Remove(reagent);
-            }
-            DebugTools.Assert(_generatedReagents.Count == 0);
-        }
-        _knownProperties.Clear();
-        var props = _protoMan.EnumeratePrototypes<ReagentPropertyPrototype>();
-
-        foreach (var prop in props)
-        {
-            if (prop.Starter)
-            {
-                _knownProperties.Add(prop);
-            }
-        }
-        _generatedProperties.Clear();
-        _scannedReagents.Clear();
-    }/**/
     private void CreateReagent(GenerateReagentEvent args)
     {
         CreateReagent(args.Reagent);
@@ -139,7 +103,7 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
             ingredients.Add(reagents[ingredient.Key].ID, ing);
         }
         MappingDataNode product = [];
-        product.Add(args.ID, args.RecipeYield.ToString());
+        product.Add(args.ID, Math.Max(1, args.RecipeYield).ToString());
         recipe.Add("products", product);
         recipe.Add("reactants", ingredients);
         _protoMan.TryLoadDynamic(recipe);

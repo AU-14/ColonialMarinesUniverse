@@ -45,8 +45,11 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
     private List<List<string>> _unfoldedConflicts = [];
     private Dictionary<string, List<string>> _unfoldedCombinations = [];
     private Dictionary<string, HashSet<string>> _propertiesList = [];
+    public Dictionary<string, HashSet<string>> Properties { get => _propertiesList; }
     private Dictionary<string, HashSet<string>> _generatedPropertiesList = [];
+    public Dictionary<string, HashSet<string>> GeneratedProperties { get => _generatedPropertiesList; }
     private Dictionary<string, HashSet<string>> _chemicalGenClassesList = [];
+    public Dictionary<string, HashSet<string>> GenClasses { get => _chemicalGenClassesList; }
 
     private int _legendaryCombineProperties = 3;
     public override void Initialize()
@@ -115,9 +118,16 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         PrepareProperties();
         PrepareChems();
     }
+
+    public void LegalizeChem(GeneratedReagentData chem)
+    {
+
+    }
+
+
     #region Recipe Generation
     // "complexity" is unimplemented in CM13's code
-    private bool GenerateRecipe(ref GeneratedReagentData data, HashSet<string> requiredReagents)
+    public bool GenerateRecipe(ref GeneratedReagentData data, HashSet<string> requiredReagents)
     {
         int modifier = _random.Next(0, 101);
         switch (modifier)
@@ -283,7 +293,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
 
     #endregion
     #region Reagent Generation
-    private bool GenerateStats(ref GeneratedReagentData data, bool noProperties = false)
+    public bool GenerateStats(ref GeneratedReagentData data, bool noProperties = false)
     {
         if (!noProperties)
         {
@@ -483,7 +493,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
     }
     #endregion
     #region Name Generation
-    private void GenerateName(ref GeneratedReagentData data)
+    public void GenerateName(ref GeneratedReagentData data)
     {
         _protoMan.TryIndex(_namePrefixes, out var prefs);
         _protoMan.TryIndex(_nameMiddles, out var mids);
@@ -508,7 +518,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
                 genName = empty;
             }
         }
-        data.ID = genName;
+        data.ID = "TAU-" + _chemicalGenClassesList["TAU"].Count + "-" + genName;
         data.Name = genName;
     }
     #endregion

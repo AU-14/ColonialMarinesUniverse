@@ -22,6 +22,8 @@ public struct GeneratedReagentData
     public FixedPoint2 CriticalOverdose;
     public FixedPoint2 MetabolismRate;
     public int GenTier;
+    public string RecipeHint;
+    public string PropertyHint;
     // TODO: effects on mix
 
 }

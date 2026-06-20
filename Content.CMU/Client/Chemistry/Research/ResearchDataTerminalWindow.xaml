@@ -6,5 +6,7 @@
     xmlns:uiControls="clr-namespace:Content.Client.UserInterface.Controls"
     Title="{Loc ui-research-data-terminal-name}"
     MinSize="400 300">
-    
+    <PanelContainer>
+        
+    </PanelContainer>
 </controls:ResearchDataTerminalWindow>
