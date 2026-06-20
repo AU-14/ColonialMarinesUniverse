@@ -8595,11 +8595,6 @@ entities:
     - type: Transform
       pos: -7.5,43.5
       parent: 1
-  - uid: 2185
-    components:
-    - type: Transform
-      pos: -14.5,48.5
-      parent: 1
 - proto: CMPaper
   entities:
   - uid: 208
@@ -10146,12 +10141,6 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -20.5,48.5
       parent: 1
-  - uid: 456
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -15.5,46.5
-      parent: 1
   - uid: 603
     components:
     - type: Transform
@@ -10169,12 +10158,6 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -20.5,38.5
-      parent: 1
-  - uid: 2189
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -15.5,48.5
       parent: 1
   - uid: 3158
     components:

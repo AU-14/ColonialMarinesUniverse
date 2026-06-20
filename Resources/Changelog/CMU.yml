@@ -4435,5 +4435,42 @@
   id: 315
   time: '2026-06-20T04:35:54.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1391
+- author: Arcticular1
+  changes:
+  - message: x1 Type 88 Marksman rifle (20p)
+    type: Add
+  - message: x2 Type 88 Magazines (8p)
+    type: Add
+  - message: x1 LC9 incinerator (10p)
+    type: Add
+  - message: x2 LC9 flamer tanks (5p)
+    type: Add
+  - message: x5 6B80 armored vests (5p)
+    type: Add
+  - message: x2 K12 ceramic armor (15p)
+    type: Add
+  - message: x2 k12 ceramic helmets (10p)
+    type: Add
+  - message: x5 Radio jammer (10p)
+    type: Add
+  - message: 5 coif masks to CLF recruitment crate.
+    type: Add
+  - message: replaced roundstart MK1s with MAR-30
+    type: Tweak
+  - message: k12 ceramic armor now gets a 36% slowdown
+    type: Tweak
+  - message: Huge IED from 3 > 1
+    type: Tweak
+  - message: '- Bomb vest from 2 > 1'
+    type: Tweak
+  - message: Replaced CLF leader's armband with a leader specific one.
+    type: Tweak
+  - message: CLF Cell leader gets a CLF Colonist ID instead (no more throwing ID away)
+    type: Tweak
+  - message: Roundstart rangefinders replaced with civilian binos
+    type: Tweak
+  id: 316
+  time: '2026-06-20T11:19:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1394
 Name: CMU
 Order: -1

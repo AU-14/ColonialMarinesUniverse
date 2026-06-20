@@ -43,6 +43,9 @@
       - id: RMCWeaponRifleType73
         amount: 1
         points: 16
+      - id: RMCType88SniperRifle
+        amount: 1
+        points: 20
     - name: Shotguns
       entries:
       - id: RMCWeaponShotgunHG3712
@@ -85,6 +88,9 @@
       - id: RMCWeaponLauncherDisposableFolded
         amount: 1
         points: 8
+      - id: RMCWeaponFlamerColony
+        amount: 1
+        points: 10
       - id: RMCWeaponMar50LMG
         amount: 1
         points: 13
@@ -120,6 +126,9 @@
       - id: RMCMagazineRifleType71AP
         amount: 2
         points: 6
+      - id: RMCMagazineSniperType88
+        amount: 2
+        points: 8
     - name: Shotgun Ammunition
       entries:
       - id: RMCBoxShotgunFlechette
@@ -168,6 +177,9 @@
       - id: RMCMagazineM2C
         amount: 5
         points: 4
+      - id: RMCTankFlamerColony
+        amount: 2
+        points: 5
       - id: RMCRocketHJRA12HE
         amount: 4
         points: 9
@@ -209,10 +221,10 @@
         amount: 6
         points: 6
       - id: AU14IEDVest
-        amount: 2
+        amount: 1
         points: 10
       - id: AU14IEDLarge
-        amount: 3
+        amount: 1
         points: 15
     - name: Protective Equipment
       entries:
@@ -222,9 +234,18 @@
       - id: AU14UACGHelmet
         amount: 5
         points: 3
+      - id: AU14ArmorArmyUPP
+        amount: 5
+        points: 5
       - id: RMCCoatMilitiaVest
         amount: 5
         points: 7
+      - id: RMCArmorHelmetMercenary
+        amount: 2
+        points: 10
+      - id: RMCArmorMercenary
+        amount: 2
+        points: 15
       - id: CMMaskGas
         amount: 5
         points: 3
@@ -245,6 +266,9 @@
       - id: AU14TattooGun
         amount: 3
         points: 12
+      - id: AU14RadioJammer
+        amount: 4
+        points: 10
       - id: AU14CLFHeadset
         amount: 10
         points: 8
@@ -354,10 +378,8 @@
     state: crate
   - type: StorageFill
     contents:
-    - id: RMCM54CMK1Case
-      amount: 1
-    - id: RMCM54CMK1CaseAP
-      amount: 1
+    - id:  AU14GunCaseRifleMar30
+      amount: 2
     - id: RMCGunCasePistolZHNK72
       amount: 1
     - id: RMCGunCasePistolMK80
@@ -368,7 +390,7 @@
       amount: 3
     - id: AU14CMDefibrillator
       amount: 1
-    - id: RMCRangefinder
+    - id: RMCBinocularsCiv
       amount: 2
     - id: AU14BeltUtilityFilled
       amount: 2
@@ -388,6 +410,8 @@
     - id: AU14CLFHeadset
       amount: 5
     - id: RMCCLFArmband
+      amount: 5
+    - id: CMMaskCoif
       amount: 5
     - id: AU14TattooInkCartridge
       amount: 6
