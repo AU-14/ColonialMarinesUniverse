@@ -8590,11 +8590,6 @@ entities:
     - type: Transform
       pos: -20.5,51.5
       parent: 1
-  - uid: 1839
-    components:
-    - type: Transform
-      pos: -14.5,46.5
-      parent: 1
   - uid: 2032
     components:
     - type: Transform
