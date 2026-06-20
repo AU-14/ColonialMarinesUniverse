@@ -29,9 +29,8 @@
       prefix: au14-job-prefix-mobboss
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-  hidden: false
+        sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+        state: colonist
 
 - type: startingGear
   id: AU14GearMobBoss

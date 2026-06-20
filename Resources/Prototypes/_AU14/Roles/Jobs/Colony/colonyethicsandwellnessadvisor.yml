@@ -8,7 +8,7 @@
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCivilianEthicsAndWellnessAdvisor
-  icon: "AU14JobIconColonyAdvisor"
+  icon: "AU14JobIconColonyNurse"
   hasIcon: false
   requireAdminNotify: false
   joinNotifyCrew: false
@@ -31,9 +31,8 @@
       prefix: au14-job-prefix-ethicsandwellnessadvisor
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-  hidden: false
+        sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+        state: nurse
 
 - type: startingGear
   id: AU14GearCivilianEthicsAndWellnessAdvisor

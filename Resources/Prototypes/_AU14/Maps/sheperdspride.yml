@@ -29,6 +29,7 @@
             AU14JobCivilianWasteManagementSpecialist: [2, 2]
 
             AU14JobCivilianColonySynthetic: [2, 2]
+            AU14JobColonyWorkingJoe: [2, 2]
 
             # Colony Command (non department)
             AU14JobCivilianColonyAdministrator: [1, 1]

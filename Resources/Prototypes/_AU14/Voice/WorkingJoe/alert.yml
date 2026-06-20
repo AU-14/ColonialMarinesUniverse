@@ -1,0 +1,307 @@
+- type: emote
+  id: WorkingJoeAPotentialHazard
+  name: emote-name-workingjoe-a-potential-hazard
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-a-potential-hazard
+  chatTriggers:
+    - a potential hazard
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeAlarmActivatedInvestigationCommencing
+  name: emote-name-workingjoe-alarm-activated-investigation-commencing
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-alarm-activated-investigation-commencing
+  chatTriggers:
+    - alarm activated investigation commencing
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeAlarmDetectedAreaWillBeExamined
+  name: emote-name-workingjoe-alarm-detected-area-will-be-examined
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-alarm-detected-area-will-be-examined
+  chatTriggers:
+    - alarm detected area will be examined
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeEnergySurgeDetected
+  name: emote-name-workingjoe-energy-surge-detected
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-energy-surge-detected
+  chatTriggers:
+    - energy surge detected
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeFireDrill
+  name: emote-name-workingjoe-fire-drill
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-fire-drill
+  chatTriggers:
+    - fire drill
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeHazardContainmentBreachLogged
+  name: emote-name-workingjoe-hazard-containment-breach-logged
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-hazard-containment-breach-logged
+  chatTriggers:
+    - hazard containment breach logged
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeLevelOmegaPermissions
+  name: emote-name-workingjoe-level-omega-permissions
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-level-omega-permissions
+  chatTriggers:
+    - level omega permissions
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeNoLaughingMatter
+  name: emote-name-workingjoe-no-laughing-matter
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-no-laughing-matter
+  chatTriggers:
+    - no laughing matter
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeProtectedAreaCompromised
+  name: emote-name-workingjoe-protected-area-compromised
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-protected-area-compromised
+  chatTriggers:
+    - protected area compromised
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeSafetyLogUpdated
+  name: emote-name-workingjoe-safety-log-updated
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-safety-log-updated
+  chatTriggers:
+    - safety log updated
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeSeegsonEmergencyAlarmProtocolBetaInOperation
+  name: emote-name-workingjoe-seegson-emergency-alarm-protocol-beta-in-operation
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-seegson-emergency-alarm-protocol-beta-in-operation
+  chatTriggers:
+    - seegson emergency alarm protocol beta in operation
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThatIsntAuthorizedInThisFacility
+  name: emote-name-workingjoe-that-isnt-authorized-in-this-facility
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-that-isnt-authorized-in-this-facility
+  chatTriggers:
+    - that isnt authorized in this facility
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThisAreaIsRestricted
+  name: emote-name-workingjoe-this-area-is-restricted
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-this-area-is-restricted
+  chatTriggers:
+    - this area is restricted
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThisIsABreachOfMultipleSafetyDirectives
+  name: emote-name-workingjoe-this-is-a-breach-of-multiple-safety-directives
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-this-is-a-breach-of-multiple-safety-directives
+  chatTriggers:
+    - this is a breach of multiple safety directives
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThisIsASafetyBreachAndWillNotBeTolerated
+  name: emote-name-workingjoe-this-is-a-safety-breach-and-will-not-be-tolerated
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-this-is-a-safety-breach-and-will-not-be-tolerated
+  chatTriggers:
+    - this is a safety breach and will not be tolerated
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeTodaysHazardContainmentAlertCurrentlyStandsAtOmega
+  name: emote-name-workingjoe-todays-hazard-containment-alert-currently-stands-at-omega
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-todays-hazard-containment-alert-currently-stands-at-omega
+  chatTriggers:
+    - todays hazard containment alert currently stands at omega
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeWeAreExperiencingAHeightenedContainmentHazardLevelToday
+  name: emote-name-workingjoe-we-are-experiencing-a-heightened-containment-hazard-level-today
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-we-are-experiencing-a-heightened-containment-hazard-level-today
+  chatTriggers:
+    - we are experiencing a heightened containment hazard level today
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeYouAreNotAllowedInThere
+  name: emote-name-workingjoe-you-are-not-allowed-in-there
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-you-are-not-allowed-in-there
+  chatTriggers:
+    - you are not allowed in there
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeYouAreTrespassing
+  name: emote-name-workingjoe-you-are-trespassing
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-you-are-trespassing
+  chatTriggers:
+    - you are trespassing
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeYouReallyShouldntBeHere
+  name: emote-name-workingjoe-you-really-shouldnt-be-here
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-you-really-shouldnt-be-here
+  chatTriggers:
+    - you really shouldnt be here
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeYoureNotAllowedInThere
+  name: emote-name-workingjoe-youre-not-allowed-in-there
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-youre-not-allowed-in-there
+  chatTriggers:
+    - youre not allowed in there
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeYourPresenceHasBeenLogged
+  name: emote-name-workingjoe-your-presence-has-been-logged
+  category: Alert
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-your-presence-has-been-logged
+  chatTriggers:
+    - your presence has been logged
+  whitelist:
+    tags:
+      - WorkingJoe

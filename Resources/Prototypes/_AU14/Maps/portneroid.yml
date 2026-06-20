@@ -1,6 +1,6 @@
 - type: gameMap
   id: portneroid
-  mapName: LV-327 Port Neroid
+  mapName: LV-327 Port Nereid
   mapPath: /Maps/_AU14/PortNeroidMultiZ/portneroidmultiz0.yml
   mapsBelow:
   - /Maps/_AU14/PortNeroidMultiZ/portneroidmultiz-1.yml
@@ -16,7 +16,7 @@
       stationProto: StandardUNMCWarship
       components:
         - type: StationNameSetup
-          mapNameTemplate: 'Port Neroid'
+          mapNameTemplate: 'Port Nereid'
         - type: StationJobs
           availableJobs:
             AU14JobCivilianColonist: [-1, -1]

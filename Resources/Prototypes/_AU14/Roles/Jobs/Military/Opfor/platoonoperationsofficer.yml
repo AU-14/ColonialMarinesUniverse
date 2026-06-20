@@ -21,8 +21,8 @@
       - OPFOR
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_AU14/Interface/au14opforhud.rsi
-        state: po
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
+        state: old_platco
 
 - type: startingGear
   id: AU14GearOpforPlatOp

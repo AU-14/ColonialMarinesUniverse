@@ -461,8 +461,10 @@
       entries:
       - id: CMWeaponPistolM1984Empty
         amount: 20
-    - name: special issue firearms
+    - name: special issue equipment
       entries:
+      - id: AU14SpikeBoots
+        amount: 3
       - id: RMCWeaponRifleM54CFilled
         amount: 10
       - id: WeaponShotgunM42A1

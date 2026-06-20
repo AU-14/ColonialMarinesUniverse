@@ -16,7 +16,6 @@
 - type: playTimeTracker
   id: AUThirdPartyMember
 
-
 - type: job
   abstract: true
   parent: CMJobBase

@@ -1,9 +1,7 @@
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Content.Shared._RMC14.Admin;
 using Content.Shared._RMC14.Chat;
-using Content.Shared._RMC14.Commendations;
 using Content.Shared._RMC14.Cryostorage;
 using Content.Shared._RMC14.Inventory;
 using Content.Shared._RMC14.Marines.Announce;
@@ -34,7 +32,6 @@ using Content.Shared.Roles;
 using Content.Shared.Roles.Jobs;
 using Content.Shared.Storage;
 using Content.Shared.Whitelist;
-using Robust.Client.GameObjects;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -779,23 +776,24 @@ public sealed partial class SquadSystem : EntitySystem
 
         _marineOrders.EnsureOrderActions((toPromote.Owner, orders));
 
+        var squad = toPromote.Comp?.Squad;
         var slots = _inventory.GetSlotEnumerator(toPromote.Owner, SlotFlags.EARS);
         while (slots.MoveNext(out var slot))
         {
             if (slot.ContainedEntity is not { } contained)
                 continue;
 
-            if (TryComp(contained, out EncryptionKeyHolderComponent? holder))
+            if (squad != null && TryComp(contained, out EncryptionKeyHolderComponent? holder))
             {
                 newLeader.Headset = contained;
                 Dirty(toPromote, newLeader);
                 EnsureComp<SquadLeaderHeadsetComponent>(contained);
+                UpdateSquadLeaderHeadsetChannels(contained, squad.Value);
                 _encryptionKey.UpdateChannels(contained, holder);
                 break;
             }
         }
 
-        var squad = toPromote.Comp?.Squad;
         if (TryComp(toPromote, out ActorComponent? actor))
         {
             var squadStr = Exists(squad) ? $" for {Name(squad.Value)}" : string.Empty;
@@ -849,6 +847,33 @@ public sealed partial class SquadSystem : EntitySystem
         RemComp<RMCTrackableComponent>(marine);
         RemCompDeferred<RMCPointingComponent>(marine);
         _awardRecommendation.SetCanRecommend(marine, false);
+    }
+
+    private void UpdateSquadLeaderHeadsetChannels(EntityUid headset, EntityUid squad)
+    {
+        if (!TryComp<SquadLeaderHeadsetComponent>(headset, out var headsetComp) ||
+            !TryComp<SquadTeamComponent>(squad, out var squadTeam))
+            return;
+
+        string group = squadTeam.Group?.ToUpperInvariant() ?? "";
+        if (group is "GOVFOR" or "OPFOR")
+        {
+            headsetComp.Channels = new()
+            {
+                new ProtoId<RadioChannelPrototype>($"radio{group}JTAC"),
+                new ProtoId<RadioChannelPrototype>($"radio{group}Command")
+            };
+        }
+        else
+        {
+            headsetComp.Channels = new()
+            {
+                new ProtoId<RadioChannelPrototype>("MarineJTAC"),
+                new ProtoId<RadioChannelPrototype>("MarineCommand")
+            };
+        }
+
+        Dirty(headset, headsetComp);
     }
 
     public bool AreInSameSquad(Entity<SquadMemberComponent?> one, Entity<SquadMemberComponent?> two)

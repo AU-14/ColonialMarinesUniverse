@@ -85,20 +85,20 @@ public readonly record struct CMUTraumaContactSettings
         BallisticArmBoneChance = 0.60f,
         BallisticLegBoneChance = 0.60f,
         BallisticOtherBoneChance = 0.35f,
-        BallisticHeadOrganChance = 0.55f,
-        BallisticTorsoOrganChance = 0.50f,
+        BallisticHeadOrganChance = 0.08f,
+        BallisticTorsoOrganChance = 0.25f,
         BallisticVascularChance = 0.03f,
 
         PierceBoneChance = 0.20f,
-        PierceOrganChance = 0.35f,
+        PierceOrganChance = 0.175f,
         PierceVascularChance = 0.04f,
 
         SlashBoneChance = 0.10f,
-        SlashOrganChance = 0.20f,
+        SlashOrganChance = 0.10f,
         SlashVascularChance = 0.05f,
 
         BluntBoneChance = 0.50f,
-        BluntOrganChance = 0.10f,
+        BluntOrganChance = 0.05f,
         BluntVascularChance = 0.02f,
 
         BallisticOrganPassThrough = 0.35f,

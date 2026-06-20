@@ -46,9 +46,8 @@
       prefix: au14-job-prefix-cmbmarshal
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-  hidden: false
+        sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+        state: cmb_mar
 
 - type: startingGear
   id: AU14GearCivilianCMBMarshal

@@ -3669,5 +3669,808 @@
   id: 287
   time: '2026-06-16T06:36:36.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1337
+- author: KeiKiyomi
+  changes:
+  - message: Added all vehicle hardpoints to the ASRS
+    type: Add
+  - message: Added all Blackfoot hardpoints to the ASRS
+    type: Add
+  - message: Added all vehicle ammo to the ASRS
+    type: Add
+  - message: Added all blackfoot hardpoints to the ASRS
+    type: Add
+  - message: Added a crate with all 3 componets for the blackfoot landing pad (and
+      added it to ASRS)
+    type: Add
+  - message: Added 2 new ammo crates, each containing 3 blackfoot flare ammo and blackfoot
+      doorgun ammo
+    type: Add
+  - message: Added blackfoot tug to ASRS (incase you loose the original)
+    type: Add
+  id: 288
+  time: '2026-06-16T07:15:40.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1167
+- author: coolshows2342342-ctrl
+  changes:
+  - message: British Accent (V0.5!)
+    type: Add
+  id: 289
+  time: '2026-06-17T02:22:29.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1338
+- author: KriegersMustDie
+  changes:
+  - message: Weyland Yutani Scientist stamp
+    type: Add
+  - message: Orbital Counsel stamp color
+    type: Tweak
+  - message: ICSC Ambassador stamp name
+    type: Fix
+  id: 290
+  time: '2026-06-17T20:19:06.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1349
+- author: TheHellFireo
+  changes:
+  - message: Added hands, feet, and groin as real medical targets. Previously most
+      gameplay collapsed into head, torso, arms, and legs; now hands and feet can
+      be damaged, treated, fractured, severed, scanned, examined, targeted, and replaced
+      separately.
+    type: Add
+  - message: Added body-part targeting support for the new regions. Arms now split
+      into arm/hand, legs split into leg/foot, and torso can cycle chest/groin.
+    type: Add
+  - message: Added TGMC-style treatment radial icons for the expanded body targeting
+      flow.
+    type: Add
+  - message: Added body targeting hotkeys for head, torso/groin, left arm/hand, right
+      arm/hand, left leg/foot, and right leg/foot.
+    type: Add
+  - message: 'Wound size thresholds did not change from the previous wound profile:
+      small below 15 damage, deep at 15+, gaping at 35+, and massive at 60+.'
+    type: Tweak
+  - message: "Wound treatment changed from \u201Cauto-find and patch wounds\u201D\
+      \ to \u201Ctreat the selected body part.\u201D If you target the chest, treatment\
+      \ stays on the chest unless a radial selection is needed."
+    type: Tweak
+  - message: Repeated wound treatment now chains with a 0.2 second repeat delay instead
+      of blasting every remaining use instantly.
+    type: Tweak
+  - message: Base field treatment timing is now 1 second before skill/tool modifiers,
+      with chained follow-up uses using the shorter 0.2 second delay.
+    type: Tweak
+  - message: Old field treatment restored body-part health up to a cap immediately.
+      New field treatment stabilizes the wound and starts recovery over time.
+    type: Tweak
+  - message: Old treated wound healing was 0.6 damage per second. New treated brute
+      and burn recovery defaults to 0.375 per second, with stronger tools able to
+      raise the recovery rate based on treatment amount.
+    type: Tweak
+  - message: "Surgical line and synth graft no longer behave like simple \u201Cbetter\
+      \ gauze/ointment.\u201D They now repair up to 10 damage, capped by both the\
+      \ wound damage and half the current region damage."
+    type: Tweak
+  - message: Gauze and trauma kits now focus on brute wounds and external bleeding
+      on the selected part, rather than globally cleaning up eligible wounds.
+    type: Tweak
+  - message: Ointment and burn kits now focus on burn wounds on the selected part,
+      rather than globally cleaning up eligible burns.
+    type: Tweak
+  - message: Hemostatic gauze remains a brute wound tool, but now participates in
+      the new selected-body-part wound loop.
+    type: Tweak
+  - message: Trauma kits still treat more serious brute wounds, but the result is
+      now stabilization plus recovery instead of instantly pushing the body part back
+      to a large HP cap.
+    type: Tweak
+  - message: Burn kits still treat more serious burn wounds, but no longer allow huge
+      burn stacks to collapse instantly from wound clearing.
+    type: Tweak
+  - message: The previous wound cap behavior could jump a badly damaged body part
+      back toward a cap immediately. New recovery is slower and capped by active wound
+      recovery, preventing 400 burn from collapsing too aggressively after treatment.
+    type: Tweak
+  - message: 'External bleeding math changed from duration-based wound bleeding into
+      persistent bleed sources. Bleeding now has severity based on rate: trace below
+      1, light below 2, moderate below 4, heavy below 6, and critical at 6+.'
+    type: Tweak
+  - message: External bleeding still starts from brute cut/puncture damage at 5+ damage,
+      but it now uses rate-based bleeding at 3.75% of brute damage instead of the
+      old timed bleed duration.
+    type: Tweak
+  - message: 'Old external bleed duration was based on damage type: slash x4 seconds,
+      piercing x3 seconds, blunt x1 second, clamped between 5 and 60 seconds. New
+      bleeding persists until treated or repaired.'
+    type: Tweak
+  - message: Internal bleeding changed from a component on a body part into a tracked
+      medical condition with scanner/examine/surgery support.
+    type: Tweak
+  - message: Old severe blunt internal bleeding seeded at 60 blunt damage with 0.3
+      bloodloss per second. New internal bleeding comes from vascular trauma, organ/fracture
+      complications, surgical mistakes, and movement complications.
+    type: Tweak
+  - message: 'Vascular trauma internal bleeding now uses mechanism-specific rates:
+      ballistic 0.25, piercing 0.30, slash 0.25, and blunt 0.20.'
+    type: Tweak
+  - message: Closing an incision over unclamped surgical bleeding now converts that
+      surgical bleeding into internal bleeding instead of simply making it disappear.
+    type: Tweak
+  - message: Added surgical bleeding as a distinct state. Open surgery can create
+      surgical bleeders, and hemostats are now the intended way to clamp them.
+    type: Add
+  - message: The old system had wounds and IB, but they were not integrated into one
+      coherent surgery flow. They now route into treatment, examine, scanner, surgery,
+      bleeding, and recovery consistently.
+    type: Tweak
+  - message: Added shrapnel as a medical injury that appears on examine/scanner and
+      can be removed.
+    type: Add
+  - message: Shrapnel previously existed as a component-style side feature. It now
+      behaves like a wound/foreign object in the medical flow.
+    type: Tweak
+  - message: Added shrapnel sources from fragmenting projectiles, xeno spikes, bone
+      spikes, and large explosions.
+    type: Add
+  - message: Added explosion shrapnel chance scaling. Explosions start becoming shrapnel-relevant
+      around 35% exposure and become nearly guaranteed around 85% exposure.
+    type: Add
+  - message: Added shrapnel movement pain/damage. Embedded fragments can pulse while
+      moving, with movement checks around 0.75 tile accumulated movement and a 1.25
+      second pulse cooldown.
+    type: Add
+  - message: "Fracture names changed. The old top tier was \u201CComminuted\u201D\
+      ; it is now \u201CShattered\u201D."
+    type: Tweak
+  - message: Fracture tiers are now Hairline, Simple, Compound, and Shattered.
+    type: Tweak
+  - message: 'Fracture severity now comes from roll damage: Hairline below 45, Simple
+      at 45+, Compound at 90+, Shattered at 120+.'
+    type: Tweak
+  - message: 'Fracture roll damage is brute damage x3, and fracture chance is roll
+      damage x2 percent. Example: 15 brute becomes 45 roll damage and about 90% fracture
+      chance if bone contact happened.'
+    type: Tweak
+  - message: Compound and Shattered fractures still require surgery, but now also
+      affect surgical access rules.
+    type: Tweak
+  - message: Compound or Shattered chest/head fractures can allow deep access after
+      an incision and retraction, so doctors do not always need to cut fresh bone
+      access when the bone is already badly broken.
+    type: Tweak
+  - message: Splints still stabilize fractures, but now they suppress penalties rather
+      than acting like full fracture healing.
+    type: Tweak
+  - message: Splints apply in 3 seconds and handle up to Simple severity.
+    type: Tweak
+  - message: Casts apply in 6 seconds, handle up to Simple severity, and support post-op
+      bone recovery over about 5 minutes.
+    type: Tweak
+  - message: 'Old fracture movement penalties used direct speed multipliers: Hairline
+      0.95, Simple 0.85, Compound 0.70, Comminuted 0.40.'
+    type: Tweak
+  - message: New movement penalties use lighter slowdown points instead of harsh direct
+      multipliers. Broken regions add 0.65 slowdown points, splinted/eschar regions
+      add 0.25, and missing regions add 2.5.
+    type: Tweak
+  - message: 'Pain slowdown was softened. Old pain movement multipliers were Mild
+      0.97, Moderate 0.92, Severe 0.85, Shock 0.70. New pain adds slowdown points
+      instead: Mild 0.25, Discomforting 0.50, Moderate 0.90, Distressing 1.25, Severe
+      1.60, Shock 2.00.'
+    type: Tweak
+  - message: Movement penalties now distinguish walking from wheelchair use. Walking
+      checks feet, legs, chest, groin, and head. Wheelchair checks hands, arms, chest,
+      groin, and head.
+    type: Tweak
+  - message: Added movement complications for untreated fractures and shrapnel, including
+      pain feedback and extra damage/IB consequences.
+    type: Add
+  - message: Old severance used body-part HP with Max 100 and SeveranceThreshold 200,
+      meaning severance happened around Max + Threshold, usually 300 brute-eligible
+      structural damage.
+    type: Tweak
+  - message: 'New severance uses direct region brute thresholds: head at 185 brute
+      damage, arms/hands/legs/feet at 120 brute damage.'
+    type: Tweak
+  - message: Fire no longer contributes to traumatic severance. Severance checks brute
+      damage only.
+    type: Tweak
+  - message: Added hand and foot severance. Previously severance was centered around
+      larger body parts and did not cleanly support extremities.
+    type: Add
+  - message: Stump location was corrected. Losing a hand creates a hand/arm stump
+      relationship instead of incorrectly pushing the stump to the wrong parent region;
+      losing an arm places the stump on the arm/chest relationship as appropriate.
+    type: Tweak
+  - message: Added stump sealing surgery. Open stumps can now be surgically repaired
+      instead of being permanent awkward bleeding states.
+    type: Add
+  - message: Added biological limb reattachment.
+    type: Add
+  - message: Added robotic prosthetic limb attachment for arms, hands, legs, and feet.
+    type: Add
+  - message: Added prosthetic removal surgery.
+    type: Add
+  - message: Added limb printer recipes for robotic limbs using metal and cable coils.
+    type: Add
+  - message: Prosthetic limbs no longer behave like biological limbs. They do not
+      get normal biological wounds, fractures, or internal bleeding.
+    type: Tweak
+  - message: Added prosthetic repair using lit welders for brute-style robotic damage
+      and cable coils for burn-style robotic damage.
+    type: Add
+  - message: Synth medical changed heavily. Synths no longer fall through the human
+      biological wound path because they spawned human first.
+    type: Tweak
+  - message: Synths are limited toward brute, burn, severance, prosthetic-style repair,
+      and synthetic limb surgery instead of normal bleeding/fracture/organ wound gameplay.
+    type: Tweak
+  - message: Synth blood and synth damage presentation changed from red human-like
+      bleeding to white synthetic-style effects.
+    type: Tweak
+  - message: Added synthetic limb surgery examine output.
+    type: Add
+  - message: Added synthetic limb surgery flow with cut chassis, strip wiring, detach,
+      attach, and weld chassis steps.
+    type: Add
+  - message: 'Synthetic limb surgery timings are short: cut chassis 2.5s, strip wiring
+      2s, detach 2.5s, attach 3s, weld chassis 2.5s.'
+    type: Tweak
+  - message: Old surgery was prototype/UI-driven and often locked into unavailable
+      procedure states. New surgery mode is tool-driven and routes from the current
+      incision/body state.
+    type: Tweak
+  - message: Added surgery mode feedback so enabling/disabling surgery mode is visible.
+    type: Add
+  - message: 'Surgery now has explicit incision stages: closed, open skin, retracted,
+      and deep access.'
+    type: Tweak
+  - message: 'Standard incision management timings are now roughly: scalpel open 2s,
+      hemostat clamp 2s, retractor retract 2s, saw/drill deep access 3s, bone access
+      repair 3s, cautery close 2.5s.'
+    type: Tweak
+  - message: Limb and extremity repairs can generally be done through shallow/retracted
+      access, while chest/head organ work requires deeper access unless an existing
+      compound/shattered fracture gives access.
+    type: Tweak
+  - message: Internal bleeding repair uses fix-o-vein as a surgery tool instead of
+      a normal treatment item.
+    type: Tweak
+  - message: Internal bleeding repair surgery takes 5 seconds.
+    type: Tweak
+  - message: Stump repair surgery takes 2 seconds once the correct access and tool
+      are available.
+    type: Tweak
+  - message: 'Foreign object removal now has separate depth handling: non-surgical
+      removal around 3 seconds, surgical removal around 4 seconds.'
+    type: Tweak
+  - message: Eschar removal takes about 3 seconds and now has its own surgery routing.
+    type: Tweak
+  - message: Added a changed alien embryo removal surgery.
+    type: Add
+  - message: Added a changed eye surgery.
+    type: Add
+  - message: Added a changed brain damage surgery.
+    type: Add
+  - message: Added a changed deliberate amputation surgery.
+    type: Add
+  - message: Amputation now has an explicit path and a cancellation route with a surgical
+      line instead of trapping the surgeon in the wrong procedure.
+    type: Tweak
+  - message: Amputation includes muscle severing and limb removal steps, both around
+      4 seconds.
+    type: Tweak
+  - message: Added surgery pain failures. Conscious patients without enough pain control
+      can scream and shake when surgery fails.
+    type: Add
+  - message: Added anesthesia support through mask plus anesthetic tank, allowing
+      proper surgery sleep setup.
+    type: Add
+  - message: Health analyzer output changed from broad always-visible body/organ lists
+      into damaged-body-part and damaged-organ focused readouts.
+    type: Tweak
+  - message: Body scanner surgery assist now gives a 0.5 surgery delay multiplier
+      after successful calibration.
+    type: Tweak
+  - message: Body scanner minigame requirement was reduced to about 2 slices for faster
+      surgery assist setup.
+    type: Tweak
+  - message: Autodoc was moved from old surgery behavior to the new surgery flow while
+      keeping its general machine role.
+    type: Tweak
+  - message: Autodoc procedure timing was lowered; queued steps now use shorter automated
+      procedure durations instead of the old long stuck-feeling repair flow.
+    type: Tweak
+  - message: Removed trauma governor gameplay. The old stabilizer UI and trauma governor
+      flow are gone.
+    type: Remove
+  - message: Removed medical field crafting and field mixing. Coagulant powder, antiseptic,
+      burn gel, tissue sealant, trauma foam, packed gauze, packed trauma dressings,
+      and prepared dressing recipes were removed from the active medical loop.
+    type: Remove
+  - message: Removed old wound compatibility behavior that could keep old wound components
+      alive beside the new wound behavior.
+    type: Remove
+  - message: Removed old body-part HP as the active medical authority.
+    type: Remove
+  - message: Removed old bone/fracture components as the active fracture authority.
+    type: Remove
+  - message: Removed old organ health components as the active organ-damage authority.
+    type: Remove
+  - message: Removed old condition-driven surgery UI/flow as the active surgery system.
+    type: Remove
+  - message: "Fixed surgery steps completing the do-after and then saying \u201Csurgery\
+      \ is no longer available.\u201D"
+    type: Fix
+  - message: Fixed surgery mode toggling multiple times from one press.
+    type: Fix
+  - message: Fixed incision state not showing useful feedback.
+    type: Fix
+  - message: Fixed hemostat/retractor/scalpel conflicts between incision flow, eschar
+      removal, stump sealing, and amputation.
+    type: Fix
+  - message: Fixed stump sealing being blocked because the limb was missing.
+    type: Fix
+  - message: Fixed reattached limbs leaving the targeting HUD/body state mismatched.
+    type: Fix
+  - message: Fixed robotic limb attachment not restoring hand use.
+    type: Fix
+  - message: Fixed robotic limbs appearing as severed/missing on scanner or examine.
+    type: Fix
+  - message: Fixed synthetic repairs not working consistently between roundstart synths
+      and spawned synths.
+    type: Fix
+  - message: Fixed shrapnel not showing as a real injury.
+    type: Fix
+  - message: Fixed large explosions and fragment projectiles not creating medical
+      shrapnel reliably.
+    type: Fix
+  - message: Fixed blood decals spawning offset from the body.
+    type: Fix
+  - message: Fixed blood footprints and dragging trails using the wrong blood color.
+    type: Fix
+  - message: Fixed synthetic blood effects spawning too often.
+    type: Fix
+  - message: Fixed eschar disappearing when opening incisions.
+    type: Fix
+  - message: Fixed organ damage from torso hits routing too heavily into lungs.
+    type: Fix
+  - message: Fixed decapitation not handling headgear, masks, glasses, ears, and headset
+      items correctly.
+    type: Fix
+  - message: Fixed severed heads not being named after their original owner.
+    type: Fix
+  - message: Optimized medical processing so healthy bodies are not constantly processed
+      by expensive medical loops.
+    type: Code
+  - message: Optimized medical networking so HUDs and scanners use compact summary
+      data unless detailed medical data is requested.
+    type: Code
+  - message: Optimized repeated treatment, bleeding, surgery, scanner, and pain updates
+      to reduce repeated work during mass-casualty combat.
+    type: Code
+  id: 291
+  time: '2026-06-17T21:10:58.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1354
+- author: Kadeo64
+  changes:
+  - message: The Weyland-Yutani bioweapons laptops have now been encrypted properly,
+      and will now only seem to be generic research laptops.
+    type: Tweak
+  id: 292
+  time: '2026-06-17T22:01:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1346
+- author: 400Ferrets
+  changes:
+  - message: Sorokyne caves no longer get rain!
+    type: Add
+  - message: Sorokyne now has salvage!
+    type: Add
+  - message: Sorokyne UPP Ambassador has had an APC installed!
+    type: Add
+  - message: Sorokyne walls will eat things less!
+    type: Add
+  id: 293
+  time: '2026-06-17T22:03:58.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1342
+- author: HolySSSS
+  changes:
+  - message: 'all MP Vendors feature a "Record Keeping" section: hand labeler, tapes
+      box, digital clock and universal recorder.'
+    type: Add
+  - message: all MP Vendors now should have straitjackets for use.
+    type: Tweak
+  - message: the autolathe now features a recipe for universal recorder's tapes.
+    type: Tweak
+  - message: the regulation tape box is now a small item allowing you to store it
+      in a satchel.
+    type: Tweak
+  id: 294
+  time: '2026-06-17T22:05:18.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1348
+- author: HotdogMan52
+  changes:
+  - message: Tear gas now respects gas masks with filters. Wearing a gas mask with
+      a filter lets you walk through chemical gas unaffected, though the filter takes
+      damage.
+    type: Add
+  - message: Tear gas smoke now uses the new ChemicalIrritant system instead of the
+      xeno neurotoxin system.
+    type: Tweak
+  id: 295
+  time: '2026-06-17T22:16:17.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1355
+- author: wray-git
+  changes:
+  - message: GAU-19/H handheld minigun no longer has an IFF system
+    type: Fix
+  - message: FBS-B ballistic shield can now be stored on the back slot or in suit
+      storage when wearing the Kestrel pointman armour
+    type: Tweak
+  - message: FBS-B ballistic shield displays a holstered sprite on the character's
+      back when stored
+    type: Tweak
+  - message: F-key quick-equip now works for the FBS-B ballistic shield
+    type: Tweak
+  - message: GAU-19/H handheld minigun RoF increased from `9.3` to `10`
+    type: Tweak
+  - message: M56 Smartgun RoF reduced from `10` to `8`
+    type: Tweak
+  - message: M56 Smartgun falloff increased from `4.5` to `10`
+    type: Tweak
+  - message: TWE L23 & L23B variant RoF increased from `2.75` to `3.5`
+    type: Tweak
+  - message: TWE L90 Combat PDW RoF increased from `3.6` to `4.0`
+    type: Tweak
+  - message: Added `ShowToggleAction` field to `IFFToggleComponent` to allow suppressing
+      the IFF toggle action on a per-gun basis
+    type: Code
+  - message: Added `FlipDirOffset` field to `ClothingComponent` to allow clothing
+      visuals on back/suitstorage slots to have their directional frames reversed
+    type: Code
+  - message: Subscribed `BlockingComponent` to `IsUnholsterableEvent` so blocking
+      items (shields) are recognised by the F-key quick-equip system
+    type: Code
+  id: 296
+  time: '2026-06-17T22:52:29.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1352
+- author: jok989372-lgtm
+  changes:
+  - message: Added hazmat for working joe.
+    type: Add
+  id: 297
+  time: '2026-06-17T22:54:24.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1350
+- author: maertayn
+  changes:
+  - message: Being able to put CAS munitions into toolboxes or pouches (any storage)
+      via Powerloader
+    type: Fix
+  - message: CMB access to the military SecTech (used by Hope's Retreat)
+    type: Tweak
+  - message: HRP roles holding the server hostage with WJ round restarts
+    type: Fix
+  - message: Pamphlets can be used by any marine that finds it
+    type: Tweak
+  - message: Govfor/Opfor getting opposite faction access from their squads
+    type: Fix
+  - message: Third Party spawns are wrapped in try/catch logs for entities/leader/members
+    type: Code
+  - message: OPFOR/GOVFOR radio channels are given on promotion - instead of old legacy
+      JTAC/Command channels
+    type: Fix
+  - message: TacMap blips - yes the icon is still small but at least not mini - will
+      be fixed
+    type: Tweak
+  id: 298
+  time: '2026-06-17T23:35:26.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1356
+- author: Piticzu
+  changes:
+  - message: Completely reworked Working Joe Voice Synthesizer with 220 voicelines
+      across 17 categories, favorites, recently used, and search.
+    type: Add
+  - message: '"Reboot Unit" right-click verb to revive dead, fully-repaired Working
+      Joes without needing a physical reset key.'
+    type: Add
+  - message: Working Joe backpack now opens instantly without a do-after.
+    type: Add
+  - message: Working Joe blood now displays as white in syringes instead of red.
+    type: Fix
+  - message: Stethoscope now correctly reports "You hear nothing." when used on synths.
+    type: Fix
+  - message: Working Joe death sounds now play randomly from 9 variants on death.
+    type: Tweak
+  - message: Replaced legacy voiceline audio files with new variants.
+    type: Remove
+  id: 299
+  time: '2026-06-17T23:40:27.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1341
+- author: troytroy400
+  changes:
+  - message: Roundstart vehicles added to the bush, retrievable via the vehicle lift.
+    type: Add
+  - message: Badbloods temporarily taken out of rotation for reworks.
+    type: Remove
+  - message: LTB cannon nerfed.
+    type: Tweak
+  id: 300
+  time: '2026-06-18T00:20:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1357
+- author: Arcticular1
+  changes:
+  - message: Added 2x M240 Flamer (800$) to ASRS
+    type: Add
+  - message: Added 4x UT Fuel (200$) to ASRS
+    type: Add
+  - message: Added 2x UT Fuel 2x BGEL Fuel mixed crate (350$) to ASRS
+    type: Add
+  - message: Added 4x BGEL Fuel (500$) to ASRS
+    type: Add
+  - message: Removed M240-T from asrs.
+    type: Remove
+  id: 301
+  time: '2026-06-19T03:40:55.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1361
+- author: sunzu432
+  changes:
+  - message: 'Hope''s Retreat: A second gate to the southern entry point of the Octanis
+      Complex, allowing the security post to control access both ways.'
+    type: Add
+  - message: 'Hope''s Retreat: Vehicle lift placed inside the Fort Beauregard Vehicle
+      Pool.'
+    type: Add
+  - message: 'Hope''s Retreat: Additional flanking routes along the central "Smuggler''s
+      Tunnel" to prevent that choke from stalling gameplay.'
+    type: Add
+  - message: 'Hope''s Retreat: The central wall should look a lot more natural, as
+      well as now having invisible walls to prevent it from being passable by armored
+      vehicles, as well as more visual language to convey that it is not intended
+      to be passable terrain to new players.'
+    type: Tweak
+  - message: 'Hope''s Retreat: The Octanis Complex''s southern gatehouse is now outdoors,
+      allowing CAS and mortars to support Marine efforts to breach the first set of
+      blast doors on the map''s south.'
+    type: Tweak
+  - message: 'Hope''s Retreat: Substantially widened and expanded the size of the
+      cave network, making map choke points less difficult to contest for Marines.'
+    type: Tweak
+  - message: 'Hope''s Retreat: The location of the Vehicle Pool in Fort Beauregard
+      has been moved.'
+    type: Tweak
+  - message: Fixes some roof areas.
+    type: Fix
+  id: 302
+  time: '2026-06-19T05:01:53.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1370
+- author: maertayn
+  changes:
+  - message: Fixed being able to use MarineOrders without cooldown as promoted SL
+    type: Fix
+  - message: RMCShellShotgunHDSG was not able to be put in storage like other shells
+      (pouches/vests etc.)
+    type: Fix
+  id: 303
+  time: '2026-06-19T05:41:17.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1380
+- author: maertayn
+  changes:
+  - message: Multi Auth
+    type: Add
+  id: 304
+  time: '2026-06-19T06:27:19.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1379
+- author: troytroy400
+  changes:
+  - message: Port Neroid renamed to Port Nereid
+    type: Tweak
+  - message: New lobby screen art provided by ak105intow
+    type: Add
+  id: 305
+  time: '2026-06-19T08:48:36.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1381
+- author: jok989372-lgtm
+  changes:
+  - message: Fixed startergear of hazmat working joe/
+    type: Fix
+  id: 306
+  time: '2026-06-19T09:58:07.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1368
+- author: Arcticular1
+  changes:
+  - message: Predators now have a 35% flame resist.
+    type: Tweak
+  id: 307
+  time: '2026-06-19T10:02:27.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1347
+- author: 400Ferrets
+  changes:
+  - message: Port Neroid carp no longer die to barotrauma round-start
+    type: Add
+  - message: Port Neroid LZs can no longer be assaulted from rooftops
+    type: Add
+  - message: Port Neroid now has dropship computers
+    type: Add
+  - message: Port Neroid can now spawn monkeys if the gamemode permits it
+    type: Add
+  - message: Port Neroid can no longer be (trivially) escaped by going over the map
+      boundary fog
+    type: Add
+  - message: Port Neroid now has a revised mob presence
+    type: Add
+  - message: Port Neroid habitation medical stairs no longer a tripping hazard
+    type: Add
+  - message: Port Neroid now has salvage
+    type: Add
+  - message: Port Neroid now has mostly fixed APCs
+    type: Add
+  - message: Port Neroid benches are no longer in the walls and improperly rotated
+    type: Add
+  id: 308
+  time: '2026-06-19T10:19:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1378
+- author: HotdogMan52
+  changes:
+  - message: CN20 Nerve Gas which respects gas masks
+    type: Add
+  - message: Dylovene neutralizes CN20 in system so injecting Dylovene helps purge
+      your system from CN20 quicker
+    type: Add
+  - message: Changed chemical irritant gases' interaction with gas mask filters
+    type: Tweak
+  - message: Chemical irritant gases respect nested and devoured peeople now
+    type: Fix
+  id: 309
+  time: '2026-06-19T18:07:53.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1371
+- author: sunzu432
+  changes:
+  - message: 'Hope''s Retreat: Second floor for the central Hope''s Retreat Dormitory,
+      allowing a commanding view of the colony.'
+    type: Add
+  - message: 'Hope''s Retreat: Second floor Octanis Complex hospital.'
+    type: Add
+  - message: 'Hope''s Retreat: Miscellaneous decorations.'
+    type: Add
+  - message: 'Hope''s Retreat: The commissary and kitchen have had some small changes
+      to the layout and interior content to hopefully encourage player interaction
+      with their respective staff.'
+    type: Tweak
+  - message: 'Hope''s Retreat: Small tweaks to increase the visual readability of
+      some buttons around the map.'
+    type: Tweak
+  - message: 'Hope''s Retreat: Moved Colony Fall threat spawns.'
+    type: Tweak
+  - message: 'Hope''s Retreat: Fort Beauregard Vehicle Pool now has the correct overhead
+      crane asset.'
+    type: Tweak
+  - message: 'Hope''s Retreat: Clarified description of unopenable podlocks near the
+      starport to be more informative.'
+    type: Tweak
+  - message: 'Hope''s Retreat: Xenos should no longer be able to jump over the central
+      wall near the starport.'
+    type: Fix
+  - message: 'Hope''s Retreat: Wey-Yu guards should now spawn in the correct place.'
+    type: Fix
+  - message: 'Hope''s Retreat: Experimental Sensor Tower is now the correct entity
+      and not from upstream.'
+    type: Fix
+  id: 310
+  time: '2026-06-19T18:10:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1387
+- author: wray-git
+  changes:
+  - message: Added the M-19 "Treadnailer" assault boots, a special issue piece of
+      kit fitted with tungsten-carbide spike plates in the sole. Destroys xeno resin
+      on contact, and if you happen to walk over anyone who's in no shape to get out
+      of the way, they're gonna have a bad time. Slowdown 20%. Available from RTO(lead)
+      lockers, HAZOPs get 3 from their cargo vendor under "Special Issue Equipment"
+    type: Add
+  - message: UZI can now be stored in bags, belts, pockets, and backpack slot
+    type: Add
+  - message: Changed HAZOPs' cargo vendor section from "Special Issue Firearms" to
+      "Special Issue Equipment"
+    type: Tweak
+  - message: Increased UZI RoF to 7.5
+    type: Tweak
+  - message: "Improved UZI accuracy slightly \U0001F90F"
+    type: Tweak
+  - message: Added SpikeBootsComponent, a marker component that sits on the boots
+      item and does nothing exciting on its own
+    type: Code
+  - message: Added SpikeBootsWearerComponent, slapped onto whoever equips the boots,
+      keeps track of what tile they last stepped on and who they recently stomped
+      so we don't spam damage every tick
+    type: Code
+  - message: Added SpikeBootsSystem, the thing that actually does stuff, runs a tile-change
+      check each update and handles resin destruction, passable mob damage, cooldowns,
+      sounds and screenshake
+    type: Code
+  - message: Added spikedboots.rsi to _AU14/Clothing/Shoes with the full icon/equipped/filled
+      state set
+    type: Code
+  id: 311
+  time: '2026-06-19T18:10:35.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1360
+- author: JaSeNeSaJ
+  changes:
+  - message: 'Sheperds'': 2 Working Joe job slots'
+    type: Add
+  - message: 'Sheperds'': Botany & Assistant Quarters to Research Labs'
+    type: Add
+  - message: 'Sheperds'': Chem setup to Research Labs'
+    type: Add
+  - message: 'Sheperds'': Colony hospital layout'
+    type: Tweak
+  - message: 'Sheperds'': Various stairwell improvements'
+    type: Tweak
+  id: 312
+  time: '2026-06-19T19:03:32.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1362
+- author: HotdogMan52
+  changes:
+  - message: added four M19-NL Tear Gas nades into SecTech vendors
+    type: Add
+  - message: added four gas mask and eight filters
+    type: Add
+  id: 313
+  time: '2026-06-20T01:24:20.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1388
+- author: wray-git
+  changes:
+  - message: M-19 Treadnailers now only destroys weeds and weed nodes
+    type: Fix
+  - message: M-19 Treadnailers are only active when the wearer is standing
+    type: Fix
+  id: 314
+  time: '2026-06-20T01:31:30.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1389
+- author: maertayn
+  changes:
+  - message: Bumped round end to 5 minutes
+    type: Tweak
+  - message: Added some internet slang to chatsan
+    type: Tweak
+  - message: Pamphlets can give marine orders if leadership becomes >= 1
+    type: Fix
+  - message: Fixes Bush not loading platoons & vendors
+    type: Fix
+  id: 315
+  time: '2026-06-20T04:35:54.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1391
+- author: Arcticular1
+  changes:
+  - message: x1 Type 88 Marksman rifle (20p)
+    type: Add
+  - message: x2 Type 88 Magazines (8p)
+    type: Add
+  - message: x1 LC9 incinerator (10p)
+    type: Add
+  - message: x2 LC9 flamer tanks (5p)
+    type: Add
+  - message: x5 6B80 armored vests (5p)
+    type: Add
+  - message: x2 K12 ceramic armor (15p)
+    type: Add
+  - message: x2 k12 ceramic helmets (10p)
+    type: Add
+  - message: x5 Radio jammer (10p)
+    type: Add
+  - message: 5 coif masks to CLF recruitment crate.
+    type: Add
+  - message: replaced roundstart MK1s with MAR-30
+    type: Tweak
+  - message: k12 ceramic armor now gets a 36% slowdown
+    type: Tweak
+  - message: Huge IED from 3 > 1
+    type: Tweak
+  - message: '- Bomb vest from 2 > 1'
+    type: Tweak
+  - message: Replaced CLF leader's armband with a leader specific one.
+    type: Tweak
+  - message: CLF Cell leader gets a CLF Colonist ID instead (no more throwing ID away)
+    type: Tweak
+  - message: Roundstart rangefinders replaced with civilian binos
+    type: Tweak
+  id: 316
+  time: '2026-06-20T11:19:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1394
 Name: CMU
 Order: -1

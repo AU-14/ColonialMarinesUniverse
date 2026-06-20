@@ -53,7 +53,7 @@
       prefix: au14-job-prefix-govforsquadautomaticrifleman
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_AU14/Interface/au14govforhud.rsi
+        sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
         state: govfor_afn
 
 - type: playTimeTracker

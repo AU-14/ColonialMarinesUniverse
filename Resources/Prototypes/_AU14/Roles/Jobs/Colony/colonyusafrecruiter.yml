@@ -13,7 +13,7 @@
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCivilianUSASFRecruiter
-  icon: "AU14JobIconRFN"
+  icon: "AU14JobIconColonyAdvisor"
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian
@@ -36,9 +36,8 @@
       prefix: au14-job-prefix-usasfrecruiter
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-  hidden: false
+        sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+        state: advisor
 
 - type: startingGear
   id: AU14GearCivilianUSASFRecruiter

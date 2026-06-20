@@ -21,8 +21,8 @@
       - OPFOR
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_AU14/Interface/au14opforhud.rsi
-        state: background
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
+        state: rifleman
 
 - type: startingGear
   id: AU14GearopforSquadRifleman

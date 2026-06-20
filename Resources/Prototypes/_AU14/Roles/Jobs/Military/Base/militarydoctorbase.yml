@@ -53,7 +53,7 @@
       prefix: au14-job-prefix-govforMilitaryDoctor
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_AU14/Interface/au14govforhud.rsi
+        sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
         state: govfor_doctor
 
 - type: playTimeTracker

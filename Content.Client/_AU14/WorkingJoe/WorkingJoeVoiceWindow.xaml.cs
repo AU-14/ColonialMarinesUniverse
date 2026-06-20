@@ -14,9 +14,19 @@ public sealed partial class WorkingJoeVoiceWindow : DefaultWindow
 
     private List<WorkingJoeVoiceLine> _allLines = new();
     private string? _selectedCategory;
+    private bool _showFavorites;
+    private readonly WorkingJoeVoiceFavorites _favorites;
+    private readonly List<string> _recentIds = new();
+    private const int MaxRecent = 5;
 
-    public WorkingJoeVoiceWindow()
+    private static readonly string[] QuestionCategories =
     {
+        "Curious", "Interrogation", "Identification", "Concern"
+    };
+
+    public WorkingJoeVoiceWindow(WorkingJoeVoiceFavorites favorites)
+    {
+        _favorites = favorites;
         RobustXamlLoader.Load(this);
         SearchBar.OnTextChanged += _ => RebuildList();
     }
@@ -37,48 +47,128 @@ public sealed partial class WorkingJoeVoiceWindow : DefaultWindow
             Text = "All",
             HorizontalExpand = true,
             ToggleMode = true,
-            Pressed = _selectedCategory == null,
+            Pressed = _selectedCategory == null && !_showFavorites,
         };
         allButton.OnPressed += _ =>
         {
             _selectedCategory = null;
+            _showFavorites = false;
             RebuildList();
             UpdateCategoryButtonStates();
         };
         CategoryList.AddChild(allButton);
 
-        foreach (var category in _allLines.Select(l => l.Category).Distinct().OrderBy(c => c))
+        var favButton = new Button
         {
-            var cat = category;
-            var button = new Button
-            {
-                Text = cat,
-                HorizontalExpand = true,
-                ToggleMode = true,
-                Pressed = _selectedCategory == cat,
-            };
-            button.OnPressed += _ =>
-            {
-                _selectedCategory = cat;
-                RebuildList();
-                UpdateCategoryButtonStates();
-            };
-            CategoryList.AddChild(button);
+            Text = "★ Favorites",
+            HorizontalExpand = true,
+            ToggleMode = true,
+            Pressed = _showFavorites,
+        };
+        favButton.OnPressed += _ =>
+        {
+            _showFavorites = true;
+            _selectedCategory = null;
+            RebuildList();
+            UpdateCategoryButtonStates();
+        };
+        CategoryList.AddChild(favButton);
+
+        var recentButton = new Button
+        {
+            Text = "⏲ Recent",
+            HorizontalExpand = true,
+            ToggleMode = true,
+            Pressed = _selectedCategory == "__recent",
+        };
+        recentButton.OnPressed += _ =>
+        {
+            _selectedCategory = "__recent";
+            _showFavorites = false;
+            RebuildList();
+            UpdateCategoryButtonStates();
+        };
+        CategoryList.AddChild(recentButton);
+
+        var nonQuestionCategories = _allLines
+            .Select(l => l.Category)
+            .Distinct()
+            .Where(c => !QuestionCategories.Contains(c))
+            .OrderBy(c => c)
+            .ToList();
+
+        var questionCategories = _allLines
+            .Select(l => l.Category)
+            .Distinct()
+            .Where(c => QuestionCategories.Contains(c))
+            .OrderBy(c => Array.IndexOf(QuestionCategories, c))
+            .ToList();
+
+        foreach (var category in nonQuestionCategories)
+        {
+            AddCategoryButton(category);
         }
+
+        if (questionCategories.Count > 0)
+        {
+            var separator = new PanelContainer
+            {
+                MinHeight = 2,
+                HorizontalExpand = true,
+                Margin = new Thickness(0, 6),
+            };
+            CategoryList.AddChild(separator);
+
+            var label = new Label
+            {
+                Text = "Questions",
+                FontColorOverride = Color.FromHex("#AAAAAA"),
+                HorizontalAlignment = HAlignment.Center,
+                Margin = new Thickness(0, 2),
+            };
+            CategoryList.AddChild(label);
+
+            foreach (var category in questionCategories)
+            {
+                AddCategoryButton(category);
+            }
+        }
+    }
+
+    private void AddCategoryButton(string category)
+    {
+        var button = new Button
+        {
+            Text = category,
+            HorizontalExpand = true,
+            ToggleMode = true,
+            Pressed = _selectedCategory == category,
+        };
+        button.OnPressed += _ =>
+        {
+            _selectedCategory = category;
+            _showFavorites = false;
+            RebuildList();
+            UpdateCategoryButtonStates();
+        };
+        CategoryList.AddChild(button);
     }
 
     private void UpdateCategoryButtonStates()
     {
-        var i = 0;
         foreach (var child in CategoryList.Children)
         {
-            if (child is Button btn)
-            {
-                btn.Pressed = i == 0
-                    ? _selectedCategory == null
-                    : btn.Text == _selectedCategory;
-            }
-            i++;
+            if (child is not Button btn)
+                continue;
+
+            if (btn.Text == "All")
+                btn.Pressed = _selectedCategory == null && !_showFavorites;
+            else if (btn.Text == "★ Favorites")
+                btn.Pressed = _showFavorites;
+            else if (btn.Text == "⏲ Recent")
+                btn.Pressed = _selectedCategory == "__recent";
+            else
+                btn.Pressed = btn.Text == _selectedCategory;
         }
     }
 
@@ -88,23 +178,70 @@ public sealed partial class WorkingJoeVoiceWindow : DefaultWindow
 
         var search = SearchBar.Text.Trim().ToLowerInvariant();
 
-        var filtered = _allLines
-            .Where(l => _selectedCategory == null || l.Category == _selectedCategory)
-            .Where(l => string.IsNullOrEmpty(search) || l.DisplayName.ToLowerInvariant().Contains(search))
-            .ToList();
+        List<WorkingJoeVoiceLine> filtered;
+
+        if (_selectedCategory == "__recent")
+        {
+            filtered = _recentIds
+                .Select(id => _allLines.FirstOrDefault(l => l.EmoteId == id))
+                .Where(l => l != null)
+                .Where(l => string.IsNullOrEmpty(search) || l!.DisplayName.ToLowerInvariant().Contains(search))
+                .ToList()!;
+        }
+        else if (_showFavorites)
+        {
+            filtered = _allLines
+                .Where(l => _favorites.Contains(l.EmoteId))
+                .Where(l => string.IsNullOrEmpty(search) || l.DisplayName.ToLowerInvariant().Contains(search))
+                .ToList();
+        }
+        else
+        {
+            filtered = _allLines
+                .Where(l => _selectedCategory == null || l.Category == _selectedCategory)
+                .Where(l => string.IsNullOrEmpty(search) || l.DisplayName.ToLowerInvariant().Contains(search))
+                .ToList();
+        }
 
         foreach (var line in filtered)
         {
-            var button = new Button
+            var row = new BoxContainer
+            {
+                Orientation = BoxContainer.LayoutOrientation.Horizontal,
+                HorizontalExpand = true,
+                SeparationOverride = 4,
+            };
+
+            var isFav = _favorites.Contains(line.EmoteId);
+            var favButton = new Button
+            {
+                Text = isFav ? "★" : "☆",
+                MinWidth = 30,
+                MaxWidth = 30,
+                ToolTip = isFav ? "Remove from favorites" : "Add to favorites",
+            };
+            var emoteId = line.EmoteId;
+            favButton.OnPressed += _ =>
+            {
+                _favorites.Toggle(emoteId);
+                RebuildList();
+            };
+            row.AddChild(favButton);
+
+            var lineButton = new Button
             {
                 Text = line.DisplayName,
                 HorizontalExpand = true,
                 StyleClasses = { "OpenRight" },
             };
+            lineButton.OnPressed += _ =>
+            {
+                OnLineSelected?.Invoke(emoteId);
+                AddRecent(emoteId);
+            };
+            row.AddChild(lineButton);
 
-            var emoteId = line.EmoteId;
-            button.OnPressed += _ => OnLineSelected?.Invoke(emoteId);
-            LineList.AddChild(button);
+            LineList.AddChild(row);
         }
 
         if (!filtered.Any())
@@ -117,5 +254,13 @@ public sealed partial class WorkingJoeVoiceWindow : DefaultWindow
                 Margin = new Thickness(0, 12),
             });
         }
+    }
+
+    private void AddRecent(string emoteId)
+    {
+        _recentIds.Remove(emoteId);
+        _recentIds.Insert(0, emoteId);
+        if (_recentIds.Count > MaxRecent)
+            _recentIds.RemoveAt(_recentIds.Count - 1);
     }
 }

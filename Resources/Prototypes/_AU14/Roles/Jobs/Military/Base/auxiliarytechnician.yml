@@ -4,7 +4,7 @@
   id: AU14JobAuxTechBaseAbstract
   name: au14-job-name-govforAuxTech
   description: au14-job-description-govforAuxTech
-  icon: "AU14JobIconRTO"
+  icon: "AU14JobIconAuxTech"
   spawnMenuRoleName: Auxiliary Technician (GOVFOR)
   startingGear: AU14GearGOVFORAuxTech
   dummyStartingGear: AU14GearGOVFORAuxTechDummy
@@ -64,7 +64,7 @@
       prefix: au14-job-prefix-govforAuxTech
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_AU14/Interface/au14govforhud.rsi
+        sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
         state: govfor_auxtech
 
 - type: playTimeTracker

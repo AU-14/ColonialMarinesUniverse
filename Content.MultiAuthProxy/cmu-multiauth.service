@@ -1,0 +1,15 @@
+[Unit]
+Description=CMU MultiAuthProxy
+After=network.target
+
+# MultiAuthProxy federates between auths for spacestation14.com and playss14.com
+# Restart automatically if it crash
+[Service]
+Type=simple
+WorkingDirectory=/opt/cmu-multiauth
+ExecStart=/usr/bin/dotnet Content.MultiAuthProxy.dll
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
