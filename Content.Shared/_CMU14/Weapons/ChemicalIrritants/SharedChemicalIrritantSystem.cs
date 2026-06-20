@@ -14,6 +14,8 @@ using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._AU14.Abominations; 
+using Content.Shared._RMC14.Xenonids.Construction.Nest;
+using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Stunnable;
 using Content.Shared.Speech.EntitySystems;
@@ -100,6 +102,11 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
             {
                 if (!injector.AffectsDead && _mobState.IsDead(victim))
                     continue;
+                
+                if (!injector.AffectsInfectedNested &&
+                    HasComp<XenoNestedComponent>(victim) &&
+                    HasComp<VictimInfectedComponent>(victim))
+                    continue;
 
                 ApplyIrritant(victim, injector);
             }
@@ -121,14 +128,13 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
     private void ApplyIrritant(EntityUid victim, ChemicalIrritantInjectorComponent injector)
     {
         if (IsImmuneToIrritants(victim))
-        return;
+            return;
 
         if (TryGetFilterFromMask(victim, out var filterId, out var filter))
         {
             var filterDamage = new GasMaskFilterDamageComponent
             {
-                Damage = injector.FilterDamage,
-                Neurotoxin = injector.NeurotoxinFilterDamage
+                Damage = injector.FilterDamage * filter.ChemicalIrritantDamageMultiplier
             };
 
             _mask.DamageFilter(filterId, filter, filterDamage);
@@ -156,6 +162,13 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
 
     private void UpdateIrritantExposure(EntityUid victim, ChemicalIrritantComponent chem)
     {
+
+        if (_mobState.IsDead(victim))
+        {
+            RemCompDeferred<ChemicalIrritantComponent>(victim);
+            return;
+        }
+
         var time = _timing.CurTime;
         var profile = chem.Profile;
 
@@ -285,7 +298,22 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
 
         return false;
     }
+    public void ReduceIrritant(EntityUid victim, float amount)
+    {
+        if (!TryComp<ChemicalIrritantComponent>(victim, out var chem))
+            return;
 
+        var actual = amount * chem.Profile.DyloveneEfficiency;
+        chem.IrritantAmount = MathF.Max(0, chem.IrritantAmount - actual);
+
+        if (chem.IrritantAmount <= 0)
+        {
+            RemCompDeferred<ChemicalIrritantComponent>(victim);
+            return;
+        }
+
+        Dirty(victim, chem);
+    }
     private bool TryGetFilterFromItem(EntityUid item, out EntityUid filterId, out GasMaskFilterComponent filter)
     {
         filterId = EntityUid.Invalid;

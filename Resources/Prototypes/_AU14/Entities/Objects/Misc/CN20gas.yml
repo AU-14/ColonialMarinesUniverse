@@ -1,6 +1,6 @@
 - type: entity
-  id: CMU14TearGas
-  name: Tear Gas
+  id: AU14GrenadeNeuroGas
+  name: CN20 Nerve Gas
   components:
   - type: Transform
     anchored: true
@@ -20,9 +20,9 @@
   - type: Sprite
     sprite: _RMC14/Effects/smoke.rsi
     state: smoke2
-    color: "#B9DBE1"
+    color: "#FFBF58"
   - type: SpriteColor
-    color: "#B9DBE1"
+    color: "#FFBF58"
   - type: TimedDespawn
     lifetime: 12
   - type: Tag
@@ -31,46 +31,44 @@
   - type: Appearance
   - type: ActiveEdgeSpreader
   - type: EdgeSpreader
-    id: CMU14TearGas
+    id: AU14GrenadeNeuroGas
   - type: EvenSmoke
-    spawn: CMU14TearGas
-    range: 2
+    spawn: AU14GrenadeNeuroGas
+    range: 4
   - type: ChemicalIrritantInjector
-    irritantPerSecond: 7
+    irritantPerSecond: 10
     affectsDead: false
     affectsInfectedNested: false
-    filterDamage: 1.15
-    depletionPerTick: 1
+    filterDamage: 2
+    depletionPerTick: 2.5
     profile:
-      irritantType: tear_gas
+      irritantType: NerveGas
+      irritantDamage:
+        types:
+          Asphyxiation: 1
+          Poison: 3
       effectThreshold: 1
-      blindThreshold: 15
-      severeThreshold: 18
-      tripThreshold: 15
-      tripChance: 0.12
-      tripStunTime: 1.5
+      blindThreshold: 19
+      severeThreshold: 29
+      tripThreshold: 19
+      tripChance: 0.23
+      tripStunTime: 1.75
       blurTime: 5
       blindTime: 1
-      minimumDelayBetweenTrips: 6
-      dyloveneEfficiency: 0
+      minimumDelayBetweenTrips: 8
+      severeSlowChance: 0.39
+      severeSlowTime: 4
+      dyloveneEfficiency: 10
+      exposureMessages:
+      - "You feel like dying!"
+      - "Your lungs burn!"
+      - "You cough uncontrollably!"
+      - "Make it stop!"
+      - "Your body stiffens!"
   - type: DeleteOnExplosion
 
 
-- type: entity
-  id: CMU14InstantTearGas
-  parent: CMU14TearGas
-  name: Tear Gas
-  components:
-  - type: TimedDespawn
-    lifetime: 6
-  - type: EdgeSpreader
-    id: CMU14InstantTearGas
-
-
 - type: edgeSpreader
-  id: CMU14TearGas
-  updatesPerSecond: 1
+  id: AU14GrenadeNeuroGas
+  updatesPerSecond: 2
 
-- type: edgeSpreader
-  id: CMU14InstantTearGas
-  updatesPerSecond: 3

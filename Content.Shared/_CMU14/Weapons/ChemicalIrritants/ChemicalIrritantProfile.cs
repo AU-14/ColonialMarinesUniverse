@@ -14,6 +14,8 @@ public sealed partial class ChemicalIrritantProfile
 {
     [DataField]
     public string IrritantType = "tear_gas";
+    [DataField]
+    public float DyloveneEfficiency = 1f;
 
     [DataField]
     public float EffectThreshold = 5f;

@@ -939,6 +939,7 @@
       - id: RMCLaserDesignator
       - id: RMCWhistle
       - id: RMCPackFlareCAS
+      - id: AU14SpikeBoots
     - name: Spare Equipment
       entries:
       - id: RMCExplosiveBreachingCharge

@@ -19,6 +19,9 @@ public sealed partial class ChemicalIrritantInjectorComponent : Component
 
     [DataField, AutoNetworkedField]
     public TimeSpan TimeBetweenGasInjects = TimeSpan.FromSeconds(1);
+    
+    [DataField, AutoNetworkedField]
+    public bool AffectsInfectedNested = false;
 
     [DataField, AutoNetworkedField]
     public bool AffectsDead = false;

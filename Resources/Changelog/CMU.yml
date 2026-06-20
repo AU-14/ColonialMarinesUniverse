@@ -4306,5 +4306,134 @@
   id: 308
   time: '2026-06-19T10:19:31.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1378
+- author: HotdogMan52
+  changes:
+  - message: CN20 Nerve Gas which respects gas masks
+    type: Add
+  - message: Dylovene neutralizes CN20 in system so injecting Dylovene helps purge
+      your system from CN20 quicker
+    type: Add
+  - message: Changed chemical irritant gases' interaction with gas mask filters
+    type: Tweak
+  - message: Chemical irritant gases respect nested and devoured peeople now
+    type: Fix
+  id: 309
+  time: '2026-06-19T18:07:53.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1371
+- author: sunzu432
+  changes:
+  - message: 'Hope''s Retreat: Second floor for the central Hope''s Retreat Dormitory,
+      allowing a commanding view of the colony.'
+    type: Add
+  - message: 'Hope''s Retreat: Second floor Octanis Complex hospital.'
+    type: Add
+  - message: 'Hope''s Retreat: Miscellaneous decorations.'
+    type: Add
+  - message: 'Hope''s Retreat: The commissary and kitchen have had some small changes
+      to the layout and interior content to hopefully encourage player interaction
+      with their respective staff.'
+    type: Tweak
+  - message: 'Hope''s Retreat: Small tweaks to increase the visual readability of
+      some buttons around the map.'
+    type: Tweak
+  - message: 'Hope''s Retreat: Moved Colony Fall threat spawns.'
+    type: Tweak
+  - message: 'Hope''s Retreat: Fort Beauregard Vehicle Pool now has the correct overhead
+      crane asset.'
+    type: Tweak
+  - message: 'Hope''s Retreat: Clarified description of unopenable podlocks near the
+      starport to be more informative.'
+    type: Tweak
+  - message: 'Hope''s Retreat: Xenos should no longer be able to jump over the central
+      wall near the starport.'
+    type: Fix
+  - message: 'Hope''s Retreat: Wey-Yu guards should now spawn in the correct place.'
+    type: Fix
+  - message: 'Hope''s Retreat: Experimental Sensor Tower is now the correct entity
+      and not from upstream.'
+    type: Fix
+  id: 310
+  time: '2026-06-19T18:10:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1387
+- author: wray-git
+  changes:
+  - message: Added the M-19 "Treadnailer" assault boots, a special issue piece of
+      kit fitted with tungsten-carbide spike plates in the sole. Destroys xeno resin
+      on contact, and if you happen to walk over anyone who's in no shape to get out
+      of the way, they're gonna have a bad time. Slowdown 20%. Available from RTO(lead)
+      lockers, HAZOPs get 3 from their cargo vendor under "Special Issue Equipment"
+    type: Add
+  - message: UZI can now be stored in bags, belts, pockets, and backpack slot
+    type: Add
+  - message: Changed HAZOPs' cargo vendor section from "Special Issue Firearms" to
+      "Special Issue Equipment"
+    type: Tweak
+  - message: Increased UZI RoF to 7.5
+    type: Tweak
+  - message: "Improved UZI accuracy slightly \U0001F90F"
+    type: Tweak
+  - message: Added SpikeBootsComponent, a marker component that sits on the boots
+      item and does nothing exciting on its own
+    type: Code
+  - message: Added SpikeBootsWearerComponent, slapped onto whoever equips the boots,
+      keeps track of what tile they last stepped on and who they recently stomped
+      so we don't spam damage every tick
+    type: Code
+  - message: Added SpikeBootsSystem, the thing that actually does stuff, runs a tile-change
+      check each update and handles resin destruction, passable mob damage, cooldowns,
+      sounds and screenshake
+    type: Code
+  - message: Added spikedboots.rsi to _AU14/Clothing/Shoes with the full icon/equipped/filled
+      state set
+    type: Code
+  id: 311
+  time: '2026-06-19T18:10:35.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1360
+- author: JaSeNeSaJ
+  changes:
+  - message: 'Sheperds'': 2 Working Joe job slots'
+    type: Add
+  - message: 'Sheperds'': Botany & Assistant Quarters to Research Labs'
+    type: Add
+  - message: 'Sheperds'': Chem setup to Research Labs'
+    type: Add
+  - message: 'Sheperds'': Colony hospital layout'
+    type: Tweak
+  - message: 'Sheperds'': Various stairwell improvements'
+    type: Tweak
+  id: 312
+  time: '2026-06-19T19:03:32.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1362
+- author: HotdogMan52
+  changes:
+  - message: added four M19-NL Tear Gas nades into SecTech vendors
+    type: Add
+  - message: added four gas mask and eight filters
+    type: Add
+  id: 313
+  time: '2026-06-20T01:24:20.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1388
+- author: wray-git
+  changes:
+  - message: M-19 Treadnailers now only destroys weeds and weed nodes
+    type: Fix
+  - message: M-19 Treadnailers are only active when the wearer is standing
+    type: Fix
+  id: 314
+  time: '2026-06-20T01:31:30.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1389
+- author: maertayn
+  changes:
+  - message: Bumped round end to 5 minutes
+    type: Tweak
+  - message: Added some internet slang to chatsan
+    type: Tweak
+  - message: Pamphlets can give marine orders if leadership becomes >= 1
+    type: Fix
+  - message: Fixes Bush not loading platoons & vendors
+    type: Fix
+  id: 315
+  time: '2026-06-20T04:35:54.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1391
 Name: CMU
 Order: -1

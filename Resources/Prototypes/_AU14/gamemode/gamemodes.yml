@@ -20,7 +20,6 @@
   - AUPlanetTrijent
   - CMUPlanetLament
   - CMUPlanetHopesRetreat
-  
   rules:
   - AuVoteRule
   - PlatoonSpawn
@@ -46,7 +45,6 @@
     - AUPlanetSorokyne
     - AuPlanetChances
     - CMUPlanetHopesRetreat
-
   rules:
   - AuVoteRule
   - PlatoonSpawn
@@ -73,7 +71,6 @@
   - AUPlanetLV327
   - AuPlanetChances
   - CMUPlanetHopesRetreat
-
   rules:
   - AuVoteRule
   - PlatoonSpawn
@@ -87,6 +84,7 @@
   name: Colony Fall
   showInVote: true
   minPlayers: 0
+  maxPlayers: 60
   description: Live in an offworld colony as it falls into chaos.
   supportedPlanets:
     - AUPlanetShepherdsPride
@@ -96,8 +94,6 @@
     - AUPlanetSorokyne
     - AuPlanetChances
     - CMUPlanetHopesRetreat
-
-
 
 - type: gamePreset
   id: Jailbreak

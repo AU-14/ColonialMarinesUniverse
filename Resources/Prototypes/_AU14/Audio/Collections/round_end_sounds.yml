@@ -1,0 +1,78 @@
+- type: soundCollection
+  id: CMRoundEnd
+  files:
+  - /Audio/Announcements/RoundEnd/apc_destroyed.ogg
+  - /Audio/_RMC14/Announcements/RoundEnd/lets_get_outta_here.ogg
+  - /Audio/_RMC14/Announcements/RoundEnd/its_only_game.ogg
+  - /Audio/_AU14/RoundEnd/surrounded_by_assholes.ogg
+
+- type: soundCollection
+  id: RMCMarineMajor
+  files:
+  - /Audio/_RMC14/Announcements/RoundEnd/marine_major.ogg
+  - /Audio/_AU14/RoundEnd/winning_triumph1.ogg
+  - /Audio/_AU14/RoundEnd/winning_triumph2.ogg
+  - /Audio/_AU14/RoundEnd/outstanding_marines.ogg
+
+- type: soundCollection
+  id: RMCMarineMinor
+  files:
+  - /Audio/_RMC14/Announcements/RoundEnd/marine_minor.ogg
+  - /Audio/_AU14/RoundEnd/neutral_hopeful1.ogg
+  - /Audio/_AU14/RoundEnd/neutral_hopeful2.ogg # quiet
+
+- type: soundCollection
+  id: RMCXenoMajor
+  files:
+  - /Audio/_RMC14/Announcements/RoundEnd/xeno_major.ogg
+  - /Audio/_AU14/RoundEnd/sad_loss1.ogg # very quiet
+  - /Audio/_AU14/RoundEnd/sad_loss2.ogg
+
+- type: soundCollection
+  id: RMCXenoMinor
+  files:
+  - /Audio/_RMC14/Announcements/RoundEnd/xeno_minor.ogg
+  - /Audio/_AU14/RoundEnd/nuclear_detonation1.ogg # quiet
+
+- type: soundCollection
+  id: RMCAllDied
+  files:
+  - /Audio/_AU14/RoundEnd/neutral_melancholy1.ogg
+  - /Audio/_AU14/RoundEnd/neutral_melancholy2.ogg
+  - /Audio/_AU14/RoundEnd/nuclear_detonation2.ogg
+
+# Last Man
+- type: soundCollection
+  id: LastManCIU
+  files:
+  - /Audio/_AU14/RoundEnd/lastmanstanding_ciu.ogg
+
+- type: soundCollection
+  id: LastManCLF
+  files:
+  - /Audio/_AU14/RoundEnd/lastmanstanding_clf.ogg
+
+- type: soundCollection
+  id: LastManHAZOPS
+  files:
+  - /Audio/_AU14/RoundEnd/lastmanstanding_hazops.ogg
+
+- type: soundCollection
+  id: LastManRMC
+  files:
+  - /Audio/_AU14/RoundEnd/lastmanstanding_rmc.ogg
+
+- type: soundCollection
+  id: LastManUPP
+  files:
+  - /Audio/_AU14/RoundEnd/lastmanstanding_upp.ogg
+
+- type: soundCollection
+  id: LastManUSCM
+  files:
+  - /Audio/_AU14/RoundEnd/lastmanstanding_uscm.ogg
+
+- type: soundCollection
+  id: LastManWY
+  files:
+  - /Audio/_AU14/RoundEnd/lastmanstanding_wy.ogg
