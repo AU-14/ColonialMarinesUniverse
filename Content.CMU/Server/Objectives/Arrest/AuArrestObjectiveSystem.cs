@@ -3,6 +3,7 @@ using Content.Server.GameTicking;
 using Content.Server.Roles.Jobs;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.AU14.Objectives;
+using Content.Shared.AU14.Objectives.Fetch;
 using Content.Shared.AU14.Objectives.Arrest;
 using Content.Shared.AU14.Objectives.Kill;
 using Content.Shared.Cuffs;
@@ -81,8 +82,9 @@ namespace Content.Server.AU14.Objectives.Arrest
             var presetId = ticker.Preset?.ID?.ToLowerInvariant();
             var mindContainer = EntityManager.GetComponentOrNull<MindContainerComponent>(uid);
             var mind = mindContainer?.Mind;
+#if DEBUG
             _sawmill.Debug($"[ARREST START] DELAYED - Mob ({uid}) proto='{protoId}' factions=[{string.Join(",", factions)}] - has MindContainerComponent: {mindContainer != null}, Mind: {mind != null}");
-
+#endif
             var query = EntityQueryEnumerator<ArrestObjectiveComponent>();
             while (query.MoveNext(out var objUid, out var arrestObj))
             {
@@ -104,13 +106,16 @@ namespace Content.Server.AU14.Objectives.Arrest
                 }
                 else
                 {
+#if DEBUG
                     _sawmill.Debug($"[ARREST TRACE] DELAYED - Mob ({uid}) proto='{protoId}' factions=[{string.Join(",", factions)}]");
                     _sawmill.Debug($"[ARREST TRACE]   Objective faction: {(string.IsNullOrEmpty(auObj.Faction) ? "null" : auObj.Faction.ToLowerInvariant())}");
-
+#endif
                     var targetFaction = arrestObj.FactionToArrest.ToLowerInvariant();
                     if (factions.Contains(targetFaction))
                     {
+#if DEBUG
                         _sawmill.Debug($"[ARREST MATCH] Mob ({uid}) MATCHES target faction '{targetFaction}' for objective {objUid}");
+#endif
                         var mark = EnsureComp<MarkedForArrestComponent>(uid);
                         mark.AssociatedObjectives[objUid] = auObj.Faction.ToLowerInvariant();
                         // Cache job info if needed
@@ -145,8 +150,9 @@ namespace Content.Server.AU14.Objectives.Arrest
 
             var mindContainer = EntityManager.GetComponentOrNull<MindContainerComponent>(uid);
             var mind = mindContainer?.Mind;
+#if DEBUG
             _sawmill.Debug($"[ARREST DEBUG] OnCuffStateChanged: Entity ({uid}) has MindContainerComponent: {mindContainer != null}, Mind: {mind != null}");
-
+#endif
             var arrestedFactionComp = EntityManager.GetComponentOrNull<NpcFactionMemberComponent>(uid);
             var arrestedFactions = arrestedFactionComp?.Factions.Select(f => f.ToString().ToLowerInvariant()).ToHashSet() ?? new HashSet<string>();
             if (arrestedFactions.Count == 0)
@@ -187,7 +193,9 @@ namespace Content.Server.AU14.Objectives.Arrest
                 {
                     if (auObj.FactionStatuses.TryGetValue(factionKey, out var status) && status == AuObjectiveComponent.ObjectiveStatus.Completed)
                     {
+#if DEBUG
                         _sawmill.Debug($"[ARREST SKIP] Objective {objectiveUid} already completed for faction '{factionKey}'.");
+#endif
                         objectivesToRemove.Add(objectiveUid);
                         continue;
                     }
@@ -197,7 +205,9 @@ namespace Content.Server.AU14.Objectives.Arrest
                     var assignedFaction = auObj.Faction.ToLowerInvariant();
                     if (auObj.FactionStatuses.TryGetValue(assignedFaction, out var status) && status == AuObjectiveComponent.ObjectiveStatus.Completed)
                     {
+#if DEBUG
                         _sawmill.Debug($"[ARREST SKIP] Objective {objectiveUid} already completed for faction '{assignedFaction}'.");
+#endif
                         objectivesToRemove.Add(objectiveUid);
                         continue;
                     }
@@ -255,8 +265,9 @@ namespace Content.Server.AU14.Objectives.Arrest
                 }
 
                 arrestObj.AmountArrestedPerFaction[factionKey]++;
+#if DEBUG
                 _sawmill.Debug($"[ARREST UPDATE]   Faction '{factionToCredit}' arrested entity ({uid}). Total arrests: {arrestObj.AmountArrestedPerFaction[factionKey]} / {arrestObj.AmountToArrest}");
-
+#endif
                 // If RemoveKillMark is true, remove MarkedForKillComponent so this entity can't also count for kill objectives
                 if (arrestObj.RemoveKillMark)
                     RemComp<MarkedForKillComponent>(uid);
@@ -286,7 +297,7 @@ namespace Content.Server.AU14.Objectives.Arrest
             // Find all relevant markers
             var markers = new List<EntityUid>();
             var genericMarkers = new List<EntityUid>();
-            var markerQuery = AllEntityQuery<Content.Shared.AU14.Objectives.Fetch.FetchObjectiveMarkerComponent, TransformComponent>();
+            var markerQuery = AllEntityQuery<FetchObjectiveMarkerComponent, TransformComponent>();
             while (markerQuery.MoveNext(out var markerUid, out var markerComp, out _))
             {
                 if (!string.IsNullOrEmpty(arrestObj.SpawnMarker) && markerComp.FetchId == arrestObj.SpawnMarker)

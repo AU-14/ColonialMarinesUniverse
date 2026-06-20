@@ -79,8 +79,9 @@ namespace Content.Server.AU14.Objectives.Kill
             var presetId = ticker.Preset?.ID?.ToLowerInvariant();
             var mindContainer = EntityManager.GetComponentOrNull<MindContainerComponent>(uid);
             var mind = mindContainer?.Mind;
+#if DEBUG
             _sawmill.Debug($"[KILL START] DELAYED - Mob ({uid}) proto='{protoId}' factions=[{string.Join(",", factions)}] - has MindContainerComponent: {mindContainer != null}, Mind: {mind != null}");
-
+#endif
             var query = EntityQueryEnumerator<KillObjectiveComponent>();
             while (query.MoveNext(out var objUid, out var killObj))
             {
@@ -103,13 +104,16 @@ namespace Content.Server.AU14.Objectives.Kill
                 }
                 else
                 {
+#if DEBUG
                     _sawmill.Debug($"[KILL TRACE]   Mob ({uid}) proto={protoId} factions=[{string.Join(",", factions)}]");
                     _sawmill.Debug($"[KILL TRACE]     Objective faction: {(string.IsNullOrEmpty(auObj.Faction) ? "null/empty" : auObj.Faction.ToLowerInvariant())}");
-
+#endif
                     var targetFaction = killObj.FactionToKill.ToLowerInvariant();
                     if (factions.Contains(targetFaction))
                     {
+#if DEBUG
                         _sawmill.Debug($"[KILL MATCH]   Mob ({uid}) MATCHES target faction '{targetFaction}' for objective {objUid}");
+#endif
                         var mark = EnsureComp<MarkedForKillComponent>(uid);
                         mark.AssociatedObjectives[objUid] = auObj.Faction.ToLowerInvariant();
                         // Cache job info if needed
@@ -127,7 +131,7 @@ namespace Content.Server.AU14.Objectives.Kill
                     }
                     else
                     {
-                        _sawmill.Debug($"[KILL MATCH]   Mob ({uid}) does NOT match target faction '{targetFaction}' for objective {objUid}");
+                        _sawmill.Warning($"[KILL MATCH]   Mob ({uid}) does NOT match target faction '{targetFaction}' for objective {objUid}");
                     }
                 }
             }
@@ -140,8 +144,9 @@ namespace Content.Server.AU14.Objectives.Kill
 
             var mindContainer = EntityManager.GetComponentOrNull<MindContainerComponent>(uid);
             var mind = mindContainer?.Mind;
+#if DEBUG
             _sawmill.Debug($"[KILL DEBUG] OnMobStateChanged: Entity ({uid}) has MindContainerComponent: {mindContainer != null}, Mind: {mind != null}");
-
+#endif
             var killedFactionComp = EntityManager.GetComponentOrNull<NpcFactionMemberComponent>(uid);
             var killedFactions = killedFactionComp?.Factions.Select(f => f.ToString().ToLowerInvariant()).ToHashSet() ?? new HashSet<string>();
             if (killedFactions.Count == 0)
@@ -249,8 +254,9 @@ namespace Content.Server.AU14.Objectives.Kill
                 }
 
                 killObj.AmountKilledPerFaction[factionKey]++;
+#if DEBUG
                 _sawmill.Debug($"[KILL UPDATE]   Faction '{factionToCredit}' killed entity ({uid}). Total kills: {killObj.AmountKilledPerFaction[factionKey]} / {killObj.AmountToKill}");
-
+#endif
                 // If CountArrest is true, remove MarkedForArrestComponent so this entity can't also count for arrest objectives
                 if (killObj.CountArrest)
                     RemComp<MarkedForArrestComponent>(uid);

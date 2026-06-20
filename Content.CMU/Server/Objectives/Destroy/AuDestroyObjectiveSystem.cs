@@ -267,8 +267,9 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
             var factionKey = factionToCredit.ToLowerInvariant();
 
             destroyComp.AmountDestroyed++;
+#if DEBUG
             _sawmill.Debug($"[DESTROY DEBUG] Objective ({objectiveUid}) counted destruction of proto '{protoId}' for faction '{factionKey}'. Total: {destroyComp.AmountDestroyed}/{destroyComp.AmountToDestroy}");
-
+#endif
             if (destroyComp.AmountDestroyed >= destroyComp.AmountToDestroy)
             {
                 _sawmill.Info($"[DESTROY DEBUG] Objective ({objectiveUid}) completed for faction '{factionKey}'!");
