@@ -24,12 +24,9 @@ public sealed partial class ReduceChemicalIrritant : RMCChemicalEffect
         FixedPoint2 potency,
         EntityEffectReagentArgs args)
     {
-        var irritantSystem =
-            args.EntityManager.System<SharedChemicalIrritantSystem>();
+        var irritantSystem = args.EntityManager.System<SharedChemicalIrritantSystem>();
+        float reduction = Amount * potency.Float();
 
-        irritantSystem.ReduceIrritant(
-            args.TargetEntity,
-            Amount
-        );
+        irritantSystem.ReduceIrritant(args.TargetEntity, reduction);
     }
 }
