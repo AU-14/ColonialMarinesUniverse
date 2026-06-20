@@ -1,5 +1,7 @@
 using Content.Shared._RMC14.CameraShake;
+using Content.Shared._RMC14.Fireman;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Construction;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Rest;
 using Content.Shared._RMC14.Xenonids.Weeds;
@@ -12,6 +14,7 @@ using Content.Shared.Popups;
 using Content.Shared.Standing;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Containers;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Timing;
 
@@ -24,16 +27,19 @@ public sealed class SpikeBootsSystem : EntitySystem
     [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
     [Dependency] private readonly RMCCameraShakeSystem _cameraShake = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly StandingStateSystem _standing = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
     private EntityQuery<XenoWeedsComponent> _weedsQuery;
+    private EntityQuery<XenoConstructComponent> _xenoConstructQuery;
     private EntityQuery<MobStateComponent> _mobStateQuery;
     private EntityQuery<XenoComponent> _xenoQuery;
     private EntityQuery<XenoRestingComponent> _xenoRestingQuery;
     private EntityQuery<XenoParasiteComponent> _parasiteQuery;
+    private EntityQuery<BeingFiremanCarriedComponent> _carriedQuery;
     private EntityQuery<MapGridComponent> _gridQuery;
 
     private readonly List<EntityUid> _expiredCooldowns = new();
@@ -58,10 +64,12 @@ public sealed class SpikeBootsSystem : EntitySystem
         base.Initialize();
 
         _weedsQuery = GetEntityQuery<XenoWeedsComponent>();
+        _xenoConstructQuery = GetEntityQuery<XenoConstructComponent>();
         _mobStateQuery = GetEntityQuery<MobStateComponent>();
         _xenoQuery = GetEntityQuery<XenoComponent>();
         _xenoRestingQuery = GetEntityQuery<XenoRestingComponent>();
         _parasiteQuery = GetEntityQuery<XenoParasiteComponent>();
+        _carriedQuery = GetEntityQuery<BeingFiremanCarriedComponent>();
         _gridQuery = GetEntityQuery<MapGridComponent>();
 
         SubscribeLocalEvent<SpikeBootsComponent, GotEquippedEvent>(OnEquipped);
@@ -99,6 +107,10 @@ public sealed class SpikeBootsSystem : EntitySystem
             if (xform.GridUid is not { } gridUid)
                 continue;
 
+            // Don't trigger while the wearer is down, being carried, or devoured.
+            if (_standing.IsDown(uid) || _carriedQuery.HasComp(uid) || _container.IsEntityInContainer(uid))
+                continue;
+
             if (!_gridQuery.TryGetComponent(gridUid, out var gridComp))
                 continue;
 
@@ -121,9 +133,13 @@ public sealed class SpikeBootsSystem : EntitySystem
                 if (target == uid)
                     continue;
 
-                // Destroy xeno resin and weed nodes.
+                // Destroy xeno weeds and weed nodes only — skip hive structures (cores, pylons,
+                // clusters) which also carry XenoWeedsComponent but have XenoConstructComponent.
                 if (_weedsQuery.HasComp(target))
                 {
+                    if (_xenoConstructQuery.HasComp(target))
+                        continue;
+
                     QueueDel(target);
 
                     if (!resinEffectsShown)
