@@ -1,0 +1,13 @@
+- type: entity
+  parent: RMCBeltBrowne
+  id: AU14BeltBrowneFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponTaser
+    - id: CMFlash
+    - id: CMStunbaton
+    - id: RMCHandcuffs
+    - id: RMCHandcuffs
+    - id: ForensicScanner

@@ -178,6 +178,7 @@
       - CMMagazineSmg
       - CMMagazineSniper
       - RMCShellShotgun
+      - RMCShellShotgunHDSG
       # TODO RMC14 m60 mag
   - type: FixedItemSizeStorage
 
@@ -273,12 +274,14 @@
     whitelist:
       tags:
       - RMCShellShotgun
+      - RMCShellShotgunHDSG
       - RMCCartridge458SOCOM
   - type: FixedItemSizeStorage
   - type: IgnoreContentsSize
     items:
       tags:
       - RMCShellShotgun
+      - RMCShellShotgunHDSG
   - type: Tag
     tags:
     - Pouch
@@ -313,11 +316,13 @@
     whitelist:
       tags:
       - RMCShellShotgun
+      - RMCShellShotgunHDSG
       - RMCCartridge458SOCOM
   - type: IgnoreContentsSize
     items:
       tags:
       - RMCShellShotgun
+      - RMCShellShotgunHDSG
   - type: ItemMapper
     mapLayers:
       half:

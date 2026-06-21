@@ -55,11 +55,12 @@
       preset: AU14SkillPresetPlatoonCommander
     - type: JobPrefix
       prefix: au14-job-prefix-govforplatco
+    - type: AU14SilenceOrderAbility
     - type: RMCSpeechBubbleSpecificStyle
       speechStyleClass: commanderSpeech
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_AU14/Interface/au14govforhud.rsi
+        sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi # au14govforjobicons.rsi
         state: govfor_platco
 
 - type: playTimeTracker

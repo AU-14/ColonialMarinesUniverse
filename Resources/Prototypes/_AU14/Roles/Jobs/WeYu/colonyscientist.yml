@@ -1,11 +1,11 @@
 - type: job
+  abstract: true
   parent: CMJobBase
   id: AU14JobCivilianScientistBase
   name: au14-job-name-civilianscientist
   description: au14-job-description-civilianscientist
   playTimeTracker: AU14JobCivilianScientist
   basePlaytimeTracker: true
-  hidden: true
 
 - type: job
   parent: AU14JobCivilianScientistBase
@@ -51,13 +51,12 @@
       prefix: au14-job-prefix-civilianscientist
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
+        sprite: _RMC14/Interface/cm_job_icons.rsi
+        state: weya_scientist
     - type: AssignSquad
       whitelist:
         tags:
         - SquadPMC
-  hidden: false
 
 - type: startingGear
   id: AU14GearCivilianScientist
@@ -68,6 +67,7 @@
     ears: AU14ColonyWeylandHeadset
     ears2: RMCM5CameraGear
     outerClothing: RMCLabcoatOpened
+    pocket1: AU14StampWYSci
 
 - type: entity
   parent: CMSpawnPointJobBase

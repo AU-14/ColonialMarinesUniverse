@@ -1,30 +1,30 @@
 - type: emote
-  id: WorkingJoeBeenLookingForYou
-  name: emote-name-workingjoe-beenlookingforyou
+  id: WorkingJoeAhYoureStillHere
+  name: emote-name-workingjoe-ah-youre-still-here
   category: Greeting
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
-    - emote-name-workingjoe-beenlookingforyou
+    - emote-name-workingjoe-ah-youre-still-here
   chatTriggers:
-    - been looking for you
+    - ah youre still here
   whitelist:
     tags:
       - WorkingJoe
 
 - type: emote
   id: WorkingJoeGoodDay
-  name: emote-name-workingjoe-goodday
+  name: emote-name-workingjoe-good-day
   category: Greeting
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
-    - emote-name-workingjoe-goodday
+    - emote-name-workingjoe-good-day
   chatTriggers:
     - good day
   whitelist:
     tags:
-    - WorkingJoe
+      - WorkingJoe
 
 - type: emote
   id: WorkingJoeHello
@@ -36,35 +36,76 @@
     - emote-name-workingjoe-hello
   chatTriggers:
     - hello
-    - hello.
   whitelist:
     tags:
-    - WorkingJoe
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeHowAreYou
+  name: emote-name-workingjoe-how-are-you
+  category: Greeting
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-how-are-you
+  chatTriggers:
+    - how are you
+  whitelist:
+    tags:
+      - WorkingJoe
 
 - type: emote
   id: WorkingJoeHowCanIHelpYou
-  name: emote-name-workingjoe-howcanihelpyou
+  name: emote-name-workingjoe-how-can-i-help-you
   category: Greeting
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
-    - emote-name-workingjoe-howcanihelpyou
+    - emote-name-workingjoe-how-can-i-help-you
   chatTriggers:
-    - how can i help
+    - how can i help you
   whitelist:
     tags:
-    - WorkingJoe
+      - WorkingJoe
 
 - type: emote
-  id: WorkingJoeLetMeHelp
-  name: emote-name-workingjoe-letmehelp
+  id: WorkingJoeIDontBelieveIveHadThePleasure
+  name: emote-name-workingjoe-i-dont-believe-ive-had-the-pleasure
   category: Greeting
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
-    - emote-name-workingjoe-letmehelp
+    - emote-name-workingjoe-i-dont-believe-ive-had-the-pleasure
   chatTriggers:
-    - let me help
+    - i dont believe ive had the pleasure
   whitelist:
     tags:
-    - WorkingJoe
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIWillBeWithYouShortly
+  name: emote-name-workingjoe-i-will-be-with-you-shortly
+  category: Greeting
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-i-will-be-with-you-shortly
+  chatTriggers:
+    - i will be with you shortly
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeWhatDoYouNeedToKnowToday
+  name: emote-name-workingjoe-what-do-you-need-to-know-today
+  category: Greeting
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-what-do-you-need-to-know-today
+  chatTriggers:
+    - what do you need to know today
+  whitelist:
+    tags:
+      - WorkingJoe

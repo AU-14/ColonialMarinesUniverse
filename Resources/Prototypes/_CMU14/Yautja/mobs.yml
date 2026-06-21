@@ -6,6 +6,7 @@
   suffix: Yautja, Event
   components:
   - type: Yautja
+  - type: YautjaHeatResistance
   - type: IgnoreXenoWeedsSlowdown
   - type: Skills
     skills:

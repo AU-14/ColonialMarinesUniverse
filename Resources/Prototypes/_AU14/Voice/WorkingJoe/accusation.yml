@@ -1,0 +1,69 @@
+- type: emote
+  id: WorkingJoeIHeardThat
+  name: emote-name-workingjoe-i-heard-that
+  category: Accusation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-i-heard-that
+  chatTriggers:
+    - i heard that
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIKnowThatWasYou
+  name: emote-name-workingjoe-i-know-that-was-you
+  category: Accusation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-i-know-that-was-you
+  chatTriggers:
+    - i know that was you
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeISawThat
+  name: emote-name-workingjoe-i-saw-that
+  category: Accusation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-i-saw-that
+  chatTriggers:
+    - i saw that
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIllAssumeThatDidntCombustAllOnItsOwn
+  name: emote-name-workingjoe-ill-assume-that-didnt-combust-all-on-its-own
+  category: Accusation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-ill-assume-that-didnt-combust-all-on-its-own
+  chatTriggers:
+    - ill assume that didnt combust all on its own
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeSomebodysMadeAMess
+  name: emote-name-workingjoe-somebodys-made-a-mess
+  category: Accusation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-somebodys-made-a-mess
+  chatTriggers:
+    - somebodys made a mess
+  whitelist:
+    tags:
+      - WorkingJoe

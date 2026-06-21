@@ -1,0 +1,125 @@
+- type: emote
+  id: WorkingJoeApolloWillRequireADetailedReport
+  name: emote-name-workingjoe-apollo-will-require-a-detailed-report
+  category: APOLLO
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-apollo-will-require-a-detailed-report
+  chatTriggers:
+    - apollo will require a detailed report
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeFacilityNowClearApolloInformed
+  name: emote-name-workingjoe-facility-now-clear-apollo-informed
+  category: APOLLO
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-facility-now-clear-apollo-informed
+  chatTriggers:
+    - facility now clear apollo informed
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIAmRequiredByApolloAbortingSearch
+  name: emote-name-workingjoe-i-am-required-by-apollo-aborting-search
+  category: APOLLO
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-i-am-required-by-apollo-aborting-search
+  chatTriggers:
+    - i am required by apollo aborting search
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIWillInformApolloOnYourBehalf
+  name: emote-name-workingjoe-i-will-inform-apollo-on-your-behalf
+  category: APOLLO
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-i-will-inform-apollo-on-your-behalf
+  chatTriggers:
+    - i will inform apollo on your behalf
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIllHaveToReportThis
+  name: emote-name-workingjoe-ill-have-to-report-this
+  category: APOLLO
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-ill-have-to-report-this
+  chatTriggers:
+    - ill have to report this
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeLoggingReportToApollo
+  name: emote-name-workingjoe-logging-report-to-apollo
+  category: APOLLO
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-logging-report-to-apollo
+  chatTriggers:
+    - logging report to apollo
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeServiceSupportTicketRemovedFromQueue
+  name: emote-name-workingjoe-service-support-ticket-removed-from-queue
+  category: APOLLO
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-service-support-ticket-removed-from-queue
+  chatTriggers:
+    - service support ticket removed from queue
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeYouUnderstandIllHaveToReportYouForThis
+  name: emote-name-workingjoe-you-understand-ill-have-to-report-you-for-this
+  category: APOLLO
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-you-understand-ill-have-to-report-you-for-this
+  chatTriggers:
+    - you understand ill have to report you for this
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeYourFailedSupportRequestHasBeenLoggedWithApollo
+  name: emote-name-workingjoe-your-failed-support-request-has-been-logged-with-apollo
+  category: APOLLO
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-your-failed-support-request-has-been-logged-with-apollo
+  chatTriggers:
+    - your failed support request has been logged with apollo
+  whitelist:
+    tags:
+      - WorkingJoe

@@ -234,6 +234,17 @@
       Snow: _RMC14/Objects/Clothing/Back/Backpacks/Marines/sniper_smock/snow-urban-desert.rsi
       Classic: _RMC14/Objects/Clothing/Back/Backpacks/Marines/sniper_smock/jungle-classic.rsi
       Urban: _RMC14/Objects/Clothing/Back/Backpacks/Marines/sniper_smock/snow-urban-desert.rsi
+  - type: Clothing
+    equipSound:
+      collection: storageRustle
+    unequipSound:
+      collection: RMCEquipArmor
+    quickEquip: false
+    slots:
+    - back
+    - belt
+  - type: Corrodible
+    isCorrodible: false
 
 - type: entity
   parent: CMSatchel

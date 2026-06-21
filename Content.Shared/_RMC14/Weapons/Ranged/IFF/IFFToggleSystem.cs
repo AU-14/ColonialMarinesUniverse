@@ -59,7 +59,7 @@ public sealed partial class IFFToggleSystem : EntitySystem
 
     public void OnGetActions(Entity<IFFToggleComponent> ent, ref GetItemActionsEvent args)
     {
-        if (!args.InHands)
+        if (!args.InHands || !ent.Comp.ShowToggleAction)
             return;
 
         args.AddAction(ref ent.Comp.Action, ent.Comp.ActionID);

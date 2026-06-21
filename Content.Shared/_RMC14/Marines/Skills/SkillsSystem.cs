@@ -551,7 +551,6 @@ public sealed partial class SkillsSystem : EntitySystem
         ent.Comp.Skills.Clear();
         Dirty(ent);
     }
-
     public void SetSkill(Entity<SkillsComponent?> ent, EntProtoId<SkillDefinitionComponent> skill, int to)
     {
         if (skill == default)
@@ -566,8 +565,16 @@ public sealed partial class SkillsSystem : EntitySystem
                      entProto.HasComponent<SkillDefinitionComponent>());
 
         ent.Comp ??= EnsureComp<SkillsComponent>(ent);
+
+        var old = ent.Comp.Skills.GetValueOrDefault(skill);
         ent.Comp.Skills[skill] = to;
         Dirty(ent);
+
+        if (old != to)
+        {
+            var ev = new SkillChangedEvent(ent.Owner, skill, to);
+            RaiseLocalEvent(ent.Owner, ref ev);
+        }
     }
 
     public void SetSkills(Entity<SkillsComponent?> ent, Dictionary<EntProtoId<SkillDefinitionComponent>, int> to)
@@ -576,7 +583,13 @@ public sealed partial class SkillsSystem : EntitySystem
 
         foreach (var (skill, level) in to)
         {
+            var old = ent.Comp.Skills.GetValueOrDefault(skill);
             ent.Comp.Skills[skill] = level;
+            if (old != level)
+            {
+                var ev = new SkillChangedEvent(ent.Owner, skill, level);
+                RaiseLocalEvent(ent.Owner, ref ev);
+            }
         }
 
         Dirty(ent);
@@ -589,7 +602,13 @@ public sealed partial class SkillsSystem : EntitySystem
         var span = CollectionsMarshal.AsSpan(to);
         foreach (ref var skill in span)
         {
+            var old = ent.Comp.Skills.GetValueOrDefault(skill.Type);
             ent.Comp.Skills[skill.Type] = skill.Level;
+            if (old != skill.Level)
+            {
+                var ev = new SkillChangedEvent(ent.Owner, skill.Type, skill.Level);
+                RaiseLocalEvent(ent.Owner, ref ev);
+            }
         }
 
         Dirty(ent);
@@ -601,7 +620,13 @@ public sealed partial class SkillsSystem : EntitySystem
 
         foreach (var skill in to)
         {
+            var old = ent.Comp.Skills.GetValueOrDefault(skill.Type);
             ent.Comp.Skills[skill.Type] = skill.Level;
+            if (old != skill.Level)
+            {
+                var ev = new SkillChangedEvent(ent.Owner, skill.Type, skill.Level);
+                RaiseLocalEvent(ent.Owner, ref ev);
+            }
         }
 
         Dirty(ent);

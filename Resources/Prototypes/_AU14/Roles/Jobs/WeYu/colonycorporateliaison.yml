@@ -1,11 +1,11 @@
 - type: job
+  abstract: true
   parent: CMJobBase
   id: AU14JobCivilianCorporateLiaisonBase
   name: au14-job-name-civiliancorporateliaison
   description: au14-job-description-civiliancorporateliaison
   playTimeTracker: AU14JobCivilianCorporateLiaison
   basePlaytimeTracker: true
-  hidden: true
 
 - type: job
   parent: AU14JobCivilianCorporateLiaisonBase
@@ -67,13 +67,12 @@
       prefix: au14-job-prefix-corporateliaison
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
+        sprite: _RMC14/Interface/cm_job_icons.rsi
+        state: hudsquad_liaison
     - type: AssignSquad
       whitelist:
         tags:
         - SquadPMC
-  hidden: false
 
 - type: startingGear
   id: AU14GearCivilianCorporateLiaison

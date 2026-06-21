@@ -166,8 +166,8 @@
         crate: RMCCrateM85A1
       - cost: 200
         crate: AU14CrateAssortedKnives
-      - cost: 1000
-        crate: AU14CrateFlamerSpec
+      - cost: 800
+        crate: RMCCrateM34
       - cost: 2200
         crate: AU14CrateHJRA12
       - cost: 1200
@@ -206,6 +206,44 @@
         crate: AU14CrateMagazineType88
       - cost: 250
         crate: AU14CrateMagazineType23Mixed
+      - cost: 200
+        crate: RMCCrateMagazineNapthalUT
+      - cost: 350
+        crate: RMCCrateMagazineFlamerMixed
+      - cost: 500
+        crate: RMCCrateMagazineBGel
+    - name: Specialist Ammo
+      entries:
+      # Sniper
+      - cost: 2000
+        crate: AU14CrateMagazineSpecSniperM96S
+      - cost: 2000
+        crate: AU14CrateMagazineSpecSniperM96SIncendiary
+      - cost: 2000
+        crate: AU14CrateMagazineSpecSniperM96SFlak
+      - cost: 1500
+        crate: AU14CrateMagazineSpecSniperM96SMixed
+      # AMR
+      - cost: 2000
+        crate: AU14CrateMagazineSpecAMRXM43E1
+      # SHARP (worst spec ever btw - kenyap)
+      - cost: 2000
+        crate: AU14CrateMagazineSpecSharpHE
+      - cost: 2000
+        crate: AU14CrateMagazineSpecSharpFLC
+      - cost: 2000
+        crate: AU14CrateMagazineSpecSharpINCEN
+      - cost: 1500
+        crate: AU14CrateMagazineSpecSharpMixed
+      # Scout
+      - cost: 2000
+        crate: AU14CrateMagazineSpecScoutStandard
+      - cost: 2000
+        crate: AU14CrateMagazineSpecScoutINCEN
+      - cost: 2000
+        crate: AU14CrateMagazineSpecScoutFLAK
+      - cost: 1500
+        crate: AU14CrateMagazineSpecScoutMixed
     - name: AP Ammo
       entries:
       - cost: 850
@@ -260,83 +298,5 @@
         crate: RMCDropshipAttachmentAmmoGAUAP
       - cost: 2000
         crate: RMCDropshipAttachmentAmmoLaserCannon
-    - name: Vehicle Hardpoints
-      entries:
-      - cost: 3800
-        crate: VehicleSPPTankHJ35TLauncher
-      - cost: 2800
-        crate: VehicleSPPTankP17702
-      - cost: 2600
-        crate: VehicleSPPAPCAutocannon
-      - cost: 600
-        crate: VehicleSPPAPCFlareLauncher
-      - cost: 1400
-        crate: VehicleSPPAPCMinigun
-      - cost: 3500
-        crate: VehicleSPPTankArtilleryModule
-      - cost: 750
-        crate: VehicleSPPTankFlareModule
-      - cost: 1500
-        crate: VehicleSPPTankOverdriveEnhancer
-      - cost: 5000
-        crate: VehicleSPPTankRailgun
-      - cost: 3000
-        crate: VehicleSPPTankRocketLauncher
-      - cost: 1200
-        crate: VehicleSPPTankWarningArray
-      - cost: 800
-        crate: VehicleSPPTankCupola
-      - cost: 2200
-        crate: VehicleSPPTankReactiveArmor
-      - cost: 300
-        crate: VehicleSPPAPCWheel
-      - cost: 250
-        crate: VehicleSPPVanWheel
-    - name: Vehicle Ammo Crates
-      entries:
-      - cost: 1500
-        crate: RMCCrateVehicleAmmoLTAAAP
-      - cost: 1500
-        crate: RMCCrateVehicleAmmoLTBCannon
-      - cost: 1500
-        crate: RMCCrateVehicleAmmoLZRNFlamer
-      - cost: 1500
-        crate: RMCCrateVehicleAmmoFlareLauncher       
-      - cost: 1500
-        crate: RMCCrateVehicleAmmoSmokeLauncher
-      - cost: 1500
-        crate: RMCCrateVehicleAmmoCupola
-      - cost: 1500
-        crate: RMCCrateVehicleAmmoGrenadeLauncher
-      - cost: 1500
-        crate: RMCCrateVehicleAmmoBoyarsDualCannon
-      - cost: 1500
-        crate: RMCCrateVehicleAmmoFrontalCannon
-      - cost: 1500
-        crate: RMCCrateVehicleAmmoRotaryCannon
-      - cost: 1500
-        crate: RMCCrateVehicleAmmoTowLauncher
-    - name: Blackfoot Hardpoints
-      entries:
-      - cost: 1500
-        crate: VehicleBlackfootThrusters
-      - cost: 1000
-        crate: VehicleBlackfootLaunchers
-      - cost: 4500
-        crate: VehicleBlackfootDoorGun
-      - cost: 2500
-        crate: VehicleBlackfootReconSystem
-      - cost: 2500
-        crate: VehicleBlackfootSensorArray
-    - name: Blackfoot Utilites & Ammo
-      entries:
-      - cost: 3500
-        crate: CMUBlackfootAerospaceTug
-      - cost: 5000
-        crate: AU14CrateBlackfootLandingPad
-      - cost: 4500
-        crate: AU14CrateBlackfootflareAmmo
-      - cost: 2500
-        crate: AU14CrateBlackfootdoorgunAmmo
       - cost: 600
         crate: RMCDropshipAttachmentAmmoLaunchableSentry

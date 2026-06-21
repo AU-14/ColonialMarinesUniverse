@@ -387,7 +387,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatCaves
+  parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatOCSecPostSouth
   name: Octanis Complex - Southern Gate House
   components:

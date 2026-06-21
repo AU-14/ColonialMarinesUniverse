@@ -61,9 +61,8 @@
       prefix: au14-job-prefix-civiliannspaConstable
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-  hidden: false
+        sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+        state: tse_paconstable
 
 - type: startingGear
   id: AU14GearCiviliannspaConstable

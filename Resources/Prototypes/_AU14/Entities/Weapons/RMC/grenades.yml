@@ -44,7 +44,7 @@
   - type: Sprite
     sprite: _AU14/Weapons/Grenades/RMC/HSDP.rsi
   - type: SpawnOnTrigger
-    proto: RMCSmokeNeurotoxin 
+    proto: AU14GrenadeNeuroGas
   - type: OnUseTimerTrigger
     delay: 3.5
   - type: Tag

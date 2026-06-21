@@ -349,3 +349,23 @@
         amount: 1
       - id: RMCMagazineRifleABR40
         amount: 9
+
+- type: entity
+  parent: RMCGunCaseBase
+  id: AU14GunCaseRifleMar30
+  name: MAR-30 carbine case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,5,1
+  - type: StorageFill
+    contents:
+      - id: RMCWeaponRifleMAR30
+        amount: 1
+      - id: RMCMagazineRifleMAR40Ext
+        amount: 1
+      - id: RMCMagazineRifleMAR40
+        amount: 3

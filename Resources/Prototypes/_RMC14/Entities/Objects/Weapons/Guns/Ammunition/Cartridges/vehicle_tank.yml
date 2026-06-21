@@ -77,12 +77,12 @@
     maxShrapnel: 100
     shrapnelSpeed: 8
   - type: RMCScorchEffect
-    radius: 3
+    radius: 4
     centerRadius: 1
   - type: Explosive
     explosionType: RMCLTBCannon
-    maxIntensity: 11
-    intensitySlope: 4
+    maxIntensity: 8
+    intensitySlope: 2
     totalIntensity: 150
     tileBreakScale: 0
     maxTileBreak: 0

@@ -39,7 +39,7 @@
     makeSentient: true
     allowSpeech: true
     allowMovement: true
-    name: PMC Combat Engineer
+    name: au14-job-name-wypmc-engineer
     description: au14-prodigyparty-description
     reregister: false
     job: AU14JobPARTSPartyEngineer
