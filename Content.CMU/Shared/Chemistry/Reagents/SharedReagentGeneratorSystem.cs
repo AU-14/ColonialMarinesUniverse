@@ -29,6 +29,10 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
     [Dependency] private ILogManager _logMan = default!;
     [Dependency] private INetManager _netMan = default!;
     private ISawmill _sawmill = default!;
+    [ViewVariables(VVAccess.ReadOnly)]
+    protected HashSet<string> _generatedReagents = [];
+    [ViewVariables(VVAccess.ReadOnly)]
+    protected HashSet<string> _generatedRecipes = [];
     public override void Initialize()
     {
         base.Initialize();
@@ -79,9 +83,9 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         reagent.Add("metabolisms", metabolisms);
         if (_protoMan.TryLoadDynamic(reagent))
         {
-            //_generatedReagents.Add(_protoMan.GetInstances<ReagentPrototype>()[args.ID]);
+            _generatedReagents.Add(args.ID);
             CreateRecipe(args);
-            //_generatedRecipes.Add(_protoMan.GetInstances<ReactionPrototype>()[args.ID]);
+            _generatedRecipes.Add(args.ID);
         }
     }
     protected void CreateRecipe(GeneratedReagentData args)

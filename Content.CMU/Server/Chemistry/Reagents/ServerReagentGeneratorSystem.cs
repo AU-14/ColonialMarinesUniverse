@@ -33,11 +33,11 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
     private static readonly ProtoId<DatasetPrototype> _nameSuffixes = "CMURandChemSuffix";
     private static readonly ProtoId<DatasetPrototype> _conflicts = "CMUConflictingProperties";
     private static readonly ProtoId<DatasetPrototype> _combinations = "CMUCombiningProperties";
-    [ViewVariables(VVAccess.ReadOnly)]
-    private HashSet<string> _generatedReagents = [];
+    //[ViewVariables(VVAccess.ReadOnly)]
+    //private HashSet<string> _generatedReagents = [];
     private Dictionary<string, GeneratedReagentData> _generatedReagentData = [];
-    [ViewVariables(VVAccess.ReadOnly)]
-    private HashSet<string> _generatedRecipes = [];
+    //[ViewVariables(VVAccess.ReadOnly)]
+    //private HashSet<string> _generatedRecipes = [];
     private ISawmill _sawmill = default!;
     private HashSet<ReagentPropertyPrototype> _knownProperties = [];
     private HashSet<ReagentPropertyPrototype> _generatedProperties = [];

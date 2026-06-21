@@ -15,11 +15,12 @@ public sealed partial class ClientReagentGeneratorSystem : SharedReagentGenerato
 {
     [Dependency] private IPrototypeManager _protoMan = default!;
     [Dependency] private ILogManager _logMan = default!;
-
+    /*
     [ViewVariables(VVAccess.ReadOnly)]
     private HashSet<string> _generatedReagents = [];
     [ViewVariables(VVAccess.ReadOnly)]
     private HashSet<string> _generatedRecipes = [];
+    /**/
     private ISawmill _sawmill = default!;
     public override void Initialize()
     {

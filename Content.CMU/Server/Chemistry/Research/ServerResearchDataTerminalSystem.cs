@@ -4,6 +4,7 @@ using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
 using Content.Shared._AU14.Chemistry.Reagents;
 using Content.Shared._AU14.Chemistry.Research;
+using Content.Shared.GameTicking;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using System;
@@ -45,6 +46,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         base.Initialize();
         SubscribeLocalEvent<UpdateResearchConsoleEvent>(OnTerminalUpdate);
         SubscribeLocalEvent<PostGameMapLoad>(OnLoadingMaps);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnCleanup);
     }
 
     private void OnTerminalUpdate(UpdateResearchConsoleEvent args)
@@ -55,6 +57,12 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             _chat.TrySendInGameICMessage(uid, Loc.GetString("research-chem-terminal-update"),
             InGameICChatType.Speak, false, ignoreActionBlocker: true);
         }
+    }
+
+    private void OnCleanup(RoundRestartCleanupEvent args)
+    {
+        ready = false;
+        NextReroll = TimeSpan.Zero;
     }
 
     public void OnLoadingMaps(PostGameMapLoad args)
