@@ -121,7 +121,17 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
 
     public void LegalizeChem(GeneratedReagentData chem)
     {
-
+        _chemicalGenClassesList["TAU"].Add(chem.ID);
+        foreach(var ef in chem.Effects)
+        {
+            CheckGeneratedProperties(ef.Key);
+        }
+        HashSet<string> str = [chem.RecipeHint];
+        GenerateRecipe(ref chem, str);
+        var ev = new GenerateReagentEvent(chem);
+        RaiseLocalEvent(ev);
+        RaiseNetworkEvent(ev);
+        _generatedReagentData.Add(chem.ID, chem);
     }
 
 
@@ -364,7 +374,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         byte green = Convert.ToByte(igreen);
         int iblue = _random.Next(0, 256);
         byte blue = Convert.ToByte(iblue);
-        Color col = Color.FromHex("#" + red.ToString("x") + green.ToString("x") + blue.ToString("x"));
+        Color col = Color.FromHex("#" + red.ToString("x2") + green.ToString("x2") + blue.ToString("x2"));
         data.Color = col;
 
         //TODO: description
