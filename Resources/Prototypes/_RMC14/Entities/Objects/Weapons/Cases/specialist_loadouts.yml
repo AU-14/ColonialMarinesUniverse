@@ -12,9 +12,9 @@
     contents:
     - id: RMCVisorNightVision
     - id: CMMagazineSniperM96S
-      amount: 10
+      amount: 8
     - id: CMMagazineSniperM96SIncendiary
-      amount: 2
+      amount: 4
     - id: CMMagazineSniperM96SFlak
       amount: 4
     - id: CMBackpackSniper
@@ -112,11 +112,11 @@
     - id: RMCWeaponRifleSharp
     - id: RMCBeltSharp
     - id: RMCMagazineRifleSharpExplosive
-      amount: 8
+      amount: 7
     - id: RMCMagazineRifleSharpFlechette
       amount: 5
     - id: RMCMagazineRifleSharpIncendiary
-      amount: 4
+      amount: 5
     - id: RMCHandsM3G4
     - id: RMCLaserDesignatorPVE
     - id: RMCPamphletSharp
@@ -187,18 +187,21 @@
     contents:
     - id: RMCGlassesM4SPRBattleSight
     - id: RMCMagazineRifleM4SPRA19
-      amount: 8
+      amount: 6
     - id: RMCMagazineRifleM4SPRA19Incendiary
-      amount: 2
+      amount: 4
     - id: RMCMagazineRifleM4SPRA19Impact
       amount: 4
     - id: RMCBackpackScout
+    - id: CMBackpackSniper
     - id: WeaponRifleM4SPRCustom
     - id: RMCThermalTarpFolded
+      amount: 2
     - id: RMCExplosivePlastic
       amount: 2
     - id: RMCLaserDesignatorScout
     - id: RMCScoutShoes
+    - id: AU14ScoutWebbing
   - type: CMChangeUserOnVend
     addComponents:
     - type: ScoutWhitelist
@@ -222,18 +225,23 @@
   - type: StorageFill
     contents:
     - id: RMCGlassesM4SPRBattleSight
-    - id: RMCMagazineRifleM4SPRA19
-      amount: 12
+    - id: RMCMagazineRifleM5SPRHVP
+      amount: 8
+    - id: RMCMagazineRifleM5SPRHVHIP
+      amount: 4
     - id: RMCAttachmentExtendedBarrel
     - id: RMCAttachmentFlashlightGrip
     - id: RMCAttachmentS5RedDotSight
     - id: RMCBackpackScout
+    - id: CMBackpackSniper
     - id: WeaponRifleM5SPR2
     - id: RMCThermalTarpFolded
+      amount: 2
     - id: RMCExplosivePlastic
       amount: 2
     - id: RMCLaserDesignatorScout
     - id: RMCScoutShoes
+    - id: AU14ScoutWebbing
   - type: CMChangeUserOnVend
     addComponents:
     - type: ScoutWhitelist
@@ -262,12 +270,15 @@
     - id: CMMagazineSniperM96SFlak
       amount: 2
     - id: RMCBackpackScout
+    - id: CMBackpackSniper
     - id: RMCThermalTarpFolded
+      amount: 2
     - id: RMCExplosivePlastic
       amount: 2
     - id: RMCLaserDesignatorScout
     - id: RMCGlassesM4SPRBattleSight
     - id: RMCScoutShoes
+    - id: AU14ScoutWebbing
   - type: CMChangeUserOnVend
     addComponents:
     - type: ScoutWhitelist

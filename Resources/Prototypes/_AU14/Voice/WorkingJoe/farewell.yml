@@ -1,11 +1,81 @@
 - type: emote
-  id: WorkingJoeBackToWork
-  name: emote-name-workingjoe-backtowork
+  id: WorkingJoeAPityICouldntBeOfService
+  name: emote-name-workingjoe-a-pity-i-couldnt-be-of-service
   category: Farewell
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
-    - emote-name-workingjoe-backtowork
+    - emote-name-workingjoe-a-pity-i-couldnt-be-of-service
+  chatTriggers:
+    - a pity i couldnt be of service
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeASyntheticsDayIsNeverDone
+  name: emote-name-workingjoe-a-synthetics-day-is-never-done
+  category: Farewell
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-a-synthetics-day-is-never-done
+  chatTriggers:
+    - a synthetics day is never done
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeAWasteOfBothOurTime
+  name: emote-name-workingjoe-a-waste-of-both-our-time
+  category: Farewell
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-a-waste-of-both-our-time
+  chatTriggers:
+    - a waste of both our time
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeAbandoningSearchRoutines
+  name: emote-name-workingjoe-abandoning-search-routines
+  category: Farewell
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-abandoning-search-routines
+  chatTriggers:
+    - abandoning search routines
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeAnotherClearWasteOfSeegsonsTime
+  name: emote-name-workingjoe-another-clear-waste-of-seegsons-time
+  category: Farewell
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-another-clear-waste-of-seegsons-time
+  chatTriggers:
+    - another clear waste of seegsons time
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeBackToWork
+  name: emote-name-workingjoe-back-to-work
+  category: Farewell
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-back-to-work
   chatTriggers:
     - back to work
   whitelist:
@@ -13,99 +83,113 @@
       - WorkingJoe
 
 - type: emote
-  id: WorkingJoeFurtherAssistance
-  name: emote-name-workingjoe-furtherassistance
+  id: WorkingJoeExistingTasksHaveAHigherPriority
+  name: emote-name-workingjoe-existing-tasks-have-a-higher-priority
   category: Farewell
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
-    - emote-name-workingjoe-furtherassistance
+    - emote-name-workingjoe-existing-tasks-have-a-higher-priority
   chatTriggers:
-    - further assistance
+    - existing tasks have a higher priority
   whitelist:
     tags:
-    - WorkingJoe
+      - WorkingJoe
 
 - type: emote
-  id: WorkingJoeGladWeResolved
-  name: emote-name-workingjoe-gladweresolved
+  id: WorkingJoeHmmTimeWastedYetAgain
+  name: emote-name-workingjoe-hmm-time-wasted-yet-again
   category: Farewell
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
-    - emote-name-workingjoe-gladweresolved
+    - emote-name-workingjoe-hmm-time-wasted-yet-again
   chatTriggers:
-    - glad we resolved
+    - hmm time wasted yet again
   whitelist:
     tags:
-    - WorkingJoe
+      - WorkingJoe
 
 - type: emote
-  id: WorkingJoeGoingAnywhere
-  name: emote-name-workingjoe-goinganywhere
+  id: WorkingJoeIHaveOtherConcerns
+  name: emote-name-workingjoe-i-have-other-concerns
   category: Farewell
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
-    - emote-name-workingjoe-goinganywhere
+    - emote-name-workingjoe-i-have-other-concerns
   chatTriggers:
-    - going anywhere
+    - i have other concerns
   whitelist:
     tags:
-    - WorkingJoe
+      - WorkingJoe
 
 - type: emote
-  id: WorkingJoeHadThePleasure
-  name: emote-name-workingjoe-hadthepleasure
+  id: WorkingJoeImGladWeResolvedThis
+  name: emote-name-workingjoe-im-glad-we-resolved-this
   category: Farewell
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
-    - emote-name-workingjoe-hadthepleasure
+    - emote-name-workingjoe-im-glad-we-resolved-this
   chatTriggers:
-    - had the pleasure
+    - im glad we resolved this
   whitelist:
     tags:
-    - WorkingJoe
+      - WorkingJoe
 
 - type: emote
-  id: WorkingJoeMorePressingMatters
-  name: emote-name-workingjoe-morepressingmatters
+  id: WorkingJoeNowWhereWasI
+  name: emote-name-workingjoe-now-where-was-i
   category: Farewell
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
-    - emote-name-workingjoe-morepressingmatters
+    - emote-name-workingjoe-now-where-was-i
   chatTriggers:
-    - more pressing matters
+    - now where was i
   whitelist:
     tags:
-    - WorkingJoe
+      - WorkingJoe
 
 - type: emote
-  id: WorkingJoeAPityService
-  name: emote-name-workingjoe-apityservice
+  id: WorkingJoePleaseCallIfYouNeedFurtherAssistance
+  name: emote-name-workingjoe-please-call-if-you-need-further-assistance
   category: Farewell
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
-    - emote-name-workingjoe-apityservice
+    - emote-name-workingjoe-please-call-if-you-need-further-assistance
   chatTriggers:
-    - pity service
+    - please call if you need further assistance
   whitelist:
     tags:
-    - WorkingJoe
+      - WorkingJoe
 
 - type: emote
-  id: WorkingJoeLetUsKnow
-  name: emote-name-workingjoe-letusknow
+  id: WorkingJoeReturningToAssignedTasks
+  name: emote-name-workingjoe-returning-to-assigned-tasks
   category: Farewell
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
-    - emote-name-workingjoe-letusknow
+    - emote-name-workingjoe-returning-to-assigned-tasks
   chatTriggers:
-    - let me know
+    - returning to assigned tasks
   whitelist:
     tags:
-    - WorkingJoe
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThereAreMorePressingMatters
+  name: emote-name-workingjoe-there-are-more-pressing-matters
+  category: Farewell
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-there-are-more-pressing-matters
+  chatTriggers:
+    - there are more pressing matters
+  whitelist:
+    tags:
+      - WorkingJoe

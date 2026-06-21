@@ -1,7 +1,7 @@
 - type: job
   parent: AU14JobMilitaryPoliceBase
   id: AU14JobOPFORMilitaryPolice
-  icon: "AU14JobIconOPFORRFN"
+  icon: "AU14JobIconOPFORMP"
   spawnMenuRoleName: Military Policeman (OPFOR)
   supervisors: au14-job-supervisors-opforplatco
   startingGear: AU14GearOPFORMilitaryPoliceMan
@@ -22,7 +22,7 @@
       - OPFOR
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_AU14/Interface/au14opforhud.rsi
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
         state: mp
 
 - type: startingGear

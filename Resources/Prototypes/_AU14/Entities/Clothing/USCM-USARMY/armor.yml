@@ -326,6 +326,25 @@
       - CMSurgicalCase
 
 - type: entity
+  parent: AU14ExternalWebbing
+  id: AU14ScoutWebbing
+  name: Light scout webbing
+  description: Designed to be worn over a jumpsuit rather than clipped on, special cut and fitted for scout operations with increased storage and some armor.
+  components:
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,5,1 # 4 slots
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: Corrodible
+    isCorrodible: false
+  - type: CMArmor
+    bullet: 15
+    bio: 15
+    explosionArmor: 15
+
+- type: entity
   parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
   id: AU14USASFICPS2
   name: USASF ICPS-2 Aircrew Armor

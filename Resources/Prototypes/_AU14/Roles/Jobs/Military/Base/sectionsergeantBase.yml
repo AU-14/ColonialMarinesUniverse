@@ -4,7 +4,7 @@
   id: AU14JobSectionSergeantBaseAbstract
   name: au14-job-name-govforSSG
   description: au14-job-description-govforSSG
-  icon: "AU14JobIconPlatoonSarge"
+  icon: "AU14JobIconPlatoonSgt"
   spawnMenuRoleName: Platoon Sergeant (GOVFOR)
   startingGear: AU14GearGOVFORSectionSergeant
   dummyStartingGear: AU14GearGOVFORPlatoonSergeantDummy
@@ -53,8 +53,8 @@
       prefix: au14-job-prefix-govforSSG
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_AU14/Interface/au14govforhud.rsi
-        state: govfor_platoonsergeant
+        sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+        state: old_govfor_platoonsergeant
 
 - type: playTimeTracker
   id: AU14JobGOVFORSectionSergeant

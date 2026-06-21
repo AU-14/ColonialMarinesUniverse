@@ -31,9 +31,8 @@
       prefix: au14-job-prefix-journalist
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-  hidden: false
+        sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+        state: journalist
 
 - type: startingGear
   id: AU14GearCivilianJournalist

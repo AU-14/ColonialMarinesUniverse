@@ -1,7 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14JobWYPMCPartyEngineer #m41a/2
-  name: PMC Combat Engineer
+  name: au14-job-name-wypmc-engineer
   description: au14-pmcparty-description
   playTimeTracker: AU14JobWYPMCPartyEngineer
   ranks:
@@ -44,7 +44,7 @@
     makeSentient: true
     allowSpeech: true
     allowMovement: true
-    name: PMC Combat Engineer
+    name: au14-job-name-wypmc-engineer
     description: au14-pmcparty-description
     reregister: false
     job: AU14JobWYPMCPartyEngineer

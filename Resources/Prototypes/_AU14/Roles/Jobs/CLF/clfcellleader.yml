@@ -58,12 +58,11 @@
       mindRole: MindRoleCLFLeader
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
+        sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+        state: colonist
     - type: ShowMarineIcons
       factions:
       - CLF
-  hidden: false
 
 - type: startingGear
   id: AU14GearCLFCellLeader
@@ -71,9 +70,9 @@
     outerClothing: AU14ExternalWebbing
     gloves: RMCHandsVeteranSPP
     shoes: RMCScoutShoes
-    neck: RMCCLFArmband
+    neck: RMCCLFCellLeaderArmband
     head: AU14CivBallCapBlack
-    id: AU14IDCardCLFCellLeader
+    id: AU14IDCardCLFCivilian
     eyes: RMCGlassesAviators
     pocket1: AU14StampCLFCell
   inhand:

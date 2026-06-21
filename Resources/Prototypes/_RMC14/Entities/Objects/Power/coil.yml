@@ -41,19 +41,16 @@
     tags:
     - CableCoil
   - type: RMCCableCoil
-  - type: PhysicalComposition
-    materialComposition:
-      CMSteel: 50
-      CMGlass: 20
+  # CMU14 start - RMC cable coils are the ghetto surgery cable fallback.
   - type: CMSurgeryTool
   - type: CMHemostat
   - type: CMUOrganClamp
   - type: CMCautery
-  - type: CMUImprovisedSurgeryTool
-    delayMultiplier: 2.2
-    mishapChance: 0.14
-    mishapDamageType: Blunt
-    mishapDamageAmount: 3
+  # CMU14 end
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 50
+      CMGlass: 20
 
 - type: entity
   parent: RMCCableCoil

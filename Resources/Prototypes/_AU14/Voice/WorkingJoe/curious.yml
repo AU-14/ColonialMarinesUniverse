@@ -1,0 +1,125 @@
+- type: emote
+  id: WorkingJoeNowWheresThatComeFrom
+  name: emote-name-workingjoe-now-wheres-that-come-from
+  category: Curious
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-now-wheres-that-come-from
+  chatTriggers:
+    - now wheres that come from
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeReally
+  name: emote-name-workingjoe-really
+  category: Curious
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-really
+  chatTriggers:
+    - really
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeWhatHaveWeHere
+  name: emote-name-workingjoe-what-have-we-here
+  category: Curious
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-what-have-we-here
+  chatTriggers:
+    - what have we here
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeWhatIsThis
+  name: emote-name-workingjoe-what-is-this
+  category: Curious
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-what-is-this
+  chatTriggers:
+    - what is this
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeWhatWasThat
+  name: emote-name-workingjoe-what-was-that
+  category: Curious
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-what-was-that
+  chatTriggers:
+    - what was that
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeWhatWasThatSound
+  name: emote-name-workingjoe-what-was-that-sound
+  category: Curious
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-what-was-that-sound
+  chatTriggers:
+    - what was that sound
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeWhatsGoingOnHere
+  name: emote-name-workingjoe-whats-going-on-here
+  category: Curious
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-whats-going-on-here
+  chatTriggers:
+    - whats going on here
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeWhatsThis
+  name: emote-name-workingjoe-whats-this
+  category: Curious
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-whats-this
+  chatTriggers:
+    - whats this
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeWhereDidThatComeFrom
+  name: emote-name-workingjoe-where-did-that-come-from
+  category: Curious
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-where-did-that-come-from
+  chatTriggers:
+    - where did that come from
+  whitelist:
+    tags:
+      - WorkingJoe

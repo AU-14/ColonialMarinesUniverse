@@ -35,9 +35,8 @@
       prefix: au14-job-prefix-civilianwastemanagementspecialist
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-  hidden: false
+        sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+        state: wms
 
 - type: startingGear
   id: AU14GearCivilianWasteManagementSpecialist

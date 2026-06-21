@@ -1,0 +1,83 @@
+- type: emote
+  id: WorkingJoeAreYouAwareOfTheCurrentHazardContainmentBreach
+  name: emote-name-workingjoe-are-you-aware-of-the-current-hazard-containment-breach
+  category: Concern
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-are-you-aware-of-the-current-hazard-containment-breach
+  chatTriggers:
+    - are you aware of the current hazard containment breach
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeAreYouLost
+  name: emote-name-workingjoe-are-you-lost
+  category: Concern
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-are-you-lost
+  chatTriggers:
+    - are you lost
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIsThereAProblem
+  name: emote-name-workingjoe-is-there-a-problem
+  category: Concern
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-is-there-a-problem
+  chatTriggers:
+    - is there a problem
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIsThereSomeoneThereThatNeedsAssistance
+  name: emote-name-workingjoe-is-there-someone-there-that-needs-assistance
+  category: Concern
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-is-there-someone-there-that-needs-assistance
+  chatTriggers:
+    - is there someone there that needs assistance
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeNowWhereDidYouGo
+  name: emote-name-workingjoe-now-where-did-you-go
+  category: Concern
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-now-where-did-you-go
+  chatTriggers:
+    - now where did you go
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeWhatHappenedToYou
+  name: emote-name-workingjoe-what-happened-to-you
+  category: Concern
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-what-happened-to-you
+  chatTriggers:
+    - what happened to you
+  whitelist:
+    tags:
+      - WorkingJoe

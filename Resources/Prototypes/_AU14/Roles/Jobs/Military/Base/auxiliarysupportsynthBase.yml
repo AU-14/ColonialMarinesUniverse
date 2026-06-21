@@ -70,8 +70,8 @@
       prefix: au14-job-prefix-govforauxsupportsynth
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_AU14/Interface/au14govforhud.rsi
-        state: govfor_syn
+        sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+        state: govfor_synth
     - type: MeleeWeapon
       soundHit:
         path: /Audio/_RMC14/Weapons/synthpunch1.ogg

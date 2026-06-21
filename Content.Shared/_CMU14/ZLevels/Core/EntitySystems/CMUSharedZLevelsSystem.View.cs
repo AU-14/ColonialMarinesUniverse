@@ -95,13 +95,19 @@ public abstract partial class CMUSharedZLevelsSystem
         if (currentMapUid is null)
             return false;
 
-        if (!TryMapUp(currentMapUid.Value, out var mapAboveUid))
+        return HasOpaqueAbove(currentMapUid.Value, _transform.GetWorldPosition(ent));
+    }
+
+    public bool HasOpaqueAbove(Entity<CMUZLevelMapComponent?> currentMapUid, Vector2 worldPosition)
+    {
+        if (!TryMapUp(currentMapUid, out var mapAboveUid))
             return false;
 
-        if (!_gridQuery.TryComp(mapAboveUid.Value, out var mapAboveGrid))
+        if (!TryGetMapCoordinates(mapAboveUid.Value, worldPosition, out var aboveMapCoordinates) ||
+            !_mapManager.TryFindGridAt(aboveMapCoordinates, out var gridUid, out var mapAboveGrid))
             return false;
 
-        return !CMUZLevelOpeningCache.IsOpeningTile(mapAboveUid.Value, mapAboveGrid, _transform.GetWorldPosition(ent), _map, TilDefMan);
+        return !CMUZLevelOpeningCache.IsOpeningTile(gridUid, mapAboveGrid, worldPosition, _map, TilDefMan);
     }
 
     public bool HasZLevelEye(CMUZLevelViewerComponent viewer, EntityUid targetMap)

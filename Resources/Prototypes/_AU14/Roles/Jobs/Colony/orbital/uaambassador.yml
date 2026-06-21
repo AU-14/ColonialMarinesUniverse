@@ -39,15 +39,14 @@
       prefix: au14-job-prefix-civilianambassadorua
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
+        sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+        state: ua_ambassador
     - type: NpcFactionMember
       factions:
       - AUUnitedAmericas
     # - CMUVAI
     - type: Marine
     # Faction: ""
-  hidden: false
 
 - type: startingGear
   id: AU14GearCivilianAmbassadorUA

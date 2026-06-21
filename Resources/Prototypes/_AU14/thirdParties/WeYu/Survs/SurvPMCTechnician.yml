@@ -1,7 +1,7 @@
 - type: job
   parent: AU14JobLEOBase
   id: AU14JobWYSurvEngineer
-  name: PMC Combat Engineer
+  name: au14-job-name-wypmc-engineer
   description: au14-wysurv-description
   ranks:
     AU14RankWeYuOperator: []
@@ -43,7 +43,7 @@
     makeSentient: true
     allowSpeech: true
     allowMovement: true
-    name: PMC Combat Engineer
+    name: au14-job-name-wypmc-engineer
     description: au14-wysurv-description
     reregister: false
     job: AU14JobWYSurvEngineer

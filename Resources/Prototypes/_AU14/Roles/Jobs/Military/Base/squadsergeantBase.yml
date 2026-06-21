@@ -4,7 +4,7 @@
   id: AU14JobSquadSergeantBaseAbstract # Squad Leader Abstraction
   name: au14-job-name-govforsquadsergeant
   description: au14-job-description-govforsquadsergeant
-  icon: "AU14JobIconSarge"
+  icon: "AU14JobIconSquadSgt"
   spawnMenuRoleName: Squad Sergeant (GOVFOR)
   startingGear: AU14GearGOVFORSquadSergeant
   dummyStartingGear: AU14GearGOVFORSquadSergeantDummy
@@ -51,7 +51,7 @@
       prefix: au14-job-prefix-govforsquadsergeant
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_AU14/Interface/au14govforhud.rsi
+        sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
         state: govfor_sergeant
 
 - type: playTimeTracker

@@ -43,13 +43,12 @@
       prefix: au14-job-prefix-civiliancorporateassistant
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
+        sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+        state: corporate_assistant
     - type: AssignSquad
       whitelist:
         tags:
         - SquadPMC
-  hidden: false
 
 - type: startingGear
   id: AU14GearCivilianCorporateAssistant

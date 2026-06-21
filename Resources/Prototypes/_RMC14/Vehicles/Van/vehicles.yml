@@ -658,7 +658,8 @@
     - map: [ rmc-wheels ]
       state: wheels_1
   - type: VehicleEnter
-    interiorPath: /Maps/_CMU14/Vehicleinteriors/paddywagon.yml
+    # interiorPath: /Maps/_CMU14/Vehicleinteriors/paddywagon.yml
+    interiorPath: /Maps/_RMC14/Vehicles/box_van_interior.yml # TODO: fix the broken interior PR-895
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 8

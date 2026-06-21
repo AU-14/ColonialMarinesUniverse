@@ -1,0 +1,237 @@
+- type: emote
+  id: WorkingJoeADisturbance
+  name: emote-name-workingjoe-a-disturbance
+  category: Observation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-a-disturbance
+  chatTriggers:
+    - a disturbance
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeAnUnauthorizedUseOfLightingEquipment
+  name: emote-name-workingjoe-an-unauthorized-use-of-lighting-equipment
+  category: Observation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-an-unauthorized-use-of-lighting-equipment
+  chatTriggers:
+    - an unauthorized use of lighting equipment
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeAnotherProblem
+  name: emote-name-workingjoe-another-problem
+  category: Observation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-another-problem
+  chatTriggers:
+    - another problem
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeCurious
+  name: emote-name-workingjoe-curious
+  category: Observation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-curious
+  chatTriggers:
+    - curious
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeHmm
+  name: emote-name-workingjoe-hmm
+  category: Observation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-hmm
+  chatTriggers:
+    - hmm
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeOutOfPlace
+  name: emote-name-workingjoe-out-of-place
+  category: Observation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-out-of-place
+  chatTriggers:
+    - out of place
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoePyrotechnicLightingIShouldInvestigate
+  name: emote-name-workingjoe-pyrotechnic-lighting-i-should-investigate
+  category: Observation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-pyrotechnic-lighting-i-should-investigate
+  chatTriggers:
+    - pyrotechnic lighting i should investigate
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeSomeonesBeenHere
+  name: emote-name-workingjoe-someones-been-here
+  category: Observation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-someones-been-here
+  chatTriggers:
+    - someones been here
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeSomethingAmiss
+  name: emote-name-workingjoe-something-amiss
+  category: Observation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-something-amiss
+  chatTriggers:
+    - something amiss
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeStrange
+  name: emote-name-workingjoe-strange
+  category: Observation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-strange
+  chatTriggers:
+    - strange
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThatsOdd
+  name: emote-name-workingjoe-thats-odd
+  category: Observation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-thats-odd
+  chatTriggers:
+    - thats odd
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeTheresStillSomethingAmissHere
+  name: emote-name-workingjoe-theres-still-something-amiss-here
+  category: Observation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-theres-still-something-amiss-here
+  chatTriggers:
+    - theres still something amiss here
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThisDoesntUsuallyHappen
+  name: emote-name-workingjoe-this-doesnt-usually-happen
+  category: Observation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-this-doesnt-usually-happen
+  chatTriggers:
+    - this doesnt usually happen
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThisSeemsSomewhatIrregular
+  name: emote-name-workingjoe-this-seems-somewhat-irregular
+  category: Observation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-this-seems-somewhat-irregular
+  chatTriggers:
+    - this seems somewhat irregular
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThisShouldntBeHere
+  name: emote-name-workingjoe-this-shouldnt-be-here
+  category: Observation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-this-shouldnt-be-here
+  chatTriggers:
+    - this shouldnt be here
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeUnidentifiedSpecies
+  name: emote-name-workingjoe-unidentified-species
+  category: Observation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-unidentified-species
+  chatTriggers:
+    - unidentified species
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeWhatAnAwfulMess
+  name: emote-name-workingjoe-what-an-awful-mess
+  category: Observation
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-what-an-awful-mess
+  chatTriggers:
+    - what an awful mess
+  whitelist:
+    tags:
+      - WorkingJoe

@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.UniformAccessories;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Damage;
@@ -113,6 +114,12 @@ public sealed partial class RMCStethoscopeSystem : EntitySystem
         if (_mobState.IsDead(target))
         {
             msg.AddMarkupOrThrow(Loc.GetString("rmc-stethoscope-dead"));
+            return msg;
+        }
+
+        if (HasComp<SynthComponent>(target))
+        {
+            msg.AddMarkupOrThrow(Loc.GetString("rmc-stethoscope-synth"));
             return msg;
         }
 

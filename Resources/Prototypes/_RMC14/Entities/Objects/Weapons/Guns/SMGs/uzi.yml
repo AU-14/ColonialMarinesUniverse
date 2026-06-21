@@ -12,8 +12,15 @@
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Item
+    size: Normal
   - type: Clothing
     sprite: _RMC14/Objects/Weapons/Guns/SMGs/uzi.rsi
+    slots:
+    - suitStorage
+    - Back
+    - belt
+    - pocket
   - type: Gun
     soundGunshot:
       path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_uzi.ogg
@@ -23,13 +30,13 @@
     - FullAuto
     recoilWielded: 0
     recoilUnwielded: 1
-    scatterWielded: 10
-    scatterUnwielded: 16
-    baseFireRate: 4
+    scatterWielded: 8
+    scatterUnwielded: 11
+    baseFireRate: 7.5
     burstScatterMult: 3
     modifiers:
       FullAuto:
-        maxScatterModifier: 12
+        maxScatterModifier: 4
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
         shotsToMaxScatter: 50

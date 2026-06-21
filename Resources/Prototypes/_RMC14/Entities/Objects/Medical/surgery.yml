@@ -193,8 +193,6 @@
   - type: Item
     size: Tiny
     sprite: _RMC14/Objects/Medical/Surgery/scalpel.rsi
-  - type: Sharp
-    butcherDelayModifier: 1.5
   - type: Utensil
     types:
     - Knife

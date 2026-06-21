@@ -15,6 +15,7 @@
   - type: GasMaskFilter
     neurotoxinResist: false
     neurotoxinDamageMultiplier: 10 #1 second
+    chemicalIrritantDamageMultiplier: 2.25 #1 and a half-ish CN20 gas clouds
     baseIntegrity: 100
 
 - type: entity
@@ -43,6 +44,7 @@
   - type: GasMaskFilter
     neurotoxinResist: true
     neurotoxinDamageMultiplier: 2.5 # 4 seconds
+    chemicalIrritantDamageMultiplier: 1.75 # 2 complete CN20 gas clouds and some extra
     baseIntegrity: 100
   - type: Sprite
     sprite: _CMU14/Items/gas_mask_filter.rsi
@@ -58,6 +60,7 @@
   - type: GasMaskFilter
     neurotoxinResist: true
     neurotoxinDamageMultiplier: 1.25 # 8 seconds
+    chemicalIrritantDamageMultiplier: 1 # 4-ish CN20 gas clouds
     baseIntegrity: 100
   - type: Sprite
     sprite: _CMU14/Items/gas_mask_filter.rsi

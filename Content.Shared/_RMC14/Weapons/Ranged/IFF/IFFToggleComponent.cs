@@ -12,6 +12,9 @@ public sealed partial class IFFToggleComponent : Component
     [DataField, AutoNetworkedField]
     public bool Enabled = true;
 
+    [DataField, AutoNetworkedField]
+    public bool ShowToggleAction = true;
+
     //do not change during runtime
     [DataField, AutoNetworkedField]
     public bool RequireIDLock = false;
