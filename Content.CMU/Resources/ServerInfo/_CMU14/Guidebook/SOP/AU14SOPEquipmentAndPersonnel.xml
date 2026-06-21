@@ -18,6 +18,7 @@
   - Any headwear that is worn must be standard issue, or an acceptable replacement. Exceptions must be made for reasonable religious headdress
   - Anyone of higher rank may still order any personnel below them to wear a protective helmet or vest unless they are a rifleman who has not been issued a special weapon.
   - Folding or otherwise shortening uniforms is permitted, provided no damage comes to the uniform.
+  - Dress uniforms may be worn by shipside staff as long as they are not deploying.
 
   ## Firearm Handling Regulations
   - Weapons should be holstered or slung when not in use and on safety. Personnel must be allowed to holster or sling on their first offense.
@@ -30,10 +31,17 @@
   - Synthetics are not at any point authorized to weild a firearm, synths may hold firearms in one hand for transport or safety reasons.
   - Synthetics are allowed to carry knives, tools, and other simillar equipment if needed to function in their job at optimal levels.
   - Synthetics may conduct arrests but are not allowed to sentence due to not being able to understand spirit of law. If MP or CMP is available, the Synth may sentence.
-  - Synthetics designed for specified tasks shall be expected to conduct those tasks with minimal supervision, if a synthtic is assigned a task outside their defined purpose in their user manual, they shall be supervised by an experinced personnel.
+  - Synthetics designed for specified tasks shall be expected to conduct those tasks with minimal supervision, if a synthtic is assigned an ADVANCED (i.e. Surgery, OB Loading, etc) task outside their defined purpose as written on their ID, they shall be supervised by an experinced personnel in that task (I.e. Doctors for Surgery, CE For Engineering, etc)
   - Synthetics may be sent to their manufacturer for examination if a represenitive or alike is on or near installiation. If the units user manual says not to allow access by other companies, it must be respected.
   - Synthetics may be dismissed from the current position if ordered by the Department Head of their specialization (General use synthetics may only be dismissed by CO or XO)
-  - Synthetics may perform operations alone, but should not be sent off installiation for longer then 10 minutes unsupervised.
+  - Synthetics may perform operations alone, but should not be sent off installiation for longer then 20 minutes unsupervised.
+
+  ## AI Core and Synthetic Areas
+  The AI core and Designated Synthetic Areas are restricted from public access and may only be entered with permission from a Synth, Working Joe, ACO, or the AI Core.
+  - Enter AI Core or Synthetic Area without permission is chargeable with FTFP and AAT
+  - Synthetics and Working Joes are permitted to dismiss anyone causing a disturbence
+  - If a person fails to leave the area within 3 chances given by Synthetics, Working Joes, or MPs, non-lethal force may be used
+  - If a person shows an active threat in these areas to a Synthetic, Working Joe, or the AI Core lethal force may be used by the stated groups.
 
   ## Grooming Standards
   - Personnel must maintain a professional and operationally safe hairstyle while on duty.
@@ -51,5 +59,8 @@
   - Light vehicles are exempt and may be assigned to a sqaud for use by the sqaud, the assignment being ordered by the XO or ACO, if it is not assigned humvees automatically fall under Vehicle Crew assignment
   - Medical assets fall under the jurisdiciton of the Chief Medical Officer. If no CMO is available it falls to the above stated jurisdicitons.
   - If a vehicle is to become heavily damaged it is to be retreated to a safe position for repairs, before it is redeployed.
+  - If no crew are available priority for crewing goes to CTs (only if there are other CTs in their sqaud to take their slack), rifleman, then synthetics (as drivers, synethics are not permitted to gun any vehicle per WICH)
+  - EO's and other command staff may not operate vehicles past the designated FOB.
+  - Command SO's and JO's may crew and command the Command type APC past FOB freely.
 
 </Document>
