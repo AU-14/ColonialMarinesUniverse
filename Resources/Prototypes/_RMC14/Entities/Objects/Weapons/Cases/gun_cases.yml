@@ -804,6 +804,7 @@
     - id: RMCScoutShoes
     - id: CMBackpackSniper
     - id: RMCVisorNightVision
+    - id: CMPamphletSpotter
   - type: Tag
     tags:
     - AU14KitSpotter
