@@ -1,8 +1,7 @@
-using Content.Shared._AU14.Formations;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._AU14.Formations;
+namespace Content.Shared._AU14.Formations;
 
 [RegisterComponent]
 public sealed partial class AU14FormationLeaderComponent : Component
