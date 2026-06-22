@@ -6,22 +6,22 @@
   color: "#9e1a0b"
   faction: opfor
   roles:
-  - AU14JobOpforPlatCo
-  - AU14JobOpforPlatOp
+  - AU14JobOPFORPlatCo
+  - AU14JobOPFORPlatOp
   - AU14JobOPFORadvisor
-  - AU14JobOpforSectionSergeant
-  - AU14JobOpforSquadSergeant
-  - AU14JobOpforRadioTelephoneOperator
-  - AU14JobOpforSquadRifleman
-  - AU14JobOpforSquadAutomaticRifleman
+  - AU14JobOPFORSectionSergeant
+  - AU14JobOPFORSquadSergeant
+  - AU14JobOPFORRadioTelephoneOperator
+  - AU14JobOPFORSquadRifleman
+  - AU14JobOPFORSquadAutomaticRifleman
   - AU14JobOPFORSquadCombatTech
-  - AU14JobOpforPlatoonCorpsman
+  - AU14JobOPFORPlatoonCorpsman
   - AU14JobOPFORAuxTech
-  - AU14JobOpforDSPilot
-  - AU14JobOpforDCC
+  - AU14JobOPFORDSPilot
+  - AU14JobOPFORDCC
   - AU14JobOPFORAuxSupportSynth
   - AU14JobOPFORWorkingJoe
   - AU14JobOPFORMilitaryDoctor
-# - AU14JobOPFORMilitaryPoliceMan # TODO
+  - AU14JobOPFORMilitaryPoliceMan
   departmentRadio: null
   headOfDepartment: null

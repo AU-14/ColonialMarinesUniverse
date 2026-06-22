@@ -165,23 +165,23 @@
     shipFaction: opfor
     addToShip: true
     jobs:
-      AU14JobOpforPlatCo: 1
-      AU14JobOpforPlatoonCorpsman: 9
-      AU14JobOpforDCC: 2
-      AU14JobOpforPlatOp: 5
-      AU14JobOpforDSPilot: 2
-      AU14JobOpforRadioTelephoneOperator: 4
-      AU14JobOpforSquadSergeant: 3
-      AU14JobOpforSquadAutomaticRifleman: 3
+      AU14JobOPFORPlatCo: 1
+      AU14JobOPFORPlatoonCorpsman: 9
+      AU14JobOPFORDCC: 2
+      AU14JobOPFORPlatOp: 5
+      AU14JobOPFORDSPilot: 2
+      AU14JobOPFORRadioTelephoneOperator: 4
+      AU14JobOPFORSquadSergeant: 3
+      AU14JobOPFORSquadAutomaticRifleman: 3
 #     AU14JobOPFORWeaponsSpecialist: 3 # TODO
       AU14JobOPFORSquadCombatTech: 6
-      AU14JobOpforSquadRifleman: 75
+      AU14JobOPFORSquadRifleman: 75
       AU14JobOPFORAuxSupportSynth: 2
       AU14JobOPFORadvisor: 1
       AU14JobOPFORMilitaryDoctor: 3
       AU14JobOPFORWorkingJoe: 1
       AU14JobOPFORAuxTech: 1
-#     AU14JobOPFORMilitaryPoliceMan: 2 # TODO
+      AU14JobOPFORMilitaryPoliceMan: 2
 
 - type: entity
   id: AddClf

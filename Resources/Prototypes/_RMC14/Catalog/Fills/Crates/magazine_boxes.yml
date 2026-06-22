@@ -344,3 +344,187 @@
     contents:
     - id: RMCMagazineM2C
       amount: 2
+
+# SNIPER
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateMagazineSpecSniperM96S
+  name: M96S Standard Magazine Crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazineSniperM96S
+      amount: 6
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateMagazineSpecSniperM96SIncendiary
+  name: M96S Incendiary Magazine Crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazineSniperM96SIncendiary
+      amount: 6
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateMagazineSpecSniperM96SFlak
+  name: M96S Flak Magazine Crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazineSniperM96SFlak
+      amount: 6
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateMagazineSpecSniperM96SMixed
+  name: M96S Mixed Magazine Crate (Standard x2, Incen 2x, Flak 2x))
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazineSniperM96S
+      amount: 2
+    - id: CMMagazineSniperM96SIncendiary
+      amount: 2
+    - id: CMMagazineSniperM96SFlak
+      amount: 2
+
+# AMR
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateMagazineSpecAMRXM43E1
+  name: XM43E1 Magazine Crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineSniperXM43E1AntiMateriel
+      amount: 6
+
+# SHARP
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateMagazineSpecSharpHE
+  name: SHARP HE Magazine Crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleSharpExplosive
+      amount: 6
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateMagazineSpecSharpFLC
+  name: SHARP Flechette Magazine Crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleSharpFlechette
+      amount: 6
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateMagazineSpecSharpINCEN
+  name: SHARP Incendiary Magazine Crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleSharpIncendiary
+      amount: 6
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateMagazineSpecSharpMixed
+  name: SHARP Mixed Magazine Crate (HE x2, Flechette x2, Incen x2)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleSharpExplosive
+      amount: 2
+    - id: RMCMagazineRifleSharpFlechette
+      amount: 2
+    - id: RMCMagazineRifleSharpIncendiary
+      amount: 2
+
+# Scout
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateMagazineSpecScoutStandard
+  name: M4SPRA19 Magazine Crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleM4SPRA19
+      amount: 6
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateMagazineSpecScoutINCEN
+  name: M4SPRA19 Incendiary Magazine Crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleM4SPRA19Incendiary
+      amount: 6
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateMagazineSpecScoutFLAK
+  name: M4SPRA19 Impact Magazine Crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleM4SPRA19Impact
+      amount: 6
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateMagazineSpecScoutMixed
+  name: M4SPRA19 Magazine Crate (Standard x2, Incen 2x, Impact 2x)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleM4SPRA19
+      amount: 2
+    - id: RMCMagazineRifleM4SPRA19Incendiary
+      amount: 2
+    - id: RMCMagazineRifleM4SPRA19Impact
+      amount: 2
+
+# WeYu Scout
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateMagazineSpecScoutStandardWeYu
+  name: M5RA/2 Standard Magazine Crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleM5SPRHVP
+      amount: 6
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateMagazineSpecScoutHVHIPWeYu
+  name: M5RA/2 HVHIP Magazine Crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleM5SPRHVHIP
+      amount: 6
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateMagazineSpecScoutMixedWeYu
+  name: M5RA/2 Mixed Magazine Crate (HVHIP x3, Standard x3)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleM5SPRHVHIP
+      amount: 3
+    - id: RMCMagazineRifleM5SPRHVP
+      amount: 3

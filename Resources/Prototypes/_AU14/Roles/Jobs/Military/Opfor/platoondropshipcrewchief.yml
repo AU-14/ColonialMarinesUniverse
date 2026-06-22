@@ -1,6 +1,6 @@
 - type: job
   parent: AU14JobDCCBase
-  id: AU14JobOpforDCC
+  id: AU14JobOPFORDCC
   icon: "AU14JobIconOPFORDCC"
   spawnMenuRoleName: Dropship Crew Chief (OPFOR)
   supervisors: au14-job-supervisors-opfor
@@ -38,7 +38,7 @@
   name: Spawn Point opfor Dropship Crew Chief
   components:
   - type: SpawnPoint
-    job_id: AU14JobOpforDCC
+    job_id: AU14JobOPFORDCC
   - type: Sprite
     state: syn_spawn
 

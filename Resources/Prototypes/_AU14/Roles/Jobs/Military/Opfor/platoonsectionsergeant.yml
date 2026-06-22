@@ -1,6 +1,6 @@
 - type: job
   parent: AU14JobSectionSergeantBase
-  id: AU14JobOpforSectionSergeant
+  id: AU14JobOPFORSectionSergeant
   icon: "AU14JobIconOPFORPlatoonSgt"
   spawnMenuRoleName: Platoon Sergeant (OPFOR)
   supervisors: au14-job-supervisors-opfor
@@ -36,7 +36,7 @@
   name: Spawn Point opfor Section Sergeant
   components:
   - type: SpawnPoint
-    job_id: AU14JobOpforSectionSergeant
+    job_id: AU14JobOPFORSectionSergeant
   - type: Sprite
     state: syn_spawn
 

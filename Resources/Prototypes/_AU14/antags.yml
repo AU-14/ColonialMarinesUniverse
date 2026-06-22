@@ -1,3 +1,47 @@
+- type: antagJobBlacklist
+  id: AllGovforJobs
+  jobs:
+    - AU14JobGOVFORPlatCo
+    - AU14JobGOVFORPlatoonCorpsman
+    - AU14JobGOVFORDCC
+    - AU14JobGOVFORPlatOp
+    - AU14JobGOVFORDSPilot
+    - AU14JobGOVFORRadioTelephoneOperator
+    - AU14JobGOVFORSquadSergeant
+    - AU14JobGOVFORSquadAutomaticRifleman
+    - AU14JobGOVFORSquadCombatTech
+    - AU14JobGOVFORSquadRifleman
+    - AU14JobGOVFORAuxSupportSynth
+    - AU14JobGOVFORadvisor
+    - AU14JobGOVFORMilitaryDoctor
+    - AU14JobGOVFORMilitaryPoliceMan
+    - AU14JobGOVFORSectionSergeant
+    - AU14JobGOVFORAuxTech
+    - AU14JobGOVFORWorkingJoe
+    - AU14JobGOVFORWeaponsSpecialist
+
+- type: antagJobBlacklist
+  id: AllOpforJobs
+  jobs:
+    - AU14JobOPFORPlatCo
+    - AU14JobOPFORPlatoonCorpsman
+    - AU14JobOPFORDCC
+    - AU14JobOPFORPlatOp
+    - AU14JobOPFORDSPilot
+    - AU14JobOPFORRadioTelephoneOperator
+    - AU14JobOPFORSquadSergeant
+    - AU14JobOPFORSquadAutomaticRifleman
+    - AU14JobOPFORSquadCombatTech
+    - AU14JobOPFORSquadRifleman
+    - AU14JobOPFORAuxSupportSynth
+    - AU14JobOPFORadvisor
+    - AU14JobOPFORMilitaryDoctor
+    - AU14JobOPFORMilitaryPoliceMan
+    - AU14JobOPFORSectionSergeant
+    - AU14JobOPFORAuxTech
+    - AU14JobOPFORWorkingJoe
+#   - AU14JobOPFORWeaponsSpecialist
+
 - type: entity
   id: RunawaySynth
   parent: BaseGameRule
@@ -10,24 +54,9 @@
     - prefRoles: [ RunawaySynthRole ]
       max: 1
       playerRatio: 15
-      jobBlacklist:
-      - AU14JobGOVFORPlatCo
-      - AU14JobGOVFORPlatoonCorpsman
-      - AU14JobGOVFORDCC
-      - AU14JobGOVFORPlatOp
-      - AU14JobGOVFORDSPilot
-      - AU14JobGOVFORRadioTelephoneOperator
-      - AU14JobGOVFORSquadSergeant
-      - AU14JobGOVFORSquadAutomaticRifleman
-      - AU14JobGOVFORSquadCombatTech
-      - AU14JobGOVFORSquadRifleman
-      - AU14JobGOVFORAuxSupportSynth
-      - AU14JobGOVFORadvisor
-      - AU14JobGOVFORMilitaryDoctor
-      - AU14JobGOVFORMilitaryPoliceMan
-      - AU14JobGOVFORSectionSergeant
-      - AU14JobGOVFORAuxTech
-      - AU14JobGOVFORWorkingJoe
+      jobBlacklistGroup:
+      - AllGovforJobs
+      - AllOpforJobs
       briefing:
         text: runawaysynth-role-greeting
         color: CornflowerBlue
@@ -228,24 +257,9 @@
     - prefRoles: [ FugitiveRole ]
       max: 1
       playerRatio: 15
-      jobBlacklist:
-      - AU14JobGOVFORPlatCo
-      - AU14JobGOVFORPlatoonCorpsman
-      - AU14JobGOVFORDCC
-      - AU14JobGOVFORPlatOp
-      - AU14JobGOVFORDSPilot
-      - AU14JobGOVFORRadioTelephoneOperator
-      - AU14JobGOVFORSquadSergeant
-      - AU14JobGOVFORSquadAutomaticRifleman
-      - AU14JobGOVFORSquadCombatTech
-      - AU14JobGOVFORSquadRifleman
-      - AU14JobGOVFORAuxSupportSynth
-      - AU14JobGOVFORadvisor
-      - AU14JobGOVFORMilitaryDoctor
-      - AU14JobGOVFORMilitaryPoliceMan
-      - AU14JobGOVFORSectionSergeant
-      - AU14JobGOVFORAuxTech
-      - AU14JobGOVFORWorkingJoe
+      jobBlacklistGroup:
+      - AllGovforJobs
+      - AllOpforJobs
       briefing:
         text: fugitive-role-greeting
         color: CornflowerBlue
@@ -311,24 +325,9 @@
     - prefRoles: [ DrugDealerRole ]
       max: 1
       playerRatio: 15
-      jobBlacklist:
-      - AU14JobGOVFORPlatCo
-      - AU14JobGOVFORPlatoonCorpsman
-      - AU14JobGOVFORDCC
-      - AU14JobGOVFORPlatOp
-      - AU14JobGOVFORDSPilot
-      - AU14JobGOVFORRadioTelephoneOperator
-      - AU14JobGOVFORSquadSergeant
-      - AU14JobGOVFORSquadAutomaticRifleman
-      - AU14JobGOVFORSquadCombatTech
-      - AU14JobGOVFORSquadRifleman
-      - AU14JobGOVFORAuxSupportSynth
-      - AU14JobGOVFORadvisor
-      - AU14JobGOVFORMilitaryDoctor
-      - AU14JobGOVFORMilitaryPoliceMan
-      - AU14JobGOVFORSectionSergeant
-      - AU14JobGOVFORAuxTech
-      - AU14JobGOVFORWorkingJoe
+      jobBlacklistGroup:
+      - AllGovforJobs
+      - AllOpforJobs
       briefing:
         text: dealer-role-greeting
         color: MediumVioletRed
@@ -394,24 +393,9 @@
     - prefRoles: [ CorporateSpyRole ]
       max: 1
       playerRatio: 15
-      jobBlacklist:
-      - AU14JobGOVFORPlatCo
-      - AU14JobGOVFORPlatoonCorpsman
-      - AU14JobGOVFORDCC
-      - AU14JobGOVFORPlatOp
-      - AU14JobGOVFORDSPilot
-      - AU14JobGOVFORRadioTelephoneOperator
-      - AU14JobGOVFORSquadSergeant
-      - AU14JobGOVFORSquadAutomaticRifleman
-      - AU14JobGOVFORSquadCombatTech
-      - AU14JobGOVFORSquadRifleman
-      - AU14JobGOVFORAuxSupportSynth
-      - AU14JobGOVFORadvisor
-      - AU14JobGOVFORMilitaryDoctor
-      - AU14JobGOVFORMilitaryPoliceMan
-      - AU14JobGOVFORSectionSergeant
-      - AU14JobGOVFORAuxTech
-      - AU14JobGOVFORWorkingJoe
+      jobBlacklistGroup:
+      - AllGovforJobs
+      - AllOpforJobs
       briefing:
         text: spy-role-greeting
         color: DarkSlateGray
@@ -459,24 +443,10 @@
     - prefRoles: [ CLFVeteranRole ]
       max: 1
       playerRatio: 15
+      jobBlacklistGroup:
+      - AllGovforJobs
+      - AllOpforJobs
       jobBlacklist:
-      - AU14JobGOVFORSectionSergeant
-      - AU14JobGOVFORSquadSergeant
-      - AU14JobGOVFORSquadRifleman
-      - AU14JobGOVFORRadioTelephoneOperator
-      - AU14JobGOVFORSquadAutomaticRifleman
-      - AU14JobGOVFORPlatoonCorpsman
-      - AU14JobGOVFORPlatCo
-      - AU14JobGOVFORPlatOp
-      - AU14JobGOVFORDSPilot
-      - AU14JobGOVFORDCC
-      - AU14JobGOVFORAuxSupportSynth
-      - AU14JobGOVFORSquadCombatTech
-      - AU14JobGOVFORadvisor
-      - AU14JobGOVFORMilitaryDoctor
-      - AU14JobGOVFORMilitaryPoliceMan
-      - AU14JobGOVFORAuxTech
-      - AU14JobGOVFORWorkingJoe
       - AU14JobCLFGuerilla
       - AU14JobCLFCellLeader
       - AU14JobCLFPhysician
@@ -540,24 +510,9 @@
     - prefRoles: [ StrikeOrganizerRole ]
       max: 1
       playerRatio: 15
-      jobBlacklist:
-      - AU14JobGOVFORPlatCo
-      - AU14JobGOVFORPlatoonCorpsman
-      - AU14JobGOVFORDCC
-      - AU14JobGOVFORPlatOp
-      - AU14JobGOVFORDSPilot
-      - AU14JobGOVFORRadioTelephoneOperator
-      - AU14JobGOVFORSquadSergeant
-      - AU14JobGOVFORSquadAutomaticRifleman
-      - AU14JobGOVFORSquadCombatTech
-      - AU14JobGOVFORSquadRifleman
-      - AU14JobGOVFORAuxSupportSynth
-      - AU14JobGOVFORadvisor
-      - AU14JobGOVFORMilitaryDoctor
-      - AU14JobGOVFORMilitaryPoliceMan
-      - AU14JobGOVFORSectionSergeant
-      - AU14JobGOVFORAuxTech
-      - AU14JobGOVFORWorkingJoe
+      jobBlacklistGroup:
+      - AllGovforJobs
+      - AllOpforJobs
       briefing:
         text: strikeorganizer-role-greeting
         color: DarkRed
@@ -660,24 +615,9 @@
     - prefRoles: [ SerialKillerRole ]
       max: 1
       playerRatio: 15
-      jobBlacklist:
-      - AU14JobGOVFORPlatCo
-      - AU14JobGOVFORPlatoonCorpsman
-      - AU14JobGOVFORDCC
-      - AU14JobGOVFORPlatOp
-      - AU14JobGOVFORDSPilot
-      - AU14JobGOVFORRadioTelephoneOperator
-      - AU14JobGOVFORSquadSergeant
-      - AU14JobGOVFORSquadAutomaticRifleman
-      - AU14JobGOVFORSquadCombatTech
-      - AU14JobGOVFORSquadRifleman
-      - AU14JobGOVFORAuxSupportSynth
-      - AU14JobGOVFORadvisor
-      - AU14JobGOVFORMilitaryDoctor
-      - AU14JobGOVFORMilitaryPoliceMan
-      - AU14JobGOVFORSectionSergeant
-      - AU14JobGOVFORAuxTech
-      - AU14JobGOVFORWorkingJoe
+      jobBlacklistGroup:
+      - AllGovforJobs
+      - AllOpforJobs
       briefing:
         text: serialkiller-role-greeting
         color: DarkRed

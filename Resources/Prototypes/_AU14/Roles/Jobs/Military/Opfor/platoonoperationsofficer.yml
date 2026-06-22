@@ -1,6 +1,6 @@
 - type: job
   parent: AU14JobPlatOpBase
-  id: AU14JobOpforPlatOp
+  id: AU14JobOPFORPlatOp
   icon: "AU14JobIconOPFOROpsOfc"
   spawnMenuRoleName: Junior Officer (OPFOR)
   supervisors: au14-job-supervisors-opfor
@@ -44,6 +44,6 @@
   name: Spawn Point opfor Platoon Operations Officer
   components:
   - type: SpawnPoint
-    job_id: AU14JobOpforPlatOp
+    job_id: AU14JobOPFORPlatOp
   - type: Sprite
     state: syn_spawn

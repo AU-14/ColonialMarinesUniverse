@@ -850,7 +850,7 @@
 - type: entity
   parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatHRAdminUPPEmbassy
-  name: Hope's Retreat - UPP Embassy
+  name: Hope's Retreat - ICSC Embassy
   components:
   - type: Sprite
     state: hr_admin_embassy

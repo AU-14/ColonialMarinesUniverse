@@ -13,7 +13,7 @@
   - !type:AddComponentSpecial
     components:
     - type: Marine
-      Faction: govfor
+      Faction: opfor
     - type: UserIFF
       factions:
       - OPFOR

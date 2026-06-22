@@ -18,6 +18,7 @@ using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Mentor.ImaginaryFriend;
+using Content.Shared._AU14.Marines.Orders;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.ActionBlocker;
@@ -292,6 +293,10 @@ public sealed partial class ChatSystem : SharedChatSystem
                 return;
             }
         }
+
+        // AU14: Silence Order forces speak → whisper for the duration.
+        if (desiredType == InGameICChatType.Speak && HasComp<AU14SilenceOrderComponent>(source))
+            desiredType = InGameICChatType.Whisper;
 
         // Otherwise, send whatever type.
         switch (desiredType)

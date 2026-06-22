@@ -23,10 +23,10 @@
   gruntsToSpawn:
     AU14AbominationMimic: 1
     AU14AbominationSkitter: 1
-  # PartySpawnPrototype field name in YAML is `entsToSpsawn` (sic).
+  # PartySpawnPrototype field name in YAML is `entsToSpawn` (sic).
   # Drops the seed flesh nest at the spawn point so the threat has somewhere
   # to retreat to from the very start.
-  entsToSpsawn:
+  entsToSpawn:
     AU14AbominationFleshNest: 1
   scaling:
     AU14AbominationMimic:
@@ -75,7 +75,7 @@
     AU14AbominationSpider: 2
     AU14AbominationSkitter: 2
     AU14AbominationGrunt: 0
-  entsToSpsawn:
+  entsToSpawn:
     AU14AbominationFleshNest: 1
   # Total scaling rate ~0.20 / player (xeno larva is 0.16) — a bit
   # heavier than the xeno ramp because abom castes are individually

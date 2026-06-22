@@ -203,8 +203,8 @@ public sealed partial class AuThreatSystem : EntitySystem
                 Logger.GetSawmill("au14.threat").Warning($"[AuThreatSystem] Removed {removed} threat assignment(s) for threat '{threat.ID}' with no roundstart spawn so normal overflow assignment can handle them.");
             return;
         }
-        var newpartySpawn = _prototypeManager.TryIndex(partySpawn, out var spawn) ? spawn : null;
-        if (newpartySpawn == null)
+        var newPartySpawn = _prototypeManager.TryIndex(partySpawn, out var spawn) ? spawn : null;
+        if (newPartySpawn == null)
         {
             Logger.GetSawmill("au14.threat").Error($"[ERROR] Could not find RoundStartSpawn prototype '{partySpawn}' for threat '{threat.ID}'. Skipping threat spawn.");
             var removed = RemoveThreatJobAssignments(assignedJobs);
@@ -216,7 +216,7 @@ public sealed partial class AuThreatSystem : EntitySystem
         // Helper to get marker entity Uids by marker type
         List<EntityUid> GetMarkers(ThreatMarkerType markerType)
         {
-            var markerId = newpartySpawn != null && newpartySpawn.Markers.TryGetValue(markerType, out var id) ? id : "";
+            var markerId = newPartySpawn != null && newPartySpawn.Markers.TryGetValue(markerType, out var id) ? id : "";
             var markers = new List<EntityUid>();
             var query = _entityManager.EntityQueryEnumerator<Content.Shared.AU14.Threats.ThreatSpawnMarkerComponent>();
             while (query.MoveNext(out var uid, out var comp))
@@ -238,7 +238,7 @@ public sealed partial class AuThreatSystem : EntitySystem
         Logger.GetSawmill("au14.threat").Debug($"[DEBUG] Begin spawning threat entities for threat: {threat?.ID ?? "null"}");
 
         // --- Spawn Together logic ---
-        bool spawnTogether = newpartySpawn?.SpawnTogether == true;
+        bool spawnTogether = newPartySpawn?.SpawnTogether == true;
         Dictionary<ThreatMarkerType, List<EntityUid>> markerCache = new();
         EntityUid? centerMarker = null;
         if (spawnTogether)
@@ -276,7 +276,7 @@ public sealed partial class AuThreatSystem : EntitySystem
         }
 
         // Spawn leaders
-        if (newpartySpawn != null)
+        if (newPartySpawn != null)
         {
             var playerCount = _playerManager.PlayerCount;
 
@@ -285,7 +285,7 @@ public sealed partial class AuThreatSystem : EntitySystem
             // If Benchmark is set it overrides the base; otherwise the static count is the base.
             int GetScaledCount(string protoId, int staticCount)
             {
-                if (newpartySpawn.Scaling.TryGetValue(protoId, out var entry))
+                if (newPartySpawn.Scaling.TryGetValue(protoId, out var entry))
                 {
                     return JobScaling.CalculateScaledSlots(playerCount, staticCount, entry);
                 }
@@ -293,7 +293,7 @@ public sealed partial class AuThreatSystem : EntitySystem
             }
 
             // Spawn leaders — each entity proto gets its own scaled count
-            foreach (var (protoId, staticCount) in newpartySpawn.LeadersToSpawn)
+            foreach (var (protoId, staticCount) in newPartySpawn.LeadersToSpawn)
             {
                 var count = GetScaledCount(protoId, staticCount);
                 var markers = GetSpawnMarkers(ThreatMarkerType.Leader);
@@ -316,7 +316,7 @@ public sealed partial class AuThreatSystem : EntitySystem
             }
 
             // Spawn grunts/members — each entity proto gets its own scaled count
-            foreach (var (protoId, staticCount) in newpartySpawn.GruntsToSpawn)
+            foreach (var (protoId, staticCount) in newPartySpawn.GruntsToSpawn)
             {
                 var count = GetScaledCount(protoId, staticCount);
                 var markers = GetSpawnMarkers(ThreatMarkerType.Member);
@@ -342,7 +342,7 @@ public sealed partial class AuThreatSystem : EntitySystem
 
             // Spawn other entities
             var spawnedEntities = 0;
-            foreach (var (protoId, count) in newpartySpawn.entitiestospawn)
+            foreach (var (protoId, count) in newPartySpawn.EntitiesToSpawn)
             {
                 var markers = GetSpawnMarkers(ThreatMarkerType.Entity);
                 Logger.GetSawmill("au14.threat").Debug(

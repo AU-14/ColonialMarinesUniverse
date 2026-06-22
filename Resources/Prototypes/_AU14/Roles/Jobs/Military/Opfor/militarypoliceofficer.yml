@@ -1,6 +1,6 @@
 - type: job
   parent: AU14JobMilitaryPoliceBase
-  id: AU14JobOPFORMilitaryPolice
+  id: AU14JobOPFORMilitaryPoliceMan
   icon: "AU14JobIconOPFORMP"
   spawnMenuRoleName: Military Policeman (OPFOR)
   supervisors: au14-job-supervisors-opforplatco
@@ -49,6 +49,6 @@
   name: Spawn Point OPFOR Military Policeman
   components:
   - type: SpawnPoint
-    job_id: AU14JobOPFORMilitaryPolice
+    job_id: AU14JobOPFORMilitaryPoliceMan
   - type: Sprite
     state: syn_spawn

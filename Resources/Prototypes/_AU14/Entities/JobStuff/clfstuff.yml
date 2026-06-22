@@ -127,8 +127,8 @@
         amount: 2
         points: 6
       - id: RMCMagazineSniperType88
-        amount: 2
-        points: 8
+        amount: 3
+        points: 6
     - name: Shotgun Ammunition
       entries:
       - id: RMCBoxShotgunFlechette
@@ -221,13 +221,16 @@
         amount: 6
         points: 6
       - id: AU14IEDVest
-        amount: 1
+        amount: 2
         points: 10
       - id: AU14IEDLarge
-        amount: 1
+        amount: 2
         points: 15
     - name: Protective Equipment
       entries:
+      - id: AU14ExternalWebbing
+        amount: 10
+        points: 1
       - id: ArmorHelmetPMCRiot
         amount: 5
         points: 3
@@ -236,7 +239,7 @@
         points: 3
       - id: AU14ArmorArmyUPP
         amount: 5
-        points: 5
+        points: 7
       - id: RMCCoatMilitiaVest
         amount: 5
         points: 7

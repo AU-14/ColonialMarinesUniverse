@@ -22,7 +22,7 @@ public sealed partial class MarineOrdersSystem : SharedMarineOrdersSystem
 
         SubscribeLocalEvent<SquadLeaderComponent, ComponentInit>(OnSquadLeaderInit);
         SubscribeLocalEvent<SquadLeaderComponent, ComponentShutdown>(OnSquadLeaderShutdown);
-        SubscribeLocalEvent<SkillChangedEvent>(OnSkillChanged);
+        SubscribeLocalEvent<MarineOrdersComponent, SkillChangedEvent>(OnSkillChanged);
     }
 
     private void OnOrdersStartup(Entity<MarineOrdersComponent> ent, ref ComponentStartup ev)
@@ -37,11 +37,12 @@ public sealed partial class MarineOrdersSystem : SharedMarineOrdersSystem
         _actions.RemoveAction(ent.Owner, ent.Comp.MoveActionEntity);
     }
 
-    private void OnSkillChanged(ref SkillChangedEvent args)
+    private void OnSkillChanged(Entity<MarineOrdersComponent> ent, ref SkillChangedEvent args)
     {
-        // Only if changed skill is the leadership skill
-        if (TryComp<MarineOrdersComponent>(args.Uid, out var orders) && args.Skill == orders.Skill)
-            SyncOrderActions((args.Uid, orders));
+        if (args.Skill != ent.Comp.Skill)
+            return;
+
+        SyncOrderActions(ent);
     }
 
     private void OnSquadLeaderInit(Entity<SquadLeaderComponent> ent, ref ComponentInit args)
