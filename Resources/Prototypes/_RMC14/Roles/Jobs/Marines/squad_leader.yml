@@ -57,6 +57,7 @@
     - type: SquadArmorWearer
       leader: true
     - type: SquadLeader
+    - type: AU14FormationLeader
     - type: RMCPointing
     - type: JobPrefix
       prefix: cm-job-prefix-squad-leader

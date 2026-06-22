@@ -1,0 +1,175 @@
+<controls:FormationMenuWindow
+    xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client._AU14.Formations"
+    Title="Formation Control"
+    MinSize="320 510"
+    Access="Public">
+    <BoxContainer Orientation="Vertical" Margin="6" HorizontalExpand="True">
+
+        <!-- Status line -->
+        <Label Name="StatusLabel" Access="Public"
+               Text="No active formation."
+               HorizontalAlignment="Center"
+               Margin="0 0 0 6" />
+
+        <!-- Step 1 -->
+        <BoxContainer Orientation="Horizontal" Margin="0 0 0 2">
+            <TextureRect Name="IconStep1" Access="Public"
+                         MinSize="16 16" Stretch="KeepAspectCentered" Margin="0 0 4 0" />
+            <Label Text="Step 1 - Mark your positions" FontColorOverride="#CCCCCC" />
+        </BoxContainer>
+        <Button Name="PlaceFollowerDotButton" Access="Public"
+                Text="Place Squad Marker"
+                HorizontalExpand="True"
+                Margin="0 0 0 2"
+                ToolTip="Place a position marker for any soldier. Click a tile to drop it; the arrow faces the direction your soldier is facing."
+                StyleClasses="OpenBoth" />
+        <Button Name="UndoLastButton" Access="Public"
+                Text="Undo Last"
+                HorizontalExpand="True"
+                Margin="0 0 0 2"
+                StyleClasses="OpenBoth" />
+
+        <!-- Pending markers list -->
+        <Label Text="Staged markers:" FontColorOverride="#CCCCCC" Margin="0 4 0 2" />
+        <ScrollContainer HorizontalExpand="True" VerticalExpand="True" MinSize="0 70">
+            <BoxContainer Name="PendingDotsList" Access="Public"
+                          Orientation="Vertical"
+                          HorizontalExpand="True" />
+        </ScrollContainer>
+
+        <!-- Dot lifetime toggle -->
+        <Button Name="DotLifetimeToggleButton" Access="Public"
+                Text="Dot lifetime: Standard (2 min)"
+                HorizontalExpand="True"
+                Margin="0 6 0 2"
+                ToolTip="Standard: formation markers expire after 2 minutes - this is correct for almost every situation. Extended: markers last 15 minutes. Only activate this for prolonged static defensive positions where slots genuinely need to stay open for a long time."
+                StyleClasses="OpenBoth" />
+
+        <!-- Extended lifetime warning - only visible when extended mode is on -->
+        <BoxContainer Name="LifetimeWarningBox" Access="Public"
+                      Orientation="Vertical" Margin="0 0 0 4">
+            <Label FontColorOverride="#FF2222"
+                   Text="! EXTENDED LIFETIME ACTIVE !"
+                   HorizontalAlignment="Center" />
+            <Label FontColorOverride="#FF4444"
+                   Text="Markers will persist for 15 minutes on the map."
+                   HorizontalAlignment="Center" />
+            <Label FontColorOverride="#FF4444"
+                   Text="This is reserved for rare, prolonged static operations."
+                   HorizontalAlignment="Center" />
+            <Label FontColorOverride="#FF6666"
+                   Text="Abuse of this mode WILL result in consequences."
+                   HorizontalAlignment="Center" />
+            <Label FontColorOverride="#FF8888"
+                   Text="Switch back to Standard as soon as possible."
+                   HorizontalAlignment="Center" />
+        </BoxContainer>
+
+        <!-- Step 2 -->
+        <BoxContainer Orientation="Horizontal" Margin="0 0 0 2">
+            <TextureRect Name="IconStep2" Access="Public"
+                         MinSize="16 16" Stretch="KeepAspectCentered" Margin="0 0 4 0" />
+            <Label Text="Step 2 - Activate the formation" FontColorOverride="#CCCCCC" />
+        </BoxContainer>
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="0 0 0 2">
+            <Button Name="ConfirmButton" Access="Public"
+                    Text="Activate"
+                    HorizontalExpand="True"
+                    Margin="0 0 3 0"
+                    ToolTip="Spawn all staged markers on the map. Soldiers have 2 minutes to walk up and slot in (or 15 minutes if extended lifetime is on)."
+                    StyleClasses="OpenBoth" />
+            <Button Name="CancelPlanningButton" Access="Public"
+                    Text="Clear Staged"
+                    HorizontalExpand="True"
+                    ToolTip="Throw out all staged markers without spawning them."
+                    StyleClasses="OpenBoth" />
+        </BoxContainer>
+
+        <!-- Step 3 -->
+        <BoxContainer Orientation="Horizontal" Margin="0 6 0 2">
+            <TextureRect Name="IconStep3" Access="Public"
+                         MinSize="16 16" Stretch="KeepAspectCentered" Margin="0 0 4 0" />
+            <Label Text="Step 3 - Manage your formation" FontColorOverride="#CCCCCC" />
+        </BoxContainer>
+        <Button Name="HaltMarchButton" Access="Public"
+                Text="March Formation"
+                HorizontalExpand="True"
+                Margin="0 0 0 2"
+                ToolTip="Halt stops your movement from being passed to the formation. March resumes it. The formation starts halted so you have time to brief before moving out."
+                StyleClasses="OpenBoth" />
+
+        <!-- Follow mode -->
+        <BoxContainer Orientation="Horizontal" Margin="0 4 0 2">
+            <TextureRect Name="IconMode" Access="Public"
+                         MinSize="16 16" Stretch="KeepAspectCentered" Margin="0 0 4 0" />
+            <Label Text="Follow mode" FontColorOverride="#CCCCCC" />
+        </BoxContainer>
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="0 0 0 2">
+            <Button Name="ModeHoldButton" Access="Public"
+                    Text="Hold"
+                    HorizontalExpand="True"
+                    Margin="0 0 3 0"
+                    ToolTip="Hold - followers move exactly one tile each time you do. Clean and synchronized on open ground.
+
+Tip: Switch to Chase first if people have fallen behind, then flip back to Hold once the formation is tight again."
+                    StyleClasses="OpenBoth" />
+            <Button Name="ModeChaseButton" Access="Public"
+                    Text="Chase"
+                    HorizontalExpand="True"
+                    ToolTip="Chase - followers close toward their slot every tick regardless of whether you moved. Gaps close fast after turns or sprints.
+
+Tip: Best when reforming after a quick advance or when members got scattered. Flip back to Hold once everyone is back in position."
+                    StyleClasses="OpenBoth" />
+        </BoxContainer>
+
+        <!-- Collision toggle -->
+        <BoxContainer Orientation="Horizontal" Margin="0 4 0 2">
+            <TextureRect Name="IconCollision" Access="Public"
+                         MinSize="16 16" Stretch="KeepAspectCentered" Margin="0 0 4 0" />
+            <Label Text="Collision" FontColorOverride="#CCCCCC" />
+        </BoxContainer>
+        <Button Name="CollisionToggleButton" Access="Public"
+                Text="Collisions: Off"
+                HorizontalExpand="True"
+                Margin="0 0 0 2"
+                ToolTip="Off - members can pass through each other freely, which keeps movement smooth in tight corridors. On restores normal physics so members block each other."
+                StyleClasses="OpenBoth" />
+
+        <!-- Disband row -->
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="0 4 0 2">
+            <Button Name="ClearAllButton" Access="Public"
+                    Text="Remove Open Slots"
+                    HorizontalExpand="True"
+                    Margin="0 0 3 0"
+                    ToolTip="Delete any markers that haven't been claimed by a soldier yet."
+                    StyleClasses="OpenBoth" />
+            <Button Name="DisbandButton" Access="Public"
+                    Text="Disband"
+                    HorizontalExpand="True"
+                    ToolTip="Kick everyone out of the formation and remove all markers."
+                    StyleClasses="OpenBoth" />
+        </BoxContainer>
+
+        <!-- Counts -->
+        <Label Name="ActiveDotsLabel" Access="Public"
+               Text="Open slots: 0  |  Members: 0"
+               HorizontalAlignment="Center"
+               FontColorOverride="#AAAAAA"
+               Margin="0 4 0 0" />
+
+        <!-- Debug -->
+        <BoxContainer Orientation="Horizontal" Margin="0 8 0 2">
+            <TextureRect Name="IconDebug" Access="Public"
+                         MinSize="16 16" Stretch="KeepAspectCentered" Margin="0 0 4 0" />
+            <Label Text="Debug" FontColorOverride="#555555" />
+        </BoxContainer>
+        <Button Name="DebugToggleButton" Access="Public"
+                Text="Show Slot Positions"
+                HorizontalExpand="True"
+                Margin="0 0 0 2"
+                ToolTip="Show persistent white markers at each member's computed target position. Handy for checking formation shape after a turn."
+                StyleClasses="OpenBoth" />
+
+    </BoxContainer>
+</controls:FormationMenuWindow>

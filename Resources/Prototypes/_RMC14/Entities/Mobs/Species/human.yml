@@ -44,6 +44,9 @@
         type: SquadInfoBui
       enum.DialogUiKey.Key:
         type: DialogBui
+      enum.FormationMenuUiKey.Key:
+        type: FormationMenuBui
+        requireInputValidation: false
       enum.ViewIntelObjectivesUI.Key:
         type: ViewIntelObjectivesBui
       enum.BodyPartPickerUIKey.Key:

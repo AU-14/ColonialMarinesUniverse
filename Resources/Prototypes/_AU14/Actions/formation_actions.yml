@@ -1,0 +1,13 @@
+- type: entity
+  id: AU14FormationMenuAction
+  name: formation control
+  description: Open the formation planning and control menu.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    icon:
+      sprite: _AU14/Actions/formation_actions.rsi
+      state: formation
+    useDelay: 0.5
+  - type: InstantAction
+    event: !type:AU14FormationMenuActionEvent {}

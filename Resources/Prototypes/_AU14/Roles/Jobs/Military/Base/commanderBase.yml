@@ -51,6 +51,7 @@
     components:
     - type: CommendationGiver
     - type: InnateCommandSpeech
+    - type: AU14FormationLeader
     - type: Skills
       preset: AU14SkillPresetPlatoonCommander
     - type: JobPrefix

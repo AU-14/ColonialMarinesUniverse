@@ -1,0 +1,78 @@
+# Formation dot entities - placed by formation leaders to mark slots in a formation.
+# DotColor is applied at runtime via FormationDotVisualsSystem tinting the sprite layers.
+# The base sprite is white/monochrome so color tinting works correctly.
+
+- type: entity
+  id: AU14FormationDotBase
+  abstract: true
+  name: formation marker
+  description: A temporary formation position marker.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    drawdepth: Objects
+    noRot: false
+    layers:
+    - sprite: Markers/arrow.rsi
+      state: mono
+      map: [ "dotArrow" ]
+  - type: Clickable
+  - type: InteractionOutline
+  - type: FormationDot
+
+- type: entity
+  parent: AU14FormationDotBase
+  id: AU14FormationDotFollower
+  suffix: Follower
+  components:
+  - type: FormationDot
+    isLeaderDot: false
+
+- type: entity
+  parent: AU14FormationDotBase
+  id: AU14FormationDotLeader
+  suffix: Leader
+  components:
+  - type: FormationDot
+    isLeaderDot: true
+
+# Ghost entities - shown during placement preview only.
+# These are spawned client-side by the placement manager and must NOT have
+# FormationDotComponent to avoid the visuals system overriding their color.
+- type: entity
+  id: AU14FormationDotGhostFollower
+  suffix: Ghost, Follower
+  name: formation marker
+  categories: [ HideSpawnMenu ]
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    drawdepth: Objects
+    noRot: false
+    color: "0.7, 0.7, 1.0, 0.6"
+    layers:
+    - sprite: Markers/arrow.rsi
+      state: mono
+
+- type: entity
+  id: AU14FormationDotGhostLeader
+  suffix: Ghost, Leader
+  name: formation marker (leader)
+  categories: [ HideSpawnMenu ]
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    drawdepth: Objects
+    noRot: false
+    color: "1.0, 0.85, 0.3, 0.6"
+    layers:
+    - sprite: Markers/arrow.rsi
+      state: mono

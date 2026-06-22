@@ -47,6 +47,7 @@
     components:
     - type: Skills
       preset: AU14SkillPresetPlatoonSeniorSergeant
+    - type: AU14FormationLeader
     - type: RMCSpeechBubbleSpecificStyle
       speechStyleClass: commanderSpeech
     - type: JobPrefix
