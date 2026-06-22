@@ -767,7 +767,7 @@
     - name: Attachments
       choices: { CMUAttachmentsVendor: 1 }
       entries:
-      - id: RMCAttachmentTwoPointSling
+      - id: AU14AttachmentTwoPointSling
       - id: RMCAttachmentRailFlashlight
 
 - type: entity
@@ -942,7 +942,7 @@
         amount: 3
     - name: Rail Attachments
       entries:
-      - id: RMCAttachmentTwoPointSling
+      - id: AU14AttachmentTwoPointSling
         amount: 50
       - id: RMCAttachmentRailFlashlight
         amount: 25
