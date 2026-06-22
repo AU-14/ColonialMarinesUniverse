@@ -1,6 +1,6 @@
 - type: job
   parent: AU14JobRadioTelephoneOperatorBase
-  id: AU14JobOpforRadioTelephoneOperator
+  id: AU14JobOPFORRadioTelephoneOperator
   icon: "AU14JobIconOPFORFTL"
   startingGear: AU14GearopforRadioTelephoneOperator
   dummyStartingGear: AU14GearopforRadioTelephoneOperatorDummy
@@ -36,12 +36,12 @@
   name: Spawn Point opfor Radio Telephone Operator
   components:
   - type: SpawnPoint
-    job_id: AU14JobOpforRadioTelephoneOperator
+    job_id: AU14JobOPFORRadioTelephoneOperator
   - type: Sprite
     state: syn_spawn
 
 - type: playTimeTracker
-  id: AU14JobOpforRadioTelephoneOperator
+  id: AU14JobOPFORRadioTelephoneOperator
   isHumanoid: true
 
 - type: startingGear

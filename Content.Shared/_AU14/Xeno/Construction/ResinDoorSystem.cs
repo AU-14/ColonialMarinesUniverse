@@ -44,7 +44,9 @@ public sealed partial class ResinDoorSystem : EntitySystem
         var hive = _hive.GetHive(door);
         if (hive is null)
         {
-            Logger.GetSawmill("hive").Warning($"Resin door ({door}) is missing a Hive, permitting access");
+            var doorHive = TryComp<HiveMemberComponent>(door, out var doorComp) ? doorComp.Hive : null;
+            var userHive = TryComp<HiveMemberComponent>(user, out var userComp) ? userComp.Hive : null;
+            Logger.GetSawmill("hive").Warning($"Resin door ({door}) is missing a Hive. Door hive: {doorHive}, User hive: {userHive}. Permitting access");
             return true; // IsAllyOfHive early-returns false when Hive is null
         }
 

@@ -1,6 +1,6 @@
 - type: job
   parent: AU14JobSquadAutomaticRiflemanBase
-  id: AU14JobOpforSquadAutomaticRifleman
+  id: AU14JobOPFORSquadAutomaticRifleman
   icon: "AU14JobIconOPFORAFN"
   spawnMenuRoleName: Automatic Rifleman (OPFOR)
   supervisors: au14-job-supervisors-opfor
@@ -36,7 +36,7 @@
   name: Spawn Point opfor Squad Rifleman
   components:
   - type: SpawnPoint
-    job_id: AU14JobOpforSquadAutomaticRifleman
+    job_id: AU14JobOPFORSquadAutomaticRifleman
   - type: Sprite
     state: syn_spawn
 

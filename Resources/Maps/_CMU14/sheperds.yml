@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 06/18/2026 08:39:38
-  entityCount: 36479
+  entityCount: 36481
 maps:
 - 1
 grids:
@@ -173178,7 +173178,7 @@ entities:
     - type: Transform
       pos: 29.625,-10.5
       parent: 1
-- proto: destroy_carp
+- proto: killcarpobjective
   entities:
   - uid: 1209
     components:
@@ -266253,5 +266253,19 @@ entities:
     components:
     - type: Transform
       pos: 22.5,69.5
+      parent: 1
+- proto: SpawnPointObserver
+  entities:
+  - uid: 344832
+    components:
+    - type: Transform
+      pos: 0.5,0.5
+      parent: 1
+- proto: CMUCrateLivestockWeYu
+  entities:
+  - uid: 344833
+    components:
+    - type: Transform
+      pos: 42.5,-124.5
       parent: 1
 ...

@@ -18,10 +18,10 @@
   description: au-job-description-threat-leader
   setPreference: true
   playTimeTracker: AUJobThreatLeader
-  # requirements:
-  # - !type:RoleTimeRequirement
-  #   role: AUJobThreatMember
-  #   time: 7200 # 2 hours
+  requirements:
+  - !type:RoleTimeRequirement
+     role: AUJobThreatMember
+     time: 10800 # 3 hours
   hidden: false
   supervisors: nobody
   icon: "AU14JobIconThreatLeader"

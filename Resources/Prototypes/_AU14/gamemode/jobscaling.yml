@@ -46,10 +46,10 @@
       scale: 0.034  # ~29 slots
       whenToBeginScaling: 50
     # --- OPFOR ---
-    AU14JobOpforSquadRifleman:
+    AU14JobOPFORSquadRifleman:
       scale: 0.5
       whenToBeginScaling: 50
-    AU14JobOpforPlatoonCorpsman:
+    AU14JobOPFORPlatoonCorpsman:
       scale: 0.2
       whenToBeginScaling: 50
     AU14JobOPFORSquadCombatTech:

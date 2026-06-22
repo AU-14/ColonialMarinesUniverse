@@ -620,7 +620,7 @@ public sealed partial class TacticalMapControl : TextureRect
                 }
             }
             // skip drawing this blip image if the frame cannot be loaded
-            catch (Exception ex) { Logger.GetSawmill("tacmap").Error($"[DrawBlips] Failed to render (missing/corrupt blip image): {ex}"); }
+            catch (Exception ex) { Logger.GetSawmill("tacmap").Error($"[DrawBlips] Failed to render blip image (missing/corrupt state) '{(blip.Image as SpriteSpecifier.Rsi)?.RsiState ?? "?"}': {ex}"); }
 
             if (_localPlayerEntityId.HasValue && _blipEntityIds != null && i < _blipEntityIds.Length)
             {

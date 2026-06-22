@@ -19,7 +19,7 @@
   name: platoon commander ID card
   components:
   - type: PresetIdCard
-    job: AU14JobOpforPlatCo
+    job: AU14JobOPFORPlatCo
   - type: ItemIFF
     factions:
     - OPFOR
@@ -30,7 +30,7 @@
   name: platoon operations officer ID card
   components:
   - type: PresetIdCard
-    job: AU14JobOpforPlatOp
+    job: AU14JobOPFORPlatOp
   - type: ItemIFF
     factions:
     - OPFOR
@@ -41,7 +41,7 @@
   name: dropship pilot ID card
   components:
   - type: PresetIdCard
-    job: AU14JobOpforDSPilot
+    job: AU14JobOPFORDSPilot
   - type: ItemIFF
     factions:
     - OPFOR
@@ -52,7 +52,7 @@
   name: dropship crew chief ID card
   components:
   - type: PresetIdCard
-    job: AU14JobOpforDCC
+    job: AU14JobOPFORDCC
   - type: ItemIFF
     factions:
     - OPFOR
@@ -63,7 +63,7 @@
   name: platoon sergeant ID card
   components:
   - type: PresetIdCard
-    job: AU14JobOpforSectionSergeant
+    job: AU14JobOPFORSectionSergeant
   - type: ItemIFF
     factions:
     - OPFOR
@@ -74,7 +74,7 @@
   name: squad sergeant ID card
   components:
   - type: PresetIdCard
-    job: AU14JobOpforSquadSergeant
+    job: AU14JobOPFORSquadSergeant
   - type: ItemIFF
     factions:
     - OPFOR
@@ -85,7 +85,7 @@
   name: squad rifleman ID card
   components:
   - type: PresetIdCard
-    job: AU14JobOpforSquadRifleman
+    job: AU14JobOPFORSquadRifleman
   - type: ItemIFF
     factions:
     - OPFOR
@@ -96,7 +96,7 @@
   name: squad sergeant ID card
   components:
   - type: PresetIdCard
-    job: AU14JobOpforSquadAutomaticRifleman
+    job: AU14JobOPFORSquadAutomaticRifleman
   - type: ItemIFF
     factions:
     - OPFOR
@@ -107,7 +107,7 @@
   name: platoon corpsman ID card
   components:
   - type: PresetIdCard
-    job: AU14JobOpforPlatoonCorpsman
+    job: AU14JobOPFORPlatoonCorpsman
   - type: ItemIFF
     factions:
     - OPFOR
@@ -118,7 +118,7 @@
   name: radio telephone operator ID card
   components:
   - type: PresetIdCard
-    job: AU14JobOpforRadioTelephoneOperator
+    job: AU14JobOPFORRadioTelephoneOperator
   - type: ItemIFF
     factions:
     - OPFOR

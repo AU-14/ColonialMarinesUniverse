@@ -45,7 +45,7 @@
   - type: KillObjective
     factiontokill: opfor
     amounttokill: 1
-    specificjob: AU14JobOpforPlatCo
+    specificjob: AU14JobOPFORPlatCo
 
 - type: entity
   name: "Kill the GOVFOR Commander (FOF)"
@@ -264,3 +264,25 @@
   - type: KillObjective
     amounttokill: 1
     specificjob: AU14JobThreatMember
+
+- type: entity
+  name: Kill the Carp
+  parent: MarkerBase
+  id: killcarpobjective
+  components:
+  - type: Sprite
+    state: red
+  - type: AuObjective
+    id: killcarpobj
+    factioneutral: false
+    applicableModes:
+    - insurgency
+    possiblefactions:
+    - clf
+    repeating: true
+    objectivelevel: 1
+    custompoints: 5
+    ObjectiveDescription: "Kill the Carp"
+  - type: KillObjective
+    mobtokill: CMUMobCarp
+    factiontokill: SimpleNeutral

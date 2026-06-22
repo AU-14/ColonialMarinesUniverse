@@ -183,6 +183,7 @@
   parent: RMCChemDispenserBase
   id: RMCChemDispenserCorpsmanBase
   name: pressurized chemical dispenser
+  suffix: DO NOT MAP
   description: A more basic chemical dispenser, designed for use with pressurized reagent canisters. A We-Yu product.
   abstract: true
   components:

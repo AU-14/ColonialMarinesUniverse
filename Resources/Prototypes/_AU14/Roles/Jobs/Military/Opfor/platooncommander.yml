@@ -1,6 +1,6 @@
 - type: job
   parent: AU14JobPlatCoBase
-  id: AU14JobOpforPlatCo
+  id: AU14JobOPFORPlatCo
   icon: "AU14JobIconOPFORPlatCo"
   spawnMenuRoleName: Platoon Commander (OPFOR)
   supervisors: au14-job-supervisors-opforplatco
@@ -46,6 +46,6 @@
   name: Spawn Point opfor Platoon Commander
   components:
   - type: SpawnPoint
-    job_id: AU14JobOpforPlatCo
+    job_id: AU14JobOPFORPlatCo
   - type: Sprite
     state: syn_spawn
