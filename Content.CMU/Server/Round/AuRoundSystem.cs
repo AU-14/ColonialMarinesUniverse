@@ -51,18 +51,54 @@ namespace Content.Server.AU14.Round
         [ViewVariables]
         private RMCPlanetMapPrototypeComponent? SelectedPlanetMap { get; set; }
 
-        private GamePresetPrototype? _selectedPreset;
-        public GamePresetPrototype? SelectedPreset => _selectedPreset;
-        private RMCPlanetMapPrototypeComponent? _selectedPlanet;
-        private bool _voteSequenceRunning;
-        private readonly List<IVoteHandle> _activeVoteHandles = new();
-        private int _voteSequenceId;
-        public ThreatPrototype _selectedthreat = null!;
-        private string? _selectedGovforShip;
-        private string? _selectedOpforShip;
+        private readonly AuRoundSelectionState _state = new();
+        private readonly AuRoundVoteSequenceTracker _voteSequence = new();
+
+        private GamePresetPrototype? _selectedPreset
+        {
+            get => _state.SelectedPreset;
+            set => _state.SelectedPreset = value;
+        }
+
+        public GamePresetPrototype? SelectedPreset => _state.SelectedPreset;
+
+        private RMCPlanetMapPrototypeComponent? _selectedPlanet
+        {
+            get => _state.SelectedPlanet;
+            set => _state.SelectedPlanet = value;
+        }
+
+        private string? _selectedPlanetId
+        {
+            get => _state.SelectedPlanetId;
+            set => _state.SelectedPlanetId = value;
+        }
+
+        private bool _voteSequenceRunning
+        {
+            get => _voteSequence.Running;
+            set => _voteSequence.Running = value;
+        }
+
+        private int _voteSequenceId => _voteSequence.SequenceId;
+        public ThreatPrototype? SelectedThreat => _state.SelectedThreat;
+
+        private string? _selectedGovforShip
+        {
+            get => _state.SelectedGovforShip;
+            set => _state.SelectedGovforShip = value;
+        }
+
+        private string? _selectedOpforShip
+        {
+            get => _state.SelectedOpforShip;
+            set => _state.SelectedOpforShip = value;
+        }
+
         public void SetOpforShip(string shipId) => _selectedOpforShip = shipId;
         public void SetGovforShip(string shipId) => _selectedGovforShip = shipId;
-        public void SetSelectedThreat(ThreatPrototype? threat) => _selectedthreat = threat ?? null!;
+        public void SetPreset(GamePresetPrototype? preset) => _selectedPreset = preset;
+        public void SetSelectedThreat(ThreatPrototype? threat) => _state.SelectedThreat = threat;
 
         public bool UsesPostRoundstartThreatVote()
         {
@@ -77,18 +113,16 @@ namespace Content.Server.AU14.Round
                     presetId.Equals("ColonyFall", StringComparison.OrdinalIgnoreCase));
         }
 
-        private List<AuThirdPartyPrototype> _selectedThirdParties = new();
-        public IReadOnlyList<AuThirdPartyPrototype> SelectedThirdParties => _selectedThirdParties;
+        private List<AuThirdPartyPrototype> _selectedThirdParties => _state.SelectedThirdParties;
+        public IReadOnlyList<AuThirdPartyPrototype> SelectedThirdParties => _state.SelectedThirdParties;
 
         public override void Initialize()
         {
 
             base.Initialize();
-            _voteSequenceRunning = false;
-            _selectedPreset = null;
-            _selectedPlanet = null;
+            _voteSequence.Reset();
+            _state.Reset();
             SelectedPlanetMap = null;
-            _selectedThirdParties.Clear(); // Reset third parties at round init
 
         }
 
@@ -123,38 +157,17 @@ namespace Content.Server.AU14.Round
 
         private bool IsCurrentVoteSequence(int sequenceId)
         {
-            return sequenceId == _voteSequenceId;
+            return _voteSequence.IsCurrent(sequenceId);
         }
 
         private void TrackVoteHandle(IVoteHandle handle)
         {
-            _activeVoteHandles.Add(handle);
-
-            handle.OnFinished += RemoveTrackedVote;
-            handle.OnCancelled += RemoveTrackedVote;
-        }
-
-        private void RemoveTrackedVote(IVoteHandle handle, VoteFinishedEventArgs args)
-        {
-            RemoveTrackedVote(handle);
-        }
-
-        private void RemoveTrackedVote(IVoteHandle handle)
-        {
-            _activeVoteHandles.Remove(handle);
-            handle.OnFinished -= RemoveTrackedVote;
-            handle.OnCancelled -= RemoveTrackedVote;
+            _voteSequence.Track(handle);
         }
 
         private void CancelActiveVoteHandles()
         {
-            foreach (var handle in _activeVoteHandles.ToArray())
-            {
-                if (!handle.Finished)
-                    handle.Cancel();
-            }
-
-            _activeVoteHandles.Clear();
+            _voteSequence.CancelActive();
         }
 
         private static string? GetPresetVoteWinner(VoteFinishedEventArgs args)
@@ -178,7 +191,8 @@ namespace Content.Server.AU14.Round
             _voteSequenceRunning = true;
             _selectedPreset = null;
             _selectedPlanet = null;
-            _selectedthreat = null!;
+            _selectedPlanetId = null;
+            _state.SelectedThreat = null;
             _selectedThirdParties.Clear();
             var sequenceId = _voteSequenceId;
             var presetVote = StartPresetVote(sequenceId, presetId =>
@@ -216,14 +230,14 @@ namespace Content.Server.AU14.Round
                 }
 
                 // Build planet options from planetIds
-                var planetProtos = new List<RMCPlanetMapPrototypeComponent>();
+                var planetProtos = new List<(string Id, RMCPlanetMapPrototypeComponent Planet)>();
                 foreach (var pid in planetIds)
                 {
                     if (_prototypeManager.TryIndex<EntityPrototype>(pid, out var proto) &&
                         proto.TryGetComponent(out RMCPlanetMapPrototypeComponent? planetComp,
                             IoCManager.Resolve<IComponentFactory>()))
                     {
-                        planetProtos.Add(planetComp);
+                        planetProtos.Add((pid, planetComp));
                     }
                     else
                     {
@@ -237,9 +251,9 @@ namespace Content.Server.AU14.Round
                 var playerCount = _playerManager.PlayerCount;
                 planetProtos.RemoveAll(p =>
                     // If MinPlayers is set (>0) and current players are fewer, exclude.
-                    (p.MinPlayers > 0 && playerCount < p.MinPlayers) ||
+                    (p.Planet.MinPlayers > 0 && playerCount < p.Planet.MinPlayers) ||
                     // If MaxPlayers is set (>0) and current players exceed it, exclude.
-                    (p.MaxPlayers > 0 && playerCount > p.MaxPlayers)
+                    (p.Planet.MaxPlayers > 0 && playerCount > p.Planet.MaxPlayers)
                 );
 
                 if (planetProtos.Count == 0)
@@ -248,10 +262,13 @@ namespace Content.Server.AU14.Round
                     return;
                 }
 
-                var vote = BuildPlanetVoteOptions(preset.ID, planetProtos, TimeSpan.FromSeconds(30));
+                var planets = planetProtos
+                    .Select(planet => planet.Planet)
+                    .ToList();
+                var vote = BuildPlanetVoteOptions(preset.ID, planets, TimeSpan.FromSeconds(30));
                 vote.SetInitiatorOrServer(null);
                 var planetByMapId = planetProtos
-                    .GroupBy(planet => planet.MapId, StringComparer.OrdinalIgnoreCase)
+                    .GroupBy(planet => planet.Planet.MapId, StringComparer.OrdinalIgnoreCase)
                     .ToDictionary(group => group.Key, group => group.First(), StringComparer.OrdinalIgnoreCase);
                 var handle = _voteManager.CreateVote(vote);
                 TrackVoteHandle(handle);
@@ -272,7 +289,7 @@ namespace Content.Server.AU14.Round
                     if (picked != null && planetByMapId.TryGetValue(picked, out var planet))
                     {
                         args.ResolveWinner(picked);
-                        _selectedPlanet = planet;
+                        _state.SetPlanet(planet.Id, planet.Planet);
                     }
                 };
 
@@ -284,9 +301,11 @@ namespace Content.Server.AU14.Round
 
                         // Fallback: if _selectedPlanet wasn't set by handler, pick manually
                         if (_selectedPlanet == null && planetProtos.Count > 0)
-                            _selectedPlanet = planetProtos[0];
+                        {
+                            _state.SetPlanet(planetProtos[0].Id, planetProtos[0].Planet);
+                        }
                         SetCamoType();
-                        StartPlatoonVotes();
+                        StartPlatoonVotes(sequenceId);
                     });
             });
 
@@ -303,7 +322,7 @@ namespace Content.Server.AU14.Round
             return IsThirdPartyAllowed(
                 proto,
                 _selectedPreset.ID,
-                _selectedthreat?.ID,
+                SelectedThreat?.ID,
                 platoonSpawnRuleSystem.SelectedGovforPlatoon?.ID,
                 platoonSpawnRuleSystem.SelectedOpforPlatoon?.ID,
                 _playerManager.PlayerCount);
@@ -317,35 +336,13 @@ namespace Content.Server.AU14.Round
             string? opforPlatoon,
             int playerCount)
         {
-            if (ContainsIgnoreCase(proto.BlacklistedGamemodes, currentGamemode))
-                return false;
-
-            if (proto.whitelistedgamemodes.Count > 0 &&
-                !ContainsIgnoreCase(proto.whitelistedgamemodes, currentGamemode))
-                return false;
-
-            if (proto.MaxPlayers < playerCount || proto.MinPlayers > playerCount)
-                return false;
-
-            if (currentThreat != null && ContainsIgnoreCase(proto.BlacklistedThreats, currentThreat))
-                return false;
-
-            if (proto.WhitelistedThreats.Count > 0 &&
-                (currentThreat == null || !ContainsIgnoreCase(proto.WhitelistedThreats, currentThreat)))
-                return false;
-
-            if (govforPlatoon != null && ContainsIgnoreCase(proto.BlacklistedPlatoons, govforPlatoon))
-                return false;
-
-            if (opforPlatoon != null && ContainsIgnoreCase(proto.BlacklistedPlatoons, opforPlatoon))
-                return false;
-
-            if (proto.WhitelistedPlatoons.Any() &&
-                ((govforPlatoon != null && !ContainsIgnoreCase(proto.WhitelistedPlatoons, govforPlatoon)) ||
-                 (opforPlatoon != null && !ContainsIgnoreCase(proto.WhitelistedPlatoons, opforPlatoon))))
-                return false;
-
-            return true;
+            return AuRoundSelectionRules.IsThirdPartyAllowed(
+                proto,
+                currentGamemode,
+                currentThreat,
+                govforPlatoon,
+                opforPlatoon,
+                playerCount);
         }
 
         internal static VoteOptions BuildPlanetVoteOptions(
@@ -353,39 +350,7 @@ namespace Content.Server.AU14.Round
             IReadOnlyList<RMCPlanetMapPrototypeComponent> planets,
             TimeSpan duration)
         {
-            var options = new List<(string text, object data)>();
-            foreach (var planet in planets)
-            {
-                var displayName = string.IsNullOrWhiteSpace(planet.VoteName)
-                    ? planet.MapId
-                    : planet.VoteName;
-                options.Add((displayName, planet.MapId));
-            }
-
-            return new VoteOptions
-            {
-                Title = "Select Planet",
-                Options = options,
-                Duration = duration,
-                CarryoverEnabled = true,
-                CarryoverKey = BuildPlanetVoteCarryoverKey(presetId, planets),
-            };
-        }
-
-        private static string BuildPlanetVoteCarryoverKey(
-            string presetId,
-            IEnumerable<RMCPlanetMapPrototypeComponent> planets)
-        {
-            var mapIds = planets
-                .Select(planet => planet.MapId)
-                .Order(StringComparer.OrdinalIgnoreCase);
-
-            return $"au14-planet:{presetId}:{string.Join(",", mapIds)}";
-        }
-
-        private static bool ContainsIgnoreCase(IEnumerable<string> values, string value)
-        {
-            return values.Any(candidate => candidate.Equals(value, StringComparison.OrdinalIgnoreCase));
+            return AuRoundSelectionRules.BuildPlanetVoteOptions(presetId, planets, duration);
         }
 
         private void PreselectThirdParties()
@@ -393,7 +358,7 @@ namespace Content.Server.AU14.Round
             _selectedThirdParties.Clear();
             if (_selectedPreset == null || _selectedPlanet == null)
                 return;
-            if (_selectedthreat == null)
+            if (SelectedThreat == null)
                 return;
 
             var allThirdParties = new List<AuThirdPartyPrototype>();
@@ -426,7 +391,7 @@ namespace Content.Server.AU14.Round
             }
             if (weighted.Count == 0)
                 return;
-            int maxThirdParties = Math.Max(0, _selectedthreat.MaxThirdParties);
+            int maxThirdParties = Math.Max(0, SelectedThreat.MaxThirdParties);
             if (maxThirdParties <= 0)
                 return;
             var selectedSet = new HashSet<AuThirdPartyPrototype>();
@@ -456,13 +421,17 @@ namespace Content.Server.AU14.Round
             PreselectThirdParties();
         }
 
-        private void StartPlatoonVotes()
+        private void StartPlatoonVotes(int sequenceId)
         {
+            if (!IsCurrentVoteSequence(sequenceId))
+                return;
+
             if (_selectedPreset == null || _selectedPlanet == null)
             {
                 _voteSequenceRunning = false;
                 _selectedPreset = null;
                 _selectedPlanet = null;
+                _selectedPlanetId = null;
                 return;
             }
 
@@ -472,12 +441,17 @@ namespace Content.Server.AU14.Round
             Timer.Spawn(TimeSpan.FromMilliseconds(100),
                 () =>
                 {
+                    if (!IsCurrentVoteSequence(sequenceId))
+                        return;
 
                     chooseThreat(planetProto);
                 });
             Timer.Spawn(TimeSpan.FromMilliseconds(200),
                 () =>
                 {
+                    if (!IsCurrentVoteSequence(sequenceId))
+                        return;
+
                     PreselectThirdParties();
                 });
 
@@ -506,8 +480,12 @@ namespace Content.Server.AU14.Round
                 voteopt.SetInitiatorOrServer(null);
 
                 var handle = _voteManager.CreateVote(voteopt);
+                TrackVoteHandle(handle);
                 handle.OnFinished += (_, args) =>
                 {
+                    if (!IsCurrentVoteSequence(sequenceId))
+                        return;
+
                     string? winner = args.Winner as string;
                     if (winner == null && args.Winners is var arr && arr.Length > 0)
                         winner = arr[0] as string;
@@ -538,8 +516,12 @@ namespace Content.Server.AU14.Round
                 };
                 voteopt.SetInitiatorOrServer(null);
                 var handle = _voteManager.CreateVote(voteopt);
+                TrackVoteHandle(handle);
                 handle.OnFinished += (_, args) =>
                 {
+                    if (!IsCurrentVoteSequence(sequenceId))
+                        return;
+
                     var winnerId = args.Winner as PlatoonPrototype;
                     if (winnerId == null && args.Winners is var winnersArray && winnersArray.Length > 0)
                         winnerId = winnersArray[0] as PlatoonPrototype;
@@ -562,6 +544,8 @@ namespace Content.Server.AU14.Round
                             Timer.Spawn(TimeSpan.FromMilliseconds(100),
                                 () =>
                                 {
+                                    if (!IsCurrentVoteSequence(sequenceId))
+                                        return;
 
                                     StartShipVote(winnerId.PossibleShips,
                                         "Govfor Ship Vote",
@@ -589,8 +573,12 @@ namespace Content.Server.AU14.Round
                 };
                 voteopt.SetInitiatorOrServer(null);
                 var handle = _voteManager.CreateVote(voteopt);
+                TrackVoteHandle(handle);
                 handle.OnFinished += (_, args) =>
                 {
+                    if (!IsCurrentVoteSequence(sequenceId))
+                        return;
+
                     var winnerId = args.Winner as PlatoonPrototype;
                     if (winnerId == null && args.Winners is var winnersArray && winnersArray.Length > 0)
                         winnerId = winnersArray[0] as PlatoonPrototype;
@@ -613,6 +601,9 @@ namespace Content.Server.AU14.Round
                             Timer.Spawn(TimeSpan.FromMilliseconds(100),
                                 () =>
                                 {
+                                    if (!IsCurrentVoteSequence(sequenceId))
+                                        return;
+
                                     StartShipVote(winnerId.PossibleShips,
                                         "Opfor Ship Vote",
                                         shipId => _selectedOpforShip = shipId);
@@ -642,14 +633,9 @@ namespace Content.Server.AU14.Round
 
         public void StartVoteSequence(Action? onFinished = null)
         {
-            _voteSequenceId++;
-            CancelActiveVoteHandles();
-            _voteSequenceRunning = false;
-            _selectedPreset = null;
-            _selectedPlanet = null;
+            _voteSequence.Restart();
+            _state.Reset();
             SelectedPlanetMap = null;
-            _selectedGovforShip = null;
-            _selectedOpforShip = null;
 
             StartFullVoteSequence();
             onFinished?.Invoke();
@@ -658,6 +644,11 @@ namespace Content.Server.AU14.Round
         public RMCPlanetMapPrototypeComponent? GetSelectedPlanet()
         {
             return _selectedPlanet;
+        }
+
+        public string? GetSelectedPlanetId()
+        {
+            return _selectedPlanetId;
         }
 
         // --- PLANET LOGIC: Load planet like cmdistress does after round starts ---
@@ -711,9 +702,10 @@ namespace Content.Server.AU14.Round
         {
             if (_prototypeManager.TryIndex<EntityPrototype>(planetId, out var proto) &&
                 proto.TryGetComponent(out RMCPlanetMapPrototypeComponent? planetComp,
-                    IoCManager.Resolve<IComponentFactory>()))
+                IoCManager.Resolve<IComponentFactory>()))
             {
-                _selectedPlanet = planetComp;
+                _state.SetPlanet(planetId, planetComp);
+                SetCamoType();
                 return true;
             }
 
@@ -740,7 +732,7 @@ namespace Content.Server.AU14.Round
             var noThreatPresets = new HashSet<string> { "ForceOnForce", "Insurgency" };
             if (_selectedPreset != null && noThreatPresets.Any(s => s.Equals(_selectedPreset.ID, StringComparison.OrdinalIgnoreCase)))
             {
-                _selectedthreat = null!;
+                _state.SelectedThreat = null;
                 Logger.GetSawmill("content").Debug($"[AuRoundSystem] Skipping threat selection for preset: {_selectedPreset.ID}");
                 return;
             }
@@ -748,7 +740,7 @@ namespace Content.Server.AU14.Round
             var presetId = _selectedPreset?.ID;
             if (IsPostRoundstartThreatVotePreset(presetId))
             {
-                _selectedthreat = null!;
+                _state.SelectedThreat = null;
                 Logger.GetSawmill("content").Debug($"[AuRoundSystem] Deferring threat selection for post-roundstart vote preset: {presetId}");
                 return;
             }
@@ -808,22 +800,27 @@ namespace Content.Server.AU14.Round
 
             var threatSelectedId = _random.Pick(weightedThreats);
             Logger.GetSawmill("content").Debug($"[AuRoundSystem] Selected threat: {threatSelectedId}");
-            _selectedthreat = _prototypeManager.TryIndex(threatSelectedId, out ThreatPrototype? threatSelected)
+            _state.SelectedThreat = _prototypeManager.TryIndex(threatSelectedId, out ThreatPrototype? threatSelected)
                 ? threatSelected
-                : null!;
+                : null;
 
         }
 
         public void StartThreatWinConditions(ThreatPrototype threat)
         {
-            if (threat.WinConditions.Count == 0)
+            StartThreatWinConditions(threat.WinConditions, $"threat '{threat.ID}'");
+        }
+
+        public void StartThreatWinConditions(IReadOnlyList<string> winConditions, string source)
+        {
+            if (winConditions.Count == 0)
                 return;
 
             var ticker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
-            foreach (var ruleId in threat.WinConditions)
+            foreach (var ruleId in winConditions)
             {
                 ticker.StartGameRule(ruleId);
-                Logger.GetSawmill("content").Debug($"[AuRoundSystem] Started wincondition rule from threat: {ruleId}");
+                Logger.GetSawmill("content").Debug($"[AuRoundSystem] Started wincondition rule from {source}: {ruleId}");
             }
         }
 
