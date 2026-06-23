@@ -1,0 +1,20 @@
+- type: partySpawn
+  id: USArmyTankSpawn
+  leadersToSpawn:
+    AU14JobUSArmyTankCommander: 1
+  gruntsToSpawn:
+    AU14JobUSArmyTankGunner: 1
+    AU14JobUSArmyTankLoader: 1
+    AU14JobUSArmyTankDriver: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: USArmyTank
+  partyspawn: USArmyTankSpawn
+  entrymethod: ground
+  weight: 20
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 4
+  roundstart: false

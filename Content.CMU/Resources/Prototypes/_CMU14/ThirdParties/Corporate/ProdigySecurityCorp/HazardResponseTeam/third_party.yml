@@ -1,0 +1,20 @@
+# HRT Third Party
+- type: partySpawn
+  id: ProdigyHazardResponseSpawn
+  leadersToSpawn:
+    AU14JobPARTPilot: 1
+  gruntsToSpawn:
+    AU14JobPARTDCC: 2
+    AU14JobPARTExtractionContractor: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: ProdigyHazardResponseTeamParty
+  partyspawn: ProdigyHazardResponseSpawn
+  entrymethod: shuttle
+  weight: 10
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 5
+  roundstart: false

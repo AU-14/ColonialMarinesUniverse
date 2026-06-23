@@ -1,0 +1,20 @@
+- type: partySpawn
+  id: ICRCReliefPartySpawn
+  leadersToSpawn:
+    AU14PartyJobICRCCMO: 1
+  gruntsToSpawn:
+    AU14PartyJobICRCDoctor: 1
+    AU14PartyJobICRCNurse: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: ICRCReliefParty
+  partyspawn: ICRCReliefPartySpawn
+  displayName: Red Cross Relief Party
+  entrymethod: shuttle
+  weight: 20
+  minplayers: 50
+  maxplayers: 400
+  GhostsNeeded: 20
+  roundstart: false
