@@ -53,6 +53,9 @@ cm-chatsan-replacement-tuff = tough
 cm-chatsan-word-wtf = wtf
 cm-chatsan-replacement-wtf = what the fuck
 
+cm-chatsan-word-wdym = wdym
+cm-chatsan-replacement-wdym = what do you mean
+
 
 # Species (mob identities)
 cm-chatsan-word-skrell = skrell

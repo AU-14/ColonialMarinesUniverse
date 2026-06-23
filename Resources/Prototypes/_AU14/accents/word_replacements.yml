@@ -21,6 +21,7 @@
     cm-chatsan-word-ttyl: cm-chatsan-replacement-ttyl
     cm-chatsan-word-tuff: cm-chatsan-replacement-tuff
     cm-chatsan-word-wtf: cm-chatsan-replacement-wtf
+    cm-chatsan-word-wdym: cm-chatsan-replacement-wdym
 
 - type: accent
   id: CMChatSanitizeMarine
