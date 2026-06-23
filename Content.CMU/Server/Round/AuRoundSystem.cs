@@ -33,6 +33,26 @@ namespace Content.Server.AU14.Round
     /// </summary>
     public sealed partial class AuRoundSystem : EntitySystem
     {
+        private static readonly HashSet<string> NoThreatPresets = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "ForceOnForce",
+            "Insurgency",
+        };
+
+        private static readonly HashSet<string> PostRoundstartThreatVotePresets = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "DistressSignal",
+            "ColonyFall",
+        };
+
+        private static readonly HashSet<string> ThreatSelectionPresets = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "Prometheus",
+            "ColonyFall",
+            "DistressSignal",
+            "Jailbreak",
+        };
+
         [Dependency] private IVoteManager _voteManager = default!;
         [Dependency] private IConfigurationManager _cfg = default!;
         [Dependency] private IPrototypeManager _prototypeManager = default!;
@@ -53,6 +73,7 @@ namespace Content.Server.AU14.Round
 
         private readonly AuRoundSelectionState _state = new();
         private readonly AuRoundVoteSequenceTracker _voteSequence = new();
+        private readonly ISawmill _sawmill = Logger.GetSawmill("content");
 
         private GamePresetPrototype? _selectedPreset
         {
@@ -101,7 +122,7 @@ namespace Content.Server.AU14.Round
         public void SetSelectedThreat(ThreatPrototype? threat)
         {
             _state.SelectedThreat = threat;
-            Logger.GetSawmill("content").Debug($"[AuRoundSystem] Selected threat set to: {threat?.ID ?? "null"}");
+            _sawmill.Debug($"[AuRoundSystem] Selected threat set to: {threat?.ID ?? "null"}");
         }
 
         public bool UsesPostRoundstartThreatVote()
@@ -112,9 +133,7 @@ namespace Content.Server.AU14.Round
 
         public static bool IsPostRoundstartThreatVotePreset(string? presetId)
         {
-            return presetId != null &&
-                   (presetId.Equals("DistressSignal", StringComparison.OrdinalIgnoreCase) ||
-                    presetId.Equals("ColonyFall", StringComparison.OrdinalIgnoreCase));
+            return presetId != null && PostRoundstartThreatVotePresets.Contains(presetId);
         }
 
         private List<AuThirdPartyPrototype> _selectedThirdParties => _state.SelectedThirdParties;
@@ -375,7 +394,7 @@ namespace Content.Server.AU14.Round
                     if (_prototypeManager.TryIndex(protoId, out AuThirdPartyPrototype? proto))
                         allThirdParties.Add(proto);
                     else
-                        Logger.GetSawmill("content").Warning($"[AuRoundSystem] Could not find AuThirdPartyPrototype for ID: {protoId}");
+                        _sawmill.Warning($"[AuRoundSystem] Could not find AuThirdPartyPrototype for ID: {protoId}");
                 }
             }
             else
@@ -383,47 +402,66 @@ namespace Content.Server.AU14.Round
                 return;
             }
 
-            var filtered = allThirdParties
-                .Where(IsThirdPartyAllowedForCurrentContext)
-                .ToList();
-            Logger.GetSawmill("content").Debug(
-                $"[AuRoundSystem] Third-party candidates for planet {_selectedPlanet.MapId}: listed={allThirdParties.Count}, allowed={filtered.Count}, max={SelectedThreat.MaxThirdParties}.");
-            if (filtered.Count == 0)
-                return;
-            var weighted = new List<AuThirdPartyPrototype>();
-            foreach (var proto in filtered)
+            var candidates = new List<AuThirdPartyPrototype>();
+            foreach (var proto in allThirdParties)
             {
-                int weight = Math.Max(1, proto.weight);
-                for (int i = 0; i < weight; i++)
-                    weighted.Add(proto);
+                if (IsThirdPartyAllowedForCurrentContext(proto))
+                    candidates.Add(proto);
             }
-            if (weighted.Count == 0)
+
+            _sawmill.Debug(
+                $"[AuRoundSystem] Third-party candidates for planet {_selectedPlanet.MapId}: listed={allThirdParties.Count}, allowed={candidates.Count}, max={SelectedThreat.MaxThirdParties}.");
+            if (candidates.Count == 0)
                 return;
-            int maxThirdParties = Math.Max(0, SelectedThreat.MaxThirdParties);
+
+            var maxThirdParties = Math.Max(0, SelectedThreat.MaxThirdParties);
             if (maxThirdParties <= 0)
                 return;
-            var selectedSet = new HashSet<AuThirdPartyPrototype>();
-            // Select up to maxThirdParties unique third parties
-            while (selectedSet.Count < maxThirdParties && weighted.Count > 0)
+
+            var roundStartParties = new List<AuThirdPartyPrototype>();
+            var delayedParties = new List<AuThirdPartyPrototype>();
+            while (roundStartParties.Count + delayedParties.Count < maxThirdParties && candidates.Count > 0)
             {
-                var pick = _random.Pick(weighted);
-                if (!selectedSet.Contains(pick))
-                {
-                    selectedSet.Add(pick);
-                }
-                // Remove all instances of this pick from weighted to avoid duplicates
-                weighted.RemoveAll(x => x == pick);
-            }
-            // Insert roundstart third parties at the start, others at the end
-            foreach (var party in selectedSet)
-            {
-                if (party.RoundStart)
-                    _selectedThirdParties.Insert(0, party);
+                var pick = PickWeightedThirdParty(candidates);
+                if (pick == null)
+                    break;
+
+                candidates.Remove(pick);
+                if (pick.RoundStart)
+                    roundStartParties.Add(pick);
                 else
-                    _selectedThirdParties.Add(party);
+                    delayedParties.Add(pick);
             }
-            Logger.GetSawmill("content").Debug(
-                $"[AuRoundSystem] Selected third parties: {string.Join(", ", _selectedThirdParties.Select(party => $"{party.ID}(roundStart={party.RoundStart})"))}");
+
+            _selectedThirdParties.AddRange(roundStartParties);
+            _selectedThirdParties.AddRange(delayedParties);
+            if (_sawmill.Level <= Robust.Shared.Log.LogLevel.Debug)
+            {
+                _sawmill.Debug(
+                    $"[AuRoundSystem] Selected third parties: {string.Join(", ", _selectedThirdParties.Select(party => $"{party.ID}(roundStart={party.RoundStart})"))}");
+            }
+        }
+
+        private AuThirdPartyPrototype? PickWeightedThirdParty(IReadOnlyList<AuThirdPartyPrototype> candidates)
+        {
+            var totalWeight = 0;
+            foreach (var candidate in candidates)
+            {
+                totalWeight += Math.Max(1, candidate.weight);
+            }
+
+            if (totalWeight <= 0)
+                return null;
+
+            var roll = _random.Next(totalWeight);
+            foreach (var candidate in candidates)
+            {
+                roll -= Math.Max(1, candidate.weight);
+                if (roll < 0)
+                    return candidate;
+            }
+
+            return candidates[candidates.Count - 1];
         }
 
         public void PreselectThirdPartiesForSelectedThreat()
@@ -454,7 +492,7 @@ namespace Content.Server.AU14.Round
                     if (!IsCurrentVoteSequence(sequenceId))
                         return;
 
-                    chooseThreat(planetProto);
+                    ChooseThreat(planetProto);
                 });
             Timer.Spawn(TimeSpan.FromMilliseconds(200),
                 () =>
@@ -734,16 +772,15 @@ namespace Content.Server.AU14.Round
                 _camo.CurrentMapCamouflage = _selectedPlanet.Camouflage;
         }
 
-        public void chooseThreat(RMCPlanetMapPrototypeComponent? planet)
+        public void ChooseThreat(RMCPlanetMapPrototypeComponent? planet)
         {
             if (_cfg.GetCVar(CCVars.GameDummyTicker))
                 return;
 
-            var noThreatPresets = new HashSet<string> { "ForceOnForce", "Insurgency" };
-            if (_selectedPreset != null && noThreatPresets.Any(s => s.Equals(_selectedPreset.ID, StringComparison.OrdinalIgnoreCase)))
+            if (_selectedPreset != null && NoThreatPresets.Contains(_selectedPreset.ID))
             {
                 _state.SelectedThreat = null;
-                Logger.GetSawmill("content").Debug($"[AuRoundSystem] Skipping threat selection for preset: {_selectedPreset.ID}");
+                _sawmill.Debug($"[AuRoundSystem] Skipping threat selection for preset: {_selectedPreset.ID}");
                 return;
             }
 
@@ -751,13 +788,12 @@ namespace Content.Server.AU14.Round
             if (IsPostRoundstartThreatVotePreset(presetId))
             {
                 _state.SelectedThreat = null;
-                Logger.GetSawmill("content").Debug($"[AuRoundSystem] Deferring threat selection for post-roundstart vote preset: {presetId}");
+                _sawmill.Debug($"[AuRoundSystem] Deferring threat selection for post-roundstart vote preset: {presetId}");
                 return;
             }
 
-            var allowedPresets = new[] { "Prometheus", "ColonyFall", "DistressSignal", "Jailbreak" };
             if (string.IsNullOrEmpty(presetId) ||
-                !allowedPresets.Any(p => p.Equals(presetId, StringComparison.InvariantCultureIgnoreCase)) ||
+                !ThreatSelectionPresets.Contains(presetId) ||
                 planet is not { AllowedThreats.Count: >= 1 })
             {
                 return;
@@ -782,38 +818,60 @@ namespace Content.Server.AU14.Round
 
             if (threats.Count == 0)
             {
-                Logger.GetSawmill("content").Debug(
+                _sawmill.Debug(
                     $"[AuRoundSystem] No valid threats found for planet {planet.MapId} with preset {presetId}, govfor {govforId}, opfor {opforId}");
                 return;
             }
 
             var preferredThreats = GetThreatPreferenceWeights(threats);
-            var weightedThreats = new List<ProtoId<ThreatPrototype>>();
+            var threatSelected = PickWeightedThreat(threats, preferredThreats);
+            if (threatSelected == null)
+                return;
 
+            _sawmill.Debug($"[AuRoundSystem] Selected threat: {threatSelected.ID}");
+            _state.SelectedThreat = threatSelected;
+
+        }
+
+        private ThreatPrototype? PickWeightedThreat(
+            IReadOnlyList<ProtoId<ThreatPrototype>> threats,
+            IReadOnlyDictionary<string, int> preferredThreats)
+        {
+            var totalWeight = 0;
             foreach (var threatId in threats)
             {
                 if (!_prototypeManager.TryIndex(threatId, out ThreatPrototype? threatProto))
                     continue;
 
-                var weight = Math.Max(1, threatProto.ThreatWeight);
-                if (preferredThreats.TryGetValue(threatProto.ID, out var preferenceCount))
-                    weight += preferenceCount * Math.Max(3, threatProto.ThreatWeight);
-
-                for (var i = 0; i < weight; i++)
-                {
-                    weightedThreats.Add(threatId);
-                }
+                totalWeight += GetThreatSelectionWeight(threatProto, preferredThreats);
             }
 
-            if (weightedThreats.Count == 0)
-                return;
+            if (totalWeight <= 0)
+                return null;
 
-            var threatSelectedId = _random.Pick(weightedThreats);
-            Logger.GetSawmill("content").Debug($"[AuRoundSystem] Selected threat: {threatSelectedId}");
-            _state.SelectedThreat = _prototypeManager.TryIndex(threatSelectedId, out ThreatPrototype? threatSelected)
-                ? threatSelected
-                : null;
+            var roll = _random.Next(totalWeight);
+            foreach (var threatId in threats)
+            {
+                if (!_prototypeManager.TryIndex(threatId, out ThreatPrototype? threatProto))
+                    continue;
 
+                roll -= GetThreatSelectionWeight(threatProto, preferredThreats);
+                if (roll < 0)
+                    return threatProto;
+            }
+
+            return null;
+        }
+
+        private static int GetThreatSelectionWeight(
+            ThreatPrototype threat,
+            IReadOnlyDictionary<string, int> preferredThreats)
+        {
+            var weight = Math.Max(1, threat.ThreatWeight);
+            if (preferredThreats.TryGetValue(threat.ID, out var preferenceCount))
+                weight += preferenceCount * Math.Max(3, threat.ThreatWeight);
+
+            return weight;
         }
 
         public void StartThreatWinConditions(ThreatPrototype threat)
@@ -830,7 +888,7 @@ namespace Content.Server.AU14.Round
             foreach (var ruleId in winConditions)
             {
                 ticker.StartGameRule(ruleId);
-                Logger.GetSawmill("content").Debug($"[AuRoundSystem] Started wincondition rule from {source}: {ruleId}");
+                _sawmill.Debug($"[AuRoundSystem] Started wincondition rule from {source}: {ruleId}");
             }
         }
 
