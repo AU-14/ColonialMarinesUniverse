@@ -1,0 +1,61 @@
+- type: entity
+  name: cultist cf threat member spawn marker
+  parent: MarkerBase
+  id: cultistcfthreatmemberspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Member
+    ID: cultcfmarker
+  - type: ScenarioSpawnMarker
+    kind: ThreatMarker
+    tags:
+    - force:hostile
+    - bucket:Member
+    - marker-id:cultcfmarker
+
+- type: entity
+  name: cultist cf threat member spawn marker
+  parent: MarkerBase
+  id: scenariocultistcfthreatmemberspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ScenarioSpawnMarker
+    kind: ThreatMarker
+    tags:
+    - force:hostile
+    - bucket:Member
+    - marker-id:cultcfmarker
+
+- type: entity
+  name: cultist cf threat leader spawn marker
+  parent: MarkerBase
+  id: cultistcfthreatleaderspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Leader
+    ID: cultcfmarker
+  - type: ScenarioSpawnMarker
+    kind: ThreatMarker
+    tags:
+    - force:hostile
+    - bucket:Leader
+    - marker-id:cultcfmarker
+
+- type: entity
+  name: cultist cf threat leader spawn marker
+  parent: MarkerBase
+  id: scenariocultistcfthreatleaderspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ScenarioSpawnMarker
+    kind: ThreatMarker
+    tags:
+    - force:hostile
+    - bucket:Leader
+    - marker-id:cultcfmarker

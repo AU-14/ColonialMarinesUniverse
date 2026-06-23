@@ -1,0 +1,9 @@
+- type: job
+  abstract: true
+  parent: CMJobBase
+  id: AU14JobMilitaryBase
+  roundSide: Govfor
+  roundForce: GOVFOR
+  supervisors: au14-job-supervisors-govfor
+  hidden: true          # abstract hides by default, but for children/factions to remain hidden
+  setPreference: false  # all faction variants are hidden in the loadout menu

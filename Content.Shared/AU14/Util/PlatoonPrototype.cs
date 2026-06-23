@@ -44,6 +44,12 @@ public sealed partial class PlatoonPrototype : IPrototype
     [DataField("reqlist", required: false)]
     public string Reqlist { get; private set; } = string.Empty;
 
+    [DataField]
+    public ProtoId<PlatoonVendorSetPrototype>? VendorSet { get; private set; }
+
+    [DataField]
+    public Dictionary<PlatoonMarkerClass, EntProtoId> VendorOverrides { get; private set; } = new();
+
     [DataField("VendorToMarker")]
     public Dictionary<PlatoonMarkerClass, EntProtoId> VendorMarkersByClass { get; private set; } = new();
 

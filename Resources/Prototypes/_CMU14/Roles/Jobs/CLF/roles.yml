@@ -1,0 +1,417 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCLFCellLeader
+  roundSide: ThirdParty
+  roundForce: CLF
+  roundRole: CLFCellLeader
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - CLF
+  - type: CLFMember
+    statusIcon: CLFFactionLeader
+  - type: Skills
+    skills:
+      RMCSkillCqc: 2
+      RMCSkillConstruction: 2
+      RMCSkillEndurance: 2
+      RMCSkillEngineer: 2
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 2
+      RMCSkillIntel: 2
+      RMCSkillJtac: 4
+      RMCSkillLeadership: 3
+      RMCSkillMedical: 1
+      RMCSkillNavigations: 1
+      RMCSkillOverwatch: 1
+      RMCSkillPolice: 1
+      RMCSkillPowerLoader: 1
+      RMCSkillSurgery: 1
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-clfcellleader
+  - type: StartingMindRole
+    mindRole: MindRoleCLFLeader
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: colonist
+  - type: ShowMarineIcons
+    factions:
+    - CLF
+
+  name: au14-job-name-clfcellleader
+  description: au14-job-description-clfcellleader
+  setPreference: true
+  ignoreAllegiance: true
+  playTimeTracker: AU14JobCLFCellLeader
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+    - Epilepsy
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCLFCellLeader
+  icon: RMCJobIconCLFCellCommander
+  hasIcon: false
+  requireAdminNotify: true
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-clfcellleader
+  spawnMenuRoleName: CLF Cell Leader (CMU)
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+- type: startingGear
+  id: AU14GearCLFCellLeader
+  equipment:
+    outerClothing: AU14ExternalWebbing
+    gloves: RMCHandsVeteranSPP
+    shoes: RMCScoutShoes
+    neck: RMCCLFCellLeaderArmband
+    head: AU14CivBallCapBlack
+    id: AU14IDCardCLFCivilian
+    eyes: RMCGlassesAviators
+    pocket1: AU14StampCLFCell
+  inhand:
+  - AU14CLFCellKit
+  - AU14CLFHeadset
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCLFCellLeader
+  name: Spawn Point CLF Cell Leader
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCLFCellLeader
+  - type: Sprite
+    state: syn_spawn
+  - type: SafehouseMarker
+  - type: ScenarioSpawnMarker
+    kind: ClfSafehouse
+    tags:
+    - force:clf:safehouse
+- type: playTimeTracker
+  id: AU14JobCLFCellLeader
+  isHumanoid: true
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobCLFPhysician
+  roundSide: ThirdParty
+  roundForce: CLF
+  roundRole: CLFPhysician
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - CLF
+  - type: CLFMember
+    statusIcon: CLFFactionMedic
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillMedical: 3
+      RMCSkillResearch: 1
+      RMCSkillSurgery: 2
+      RMCSkillFirearms: 2
+      RMCSkillPolice: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-clfphysician
+  - type: StartingMindRole
+    mindRole: MindRoleCLFPhysician
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: colonist
+  - type: ShowMarineIcons
+    factions:
+    - CLF
+
+  name: au14-job-name-clfphysician
+  description: au14-job-description-clfphysician
+  setPreference: true
+  ignoreAllegiance: true
+  playTimeTracker: AU14JobCLFPhysician
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+    - Epilepsy
+  ranks:
+    RMCRankCivilianDoctor: []
+  startingGear: AU14GearCLFPhysician
+  icon: "RMCJobIconCLFMedic"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-clflrs
+  accessGroups:
+  - Colonist
+  - aumed
+  roleWeight: 0.25
+- type: startingGear
+  id: AU14GearCLFPhysician
+  equipment:
+    ears2: RMCFlashlightPen
+    suitstorage: RMCFlashlight
+    id: AU14IDCardCLFPhysician
+  inhand:
+  - AU14CLFHeadset
+  - RMCCLFArmband
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCLFPhysician
+  name: Spawn Point CLF Physician
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCLFPhysician
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCLFPhysician
+  isHumanoid: true
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobCLFGuerilla
+  roundSide: ThirdParty
+  roundForce: CLF
+  roundRole: CLFGuerilla
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - CLF
+  - type: CLFMember
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 1
+      RMCSkillFirearms: 2
+      RMCSkillConstruction: 2
+      RMCSkillEngineer: 3
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillPolice: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-clfguerilla
+  - type: StartingMindRole
+    mindRole: MindRoleCLFGuerrilla
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: colonist
+  - type: ShowMarineIcons
+    factions:
+    - CLF
+
+  name: au14-job-name-clfguerilla
+  description: au14-job-description-clfguerilla
+  setPreference: true
+  ignoreAllegiance: true
+  playTimeTracker: AU14JobCLFGuerilla
+  basePlaytimeTracker: true
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCLFGuerilla
+  icon: "RMCJobIconCLFSoldier"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-clflrs
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+- type: startingGear
+  id: AU14GearCLFGuerilla
+  equipment:
+    id: AU14IDCardCLFCivilian
+   # neck: RMCCLFArmband
+  inhand:
+  - AU14CLFHeadset
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCLFGuerilla
+  name: Spawn Point CLF Guerilla
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCLFGuerilla
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCLFGuerilla
+  isHumanoid: true
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobCLFMachineGunner
+  roundSide: ThirdParty
+  roundForce: CLF
+  roundRole: CLFMachineGunner
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - CLF
+  - type: CLFMember
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillConstruction: 2
+      RMCSkillEngineer: 3
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 1
+      RMCSkillPolice: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-clfmachinegunner
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: colonist
+  - type: ShowMarineIcons
+    factions:
+    - CLF
+
+  name: au14-job-name-clfmachinegunner
+  description: au14-job-description-clfmachinegunner
+  setPreference: true
+  ignoreAllegiance: true
+  playTimeTracker: AU14JobCLFMachineGunner
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+    - Epilepsy
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCLFMachineGunner
+  icon: "RMCJobIconCLFSpecialist"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-clflrs
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+- type: startingGear
+  id: AU14GearCLFMachineGunner
+  equipment:
+    outerClothing: AU14ArmorBallisticVest
+    gloves: CMHandsInsulated
+    shoes: RMCBootsPMCFilled
+    jumpsuit: AU14CMJumpsuitColonistCLF
+    id: AU14IDCardColonyColonist
+  inhand:
+  - RMCWeaponLMGM60
+  - RMCCLFArmband
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCLFMachineGunner
+  name: Spawn Point CLF Machine Gunner
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCLFMachineGunner
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCLFMachineGunner
+  isHumanoid: true
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobCLFSurgeon
+  roundSide: ThirdParty
+  roundForce: CLF
+  roundRole: CLFSurgeon
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - CLF
+  - type: CLFMember
+    statusIcon: CLFFactionMedic
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillMedical: 3
+      RMCSkillResearch: 1
+      RMCSkillSurgery: 3
+      RMCSkillFirearms: 2
+      RMCSkillPolice: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-clfsurgeon
+  - type: StartingMindRole
+    mindRole: MindRoleCLFSurgeon
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: colonist
+  - type: ShowMarineIcons
+    factions:
+    - CLF
+
+  name: au14-job-name-clfsurgeon
+  description: au14-job-description-clfsurgeon
+  setPreference: true
+  ignoreAllegiance: true
+  playTimeTracker: AU14JobCLFSurgeon
+  requirements:
+  - !type:RoleTimeRequirement
+    role: AU14JobCLFGuerilla
+    time: 18000 # 5 hours
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentColonyMedical
+    time: 18000 # 5 hours
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+    - Epilepsy
+  ranks:
+    RMCRankCivilianDoctor: []
+  startingGear: AU14GearCLFSurgeon
+  icon: "RMCJobIconCLFMedic"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-clflrs
+  accessGroups:
+  - Colonist
+  - aumed
+  roleWeight: 0.25
+- type: startingGear
+  id: AU14GearCLFSurgeon
+  equipment:
+    back: CMBackpackMedical
+    ears2: RMCFlashlightPen
+    suitstorage: RMCFlashlight
+    id: AU14IDCardCLFSurgeon
+  inhand:
+  - AU14CLFHeadset
+  - RMCCLFArmband
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCLFSurgeon
+  name: Spawn Point CLF Surgeon
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCLFSurgeon
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCLFSurgeon
+  isHumanoid: true

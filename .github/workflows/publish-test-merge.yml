@@ -16,7 +16,7 @@ on:
 permissions:
   contents: read
   issues: write
-  pull-requests: read
+  pull-requests: write
 
 env:
   DOTNET_VERSION: 10.0.x
@@ -211,9 +211,18 @@ jobs:
               '</details>',
             ].join('\n');
 
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: Number('${{ inputs.pr_number }}'),
-              body,
-            });
+            try {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: Number('${{ inputs.pr_number }}'),
+                body,
+              });
+            } catch (error) {
+              if (error.status === 403 && error.response?.data?.message === 'Resource not accessible by integration') {
+                core.warning(`Could not comment on PR #${{ inputs.pr_number }} because GITHUB_TOKEN cannot write issue comments in this context.`);
+                return;
+              }
+
+              throw error;
+            }

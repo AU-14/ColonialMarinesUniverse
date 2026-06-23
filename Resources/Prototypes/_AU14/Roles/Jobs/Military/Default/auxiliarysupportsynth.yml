@@ -1,6 +1,0 @@
-- type: job
-  parent: AU14JobAuxSupportSynthBase
-  id: AU14JobGOVFORAuxSupportSynth
-  hidden: false
-  setPreference: true
-  basePlaytimeTracker: true

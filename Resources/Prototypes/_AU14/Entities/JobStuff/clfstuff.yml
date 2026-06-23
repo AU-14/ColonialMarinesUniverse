@@ -369,7 +369,22 @@
   - type: Sprite
     state: green
   - type: SafehouseMarker
+  - type: ScenarioSpawnMarker
+    kind: ClfSafehouse
+    tags:
+    - force:clf:safehouse
 
+- type: entity
+  name: Generic CLF Safehouse Spawn Marker
+  parent: MarkerBase
+  id: scenarioclfsafehousespawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ScenarioSpawnMarker
+    kind: ClfSafehouse
+    tags:
+    - force:clf:safehouse
 
 - type: entity
   parent: RMCCrateBase
@@ -541,5 +556,3 @@
     - Utility
     startingAccessories:
     - AU14CLFHeadset
-
-

@@ -7791,7 +7791,7 @@ entities:
     - type: Transform
       pos: -58.487648,-31.635485
       parent: 1
-- proto: AU14SpawnPointCivilianColonist
+- proto: ScenarioClfCivilianColonistSpawnMarker
   entities:
   - uid: 20275
     components:
