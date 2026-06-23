@@ -41,7 +41,7 @@
     hudOffset: -0.1,0.15
     tier: 1
     bypassTierCount: true
-    unlockAt: 60 # 1 minute
+    unlockAt: 30 # 0.5 minute
   - type: XenoLight
   - type: XenoDevolve
     devolvesTo:

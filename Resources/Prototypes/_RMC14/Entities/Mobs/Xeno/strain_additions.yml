@@ -193,7 +193,7 @@
     - ActionXenoDevolve
     tier: 3
     hudOffset: -0.1,0.1
-    unlockAt: 900
+    unlockAt: 1800 # 30 Minutes
   - type: XenoDevolve
     devolvesTo:
     - CMXenoCarrier

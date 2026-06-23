@@ -31,7 +31,7 @@
     role: CMXenoRunner
     tier: 1
     hudOffset: -0.15,0.6
-    unlockAt: 300 # 5 minutes
+    unlockAt: 600 # 10 minutes
   - type: XenoRegen
     restHealMultiplier:  1.75
   - type: Fixtures

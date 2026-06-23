@@ -61,7 +61,7 @@
     role: RMCXenoDespoiler
     tier: 3
     hudOffset: 0,0
-    unlockAt: 900
+    unlockAt: 2700 # 45 Minutes
     actionIds:
     - ActionXenoRest
     - ActionXenoRegurgitate

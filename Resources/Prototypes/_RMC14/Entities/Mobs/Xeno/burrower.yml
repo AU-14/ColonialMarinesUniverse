@@ -51,7 +51,7 @@
     - ActionXenoDevolve
     tier: 2
     hudOffset: -0.15,0.56
-    unlockAt: 420 # 7 minutes
+    unlockAt: 600 # 10 minutes
   - type: XenoLight
   - type: XenoDevolve
     devolvesTo:
