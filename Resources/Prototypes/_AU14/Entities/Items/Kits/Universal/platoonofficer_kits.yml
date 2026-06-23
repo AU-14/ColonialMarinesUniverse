@@ -56,8 +56,8 @@
     contents:
       - id: AU14HeadBeretIO
         amount: 1
-      #- id: AU14GOVFORIOHeadset # I dont see OPFOR kits so use AU14OPFORIOHeadset for OPFOR
-        #amount: 1
+      - id: AU14GOVFORIOHeadset # I dont see OPFOR kits so use AU14OPFORIOHeadset for OPFOR
+        amount: 1
       - id: CMHandsInsulated
         amount: 1
       - id: AU14WebbingDumpPouch
