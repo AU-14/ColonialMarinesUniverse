@@ -20,17 +20,17 @@
           AU14JobWYPMCPartyContractor: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 7
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -56,17 +56,17 @@
           AU14JobWYPMCPartyContractorNSG23: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 5
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -94,17 +94,17 @@
           AU14JobUSArmyTrooper: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 6
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -128,17 +128,17 @@
           AU14JobUSArmyTrooper: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -164,17 +164,17 @@
           AU14JobUSArmyMarksman: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 4
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -201,17 +201,17 @@
           AU14JobUPPGROMPointman: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 5
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -238,17 +238,17 @@
           AU14JobUPPGROMPointman: 0
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -275,17 +275,17 @@
           AU14JobUPPGROMPointman: 0
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 3
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -312,17 +312,17 @@
           AU14JobFORECONRifleman: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 5
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -349,17 +349,17 @@
           AU14JobFORECONSynth: 0
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -386,17 +386,17 @@
           AU14JobFORECONSynth: 0
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 3
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -423,17 +423,17 @@
           AU14IASFSurvCombatEngineer: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 6
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -460,17 +460,17 @@
           AU14IASFSurvCombatEngineer: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 3
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -497,17 +497,17 @@
           AU14IASFSurvCombatEngineer: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 3
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -533,17 +533,17 @@
           AU14JobWYSurvEngineer: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 6
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -568,17 +568,17 @@
           AU14JobWYSurvEngineer: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 4
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -602,17 +602,17 @@
           AU14JobWYSurvEngineer: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 3
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -632,10 +632,10 @@
         count: 0
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
@@ -655,10 +655,10 @@
         count: 0
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
@@ -678,10 +678,10 @@
         count: 0
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
@@ -704,17 +704,17 @@
           AU14JobUPPTerritorialDefenseLoader: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -736,17 +736,17 @@
           AU14JobCommandoSniperTeamSpotter: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -770,17 +770,17 @@
           AU14JobFORECONFirstReconCorpsman: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 4
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -806,17 +806,17 @@
           AU14JobRMCRRTSmartgunner: 0
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 4
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -839,17 +839,17 @@
           CMBInvestigationPartyJobDeputyShotgun: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -873,17 +873,17 @@
           CMBInvestigationPartyJobRightsObserver: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 3
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -906,17 +906,17 @@
           AU14JobPaPThirdpartyInvestigatorSMG: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -940,17 +940,17 @@
           AU14JobPAPThirdpartyObserver: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 3
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -973,17 +973,17 @@
           NSPAInvestigationPartyJobConstableSMG: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -1006,17 +1006,17 @@
           AU14JobUACGLostRifleman: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -1044,17 +1044,17 @@
           AU14JobUSArmyTrooperArmoredLAT: 0
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 5
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -1078,17 +1078,17 @@
           AU14JobUSArmyTankDriver: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 3
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -1111,17 +1111,17 @@
           AU14PartyJobICRCNurse: 2
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 3
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member

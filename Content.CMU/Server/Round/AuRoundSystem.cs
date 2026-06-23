@@ -98,7 +98,11 @@ namespace Content.Server.AU14.Round
         public void SetOpforShip(string shipId) => _selectedOpforShip = shipId;
         public void SetGovforShip(string shipId) => _selectedGovforShip = shipId;
         public void SetPreset(GamePresetPrototype? preset) => _selectedPreset = preset;
-        public void SetSelectedThreat(ThreatPrototype? threat) => _state.SelectedThreat = threat;
+        public void SetSelectedThreat(ThreatPrototype? threat)
+        {
+            _state.SelectedThreat = threat;
+            Logger.GetSawmill("content").Debug($"[AuRoundSystem] Selected threat set to: {threat?.ID ?? "null"}");
+        }
 
         public bool UsesPostRoundstartThreatVote()
         {
@@ -356,6 +360,8 @@ namespace Content.Server.AU14.Round
         private void PreselectThirdParties()
         {
             _selectedThirdParties.Clear();
+            Logger.GetSawmill("content").Debug(
+                $"[AuRoundSystem] PreselectThirdParties start: preset={_selectedPreset?.ID ?? "null"}, planet={_selectedPlanet?.MapId ?? "null"}, threat={SelectedThreat?.ID ?? "null"}.");
             if (_selectedPreset == null || _selectedPlanet == null)
                 return;
             if (SelectedThreat == null)
@@ -380,6 +386,8 @@ namespace Content.Server.AU14.Round
             var filtered = allThirdParties
                 .Where(IsThirdPartyAllowedForCurrentContext)
                 .ToList();
+            Logger.GetSawmill("content").Debug(
+                $"[AuRoundSystem] Third-party candidates for planet {_selectedPlanet.MapId}: listed={allThirdParties.Count}, allowed={filtered.Count}, max={SelectedThreat.MaxThirdParties}.");
             if (filtered.Count == 0)
                 return;
             var weighted = new List<AuThirdPartyPrototype>();
@@ -414,6 +422,8 @@ namespace Content.Server.AU14.Round
                 else
                     _selectedThirdParties.Add(party);
             }
+            Logger.GetSawmill("content").Debug(
+                $"[AuRoundSystem] Selected third parties: {string.Join(", ", _selectedThirdParties.Select(party => $"{party.ID}(roundStart={party.RoundStart})"))}");
         }
 
         public void PreselectThirdPartiesForSelectedThreat()

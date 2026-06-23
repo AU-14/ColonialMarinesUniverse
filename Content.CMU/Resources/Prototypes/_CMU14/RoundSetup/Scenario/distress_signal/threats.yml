@@ -18,17 +18,17 @@
             whenToBeginScaling: 30
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:hostile
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 12
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:hostile
           - bucket:Member
@@ -76,24 +76,24 @@
         count: 1
         bodies:
           AU14AbominationFleshNest: 1
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 9
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:hostile
           - bucket:Leader
           - marker-id:xenocf
       - bucket: Member
         requiredBodyCount: 20
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:hostile
           - bucket:Member
           - marker-id:xenocf
       - bucket: Entity
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:hostile
           - bucket:Entity

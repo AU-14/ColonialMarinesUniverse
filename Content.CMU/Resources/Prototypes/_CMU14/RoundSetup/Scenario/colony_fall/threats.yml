@@ -14,17 +14,17 @@
           cultistJob: 3
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:hostile
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 3
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:hostile
           - bucket:Member
@@ -58,17 +58,17 @@
             whenToBeginScaling: 50
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:hostile
           - bucket:Leader
           - marker-id:cultcfmarker
       - bucket: Member
         requiredBodyCount: 5
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:hostile
           - bucket:Member
@@ -101,17 +101,17 @@
             whenToBeginScaling: 50
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:hostile
           - bucket:Leader
           - marker-id:xenocf
       - bucket: Member
         requiredBodyCount: 4
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:hostile
           - bucket:Member
@@ -154,24 +154,24 @@
         count: 1
         bodies:
           AU14AbominationFleshNest: 1
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:hostile
           - bucket:Leader
           - marker-id:xenocf
       - bucket: Member
         requiredBodyCount: 3
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:hostile
           - bucket:Member
           - marker-id:xenocf
       - bucket: Entity
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:hostile
           - bucket:Entity
@@ -198,10 +198,10 @@
         count: 0
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:hostile
           - bucket:Leader

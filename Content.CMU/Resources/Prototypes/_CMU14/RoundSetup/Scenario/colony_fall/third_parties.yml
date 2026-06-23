@@ -14,17 +14,17 @@
           AU14JobTransportParolee: 2
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -46,17 +46,17 @@
           AU14JobTransportParolee: 3
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 3
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -78,17 +78,17 @@
           AU14JobIPIEPPO: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -110,17 +110,17 @@
           AU14JobIPIEPPO: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -144,17 +144,17 @@
           AU14SpawnerRandomWeYuSupply: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 5
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -176,17 +176,17 @@
           AU14JobWanderingMissionary: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -208,17 +208,17 @@
           AU14JobWanderingMissionary: 3
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 3
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -240,17 +240,17 @@
           AU14JobMigratingColonist: 2
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 2
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -272,17 +272,17 @@
           AU14JobMigratingColonist: 4
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 4
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -304,17 +304,17 @@
           AU14JobMigratingColonist: 5
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 5
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -336,17 +336,17 @@
           AU14DrugSmuggler: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -368,17 +368,17 @@
           AU14JobForeignMobGoon: 3
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 3
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -400,17 +400,17 @@
           AU14JobFORECONKillTeamSpotter: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -432,17 +432,17 @@
           CMUXenoParasiteRunner: 1
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Member
@@ -462,10 +462,10 @@
         count: 0
       - bucket: Entity
         count: 0
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:third-party
           - bucket:Leader
