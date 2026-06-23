@@ -1,0 +1,55 @@
+# Tribal species — sprite-wise identical to Human, but with a distinct
+# species name so examine / identity strings call them out as Na'vi
+# instead of "Human", and a marking-points proto that drops the forced
+# underwear defaults so tribals spawn naked underneath their gear.
+# TribalAppearanceSystem forces this species id onto every Tribal mob
+# on map-init.
+- type: species
+  id: Tribal
+  name: species-name-tribal
+  roundStart: false
+  prototype: CMMobHuman
+  sprites: MobHumanSprites
+  markingLimits: MobTribalMarkingLimits
+  dollPrototype: MobHumanDummy
+  skinColoration: HumanToned
+
+# Same as MobHumanMarkingLimits but UndergarmentTop / UndergarmentBottom
+# are no longer required and have no default markings — tribals are bare
+# under whatever they're wearing.
+- type: markingPoints
+  id: MobTribalMarkingLimits
+  points:
+    Special:
+      points: 0
+      required: false
+    Hair:
+      points: 1
+      required: false
+    FacialHair:
+      points: 1
+      required: false
+    Snout:
+      points: 1
+      required: false
+    Tail:
+      points: 0
+      required: false
+    HeadTop:
+      points: 1
+      required: false
+    UndergarmentTop:
+      points: 0
+      required: false
+    UndergarmentBottom:
+      points: 0
+      required: false
+    Chest:
+      points: 2
+      required: false
+    Legs:
+      points: 2
+      required: false
+    Arms:
+      points: 2
+      required: false

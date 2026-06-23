@@ -1,0 +1,210 @@
+- type: entity
+  name: Generic Threat Leader Spawn Marker
+  parent: MarkerBase
+  id: threatleaderspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Leader
+  - type: ScenarioSpawnMarker
+    kind: ThreatMarker
+    tags:
+    - force:hostile
+    - bucket:Leader
+    - marker-id:<generic>
+
+- type: entity
+  name: Generic Threat Leader Spawn Marker
+  parent: MarkerBase
+  id: scenariothreatleaderspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ScenarioSpawnMarker
+    kind: ThreatMarker
+    tags:
+    - force:hostile
+    - bucket:Leader
+    - marker-id:<generic>
+
+- type: entity
+  name: RMC Generic Threat Leader Spawn Marker
+  parent: MarkerBase
+  id: scenariormcthreatleaderspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Leader
+  - type: ScenarioSpawnMarker
+    kind: ThreatMarker
+    tags:
+    - force:hostile
+    - bucket:Leader
+    - marker-id:<generic>
+
+- type: entity
+  name: Generic Threat Member Spawn Marker
+  parent: MarkerBase
+  id: threatmemberspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Member
+  - type: ScenarioSpawnMarker
+    kind: ThreatMarker
+    tags:
+    - force:hostile
+    - bucket:Member
+    - marker-id:<generic>
+
+- type: entity
+  name: Generic Threat Member Spawn Marker
+  parent: MarkerBase
+  id: scenariothreatmemberspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ScenarioSpawnMarker
+    kind: ThreatMarker
+    tags:
+    - force:hostile
+    - bucket:Member
+    - marker-id:<generic>
+
+- type: entity
+  name: Generic Threat Entity Spawn Marker
+  parent: MarkerBase
+  id: threatentityspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Entity
+  - type: ScenarioSpawnMarker
+    kind: ThreatMarker
+    tags:
+    - force:hostile
+    - bucket:Entity
+    - marker-id:<generic>
+
+- type: entity
+  name: Generic Threat Entity Spawn Marker
+  parent: MarkerBase
+  id: scenariothreatentityspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ScenarioSpawnMarker
+    kind: ThreatMarker
+    tags:
+    - force:hostile
+    - bucket:Entity
+    - marker-id:<generic>
+
+- type: entity
+  name: Parachute Marker
+  parent: MarkerBase
+  id: parachutemarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ParachuteMarker
+
+- type: entity
+  name: Generic Third Party Spawn Marker
+  parent: MarkerBase
+  id: thirdpartyleaderspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Leader
+    thirdparty: true
+  - type: ScenarioSpawnMarker
+    kind: ThirdPartyMarker
+    tags:
+    - force:third-party
+    - bucket:Leader
+    - marker-id:<generic>
+
+- type: entity
+  name: Generic Third Party Leader Spawn Marker
+  parent: MarkerBase
+  id: scenariothirdpartyleaderspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ScenarioSpawnMarker
+    kind: ThirdPartyMarker
+    tags:
+    - force:third-party
+    - bucket:Leader
+    - marker-id:<generic>
+  - type: ScenarioSpawnMarkerCooldown
+
+- type: entity
+  name: Generic Third Party Member Spawn Marker
+  parent: MarkerBase
+  id: thirdpartymemberspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Member
+    thirdparty: true
+  - type: ScenarioSpawnMarker
+    kind: ThirdPartyMarker
+    tags:
+    - force:third-party
+    - bucket:Member
+    - marker-id:<generic>
+
+- type: entity
+  name: Generic Third Party Member Spawn Marker
+  parent: MarkerBase
+  id: scenariothirdpartymemberspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ScenarioSpawnMarker
+    kind: ThirdPartyMarker
+    tags:
+    - force:third-party
+    - bucket:Member
+    - marker-id:<generic>
+  - type: ScenarioSpawnMarkerCooldown
+
+- type: entity
+  name: Generic Third Party Entity Spawn Marker
+  parent: MarkerBase
+  id: thirdpartyentityspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Entity
+    thirdparty: true
+  - type: ScenarioSpawnMarker
+    kind: ThirdPartyMarker
+    tags:
+    - force:third-party
+    - bucket:Entity
+    - marker-id:<generic>
+
+- type: entity
+  name: Generic Third Party Entity Spawn Marker
+  parent: MarkerBase
+  id: scenariothirdpartyentityspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ScenarioSpawnMarker
+    kind: ThirdPartyMarker
+    tags:
+    - force:third-party
+    - bucket:Entity
+    - marker-id:<generic>
+  - type: ScenarioSpawnMarkerCooldown
