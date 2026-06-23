@@ -299,7 +299,7 @@
   name: roles-antag-exped-traitor-name
   antagonist: true
   category: roles-antag-category-prometheus
-  setPreference: true
+  setPreference: false
   objective: roles-antag-exped-traitor-objective
   isCM: true
 
@@ -308,7 +308,7 @@
   name: monster-traitor-name
   antagonist: true
   category: roles-antag-category-prometheus
-  setPreference: true
+  setPreference: false
   objective: monster-traitor-objective
   isCM: true
 

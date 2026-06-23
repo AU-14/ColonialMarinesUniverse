@@ -71,7 +71,7 @@
 - type: entity
   parent: CMIDCardBase
   id: AU14IDCardopforSquadSergeant
-  name: squad sergeant ID card
+  name: squad leader ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORSquadSergeant
@@ -93,7 +93,7 @@
 - type: entity
   parent: CMIDCardBase
   id: AU14IDCardopforSquadAutomaticRifleman
-  name: squad sergeant ID card
+  name: squad automatic rifleman ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORSquadAutomaticRifleman

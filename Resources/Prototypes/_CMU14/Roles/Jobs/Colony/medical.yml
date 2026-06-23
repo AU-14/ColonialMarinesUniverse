@@ -1,0 +1,192 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianHeadPhysician
+  roundSide: Civilian
+  roundForce: COLONY
+  roundRole: CivilianHeadPhysician
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillMedical: 4
+      RMCSkillResearch: 2
+      RMCSkillSurgery: 3
+      RMCSkillFirearms: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-headphysician
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: head_physician
+
+  name: au14-job-name-civilianheadphysician
+  description: au14-job-description-civilianheadphysician
+  setPreference: true
+  canBeAntag: false
+  playTimeTracker: AU14JobCivilianHeadPhysician
+  requirements:
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentColonyMedical
+    time: 36000 # 10 hours
+  - !type:OverallPlaytimeRequirement
+    time: 86400 # 24 hours
+  - !type:AgeRequirement
+    requiredAge: 25
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+  ranks:
+    RMCRankCivilianDoctor: []
+  startingGear: AU14GearCivilianHeadPhysician
+  icon: "AU14JobIconColonyHeadPhysician"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonyadministrator
+  accessGroups:
+  - Colonist
+  - aumed
+  - AUPrisonStaff
+  - auheadsofcolony
+  access:
+# - AU14AccessColonyHeadPhysician # implicit
+  - AU14AccessColonyAdministrator
+  roleWeight: 0.25
+- type: startingGear
+  id: AU14GearCivilianHeadPhysician
+  equipment: {}
+  storage:
+    back:
+    - AU14StampHPHY
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianHeadPhysician
+  name: Spawn Point Head Physician
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianHeadPhysician
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianHeadPhysician
+  isHumanoid: true
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianNurse
+  roundSide: Civilian
+  roundForce: COLONY
+  roundRole: CivilianNurse
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillMedical: 2
+      RMCSkillSurgery: 1
+      RMCSkillFirearms: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-nurse
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: nurse
+
+  name: au14-job-name-civiliannurse
+  description: au14-job-description-civiliannurse
+  setPreference: true
+  playTimeTracker: AU14JobCivilianNurse
+  ranks:
+    RMCRankCivilianNurse: []
+  startingGear: AU14GearCivilianNurse
+  icon: "AU14JobIconColonyNurse"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - Colonist
+  - aumed
+  roleWeight: 0.25
+- type: startingGear
+  id: AU14GearCivilianNurse
+  equipment:
+    id: AU14IDCardColonyNurse
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianNurse
+  name: Spawn Point Civilian Nurse
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianNurse
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianNurse
+  isHumanoid: true
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianPhysician
+  roundSide: Civilian
+  roundForce: COLONY
+  roundRole: CivilianPhysician
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillMedical: 3
+      RMCSkillResearch: 1
+      RMCSkillSurgery: 2
+      RMCSkillFirearms: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-physician
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: physician
+
+  name: au14-job-name-civilianphysician
+  description: au14-job-description-civilianphysician
+  setPreference: true
+  playTimeTracker: AU14JobCivilianPhysician
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+  ranks:
+    RMCRankCivilianDoctor: []
+  icon: "AU14JobIconColonyPhysician"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - Colonist
+  - aumed
+  - AUPrisonStaff
+  roleWeight: 0.25
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianPhysician
+  name: Spawn Point Civilian Physician
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianPhysician
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianPhysician
+  isHumanoid: true

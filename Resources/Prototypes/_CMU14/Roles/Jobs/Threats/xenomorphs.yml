@@ -1,0 +1,19 @@
+- type: job
+  parent: CMJobXenoBase
+  id: CMXenoBull
+  name: cm-job-name-xeno-bull
+  playTimeTracker: CMJobXenoBull
+
+- type: playTimeTracker
+  id: CMJobXenoBull
+  isXeno: true
+
+- type: job
+  parent: CMJobXenoBase
+  id: CMXenoWarlock
+  name: cm-job-name-xeno-warlock
+  playTimeTracker: CMJobXenoWarlock
+
+- type: playTimeTracker
+  id: CMJobXenoWarlock
+  isXeno: true

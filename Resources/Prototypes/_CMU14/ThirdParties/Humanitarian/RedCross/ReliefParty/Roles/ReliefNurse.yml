@@ -1,0 +1,84 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobRedCrossNurse
+  roundSide: ThirdParty
+  roundForce: ICRC
+  roundRole: RedCrossNurse
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - AUBureau
+  - type: Skills
+    skills:
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillMedical: 3
+      RMCSkillResearch: 1
+      RMCSkillSurgery: 2
+      RMCSkillFirearms: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-nurse
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: synth
+
+  name: ICRC Medical Staff Nurse
+  description: You are a member of the medical staff assigned to an International Committee of the Red Cross relief mission, traveling from colony to colony to provide vaccines, medical aid and humanitarian assistance. Provide care to those you encounter and help the people of the Neroid Sector.
+  setPreference: true
+  canBeAntag: false
+  playTimeTracker: AU14JobRedCrossNurse
+  ranks:
+    RMCRankCivilianNurse: []
+  startingGear: AU14GearICRCNurse
+  icon: "AU14JobIconColonyICRCNurse"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonyadministrator
+  accessGroups:
+  - Colonist
+  - aumed
+  roleWeight: 0.25
+  hidden: false
+
+- type: startingGear
+  id: AU14GearICRCNurse
+  equipment:
+    id: AU14IDCardRedCrossNurse
+    jumpsuit: RMCScrubsLightBlue
+    shoes: RMCShoesBlack
+    belt: CMUBeltMedicBagICRCDoctor
+    pocket1: AU14PouchIFAKFill
+    pocket2: RMCPouchGeneralLargeBureauObserverFill
+    back: CMSatchel
+    ears: CMHeadsetColony
+    ears2: RMCFlashlightPen
+    neck: ClothingNeckStethoscope
+    eyes: RMCGlassesMedicalHUDGlasses
+  storage:
+    back:
+    - AU14CMDefibrillator
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicRedCross
+  id: AU14PartyJobICRCNurse
+  name: ICRC Medical Staff Nurse
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: ICRC Medical Staff Nurse
+    description: You are a member of the medical staff assigned to an International Committee of the Red Cross relief mission, traveling from colony to colony to provide vaccines, medical aid and humanitarian assistance. Provide care to those you encounter and help the people of the Neroid Sector.
+    reregister: false
+    job: AU14JobRedCrossNurse
+    raffle:
+      settings: short
+    rules: You are a member of the medical staff assigned to an International Committee of the Red Cross relief mission, traveling from colony to colony to provide vaccines, medical aid and humanitarian assistance. Provide care to those you encounter and help the people of the Neroid Sector.
+
+- type: playTimeTracker
+  id: AU14JobRedCrossNurse
+  isHumanoid: true

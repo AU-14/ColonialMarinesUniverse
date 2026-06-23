@@ -1241,7 +1241,7 @@ entities:
       pos: 0.5,10.5
       parent: 2
 
-- proto: threatleaderspawnmarker
+- proto: scenariormcthreatleaderspawnmarker
   entities:
   - uid: 185
     components:

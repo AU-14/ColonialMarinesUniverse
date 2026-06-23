@@ -338,7 +338,7 @@ public sealed partial class AuObjectiveSystem : AuSharedObjectiveSystem
         ThreatPrototype? currentThreat = null;
         var auRoundSystem = _entityManager.EntitySysManager.GetEntitySystem<Content.Server.AU14.Round.AuRoundSystem>();
         if (auRoundSystem != null)
-            currentThreat = auRoundSystem._selectedthreat;
+            currentThreat = auRoundSystem.SelectedThreat;
         switch (factionLower)
         {
             case "govfor":

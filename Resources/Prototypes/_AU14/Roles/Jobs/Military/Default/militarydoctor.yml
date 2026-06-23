@@ -1,6 +1,0 @@
-- type: job
-  parent: AU14JobMilitaryDoctorBase
-  id: AU14JobGOVFORMilitaryDoctor
-  hidden: false
-  setPreference: true
-  basePlaytimeTracker: true

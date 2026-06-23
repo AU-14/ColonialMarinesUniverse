@@ -1,6 +1,0 @@
-- type: job
-  parent: AU14JobRadioTelephoneOperatorBase
-  id: AU14JobGOVFORRadioTelephoneOperator
-  hidden: false
-  setPreference: true
-  basePlaytimeTracker: true

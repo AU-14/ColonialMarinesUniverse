@@ -1,0 +1,104 @@
+- type: roundGroup
+  id: DistressSignalXenoRoundGroup
+  kind: Hostile
+  sourcePrototypeId: XenoThreat
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          CMXenoQueen: 1
+      - bucket: Member
+        count: 12
+        bodies:
+          CMXenoLarva: 5
+        scaling:
+          CMXenoLarva:
+            scale: 0.11
+            whenToBeginScaling: 30
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:hostile
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 12
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:hostile
+          - bucket:Member
+          - marker-id:<generic>
+    allowsUnderfill: true
+  winConditionRuleIds:
+    - KillAllGovforRule
+    - KillAllXenoRule
+
+- type: roundGroup
+  id: DistressSignalAbominationRoundGroup
+  kind: Hostile
+  sourcePrototypeId: abominationsThreatDistress
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 9
+        bodies:
+          AU14AbominationMimic: 2
+        scaling:
+          AU14AbominationMimic:
+            scale: 0.10
+            whenToBeginScaling: 25
+      - bucket: Member
+        count: 20
+        bodies:
+          AU14AbominationMimic: 4
+          AU14AbominationSpider: 2
+          AU14AbominationSkitter: 2
+          AU14AbominationGrunt: 0
+        scaling:
+          AU14AbominationMimic:
+            scale: 0.10
+            whenToBeginScaling: 25
+          AU14AbominationSpider:
+            scale: 0.05
+            whenToBeginScaling: 30
+          AU14AbominationSkitter:
+            scale: 0.03
+            whenToBeginScaling: 35
+          AU14AbominationGrunt:
+            scale: 0.02
+            whenToBeginScaling: 45
+      - bucket: Entity
+        count: 1
+        bodies:
+          AU14AbominationFleshNest: 1
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 9
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:hostile
+          - bucket:Leader
+          - marker-id:xenocf
+      - bucket: Member
+        requiredBodyCount: 20
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:hostile
+          - bucket:Member
+          - marker-id:xenocf
+      - bucket: Entity
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:hostile
+          - bucket:Entity
+          - marker-id:xenocf
+    allowsUnderfill: true
+  winConditionRuleIds:
+    - KillAllGovforRule
+    - KillAllAbominationsRule

@@ -46261,7 +46261,7 @@ entities:
     - type: Transform
       pos: 146.5,49.5
       parent: 1
-- proto: AU14SpawnPointCivilianColonist
+- proto: ScenarioClfCivilianColonistSpawnMarker
   entities:
   - uid: 110
     components:
@@ -46577,7 +46577,7 @@ entities:
     - type: Transform
       pos: 155.5,85.5
       parent: 1
-- proto: AU14SpawnPointCLFCellLeader
+- proto: scenarioclfsafehousespawnmarker
   entities:
   - uid: 165
     components:
@@ -208612,7 +208612,7 @@ entities:
     - type: Transform
       pos: 148.30745,83.59514
       parent: 1
-- proto: thirdpartyentityspawnmarker
+- proto: scenariothirdpartyentityspawnmarker
   entities:
   - uid: 30856
     components:
@@ -208664,7 +208664,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 252.5,92.5
       parent: 1
-- proto: thirdpartyleaderspawnmarker
+- proto: scenariothirdpartyleaderspawnmarker
   entities:
   - uid: 30865
     components:
@@ -208699,7 +208699,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 252.5,93.5
       parent: 1
-- proto: thirdpartymemberspawnmarker
+- proto: scenariothirdpartymemberspawnmarker
   entities:
   - uid: 30871
     components:
@@ -209120,7 +209120,7 @@ entities:
     - type: Transform
       pos: 162.5,158.5
       parent: 1
-- proto: threatentityspawnmarker
+- proto: scenariothreatentityspawnmarker
   entities:
   - uid: 30946
     components:
@@ -209146,7 +209146,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 163.5,18.5
       parent: 1
-- proto: threatleaderspawnmarker
+- proto: scenariothreatleaderspawnmarker
   entities:
   - uid: 30950
     components:
@@ -209154,7 +209154,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 164.5,17.5
       parent: 1
-- proto: threatmemberspawnmarker
+- proto: scenariothreatmemberspawnmarker
   entities:
   - uid: 30951
     components:
@@ -209299,7 +209299,7 @@ entities:
     - type: Transform
       pos: 104.5,102.5
       parent: 1
-- proto: xenocfthreatentityspawnmarker
+- proto: scenarioxenocfthreatentityspawnmarker
   entities:
   - uid: 30975
     components:
@@ -209331,7 +209331,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 165.5,18.5
       parent: 1
-- proto: xenocfthreatleaderspawnmarker
+- proto: scenarioxenocfthreatleaderspawnmarker
   entities:
   - uid: 30980
     components:
@@ -209339,7 +209339,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 164.5,15.5
       parent: 1
-- proto: xenocfthreatmemberspawnmarker
+- proto: scenarioxenocfthreatmemberspawnmarker
   entities:
   - uid: 30981
     components:

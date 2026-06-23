@@ -1,0 +1,223 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianHeadOfEngineering
+  roundSide: Civilian
+  roundForce: COLONY
+  roundRole: CivilianHeadOfEngineering
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 2
+      RMCSkillFirearms: 2
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillEngineer: 4
+      RMCSkillConstruction: 4
+      RMCSkillPowerLoader: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-headofengineering
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: head_of_engineering
+
+  name: au14-job-name-civilianheadofengineering
+  description: au14-job-description-civilianheadofengineering
+  setPreference: true
+  canBeAntag: false
+  playTimeTracker: AU14JobCivilianHeadOfEngineering
+  requirements:
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentEngineering
+    time: 36000 # 10 hours
+  - !type:OverallPlaytimeRequirement
+    time: 86400 # 24 hours
+  - !type:AgeRequirement
+    requiredAge: 25
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCivilianHeadOfEngineering
+  icon: "AU14JobIconColonyHeadOfEngi"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonyadministrator
+  accessGroups:
+  - Colonist
+  - auengi
+  - CMCargoTech
+  - auheadsofcolony
+  access:
+# - AU14AccessColonyHeadEngineer # implicit
+  - AU14AccessColonyAdministrator
+  roleWeight: 0.25
+- type: startingGear
+  id: AU14GearCivilianHeadOfEngineering
+  equipment:
+    head: RMCHardhatBlue
+    jumpsuit: AU14CivilianWeYuEngineerFormanClothes
+    shoes: RMCBootsCorporate
+    id: AU14IDCardColonyHeadOfEngineering
+    ears: AU14ColonyAdminHeadset
+    pocket1: AU14StampHENG
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianHeadOfEngineering
+  name: Spawn Point Head of Engineering
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianHeadOfEngineering
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianHeadOfEngineering
+  isHumanoid: true
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianEngineer
+  roundSide: Civilian
+  roundForce: COLONY
+  roundRole: CivilianEngineer
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillEngineer: 4
+      RMCSkillFirearms: 2
+      RMCSkillConstruction: 4
+      RMCSkillPowerLoader: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-colonyengineer
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: engineer
+
+  name: au14-job-name-civilianengineer
+  description: au14-job-description-civilianengineer
+  setPreference: true
+  playTimeTracker: AU14JobCivilianEngineer
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCivilianEngineer
+  icon: "AU14JobIconColonyEngineer"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonyadministrator
+  spawnMenuRoleName: Colony Engineer (CMU)
+  accessGroups:
+  - Colonist
+  - auengi
+  roleWeight: 0.25
+- type: startingGear
+  id: AU14GearCivilianEngineer
+  equipment:
+    head: RMCHardhatWhite
+    jumpsuit: AU14CivilianWeYuEngineerClothes
+    outerClothing: AU14CivilianFullSuitWeYuEngineer
+    shoes: RMCBootsCorporate
+    id: AU14IDCardColonyEngineer
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianEngineer
+  name: Spawn Point Civilian Engineer
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianEngineer
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianEngineer
+  isHumanoid: true
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianForeman
+  roundSide: Civilian
+  roundForce: COLONY
+  roundRole: CivilianForeman
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 2
+      RMCSkillFirearms: 2
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillEngineer: 4
+      RMCSkillConstruction: 4
+      RMCSkillPowerLoader: 2
+      RMCSkillPilot: 1
+      RMCSkillNavigations: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-colonyforeman
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: foreman
+
+  name: au14-job-name-foreman
+  description: au14-job-description-foreman
+  setPreference: true
+  canBeAntag: false
+  playTimeTracker: AU14JobCivilianForeman
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
+  - !type:AgeRequirement
+    requiredAge: 25
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCivilianForeman
+  icon: "AU14JobIconCivilianForeman"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonyadministrator
+  accessGroups:
+  - Colonist
+  - auadmin
+  - auengi
+  - CMCargoTech
+  - auheadsofcolony
+  access:
+# - AU14AccessColonyForeman # implicit
+  - AU14AccessColonyAdministrator
+  roleWeight: 0.25
+- type: startingGear
+  id: AU14GearCivilianForeman
+  equipment:
+    head: RMCHardhatBlue
+    jumpsuit: AU14CivilianWeYuEngineerFormanClothes
+    shoes: RMCBootsCorporate
+    id: AU14IDCardColonyForeman
+    ears: AU14ColonyAdminHeadset
+    pocket1: AU14StampFore
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianForeman
+  name: Spawn Point Civilian Foreman
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianForeman
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianForeman
+  isHumanoid: true
