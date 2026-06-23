@@ -19,6 +19,7 @@ using Content.Shared.Speech.EntitySystems;
 using Content.Shared.StatusEffect;
 using Content.Shared.Storage;
 using Content.Shared.Stunnable;
+using Content.Shared.Clothing.Components;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Events;
@@ -276,6 +277,10 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
         {
             foreach (var maskItem in maskContainer.ContainedEntities)
             {
+                // Mask is pulled down / not covering the face — it provides no filtration
+                if (TryComp<MaskComponent>(maskItem, out var maskComp) && maskComp.IsToggled)
+                    continue;
+
                 if (TryGetFilterFromItem(maskItem, out filterId, out filter))
                     return true;
             }
