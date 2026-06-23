@@ -1,0 +1,21 @@
+# Tactical Advanced Rescue Squad (TARS)
+- type: partySpawn
+  id: ProdigyTARSSpawn
+  leadersToSpawn:
+    AU14JobProdigyTARSPartyLeader: 1
+  gruntsToSpawn:
+    AU14JobTARSPartyRifleman: 1
+    AU14JobTARSPartyMedic: 1
+    AU14JobProdigyTARSPartySynth: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: ProdigyTARSParty
+  partyspawn: ProdigyTARSSpawn
+  entrymethod: ground
+  weight: 20
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 4
+  roundstart: false

@@ -1,0 +1,30 @@
+- type: job
+  parent: AU14IASFPilotBase
+  id: AU14IASFSurvPilot
+  spawnMenuRoleName: IASF Pilot (Survivor)
+  playTimeTracker: AU14IASFPilot
+  greeting: au14-job-greeting-IASFsurv
+  startingGear: AU14RMCGearIASFPilot
+  basePlaytimeTracker: true
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicTWEIASF
+  id: AU14IASFSurvPilot
+  name: IASF Pilot (Survivor)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadIASF
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-tweiasf-pl
+    description: au14-job-description-IASFsurv
+    job: AU14IASFSurvPilot
+    rules: au14-job-rules-IASFsurv
+    raffle:
+      settings: short

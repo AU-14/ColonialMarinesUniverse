@@ -1,0 +1,46 @@
+# Using reallife Mormon Missionaries as the Base but kept purposefully ambigous 
+# To avoid people not knowing anything about mormon or even christian religion doing slop RP
+
+- type: partySpawn
+  id: MissionariesPartySpawn
+  leadersToSpawn:
+    AU14JobWanderingMissionary: 1
+  gruntsToSpawn:
+    AU14JobWanderingMissionary: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: MissionariesParty
+  partyspawn: MissionariesPartySpawn
+  entrymethod: shuttle
+  weight: 20
+  minplayers: 20
+  maxplayers: 69
+  GhostsNeeded: 2
+  roundstart: false
+  whitelistedgamemodes:
+    - insurgency
+    - colonyfall
+
+- type: partySpawn
+  id: MissionariesPartySpawnMid
+  leadersToSpawn:
+    AU14JobWanderingMissionary: 1
+  gruntsToSpawn:
+    AU14JobWanderingMissionary: 3
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: MissionariesPartyMedium
+  partyspawn: MissionariesPartySpawnMid
+  entrymethod: shuttle
+  weight: 20
+  minplayers: 70
+  maxplayers: 150
+  GhostsNeeded: 4
+  roundstart: false
+  whitelistedgamemodes:
+    - insurgency
+    - colonyfall

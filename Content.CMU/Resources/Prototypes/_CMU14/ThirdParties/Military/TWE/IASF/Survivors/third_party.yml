@@ -1,0 +1,86 @@
+- type: partySpawn
+  id: IASFSurvSpawnLarge
+  leadersToSpawn:
+    AU14IASFSurvTeamLead: 1
+    AU14IASFSurvCommander: 1
+  gruntsToSpawn:
+    AU14IASFSurvPilot: 1
+    AU14IASFSurvRifleman: 2
+    AU14IASFSurvRiflemanAmmo: 1
+    AU14IASFsurvMedicalTechnician: 1
+    AU14IASFSurvCombatEngineer: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: IASFSurvLarge
+  displayName: IASF Survivors Large
+  partyspawn: IASFSurvSpawnLarge
+  blacklistedgamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: ground
+  weight: 25
+  minplayers: 101
+  maxplayers: 400
+  GhostsNeeded: 0
+  roundstart: true
+
+- type: partySpawn
+  id: IASFSurvSpawnMedium
+  leadersToSpawn:
+    AU14IASFSurvTeamLead: 1
+    AU14IASFSurvCommander: 1
+  gruntsToSpawn:
+    AU14IASFSurvPilot: 0
+    AU14IASFSurvRifleman: 0
+    AU14IASFSurvRiflemanAmmo: 1
+    AU14IASFsurvMedicalTechnician: 1
+    AU14IASFSurvCombatEngineer: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: IASFSurvMedium
+  displayName: IASF Survivors Medium
+  partyspawn: IASFSurvSpawnMedium
+  blacklistedgamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: ground
+  weight: 25
+  minplayers: 51
+  maxplayers: 99
+  GhostsNeeded: 0
+  roundstart: true
+
+- type: partySpawn
+  id: IASFSurvSpawnSmall
+  leadersToSpawn:
+    AU14IASFSurvTeamLead: 1
+    AU14IASFSurvCommander: 0
+  gruntsToSpawn:
+    AU14IASFSurvPilot: 0
+    AU14IASFSurvRifleman: 0
+    AU14IASFSurvRiflemanAmmo: 1
+    AU14IASFsurvMedicalTechnician: 1
+    AU14IASFSurvCombatEngineer: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: IASFSurvSmall
+  displayName: IASF Survivors Small
+  partyspawn: IASFSurvSpawnSmall
+  blacklistedgamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: ground
+  weight: 25
+  minplayers: 25
+  maxplayers: 50
+  GhostsNeeded: 0
+  roundstart: true

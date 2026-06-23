@@ -1,0 +1,27 @@
+- type: threat
+  id: wendigoThreat
+  lorePrimer: AU14PrimerThreatWendigo
+  roundstartspawns: wendigoParty
+  thirdpartyinterval: 9100
+  whitelistedgamemodes:
+  - ColonyFall
+  blacklistedgamemodes:
+  - DistressSignal
+  winconditions:
+  - KillAllColonistRule
+  - KillAllXenoRule
+
+- type: partySpawn
+  id: wendigoParty
+  leadersToSpawn:
+    AU14Wendigo: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: lorePrimer
+  id: AU14PrimerThreatWendigo
+  threattext: "You are a mutated xenomorph with mimicry and  hunting abilities, stalk and eliminate the colonists"
+  KnowledgeLevelsGovforThreat:
+    "Threat Unknown": 1
+    "Threat is biological in nature.": 2
+

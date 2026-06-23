@@ -1,0 +1,55 @@
+- type: healthIcon
+  abstract: true
+  id: CMUYautjaIconBase
+  priority: -10
+  locationPreference: Right
+  isShaded: true
+
+- type: healthIcon
+  parent: CMUYautjaIconBase
+  id: CMUYautjaIconPrey
+  icon:
+    sprite: /Textures/_RMC14/Interface/xeno_leader.rsi
+    state: hudxenoleader
+
+- type: healthIcon
+  parent: CMUYautjaIconBase
+  id: CMUYautjaIconHonored
+  icon:
+    sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+    state: hudsquad_leader
+
+- type: healthIcon
+  parent: CMUYautjaIconBase
+  id: CMUYautjaIconDishonored
+  icon:
+    sprite: /Textures/_RMC14/Interface/health_hud.rsi
+    state: huddead
+
+- type: healthIcon
+  parent: CMUYautjaIconBase
+  id: CMUYautjaIconGearCarrier
+  icon:
+    sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+    state: hudRESS
+
+- type: healthIcon
+  parent: CMUYautjaIconBase
+  id: CMUYautjaIconThrall
+  icon:
+    sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+    state: hudCLF
+
+- type: healthIcon
+  parent: CMUYautjaIconBase
+  id: CMUYautjaIconStudent
+  icon:
+    sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+    state: hudsquad_rifleman
+
+- type: healthIcon
+  parent: CMUYautjaIconBase
+  id: CMUYautjaIconBlooded
+  icon:
+    sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+    state: hudsquad_spec
