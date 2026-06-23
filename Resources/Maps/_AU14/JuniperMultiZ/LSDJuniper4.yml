@@ -4,8 +4,8 @@ meta:
   engineVersion: v277.0.0
   forkId: ""
   forkVersion: ""
-  time: 06/21/2026 18:45:32
-  entityCount: 13869
+  time: 06/23/2026 19:25:52
+  entityCount: 13872
 maps:
 - 1
 grids:
@@ -9561,6 +9561,28 @@ entities:
     components:
     - type: Transform
       pos: 72.5,3.5
+      parent: 2
+- proto: CMSemioticLadder
+  entities:
+  - uid: 2072
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 88.5,2.5
+      parent: 2
+- proto: CMSemioticNorth
+  entities:
+  - uid: 2070
+    components:
+    - type: Transform
+      pos: 92.40741,2.3148148
+      parent: 2
+- proto: CMSemioticSouth
+  entities:
+  - uid: 2071
+    components:
+    - type: Transform
+      pos: 88.90741,2.3148148
       parent: 2
 - proto: CMSink
   entities:
