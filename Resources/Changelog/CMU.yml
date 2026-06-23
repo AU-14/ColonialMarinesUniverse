@@ -3669,5 +3669,12 @@
   id: 287
   time: '2026-06-16T06:36:36.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1337
+- author: KeiKiyomi
+  changes:
+  - message: Added ear pieces to IOs kit with a built in camera and their comms channels
+    type: Add
+  id: 288
+  time: '2026-06-23T01:52:28.0000000+00:00'
+  url: https://github.com/KeiKiyomi/FUCKBUSH/pull/1
 Name: CMU
 Order: -1
