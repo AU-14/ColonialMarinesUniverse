@@ -53,6 +53,9 @@
   name: 6B80 personal armor
   description: An older UPP personal armor system that's since been replaced by the UPP Army Standard 6B90 body armor. It is still used by certain UPP Army units that the UPP doesn't expect to see much combat.
   components:
+  - type: ClothingSpeedModifier
+    walkModifier: 1
+    sprintModifier: 1
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/army.rsi
 

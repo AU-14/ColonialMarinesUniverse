@@ -273,7 +273,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
   - type: CMAutomatedVendor
-    jobs: [ AU14JobPlatoonCorpsmanBase, AU14JobGOVFORPlatoonCorpsman, AU14JobOpforPlatoonCorpsman ]
+    jobs: [ AU14JobPlatoonCorpsmanBase, AU14JobGOVFORPlatoonCorpsman, AU14JobOPFORPlatoonCorpsman ]
     sections:
     - name: Essential Equipment
       takeAll: CMUEssentialEquipment
@@ -835,6 +835,11 @@
         isAppendSquadRoleName: false
         givePrefix: rmc-job-prefix-weapons-specialist-plasmagunner
         isAppendPrefix: true
+      - id: RMCPyroSpecEquipmentCase
+        giveSquadRoleName: rmc-job-name-weapons-specialist-pyro
+        isAppendSquadRoleName: false
+        givePrefix: au14-job-prefix-specialist-pyro
+        isAppendPrefix: true
 
 # Equipment Vendor (universal except UPP/RMC)
 - type: entity
@@ -1198,7 +1203,8 @@
       takeAll: CMStandard
       entries:
       - id: CMGlassesSecurity
-      - id: RMCBeltBrowne
+      - id: AU14BeltBrowneFilled
+      - id: CMU14USCMMPBrassard
       - id: RMCBoxZiptie
       - id: AU14GuidebookLawMarine
       - id: AU14GuidebookSOP

@@ -20,7 +20,7 @@ struct Args {
     config_file: String,
 
     /// Map file directory location
-    #[arg(short, long, default_value_t = String::from("../../Resources/Maps/_RMC14"))]
+    #[arg(short, long, default_value_t = String::from("../../Resources/Maps/_AU14"))]
     maps_directory: String,
 }
 
@@ -48,15 +48,14 @@ fn main() {
             // Handle matches found if any. Set found_errors flag.
             if !matches.is_empty() {
                 found_errors = true;
-
-                info!("Found blacklisted prototypes in file: {}", path.display());
+                info!("Found errors in file: {}", path.display());
                 for m in matches {
                     info!(" - {} ({})", m.matched_text, m.info);
                 }
             }
         }
     }
-    
+
     // Exit.
     if found_errors {
         error!("Mapchecker ran successfully and found errors. Exiting.");

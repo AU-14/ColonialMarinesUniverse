@@ -62,6 +62,7 @@
     - CMUYautjaOverseer
     - CMUYautjaBadBlood
     - radioVAI
+    - CCASOF
     - ICSCSOF
     - UASOF
     - TWESOF
@@ -112,6 +113,7 @@
     state: Off
     channels:
     - radioVAI
+    - CCASOF
     - ICSCSOF
     - UASOF
     - TWESOF

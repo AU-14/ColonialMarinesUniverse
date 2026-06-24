@@ -1,0 +1,20 @@
+- type: Tag
+  id: tribe
+
+# Tribal faction — hostile to colony, marines, xenos, abominations, etc.
+# Mirrors the threat lists used by CMUAPE / RMCXeno.
+- type: npcFaction
+  id: Tribe
+  hostile:
+  - UNMC
+  - NanoTrasen
+  - SPP
+  - GOVFOR
+  - OPFOR
+  - Halcyon
+  - WeYa
+  - Civilian
+  - CLF
+  - TSE
+  - AUColonist
+  - CMUAPE

@@ -60,7 +60,9 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
         if (platoon != null && platoon.JobSlotOverride.Count > 0)
         {
             var jobsToAdd = new Dictionary<ProtoId<JobPrototype>, int>();
-            var team = (component.ShipFaction != null && component.ShipFaction.ToLower() == "opfor") ? "Opfor" : "GOVFOR";
+            var team = component.ShipFaction != null && component.ShipFaction.Equals("opfor", StringComparison.OrdinalIgnoreCase)
+                ? "OPFOR"
+                : "GOVFOR";
             foreach (var (jobClass, slotCount) in platoon.JobSlotOverride)
             {
                 var jobId = $"AU14Job{team}{jobClass}";
@@ -89,7 +91,7 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
             if (isDistressPreset || isColonyFallPreset)
             {
                 // ColonyFall / Distress — scaling comes from the selected threat
-                var threat = _auRoundSystem._selectedthreat;
+                var threat = _auRoundSystem.SelectedThreat;
                 if (threat?.JobScaling != null)
                     protoMgr.TryIndex<JobScalePrototype>(threat.JobScaling.Value, out scaleDef);
             }
@@ -371,5 +373,3 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
         }
     }
 }
-
-

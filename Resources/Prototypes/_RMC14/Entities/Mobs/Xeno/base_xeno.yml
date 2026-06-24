@@ -151,7 +151,7 @@
     bodyType: KinematicController
   - type: CMUZPhysics
   # CMU14
-  - type: CMUXenoZJump
+  #- type: CMUXenoZJump
   # CMU14
   - type: Fixtures
     fixtures:

@@ -1,0 +1,523 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianCorporateAssistant
+  roundSide: Civilian
+  roundForce: WY
+  roundRole: CivilianCorporateAssistant
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 1
+      RMCSkillOverwatch: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliancorporateassistant
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: corporate_assistant
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - SquadPMC
+
+  name: au14-job-name-civiliancorporateassistant
+  playTimeTracker: AU14JobCivilianCorporateAssistant
+  description: au14-job-description-civiliancorporateassistant
+  setPreference: true
+  ranks:
+    AU14RankWYSeniorAssistant:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateAssistant
+      time: 90000 # 25 hours
+    AU14RankWYAssistant:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateAssistant
+      time: 36000 # 10 hours
+    AU14RankWYJuniorAssistant: []
+  startingGear: AU14GearCivilianCorporateAssistant
+  icon: "AU14JobIconCorporateAssistant"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  - auwy
+  access:
+  - AU14AccessCorporateWEYULiaison
+  roleWeight: 0.25
+- type: startingGear
+  id: AU14GearCivilianCorporateAssistant
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonBlack
+    shoes: RMCShoesLaceup
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: AU14CivilianJacketTanPufferVest
+    ears: AU14ColonyWeylandHeadset
+    ears2: RMCM5CameraGear
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianCorporateAssistant
+  name: Spawn Point Civilian Corporate Assistant
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianCorporateAssistant
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianCorporateAssistant
+  isHumanoid: true
+
+# Corporate Administrator and Corporate Admin Assistant — the Weyland-Yutani corporate
+# executive equivalent of the Colony Administrator. Manages corporate interests on-colony.
+
+- type: job
+  parent: AU14JobCivilianColonyAdministrator
+  id: AU14JobCivilianCorporateAdministrator
+  roundSide: Civilian
+  roundForce: WY
+  roundRole: CivilianCorporateAdministrator
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 1
+      RMCSkillEngineer: 1
+      RMCSkillConstruction: 1
+      RMCSkillOverwatch: 1
+      RMCSkillResearch: 1
+      RMCSkillPolice: 1
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillIntel: 1
+      RMCSkillDomestics: 1
+      RMCSkillNavigations: 1
+      RMCSkillFirearms: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliancorporateadministrator
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: hudsquad_liaison
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - SquadPMC
+
+  name: au14-job-name-civiliancorporateadministrator
+  description: au14-job-description-civiliancorporateadministrator
+  setPreference: false
+  playTimeTracker: AU14JobCivilianCorporateAdministrator
+  canBeAntag: false
+  startingGear: AU14GearCivilianCorporateAdministrator
+  icon: "CMJobIconLiaison"
+  requireAdminNotify: true
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: Corporate Administrator (CMU)
+  accessGroups:
+  - auwy
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  access:
+  - AU14AccessCorporateWEYULiaison
+  - AU14AccessColonyAdministrator
+  roleWeight: 0.25
+- type: startingGear
+  id: AU14GearCivilianCorporateAdministrator
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonBlack
+    shoes: RMCShoesLaceupBrown
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: RMCJacketCorporateBlue
+  inhand:
+  - RMCRadioHandheldColonyOff
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianCorporateAdministrator
+  name: Spawn Point Corporate Administrator
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianCorporateAdministrator
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianCorporateAdministrator
+  isHumanoid: true
+
+# ── Corporate Admin Assistant ───────────────────────────────────────────────
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianCorporateAdminAssistant
+  roundSide: Civilian
+  roundForce: WY
+  roundRole: CivilianCorporateAdminAssistant
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 1
+      RMCSkillOverwatch: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliancorporateadminassistant
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: corporate_assistant
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - SquadPMC
+  name: au14-job-name-civiliancorporateadminassistant
+  description: au14-job-description-civiliancorporateadminassistant
+  setPreference: false
+  playTimeTracker: AU14JobCivilianCorporateAdminAssistant
+  canBeAntag: false
+  startingGear: AU14GearCivilianCorporateAdminAssistant
+  icon: "AU14JobIconCorporateAssistant"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-wy
+  spawnMenuRoleName: Corporate Admin Assistant (CMU)
+  accessGroups:
+  - auwy
+  - Colonist
+  - AUPrisonStaff
+  - auadmin
+  - CMCargoTech
+  - auheadsofcolony
+  access:
+  - AU14AccessCorporateWEYULiaison
+  roleWeight: 0.25
+- type: startingGear
+  id: AU14GearCivilianCorporateAdminAssistant
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonBlack
+    shoes: RMCShoesLaceupBrown
+    id: AU14IDCardColonyCorporateLiaison
+    ears: AU14ColonyWeylandHeadset
+    outerClothing: AU14CivilianJacketGrayPufferVest
+    back: CMSatchel
+  inhand:
+  - RMCRadioHandheldColonyOff
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianCorporateAdminAssistant
+  name: Spawn Point Corporate Admin Assistant
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianCorporateAdminAssistant
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianCorporateAdminAssistant
+  isHumanoid: true
+
+- type: job
+  abstract: true
+  parent: CMJobBase
+  id: AU14JobCivilianCorporateLiaisonBase
+  name: au14-job-name-civiliancorporateliaison
+  description: au14-job-description-civiliancorporateliaison
+  playTimeTracker: AU14JobCivilianCorporateLiaison
+  basePlaytimeTracker: true
+
+- type: job
+  parent: AU14JobCivilianCorporateLiaisonBase
+  id: AU14JobCivilianCorporateLiaison
+  roundSide: Civilian
+  roundForce: WY
+  roundRole: CivilianCorporateLiaison
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 1
+      RMCSkillOverwatch: 1
+  - type: CMVendorUser
+    id: AU14JobCivilianCorporateLiaison
+    points: 70
+  - type: JobPrefix
+    prefix: au14-job-prefix-corporateliaison
+  - type: TacticalMapIcon
+    icon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: hudsquad_liaison
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - SquadPMC
+
+  name: au14-job-name-civiliancorporateliaison
+  description: au14-job-description-civiliancorporateliaison
+  setPreference: true
+  ranks:
+    RMCRankWeYaAssistantManager:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateLiaison
+      time: 360000 # 100 hours
+    RMCRankWeYaExecutiveSupervisor:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateLiaison
+      time: 270000 # 75 hours
+    RMCRankWeYaExecutiveSpecialist:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateLiaison
+      time: 180000 # 50 hours
+    RMCRankWeYaSeniorExecutive:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateLiaison
+      time: 90000 # 25 hours
+    RMCRankWeYaExecutive:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateLiaison
+      time: 36000 # 10 hours
+    RMCRankWeYaJuniorExecutive: []
+  startingGear: AU14GearCivilianCorporateLiaison
+  icon: "CMJobIconLiaison"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: WY Liaison (CMU)
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  - auwy
+  access:
+  - AU14AccessCorporateWEYULiaison
+  roleWeight: 0.25
+- type: startingGear
+  id: AU14GearCivilianCorporateLiaison
+  equipment:
+    jumpsuit: AU14CivilianWorkwearBlue
+    shoes: RMCShoesLaceup
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: AU14CivilianJacketOrangePufferJacket
+    ears: AU14ColonyWeylandHeadset
+    ears2: RMCM5CameraGear
+    pocket1: AU14StampLiaison
+  inhand:
+  - RMCPortableVendorCorporate
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianCorporateLiaison
+  name: Spawn Point Civilian Corporate Liaison
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianCorporateLiaison
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianCorporateLiaison
+  isHumanoid: true
+
+- type: job
+  abstract: true
+  parent: CMJobBase
+  id: AU14JobCivilianScientistBase
+  name: au14-job-name-civilianscientist
+  description: au14-job-description-civilianscientist
+  playTimeTracker: AU14JobCivilianScientist
+  basePlaytimeTracker: true
+
+- type: job
+  parent: AU14JobCivilianScientistBase
+  id: AU14JobCivilianScientist
+  roundSide: Civilian
+  roundForce: WY
+  roundRole: CivilianScientist
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillMedical: 3
+      RMCSkillFirearms: 2
+      RMCSkillSurgery: 4
+  - type: JobPrefix
+    prefix: au14-job-prefix-civilianscientist
+  - type: TacticalMapIcon
+    icon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: weya_scientist
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - SquadPMC
+
+  name: au14-job-name-civilianscientist
+  description: au14-job-description-civilianscientist
+  setPreference: true
+  canBeAntag: true
+  playTimeTracker: AU14JobCivilianScientist
+  ranks:
+    AU14RankScientistProfessor:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianScientist
+      time: 86400 # 24 hours
+    AU14RankScientistAssociate:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianScientist
+      time: 36000 # 10 hours
+    AU14RankScientistAssistant: []
+  startingGear: AU14GearCivilianScientist
+  icon: "RMCJobIconPMCScientist"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: WY Scientist (CMU)
+  accessGroups:
+  - Colonist
+  - auwy
+  - aumed
+  roleWeight: 0.25
+- type: startingGear
+  id: AU14GearCivilianScientist
+  equipment:
+    id: AU14IDCardCivilianScientist
+    jumpsuit: AU14CivilianWorkwearBlue
+    shoes: RMCShoesBlack
+    ears: AU14ColonyWeylandHeadset
+    ears2: RMCM5CameraGear
+    outerClothing: RMCLabcoatOpened
+    pocket1: AU14StampWYSci
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianScientist
+  name: Spawn Point Civilian Scientist
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianScientist
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianScientist
+  isHumanoid: true
+
+- type: job
+  parent: CMJobBase
+  abstract: true
+  id: AU14JobWYGuardBase
+  name: au14-job-name-wyguard
+  description: au14-job-description-wyguard
+  playTimeTracker: AU14JobWYGuard
+  basePlaytimeTracker: true
+
+- type: job
+  parent: AU14JobWYGuardBase
+  id: AU14JobWYGuard
+  roundSide: Civilian
+  roundForce: WY
+  roundRole: WYGuard
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillOverwatch: 1
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFireman: 2
+      RMCSkillEngineer: 1
+      RMCSkillIntel: 1
+      RMCSkillVehicles: 1
+      RMCSkillPolice: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-wyguard
+  - type: TacticalMapIcon
+    icon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_standard
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - SquadPMC
+
+  name: au14-job-name-wyguard
+  description: au14-job-description-wyguard
+  setPreference: true
+  ranks:
+    AU14RankWYSecurityOfficerChief:
+    - !type:RoleTimeRequirement
+      role: AU14JobWYGuard
+      time: 360000 # 100 hours
+    AU14RankWYSecurityOfficerMaster:
+    - !type:RoleTimeRequirement
+      role: AU14JobWYGuard
+      time: 180000 # 50 hours
+    AU14RankWYSecurityOfficerSenior:
+    - !type:RoleTimeRequirement
+      role: AU14JobWYGuard
+      time: 86400 # 24 hours
+    AU14RankWYSecurityOfficer:
+    - !type:RoleTimeRequirement
+      role: AU14JobWYGuard
+      time: 36000 # 10 hours
+    AU14RankWYSecurityOfficerJunior: []
+  startingGear: AU14GearWYGuard
+  icon: "RMCJobIconPMCGoonStandard"
+  requireAdminNotify: false
+  requirements:
+  - !type:AgeRequirement
+    requiredAge: 21
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-wy
+  spawnMenuRoleName: WY Corporate Goon (CMU)
+  accessGroups:
+  - auwy
+  - AUPrisonStaff
+  roleWeight: 0.25
+- type: startingGear
+  id: AU14GearWYGuard
+  equipment:
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: CMUArmorM4PMCCorporate
+    jumpsuit: AU14WYSecurityUniformRig
+    shoes: RMCBootsPMCFilled
+    head: AU14CivBallCapBlack
+    belt: RMCBeltSecurityWeYaFilled
+    back: RMCSatchelLightpackBlack
+    ears: AU14ColonyWeylandHeadset
+    ears2: RMCM5CameraGear
+    suitstorage: RMCM77BeltPMCFilled
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointWYGuard
+  name: Spawn Point WY guard
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobWYGuard
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobWYGuard
+  isHumanoid: true

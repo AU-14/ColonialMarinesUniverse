@@ -92,7 +92,7 @@ public sealed partial class KillAllTribeRuleSystem : GameRuleSystem<KillAllTribe
             if (_gameTicker.RunLevel != GameRunLevel.InRound)
                 return;
 
-            var winMessage = _auRoundSystem._selectedthreat?.WinMessage;
+            var winMessage = _auRoundSystem.SelectedThreat?.WinMessage;
             if (!string.IsNullOrEmpty(winMessage))
             {
                 _gameTicker.EndRound(winMessage);

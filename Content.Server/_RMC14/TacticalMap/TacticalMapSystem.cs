@@ -335,30 +335,31 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             if (!ent.Comp.Xenos || ent.Comp.Marines || ent.Comp.Opfor || ent.Comp.Govfor || ent.Comp.Clf)
             {
                 ent.Comp.Xenos = true;
-                ent.Comp.Marines = false;
-                ent.Comp.Opfor = false;
-                ent.Comp.Govfor = false;
-                ent.Comp.Clf = false;
+                ent.Comp.Marines = ent.Comp.Opfor = ent.Comp.Govfor = ent.Comp.Clf = false;
                 Dirty(ent);
             }
             return;
         }
 
         bool marines = false, opfor = false, govfor = false, clf = false;
-        string faction = "null";
         if (TryComp<MarineComponent>(ent, out var marine))
         {
-            faction = (marine.Faction ?? string.Empty).ToUpperInvariant();
-            if (faction.Contains("CLF"))
+            string faction = (marine.Faction ?? string.Empty).ToUpperInvariant();
+            if (faction == "CLF")
                 clf = true;
-            else if (faction.Contains("OPF"))
+            else if (faction == "OPFOR")
                 opfor = true;
-            else if (faction.Contains("GOV"))
+            else if (faction == "GOVFOR")
                 govfor = true;
+            else if (faction == "MARINE" || faction == "")
+                marines = true; // default - unspecified
             else
             {
                 marines = true;
-                Logger.GetSawmill("tacmap").Warning($"[SyncUserFactionFlags] Couldn't determine TacticalMapUser faction for {ToPrettyString(ent.Owner)}, with Marine: ({faction})");
+                string protoId = MetaData(ent.Owner).EntityPrototype?.ID ?? "null";
+                Logger.GetSawmill("tacmap").Warning(
+                    $"[SyncUserFactionFlags] Couldn't determine TacticalMapUser faction '{faction}' for {ToPrettyString(ent.Owner)}, " +
+                    $"proto: {protoId}, defaulting to Marines!");
             }
         }
 

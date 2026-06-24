@@ -4472,5 +4472,226 @@
   id: 316
   time: '2026-06-20T11:19:31.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1394
+- author: sunzu432
+  changes:
+  - message: 'Hope''s Retreat: ATMs in the dorms, administration building, and Octanis
+      Complex.'
+    type: Add
+  - message: 'Hope''s Retreat: Communications and budget console in the both the administration
+      building and the Octanis Complex.'
+    type: Add
+  - message: 'Hope''s Retreat: Survivors should now spawn.'
+    type: Add
+  - message: 'Hope''s Retreat: Extra detailing around the spaceport and colony.'
+    type: Add
+  - message: 'Hope''s Retreat: Fort Beauregard''s second LZ can now load armored vehicles.'
+    type: Fix
+  - message: 'Hope''s Retreat: Lights on the second floor of dorms.'
+    type: Fix
+  - message: 'Hope''s Retreat: Edge case where someone fell in the opening in admin
+      resolved by adding windows to see into the affected area.'
+    type: Fix
+  id: 317
+  time: '2026-06-20T22:47:29.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1390
+- author: KeiKiyomi
+  changes:
+  - message: Added all weapon spec ammo to ASRS
+    type: Add
+  - message: Sniper Spec Waistrig can now be equipped to the belt
+    type: Tweak
+  - message: Scout specs now get waist rigs (RIP scout armor)
+    type: Tweak
+  - message: WeYu Scout Spec gun can now take normal scout spec mags
+    type: Tweak
+  - message: Scout gets 2 thermal tarps now (from 1)
+    type: Tweak
+  - message: Scout now gets 4 impact 4 incen and 6 standard mags in their crate
+    type: Tweak
+  - message: ': sniper spec now gets 8 standard 4 incen and 4 flak mags in their kit.'
+    type: Tweak
+  id: 318
+  time: '2026-06-20T23:35:22.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1397
+- author: KeiKiyomi
+  changes:
+  - message: Added specialized scout webbing in scout kit
+    type: Add
+  id: 319
+  time: '2026-06-20T23:36:08.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1396
+- author: HolySSSS
+  changes:
+  - message: universal recorder can be put into law enforcement belts.
+    type: Tweak
+  - message: Sam Browne belt is now filled in MP vendors.
+    type: Fix
+  id: 320
+  time: '2026-06-20T23:38:49.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1395
+- author: wray-git
+  changes:
+  - message: GOVFOR Platoon Commanders have a new Silence Order ability. Activating
+      it forces nearby marines to whisper only for 10 seconds and sends them a subtle
+      notification. The CO emotes a loud throat clear instead of shouting a callout.
+      Has its own 10 second cooldown separate from the other orders.
+    type: Add
+  id: 321
+  time: '2026-06-21T00:37:51.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1399
+- author: maertayn
+  changes:
+  - message: Third Party extract method refactoring (DRY) & try/catch redundancies
+    type: Code
+  - message: Lowered the Dylovene efficiency so that it doesn't make you immune to
+      nerve gas
+    type: Tweak
+  - message: Third Party to use 5min cooldowns for spawn marker reusage instead of
+      a used flag
+    type: Tweak
+  - message: jobBlacklistGroup for antags.yml - much easier to maintain - works alongside
+      normal jobBlacklist (look at CLFVeteran for usage)
+    type: Code
+  - message: CLF doctors/surgeons get colony medical access on their IDs
+    type: Fix
+  id: 322
+  time: '2026-06-21T09:52:49.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1398
+- author: deepdarkdepths
+  changes:
+  - message: Queen has time requirements again
+    type: Tweak
+  id: 323
+  time: '2026-06-21T19:30:55.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1401
+- author: sunzu432
+  changes:
+  - message: 'Hope''s Retreat: An accounting error has been rectified in Weyland-Yutani''s
+      research budget, allowing for an expanded Octanis Complex Security Post now
+      fitting of an installation of the Octanis Complex''s size--including a bullpen,
+      forensic laboratory, reception area, armory (now featuring lethals and incendiary
+      equipment), briefing room and jail.'
+    type: Add
+  - message: 'Hope''s Retreat: The UPP and ICSC''s ambassadors have swapped places
+      after the conclusion of what has been described as a "Freaky Friday"-type scenario.'
+    type: Tweak
+  - message: 'Hope''s Retreat: A wood submission point, unearthed in the northern
+      mineshaft, has been installed in Colony Shipping & Receiving.'
+    type: Fix
+  id: 324
+  time: '2026-06-22T03:29:51.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1403
+- author: OverusedMeme
+  changes:
+  - message: Added Spotter Pamphlets to both the M96S & XM43E1 spotter kits.
+    type: Add
+  id: 325
+  time: '2026-06-22T03:30:19.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1405
+- author: JaSeNeSaJ
+  changes:
+  - message: 'Sheperds'': Ghost spawn point (fix tacmap?)'
+    type: Fix
+  - message: 'Sheperds'': Preliminary experiment subject crate'
+    type: Add
+  - message: 'Sheperds'': Kill carp objective for CLF'
+    type: Fix
+  id: 326
+  time: '2026-06-22T06:40:00.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1408
+- author: Arcticular1
+  changes:
+  - message: Added 1 bomb vest and 1 huge IED to clf rack
+    type: Add
+  - message: 6B armor is a little more expensive and has no slowdown.
+    type: Tweak
+  - message: type 88 ammo is a little cheaper, and gets one more mag.
+    type: Tweak
+  id: 327
+  time: '2026-06-22T06:58:43.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1407
+- author: sunzu432
+  changes:
+  - message: 'Hope''s Retreat: Withdrawal consoles have spontaneously appeared in
+      the Fort Beauregard Command Center and Hope''s Retreat Administrator''s Office!'
+    type: Add
+  - message: 'Hope''s Retreat: An inaccurate TO&E has been updated, allowing for the
+      construction of an expanded specialist equipment area.'
+    type: Tweak
+  - message: 'Hope''s Retreat: Following an arduous set of committees and municipal
+      re-zoning struggles, the second floor of the Hope''s Retreat dormitories has
+      finally been permitted to have power.'
+    type: Fix
+  - message: 'Hope''s Retreat: A contract has been arbitrated with the Power and Lights
+      Spirit, allowing for APC and lighting issues with the Octanis Complex''s second
+      floor to be fixed (pertains to both the Security Post and Hospital).'
+    type: Fix
+  - message: 'Hope''s Retreat: Weyland-Yutani Cross-Dimensional Specialists have correctly
+      identified and removed reality-deviating upstream defibrillators from the Fort
+      Beauregard medbay.'
+    type: Fix
+  - message: 'Hope''s Retreat: The NSPA have received a supply shipment from a delayed
+      transport, finally allowing them to refill their emergency armory.'
+    type: Fix
+  id: 328
+  time: '2026-06-22T21:52:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1410
+- author: HotdogMan52
+  changes:
+  - message: Added MP brassards for USCM MPs
+    type: Add
+  - message: Adjusted Sam Browne Duty Belt to fit two guns, allowing for pistol/tazer
+      | tazer/tazer | pistol/pistol
+    type: Tweak
+  - message: Fixed gas not affecting people when gas mask is toggled off/hidden
+    type: Fix
+  id: 329
+  time: '2026-06-22T21:52:56.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1406
+- author: KriegersMustDie
+  changes:
+  - message: Ambassador Briefcases with some flavor.
+    type: Add
+  id: 330
+  time: '2026-06-23T03:17:39.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1417
+- author: maertayn
+  changes:
+  - message: '''serverlogs'' & ''serversawmills'' commands for live log access in-game
+      (host-only restricted perms), with a --tail option that sends server-side logs
+      into admin-chat as they arrive & use --filter to cut out noise. Adjust the Sawmill
+      (log group) verbosity level in-game with ''loglevel'' <sawmill> and use ''serversawmills''
+      to search/list all ~3500! groups and their current overrides'
+    type: Add
+  - message: the rejuvenate verb/trick now fully repairs vehicles/blackfoot - resets
+      damage & hardpoint health + integrity, clears all failure states and refills
+      fuel/battery - also rearms all the vehicle's mounted weaponry
+    type: Admin
+  - message: removed duplicate "rename" command that caused toolshed warnings
+    type: Fix
+  id: 331
+  time: '2026-06-23T03:39:16.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1416
+- author: ProspectorAres
+  changes:
+  - message: new lobby art
+    type: Add
+  id: 332
+  time: '2026-06-23T12:20:46.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1418
+- author: OverusedMeme
+  changes:
+  - message: Added the Pyro spec kit to select Factions WS Vendors (LACN/USCM/TWE/WY)
+    type: Add
+  id: 333
+  time: '2026-06-24T11:50:05.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1423
+- author: OverusedMeme
+  changes:
+  - message: Added two plant bags to the hydroponics crate
+    type: Add
+  id: 334
+  time: '2026-06-24T12:12:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1430
 Name: CMU
 Order: -1

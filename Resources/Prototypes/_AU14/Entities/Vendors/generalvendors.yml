@@ -240,7 +240,7 @@
   - type: Sprite
     sprite: _AU14/Structures/Vendors/assortedequipment.rsi
   - type: CMAutomatedVendor
-    jobs: [ AU14JobOpforPlatOp, AU14JobGOVFORPlatOp, AU14JobPlatOpBase ]
+    jobs: [ AU14JobOPFORPlatOp, AU14JobGOVFORPlatOp, AU14JobPlatOpBase ]
     sections:
     - name: Senior Officer
       choices: { CMUJOLoadoutVendorKit: 1 }
@@ -467,6 +467,11 @@
         giveSquadRoleName: rmc-job-name-weapons-specialist-shotgunner
         isAppendSquadRoleName: false
         givePrefix: rmc-job-prefix-weapons-specialist-shotgunner
+        isAppendPrefix: true
+      - id: RMCPyroSpecEquipmentCase
+        giveSquadRoleName: rmc-job-name-weapons-specialist-pyro
+        isAppendSquadRoleName: false
+        givePrefix: au14-job-prefix-specialist-pyro
         isAppendPrefix: true
 
 - type: entity

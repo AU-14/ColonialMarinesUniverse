@@ -1,0 +1,82 @@
+- type: job
+  parent: AU14JobUACGRiflemanBase
+  id: AU14UACGAmmobearer
+  roundSide: ThirdParty
+  roundForce: UACG
+  roundRole: AU14UACGAmmobearer
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: private
+  - type: Skills
+    skills:
+      RMCSkillFirearms: 2
+      RMCSkillMeleeWeapons: 1
+      RMCSkillEndurance: 1
+      RMCSkillCqc: 1
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: au-14-job-prefix-uacg-rifleman
+
+  name: au-14-job-name-uacg-ammobearer
+  description: au14-uacg-description
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankPrivateFirstClass:
+      entity: AU14ChevronUSArmyPFC
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUACGRifleman
+        time: 18000 #5 hours
+    RMCRankPrivate:
+      entity: AU14ChevronUSArmyPrivate2
+      requirements: []
+  spawnMenuRoleName: UACG Ammo Bearer (3rd party)
+  startingGear: AU14GearUACGLostAmmobearer
+  greeting: au14-uacg-greeting
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: au-14-job-name-uacg-squadleader
+  accessGroups:
+  - AU14GovforFTL
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUACG
+  id: AU14JobUACGLostAmmobearer
+  name: Lost Ammo Bearer
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadUACG
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au-14-job-name-uacg-ammobearer
+    description: au14-uacg-description
+    reregister: false
+    job: AU14UACGAmmobearer
+    raffle:
+      settings: short
+    rules: au14-uacg-rules
+
+- type: startingGear
+  id: AU14GearUACGLostAmmobearer
+  equipment:
+    id: AU14IDCardUACGAmmobearer
+    outerClothing: RMCOuterClothingExternalWebbingForeconSurvivorFill
+    jumpsuit: AU14UACGFatigues
+    shoes: CMBootsBrownFilled
+    mask: RMCMaskScarfTanDown
+    head: AU14UACGPatrolCap
+    belt: AU14UACGAmmoBearerBelt
+    pocket1: AU14UACGPouchFilledM20a
+    pocket2: AU14PouchIFAKFill
+    back: AU14UACGPatrolRucksackAmmobearer
+  inhand:
+  - CMFlare
+  - AUWeaponRifleM20A

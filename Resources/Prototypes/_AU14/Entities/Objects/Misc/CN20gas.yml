@@ -40,6 +40,7 @@
     affectsDead: false
     affectsInfectedNested: false
     filterDamage: 2
+    neurotoxinFilterDamage: true
     depletionPerTick: 2.5
     profile:
       irritantType: NerveGas
@@ -58,7 +59,7 @@
       minimumDelayBetweenTrips: 8
       severeSlowChance: 0.39
       severeSlowTime: 4
-      dyloveneEfficiency: 10
+      dyloveneEfficiency: 3
       exposureMessages:
       - "You feel like dying!"
       - "Your lungs burn!"

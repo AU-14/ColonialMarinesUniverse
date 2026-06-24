@@ -1,0 +1,101 @@
+- type: job
+  parent: CMJobBase
+  id: AU14RMCRRTCommander
+  roundSide: ThirdParty
+  roundForce: RMC
+  roundRole: AU14RMCRRTCommander
+  roundComponents:
+  - type: Skills
+    skills:
+        RMCSkillCqc: 3
+        RMCSkillConstruction: 2
+        RMCSkillEndurance: 3
+        RMCSkillEngineer: 2
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 2
+        RMCSkillIntel: 2
+        RMCSkillJtac: 4
+        RMCSkillLeadership: 3
+        RMCSkillMedical: 2
+        RMCSkillNavigations: 1
+        RMCSkillOverwatch: 1
+        RMCSkillPolice: 2
+        RMCSkillPowerLoader: 2
+        RMCSkillSurgery: 1
+        RMCSkillVehicles: 1
+  - type: MarineOrders
+    moveOrderSoundMale:
+      collection: AU14MaleMoveOrder
+    moveOrderSoundFemale:
+      collection: AU14FemaleMoveOrder
+    focusOrderSoundMale:
+      collection: AU14MaleFocusOrder
+    focusOrderSoundFemale:
+      collection: AU14FemaleFocusOrder
+    holdOrderSoundMale:
+      collection: AU14MaleHoldOrder
+    holdOrderSoundFemale:
+      collection: AU14FemaleHoldOrder
+  - type: SquadLeader
+  - type: RMCTrackable
+  - type: RMCPointing
+  - type: JobPrefix
+    prefix: au-14-job-prefix-rmcrrt-commander
+
+  name: au-14-job-name-rmcrrt-commander
+  description: au14-rmcert-rules
+  playTimeTracker: AU14JobRMCRRTCommander
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMC_2Lieutenant:
+      entity: AU14ChevronRMCSecondLieutenant
+      requirements: []
+  spawnMenuRoleName: RMC RRT Commander
+  startingGear: AU14GearRMCRRTCommander
+  icon: "RMCJobIconRoyalLieutenant"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - AU14GovforCommand
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicRMCRRT
+  id: AU14JobRMCRRTCommander
+  name: RMC reaction troop commander
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadRMCRRT
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au-14-job-name-rmcrrt-commander
+    description: au14-rmcert-rules
+    reregister: false
+    job: AU14RMCRRTCommander
+    raffle:
+      settings: short
+    rules: au14-rmcert-rules
+
+- type: startingGear
+  id: AU14GearRMCRRTCommander
+  equipment:
+    id: AU14IDCardRMCRRTCommander
+    outerClothing: AU14ArmorRMC
+    jumpsuit: AU14FatiguesBlackRMCTeamlead
+    shoes: RMCBootsRoyalFilled
+    mask: RMCMaskScarfTanDown
+    head: AU14HeadBeretRMCOfficer
+    gloves: AU14HandsRMC
+    belt: AU14BeltHolsterPistolRMCFullL165A1
+    pocket1: AU14PouchSlingBinocs
+    pocket2: AU14PouchIFAKFill
+    back: AU14RMCRRTBackpackCommander
+    ears: AU14HeadsetRMCRRT
+    suitstorage: AU14WeaponSMGL90A2old
+
+- type: playTimeTracker
+  id: AU14JobRMCRRTCommander

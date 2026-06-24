@@ -235,6 +235,10 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
     protected void SyncOrderActions(Entity<MarineOrdersComponent> ent)
     {
         bool isLeader = HasComp<SquadLeaderComponent>(ent.Owner) || _skills.GetSkill(ent.Owner, ent.Comp.Skill) > 0;
+        bool hasActions = ent.Comp.MoveActionEntity != null;
+
+        if (isLeader == hasActions)
+            return;
 
         if (isLeader)
             EnsureOrderActions(ent);

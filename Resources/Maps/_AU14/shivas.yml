@@ -130413,7 +130413,7 @@ entities:
     - type: Transform
       pos: 214.5,75.5
       parent: 1
-- proto: thirdpartyentityspawnmarker
+- proto: scenariothirdpartyentityspawnmarker
   entities:
   - uid: 17223
     components:
@@ -130571,7 +130571,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 92.5,154.5
       parent: 1
-- proto: thirdpartyleaderspawnmarker
+- proto: scenariothirdpartyleaderspawnmarker
   entities:
   - uid: 17249
     components:
@@ -130843,7 +130843,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 168.5,112.5
       parent: 1
-- proto: thirdpartymemberspawnmarker
+- proto: scenariothirdpartymemberspawnmarker
   entities:
   - uid: 17294
     components:
@@ -131097,7 +131097,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 96.5,155.5
       parent: 1
-- proto: threatentityspawnmarker
+- proto: scenariothreatentityspawnmarker
   entities:
   - uid: 17336
     components:
@@ -131159,7 +131159,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 210.5,154.5
       parent: 1
-- proto: threatmemberspawnmarker
+- proto: scenariothreatmemberspawnmarker
   entities:
   - uid: 17346
     components:
@@ -131417,7 +131417,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: threatleaderspawnmarker
+- proto: scenariothreatleaderspawnmarker
   entities:
   - uid: 17388
     components:

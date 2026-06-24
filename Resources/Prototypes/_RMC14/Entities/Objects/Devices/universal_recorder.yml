@@ -10,6 +10,9 @@
       state: taperecorder_idle
   - type: Item
     size: Small
+  - type: Tag
+    tags:
+      - SecBeltEquip
   - type: EmitSoundOnPickup
     sound:
       path: /Audio/Handling/taperecorder_pickup.ogg

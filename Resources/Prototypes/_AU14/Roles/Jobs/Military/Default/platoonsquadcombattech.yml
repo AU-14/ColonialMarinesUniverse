@@ -1,6 +1,0 @@
-- type: job
-  parent: AU14JobSquadCombatTechBase
-  id: AU14JobGOVFORSquadCombatTech
-  hidden: false
-  setPreference: true
-  basePlaytimeTracker: true
