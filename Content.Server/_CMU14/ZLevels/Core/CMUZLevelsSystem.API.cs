@@ -72,7 +72,8 @@ public sealed partial class CMUZLevelsSystem
 
         if (maps.Count > 0)
         {
-            RaiseLocalEvent(network, new CMUZLevelNetworkUpdatedEvent());
+            var ev = new CMUZLevelNetworkUpdatedEvent(network);
+            RaiseLocalEvent(ref ev);
             RefreshViewersForNetwork(network);
         }
 
@@ -128,6 +129,7 @@ public sealed partial class CMUZLevelsSystem
 }
 
 /// <summary>
-/// Called on ZLevel Network Entity, when maps added or removed from network
+/// Raised when maps are added to or removed from a Z-level network.
 /// </summary>
-public sealed class CMUZLevelNetworkUpdatedEvent : EntityEventArgs;
+[ByRefEvent]
+public readonly record struct CMUZLevelNetworkUpdatedEvent(Entity<CMUZLevelsNetworkComponent> Network);

@@ -1,4 +1,5 @@
-﻿using Content.Client.Message;
+using Content.Client.Message;
+using Content.Shared._CMU14.ZLevels.Ordnance;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Rangefinder;
 using JetBrains.Annotations;
@@ -14,11 +15,13 @@ public sealed class RangefinderBui : BoundUserInterface
     private RangefinderWindow? _window;
 
     private readonly AreaSystem _area;
+    private readonly CMUTopDownOrdnanceSystem _topDownOrdnance;
     private readonly SharedTransformSystem _transform;
 
     public RangefinderBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
         _area = EntMan.System<AreaSystem>();
+        _topDownOrdnance = EntMan.System<CMUTopDownOrdnanceSystem>();
         _transform = EntMan.System<SharedTransformSystem>();
     }
 
@@ -52,11 +55,20 @@ public sealed class RangefinderBui : BoundUserInterface
         if (rangefinder.LastCoords is { } mapCoords)
         {
             var coords = _transform.ToCoordinates(mapCoords);
+            var canMortar = _topDownOrdnance.TryResolveImpactColumn(mapCoords, CMUTopDownOrdnanceKind.Mortar, out var mortar);
+            var canOrbital = _topDownOrdnance.TryResolveImpactColumn(mapCoords, CMUTopDownOrdnanceKind.OrbitalBombardment, out var orbital);
             _window.BottomContainer.AddChild(AddRow("Supply Drop", _area.CanSupplyDrop(mapCoords)));
-            _window.BottomContainer.AddChild(AddRow("Mortar", _area.CanMortarFire(coords)));
+            _window.BottomContainer.AddChild(AddRow(GetOrdnanceLabel("Mortar", mortar), canMortar));
             _window.BottomContainer.AddChild(AddRow("Close Air Support", _area.CanCAS(coords)));
-            _window.BottomContainer.AddChild(AddRow("Orbital Bombardment", _area.CanOrbitalBombard(coords, out _)));
+            _window.BottomContainer.AddChild(AddRow(GetOrdnanceLabel("Orbital Bombardment", orbital), canOrbital));
         }
+    }
+
+    private static string GetOrdnanceLabel(string label, CMUTopDownOrdnanceResult? result)
+    {
+        return result is { Redirected: true }
+            ? $"{label} (top-down)"
+            : label;
     }
 
     private BoxContainer AddRow(string text, bool allowed)

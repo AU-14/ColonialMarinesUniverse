@@ -1,0 +1,11 @@
+- type: loadoutGroup
+  id: EngiSatchelAU14
+  name: au14-loadout-group-civilian-satchel
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - CMSatchelAU14
+  - SlingSatchelBlackAU14
+  - SlingSatchelBlueAU14
+  - SatchelLightpackWelderAU14
+  - SatchelEngineerAU14

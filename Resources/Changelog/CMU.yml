@@ -4833,5 +4833,26 @@
   id: 337
   time: '2026-06-24T18:26:59.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1432
+- author: TheHellFireo
+  changes:
+  - message: Mortars and orbital bombardments now work properly with multi-Z maps,
+      including falling through openings to the correct level.
+    type: Add
+  - message: Vehicles now support multi-Z movement and support checks on connected
+      levels.
+    type: Add
+  - message: Dropships can now use tactical hover with level selection, downwash,
+      sound, shadow, timed return, and early return cancellation.
+    type: Add
+  - message: Improved the tactical landing UI and overlay so landing vs hover is clearer.
+    type: Tweak
+  - message: Fixed tactical landing/hover issues with z-level selection, openings,
+      and the tactical view falling between levels.
+    type: Fix
+  - message: Adds Deployable ladders to combat engineers working this time
+    type: Add
+  id: 338
+  time: '2026-06-24T21:10:04.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1434
 Name: CMU
 Order: -1

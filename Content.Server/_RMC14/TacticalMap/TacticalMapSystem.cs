@@ -465,12 +465,13 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             _toUpdate.Add((ent.Owner, active));
     }
 
-    private void UpdateVehicleBlip(Entity<VehicleInteriorComponent> vehicle)
+    private void UpdateVehicleBlip(Entity<VehicleInteriorComponent> vehicle, bool showEmpty = false)
     {
         if (TerminatingOrDeleted(vehicle.Owner))
             return;
 
         var occupants = vehicle.Comp.Passengers;
+        var hasOccupants = occupants.Count > 0;
         var totalLive = 0;
         foreach (var passenger in occupants)
         {
@@ -481,7 +482,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             totalLive++;
         }
 
-        if (occupants.Count == 0 ||
+        if ((!showEmpty && !hasOccupants) ||
             !_transformQuery.TryComp(vehicle.Owner, out var xform) ||
             xform.GridUid is not { } gridId ||
             !_mapGridQuery.TryComp(gridId, out var gridComp) ||
@@ -497,7 +498,13 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             return;
         }
 
-        var status = totalLive > 0 ? TacticalMapBlipStatus.Alive : TacticalMapBlipStatus.Defibabble;
+        if (_activeTacticalMapTrackedQuery.TryComp(vehicle.Owner, out var active) && active.Map != gridId)
+        {
+            BreakTracking((vehicle.Owner, active));
+            active.Map = gridId;
+        }
+
+        var status = hasOccupants && totalLive == 0 ? TacticalMapBlipStatus.Defibabble : TacticalMapBlipStatus.Alive;
         SpriteSpecifier.Rsi? icon = null;
         if (_tacticalMapIconQuery.TryComp(vehicle.Owner, out var iconComp))
             icon = iconComp.Icon;
@@ -1412,6 +1419,12 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             return;
         }
 
+        if (TryComp<VehicleInteriorComponent>(ent, out var interior))
+        {
+            UpdateVehicleBlip((ent.Owner, interior), true);
+            return;
+        }
+
         if (!_transformQuery.TryComp(ent.Owner, out var xform) ||
             xform.GridUid is not { } gridId ||
             !_mapGridQuery.TryComp(gridId, out var gridComp) ||
@@ -1605,7 +1618,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 
                 // With sensors, show other humans as enemy_blip
                 var orig = blips[id];
-                blips[id] = new TacticalMapBlip(orig.Indices, enemyRsi, orig.Color, orig.Status, orig.Background, false);
+                blips[id] = orig with { Image = enemyRsi, HiveLeader = false };
             }
         }
 
@@ -1882,7 +1895,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                     if (!lastUpdate.TryGetValue(id, out var orig))
                         continue;
 
-                    lastUpdate[id] = new TacticalMapBlip(orig.Indices, enemyRsi, orig.Color, orig.Status, orig.Background, false);
+                    lastUpdate[id] = orig with { Image = enemyRsi, HiveLeader = false };
                 }
             }
 
@@ -2098,7 +2111,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             if (blip == null) continue;
 
             var img = blip.Value.Image ?? new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Interface/map_blips.rsi"), "comms_tower");
-            blips[uid.Id] = new TacticalMapBlip(blip.Value.Indices, img, blip.Value.Color, blip.Value.Status, blip.Value.Background, blip.Value.HiveLeader);
+            blips[uid.Id] = blip.Value with { Image = img };
         }
 
         var sensors = EntityQueryEnumerator<SensorTowerComponent>();
@@ -2109,7 +2122,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             if (blip == null) continue;
 
             var img = blip.Value.Image ?? new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Interface/map_blips.rsi"), "sensor_tower");
-            blips[uid.Id] = new TacticalMapBlip(blip.Value.Indices, img, blip.Value.Color, blip.Value.Status, blip.Value.Background, blip.Value.HiveLeader);
+            blips[uid.Id] = blip.Value with { Image = img };
         }
     }
 
@@ -2129,7 +2142,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                 continue;
 
             var img = blip.Value.Image ?? new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Interface/map_blips.rsi"), "tunnel");
-            blips[uid.Id] = new TacticalMapBlip(blip.Value.Indices, img, blip.Value.Color, blip.Value.Status, blip.Value.Background, blip.Value.HiveLeader);
+            blips[uid.Id] = blip.Value with { Image = img };
         }
     }
 
@@ -2187,7 +2200,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 
                 // Replace with enemy_blip image (preserve color/background/status)
                 var orig = computer.Comp.Blips[id];
-                computer.Comp.Blips[id] = new TacticalMapBlip(orig.Indices, enemyRsi, orig.Color, orig.Status, orig.Background, false);
+                computer.Comp.Blips[id] = orig with { Image = enemyRsi, HiveLeader = false };
             }
 
             // Add other human factions as enemy_blip if they aren't already visible on this computer
@@ -2197,7 +2210,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                 var id = kv.Key;
                 if (infraIds.Contains(id) || computer.Comp.Blips.ContainsKey(id))
                     continue;
-                computer.Comp.Blips[id] = new TacticalMapBlip(kv.Value.Indices, enemyRsi, kv.Value.Color, kv.Value.Status, kv.Value.Background, false);
+                computer.Comp.Blips[id] = kv.Value with { Image = enemyRsi, HiveLeader = false };
             }
 
             foreach (var kv in map.GovforBlips)
@@ -2205,7 +2218,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                 var id = kv.Key;
                 if (infraIds.Contains(id) || computer.Comp.Blips.ContainsKey(id))
                     continue;
-                computer.Comp.Blips[id] = new TacticalMapBlip(kv.Value.Indices, enemyRsi, kv.Value.Color, kv.Value.Status, kv.Value.Background, false);
+                computer.Comp.Blips[id] = kv.Value with { Image = enemyRsi, HiveLeader = false };
             }
 
             foreach (var kv in map.ClfBlips)
@@ -2213,7 +2226,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                 var id = kv.Key;
                 if (infraIds.Contains(id) || computer.Comp.Blips.ContainsKey(id))
                     continue;
-                computer.Comp.Blips[id] = new TacticalMapBlip(kv.Value.Indices, enemyRsi, kv.Value.Color, kv.Value.Status, kv.Value.Background, false);
+                computer.Comp.Blips[id] = kv.Value with { Image = enemyRsi, HiveLeader = false };
             }
 
             // Ensure xenon blips/structures are visible on canvases when sensors are active (native icons)
@@ -2330,7 +2343,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             foreach (var vehicle in _vehicleBlipsToUpdate)
             {
                 if (TryComp<VehicleInteriorComponent>(vehicle, out var interior))
-                    UpdateVehicleBlip((vehicle, interior));
+                    UpdateVehicleBlip((vehicle, interior), _activeTacticalMapTrackedQuery.HasComp(vehicle));
             }
         }
         finally

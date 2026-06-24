@@ -1,0 +1,17 @@
+- type: loadoutGroup
+  id: RecruiterPatchesAU14
+  name: au14-loadout-group-military-patches
+  minLimit: 1
+  maxLimit: 3
+  loadouts:
+  - PatchUSASFAU14
+  - PatchFORECONAU14
+  - PatchUSArmyAU14
+  - Patch1stCavAU14
+  - PatchUSCMEngineersAU14
+  - HAZOPShecuPatchAU14
+  - Patch32ndABAU14
+  - Patch525thAIBAU14
+  - CCAFPatchAU14
+
+# CLF

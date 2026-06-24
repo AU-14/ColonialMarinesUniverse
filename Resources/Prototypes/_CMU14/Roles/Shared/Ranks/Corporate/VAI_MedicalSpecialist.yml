@@ -1,0 +1,5 @@
+- type: rank
+  id: VAI_MedicalSpecialist
+  name: VASC Medical Specialist
+  prefix: VASC MED
+  paygrade: VASCM

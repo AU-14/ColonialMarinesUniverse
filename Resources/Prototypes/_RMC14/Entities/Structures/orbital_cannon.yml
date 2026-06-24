@@ -102,6 +102,7 @@
     state: ob_warhead1
     drawdepth: SmallObjects
   - type: OrbitalCannonWarhead
+    transitExplosionType: RMCOB
   - type: Clickable
   - type: InteractionOutline
   - type: PowerLoaderGrabbable

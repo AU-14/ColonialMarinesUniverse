@@ -1,0 +1,7 @@
+- type: department
+  parent: CMDepartmentBase
+  abstract: true
+  id: AU14DepartmentLumbermill
+  departmentRadio: null
+  headOfDepartment: AU14JobCivilianForeman
+  faction: colonist

@@ -1,0 +1,5 @@
+- type: rank
+  id: RMC_Colonel
+  name: Colonel
+  prefix: Col.
+  paygrade: O6

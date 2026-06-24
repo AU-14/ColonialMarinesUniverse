@@ -51,6 +51,10 @@
     softness: 2
   - type: Physics
     bodyType: Dynamic
+  #CMU
+  - type: CMUZPhysics
+  - type: CMUVehicleZTraversal
+  - type: CMUZLevelViewer
   - type: Fixtures
     fixtures:
       world:
@@ -185,6 +189,12 @@
     - offset: 1,-0.1
       radius: 0.45
       interiorCoords: 2.41,-1.35
+  - type: MarineMapTracked
+  - type: TacticalMapTracked
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips_large.rsi
+      state: humvee
 
 - type: entity
   parent: VehicleHumveeBase

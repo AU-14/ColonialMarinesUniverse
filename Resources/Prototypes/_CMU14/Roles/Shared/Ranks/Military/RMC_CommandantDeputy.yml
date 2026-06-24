@@ -1,0 +1,7 @@
+- type: rank
+  id: RMC_CommandantDeputy
+  name: Deputy Commandant General
+  prefix: DCG.
+  paygrade: O7
+
+# Generals

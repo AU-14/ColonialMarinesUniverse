@@ -1,0 +1,5 @@
+- type: rank
+  id: AU14RankWYSecurityOfficer
+  name: Corporate Security Officer
+  prefix: CSO.
+  paygrade: CORP-SEC2

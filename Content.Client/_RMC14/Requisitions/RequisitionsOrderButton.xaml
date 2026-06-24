@@ -1,8 +1,25 @@
-﻿<controls:RequisitionsOrderButton
+<controls:RequisitionsOrderButton
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client._RMC14.Requisitions"
-    Orientation="Horizontal">
-    <Label Name="CostLabel" Access="Public" />
-    <Control MinWidth="5" />
-    <Button Name="Button" Access="Public" StyleClasses="ButtonSquare" HorizontalExpand="True" />
+    Orientation="Horizontal"
+    HorizontalExpand="True"
+    Margin="0 0 0 3">
+    <PanelContainer Name="RowPanel" Access="Public" HorizontalExpand="True">
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="4">
+            <LayeredTextureRect Name="Texture" Access="Public" MinSize="34 34" />
+            <Control MinWidth="5" />
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                <Label Name="NameLabel" Access="Public" ClipText="True" />
+                <Label Name="DescriptionLabel" Access="Public" ClipText="True" />
+                <BoxContainer Orientation="Horizontal">
+                    <Label Name="CostLabel" Access="Public" MinWidth="58" />
+                    <Label Name="StockLabel" Access="Public" HorizontalExpand="True" ClipText="True" />
+                </BoxContainer>
+            </BoxContainer>
+            <Control MinWidth="4" />
+            <Button Name="DetailsButton" Access="Public" Text="Info" StyleClasses="ButtonSquare" MinWidth="48" />
+            <Control MinWidth="3" />
+            <Button Name="OrderButton" Access="Public" Text="Buy" StyleClasses="ButtonSquare" MinWidth="48" />
+        </BoxContainer>
+    </PanelContainer>
 </controls:RequisitionsOrderButton>

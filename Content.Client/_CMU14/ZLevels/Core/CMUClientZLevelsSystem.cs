@@ -47,6 +47,7 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
         SubscribeLocalEvent<CMUZLevelProjectileVisualOffsetComponent, ComponentShutdown>(OnProjectileVisualOffsetShutdown);
         SubscribeLocalEvent<CMUZLevelPredictedProjectileVisualOffsetComponent, ComponentStartup>(OnPredictedProjectileVisualOffsetStartup);
         SubscribeLocalEvent<CMUZLevelPredictedProjectileVisualOffsetComponent, ComponentShutdown>(OnPredictedProjectileVisualOffsetShutdown);
+        SubscribeLocalEvent<CMUZVisualFollowerComponent, ComponentShutdown>(OnVisualFollowerShutdown);
         SubscribeLocalEvent<GridRemovalEvent>(OnGridShutdown);
         SubscribeLocalEvent<TileChangedEvent>(OnTileChanged);
     }
@@ -126,6 +127,11 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
     }
 
     private void OnPredictedProjectileVisualOffsetShutdown(Entity<CMUZLevelPredictedProjectileVisualOffsetComponent> ent, ref ComponentShutdown args)
+    {
+        RestoreProjectileVisualOffset(ent.Owner, ent.Comp.OriginalOffset);
+    }
+
+    private void OnVisualFollowerShutdown(Entity<CMUZVisualFollowerComponent> ent, ref ComponentShutdown args)
     {
         RestoreProjectileVisualOffset(ent.Owner, ent.Comp.OriginalOffset);
     }
@@ -255,6 +261,12 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
                 sprite,
                 xform);
         }
+
+        var followerQuery = EntityQueryEnumerator<CMUZVisualFollowerComponent, SpriteComponent, TransformComponent>();
+        while (followerQuery.MoveNext(out var uid, out var follower, out var sprite, out var xform))
+        {
+            ApplyVisualFollowerOffset(uid, follower, sprite, xform);
+        }
     }
 
     private void ApplyZPhysicsVisuals(EntityUid uid, CMUZPhysicsComponent zPhys, SpriteComponent sprite)
@@ -293,6 +305,54 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
             sprite,
             xform);
         return true;
+    }
+
+    private void ApplyVisualFollowerOffset(
+        EntityUid uid,
+        CMUZVisualFollowerComponent follower,
+        SpriteComponent sprite,
+        TransformComponent xform)
+    {
+        if (!TryGetVisualFollowerTarget(follower, xform, out var target) ||
+            !TryComp(target, out CMUZPhysicsComponent? zPhys))
+        {
+            RestoreProjectileVisualOffset(uid, follower.OriginalOffset);
+            follower.AppliedOffset = Vector2.Zero;
+            return;
+        }
+
+        ApplyProjectileVisualOffset(
+            uid,
+            new Vector2(0f, zPhys.LocalPosition * ZLevelOffset),
+            ref follower.OriginalOffset,
+            ref follower.AppliedOffset,
+            sprite,
+            xform);
+    }
+
+    private bool TryGetVisualFollowerTarget(
+        CMUZVisualFollowerComponent follower,
+        TransformComponent xform,
+        out EntityUid target)
+    {
+        if (follower.Target is { } configured &&
+            Exists(configured) &&
+            !TerminatingOrDeleted(configured))
+        {
+            target = configured;
+            return true;
+        }
+
+        if (xform.ParentUid != EntityUid.Invalid &&
+            Exists(xform.ParentUid) &&
+            !TerminatingOrDeleted(xform.ParentUid))
+        {
+            target = xform.ParentUid;
+            return true;
+        }
+
+        target = default;
+        return false;
     }
 
     private void ApplyProjectileVisualOffset(

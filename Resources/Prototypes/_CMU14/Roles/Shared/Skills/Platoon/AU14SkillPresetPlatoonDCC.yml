@@ -1,0 +1,22 @@
+- type: entity
+  id: AU14SkillPresetPlatoonDCC
+  name: Dropship Crew Chief
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillConstruction: 2
+      RMCSkillCqc: 1
+      RMCSkillEndurance: 1
+      RMCSkillEngineer: 3
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 2
+      RMCSkillPilot: 2
+      RMCSkillIntel: 1
+      RMCSkillPowerLoader: 2
+      RMCSkillMedical: 2
+      RMCSkillSurgery: 1
+      RMCSkillNavigations: 1
+      RMCSkillPolice: 1
+      RMCSkillJtac: 4
