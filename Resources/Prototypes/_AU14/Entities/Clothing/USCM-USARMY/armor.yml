@@ -343,6 +343,13 @@
     bullet: 15
     bio: 15
     explosionArmor: 15
+  - type: LockVisuals
+  - type: RMCIdLockableStorage
+    overrideAccesses:
+    - RMCAccessSeniorCommand
+    - CMAccessRequisitions
+    - CMAccessQM
+    - CMAccessSquadLeaderPrep
 
 - type: entity
   parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
