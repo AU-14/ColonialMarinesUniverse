@@ -53,7 +53,7 @@
     - ActionXenoDevolve
     tier: 3
     hudOffset: 0,0.1
-    unlockAt: 2700 # 45 minutes
+    unlockAt: 1800 # 30 minutes
   - type: XenoRegen
     standHealingMultiplier: 0.66
   - type: XenoHeavy
