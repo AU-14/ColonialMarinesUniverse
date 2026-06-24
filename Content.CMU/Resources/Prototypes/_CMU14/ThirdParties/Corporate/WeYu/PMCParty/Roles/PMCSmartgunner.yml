@@ -5,6 +5,9 @@
   roundForce: WY
   roundRole: WYPMCPartySmartgunner
   roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
   - type: Skills
     skills:
       RMCSkillEndurance: 3

@@ -1,0 +1,34 @@
+- type: loadout
+  id: ShoesBlackAU14
+  equipment:
+    shoes: RMCShoesBlack
+
+- type: loadout
+  id: BootsVanBandolierAU14
+  equipment:
+    shoes: RMCBootsVanBandolier
+
+- type: loadout
+  id: ShoesBrownAU14
+  equipment:
+    shoes: RMCShoesBrown
+
+- type: loadout
+  id: ShoesLaceupAU14
+  equipment:
+    shoes: RMCShoesLaceup
+
+- type: loadout
+  id: ShoesLaceupBrownAU14
+  equipment:
+    shoes: RMCShoesLaceupBrown
+
+- type: loadout
+  id: ShoesFancyLeatherAU14
+  equipment:
+    shoes: RMCShoesFancyLeather
+
+- type: loadout
+  id: BootsCorporateAU14
+  equipment:
+    shoes: RMCBootsCorporate

@@ -1,0 +1,7 @@
+- type: loadoutGroup
+  id: EngiGlovesAU14
+  name: au14-loadout-group-civilian-gloves
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - HandsVeteranInsulatedAU14

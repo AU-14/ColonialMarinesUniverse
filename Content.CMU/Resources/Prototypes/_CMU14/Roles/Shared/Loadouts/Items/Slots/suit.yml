@@ -1,0 +1,107 @@
+- type: loadout
+  id: DefibrillatorAU14
+  storage:
+    back:
+    - AU14CMDefibrillator
+
+- type: loadout
+  id: JacketCorporateBrownAU14
+  storage:
+    back:
+    - RMCJacketCorporateBrown
+
+- type: loadout
+  id: CivilianJacketGrayPufferVestAU14
+  storage:
+    back:
+    - AU14CivilianJacketGrayPufferVest
+
+- type: loadout
+  id: CivilianJacketOrangePufferJacketAU14
+  storage:
+    back:
+    - AU14CivilianJacketOrangePufferJacket
+
+- type: loadout
+  id: WindbreakerBlueAU14
+  storage:
+    back:
+    - AU14WindbreakerBlue
+
+- type: loadout
+  id: CivilianJacketGreenParkaAU14
+  storage:
+    back:
+    - AU14CivilianJacketGreenParka
+
+- type: loadout
+  id: CivilianJacketSnowSuitAU14
+  storage:
+    back:
+    - AU14CivilianJacketSnowSuit
+
+- type: loadout
+  id: CivilianJacketOldCoatAU14
+  storage:
+    back:
+    - AU14CivilianJacketOldCoat
+
+- type: loadout
+  id: CivilianFullSuitWeYuEngineerAU14
+  storage:
+    back:
+    - AU14CivilianFullSuitWeYuEngineer
+
+- type: loadout
+  id: CivilianFullSuitParamedicGreenAU14
+  equipment:
+    outerClothing: AU14CivilianFullSuitParamedicGreen
+
+- type: loadout
+  id: CivilianFullSuitParamedicRedAU14
+  equipment:
+    outerClothing: AU14CivilianFullSuitParamedicRed
+
+- type: loadout
+  id: CivilianFullSuitFirefighterAU14
+  equipment:
+    outerClothing: AU14CivilianTurnoutGear
+
+- type: loadout
+  id: CivilianFullSuitFirefighterUPPAU14
+  equipment:
+    outerClothing: RMCArmorSPPFirefighter
+
+- type: loadout
+  id: OuterClothingExternalWebbingBlackAU14
+  storage:
+    back:
+    - RMCOuterClothingExternalWebbingBlack
+
+- type: loadout
+  id: AU14CivilianHazardVestParamedicWhiteAU14
+  storage:
+    back:
+    - AU14CivilianHazardVestParamedicWhite
+
+- type: loadout
+  id: CivilianHazardVestParamedicGreenAU14
+  storage:
+    back:
+    - AU14CivilianHazardVestParamedicGreen
+
+- type: loadout
+  id: WYFancySuitJacketBlackAU14
+  equipment:
+    outerClothing: RMCFancySuitJacketBlack
+
+- type: loadout
+  id: WYFancySuitJacketBrownAU14
+  equipment:
+    outerClothing: RMCFancySuitJacketBrown
+
+- type: loadout
+  id: WYFancySuitJacketLightBrownAU14
+  equipment:
+    outerClothing: RMCFancySuitJacketLightBrown
+

@@ -11,6 +11,7 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Popups;
 using Content.Shared.Throwing;
 using Content.Shared.Actions.Components;
+using Content.Shared.Vehicle.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -394,7 +395,8 @@ public abstract partial class SharedFishingSystem : EntitySystem
 
         if (lure.Comp.AttachedEntity is { } attachedEnt &&
             attachedEnt.IsValid() &&
-            Exists(attachedEnt))
+            Exists(attachedEnt) &&
+            !IsVehicleTarget(attachedEnt))
         {
             // TODO: so this kinda just lets you pull anything right up to you, it should instead just apply an impulse in your direction modfiied by the weight of the player vs the object
             // Also we need to autoreel/snap the line if the player gets too far away
@@ -414,6 +416,12 @@ public abstract partial class SharedFishingSystem : EntitySystem
 
         StopFishing(ent, player);
         args.Handled = true;
+    }
+
+    protected bool IsVehicleTarget(EntityUid uid)
+    {
+        return HasComp<VehicleComponent>(uid) ||
+               HasComp<GridVehicleMoverComponent>(uid);
     }
 
     private void OnFishingRodInit(Entity<FishingRodComponent> ent, ref MapInitEvent args)

@@ -1,0 +1,129 @@
+- type: loadout
+  id: RMCPouchGeneralAU14
+  equipment:
+    pocket1: RMCPouchGeneral
+
+- type: loadout
+  id: RMCPouchToolsFillAU14
+  equipment:
+    pocket1: RMCPouchToolsFill
+
+- type: loadout
+  id: RMCPouchElectronicsAU14
+  equipment:
+    pocket1: RMCPouchElectronics
+
+- type: loadout
+  id: RMCPouchConstructionAU14
+  equipment:
+    pocket1: RMCPouchConstruction
+
+- type: loadout
+  id: PouchAutoinjectorAU14
+  equipment:
+    pocket1: RMCPouchAutoinjector
+
+- type: loadout
+  id: PouchFirstResponderAU14
+  equipment:
+    pocket1: RMCPouchFirstResponder
+
+- type: loadout
+  id: PouchMedicalAU14
+  equipment:
+    pocket1: RMCPouchMedical
+
+- type: loadout
+  id: PouchSyringeFillAU14
+  equipment:
+    pocket1: RMCPouchSyringeFill
+
+- type: loadout
+  id: PouchToolsSocFillAU14
+  equipment:
+    pocket1: RMCPouchToolsSocFill
+
+- type: loadout
+  id: PouchFirstAidAU14
+  equipment:
+    pocket1: RMCPouchFirstAid
+
+- type: loadout
+  id: PouchGeneralLargeAU14
+  equipment:
+    pocket1: RMCPouchGeneralLarge
+
+- type: loadout
+  id: PouchVialFillAU14
+  equipment:
+    pocket1: RMCPouchVialFill
+
+# pocket2
+
+- type: loadout
+  id: RMCPouchGeneralRightAU14
+  equipment:
+    pocket2: RMCPouchGeneral
+
+- type: loadout
+  id: RMCPouchToolsFillRightAU14
+  equipment:
+    pocket2: RMCPouchToolsFill
+
+- type: loadout
+  id: RMCPouchElectronicsRightAU14
+  equipment:
+    pocket2: RMCPouchElectronics
+
+- type: loadout
+  id: RMCPouchConstructionRightAU14
+  equipment:
+    pocket2: RMCPouchConstruction
+
+- type: loadout
+  id: PouchAutoinjectorRightAU14
+  equipment:
+    pocket2: RMCPouchAutoinjector
+
+- type: loadout
+  id: PouchFirstResponderRightAU14
+  equipment:
+    pocket2: RMCPouchFirstResponder
+
+- type: loadout
+  id: PouchMedicalRightAU14
+  equipment:
+    pocket2: RMCPouchMedical
+
+- type: loadout
+  id: PouchSyringeFillRightAU14
+  equipment:
+    pocket2: RMCPouchSyringeFill
+
+- type: loadout
+  id: PouchToolsSocFillRightAU14
+  equipment:
+    pocket2: RMCPouchToolsSocFill
+
+- type: loadout
+  id: PouchFirstAidRightAU14
+  equipment:
+    pocket2: RMCPouchFirstAid
+
+- type: loadout
+  id: PouchGeneralLargeRightAU14
+  equipment:
+    pocket2: RMCPouchGeneralLarge
+
+- type: loadout
+  id: PouchVialFillRightAU14
+  equipment:
+    pocket2: RMCPouchVialFill
+
+# uniform webbing
+
+- type: loadout
+  id: WebbingDropPouchAU14
+  storage:
+    back:
+    - RMCWebbingDropPouch
