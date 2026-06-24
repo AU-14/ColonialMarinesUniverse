@@ -40,7 +40,7 @@
     - ActionXenoDevolve
     tier: 3
     hudOffset: -0.15,0.16
-    unlockAt: 2700 # 45 minutes
+    unlockAt: 1800 # 30 minutes
   - type: XenoHeavy
   - type: XenoDevolve
     devolvesTo:
