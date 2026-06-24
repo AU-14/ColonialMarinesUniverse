@@ -18,7 +18,7 @@
     - id: CMMagazineSniperM96SFlak
       amount: 4
     - id: CMBackpackSniper
-    - id: CMM96SSniperRifle
+    - id: AU14WeaponRifleCM96SLock # CMM96SSniperRifle
     - id: AU14KitSpotter
 #    - id: CMFacepaintSniper
   - type: CMChangeUserOnVend
@@ -41,7 +41,7 @@
     - 0,0,21,3
   - type: StorageFill
     contents:
-    - id: RMCXM43E1AntiMaterielRifle
+    - id: AU14WeaponRifleXM43E1Lock # RMCXM43E1AntiMaterielRifle NO ID LOCK
     - id: RMCMagazineSniperXM43E1AntiMateriel
       amount: 10
     - id: RMCVisorNightVision
@@ -71,11 +71,12 @@
     - 0,0,21,3
   - type: StorageFill
     contents:
-    - id: WeaponLauncherM83 # check IFF
-    - id: RMCBeltGrenadeLargeFilled
+    - id: AU14WeaponRifleM83Lock # WeaponLauncherM83 Unlocked Version
+    # check IFF
+    - id: RMCBeltGrenadeLargeLockedFilled # ID lock
     - id: RMCSatchelGrenadeSpec # ID lock
-    - id: RMCSatchelGrenadeSpec
-    - id: RMCHandsM3G4
+    - id: RMCSatchelGrenadeSpec # ID lock
+    - id: AU14WeaponRifleM83Lock # RMCHandsM3G4 No ID lock
     - id: RMCBinoculars
     - id: RMCBoxAGMI
     - id: RMCBoxAGMF
@@ -109,8 +110,8 @@
     - 0,0,21,3
   - type: StorageFill
     contents:
-    - id: RMCWeaponRifleSharp
-    - id: RMCBeltSharp
+    - id: AU14WeaponRifleSharpLock # RMCWeaponRifleSharp - No lock version
+    - id: RMCBeltSharp # ID Locked
     - id: RMCMagazineRifleSharpExplosive
       amount: 7
     - id: RMCMagazineRifleSharpFlechette
@@ -194,7 +195,7 @@
       amount: 4
     - id: RMCBackpackScout
     - id: CMBackpackSniper
-    - id: WeaponRifleM4SPRCustom
+    - id: AU14WeaponRifleM4SPRCLock # WeaponRifleM4SPRCustom Unlocked version
     - id: RMCThermalTarpFolded
       amount: 2
     - id: RMCExplosivePlastic
@@ -234,7 +235,7 @@
     - id: RMCAttachmentS5RedDotSight
     - id: RMCBackpackScout
     - id: CMBackpackSniper
-    - id: WeaponRifleM5SPR2
+    - id: AU14WeaponRifleM5SPR2Lock # WeaponRifleM5SPR2 - Unlocked Version
     - id: RMCThermalTarpFolded
       amount: 2
     - id: RMCExplosivePlastic
@@ -264,7 +265,7 @@
     - 0,0,21,3
   - type: StorageFill
     contents:
-    - id: AU14WeaponSniperRifleM42A2
+    - id: AU14WeaponRifleM42A2Lock # AU14WeaponSniperRifleM42A2 Unlocked version
     - id: CMMagazineSniperM96S
       amount: 12
     - id: CMMagazineSniperM96SFlak
@@ -304,14 +305,14 @@
     - id: CMArmorM35
     - id: CMArmorHelmetM35
     - id: RMCBackpackBroiler
-    - id: RMCWeaponFlamerSpec
+    - id: AU14WeaponRifleM240TLock # RMCWeaponFlamerSpec - Unlocked Version
     - id: RMCTankFlamerLarge
     - id: RMCTankFlamerLargeB
     - id: RMCTankFlamerLargeX
     - id: RMCPouchFuelTank
     - id: CMFireExtinguisher
     - id: CMFireExtinguisherPortable
-    - id: RMCBinoculars 
+    - id: RMCBinoculars
     #- id: RMCMK80
     #- id: CMMagazinePistolMK80
     #  amount: 2

@@ -5,6 +5,7 @@
   name: M56B smart gun
   description: The actual firearm in the Smart Gun System. Essentially a heavy, mobile machinegun.
   components:
+  - type: GunIDLock
   - type: Wieldable
   - type: Item
     size: Huge
@@ -154,15 +155,9 @@
 
 - type: entity
   parent: RMCSmartGunNoCamo
-  id: AU14WeaponRifleM56BLock
-  suffix: ID lock
-  components:
-  - type: GunIDLock
-
-- type: entity
-  parent: RMCSmartGunNoCamo
   id: RMCSmartGun
   components:
+  - type: GunIDLock
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/SmartGuns/ml66a.rsi
     layers:
@@ -184,17 +179,11 @@
 
 - type: entity
   parent: RMCSmartGun
-  id: AU14WeaponRifleSmartGunLock
-  suffix: ID lock
-  components:
-  - type: GunIDLock
-
-- type: entity
-  parent: RMCSmartGun
   id: RMCSmartGunPMC
   name: M56T smart gun
   description: The actual firearm in the 4-piece M56T Smartgun System. If you have this, you're about to bring some serious pain to anyone in your way. You may toggle firing restrictions by using a special action.
   components:
+  - type: GunIDLock
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/SmartGuns/ml79a.rsi
     layers:
@@ -244,18 +233,12 @@
 
 - type: entity
   parent: RMCSmartGunPMC
-  id: AU14WeaponRifleM56TLock
-  suffix: ID lock
-  components:
-  - type: GunIDLock
-
-- type: entity
-  parent: RMCSmartGunPMC
   id: RMCSmartGunWhiteOut
   name: "ML79A 'Breaker' smart gun"
   description: The actual firearm in the 4-piece ML79A Smartgun System, modified for extra power. If you have this, you're about to bring some serious pain to anyone in your way. You may toggle firing restrictions by using a special action.
   suffix: Whiteout
   components:
+  - type: GunIDLock
   - type: RMCSelectiveFire
     recoilWielded: 3
     scatterWielded: 10
@@ -286,12 +269,6 @@
         sprite: _RMC14/Actions/marine_smart_gun_actions.rsi
         state: ammo_swap_ap
 
-- type: entity
-  parent: RMCSmartGunWhiteOut
-  id: AU14WeaponRifleML79ABreakerLock
-  suffix: ID lock
-  components:
-  - type: GunIDLock
 
 - type: entity
   parent: RMCSmartGunNoCamo
@@ -356,6 +333,7 @@
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
     sprite: _RMC14/Objects/Weapons/Guns/SmartGuns/ml66a_royal.rsi
+  - type: GunIDLock
   - type: ItemSlots
     slots:
       gun_magazine:
@@ -374,13 +352,6 @@
         whitelist:
           components:
           - SmartGunBattery
-
-- type: entity
-  parent: RMCSmartGunRoyal
-  id: AU14WeaponRifleL56Lock
-  suffix: ID lock
-  components:
-  - type: GunIDLock
 
 - type: entity
   parent: CMMagazineRifleBase

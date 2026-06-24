@@ -173,6 +173,28 @@
 
 - type: entity
   parent: RMCBeltGrenadeLarge
+  id: RMCBeltGrenadeLargeLockedFilled
+  suffix: Filled
+  components:
+  - type: LockVisuals
+  - type: RMCIdLockableStorage
+    overrideAccesses:
+    - RMCAccessSeniorCommand
+    - CMAccessRequisitions
+    - CMAccessQM
+    - CMAccessSquadLeaderPrep
+  - type: StorageFill
+    contents:
+    - id: CMGrenadeHighExplosive
+      amount: 12
+    - id: CMGrenadeFrag
+      amount: 3
+    - id: RMCGrenadeIncendiary
+      amount: 3
+    # TODO Original is 6 HEDP, 3 HIDP incen, 6 airburst frag, 3 airburst incen
+
+- type: entity
+  parent: RMCBeltGrenadeLarge
   id: RMCBeltGrenadeHEFA
   name: M276 HEFA rig Mk. XVII
   description: The M276 HEFA rig Mk. XVII is an upgraded version of the M276 grenade rig, with more storage capacity.
