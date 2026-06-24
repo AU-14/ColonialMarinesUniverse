@@ -194,6 +194,14 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
                 minimum = weapon.NextAttack;
         }
 
+        // RMC14, Prevent holstering a melee weapon and swapping to unarmed attacks from resetting melee delay.
+        if (uid != args.User &&
+            TryComp(args.User, out MeleeWeaponComponent? userMelee) &&
+            minimum < userMelee.NextAttack)
+        {
+            minimum = userMelee.NextAttack;
+        }
+
         if (minimum < component.NextAttack)
             return;
 
@@ -480,6 +488,7 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
         }
 
         DirtyField(weaponUid, weapon, nameof(MeleeWeaponComponent.NextAttack));
+        SyncUserMeleeCooldown(user, weaponUid, weapon.NextAttack);
 
         // Do this AFTER attack so it doesn't spam every tick
         var ev = new AttemptMeleeEvent(user);
@@ -534,6 +543,19 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
         weapon.Attacking = true;
         DirtyField(weaponUid, weapon, nameof(MeleeWeaponComponent.Attacking));
         return true;
+    }
+
+    private void SyncUserMeleeCooldown(EntityUid user, EntityUid weaponUid, TimeSpan nextAttack)
+    {
+        if (weaponUid == user ||
+            !TryComp(user, out MeleeWeaponComponent? userMelee) ||
+            userMelee.NextAttack >= nextAttack)
+        {
+            return;
+        }
+
+        userMelee.NextAttack = nextAttack;
+        DirtyField(user, userMelee, nameof(MeleeWeaponComponent.NextAttack));
     }
 
     protected abstract bool InRange(EntityUid user, EntityUid target, float range, ICommonSession? session);

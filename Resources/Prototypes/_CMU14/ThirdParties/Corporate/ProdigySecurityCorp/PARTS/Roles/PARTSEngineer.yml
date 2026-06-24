@@ -29,7 +29,7 @@
   - auwy
   - AUPrisonStaff
 - type: entity
-  parent: AU14BaseMobSpeciesOrganicWeYu
+  parent: AU14BaseMobSpeciesOrganicProdigy
   id: AU14JobPARTSPartyEngineer
   name: Prodigy Sierra Party Combat Engineer (3rd party, M41A/2)
   components:

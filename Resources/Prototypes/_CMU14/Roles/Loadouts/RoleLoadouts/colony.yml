@@ -102,6 +102,23 @@
   - SmokablesRMC
 
 - type: roleLoadout
+  id: JobAU14JobCivilianHeadOfEngineering
+  points: 7
+  groups:
+  - EngiSatchelAU14
+  - EngiJacketAU14
+  - EngiGlovesAU14
+  - EngiBeltAU14
+  - EngiPouchAU14
+  - EngiPouchRightAU14
+  - ForceStampApprovedAU14
+  - ForceSynthResetKeyAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+- type: roleLoadout
   id: JobAU14JobCivilianForeman
   points: 7
   groups:

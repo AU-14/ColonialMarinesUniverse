@@ -21,6 +21,8 @@ public sealed partial class NightVisionSystem : SharedNightVisionSystem
 
         SubscribeLocalEvent<NightVisionComponent, LocalPlayerAttachedEvent>(OnNightVisionAttached);
         SubscribeLocalEvent<NightVisionComponent, LocalPlayerDetachedEvent>(OnNightVisionDetached);
+        SubscribeLocalEvent<NightVisionComponent, EntParentChangedMessage>(OnNightVisionParentChanged);
+        SubscribeLocalEvent<NightVisionComponent, MapUidChangedEvent>(OnNightVisionMapChanged);
     }
 
     private void OnNightVisionAttached(Entity<NightVisionComponent> ent, ref LocalPlayerAttachedEvent args)
@@ -31,6 +33,16 @@ public sealed partial class NightVisionSystem : SharedNightVisionSystem
     private void OnNightVisionDetached(Entity<NightVisionComponent> ent, ref LocalPlayerDetachedEvent args)
     {
         Off();
+    }
+
+    private void OnNightVisionParentChanged(Entity<NightVisionComponent> ent, ref EntParentChangedMessage args)
+    {
+        NightVisionChanged(ent);
+    }
+
+    private void OnNightVisionMapChanged(Entity<NightVisionComponent> ent, ref MapUidChangedEvent args)
+    {
+        NightVisionChanged(ent);
     }
 
     protected override void NightVisionChanged(Entity<NightVisionComponent> ent)

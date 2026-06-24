@@ -29,6 +29,9 @@ public sealed partial class AuThreatSystem : EntitySystem
 {
     private static readonly ProtoId<JobPrototype> ThreatLeaderJobId = new("AU14JobThreatLeader");
     private static readonly ProtoId<JobPrototype> ThreatMemberJobId = new("AU14JobThreatMember");
+    private static readonly EntProtoId ThreatMindRoleId = new("MindRoleThreat");
+    private static readonly EntProtoId ThreatLeaderPlayTimeRoleId = new("MindRoleThreatLeaderPlayTime");
+    private static readonly EntProtoId ThreatMemberPlayTimeRoleId = new("MindRoleThreatMemberPlayTime");
     private static readonly ProtoId<NpcFactionPrototype> ThreatNpcFaction = new("THREAT");
     private static readonly IReadOnlyDictionary<string, JobScaleEntry> EmptyScaling = new Dictionary<string, JobScaleEntry>();
     private static readonly ThreatMarkerType[] ThreatMarkerTypes = Enum.GetValues<ThreatMarkerType>();
@@ -86,6 +89,33 @@ public sealed partial class AuThreatSystem : EntitySystem
     internal static bool IsThreatJob(ProtoId<JobPrototype>? job)
     {
         return job == ThreatLeaderJobId || job == ThreatMemberJobId;
+    }
+
+    internal static bool TryGetThreatPlayTimeRole(ProtoId<JobPrototype> job, out EntProtoId role)
+    {
+        if (job == ThreatLeaderJobId)
+        {
+            role = ThreatLeaderPlayTimeRoleId;
+            return true;
+        }
+
+        if (job == ThreatMemberJobId)
+        {
+            role = ThreatMemberPlayTimeRoleId;
+            return true;
+        }
+
+        role = default;
+        return false;
+    }
+
+    private static List<EntProtoId> GetThreatMindRoles(ProtoId<JobPrototype> job)
+    {
+        var roles = new List<EntProtoId> { ThreatMindRoleId };
+        if (TryGetThreatPlayTimeRole(job, out var playTimeRole))
+            roles.Add(playTimeRole);
+
+        return roles;
     }
 
     private static ThreatAssignmentCounts CountThreatAssignments(
@@ -897,7 +927,11 @@ public sealed partial class AuThreatSystem : EntitySystem
         var entityJob = ghostRole?.JobProto ?? jobId;
         _roles.MindAddJobRole(mind.Value, silent: true, jobPrototype: entityJob);
         AddStartingMindRole(entity, mind.Value);
-        _roles.MindAddRole(mind.Value, "MindRoleThreat", silent: true);
+        foreach (var role in GetThreatMindRoles(jobId))
+        {
+            _roles.MindAddRole(mind.Value, role, silent: true);
+        }
+
         AddThreatFaction(entity);
 
         if (ghostRole != null)
@@ -936,7 +970,7 @@ public sealed partial class AuThreatSystem : EntitySystem
         ghostRole.RoleDescription = "au14-threat-ghost-role-description";
         ghostRole.RoleRules = "au14-threat-ghost-role-rules";
         ghostRole.JobProto = jobId;
-        ghostRole.MindRoles = new List<EntProtoId> { "MindRoleThreat" };
+        ghostRole.MindRoles = GetThreatMindRoles(jobId);
 
         EnsureComp<GhostTakeoverAvailableComponent>(entity);
     }

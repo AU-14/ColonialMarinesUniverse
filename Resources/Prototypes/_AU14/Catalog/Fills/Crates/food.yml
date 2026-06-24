@@ -25,6 +25,8 @@
   id: AU14CrateHydroponics
   suffix: Filled
   components:
+  - type: EntityStorage
+    capacity: 32
   - type: StorageFill
     contents:
     - id: RMCStoragePlantBag
