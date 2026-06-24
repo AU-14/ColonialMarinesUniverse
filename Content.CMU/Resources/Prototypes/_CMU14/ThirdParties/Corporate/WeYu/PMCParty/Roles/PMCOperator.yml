@@ -14,6 +14,9 @@
   roundForce: WY
   roundRole: WYPMCPartyContractor
   roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
   - type: Skills
     skills:
       RMCSkillEndurance: 3
@@ -49,6 +52,9 @@
   roundForce: WY
   roundRole: WYPMCPartyContractorM39B2
   roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
   - type: Skills
     skills:
       RMCSkillEndurance: 1
@@ -86,6 +92,9 @@
   roundForce: WY
   roundRole: WYPMCPartyContractorNSG23
   roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
   - type: Skills
     skills:
       RMCSkillEndurance: 1
@@ -123,6 +132,9 @@
   roundForce: WY
   roundRole: WYPMCPartyContractorM42A
   roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
   - type: Skills
     skills:
       RMCSkillEndurance: 1
