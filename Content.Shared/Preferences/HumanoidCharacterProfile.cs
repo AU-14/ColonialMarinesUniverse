@@ -608,10 +608,9 @@ namespace Content.Shared.Preferences
         {
             var key = NormalizePreferenceGamemode(gamemode);
             if (!string.IsNullOrEmpty(key) &&
-                _gamemodeJobPriorities.TryGetValue(key, out var priorities) &&
-                priorities.TryGetValue(jobId, out var priority))
+                _gamemodeJobPriorities.TryGetValue(key, out var priorities))
             {
-                return priority;
+                return priorities.GetValueOrDefault(jobId, JobPriority.Never);
             }
 
             return _jobPriorities.GetValueOrDefault(jobId, JobPriority.Never);
@@ -626,30 +625,7 @@ namespace Content.Shared.Preferences
                 return _jobPriorities;
             }
 
-            var output = new Dictionary<ProtoId<JobPrototype>, JobPriority>(_jobPriorities);
-            var gamemodeHighPriorities = priorities
-                .Where(pair => pair.Value == JobPriority.High)
-                .Select(pair => pair.Key)
-                .ToHashSet();
-
-            if (gamemodeHighPriorities.Count > 0)
-            {
-                foreach (var (job, priority) in output.ToArray())
-                {
-                    if (priority == JobPriority.High && !gamemodeHighPriorities.Contains(job))
-                        output[job] = JobPriority.Medium;
-                }
-            }
-
-            foreach (var (job, priority) in priorities)
-            {
-                if (priority == JobPriority.Never)
-                    output.Remove(job);
-                else
-                    output[job] = priority;
-            }
-
-            return NormalizeJobPriorities(output);
+            return NormalizeJobPriorities(priorities);
         }
 
         public HumanoidCharacterProfile WithGamemodeJobPriority(string? gamemode, ProtoId<JobPrototype> jobId, JobPriority priority)
@@ -667,12 +643,6 @@ namespace Content.Shared.Preferences
 
             if (priority == JobPriority.High)
             {
-                foreach (var (job, value) in _jobPriorities)
-                {
-                    if (job != jobId && value == JobPriority.High)
-                        priorities[job] = JobPriority.Medium;
-                }
-
                 foreach (var (job, value) in priorities.ToArray())
                 {
                     if (job != jobId && value == JobPriority.High)

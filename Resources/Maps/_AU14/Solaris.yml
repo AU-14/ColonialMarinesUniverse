@@ -107679,6 +107679,13 @@ entities:
     - type: Transform
       pos: 70.5,-121.5
       parent: 1
+- proto: AU14SpawnPointCivilianHeadOfEngineering
+  entities:
+  - uid: 55293
+    components:
+    - type: Transform
+      pos: 71.5,-120.5
+      parent: 1
 - proto: AU14SpawnPointCivilianFreightSystemsSpecialist
   entities:
   - uid: 158

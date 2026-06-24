@@ -78,10 +78,10 @@ public sealed partial class BlackfootFlightComponent : Component
     public TimeSpan StateStartedAt;
 
     [DataField, AutoNetworkedField]
-    public TimeSpan TakeoffDuration = TimeSpan.FromSeconds(23.66);
+    public TimeSpan TakeoffDuration = TimeSpan.FromSeconds(16.562);
 
     [DataField, AutoNetworkedField]
-    public TimeSpan LandingDuration = TimeSpan.FromSeconds(18);
+    public TimeSpan LandingDuration = TimeSpan.FromSeconds(9);
 
     [DataField, AutoNetworkedField]
     public Vector2i Footprint = new(3, 3);
@@ -204,6 +204,13 @@ public sealed partial class BlackfootSoundComponent : Component
     public string? InteriorEngineLoopSoundKey;
 
     public readonly HashSet<EntityUid> InteriorEngineLoopRecipients = new();
+}
+
+[RegisterComponent]
+public sealed partial class BlackfootGunshotComponent : Component
+{
+    [DataField]
+    public SoundSpecifier? Sound;
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]

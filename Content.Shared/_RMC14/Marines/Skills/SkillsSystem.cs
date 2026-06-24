@@ -57,7 +57,7 @@ public sealed partial class SkillsSystem : EntitySystem
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
         SubscribeLocalEvent<GetMeleeDamageEvent>(OnGetMeleeDamage);
 
-        SubscribeLocalEvent<SkillsComponent, MapInitEvent>(OnSkillsMapInit);
+        SubscribeLocalEvent<SkillsComponent, ComponentStartup>(OnSkillsStartup);
         SubscribeLocalEvent<SkillsComponent, GetVerbsEvent<ExamineVerb>>(OnSkillsVerbExamine);
 
         SubscribeLocalEvent<MedicallyUnskilledDoAfterComponent, AttemptHyposprayUseEvent>(OnAttemptHyposprayUse);
@@ -98,7 +98,7 @@ public sealed partial class SkillsSystem : EntitySystem
         args.Damage = ApplyMeleeSkillModifier(args.User, args.Damage);
     }
 
-    private void OnSkillsMapInit(Entity<SkillsComponent> ent, ref MapInitEvent args)
+    private void OnSkillsStartup(Entity<SkillsComponent> ent, ref ComponentStartup args)
     {
         if (ent.Comp.Preset is not { } presetPrototype)
             return;

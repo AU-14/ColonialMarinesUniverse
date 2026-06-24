@@ -11,11 +11,70 @@ namespace Content.Shared._RMC14.TacticalMap;
 
 public abstract partial class SharedTacticalMapSystem : EntitySystem
 {
+    public const string MarinesFaction = "MARINES";
+    public const string XenosFaction = "XENONIDS";
+    public const string OpforFaction = "OPFOR";
+    public const string GovforFaction = "GOVFOR";
+    public const string ClfFaction = "CLF";
+
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private SensorTowerSystem _sensorTowers = default!;
 
     public int LineLimit { get; private set; }
+
+    public static bool TryNormalizeHumanFaction(string? faction, out string normalized)
+    {
+        normalized = MarinesFaction;
+
+        if (string.IsNullOrWhiteSpace(faction))
+            return true;
+
+        var key = faction.Trim().ToUpperInvariant();
+        if (key is "MARINE" or "MARINES" or "UNMC")
+            return true;
+
+        if (key.Contains(ClfFaction))
+        {
+            normalized = ClfFaction;
+            return true;
+        }
+
+        if (key.Contains("OPF"))
+        {
+            normalized = OpforFaction;
+            return true;
+        }
+
+        if (key.Contains("GOV"))
+        {
+            normalized = GovforFaction;
+            return true;
+        }
+
+        return false;
+    }
+
+    public static string NormalizeHumanFaction(string? faction)
+    {
+        return TryNormalizeHumanFaction(faction, out var normalized)
+            ? normalized
+            : MarinesFaction;
+    }
+
+    public static string? NormalizeMapFaction(string? faction)
+    {
+        if (string.IsNullOrWhiteSpace(faction))
+            return null;
+
+        var key = faction.Trim().ToUpperInvariant();
+        if (key is "XENO" or "XENOS" or "XENONID" || key == XenosFaction)
+            return XenosFaction;
+
+        return TryNormalizeHumanFaction(key, out var normalized)
+            ? normalized
+            : key;
+    }
 
     public override void Initialize()
     {
@@ -86,7 +145,7 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem
     protected void UpdateMapData(Entity<TacticalMapComputerComponent> computer, TacticalMapComponent map)
     {
         // If the computer is tied to a faction, filter what we send accordingly.
-        var faction = computer.Comp.Faction?.ToUpperInvariant();
+        var faction = NormalizeMapFaction(computer.Comp.Faction);
 
         computer.Comp.Blips = new Dictionary<int, TacticalMapBlip>();
 
@@ -101,11 +160,11 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem
         }
 
         // Helpers to check faction selection
-        bool WantsMarines() => faction == null || faction == "MARINES" || faction == "UNMC" || faction == string.Empty;
-        bool WantsXenos() => faction == null || faction == "XENONIDS" || faction == "XENONID" || faction == string.Empty;
-        bool WantsOpfor() => faction == null || faction == "OPFOR" || faction == string.Empty;
-        bool WantsGovfor() => faction == null || faction == "GOVFOR" || faction == string.Empty;
-        bool WantsClf() => faction == null || faction == "CLF" || faction == string.Empty;
+        bool WantsMarines() => faction == null || faction == MarinesFaction;
+        bool WantsXenos() => faction == null || faction == XenosFaction;
+        bool WantsOpfor() => faction == null || faction == OpforFaction;
+        bool WantsGovfor() => faction == null || faction == GovforFaction;
+        bool WantsClf() => faction == null || faction == ClfFaction;
 
         // Add marine blips if desired
         AddIf(WantsMarines, map.MarineBlips);

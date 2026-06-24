@@ -4693,5 +4693,145 @@
   id: 334
   time: '2026-06-24T12:12:14.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1430
+- author: KriegersMustDie
+  changes:
+  - message: Xeno Queen is banned from Space Jam
+    type: Tweak
+  id: 335
+  time: '2026-06-24T12:22:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1428
+- author: nicholast013
+  changes:
+  - message: 2 amount scout webbing for 6 points
+    type: Add
+  - message: coif (balaclava) price -> 1
+    type: Add
+  - message: militia vest price -> 5
+    type: Tweak
+  - message: K12 armor and helmet is more pricey 10 -> 20
+    type: Tweak
+  - message: IED amount 6 -> 12
+    type: Tweak
+  - message: Huge IED amount 2 -> 3
+    type: Tweak
+  id: 336
+  time: '2026-06-24T12:25:40.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1411
+- author: TheHellFireo
+  changes:
+  - message: Fixed single-option threat votes not spawning a threat.
+    type: Fix
+  - message: Fixed Head of Engineering spawn and loadout issues.
+    type: Fix
+  - message: Prevented fishing rods from pulling vehicles.
+    type: Fix
+  - message: Fixed gamemode-specific job preference fallback behavior.
+    type: Fix
+  - message: Fixed deployables disappearing or breaking on moving grids.
+    type: Fix
+  - message: Fixed GOVFOR Weapon Specialist loadouts.
+    type: Fix
+  - message: Fixed tactical map faction handling for overwatch.
+    type: Fix
+  - message: Fixed First Recon rifleman skills.
+    type: Fix
+  - message: Fixed Reaper corrosive acid action behavior.
+    type: Fix
+  - message: Fixed viewport freeze when the main eye entered nullspace.
+    type: Fix
+  - message: Fixed signal flares settling into invalid airborne targets.
+    type: Fix
+  - message: Fixed z-level look-up fullbright while nested.
+    type: Fix
+  - message: Fixed Yautja wrench storage sprite.
+    type: Fix
+  - message: Fixed impossible burrowed larva queue offers.
+    type: Fix
+  - message: Fixed parasite collision after changing z-levels.
+    type: Fix
+  - message: Fixed CAS fire mission targeting validation.
+    type: Fix
+  - message: Fixed Vulture spotter tripod scope cleanup and stowed scoping.
+    type: Fix
+  - message: Prevented hivebroken xeno evolution/devolution issues.
+    type: Fix
+  - message: Preserved xeno spawn mute timers through evolution.
+    type: Fix
+  - message: Blocked downed marine hand actions while preserving missing-leg handling.
+    type: Fix
+  - message: Fixed xeno trap line-of-sight checks.
+    type: Fix
+  - message: Fixed Queen Eye camera switching after watching xenos.
+    type: Fix
+  - message: Filled colonist medical kit pouches.
+    type: Fix
+  - message: Fixed upper z-level placement rendering.
+    type: Fix
+  - message: Prevented holster melee cooldown bypass.
+    type: Fix
+  - message: Fixed queen healing across z-levels.
+    type: Fix
+  - message: Preserved folding barricade damage when redeployed or stacked.
+    type: Fix
+  - message: Fixed Queen Eye overlay on z-level maps.
+    type: Fix
+  - message: Fixed dropship exit fall damage behavior.
+    type: Fix
+  - message: Fixed stirring mixer interactions for drink recipes.
+    type: Fix
+  - message: Fixed infection stun on crit crawling hosts.
+    type: Fix
+  - message: Fixed per-hive ovipositor evolution point gating and tacmap live updates.
+    type: Fix
+  - message: Fixed Head Physician access to medical storage.
+    type: Fix
+  - message: Fixed synth mesons across z-level transitions.
+    type: Fix
+  - message: Fixed flesh abominations seeing synth markers.
+    type: Fix
+  - message: Fixed beds and buckled mob z-level behavior.
+    type: Fix
+  - message: Fixed threat leader playtime aggregation from derived threat-member roles.
+    type: Fix
+  - message: Fixed late-added job component initialization.
+    type: Fix
+  - message: Fixed vehicle driver state after unbuckling from internal viewport.
+    type: Fix
+  - message: Fixed vehicle F-key headlight toggling.
+    type: Fix
+  - message: Preserved queen action order through ovi changes.
+    type: Fix
+  - message: Prevented RVS drum mags from releasing live rounds on manual cycling.
+    type: Fix
+  - message: Fixed ID-locked gun prediction behavior.
+    type: Fix
+  - message: Allowed greenos to pull allied corpses.
+    type: Fix
+  - message: Fixed Wey-Yu facility faction membership for greeno alliances.
+    type: Fix
+  - message: Fixed Blackfoot cross-z landing and weapon audio.
+    type: Fix
+  - message: Preserved carried mob coordinates on fireman carry drops.
+    type: Fix
+  - message: Fixed build analyzer warnings and prototype startup warnings.
+    type: Fix
+  - message: Fixed nested z-level lookup startup subscriptions.
+    type: Fix
+  - message: Fixed viewport controller dependency registration.
+    type: Fix
+  - message: Added the remaining allowed vehicle supply console vehicle options.
+    type: Add
+  - message: Limited vehicle supply to one APC-group, one tank-group, and one support/rest-group
+      vehicle.
+    type: Tweak
+  - message: Prevented vehicle supply from offering duplicate or already-ordered vehicle
+      choices.
+    type: Fix
+  - message: Removed LTB, SPP railgun, and Blackfoot door gunner options from vehicle
+      lift selections.
+    type: Fix
+  id: 337
+  time: '2026-06-24T18:26:59.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1432
 Name: CMU
 Order: -1

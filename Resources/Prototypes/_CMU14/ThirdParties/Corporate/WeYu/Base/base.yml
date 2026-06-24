@@ -4,6 +4,9 @@
   abstract: true
   suffix: AU14, WeYu
   components:
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
   - type: GhostTakeoverAvailable
   - type: RandomHumanoidAppearance
   - type: RandomHumanoidAppearanceWhitelisted

@@ -16,7 +16,7 @@ public sealed partial class TacMapMarineAlertSystem : EntitySystem
         SubscribeLocalEvent<GrantTacMapAlertComponent, GotEquippedEvent>(OnGotEquipped);
         SubscribeLocalEvent<GrantTacMapAlertComponent, GotUnequippedEvent>(OnGotUnequipped);
 
-        SubscribeLocalEvent<TacMapMarineAlertComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<TacMapMarineAlertComponent, ComponentStartup>(OnStartup);
         SubscribeLocalEvent<TacMapMarineAlertComponent, ComponentRemove>(OnRemove);
     }
     private void OnGotEquipped(Entity<GrantTacMapAlertComponent> ent, ref GotEquippedEvent args)
@@ -40,7 +40,7 @@ public sealed partial class TacMapMarineAlertSystem : EntitySystem
             RemCompDeferred<TacMapMarineAlertComponent>(args.Equipee);
     }
 
-    private void OnMapInit(Entity<TacMapMarineAlertComponent> ent, ref MapInitEvent args)
+    private void OnStartup(Entity<TacMapMarineAlertComponent> ent, ref ComponentStartup args)
     {
         _alerts.ShowAlert(ent, ent.Comp.Alert);
     }

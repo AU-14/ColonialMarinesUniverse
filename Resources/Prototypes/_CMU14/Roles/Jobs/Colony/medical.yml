@@ -54,6 +54,7 @@
   access:
 # - AU14AccessColonyHeadPhysician # implicit
   - AU14AccessColonyAdministrator
+  - CMAccessCMO
   roleWeight: 0.25
 - type: startingGear
   id: AU14GearCivilianHeadPhysician

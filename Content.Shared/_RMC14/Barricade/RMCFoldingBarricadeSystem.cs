@@ -52,6 +52,7 @@ public sealed partial class RMCFoldingBarricadeSystem : EntitySystem
     {
         SubscribeLocalEvent<RMCFoldingBarricadeStackComponent, ComponentStartup>(OnStackStartup);
         SubscribeLocalEvent<RMCFoldingBarricadeStackComponent, StackCountChangedEvent>(OnStackCountChanged);
+        SubscribeLocalEvent<RMCFoldingBarricadeStackComponent, StackMergedEvent>(OnStackMerged);
         SubscribeLocalEvent<RMCFoldingBarricadeStackComponent, StackSplitEvent>(OnStackSplit);
         SubscribeLocalEvent<RMCFoldingBarricadeStackComponent, UseInHandEvent>(OnStackUseInHand);
         SubscribeLocalEvent<RMCFoldingBarricadeStackComponent, InteractUsingEvent>(OnStackInteractUsing, before: [typeof(SharedStackSystem)]);
@@ -224,6 +225,35 @@ public sealed partial class RMCFoldingBarricadeSystem : EntitySystem
 
         NormalizeStoredDamage(ent, args.NewCount);
         Dirty(ent);
+    }
+
+    private void OnStackMerged(Entity<RMCFoldingBarricadeStackComponent> ent, ref StackMergedEvent args)
+    {
+        if (args.Transferred <= 0 ||
+            !TryComp(args.Donor, out RMCFoldingBarricadeStackComponent? donor))
+        {
+            return;
+        }
+
+        NormalizeStoredDamage(ent);
+
+        var transfer = Math.Min(args.Transferred, ent.Comp.StoredDamage.Count);
+        var start = ent.Comp.StoredDamage.Count - transfer;
+        for (var i = 0; i < transfer; i++)
+        {
+            var damage = 0f;
+            if (donor.PendingSplitDamage.Count > 0)
+            {
+                damage = donor.PendingSplitDamage[0];
+                donor.PendingSplitDamage.RemoveAt(0);
+            }
+
+            ent.Comp.StoredDamage[start + i] = ClampDamage(damage, ent.Comp.MaxDamage);
+        }
+
+        NormalizeStoredDamage(ent);
+        Dirty(ent);
+        Dirty(args.Donor, donor);
     }
 
     private void OnStackSplit(Entity<RMCFoldingBarricadeStackComponent> ent, ref StackSplitEvent args)

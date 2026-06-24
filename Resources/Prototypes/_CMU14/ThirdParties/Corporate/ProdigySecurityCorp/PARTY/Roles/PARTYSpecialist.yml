@@ -42,7 +42,7 @@
   - auwy
   - AUPrisonStaff
 - type: entity
-  parent: AU14BaseMobSpeciesOrganicWeYu
+  parent: AU14BaseMobSpeciesOrganicProdigy
   id: AU14JobWYProdigyPartySpecialist
   name: Prodigy Yankee Weapon Specialist (3rd party)
   components:
