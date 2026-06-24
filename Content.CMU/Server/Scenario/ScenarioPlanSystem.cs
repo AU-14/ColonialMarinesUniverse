@@ -1,6 +1,6 @@
 using System.IO;
 using System.Linq;
-using Content.Server.AU14.Threats;
+using Content.Server._CMU14.Threats;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Maps;
 using Content.Server.Spawners.Components;
@@ -10,8 +10,6 @@ using Content.Shared.AU14.Scenario;
 using Content.Shared.AU14.Threats;
 using Content.Shared.AU14.util;
 using Robust.Shared.ContentPack;
-using Robust.Shared.GameObjects;
-using Robust.Shared.IoC;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -1132,6 +1130,7 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
         AddPlatoonForces(preset, planet, request.PlayerCount, forces, deferredChoices);
 
         if (IsPostRoundstartThreatVotePreset(preset.ID))
+        {
             AddDeferredThreatChoice(
                 preset.ID,
                 planetId,
@@ -1141,6 +1140,7 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
                 deferredChoices,
                 markers,
                 includedMarkerSources);
+        }
 
         if (preset.ID.Equals(InsurgencyPresetId, StringComparison.OrdinalIgnoreCase))
             AddClfForce(preset.ID, planetId, planet, request.PlayerCount, forces, diagnostics);
