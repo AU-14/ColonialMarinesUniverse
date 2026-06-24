@@ -29,7 +29,7 @@
     prefix: au14-job-prefix-wyguard
   - type: TacticalMapIcon
     icon:
-      sprite: _RMC14/Interface/cm_job_icons.rsi
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
       state: weya_goon_standard
   - type: AssignSquad
     whitelist:
