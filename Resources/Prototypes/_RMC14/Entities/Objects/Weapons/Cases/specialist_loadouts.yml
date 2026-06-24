@@ -76,7 +76,7 @@
     - id: RMCHandsM3G4
     - id: RMCSatchelGrenadeSpec # ID lock
     - id: RMCSatchelGrenadeSpec # ID lock
-    - id: AU14WeaponRifleM83Lock # RMCHandsM3G4 No ID lock
+    - id: AU14WeaponRifleM83Lock # WeaponLauncherM83 No ID lock
     - id: RMCBinoculars
     - id: RMCBoxAGMI
     - id: RMCBoxAGMF
