@@ -240,6 +240,7 @@ public abstract partial class CMUSharedZLevelsSystem
                 ? distanceToGround
                 : GetGroundSnapDistance(distanceToGround, stickyGround);
             hasGroundContact |= fallingGroundContact;
+            var isVehicle = HasComp<CMUVehicleZTraversalComponent>(uid);
             DebugLogFalling(
                 uid,
                 "tick",
@@ -300,7 +301,8 @@ public abstract partial class CMUSharedZLevelsSystem
                                 settledDistanceToGround,
                                 stickyGround,
                                 zPhys.LocalPosition,
-                                zPhys.Velocity))
+                                zPhys.Velocity,
+                                isVehicle))
                         {
                             DebugLogFalling(
                                 uid,
@@ -314,7 +316,7 @@ public abstract partial class CMUSharedZLevelsSystem
                 }
             }
             else if (hasGroundContact &&
-                     ShouldSettleNonBouncingGroundContact(HasComp<CMUVehicleZTraversalComponent>(uid), zPhys.Velocity))
+                     ShouldSettleNonBouncingGroundContact(isVehicle, zPhys.Velocity))
             {
                 var velocityBeforeSettle = zPhys.Velocity;
                 zPhys.Velocity = 0f;
@@ -325,7 +327,7 @@ public abstract partial class CMUSharedZLevelsSystem
 
                 if (zPhys.LocalPosition >= 0f &&
                     zPhys.LocalPosition < 1f &&
-                    ShouldSleepZPhysics(0f, stickyGround, zPhys.LocalPosition, zPhys.Velocity))
+                    ShouldSleepZPhysics(0f, stickyGround, zPhys.LocalPosition, zPhys.Velocity, isVehicle))
                 {
                     DebugLogFalling(uid, "sleep", $"settledDistance=0.000 sticky={stickyGround} local={zPhys.LocalPosition:F3}");
                     RemComp<CMUZFallingComponent>(uid);
@@ -488,7 +490,8 @@ public abstract partial class CMUSharedZLevelsSystem
         float distanceToGround,
         bool stickyGround,
         float localPosition,
-        float velocity)
+        float velocity,
+        bool isVehicle = false)
     {
         if (MathF.Abs(velocity) > MinActiveZVelocity)
             return false;
@@ -496,7 +499,9 @@ public abstract partial class CMUSharedZLevelsSystem
         if (MathF.Abs(distanceToGround) > ZPhysicsSleepDistance)
             return false;
 
-        return stickyGround || MathF.Abs(localPosition) <= ZPhysicsSleepDistance;
+        return isVehicle ||
+               stickyGround ||
+               MathF.Abs(localPosition) <= ZPhysicsSleepDistance;
     }
 
     private static float GetGroundSnapDistance(float distanceToGround, bool stickyGround)
@@ -747,7 +752,12 @@ public abstract partial class CMUSharedZLevelsSystem
         if (MathF.Abs(zPhys.Velocity) <= MinActiveZVelocity)
         {
             zPhys.Velocity = 0f;
-            if (ShouldSleepZPhysics(0f, stickyGround, zPhys.LocalPosition, zPhys.Velocity))
+            if (ShouldSleepZPhysics(
+                    0f,
+                    stickyGround,
+                    zPhys.LocalPosition,
+                    zPhys.Velocity,
+                    HasComp<CMUVehicleZTraversalComponent>(uid)))
             {
                 DebugLogFalling(uid, "post-down-sleep", $"local={zPhys.LocalPosition:F3} sticky={stickyGround}");
                 RemComp<CMUZFallingComponent>(uid);

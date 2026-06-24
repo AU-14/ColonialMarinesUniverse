@@ -1,5 +1,6 @@
 using Content.Shared._CMU14.ZLevels;
 using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared._CMU14.ZLevels.Vehicles;
 using Robust.Shared.Timing;
 using DiagnosticStopwatch = System.Diagnostics.Stopwatch;
 
@@ -78,7 +79,8 @@ public sealed partial class CMUZLevelsSystem
                 distance,
                 stickyGround,
                 ent.Comp.LocalPosition,
-                ent.Comp.Velocity))
+                ent.Comp.Velocity,
+                HasComp<CMUVehicleZTraversalComponent>(ent.Owner)))
         {
             RemCompDeferred<CMUZFallingComponent>(ent.Owner);
             return;
