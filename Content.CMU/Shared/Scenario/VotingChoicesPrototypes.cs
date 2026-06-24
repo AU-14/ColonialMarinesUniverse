@@ -5,6 +5,8 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.AU14.Scenario;
 
+#pragma warning disable RA0042 // Runtime prototype registration still requires explicit PrototypeAttribute metadata.
+[Prototype("votingChoices")]
 public sealed partial class VotingChoicesPrototype : IPrototype
 {
     [IdDataField]
@@ -98,6 +100,7 @@ public sealed partial class ScenarioPlanetVotingChoicesDefinition
     }
 }
 
+[Prototype("votingBackup")]
 public sealed partial class VotingBackupPrototype : IPrototype
 {
     [IdDataField]
@@ -117,6 +120,7 @@ public sealed partial class VotingBackupPrototype : IPrototype
     public IReadOnlyList<string> SupportedPlanets => Planets;
 }
 
+[Prototype("roundGroup")]
 public sealed partial class RoundGroupPrototype : IPrototype
 {
     [IdDataField]
@@ -166,6 +170,7 @@ public partial class ScenarioSpawnDefinition
         AllowsUnderfill;
 }
 
+[Prototype("spawnMarker")]
 public sealed partial class SpawnMarkerPrototype : IPrototype
 {
     [IdDataField]
@@ -180,6 +185,7 @@ public sealed partial class SpawnMarkerPrototype : IPrototype
     [DataField]
     public int Count { get; private set; } = 1;
 }
+#pragma warning restore RA0042
 
 [DataDefinition]
 public sealed partial class ScenarioDeferredForceChoiceDefinition
