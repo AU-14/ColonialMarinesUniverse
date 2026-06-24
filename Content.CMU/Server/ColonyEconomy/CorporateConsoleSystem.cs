@@ -128,7 +128,7 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
             return;
         if (comp.CorporateBudget < cost)
             return;
-        if (!_proto.TryIndex<AuThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto))
+        if (!_proto.TryIndex<ThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto))
             return;
         if (!_auRound.IsThirdPartyAllowedForCurrentContext(partyProto))
             return;
@@ -226,7 +226,7 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
         var thirdParties = new Dictionary<string, (string DisplayName, float Cost)>();
         foreach (var (id, cost) in comp.CallableParties)
         {
-            if (_proto.TryIndex<AuThirdPartyPrototype>(id, out var proto) &&
+            if (_proto.TryIndex<ThirdPartyPrototype>(id, out var proto) &&
                 _auRound.IsThirdPartyAllowedForCurrentContext(proto))
                 thirdParties[id] = (proto.DisplayName ?? proto.ID, cost);
         }

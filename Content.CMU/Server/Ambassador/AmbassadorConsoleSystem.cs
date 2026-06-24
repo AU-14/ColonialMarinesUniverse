@@ -336,7 +336,7 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         var thirdParties = new Dictionary<string, (string DisplayName, float Cost)>();
         foreach (var (id, cost) in comp.CallableParties)
         {
-            if (_proto.TryIndex<AuThirdPartyPrototype>(id, out var proto))
+            if (_proto.TryIndex<ThirdPartyPrototype>(id, out var proto))
             {
                 var displayName = proto.DisplayName ?? proto.ID;
                 thirdParties[id] = (displayName, cost);
@@ -378,7 +378,7 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         if (!comp.CallableParties.TryGetValue(msg.ThirdPartyId, out var cost)) return;
         if (comp.CalledParties.Contains(msg.ThirdPartyId)) return;
         if (comp.Budget < cost) return;
-        if (!_proto.TryIndex<AuThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto)) return;
+        if (!_proto.TryIndex<ThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto)) return;
         if (!_proto.TryIndex(partyProto.PartySpawn, out var spawnProto)) return;
         if (!_thirdParty.SpawnThirdParty(partyProto, spawnProto, false))
         {

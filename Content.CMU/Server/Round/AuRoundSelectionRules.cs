@@ -8,7 +8,7 @@ namespace Content.Server.AU14.Round;
 internal static class AuRoundSelectionRules
 {
     public static bool IsThirdPartyAllowed(
-        AuThirdPartyPrototype proto,
+        ThirdPartyPrototype proto,
         string currentGamemode,
         string? currentThreat,
         string? govforPlatoon,

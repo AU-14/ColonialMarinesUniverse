@@ -14,7 +14,7 @@ internal sealed class AuRoundSelectionState
     public ThreatPrototype? SelectedThreat { get; set; }
     public string? SelectedGovforShip { get; set; }
     public string? SelectedOpforShip { get; set; }
-    public List<AuThirdPartyPrototype> SelectedThirdParties { get; } = new();
+    public List<ThirdPartyPrototype> SelectedThirdParties { get; } = new();
 
     public void Reset()
     {
