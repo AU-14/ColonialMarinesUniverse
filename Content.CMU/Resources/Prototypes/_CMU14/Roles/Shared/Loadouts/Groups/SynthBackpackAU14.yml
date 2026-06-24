@@ -1,0 +1,23 @@
+- type: loadoutGroup
+  id: SynthBackpackAU14
+  name: rmc-loadout-group-backpack
+  minLimit: 1
+  loadouts:
+  - SmarpackAU14
+  - BackpackMarineMedicRMC
+  - MarineTechnicianSatchel
+  - MarineSatchel
+  - CMSatchelAU14
+  - SlingSatchelBlueAU14
+  - SlingSatchelBlackAU14
+  - SatchelWelderRMC
+  - BackpackEngineerRMC
+  - SmarpackBlackAU14
+  - SmarpackGreenAU14
+  - SmarpackWhiteAU14
+  - SmarpackTanAU14
+  - SmarpackA1TanAU14
+  - SmarpackA1GreenAU14
+  - SmarpackA1BlackAU14
+  - SmarpackA1AU14
+  - SmarpackA1WhiteAU14

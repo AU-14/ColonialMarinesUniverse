@@ -1,0 +1,11 @@
+- type: loadoutGroup
+  id: MedJacketAU14
+  name: au14-loadout-group-civilian-jacket
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - LabcoatRMC
+  - LabcoatRMCShort
+  - LabcoatRMCLong
+  - LabcoatRMCBrown
+  - CivilianJacketSnowSuitAU14

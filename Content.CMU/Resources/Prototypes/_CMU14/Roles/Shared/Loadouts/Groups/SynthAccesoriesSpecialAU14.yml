@@ -1,0 +1,10 @@
+- type: loadoutGroup
+  id: SynthAccesoriesSpecialAU14
+  name: au14-loadout-group-synth-equipment
+  minLimit: 1
+  maxLimit: 2
+  loadouts:
+  - WebbingSurgicalBlueAU14
+  # - AU14GOVFORIOHeadset # I dont see OPFOR loadouts so use AU14OPFORIOHeadset for OPFOR
+
+# Doctor

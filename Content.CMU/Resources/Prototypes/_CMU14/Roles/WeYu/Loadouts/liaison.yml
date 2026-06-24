@@ -1,0 +1,32 @@
+- type: loadout
+  id: WYLiaisonManagerJacketAU14
+  effects:
+    - !type:JobRequirementLoadoutEffect
+      requirement:
+        !type:RoleTimeRequirement
+        role: AU14JobCivilianCorporateLiaison
+        time: 360000 # 50 hrs
+  equipment:
+    outerClothing: RMCJacketCorporateManager
+
+- type: loadout
+  id: WYLiaisonManagerJumpsuitAU14
+  effects:
+    - !type:JobRequirementLoadoutEffect
+      requirement:
+        !type:RoleTimeRequirement
+        role: AU14JobCivilianCorporateLiaison
+        time: 360000 # 100 hrs
+  equipment:
+    jumpsuit: RMCJumpsuitLiaisonManager
+
+- type: loadout
+  id: WYLiaisonManagerCapAU14
+  effects:
+    - !type:JobRequirementLoadoutEffect
+      requirement:
+        !type:RoleTimeRequirement
+        role: AU14JobCivilianCorporateLiaison
+        time: 360000 # 100 hrs
+  equipment:
+    head: RMCHeadCapManager

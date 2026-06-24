@@ -1,0 +1,70 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianJournalist
+  roundSide: Civilian
+  roundForce: COLONY
+  roundRole: CivilianJournalist
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-journalist
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: journalist
+
+  name: au14-job-name-civilianjournalist
+  description: au14-job-description-civilianjournalist
+  setPreference: true
+  playTimeTracker: AU14JobCivilianJournalist
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCivilianJournalist
+  icon: "AU14JobIconColonyJournalist"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: Journalist (CMU)
+  accessGroups:
+  - Colonist
+  - aunews
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianJournalist
+  equipment:
+    outerClothing: AU14CivilianJacketTanPufferVest
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianJournalist
+  name: Spawn Point Civilian Journalist
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianJournalist
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianJournalist
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobAU14JobCivilianJournalist
+  points: 7
+  groups:
+  - JournalistSpecializationAU14
+  - CivSatchelAU14
+  - CivFootwearAU14
+  - CivJumpsuitAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - ForceJournalistEssentialAU14

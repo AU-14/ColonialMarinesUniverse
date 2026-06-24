@@ -1,0 +1,12 @@
+- type: loadoutGroup
+  id: ScientistPouchRightAU14
+  name: au14-loadout-group-civilian-pouch-right
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - PouchVialFillRightAU14
+  - PouchAutoinjectorRightAU14
+  - PouchMedicalRightAU14
+  - PouchSyringeFillRightAU14
+
+# UA recruiter
