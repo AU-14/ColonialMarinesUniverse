@@ -12,7 +12,6 @@
       components:
       - RMCFlamerAmmoProvider
       - RMCFlamerTank
-      - RMCTankFlamerLarge
       - RMCTankFlamer
       tags:
       - RMCAttachmentExtinguisher
