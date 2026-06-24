@@ -306,13 +306,15 @@
     - id: RMCBackpackBroiler
     - id: RMCWeaponFlamerSpec
     - id: RMCTankFlamerLarge
+    - id: RMCTankFlamerLargeB
+    - id: RMCTankFlamerLargeX
     - id: RMCPouchFuelTank
     - id: CMFireExtinguisher
     - id: CMFireExtinguisherPortable
-    - id: RMCMK80
-    - id: CMMagazinePistolMK80
-      amount: 2
-    - id: RMCBinoculars
+    - id: RMCBinoculars 
+    #- id: RMCMK80
+    #- id: CMMagazinePistolMK80
+    #  amount: 2
   - type: CMChangeUserOnVend
     addComponents:
     - type: PyroWhitelist

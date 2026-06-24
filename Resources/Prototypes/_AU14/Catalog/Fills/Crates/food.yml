@@ -27,6 +27,8 @@
   components:
   - type: StorageFill
     contents:
+    - id: RMCStoragePlantBag
+      amount: 2
     - id: ChemistryBottleEZNutrient
       amount: 1
     - id: ChemistryBottleRobustHarvest
