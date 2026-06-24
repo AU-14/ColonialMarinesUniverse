@@ -153,6 +153,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         var originalJob = job;
         _prototypeManager.Resolve(originalJob, out JobPrototype? originalPrototype);
         var originalSide = _roundJobProfiles.GetRoundSide(originalPrototype, jobId);
+        var team = GetTeamForSide(originalSide);
         if (!string.IsNullOrEmpty(jobId))
         {
             var platoon = originalSide switch
@@ -232,6 +233,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
                 EquipRoleName(jobEntity, loadout, loadoutProto);
 
             DoJobSpecials(job, jobEntity);
+            ApplyTeamFaction(jobEntity, team);
 
             // Use originalPrototype for access, ID, and faction
             _identity.QueueIdentityUpdate(jobEntity);
@@ -341,12 +343,6 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         DoJobSpecials(job, entity.Value);
         _identity.QueueIdentityUpdate(entity.Value);
 
-        var team = originalSide switch
-        {
-            RoundJobSide.Govfor => "govfor",
-            RoundJobSide.Opfor => "opfor",
-            _ => null,
-        };
         string? teamCheckJobId = originalJob?.ToString();
 
         bool assignToSquad = team != null && ShouldAssignToSquad(originalPrototype, teamCheckJobId);
@@ -500,27 +496,46 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             }
         }
 
-        // --- Add opfor/govfor faction after player is spawned ---
-        if (team == "govfor" || team == "opfor")
-        {
-            var faction = team == "govfor" ? GovforNpcFaction : OpforNpcFaction;
-            _npcFaction.AddFaction((entity.Value, default), faction);
-
-            // Add additional factions from platoon if present
-            PlatoonPrototype? selectedPlatoon = team == "govfor"
-                ? _platoonSpawnRuleSystem.SelectedGovforPlatoon
-                : _platoonSpawnRuleSystem.SelectedOpforPlatoon;
-
-            if (selectedPlatoon != null)
-            {
-                foreach (var addFaction in selectedPlatoon.Factions)
-                    _npcFaction.AddFaction((entity.Value, default), addFaction);
-
-                if (selectedPlatoon.NpcFaction is { } platoonNpcFaction)
-                    _npcFaction.AddFaction((entity.Value, default), platoonNpcFaction);
-            }
-        }
+        ApplyTeamFaction(entity.Value, team);
         return entity.Value;
+    }
+
+    private static string? GetTeamForSide(RoundJobSide side)
+    {
+        return side switch
+        {
+            RoundJobSide.Govfor => "govfor",
+            RoundJobSide.Opfor => "opfor",
+            _ => null,
+        };
+    }
+
+    private void ApplyTeamFaction(EntityUid entity, string? team)
+    {
+        if (team != "govfor" && team != "opfor")
+            return;
+
+        if (TryComp<MarineComponent>(entity, out var marine))
+        {
+            marine.Faction = team;
+            Dirty(entity, marine);
+        }
+
+        var faction = team == "govfor" ? GovforNpcFaction : OpforNpcFaction;
+        _npcFaction.AddFaction((entity, default), faction);
+
+        PlatoonPrototype? selectedPlatoon = team == "govfor"
+            ? _platoonSpawnRuleSystem.SelectedGovforPlatoon
+            : _platoonSpawnRuleSystem.SelectedOpforPlatoon;
+
+        if (selectedPlatoon == null)
+            return;
+
+        foreach (var addFaction in selectedPlatoon.Factions)
+            _npcFaction.AddFaction((entity, default), addFaction);
+
+        if (selectedPlatoon.NpcFaction is { } platoonNpcFaction)
+            _npcFaction.AddFaction((entity, default), platoonNpcFaction);
     }
 
     private static bool ShouldAssignToSquad(JobPrototype? job, string? fallbackJobId)

@@ -87,6 +87,55 @@ public sealed partial class CMUZLevelsSystem
         ProjectCrossZAudioDirection(source.Comp, sourceMap, sourcePosition, ref specifier, 1, maxDepth);
     }
 
+    public void PlayPvsDirectlyAcrossZ(SoundSpecifier sound, EntityUid source, int maxDepth = 1)
+    {
+        _creatingZLevelAudioProjection = true;
+
+        try
+        {
+            _audioSystem.PlayPvs(sound, source);
+
+            if (!_zLevelsEnabled || maxDepth <= 0)
+                return;
+
+            var xform = Transform(source);
+            if (xform.MapUid is not { } sourceMap ||
+                !TryComp<CMUZLevelMapComponent>(sourceMap, out var sourceZMap))
+            {
+                return;
+            }
+
+            var sourcePosition = _transform.GetWorldPosition(xform);
+            Entity<CMUZLevelMapComponent?> currentMap = (sourceMap, sourceZMap);
+
+            PlayPvsDirectlyAcrossZDirection(sound, currentMap, sourcePosition, -1, maxDepth);
+            PlayPvsDirectlyAcrossZDirection(sound, currentMap, sourcePosition, 1, maxDepth);
+        }
+        finally
+        {
+            _creatingZLevelAudioProjection = false;
+        }
+    }
+
+    private void PlayPvsDirectlyAcrossZDirection(
+        SoundSpecifier sound,
+        Entity<CMUZLevelMapComponent?> sourceMap,
+        Vector2 sourcePosition,
+        int step,
+        int maxDepth)
+    {
+        var currentMap = sourceMap;
+
+        for (var depth = step; Math.Abs(depth) <= maxDepth; depth += step)
+        {
+            if (!TryMapOffset(currentMap, step, out var targetMap))
+                return;
+
+            _audioSystem.PlayPvs(sound, new EntityCoordinates(targetMap.Value.Owner, sourcePosition));
+            currentMap = (targetMap.Value.Owner, targetMap.Value.Comp);
+        }
+    }
+
     private void ProjectCrossZAudioDirection(
         AudioComponent source,
         Entity<CMUZLevelMapComponent> sourceMap,

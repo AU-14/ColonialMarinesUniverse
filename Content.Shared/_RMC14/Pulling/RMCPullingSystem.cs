@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Shared._RMC14.Fireman;
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Buckle.Components;
@@ -40,6 +41,7 @@ public sealed partial class RMCPullingSystem : EntitySystem
     [Dependency] private SharedMeleeWeaponSystem _melee = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private SharedXenoParasiteSystem _parasite = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private PullingSystem _pulling = default!;
@@ -518,12 +520,21 @@ public sealed partial class RMCPullingSystem : EntitySystem
         if (HasComp<IgnoreBlockPullingDeadComponent>(pulled))
             return true;
 
+        if (CanPullDeadAlly(puller, pulled))
+            return true;
+
         if (TryComp<VictimInfectedComponent>(pulled, out var infect) &&
             TryComp<AllowPullWhileDeadAndInfectedComponent>(pulled, out var deadPull) &&
             infect.CurrentStage > deadPull.InfectionStageThreshold)
             return true;
 
         return false;
+    }
+
+    private bool CanPullDeadAlly(EntityUid puller, EntityUid pulled)
+    {
+        return _hive.GetHive(puller) is { } pullerHive &&
+               _hive.IsAllyOfHive(pulled, pullerHive.Owner);
     }
 
     public EntityUid? TryRetargetPull(EntityUid user, EntityUid target)

@@ -10,7 +10,6 @@ using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Maps;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
-using Robust.Client.Placement;
 using Robust.Shared.Containers;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
@@ -31,7 +30,6 @@ public sealed partial class ScalingViewport
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private ProfManager _prof = default!;
     [Dependency] private IPrototypeManager _proto = default!;
-    [Dependency] private IPlacementManager _placement = default!;
     [Dependency] private Robust.Shared.Timing.IGameTiming _timing = default!;
 
     private static readonly ProtoId<ShaderPrototype> StencilClearShader = "StencilClear";
@@ -155,11 +153,9 @@ public sealed partial class ScalingViewport
 
         var zLevelsEnabled = _config.GetCVar(CMUZLevelsCVars.Enabled);
         var renderEnabled = _config.GetCVar(CMUZLevelsCVars.RenderEnabled);
-        var placementActive = _placement.IsActive;
 
         if (_eye is null ||
             !ShouldUseZLevelRenderPasses(
-                placementActive,
                 zLevelsEnabled,
                 renderEnabled))
         {
@@ -169,9 +165,7 @@ public sealed partial class ScalingViewport
                     ? "cmu.zlevels.enabled=false"
                     : !renderEnabled
                         ? "cmu.zlevels.render_enabled=false"
-                            : placementActive
-                                ? "placement active"
-                                : "z render disabled";
+                        : "z render disabled";
             var renderStart = Stopwatch.GetTimestamp();
             viewport.Render();
             LastZRenderDebugStats.BasePassRendered = true;
@@ -450,10 +444,9 @@ public sealed partial class ScalingViewport
         LastZRenderDebugStats.TotalRenderMs = GetElapsedMilliseconds(totalStart);
     }
 
-    internal static bool ShouldUseZLevelRenderPasses(bool placementActive, bool zLevelsEnabled, bool renderEnabled)
+    internal static bool ShouldUseZLevelRenderPasses(bool zLevelsEnabled, bool renderEnabled)
     {
-        return !placementActive &&
-               zLevelsEnabled &&
+        return zLevelsEnabled &&
                renderEnabled;
     }
 

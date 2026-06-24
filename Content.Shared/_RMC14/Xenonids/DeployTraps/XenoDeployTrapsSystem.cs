@@ -12,8 +12,6 @@ using Content.Shared.Coordinates;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
-using Content.Shared.Interaction;
-using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -35,7 +33,7 @@ public sealed partial class XenoDeployTrapsSystem : EntitySystem
     [Dependency] private SharedRMCEmoteSystem _emote = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
 
     public override void Initialize()
@@ -53,30 +51,9 @@ public sealed partial class XenoDeployTrapsSystem : EntitySystem
             !TryComp(gridId, out MapGridComponent? grid))
             return;
 
-        var targetMap = _transform.ToMapCoordinates(args.Target);
-        var tileBase = new Vector2(targetMap.Position.Floored().X, targetMap.Position.Floored().Y);
-        var origin = _transform.GetMapCoordinates(xeno.Owner);
-        var offsets = new Vector2[]
-        {
-            new(0.5f, 0.5f),   // centre
-            new(0.2f, 0.2f),   // bottom-left
-            new(0.8f, 0.2f),   // bottom-right
-            new(0.2f, 0.8f),   // top-left
-            new(0.8f, 0.8f),   // top-right
-        };
+        var coords = args.Target.SnapToGrid(EntityManager, _map);
 
-        var hasLos = false;
-        foreach (var offset in offsets)
-        {
-            var point = new MapCoordinates(tileBase + offset, targetMap.MapId);
-            if (_interaction.InRangeUnobstructed(origin, point, xeno.Comp.Range, CollisionGroup.InteractImpassable,
-                    e => e == xeno.Owner || !Transform(e).Anchored))
-            {
-                hasLos = true;
-                break;
-            }
-        }
-        if (!hasLos)
+        if (!_examine.InRangeUnOccluded(xeno.Owner, coords, xeno.Comp.Range))
         {
             _popup.PopupClient(Loc.GetString("rmc-xeno-deploy-traps-see-fail"), xeno, xeno);
             return;
@@ -89,8 +66,6 @@ public sealed partial class XenoDeployTrapsSystem : EntitySystem
             return;
 
         args.Handled = true;
-
-        var coords = args.Target.SnapToGrid(EntityManager, _map);
 
         _audio.PlayPredicted(xeno.Comp.DeploySound, coords, xeno);
 
@@ -116,7 +91,7 @@ public sealed partial class XenoDeployTrapsSystem : EntitySystem
                 orthoTile = new Vector2i(1, 0);
 
             var mapSystem = EntityManager.System<SharedMapSystem>();
-            var centerTile = mapSystem.CoordinatesToTile(gridId, grid, targetMap);
+            var centerTile = mapSystem.CoordinatesToTile(gridId, grid, coords);
 
             var radius = (int) xeno.Comp.DeployTrapsRadius;
             var empowered = xeno.Comp.Empowered;

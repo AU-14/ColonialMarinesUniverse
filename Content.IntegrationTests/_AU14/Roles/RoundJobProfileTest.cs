@@ -2,7 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Content.Server.AU14.Roles;
 using Content.Server.Jobs;
+using Content.Server.Station.Systems;
+using Content.Shared._RMC14.Marines;
 using Content.Shared.AU14.Roles;
+using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 
@@ -112,6 +115,33 @@ public sealed class RoundJobProfileTest
             Assert.That(HasResolvedComponent(profiles, wypmc, "UserIFF"), Is.True);
             Assert.That(HasResolvedComponent(profiles, wypmc, "JobPrefix"), Is.True);
             Assert.That(HasResolvedComponent(profiles, wypmc, "Skills"), Is.True);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task SpawnedSideJobsSetMarineFactionForTacmap()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var testMap = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var stationSpawning = server.System<StationSpawningSystem>();
+            var profile = new HumanoidCharacterProfile();
+            var govfor = stationSpawning.SpawnPlayerMob(testMap.GridCoords, GovforSquadRifleman, profile, station: null);
+            var opfor = stationSpawning.SpawnPlayerMob(testMap.GridCoords, OpforSquadRifleman, profile, station: null);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(server.EntMan.GetComponent<MarineComponent>(govfor).Faction, Is.EqualTo("govfor"));
+                Assert.That(server.EntMan.GetComponent<MarineComponent>(opfor).Faction, Is.EqualTo("opfor"));
+            });
+
+            server.EntMan.DeleteEntity(govfor);
+            server.EntMan.DeleteEntity(opfor);
         });
 
         await pair.CleanReturnAsync();

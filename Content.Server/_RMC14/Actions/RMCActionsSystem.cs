@@ -1,8 +1,9 @@
 using System.Collections.Immutable;
 using System.Linq;
-using Content.Server.Actions;
 using Content.Shared._RMC14.Actions;
+using Content.Shared.Actions.Components;
 using Robust.Shared.Enums;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -11,16 +12,18 @@ namespace Content.Server._RMC14.Actions;
 
 public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
 {
-    [Dependency] private ActionsSystem _actions = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
     [Dependency] private RMCActionsManager _manager = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
-    private readonly HashSet<EntProtoId> _actionsPresent = new();
     private readonly Dictionary<(NetUserId User, EntProtoId Id), RMCActionOrderData> _toUpdate = new();
+    private string _actionComponentName = string.Empty;
 
     public override void Initialize()
     {
         base.Initialize();
 
+        _actionComponentName = _componentFactory.GetComponentName<ActionComponent>();
         _manager.OnLoaded += OnLoaded;
 
         SubscribeNetworkEvent<RMCActionOrderChangeEvent>(OnActionOrder);
@@ -45,17 +48,8 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
             return;
         }
 
-        _actionsPresent.Clear();
-        foreach (var action in _actions.GetActions(ent))
-        {
-            if (Prototype(action)?.ID is not { } proto)
-                continue;
-
-            _actionsPresent.Add(proto);
-        }
-
-        FilterUnavailableActions(msg.Actions);
-        FilterUnavailableActions(msg.HiddenActions);
+        FilterInvalidActions(msg.Actions);
+        FilterInvalidActions(msg.HiddenActions);
 
         var visibleActions = msg.Actions.ToHashSet();
         msg.HiddenActions.RemoveAll(visibleActions.Contains);
@@ -66,13 +60,16 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
             msg.HiddenActionsKnown);
     }
 
-    private void FilterUnavailableActions(List<EntProtoId> actions)
+    private void FilterInvalidActions(List<EntProtoId> actions)
     {
         for (var i = actions.Count - 1; i >= 0; i--)
         {
             var action = actions[i];
-            if (!_actionsPresent.Contains(action))
+            if (!_prototypes.TryIndex<EntityPrototype>(action, out var prototype) ||
+                !prototype.Components.ContainsKey(_actionComponentName))
+            {
                 actions.RemoveAt(i);
+            }
         }
     }
 

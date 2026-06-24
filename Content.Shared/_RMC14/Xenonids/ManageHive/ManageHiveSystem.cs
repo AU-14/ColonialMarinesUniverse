@@ -596,6 +596,9 @@ public sealed partial class ManageHiveSystem : EntitySystem
             return false;
         }
 
+        if (!_xenoEvolution.HivebrokenCheckPopup(watchedId, popupTarget: manage.Owner))
+            return false;
+
         if (!_xenoPlasma.HasPlasmaPopup(manage.Owner, manage.Comp.DevolvePlasmaCost, false))
             return false;
 

@@ -78460,6 +78460,13 @@ entities:
     - type: Transform
       pos: -0.5,-100.5
       parent: 1
+- proto: AU14SpawnPointCivilianHeadOfEngineering
+  entities:
+  - uid: 33609
+    components:
+    - type: Transform
+      pos: 1.5,-100.5
+      parent: 1
 - proto: AU14SpawnPointCivilianFreightSystemsSpecialist
   entities:
   - uid: 196

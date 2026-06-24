@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared.Actions;
 using Content.Shared.Maps;
 using Content.Shared.Popups;
@@ -50,7 +51,13 @@ public abstract partial class CMUSharedZLevelsSystem
 
         args.Handled = true;
 
-        if (HasOpaqueAbove(ent))
+        if (!ent.Comp.LookUp && HasComp<XenoNestedComponent>(ent))
+        {
+            _popup.PopupClient(Loc.GetString("cmu-zlevel-look-up-nested"), ent, ent, PopupType.SmallCaution);
+            return;
+        }
+
+        if (!ent.Comp.LookUp && HasOpaqueAbove(ent))
         {
             _popup.PopupClient(Loc.GetString("cmu-zlevel-look-up-fail"), ent, ent, PopupType.SmallCaution);
             return;
