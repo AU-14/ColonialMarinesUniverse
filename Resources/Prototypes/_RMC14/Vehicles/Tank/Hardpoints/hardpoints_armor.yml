@@ -80,7 +80,7 @@
     damageMultiplier: 0.5
     repairRate: 0.007
   - type: HardpointIntegrity
-    maxIntegrity: 6000
+    maxIntegrity: 3000
   - type: VehicleArmorHardpoint
     modifierSets:
     - VehicleArmorPaladin
