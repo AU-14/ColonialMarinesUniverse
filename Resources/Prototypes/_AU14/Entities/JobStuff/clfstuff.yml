@@ -218,13 +218,13 @@
         amount: 10
         points: 1
       - id: AU14IED
-        amount: 6
+        amount: 12
         points: 6
       - id: AU14IEDVest
         amount: 2
         points: 10
       - id: AU14IEDLarge
-        amount: 2
+        amount: 3
         points: 15
     - name: Protective Equipment
       entries:
@@ -242,13 +242,19 @@
         points: 7
       - id: RMCCoatMilitiaVest
         amount: 5
-        points: 7
+        points: 5
       - id: RMCArmorHelmetMercenary
         amount: 2
-        points: 10
+        points: 20
       - id: RMCArmorMercenary
         amount: 2
-        points: 15
+        points: 25
+      - id: AU14ScoutWebbing
+        amount: 2
+        points: 6
+      - id: CMMaskCoif
+        amount: 15
+        points: 1
       - id: CMMaskGas
         amount: 5
         points: 3
