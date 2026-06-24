@@ -4,7 +4,6 @@ using Content.Shared._RMC14.Ladder;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Light.Components;
-using Content.Shared.Light.EntitySystems;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Robust.Shared.Map;
@@ -18,7 +17,6 @@ public sealed partial class CMUDeployableZLevelLadderSystem : EntitySystem
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private SharedRoofSystem _roof = default!;
     [Dependency] private ITileDefinitionManager _tile = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
@@ -42,7 +40,7 @@ public sealed partial class CMUDeployableZLevelLadderSystem : EntitySystem
 
     private void OnGetAlternativeVerbs(Entity<CMUDeployedZLevelLadderComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
     {
-        if (!args.CanAccess || !args.CanInteract)
+        if (!args.CanAccess || !args.CanInteract || !ent.Comp.Retractable)
             return;
 
         var user = args.User;
@@ -71,8 +69,8 @@ public sealed partial class CMUDeployableZLevelLadderSystem : EntitySystem
         PrepareSpawnedLadder(upper, deployment.UpperCoordinates);
 
         var packed = ent.Comp.PackedPrototype ?? MetaData(ent).EntityPrototype?.ID ?? "CMUDeployableZLevelLadder";
-        SetDeployedLadderData(lower, upper, packed);
-        SetDeployedLadderData(upper, lower, packed);
+        SetDeployedLadderData(lower, upper, packed, true);
+        SetDeployedLadderData(upper, lower, packed, false);
 
         _popup.PopupEntity(Loc.GetString("cmu-zlevel-ladder-deploy-finish", ("ladder", ent)), user, user);
         QueueDel(ent);
@@ -81,6 +79,9 @@ public sealed partial class CMUDeployableZLevelLadderSystem : EntitySystem
 
     private bool TryRetract(Entity<CMUDeployedZLevelLadderComponent> ent, EntityUid user)
     {
+        if (!ent.Comp.Retractable)
+            return false;
+
         if (!_hands.TryGetEmptyHand(user, out _))
         {
             _popup.PopupEntity(Loc.GetString("cmu-zlevel-ladder-retract-no-hand"), ent, user, PopupType.SmallCaution);
@@ -142,7 +143,7 @@ public sealed partial class CMUDeployableZLevelLadderSystem : EntitySystem
             return false;
         }
 
-        if (HasRoofAbove(currentMap, grid, upperMap.Value, upperGrid, tile))
+        if (HasRoofAbove(currentMap, upperMap.Value, upperGrid, tile))
         {
             popup = Loc.GetString("cmu-zlevel-ladder-deploy-roof");
             return false;
@@ -164,18 +165,28 @@ public sealed partial class CMUDeployableZLevelLadderSystem : EntitySystem
 
     private bool HasRoofAbove(
         Entity<CMUZLevelMapComponent?> currentMap,
-        MapGridComponent currentGrid,
         Entity<CMUZLevelMapComponent> upperMap,
         MapGridComponent upperGrid,
         Vector2i tile)
     {
         if (TryComp<RoofComponent>(currentMap, out var roof) &&
-            _roof.IsRooved((currentMap.Owner, currentGrid, roof), tile))
+            HasDirectRoofFlag(roof, tile))
         {
             return true;
         }
 
         return !CMUZLevelOpeningCache.IsOpeningTile((upperMap.Owner, upperGrid), tile, _map, _tile);
+    }
+
+    private static bool HasDirectRoofFlag(RoofComponent roof, Vector2i tile)
+    {
+        var chunkOrigin = SharedMapSystem.GetChunkIndices(tile, RoofComponent.ChunkSize);
+        if (!roof.Data.TryGetValue(chunkOrigin, out var bitMask))
+            return false;
+
+        var chunkRelative = SharedMapSystem.GetChunkRelative(tile, RoofComponent.ChunkSize);
+        var bitFlag = (ulong) 1 << (chunkRelative.X + chunkRelative.Y * RoofComponent.ChunkSize);
+        return (bitMask & bitFlag) == bitFlag;
     }
 
     private bool HasLadderAt(EntityUid map, MapGridComponent grid, Vector2i tile)
@@ -203,11 +214,12 @@ public sealed partial class CMUDeployableZLevelLadderSystem : EntitySystem
             _transform.AnchorEntity((ladder, xform));
     }
 
-    private void SetDeployedLadderData(EntityUid ladder, EntityUid otherLadder, EntProtoId packed)
+    private void SetDeployedLadderData(EntityUid ladder, EntityUid otherLadder, EntProtoId packed, bool retractable)
     {
         var deployed = EnsureComp<CMUDeployedZLevelLadderComponent>(ladder);
         deployed.OtherLadder = otherLadder;
         deployed.PackedPrototype = packed;
+        deployed.Retractable = retractable;
     }
 
     private readonly record struct LadderDeployment(

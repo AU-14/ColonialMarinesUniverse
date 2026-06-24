@@ -75,12 +75,12 @@
 - type: entity
   parent: BaseItem
   id: CMUDeployableZLevelLadder
-  name: deployable z-level ladder
+  name: Deployable Ladder
   description: A portable ladder that can be deployed through an open Z-level shaft.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/ladder.rsi
-    state: ladder11
+    state: ladderup
   - type: Item
     sprite: _RMC14/Structures/ladder.rsi
     size: Large

@@ -11,4 +11,7 @@ public sealed partial class CMUDeployedZLevelLadderComponent : Component
 
     [DataField]
     public EntProtoId PackedPrototype = "CMUDeployableZLevelLadder";
+
+    [DataField]
+    public bool Retractable = true;
 }
