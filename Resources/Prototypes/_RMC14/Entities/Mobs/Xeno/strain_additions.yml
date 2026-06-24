@@ -197,6 +197,7 @@
   - type: XenoDevolve
     devolvesTo:
     - CMXenoCarrier
+  - type: XenoAcid
   - type: XenoPlasma
     plasma: 500
     maxPlasma: 500

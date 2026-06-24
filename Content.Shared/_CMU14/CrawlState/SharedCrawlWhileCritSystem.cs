@@ -1,4 +1,6 @@
 using Content.Shared.ActionBlocker;
+using Content.Shared._RMC14.Stun;
+using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
@@ -9,7 +11,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
-using Content.Shared._RMC14.Xenonids.Construction.Nest;
+using Content.Shared.Stunnable;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
@@ -138,6 +140,9 @@ public sealed partial class SharedCrawlWhileCritSystem : EntitySystem
         if (HasComp<XenoNestedComponent>(ent))
             return;
 
+        if (IsCrawlBlocked(ent))
+            return;
+
         args.Uncancel();
     }
 
@@ -149,7 +154,17 @@ public sealed partial class SharedCrawlWhileCritSystem : EntitySystem
         if (!TryComp<CrawlWhileCritComponent>(ent, out var crawl))
             return;
 
+        if (IsCrawlBlocked(ent))
+            return;
+
         args.ModifySpeed(crawl.WalkSpeedModifier, crawl.SprintSpeedModifier);
+    }
+
+    private bool IsCrawlBlocked(EntityUid ent)
+    {
+        return HasComp<StunnedComponent>(ent) ||
+               HasComp<KnockedDownComponent>(ent) ||
+               HasComp<RMCUnconsciousComponent>(ent);
     }
 
     private void ShowServerPopup(EntityUid target, string locKey, PopupType type)

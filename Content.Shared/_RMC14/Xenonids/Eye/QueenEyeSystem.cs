@@ -12,6 +12,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Physics;
+using Robust.Shared.Player;
 using Robust.Shared.Threading;
 using Robust.Shared.Timing;
 
@@ -101,6 +102,12 @@ public sealed partial class QueenEyeSystem : EntitySystem
 
         if (!TryComp(ent, out EyeComponent? eye))
             return;
+
+        if (TryComp(ent, out XenoWatchingComponent? _) &&
+            TryComp(ent, out ActorComponent? actor))
+        {
+            _xenoWatch.Unwatch((ent.Owner, eye), actor.PlayerSession);
+        }
 
         ent.Comp.Eye = SpawnAtPosition(ent.Comp.Spawn, ent.Owner.ToCoordinates());
         Dirty(ent);

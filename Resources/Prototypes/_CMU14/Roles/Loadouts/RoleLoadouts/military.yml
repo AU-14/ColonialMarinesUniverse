@@ -145,6 +145,21 @@
   - SmokablesRMC
 
 - type: roleLoadout
+  id: JobAU14JobGOVFORWeaponsSpecialist
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - WeaponsRMC
+
+- type: roleLoadout
   id: JobAU14JobGOVFORSquadCombatTech
   points: 7
   groups:

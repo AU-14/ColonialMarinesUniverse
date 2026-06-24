@@ -83,7 +83,7 @@ rmc-dropship-weapons-previous = ^
 rmc-dropship-weapons-next = v
 
 rmc-dropship-weapons-fire-no-weapon = No weapon selected.
-rmc-dropship-weapons-fire-not-flying = Dropships can only fire fire while in flight.
+rmc-dropship-weapons-fire-not-flying = Dropships can only fire while in flight.
 rmc-dropship-weapons-fire-not-skilled = You don't have the training to fire this weapon!
 rmc-dropship-weapons-fire-no-ammo = {$weapon} doesn't have enough ammo.
 rmc-dropship-weapons-fire-cooldown = {$weapon} just fired, wait for it to cool down.

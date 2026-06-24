@@ -1,6 +1,7 @@
 cmu-zlevel-falling-popup = {$name} falls from above.
 
 cmu-zlevel-look-up-fail = There is a ceiling above you. You cannot look up.
+cmu-zlevel-look-up-nested = You cannot look up while nested.
 cmu-zlevel-look-up-enabled = You look up.
 cmu-zlevel-look-up-disabled = You stop looking up.
 

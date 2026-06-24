@@ -211,15 +211,12 @@ public sealed partial class AuThreatVoteSystem : EntitySystem
 
         if (prepared.Candidates.Count == 1)
         {
-            if (_ticker.RunLevel != GameRunLevel.InRound)
-            {
-                ClearRoundJoinBlocks();
-                return false;
-            }
-
             var selected = prepared.Candidates[0].Threat;
             Sawmill.Info(
                 $"[AuThreatVoteSystem] Only one threat candidate '{selected.ID}' prepared for preset {prepared.PresetId}; auto-selecting without starting a vote.");
+            // StartPreparedThreatVote is called while SpawnPlayers is still running, before the ticker
+            // flips to InRound. A real vote finishes later; a single-candidate shortcut still needs to
+            // complete the same spawn path instead of dropping the prepared vote.
             FinishThreatVote(prepared, selected, assignedJobs);
             return true;
         }

@@ -5,6 +5,9 @@
   roundForce: WY
   roundRole: CivilianCorporateLiaisonSurv
   roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
   - type: Skills
     skills:
       RMCSkillFireman: 1

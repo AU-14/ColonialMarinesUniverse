@@ -231,6 +231,9 @@
     sprite: _CMU14/Yautja/yautja_items.rsi
     heldPrefix: wrench
     storedRotation: 0
+    storedSprite:
+      sprite: _CMU14/Yautja/yautja_items.rsi
+      state: wrench
   - type: YautjaTechItem
 
 - type: entity

@@ -53,6 +53,7 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
         _gridQuery = GetEntityQuery<MapGridComponent>();
         _xformQuery = GetEntityQuery<TransformComponent>();
 
+        InitBuckle();
         InitMovement();
         InitThrowing();
         InitView();

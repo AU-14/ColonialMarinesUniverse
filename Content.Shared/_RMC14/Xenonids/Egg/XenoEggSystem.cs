@@ -199,8 +199,7 @@ public sealed partial class XenoEggSystem : EntitySystem
         if (TryComp(attached, out TransformComponent? xform))
             _transform.AnchorEntity(attached, xform);
 
-        var ev = new XenoOvipositorChangedEvent(true);
-        RaiseLocalEvent(attached, ref ev, true);
+        RaiseOvipositorChanged(attached.Owner, true);
     }
 
     private void OnXenoAttachedRemove(Entity<XenoAttachedOvipositorComponent> attached, ref ComponentRemove args)
@@ -211,8 +210,7 @@ public sealed partial class XenoEggSystem : EntitySystem
             _physics.TrySetBodyType(attached, BodyType.KinematicController);
         }
 
-        var ev = new XenoOvipositorChangedEvent(false);
-        RaiseLocalEvent(attached, ref ev, true);
+        RaiseOvipositorChanged(attached.Owner, false);
     }
 
     private void OnXenoMobStateChanged(Entity<XenoAttachedOvipositorComponent> ent, ref MobStateChangedEvent args)
@@ -638,6 +636,7 @@ public sealed partial class XenoEggSystem : EntitySystem
         }
 
         EnsureComp<EggPlantingDistanceComponent>(xeno).Distance = 3.5f;
+        RaiseOvipositorChanged(xeno.Owner, true);
     }
 
     private void DetachOvipositor(Entity<XenoAttachedOvipositorComponent> xeno)
@@ -657,6 +656,12 @@ public sealed partial class XenoEggSystem : EntitySystem
         RemoveOvipositorActions(xeno.Owner);
         _popup.PopupClient(Loc.GetString("cm-xeno-ovipositor-detach"), xeno, xeno);
         RemCompDeferred<EggPlantingDistanceComponent>(xeno);
+    }
+
+    private void RaiseOvipositorChanged(EntityUid xeno, bool attached)
+    {
+        var ev = new XenoOvipositorChangedEvent(attached, xeno, _hive.GetHive(xeno)?.Owner);
+        RaiseLocalEvent(xeno, ref ev, true);
     }
 
     private bool TryTrigger(Entity<XenoEggComponent> egg, EntityUid tripper)
