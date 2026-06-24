@@ -14,8 +14,8 @@ public sealed partial class ServerSawmillsCommand : LocalizedCommands
     public override string Description => "Lists sawmills (non-info) log level (or use --all/filters).";
     public override string Help => $"Usage: {this.Command} [--all] [filter|level] [level]";
 
-    private static readonly string primaryClr = Color.Green.ToHex();
-    private static readonly string secondaryClr = Color.Yellow.ToHex();
+    private static readonly string PrimaryClr = Color.Green.ToHex();
+    private static readonly string SecondaryClr = Color.Yellow.ToHex();
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -29,7 +29,8 @@ public sealed partial class ServerSawmillsCommand : LocalizedCommands
                 filterArgs.Add(arg);
         }
 
-        if (!ServerSawmillsCommand.TryParseFilterArgs(shell, filterArgs, out var nameFilter, out var hasLevelFilter, out var wantInherited, out var levelFilter))
+        if (!ServerSawmillsCommand.TryParseFilterArgs(shell, filterArgs, out var nameFilter, out var hasLevelFilter,
+                out var wantInherited, out var levelFilter))
             return;
 
         bool showAll = nameFilter != null || hasLevelFilter || explicitAll;
@@ -45,7 +46,7 @@ public sealed partial class ServerSawmillsCommand : LocalizedCommands
 
         if (sawmills.Count == 0)
         {
-            shell.WriteMarkup($"[color={ServerSawmillsCommand.secondaryClr}]No sawmills matching criteria.[/color]");
+            shell.WriteMarkup($"[color={ServerSawmillsCommand.SecondaryClr}]No sawmills matching criteria.[/color]");
             return;
         }
 
@@ -53,7 +54,7 @@ public sealed partial class ServerSawmillsCommand : LocalizedCommands
         foreach (var sawmill in sawmills)
         {
             var (levelText, colour) = ServerSawmillsCommand.GetLevelTextAndColour(sawmill.Level);
-            var line = $"[color={ServerSawmillsCommand.primaryClr}]{sawmill.Name.PadRight(col)}[/color]" +
+            var line = $"[color={ServerSawmillsCommand.PrimaryClr}]{sawmill.Name.PadRight(col)}[/color]" +
                 $" [color={colour.ToHex()}]{levelText}[/color]";
             shell.WriteMarkup(line);
         }
@@ -62,16 +63,15 @@ public sealed partial class ServerSawmillsCommand : LocalizedCommands
         if (hasLevelFilter)
             suffix += wantInherited ? " with inherited level" : $" with level '{levelFilter}'";
 
-        shell.WriteMarkup($"[color={ServerSawmillsCommand.secondaryClr}]--- {sawmills.Count} sawmill(s){suffix} ---[/color]");
+        shell.WriteMarkup($"[color={ServerSawmillsCommand.SecondaryClr}]--- {sawmills.Count} sawmill(s){suffix} ---[/color]");
     }
 
     public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)
     {
-        bool hasAll = args.Any(a => a.Equals("--all", StringComparison.OrdinalIgnoreCase));
         var cleanedArgs = args.Where(a => !a.Equals("--all", StringComparison.OrdinalIgnoreCase)).ToArray();
         return cleanedArgs.Length switch
         {
-            0 => CompletionResult.FromHintOptions(new[] { "--all" }, "[--all]"),
+            0 => CompletionResult.FromHintOptions(["--all"], "[--all]"),
             1 => CompletionResult.FromHintOptions(new[] { "--all" }.Concat(Enum.GetNames<LogLevel>()).Append("null")
                     .Concat(this._logManager.AllSawmills.Select(s => s.Name).OrderBy(s => s, StringComparer.OrdinalIgnoreCase)), "<name or level>"),
             2 => CompletionResult.FromHintOptions(Enum.GetNames<LogLevel>().Append("null"), "<level filter>"),
@@ -90,7 +90,7 @@ public sealed partial class ServerSawmillsCommand : LocalizedCommands
             LogLevel.Warning => ("Warning", Color.Yellow),
             LogLevel.Error => ("Error", Color.Red),
             LogLevel.Fatal => ("Fatal", Color.Magenta),
-            _ => (level!.Value.ToString(), Color.White)
+            _ => (level.Value.ToString(), Color.White)
         };
     }
 

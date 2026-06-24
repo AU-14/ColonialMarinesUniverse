@@ -15,15 +15,15 @@ public sealed partial class ServerLogsFollowerSystem : EntitySystem
     private const int MaxLinesPerTick = 20;
     private const float UpdateRate = 0.5f; // in seconds
     private float _updateAccumulator;
-    private static readonly string[] _noiseFilters = new[]
-    {
+    private static readonly string[] NoiseFilters =
+    [
         "MainLoop: Cannot keep up!",
         "] admin.logs: ", // sawmill chunk as not to excl. "admin.logs" itself
         "] db.op: ",
         "] battlebuddy: ",
         "] con: ",
-        "] net.ent: ",
-    };
+        "] net.ent: "
+    ];
 
     public override void Update(float frameTime)
     {
@@ -76,24 +76,22 @@ public sealed partial class ServerLogsFollowerSystem : EntitySystem
 
         using var fs = new FileStream(follower.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         fs.Seek(follower.LastPosition, SeekOrigin.Begin);
-        using var reader = new StreamReader(fs, Encoding.UTF8);
+        using var reader = new StreamReader(fs, Encoding.UTF8, detectEncodingFromByteOrderMarks: false, bufferSize: 4096, leaveOpen: true);
 
-        string? line;
-        int linesSent = 0;
-        int linesRead = 0;
-        const int MaxLinesReadPerTick = 500;
+        int linesSent = 0, linesRead = 0;
+        const int maxLinesReadPerTick = 500;
 
         long consumed = follower.LastPosition;
-        while ((line = reader.ReadLine()) != null
+        while (reader.ReadLine() is { } line
             && linesSent < ServerLogsFollowerSystem.MaxLinesPerTick
-            && linesRead < MaxLinesReadPerTick)
+            && linesRead < maxLinesReadPerTick)
         {
             linesRead++;
             consumed += Encoding.UTF8.GetByteCount(line) + 1; // based on linux server (\n line endings)
 
             if (string.IsNullOrWhiteSpace(line)) continue;
             if (line.Contains("[TAIL]")) continue; // feedback loop
-            if (Array.Exists(ServerLogsFollowerSystem._noiseFilters, f => line.Contains(f))) continue;
+            if (Array.Exists(ServerLogsFollowerSystem.NoiseFilters, f => line.Contains(f))) continue;
             if (follower.Filter != null && !line.Contains(follower.Filter, StringComparison.OrdinalIgnoreCase)) continue;
 
             this.SendLine(follower.Session, line);
