@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
   id: RMCType88SniperRifle
   name: Type 88 designated marksman rifle
@@ -151,7 +151,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 125
+        Piercing: 105
   - type: RMCProjectileDamageFalloff
     thresholds:
     - range: 32
