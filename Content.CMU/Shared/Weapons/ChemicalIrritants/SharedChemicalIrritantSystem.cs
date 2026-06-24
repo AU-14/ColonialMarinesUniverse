@@ -1,24 +1,25 @@
+using Content.Shared._AU14.Abominations;
 using Content.Shared._CMU14.GasMask;
+using Content.Shared._RMC14.BlurredVision;
+using Content.Shared._RMC14.Slow;
+using Content.Shared._RMC14.Stun;
+using Content.Shared._RMC14.Synth;
+using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Construction.Nest;
+using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
+using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Jittering;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Rejuvenate;
+using Content.Shared.Speech.EntitySystems;
 using Content.Shared.StatusEffect;
 using Content.Shared.Storage;
-using Content.Shared._RMC14.BlurredVision;
-using Content.Shared._RMC14.Stun;
-using Content.Shared._RMC14.Slow;
-using Content.Shared._RMC14.Synth;
-using Content.Shared._RMC14.Xenonids;
-using Content.Shared._AU14.Abominations; 
-using Content.Shared._RMC14.Xenonids.Construction.Nest;
-using Content.Shared._RMC14.Xenonids.Parasite;
-using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Stunnable;
-using Content.Shared.Speech.EntitySystems;
+using Content.Shared.Clothing.Components;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Events;
@@ -102,7 +103,7 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
             {
                 if (!injector.AffectsDead && _mobState.IsDead(victim))
                     continue;
-                
+
                 if (!injector.AffectsInfectedNested &&
                     HasComp<XenoNestedComponent>(victim) &&
                     HasComp<VictimInfectedComponent>(victim))
@@ -134,7 +135,8 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
         {
             var filterDamage = new GasMaskFilterDamageComponent
             {
-                Damage = injector.FilterDamage * filter.ChemicalIrritantDamageMultiplier
+                Damage = injector.FilterDamage * filter.ChemicalIrritantDamageMultiplier,
+                Neurotoxin = injector.NeurotoxinFilterDamage
             };
 
             _mask.DamageFilter(filterId, filter, filterDamage);
@@ -239,7 +241,7 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
             _stun.TryParalyze(victim, profile.TripStunTime, true);
 
             _popup.PopupEntity(Loc.GetString("You stumble and trip."), victim, victim, PopupType.MediumCaution);
-        }   
+        }
 
         // Exposure message (rate-limited)
         if (time >= chem.LastMessage + chem.TimeBetweenMessages)
@@ -275,6 +277,10 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
         {
             foreach (var maskItem in maskContainer.ContainedEntities)
             {
+                // Mask is pulled down / not covering the face — it provides no filtration
+                if (TryComp<MaskComponent>(maskItem, out var maskComp) && maskComp.IsToggled)
+                    continue;
+
                 if (TryGetFilterFromItem(maskItem, out filterId, out filter))
                     return true;
             }
@@ -351,7 +357,7 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
     {
         if (IsImmuneToIrritants(victim))
             return;
-        
+
         if (TryGetFilterFromMask(victim, out _, out _))
             return;
 

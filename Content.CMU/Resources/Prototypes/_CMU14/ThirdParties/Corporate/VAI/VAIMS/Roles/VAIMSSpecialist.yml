@@ -1,0 +1,78 @@
+- type: job
+  parent: AU14VAIMedicBase
+  id: AU14VAIMedic
+  spawnMenuRoleName: VAIPO Medic
+  playTimeTracker: AU14VAIMedic
+  icon: "CMJobIconEmpty"
+  startingGear: AU14GearVAIMSMedic
+  greeting: au14-vaipo-greeting
+  basePlaytimeTracker: true
+  accessGroups:
+  - auadmin
+  - Colonist
+  - CMCargoTech
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicVAI
+  id: AU14VAIMedic
+  name: VAIPO Medical Specialist
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadVAIPO
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: VAIPO Medical Specialist
+    description: You have been dispatched to the colony by Vanguard's Arrow because of contract with local UA Ambassador. Assist the Ambassador with what you can.
+    job: AU14VAIMedic
+    raffle:
+      settings: short
+
+- type: job
+  parent: AU14VAIMedicBase
+  id: AU14VAISPMedic
+  spawnMenuRoleName: VAISP Medic
+  playTimeTracker: AU14VAISPMedic
+  icon: "CMJobIconEmpty"
+  startingGear: AU14GearVAIMSMedic
+  greeting: au14-vaisp-greeting
+  basePlaytimeTracker: true
+  accessGroups:
+  - auadmin
+  - Colonist
+  - CMCargoTech
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicVAI
+  id: AU14VAISPMedic
+  name: VAISP Medical Specialist
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadVAISP
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: VAISP Medical Specialist
+    description: You have been dispatched to the colony by Vanguard's Arrow to the colony. Ensure safety of your medical personel and UA Ambassador.
+    job: AU14VAISPMedic
+    raffle:
+      settings: short
+
+- type: startingGear
+  parent: AU14GearVAIMedic
+  id: AU14GearVAIMSMedic
+  equipment:
+    id: AU14IDCardVAIMercenary
+    ears: AU14HeadsetVAI
+
+- type: playTimeTracker
+  id: AU14VAIMedic
+
+- type: playTimeTracker
+  id: AU14VAISPMedic

@@ -1,0 +1,104 @@
+- type: job
+  parent: CMJobBase
+  id: AU14UACGSquadleader
+  roundSide: ThirdParty
+  roundForce: UACG
+  roundRole: AU14UACGSquadleader
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: leader
+  - type: SquadLeader
+  - type: RMCTrackable
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 2
+      RMCSkillCqc: 2
+      RMCSkillMeleeWeapons: 1
+      RMCSkillJtac: 2
+      RMCSkillMedical: 1
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: au-14-job-prefix-uacg-squadleader
+  - type: MarineOrders
+    moveOrderSoundMale:
+      collection: AU14MaleMoveOrder
+    moveOrderSoundFemale:
+      collection: AU14FemaleMoveOrder
+    focusOrderSoundMale:
+      collection: AU14MaleFocusOrder
+    focusOrderSoundFemale:
+      collection: AU14FemaleFocusOrder
+    holdOrderSoundMale:
+      collection: AU14MaleHoldOrder
+    holdOrderSoundFemale:
+      collection: AU14FemaleHoldOrder # No Russian/UPP voicelines yet, its gonna have to use normal english accent (Not sure if this is UPP, but just in case)
+  - type: RMCPointing
+
+  name: au-14-job-name-uacg-squadleader
+  description: au14-uacg-description
+  playTimeTracker: AU14JobUACGSquadLeader
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankSergeant:
+      entity: AU14ChevronUSArmySergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUACGSquadLeader
+        time: 18000 #5 hours
+    RMCRankCorporal:
+      entity: AU14ChevronUSArmyCorporal
+      requirements: []
+  spawnMenuRoleName: UACG Squad Leader (3rd party)
+  startingGear: AU14GearUACGLostSquadLeader
+  greeting: au14-uacg-greeting
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-platco
+  accessGroups:
+  - AU14GovforFTL
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUACG
+  id: AU14JobUACGLostSquadLeader
+  name: Lost Squad Leader
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadUACG
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au-14-job-name-uacg-squadleader
+    description: au14-uacg-description
+    reregister: false
+    job: AU14UACGSquadleader
+    raffle:
+      settings: short
+    rules: au14-uacg-rules
+
+- type: startingGear
+  id: AU14GearUACGLostSquadLeader
+  equipment:
+    id: AU14IDCardUACGSquadleader
+    outerClothing: RMCOuterClothingExternalWebbingForeconSurvivorFill
+    jumpsuit: AU14UACGFatigues
+    shoes: CMBootsBrownFilled
+    mask: RMCMaskScarfTanDown
+    head: AU14UACGPatrolCap
+    belt: AU14UACGBeltFilledM20a
+    pocket1: AU14UACGCigPouch
+    pocket2: AU14PouchIFAKFill
+    back: AU14UACGPatrolRucksack
+  inhand:
+  - RMCBinocularsPVE
+  - AUWeaponRifleM20A
+
+- type: playTimeTracker
+  id: AU14JobUACGSquadLeader

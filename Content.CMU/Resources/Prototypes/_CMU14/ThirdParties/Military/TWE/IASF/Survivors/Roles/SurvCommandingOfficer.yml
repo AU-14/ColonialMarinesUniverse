@@ -1,0 +1,30 @@
+- type: job
+  parent: AU14IASFCommanderBase
+  id: AU14IASFSurvCommander
+  spawnMenuRoleName: IASF Survivor
+  playTimeTracker: AU14IASFCommander
+  greeting: au14-job-greeting-IASFsurv
+  startingGear: AU14RMCGearIASFCommander
+  basePlaytimeTracker: true
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicTWEIASF
+  id: AU14IASFSurvCommander
+  name: IASF Commander (Survivor)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadIASF
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-tweiasf-co
+    description: au14-job-description-IASFsurv
+    job: AU14IASFSurvCommander
+    rules: au14-job-rules-IASFsurv
+    raffle:
+      settings: short

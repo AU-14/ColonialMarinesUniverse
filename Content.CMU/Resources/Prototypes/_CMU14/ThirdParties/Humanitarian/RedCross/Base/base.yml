@@ -1,0 +1,136 @@
+- type: entity
+  parent: CMMobHuman
+  id: AU14BaseMobSpeciesOrganicRedCross
+  abstract: true
+  suffix: AU14, Red Cross
+  components:
+  - type: GhostTakeoverAvailable
+  - type: RandomHumanoidAppearance
+  - type: RandomHumanoidAppearanceWhitelisted
+    allowedMaleHairStyles:
+    - RMCHumanHairCrew
+    - RMCHumanHairAviator
+    - RMCHumanHairJensen
+    - RMCHumanHairAverageJoe
+    - AU14HumanHairCIA5
+    - RMCHumanHairCombover
+    - RMCHumanHairCombover2
+    - RMCHumanHairCplDietrich
+    - RMCHumanHairCut
+    - RMCHumanHairHeadStubble
+    - RMCHumanHairHighAndTight
+    - RMCHumanHairHighfade
+    - RMCHumanHairHighlight
+    - AU14HumanHairIRS
+    - RMCHumanHairLtRasczak
+    - RMCHumanHairMarineFade
+    - RMCHumanHairMarineFlatTop
+    - RMCHumanHairMedfade
+    - RMCHumanHairNofade
+    - RMCHumanHairShavedpart
+    - RMCHumanHairShavedHead
+    - RMCHumanHairShort
+    - RMCHumanHairSideUndercutHang
+    - RMCHumanHairSkinhead
+    - RMCHumanHairTaper
+    - RMCHumanHairWardaddy
+    - RMCHumanHairUndercut
+    - RMCHumanHairUndercutTop
+    - RMCHumanHairBowlcut2
+    - RMCHumanHairCIA
+    - AU14HumanHairCIA2
+    - AU14HumanHairCIA3
+    - RMCHumanHairFlowingHair
+    - RMCHumanHairCleancut
+    - RMCHumanHairIceman
+    - RMCHumanHairMulder
+    allowedFemaleHairStyles:
+    - RMCHumanHairShortbangs
+    - RMCHumanHairBobcurl
+    - RMCHumanHairMarineBun
+    - RMCHumanHairBun
+    - RMCHumanHairFringetail
+    - AU14HumanHairLowBun
+    - AU14HumanHairLowPonyTail
+    - AU14HumanHairLowPonyTailAlt
+    - RMCHumanHairPonytail1
+    - RMCHumanHairPonytail7
+    - RMCHumanHairPvtRedding
+    - RMCHumanHairPvtVasquez
+    - RMCHumanHairLong
+    - RMCHumanHairPixieCutLeft
+    - RMCHumanHairPixieCutRight
+    - RMCHumanHairBob
+    - RMCHumanHairCurls
+    - AU14HumanHairElegant
+    - RMCHumanHairFlair
+    - RMCHumanHairFlair2
+    - RMCHumanHairGentle
+    - RMCHumanHairGentle2
+    - RMCHumanHairGentlebraid
+    - RMCHumanHairLongEmo
+    - RMCHumanHairLongFringe
+    - RMCHumanHairLonger
+    - RMCHumanHairLongerAlt
+    - RMCHumanHairLongerAlt
+    - RMCHumanHairShortOvereye
+    - RMCHumanHairLongOvereye
+    - RMCHumanHairPonytail6
+    - RMCHumanHairPonytail3
+    - RMCHumanHairPonytail2
+    - RMCHumanHairScully
+    - RMCHumanHairScully2
+    - RMCHumanHairScully2Alt
+    - RMCHumanHairShavedbun
+    - RMCHumanHairLongAlt
+    - RMCHumanHairLongest
+    allowedHairColorsHex:
+    - "#0B0B0B"
+    - "#1A1A1A"
+    - "#222222"
+    - "#2B1B0F"
+    - "#3B2314"
+    - "#4A2E1A"
+    - "#5A3A22"
+    - "#6B4A2F"
+    - "#9C8651"
+    - "#B79A5A"
+    - "#4A1F12"
+    - "#7A5E42"
+    allowedEyeColorsHex: [ "#000000" ]
+    beardChance: 0.1
+
+# equipment
+
+- type: entity
+  parent: CMBeltMedicBag
+  id: CMUBeltMedicBagICRCDoctor
+  suffix: Filled, ICRC Doctor
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14Tourniquet
+    - id: AU14Tourniquet
+    - id: AU14PillCanisterMeralyne
+    - id: AU14PillCanisterDermaline
+    - id: RMCPillCanisterIron
+    # - id: CMPillCanisterTramadol
+    - id: CMPillCanisterDylovene
+    # - id: CMPillCanisterPeridaxon
+    - id: AU14PillCanisterAlbuterol
+    # - id: CMPillCanisterAlkysine
+    - id: RMCPillCanisterImidazoline
+    - id: CMTraumaKit10
+      amount: 3
+    - id: CMBurnKit10
+      amount: 3
+    - id: CMUPlainTraumaDressing10
+    - id: CMUCoagulantPowder
+    - id: CMUBurnGel
+    # - id: RMCSplint
+    - id: AU14NaloxoneAutoInjector
+    - id: CMEpinephrineAutoInjector
+    - id: CMHealthAnalyzer
+    - id: CMSynthGraft
+    - id: CMSurgicalLine
+    - id: CMHandsLatex

@@ -1,0 +1,154 @@
+- type: entity
+  parent: CMMobHuman
+  id: AU14BaseMobSpeciesOrganicUACG
+  suffix: AU14, UA, UACG
+  abstract: true
+  components:
+  - type: GhostTakeoverAvailable
+  - type: NpcFactionMember
+    factions:
+    - AUUnitedAmericas
+  - type: RandomHumanoidAppearance
+  - type: RandomHumanoidAppearanceWhitelisted
+    allowedMaleHairStyles:
+    - RMCHumanHairCrew
+    - RMCHumanHairAviator
+    - RMCHumanHairJensen
+    - RMCHumanHairAverageJoe
+    - AU14HumanHairCIA5
+    - RMCHumanHairCombover
+    - RMCHumanHairCombover2
+    - RMCHumanHairCplDietrich
+    - RMCHumanHairCut
+    - RMCHumanHairHeadStubble
+    - RMCHumanHairHighAndTight
+    - RMCHumanHairHighfade
+    - RMCHumanHairHighlight
+    - AU14HumanHairIRS
+    - RMCHumanHairLtRasczak
+    - RMCHumanHairMarineFade
+    - RMCHumanHairMarineFlatTop
+    - RMCHumanHairMedfade
+    - RMCHumanHairNofade
+    - RMCHumanHairShavedpart
+    - RMCHumanHairShavedHead
+    - RMCHumanHairShort
+    - RMCHumanHairSideUndercutHang
+    - RMCHumanHairSkinhead
+    - RMCHumanHairTaper
+    - RMCHumanHairWardaddy
+    - RMCHumanHairUndercut
+    - RMCHumanHairUndercutTop
+    allowedFemaleHairStyles:
+    - RMCHumanHairShortbangs
+    - RMCHumanHairBobcurl
+    - RMCHumanHairMarineBun
+    - RMCHumanHairBun
+    - RMCHumanHairFringetail
+    - AU14HumanHairLowBun
+    - AU14HumanHairLowPonyTail
+    - AU14HumanHairLowPonyTailAlt
+    - RMCHumanHairPonytail1
+    - RMCHumanHairPonytail7
+    - RMCHumanHairPvtRedding
+    - RMCHumanHairPvtVasquez
+    - RMCHumanHairLong
+    - RMCHumanHairPixieCutLeft
+    - RMCHumanHairPixieCutRight
+    allowedHairColorsHex:
+    - "#0B0B0B"
+    - "#1A1A1A"
+    - "#222222"
+    - "#2B1B0F"
+    - "#3B2314"
+    - "#4A2E1A"
+    - "#5A3A22"
+    - "#6B4A2F"
+    - "#9C8651"
+    - "#B79A5A"
+    - "#4A1F12"
+    - "#7A5E42"
+    allowedEyeColorsHex: [ "#000000" ]
+    beardChance: 0.1
+
+# Equipment
+
+- type: entity
+  parent: CMBeltMarine
+  id: AU14UACGBeltFilledM20a
+  suffix: UACG, Filled, M20a
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MagazineRifleM20A
+      amount: 5
+
+- type: entity
+  parent: RMCPouchMagazine
+  id: AU14UACGPouchFilledM20a
+  suffix: UACG, Filled, M20a
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MagazineRifleM20A
+      amount: 3
+
+- type: entity
+  parent: RMCPouchGeneralLarge
+  id: AU14UACGCigPouch
+  suffix: UACG, Filled, Cigarettes
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMCigarettePackLuckySlothsMini
+      amount: 1
+    - id: CMMatchBook
+      amount: 1
+    - id: CMShellShotgunBuckshot
+      amount: 1
+
+- type: entity
+  parent: RMCSatchelMarineLogisticsBig
+  id: AU14UACGPatrolRucksack
+  suffix: UACG, Backpack
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMRE
+      amount: 2
+    - id: CMCanteen
+      amount: 1
+    - id: BedrollFolded
+      amount: 1
+    - id: CMPackFlare
+      amount: 2
+    - id: CMEntrenchingTool
+      amount: 1
+
+- type: entity
+  parent: RMCSatchelMarineLogisticsBig
+  id: AU14UACGPatrolRucksackAmmobearer
+  suffix: UACG, Backpack, Ammobearer
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineLMGM60
+      amount: 6
+    - id: CMMatchBook
+      amount: 1
+
+- type: entity
+  parent: RMCBeltUtilityGeneral
+  id: AU14UACGAmmoBearerBelt
+  suffix: UACG, Belt
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMRE
+      amount: 2
+    - id: CMCanteen
+      amount: 1
+    - id: BedrollFolded
+      amount: 1
+    - id: CMCigarettePackLuckySlothsMini
+      amount: 1

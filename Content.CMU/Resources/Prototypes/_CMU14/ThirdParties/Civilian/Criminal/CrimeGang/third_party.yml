@@ -1,0 +1,21 @@
+- type: partySpawn
+  id: ForeignCrimeGangSpawn
+  leadersToSpawn:
+    AU14JobForeignMobBoss: 1
+  gruntsToSpawn:
+    AU14JobForeignMobGoon: 3
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: ForeignCrimeGang
+  partyspawn: ForeignCrimeGangSpawn
+  entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
+  weight: 20
+  minplayers: 20
+  maxplayers: 120
+  GhostsNeeded: 5
+  roundstart: false
+  whitelistedgamemodes:
+    - insurgency
+    - colonyfall

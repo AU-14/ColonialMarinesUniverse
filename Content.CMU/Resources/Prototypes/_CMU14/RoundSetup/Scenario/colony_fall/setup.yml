@@ -1,0 +1,63 @@
+- type: votingChoices
+  id: ColonyFallVotingChoices
+  preset: ColonyFall
+  planetChoices:
+    - planets:
+        - AUPlanetShepherdsPride
+        - AUPlanetStableGarrison
+      threatVote:
+        candidates:
+          - ColonyFallCultistRoundGroup
+          - ColonyFallXenoRoundGroup
+          - ColonyFallWendigoRoundGroup
+          - ColonyFallAbominationRoundGroup
+      backupThreatVote:
+        candidates:
+          - ColonyFallWendigoRoundGroup
+
+    - planets:
+        - AUPlanetLV327
+      threatVote:
+        candidates:
+          - ColonyFallCultistRoundGroup
+          - ColonyFallXenoRoundGroup
+          - ColonyFallWendigoRoundGroup
+      backupThreatVote:
+        candidates:
+          - ColonyFallWendigoRoundGroup
+
+    - planets:
+        - AUPlanetSorokyne
+      threatVote:
+        candidates:
+          - ColonyFallCultistRoundGroup
+          - ColonyFallWendigoRoundGroup
+      backupThreatVote:
+        candidates:
+          - ColonyFallWendigoRoundGroup
+
+    - planets:
+        - CMUPlanetLament
+      threatVote:
+        candidates:
+          - ColonyFallCultistMarkerRoundGroup
+          - ColonyFallXenoRoundGroup
+          - ColonyFallWendigoRoundGroup
+          - ColonyFallAbominationRoundGroup
+      backupThreatVote:
+        candidates:
+          - ColonyFallWendigoRoundGroup
+
+    - planets:
+        - CMUPlanetHopesRetreat
+      threatVote:
+        candidates:
+          - ColonyFallCultistMarkerRoundGroup
+          - ColonyFallAbominationRoundGroup
+      backupThreatVote:
+        candidates:
+          - ColonyFallAbominationRoundGroup
+
+    - planets:
+        - AuPlanetChances
+      backupQuiet: true

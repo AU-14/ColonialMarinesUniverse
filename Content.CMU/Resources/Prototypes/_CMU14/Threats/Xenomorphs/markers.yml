@@ -1,0 +1,92 @@
+- type: entity
+  name: xeno cf threat entity Spawn Marker
+  parent: MarkerBase
+  id: xenocfthreatentityspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Entity
+    ID: xenocf
+  - type: ScenarioSpawnMarker
+    kind: ThreatMarker
+    tags:
+    - force:hostile
+    - bucket:Entity
+    - marker-id:xenocf
+
+- type: entity
+  name: xeno cf threat entity Spawn Marker
+  parent: MarkerBase
+  id: scenarioxenocfthreatentityspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ScenarioSpawnMarker
+    kind: ThreatMarker
+    tags:
+    - force:hostile
+    - bucket:Entity
+    - marker-id:xenocf
+
+- type: entity
+  name: xeno cf threat member Spawn Marker
+  parent: MarkerBase
+  id: xenocfthreatmemberspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Member
+    ID: xenocf
+  - type: ScenarioSpawnMarker
+    kind: ThreatMarker
+    tags:
+    - force:hostile
+    - bucket:Member
+    - marker-id:xenocf
+
+- type: entity
+  name: xeno cf threat member Spawn Marker
+  parent: MarkerBase
+  id: scenarioxenocfthreatmemberspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ScenarioSpawnMarker
+    kind: ThreatMarker
+    tags:
+    - force:hostile
+    - bucket:Member
+    - marker-id:xenocf
+
+- type: entity
+  name: xeno cf threat Leader Spawn Marker
+  parent: MarkerBase
+  id: xenocfthreatleaderspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Leader
+    ID: xenocf
+  - type: ScenarioSpawnMarker
+    kind: ThreatMarker
+    tags:
+    - force:hostile
+    - bucket:Leader
+    - marker-id:xenocf
+
+- type: entity
+  name: xeno cf threat Leader Spawn Marker
+  parent: MarkerBase
+  id: scenarioxenocfthreatleaderspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ScenarioSpawnMarker
+    kind: ThreatMarker
+    tags:
+    - force:hostile
+    - bucket:Leader
+    - marker-id:xenocf
