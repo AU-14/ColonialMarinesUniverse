@@ -239,9 +239,9 @@
     deleteOnCollide: false
     damage:
       types:
-        Piercing: 550
-        Blunt: 25
-        Structural: 1800
+        Piercing: 600
+        Blunt: 50
+        Structural: 2800
     soundHit:
       path: /Audio/_RMC14/Bullets/bullet_vulture_impact.ogg
   - type: RMCProjectileDamageFalloff

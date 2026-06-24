@@ -188,7 +188,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 70
+        Piercing: 115
   - type: RMCProjectileDamageFalloff
     thresholds:
     - range: 32

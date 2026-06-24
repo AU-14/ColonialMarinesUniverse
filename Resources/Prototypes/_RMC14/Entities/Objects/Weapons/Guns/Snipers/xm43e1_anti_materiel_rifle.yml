@@ -132,10 +132,10 @@
     deleteOnCollide: false
     damage:
       types:
-        Piercing: 125
-        Structural: 1275
+        Piercing: 250
+        Structural: 1850
   - type: CMArmorPiercing
-    amount: 75
+    amount: 125
   - type: RMCPenetratingProjectile
   - type: RMCStoppingPower
   - type: AimedShotEffect
