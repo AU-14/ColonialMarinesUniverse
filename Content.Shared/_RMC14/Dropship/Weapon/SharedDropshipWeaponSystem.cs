@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Camera;
@@ -106,6 +107,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
     [Dependency] private SquadSystem _squad = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private TagSystem _tagSystem = default!;
@@ -1685,6 +1687,17 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         var activeFlares = EntityQueryEnumerator<ActiveFlareSignalComponent, TransformComponent>();
         while (activeFlares.MoveNext(out var uid, out var active, out var xform))
         {
+            if (!CanSettleActiveFlare(uid))
+            {
+                if (active.LastCoordinates.Count > 0)
+                {
+                    active.LastCoordinates.Clear();
+                    Dirty(uid, active);
+                }
+
+                continue;
+            }
+
             active.LastCoordinates.Enqueue(GetNetCoordinates(xform.Coordinates));
             Dirty(uid, active);
             if (active.LastCoordinates.Count < 10)
@@ -1909,6 +1922,12 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             if (!_transform.InRange(xform.Coordinates, active.Origin, active.BreakRange))
                 RemCompDeferred<ActiveLaserDesignatorComponent>(uid);
         }
+    }
+
+    private bool CanSettleActiveFlare(EntityUid uid)
+    {
+        return !HasComp<ThrownItemComponent>(uid) &&
+               _zLevels.DistanceToGround(uid, out _) <= 0;
     }
 
     public static Angle GetImpactEffectRotation(Angle randomRotation, bool hasOccluder)
@@ -2239,6 +2258,10 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             return false;
         }
 
+        var targetCoordinates = _transform.GetMoverCoordinates(target).SnapToGrid(EntityManager, _mapManager).Offset(offset);
+        if (!CanStartFireMission(dropship, targetCoordinates, user))
+            return false;
+
         var shotsPerWeapon = new Dictionary<EntityUid, int>();
         foreach (var weaponOffset in missionData.WeaponOffsets)
         {
@@ -2286,6 +2309,36 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         return true;
     }
 
+    private bool CanStartFireMission(Entity<DropshipComponent> dropship, EntityCoordinates targetCoordinates, EntityUid user)
+    {
+        if (CasDebug)
+            return true;
+
+        if (!TryComp(dropship, out FTLComponent? ftl) ||
+            (ftl.State != FTLState.Travelling && ftl.State != FTLState.Arriving))
+        {
+            var msg = Loc.GetString("rmc-dropship-weapons-fire-not-flying");
+            _popup.PopupCursor(msg, user, PopupType.SmallCaution);
+            return false;
+        }
+
+        return CanFireMissionAt(targetCoordinates, user);
+    }
+
+    private bool CanFireMissionAt(EntityCoordinates targetCoordinates, EntityUid? actor)
+    {
+        if (CasDebug || _area.CanCAS(targetCoordinates))
+            return true;
+
+        if (actor != null)
+        {
+            var msg = Loc.GetString("rmc-laser-designator-not-cas");
+            _popup.PopupCursor(msg, actor.Value);
+        }
+
+        return false;
+    }
+
     /// <summary>
     ///     Try to fire the dropship weapon at the targeted location.
     /// </summary>
@@ -2303,6 +2356,12 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
         if (!Resolve(weapon, ref weaponComp, false))
             return false;
+
+        if (strikeType == DropshipWeaponStrikeType.FireMission &&
+            !CanFireMissionAt(targetCoordinates, actor))
+        {
+            return false;
+        }
 
         if (!CanFire(weapon, strikeType, actor, weapon: weaponComp))
             return false;

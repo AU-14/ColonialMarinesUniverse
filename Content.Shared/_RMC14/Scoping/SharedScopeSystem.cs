@@ -219,7 +219,9 @@ public abstract partial class SharedScopeSystem : EntitySystem
         }
 
         var holdingItem = _hands.TryGetActiveItem(user, out var heldItem) && (scope.Comp.Attachment || heldItem == scope.Owner);
-        if (!holdingItem && !scope.Comp.CanUseInsideContainer)
+        if (!holdingItem &&
+            !scope.Comp.CanUseInsideContainer &&
+            !IsMountedVultureSpotterScope(scope))
         {
             var msgError = Loc.GetString("cm-action-popup-scoping-user-must-hold", ("scope", ent));
             _popup.PopupClient(msgError, user, user);

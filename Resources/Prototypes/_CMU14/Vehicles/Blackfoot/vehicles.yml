@@ -148,6 +148,7 @@
   - type: BlackfootRearDoor
     open: false
     rearEntryIndex: 0
+    allowAirborneExit: true
   - type: ItemSlots
     slots:
       thrusters:

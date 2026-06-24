@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Ghost;
 using Content.Shared._RMC14.Inventory;
@@ -63,6 +64,7 @@ public sealed partial class XenoNestSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private TurfSystem _turf = default!;
     [Dependency] private SharedXenoWeedsSystem _xenoWeeds = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private EntityQuery<OccluderComponent> _occluderQuery;
     private EntityQuery<XenoNestComponent> _xenoNestQuery;
@@ -209,6 +211,7 @@ public sealed partial class XenoNestSystem : EntitySystem
 
     private void OnNestedAdd(Entity<XenoNestedComponent> ent, ref ComponentStartup args)
     {
+        _zLevels.TryDisableLookUp(ent);
         _parasite.RefreshIncubationMultipliers(ent.Owner);
     }
 

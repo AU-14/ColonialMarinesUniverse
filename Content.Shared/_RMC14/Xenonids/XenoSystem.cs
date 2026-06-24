@@ -63,6 +63,8 @@ namespace Content.Shared._RMC14.Xenonids;
 
 public sealed partial class XenoSystem : EntitySystem
 {
+    private const string SpawnMuteStatus = "Muted";
+
     [Dependency] private SharedActionsSystem _action = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private DamageableSystem _damageable = default!;
@@ -179,7 +181,7 @@ public sealed partial class XenoSystem : EntitySystem
             _movementSpeed.RefreshMovementSpeedModifiers(xeno);
 
         if (xeno.Comp.MuteOnSpawn)
-            _status.TryAddStatusEffect(xeno, "Muted", _xenoSpawnMuteDuration, true, "Muted");
+            _status.TryAddStatusEffect(xeno, SpawnMuteStatus, _xenoSpawnMuteDuration, true, SpawnMuteStatus);
 
         _eye.RefreshVisibilityMask(xeno.Owner);
         Dirty(xeno);
@@ -206,6 +208,7 @@ public sealed partial class XenoSystem : EntitySystem
         var oldRotation = _transform.GetWorldRotation(args.OldXeno);
         _transform.SetWorldRotation(newXeno, oldRotation);
 
+        TransferSpawnMute(args.OldXeno, newXeno);
         _imaginaryFriend.TryTransferFriends(args.OldXeno, newXeno);
     }
 
@@ -214,7 +217,30 @@ public sealed partial class XenoSystem : EntitySystem
         var oldRotation = _transform.GetWorldRotation(args.OldXeno);
         _transform.SetWorldRotation(newXeno, oldRotation);
 
+        TransferSpawnMute(args.OldXeno, newXeno);
         _imaginaryFriend.TryTransferFriends(args.OldXeno, newXeno);
+    }
+
+    private void TransferSpawnMute(EntityUid oldXeno, Entity<XenoComponent> newXeno)
+    {
+        if (!newXeno.Comp.MuteOnSpawn)
+            return;
+
+        if (!_status.TryGetTime(oldXeno, SpawnMuteStatus, out var oldMuteTime))
+        {
+            _status.TryRemoveStatusEffect(newXeno, SpawnMuteStatus);
+            return;
+        }
+
+        var remaining = oldMuteTime.Value.Item2 - _timing.CurTime;
+        if (remaining <= TimeSpan.Zero)
+        {
+            _status.TryRemoveStatusEffect(newXeno, SpawnMuteStatus);
+            return;
+        }
+
+        _status.TryRemoveStatusEffect(newXeno, SpawnMuteStatus);
+        _status.TryAddStatusEffect(newXeno, SpawnMuteStatus, remaining, true, SpawnMuteStatus);
     }
 
     private void OnXenoHealthScannerAttemptTarget(Entity<XenoComponent> ent, ref HealthScannerAttemptTargetEvent args)

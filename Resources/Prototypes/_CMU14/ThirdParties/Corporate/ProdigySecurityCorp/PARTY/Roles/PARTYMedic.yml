@@ -38,7 +38,7 @@
   - auwy
   - AUPrisonStaff
 - type: entity
-  parent: AU14BaseMobSpeciesOrganicWeYu
+  parent: AU14BaseMobSpeciesOrganicProdigy
   id: AU14JobWYProdigyPartyMedic
   name: Prodigy Yankee Combat Lifesaver (3rd party, M41A/2)
   components:

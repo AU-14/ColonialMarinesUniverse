@@ -1,3 +1,4 @@
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Damage;
@@ -18,6 +19,7 @@ using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction;
 using Content.Shared.Jittering;
+using Content.Shared.Maps;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -40,6 +42,7 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private SharedInteractionSystem _interact = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private MobThresholdSystem _mobThreshold = default!;
     [Dependency] private INetManager _net = default!;
@@ -54,6 +57,7 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
     [Dependency] private XenoEnergySystem _xenoEnergy = default!;
     [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private XenoStrainSystem _xenoStrain = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private StatusEffectQuerySystem _status = default!;
 
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
@@ -86,7 +90,7 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
         args.Handled = true;
 
         _xenos.Clear();
-        _entityLookup.GetEntitiesInRange(args.Target, ent.Comp.Radius, _xenos);
+        GetXenosInHealRange(args.Target, ent.Comp.Radius, _xenos);
 
         if (_xenos.Count == 0)
             return;
@@ -125,6 +129,34 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
 
             if (_net.IsServer)
                 SpawnAttachedTo(ent.Comp.HealEffect, xeno.Owner.ToCoordinates());
+        }
+    }
+
+    private void GetXenosInHealRange(EntityCoordinates target, float radius, HashSet<Entity<XenoComponent>> xenos)
+    {
+        _entityLookup.GetEntitiesInRange(target, radius, xenos);
+
+        var targetMap = _transform.ToMapCoordinates(target);
+        if (targetMap.MapId == MapId.Nullspace ||
+            !_map.TryGetMap(targetMap.MapId, out var mapUid) ||
+            mapUid is not { } resolvedMapUid ||
+            !_zLevels.TryGetZNetwork(resolvedMapUid, out var network) ||
+            network is not { } resolvedNetwork ||
+            !_zLevels.TryGetDepthBounds(resolvedNetwork, out var minDepth, out var maxDepth))
+        {
+            return;
+        }
+
+        for (var depth = minDepth; depth <= maxDepth; depth++)
+        {
+            if (!_zLevels.TryGetMapAtDepth(resolvedNetwork, depth, out var zMap, out var zMapComp) ||
+                zMap == resolvedMapUid)
+            {
+                continue;
+            }
+
+            var zTarget = new MapCoordinates(targetMap.Position, zMapComp.MapId);
+            _entityLookup.GetEntitiesInRange(zTarget, radius, xenos);
         }
     }
 
