@@ -71,3 +71,17 @@
     sprite: _CMU14/Structures/stairs.rsi
     state: p_stair_kutjevo_solo_cap
     offset: 0,0.5
+
+- type: entity
+  parent: BaseItem
+  id: CMUDeployableZLevelLadder
+  name: Deployable Ladder
+  description: A portable ladder that can be deployed through an open Z-level shaft.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/ladder.rsi
+    state: ladderup
+  - type: Item
+    sprite: _RMC14/Structures/ladder.rsi
+    size: Large
+  - type: CMUDeployableZLevelLadder
