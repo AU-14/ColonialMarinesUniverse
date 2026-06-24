@@ -21,7 +21,6 @@ public abstract partial class CMUSharedZLevelsSystem
     {
         SubscribeLocalEvent<CMUZLevelViewerComponent, MoveEvent>(OnViewerMove);
         SubscribeLocalEvent<CMUZLevelViewerComponent, CMUToggleZLevelLookUpAction>(OnToggleLookUp);
-        SubscribeLocalEvent<XenoNestedComponent, ComponentStartup>(OnNestedStartup);
     }
 
     protected void InvalidateSharedOpeningCache(EntityUid gridUid)
@@ -76,11 +75,6 @@ public abstract partial class CMUSharedZLevelsSystem
         _popup.PopupClient(Loc.GetString(ent.Comp.LookUp
             ? "cmu-zlevel-look-up-enabled"
             : "cmu-zlevel-look-up-disabled"), ent, ent, PopupType.SmallCaution);
-    }
-
-    private void OnNestedStartup(Entity<XenoNestedComponent> ent, ref ComponentStartup args)
-    {
-        TryDisableLookUp(ent);
     }
 
     public bool TryDisableLookUp(EntityUid uid)
