@@ -1,0 +1,9 @@
+- type: loadoutGroup
+  id: CivFootwearAU14
+  name: au14-loadout-group-civilian-footwear
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - ShoesBlackAU14
+  - BootsVanBandolierAU14
+  - ShoesBrownAU14

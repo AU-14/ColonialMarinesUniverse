@@ -1,0 +1,29 @@
+- type: loadout
+  id: SlingSatchelBlueAU14
+  equipment:
+    back: AU14SlingSatchelBlue
+
+- type: loadout
+  id: SlingSatchelBlackAU14
+  equipment:
+    back: AU14SlingSatchelBlack
+
+- type: loadout
+  id: CMSatchelAU14
+  equipment:
+    back: CMSatchel
+
+- type: loadout
+  id: SatchelLightpackWelderAU14
+  equipment:
+    back: RMCSatchelLightpackWelder
+
+- type: loadout
+  id: SatchelEngineerAU14
+  equipment:
+    back: CMSatchelEngineer
+
+- type: loadout
+  id: MedicalSatchelAU14
+  equipment:
+    back: CMSatchelMedical

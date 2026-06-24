@@ -1,0 +1,23 @@
+- type: loadoutGroup
+  id: SynthMasksAU14
+  name: rmc-loadout-group-masks
+  minLimit: 0
+  loadouts:
+  - MaskSterileAU14
+  - MaskScarfRedRMC
+  - MaskScarfBlackRMC
+  - MaskScarfGrayRMC
+  - MaskScarfGreenRMC
+  - MaskScarfTanRMC
+  - TornScarfBlackRMC
+  - TornScarfDesertRMC
+  - TornScarfGreenRMC
+  - TornScarfGreyRMC
+  - TornScarfUrbanRMC
+  - TornScarfSnowRMC
+  - NeckerchiefTanRMC
+  - NeckerchiefBlackRMC
+  - NeckerchiefGrayRMC
+  - NeckerchiefGreenRMC
+  - NeckerchiefWhiteRMC
+  - NeckerchiefRedRMC

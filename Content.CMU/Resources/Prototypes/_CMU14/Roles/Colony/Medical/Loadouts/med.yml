@@ -1,0 +1,14 @@
+- type: loadout
+  id: MedEssentialAU14
+  storage:
+    belt:
+    - CMHealthAnalyzer
+    - CMSurgicalLine
+    - CMSynthGraft
+    back:
+    - CMSurgicalCaseFilled
+    - ClothingNeckStethoscope
+    - AU14CMDefibrillator
+  equipment:
+    ears2: RMCFlashlightPen
+    eyes: RMCGlassesMedicalHUDGlasses

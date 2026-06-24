@@ -1,0 +1,11 @@
+- type: loadoutGroup
+  id: EROPouchAU14
+  name: au14-loadout-group-civilian-pouch
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - PouchFirstResponderAU14
+  - PouchToolsSocFillAU14
+  - PouchFirstAidAU14
+  - PouchGeneralLargeAU14
+  - WebbingDropPouchAU14

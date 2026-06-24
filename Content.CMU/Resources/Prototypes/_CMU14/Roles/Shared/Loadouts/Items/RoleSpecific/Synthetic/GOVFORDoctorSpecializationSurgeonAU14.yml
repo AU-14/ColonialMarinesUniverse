@@ -1,0 +1,4 @@
+- type: loadout
+  id: GOVFORDoctorSpecializationSurgeonAU14
+  equipment:
+    id: AU14IDCardGOVFORDoctorSurgeon

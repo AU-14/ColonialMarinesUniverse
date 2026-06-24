@@ -1,0 +1,122 @@
+- type: job
+  abstract: true
+  parent: CMJobBase
+  id: AU14JobWorkingJoeBase
+  name: au14-job-name-workingjoe
+  description: au14-job-description-workingjoe
+  playTimeTracker: AU14JobWorkingJoe
+  basePlaytimeTracker: true
+  setPreference: true
+  canBeAntag: false
+  whitelisted: true
+  whitelistParent: AU14JobGeneralWhitelist
+
+- type: playTimeTracker
+  id: AU14JobWorkingJoe
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearWorkingJoeBase
+  equipment:
+    shoes: CMBootsBlack
+    jumpsuit: CMJumpsuitAverageJoe
+    belt: CMBeltUtilityFilled
+    back: AU14IMPBackpackWorkingJoe
+    pocket1: RMCPouchElectronicsFill
+    pocket2: RMCPouchConstructionFillFull
+  storage:
+      belt:
+      - AU14MaintenanceJack
+      - RMCSynthResetKeySeegson
+      back:
+      - AU14SprayCleanerExperimental
+      - RMCBucketJanitorial
+      - CMMop
+      - CMWetSign
+      - RMCLightReplacer
+      - CMFireExtinguisher
+      - AU14StampJoe
+  inhand:
+  - TrashBag
+
+- type: job
+  parent: AU14JobWorkingJoeBase
+  id: AU14JobColonyWorkingJoe
+  roundSide: Civilian
+  roundForce: WORKING_JOE
+  roundRole: ColonyWorkingJoe
+  roundProfiles:
+  - AU14RoundJobProfileColonyWorkingJoe
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+  icon: "AU14JobIconColonyWorkingJoe"
+  spawnMenuRoleName: Working Joe (Colony)
+  supervisors: au14-job-supervisors-workingjoe-colony
+  usePlayerProfile: false
+  jobEntity: AU14MobWorkingJoeColony
+  jobPreviewEntity: AU14MobWorkingJoeDummy
+  hasIcon: false
+  accessGroups:
+  - auadmin
+  - Colonist
+  - AUPrisonStaff
+  - auwy
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointColonyWorkingJoe
+  name: Spawn Point Working Joe (Colony)
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobColonyWorkingJoe
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobColonyWorkingJoe
+  id: AU14JobColonyWorkingJoeHazmat
+  roundSide: Civilian
+  roundForce: WORKING_JOE
+  roundRole: ColonyWorkingJoeHazmat
+  roundProfiles:
+  - AU14RoundJobProfileColonyWorkingJoe
+  roundComponents:
+  - type: Loadout
+    prototypes: [ AU14GearColonyWorkingJoeHazmat ]
+
+  spawnMenuRoleName: Working Joe (Hazmat)
+  dummyStartingGear: AU14GearColonyWorkingJoeHazmat
+
+- type: startingGear
+  id: AU14GearColonyWorkingJoeHazmat
+  equipment:
+    id: AU14IDCardColonyWorkingJoe
+    ears: AU14HeadsetWorkingJoe
+    shoes: AU14BootsCBRN
+    gloves: RMCHandsVeteranCBRN
+    jumpsuit: AU14JoeHazmat
+    belt: CMBeltUtilityFilled
+    back: AU14IMPBackpackWorkingJoe
+    pocket2: RMCPouchConstructionFillFull
+  storage:
+      belt:
+      - AU14MaintenanceJack
+      - RMCSynthResetKeySeegson
+  inhand:
+  - CMFireExtinguisher
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointWorkingJoeHazmat
+  name: Spawn Point Working Joe (Hazmat)
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobColonyWorkingJoeHazmat
+  - type: Sprite
+    state: syn_spawn
