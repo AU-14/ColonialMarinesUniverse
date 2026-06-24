@@ -178,6 +178,8 @@
         crate: RMCCrateML66D
       - cost: 1000
         crate: RMCCrateM2C
+      - cost: 500
+        crate: AU14CrateM240TKits
     - name: Ammo
       entries:
       - cost: 400

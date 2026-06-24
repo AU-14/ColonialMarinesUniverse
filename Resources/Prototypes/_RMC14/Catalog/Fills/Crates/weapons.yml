@@ -123,3 +123,13 @@
     contents:
     - id: RMCM2CCase
       amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: AU14CrateM240TKits
+  name: M240-T Equipment Crate (x2)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14CaseBroiler
+      amount: 2

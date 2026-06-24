@@ -1,0 +1,26 @@
+- type: entity
+  parent: RMCGunCaseBase
+  id: AU14CaseBroiler
+  name: M240-T incinerator case
+  description: A gun case containing the M240-T incinerator unit. It does come loaded, but you'll still have to find extra tanks as you go.
+  components:
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,11,1
+    whitelist:
+      components:
+      - RMCFlamerAmmoProvider
+      - RMCFlamerTank
+      - RMCTankFlamerLarge
+      - RMCTankFlamer
+      tags:
+      - RMCAttachmentExtinguisher
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponFlamerSpec
+    - id: RMCBackpackBroiler
+    - id: RMCTankFlamerLarge
+    - id: RMCTankFlamerLargeB
+    - id: RMCTankFlamerLargeX
+    - id: AU14PouchFuelTankLarge

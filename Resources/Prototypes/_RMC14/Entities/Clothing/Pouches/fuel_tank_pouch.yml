@@ -25,6 +25,22 @@
 
 - type: entity
   parent: RMCPouchFuelTank
+  id: AU14PouchFuelTankLarge
+  name: large fuel tank strap pouch
+  description: Two extra large ring straps to loop around M240-pattern napalm tanks. Handle with care. #cmu14
+  components:
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,6,1 #4 slots
+    whitelist:
+      components:
+      - RMCFlamerTank
+      tags:
+      - FireExtinguisher
+
+- type: entity
+  parent: RMCPouchFuelTank
   id: RMCPouchFuelTankFilledExtinguisher
   suffix: Filled, Extinguishers
   components:

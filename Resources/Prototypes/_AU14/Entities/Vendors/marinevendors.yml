@@ -1296,6 +1296,8 @@
         amount: 5
       - id: RMCML66DCase
         amount: 1
+      - id: AU14CaseBroiler
+        amount: 2
     - name: primary ammunition
       entries:
       - id: CMMagazineRifleM54CMK1
