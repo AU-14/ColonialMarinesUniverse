@@ -19,41 +19,23 @@ public sealed partial class KillAllRulesHandcuffSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+
         SubscribeLocalEvent<CuffableComponent, TargetHandcuffedEvent>(OnTargetHandcuffed);
     }
 
     private void OnTargetHandcuffed(EntityUid uid, CuffableComponent component, ref TargetHandcuffedEvent args)
     {
-        // Dispatch to KillAllHuman rule for any humanoid handcuff
-        if (HasComp<HumanoidAppearanceComponent>(uid) && _gameTicker.IsGameRuleActive<KillAllHumanRuleComponent>())
-        {
-            var humanSys = EntityManager.System<KillAllHumanRuleSystem>();
-            humanSys.OnHandcuffEvent(uid);
-        }
+        if (_gameTicker.IsGameRuleActive<KillAllHumanRuleComponent>() && HasComp<HumanoidAppearanceComponent>(uid))
+            EntityManager.System<KillAllHumanRuleSystem>().OnHandcuffEvent(uid);
 
-        // Check if this entity has a faction for faction-specific rules
         if (!TryComp(uid, out NpcFactionMemberComponent? faction))
             return;
 
-        var factionName = string.Empty;
-
-        if (faction.Factions.Any(f => f.ToString().ToLowerInvariant() == "clf"))
-            factionName = "clf";
-        else if (faction.Factions.Any(f => f.ToString().ToLowerInvariant() == "govfor"))
-            factionName = "govfor";
-        else
-            return;
-
-        // Dispatch to the appropriate rule system
-        if (factionName == "clf" && _gameTicker.IsGameRuleActive<KillAllClfRuleComponent>())
-        {
-            var sys = EntityManager.System<KillAllClfRuleSystem>();
-            sys.OnHandcuffEvent(uid);
-        }
-        else if (factionName == "govfor" && _gameTicker.IsGameRuleActive<KillAllGovforRuleComponent>())
-        {
-            var sys = EntityManager.System<KillAllGovforRuleSystem>();
-            sys.OnHandcuffEvent(uid);
-        }
+        if (_gameTicker.IsGameRuleActive<KillAllClfRuleComponent>()
+            && faction.Factions.Any(f => f.ToString().ToLowerInvariant() == "clf"))
+            EntityManager.System<KillAllClfRuleSystem>().OnHandcuffEvent(uid);
+        else if (_gameTicker.IsGameRuleActive<KillAllGovforRuleComponent>()
+            && faction.Factions.Any(f => f.ToString().ToLowerInvariant() == "govfor"))
+            EntityManager.System<KillAllGovforRuleSystem>().OnHandcuffEvent(uid);
     }
 }

@@ -1,4 +1,3 @@
-using System.Linq;
 using Content.Server.AU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
@@ -6,7 +5,6 @@ using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared.AU14;
 using Content.Shared.Cuffs.Components;
-using Content.Shared.GameTicking.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs;
@@ -23,26 +21,25 @@ public sealed partial class KillAllGovforRuleSystem : GameRuleSystem<KillAllGovf
 {
     [Dependency] private AreaSystem _area = default!;
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private IEntityManager _entityManager = default!;
-
-    private EntityQuery<EvacuatedGridComponent> _evacuatedQuery;
     [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private IEntityManager _entMan = default!;
     [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private ThreatRuleHelper _threatRuleHelper = default!;
+
+    private const string DefaultWinMsg = "Threat victory: Required percentage of Govfor eliminated.";
 
     public override void Initialize()
     {
         base.Initialize();
-        _evacuatedQuery = GetEntityQuery<EvacuatedGridComponent>();
+
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<EvacuationLaunchedEvent>(OnEvacuationLaunched);
         SubscribeLocalEvent<GotEquippedEvent>(OnGotEquipped);
         SubscribeLocalEvent<GotUnequippedEvent>(OnGotUnequipped);
     }
-
-    private void OnGotEquipped(GotEquippedEvent     ev) => OnJumpsuitChanged(ev.Equipee, ev.Slot, ev.Equipment);
+    private void OnGotEquipped(GotEquippedEvent ev) => OnJumpsuitChanged(ev.Equipee, ev.Slot, ev.Equipment);
     private void OnGotUnequipped(GotUnequippedEvent ev) => OnJumpsuitChanged(ev.Equipee, ev.Slot, ev.Equipment);
-
-    private bool IsEvacuated(EntityUid uid) => Transform(uid).GridUid is { } grid && _evacuatedQuery.HasComp(grid);
+    public void OnHandcuffEvent(EntityUid _) => CheckVictoryCondition();
 
     private void OnEvacuationLaunched(ref EvacuationLaunchedEvent ev)
     {
@@ -58,107 +55,75 @@ public sealed partial class KillAllGovforRuleSystem : GameRuleSystem<KillAllGovf
         CheckVictoryCondition();
     }
 
-    /// <summary>
-    ///     Called by KillAllRulesHandcuffSystem when a Govfor entity is handcuffed.
-    /// </summary>
-    public void OnHandcuffEvent(EntityUid _) => CheckVictoryCondition();
-
-    private bool IsInArrestArea(EntityUid uid) => _area.TryGetArea(uid, out Entity<AreaComponent>? area, out _)
-     && area.Value.Comp.CountAsArrestedForEndConditions;
-
     private void OnJumpsuitChanged(EntityUid wearer, string slot, EntityUid equipment)
     {
         if (slot != "jumpsuit" || Prototype(equipment)?.ID != "AU14CivilianPrisonJumpsuit")
             return;
-
         if (!IsActiveRuleAndGovfor(wearer))
             return;
 
         CheckVictoryCondition();
     }
 
-    private bool HasPrisonJumpsuit(EntityUid uid) => _inventory.TryGetSlotEntity(uid, "jumpsuit", out EntityUid? suit)
-     && Prototype(suit!.Value)?.ID == "AU14CivilianPrisonJumpsuit";
+    private bool HasPrisonJumpsuit(EntityUid uid)
+        => _inventory.TryGetSlotEntity(uid, "jumpsuit", out EntityUid? suit)
+        && Prototype(suit!.Value)?.ID == "AU14CivilianPrisonJumpsuit";
+
+    private bool IsInArrestArea(EntityUid uid)
+        => _area.TryGetArea(uid, out Entity<AreaComponent>? area, out _)
+         && area.Value.Comp.CountAsArrestedForEndConditions;
 
     private bool IsActiveRuleAndGovfor(EntityUid uid)
-    {
-        if (!_gameTicker.IsGameRuleActive<KillAllGovforRuleComponent>())
-            return false;
-
-        return TryComp(uid, out NpcFactionMemberComponent? faction)
-         && faction.Factions.Any(f => f.ToString().ToLowerInvariant() == "govfor");
-    }
+        => _gameTicker.IsGameRuleActive<KillAllGovforRuleComponent>()
+        && TryComp(uid, out NpcFactionMemberComponent? faction)
+        && ThreatRuleHelper.HasFaction(faction, "govfor");
 
     private void CheckVictoryCondition()
     {
-        EntityQueryEnumerator<ActiveGameRuleComponent, KillAllGovforRuleComponent, GameRuleComponent> queryRules
-            = QueryActiveRules();
-
-        if (!queryRules.MoveNext(out _, out _, out KillAllGovforRuleComponent? ruleComp, out _))
+        var queryRule = QueryActiveRules();
+        if (!ThreatRuleHelper.TryGetActiveRule(ref queryRule, out var ruleComp, out _))
             return;
-        if (ruleComp == null) return;
 
         int  requiredPercent = Math.Clamp(ruleComp.Percent, 1, 100);
         bool countArrests    = ruleComp.Arrest;
+        int eliminated = 0, total = 0;
 
-        // Count total and dead/arrested Govfor mobs (excluding evacuated)
-        var total      = 0;
-        var eliminated = 0;
-
-        EntityQueryEnumerator<MobStateComponent, NpcFactionMemberComponent> query
-            = EntityQueryEnumerator<MobStateComponent, NpcFactionMemberComponent>();
-        while (query.MoveNext(out EntityUid uid, out MobStateComponent? mobState,
-                   out NpcFactionMemberComponent? faction))
+        var query = _entMan.EntityQueryEnumerator<MobStateComponent, NpcFactionMemberComponent>();
+        while (query.MoveNext(out EntityUid uid, out MobStateComponent? mobState, out NpcFactionMemberComponent? faction))
         {
-            if (faction.Factions.Any(f => f.ToString().ToLowerInvariant() == "govfor"))
+            if (!ThreatRuleHelper.HasFaction(faction, "govfor"))
+                continue;
+            if (_threatRuleHelper.IsExcludedFromVictory(uid, mobState))
+                continue;
+
+            total++;
+
+            if (_threatRuleHelper.IsEvacuated(uid))
             {
-                if (IsExcludedFromVictory(uid, mobState))
-                    continue;
-
-                // If the grid was evacuated, count them as dead (do not skip)
-                if (IsEvacuated(uid))
-                {
-                    total++;
-                    eliminated++;
-
-                    continue;
-                }
-
-                total++;
-
-                if (mobState.CurrentState == MobState.Dead)
-                    eliminated++;
-
-                // Wearing jumpsuit, or arrested flag is set and they're cuffed, or in the mapped brig areas
-                else if (HasPrisonJumpsuit(uid)
-                      || (countArrests && ((TryComp(uid, out CuffableComponent? cuffable)
-                              && cuffable.CuffedHandCount > 0)
-                          || IsInArrestArea(uid))))
-                    eliminated++;
+                eliminated++;
+                continue;
             }
+
+            if (mobState.CurrentState == MobState.Dead)
+                eliminated++;
+            else if (HasPrisonJumpsuit(uid)
+                || (countArrests && ((TryComp(uid, out CuffableComponent? cuffable)
+                && cuffable.CuffedHandCount > 0)
+                || IsInArrestArea(uid))))
+                eliminated++;
         }
 
         if (total == 0)
             return;
+        if (!ThreatRuleHelper.MeetsRequiredPercent(eliminated, total, requiredPercent))
+            return;
+        if (_gameTicker.RunLevel != GameRunLevel.InRound)
+            return;
 
-        var percentEliminated = (int)((double)eliminated / total * 100.0);
+        string? winMessage = !string.IsNullOrEmpty(ruleComp.WinMessage)
+            ? ruleComp.WinMessage
+            : _auRoundSystem.SelectedThreat?.WinMessage;
 
-        if (percentEliminated >= requiredPercent)
-        {
-            if (_gameTicker.RunLevel != GameRunLevel.InRound)
-                return;
-
-            string? customMessage = ruleComp.WinMessage;
-            if (!string.IsNullOrEmpty(customMessage))
-                _gameTicker.EndRound(customMessage);
-            else
-            {
-                string? winMessage = _auRoundSystem.SelectedThreat?.WinMessage;
-                if (!string.IsNullOrEmpty(winMessage))
-                    _gameTicker.EndRound(winMessage);
-                else
-                    _gameTicker.EndRound("Threat victory: Required percentage of Govfor eliminated.");
-            }
-        }
+        _gameTicker.EndRound(!string.IsNullOrEmpty(winMessage) ? winMessage : DefaultWinMsg);
     }
 }

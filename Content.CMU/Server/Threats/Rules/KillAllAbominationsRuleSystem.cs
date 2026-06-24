@@ -21,26 +21,18 @@ namespace Content.Server._CMU14.Threats.Rules;
 public sealed partial class KillAllAbominationsRuleSystem : GameRuleSystem<KillAllAbominationsRuleComponent>
 {
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private IEntityManager _entityManager = default!;
-
-    private EntityQuery<EvacuatedGridComponent> _evacuatedQuery;
     [Dependency] private GameTicker _gameTicker = default!;
-    private EntityQuery<MetaDataComponent> _metaQuery;
+    [Dependency] private IEntityManager _entMan = default!;
+    [Dependency] private ThreatRuleHelper _threatRuleHelper = default!;
+
+    private const string DefaultWinMsg = "The Threat has been Eliminated";
 
     public override void Initialize()
     {
         base.Initialize();
-        _evacuatedQuery = GetEntityQuery<EvacuatedGridComponent>();
-        _metaQuery      = GetEntityQuery<MetaDataComponent>();
+
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<EvacuationLaunchedEvent>(OnEvacuationLaunched);
-    }
-
-    private bool IsEvacuated(EntityUid uid)
-    {
-        TransformComponent xform = Transform(uid);
-
-        return xform.GridUid is { } grid && _evacuatedQuery.HasComp(grid);
     }
 
     private void OnEvacuationLaunched(ref EvacuationLaunchedEvent ev)
@@ -53,7 +45,6 @@ public sealed partial class KillAllAbominationsRuleSystem : GameRuleSystem<KillA
     {
         if (!_gameTicker.IsGameRuleActive<KillAllAbominationsRuleComponent>())
             return;
-
         if (ev.NewMobState != MobState.Dead)
             return;
 
@@ -62,60 +53,38 @@ public sealed partial class KillAllAbominationsRuleSystem : GameRuleSystem<KillA
 
     private void CheckVictoryCondition()
     {
-        EntityQueryEnumerator<ActiveGameRuleComponent, KillAllAbominationsRuleComponent, GameRuleComponent>
-            queryRule = QueryActiveRules();
-
-        if (!queryRule.MoveNext(out _, out _, out KillAllAbominationsRuleComponent? ruleComp, out _))
+        var queryRule = QueryActiveRules();
+        if (!ThreatRuleHelper.TryGetActiveRule(ref queryRule, out var ruleComp, out _))
             return;
 
-        int requiredPercent = Math.Clamp(ruleComp!.Percent, 1, 100);
+        int requiredPercent = Math.Clamp(ruleComp.Percent, 1, 100);
+        int eliminated = 0, total = 0;
 
-        var total = 0;
-        var dead  = 0;
-
-        EntityQueryEnumerator<MobStateComponent> query = _entityManager.EntityQueryEnumerator<MobStateComponent>();
+        var query = _entMan.EntityQueryEnumerator<MobStateComponent>();
         while (query.MoveNext(out EntityUid uid, out MobStateComponent? mobState))
         {
-            // Natural-form abomination, OR a mimic currently wearing a face.
-            bool isAbom = _entityManager.HasComponent<AbominationComponent>(uid)
-             || _entityManager.HasComponent<AbominationMimicTransformedComponent>(uid);
-
+            bool isAbom = _entMan.HasComponent<AbominationComponent>(uid)
+                || _entMan.HasComponent<AbominationMimicTransformedComponent>(uid);
             if (!isAbom)
                 continue;
 
-            // Skip parked polymorph parents — the disguise that points to
-            // them is the "live" count, so counting both would double up.
-            if (_metaQuery.TryGetComponent(uid, out MetaDataComponent? meta) && meta.EntityPaused)
+            // skip parents, counting both would double up
+            if (_entMan.TryGetComponent(uid, out MetaDataComponent? meta) && meta.EntityPaused)
                 continue;
-
-            if (IsEvacuated(uid))
-            {
-                total++;
-                dead++;
-
-                continue;
-            }
 
             total++;
-            if (mobState.CurrentState == MobState.Dead)
-                dead++;
+            if (mobState.CurrentState == MobState.Dead || _threatRuleHelper.IsEvacuated(uid))
+                eliminated++;
         }
 
         if (total == 0)
             return;
-
-        var percentDead = (int)((double)dead / total * 100.0);
-
-        if (percentDead < requiredPercent)
-            return;
-
         if (_gameTicker.RunLevel != GameRunLevel.InRound)
+            return;
+        if (!ThreatRuleHelper.MeetsRequiredPercent(eliminated, total, requiredPercent))
             return;
 
         string? winMessage = _auRoundSystem.SelectedThreat?.WinMessage;
-        if (!string.IsNullOrEmpty(winMessage))
-            _gameTicker.EndRound(winMessage);
-        else
-            _gameTicker.EndRound("The Threat has been Eliminated");
+        _gameTicker.EndRound(!string.IsNullOrEmpty(winMessage) ? winMessage : DefaultWinMsg);
     }
 }

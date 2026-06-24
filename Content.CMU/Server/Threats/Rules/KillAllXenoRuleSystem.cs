@@ -5,33 +5,29 @@ using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.AU14;
 using Content.Shared.Cuffs.Components;
-using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Roles;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server._CMU14.Threats.Rules;
 
 public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRuleComponent>
 {
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private IEntityManager _entityManager = default!;
-
-    private EntityQuery<EvacuatedGridComponent> _evacuatedQuery;
+    [Dependency] private IEntityManager _entMan = default!;
     [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private ThreatRuleHelper _threatRuleHelper = default!;
+
+    private static readonly ProtoId<JobPrototype> LesserDroneRole = "CMXenoLesserDrone";
+    private const string DefaultWinMsg = "The threat has been eliminated!";
 
     public override void Initialize()
     {
         base.Initialize();
-        _evacuatedQuery = GetEntityQuery<EvacuatedGridComponent>();
+
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<EvacuationLaunchedEvent>(OnEvacuationLaunched);
-    }
-
-    private bool IsEvacuated(EntityUid uid)
-    {
-        TransformComponent xform = Transform(uid);
-
-        return xform.GridUid is { } grid && _evacuatedQuery.HasComp(grid);
     }
 
     private void OnEvacuationLaunched(ref EvacuationLaunchedEvent ev)
@@ -42,11 +38,9 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
 
     private void OnMobStateChanged(MobStateChangedEvent ev)
     {
-        // Only run this logic when the KillAllXeno rule is active
         if (!_gameTicker.IsGameRuleActive<KillAllXenoRuleComponent>())
             return;
 
-        // Only care about dead mobs
         if (ev.NewMobState != MobState.Dead)
             return;
 
@@ -55,74 +49,47 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
 
     private void CheckVictoryCondition()
     {
-        EntityQueryEnumerator<ActiveGameRuleComponent, KillAllXenoRuleComponent, GameRuleComponent> queryRule
-            = QueryActiveRules();
-
-        if (!queryRule.MoveNext(out _, out _, out KillAllXenoRuleComponent? ruleComp, out _))
+        var queryRule = QueryActiveRules();
+        if (!ThreatRuleHelper.TryGetActiveRule(ref queryRule, out var ruleComp, out _))
             return;
-        if (ruleComp == null) return;
 
-        int requiredPercentXeno    = Math.Clamp(ruleComp.PercentXeno, 1, 100);
+        int requiredPercentXeno    = Math.Clamp(ruleComp.PercentXeno,    1, 100);
         int requiredPercentCultist = Math.Clamp(ruleComp.PercentCultist, 1, 100);
+        int totalXeno    = 0, deadXeno    = 0;
+        int totalCultist = 0, deadCultist = 0;
 
-        // Count total and dead Xeno and Cultist mobs separately (excluding evacuated)
-        var totalXeno    = 0;
-        var deadXeno     = 0;
-        var totalCultist = 0;
-        var deadCultist  = 0;
-
-        EntityQueryEnumerator<MobStateComponent> query = _entityManager.EntityQueryEnumerator<MobStateComponent>();
+        var query = _entMan.EntityQueryEnumerator<MobStateComponent>();
         while (query.MoveNext(out EntityUid uid, out MobStateComponent? mobState))
         {
-            if (_entityManager.TryGetComponent(uid, out XenoComponent? xeno))
+            if (_entMan.TryGetComponent(uid, out XenoComponent? xeno)
+                && xeno.Role != LesserDroneRole)
             {
-                if (xeno.Role == "CMXenoLesserDrone")
-                    continue;
-
                 totalXeno++;
-
-                // Treat evacuated entities as dead for victory conditions
-                if (IsEvacuated(uid) || mobState.CurrentState == MobState.Dead)
+                if (mobState.CurrentState == MobState.Dead || _threatRuleHelper.IsEvacuated(uid))
                     deadXeno++;
             }
 
-            if (_entityManager.HasComponent<CultistComponent>(uid))
+            if (_entMan.HasComponent<CultistComponent>(uid))
             {
                 totalCultist++;
-
-                // Treat evacuated entities as dead; otherwise count actual death or restraints.
-                if (IsEvacuated(uid) || mobState.CurrentState == MobState.Dead)
+                if (mobState.CurrentState == MobState.Dead || _threatRuleHelper.IsEvacuated(uid))
                     deadCultist++;
-                else if (_entityManager.TryGetComponent(uid, out CuffableComponent? cuff) && cuff.CuffedHandCount > 0)
-                {
-                    // Restrained cultist counts as killed for the purposes of this rule.
+                else if (_entMan.TryGetComponent(uid, out CuffableComponent? cuff) && cuff.CuffedHandCount > 0)
                     deadCultist++;
-                }
             }
         }
 
-        // If nothing to count at all, bail out
-        if (totalXeno == 0 && totalCultist == 0)
+        if (totalXeno == 0)
+            return;
+        if (_gameTicker.RunLevel != GameRunLevel.InRound)
             return;
 
-        // Calculate percent dead for each category. If a category has zero total we treat it as satisfied.
-        int percentDeadXeno    = totalXeno == 0 ? 100 : (int)((double)deadXeno / totalXeno * 100.0);
-        int percentDeadCultist = totalCultist == 0 ? 100 : (int)((double)deadCultist / totalCultist * 100.0);
+        bool xenoSatisfied    = ThreatRuleHelper.MeetsRequiredPercent(deadXeno, totalXeno, requiredPercentXeno);
+        bool cultistSatisfied = ThreatRuleHelper.MeetsRequiredPercent(deadCultist, totalCultist, requiredPercentCultist);
+        if (!xenoSatisfied || !cultistSatisfied)
+            return;
 
-        bool xenoSatisfied    = percentDeadXeno >= requiredPercentXeno;
-        bool cultistSatisfied = percentDeadCultist >= requiredPercentCultist;
-
-        if (xenoSatisfied && cultistSatisfied)
-        {
-            if (_gameTicker.RunLevel != GameRunLevel.InRound)
-                return;
-
-            // Prefer any configured win message, otherwise use a default.
-            string? winMessage = _auRoundSystem.SelectedThreat?.WinMessage;
-            if (!string.IsNullOrEmpty(winMessage))
-                _gameTicker.EndRound(winMessage);
-            else
-                _gameTicker.EndRound("The Threat has been Eliminated");
-        }
+        string? winMessage = _auRoundSystem.SelectedThreat?.WinMessage;
+        _gameTicker.EndRound(string.IsNullOrEmpty(winMessage) ? DefaultWinMsg : winMessage);
     }
 }
