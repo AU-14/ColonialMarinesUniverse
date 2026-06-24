@@ -28,11 +28,11 @@
     damageMultiplier: 0.05
     repairRate: 0.008
   - type: HardpointIntegrity
-    maxIntegrity: 450
+    maxIntegrity: 2500
   - type: VehicleTurret
     rotateToCursor: true
     stabilizedRotation: false
-    rotationSpeed: 60
+    rotationSpeed: 120
     showOverlay: true
     overlayRsi: _RMC14/Structures/Vehicles/tank.rsi
     overlayState: tank_turret_0
@@ -82,7 +82,7 @@
     damageMultiplier: 0.15
     repairRate: 0.0165
   - type: HardpointIntegrity
-    maxIntegrity: 300
+    maxIntegrity: 750
   - type: VehicleWheelItem
   - type: RemoveComponents
     components:
@@ -104,7 +104,7 @@
     repairRate: 0.0165
   - type: VehicleWheelItem
   - type: HardpointIntegrity
-    maxIntegrity: 500
+    maxIntegrity: 1500
   - type: HardpointDamageModifier
     modifierSets:
     - VehicleArmorCaustic

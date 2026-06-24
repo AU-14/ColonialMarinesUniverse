@@ -13,7 +13,7 @@
     damageMultiplier: 0.0
     repairRate: 0.0125
   - type: HardpointIntegrity
-    maxIntegrity: 300
+    maxIntegrity: 1300
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     offsetRotatesWithTurret: true
@@ -84,7 +84,7 @@
     damageMultiplier: 0.0
     repairRate: 0.0125
   - type: HardpointIntegrity
-    maxIntegrity: 500
+    maxIntegrity: 1500
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     offsetRotatesWithTurret: true
@@ -153,7 +153,7 @@
     damageMultiplier: 0.0
     repairRate: 0.0125
   - type: HardpointIntegrity
-    maxIntegrity: 500
+    maxIntegrity: 1500
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     offsetRotatesWithTurret: true
@@ -218,7 +218,7 @@
     damageMultiplier: 0.0
     repairRate: 0.0125
   - type: HardpointIntegrity
-    maxIntegrity: 350
+    maxIntegrity: 1350
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     offsetRotatesWithTurret: true
@@ -282,7 +282,7 @@
     damageMultiplier: 0.0
     repairRate: 0.0125
   - type: HardpointIntegrity
-    maxIntegrity: 350
+    maxIntegrity: 1350
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     offsetRotatesWithTurret: true

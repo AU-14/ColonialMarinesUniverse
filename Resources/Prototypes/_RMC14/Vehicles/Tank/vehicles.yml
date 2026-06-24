@@ -205,7 +205,7 @@
   - type: VehicleWheelSlots
     slotCount: 1
   - type: HardpointIntegrity
-    maxIntegrity: 1000
+    maxIntegrity: 3500
     repairFuelCost: 20
     bypassEntryOnZero: true
   - type: Appearance

@@ -13,7 +13,7 @@
     damageMultiplier: 0.5
     repairRate: 0.007
   - type: HardpointIntegrity
-    maxIntegrity: 1000
+    maxIntegrity: 3000
   - type: VehicleArmorHardpoint
     modifierSets:
     - VehicleArmorBallistic
@@ -35,7 +35,7 @@
     damageMultiplier: 0.5
     repairRate: 0.007
   - type: HardpointIntegrity
-    maxIntegrity: 1000
+    maxIntegrity: 3000
   - type: VehicleArmorHardpoint
     modifierSets:
     - VehicleArmorConcussive
@@ -58,7 +58,7 @@
     damageMultiplier: 0.5
     repairRate: 0.007
   - type: HardpointIntegrity
-    maxIntegrity: 1000
+    maxIntegrity: 3000
   - type: VehicleArmorHardpoint
     modifierSets:
     - VehicleArmorCaustic
@@ -80,7 +80,7 @@
     damageMultiplier: 0.5
     repairRate: 0.007
   - type: HardpointIntegrity
-    maxIntegrity: 1000
+    maxIntegrity: 6000
   - type: VehicleArmorHardpoint
     modifierSets:
     - VehicleArmorPaladin
@@ -103,7 +103,7 @@
     damageMultiplier: 0.5
     repairRate: 0.007
   - type: HardpointIntegrity
-    maxIntegrity: 150
+    maxIntegrity: 1000
   - type: HardpointVisual
     vehicleState: snowplow_0
   - type: Tag
