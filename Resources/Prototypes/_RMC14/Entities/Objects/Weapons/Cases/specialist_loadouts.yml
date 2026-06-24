@@ -74,6 +74,7 @@
     - id: AU14WeaponRifleM83Lock # WeaponLauncherM83 Unlocked Version
     # check IFF
     - id: RMCHandsM3G4
+    - id: RMCBeltGrenadeLargeLockedFilled # ID Lock
     - id: RMCSatchelGrenadeSpec # ID lock
     - id: RMCSatchelGrenadeSpec # ID lock
     - id: AU14WeaponRifleM83Lock # WeaponLauncherM83 No ID lock
