@@ -68,6 +68,13 @@
 
 - type: entity
   parent: AU14WeaponRifleKramerLSW
+  id: AU14WeaponRifleKramerLock
+  suffix: ID lock
+  components:
+  - type: GunIDLock
+
+- type: entity
+  parent: AU14WeaponRifleKramerLSW
   id: AU14WeaponRifleKramerLSWAP
   name: Kramer Light Support Weapon (AP)
   components:

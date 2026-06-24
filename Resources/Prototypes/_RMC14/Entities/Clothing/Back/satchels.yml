@@ -243,6 +243,13 @@
     slots:
     - back
     - belt
+  - type: LockVisuals
+  - type: RMCIdLockableStorage
+    overrideAccesses:
+    - RMCAccessSeniorCommand
+    - CMAccessRequisitions
+    - CMAccessQM
+    - CMAccessSquadLeaderPrep
   - type: Corrodible
     isCorrodible: false
 
@@ -274,6 +281,13 @@
       path: /Audio/_RMC14/Effects/Cloak/cloak_scout_off.ogg
       params:
         variation: 0.09
+  - type: LockVisuals
+  - type: RMCIdLockableStorage
+    overrideAccesses:
+    - RMCAccessSeniorCommand
+    - CMAccessRequisitions
+    - CMAccessQM
+    - CMAccessSquadLeaderPrep
   - type: Corrodible
     isCorrodible: false
 

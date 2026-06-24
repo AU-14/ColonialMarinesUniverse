@@ -38,6 +38,12 @@
   - type: IFFToggle
     showToggleAction: false
 
+- type: entity
+  parent: AU14SmartGunMinigunHAZOPS
+  id: AU14WeaponRifleGAU19HLock
+  suffix: ID lock
+  components:
+  - type: GunIDLock
 
 - type: entity
   parent: CMMagazineRifleBase

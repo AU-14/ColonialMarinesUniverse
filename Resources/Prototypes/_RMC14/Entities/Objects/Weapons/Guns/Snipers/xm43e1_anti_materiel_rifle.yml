@@ -36,6 +36,10 @@
     shotsPerBurst: 1
     soundGunshot:
       path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_sniper_heavy.ogg
+  - type: MotionDetector
+    handToggleable: false
+    deactivateOnDrop: false
+    toggleSound: null
   - type: RMCSelectiveFire
     recoilWielded: 1
     scatterWielded: 0
@@ -84,6 +88,13 @@
   - type: RMCFocusedShooting
   - type: RMCGunChamber
     enabled: false
+
+- type: entity
+  parent: RMCXM43E1AntiMaterielRifle
+  id: AU14WeaponRifleXM43E1Lock
+  suffix: ID lock
+  components:
+  - type: GunIDLock
 
 - type: entity
   parent: CMMagazineSniperM96S

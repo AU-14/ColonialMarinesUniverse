@@ -18,6 +18,10 @@
     - state: mag-0
       sprite: _RMC14/Objects/Weapons/Guns/GrenadeLaunchers/m83_main.rsi
       map: [ "enum.GunVisualLayers.Mag" ]
+  - type: MotionDetector
+    handToggleable: false
+    deactivateOnDrop: false
+    toggleSound: null
   - type: MagazineVisuals
     magState: mag
     steps: 2
@@ -54,3 +58,10 @@
       Snow: "#ddcbc9"
       Classic: "#c7e7d9"
       Urban: "#acb8c7"
+
+- type: entity
+  parent: WeaponLauncherM83
+  id: AU14WeaponRifleM83Lock
+  suffix: ID lock
+  components:
+  - type: GunIDLock

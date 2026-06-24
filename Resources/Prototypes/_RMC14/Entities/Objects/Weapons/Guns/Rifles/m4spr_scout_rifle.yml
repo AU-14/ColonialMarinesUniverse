@@ -34,6 +34,10 @@
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
         shotsToMaxScatter: 6
+  - type: MotionDetector
+    handToggleable: false
+    deactivateOnDrop: false
+    toggleSound: null
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1.1
   - type: GunDamageModifier
@@ -121,6 +125,13 @@
         Snow: s_m4spr_custom_barrel
         Classic: c_m4spr_custom_barrel
         Urban: u_m4spr_custom_barrel
+
+- type: entity
+  parent: WeaponRifleM4SPRCustom
+  id: AU14WeaponRifleM4SPRCLock
+  suffix: ID lock
+  components:
+  - type: GunIDLock
 
 - type: entity
   parent: CMMagazineRifleBase

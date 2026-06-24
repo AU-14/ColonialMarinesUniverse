@@ -201,6 +201,10 @@
     recoilUnwielded: 1
     scatterWielded: 4
     baseFireRate: 2.8
+  - type: MotionDetector
+    handToggleable: false
+    deactivateOnDrop: false
+    toggleSound: null
   - type: ItemSlots
     slots:
       gun_magazine:
@@ -229,6 +233,13 @@
   - type: Tag
     tags:
     - RMCWeaponRifleM5SPR2
+
+- type: entity
+  parent: WeaponRifleM5SPR2
+  id: AU14WeaponRifleM5SPR2Lock
+  suffix: ID lock
+  components:
+  - type: GunIDLock
 
 - type: entity
   parent: WeaponRifleM4SPR

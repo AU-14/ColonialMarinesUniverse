@@ -39,6 +39,10 @@
         volume: -4
     soundEmpty:
       path: /Audio/Weapons/Guns/Empty/lmg_empty.ogg
+  - type: MotionDetector
+    handToggleable: false
+    deactivateOnDrop: false
+    toggleSound: null
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
@@ -95,6 +99,13 @@
   - type: Wieldable
   - type: GunRequiresWield
   - type: RMCMagneticItem
+
+- type: entity
+  parent: RMCWeaponLMGQYJ72
+  id: AU14WeaponRifleLMGQYJ72Lock
+  suffix: ID lock
+  components:
+  - type: GunIDLock
 
 - type: entity
   parent: RMCMagazineLMGBase

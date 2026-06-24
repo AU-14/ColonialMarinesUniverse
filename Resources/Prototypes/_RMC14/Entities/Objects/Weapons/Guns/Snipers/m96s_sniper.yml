@@ -26,6 +26,10 @@
     damage:
       types:
         Blunt: 12
+  - type: MotionDetector
+    handToggleable: false
+    deactivateOnDrop: false
+    toggleSound: null
   - type: Gun
     shotsPerBurst: 1
     soundGunshot:
@@ -80,6 +84,13 @@
       Urban: _RMC14/Objects/Weapons/Guns/Snipers/m96s/urban.rsi
   - type: RMCGunChamber
     enabled: false
+
+- type: entity
+  parent: CMM96SSniperRifle
+  id: AU14WeaponRifleCM96SLock
+  suffix: ID lock
+  components:
+  - type: GunIDLock
 
 - type: entity
   parent: BaseItem

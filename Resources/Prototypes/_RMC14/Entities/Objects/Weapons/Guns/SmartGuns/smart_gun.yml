@@ -154,6 +154,13 @@
 
 - type: entity
   parent: RMCSmartGunNoCamo
+  id: AU14WeaponRifleM56BLock
+  suffix: ID lock
+  components:
+  - type: GunIDLock
+
+- type: entity
+  parent: RMCSmartGunNoCamo
   id: RMCSmartGun
   components:
   - type: Sprite
@@ -174,6 +181,13 @@
       Snow: "#ddcbc9"
       Classic: "#c7e7d9"
       Urban: "#acb8c7"
+
+- type: entity
+  parent: RMCSmartGun
+  id: AU14WeaponRifleSmartGunLock
+  suffix: ID lock
+  components:
+  - type: GunIDLock
 
 - type: entity
   parent: RMCSmartGun
@@ -230,6 +244,13 @@
 
 - type: entity
   parent: RMCSmartGunPMC
+  id: AU14WeaponRifleM56TLock
+  suffix: ID lock
+  components:
+  - type: GunIDLock
+
+- type: entity
+  parent: RMCSmartGunPMC
   id: RMCSmartGunWhiteOut
   name: "ML79A 'Breaker' smart gun"
   description: The actual firearm in the 4-piece ML79A Smartgun System, modified for extra power. If you have this, you're about to bring some serious pain to anyone in your way. You may toggle firing restrictions by using a special action.
@@ -264,6 +285,13 @@
       icon:
         sprite: _RMC14/Actions/marine_smart_gun_actions.rsi
         state: ammo_swap_ap
+
+- type: entity
+  parent: RMCSmartGunWhiteOut
+  id: AU14WeaponRifleML79ABreakerLock
+  suffix: ID lock
+  components:
+  - type: GunIDLock
 
 - type: entity
   parent: RMCSmartGunNoCamo
@@ -346,6 +374,13 @@
         whitelist:
           components:
           - SmartGunBattery
+
+- type: entity
+  parent: RMCSmartGunRoyal
+  id: AU14WeaponRifleL56Lock
+  suffix: ID lock
+  components:
+  - type: GunIDLock
 
 - type: entity
   parent: CMMagazineRifleBase

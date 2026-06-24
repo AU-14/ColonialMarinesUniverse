@@ -24,6 +24,10 @@
     damage:
       types:
         Blunt: 12
+  - type: MotionDetector
+    handToggleable: false
+    deactivateOnDrop: false
+    toggleSound: null
   - type: Gun
     shotsPerBurst: 1
     soundGunshot:
@@ -67,3 +71,10 @@
       rmc-aslot-rail: -0.37, 0.1
   - type: RMCGunChamber
     enabled: false
+
+- type: entity
+  parent: AU14WeaponSniperRifleM42A2
+  id: AU14WeaponRifleM42A2Lock
+  suffix: ID lock
+  components:
+  - type: GunIDLock

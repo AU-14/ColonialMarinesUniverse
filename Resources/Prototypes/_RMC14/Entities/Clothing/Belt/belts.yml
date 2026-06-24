@@ -678,6 +678,13 @@
     whitelist:
       tags:
       - RMCMagazineRifleSharp
+  - type: LockVisuals
+  - type: RMCIdLockableStorage
+    overrideAccesses:
+    - RMCAccessSeniorCommand
+    - CMAccessRequisitions
+    - CMAccessQM
+    - CMAccessSquadLeaderPrep
   - type: FixedItemSizeStorage
   - type: ItemCamouflage
     camouflageVariations: { }

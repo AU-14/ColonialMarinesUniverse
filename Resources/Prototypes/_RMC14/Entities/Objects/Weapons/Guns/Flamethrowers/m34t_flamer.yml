@@ -48,6 +48,13 @@
     locked: true
 
 - type: entity
+  parent: RMCWeaponFlamerSpec
+  id: AU14WeaponRifleM240TLock
+  suffix: ID lock
+  components:
+  - type: GunIDLock
+
+- type: entity
   parent: RMCTankFlamer
   id: RMCTankFlamerLarge
   name: M240 large incinerator tank

@@ -33,6 +33,13 @@
           - SmartGunBattery
 
 - type: entity
+  parent: AU14SmartGunUPP
+  id: AU14WeaponRifleRVS37Lock
+  suffix: ID lock
+  components:
+  - type: GunIDLock
+
+- type: entity
   parent: RMCMagazineSmartGun
   id: AU14MagazineSmartGunUPP
   name: "RVS-37 drum magazine (12.7x40mm)"

@@ -25,6 +25,10 @@
     - FullAuto
     soundGunshot:
       collection: AU14M41FireSound
+  - type: MotionDetector
+    handToggleable: false
+    deactivateOnDrop: false
+    toggleSound: null
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
@@ -117,6 +121,13 @@
       Snow: _RMC14/Objects/Weapons/Guns/Rifles/m54ce2/snow.rsi
       Classic: _RMC14/Objects/Weapons/Guns/Rifles/m54ce2/classic.rsi
       Urban: _RMC14/Objects/Weapons/Guns/Rifles/m54ce2/urban.rsi
+
+- type: entity
+  parent: RMCWeaponRifleM54CE2
+  id: AU14WeaponRifleM54CE2Lock
+  suffix: ID lock
+  components:
+  - type: GunIDLock
 
 - type: entity
   parent: CMMagazineRifleM54C
