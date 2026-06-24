@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: RMCBaseWeaponSniperRifle
   id: CMM96SSniperRifle
   name: M42A scoped rifle
@@ -188,7 +188,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 115
+        Piercing: 98
   - type: RMCProjectileDamageFalloff
     thresholds:
     - range: 32
