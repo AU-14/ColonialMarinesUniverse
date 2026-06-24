@@ -1,0 +1,27 @@
+using Content.Shared._RMC14.Xenonids;
+using Content.Shared.AU14;
+using Content.Shared.DragDrop;
+using Content.Shared.Mobs.Systems;
+
+namespace Content.Client._CMU14.Threats.Mobs.Cultist;
+
+public sealed partial class CultistDragSystem : EntitySystem
+{
+    [Dependency] private MobStateSystem _mobState = default!;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        SubscribeLocalEvent<CultistComponent, CanStartDragEvent>(OnCultistCanStartDrag);
+    }
+
+    private void OnCultistCanStartDrag(Entity<CultistComponent> cultist, ref CanStartDragEvent args)
+    {
+        var target = args.Target;
+        if (HasComp<CultistComponent>(target) || HasComp<XenoComponent>(target))
+            return;
+
+        if (_mobState.IsDead(target))
+            args.Cancelled = true;
+    }
+}
