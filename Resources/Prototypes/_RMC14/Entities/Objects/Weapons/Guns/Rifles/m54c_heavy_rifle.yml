@@ -4,7 +4,6 @@
   id: RMCWeaponRifleM54CE2
   description: A large squad support weapon capable of laying down sustained suppressing fire from a mounted position. While unstable and less accurate, it can be lugged and shot with two hands.
   components:
-  - type: GunIDLock
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Rifles/m54ce2/desert.rsi
     layers:

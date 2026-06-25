@@ -156,12 +156,6 @@
       tags:
       - Sidearm
   - type: LockVisuals
-  - type: RMCIdLockableStorage
-    overrideAccesses:
-    - RMCAccessSeniorCommand
-    - CMAccessRequisitions
-    - CMAccessQM
-    - CMAccessSquadLeaderPrep
 
 # Magazine Pouch
 - type: entity
@@ -380,12 +374,6 @@
   - type: FixedItemSizeStorage
   - type: Dumpable
   - type: LockVisuals
-  - type: RMCIdLockableStorage
-    overrideAccesses:
-    - RMCAccessSeniorCommand
-    - CMAccessRequisitions
-    - CMAccessQM
-    - CMAccessSquadLeaderPrep
 
 # Small Documents Pouch
 - type: entity

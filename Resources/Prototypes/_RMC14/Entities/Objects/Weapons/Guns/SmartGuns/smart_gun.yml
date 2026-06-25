@@ -5,7 +5,6 @@
   name: M56B smart gun
   description: The actual firearm in the Smart Gun System. Essentially a heavy, mobile machinegun.
   components:
-  - type: GunIDLock
   - type: Wieldable
   - type: Item
     size: Huge
@@ -157,7 +156,6 @@
   parent: RMCSmartGunNoCamo
   id: RMCSmartGun
   components:
-  - type: GunIDLock
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/SmartGuns/ml66a.rsi
     layers:
@@ -183,7 +181,6 @@
   name: M56T smart gun
   description: The actual firearm in the 4-piece M56T Smartgun System. If you have this, you're about to bring some serious pain to anyone in your way. You may toggle firing restrictions by using a special action.
   components:
-  - type: GunIDLock
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/SmartGuns/ml79a.rsi
     layers:
@@ -238,7 +235,7 @@
   description: The actual firearm in the 4-piece ML79A Smartgun System, modified for extra power. If you have this, you're about to bring some serious pain to anyone in your way. You may toggle firing restrictions by using a special action.
   suffix: Whiteout
   components:
-  - type: GunIDLock
+  - type: GunIDLock # Whiteout gun, baaaaaaaaaad ID to remove this negl
   - type: RMCSelectiveFire
     recoilWielded: 3
     scatterWielded: 10
@@ -306,7 +303,6 @@
         whitelist:
           components:
           - SmartGunBattery
-  - type: GunIDLock
 
 - type: entity
   parent: RMCSmartGun
@@ -333,7 +329,6 @@
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
     sprite: _RMC14/Objects/Weapons/Guns/SmartGuns/ml66a_royal.rsi
-  - type: GunIDLock
   - type: ItemSlots
     slots:
       gun_magazine:

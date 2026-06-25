@@ -4,7 +4,6 @@
   id: AU14WeaponRifleKramerLSW
   description: Also referred to as the Kramer or KAR, the Kramer Light Support Weapon is an automatic squad support variant of the standard Kramer assault rifle. Manufactured by Kramer Metallarbeiten GmbH, the KAR sees widespread use across United Americas.
   components:
-    - type: GunIDLock
     - type: Sprite
       sprite: _AU14/Weapons/Guns/LACN/kramerLMG.rsi
       layers:

@@ -4,6 +4,11 @@
   name: M707 "Vulture" anti-materiel rifle
   description: A massive bolt-action anti-materiel rifle chambered in 20x102mm. It carries an integrated spotting scope and bipod, and its recoil is punishing without a deployed firing position.
   components:
+  - type: GunIDLock
+  - type: MotionDetector
+    handToggleable: false
+    deactivateOnDrop: false
+    toggleSound: null
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Unsorted/vulture/desert.rsi
     layers:
