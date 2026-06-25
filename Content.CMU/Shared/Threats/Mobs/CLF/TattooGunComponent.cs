@@ -35,6 +35,7 @@ public sealed partial class TattooGunComponent : Component
     /// </summary>
     [DataField]
     public float DoAfterDuration = 10f;
+
     /// <summary>
     ///     Faction to add to the tattooed target.
     /// </summary>

@@ -59,6 +59,7 @@ public sealed partial class CMUXenoBullChargeComponent : Component
 
     [DataField, AutoNetworkedField]
     public float KnockbackSpeed = 10f;
+
     [DataField, AutoNetworkedField]
     public CMUXenoBullChargeMode Mode = CMUXenoBullChargeMode.Plow;
 

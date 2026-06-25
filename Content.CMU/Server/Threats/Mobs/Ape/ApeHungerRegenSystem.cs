@@ -18,12 +18,12 @@ namespace Content.Server._CMU14.Threats.Mobs.Ape;
 /// </summary>
 public sealed partial class ApeHungerRegenSystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly HungerSystem _hunger = default!;
-    [Dependency] private readonly MobStateSystem _mob = default!;
-    [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
-    [Dependency] private readonly SharedRMCDamageableSystem _rmcDamageable = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private HungerSystem _hunger = default!;
+    [Dependency] private MobStateSystem _mob = default!;
+    [Dependency] private MobThresholdSystem _mobThreshold = default!;
+    [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
+    [Dependency] private IGameTiming _timing = default!;
     private static readonly TimeSpan UpdateInterval = TimeSpan.FromSeconds(1);
 
     // Heal rate: 10% of max health per minute -> 0.1 per 60s

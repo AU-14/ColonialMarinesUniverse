@@ -11,7 +11,7 @@ namespace Content.Shared._CMU14.Threats.Mobs.Xeno.Construction;
 
 public sealed partial class ResinDoorSystem : EntitySystem
 {
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
 
     public override void Initialize()
     {

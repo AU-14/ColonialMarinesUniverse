@@ -15,11 +15,11 @@ namespace Content.Server._CMU14.Threats.Mobs.WorkingJoe;
 
 public sealed partial class WorkingJoeRebootSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly DefibrillatorSystem _defib = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly ItemToggleSystem _toggle = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private DefibrillatorSystem _defib = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private ItemToggleSystem _toggle = default!;
 
     private static readonly SoundPathSpecifier ChargeSound =
         new("/Audio/_RMC14/Medical/reset_key_powerup.ogg", AudioParams.Default.WithVolume(-8));
@@ -32,6 +32,7 @@ public sealed partial class WorkingJoeRebootSystem : EntitySystem
 
     private static readonly SoundPathSpecifier FailSound =
         new("/Audio/_RMC14/Medical/reset_key_shortbeep.ogg", AudioParams.Default.WithVolume(-6));
+
     private const float DoAfterSeconds = 5f;
 
     public override void Initialize()

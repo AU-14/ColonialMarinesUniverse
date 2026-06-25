@@ -15,6 +15,7 @@ public sealed partial class AbominationMimicTransformedComponent : Component
 {
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan ExpiresAt;
+
     [DataField, AutoNetworkedField]
     public AbominationAssimilationProfile Profile = new();
 }

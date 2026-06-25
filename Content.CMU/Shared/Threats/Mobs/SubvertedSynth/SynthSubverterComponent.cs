@@ -12,6 +12,7 @@ public sealed partial class SynthSubverterComponent : Component
 
     [DataField]
     public LocId Briefing = "clf-subverted-synth-briefing";
+
     [DataField]
     public ProtoId<NpcFactionPrototype> Faction = "CLF";
 

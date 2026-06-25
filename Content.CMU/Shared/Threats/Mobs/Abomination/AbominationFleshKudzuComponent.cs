@@ -66,6 +66,7 @@ public sealed partial class AbominationFleshKudzuComponent : Component
     /// <summary>Damage applied (typically negative) to abominations in contact each tick.</summary>
     [DataField, AutoNetworkedField]
     public DamageSpecifier Heal = new();
+
     /// <summary>How often the heal tick runs.</summary>
     [DataField, AutoNetworkedField]
     public TimeSpan HealInterval = TimeSpan.FromSeconds(2);

@@ -41,6 +41,7 @@ public sealed partial class ApeLeapingComponent : Component
 
     [DataField, AutoNetworkedField]
     public TimeSpan MoveDelayTime;
+
     [DataField, AutoNetworkedField]
     public EntityCoordinates Origin;
 

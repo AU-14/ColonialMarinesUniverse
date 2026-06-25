@@ -12,10 +12,10 @@ namespace Content.Server._CMU14.Threats.Rules;
 
 public sealed partial class KillAllTribeRuleSystem : GameRuleSystem<KillAllTribeRuleComponent>
 {
-    [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private readonly EntityManager _entMan = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly ThreatRuleHelper _threatRuleHelper = default!;
+    [Dependency] private AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private EntityManager _entMan = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private ThreatRuleHelper _threatRuleHelper = default!;
     private const string DefaultWinMsg = "The Threat has been Eliminated";
 
     public override void Initialize()

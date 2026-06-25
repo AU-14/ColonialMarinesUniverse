@@ -15,6 +15,7 @@ public sealed partial class WorkingJoeVoiceWindow : DefaultWindow
     {
         "Curious", "Interrogation", "Identification", "Concern"
     };
+
     private const int MaxRecent = 5;
     private readonly WorkingJoeVoiceFavorites _favorites;
     private readonly List<string> _recentIds = new();

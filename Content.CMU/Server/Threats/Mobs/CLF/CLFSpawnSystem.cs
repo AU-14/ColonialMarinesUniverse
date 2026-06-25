@@ -22,13 +22,13 @@ namespace Content.Server._CMU14.Threats.Mobs.CLF;
 /// </summary>
 public sealed partial class ClfSpawnSystem : EntitySystem
 {
-    [Dependency] private readonly AuRoundSystem _auRound = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ScenarioPlanSystem _scenarioPlan = default!;
-    [Dependency] private readonly StationSpawningSystem _stationSpawning = default!;
-    [Dependency] private readonly GameTicker _ticker = default!;
+    [Dependency] private AuRoundSystem _auRound = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
+    [Dependency] private StationSpawningSystem _stationSpawning = default!;
+    [Dependency] private GameTicker _ticker = default!;
 
     private static readonly ProtoId<CLFSpawnConfigPrototype> ClfSpawnConfig = "CLFSpawnConfig";
 
@@ -47,6 +47,7 @@ public sealed partial class ClfSpawnSystem : EntitySystem
         "CMPortableSurgicalBedSpawnFolded",
         "RMCSurgicalTray"
     };
+
     private const string ClfSafehouseBucket = "CLFSafehouse";
     private const string ClfCivilianBackupBucket = "CLFCivilianBackup";
 

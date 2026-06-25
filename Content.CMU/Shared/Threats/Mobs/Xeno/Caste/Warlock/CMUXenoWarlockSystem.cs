@@ -87,6 +87,7 @@ public sealed partial class CMUXenoWarlockComponent : Component
 
     [DataField, AutoNetworkedField]
     public TimeSpan PsychicBlastChargeDuration = TimeSpan.FromSeconds(1);
+
     [DataField, AutoNetworkedField]
     public FixedPoint2 PsychicBlastCost = 75;
 
@@ -269,6 +270,7 @@ public sealed partial class CMUXenoPsychicShieldSegmentComponent : Component
 {
     [DataField, AutoNetworkedField]
     public Direction Direction;
+
     [DataField, AutoNetworkedField]
     public EntityUid Warlock;
 }
@@ -317,6 +319,7 @@ public sealed partial class CMUXenoFrozenProjectileComponent : Component
 
     [DataField, AutoNetworkedField]
     public EntityUid? Shooter;
+
     [DataField, AutoNetworkedField]
     public Vector2 Velocity;
 
@@ -350,6 +353,7 @@ public sealed partial class CMUXenoPsychicCrushBlurComponent : Component
 {
     [DataField, AutoNetworkedField]
     public TimeSpan Duration = TimeSpan.FromSeconds(1);
+
     [DataField, AutoNetworkedField]
     public float Radius = 0.55f;
 
@@ -362,6 +366,7 @@ public sealed partial class CMUXenoPsychicBlastDoAfterEvent : SimpleDoAfterEvent
 {
     [DataField]
     public CMUXenoPsychicBlastMode Mode;
+
     [DataField]
     public NetCoordinates TargetCoordinates;
 
@@ -391,6 +396,7 @@ public sealed partial class CMUXenoPsychicBlastProjectileComponent : Component
 
     [DataField, AutoNetworkedField]
     public float KnockbackSpeed = CMUXenoWarlockSystem.PsychicBlastKnockbackSpeed;
+
     [DataField, AutoNetworkedField]
     public CMUXenoPsychicBlastMode Mode = CMUXenoPsychicBlastMode.Blast;
 
@@ -405,30 +411,30 @@ public sealed partial class CMUXenoPsychicBlastProjectileComponent : Component
 
 public sealed partial class CMUXenoWarlockSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly RMCDazedSystem _daze = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private readonly RMCMapSystem _rmcMap = default!;
-    [Dependency] private readonly SharedRMCSpriteSystem _rmcSprite = default!;
-    [Dependency] private readonly RMCSlowSystem _slow = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly XenoSystem _xeno = default!;
-    [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;
-    [Dependency] private readonly XenoProjectileSystem _xenoProjectile = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private RMCDazedSystem _daze = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private SharedRMCSpriteSystem _rmcSprite = default!;
+    [Dependency] private RMCSlowSystem _slow = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private XenoSystem _xeno = default!;
+    [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private XenoProjectileSystem _xenoProjectile = default!;
     private static readonly FixedPoint2 PsychicCrushVehicleDamageMultiplier = FixedPoint2.New(0.5f);
     private static readonly FixedPoint2 PsychicCrushMechDamageMultiplier = FixedPoint2.New(2.3f);
     public const string PsychicBlastFireSoundPath = "/Audio/_CMU14/Xeno/Warlock/volkite_4.ogg";

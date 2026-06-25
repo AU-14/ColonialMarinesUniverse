@@ -9,6 +9,7 @@ public sealed partial class CMUXenoZJumpComponent : Component
 {
     [DataField, AutoNetworkedField]
     public EntityUid? Action;
+
     [DataField, AutoNetworkedField]
     public EntProtoId ActionId = "CMUActionXenoZJump";
 

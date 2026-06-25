@@ -11,6 +11,7 @@ public sealed partial class ApeDestroyLeapingComponent : Component
 
     [DataField, AutoNetworkedField]
     public TimeSpan? LeapMoveAt;
+
     [DataField, AutoNetworkedField]
     public EntityCoordinates? Target;
 }

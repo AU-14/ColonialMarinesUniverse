@@ -36,17 +36,17 @@ namespace Content.Server._CMU14.Threats.Mobs.Abomination;
 /// </summary>
 public sealed partial class AbominationInfectionSystem : EntitySystem
 {
-    [Dependency] private readonly AbominationAssimilateSystem _assimilate = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedJitteringSystem _jitter = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly PolymorphSystem _polymorph = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly StatusEffectQuerySystem _statusEffects = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly VomitSystem _vomit = default!;
+    [Dependency] private AbominationAssimilateSystem _assimilate = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private PolymorphSystem _polymorph = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private VomitSystem _vomit = default!;
     [Dependency] private SharedDrunkSystem _drunk = default!;
     public static readonly EntProtoId FleshKudzuSource = "AU14AbominationFleshKudzuSource";
     public static readonly ProtoId<PolymorphPrototype> TurnIntoMimic = "AbominationAssimilationToMimic";

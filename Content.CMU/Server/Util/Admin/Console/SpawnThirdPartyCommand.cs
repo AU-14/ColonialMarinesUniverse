@@ -1,6 +1,5 @@
 using System.Linq;
 using Content.Server.Administration;
-using Content.Server._CMU14.Ops.ThirdParty;
 using Content.Shared._CMU14.Threats;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
@@ -12,7 +11,7 @@ namespace Content.Server._CMU14.Util.Admin.Console;
 [AdminCommand(AdminFlags.Admin)]
 public sealed partial class SpawnThirdPartyCommand : LocalizedEntityCommands
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     public override string Command => "spawnthirdparty";
 

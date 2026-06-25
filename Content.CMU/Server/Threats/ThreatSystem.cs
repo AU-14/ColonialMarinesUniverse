@@ -39,21 +39,21 @@ namespace Content.Server._CMU14.Threats;
 
 public sealed partial class ThreatSystem : EntitySystem
 {
-    [Dependency] private readonly AuRoundSystem _auRound = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly GhostRoleSystem _ghostRole = default!;
-    [Dependency] private readonly SharedMindSystem _mindSystem = default!;
-    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
-    [Dependency] private readonly PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedRoleSystem _roles = default!;
-    [Dependency] private readonly ScenarioPlanSystem _scenarioPlan = default!;
-    [Dependency] private readonly ThreatVoteSystem _threatVote = default!;
-    [Dependency] private readonly GameTicker _ticker = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private AuRoundSystem _auRound = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private GhostRoleSystem _ghostRole = default!;
+    [Dependency] private SharedMindSystem _mindSystem = default!;
+    [Dependency] private NpcFactionSystem _npcFaction = default!;
+    [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedRoleSystem _roles = default!;
+    [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
+    [Dependency] private ThreatVoteSystem _threatVote = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
     private static readonly ProtoId<JobPrototype> ThreatLeaderJobId = new("AU14JobThreatLeader");
     private static readonly ProtoId<JobPrototype> ThreatMemberJobId = new("AU14JobThreatMember");
     private static readonly EntProtoId ThreatMindRoleId = new("MindRoleThreat");

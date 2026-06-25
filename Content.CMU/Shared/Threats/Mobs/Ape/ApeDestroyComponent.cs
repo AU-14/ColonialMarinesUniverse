@@ -47,6 +47,7 @@ public sealed partial class ApeDestroyComponent : Component
 
     [DataField, AutoNetworkedField]
     public SoundSpecifier Sound = new SoundPathSpecifier("/Audio/_RMC14/Effects/meteorimpact.ogg");
+
     [DataField, AutoNetworkedField]
     public DamageSpecifier StructureDamage = new();
 

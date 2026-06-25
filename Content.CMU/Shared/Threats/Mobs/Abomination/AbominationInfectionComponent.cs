@@ -40,6 +40,7 @@ public sealed partial class AbominationInfectionComponent : Component
     /// <summary>True once symptoms have begun (severity > 0). Used to gate the death-into-mimic trigger.</summary>
     [DataField, AutoNetworkedField]
     public bool HasShownSymptoms;
+
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan InfectedAt;
 

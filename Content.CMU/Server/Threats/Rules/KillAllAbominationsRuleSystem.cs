@@ -22,10 +22,10 @@ namespace Content.Server._CMU14.Threats.Rules;
 /// </summary>
 public sealed partial class KillAllAbominationsRuleSystem : GameRuleSystem<KillAllAbominationsRuleComponent>
 {
-    [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly ThreatRuleHelper _threatRuleHelper = default!;
+    [Dependency] private AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private IEntityManager _entMan = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private ThreatRuleHelper _threatRuleHelper = default!;
     private const string DefaultWinMsg = "The Threat has been Eliminated";
 
     public override void Initialize()

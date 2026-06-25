@@ -8,6 +8,7 @@ public sealed partial class SpawnThirdPartyToolComponent : Component
 {
     [DataField("dropship")]
     public bool Dropship = true;
+
     [DataField("party", required: true)]
     public ProtoId<ThirdPartyPrototype> Party;
 }

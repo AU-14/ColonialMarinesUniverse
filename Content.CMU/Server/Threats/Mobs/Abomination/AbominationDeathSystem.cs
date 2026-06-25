@@ -12,8 +12,8 @@ namespace Content.Server._CMU14.Threats.Mobs.Abomination;
 /// </summary>
 public sealed partial class AbominationDeathSystem : EntitySystem
 {
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
     public static readonly EntProtoId FleshKudzuSource = "AU14AbominationFleshKudzuSource";
 
     public override void Initialize()

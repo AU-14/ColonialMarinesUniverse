@@ -34,6 +34,7 @@ public sealed partial class AbominationLeapComponent : Component
     /// <summary>Cooldown before the action becomes usable again, server-managed via ActionUseDelay.</summary>
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan? NextUseAt;
+
     /// <summary>Maximum distance of the leap in tiles.</summary>
     [DataField, AutoNetworkedField]
     public float Range = 6f;
@@ -52,6 +53,7 @@ public sealed partial class AbominationLeapingComponent : Component
 {
     [DataField, AutoNetworkedField]
     public DamageSpecifier Damage = new();
+
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan EndsAt;
 

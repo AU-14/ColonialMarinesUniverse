@@ -54,6 +54,7 @@ public sealed partial class AbominationAssimilationProfile
     /// </summary>
     [DataField]
     public bool IsTribal;
+
     [DataField]
     public string Name = string.Empty;
 
@@ -101,6 +102,7 @@ public sealed partial class AbominationAppearanceSnapshot
 
     [DataField]
     public Color SkinColor = Color.FromHex("#C0967F");
+
     [DataField]
     public ProtoId<SpeciesPrototype> Species;
 }

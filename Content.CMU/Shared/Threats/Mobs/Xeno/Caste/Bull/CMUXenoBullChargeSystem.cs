@@ -19,19 +19,19 @@ namespace Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Bull;
 
 public sealed partial class CMUXenoBullChargeSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly RMCDazedSystem _daze = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private readonly RMCSizeStunSystem _size = default!;
-    [Dependency] private readonly RMCSlowSystem _slow = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solution = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly XenoSystem _xeno = default!;
-    [Dependency] private readonly XenoChargeSystem _xenoCharge = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private RMCDazedSystem _daze = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private RMCSizeStunSystem _size = default!;
+    [Dependency] private RMCSlowSystem _slow = default!;
+    [Dependency] private SharedSolutionContainerSystem _solution = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private XenoSystem _xeno = default!;
+    [Dependency] private XenoChargeSystem _xenoCharge = default!;
 
     public override void Initialize()
     {
@@ -123,11 +123,8 @@ public sealed partial class CMUXenoBullChargeSystem : EntitySystem
     }
 
     public static bool ShouldStopAfterImpact(CMUXenoBullChargeMode mode) => mode != CMUXenoBullChargeMode.Plow;
-
     public static bool ShouldHandleImpact(CMUXenoBullChargeMode mode) => true;
-
     public static bool ShouldPlayImpactSound(CMUXenoBullChargeMode mode) => true;
-
     public static bool ShouldPlayGoreSpraySound(bool injectionSucceeded) => injectionSucceeded;
 
     public static double GetGoreStaggerSeconds(int stage, int maxStage, TimeSpan duration)

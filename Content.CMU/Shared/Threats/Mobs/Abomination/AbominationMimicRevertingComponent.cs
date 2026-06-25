@@ -18,6 +18,7 @@ public sealed partial class AbominationMimicRevertingComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public TimeSpan JitterDuration = TimeSpan.FromSeconds(7);
+
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan RevertAt;
 }

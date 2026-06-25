@@ -18,6 +18,7 @@ public sealed partial class AbominationConstructionComponent : Component
     /// <summary>Currently-selected structure to place. null = nothing chosen yet.</summary>
     [DataField, AutoNetworkedField]
     public EntProtoId? BuildChoice;
+
     /// <summary>Structures the builder can secrete.</summary>
     [DataField, AutoNetworkedField]
     public List<EntProtoId> CanBuild = new();

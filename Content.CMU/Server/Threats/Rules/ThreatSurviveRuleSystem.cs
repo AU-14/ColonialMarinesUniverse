@@ -10,10 +10,10 @@ namespace Content.Server._CMU14.Threats.Rules;
 
 public sealed partial class ThreatSurviveRuleSystem : GameRuleSystem<ThreatSurviveRuleComponent>
 {
-    [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly RoundEndSystem _roundEnd = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private RoundEndSystem _roundEnd = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private TimeSpan? _endTime;
     private float _minutes;

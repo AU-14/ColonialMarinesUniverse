@@ -13,6 +13,7 @@ public sealed partial class KillAllColonistRuleComponent : Component
     /// <summary>Tracks whether colony evacuation has been triggered by the death threshold.</summary>
     [DataField]
     public bool ColonyEvacTriggered;
+
     /// <summary>
     ///     Percentage of AUColonists that must be dead to trigger victory (0-100).
     ///     Default 100 preserves original "all dead" behavior.

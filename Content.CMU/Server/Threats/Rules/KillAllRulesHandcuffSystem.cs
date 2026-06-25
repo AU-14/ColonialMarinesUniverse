@@ -16,7 +16,7 @@ namespace Content.Server._CMU14.Threats.Rules;
 /// </summary>
 public sealed partial class KillAllRulesHandcuffSystem : EntitySystem
 {
-    [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
 
     public override void Initialize()
     {

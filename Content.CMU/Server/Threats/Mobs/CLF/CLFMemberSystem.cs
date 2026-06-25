@@ -19,13 +19,13 @@ namespace Content.Server._CMU14.Threats.Mobs.CLF;
 
 public sealed partial class CLFMemberSystem : EntitySystem
 {
-    [Dependency] private readonly IAdminManager _admin = default!;
-    [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly GunIFFSystem _gunIFF = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
-    [Dependency] private readonly RoleSystem _role = default!;
+    [Dependency] private IAdminManager _admin = default!;
+    [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private GunIFFSystem _gunIFF = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private NpcFactionSystem _npcFaction = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private RoleSystem _role = default!;
 
     public override void Initialize()
     {

@@ -14,10 +14,10 @@ namespace Content.Server._CMU14.Threats.Mobs.Abomination;
 /// </summary>
 public sealed partial class AbominationNestSpawnSystem : EntitySystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     /// <summary>Base interval with one nest placed.</summary>
     public static readonly TimeSpan BaseInterval = TimeSpan.FromSeconds(300);
@@ -31,6 +31,7 @@ public sealed partial class AbominationNestSpawnSystem : EntitySystem
         "AU14AbominationGrunt",
         "AU14AbominationSkitter"
     };
+
     /// <summary>Seconds subtracted from the interval per extra nest beyond the first.</summary>
     public const double SecondsPerExtraNest = 3.0;
 

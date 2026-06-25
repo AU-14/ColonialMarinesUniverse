@@ -20,12 +20,12 @@ namespace Content.Server._CMU14.Threats.Rules;
 /// </summary>
 public sealed partial class KillAllGovforRuleSystem : GameRuleSystem<KillAllGovforRuleComponent>
 {
-    [Dependency] private readonly AreaSystem _area = default!;
-    [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly ThreatRuleHelper _threatRuleHelper = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private IEntityManager _entMan = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private ThreatRuleHelper _threatRuleHelper = default!;
     private const string DefaultWinMsg = "Threat victory: Required percentage of Govfor eliminated.";
 
     public override void Initialize()

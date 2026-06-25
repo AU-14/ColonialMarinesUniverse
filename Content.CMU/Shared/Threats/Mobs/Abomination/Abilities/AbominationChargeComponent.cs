@@ -24,6 +24,7 @@ public sealed partial class AbominationChargeComponent : Component
 
     [DataField, AutoNetworkedField]
     public DamageSpecifier MobDamage = new();
+
     [DataField, AutoNetworkedField]
     public float Range = 14f;
 

@@ -16,7 +16,7 @@ namespace Content.Server._CMU14.Threats.Mobs.Tribal;
 /// </summary>
 public sealed partial class TribalAppearanceSystem : EntitySystem
 {
-    [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
     public static readonly Color TribalSkin = Color.FromHex("#4F7A82");
     public static readonly ProtoId<SpeciesPrototype> TribalSpecies = "Tribal";
 

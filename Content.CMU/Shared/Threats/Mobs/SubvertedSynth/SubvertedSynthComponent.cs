@@ -10,6 +10,7 @@ public sealed partial class SubvertedSynthComponent : Component
 {
     [DataField]
     public ComponentRegistry AdditionalComponents = new();
+
     [DataField]
     public SoundSpecifier CLFSubversionSound = new SoundPathSpecifier("/Audio/Ambience/Antag/headrev_start.ogg");
 

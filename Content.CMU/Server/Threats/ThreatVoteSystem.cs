@@ -1,7 +1,6 @@
 using System.Linq;
 using Content.Server.AU14.Round;
 using Content.Server.AU14.Scenario;
-using Content.Server._CMU14.Ops.ThirdParty;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.Voting;
@@ -23,18 +22,18 @@ namespace Content.Server._CMU14.Threats;
 
 public sealed partial class ThreatVoteSystem : EntitySystem
 {
-    [Dependency] private readonly AuRoundSystem _auRound = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly AuJobSelectionSystem _jobSelection = default!;
-    [Dependency] private readonly PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ScenarioPlanSystem _scenarioPlan = default!;
-    [Dependency] private readonly ThirdPartySystem _thirdParty = default!;
-    [Dependency] private readonly ThreatSystem _threat = default!;
-    [Dependency] private readonly GameTicker _ticker = default!;
-    [Dependency] private readonly IVoteManager _voteManager = default!;
+    [Dependency] private AuRoundSystem _auRound = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private AuJobSelectionSystem _jobSelection = default!;
+    [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
+    [Dependency] private ThirdPartySystem _thirdParty = default!;
+    [Dependency] private ThreatSystem _threat = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private IVoteManager _voteManager = default!;
     private static readonly TimeSpan VoteDuration = TimeSpan.FromSeconds(30);
     private const string VoteTitleLocId = "au14-threat-vote-title";
     private readonly HashSet<NetUserId> _roundJoinBlockedPlayers = new();
