@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Content.Shared.AU14.Ambassador;
-using Content.Shared.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests._AU14.ThirdParty;
@@ -25,7 +25,7 @@ public sealed class AmbassadorThirdPartyCallInsTest
                 {
                     checkedParties.Add(id);
                     Assert.That(
-                        prototypes.TryIndex<AuThirdPartyPrototype>(id, out var party),
+                        prototypes.TryIndex<ThirdPartyPrototype>(id, out var party),
                         Is.True,
                         $"{entity.ID} references missing ambassador third party '{id}'.");
 

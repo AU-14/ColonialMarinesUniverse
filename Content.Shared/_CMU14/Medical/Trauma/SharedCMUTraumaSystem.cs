@@ -2,11 +2,11 @@ using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
 using Content.Shared.Body.Part;
 using Content.Shared.Projectiles;
-using Content.Shared._AU14.Abominations;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.ClawSharpness;
 using Robust.Shared.Configuration;
 using Robust.Shared.Random;
+using AbominationComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationComponent;
 
 namespace Content.Shared._CMU14.Medical.Trauma;
 

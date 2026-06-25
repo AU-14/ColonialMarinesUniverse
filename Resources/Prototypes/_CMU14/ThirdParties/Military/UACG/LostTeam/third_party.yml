@@ -8,7 +8,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: UACGLostTeam
   partyspawn: UACGLostTeamSpawn
   entrymethod: shuttle

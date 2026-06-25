@@ -21,6 +21,7 @@
     - id: CMM96SSniperRifle
     - id: AU14KitSpotter
 #    - id: CMFacepaintSniper
+    - id: AU14ScoutWebbing
   - type: CMChangeUserOnVend
     addComponents:
     - type: SniperWhitelist
@@ -48,6 +49,7 @@
     - id: RMCScoutShoes
     - id: CMBackpackSniper
     - id: AU14KitSpotter
+    - id: AU14ScoutWebbing
   - type: IgnoreContentsSize
     items:
       tags:
@@ -171,6 +173,7 @@
   parent: RMCBaseEquipmentCase
   id: RMCScoutSpecEquipmentCase
   name: scout equipment case
+  suffix: Base
   description: "A large case containing an M4SPR custom battle rifle, M3-S light armor and helmet, M4SPR battle sight, M68 thermal cloak, V3 reactive thermal tarp, ammunition and additional pieces of equipment.\nNOTE: You cannot put items back inside this case."
   components:
   - type: Sprite
@@ -210,6 +213,7 @@
   parent: RMCBaseEquipmentCase
   id: AU14ScoutSpecEquipmentCaseWeYu
   name: scout equipment case
+  suffix: WeYu
   description: "A large case containing an M4SPR custom battle rifle, M3-S light armor and helmet, M4SPR battle sight, M68 thermal cloak, V3 reactive thermal tarp, ammunition and additional pieces of equipment.\nNOTE: You cannot put items back inside this case."
   components:
   - type: Sprite
@@ -247,41 +251,11 @@
     - type: ScoutWhitelist
 
 - type: entity
-  parent: RMCBaseEquipmentCase
+  parent: RMCScoutSpecEquipmentCase
   id: AU14ScoutSpecEquipmentCaseLACN
   name: scout equipment case
+  suffix: LACN
   description: "A large case containing an M4SPR custom battle rifle, M3-S light armor and helmet, M4SPR battle sight, M68 thermal cloak, V3 reactive thermal tarp, ammunition and additional pieces of equipment.\nNOTE: You cannot put items back inside this case."
-  components:
-  - type: Sprite
-    layers:
-    - state: closed
-      map: [ base ]
-    - state: scout
-      map: [ label ]
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,21,3
-  - type: StorageFill
-    contents:
-    - id: AU14WeaponSniperRifleM42A2
-    - id: CMMagazineSniperM96S
-      amount: 12
-    - id: CMMagazineSniperM96SFlak
-      amount: 2
-    - id: RMCBackpackScout
-    - id: CMBackpackSniper
-    - id: RMCThermalTarpFolded
-      amount: 2
-    - id: RMCExplosivePlastic
-      amount: 2
-    - id: RMCLaserDesignatorScout
-    - id: RMCGlassesM4SPRBattleSight
-    - id: RMCScoutShoes
-    - id: AU14ScoutWebbing
-  - type: CMChangeUserOnVend
-    addComponents:
-    - type: ScoutWhitelist
 
 - type: entity
   parent: RMCBaseEquipmentCase
@@ -311,7 +285,7 @@
     - id: RMCPouchFuelTank
     - id: CMFireExtinguisher
     - id: CMFireExtinguisherPortable
-    - id: RMCBinoculars 
+    - id: RMCBinoculars
     #- id: RMCMK80
     #- id: CMMagazinePistolMK80
     #  amount: 2
@@ -389,7 +363,7 @@
     sprite: _RMC14/Objects/Storage/procase_mini.rsi
   - type: StorageFill
     contents:
-    - id: CMArmorM45
+    - id: AU14ScoutWebbing
     - id: CMArmorHelmetM45
     - id: RMCVisorNightVision
     - id: CMBackpackSniper

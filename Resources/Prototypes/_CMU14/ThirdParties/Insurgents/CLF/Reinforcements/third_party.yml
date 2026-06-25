@@ -7,7 +7,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: CLFCellReinforcementsIntel
   partyspawn: CLFReinforcementsSpawnIntel
   entrymethod: shuttle
@@ -27,7 +27,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: CLFCellReinforcementsIntelMachineGunner
   partyspawn: CLFReinforcementsSpawnIntelMachineGunner
   entrymethod: shuttle

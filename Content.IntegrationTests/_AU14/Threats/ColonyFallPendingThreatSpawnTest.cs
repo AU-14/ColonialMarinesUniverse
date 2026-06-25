@@ -2,9 +2,9 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Content.Server._CMU14.Threats;
 using Content.Server.AU14.Scenario;
-using Content.Server.AU14.Threats;
-using Content.Shared.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Content.Shared.AU14.util;
 using Content.Shared.Roles;
 using Robust.Shared.GameObjects;
@@ -33,7 +33,7 @@ public sealed class ColonyFallPendingThreatSpawnTest
         await server.WaitAssertion(() =>
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var threatSystem = server.System<AuThreatSystem>();
+            var threatSystem = server.System<ThreatSystem>();
             var xeno = prototypes.Index(XenoThreat);
             var cultist = prototypes.Index(CultistThreat);
             var assignedJobs = BuildThreatAssignments();

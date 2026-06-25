@@ -17,4 +17,3 @@ ui-escape-status-round-time = Time
 ui-escape-status-unknown = Unknown
 ui-escape-status-no-ship = No ship
 ui-escape-status-not-started = Not started
-

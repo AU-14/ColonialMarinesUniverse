@@ -12,7 +12,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: FORECON
   partyspawn: FORECONSpawn
   blacklistedgamemodes:
@@ -40,7 +40,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: FORECONAlt
   partyspawn: FORECONSpawnAlt
   blacklistedgamemodes:
@@ -68,7 +68,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: FORECONAlt2
   partyspawn: FORECONSpawnAlt2
   blacklistedgamemodes:

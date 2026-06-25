@@ -1,6 +1,7 @@
 using System.Numerics;
-using Content.Shared._CMU14.Xenonids.ZJump;
+using Content.Shared._CMU14.Threats.Mobs.Xeno.ZJump;
 using NUnit.Framework;
+using CMUXenoZJumpSystem = Content.Shared._CMU14.Threats.Mobs.Xeno.ZJump.CMUXenoZJumpSystem;
 
 namespace Content.Tests.Shared._CMU14.Xenonids;
 
