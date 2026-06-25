@@ -1475,9 +1475,6 @@ ClothingUniformJumpsuitPrisoner: RMCJumpsuitOrange
 
 # 2026-01-27
 RMCJumpsuitUNSecurity: RMCJumpsuitRiotControl
-RMCSpawnPointSurvivorShivasUNPeacekeeper: RMCSpawnPointSurvivorShivasILRCPeacekeeper
-RMCSpawnPointSurvivorSolarisUNPeacekeeper: RMCSpawnPointSurvivorSolarisILRCPeacekeeper
-RMCSpawnPointSurvivorUNPeacekeeper: RMCSpawnPointSurvivorILRCPeacekeeper
 
 # 2026-2-1
 CMPosterZSPA1: RMCPosterTSEPA1

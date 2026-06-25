@@ -36,6 +36,7 @@
     inverted: true
     traits:
     - NonResuscitable
+    - NoEnglish
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCivilianHeadOfService

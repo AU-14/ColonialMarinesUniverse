@@ -15,6 +15,17 @@
   - type: SniperWhitelist
   - type: JobPrefix
     prefix: rmc-job-prefix-weapons-specialist-sniper
+  - type: Language
+    spokenLanguages:
+    - English
+    - Brazilian
+    - Spanish
+    understoodLanguages:
+    - English
+    - Brazilian
+    - Spanish
+    currentLanguage: Brazilian
+    defaultLanguage: Brazilian
 
   name: rmc-job-name-forecon-sniper
   playTimeTracker: AU14LACNCommandoSniper

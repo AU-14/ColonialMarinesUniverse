@@ -56,6 +56,10 @@
       types:
         Blunt: 35
   - type: Synth
+  - type: Language
+    preset: AU14LanguagePresetSynth
+  - type: LanguageLearning
+    preset: AU14LanguageLearningPresetSynth
 
   name: rmc-job-name-forecon-synth
   description: rmc-job-description-forecon

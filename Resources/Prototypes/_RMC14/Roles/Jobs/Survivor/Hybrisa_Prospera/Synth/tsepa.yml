@@ -1,5 +1,5 @@
 - type: job
-  parent: RMCJobSyntheticColony
+  parent: RMCSurvivorForeconSynth
   id: RMCSyntheticColonyHybrisaTSEPA
   startingGear: RMCGearSyntheticColonistHybrisaTSEPA
   spawnMenuRoleName: TSEPA Support Synth (Hybrisa Survivor)
@@ -9,6 +9,11 @@
   special:
   - !type:AddComponentSpecial
     components:
+    - type: Language
+      preset: RMCLanguagePresetSynthColonist
+    - type: LanguageLearning
+      preset: RMCLanguageLearningPresetSynthColonist
+    - type: RMCAllowSuitStorage
     - type: Skills
       skills:
         RMCSkillCqc: 3
@@ -56,11 +61,10 @@
       damage:
         types:
           Blunt: 35
-    - type: EquipEntityPreset
+    - type: EquipSurvivorPreset
       preset: RMCSurvivorPresetHybrisaSynthTSEPA
     - type: Synth
       generation: rmc-species-synth-generation-second
-  useLoadoutOfJob: RMCJobSyntheticColony # for inheritance
 
 - type: startingGear
   parent: RMCGearSyntheticColonistHybrisaCivilian

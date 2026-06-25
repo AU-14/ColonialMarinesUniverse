@@ -17,6 +17,23 @@
     preset: AU14SkillPresetPlatoonAutomaticRifleman
   - type: JobPrefix
     prefix: au14-job-prefix-govforsquadautomaticriflemanRMC
+  - type: Language
+    spokenLanguages:
+    - Polish
+    - Russian
+    - Spanish
+    - Chinese
+    - German
+    - TacticalSignLanguage
+    understoodLanguages:
+    - Polish
+    - Russian
+    - Spanish
+    - Chinese
+    - German
+    - TacticalSignLanguage
+    currentLanguage: Polish
+    defaultLanguage: Polish
 
   name: au14-job-name-govforsquadautomaticriflemanRMC
   description: au14-uppgrom-description
