@@ -1,0 +1,112 @@
+- type: entity
+  abstract: true
+  parent: RMCAttachmentScopeBase
+  id: AU14AttachmentScopeBase
+  components:
+  - type: AttachableToggleable
+    needHand: true
+    heldOnlyActivate: true
+    userOnly: true
+    doInterrupt: true
+    attachedOnly: true
+    breakOnMove: true
+    breakOnRotate: true
+    wieldedOnly: true
+    useDelay: 0.5
+    showTogglePopup: false
+    icon:
+      sprite: _RMC14/Objects/Weapons/Guns/Attachments/rail.rsi
+      state: sniperscope
+    actionName: Look through Scope
+    actionDesc: Scope in. If you're seeing this, someone forgot to set the description properly.
+  - type: AttachableToggleableSimpleActivate
+  - type: Scope
+    requireWielding: true
+    attachment: true
+    useInHand: true
+    zoomLevels:
+    - zoom: 1
+      offset: 15
+      allowMovement: false
+      doAfter: 0
+
+- type: entity
+  parent: RMCAttachmentS42xTelescopicMiniscope
+  id: AU14AttachmentB11SmartScope
+  name: B11 Advanced Targetting Scope
+  description: An experimental Prodigy B11-ATS. Adds IFF to weapons without them, and gives the user enhanced sight to use their weapons effectively at range even while behind friendlies.
+  components:
+  - type: Scope
+    zoomLevels:
+    - zoom: 1.6
+      offset: 14
+      allowMovement: false
+      doAfter: 0
+  - type: Sprite
+    state: iffbarrel
+  - type: Tag
+    tags:
+    - RMCAttachmentRail
+    - RMCAttachmentB8SmartScope
+  - type: AttachableToggleable
+    doAfter: 0.8
+    icon:
+      sprite: _RMC14/Objects/Weapons/Guns/Attachments/rail.rsi
+      state: huntingscope
+    actionName: Look through B11 Smart-Scope
+    actionDesc: Lets you see further and shoot through your fellow marines without harming them.
+  - type: AttachableIFF
+  - type: AttachableWeaponRangedMods
+    modifiers:
+    - conditions:
+        wieldedOnly: true
+        inactiveOnly: true
+  - type: RMCLoreExaminable
+    content: rmc-lore-examinable-b8-smart-scope
+
+- type: entity
+  parent: AU14AttachmentScopeBase
+  id: AU14AttachmentS84xTelescopicScope
+  name: S11 4x telescopic scope
+  description: An Lockmart Welsun S11 telescopic eye piece. Fixed at 4x zoom.
+  components:
+  - type: Sprite
+    state: sniperscope
+  - type: Tag
+    tags:
+    - RMCAttachmentRail
+    - RMCAttachmentS84xTelescopicScope
+  - type: AttachableVisuals
+  - type: AttachableToggleable
+    actionName: Look through the S11 4x Telescopic Scope
+    actionDesc: An Lockmart Welsun S11 telescopic eye piece. Fixed at 4x zoom.
+  - type: AttachableToggleableSimpleActivate
+  - type: Scope
+    zoomLevels:
+    - zoom: 1.6
+      offset: 14
+      allowMovement: false
+      doAfter: 0
+  - type: AttachableSpeedMods
+    modifiers:
+    - conditions:
+        wieldedOnly: true
+      walk: -0.23
+      sprint: -0.35
+  - type: AttachableWieldDelayMods
+    modifiers:
+    - delay: 0.4
+  - type: AttachableWeaponRangedMods
+    modifiers:
+    - fireDelayFlat: 0.1
+    - conditions:
+        activeOnly: true
+      fireDelayFlat: 0.25
+      accuracyAddMult: 0.35
+      damageFalloffAddMult: -0.4
+    - conditions:
+        wieldedOnly: true
+        inactiveOnly: true
+      accuracyAddMult: -0.05
+  - type: RMCLoreExaminable
+    content: rmc-lore-examinable-s8-4x-telescopic-scope

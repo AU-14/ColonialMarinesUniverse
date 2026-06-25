@@ -202,6 +202,7 @@
     - id: RMCLaserDesignatorScout
     - id: RMCScoutShoes
     - id: AU14ScoutWebbing
+    - id: AU14AttachmentB11SmartScope
   - type: CMChangeUserOnVend
     addComponents:
     - type: ScoutWhitelist
@@ -242,6 +243,7 @@
     - id: RMCLaserDesignatorScout
     - id: RMCScoutShoes
     - id: AU14ScoutWebbing
+    - id: AU14AttachmentB11SmartScope
   - type: CMChangeUserOnVend
     addComponents:
     - type: ScoutWhitelist
@@ -279,6 +281,7 @@
     - id: RMCGlassesM4SPRBattleSight
     - id: RMCScoutShoes
     - id: AU14ScoutWebbing
+    - id: AU14AttachmentB11SmartScope
   - type: CMChangeUserOnVend
     addComponents:
     - type: ScoutWhitelist
@@ -311,7 +314,7 @@
     - id: RMCPouchFuelTank
     - id: CMFireExtinguisher
     - id: CMFireExtinguisherPortable
-    - id: RMCBinoculars 
+    - id: RMCBinoculars
     #- id: RMCMK80
     #- id: CMMagazinePistolMK80
     #  amount: 2
