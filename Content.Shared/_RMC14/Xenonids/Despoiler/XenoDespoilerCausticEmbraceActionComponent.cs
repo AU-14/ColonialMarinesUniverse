@@ -6,9 +6,10 @@ namespace Content.Shared._RMC14.Xenonids.Despoiler;
 
 [RegisterComponent]
 public sealed partial class XenoDespoilerCausticEmbraceActionComponent : Component
+
 {
     [DataField]
-    public int NormalRange = 1;
+    public int NormalRange = 3;
 
     [DataField]
     public int EmpoweredRange = 5;
