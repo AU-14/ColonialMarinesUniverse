@@ -37,7 +37,7 @@
     "Intelligent stone age society dedicated to protecting its homeworld, secure those crystals at all costs": 1
 
 # Tribal third-party — drops a roundstart party of natives onto the map.
-- type: auThirdParty
+- type: thirdParty
   id: tribalThirdParty
   partyspawn: tribalsParty
   entrymethod: ground

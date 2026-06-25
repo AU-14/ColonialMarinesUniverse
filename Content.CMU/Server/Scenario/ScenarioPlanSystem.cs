@@ -1,20 +1,20 @@
 using System.IO;
 using System.Linq;
-using Content.Server.AU14.Threats;
+using Content.Server._CMU14.Threats;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Maps;
 using Content.Server.Spawners.Components;
+using Content.Shared._CMU14.Threats;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.AU14;
 using Content.Shared.AU14.Scenario;
-using Content.Shared.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Content.Shared.AU14.util;
 using Robust.Shared.ContentPack;
-using Robust.Shared.GameObjects;
-using Robust.Shared.IoC;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using ParachuteMarkerComponent = Content.Shared._CMU14.Threats.ParachuteMarkerComponent;
 
 namespace Content.Server.AU14.Scenario;
 
@@ -1132,6 +1132,7 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
         AddPlatoonForces(preset, planet, request.PlayerCount, forces, deferredChoices);
 
         if (IsPostRoundstartThreatVotePreset(preset.ID))
+        {
             AddDeferredThreatChoice(
                 preset.ID,
                 planetId,
@@ -1141,6 +1142,7 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
                 deferredChoices,
                 markers,
                 includedMarkerSources);
+        }
 
         if (preset.ID.Equals(InsurgencyPresetId, StringComparison.OrdinalIgnoreCase))
             AddClfForce(preset.ID, planetId, planet, request.PlayerCount, forces, diagnostics);
@@ -1327,7 +1329,7 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
 
     private bool TryBuildThirdPartyForce(
         string presetId,
-        AuThirdPartyPrototype thirdParty,
+        ThirdPartyPrototype thirdParty,
         string? threatId,
         int playerCount,
         out PlannedForce force)
@@ -1356,7 +1358,7 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
 
     private bool TryBuildThirdPartyForceFromPrototype(
         string roundGroupId,
-        AuThirdPartyPrototype thirdParty,
+        ThirdPartyPrototype thirdParty,
         string? threatId,
         int playerCount,
         out PlannedForce force,
@@ -1392,7 +1394,7 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
     }
 
     private bool TryBuildLegacyThirdPartyForce(
-        AuThirdPartyPrototype thirdParty,
+        ThirdPartyPrototype thirdParty,
         string? threatId,
         int playerCount,
         out PlannedForce force)
@@ -1442,7 +1444,7 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
     {
         foreach (var thirdPartyId in planet.ThirdParties)
         {
-            if (!_prototypes.TryIndex(thirdPartyId, out AuThirdPartyPrototype? thirdParty) ||
+            if (!_prototypes.TryIndex(thirdPartyId, out ThirdPartyPrototype? thirdParty) ||
                 !IsThirdPartyAllowed(
                     thirdParty,
                     presetId,
@@ -1942,7 +1944,7 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
             }
         }
 
-        if (!_prototypes.TryIndex<AuThirdPartyPrototype>(thirdPartyId, out var thirdParty))
+        if (!_prototypes.TryIndex<ThirdPartyPrototype>(thirdPartyId, out var thirdParty))
         {
             diagnostic = $"Third-party prototype '{thirdPartyId}' could not be resolved.";
             return false;
@@ -2477,18 +2479,18 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
                presetId.Equals(ColonyFallPresetId, StringComparison.OrdinalIgnoreCase);
     }
 
-    private static bool ThirdPartyUsesMarkerValidation(AuThirdPartyPrototype thirdParty)
+    private static bool ThirdPartyUsesMarkerValidation(ThirdPartyPrototype thirdParty)
     {
         var entryMethod = thirdParty.EntryMethod?.ToLowerInvariant() ?? "ground";
         return entryMethod is "ground" or "parachute" or "shuttle";
     }
 
-    private static bool IsShuttleEntry(AuThirdPartyPrototype thirdParty)
+    private static bool IsShuttleEntry(ThirdPartyPrototype thirdParty)
     {
         return (thirdParty.EntryMethod?.ToLowerInvariant() ?? "ground") == "shuttle";
     }
 
-    private static bool IsParachuteEntry(AuThirdPartyPrototype thirdParty)
+    private static bool IsParachuteEntry(ThirdPartyPrototype thirdParty)
     {
         return (thirdParty.EntryMethod?.ToLowerInvariant() ?? "ground") == "parachute";
     }
@@ -2505,7 +2507,7 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
     }
 
     private static bool IsThirdPartyAllowed(
-        AuThirdPartyPrototype proto,
+        ThirdPartyPrototype proto,
         string currentGamemode,
         string? currentThreat,
         string? govforPlatoon,

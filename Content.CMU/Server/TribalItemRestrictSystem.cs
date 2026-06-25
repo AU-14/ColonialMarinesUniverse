@@ -4,6 +4,7 @@ using Content.Shared.Tag;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Popups;
 using Robust.Shared.Prototypes;
+using TribalComponent = Content.Shared._CMU14.Threats.Mobs.Tribal.TribalComponent;
 
 namespace Content.Server.AU14;
 
