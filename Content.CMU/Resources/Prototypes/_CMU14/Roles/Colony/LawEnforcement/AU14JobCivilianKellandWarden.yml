@@ -33,6 +33,11 @@
   ranks:
     RMCRankCivilian: [ ]
   startingGear: AU14GearCivilianKellandWarden
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NoEnglish
   icon: "AU14JobIconColonyKellandWarden"
   hasIcon: false
   requireAdminNotify: false

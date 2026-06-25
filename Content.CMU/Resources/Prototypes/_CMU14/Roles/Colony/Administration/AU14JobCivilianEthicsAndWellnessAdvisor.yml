@@ -23,6 +23,16 @@
   description: au14-job-description-ethicsandwellnessadvisor
   setPreference: true
   playTimeTracker: AU14JobCivilianEthicsAndWellnessAdvisor
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
+  - !type:AgeRequirement
+    requiredAge: 21
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+    - NoEnglish
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCivilianEthicsAndWellnessAdvisor

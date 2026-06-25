@@ -21,6 +21,8 @@
       RMCSkillVehicles: 1
   - type: JobPrefix
     prefix: au-14-job-prefix-papthirdparty-observer
+  - type: Language
+    preset: AU14LanguagePresetUPPOfficer
 
   name: au-14-job-name-papthirdparty-observer
   description: au14-papthirdparty-description-observer

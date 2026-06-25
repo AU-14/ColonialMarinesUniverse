@@ -87,6 +87,7 @@
     inverted: true
     traits:
     - Epilepsy
+    - NoEnglish
   ranks:
     RMCRankCivilian: []
   chevrons:

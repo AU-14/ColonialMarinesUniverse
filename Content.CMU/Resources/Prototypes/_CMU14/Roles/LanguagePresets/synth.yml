@@ -1,0 +1,90 @@
+# Synth languages
+
+- type: entity
+  id: AU14LanguagePresetSynth
+  name: Synth Languages
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: LanguagePreset
+    spokenLanguages:
+    - English
+    - French
+    - Japanese
+    - Russian
+    - German
+    - Chinese
+    - Spanish
+    - Esperanto
+    - SignLanguage
+    - TacticalSignLanguage
+    - Portuguese
+    understoodLanguages:
+    - English
+    - French
+    - Japanese
+    - Russian
+    - German
+    - Chinese
+    - Spanish
+    - Esperanto
+    - SignLanguage
+    - TacticalSignLanguage
+    - Portuguese
+    currentLanguage: English
+    defaultLanguage: English
+
+- type: entity
+  id: AU14LanguageLearningPresetSynth
+  name: Synth Language Learning
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: LanguageLearningPreset
+    learnableLanguages:
+    - English
+    - French
+    - Japanese
+    - Russian
+    - German
+    - Chinese
+    - Spanish
+    - Esperanto
+    - SignLanguage
+    - TacticalSignLanguage
+    - Portuguese
+    - Xeno
+    - Yautja
+    - Arcturian
+    - Ukrainian
+    - Polish
+    - Czech
+    - Italian
+    - Irish
+    - Finnish
+    - Hungarian
+    - Albanian
+    - Serbian
+    - Lithuanian
+    - Arabic
+    - Afrikaans
+    - Dutch
+    - Swahili
+    - Persian
+    - Hindi
+    - Vietnamese
+    - Indonesian
+    - Filipino
+    - Urdu
+    - Yoruba
+    - Latin
+    firstContactLanguages:
+    - Xeno
+    - Yautja
+    - Arcturian
+# example on how to modify boosts
+#    languages:
+#      Xeno:
+#        initialBoostedWordCount: 18
+#        initialBoostedWordComprehension: 0.4
+    comprehensionThreshold: 0.8
+    learningRange: 8.0
+    baseWordLearningRate: 0.05

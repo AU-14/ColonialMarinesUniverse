@@ -31,6 +31,87 @@
         type: YautjaTranslatorBui
       enum.DialogUiKey.Key:
         type: DialogBui
+  - type: TranslatorDevice
+    spokenLanguages:
+      - English
+      - Russian
+      - Spanish
+      - French
+      - Chinese
+      - SignLanguage
+      - Yautja
+      - Arcturian
+      - TacticalSignLanguage
+      - Ukrainian
+      - Polish
+      - Czech
+      - Turkish
+      - Korean
+      - Italian
+      - Irish
+      - Finnish
+      - Hungarian
+      - Albanian
+      - Serbian
+      - Lithuanian
+      - Arabic
+      - Afrikaans
+      - Dutch
+      - Swahili
+      - Persian
+      - Hindi
+      - Vietnamese
+      - Portuguese
+      - Indonesian
+      - Filipino
+      - Urdu
+      - Yoruba
+      - Esperanto
+      - Latin
+      - Swedish
+      - Brazilian
+      - Slovak
+      - Romanian
+    understoodLanguages:
+      - English
+      - Russian
+      - Spanish
+      - French
+      - Chinese
+      - SignLanguage
+      - Yautja
+      - Arcturian
+      - TacticalSignLanguage
+      - Ukrainian
+      - Polish
+      - Czech
+      - Turkish
+      - Korean
+      - Italian
+      - Irish
+      - Finnish
+      - Hungarian
+      - Albanian
+      - Serbian
+      - Lithuanian
+      - Arabic
+      - Afrikaans
+      - Dutch
+      - Swahili
+      - Persian
+      - Hindi
+      - Vietnamese
+      - Portuguese
+      - Indonesian
+      - Filipino
+      - Urdu
+      - Yoruba
+      - Esperanto
+      - Latin
+      - Swedish
+      - Brazilian
+      - Slovak
+      - Romanian
 
 - type: entity
   parent: CMUYautjaBracer

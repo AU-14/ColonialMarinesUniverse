@@ -33,6 +33,15 @@
   - type: SpotterWhitelist
   - type: JobPrefix
     prefix: au14-job-prefix-forecon-corpsman
+  - type: LanguagePreset
+    spokenLanguages:
+    - English
+    - TacticalSignLanguage
+    understoodLanguages:
+    - English
+    - TacticalSignLanguage
+    currentLanguage: English
+    defaultLanguage: English
 
   name: au14-job-name-forecon-corpsman
   description: au14-job-description-forecon-firstrecon

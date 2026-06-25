@@ -27,6 +27,25 @@
       RMCSkillVehicles: 1
   - type: JobPrefix
     prefix: au-14-job-prefix-upptd-rifleman
+  - type: Language
+    spokenLanguages:
+    - Polish
+    - Czech
+    - Slovak
+    - Ukrainian
+    - Romanian
+    - Hungarian
+    - Lithuanian
+    understoodLanguages:
+    - Polish
+    - Czech
+    - Slovak
+    - Ukrainian
+    - Romanian
+    - Hungarian
+    - Lithuanian
+    currentLanguage: Ukrainian
+    defaultLanguage: Ukrainian
 
   name: au-14-job-name-upptd-rifleman
   description: au14-upptd-description
