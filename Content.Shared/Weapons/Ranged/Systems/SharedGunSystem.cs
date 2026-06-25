@@ -91,6 +91,7 @@ public abstract partial class SharedGunSystem : EntitySystem
     [Dependency] private   SharedStunSystem _stun = default!;
     [Dependency] private   SharedColorFlashEffectSystem _color = default!;
     [Dependency] private   CMUZLevelShootingSystem _zLevelShooting = default!;
+    [Dependency] private   CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private   SharedCameraRecoilSystem _recoil = default!;
     [Dependency] private   IConfigurationManager _config = default!;
     [Dependency] private   INetConfigurationManager _netConfig = default!;
@@ -651,7 +652,7 @@ public abstract partial class SharedGunSystem : EntitySystem
                         else
                         {
                             MuzzleFlash(gunUid, cartridge, mapDirection.ToAngle(), user);
-                            Audio.PlayPredicted(gun.SoundGunshotModified, gunUid, user);
+                            PlayGunshotSound(gun.SoundGunshotModified, gunUid, user);
                         }
                     }
                     else
@@ -680,7 +681,7 @@ public abstract partial class SharedGunSystem : EntitySystem
                     else
                     {
                         MuzzleFlash(gunUid, newAmmo, mapDirection.ToAngle(), user);
-                        Audio.PlayPredicted(gun.SoundGunshotModified, gunUid, user);
+                        PlayGunshotSound(gun.SoundGunshotModified, gunUid, user);
                     }
 
                     Recoil(user, mapDirection, gun.CameraRecoilScalarModified);
@@ -790,7 +791,7 @@ public abstract partial class SharedGunSystem : EntitySystem
                         FireEffects(fromEffect, hitscan.MaxLength, dir.ToAngle(), hitscan);
                     }
 
-                    Audio.PlayPredicted(gun.SoundGunshotModified, gunUid, user);
+                    PlayGunshotSound(gun.SoundGunshotModified, gunUid, user);
                     Recoil(user, mapDirection, gun.CameraRecoilScalarModified);
                     break;
                 case RMCFlamerAmmoProviderComponent flamer:
@@ -841,11 +842,17 @@ public abstract partial class SharedGunSystem : EntitySystem
             }
 
             MuzzleFlash(gunUid, ammoComp, mapDirection.ToAngle(), user);
-            Audio.PlayPredicted(gun.SoundGunshotModified, gunUid, user);
+            PlayGunshotSound(gun.SoundGunshotModified, gunUid, user);
         }
 
         Logs.Add(LogType.RMCGunShot, LogImpact.Low, $"{ToPrettyString(user)} shot {ToPrettyString(gunUid)} with {shotProjectiles.Count} projectiles aiming at {TransformSystem.ToMapCoordinates(toCoordinates)}.");
         return shotProjectiles;
+    }
+
+    private void PlayGunshotSound(SoundSpecifier? sound, EntityUid gunUid, EntityUid? user)
+    {
+        if (!_zLevels.PlayPredictedDirectlyAcrossZ(sound, gunUid, user))
+            Audio.PlayPredicted(sound, gunUid, user);
     }
 
     private Angle GetRecoilAngle(EntityUid gunUid, TimeSpan curTime, GunComponent component, Angle direction)

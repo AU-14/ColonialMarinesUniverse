@@ -1,0 +1,5 @@
+- type: rank
+  id: RMC_LanceCorporal
+  name: Lance Corporal
+  prefix: LCpl.
+  paygrade: E3

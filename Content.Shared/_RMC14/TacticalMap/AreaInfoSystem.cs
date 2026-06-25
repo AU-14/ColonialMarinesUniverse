@@ -1,3 +1,4 @@
+using Content.Shared._CMU14.ZLevels.Ordnance;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared.Alert;
@@ -22,6 +23,7 @@ public sealed partial class AreaInfoSystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private CMUTopDownOrdnanceSystem _topDownOrdnance = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private ProfManager _prof = default!;
 
@@ -137,6 +139,15 @@ public sealed partial class AreaInfoSystem : EntitySystem
 
         short ceilingLevel = 0;
         short severityToUse = 0;
+        var mapCoordinates = _transform.ToMapCoordinates(coordinates);
+        var canOrbitalBombard = _topDownOrdnance.TryResolveImpactColumn(
+            mapCoordinates,
+            CMUTopDownOrdnanceKind.OrbitalBombardment,
+            out var orbitalBombardment);
+        var canMortarFire = _topDownOrdnance.TryResolveImpactColumn(
+            mapCoordinates,
+            CMUTopDownOrdnanceKind.Mortar,
+            out var mortarFire);
 
         // Check for hive core protection first (blocks everything including OB, has range ~11.85)
         bool hasHiveCoreProtection = IsProtectedByRoofing(coordinates, r => !r.Comp.CanOrbitalBombard && r.Comp.Range > 10);        // Check for pylon protection (blocks CAS/Mortar but allows OB, has range ~8.46)
@@ -144,7 +155,7 @@ public sealed partial class AreaInfoSystem : EntitySystem
 
         // Determine ceiling level based on effective protection (including roofing entities)
         // Note: severityToUse is offset by +1 because roofnull is at index 0 (for "no area" case)
-        if (!_area.CanOrbitalBombard(coordinates, out var roofed))
+        if (!canOrbitalBombard)
         {
             ceilingLevel = 4;
             severityToUse = hasHiveCoreProtection ? (short)7 : (short)5;
@@ -154,7 +165,7 @@ public sealed partial class AreaInfoSystem : EntitySystem
             ceilingLevel = 3;
             severityToUse = hasPylonProtection ? (short)6 : (short)4;
         }
-        else if (!_area.CanSupplyDrop(_transform.ToMapCoordinates(coordinates)) || !_area.CanMortarFire(coordinates))
+        else if (!_area.CanSupplyDrop(mapCoordinates) || !canMortarFire)
         {
             ceilingLevel = 2;
             severityToUse = (short)3;
@@ -174,8 +185,8 @@ public sealed partial class AreaInfoSystem : EntitySystem
         var allowedActions = new List<string>();
         var restrictedActions = new List<string>();
 
-        if (_area.CanOrbitalBombard(coordinates, out _))
-            allowedActions.Add("Orbital Strike");
+        if (canOrbitalBombard)
+            allowedActions.Add(GetOrdnanceActionLabel("Orbital Strike", orbitalBombardment));
         else
             restrictedActions.Add("Orbital Strike");
 
@@ -184,13 +195,13 @@ public sealed partial class AreaInfoSystem : EntitySystem
         else
             restrictedActions.Add("Close Air Support");
 
-        if (_area.CanSupplyDrop(_transform.ToMapCoordinates(coordinates)))
+        if (_area.CanSupplyDrop(mapCoordinates))
             allowedActions.Add("Supply Drops");
         else
             restrictedActions.Add("Supply Drops");
 
-        if (_area.CanMortarFire(coordinates))
-            allowedActions.Add("Mortar Fire");
+        if (canMortarFire)
+            allowedActions.Add(GetOrdnanceActionLabel("Mortar Fire", mortarFire));
         else
             restrictedActions.Add("Mortar Fire");
 
@@ -243,6 +254,13 @@ public sealed partial class AreaInfoSystem : EntitySystem
         }
 
         return (areaProto.Name, severityToUse, restrictionsStr);
+    }
+
+    private static string GetOrdnanceActionLabel(string label, CMUTopDownOrdnanceResult? result)
+    {
+        return result is { Redirected: true }
+            ? $"{label} (top-down)"
+            : label;
     }
 
     private bool IsProtectedByRoofing(EntityCoordinates coordinates, Predicate<Entity<RoofingEntityComponent>> predicate)

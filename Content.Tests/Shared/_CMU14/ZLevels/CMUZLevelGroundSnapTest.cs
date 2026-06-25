@@ -76,6 +76,98 @@ public sealed class CMUZLevelGroundSnapTest
     }
 
     [Test]
+    public void UpwardGroundContactDoesNotBounce()
+    {
+        Assert.That(ShouldBounceOnGroundContact(0.9f), Is.False);
+    }
+
+    [Test]
+    public void DownwardGroundContactBounces()
+    {
+        Assert.That(ShouldBounceOnGroundContact(-0.9f), Is.True);
+    }
+
+    [Test]
+    public void VehicleUpwardGroundContactSettles()
+    {
+        Assert.That(ShouldSettleNonBouncingGroundContact(true, 0.9f), Is.True);
+    }
+
+    [Test]
+    public void NonVehicleUpwardGroundContactDoesNotSettle()
+    {
+        Assert.That(ShouldSettleNonBouncingGroundContact(false, 0.9f), Is.False);
+    }
+
+    [Test]
+    public void SettledStickyGroundSleepsAtStairHeight()
+    {
+        Assert.That(ShouldSleepZPhysics(0f, true, 0.5f, 0f), Is.True);
+    }
+
+    [Test]
+    public void UnsettledStickyGroundStaysAwake()
+    {
+        Assert.That(ShouldSleepZPhysics(-0.2f, true, 0.5f, 0f), Is.False);
+    }
+
+    [Test]
+    public void MovingStickyGroundStaysAwake()
+    {
+        Assert.That(ShouldSleepZPhysics(0f, true, 0.5f, 0.1f), Is.False);
+    }
+
+    [Test]
+    public void NonStickyGroundOnlySleepsAtBaseHeight()
+    {
+        Assert.That(ShouldSleepZPhysics(0f, false, 0.5f, 0f), Is.False);
+        Assert.That(ShouldSleepZPhysics(0f, false, 0f, 0f), Is.True);
+    }
+
+    [Test]
+    public void SettledVehicleNonStickyGroundSleepsAtSupportedHeight()
+    {
+        Assert.That(ShouldSleepZPhysics(0f, false, 0.5f, 0f, true), Is.True);
+    }
+
+    [Test]
+    public void MovingVehicleNonStickyGroundStaysAwake()
+    {
+        Assert.That(ShouldSleepZPhysics(0f, false, 0.5f, 0.1f, true), Is.False);
+    }
+
+    [Test]
+    public void DownTransitionOvershootClampsToCurrentFloor()
+    {
+        Assert.That(ShouldClampAfterDownTransition(-0.2f, -0.2f, false, -5f), Is.True);
+    }
+
+    [Test]
+    public void DownTransitionDoesNotClampWhileStillAboveCurrentFloor()
+    {
+        Assert.That(ShouldClampAfterDownTransition(0.9f, 0.9f, false, -5f), Is.False);
+    }
+
+    [Test]
+    public void DownTransitionThroughOpeningKeepsFallingTowardNextFloor()
+    {
+        Assert.That(ShouldClampAfterDownTransition(-0.2f, 0.8f, false, -5f), Is.False);
+    }
+
+    [Test]
+    public void DownTransitionThroughOpeningIgnoresStickySupportStillBelow()
+    {
+        Assert.That(ShouldClampAfterDownTransition(-0.2f, 0.8f, true, -5f), Is.False);
+    }
+
+    [Test]
+    public void DownTransitionOvershootPastStepWindowRequiresDownwardVelocity()
+    {
+        Assert.That(ShouldClampAfterDownTransition(-0.9f, -0.9f, false, 1f), Is.False);
+        Assert.That(ShouldClampAfterDownTransition(-0.9f, -0.9f, false, -1f), Is.True);
+    }
+
+    [Test]
     public void StickyGroundLargeStepUpFollowsGroundHeightImmediately()
     {
         Assert.That(GetGroundSnapDistance(-0.9f, true), Is.EqualTo(-0.9f).Within(0.001f));
@@ -127,6 +219,18 @@ public sealed class CMUZLevelGroundSnapTest
     public void StickyMoveSnapProcessesLowerZBoundary()
     {
         Assert.That(ShouldProcessMoveSnapZLevelTransition(-0.05f, true), Is.True);
+    }
+
+    [Test]
+    public void TinyNegativeLocalHeightDoesNotProcessDownBoundary()
+    {
+        Assert.That(ShouldProcessDownBoundary(-0.001f), Is.False);
+    }
+
+    [Test]
+    public void NegativeLocalHeightPastToleranceProcessesDownBoundary()
+    {
+        Assert.That(ShouldProcessDownBoundary(-0.051f), Is.True);
     }
 
     [Test]
@@ -313,6 +417,82 @@ public sealed class CMUZLevelGroundSnapTest
 
         Assert.That(method, Is.Not.Null);
         return (bool) method!.Invoke(null, new object[] { distanceToGround, stickyGround })!;
+    }
+
+    private static bool ShouldBounceOnGroundContact(float velocity)
+    {
+        var method = typeof(CMUSharedZLevelsSystem).GetMethod(
+            "ShouldBounceOnGroundContact",
+            BindingFlags.Static | BindingFlags.NonPublic);
+
+        Assert.That(method, Is.Not.Null);
+        return (bool) method!.Invoke(null, new object[] { velocity })!;
+    }
+
+    private static bool ShouldSettleNonBouncingGroundContact(bool isVehicle, float velocity)
+    {
+        var method = typeof(CMUSharedZLevelsSystem).GetMethod(
+            "ShouldSettleNonBouncingGroundContact",
+            BindingFlags.Static | BindingFlags.NonPublic);
+
+        Assert.That(method, Is.Not.Null);
+        return (bool) method!.Invoke(null, new object[] { isVehicle, velocity })!;
+    }
+
+    private static bool ShouldProcessDownBoundary(float localPosition)
+    {
+        var method = typeof(CMUSharedZLevelsSystem).GetMethod(
+            "ShouldProcessDownBoundary",
+            BindingFlags.Static | BindingFlags.NonPublic);
+
+        Assert.That(method, Is.Not.Null);
+        return (bool) method!.Invoke(null, new object[] { localPosition })!;
+    }
+
+    private static bool ShouldSleepZPhysics(
+        float distanceToGround,
+        bool stickyGround,
+        float localPosition,
+        float velocity,
+        bool isVehicle = false)
+    {
+        var method = typeof(CMUSharedZLevelsSystem).GetMethod(
+            "ShouldSleepZPhysics",
+            BindingFlags.Static | BindingFlags.NonPublic);
+
+        Assert.That(method, Is.Not.Null);
+        return (bool) method!.Invoke(
+            null,
+            new object[]
+            {
+                distanceToGround,
+                stickyGround,
+                localPosition,
+                velocity,
+                isVehicle,
+            })!;
+    }
+
+    private static bool ShouldClampAfterDownTransition(
+        float localPosition,
+        float distanceToGround,
+        bool stickyGround,
+        float velocity)
+    {
+        var method = typeof(CMUSharedZLevelsSystem).GetMethod(
+            "ShouldClampAfterDownTransition",
+            BindingFlags.Static | BindingFlags.NonPublic);
+
+        Assert.That(method, Is.Not.Null);
+        return (bool) method!.Invoke(
+            null,
+            new object[]
+            {
+                localPosition,
+                distanceToGround,
+                stickyGround,
+                velocity,
+            })!;
     }
 
     private static bool ShouldProcessMoveSnapZLevelTransition(float localPosition, bool stickyGround)

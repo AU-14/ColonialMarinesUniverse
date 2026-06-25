@@ -6,10 +6,14 @@ namespace Content.Shared._CMU14.Medical.BodyPart;
 public enum TargetBodyZone : byte
 {
     Head = 0,
-    Chest,
-    GroinPelvis,
-    LeftArm,
-    RightArm,
-    LeftLeg,
-    RightLeg,
+    Chest = 1,
+    GroinPelvis = 2,
+    LeftArm = 3,
+    RightArm = 4,
+    LeftLeg = 5,
+    RightLeg = 6,
+    LeftHand = 7,
+    RightHand = 8,
+    LeftFoot = 9,
+    RightFoot = 10,
 }

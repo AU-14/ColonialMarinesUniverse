@@ -1101,6 +1101,8 @@
         points: 2
       - id: DoorElectronics
         points: 2
+      - id: CMUDeployableZLevelLadder
+        points: 10
       - id: RMCPowerCellHigh
         points: 3
       - id: RMCPowerCellSuper

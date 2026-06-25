@@ -9,6 +9,7 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Rangefinder;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._CMU14.ZLevels.Ordnance;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Chat;
 using Content.Shared.Construction.Components;
@@ -18,6 +19,7 @@ using Content.Shared.Database;
 using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
+using Content.Shared.Explosion.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Popups;
@@ -57,6 +59,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
     [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private CMUTopDownOrdnanceSystem _topDownOrdnance = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
@@ -286,6 +289,13 @@ public abstract partial class SharedMortarSystem : EntitySystem
             WarnAt = time + travelTime,
             ImpactWarnAt = time + travelTime + shell.ImpactWarningDelay,
             LandAt = time + travelTime + shell.ImpactDelay,
+            CarvesZLevels = shell.CarvesZLevels,
+            CreatesZLevelOpening = shell.CreatesZLevelOpening || shell.CarvesZLevels,
+            CarveOpeningTile = shell.CarveOpeningTile,
+            CarveFringeTile = shell.CarveFringeTile,
+            CarveFringeRadius = shell.CarveFringeRadius,
+            CarveDelay = shell.CarveDelay,
+            CarveImpactsRemaining = shell.MaxCarveImpacts,
         };
 
         AddComp(shellId, active, true);
@@ -567,6 +577,13 @@ public abstract partial class SharedMortarSystem : EntitySystem
             WarnAt = time + shell.TravelDelay,
             ImpactWarnAt = time + shell.TravelDelay + shell.ImpactWarningDelay,
             LandAt = time + shell.TravelDelay + shell.ImpactDelay,
+            CarvesZLevels = shell.CarvesZLevels,
+            CreatesZLevelOpening = shell.CreatesZLevelOpening || shell.CarvesZLevels,
+            CarveOpeningTile = shell.CarveOpeningTile,
+            CarveFringeTile = shell.CarveFringeTile,
+            CarveFringeRadius = shell.CarveFringeRadius,
+            CarveDelay = shell.CarveDelay,
+            CarveImpactsRemaining = shell.MaxCarveImpacts,
         };
 
         AddComp(explosion, active, true);
@@ -581,6 +598,14 @@ public abstract partial class SharedMortarSystem : EntitySystem
         var shells = EntityQueryEnumerator<ActiveMortarShellComponent>();
         while (shells.MoveNext(out var uid, out var active))
         {
+            if (active.Carving)
+            {
+                if (time >= active.CarveCheckAt)
+                    ContinueCarvingMortarShell((uid, active), time);
+
+                continue;
+            }
+
             if (!active.Warned && time >= active.WarnAt)
             {
                 active.Warned = true;
@@ -603,18 +628,95 @@ public abstract partial class SharedMortarSystem : EntitySystem
             }
 
             if (time >= active.LandAt)
-            {
-                _transform.SetCoordinates(uid, active.Coordinates);
-
-                var ev = new MortarShellLandEvent(active.Coordinates);
-                RaiseLocalEvent(uid, ref ev);
-
-                _rmcExplosion.TriggerExplosive(uid);
-
-                if (!EntityManager.IsQueuedForDeletion(uid))
-                    QueueDel(uid);
-            }
+                ImpactMortarShell((uid, active), time);
         }
+    }
+
+    private void ImpactMortarShell(Entity<ActiveMortarShellComponent> shell, TimeSpan time)
+    {
+        _transform.SetCoordinates(shell.Owner, shell.Comp.Coordinates);
+
+        var ev = new MortarShellLandEvent(shell.Comp.Coordinates);
+        RaiseLocalEvent(shell.Owner, ref ev);
+
+        var exploded = TriggerMortarShellExplosion(shell.Owner);
+        if ((!shell.Comp.CarvesZLevels && !shell.Comp.CreatesZLevelOpening) || !exploded)
+        {
+            if (!EntityManager.IsQueuedForDeletion(shell.Owner))
+                QueueDel(shell.Owner);
+
+            return;
+        }
+
+        shell.Comp.Carving = true;
+        shell.Comp.CarveCheckAt = time + shell.Comp.CarveDelay;
+        Dirty(shell);
+    }
+
+    private bool TriggerMortarShellExplosion(EntityUid shell)
+    {
+        if (!TryComp(shell, out ExplosiveComponent? explosive))
+            return false;
+
+        var coordinates = _transform.GetMapCoordinates(shell);
+        _rmcExplosion.QueueExplosion(
+            coordinates,
+            explosive.ExplosionType,
+            explosive.TotalIntensity,
+            explosive.IntensitySlope,
+            explosive.MaxIntensity,
+            shell,
+            explosive.TileBreakScale,
+            explosive.MaxTileBreak,
+            explosive.CanCreateVacuum);
+
+        var ev = new CMExplosiveTriggeredEvent();
+        RaiseLocalEvent(shell, ref ev);
+        return true;
+    }
+
+    private void ContinueCarvingMortarShell(Entity<ActiveMortarShellComponent> shell, TimeSpan time)
+    {
+        var current = _transform.ToMapCoordinates(shell.Comp.Coordinates);
+        if (!_topDownOrdnance.TryResolveSurfaceBelow(
+                current,
+                CMUTopDownOrdnanceKind.Mortar,
+                out var next,
+                out _))
+        {
+            QueueDel(shell.Owner);
+            return;
+        }
+
+        if (!_topDownOrdnance.IsOpening(current) &&
+            !TryCarveMortarOpening(shell, current))
+        {
+            QueueDel(shell.Owner);
+            return;
+        }
+
+        if (!shell.Comp.CarvesZLevels)
+        {
+            QueueDel(shell.Owner);
+            return;
+        }
+
+        shell.Comp.CarveImpactsRemaining--;
+        if (shell.Comp.CarveImpactsRemaining <= 0)
+        {
+            QueueDel(shell.Owner);
+            return;
+        }
+
+        shell.Comp.Coordinates = _transform.ToCoordinates(next.Value.Coordinates);
+        shell.Comp.LandAt = time;
+        shell.Comp.Carving = false;
+        Dirty(shell);
+    }
+
+    protected virtual bool TryCarveMortarOpening(Entity<ActiveMortarShellComponent> shell, MapCoordinates coordinates)
+    {
+        return false;
     }
 
     private void OnMortarLinkLaserDesignatorDoAfter(Entity<MortarComponent> mortar, ref LinkMortarLaserDesignatorDoAfterEvent args)

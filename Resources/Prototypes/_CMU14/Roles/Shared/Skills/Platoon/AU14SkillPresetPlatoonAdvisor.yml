@@ -1,0 +1,24 @@
+- type: entity
+  id: AU14SkillPresetPlatoonAdvisor
+  name: Advisor
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillConstruction: 4
+      RMCSkillCqc: 4
+      RMCSkillEndurance: 4
+      RMCSkillEngineer: 4
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 3
+      RMCSkillVehicles: 2
+      RMCSkillOverwatch: 1
+      RMCSkillPilot: 2
+      RMCSkillLeadership: 2
+      RMCSkillIntel: 2
+      RMCSkillPowerLoader: 2
+      RMCSkillMedical: 4
+      RMCSkillSurgery: 4
+      RMCSkillNavigations: 1
+      RMCSkillPolice: 2
+      RMCSkillJtac: 4
