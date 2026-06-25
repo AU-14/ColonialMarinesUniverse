@@ -5,7 +5,7 @@ using Content.Server.GameTicking.Rules;
 using Content.Server.Station.Systems;
 using Content.Server.Station.Components;
 using Content.Shared.AU14;
-using Content.Shared.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Content.Shared.AU14.util;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Roles;

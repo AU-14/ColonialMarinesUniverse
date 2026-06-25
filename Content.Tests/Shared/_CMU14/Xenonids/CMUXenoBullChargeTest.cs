@@ -1,5 +1,5 @@
 using System;
-using Content.Shared._CMU14.Xenonids.Bull;
+using Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Bull;
 using NUnit.Framework;
 
 namespace Content.Tests.Shared._CMU14.Xenonids;

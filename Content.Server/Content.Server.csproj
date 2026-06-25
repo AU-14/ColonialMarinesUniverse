@@ -1,4 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputPath>..\bin\Content.Server\</OutputPath>
@@ -34,25 +35,24 @@
   <ItemGroup>
     <ProjectReference Include="..\Content.Analyzers\Content.Analyzers.csproj" Condition="'$(SkipRobustAnalyzer)' != 'true'" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
-
+  
   <ItemGroup>
-    <Folder Include="AU14\Actions\" />
-    <Folder Include="AU14\Commands\" />
-    <Folder Include="AU14\Extract\" />
-    <Folder Include="AU14\Round\Colony\" />
-    <Folder Include="AU14\Round\Utility\" />
-    <Folder Include="JobTitleChanger\" />
-    <Folder Include="_AU14\RandomBreaker\" />
-    <Folder Include="_RMC14\Extract\" />
-    <Folder Include="_RMC14\Power\Commands\" />
+    <Folder Include="_CMU14\Domain\Space\Orbital\" />
+    <Folder Include="_CMU14\Jobs\Economy\Factory\" />
+    <Folder Include="_CMU14\Ops\" />
+    <Folder Include="_CMU14\Ops\Allegiance\Origin\" />
+    <Folder Include="_CMU14\Ops\Factions\Ambassador\" />
+    <Folder Include="_CMU14\Ops\Radio\" />
+    <Folder Include="_CMU14\Round\Objectives\" />
+    <Folder Include="_CMU14\Domain\Air\" />
+    <Folder Include="_CMU14\Domain\Ground\" />
+    <Folder Include="_CMU14\Jobs\Fishing\" />
+    <Folder Include="_CMU14\Jobs\Salvage\" />
+    <Folder Include="_CMU14\Round\Lobby\Voting\" />
+    <Folder Include="_CMU14\Round\Spawn\VendorMarker\" />
+    <Folder Include="_CMU14\Threats\Mobs\Yautja\" />
+    <Folder Include="_CMU14\Util\Chat\" />
+    <Folder Include="_CMU14\Round\Antags" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="AU14\SetFullPowerCommand.cs" />
-    <Compile Remove="AU14\Threats\KillAllHumansRuleComponent.cs" />
-    <Compile Remove="AU14\CLF\CLFRecruitRoleComponent.cs" />
-  </ItemGroup>
-
-
 
 </Project>

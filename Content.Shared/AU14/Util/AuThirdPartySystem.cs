@@ -1,4 +1,4 @@
-using Content.Shared.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Robust.Shared.Prototypes;
 using Robust.Shared.IoC;
 using Robust.Shared.Player;
@@ -27,7 +27,7 @@ public abstract partial class AuThirdPartySystem : EntitySystem
 
     public void SpawnThirdPartyForContext(string currentGamemode, string? currentThreat, string? govforPlatoon, string? opforPlatoon)
     {
-        var allThirdParties = PrototypeManager.EnumeratePrototypes<AuThirdPartyPrototype>().ToList();
+        var allThirdParties = PrototypeManager.EnumeratePrototypes<ThirdPartyPrototype>().ToList();
         var playerCount = PlayerManager.PlayerCount;
         var filtered = allThirdParties.ToList();
 
@@ -50,7 +50,7 @@ public abstract partial class AuThirdPartySystem : EntitySystem
         }
 
         // Build weighted list
-        var weighted = new List<AuThirdPartyPrototype>();
+        var weighted = new List<ThirdPartyPrototype>();
         foreach (var proto in filtered)
         {
             int weight = Math.Max(1, proto.weight);
@@ -67,7 +67,7 @@ public abstract partial class AuThirdPartySystem : EntitySystem
         SpawnThirdParty(selected);
     }
 
-    public void SpawnThirdParty(AuThirdPartyPrototype party)
+    public void SpawnThirdParty(ThirdPartyPrototype party)
     {
 
         Logger.GetSawmill("content").Debug($"[AuThirdPartySystem] Spawning third party: {party.ID}");

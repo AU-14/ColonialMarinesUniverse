@@ -10,6 +10,7 @@ using Content.Shared.Mobs.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Random;
+using ApeComponent = Content.Shared._CMU14.Threats.Mobs.Ape.ApeComponent;
 
 namespace Content.Shared._RMC14.Gibbing;
 

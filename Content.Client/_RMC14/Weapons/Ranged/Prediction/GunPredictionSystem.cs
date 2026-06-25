@@ -1,6 +1,6 @@
 using System.Linq;
 using Content.Client.Projectiles;
-using Content.Shared._CMU14.Xenonids.Warlock;
+using Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared.Projectiles;
 using Content.Shared.Weapons.Ranged.Events;

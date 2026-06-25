@@ -1,6 +1,6 @@
 using Content.Shared._RMC14.Xenonids.Projectile;
 // CMU14
-using Content.Shared._CMU14.Xenonids.Warlock;
+using Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
 // CMU14
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;

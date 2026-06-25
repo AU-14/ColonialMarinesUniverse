@@ -4,7 +4,7 @@ using Content.Server._CMU14.Dropship.TacticalLand;
 using Content.Server._RMC14.GameStates;
 using Content.Server._RMC14.Marines;
 using Content.Server.AU14.Round;
-using Content.Server.AU14.ThirdParty;
+using Content.Server._CMU14.Ops.ThirdParty;
 using Content.Server._RMC14.Shuttles;
 using Content.Server.Doors.Systems;
 using Content.Server.GameTicking;
@@ -56,6 +56,10 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
+using ThirdPartyDropshipAutoReturnComponent = Content.Server._CMU14.Ops.ThirdParty.ThirdPartyDropshipAutoReturnComponent ;
+using ThirdPartyDropshipDeactivatedConsoleComponent = Content.Server._CMU14.Ops.ThirdParty.ThirdPartyDropshipDeactivatedConsoleComponent ;
+using ThirdPartyDropshipReturnDestinationComponent = Content.Server._CMU14.Ops.ThirdParty.ThirdPartyDropshipReturnDestinationComponent ;
+using ThirdPartyDropshipReturnedComponent = Content.Server._CMU14.Ops.ThirdParty.ThirdPartyDropshipReturnedComponent ;
 
 namespace Content.Server._RMC14.Dropship;
 
