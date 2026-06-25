@@ -1,0 +1,13 @@
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentEngineering
+  name: au14-department-colony-engineeringlogistics
+  description: au14-department-colony-engineeringlogistics-description
+  color: "#e3ce94"
+  roles:
+    - AU14JobCivilianHeadOfEngineering
+    - AU14JobCivilianEngineer
+    - AU14JobCivilianFreightSystemsSpecialist
+  departmentRadio: null
+  headOfDepartment: AU14JobCivilianHeadOfEngineering
+  faction: colonist

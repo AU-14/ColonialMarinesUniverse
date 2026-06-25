@@ -223,9 +223,14 @@ public sealed partial class CMUMedicalFieldBleedControlSystem : EntitySystem
     {
         TargetBodyZone.Head,
         TargetBodyZone.RightArm,
+        TargetBodyZone.RightHand,
         TargetBodyZone.Chest,
+        TargetBodyZone.GroinPelvis,
         TargetBodyZone.LeftArm,
+        TargetBodyZone.LeftHand,
         TargetBodyZone.RightLeg,
+        TargetBodyZone.RightFoot,
         TargetBodyZone.LeftLeg,
+        TargetBodyZone.LeftFoot,
     };
 }

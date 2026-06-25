@@ -1,0 +1,5 @@
+- type: rank
+  id: USArmy_GeneralArmy
+  name: General of the Army
+  prefix: Gen. Arm.
+  paygrade: O10

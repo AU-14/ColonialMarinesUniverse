@@ -1,0 +1,10 @@
+- type: loadoutGroup
+  id: CivJumpsuitAU14
+  name: au14-loadout-group-civilian-jumpsuit
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - JumpsuitColonistAU14
+  - JumpsuitCivilianAU14
+  - JumpsuitTShirtWhiteAU14
+  - JumpsuitTShirtGrayAU14

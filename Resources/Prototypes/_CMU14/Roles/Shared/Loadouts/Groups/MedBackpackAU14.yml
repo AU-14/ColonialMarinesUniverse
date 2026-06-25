@@ -1,0 +1,7 @@
+- type: loadoutGroup
+  id: MedBackpackAU14
+  name: rmc-loadout-group-backpack
+  minLimit: 1
+  hidden: true
+  loadouts:
+  - MedicalSatchelAU14

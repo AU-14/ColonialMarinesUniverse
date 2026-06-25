@@ -1,0 +1,104 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCLFPhysician
+  roundSide: ThirdParty
+  roundForce: CLF
+  roundRole: CLFPhysician
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - CLF
+  - type: CLFMember
+    statusIcon: CLFFactionMedic
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillMedical: 3
+      RMCSkillResearch: 1
+      RMCSkillSurgery: 2
+      RMCSkillFirearms: 2
+      RMCSkillPolice: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-clfphysician
+  - type: StartingMindRole
+    mindRole: MindRoleCLFPhysician
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: colonist
+  - type: ShowMarineIcons
+    factions:
+    - CLF
+  - type: FactionLanguageMember
+    factionTag: CLF
+
+  name: au14-job-name-clfphysician
+  description: au14-job-description-clfphysician
+  setPreference: true
+  ignoreAllegiance: true
+  playTimeTracker: AU14JobCLFPhysician
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+    - Epilepsy
+  ranks:
+    RMCRankCivilianDoctor: []
+  startingGear: AU14GearCLFPhysician
+  icon: "RMCJobIconCLFMedic"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-clflrs
+  accessGroups:
+  - Colonist
+  - aumed
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCLFPhysician
+  equipment:
+    ears2: RMCFlashlightPen
+    suitstorage: RMCFlashlight
+    id: AU14IDCardCLFPhysician
+  inhand:
+  - AU14CLFHeadset
+  - RMCCLFArmband
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCLFPhysician
+  name: Spawn Point CLF Physician
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCLFPhysician
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCLFPhysician
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobAU14JobCLFPhysician
+  points: 7
+  groups:
+  - CLFPhycisianSpecializationAU14
+  - MedBackpackAU14
+  - MedJumpsuitAU14
+  - MedHatsAU14
+  - MedJacketAU14
+  - MedGlovesAU14
+  - CivFootwearAU14
+  - MedMaskAU14
+  - MedBeltAU14
+  - MedPouchAU14
+  - MedPouchRightAU14
+  - ForceMedEssentialAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC

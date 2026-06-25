@@ -17,6 +17,8 @@
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
+  - type: FactionLanguageLeader
+    factionTag: ForeignMob
 
   name: au14-job-name-mobboss
   description: You have been ousted from your old territory and lost everything. But old habits die hard, move into rival territory with your Family and begin anew.
@@ -28,6 +30,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-mobboss
+  spawnMenuRoleName: Mob Boss (3rd party)
   accessGroups:
   - Colonist
   roleWeight: 0.25

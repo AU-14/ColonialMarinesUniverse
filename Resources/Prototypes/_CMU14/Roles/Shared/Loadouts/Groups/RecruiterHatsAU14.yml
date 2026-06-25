@@ -1,0 +1,11 @@
+- type: loadoutGroup
+  id: RecruiterHatsAU14
+  name: au14-loadout-group-military-hats
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - USASFCapAU14
+  - JunglePatrolCapAU14
+  - BeretUSArmyAU14
+  - USASFSECFORBeretAU14
+  - HeadBeretGreenAU14

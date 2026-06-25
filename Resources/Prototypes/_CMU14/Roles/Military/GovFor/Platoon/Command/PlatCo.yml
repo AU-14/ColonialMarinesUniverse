@@ -1,0 +1,228 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobPlatCoBaseAbstract
+  name: au14-job-name-govforplatco
+  description: au14-job-description-govforplatco
+  icon: "AU14JobIconPlatCo"
+  spawnMenuRoleName: Platoon Commander (GOVFOR)
+  supervisors: au14-job-supervisors-govforplatco
+  startingGear: AU14GearGOVFORPlatCo
+  dummyStartingGear: AU14GearGOVFORPlatCoDummy
+  playTimeTracker: AU14JobGOVFORPlatCo
+  requireAdminNotify: true
+  joinNotifyCrew: true
+  canBeAntag: false
+  accessGroups:
+  - AU14GovforCommand
+  - aulegacygroupcommand # NOTE: should remove & hard migrate
+
+- type: job
+  abstract: true
+  parent: AU14JobPlatCoBaseAbstract
+  id: AU14JobPlatCoBase
+  roundRole: PlatoonCommander
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: CommendationGiver
+  - type: InnateCommandSpeech
+  - type: Skills
+    preset: AU14SkillPresetPlatoonCommander
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforplatco
+  - type: AU14SilenceOrderAbility
+  - type: RMCSpeechBubbleSpecificStyle
+    speechStyleClass: commanderSpeech
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: govfor_platco
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
+        state: platco
+    UPP:
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORPlatCoUPP
+    WYPMC:
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORPlatCoWYPMC
+    CMBCIU:
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORPlatCoCMBCIU
+
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
+  - !type:AgeRequirement
+    requiredAge: 30
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxiety
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankMajor:
+      entity: AU14ChevronMajor
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORPlatCo
+        time: 180000 # 50 hours
+    RMCRankCaptain:
+      entity: AU14ChevronCaptain
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFORPlatCo
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORPlatCo
+  equipment:
+    id: AU14IDCardGOVFORPlatCo
+    ears: AU14HeadsetGovforCommand
+    pocket1: AU14StampCO
+  inhand:
+    -  AU14TabletGovfor
+
+- type: startingGear
+  id: AU14GearGOVFORPlatCoDummy
+  equipment:
+    shoes: CMBootsBlack
+    head: CMHeadCapPeakedFormal
+    jumpsuit: CMJumpsuitXOFormal
+    ears: AU14HeadsetGovforCommand
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORPlatCo
+  name: Spawn Point GOVFOR Platoon Commander
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORPlatCo
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobPlatCoBase
+  id: AU14JobGOVFORPlatCo
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: RMCSpeechBubbleSpecificStyle
+      speechStyleClass: commanderSpeech
+
+- type: roleLoadout
+  id: JobAU14JobGOVFORPlatCo
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - GOVFORPlatCOSidearmBeltAU14
+
+- type: job
+  parent: AU14JobPlatCoBase
+  id: AU14JobOPFORPlatCo
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORPlatCo"
+  spawnMenuRoleName: Platoon Commander (OPFOR)
+  supervisors: au14-job-supervisors-opforplatco
+  startingGear: AU14GearOPFORPlatCo
+  dummyStartingGear: AU14GearOPFORPlatCoDummy
+  accessGroups:
+  - AU14OpforCommand
+
+- type: startingGear
+  id: AU14GearOPFORPlatCo
+  equipment:
+    id: AU14IDCardopforPlatCo
+    ears: AU14HeadsetOpforCommand
+  inhand:
+   -  AU14TabletOpfor
+
+- type: startingGear
+  id: AU14GearOPFORPlatCoDummy
+  equipment:
+    shoes: CMBootsBlack
+    head: CMHeadCapPeakedFormal
+    jumpsuit: CMJumpsuitXOFormal
+    ears: AU14HeadsetOpforCommand
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointopforPlatCo
+  name: Spawn Point opfor Platoon Commander
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORPlatCo
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobPlatCoBase
+  id: AU14JobGOVFORPlatCoCMBCIU
+  roundForce: CMBCIU
+  name: Platoon Commander
+  spawnMenuRoleName: Platoon Commander (CMBCIU)
+  ranks:
+    AU14RankCMBMarshal: []
+
+- type: job
+  parent: AU14JobPlatCoBase
+  id: AU14JobGOVFORPlatCoRMC
+  roundForce: RMC
+  name: au14-job-name-govforplatcoRMC
+  description: au14-job-description-govforplatco
+  spawnMenuRoleName: Platoon Commander (TWE RMC)
+
+- type: job
+  parent: AU14JobPlatCoBase
+  id: AU14JobGOVFORPlatCoUPP
+  roundForce: UPP
+  requirements: []
+  name: Platoon Commander
+  spawnMenuRoleName: Platoon Commander (UPP)
+  ranks:
+    UPP_Captain:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatCo
+      time: 360000 # 100 hours
+    UPP_SeniorLieutenant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatCo
+      time: 108000 # 30 hours
+    UPP_Lieutenant: []
+
+- type: job
+  parent: AU14JobPlatCoBase
+  id: AU14JobGOVFORPlatCoWYPMC
+  roundForce: WYPMC
+  requirements: []
+  name: PMC Operations Director
+  spawnMenuRoleName: Platoon Commander (WYPMC)
+  ranks:
+    AU14RankWeYuCommanderSenior:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatCo
+      time: 360000 # 100 hours
+    AU14RankWeYuCommander: []

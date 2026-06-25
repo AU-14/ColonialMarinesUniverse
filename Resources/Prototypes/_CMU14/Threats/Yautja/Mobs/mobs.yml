@@ -5,6 +5,13 @@
   name: Yautja Hunter
   suffix: Yautja, Event
   components:
+  - type: Language
+    spokenLanguages:
+    - Yautja
+    understoodLanguages:
+    - Yautja
+    currentLanguage: Yautja
+    defaultLanguage: Yautja
   - type: Yautja
   - type: YautjaHeatResistance
   - type: IgnoreXenoWeedsSlowdown

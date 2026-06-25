@@ -1,0 +1,794 @@
+- type: language
+  id: Yautja
+  name: "Yautja"
+  description: "An ancient alien language."
+  isVisibleLanguage: true
+  typefaceId: DefaultBold
+  textSize: null
+  showLanguageIcon: false
+  showLanguageName: false
+  firstContactMeaning: language-Yautja-first-contact
+  languageIcon:
+    sprite: /Textures/_CMU14/Yautja/mask.rsi
+    state: icon
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 140
+  minimumRequiredLearnedWords: 40
+  learningRateMultiplier: 0.45
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["krrk", "rrk", "krk", "krr", "krkr"]
+    minSyllables: 1
+    maxSyllables: 3
+  speechOverride:
+    speechSoundsOverride: CMUYautjaSpeech
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Arcturian
+  name: "Arcturian"
+  description: "An ancient alien language from the Arcturian colonies."
+  isVisibleLanguage: true
+  typefaceId: DefaultBold
+  textSize: null
+  showLanguageName: true
+  firstContactMeaning: language-Arcturian-first-contact
+  languageIcon:
+    sprite: Objects/Weapons/Melee/bone_spear.rsi
+    state: spear
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 150
+  minimumRequiredLearnedWords: 40
+  learningRateMultiplier: 0.45
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["kha", "zra", "vok", "thaal", "qir", "dra", "xen", "vak", "oru", "zhak", "kra", "neth", "sha", "vra", "ulk", "yrr", "kaal", "tor", "vek", "sai", "qor", "mra", "zhir", "tal", "xur", "gra", "uun", "hek", "raal", "vor", "krii", "drax", "shel", "mor", "tza", "vrak", "ael", "nyr", "ghel", "qaal", "zir", "threx", "kor", "ulv", "saar", "jek", "vii", "nahl", "xaar", "brax"]
+    minSyllables: 1
+    maxSyllables: 4
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: TacticalSignLanguage
+  name: "Tactical Sign Language"
+  description: "A visual language using hand gestures and body movements."
+  isVisibleLanguage: true
+  typefaceId: DefaultItalic
+  textSize: null
+  showLanguageName: true
+  languageIcon: "/Textures/Interface/Default/Slots/hand_m.png"
+  canUseRadio: false
+  needsSpeech: false
+  needsLOS: true
+  expectedVocabularySize: 100
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["*waves*", "*gestures*", "*points*", "*nods*", "*shakes head*", "*thumbs up*", "*claps*", "*motions*", "*indicates*", "*signals*"]
+    minSyllables: 1
+    maxSyllables: 1
+
+- type: language
+  id: Ukrainian
+  name: "Ukrainian"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: DefaultBold
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: UA
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 125
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ба", "ве", "ги", "жа", "зі", "кі", "ла", "ме", "но", "па", "ра", "ті", "хо", "чу", "ші", "їв", "єр", "ня", "льо", "врі", "при", "тре", "кри", "зна", "дро", "мле", "плі", "єв", "цю", "ря"]
+    minSyllables: 1
+    maxSyllables: 4
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Polish
+  name: "Polish"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: Default
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: PL
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 130
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["szcze", "prze", "strze", "krze", "trze", "czar", "dźwi", "źre", "grze", "wrze", "brze", "pstr", "chrze", "sztr", "rzec", "kąt", "łom", "mrok", "żar", "śnie", "błysk", "grz", "prz", "str", "chr", "dźw", "źć", "ńk", "łk", "rz"]
+    minSyllables: 1
+    maxSyllables: 4
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Czech
+  name: "Czech"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: Default
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: CZ
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 115
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["čar", "šer", "řek", "třes", "dřev", "přes", "větr", "křik", "žár", "hlub", "střel", "pláš", "smrk", "břeh", "dům", "tich", "chřap", "škr", "řít", "věž", "pln", "křes", "dřím", "stín", "řad", "čel", "šum", "trn", "chrám", "věk"]
+    minSyllables: 1
+    maxSyllables: 4
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Turkish
+  name: "Turkish"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: Default
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: TR
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 120
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ba", "be", "bi", "bo", "bu", "ça", "çe", "çi", "ço", "çu", "da", "de", "di", "do", "du", "ka", "ke", "ki", "ko", "ku", "la", "le", "li", "lo", "lu", "ma", "me", "mi", "mo", "mu", "na", "ne", "ni", "no", "nu", "ra", "re", "ri", "ro", "ru", "sa", "se", "si", "so", "su", "ta", "te", "ti", "to", "tu", "ya", "ye", "yi", "yo", "yu", "ak", "ek", "ik", "ok", "uk", "ar", "er", "ir", "or", "ur", "lar", "ler", "dan", "den", "tan", "ten", "ver", "yok", "ama", "dur", "gel", "yağ", "kül", "kör", "mağa", "ör", "aç", "ac", "ağ", "ay", "şek", "şık", ök ]
+    minSyllables: 1
+    maxSyllables: 3
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Korean
+  name: "Korean"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: Default
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: KR
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 135
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ga", "na", "da", "ra", "ma", "ba", "sa", "ja", "cha", "ka", "ta", "pa", "ha", "gi", "ni", "ri", "mi", "bi", "si", "ji", "go", "no", "do", "ro", "mo", "bo", "so", "jo", "han", "min", "seok", "young", "dae", "gung", "hwa", "juk", "rim", "sang", "won", "guk", "jeong", "hyun", "kyung", "su", "yeon"]
+    minSyllables: 1
+    maxSyllables: 4
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Italian
+  name: "Italian"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: DefaultItalic
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: IT
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 125
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["tra", "tre", "tri", "tro", "tra", "fra", "fre", "fri", "fla", "fle", "gli", "gna", "sci", "spa", "spe", "sco", "sta", "ste", "sto", "pre", "pra", "bre", "bri", "cro", "cre", "glo", "gra", "ple", "plo"]
+    minSyllables: 1
+    maxSyllables: 3
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Irish
+  name: "Irish"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: DefaultItalic
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: IE
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 95
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["bho", "dho", "fha", "gha", "mha", "tho", "bhra", "dhra", "ghra", "mhra", "shai", "slea", "croi", "brei", "froi", "droi", "glen", "brua", "clan", "trai", "finn", "dail", "rua", "lair", "muir", "sean", "oire", "caol", "brea", "nial"]
+    minSyllables: 1
+    maxSyllables: 3
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Finnish
+  name: "Finnish"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: Default
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: FI
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 110
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ta", "te", "ti", "to", "tu", "ka", "ke", "ki", "ko", "ku", "sa", "se", "si", "so", "su", "la", "le", "li", "lo", "lu", "mä", "nä", "pä", "rä", "vä", "ty", "sy", "hy", "lö", "kö", "ää", "ee", "ii", "uu", "äy", "öy", "vai", "kai", "suo", "maa"]
+    minSyllables: 2
+    maxSyllables: 5
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Hungarian
+  name: "Hungarian"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: DefaultBold
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: HU
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 115
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["gyo", "nya", "sza", "csa", "zsa", "dza", "dzsa", "tör", "bőr", "fő", "kő", "tű", "szép", "vár", "kér", "lát", "még", "nagy", "ház", "rét", "pén", "cső", "gyűr", "nyár", "köz", "zöld", "szél", "tűz", "ér", "fal"]
+    minSyllables: 1
+    maxSyllables: 3
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Albanian
+  name: "Albanian"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: DefaultItalic
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: AL
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 90
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["dhe", "gja", "nje", "shi", "thë", "llë", "rrë", "zhë", "xhë", "bë", "kë", "më", "për", "sht", "ndr", "ngë", "gjë", "që", "vër", "dor", "mal", "gur", "det", "flam", "zem", "nat", "yll", "bard", "kuq", "lir"]
+    minSyllables: 1
+    maxSyllables: 3
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Serbian
+  name: "Serbian"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: DefaultBold
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: RS
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 120
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ба", "ва", "га", "да", "ђа", "жа", "за", "ка", "ља", "на", "ња", "па", "ра", "са", "та", "ћа", "ча", "џа", "ша", "би", "ли", "ђи", "жи", "ки", "љи", "ми", "ни", "њи", "ри", "ћи", "бра", "дра", "гра", "вра", "здр", "шта", "чар", "жар", "њег", "љуб", "ћир"]
+    minSyllables: 1
+    maxSyllables: 4
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Lithuanian
+  name: "Lithuanian"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: Default
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: LT
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 100
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["tra", "tre", "tri", "kla", "kle", "kli", "pra", "pre", "pri", "žra", "žre", "gra", "gre", "gri", "bra", "bre", "bru", "šla", "šle", "šri", "vra", "vre", "sna", "sne", "plė", "krė", "drė", "žem", "lau", "dai"]
+    minSyllables: 1
+    maxSyllables: 4
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Arabic
+  name: "Arabic"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: Default
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: SA
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 135
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["al", "ah", "ba", "da", "fa", "ha", "ja", "ka", "la", "ma", "na", "ra", "sa", "ta", "wa", "ya", "ib", "ad", "ar", "in", "ash", "ayn", "din", "rah", "hak", "nur", "qal", "sul", "bar", "zah"]
+    minSyllables: 1
+    maxSyllables: 4
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Afrikaans
+  name: "Afrikaans"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: Default
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: ZA
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 105
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["blief", "kraaf", "groof", "snuif", "skoef", "triek", "vlof", "knoef", "snoer", "proef", "bruif", "kloef", "stroel", "vlam", "drief", "bloem", "skryf", "gryn", "zwak", "frak"]
+    minSyllables: 1
+    maxSyllables: 3
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Dutch
+  name: "Dutch"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: Default
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: NL
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 120
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["sch", "scho", "schr", "vla", "vle", "gro", "dro", "bro", "kno", "kru", "zw", "stroom", "bloem", "druif", "pruif", "klei", "vrij", "dijk", "koen", "noord", "vaart", "veld", "wind", "zand", "rood", "goed", "huis", "kerk", "meer"]
+    minSyllables: 1
+    maxSyllables: 3
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Swahili
+  name: "Swahili"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: Default
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: KE
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 110
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ba", "bi", "bo", "bu", "da", "di", "du", "fa", "fi", "ga", "gi", "ha", "ka", "ki", "la", "li", "ma", "mi", "na", "ni", "pa", "pi", "ra", "ri", "sa", "si", "ta", "ti", "wa", "ya", "za", "cha", "chi", "nga", "ngi", "ngo", "mba", "mbi", "nda", "ndi", "nza", "nzi", "mwa", "mwe"]
+    minSyllables: 2
+    maxSyllables: 5
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Persian
+  name: "Persian"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: Default
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: IR
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 135
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ah", "ar", "az", "ba", "be", "dar", "del", "dor", "far", "gol", "jan", "kam", "kha", "mah", "mehr", "nar", "par", "rah", "sar", "shah", "shir", "tar", "yar", "zar", "ruz", "rang", "bar", "baz", "darya", "khur", "nav", "omid", "rosh", "sor"]
+    minSyllables: 1
+    maxSyllables: 4
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Hindi
+  name: "Hindi"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: Default
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: IN
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 135
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["a", "aa", "ba", "bha", "cha", "da", "dha", "ga", "ha", "ja", "ka", "kha", "la", "ma", "na", "pa", "pha", "ra", "sa", "sha", "ta", "tha", "va", "ya", "raj", "dev", "ram", "krish", "sur", "prem", "dhar", "kar", "nagar", "mandir", "shakti", "ganga", "chandra", "akash"]
+    minSyllables: 1
+    maxSyllables: 4
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Vietnamese
+  name: "Vietnamese"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: DefaultItalic
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: VN
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 120
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ba", "bà", "bá", "bả", "ca", "cá", "cà", "cha", "chà", "da", "đà", "đi", "ga", "gì", "ha", "hà", "khi", "kia", "la", "là", "ma", "mà", "na", "nhà", "nga", "ngô", "pha", "phê", "qua", "ra", "rồi", "thà", "thì", "trà", "trên", "và", "vào", "với", "xưa", "yên"]
+    minSyllables: 1
+    maxSyllables: 4
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Portuguese
+  name: "Portuguese"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: DefaultItalic
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: PT
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 130
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["lhão", "nhê", "chã", "brio", "grão", "três", "prão", "frão", "vão", "ção", "rê", "dê", "fla", "cro", "gri", "plu", "são", "mão", "nho", "lho", "qui", "gue", "ria", "rio", "mar", "sol", "lua", "bom", "bem", "lar"]
+    minSyllables: 1
+    maxSyllables: 3
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Indonesian
+  name: "Indonesian"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: Default
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: ID
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 115
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ba", "ca", "da", "ga", "ha", "ja", "ka", "la", "ma", "na", "pa", "ra", "sa", "ta", "wa", "ya", "nga", "ngi", "ngu", "mba", "nda", "ndi", "bri", "tri", "kri", "sri", "mau", "kau", "dia", "aku"]
+    minSyllables: 2
+    maxSyllables: 5
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Filipino
+  name: "Filipino"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: Default
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: PH
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 110
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["na", "nga", "ng", "ang", "ka", "ma", "pa", "sa", "ta", "ba", "la", "ra", "ga", "wa", "ya", "ko", "mo", "po", "si", "ni", "ala", "aya", "aga", "ama", "asa", "ata"]
+    minSyllables: 2
+    maxSyllables: 5
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Urdu
+  name: "Urdu"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: Default
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: PK
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 135
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["aa", "ba", "cha", "da", "fa", "ga", "ha", "ja", "ka", "la", "ma", "na", "pa", "ra", "sa", "sha", "ta", "wa", "za", "kh", "gh", "dil", "jaan", "noor", "gul", "rang", "mehr", "shah", "baz", "sher", "zain"]
+    minSyllables: 1
+    maxSyllables: 4
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Yoruba
+  name: "Yoruba"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: DefaultItalic
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: NG
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 95
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["bá", "bí", "bó", "bẹ́", "dá", "dí", "dó", "dẹ́", "fá", "fí", "gá", "gí", "já", "jí", "ká", "kí", "kó", "kẹ́", "lá", "lí", "ló", "lẹ́", "má", "mí", "ná", "ní", "pá", "pí", "rá", "rí", "ṣá", "ṣí", "ṣó", "ṣẹ́", "tá", "tí", "wá", "wí", "yá", "yí"]
+    minSyllables: 1
+    maxSyllables: 3
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Esperanto
+  name: "Esperanto"
+  description: "A constructed interlanguage."
+  isVisibleLanguage: true
+  typefaceId: DefaultItalic
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: PL
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 100
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ĉa", "ĉe", "ĉi", "ĉo", "ĝa", "ĝe", "ĝo", "ĥa", "ĥo", "ĵa", "ĵe", "ĵo", "ŝa", "ŝe", "ŝo", "ŭa", "ŭe", "pra", "tra", "gra", "kri", "blu", "stel", "mond", "ling", "ver", "bon"]
+    minSyllables: 1
+    maxSyllables: 3
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Latin
+  name: "Latin"
+  description: "An ancient Earth language."
+  isVisibleLanguage: true
+  typefaceId: DefaultItalic
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: VA
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 110
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["tra", "tri", "tru", "cra", "cre", "cri", "cro", "fru", "fra", "fre", "gra", "gri", "glor", "pla", "ple", "pri", "pro", "blu", "bra", "str", "spr", "rex", "vox", "lux", "sol", "mar", "vin", "dom", "fer"]
+    minSyllables: 1
+    maxSyllables: 3
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Swedish
+  name: "Swedish"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: DefaultBold
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: SE
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 140
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["de", "vin", "meg", "og", "vi", "en", "nei", "ing", "gen", "et", "pur", "ke", "er", "nei", "hjort", "tysk", "de", "kjae", "en", "stein", "ja", "ull", "sil", "pa", "hun", "kjo", "erg", "ba", "re", "ol", "kyll", "menn", "esk", "gul", "gronn", "natt", "makt", "to", "fi", "re", "dag", "god", "jul", "ild", "fem", "jeg", "deg", "bjor", "en", "russ", "land", "sve", "rig", "nor", "ge", "dan", "is"]
+    minSyllables: 2
+    maxSyllables: 4
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Brazilian
+  name: "Brazilian"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: DefaultBold
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: BR
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 140
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ih", "tá", "okay", "ser", "tu", "opa", "me", "de", "senhor", "senhora", "nome", "copo", "prato", "talher", "um", "tipo", "aquilo", "pessoa", "fulano", "oi", "ei", "e", "é", "ah", "tem", "algo", "bem", "mal", "legal", "illegal", "maldito", "maldita", "arma", "sim", "não", "talvez", "quem", "onde", "quando", "como", "porquê", "porque", "eu", "você", "ele", "ela", "nós", "eles", "amigo", "inimigo", "homem", "mulher", "criança", "chefe", "soldado", "médico", "comandante", "ajuda", "perigo", "cuidado", "pare", "vá", "vem", "fica", "espera", "olha", "escuta", "fala", "silêncio", "água", "comida", "casa", "porta", "chão", "céu", "terra", "fogo", "luz", "escuro", "noite", "dia", "agora", "depois", "antes", "aqui", "lá", "perto", "longe", "rápido", "devagar", "forte", "fraco", "bom", "ruim", "novo", "velho", "grande", "pequeno", "verdade", "mentira", "seguro", "morto", "vivo"]
+    minSyllables: 2
+    maxSyllables: 4
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Slovak
+  name: "Slovak"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: DefaultBold
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: SK
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 140
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ah", "áno", "nie", "som", "si", "ja", "ty", "on", "ona", "my", "vy", "oni", "dobrý", "zlý", "malý", "veľký", "človek", "meno", "priateľ", "nepriateľ", "pán", "pani", "dom", "voda", "jedlo", "chlieb", "ruka", "oko", "hlava", "srdce", "deň", "noc", "svetlo", "tma", "oheň", "zem", "vzduch", "čas", "teraz", "potom", "kde", "kto", "čo", "ako", "prečo", "tam", "tu", "choď", "poď", "stoj", "čakaj", "pomoc", "nebezpečie", "zbraň", "vojna", "mier", "silný", "slabý", "rýchlo", "pomaly", "dobré", "zlé", "nový", "starý", "pravda", "lož", "vidím", "počujem", "hovorím", "rozumiem"]
+    minSyllables: 2
+    maxSyllables: 4
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Romanian
+  name: "Romanian"
+  description: "An old Earth language."
+  isVisibleLanguage: true
+  typefaceId: DefaultBold
+  textSize: null
+  showLanguageName: true
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: RO
+  canUseRadio: true
+  needsSpeech: true
+  expectedVocabularySize: 140
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ah", "da", "nu", "eu", "tu", "el", "ea", "noi", "voi", "ei", "bun", "rău", "mic", "mare", "om", "nume", "prieten", "dușman", "domn", "doamnă", "casă", "apă", "mâncare", "pâine", "mână", "ochi", "cap", "inimă", "zi", "noapte", "lumină", "întuneric", "foc", "pământ", "aer", "timp", "acum", "apoi", "unde", "cine", "ce", "cum", "de ce", "aici", "acolo", "mergi", "vino", "stai", "așteaptă", "ajutor", "pericol", "armă", "război", "pace", "puternic", "slab", "repede", "încet", "bine", "rău", "nou", "vechi", "adevăr", "minciună", "văd", "aud", "vorbesc", "înțeleg"]
+    minSyllables: 2
+    maxSyllables: 4
+  speechOverride:
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}

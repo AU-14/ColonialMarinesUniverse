@@ -1,0 +1,15 @@
+- type: loadoutGroup
+  id: ForceStampApprovedAU14
+  name: rmc-loadout-group-backpack
+  minLimit: 1
+  hidden: true
+  loadouts:
+  - StampApprovedAU14
+
+# id: EyewearRMCPVE
+# id MasksRMCPVE
+# id HeadwearRMCPVE
+# id HelmetGarbsRMCPVE
+# id AccessoriesRMCPVE
+# id PaperworkRMC
+# id RecreationalRMC

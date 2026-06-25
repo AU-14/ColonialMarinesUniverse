@@ -19,6 +19,8 @@
       RMCSkillPolice: 1
   - type: EquipEntityPreset
     preset: AU14CLFSurvFighterPreset
+  - type: FactionLanguageMember
+    factionTag: CLF
 
   name: au14-job-name-clfguerilla
   description: au14-clfsurv-desription

@@ -1,0 +1,7 @@
+- type: rank
+  id: UPP_SergeantMajor
+  name: Sergeant Major
+  prefix: SgtMaj.
+  paygrade: E7
+
+#  warrant Officers

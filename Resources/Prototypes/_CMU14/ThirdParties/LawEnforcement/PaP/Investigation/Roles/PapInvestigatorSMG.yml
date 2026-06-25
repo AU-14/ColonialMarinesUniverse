@@ -23,6 +23,8 @@
       RMCSkillConstruction: 1
   - type: JobPrefix
     prefix: au-14-job-prefix-papthirdparty-investigator
+  - type: Language
+    preset: AU14LanguagePresetUPPOfficer
 
   name: au-14-job-name-papthirdparty-investigator
   description: au14-papthirdparty-description

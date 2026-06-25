@@ -1,0 +1,14 @@
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentColonialLiberationFront
+  name: au14-department-colonialliberationfront
+  description: au14-department-colonialliberationfront-description
+  color: "#e3ce94"
+  roles:
+  - AU14JobCLFGuerilla
+  - AU14JobCLFCellLeader
+  - AU14JobCLFPhysician
+  - AU14JobCLFSurgeon
+  departmentRadio: null
+  headOfDepartment: null
+  faction: colonist
