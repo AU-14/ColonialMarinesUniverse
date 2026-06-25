@@ -285,9 +285,9 @@
   - type: RMCIdLockableStorage
     overrideAccesses:
     - RMCAccessSeniorCommand
-    - CMAccessRequisitions
-    - CMAccessQM
-    - CMAccessSquadLeaderPrep
+    - AU14AccessGovforCommand
+    - AU14AccessGovforSecurity
+    - AU14AccessGovforReq
   - type: Corrodible
     isCorrodible: false
 
@@ -673,9 +673,9 @@
   - type: RMCIdLockableStorage
     overrideAccesses:
     - RMCAccessSeniorCommand
-    - CMAccessRequisitions
-    - CMAccessQM
-    - CMAccessSquadLeaderPrep
+    - AU14AccessGovforCommand
+    - AU14AccessGovforSecurity
+    - AU14AccessGovforReq
 
 - type: entity
   parent: CMSatchel

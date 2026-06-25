@@ -155,7 +155,6 @@
     whitelist:
       tags:
       - Sidearm
-  - type: LockVisuals
 
 # Magazine Pouch
 - type: entity
@@ -373,7 +372,6 @@
       - RMCDataDisk
   - type: FixedItemSizeStorage
   - type: Dumpable
-  - type: LockVisuals
 
 # Small Documents Pouch
 - type: entity
