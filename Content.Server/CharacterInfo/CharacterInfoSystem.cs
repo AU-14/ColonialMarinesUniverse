@@ -7,7 +7,7 @@ using Content.Shared.Mind;
 using Content.Server.GameTicking;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.AU14.Util;
-using Content.Shared.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Content.Shared.AU14.util;
 using Content.Shared.CharacterInfo;
 using Content.Shared.Inventory;

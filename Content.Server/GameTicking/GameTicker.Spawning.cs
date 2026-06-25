@@ -1,10 +1,11 @@
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
+using Content.Server._CMU14.Ops.ThirdParty;
+using Content.Server._CMU14.Threats;
 using Content.Server.Administration.Managers;
 using Content.Server.Administration.Systems;
 using Content.Server.GameTicking.Events;
-using Content.Server.Ghost;
 using Content.Server.Spawners.Components;
 using Content.Server.Speech.Components;
 using Content.Server.Station.Components;
@@ -31,8 +32,6 @@ using Content.Server._RMC14.Announce;
 using Content.Server._RMC14.Xenonids.Hive;
 using Content.Server.AU14.Round;
 using Content.Server.AU14.Scenario;
-using Content.Server.AU14.Threats;
-using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.AU14.util;
 
 namespace Content.Server.GameTicking
@@ -47,9 +46,9 @@ namespace Content.Server.GameTicking
         [Dependency] private MarinePresenceAnnounceSystem _marinePresenceAnnounce = default!;
         [Dependency] private AuJobSelectionSystem _auJobSelectionSystem = default!;
         [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
-        [Dependency] private AuThreatSystem _auThreatSystem = default!;
-        [Dependency] private AuThreatVoteSystem _auThreatVoteSystem = default!;
-        [Dependency] private Content.Server.AU14.ThirdParty.AuThirdPartySystem _auThirdParty = default!;
+        [Dependency] private ThreatSystem _threatSystem = default!;
+        [Dependency] private ThreatVoteSystem _threatVoteSystem = default!;
+        [Dependency] private ThirdPartySystem _ThirdParty = default!;
         [Dependency] private Content.Server.AU14.Allegiance.AllegianceSystem _allegianceSystem = default!;
         [Dependency] private Content.Server.AU14.Origin.OriginSystem _originSystem = default!;
 
@@ -311,7 +310,7 @@ namespace Content.Server.GameTicking
             var presetId = CurrentPreset?.ID ?? Preset?.ID ?? _auRoundSystem.SelectedPreset?.ID;
             var assignmentProfiles = GetGamemodeAssignmentProfiles(profiles, presetId);
 
-            _auThreatVoteSystem.ClearRoundJoinBlocks();
+            this._threatVoteSystem.ClearRoundJoinBlocks();
             var usesPostRoundstartThreatVote = _auRoundSystem.UsesPostRoundstartThreatVote();
             var threatVotePrepared = false;
             _sawmill.Debug(
@@ -321,13 +320,13 @@ namespace Content.Server.GameTicking
                 _sawmill.Debug("[RoundStart] Preparing post-roundstart threat vote.");
                 try
                 {
-                    threatVotePrepared = _auThreatVoteSystem.TryPrepareThreatVote(assignmentProfiles, DefaultMap);
+                    threatVotePrepared = this._threatVoteSystem.TryPrepareThreatVote(assignmentProfiles, DefaultMap);
                     _sawmill.Debug($"[RoundStart] TryPrepareThreatVote result={threatVotePrepared}.");
                 }
                 catch (Exception threatVoteEx)
                 {
                     Log.Error($"TryPrepareThreatVote threw - round will continue without a threat vote. {threatVoteEx}");
-                    _auThreatVoteSystem.ClearRoundJoinBlocks();
+                    this._threatVoteSystem.ClearRoundJoinBlocks();
                     _auJobSelectionSystem.ForcedJobAssignments.Clear();
                 }
             }
@@ -379,7 +378,7 @@ namespace Content.Server.GameTicking
 
                 try
                 {
-                    _auThreatSystem.SpawnThreatAtRoundStart(selectedThreat, DefaultMap, assignedJobs);
+                    this._threatSystem.SpawnThreatAtRoundStart(selectedThreat, DefaultMap, assignedJobs);
                     if (_sawmill.Level <= Robust.Shared.Log.LogLevel.Debug)
                     {
                         var afterThreatCounts = CountAuAssignments(assignedJobs);
@@ -390,7 +389,7 @@ namespace Content.Server.GameTicking
                 catch (Exception threatEx)
                 {
                     Log.Error($"SpawnThreatAtRoundStart threw — round will continue without threat spawn. {threatEx}");
-                    var removed = AuThreatSystem.RemoveThreatJobAssignments(assignedJobs);
+                    var removed = ThreatSystem.RemoveThreatJobAssignments(assignedJobs);
                     if (removed > 0)
                         Log.Warning($"Removed {removed} threat assignment(s) after threat spawning failed so overflow assignment can handle those players.");
                 }
@@ -437,7 +436,7 @@ namespace Content.Server.GameTicking
             // Spawn everybody in!
             foreach (var (player, (job, station)) in assignedJobs)
             {
-                // Threat jobs are intentionally skipped here — AuThreatSystem.SpawnThreatAtRoundStart
+                // Threat jobs are intentionally skipped here — ThreatSystem.SpawnThreatAtRoundStart
                 // (called above) already spawns those entities at threat markers and mind-transfers
                 // the players to them.
                 //
@@ -480,14 +479,14 @@ namespace Content.Server.GameTicking
                 _sawmill.Debug("[RoundStart] Starting prepared post-roundstart threat vote.");
                 try
                 {
-                    _auThreatVoteSystem.StartPreparedThreatVote(assignedJobs);
+                    this._threatVoteSystem.StartPreparedThreatVote(assignedJobs);
                     _sawmill.Debug("[RoundStart] Prepared threat vote started; threat and third-party spawn will continue from vote completion.");
                 }
                 catch (Exception threatVoteEx)
                 {
                     Log.Error($"StartPreparedThreatVote threw - round will continue without a threat vote. {threatVoteEx}");
-                    _auThreatVoteSystem.ClearRoundJoinBlocks();
-                    var removed = AuThreatSystem.RemoveThreatJobAssignments(assignedJobs);
+                    this._threatVoteSystem.ClearRoundJoinBlocks();
+                    var removed = ThreatSystem.RemoveThreatJobAssignments(assignedJobs);
                     if (removed > 0)
                         Log.Warning($"Removed {removed} held threat assignment(s) after threat vote start failed.");
                 }
@@ -512,7 +511,7 @@ namespace Content.Server.GameTicking
 
                     try
                     {
-                        _auThirdParty.StartThirdPartySpawning(selectedThreat, assignedJobs);
+                        _ThirdParty.StartThirdPartySpawning(selectedThreat, assignedJobs);
                         _sawmill.Debug($"[RoundStart] StartThirdPartySpawning returned for threat '{selectedThreat.ID}'.");
                     }
                     catch (Exception thirdPartyEx)
@@ -530,7 +529,7 @@ namespace Content.Server.GameTicking
             var jobsAssignedList = new List<ICommonSession>(assignedJobs.Count);
             foreach (var (netUserId, (job, _)) in assignedJobs)
             {
-                if (threatVotePrepared && AuThreatSystem.IsThreatJob(job))
+                if (threatVotePrepared && ThreatSystem.IsThreatJob(job))
                     continue;
 
                 if (readySessions.TryGetValue(netUserId, out var session))
@@ -582,7 +581,7 @@ namespace Content.Server.GameTicking
 
         private bool IsThreatVoteRoundJoinBlocked(ICommonSession player)
         {
-            if (!_auThreatVoteSystem.IsRoundJoinBlocked(player.UserId))
+            if (!this._threatVoteSystem.IsRoundJoinBlocked(player.UserId))
                 return false;
 
             _chatManager.DispatchServerMessage(player, Loc.GetString("au14-threat-vote-round-join-blocked"));

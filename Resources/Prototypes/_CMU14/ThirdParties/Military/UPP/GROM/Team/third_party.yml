@@ -12,7 +12,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: UPPGROM
   partyspawn: UPPGROMSpawn
   blacklistedgamemodes:
@@ -41,7 +41,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: UPPGROMAlt
   partyspawn: UPPGROMSpawnAlt
   blacklistedgamemodes:
@@ -70,7 +70,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: UPPGROMAlt2
   partyspawn: UPPGROMSpawnAlt2
   blacklistedgamemodes:

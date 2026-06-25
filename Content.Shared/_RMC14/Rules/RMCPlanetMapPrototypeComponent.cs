@@ -1,7 +1,7 @@
 using Content.Shared._RMC14.Item;
 using Content.Shared.AU14;
 using Content.Shared.AU14.Allegiance;
-using Content.Shared.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Content.Shared.AU14.util;
 using Content.Shared.Paper;
 using Content.Shared.Roles;
@@ -144,7 +144,7 @@ public sealed partial class RMCPlanetMapPrototypeComponent : Component
     [DataField("threats")]
     public List<ProtoId<ThreatPrototype>> AllowedThreats = new();
     [DataField("thirdparties")]
-    public List<ProtoId<AuThirdPartyPrototype>> ThirdParties = new();
+    public List<ProtoId<ThirdPartyPrototype>> ThirdParties = new();
 
 
     [DataField("thirdpartyinterval"), AutoNetworkedField]

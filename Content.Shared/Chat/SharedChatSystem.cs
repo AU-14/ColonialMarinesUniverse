@@ -1,6 +1,6 @@
 using System.Collections.Frozen;
 using System.Text.RegularExpressions;
-using Content.Shared._AU14.Abominations;
+using Content.Shared._CMU14.Threats.Mobs.Abomination;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Chat;
 using Content.Shared.AU14;
@@ -12,6 +12,7 @@ using Content.Shared.Speech;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Content.Shared._RMC14.Xenonids.Hive;
+using CultistComponent = Content.Shared._CMU14.Threats.Mobs.Cultist.CultistComponent;
 
 namespace Content.Shared.Chat;
 
