@@ -11,6 +11,8 @@ public sealed class FactionLanguageBoundUserInterface : BoundUserInterface
 
     protected override void Open()
     {
+        base.Open();
+
         Logger.Debug("[FactionLanguage] BUI Open() called");
         CreateWindow();
     }
