@@ -173,7 +173,7 @@
   - type: GunUseGunOrigin
   - type: GunIgnoreContainerOwnerCollision
   - type: Gun
-    fireRate: 1
+    fireRate: 3.3
     projectileSpeed: 50
     selectedMode: FullAuto
     availableModes:
