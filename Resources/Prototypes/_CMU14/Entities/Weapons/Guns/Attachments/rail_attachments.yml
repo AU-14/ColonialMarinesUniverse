@@ -8,7 +8,7 @@
   id: AU14AttachmentB11SmartScope
   name: B11 Advanced Targetting Scope
   suffix: AU14, Scout Spec
-  description: An experimental Prodigy B11-ATS. Adds IFF to weapons without them, and gives the user enhanced sight to use their weapons effectively at range even while behind friendlies.
+  description: An experimental Prodigy B11-ATS. Adds IFF to weapons without them comes with 1.5x zoom and gives the user enhanced sight to use their weapons effectively at range even while behind friendlies.
   components:
   - type: Scope
     zoomLevels:
