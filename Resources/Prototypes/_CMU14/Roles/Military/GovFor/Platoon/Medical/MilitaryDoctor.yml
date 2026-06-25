@@ -1,0 +1,151 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBaseAbstract
+  id: AU14JobMilitaryDoctorBase
+  roundRole: MilitaryDoctor
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetMilitaryDoctor
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforMilitaryDoctor
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: govfor_doctor
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
+        state: doctor
+
+  requirements:
+  - !type:AgeRequirement
+    requiredAge: 25
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+    - Epilepsy
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankFirstLT:
+      entity: AU14ChevronFirstLT
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORMilitaryDoctor
+        time: 86400 # 24 hours
+    RMCRankSecondLT:
+      entity: AU14ChevronSecondLT
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFORMilitaryDoctor
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORMilitaryDoctor
+  equipment:
+    shoes: CMBootsBlackFilled
+    ears: AU14HeadsetGovforAuxiliary
+    ears2: RMCM5CameraGear
+  inhand:
+    - AU14StampMO
+
+- type: startingGear
+  id: AU14GearGOVFORMilitaryDoctorDummy
+  equipment:
+    shoes: CMBootsBlackFilled
+    back: CMSatchelMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORMilitaryDoctor
+  name: Spawn Point GOVFOR Doctor
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORMilitaryDoctor
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobMilitaryDoctorBase
+  id: AU14JobGOVFORMilitaryDoctor
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: roleLoadout
+  id: JobAU14JobGOVFORMilitaryDoctor
+  points: 7
+  groups:
+  - GOVFORDoctorEquipmentAU14
+  - GOVFORDoctorUniformAU14
+  - MedJacketMilitaryAU14
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+- type: job
+  parent: AU14JobMilitaryDoctorBase
+  id: AU14JobOPFORMilitaryDoctor
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORCorpsman"
+  spawnMenuRoleName: Military Doctor (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearOPFORMilitaryDoctor
+  dummyStartingGear: AU14GearOPFORMilitaryDoctorDummy
+  accessGroups:
+  - AU14OpforCorpsman
+  - AU14OpforSquad
+
+- type: startingGear
+  id: AU14GearOPFORMilitaryDoctor
+  equipment:
+    jumpsuit: AU14ScrubsGreenDoctorSurgical
+    head: CMHeadCapSurgGreen
+    shoes: CMBootsBlackFilled
+    belt: AU14BeltMedicBagSupportSynth
+    pocket1: AU14PouchFirstResponderFilledMilitaryDoctor
+    pocket2: AU14PouchAutoinjectorFilledMilitaryDoctor
+    back: AU14SatchelMilitaryDoctor
+    outerClothing: RMCLabcoat
+    ears: AU14HeadsetGovforAuxiliary
+    ears2: RMCM5CameraGear
+    id: AU14IDCardGOVFORDoctor
+    neck: ClothingNeckStethoscope
+    eyes: RMCGlassesMedicalHUDGlasses
+  inhand:
+  - AU14CMDefibrillator
+  - AU14TentBigFoldedSurgical
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointOPFORMilitaryDoctor
+  name: Spawn Point OPFOR Doctor
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORMilitaryDoctor
+  - type: Sprite
+    state: syn_spawn
+
+- type: startingGear
+  id: AU14GearOPFORMilitaryDoctorDummy
+  equipment:
+    jumpsuit: AU14ScrubsGreenDoctorSurgical
+    shoes: CMBootsBlackFilled
+    belt: AU14BeltMedicBagSupportSynth
+    back: CMSatchelMarine
+    outerClothing: RMCLabcoat
+    id: AU14IDCardOPFORDoctor
+    neck: ClothingNeckStethoscope

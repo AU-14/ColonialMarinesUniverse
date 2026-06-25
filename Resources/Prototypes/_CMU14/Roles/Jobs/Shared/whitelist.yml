@@ -1,9 +1,0 @@
-- type: job
-  parent: CMJobBase
-  id: AU14JobGeneralWhitelist
-  playTimeTracker: AU14JobGeneralWhitelist
-  whitelisted: true
-  hidden: true
-
-- type: playTimeTracker
-  id: AU14JobGeneralWhitelist

@@ -137,8 +137,13 @@ public abstract partial class SharedRequisitionsSystem : EntitySystem
         var balance = CompOrNull<RequisitionsAccountComponent>(computer.Comp.Account)?.Balance ?? 0;
         var full = elevator != null && IsFull(elevator.Value);
 
-        var state = new RequisitionsBuiState(mode, busy, balance, full);
+        var state = new RequisitionsBuiState(mode, busy, balance, full, GetStockInfo(computer));
         _ui.SetUiState(computer.Owner, RequisitionsUIKey.Key, state);
+    }
+
+    protected virtual List<RequisitionsStockInfo> GetStockInfo(Entity<RequisitionsComputerComponent> computer)
+    {
+        return new List<RequisitionsStockInfo>();
     }
 
     protected bool IsFull(Entity<RequisitionsElevatorComponent> elevator)

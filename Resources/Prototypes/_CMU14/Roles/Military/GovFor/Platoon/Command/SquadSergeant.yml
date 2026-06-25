@@ -1,0 +1,212 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobSquadSergeantBaseAbstract # Squad Leader Abstraction
+  name: au14-job-name-govforsquadsergeant
+  description: au14-job-description-govforsquadsergeant
+  icon: "AU14JobIconSquadSgt"
+  spawnMenuRoleName: Squad Leader (GOVFOR)
+  startingGear: AU14GearGOVFORSquadSergeant
+  dummyStartingGear: AU14GearGOVFORSquadSergeantDummy
+  playTimeTracker: AU14JobGOVFORSquadSergeant
+  overwatchRoleName: Squad Leader
+  overwatchShowName: true
+  overwatchSortPriority: -5
+  canBeAntag: false
+  accessGroups:
+  - AU14GovforFTL
+
+- type: job
+  abstract: true
+  parent: AU14JobSquadSergeantBaseAbstract
+  id: AU14JobSquadSergeantBase # Squad Leader Base
+  roundRole: SquadSergeant
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetPlatoonSergeant
+  - type: RMCSpeechBubbleSpecificStyle
+    speechStyleClass: commanderSpeech
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforsquadsergeant
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: govfor_sergeant
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
+        state: sergeant
+    RMC:
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforsquadsergeantRMC
+    UPP:
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSquadSergeantUPP
+    WYPMC:
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSquadSergeantWYPMC
+    CMBCIU:
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSquadSergeantCMBCIU
+
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankStaffSergeant:
+      entity: AU14ChevronUSCMStaffSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORSquadSergeant
+        time: 36000 # 10 hours
+    RMCRankSergeant:
+      entity: AU14ChevronUSCMSergeant
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFORSquadSergeant
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORSquadSergeant
+  equipment:
+    id: AU14IDCardSquadSergeant
+    ears: AU14HeadsetGovforCommand
+
+- type: startingGear
+  id: AU14GearGOVFORSquadSergeantDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleOne
+    shoes: CMBootsBrown
+    head: AU14JungleBoonieHat
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetGovforCommand
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORSquadSergeant
+  name: Spawn Point GOVFOR Squad Leader
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORSquadSergeant
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobSquadSergeantBase # parent does the heavy lifting
+  id: AU14JobGOVFORSquadSergeant # Default Squad Leader
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: RMCSpeechBubbleSpecificStyle
+      speechStyleClass: commanderSpeech
+
+- type: roleLoadout
+  id: JobAU14JobGOVFORSquadSergeant
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - WeaponsRMC
+
+- type: job
+  parent: AU14JobSquadSergeantBase
+  id: AU14JobOPFORSquadSergeant
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORSquadSgt"
+  spawnMenuRoleName: Squad Leader (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearOpforSquadSergeant
+  dummyStartingGear: AU14GearOpforSquadSergeantDummy
+  accessGroups:
+  - AU14OpforFTL
+
+- type: startingGear
+  id: AU14GearOpforSquadSergeant
+  equipment:
+    id: AU14IDCardopforSquadSergeant
+    ears: AU14HeadsetOpforCommand
+
+- type: startingGear
+  id: AU14GearOpforSquadSergeantDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleOne
+    shoes: CMBootsBrown
+    head: AU14JungleBoonieHat
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetOpforCommand
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointopforSquadSergeant
+  name: Spawn Point opfor Squad Leader
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORSquadSergeant
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobSquadSergeantBase
+  id: AU14JobGOVFORSquadSergeantCMBCIU
+  roundForce: CMBCIU
+  name: Team Leader
+  spawnMenuRoleName: Squad Leader (CMBCIU)
+  overwatchRoleName: Squad Leader
+  ranks:
+    AU14RankCMBSrDeputy: []
+
+- type: job
+  parent: AU14JobSquadSergeantBase
+  id: AU14JobGOVFORSquadSergeantRMC
+  roundForce: RMC
+  name: au14-job-name-govforsquadsergeantRMC
+  spawnMenuRoleName: Squad Leader (TWE RMC)
+  overwatchRoleName: Team Leader
+
+- type: job
+  parent: AU14JobSquadSergeantBase
+  id: AU14JobGOVFORSquadSergeantUPP
+  roundForce: UPP
+  requirements: []
+  spawnMenuRoleName: Squad Leader (UPP)
+  overwatchRoleName: Squad Leader
+  ranks:
+    UPP_Plutonowy: []
+
+- type: job
+  parent: AU14JobSquadSergeantBase
+  id: AU14JobGOVFORSquadSergeantWYPMC
+  roundForce: WYPMC
+  requirements: []
+  name: PMC Squad Leader
+  ranks:
+    AU14RankWeYuEnforcerSenior:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadSergeant
+      time: 108000 # 30 hours
+    AU14RankWeYuEnforcer: []
+  spawnMenuRoleName: Squad Leader (WYPMC)

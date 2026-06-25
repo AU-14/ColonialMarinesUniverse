@@ -6,7 +6,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared._RMC14.Dropship;
 
 [Serializable, NetSerializable]
-public sealed class DropshipNavigationDestinationsBuiState(NetEntity? flyBy, List<Destination> destinations, Dictionary<DoorLocation, bool> doorLockStatus, bool remoteControlStatus, bool canTacticalLand, bool launchAlarmStatus, bool canWithdrawReturn = false) : BoundUserInterfaceState
+public sealed class DropshipNavigationDestinationsBuiState(NetEntity? flyBy, List<Destination> destinations, Dictionary<DoorLocation, bool> doorLockStatus, bool remoteControlStatus, bool canTacticalLand, bool launchAlarmStatus, bool canWithdrawReturn = false, bool canCancelTacticalHover = false) : BoundUserInterfaceState
 {
     public readonly NetEntity? FlyBy = flyBy;
     public readonly List<Destination> Destinations = destinations;
@@ -15,10 +15,11 @@ public sealed class DropshipNavigationDestinationsBuiState(NetEntity? flyBy, Lis
     public readonly bool CanTacticalLand = canTacticalLand;
     public readonly bool LaunchAlarmStatus = launchAlarmStatus;
     public readonly bool CanWithdrawReturn = canWithdrawReturn;
+    public readonly bool CanCancelTacticalHover = canCancelTacticalHover;
 }
 
 [Serializable, NetSerializable]
-public sealed class DropshipNavigationTravellingBuiState(FTLState state, StartEndTime time, string destination, string departureLocation, Dictionary<DoorLocation, bool> doorLockStatus, bool remoteControlStatus, bool launchAlarmStatus) : BoundUserInterfaceState
+public sealed class DropshipNavigationTravellingBuiState(FTLState state, StartEndTime time, string destination, string departureLocation, Dictionary<DoorLocation, bool> doorLockStatus, bool remoteControlStatus, bool launchAlarmStatus, bool canCancelTacticalHover = false) : BoundUserInterfaceState
 {
     public readonly FTLState State = state;
     public readonly StartEndTime Time = time;
@@ -27,6 +28,7 @@ public sealed class DropshipNavigationTravellingBuiState(FTLState state, StartEn
     public readonly Dictionary<DoorLocation, bool> DoorLockStatus = doorLockStatus;
     public readonly bool RemoteControlStatus = remoteControlStatus;
     public readonly bool LaunchAlarmStatus = launchAlarmStatus;
+    public readonly bool CanCancelTacticalHover = canCancelTacticalHover;
 }
 
 [Serializable, NetSerializable]

@@ -1,0 +1,24 @@
+- type: entity
+  id: AU14SkillPresetPlatoonCommander
+  name: Commander
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillLeadership: 4
+      RMCSkillJtac: 4
+      RMCSkillNavigations: 1
+      RMCSkillOverwatch: 1
+      RMCSkillIntel: 2
+      RMCSkillCqc: 2
+      RMCSkillFirearms: 2
+      RMCSkillEndurance: 3
+      RMCSkillPilot: 1
+      RMCSkillEngineer: 3
+      RMCSkillConstruction: 3
+      RMCSkillPowerLoader: 2
+      RMCSkillVehicles: 1
+      RMCSkillFireman: 2
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 1
+      RMCSkillPolice: 2

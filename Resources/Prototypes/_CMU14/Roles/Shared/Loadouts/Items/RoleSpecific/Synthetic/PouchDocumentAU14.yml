@@ -1,0 +1,4 @@
+- type: loadout
+  id: PouchDocumentAU14
+  equipment:
+    pocket1: RMCPouchDocument

@@ -29,6 +29,23 @@
       RMCSkillVehicles: 0
   - type: JobPrefix
     prefix: rmc-job-prefix-forecon-support-tech
+  - type: Language
+    spokenLanguages:
+    - Polish
+    - Russian
+    - Spanish
+    - Chinese
+    - German
+    - TacticalSignLanguage
+    understoodLanguages:
+    - Polish
+    - Russian
+    - Spanish
+    - Chinese
+    - German
+    - TacticalSignLanguage
+    currentLanguage: Polish
+    defaultLanguage: Polish
 
   name: rmc-job-name-forecon-support-tech
   description: au14-uppgrom-description

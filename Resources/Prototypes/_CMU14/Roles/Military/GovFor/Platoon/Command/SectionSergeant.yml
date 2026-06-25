@@ -1,0 +1,261 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobSectionSergeantBaseAbstract
+  name: au14-job-name-govforSSG
+  description: au14-job-description-govforSSG
+  icon: "AU14JobIconPlatoonSgt"
+  spawnMenuRoleName: Platoon Sergeant (GOVFOR)
+  startingGear: AU14GearGOVFORSectionSergeant
+  dummyStartingGear: AU14GearGOVFORPlatoonSergeantDummy
+  playTimeTracker: AU14JobGOVFORSectionSergeant
+  requireAdminNotify: true
+  overwatchRoleName: Platoon Sergeant
+  overwatchSortPriority: -6
+  overwatchShowName: true
+  accessGroups:
+  - AU14GovforCommand
+
+- type: job
+  abstract: true
+  parent: AU14JobSectionSergeantBaseAbstract
+  id: AU14JobSectionSergeantBase
+  roundRole: SectionSergeant
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetPlatoonSeniorSergeant
+  - type: RMCSpeechBubbleSpecificStyle
+    speechStyleClass: commanderSpeech
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforSSG
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: old_govfor_platoonsergeant
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
+        state: old_platoonsergeant
+    RMC:
+    - type: Skills
+      skills:
+        RMCSkillConstruction: 2
+        RMCSkillCqc: 1
+        RMCSkillEndurance: 2
+        RMCSkillEngineer: 3
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillIntel: 1
+        RMCSkillJtac: 2
+        RMCSkillLeadership: 1
+        RMCSkillMedical: 1
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforSSGRMC
+    UPP:
+    - type: Skills
+      skills:
+        RMCSkillConstruction: 2
+        RMCSkillCqc: 1
+        RMCSkillEndurance: 2
+        RMCSkillEngineer: 3
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillIntel: 1
+        RMCSkillJtac: 2
+        RMCSkillLeadership: 1
+        RMCSkillMedical: 1
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSectionSergeantUPP
+    WYPMC:
+    - type: Skills
+      skills:
+        RMCSkillConstruction: 2
+        RMCSkillCqc: 1
+        RMCSkillEndurance: 2
+        RMCSkillEngineer: 3
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillIntel: 1
+        RMCSkillJtac: 2
+        RMCSkillLeadership: 1
+        RMCSkillMedical: 1
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSectionSergeantWYPMC
+    CMBCIU:
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSectionSergeantCMBCIU
+
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankStaffSergeant:
+      entity: AU14ChevronUSCMStaffSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORSectionSergeant
+        time: 36000
+    RMCRankSergeant:
+      entity: AU14ChevronUSCMSergeant
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFORSectionSergeant
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORSectionSergeant
+  equipment:
+    id: AU14IDCardSecSergeant
+    ears: AU14HeadsetGovforMarine
+
+- type: startingGear
+  id: AU14GearGOVFORPlatoonSergeantDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleTwo
+    shoes: CMBootsBrown
+    head: AU14JunglePatrolCap
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetGovforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORSectionSergeant
+  name: Spawn Point GOVFOR Section Sergeant
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORSectionSergeant
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobSectionSergeantBase
+  id: AU14JobGOVFORSectionSergeant
+  # hidden: false # plt. sgt. is disabled
+  # setPreference: true # don't show in loadout menu
+  basePlaytimeTracker: true
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: RMCSpeechBubbleSpecificStyle
+      speechStyleClass: commanderSpeech
+
+- type: roleLoadout
+  id: JobAU14JobGOVFORSectionSergeant
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+- type: job
+  parent: AU14JobSectionSergeantBase
+  id: AU14JobOPFORSectionSergeant
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORPlatoonSgt"
+  spawnMenuRoleName: Platoon Sergeant (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearopforSectionSergeant
+  dummyStartingGear: AU14GearopforPlatoonSergantDummy
+  accessGroups:
+  - AU14OpforCommand
+
+- type: startingGear
+  id: AU14GearopforSectionSergeant
+  equipment:
+    id: AU14IDCardopforSecSergeant
+    ears: AU14HeadsetOpforCommand
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointopforSectionSergeant
+  name: Spawn Point opfor Section Sergeant
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORSectionSergeant
+  - type: Sprite
+    state: syn_spawn
+
+- type: startingGear
+  id: AU14GearopforPlatoonSergantDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleTwo
+    shoes: CMBootsBrown
+    head: AU14JunglePatrolCap
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetOpforCommand
+
+- type: job
+  parent: AU14JobSectionSergeantBase
+  id: AU14JobGOVFORSectionSergeantCMBCIU
+  roundForce: CMBCIU
+  name: Unit Leader
+  ranks:
+    AU14RankCMBChiefDeputy: []
+  spawnMenuRoleName: Section Sergeant (CMBCIU)
+
+- type: job
+  parent: AU14JobSectionSergeantBase
+  id: AU14JobGOVFORSectionSergeantRMC
+  roundForce: RMC
+  name: au14-job-name-govforSSGRMC
+  spawnMenuRoleName: Platoon Sergeant (TWE RMC)
+  ranks:
+    RMC_ColourSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSectionSergeant
+      time: 216000 # 60 hours
+    RMC_Sergeant: []
+
+- type: job
+  parent: AU14JobSectionSergeantBase
+  id: AU14JobGOVFORSectionSergeantUPP
+  roundForce: UPP
+  name: Platoon Leader
+  spawnMenuRoleName: Platoon Sergeant (UPP)
+  ranks:
+    UPP_FirstSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSectionSergeant
+      time: 216000 # 60 hours
+    UPP_SeniorSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSectionSergeant
+      time: 108000 # 30 hours
+    UPP_Sergeant: []
+
+- type: job
+  parent: AU14JobSectionSergeantBase
+  id: AU14JobGOVFORSectionSergeantWYPMC
+  roundForce: WYPMC
+  name: PMC Platoon Leader
+  spawnMenuRoleName: Platoon Sergeant (WYPMC)
+  ranks:
+    AU14RankWeYuEnforcerLead: []

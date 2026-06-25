@@ -39,6 +39,15 @@
       collection: AU14FemaleHoldOrder
   - type: RMCTrackable
   - type: RMCPointing
+  - type: LanguagePreset
+    spokenLanguages:
+    - English
+    - TacticalSignLanguage
+    understoodLanguages:
+    - English
+    - TacticalSignLanguage
+    currentLanguage: English
+    defaultLanguage: English
 
   name: rmc-job-name-forecon-commander
   description: cm-job-description-commanding-officer

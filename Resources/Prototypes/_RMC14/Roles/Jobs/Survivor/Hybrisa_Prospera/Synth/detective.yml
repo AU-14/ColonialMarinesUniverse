@@ -1,11 +1,16 @@
 - type: job
-  parent: RMCJobSyntheticColony
+  parent: RMCSurvivorForeconSynth
   id: RMCSyntheticColonyHybrisaDetective
   startingGear: RMCGearSyntheticColonistHybrisaDetective
   spawnMenuRoleName: Detective Synth (Hybrisa Survivor)
   special:
   - !type:AddComponentSpecial
     components:
+    - type: Language
+      preset: RMCLanguagePresetSynthColonist
+    - type: LanguageLearning
+      preset: RMCLanguageLearningPresetSynthColonist
+    - type: RMCAllowSuitStorage
     - type: Skills
       skills:
         RMCSkillCqc: 3
@@ -52,11 +57,10 @@
       damage:
         types:
           Blunt: 35
-    - type: EquipEntityPreset
+    - type: EquipSurvivorPreset
       preset: RMCSurvivorPresetHybrisaSynthDetective
     - type: Synth
       generation: rmc-species-synth-generation-second
-  useLoadoutOfJob: RMCJobSyntheticColony # for inheritance
 
 - type: startingGear
   parent: RMCGearSyntheticColonistHybrisaCivilian
@@ -77,5 +81,5 @@
   components:
   - type: EntityPreset
     randomOutfits:
-    - [ RMCGlassesSecurityBlue, RMCCoatBureauTrenchCoatBrown, ClothingHeadHatFedoraBrown, ClothingUniformJumpsuitDetective ]
-    - [ CMGlassesSecurity, RMCCoatBureauTrenchCoatGrey, ClothingHeadHatFedoraGrey, ClothingUniformJumpsuitDetectiveGrey ]
+    - [ RMCGlassesSecurityBlue, RMCCoatBureauTrenchCoatBrown, RMCHeadCapFedoraBrown, ClothingUniformJumpsuitDetective ]
+    - [ CMGlassesSecurity, RMCCoatBureauTrenchCoatGrey, RMCHeadCapFedoraGrey, ClothingUniformJumpsuitDetectiveGrey ]

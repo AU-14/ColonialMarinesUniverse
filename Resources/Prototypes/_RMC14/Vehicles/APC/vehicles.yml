@@ -47,6 +47,10 @@
     softness: 2
   - type: Physics
     bodyType: Dynamic
+  #CMU
+  - type: CMUZPhysics
+  - type: CMUVehicleZTraversal
+  - type: CMUZLevelViewer
   - type: Fixtures
     fixtures:
       world:
@@ -196,6 +200,13 @@
 - type: entity
   parent: VehicleAPCBase
   id: VehicleAPC
+  components:
+  - type: MarineMapTracked
+  - type: TacticalMapTracked
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips_large.rsi
+      state: apc
 
 - type: entity
   parent: VehicleAPCBase
@@ -237,6 +248,12 @@
     - offset: 0,2
       radius: 0.85
       interiorCoords: 0.25,-1
+  - type: MarineMapTracked
+  - type: TacticalMapTracked
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips_large.rsi
+      state: apc
 
 - type: entity
   parent: VehicleAPCBase
@@ -278,6 +295,12 @@
     - offset: 0,2
       radius: 0.85
       interiorCoords: 0.25,-1
+  - type: MarineMapTracked
+  - type: TacticalMapTracked
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips_large.rsi
+      state: apc
 
 - type: entity
   parent: VehicleAPCBase

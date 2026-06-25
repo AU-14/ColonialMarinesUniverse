@@ -1,0 +1,221 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobSquadAutomaticRiflemanBaseAbstract
+  name: au14-job-name-govforsquadautomaticrifleman
+  description: au14-job-description-govforsquadautomaticrifleman
+  icon: "AU14JobIconAFN"
+  spawnMenuRoleName: Automatic Rifleman (GOVFOR)
+  startingGear: AU14GearGOVFORSquadAutomaticRifleman
+  dummyStartingGear: AU14GearGOVFORAutoRiflemanDummy
+  playTimeTracker: AU14JobGOVFORSquadAutomaticRifleman
+  overwatchRoleName: au14-job-name-govforsquadautomaticrifleman-plural
+  overwatchSortPriority: -6
+  overwatchShowName: true
+  accessGroups:
+  - AU14GovforGunner
+
+- type: job
+  abstract: true
+  parent: AU14JobSquadAutomaticRiflemanBaseAbstract
+  id: AU14JobSquadAutomaticRiflemanBase
+  roundRole: SquadAutomaticRifleman
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: SquadArmorWearer
+  - type: Skills
+    preset: AU14SkillPresetPlatoonAutomaticRifleman
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforsquadautomaticrifleman
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: govfor_afn
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
+        state: afn
+    UPP:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillJtac: 1
+        RMCSkillSmartGun: 1
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSquadAutomaticRiflemanUPP
+    WYPMC:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillJtac: 1
+        RMCSkillSmartGun: 1
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSquadAutomaticRiflemanWYPMC
+
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NonResuscitable
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankLanceCorporal:
+      entity: AU14ChevronUSCMLanceCorporal
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORSquadAutomaticRifleman
+        time: 86400 # 24 hours
+    RMCRankPrivateFirstClass:
+      entity: AU14ChevronUSCMPrivateFirstClass
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORSquadAutomaticRifleman
+        time: 36000 # 10 hours
+    RMCRankPrivate:
+      entity: AU14ChevronUSCMPrivate
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFORSquadAutomaticRifleman
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORSquadAutomaticRifleman
+  equipment:
+    id: AU14IDCardSquadAutomaticRifleman
+    ears: AU14HeadsetGovforMarine
+
+- type: startingGear
+  id: AU14GearGOVFORAutoRiflemanDummy
+  equipment:
+    outerClothing: AU14ArmorSmartGunJungleCombatHarness
+    shoes: AU14BootsJungle
+    head: AU14JungleM10Helmet
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetGovforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORSquadAutomaticRifleman
+  name: Spawn Point GOVFOR Squad Rifleman
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORSquadAutomaticRifleman
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobSquadAutomaticRiflemanBase
+  id: AU14JobGOVFORSquadAutomaticRifleman
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: roleLoadout
+  id: JobAU14JobGOVFORSquadAutomaticRifleman
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+- type: job
+  parent: AU14JobSquadAutomaticRiflemanBase
+  id: AU14JobOPFORSquadAutomaticRifleman
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORAFN"
+  spawnMenuRoleName: Automatic Rifleman (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearopforSquadAutomaticRifleman
+  dummyStartingGear: AU14GearopforAutoRiflemanDummy
+  accessGroups:
+  - AU14OpforGunner
+
+- type: startingGear
+  id: AU14GearopforSquadAutomaticRifleman
+  equipment:
+    id: AU14IDCardopforSquadAutomaticRifleman
+    ears: AU14HeadsetOpforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointopforSquadAutomaticRifleman
+  name: Spawn Point opfor Squad Rifleman
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORSquadAutomaticRifleman
+  - type: Sprite
+    state: syn_spawn
+
+- type: startingGear
+  id: AU14GearopforAutoRiflemanDummy
+  equipment:
+    outerClothing: AU14ArmorSmartGunJungleCombatHarness
+    shoes: AU14BootsJungle
+    head: AU14JungleM10Helmet
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetOpforMarine
+
+- type: job
+  parent: AU14JobSquadAutomaticRiflemanBase
+  id: AU14JobGOVFORSquadAutomaticRiflemanRMC
+  roundForce: RMC
+  name: au14-job-name-govforsquadautomaticriflemanRMC
+  spawnMenuRoleName: Automatic Rifleman (TWE RMC)
+  ranks:
+    RMC_Corporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadAutomaticRifleman
+      time: 108000 # 30 hours
+    RMC_LanceCorporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadAutomaticRifleman
+      time: 54000 # 15 hours
+    RMC_Marine: []
+
+- type: job
+  parent: AU14JobSquadAutomaticRiflemanBase
+  id: AU14JobGOVFORSquadAutomaticRiflemanUPP
+  roundForce: UPP
+  name: Machine Gunner
+  spawnMenuRoleName: Automatic Rifleman (UPP)
+  ranks:
+    UPP_Gefreiter:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadAutomaticRifleman
+      time: 108000 # 30 hours
+    UPP_Private: []
+
+- type: job
+  parent: AU14JobSquadAutomaticRiflemanBase
+  id: AU14JobGOVFORSquadAutomaticRiflemanWYPMC
+  roundForce: WYPMC
+  name: PMC Smartgun Operator
+  spawnMenuRoleName: Automatic Rifleman (WYPMC)
+  ranks:
+    AU14RankWeYuSeniorOperator:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadAutomaticRifleman
+      time: 108000 # 30 hours
+    AU14RankWeYuOperator: []

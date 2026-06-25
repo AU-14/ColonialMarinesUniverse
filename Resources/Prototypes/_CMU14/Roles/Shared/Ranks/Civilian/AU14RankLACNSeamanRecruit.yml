@@ -1,0 +1,5 @@
+- type: rank
+  id: AU14RankLACNSeamanRecruit
+  name: Seaman Recruit
+  prefix: SR
+  paygrade: E-1

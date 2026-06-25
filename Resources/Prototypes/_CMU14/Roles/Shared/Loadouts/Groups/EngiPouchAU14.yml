@@ -1,0 +1,10 @@
+- type: loadoutGroup
+  id: EngiPouchAU14
+  name: au14-loadout-group-civilian-pouch
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - RMCPouchGeneralAU14
+  - RMCPouchToolsFillAU14
+  - RMCPouchElectronicsAU14
+  - RMCPouchConstructionAU14
