@@ -17,6 +17,23 @@
     preset: AU14SkillPresetPlatoonRifleman
   - type: JobPrefix
     prefix: au14-job-prefix-govforspecialist-marksmanRMC
+  - type: Language
+    spokenLanguages:
+    - Polish
+    - Russian
+    - Spanish
+    - Chinese
+    - German
+    - TacticalSignLanguage
+    understoodLanguages:
+    - Polish
+    - Russian
+    - Spanish
+    - Chinese
+    - German
+    - TacticalSignLanguage
+    currentLanguage: Polish
+    defaultLanguage: Polish
 
   name: au14-job-name-govforspecialist-marksmanRMC
   description: au14-uppgrom-description

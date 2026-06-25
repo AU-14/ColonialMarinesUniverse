@@ -21,6 +21,7 @@
     inverted: true
     traits:
     - Epilepsy
+    - NoEnglish
 
 - type: playTimeTracker
   id: AU14JobCivilianCMBMarshal

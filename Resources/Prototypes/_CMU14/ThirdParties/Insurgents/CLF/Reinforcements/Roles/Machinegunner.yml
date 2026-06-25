@@ -31,6 +31,8 @@
   - type: ShowMarineIcons
     factions:
     - CLF
+  - type: FactionLanguageMember
+    factionTag: CLF
 
   name: au14-job-name-clfmachinegunner
   description: au14-job-description-clfmachinegunner

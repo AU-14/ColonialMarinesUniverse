@@ -29,11 +29,18 @@
     icon:
       sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
       state: tse_painspector
+  - type: Language
+    preset: AU14LanguagePresetTWE
 
   name: au14-job-name-civiliannspainspector
   description: au14-job-description-civiliannspainspector
   setPreference: false
   canBeAntag: false
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NoEnglish
   ranks:
     RMCRankCivilian: []
   chevrons:

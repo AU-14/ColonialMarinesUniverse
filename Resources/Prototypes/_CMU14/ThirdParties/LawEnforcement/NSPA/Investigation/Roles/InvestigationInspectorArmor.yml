@@ -29,6 +29,8 @@
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
+  - type: Language
+    preset: AU14LanguagePresetTWE
 
   name: au14-job-name-civiliannspainspector
   description: You are an Inspector of the Neroid Sector Policing Authority on routine patrol through the sector. Patrol the area with your constables and ensure that the law is enforced.

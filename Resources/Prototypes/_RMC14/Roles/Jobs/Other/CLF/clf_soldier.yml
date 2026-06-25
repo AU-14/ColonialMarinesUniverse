@@ -16,10 +16,18 @@
     - type: NpcFactionMember
       factions:
       - CLF
-    - type: CLFMember
+    - type: Language
+      spokenLanguages:
+      - Japanese
+      - English
+      understoodLanguages:
+      - Japanese
+      - English
+      currentLanguage: Japanese
+      defaultLanguage: Japanese
     - type: Skills
       skills:
-        RMCSkillFirearms: 2
+        RMCSkillFirearms: 1
         RMCSkillMeleeWeapons: 1
         RMCSkillPolice: 1 # RMC14 disallow use of flashbangs
         RMCSkillFireman: 1

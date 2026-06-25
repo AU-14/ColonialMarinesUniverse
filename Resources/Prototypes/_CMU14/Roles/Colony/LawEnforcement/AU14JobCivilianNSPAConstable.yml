@@ -25,6 +25,8 @@
     icon:
       sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
       state: tse_paconstable
+  - type: Language
+    preset: AU14LanguagePresetTWE
 
   name: au14-job-name-civiliannspaConstable
   description: au14-job-description-civiliannspaConstable
@@ -36,6 +38,7 @@
     inverted: true
     traits:
     - Epilepsy
+    - NoEnglish
   canBeAntag: false
   ranks:
     RMCRankCivilian: []

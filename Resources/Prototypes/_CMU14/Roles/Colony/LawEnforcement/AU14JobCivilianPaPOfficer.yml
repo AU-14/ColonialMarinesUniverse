@@ -23,6 +23,8 @@
     icon:
       sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
       state: cmb_dep
+  - type: Language
+    preset: AU14LanguagePresetUPPOfficer
 
   name: au14-job-name-civilianpapofficer
   description: au14-job-description-civilianpapofficer
@@ -35,6 +37,7 @@
     inverted: true
     traits:
     - Epilepsy
+    - NoEnglish
   playTimeTracker: AU14JobCivilianPaPOfficer
   ranks:
     RMCRankCivilian: []

@@ -33,6 +33,25 @@
   - type: RMCTrackable
   - type: SquadLeader
   - type: RMCPointing
+  - type: Language
+    spokenLanguages:
+    - Polish
+    - English
+    - Russian
+    - Spanish
+    - Chinese
+    - German
+    - TacticalSignLanguage
+    understoodLanguages:
+    - Polish
+    - English
+    - Russian
+    - Spanish
+    - Chinese
+    - German
+    - TacticalSignLanguage
+    currentLanguage: Polish
+    defaultLanguage: Polish
 
   name: au-14-job-name-uppgrom-squadleader
   description: au14-uppgrom-description
