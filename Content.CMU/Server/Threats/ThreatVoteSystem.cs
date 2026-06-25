@@ -8,7 +8,7 @@ using Content.Server.Voting;
 using Content.Server.Voting.Managers;
 using Content.Shared._CMU14.Threats;
 using Content.Shared._RMC14.Rules;
-using Content.Shared.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Robust.Server.Player;

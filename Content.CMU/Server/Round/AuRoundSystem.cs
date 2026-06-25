@@ -12,7 +12,7 @@ using Content.Server.Voting;
 using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.TacticalMap;
-using Content.Shared.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Content.Shared.AU14.util;
 using Content.Shared.CCVar;
 using Content.Shared.Preferences;
@@ -134,8 +134,8 @@ namespace Content.Server.AU14.Round
             return presetId != null && PostRoundstartThreatVotePresets.Contains(presetId);
         }
 
-        private List<AuThirdPartyPrototype> _selectedThirdParties => _state.SelectedThirdParties;
-        public IReadOnlyList<AuThirdPartyPrototype> SelectedThirdParties => _state.SelectedThirdParties;
+        private List<ThirdPartyPrototype> _selectedThirdParties => _state.SelectedThirdParties;
+        public IReadOnlyList<ThirdPartyPrototype> SelectedThirdParties => _state.SelectedThirdParties;
 
         public override void Initialize()
         {
@@ -334,7 +334,7 @@ namespace Content.Server.AU14.Round
                 _voteSequenceRunning = false;
         }
 
-        public bool IsThirdPartyAllowedForCurrentContext(AuThirdPartyPrototype proto)
+        public bool IsThirdPartyAllowedForCurrentContext(ThirdPartyPrototype proto)
         {
             if (_selectedPreset == null)
                 return true;
@@ -350,7 +350,7 @@ namespace Content.Server.AU14.Round
         }
 
         private static bool IsThirdPartyAllowed(
-            AuThirdPartyPrototype proto,
+            ThirdPartyPrototype proto,
             string currentGamemode,
             string? currentThreat,
             string? govforPlatoon,
@@ -384,15 +384,15 @@ namespace Content.Server.AU14.Round
             if (SelectedThreat == null)
                 return;
 
-            var allThirdParties = new List<AuThirdPartyPrototype>();
+            var allThirdParties = new List<ThirdPartyPrototype>();
             if (_selectedPlanet.ThirdParties.Count > 0)
             {
                 foreach (var protoId in _selectedPlanet.ThirdParties)
                 {
-                    if (_prototypeManager.TryIndex(protoId, out AuThirdPartyPrototype? proto))
+                    if (_prototypeManager.TryIndex(protoId, out ThirdPartyPrototype? proto))
                         allThirdParties.Add(proto);
                     else
-                        _sawmill.Warning($"[AuRoundSystem] Could not find AuThirdPartyPrototype for ID: {protoId}");
+                        _sawmill.Warning($"[AuRoundSystem] Could not find ThirdPartyPrototype for ID: {protoId}");
                 }
             }
             else
@@ -400,7 +400,7 @@ namespace Content.Server.AU14.Round
                 return;
             }
 
-            var candidates = new List<AuThirdPartyPrototype>();
+            var candidates = new List<ThirdPartyPrototype>();
             foreach (var proto in allThirdParties)
             {
                 if (IsThirdPartyAllowedForCurrentContext(proto))
@@ -416,8 +416,8 @@ namespace Content.Server.AU14.Round
             if (maxThirdParties <= 0)
                 return;
 
-            var roundStartParties = new List<AuThirdPartyPrototype>();
-            var delayedParties = new List<AuThirdPartyPrototype>();
+            var roundStartParties = new List<ThirdPartyPrototype>();
+            var delayedParties = new List<ThirdPartyPrototype>();
             while (roundStartParties.Count + delayedParties.Count < maxThirdParties && candidates.Count > 0)
             {
                 var pick = PickWeightedThirdParty(candidates);
@@ -440,7 +440,7 @@ namespace Content.Server.AU14.Round
             }
         }
 
-        private AuThirdPartyPrototype? PickWeightedThirdParty(IReadOnlyList<AuThirdPartyPrototype> candidates)
+        private ThirdPartyPrototype? PickWeightedThirdParty(IReadOnlyList<ThirdPartyPrototype> candidates)
         {
             var totalWeight = 0;
             foreach (var candidate in candidates)

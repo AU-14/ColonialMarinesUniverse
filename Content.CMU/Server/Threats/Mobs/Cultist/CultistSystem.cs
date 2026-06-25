@@ -3,7 +3,7 @@ using Content.Server.Antag;
 using Content.Server.Mind;
 using Content.Server.Radio.Components;
 using Content.Server.Roles;
-using Content.Shared._AU14.Xeno;
+using Content.Shared._CMU14.Threats.Mobs.Xeno;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Xenonids.Parasite;

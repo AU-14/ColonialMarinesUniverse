@@ -1,10 +1,8 @@
 using Content.Server.Medical;
-using Content.Shared._AU14.WorkingJoe;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared.Medical;
-using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Traits.Assorted;
 using Content.Shared.Verbs;
@@ -13,7 +11,7 @@ using Robust.Shared.Audio.Systems;
 using WorkingJoeRebootDoAfterEvent = Content.Shared._CMU14.Threats.Mobs.WorkingJoe.WorkingJoeRebootDoAfterEvent;
 using WorkingJoeVoiceComponent = Content.Shared._CMU14.Threats.Mobs.WorkingJoe.WorkingJoeVoiceComponent;
 
-namespace Content.Server._AU14.WorkingJoe;
+namespace Content.Server._CMU14.Threats.Mobs.WorkingJoe;
 
 public sealed partial class WorkingJoeRebootSystem : EntitySystem
 {

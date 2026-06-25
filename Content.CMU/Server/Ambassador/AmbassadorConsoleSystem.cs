@@ -7,7 +7,7 @@ using Content.Server.Radio.EntitySystems;
 using Content.Server.Stack;
 using Content.Shared.AU14.Ambassador;
 using Content.Shared.AU14.ColonyEconomy;
-using Content.Shared.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Content.Shared._RMC14.Intel.Tech;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared.Stacks;

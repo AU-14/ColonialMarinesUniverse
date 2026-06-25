@@ -1,6 +1,6 @@
 using System.Linq;
 using Content.Shared._CMU14.Threats;
-using Content.Shared.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Content.Shared.AU14.util;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;

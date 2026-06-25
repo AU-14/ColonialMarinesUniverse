@@ -1,4 +1,3 @@
-using Content.Shared._AU14.WorkingJoe;
 using Content.Shared._CMU14.Threats.Mobs.WorkingJoe;
 using Content.Shared.Chat.Prototypes;
 using Robust.Shared.ContentPack;

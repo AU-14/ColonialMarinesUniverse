@@ -8,7 +8,7 @@ using Content.Shared._CMU14.Threats;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.AU14;
 using Content.Shared.AU14.Scenario;
-using Content.Shared.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Content.Shared.AU14.util;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Map;

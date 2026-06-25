@@ -6,7 +6,7 @@ using Content.Server.Chat.Systems;
 using Content.Server.Popups;
 using Content.Shared.AU14.Ambassador;
 using Content.Shared.AU14.ColonyEconomy;
-using Content.Shared.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;
 

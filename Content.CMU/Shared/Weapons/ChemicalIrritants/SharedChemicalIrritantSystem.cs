@@ -1,4 +1,4 @@
-using Content.Shared._AU14.Abominations;
+using Content.Shared._CMU14.Threats.Mobs.Abomination;
 using Content.Shared._CMU14.GasMask;
 using Content.Shared._RMC14.BlurredVision;
 using Content.Shared._RMC14.Slow;
