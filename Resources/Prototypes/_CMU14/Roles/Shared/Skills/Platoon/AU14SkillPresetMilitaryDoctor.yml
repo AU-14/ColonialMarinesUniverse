@@ -5,7 +5,7 @@
   components:
   - type: SkillPreset
     skills:
-      RMCSkillFirearms: 1
+      RMCSkillFirearms: 3
       RMCSkillFireman: 2
       RMCSkillVehicles: 1
       RMCSkillOverwatch: 1
