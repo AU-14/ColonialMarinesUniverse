@@ -303,3 +303,90 @@
   components:
   - type: SkillPamphlet
     language: Romanian
+
+- type: entity
+  parent: RMCPamphletAdmin
+  id: AU14PamphletCLFFirearms1
+  name: firearms 1 infographic guide pamphlet
+  suffix: CLF
+  description: Gives anyone the bare basics on how to work a firearm... while maybe teaching them would be better this will have to do.
+  components:
+  - type: SkillPamphlet
+    addSkills:
+      RMCSkillFirearms: 1
+
+- type: entity
+  parent: RMCPamphletAdmin
+  id: AU14PamphletCLFWeaponsSpecialistDemolitionist
+  name: demolitionist specialist instructional pamphlet
+  suffix: CLF
+  description: Gives anyone the bare basics on how to work a Demo Specialist Weapon... while maybe teaching them would be better this will have to do.
+  components:
+  - type: SkillPamphlet
+    addSkills:
+      RMCSkillSpecialistWeapons: 1
+    addComps:
+    - type: DemoSpecWhitelist
+
+- type: entity
+  parent: RMCPamphletAdmin
+  id: AU14PamphletCLFWeaponsSpecialist
+  name: weapon specialist instructional pamphlet
+  suffix: CLF
+  description: Gives anyone the bare basics on how to work a Specialist Weapon... while maybe teaching them would be better this will have to do.
+  components:
+  - type: SkillPamphlet
+    addSkills:
+      RMCSkillSpecialistWeapons: 1
+
+- type: entity
+  parent: RMCPamphletAdmin
+  id: AU14PamphletCLFWeaponsSpecialistGrenadier
+  name: grenadier specialist instructional pamphlet
+  suffix: CLF
+  description: Gives anyone the bare basics on how to work a Grenadier Specialist Weapon... while maybe teaching them would be better this will have to do.
+  components:
+  - type: SkillPamphlet
+    addSkills:
+      RMCSkillSpecialistWeapons: 1
+    addComps:
+    - type: GrenadeSpecWhitelist
+
+- type: entity
+  parent: RMCPamphletAdmin
+  id: AU14PamphletCLFWeaponsSpecialistPyro
+  name: pyro specialist instructional pamphlet
+  suffix: CLF
+  description: Gives anyone the bare basics on how to work a Pyro Specialist Weapon... while maybe teaching them would be better this will have to do.
+  components:
+  - type: SkillPamphlet
+    addSkills:
+      RMCSkillSpecialistWeapons: 1
+    addComps:
+    - type: PyroWhitelist
+
+- type: entity
+  parent: RMCPamphletAdmin
+  id: AU14PamphletCLFWeaponsSpecialistScout
+  name: scout specialist instructional pamphlet
+  suffix: CLF
+  description: Gives anyone the bare basics on how to work a Scout Specialist Weapon... while maybe teaching them would be better this will have to do.
+  components:
+  - type: SkillPamphlet
+    addSkills:
+      RMCSkillSpecialistWeapons: 1
+    addComps:
+    - type: ScoutWhitelist
+
+- type: entity
+  parent: RMCPamphletAdmin
+  id: AU14PamphletCLFWeaponsSpecialistSniper
+  name: sniper specialist instructional pamphlet
+  suffix: CLF
+  description: Gives anyone the bare basics on how to work a Sniper Specialist Weapon... while maybe teaching them would be better this will have to do.
+  components:
+  - type: SkillPamphlet
+    addSkills:
+      RMCSkillSpecialistWeapons: 1
+    addComps:
+    - type: SniperWhitelist

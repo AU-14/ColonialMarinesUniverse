@@ -11,7 +11,7 @@
       RMCSkillVehicles: 1
       RMCSkillDomestics: 3
       RMCSkillConstruction: 1
-      RMCSkillFirearms: 2
+      RMCSkillFirearms: 1
   - type: JobPrefix
     prefix: au14-job-prefix-headofservice
   - type: TacticalMapIcon
