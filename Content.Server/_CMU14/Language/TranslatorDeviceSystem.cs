@@ -6,7 +6,7 @@ namespace Content.Server._CMU14.Language;
 
 public sealed class TranslatorDeviceSystem : EntitySystem
 {
-    [Dependency] private readonly LanguageSystem _language = default!;
+    [Dependency] private LanguageSystem _language = default!;
 
     public override void Initialize()
     {

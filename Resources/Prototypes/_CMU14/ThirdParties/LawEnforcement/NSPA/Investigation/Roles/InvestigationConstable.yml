@@ -58,7 +58,7 @@
 - type: startingGear
   id: AU14GearNSPAConstableInvestigation
   equipment:
-    id: AU14IDCardciviliannspaConstable
+    id: AU14IDCardCivilianNSPAConstable
     outerClothing: RMCCoatTSEPAHighVisVest
     jumpsuit: RMCJumpsuitTSEPA
     shoes: RMCBootsPMCFilled

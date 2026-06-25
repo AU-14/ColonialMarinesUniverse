@@ -112,10 +112,10 @@
 
 ## CLF subverted synth
 - type: entity
-  id: CLFSubvertedSynth
+  id: SubvertedSynth
   parent: BaseGameRule
   components:
-  - type: CLFSubvertedSynthRule
+  - type: SubvertedSynthRule
   - type: AntagSelection
     selectionTime: PostPlayerSpawn
     definitions:

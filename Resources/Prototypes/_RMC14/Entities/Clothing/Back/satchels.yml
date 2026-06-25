@@ -256,7 +256,7 @@
     sprite: _RMC14/Objects/Clothing/Back/Backpacks/Marines/scout_cloak.rsi
   - type: Storage
     grid:
-    - 0,0,10,1
+    - 0,0,15,1
   - type: ThermalCloak
     opacity: 0.035 # Put to 0.03 for testing
     restrictWeapons: true

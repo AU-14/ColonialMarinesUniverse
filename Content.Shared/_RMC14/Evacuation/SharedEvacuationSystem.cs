@@ -530,7 +530,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
                 if (!progress.Enabled || !TryComp<EvacuationProgressComponent>(map.Value, out var curProgress)) return;
 
                 _marineAnnounce.AnnounceARESStaging(null,
-                    "ALL STATIONS. Scuttling failure. Self‑destruct sequence unresponsive. All personnel abandon ship immediately.",
+                    "ALL STATIONS. Scuttling failure. Self-destruct sequence unresponsive. All personnel abandon ship immediately.",
                     startSound,
                     faction: curProgress.VictimFaction);
             });

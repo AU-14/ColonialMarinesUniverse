@@ -5,7 +5,7 @@ using Content.Server.Radio.Components;
 using Content.Server.Speech.EntitySystems;
 using Content.Server.Speech.Prototypes;
 using Content.Server.Players;
-using Content.Shared._AU14.Xeno;
+using Content.Shared._CMU14.Threats.Mobs.Xeno;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Marines;
@@ -27,19 +27,21 @@ using Content.Shared.Chat.Prototypes;
 using Robust.Shared.Replays;
 using Robust.Shared.Network;
 using Robust.Server.GameObjects;
+using CultistComponent = Content.Shared._CMU14.Threats.Mobs.Cultist.CultistComponent;
+using HasKnowledgeOfXenoLanguageComponent = Content.Shared._CMU14.Threats.Mobs.Xeno.HasKnowledgeOfXenoLanguageComponent;
 
 namespace Content.Server._RMC14.Chat.Chat;
 
 public sealed partial class CMChatSystem : SharedCMChatSystem
 {
 
-    [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly ChatSystem _chatSystem = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ReplacementAccentSystem _wordreplacement = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private ChatSystem _chatSystem = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ReplacementAccentSystem _wordreplacement = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
 
     private static readonly ProtoId<ReplacementAccentPrototype> ChatSanitize = "CMChatSanitize";
@@ -139,26 +141,26 @@ public sealed partial class CMChatSystem : SharedCMChatSystem
         );
     }
 
-public override void Emote(
-    EntityUid source,
-    string message,
-    string? nameOverride = null,
-    bool checkRadioPrefix = true,
-    bool ignoreActionBlocker = false)
-{
-    _chatSystem.TrySendInGameICMessage(
-        source,
-        message,
-        InGameICChatType.Emote,
-        ChatTransmitRange.Normal,
-        false,
-        null,
-        null,
-        nameOverride,
-        checkRadioPrefix,
-        ignoreActionBlocker
-    );
-}
+    public override void Emote(
+        EntityUid source,
+        string message,
+        string? nameOverride = null,
+        bool checkRadioPrefix = true,
+        bool ignoreActionBlocker = false)
+    {
+        _chatSystem.TrySendInGameICMessage(
+            source,
+            message,
+            InGameICChatType.Emote,
+            ChatTransmitRange.Normal,
+            false,
+            null,
+            null,
+            nameOverride,
+            checkRadioPrefix,
+            ignoreActionBlocker
+        );
+    }
 
     private bool IsValidRadioPrefix(EntityUid headset, string prefixPart)
     {

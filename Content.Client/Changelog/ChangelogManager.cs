@@ -20,7 +20,7 @@ namespace Content.Client.Changelog
         [Dependency] private IConfigurationManager _configManager = default!;
 
         private const string SawmillName = "changelog";
-        public const string MainChangelogName = "Changelog";
+        public const string MainChangelogName = "CMU";
 
         private ISawmill _sawmill = default!;
 
@@ -43,7 +43,7 @@ namespace Content.Client.Changelog
             NewChangelogEntries = false;
             NewChangelogEntriesChanged?.Invoke();
 
-            using var sw = _resource.UserData.OpenWriteText(new ($"/changelog_last_seen_{_configManager.GetCVar(CCVars.ServerId)}"));
+            using var sw = _resource.UserData.OpenWriteText(new($"/changelog_last_seen_{_configManager.GetCVar(CCVars.ServerId)}"));
 
             sw.Write(MaxId.ToString());
         }
@@ -99,9 +99,14 @@ namespace Content.Client.Changelog
             {
                 var changelogs = new List<Changelog>();
                 var directory = new ResPath("/Changelog");
+                var excludedFiles = new HashSet<string>() { "Admin", "Changelog", "Maps", "RMC14" };
                 foreach (var file in _resource.ContentFindFiles(new ResPath("/Changelog/")))
                 {
                     if (file.Directory != directory || file.Extension != "yml")
+                        continue;
+
+                    // CMU exclude upstream stale data
+                    if (excludedFiles.Contains(file.FilenameWithoutExtension))
                         continue;
 
                     var yamlData = _resource.ContentFileReadYaml(file);

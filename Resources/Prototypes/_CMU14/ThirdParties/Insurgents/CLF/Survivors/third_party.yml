@@ -8,7 +8,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: CLFSurvsBig
   partyspawn: CLFSurvsSpawnBig
   blacklistedgamemodes:
@@ -32,7 +32,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: CLFSurvsMedium
   partyspawn: CLFSurvsSpawnBig
   blacklistedgamemodes:
@@ -56,7 +56,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: CLFSurvsSmall
   partyspawn: CLFSurvsSpawnBig
   blacklistedgamemodes:

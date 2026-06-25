@@ -4854,5 +4854,82 @@
   id: 338
   time: '2026-06-24T21:10:04.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1434
+- author: TheHellFireo
+  changes:
+  - message: ASRS UI reworked to be nicer
+    type: Add
+  - message: Stock to equipment, right now only vehicle equipment have a stock limit,
+      limited to 2 and replenish their stock every 5 minutes.
+    type: Add
+  id: 339
+  time: '2026-06-24T22:22:45.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1439
+- author: potatoed6
+  changes:
+  - message: Ported languages from RMC!
+    type: Add
+  - message: 'Added more languages: Yautja, Ukrainian, Polish, Czech, Turkish, Korean,
+      Italian, Irish, Finnish, Hungarian, Albanian, Serbian, Lithuanian, Arabic, Afrikaans,
+      Dutch, Swahili, Persian, Hindi, Vietnamese, Portuguese, Indonesian, Filipino,
+      Urdu, Yoruba, Esperanto, Latin, TacticalSignLanguage, Brazilian, Slovak, Romanian,
+      Arcturian'
+    type: Add
+  - message: IASF ranks
+    type: Add
+  - message: Yautjas have translator in their bracelet
+    type: Add
+  - message: All humans can learn languages at a slow pace.
+    type: Tweak
+  - message: CLF and Mob gangs can choose their own language for larps
+    type: Add
+  - message: Tweaked third parties and other roles to have languages. F.e. UPP TD
+      speak only minor UPP languages.
+    type: Tweak
+  - message: Fixed 3rd party ranks (chevrons) not spawning. Now they spawn after rolling
+      so you can have your higher rank if you played enough.
+    type: Fix
+  id: 340
+  time: '2026-06-25T03:56:41.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1431
+- author: KeiKiyomi
+  changes:
+  - message: Increased Scout Spec cloak storage to 15 from 10
+    type: Tweak
+  id: 341
+  time: '2026-06-25T07:03:56.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1450
+- author: KeiKiyomi
+  changes:
+  - message: Fixed LACN Scout getting a sniper and not the scout rifle
+    type: Fix
+  id: 342
+  time: '2026-06-25T07:05:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1449
+- author: KeiKiyomi
+  changes:
+  - message: Fixed Scout webbing only having 3 slots instead of 4
+    type: Fix
+  id: 343
+  time: '2026-06-25T07:17:35.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1442
+- author: KeiKiyomi
+  changes:
+  - message: Changed BGEL/Napalm-B (Green Fire) armor shred from 50% to 75%
+    type: Tweak
+  id: 344
+  time: '2026-06-25T07:18:07.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1427
+- author: KeiKiyomi
+  changes:
+  - message: Added Scout webbing to all Snipers and Spotters
+    type: Add
+  - message: Added a crate of SMART SCOPES to ASRS for 800 dollars containing 5 smart
+      scopes
+    type: Add
+  - message: Added 5 SMART SCOPES to USCM and HAZOPS req vendor
+    type: Add
+  id: 345
+  time: '2026-06-25T12:12:00.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1443
 Name: CMU
 Order: -1

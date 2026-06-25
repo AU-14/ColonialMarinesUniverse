@@ -1,16 +1,18 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Content.Server.AU14.Threats;
+using Content.Server._CMU14.Threats;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Maps;
+using Content.Shared._CMU14.Threats;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.AU14;
-using Content.Shared.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Robust.Shared.ContentPack;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using KillAllColonistRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllColonistRuleComponent;
 
 namespace Content.IntegrationTests._AU14.Threats;
 
