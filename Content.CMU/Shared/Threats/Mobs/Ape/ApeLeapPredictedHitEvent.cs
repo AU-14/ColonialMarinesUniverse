@@ -6,7 +6,6 @@ namespace Content.Shared._CMU14.Threats.Mobs.Ape;
 [Serializable, NetSerializable]
 public sealed class ApeLeapPredictedHitEvent(NetEntity target, GameTick lastRealTick) : EntityEventArgs
 {
-    public readonly NetEntity Target = target;
     public readonly GameTick LastRealTick = lastRealTick;
+    public readonly NetEntity Target = target;
 }
-

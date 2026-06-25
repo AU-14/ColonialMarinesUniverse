@@ -1,11 +1,11 @@
 using System.Linq;
 using Content.Shared._CMU14.Yautja;
-using Content.Shared.GameTicking.Components;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
+using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.NPC.Components;
@@ -21,7 +21,7 @@ internal enum EvacuatedMobPolicy
 {
     CountAsEliminated,
     CountAsAlive,
-    Exclude,
+    Exclude
 }
 
 internal sealed class ThreatRuleHelper : EntitySystem
@@ -38,20 +38,20 @@ internal sealed class ThreatRuleHelper : EntitySystem
         => eliminated * 100 >= total * requiredPercent;
 
     internal static bool HasFaction(NpcFactionMemberComponent factionComp, string factionId)
-        => factionComp.Factions.Any(f
-            => f.ToString().Equals(factionId, StringComparison.OrdinalIgnoreCase));
+        => factionComp.Factions.Any(f => f.ToString().Equals(factionId, StringComparison.OrdinalIgnoreCase));
 
     internal bool IsEvacuated(EntityUid uid)
         => Transform(uid).GridUid is { } grid && _evacuatedQuery.HasComp(grid);
 
     internal bool HasCrashedDropship()
     {
-        var query = EntityQueryEnumerator<DropshipComponent>();
-        while (query.MoveNext(out _, out var dropship))
+        EntityQueryEnumerator<DropshipComponent> query = EntityQueryEnumerator<DropshipComponent>();
+        while (query.MoveNext(out _, out DropshipComponent? dropship))
         {
             if (dropship.Crashed)
                 return true;
         }
+
         return false;
     }
 
@@ -63,7 +63,7 @@ internal sealed class ThreatRuleHelper : EntitySystem
         if (query.MoveNext(out _, out _, out rule!, out gameRule!))
             return true;
 
-        rule     = default(TRule)!;
+        rule = default(TRule)!;
         gameRule = default(GameRuleComponent)!;
         return false;
     }
@@ -83,6 +83,6 @@ internal sealed class ThreatRuleHelper : EntitySystem
 
         // Alive and nested/SSD
         return HasComp<XenoNestedComponent>(uid)
-            || (TryComp<SSDIndicatorComponent>(uid, out var ssd) && ssd.IsSSD);
+            || (TryComp(uid, out SSDIndicatorComponent? ssd) && ssd.IsSSD);
     }
 }

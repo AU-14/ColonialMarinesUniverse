@@ -3,12 +3,10 @@ using Content.Server.Antag;
 using Content.Server.Mind;
 using Content.Server.Radio.Components;
 using Content.Server.Roles;
-using Content.Shared._CMU14.Threats.Mobs.Xeno;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Administration;
-using Content.Shared.AU14;
 using Content.Shared.Database;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
@@ -23,13 +21,13 @@ namespace Content.Server._CMU14.Threats.Mobs.Cultist;
 
 public sealed partial class CultistSystem : EntitySystem
 {
-    [Dependency] private IAdminManager _admin = default!;
-    [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private readonly IAdminManager _admin = default!;
+    [Dependency] private readonly AntagSelectionSystem _antag = default!;
+    [Dependency] private readonly MindSystem _mind = default!;
+    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
+    [Dependency] private readonly ISharedPlayerManager _player = default!;
+    [Dependency] private readonly RoleSystem _role = default!;
     [Dependency] private GunIFFSystem _gunIFF = default!;
-    [Dependency] private MindSystem _mind = default!;
-    [Dependency] private NpcFactionSystem _npcFaction = default!;
-    [Dependency] private ISharedPlayerManager _player = default!;
-    [Dependency] private RoleSystem _role = default!;
 
     public override void Initialize()
     {
@@ -37,10 +35,9 @@ public sealed partial class CultistSystem : EntitySystem
         SubscribeLocalEvent<GetVerbsEvent<Verb>>(AddMakeCultistVerb);
     }
 
-
     private void AddMakeCultistVerb(GetVerbsEvent<Verb> args)
     {
-        if (!TryComp<ActorComponent>(args.User, out ActorComponent? actor))
+        if (!TryComp(args.User, out ActorComponent? actor))
             return;
 
         ICommonSession player = actor.PlayerSession;
@@ -49,10 +46,10 @@ public sealed partial class CultistSystem : EntitySystem
             return;
 
         if (!HasComp<MindContainerComponent>(args.Target)
-         || !TryComp<ActorComponent>(args.Target, out ActorComponent? targetActor))
+            || !TryComp(args.Target, out ActorComponent? targetActor))
             return;
 
-        if (!TryComp<MarineComponent>(args.Target, out MarineComponent? marine))
+        if (!TryComp(args.Target, out MarineComponent? marine))
             return;
 
 
@@ -60,12 +57,12 @@ public sealed partial class CultistSystem : EntitySystem
         {
             Verb clf = new()
             {
-                Text     = "Make Cultist",
+                Text = "Make Cultist",
                 Category = VerbCategory.Antag,
                 Icon = new SpriteSpecifier.Rsi(new("/Textures/_AU14/Interface/job_icons.rsi"),
                     "threat_member"),
-                Act     = () => { MakeCultist(args.Target); },
-                Impact  = LogImpact.High,
+                Act = () => { MakeCultist(args.Target); },
+                Impact = LogImpact.High,
                 Message = "Make Cultist"
             };
             args.Verbs.Add(clf);
@@ -78,9 +75,9 @@ public sealed partial class CultistSystem : EntitySystem
         EnsureComp<HasKnowledgeOfXenoLanguageComponent>(Target);
         RemCompDeferred<InfectableComponent>(Target);
         EnsureComp<IntrinsicRadioReceiverComponent>(Target);
-        EnsureComp<IntrinsicRadioTransmitterComponent>(Target, out IntrinsicRadioTransmitterComponent radio);
+        EnsureComp(Target, out IntrinsicRadioTransmitterComponent radio);
         radio.Channels.Add("Hivemind");
-        EnsureComp<ActiveRadioComponent>(Target, out ActiveRadioComponent actrad);
+        EnsureComp(Target, out ActiveRadioComponent actrad);
         actrad.Channels.Add("Hivemind");
         var s = "Xeno";
         _npcFaction.AddFaction(Target, s);
@@ -91,8 +88,7 @@ public sealed partial class CultistSystem : EntitySystem
 
             if (mind is { UserId: not null } && _player.TryGetSessionById(mind.UserId, out ICommonSession? session))
             {
-                _antag.SendBriefing(
-                    session,
+                _antag.SendBriefing(session,
                     Loc.GetString("roles-antag-cultist-greeting"),
                     Color.Red, null);
             }

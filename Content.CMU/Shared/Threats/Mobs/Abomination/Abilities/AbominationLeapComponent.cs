@@ -7,21 +7,17 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities;
 
 /// <summary>
-/// Lunge / pounce ability shared by abominations that need to close distance:
-/// spider's Pounce and grunt's Slam. The action applies a physics impulse
-/// toward the target tile and, while AbominationLeapingComponent is alive,
-/// the entity knocks down + damages mobs it collides with.
+///     Lunge / pounce ability shared by abominations that need to close distance:
+///     spider's Pounce and grunt's Slam. The action applies a physics impulse
+///     toward the target tile and, while AbominationLeapingComponent is alive,
+///     the entity knocks down + damages mobs it collides with.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 public sealed partial class AbominationLeapComponent : Component
 {
-    /// <summary>Maximum distance of the leap in tiles.</summary>
+    /// <summary>Damage applied to mobs hit by the leap.</summary>
     [DataField, AutoNetworkedField]
-    public float Range = 6f;
-
-    /// <summary>Impulse magnitude applied at the start of the leap.</summary>
-    [DataField, AutoNetworkedField]
-    public float Strength = 25f;
+    public DamageSpecifier Damage = new();
 
     /// <summary>How long the entity stays in flight before the leap auto-ends.</summary>
     [DataField, AutoNetworkedField]
@@ -31,10 +27,6 @@ public sealed partial class AbominationLeapComponent : Component
     [DataField, AutoNetworkedField]
     public TimeSpan KnockdownTime = TimeSpan.FromSeconds(2);
 
-    /// <summary>Damage applied to mobs hit by the leap.</summary>
-    [DataField, AutoNetworkedField]
-    public DamageSpecifier Damage = new();
-
     /// <summary>Sound played at the start of the leap (loud roar / lunge audio).</summary>
     [DataField, AutoNetworkedField]
     public SoundSpecifier? LeapSound;
@@ -42,23 +34,29 @@ public sealed partial class AbominationLeapComponent : Component
     /// <summary>Cooldown before the action becomes usable again, server-managed via ActionUseDelay.</summary>
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan? NextUseAt;
+    /// <summary>Maximum distance of the leap in tiles.</summary>
+    [DataField, AutoNetworkedField]
+    public float Range = 6f;
+
+    /// <summary>Impulse magnitude applied at the start of the leap.</summary>
+    [DataField, AutoNetworkedField]
+    public float Strength = 25f;
 }
 
 /// <summary>
-/// Live on the abomination while it is mid-leap. Removed when the duration
-/// elapses or when a valid hit is registered.
+///     Live on the abomination while it is mid-leap. Removed when the duration
+///     elapses or when a valid hit is registered.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 public sealed partial class AbominationLeapingComponent : Component
 {
+    [DataField, AutoNetworkedField]
+    public DamageSpecifier Damage = new();
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan EndsAt;
 
     [DataField, AutoNetworkedField]
     public TimeSpan KnockdownTime;
-
-    [DataField, AutoNetworkedField]
-    public DamageSpecifier Damage = new();
 }
 
 public sealed partial class AbominationLeapActionEvent : WorldTargetActionEvent;

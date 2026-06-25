@@ -13,8 +13,5 @@ public sealed class WorkingJoePlayLineMessage : BoundUserInterfaceMessage
 {
     public string EmoteId;
 
-    public WorkingJoePlayLineMessage(string emoteId)
-    {
-        EmoteId = emoteId;
-    }
+    public WorkingJoePlayLineMessage(string emoteId) => EmoteId = emoteId;
 }

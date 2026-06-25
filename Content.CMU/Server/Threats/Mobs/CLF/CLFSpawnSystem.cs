@@ -22,20 +22,13 @@ namespace Content.Server._CMU14.Threats.Mobs.CLF;
 /// </summary>
 public sealed partial class ClfSpawnSystem : EntitySystem
 {
-    private const string ClfSafehouseBucket = "CLFSafehouse";
-    private const string ClfCivilianBackupBucket = "CLFCivilianBackup";
-
-    /// <summary>
-    ///     The colony civilian job whose spawn points guerillas may use.
-    /// </summary>
-    private const string ColonyCivilianJobId = "AU14JobCivilianColonist";
-
-    private const string ClfSurgeonJobId = "AU14JobCLFSurgeon";
-
-    /// <summary>
-    ///     Chance (0-1) for a guerilla to spawn at a colony civilian spawn point instead of the safehouse.
-    /// </summary>
-    private const float GuerillaCivilianSpawnChance = 0.66f;
+    [Dependency] private readonly AuRoundSystem _auRound = default!;
+    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly ScenarioPlanSystem _scenarioPlan = default!;
+    [Dependency] private readonly StationSpawningSystem _stationSpawning = default!;
+    [Dependency] private readonly GameTicker _ticker = default!;
 
     private static readonly ProtoId<CLFSpawnConfigPrototype> ClfSpawnConfig = "CLFSpawnConfig";
 
@@ -54,18 +47,24 @@ public sealed partial class ClfSpawnSystem : EntitySystem
         "CMPortableSurgicalBedSpawnFolded",
         "RMCSurgicalTray"
     };
+    private const string ClfSafehouseBucket = "CLFSafehouse";
+    private const string ClfCivilianBackupBucket = "CLFCivilianBackup";
 
-    [Dependency] private AuRoundSystem _auRound = default!;
+    /// <summary>
+    ///     The colony civilian job whose spawn points guerillas may use.
+    /// </summary>
+    private const string ColonyCivilianJobId = "AU14JobCivilianColonist";
+
+    private const string ClfSurgeonJobId = "AU14JobCLFSurgeon";
+
+    /// <summary>
+    ///     Chance (0-1) for a guerilla to spawn at a colony civilian spawn point instead of the safehouse.
+    /// </summary>
+    private const float GuerillaCivilianSpawnChance = 0.66f;
 
     private EntityCoordinates? _chosenSafehouseLocation;
-    [Dependency] private IEntityManager _entityManager = default!;
     private bool _hasSpawnedAdditionalEntities;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
-    [Dependency] private IRobustRandom _random = default!;
     private ResolvedClfSpawnMarkerSet? _resolvedClfMarkers;
-    [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
-    [Dependency] private StationSpawningSystem _stationSpawning = default!;
-    [Dependency] private GameTicker _ticker = default!;
 
     public override void Initialize()
     {
@@ -77,9 +76,9 @@ public sealed partial class ClfSpawnSystem : EntitySystem
 
     private void OnRoundRestart(RoundRestartCleanupEvent ev)
     {
-        _chosenSafehouseLocation      = null;
+        _chosenSafehouseLocation = null;
         _hasSpawnedAdditionalEntities = false;
-        _resolvedClfMarkers           = null;
+        _resolvedClfMarkers = null;
     }
 
     private void OnRulePlayerSpawning(RulePlayerSpawningEvent ev)
@@ -128,9 +127,9 @@ public sealed partial class ClfSpawnSystem : EntitySystem
         }
 
         // Determine spawn location based on role type
-        bool isCommand = ClfSpawnSystem.CommandJobIds.Contains(jobId);
+        bool isCommand = CommandJobIds.Contains(jobId);
 
-        if (!isCommand && _random.Prob(ClfSpawnSystem.GuerillaCivilianSpawnChance))
+        if (!isCommand && _random.Prob(GuerillaCivilianSpawnChance))
         {
             // Guerilla: try to spawn at a colony civilian spawn point
             EntityCoordinates? civilianSpawnLocation = GetRandomColonyCivilianSpawnPoint();
@@ -165,11 +164,11 @@ public sealed partial class ClfSpawnSystem : EntitySystem
 
     private void SpawnJobEquipment(string jobId, EntityUid mob)
     {
-        if (!string.Equals(jobId, ClfSpawnSystem.ClfSurgeonJobId, StringComparison.OrdinalIgnoreCase))
+        if (!string.Equals(jobId, ClfSurgeonJobId, StringComparison.OrdinalIgnoreCase))
             return;
 
         EntityCoordinates coordinates = Transform(mob).Coordinates;
-        foreach (string protoId in ClfSpawnSystem.ClfSurgeonRoundstartEquipment)
+        foreach (string protoId in ClfSurgeonRoundstartEquipment)
         {
             _entityManager.SpawnEntity(protoId, coordinates);
         }
@@ -181,7 +180,7 @@ public sealed partial class ClfSpawnSystem : EntitySystem
     private EntityCoordinates? GetRandomColonyCivilianSpawnPoint()
     {
         if (_resolvedClfMarkers != null &&
-            _resolvedClfMarkers.TryGetMarkers(ClfSpawnSystem.ClfCivilianBackupBucket,
+            _resolvedClfMarkers.TryGetMarkers(ClfCivilianBackupBucket,
                 out IReadOnlyList<EntityUid> scenarioMarkers))
         {
             List<EntityUid> scenarioCandidates = FilterCivilianSpawnMarkers(scenarioMarkers);
@@ -199,7 +198,7 @@ public sealed partial class ClfSpawnSystem : EntitySystem
         while (spawnPoints.MoveNext(out _, out SpawnPointComponent? sp, out TransformComponent? xform))
         {
             if (sp.Job != null &&
-                string.Equals(sp.Job.ToString(), ClfSpawnSystem.ColonyCivilianJobId,
+                string.Equals(sp.Job.ToString(), ColonyCivilianJobId,
                     StringComparison.OrdinalIgnoreCase))
                 candidates.Add(xform.Coordinates);
         }
@@ -212,8 +211,8 @@ public sealed partial class ClfSpawnSystem : EntitySystem
         if (TryResolveScenarioPlanSpawnMarkers(out ResolvedClfSpawnMarkerSet? markerSet) &&
             markerSet != null)
         {
-            if (markerSet.TryGetMarkers(ClfSpawnSystem.ClfSafehouseBucket,
-                    out IReadOnlyList<EntityUid> scenarioMarkers))
+            if (markerSet.TryGetMarkers(ClfSafehouseBucket,
+                out IReadOnlyList<EntityUid> scenarioMarkers))
             {
                 List<EntityUid> markers = FilterSafehouseMarkers(scenarioMarkers);
                 if (markers.Count > 0)
@@ -238,8 +237,8 @@ public sealed partial class ClfSpawnSystem : EntitySystem
 
     private List<EntityUid> GetLegacySafehouseMarkers()
     {
-        var                                             markers = new List<EntityUid>();
-        EntityQueryEnumerator<SafehouseMarkerComponent> query   = EntityQueryEnumerator<SafehouseMarkerComponent>();
+        var markers = new List<EntityUid>();
+        EntityQueryEnumerator<SafehouseMarkerComponent> query = EntityQueryEnumerator<SafehouseMarkerComponent>();
         while (query.MoveNext(out EntityUid uid, out _))
         {
             markers.Add(uid);
@@ -260,7 +259,7 @@ public sealed partial class ClfSpawnSystem : EntitySystem
             ScenarioPlanValidationRequest request = BuildClfScenarioPlanRequest();
 
             if (_scenarioPlan.TryResolveClfSpawnMarkers(request, _ticker.DefaultMap, out markers,
-                    out string diagnostic))
+                out string diagnostic))
                 return true;
 
             Log.Warning($"CLF Spawn System: Could not resolve Scenario Plan CLF markers. {diagnostic}");
@@ -309,7 +308,7 @@ public sealed partial class ClfSpawnSystem : EntitySystem
         {
             if (TryComp(uid, out SpawnPointComponent? spawnPoint) &&
                 spawnPoint.Job != null &&
-                spawnPoint.Job.Value.Id.Equals(ClfSpawnSystem.ColonyCivilianJobId, StringComparison.OrdinalIgnoreCase))
+                spawnPoint.Job.Value.Id.Equals(ColonyCivilianJobId, StringComparison.OrdinalIgnoreCase))
             {
                 markers.Add(uid);
 
@@ -317,19 +316,18 @@ public sealed partial class ClfSpawnSystem : EntitySystem
             }
 
             if (HasStandaloneScenarioMarker(
-                    uid,
-                    SpawnMarkerKind.ClfCivilianSpawn,
-                    ScenarioMarkerTags.ClfCivilianSpawn(ClfSpawnSystem.ColonyCivilianJobId)))
+                uid,
+                SpawnMarkerKind.ClfCivilianSpawn,
+                ScenarioMarkerTags.ClfCivilianSpawn(ColonyCivilianJobId)))
                 markers.Add(uid);
         }
 
         return markers;
     }
 
-    private bool HasStandaloneScenarioMarker(
-        EntityUid       uid,
+    private bool HasStandaloneScenarioMarker(EntityUid uid,
         SpawnMarkerKind kind,
-        string          requiredTag)
+        string requiredTag)
     {
         if (!TryComp(uid, out ScenarioSpawnMarkerComponent? marker) ||
             marker.Kind != kind ||
@@ -346,7 +344,7 @@ public sealed partial class ClfSpawnSystem : EntitySystem
             return;
 
         // Get CLF spawn config
-        if (!_prototypeManager.TryIndex(ClfSpawnSystem.ClfSpawnConfig, out CLFSpawnConfigPrototype? config))
+        if (!_prototypeManager.TryIndex(ClfSpawnConfig, out CLFSpawnConfigPrototype? config))
         {
             Log.Info("CLF Spawn System: No CLFSpawnConfig found, skipping additional entity spawning");
 

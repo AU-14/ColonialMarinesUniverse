@@ -13,8 +13,5 @@ public sealed class WendigoPlayLineMessage : BoundUserInterfaceMessage
 {
     public string EmoteId;
 
-    public WendigoPlayLineMessage(string emoteId)
-    {
-        EmoteId = emoteId;
-    }
+    public WendigoPlayLineMessage(string emoteId) => EmoteId = emoteId;
 }

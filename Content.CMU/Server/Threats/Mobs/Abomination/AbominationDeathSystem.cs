@@ -12,10 +12,9 @@ namespace Content.Server._CMU14.Threats.Mobs.Abomination;
 /// </summary>
 public sealed partial class AbominationDeathSystem : EntitySystem
 {
+    [Dependency] private readonly SharedBodySystem _body = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
     public static readonly EntProtoId FleshKudzuSource = "AU14AbominationFleshKudzuSource";
-
-    [Dependency] private SharedBodySystem _body = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {
@@ -29,14 +28,14 @@ public sealed partial class AbominationDeathSystem : EntitySystem
 
         // Capture the corpse coordinates *before* gibbing — once the body is
         // gibbed the entity is deleted and ToCoordinates returns an invalid map.
-        TransformComponent xform  = Transform(ent.Owner);
-        MapCoordinates     coords = _transform.GetMapCoordinates(ent.Owner, xform);
+        TransformComponent xform = Transform(ent.Owner);
+        MapCoordinates coords = _transform.GetMapCoordinates(ent.Owner, xform);
 
         _body.GibBody(ent.Owner);
 
         if (coords.MapId == default(MapId))
             return;
 
-        Spawn(AbominationDeathSystem.FleshKudzuSource, coords);
+        Spawn(FleshKudzuSource, coords);
     }
 }

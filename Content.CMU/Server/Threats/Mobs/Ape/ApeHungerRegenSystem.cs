@@ -1,4 +1,3 @@
-using Content.Shared._CMU14.Threats.Mobs.Ape;
 using Content.Shared._RMC14.Damage;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
@@ -19,27 +18,28 @@ namespace Content.Server._CMU14.Threats.Mobs.Ape;
 /// </summary>
 public sealed partial class ApeHungerRegenSystem : EntitySystem
 {
+    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly HungerSystem _hunger = default!;
+    [Dependency] private readonly MobStateSystem _mob = default!;
+    [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
+    [Dependency] private readonly SharedRMCDamageableSystem _rmcDamageable = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    private static readonly TimeSpan UpdateInterval = TimeSpan.FromSeconds(1);
+
     // Heal rate: 10% of max health per minute -> 0.1 per 60s
     private const float HealFractionPerSecond = 0.1f / 60f;
 
     // Minimum hunger fraction required to trigger regen (50% -> use hunger thresholds mapping)
     private const float MinimumHungerFraction = 0.5f;
-    private static readonly TimeSpan UpdateInterval = TimeSpan.FromSeconds(1);
-    [Dependency] private DamageableSystem _damageable = default!;
-    [Dependency] private HungerSystem _hunger = default!;
-    [Dependency] private MobStateSystem _mob = default!;
-    [Dependency] private MobThresholdSystem _mobThreshold = default!;
 
     private TimeSpan _nextUpdate = TimeSpan.Zero;
-    [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
-    [Dependency] private IGameTiming _timing = default!;
 
     public override void Update(float frameTime)
     {
         if (_timing.CurTime < _nextUpdate)
             return;
 
-        _nextUpdate = _timing.CurTime + ApeHungerRegenSystem.UpdateInterval;
+        _nextUpdate = _timing.CurTime + UpdateInterval;
 
         EntityQueryEnumerator<ApeDestroyComponent, HungerComponent> query
             = EntityQueryEnumerator<ApeDestroyComponent, HungerComponent>();
@@ -51,19 +51,19 @@ public sealed partial class ApeHungerRegenSystem : EntitySystem
 
             // Check hunger value as fraction of maximum hunger (Overfed threshold)
             float currentHunger = _hunger.GetHunger(hungerComp);
-            float maxHunger     = hungerComp.Thresholds[HungerThreshold.Overfed];
+            float maxHunger = hungerComp.Thresholds[HungerThreshold.Overfed];
 
             if (maxHunger <= 0)
                 continue;
 
             float hungerFraction = currentHunger / maxHunger;
 
-            if (hungerFraction < ApeHungerRegenSystem.MinimumHungerFraction)
+            if (hungerFraction < MinimumHungerFraction)
                 continue;
 
             // Determine max HP using the mob dead threshold from MobThresholdSystem.
             if (!_mobThreshold.TryGetDeadThreshold(uid, out FixedPoint2? deadThreshold)
-             || deadThreshold == FixedPoint2.Zero)
+                || deadThreshold == FixedPoint2.Zero)
                 continue;
 
             FixedPoint2 maxHp = deadThreshold.Value;
@@ -72,12 +72,12 @@ public sealed partial class ApeHungerRegenSystem : EntitySystem
                 continue;
 
             // Heal amount per second as FixedPoint2
-            var healAmount = FixedPoint2.New(maxHp.Float() * ApeHungerRegenSystem.HealFractionPerSecond);
+            var healAmount = FixedPoint2.New(maxHp.Float() * HealFractionPerSecond);
 
             if (healAmount <= FixedPoint2.Zero)
                 continue;
 
-            if (!TryComp<DamageableComponent>(uid, out DamageableComponent? damageable))
+            if (!TryComp(uid, out DamageableComponent? damageable))
                 continue;
 
             // Distribute healing across damage types (expects negative amount for healing)

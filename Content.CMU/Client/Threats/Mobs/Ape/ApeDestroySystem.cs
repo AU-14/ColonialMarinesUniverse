@@ -1,6 +1,5 @@
 using System.Numerics;
 using Content.Shared._CMU14.Threats.Mobs.Ape;
-using Content.Shared._CMU14.Threats.Mobs.Ape;
 using Robust.Client.Animations;
 using Robust.Client.GameObjects;
 using Robust.Shared.Animations;
@@ -12,7 +11,6 @@ public sealed partial class ApeDestroySystem : SharedApeDestroySystem
 {
     [Dependency] private AnimationPlayerSystem _animPlayer = default!;
     [Dependency] private SpriteSystem _sprite = default!;
-
     private const float JumpHeight = 10;
 
     private const string LeapingAnimationKey = "ape-leap-animation";
@@ -26,30 +24,30 @@ public sealed partial class ApeDestroySystem : SharedApeDestroySystem
 
     public Animation LeapAnimation(ApeDestroyComponent destroy, Vector2 leapOffset)
     {
-        var midpoint = (leapOffset / 2);
-        var opposite = -midpoint;
+        Vector2 midpoint = leapOffset / 2;
+        Vector2 opposite = -midpoint;
 
         midpoint += new Vector2(0, JumpHeight);
         opposite += new Vector2(0, JumpHeight);
 
         var midtime = (float)(destroy.CrashTime.TotalSeconds / 2f);
 
-        return new Animation
+        return new()
         {
             Length = destroy.CrashTime,
             AnimationTracks =
             {
-                new AnimationTrackComponentProperty()
+                new AnimationTrackComponentProperty
                 {
                     ComponentType = typeof(SpriteComponent),
                     Property = nameof(SpriteComponent.Offset),
                     InterpolationMode = AnimationInterpolationMode.Linear,
                     KeyFrames =
                     {
-                        new AnimationTrackProperty.KeyFrame(Vector2.Zero, 0f),
-                        new AnimationTrackProperty.KeyFrame(midpoint, midtime),
-                        new AnimationTrackProperty.KeyFrame(opposite, 0f),
-                        new AnimationTrackProperty.KeyFrame(Vector2.Zero, midtime),
+                        new(Vector2.Zero, 0f),
+                        new(midpoint, midtime),
+                        new(opposite, 0f),
+                        new(Vector2.Zero, midtime)
                     }
                 }
             }
@@ -58,13 +56,14 @@ public sealed partial class ApeDestroySystem : SharedApeDestroySystem
 
     private void OnApeLeapStart(ApeDestroyLeapStartEvent ev)
     {
-        if (!TryGetEntity(ev.King, out var ape) || !TryComp<ApeDestroyComponent>(ape, out var destroy))
+        if (!TryGetEntity(ev.King, out EntityUid? ape)
+            || !TryComp(ape, out ApeDestroyComponent? destroy))
             return;
 
-        if (!TryComp<SpriteComponent>(ape, out var sprite) || TerminatingOrDeleted(ape))
+        if (!TryComp(ape, out SpriteComponent? sprite) || TerminatingOrDeleted(ape))
             return;
 
-        if (!TryComp<AnimationPlayerComponent>(ape, out var player))
+        if (!TryComp(ape, out AnimationPlayerComponent? player))
             return;
 
         if (_animPlayer.HasRunningAnimation(player, LeapingAnimationKey))
@@ -77,7 +76,7 @@ public sealed partial class ApeDestroySystem : SharedApeDestroySystem
     {
         base.OnLeapingRemove(ape, ref args);
 
-        if (!TryComp<SpriteComponent>(ape, out var sprite) || TerminatingOrDeleted(ape))
+        if (!TryComp(ape, out SpriteComponent? sprite) || TerminatingOrDeleted(ape))
             return;
 
         if (TryComp(ape, out AnimationPlayerComponent? animation))
@@ -86,4 +85,3 @@ public sealed partial class ApeDestroySystem : SharedApeDestroySystem
         _sprite.SetOffset((ape.Owner, sprite), Vector2.Zero);
     }
 }
-

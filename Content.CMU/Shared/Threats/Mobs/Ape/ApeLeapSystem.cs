@@ -1,11 +1,8 @@
 using System.Linq;
 using System.Numerics;
-using Content.Shared._CMU14.Threats.Mobs.Ape;
 using Content.Shared._RMC14.Barricade;
-using Content.Shared._RMC14.Barricade.Components;
 using Content.Shared._RMC14.CameraShake;
 using Content.Shared._RMC14.Damage.ObstacleSlamming;
-using Content.Shared._RMC14.Entrenching;
 using Content.Shared._RMC14.Movement;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Stun;
@@ -20,9 +17,6 @@ using Content.Shared.DoAfter;
 using Content.Shared.Effects;
 using Content.Shared.Eye.Blinding.Systems;
 using Content.Shared.FixedPoint;
-using Content.Shared.Hands;
-using Content.Shared.IdentityManagement;
-using Content.Shared.Inventory.Events;
 using Content.Shared.Jittering;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -33,12 +27,12 @@ using Content.Shared.Pulling.Events;
 using Content.Shared.Standing;
 using Content.Shared.Stunnable;
 using Content.Shared.Weapons.Melee.Events;
-using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
@@ -48,32 +42,32 @@ namespace Content.Shared._CMU14.Threats.Mobs.Ape;
 
 public sealed partial class ApeLeapSystem : EntitySystem
 {
-    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private BlindableSystem _blindable = default!;
-    [Dependency] private SharedBroadphaseSystem _broadphase = default!;
-    [Dependency] private SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private MobStateSystem _mobState = default!;
-    [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
-    [Dependency] private INetManager _net = default!;
-    [Dependency] private SharedPhysicsSystem _physics = default!;
-    [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private SharedRMCLagCompensationSystem _rmcLagCompensation = default!;
-    [Dependency] private RMCPullingSystem _rmcPulling = default!;
-    [Dependency] private StandingStateSystem _standing = default!;
-    [Dependency] private SharedStunSystem _stun = default!;
-    [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private SharedColorFlashEffectSystem _colorFlash = default!;
-    [Dependency] private SharedJitteringSystem _jitter = default!;
-    [Dependency] private RMCCameraShakeSystem _cameraShake = default!;
-    [Dependency] private RMCSizeStunSystem _size = default!;
-    [Dependency] private RMCObstacleSlammingSystem _obstacleSlamming = default!;
+    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly BlindableSystem _blindable = default!;
+    [Dependency] private readonly SharedBroadphaseSystem _broadphase = default!;
+    [Dependency] private readonly RMCCameraShakeSystem _cameraShake = default!;
+    [Dependency] private readonly SharedColorFlashEffectSystem _colorFlash = default!;
+    [Dependency] private readonly DamageableSystem _damagable = default!;
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly SharedJitteringSystem _jitter = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly RMCObstacleSlammingSystem _obstacleSlamming = default!;
+    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly SharedRMCLagCompensationSystem _rmcLagCompensation = default!;
+    [Dependency] private readonly RMCPullingSystem _rmcPulling = default!;
+    [Dependency] private readonly RMCSizeStunSystem _size = default!;
+    [Dependency] private readonly StandingStateSystem _standing = default!;
+    [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private SharedDirectionalAttackBlockSystem _directionalBlock = default!;
-    [Dependency] private DamageableSystem _damagable = default!;
+    private EntityQuery<FixturesComponent> _fixturesQuery;
 
     private EntityQuery<PhysicsComponent> _physicsQuery;
-    private EntityQuery<FixturesComponent> _fixturesQuery;
 
     public override void Initialize()
     {
@@ -82,8 +76,8 @@ public sealed partial class ApeLeapSystem : EntitySystem
 
         SubscribeAllEvent<ApeLeapPredictedHitEvent>(OnPredictedHit);
 
-        SubscribeLocalEvent<ApeLeapComponent, Threats.Mobs.Ape.ApeLeapActionEvent>(OnApeLeapAction);
-        SubscribeLocalEvent<ApeLeapComponent, Threats.Mobs.Ape.ApeLeapDoAfterEvent>(OnApeLeapDoAfter);
+        SubscribeLocalEvent<ApeLeapComponent, ApeLeapActionEvent>(OnApeLeapAction);
+        SubscribeLocalEvent<ApeLeapComponent, ApeLeapDoAfterEvent>(OnApeLeapDoAfter);
         SubscribeLocalEvent<ApeLeapComponent, MeleeHitEvent>(OnApeLeapMelee);
         SubscribeLocalEvent<ApeLeapComponent, RMCMeleeUserGetRangeEvent>(OnApeLeapingMeleeGetRange);
 
@@ -92,6 +86,34 @@ public sealed partial class ApeLeapSystem : EntitySystem
         SubscribeLocalEvent<ApeLeapingComponent, PhysicsSleepEvent>(OnApeLeapingPhysicsSleep);
         SubscribeLocalEvent<ApeLeapingComponent, StartPullAttemptEvent>(OnApeLeapingStartPullAttempt);
         SubscribeLocalEvent<ApeLeapingComponent, PullAttemptEvent>(OnApeLeapingPullAttempt);
+    }
+
+    public override void Update(float frameTime)
+    {
+        TimeSpan time = _timing.CurTime;
+        EntityQueryEnumerator<ApeLeapingComponent> leaping = EntityQueryEnumerator<ApeLeapingComponent>();
+        while (leaping.MoveNext(out EntityUid uid, out ApeLeapingComponent? comp))
+        {
+            if (time < comp.LeapEndTime)
+                continue;
+
+            StopLeap((uid, comp));
+        }
+
+        if (_net.IsClient)
+            return;
+
+        EntityQueryEnumerator<LeapIncapacitatedComponent> incapacitated
+            = EntityQueryEnumerator<LeapIncapacitatedComponent>();
+        while (incapacitated.MoveNext(out EntityUid uid, out LeapIncapacitatedComponent? victim))
+        {
+            if (victim.RecoverAt > time)
+                continue;
+
+            RemCompDeferred<LeapIncapacitatedComponent>(uid);
+            _blindable.UpdateIsBlind(uid);
+            _actionBlocker.UpdateCanMove(uid);
+        }
     }
 
     private void OnPredictedHit(ApeLeapPredictedHitEvent msg, EntitySessionEventArgs args)
@@ -118,7 +140,7 @@ public sealed partial class ApeLeapSystem : EntitySystem
         ApplyLeapingHitEffects((ent, leaping), target);
     }
 
-    private void OnApeLeapAction(Entity<ApeLeapComponent> ape, ref Threats.Mobs.Ape.ApeLeapActionEvent args)
+    private void OnApeLeapAction(Entity<ApeLeapComponent> ape, ref ApeLeapActionEvent args)
     {
         if (args.Handled)
             return;
@@ -131,7 +153,7 @@ public sealed partial class ApeLeapSystem : EntitySystem
 
         args.Handled = true;
 
-        var ev = new Threats.Mobs.Ape.ApeLeapDoAfterEvent(GetNetCoordinates(args.Target));
+        var ev = new ApeLeapDoAfterEvent(GetNetCoordinates(args.Target));
         var doAfter = new DoAfterArgs(EntityManager, ape, ape.Comp.Delay, ev, ape)
         {
             BreakOnMove = true,
@@ -142,7 +164,7 @@ public sealed partial class ApeLeapSystem : EntitySystem
         _doAfter.TryStartDoAfter(doAfter);
     }
 
-    private void OnApeLeapDoAfter(Entity<ApeLeapComponent> ape, ref Threats.Mobs.Ape.ApeLeapDoAfterEvent args)
+    private void OnApeLeapDoAfter(Entity<ApeLeapComponent> ape, ref ApeLeapDoAfterEvent args)
     {
         if (args.Handled)
             return;
@@ -153,10 +175,10 @@ public sealed partial class ApeLeapSystem : EntitySystem
             return;
         }
 
-        if (!_physicsQuery.TryGetComponent(ape, out var physics))
+        if (!_physicsQuery.TryGetComponent(ape, out PhysicsComponent? physics))
             return;
 
-        if (EnsureComp<ApeLeapingComponent>(ape, out var leaping))
+        if (EnsureComp(ape, out ApeLeapingComponent leaping))
             return;
 
         args.Handled = true;
@@ -173,17 +195,17 @@ public sealed partial class ApeLeapSystem : EntitySystem
 
         _rmcPulling.TryStopAllPullsFromAndOn(ape);
 
-        var origin = _transform.GetMapCoordinates(ape);
+        MapCoordinates origin = _transform.GetMapCoordinates(ape);
         var target = _transform.ToMapCoordinates(args.TargetCoords);
-        var direction = target.Position - origin.Position;
+        Vector2 direction = target.Position - origin.Position;
 
         if (direction == Vector2.Zero)
             return;
 
-        var length = direction.Length();
-        var distance = Math.Clamp(length, 0.1f, ape.Comp.Range.Float());
+        float length = direction.Length();
+        float distance = Math.Clamp(length, 0.1f, ape.Comp.Range.Float());
         direction *= distance / length;
-        var impulse = direction.Normalized() * ape.Comp.Strength * physics.Mass;
+        Vector2 impulse = direction.Normalized() * ape.Comp.Strength * physics.Mass;
 
         leaping.Origin = _transform.GetMoverCoordinates(ape);
         leaping.ParalyzeTime = ape.Comp.KnockdownTime;
@@ -196,16 +218,16 @@ public sealed partial class ApeLeapSystem : EntitySystem
 
         if (TryComp(ape, out FixturesComponent? fixtures))
         {
-            var collisionGroup = (int) leaping.IgnoredCollisionGroupSmall;
-            if (_size.TryGetSize(ape, out var size) && size > RMCSizes.SmallXeno)
-                collisionGroup = (int) leaping.IgnoredCollisionGroupLarge;
+            var collisionGroup = (int)leaping.IgnoredCollisionGroupSmall;
+            if (_size.TryGetSize(ape, out RMCSizes size) && size > RMCSizes.SmallXeno)
+                collisionGroup = (int)leaping.IgnoredCollisionGroupLarge;
 
-            var fixture = fixtures.Fixtures.First();
+            KeyValuePair<string, Fixture> fixture = fixtures.Fixtures.First();
             _physics.SetCollisionMask(ape, fixture.Key, fixture.Value, fixture.Value.CollisionMask ^ collisionGroup);
         }
 
-        //Handle close-range or same-tile leaps
-        foreach (var ent in _physics.GetContactingEntities(ape.Owner, physics))
+        // Handle close-range or same-tile leaps
+        foreach (EntityUid ent in _physics.GetContactingEntities(ape.Owner, physics))
         {
             if (ApplyLeapingHitEffects((ape, leaping), ent))
                 return;
@@ -220,9 +242,9 @@ public sealed partial class ApeLeapSystem : EntitySystem
         if (!args.IsHit || args.HitEntities.Count == 0)
             return;
 
-        foreach (var entity in args.HitEntities)
+        foreach (EntityUid entity in args.HitEntities)
         {
-            if (TryComp<SlowedDownComponent>(ape, out var root) && root.SprintSpeedModifier == 0f)
+            if (TryComp(ape, out SlowedDownComponent? root) && root.SprintSpeedModifier == 0f)
             {
                 RemComp<SlowedDownComponent>(ape);
                 _movementSpeed.RefreshMovementSpeedModifiers(ape);
@@ -240,9 +262,7 @@ public sealed partial class ApeLeapSystem : EntitySystem
         if (ent.Comp.LastHit == null ||
             ent.Comp.LastHit != args.Target ||
             _timing.CurTime > ent.Comp.LastHitAt + ent.Comp.MoveDelayTime)
-        {
             return;
-        }
 
         args.Range = ent.Comp.LastHitRange;
     }
@@ -280,7 +300,8 @@ public sealed partial class ApeLeapSystem : EntitySystem
         if (xeno.Comp.KnockedDown)
             return false;
 
-        if (xeno.Comp.DestroyObjects && TryComp<XenoLeapDestroyOnPassComponent>(target, out var destroy))
+        if (xeno.Comp.DestroyObjects
+            && TryComp(target, out XenoLeapDestroyOnPassComponent? destroy))
         {
             if (_net.IsServer)
             {
@@ -298,11 +319,9 @@ public sealed partial class ApeLeapSystem : EntitySystem
         }
 
         if ((HasComp<XenoParasiteComponent>(target) ||
-            !HasComp<MobStateComponent>(target)) &&
+                !HasComp<MobStateComponent>(target)) &&
             !HasComp<RMCLeapProtectionComponent>(target))
-        {
             return false;
-        }
 
         if (_standing.IsDown(target))
             return false;
@@ -310,7 +329,7 @@ public sealed partial class ApeLeapSystem : EntitySystem
         if (HasComp<LeapIncapacitatedComponent>(target))
             return false;
 
-        if (_size.TryGetSize(target, out var size) && size >= RMCSizes.Big)
+        if (_size.TryGetSize(target, out RMCSizes size) && size >= RMCSizes.Big)
             return false;
 
         if (size == RMCSizes.VerySmallXeno)
@@ -348,7 +367,7 @@ public sealed partial class ApeLeapSystem : EntitySystem
             Dirty(xeno, leap);
         }
 
-        if (_physicsQuery.TryGetComponent(xeno, out var physics))
+        if (_physicsQuery.TryGetComponent(xeno, out PhysicsComponent? physics))
         {
             _physics.SetBodyStatus(xeno, physics, BodyStatus.OnGround);
 
@@ -374,11 +393,12 @@ public sealed partial class ApeLeapSystem : EntitySystem
                 SpawnAttachedTo(xeno.Comp.HitEffect, target.ToCoordinates());
         }
 
-        var damage = _damagable.TryChangeDamage(target, xeno.Comp.Damage, origin: xeno, tool: xeno);
+        DamageSpecifier? damage = _damagable.TryChangeDamage(target, xeno.Comp.Damage, origin: xeno, tool: xeno);
         if (damage?.GetTotal() > FixedPoint2.Zero)
         {
-            var filter = Filter.Pvs(target, entityManager: EntityManager).RemoveWhereAttachedEntity(o => o == xeno.Owner);
-            _colorFlash.RaiseEffect(Color.Red, new List<EntityUid> { target }, filter);
+            Filter filter = Filter.Pvs(target, entityManager: EntityManager)
+                .RemoveWhereAttachedEntity(o => o == xeno.Owner);
+            _colorFlash.RaiseEffect(Color.Red, new() { target }, filter);
         }
 
         _jitter.DoJitter(target, xeno.Comp.TargetJitterTime, false);
@@ -395,12 +415,10 @@ public sealed partial class ApeLeapSystem : EntitySystem
 
         if (_net.IsClient)
         {
-            var predictedEv = new ApeLeapPredictedHitEvent(GetNetEntity(target), _rmcLagCompensation.GetLastRealTick(null));
+            var predictedEv = new ApeLeapPredictedHitEvent(GetNetEntity(target),
+                _rmcLagCompensation.GetLastRealTick(null));
             RaiseNetworkEvent(predictedEv);
-            if (_timing.InPrediction && _timing.IsFirstTimePredicted)
-            {
-                RaisePredictiveEvent(predictedEv);
-            }
+            if (_timing.InPrediction && _timing.IsFirstTimePredicted) RaisePredictiveEvent(predictedEv);
         }
 
         StopLeap(xeno);
@@ -409,53 +427,27 @@ public sealed partial class ApeLeapSystem : EntitySystem
 
     private void StopLeap(Entity<ApeLeapingComponent> leaping)
     {
-        if (_physicsQuery.TryGetComponent(leaping, out var physics))
+        if (_physicsQuery.TryGetComponent(leaping, out PhysicsComponent? physics))
         {
             _physics.SetLinearVelocity(leaping, Vector2.Zero, body: physics);
             _physics.SetBodyStatus(leaping, physics, BodyStatus.OnGround);
         }
 
-        if (_fixturesQuery.TryGetComponent(leaping, out var fixtures))
+        if (_fixturesQuery.TryGetComponent(leaping, out FixturesComponent? fixtures))
         {
             var collisionGroup = (int)leaping.Comp.IgnoredCollisionGroupSmall;
-            if (_size.TryGetSize(leaping, out var size) && size > RMCSizes.SmallXeno)
+            if (_size.TryGetSize(leaping, out RMCSizes size) && size > RMCSizes.SmallXeno)
                 collisionGroup = (int)leaping.Comp.IgnoredCollisionGroupLarge;
 
             if (size >= RMCSizes.SmallXeno)
             {
-                var fixture = fixtures.Fixtures.First();
-                _physics.SetCollisionMask(leaping, fixture.Key, fixture.Value, fixture.Value.CollisionMask | collisionGroup);
+                KeyValuePair<string, Fixture> fixture = fixtures.Fixtures.First();
+                _physics.SetCollisionMask(leaping, fixture.Key, fixture.Value,
+                    fixture.Value.CollisionMask | collisionGroup);
             }
         }
 
         RemCompDeferred<ApeLeapingComponent>(leaping);
-    }
-
-    public override void Update(float frameTime)
-    {
-        var time = _timing.CurTime;
-        var leaping = EntityQueryEnumerator<ApeLeapingComponent>();
-        while (leaping.MoveNext(out var uid, out var comp))
-        {
-            if (time < comp.LeapEndTime)
-                continue;
-
-            StopLeap((uid, comp));
-        }
-
-        if (_net.IsClient)
-            return;
-
-        var incapacitated = EntityQueryEnumerator<LeapIncapacitatedComponent>();
-        while (incapacitated.MoveNext(out var uid, out var victim))
-        {
-            if (victim.RecoverAt > time)
-                continue;
-
-            RemCompDeferred<LeapIncapacitatedComponent>(uid);
-            _blindable.UpdateIsBlind(uid);
-            _actionBlocker.UpdateCanMove(uid);
-        }
     }
 }
 

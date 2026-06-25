@@ -1,16 +1,17 @@
 using System.Numerics;
-using CMUDrawDepth = Content.Shared.DrawDepth.DrawDepth;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Projectiles;
 using Content.Shared._RMC14.Slow;
-using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Sprite;
+using Content.Shared._RMC14.Stun;
+using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared._RMC14.Xenonids.Projectile;
 using Content.Shared.Actions;
+using Content.Shared.Actions.Components;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
@@ -20,21 +21,17 @@ using Content.Shared.Mech.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.Movement.Components;
-using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
-using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Vehicle.Components;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
-using Robust.Shared.Maths;
 using Robust.Shared.Network;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
@@ -44,248 +41,244 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
+using CMUDrawDepth = Content.Shared.DrawDepth.DrawDepth;
 
 namespace Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
 
 public enum CMUXenoPsychicBlastMode : byte
 {
     Blast,
-    Lance,
+    Lance
 }
 
 public enum CMUXenoWarlockChannelKind : byte
 {
     PsychicCrush,
     PsychicBlast,
-    PsychicShield,
+    PsychicShield
 }
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-[Access(typeof(CMUXenoWarlockSystem))]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, Access(typeof(CMUXenoWarlockSystem))]
 public sealed partial class CMUXenoWarlockComponent : Component
 {
-    [DataField, AutoNetworkedField]
-    public FixedPoint2 PsychicBlastCost = 75;
+    public readonly List<EntityUid> FrozenProjectiles = new();
 
-    [DataField, AutoNetworkedField]
-    public TimeSpan PsychicBlastChargeDuration = TimeSpan.FromSeconds(1);
+    public readonly List<EntityUid> PsychicCrushWarnings = new();
 
-    [DataField, AutoNetworkedField]
-    public float PsychicBlastProjectileSpeed = 28f;
+    public readonly List<EntityUid> PsychicShieldSegments = new();
 
-    [DataField, AutoNetworkedField]
-    public float PsychicBlastRange = 7f;
+    public TimeSpan NextPsychicCrushAt;
 
-    [DataField, AutoNetworkedField]
-    public EntProtoId PsychicBlastProjectileId = "CMUXenoPsychicBlastProjectile";
+    public TimeSpan NextPsychicCrushPulseAt;
 
-    [DataField, AutoNetworkedField]
-    public EntProtoId PsychicLanceProjectileId = "CMUXenoPsychicLanceProjectile";
+    public TimeSpan NextPsychicShieldAt;
 
-    [DataField, AutoNetworkedField]
-    public CMUXenoPsychicBlastMode PsychicBlastMode = CMUXenoPsychicBlastMode.Blast;
-
-    [DataField, AutoNetworkedField]
-    public float PsychicBlastRadius = 1.25f;
-
-    [DataField, AutoNetworkedField]
-    public DamageSpecifier PsychicBlastDamage = new()
-    {
-        DamageDict = { ["Blunt"] = FixedPoint2.New(35) },
-    };
-
-    [DataField, AutoNetworkedField]
-    public TimeSpan PsychicBlastSlow = TimeSpan.FromSeconds(1.5);
-
-    [DataField, AutoNetworkedField]
-    public FixedPoint2 PsychicCrushPulseCost = FixedPoint2.New(CMUXenoWarlockSystem.PsychicCrushPlasmaPerPulse);
-
-    [DataField, AutoNetworkedField]
-    public float PsychicCrushRange = CMUXenoWarlockSystem.PsychicCrushTargetRangeValue;
-
-    [DataField, AutoNetworkedField]
-    public TimeSpan PsychicCrushPulseInterval = TimeSpan.FromSeconds(1.75);
-
-    [DataField, AutoNetworkedField]
-    public TimeSpan PsychicCrushWindupDuration = TimeSpan.FromSeconds(0.8);
-
-    [DataField, AutoNetworkedField]
-    public TimeSpan PsychicCrushCooldown = TimeSpan.FromSeconds(15);
-
-    [DataField, AutoNetworkedField]
-    public float PsychicCrushChannelSpeedMultiplier = 0.3f;
-
-    [DataField, AutoNetworkedField]
-    public TimeSpan PsychicCrushOwnerSlowDuration = TimeSpan.FromSeconds(1);
-
-    [DataField, AutoNetworkedField]
-    public FixedPoint2 PsychicShieldCost = FixedPoint2.New(CMUXenoWarlockSystem.PsychicShieldPlasmaCost);
-
-    [DataField, AutoNetworkedField]
-    public TimeSpan PsychicShieldDuration = TimeSpan.FromSeconds(6);
-
-    [DataField, AutoNetworkedField]
-    public TimeSpan PsychicShieldCooldown = TimeSpan.FromSeconds(10);
-
-    [DataField, AutoNetworkedField]
-    public TimeSpan PsychicShieldMoveCancelGrace = TimeSpan.FromSeconds(0.25);
-
-    [DataField, AutoNetworkedField]
-    public FixedPoint2 PsychicShieldIntegrity = FixedPoint2.New(CMUXenoWarlockSystem.PsychicShieldIntegrityValue);
-
-    [DataField, AutoNetworkedField]
-    public int PsychicShieldMaxFrozenProjectiles = CMUXenoWarlockSystem.PsychicShieldMaxFrozenProjectilesValue;
-
-    [DataField, AutoNetworkedField]
-    public TimeSpan PsychicShieldOwnerStun = TimeSpan.FromSeconds(1);
-
-    [DataField, AutoNetworkedField]
-    public TimeSpan PsychicShieldBlastParalyze = TimeSpan.FromSeconds(1);
-
-    [DataField, AutoNetworkedField]
-    public float PsychicShieldBlastThrowSpeed = 4f;
-
-    [DataField, AutoNetworkedField]
-    public EntProtoId PsychicShieldSegmentId = "CMUXenoPsychicShieldSegment";
-
-    [DataField, AutoNetworkedField]
-    public EntProtoId PsychicShieldVisualId = "CMUXenoPsychicShield";
-
-    [DataField, AutoNetworkedField]
-    public EntProtoId PsychicCrushWarningId = "CMUXenoPsychicCrushWarning";
-
-    [DataField, AutoNetworkedField]
-    public EntProtoId PsychicCrushOrbId = "CMUXenoPsychicCrushOrb";
-
-    [DataField, AutoNetworkedField]
-    public EntProtoId PsychicCrushSmoothId = "CMUXenoPsychicCrushSmooth";
-
-    [DataField, AutoNetworkedField]
-    public EntProtoId PsychicCrushDetonateId = "CMUXenoPsychicCrushHard";
-
-    [DataField, AutoNetworkedField]
-    public EntProtoId PsychicCrushBlurId = "CMUXenoPsychicCrushBlur";
-
-    [DataField, AutoNetworkedField]
-    public EntProtoId PsychicCrushChannelEffectId = "CMUXenoWarlockCrushChannelEffect";
-
-    [DataField, AutoNetworkedField]
-    public EntProtoId PsychicCrushChannelParticleId = "CMUXenoWarlockCrushParticles";
+    public EntityUid? PsychicBlastChannelEffect;
 
     [DataField, AutoNetworkedField]
     public EntProtoId PsychicBlastChannelEffectId = "CMUXenoWarlockBlastChannelEffect";
+
+    public bool PsychicBlastChanneling;
+
+    public EntityUid? PsychicBlastChannelParticle;
 
     [DataField, AutoNetworkedField]
     public EntProtoId PsychicBlastChannelParticleId = "CMUXenoWarlockBlastParticles";
 
     [DataField, AutoNetworkedField]
-    public EntProtoId PsychicLanceChannelParticleId = "CMUXenoWarlockLanceParticles";
+    public TimeSpan PsychicBlastChargeDuration = TimeSpan.FromSeconds(1);
+    [DataField, AutoNetworkedField]
+    public FixedPoint2 PsychicBlastCost = 75;
 
     [DataField, AutoNetworkedField]
-    public EntProtoId PsychicShieldChannelEffectId = "CMUXenoWarlockShieldChannelEffect";
+    public DamageSpecifier PsychicBlastDamage = new()
+    {
+        DamageDict = { ["Blunt"] = FixedPoint2.New(35) }
+    };
 
     [DataField, AutoNetworkedField]
-    public SoundSpecifier PsychicBlastFireSound = new SoundPathSpecifier(CMUXenoWarlockSystem.PsychicBlastFireSoundPath);
+    public SoundSpecifier
+        PsychicBlastFireSound = new SoundPathSpecifier(CMUXenoWarlockSystem.PsychicBlastFireSoundPath);
 
     [DataField, AutoNetworkedField]
-    public SoundSpecifier PsychicBlastImpactSound = new SoundPathSpecifier(CMUXenoWarlockSystem.PsychicBlastImpactSoundPath);
+    public SoundSpecifier PsychicBlastImpactSound
+        = new SoundPathSpecifier(CMUXenoWarlockSystem.PsychicBlastImpactSoundPath);
 
     [DataField, AutoNetworkedField]
-    public SoundSpecifier PsychicCrushPulseSound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/woosh_swoosh.ogg");
+    public CMUXenoPsychicBlastMode PsychicBlastMode = CMUXenoPsychicBlastMode.Blast;
+
+    [DataField, AutoNetworkedField]
+    public EntProtoId PsychicBlastProjectileId = "CMUXenoPsychicBlastProjectile";
+
+    [DataField, AutoNetworkedField]
+    public float PsychicBlastProjectileSpeed = 28f;
+
+    [DataField, AutoNetworkedField]
+    public float PsychicBlastRadius = 1.25f;
+
+    [DataField, AutoNetworkedField]
+    public float PsychicBlastRange = 7f;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan PsychicBlastSlow = TimeSpan.FromSeconds(1.5);
+
+    public EntityCoordinates PsychicBlastTarget;
+
+    [DataField, AutoNetworkedField]
+    public EntProtoId PsychicCrushBlurId = "CMUXenoPsychicCrushBlur";
+
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier PsychicCrushCancelSound
+        = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/woosh_swoosh.ogg");
+
+    public EntityUid? PsychicCrushChannelEffect;
+
+    [DataField, AutoNetworkedField]
+    public EntProtoId PsychicCrushChannelEffectId = "CMUXenoWarlockCrushChannelEffect";
+
+    public bool PsychicCrushChanneling;
+
+    public EntityUid? PsychicCrushChannelParticle;
+
+    [DataField, AutoNetworkedField]
+    public EntProtoId PsychicCrushChannelParticleId = "CMUXenoWarlockCrushParticles";
+
+    [DataField, AutoNetworkedField]
+    public float PsychicCrushChannelSpeedMultiplier = 0.3f;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan PsychicCrushCooldown = TimeSpan.FromSeconds(15);
+
+    [DataField, AutoNetworkedField]
+    public EntProtoId PsychicCrushDetonateId = "CMUXenoPsychicCrushHard";
+
+    public EntityUid? PsychicCrushOrb;
+
+    [DataField, AutoNetworkedField]
+    public EntProtoId PsychicCrushOrbId = "CMUXenoPsychicCrushOrb";
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan PsychicCrushOwnerSlowDuration = TimeSpan.FromSeconds(1);
+
+    [DataField, AutoNetworkedField]
+    public FixedPoint2 PsychicCrushPulseCost = FixedPoint2.New(CMUXenoWarlockSystem.PsychicCrushPlasmaPerPulse);
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan PsychicCrushPulseInterval = TimeSpan.FromSeconds(1.75);
+
+    public int PsychicCrushPulses;
+
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier
+        PsychicCrushPulseSound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/woosh_swoosh.ogg");
+
+    [DataField, AutoNetworkedField]
+    public float PsychicCrushRange = CMUXenoWarlockSystem.PsychicCrushTargetRangeValue;
+
+    [DataField, AutoNetworkedField]
+    public EntProtoId PsychicCrushSmoothId = "CMUXenoPsychicCrushSmooth";
+
+    public EntityCoordinates PsychicCrushTarget;
 
     [DataField, AutoNetworkedField]
     public SoundSpecifier PsychicCrushTriggerSound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/EMPulse.ogg");
 
     [DataField, AutoNetworkedField]
-    public SoundSpecifier PsychicCrushCancelSound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/woosh_swoosh.ogg");
+    public EntProtoId PsychicCrushWarningId = "CMUXenoPsychicCrushWarning";
+
+    public bool PsychicCrushWindingUp;
 
     [DataField, AutoNetworkedField]
-    public SoundSpecifier PsychicShieldStartSound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/magic.ogg");
+    public TimeSpan PsychicCrushWindupDuration = TimeSpan.FromSeconds(0.8);
 
     [DataField, AutoNetworkedField]
-    public SoundSpecifier PsychicShieldReflectSound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/portal.ogg");
+    public EntProtoId PsychicLanceChannelParticleId = "CMUXenoWarlockLanceParticles";
+
+    [DataField, AutoNetworkedField]
+    public EntProtoId PsychicLanceProjectileId = "CMUXenoPsychicLanceProjectile";
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan PsychicShieldBlastParalyze = TimeSpan.FromSeconds(1);
 
     [DataField, AutoNetworkedField]
     public SoundSpecifier PsychicShieldBlastSound = new SoundPathSpecifier("/Audio/_RMC14/Effects/bamf.ogg");
 
     [DataField, AutoNetworkedField]
-    public SoundSpecifier PsychicShieldRoarSound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/roar_warlock.ogg");
-
-    public EntityUid? PsychicCrushOrb;
-
-    public EntityUid? PsychicCrushChannelEffect;
-
-    public EntityUid? PsychicCrushChannelParticle;
-
-    public EntityUid? PsychicBlastChannelEffect;
-
-    public EntityUid? PsychicBlastChannelParticle;
+    public float PsychicShieldBlastThrowSpeed = 4f;
 
     public EntityUid? PsychicShieldChannelEffect;
 
-    public readonly List<EntityUid> PsychicCrushWarnings = new();
+    [DataField, AutoNetworkedField]
+    public EntProtoId PsychicShieldChannelEffectId = "CMUXenoWarlockShieldChannelEffect";
 
-    public bool PsychicCrushWindingUp;
+    [DataField, AutoNetworkedField]
+    public TimeSpan PsychicShieldCooldown = TimeSpan.FromSeconds(10);
 
-    public bool PsychicCrushChanneling;
-
-    public bool PsychicBlastChanneling;
-
-    public EntityCoordinates PsychicCrushTarget;
-
-    public EntityCoordinates PsychicBlastTarget;
-
-    public int PsychicCrushPulses;
-
-    public TimeSpan NextPsychicCrushPulseAt;
-
-    public TimeSpan NextPsychicCrushAt;
-
-    public readonly List<EntityUid> PsychicShieldSegments = new();
-
-    public readonly List<EntityUid> FrozenProjectiles = new();
+    [DataField, AutoNetworkedField]
+    public FixedPoint2 PsychicShieldCost = FixedPoint2.New(CMUXenoWarlockSystem.PsychicShieldPlasmaCost);
 
     public Direction PsychicShieldDirection;
 
-    public FixedPoint2 PsychicShieldIntegrityRemaining;
+    [DataField, AutoNetworkedField]
+    public TimeSpan PsychicShieldDuration = TimeSpan.FromSeconds(6);
 
     public TimeSpan PsychicShieldExpiresAt;
 
+    [DataField, AutoNetworkedField]
+    public FixedPoint2 PsychicShieldIntegrity = FixedPoint2.New(CMUXenoWarlockSystem.PsychicShieldIntegrityValue);
+
+    public FixedPoint2 PsychicShieldIntegrityRemaining;
+
+    [DataField, AutoNetworkedField]
+    public int PsychicShieldMaxFrozenProjectiles = CMUXenoWarlockSystem.PsychicShieldMaxFrozenProjectilesValue;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan PsychicShieldMoveCancelGrace = TimeSpan.FromSeconds(0.25);
+
     public TimeSpan PsychicShieldMoveCancelGraceUntil;
 
-    public TimeSpan NextPsychicShieldAt;
+    [DataField, AutoNetworkedField]
+    public TimeSpan PsychicShieldOwnerStun = TimeSpan.FromSeconds(1);
+
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier PsychicShieldReflectSound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/portal.ogg");
+
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier
+        PsychicShieldRoarSound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/roar_warlock.ogg");
+
+    [DataField, AutoNetworkedField]
+    public EntProtoId PsychicShieldSegmentId = "CMUXenoPsychicShieldSegment";
+
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier PsychicShieldStartSound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/magic.ogg");
+
+    [DataField, AutoNetworkedField]
+    public EntProtoId PsychicShieldVisualId = "CMUXenoPsychicShield";
 }
 
-[RegisterComponent]
-[Access(typeof(CMUXenoWarlockSystem))]
+[RegisterComponent, Access(typeof(CMUXenoWarlockSystem))]
 public sealed partial class CMUXenoWarlockChannelingComponent : Component
 {
     [DataField]
     public float SpeedMultiplier = 0.3f;
 }
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-[Access(typeof(CMUXenoWarlockSystem))]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, Access(typeof(CMUXenoWarlockSystem))]
 public sealed partial class CMUXenoPsychicShieldSegmentComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public EntityUid Warlock;
-
-    [DataField, AutoNetworkedField]
     public Direction Direction;
+    [DataField, AutoNetworkedField]
+    public EntityUid Warlock;
 }
 
-[RegisterComponent, NetworkedComponent]
-[Access(typeof(CMUXenoWarlockSystem))]
+[RegisterComponent, NetworkedComponent, Access(typeof(CMUXenoWarlockSystem))]
 public sealed partial class CMUXenoPsychicShieldRootComponent : Component;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-[Access(typeof(CMUXenoWarlockSystem))]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, Access(typeof(CMUXenoWarlockSystem))]
 public sealed partial class CMUXenoFrozenProjectileComponent : Component
 {
-    [DataField, AutoNetworkedField]
-    public Vector2 Velocity;
-
     [DataField, AutoNetworkedField]
     public BodyStatus BodyStatus;
 
@@ -296,25 +289,10 @@ public sealed partial class CMUXenoFrozenProjectileComponent : Component
     public bool CanCollide;
 
     [DataField, AutoNetworkedField]
-    public EntityUid? Shooter;
-
-    [DataField, AutoNetworkedField]
-    public EntityUid? Weapon;
-
-    [DataField, AutoNetworkedField]
-    public bool IgnoreShooter;
-
-    [DataField, AutoNetworkedField]
     public bool DeleteOnCollide;
 
     [DataField, AutoNetworkedField]
-    public bool ProjectileSpent;
-
-    [DataField, AutoNetworkedField]
-    public bool HadDeleteOnCollideComponent;
-
-    [DataField, AutoNetworkedField]
-    public bool HadProjectileFixedDistanceComponent;
+    public bool FixedDistanceArcProj;
 
     [DataField, AutoNetworkedField]
     public TimeSpan FixedDistanceRemaining;
@@ -323,16 +301,31 @@ public sealed partial class CMUXenoFrozenProjectileComponent : Component
     public MapCoordinates? FixedDistanceTargetCoordinates;
 
     [DataField, AutoNetworkedField]
-    public bool FixedDistanceArcProj;
+    public bool HadDeleteOnCollideComponent;
 
     [DataField, AutoNetworkedField]
     public bool HadDeleteOnFixedDistanceStopComponent;
+
+    [DataField, AutoNetworkedField]
+    public bool HadProjectileFixedDistanceComponent;
+
+    [DataField, AutoNetworkedField]
+    public bool IgnoreShooter;
+
+    [DataField, AutoNetworkedField]
+    public bool ProjectileSpent;
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? Shooter;
+    [DataField, AutoNetworkedField]
+    public Vector2 Velocity;
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? Weapon;
 }
 
 public sealed partial class CMUXenoPsychicBlastActionEvent : WorldTargetActionEvent;
-
 public sealed partial class CMUXenoPsychicCrushActionEvent : WorldTargetActionEvent;
-
 public sealed partial class CMUXenoPsychicShieldActionEvent : InstantActionEvent;
 
 [Serializable, NetSerializable]
@@ -341,48 +334,36 @@ public sealed partial class CMUXenoPsychicCrushDoAfterEvent : SimpleDoAfterEvent
     [DataField]
     public NetCoordinates TargetCoordinates;
 
-    public CMUXenoPsychicCrushDoAfterEvent(NetCoordinates targetCoordinates)
-    {
-        TargetCoordinates = targetCoordinates;
-    }
+    public CMUXenoPsychicCrushDoAfterEvent(NetCoordinates targetCoordinates) => TargetCoordinates = targetCoordinates;
 
-    public override DoAfterEvent Clone()
-    {
-        return new CMUXenoPsychicCrushDoAfterEvent(TargetCoordinates);
-    }
+    public override DoAfterEvent Clone() => new CMUXenoPsychicCrushDoAfterEvent(TargetCoordinates);
 }
 
 [Serializable, NetSerializable]
 public sealed partial class CMUXenoPsychicCrushChannelDoAfterEvent : SimpleDoAfterEvent
 {
-    public override DoAfterEvent Clone()
-    {
-        return new CMUXenoPsychicCrushChannelDoAfterEvent();
-    }
+    public override DoAfterEvent Clone() => new CMUXenoPsychicCrushChannelDoAfterEvent();
 }
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-[Access(typeof(CMUXenoWarlockSystem))]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, Access(typeof(CMUXenoWarlockSystem))]
 public sealed partial class CMUXenoPsychicCrushBlurComponent : Component
 {
+    [DataField, AutoNetworkedField]
+    public TimeSpan Duration = TimeSpan.FromSeconds(1);
     [DataField, AutoNetworkedField]
     public float Radius = 0.55f;
 
     [DataField, AutoNetworkedField]
     public float Strength = 1.6f;
-
-    [DataField, AutoNetworkedField]
-    public TimeSpan Duration = TimeSpan.FromSeconds(1);
 }
 
 [Serializable, NetSerializable]
 public sealed partial class CMUXenoPsychicBlastDoAfterEvent : SimpleDoAfterEvent
 {
     [DataField]
-    public NetCoordinates TargetCoordinates;
-
-    [DataField]
     public CMUXenoPsychicBlastMode Mode;
+    [DataField]
+    public NetCoordinates TargetCoordinates;
 
     public CMUXenoPsychicBlastDoAfterEvent(NetCoordinates targetCoordinates, CMUXenoPsychicBlastMode mode)
     {
@@ -390,16 +371,26 @@ public sealed partial class CMUXenoPsychicBlastDoAfterEvent : SimpleDoAfterEvent
         Mode = mode;
     }
 
-    public override DoAfterEvent Clone()
-    {
-        return new CMUXenoPsychicBlastDoAfterEvent(TargetCoordinates, Mode);
-    }
+    public override DoAfterEvent Clone() => new CMUXenoPsychicBlastDoAfterEvent(TargetCoordinates, Mode);
 }
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-[Access(typeof(CMUXenoWarlockSystem))]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, Access(typeof(CMUXenoWarlockSystem))]
 public sealed partial class CMUXenoPsychicBlastProjectileComponent : Component
 {
+    [DataField, AutoNetworkedField]
+    public DamageSpecifier Damage = new()
+    {
+        DamageDict = { ["Blunt"] = FixedPoint2.New(35) }
+    };
+
+    [DataField, AutoNetworkedField]
+    public EntProtoId ImpactEffectId = "CMUXenoPsychicBlastShockwave";
+
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier ImpactSound = new SoundPathSpecifier(CMUXenoWarlockSystem.PsychicBlastImpactSoundPath);
+
+    [DataField, AutoNetworkedField]
+    public float KnockbackSpeed = CMUXenoWarlockSystem.PsychicBlastKnockbackSpeed;
     [DataField, AutoNetworkedField]
     public CMUXenoPsychicBlastMode Mode = CMUXenoPsychicBlastMode.Blast;
 
@@ -407,28 +398,39 @@ public sealed partial class CMUXenoPsychicBlastProjectileComponent : Component
     public float Radius = 1.25f;
 
     [DataField, AutoNetworkedField]
-    public DamageSpecifier Damage = new()
-    {
-        DamageDict = { ["Blunt"] = FixedPoint2.New(35) },
-    };
-
-    [DataField, AutoNetworkedField]
     public TimeSpan Slow = TimeSpan.FromSeconds(1.5);
-
-    [DataField, AutoNetworkedField]
-    public float KnockbackSpeed = CMUXenoWarlockSystem.PsychicBlastKnockbackSpeed;
-
-    [DataField, AutoNetworkedField]
-    public SoundSpecifier ImpactSound = new SoundPathSpecifier(CMUXenoWarlockSystem.PsychicBlastImpactSoundPath);
-
-    [DataField, AutoNetworkedField]
-    public EntProtoId ImpactEffectId = "CMUXenoPsychicBlastShockwave";
 
     public bool Triggered;
 }
 
 public sealed partial class CMUXenoWarlockSystem : EntitySystem
 {
+    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly RMCDazedSystem _daze = default!;
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private readonly RMCMapSystem _rmcMap = default!;
+    [Dependency] private readonly SharedRMCSpriteSystem _rmcSprite = default!;
+    [Dependency] private readonly RMCSlowSystem _slow = default!;
+    [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private readonly ThrowingSystem _throwing = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly XenoSystem _xeno = default!;
+    [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private readonly XenoProjectileSystem _xenoProjectile = default!;
+    private static readonly FixedPoint2 PsychicCrushVehicleDamageMultiplier = FixedPoint2.New(0.5f);
+    private static readonly FixedPoint2 PsychicCrushMechDamageMultiplier = FixedPoint2.New(2.3f);
     public const string PsychicBlastFireSoundPath = "/Audio/_CMU14/Xeno/Warlock/volkite_4.ogg";
     public const string PsychicBlastImpactSoundPath = "/Audio/_CMU14/Xeno/Warlock/EMPulse.ogg";
     public const int PsychicCrushBaseDamage = 30;
@@ -447,34 +449,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     public const float PsychicShieldReflectionSpreadDegrees = 80f;
 
     private const float WarlockDirectedParticleVelocity = 7f;
-    private static readonly FixedPoint2 PsychicCrushVehicleDamageMultiplier = FixedPoint2.New(0.5f);
-    private static readonly FixedPoint2 PsychicCrushMechDamageMultiplier = FixedPoint2.New(2.3f);
     private readonly HashSet<EntityUid> _affected = new();
-
-    [Dependency] private SharedActionsSystem _actions = default!;
-    [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private DamageableSystem _damageable = default!;
-    [Dependency] private SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private EntityLookupSystem _lookup = default!;
-    [Dependency] private SharedInteractionSystem _interaction = default!;
-    [Dependency] private MobStateSystem _mobState = default!;
-    [Dependency] private MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private INetManager _net = default!;
-    [Dependency] private SharedPhysicsSystem _physics = default!;
-    [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private RMCMapSystem _rmcMap = default!;
-    [Dependency] private SharedRMCSpriteSystem _rmcSprite = default!;
-    [Dependency] private RMCSlowSystem _slow = default!;
-    [Dependency] private RMCDazedSystem _daze = default!;
-    [Dependency] private SharedStunSystem _stun = default!;
-    [Dependency] private ThrowingSystem _throwing = default!;
-    [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private XenoSystem _xeno = default!;
-    [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
-    [Dependency] private XenoProjectileSystem _xenoProjectile = default!;
 
     public override void Initialize()
     {
@@ -482,22 +457,55 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         SubscribeLocalEvent<CMUXenoWarlockComponent, CMUXenoPsychicBlastDoAfterEvent>(OnPsychicBlastDoAfter);
         SubscribeLocalEvent<CMUXenoWarlockComponent, CMUXenoPsychicCrushActionEvent>(OnPsychicCrushAction);
         SubscribeLocalEvent<CMUXenoWarlockComponent, CMUXenoPsychicCrushDoAfterEvent>(OnPsychicCrushDoAfter);
-        SubscribeLocalEvent<CMUXenoWarlockComponent, CMUXenoPsychicCrushChannelDoAfterEvent>(OnPsychicCrushChannelDoAfter);
+        SubscribeLocalEvent<CMUXenoWarlockComponent, CMUXenoPsychicCrushChannelDoAfterEvent>(
+            OnPsychicCrushChannelDoAfter);
         SubscribeLocalEvent<CMUXenoWarlockComponent, CMUXenoPsychicShieldActionEvent>(OnPsychicShieldAction);
         SubscribeLocalEvent<CMUXenoWarlockComponent, MoveEvent>(OnWarlockMove);
         SubscribeLocalEvent<CMUXenoWarlockComponent, StunnedEvent>(OnWarlockStunned);
         SubscribeLocalEvent<CMUXenoWarlockComponent, KnockedDownEvent>(OnWarlockKnockedDown);
         SubscribeLocalEvent<CMUXenoWarlockComponent, MobStateChangedEvent>(OnWarlockMobStateChanged);
 
-        SubscribeLocalEvent<CMUXenoWarlockChannelingComponent, RefreshMovementSpeedModifiersEvent>(OnChannelingRefreshSpeed);
-        SubscribeLocalEvent<CMUXenoPsychicShieldRootComponent, RefreshMovementSpeedModifiersEvent>(OnPsychicShieldRootRefreshSpeed);
+        SubscribeLocalEvent<CMUXenoWarlockChannelingComponent, RefreshMovementSpeedModifiersEvent>(
+            OnChannelingRefreshSpeed);
+        SubscribeLocalEvent<CMUXenoPsychicShieldRootComponent, RefreshMovementSpeedModifiersEvent>(
+            OnPsychicShieldRootRefreshSpeed);
         SubscribeLocalEvent<CMUXenoPsychicBlastProjectileComponent, ProjectileHitEvent>(OnPsychicBlastProjectileHit);
-        SubscribeLocalEvent<CMUXenoPsychicBlastProjectileComponent, ProjectileFixedDistanceStopEvent>(OnPsychicBlastProjectileFixedDistanceStop);
-        SubscribeLocalEvent<CMUXenoPsychicBlastProjectileComponent, PreventCollideEvent>(OnPsychicBlastProjectilePreventCollide);
-        SubscribeLocalEvent<CMUXenoPsychicShieldSegmentComponent, PreventCollideEvent>(OnShieldProjectilePreventCollide);
-        SubscribeLocalEvent<CMUXenoPsychicShieldSegmentComponent, ProjectileReflectAttemptEvent>(OnShieldProjectileReflectAttempt);
+        SubscribeLocalEvent<CMUXenoPsychicBlastProjectileComponent, ProjectileFixedDistanceStopEvent>(
+            OnPsychicBlastProjectileFixedDistanceStop);
+        SubscribeLocalEvent<CMUXenoPsychicBlastProjectileComponent, PreventCollideEvent>(
+            OnPsychicBlastProjectilePreventCollide);
+        SubscribeLocalEvent<CMUXenoPsychicShieldSegmentComponent, PreventCollideEvent>(
+            OnShieldProjectilePreventCollide);
+        SubscribeLocalEvent<CMUXenoPsychicShieldSegmentComponent, ProjectileReflectAttemptEvent>(
+            OnShieldProjectileReflectAttempt);
         SubscribeLocalEvent<CMUXenoFrozenProjectileComponent, MapInitEvent>(OnFrozenProjectileInit);
         SubscribeLocalEvent<CMUXenoFrozenProjectileComponent, ComponentAdd>(OnFrozenProjectileInit);
+    }
+
+    public override void Update(float frameTime)
+    {
+        TimeSpan time = _timing.CurTime;
+
+        if (_net.IsClient)
+        {
+            EntityQueryEnumerator<CMUXenoFrozenProjectileComponent, PhysicsComponent> frozenQuery
+                = EntityQueryEnumerator<CMUXenoFrozenProjectileComponent, PhysicsComponent>();
+            while (frozenQuery.MoveNext(out EntityUid uid, out _, out PhysicsComponent? physics))
+            {
+                if (physics.BodyType != BodyType.Static) _physics.SetBodyType(uid, BodyType.Static, body: physics);
+            }
+        }
+
+        EntityQueryEnumerator<CMUXenoWarlockComponent> query = EntityQueryEnumerator<CMUXenoWarlockComponent>();
+        while (query.MoveNext(out EntityUid uid, out CMUXenoWarlockComponent? warlock))
+        {
+            Entity<CMUXenoWarlockComponent> ent = (uid, warlock);
+            if (warlock.PsychicCrushChanneling && time >= warlock.NextPsychicCrushPulseAt)
+                ContinuePsychicCrush(ent);
+
+            if (warlock.PsychicShieldSegments.Count > 0 && time >= warlock.PsychicShieldExpiresAt)
+                EndPsychicShield(ent, false, false);
+        }
     }
 
     private void OnFrozenProjectileInit(Entity<CMUXenoFrozenProjectileComponent> frozen, ref MapInitEvent args)
@@ -530,62 +538,35 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         RemCompDeferred<ProjectileFixedDistanceComponent>(frozen);
     }
 
-    public override void Update(float frameTime)
-    {
-        var time = _timing.CurTime;
-
-        if (_net.IsClient)
-        {
-            var frozenQuery = EntityQueryEnumerator<CMUXenoFrozenProjectileComponent, PhysicsComponent>();
-            while (frozenQuery.MoveNext(out var uid, out _, out var physics))
-            {
-                if (physics.BodyType != BodyType.Static)
-                {
-                    _physics.SetBodyType(uid, BodyType.Static, body: physics);
-                }
-            }
-        }
-
-        var query = EntityQueryEnumerator<CMUXenoWarlockComponent>();
-        while (query.MoveNext(out var uid, out var warlock))
-        {
-            Entity<CMUXenoWarlockComponent> ent = (uid, warlock);
-            if (warlock.PsychicCrushChanneling && time >= warlock.NextPsychicCrushPulseAt)
-                ContinuePsychicCrush(ent);
-
-            if (warlock.PsychicShieldSegments.Count > 0 && time >= warlock.PsychicShieldExpiresAt)
-                EndPsychicShield(ent, reflectProjectiles: false, stunOwner: false);
-        }
-    }
-
     private void OnPsychicBlastAction(Entity<CMUXenoWarlockComponent> warlock, ref CMUXenoPsychicBlastActionEvent args)
     {
-        if (args.Handled ||
-            warlock.Comp.PsychicBlastChanneling ||
-            !_xenoPlasma.TryRemovePlasmaPopup((warlock.Owner, null), warlock.Comp.PsychicBlastCost))
-        {
+        if (args.Handled
+            || warlock.Comp.PsychicBlastChanneling
+            || !_xenoPlasma.TryRemovePlasmaPopup((warlock.Owner, null), warlock.Comp.PsychicBlastCost))
             return;
-        }
 
         args.Handled = true;
         warlock.Comp.PsychicBlastChanneling = true;
         warlock.Comp.PsychicBlastTarget = args.Target;
         StartWarlockChannelEffect(warlock, CMUXenoWarlockChannelKind.PsychicBlast);
-        StartWarlockChannelParticles(warlock, CMUXenoWarlockChannelKind.PsychicBlast, args.Target, warlock.Comp.PsychicBlastMode);
+        StartWarlockChannelParticles(warlock, CMUXenoWarlockChannelKind.PsychicBlast, args.Target,
+            warlock.Comp.PsychicBlastMode);
         SetActionToggled<CMUXenoPsychicBlastActionEvent>(warlock, true);
 
         var ev = new CMUXenoPsychicBlastDoAfterEvent(GetNetCoordinates(args.Target), warlock.Comp.PsychicBlastMode);
-        var doAfter = new DoAfterArgs(EntityManager, warlock, warlock.Comp.PsychicBlastChargeDuration, ev, warlock, args.Action)
+        var doAfter = new DoAfterArgs(EntityManager, warlock, warlock.Comp.PsychicBlastChargeDuration, ev, warlock,
+            args.Action)
         {
             BreakOnMove = true,
-            RootEntity = true,
+            RootEntity = true
         };
 
         if (!_doAfter.TryStartDoAfter(doAfter))
             StopPsychicBlastChannel(warlock);
     }
 
-    private void OnPsychicBlastDoAfter(Entity<CMUXenoWarlockComponent> warlock, ref CMUXenoPsychicBlastDoAfterEvent args)
+    private void OnPsychicBlastDoAfter(Entity<CMUXenoWarlockComponent> warlock,
+        ref CMUXenoPsychicBlastDoAfterEvent args)
     {
         if (args.Handled)
             return;
@@ -596,31 +577,29 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         if (args.Cancelled)
             return;
 
-        var target = GetCoordinates(args.TargetCoordinates);
+        EntityCoordinates target = GetCoordinates(args.TargetCoordinates);
         FirePsychicBlastProjectile(warlock, target, args.Mode);
     }
 
-    private void FirePsychicBlastProjectile(
-        Entity<CMUXenoWarlockComponent> warlock,
+    private void FirePsychicBlastProjectile(Entity<CMUXenoWarlockComponent> warlock,
         EntityCoordinates target,
         CMUXenoPsychicBlastMode mode)
     {
-        var origin = _transform.GetMapCoordinates(warlock);
+        MapCoordinates origin = _transform.GetMapCoordinates(warlock);
         var targetMap = _transform.ToMapCoordinates(target);
         if (origin.MapId != targetMap.MapId)
             return;
 
-        var direction = targetMap.Position - origin.Position;
+        Vector2 direction = targetMap.Position - origin.Position;
         if (direction.LengthSquared() <= 0f)
             return;
 
-        var distance = Math.Min(direction.Length(), warlock.Comp.PsychicBlastRange);
-        var projectileId = mode == CMUXenoPsychicBlastMode.Lance
+        float distance = Math.Min(direction.Length(), warlock.Comp.PsychicBlastRange);
+        EntProtoId projectileId = mode == CMUXenoPsychicBlastMode.Lance
             ? warlock.Comp.PsychicLanceProjectileId
             : warlock.Comp.PsychicBlastProjectileId;
 
-        var shot = _xenoProjectile.TryShoot(
-            warlock,
+        bool shot = _xenoProjectile.TryShoot(warlock,
             target,
             FixedPoint2.Zero,
             projectileId,
@@ -647,37 +626,34 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         SetActionToggled<CMUXenoPsychicBlastActionEvent>(warlock, false);
     }
 
-    private void OnPsychicBlastProjectileHit(Entity<CMUXenoPsychicBlastProjectileComponent> projectile, ref ProjectileHitEvent args)
+    private void OnPsychicBlastProjectileHit(Entity<CMUXenoPsychicBlastProjectileComponent> projectile,
+        ref ProjectileHitEvent args)
     {
-        var coords = Transform(args.Target).Coordinates;
+        EntityCoordinates coords = Transform(args.Target).Coordinates;
         TryTriggerPsychicBlastProjectile(projectile, coords, args.Shooter);
     }
 
-    private void OnPsychicBlastProjectileFixedDistanceStop(
-        Entity<CMUXenoPsychicBlastProjectileComponent> projectile,
+    private void OnPsychicBlastProjectileFixedDistanceStop(Entity<CMUXenoPsychicBlastProjectileComponent> projectile,
         ref ProjectileFixedDistanceStopEvent args)
     {
         if (_net.IsClient && !IsClientSide(projectile))
             return;
 
         TryTriggerPsychicBlastProjectile(projectile, Transform(projectile).Coordinates, null);
-        if (ShouldDeletePsychicBlastProjectileOnFixedDistanceStop(_net.IsClient, IsClientSide(projectile)))
+        if (CMUXenoWarlockSystem.ShouldDeletePsychicBlastProjectileOnFixedDistanceStop(_net.IsClient,
+            IsClientSide(projectile)))
             QueueDel(projectile);
     }
 
-    private void OnPsychicBlastProjectilePreventCollide(
-        Entity<CMUXenoPsychicBlastProjectileComponent> projectile,
+    private void OnPsychicBlastProjectilePreventCollide(Entity<CMUXenoPsychicBlastProjectileComponent> projectile,
         ref PreventCollideEvent args)
     {
-        if (ShouldPsychicBlastIgnoreCollisionLayer(args.OtherFixture.CollisionLayer) ||
-            ShouldPsychicBlastIgnoreCollisionLayer(args.OtherBody.CollisionLayer))
-        {
+        if (CMUXenoWarlockSystem.ShouldPsychicBlastIgnoreCollisionLayer(args.OtherFixture.CollisionLayer)
+            || CMUXenoWarlockSystem.ShouldPsychicBlastIgnoreCollisionLayer(args.OtherBody.CollisionLayer))
             args.Cancelled = true;
-        }
     }
 
-    private void TryTriggerPsychicBlastProjectile(
-        Entity<CMUXenoPsychicBlastProjectileComponent> projectile,
+    private void TryTriggerPsychicBlastProjectile(Entity<CMUXenoPsychicBlastProjectileComponent> projectile,
         EntityCoordinates coords,
         EntityUid? shooter)
     {
@@ -693,38 +669,36 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        if (shooter == null &&
-            TryComp(projectile, out ProjectileComponent? projectileComp))
-        {
+        if (shooter == null && TryComp(projectile, out ProjectileComponent? projectileComp))
             shooter = projectileComp.Shooter;
-        }
 
         _audio.PlayPvs(projectile.Comp.ImpactSound, coords);
         Spawn(projectile.Comp.ImpactEffectId, coords);
         var mapCoords = _transform.ToMapCoordinates(coords);
-        var projectileVelocity = Vector2.Zero;
+        Vector2 projectileVelocity = Vector2.Zero;
         if (TryComp(projectile, out PhysicsComponent? projectilePhysics))
-            projectileVelocity = _physics.GetMapLinearVelocity(projectile, component: projectilePhysics);
+            projectileVelocity = _physics.GetMapLinearVelocity(projectile, projectilePhysics);
 
         _affected.Clear();
-        foreach (var (target, state) in _lookup.GetEntitiesInRange<MobStateComponent>(mapCoords, projectile.Comp.Radius))
+        foreach ((EntityUid target, MobStateComponent state) in _lookup.GetEntitiesInRange<MobStateComponent>(mapCoords,
+            projectile.Comp.Radius))
         {
-            if (target == shooter ||
-                !_affected.Add(target) ||
-                _mobState.IsDead(target, state) ||
-                shooter != null && !_xeno.CanAbilityAttackTarget(shooter.Value, target))
-            {
+            if (target == shooter
+                || !_affected.Add(target)
+                || _mobState.IsDead(target, state)
+                || (shooter != null && !_xeno.CanAbilityAttackTarget(shooter.Value, target)))
                 continue;
-            }
 
             _damageable.TryChangeDamage(target, projectile.Comp.Damage, origin: shooter, tool: projectile);
             _slow.TrySlowdown(target, projectile.Comp.Slow);
-            var direction = GetPsychicBlastKnockbackDirection(
-                mapCoords.Position,
+            Vector2 direction = CMUXenoWarlockSystem.GetPsychicBlastKnockbackDirection(mapCoords.Position,
                 _transform.GetMapCoordinates(target).Position,
                 projectileVelocity);
             if (direction != Vector2.Zero)
-                _throwing.TryThrow(target, direction, projectile.Comp.KnockbackSpeed, shooter, animated: false, playSound: false, compensateFriction: true);
+            {
+                _throwing.TryThrow(target, direction, projectile.Comp.KnockbackSpeed, shooter, animated: false,
+                    playSound: false, compensateFriction: true);
+            }
         }
     }
 
@@ -736,7 +710,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         if (warlock.Comp.PsychicCrushChanneling)
         {
             args.Handled = true;
-            if (CanTriggerPsychicCrush(warlock.Comp.PsychicCrushPulses))
+            if (CMUXenoWarlockSystem.CanTriggerPsychicCrush(warlock.Comp.PsychicCrushPulses))
                 TriggerPsychicCrush(warlock);
 
             return;
@@ -753,7 +727,8 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
         if (!CanKeepPsychicCrushTarget(warlock, args.Target))
         {
-            _popup.PopupClient(Loc.GetString("cmu-xeno-warlock-psychic-crush-invalid-target"), warlock, warlock, PopupType.SmallCaution);
+            _popup.PopupClient(Loc.GetString("cmu-xeno-warlock-psychic-crush-invalid-target"), warlock, warlock,
+                PopupType.SmallCaution);
             return;
         }
 
@@ -761,8 +736,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         args.Handled = true;
     }
 
-    private void StartPsychicCrushWindup(
-        Entity<CMUXenoWarlockComponent> warlock,
+    private void StartPsychicCrushWindup(Entity<CMUXenoWarlockComponent> warlock,
         EntityCoordinates target,
         EntityUid? action)
     {
@@ -774,17 +748,19 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         _movement.RefreshMovementSpeedModifiers(warlock);
 
         var ev = new CMUXenoPsychicCrushDoAfterEvent(GetNetCoordinates(target));
-        var doAfter = new DoAfterArgs(EntityManager, warlock, warlock.Comp.PsychicCrushWindupDuration, ev, warlock, action)
+        var doAfter = new DoAfterArgs(EntityManager, warlock, warlock.Comp.PsychicCrushWindupDuration, ev, warlock,
+            action)
         {
             BreakOnMove = true,
-            RootEntity = true,
+            RootEntity = true
         };
 
         if (!_doAfter.TryStartDoAfter(doAfter))
             StopPsychicCrushWindup(warlock);
     }
 
-    private void OnPsychicCrushDoAfter(Entity<CMUXenoWarlockComponent> warlock, ref CMUXenoPsychicCrushDoAfterEvent args)
+    private void OnPsychicCrushDoAfter(Entity<CMUXenoWarlockComponent> warlock,
+        ref CMUXenoPsychicCrushDoAfterEvent args)
     {
         if (args.Handled)
             return;
@@ -802,7 +778,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
             return;
         }
 
-        var target = GetCoordinates(args.TargetCoordinates);
+        EntityCoordinates target = GetCoordinates(args.TargetCoordinates);
         if (!CanKeepPsychicCrushTarget(warlock, target))
         {
             RemovePsychicCrushMovementModifier(warlock);
@@ -812,8 +788,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         StartPsychicCrush(warlock, target);
     }
 
-    private void OnPsychicCrushChannelDoAfter(
-        Entity<CMUXenoWarlockComponent> warlock,
+    private void OnPsychicCrushChannelDoAfter(Entity<CMUXenoWarlockComponent> warlock,
         ref CMUXenoPsychicCrushChannelDoAfterEvent args)
     {
         if (args.Handled)
@@ -827,10 +802,11 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         if (!args.Cancelled)
             warlock.Comp.PsychicCrushPulses = PsychicCrushMaxPulses;
 
-        ResolvePsychicCrush(warlock, detonated: true, setCooldown: true);
+        ResolvePsychicCrush(warlock, true, true);
     }
 
-    private void OnPsychicShieldAction(Entity<CMUXenoWarlockComponent> warlock, ref CMUXenoPsychicShieldActionEvent args)
+    private void OnPsychicShieldAction(Entity<CMUXenoWarlockComponent> warlock,
+        ref CMUXenoPsychicShieldActionEvent args)
     {
         if (args.Handled)
             return;
@@ -850,18 +826,14 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
         if (!CanStartPsychicShield(warlock))
         {
-            _popup.PopupClient(
-                Loc.GetString("cmu-xeno-warlock-psychic-shield-obstructed"),
+            _popup.PopupClient(Loc.GetString("cmu-xeno-warlock-psychic-shield-obstructed"),
                 warlock,
                 warlock,
                 PopupType.SmallCaution);
             return;
         }
 
-        if (!_xenoPlasma.TryRemovePlasmaPopup((warlock.Owner, null), warlock.Comp.PsychicShieldCost))
-        {
-            return;
-        }
+        if (!_xenoPlasma.TryRemovePlasmaPopup((warlock.Owner, null), warlock.Comp.PsychicShieldCost)) return;
 
         StartPsychicShield(warlock);
         args.Handled = true;
@@ -869,8 +841,9 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
     private bool CanStartPsychicShield(Entity<CMUXenoWarlockComponent> warlock)
     {
-        var direction = _transform.GetWorldRotation(warlock).GetCardinalDir();
-        var target = _transform.GetMoverCoordinates(warlock).Offset(GetPsychicShieldObstructionCheckOffset(direction));
+        Direction direction = _transform.GetWorldRotation(warlock).GetCardinalDir();
+        EntityCoordinates target = _transform.GetMoverCoordinates(warlock)
+            .Offset(CMUXenoWarlockSystem.GetPsychicShieldObstructionCheckOffset(direction));
         return !_rmcMap.IsTileBlocked(target, CollisionGroup.MobMask);
     }
 
@@ -884,7 +857,8 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         warlock.Comp.PsychicCrushOrb = Spawn(warlock.Comp.PsychicCrushOrbId, target);
         SpawnPsychicCrushWarnings(warlock, 0);
         StartWarlockChannelEffect(warlock, CMUXenoWarlockChannelKind.PsychicCrush);
-        StartWarlockChannelParticles(warlock, CMUXenoWarlockChannelKind.PsychicCrush, target, warlock.Comp.PsychicBlastMode);
+        StartWarlockChannelParticles(warlock, CMUXenoWarlockChannelKind.PsychicCrush, target,
+            warlock.Comp.PsychicBlastMode);
         SetActionToggled<CMUXenoPsychicCrushActionEvent>(warlock, true);
 
         var channeling = EnsureComp<CMUXenoWarlockChannelingComponent>(warlock);
@@ -892,19 +866,18 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         _movement.RefreshMovementSpeedModifiers(warlock);
 
         var ev = new CMUXenoPsychicCrushChannelDoAfterEvent();
-        var doAfter = new DoAfterArgs(
-            EntityManager,
+        var doAfter = new DoAfterArgs(EntityManager,
             warlock,
-            GetPsychicCrushChannelDuration(warlock.Comp.PsychicCrushPulseInterval),
+            CMUXenoWarlockSystem.GetPsychicCrushChannelDuration(warlock.Comp.PsychicCrushPulseInterval),
             ev,
             warlock)
         {
             BreakOnMove = true,
-            RootEntity = true,
+            RootEntity = true
         };
 
         if (!_doAfter.TryStartDoAfter(doAfter))
-            ResolvePsychicCrush(warlock, detonated: true, setCooldown: true);
+            ResolvePsychicCrush(warlock, true, true);
     }
 
     private void StopPsychicCrushWindup(Entity<CMUXenoWarlockComponent> warlock)
@@ -920,11 +893,11 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     {
         if (!CanKeepPsychicCrushTarget(warlock, warlock.Comp.PsychicCrushTarget))
         {
-            StopPsychicCrush(warlock, setCooldown: true);
+            StopPsychicCrush(warlock, true);
             return;
         }
 
-        if (HasPsychicCrushReachedMaxRange(warlock.Comp.PsychicCrushPulses))
+        if (CMUXenoWarlockSystem.HasPsychicCrushReachedMaxRange(warlock.Comp.PsychicCrushPulses))
         {
             warlock.Comp.PsychicCrushPulses = PsychicCrushMaxPulses;
             TriggerPsychicCrush(warlock);
@@ -933,20 +906,19 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
         if (!_xenoPlasma.TryRemovePlasmaPopup((warlock.Owner, null), warlock.Comp.PsychicCrushPulseCost))
         {
-            StopPsychicCrush(warlock, setCooldown: true);
+            StopPsychicCrush(warlock, true);
             return;
         }
 
         warlock.Comp.PsychicCrushPulses++;
         warlock.Comp.NextPsychicCrushPulseAt = _timing.CurTime + warlock.Comp.PsychicCrushPulseInterval;
         SpawnPsychicCrushWarnings(warlock, warlock.Comp.PsychicCrushPulses);
-        _audio.PlayPredicted(
-            warlock.Comp.PsychicCrushPulseSound,
+        _audio.PlayPredicted(warlock.Comp.PsychicCrushPulseSound,
             warlock.Comp.PsychicCrushTarget,
             warlock,
             AudioParams.Default.WithVolume(-2f + warlock.Comp.PsychicCrushPulses));
 
-        if (HasPsychicCrushReachedMaxRange(warlock.Comp.PsychicCrushPulses))
+        if (CMUXenoWarlockSystem.HasPsychicCrushReachedMaxRange(warlock.Comp.PsychicCrushPulses))
         {
             warlock.Comp.PsychicCrushPulses = PsychicCrushMaxPulses;
             TriggerPsychicCrush(warlock);
@@ -955,96 +927,106 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
     private void TriggerPsychicCrush(Entity<CMUXenoWarlockComponent> warlock)
     {
-        if (!CanTriggerPsychicCrush(warlock.Comp.PsychicCrushPulses))
+        if (!CMUXenoWarlockSystem.CanTriggerPsychicCrush(warlock.Comp.PsychicCrushPulses))
             return;
 
-        var pulses = GetPsychicCrushResolvedPulses(warlock.Comp.PsychicCrushPulses);
+        int pulses = CMUXenoWarlockSystem.GetPsychicCrushResolvedPulses(warlock.Comp.PsychicCrushPulses);
 
-        if (!CanKeepPsychicCrushTarget(warlock, warlock.Comp.PsychicCrushTarget) ||
-            !_xenoPlasma.TryRemovePlasmaPopup((warlock.Owner, null), GetPsychicCrushCost(pulses)))
+        if (!CanKeepPsychicCrushTarget(warlock, warlock.Comp.PsychicCrushTarget)
+            || !_xenoPlasma.TryRemovePlasmaPopup((warlock.Owner, null),
+                CMUXenoWarlockSystem.GetPsychicCrushCost(pulses)))
         {
-            StopPsychicCrush(warlock, setCooldown: true);
+            StopPsychicCrush(warlock, true);
             return;
         }
 
-        ResolvePsychicCrush(warlock, detonated: true, setCooldown: true);
+        ResolvePsychicCrush(warlock, true, true);
     }
 
-    private void StopPsychicCrush(Entity<CMUXenoWarlockComponent> warlock, bool setCooldown, bool showSmoothEffect = true)
+    private void StopPsychicCrush(Entity<CMUXenoWarlockComponent> warlock, bool setCooldown,
+        bool showSmoothEffect = true)
     {
         if (!warlock.Comp.PsychicCrushChanneling)
             return;
 
         if (showSmoothEffect)
-            SpawnPsychicCrushEndEffect(warlock, detonated: false);
+            SpawnPsychicCrushEndEffect(warlock, false);
 
         FinishPsychicCrush(warlock, setCooldown);
     }
 
     private void ResolvePsychicCrush(Entity<CMUXenoWarlockComponent> warlock, bool detonated, bool setCooldown)
     {
-        var areaPulses = Math.Clamp(warlock.Comp.PsychicCrushPulses, 0, PsychicCrushMaxPulses);
+        int areaPulses = Math.Clamp(warlock.Comp.PsychicCrushPulses, 0, PsychicCrushMaxPulses);
 
         _audio.PlayPredicted(warlock.Comp.PsychicCrushTriggerSound, warlock.Comp.PsychicCrushTarget, warlock);
         SpawnPsychicCrushEndEffect(warlock, detonated);
         SpawnPsychicCrushBlur(warlock, areaPulses);
-        ApplyPsychicCrushDamage(warlock, areaPulses, GetPsychicCrushResolvedPulses(warlock.Comp.PsychicCrushPulses));
+        ApplyPsychicCrushDamage(warlock, areaPulses,
+            CMUXenoWarlockSystem.GetPsychicCrushResolvedPulses(warlock.Comp.PsychicCrushPulses));
         _slow.TrySlowdown(warlock.Owner, warlock.Comp.PsychicCrushOwnerSlowDuration, ignoreDurationModifier: true);
         FinishPsychicCrush(warlock, setCooldown);
     }
 
-    private void ApplyPsychicCrushDamage(
-        Entity<CMUXenoWarlockComponent> warlock,
+    private void ApplyPsychicCrushDamage(Entity<CMUXenoWarlockComponent> warlock,
         int areaPulses,
         int damagePulses)
     {
-        var damageAmount = FixedPoint2.New(GetPsychicCrushDamage(damagePulses));
+        var damageAmount = FixedPoint2.New(CMUXenoWarlockSystem.GetPsychicCrushDamage(damagePulses));
         var mobDamage = new DamageSpecifier
         {
-            DamageDict = { ["Blunt"] = damageAmount },
+            DamageDict = { ["Blunt"] = damageAmount }
         };
 
         _affected.Clear();
-        foreach (var offset in GetPsychicCrushAffectedOffsets(areaPulses))
+        foreach (Vector2i offset in CMUXenoWarlockSystem.GetPsychicCrushAffectedOffsets(areaPulses))
         {
-            var coords = warlock.Comp.PsychicCrushTarget.Offset(new Vector2(offset.X, offset.Y));
+            EntityCoordinates coords = warlock.Comp.PsychicCrushTarget.Offset(new(offset.X, offset.Y));
             var mapCoords = _transform.ToMapCoordinates(coords);
-            foreach (var (target, state) in _lookup.GetEntitiesInRange<MobStateComponent>(mapCoords, 0.45f))
+            foreach ((EntityUid target, MobStateComponent state) in _lookup.GetEntitiesInRange<MobStateComponent>(
+                mapCoords, 0.45f))
             {
-                if (target == warlock.Owner ||
-                    _mobState.IsDead(target, state) ||
-                    !_xeno.CanAbilityAttackTarget(warlock.Owner, target))
-                {
+                if (target == warlock.Owner
+                    || _mobState.IsDead(target, state)
+                    || !_xeno.CanAbilityAttackTarget(warlock.Owner, target))
                     continue;
-                }
 
                 if (!_affected.Add(target))
                     continue;
 
                 _damageable.TryChangeDamage(target, mobDamage, origin: warlock, tool: warlock);
-                _daze.TryDaze(target, GetPsychicCrushStaggerDuration(damagePulses), true, stutter: true);
-                _slow.TrySlowdown(target, GetPsychicCrushSlowDuration(damagePulses), ignoreDurationModifier: true);
+                _daze.TryDaze(target, CMUXenoWarlockSystem.GetPsychicCrushStaggerDuration(damagePulses), true,
+                    stutter: true);
+                _slow.TrySlowdown(target, CMUXenoWarlockSystem.GetPsychicCrushSlowDuration(damagePulses),
+                    ignoreDurationModifier: true);
             }
         }
 
         var vehicleDamage = new DamageSpecifier
         {
-            DamageDict = { ["Blunt"] = damageAmount },
+            DamageDict = { ["Blunt"] = damageAmount }
         };
 
-        foreach (var offset in GetPsychicCrushAffectedOffsets(areaPulses))
+        foreach (Vector2i offset in CMUXenoWarlockSystem.GetPsychicCrushAffectedOffsets(areaPulses))
         {
-            var coords = warlock.Comp.PsychicCrushTarget.Offset(new Vector2(offset.X, offset.Y));
+            EntityCoordinates coords = warlock.Comp.PsychicCrushTarget.Offset(new(offset.X, offset.Y));
             var mapCoords = _transform.ToMapCoordinates(coords);
-            foreach (var (target, _) in _lookup.GetEntitiesInRange<DamageableComponent>(mapCoords, 0.45f))
+            foreach ((EntityUid target, DamageableComponent _) in _lookup.GetEntitiesInRange<DamageableComponent>(
+                mapCoords, 0.45f))
             {
                 if (_affected.Contains(target))
                     continue;
 
                 if (HasComp<MechComponent>(target))
-                    _damageable.TryChangeDamage(target, vehicleDamage * PsychicCrushMechDamageMultiplier, origin: warlock, tool: warlock);
+                {
+                    _damageable.TryChangeDamage(target, vehicleDamage * PsychicCrushMechDamageMultiplier,
+                        origin: warlock, tool: warlock);
+                }
                 else if (HasComp<VehicleComponent>(target))
-                    _damageable.TryChangeDamage(target, vehicleDamage * PsychicCrushVehicleDamageMultiplier, origin: warlock, tool: warlock);
+                {
+                    _damageable.TryChangeDamage(target, vehicleDamage * PsychicCrushVehicleDamageMultiplier,
+                        origin: warlock, tool: warlock);
+                }
             }
         }
     }
@@ -1071,7 +1053,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
     private void SpawnPsychicCrushEndEffect(Entity<CMUXenoWarlockComponent> warlock, bool detonated)
     {
-        var prototype = detonated
+        EntProtoId prototype = detonated
             ? warlock.Comp.PsychicCrushDetonateId
             : warlock.Comp.PsychicCrushSmoothId;
 
@@ -1080,40 +1062,38 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
     private void SpawnPsychicCrushBlur(Entity<CMUXenoWarlockComponent> warlock, int areaPulses)
     {
-        if (!ShouldSpawnPsychicCrushTileBlur(true))
+        if (!CMUXenoWarlockSystem.ShouldSpawnPsychicCrushTileBlur(true))
             return;
 
-        foreach (var offset in GetPsychicCrushAffectedOffsets(areaPulses))
+        foreach (Vector2i offset in CMUXenoWarlockSystem.GetPsychicCrushAffectedOffsets(areaPulses))
         {
-            Spawn(warlock.Comp.PsychicCrushBlurId, warlock.Comp.PsychicCrushTarget.Offset(new Vector2(offset.X, offset.Y)));
+            Spawn(warlock.Comp.PsychicCrushBlurId, warlock.Comp.PsychicCrushTarget.Offset(new(offset.X, offset.Y)));
         }
     }
 
-    private void StartWarlockChannelParticles(
-        Entity<CMUXenoWarlockComponent> warlock,
+    private void StartWarlockChannelParticles(Entity<CMUXenoWarlockComponent> warlock,
         CMUXenoWarlockChannelKind kind,
         EntityCoordinates target,
         CMUXenoPsychicBlastMode mode)
     {
-        if (GetWarlockChannelParticle(warlock.Comp, kind) != null)
+        if (CMUXenoWarlockSystem.GetWarlockChannelParticle(warlock.Comp, kind) != null)
             return;
 
-        var prototype = GetWarlockChannelParticlePrototype(warlock.Comp, kind, mode);
-        var holder = SpawnAttachedTo(prototype, warlock.Owner.ToCoordinates());
-        SetWarlockChannelParticle(warlock.Comp, kind, holder);
+        EntProtoId prototype = CMUXenoWarlockSystem.GetWarlockChannelParticlePrototype(warlock.Comp, kind, mode);
+        EntityUid holder = SpawnAttachedTo(prototype, warlock.Owner.ToCoordinates());
+        CMUXenoWarlockSystem.SetWarlockChannelParticle(warlock.Comp, kind, holder);
 
-        if (kind != CMUXenoWarlockChannelKind.PsychicBlast ||
-            !TryComp(holder, out CMUXenoWarlockParticleEmitterComponent? particles))
-        {
+        if (kind != CMUXenoWarlockChannelKind.PsychicBlast
+            || !TryComp(holder, out CMUXenoWarlockParticleEmitterComponent? particles))
             return;
-        }
 
-        var originMap = _transform.GetMapCoordinates(warlock);
+        MapCoordinates originMap = _transform.GetMapCoordinates(warlock);
         var targetMap = _transform.ToMapCoordinates(target);
         if (originMap.MapId != targetMap.MapId)
             return;
 
-        var motion = GetWarlockDirectedParticleMotion(originMap.Position, targetMap.Position, WarlockDirectedParticleVelocity);
+        CMUXenoWarlockParticleMotion? motion = CMUXenoWarlockSystem.GetWarlockDirectedParticleMotion(originMap.Position,
+            targetMap.Position, WarlockDirectedParticleVelocity);
         if (motion == null)
             return;
 
@@ -1125,13 +1105,13 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
     private void StopWarlockChannelParticles(Entity<CMUXenoWarlockComponent> warlock, CMUXenoWarlockChannelKind kind)
     {
-        if (GetWarlockChannelParticle(warlock.Comp, kind) is not { } particles)
+        if (CMUXenoWarlockSystem.GetWarlockChannelParticle(warlock.Comp, kind) is not { } particles)
             return;
 
         if (!Deleted(particles))
             QueueDel(particles);
 
-        SetWarlockChannelParticle(warlock.Comp, kind, null);
+        CMUXenoWarlockSystem.SetWarlockChannelParticle(warlock.Comp, kind, null);
     }
 
     private static EntityUid? GetWarlockChannelParticle(CMUXenoWarlockComponent warlock, CMUXenoWarlockChannelKind kind)
@@ -1139,12 +1119,12 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         return kind switch
         {
             CMUXenoWarlockChannelKind.PsychicCrush => warlock.PsychicCrushChannelParticle,
-            CMUXenoWarlockChannelKind.PsychicBlast => warlock.PsychicBlastChannelParticle,
-            _ => null,
+            CMUXenoWarlockChannelKind.PsychicBlast => warlock.PsychicBlastChannelParticle, _ => null
         };
     }
 
-    private static void SetWarlockChannelParticle(CMUXenoWarlockComponent warlock, CMUXenoWarlockChannelKind kind, EntityUid? particles)
+    private static void SetWarlockChannelParticle(CMUXenoWarlockComponent warlock, CMUXenoWarlockChannelKind kind,
+        EntityUid? particles)
     {
         switch (kind)
         {
@@ -1159,13 +1139,13 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
     private bool CanKeepPsychicCrushTarget(Entity<CMUXenoWarlockComponent> warlock, EntityCoordinates target)
     {
-        var origin = _transform.GetMapCoordinates(warlock);
+        MapCoordinates origin = _transform.GetMapCoordinates(warlock);
         var targetMap = _transform.ToMapCoordinates(target);
         if (origin.MapId != targetMap.MapId)
             return false;
 
-        return (origin.Position - targetMap.Position).Length() <= warlock.Comp.PsychicCrushRange &&
-               _interaction.InRangeUnobstructed(warlock.Owner, target, range: warlock.Comp.PsychicCrushRange, popup: false);
+        return (origin.Position - targetMap.Position).Length() <= warlock.Comp.PsychicCrushRange
+            && _interaction.InRangeUnobstructed(warlock.Owner, target, warlock.Comp.PsychicCrushRange, popup: false);
     }
 
     private void StartPsychicShield(Entity<CMUXenoWarlockComponent> warlock)
@@ -1182,12 +1162,12 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         if (TryComp(warlock, out PhysicsComponent? physics))
             _physics.SetLinearVelocity(warlock, Vector2.Zero, body: physics);
 
-        var origin = _transform.GetMoverCoordinates(warlock);
-        var shield = Spawn(
-            warlock.Comp.PsychicShieldVisualId,
-            origin.Offset(GetPsychicShieldCenterOffset(warlock.Comp.PsychicShieldDirection)));
+        EntityCoordinates origin = _transform.GetMoverCoordinates(warlock);
+        EntityUid shield = Spawn(warlock.Comp.PsychicShieldVisualId,
+            origin.Offset(CMUXenoWarlockSystem.GetPsychicShieldCenterOffset(warlock.Comp.PsychicShieldDirection)));
         _transform.SetWorldRotationNoLerp(shield, warlock.Comp.PsychicShieldDirection.ToAngle());
-        _rmcSprite.SetOffset(shield, GetPsychicShieldVisualOffset(warlock.Comp.PsychicShieldDirection));
+        _rmcSprite.SetOffset(shield,
+            CMUXenoWarlockSystem.GetPsychicShieldVisualOffset(warlock.Comp.PsychicShieldDirection));
 
         var comp = EnsureComp<CMUXenoPsychicShieldSegmentComponent>(shield);
         comp.Warlock = warlock;
@@ -1202,12 +1182,12 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         ApplyPsychicShieldBlast(warlock);
         _audio.PlayPredicted(warlock.Comp.PsychicShieldBlastSound, warlock, warlock);
         _audio.PlayPredicted(warlock.Comp.PsychicShieldRoarSound, warlock, warlock);
-        EndPsychicShield(warlock, reflectProjectiles: false, stunOwner: false);
+        EndPsychicShield(warlock, false, false);
     }
 
     private void EndPsychicShield(Entity<CMUXenoWarlockComponent> warlock, bool reflectProjectiles, bool stunOwner)
     {
-        foreach (var segment in warlock.Comp.PsychicShieldSegments)
+        foreach (EntityUid segment in warlock.Comp.PsychicShieldSegments)
         {
             if (!Deleted(segment))
             {
@@ -1240,9 +1220,9 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
     private void ReleaseShieldProjectiles(Entity<CMUXenoWarlockComponent> warlock)
     {
-        foreach (var projectile in warlock.Comp.FrozenProjectiles)
+        foreach (EntityUid projectile in warlock.Comp.FrozenProjectiles)
         {
-            if (!TryComp<CMUXenoFrozenProjectileComponent>(projectile, out var frozen))
+            if (!TryComp(projectile, out CMUXenoFrozenProjectileComponent? frozen))
                 continue;
 
             RemComp<CMUXenoFrozenProjectileComponent>(projectile);
@@ -1259,25 +1239,24 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
     private void ReflectShieldProjectiles(Entity<CMUXenoWarlockComponent> warlock)
     {
-        _audio.PlayPredicted(warlock.Comp.PsychicShieldReflectSound, GetPsychicShieldSoundCoordinates(warlock), warlock);
+        _audio.PlayPredicted(warlock.Comp.PsychicShieldReflectSound, GetPsychicShieldSoundCoordinates(warlock),
+            warlock);
 
-        foreach (var projectile in warlock.Comp.FrozenProjectiles)
+        foreach (EntityUid projectile in warlock.Comp.FrozenProjectiles)
         {
-            if (!TryComp<CMUXenoFrozenProjectileComponent>(projectile, out var frozen))
+            if (!TryComp(projectile, out CMUXenoFrozenProjectileComponent? frozen))
                 continue;
 
-            var reflected = ReflectProjectileVelocity(
-                frozen.Velocity,
+            Vector2 reflected = CMUXenoWarlockSystem.ReflectProjectileVelocity(frozen.Velocity,
                 warlock.Comp.PsychicShieldDirection,
-                _random.NextAngle(
-                    -Angle.FromDegrees(PsychicShieldReflectionSpreadDegrees / 2f),
+                _random.NextAngle(-Angle.FromDegrees(PsychicShieldReflectionSpreadDegrees / 2f),
                     Angle.FromDegrees(PsychicShieldReflectionSpreadDegrees / 2f)));
             if (TryComp(projectile, out PhysicsComponent? physics))
                 RestoreFrozenProjectilePhysics(projectile, frozen, reflected, physics);
 
             RemComp<CMUXenoFrozenProjectileComponent>(projectile);
 
-            var projectileAngle = Angle.Zero;
+            Angle projectileAngle = Angle.Zero;
             if (TryComp(projectile, out ProjectileComponent? projectileComp))
             {
                 projectileComp.Shooter = warlock;
@@ -1299,84 +1278,81 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
     private EntityCoordinates GetPsychicShieldSoundCoordinates(Entity<CMUXenoWarlockComponent> warlock)
     {
-        var origin = _transform.GetMoverCoordinates(warlock);
-        var offset = GetPsychicShieldCenterOffset(warlock.Comp.PsychicShieldDirection);
+        EntityCoordinates origin = _transform.GetMoverCoordinates(warlock);
+        Vector2 offset = CMUXenoWarlockSystem.GetPsychicShieldCenterOffset(warlock.Comp.PsychicShieldDirection);
         return origin.Offset(offset);
     }
 
     private void ApplyPsychicShieldBlast(Entity<CMUXenoWarlockComponent> warlock)
     {
         _affected.Clear();
-        var origin = _transform.GetMoverCoordinates(warlock);
-        var direction = warlock.Comp.PsychicShieldDirection.ToVec();
+        EntityCoordinates origin = _transform.GetMoverCoordinates(warlock);
+        Vector2 direction = warlock.Comp.PsychicShieldDirection.ToVec();
 
-        foreach (var offset in GetPsychicShieldBlastOffsets(warlock.Comp.PsychicShieldDirection))
+        foreach (Vector2i offset in CMUXenoWarlockSystem.GetPsychicShieldBlastOffsets(warlock.Comp
+            .PsychicShieldDirection))
         {
-            var coords = origin.Offset(new Vector2(offset.X, offset.Y));
-            foreach (var (target, state) in _lookup.GetEntitiesInRange<MobStateComponent>(coords, 0.45f))
+            EntityCoordinates coords = origin.Offset(new(offset.X, offset.Y));
+            foreach ((EntityUid target, MobStateComponent state) in _lookup.GetEntitiesInRange<MobStateComponent>(
+                coords, 0.45f))
             {
-                if (target == warlock.Owner ||
-                    !_affected.Add(target) ||
-                    _mobState.IsDead(target, state) ||
-                    !_xeno.CanAbilityAttackTarget(warlock.Owner, target))
-                {
+                if (target == warlock.Owner
+                    || !_affected.Add(target)
+                    || _mobState.IsDead(target, state)
+                    || !_xeno.CanAbilityAttackTarget(warlock.Owner, target))
                     continue;
-                }
 
                 _stun.TryParalyze(target, warlock.Comp.PsychicShieldBlastParalyze, true);
-                _throwing.TryThrow(target, direction, warlock.Comp.PsychicShieldBlastThrowSpeed, warlock, animated: false, playSound: false, compensateFriction: true);
+                _throwing.TryThrow(target, direction, warlock.Comp.PsychicShieldBlastThrowSpeed, warlock,
+                    animated: false, playSound: false, compensateFriction: true);
             }
         }
     }
 
-    private void OnShieldProjectilePreventCollide(Entity<CMUXenoPsychicShieldSegmentComponent> segment, ref PreventCollideEvent args)
+    private void OnShieldProjectilePreventCollide(Entity<CMUXenoPsychicShieldSegmentComponent> segment,
+        ref PreventCollideEvent args)
     {
-        if (!TryComp(args.OtherEntity, out ProjectileComponent? projectile) ||
-            !TryComp(args.OtherEntity, out PhysicsComponent? physics))
-        {
+        if (!TryComp(args.OtherEntity, out ProjectileComponent? projectile)
+            || !TryComp(args.OtherEntity, out PhysicsComponent? physics))
             return;
-        }
 
         if (TryFreezeShieldProjectile(segment, args.OtherEntity, projectile, physics))
             args.Cancelled = true;
     }
 
-    private void OnShieldProjectileReflectAttempt(Entity<CMUXenoPsychicShieldSegmentComponent> segment, ref ProjectileReflectAttemptEvent args)
+    private void OnShieldProjectileReflectAttempt(Entity<CMUXenoPsychicShieldSegmentComponent> segment,
+        ref ProjectileReflectAttemptEvent args)
     {
-        if (args.Cancelled ||
-            !TryComp(args.ProjUid, out PhysicsComponent? physics))
-        {
+        if (args.Cancelled || !TryComp(args.ProjUid, out PhysicsComponent? physics))
             return;
-        }
 
         if (TryFreezeShieldProjectile(segment, args.ProjUid, args.Component, physics))
             args.Cancelled = true;
     }
 
-    private bool TryFreezeShieldProjectile(
-        Entity<CMUXenoPsychicShieldSegmentComponent> segment,
+    private bool TryFreezeShieldProjectile(Entity<CMUXenoPsychicShieldSegmentComponent> segment,
         EntityUid projectile,
         ProjectileComponent projectileComp,
         PhysicsComponent physics)
     {
-        if (!TryComp<CMUXenoWarlockComponent>(segment.Comp.Warlock, out var warlock))
+        if (!TryComp(segment.Comp.Warlock, out CMUXenoWarlockComponent? warlock))
             return false;
 
         if (HasComp<CMUXenoFrozenProjectileComponent>(projectile))
             return true;
 
-        var velocity = _physics.GetMapLinearVelocity(projectile, component: physics);
-        if (!IsProjectileIncomingFromFront(velocity, segment.Comp.Direction))
+        Vector2 velocity = _physics.GetMapLinearVelocity(projectile, physics);
+        if (!CMUXenoWarlockSystem.IsProjectileIncomingFromFront(velocity, segment.Comp.Direction))
             return false;
 
-        var bodyStatus = physics.BodyStatus;
-        var bodyType = physics.BodyType;
-        var canCollide = physics.CanCollide;
-        var shooter = projectileComp.Shooter;
-        var weapon = projectileComp.Weapon;
-        var ignoreShooter = projectileComp.IgnoreShooter;
-        var deleteOnCollide = projectileComp.DeleteOnCollide;
-        var projectileSpent = projectileComp.ProjectileSpent;
+        BodyStatus bodyStatus = physics.BodyStatus;
+        BodyType bodyType = physics.BodyType;
+        bool canCollide = physics.CanCollide;
+        EntityUid? shooter = projectileComp.Shooter;
+        EntityUid? weapon = projectileComp.Weapon;
+        bool ignoreShooter = projectileComp.IgnoreShooter;
+        bool deleteOnCollide = projectileComp.DeleteOnCollide;
+        bool projectileSpent = projectileComp.ProjectileSpent;
 
         MoveProjectileToShieldFace(segment, projectile);
 
@@ -1405,25 +1381,21 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         if (!warlock.FrozenProjectiles.Contains(projectile))
             warlock.FrozenProjectiles.Add(projectile);
 
-        if (!ShouldPsychicShieldApplyAuthoritativeFreezeSideEffects(_net.IsClient))
+        if (!CMUXenoWarlockSystem.ShouldPsychicShieldApplyAuthoritativeFreezeSideEffects(_net.IsClient))
             return true;
 
         warlock.PsychicShieldIntegrityRemaining -= projectileComp.Damage.GetTotal();
         UpdatePsychicShieldAlpha((segment.Comp.Warlock, warlock));
 
-        if (warlock.PsychicShieldIntegrityRemaining <= FixedPoint2.Zero ||
-            ShouldPsychicShieldBreakFromFrozenProjectiles(
-                warlock.FrozenProjectiles.Count,
+        if (warlock.PsychicShieldIntegrityRemaining <= FixedPoint2.Zero
+            || CMUXenoWarlockSystem.ShouldPsychicShieldBreakFromFrozenProjectiles(warlock.FrozenProjectiles.Count,
                 warlock.PsychicShieldMaxFrozenProjectiles))
-        {
-            EndPsychicShield((segment.Comp.Warlock, warlock), reflectProjectiles: false, stunOwner: true);
-        }
+            EndPsychicShield((segment.Comp.Warlock, warlock), false, true);
 
         return true;
     }
 
-    private void RestoreFrozenProjectilePhysics(
-        EntityUid projectile,
+    private void RestoreFrozenProjectilePhysics(EntityUid projectile,
         CMUXenoFrozenProjectileComponent frozen,
         Vector2 velocity,
         PhysicsComponent physics)
@@ -1453,16 +1425,15 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
     private void MoveProjectileToShieldFace(Entity<CMUXenoPsychicShieldSegmentComponent> segment, EntityUid projectile)
     {
-        var shieldCoordinates = _transform.GetMapCoordinates(segment);
-        var projectileCoordinates = _transform.GetMapCoordinates(projectile);
+        MapCoordinates shieldCoordinates = _transform.GetMapCoordinates(segment);
+        MapCoordinates projectileCoordinates = _transform.GetMapCoordinates(projectile);
         if (shieldCoordinates.MapId != projectileCoordinates.MapId)
             return;
 
-        var stopPosition = GetPsychicShieldFrozenProjectilePosition(
-            shieldCoordinates.Position,
+        Vector2 stopPosition = CMUXenoWarlockSystem.GetPsychicShieldFrozenProjectilePosition(shieldCoordinates.Position,
             projectileCoordinates.Position,
             segment.Comp.Direction);
-        _transform.SetMapCoordinates(projectile, new MapCoordinates(stopPosition, shieldCoordinates.MapId));
+        _transform.SetMapCoordinates(projectile, new(stopPosition, shieldCoordinates.MapId));
     }
 
     private void RestoreFrozenProjectileDeleteOnCollide(EntityUid projectile, CMUXenoFrozenProjectileComponent frozen)
@@ -1507,11 +1478,11 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
     private void UpdatePsychicShieldAlpha(Entity<CMUXenoWarlockComponent> warlock)
     {
-        var color = Color.White.WithAlpha(GetPsychicShieldAlpha(
+        Color color = Color.White.WithAlpha(CMUXenoWarlockSystem.GetPsychicShieldAlpha(
             warlock.Comp.PsychicShieldIntegrityRemaining,
             warlock.Comp.PsychicShieldIntegrity));
 
-        foreach (var segment in warlock.Comp.PsychicShieldSegments)
+        foreach (EntityUid segment in warlock.Comp.PsychicShieldSegments)
         {
             if (!Deleted(segment))
                 _rmcSprite.SetColor(segment, color);
@@ -1521,35 +1492,32 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     private void OnWarlockMove(Entity<CMUXenoWarlockComponent> warlock, ref MoveEvent args)
     {
         StopPsychicBlastChannel(warlock);
-        if (warlock.Comp.PsychicShieldSegments.Count > 0 &&
-            ShouldPsychicShieldApplyMoveCancel(_net.IsClient) &&
-            ShouldPsychicShieldCancelOnMove(
-                args.OldPosition.Position,
+        if (warlock.Comp.PsychicShieldSegments.Count > 0
+            && CMUXenoWarlockSystem.ShouldPsychicShieldApplyMoveCancel(_net.IsClient)
+            && CMUXenoWarlockSystem.ShouldPsychicShieldCancelOnMove(args.OldPosition.Position,
                 args.NewPosition.Position,
                 args.ParentChanged,
                 _timing.CurTime,
                 warlock.Comp.PsychicShieldMoveCancelGraceUntil))
-        {
-            EndPsychicShield(warlock, reflectProjectiles: false, stunOwner: false);
-        }
+            EndPsychicShield(warlock, false, false);
     }
 
     private void OnWarlockStunned(Entity<CMUXenoWarlockComponent> warlock, ref StunnedEvent args)
     {
         StopPsychicBlastChannel(warlock);
         StopPsychicCrushWindup(warlock);
-        StopPsychicCrush(warlock, setCooldown: true);
+        StopPsychicCrush(warlock, true);
         if (warlock.Comp.PsychicShieldSegments.Count > 0)
-            EndPsychicShield(warlock, reflectProjectiles: false, stunOwner: false);
+            EndPsychicShield(warlock, false, false);
     }
 
     private void OnWarlockKnockedDown(Entity<CMUXenoWarlockComponent> warlock, ref KnockedDownEvent args)
     {
         StopPsychicBlastChannel(warlock);
         StopPsychicCrushWindup(warlock);
-        StopPsychicCrush(warlock, setCooldown: true);
+        StopPsychicCrush(warlock, true);
         if (warlock.Comp.PsychicShieldSegments.Count > 0)
-            EndPsychicShield(warlock, reflectProjectiles: false, stunOwner: false);
+            EndPsychicShield(warlock, false, false);
     }
 
     private void OnWarlockMobStateChanged(Entity<CMUXenoWarlockComponent> warlock, ref MobStateChangedEvent args)
@@ -1559,14 +1527,14 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
         StopPsychicBlastChannel(warlock);
         StopPsychicCrushWindup(warlock);
-        StopPsychicCrush(warlock, setCooldown: true);
+        StopPsychicCrush(warlock, true);
         if (warlock.Comp.PsychicShieldSegments.Count > 0)
-            EndPsychicShield(warlock, reflectProjectiles: false, stunOwner: false);
+            EndPsychicShield(warlock, false, false);
     }
 
     private void SetActionToggled<T>(EntityUid warlock, bool toggled) where T : BaseActionEvent
     {
-        foreach (var action in _rmcActions.GetActionsWithEvent<T>(warlock))
+        foreach (Entity<ActionComponent> action in _rmcActions.GetActionsWithEvent<T>(warlock))
         {
             _actions.SetToggled((action, action), toggled);
         }
@@ -1574,9 +1542,9 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
     private void SetActionCooldown<T>(EntityUid warlock, TimeSpan cooldown) where T : BaseActionEvent
     {
-        var start = _timing.CurTime;
-        var end = start + cooldown;
-        foreach (var action in _rmcActions.GetActionsWithEvent<T>(warlock))
+        TimeSpan start = _timing.CurTime;
+        TimeSpan end = start + cooldown;
+        foreach (Entity<ActionComponent> action in _rmcActions.GetActionsWithEvent<T>(warlock))
         {
             Timer.Spawn(0, () => _actions.SetCooldown(action.AsNullable(), start, end));
         }
@@ -1584,9 +1552,10 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
     private void SpawnPsychicCrushWarnings(Entity<CMUXenoWarlockComponent> warlock, int pulse)
     {
-        foreach (var offset in GetPsychicCrushWarningOffsets(pulse))
+        foreach (Vector2i offset in CMUXenoWarlockSystem.GetPsychicCrushWarningOffsets(pulse))
         {
-            var warning = Spawn(warlock.Comp.PsychicCrushWarningId, warlock.Comp.PsychicCrushTarget.Offset(new Vector2(offset.X, offset.Y)));
+            EntityUid warning = Spawn(warlock.Comp.PsychicCrushWarningId,
+                warlock.Comp.PsychicCrushTarget.Offset(new(offset.X, offset.Y)));
             warlock.Comp.PsychicCrushWarnings.Add(warning);
         }
     }
@@ -1598,7 +1567,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
         warlock.Comp.PsychicCrushOrb = null;
 
-        foreach (var warning in warlock.Comp.PsychicCrushWarnings)
+        foreach (EntityUid warning in warlock.Comp.PsychicCrushWarnings)
         {
             if (!Deleted(warning))
                 QueueDel(warning);
@@ -1615,40 +1584,38 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
     private void StartWarlockChannelEffect(Entity<CMUXenoWarlockComponent> warlock, CMUXenoWarlockChannelKind kind)
     {
-        if (!ShouldShowWarlockChannelEffect(kind) ||
-            GetWarlockChannelEffect(warlock.Comp, kind) != null)
-        {
+        if (!CMUXenoWarlockSystem.ShouldShowWarlockChannelEffect(kind)
+            || CMUXenoWarlockSystem.GetWarlockChannelEffect(warlock.Comp, kind) != null)
             return;
-        }
 
-        var prototype = GetWarlockChannelEffectPrototype(warlock.Comp, kind);
-        var effect = SpawnAttachedTo(prototype, warlock.Owner.ToCoordinates());
-        SetWarlockChannelEffect(warlock.Comp, kind, effect);
+        EntProtoId prototype = CMUXenoWarlockSystem.GetWarlockChannelEffectPrototype(warlock.Comp, kind);
+        EntityUid effect = SpawnAttachedTo(prototype, warlock.Owner.ToCoordinates());
+        CMUXenoWarlockSystem.SetWarlockChannelEffect(warlock.Comp, kind, effect);
     }
 
     private void StopWarlockChannelEffect(Entity<CMUXenoWarlockComponent> warlock, CMUXenoWarlockChannelKind kind)
     {
-        if (GetWarlockChannelEffect(warlock.Comp, kind) is not { } effect)
+        if (CMUXenoWarlockSystem.GetWarlockChannelEffect(warlock.Comp, kind) is not { } effect)
             return;
 
         if (!Deleted(effect))
             QueueDel(effect);
 
-        SetWarlockChannelEffect(warlock.Comp, kind, null);
+        CMUXenoWarlockSystem.SetWarlockChannelEffect(warlock.Comp, kind, null);
     }
 
     private static EntityUid? GetWarlockChannelEffect(CMUXenoWarlockComponent warlock, CMUXenoWarlockChannelKind kind)
     {
         return kind switch
         {
-            CMUXenoWarlockChannelKind.PsychicCrush => warlock.PsychicCrushChannelEffect,
-            CMUXenoWarlockChannelKind.PsychicBlast => warlock.PsychicBlastChannelEffect,
-            CMUXenoWarlockChannelKind.PsychicShield => warlock.PsychicShieldChannelEffect,
-            _ => null,
+            CMUXenoWarlockChannelKind.PsychicCrush  => warlock.PsychicCrushChannelEffect,
+            CMUXenoWarlockChannelKind.PsychicBlast  => warlock.PsychicBlastChannelEffect,
+            CMUXenoWarlockChannelKind.PsychicShield => warlock.PsychicShieldChannelEffect, _ => null
         };
     }
 
-    private static void SetWarlockChannelEffect(CMUXenoWarlockComponent warlock, CMUXenoWarlockChannelKind kind, EntityUid? effect)
+    private static void SetWarlockChannelEffect(CMUXenoWarlockComponent warlock, CMUXenoWarlockChannelKind kind,
+        EntityUid? effect)
     {
         switch (kind)
         {
@@ -1664,25 +1631,29 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         }
     }
 
-    private static EntProtoId GetWarlockChannelEffectPrototype(CMUXenoWarlockComponent warlock, CMUXenoWarlockChannelKind kind)
+    private static EntProtoId
+        GetWarlockChannelEffectPrototype(CMUXenoWarlockComponent warlock, CMUXenoWarlockChannelKind kind)
     {
         return kind switch
         {
-            CMUXenoWarlockChannelKind.PsychicCrush => warlock.PsychicCrushChannelEffectId,
-            CMUXenoWarlockChannelKind.PsychicBlast => warlock.PsychicBlastChannelEffectId,
+            CMUXenoWarlockChannelKind.PsychicCrush  => warlock.PsychicCrushChannelEffectId,
+            CMUXenoWarlockChannelKind.PsychicBlast  => warlock.PsychicBlastChannelEffectId,
             CMUXenoWarlockChannelKind.PsychicShield => warlock.PsychicShieldChannelEffectId,
-            _ => warlock.PsychicCrushChannelEffectId,
+            _                                       => warlock.PsychicCrushChannelEffectId
         };
     }
 
-    private void OnChannelingRefreshSpeed(Entity<CMUXenoWarlockChannelingComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
+    private void OnChannelingRefreshSpeed(Entity<CMUXenoWarlockChannelingComponent> ent,
+        ref RefreshMovementSpeedModifiersEvent args)
     {
         args.ModifySpeed(ent.Comp.SpeedMultiplier, ent.Comp.SpeedMultiplier);
     }
 
-    private void OnPsychicShieldRootRefreshSpeed(Entity<CMUXenoPsychicShieldRootComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
+    private void OnPsychicShieldRootRefreshSpeed(Entity<CMUXenoPsychicShieldRootComponent> ent,
+        ref RefreshMovementSpeedModifiersEvent args)
     {
-        args.ModifySpeed(GetPsychicShieldOwnerMoveSpeedMultiplier(), GetPsychicShieldOwnerMoveSpeedMultiplier());
+        args.ModifySpeed(CMUXenoWarlockSystem.GetPsychicShieldOwnerMoveSpeedMultiplier(),
+            CMUXenoWarlockSystem.GetPsychicShieldOwnerMoveSpeedMultiplier());
     }
 
     private void ResetShieldProjectilePrediction(EntityUid projectile)
@@ -1699,154 +1670,93 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
     public static int GetPsychicCrushDamage(int completedPulses)
     {
-        var pulses = Math.Clamp(completedPulses, 0, PsychicCrushMaxPulses);
+        int pulses = Math.Clamp(completedPulses, 0, PsychicCrushMaxPulses);
         return PsychicCrushBaseDamage + PsychicCrushDamagePerPulse * pulses;
     }
 
     public static FixedPoint2 GetPsychicCrushCost(int completedPulses)
     {
-        var pulses = Math.Clamp(completedPulses, 0, PsychicCrushMaxPulses);
+        int pulses = Math.Clamp(completedPulses, 0, PsychicCrushMaxPulses);
         return FixedPoint2.New(PsychicCrushPlasmaPerPulse * pulses);
     }
 
     public static int GetPsychicCrushResolvedPulses(int completedPulses)
-    {
-        return Math.Clamp(completedPulses, 0, PsychicCrushMaxPulses);
-    }
+        => Math.Clamp(completedPulses, 0, PsychicCrushMaxPulses);
 
-    public static bool CanTriggerPsychicCrush(int completedPulses)
-    {
-        return completedPulses > 1;
-    }
+    public static bool CanTriggerPsychicCrush(int completedPulses) => completedPulses > 1;
 
-    public static TimeSpan GetPsychicCrushPulseInterval()
-    {
-        return TimeSpan.FromSeconds(1.75);
-    }
+    public static TimeSpan GetPsychicCrushPulseInterval() => TimeSpan.FromSeconds(1.75);
 
-    public static TimeSpan GetPsychicCrushWindupDuration()
-    {
-        return TimeSpan.FromSeconds(0.8);
-    }
+    public static TimeSpan GetPsychicCrushWindupDuration() => TimeSpan.FromSeconds(0.8);
 
     public static TimeSpan GetPsychicCrushChannelDuration()
-    {
-        return GetPsychicCrushChannelDuration(GetPsychicCrushPulseInterval());
-    }
+        => CMUXenoWarlockSystem.GetPsychicCrushChannelDuration(CMUXenoWarlockSystem.GetPsychicCrushPulseInterval());
 
     public static TimeSpan GetPsychicCrushChannelDuration(TimeSpan pulseInterval)
-    {
-        return pulseInterval * PsychicCrushMaxAreaRadius;
-    }
+        => pulseInterval * PsychicCrushMaxAreaRadius;
 
-    public static bool ShouldPsychicCrushCancellationResolve()
-    {
-        return true;
-    }
+    public static bool ShouldPsychicCrushCancellationResolve() => true;
 
     public static bool ShouldPsychicCrushInterruptionResolve()
-    {
-        return ShouldPsychicCrushCancellationResolve();
-    }
+        => CMUXenoWarlockSystem.ShouldPsychicCrushCancellationResolve();
 
-    public static bool ShouldSpawnPsychicCrushTileBlur(bool detonated)
-    {
-        return true;
-    }
+    public static bool ShouldSpawnPsychicCrushTileBlur(bool detonated) => true;
 
-    public static string GetPsychicCrushBlurPrototype()
-    {
-        return "CMUXenoPsychicCrushBlur";
-    }
+    public static string GetPsychicCrushBlurPrototype() => "CMUXenoPsychicCrushBlur";
 
-    public static TimeSpan GetPsychicCrushBlurDuration()
-    {
-        return TimeSpan.FromSeconds(1);
-    }
+    public static TimeSpan GetPsychicCrushBlurDuration() => TimeSpan.FromSeconds(1);
 
-    public static TimeSpan GetPsychicCrushOwnerSlowDuration()
-    {
-        return TimeSpan.FromSeconds(1);
-    }
+    public static TimeSpan GetPsychicCrushOwnerSlowDuration() => TimeSpan.FromSeconds(1);
 
-    public static bool ShouldPsychicCrushShowActionCooldown()
-    {
-        return true;
-    }
+    public static bool ShouldPsychicCrushShowActionCooldown() => true;
 
-    public static bool ShouldDeferWarlockActionCooldownUntilAfterActionPerformed()
-    {
-        return true;
-    }
+    public static bool ShouldDeferWarlockActionCooldownUntilAfterActionPerformed() => true;
 
-    public static TimeSpan GetPsychicCrushCooldownDuration()
-    {
-        return TimeSpan.FromSeconds(15);
-    }
+    public static TimeSpan GetPsychicCrushCooldownDuration() => TimeSpan.FromSeconds(15);
 
-    public static float GetPsychicCrushTargetRange()
-    {
-        return PsychicCrushTargetRangeValue;
-    }
+    public static float GetPsychicCrushTargetRange() => PsychicCrushTargetRangeValue;
 
     public static bool ShouldDeletePsychicBlastProjectileOnFixedDistanceStop(bool isClient, bool isClientSide)
-    {
-        return !isClient || isClientSide;
-    }
+        => !isClient || isClientSide;
 
     public static bool ShouldPsychicBlastIgnoreCollisionLayer(int collisionLayer)
-    {
-        return collisionLayer == (int)CollisionGroup.GlassLayer ||
-               collisionLayer == (int)CollisionGroup.GlassAirlockLayer;
-    }
+        => collisionLayer == (int)CollisionGroup.GlassLayer || collisionLayer == (int)CollisionGroup.GlassAirlockLayer;
 
     public static float GetPsychicCrushRadius(int completedPulses)
-    {
-        return GetPsychicCrushAreaRadius(completedPulses);
-    }
+        => CMUXenoWarlockSystem.GetPsychicCrushAreaRadius(completedPulses);
 
     public static int GetPsychicCrushAreaRadius(int completedPulses)
-    {
-        return Math.Clamp(completedPulses, 0, PsychicCrushMaxAreaRadius);
-    }
+        => Math.Clamp(completedPulses, 0, PsychicCrushMaxAreaRadius);
 
     public static bool HasPsychicCrushReachedMaxRange(int completedPulses)
-    {
-        return GetPsychicCrushAreaRadius(completedPulses) >= PsychicCrushMaxAreaRadius;
-    }
+        => CMUXenoWarlockSystem.GetPsychicCrushAreaRadius(completedPulses) >= PsychicCrushMaxAreaRadius;
 
     public static TimeSpan GetPsychicCrushStaggerDuration(int completedPulses)
     {
-        var pulses = Math.Clamp(completedPulses, 0, PsychicCrushMaxPulses);
+        int pulses = Math.Clamp(completedPulses, 0, PsychicCrushMaxPulses);
         return TimeSpan.FromSeconds(2 * pulses);
     }
 
     public static TimeSpan GetPsychicCrushSlowDuration(int completedPulses)
     {
-        var pulses = Math.Clamp(completedPulses, 0, PsychicCrushMaxPulses);
+        int pulses = Math.Clamp(completedPulses, 0, PsychicCrushMaxPulses);
         return TimeSpan.FromSeconds(3 * pulses);
     }
 
-    public static TimeSpan GetPsychicBlastChargeDuration()
-    {
-        return TimeSpan.FromSeconds(1);
-    }
+    public static TimeSpan GetPsychicBlastChargeDuration() => TimeSpan.FromSeconds(1);
 
     public static string GetPsychicBlastBeamPrototype(CMUXenoPsychicBlastMode mode)
     {
         return mode switch
         {
-            CMUXenoPsychicBlastMode.Lance => "CMUXenoPsychicLanceProjectile",
-            _ => "CMUXenoPsychicBlastProjectile",
+            CMUXenoPsychicBlastMode.Lance => "CMUXenoPsychicLanceProjectile", _ => "CMUXenoPsychicBlastProjectile"
         };
     }
 
     public static bool ShouldShowWarlockChannelEffect(CMUXenoWarlockChannelKind kind)
-    {
-        return kind is CMUXenoWarlockChannelKind.PsychicCrush
+        => kind is CMUXenoWarlockChannelKind.PsychicCrush
             or CMUXenoWarlockChannelKind.PsychicBlast
             or CMUXenoWarlockChannelKind.PsychicShield;
-    }
 
     public static string GetWarlockChannelColor(CMUXenoWarlockChannelKind kind, CMUXenoPsychicBlastMode mode)
     {
@@ -1855,38 +1765,36 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
             CMUXenoWarlockChannelKind.PsychicBlast when mode == CMUXenoPsychicBlastMode.Lance => "#CB0166",
             CMUXenoWarlockChannelKind.PsychicBlast => "#970f0f",
             CMUXenoWarlockChannelKind.PsychicCrush => "#6a59b3",
-            CMUXenoWarlockChannelKind.PsychicShield => "#5999b3",
-            _ => "#ffffff",
+            CMUXenoWarlockChannelKind.PsychicShield => "#5999b3", _ => "#ffffff"
         };
     }
 
-    public static bool ShouldSpawnWarlockChannelStream(CMUXenoWarlockChannelKind kind)
-    {
-        return false;
-    }
+    public static bool ShouldSpawnWarlockChannelStream(CMUXenoWarlockChannelKind kind) => false;
 
-    public static string GetWarlockChannelParticlePrototype(CMUXenoWarlockChannelKind kind, CMUXenoPsychicBlastMode mode)
+    public static string
+        GetWarlockChannelParticlePrototype(CMUXenoWarlockChannelKind kind, CMUXenoPsychicBlastMode mode)
     {
         return kind switch
         {
-            CMUXenoWarlockChannelKind.PsychicBlast when mode == CMUXenoPsychicBlastMode.Lance => "CMUXenoWarlockLanceParticles",
+            CMUXenoWarlockChannelKind.PsychicBlast when mode == CMUXenoPsychicBlastMode.Lance =>
+                "CMUXenoWarlockLanceParticles",
             CMUXenoWarlockChannelKind.PsychicBlast => "CMUXenoWarlockBlastParticles",
             CMUXenoWarlockChannelKind.PsychicCrush => "CMUXenoWarlockCrushParticles",
-            _ => "CMUXenoWarlockCrushParticles",
+            _                                      => "CMUXenoWarlockCrushParticles"
         };
     }
 
-    private static EntProtoId GetWarlockChannelParticlePrototype(
-        CMUXenoWarlockComponent warlock,
+    private static EntProtoId GetWarlockChannelParticlePrototype(CMUXenoWarlockComponent warlock,
         CMUXenoWarlockChannelKind kind,
         CMUXenoPsychicBlastMode mode)
     {
         return kind switch
         {
-            CMUXenoWarlockChannelKind.PsychicBlast when mode == CMUXenoPsychicBlastMode.Lance => warlock.PsychicLanceChannelParticleId,
+            CMUXenoWarlockChannelKind.PsychicBlast when mode == CMUXenoPsychicBlastMode.Lance =>
+                warlock.PsychicLanceChannelParticleId,
             CMUXenoWarlockChannelKind.PsychicBlast => warlock.PsychicBlastChannelParticleId,
             CMUXenoWarlockChannelKind.PsychicCrush => warlock.PsychicCrushChannelParticleId,
-            _ => warlock.PsychicCrushChannelParticleId,
+            _                                      => warlock.PsychicCrushChannelParticleId
         };
     }
 
@@ -1894,8 +1802,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     {
         return effect switch
         {
-            CMUXenoWarlockParticleEffect.PsychicBlastCharge => new(
-                "#970f0f",
+            CMUXenoWarlockParticleEffect.PsychicBlastCharge => new("#970f0f",
                 300,
                 20,
                 12,
@@ -1905,12 +1812,11 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
                 Vector2.Zero,
                 Vector2.Zero,
                 Vector2.Zero,
-                new Vector2(15, 17),
-                new Vector2(0.1f, 0.1f),
-                new Vector2(0.5f, 0.5f),
-                new Vector2(16, 0)),
-            CMUXenoWarlockParticleEffect.PsychicLanceCharge => new(
-                "#CB0166",
+                new(15, 17),
+                new(0.1f, 0.1f),
+                new(0.5f, 0.5f),
+                new(16, 0)),
+            CMUXenoWarlockParticleEffect.PsychicLanceCharge => new("#CB0166",
                 300,
                 30,
                 12,
@@ -1920,40 +1826,38 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
                 Vector2.Zero,
                 Vector2.Zero,
                 Vector2.Zero,
-                new Vector2(15, 17),
-                new Vector2(0.1f, 0.1f),
-                new Vector2(0.5f, 0.5f),
-                new Vector2(16, 0)),
-            CMUXenoWarlockParticleEffect.CrushWarning => new(
-                "#4b3f7e",
+                new(15, 17),
+                new(0.1f, 0.1f),
+                new(0.5f, 0.5f),
+                new(16, 0)),
+            CMUXenoWarlockParticleEffect.CrushWarning => new("#4b3f7e",
                 50,
                 5,
                 8,
                 10,
                 -0.04f,
-                new Vector2(0, 0.2f),
-                new Vector2(0, 0.6f),
-                new Vector2(-0.5f, -0.5f),
-                new Vector2(0.5f, 0.5f),
-                new Vector2(15, 17),
-                new Vector2(0.3f, 0.3f),
-                new Vector2(0.7f, 0.7f),
+                new(0, 0.2f),
+                new(0, 0.6f),
+                new(-0.5f, -0.5f),
+                new(0.5f, 0.5f),
+                new(15, 17),
+                new(0.3f, 0.3f),
+                new(0.7f, 0.7f),
                 Vector2.Zero),
-            _ => new(
-                "#6a59b3",
+            _ => new("#6a59b3",
                 300,
                 15,
                 8,
                 12,
                 -0.02f,
-                new Vector2(0, 3),
-                new Vector2(0, 3),
-                new Vector2(0, -0.5f),
-                new Vector2(0, 0.2f),
-                new Vector2(15, 17),
-                new Vector2(0.1f, 0.1f),
-                new Vector2(0.5f, 0.5f),
-                new Vector2(16, 5)),
+                new(0, 3),
+                new(0, 3),
+                new(0, -0.5f),
+                new(0, 0.2f),
+                new(15, 17),
+                new(0.1f, 0.1f),
+                new(0.5f, 0.5f),
+                new(16, 5))
         };
     }
 
@@ -1962,24 +1866,23 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         if (effect is CMUXenoWarlockParticleEffect.PsychicBlastCharge
             or CMUXenoWarlockParticleEffect.PsychicLanceCharge
             or CMUXenoWarlockParticleEffect.PsychicCrushCharge)
-        {
             return Vector2.Zero;
-        }
 
-        return GetWarlockParticleProfile(effect).HolderOffset;
+        return CMUXenoWarlockSystem.GetWarlockParticleProfile(effect).HolderOffset;
     }
 
-    public static CMUXenoWarlockParticleMotion? GetWarlockDirectedParticleMotion(Vector2 origin, Vector2 target, float velocity)
+    public static CMUXenoWarlockParticleMotion? GetWarlockDirectedParticleMotion(Vector2 origin, Vector2 target,
+        float velocity)
     {
         if (velocity <= 0f)
             return null;
 
-        var direction = target - origin;
-        var length = direction.Length();
+        Vector2 direction = target - origin;
+        float length = direction.Length();
         if (length <= 0f)
             return null;
 
-        var normalized = direction / length;
+        Vector2 normalized = direction / length;
         return new CMUXenoWarlockParticleMotion(normalized * (velocity * 0.5f), normalized * velocity);
     }
 
@@ -1987,51 +1890,30 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     {
         return kind switch
         {
-            CMUXenoWarlockChannelKind.PsychicBlast => "CMUXenoWarlockBlastChannelEffect",
-            CMUXenoWarlockChannelKind.PsychicCrush => "CMUXenoWarlockCrushChannelEffect",
+            CMUXenoWarlockChannelKind.PsychicBlast  => "CMUXenoWarlockBlastChannelEffect",
+            CMUXenoWarlockChannelKind.PsychicCrush  => "CMUXenoWarlockCrushChannelEffect",
             CMUXenoWarlockChannelKind.PsychicShield => "CMUXenoWarlockShieldChannelEffect",
-            _ => "CMUXenoWarlockCrushChannelEffect",
+            _                                       => "CMUXenoWarlockCrushChannelEffect"
         };
     }
 
-    public static string GetPsychicBlastImpactEffectPrototype()
-    {
-        return "CMUXenoPsychicBlastShockwave";
-    }
+    public static string GetPsychicBlastImpactEffectPrototype() => "CMUXenoPsychicBlastShockwave";
 
-    public static string GetPsychicBlastFireSoundPath()
-    {
-        return PsychicBlastFireSoundPath;
-    }
+    public static string GetPsychicBlastFireSoundPath() => PsychicBlastFireSoundPath;
 
-    public static string GetPsychicBlastImpactSoundPath()
-    {
-        return PsychicBlastImpactSoundPath;
-    }
+    public static string GetPsychicBlastImpactSoundPath() => PsychicBlastImpactSoundPath;
 
-    public static bool ShouldPsychicBlastPlayFireSoundFromWarlockSystem()
-    {
-        return true;
-    }
+    public static bool ShouldPsychicBlastPlayFireSoundFromWarlockSystem() => true;
 
-    public static bool ShouldPsychicBlastUsePvsAudio()
-    {
-        return true;
-    }
+    public static bool ShouldPsychicBlastUsePvsAudio() => true;
 
-    public static bool ShouldPsychicBlastKnockbackAffectedTargets()
-    {
-        return true;
-    }
+    public static bool ShouldPsychicBlastKnockbackAffectedTargets() => true;
 
-    public static float GetPsychicBlastKnockbackSpeed()
-    {
-        return PsychicBlastKnockbackSpeed;
-    }
+    public static float GetPsychicBlastKnockbackSpeed() => PsychicBlastKnockbackSpeed;
 
     public static Vector2 GetPsychicBlastKnockbackDirection(Vector2 impact, Vector2 target, Vector2 fallback)
     {
-        var direction = target - impact;
+        Vector2 direction = target - impact;
         if (direction.LengthSquared() <= 0.0001f)
             direction = fallback;
 
@@ -2042,196 +1924,87 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     }
 
     public static string GetPsychicCrushEndEffectPrototype(bool detonated)
-    {
-        return detonated ? "CMUXenoPsychicCrushHard" : "CMUXenoPsychicCrushSmooth";
-    }
+        => detonated ? "CMUXenoPsychicCrushHard" : "CMUXenoPsychicCrushSmooth";
 
-    public static int GetPsychicCrushEndEffectCount(bool detonated, int completedPulses)
-    {
-        return 1;
-    }
+    public static int GetPsychicCrushEndEffectCount(bool detonated, int completedPulses) => 1;
 
-    public static CMUDrawDepth GetPsychicCrushOrbDrawDepth()
-    {
-        return CMUDrawDepth.Overlays;
-    }
+    public static CMUDrawDepth GetPsychicCrushOrbDrawDepth() => CMUDrawDepth.Overlays;
 
-    public static FixedPoint2 GetPsychicShieldCost()
-    {
-        return FixedPoint2.New(PsychicShieldPlasmaCost);
-    }
+    public static FixedPoint2 GetPsychicShieldCost() => FixedPoint2.New(PsychicShieldPlasmaCost);
 
-    public static FixedPoint2 GetPsychicShieldDetonationCost()
-    {
-        return FixedPoint2.New(PsychicShieldPlasmaCost);
-    }
+    public static FixedPoint2 GetPsychicShieldDetonationCost() => FixedPoint2.New(PsychicShieldPlasmaCost);
 
-    public static TimeSpan GetPsychicShieldDuration()
-    {
-        return TimeSpan.FromSeconds(6);
-    }
+    public static TimeSpan GetPsychicShieldDuration() => TimeSpan.FromSeconds(6);
 
-    public static TimeSpan GetPsychicShieldCooldownDuration()
-    {
-        return TimeSpan.FromSeconds(10);
-    }
+    public static TimeSpan GetPsychicShieldCooldownDuration() => TimeSpan.FromSeconds(10);
 
-    public static FixedPoint2 GetPsychicShieldIntegrity()
-    {
-        return FixedPoint2.New(PsychicShieldIntegrityValue);
-    }
+    public static FixedPoint2 GetPsychicShieldIntegrity() => FixedPoint2.New(PsychicShieldIntegrityValue);
 
-    public static int GetPsychicShieldMaxFrozenProjectiles()
-    {
-        return PsychicShieldMaxFrozenProjectilesValue;
-    }
+    public static int GetPsychicShieldMaxFrozenProjectiles() => PsychicShieldMaxFrozenProjectilesValue;
 
-    public static TimeSpan GetPsychicShieldBreakStunDuration()
-    {
-        return TimeSpan.FromSeconds(1);
-    }
+    public static TimeSpan GetPsychicShieldBreakStunDuration() => TimeSpan.FromSeconds(1);
 
-    public static bool ShouldPsychicShieldOwnerChannelDrawShieldSprite()
-    {
-        return false;
-    }
+    public static bool ShouldPsychicShieldOwnerChannelDrawShieldSprite() => false;
 
-    public static bool ShouldPsychicShieldFreezeIncomingProjectiles()
-    {
-        return true;
-    }
+    public static bool ShouldPsychicShieldFreezeIncomingProjectiles() => true;
 
-    public static bool ShouldPsychicShieldReleaseProjectilesOnCancel()
-    {
-        return true;
-    }
+    public static bool ShouldPsychicShieldReleaseProjectilesOnCancel() => true;
 
-    public static bool ShouldPsychicShieldReflectProjectilesOnManualDetonation()
-    {
-        return true;
-    }
+    public static bool ShouldPsychicShieldReflectProjectilesOnManualDetonation() => true;
 
-    public static bool ShouldPsychicShieldReleaseProjectilesAndStunOwnerOnBreak()
-    {
-        return true;
-    }
+    public static bool ShouldPsychicShieldReleaseProjectilesAndStunOwnerOnBreak() => true;
 
-    public static bool ShouldPsychicShieldRestoreOriginalProjectileOnBreak()
-    {
-        return true;
-    }
+    public static bool ShouldPsychicShieldRestoreOriginalProjectileOnBreak() => true;
 
-    public static bool ShouldPsychicShieldDisableFrozenProjectileCollision()
-    {
-        return true;
-    }
+    public static bool ShouldPsychicShieldDisableFrozenProjectileCollision() => true;
 
-    public static bool ShouldPsychicShieldRestoreFrozenProjectileCollision()
-    {
-        return true;
-    }
+    public static bool ShouldPsychicShieldRestoreFrozenProjectileCollision() => true;
 
-    public static bool ShouldPsychicShieldUseHardProjectileCollision()
-    {
-        return true;
-    }
+    public static bool ShouldPsychicShieldUseHardProjectileCollision() => true;
 
-    public static bool ShouldPsychicShieldCatchProjectilesBeforeProjectileSystems()
-    {
-        return true;
-    }
+    public static bool ShouldPsychicShieldCatchProjectilesBeforeProjectileSystems() => true;
 
-    public static bool ShouldPsychicShieldSubscribeToProjectilePreventCollide()
-    {
-        return false;
-    }
+    public static bool ShouldPsychicShieldSubscribeToProjectilePreventCollide() => false;
 
-    public static bool ShouldPsychicShieldSuspendDeleteOnCollideComponent()
-    {
-        return true;
-    }
+    public static bool ShouldPsychicShieldSuspendDeleteOnCollideComponent() => true;
 
-    public static bool ShouldPsychicShieldSuspendFixedDistanceProjectileLifetime()
-    {
-        return true;
-    }
+    public static bool ShouldPsychicShieldSuspendFixedDistanceProjectileLifetime() => true;
 
     public static bool ShouldPsychicShieldBreakFromFrozenProjectiles(int frozenProjectiles, int maxFrozenProjectiles)
-    {
-        return maxFrozenProjectiles > 0 &&
-               frozenProjectiles >= maxFrozenProjectiles;
-    }
+        => maxFrozenProjectiles > 0 && frozenProjectiles >= maxFrozenProjectiles;
 
-    public static bool ShouldPsychicShieldRootOwnerWhileActive()
-    {
-        return true;
-    }
+    public static bool ShouldPsychicShieldRootOwnerWhileActive() => true;
 
-    public static float GetPsychicShieldOwnerMoveSpeedMultiplier()
-    {
-        return 0f;
-    }
+    public static float GetPsychicShieldOwnerMoveSpeedMultiplier() => 0f;
 
-    public static bool ShouldPlayPsychicShieldReflectSoundAtShield()
-    {
-        return true;
-    }
+    public static bool ShouldPlayPsychicShieldReflectSoundAtShield() => true;
 
-    public static bool ShouldPsychicShieldRequireClearForwardTile()
-    {
-        return true;
-    }
+    public static bool ShouldPsychicShieldRequireClearForwardTile() => true;
 
-    public static bool ShouldPsychicShieldShowActionCooldown()
-    {
-        return true;
-    }
+    public static bool ShouldPsychicShieldShowActionCooldown() => true;
 
-    public static bool ShouldPsychicShieldApplyAuthoritativeFreezeSideEffects(bool isClient)
-    {
-        return !isClient;
-    }
+    public static bool ShouldPsychicShieldApplyAuthoritativeFreezeSideEffects(bool isClient) => !isClient;
 
-    public static bool ShouldPsychicShieldApplyMoveCancel(bool isClient)
-    {
-        return !isClient;
-    }
+    public static bool ShouldPsychicShieldApplyMoveCancel(bool isClient) => !isClient;
 
     public static bool ShouldPsychicShieldCancelOnMove(Vector2 oldPosition, Vector2 newPosition, bool parentChanged)
-    {
-        return parentChanged || !oldPosition.EqualsApprox(newPosition, 0.001f);
-    }
+        => parentChanged || !oldPosition.EqualsApprox(newPosition, 0.001f);
 
-    public static bool ShouldPsychicShieldCancelOnMove(
-        Vector2 oldPosition,
+    public static bool ShouldPsychicShieldCancelOnMove(Vector2 oldPosition,
         Vector2 newPosition,
         bool parentChanged,
         TimeSpan currentTime,
         TimeSpan graceUntil)
-    {
-        return currentTime >= graceUntil &&
-               ShouldPsychicShieldCancelOnMove(oldPosition, newPosition, parentChanged);
-    }
+        => currentTime >= graceUntil
+            && CMUXenoWarlockSystem.ShouldPsychicShieldCancelOnMove(oldPosition, newPosition, parentChanged);
 
-    public static bool ShouldPsychicShieldUseUnanchoredWorldPlacement()
-    {
-        return true;
-    }
+    public static bool ShouldPsychicShieldUseUnanchoredWorldPlacement() => true;
 
-    public static bool ShouldPsychicShieldSnapToGrid()
-    {
-        return false;
-    }
+    public static bool ShouldPsychicShieldSnapToGrid() => false;
 
-    public static bool ShouldOffsetPsychicShieldSpriteWithoutMovingCollision()
-    {
-        return false;
-    }
+    public static bool ShouldOffsetPsychicShieldSpriteWithoutMovingCollision() => false;
 
-    public static Vector2 GetPsychicShieldVisualOffset(Direction direction)
-    {
-        return Vector2.Zero;
-    }
+    public static Vector2 GetPsychicShieldVisualOffset(Direction direction) => Vector2.Zero;
 
     public static float GetPsychicShieldAlpha(FixedPoint2 remainingIntegrity, FixedPoint2 maxIntegrity)
     {
@@ -2242,45 +2015,40 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     }
 
     public static IEnumerable<Vector2> GetPsychicShieldOffsets(Direction direction)
-    {
-        return [GetPsychicShieldCenterOffset(direction)];
-    }
+        => [CMUXenoWarlockSystem.GetPsychicShieldCenterOffset(direction)];
 
     public static Vector2 GetPsychicShieldCenterOffset(Direction direction)
     {
         const float nearEdgeDistance = 0.5f;
-        var centerDistance = nearEdgeDistance + PsychicShieldHalfThickness;
+        float centerDistance = nearEdgeDistance + PsychicShieldHalfThickness;
         return direction switch
         {
-            Direction.North => new Vector2(0, centerDistance),
-            Direction.South => new Vector2(0, -centerDistance),
-            Direction.East => new Vector2(centerDistance, 0),
-            Direction.West => new Vector2(-centerDistance, 0),
-            _ => new Vector2(0, centerDistance),
+            Direction.North => new(0, centerDistance), Direction.South => new(0, -centerDistance),
+            Direction.East  => new(centerDistance, 0), Direction.West  => new(-centerDistance, 0),
+            _               => new(0, centerDistance)
         };
     }
 
-    public static Vector2 GetPsychicShieldFrozenProjectilePosition(
-        Vector2 shieldPosition,
+    public static Vector2 GetPsychicShieldFrozenProjectilePosition(Vector2 shieldPosition,
         Vector2 projectilePosition,
         Direction direction)
     {
-        var faceDistance = PsychicShieldHalfThickness + PsychicShieldProjectileStopOffset;
+        float faceDistance = PsychicShieldHalfThickness + PsychicShieldProjectileStopOffset;
         return direction switch
         {
-            Direction.North => new Vector2(
-                Math.Clamp(projectilePosition.X, shieldPosition.X - PsychicShieldHalfWidth, shieldPosition.X + PsychicShieldHalfWidth),
+            Direction.North => new(Math.Clamp(projectilePosition.X, shieldPosition.X - PsychicShieldHalfWidth,
+                    shieldPosition.X + PsychicShieldHalfWidth),
                 shieldPosition.Y + faceDistance),
-            Direction.South => new Vector2(
-                Math.Clamp(projectilePosition.X, shieldPosition.X - PsychicShieldHalfWidth, shieldPosition.X + PsychicShieldHalfWidth),
+            Direction.South => new(Math.Clamp(projectilePosition.X, shieldPosition.X - PsychicShieldHalfWidth,
+                    shieldPosition.X + PsychicShieldHalfWidth),
                 shieldPosition.Y - faceDistance),
-            Direction.East => new Vector2(
-                shieldPosition.X + faceDistance,
-                Math.Clamp(projectilePosition.Y, shieldPosition.Y - PsychicShieldHalfWidth, shieldPosition.Y + PsychicShieldHalfWidth)),
-            Direction.West => new Vector2(
-                shieldPosition.X - faceDistance,
-                Math.Clamp(projectilePosition.Y, shieldPosition.Y - PsychicShieldHalfWidth, shieldPosition.Y + PsychicShieldHalfWidth)),
-            _ => projectilePosition,
+            Direction.East => new(shieldPosition.X + faceDistance,
+                Math.Clamp(projectilePosition.Y, shieldPosition.Y - PsychicShieldHalfWidth,
+                    shieldPosition.Y + PsychicShieldHalfWidth)),
+            Direction.West => new(shieldPosition.X - faceDistance,
+                Math.Clamp(projectilePosition.Y, shieldPosition.Y - PsychicShieldHalfWidth,
+                    shieldPosition.Y + PsychicShieldHalfWidth)),
+            _ => projectilePosition
         };
     }
 
@@ -2288,42 +2056,39 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     {
         return direction switch
         {
-            Direction.North => Vector2.UnitY,
-            Direction.South => -Vector2.UnitY,
-            Direction.East => Vector2.UnitX,
-            Direction.West => -Vector2.UnitX,
-            _ => Vector2.UnitY,
+            Direction.North => Vector2.UnitY, Direction.South => -Vector2.UnitY, Direction.East => Vector2.UnitX,
+            Direction.West  => -Vector2.UnitX, _              => Vector2.UnitY
         };
     }
 
     public static IEnumerable<Vector2i> GetPsychicCrushAffectedOffsets(int completedPulses)
     {
-        var radius = GetPsychicCrushAreaRadius(completedPulses);
-        for (var x = -radius; x <= radius; x++)
+        int radius = CMUXenoWarlockSystem.GetPsychicCrushAreaRadius(completedPulses);
+        for (int x = -radius; x <= radius; x++)
         {
-            for (var y = -radius; y <= radius; y++)
+            for (int y = -radius; y <= radius; y++)
             {
                 if (Math.Abs(x) + Math.Abs(y) <= radius)
-                    yield return new Vector2i(x, y);
+                    yield return new(x, y);
             }
         }
     }
 
     public static IEnumerable<Vector2i> GetPsychicCrushWarningOffsets(int completedPulses)
     {
-        var radius = GetPsychicCrushAreaRadius(completedPulses);
+        int radius = CMUXenoWarlockSystem.GetPsychicCrushAreaRadius(completedPulses);
         if (radius == 0)
         {
             yield return Vector2i.Zero;
             yield break;
         }
 
-        for (var x = -radius; x <= radius; x++)
+        for (int x = -radius; x <= radius; x++)
         {
-            for (var y = -radius; y <= radius; y++)
+            for (int y = -radius; y <= radius; y++)
             {
                 if (Math.Abs(x) + Math.Abs(y) == radius)
-                    yield return new Vector2i(x, y);
+                    yield return new(x, y);
             }
         }
     }
@@ -2332,67 +2097,54 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     {
         for (var depth = 1; depth <= 2; depth++)
         {
-            for (var lateral = -1; lateral <= 1; lateral++)
+            for (int lateral = -1; lateral <= 1; lateral++)
             {
                 yield return direction switch
                 {
-                    Direction.North => new Vector2i(lateral, depth),
-                    Direction.South => new Vector2i(lateral, -depth),
-                    Direction.East => new Vector2i(depth, lateral),
-                    Direction.West => new Vector2i(-depth, lateral),
-                    _ => new Vector2i(lateral, depth),
+                    Direction.North => new(lateral, depth), Direction.South => new(lateral, -depth),
+                    Direction.East  => new(depth, lateral), Direction.West  => new(-depth, lateral),
+                    _               => new(lateral, depth)
                 };
             }
         }
     }
 
     public static Vector2 ReflectProjectileVelocity(Vector2 velocity, Direction shieldDirection)
-    {
-        return ReflectProjectileVelocity(velocity, shieldDirection, Angle.Zero);
-    }
+        => CMUXenoWarlockSystem.ReflectProjectileVelocity(velocity, shieldDirection, Angle.Zero);
 
     public static Vector2 ReflectProjectileVelocity(Vector2 velocity, Direction shieldDirection, Angle spread)
     {
-        var reflected = shieldDirection switch
+        Vector2 reflected = shieldDirection switch
         {
-            Direction.North or Direction.South => new Vector2(velocity.X, -velocity.Y),
-            Direction.East or Direction.West => new Vector2(-velocity.X, velocity.Y),
-            _ => -velocity,
+            Direction.North or Direction.South => new(velocity.X, -velocity.Y),
+            Direction.East or Direction.West   => new(-velocity.X, velocity.Y), _ => -velocity
         };
 
         return spread.RotateVec(reflected);
     }
 
-    public static float GetPsychicShieldReflectionSpreadDegrees()
-    {
-        return PsychicShieldReflectionSpreadDegrees;
-    }
+    public static float GetPsychicShieldReflectionSpreadDegrees() => PsychicShieldReflectionSpreadDegrees;
 
     public static bool IsProjectileIncomingFromFront(Vector2 velocity, Direction shieldDirection)
     {
         if (velocity.LengthSquared() <= 0f)
             return false;
 
-        var angle = velocity.ToWorldAngle();
+        Angle angle = velocity.ToWorldAngle();
         var shieldAngle = shieldDirection.ToAngle();
-        var diff = Angle.ShortestDistance(angle, shieldAngle + Math.PI);
+        Angle diff = Angle.ShortestDistance(angle, shieldAngle + Math.PI);
         return Math.Abs(diff.Theta) <= Math.PI / 2;
     }
 
-    public static FixedPoint2 GetPlasmaTransferAmount(
-        FixedPoint2 requested,
+    public static FixedPoint2 GetPlasmaTransferAmount(FixedPoint2 requested,
         FixedPoint2 donorPlasma,
         FixedPoint2 targetPlasma,
         FixedPoint2 targetMaxPlasma)
     {
-        if (requested <= FixedPoint2.Zero ||
-            donorPlasma <= FixedPoint2.Zero ||
-            targetMaxPlasma <= targetPlasma)
-        {
+        if (requested <= FixedPoint2.Zero || donorPlasma <= FixedPoint2.Zero || targetMaxPlasma <= targetPlasma)
             return FixedPoint2.Zero;
-        }
 
-        var targetMissing = targetMaxPlasma - targetPlasma;
+        FixedPoint2 targetMissing = targetMaxPlasma - targetPlasma;
         return FixedPoint2.Min(requested, FixedPoint2.Min(donorPlasma, targetMissing));
     }
 }

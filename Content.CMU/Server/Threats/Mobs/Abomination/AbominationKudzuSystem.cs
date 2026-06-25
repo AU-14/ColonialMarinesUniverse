@@ -1,7 +1,8 @@
 using Content.Shared.Coordinates;
 using Robust.Shared.Prototypes;
 using AbominationComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationComponent;
-using AbominationPlantKudzuActionEvent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationPlantKudzuActionEvent;
+using AbominationPlantKudzuActionEvent
+    = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationPlantKudzuActionEvent;
 
 namespace Content.Server._CMU14.Threats.Mobs.Abomination;
 
@@ -20,6 +21,6 @@ public sealed class AbominationKudzuSystem : EntitySystem
             return;
 
         args.Handled = true;
-        Spawn(AbominationKudzuSystem.KudzuSource, ent.Owner.ToCoordinates());
+        Spawn(KudzuSource, ent.Owner.ToCoordinates());
     }
 }

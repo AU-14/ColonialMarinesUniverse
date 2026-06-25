@@ -7,12 +7,10 @@ namespace Content.Shared._CMU14.Threats.Mobs.Ape;
 public sealed partial class ApeDestroyLeapingComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public EntityCoordinates? Target;
+    public TimeSpan? LeapEndAt;
 
     [DataField, AutoNetworkedField]
     public TimeSpan? LeapMoveAt;
-
     [DataField, AutoNetworkedField]
-    public TimeSpan? LeapEndAt;
+    public EntityCoordinates? Target;
 }
-

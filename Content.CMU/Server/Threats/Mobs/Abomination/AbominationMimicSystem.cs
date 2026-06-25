@@ -26,10 +26,14 @@ using Robust.Shared.Timing;
 using AbominationAppearanceSnapshot = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationAppearanceSnapshot;
 using AbominationAssimilationProfile = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationAssimilationProfile;
 using AbominationMimicComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicComponent;
-using AbominationMimicRevertActionEvent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicRevertActionEvent;
-using AbominationMimicRevertingComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicRevertingComponent;
-using AbominationMimicTransformActionEvent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicTransformActionEvent;
-using AbominationMimicTransformedComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicTransformedComponent;
+using AbominationMimicRevertActionEvent
+    = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicRevertActionEvent;
+using AbominationMimicRevertingComponent
+    = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicRevertingComponent;
+using AbominationMimicTransformActionEvent
+    = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicTransformActionEvent;
+using AbominationMimicTransformedComponent
+    = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicTransformedComponent;
 using TribalComponent = Content.Shared._CMU14.Threats.Mobs.Tribal.TribalComponent;
 
 namespace Content.Server._CMU14.Threats.Mobs.Abomination;
@@ -51,26 +55,25 @@ namespace Content.Server._CMU14.Threats.Mobs.Abomination;
 /// </summary>
 public sealed partial class AbominationMimicSystem : EntitySystem
 {
-    public const string AbominationRadioChannel = "Abomination";
+    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly NpcFactionSystem _faction = default!;
+    [Dependency] private readonly GunIFFSystem _gunIff = default!;
+    [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private readonly SharedJitteringSystem _jitter = default!;
+    [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private readonly PolymorphSystem _polymorph = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly SkillsSystem _skills = default!;
+    [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
     public static readonly ProtoId<PolymorphPrototype> DisguisePolymorph = "AbominationMimicDisguise";
     public static readonly EntProtoId RevertAction = "ActionAbominationMimicRevert";
     public static readonly ProtoId<EmotePrototype> ScreamEmote = "Scream";
-
-    [Dependency] private SharedActionsSystem _actions = default!;
-    [Dependency] private ChatSystem _chat = default!;
-    [Dependency] private DamageableSystem _damageable = default!;
-    [Dependency] private NpcFactionSystem _faction = default!;
-    [Dependency] private GunIFFSystem _gunIff = default!;
-    [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
-    [Dependency] private SharedJitteringSystem _jitter = default!;
-    [Dependency] private MetaDataSystem _metaData = default!;
-    [Dependency] private PolymorphSystem _polymorph = default!;
-    [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
-    [Dependency] private SkillsSystem _skills = default!;
-    [Dependency] private SharedStunSystem _stun = default!;
-    [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    public const string AbominationRadioChannel = "Abomination";
 
     public override void Initialize()
     {
@@ -94,8 +97,38 @@ public sealed partial class AbominationMimicSystem : EntitySystem
         });
     }
 
+    public override void Update(float frameTime)
+    {
+        TimeSpan now = _timing.CurTime;
+
+        // Stage 1: trigger BeginRevert when the disguise's lifetime ends.
+        EntityQueryEnumerator<AbominationMimicTransformedComponent, PolymorphedEntityComponent> disguised
+            = EntityQueryEnumerator<AbominationMimicTransformedComponent, PolymorphedEntityComponent>();
+        while (disguised.MoveNext(out EntityUid uid, out AbominationMimicTransformedComponent? tracker, out _))
+        {
+            if (HasComp<AbominationMimicRevertingComponent>(uid))
+                continue;
+            if (tracker.ExpiresAt > now)
+                continue;
+
+            BeginRevert(uid);
+        }
+
+        // Stage 2: actually polymorph-revert once the shake-and-scream timer ends.
+        EntityQueryEnumerator<AbominationMimicRevertingComponent, PolymorphedEntityComponent> reverting
+            = EntityQueryEnumerator<AbominationMimicRevertingComponent, PolymorphedEntityComponent>();
+        while (reverting.MoveNext(out EntityUid uid, out AbominationMimicRevertingComponent? revert,
+            out PolymorphedEntityComponent? polymorphed))
+        {
+            if (revert.RevertAt > now)
+                continue;
+
+            FinishRevert(uid, polymorphed);
+        }
+    }
+
     private void OnTransformAction(Entity<AbominationMimicComponent> mimic,
-        ref AbominationMimicTransformActionEvent                     args)
+        ref AbominationMimicTransformActionEvent args)
     {
         Log.Info($"[mimic] OnTransformAction fired on {ToPrettyString(mimic)} performer={ToPrettyString(args.Performer)
         } action={ToPrettyString(args.Action.Owner)} pool={mimic.Comp.AssimilatedPool.Count}");
@@ -168,7 +201,7 @@ public sealed partial class AbominationMimicSystem : EntitySystem
     ///     Then patch the disguise on top and grant the Revert action.
     /// </summary>
     public EntityUid? StartDisguise(Entity<AbominationMimicComponent> mimic, AbominationAssimilationProfile profile,
-        TimeSpan                                                      duration)
+        TimeSpan duration)
     {
         Log.Info($"[mimic] StartDisguise mimic={ToPrettyString(mimic)} profile={profile.Name} sourceProto={
             profile.SourceProtoId ?? "(humanoid)"}");
@@ -178,27 +211,26 @@ public sealed partial class AbominationMimicSystem : EntitySystem
         // Animal profiles carry a SourceProtoId — polymorph straight into that
         // prototype so the mimic actually BECOMES that animal, instead of
         // becoming a human named "rat".
-        if (profile.SourceProtoId is { } animalProto &&
-            _proto.HasIndex<EntityPrototype>(animalProto))
+        if (profile.SourceProtoId is { } animalProto && _proto.HasIndex<EntityPrototype>(animalProto))
         {
             var config = new PolymorphConfiguration
             {
-                Entity         = animalProto,
-                Forced         = true,
-                Inventory      = PolymorphInventoryChange.Drop,
-                TransferName   = false,
+                Entity = animalProto,
+                Forced = true,
+                Inventory = PolymorphInventoryChange.Drop,
+                TransferName = false,
                 TransferDamage = true,
 
                 // Mimics from assimilation already have PolymorphedEntityComponent;
                 // allow stacking the disguise polymorph on top.
                 AllowRepeatedMorphs = true,
-                RevertOnCrit        = false,
-                RevertOnDeath       = false
+                RevertOnCrit = false,
+                RevertOnDeath = false
             };
             disguised = _polymorph.PolymorphEntity(mimic.Owner, config);
         }
         else
-            disguised = _polymorph.PolymorphEntity(mimic.Owner, AbominationMimicSystem.DisguisePolymorph);
+            disguised = _polymorph.PolymorphEntity(mimic.Owner, DisguisePolymorph);
 
         if (disguised is not { } disguisedUid)
         {
@@ -209,13 +241,13 @@ public sealed partial class AbominationMimicSystem : EntitySystem
         }
 
         var carried = EnsureComp<AbominationMimicComponent>(disguisedUid);
-        carried.AssimilatedPool   = new(mimic.Comp.AssimilatedPool);
+        carried.AssimilatedPool = new(mimic.Comp.AssimilatedPool);
         carried.TransformDuration = mimic.Comp.TransformDuration;
         carried.TransformCooldown = mimic.Comp.TransformCooldown;
         Dirty(disguisedUid, carried);
 
         var tracker = EnsureComp<AbominationMimicTransformedComponent>(disguisedUid);
-        tracker.Profile   = profile;
+        tracker.Profile = profile;
         tracker.ExpiresAt = _timing.CurTime + duration;
         Dirty(disguisedUid, tracker);
 
@@ -228,29 +260,29 @@ public sealed partial class AbominationMimicSystem : EntitySystem
         // Grant the disguise the abomination radio channel — the disguised
         // mimic still hears + speaks to the flesh-hivemind even while
         // wearing a face.
-        var receiver    = EnsureComp<IntrinsicRadioReceiverComponent>(disguisedUid);
+        var receiver = EnsureComp<IntrinsicRadioReceiverComponent>(disguisedUid);
         var transmitter = EnsureComp<IntrinsicRadioTransmitterComponent>(disguisedUid);
         var activeRadio = EnsureComp<ActiveRadioComponent>(disguisedUid);
-        transmitter.Channels.Add(AbominationMimicSystem.AbominationRadioChannel);
-        activeRadio.Channels.Add(AbominationMimicSystem.AbominationRadioChannel);
+        transmitter.Channels.Add(AbominationRadioChannel);
+        activeRadio.Channels.Add(AbominationRadioChannel);
 
         // Every transform resets damage on the new body — mimics spawn
         // fresh into the disguise no matter how chewed-up they were.
         HealToFull(disguisedUid);
 
-        _actions.AddAction(disguisedUid, AbominationMimicSystem.RevertAction);
+        _actions.AddAction(disguisedUid, RevertAction);
 
         return disguisedUid;
     }
 
     private void HealToFull(EntityUid uid)
     {
-        if (TryComp<DamageableComponent>(uid, out DamageableComponent? damageable))
+        if (TryComp(uid, out DamageableComponent? damageable))
             _damageable.SetAllDamage(uid, damageable, FixedPoint2.Zero);
     }
 
     private void OnRevertAction(Entity<AbominationMimicTransformedComponent> ent,
-        ref AbominationMimicRevertActionEvent                                args)
+        ref AbominationMimicRevertActionEvent args)
     {
         if (args.Handled)
             return;
@@ -260,7 +292,7 @@ public sealed partial class AbominationMimicSystem : EntitySystem
     }
 
     private void OnDisguisedMobStateChanged(Entity<AbominationMimicTransformedComponent> ent,
-        ref MobStateChangedEvent                                                         args)
+        ref MobStateChangedEvent args)
     {
         // Death == instant revert at full health, no shake-and-scream wind-up
         // (engine can gib the disguise before the 7s timer fires, leaving the
@@ -284,7 +316,7 @@ public sealed partial class AbominationMimicSystem : EntitySystem
     /// </summary>
     private void ImmediateRevert(EntityUid disguisedUid)
     {
-        if (!TryComp<PolymorphedEntityComponent>(disguisedUid, out PolymorphedEntityComponent? polymorphed))
+        if (!TryComp(disguisedUid, out PolymorphedEntityComponent? polymorphed))
             return;
 
         // Stop the slow wind-up if one was already in flight.
@@ -294,7 +326,7 @@ public sealed partial class AbominationMimicSystem : EntitySystem
     }
 
     private void OnDisguisedTerminating(Entity<AbominationMimicTransformedComponent> ent,
-        ref EntityTerminatingEvent                                                   args)
+        ref EntityTerminatingEvent args)
     {
         ImmediateRevert(ent.Owner);
     }
@@ -320,38 +352,8 @@ public sealed partial class AbominationMimicSystem : EntitySystem
         // visible at a glance.
         _jitter.DoJitter(mimic, reverting.JitterDuration, true, 20, 18);
         _stun.TryParalyze(mimic, reverting.JitterDuration, true);
-        _chat.TryEmoteWithChat(mimic, AbominationMimicSystem.ScreamEmote);
+        _chat.TryEmoteWithChat(mimic, ScreamEmote);
         _popup.PopupClient(Loc.GetString("abomination-mimic-transform-revert"), mimic, mimic);
-    }
-
-    public override void Update(float frameTime)
-    {
-        TimeSpan now = _timing.CurTime;
-
-        // Stage 1: trigger BeginRevert when the disguise's lifetime ends.
-        EntityQueryEnumerator<AbominationMimicTransformedComponent, PolymorphedEntityComponent> disguised
-            = EntityQueryEnumerator<AbominationMimicTransformedComponent, PolymorphedEntityComponent>();
-        while (disguised.MoveNext(out EntityUid uid, out AbominationMimicTransformedComponent? tracker, out _))
-        {
-            if (HasComp<AbominationMimicRevertingComponent>(uid))
-                continue;
-            if (tracker.ExpiresAt > now)
-                continue;
-
-            BeginRevert(uid);
-        }
-
-        // Stage 2: actually polymorph-revert once the shake-and-scream timer ends.
-        EntityQueryEnumerator<AbominationMimicRevertingComponent, PolymorphedEntityComponent> reverting
-            = EntityQueryEnumerator<AbominationMimicRevertingComponent, PolymorphedEntityComponent>();
-        while (reverting.MoveNext(out EntityUid uid, out AbominationMimicRevertingComponent? revert,
-                   out PolymorphedEntityComponent? polymorphed))
-        {
-            if (revert.RevertAt > now)
-                continue;
-
-            FinishRevert(uid, polymorphed);
-        }
     }
 
     private void FinishRevert(EntityUid disguisedUid, PolymorphedEntityComponent polymorphed)
@@ -359,8 +361,8 @@ public sealed partial class AbominationMimicSystem : EntitySystem
         // Carry pool changes back, then stamp the cooldown on the original
         // mimic's transform action entity. SetCooldown grays out only THAT
         // action; other mimics' action entities are untouched.
-        if (TryComp<AbominationMimicComponent>(disguisedUid, out AbominationMimicComponent? disguisedMimic)
-         && TryComp<AbominationMimicComponent>(polymorphed.Parent, out AbominationMimicComponent? originalMimic))
+        if (TryComp(disguisedUid, out AbominationMimicComponent? disguisedMimic)
+            && TryComp(polymorphed.Parent, out AbominationMimicComponent? originalMimic))
         {
             originalMimic.AssimilatedPool = new(disguisedMimic.AssimilatedPool);
             Dirty(polymorphed.Parent, originalMimic);
@@ -410,7 +412,7 @@ public sealed partial class AbominationMimicSystem : EntitySystem
 
     private void ApplyFactions(EntityUid disguised, IEnumerable<string> factions)
     {
-        if (!TryComp<NpcFactionMemberComponent>(disguised, out NpcFactionMemberComponent? npc))
+        if (!TryComp(disguised, out NpcFactionMemberComponent? npc))
             return;
 
         foreach (ProtoId<NpcFactionPrototype> existing in npc.Factions.ToArray())
@@ -435,9 +437,9 @@ public sealed partial class AbominationMimicSystem : EntitySystem
 
     private void CopySkillsFromSource(EntityUid disguised, AbominationAssimilationProfile profile)
     {
-        if (profile.SourceEntity is not { } netSource ||
-            !TryGetEntity(netSource, out EntityUid? source) ||
-            !TryComp<SkillsComponent>(source.Value, out SkillsComponent? sourceSkills))
+        if (profile.SourceEntity is not { } netSource
+            || !TryGetEntity(netSource, out EntityUid? source)
+            || !TryComp(source.Value, out SkillsComponent? sourceSkills))
             return;
 
         _skills.SetSkills(disguised, new Dictionary<EntProtoId<SkillDefinitionComponent>, int>(sourceSkills.Skills));
@@ -448,16 +450,16 @@ public sealed partial class AbominationMimicSystem : EntitySystem
         if (snapshot is null || string.IsNullOrEmpty(snapshot.Species.Id))
             return;
 
-        if (!TryComp<HumanoidAppearanceComponent>(disguised, out HumanoidAppearanceComponent? humanoid))
+        if (!TryComp(disguised, out HumanoidAppearanceComponent? humanoid))
             return;
 
         _humanoid.SetSpecies(disguised, snapshot.Species, false, humanoid);
         _humanoid.SetSex(disguised, snapshot.Sex, false, humanoid);
-        humanoid.SkinColor        = snapshot.SkinColor;
-        humanoid.EyeColor         = snapshot.EyeColor;
-        humanoid.Age              = snapshot.Age;
-        humanoid.Gender           = snapshot.Gender;
-        humanoid.MarkingSet       = new(snapshot.MarkingSet);
+        humanoid.SkinColor = snapshot.SkinColor;
+        humanoid.EyeColor = snapshot.EyeColor;
+        humanoid.Age = snapshot.Age;
+        humanoid.Gender = snapshot.Gender;
+        humanoid.MarkingSet = new(snapshot.MarkingSet);
         humanoid.CustomBaseLayers = new(snapshot.CustomBaseLayers);
         Dirty(disguised, humanoid);
     }

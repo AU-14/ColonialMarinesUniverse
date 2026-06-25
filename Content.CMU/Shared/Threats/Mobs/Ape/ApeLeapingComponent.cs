@@ -8,10 +8,39 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared._CMU14.Threats.Mobs.Ape;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
-[Access(typeof(ApeLeapSystem))]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause,
+ Access(typeof(ApeLeapSystem))]
 public sealed partial class ApeLeapingComponent : Component
 {
+    [DataField, AutoNetworkedField]
+    public DamageSpecifier Damage = new();
+
+    [DataField, AutoNetworkedField]
+    public bool DestroyObjects;
+
+    [DataField, AutoNetworkedField]
+    public EntProtoId? HitEffect;
+
+    [DataField, AutoNetworkedField]
+    public CollisionGroup IgnoredCollisionGroupLarge;
+
+    [DataField, AutoNetworkedField]
+    public CollisionGroup IgnoredCollisionGroupSmall;
+
+    [DataField, AutoNetworkedField]
+    public bool KnockdownRequiresInvisibility;
+
+    [DataField, AutoNetworkedField]
+    public bool KnockedDown;
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    public TimeSpan LeapEndTime;
+
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier? LeapSound;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan MoveDelayTime;
     [DataField, AutoNetworkedField]
     public EntityCoordinates Origin;
 
@@ -19,42 +48,11 @@ public sealed partial class ApeLeapingComponent : Component
     public TimeSpan ParalyzeTime;
 
     [DataField, AutoNetworkedField]
-    public SoundSpecifier? LeapSound;
-
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
-    public TimeSpan LeapEndTime;
-
-    [DataField, AutoNetworkedField]
-    public TimeSpan MoveDelayTime;
-
-    [DataField, AutoNetworkedField]
-    public bool KnockedDown;
-
-    [DataField, AutoNetworkedField]
     public bool PlayedSound;
-
-    [DataField, AutoNetworkedField]
-    public bool KnockdownRequiresInvisibility;
-
-    [DataField, AutoNetworkedField]
-    public bool DestroyObjects;
-
-    [DataField, AutoNetworkedField]
-    public DamageSpecifier Damage = new();
-
-    [DataField, AutoNetworkedField]
-    public EntProtoId? HitEffect;
-
-    [DataField, AutoNetworkedField]
-    public TimeSpan TargetJitterTime;
 
     [DataField, AutoNetworkedField]
     public int TargetCameraShakeStrength;
 
     [DataField, AutoNetworkedField]
-    public CollisionGroup IgnoredCollisionGroupLarge;
-
-    [DataField, AutoNetworkedField]
-    public CollisionGroup IgnoredCollisionGroupSmall;
+    public TimeSpan TargetJitterTime;
 }
-

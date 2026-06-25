@@ -9,14 +9,15 @@ namespace Content.Client._CMU14.Threats.Mobs.Xeno;
 
 public sealed partial class XenoHiveColorVisualizerSystem : VisualizerSystem<HiveMemberComponent>
 {
-    protected override void OnAppearanceChange(EntityUid uid, HiveMemberComponent component, ref AppearanceChangeEvent args)
+    protected override void OnAppearanceChange(EntityUid uid, HiveMemberComponent component,
+        ref AppearanceChangeEvent args)
     {
         base.OnAppearanceChange(uid, component, ref args);
 
         if (args.Sprite == null)
             return;
 
-        if (!AppearanceSystem.TryGetData<Color>(uid, XenoHiveVisuals.Color, out var color, args.Component))
+        if (!AppearanceSystem.TryGetData(uid, XenoHiveVisuals.Color, out Color color, args.Component))
             return;
 
         SpriteSystem.SetColor((uid, args.Sprite), color);

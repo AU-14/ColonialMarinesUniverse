@@ -11,9 +11,11 @@ using Content.Shared.Polymorph;
 using Content.Shared.Popups;
 using Robust.Shared.Prototypes;
 using AbominationAppearanceSnapshot = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationAppearanceSnapshot;
-using AbominationAssimilateActionEvent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationAssimilateActionEvent;
+using AbominationAssimilateActionEvent
+    = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationAssimilateActionEvent;
 using AbominationAssimilateComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationAssimilateComponent;
-using AbominationAssimilateDoAfterEvent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationAssimilateDoAfterEvent;
+using AbominationAssimilateDoAfterEvent
+    = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationAssimilateDoAfterEvent;
 using AbominationAssimilationProfile = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationAssimilationProfile;
 using AbominationComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationComponent;
 using AbominationInfectableComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationInfectableComponent;
@@ -24,24 +26,21 @@ namespace Content.Server._CMU14.Threats.Mobs.Abomination;
 
 public sealed partial class AbominationAssimilateSystem : EntitySystem
 {
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly PolymorphSystem _polymorph = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
     /// <summary>Polymorph used when a humanoid victim turns.</summary>
     public static readonly ProtoId<PolymorphPrototype> HumanoidTurnPolymorph = "AbominationAssimilationToMimic";
 
     /// <summary>Polymorph used when an animal victim turns — they become a spider, not a mimic.</summary>
     public static readonly ProtoId<PolymorphPrototype> AnimalTurnPolymorph = "AbominationAssimilationToSpider";
 
-    [Dependency] private SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private MobStateSystem _mobState = default!;
-    [Dependency] private PolymorphSystem _polymorph = default!;
-    [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
-
     public override void Initialize()
     {
-        SubscribeLocalEvent<AbominationAssimilateComponent, AbominationAssimilateActionEvent>(
-            OnAssimilateAction);
-        SubscribeLocalEvent<AbominationAssimilateComponent, AbominationAssimilateDoAfterEvent>(
-            OnAssimilateDoAfter);
+        SubscribeLocalEvent<AbominationAssimilateComponent, AbominationAssimilateActionEvent>(OnAssimilateAction);
+        SubscribeLocalEvent<AbominationAssimilateComponent, AbominationAssimilateDoAfterEvent>(OnAssimilateDoAfter);
 
         // Any fresh AbominationMimicComponent — partyspawn, ghost takeover,
         // infection-death polymorph, admin spawn — inherits the current global
@@ -85,7 +84,7 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
     }
 
     private void OnAssimilateAction(Entity<AbominationAssimilateComponent> mimic,
-        ref AbominationAssimilateActionEvent                               args)
+        ref AbominationAssimilateActionEvent args)
     {
         if (args.Handled)
             return;
@@ -102,9 +101,9 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
         var ev = new AbominationAssimilateDoAfterEvent();
         var doAfter = new DoAfterArgs(EntityManager, mimic.Owner, mimic.Comp.DoAfter, ev, mimic.Owner, args.Target)
         {
-            BreakOnMove        = true,
-            BreakOnDamage      = true,
-            NeedHand           = false,
+            BreakOnMove = true,
+            BreakOnDamage = true,
+            NeedHand = false,
             RequireCanInteract = true
         };
 
@@ -112,7 +111,7 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
     }
 
     private void OnAssimilateDoAfter(Entity<AbominationAssimilateComponent> mimic,
-        ref AbominationAssimilateDoAfterEvent                               args)
+        ref AbominationAssimilateDoAfterEvent args)
     {
         if (args.Handled || args.Cancelled)
             return;
@@ -129,8 +128,8 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
 
         args.Handled = true;
 
-        bool                           isHumanoid = HasComp<HumanoidAppearanceComponent>(target);
-        AbominationAssimilationProfile profile    = BuildProfile(target);
+        bool isHumanoid = HasComp<HumanoidAppearanceComponent>(target);
+        AbominationAssimilationProfile profile = BuildProfile(target);
         AddProfileToAllMimics(profile);
 
         _popup.PopupEntity(Loc.GetString("abomination-assimilate-complete", ("target", Name(target))),
@@ -138,8 +137,8 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
 
         // Humanoid victims become mimics; animal victims become spiders.
         ProtoId<PolymorphPrototype> polymorphId = isHumanoid
-            ? AbominationAssimilateSystem.HumanoidTurnPolymorph
-            : AbominationAssimilateSystem.AnimalTurnPolymorph;
+            ? HumanoidTurnPolymorph
+            : AnimalTurnPolymorph;
         EntityUid? newAbomination = _polymorph.PolymorphEntity(target, polymorphId);
         if (newAbomination is { } newUid && isHumanoid)
         {
@@ -210,10 +209,10 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
 
         var profile = new AbominationAssimilationProfile
         {
-            Name          = displayName,
-            SourceEntity  = GetNetEntity(target),
+            Name = displayName,
+            SourceEntity = GetNetEntity(target),
             SourceProtoId = isHumanoid ? null : protoId,
-            IsTribal      = HasComp<TribalComponent>(target)
+            IsTribal = HasComp<TribalComponent>(target)
         };
 
         if (TryComp(target, out NpcFactionMemberComponent? npcFaction))
@@ -240,13 +239,13 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
 
     private static AbominationAppearanceSnapshot SnapshotAppearance(HumanoidAppearanceComponent humanoid) => new()
     {
-        Species          = humanoid.Species,
-        SkinColor        = humanoid.SkinColor,
-        EyeColor         = humanoid.EyeColor,
-        Sex              = humanoid.Sex,
-        Gender           = humanoid.Gender,
-        Age              = humanoid.Age,
-        MarkingSet       = new(humanoid.MarkingSet),
+        Species = humanoid.Species,
+        SkinColor = humanoid.SkinColor,
+        EyeColor = humanoid.EyeColor,
+        Sex = humanoid.Sex,
+        Gender = humanoid.Gender,
+        Age = humanoid.Age,
+        MarkingSet = new(humanoid.MarkingSet),
         CustomBaseLayers = new(humanoid.CustomBaseLayers)
     };
 
@@ -264,8 +263,8 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
         {
             // Animal profiles dedupe by SourceProtoId — only the first rat ever
             // assimilated goes in the pool, every subsequent rat is a no-op.
-            if (profile.SourceProtoId is not null &&
-                mimic.AssimilatedPool.Exists(p => p.SourceProtoId == profile.SourceProtoId))
+            if (profile.SourceProtoId is not null
+                && mimic.AssimilatedPool.Exists(p => p.SourceProtoId == profile.SourceProtoId))
                 continue;
 
             mimic.AssimilatedPool.Add(profile);

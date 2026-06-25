@@ -2,7 +2,7 @@ using Content.Server.AU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Shared._RMC14.Evacuation;
-using Content.Shared.AU14;
+using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using KillAllTribeRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllTribeRuleComponent;
@@ -12,11 +12,10 @@ namespace Content.Server._CMU14.Threats.Rules;
 
 public sealed partial class KillAllTribeRuleSystem : GameRuleSystem<KillAllTribeRuleComponent>
 {
-    [Dependency] private AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private GameTicker _gameTicker = default!;
-    [Dependency] private EntityManager _entMan = default!;
-    [Dependency] private ThreatRuleHelper _threatRuleHelper = default!;
-
+    [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private readonly EntityManager _entMan = default!;
+    [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private readonly ThreatRuleHelper _threatRuleHelper = default!;
     private const string DefaultWinMsg = "The Threat has been Eliminated";
 
     public override void Initialize()
@@ -45,14 +44,15 @@ public sealed partial class KillAllTribeRuleSystem : GameRuleSystem<KillAllTribe
 
     private void CheckVictoryCondition()
     {
-        var queryRule = QueryActiveRules();
+        EntityQueryEnumerator<ActiveGameRuleComponent, KillAllTribeRuleComponent, GameRuleComponent> queryRule
+            = QueryActiveRules();
         if (!ThreatRuleHelper.TryGetActiveRule(ref queryRule, out KillAllTribeRuleComponent ruleComp, out _))
             return;
 
         int requiredPercent = Math.Clamp(ruleComp.Percent, 1, 100);
         int eliminated = 0, total = 0;
 
-        var query = _entMan.EntityQueryEnumerator<MobStateComponent>();
+        EntityQueryEnumerator<MobStateComponent> query = _entMan.EntityQueryEnumerator<MobStateComponent>();
         while (query.MoveNext(out EntityUid uid, out MobStateComponent? mobState))
         {
             if (!_entMan.HasComponent<TribalComponent>(uid))

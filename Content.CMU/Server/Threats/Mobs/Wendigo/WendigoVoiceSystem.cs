@@ -16,6 +16,12 @@ namespace Content.Server._CMU14.Threats.Mobs.Wendigo;
 
 public sealed partial class WendigoVoiceSystem : EntitySystem
 {
+    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly UserInterfaceSystem _ui = default!;
     private static readonly Dictionary<string, string> EmoteToSound = new()
     {
         // Voice lines
@@ -44,13 +50,6 @@ public sealed partial class WendigoVoiceSystem : EntitySystem
         { "WendigoWeCantGetOut", "/Audio/_AU14/Wendigo/mimicry/we_cant_get_out.ogg" },
         { "WendigoWhereAreYou", "/Audio/_AU14/Wendigo/mimicry/where_are_you.ogg" }
     };
-
-    [Dependency] private SharedActionsSystem _actions = default!;
-    [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private ChatSystem _chat = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
-    [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private UserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {
@@ -82,16 +81,14 @@ public sealed partial class WendigoVoiceSystem : EntitySystem
         if (emote.ChatMessages.Count > 0)
         {
             string msg = Loc.GetString(_random.Pick(emote.ChatMessages));
-            _chat.TrySendInGameICMessage(
-                ent.Owner,
+            _chat.TrySendInGameICMessage(ent.Owner,
                 msg,
                 InGameICChatType.Speak,
                 ChatTransmitRange.Normal,
-                nameOverride: null
-            );
+                nameOverride: null);
         }
 
-        if (!WendigoVoiceSystem.EmoteToSound.TryGetValue(args.EmoteId, out string? soundValue))
+        if (!EmoteToSound.TryGetValue(args.EmoteId, out string? soundValue))
             return;
 
         SoundSpecifier sound = soundValue.StartsWith('/')

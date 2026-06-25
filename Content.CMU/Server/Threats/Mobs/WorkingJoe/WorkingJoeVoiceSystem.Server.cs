@@ -16,13 +16,12 @@ namespace Content.Server._CMU14.Threats.Mobs.WorkingJoe;
 
 public sealed partial class WorkingJoeVoiceSystem : EntitySystem
 {
-    [Dependency] private UserInterfaceSystem _ui = default!;
-    [Dependency] private SharedActionsSystem _actions = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
-    [Dependency] private ChatSystem _chat = default!;
-    [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private IRobustRandom _random = default!;
-
+    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly UserInterfaceSystem _ui = default!;
     private static readonly (string SoundCollectionId, string? LocKey)[] DeathSounds =
     {
         ("AU14WorkingJoeDeathNormalVar1", null),
@@ -33,7 +32,7 @@ public sealed partial class WorkingJoeVoiceSystem : EntitySystem
         ("AU14WorkingJoeSilenceVar2", null),
         ("AU14WorkingJoeSilenceVar3", null),
         ("AU14WorkingJoeSilenceVar4", null),
-        ("AU14WorkingJoeToSleepPerchanceToDreamVar1", null),
+        ("AU14WorkingJoeToSleepPerchanceToDreamVar1", null)
     };
 
     public override void Initialize()
@@ -65,22 +64,20 @@ public sealed partial class WorkingJoeVoiceSystem : EntitySystem
 
     private void OnPlayLine(Entity<WorkingJoeVoiceComponent> ent, ref WorkingJoePlayLineMessage args)
     {
-        if (!_proto.TryIndex<EmotePrototype>(args.EmoteId, out var emote))
+        if (!_proto.TryIndex(args.EmoteId, out EmotePrototype? emote))
             return;
 
         if (emote.ChatMessages.Count > 0)
         {
-            var msg = Loc.GetString(_random.Pick(emote.ChatMessages));
-            _chat.TrySendInGameICMessage(
-                ent.Owner,
+            string msg = Loc.GetString(_random.Pick(emote.ChatMessages));
+            _chat.TrySendInGameICMessage(ent.Owner,
                 msg,
                 InGameICChatType.Speak,
                 ChatTransmitRange.Normal,
-                nameOverride: null
-            );
+                nameOverride: null);
         }
 
-        var soundId = "AU14" + args.EmoteId;
+        string soundId = "AU14" + args.EmoteId;
         var sound = new SoundCollectionSpecifier(soundId);
         _audio.PlayPvs(sound, ent.Owner);
     }
@@ -90,7 +87,7 @@ public sealed partial class WorkingJoeVoiceSystem : EntitySystem
         if (args.NewMobState != MobState.Dead)
             return;
 
-        var pick = _random.Pick(DeathSounds);
+        (string SoundCollectionId, string? LocKey) pick = _random.Pick(DeathSounds);
         var sound = new SoundCollectionSpecifier(pick.SoundCollectionId, AudioParams.Default.WithVolume(6f));
         _audio.PlayPvs(sound, ent.Owner);
     }

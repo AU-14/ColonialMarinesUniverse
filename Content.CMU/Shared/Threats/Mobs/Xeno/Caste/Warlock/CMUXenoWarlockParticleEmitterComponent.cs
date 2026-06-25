@@ -10,7 +10,7 @@ public enum CMUXenoWarlockParticleEffect : byte
     PsychicCrushCharge,
     PsychicBlastCharge,
     PsychicLanceCharge,
-    CrushWarning,
+    CrushWarning
 }
 
 public readonly record struct CMUXenoWarlockParticleProfile(
@@ -27,23 +27,23 @@ public readonly record struct CMUXenoWarlockParticleProfile(
     Vector2 PositionRadius,
     Vector2 ScaleMin,
     Vector2 ScaleMax,
-    Vector2 HolderOffset);
+    Vector2 HolderOffset
+);
 
 public readonly record struct CMUXenoWarlockParticleMotion(Vector2 Velocity, Vector2 Gravity);
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-[Access(typeof(CMUXenoWarlockSystem))]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, Access(typeof(CMUXenoWarlockSystem))]
 public sealed partial class CMUXenoWarlockParticleEmitterComponent : Component
 {
     [DataField, AutoNetworkedField]
     public CMUXenoWarlockParticleEffect Effect;
 
     [DataField, AutoNetworkedField]
-    public bool UseMotionOverride;
+    public Vector2 MotionGravity;
 
     [DataField, AutoNetworkedField]
     public Vector2 MotionVelocity;
 
     [DataField, AutoNetworkedField]
-    public Vector2 MotionGravity;
+    public bool UseMotionOverride;
 }

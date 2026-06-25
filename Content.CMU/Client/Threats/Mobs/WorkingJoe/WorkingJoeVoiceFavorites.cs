@@ -6,9 +6,9 @@ namespace Content.Client._CMU14.Threats.Mobs.WorkingJoe;
 public sealed class WorkingJoeVoiceFavorites
 {
     private static readonly ResPath Path = new("/working_joe_voice_favorites.txt");
+    private readonly HashSet<string> _favorites = new();
 
     private readonly IResourceManager _resource;
-    private readonly HashSet<string> _favorites = new();
 
     public WorkingJoeVoiceFavorites(IResourceManager resource)
     {
@@ -28,12 +28,12 @@ public sealed class WorkingJoeVoiceFavorites
 
     private void Load()
     {
-        if (!_resource.UserData.TryReadAllText(Path, out var text))
+        if (!_resource.UserData.TryReadAllText(Path, out string? text))
             return;
 
-        foreach (var line in text.Split('\n'))
+        foreach (string line in text.Split('\n'))
         {
-            var trimmed = line.Trim();
+            string trimmed = line.Trim();
             if (trimmed.Length > 0)
                 _favorites.Add(trimmed);
         }
@@ -41,7 +41,7 @@ public sealed class WorkingJoeVoiceFavorites
 
     private void Save()
     {
-        var content = string.Join("\n", _favorites);
+        string content = string.Join("\n", _favorites);
         _resource.UserData.WriteAllText(Path, content);
     }
 }

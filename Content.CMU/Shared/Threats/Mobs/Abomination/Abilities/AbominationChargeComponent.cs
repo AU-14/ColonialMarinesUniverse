@@ -7,17 +7,14 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities;
 
 /// <summary>
-/// Crusher-style charge ability. Bigger / longer than AbominationLeap and
-/// also damages structures it ploughs into. Used by the grunt.
+///     Crusher-style charge ability. Bigger / longer than AbominationLeap and
+///     also damages structures it ploughs into. Used by the grunt.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class AbominationChargeComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public float Range = 14f;
-
-    [DataField, AutoNetworkedField]
-    public float Strength = 40f;
+    public SoundSpecifier? ChargeSound;
 
     [DataField, AutoNetworkedField]
     public TimeSpan FlightDuration = TimeSpan.FromSeconds(1.4);
@@ -27,12 +24,14 @@ public sealed partial class AbominationChargeComponent : Component
 
     [DataField, AutoNetworkedField]
     public DamageSpecifier MobDamage = new();
+    [DataField, AutoNetworkedField]
+    public float Range = 14f;
+
+    [DataField, AutoNetworkedField]
+    public float Strength = 40f;
 
     [DataField, AutoNetworkedField]
     public DamageSpecifier StructureDamage = new();
-
-    [DataField, AutoNetworkedField]
-    public SoundSpecifier? ChargeSound;
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]

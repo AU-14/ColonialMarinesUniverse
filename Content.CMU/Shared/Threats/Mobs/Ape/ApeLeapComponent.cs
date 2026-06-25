@@ -11,51 +11,31 @@ namespace Content.Shared._CMU14.Threats.Mobs.Ape;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 public sealed partial class ApeLeapComponent : Component
 {
+    [DataField, AutoNetworkedField]
+    public DamageSpecifier Damage = new();
+
     // No plasma cost for ape
     [DataField, AutoNetworkedField]
     public TimeSpan Delay = TimeSpan.FromSeconds(2);
 
     [DataField, AutoNetworkedField]
-    public FixedPoint2 Range = FixedPoint2.New(6);
-
-    [DataField, AutoNetworkedField]
-    public TimeSpan KnockdownTime = TimeSpan.FromSeconds(1);
-
-    [DataField, AutoNetworkedField]
-    public SoundSpecifier? LeapSound;
-
-    [DataField, AutoNetworkedField]
-    public int Strength = 20;
-
-    [DataField, AutoNetworkedField]
-    public bool KnockdownRequiresInvisibility;
-
-    [DataField, AutoNetworkedField]
-    public TimeSpan MoveDelayTime = TimeSpan.FromSeconds(.7);
-
-    [DataField, AutoNetworkedField]
-    public bool UnrootOnMelee;
-
-    [DataField, AutoNetworkedField]
     public bool DestroyObjects;
-
-    [DataField, AutoNetworkedField]
-    public DamageSpecifier Damage = new();
 
     [DataField, AutoNetworkedField]
     public EntProtoId? HitEffect;
 
     [DataField, AutoNetworkedField]
-    public TimeSpan TargetJitterTime = TimeSpan.FromSeconds(0);
-
-    [DataField, AutoNetworkedField]
-    public int TargetCameraShakeStrength;
-
-    [DataField, AutoNetworkedField]
-    public CollisionGroup IgnoredCollisionGroupLarge = CollisionGroup.BarricadeImpassable | CollisionGroup.MidImpassable;
+    public CollisionGroup
+        IgnoredCollisionGroupLarge = CollisionGroup.BarricadeImpassable | CollisionGroup.MidImpassable;
 
     [DataField, AutoNetworkedField]
     public CollisionGroup IgnoredCollisionGroupSmall = CollisionGroup.BarricadeImpassable;
+
+    [DataField, AutoNetworkedField]
+    public bool KnockdownRequiresInvisibility;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan KnockdownTime = TimeSpan.FromSeconds(1);
 
     [DataField, AutoNetworkedField]
     public EntityUid? LastHit;
@@ -65,5 +45,25 @@ public sealed partial class ApeLeapComponent : Component
 
     [DataField, AutoNetworkedField]
     public float LastHitRange = 10;
-}
 
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier? LeapSound;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan MoveDelayTime = TimeSpan.FromSeconds(.7);
+
+    [DataField, AutoNetworkedField]
+    public FixedPoint2 Range = FixedPoint2.New(6);
+
+    [DataField, AutoNetworkedField]
+    public int Strength = 20;
+
+    [DataField, AutoNetworkedField]
+    public int TargetCameraShakeStrength;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan TargetJitterTime = TimeSpan.FromSeconds(0);
+
+    [DataField, AutoNetworkedField]
+    public bool UnrootOnMelee;
+}

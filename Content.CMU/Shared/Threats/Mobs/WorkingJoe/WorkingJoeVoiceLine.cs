@@ -5,7 +5,7 @@ namespace Content.Shared._CMU14.Threats.Mobs.WorkingJoe;
 [Serializable, NetSerializable]
 public sealed class WorkingJoeVoiceLine
 {
-    public string EmoteId = string.Empty;
-    public string DisplayName = string.Empty;
     public string Category = string.Empty;
+    public string DisplayName = string.Empty;
+    public string EmoteId = string.Empty;
 }

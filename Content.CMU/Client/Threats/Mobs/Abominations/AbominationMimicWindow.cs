@@ -5,20 +5,18 @@ namespace Content.Client._CMU14.Threats.Mobs.Abominations;
 
 public sealed class AbominationMimicWindow : DefaultWindow
 {
-    public event Action<int>? OnFormSelected;
-
     private readonly BoxContainer _list;
 
     public AbominationMimicWindow()
     {
         Title = Loc.GetString("abomination-mimic-picker-title");
-        SetSize = MinSize = new System.Numerics.Vector2(260, 320);
+        SetSize = MinSize = new(260, 320);
 
-        _list = new BoxContainer
+        _list = new()
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
             VerticalExpand = true,
-            HorizontalExpand = true,
+            HorizontalExpand = true
         };
 
         var scroll = new ScrollContainer
@@ -26,11 +24,13 @@ public sealed class AbominationMimicWindow : DefaultWindow
             HScrollEnabled = false,
             VScrollEnabled = true,
             VerticalExpand = true,
-            HorizontalExpand = true,
+            HorizontalExpand = true
         };
         scroll.AddChild(_list);
         Contents.AddChild(scroll);
     }
+
+    public event Action<int>? OnFormSelected;
 
     public void Populate(IReadOnlyList<string> profileNames, int? activeIndex)
     {
@@ -38,15 +38,15 @@ public sealed class AbominationMimicWindow : DefaultWindow
 
         for (var i = 0; i < profileNames.Count; i++)
         {
-            var index = i;
-            var name = profileNames[i];
+            int index = i;
+            string name = profileNames[i];
 
             var button = new Button
             {
                 Text = string.IsNullOrWhiteSpace(name) ? "<unknown>" : name,
                 ToggleMode = true,
                 Pressed = activeIndex == index,
-                HorizontalExpand = true,
+                HorizontalExpand = true
             };
             button.OnPressed += _ => OnFormSelected?.Invoke(index);
             _list.AddChild(button);

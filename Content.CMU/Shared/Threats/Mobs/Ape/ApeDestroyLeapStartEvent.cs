@@ -10,4 +10,3 @@ public sealed class ApeDestroyLeapStartEvent(NetEntity king, Vector2 leapOffset)
 
     public readonly Vector2 LeapOffset = leapOffset;
 }
-

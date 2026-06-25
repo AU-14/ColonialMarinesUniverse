@@ -4,25 +4,24 @@ using Content.Shared._RMC14.Xenonids.Headbite;
 
 namespace Content.Shared._CMU14.Threats.Mobs.Ape;
 
-
 public sealed class ApeXenoAdapterSystem : EntitySystem
 {
     public override void Initialize()
     {
         base.Initialize();
 
-        SubscribeLocalEvent<Threats.Mobs.Ape.ApeChargeActionEvent>(OnApeChargeFromAction);
-        SubscribeLocalEvent<Threats.Mobs.Ape.ApeRamActionEvent>(OnApeRamFromAction);
-        SubscribeLocalEvent<Threats.Mobs.Ape.ApeXenoHeadbiteActionEvent>(OnApeHeadbiteFromAction);
+        SubscribeLocalEvent<ApeChargeActionEvent>(OnApeChargeFromAction);
+        SubscribeLocalEvent<ApeRamActionEvent>(OnApeRamFromAction);
+        SubscribeLocalEvent<ApeXenoHeadbiteActionEvent>(OnApeHeadbiteFromAction);
     }
 
-    private void OnApeChargeFromAction(Threats.Mobs.Ape.ApeChargeActionEvent args)
+    private void OnApeChargeFromAction(ApeChargeActionEvent args)
     {
         if (args.Handled)
             return;
 
-        var performer = args.Performer;
-        if (performer == default)
+        EntityUid performer = args.Performer;
+        if (performer == default(EntityUid))
             return;
 
         if (TryComp<XenoChargeComponent>(performer, out _))
@@ -41,13 +40,13 @@ public sealed class ApeXenoAdapterSystem : EntitySystem
         }
     }
 
-    private void OnApeRamFromAction(Threats.Mobs.Ape.ApeRamActionEvent args)
+    private void OnApeRamFromAction(ApeRamActionEvent args)
     {
         if (args.Handled)
             return;
 
-        var performer = args.Performer;
-        if (performer == default)
+        EntityUid performer = args.Performer;
+        if (performer == default(EntityUid))
             return;
 
         if (TryComp<XenoFlingComponent>(performer, out _))
@@ -65,13 +64,13 @@ public sealed class ApeXenoAdapterSystem : EntitySystem
         }
     }
 
-    private void OnApeHeadbiteFromAction(Threats.Mobs.Ape.ApeXenoHeadbiteActionEvent args)
+    private void OnApeHeadbiteFromAction(ApeXenoHeadbiteActionEvent args)
     {
         if (args.Handled)
             return;
 
-        var performer = args.Performer;
-        if (performer == default)
+        EntityUid performer = args.Performer;
+        if (performer == default(EntityUid))
             return;
 
         if (TryComp<XenoHeadbiteComponent>(performer, out _))
@@ -88,6 +87,3 @@ public sealed class ApeXenoAdapterSystem : EntitySystem
         }
     }
 }
-
-
-

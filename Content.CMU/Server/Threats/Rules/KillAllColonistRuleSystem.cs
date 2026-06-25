@@ -3,8 +3,8 @@ using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Rules;
-using Content.Shared.AU14;
 using Content.Shared.AU14.ColonyEvacuation;
+using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.NPC.Components;
@@ -18,12 +18,11 @@ namespace Content.Server._CMU14.Threats.Rules;
 /// </summary>
 public sealed partial class KillAllColonistRuleSystem : GameRuleSystem<KillAllColonistRuleComponent>
 {
-    [Dependency] private AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private GameTicker _gameTicker = default!;
-    [Dependency] private IEntityManager _entMan = default!;
-    [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
-    [Dependency] private ThreatRuleHelper _threatRuleHelper = default!;
-
+    [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private readonly RMCPlanetSystem _rmcPlanet = default!;
+    [Dependency] private readonly ThreatRuleHelper _threatRuleHelper = default!;
     private const string DefaultWinMsg = "Threat victory: Required percentage of Colonists eliminated.";
 
     public override void Initialize()
@@ -50,21 +49,24 @@ public sealed partial class KillAllColonistRuleSystem : GameRuleSystem<KillAllCo
 
     private bool IsActiveRuleAndColonist(EntityUid uid)
         => _gameTicker.IsGameRuleActive<KillAllColonistRuleComponent>()
-        && TryComp(uid, out NpcFactionMemberComponent? faction)
-        && ThreatRuleHelper.HasFaction(faction, "aucolonist");
+            && TryComp(uid, out NpcFactionMemberComponent? faction)
+            && ThreatRuleHelper.HasFaction(faction, "aucolonist");
 
     private void CheckVictoryCondition()
     {
-        var queryRule = QueryActiveRules();
-        if (!ThreatRuleHelper.TryGetActiveRule(ref queryRule, out var ruleComp, out _))
+        EntityQueryEnumerator<ActiveGameRuleComponent, KillAllColonistRuleComponent, GameRuleComponent> queryRule
+            = QueryActiveRules();
+        if (!ThreatRuleHelper.TryGetActiveRule(ref queryRule, out KillAllColonistRuleComponent ruleComp, out _))
             return;
 
-        int  requiredPercent = Math.Clamp(ruleComp.Percent, 1, 100);
+        int requiredPercent = Math.Clamp(ruleComp.Percent, 1, 100);
         bool crashedDropship = _threatRuleHelper.HasCrashedDropship();
         int eliminated = 0, total = 0;
 
-        var query = _entMan.EntityQueryEnumerator<MobStateComponent, NpcFactionMemberComponent>();
-        while (query.MoveNext(out EntityUid uid, out MobStateComponent? mobState, out NpcFactionMemberComponent? faction))
+        EntityQueryEnumerator<MobStateComponent, NpcFactionMemberComponent> query = _entMan
+            .EntityQueryEnumerator<MobStateComponent, NpcFactionMemberComponent>();
+        while (query.MoveNext(out EntityUid uid, out MobStateComponent? mobState,
+            out NpcFactionMemberComponent? faction))
         {
             if (!ThreatRuleHelper.HasFaction(faction, "aucolonist"))
                 continue;

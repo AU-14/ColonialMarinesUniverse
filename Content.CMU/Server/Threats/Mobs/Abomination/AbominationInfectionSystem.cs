@@ -21,7 +21,8 @@ using AbominationAssimilationProfile = Content.Shared._CMU14.Threats.Mobs.Abomin
 using AbominationComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationComponent;
 using AbominationInfectableComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationInfectableComponent;
 using AbominationInfectionComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationInfectionComponent;
-using AbominationMimicTransformedComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicTransformedComponent;
+using AbominationMimicTransformedComponent
+    = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicTransformedComponent;
 using CauseAbominationInfection = Content.Shared._CMU14.Threats.Mobs.Abomination.Reagents.CauseAbominationInfection;
 
 namespace Content.Server._CMU14.Threats.Mobs.Abomination;
@@ -35,6 +36,18 @@ namespace Content.Server._CMU14.Threats.Mobs.Abomination;
 /// </summary>
 public sealed partial class AbominationInfectionSystem : EntitySystem
 {
+    [Dependency] private readonly AbominationAssimilateSystem _assimilate = default!;
+    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly SharedJitteringSystem _jitter = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly PolymorphSystem _polymorph = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly StatusEffectQuerySystem _statusEffects = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly VomitSystem _vomit = default!;
+    [Dependency] private SharedDrunkSystem _drunk = default!;
     public static readonly EntProtoId FleshKudzuSource = "AU14AbominationFleshKudzuSource";
     public static readonly ProtoId<PolymorphPrototype> TurnIntoMimic = "AbominationAssimilationToMimic";
     public static readonly ProtoId<PolymorphPrototype> TurnIntoSkitter = "AbominationAssimilationToSkitter";
@@ -42,24 +55,79 @@ public sealed partial class AbominationInfectionSystem : EntitySystem
     public static readonly ProtoId<EmotePrototype> CoughEmote = "Cough";
     public static readonly ProtoId<EmotePrototype> ScreamEmote = "Scream";
 
-    [Dependency] private AbominationAssimilateSystem _assimilate = default!;
-    [Dependency] private ChatSystem _chat = default!;
-    [Dependency] private DamageableSystem _damageable = default!;
-    [Dependency] private SharedDrunkSystem _drunk = default!;
-    [Dependency] private SharedJitteringSystem _jitter = default!;
-    [Dependency] private MobStateSystem _mobState = default!;
-    [Dependency] private PolymorphSystem _polymorph = default!;
-    [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
-    [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private VomitSystem _vomit = default!;
-
     public override void Initialize()
     {
         SubscribeLocalEvent<AbominationComponent, MeleeHitEvent>(OnAbominationMeleeHit);
         SubscribeLocalEvent<AbominationInfectionComponent, MobStateChangedEvent>(OnInfectedMobStateChanged);
         SubscribeLocalEvent<ExecuteEntityEffectEvent<CauseAbominationInfection>>(OnExecuteCauseInfection);
+    }
+
+    public override void Update(float frameTime)
+    {
+        TimeSpan now = _timing.CurTime;
+        EntityQueryEnumerator<AbominationInfectionComponent> query
+            = EntityQueryEnumerator<AbominationInfectionComponent>();
+        while (query.MoveNext(out EntityUid uid, out AbominationInfectionComponent? infection))
+        {
+            // Auto-cure: if the host survives long enough the infection burns itself out.
+            if (now - infection.InfectedAt >= infection.CureAfter)
+            {
+                if (!_mobState.IsDead(uid)) RemComp<AbominationInfectionComponent>(uid);
+
+                continue;
+            }
+
+            float severity = GetSeverity(infection, now);
+            if (severity > 0 && !infection.HasShownSymptoms)
+            {
+                infection.HasShownSymptoms = true;
+                Dirty(uid, infection);
+            }
+
+            if (severity >= 1f && !infection.HasCrescendoed)
+            {
+                infection.HasCrescendoed = true;
+                _chat.TryEmoteWithChat(uid, ScreamEmote);
+                Dirty(uid, infection);
+            }
+
+            // Flat poison tick — damage is not scaled by severity so it hits
+            // hard from the moment of infection. Drunk scales with severity.
+            if (now >= infection.NextTickAt)
+            {
+                infection.NextTickAt = now + infection.TickInterval;
+                _damageable.TryChangeDamage(uid, infection.TickDamage, true);
+                _statusEffects.TryAddStatusEffect<DrunkComponent>(uid, SharedDrunkSystem.DrunkKey,
+                    infection.DrunkPerTick * severity, true);
+            }
+
+            // Coughing — interval shrinks as severity rises.
+            if (now >= infection.NextCoughAt)
+            {
+                TimeSpan coughInterval = AbominationInfectionSystem.Lerp(infection.CoughIntervalEarly,
+                    infection.CoughIntervalLate, severity);
+                infection.NextCoughAt = now + coughInterval;
+                _chat.TryEmoteWithChat(uid, CoughEmote);
+            }
+
+            // Jitter — interval shrinks aggressively as severity rises so it
+            // becomes near-constant near crescendo.
+            if (now >= infection.NextJitterAt)
+            {
+                TimeSpan jitterInterval = AbominationInfectionSystem.Lerp(infection.JitterIntervalEarly,
+                    infection.JitterIntervalLate, severity);
+                infection.NextJitterAt = now + jitterInterval;
+                TimeSpan burst = TimeSpan.FromSeconds(2 + 4 * severity);
+                _jitter.DoJitter(uid, burst, true, 6 + 16 * severity, 8 + 8 * severity);
+            }
+
+            // Vomiting only kicks in past the threshold and accelerates with severity.
+            if (severity >= infection.VomitSeverityThreshold && now >= infection.NextVomitAt)
+            {
+                infection.NextVomitAt = now + infection.VomitInterval;
+                _vomit.Vomit(uid);
+            }
+        }
     }
 
     private void OnExecuteCauseInfection(ref ExecuteEntityEffectEvent<CauseAbominationInfection> args)
@@ -120,16 +188,16 @@ public sealed partial class AbominationInfectionSystem : EntitySystem
 
     private void ApplyInfection(EntityUid target)
     {
-        TimeSpan now       = _timing.CurTime;
-        var      infection = EnsureComp<AbominationInfectionComponent>(target);
-        infection.InfectedAt   = now;
-        infection.NextTickAt   = now; // apply first poison tick immediately
-        infection.NextCoughAt  = now + infection.CoughIntervalEarly;
+        TimeSpan now = _timing.CurTime;
+        var infection = EnsureComp<AbominationInfectionComponent>(target);
+        infection.InfectedAt = now;
+        infection.NextTickAt = now; // apply first poison tick immediately
+        infection.NextCoughAt = now + infection.CoughIntervalEarly;
         infection.NextJitterAt = now + infection.JitterIntervalEarly;
 
         // Heavy flat poison — enough to kill an unassisted host in ~3 minutes
         // (30 ticks × 8 Toxin = 240 damage over 3 min at 6 s/tick).
-        infection.TickDamage                     = new();
+        infection.TickDamage = new();
         infection.TickDamage.DamageDict["Toxin"] = 8;
         Dirty(target, infection);
     }
@@ -150,7 +218,7 @@ public sealed partial class AbominationInfectionSystem : EntitySystem
         // Capture coords before the polymorph deletes the body.
         MapCoordinates coords = _transform.GetMapCoordinates(ent.Owner);
         if (coords.MapId != default(MapId))
-            Spawn(AbominationInfectionSystem.FleshKudzuSource, coords);
+            Spawn(FleshKudzuSource, coords);
 
         if (!ent.Comp.HasShownSymptoms)
             return;
@@ -169,87 +237,19 @@ public sealed partial class AbominationInfectionSystem : EntitySystem
             // (skitter) instead of yet another mimic. Keeps the threat from
             // being a pure mimic-snowball.
             polymorphId = _random.Prob(0.5f)
-                ? AbominationInfectionSystem.TurnIntoMimic
-                : AbominationInfectionSystem.TurnIntoSkitter;
+                ? TurnIntoMimic
+                : TurnIntoSkitter;
         }
         else
-            polymorphId = AbominationInfectionSystem.TurnIntoSpider;
+            polymorphId = TurnIntoSpider;
 
         _polymorph.PolymorphEntity(ent.Owner, polymorphId);
-    }
-
-    public override void Update(float frameTime)
-    {
-        TimeSpan now = _timing.CurTime;
-        EntityQueryEnumerator<AbominationInfectionComponent> query
-            = EntityQueryEnumerator<AbominationInfectionComponent>();
-        while (query.MoveNext(out EntityUid uid, out AbominationInfectionComponent? infection))
-        {
-            // Auto-cure: if the host survives long enough the infection burns itself out.
-            if (now - infection.InfectedAt >= infection.CureAfter)
-            {
-                if (!_mobState.IsDead(uid)) RemComp<AbominationInfectionComponent>(uid);
-
-                continue;
-            }
-
-            float severity = GetSeverity(infection, now);
-            if (severity > 0 && !infection.HasShownSymptoms)
-            {
-                infection.HasShownSymptoms = true;
-                Dirty(uid, infection);
-            }
-
-            if (severity >= 1f && !infection.HasCrescendoed)
-            {
-                infection.HasCrescendoed = true;
-                _chat.TryEmoteWithChat(uid, AbominationInfectionSystem.ScreamEmote);
-                Dirty(uid, infection);
-            }
-
-            // Flat poison tick — damage is not scaled by severity so it hits
-            // hard from the moment of infection. Drunk scales with severity.
-            if (now >= infection.NextTickAt)
-            {
-                infection.NextTickAt = now + infection.TickInterval;
-                _damageable.TryChangeDamage(uid, infection.TickDamage, true);
-                _statusEffects.TryAddStatusEffect<DrunkComponent>(uid, SharedDrunkSystem.DrunkKey,
-                    infection.DrunkPerTick * severity, true);
-            }
-
-            // Coughing — interval shrinks as severity rises.
-            if (now >= infection.NextCoughAt)
-            {
-                TimeSpan coughInterval = AbominationInfectionSystem.Lerp(infection.CoughIntervalEarly,
-                    infection.CoughIntervalLate, severity);
-                infection.NextCoughAt = now + coughInterval;
-                _chat.TryEmoteWithChat(uid, AbominationInfectionSystem.CoughEmote);
-            }
-
-            // Jitter — interval shrinks aggressively as severity rises so it
-            // becomes near-constant near crescendo.
-            if (now >= infection.NextJitterAt)
-            {
-                TimeSpan jitterInterval = AbominationInfectionSystem.Lerp(infection.JitterIntervalEarly,
-                    infection.JitterIntervalLate, severity);
-                infection.NextJitterAt = now + jitterInterval;
-                TimeSpan burst = TimeSpan.FromSeconds(2 + 4 * severity);
-                _jitter.DoJitter(uid, burst, true, 6 + 16 * severity, 8 + 8 * severity);
-            }
-
-            // Vomiting only kicks in past the threshold and accelerates with severity.
-            if (severity >= infection.VomitSeverityThreshold && now >= infection.NextVomitAt)
-            {
-                infection.NextVomitAt = now + infection.VomitInterval;
-                _vomit.Vomit(uid);
-            }
-        }
     }
 
     private float GetSeverity(AbominationInfectionComponent infection, TimeSpan now)
     {
         double elapsed = (now - infection.InfectedAt).TotalSeconds;
-        double total   = Math.Max(1.0, infection.CrescendoAfter.TotalSeconds);
+        double total = Math.Max(1.0, infection.CrescendoAfter.TotalSeconds);
 
         return (float)Math.Clamp(elapsed / total, 0.0, 1.0);
     }

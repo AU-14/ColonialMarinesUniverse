@@ -1,3 +1,4 @@
+using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
 using Robust.Shared.Prototypes;
 using CLFMemberComponent = Content.Shared._CMU14.Threats.Mobs.CLF.CLFMemberComponent;
@@ -16,9 +17,7 @@ public sealed partial class CLFTeamIconSystem : EntitySystem
 
     private void OnGetCLFIcon(Entity<CLFMemberComponent> ent, ref GetStatusIconsEvent args)
     {
-        if (_prototype.TryIndex(ent.Comp.StatusIcon, out var iconPrototype))
+        if (_prototype.TryIndex(ent.Comp.StatusIcon, out FactionIconPrototype? iconPrototype))
             args.StatusIcons.Add(iconPrototype);
     }
 }
-
-

@@ -1,3 +1,4 @@
+using Content.Server._CMU14.Language;
 using Content.Server.Administration.Logs;
 using Content.Server.Antag;
 using Content.Server.Mind;
@@ -19,9 +20,6 @@ using Content.Shared.Storage;
 using Robust.Shared.Containers;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
-using Content.Shared._RMC14.Weapons.Ranged.IFF;
-using Content.Server._CMU14.Language;
-using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using CLFMemberComponent = Content.Shared._CMU14.Threats.Mobs.CLF.CLFMemberComponent;
 using TattooDoAfterEvent = Content.Shared._CMU14.Threats.Mobs.CLF.TattooDoAfterEvent;
 using TattooGunComponent = Content.Shared._CMU14.Threats.Mobs.CLF.TattooGunComponent;
@@ -31,21 +29,21 @@ namespace Content.Server._CMU14.Threats.Mobs.CLF;
 
 public sealed partial class CLFTattooSystem : EntitySystem
 {
-    [Dependency] private IAdminLogManager _adminLog = default!;
-    [Dependency] private AntagSelectionSystem _antag = default!;
-    [Dependency] private SharedContainerSystem _container = default!;
-    [Dependency] private DialogSystem _dialog = default!;
-    [Dependency] private SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private GunIFFSystem _gunIFF = default!;
-    [Dependency] private SharedJobSystem _jobs = default!;
-    [Dependency] private MindSystem _mind = default!;
-    [Dependency] private MobStateSystem _mobState = default!;
-    [Dependency] private NpcFactionSystem _npcFaction = default!;
-    [Dependency] private ISharedPlayerManager _player = default!;
-    [Dependency] private PopupSystem _popup = default!;
-    [Dependency] private IPrototypeManager _protoManager = default!;
-    [Dependency] private RoleSystem _role = default!;
+    [Dependency] private readonly IAdminLogManager _adminLog = default!;
+    [Dependency] private readonly AntagSelectionSystem _antag = default!;
+    [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private readonly DialogSystem _dialog = default!;
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly FactionLanguageSystem _factionLanguage = default!;
+    [Dependency] private readonly GunIFFSystem _gunIFF = default!;
+    [Dependency] private readonly SharedJobSystem _jobs = default!;
+    [Dependency] private readonly MindSystem _mind = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
+    [Dependency] private readonly ISharedPlayerManager _player = default!;
+    [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private readonly IPrototypeManager _protoManager = default!;
+    [Dependency] private readonly RoleSystem _role = default!;
 
     public override void Initialize()
     {
@@ -128,7 +126,7 @@ public sealed partial class CLFTattooSystem : EntitySystem
         }
 
         // Check storage for ink
-        if (!TryComp<StorageComponent>(uid, out StorageComponent? storage) ||
+        if (!TryComp(uid, out StorageComponent? storage) ||
             storage.Container.ContainedEntities.Count == 0)
         {
             _popup.PopupEntity(Loc.GetString("clf-tattoo-no-ink"), user, user);
@@ -191,12 +189,11 @@ public sealed partial class CLFTattooSystem : EntitySystem
         if (Deleted(user) || Deleted(tattooGun) || Deleted(target))
             return;
 
-        if (!TryComp<TattooGunComponent>(tattooGun, out TattooGunComponent? gunComp))
+        if (!TryComp(tattooGun, out TattooGunComponent? gunComp))
             return;
 
         // Re-check ink
-        if (!TryComp<StorageComponent>(tattooGun, out StorageComponent? storage) ||
-            storage.Container.ContainedEntities.Count == 0)
+        if (!TryComp(tattooGun, out StorageComponent? storage) || storage.Container.ContainedEntities.Count == 0)
         {
             _popup.PopupEntity(Loc.GetString("clf-tattoo-no-ink"), user, user);
 
@@ -212,14 +209,8 @@ public sealed partial class CLFTattooSystem : EntitySystem
             return;
 
         // Start DoAfter on the user, event raised on the tattoo gun
-        var doAfterArgs = new DoAfterArgs(
-            EntityManager,
-            user,
-            TimeSpan.FromSeconds(gunComp.DoAfterDuration),
-            new TattooDoAfterEvent(),
-            tattooGun,
-            target,
-            tattooGun)
+        var doAfterArgs = new DoAfterArgs(EntityManager, user, TimeSpan.FromSeconds(gunComp.DoAfterDuration),
+            new TattooDoAfterEvent(), tattooGun, target, tattooGun)
         {
             BreakOnMove = true,
             BreakOnDamage = true,
@@ -227,11 +218,9 @@ public sealed partial class CLFTattooSystem : EntitySystem
             NeedHand = true
         };
 
-        if (_doAfter.TryStartDoAfter(doAfterArgs))
-        {
-            _popup.PopupEntity(Loc.GetString("clf-tattoo-begin", ("user", user)), target, target);
-            _popup.PopupEntity(Loc.GetString("clf-tattoo-begin-user", ("target", target)), user, user);
-        }
+        if (!_doAfter.TryStartDoAfter(doAfterArgs)) return;
+        _popup.PopupEntity(Loc.GetString("clf-tattoo-begin", ("user", user)), target, target);
+        _popup.PopupEntity(Loc.GetString("clf-tattoo-begin-user", ("target", target)), user, user);
     }
 
     private void OnTattooDoAfter(EntityUid uid, TattooGunComponent comp, TattooDoAfterEvent args)
@@ -252,7 +241,7 @@ public sealed partial class CLFTattooSystem : EntitySystem
             return;
 
         // Consume one ink cartridge
-        if (!TryComp<StorageComponent>(uid, out StorageComponent? storage) ||
+        if (!TryComp(uid, out StorageComponent? storage) ||
             storage.Container.ContainedEntities.Count == 0)
         {
             _popup.PopupEntity(Loc.GetString("clf-tattoo-no-ink"), args.User, args.User);
@@ -279,8 +268,7 @@ public sealed partial class CLFTattooSystem : EntitySystem
 
             if (mind is { UserId: not null } && _player.TryGetSessionById(mind.UserId, out ICommonSession? session))
             {
-                _antag.SendBriefing(
-                    session,
+                _antag.SendBriefing(session,
                     Loc.GetString(comp.Briefing),
                     Color.Red,
                     comp.Sound);

@@ -19,13 +19,13 @@ namespace Content.Server._CMU14.Threats.Mobs.CLF;
 
 public sealed partial class CLFMemberSystem : EntitySystem
 {
-    [Dependency] private IAdminManager _admin = default!;
-    [Dependency] private AntagSelectionSystem _antag = default!;
-    [Dependency] private GunIFFSystem _gunIFF = default!;
-    [Dependency] private MindSystem _mind = default!;
-    [Dependency] private NpcFactionSystem _npcFaction = default!;
-    [Dependency] private ISharedPlayerManager _player = default!;
-    [Dependency] private RoleSystem _role = default!;
+    [Dependency] private readonly IAdminManager _admin = default!;
+    [Dependency] private readonly AntagSelectionSystem _antag = default!;
+    [Dependency] private readonly GunIFFSystem _gunIFF = default!;
+    [Dependency] private readonly MindSystem _mind = default!;
+    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
+    [Dependency] private readonly ISharedPlayerManager _player = default!;
+    [Dependency] private readonly RoleSystem _role = default!;
 
     public override void Initialize()
     {
@@ -44,7 +44,7 @@ public sealed partial class CLFMemberSystem : EntitySystem
             return;
 
         if (!HasComp<MindContainerComponent>(args.Target)
-         || !TryComp(args.Target, out ActorComponent? _))
+            || !TryComp(args.Target, out ActorComponent? _))
             return;
 
         if (!TryComp(args.Target, out MarineComponent? marine))
@@ -55,12 +55,12 @@ public sealed partial class CLFMemberSystem : EntitySystem
         {
             Verb clf = new()
             {
-                Text     = "Make CLF Recruit",
+                Text = "Make CLF Recruit",
                 Category = VerbCategory.Antag,
                 Icon = new SpriteSpecifier.Rsi(new("/Textures/_RMC14/Interface/cm_job_icons.rsi"),
                     "hudCLF"),
-                Act     = () => { MakeCLF(args.Target); },
-                Impact  = LogImpact.High,
+                Act = () => { MakeCLF(args.Target); },
+                Impact = LogImpact.High,
                 Message = "Make CLF Recruit"
             };
             args.Verbs.Add(clf);
@@ -79,8 +79,7 @@ public sealed partial class CLFMemberSystem : EntitySystem
 
             if (mind is { UserId: not null } && _player.TryGetSessionById(mind.UserId, out ICommonSession? session))
             {
-                _antag.SendBriefing(
-                    session,
+                _antag.SendBriefing(session,
                     Loc.GetString("clf-tattoo-recruit-briefing"),
                     Color.Red,
                     new SoundPathSpecifier("/Audio/Ambience/Antag/headrev_start.ogg"));

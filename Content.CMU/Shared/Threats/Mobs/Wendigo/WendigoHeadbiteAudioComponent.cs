@@ -14,19 +14,22 @@ public sealed partial class WendigoHeadbiteAudioComponent : Component
     public SoundSpecifier? CloseSound;
 
     /// <summary>
-    ///     Sound played map-wide for distant players, gated by <see cref="GlobalCooldown"/>.
-    /// </summary>
-    [DataField, AutoNetworkedField]
-    public SoundSpecifier? GlobalSound;
-
-    /// <summary>
     ///     Minimum time between global sound plays.
     /// </summary>
     [DataField, AutoNetworkedField]
     public TimeSpan GlobalCooldown = TimeSpan.FromSeconds(60);
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
-    public TimeSpan? LastGlobalPlayed;
+    /// <summary>
+    ///     Volume in dB for the global screech heard by indoor (roofed) players.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float GlobalIndoorVolume = -12f;
+
+    /// <summary>
+    ///     Sound played map-wide for distant players, gated by <see cref="GlobalCooldown" />.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier? GlobalSound;
 
     /// <summary>
     ///     Volume in dB for the global screech heard by outdoor players.
@@ -34,11 +37,8 @@ public sealed partial class WendigoHeadbiteAudioComponent : Component
     [DataField, AutoNetworkedField]
     public float GlobalVolume = -3f;
 
-    /// <summary>
-    ///     Volume in dB for the global screech heard by indoor (roofed) players.
-    /// </summary>
-    [DataField, AutoNetworkedField]
-    public float GlobalIndoorVolume = -12f;
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    public TimeSpan? LastGlobalPlayed;
 
     /// <summary>
     ///     Tracks whether the global screech cooldown has expired. Used for the popup notification.

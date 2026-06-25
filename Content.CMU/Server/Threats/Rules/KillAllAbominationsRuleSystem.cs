@@ -2,10 +2,12 @@ using Content.Server.AU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Shared._RMC14.Evacuation;
+using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using AbominationComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationComponent;
-using AbominationMimicTransformedComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicTransformedComponent;
+using AbominationMimicTransformedComponent
+    = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicTransformedComponent;
 using KillAllAbominationsRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllAbominationsRuleComponent;
 
 namespace Content.Server._CMU14.Threats.Rules;
@@ -20,11 +22,10 @@ namespace Content.Server._CMU14.Threats.Rules;
 /// </summary>
 public sealed partial class KillAllAbominationsRuleSystem : GameRuleSystem<KillAllAbominationsRuleComponent>
 {
-    [Dependency] private AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private GameTicker _gameTicker = default!;
-    [Dependency] private IEntityManager _entMan = default!;
-    [Dependency] private ThreatRuleHelper _threatRuleHelper = default!;
-
+    [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private readonly ThreatRuleHelper _threatRuleHelper = default!;
     private const string DefaultWinMsg = "The Threat has been Eliminated";
 
     public override void Initialize()
@@ -53,14 +54,15 @@ public sealed partial class KillAllAbominationsRuleSystem : GameRuleSystem<KillA
 
     private void CheckVictoryCondition()
     {
-        var queryRule = QueryActiveRules();
-        if (!ThreatRuleHelper.TryGetActiveRule(ref queryRule, out var ruleComp, out _))
+        EntityQueryEnumerator<ActiveGameRuleComponent, KillAllAbominationsRuleComponent, GameRuleComponent>
+            queryRule = QueryActiveRules();
+        if (!ThreatRuleHelper.TryGetActiveRule(ref queryRule, out KillAllAbominationsRuleComponent ruleComp, out _))
             return;
 
         int requiredPercent = Math.Clamp(ruleComp.Percent, 1, 100);
         int eliminated = 0, total = 0;
 
-        var query = _entMan.EntityQueryEnumerator<MobStateComponent>();
+        EntityQueryEnumerator<MobStateComponent> query = _entMan.EntityQueryEnumerator<MobStateComponent>();
         while (query.MoveNext(out EntityUid uid, out MobStateComponent? mobState))
         {
             bool isAbom = _entMan.HasComponent<AbominationComponent>(uid)

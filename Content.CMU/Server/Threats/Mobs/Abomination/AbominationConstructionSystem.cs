@@ -2,18 +2,21 @@ using System.Linq;
 using Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities;
 using Content.Shared.Popups;
 using Robust.Shared.Timing;
-using AbominationConstructionChooseActionEvent = Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationConstructionChooseActionEvent;
-using AbominationConstructionComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationConstructionComponent;
-using AbominationConstructionSecreteActionEvent = Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationConstructionSecreteActionEvent;
+using AbominationConstructionChooseActionEvent
+    = Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationConstructionChooseActionEvent;
+using AbominationConstructionComponent
+    = Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationConstructionComponent;
+using AbominationConstructionSecreteActionEvent
+    = Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationConstructionSecreteActionEvent;
 
 namespace Content.Server._CMU14.Threats.Mobs.Abomination;
 
 public sealed partial class AbominationConstructionSystem : EntitySystem
 {
-    [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {
@@ -29,7 +32,7 @@ public sealed partial class AbominationConstructionSystem : EntitySystem
     }
 
     private void OnChooseAction(Entity<AbominationConstructionComponent> ent,
-        ref AbominationConstructionChooseActionEvent                     args)
+        ref AbominationConstructionChooseActionEvent args)
     {
         if (args.Handled)
             return;
@@ -41,7 +44,7 @@ public sealed partial class AbominationConstructionSystem : EntitySystem
     }
 
     private void OnChooseMessage(Entity<AbominationConstructionComponent> ent,
-        ref AbominationConstructionChooseMessage                          args)
+        ref AbominationConstructionChooseMessage args)
     {
         if (!ent.Comp.CanBuild.Contains(args.Structure))
             return;
@@ -52,7 +55,7 @@ public sealed partial class AbominationConstructionSystem : EntitySystem
     }
 
     private void OnSecreteAction(Entity<AbominationConstructionComponent> ent,
-        ref AbominationConstructionSecreteActionEvent                     args)
+        ref AbominationConstructionSecreteActionEvent args)
     {
         if (args.Handled)
             return;
@@ -66,9 +69,7 @@ public sealed partial class AbominationConstructionSystem : EntitySystem
 
         // Flesh nests have their own 40s cooldown on top of the action's
         // useDelay. Other structures (walls, etc.) are gated only by the action.
-        if (choice == ent.Comp.NestProto &&
-            ent.Comp.NextNestAt is { } nestReady &&
-            _timing.CurTime < nestReady)
+        if (choice == ent.Comp.NestProto && ent.Comp.NextNestAt is { } nestReady && _timing.CurTime < nestReady)
         {
             _popup.PopupClient(Loc.GetString("abomination-secrete-nest-cooldown"), ent, ent);
 

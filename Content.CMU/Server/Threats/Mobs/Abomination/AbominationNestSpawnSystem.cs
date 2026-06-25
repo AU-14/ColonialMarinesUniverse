@@ -14,8 +14,10 @@ namespace Content.Server._CMU14.Threats.Mobs.Abomination;
 /// </summary>
 public sealed partial class AbominationNestSpawnSystem : EntitySystem
 {
-    /// <summary>Seconds subtracted from the interval per extra nest beyond the first.</summary>
-    public const double SecondsPerExtraNest = 3.0;
+    [Dependency] private readonly IRobustRandom _random = default!;
+
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     /// <summary>Base interval with one nest placed.</summary>
     public static readonly TimeSpan BaseInterval = TimeSpan.FromSeconds(300);
@@ -29,12 +31,10 @@ public sealed partial class AbominationNestSpawnSystem : EntitySystem
         "AU14AbominationGrunt",
         "AU14AbominationSkitter"
     };
+    /// <summary>Seconds subtracted from the interval per extra nest beyond the first.</summary>
+    public const double SecondsPerExtraNest = 3.0;
 
     private TimeSpan _nextSpawnAt;
-    [Dependency] private IRobustRandom _random = default!;
-
-    [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Update(float frameTime)
     {
@@ -55,20 +55,20 @@ public sealed partial class AbominationNestSpawnSystem : EntitySystem
         {
             // No nests in the world; idle out the base interval before
             // checking again. Avoids re-querying every frame.
-            _nextSpawnAt = now + AbominationNestSpawnSystem.BaseInterval;
+            _nextSpawnAt = now + BaseInterval;
 
             return;
         }
 
         // Each extra nest beyond the first shaves 3 seconds off the interval, floored at 30 s.
         int extraNests = nests.Count - 1;
-        double intervalSeconds = Math.Max(AbominationNestSpawnSystem.MinInterval.TotalSeconds,
-            AbominationNestSpawnSystem.BaseInterval.TotalSeconds
-          - extraNests * AbominationNestSpawnSystem.SecondsPerExtraNest);
+        double intervalSeconds = Math.Max(MinInterval.TotalSeconds,
+            BaseInterval.TotalSeconds
+            - extraNests * SecondsPerExtraNest);
         TimeSpan interval = TimeSpan.FromSeconds(intervalSeconds);
 
-        EntityUid      chosen = _random.Pick(nests);
-        EntProtoId     proto  = _random.Pick(AbominationNestSpawnSystem.SpawnPool);
+        EntityUid chosen = _random.Pick(nests);
+        EntProtoId proto = _random.Pick(SpawnPool);
         MapCoordinates coords = _transform.GetMapCoordinates(chosen);
         Spawn(proto, coords);
 

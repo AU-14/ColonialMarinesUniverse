@@ -4,6 +4,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Stunnable;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
@@ -13,19 +14,19 @@ using Robust.Shared.Timing;
 namespace Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities;
 
 /// <summary>
-/// Crusher charge: long ranged lunge that damages mobs AND structures it
-/// ploughs through. Sibling of AbominationLeapSystem but heavier.
+///     Crusher charge: long ranged lunge that damages mobs AND structures it
+///     ploughs through. Sibling of AbominationLeapSystem but heavier.
 /// </summary>
 public sealed partial class AbominationChargeSystem : EntitySystem
 {
-    [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private DamageableSystem _damageable = default!;
-    [Dependency] private MobStateSystem _mobState = default!;
-    [Dependency] private INetManager _net = default!;
-    [Dependency] private SharedPhysicsSystem _physics = default!;
-    [Dependency] private SharedStunSystem _stun = default!;
-    [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {
@@ -33,12 +34,32 @@ public sealed partial class AbominationChargeSystem : EntitySystem
         SubscribeLocalEvent<AbominationChargingComponent, StartCollideEvent>(OnChargingCollide);
     }
 
+    public override void Update(float frameTime)
+    {
+        if (_net.IsClient)
+            return;
+
+        TimeSpan now = _timing.CurTime;
+        EntityQueryEnumerator<AbominationChargingComponent> query
+            = EntityQueryEnumerator<AbominationChargingComponent>();
+        while (query.MoveNext(out EntityUid uid, out AbominationChargingComponent? charging))
+        {
+            if (charging.EndsAt > now)
+                continue;
+
+            if (TryComp(uid, out PhysicsComponent? physics))
+                _physics.SetLinearVelocity(uid, Vector2.Zero, body: physics);
+
+            RemCompDeferred<AbominationChargingComponent>(uid);
+        }
+    }
+
     private void OnChargeAction(Entity<AbominationChargeComponent> ent, ref AbominationChargeActionEvent args)
     {
         if (args.Handled)
             return;
 
-        if (!TryComp<PhysicsComponent>(ent, out var physics))
+        if (!TryComp(ent, out PhysicsComponent? physics))
             return;
 
         args.Handled = true;
@@ -46,17 +67,17 @@ public sealed partial class AbominationChargeSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        var origin = _transform.GetMapCoordinates(ent);
+        MapCoordinates origin = _transform.GetMapCoordinates(ent);
         var target = _transform.ToMapCoordinates(args.Target);
         if (origin.MapId != target.MapId)
             return;
 
-        var direction = target.Position - origin.Position;
+        Vector2 direction = target.Position - origin.Position;
         if (direction == Vector2.Zero)
             return;
 
         Math.Clamp(direction.Length(), 0.1f, ent.Comp.Range);
-        var velocity = Vector2.Normalize(direction) * ent.Comp.Strength;
+        Vector2 velocity = Vector2.Normalize(direction) * ent.Comp.Strength;
 
         _physics.SetLinearVelocity(ent, Vector2.Zero, body: physics);
         _physics.ApplyLinearImpulse(ent, velocity * physics.Mass, body: physics);
@@ -74,7 +95,7 @@ public sealed partial class AbominationChargeSystem : EntitySystem
 
     private void OnChargingCollide(Entity<AbominationChargingComponent> ent, ref StartCollideEvent args)
     {
-        var target = args.OtherEntity;
+        EntityUid target = args.OtherEntity;
         if (target == ent.Owner || HasComp<AbominationComponent>(target))
             return;
 
@@ -87,30 +108,12 @@ public sealed partial class AbominationChargeSystem : EntitySystem
                 _stun.TryParalyze(target, ent.Comp.KnockdownTime, true);
                 _damageable.TryChangeDamage(target, ent.Comp.MobDamage, origin: ent.Owner);
             }
+
             return;
         }
 
         // Structure / wall / anything else damageable in the way.
         if (_net.IsServer && HasComp<DamageableComponent>(target))
             _damageable.TryChangeDamage(target, ent.Comp.StructureDamage, origin: ent.Owner);
-    }
-
-    public override void Update(float frameTime)
-    {
-        if (_net.IsClient)
-            return;
-
-        var now = _timing.CurTime;
-        var query = EntityQueryEnumerator<AbominationChargingComponent>();
-        while (query.MoveNext(out var uid, out var charging))
-        {
-            if (charging.EndsAt > now)
-                continue;
-
-            if (TryComp<PhysicsComponent>(uid, out var physics))
-                _physics.SetLinearVelocity(uid, Vector2.Zero, body: physics);
-
-            RemCompDeferred<AbominationChargingComponent>(uid);
-        }
     }
 }

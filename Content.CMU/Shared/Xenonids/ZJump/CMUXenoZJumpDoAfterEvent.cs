@@ -10,8 +10,5 @@ public sealed partial class CMUXenoZJumpDoAfterEvent : SimpleDoAfterEvent
     [DataField]
     public NetCoordinates Coordinates;
 
-    public CMUXenoZJumpDoAfterEvent(NetCoordinates coordinates)
-    {
-        Coordinates = coordinates;
-    }
+    public CMUXenoZJumpDoAfterEvent(NetCoordinates coordinates) => Coordinates = coordinates;
 }

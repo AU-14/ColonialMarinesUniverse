@@ -1,5 +1,4 @@
 using Content.Shared._RMC14.Xenonids;
-using Content.Shared.AU14;
 using Content.Shared.DragDrop;
 using Content.Shared.Mobs.Systems;
 using CultistComponent = Content.Shared._CMU14.Threats.Mobs.Cultist.CultistComponent;
@@ -18,7 +17,7 @@ public sealed partial class CultistDragSystem : EntitySystem
 
     private void OnCultistCanStartDrag(Entity<CultistComponent> cultist, ref CanStartDragEvent args)
     {
-        var target = args.Target;
+        EntityUid target = args.Target;
         if (HasComp<CultistComponent>(target) || HasComp<XenoComponent>(target))
             return;
 

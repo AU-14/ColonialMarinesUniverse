@@ -1,7 +1,6 @@
 using Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
-using Robust.Shared.Prototypes;
 
 namespace Content.Client._CMU14.Threats.Mobs.Abominations;
 
@@ -17,7 +16,7 @@ public sealed class AbominationConstructionBui : BoundUserInterface
     {
         base.Open();
         _window = this.CreateWindow<AbominationConstructionWindow>();
-        _window.OnStructurePicked += id => SendPredictedMessage(new AbominationConstructionChooseMessage(new EntProtoId(id)));
+        _window.OnStructurePicked += id => SendPredictedMessage(new AbominationConstructionChooseMessage(new(id)));
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

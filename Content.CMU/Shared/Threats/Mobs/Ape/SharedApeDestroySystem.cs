@@ -1,16 +1,16 @@
+using System.Numerics;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.CameraShake;
 using Content.Shared._RMC14.Emote;
-using Content.Shared._RMC14.Entrenching;
 using Content.Shared._RMC14.Gibbing;
 using Content.Shared._RMC14.Map;
-using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Stun;
-
+using Content.Shared._RMC14.Xenonids.Devour;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
+using Content.Shared.Actions.Components;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
@@ -22,7 +22,6 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
 using Content.Shared.Jittering;
 using Content.Shared.Maps;
-using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Events;
@@ -32,51 +31,49 @@ using Content.Shared.Popups;
 using Content.Shared.Throwing;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
-using System.Numerics;
-using Content.Shared._CMU14.Threats.Mobs.Ape;
-using Content.Shared._CMU14.Threats.Mobs.Ape;
-using Content.Shared._RMC14.Xenonids.Devour;
 
 namespace Content.Shared._CMU14.Threats.Mobs.Ape;
+
 public abstract partial class SharedApeDestroySystem : EntitySystem
 {
-    [Dependency] private INetManager _net = default!;
-    [Dependency] private SharedInteractionSystem _interaction = default!;
-    [Dependency] private AreaSystem _area = default!;
-    [Dependency] private SharedJitteringSystem _jitter = default!;
-    [Dependency] private SharedDoAfterSystem _doafter = default!;
-    [Dependency] private TurfSystem _turf = default!;
-    [Dependency] private SharedRMCEmoteSystem _emote = default!;
-    [Dependency] private RotateToFaceSystem _rotateToFace = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private MobStateSystem _mob = default!;
+    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private readonly AreaSystem _area = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
+    [Dependency] private readonly SharedBodySystem _body = default!;
+    [Dependency] private readonly RMCCameraShakeSystem _cameraShake = default!;
+    [Dependency] private readonly DamageableSystem _damage = default!;
+    [Dependency] private readonly SharedDoAfterSystem _doafter = default!;
+    [Dependency] private readonly SharedRMCEmoteSystem _emote = default!;
+    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
+    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
+    [Dependency] private readonly SharedJitteringSystem _jitter = default!;
+    [Dependency] private readonly SharedMapSystem _map = default!;
+    [Dependency] private readonly MobStateSystem _mob = default!;
+    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private readonly RMCGibSystem _rmcGib = default!;
+    [Dependency] private readonly RMCMapSystem _rmcMap = default!;
+    [Dependency] private readonly RMCPullingSystem _rmcPull = default!;
+    [Dependency] private readonly RotateToFaceSystem _rotateToFace = default!;
+    [Dependency] private readonly RMCSizeStunSystem _size = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
     [Dependency] protected IGameTiming _timing = default!;
-    [Dependency] private SharedMapSystem _map = default!;
-    [Dependency] private EntityLookupSystem _entityLookup = default!;
-    [Dependency] private EntityWhitelistSystem _whitelist = default!;
-    [Dependency] private DamageableSystem _damage = default!;
-    [Dependency] private RMCSizeStunSystem _size = default!;
-    [Dependency] private SharedBodySystem _body = default!;
-    [Dependency] private RMCGibSystem _rmcGib = default!;
-    [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private RMCCameraShakeSystem _cameraShake = default!;
-    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private SharedActionsSystem _actions = default!;
-    [Dependency] private RMCMapSystem _rmcMap = default!;
-    [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private RMCPullingSystem _rmcPull = default!;
-    [Dependency] private ActionBlockerSystem _blocker = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _mobs = new();
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<Threats.Mobs.Ape.ApeDestroyComponent, Threats.Mobs.Ape.ApeDestroyActionEvent>(OnApeDestroyAction);
-        SubscribeLocalEvent<Threats.Mobs.Ape.ApeDestroyComponent, Threats.Mobs.Ape.ApeDestroyLeapDoafter>(OnApeDestroyDoafter);
+        SubscribeLocalEvent<ApeDestroyComponent, ApeDestroyActionEvent>(OnApeDestroyAction);
+        SubscribeLocalEvent<ApeDestroyComponent, ApeDestroyLeapDoafter>(OnApeDestroyDoafter);
 
         SubscribeLocalEvent<ApeDestroyLeapingComponent, AttemptMobCollideEvent>(OnLeapCollide);
         SubscribeLocalEvent<ApeDestroyLeapingComponent, AttemptMobTargetCollideEvent>(OnLeapTargetCollide);
@@ -94,12 +91,46 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
         SubscribeLocalEvent<ApeDestroyLeapingComponent, UpdateCanMoveEvent>(OnLeapingCancel);
     }
 
-    private void OnApeDestroyAction(Entity<Threats.Mobs.Ape.ApeDestroyComponent> ape, ref Threats.Mobs.Ape.ApeDestroyActionEvent args)
+    public override void Update(float frameTime)
     {
-        if (args.Handled || !_turf.TryGetTileRef(args.Target, out var tile))
+        if (_net.IsClient)
             return;
 
-        var target = _turf.GetTileCenter(tile.Value);
+        TimeSpan time = _timing.CurTime;
+        EntityQueryEnumerator<ApeDestroyLeapingComponent, ApeDestroyComponent> query
+            = EntityQueryEnumerator<ApeDestroyLeapingComponent, ApeDestroyComponent>();
+
+        while (query.MoveNext(out EntityUid uid, out ApeDestroyLeapingComponent? leaping,
+            out ApeDestroyComponent? destroy))
+        {
+            if (_mob.IsDead(uid))
+            {
+                RemCompDeferred<ApeDestroyLeapingComponent>(uid);
+                continue;
+            }
+
+            if (leaping.LeapMoveAt != null && time > leaping.LeapMoveAt)
+            {
+                if (leaping.Target != null)
+                    _transform.SetCoordinates(uid, leaping.Target.Value);
+
+                leaping.LeapMoveAt = null;
+                Dirty(uid, leaping);
+            }
+
+            if (leaping.LeapEndAt == null || time < leaping.LeapEndAt)
+                continue;
+
+            CrashDown((uid, destroy));
+        }
+    }
+
+    private void OnApeDestroyAction(Entity<ApeDestroyComponent> ape, ref ApeDestroyActionEvent args)
+    {
+        if (args.Handled || !_turf.TryGetTileRef(args.Target, out TileRef? tile))
+            return;
+
+        EntityCoordinates target = _turf.GetTileCenter(tile.Value);
 
         if (!_interaction.InRangeUnobstructed(ape, target, ape.Comp.Range) || _rmcMap.IsTileBlocked(target))
         {
@@ -107,7 +138,7 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
             return;
         }
 
-        if (!_area.TryGetArea(target, out var area, out var _) || area.Value.Comp.NoTunnel)
+        if (!_area.TryGetArea(target, out Entity<AreaComponent>? area, out _) || area.Value.Comp.NoTunnel)
         {
             _popup.PopupClient(Loc.GetString("rmc-destroy-cant-area"), ape, ape, PopupType.SmallCaution);
             return;
@@ -115,7 +146,8 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
 
         _jitter.DoJitter(ape, ape.Comp.JumpTime, true, 80, 8, true);
 
-        var doAfter = new DoAfterArgs(EntityManager, ape, ape.Comp.JumpTime, new Threats.Mobs.Ape.ApeDestroyLeapDoafter(GetNetCoordinates(target)), ape)
+        var doAfter = new DoAfterArgs(EntityManager, ape, ape.Comp.JumpTime,
+            new ApeDestroyLeapDoafter(GetNetCoordinates(target)), ape)
         {
             BreakOnMove = true,
             BreakOnRest = true
@@ -125,7 +157,7 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
         Dirty(ape);
     }
 
-    private void OnApeDestroyDoafter(Entity<Threats.Mobs.Ape.ApeDestroyComponent> ape, ref Threats.Mobs.Ape.ApeDestroyLeapDoafter args)
+    private void OnApeDestroyDoafter(Entity<ApeDestroyComponent> ape, ref ApeDestroyLeapDoafter args)
     {
         if (args.Handled || args.Cancelled)
             return;
@@ -135,7 +167,7 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
 
         args.Handled = true;
 
-        var coords = GetCoordinates(args.TargetCoords);
+        EntityCoordinates coords = GetCoordinates(args.TargetCoords);
 
         if (!_interaction.InRangeUnobstructed(ape, coords, ape.Comp.Range) || _rmcMap.IsTileBlocked(coords))
         {
@@ -154,7 +186,7 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
             leaping.LeapEndAt = _timing.CurTime + ape.Comp.CrashTime;
             Dirty(ape.Owner, leaping);
 
-            var filter = Filter.Pvs(ape);
+            Filter filter = Filter.Pvs(ape);
             Vector2 offset = _transform.ToMapCoordinates(coords).Position - _transform.GetMapCoordinates(ape).Position;
 
             var ev = new ApeDestroyLeapStartEvent(GetNetEntity(ape), offset);
@@ -176,7 +208,8 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
         args.Cancelled = true;
     }
 
-    private void OnLeapingCancel<T>(Entity<ApeDestroyLeapingComponent> ent, ref T args) where T : CancellableEntityEventArgs
+    private void OnLeapingCancel<T>(Entity<ApeDestroyLeapingComponent> ent, ref T args)
+        where T : CancellableEntityEventArgs
     {
         args.Cancel();
     }
@@ -191,26 +224,28 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
         args.Cancelled = true;
     }
 
-    private void CrashDown(Entity<Threats.Mobs.Ape.ApeDestroyComponent> ape)
+    private void CrashDown(Entity<ApeDestroyComponent> ape)
     {
         RemCompDeferred<ApeDestroyLeapingComponent>(ape);
 
-        if (_transform.GetGrid(ape.Owner) is not { } gridId || !TryComp<MapGridComponent>(gridId, out var grid))
+        if (_transform.GetGrid(ape.Owner) is not { } gridId
+            || !TryComp(gridId, out MapGridComponent? grid))
             return;
 
         if (_net.IsServer)
             _audio.PlayPvs(ape.Comp.Sound, ape);
 
-        foreach (var tile in _map.GetTilesIntersecting(gridId, grid, Box2.CenteredAround(_transform.GetMoverCoordinates(ape).Position, new Vector2(2, 2))))
+        foreach (TileRef tile in _map.GetTilesIntersecting(gridId, grid,
+            Box2.CenteredAround(_transform.GetMoverCoordinates(ape).Position, new(2, 2))))
         {
-            //Gib mobs, knockback items, also kill structures
-            foreach (var ent in _entityLookup.GetEntitiesInTile(tile, LookupFlags.All))
+            // Gib mobs, knockback items, also kill structures
+            foreach (EntityUid ent in _entityLookup.GetEntitiesInTile(tile, LookupFlags.All))
             {
                 if (CanGib(ape, ent))
                 {
-                    if (!ape.Comp.Gibs || !TryComp<BodyComponent>(ent, out var body))
+                    if (!ape.Comp.Gibs || !TryComp(ent, out BodyComponent? body))
                     {
-                        //just do a ton of damage instead
+                        // just do a ton of damage instead
                         _damage.TryChangeDamage(ent, ape.Comp.MobDamage, true, origin: ape, tool: ape);
                         continue;
                     }
@@ -220,12 +255,14 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
                         _rmcGib.ScatterInventoryItems(ent);
                         _body.GibBody(ent, true, body);
                     }
+
                     continue;
                 }
 
                 if (HasComp<ItemComponent>(ent) && !Transform(ent).Anchored)
                 {
-                    _size.KnockBack(ent, _transform.GetMapCoordinates(ape), ape.Comp.Knockback, ape.Comp.Knockback, 15, true);
+                    _size.KnockBack(ent, _transform.GetMapCoordinates(ape), ape.Comp.Knockback, ape.Comp.Knockback, 15,
+                        true);
                     continue;
                 }
 
@@ -234,19 +271,19 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
                     var ev = new GetExplosionResistanceEvent(ape.Comp.ExplosionType.Id);
                     RaiseLocalEvent(ent, ref ev);
 
-                    _damage.TryChangeDamage(ent, ape.Comp.StructureDamage * ev.DamageCoefficient, true, origin: ape, tool: ape);
-                    continue;
+                    _damage.TryChangeDamage(ent, ape.Comp.StructureDamage * ev.DamageCoefficient, true, origin: ape,
+                        tool: ape);
                 }
             }
 
             PredictedSpawnAtPosition(ape.Comp.SmokeEffect, _turf.GetTileCenter(tile));
         }
 
-        //Shake - effects everyone
+        // Shake - effects everyone
         _mobs.Clear();
         _entityLookup.GetEntitiesInRange(Transform(ape).Coordinates, ape.Comp.ShakeCameraRange, _mobs);
 
-        foreach (var mob in _mobs)
+        foreach (Entity<MobStateComponent> mob in _mobs)
         {
             if (mob.Owner == ape.Owner)
             {
@@ -274,8 +311,8 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
 
     private void OnLeapingInit(Entity<ApeDestroyLeapingComponent> ape, ref ComponentInit args)
     {
-        var actions = _actions.GetActions(ape);
-        foreach (var action in actions)
+        IEnumerable<Entity<ActionComponent>> actions = _actions.GetActions(ape);
+        foreach (Entity<ActionComponent> action in actions)
         {
             _actions.SetEnabled(action.AsNullable(), false);
         }
@@ -285,8 +322,8 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
 
     protected virtual void OnLeapingRemove(Entity<ApeDestroyLeapingComponent> ape, ref ComponentRemove args)
     {
-        var actions = _actions.GetActions(ape);
-        foreach (var action in actions)
+        IEnumerable<Entity<ActionComponent>> actions = _actions.GetActions(ape);
+        foreach (Entity<ActionComponent> action in actions)
         {
             _actions.SetEnabled(action.AsNullable(), true);
         }
@@ -294,49 +331,14 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
         _blocker.UpdateCanMove(ape);
     }
 
-    public override void Update(float frameTime)
-    {
-        if (_net.IsClient)
-            return;
-
-        var time = _timing.CurTime;
-        var query = EntityQueryEnumerator<ApeDestroyLeapingComponent, Threats.Mobs.Ape.ApeDestroyComponent>();
-
-        while (query.MoveNext(out var uid, out var leaping, out var destroy))
-        {
-            if (_mob.IsDead(uid))
-            {
-                RemCompDeferred<ApeDestroyLeapingComponent>(uid);
-                continue;
-            }
-
-            if (leaping.LeapMoveAt != null && time > leaping.LeapMoveAt)
-            {
-                if (leaping.Target != null)
-                    _transform.SetCoordinates(uid, leaping.Target.Value);
-
-                leaping.LeapMoveAt = null;
-                Dirty(uid, leaping);
-            }
-
-            if (leaping.LeapEndAt == null || time < leaping.LeapEndAt)
-                continue;
-
-            CrashDown((uid, destroy));
-        }
-    }
-
-    private void SetCooldown(Entity<Threats.Mobs.Ape.ApeDestroyComponent> ape)
+    private void SetCooldown(Entity<ApeDestroyComponent> ape)
     {
         // Find the ape's Destroy action and apply the configured cooldown to it.
-        foreach (var (actionId, action) in _rmcActions.GetActionsWithEvent<Threats.Mobs.Ape.ApeDestroyActionEvent>(ape))
+        foreach ((EntityUid actionId, ActionComponent action) in
+            _rmcActions.GetActionsWithEvent<ApeDestroyActionEvent>(ape))
         {
             _actions.SetCooldown(actionId, ape.Comp.Cooldown);
             break;
         }
     }
-
-
 }
-
-

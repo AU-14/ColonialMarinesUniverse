@@ -1,6 +1,5 @@
 using System.Linq;
 using Content.Server.GameTicking;
-using Content.Shared.AU14;
 using Content.Shared.Cuffs;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.Humanoid;
@@ -17,7 +16,7 @@ namespace Content.Server._CMU14.Threats.Rules;
 /// </summary>
 public sealed partial class KillAllRulesHandcuffSystem : EntitySystem
 {
-    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private readonly GameTicker _gameTicker = default!;
 
     public override void Initialize()
     {

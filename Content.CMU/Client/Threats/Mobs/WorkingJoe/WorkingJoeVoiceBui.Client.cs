@@ -7,41 +7,38 @@ namespace Content.Client._CMU14.Threats.Mobs.WorkingJoe;
 
 public sealed partial class WorkingJoeVoiceBui : BoundUserInterface
 {
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private ILocalizationManager _loc = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private IResourceManager _resource = default!;
-
-    private WorkingJoeVoiceWindow? _window;
     private WorkingJoeVoiceFavorites? _favorites;
 
-    public WorkingJoeVoiceBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
-    {
-        IoCManager.InjectDependencies(this);
-    }
+    private WorkingJoeVoiceWindow? _window;
+
+    public WorkingJoeVoiceBui(EntityUid owner, Enum uiKey) : base(owner, uiKey) { IoCManager.InjectDependencies(this); }
 
     protected override void Open()
     {
         base.Open();
 
-        _favorites ??= new WorkingJoeVoiceFavorites(_resource);
+        _favorites ??= new(_resource);
 
-        _window = new WorkingJoeVoiceWindow(_favorites);
+        _window = new(_favorites);
         _window.OnClose += Close;
         _window.OnLineSelected += OnLineSelected;
 
         var lines = new List<WorkingJoeVoiceLine>();
-        foreach (var emote in _proto.EnumeratePrototypes<EmotePrototype>())
+        foreach (EmotePrototype emote in _proto.EnumeratePrototypes<EmotePrototype>())
         {
             if (emote.Whitelist?.Tags == null)
                 continue;
             if (!emote.Whitelist.Tags.Contains("WorkingJoe"))
                 continue;
 
-            lines.Add(new WorkingJoeVoiceLine
+            lines.Add(new()
             {
                 EmoteId = emote.ID,
                 DisplayName = _loc.GetString(emote.Name),
-                Category = emote.Category.ToString(),
+                Category = emote.Category.ToString()
             });
         }
 
@@ -49,10 +46,7 @@ public sealed partial class WorkingJoeVoiceBui : BoundUserInterface
         _window.OpenCentered();
     }
 
-    private void OnLineSelected(string emoteId)
-    {
-        SendMessage(new WorkingJoePlayLineMessage(emoteId));
-    }
+    private void OnLineSelected(string emoteId) { SendMessage(new WorkingJoePlayLineMessage(emoteId)); }
 
     protected override void Dispose(bool disposing)
     {

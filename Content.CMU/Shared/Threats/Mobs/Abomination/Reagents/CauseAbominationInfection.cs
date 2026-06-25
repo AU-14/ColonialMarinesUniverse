@@ -4,8 +4,8 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared._CMU14.Threats.Mobs.Abomination.Reagents;
 
 /// <summary>
-/// Reagent effect that applies <see cref="AbominationInfectionComponent"/> to
-/// the target on metabolism. Used by the AbominationVenom chemical.
+///     Reagent effect that applies <see cref="AbominationInfectionComponent" /> to
+///     the target on metabolism. Used by the AbominationVenom chemical.
 /// </summary>
 public sealed partial class CauseAbominationInfection : EventEntityEffect<CauseAbominationInfection>
 {

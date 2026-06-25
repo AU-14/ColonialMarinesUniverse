@@ -1,6 +1,5 @@
 using System.Linq;
 using Content.Shared._CMU14.Threats;
-using Content.Shared._CMU14.Threats;
 using Content.Shared.AU14.util;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
@@ -18,15 +17,14 @@ public readonly record struct ThreatVoteAssignment(NetUserId Player, ProtoId<Job
 
 public static class ThreatVoteSelection
 {
-    public const string GenericThreatDisplayNameLocId = "au14-threat-vote-option-generic";
     public static readonly ProtoId<JobPrototype> ThreatLeaderJobId = new("AU14JobThreatLeader");
     public static readonly ProtoId<JobPrototype> ThreatMemberJobId = new("AU14JobThreatMember");
+    public const string GenericThreatDisplayNameLocId = "au14-threat-vote-option-generic";
 
-    public static ThreatVoteBodyCount CalculateBodyCount(
-        IReadOnlyDictionary<string, int>           leaders,
-        IReadOnlyDictionary<string, int>           members,
+    public static ThreatVoteBodyCount CalculateBodyCount(IReadOnlyDictionary<string, int> leaders,
+        IReadOnlyDictionary<string, int> members,
         IReadOnlyDictionary<string, JobScaleEntry> scaling,
-        int                                        playerCount)
+        int playerCount)
     {
         int leaderCount = ThreatVoteSelection.CalculateEntries(leaders, scaling, playerCount);
         int memberCount = ThreatVoteSelection.CalculateEntries(members, scaling, playerCount);
@@ -38,17 +36,16 @@ public static class ThreatVoteSelection
         => ThreatVoteSelection.CalculateBodyCount(spawn.LeadersToSpawn, spawn.GruntsToSpawn, spawn.Scaling,
             playerCount);
 
-    public static bool IsThreatAllowed(
-        IReadOnlyCollection<string> blacklistedGamemodes,
+    public static bool IsThreatAllowed(IReadOnlyCollection<string> blacklistedGamemodes,
         IReadOnlyCollection<string> whitelistedGamemodes,
-        int                         minPlayers,
-        int                         maxPlayers,
+        int minPlayers,
+        int maxPlayers,
         IReadOnlyCollection<string> blacklistedPlatoons,
         IReadOnlyCollection<string> whitelistedPlatoons,
-        string                      preset,
-        string?                     govforId,
-        string?                     opforId,
-        int                         playerCount)
+        string preset,
+        string? govforId,
+        string? opforId,
+        int playerCount)
     {
         if (ThreatVoteSelection.ContainsIgnoreCase(blacklistedGamemodes, preset))
             return false;
@@ -76,12 +73,11 @@ public static class ThreatVoteSelection
         return true;
     }
 
-    public static bool IsThreatAllowed(
-        ThreatPrototype threat,
-        string          preset,
-        string?         govforId,
-        string?         opforId,
-        int             playerCount)
+    public static bool IsThreatAllowed(ThreatPrototype threat,
+        string preset,
+        string? govforId,
+        string? opforId,
+        int playerCount)
         => ThreatVoteSelection.IsThreatAllowed(
             threat.BlacklistedGamemodes,
             threat.whitelistedgamemodes,
@@ -94,20 +90,18 @@ public static class ThreatVoteSelection
             opforId,
             playerCount);
 
-    public static bool CanEnterThreatVotePool(
-        HumanoidCharacterProfile              profile,
-        string?                               presetId,
+    public static bool CanEnterThreatVotePool(HumanoidCharacterProfile profile,
+        string? presetId,
         IEnumerable<ProtoId<ThreatPrototype>> candidateThreatIds)
         => ThreatVoteSelection.CanEnterThreatVotePoolForJob(profile, presetId, candidateThreatIds,
-                ThreatVoteSelection.ThreatLeaderJobId) ||
+                ThreatLeaderJobId) ||
             ThreatVoteSelection.CanEnterThreatVotePoolForJob(profile, presetId, candidateThreatIds,
-                ThreatVoteSelection.ThreatMemberJobId);
+                ThreatMemberJobId);
 
-    public static bool CanEnterThreatVotePoolForJob(
-        HumanoidCharacterProfile              profile,
-        string?                               presetId,
+    public static bool CanEnterThreatVotePoolForJob(HumanoidCharacterProfile profile,
+        string? presetId,
         IEnumerable<ProtoId<ThreatPrototype>> candidateThreatIds,
-        ProtoId<JobPrototype>                 threatJobId)
+        ProtoId<JobPrototype> threatJobId)
     {
         JobPriority priority = ThreatVoteSelection.GetThreatJobPriority(profile, presetId, threatJobId);
 
@@ -126,10 +120,9 @@ public static class ThreatVoteSelection
         return threatPreferences.Any(preference => candidates.Contains(preference.Id));
     }
 
-    private static JobPriority GetThreatJobPriority(
-        HumanoidCharacterProfile profile,
-        string?                  presetId,
-        ProtoId<JobPrototype>    threatJobId)
+    private static JobPriority GetThreatJobPriority(HumanoidCharacterProfile profile,
+        string? presetId,
+        ProtoId<JobPrototype> threatJobId)
     {
         IReadOnlyDictionary<ProtoId<JobPrototype>, JobPriority> priorities
             = profile.GetJobPrioritiesForGamemode(presetId);
@@ -139,19 +132,18 @@ public static class ThreatVoteSelection
             : JobPriority.Never;
     }
 
-    public static List<ThreatVoteAssignment> BuildHeldAssignments(
-        IReadOnlyList<NetUserId>                                 shuffledPlayers,
+    public static List<ThreatVoteAssignment> BuildHeldAssignments(IReadOnlyList<NetUserId> shuffledPlayers,
         IReadOnlyDictionary<NetUserId, HumanoidCharacterProfile> profiles,
-        IReadOnlyList<ProtoId<ThreatPrototype>>                  candidateThreatIds,
-        int                                                      leaderSlots,
-        int                                                      memberSlots,
-        string?                                                  presetId)
+        IReadOnlyList<ProtoId<ThreatPrototype>> candidateThreatIds,
+        int leaderSlots,
+        int memberSlots,
+        string? presetId)
     {
         var assignments = new List<ThreatVoteAssignment>(Math.Max(0, leaderSlots) + Math.Max(0, memberSlots));
-        var assigned    = new HashSet<NetUserId>();
+        var assigned = new HashSet<NetUserId>();
 
-        AssignJob(ThreatVoteSelection.ThreatLeaderJobId, leaderSlots);
-        AssignJob(ThreatVoteSelection.ThreatMemberJobId, memberSlots);
+        AssignJob(ThreatLeaderJobId, leaderSlots);
+        AssignJob(ThreatMemberJobId, memberSlots);
 
         return assignments;
 
@@ -185,26 +177,24 @@ public static class ThreatVoteSelection
         }
     }
 
-    public static List<ThreatVoteAssignment> BuildHeldAssignments(
-        IReadOnlyList<NetUserId> shuffledEligiblePlayers,
-        int                      heldCount)
+    public static List<ThreatVoteAssignment> BuildHeldAssignments(IReadOnlyList<NetUserId> shuffledEligiblePlayers,
+        int heldCount)
     {
         var assignments = new List<ThreatVoteAssignment>(Math.Min(heldCount, shuffledEligiblePlayers.Count));
         for (var i = 0; i < heldCount && i < shuffledEligiblePlayers.Count; i++)
         {
-            assignments.Add(new(shuffledEligiblePlayers[i], ThreatVoteSelection.ThreatMemberJobId));
+            assignments.Add(new(shuffledEligiblePlayers[i], ThreatMemberJobId));
         }
 
         return assignments;
     }
 
-    public static List<ThreatVoteAssignment> BuildSpawnAssignments(
-        IReadOnlyList<NetUserId> shuffledHeldPlayers,
-        int                      leaderBodies,
-        int                      memberBodies)
+    public static List<ThreatVoteAssignment> BuildSpawnAssignments(IReadOnlyList<NetUserId> shuffledHeldPlayers,
+        int leaderBodies,
+        int memberBodies)
     {
         List<ThreatVoteAssignment> heldAssignments = shuffledHeldPlayers
-            .Select(player => new ThreatVoteAssignment(player, ThreatVoteSelection.ThreatMemberJobId))
+            .Select(player => new ThreatVoteAssignment(player, ThreatMemberJobId))
             .ToList();
 
         return ThreatVoteSelection.BuildSpawnAssignments(heldAssignments, leaderBodies, memberBodies);
@@ -212,12 +202,12 @@ public static class ThreatVoteSelection
 
     public static List<ThreatVoteAssignment> BuildSpawnAssignments(
         IReadOnlyList<ThreatVoteAssignment> shuffledHeldAssignments,
-        int                                 leaderBodies,
-        int                                 memberBodies)
+        int leaderBodies,
+        int memberBodies)
     {
-        int totalBodies     = Math.Max(0, leaderBodies) + Math.Max(0, memberBodies);
-        var assignments     = new List<ThreatVoteAssignment>(Math.Min(totalBodies, shuffledHeldAssignments.Count));
-        var assigned        = new HashSet<NetUserId>();
+        int totalBodies = Math.Max(0, leaderBodies) + Math.Max(0, memberBodies);
+        var assignments = new List<ThreatVoteAssignment>(Math.Min(totalBodies, shuffledHeldAssignments.Count));
+        var assigned = new HashSet<NetUserId>();
         var assignedLeaders = 0;
         var assignedMembers = 0;
 
@@ -226,10 +216,10 @@ public static class ThreatVoteSelection
             if (assignedLeaders >= leaderBodies)
                 break;
 
-            if (held.Job != ThreatVoteSelection.ThreatLeaderJobId)
+            if (held.Job != ThreatLeaderJobId)
                 continue;
 
-            assignments.Add(new(held.Player, ThreatVoteSelection.ThreatLeaderJobId));
+            assignments.Add(new(held.Player, ThreatLeaderJobId));
             assigned.Add(held.Player);
             assignedLeaders++;
         }
@@ -242,7 +232,7 @@ public static class ThreatVoteSelection
             if (!assigned.Add(held.Player))
                 continue;
 
-            assignments.Add(new(held.Player, ThreatVoteSelection.ThreatMemberJobId));
+            assignments.Add(new(held.Player, ThreatMemberJobId));
             assignedMembers++;
         }
 
@@ -282,7 +272,7 @@ public static class ThreatVoteSelection
     public static string GetThreatDisplayNameLocId(string threatId)
     {
         if (string.IsNullOrWhiteSpace(threatId))
-            return ThreatVoteSelection.GenericThreatDisplayNameLocId;
+            return GenericThreatDisplayNameLocId;
 
         if (threatId.Contains("cultist", StringComparison.OrdinalIgnoreCase))
             return "au14-threat-vote-option-cultist-xeno";
@@ -302,13 +292,12 @@ public static class ThreatVoteSelection
         if (threatId.Contains("wendigo", StringComparison.OrdinalIgnoreCase))
             return "au14-threat-vote-option-wendigo";
 
-        return ThreatVoteSelection.GenericThreatDisplayNameLocId;
+        return GenericThreatDisplayNameLocId;
     }
 
-    private static int CalculateEntries(
-        IReadOnlyDictionary<string, int>           entries,
+    private static int CalculateEntries(IReadOnlyDictionary<string, int> entries,
         IReadOnlyDictionary<string, JobScaleEntry> scaling,
-        int                                        playerCount)
+        int playerCount)
     {
         var count = 0;
         foreach ((string protoId, int staticCount) in entries)

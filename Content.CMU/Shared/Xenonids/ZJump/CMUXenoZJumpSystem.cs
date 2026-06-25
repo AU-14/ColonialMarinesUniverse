@@ -16,40 +16,37 @@ namespace Content.Shared._CMU14.Threats.Mobs.Xeno.ZJump;
 
 public sealed partial class CMUXenoZJumpSystem : EntitySystem
 {
+    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly ThrowingSystem _throwing = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private readonly CMUSharedZLevelsSystem _zLevels = default!;
     public const float ZJumpTakeoffLocalPosition = 0.25f;
     private const float LightTakeoffDashMaxDistance = 1f;
     private const float LightTakeoffDashMaxSpeed = 5f;
 
-    [Dependency] private SharedActionsSystem _actions = default!;
-    [Dependency] private SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private SharedPhysicsSystem _physics = default!;
-    [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private ThrowingSystem _throwing = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
-    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
-
     public override void Initialize()
     {
         SubscribeLocalEvent<CMUXenoZJumpComponent, MapInitEvent>(OnZJumpMapInit);
-        SubscribeLocalEvent<CMUXenoZJumpComponent, Threats.Mobs.Xeno.ZJump.CMUXenoZJumpActionEvent>(OnZJumpAction);
-        SubscribeLocalEvent<CMUXenoZJumpComponent, Threats.Mobs.Xeno.ZJump.CMUXenoZJumpDoAfterEvent>(OnZJumpDoAfter);
+        SubscribeLocalEvent<CMUXenoZJumpComponent, CMUXenoZJumpActionEvent>(OnZJumpAction);
+        SubscribeLocalEvent<CMUXenoZJumpComponent, CMUXenoZJumpDoAfterEvent>(OnZJumpDoAfter);
     }
 
     private void OnZJumpMapInit(Entity<CMUXenoZJumpComponent> xeno, ref MapInitEvent args)
     {
-        if (!HasComp<XenoComponent>(xeno) ||
-            xeno.Comp.Action != null ||
-            _actions.AddAction(xeno, xeno.Comp.ActionId) is not { } action)
-        {
+        if (!HasComp<XenoComponent>(xeno)
+            || xeno.Comp.Action != null
+            || _actions.AddAction(xeno, xeno.Comp.ActionId) is not { } action)
             return;
-        }
 
         xeno.Comp.Action = action;
         Dirty(xeno);
     }
 
-    private void OnZJumpAction(Entity<CMUXenoZJumpComponent> xeno, ref Threats.Mobs.Xeno.ZJump.CMUXenoZJumpActionEvent args)
+    private void OnZJumpAction(Entity<CMUXenoZJumpComponent> xeno, ref CMUXenoZJumpActionEvent args)
     {
         if (args.Handled)
             return;
@@ -66,14 +63,14 @@ public sealed partial class CMUXenoZJumpSystem : EntitySystem
         if (!_xenoPlasma.HasPlasmaPopup((xeno.Owner, null), xeno.Comp.PlasmaCost))
             return;
 
-        var ev = new Threats.Mobs.Xeno.ZJump.CMUXenoZJumpDoAfterEvent(GetNetCoordinates(args.Target));
+        var ev = new CMUXenoZJumpDoAfterEvent(GetNetCoordinates(args.Target));
         var doAfter = new DoAfterArgs(EntityManager, xeno, xeno.Comp.Windup, ev, xeno, args.Action)
         {
             BreakOnMove = true,
             BreakOnDamage = true,
             DamageThreshold = FixedPoint2.New(10),
             DuplicateCondition = DuplicateConditions.SameEvent,
-            Hidden = true,
+            Hidden = true
         };
 
         if (!_doAfter.TryStartDoAfter(doAfter))
@@ -82,7 +79,7 @@ public sealed partial class CMUXenoZJumpSystem : EntitySystem
         args.Handled = true;
     }
 
-    private void OnZJumpDoAfter(Entity<CMUXenoZJumpComponent> xeno, ref Threats.Mobs.Xeno.ZJump.CMUXenoZJumpDoAfterEvent args)
+    private void OnZJumpDoAfter(Entity<CMUXenoZJumpComponent> xeno, ref CMUXenoZJumpDoAfterEvent args)
     {
         if (args.Handled)
             return;
@@ -99,21 +96,21 @@ public sealed partial class CMUXenoZJumpSystem : EntitySystem
 
     private bool TryDoZJump(Entity<CMUXenoZJumpComponent> xeno, NetCoordinates targetCoordinates)
     {
-        if (!TryComp<CMUZPhysicsComponent>(xeno, out var zPhysics))
+        if (!TryComp(xeno, out CMUZPhysicsComponent? zPhysics))
         {
             _popup.PopupClient(Loc.GetString(xeno.Comp.NoZPhysicsPopup), xeno, xeno, PopupType.MediumCaution);
             return false;
         }
 
-        if (!TryComp<PhysicsComponent>(xeno, out var physics))
+        if (!TryComp(xeno, out PhysicsComponent? physics))
             return false;
 
         if (!CanStartZJumpWindup(xeno, GetCoordinates(targetCoordinates), xeno.Comp))
             return false;
 
-        var origin = _transform.GetMapCoordinates(xeno);
+        MapCoordinates origin = _transform.GetMapCoordinates(xeno);
         var target = _transform.ToMapCoordinates(targetCoordinates);
-        var direction = CMUXenoZJumpSystem.ClampJumpVector(target.Position - origin.Position, xeno.Comp.Range);
+        Vector2 direction = CMUXenoZJumpSystem.ClampJumpVector(target.Position - origin.Position, xeno.Comp.Range);
         if (direction == Vector2.Zero)
             return false;
 
@@ -122,13 +119,12 @@ public sealed partial class CMUXenoZJumpSystem : EntitySystem
 
         _physics.ResetDynamics(xeno, physics);
 
-        var takeoffDash = CMUXenoZJumpSystem.GetTakeoffDashVector(direction, xeno.Comp.TakeoffDashDistance);
+        Vector2 takeoffDash = CMUXenoZJumpSystem.GetTakeoffDashVector(direction, xeno.Comp.TakeoffDashDistance);
 
-        _throwing.TryThrow(
-            xeno,
+        _throwing.TryThrow(xeno,
             takeoffDash,
             xeno.Comp.TakeoffDashSpeed,
-            user: xeno,
+            xeno,
             animated: false,
             compensateFriction: true);
 
@@ -144,8 +140,7 @@ public sealed partial class CMUXenoZJumpSystem : EntitySystem
         return true;
     }
 
-    private bool CanStartZJumpWindup(
-        Entity<CMUXenoZJumpComponent> xeno,
+    private bool CanStartZJumpWindup(Entity<CMUXenoZJumpComponent> xeno,
         EntityCoordinates targetCoordinates,
         CMUXenoZJumpComponent component)
     {
@@ -158,30 +153,28 @@ public sealed partial class CMUXenoZJumpSystem : EntitySystem
         if (!TryComp<PhysicsComponent>(xeno, out _))
             return false;
 
-        var xform = Transform(xeno);
+        TransformComponent xform = Transform(xeno);
         var hasZMap = false;
         var hasMapAbove = false;
-        if (xform.MapUid is { } mapUid &&
-            TryComp<CMUZLevelMapComponent>(mapUid, out var zMap))
+        if (xform.MapUid is { } mapUid && TryComp(mapUid, out CMUZLevelMapComponent? zMap))
         {
             hasZMap = true;
             hasMapAbove = _zLevels.TryMapUp((mapUid, zMap), out _);
         }
 
-        var canUseZJumpMap = CMUXenoZJumpSystem.CanUseZJumpMap(hasZMap, hasMapAbove);
-        if (!canUseZJumpMap ||
-            !CMUXenoZJumpSystem.CanStartZJumpTakeoff(canUseZJumpMap, _zLevels.HasTileAbove(xeno)))
+        bool canUseZJumpMap = CMUXenoZJumpSystem.CanUseZJumpMap(hasZMap, hasMapAbove);
+        if (!canUseZJumpMap || !CMUXenoZJumpSystem.CanStartZJumpTakeoff(canUseZJumpMap, _zLevels.HasTileAbove(xeno)))
         {
             _popup.PopupClient(Loc.GetString(component.NoZPhysicsPopup), xeno, xeno, PopupType.MediumCaution);
             return false;
         }
 
-        var origin = _transform.GetMapCoordinates(xeno);
+        MapCoordinates origin = _transform.GetMapCoordinates(xeno);
         var target = _transform.ToMapCoordinates(targetCoordinates);
         if (origin.MapId != target.MapId)
             return false;
 
-        var direction = CMUXenoZJumpSystem.ClampJumpVector(target.Position - origin.Position, component.Range);
+        Vector2 direction = CMUXenoZJumpSystem.ClampJumpVector(target.Position - origin.Position, component.Range);
         return direction != Vector2.Zero;
     }
 
@@ -190,7 +183,7 @@ public sealed partial class CMUXenoZJumpSystem : EntitySystem
         if (vector == Vector2.Zero || range <= 0f)
             return Vector2.Zero;
 
-        var length = vector.Length();
+        float length = vector.Length();
         if (length <= range)
             return vector;
 
@@ -198,46 +191,25 @@ public sealed partial class CMUXenoZJumpSystem : EntitySystem
     }
 
     public static bool HasEnoughVerticalVelocity(float velocity, float requiredVelocity)
-    {
-        return velocity >= requiredVelocity;
-    }
+        => velocity >= requiredVelocity;
 
-    public static bool ShouldSetInAirForUpwardMomentum(float zVelocity)
-    {
-        return zVelocity > 0f;
-    }
+    public static bool ShouldSetInAirForUpwardMomentum(float zVelocity) => zVelocity > 0f;
 
     public static bool ShouldRaiseZJumpTakeoffLocalPosition(float zVelocity, float localPosition)
-    {
-        return zVelocity > 0f &&
-               localPosition < ZJumpTakeoffLocalPosition;
-    }
+        => zVelocity > 0f && localPosition < ZJumpTakeoffLocalPosition;
 
-    public static bool CanUseZJumpMap(bool hasZMap, bool hasMapAbove)
-    {
-        return hasZMap && hasMapAbove;
-    }
+    public static bool CanUseZJumpMap(bool hasZMap, bool hasMapAbove) => hasZMap && hasMapAbove;
 
     public static Vector2 GetTakeoffDashVector(Vector2 vector, float distance)
-    {
-        return CMUXenoZJumpSystem.ClampJumpVector(vector, distance);
-    }
+        => CMUXenoZJumpSystem.ClampJumpVector(vector, distance);
 
-    public static bool IsLightTakeoffDash(float distance, float speed)
-    {
-        return distance > 0f &&
-               distance <= LightTakeoffDashMaxDistance &&
-               speed > 0f &&
-               speed <= LightTakeoffDashMaxSpeed;
-    }
+    public static bool IsLightTakeoffDash(float distance, float speed) => distance > 0f
+        && distance <= LightTakeoffDashMaxDistance
+        && speed > 0f
+        && speed <= LightTakeoffDashMaxSpeed;
 
     public static bool CanStartZJumpTakeoff(bool canUseZJumpMap, bool hasBlockingTileAbove)
-    {
-        return canUseZJumpMap && !hasBlockingTileAbove;
-    }
+        => canUseZJumpMap && !hasBlockingTileAbove;
 
-    public static bool ShouldUseWindupDoAfter(TimeSpan windup)
-    {
-        return windup > TimeSpan.Zero;
-    }
+    public static bool ShouldUseWindupDoAfter(TimeSpan windup) => windup > TimeSpan.Zero;
 }

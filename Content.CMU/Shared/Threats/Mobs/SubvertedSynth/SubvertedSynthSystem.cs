@@ -10,18 +10,17 @@ public sealed class SubvertedSynthSystem : EntitySystem
         SubscribeLocalEvent<SubvertedSynthComponent, ComponentInit>(OnInit);
         SubscribeLocalEvent<SubvertedSynthComponent, ComponentRemove>(OnRemove);
     }
-    //hacky hack just to dirty the entity
+
+    // hacky hack just to dirty the entity
     private void OnInit(EntityUid uid, SubvertedSynthComponent comp, ComponentInit args)
     {
-        if (TryComp<SynthComponent>(uid, out var sc))
-        {
-            Dirty(uid, sc);
-        }
+        if (TryComp(uid, out SynthComponent? sc)) Dirty(uid, sc);
         DirtyEntity(uid);
     }
+
     private void OnRemove(EntityUid uid, SubvertedSynthComponent comp, ComponentRemove args)
     {
-        if (TryComp<SynthComponent>(uid, out var sc))
+        if (TryComp(uid, out SynthComponent? sc))
             Dirty(uid, sc);
         DirtyEntity(uid);
     }

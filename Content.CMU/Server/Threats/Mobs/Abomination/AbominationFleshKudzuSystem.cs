@@ -23,28 +23,18 @@ namespace Content.Server._CMU14.Threats.Mobs.Abomination;
 /// </summary>
 public sealed partial class AbominationFleshKudzuSystem : EntitySystem
 {
-    [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private ChatSystem _chat = default!;
-    [Dependency] private DamageableSystem _damageable = default!;
-    [Dependency] private AbominationInfectionSystem _infection = default!;
-    [Dependency] private MobStateSystem _mobState = default!;
-    [Dependency] private SharedPhysicsSystem _physics = default!;
-    [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly AbominationInfectionSystem _infection = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     public override void Initialize()
     {
         SubscribeLocalEvent<AbominationComponent, AttackAttemptEvent>(OnAbominationAttackAttempt);
-    }
-
-    /// <summary>
-    ///     Block abominations from melee-attacking flesh kudzu — they kept
-    ///     destroying their own coverage in playtest.
-    /// </summary>
-    private void OnAbominationAttackAttempt(Entity<AbominationComponent> ent, ref AttackAttemptEvent args)
-    {
-        if (args.Target is { } target && HasComp<AbominationFleshKudzuComponent>(target))
-            args.Cancel();
     }
 
     public override void Update(float frameTime)
@@ -66,7 +56,7 @@ public sealed partial class AbominationFleshKudzuSystem : EntitySystem
         EntityQueryEnumerator<AbominationFleshKudzuComponent, PhysicsComponent> query
             = EntityQueryEnumerator<AbominationFleshKudzuComponent, PhysicsComponent>();
         while (query.MoveNext(out EntityUid uid, out AbominationFleshKudzuComponent? kudzu,
-                   out PhysicsComponent? physics))
+            out PhysicsComponent? physics))
         {
             if (kudzu.NextHealAt <= now)
             {
@@ -84,9 +74,9 @@ public sealed partial class AbominationFleshKudzuSystem : EntitySystem
 
             if (kudzu.NextEmoteAt <= now)
             {
-                kudzu.NextEmoteAt = now + TimeSpan.FromSeconds(_random.NextDouble(
-                    kudzu.EmoteIntervalMin.TotalSeconds,
-                    kudzu.EmoteIntervalMax.TotalSeconds));
+                kudzu.NextEmoteAt = now
+                    + TimeSpan.FromSeconds(_random.NextDouble(kudzu.EmoteIntervalMin.TotalSeconds,
+                        kudzu.EmoteIntervalMax.TotalSeconds));
 
                 AudioParams audioParams = AudioParams.Default.WithVolume(kudzu.EmoteVolume);
 
@@ -107,6 +97,16 @@ public sealed partial class AbominationFleshKudzuSystem : EntitySystem
                 }
             }
         }
+    }
+
+    /// <summary>
+    ///     Block abominations from melee-attacking flesh kudzu — they kept
+    ///     destroying their own coverage in playtest.
+    /// </summary>
+    private void OnAbominationAttackAttempt(Entity<AbominationComponent> ent, ref AttackAttemptEvent args)
+    {
+        if (args.Target is { } target && HasComp<AbominationFleshKudzuComponent>(target))
+            args.Cancel();
     }
 
     private void HealContacts(Entity<AbominationFleshKudzuComponent, PhysicsComponent> ent)

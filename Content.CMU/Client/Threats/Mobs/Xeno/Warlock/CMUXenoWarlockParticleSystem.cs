@@ -35,27 +35,23 @@ public sealed partial class CMUXenoWarlockParticleSystem : EntitySystem
 
 public sealed partial class CMUXenoWarlockParticleOverlay : Overlay
 {
+    [Dependency] private IEntityManager _entity = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IGameTiming _timing = default!;
     private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
     private static readonly ResPath ParticleSprite = new("/Textures/_CMU14/Effects/Xeno/warlock_particles.rsi");
-
     private const float PixelsPerMeter = EyeManager.PixelsPerMeter;
     private const float CullPadding = 9f;
     private const float MaxDirectedTravelPixels = 250f;
-
-    [Dependency] private IEntityManager _entity = default!;
-    [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private IPrototypeManager _prototype = default!;
+    private readonly Texture _particleTexture;
+    private readonly List<EntityUid> _remove = new();
+    private readonly HashSet<EntityUid> _seen = new();
 
     private readonly SpriteSystem _sprite;
-    private readonly TransformSystem _transform;
-    private readonly EntityQuery<TransformComponent> _xformQuery;
-    private readonly Texture _particleTexture;
-    private readonly ShaderInstance _unshaded;
     private readonly Dictionary<EntityUid, TimeSpan> _startedAt = new();
-    private readonly HashSet<EntityUid> _seen = new();
-    private readonly List<EntityUid> _remove = new();
-
-    public override OverlaySpace Space => OverlaySpace.WorldSpace;
+    private readonly TransformSystem _transform;
+    private readonly ShaderInstance _unshaded;
+    private readonly EntityQuery<TransformComponent> _xformQuery;
 
     public CMUXenoWarlockParticleOverlay()
     {
@@ -68,24 +64,28 @@ public sealed partial class CMUXenoWarlockParticleOverlay : Overlay
         _unshaded = _prototype.Index(UnshadedShader).Instance();
     }
 
+    public override OverlaySpace Space => OverlaySpace.WorldSpace;
+
     protected override void Draw(in OverlayDrawArgs args)
     {
-        var handle = args.WorldHandle;
-        var cullBounds = args.WorldAABB.Enlarged(CullPadding);
-        var now = _timing.CurTime;
-        var textureSize = new Vector2(_particleTexture.Width, _particleTexture.Height) / PixelsPerMeter;
+        DrawingHandleWorld handle = args.WorldHandle;
+        Box2 cullBounds = args.WorldAABB.Enlarged(CullPadding);
+        TimeSpan now = _timing.CurTime;
+        Vector2 textureSize = new Vector2(_particleTexture.Width, _particleTexture.Height) / PixelsPerMeter;
 
         _seen.Clear();
         handle.UseShader(_unshaded);
 
-        var query = _entity.AllEntityQueryEnumerator<CMUXenoWarlockParticleEmitterComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var particles, out var xform))
+        AllEntityQueryEnumerator<CMUXenoWarlockParticleEmitterComponent, TransformComponent> query = _entity
+            .AllEntityQueryEnumerator<CMUXenoWarlockParticleEmitterComponent, TransformComponent>();
+        while (query.MoveNext(out EntityUid uid, out CMUXenoWarlockParticleEmitterComponent? particles,
+            out TransformComponent? xform))
         {
             _seen.Add(uid);
             if (xform.MapID != args.MapId)
                 continue;
 
-            var origin = _transform.GetWorldPosition(xform, _xformQuery);
+            Vector2 origin = _transform.GetWorldPosition(xform, _xformQuery);
             if (!cullBounds.Contains(origin))
                 continue;
 
@@ -95,20 +95,19 @@ public sealed partial class CMUXenoWarlockParticleOverlay : Overlay
         handle.UseShader(null);
 
         _remove.Clear();
-        foreach (var (uid, _) in _startedAt)
+        foreach ((EntityUid uid, TimeSpan _) in _startedAt)
         {
             if (!_seen.Contains(uid))
                 _remove.Add(uid);
         }
 
-        foreach (var uid in _remove)
+        foreach (EntityUid uid in _remove)
         {
             _startedAt.Remove(uid);
         }
     }
 
-    private void DrawEmitter(
-        EntityUid uid,
+    private void DrawEmitter(EntityUid uid,
         CMUXenoWarlockParticleEmitterComponent particles,
         Vector2 origin,
         Vector2 textureSize,
@@ -116,59 +115,59 @@ public sealed partial class CMUXenoWarlockParticleOverlay : Overlay
         TimeSpan now,
         DrawingHandleWorld handle)
     {
-        var profile = CMUXenoWarlockSystem.GetWarlockParticleProfile(particles.Effect);
-        var color = Color.FromHex(profile.Color);
-        var elapsed = Math.Max(0f, (float) (now - startedAt).TotalSeconds);
-        var lifespan = Math.Max(0.05f, profile.Lifespan / 10f);
-        var fade = Math.Max(0.01f, profile.Fade / 10f);
-        var seed = uid.GetHashCode();
-        var holderOffset = CMUXenoWarlockSystem.GetWarlockParticleRenderOffset(particles.Effect) / PixelsPerMeter;
-        var velocity = particles.UseMotionOverride ? particles.MotionVelocity : profile.Velocity;
-        var gravity = particles.UseMotionOverride ? particles.MotionGravity : profile.Gravity;
+        CMUXenoWarlockParticleProfile profile = CMUXenoWarlockSystem.GetWarlockParticleProfile(particles.Effect);
+        Color color = Color.FromHex(profile.Color);
+        float elapsed = Math.Max(0f, (float)(now - startedAt).TotalSeconds);
+        float lifespan = Math.Max(0.05f, profile.Lifespan / 10f);
+        float fade = Math.Max(0.01f, profile.Fade / 10f);
+        int seed = uid.GetHashCode();
+        Vector2 holderOffset = CMUXenoWarlockSystem.GetWarlockParticleRenderOffset(particles.Effect) / PixelsPerMeter;
+        Vector2 velocity = particles.UseMotionOverride ? particles.MotionVelocity : profile.Velocity;
+        Vector2 gravity = particles.UseMotionOverride ? particles.MotionGravity : profile.Gravity;
 
         for (var i = 0; i < profile.Count; i++)
         {
-            var phase = CMUXenoWarlockParticleOverlay.Hash01(seed, i, 0);
-            var age = CMUXenoWarlockParticleOverlay.PositiveModulo(elapsed + phase * lifespan, lifespan);
-            var rawAge = age * 10f;
-            var alpha = CMUXenoWarlockParticleOverlay.GetAlpha(age, lifespan, fade);
+            float phase = CMUXenoWarlockParticleOverlay.Hash01(seed, i, 0);
+            float age = CMUXenoWarlockParticleOverlay.PositiveModulo(elapsed + phase * lifespan, lifespan);
+            float rawAge = age * 10f;
+            float alpha = CMUXenoWarlockParticleOverlay.GetAlpha(age, lifespan, fade);
             if (alpha <= 0f)
                 continue;
 
-            var initial = CMUXenoWarlockParticleOverlay.RandomRing(seed, i, profile.PositionRadius);
-            var drift = CMUXenoWarlockParticleOverlay.Lerp(profile.DriftMin, profile.DriftMax, CMUXenoWarlockParticleOverlay.Hash01(seed, i, 4), CMUXenoWarlockParticleOverlay.Hash01(seed, i, 5));
-            var motion = velocity * rawAge + drift * rawAge + gravity * (0.5f * rawAge * rawAge);
-            if (particles.UseMotionOverride && motion.LengthSquared() > MaxDirectedTravelPixels * MaxDirectedTravelPixels)
+            Vector2 initial = CMUXenoWarlockParticleOverlay.RandomRing(seed, i, profile.PositionRadius);
+            Vector2 drift = CMUXenoWarlockParticleOverlay.Lerp(profile.DriftMin, profile.DriftMax,
+                CMUXenoWarlockParticleOverlay.Hash01(seed, i, 4), CMUXenoWarlockParticleOverlay.Hash01(seed, i, 5));
+            Vector2 motion = velocity * rawAge + drift * rawAge + gravity * (0.5f * rawAge * rawAge);
+            if (particles.UseMotionOverride
+                && motion.LengthSquared() > MaxDirectedTravelPixels * MaxDirectedTravelPixels)
                 motion = Vector2.Normalize(motion) * MaxDirectedTravelPixels;
 
-            var scale = CMUXenoWarlockParticleOverlay.Lerp(profile.ScaleMin, profile.ScaleMax, CMUXenoWarlockParticleOverlay.Hash01(seed, i, 6), CMUXenoWarlockParticleOverlay.Hash01(seed, i, 7)) +
-                        new Vector2(profile.Grow * rawAge);
-            scale = Vector2.Max(scale, new Vector2(0.04f));
+            Vector2 scale = CMUXenoWarlockParticleOverlay.Lerp(profile.ScaleMin, profile.ScaleMax,
+                    CMUXenoWarlockParticleOverlay.Hash01(seed, i, 6), CMUXenoWarlockParticleOverlay.Hash01(seed, i, 7))
+                + new Vector2(profile.Grow * rawAge);
+            scale = Vector2.Max(scale, new(0.04f));
 
-            var center = origin + holderOffset + (initial + motion) / PixelsPerMeter;
-            var size = textureSize * scale;
-            var box = Box2.CenteredAround(center, size);
+            Vector2 center = origin + holderOffset + (initial + motion) / PixelsPerMeter;
+            Vector2 size = textureSize * scale;
+            Box2 box = Box2.CenteredAround(center, size);
             handle.DrawTextureRect(_particleTexture, box, color.WithAlpha(alpha));
         }
     }
 
     private static Vector2 RandomRing(int seed, int index, Vector2 radius)
     {
-        var angle = CMUXenoWarlockParticleOverlay.Hash01(seed, index, 1) * MathF.Tau;
-        var length = MathHelper.Lerp(radius.X, radius.Y, MathF.Sqrt(CMUXenoWarlockParticleOverlay.Hash01(seed, index, 2)));
+        float angle = CMUXenoWarlockParticleOverlay.Hash01(seed, index, 1) * MathF.Tau;
+        float length = MathHelper.Lerp(radius.X, radius.Y,
+            MathF.Sqrt(CMUXenoWarlockParticleOverlay.Hash01(seed, index, 2)));
         return new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * length;
     }
 
-    private static Vector2 Lerp(Vector2 min, Vector2 max, float x, float y)
-    {
-        return new Vector2(
-            MathHelper.Lerp(min.X, max.X, x),
-            MathHelper.Lerp(min.Y, max.Y, y));
-    }
+    private static Vector2 Lerp(Vector2 min, Vector2 max, float x, float y) => new(MathHelper.Lerp(min.X, max.X, x),
+        MathHelper.Lerp(min.Y, max.Y, y));
 
     private static float GetAlpha(float age, float lifespan, float fade)
     {
-        var fadeStart = Math.Max(0f, lifespan - fade);
+        float fadeStart = Math.Max(0f, lifespan - fade);
         if (age <= fadeStart)
             return 1f;
 
@@ -177,7 +176,7 @@ public sealed partial class CMUXenoWarlockParticleOverlay : Overlay
 
     private static float PositiveModulo(float value, float divisor)
     {
-        var result = value % divisor;
+        float result = value % divisor;
         return result < 0f ? result + divisor : result;
     }
 
@@ -185,21 +184,21 @@ public sealed partial class CMUXenoWarlockParticleOverlay : Overlay
     {
         unchecked
         {
-            var hash = (uint) seed;
-            hash ^= (uint) index * 0x9E3779B9u;
-            hash ^= (uint) salt * 0x85EBCA6Bu;
+            var hash = (uint)seed;
+            hash ^= (uint)index * 0x9E3779B9u;
+            hash ^= (uint)salt * 0x85EBCA6Bu;
             hash ^= hash >> 16;
             hash *= 0x7FEB352Du;
             hash ^= hash >> 15;
             hash *= 0x846CA68Bu;
             hash ^= hash >> 16;
-            return (hash & 0x00FFFFFF) / (float) 0x01000000;
+            return (hash & 0x00FFFFFF) / (float)0x01000000;
         }
     }
 
     private TimeSpan GetStartedAt(EntityUid uid, TimeSpan now)
     {
-        if (_startedAt.TryGetValue(uid, out var startedAt))
+        if (_startedAt.TryGetValue(uid, out TimeSpan startedAt))
             return startedAt;
 
         _startedAt[uid] = now;

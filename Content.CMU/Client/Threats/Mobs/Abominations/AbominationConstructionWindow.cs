@@ -7,8 +7,6 @@ namespace Content.Client._CMU14.Threats.Mobs.Abominations;
 
 public sealed class AbominationConstructionWindow : DefaultWindow
 {
-    public event Action<string>? OnStructurePicked;
-
     private readonly BoxContainer _list;
     private readonly IPrototypeManager _proto;
     private readonly SpriteSystem _sprite;
@@ -16,16 +14,16 @@ public sealed class AbominationConstructionWindow : DefaultWindow
     public AbominationConstructionWindow()
     {
         Title = Loc.GetString("abomination-construction-picker-title");
-        SetSize = MinSize = new System.Numerics.Vector2(260, 320);
+        SetSize = MinSize = new(260, 320);
 
         _proto = IoCManager.Resolve<IPrototypeManager>();
         _sprite = IoCManager.Resolve<IEntityManager>().System<SpriteSystem>();
 
-        _list = new BoxContainer
+        _list = new()
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
             VerticalExpand = true,
-            HorizontalExpand = true,
+            HorizontalExpand = true
         };
 
         var scroll = new ScrollContainer
@@ -33,36 +31,38 @@ public sealed class AbominationConstructionWindow : DefaultWindow
             HScrollEnabled = false,
             VScrollEnabled = true,
             VerticalExpand = true,
-            HorizontalExpand = true,
+            HorizontalExpand = true
         };
         scroll.AddChild(_list);
         Contents.AddChild(scroll);
     }
 
+    public event Action<string>? OnStructurePicked;
+
     public void Populate(IReadOnlyList<string> options, string? selected)
     {
         _list.RemoveAllChildren();
 
-        foreach (var id in options)
+        foreach (string id in options)
         {
-            var displayName = id;
+            string displayName = id;
             TextureRect? icon = null;
-            if (_proto.TryIndex<EntityPrototype>(id, out var proto))
+            if (_proto.TryIndex(id, out EntityPrototype? proto))
             {
                 displayName = proto.Name;
-                icon = new TextureRect
+                icon = new()
                 {
                     Texture = _sprite.Frame0(proto),
                     Stretch = TextureRect.StretchMode.KeepAspectCentered,
                     VerticalAlignment = VAlignment.Center,
-                    SetSize = new System.Numerics.Vector2(32, 32),
+                    SetSize = new(32, 32)
                 };
             }
 
             var row = new BoxContainer
             {
                 Orientation = BoxContainer.LayoutOrientation.Horizontal,
-                HorizontalExpand = true,
+                HorizontalExpand = true
             };
 
             if (icon != null)
@@ -73,9 +73,9 @@ public sealed class AbominationConstructionWindow : DefaultWindow
                 Text = displayName,
                 ToggleMode = true,
                 Pressed = selected == id,
-                HorizontalExpand = true,
+                HorizontalExpand = true
             };
-            var captured = id;
+            string captured = id;
             button.OnPressed += _ => OnStructurePicked?.Invoke(captured);
             row.AddChild(button);
             _list.AddChild(row);

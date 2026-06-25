@@ -10,9 +10,5 @@ public sealed partial class ApeLeapDoAfterEvent : SimpleDoAfterEvent
     [DataField]
     public NetCoordinates TargetCoords;
 
-    public ApeLeapDoAfterEvent(NetCoordinates coordinates)
-    {
-        TargetCoords = coordinates;
-    }
+    public ApeLeapDoAfterEvent(NetCoordinates coordinates) => TargetCoords = coordinates;
 }
-

@@ -3,8 +3,8 @@ using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Evacuation;
-using Content.Shared.AU14;
 using Content.Shared.Cuffs.Components;
+using Content.Shared.GameTicking.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs;
@@ -20,13 +20,12 @@ namespace Content.Server._CMU14.Threats.Rules;
 /// </summary>
 public sealed partial class KillAllGovforRuleSystem : GameRuleSystem<KillAllGovforRuleComponent>
 {
-    [Dependency] private AreaSystem _area = default!;
-    [Dependency] private AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private GameTicker _gameTicker = default!;
-    [Dependency] private IEntityManager _entMan = default!;
-    [Dependency] private InventorySystem _inventory = default!;
-    [Dependency] private ThreatRuleHelper _threatRuleHelper = default!;
-
+    [Dependency] private readonly AreaSystem _area = default!;
+    [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private readonly ThreatRuleHelper _threatRuleHelper = default!;
     private const string DefaultWinMsg = "Threat victory: Required percentage of Govfor eliminated.";
 
     public override void Initialize()
@@ -38,6 +37,7 @@ public sealed partial class KillAllGovforRuleSystem : GameRuleSystem<KillAllGovf
         SubscribeLocalEvent<GotEquippedEvent>(OnGotEquipped);
         SubscribeLocalEvent<GotUnequippedEvent>(OnGotUnequipped);
     }
+
     private void OnGotEquipped(GotEquippedEvent ev) => OnJumpsuitChanged(ev.Equipee, ev.Slot, ev.Equipment);
     private void OnGotUnequipped(GotUnequippedEvent ev) => OnJumpsuitChanged(ev.Equipee, ev.Slot, ev.Equipment);
     public void OnHandcuffEvent(EntityUid _) => CheckVictoryCondition();
@@ -68,29 +68,32 @@ public sealed partial class KillAllGovforRuleSystem : GameRuleSystem<KillAllGovf
 
     private bool HasPrisonJumpsuit(EntityUid uid)
         => _inventory.TryGetSlotEntity(uid, "jumpsuit", out EntityUid? suit)
-        && Prototype(suit!.Value)?.ID == "AU14CivilianPrisonJumpsuit";
+            && Prototype(suit!.Value)?.ID == "AU14CivilianPrisonJumpsuit";
 
     private bool IsInArrestArea(EntityUid uid)
         => _area.TryGetArea(uid, out Entity<AreaComponent>? area, out _)
-         && area.Value.Comp.CountAsArrestedForEndConditions;
+            && area.Value.Comp.CountAsArrestedForEndConditions;
 
     private bool IsActiveRuleAndGovfor(EntityUid uid)
         => _gameTicker.IsGameRuleActive<KillAllGovforRuleComponent>()
-        && TryComp(uid, out NpcFactionMemberComponent? faction)
-        && ThreatRuleHelper.HasFaction(faction, "govfor");
+            && TryComp(uid, out NpcFactionMemberComponent? faction)
+            && ThreatRuleHelper.HasFaction(faction, "govfor");
 
     private void CheckVictoryCondition()
     {
-        var queryRule = QueryActiveRules();
-        if (!ThreatRuleHelper.TryGetActiveRule(ref queryRule, out var ruleComp, out _))
+        EntityQueryEnumerator<ActiveGameRuleComponent, KillAllGovforRuleComponent, GameRuleComponent> queryRule
+            = QueryActiveRules();
+        if (!ThreatRuleHelper.TryGetActiveRule(ref queryRule, out KillAllGovforRuleComponent ruleComp, out _))
             return;
 
-        int  requiredPercent = Math.Clamp(ruleComp.Percent, 1, 100);
-        bool countArrests    = ruleComp.Arrest;
+        int requiredPercent = Math.Clamp(ruleComp.Percent, 1, 100);
+        bool countArrests = ruleComp.Arrest;
         int eliminated = 0, total = 0;
 
-        var query = _entMan.EntityQueryEnumerator<MobStateComponent, NpcFactionMemberComponent>();
-        while (query.MoveNext(out EntityUid uid, out MobStateComponent? mobState, out NpcFactionMemberComponent? faction))
+        EntityQueryEnumerator<MobStateComponent, NpcFactionMemberComponent> query = _entMan
+            .EntityQueryEnumerator<MobStateComponent, NpcFactionMemberComponent>();
+        while (query.MoveNext(out EntityUid uid, out MobStateComponent? mobState,
+            out NpcFactionMemberComponent? faction))
         {
             if (!ThreatRuleHelper.HasFaction(faction, "govfor"))
                 continue;
@@ -108,9 +111,10 @@ public sealed partial class KillAllGovforRuleSystem : GameRuleSystem<KillAllGovf
             if (mobState.CurrentState == MobState.Dead)
                 eliminated++;
             else if (HasPrisonJumpsuit(uid)
-                || (countArrests && ((TryComp(uid, out CuffableComponent? cuffable)
-                && cuffable.CuffedHandCount > 0)
-                || IsInArrestArea(uid))))
+                || (countArrests
+                    && ((TryComp(uid, out CuffableComponent? cuffable)
+                            && cuffable.CuffedHandCount > 0)
+                        || IsInArrestArea(uid))))
                 eliminated++;
         }
 

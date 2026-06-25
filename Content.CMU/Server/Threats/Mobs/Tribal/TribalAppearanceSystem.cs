@@ -1,5 +1,4 @@
 using Content.Server.Humanoid.Systems;
-using Content.Shared.AU14;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
 using Robust.Shared.Prototypes;
@@ -17,10 +16,9 @@ namespace Content.Server._CMU14.Threats.Mobs.Tribal;
 /// </summary>
 public sealed partial class TribalAppearanceSystem : EntitySystem
 {
+    [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
     public static readonly Color TribalSkin = Color.FromHex("#4F7A82");
     public static readonly ProtoId<SpeciesPrototype> TribalSpecies = "Tribal";
-
-    [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
 
     public override void Initialize()
     {
@@ -30,11 +28,11 @@ public sealed partial class TribalAppearanceSystem : EntitySystem
 
     private void OnMapInit(Entity<TribalComponent> ent, ref MapInitEvent args)
     {
-        if (!TryComp<HumanoidAppearanceComponent>(ent, out HumanoidAppearanceComponent? humanoid))
+        if (!TryComp(ent, out HumanoidAppearanceComponent? humanoid))
             return;
 
-        _humanoid.SetSpecies(ent.Owner, TribalAppearanceSystem.TribalSpecies, false, humanoid);
-        _humanoid.SetSkinColor(ent.Owner, TribalAppearanceSystem.TribalSkin, false, false, humanoid);
+        _humanoid.SetSpecies(ent.Owner, TribalSpecies, false, humanoid);
+        _humanoid.SetSkinColor(ent.Owner, TribalSkin, false, false, humanoid);
         Dirty(ent.Owner, humanoid);
     }
 }

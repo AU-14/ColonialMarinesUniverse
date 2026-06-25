@@ -9,13 +9,12 @@ namespace Content.Shared._CMU14.Threats.Mobs.SubvertedSynth;
 public sealed partial class SubvertedSynthComponent : Component
 {
     [DataField]
+    public ComponentRegistry AdditionalComponents = new();
+    [DataField]
     public SoundSpecifier CLFSubversionSound = new SoundPathSpecifier("/Audio/Ambience/Antag/headrev_start.ogg");
 
     [DataField]
     public ProtoId<NpcFactionPrototype> Faction = "CLF";
-
-    [DataField]
-    public ComponentRegistry AdditionalComponents = new();
 
     public override bool SessionSpecific => true;
 }

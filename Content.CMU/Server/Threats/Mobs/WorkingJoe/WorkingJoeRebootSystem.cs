@@ -15,11 +15,11 @@ namespace Content.Server._CMU14.Threats.Mobs.WorkingJoe;
 
 public sealed partial class WorkingJoeRebootSystem : EntitySystem
 {
-    [Dependency] private MobStateSystem _mobState = default!;
-    [Dependency] private DefibrillatorSystem _defib = default!;
-    [Dependency] private ItemToggleSystem _toggle = default!;
-    [Dependency] private SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly DefibrillatorSystem _defib = default!;
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly ItemToggleSystem _toggle = default!;
 
     private static readonly SoundPathSpecifier ChargeSound =
         new("/Audio/_RMC14/Medical/reset_key_powerup.ogg", AudioParams.Default.WithVolume(-8));
@@ -32,7 +32,6 @@ public sealed partial class WorkingJoeRebootSystem : EntitySystem
 
     private static readonly SoundPathSpecifier FailSound =
         new("/Audio/_RMC14/Medical/reset_key_shortbeep.ogg", AudioParams.Default.WithVolume(-6));
-
     private const float DoAfterSeconds = 5f;
 
     public override void Initialize()
@@ -51,30 +50,31 @@ public sealed partial class WorkingJoeRebootSystem : EntitySystem
         if (!_mobState.IsDead(ent.Owner))
             return;
 
-        if (!TryComp<DamageableComponent>(ent.Owner, out var damageable))
+        if (!TryComp(ent.Owner, out DamageableComponent? damageable))
             return;
 
         if (damageable.TotalDamage > 0)
             return;
 
-        var user = args.User;
-        var target = ent.Owner;
+        EntityUid user = args.User;
+        EntityUid target = ent.Owner;
 
-        args.Verbs.Add(new AlternativeVerb
+        args.Verbs.Add(new()
         {
             Text = Loc.GetString("working-joe-reboot-verb"),
             Act = () =>
             {
                 var ev = new WorkingJoeRebootDoAfterEvent();
-                var doAfter = new DoAfterArgs(EntityManager, user, TimeSpan.FromSeconds(DoAfterSeconds), ev, target, target)
+                var doAfter = new DoAfterArgs(EntityManager, user, TimeSpan.FromSeconds(DoAfterSeconds), ev, target,
+                    target)
                 {
                     BreakOnMove = true,
-                    BreakOnDamage = true,
+                    BreakOnDamage = true
                 };
                 if (_doAfter.TryStartDoAfter(doAfter))
                     _audio.PlayPvs(ChargeSound, target);
             },
-            Priority = 2,
+            Priority = 2
         });
     }
 
@@ -92,11 +92,11 @@ public sealed partial class WorkingJoeRebootSystem : EntitySystem
 
         _audio.PlayPvs(ZapSound, ent.Owner);
 
-        var key = Spawn("RMCSynthResetKeySeegson", Transform(ent.Owner).Coordinates);
+        EntityUid key = Spawn("RMCSynthResetKeySeegson", Transform(ent.Owner).Coordinates);
         _toggle.TryActivate(key, args.User);
 
         var revived = false;
-        if (TryComp<DefibrillatorComponent>(key, out var defibComp))
+        if (TryComp(key, out DefibrillatorComponent? defibComp))
         {
             _defib.Zap(key, ent.Owner, args.User, defibComp);
             revived = !_mobState.IsDead(ent.Owner);

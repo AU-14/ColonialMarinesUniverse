@@ -3,7 +3,7 @@ using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Evacuation;
-using Content.Shared.AU14;
+using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using KillAllYautjaRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllYautjaRuleComponent;
@@ -12,11 +12,10 @@ namespace Content.Server._CMU14.Threats.Rules;
 
 public sealed partial class KillAllYautjaRuleSystem : GameRuleSystem<KillAllYautjaRuleComponent>
 {
-    [Dependency] private AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private GameTicker _gameTicker = default!;
-    [Dependency] private IEntityManager _entMan = default!;
-    [Dependency] private ThreatRuleHelper _threatRuleHelper = default!;
-
+    [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private readonly ThreatRuleHelper _threatRuleHelper = default!;
     private const string DefaultWinMsg = "The Bad Blood Clan has been eliminated.";
 
     public override void Initialize()
@@ -45,14 +44,16 @@ public sealed partial class KillAllYautjaRuleSystem : GameRuleSystem<KillAllYaut
 
     private void CheckVictoryCondition()
     {
-        var queryRule = QueryActiveRules();
-        if (!ThreatRuleHelper.TryGetActiveRule(ref queryRule, out var ruleComp, out _))
+        EntityQueryEnumerator<ActiveGameRuleComponent, KillAllYautjaRuleComponent, GameRuleComponent> queryRule
+            = QueryActiveRules();
+        if (!ThreatRuleHelper.TryGetActiveRule(ref queryRule, out KillAllYautjaRuleComponent ruleComp, out _))
             return;
 
         int requiredPercent = Math.Clamp(ruleComp.Percent, 1, 100);
         int eliminated = 0, total = 0;
 
-        var query = _entMan.EntityQueryEnumerator<MobStateComponent, YautjaComponent>();
+        EntityQueryEnumerator<MobStateComponent, YautjaComponent> query = _entMan
+            .EntityQueryEnumerator<MobStateComponent, YautjaComponent>();
         while (query.MoveNext(out EntityUid uid, out MobStateComponent? mobState, out _))
         {
             total++;

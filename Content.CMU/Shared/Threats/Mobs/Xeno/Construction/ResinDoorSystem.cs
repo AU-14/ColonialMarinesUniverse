@@ -4,7 +4,6 @@
 
 using Content.Shared._RMC14.Xenonids.Construction.ResinWhisper;
 using Content.Shared._RMC14.Xenonids.Hive;
-using Content.Shared.AU14;
 using Content.Shared.Doors;
 using CultistComponent = Content.Shared._CMU14.Threats.Mobs.Cultist.CultistComponent;
 
@@ -12,13 +11,13 @@ namespace Content.Shared._CMU14.Threats.Mobs.Xeno.Construction;
 
 public sealed partial class ResinDoorSystem : EntitySystem
 {
-    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
+
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<ResinDoorComponent, BeforeDoorOpenedEvent>(OnBeforeDoorOpen);
         SubscribeLocalEvent<ResinDoorComponent, BeforeDoorClosedEvent>(OnBeforeDoorClose);
-
     }
 
     private void OnBeforeDoorOpen(Entity<ResinDoorComponent> ent, ref BeforeDoorOpenedEvent args)
@@ -43,12 +42,17 @@ public sealed partial class ResinDoorSystem : EntitySystem
         if (HasComp<CultistComponent>(user))
             return true;
 
-        var hive = _hive.GetHive(door);
+        Entity<HiveComponent>? hive = _hive.GetHive(door);
         if (hive is null)
         {
-            var doorHive = TryComp<HiveMemberComponent>(door, out var doorComp) ? doorComp.Hive : null;
-            var userHive = TryComp<HiveMemberComponent>(user, out var userComp) ? userComp.Hive : null;
-            Logger.GetSawmill("hive").Warning($"Resin door ({door}) is missing a Hive. Door hive: {doorHive}, User hive: {userHive}. Permitting access");
+            EntityUid? doorHive = TryComp(door, out HiveMemberComponent? doorComp)
+                ? doorComp.Hive
+                : null;
+            EntityUid? userHive = TryComp(user, out HiveMemberComponent? userComp)
+                ? userComp.Hive
+                : null;
+            Logger.GetSawmill("hive").Warning($"Resin door ({door}) is missing a Hive. Door hive: {doorHive
+            }, User hive: {userHive}. Permitting access");
             return true; // IsAllyOfHive early-returns false when Hive is null
         }
 
