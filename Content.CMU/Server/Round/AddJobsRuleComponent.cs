@@ -20,7 +20,8 @@ namespace Content.Server.AU14.Round
         public bool AddToShip { get; set; } = false;
 
         /// <summary>
-        /// If set, designates which ship(s) to add jobs to: "govfor", "opfor", or null/empty for all.
+        /// If set, designates which side to add jobs to: "govfor" or "opfor".
+        /// Null/empty jobs are added to the main planet station.
         /// </summary>
         [DataField("shipFaction")]
         public string? ShipFaction { get; set; } = null;

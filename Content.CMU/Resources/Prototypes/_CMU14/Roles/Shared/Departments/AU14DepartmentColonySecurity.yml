@@ -1,0 +1,20 @@
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentColonySecurity
+  name: au14-department-colony-security
+  description: au14-department-colony-security-description
+  color: "#e3ce94"
+  roles:
+    - AU14JobLEOLeaderBase
+    - AU14JobLEOBase
+    - AU14JobCivilianCWPSRanger
+    - AU14JobCivilianPaPOfficer
+    - AU14JobCivilianCMBMarshal
+    - AU14JobCivilianCMBDeputy
+    - AU14JobCivilianNSPAConstable
+    - AU14JobCivilianNSPAInspector
+    - AU14JobCivilianColonySecurityLeader
+    - AU14JobCivilianColonySecurityOfficer
+  departmentRadio: null
+  headOfDepartment: AU14JobCivilianCMBMarshal
+  faction: colonist

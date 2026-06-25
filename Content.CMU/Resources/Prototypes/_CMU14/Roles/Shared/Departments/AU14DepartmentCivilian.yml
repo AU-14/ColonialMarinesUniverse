@@ -1,0 +1,13 @@
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentCivilian
+  name: au14-department-colony
+  description: au14-department-colony-description
+  color: "#e3ce94"
+  roles:
+    - AU14JobCivilianJournalist
+    - AU14JobCivilianUSASFRecruiter
+    - AU14JobCivilianColonySynthetic
+  departmentRadio: null
+  headOfDepartment: AU14JobCivilianColonyAdministrator
+  faction: colonist

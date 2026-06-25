@@ -1,0 +1,87 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianColonist
+  roundSide: Civilian
+  roundForce: COLONY
+  roundRole: CivilianColonist
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliancolonist
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: colonist
+
+  name: au14-job-name-civiliancolonist
+  description: au14-job-description-civiliancolonist
+  setPreference: true
+  playTimeTracker: AU14JobCivilianColonist
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCivilianColonist
+  icon: "AU14JobIconColonyColonist"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: Colonist (CMU)
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianColonist
+  equipment:
+    id: AU14IDCardColonyColonist
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianColonist
+  name: Spawn Point Civilian Colonist
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianColonist
+  - type: Sprite
+    state: syn_spawn
+  - type: ScenarioSpawnMarker
+    kind: ClfCivilianSpawn
+    tags:
+    - force:clf:civilian-spawn:AU14JobCivilianColonist
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: ScenarioClfCivilianColonistSpawnMarker
+  name: Spawn Point Civilian Colonist
+  suffix: Scenario Anchor
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianColonist
+  - type: Sprite
+    state: syn_spawn
+  - type: ScenarioSpawnMarker
+    kind: ClfCivilianSpawn
+    tags:
+    - force:clf:civilian-spawn:AU14JobCivilianColonist
+
+- type: playTimeTracker
+  id: AU14JobCivilianColonist
+  isHumanoid: true
+
+# ├──[ colony ]──────────────────────────────────────────────────────┤
+- type: roleLoadout
+  id: JobAU14JobCivilianColonist
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - CivFootwearAU14
+  - CivJumpsuitAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC

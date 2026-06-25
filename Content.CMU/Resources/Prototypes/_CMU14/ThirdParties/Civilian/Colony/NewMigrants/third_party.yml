@@ -1,0 +1,68 @@
+# Potential for language system addition in the future
+
+
+- type: partySpawn
+  id: MigratingCivsSpawn
+  leadersToSpawn:
+    AU14JobMigratingColonist: 1
+  gruntsToSpawn:
+    AU14JobMigratingColonist: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: MigratingCivs
+  partyspawn: MigratingCivsSpawn
+  entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
+  weight: 30
+  minplayers: 30
+  maxplayers: 54
+  GhostsNeeded: 5
+  roundstart: false
+  whitelistedgamemodes:
+    - insurgency
+    - colonyfall
+
+- type: partySpawn
+  id: MigratingCivsMediumSpawn
+  leadersToSpawn:
+    AU14JobMigratingColonist: 1
+  gruntsToSpawn:
+    AU14JobMigratingColonist: 4
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: MigratingCivsMedium
+  partyspawn: MigratingCivsMediumSpawn
+  entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
+  weight: 30
+  minplayers: 55
+  maxplayers: 100
+  GhostsNeeded: 5
+  roundstart: false
+  whitelistedgamemodes:
+    - insurgency
+    - colonyfall
+
+- type: partySpawn
+  id: MigratingCivsLargeSpawn
+  leadersToSpawn:
+    AU14JobMigratingColonist: 1
+  gruntsToSpawn:
+    AU14JobMigratingColonist: 5
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: MigratingCivsLarge
+  partyspawn: MigratingCivsLargeSpawn
+  entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
+  weight: 30
+  minplayers: 101
+  maxplayers: 400
+  GhostsNeeded: 6
+  roundstart: false
+  whitelistedgamemodes:
+    - insurgency
+    - colonyfall

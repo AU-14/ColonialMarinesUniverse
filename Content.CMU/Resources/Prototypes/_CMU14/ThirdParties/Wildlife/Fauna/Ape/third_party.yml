@@ -1,0 +1,10 @@
+
+- type: auThirdParty
+  id: ApeThirdParty
+  partyspawn: apePartycf
+  entrymethod: ground
+  weight: 10
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 1
+  roundstart: false

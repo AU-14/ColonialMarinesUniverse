@@ -1,0 +1,218 @@
+# Ammo Pouches for Random Gear
+# rifles
+- type: entity
+  parent: RMCPouchMagazineLarge
+  id: AU14PouchMagazineLargeFilledM16
+  suffix: Filled, M16
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleM16
+      amount: 4
+
+- type: entity
+  parent: RMCPouchMagazineLarge
+  id: AU14PouchMagazineLargeFilledAR10
+  suffix: Filled, AR10
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleAR10
+      amount: 4
+
+- type: entity
+  parent: RMCPouchMagazineLarge
+  id: AU14PouchMagazineLargeFilledHuntingRifle
+  suffix: Filled, Basira
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleHunting
+      amount: 4
+
+- type: entity
+  parent: RMCPouchMagazineLarge
+  id: AU14PouchMagazineLargeFilledMAR40normal
+  suffix: Filled, MAR40
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleMAR40
+      amount: 4
+
+- type: entity
+  parent: RMCPouchMagazineLarge
+  id: AU14PouchMagazineLargeFilledType71
+  suffix: Filled, Type71
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleType71
+      amount: 4
+
+# Leader Machine Guns
+- type: entity
+  parent: RMCPouchGeneralLarge
+  id: AU14PouchGeneralLargeFilledM60
+  suffix: Filled, M60
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineLMGM60
+      amount: 2
+
+- type: entity
+  parent: RMCPouchGeneralLarge
+  id: AU14PouchGeneralLargeFilledMAR50
+  suffix: Filled, MAR50
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineMar50LMG
+      amount: 2
+
+#Pistol Belts
+- type: entity
+  parent: RMCBeltHolsterPistol
+  id: AU14BeltHolsterPistolFilledB92FS
+  suffix: Filled, Beretta
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazinePistolB92FS
+      amount: 6
+    - id: RMCWeaponPistolB92FS
+      amount: 1
+
+# random Belts
+- type: entity
+  parent: RMCBeltConstruction
+  id: AU14BeltConstructionCLFSurv
+  suffix: CLF; Survivor
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMSheetMetal50
+      amount: 2
+    - id: CMWelder
+      amount: 1
+    - id: CMCrowbar
+      amount: 1
+    - id: CMWirecutter
+      amount: 1
+    - id: CMWrench
+      amount: 1
+
+- type: entity
+  parent: AU14BeltUtilityGeneralBlack
+  id: AU14BeltUtilityGeneralBlackCLFSurvMolly
+  suffix: CLF; Survivor; Molotov
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCGrenadeMolotov
+      amount: 3
+    - id: RMCLighter
+      amount: 1
+    - id: RMCFlashlight
+      amount: 1
+
+- type: entity
+  parent: AU14BeltUtilityGeneralBlack
+  id: AU14BeltUtilityGeneralBlackCLFSurvGrenade
+  suffix: CLF; Survivor; Grenades
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMGrenadeFragOld
+      amount: 2
+    - id: AU14GrenadeSmokeUPP
+      amount: 1
+    - id: AU14GrenadeIncendiaryUPP
+      amount: 1
+    - id: RMCFlashlight
+      amount: 1
+
+
+- type: entity
+  parent: AU14BeltUtilityGeneralBlack
+  id: AU14BeltUtilityGeneralBlackCLFSurvMedical
+  suffix: CLF; Survivor; Medical
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMTraumaKit10
+      amount: 2
+    - id: CMBurnKit10
+      amount: 1
+    - id: CMHealthAnalyzer
+      amount: 1
+    - id: AU14OxycodoneAutoInjector
+      amount: 1
+
+- type: entity
+  parent: AU14BeltUtilityGeneralBlack
+  id: AU14BeltUtilityGeneralBlackCLFSurvMetal
+  suffix: CLF; Survivor; Metal
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMSheetMetal50
+      amount: 1
+    - id: CMSheetMetal10
+      amount: 1
+    - id: RMCFlashlight
+      amount: 1
+
+- type: entity
+  parent: AU14BeltUtilityGeneralBlack
+  id: AU14BeltUtilityGeneralBlackCLFSurvPipeBomb
+  suffix: CLF; Survivor; Pipebomb
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCGrenadeMolotov
+      amount: 1
+    - id: CMUPipeBomb
+      amount: 2
+    - id: RMCLighter
+      amount: 1
+    - id: RMCFlashlight
+      amount: 1
+
+# Uniforms with Armbands
+- type: entity
+  parent: CMJumpsuitTShirtGray
+  id: CMJumpsuitTShirtGrayCLFArmband
+  suffix: CLF, Survivor, Armband
+  components:
+  - type: UniformAccessoryHolder
+    startingAccessories: 
+    - RMCCLFArmband
+  
+- type: entity
+  parent: CMJumpsuitTShirtWhite
+  id: CMJumpsuitTShirtWhiteCLFArmband
+  suffix: CLF, Survivor, Armband
+  components:
+  - type: UniformAccessoryHolder
+    startingAccessories: 
+    - RMCCLFArmband
+
+- type: entity
+  parent: RMCJumpsuitCivilian
+  id: RMCJumpsuitCivilianCLFArmband
+  suffix: CLF, Survivor, Armband
+  components:
+  - type: UniformAccessoryHolder
+    startingAccessories: 
+    - RMCCLFArmband
+
+- type: entity
+  parent: CMJumpsuitColonist
+  id: CMJumpsuitColonistCLFArmband
+  suffix: CLF, Survivor, Armband
+  components:
+  - type: UniformAccessoryHolder
+    startingAccessories: 
+    - RMCCLFArmband

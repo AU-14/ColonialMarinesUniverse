@@ -1,0 +1,115 @@
+- type: job
+  parent: AU14USArmySquadLeaderBase
+  id: AU14USArmySquadLeader
+  roundSide: ThirdParty
+  roundForce: USARMY
+  roundRole: AU14USArmySquadLeader
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: leader
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_ua
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - AU14SquadUSArmy
+  - type: Skills
+    preset: AU14SkillPresetPlatoonSeniorSergeant
+  - type: SpotterWhitelist
+  - type: JobPrefix
+    prefix: cm-job-prefix-squad-leader
+  - type: MarineOrders
+    moveOrderSoundMale:
+      collection: AU14MaleMoveOrder
+    moveOrderSoundFemale:
+      collection: AU14FemaleMoveOrder
+    focusOrderSoundMale:
+      collection: AU14MaleFocusOrder
+    focusOrderSoundFemale:
+      collection: AU14FemaleFocusOrder
+    holdOrderSoundMale:
+      collection: AU14MaleHoldOrder
+    holdOrderSoundFemale:
+      collection: AU14FemaleHoldOrder
+  - type: RMCTrackable
+  - type: SquadLeader
+  - type: RMCPointing
+
+  name: cm-job-name-squad-leader
+  description: au14-job-description-usarmy
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    USArmy_FirstSergeant:
+      entity: AU14ChevronUSArmyFirstSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUSArmySquadLeader
+        time: 36000
+    USArmy_MasterSergeant:
+      entity: AU14ChevronUSArmyMasterSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUSArmySquadLeader
+        time: 18000
+    USArmy_SergeantFirstClass:
+      entity: AU14ChevronUSArmySergeantFirstClass
+      requirements: []
+  spawnMenuRoleName: US Army Squad Leader (AU14, surv)
+  startingGear: AU14GearUSArmySquadleader
+  greeting: au14-usarmy-greeting
+  icon: "AU14JobIconUSArmySL"
+  joinNotifyCrew: false
+  supervisors: rmc-job-name-forecon-commander
+  accessGroups:
+  - AU14GovforCommand
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUSArmy
+  id: AU14JobUSArmySquadleader
+  name: US Army Squad Leader (Surv)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadUSArmy
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cm-job-name-squad-leader
+    description: au14-job-description-usarmy
+    reregister: false
+    job: AU14USArmySquadLeader
+    raffle:
+      settings: short
+    rules: au14-usarmy-rules
+
+- type: startingGear
+  id: AU14GearUSArmySquadleader
+  equipment:
+    id: AU14IDCardUSArmySquadleader
+    outerClothing: AU14ArmorUSArmy
+    jumpsuit: AU14ArmyJumpsuitCavalry
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    shoes: AU14BootsUSArmyFilled
+    mask: RMCMaskScarfTan
+    head: AU14HelmetUSArmy
+    belt: RMCM1984BeltFilled
+    pocket1: AU14PouchSlingBinocs
+    pocket2: AU14PouchIFAKFill
+    back: AU14MolleSatchel
+    ears: AU14HeadsetUSArmy
+    suitstorage: RMCWeaponRifleM54C
+  storage:
+    head:
+      - AU14GogglesM1A1DarkBallistic
+    back:
+    - RMCRadioHandheldColony
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - RMCMagazineRifleM54CHEAPEmpty
+    - RMCFlashlight

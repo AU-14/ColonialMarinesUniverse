@@ -1,0 +1,21 @@
+- type: partySpawn
+  id: DrugSmugglerSpawn
+  leadersToSpawn:
+    AU14DrugSmuggler: 1
+  gruntsToSpawn:
+     AU14DrugSmuggler: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: DrugSmuggler
+  partyspawn: DrugSmugglerSpawn
+  entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
+  weight: 20
+  minplayers: 10
+  maxplayers: 100
+  GhostsNeeded: 2
+  roundstart: false
+  whitelistedgamemodes:
+    - insurgency
+    - colonyfall

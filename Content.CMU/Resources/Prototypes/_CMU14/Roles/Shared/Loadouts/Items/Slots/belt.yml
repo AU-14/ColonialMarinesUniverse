@@ -1,0 +1,39 @@
+- type: loadout
+  id: BeltUtilityFilledAU14
+  equipment:
+    belt: AU14BeltUtilityFilled
+
+- type: loadout
+  id: IntelDetectorAU14
+  equipment:
+    belt: RMCIntelDetector
+
+- type: loadout
+  id: BeltSecurityMPFilledAU14
+  equipment:
+    belt: CMBeltSecurityMPFilled
+
+- type: loadout
+  id: BeltMedicalFilledAU14
+  equipment:
+    belt: CMBeltMedicalFilled
+
+- type: loadout
+  id: EngiBeltUtilityFilledAU14
+  equipment:
+    belt: CMBeltUtilityFilled
+
+- type: loadout
+  id: BeltUtilityGeneralAU14
+  equipment:
+    belt: RMCBeltUtilityGeneral
+
+- type: loadout
+  id: BeltMedicalAU14
+  equipment:
+    belt: CMBeltMedical
+
+- type: loadout
+  id: BeltMedicBagAU14
+  equipment:
+    belt: CMBeltMedicBag
