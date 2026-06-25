@@ -20,6 +20,8 @@
       RMCSkillPolice: 1
   - type: EquipEntityPreset
     preset: AU14CLFSurvMedicPreset
+  - type: FactionLanguageMember
+    factionTag: CLF
 
   name: au14-job-name-clfsurgeon
   description: au14-clfsurv-desription

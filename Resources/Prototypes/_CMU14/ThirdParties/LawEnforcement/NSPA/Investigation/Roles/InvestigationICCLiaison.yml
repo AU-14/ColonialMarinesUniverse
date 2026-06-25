@@ -21,6 +21,8 @@
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
+  - type: Language
+    preset: AU14LanguagePresetTWE
 
   name: au14-job-name-civilianiccliaison
   description: au14-job-description-civilianiccliaison

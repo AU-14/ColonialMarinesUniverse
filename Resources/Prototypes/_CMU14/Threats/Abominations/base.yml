@@ -190,6 +190,13 @@
         - XenoProjectileImpassable
   - type: NameIdentifier
     group: Abomination
+  - type: Language
+    spokenLanguages:
+      - Primitive
+    understoodLanguages:
+      - Primitive
+    currentLanguage: Primitive
+    defaultLanguage: Primitive
 
 - type: nameIdentifierGroup
   id: Abomination

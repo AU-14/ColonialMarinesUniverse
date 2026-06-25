@@ -53,6 +53,15 @@
   - type: RMCTrackable
   - type: SquadLeader
   - type: RMCPointing
+  - type: LanguagePreset
+    spokenLanguages:
+    - English
+    - TacticalSignLanguage
+    understoodLanguages:
+    - English
+    - TacticalSignLanguage
+    currentLanguage: English
+    defaultLanguage: English
   name: cm-job-name-squad-leader
   description: rmc-job-description-forecon
   ranks:

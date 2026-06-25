@@ -35,6 +35,11 @@
   name: au14-job-name-civilianlaselleliaison
   description: au14-job-description-civilianlaselleliaison
   playTimeTracker: AU14JobCivilianLaselleLiaison
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NoEnglish
   setPreference: true
   ranks:
     AU14RankLBSeniorExecutive:

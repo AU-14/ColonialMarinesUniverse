@@ -389,7 +389,11 @@ internal sealed partial class ChatManager : IChatManager
 
     #region Utility
 
-    public void ChatMessageToOne(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, INetChannel client, Color? colorOverride = null, bool recordReplay = false, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, bool hidePopup = false)
+    // RMC14
+    public void ChatMessageToOne(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, INetChannel client, Color? colorOverride = null, bool recordReplay = false, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, bool hidePopup = false,
+        bool useEmoteSpeechBubble = false,
+        string? languageIcon = null)
+    // RMC14
     {
         var user = author == null ? null : EnsurePlayer(author);
         var netSource = _entityManager.GetNetEntity(source);
@@ -399,8 +403,24 @@ internal sealed partial class ChatManager : IChatManager
         var repeatCheckSender = !_entityManager.HasComponent<ChatRepeatIgnoreSenderComponent>(source);
         // CMU14
         var customWrappedMessage = AddGhostFollowButton(wrappedMessage, source, client);
-        // CMU14
-        var msg = new ChatMessage(channel, message, customWrappedMessage, netSource, user?.Key, hideChat, colorOverride, audioPath, audioVolume, hidePopup, speechStyleClass: speechStyleClass, repeatCheckSender: repeatCheckSender);
+
+        var msg = new ChatMessage(
+            channel,
+            message,
+            customWrappedMessage,
+            netSource,
+            user?.Key,
+            hideChat,
+            colorOverride,
+            audioPath,
+            audioVolume,
+            hidePopup,
+            useEmoteSpeechBubble,
+            speechStyleClass: speechStyleClass,
+            repeatCheckSender: repeatCheckSender,
+            languageIcon: languageIcon
+        );
+
         _netManager.ServerSendMessage(new MsgChatMessage() { Message = msg }, client);
 
         if (!recordReplay)
@@ -409,7 +429,21 @@ internal sealed partial class ChatManager : IChatManager
         if ((channel & ChatChannel.AdminRelated) == 0 ||
             _configurationManager.GetCVar(CCVars.ReplayRecordAdminChat))
         {
-            var replayMsg = new ChatMessage(channel, message, wrappedMessage, netSource, user?.Key, hideChat, colorOverride, audioPath, audioVolume, hidePopup, speechStyleClass: speechStyleClass, repeatCheckSender: repeatCheckSender);
+            var replayMsg = new ChatMessage(
+                channel,
+                message,
+                wrappedMessage,
+                netSource,
+                user?.Key,
+                hideChat,
+                colorOverride,
+                audioPath,
+                audioVolume,
+                hidePopup,
+                speechStyleClass: speechStyleClass,
+                repeatCheckSender: repeatCheckSender,
+                languageIcon: languageIcon
+            );
             _replay.RecordServerMessage(replayMsg);
         }
     }

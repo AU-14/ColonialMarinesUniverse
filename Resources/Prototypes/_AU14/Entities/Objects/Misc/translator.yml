@@ -1,0 +1,83 @@
+- type: entity
+  parent: BaseItem
+  id: AU14TranslatorDevice
+  name: universal translator
+  description: A compact neural-interface device that feeds real-time translations directly into your auditory cortex. Wear it and understand everyone. Take it off and you're back to pointing and grunting.
+  components:
+  - type: Sprite
+    sprite: Objects/Fun/clownrecorder.rsi
+    state: icon
+  - type: Item
+    size: Tiny
+  - type: Clothing
+    slots:
+    - ears             # or whichever slot makes sense
+  - type: TranslatorDevice
+    spokenLanguages:
+      - Yautja
+      - Arcturian
+      - TacticalSignLanguage
+      - Ukrainian
+      - Polish
+      - Czech
+      - Turkish
+      - Korean
+      - Italian
+      - Irish
+      - Finnish
+      - Hungarian
+      - Albanian
+      - Serbian
+      - Lithuanian
+      - Arabic
+      - Afrikaans
+      - Dutch
+      - Swahili
+      - Persian
+      - Hindi
+      - Vietnamese
+      - Portuguese
+      - Indonesian
+      - Filipino
+      - Urdu
+      - Yoruba
+      - Esperanto
+      - Latin
+      - Swedish
+      - Brazilian
+      - Slovak
+      - Romanian
+    understoodLanguages:
+      - Yautja
+      - Arcturian
+      - TacticalSignLanguage
+      - Ukrainian
+      - Polish
+      - Czech
+      - Turkish
+      - Korean
+      - Italian
+      - Irish
+      - Finnish
+      - Hungarian
+      - Albanian
+      - Serbian
+      - Lithuanian
+      - Arabic
+      - Afrikaans
+      - Dutch
+      - Swahili
+      - Persian
+      - Hindi
+      - Vietnamese
+      - Portuguese
+      - Indonesian
+      - Filipino
+      - Urdu
+      - Yoruba
+      - Esperanto
+      - Latin
+      - Swedish
+      - Brazilian
+      - Slovak
+      - Romanian

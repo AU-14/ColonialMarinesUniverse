@@ -47,6 +47,7 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
+    - NoEnglish
 
 - type: entity
   parent: CMSpawnPointJobBase

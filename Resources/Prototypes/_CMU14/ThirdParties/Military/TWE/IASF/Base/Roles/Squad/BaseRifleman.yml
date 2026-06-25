@@ -20,13 +20,24 @@
     preset: AU14SkillPresetPlatoonRifleman
   - type: JobPrefix
     prefix: au14-job-prefix-iasf
+  - type: Language
+    spokenLanguages:
+    - Indonesian
+    understoodLanguages:
+    - Indonesian
+    currentLanguage: Indonesian
+    defaultLanguage: Indonesian
 
   name: au14-job-name-tweiasf-paratrooper
   icon: RMCJobIconParamarine
   playTimeTracker: AU14IASFRifleman
   description: au14-job-description-twepara
   ranks:
-    RMC_Marine: []
+    RMCRankCivilian: []
+  chevrons:
+    IASF_PrivateFirstClass:
+      entity: AU14ChevronIASFPrivateFirstClass
+      requirements: []
   spawnMenuRoleName: IASF Rifleman (Base)
   joinNotifyCrew: false
   supervisors: au14-job-name-tweiasf-tl

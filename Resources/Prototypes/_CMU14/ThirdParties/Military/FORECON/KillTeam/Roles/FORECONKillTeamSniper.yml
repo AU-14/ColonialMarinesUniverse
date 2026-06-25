@@ -15,6 +15,15 @@
   - type: SniperWhitelist
   - type: JobPrefix
     prefix: rmc-job-prefix-weapons-specialist-sniper
+  - type: LanguagePreset
+    spokenLanguages:
+    - English
+    - TacticalSignLanguage
+    understoodLanguages:
+    - English
+    - TacticalSignLanguage
+    currentLanguage: English
+    defaultLanguage: English
 
   name: rmc-job-name-forecon-sniper
   description: au14-job-description-forecon-killteam

@@ -22,6 +22,17 @@
   - type: SpotterWhitelist
   - type: JobPrefix
     prefix: au14-job-prefix-forecon-spotter
+  - type: Language
+    spokenLanguages:
+    - English
+    - Brazilian
+    - Spanish
+    understoodLanguages:
+    - English
+    - Brazilian
+    - Spanish
+    currentLanguage: Brazilian
+    defaultLanguage: Brazilian
 
   name: au14-job-name-forecon-spotter
   playTimeTracker: AU14LACNCommandoSpotter

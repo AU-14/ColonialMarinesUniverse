@@ -28,6 +28,8 @@
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
+  - type: Language
+    preset: AU14LanguagePresetTWE
 
   name: au14-job-name-civiliannspaConstable
   description: You have been sent by the Colonial Administration to investigate unspecified occurrences on this planet. Investigate the area under the orders of your marshal and ensure that the laws of Sol extend far beyond the Solar System.
