@@ -678,7 +678,6 @@
     whitelist:
       tags:
       - RMCMagazineRifleSharp
-  - type: LockVisuals
   - type: RMCIdLockableStorage
     overrideAccesses:
     - RMCAccessSeniorCommand
