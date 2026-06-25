@@ -1,8 +1,9 @@
 using System.Linq;
+using Content.Server._CMU14.Threats;
 using Content.Server.AU14.Scenario;
-using Content.Server.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Content.Shared.Preferences;
-using Content.Shared.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Content.Shared.AU14.util;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
@@ -76,7 +77,7 @@ public sealed partial class AuJobSelectionSystem : EntitySystem
 
         var threatRatio = threat?.ThreatRatio ?? 0f;
 
-        // Third parties spawn through AuThirdPartySystem's dedicated ghost-role path.
+        // Third parties spawn through ThirdPartySystem's dedicated ghost-role path.
         // Do not force players into the utility ThirdParty jobs at roundstart: those
         // jobs are not station jobs and the normal spawn pipeline creates naked
         // placeholder humans when it tries to spawn them directly.

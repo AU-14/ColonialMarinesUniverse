@@ -14,7 +14,7 @@
     range: 15
     checkCanAccess: false
   - type: WorldTargetAction
-    event: !type:Content.Shared._CMU14.Ape.ApeLeapActionEvent
+    event: !type:Content.Shared._CMU14.Threats.Mobs.Ape.ApeLeapActionEvent
   - type: RMCDazeableAction
 
 - type: entity
@@ -33,7 +33,7 @@
     range: 7
     deselectOnMiss: false
   - type: WorldTargetAction
-    event: !type:Content.Shared._CMU14.Ape.ApeDestroyActionEvent
+    event: !type:Content.Shared._CMU14.Threats.Mobs.Ape.ApeDestroyActionEvent
 
 - type: entity
   parent: ActionXenoBase
@@ -52,7 +52,7 @@
     checkCanAccess: false
   - type: WorldTargetAction
     # Use ape-specific charge event
-    event: !type:Content.Shared._CMU14.Ape.ApeChargeActionEvent
+    event: !type:Content.Shared._CMU14.Threats.Mobs.Ape.ApeChargeActionEvent
 
 - type: entity
   parent: ActionXenoFling
@@ -67,7 +67,7 @@
     useDelay: 10
   - type: EntityTargetAction
     # Use ape-specific ram event
-    event: !type:Content.Shared._CMU14.Ape.ApeRamActionEvent
+    event: !type:Content.Shared._CMU14.Threats.Mobs.Ape.ApeRamActionEvent
     toggleOutline: false
   # Ape ram does not consume plasma
 
@@ -88,7 +88,7 @@
     checkCanAccess: false
     deselectOnMiss: false
   - type: EntityTargetAction
-    event: !type:Content.Shared._CMU14.Ape.ApeXenoHeadbiteActionEvent
+    event: !type:Content.Shared._CMU14.Threats.Mobs.Ape.ApeXenoHeadbiteActionEvent
   - type: ActionBlockIfResting
   - type: XenoOffensiveAction
 

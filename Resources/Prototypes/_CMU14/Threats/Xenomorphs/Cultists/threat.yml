@@ -59,7 +59,7 @@
       benchmark: 3
       whenToBeginScaling: 50
 
-- type: auThirdParty
+- type: thirdParty
   id: cultistThirdParty
   partyspawn: cultistParty
   blacklistedgamemodes:
@@ -73,7 +73,7 @@
   GhostsNeeded: 3
   roundstart: false
 
-- type: auThirdParty
+- type: thirdParty
   id: cultistThirdPartyNoQueen
   partyspawn: cultistPartyNoQueen
   blacklistedgamemodes:

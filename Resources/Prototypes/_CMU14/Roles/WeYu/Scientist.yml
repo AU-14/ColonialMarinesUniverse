@@ -26,7 +26,7 @@
     prefix: au14-job-prefix-civilianscientist
   - type: TacticalMapIcon
     icon:
-      sprite: _RMC14/Interface/cm_job_icons.rsi
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
       state: weya_scientist
   - type: AssignSquad
     whitelist:

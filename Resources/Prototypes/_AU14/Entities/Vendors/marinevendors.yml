@@ -1409,6 +1409,8 @@
         amount: 25
       - id: RMCAttachmentS42xTelescopicMiniscope
         amount: 2
+      - id: RMCAttachmentB8SmartScope
+        amount: 5
     - name: Underbarrel Attachments
       entries:
       - id: RMCAttachmentFlashlightGrip

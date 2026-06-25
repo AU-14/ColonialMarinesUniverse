@@ -13,6 +13,7 @@ using Content.Shared.Storage;
 using Robust.Shared.Containers;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using TribalComponent = Content.Shared._CMU14.Threats.Mobs.Tribal.TribalComponent;
 
 namespace Content.Server._CMU14.Medical.FieldTreatments;
 

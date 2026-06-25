@@ -60,7 +60,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: PizzaDeliveryBoyThirdParty
   partyspawn: PizzaDeliveryBoySpawn
   entrymethod: shuttle
