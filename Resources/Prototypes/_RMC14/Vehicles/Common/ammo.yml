@@ -354,7 +354,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 36
+        Piercing: 76
 
 - type: entity
   parent: CMBulletSentry10x50mm
@@ -365,7 +365,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 30
+        Piercing: 68
   - type: CMArmorPiercing
     amount: 15
 
@@ -378,7 +378,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 50
+        Piercing: 82
   - type: CMArmorPiercing
     amount: 15
 
@@ -391,7 +391,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 30
+        Piercing: 72
   - type: CMArmorPiercing
     amount: 15
 
@@ -413,8 +413,8 @@
     impactEffect: BulletImpactEffect
     damage:
       types:
-        Blunt: 160
-        Heat: 150
+        Blunt: 220
+        Heat: 195
     maxFixedRange: 32
   - type: CMArmorPiercing
     amount: 50
