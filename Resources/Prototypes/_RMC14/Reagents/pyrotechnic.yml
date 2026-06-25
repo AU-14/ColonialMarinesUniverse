@@ -100,7 +100,9 @@
   color: "#DD9B00"
   intensity: 30
   duration: 20
-  radius: 7
+  radius: 10
+  fireEntity: RMCTileFireBlue
+  fireSpread: true
 
 - type: reagent
   parent: [ CMReagent, BasePyrotechnic ]
