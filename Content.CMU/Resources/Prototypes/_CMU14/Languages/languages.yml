@@ -19,7 +19,6 @@
   obfuscationMethod:
     !type:SyllableObfuscation
     replacement: ["krrk", "rrk", "krk", "krr", "krkr"]
-    garbleChars: ['~', '?', '*', '#', '¿', '§']
     minSyllables: 1
     maxSyllables: 3
   speechOverride:
