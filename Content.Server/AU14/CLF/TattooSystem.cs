@@ -18,6 +18,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
+using Content.Server._CMU14.Language;
 
 namespace Content.Server.AU14.CLF;
 
@@ -37,6 +38,7 @@ public sealed partial class TattooSystem : EntitySystem
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _protoManager = default!;
     [Dependency] private RoleSystem _role = default!;
+    [Dependency] private readonly FactionLanguageSystem _factionLanguage = default!;
 
     public override void Initialize()
     {
@@ -256,6 +258,7 @@ public sealed partial class TattooSystem : EntitySystem
 
         // Add CLF member component
         EnsureComp<CLFMemberComponent>(target);
+        _factionLanguage.ApplyFactionLanguageToNewMember(target, "CLF"); // for the lang system
 
         // Add mind role and send briefing
         if (_mind.TryGetMind(target, out var mindId, out var mind))

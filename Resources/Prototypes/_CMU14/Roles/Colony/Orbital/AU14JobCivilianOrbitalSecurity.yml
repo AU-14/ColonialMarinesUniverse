@@ -38,6 +38,7 @@
     inverted: true
     traits:
     - Epilepsy
+    - NoEnglish
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-orbital
   accessGroups:

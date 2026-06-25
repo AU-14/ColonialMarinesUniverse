@@ -179,6 +179,8 @@
     - CanPilot
     - FootstepSound
     - DoorBumpOpener
+  - type: Language
+    preset: AU14LanguagePresetSynth
 
 - type: entity
   parent: BaseSpeciesDummy

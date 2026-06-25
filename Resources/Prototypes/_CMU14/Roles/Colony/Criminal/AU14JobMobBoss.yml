@@ -17,6 +17,8 @@
     icon:
       sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
       state: colonist
+  - type: FactionLanguageLeader
+    factionTag: Mob
 
   name: au14-job-name-mobboss
   description: au14-job-description-mobboss

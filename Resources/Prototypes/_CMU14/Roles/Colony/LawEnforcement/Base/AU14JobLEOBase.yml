@@ -7,6 +7,11 @@
   playTimeTracker: AU14JobCivilianCMBDeputy
   basePlaytimeTracker: true
   icon: "RMCJobIconBureauDeputy"
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NoEnglish
 
 - type: playTimeTracker
   id: AU14JobCivilianCMBDeputy

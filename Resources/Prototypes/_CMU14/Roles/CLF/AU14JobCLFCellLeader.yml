@@ -39,6 +39,8 @@
   - type: ShowMarineIcons
     factions:
     - CLF
+  - type: FactionLanguageLeader
+    factionTag: CLF
 
   name: au14-job-name-clfcellleader
   description: au14-job-description-clfcellleader

@@ -43,6 +43,8 @@
   - type: CMVendorUser
     id: AU14JobCultist
     points: 70
+  - type: Language
+    preset: AU14LanguagePresetXeno
   name: cm-cultist-name
   description: cm-cultist-description
   setPreference: true

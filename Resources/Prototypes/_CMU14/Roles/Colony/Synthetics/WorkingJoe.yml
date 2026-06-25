@@ -10,6 +10,43 @@
   canBeAntag: false
   whitelisted: true
   whitelistParent: AU14JobGeneralWhitelist
+  requirements:
+    - !type:TraitsRequirement
+      inverted: true
+      traits:
+      - NoEnglish
+      - UkrainianLanguage
+      - PolishLanguage
+      - CzechLanguage
+      - TurkishLanguage
+      - KoreanLanguage
+      - ItalianLanguage
+      - IrishLanguage
+      - FinnishLanguage
+      - HungarianLanguage
+      - AlbanianLanguage
+      - SerbianLanguage
+      - LithuanianLanguage
+      - ArabicLanguage
+      - AfrikaansLanguage
+      - DutchLanguage
+      - SwahiliLanguage
+      - PersianLanguage
+      - HindiLanguage
+      - VietnameseLanguage
+      - PortugueseLanguage
+      - IndonesianLanguage
+      - FilipinoLanguage
+      - UrduLanguage
+      - YorubaLanguage
+      - EsperantoLanguage
+      - LatinLanguage
+      - SwedishLanguage
+      - SignLanguage
+      - BrazilianLanguage
+      - SlovakLanguage
+      - RomanianLanguage
+
 
 - type: playTimeTracker
   id: AU14JobWorkingJoe
