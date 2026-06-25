@@ -290,24 +290,27 @@
       - id: AU14PamphletCLFFirearms1
         amount: 12
         points: 2
+      - id: AU14PamphletCLFFirearms1
+        amount: 6
+        points: 5
       - id: AU14PamphletCLFWeaponsSpecialistDemolitionist
         amount: 1
-        points: 10
+        points: 15
       - id: AU14PamphletCLFWeaponsSpecialist
         amount: 1
-        points: 10
+        points: 15
       - id: AU14PamphletCLFWeaponsSpecialistGrenadier
         amount: 1
-        points: 10
+        points: 15
       - id: AU14PamphletCLFWeaponsSpecialistPyro
         amount: 1
-        points: 10
+        points: 15
       - id: AU14PamphletCLFWeaponsSpecialistScout
         amount: 1
-        points: 10
+        points: 15
       - id: AU14PamphletCLFWeaponsSpecialistSniper
         amount: 1
-        points: 10
+        points: 15
     - name: Mortar
       entries:
       - id: RMCRangefinder

@@ -317,6 +317,17 @@
 
 - type: entity
   parent: RMCPamphletAdmin
+  id: AU14PamphletCLFFirearms2
+  name: firearms 2 infographic guide pamphlet
+  suffix: CLF
+  description: Gives anyone a bit better of an understanding on how to work a firearm... while maybe teaching them would be better this will have to do.
+  components:
+  - type: SkillPamphlet
+    addSkills:
+      RMCSkillFirearms: 2
+
+- type: entity
+  parent: RMCPamphletAdmin
   id: AU14PamphletCLFWeaponsSpecialistDemolitionist
   name: demolitionist specialist instructional pamphlet
   suffix: CLF
