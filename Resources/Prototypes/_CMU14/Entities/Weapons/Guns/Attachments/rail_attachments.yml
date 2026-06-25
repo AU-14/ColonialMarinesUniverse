@@ -31,7 +31,7 @@
       doAfter: 0
 
 - type: entity
-  parent: RMCAttachmentS42xTelescopicMiniscope
+  parent: RMCAttachmentB8SmartScope
   id: AU14AttachmentB11SmartScope
   name: B11 Advanced Targetting Scope
   description: An experimental Prodigy B11-ATS. Adds IFF to weapons without them, and gives the user enhanced sight to use their weapons effectively at range even while behind friendlies.
