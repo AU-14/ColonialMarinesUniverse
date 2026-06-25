@@ -2,11 +2,11 @@ using Content.Shared._RMC14.Item;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.Medal;
 using Content.Shared._RMC14.Prototypes;
-using Content.Shared.AU14.Roles;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
 using Content.Shared._AU14.Marines.Roles.Chevrons;
+using Content.Shared._CMU14.Round.Roles;
 using Robust.Shared.GameObjects;
 
 // ReSharper disable CheckNamespace

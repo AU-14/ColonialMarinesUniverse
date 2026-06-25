@@ -456,17 +456,9 @@
 
 # ├──[ LEOs ]────────────────────────────────────────────────────────┤
 - type: entity
+  abstract: true
   parent: AU14IDCardBaseCivilianNoIFF
-  id: AU14IDCardCivilianKellandWarden
-  name: Warden ID card
-  components:
-  - type: PresetIdCard
-    job: AU14JobCivilianKellandWarden
-
-- type: entity
-  parent: AU14IDCardBaseCivilianNoIFF
-  id: AU14IDCardColonyCMBMarshal
-  name: CMB marshal ID card
+  id: AU14IDCardColonyLEOLeader
   components:
   - type: PresetIdCard
     job: AU14JobCivilianCMBMarshal
@@ -483,12 +475,10 @@
     - FactionCMB
 
 - type: entity
+  abstract: true
   parent: AU14IDCardBaseCivilianNoIFF
-  id: AU14IDCardColonyCMBDeputy
-  name: CMB deputy ID card
+  id: AU14IDCardColonyLEO
   components:
-  - type: PresetIdCard
-    job: AU14JobCivilianCMBDeputy
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/cmb_deputy.rsi
     state: icon
@@ -502,19 +492,31 @@
     - FactionCMB
 
 - type: entity
-  parent: AU14IDCardBaseCivilianNoIFF
+  parent: AU14IDCardColonyLEOLeader
+  id: AU14IDCardColonyCMBMarshal
+  name: CMB marshal ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianCMBMarshal
+
+- type: entity
+  parent: AU14IDCardColonyLEO
+  id: AU14IDCardColonyCMBDeputy
+  name: CMB deputy ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianCMBDeputy
+
+- type: entity
+  parent: AU14IDCardColonyLEO
   id: AU14IDCardcivilianCWPSranger
   name: CWPS ranger ID card
   components:
   - type: PresetIdCard
     job: AU14JobCivilianCWPSRanger
-  - type: ItemIFF
-    factions:
-    - FactionSurvivor
-    - FactionCMB
 
 - type: entity
-  parent: AU14IDCardBaseCivilianNoIFF
+  parent: AU14IDCardColonyLEOLeader
   id: AU14IDCardColonyNSPAInspector
   name: NSPA inspector ID card
   components:
@@ -522,17 +524,25 @@
     job: AU14JobCivilianNSPAInspector
 
 - type: entity
-  parent: AU14IDCardBaseCivilianNoIFF
-  id: AU14IDCardciviliannspaConstable
+  parent: AU14IDCardColonyLEO
+  id: AU14IDCardCivilianNSPAConstable
   name: NSPA constable ID card
   components:
   - type: PresetIdCard
     job: AU14JobCivilianNSPAConstable
 
 - type: entity
-  parent: AU14IDCardBaseCivilianNoIFF
+  parent: AU14IDCardColonyLEO
   id: AU14IDCardcivilianPaPOfficer
   name: PAP officer ID card
   components:
   - type: PresetIdCard
     job: AU14JobCivilianPaPOfficer
+
+- type: entity
+  parent: AU14IDCardColonyLEO
+  id: AU14IDCardCivilianKellandWarden
+  name: Warden ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianKellandWarden

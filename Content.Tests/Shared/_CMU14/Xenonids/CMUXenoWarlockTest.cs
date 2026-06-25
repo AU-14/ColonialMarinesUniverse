@@ -3,7 +3,7 @@ using System.Linq;
 using System.Numerics;
 using CMUDrawDepth = Content.Shared.DrawDepth.DrawDepth;
 using Content.Shared.Actions;
-using Content.Shared._CMU14.Xenonids.Warlock;
+using Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
 using Content.Shared.FixedPoint;
 using Content.Shared.Physics;
 using NUnit.Framework;

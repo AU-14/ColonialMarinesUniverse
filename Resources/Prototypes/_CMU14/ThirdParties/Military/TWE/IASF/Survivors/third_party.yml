@@ -12,7 +12,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: IASFSurvLarge
   displayName: IASF Survivors Large
   partyspawn: IASFSurvSpawnLarge
@@ -41,7 +41,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: IASFSurvMedium
   displayName: IASF Survivors Medium
   partyspawn: IASFSurvSpawnMedium
@@ -70,7 +70,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: IASFSurvSmall
   displayName: IASF Survivors Small
   partyspawn: IASFSurvSpawnSmall
