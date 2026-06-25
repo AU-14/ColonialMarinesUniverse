@@ -89,7 +89,7 @@
     tileDamage:
       types:
         Heat: 1
-    armorMultiplier: 0.25
+    armorMultiplier: 0.75
     armorWhitelist:
       components:
       - Xeno
