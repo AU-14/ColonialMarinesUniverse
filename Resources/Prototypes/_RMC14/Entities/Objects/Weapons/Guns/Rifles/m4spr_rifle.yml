@@ -198,9 +198,22 @@
   - type: Clothing
     sprite: _RMC14/Objects/Weapons/Guns/Rifles/m5spr2.rsi
   - type: RMCSelectiveFire
-    recoilUnwielded: 1
-    scatterWielded: 4
-    baseFireRate: 2.8
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    recoilWielded: 1
+    recoilUnwielded: 4
+    scatterWielded: 2.5
+    scatterUnwielded: 8
+    baseFireRate: 1.8
+    burstFireRateMultiplier: 15
+    modifiers:
+      Burst:
+        fireDelay: 0.01
+        maxScatterModifier: 10
+        useBurstScatterMult: false
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 6
   - type: ItemSlots
     slots:
       gun_magazine:
