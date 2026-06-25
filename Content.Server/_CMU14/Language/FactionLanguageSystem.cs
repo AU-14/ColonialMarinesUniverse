@@ -11,10 +11,10 @@ namespace Content.Server._CMU14.Language;
 
 public sealed class FactionLanguageSystem : EntitySystem
 {
-    [Dependency] private readonly LanguageSystem _language = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private LanguageSystem _language = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
     public override void Initialize()
     {

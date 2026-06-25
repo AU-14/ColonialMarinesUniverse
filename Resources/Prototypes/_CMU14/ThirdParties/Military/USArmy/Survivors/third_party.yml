@@ -13,7 +13,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: USArmy
   displayName: US Army Infantry (Full Squad)
   partyspawn: USArmySpawn
@@ -39,7 +39,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: USArmyAlt
   displayName: US Army Infantry (Small Team)
   partyspawn: USArmySpawnAlt
@@ -67,7 +67,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: USArmyAlt2
   displayName: US Army Infantry (Medium Team)
   partyspawn: USArmySpawnAlt2

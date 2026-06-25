@@ -54,7 +54,7 @@
   scalewithpop: true
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: XenoParasiteRunnerParty
   partyspawn: XenoParasiteRunnerPartySpawn
   blacklistedgamemodes:

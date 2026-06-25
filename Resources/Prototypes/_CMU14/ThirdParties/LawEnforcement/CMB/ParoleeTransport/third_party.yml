@@ -16,7 +16,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: CMBParoleeTransport
   partyspawn: CMBParoleeTransportSpawn
   entrymethod: shuttle
@@ -30,7 +30,7 @@
     - insurgency
     - colonyfall
 
-- type: auThirdParty
+- type: thirdParty
   id: CMBParoleeTransportBig
   partyspawn: CMBParoleeTransportBigSpawn
   entrymethod: shuttle

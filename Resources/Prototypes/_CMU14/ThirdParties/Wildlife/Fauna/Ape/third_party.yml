@@ -1,5 +1,5 @@
 
-- type: auThirdParty
+- type: thirdParty
   id: ApeThirdParty
   partyspawn: apePartycf
   entrymethod: ground
