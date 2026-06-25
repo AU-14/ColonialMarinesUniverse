@@ -21,7 +21,7 @@
   - type: Tag
     tags:
     - RMCAttachmentRail
-    - RMCAttachmentB8SmartScope
+    - AU14AttachmentB11SmartScope
   - type: AttachableToggleable
     doAfter: 0.8
     icon:
@@ -50,7 +50,7 @@
   - type: Tag
     tags:
     - RMCAttachmentRail
-    - RMCAttachmentS84xTelescopicScope
+    - AU14AttachmentS114xTelescopicScope
   - type: AttachableVisuals
   - type: AttachableToggleable
     actionName: Look through the S11 4x Telescopic Scope
@@ -85,3 +85,9 @@
       accuracyAddMult: -0.05
   - type: RMCLoreExaminable
     content: rmc-lore-examinable-s8-4x-telescopic-scope
+
+- type: Tag
+  id: AU14AttachmentB11SmartScope
+
+- type: Tag
+  id: AU14AttachmentS114xTelescopicScope

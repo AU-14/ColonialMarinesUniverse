@@ -9,7 +9,7 @@
   - type: Tag
     tags:
     - RMCAttachmentBarrel
-    - RMCAttachmentExtendedBarrel
+    - AU14Z11AttachmentExtendedBarrel
   - type: AttachableVisuals
   - type: AttachableWeaponRangedMods
     modifiers:
@@ -23,3 +23,6 @@
   - type: AttachableWieldDelayMods
     modifiers:
     - delay: 0.95
+
+- type: Tag
+  id: AU14Z11AttachmentExtendedBarrel

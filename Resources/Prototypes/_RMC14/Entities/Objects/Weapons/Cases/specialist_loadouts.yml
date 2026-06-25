@@ -176,6 +176,10 @@
   suffix: Base
   description: "A large case containing an M4SPR custom battle rifle, M3-S light armor and helmet, M4SPR battle sight, M68 thermal cloak, V3 reactive thermal tarp, ammunition and additional pieces of equipment.\nNOTE: You cannot put items back inside this case."
   components:
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,21,5
   - type: Sprite
     layers:
     - state: closed
@@ -217,6 +221,10 @@
   suffix: WeYu
   description: "A large case containing an M4SPR custom battle rifle, M3-S light armor and helmet, M4SPR battle sight, M68 thermal cloak, V3 reactive thermal tarp, ammunition and additional pieces of equipment.\nNOTE: You cannot put items back inside this case."
   components:
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,21,5
   - type: Sprite
     layers:
     - state: closed

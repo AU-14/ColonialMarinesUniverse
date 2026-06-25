@@ -72,6 +72,7 @@
           - RMCAttachmentExtendedBarrel
           - RMCAttachmentSuppressor
           - RMCM5Bayonet
+          - AU14Z11AttachmentExtendedBarrel
       rmc-aslot-rail:
         whitelist:
           tags:
@@ -81,6 +82,7 @@
           - RMCAttachmentS5RedDotSight
           - RMCAttachmentS6ReflexSight
           - RMCAttachmentS84xTelescopicScope
+          - AU14AttachmentB11SmartScope
       rmc-aslot-underbarrel:
         whitelist:
           tags:
