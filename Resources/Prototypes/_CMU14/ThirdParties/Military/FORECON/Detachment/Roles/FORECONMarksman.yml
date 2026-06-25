@@ -15,6 +15,15 @@
   - type: SpotterWhitelist
   - type: JobPrefix
     prefix: rmc-job-prefix-forecon-marksman
+  - type: LanguagePreset
+    spokenLanguages:
+    - English
+    - TacticalSignLanguage
+    understoodLanguages:
+    - English
+    - TacticalSignLanguage
+    currentLanguage: English
+    defaultLanguage: English
 
   name: rmc-job-name-forecon-marksman
   description: rmc-job-description-forecon-detachment

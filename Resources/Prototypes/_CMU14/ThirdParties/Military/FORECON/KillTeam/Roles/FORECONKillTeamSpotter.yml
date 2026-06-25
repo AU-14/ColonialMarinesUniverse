@@ -14,6 +14,15 @@
   - type: SpotterWhitelist
   - type: JobPrefix
     prefix: au14-job-prefix-forecon-spotter
+  - type: LanguagePreset
+    spokenLanguages:
+    - English
+    - TacticalSignLanguage
+    understoodLanguages:
+    - English
+    - TacticalSignLanguage
+    currentLanguage: English
+    defaultLanguage: English
 
   name: au14-job-name-forecon-spotter
   description: au14-job-description-forecon-killteam

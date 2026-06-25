@@ -17,12 +17,27 @@
     preset: AU14SkillPresetPlatoonDP
   - type: JobPrefix
     prefix: au14-job-prefix-tweiasf-pl
+  - type: Language
+    spokenLanguages:
+    - English
+    - Japanese
+    - Indonesian
+    understoodLanguages:
+    - English
+    - Japanese
+    - Indonesian
+    currentLanguage: Indonesian
+    defaultLanguage: Indonesian
 
   name: au14-job-name-tweiasf-pl
   playTimeTracker: AU14IASFPilot
   description: au14-job-description-twepara
   ranks:
-    RMC_WarrantOfficer2: []
+    RMCRankCivilian: []
+  chevrons:
+    IASF_SecondWarrantOfficer:
+      entity: AU14ChevronIASFSecondWarrantOfficer
+      requirements: []
   spawnMenuRoleName: IASF Pilot (Base)
   joinNotifyCrew: false
   icon: RMCJobIconParaPilot

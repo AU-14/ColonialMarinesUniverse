@@ -29,6 +29,8 @@
   - type: ShowMarineIcons
     factions:
     - CLF
+  - type: FactionLanguageMember
+    factionTag: CLF
 
   name: au14-job-name-clfguerilla
   description: au14-job-description-clfguerilla

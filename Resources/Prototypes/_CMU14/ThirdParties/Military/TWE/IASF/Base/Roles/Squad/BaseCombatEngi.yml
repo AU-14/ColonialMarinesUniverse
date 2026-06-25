@@ -20,12 +20,23 @@
     preset: AU14SkillPresetPlatoonCombatTechnician
   - type: JobPrefix
     prefix: au14-job-prefix-iasf
+  - type: Language
+    spokenLanguages:
+    - Indonesian
+    understoodLanguages:
+    - Indonesian
+    currentLanguage: Indonesian
+    defaultLanguage: Indonesian
 
   name: au14-job-name-tweiasf-ce
   playTimeTracker: AU14IASFCombatEngineer
   description: au14-job-description-tweiasf
   ranks:
-    RMC_LanceCorporal: []
+    RMCRankCivilian: []
+  chevrons:
+    IASF_ChiefPrivate:
+      entity: AU14ChevronIASFChiefPrivate
+      requirements: []
   spawnMenuRoleName: IASF Engineer (Base)
   joinNotifyCrew: false
   icon: RMCJobIconParaAssaultEngineer

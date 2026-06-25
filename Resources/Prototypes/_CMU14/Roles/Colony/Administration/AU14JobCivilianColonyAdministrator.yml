@@ -39,6 +39,7 @@
     inverted: true
     traits:
     - NonResuscitable
+    - NoEnglish
   ranks:
     AU14RankColonySeniorAdministrator:
     - !type:RoleTimeRequirement

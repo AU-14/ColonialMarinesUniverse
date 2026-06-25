@@ -42,6 +42,7 @@
     inverted: true
     traits:
     - NonResuscitable
+    - NoEnglish
   ranks:
     AU14RankSeniorOrbitalArbiter:
     - !type:RoleTimeRequirement
