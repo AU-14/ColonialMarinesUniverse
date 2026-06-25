@@ -2,33 +2,6 @@
   abstract: true
   parent: RMCAttachmentScopeBase
   id: AU14AttachmentScopeBase
-  components:
-  - type: AttachableToggleable
-    needHand: true
-    heldOnlyActivate: true
-    userOnly: true
-    doInterrupt: true
-    attachedOnly: true
-    breakOnMove: true
-    breakOnRotate: true
-    wieldedOnly: true
-    useDelay: 0.5
-    showTogglePopup: false
-    icon:
-      sprite: _RMC14/Objects/Weapons/Guns/Attachments/rail.rsi
-      state: sniperscope
-    actionName: Look through Scope
-    actionDesc: Scope in. If you're seeing this, someone forgot to set the description properly.
-  - type: AttachableToggleableSimpleActivate
-  - type: Scope
-    requireWielding: true
-    attachment: true
-    useInHand: true
-    zoomLevels:
-    - zoom: 1
-      offset: 15
-      allowMovement: false
-      doAfter: 0
 
 - type: entity
   parent: RMCAttachmentS42xTelescopicMiniscope
