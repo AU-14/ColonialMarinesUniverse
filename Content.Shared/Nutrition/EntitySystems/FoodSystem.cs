@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._CMU14.Threats.Mobs.Ape;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Organ;
@@ -268,7 +269,7 @@ public sealed partial class FoodSystem : EntitySystem
 
 
         var foodIsOrgan = TryComp<OrganComponent>(entity.Owner, out _);
-        var eaterIsApe = HasComp<Content.Shared._CMU14.Ape.ApeDestroyComponent>(args.Target.Value);
+        var eaterIsApe = HasComp<ApeDestroyComponent>(args.Target.Value);
 
         if (!(foodIsOrgan && eaterIsApe))
         {

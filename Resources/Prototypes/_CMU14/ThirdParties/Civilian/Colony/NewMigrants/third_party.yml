@@ -10,7 +10,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: MigratingCivs
   partyspawn: MigratingCivsSpawn
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
@@ -32,7 +32,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: MigratingCivsMedium
   partyspawn: MigratingCivsMediumSpawn
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
@@ -54,7 +54,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: MigratingCivsLarge
   partyspawn: MigratingCivsLargeSpawn
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside

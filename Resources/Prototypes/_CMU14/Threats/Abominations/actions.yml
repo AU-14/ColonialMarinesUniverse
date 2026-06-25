@@ -28,7 +28,7 @@
     range: 6
     checkCanAccess: false
   - type: WorldTargetAction
-    event: !type:Content.Shared._AU14.Abominations.Abilities.AbominationLeapActionEvent
+    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationLeapActionEvent
 
 - type: entity
   parent: ActionAbominationBase
@@ -46,7 +46,7 @@
     range: 10
     checkCanAccess: false
   - type: WorldTargetAction
-    event: !type:Content.Shared._AU14.Abominations.Abilities.AbominationSpitActionEvent
+    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationSpitActionEvent
 
 # --- Grunt ---
 
@@ -66,7 +66,7 @@
     range: 6
     checkCanAccess: false
   - type: WorldTargetAction
-    event: !type:Content.Shared._AU14.Abominations.Abilities.AbominationLeapActionEvent
+    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationLeapActionEvent
 
 - type: entity
   parent: ActionAbominationBase
@@ -84,7 +84,7 @@
     range: 8
     checkCanAccess: false
   - type: WorldTargetAction
-    event: !type:Content.Shared._AU14.Abominations.Abilities.AbominationChargeActionEvent
+    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationChargeActionEvent
 
 - type: entity
   parent: ActionAbominationBase
@@ -102,7 +102,7 @@
     range: 10
     checkCanAccess: false
   - type: WorldTargetAction
-    event: !type:Content.Shared._AU14.Abominations.Abilities.AbominationSpitActionEvent
+    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationSpitActionEvent
 
 - type: entity
   parent: ActionAbominationBase
@@ -120,7 +120,7 @@
     range: 7
     checkCanAccess: false
   - type: WorldTargetAction
-    event: !type:Content.Shared._AU14.Abominations.Abilities.AbominationAcidSprayActionEvent
+    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationAcidSprayActionEvent
 
 # --- Skitter ---
 
@@ -137,7 +137,7 @@
       state: plant_weeds
     useDelay: 30
   - type: InstantAction
-    event: !type:Content.Shared._AU14.Abominations.AbominationPlantKudzuActionEvent
+    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationPlantKudzuActionEvent
 
 - type: entity
   parent: ActionAbominationBase
@@ -152,7 +152,7 @@
       state: place_resin
     useDelay: 1
   - type: InstantAction
-    event: !type:Content.Shared._AU14.Abominations.Abilities.AbominationConstructionChooseActionEvent
+    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationConstructionChooseActionEvent
 
 - type: entity
   parent: ActionAbominationBase
@@ -170,7 +170,7 @@
     range: 1
     checkCanAccess: false
   - type: WorldTargetAction
-    event: !type:Content.Shared._AU14.Abominations.Abilities.AbominationConstructionSecreteActionEvent
+    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationConstructionSecreteActionEvent
 
 # --- Mimic ---
 
@@ -191,7 +191,7 @@
     checkCanAccess: true
     deselectOnMiss: false
   - type: EntityTargetAction
-    event: !type:Content.Shared._AU14.Abominations.AbominationAssimilateActionEvent
+    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationAssimilateActionEvent
 
 - type: entity
   parent: ActionAbominationBase
@@ -209,7 +209,7 @@
     # per-mimic by construction.
     useDelay: 1
   - type: InstantAction
-    event: !type:Content.Shared._AU14.Abominations.AbominationMimicTransformActionEvent
+    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicTransformActionEvent
 
 - type: entity
   parent: ActionAbominationBase
@@ -224,4 +224,4 @@
       state: headbite
     useDelay: 1
   - type: InstantAction
-    event: !type:Content.Shared._AU14.Abominations.AbominationMimicRevertActionEvent
+    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicRevertActionEvent

@@ -1,7 +1,6 @@
 using System.Numerics;
 using Content.Client._RMC14.Medical.HUD;
 using Content.Client._RMC14.NightVision;
-using Content.Shared._AU14.Abominations;
 using Content.Shared._RMC14.Mobs;
 using Content.Shared._RMC14.Shields;
 using Content.Shared._RMC14.Stealth;
@@ -32,8 +31,9 @@ using Content.Shared._RMC14.Xenonids.Finesse;
 using static Robust.Shared.Utility.SpriteSpecifier;
 using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Synth;
-using Content.Shared._RMC14.Xenonids.Hedgehog;
 using Content.Shared.FixedPoint;
+using AbominationComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationComponent;
+using AbominationMimicTransformedComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicTransformedComponent;
 
 namespace Content.Client._RMC14.Xenonids.Hud;
 

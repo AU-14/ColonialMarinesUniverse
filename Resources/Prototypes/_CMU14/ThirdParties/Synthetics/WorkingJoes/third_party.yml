@@ -7,7 +7,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: WorkingJoesAPOLLO
   partyspawn: WorkingJoesAPOLLO
   entrymethod: shuttle
@@ -26,7 +26,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: WorkingJoesNoAPOLLO
   partyspawn: WorkingJoesNoAPOLLO
   entrymethod: shuttle

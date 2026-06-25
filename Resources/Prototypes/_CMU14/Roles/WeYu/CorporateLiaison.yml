@@ -29,7 +29,7 @@
     prefix: au14-job-prefix-corporateliaison
   - type: TacticalMapIcon
     icon:
-      sprite: _RMC14/Interface/cm_job_icons.rsi
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
       state: hudsquad_liaison
   - type: AssignSquad
     whitelist:
