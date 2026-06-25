@@ -106,6 +106,8 @@
         crate: RMCCrateGearFulton
       - cost: 400
         crate: RMCCrateGearParachute
+      - cost: 500
+        crate: RMCCrateAttachmentSmartScope
     - name: Medical
       entries:
       - cost: 3000
