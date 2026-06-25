@@ -1,0 +1,22 @@
+- type: loadoutGroup
+  id: ColonySynthUniformAU14
+  name: rmc-loadout-group-synthetic-uniform
+  minLimit: 1
+  loadouts:
+  - CivilianWorkwearYellowAU14
+  - CivilianWorkwearPinkAU14
+  - CivilianWorkwearBlueAU14
+  - CivilianWorkwearGreenAU14
+  - JumpsuitDutchBandolierAU14
+  - JumpsuitCivilianAU14
+  - JumpsuitColonistAU14
+  - JumpsuitTShirtWhiteAU14
+  - JumpsuitTShirtGrayAU14
+  - JumpsuitTShirtRedAU14
+  - CivilianWeYuEngineerClothesAU14
+  - ScrubsBlueRMC
+  - ScrubsLightBlueRMC
+  - ScrubsGreenRMC
+  - ScrubsPurpleRMC
+  - ScrubsOliveRMC
+  - ScrubsGreyRMC

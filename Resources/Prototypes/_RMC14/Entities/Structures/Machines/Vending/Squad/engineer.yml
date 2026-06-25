@@ -41,6 +41,8 @@
         points: 2
       - id: CMEntrenchingTool
         points: 2
+      - id: CMUDeployableZLevelLadder
+        points: 10
       - id: RMCPowerCellHigh
         points: 3
       - id: CMSheetMetal10
@@ -381,6 +383,8 @@
       entries:
       - id: RMCSentryLaptop
         name: sentry gun network laptop
+        amount: 4
+      - id: CMUDeployableZLevelLadder
         amount: 4
     #   - id: Sentry Gun Network Encryption KEy
     #     amount: 4

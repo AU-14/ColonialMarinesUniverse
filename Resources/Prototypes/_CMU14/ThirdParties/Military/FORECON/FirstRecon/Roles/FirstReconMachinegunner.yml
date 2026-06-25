@@ -21,6 +21,15 @@
   - type: SpotterWhitelist
   - type: JobPrefix
     prefix: cm-job-prefix-gun-operator
+  - type: LanguagePreset
+    spokenLanguages:
+    - English
+    - TacticalSignLanguage
+    understoodLanguages:
+    - English
+    - TacticalSignLanguage
+    currentLanguage: English
+    defaultLanguage: English
 
   name: au14-job-name-govforsquadautomaticriflemanRMC
   description: au14-job-description-forecon-firstrecon

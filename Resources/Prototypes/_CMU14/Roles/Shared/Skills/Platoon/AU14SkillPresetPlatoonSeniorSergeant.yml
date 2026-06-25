@@ -1,0 +1,24 @@
+- type: entity
+  id: AU14SkillPresetPlatoonSeniorSergeant
+  name: Senior Sergeant
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillConstruction: 2
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 3
+      RMCSkillEngineer: 2
+      RMCSkillFirearms: 2 #gunny has more time on the range than the entire platoon, rumour is he rucks 20 miles a day just to get a weyburger
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 1
+      RMCSkillOverwatch: 1
+      RMCSkillPilot: 1
+      RMCSkillLeadership: 3
+      RMCSkillIntel: 1
+      RMCSkillPowerLoader: 1
+      RMCSkillMedical: 1
+      RMCSkillSurgery: 1
+      RMCSkillNavigations: 1
+      RMCSkillPolice: 1
+      RMCSkillJtac: 4

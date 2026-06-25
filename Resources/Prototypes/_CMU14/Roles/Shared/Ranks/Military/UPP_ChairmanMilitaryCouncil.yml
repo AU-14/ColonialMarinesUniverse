@@ -1,0 +1,5 @@
+- type: rank
+  id: UPP_ChairmanMilitaryCouncil
+  name: Chairman of Military Council
+  prefix: CMC
+  paygrade: O10

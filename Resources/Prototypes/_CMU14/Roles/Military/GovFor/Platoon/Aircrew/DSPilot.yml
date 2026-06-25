@@ -1,0 +1,278 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobDSPilotBaseAbstract
+  name: au14-job-name-govfordspilot
+  description: au14-job-description-govfordspilot
+  icon: "AU14JobIconPilotOfficer"
+  spawnMenuRoleName: Pilot Officer (GOVFOR)
+  startingGear: AU14GearGOVFORDSPilot
+  dummyStartingGear: AU14GearGOVFORDSPilotDummy
+  playTimeTracker: AU14JobGOVFORDSPilot
+  requireAdminNotify: true
+  canBeAntag: false
+  accessGroups:
+  - AU14GovforPilot
+  - AU14GovforCorpsman
+  - AU14GovforSquad
+
+- type: job
+  abstract: true
+  parent: AU14JobDSPilotBaseAbstract
+  id: AU14JobDSPilotBase
+  roundRole: DropshipPilot
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetPlatoonDP
+  - type: JobPrefix
+    prefix: au14-job-prefix-govfordspilot
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: govfor_po
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
+        state: po
+    RMC:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillIntel: 1
+        RMCSkillJtac: 2
+        RMCSkillLeadership: 1
+        RMCSkillMedical: 2
+        RMCSkillOverwatch: 1
+        RMCSkillPilot: 2
+        RMCSkillPowerLoader: 2
+        RMCSkillSurgery: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-govfordspilotRMC
+    UPP:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillIntel: 1
+        RMCSkillJtac: 2
+        RMCSkillLeadership: 1
+        RMCSkillMedical: 2
+        RMCSkillOverwatch: 1
+        RMCSkillPilot: 2
+        RMCSkillPowerLoader: 2
+        RMCSkillSurgery: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORDSPilotUPP
+    WYPMC:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillIntel: 1
+        RMCSkillJtac: 2
+        RMCSkillLeadership: 1
+        RMCSkillMedical: 2
+        RMCSkillOverwatch: 1
+        RMCSkillPilot: 2
+        RMCSkillPowerLoader: 2
+        RMCSkillSurgery: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORDSPilotWYPMC
+
+  requirements:
+  - !type:AgeRequirement
+    requiredAge: 25
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankChiefWarrantOfficer5:
+      entity: AU14ChevronUSCMChiefWarrantOfficer5
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORDSPilot
+        time: 360000
+    RMCRankChiefWarrantOfficer4:
+      entity: AU14ChevronUSCMChiefWarrantOfficer4
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORDSPilot
+        time: 180000
+    RMCRankChiefWarrantOfficer3:
+      entity: AU14ChevronUSCMChiefWarrantOfficer3
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORDSPilot
+        time: 86400
+    RMCRankChiefWarrantOfficer2:
+      entity: AU14ChevronUSCMChiefWarrantOfficer2
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORDSPilot
+        time: 36000
+    RMCRankWarrantOfficer:
+      entity: AU14ChevronUSCMWarrantOfficer
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFORDSPilot
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORDSPilot
+  equipment:
+    id: AU14IDCardGOVFORDSPilot
+    ears: AU14HeadsetGovforCommand
+
+- type: startingGear
+  id: AU14GearGOVFORDSPilotDummy
+  equipment:
+    outerClothing: AU14USASFICPS2
+    shoes: CMBootsBrown
+    mask: AU14MaskUSASFPilotOxygen
+    head: AU14USASFAirCrewHelmet
+    jumpsuit: AU14USASFPilotJumpsuit
+    ears: AU14HeadsetGovforCommand
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORDSPilot
+  name: Spawn Point GOVFOR Dropship Pilot
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORDSPilot
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobDSPilotBase
+  id: AU14JobGOVFORDSPilot
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: roleLoadout
+  id: JobAU14JobGOVFORDSPilot
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - WeaponsRMC
+
+- type: job
+  parent: AU14JobDSPilotBase
+  id: AU14JobOPFORDSPilot
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORPilotOfficer"
+  spawnMenuRoleName: Pilot Officer (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearopforDSPilot
+  dummyStartingGear: AU14GearopforDSPilotDummy
+  accessGroups:
+  - AU14OpforPilot
+  - AU14OpforCorpsman
+  - AU14OpforSquad
+
+- type: startingGear
+  id: AU14GearopforDSPilot
+  equipment:
+    id: AU14IDCardopforDSPilot
+    ears: AU14HeadsetOpforCommand
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointopforDSPilot
+  name: Spawn Point opfor Dropship Pilot
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORDSPilot
+  - type: Sprite
+    state: syn_spawn
+
+- type: startingGear
+  id: AU14GearopforDSPilotDummy
+  equipment:
+    outerClothing: AU14USASFICPS2
+    shoes: CMBootsBrown
+    mask: AU14MaskUSASFPilotOxygen
+    head: AU14USASFAirCrewHelmet
+    jumpsuit: AU14USASFPilotJumpsuit
+    ears: AU14HeadsetOpforCommand
+
+- type: job
+  parent: AU14JobDSPilotBase
+  id: AU14JobGOVFORDSPilotRMC
+  roundForce: RMC
+  name: RMC Pilot Officer
+  spawnMenuRoleName: Pilot Officer (TWE RMC)
+  ranks:
+    RMC_Lieutenant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDSPilot
+      time: 360000 # 100 hours
+    RMC_2Lieutenant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDSPilot
+      time: 216000 # 60 hours
+    RMC_WarrantOfficer1:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDSPilot
+      time: 108000 # 30 hours
+    RMC_WarrantOfficer2: []
+
+- type: job
+  parent: AU14JobDSPilotBase
+  id: AU14JobGOVFORDSPilotUPP
+  roundForce: UPP
+  name: Dropship Pilot
+  spawnMenuRoleName: Pilot Officer (UPP)
+  ranks:
+    UPP_Lieutenant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDSPilot
+      time: 360000 # 100 hours
+    UPP_JuniorLieutenant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDSPilot
+      time: 216000 # 60 hours
+    UPP_SeniorWarrantOfficer:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDSPilot
+      time: 108000 # 30 hours
+    UPP_WarrantOfficer: []
+
+- type: job
+  parent: AU14JobDSPilotBase
+  id: AU14JobGOVFORDSPilotWYPMC
+  roundForce: WYPMC
+  name: PMC Pilot Officer
+  spawnMenuRoleName: Pilot Officer (WYPMC)
+  ranks:
+    AU14RankWeYuSeniorCrewChief:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDSPilot
+      time: 108000 # 30 hours
+    AU14RankWeYuCrewChief: []

@@ -1,0 +1,19 @@
+- type: loadoutGroup
+  id: SynthHeadwearAU14
+  name: rmc-loadout-group-synthetic-headwear
+  minLimit: 0
+  maxLimit: 2
+  loadouts:
+  - CapRMC
+  - BeretEngineerRMC
+  - CapMPRMC
+  - CapQuartermasterRMC
+  - HeadCapCargoRMC
+  - HardHatRMC
+  - HardHatOrangeRMC
+  - HardHatWhiteRMC
+  - HardHatBlueRMC
+  - HeadCapOfficerRMC
+  - BeretIOAU14
+  - BeretSOAU14
+  - BeretADJAU14

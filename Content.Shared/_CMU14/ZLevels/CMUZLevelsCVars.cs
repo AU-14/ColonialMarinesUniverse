@@ -42,6 +42,9 @@ public sealed partial class CMUZLevelsCVars : CVars
     public static readonly CVarDef<int> MaxFallsPerTick =
         CVarDef.Create("cmu.zlevels.max_falls_per_tick", 64, CVar.SERVER);
 
+    public static readonly CVarDef<bool> DebugFalling =
+        CVarDef.Create("cmu.zlevels.debug_falling", false, CVar.REPLICATED | CVar.SERVER);
+
     public static readonly CVarDef<float> TransitionBudgetMs =
         CVarDef.Create("cmu.zlevels.transition_budget_ms", 1.0f, CVar.SERVER);
 

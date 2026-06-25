@@ -105,6 +105,7 @@
   id: RMCOuterClothingExternalWebbingBrownFull
   suffix: Full, Crowbar
   components:
+  - type: RMCMagneticArmor
   - type: StorageFill
     contents:
     - id: RMCTacticalPrybar

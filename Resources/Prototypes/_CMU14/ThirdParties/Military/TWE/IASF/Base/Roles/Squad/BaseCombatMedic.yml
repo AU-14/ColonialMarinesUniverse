@@ -20,12 +20,23 @@
     preset: AU14SkillPresetPlatoonHospitalCorpsman
   - type: JobPrefix
     prefix: au14-job-prefix-iasf
+  - type: Language
+    spokenLanguages:
+    - Indonesian
+    understoodLanguages:
+    - Indonesian
+    currentLanguage: Indonesian
+    defaultLanguage: Indonesian
 
   name: au14-job-name-tweiasf-cm
   playTimeTracker: AU14IASFCombatMedicalTechnician
   description: au14-job-description-twepara
   ranks:
-    RMC_LanceCorporal: []
+    RMCRankCivilian: []
+  chevrons:
+    IASF_ChiefPrivate:
+      entity: AU14ChevronIASFChiefPrivate
+      requirements: []
   spawnMenuRoleName: IASF Medical Technician (Base)
   joinNotifyCrew: false
   icon: RMCJobIconParaMedicalTechnican

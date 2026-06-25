@@ -17,6 +17,8 @@
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
+  - type: FactionLanguageMember
+    factionTag: ForeignMob
 
   name: au14-job-name-mobgoon
   description: You and your Boss have been evicted from your old territory and lost everything. But old habits die hard, move into rival territory and begin anew.
@@ -28,6 +30,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-mobgoon
+  spawnMenuRoleName: Mob Goon (3rd party)
   accessGroups:
   - Colonist
   roleWeight: 0.25

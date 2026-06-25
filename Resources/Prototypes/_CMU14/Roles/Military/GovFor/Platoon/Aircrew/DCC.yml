@@ -1,0 +1,259 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobDCCBaseAbstract
+  name: au14-job-name-govfordcc
+  description: au14-job-description-govfordcc
+  icon: "AU14JobIconDCC"
+  spawnMenuRoleName: Dropship Crew Chief (GOVFOR)
+  startingGear: AU14GearGOVFORDCC
+  dummyStartingGear: AU14GearGOVFORDCCDummy
+  playTimeTracker: AU14JobGOVFORDCC
+  requireAdminNotify: true
+  canBeAntag: false
+  accessGroups:
+  - AU14GovforPilot
+  - AU14GovforCorpsman
+  - AU14GovforSquad
+
+- type: job
+  abstract: true
+  parent: AU14JobDCCBaseAbstract
+  id: AU14JobDCCBase
+  roundRole: DropshipCrewChief
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetPlatoonDCC
+  - type: JobPrefix
+    prefix: au14-job-prefix-govfordcc
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: govfor_dcc
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
+        state: dcc
+    RMC:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillIntel: 1
+        RMCSkillJtac: 2
+        RMCSkillLeadership: 1
+        RMCSkillMedical: 2
+        RMCSkillOverwatch: 1
+        RMCSkillPilot: 2
+        RMCSkillPowerLoader: 2
+        RMCSkillSurgery: 1
+        RMCSkillPolice: 1
+    UPP:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillIntel: 1
+        RMCSkillJtac: 2
+        RMCSkillLeadership: 1
+        RMCSkillMedical: 2
+        RMCSkillOverwatch: 1
+        RMCSkillPilot: 2
+        RMCSkillPowerLoader: 2
+        RMCSkillSurgery: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORDCCUPP
+    WYPMC:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillIntel: 1
+        RMCSkillJtac: 2
+        RMCSkillLeadership: 1
+        RMCSkillMedical: 2
+        RMCSkillOverwatch: 1
+        RMCSkillPilot: 2
+        RMCSkillPowerLoader: 2
+        RMCSkillSurgery: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORDCCWYPMC
+
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NonResuscitable
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    AU14RankUSASFCMSgt:
+      entity: AU14ChevronUSASFChiefMasterSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORDCC
+        time: 360000
+    AU14RankUSASFSMSgt:
+      entity: AU14ChevronUSASFSeniorMasterSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORDCC
+        time: 216000
+    AU14RankUSASFMasterSergeant:
+      entity: AU14ChevronUSASFMasterSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORDCC
+        time: 43200
+    AU14RankUSASFTechnicalSergeant:
+      entity: AU14ChevronUSASFTechnicalSergeant
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFORDCC
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORDCC
+  equipment:
+    id: AU14IDCardGOVFORDCC
+    ears: AU14HeadsetGovforCommand
+
+- type: startingGear
+  id: AU14GearGOVFORDCCDummy
+  equipment:
+    outerClothing: AU14USASFICPS2
+    shoes: CMBootsBrown
+    head: AU14USASFAirCrewHelmet
+    jumpsuit: AU14USASFPilotJumpsuit
+    ears: AU14HeadsetGovforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORDCC
+  name: Spawn Point GOVFOR Dropship Crew Chief
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORDCC
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobDCCBase
+  id: AU14JobGOVFORDCC
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: roleLoadout
+  id: JobAU14JobGOVFORDCC
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+- type: job
+  parent: AU14JobDCCBase
+  id: AU14JobOPFORDCC
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORDCC"
+  spawnMenuRoleName: Dropship Crew Chief (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearopforDCC
+  dummyStartingGear: AU14GearopforDCCDummy
+  accessGroups:
+  - AU14OpforPilot
+  - AU14OpforCorpsman
+  - AU14OpforSquad
+
+- type: startingGear
+  id: AU14GearopforDCC
+  equipment:
+    id: AU14IDCardopforDCC
+    ears: AU14HeadsetOpforCommand
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointopforDCC
+  name: Spawn Point opfor Dropship Crew Chief
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORDCC
+  - type: Sprite
+    state: syn_spawn
+
+- type: startingGear
+  id: AU14GearopforDCCDummy
+  equipment:
+    outerClothing: AU14USASFICPS2
+    shoes: CMBootsBrown
+    head: AU14USASFAirCrewHelmet
+    jumpsuit: AU14USASFPilotJumpsuit
+    ears: AU14HeadsetOpforMarine
+
+- type: job
+  parent: AU14JobDCCBase
+  id: AU14JobGOVFORDCCRMC
+  roundForce: RMC
+  name: au14-job-name-govfordccRMC
+  spawnMenuRoleName: Dropship Crew Chief (TWE RMC)
+  ranks:
+    RMC_WarrantOfficer1:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDCC
+      time: 360000 # 100 hours
+    RMC_WarrantOfficer2:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDCC
+      time: 216000 # 60 hours
+    RMC_ColourSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDCC
+      time: 43200 # 12 hours
+    RMC_Sergeant: []
+
+- type: job
+  parent: AU14JobDCCBase
+  id: AU14JobGOVFORDCCUPP
+  roundForce: UPP
+  name: Dropship Crew Chief
+  spawnMenuRoleName: Dropship Crew Chief (UPP)
+  ranks:
+    UPP_FirstSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDCC
+      time: 360000 # 100 hours
+    UPP_SeniorSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDCC
+      time: 108000 # 30 hours
+    UPP_Sergeant: []
+
+- type: job
+  parent: AU14JobDCCBase
+  id: AU14JobGOVFORDCCWYPMC
+  roundForce: WYPMC
+  name: PMC Crew Chief
+  spawnMenuRoleName: Dropship Crew Chief (WYPMC)
+  ranks:
+    AU14RankWeYuSeniorCrewChief:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDCC
+      time: 108000 # 30 hours
+    AU14RankWeYuCrewChief: []

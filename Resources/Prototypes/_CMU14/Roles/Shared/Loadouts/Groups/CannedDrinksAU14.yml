@@ -1,0 +1,25 @@
+- type: loadoutGroup
+  id: CannedDrinksAU14
+  name: rmc-loadout-group-canned-drinks
+  minLimit: 0
+  maxLimit: 14
+  loadouts:
+  - BottledWaterRMC
+  - GrapeJuiceRMC
+  - LemonLimeRMC
+  - IcedTeaRMC
+  - ColaRMC
+  - MountainWindRMC
+  - SpaceUpRMC
+  - BobdaRMC
+  - DietBobdaRMC
+  - BodaRMC
+  - BodaPlyusRMC
+  #- AleIpaRMC
+  #- LiteBeerRMC
+  #- SequoiaBeerRMC
+  - ThirteenLokoRMC
+# id SmokablesRMC
+
+# WY
+# Liaison

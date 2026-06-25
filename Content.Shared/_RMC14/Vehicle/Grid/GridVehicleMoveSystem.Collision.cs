@@ -1,6 +1,8 @@
 using System;
 using System.Numerics;
 using System.Collections.Generic;
+using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared._CMU14.ZLevels.Vehicles;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
 using Content.Shared.Doors.Components;
@@ -116,6 +118,9 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 continue;
 
             if (ignoredEntities != null && ignoredEntities.Contains(other))
+                continue;
+
+            if (ShouldIgnoreZHighGroundCollision(uid, other))
                 continue;
 
             // Heavy vehicles (APC/Tank) drive over consoles and similar tagged props
@@ -275,6 +280,12 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         AddProbe(false);
         _hitsDepth--;
         return true;
+    }
+
+    private bool ShouldIgnoreZHighGroundCollision(EntityUid vehicle, EntityUid other)
+    {
+        return HasComp<CMUVehicleZTraversalComponent>(vehicle) &&
+               HasComp<CMUZLevelHighGroundComponent>(other);
     }
 
     private bool TryBuildCollisionCandidate(

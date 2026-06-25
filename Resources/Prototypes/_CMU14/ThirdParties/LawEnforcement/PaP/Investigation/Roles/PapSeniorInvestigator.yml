@@ -24,6 +24,8 @@
       RMCSkillVehicles: 1
   - type: JobPrefix
     prefix: au-14-job-prefix-papthirdparty-captain
+  - type: Language
+    preset: AU14LanguagePresetUPPOfficer
 
   name: au-14-job-name-papthirdparty-captain
   description: au14-papthirdparty-description
