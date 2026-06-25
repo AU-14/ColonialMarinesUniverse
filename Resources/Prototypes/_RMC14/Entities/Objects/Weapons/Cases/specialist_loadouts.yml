@@ -21,6 +21,7 @@
     - id: CMM96SSniperRifle
     - id: AU14KitSpotter
 #    - id: CMFacepaintSniper
+    - id: AU14ScoutWebbing
   - type: CMChangeUserOnVend
     addComponents:
     - type: SniperWhitelist
@@ -48,6 +49,7 @@
     - id: RMCScoutShoes
     - id: CMBackpackSniper
     - id: AU14KitSpotter
+    - id: AU14ScoutWebbing
   - type: IgnoreContentsSize
     items:
       tags:
@@ -311,7 +313,7 @@
     - id: RMCPouchFuelTank
     - id: CMFireExtinguisher
     - id: CMFireExtinguisherPortable
-    - id: RMCBinoculars 
+    - id: RMCBinoculars
     #- id: RMCMK80
     #- id: CMMagazinePistolMK80
     #  amount: 2
@@ -389,7 +391,7 @@
     sprite: _RMC14/Objects/Storage/procase_mini.rsi
   - type: StorageFill
     contents:
-    - id: CMArmorM45
+    - id: AU14ScoutWebbing
     - id: CMArmorHelmetM45
     - id: RMCVisorNightVision
     - id: CMBackpackSniper
