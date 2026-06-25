@@ -5,6 +5,8 @@ using Content.Shared._RMC14.Evacuation;
 using Content.Shared.AU14;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using KillAllTribeRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllTribeRuleComponent;
+using TribalComponent = Content.Shared._CMU14.Threats.Mobs.Tribal.TribalComponent;
 
 namespace Content.Server._CMU14.Threats.Rules;
 

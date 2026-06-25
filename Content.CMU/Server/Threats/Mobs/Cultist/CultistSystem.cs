@@ -16,6 +16,8 @@ using Content.Shared.NPC.Systems;
 using Content.Shared.Verbs;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
+using CultistComponent = Content.Shared._CMU14.Threats.Mobs.Cultist.CultistComponent;
+using HasKnowledgeOfXenoLanguageComponent = Content.Shared._CMU14.Threats.Mobs.Xeno.HasKnowledgeOfXenoLanguageComponent;
 
 namespace Content.Server._CMU14.Threats.Mobs.Cultist;
 

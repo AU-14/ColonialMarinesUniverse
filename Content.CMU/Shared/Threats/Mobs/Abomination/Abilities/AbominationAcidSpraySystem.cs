@@ -5,7 +5,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Random;
 using Robust.Shared.Spawners;
 
-namespace Content.Shared._AU14.Abominations.Abilities;
+namespace Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities;
 
 /// <summary>
 /// Spawns a fan of acid spit projectiles in a cone toward the target.
@@ -21,10 +21,10 @@ public sealed partial class AbominationAcidSpraySystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<AbominationAcidSprayComponent, AbominationAcidSprayActionEvent>(OnSprayAction);
+        SubscribeLocalEvent<_CMU14.Threats.Mobs.Abomination.Abilities.AbominationAcidSprayComponent, _CMU14.Threats.Mobs.Abomination.Abilities.AbominationAcidSprayActionEvent>(OnSprayAction);
     }
 
-    private void OnSprayAction(Entity<AbominationAcidSprayComponent> ent, ref AbominationAcidSprayActionEvent args)
+    private void OnSprayAction(Entity<_CMU14.Threats.Mobs.Abomination.Abilities.AbominationAcidSprayComponent> ent, ref _CMU14.Threats.Mobs.Abomination.Abilities.AbominationAcidSprayActionEvent args)
     {
         if (args.Handled)
             return;

@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared.AU14.CLF;
+namespace Content.Shared._CMU14.Threats.Mobs.CLF;
 
 /// <summary>
 /// Temporary component placed on an entity that is being offered a CLF tattoo.

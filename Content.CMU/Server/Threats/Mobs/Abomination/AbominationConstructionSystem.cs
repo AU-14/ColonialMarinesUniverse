@@ -1,7 +1,11 @@
 using System.Linq;
 using Content.Shared._AU14.Abominations.Abilities;
+using Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities;
 using Content.Shared.Popups;
 using Robust.Shared.Timing;
+using AbominationConstructionChooseActionEvent = Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationConstructionChooseActionEvent;
+using AbominationConstructionComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationConstructionComponent;
+using AbominationConstructionSecreteActionEvent = Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationConstructionSecreteActionEvent;
 
 namespace Content.Server._CMU14.Threats.Mobs.Abomination;
 

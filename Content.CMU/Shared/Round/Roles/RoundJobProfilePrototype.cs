@@ -1,8 +1,7 @@
-using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
 
-namespace Content.Shared.AU14.Roles;
+namespace Content.Shared._CMU14.Round.Roles;
 
 public enum RoundJobSide : byte
 {

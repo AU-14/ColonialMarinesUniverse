@@ -12,6 +12,15 @@ using Content.Shared.NPC.Prototypes;
 using Content.Shared.Polymorph;
 using Content.Shared.Popups;
 using Robust.Shared.Prototypes;
+using AbominationAppearanceSnapshot = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationAppearanceSnapshot;
+using AbominationAssimilateActionEvent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationAssimilateActionEvent;
+using AbominationAssimilateComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationAssimilateComponent;
+using AbominationAssimilateDoAfterEvent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationAssimilateDoAfterEvent;
+using AbominationAssimilationProfile = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationAssimilationProfile;
+using AbominationComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationComponent;
+using AbominationInfectableComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationInfectableComponent;
+using AbominationMimicComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicComponent;
+using TribalComponent = Content.Shared._CMU14.Threats.Mobs.Tribal.TribalComponent;
 
 namespace Content.Server._CMU14.Threats.Mobs.Abomination;
 

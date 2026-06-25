@@ -9,6 +9,8 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using AbominationComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationComponent;
+using AbominationFleshKudzuComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationFleshKudzuComponent;
 
 namespace Content.Server._CMU14.Threats.Mobs.Abomination;
 

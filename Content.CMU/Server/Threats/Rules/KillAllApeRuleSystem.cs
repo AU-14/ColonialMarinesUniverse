@@ -5,6 +5,8 @@ using Content.Shared._RMC14.Evacuation;
 using Content.Shared.AU14;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using ApeComponent = Content.Shared._CMU14.Threats.Mobs.Ape.ApeComponent;
+using KillAllApeRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllApeRuleComponent;
 
 namespace Content.Server._CMU14.Threats.Rules;
 

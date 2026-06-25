@@ -2,7 +2,7 @@ using Content.Shared.Damage;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
-namespace Content.Shared._AU14.Abominations;
+namespace Content.Shared._CMU14.Threats.Mobs.Abomination;
 
 /// <summary>
 /// Applied to a humanoid hit by an abomination. Symptoms ramp progressively

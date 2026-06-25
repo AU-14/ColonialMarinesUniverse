@@ -10,6 +10,7 @@ using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.NPC.Components;
+using KillAllGovforRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllGovforRuleComponent;
 
 namespace Content.Server._CMU14.Threats.Rules;
 

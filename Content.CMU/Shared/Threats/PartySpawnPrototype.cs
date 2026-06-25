@@ -1,8 +1,7 @@
-using System.Runtime.Serialization;
 using Content.Shared.AU14.util;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.AU14.Threats;
+namespace Content.Shared._CMU14.Threats;
 
 
 [Prototype]

@@ -6,7 +6,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Abominations;
+namespace Content.Shared._CMU14.Threats.Mobs.Abomination;
 
 /// <summary>
 /// Applied to a humanoid after a mimic finishes the assimilation doafter on them.

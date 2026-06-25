@@ -8,6 +8,7 @@ using Content.Shared.AU14.ColonyEvacuation;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.NPC.Components;
+using KillAllColonistRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllColonistRuleComponent;
 
 namespace Content.Server._CMU14.Threats.Rules;
 

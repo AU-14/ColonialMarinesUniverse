@@ -2,7 +2,7 @@ using Content.Shared._RMC14.Xenonids.Charge;
 using Content.Shared._RMC14.Xenonids.Fling;
 using Content.Shared._RMC14.Xenonids.Headbite;
 
-namespace Content.Shared._CMU14.Ape;
+namespace Content.Shared._CMU14.Threats.Mobs.Ape;
 
 
 public sealed class ApeXenoAdapterSystem : EntitySystem
@@ -11,12 +11,12 @@ public sealed class ApeXenoAdapterSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<ApeChargeActionEvent>(OnApeChargeFromAction);
-        SubscribeLocalEvent<ApeRamActionEvent>(OnApeRamFromAction);
-        SubscribeLocalEvent<ApeXenoHeadbiteActionEvent>(OnApeHeadbiteFromAction);
+        SubscribeLocalEvent<Threats.Mobs.Ape.ApeChargeActionEvent>(OnApeChargeFromAction);
+        SubscribeLocalEvent<Threats.Mobs.Ape.ApeRamActionEvent>(OnApeRamFromAction);
+        SubscribeLocalEvent<Threats.Mobs.Ape.ApeXenoHeadbiteActionEvent>(OnApeHeadbiteFromAction);
     }
 
-    private void OnApeChargeFromAction(ApeChargeActionEvent args)
+    private void OnApeChargeFromAction(Threats.Mobs.Ape.ApeChargeActionEvent args)
     {
         if (args.Handled)
             return;
@@ -41,7 +41,7 @@ public sealed class ApeXenoAdapterSystem : EntitySystem
         }
     }
 
-    private void OnApeRamFromAction(ApeRamActionEvent args)
+    private void OnApeRamFromAction(Threats.Mobs.Ape.ApeRamActionEvent args)
     {
         if (args.Handled)
             return;
@@ -65,7 +65,7 @@ public sealed class ApeXenoAdapterSystem : EntitySystem
         }
     }
 
-    private void OnApeHeadbiteFromAction(ApeXenoHeadbiteActionEvent args)
+    private void OnApeHeadbiteFromAction(Threats.Mobs.Ape.ApeXenoHeadbiteActionEvent args)
     {
         if (args.Handled)
             return;

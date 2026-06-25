@@ -2,10 +2,9 @@ using Content.Shared.Actions;
 using Content.Shared.Damage;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
-using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
-namespace Content.Shared._AU14.Abominations.Abilities;
+namespace Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities;
 
 /// <summary>
 /// Lunge / pounce ability shared by abominations that need to close distance:

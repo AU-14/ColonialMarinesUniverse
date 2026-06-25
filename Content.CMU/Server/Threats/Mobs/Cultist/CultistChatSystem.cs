@@ -2,6 +2,7 @@ using Content.Shared._RMC14.Chat;
 using Content.Shared.AU14;
 using Content.Shared.Chat;
 using Content.Shared.Radio;
+using CultistComponent = Content.Shared._CMU14.Threats.Mobs.Cultist.CultistComponent;
 
 namespace Content.Server._CMU14.Threats.Mobs.Cultist;
 

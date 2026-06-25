@@ -15,6 +15,7 @@ using Content.Shared.CriminalRecords;
 using Content.Shared.Security;
 using Content.Shared.Cuffs.Components;
 using Robust.Shared.Maths;
+using CLFFaxReceiverComponent = Content.Shared._CMU14.Threats.Mobs.CLF.CLFFaxReceiverComponent;
 
 namespace Content.Server.AU14.Round.CLFVeteran;
 

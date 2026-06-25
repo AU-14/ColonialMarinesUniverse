@@ -1,8 +1,8 @@
+using Content.Shared.NPC.Prototypes;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
-using Content.Shared.NPC.Prototypes;
 
-namespace Content.Shared._CMU14.CLFSubverter;
+namespace Content.Shared._CMU14.Threats.Mobs.SubvertedSynth;
 
 [RegisterComponent]
 public sealed partial class SynthSubverterComponent : Component

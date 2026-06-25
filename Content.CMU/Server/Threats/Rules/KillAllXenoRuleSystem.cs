@@ -9,6 +9,8 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
+using CultistComponent = Content.Shared._CMU14.Threats.Mobs.Cultist.CultistComponent;
+using KillAllXenoRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllXenoRuleComponent;
 
 namespace Content.Server._CMU14.Threats.Rules;
 

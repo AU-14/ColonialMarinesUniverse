@@ -2,7 +2,7 @@ using Content.Shared.DoAfter;
 using Robust.Shared.Map;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Ape;
+namespace Content.Shared._CMU14.Threats.Mobs.Ape;
 
 [Serializable, NetSerializable]
 public sealed partial class ApeLeapDoAfterEvent : SimpleDoAfterEvent

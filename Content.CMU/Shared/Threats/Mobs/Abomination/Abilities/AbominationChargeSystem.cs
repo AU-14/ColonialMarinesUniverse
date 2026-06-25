@@ -1,6 +1,5 @@
 using System.Numerics;
 using Content.Shared.Damage;
-using Content.Shared.Damage.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Stunnable;
@@ -11,7 +10,7 @@ using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._AU14.Abominations.Abilities;
+namespace Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities;
 
 /// <summary>
 /// Crusher charge: long ranged lunge that damages mobs AND structures it

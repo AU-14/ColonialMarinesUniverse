@@ -11,6 +11,7 @@ using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.NPC.Components;
+using KillAllClfRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllClfRuleComponent;
 
 namespace Content.Server._CMU14.Threats.Rules;
 

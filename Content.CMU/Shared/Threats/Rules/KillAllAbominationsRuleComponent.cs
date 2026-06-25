@@ -1,4 +1,4 @@
-namespace Content.Shared.AU14;
+namespace Content.Shared._CMU14.Threats.Rules;
 
 /// <summary>
 /// Win condition rule that fires when a percentage of abominations are dead.

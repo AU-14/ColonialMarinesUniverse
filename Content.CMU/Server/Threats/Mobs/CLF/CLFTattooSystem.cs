@@ -3,9 +3,9 @@ using Content.Server.Antag;
 using Content.Server.Mind;
 using Content.Server.Popups;
 using Content.Server.Roles;
+using Content.Shared._CMU14.Threats.Mobs.CLF;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
-using Content.Shared.AU14.CLF;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Humanoid;
@@ -22,6 +22,10 @@ using Robust.Shared.Prototypes;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Server._CMU14.Language;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
+using CLFMemberComponent = Content.Shared._CMU14.Threats.Mobs.CLF.CLFMemberComponent;
+using TattooDoAfterEvent = Content.Shared._CMU14.Threats.Mobs.CLF.TattooDoAfterEvent;
+using TattooGunComponent = Content.Shared._CMU14.Threats.Mobs.CLF.TattooGunComponent;
+using TattooPendingComponent = Content.Shared._CMU14.Threats.Mobs.CLF.TattooPendingComponent;
 
 namespace Content.Server._CMU14.Threats.Mobs.CLF;
 

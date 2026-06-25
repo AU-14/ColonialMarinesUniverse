@@ -14,7 +14,7 @@ using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._AU14.Abominations.Abilities;
+namespace Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities;
 
 public sealed partial class AbominationLeapSystem : EntitySystem
 {

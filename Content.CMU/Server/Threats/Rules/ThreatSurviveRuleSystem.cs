@@ -5,6 +5,7 @@ using Content.Server.RoundEnd;
 using Content.Shared.AU14;
 using Content.Shared.GameTicking.Components;
 using Robust.Shared.Timing;
+using ThreatSurviveRuleComponent = Content.Shared._CMU14.Threats.Rules.ThreatSurviveRuleComponent;
 
 namespace Content.Server._CMU14.Threats.Rules;
 

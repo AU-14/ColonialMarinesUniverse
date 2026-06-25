@@ -1,7 +1,7 @@
 using Content.Shared.EntityEffects;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._AU14.Abominations.Reagents;
+namespace Content.Shared._CMU14.Threats.Mobs.Abomination.Reagents;
 
 /// <summary>
 /// Reagent effect that applies <see cref="AbominationInfectionComponent"/> to

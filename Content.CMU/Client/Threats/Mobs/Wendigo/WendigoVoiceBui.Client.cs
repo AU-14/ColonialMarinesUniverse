@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Wendigo;
+using Content.Shared._CMU14.Threats.Mobs.Wendigo;
 using Content.Shared.Chat.Prototypes;
 using Robust.Shared.Prototypes;
 

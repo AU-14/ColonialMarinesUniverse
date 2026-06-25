@@ -4,6 +4,7 @@ using Content.Server._CMU14.Threats;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Maps;
 using Content.Server.Spawners.Components;
+using Content.Shared._CMU14.Threats;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.AU14;
 using Content.Shared.AU14.Scenario;
@@ -13,6 +14,7 @@ using Robust.Shared.ContentPack;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using ParachuteMarkerComponent = Content.Shared._CMU14.Threats.ParachuteMarkerComponent;
 
 namespace Content.Server.AU14.Scenario;
 

@@ -3,6 +3,7 @@ using Content.Shared.Body.Systems;
 using Content.Shared.Mobs;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
+using AbominationComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationComponent;
 
 namespace Content.Server._CMU14.Threats.Mobs.Abomination;
 

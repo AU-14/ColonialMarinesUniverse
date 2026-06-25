@@ -1,11 +1,11 @@
+using Content.Shared._RMC14.Weapons.Ranged.IFF;
+using Content.Shared.NPC.Prototypes;
 using Content.Shared.Roles;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
-using Content.Shared.NPC.Prototypes;
-using Content.Shared._RMC14.Weapons.Ranged.IFF;
 
-namespace Content.Shared.AU14.CLF;
+namespace Content.Shared._CMU14.Threats.Mobs.CLF;
 
 /// <summary>
 /// When held and used on a humanoid, opens a prompt asking if they want to join the CLF.

@@ -1,8 +1,10 @@
 using System.Numerics;
-using Content.Shared._CMU14.Ape;
+using Content.Shared._CMU14.Threats.Mobs.Ape;
+using Content.Shared._CMU14.Threats.Mobs.Ape;
 using Robust.Client.Animations;
 using Robust.Client.GameObjects;
 using Robust.Shared.Animations;
+using ApeDestroyComponent = Content.Shared._CMU14.Threats.Mobs.Ape.ApeDestroyComponent;
 
 namespace Content.Client._CMU14.Threats.Mobs.Ape;
 

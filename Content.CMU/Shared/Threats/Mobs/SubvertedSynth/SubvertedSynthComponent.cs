@@ -1,12 +1,12 @@
+using Content.Shared.NPC.Prototypes;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
-using Content.Shared.NPC.Prototypes;
 
-namespace Content.Shared._CMU14.CLFSubverter;
+namespace Content.Shared._CMU14.Threats.Mobs.SubvertedSynth;
 
 [RegisterComponent, NetworkedComponent]
-public sealed partial class LFSubvertedSynthComponent : Component
+public sealed partial class SubvertedSynthComponent : Component
 {
     [DataField]
     public SoundSpecifier CLFSubversionSound = new SoundPathSpecifier("/Audio/Ambience/Antag/headrev_start.ogg");

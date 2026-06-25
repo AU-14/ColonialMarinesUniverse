@@ -1,6 +1,6 @@
 ﻿using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Wendigo;
+namespace Content.Shared._CMU14.Threats.Mobs.Wendigo;
 
 [Serializable, NetSerializable]
 public sealed class WendigoVoiceLine

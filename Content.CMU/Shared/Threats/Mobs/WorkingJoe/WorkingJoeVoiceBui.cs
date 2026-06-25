@@ -1,6 +1,6 @@
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.WorkingJoe;
+namespace Content.Shared._CMU14.Threats.Mobs.WorkingJoe;
 
 [Serializable, NetSerializable]
 public enum WorkingJoeVoiceUiKey : byte

@@ -7,6 +7,9 @@ using Content.Shared.AU14;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using AbominationComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationComponent;
+using AbominationMimicTransformedComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicTransformedComponent;
+using KillAllAbominationsRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllAbominationsRuleComponent;
 
 namespace Content.Server._CMU14.Threats.Rules;
 

@@ -1,5 +1,5 @@
 ﻿using Content.Server.Chat.Systems;
-using Content.Shared._CMU14.Wendigo;
+using Content.Shared._CMU14.Threats.Mobs.Wendigo;
 using Content.Shared.Actions;
 using Content.Shared.Chat.Prototypes;
 using Robust.Server.GameObjects;
@@ -8,9 +8,9 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
-using WendigoPlayLineMessage = Content.Shared._CMU14.Wendigo.WendigoPlayLineMessage;
-using WendigoVoiceActionEvent = Content.Shared._CMU14.Wendigo.WendigoVoiceActionEvent;
-using WendigoVoiceComponent = Content.Shared._CMU14.Wendigo.WendigoVoiceComponent;
+using WendigoPlayLineMessage = Content.Shared._CMU14.Threats.Mobs.Wendigo.WendigoPlayLineMessage;
+using WendigoVoiceActionEvent = Content.Shared._CMU14.Threats.Mobs.Wendigo.WendigoVoiceActionEvent;
+using WendigoVoiceComponent = Content.Shared._CMU14.Threats.Mobs.Wendigo.WendigoVoiceComponent;
 
 namespace Content.Server._CMU14.Threats.Mobs.Wendigo;
 

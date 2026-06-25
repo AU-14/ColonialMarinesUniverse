@@ -2,6 +2,7 @@ using Content.Shared._AU14.Abominations;
 using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
 using Robust.Shared.Prototypes;
+using AbominationMimicComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicComponent;
 
 namespace Content.Client._CMU14.Threats.Mobs.Abominations;
 

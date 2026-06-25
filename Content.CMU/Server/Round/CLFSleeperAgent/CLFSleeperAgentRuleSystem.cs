@@ -3,6 +3,8 @@ using Content.Server.GameTicking.Rules;
 using Content.Shared.AU14.Round.CLFSleeperAgent;
 using Content.Shared.Paper;
 using Robust.Shared.Maths;
+using CLFSleeperAgentComponent = Content.Shared._CMU14.Round.Antags.CLFSleeperAgent.CLFSleeperAgentComponent;
+using CLFSleeperAgentRuleComponent = Content.Shared._CMU14.Round.Antags.CLFSleeperAgent.CLFSleeperAgentRuleComponent;
 
 namespace Content.Server.AU14.Round.CLFSleeperAgent;
 

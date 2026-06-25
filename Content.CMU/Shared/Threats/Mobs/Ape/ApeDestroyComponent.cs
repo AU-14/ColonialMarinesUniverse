@@ -1,4 +1,3 @@
-using Content.Shared._RMC14.Maths;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Damage;
 using Content.Shared.Explosion;
@@ -7,7 +6,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Ape;
+namespace Content.Shared._CMU14.Threats.Mobs.Ape;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class ApeDestroyComponent : Component

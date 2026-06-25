@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Evacuation;
 using Content.Shared.AU14;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using KillAllYautjaRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllYautjaRuleComponent;
 
 namespace Content.Server._CMU14.Threats.Rules;
 

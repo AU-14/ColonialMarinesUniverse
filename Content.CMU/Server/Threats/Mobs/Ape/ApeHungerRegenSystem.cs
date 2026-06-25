@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Ape;
+using Content.Shared._CMU14.Threats.Mobs.Ape;
 using Content.Shared._RMC14.Damage;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
@@ -6,6 +6,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
 using Robust.Shared.Timing;
+using ApeDestroyComponent = Content.Shared._CMU14.Threats.Mobs.Ape.ApeDestroyComponent;
 
 // using Content.Shared.Damage.Components; // unused
 

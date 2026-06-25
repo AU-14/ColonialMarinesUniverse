@@ -4,6 +4,7 @@ using Content.Server.Polymorph.Components;
 using Content.Server.Polymorph.Systems;
 using Content.Server.Radio.Components;
 using Content.Shared._AU14.Abominations;
+using Content.Shared._CMU14.Threats.Mobs.Abomination;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Xenonids.Parasite;
@@ -24,6 +25,14 @@ using Content.Shared.Popups;
 using Content.Shared.Stunnable;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using AbominationAppearanceSnapshot = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationAppearanceSnapshot;
+using AbominationAssimilationProfile = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationAssimilationProfile;
+using AbominationMimicComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicComponent;
+using AbominationMimicRevertActionEvent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicRevertActionEvent;
+using AbominationMimicRevertingComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicRevertingComponent;
+using AbominationMimicTransformActionEvent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicTransformActionEvent;
+using AbominationMimicTransformedComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicTransformedComponent;
+using TribalComponent = Content.Shared._CMU14.Threats.Mobs.Tribal.TribalComponent;
 
 namespace Content.Server._CMU14.Threats.Mobs.Abomination;
 

@@ -37,10 +37,11 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using System.Numerics;
-using Content.Shared._CMU14.Ape;
+using Content.Shared._CMU14.Threats.Mobs.Ape;
+using Content.Shared._CMU14.Threats.Mobs.Ape;
 using Content.Shared._RMC14.Xenonids.Devour;
 
-namespace Content.Shared._CMU14.Ape;
+namespace Content.Shared._CMU14.Threats.Mobs.Ape;
 public abstract partial class SharedApeDestroySystem : EntitySystem
 {
     [Dependency] private INetManager _net = default!;
@@ -74,8 +75,8 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<ApeDestroyComponent, ApeDestroyActionEvent>(OnApeDestroyAction);
-        SubscribeLocalEvent<ApeDestroyComponent, ApeDestroyLeapDoafter>(OnApeDestroyDoafter);
+        SubscribeLocalEvent<Threats.Mobs.Ape.ApeDestroyComponent, Threats.Mobs.Ape.ApeDestroyActionEvent>(OnApeDestroyAction);
+        SubscribeLocalEvent<Threats.Mobs.Ape.ApeDestroyComponent, Threats.Mobs.Ape.ApeDestroyLeapDoafter>(OnApeDestroyDoafter);
 
         SubscribeLocalEvent<ApeDestroyLeapingComponent, AttemptMobCollideEvent>(OnLeapCollide);
         SubscribeLocalEvent<ApeDestroyLeapingComponent, AttemptMobTargetCollideEvent>(OnLeapTargetCollide);
@@ -93,7 +94,7 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
         SubscribeLocalEvent<ApeDestroyLeapingComponent, UpdateCanMoveEvent>(OnLeapingCancel);
     }
 
-    private void OnApeDestroyAction(Entity<ApeDestroyComponent> ape, ref ApeDestroyActionEvent args)
+    private void OnApeDestroyAction(Entity<Threats.Mobs.Ape.ApeDestroyComponent> ape, ref Threats.Mobs.Ape.ApeDestroyActionEvent args)
     {
         if (args.Handled || !_turf.TryGetTileRef(args.Target, out var tile))
             return;
@@ -114,7 +115,7 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
 
         _jitter.DoJitter(ape, ape.Comp.JumpTime, true, 80, 8, true);
 
-        var doAfter = new DoAfterArgs(EntityManager, ape, ape.Comp.JumpTime, new ApeDestroyLeapDoafter(GetNetCoordinates(target)), ape)
+        var doAfter = new DoAfterArgs(EntityManager, ape, ape.Comp.JumpTime, new Threats.Mobs.Ape.ApeDestroyLeapDoafter(GetNetCoordinates(target)), ape)
         {
             BreakOnMove = true,
             BreakOnRest = true
@@ -124,7 +125,7 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
         Dirty(ape);
     }
 
-    private void OnApeDestroyDoafter(Entity<ApeDestroyComponent> ape, ref ApeDestroyLeapDoafter args)
+    private void OnApeDestroyDoafter(Entity<Threats.Mobs.Ape.ApeDestroyComponent> ape, ref Threats.Mobs.Ape.ApeDestroyLeapDoafter args)
     {
         if (args.Handled || args.Cancelled)
             return;
@@ -190,7 +191,7 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
         args.Cancelled = true;
     }
 
-    private void CrashDown(Entity<ApeDestroyComponent> ape)
+    private void CrashDown(Entity<Threats.Mobs.Ape.ApeDestroyComponent> ape)
     {
         RemCompDeferred<ApeDestroyLeapingComponent>(ape);
 
@@ -299,7 +300,7 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
             return;
 
         var time = _timing.CurTime;
-        var query = EntityQueryEnumerator<ApeDestroyLeapingComponent, ApeDestroyComponent>();
+        var query = EntityQueryEnumerator<ApeDestroyLeapingComponent, Threats.Mobs.Ape.ApeDestroyComponent>();
 
         while (query.MoveNext(out var uid, out var leaping, out var destroy))
         {
@@ -325,10 +326,10 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
         }
     }
 
-    private void SetCooldown(Entity<ApeDestroyComponent> ape)
+    private void SetCooldown(Entity<Threats.Mobs.Ape.ApeDestroyComponent> ape)
     {
         // Find the ape's Destroy action and apply the configured cooldown to it.
-        foreach (var (actionId, action) in _rmcActions.GetActionsWithEvent<ApeDestroyActionEvent>(ape))
+        foreach (var (actionId, action) in _rmcActions.GetActionsWithEvent<Threats.Mobs.Ape.ApeDestroyActionEvent>(ape))
         {
             _actions.SetCooldown(actionId, ape.Comp.Cooldown);
             break;

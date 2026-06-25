@@ -2,7 +2,7 @@ using Content.Shared.StatusIcon;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.AU14;
+namespace Content.Shared._CMU14.Threats.Mobs.Cultist;
 
 /// <summary>
 /// Marks an entity as a cultist, allowing them to access the Hivemind channel.

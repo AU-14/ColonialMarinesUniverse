@@ -4,7 +4,7 @@ using Content.Shared.StatusIcon;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.AU14.CLF;
+namespace Content.Shared._CMU14.Threats.Mobs.CLF;
 
 /// <summary>
 /// Marks an entity as a CLF member. Used for showing CLF team identifiers

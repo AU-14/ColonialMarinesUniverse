@@ -1,6 +1,6 @@
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.AU14;
+namespace Content.Shared._CMU14.Threats.Mobs.CLF;
 
 /// <summary>
 /// Configuration for CLF spawn points and additional entities to spawn at round start

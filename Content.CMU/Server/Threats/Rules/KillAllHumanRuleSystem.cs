@@ -11,6 +11,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using KillAllHumanRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllHumanRuleComponent;
 
 namespace Content.Server._CMU14.Threats.Rules;
 

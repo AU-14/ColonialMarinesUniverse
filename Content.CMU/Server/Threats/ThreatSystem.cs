@@ -6,6 +6,7 @@ using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Mind.Commands;
 using Content.Shared._AU14.Abominations;
+using Content.Shared._CMU14.Threats;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Synth;
@@ -32,6 +33,10 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using AbominationComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationComponent;
+using AbominationMimicComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicComponent;
+using ApeComponent = Content.Shared._CMU14.Threats.Mobs.Ape.ApeComponent;
+using TribalComponent = Content.Shared._CMU14.Threats.Mobs.Tribal.TribalComponent;
 
 namespace Content.Server._CMU14.Threats;
 

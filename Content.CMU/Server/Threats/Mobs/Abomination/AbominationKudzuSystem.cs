@@ -1,6 +1,8 @@
 using Content.Shared._AU14.Abominations;
 using Content.Shared.Coordinates;
 using Robust.Shared.Prototypes;
+using AbominationComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationComponent;
+using AbominationPlantKudzuActionEvent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationPlantKudzuActionEvent;
 
 namespace Content.Server._CMU14.Threats.Mobs.Abomination;
 

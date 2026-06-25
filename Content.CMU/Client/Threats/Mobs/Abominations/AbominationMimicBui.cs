@@ -1,4 +1,5 @@
 using Content.Shared._AU14.Abominations;
+using Content.Shared._CMU14.Threats.Mobs.Abomination;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
 

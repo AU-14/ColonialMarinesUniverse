@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Shared._CMU14.Threats.Mobs.Ape;
 using Content.Shared._RMC14.Barricade;
 using Content.Shared._RMC14.Barricade.Components;
 using Content.Shared._RMC14.CameraShake;
@@ -43,7 +44,7 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Ape;
+namespace Content.Shared._CMU14.Threats.Mobs.Ape;
 
 public sealed partial class ApeLeapSystem : EntitySystem
 {
@@ -81,8 +82,8 @@ public sealed partial class ApeLeapSystem : EntitySystem
 
         SubscribeAllEvent<ApeLeapPredictedHitEvent>(OnPredictedHit);
 
-        SubscribeLocalEvent<ApeLeapComponent, ApeLeapActionEvent>(OnApeLeapAction);
-        SubscribeLocalEvent<ApeLeapComponent, ApeLeapDoAfterEvent>(OnApeLeapDoAfter);
+        SubscribeLocalEvent<ApeLeapComponent, Threats.Mobs.Ape.ApeLeapActionEvent>(OnApeLeapAction);
+        SubscribeLocalEvent<ApeLeapComponent, Threats.Mobs.Ape.ApeLeapDoAfterEvent>(OnApeLeapDoAfter);
         SubscribeLocalEvent<ApeLeapComponent, MeleeHitEvent>(OnApeLeapMelee);
         SubscribeLocalEvent<ApeLeapComponent, RMCMeleeUserGetRangeEvent>(OnApeLeapingMeleeGetRange);
 
@@ -117,7 +118,7 @@ public sealed partial class ApeLeapSystem : EntitySystem
         ApplyLeapingHitEffects((ent, leaping), target);
     }
 
-    private void OnApeLeapAction(Entity<ApeLeapComponent> ape, ref ApeLeapActionEvent args)
+    private void OnApeLeapAction(Entity<ApeLeapComponent> ape, ref Threats.Mobs.Ape.ApeLeapActionEvent args)
     {
         if (args.Handled)
             return;
@@ -130,7 +131,7 @@ public sealed partial class ApeLeapSystem : EntitySystem
 
         args.Handled = true;
 
-        var ev = new ApeLeapDoAfterEvent(GetNetCoordinates(args.Target));
+        var ev = new Threats.Mobs.Ape.ApeLeapDoAfterEvent(GetNetCoordinates(args.Target));
         var doAfter = new DoAfterArgs(EntityManager, ape, ape.Comp.Delay, ev, ape)
         {
             BreakOnMove = true,
@@ -141,7 +142,7 @@ public sealed partial class ApeLeapSystem : EntitySystem
         _doAfter.TryStartDoAfter(doAfter);
     }
 
-    private void OnApeLeapDoAfter(Entity<ApeLeapComponent> ape, ref ApeLeapDoAfterEvent args)
+    private void OnApeLeapDoAfter(Entity<ApeLeapComponent> ape, ref Threats.Mobs.Ape.ApeLeapDoAfterEvent args)
     {
         if (args.Handled)
             return;

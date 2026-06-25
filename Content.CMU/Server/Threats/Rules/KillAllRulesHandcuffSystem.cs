@@ -5,6 +5,9 @@ using Content.Shared.Cuffs;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.NPC.Components;
+using KillAllClfRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllClfRuleComponent;
+using KillAllGovforRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllGovforRuleComponent;
+using KillAllHumanRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllHumanRuleComponent;
 
 namespace Content.Server._CMU14.Threats.Rules;
 
