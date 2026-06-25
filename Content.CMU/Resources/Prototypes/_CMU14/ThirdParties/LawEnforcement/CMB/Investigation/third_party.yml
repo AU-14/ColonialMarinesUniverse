@@ -19,7 +19,7 @@
   scalewithpop: false
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: CMBInvestigationPartyAlt
   partyspawn: CMBInvestigationPartySpawnAlt
   entrymethod: shuttle
@@ -30,7 +30,7 @@
   GhostsNeeded: 6
   roundstart: false
 
-- type: auThirdParty
+- type: thirdParty
   id: CMBInvestigationParty
   partyspawn: CMBInvestigationPartySpawn
   entrymethod: shuttle

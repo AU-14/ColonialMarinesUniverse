@@ -1,4 +1,4 @@
-using Content.Server.AU14.ThirdParty;
+using Content.Server._CMU14.Ops.ThirdParty;
 using Content.Server.AU14.Round;
 using Content.Server.Chat.Systems;
 using Content.Server.Popups;
@@ -11,6 +11,7 @@ using Content.Shared.Tag;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
+using ThirdPartySystem = Content.Server._CMU14.Ops.ThirdParty.ThirdPartySystem;
 
 namespace Content.Server.AU14.ColonyEconomy;
 
@@ -18,7 +19,7 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
 {
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private ChatSystem _chat = default!;
-    [Dependency] private AuThirdPartySystem _thirdParty = default!;
+    [Dependency] private ThirdPartySystem _thirdParty = default!;
     [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private StackSystem _stack = default!;

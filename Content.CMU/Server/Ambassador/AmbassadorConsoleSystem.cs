@@ -1,5 +1,5 @@
 using System.Linq;
-using Content.Server.AU14.ThirdParty;
+using Content.Server._CMU14.Ops.ThirdParty;
 using Content.Server.Chat.Systems;
 using Content.Server.Popups;
 using Content.Server.Radio;
@@ -18,6 +18,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using ThirdPartySystem = Content.Server._CMU14.Ops.ThirdParty.ThirdPartySystem;
 
 namespace Content.Server.AU14.Ambassador;
 
@@ -27,7 +28,7 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     [Dependency] private IEntityManager _entities = default!;
     [Dependency] private StackSystem _stack = default!;
     [Dependency] private IPrototypeManager _proto = default!;
-    [Dependency] private AuThirdPartySystem _thirdParty = default!;
+    [Dependency] private ThirdPartySystem _thirdParty = default!;
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private RadioSystem _radio = default!;
     [Dependency] private IRobustRandom _random = default!;

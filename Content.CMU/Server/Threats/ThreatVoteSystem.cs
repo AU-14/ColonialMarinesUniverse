@@ -1,7 +1,7 @@
 using System.Linq;
 using Content.Server.AU14.Round;
 using Content.Server.AU14.Scenario;
-using Content.Server.AU14.ThirdParty;
+using Content.Server._CMU14.Ops.ThirdParty;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.Voting;
@@ -17,6 +17,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using ThirdPartySystem = Content.Server._CMU14.Ops.ThirdParty.ThirdPartySystem;
 
 namespace Content.Server._CMU14.Threats;
 
@@ -30,7 +31,7 @@ public sealed partial class ThreatVoteSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ScenarioPlanSystem _scenarioPlan = default!;
-    [Dependency] private readonly AuThirdPartySystem _thirdParty = default!;
+    [Dependency] private readonly ThirdPartySystem _thirdParty = default!;
     [Dependency] private readonly ThreatSystem _threat = default!;
     [Dependency] private readonly GameTicker _ticker = default!;
     [Dependency] private readonly IVoteManager _voteManager = default!;

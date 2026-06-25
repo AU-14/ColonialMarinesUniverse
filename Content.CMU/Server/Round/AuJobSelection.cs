@@ -77,7 +77,7 @@ public sealed partial class AuJobSelectionSystem : EntitySystem
 
         var threatRatio = threat?.ThreatRatio ?? 0f;
 
-        // Third parties spawn through AuThirdPartySystem's dedicated ghost-role path.
+        // Third parties spawn through ThirdPartySystem's dedicated ghost-role path.
         // Do not force players into the utility ThirdParty jobs at roundstart: those
         // jobs are not station jobs and the normal spawn pipeline creates naked
         // placeholder humans when it tries to spawn them directly.

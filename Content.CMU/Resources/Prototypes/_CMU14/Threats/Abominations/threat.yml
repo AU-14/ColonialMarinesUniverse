@@ -109,7 +109,7 @@
     AU14AbominationSkitter: 1
   spawnTogether: true
 
-- type: auThirdParty
+- type: thirdParty
   id: abominationThirdParty
   partyspawn: abominationSmallParty
   entrymethod: ground
