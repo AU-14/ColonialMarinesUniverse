@@ -1,8 +1,6 @@
 using Content.Server.Chat.Systems;
 using Content.Server.Medical;
 using Content.Server.Polymorph.Systems;
-using Content.Shared._AU14.Abominations;
-using Content.Shared._AU14.Abominations.Reagents;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Damage;
