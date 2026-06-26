@@ -14,7 +14,6 @@ public sealed class FactionLanguageSystem : EntitySystem
     [Dependency] private LanguageSystem _language = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private IPrototypeManager _proto = default!;
-    [Dependency] private IPlayerManager _playerManager = default!;
 
     public override void Initialize()
     {
