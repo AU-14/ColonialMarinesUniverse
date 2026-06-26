@@ -98,11 +98,11 @@
   physicalDesc: reagent-physical-desc-shiny
   flavor: bitter
   color: "#DD9B00"
-  intensity: 30
-  duration: 20
+  intensity: 20
+  duration: 50
   radius: 10
-  fireEntity: RMCTileFireBlue
-  fireSpread: true
+  fireEntity: RMCTileFireGreen
+  #fireSpread: true
 
 - type: reagent
   parent: [ CMReagent, BasePyrotechnic ]
