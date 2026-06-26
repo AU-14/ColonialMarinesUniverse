@@ -11,8 +11,6 @@
   - type: RequireProjectileTarget
   - type: Physics
     bodyType: Dynamic
-  - type: CMUZPhysics
-  - type: CMUVehicleZTraversal
   - type: CMUZLevelViewer
   - type: Fixtures
     fixtures:
