@@ -22,9 +22,6 @@ language-TacticalSignLanguage-description = A silent communication system using 
 language-Latin-name = Latin
 language-Latin-description = An ancient Earth language used by old civilizations and scholars.
 
-language-Portuguese-name = Portuguese
-language-Portuguese-description = A Romance Earth language with nasal sounds and flowing speech.
-
 language-Spanish-name = Spanish
 language-Spanish-description = A Romance Earth language spoken across many continents.
 
@@ -46,33 +43,36 @@ language-Japanese-description = An Earth language using unique writing systems a
 language-Mandarin-name = Mandarin
 language-Mandarin-description = An old Earth language, with a tonal system and thousands of characters.
 
+language-Afrikaans-name = Afrikaans
+language-Afrikaans-description = A Germanic Earth language developed from Dutch influences.
+
+language-Korean-name = Korean
+language-Korean-description = An Earth language using Hangul, known for its organized syllable structure.
+
+language-Turkish-name = Turkish
+language-Turkish-description = A Turkic Earth language with vowel harmony and agglutinative structure.
+
+language-Polish-name = Polish
+language-Polish-description = A Slavic Earth language with complex consonant clusters and distinct sounds.
+
+# ├──[ Alternative tongues ]──────────────────────────────────────┤
 language-Binary-name = Binary
 language-Binary-description = The machine language of 1s and 0s, pure information without emotion.
 
 language-Legalese-name = Legalese
 language-Legalese-description = High-corporate elitist jargon, full of clauses and disclaimers.
 
-# ├──[ Alternative tongues ]──────────────────────────────────────┤
-language-Afrikaans-name = Afrikaans
-language-Afrikaans-description = A Germanic Earth language developed from Dutch influences.
+language-Portuguese-name = Portuguese
+language-Portuguese-description = A Romance Earth language with nasal sounds and flowing speech.
 
 language-Brazilian-name = Brazilian
 language-Brazilian-description = A regional Earth language variant with Portuguese roots.
 
-language-Korean-name = Korean
-language-Korean-description = An Earth language using Hangul, known for its organized syllable structure.
-
 language-Ukrainian-name = Ukrainian
 language-Ukrainian-description = A Slavic Earth language known for its unique alphabet and soft pronunciation.
 
-language-Polish-name = Polish
-language-Polish-description = A Slavic Earth language with complex consonant clusters and distinct sounds.
-
 language-Czech-name = Czech
 language-Czech-description = A Slavic language known for its háček letters and unusual pronunciation.
-
-language-Turkish-name = Turkish
-language-Turkish-description = A Turkic Earth language with vowel harmony and agglutinative structure.
 
 language-Italian-name = Italian
 language-Italian-description = A Romance Earth language known for flowing vowels and melodic speech.
