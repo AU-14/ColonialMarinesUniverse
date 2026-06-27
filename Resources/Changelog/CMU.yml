@@ -4931,5 +4931,46 @@
   id: 345
   time: '2026-06-25T12:12:00.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1443
+- author: deepdarkdepths
+  changes:
+  - message: Despoiler's Hypertension now utilizes armor to be better effective in
+      combat.
+    type: Add
+  - message: Caustic Embrace now has a preview to see where you're aiming, alongside
+      a range buff.
+    type: Add
+  - message: Acid Barrage scatter is more consistent.
+    type: Tweak
+  - message: Catalyze takes 2 stacks to empower, instead of 1.
+    type: Tweak
+  - message: Oozing Wounds stack use dynamically changes depending on HP; the lower
+      hp you are, the less stacks you consume.
+    type: Tweak
+  id: 346
+  time: '2026-06-25T12:52:44.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1343
+- author: maertayn
+  changes:
+  - message: We're ditching _AU14 & AU14 folders in favor of _CMU14 - structure to
+      follow - threats and gamerules are moved already
+    type: Code
+  - message: Refactored the gamerules & serverside threat classes by removing all
+      junk and extracting methods
+    type: Code
+  - message: Changelog is now also visible in-game
+    type: Add
+  id: 347
+  time: '2026-06-25T17:51:28.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1444
+- author: TheHellFireo
+  changes:
+  - message: Makes ladders collapse if they do not have support of some structure
+      next to them, if its a wall and it gets destroyed the ladder will collapse
+    type: Add
+  - message: Blackfoot can now fly again
+    type: Fix
+  id: 348
+  time: '2026-06-26T18:17:02.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1463
 Name: CMU
 Order: -1

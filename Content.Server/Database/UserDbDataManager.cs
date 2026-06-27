@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Preferences.Managers;
@@ -17,6 +18,8 @@ namespace Content.Server.Database;
 /// </remarks>
 public sealed partial class UserDbDataManager : IPostInjectInit
 {
+    private static readonly TimeSpan LoadTimingWarnThreshold = TimeSpan.FromSeconds(1);
+
     [Dependency] private ILogManager _logManager = default!;
 
     private readonly Dictionary<NetUserId, UserData> _users = new();
@@ -61,12 +64,14 @@ public sealed partial class UserDbDataManager : IPostInjectInit
         // The task returned by this function is only ever observed by callers of WaitLoadComplete,
         // which doesn't even happen currently if the lobby is enabled.
         // As such, this task must NOT throw a non-cancellation error!
+        var totalStopwatch = Stopwatch.StartNew();
+
         try
         {
             var tasks = new List<Task>();
             foreach (var action in _onLoadPlayer)
             {
-                tasks.Add(action(session, cancel));
+                tasks.Add(RunLoadAction(action, session, cancel));
             }
 
             await Task.WhenAll(tasks);
@@ -75,10 +80,12 @@ public sealed partial class UserDbDataManager : IPostInjectInit
 
             foreach (var action in _onFinishLoad)
             {
+                var stopwatch = Stopwatch.StartNew();
                 action(session);
+                LogSlowAction("finish", action, session, stopwatch.Elapsed);
             }
 
-            _sawmill.Verbose($"Load complete for user {session}");
+            LogLoadComplete(session, totalStopwatch.Elapsed);
         }
         catch (OperationCanceledException)
         {
@@ -99,6 +106,55 @@ public sealed partial class UserDbDataManager : IPostInjectInit
             // We throw a OperationCanceledException so users of WaitLoadComplete() always see cancellation here.
             throw new OperationCanceledException("Load of user data cancelled due to unknown error");
         }
+    }
+
+    private async Task RunLoadAction(OnLoadPlayer action, ICommonSession session, CancellationToken cancel)
+    {
+        var stopwatch = Stopwatch.StartNew();
+
+        try
+        {
+            await action(session, cancel);
+        }
+        finally
+        {
+            LogSlowAction("load", action, session, stopwatch.Elapsed);
+        }
+    }
+
+    private void LogLoadComplete(ICommonSession session, TimeSpan elapsed)
+    {
+        if (elapsed < LoadTimingWarnThreshold)
+        {
+            _sawmill.Verbose($"Load complete for user {session} in {elapsed.TotalMilliseconds:N0} ms");
+            return;
+        }
+
+        _sawmill.Warning(
+            "[JOIN-TIMING] User data load for {Session} took {Elapsed:N0} ms ({LoaderCount} loaders, {FinisherCount} finishers)",
+            session,
+            elapsed.TotalMilliseconds,
+            _onLoadPlayer.Count,
+            _onFinishLoad.Count);
+    }
+
+    private void LogSlowAction(string phase, Delegate action, ICommonSession session, TimeSpan elapsed)
+    {
+        if (elapsed < LoadTimingWarnThreshold)
+            return;
+
+        _sawmill.Warning(
+            "[JOIN-TIMING] User data {Phase} step {Step} for {Session} took {Elapsed:N0} ms",
+            phase,
+            FormatActionName(action),
+            session,
+            elapsed.TotalMilliseconds);
+    }
+
+    private static string FormatActionName(Delegate action)
+    {
+        var method = action.Method;
+        return $"{method.DeclaringType?.FullName ?? "<unknown>"}.{method.Name}";
     }
 
     /// <summary>
