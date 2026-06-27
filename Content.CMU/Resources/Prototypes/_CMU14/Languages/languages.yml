@@ -66,11 +66,15 @@
     maxSyllables: 1
 
 - type: language
-  parent: SignLanguage
   id: TacticalSignLanguage
   name: "Tactical Sign Language"
   description: "A visual language using hand gestures and body movements."
+  typefaceId: DefaultItalic
   languageIcon: "/Textures/Interface/Default/Slots/hand_m.png"
+  canUseRadio: false
+  needsSpeech: false
+  needsLOS: true
+  expectedVocabularySize: 100
   obfuscationMethod:
     !type:SyllableObfuscation
     replacement: ["*waves*", "*gestures*", "*points*", "*nods*", "*shakes head*", "*thumbs up*", "*claps*", "*motions*", "*indicates*", "*signals*"]
@@ -299,8 +303,6 @@
   obfuscationMethod:
     !type:SyllableObfuscation
     replacement: ["ба", "ве", "ги", "жа", "зі", "кі", "ла", "ме", "но", "па", "ра", "ті", "хо", "чу", "ші", "їв", "єр", "ня", "льо", "врі", "при", "тре", "кри", "зна", "дро", "мле", "плі", "єв", "цю", "ря"]
-    minSyllables: 1
-    maxSyllables: 4
 
 - type: language
   id: Korean
