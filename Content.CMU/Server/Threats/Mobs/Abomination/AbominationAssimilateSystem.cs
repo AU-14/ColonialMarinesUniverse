@@ -1,4 +1,7 @@
 using Content.Server.Polymorph.Systems;
+using Content.Shared._RMC14.Language.Components;
+using Content.Server._RMC14.Language.Systems;
+using Content.Shared._RMC14.Language.Prototypes;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.DoAfter;
@@ -31,6 +34,7 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
     [Dependency] private PolymorphSystem _polymorph = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private LanguageSystem _language = default!;
 
     /// <summary>Polymorph used when a humanoid victim turns.</summary>
     public static readonly ProtoId<PolymorphPrototype> HumanoidTurnPolymorph = "AbominationAssimilationToMimic";
@@ -68,6 +72,7 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
             return;
 
         ent.Comp.AssimilatedPool = pool;
+        ApplyAllPoolLanguages(ent.Owner);
         Dirty(ent);
     }
 
@@ -93,7 +98,6 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
         if (!CanAssimilate(mimic.Owner, args.Target, out string reason))
         {
             _popup.PopupClient(reason, mimic, mimic);
-
             return;
         }
 
@@ -123,7 +127,6 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
         if (!CanAssimilate(mimic.Owner, target, out string reason))
         {
             _popup.PopupClient(reason, mimic, mimic);
-
             return;
         }
 
@@ -132,7 +135,6 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
         bool isHumanoid = HasComp<HumanoidAppearanceComponent>(target);
         AbominationAssimilationProfile profile = BuildProfile(target);
         AddProfileToAllMimics(profile);
-
         _popup.PopupEntity(Loc.GetString("abomination-assimilate-complete", ("target", Name(target))),
             target, mimic);
 
@@ -141,24 +143,22 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
             ? HumanoidTurnPolymorph
             : AnimalTurnPolymorph;
         EntityUid? newAbomination = _polymorph.PolymorphEntity(target, polymorphId);
-        if (newAbomination is { } newUid && isHumanoid)
-        {
-            // Fresh mimics inherit the full current pool so they can
-            // immediately impersonate any prior victim, including themselves.
-            var newMimicComp = EnsureComp<AbominationMimicComponent>(newUid);
-            newMimicComp.AssimilatedPool = new(GatherCurrentPool());
-            Dirty(newUid, newMimicComp);
-        }
+        if (newAbomination is not { } newUid || !isHumanoid)
+            return;
+
+        // Fresh mimics inherit the full current pool so they can
+        // immediately impersonate any prior victim, including themselves.
+        var newMimicComp = EnsureComp<AbominationMimicComponent>(newUid);
+        newMimicComp.AssimilatedPool = new(GatherCurrentPool());
+        Dirty(newUid, newMimicComp);
     }
 
     private bool CanAssimilate(EntityUid mimic, EntityUid target, out string reason)
     {
         reason = string.Empty;
-
         if (mimic == target)
         {
             reason = Loc.GetString("abomination-assimilate-self");
-
             return false;
         }
 
@@ -166,7 +166,6 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
         if (!HasComp<HumanoidAppearanceComponent>(target) && !HasComp<AbominationInfectableComponent>(target))
         {
             reason = Loc.GetString("abomination-assimilate-not-humanoid");
-
             return false;
         }
 
@@ -174,25 +173,20 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
         if (HasComp<SynthComponent>(target))
         {
             reason = Loc.GetString("abomination-assimilate-synth");
-
             return false;
         }
 
         if (!_mobState.IsIncapacitated(target))
         {
             reason = Loc.GetString("abomination-assimilate-not-incapacitated");
-
             return false;
         }
 
-        if (HasComp<AbominationComponent>(target))
-        {
-            reason = Loc.GetString("abomination-assimilate-not-humanoid");
+        if (!HasComp<AbominationComponent>(target))
+            return true;
 
-            return false;
-        }
-
-        return true;
+        reason = Loc.GetString("abomination-assimilate-not-humanoid");
+        return false;
     }
 
     public AbominationAssimilationProfile BuildProfile(EntityUid target)
@@ -235,6 +229,10 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
         if (TryComp(target, out HumanoidAppearanceComponent? humanoid))
             profile.Appearance = AbominationAssimilateSystem.SnapshotAppearance(humanoid);
 
+        if (!TryComp<LanguageComponent>(target, out var langComp)) return profile;
+        profile.SpokenLanguages.UnionWith(langComp.SpokenLanguages);
+        profile.UnderstoodLanguages.UnionWith(langComp.UnderstoodLanguages);
+
         return profile;
     }
 
@@ -258,18 +256,19 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
     /// </summary>
     public void AddProfileToAllMimics(AbominationAssimilationProfile profile)
     {
-        EntityQueryEnumerator<AbominationMimicComponent>
-            query = EntityQueryEnumerator<AbominationMimicComponent>();
+        var query = EntityQueryEnumerator<AbominationMimicComponent>();
         while (query.MoveNext(out EntityUid uid, out AbominationMimicComponent? mimic))
         {
             // Animal profiles dedupe by SourceProtoId — only the first rat ever
             // assimilated goes in the pool, every subsequent rat is a no-op.
-            if (profile.SourceProtoId is not null
-                && mimic.AssimilatedPool.Exists(p => p.SourceProtoId == profile.SourceProtoId))
-                continue;
+            if (profile.SourceProtoId is null || !mimic.AssimilatedPool.Exists(p
+                => p.SourceProtoId == profile.SourceProtoId))
+            {
+                mimic.AssimilatedPool.Add(profile);
+                Dirty(uid, mimic);
+            }
 
-            mimic.AssimilatedPool.Add(profile);
-            Dirty(uid, mimic);
+            ApplyAllPoolLanguages(uid);
         }
     }
 
@@ -280,9 +279,29 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
         while (query.MoveNext(out _, out AbominationMimicComponent? mimic))
         {
             if (mimic.AssimilatedPool.Count > 0)
-                return [..mimic.AssimilatedPool];
+                return [.. mimic.AssimilatedPool];
         }
 
         return [];
+    }
+
+    private void ApplyAllPoolLanguages(EntityUid mimicUid)
+    {
+        if (!TryComp<LanguageComponent>(mimicUid, out var _))
+            return;
+
+        var query = EntityQueryEnumerator<AbominationMimicComponent>();
+        while (query.MoveNext(out _, out AbominationMimicComponent? mimic))
+        {
+            foreach (AbominationAssimilationProfile profile in mimic.AssimilatedPool)
+            {
+                foreach (ProtoId<LanguagePrototype> lang in profile.SpokenLanguages)
+                    _language.AddLanguage(mimicUid, lang, addSpoken: true, addUnderstood: false);
+                foreach (ProtoId<LanguagePrototype> lang in profile.UnderstoodLanguages)
+                    _language.AddLanguage(mimicUid, lang, addSpoken: false, addUnderstood: true);
+            }
+
+            break;
+        }
     }
 }
