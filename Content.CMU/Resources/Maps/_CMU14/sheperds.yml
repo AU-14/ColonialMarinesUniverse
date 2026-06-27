@@ -60236,7 +60236,7 @@ entities:
     - type: Transform
       pos: 48.5,-113.5
       parent: 1
-- proto: AU14SpawnPointCivilianColonist
+- proto: ScenarioClfCivilianColonistSpawnMarker
   entities:
   - uid: 113
     components:
@@ -60848,7 +60848,7 @@ entities:
     - type: Transform
       pos: 41.5,95.5
       parent: 1
-- proto: AU14SpawnPointCLFCellLeader
+- proto: scenarioclfsafehousespawnmarker
   entities:
   - uid: 835
     components:
@@ -265417,7 +265417,7 @@ entities:
     - type: Transform
       pos: 5.5,-55.5
       parent: 1
-- proto: thirdpartyentityspawnmarker
+- proto: scenariothirdpartyentityspawnmarker
   entities:
   - uid: 1064
     components:
@@ -265499,7 +265499,7 @@ entities:
     - type: Transform
       pos: 73.5,-61.5
       parent: 1
-- proto: thirdpartyleaderspawnmarker
+- proto: scenariothirdpartyleaderspawnmarker
   entities:
   - uid: 1063
     components:
@@ -265521,7 +265521,7 @@ entities:
     - type: Transform
       pos: 75.5,-65.5
       parent: 1
-- proto: thirdpartymemberspawnmarker
+- proto: scenariothirdpartymemberspawnmarker
   entities:
   - uid: 1068
     components:
@@ -265763,7 +265763,7 @@ entities:
     - type: Transform
       pos: 71.5,-63.5
       parent: 1
-- proto: threatentityspawnmarker
+- proto: scenariothreatentityspawnmarker
   entities:
   - uid: 1021
     components:
@@ -265825,7 +265825,7 @@ entities:
     - type: Transform
       pos: -77.5,-147.5
       parent: 1
-- proto: threatleaderspawnmarker
+- proto: scenariothreatleaderspawnmarker
   entities:
   - uid: 1012
     components:
@@ -265842,7 +265842,7 @@ entities:
     - type: Transform
       pos: -77.5,-144.5
       parent: 1
-- proto: threatmemberspawnmarker
+- proto: scenariothreatmemberspawnmarker
   entities:
   - uid: 1013
     components:
@@ -266023,6 +266023,27 @@ entities:
     components:
     - type: Transform
       pos: -75.5,-146.5
+      parent: 1
+- proto: scenarioxenocfthreatentityspawnmarker
+  entities:
+  - uid: 344832
+    components:
+    - type: Transform
+      pos: 81.5,133.5
+      parent: 1
+- proto: scenarioxenocfthreatleaderspawnmarker
+  entities:
+  - uid: 344833
+    components:
+    - type: Transform
+      pos: 78.5,133.5
+      parent: 1
+- proto: scenarioxenocfthreatmemberspawnmarker
+  entities:
+  - uid: 344834
+    components:
+    - type: Transform
+      pos: 79.5,135.5
       parent: 1
 - proto: WoodenBench
   entities:
@@ -266256,14 +266277,14 @@ entities:
       parent: 1
 - proto: SpawnPointObserver
   entities:
-  - uid: 344832
+  - uid: 344835
     components:
     - type: Transform
       pos: 0.5,0.5
       parent: 1
 - proto: CMUCrateLivestockWeYu
   entities:
-  - uid: 344833
+  - uid: 344836
     components:
     - type: Transform
       pos: 42.5,-124.5

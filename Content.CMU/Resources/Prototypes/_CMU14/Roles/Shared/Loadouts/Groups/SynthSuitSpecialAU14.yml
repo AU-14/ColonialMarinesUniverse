@@ -1,0 +1,13 @@
+- type: loadoutGroup
+  id: SynthSuitSpecialAU14
+  name: au14-loadout-group-synth-suit-special
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - DefibrillatorAU14
+  - ArmorM3VLSynthAU14
+  - ArmorM3VLSynthClassicAU14
+  - ArmorM3VLSynthDesertAU14
+  - ArmorM3VLSynthJungleAU14
+  - ArmorM3VLSynthSnowAU14
+  - ArmorM3VLSynthUrbanAU14

@@ -1,0 +1,22 @@
+- type: entity
+  id: AU14LanguagePresetCCA
+  name: CCA Languages
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: LanguagePreset
+    spokenLanguages:
+    - Swahili
+    - French
+    - English
+    - Afrikaans
+    - Yoruba
+    - Arabic
+    understoodLanguages:
+    - Swahili
+    - French
+    - English
+    - Afrikaans
+    - Yoruba
+    - Arabic
+    currentLanguage: Swahili
+    defaultLanguage: Swahili

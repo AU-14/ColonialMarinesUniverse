@@ -1,0 +1,63 @@
+
+- type: partySpawn
+  id: NSPAInvestigationPartySpawn
+  leadersToSpawn:
+    NSPAInvestigationPartyJobInspector: 1
+  gruntsToSpawn:
+    NSPAInvestigationPartyJobConstable: 1
+    NSPAInvestigationPartyJobConstableSMG: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: NSPAInvestigationParty
+  partyspawn: NSPAInvestigationPartySpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_tsepa_shuttle.yml
+  weight: 15
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 3
+  roundstart: false
+
+- type: partySpawn
+  id: NSPAInvestigationPartySpawnArmored
+  leadersToSpawn:
+    NSPAInvestigationPartyJobInspectorArmored: 1
+  gruntsToSpawn:
+    NSPAInvestigationPartyJobConstableSMGArmor: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: NSPAInvestigationPartyArmored
+  partyspawn: NSPAInvestigationPartySpawnArmored
+  entrymethod: shuttle
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_tsepa_shuttle.yml
+  weight: 5
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 3
+  roundstart: false
+
+- type: partySpawn
+  id: NSPAInvestigationPartySpawnAlt
+  leadersToSpawn:
+    NSPAInvestigationPartyJobInspector: 1
+  gruntsToSpawn:
+    NSPAInvestigationPartyJobConstable: 1
+    NSPAInvestigationPartyJobConstableSMG: 1
+    NSPAInvestigationPartyJobICCLiaison: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: NSPAInvestigationPartyAlt
+  partyspawn: NSPAInvestigationPartySpawnAlt
+  entrymethod: shuttle
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_tsepa_shuttle.yml
+  weight: 5
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 5
+  roundstart: false

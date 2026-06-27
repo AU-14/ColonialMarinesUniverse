@@ -1,0 +1,40 @@
+# Abstract base for every tribal mob variant. The three concrete variants
+# (leader / spear / bowman) parent this and slot a job + starting-gear.
+- type: entity
+  save: false
+  abstract: true
+  parent: RMCBaseMobSpeciesOrganic
+  id: CMUMobTribal
+  name: Tribal
+  suffix: CMU14
+  components:
+  - type: Tribal
+  # RandomHumanoidAppearance rolls a fresh humanoid profile on map-init; we
+  # tell it not to set the entity name because RandomMetadata is responsible
+  # for the Na'vi-flavoured first-name + clan name combo. Skin is applied
+  # after the roll by TribalAppearanceSystem.
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: RandomMetadata
+    nameSegments:
+    - NamesTribalFirst
+    - NamesTribalClan
+    nameFormat: name-format-tribal
+  # Override the base species faction — tribals defend the homeworld, they
+  # aren't on the AUColonist team. Their own Tribe faction is hostile to
+  # everyone else so they fight invaders on sight.
+  - type: NpcFactionMember
+    factions:
+    - Tribe
+  # Doubled health from the human baseline (200/275 -> 400/550). Stone-age
+  # warriors are tough; you don't drop them with a sidearm.
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      400: Critical
+      550: Dead
+  # 1.5x speed from the human baseline (2.7/5 -> 4.05/7.5). Tribals
+  # outrun invaders so they can close the gap with spears/bows.
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4.05
+    baseSprintSpeed: 7.5

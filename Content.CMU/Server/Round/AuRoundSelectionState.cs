@@ -1,0 +1,35 @@
+using Content.Server.GameTicking.Presets;
+using Content.Shared._RMC14.Rules;
+using Content.Shared.AU14;
+using Content.Shared._CMU14.Threats;
+using Content.Shared.AU14.util;
+
+namespace Content.Server.AU14.Round;
+
+internal sealed class AuRoundSelectionState
+{
+    public GamePresetPrototype? SelectedPreset { get; set; }
+    public RMCPlanetMapPrototypeComponent? SelectedPlanet { get; set; }
+    public string? SelectedPlanetId { get; set; }
+    public ThreatPrototype? SelectedThreat { get; set; }
+    public string? SelectedGovforShip { get; set; }
+    public string? SelectedOpforShip { get; set; }
+    public List<ThirdPartyPrototype> SelectedThirdParties { get; } = new();
+
+    public void Reset()
+    {
+        SelectedPreset = null;
+        SelectedPlanet = null;
+        SelectedPlanetId = null;
+        SelectedThreat = null;
+        SelectedGovforShip = null;
+        SelectedOpforShip = null;
+        SelectedThirdParties.Clear();
+    }
+
+    public void SetPlanet(string planetId, RMCPlanetMapPrototypeComponent planet)
+    {
+        SelectedPlanetId = planetId;
+        SelectedPlanet = planet;
+    }
+}

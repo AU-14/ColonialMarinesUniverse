@@ -1,0 +1,335 @@
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: AU14BaseMobSpeciesOrganicCultist
+  abstract: true
+  suffix: AU14, Cultist
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: RandomHumanoidAppearance
+  - type: RandomHumanoidAppearanceWhitelisted
+    allowedMaleHairStyles:
+    - RMCHumanHairCrew
+    - RMCHumanHairAviator
+    - RMCHumanHairJensen
+    - RMCHumanHairAverageJoe
+    - AU14HumanHairCIA5
+    - RMCHumanHairCombover
+    - RMCHumanHairCombover2
+    - RMCHumanHairCplDietrich
+    - RMCHumanHairCut
+    - RMCHumanHairHeadStubble
+    - RMCHumanHairHighAndTight
+    - RMCHumanHairHighfade
+    - RMCHumanHairHighlight
+    - AU14HumanHairIRS
+    - RMCHumanHairLtRasczak
+    - RMCHumanHairMarineFade
+    - RMCHumanHairMarineFlatTop
+    - RMCHumanHairMedfade
+    - RMCHumanHairNofade
+    - RMCHumanHairShavedpart
+    - RMCHumanHairShavedHead
+    - RMCHumanHairShort
+    - RMCHumanHairSideUndercutHang
+    - RMCHumanHairSkinhead
+    - RMCHumanHairTaper
+    - RMCHumanHairWardaddy
+    - RMCHumanHairUndercut
+    - RMCHumanHairUndercutTop
+    allowedFemaleHairStyles:
+    - RMCHumanHairShortbangs
+    - RMCHumanHairBobcurl
+    - RMCHumanHairMarineBun
+    - RMCHumanHairBun
+    - RMCHumanHairFringetail
+    - AU14HumanHairLowBun
+    - AU14HumanHairLowPonyTail
+    - AU14HumanHairLowPonyTailAlt
+    - RMCHumanHairPonytail1
+    - RMCHumanHairPonytail7
+    - RMCHumanHairPvtRedding
+    - RMCHumanHairPvtVasquez
+    - RMCHumanHairLong
+    - RMCHumanHairPixieCutLeft
+    - RMCHumanHairPixieCutRight
+    allowedHairColorsHex:
+    - "#0B0B0B"
+    - "#1A1A1A"
+    - "#222222"
+    - "#2B1B0F"
+    - "#3B2314"
+    - "#4A2E1A"
+    - "#5A3A22"
+    - "#6B4A2F"
+    - "#9C8651"
+    - "#B79A5A"
+    - "#4A1F12"
+    - "#7A5E42"
+    allowedEyeColorsHex: [ "#000000" ]
+    beardChance: 0.1
+
+# Equipment
+
+- type: entity
+  parent: AU14SlingSatchelBlack
+  id: AU14CultistSatchelBlack
+  suffix: Cultist, Filled
+  components:
+  - type: Storage
+    grid:
+    - 0,0,14,1 # 15
+  - type: IgnoreContentsSize
+    items:
+      components:
+      - XenoEgg
+
+- type: entity
+  parent: CMSatchel
+  id: AU14CultistSatchelMarine
+  suffix: Cultist
+  components:
+  - type: Storage
+    grid:
+    - 0,0,14,1 # 15
+  - type: IgnoreContentsSize
+    items:
+      components:
+      - XenoEgg
+
+- type: entity
+  parent: AU14SlingSatchelBlue
+  id: AU14CultistSatchelBlue
+  suffix: Cultist
+  components:
+  - type: Storage
+    grid:
+    - 0,0,14,1 # 15
+  - type: IgnoreContentsSize
+    items:
+      components:
+      - XenoEgg
+
+- type: entity
+  parent: RMCBeltUtilityGeneral
+  id: AU14CultistBelt
+  suffix: Cultist
+  components:
+  - type: Storage
+    grid:
+    - 0,0,9,1 # 9 slots
+  - type: IgnoreContentsSize
+    items:
+      components:
+      - XenoEgg
+
+- type: entity
+  parent: RMCBeltHolsterPistolTSE
+  id: AU14BeltHolsterPistolCultistMK45
+  suffix: Cultist, Filled, HG45
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazinePistolMK45
+      amount: 6
+    - id: RMCWeaponPistolHG45Aguila
+
+- type: entity
+  parent: RMCSynthResetKeySMART
+  id: AU14SynthSubversionKeyCultist
+  name: WY synthetic reset key
+  suffix: Cultist
+  description: This device can fix major glitches or programming errors of synthetic units, as well as being able to restart a synthetic that has suffered critical failure. It can only be used once before being reset. This one has been illegally modified. Who knows what it could do.
+  components:
+  - type: SynthSubverter
+    faction: Xeno
+    briefing: "cultist-hacked-synth-briefing"
+    role: "MindRoleXenoHackedSynth"
+    additionalComponents:
+    - type: Cultist
+    - type: IntrinsicRadioReceiver
+    - type: IntrinsicRadioTransmitter
+      channels:
+      - Hivemind
+    - type: ActiveRadio
+      channels:
+      - Hivemind
+    - type: Access
+      tags:
+      - CMAccessXeno
+  - type: Sprite
+    layers:
+    - state: makeshift_key
+    - state: makeshift_key_on
+      map: [ "enum.ToggleableVisuals.Layer" ]
+      visible: false
+
+- type: entity
+  parent: RMCPortableVendor
+  id: AU14PortableVendorCultist
+  name: hacked automated storage briefcase
+  suffix: Cultist
+  description: A suitcase-sized automated storage and retrieval system. Designed to efficiently store and selectively dispense small items. This one has some occult symbols written on it.
+  components:
+  - type: CMAutomatedVendor
+    jobs:
+    - AU14JobCultist
+    sections:
+    - name: Weapons & Ammo
+      entries:
+      - id: RMCWeaponShotgunHG3712
+        points: 40
+      - id: CMShellShotgunBuckshot
+        points: 5
+      - id: RMCWeaponSMGMP27
+        points: 30
+      - id: RMCMagazineSMGMP27
+        points: 3
+      - id: RMCGrenadeIED
+        points: 15
+    - name: Equipment
+      entries:
+      - id: RMCPouchMagazine
+        points: 5
+      - id: RMCPouchShotgunLarge
+        points: 10
+      - id: AU14BeltHolsterPistolCultistMK45
+        points: 10
+      - id: RMCScabbardMacheteM2100Filled
+        points: 5
+      - id: AU14PouchIFAKFill
+        points: 10
+    - name: Special
+      entries:
+      - id: XenoEgg
+        points: 40
+    - name: Headset
+      entries:
+      - id: RMCHeadsetColonyIcons
+        points: 5
+      - id: AU14ColonyWeylandHeadset
+        points: 15
+    - name: Foot Wear
+      choices: { CMUcivilianshoes: 2 }
+      entries:
+      - id: RMCShoesBlack
+      - id: RMCShoesBlue
+      - id: RMCShoesBrown
+      - id: RMCShoesGreen
+      - id: RMCShoesOrange
+      - id: RMCShoesPurple
+      - id: RMCShoesRed
+      - id: RMCShoesWhite
+      - id: RMCShoesYellow
+      - id: RMCBootsPMC
+      - id: RMCBootsVanBandolier
+      - id: RMCShoesLaceupBrown
+      - id: RMCShoesLaceup
+      - id: RMCShoesLeather
+    - name: Work Wear
+      choices: { CMUcivilianworkwear: 1 }
+      entries:
+      - id: AU14CivilianWorkwearYellow
+      - id: AU14CivilianWorkwearPink
+      - id: AU14CivilianWorkwearBlue
+      - id: AU14CivilianWorkwearGreen
+    - name: Business Attire
+      choices: { CMUcivilianbusinessatrire: 1 }
+      entries:
+      - id: CMJumpsuitLiaisonBlack
+      - id: CMJumpsuitLiaisonBlue
+      - id: CMJumpsuitLiaisonBrown
+      - id: CMJumpsuitLiaisonField
+      - id: CMJumpsuitLiaisonIvy
+      - id: CMJumpsuitLiaisonCorporateFormal
+      - id: CMJumpsuitLiaisonFormal
+      - id: CMJumpsuitLiaison
+      - id: CMJumpsuitLiaisonBlazer
+      - id: CMJumpsuitLiaisonCharcoal
+    - name: Miscellaneous Clothes
+      choices: { CMUcivilianclothesmisc: 1 }
+      entries:
+      - id: RMCJumpsuitDutchBandolier
+      - id: RMCJumpsuitCivilian
+      - id: CMJumpsuitColonist
+      - id: CMJumpsuitTShirtWhite
+      - id: CMJumpsuitTShirtGray
+      - id: CMJumpsuitTShirtRed
+    - name: Suit Jackets
+      choices: { CMUcivilianclothessuitjacket: 1 }
+      entries:
+      - id: RMCJacketCorporateKhaki
+      - id: RMCJacketCorporateBlack
+      - id: RMCJacketCorporateBlue
+      - id: RMCJacketCorporateBrown
+    - name: Puffer Wear
+      choices: { CMUcivilianclothespuffervest: 1 }
+      entries:
+      - id: AU14CivilianJacketGrayPufferVest
+      - id: AU14CivilianJacketKhakiPufferVest
+      - id: AU14CivilianJacketTanPufferVest
+      - id: AU14CivilianJacketGrayPufferJacket
+      - id: AU14CivilianJacketOrangePufferJacket
+      - id: AU14CivilianJacketKhakiPufferJacket
+    - name: Windbreakers
+      choices: { CMUcivilianclotheswindbreaker: 1 }
+      entries:
+      - id: AU14WindbreakerBlue
+      - id: AU14WindbreakerGray
+      - id: AU14WindbreakerGreen
+      - id: AU14WindbreakerKhakiGreenMix
+      - id: AU14WindbreakerKhaki
+    - name: Parkas
+      choices: { CMUcivilianclothesparka: 1 }
+      entries:
+      - id: AU14CivilianJacketBlueParka
+      - id: AU14CivilianJacketGreenParka
+      - id: AU14CivilianJacketRedParka
+      - id: AU14CivilianJacketYellowParka
+    - name: Trench Coats
+      choices: { CMUcivilianclothestrenchcoat: 1 }
+      entries:
+      - id: AU14CivilianTanTrenchCoat
+      - id: AU14CivilianBrownTrenchCoat
+      - id: AU14CivilianGrayTrenchCoat
+    - name: Miscellaneous Jackets
+      choices: { CMUcivilianclothesmiscjacket: 1 }
+      entries:
+      - id: AU14CivilianJacketBomberJacket
+      - id: AU14CivilianJacketOldCoat
+      - id: AU14CivilianJacketSnowSuit
+    - name: Hats
+      choices: { CMUcivilianclotheshat: 2 }
+      entries:
+      - id: AU14CivBallCapBlack
+      - id: AU14CivBallCapBlueTrucker
+      - id: AU14CivBallCapRedTrucker
+      - id: AU14USCMVeteranCap
+      - id: AU14CivFedoraTan
+      - id: AU14CivFedoraBrown
+      - id: AU14CivFedoraGray
+    - name: Glasses
+      choices: { CMUcivilianclothesglasses: 2 }
+      entries:
+      - id: RMCSunglasses
+      - id: RMCHipsterGlasses
+      - id: RMCSunglassesBig
+      - id: AU14GlassesPersonalOrange
+      - id: RMCGlassesAviators
+      - id: RMCGlassesTriMaxYellow
+      - id: RMCGlassesTriMaxBlack
+      - id: RMCGlassesTriMaxBronze
+      - id: AU14GlassesBiMexOrange
+    - name: Gloves
+      choices: { CMUcivilianclothesgloves: 1 }
+      entries:
+      - id: CMHandsBrown
+      - id: CMHandsLightBrown
+    - name: Storage
+      choices: { CMUcivilianclothesstorage: 2 }
+      entries:
+      - id: AU14CultistSatchelMarine
+      - id: AU14CultistSatchelBlack
+      - id: AU14CultistSatchelBlue
+      - id: AU14CultistBelt
+      - id: RMCPouchGeneral

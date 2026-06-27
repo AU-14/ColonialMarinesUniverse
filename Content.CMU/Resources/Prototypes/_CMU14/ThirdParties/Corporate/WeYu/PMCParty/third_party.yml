@@ -1,0 +1,49 @@
+- type: partySpawn
+  id: WYPMCPartySpawn
+  leadersToSpawn:
+    AU14JobWYPMCPartyLeader: 1
+  gruntsToSpawn:
+    AU14JobWYPMCPartyEngineer: 1
+    AU14JobWYPMCPartyMedic: 1
+    AU14JobWYPMCPartySmartgunner: 1
+    AU14JobWYPMCPartyContractorM42A: 1
+    AU14JobWYPMCPartyContractorNSG23: 1
+    AU14JobWYPMCPartyContractorM39B2: 1
+    AU14JobWYPMCPartyContractor: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: WYPMCParty
+  partyspawn: WYPMCPartySpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml
+  weight: 20
+  minplayers: 30
+  maxplayers: 400
+  GhostsNeeded: 8
+  roundstart: false
+
+- type: partySpawn
+  id: WYPMCPartySpawnAlt
+  leadersToSpawn:
+    AU14JobWYPMCPartyLeader: 1
+  gruntsToSpawn:
+    AU14JobWYPMCPartyEngineer: 1
+    AU14JobWYPMCPartyMedic: 1
+    AU14JobWYPMCPartySmartgunner: 1
+    AU14JobWYPMCPartyContractorM42A: 1
+    AU14JobWYPMCPartyContractorNSG23: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: WYPMCPartyAlt
+  partyspawn: WYPMCPartySpawnAlt
+  entrymethod: shuttle
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml
+  weight: 20
+  minplayers: 30
+  maxplayers: 400
+  GhostsNeeded: 6
+  roundstart: false

@@ -1,0 +1,539 @@
+## use inverted to invert destruction behavior ie insurgency removes on all modes except insurgency
+
+# Wall removes for various presets
+- type: entity
+  id: rockwallremoveinssolaris
+  suffix: Insurgency
+  parent: CMWallSolarisRock
+  components:
+    - type: DestroyOnPreset
+      preset: Insurgency
+
+- type: entity
+  id: rockwallremoveinshybrisia
+  suffix: Insurgency
+  parent: RMCWallHybrisaRock
+  components:
+  - type: DestroyOnPreset
+    preset: Insurgency
+
+- type: entity
+  id: rockwallremoveinshbyrisia
+  suffix: Insurgency
+  parent: RMCWallKutjevoRock
+  components:
+  - type: DestroyOnPreset
+    preset: Insurgency
+
+- type: entity
+  id: rockwallremovein
+  suffix: Insurgency
+  parent: CMWallRock
+  components:
+  - type: DestroyOnPreset
+    preset: Insurgency
+
+- type: entity
+  id: barrierremove
+  suffix: Insurgency
+  parent: RMCBarrierBase
+  components:
+  - type: DestroyOnPreset
+    preset: Insurgency
+
+- type: entity
+  id: junglevegetationremove
+  suffix: Insurgency
+  parent: CMWallJungle
+  components:
+  - type: DestroyOnPreset
+    preset: Insurgency
+
+- type: entity
+  id: rockwallremoveinssolaris_forceonforce
+  suffix: ForceOnForce
+  parent: CMWallSolarisRock
+  components:
+    - type: DestroyOnPreset
+      preset: ForceOnForce
+
+- type: entity
+  id: rockwallremoveinshybrisia_forceonforce
+  suffix: ForceOnForce
+  parent: RMCWallHybrisaRock
+  components:
+    - type: DestroyOnPreset
+      preset: ForceOnForce
+
+- type: entity
+  id: rockwallremoveinshbyrisia_forceonforce
+  suffix: ForceOnForce
+  parent: RMCWallKutjevoRock
+  components:
+    - type: DestroyOnPreset
+      preset: ForceOnForce
+
+- type: entity
+  id: junglevegetationremove_forceonforce
+  suffix: ForceOnForce
+  parent: CMWallJungle
+  components:
+  - type: DestroyOnPreset
+    preset: ForceOnForce
+
+- type: entity
+  id: rockwallremoveinssolaris_criminal
+  suffix: Criminal
+  parent: CMWallSolarisRock
+  components:
+    - type: DestroyOnPreset
+      preset: Criminal
+
+- type: entity
+  id: rockwallremoveinshybrisia_criminal
+  suffix: Criminal
+  parent: RMCWallHybrisaRock
+  components:
+    - type: DestroyOnPreset
+      preset: Criminal
+
+- type: entity
+  id: rockwallremoveinshbyrisia_criminal
+  suffix: Criminal
+  parent: RMCWallKutjevoRock
+  components:
+    - type: DestroyOnPreset
+      preset: Criminal
+
+- type: entity
+  id: rockwallremoveinssolaris_prometheus
+  suffix: Prometheus
+  parent: CMWallSolarisRock
+  components:
+    - type: DestroyOnPreset
+      preset: Prometheus
+
+- type: entity
+  id: rockwallremoveinshybrisia_prometheus
+  suffix: Prometheus
+  parent: RMCWallHybrisaRock
+  components:
+    - type: DestroyOnPreset
+      preset: Prometheus
+
+- type: entity
+  id: rockwallremoveinshbyrisia_prometheus
+  suffix: Prometheus
+  parent: RMCWallKutjevoRock
+  components:
+    - type: DestroyOnPreset
+      preset: Prometheus
+
+- type: entity
+  id: rockwallremoveinssolaris_colonyfall
+  suffix: ColonyFall
+  parent: CMWallSolarisRock
+  components:
+    - type: DestroyOnPreset
+      preset: ColonyFall
+
+- type: entity
+  id: rockwallremoveinshybrisia_colonyfall
+  suffix: ColonyFall
+  parent: RMCWallHybrisaRock
+  components:
+    - type: DestroyOnPreset
+      preset: ColonyFall
+
+- type: entity
+  id: rockwallremoveinshbyrisia_colonyfall
+  suffix: ColonyFall
+  parent: RMCWallKutjevoRock
+  components:
+    - type: DestroyOnPreset
+      preset: ColonyFall
+
+- type: entity
+  id: rockwallremoveinssolaris_distresssignal
+  suffix: DistressSignal
+  parent: CMWallSolarisRock
+  components:
+    - type: DestroyOnPreset
+      preset: DistressSignal
+
+- type: entity
+  id: rockwallremoveinshybrisia_distresssignal
+  suffix: DistressSignal
+  parent: RMCWallHybrisaRock
+  components:
+    - type: DestroyOnPreset
+      preset: DistressSignal
+
+- type: entity
+  id: rockwallremoveinshbyrisia_distresssignal
+  suffix: DistressSignal
+  parent: RMCWallKutjevoRock
+  components:
+    - type: DestroyOnPreset
+      preset: DistressSignal
+
+- type: entity
+  id: rockwallremovein_distresssignal
+  suffix: DistressSignal
+  parent: CMWallRock
+  components:
+    - type: DestroyOnPreset
+      preset: DistressSignal
+
+- type: entity
+  id: barrierremove_distresssignal
+  suffix: DistressSignal
+  parent: RMCBarrierBase
+  components:
+    - type: DestroyOnPreset
+      preset: DistressSignal
+
+- type: entity
+  id: junglevegetationremove_distresssignal
+  suffix: DistressSignal
+  parent: CMWallJungle
+  components:
+    - type: DestroyOnPreset
+      preset: DistressSignal
+
+- type: entity
+  id: rockwallremoveinssolaris_fog
+  suffix: Fog
+  parent: CMWallSolarisRock
+  components:
+    - type: DestroyOnPreset
+      preset: Fog
+
+- type: entity
+  id: rockwallremoveinshybrisia_fog
+  suffix: Fog
+  parent: RMCWallHybrisaRock
+  components:
+    - type: DestroyOnPreset
+      preset: Fog
+
+- type: entity
+  id: rockwallremoveinshbyrisia_fog
+  suffix: Fog
+  parent: RMCWallKutjevoRock
+  components:
+    - type: DestroyOnPreset
+      preset: Fog
+
+- type: entity
+  id: rockwallremovein_fog
+  suffix: Fog
+  parent: CMWallRock
+  components:
+    - type: DestroyOnPreset
+      preset: Fog
+
+- type: entity
+  id: barrierremove_fog
+  suffix: Fog
+  parent: RMCBarrierBase
+  components:
+    - type: DestroyOnPreset
+      preset: Fog
+
+- type: entity
+  id: junglevegetationremove_fog
+  suffix: Fog
+  parent: CMWallJungle
+  components:
+    - type: DestroyOnPreset
+      preset: Fog
+
+# Inverted versions (remove on all modes EXCEPT the specified preset)
+- type: entity
+  id: rockwallremoveinssolaris_inverted
+  suffix: Insurgency Inverted
+  parent: CMWallSolarisRock
+  components:
+    - type: DestroyOnPreset
+      preset: Insurgency
+      inverted: true
+
+- type: entity
+  id: rockwallremoveinshybrisia_inverted
+  suffix: Insurgency Inverted
+  parent: RMCWallHybrisaRock
+  components:
+    - type: DestroyOnPreset
+      preset: Insurgency
+      inverted: true
+
+- type: entity
+  id: rockwallremoveinshbyrisia_inverted
+  suffix: Insurgency Inverted
+  parent: RMCWallKutjevoRock
+  components:
+    - type: DestroyOnPreset
+      preset: Insurgency
+      inverted: true
+
+- type: entity
+  id: rockwallremovein_inverted
+  suffix: Insurgency Inverted
+  parent: CMWallRock
+  components:
+    - type: DestroyOnPreset
+      preset: Insurgency
+      inverted: true
+
+- type: entity
+  id: barrierremove_inverted
+  suffix: Insurgency Inverted
+  parent: RMCBarrierBase
+  components:
+    - type: DestroyOnPreset
+      preset: Insurgency
+      inverted: true
+
+- type: entity
+  id: junglevegetationremove_inverted
+  suffix: Insurgency Inverted
+  parent: CMWallJungle
+  components:
+    - type: DestroyOnPreset
+      preset: Insurgency
+      inverted: true
+
+- type: entity
+  id: rockwallremoveinssolaris_forceonforce_inverted
+  suffix: ForceOnForce Inverted
+  parent: CMWallSolarisRock
+  components:
+    - type: DestroyOnPreset
+      preset: ForceOnForce
+      inverted: true
+
+- type: entity
+  id: rockwallremoveinshybrisia_forceonforce_inverted
+  suffix: ForceOnForce Inverted
+  parent: RMCWallHybrisaRock
+  components:
+    - type: DestroyOnPreset
+      preset: ForceOnForce
+      inverted: true
+
+- type: entity
+  id: rockwallremoveinshbyrisia_forceonforce_inverted
+  suffix: ForceOnForce Inverted
+  parent: RMCWallKutjevoRock
+  components:
+    - type: DestroyOnPreset
+      preset: ForceOnForce
+      inverted: true
+
+- type: entity
+  id: junglevegetationremove_forceonforce_inverted
+  suffix: ForceOnForce Inverted
+  parent: CMWallJungle
+  components:
+    - type: DestroyOnPreset
+      preset: ForceOnForce
+      inverted: true
+
+- type: entity
+  id: rockwallremoveinssolaris_criminal_inverted
+  suffix: Criminal Inverted
+  parent: CMWallSolarisRock
+  components:
+    - type: DestroyOnPreset
+      preset: Criminal
+      inverted: true
+
+- type: entity
+  id: rockwallremoveinshybrisia_criminal_inverted
+  suffix: Criminal Inverted
+  parent: RMCWallHybrisaRock
+  components:
+    - type: DestroyOnPreset
+      preset: Criminal
+      inverted: true
+
+- type: entity
+  id: rockwallremoveinshbyrisia_criminal_inverted
+  suffix: Criminal Inverted
+  parent: RMCWallKutjevoRock
+  components:
+    - type: DestroyOnPreset
+      preset: Criminal
+      inverted: true
+
+- type: entity
+  id: rockwallremoveinssolaris_prometheus_inverted
+  suffix: Prometheus Inverted
+  parent: CMWallSolarisRock
+  components:
+    - type: DestroyOnPreset
+      preset: Prometheus
+      inverted: true
+
+- type: entity
+  id: rockwallremoveinshybrisia_prometheus_inverted
+  suffix: Prometheus Inverted
+  parent: RMCWallHybrisaRock
+  components:
+    - type: DestroyOnPreset
+      preset: Prometheus
+      inverted: true
+
+- type: entity
+  id: rockwallremoveinshbyrisia_prometheus_inverted
+  suffix: Prometheus Inverted
+  parent: RMCWallKutjevoRock
+  components:
+    - type: DestroyOnPreset
+      preset: Prometheus
+      inverted: true
+
+- type: entity
+  id: rockwallremoveinssolaris_colonyfall_inverted
+  suffix: ColonyFall Inverted
+  parent: CMWallSolarisRock
+  components:
+    - type: DestroyOnPreset
+      preset: ColonyFall
+      inverted: true
+
+- type: entity
+  id: rockwallremoveinshybrisia_colonyfall_inverted
+  suffix: ColonyFall Inverted
+  parent: RMCWallHybrisaRock
+  components:
+    - type: DestroyOnPreset
+      preset: ColonyFall
+      inverted: true
+
+- type: entity
+  id: rockwallremoveinshbyrisia_colonyfall_inverted
+  suffix: ColonyFall Inverted
+  parent: RMCWallKutjevoRock
+  components:
+    - type: DestroyOnPreset
+      preset: ColonyFall
+      inverted: true
+
+- type: entity
+  id: rockwallremoveinssolaris_distresssignal_inverted
+  suffix: DistressSignal Inverted
+  parent: CMWallSolarisRock
+  components:
+    - type: DestroyOnPreset
+      preset: DistressSignal
+      inverted: true
+
+- type: entity
+  id: rockwallremoveinshybrisia_distresssignal_inverted
+  suffix: DistressSignal Inverted
+  parent: RMCWallHybrisaRock
+  components:
+    - type: DestroyOnPreset
+      preset: DistressSignal
+      inverted: true
+
+- type: entity
+  id: rockwallremoveinshbyrisia_distresssignal_inverted
+  suffix: DistressSignal Inverted
+  parent: RMCWallKutjevoRock
+  components:
+    - type: DestroyOnPreset
+      preset: DistressSignal
+      inverted: true
+
+- type: entity
+  id: rockwallremovein_distresssignal_inverted
+  suffix: DistressSignal Inverted
+  parent: CMWallRock
+  components:
+    - type: DestroyOnPreset
+      preset: DistressSignal
+      inverted: true
+
+- type: entity
+  id: barrierremove_distresssignal_inverted
+  suffix: DistressSignal Inverted
+  parent: RMCBarrierBase
+  components:
+    - type: DestroyOnPreset
+      preset: DistressSignal
+      inverted: true
+
+- type: entity
+  id: junglevegetationremove_distresssignal_inverted
+  suffix: DistressSignal Inverted
+  parent: CMWallJungle
+  components:
+    - type: DestroyOnPreset
+      preset: DistressSignal
+      inverted: true
+
+- type: entity
+  id: rockwallremoveinssolaris_fog_inverted
+  suffix: Fog Inverted
+  parent: CMWallSolarisRock
+  components:
+    - type: DestroyOnPreset
+      preset: Fog
+      inverted: true
+
+- type: entity
+  id: rockwallremoveinshybrisia_fog_inverted
+  suffix: Fog Inverted
+  parent: RMCWallHybrisaRock
+  components:
+    - type: DestroyOnPreset
+      preset: Fog
+      inverted: true
+
+- type: entity
+  id: rockwallremoveinshbyrisia_fog_inverted
+  suffix: Fog Inverted
+  parent: RMCWallKutjevoRock
+  components:
+    - type: DestroyOnPreset
+      preset: Fog
+      inverted: true
+
+- type: entity
+  id: rockwallremovein_fog_inverted
+  suffix: Fog Inverted
+  parent: CMWallRock
+  components:
+    - type: DestroyOnPreset
+      preset: Fog
+      inverted: true
+
+- type: entity
+  id: barrierremove_fog_inverted
+  suffix: Fog Inverted
+  parent: RMCBarrierBase
+  components:
+    - type: DestroyOnPreset
+      preset: Fog
+      inverted: true
+
+- type: entity
+  id: junglevegetationremove_fog_inverted
+  suffix: Fog Inverted
+  parent: CMWallJungle
+  components:
+    - type: DestroyOnPreset
+      preset: Fog
+      inverted: true
+
+- type: entity
+  id: junglevegetationremove_colonyfall_inverted
+  suffix: ColonyFall Inverted
+  parent: CMWallJungle
+  components:
+  - type: DestroyOnPreset
+    preset: ColonyFall
+    inverted: true

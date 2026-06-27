@@ -31,5 +31,6 @@ chat-radio-uppsof = UPP
 chat-radio-uasof = UA
 chat-radio-twe = TWE
 chat-radio-icsc = ICSC
+chat-radio-cca = CCA
 chat-radio-vai = VAI
 chat-radio-part = Prodigy

@@ -1,0 +1,25 @@
+- type: partySpawn
+  id: USArmyArmoredSpawn
+  leadersToSpawn:
+    AU14JobUSArmySquadLeaderArmored: 1
+  gruntsToSpawn:
+    AU14JobUSArmySynthArmored: 1
+    AU14JobUSArmyCETArmored: 1
+    AU14JobUSArmyCMTArmored: 1
+    AU14JobUSArmyHeavyGunnerArmored: 0
+    AU14JobUSArmyMarksmanArmored: 0
+    AU14JobUSArmyTrooperArmored: 2
+    AU14JobUSArmyTrooperArmoredLAT: 0
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: USArmyArmored
+  partyspawn: USArmyArmoredSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_response_shuttle.yml
+  weight: 20
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 10
+  roundstart: false

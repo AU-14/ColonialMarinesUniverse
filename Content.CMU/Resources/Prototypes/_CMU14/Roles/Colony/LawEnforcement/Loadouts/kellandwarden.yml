@@ -1,0 +1,13 @@
+- type: loadout
+  id: KellandWardenEssentialAU14
+  equipment:
+    belt: RMCWeaponRevolverM44
+  storage:
+    back:
+    - ClothingEyesGlassesCheapSunglasses
+    - RMCRadioHandheldColonyOff
+    - RMCSpeedLoader44Marksman
+    - RMCSpeedLoader44Marksman
+    - RMCTelescopicBaton
+  inhand:
+  - RMCBoxHandcuffs

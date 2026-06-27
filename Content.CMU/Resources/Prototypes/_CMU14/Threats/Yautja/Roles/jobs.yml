@@ -1,0 +1,475 @@
+- type: job
+  parent: CMJobBase
+  id: CMUYautjaHunter
+  name: cmu-yautja-job-name-hunter
+  description: cmu-yautja-job-description-hunter
+  playTimeTracker: CMUYautjaHunter
+  icon: CMJobIconEmpty
+  joinNotifyCrew: false
+  hidden: true
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Yautja
+    - type: IgnoreXenoWeedsSlowdown
+    - type: Skills
+      skills:
+        RMCSkillMedical: 3
+        RMCSkillSurgery: 2
+
+- type: startingGear
+  id: CMUYautjaHunterGear
+  equipment:
+    ears: CMUYautjaCommunicator
+    mask: CMUYautjaMask
+    gloves: CMUYautjaBracer
+    back: CMUYautjaCloakPack
+    outerClothing: CMUYautjaClanArmor
+    jumpsuit: CMUYautjaBodyMesh
+    shoes: CMUYautjaClanGreaves
+    belt: CMUYautjaTrophyBelt
+    pocket1: CMUYautjaSmartDisc
+    pocket2: CMUYautjaMedicomp
+  storage:
+    back:
+    - CMUYautjaHuntingTrap
+    - CMUYautjaHuntingTrap
+    - CMUYautjaPolishingRag
+    - CMUYautjaCleanserGelVial
+    - CMUYautjaRelayBeacon
+    - CMUYautjaHuntingPouch
+    - CMUYautjaToolbeltFilled
+    - CMUYautjaHoundObservationPad
+
+- type: startingGear
+  parent: CMUYautjaHunterGear
+  id: CMUYautjaHunterGearBronze
+  equipment:
+    outerClothing: CMUYautjaClanArmorBronze
+
+- type: startingGear
+  parent: CMUYautjaHunterGear
+  id: CMUYautjaHunterGearSilver
+  equipment:
+    outerClothing: CMUYautjaClanArmorSilver
+
+- type: startingGear
+  parent: CMUYautjaHunterGear
+  id: CMUYautjaHunterGearCrimson
+  equipment:
+    outerClothing: CMUYautjaClanArmorCrimson
+
+- type: startingGear
+  parent: CMUYautjaHunterGear
+  id: CMUYautjaHunterGearBone
+  equipment:
+    outerClothing: CMUYautjaClanArmorBone
+
+# Bad Blood base loadout — standalone, no communicator or smart disc
+- type: startingGear
+  id: CMUYautjaBadBloodGearBase
+  equipment:
+    gloves: CMUYautjaBadBloodBracer
+    back: CMUYautjaCloakPack
+    outerClothing: CMUYautjaClanArmor
+    jumpsuit: CMUYautjaBodyMesh
+    shoes: CMUYautjaClanGreaves
+    mask: CMUYautjaMask
+    belt: CMUYautjaTrophyBelt
+    pocket1: CMUYautjaHealthShard
+    pocket2: CMUYautjaMedicomp
+  storage:
+    back:
+    - CMUYautjaHuntingTrap
+    - CMUYautjaHuntingTrap
+    - CMUYautjaPolishingRag
+    - CMUYautjaCleanserGelVial
+    - CMUYautjaRelayBeacon
+    - CMUYautjaHuntingPouch
+    - CMUYautjaToolbeltFilled
+    - CMUYautjaHoundObservationPad
+
+# ── Leader variants (4 masks × 4 armor sets = 16) ──
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodLeaderGear01
+  equipment:
+    mask: CMUYautjaMaskBadBloodCommando
+    outerClothing: CMUYautjaBadBloodArmorCommandoAlt
+    shoes: CMUYautjaBadBloodGreavesCommandoAlt
+    back: CMUYautjaBadBloodCloakPack
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodLeaderGear02
+  equipment:
+    mask: CMUYautjaMaskBadBloodCommando
+    outerClothing: CMUYautjaBadBloodArmorScavengerAlt
+    shoes: CMUYautjaBadBloodGreavesScavengerAlt
+    back: CMUYautjaBadBloodCloakPack
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodLeaderGear03
+  equipment:
+    mask: CMUYautjaMaskBadBloodCommando
+    outerClothing: CMUYautjaBadBloodArmorLunatic
+    shoes: CMUYautjaBadBloodGreavesLunatic
+    back: CMUYautjaBadBloodCloakPack
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodLeaderGear04
+  equipment:
+    mask: CMUYautjaMaskBadBloodCommando
+    outerClothing: CMUYautjaBadBloodArmorBane
+    shoes: CMUYautjaBadBloodGreavesBane
+    back: CMUYautjaBadBloodCloakPack
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodLeaderGear05
+  equipment:
+    mask: CMUYautjaMaskBadBloodCommandoAlt
+    outerClothing: CMUYautjaBadBloodArmorCommandoAlt
+    shoes: CMUYautjaBadBloodGreavesCommandoAlt
+    back: CMUYautjaBadBloodCloakPack
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodLeaderGear06
+  equipment:
+    mask: CMUYautjaMaskBadBloodCommandoAlt
+    outerClothing: CMUYautjaBadBloodArmorScavengerAlt
+    shoes: CMUYautjaBadBloodGreavesScavengerAlt
+    back: CMUYautjaBadBloodCloakPack
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodLeaderGear07
+  equipment:
+    mask: CMUYautjaMaskBadBloodCommandoAlt
+    outerClothing: CMUYautjaBadBloodArmorLunatic
+    shoes: CMUYautjaBadBloodGreavesLunatic
+    back: CMUYautjaBadBloodCloakPack
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodLeaderGear08
+  equipment:
+    mask: CMUYautjaMaskBadBloodCommandoAlt
+    outerClothing: CMUYautjaBadBloodArmorBane
+    shoes: CMUYautjaBadBloodGreavesBane
+    back: CMUYautjaBadBloodCloakPack
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodLeaderGear09
+  equipment:
+    mask: CMUYautjaMaskBadBloodLunatic
+    outerClothing: CMUYautjaBadBloodArmorCommandoAlt
+    shoes: CMUYautjaBadBloodGreavesCommandoAlt
+    back: CMUYautjaBadBloodCloakPack
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodLeaderGear10
+  equipment:
+    mask: CMUYautjaMaskBadBloodLunatic
+    outerClothing: CMUYautjaBadBloodArmorScavengerAlt
+    shoes: CMUYautjaBadBloodGreavesScavengerAlt
+    back: CMUYautjaBadBloodCloakPack
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodLeaderGear11
+  equipment:
+    mask: CMUYautjaMaskBadBloodLunatic
+    outerClothing: CMUYautjaBadBloodArmorLunatic
+    shoes: CMUYautjaBadBloodGreavesLunatic
+    back: CMUYautjaBadBloodCloakPack
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodLeaderGear12
+  equipment:
+    mask: CMUYautjaMaskBadBloodLunatic
+    outerClothing: CMUYautjaBadBloodArmorBane
+    shoes: CMUYautjaBadBloodGreavesBane
+    back: CMUYautjaBadBloodCloakPack
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodLeaderGear13
+  equipment:
+    mask: CMUYautjaMaskBadBloodVenator
+    outerClothing: CMUYautjaBadBloodArmorCommandoAlt
+    shoes: CMUYautjaBadBloodGreavesCommandoAlt
+    back: CMUYautjaBadBloodCloakPack
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodLeaderGear14
+  equipment:
+    mask: CMUYautjaMaskBadBloodVenator
+    outerClothing: CMUYautjaBadBloodArmorScavengerAlt
+    shoes: CMUYautjaBadBloodGreavesScavengerAlt
+    back: CMUYautjaBadBloodCloakPack
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodLeaderGear15
+  equipment:
+    mask: CMUYautjaMaskBadBloodVenator
+    outerClothing: CMUYautjaBadBloodArmorLunatic
+    shoes: CMUYautjaBadBloodGreavesLunatic
+    back: CMUYautjaBadBloodCloakPack
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodLeaderGear16
+  equipment:
+    mask: CMUYautjaMaskBadBloodVenator
+    outerClothing: CMUYautjaBadBloodArmorBane
+    shoes: CMUYautjaBadBloodGreavesBane
+    back: CMUYautjaBadBloodCloakPack
+
+# ── Grunt variants (21 masks cycled across 10 armor sets) ──
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodGruntGear01
+  equipment:
+    mask: CMUYautjaMaskBadBloodBane
+    outerClothing: CMUYautjaBadBloodArmorScavengerAlt
+    shoes: CMUYautjaBadBloodGreavesScavengerAlt
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodGruntGear02
+  equipment:
+    mask: CMUYautjaMaskPred01Crimson
+    outerClothing: CMUYautjaBadBloodArmorLunatic
+    shoes: CMUYautjaBadBloodGreavesLunatic
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodGruntGear03
+  equipment:
+    mask: CMUYautjaMaskPred02Crimson
+    outerClothing: CMUYautjaBadBloodArmorBane
+    shoes: CMUYautjaBadBloodGreavesBane
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodGruntGear04
+  equipment:
+    mask: CMUYautjaMaskPred03Crimson
+    outerClothing: CMUYautjaClanArmor
+    shoes: CMUYautjaClanGreaves
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodGruntGear05
+  equipment:
+    mask: CMUYautjaMaskPred04Crimson
+    outerClothing: CMUYautjaClanArmor2
+    shoes: CMUYautjaClanGreaves2
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodGruntGear06
+  equipment:
+    mask: CMUYautjaMaskPred05Crimson
+    outerClothing: CMUYautjaClanArmor3
+    shoes: CMUYautjaClanGreaves3
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodGruntGear07
+  equipment:
+    mask: CMUYautjaMaskPred06Crimson
+    outerClothing: CMUYautjaClanArmor4
+    shoes: CMUYautjaClanGreaves4
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodGruntGear08
+  equipment:
+    mask: CMUYautjaMaskPred07Crimson
+    outerClothing: CMUYautjaClanArmor5
+    shoes: CMUYautjaClanGreaves3
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodGruntGear09
+  equipment:
+    mask: CMUYautjaMaskPred08Crimson
+    outerClothing: CMUYautjaClanArmor6
+    shoes: CMUYautjaClanGreaves3
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodGruntGear10
+  equipment:
+    mask: CMUYautjaMaskPred09Crimson
+    outerClothing: CMUYautjaClanArmor7
+    shoes: CMUYautjaClanGreaves3
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodGruntGear11
+  equipment:
+    mask: CMUYautjaMaskPred10Crimson
+    outerClothing: CMUYautjaBadBloodArmorScavengerAlt
+    shoes: CMUYautjaBadBloodGreavesScavengerAlt
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodGruntGear12
+  equipment:
+    mask: CMUYautjaMaskPred11Crimson
+    outerClothing: CMUYautjaBadBloodArmorLunatic
+    shoes: CMUYautjaBadBloodGreavesLunatic
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodGruntGear13
+  equipment:
+    mask: CMUYautjaMaskPred12Crimson
+    outerClothing: CMUYautjaBadBloodArmorBane
+    shoes: CMUYautjaBadBloodGreavesBane
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodGruntGear14
+  equipment:
+    mask: CMUYautjaMaskPred13Crimson
+    outerClothing: CMUYautjaClanArmor
+    shoes: CMUYautjaClanGreaves
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodGruntGear15
+  equipment:
+    mask: CMUYautjaMaskPred14Crimson
+    outerClothing: CMUYautjaClanArmor2
+    shoes: CMUYautjaClanGreaves2
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodGruntGear16
+  equipment:
+    mask: CMUYautjaMaskPred15Crimson
+    outerClothing: CMUYautjaClanArmor3
+    shoes: CMUYautjaClanGreaves3
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodGruntGear17
+  equipment:
+    mask: CMUYautjaMaskPred16Crimson
+    outerClothing: CMUYautjaClanArmor4
+    shoes: CMUYautjaClanGreaves4
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodGruntGear18
+  equipment:
+    mask: CMUYautjaMaskPred17Crimson
+    outerClothing: CMUYautjaClanArmor5
+    shoes: CMUYautjaClanGreaves3
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodGruntGear19
+  equipment:
+    mask: CMUYautjaMaskPred18Crimson
+    outerClothing: CMUYautjaClanArmor6
+    shoes: CMUYautjaClanGreaves3
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodGruntGear20
+  equipment:
+    mask: CMUYautjaMaskPred19Crimson
+    outerClothing: CMUYautjaClanArmor7
+    shoes: CMUYautjaClanGreaves3
+
+- type: startingGear
+  parent: CMUYautjaBadBloodGearBase
+  id: CMUYautjaBadBloodGruntGear21
+  equipment:
+    mask: CMUYautjaMaskPred20Crimson
+    outerClothing: CMUYautjaBadBloodArmorScavengerAlt
+    shoes: CMUYautjaBadBloodGreavesScavengerAlt
+
+- type: entity
+  id: CMURandomHumanoidYautjaHunter
+  name: yautja hunter spawner
+  suffix: Spawner, Player, Event
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/mask.rsi
+    state: icon
+  - type: RandomHumanoidSpawner
+    settings: CMUYautjaHunter
+
+- type: randomHumanoidSettings
+  id: CMUYautjaHunter
+  species: Yautja
+  randomizeName: true
+  components:
+  - type: Yautja
+  - type: IgnoreXenoWeedsSlowdown
+  - type: Skills
+    skills:
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 2
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4.4
+    baseSprintSpeed: 8.4
+  - type: Damageable
+    damageContainer: Biological
+    damageModifierSet: CMUYautja
+    healthBarThreshold: 5
+  - type: MeleeWeapon
+    soundHit:
+      collection: Punch
+    angle: 0
+    animation: WeaponArcFist
+    attackRate: 1.15
+    damage:
+      types:
+        Blunt: 12
+        Structural: 3
+  - type: Speech
+    speechSounds: CMUYautjaSpeech
+    allowedEmotes:
+    - Scream
+    - Laugh
+    - Growl
+    - Warcry
+    - CMUYautjaClick
+    - CMUYautjaRoar
+    - CMUYautjaLaugh
+    - CMUYautjaGrowl
+    - CMUYautjaPain
+    - CMUYautjaDeathCry
+    - CMUYautjaDeathLaugh
+  - type: Vocal
+    sounds:
+      Male: CMUMaleYautja
+      Female: CMUFemaleYautja
+      Unsexed: CMUMaleYautja
+
+- type: playTimeTracker
+  id: CMUYautjaHunter
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: CMUYautjaJobIcon
+  icon:
+    sprite: _CMU14/Yautja/mask.rsi
+    state: icon

@@ -1,0 +1,20 @@
+- type: partySpawn
+  id: UACGLostTeamSpawn
+  leadersToSpawn:
+    AU14JobUACGLostSquadLeader: 1
+  gruntsToSpawn:
+    AU14JobUACGLostAmmobearer: 1
+    AU14JobUACGLostRifleman: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: UACGLostTeam
+  partyspawn: UACGLostTeamSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_response_shuttle.yml
+  weight:  20
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 3
+  roundstart: false

@@ -1,0 +1,117 @@
+# Synth languages
+
+- type: entity
+  id: AU14LanguagePresetSynth
+  name: Synth Languages
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: LanguagePreset
+    spokenLanguages:
+    - English
+    - SignLanguage
+    - TacticalSignLanguage
+    - Primitive
+    - Binary
+    - Latin
+    - Legalese
+    - Portuguese
+    - Spanish
+    - Arabic
+    - French
+    - German
+    - Russian
+    - Japanese
+    - Mandarin
+    - Swahili
+    - Afrikaans
+    - Yoruba
+    - Turkish
+    - Korean
+    understoodLanguages:
+    - English
+    - SignLanguage
+    - TacticalSignLanguage
+    - Primitive
+    - Binary
+    - Latin
+    - Legalese
+    - Portuguese
+    - Spanish
+    - Arabic
+    - French
+    - German
+    - Russian
+    - Japanese
+    - Mandarin
+    - Swahili
+    - Afrikaans
+    - Yoruba
+    - Turkish
+    - Korean
+    currentLanguage: Binary
+    defaultLanguage: Binary
+
+- type: entity
+  id: AU14LanguageLearningPresetSynth
+  name: Synth Language Learning
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: LanguageLearningPreset
+    learnableLanguages:
+    - English
+    - SignLanguage
+    - TacticalSignLanguage
+    - Primitive
+    - Xeno
+    - Yautja
+    - Arcturian
+    - Binary
+    - Latin
+    - Legalese
+    - Portuguese
+    - Spanish
+    - Arabic
+    - French
+    - German
+    - Russian
+    - Japanese
+    - Mandarin
+    - Swahili
+    - Afrikaans
+    - Yoruba
+    - Turkish
+    - Korean
+    - Ukrainian
+    - Polish
+    - Czech
+    - Italian
+    - Irish
+    - Finnish
+    - Hungarian
+    - Albanian
+    - Serbian
+    - Lithuanian
+    - Dutch
+    - Persian
+    - Hindi
+    - Vietnamese
+    - Indonesian
+    - Filipino
+    - Urdu
+    - Esperanto
+    - Swedish
+    - Brazilian
+    - Slovak
+    - Romanian
+    firstContactLanguages:
+    - Xeno
+    - Yautja
+    - Arcturian
+# example on how to modify boosts
+#    languages:
+#      Xeno:
+#        initialBoostedWordCount: 18
+#        initialBoostedWordComprehension: 0.4
+    comprehensionThreshold: 0.8
+    learningRange: 8.0
+    baseWordLearningRate: 0.05

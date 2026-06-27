@@ -1,0 +1,83 @@
+- type: partySpawn
+  id: USArmySpawn
+  leadersToSpawn:
+    AU14JobUSArmyCommander: 1
+    AU14JobUSArmySquadleader: 1
+  gruntsToSpawn:
+    AU14JobUSArmySynth: 1
+    AU14JobUSArmyCET: 1
+    AU14JobUSArmyCMT: 1
+    AU14JobUSArmyHeavyGunner: 1
+    AU14JobUSArmyMarksman: 1
+    AU14JobUSArmyTrooper: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: USArmy
+  displayName: US Army Infantry (Full Squad)
+  partyspawn: USArmySpawn
+  blacklistedgamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: ground
+  weight: 100
+  minplayers: 100
+  maxplayers: 400
+  GhostsNeeded: 0
+  roundstart: true
+
+- type: partySpawn
+  id: USArmySpawnAlt
+  leadersToSpawn:
+    AU14JobUSArmyCommander: 1
+    AU14JobUSArmySquadleader: 1
+  gruntsToSpawn:
+    AU14JobUSArmyCET: 1
+    AU14JobUSArmyTrooper: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: USArmyAlt
+  displayName: US Army Infantry (Small Team)
+  partyspawn: USArmySpawnAlt
+  blacklistedgamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: ground
+  weight: 100
+  minplayers: 25
+  maxplayers: 50
+  GhostsNeeded: 0
+  roundstart: true
+
+- type: partySpawn
+  id: USArmySpawnAlt2
+  leadersToSpawn:
+    AU14JobUSArmyCommander: 1
+    AU14JobUSArmySquadleader: 1
+  gruntsToSpawn:
+    AU14JobUSArmyCET: 1
+    AU14JobUSArmyCMT: 1
+    AU14JobUSArmyHeavyGunner: 1
+    AU14JobUSArmyMarksman: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: USArmyAlt2
+  displayName: US Army Infantry (Medium Team)
+  partyspawn: USArmySpawnAlt2
+  blacklistedgamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: ground
+  weight: 100
+  minplayers: 51
+  maxplayers: 99
+  GhostsNeeded: 5
+  roundstart: true

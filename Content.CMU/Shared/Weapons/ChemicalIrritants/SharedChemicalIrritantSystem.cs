@@ -1,4 +1,4 @@
-using Content.Shared._AU14.Abominations;
+using Content.Shared._CMU14.Threats.Mobs.Abomination;
 using Content.Shared._CMU14.GasMask;
 using Content.Shared._RMC14.BlurredVision;
 using Content.Shared._RMC14.Slow;
@@ -19,11 +19,13 @@ using Content.Shared.Speech.EntitySystems;
 using Content.Shared.StatusEffect;
 using Content.Shared.Storage;
 using Content.Shared.Stunnable;
+using Content.Shared.Clothing.Components;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using AbominationComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationComponent;
 
 namespace Content.Shared._CMU14.ChemicalIrritants;
 
@@ -276,6 +278,10 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
         {
             foreach (var maskItem in maskContainer.ContainedEntities)
             {
+                // Mask is pulled down / not covering the face — it provides no filtration
+                if (TryComp<MaskComponent>(maskItem, out var maskComp) && maskComp.IsToggled)
+                    continue;
+
                 if (TryGetFilterFromItem(maskItem, out filterId, out filter))
                     return true;
             }

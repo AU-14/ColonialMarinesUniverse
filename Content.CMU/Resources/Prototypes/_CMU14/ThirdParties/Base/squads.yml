@@ -1,0 +1,513 @@
+- type: entity
+  parent: SquadBase
+  id: SquadCLF
+  name: CLF
+  components:
+  - type: SquadTeam
+    color: "#3aeb34"
+    background:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: empty
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: Colony
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_spp
+    canSupplyDrop: false
+    group: CLF
+    leaderIcon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: clf_sl
+
+- type: entity
+  parent: SquadBase
+  id: AU14SquadGROM
+  name: GROM
+  components:
+  - type: SquadTeam
+    color: "#edae72"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: UPPSOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_spp_alpha
+    leaderIcon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: upp_lt
+    canSupplyDrop: false
+    group: GROM
+  - type: Tag
+    tags:
+    - AU14SquadGROM
+
+- type: entity
+  parent: SquadBase
+  id: AU14SquadTD
+  name: Territorial Defense
+  components:
+  - type: SquadTeam
+    color: "#ed7e57"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: UPPSOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_spp
+    canSupplyDrop: false
+    group: TD
+  - type: Tag
+    tags:
+    - AU14SquadTD
+
+- type: entity
+  parent: SquadBase
+  id: AU14SquadUACG
+  name: Colonial Guard
+  components:
+  - type: SquadTeam
+    color: "#edae72"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: UASOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_ua
+    canSupplyDrop: false
+    group: UACG
+  - type: Tag
+    tags:
+    - AU14SquadUACG
+
+- type: entity
+  parent: SquadBase
+  id: AU14SquadUSArmy
+  name: US Army
+  components:
+  - type: SquadTeam
+    color: "#2e4f68"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: UASOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_ua
+    leaderIcon:
+      sprite: _AU14/Interface/job_icons.rsi
+      state: hudsquad_sl_army
+    canSupplyDrop: false
+    group: USArmy
+  - type: Tag
+    tags:
+    - AU14SquadUSArmy
+
+- type: entity
+  parent: SquadBase
+  id: AU14SquadUSArmy32nd
+  name: 32nd Arm
+  components:
+  - type: SquadTeam
+    color: "#2e4f68"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: UASOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_ua
+    leaderIcon:
+      sprite: _AU14/Interface/job_icons.rsi
+      state: hudsquad_sl_army
+    canSupplyDrop: false
+    group: USArmy
+  - type: Tag
+    tags:
+    - AU14SquadUSArmy
+
+- type: entity
+  parent: SquadBase
+  id: AU14SquadRMCRRT
+  name: RRT
+  components:
+  - type: SquadTeam
+    color: "#3D6F43"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: UASOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_twe
+    leaderIcon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: rmc_lieutenant
+    canSupplyDrop: false
+    group: RRT
+  - type: Tag
+    tags:
+    - AU14SquadRMCRRT
+
+- type: entity
+  parent: SquadBase
+  id: AU14SquadFirstRecon
+  name: First Recon
+  components:
+  - type: SquadTeam
+    color: "#32CD32"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: UASOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_forecon
+    canSupplyDrop: false
+    group: FORECON
+  - type: Tag
+    tags:
+    - AU14SquadFirstRecon
+
+- type: entity
+  parent: SquadBase
+  id: AU14SquadLACNCommando
+  name: LACN Commando
+  components:
+  - type: SquadTeam
+    color: "#32CD32"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: UASOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_forecon
+    canSupplyDrop: false
+    group: LACNCommando
+  - type: Tag
+    tags:
+    - AU14SquadLACNCommando
+
+- type: entity
+  parent: SquadBase
+  id: AU14SquadVAIPO
+  name: VAIPO
+  components:
+  - type: SquadTeam
+    color: "#e3580e"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: radioVAI
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_forecon
+    canSupplyDrop: false
+    group: VAIPO
+  - type: Tag
+    tags:
+    - AU14SquadVAIPO
+
+- type: entity
+  parent: SquadBase
+  id: AU14SquadVAISO
+  name: VAISO
+  components:
+  - type: SquadTeam
+    color: "#943d0a"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: radioVAI
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_forecon
+    canSupplyDrop: false
+    group: VAISO
+  - type: Tag
+    tags:
+    - AU14SquadVAISO
+
+- type: entity
+  parent: SquadBase
+  id: AU14SquadVAISP
+  name: VAISP
+  components:
+  - type: SquadTeam
+    color: "#1ecc43"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: radioVAI
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_forecon
+    canSupplyDrop: false
+    group: VAISP
+  - type: Tag
+    tags:
+    - AU14SquadVAISP
+
+- type: entity
+  parent: SquadBase
+  id: SquadPARTY
+  name: Prodigy Armed Repair Team Yankee # PARTY
+  components:
+  - type: SquadTeam
+    color: "#92969A"
+    background:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: empty
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: PART
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_pmc
+    canSupplyDrop: false
+    group: PSC
+    leaderIcon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_lead
+  - type: Tag
+    tags:
+    - SquadPARTY
+
+- type: entity
+  parent: SquadBase
+  id: SquadPARTS
+  name: Prodigy Armed Repair Team Sierra # PARTS
+  components:
+  - type: SquadTeam
+    color: "#92969A"
+    background:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: empty
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: PART
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_pmc
+    canSupplyDrop: false
+    group: PSC
+    leaderIcon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_lead
+  - type: Tag
+    tags:
+    - SquadPARTS
+
+- type: entity
+  parent: SquadBase
+  id: SquadPET
+  name: Prodigy Extraction Team # PET
+  components:
+  - type: SquadTeam
+    color: "#92969A"
+    background:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: empty
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: PART
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_pmc
+    canSupplyDrop: false
+    group: PSC
+    leaderIcon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_lead
+  - type: Tag
+    tags:
+    - SquadPET
+
+- type: entity
+  parent: SquadBase
+  id: SquadTARS
+  name: Prodigy Tactical Assault and Rescue Squad # TARS
+  components:
+  - type: SquadTeam
+    color: "#92969A"
+    background:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: empty
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: PART
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_pmc
+    canSupplyDrop: false
+    group: PSC
+    leaderIcon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_lead
+  - type: Tag
+    tags:
+    - SquadTARS
+
+- type: entity
+  parent: SquadBase
+  id: SquadHRT
+  name: Prodigy Hazard Response Team # HRT
+  components:
+  - type: SquadTeam
+    color: "#92969A"
+    background:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: empty
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: PART
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_pmc
+    canSupplyDrop: false
+    group: PSC
+    leaderIcon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_lead
+  - type: Tag
+    tags:
+    - SquadHRT
+
+- type: entity
+  parent: SquadBase
+  id: AU14SquadMSG
+  name: Marine Guard
+  components:
+  - type: SquadTeam
+    color: "#2e4f68"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: UASOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_ua
+    canSupplyDrop: false
+    group: MSG
+  - type: Tag
+    tags:
+    - AU14SquadMSG
+
+- type: entity
+  parent: SquadBase
+  id: AU14SquadIASF
+  name: IASF
+  components:
+  - type: SquadTeam
+    color: "#3D6F43"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: TWESOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_twe
+    canSupplyDrop: false
+    group: VAIPO
+  - type: Tag
+    tags:
+    - AU14SquadIASF
+
+- type: Tag
+  id: SquadHRT
+
+- type: Tag
+  id: SquadTARS
+
+- type: Tag
+  id: SquadPET
+
+- type: Tag
+  id: SquadPARTY
+
+- type: Tag
+  id: SquadPARTS
+
+- type: Tag
+  id: AU14SquadUACG
+
+- type: Tag
+  id: AU14SquadGROM
+
+- type: Tag
+  id: AU14SquadTD
+
+- type: Tag
+  id: AU14SquadUSArmy
+
+- type: Tag
+  id: AU14SquadRMCRRT
+
+- type: Tag
+  id: AU14SquadFirstRecon
+
+- type: Tag
+  id: AU14SquadLACNCommando
+
+- type: Tag
+  id: AU14SquadVAIPO
+
+- type: Tag
+  id: AU14SquadVAISO
+
+- type: Tag
+  id: AU14SquadVAISP
+
+- type: Tag
+  id: AU14SquadMSG
+
+- type: Tag
+  id: AU14SquadIASF

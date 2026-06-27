@@ -1,0 +1,15 @@
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentServices
+  name: au14-department-colony-service
+  description: au14-department-colony-description-service
+  color: "#e3ce94"
+  roles:
+    - AU14JobCivilianHeadOfService
+    - AU14JobCivilianFoodServiceWorker
+    - AU14JobCivilianShopkeep
+    - AU14JobCivilianWasteManagementSpecialist
+  departmentRadio: null
+  headOfDepartment: AU14JobCivilianHeadOfService
+  faction: colonist
+  editorHidden: false

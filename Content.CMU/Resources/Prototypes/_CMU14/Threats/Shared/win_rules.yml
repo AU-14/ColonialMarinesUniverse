@@ -1,0 +1,94 @@
+- type: entity
+  id: KillAllGovforRule
+  parent: BaseGameRule
+  name: Kill All Govfor
+  description: Threat wins when all Govfor are dead (or when specified percent are dead).
+  components:
+    - type: KillAllGovforRule
+      percent: 80
+
+- type: entity
+  id: ThreatSurviveRule
+  parent: BaseGameRule
+  name: Threat Survive Timer
+  description: Threat wins if they survive X minutes after round start.
+  components:
+    - type: ThreatSurviveRule
+      minutes: 120 # Set this to the desired number of minutes
+
+- type: entity
+  id: KillAllColonistRule
+  parent: BaseGameRule
+  name: Kill All Colonists
+  description: Threat wins when all AUColonists are dead (or when specified percent are dead).
+  components:
+    - type: KillAllColonistRule
+      percent: 85
+
+- type: entity
+  id: KillAllApeRule
+  parent: BaseGameRule
+  name: Kill All Apes
+  description: Threat wins when all Apes are dead (or when specified percent are dead).
+  components:
+    - type: KillAllApeRule
+      percent: 100
+
+- type: entity
+  id: KillAllTribeRule
+  parent: BaseGameRule
+  name: Kill All Tribals
+  description: Threat wins when all Tribals are dead (or when specified percent are dead).
+  components:
+    - type: KillAllTribeRule
+      percent: 100
+
+- type: entity
+  id: KillAllAbominationsRule
+  parent: BaseGameRule
+  name: Kill All Abominations
+  description: Threat wins when all abominations are dead (or when specified percent are dead). Counts disguised mimics.
+  components:
+    - type: KillAllAbominationsRule
+      percent: 100
+
+- type: entity
+  id: KillAllXenoRule
+  parent: BaseGameRule
+  name: Kill All Xenos/Cultists
+  description: Threat wins when all Xenos and Cultists are dead (or when specified percent are dead).
+  components:
+    - type: KillAllXenoRule
+
+- type: entity
+  id: KillAllHumanRule
+  parent: BaseGameRule
+  name: Kill All Humans
+  description: Threat wins when all humanoid mobs (excluding xenos) are dead (or when specified percent are dead).
+  components:
+    - type: KillAllHumanRule
+      percent: 85
+
+- type: entity
+  id: KillAllYautjaRule
+  parent: BaseGameRule
+  name: Kill All Yautja
+  description: Threat wins when all Yautja are dead.
+  components:
+  - type: KillAllYautjaRule
+    percent: 100
+
+- type: entity
+  id: InsWinConditionsRule
+  parent: BaseGameRule
+  name: Kill All Govfor/killallclf respectively
+  description: Threat wins when all Govfor are dead (or when specified percent are dead).
+  components:
+  - type: InsurgencyRule
+  - type: KillAllGovforRule
+    percent: 85
+    arrest: true
+    winMessage: The CLF have won by eliminating Government Forces!
+  - type: KillAllClfRule
+    percent: 80
+    winMessage: CLF combatants neutralized! The insurgency has been wiped out.

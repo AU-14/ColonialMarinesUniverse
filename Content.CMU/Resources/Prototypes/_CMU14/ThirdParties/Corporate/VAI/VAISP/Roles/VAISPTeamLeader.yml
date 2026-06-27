@@ -1,0 +1,35 @@
+- type: job
+  parent: AU14VAITeamLeaderBase
+  id: AU14VAISPTeamLeader
+  spawnMenuRoleName: VAISP Team Leader
+  playTimeTracker: AU14VAISPTeamLeader
+  icon: "CMJobIconEmpty"
+  greeting: au14-vaisp-greeting
+  startingGear: AU14GearVAIPOTeamLeader
+  basePlaytimeTracker: true
+  accessGroups:
+  - auadmin
+  - Colonist
+  - CMCargoTech
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicVAI
+  id: AU14VAISPTeamLeader
+  name: VAISP team leader
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadVAISP
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: VAISP Team Leader
+    description: You have been dispatched to the colony by Vanguard's Arrow to the colony. Ensure safety of your medical personel and UA Ambassador.
+    job: AU14VAISPTeamLeader
+    raffle:
+      settings: short
+
+- type: playTimeTracker
+  id: AU14VAISPTeamLeader

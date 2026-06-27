@@ -21,7 +21,7 @@ public sealed partial class AnalyzerSystem : EntitySystem
     [Dependency] private PopupSystem _popupSystem = default!;
 
     private const string ClfFaction = "clf";
-    private const int CashPerPoint = 30;
+    private const int CashPerPoint = 15;
 
     public override void Initialize()
     {

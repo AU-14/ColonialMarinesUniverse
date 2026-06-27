@@ -1,0 +1,29 @@
+- type: job
+  parent: AU14IASFCombatEngineerBase
+  id: AU14IASFSurvCombatEngineer
+  spawnMenuRoleName: IASF CombatEngineer Survivor
+  playTimeTracker: AU14IASFCombatEngineer
+  greeting: au14-job-greeting-IASFsurv
+  basePlaytimeTracker: true
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicTWEIASF
+  id: AU14IASFSurvCombatEngineer
+  name: IASF Combat Engineer (Survivor)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadIASF
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-tweiasf-paratrooper
+    description: au14-job-description-IASFsurv
+    job: AU14IASFSurvCombatEngineer
+    rules: au14-job-rules-IASFsurv
+    raffle:
+      settings: short

@@ -1,0 +1,31 @@
+# specialization
+
+- type: loadout
+  id: ColonyJournalistSpecializationDefaultAU14
+  equipment:
+    id: AU14IDCardColonyJournalist
+
+- type: loadout
+  id: ColonyJournalistSpecializationIndependentAU14
+  equipment:
+    id: AU14IDCardColonyJournalistIndependent
+
+- type: loadout
+  id: ColonyJournalistSpecializationFreePressAU14
+  equipment:
+    id: AU14IDCardColonyJournalistFreePress
+
+- type: loadout
+  id: ColonyJournalistSpecializationPhotoJournalistAU14
+  equipment:
+    id: AU14IDCardColonyJournalistPhotojournalist
+
+# essentials
+
+- type: loadout
+  id: JournalistEssentialAU14
+  storage:
+    back:
+    - RMCCorrespondentMicrophone
+  inhand:
+  - RMCCameraBroadcasting
