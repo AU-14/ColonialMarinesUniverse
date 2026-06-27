@@ -6,13 +6,13 @@
   - type: LanguagePreset
     spokenLanguages:
     - Russian
+    - Mandarin
     - German
-    - Chinese
     - Spanish
     understoodLanguages:
     - Russian
+    - Mandarin
     - German
-    - Chinese
     - Spanish
     currentLanguage: German
     defaultLanguage: German
@@ -27,13 +27,13 @@
     - English
     - Russian
     - German
-    - Chinese
+    - Mandarin
     - Spanish
     understoodLanguages:
     - English
     - Russian
     - German
-    - Chinese
+    - Mandarin
     - Spanish
     currentLanguage: German
     defaultLanguage: German

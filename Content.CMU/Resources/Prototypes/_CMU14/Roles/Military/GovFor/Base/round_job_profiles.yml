@@ -42,6 +42,11 @@
 
 - type: roundJobProfile
   id: AU14RoundJobProfileWorkingJoe
+  roundComponents:
+  - type: Language
+    preset: AU14LanguagePresetSynth
+  - type: LanguageLearning
+    preset: AU14LanguageLearningPresetSynth
   sideComponents:
     Govfor:
     - type: UserIFF

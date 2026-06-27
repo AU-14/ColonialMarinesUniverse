@@ -5,14 +5,18 @@
   components:
   - type: LanguagePreset
     spokenLanguages:
+    - Swahili
+    - French
     - English
     - Afrikaans
-    - Arabic
     - Yoruba
+    - Arabic
     understoodLanguages:
+    - Swahili
+    - French
     - English
     - Afrikaans
-    - Arabic
     - Yoruba
-    currentLanguage: English
-    defaultLanguage: English
+    - Arabic
+    currentLanguage: Swahili
+    defaultLanguage: Swahili

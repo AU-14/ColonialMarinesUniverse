@@ -8,30 +8,48 @@
   - type: LanguagePreset
     spokenLanguages:
     - English
-    - French
-    - Japanese
-    - Russian
-    - German
-    - Chinese
-    - Spanish
-    - Esperanto
     - SignLanguage
     - TacticalSignLanguage
+    - Primitive
+    - Binary
+    - Latin
+    - Legalese
     - Portuguese
+    - Spanish
+    - Arabic
+    - French
+    - German
+    - Russian
+    - Japanese
+    - Mandarin
+    - Swahili
+    - Afrikaans
+    - Yoruba
+    - Turkish
+    - Korean
     understoodLanguages:
     - English
-    - French
-    - Japanese
-    - Russian
-    - German
-    - Chinese
-    - Spanish
-    - Esperanto
     - SignLanguage
     - TacticalSignLanguage
+    - Primitive
+    - Binary
+    - Latin
+    - Legalese
     - Portuguese
-    currentLanguage: English
-    defaultLanguage: English
+    - Spanish
+    - Arabic
+    - French
+    - German
+    - Russian
+    - Japanese
+    - Mandarin
+    - Swahili
+    - Afrikaans
+    - Yoruba
+    - Turkish
+    - Korean
+    currentLanguage: Binary
+    defaultLanguage: Binary
 
 - type: entity
   id: AU14LanguageLearningPresetSynth
@@ -41,19 +59,28 @@
   - type: LanguageLearningPreset
     learnableLanguages:
     - English
-    - French
-    - Japanese
-    - Russian
-    - German
-    - Chinese
-    - Spanish
-    - Esperanto
     - SignLanguage
     - TacticalSignLanguage
-    - Portuguese
+    - Primitive
     - Xeno
     - Yautja
     - Arcturian
+    - Binary
+    - Latin
+    - Legalese
+    - Portuguese
+    - Spanish
+    - Arabic
+    - French
+    - German
+    - Russian
+    - Japanese
+    - Mandarin
+    - Swahili
+    - Afrikaans
+    - Yoruba
+    - Turkish
+    - Korean
     - Ukrainian
     - Polish
     - Czech
@@ -64,18 +91,18 @@
     - Albanian
     - Serbian
     - Lithuanian
-    - Arabic
-    - Afrikaans
     - Dutch
-    - Swahili
     - Persian
     - Hindi
     - Vietnamese
     - Indonesian
     - Filipino
     - Urdu
-    - Yoruba
-    - Latin
+    - Esperanto
+    - Swedish
+    - Brazilian
+    - Slovak
+    - Romanian
     firstContactLanguages:
     - Xeno
     - Yautja
