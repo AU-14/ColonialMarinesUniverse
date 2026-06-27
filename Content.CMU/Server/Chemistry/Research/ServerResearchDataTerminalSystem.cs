@@ -23,9 +23,6 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     [ViewVariables(VVAccess.ReadOnly)]
     public List<string> IDS = [];
     public TimeSpan NextReroll = TimeSpan.Zero;
-    public int Clearance = 1; //6 is "X" clearance
-    public int Credits = 0;
-    public bool DDIDiscovered = false;
 
     [ViewVariables(VVAccess.ReadWrite)]
     public TimeSpan RerollTime = TimeSpan.FromSeconds(180); //3 minutes
