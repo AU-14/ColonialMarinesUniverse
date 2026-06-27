@@ -6,39 +6,50 @@
   - type: LanguageLearningPreset
     learnableLanguages:
     - English
-    - French
-    - Japanese
-    - Russian
-    - German
-    - Chinese
-    - Spanish
-    - Esperanto
     - SignLanguage
     - TacticalSignLanguage
-    - Portuguese
-    - Arcturian
-    - Ukrainian
-    - Polish
-    - Czech
-    - Italian
-    - Irish
-    - Finnish
-    - Hungarian
-    - Albanian
-    - Serbian
-    - Lithuanian
-    - Arabic
-    - Afrikaans
-    - Dutch
-    - Swahili
-    - Persian
-    - Hindi
-    - Vietnamese
-    - Indonesian
-    - Filipino
-    - Urdu
-    - Yoruba
+    - Primitive
+#   - Arcturian
+#   - Xeno
+#   - Yautja
+    - Binary
     - Latin
+    - Legalese
+    - Portuguese
+    - Spanish
+    - Arabic
+    - French
+    - German
+    - Russian
+    - Japanese
+    - Mandarin
+    - Afrikaans
+    - Swahili
+    - Korean
+    - Turkish
+    - Albanian
+    - Brazilian
+    - Czech
+    - Dutch
+    - Esperanto
+    - Filipino
+    - Finnish
+    - Hindi
+    - Hungarian
+    - Indonesian
+    - Irish
+    - Italian
+    - Lithuanian
+    - Persian
+    - Polish
+    - Romanian
+    - Serbian
+    - Slovak
+    - Swedish
+    - Ukrainian
+    - Urdu
+    - Vietnamese
+    - Yoruba
     firstContactLanguages:
     - Arcturian
     comprehensionThreshold: 0.2

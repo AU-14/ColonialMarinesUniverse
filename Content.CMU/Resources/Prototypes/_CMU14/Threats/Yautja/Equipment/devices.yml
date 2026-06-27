@@ -34,19 +34,29 @@
   - type: TranslatorDevice
     spokenLanguages:
       - English
-      - Russian
-      - Spanish
-      - French
-      - Chinese
       - SignLanguage
+      - TacticalSignLanguage
+      - Primitive
+      - Binary
+      - Legalese
+      - Spanish
+      - Portuguese
+      - French
+      - German
+      - Russian
+      - Japanese
+      - Mandarin
       - Yautja
       - Arcturian
-      - TacticalSignLanguage
+      - Korean
+      - Turkish
+      - Swahili
+      - Arabic
+      - Afrikaans
+      - Latin
       - Ukrainian
       - Polish
       - Czech
-      - Turkish
-      - Korean
       - Italian
       - Irish
       - Finnish
@@ -54,39 +64,44 @@
       - Albanian
       - Serbian
       - Lithuanian
-      - Arabic
-      - Afrikaans
       - Dutch
-      - Swahili
       - Persian
       - Hindi
       - Vietnamese
-      - Portuguese
       - Indonesian
       - Filipino
       - Urdu
       - Yoruba
       - Esperanto
-      - Latin
       - Swedish
       - Brazilian
       - Slovak
       - Romanian
     understoodLanguages:
       - English
-      - Russian
-      - Spanish
-      - French
-      - Chinese
       - SignLanguage
+      - TacticalSignLanguage
+      - Primitive
+      - Binary
+      - Legalese
+      - Spanish
+      - Portuguese
+      - French
+      - German
+      - Russian
+      - Japanese
+      - Mandarin
       - Yautja
       - Arcturian
-      - TacticalSignLanguage
+      - Korean
+      - Turkish
+      - Swahili
+      - Arabic
+      - Afrikaans
+      - Latin
       - Ukrainian
       - Polish
       - Czech
-      - Turkish
-      - Korean
       - Italian
       - Irish
       - Finnish
@@ -94,20 +109,15 @@
       - Albanian
       - Serbian
       - Lithuanian
-      - Arabic
-      - Afrikaans
       - Dutch
-      - Swahili
       - Persian
       - Hindi
       - Vietnamese
-      - Portuguese
       - Indonesian
       - Filipino
       - Urdu
       - Yoruba
       - Esperanto
-      - Latin
       - Swedish
       - Brazilian
       - Slovak

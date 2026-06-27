@@ -27,3 +27,5 @@
       state: working_joe
   - type: Language
     preset: AU14LanguagePresetSynth
+  - type: LanguageLearning
+    preset: AU14LanguageLearningPresetSynth

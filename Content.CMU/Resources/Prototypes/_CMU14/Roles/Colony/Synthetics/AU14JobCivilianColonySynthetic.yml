@@ -5,6 +5,10 @@
   roundForce: COLONY
   roundRole: CivilianColonySynthetic
   roundComponents:
+  - type: Language
+    preset: AU14LanguagePresetSynth
+  - type: LanguageLearning
+    preset: AU14LanguageLearningPresetSynth
   - type: NpcFactionMember
     factions:
     - ColonySynth

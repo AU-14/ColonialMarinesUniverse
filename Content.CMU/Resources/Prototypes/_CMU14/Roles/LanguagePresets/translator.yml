@@ -6,17 +6,29 @@
   - type: LanguageLearningPreset
     learnableLanguages:
     - English
-    - French
-    - Japanese
-    - Russian
-    - German
-    - Chinese
-    - Spanish
-    - Esperanto
     - SignLanguage
     - TacticalSignLanguage
+    - Primitive
+#   - Xeno
+#   - Yautja
+#   - Arcturian
+    - Binary
+    - Latin
+    - Legalese
     - Portuguese
-    - Arcturian
+    - Spanish
+    - Arabic
+    - French
+    - German
+    - Russian
+    - Japanese
+    - Mandarin
+    - Korean
+    - Turkish
+    - Swahili
+    - Afrikaans
+    - Swedish
+    - Esperanto
     - Ukrainian
     - Polish
     - Czech
@@ -27,10 +39,7 @@
     - Albanian
     - Serbian
     - Lithuanian
-    - Arabic
-    - Afrikaans
     - Dutch
-    - Swahili
     - Persian
     - Hindi
     - Vietnamese
@@ -38,8 +47,6 @@
     - Filipino
     - Urdu
     - Yoruba
-    - Latin
     - Brazilian
     - Slovak
     - Romanian
-    - Primitive

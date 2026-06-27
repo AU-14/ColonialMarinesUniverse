@@ -77,6 +77,10 @@
       icon:
         sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
         state: working_joe
+    - type: Language
+      preset: AU14LanguagePresetSynth
+    - type: LanguageLearning
+      preset: AU14LanguageLearningPresetSynth
     Opfor:
     - type: UserIFF
       factions:
@@ -109,3 +113,7 @@
       icon:
         sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
         state: working_joe
+    - type: Language
+      preset: AU14LanguagePresetSynth
+    - type: LanguageLearning
+      preset: AU14LanguageLearningPresetSynth
