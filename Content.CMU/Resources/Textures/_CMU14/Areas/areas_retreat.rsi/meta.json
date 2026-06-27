@@ -306,6 +306,9 @@
 	},
 	{
 	  "name": "oc_starport_warehouses"
+	},
+	{
+      "name": "smuggler_tunnel"
 	}
   ]
 }
