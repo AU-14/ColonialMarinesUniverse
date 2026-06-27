@@ -452,7 +452,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     public const float PsychicShieldHalfThickness = 0.5f;
     public const float PsychicShieldHalfWidth = 1.5f;
     public const float PsychicShieldProjectileStopOffset = 0.1f;
-    public const float PsychicShieldReflectionSpreadDegrees = 50f;
+    public const float PsychicShieldReflectionSpreadDegrees = 80f;
 
     private const float WarlockDirectedParticleVelocity = 7f;
     private readonly HashSet<EntityUid> _affected = new();
