@@ -79,7 +79,7 @@ public sealed partial class AbominationMimicSystem : EntitySystem
     public static readonly EntProtoId RevertAction = "ActionAbominationMimicRevert";
     public static readonly ProtoId<EmotePrototype> ScreamEmote = "Scream";
     public static readonly ProtoId<LanguagePrototype> AbominationLanguage = "Primitive";
-    public const string AbominationRadioChannel = "FactionAbomination";
+    public const string AbominationRadioChannel = "Abomination";
 
     public override void Initialize()
     {
