@@ -113,6 +113,9 @@
   - type: UserIFF
     factions:
     - FactionAbomination
+  - type: MeleeIFF
+    factions:
+    - FactionAbomination
   - type: GhostTakeoverAvailable
   - type: GhostRole
     name: Abomination

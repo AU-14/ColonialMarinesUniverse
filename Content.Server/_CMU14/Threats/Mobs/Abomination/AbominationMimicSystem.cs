@@ -1,9 +1,11 @@
 using System.Linq;
+using Content.Server._RMC14.Language.Systems;
 using Content.Server.Chat.Systems;
 using Content.Server.Polymorph.Components;
 using Content.Server.Polymorph.Systems;
 using Content.Server.Radio.Components;
 using Content.Shared._CMU14.Threats.Mobs.Abomination;
+using Content.Shared._RMC14.Language.Prototypes;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Xenonids.Parasite;
@@ -21,6 +23,7 @@ using Content.Shared.NPC.Systems;
 using Content.Shared.Polymorph;
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
+using Robust.Shared.GameObjects.Components.Localization;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using AbominationAppearanceSnapshot = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationAppearanceSnapshot;
@@ -70,10 +73,13 @@ public sealed partial class AbominationMimicSystem : EntitySystem
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private GrammarSystem _grammarSystem = default!;
+    [Dependency] private LanguageSystem _language = default!;
     public static readonly ProtoId<PolymorphPrototype> DisguisePolymorph = "AbominationMimicDisguise";
     public static readonly EntProtoId RevertAction = "ActionAbominationMimicRevert";
     public static readonly ProtoId<EmotePrototype> ScreamEmote = "Scream";
-    public const string AbominationRadioChannel = "Abomination";
+    public static readonly ProtoId<LanguagePrototype> AbominationLanguage = "Primitive";
+    public const string AbominationRadioChannel = "FactionAbomination";
 
     public override void Initialize()
     {
@@ -265,6 +271,9 @@ public sealed partial class AbominationMimicSystem : EntitySystem
         var activeRadio = EnsureComp<ActiveRadioComponent>(disguisedUid);
         transmitter.Channels.Add(AbominationRadioChannel);
         activeRadio.Channels.Add(AbominationRadioChannel);
+
+        // Abominations all speak primitive
+        _language.AddLanguage(disguisedUid, AbominationLanguage, true, true);
 
         // Every transform resets damage on the new body — mimics spawn
         // fresh into the disguise no matter how chewed-up they were.
@@ -461,6 +470,10 @@ public sealed partial class AbominationMimicSystem : EntitySystem
         humanoid.Gender = snapshot.Gender;
         humanoid.MarkingSet = new(snapshot.MarkingSet);
         humanoid.CustomBaseLayers = new(snapshot.CustomBaseLayers);
+
+        if (TryComp(disguised, out GrammarComponent? grammar))
+            _grammarSystem.SetGender((disguised, grammar), snapshot.Gender);
+
         Dirty(disguised, humanoid);
     }
 }

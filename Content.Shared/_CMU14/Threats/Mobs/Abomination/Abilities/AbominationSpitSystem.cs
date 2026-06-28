@@ -1,8 +1,10 @@
 using System.Numerics;
+using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Spawners;
 
 namespace Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities;
@@ -13,6 +15,8 @@ public sealed partial class AbominationSpitSystem : EntitySystem
     [Dependency] private SharedGunSystem _gun = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private GunIFFSystem _gunIFF = default!;
+    private static readonly EntProtoId<IFFFactionComponent> AbominationFaction = "FactionAbomination";
 
     public override void Initialize()
     {
@@ -45,6 +49,7 @@ public sealed partial class AbominationSpitSystem : EntitySystem
         // ShootProjectile sets up the ProjectileComponent.Shooter, body type and
         // initial velocity correctly. Doing this manually is what made the
         // previous version's networking go sideways.
+        _gunIFF.GiveAmmoIFF(projectile, AbominationFaction, true);
         _gun.ShootProjectile(projectile, velocity, Vector2.Zero, ent.Owner, ent.Owner, ent.Comp.Speed);
 
         // Hard despawn so missed projectiles don't litter the map.
