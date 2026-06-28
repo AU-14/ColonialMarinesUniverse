@@ -4,8 +4,8 @@ meta:
   engineVersion: v277.0.0
   forkId: ""
   forkVersion: ""
-  time: 06/28/2026 20:28:53
-  entityCount: 1701
+  time: 06/28/2026 21:57:17
+  entityCount: 1705
 maps:
 - 1
 grids:
@@ -2162,6 +2162,18 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 0.5,-51.5
       parent: 1
+- proto: CMBeakerLarge
+  entities:
+  - uid: 320266
+    components:
+    - type: Transform
+      pos: 28.625,-17
+      parent: 1
+  - uid: 320267
+    components:
+    - type: Transform
+      pos: 28.375,-17
+      parent: 1
 - proto: CMBed
   entities:
   - uid: 319694
@@ -2485,6 +2497,11 @@ entities:
     components:
     - type: Transform
       pos: -5.5,78.5
+      parent: 1
+  - uid: 320264
+    components:
+    - type: Transform
+      pos: 28.5,-17.5
       parent: 1
 - proto: CMTableWoodenFancy
   entities:
@@ -10241,6 +10258,13 @@ entities:
     components:
     - type: Transform
       pos: -82.5,0.5
+      parent: 1
+- proto: RMCKitchenReagentGrinder
+  entities:
+  - uid: 320265
+    components:
+    - type: Transform
+      pos: 28.5,-17.5
       parent: 1
 - proto: RMCLamp
   entities:

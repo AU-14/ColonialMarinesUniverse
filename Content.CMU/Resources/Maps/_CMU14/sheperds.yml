@@ -4,8 +4,8 @@ meta:
   engineVersion: v277.0.0
   forkId: ""
   forkVersion: ""
-  time: 06/28/2026 21:18:35
-  entityCount: 42765
+  time: 06/28/2026 21:59:01
+  entityCount: 42767
 maps:
 - 1
 grids:
@@ -60237,413 +60237,6 @@ entities:
     - type: Transform
       pos: -31.5,-46.5
       parent: 1
-- proto: ScenarioClfCivilianColonistSpawnMarker
-  entities:
-  - uid: 113
-    components:
-    - type: Transform
-      pos: -42.5,-25.5
-      parent: 1
-  - uid: 114
-    components:
-    - type: Transform
-      pos: -42.5,-26.5
-      parent: 1
-  - uid: 116
-    components:
-    - type: Transform
-      pos: -42.5,-27.5
-      parent: 1
-  - uid: 117
-    components:
-    - type: Transform
-      pos: -44.5,-20.5
-      parent: 1
-  - uid: 266
-    components:
-    - type: Transform
-      pos: -44.5,-21.5
-      parent: 1
-  - uid: 302
-    components:
-    - type: Transform
-      pos: -44.5,-19.5
-      parent: 1
-  - uid: 322
-    components:
-    - type: Transform
-      pos: -40.5,-20.5
-      parent: 1
-  - uid: 323
-    components:
-    - type: Transform
-      pos: -40.5,-21.5
-      parent: 1
-  - uid: 324
-    components:
-    - type: Transform
-      pos: -40.5,-22.5
-      parent: 1
-  - uid: 325
-    components:
-    - type: Transform
-      pos: -38.5,-26.5
-      parent: 1
-  - uid: 326
-    components:
-    - type: Transform
-      pos: -38.5,-27.5
-      parent: 1
-  - uid: 327
-    components:
-    - type: Transform
-      pos: -38.5,-28.5
-      parent: 1
-  - uid: 328
-    components:
-    - type: Transform
-      pos: -34.5,-25.5
-      parent: 1
-  - uid: 384
-    components:
-    - type: Transform
-      pos: -34.5,-26.5
-      parent: 1
-  - uid: 385
-    components:
-    - type: Transform
-      pos: -34.5,-27.5
-      parent: 1
-  - uid: 409
-    components:
-    - type: Transform
-      pos: -30.5,-24.5
-      parent: 1
-  - uid: 410
-    components:
-    - type: Transform
-      pos: -30.5,-25.5
-      parent: 1
-  - uid: 411
-    components:
-    - type: Transform
-      pos: -30.5,-26.5
-      parent: 1
-  - uid: 412
-    components:
-    - type: Transform
-      pos: -28.5,-19.5
-      parent: 1
-  - uid: 413
-    components:
-    - type: Transform
-      pos: -28.5,-20.5
-      parent: 1
-  - uid: 414
-    components:
-    - type: Transform
-      pos: -28.5,-21.5
-      parent: 1
-  - uid: 415
-    components:
-    - type: Transform
-      pos: -32.5,-18.5
-      parent: 1
-  - uid: 416
-    components:
-    - type: Transform
-      pos: -32.5,-20.5
-      parent: 1
-  - uid: 417
-    components:
-    - type: Transform
-      pos: -32.5,-19.5
-      parent: 1
-  - uid: 418
-    components:
-    - type: Transform
-      pos: -36.5,-19.5
-      parent: 1
-  - uid: 419
-    components:
-    - type: Transform
-      pos: -36.5,-20.5
-      parent: 1
-  - uid: 420
-    components:
-    - type: Transform
-      pos: -36.5,-21.5
-      parent: 1
-  - uid: 421
-    components:
-    - type: Transform
-      pos: -42.5,-13.5
-      parent: 1
-  - uid: 422
-    components:
-    - type: Transform
-      pos: -42.5,-14.5
-      parent: 1
-  - uid: 423
-    components:
-    - type: Transform
-      pos: -42.5,-15.5
-      parent: 1
-  - uid: 424
-    components:
-    - type: Transform
-      pos: -38.5,-12.5
-      parent: 1
-  - uid: 425
-    components:
-    - type: Transform
-      pos: -38.5,-13.5
-      parent: 1
-  - uid: 426
-    components:
-    - type: Transform
-      pos: -38.5,-14.5
-      parent: 1
-  - uid: 427
-    components:
-    - type: Transform
-      pos: -34.5,-11.5
-      parent: 1
-  - uid: 428
-    components:
-    - type: Transform
-      pos: -34.5,-12.5
-      parent: 1
-  - uid: 429
-    components:
-    - type: Transform
-      pos: -34.5,-13.5
-      parent: 1
-  - uid: 430
-    components:
-    - type: Transform
-      pos: -30.5,-12.5
-      parent: 1
-  - uid: 431
-    components:
-    - type: Transform
-      pos: -30.5,-13.5
-      parent: 1
-  - uid: 432
-    components:
-    - type: Transform
-      pos: -30.5,-14.5
-      parent: 1
-  - uid: 433
-    components:
-    - type: Transform
-      pos: 34.5,71.5
-      parent: 1
-  - uid: 434
-    components:
-    - type: Transform
-      pos: 34.5,72.5
-      parent: 1
-  - uid: 435
-    components:
-    - type: Transform
-      pos: 34.5,73.5
-      parent: 1
-  - uid: 436
-    components:
-    - type: Transform
-      pos: 38.5,72.5
-      parent: 1
-  - uid: 437
-    components:
-    - type: Transform
-      pos: 38.5,73.5
-      parent: 1
-  - uid: 438
-    components:
-    - type: Transform
-      pos: 38.5,74.5
-      parent: 1
-  - uid: 439
-    components:
-    - type: Transform
-      pos: 42.5,71.5
-      parent: 1
-  - uid: 440
-    components:
-    - type: Transform
-      pos: 42.5,72.5
-      parent: 1
-  - uid: 441
-    components:
-    - type: Transform
-      pos: 42.5,73.5
-      parent: 1
-  - uid: 442
-    components:
-    - type: Transform
-      pos: 46.5,72.5
-      parent: 1
-  - uid: 443
-    components:
-    - type: Transform
-      pos: 46.5,73.5
-      parent: 1
-  - uid: 444
-    components:
-    - type: Transform
-      pos: 46.5,74.5
-      parent: 1
-  - uid: 445
-    components:
-    - type: Transform
-      pos: 50.5,71.5
-      parent: 1
-  - uid: 446
-    components:
-    - type: Transform
-      pos: 50.5,72.5
-      parent: 1
-  - uid: 447
-    components:
-    - type: Transform
-      pos: 50.5,73.5
-      parent: 1
-  - uid: 448
-    components:
-    - type: Transform
-      pos: 54.5,72.5
-      parent: 1
-  - uid: 449
-    components:
-    - type: Transform
-      pos: 54.5,73.5
-      parent: 1
-  - uid: 450
-    components:
-    - type: Transform
-      pos: 54.5,74.5
-      parent: 1
-  - uid: 451
-    components:
-    - type: Transform
-      pos: 52.5,78.5
-      parent: 1
-  - uid: 452
-    components:
-    - type: Transform
-      pos: 52.5,79.5
-      parent: 1
-  - uid: 453
-    components:
-    - type: Transform
-      pos: 52.5,80.5
-      parent: 1
-  - uid: 454
-    components:
-    - type: Transform
-      pos: 48.5,77.5
-      parent: 1
-  - uid: 455
-    components:
-    - type: Transform
-      pos: 48.5,78.5
-      parent: 1
-  - uid: 456
-    components:
-    - type: Transform
-      pos: 48.5,79.5
-      parent: 1
-  - uid: 457
-    components:
-    - type: Transform
-      pos: 44.5,78.5
-      parent: 1
-  - uid: 458
-    components:
-    - type: Transform
-      pos: 44.5,79.5
-      parent: 1
-  - uid: 459
-    components:
-    - type: Transform
-      pos: 44.5,80.5
-      parent: 1
-  - uid: 460
-    components:
-    - type: Transform
-      pos: 40.5,79.5
-      parent: 1
-  - uid: 461
-    components:
-    - type: Transform
-      pos: 40.5,81.5
-      parent: 1
-  - uid: 462
-    components:
-    - type: Transform
-      pos: 40.5,80.5
-      parent: 1
-  - uid: 463
-    components:
-    - type: Transform
-      pos: 36.5,78.5
-      parent: 1
-  - uid: 464
-    components:
-    - type: Transform
-      pos: 36.5,79.5
-      parent: 1
-  - uid: 465
-    components:
-    - type: Transform
-      pos: 36.5,80.5
-      parent: 1
-  - uid: 492
-    components:
-    - type: Transform
-      pos: 34.5,87.5
-      parent: 1
-  - uid: 493
-    components:
-    - type: Transform
-      pos: 34.5,86.5
-      parent: 1
-  - uid: 494
-    components:
-    - type: Transform
-      pos: 34.5,85.5
-      parent: 1
-  - uid: 495
-    components:
-    - type: Transform
-      pos: 38.5,88.5
-      parent: 1
-  - uid: 496
-    components:
-    - type: Transform
-      pos: 38.5,87.5
-      parent: 1
-  - uid: 497
-    components:
-    - type: Transform
-      pos: 38.5,86.5
-      parent: 1
-  - uid: 498
-    components:
-    - type: Transform
-      pos: 42.5,87.5
-      parent: 1
-  - uid: 499
-    components:
-    - type: Transform
-      pos: 42.5,86.5
-      parent: 1
-  - uid: 500
-    components:
-    - type: Transform
-      pos: 42.5,85.5
-      parent: 1
 - proto: AU14SpawnPointCivilianColonyAdministrator
   entities:
   - uid: 344558
@@ -60848,23 +60441,6 @@ entities:
     components:
     - type: Transform
       pos: 41.5,95.5
-      parent: 1
-- proto: scenarioclfsafehousespawnmarker
-  entities:
-  - uid: 957
-    components:
-    - type: Transform
-      pos: -77.5,-144.5
-      parent: 1
-  - uid: 351995
-    components:
-    - type: Transform
-      pos: 79.5,133.5
-      parent: 1
-  - uid: 352245
-    components:
-    - type: Transform
-      pos: -54.5,168.5
       parent: 1
 - proto: AU14SpawnPointColonyWorkingJoe
   entities:
@@ -77112,6 +76688,16 @@ entities:
     components:
     - type: Transform
       pos: 70.375,-155
+      parent: 1
+  - uid: 352591
+    components:
+    - type: Transform
+      pos: 11.625,102
+      parent: 1
+  - uid: 352592
+    components:
+    - type: Transform
+      pos: 11.375,102
       parent: 1
 - proto: CMBed
   entities:
@@ -279065,6 +278651,430 @@ entities:
     components:
     - type: Transform
       pos: 80.375,-150.5
+      parent: 1
+- proto: ScenarioClfCivilianColonistSpawnMarker
+  entities:
+  - uid: 113
+    components:
+    - type: Transform
+      pos: -42.5,-25.5
+      parent: 1
+  - uid: 114
+    components:
+    - type: Transform
+      pos: -42.5,-26.5
+      parent: 1
+  - uid: 116
+    components:
+    - type: Transform
+      pos: -42.5,-27.5
+      parent: 1
+  - uid: 117
+    components:
+    - type: Transform
+      pos: -44.5,-20.5
+      parent: 1
+  - uid: 266
+    components:
+    - type: Transform
+      pos: -44.5,-21.5
+      parent: 1
+  - uid: 302
+    components:
+    - type: Transform
+      pos: -44.5,-19.5
+      parent: 1
+  - uid: 322
+    components:
+    - type: Transform
+      pos: -40.5,-20.5
+      parent: 1
+  - uid: 323
+    components:
+    - type: Transform
+      pos: -40.5,-21.5
+      parent: 1
+  - uid: 324
+    components:
+    - type: Transform
+      pos: -40.5,-22.5
+      parent: 1
+  - uid: 325
+    components:
+    - type: Transform
+      pos: -38.5,-26.5
+      parent: 1
+  - uid: 326
+    components:
+    - type: Transform
+      pos: -38.5,-27.5
+      parent: 1
+  - uid: 327
+    components:
+    - type: Transform
+      pos: -38.5,-28.5
+      parent: 1
+  - uid: 328
+    components:
+    - type: Transform
+      pos: -34.5,-25.5
+      parent: 1
+  - uid: 384
+    components:
+    - type: Transform
+      pos: -34.5,-26.5
+      parent: 1
+  - uid: 385
+    components:
+    - type: Transform
+      pos: -34.5,-27.5
+      parent: 1
+  - uid: 409
+    components:
+    - type: Transform
+      pos: -30.5,-24.5
+      parent: 1
+  - uid: 410
+    components:
+    - type: Transform
+      pos: -30.5,-25.5
+      parent: 1
+  - uid: 411
+    components:
+    - type: Transform
+      pos: -30.5,-26.5
+      parent: 1
+  - uid: 412
+    components:
+    - type: Transform
+      pos: -28.5,-19.5
+      parent: 1
+  - uid: 413
+    components:
+    - type: Transform
+      pos: -28.5,-20.5
+      parent: 1
+  - uid: 414
+    components:
+    - type: Transform
+      pos: -28.5,-21.5
+      parent: 1
+  - uid: 415
+    components:
+    - type: Transform
+      pos: -32.5,-18.5
+      parent: 1
+  - uid: 416
+    components:
+    - type: Transform
+      pos: -32.5,-20.5
+      parent: 1
+  - uid: 417
+    components:
+    - type: Transform
+      pos: -32.5,-19.5
+      parent: 1
+  - uid: 418
+    components:
+    - type: Transform
+      pos: -36.5,-19.5
+      parent: 1
+  - uid: 419
+    components:
+    - type: Transform
+      pos: -36.5,-20.5
+      parent: 1
+  - uid: 420
+    components:
+    - type: Transform
+      pos: -36.5,-21.5
+      parent: 1
+  - uid: 421
+    components:
+    - type: Transform
+      pos: -42.5,-13.5
+      parent: 1
+  - uid: 422
+    components:
+    - type: Transform
+      pos: -42.5,-14.5
+      parent: 1
+  - uid: 423
+    components:
+    - type: Transform
+      pos: -42.5,-15.5
+      parent: 1
+  - uid: 424
+    components:
+    - type: Transform
+      pos: -38.5,-12.5
+      parent: 1
+  - uid: 425
+    components:
+    - type: Transform
+      pos: -38.5,-13.5
+      parent: 1
+  - uid: 426
+    components:
+    - type: Transform
+      pos: -38.5,-14.5
+      parent: 1
+  - uid: 427
+    components:
+    - type: Transform
+      pos: -34.5,-11.5
+      parent: 1
+  - uid: 428
+    components:
+    - type: Transform
+      pos: -34.5,-12.5
+      parent: 1
+  - uid: 429
+    components:
+    - type: Transform
+      pos: -34.5,-13.5
+      parent: 1
+  - uid: 430
+    components:
+    - type: Transform
+      pos: -30.5,-12.5
+      parent: 1
+  - uid: 431
+    components:
+    - type: Transform
+      pos: -30.5,-13.5
+      parent: 1
+  - uid: 432
+    components:
+    - type: Transform
+      pos: -30.5,-14.5
+      parent: 1
+  - uid: 433
+    components:
+    - type: Transform
+      pos: 34.5,71.5
+      parent: 1
+  - uid: 434
+    components:
+    - type: Transform
+      pos: 34.5,72.5
+      parent: 1
+  - uid: 435
+    components:
+    - type: Transform
+      pos: 34.5,73.5
+      parent: 1
+  - uid: 436
+    components:
+    - type: Transform
+      pos: 38.5,72.5
+      parent: 1
+  - uid: 437
+    components:
+    - type: Transform
+      pos: 38.5,73.5
+      parent: 1
+  - uid: 438
+    components:
+    - type: Transform
+      pos: 38.5,74.5
+      parent: 1
+  - uid: 439
+    components:
+    - type: Transform
+      pos: 42.5,71.5
+      parent: 1
+  - uid: 440
+    components:
+    - type: Transform
+      pos: 42.5,72.5
+      parent: 1
+  - uid: 441
+    components:
+    - type: Transform
+      pos: 42.5,73.5
+      parent: 1
+  - uid: 442
+    components:
+    - type: Transform
+      pos: 46.5,72.5
+      parent: 1
+  - uid: 443
+    components:
+    - type: Transform
+      pos: 46.5,73.5
+      parent: 1
+  - uid: 444
+    components:
+    - type: Transform
+      pos: 46.5,74.5
+      parent: 1
+  - uid: 445
+    components:
+    - type: Transform
+      pos: 50.5,71.5
+      parent: 1
+  - uid: 446
+    components:
+    - type: Transform
+      pos: 50.5,72.5
+      parent: 1
+  - uid: 447
+    components:
+    - type: Transform
+      pos: 50.5,73.5
+      parent: 1
+  - uid: 448
+    components:
+    - type: Transform
+      pos: 54.5,72.5
+      parent: 1
+  - uid: 449
+    components:
+    - type: Transform
+      pos: 54.5,73.5
+      parent: 1
+  - uid: 450
+    components:
+    - type: Transform
+      pos: 54.5,74.5
+      parent: 1
+  - uid: 451
+    components:
+    - type: Transform
+      pos: 52.5,78.5
+      parent: 1
+  - uid: 452
+    components:
+    - type: Transform
+      pos: 52.5,79.5
+      parent: 1
+  - uid: 453
+    components:
+    - type: Transform
+      pos: 52.5,80.5
+      parent: 1
+  - uid: 454
+    components:
+    - type: Transform
+      pos: 48.5,77.5
+      parent: 1
+  - uid: 455
+    components:
+    - type: Transform
+      pos: 48.5,78.5
+      parent: 1
+  - uid: 456
+    components:
+    - type: Transform
+      pos: 48.5,79.5
+      parent: 1
+  - uid: 457
+    components:
+    - type: Transform
+      pos: 44.5,78.5
+      parent: 1
+  - uid: 458
+    components:
+    - type: Transform
+      pos: 44.5,79.5
+      parent: 1
+  - uid: 459
+    components:
+    - type: Transform
+      pos: 44.5,80.5
+      parent: 1
+  - uid: 460
+    components:
+    - type: Transform
+      pos: 40.5,79.5
+      parent: 1
+  - uid: 461
+    components:
+    - type: Transform
+      pos: 40.5,81.5
+      parent: 1
+  - uid: 462
+    components:
+    - type: Transform
+      pos: 40.5,80.5
+      parent: 1
+  - uid: 463
+    components:
+    - type: Transform
+      pos: 36.5,78.5
+      parent: 1
+  - uid: 464
+    components:
+    - type: Transform
+      pos: 36.5,79.5
+      parent: 1
+  - uid: 465
+    components:
+    - type: Transform
+      pos: 36.5,80.5
+      parent: 1
+  - uid: 492
+    components:
+    - type: Transform
+      pos: 34.5,87.5
+      parent: 1
+  - uid: 493
+    components:
+    - type: Transform
+      pos: 34.5,86.5
+      parent: 1
+  - uid: 494
+    components:
+    - type: Transform
+      pos: 34.5,85.5
+      parent: 1
+  - uid: 495
+    components:
+    - type: Transform
+      pos: 38.5,88.5
+      parent: 1
+  - uid: 496
+    components:
+    - type: Transform
+      pos: 38.5,87.5
+      parent: 1
+  - uid: 497
+    components:
+    - type: Transform
+      pos: 38.5,86.5
+      parent: 1
+  - uid: 498
+    components:
+    - type: Transform
+      pos: 42.5,87.5
+      parent: 1
+  - uid: 499
+    components:
+    - type: Transform
+      pos: 42.5,86.5
+      parent: 1
+  - uid: 500
+    components:
+    - type: Transform
+      pos: 42.5,85.5
+      parent: 1
+- proto: scenarioclfsafehousespawnmarker
+  entities:
+  - uid: 957
+    components:
+    - type: Transform
+      pos: -77.5,-144.5
+      parent: 1
+  - uid: 351995
+    components:
+    - type: Transform
+      pos: 79.5,133.5
+      parent: 1
+  - uid: 352245
+    components:
+    - type: Transform
+      pos: -54.5,168.5
       parent: 1
 - proto: scenariothirdpartyleaderspawnmarker
   entities:
