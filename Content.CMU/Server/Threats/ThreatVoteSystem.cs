@@ -410,6 +410,31 @@ public sealed partial class ThreatVoteSystem : EntitySystem
 
         try
         {
+            // Return held players who failed the threat roll back to the lobby
+            var unusedPlayers = new List<NetUserId>();
+            foreach (NetUserId playerId in prepared.HeldPlayers)
+            {
+                if (assignedJobs.TryGetValue(playerId, out (ProtoId<JobPrototype>?, EntityUid) job)
+                    && ThreatSystem.IsThreatJob(job.Item1))
+                    unusedPlayers.Add(playerId);
+            }
+
+            _sawmill?.Debug($"[RoundStart] Returning {unusedPlayers.Count} unselected threat player(s) to lobby.");
+            if (unusedPlayers.Count > 0)
+            {
+                foreach (NetUserId uid in unusedPlayers)
+                    assignedJobs.Remove(uid);
+
+                ReleaseHeldPlayersToLobby(unusedPlayers, selected.ID, "not selected as threat");
+            }
+        }
+        catch (Exception ex)
+        {
+            Sawmill.Error($"[ThreatVoteSystem] Could not return unselected threat-roll players back to lobby. {ex}");
+        }
+
+        try
+        {
             Sawmill.Debug($"[ThreatVoteSystem] Starting third-party spawning after threat vote; selectedThirdParties={
                 _auRound.SelectedThirdParties.Count}.");
             _thirdParty.StartThirdPartySpawning(selected, assignedJobs);
