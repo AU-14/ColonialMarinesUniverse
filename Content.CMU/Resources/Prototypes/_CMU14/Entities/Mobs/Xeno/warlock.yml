@@ -23,7 +23,7 @@
     thresholds:
       0: Alive
       550: Critical
-      625: Dead
+      650: Dead
   - type: Xeno
     role: CMXenoWarlock
     actionIds:
