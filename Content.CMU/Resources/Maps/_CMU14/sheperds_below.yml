@@ -4,8 +4,8 @@ meta:
   engineVersion: v277.0.0
   forkId: ""
   forkVersion: ""
-  time: 06/16/2026 03:14:18
-  entityCount: 1686
+  time: 06/28/2026 20:28:53
+  entityCount: 1701
 maps:
 - 1
 grids:
@@ -187,35 +187,6 @@ entities:
     - type: Broadphase
     - type: OccluderTree
     - type: MapLight
-    - type: TacticalMap
-      nextUpdatePerFaction:
-        MARINES: 1
-        XENONIDS: 1
-        OPFOR: 1
-        GOVFOR: 1
-        CLF: 1
-      marineBlips: {}
-      lastUpdateMarineBlips: {}
-      xenoBlips: {}
-      xenoStructureBlips: {}
-      lastUpdateXenoBlips: {}
-      lastUpdateXenoStructureBlips: {}
-      opforBlips: {}
-      lastUpdateOpforBlips: {}
-      govforBlips: {}
-      lastUpdateGovforBlips: {}
-      clfBlips: {}
-      lastUpdateClfBlips: {}
-      marineLines: []
-      xenoLines: []
-      opforLines: []
-      govforLines: []
-      clfLines: []
-      marineLabels: {}
-      xenoLabels: {}
-      opforLabels: {}
-      govforLabels: {}
-      clfLabels: {}
     - type: RMCAmbientLightEffects
     - type: SpreaderGrid
     - type: GridPathfinding
@@ -2070,6 +2041,13 @@ entities:
     - type: Transform
       pos: 32.5,-30.625
       parent: 1
+- proto: BoxMouthSwab
+  entities:
+  - uid: 320261
+    components:
+    - type: Transform
+      pos: 27.5,-17.5
+      parent: 1
 - proto: BoxTrashbag
   entities:
   - uid: 320185
@@ -2108,6 +2086,44 @@ entities:
     components:
     - type: Transform
       pos: 2.75,-39.25
+      parent: 1
+- proto: CannabisSeeds
+  entities:
+  - uid: 320252
+    components:
+    - type: Transform
+      pos: 27.5,-17.5
+      parent: 1
+  - uid: 320253
+    components:
+    - type: Transform
+      pos: 27.5,-17.5
+      parent: 1
+  - uid: 320254
+    components:
+    - type: Transform
+      pos: 27.5,-17.5
+      parent: 1
+- proto: ChemistryBottleEZNutrient
+  entities:
+  - uid: 320255
+    components:
+    - type: Transform
+      pos: 27.5,-17.5
+      parent: 1
+- proto: ChemistryBottleLeft4Zed
+  entities:
+  - uid: 320257
+    components:
+    - type: Transform
+      pos: 27.5,-17.5
+      parent: 1
+- proto: ChemistryBottleRobustHarvest
+  entities:
+  - uid: 320256
+    components:
+    - type: Transform
+      pos: 27.5,-17.5
       parent: 1
 - proto: CMAirlockCommandLockedColony
   entities:
@@ -10205,6 +10221,20 @@ entities:
     - type: Transform
       pos: 32.5,-9.5
       parent: 1
+- proto: RMCBucket
+  entities:
+  - uid: 320263
+    components:
+    - type: Transform
+      pos: 27.5,-17.5
+      parent: 1
+- proto: RMCCrateBase
+  entities:
+  - uid: 320262
+    components:
+    - type: Transform
+      pos: 27.5,-17.5
+      parent: 1
 - proto: RMCGeneratorFusion
   entities:
   - uid: 320104
@@ -10491,7 +10521,7 @@ entities:
     - type: Transform
       pos: 4.5,-21.5
       parent: 1
-- proto: RMCTelevisionWallMount
+- proto: RMCTelevision
   entities:
   - uid: 319905
     components:
@@ -10507,5 +10537,43 @@ entities:
     components:
     - type: Transform
       pos: -7.5,78.5
+      parent: 1
+- proto: RMCToolHatchet
+  entities:
+  - uid: 320259
+    components:
+    - type: Transform
+      pos: 27.5,-17.5
+      parent: 1
+- proto: RMCToolMiniHoe
+  entities:
+  - uid: 320260
+    components:
+    - type: Transform
+      pos: 27.5,-17.5
+      parent: 1
+- proto: RMCToolSpade
+  entities:
+  - uid: 320258
+    components:
+    - type: Transform
+      pos: 27.5,-17.5
+      parent: 1
+- proto: TobaccoSeeds
+  entities:
+  - uid: 320249
+    components:
+    - type: Transform
+      pos: 27.5,-17.5
+      parent: 1
+  - uid: 320250
+    components:
+    - type: Transform
+      pos: 27.5,-17.5
+      parent: 1
+  - uid: 320251
+    components:
+    - type: Transform
+      pos: 27.5,-17.5
       parent: 1
 ...
