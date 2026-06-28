@@ -6,13 +6,13 @@
   - type: LanguageLearningPreset
     learnableLanguages:
     - English
-    - SignLanguage
-    - TacticalSignLanguage
+#    - SignLanguage
+#    - TacticalSignLanguage
     - Primitive
 #   - Arcturian
 #   - Xeno
 #   - Yautja
-    - Binary
+#    - Binary
     - Latin
     - Legalese
     - Portuguese
