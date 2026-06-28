@@ -9,6 +9,7 @@
   - type: RemoveLanguage
     languages:
     - English
+    clearCurrentLanguage: true
 
 - type: trait
   id: Polyglot

@@ -92,7 +92,7 @@ origin-cca-luna-description = Born aboard a CCA vessel or space station.
 origin-upp-russia-name = UPP - Russia
 origin-upp-russia-description = Born in Russia, a founding member of the Union of Progressive Peoples.
 origin-upp-germany-name = UPP - Germany
-origin-upp-germany-description = Born in Germany, part of the Union of Progressive Peoples.
+origin-upp-germany-description = Born in Germany, a founding member of the Union of Progressive Peoples.
 origin-upp-algeria-name = UPP - Algeria
 origin-upp-algeria-description = Born in Algeria, part of the Union of Progressive Peoples.
 origin-upp-china-name = UPP - China
@@ -108,15 +108,21 @@ origin-upp-korea-description = Born in Korea, part of the Union of Progressive P
 origin-upp-colonies-name = UPP - Colonies
 origin-upp-colonies-description = Raised in one of the UPP's extrasolar colonies.
 origin-upp-spain-name = UPP - Spain
-origin-upp-spain-description = Born in Spain, part of the Union of Progressive Peoples.
+origin-upp-spain-description = Born in Spain, a founding member of the Union of Progressive Peoples.
 origin-upp-italy-name = UPP - Italy
 origin-upp-italy-description = Born in Italy, part of the Union of Progressive Peoples.
+
+origin-upp-ukraine-name = UPP - Ukraine
+origin-upp-ukraine-description = Born in Ukraine, part of the Union of Progressive Peoples.
+
+origin-upp-poland-name = UPP - Poland
+origin-upp-poland-description = Born in Poland, part of the Union of Progressive Peoples.
 
 origin-upp-hungary-name = UPP - Hungary
 origin-upp-hungary-description = Born in Hungary, part of the Union of Progressive Peoples.
 
-origin-upp-czech-name = UPP - Czech Republic
-origin-upp-czech-description = Born in the Czech Republic, part of the Union of Progressive Peoples.
+origin-upp-czech-name = UPP - Czechia
+origin-upp-czech-description = Born in the Czechia, part of the Union of Progressive Peoples.
 
 origin-upp-slovakia-name = UPP - Slovakia
 origin-upp-slovakia-description = Born in Slovakia, part of the Union of Progressive Peoples.
