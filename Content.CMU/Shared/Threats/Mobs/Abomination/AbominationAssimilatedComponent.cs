@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Language.Prototypes;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
@@ -72,6 +73,9 @@ public sealed partial class AbominationAssimilationProfile
     /// </summary>
     [DataField]
     public string? SourceProtoId;
+
+    public HashSet<ProtoId<LanguagePrototype>> SpokenLanguages = new();
+    public HashSet<ProtoId<LanguagePrototype>> UnderstoodLanguages = new();
 }
 
 /// <summary>

@@ -50,11 +50,10 @@ public sealed partial class ThreatVoteSystem : EntitySystem
 
     private void OnRunLevelChanged(GameRunLevelChangedEvent ev)
     {
-        if (ev.New != GameRunLevel.InRound)
-        {
-            _prepared = null;
-            ClearRoundJoinBlocks();
-        }
+        if (ev.New == GameRunLevel.InRound) return;
+
+        _prepared = null;
+        ClearRoundJoinBlocks();
     }
 
     public bool IsRoundJoinBlocked(NetUserId playerId) => _roundJoinBlockedPlayers.Contains(playerId);
@@ -98,10 +97,9 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         int playerCount = Math.Max(_player.PlayerCount, profiles.Count);
         Sawmill.Debug($"[ThreatVoteSystem] Preparing threat vote: preset={presetId}, planet={planet.MapId}, profiles={
             profiles.Count}, playerCount={playerCount}, selectedThreat={_auRound.SelectedThreat?.ID ?? "null"}.");
-        var candidates = new List<ThreatVoteCandidate>();
-        ThreatVoteBodyCount heldBodyCount;
-        if (!TryBuildCandidatesFromScenarioPlan(planet, presetId, playerCount, out candidates, out heldBodyCount,
-            out string diagnostic))
+
+        if (!TryBuildCandidatesFromScenarioPlan(planet, presetId, playerCount, out List<ThreatVoteCandidate> candidates,
+            out ThreatVoteBodyCount heldBodyCount, out string diagnostic))
         {
             if (HasCoveredScenarioThreatCandidate(planet, presetId))
             {
@@ -270,7 +268,7 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         out ThreatVoteBodyCount heldBodyCount,
         out string diagnostic)
     {
-        candidates = new();
+        candidates = [];
         heldBodyCount = default(ThreatVoteBodyCount);
 
         var request = new ScenarioPlanValidationRequest(presetId,
@@ -320,15 +318,7 @@ public sealed partial class ThreatVoteSystem : EntitySystem
     }
 
     private bool HasCoveredScenarioThreatCandidate(RMCPlanetMapPrototypeComponent planet, string presetId)
-    {
-        foreach (ProtoId<ThreatPrototype> threatId in planet.AllowedThreats)
-        {
-            if (_scenarioPlan.HasMappedHostileRoundGroup(presetId, threatId.Id))
-                return true;
-        }
-
-        return false;
-    }
+        => planet.AllowedThreats.Any(threatId => _scenarioPlan.HasMappedHostileRoundGroup(presetId, threatId.Id));
 
     private List<ThreatVoteCandidate> BuildLegacyCandidates(RMCPlanetMapPrototypeComponent planet,
         string presetId,
@@ -416,6 +406,31 @@ public sealed partial class ThreatVoteSystem : EntitySystem
             ReleaseHeldPlayersToLobby(prepared.HeldPlayers, selected.ID, "threat spawn threw");
 
             return;
+        }
+
+        try
+        {
+            // Return held players who failed the threat roll back to the lobby
+            var unusedPlayers = new List<NetUserId>();
+            foreach (NetUserId playerId in prepared.HeldPlayers)
+            {
+                if (assignedJobs.TryGetValue(playerId, out (ProtoId<JobPrototype>?, EntityUid) job)
+                    && ThreatSystem.IsThreatJob(job.Item1))
+                    unusedPlayers.Add(playerId);
+            }
+
+            _sawmill?.Debug($"[RoundStart] Returning {unusedPlayers.Count} unselected threat player(s) to lobby.");
+            if (unusedPlayers.Count > 0)
+            {
+                foreach (NetUserId uid in unusedPlayers)
+                    assignedJobs.Remove(uid);
+
+                ReleaseHeldPlayersToLobby(unusedPlayers, selected.ID, "not selected as threat");
+            }
+        }
+        catch (Exception ex)
+        {
+            Sawmill.Error($"[ThreatVoteSystem] Could not return unselected threat-roll players back to lobby. {ex}");
         }
 
         try
