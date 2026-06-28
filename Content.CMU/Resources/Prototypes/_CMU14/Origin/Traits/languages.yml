@@ -12,6 +12,13 @@
     clearCurrentLanguage: true
 
 - type: trait
+  id: NoLanguageLearning
+  name: trait-no-language-learning-name
+  description: trait-no-language-learning-desc
+  components:
+  - type: NoLanguageLearning
+
+- type: trait
   id: Polyglot
   name: au14-trait-polyglot-name
   description: au14-trait-polyglot-desc
