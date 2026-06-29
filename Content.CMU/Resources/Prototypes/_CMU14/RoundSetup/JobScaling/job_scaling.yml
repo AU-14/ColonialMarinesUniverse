@@ -43,10 +43,10 @@
       benchmark: 2  # 2 slots available at 50 (whenToBeginScaling)
       maximum: 5
     AU14JobGOVFORVehicleCrewman:
-      scale: 0.03   # ~33 slots
+      scale: 0
       whenToBeginScaling: 50
       benchmark: 2
-      maximum: 4
+      maximum: 2
     AU14JobGOVFORWorkingJoe:
       scale: 0.034  # ~29 slots
       whenToBeginScaling: 50
@@ -61,10 +61,10 @@
       scale: 0.15
       whenToBeginScaling: 50
     AU14JobOPFORVehicleCrewman:
-      scale: 0.03
+      scale: 0
       whenToBeginScaling: 50
       benchmark: 2
-      maximum: 4
+      maximum: 2
     # TODO: MP/AuxTech prototypes
     AU14JobOPFORWorkingJoe:
       scale: 0.034
@@ -93,10 +93,10 @@
       benchmark: 3
       maximum: 6
     AU14JobGOVFORVehicleCrewman:
-      scale: 0.03
+      scale: 0
       whenToBeginScaling: 60
       benchmark: 2
-      maximum: 4
+      maximum: 2
     AU14JobGOVFORWorkingJoe:
       scale: 0.034
       whenToBeginScaling: 50
@@ -151,10 +151,10 @@
         benchmark: 3
         maximum: 6
     AU14JobGOVFORVehicleCrewman:
-        scale: 0.02
+        scale: 0
         whenToBeginScaling: 50
-        benchmark: 1
-        maximum: 3
+        benchmark: 2
+        maximum: 2
     AU14JobGOVFORWorkingJoe:
       scale: 0.034
       whenToBeginScaling: 50
