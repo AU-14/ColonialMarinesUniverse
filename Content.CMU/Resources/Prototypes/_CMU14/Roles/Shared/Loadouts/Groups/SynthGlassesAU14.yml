@@ -4,12 +4,15 @@
   minLimit: 0
   maxLimit: 2
   loadouts:
+  - GlassesSecurityHUDGlassesAU14
   - GlassesMedicalHUDGlassesAU14
+  - GlassesReagentHUDGlassesAU14
   - AviatorsRMC
   - EyepatchRMC
   - GlassesRPGRMC
   - GlassesRPGRMCOld
   - GlassesPrescriptionRMC
+  - HippieGlassesRMC
   - GogglesRMC
   - GogglesPrescriptionRMC
   - GogglesBlackRMC
