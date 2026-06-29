@@ -44,6 +44,7 @@
   accessGroups:
   - CMAccessXeno
   - CMAccessXenoQueen
+  hidden: false # CMJobXenoBase has hidden: true
 
 - type: playTimeTracker
   id: AUJobThreatMember
