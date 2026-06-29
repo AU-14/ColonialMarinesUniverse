@@ -1,5 +1,6 @@
 using Content.Shared._CMU14.ZLevels;
 using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared._CMU14.ZLevels.Vehicles;
 using Robust.Shared.Timing;
 using DiagnosticStopwatch = System.Diagnostics.Stopwatch;
 
@@ -7,8 +8,6 @@ namespace Content.Server._CMU14.ZLevels.Core;
 
 public sealed partial class CMUZLevelsSystem
 {
-    private const float FallWakeDistance = 0.05f;
-
     private int _maxZTransitionsPerTick = 64;
     private TimeSpan _zTransitionBudget = TimeSpan.FromMilliseconds(1);
     private GameTick _zTransitionBudgetTick;
@@ -76,10 +75,12 @@ public sealed partial class CMUZLevelsSystem
 
         Entity<CMUZPhysicsComponent?> distanceEnt = (ent.Owner, ent.Comp);
         var distance = DistanceToGround(distanceEnt, out var stickyGround);
-        if (!stickyGround &&
-            MathF.Abs(distance) <= FallWakeDistance &&
-            MathF.Abs(ent.Comp.LocalPosition) <= FallWakeDistance &&
-            MathF.Abs(ent.Comp.Velocity) <= MinActiveZVelocity)
+        if (ShouldSleepZPhysics(
+                distance,
+                stickyGround,
+                ent.Comp.LocalPosition,
+                ent.Comp.Velocity,
+                HasComp<CMUVehicleZTraversalComponent>(ent.Owner)))
         {
             RemCompDeferred<CMUZFallingComponent>(ent.Owner);
             return;

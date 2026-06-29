@@ -1,0 +1,168 @@
+- type: platoonVendorSet
+  abstract: true
+  id: AU14BasePlatoonVendorSet
+  vendors:
+    Rifleman: AU14USCMequipmentvendor
+    Rto: AU14RTOVendor
+    Pilot: AU14AircrewWeaponsVendor
+    combattech: AU14ComtechGearVendor
+    JuniorOfficer: AU14JOGenericVendor
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
+
+- type: platoonVendorSet
+  id: Example
+  parent: AU14BasePlatoonVendorSet
+  vendors:
+    Corpsman: AU14USCMcorpsmanvendor
+    Arifleman: AU14USCMequipmentvendor
+    Dcc: AU14AircrewWeaponsVendor
+    OperationsOfficer: AU14USCMsectionleaderequipmentvendor
+    SectionSergeant: AU14USCMsectionleaderequipmentvendor
+
+- type: platoonVendorSet
+  id: USCM
+  parent: AU14BasePlatoonVendorSet
+  vendors:
+    Clothing: AU14USCMclothingequipmentvendor
+    Weapons: AU14USCMWeaponsVendor
+    SWeapons: AU14USCMSpecialWeaponsVendor
+    Corpsman: AU14USCMcorpsmanvendor
+    Arifleman: AU14USCMSGequipmentvendor
+    Dcc: AU14USCMaircrewvendor
+    OperationsOfficer: AU14USCMcommandequipmentvendor
+    SectionSergeant: AU14USCMsectionleaderequipmentvendor
+    MilitaryPolice: AU14MilitaryPolicemanVendorUSCM
+    ReqVend: AU14USCMRequisitionVendor
+
+- type: platoonVendorSet
+  id: LACN
+  parent: AU14BasePlatoonVendorSet
+  vendors:
+    Clothing: AU14LACNclothingequipmentvendor
+    Weapons: AU14LACNWeaponsVendor
+    SWeapons: AU14LACNSpecialWeaponsVendor
+    Corpsman: AU14LACNcorpsmanvendor
+    Arifleman: AU14LACNMGequipmentvendor
+    Dcc: AU14LACNaircrewvendor
+    OperationsOfficer: AU14LACNcommandequipmentvendor
+    SectionSergeant: AU14USCMsectionleaderequipmentvendor
+    MilitaryPolice: AU14MilitaryPolicemanVendorLACN
+    ReqVend: AU14LACNRequisitionVendor
+
+- type: platoonVendorSet
+  id: UPP
+  parent: AU14BasePlatoonVendorSet
+  vendors:
+    Rifleman: AU14UPPequipmentvendor
+    Clothing: AU14UPPclothingapparelvendor
+    Weapons: AU14UPPWeaponsVendor
+    SWeapons: AU14UPPSpecialWeaponsVendor
+    Corpsman: AU14UPPMedicalVendor
+    Arifleman: AU14UPPgunnerequipment
+    Dcc: AU14UPPaircrewvendor
+    OperationsOfficer: AU14UPPcommandvendor
+    SectionSergeant: AU14UPPSectionLeaderVendor
+    Pilot: AU14UPPAirCrewWeaponsVendor
+    MilitaryPolice: AU14MilitaryPolicemanVendorUPP
+    ReqVend: AU14UPPRequisitionVendor
+
+- type: platoonVendorSet
+  id: WEYU
+  parent: AU14BasePlatoonVendorSet
+  vendors:
+    Clothing: AU14WYclothingequipmentvendor
+    Weapons: AU14WYWeaponsVendor
+    SWeapons: AU14WYSpecialWeaponsVendor
+    Corpsman: AU14WYcorpsmanvendor
+    Arifleman: AU14WYSGequipmentvendor
+    Dcc: AU14WYaircrewvendor
+    OperationsOfficer: AU14WYdirectorequipmentvendor
+    SectionSergeant: AU14WYsupervisorequipmentvendor
+    MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    ReqVend: AU14WYPMCRequisitionVendor
+
+- type: platoonVendorSet
+  id: CMBCIU
+  parent: AU14BasePlatoonVendorSet
+  vendors:
+    Clothing: AU14CMBCIUapparelvendor
+    Weapons: AU14CMBCIUWeaponsVendor
+    SWeapons: AU14SpecVend
+    Corpsman: AU14CMBCIUTacticalMedicVendor
+    Arifleman: AU14CMBCIUGunnerVendor
+    Dcc: AU14CMBCIUWeaponsVendor
+    OperationsOfficer: AU14CMBCIUCommandVendor
+    SectionSergeant: AU14CMBCIUSectionLeader
+    Pilot: AU14CMBCIUPilotVendor
+    MilitaryPolice: AU14MilitaryPolicemanGenericVendorCIU
+    ReqVend: AU14CMBCIURequisitionVendor
+
+- type: platoonVendorSet
+  id: HAZOPS
+  parent: AU14BasePlatoonVendorSet
+  vendors:
+    Clothing: AU14HAZOPSclothingequipmentvendor
+    Weapons: AU14HAZOPSWeaponsVendor
+    SWeapons: AU14HAZOPSSpecialWeaponsVendor
+    Corpsman: AU14USCMcorpsmanvendor
+    Arifleman: AU14HAZOPSMGequipmentvendor
+    Dcc: AU14USCMaircrewvendor
+    OperationsOfficer: AU14HAZOPScommandequipmentvendor
+    SectionSergeant: AU14HAZOPSsectionleaderequipmentvendor
+    MilitaryPolice: AU14MilitaryPolicemanVendorUSCM
+    ReqVend: AU14HAZOPSRequisitionVendor
+
+- type: platoonVendorSet
+  id: ProdigySF
+  parent: AU14BasePlatoonVendorSet
+  vendors:
+    Clothing: AU14prodigyclothingequipmentvendor
+    Weapons: AU14prodigyWeaponsVendor
+    SWeapons: AU14SpecVend
+    Corpsman: AU14prodigycorpsmanvendor
+    Arifleman: AU14prodigySGequipmentvendor
+    Dcc: AU14prodigyaircrewvendor
+    OperationsOfficer: AU14prodigycommandequipmentvendor
+    SectionSergeant: AU14prodigysectionleaderequipmentvendor
+    ExtraVendor1: VMarkerOpforDeco5
+    Deco1: VMarkerOpforDeco5
+    MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    ReqVend: AU14ProdigyRequisitionVendor
+
+- type: platoonVendorSet
+  id: VAIPO
+  parent: AU14BasePlatoonVendorSet
+  vendors:
+    Clothing: AU14VAIPOclothingequipmentvendor
+    Weapons: AU14VAIPOWeaponsVendor
+    SWeapons: AU14SpecVend
+    Corpsman: AU14VAIPOcorpsmanvendor
+    Arifleman: AU14VAIPOSGequipmentvendor
+    Dcc: AU14VAIPOaircrewvendor
+    OperationsOfficer: AU14VAIPOcommandequipmentvendor
+    SectionSergeant: AU14VAIPOsectionleaderequipmentvendor
+    ExtraVendor1: VMarkerOpforDeco5
+    Deco1: VMarkerOpforDeco5
+    MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    ReqVend: AU14VAIPORequisitionVendor
+
+- type: platoonVendorSet
+  id: RMC
+  parent: AU14BasePlatoonVendorSet
+  vendors:
+    Rifleman: AU14RMCequipmentvendor
+    Clothing: AU14RMCclothingequipmentvendor
+    Weapons: AU14RMCWeaponsVendor
+    SWeapons: AU14RMCSpecialWeaponsVendor
+    Corpsman: AU14RMCcorpsmanvendor
+    Arifleman: AU14RMCSGequipmentvendor
+    Dcc: AU14RMCaircrewvendor
+    OperationsOfficer: AU14RMCcommandequipmentvendor
+    Rto: AU14RMCRTOVendor
+    SectionSergeant: AU14RMCsectionleaderequipmentvendor
+    Pilot: AU14RMCAircrewWeaponsVendor
+    combattech: AU14RMCComtechGearVendor
+    ExtraVendor1: VMarkerOpforDeco5
+    Deco1: VMarkerOpforDeco5
+    MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    ReqVend: AU14RMCRequisitionVendor

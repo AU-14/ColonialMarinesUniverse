@@ -1,0 +1,24 @@
+- type: loadout
+  id: ClothingHandGlovesNitrileAU14
+  equipment:
+    gloves: ClothingHandsGlovesNitrile
+
+- type: loadout
+  id: HandsLatexAU14
+  equipment:
+    gloves: CMHandsLatex
+
+- type: loadout
+  id: HandsVeteranInsulatedAU14
+  equipment:
+    gloves: RMCHandsVeteranInsulated
+
+- type: loadout
+  id: HandsInsulatedBlackMarineAU14
+  equipment:
+    gloves: AU14PVEHandsInsulatedBlackMarine
+
+- type: loadout
+  id: HandsBrownAU14
+  equipment:
+    gloves: CMHandsBrown

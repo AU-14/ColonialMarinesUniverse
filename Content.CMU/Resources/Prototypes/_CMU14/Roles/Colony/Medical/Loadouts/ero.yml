@@ -1,0 +1,29 @@
+# specialization
+
+- type: loadout
+  id: ColonyEmergencyResponseOfficerSpecializationDefaultAU14
+  equipment:
+    id: AU14IDCardColonyEmergencyResponseOfficer
+
+- type: loadout
+  id: ColonyEmergencyResponseOfficerSpecializationParamedicAU14
+  equipment:
+    id: AU14IDCardColonyEmergencyResponseOfficerParamedic
+
+- type: loadout
+  id: ColonyEmergencyResponseOfficerSpecializationFirefighterAU14
+  equipment:
+    id: AU14IDCardColonyEmergencyResponseOfficerFirefighter
+
+# essentials
+- type: loadout
+  id: EROEssentialAU14
+  storage:
+    back:
+    - RMCRadioHandheldColonyOff
+    - CMFireExtinguisherPortable
+  equipment:
+    ears: RMCFlashlightPen
+    suitstorage: RMCFireAxe
+  inhand:
+  - CMFireExtinguisher

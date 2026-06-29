@@ -1,0 +1,86 @@
+- type: job
+  abstract: true
+  parent: AU14JobWorkingJoeBase
+  id: AU14JobGOVFORWorkingJoeBase
+  roundSide: Govfor
+  roundForce: GOVFOR
+  roundRole: WorkingJoe
+  roundProfiles:
+  - AU14RoundJobProfileWorkingJoe
+  icon: "AU14JobIconGovWorkingJoe"
+  spawnMenuRoleName: Working Joe (GOVFOR)
+  supervisors: au14-job-supervisors-workingjoe-military
+  usePlayerProfile: false
+  jobEntity: AU14MobWorkingJoeGOVFOR
+  accessGroups:
+  - AU14GovforCommand
+  - AUPrisonStaff
+  - auwy
+
+- type: job
+  abstract: true
+  parent: AU14JobWorkingJoeBase
+  id: AU14JobOPFORWorkingJoeBase
+  roundSide: Opfor
+  roundForce: OPFOR
+  roundRole: WorkingJoe
+  roundProfiles:
+  - AU14RoundJobProfileWorkingJoe
+  icon: "AU14JobIconOPFORWorkingJoe"
+  spawnMenuRoleName: Working Joe (OPFOR)
+  supervisors: au14-job-supervisors-workingjoe-military
+  usePlayerProfile: false
+  jobEntity: AU14MobWorkingJoeOPFOR
+  accessGroups:
+  - AU14OpforCommand
+  - AUPrisonStaff
+  - auwy
+
+- type: job
+  parent: AU14JobGOVFORWorkingJoeBase
+  id: AU14JobGOVFORWorkingJoe
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+    - NoEnglish
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORWorkingJoe
+  name: Spawn Point Working Joe (GOVFOR)
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORWorkingJoe
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobOPFORWorkingJoeBase
+  id: AU14JobOPFORWorkingJoe
+  hidden: true
+  requirements:
+  - !type:RoleTimeRequirement
+    role: AU14JobGOVFORAuxSupportSynth
+    time: 9000 # 2.5 hours
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointOPFORWorkingJoe
+  name: Spawn Point Working Joe (OPFOR)
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORWorkingJoe
+  - type: Sprite
+    state: syn_spawn

@@ -1,0 +1,100 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianLaselleLiaison
+  roundSide: Civilian
+  roundForce: LASELLE
+  roundRole: CivilianLaselleLiaison
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 1
+      RMCSkillOverwatch: 1
+  - type: CMVendorUser
+    id: AU14JobCivilianCorporateLiaison
+    points: 70
+  - type: JobPrefix
+    prefix: au14-job-prefix-laselleliaison
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: laselle_liaison
+#    - type: AssignSquad
+#      whitelist:
+#        tags:
+#        - SquadPMC todo laselle squad
+  - type: NpcFactionMember
+    factions:
+    - GOVFOR
+  - type: Marine
+    Faction: govfor
+
+  name: au14-job-name-civilianlaselleliaison
+  description: au14-job-description-civilianlaselleliaison
+  playTimeTracker: AU14JobCivilianLaselleLiaison
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NoEnglish
+  setPreference: true
+  ranks:
+    AU14RankLBSeniorExecutive:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianLaselleLiaison
+      time: 90000 # 25 hours
+    AU14RankLBExecutive:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianLaselleLiaison
+      time: 36000 # 10 hours
+    AU14RankLBJuniorExecutive: []
+  startingGear: AU14GearCivilianLaselleLiaison
+  icon: "AU14JobIconLaselleLiaison"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-orbital
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianLaselleLiaison
+  equipment:
+    jumpsuit: RMCJumpsuitMarsoc
+    shoes: CMBootsBlack
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: RMCJacketCorporateBlack
+    ears: AU14ColonyAdminHeadset # todo laselle headset
+    eyes: RMCGlassesTriMaxBlack
+    pocket1: AU14StampLLiaison
+  inhand:
+  - RMCPortableVendorCorporate
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianLaselleLiaison
+  name: Spawn Point Civilian Laselle Liaison
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianLaselleLiaison
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianLaselleLiaison
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobAU14JobCivilianLaselleLiaison
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC

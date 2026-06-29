@@ -1,0 +1,39 @@
+- type: entity
+  id: AU14LanguagePresetUPPEnlisted
+  name: UPP enlisted Languages
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: LanguagePreset
+    spokenLanguages:
+    - Russian
+    - Mandarin
+    - German
+    - Spanish
+    understoodLanguages:
+    - Russian
+    - Mandarin
+    - German
+    - Spanish
+    currentLanguage: German
+    defaultLanguage: German
+
+- type: entity
+  id: AU14LanguagePresetUPPOfficer
+  name: UPP officer Languages
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: LanguagePreset
+    spokenLanguages:
+    - English
+    - Russian
+    - German
+    - Mandarin
+    - Spanish
+    understoodLanguages:
+    - English
+    - Russian
+    - German
+    - Mandarin
+    - Spanish
+    currentLanguage: German
+    defaultLanguage: German

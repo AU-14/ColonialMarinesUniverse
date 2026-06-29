@@ -1,0 +1,119 @@
+# Military round job profiles for this role family.
+
+- type: roundJobProfile
+  id: AU14RoundJobProfileMilitaryBase
+  components:
+  - type: MarineOrders
+    moveOrderSoundMale:
+      collection: AU14MaleMoveOrder
+    moveOrderSoundFemale:
+      collection: AU14FemaleMoveOrder
+    focusOrderSoundMale:
+      collection: AU14MaleFocusOrder
+    focusOrderSoundFemale:
+      collection: AU14FemaleFocusOrder
+    holdOrderSoundMale:
+      collection: AU14MaleHoldOrder
+    holdOrderSoundFemale:
+      collection: AU14FemaleHoldOrder
+  sideComponents:
+    Govfor:
+    - type: Marine
+      Faction: govfor
+    - type: UserIFF
+      factions:
+      - GOVFOR
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    Opfor:
+    - type: Marine
+      Faction: opfor
+    - type: UserIFF
+      factions:
+      - OPFOR
+    - type: NpcFactionMember
+      factions:
+      - OPFOR
+
+- type: roundJobProfile
+  parent: AU14RoundJobProfileMilitaryBase
+  id: AU14RoundJobProfileSquadRifleman
+
+- type: roundJobProfile
+  id: AU14RoundJobProfileWorkingJoe
+  sideComponents:
+    Govfor:
+    - type: UserIFF
+      factions:
+      - GOVFOR
+    - type: IntrinsicRadioTransmitter
+      channels:
+      - radioAI
+      - radioGovforCommand
+      - radioGovforJTAC
+      - radioGovforAlpha
+      - radioGovforCharlie
+      - radioGovforBravo
+      - radioGovforIntel
+      - radioGovforMILP
+    - type: ActiveRadio
+      channels:
+      - radioAI
+      - radioGovforCommand
+      - radioGovforJTAC
+      - radioGovforAlpha
+      - radioGovforCharlie
+      - radioGovforBravo
+      - radioGovforIntel
+      - radioGovforMILP
+    - type: Tag
+      tags:
+      - WorkingJoe
+      - CanPilot
+      - FootstepSound
+      - DoorBumpOpener
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+        state: working_joe
+    - type: Language
+      preset: AU14LanguagePresetSynth
+    - type: LanguageLearning
+      preset: AU14LanguageLearningPresetSynth
+    Opfor:
+    - type: UserIFF
+      factions:
+      - OPFOR
+    - type: IntrinsicRadioTransmitter
+      channels:
+      - radioAI
+      - radioOpforAlpha
+      - radioOpforCommand
+      - radioOpforCharlie
+      - radioOpforBravo
+      - radioOpforIntel
+      - radioOpforJTAC
+    - type: ActiveRadio
+      channels:
+      - radioAI
+      - radioOpforAlpha
+      - radioOpforCommand
+      - radioOpforCharlie
+      - radioOpforBravo
+      - radioOpforIntel
+      - radioOpforJTAC
+    - type: Tag
+      tags:
+      - WorkingJoe
+      - CanPilot
+      - FootstepSound
+      - DoorBumpOpener
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+        state: working_joe
+    - type: Language
+      preset: AU14LanguagePresetSynth
+    - type: LanguageLearning
+      preset: AU14LanguageLearningPresetSynth

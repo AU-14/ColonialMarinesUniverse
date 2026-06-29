@@ -1,0 +1,10 @@
+- type: reagent
+  parent: Blood
+  id: CMUYautjaBlood
+  name: reagent-name-cmu-yautja-blood
+  group: Biological
+  desc: reagent-desc-cmu-yautja-blood
+  flavor: metallic
+  color: "#2cf274"
+  recognizable: true
+  physicalDesc: reagent-physical-desc-ferrous

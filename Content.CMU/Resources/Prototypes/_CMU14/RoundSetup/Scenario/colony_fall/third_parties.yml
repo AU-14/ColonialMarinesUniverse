@@ -1,0 +1,472 @@
+- type: roundGroup
+  id: ColonyFallCmbParoleeTransportPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: CMBParoleeTransport
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobParoleeReleaseCMBDeputy: 1
+      - bucket: Member
+        count: 2
+        bodies:
+          AU14JobTransportParolee: 2
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: ColonyFallCmbParoleeTransportBigPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: CMBParoleeTransportBig
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobParoleeReleaseCMBDeputy: 1
+      - bucket: Member
+        count: 3
+        bodies:
+          AU14JobTransportParolee: 3
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 3
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: ColonyFallIpiePartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: IPIE
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobIPIELawyer: 1
+      - bucket: Member
+        count: 1
+        bodies:
+          AU14JobIPIEPPO: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: ColonyFallIpieSynthPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: IPIESynth
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobIPIELawyerSynth: 1
+      - bucket: Member
+        count: 1
+        bodies:
+          AU14JobIPIEPPO: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: ColonyFallWyhtPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: WYHT
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobWYHTLiaison: 1
+      - bucket: Member
+        count: 5
+        bodies:
+          AU14JobWYHTScientist: 2
+          AU14JobWYHTGoon: 2
+          AU14SpawnerRandomWeYuSupply: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 5
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: ColonyFallMissionariesPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: MissionariesParty
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobWanderingMissionary: 1
+      - bucket: Member
+        count: 1
+        bodies:
+          AU14JobWanderingMissionary: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: ColonyFallMissionariesPartyMediumRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: MissionariesPartyMedium
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobWanderingMissionary: 1
+      - bucket: Member
+        count: 3
+        bodies:
+          AU14JobWanderingMissionary: 3
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 3
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: ColonyFallMigratingCivsPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: MigratingCivs
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobMigratingColonist: 1
+      - bucket: Member
+        count: 2
+        bodies:
+          AU14JobMigratingColonist: 2
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: ColonyFallMigratingCivsMediumPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: MigratingCivsMedium
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobMigratingColonist: 1
+      - bucket: Member
+        count: 4
+        bodies:
+          AU14JobMigratingColonist: 4
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 4
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: ColonyFallMigratingCivsLargePartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: MigratingCivsLarge
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobMigratingColonist: 1
+      - bucket: Member
+        count: 5
+        bodies:
+          AU14JobMigratingColonist: 5
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 5
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: ColonyFallDrugSmugglerPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: DrugSmuggler
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14DrugSmuggler: 1
+      - bucket: Member
+        count: 1
+        bodies:
+          AU14DrugSmuggler: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: ColonyFallForeignCrimeGangPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: ForeignCrimeGang
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobForeignMobBoss: 1
+      - bucket: Member
+        count: 3
+        bodies:
+          AU14JobForeignMobGoon: 3
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 3
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: ColonyFallForeconKillTeamPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: FORECONKillTeam
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobFORECONKillTeamSniper: 1
+      - bucket: Member
+        count: 1
+        bodies:
+          AU14JobFORECONKillTeamSpotter: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: ColonyFallXenoParasiteRunnerPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: XenoParasiteRunnerParty
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          CMUXenoParasiteRunner: 1
+      - bucket: Member
+        count: 1
+        bodies:
+          CMUXenoParasiteRunner: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: ColonyFallCarpInvasivePartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: CarpInvasiveParty
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          CMUMobCarpInvasive: 1
+      - bucket: Member
+        count: 0
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>

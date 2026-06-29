@@ -1,0 +1,4734 @@
+# Original upstream reference: https://github.com/cmss13-devs/cmss13
+
+- type: entity
+  parent: BaseStructure
+  id: CMUYautjaStructureBase
+  abstract: true
+  suffix: Yautja
+  components:
+    - type: InteractionOutline
+    - type: Damageable
+      damageContainer: StructuralInorganic
+      damageModifierSet: StrongMetallic
+    - type: RMCMesonsNonviewable
+
+- type: entity
+  id: CMUYautjaFloorOverlayBase
+  abstract: true
+  suffix: Yautja
+  placement:
+    mode: SnapgridCenter
+  components:
+    - type: Transform
+      anchored: true
+    - type: Clickable
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsBorderStairs
+  name: yautja border stairs
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "border_stairs"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "border_stairs"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsBorderStairCut
+  name: yautja border stair cut
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "border_stair_cut"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "border_stair_cut"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsBorderStairsRune
+  name: yautja border stairs rune
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "border_stairs_rune"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "border_stairs_rune"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsBorderStairRuneCut
+  name: yautja border stair rune cut
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "border_stair_rune_cut"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "border_stair_rune_cut"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsHunterFeed
+  name: yautja hunter feed
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "hunter_feed"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "hunter_feed"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsHunterArmorProp
+  name: yautja hunter armor prop
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "hunter_armor_prop"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "hunter_armor_prop"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsHunterArmorProp2
+  name: yautja hunter armor prop 2
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "hunter_armor_prop_2"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "hunter_armor_prop_2"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsHunterArmorProp3
+  name: yautja hunter armor prop 3
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "hunter_armor_prop_3"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "hunter_armor_prop_3"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsHunterArmorProp4
+  name: yautja hunter armor prop 4
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "hunter_armor_prop_4"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "hunter_armor_prop_4"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsPredTrophyVendorBottomLeft
+  name: yautja pred trophy vendor bottom left
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "pred_trophy_vendor_bottom_left"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "pred_trophy_vendor_bottom_left"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsPredTrophyVendorTopLeft
+  name: yautja pred trophy vendor top left
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "pred_trophy_vendor_top_left"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "pred_trophy_vendor_top_left"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsPredTrophyVendorCenter
+  name: yautja pred trophy vendor center
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "pred_trophy_vendor_center"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "pred_trophy_vendor_center"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsPredTrophyVendorTopCenter
+  name: yautja pred trophy vendor top center
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "pred_trophy_vendor_top_center"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "pred_trophy_vendor_top_center"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsPredTrophyVendorBottomRight
+  name: yautja pred trophy vendor bottom right
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "pred_trophy_vendor_bottom_right"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "pred_trophy_vendor_bottom_right"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsPredTrophyVendorTopRight
+  name: yautja pred trophy vendor top right
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "pred_trophy_vendor_top_right"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "pred_trophy_vendor_top_right"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsBoneThrone
+  name: yautja bone throne
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "bone_throne"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "bone_throne"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsBoneThroneTop
+  name: yautja bone throne top
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "bone_throne_top"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "bone_throne_top"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsClosed
+  name: yautja closed
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "closed"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "closed"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsOpen
+  name: yautja open
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "open"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "open"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsHoe
+  name: yautja hoe
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "hoe"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "hoe"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsSpade
+  name: yautja spade
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "spade"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "spade"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsHydro
+  name: yautja hydro
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "hydro"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "hydro"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsFountainHeadStatic
+  name: yautja fountain head static
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "fountain_head_static"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "fountain_head_static"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureN32x32HunterPropsFountainHeadFlowing
+  name: yautja fountain head flowing
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      drawdepth: Objects
+      layers:
+        - state: "fountain_head_flowing"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "fountain_head_flowing"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureAncientsmallstatueSmallStatueBase
+  name: ancient yautja statue small statue base
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
+      drawdepth: Objects
+      layers:
+        - state: "small_statue_base"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
+      state: "small_statue_base"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureAncientsmallstatueSmallStatueBaseColorable
+  name: ancient yautja statue small statue base colorable
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
+      drawdepth: Objects
+      layers:
+        - state: "small_statue_base_colorable"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
+      state: "small_statue_base_colorable"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureAncientsmallstatueStatueAncient
+  name: ancient yautja statue statue ancient
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
+      drawdepth: Objects
+      layers:
+        - state: "statue_ancient"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
+      state: "statue_ancient"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureAncientsmallstatueStatueGrey
+  name: ancient yautja statue statue grey
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
+      drawdepth: Objects
+      layers:
+        - state: "statue_grey"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
+      state: "statue_grey"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureAncientsmallstatueStatueSandstone
+  name: ancient yautja statue statue sandstone
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
+      drawdepth: Objects
+      layers:
+        - state: "statue_sandstone"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
+      state: "statue_sandstone"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureConsolesEngineerconsole
+  name: yautja console engineerconsole
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/consoles.rsi
+      drawdepth: Objects
+      layers:
+        - state: "engineerconsole"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/consoles.rsi
+      state: "engineerconsole"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureCryogenics2Cell
+  name: yautja cryogenic cell cell
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
+      drawdepth: Mobs
+      layers:
+        - state: "cell"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
+      state: "cell"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureCryogenics2CellOffEmpty
+  name: yautja cryogenic cell cell off empty
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
+      drawdepth: Mobs
+      layers:
+        - state: "cell-off-empty"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
+      state: "cell-off-empty"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureCryogenics2CellOffOccupied
+  name: yautja cryogenic cell cell off occupied
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
+      drawdepth: Mobs
+      layers:
+        - state: "cell-off-occupied"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
+      state: "cell-off-occupied"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureCryogenics2CellOnEmpty
+  name: yautja cryogenic cell cell on empty
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
+      drawdepth: Mobs
+      layers:
+        - state: "cell-on-empty"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
+      state: "cell-on-empty"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureCryogenics2CellOnOccupied
+  name: yautja cryogenic cell cell on occupied
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
+      drawdepth: Mobs
+      layers:
+        - state: "cell-on-occupied"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
+      state: "cell-on-occupied"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureCryogenics2PredCell
+  name: yautja cryogenic cell pred cell
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
+      drawdepth: Mobs
+      layers:
+        - state: "pred_cell"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
+      state: "pred_cell"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureCryogenics2PredCellOffEmpty
+  name: yautja cryogenic cell pred cell off empty
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
+      drawdepth: Mobs
+      layers:
+        - state: "pred_cell-off-empty"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
+      state: "pred_cell-off-empty"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureCryogenics2PredCellOffOccupied
+  name: yautja cryogenic cell pred cell off occupied
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
+      drawdepth: Mobs
+      layers:
+        - state: "pred_cell-off-occupied"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
+      state: "pred_cell-off-occupied"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureCryogenics2PredCellOnEmpty
+  name: yautja cryogenic cell pred cell on empty
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
+      drawdepth: Mobs
+      layers:
+        - state: "pred_cell-on-empty"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
+      state: "pred_cell-on-empty"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureCryogenics2PredCellOnOccupied
+  name: yautja cryogenic cell pred cell on occupied
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
+      drawdepth: Mobs
+      layers:
+        - state: "pred_cell-on-occupied"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
+      state: "pred_cell-on-occupied"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureEngineerJockeySpacejockey
+  name: engineer jockey spacejockey
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/engineerJockey.rsi
+      drawdepth: Overdoors
+      layers:
+        - state: "spacejockey"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/engineerJockey.rsi
+      state: "spacejockey"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureEngineerPodPodBroken
+  name: engineer pod pod broken
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/engineerPod.rsi
+      drawdepth: Mobs
+      layers:
+        - state: "pod_broken"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/engineerPod.rsi
+      state: "pod_broken"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureEngineerPodPod
+  name: engineer pod pod
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/engineerPod.rsi
+      drawdepth: Mobs
+      layers:
+        - state: "pod"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/engineerPod.rsi
+      state: "pod"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsFloor
+  name: yautja floor floor
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "floor"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "floor"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterTile1
+  name: yautja floor hunter tile 1
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_tile_1"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_tile_1"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterTile2
+  name: yautja floor hunter tile 2
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_tile_2"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_tile_2"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterTile3
+  name: yautja floor hunter tile 3
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_tile_3"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_tile_3"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterTile4
+  name: yautja floor hunter tile 4
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_tile_4"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_tile_4"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterTile5
+  name: yautja floor hunter tile 5
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_tile_5"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_tile_5"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterTile6
+  name: yautja floor hunter tile 6
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_tile_6"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_tile_6"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsOuterhull
+  name: yautja floor outerhull
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "outerhull"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "outerhull"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsDamaged1
+  name: yautja floor damaged1
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "damaged1"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "damaged1"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsDamaged2
+  name: yautja floor damaged2
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "damaged2"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "damaged2"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsDamaged3
+  name: yautja floor damaged3
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "damaged3"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "damaged3"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsDamaged4
+  name: yautja floor damaged4
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "damaged4"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "damaged4"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsDamaged5
+  name: yautja floor damaged5
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "damaged5"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "damaged5"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsOuterhullDir
+  name: yautja floor outerhull dir
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "outerhull_dir"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "outerhull_dir"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsOuterhullAlt
+  name: yautja floor outerhull alt
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "outerhull_alt"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "outerhull_alt"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsOuterhullAltDir
+  name: yautja floor outerhull alt dir
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "outerhull_alt_dir"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "outerhull_alt_dir"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterGlow
+  name: yautja floor hunter glow
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_glow"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_glow"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterBridge
+  name: yautja floor hunter bridge
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_bridge"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_bridge"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterCatwalkAlpha
+  name: yautja floor hunter catwalk alpha
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_catwalk_alpha"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_catwalk_alpha"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterCatwalk
+  name: yautja floor hunter catwalk
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_catwalk"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_catwalk"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterCatwalkAltAlpha
+  name: yautja floor hunter catwalk alt alpha
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_catwalk_alt_alpha"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_catwalk_alt_alpha"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterCatwalkAlt
+  name: yautja floor hunter catwalk alt
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_catwalk_alt"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_catwalk_alt"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterCatwalkNewAlpha
+  name: yautja floor hunter catwalk new alpha
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_catwalk_new_alpha"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_catwalk_new_alpha"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterCatwalkNew
+  name: yautja floor hunter catwalk new
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_catwalk_new"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_catwalk_new"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterGrille
+  name: yautja floor hunter grille
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_grille"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_grille"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterGrilleAlpha
+  name: yautja floor hunter grille alpha
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_grille_alpha"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_grille_alpha"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterGrate
+  name: yautja floor hunter grate
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_grate"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_grate"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterGrateAlpha
+  name: yautja floor hunter grate alpha
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_grate_alpha"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_grate_alpha"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsN115
+  name: yautja floor 11,5
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "11,5"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "11,5"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsN66
+  name: yautja floor 6,6
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "6,6"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "6,6"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsN1715
+  name: yautja floor 17,15
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "17,15"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "17,15"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsN611
+  name: yautja floor 6,11
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "6,11"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "6,11"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsN612
+  name: yautja floor 6,12
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "6,12"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "6,12"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsCorner1
+  name: yautja floor corner 1
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "corner_1"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "corner_1"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsCorner2
+  name: yautja floor corner 2
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "corner_2"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "corner_2"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsCorner3
+  name: yautja floor corner 3
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "corner_3"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "corner_3"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsCorner4
+  name: yautja floor corner 4
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "corner_4"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "corner_4"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsCorner5
+  name: yautja floor corner 5
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "corner_5"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "corner_5"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsCorner6
+  name: yautja floor corner 6
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "corner_6"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "corner_6"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsCorner7
+  name: yautja floor corner 7
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "corner_7"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "corner_7"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsCorner8
+  name: yautja floor corner 8
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "corner_8"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "corner_8"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsCorner9
+  name: yautja floor corner 9
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "corner_9"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "corner_9"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsN22
+  name: yautja floor 2,2
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "2,2"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "2,2"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsN32
+  name: yautja floor 3,2
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "3,2"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "3,2"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsN204
+  name: yautja floor 20,4
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "20,4"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "20,4"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsN214
+  name: yautja floor 21,4
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "21,4"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "21,4"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsN216
+  name: yautja floor 21,6
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "21,6"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "21,6"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsN203
+  name: yautja floor 20,3
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "20,3"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "20,3"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterRed
+  name: yautja floor hunter red
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_red"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_red"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterRed2
+  name: yautja floor hunter red 2
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_red_2"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_red_2"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterRed3
+  name: yautja floor hunter red 3
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_red_3"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_red_3"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterRed4
+  name: yautja floor hunter red 4
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_red_4"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_red_4"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterRed5
+  name: yautja floor hunter red 5
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_red_5"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_red_5"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsHunterRed6
+  name: yautja floor hunter red 6
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "hunter_red_6"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "hunter_red_6"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsBorderlessV
+  name: yautja floor borderless v
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "borderless_v"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "borderless_v"
+
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUYautjaStructureHunterFloorsBorderlessH
+  name: yautja floor borderless h
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      layers:
+        - state: "borderless_h"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      state: "borderless_h"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleLeftengine
+  name: yautja shuttle leftengine
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "leftengine"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "leftengine"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleLeftengine1
+  name: yautja shuttle leftengine 1
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "leftengine_1"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "leftengine_1"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleLeftengine2
+  name: yautja shuttle leftengine 2
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "leftengine_2"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "leftengine_2"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleLeftengine3
+  name: yautja shuttle leftengine 3
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "leftengine_3"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "leftengine_3"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleLeftengine4
+  name: yautja shuttle leftengine 4
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "leftengine_4"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "leftengine_4"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleLeftengine5
+  name: yautja shuttle leftengine 5
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "leftengine_5"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "leftengine_5"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleLeftengine6
+  name: yautja shuttle leftengine 6
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "leftengine_6"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "leftengine_6"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleLeftengine7
+  name: yautja shuttle leftengine 7
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "leftengine_7"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "leftengine_7"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleLeftengine8
+  name: yautja shuttle leftengine 8
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "leftengine_8"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "leftengine_8"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleLeftengine9
+  name: yautja shuttle leftengine 9
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "leftengine_9"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "leftengine_9"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleStanLeftengine
+  name: yautja shuttle stan leftengine
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "stan_leftengine"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "stan_leftengine"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleRightengine
+  name: yautja shuttle rightengine
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "rightengine"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "rightengine"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleRightengine1
+  name: yautja shuttle rightengine 1
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "rightengine_1"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "rightengine_1"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleRightengine2
+  name: yautja shuttle rightengine 2
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "rightengine_2"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "rightengine_2"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleRightengine3
+  name: yautja shuttle rightengine 3
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "rightengine_3"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "rightengine_3"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleRightengine4
+  name: yautja shuttle rightengine 4
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "rightengine_4"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "rightengine_4"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleRightengine5
+  name: yautja shuttle rightengine 5
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "rightengine_5"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "rightengine_5"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleRightengine6
+  name: yautja shuttle rightengine 6
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "rightengine_6"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "rightengine_6"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleRightengine7
+  name: yautja shuttle rightengine 7
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "rightengine_7"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "rightengine_7"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleRightengine8
+  name: yautja shuttle rightengine 8
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "rightengine_8"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "rightengine_8"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleRightengine9
+  name: yautja shuttle rightengine 9
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "rightengine_9"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "rightengine_9"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleStanRightengine
+  name: yautja shuttle stan rightengine
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "stan_rightengine"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "stan_rightengine"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleMiddle
+  name: yautja shuttle middle
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "middle"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "middle"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter1
+  name: yautja shuttle hunter1
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter1"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter1"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter2
+  name: yautja shuttle hunter2
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter2"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter2"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter3
+  name: yautja shuttle hunter3
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter3"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter3"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunterLW
+  name: yautja shuttle hunter l w
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter_l_w"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter_l_w"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunterRW
+  name: yautja shuttle hunter r w
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter_r_w"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter_r_w"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter4
+  name: yautja shuttle hunter4
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter4"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter4"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunterInnerW2
+  name: yautja shuttle hunter inner w 2
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter_inner_w_2"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter_inner_w_2"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter5
+  name: yautja shuttle hunter5
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter5"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter5"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleInside
+  name: yautja shuttle inside
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "inside"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "inside"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter6
+  name: yautja shuttle hunter6
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter6"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter6"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter7
+  name: yautja shuttle hunter7
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter7"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter7"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter8
+  name: yautja shuttle hunter8
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter8"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter8"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter9
+  name: yautja shuttle hunter9
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter9"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter9"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter10
+  name: yautja shuttle hunter10
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter10"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter10"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter11
+  name: yautja shuttle hunter11
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter11"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter11"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter12
+  name: yautja shuttle hunter12
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter12"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter12"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter13
+  name: yautja shuttle hunter13
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter13"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter13"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter14
+  name: yautja shuttle hunter14
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter14"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter14"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter15
+  name: yautja shuttle hunter15
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter15"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter15"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter16
+  name: yautja shuttle hunter16
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter16"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter16"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleLeftFront
+  name: yautja shuttle left front
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "left_front"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "left_front"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter17
+  name: yautja shuttle hunter17
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter17"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter17"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter18
+  name: yautja shuttle hunter18
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter18"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter18"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter19
+  name: yautja shuttle hunter19
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter19"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter19"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter20
+  name: yautja shuttle hunter20
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter20"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter20"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter21
+  name: yautja shuttle hunter21
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter21"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter21"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter22
+  name: yautja shuttle hunter22
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter22"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter22"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleRightFront
+  name: yautja shuttle right front
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "right_front"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "right_front"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter23
+  name: yautja shuttle hunter23
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter23"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter23"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter24
+  name: yautja shuttle hunter24
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter24"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter24"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter25
+  name: yautja shuttle hunter25
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter25"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter25"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter26
+  name: yautja shuttle hunter26
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter26"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter26"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter27
+  name: yautja shuttle hunter27
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter27"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter27"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunter28
+  name: yautja shuttle hunter28
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunter28"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunter28"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleFrontMiddleWindow
+  name: yautja shuttle front middle window
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "front_middle_window"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "front_middle_window"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunterw1
+  name: yautja shuttle hunterw 1
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunterw_1"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunterw_1"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunterw2
+  name: yautja shuttle hunterw 2
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunterw_2"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunterw_2"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunterw3
+  name: yautja shuttle hunterw 3
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunterw_3"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunterw_3"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunterw4
+  name: yautja shuttle hunterw 4
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunterw_4"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunterw_4"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunterw5
+  name: yautja shuttle hunterw 5
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunterw_5"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunterw_5"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunterw6
+  name: yautja shuttle hunterw 6
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunterw_6"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunterw_6"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunterw7
+  name: yautja shuttle hunterw 7
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunterw_7"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunterw_7"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunterw8
+  name: yautja shuttle hunterw 8
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunterw_8"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunterw_8"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleLeftWindow
+  name: yautja shuttle left window
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "left_window"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "left_window"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunterw9
+  name: yautja shuttle hunterw 9
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunterw_9"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunterw_9"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunterw10
+  name: yautja shuttle hunterw 10
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunterw_10"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunterw_10"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunterw11
+  name: yautja shuttle hunterw 11
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunterw_11"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunterw_11"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleRightWindow
+  name: yautja shuttle right window
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "right_window"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "right_window"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunterw12
+  name: yautja shuttle hunterw 12
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunterw_12"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunterw_12"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunterw13
+  name: yautja shuttle hunterw 13
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunterw_13"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunterw_13"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunterw14
+  name: yautja shuttle hunterw 14
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunterw_14"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunterw_14"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleBottomWindow
+  name: yautja shuttle bottom window
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "bottom_window"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "bottom_window"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunterw15
+  name: yautja shuttle hunterw 15
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunterw_15"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunterw_15"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunterw16
+  name: yautja shuttle hunterw 16
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunterw_16"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunterw_16"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureHunterShuttleHunterw17
+  name: yautja shuttle hunterw 17
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      drawdepth: Walls
+      layers:
+        - state: "hunterw_17"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
+      state: "hunterw_17"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureSarcophagusSarcophagus0
+  name: yautja sarcophagus sarcophagus0
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      drawdepth: Objects
+      layers:
+        - state: "sarcophagus0"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      state: "sarcophagus0"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureSarcophagusSarcophagus1
+  name: yautja sarcophagus sarcophagus1
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      drawdepth: Objects
+      layers:
+        - state: "sarcophagus1"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      state: "sarcophagus1"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureSarcophagusSarcophagus2
+  name: yautja sarcophagus sarcophagus2
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      drawdepth: Objects
+      layers:
+        - state: "sarcophagus2"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      state: "sarcophagus2"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureSarcophagusSarcomat
+  name: yautja sarcophagus sarcomat
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      drawdepth: Objects
+      layers:
+        - state: "sarcomat"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      state: "sarcomat"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureSarcophagusAncientCoffin
+  name: yautja sarcophagus ancient coffin
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ancient_coffin"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      state: "ancient_coffin"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureSarcophagusAncientCoffinDeco
+  name: yautja sarcophagus ancient coffin deco
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ancient_coffin_deco"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      state: "ancient_coffin_deco"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureSarcophagusAncientCoffinMumifiedOpen
+  name: yautja sarcophagus ancient coffin mumified open
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ancient_coffin_mumified_open"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      state: "ancient_coffin_mumified_open"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureSarcophagusAncientCoffinMumifiedDecoOpen
+  name: yautja sarcophagus ancient coffin mumified deco open
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ancient_coffin_mumified_deco_open"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      state: "ancient_coffin_mumified_deco_open"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureSarcophagusAncientCoffinMumifiedDecoAltOpen
+  name: yautja sarcophagus ancient coffin mumified deco alt open
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ancient_coffin_mumified_deco_alt_open"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      state: "ancient_coffin_mumified_deco_alt_open"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureSarcophagusAncientCoffinEmptyOpen
+  name: yautja sarcophagus ancient coffin empty open
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ancient_coffin_empty_open"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      state: "ancient_coffin_empty_open"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureSarcophagusAncientCoffinEmptyDecoOpen
+  name: yautja sarcophagus ancient coffin empty deco open
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ancient_coffin_empty_deco_open"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      state: "ancient_coffin_empty_deco_open"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureSarcophagusAncientCoffinBase
+  name: yautja sarcophagus ancient coffin base
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ancient_coffin_base"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      state: "ancient_coffin_base"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureSarcophagusAncientCoffinBaseDeco
+  name: yautja sarcophagus ancient coffin base deco
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ancient_coffin_base_deco"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
+      state: "ancient_coffin_base_deco"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureShieldsBallisticshield
+  name: yautja shield display ballisticshield
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ballisticshield"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      state: "ballisticshield"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureShieldsBallisticshieldReady
+  name: yautja shield display ballisticshield ready
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ballisticshield_ready"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      state: "ballisticshield_ready"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureShieldsRiotmetal
+  name: yautja shield display riotmetal
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      drawdepth: Objects
+      layers:
+        - state: "riotmetal"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      state: "riotmetal"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureShieldsRiotmetalReady
+  name: yautja shield display riotmetal ready
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      drawdepth: Objects
+      layers:
+        - state: "riotmetal_ready"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      state: "riotmetal_ready"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureShieldsRiot
+  name: yautja shield display riot
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      drawdepth: Objects
+      layers:
+        - state: "riot"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      state: "riot"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureShieldsRiotReady
+  name: yautja shield display riot ready
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      drawdepth: Objects
+      layers:
+        - state: "riot_ready"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      state: "riot_ready"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureShieldsAncientShield
+  name: yautja shield display ancient shield
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ancient_shield"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      state: "ancient_shield"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureShieldsAncientShieldReady
+  name: yautja shield display ancient shield ready
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ancient_shield_ready"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      state: "ancient_shield_ready"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureShieldsAncientShieldAlt
+  name: yautja shield display ancient shield alt
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ancient_shield_alt"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      state: "ancient_shield_alt"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureShieldsAncientShieldAltReady
+  name: yautja shield display ancient shield alt ready
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ancient_shield_alt_ready"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      state: "ancient_shield_alt_ready"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureShieldsRomanShield
+  name: yautja shield display roman shield
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      drawdepth: Objects
+      layers:
+        - state: "roman_shield"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      state: "roman_shield"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureShieldsRomanShieldReady
+  name: yautja shield display roman shield ready
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      drawdepth: Objects
+      layers:
+        - state: "roman_shield_ready"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      state: "roman_shield_ready"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureShieldsAncientShieldTemple
+  name: yautja shield display ancient shield temple
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ancient_shield_temple"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      state: "ancient_shield_temple"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureShieldsAncientShieldTempleReady
+  name: yautja shield display ancient shield temple ready
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ancient_shield_temple_ready"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      state: "ancient_shield_temple_ready"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureShieldsLegacyBay
+  name: yautja shield display legacy bay
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      drawdepth: Objects
+      layers:
+        - state: "legacy_bay"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      state: "legacy_bay"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureShieldsEshield0
+  name: yautja shield display eshield0
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      drawdepth: Objects
+      layers:
+        - state: "eshield0"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      state: "eshield0"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureShieldsEshield1
+  name: yautja shield display eshield1
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      drawdepth: Objects
+      layers:
+        - state: "eshield1"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/shields.rsi
+      state: "eshield1"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesGlobe
+  name: yautja globe
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "globe"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "globe"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesAutolatheR
+  name: yautja autolathe r
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "autolathe_r"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "autolathe_r"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesAutolatheO
+  name: yautja autolathe o
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "autolathe_o"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "autolathe_o"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesAutolathe
+  name: yautja autolathe
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "autolathe"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "autolathe"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesAutolatheT
+  name: yautja autolathe t
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "autolathe_t"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "autolathe_t"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesAutolatheN
+  name: yautja autolathe n
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "autolathe_n"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "autolathe_n"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesVat
+  name: yautja vat
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "vat"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "vat"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesVatBoiling
+  name: yautja vat boiling
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "vat_boiling"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "vat_boiling"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesChair
+  name: yautja chair
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "chair"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "chair"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesChairBuckledOverlay
+  name: yautja chair buckled overlay
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "chair_buckled_overlay"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "chair_buckled_overlay"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesComfychair
+  name: yautja comfychair
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "comfychair"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "comfychair"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesJuicer0
+  name: yautja juicer0
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "juicer0"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "juicer0"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesJuicer1
+  name: yautja juicer1
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "juicer1"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "juicer1"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesMw
+  name: yautja mw
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "mw"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "mw"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesMwo
+  name: yautja mwo
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "mwo"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "mwo"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesMw1
+  name: yautja mw1
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "mw1"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "mw1"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesMw0
+  name: yautja mw0
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "mw0"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "mw0"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesMwb
+  name: yautja mwb
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "mwb"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "mwb"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesMwbloody
+  name: yautja mwbloody
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "mwbloody"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "mwbloody"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesMwbloodyo
+  name: yautja mwbloodyo
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "mwbloodyo"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "mwbloodyo"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesMwbloody1
+  name: yautja mwbloody1
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "mwbloody1"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "mwbloody1"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesMwbloody0
+  name: yautja mwbloody0
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "mwbloody0"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "mwbloody0"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesFridge
+  name: yautja fridge
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "fridge"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "fridge"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesFridge1
+  name: yautja fridge1
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "fridge1"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "fridge1"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesFridgebroken
+  name: yautja fridgebroken
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "fridgebroken"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "fridgebroken"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesFridgeopen
+  name: yautja fridgeopen
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "fridgeopen"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "fridgeopen"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesGrinder
+  name: yautja grinder
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "grinder"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "grinder"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesGrbloody
+  name: yautja grbloody
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "grbloody"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "grbloody"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesGruse
+  name: yautja gruse
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "gruse"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "gruse"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesGridle
+  name: yautja gridle
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "gridle"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "gridle"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesGrjam
+  name: yautja grjam
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "grjam"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "grjam"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesProcessor
+  name: yautja processor
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "processor"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "processor"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesDinnerware
+  name: yautja dinnerware
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "dinnerware"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "dinnerware"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesDinnerwareVend
+  name: yautja dinnerware vend
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "dinnerware-vend"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "dinnerware-vend"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesDinnerwareDeny
+  name: yautja dinnerware deny
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "dinnerware-deny"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "dinnerware-deny"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesBlue
+  name: yautja blue
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "blue"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "blue"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesMixer0
+  name: yautja mixer0
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "mixer0"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "mixer0"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesMixer1
+  name: yautja mixer1
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "mixer1"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "mixer1"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesMixer0Nopower
+  name: yautja mixer0 nopower
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "mixer0_nopower"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "mixer0_nopower"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesMixer1Nopower
+  name: yautja mixer1 nopower
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "mixer1_nopower"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "mixer1_nopower"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesDispenser
+  name: yautja dispenser
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "dispenser"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "dispenser"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesBeaker1
+  name: yautja +beaker1
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "+beaker1"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "+beaker1"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesBeaker2
+  name: yautja +beaker2
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "+beaker2"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "+beaker2"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesBeaker3
+  name: yautja +beaker3
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "+beaker3"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "+beaker3"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesBeaker4
+  name: yautja +beaker4
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "+beaker4"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "+beaker4"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesBeaker5
+  name: yautja +beaker5
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "+beaker5"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "+beaker5"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesSodaDispenser
+  name: yautja soda dispenser
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "soda_dispenser"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "soda_dispenser"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesBoozeDispenser
+  name: yautja booze dispenser
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "booze_dispenser"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "booze_dispenser"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesTankHugger
+  name: yautja tank hugger
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "tank_hugger"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "tank_hugger"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesTankBroken
+  name: yautja tank broken
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "tank_broken"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "tank_broken"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesFreezer
+  name: yautja freezer
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "freezer"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "freezer"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesFreezer0
+  name: yautja freezer 0
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "freezer_0"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "freezer_0"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesFreezer1
+  name: yautja freezer 1
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "freezer_1"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "freezer_1"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesAutodocClosed
+  name: yautja autodoc closed
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "autodoc_closed"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "autodoc_closed"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesAutodocOpen
+  name: yautja autodoc open
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "autodoc_open"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "autodoc_open"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesAutodocOperate
+  name: yautja autodoc operate
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "autodoc_operate"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "autodoc_operate"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesSleeperOpen
+  name: yautja sleeper open
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "sleeper_open"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "sleeper_open"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesSleeper
+  name: yautja sleeper
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "sleeper"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "sleeper"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesSleeperClosed
+  name: yautja sleeper closed
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "sleeper_closed"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "sleeper_closed"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesBodyScanner
+  name: yautja body scanner
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "body_scanner"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "body_scanner"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesSleeperconsoleP
+  name: yautja sleeperconsole p
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "sleeperconsole-p"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "sleeperconsole-p"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesSleeperconsole
+  name: yautja sleeperconsole
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "sleeperconsole"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "sleeperconsole"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesCrew
+  name: yautja crew
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "crew"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "crew"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesTerminal
+  name: yautja terminal
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "terminal"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "terminal"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesCmonitor
+  name: yautja cmonitor
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "cmonitor"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "cmonitor"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesCameras
+  name: yautja cameras
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "cameras"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "cameras"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesOverwatch
+  name: yautja overwatch
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "overwatch"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "overwatch"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesSmallmonitor
+  name: yautja smallmonitor
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "smallmonitor"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "smallmonitor"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesAbed
+  name: yautja abed
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "abed"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "abed"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesBed
+  name: yautja bed
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "bed"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "bed"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesClosed
+  name: yautja closed
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "closed"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "closed"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesOpen
+  name: yautja open
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "open"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "open"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesTable1
+  name: yautja table1
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "table1"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "table1"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesTable2Idle
+  name: yautja table2 idle
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "table2-idle"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "table2-idle"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesTable2Active
+  name: yautja table2 active
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "table2-active"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "table2-active"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesWeldtank
+  name: yautja weldtank
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "weldtank"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "weldtank"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesWatertank
+  name: yautja watertank
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "watertank"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "watertank"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesBodyScannerOpen
+  name: yautja body scanner open
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "body_scanner_open"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "body_scanner_open"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesBodyScannerClosed
+  name: yautja body scanner closed
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "body_scanner_closed"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "body_scanner_closed"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesSmes
+  name: yautja smes
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "smes"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "smes"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesDoorctrl
+  name: yautja doorctrl
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "doorctrl"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "doorctrl"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesDoorctrl0
+  name: yautja doorctrl0
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "doorctrl0"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "doorctrl0"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesDoorctrl1
+  name: yautja doorctrl1
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "doorctrl1"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "doorctrl1"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesDoorctrlDenied
+  name: yautja doorctrl denied
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "doorctrl-denied"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "doorctrl-denied"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesDoorctrlP
+  name: yautja doorctrl p
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "doorctrl-p"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "doorctrl-p"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesLadder10
+  name: yautja ladder10
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ladder10"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "ladder10"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesLadder01
+  name: yautja ladder01
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ladder01"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "ladder01"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesLadder11
+  name: yautja ladder11
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ladder11"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "ladder11"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesLadderdown
+  name: yautja ladderdown
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ladderdown"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "ladderdown"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesLadderup
+  name: yautja ladderup
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ladderup"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "ladderup"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesLadder00
+  name: yautja ladder00
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "ladder00"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "ladder00"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesSeeds
+  name: yautja seeds
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "seeds"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "seeds"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesNutri
+  name: yautja nutri
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "nutri"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "nutri"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesNutriDeny
+  name: yautja nutri deny
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "nutri_deny"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "nutri_deny"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesT20
+  name: yautja t 20
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "t_20"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "t_20"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesT40
+  name: yautja t 40
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "t_40"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "t_40"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesT60
+  name: yautja t 60
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "t_60"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "t_60"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesT80
+  name: yautja t 80
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "t_80"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "t_80"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesT100
+  name: yautja t 100
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "t_100"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "t_100"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesTInactive
+  name: yautja t inactive
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "t_inactive"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "t_inactive"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesTActive
+  name: yautja t active
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "t_active"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "t_active"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesTBoom
+  name: yautja t boom
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "t_boom"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "t_boom"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesTSignaller
+  name: yautja t signaller
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "t_signaller"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "t_signaller"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesTReinforced
+  name: yautja t reinforced
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "t_reinforced"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "t_reinforced"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesDispensing
+  name: yautja dispensing
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "dispensing"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "dispensing"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesFilling
+  name: yautja filling
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "filling"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "filling"
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesConsoleShuttle
+  name: yautja console shuttle
+  description: An ancient Yautja hunting-ground structure.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "console_shuttle"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "console_shuttle"

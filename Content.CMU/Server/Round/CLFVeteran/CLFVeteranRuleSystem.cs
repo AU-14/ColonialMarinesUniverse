@@ -4,7 +4,6 @@ using Content.Server.GameTicking.Rules;
 using Content.Server.AU14.Systems;
 using Content.Server.Station.Systems;
 using Content.Server.StationRecords.Systems;
-using Content.Shared.AU14.CLF;
 using Content.Shared.Fax.Components;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs.Components;
@@ -15,6 +14,7 @@ using Content.Shared.CriminalRecords;
 using Content.Shared.Security;
 using Content.Shared.Cuffs.Components;
 using Robust.Shared.Maths;
+using CLFFaxReceiverComponent = Content.Shared._CMU14.Threats.Mobs.CLF.CLFFaxReceiverComponent;
 
 namespace Content.Server.AU14.Round.CLFVeteran;
 

@@ -1,0 +1,83 @@
+- type: partySpawn
+  id: FORECONSpawn
+  leadersToSpawn:
+    AU14JobFORECONCommander: 1
+    AU14JobFORECONSquadleader: 1
+  gruntsToSpawn:
+    AU14JobFORECONSynth: 1
+    AU14JobFORECONSupportTech: 1
+    AU14JobFORECONSmartGunOperator: 1
+    AU14JobFORECONMarksman: 1
+    AU14JobFORECONRifleman: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: FORECON
+  partyspawn: FORECONSpawn
+  blacklistedgamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: ground
+  weight: 100
+  minplayers: 100
+  maxplayers: 400
+  GhostsNeeded: 0
+  roundstart: true
+
+- type: partySpawn
+  id: FORECONSpawnAlt
+  leadersToSpawn:
+    AU14JobFORECONCommander: 1
+    AU14JobFORECONSquadleader: 1
+  gruntsToSpawn:
+    AU14JobFORECONRifleman: 0
+    AU14JobFORECONSupportTech: 1
+    AU14JobFORECONSmartGunOperator: 0
+    AU14JobFORECONMarksman: 0
+    AU14JobFORECONSynth: 0
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: FORECONAlt
+  partyspawn: FORECONSpawnAlt
+  blacklistedgamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: ground
+  weight: 100
+  minplayers: 25
+  maxplayers: 50
+  GhostsNeeded: 0
+  roundstart: true
+
+- type: partySpawn
+  id: FORECONSpawnAlt2
+  leadersToSpawn:
+    AU14JobFORECONCommander: 1
+    AU14JobFORECONSquadleader: 1
+  gruntsToSpawn:
+    AU14JobFORECONRifleman: 0
+    AU14JobFORECONSupportTech: 1
+    AU14JobFORECONSmartGunOperator: 1
+    AU14JobFORECONMarksman: 1
+    AU14JobFORECONSynth: 0
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: FORECONAlt2
+  partyspawn: FORECONSpawnAlt2
+  blacklistedgamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: ground
+  weight: 100
+  minplayers: 51
+  maxplayers: 99
+  GhostsNeeded: 0
+  roundstart: true

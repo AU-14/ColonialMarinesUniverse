@@ -1,0 +1,39 @@
+- type: partySpawn
+  id: CLFReinforcementsSpawnIntel
+  leadersToSpawn:
+    AU14IntelThirdPartyCLFInsurgentReinforcements: 1
+  gruntsToSpawn:
+    AU14IntelThirdPartyCLFInsurgentReinforcements: 4
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CLFCellReinforcementsIntel
+  partyspawn: CLFReinforcementsSpawnIntel
+  entrymethod: shuttle
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_clf_shuttle.yml
+  weight: 1
+  minplayers: 0
+  maxplayers: 600
+  GhostsNeeded: 600
+  roundstart: false
+
+
+
+- type: partySpawn
+  id: CLFReinforcementsSpawnIntelMachineGunner
+  leadersToSpawn:
+    AU14IntelThirdPartyCLFInsurgentReinforcementsMachineGunner: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CLFCellReinforcementsIntelMachineGunner
+  partyspawn: CLFReinforcementsSpawnIntelMachineGunner
+  entrymethod: shuttle
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_clf_shuttle.yml
+  weight: 1
+  minplayers: 0
+  maxplayers: 600
+  GhostsNeeded: 600
+  roundstart: false

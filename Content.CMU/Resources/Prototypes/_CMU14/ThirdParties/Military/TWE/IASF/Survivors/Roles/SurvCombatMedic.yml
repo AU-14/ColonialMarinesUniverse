@@ -1,0 +1,29 @@
+- type: job
+  parent: AU14IASFMedicalTechnicianBase
+  id: AU14IASFsurvMedicalTechnician
+  spawnMenuRoleName: IASF Medical Technician Survivor
+  playTimeTracker: AU14IASFCombatMedicalTechnician
+  greeting: au14-job-greeting-IASFsurv
+  basePlaytimeTracker: true
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicTWEIASF
+  id: AU14IASFsurvMedicalTechnician
+  name: IASF Medical Technician (Survivor)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadIASF
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-tweiasf-paratrooper
+    description: au14-job-description-IASFsurv
+    job: AU14IASFsurvMedicalTechnician
+    rules: au14-job-rules-IASFsurv
+    raffle:
+      settings: short

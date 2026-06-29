@@ -1,0 +1,24 @@
+- type: partySpawn
+  id: WYHTSpawn
+  leadersToSpawn:
+    AU14JobWYHTLiaison: 1
+  gruntsToSpawn:
+    AU14JobWYHTScientist: 2
+    AU14JobWYHTGoon: 2
+    AU14SpawnerRandomWeYuSupply: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: WYHT
+  partyspawn: WYHTSpawn
+  whitelistedgamemodes:
+    - insurgency
+    - colonyfall
+  entrymethod: shuttle
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml
+  weight: 20
+  minplayers: 30
+  maxplayers: 400
+  GhostsNeeded: 5
+  roundstart: false

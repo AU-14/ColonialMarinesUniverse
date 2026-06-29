@@ -1,0 +1,78 @@
+- type: job
+  parent: AU14JobCivilianColonyAdministrator
+  id: AU14JobCivilianCorporateAdministrator
+  roundSide: Civilian
+  roundForce: WY
+  roundRole: CivilianCorporateAdministrator
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 1
+      RMCSkillEngineer: 1
+      RMCSkillConstruction: 1
+      RMCSkillOverwatch: 1
+      RMCSkillResearch: 1
+      RMCSkillPolice: 1
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillIntel: 1
+      RMCSkillDomestics: 1
+      RMCSkillNavigations: 1
+      RMCSkillFirearms: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliancorporateadministrator
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: hudsquad_liaison
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - SquadPMC
+
+  name: au14-job-name-civiliancorporateadministrator
+  description: au14-job-description-civiliancorporateadministrator
+  setPreference: false
+  playTimeTracker: AU14JobCivilianCorporateAdministrator
+  canBeAntag: false
+  startingGear: AU14GearCivilianCorporateAdministrator
+  icon: "CMJobIconLiaison"
+  requireAdminNotify: true
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: Corporate Administrator (CMU)
+  accessGroups:
+  - auwy
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  access:
+  - AU14AccessCorporateWEYULiaison
+  - AU14AccessColonyAdministrator
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianCorporateAdministrator
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonBlack
+    shoes: RMCShoesLaceupBrown
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: RMCJacketCorporateBlue
+  inhand:
+  - RMCRadioHandheldColonyOff
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianCorporateAdministrator
+  name: Spawn Point Corporate Administrator
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianCorporateAdministrator
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianCorporateAdministrator
+  isHumanoid: true
+
+# ── Corporate Admin Assistant ───────────────────────────────────────────────

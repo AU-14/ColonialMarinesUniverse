@@ -1,0 +1,118 @@
+- type: job
+  abstract: true
+  parent: CMJobBase
+  id: AU14JobCivilianCorporateLiaisonBase
+  name: au14-job-name-civiliancorporateliaison
+  description: au14-job-description-civiliancorporateliaison
+  playTimeTracker: AU14JobCivilianCorporateLiaison
+  basePlaytimeTracker: true
+
+- type: job
+  parent: AU14JobCivilianCorporateLiaisonBase
+  id: AU14JobCivilianCorporateLiaison
+  roundSide: Civilian
+  roundForce: WY
+  roundRole: CivilianCorporateLiaison
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 1
+      RMCSkillOverwatch: 1
+  - type: CMVendorUser
+    id: AU14JobCivilianCorporateLiaison
+    points: 70
+  - type: JobPrefix
+    prefix: au14-job-prefix-corporateliaison
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: hudsquad_liaison
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - SquadPMC
+
+  name: au14-job-name-civiliancorporateliaison
+  description: au14-job-description-civiliancorporateliaison
+  setPreference: true
+  ranks:
+    RMCRankWeYaAssistantManager:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateLiaison
+      time: 360000 # 100 hours
+    RMCRankWeYaExecutiveSupervisor:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateLiaison
+      time: 270000 # 75 hours
+    RMCRankWeYaExecutiveSpecialist:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateLiaison
+      time: 180000 # 50 hours
+    RMCRankWeYaSeniorExecutive:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateLiaison
+      time: 90000 # 25 hours
+    RMCRankWeYaExecutive:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateLiaison
+      time: 36000 # 10 hours
+    RMCRankWeYaJuniorExecutive: []
+  startingGear: AU14GearCivilianCorporateLiaison
+  icon: "CMJobIconLiaison"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: WY Liaison (CMU)
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  - auwy
+  access:
+  - AU14AccessCorporateWEYULiaison
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianCorporateLiaison
+  equipment:
+    jumpsuit: AU14CivilianWorkwearBlue
+    shoes: RMCShoesLaceup
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: AU14CivilianJacketOrangePufferJacket
+    ears: AU14ColonyWeylandHeadset
+    ears2: RMCM5CameraGear
+    pocket1: AU14StampLiaison
+  inhand:
+  - RMCPortableVendorCorporate
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianCorporateLiaison
+  name: Spawn Point Civilian Corporate Liaison
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianCorporateLiaison
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianCorporateLiaison
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobAU14JobCivilianCorporateLiaison
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - WYCLJumpsuitAU14
+  - WYCLOuterwearAU14
+  - WYCLHeadwearAU14
+  - WYCLFootwearAU14
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC

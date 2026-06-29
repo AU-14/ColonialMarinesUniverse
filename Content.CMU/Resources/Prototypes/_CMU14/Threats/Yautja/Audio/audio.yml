@@ -1,0 +1,241 @@
+- type: soundCollection
+  id: CMUYautjaSpeechClicks
+  files:
+  - /Audio/_CMU14/Yautja/Voice/Clicks/pred_click01.wav
+  - /Audio/_CMU14/Yautja/Voice/Clicks/pred_click02.wav
+  - /Audio/_CMU14/Yautja/Voice/Clicks/pred_click03.wav
+  - /Audio/_CMU14/Yautja/Voice/Clicks/pred_click04.wav
+  - /Audio/_CMU14/Yautja/Voice/Clicks/pred_click05.wav
+  - /Audio/_CMU14/Yautja/Voice/Clicks/pred_click06.wav
+  - /Audio/_CMU14/Yautja/Voice/Clicks/pred_click07.wav
+  - /Audio/_CMU14/Yautja/Voice/Clicks/pred_click08.wav
+  - /Audio/_CMU14/Yautja/Voice/Clicks/pred_click09.wav
+  - /Audio/_CMU14/Yautja/Voice/Clicks/pred_click10.wav
+
+- type: soundCollection
+  id: CMUYautjaCloakWarning
+  files:
+  - /Audio/_CMU14/Yautja/Equipment/predator_cloak_warning_01.wav
+  - /Audio/_CMU14/Yautja/Equipment/predator_cloak_warning_02.wav
+  - /Audio/_CMU14/Yautja/Equipment/predator_cloak_warning_03.wav
+
+- type: soundCollection
+  id: CMUYautjaHealthShardPainScream
+  files:
+  - /Audio/_CMU14/Yautja/Equipment/HealthShard/prd_health_pain_scream_01.wav
+  - /Audio/_CMU14/Yautja/Equipment/HealthShard/prd_health_pain_scream_02.wav
+  - /Audio/_CMU14/Yautja/Equipment/HealthShard/prd_health_pain_scream_03.wav
+
+- type: soundCollection
+  id: CMUYautjaTranslator
+  files:
+  - /Audio/_CMU14/Yautja/Equipment/pred_translator.ogg
+
+- type: soundCollection
+  id: CMUYautjaRoars
+  files:
+  - /Audio/_CMU14/Yautja/Voice/Roars/pred_roar1.wav
+  - /Audio/_CMU14/Yautja/Voice/Roars/pred_roar2.wav
+  - /Audio/_CMU14/Yautja/Voice/Roars/pred_roar3.wav
+  - /Audio/_CMU14/Yautja/Voice/Roars/pred_roar4.wav
+  - /Audio/_CMU14/Yautja/Voice/Roars/pred_roar5.wav
+  - /Audio/_CMU14/Yautja/Voice/Roars/pred_roar6.wav
+
+- type: soundCollection
+  id: CMUYautjaLaughs
+  files:
+  - /Audio/_CMU14/Yautja/Voice/Laughs/pred_laugh1.wav
+  - /Audio/_CMU14/Yautja/Voice/Laughs/pred_laugh2.wav
+  - /Audio/_CMU14/Yautja/Voice/Laughs/pred_laugh3.wav
+  - /Audio/_CMU14/Yautja/Voice/Laughs/pred_laugh4.wav
+  - /Audio/_CMU14/Yautja/Voice/Laughs/pred_laugh5.wav
+  - /Audio/_CMU14/Yautja/Voice/Laughs/pred_laugh6.wav
+
+- type: soundCollection
+  id: CMUYautjaPain
+  files:
+  - /Audio/_CMU14/Yautja/Voice/Pain/pred_pain1.wav
+  - /Audio/_CMU14/Yautja/Voice/Pain/pred_pain2.wav
+  - /Audio/_CMU14/Yautja/Voice/Pain/pred_pain3.wav
+  - /Audio/_CMU14/Yautja/Voice/Pain/pred_pain4.wav
+  - /Audio/_CMU14/Yautja/Voice/Pain/pred_pain5.wav
+  - /Audio/_CMU14/Yautja/Voice/Pain/pred_pain_rare1.wav
+
+- type: soundCollection
+  id: CMUYautjaDeath
+  files:
+  - /Audio/_CMU14/Yautja/Voice/Death/pred_death_scream_01.wav
+  - /Audio/_CMU14/Yautja/Voice/Death/pred_death_scream_02.wav
+
+- type: soundCollection
+  id: CMUYautjaDeathCries
+  files:
+  - /Audio/_CMU14/Yautja/Voice/Death/pred_death1.wav
+  - /Audio/_CMU14/Yautja/Voice/Death/pred_death2.wav
+  - /Audio/_CMU14/Yautja/Voice/Death/pred_death_scream_01.wav
+  - /Audio/_CMU14/Yautja/Voice/Death/pred_death_scream_02.wav
+
+- type: soundCollection
+  id: CMUYautjaDistract
+  files:
+  - /Audio/_CMU14/Yautja/Voice/Distract/pred_distract_01.wav
+  - /Audio/_CMU14/Yautja/Voice/Distract/pred_distract_02.wav
+  - /Audio/_CMU14/Yautja/Voice/Distract/pred_distract_03.wav
+  - /Audio/_CMU14/Yautja/Voice/Distract/pred_distract_04.wav
+
+- type: soundCollection
+  id: CMUYautjaWristBladesHit
+  files:
+  - /Audio/_CMU14/Yautja/Weapons/WristBlades/prd_wrist_blades_hit_01.wav
+  - /Audio/_CMU14/Yautja/Weapons/WristBlades/prd_wrist_blades_hit_02.wav
+  - /Audio/_CMU14/Yautja/Weapons/WristBlades/prd_wrist_blades_hit_03.wav
+  - /Audio/_CMU14/Yautja/Weapons/WristBlades/prd_wrist_blades_hit_04.wav
+  - /Audio/_CMU14/Yautja/Weapons/WristBlades/prd_wrist_blades_hit_05.wav
+
+- type: soundCollection
+  id: CMUYautjaWristBladesMiss
+  files:
+  - /Audio/_CMU14/Yautja/Weapons/WristBlades/prd_wrist_blades_swipe_01.wav
+  - /Audio/_CMU14/Yautja/Weapons/WristBlades/prd_wrist_blades_swipe_02.wav
+  - /Audio/_CMU14/Yautja/Weapons/WristBlades/prd_wrist_blades_swipe_03.wav
+  - /Audio/_CMU14/Yautja/Weapons/WristBlades/prd_wrist_blades_swipe_04.wav
+  - /Audio/_CMU14/Yautja/Weapons/WristBlades/prd_wrist_blades_swipe_05.wav
+
+- type: soundCollection
+  id: CMUYautjaWristBladesHitDirt
+  files:
+  - /Audio/_CMU14/Yautja/Weapons/WristBlades/wrist_blades_hit_dirt_01.wav
+  - /Audio/_CMU14/Yautja/Weapons/WristBlades/wrist_blades_hit_dirt_02.wav
+  - /Audio/_CMU14/Yautja/Weapons/WristBlades/wrist_blades_hit_dirt_03.wav
+  - /Audio/_CMU14/Yautja/Weapons/WristBlades/wrist_blades_hit_dirt_04.wav
+  - /Audio/_CMU14/Yautja/Weapons/WristBlades/wrist_blades_hit_dirt_05.wav
+
+- type: soundCollection
+  id: CMUYautjaSwordHitDirt
+  files:
+  - /Audio/_CMU14/Yautja/Weapons/Sword/sword_impact_dirt_01.wav
+  - /Audio/_CMU14/Yautja/Weapons/Sword/sword_impact_dirt_02.wav
+
+- type: soundCollection
+  id: CMUYautjaSwordHit
+  files:
+  - /Audio/_CMU14/Yautja/Weapons/Sword/prd_sword_impact_01.wav
+  - /Audio/_CMU14/Yautja/Weapons/Sword/prd_sword_impact_02.wav
+
+- type: soundCollection
+  id: CMUYautjaSwordMiss
+  files:
+  - /Audio/_CMU14/Yautja/Weapons/Sword/prd_sword_miss_01.wav
+  - /Audio/_CMU14/Yautja/Weapons/Sword/prd_sword_miss_02.wav
+
+- type: soundCollection
+  id: CMUYautjaChainGauntletHit
+  files:
+  - /Audio/Weapons/punch1.ogg
+  - /Audio/Weapons/punch2.ogg
+  - /Audio/Weapons/punch3.ogg
+  - /Audio/Weapons/punch4.ogg
+  - /Audio/Effects/hit_kick.ogg
+  - /Audio/_CMU14/Yautja/Weapons/ChainGauntlet/hit_punch.wav
+  - /Audio/_CMU14/Yautja/Weapons/ChainGauntlet/chain_whip.wav
+
+- type: soundCollection
+  id: CMUYautjaClanSwordHit
+  files:
+  - /Audio/_CMU14/Yautja/Weapons/Melee/clan_sword_hit_1.wav
+  - /Audio/_CMU14/Yautja/Weapons/Melee/clan_sword_hit_2.wav
+
+- type: soundCollection
+  id: CMUYautjaChainWhipHit
+  files:
+  - /Audio/_CMU14/Yautja/Weapons/ChainGauntlet/chain_whip.wav
+
+- type: soundCollection
+  id: CMUYautjaSlam
+  files:
+  - /Audio/_CMU14/Yautja/Weapons/ChainGauntlet/slam1.wav
+  - /Audio/_CMU14/Yautja/Weapons/ChainGauntlet/slam2.wav
+  - /Audio/_CMU14/Yautja/Weapons/ChainGauntlet/slam3.wav
+  - /Audio/_CMU14/Yautja/Weapons/ChainGauntlet/slam_rare_1.wav
+
+- type: soundCollection
+  id: CMUPredalienSpeechClicks
+  files:
+  - /Audio/_CMU14/Yautja/Predalien/predalien_click.ogg
+
+- type: soundCollection
+  id: CMUPredalienRoar
+  files:
+  - /Audio/_CMU14/Yautja/Predalien/predalien_roar.ogg
+
+- type: speechSounds
+  id: CMUPredalienSpeech
+  saySound:
+    collection: CMUPredalienSpeechClicks
+  askSound:
+    collection: CMUPredalienSpeechClicks
+  exclaimSound:
+    collection: CMUPredalienSpeechClicks
+
+- type: emoteSounds
+  id: CMUPredalien
+  params:
+    variation: 0.125
+  sounds:
+    Growl:
+      collection: XenoGrowl
+    Hiss:
+      collection: XenoHiss
+    XenoRoar:
+      collection: CMUPredalienRoar
+    XenoHelp:
+      collection: XenoHelp
+    XenoTailSwipe:
+      collection: XenoTailSwipe
+
+- type: speechSounds
+  id: CMUYautjaSpeech
+  saySound:
+    collection: CMUYautjaSpeechClicks
+  askSound:
+    collection: CMUYautjaSpeechClicks
+  exclaimSound:
+    collection: CMUYautjaSpeechClicks
+
+- type: emoteSounds
+  id: CMUBaseYautja
+  sounds:
+    CMUYautjaClick:
+      collection: CMUYautjaSpeechClicks
+    CMUYautjaRoar:
+      collection: CMUYautjaRoars
+    CMUYautjaLaugh:
+      collection: CMUYautjaLaughs
+    CMUYautjaGrowl:
+      path: /Audio/_CMU14/Yautja/Voice/Roars/predgrowl.wav
+    CMUYautjaPain:
+      collection: CMUYautjaPain
+    CMUYautjaDeathCry:
+      collection: CMUYautjaDeathCries
+    CMUYautjaDeathLaugh:
+      path: /Audio/_CMU14/Yautja/Voice/Death/pred_deathlaugh.wav
+    CMUYautjaDistract:
+      collection: CMUYautjaDistract
+    Scream:
+      collection: CMUYautjaRoars
+    Laugh:
+      collection: CMUYautjaLaughs
+    Growl:
+      path: /Audio/_CMU14/Yautja/Voice/Roars/predgrowl.wav
+    Warcry:
+      collection: CMUYautjaRoars
+    DefaultDeathgasp:
+      collection: CMUYautjaDeath
+
+- type: emoteSounds
+  parent: [ CMUBaseYautja, RMCBaseMaleSounds ]
+  id: CMUMaleYautja
+
+- type: emoteSounds
+  parent: [ CMUBaseYautja, RMCBaseFemaleSounds ]
+  id: CMUFemaleYautja

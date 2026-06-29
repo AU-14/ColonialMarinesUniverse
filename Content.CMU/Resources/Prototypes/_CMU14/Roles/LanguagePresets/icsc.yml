@@ -1,0 +1,18 @@
+- type: entity
+  id: AU14LanguagePresetICSC
+  name: ICSC Languages
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: LanguagePreset
+    spokenLanguages:
+    - French
+    - English
+    - Turkish
+    - Korean
+    understoodLanguages:
+    - French
+    - English
+    - Turkish
+    - Korean
+    currentLanguage: French
+    defaultLanguage: French
