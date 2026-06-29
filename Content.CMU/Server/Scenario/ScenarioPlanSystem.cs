@@ -1,6 +1,7 @@
 using System.IO;
 using System.Linq;
 using Content.Server._CMU14.Threats;
+using Content.Server.Chat.Managers;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Maps;
 using Content.Server.Spawners.Components;
@@ -25,8 +26,10 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
     private const string DistressSignalPresetId = "DistressSignal";
     private const string ColonyFallPresetId = "ColonyFall";
     private const string InsurgencyPresetId = "Insurgency";
+    private const int ScenarioPlanAnnouncementMaxDiagnosticLength = 500;
     private const string SmallestCandidateReservationPolicyId = "SmallestCandidateBodyCountAllowsUnderfill";
 
+    [Dependency] private IChatManager _chat = default!;
     [Dependency] private IComponentFactory _componentFactory = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IResourceManager _resources = default!;
@@ -90,7 +93,12 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
         if (usedBackup)
         {
             sawmill.Warning(
-                $"[ScenarioPlanSystem] Shadow Scenario Plan validation failed for {request.PresetId} ({reason}); using validated Voting Backup for planet {request.PlanetId} map {request.MapId}.");
+                $"[ScenarioPlanSystem] Shadow Scenario Plan validation failed for {request.PresetId} ({reason}); using validated Voting Backup for planet {request.PlanetId} map {request.MapId}. Diagnostic: {backupDiagnostic}");
+            AnnounceScenarioPlanFailure(
+                "au14-scenario-plan-failed-backup-announcement",
+                request,
+                reason,
+                backupDiagnostic);
         }
         else if (report.IsValid)
         {
@@ -101,6 +109,11 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
         {
             sawmill.Warning(
                 $"[ScenarioPlanSystem] Shadow Scenario Plan generated diagnostics for {request.PresetId} ({reason}): {report}. Backup diagnostic: {backupDiagnostic}");
+            AnnounceScenarioPlanFailure(
+                "au14-scenario-plan-failed-no-backup-announcement",
+                request,
+                reason,
+                report.ToString());
         }
 
         return snapshot;
@@ -122,20 +135,56 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
             return report;
         }
 
+        var markerDiagnostic = report.ToString();
+        var backupResolveDiagnostic = string.Empty;
         if (TryResolveVotingBackup(
                 request.PresetId,
                 request.PlanetId,
                 request.MapId,
                 request.PlayerCount,
                 out var backupPlan,
-                out backupDiagnostic) &&
+                out backupResolveDiagnostic) &&
             backupPlan != null)
         {
             usedBackup = true;
+            backupDiagnostic = markerDiagnostic;
             return new ScenarioPlanValidationReport(new[] { backupPlan }, backupPlan.Diagnostics);
         }
 
+        backupDiagnostic = backupResolveDiagnostic;
         return report;
+    }
+
+    private void AnnounceScenarioPlanFailure(
+        string locId,
+        ScenarioPlanValidationRequest request,
+        string reason,
+        string diagnostic)
+    {
+        _chat.DispatchServerAnnouncement(
+            Loc.GetString(locId,
+                ("preset", request.PresetId),
+                ("reason", reason),
+                ("planet", request.PlanetId ?? "<any>"),
+                ("map", request.MapId ?? "<any>"),
+                ("threat", request.SelectedThreatId ?? "<none>"),
+                ("diagnostic", PrepareAnnouncementDiagnostic(diagnostic))),
+            Color.Red);
+    }
+
+    private static string PrepareAnnouncementDiagnostic(string diagnostic)
+    {
+        if (string.IsNullOrWhiteSpace(diagnostic))
+            return "No diagnostic details were reported.";
+
+        diagnostic = diagnostic
+            .Replace('\r', ' ')
+            .Replace('\n', ' ');
+
+        if (diagnostic.Length <= ScenarioPlanAnnouncementMaxDiagnosticLength)
+            return diagnostic;
+
+        return $"{diagnostic[..ScenarioPlanAnnouncementMaxDiagnosticLength]}...";
     }
 
     private IReadOnlyList<ScenarioPlan> GeneratePlansForRuntimeResolution(

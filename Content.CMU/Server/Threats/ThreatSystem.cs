@@ -11,6 +11,7 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
+using Content.Shared.AU14.Scenario;
 using Content.Shared.AU14.util;
 using Content.Shared.Ghost;
 using Content.Shared.Mind;
@@ -57,8 +58,6 @@ public sealed partial class ThreatSystem : EntitySystem
     private static readonly ProtoId<JobPrototype> ThreatLeaderJobId = new("AU14JobThreatLeader");
     private static readonly ProtoId<JobPrototype> ThreatMemberJobId = new("AU14JobThreatMember");
     private static readonly EntProtoId ThreatMindRoleId = new("MindRoleThreat");
-    private static readonly EntProtoId ThreatLeaderPlayTimeRoleId = new("MindRoleThreatLeaderPlayTime");
-    private static readonly EntProtoId ThreatMemberPlayTimeRoleId = new("MindRoleThreatMemberPlayTime");
     private static readonly ProtoId<NpcFactionPrototype> ThreatNpcFaction = new("THREAT");
 
     private static readonly IReadOnlyDictionary<string, JobScaleEntry> EmptyScaling
@@ -114,33 +113,6 @@ public sealed partial class ThreatSystem : EntitySystem
 
     internal static bool IsThreatJob(ProtoId<JobPrototype>? job)
         => job == ThreatLeaderJobId || job == ThreatMemberJobId;
-
-    internal static bool TryGetThreatPlayTimeRole(ProtoId<JobPrototype> job, out EntProtoId role)
-    {
-        if (job == ThreatLeaderJobId)
-        {
-            role = ThreatLeaderPlayTimeRoleId;
-            return true;
-        }
-
-        if (job == ThreatMemberJobId)
-        {
-            role = ThreatMemberPlayTimeRoleId;
-            return true;
-        }
-
-        role = default(EntProtoId);
-        return false;
-    }
-
-    private static List<EntProtoId> GetThreatMindRoles(ProtoId<JobPrototype> job)
-    {
-        var roles = new List<EntProtoId> { ThreatMindRoleId };
-        if (ThreatSystem.TryGetThreatPlayTimeRole(job, out EntProtoId playTimeRole))
-            roles.Add(playTimeRole);
-
-        return roles;
-    }
 
     private static ThreatAssignmentCounts CountThreatAssignments(
         Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> assignedJobs)
@@ -494,7 +466,27 @@ public sealed partial class ThreatSystem : EntitySystem
                 }
             }
 
-            _sawmill.Debug($"[DEBUG] GetMarkers({markerType}): Found {legacyMarkers.Count} markers with markerId '{
+            string bucketTag = ScenarioMarkerTags.Bucket(markerType.ToString());
+            string markerIdTag = ScenarioMarkerTags.MarkerId(markerId);
+            EntityQueryEnumerator<ScenarioSpawnMarkerComponent, TransformComponent> scenarioQuery = _entityManager
+                .EntityQueryEnumerator<ScenarioSpawnMarkerComponent, TransformComponent>();
+            while (scenarioQuery.MoveNext(out EntityUid uid, out ScenarioSpawnMarkerComponent? comp,
+                       out TransformComponent? transform))
+            {
+                if (transform.MapID != mapId ||
+                    _entityManager.HasComponent<ThreatSpawnMarkerComponent>(uid) ||
+                    comp.Kind != SpawnMarkerKind.ThreatMarker ||
+                    !comp.Tags.Contains(ScenarioMarkerTags.ForceHostile, StringComparer.OrdinalIgnoreCase) ||
+                    !comp.Tags.Contains(bucketTag, StringComparer.OrdinalIgnoreCase) ||
+                    !comp.Tags.Contains(markerIdTag, StringComparer.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                legacyMarkers.Add(uid);
+            }
+
+            _sawmill.Debug($"[DEBUG] GetMarkers({markerType}): Found {legacyMarkers.Count} legacy-compatible markers with markerId '{
                 markerId
             }' on map {mapId}");
 
@@ -990,10 +982,7 @@ public sealed partial class ThreatSystem : EntitySystem
         ProtoId<JobPrototype> entityJob = ghostRole?.JobProto ?? jobId;
         _roles.MindAddJobRole(mind.Value, silent: true, jobPrototype: entityJob);
         AddStartingMindRole(entity, mind.Value);
-        foreach (EntProtoId role in ThreatSystem.GetThreatMindRoles(jobId))
-        {
-            _roles.MindAddRole(mind.Value, role, silent: true);
-        }
+        _roles.MindAddRole(mind.Value, ThreatMindRoleId, silent: true);
 
         AddThreatFaction(entity);
 
@@ -1029,7 +1018,7 @@ public sealed partial class ThreatSystem : EntitySystem
         ghostRole.RoleDescription = "au14-threat-ghost-role-description";
         ghostRole.RoleRules = "au14-threat-ghost-role-rules";
         ghostRole.JobProto = jobId;
-        ghostRole.MindRoles = ThreatSystem.GetThreatMindRoles(jobId);
+        ghostRole.MindRoles = new List<EntProtoId> { ThreatMindRoleId };
 
         EnsureComp<GhostTakeoverAvailableComponent>(entity);
     }
