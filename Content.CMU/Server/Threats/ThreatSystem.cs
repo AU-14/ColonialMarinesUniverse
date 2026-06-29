@@ -11,6 +11,7 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
+using Content.Shared.AU14.Scenario;
 using Content.Shared.AU14.util;
 using Content.Shared.Ghost;
 using Content.Shared.Mind;
@@ -465,7 +466,27 @@ public sealed partial class ThreatSystem : EntitySystem
                 }
             }
 
-            _sawmill.Debug($"[DEBUG] GetMarkers({markerType}): Found {legacyMarkers.Count} markers with markerId '{
+            string bucketTag = ScenarioMarkerTags.Bucket(markerType.ToString());
+            string markerIdTag = ScenarioMarkerTags.MarkerId(markerId);
+            EntityQueryEnumerator<ScenarioSpawnMarkerComponent, TransformComponent> scenarioQuery = _entityManager
+                .EntityQueryEnumerator<ScenarioSpawnMarkerComponent, TransformComponent>();
+            while (scenarioQuery.MoveNext(out EntityUid uid, out ScenarioSpawnMarkerComponent? comp,
+                       out TransformComponent? transform))
+            {
+                if (transform.MapID != mapId ||
+                    _entityManager.HasComponent<ThreatSpawnMarkerComponent>(uid) ||
+                    comp.Kind != SpawnMarkerKind.ThreatMarker ||
+                    !comp.Tags.Contains(ScenarioMarkerTags.ForceHostile, StringComparer.OrdinalIgnoreCase) ||
+                    !comp.Tags.Contains(bucketTag, StringComparer.OrdinalIgnoreCase) ||
+                    !comp.Tags.Contains(markerIdTag, StringComparer.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                legacyMarkers.Add(uid);
+            }
+
+            _sawmill.Debug($"[DEBUG] GetMarkers({markerType}): Found {legacyMarkers.Count} legacy-compatible markers with markerId '{
                 markerId
             }' on map {mapId}");
 
