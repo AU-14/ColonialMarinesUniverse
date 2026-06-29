@@ -13,7 +13,6 @@ public sealed class FactionLanguageBoundUserInterface : BoundUserInterface
     {
         base.Open();
 
-        Logger.Debug("[FactionLanguage] BUI Open() called");
         CreateWindow();
     }
 

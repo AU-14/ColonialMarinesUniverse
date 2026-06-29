@@ -143,7 +143,7 @@ public sealed partial class AuObjectiveSystem : AuSharedObjectiveSystem
         else
         {
             var factionKey = component.Faction.ToLowerInvariant();
-            if (!component.FactionStatuses.ContainsKey(factionKey) || component.FactionStatuses[factionKey] !=
+            if (!component.FactionStatuses.TryGetValue(factionKey, out var status) || status !=
                 AuObjectiveComponent.ObjectiveStatus.Completed)
             {
                 // Use the assigned faction for non-neutral objectives
@@ -448,8 +448,8 @@ public sealed partial class AuObjectiveSystem : AuSharedObjectiveSystem
 
         if (objective.FactionNeutral)
         {
-            if (!objective.FactionStatuses.ContainsKey(factionKey) ||
-                objective.FactionStatuses[factionKey] != AuObjectiveComponent.ObjectiveStatus.Incomplete)
+            if (!objective.FactionStatuses.TryGetValue(factionKey, out var status) ||
+                status != AuObjectiveComponent.ObjectiveStatus.Incomplete)
                 return;
 
             objective.FactionStatuses[factionKey] = AuObjectiveComponent.ObjectiveStatus.Completed;

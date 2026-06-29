@@ -55,6 +55,7 @@ public abstract partial class CMUSharedZLevelsSystem
     private EntityQuery<CMUZLevelHighGroundComponent> _highgroundQuery;
     private EntityQuery<CMUVehicleZTraversalComponent> _vehicleTraversalQuery;
     private readonly HashSet<EntityUid> _moveSnapSuppressed = new();
+    private readonly HashSet<EntityUid> _fallImpactVictims = new();
     private readonly HashSet<(EntityUid Puller, EntityUid Pulled)> _deferredPullJointRefreshes = new();
     private readonly List<(EntityUid Puller, EntityUid Pulled)> _deferredPullJointRefreshBuffer = new();
     private readonly List<Vector2> _vehicleSupportSamples = new();
@@ -170,9 +171,10 @@ public abstract partial class CMUSharedZLevelsSystem
         if (_vehicleTraversalQuery.HasComp(ent.Owner))
             return;
 
-        var entitiesAround = _lookup.GetEntitiesInRange(ent, 0.25f, LookupFlags.Uncontained);
+        _fallImpactVictims.Clear();
+        _lookup.GetEntitiesInRange(ent, 0.25f, _fallImpactVictims, LookupFlags.Uncontained);
 
-        foreach (var victim in entitiesAround)
+        foreach (var victim in _fallImpactVictims)
         {
             if (victim == ent.Owner)
                 continue;
