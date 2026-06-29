@@ -1,0 +1,139 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobVehicleCrewmanBaseAbstract
+  name: au14-job-name-vehiclecrewman
+  description: au14-job-description-vehiclecrewman
+  icon: "AU14JobIconTankCrewman"
+  spawnMenuRoleName: Vehicle Crewman (GOVFOR)
+  startingGear: AU14GearGOVFORVehicleCrewman
+  dummyStartingGear: AU14GearGOVFORVehicleCrewmanDummy
+  playTimeTracker: AU14JobGOVFORVehicleCrewman
+  overwatchRoleName: au14-job-name-vehiclecrewman
+  overwatchSortPriority: -4
+  accessGroups:
+  - AU14GovforVehicleCrew
+
+- type: job
+  abstract: true
+  parent: AU14JobVehicleCrewmanBaseAbstract
+  id: AU14JobVehicleCrewmanBase
+  roundRole: VehicleCrewman
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetPlatoonVehicleCrewman
+  - type: JobPrefix
+    prefix: au14-job-prefix-vehiclecrewman
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: vc
+
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NonResuscitable
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankPrivateFirstClass:
+      entity: AU14ChevronUSCMPrivateFirstClass
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORVehicleCrewman
+        time: 54000 # 15 hours
+    RMCRankPrivate:
+      entity: AU14ChevronUSCMPrivate
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFORVehicleCrewman
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORVehicleCrewman
+  equipment:
+    id: AU14IDCardGOVFORVehicleCrewman
+    ears: AU14HeadsetGovforMarine
+
+- type: startingGear
+  id: AU14GearGOVFORVehicleCrewmanDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleThree
+    shoes: AU14BootsJungle
+    head: AU14JungleM10Helmet
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetGovforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORVehicleCrewman
+  name: Spawn Point GOVFOR Vehicle Crewman
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORVehicleCrewman
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobVehicleCrewmanBase
+  id: AU14JobGOVFORVehicleCrewman
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: roleLoadout
+  id: JobAU14JobGOVFORVehicleCrewman
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+- type: job
+  parent: AU14JobVehicleCrewmanBase
+  id: AU14JobOPFORVehicleCrewman
+  roundSide: Opfor
+  roundForce: OPFOR
+  spawnMenuRoleName: Vehicle Crewman (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearOPFORVehicleCrewman
+  dummyStartingGear: AU14GearOPFORVehicleCrewmanDummy
+  accessGroups:
+  - AU14OpforVehicleCrew
+
+- type: startingGear
+  id: AU14GearOPFORVehicleCrewman
+  equipment:
+    id: AU14IDCardOPFORVehicleCrewman
+    ears: AU14HeadsetOpforMarine
+
+- type: startingGear
+  id: AU14GearOPFORVehicleCrewmanDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleThree
+    shoes: AU14BootsJungle
+    head: AU14JungleM10Helmet
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetOpforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointOPFORVehicleCrewman
+  name: Spawn Point OPFOR Vehicle Crewman
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORVehicleCrewman
+  - type: Sprite
+    state: syn_spawn
