@@ -6,19 +6,3 @@
   - type: MindRole
     exclusiveAntag: true
     roleType: TeamAntagonist
-
-- type: entity
-  parent: BaseMindRole
-  id: MindRoleThreatLeaderPlayTime
-  name: Threat Leader Playtime
-  components:
-  - type: MindRole
-    playTimeTracker: AUJobThreatLeader
-
-- type: entity
-  parent: BaseMindRole
-  id: MindRoleThreatMemberPlayTime
-  name: Threat Member Playtime
-  components:
-  - type: MindRole
-    playTimeTracker: AUJobThreatMember

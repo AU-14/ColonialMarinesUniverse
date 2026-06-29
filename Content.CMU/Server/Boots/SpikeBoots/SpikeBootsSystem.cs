@@ -1,3 +1,4 @@
+using Content.Shared._CMU14.Threats.Mobs.Abomination;
 using Content.Shared._RMC14.CameraShake;
 using Content.Shared._RMC14.Fireman;
 using Content.Shared._RMC14.Xenonids;
@@ -34,6 +35,7 @@ public sealed partial class SpikeBootsSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
 
     private EntityQuery<XenoWeedsComponent> _weedsQuery;
+    private EntityQuery<AbominationFleshKudzuComponent> _abominationFleshKudzuQuery;
     private EntityQuery<XenoConstructComponent> _xenoConstructQuery;
     private EntityQuery<MobStateComponent> _mobStateQuery;
     private EntityQuery<XenoComponent> _xenoQuery;
@@ -64,6 +66,7 @@ public sealed partial class SpikeBootsSystem : EntitySystem
         base.Initialize();
 
         _weedsQuery = GetEntityQuery<XenoWeedsComponent>();
+        _abominationFleshKudzuQuery = GetEntityQuery<AbominationFleshKudzuComponent>();
         _xenoConstructQuery = GetEntityQuery<XenoConstructComponent>();
         _mobStateQuery = GetEntityQuery<MobStateComponent>();
         _xenoQuery = GetEntityQuery<XenoComponent>();
@@ -133,13 +136,10 @@ public sealed partial class SpikeBootsSystem : EntitySystem
                 if (target == uid)
                     continue;
 
-                // Destroy xeno weeds and weed nodes only — skip hive structures (cores, pylons,
-                // clusters) which also carry XenoWeedsComponent but have XenoConstructComponent.
-                if (_weedsQuery.HasComp(target))
+                // Destroy xeno weeds, weed nodes, and abomination tendons.
+                // Skip hive structures (cores, pylons, clusters) which also carry XenoWeedsComponent.
+                if (IsCrushableResin(target))
                 {
-                    if (_xenoConstructQuery.HasComp(target))
-                        continue;
-
                     QueueDel(target);
 
                     if (!resinEffectsShown)
@@ -156,6 +156,9 @@ public sealed partial class SpikeBootsSystem : EntitySystem
                 }
 
                 if (!_mobStateQuery.HasComp(target))
+                    continue;
+
+                if (_carriedQuery.HasComp(target) || _container.IsEntityInContainer(target))
                     continue;
 
                 if (!IsPassable(target))
@@ -225,5 +228,14 @@ public sealed partial class SpikeBootsSystem : EntitySystem
             return true;
 
         return false;
+    }
+
+    private bool IsCrushableResin(EntityUid target)
+    {
+        if (_abominationFleshKudzuQuery.HasComp(target))
+            return true;
+
+        return _weedsQuery.HasComp(target) &&
+               !_xenoConstructQuery.HasComp(target);
     }
 }
