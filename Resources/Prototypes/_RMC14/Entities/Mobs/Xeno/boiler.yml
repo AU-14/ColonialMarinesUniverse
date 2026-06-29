@@ -241,11 +241,11 @@
       groups:
         Brute: 30
   - type: XenoAcidMine
+    range: 8
   - type: XenoAcidShotgun
   - type: XenoDeployTraps
   - type: XenoInsight
   - type: XenoAdrenalineSurge
   - type: RMCActionOrder
     id: RMCXenoBoilerSapper
-
 
