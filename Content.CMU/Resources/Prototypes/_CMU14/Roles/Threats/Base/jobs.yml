@@ -32,7 +32,7 @@
   id: AUJobThreatLeader
 
 - type: job
-  parent: CMJobXenoBase
+  parent: AUThreatJobBase
   id: AU14JobThreatMember
   name: au-job-name-threat-member
   description: au-job-description-threat-member
