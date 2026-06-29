@@ -15,26 +15,17 @@ public sealed partial class CMUXenoLanguageSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<XenoComponent, MapInitEvent>(OnXenoMapInit, after: [typeof(LanguageSystem)]);
-        SubscribeLocalEvent<LanguageComponent, MapInitEvent>(OnLanguageMapInit, after: [typeof(LanguageSystem)]);
-        SubscribeLocalEvent<XenoComponent, HiveChangedEvent>(OnXenoHiveChanged);
+        SubscribeLocalEvent<XenoComponent, DetermineEntityLanguagesEvent>(OnXenoDetermineEntityLanguages);
         SubscribeLocalEvent<XenoComponent, DetermineLanguageEvent>(OnXenoDetermineLanguage);
     }
 
-    private void OnXenoMapInit(Entity<XenoComponent> ent, ref MapInitEvent args)
+    private void OnXenoDetermineEntityLanguages(Entity<XenoComponent> ent, ref DetermineEntityLanguagesEvent args)
     {
-        RefreshEnglish(ent.Owner);
-    }
+        if (!ShouldUseEnglish(ent.Owner))
+            return;
 
-    private void OnLanguageMapInit(Entity<LanguageComponent> ent, ref MapInitEvent args)
-    {
-        if (HasComp<XenoComponent>(ent.Owner))
-            RefreshEnglish(ent.Owner);
-    }
-
-    private void OnXenoHiveChanged(Entity<XenoComponent> ent, ref HiveChangedEvent args)
-    {
-        RefreshEnglish(ent.Owner);
+        args.SpokenLanguages.Add(SharedLanguageSystem.CommonLanguage);
+        args.UnderstoodLanguages.Add(SharedLanguageSystem.CommonLanguage);
     }
 
     private void OnXenoDetermineLanguage(Entity<XenoComponent> ent, ref DetermineLanguageEvent args)
@@ -51,13 +42,7 @@ public sealed partial class CMUXenoLanguageSystem : EntitySystem
             return;
         }
 
-        if (ShouldUseEnglish(uid))
-        {
-            ApplyEnglish(uid);
-            return;
-        }
-
-        RestoreEnglish(uid);
+        _language.UpdateEntityLanguages(uid);
     }
 
     private bool ShouldUseEnglish(EntityUid uid)
@@ -72,34 +57,4 @@ public sealed partial class CMUXenoLanguageSystem : EntitySystem
                TryComp(uid, out YautjaThrallComponent? thrall) && thrall.Hivebroken;
     }
 
-    private void ApplyEnglish(EntityUid uid)
-    {
-        if (!TryComp(uid, out CMUXenoEnglishLanguageComponent? english))
-        {
-            english = EnsureComp<CMUXenoEnglishLanguageComponent>(uid);
-            english.HadSpokenEnglish = _language.CanSpeak(uid, SharedLanguageSystem.CommonLanguage);
-            english.HadUnderstoodEnglish = _language.CanUnderstand(uid, SharedLanguageSystem.CommonLanguage);
-            english.PreviousLanguage = _language.GetCurrentLanguage(uid);
-        }
-
-        _language.AddLanguage(uid, SharedLanguageSystem.CommonLanguage);
-        _language.SetLanguage((uid, null), SharedLanguageSystem.CommonLanguage);
-    }
-
-    private void RestoreEnglish(EntityUid uid)
-    {
-        if (!TryComp(uid, out CMUXenoEnglishLanguageComponent? english))
-            return;
-
-        var removeSpoken = !english.HadSpokenEnglish;
-        var removeUnderstood = !english.HadUnderstoodEnglish;
-
-        if (removeSpoken || removeUnderstood)
-            _language.RemoveLanguage((uid, null), SharedLanguageSystem.CommonLanguage, removeSpoken, removeUnderstood);
-
-        if (_language.CanSpeak(uid, english.PreviousLanguage))
-            _language.SetLanguage((uid, null), english.PreviousLanguage);
-
-        RemCompDeferred<CMUXenoEnglishLanguageComponent>(uid);
-    }
 }
