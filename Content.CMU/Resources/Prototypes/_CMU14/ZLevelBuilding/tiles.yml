@@ -130,9 +130,6 @@
   # Mappers can forbid vertical building on a map with ZBuildableMap { enabled: false } (e.g. the UNS Almayer).
   conditions:
   - !type:ZBuildAllowed
-  icon:
-    sprite: Objects/Tiles/tile.rsi
-    state: steel
 
 - type: construction
   id: AU14TileSteel
@@ -151,9 +148,6 @@
   # Mappers can forbid vertical building on a map with ZBuildableMap { enabled: false } (e.g. the UNS Almayer).
   conditions:
   - !type:ZBuildAllowed
-  icon:
-    sprite: Objects/Tiles/tile.rsi
-    state: steel
 
 - type: construction
   id: AU14TileDirt
@@ -172,6 +166,3 @@
   # Mappers can forbid vertical building on a map with ZBuildableMap { enabled: false } (e.g. the UNS Almayer).
   conditions:
   - !type:ZBuildAllowed
-  icon:
-    sprite: Objects/Tiles/tile.rsi
-    state: steel

@@ -3,22 +3,6 @@
 # Proprietary - reuse only with the Author's prior written authorization. See LICENSE-AdvancedAtkinsonatorv2.md.
 # Building overhaul (z-level): underground stone + debris.
 
-# Minable cave rock for dug-out levels. Inherits AsteroidRock's mining behaviour (drops salvageable materials)
-# but wears the CM cave-wall look instead of the vanilla asteroid sprite, to match maps like Barker's Lament.
-- type: entity
-  parent: AsteroidRock
-  id: AU14CaveRock
-  name: rock
-  suffix: AU14 z-build
-  components:
-  - type: Sprite
-    sprite: _RMC14/Structures/Walls/cave.rsi
-    color: "#826161"
-    state: cavewall
-  - type: Icon
-    sprite: _RMC14/Structures/Walls/cave.rsi
-    state: cavewall
-
 # Loose rock flung outward when a cave-in starts (before the roof buries the cavern). Salvage flavour.
 # Borrows ONLY the SteelOre1 (iron ore) sprite, tinted darker and scaled down so it reads as a small rock chunk.
 - type: entity
