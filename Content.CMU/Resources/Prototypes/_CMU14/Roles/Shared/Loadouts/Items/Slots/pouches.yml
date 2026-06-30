@@ -21,7 +21,7 @@
 - type: loadout
   id: PouchAutoinjectorAU14
   equipment:
-    pocket1: AU14PouchAutoinjectorFilled
+    pocket1: RMCPouchAutoinjector
 
 - type: loadout
   id: PouchFirstResponderAU14
@@ -83,7 +83,7 @@
 - type: loadout
   id: PouchAutoinjectorRightAU14
   equipment:
-    pocket2: AU14PouchAutoinjectorFilled
+    pocket2: RMCPouchAutoinjector
 
 - type: loadout
   id: PouchFirstResponderRightAU14
