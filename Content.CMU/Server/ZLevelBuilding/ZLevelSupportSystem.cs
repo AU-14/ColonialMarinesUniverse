@@ -55,6 +55,11 @@ public sealed class ZLevelSupportSystem : EntitySystem
     private readonly Dictionary<EntityUid, TimeSpan> _nextCollapseAlert = new();
     private static readonly TimeSpan CollapseAlertCooldown = TimeSpan.FromSeconds(3);
 
+    // Exact attribution: the last PLAYER to damage a support on each map, with the time. Used to name the real
+    // culprit in the collapse log/alert (e.g. whoever shot the beam out) instead of just "nearest player".
+    private readonly Dictionary<EntityUid, (EntityUid Culprit, TimeSpan Time)> _lastSupportDamager = new();
+    private static readonly TimeSpan AttributionWindow = TimeSpan.FromSeconds(15);
+
     /// <summary>Crash SFX when an unsupported structure caves in (guarded against a missing path).</summary>
     private static readonly SoundSpecifier CollapseSound = new SoundPathSpecifier("/Audio/Effects/explosion3.ogg");
 
@@ -98,6 +103,17 @@ public sealed class ZLevelSupportSystem : EntitySystem
         SubscribeLocalEvent<StructuralSupportComponent, MapInitEvent>(OnSupportMapInit);
         SubscribeLocalEvent<StructuralSupportComponent, ComponentShutdown>(OnSupportShutdown);
         SubscribeLocalEvent<StructuralSupportComponent, AnchorStateChangedEvent>(OnSupportAnchorChanged);
+        SubscribeLocalEvent<StructuralSupportComponent, DamageChangedEvent>(OnSupportDamaged);
+    }
+
+    /// <summary>Records the last player to damage a support on a level, so a resulting collapse names the real culprit.</summary>
+    private void OnSupportDamaged(Entity<StructuralSupportComponent> ent, ref DamageChangedEvent args)
+    {
+        if (!args.DamageIncreased || args.Origin is not { } origin || !HasComp<ActorComponent>(origin))
+            return;
+
+        if (Transform(ent).MapUid is { } mapUid)
+            _lastSupportDamager[mapUid] = (origin, _timing.CurTime);
     }
 
     private void OnSupportMapInit(Entity<StructuralSupportComponent> ent, ref MapInitEvent args)
@@ -344,7 +360,7 @@ public sealed class ZLevelSupportSystem : EntitySystem
             {
                 _nextCollapseAlert[collapseMap] = now + CollapseAlertCooldown;
                 var worldPos = _transform.ToMapCoordinates(coords).Position;
-                var culprit = DescribeNearestPlayer(collapseMap, worldPos);
+                var culprit = DescribeCulprit(collapseMap, worldPos, now);
                 _adminLog.Add(LogType.Action, LogImpact.High,
                     $"Upper z-level collapse: {ToPrettyString(uid)} lost structural support on {ToPrettyString(collapseMap)}; likely caused by {culprit}.");
                 _chat.SendAdminAlert(Loc.GetString("au-zsupport-admin-alert", ("culprit", culprit)));
@@ -523,6 +539,22 @@ public sealed class ZLevelSupportSystem : EntitySystem
             return true;
 
         return !_zMapQuery.TryComp(mapUid.Value, out var z) || z.Depth <= 0;
+    }
+
+    /// <summary>
+    /// Attributes a collapse: prefers the last player who damaged a support on this level within the attribution
+    /// window (the exact culprit, e.g. whoever shot the beam out); otherwise falls back to the nearest player.
+    /// </summary>
+    private string DescribeCulprit(EntityUid mapUid, Vector2 worldPos, TimeSpan now)
+    {
+        if (_lastSupportDamager.TryGetValue(mapUid, out var last) &&
+            now - last.Time <= AttributionWindow &&
+            !Deleted(last.Culprit))
+        {
+            return ToPrettyString(last.Culprit).ToString();
+        }
+
+        return DescribeNearestPlayer(mapUid, worldPos);
     }
 
     /// <summary>

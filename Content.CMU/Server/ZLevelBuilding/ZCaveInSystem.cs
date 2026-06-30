@@ -8,6 +8,7 @@ using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.CameraShake;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Database;
 using Content.Shared.FixedPoint;
 using Content.Shared.Popups;
@@ -76,6 +77,11 @@ public sealed class ZCaveInSystem : EntitySystem
     private EntityQuery<MapGridComponent> _gridQuery;
     private EntityQuery<ZGeneratedStoneComponent> _stoneQuery;
 
+    // Exact attribution: the last PLAYER to damage something on each underground level (the over-miner), with the
+    // time. Used to name the real culprit in the cave-in log/alert instead of just "nearest player".
+    private readonly Dictionary<EntityUid, (EntityUid Culprit, TimeSpan Time)> _lastDigger = new();
+    private static readonly TimeSpan AttributionWindow = TimeSpan.FromSeconds(15);
+
     public override void Initialize()
     {
         base.Initialize();
@@ -86,6 +92,17 @@ public sealed class ZCaveInSystem : EntitySystem
         // solid (mined rock / built or destroyed pillar) appearing or disappearing. Hook that and flag a small
         // region dirty, rather than re-scanning every dug tile every second forever (the old TPS sink).
         SubscribeLocalEvent<TransformComponent, AnchorStateChangedEvent>(OnAnchorChanged);
+        SubscribeLocalEvent<DamageableComponent, DamageChangedEvent>(OnDamaged);
+    }
+
+    /// <summary>Records the last player to deal damage on an underground level (the likely over-miner), for attribution.</summary>
+    private void OnDamaged(Entity<DamageableComponent> ent, ref DamageChangedEvent args)
+    {
+        if (!args.DamageIncreased || args.Origin is not { } origin || !HasComp<ActorComponent>(origin))
+            return;
+
+        if (Transform(ent).MapUid is { } mapUid && _stoneQuery.HasComponent(mapUid))
+            _lastDigger[mapUid] = (origin, _timing.CurTime);
     }
 
     /// <summary>
@@ -275,7 +292,7 @@ public sealed class ZCaveInSystem : EntitySystem
         // player on the level (the most likely over-miner). A whole cavern collapses as ONE event, so this fires
         // once per cave-in, not per tile.
         var originWorld = _transform.ToMapCoordinates(_map.GridTileToLocal(grid.Owner, grid.Comp, origin)).Position;
-        var culprit = DescribeNearestPlayer(stoneMap.Owner, originWorld);
+        var culprit = DescribeCulprit(stoneMap.Owner, originWorld);
         _adminLog.Add(LogType.Action, LogImpact.High,
             $"Underground cave-in started at {origin} on {ToPrettyString(stoneMap.Owner)} ({region.Count} tiles); likely caused by {culprit}.");
         _chat.SendAdminAlert(Loc.GetString("au-cavein-admin-alert", ("count", region.Count), ("culprit", culprit)));
@@ -598,6 +615,22 @@ public sealed class ZCaveInSystem : EntitySystem
     }
 
     private static int FloorDiv(int a, int b) => (int) Math.Floor((double) a / b);
+
+    /// <summary>
+    /// Attributes a cave-in: prefers the last player who dealt damage on this level within the attribution window
+    /// (the exact over-miner); otherwise falls back to the nearest player.
+    /// </summary>
+    private string DescribeCulprit(EntityUid mapUid, Vector2 worldPos)
+    {
+        if (_lastDigger.TryGetValue(mapUid, out var last) &&
+            _timing.CurTime - last.Time <= AttributionWindow &&
+            !Deleted(last.Culprit))
+        {
+            return ToPrettyString(last.Culprit).ToString();
+        }
+
+        return DescribeNearestPlayer(mapUid, worldPos);
+    }
 
     /// <summary>
     /// Best-effort attribution for an environmental collapse: the nearest player on <paramref name="mapUid"/> to

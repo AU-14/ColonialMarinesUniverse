@@ -61,6 +61,14 @@ build-partner-window-desc = Add a player to let them include YOUR built items in
 build-partner-window-empty = No other players are online.
 build-partner-window-add = Add
 build-partner-window-remove = Remove
+build-partner-window-clear-all = Clear all partners
+build-partner-granted-to-you = { $name } added you as a build partner - you can now save their builds.
+build-partner-revoked-from-you = { $name } removed you as a build partner.
+
+# Saved-build window extra option (mapper mode) + detail-panel rename/delete.
+saved-build-window-include-loose = Include loose items
+gmod-construction-menu-rename-build = Rename
+gmod-construction-menu-delete-build-confirm = Confirm Delete?
 
 # Placement controls hint (top-left).
 saved-build-controls-mode-admin = Mode: Admin (instant, free)

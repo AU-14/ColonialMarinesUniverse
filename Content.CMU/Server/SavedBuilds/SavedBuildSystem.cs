@@ -67,6 +67,71 @@ public sealed partial class SavedBuildSystem : EntitySystem
         SubscribeNetworkEvent<RequestPlaceBuildEvent>(OnRequestPlace);
         SubscribeNetworkEvent<RequestDeleteSavedBuildEvent>(OnRequestDelete);
         SubscribeNetworkEvent<RequestOpenSavedBuildsFolderEvent>(OnRequestOpenFolder);
+        SubscribeNetworkEvent<RequestRenameSavedBuildEvent>(OnRequestRename);
+    }
+
+    /// <summary>Renames a saved build (updates the metadata name and the file), if the requester is an admin or author.</summary>
+    private void OnRequestRename(RequestRenameSavedBuildEvent ev, EntitySessionEventArgs args)
+    {
+        var session = args.SenderSession;
+        var user = session.AttachedEntity;
+
+        var id = ev.Id;
+        if (string.IsNullOrEmpty(id)
+            || !id.EndsWith(".build.yml", StringComparison.Ordinal)
+            || id.Contains('/') || id.Contains('\\') || id.Contains("..")
+            || !id.Contains("__", StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        var newName = ev.NewName.Trim();
+        if (string.IsNullOrEmpty(newName))
+            return;
+
+        var dir = new ResPath(SaveDir).ToRootedPath();
+        var path = dir / id;
+        if (!_resource.UserData.Exists(path) || !_mapLoader.TryReadFile(path, out var root))
+            return;
+
+        var isAdmin = _adminManager.HasAdminFlag(session, AdminFlags.Spawn);
+        if (!isAdmin && !IsAuthor(path, session.UserId))
+        {
+            if (user is { } notYours)
+                _popup.PopupEntity(Loc.GetString("saved-build-error-delete-notyours"), notYours, notYours);
+            return;
+        }
+
+        // Update the metadata name and write under a new file name (same author prefix), then drop the old file.
+        if (root.TryGet<MappingDataNode>("meta", out var meta))
+        {
+            meta.Remove("name");
+            meta.Add("name", new ValueDataNode(newName));
+        }
+
+        var prefix = id[..id.IndexOf("__", StringComparison.Ordinal)];
+        var newPath = dir / $"{prefix}__{Sanitize(newName)}.build.yml";
+
+        try
+        {
+            using (var writer = _resource.UserData.OpenWriteText(newPath))
+            {
+                var stream = new YamlStream { new YamlDocument(root.ToYaml()) };
+                stream.Save(new YamlMappingFix(new Emitter(writer)), false);
+            }
+
+            if (newPath != path)
+                _resource.UserData.Delete(path);
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to rename saved build '{id}' -> '{newName}' for {session.Name}: {e}");
+            return;
+        }
+
+        _adminLog.Add(LogType.Action, LogImpact.Low,
+            $"{session.Name} (user {session.UserId}) renamed saved build '{id}' to '{newName}'");
+        RaiseNetworkEvent(new SavedBuildListEvent { Builds = EnumerateSavedBuilds() }, session);
     }
 
     /// <summary>Deletes a saved-build file, if the requester is an admin or the build's own author.</summary>
@@ -232,6 +297,11 @@ public sealed partial class SavedBuildSystem : EntitySystem
             .Where(e => EntityManager.EntityExists(e) && Transform(e).ParentUid == targetMapUid)
             .ToList();
 
+        // The serialized anchored flag is lost in the nullspace/map phase, so we restore it from the saved
+        // preview (keyed by prototype + quarter-tile offset). Only entries that actually recorded "anchored"
+        // are used; older saves without it fall back to the physics-body heuristic below, unchanged.
+        var anchoredByKey = ReadAnchoredIntent(root);
+
         foreach (var rootEnt in roots)
         {
             var xform = Transform(rootEnt);
@@ -242,9 +312,15 @@ public sealed partial class SavedBuildSystem : EntitySystem
             _transform.SetCoordinates(rootEnt, new EntityCoordinates(gridUid, targetLocal + rel));
             _transform.SetLocalRotation(rootEnt, savedRot + rotation);
 
-            // Re-anchor structures (static bodies) to the grid — anchored state can't survive the
-            // nullspace/map phase, so we restore it from the body type.
-            if (TryComp<PhysicsComponent>(rootEnt, out var body) && body.BodyType == BodyType.Static)
+            // Restore the original anchored state. Prefer the recorded intent (handles props anchored without a
+            // Static physics body - the mapper-mode case); fall back to "Static body => anchored" for old saves.
+            var relSave = savedLocal - anchor;
+            var protoId = MetaData(rootEnt).EntityPrototype?.ID ?? string.Empty;
+            var wasAnchored = anchoredByKey.TryGetValue((protoId, QuantizeOffset(relSave.X), QuantizeOffset(relSave.Y)), out var recorded)
+                ? recorded
+                : TryComp<PhysicsComponent>(rootEnt, out var body) && body.BodyType == BodyType.Static;
+
+            if (wasAnchored)
                 _transform.AnchorEntity(rootEnt);
 
             // Mark placed entities as built by the placer (accountability + makes them re-saveable).
@@ -369,9 +445,38 @@ public sealed partial class SavedBuildSystem : EntitySystem
         return list;
     }
 
+    /// <summary>
+    /// Builds a lookup of saved anchored intent, keyed by (prototype, quarter-tile X, quarter-tile Y), from the
+    /// build's preview header. Only entries that recorded an "anchored" field are included; older saves without
+    /// it leave the dictionary empty, so placement falls back to the physics-body heuristic.
+    /// </summary>
+    private Dictionary<(string, int, int), bool> ReadAnchoredIntent(MappingDataNode root)
+    {
+        var map = new Dictionary<(string, int, int), bool>();
+        if (!root.TryGet<MappingDataNode>("meta", out var meta) || !meta.TryGet<SequenceDataNode>("preview", out var seq))
+            return map;
+
+        foreach (var node in seq)
+        {
+            if (node is not MappingDataNode m || !m.TryGet<ValueDataNode>("anchored", out var anchoredNode))
+                continue;
+
+            var proto = MetaString(m, "proto");
+            var x = MetaFloat(m, "x");
+            var y = MetaFloat(m, "y");
+            bool.TryParse(anchoredNode.Value, out var anchored);
+            map[(proto, QuantizeOffset(x), QuantizeOffset(y))] = anchored;
+        }
+
+        return map;
+    }
+
+    /// <summary>Quarter-tile quantisation so a float offset can key a dictionary (structures are tile-aligned).</summary>
+    private static int QuantizeOffset(float value) => (int) MathF.Round(value * 4f);
+
     private void OnRequestSelection(RequestBuildSelectionEvent ev, EntitySessionEventArgs args)
     {
-        var resolved = ResolveSelection(args.SenderSession, ev.Selection, ev.Mode);
+        var resolved = ResolveSelection(args.SenderSession, ev.Selection, ev.Mode, ev.IncludeLoose);
         RaiseNetworkEvent(new BuildSelectionResultEvent
         {
             Entities = resolved.Select(e => GetNetEntity(e)).ToList(),
@@ -380,7 +485,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
     private void OnRequestSave(RequestSaveBuildEvent ev, EntitySessionEventArgs args)
     {
-        SaveBuild(args.SenderSession, ev.Name, ev.Selection, ev.Mode);
+        SaveBuild(args.SenderSession, ev.Name, ev.Selection, ev.Mode, ev.IncludeLoose);
     }
 
     /// <summary>
@@ -389,7 +494,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
     /// ANY world structure/item regardless of who built it (map-placed, admin-spawned, etc.) minus mobs/players.
     /// The privileged mode is re-validated here against the caller's real flags, so a client can't spoof it.
     /// </summary>
-    public HashSet<EntityUid> ResolveSelection(ICommonSession saver, BuildSelectionData selection, BuildSaveMode mode = BuildSaveMode.Player)
+    public HashSet<EntityUid> ResolveSelection(ICommonSession saver, BuildSelectionData selection, BuildSaveMode mode = BuildSaveMode.Player, bool includeLoose = false)
     {
         var result = new HashSet<EntityUid>();
         var saverId = saver.UserId;
@@ -415,7 +520,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
                 _lookup.GetEntitiesIntersecting(map.MapId, box, found);
                 foreach (var uid in found)
                 {
-                    if (CanSave(uid, saverId, mapperMode))
+                    if (CanSave(uid, saverId, mapperMode, includeLoose))
                         result.Add(uid);
                 }
             }
@@ -425,7 +530,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
         {
             foreach (var net in selection.ManualAdds)
             {
-                if (TryGetEntity(net, out var uid) && CanSave(uid.Value, saverId, mapperMode))
+                if (TryGetEntity(net, out var uid) && CanSave(uid.Value, saverId, mapperMode, includeLoose))
                     result.Add(uid.Value);
             }
         }
@@ -442,7 +547,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
         return result;
     }
 
-    private bool CanSave(EntityUid uid, NetUserId saver, bool mapperMode)
+    private bool CanSave(EntityUid uid, NetUserId saver, bool mapperMode, bool includeLoose)
     {
         // Only world-placed entities (directly parented to the grid) — never things held in a hand or
         // inside a container, whose LocalPosition is in a different frame and would skew the anchor.
@@ -450,10 +555,15 @@ public sealed partial class SavedBuildSystem : EntitySystem
         if (xform.GridUid is not { } grid || xform.ParentUid != grid)
             return false;
 
-        // Mapper mode: any world structure/item counts, no matter who built it (map-placed, admin-spawned, etc.).
-        // Mobs and players are still excluded - you save builds, not creatures.
+        // Mapper mode: any structure counts no matter who built it (map-placed, admin-spawned, etc.). By default
+        // only ANCHORED structures are captured (a clean building); the "include loose items" toggle also grabs
+        // unanchored floor items. Mobs/players are always excluded - you save builds, not creatures.
         if (mapperMode)
-            return !HasComp<MobStateComponent>(uid);
+        {
+            if (HasComp<MobStateComponent>(uid))
+                return false;
+            return includeLoose || xform.Anchored;
+        }
 
         if (!TryComp<PlayerBuiltComponent>(uid, out var built))
             return false;
@@ -476,7 +586,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
         SaveBuild(session, name, selection);
     }
 
-    private void SaveBuild(ICommonSession saver, string rawName, BuildSelectionData selection, BuildSaveMode mode = BuildSaveMode.Player)
+    private void SaveBuild(ICommonSession saver, string rawName, BuildSelectionData selection, BuildSaveMode mode = BuildSaveMode.Player, bool includeLoose = false)
     {
         if (saver.AttachedEntity is not { } user)
             return;
@@ -488,7 +598,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
             return;
         }
 
-        var entities = ResolveSelection(saver, selection, mode);
+        var entities = ResolveSelection(saver, selection, mode, includeLoose);
         if (entities.Count == 0)
         {
             _popup.PopupEntity(Loc.GetString("saved-build-error-empty"), user, user);
@@ -517,6 +627,9 @@ public sealed partial class SavedBuildSystem : EntitySystem
             entry.Add("x", new ValueDataNode(rel.X.ToString("R", CultureInfo.InvariantCulture)));
             entry.Add("y", new ValueDataNode(rel.Y.ToString("R", CultureInfo.InvariantCulture)));
             entry.Add("rot", new ValueDataNode(Transform(uid).LocalRotation.Theta.ToString("R", CultureInfo.InvariantCulture)));
+            // Record whether the entity was anchored, so placement restores the exact anchored state instead of
+            // guessing from physics body type (mapper-mode saves can include props anchored without a Static body).
+            entry.Add("anchored", new ValueDataNode(Transform(uid).Anchored ? "true" : "false"));
             preview.Add(entry);
         }
 

@@ -22,12 +22,15 @@ public sealed class BuildPartnerWindow : DefaultWindow
     /// <summary>Raised when the local player toggles a partner: (the other player, true = grant / false = revoke).</summary>
     public event Action<NetUserId, bool>? OnSetPartner;
 
+    /// <summary>Raised when the local player clicks "Clear all" to revoke every partner at once.</summary>
+    public event Action? OnClearAll;
+
     private readonly BoxContainer _list;
 
     public BuildPartnerWindow()
     {
         Title = Loc.GetString("build-partner-window-title");
-        MinSize = new Vector2(340, 280);
+        MinSize = new Vector2(340, 300);
 
         var root = new BoxContainer
         {
@@ -46,6 +49,14 @@ public sealed class BuildPartnerWindow : DefaultWindow
         scroll.AddChild(_list);
         root.AddChild(scroll);
 
+        var clearAll = new Button
+        {
+            Text = Loc.GetString("build-partner-window-clear-all"),
+            Margin = new Thickness(0, 6, 0, 0),
+        };
+        clearAll.OnPressed += _ => OnClearAll?.Invoke();
+        root.AddChild(clearAll);
+
         Contents.AddChild(root);
     }
 
@@ -59,6 +70,12 @@ public sealed class BuildPartnerWindow : DefaultWindow
             _list.AddChild(new Label { Text = Loc.GetString("build-partner-window-empty"), Margin = new Thickness(4) });
             return;
         }
+
+        // Current partners first (so you can see who can save your builds at a glance), then by name.
+        players.Sort((a, b) =>
+            a.IsPartner != b.IsPartner
+                ? (a.IsPartner ? -1 : 1)
+                : string.Compare(a.Name, b.Name, StringComparison.InvariantCultureIgnoreCase));
 
         foreach (var player in players)
         {

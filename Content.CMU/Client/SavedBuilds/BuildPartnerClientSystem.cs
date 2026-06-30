@@ -31,6 +31,7 @@ public sealed class BuildPartnerClientSystem : EntitySystem
 
         _window = new BuildPartnerWindow();
         _window.OnSetPartner += (user, add) => RaiseNetworkEvent(new SetBuildPartnerEvent { Partner = user, Add = add });
+        _window.OnClearAll += () => RaiseNetworkEvent(new ClearBuildPartnersEvent());
         _window.OnClose += () => _window = null;
         _window.OpenCentered();
 

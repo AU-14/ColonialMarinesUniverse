@@ -59,6 +59,9 @@ public sealed class RequestBuildSelectionEvent : EntityEventArgs
 
     /// <summary>Which selection ruleset to resolve under (re-validated server-side against the caller's flags).</summary>
     public BuildSaveMode Mode;
+
+    /// <summary>Mapper mode only: also select unanchored loose items (default false = anchored structures only).</summary>
+    public bool IncludeLoose;
 }
 
 /// <summary>Server -> client: the resolved, whitelisted entities to highlight.</summary>
@@ -77,6 +80,9 @@ public sealed class RequestSaveBuildEvent : EntityEventArgs
 
     /// <summary>Which selection ruleset to save under (re-validated server-side against the caller's flags).</summary>
     public BuildSaveMode Mode;
+
+    /// <summary>Mapper mode only: also save unanchored loose items (default false = anchored structures only).</summary>
+    public bool IncludeLoose;
 }
 
 /// <summary>One entity in a build's placement preview: prototype + position relative to the anchor.</summary>
@@ -145,6 +151,14 @@ public sealed class RequestDeleteSavedBuildEvent : EntityEventArgs
 [Serializable, NetSerializable]
 public sealed class RequestOpenSavedBuildsFolderEvent : EntityEventArgs;
 
+/// <summary>Client -> server: rename a saved build (re-validated: admin or the build's author). Replies with a fresh list.</summary>
+[Serializable, NetSerializable]
+public sealed class RequestRenameSavedBuildEvent : EntityEventArgs
+{
+    public string Id = string.Empty;
+    public string NewName = string.Empty;
+}
+
 // -------------------------------------------------------------------------
 // Build partners (the "Partners" menu button). A partner you add may include
 // YOUR built entities in THEIR saved builds. One-directional, round-scoped.
@@ -178,6 +192,10 @@ public sealed class SetBuildPartnerEvent : EntityEventArgs
     public NetUserId Partner;
     public bool Add;
 }
+
+/// <summary>Client -> server: revoke ALL of my build partners at once. Replies with a fresh list.</summary>
+[Serializable, NetSerializable]
+public sealed class ClearBuildPartnersEvent : EntityEventArgs;
 
 /// <summary>Client -> server: place a saved build at <see cref="Target"/>, rotated by <see cref="Rotation"/> radians.</summary>
 [Serializable, NetSerializable]

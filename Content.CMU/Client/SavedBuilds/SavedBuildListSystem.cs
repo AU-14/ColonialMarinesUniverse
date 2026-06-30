@@ -45,6 +45,13 @@ public sealed class SavedBuildListSystem : EntitySystem
         RaiseNetworkEvent(new RequestOpenSavedBuildsFolderEvent());
     }
 
+    /// <summary>Asks the server to rename a saved build (server re-validates admin / author), then refreshes the list.</summary>
+    public void Rename(string id, string newName)
+    {
+        if (!string.IsNullOrEmpty(id) && !string.IsNullOrWhiteSpace(newName))
+            RaiseNetworkEvent(new RequestRenameSavedBuildEvent { Id = id, NewName = newName });
+    }
+
     private void OnList(SavedBuildListEvent ev)
     {
         _builds = ev.Builds;

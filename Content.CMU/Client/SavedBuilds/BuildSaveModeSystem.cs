@@ -36,6 +36,9 @@ public sealed class BuildSaveModeSystem : EntitySystem
     /// </summary>
     public BuildSaveMode Mode { get; set; } = BuildSaveMode.Player;
 
+    /// <summary>Mapper mode only: also include unanchored loose items in the selection (default anchored-only).</summary>
+    public bool IncludeLoose { get; set; }
+
     public readonly List<BuildSelectionBox> CommittedBoxes = new();
     public readonly HashSet<NetEntity> ManualAdds = new();
     public readonly HashSet<NetEntity> ManualRemoves = new();
@@ -141,6 +144,7 @@ public sealed class BuildSaveModeSystem : EntitySystem
             Name = name,
             Selection = BuildSelection(includeLive: true),
             Mode = Mode,
+            IncludeLoose = IncludeLoose,
         });
         _window?.Close();
     }
@@ -190,12 +194,15 @@ public sealed class BuildSaveModeSystem : EntitySystem
         return true;
     }
 
+    /// <summary>Re-resolves the current selection against the server (e.g. after toggling Include-loose).</summary>
+    public void RefreshSelection() => RequestRefresh();
+
     private void RequestRefresh()
     {
         if (!Active)
             return;
 
-        RaiseNetworkEvent(new RequestBuildSelectionEvent { Selection = BuildSelection(includeLive: true), Mode = Mode });
+        RaiseNetworkEvent(new RequestBuildSelectionEvent { Selection = BuildSelection(includeLive: true), Mode = Mode, IncludeLoose = IncludeLoose });
     }
 
     private BuildSelectionData BuildSelection(bool includeLive)

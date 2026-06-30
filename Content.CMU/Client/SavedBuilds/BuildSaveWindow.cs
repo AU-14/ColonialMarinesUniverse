@@ -64,6 +64,23 @@ public sealed class BuildSaveWindow : DefaultWindow
         _countLabel = new Label { Margin = new Thickness(0, 6, 0, 6) };
         root.AddChild(_countLabel);
 
+        // Mapper-mode option: also grab unanchored loose items (default is anchored structures only). Only shown
+        // when the build-mode dropdown is on Mapper; for other modes it's irrelevant.
+        if (mode.Mode == Content.Shared._AU14.SavedBuilds.BuildSaveMode.Mapper)
+        {
+            var includeLoose = new CheckBox
+            {
+                Text = Loc.GetString("saved-build-window-include-loose"),
+                Pressed = mode.IncludeLoose,
+            };
+            includeLoose.OnToggled += args =>
+            {
+                _mode.IncludeLoose = args.Pressed;
+                _mode.RefreshSelection();
+            };
+            root.AddChild(includeLoose);
+        }
+
         // Name + save.
         _nameEdit = new LineEdit { PlaceHolder = Loc.GetString("saved-build-window-name"), HorizontalExpand = true };
         root.AddChild(_nameEdit);

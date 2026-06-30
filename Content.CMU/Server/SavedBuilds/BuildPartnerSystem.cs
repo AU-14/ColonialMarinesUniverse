@@ -35,6 +35,19 @@ public sealed partial class BuildPartnerSystem : EntitySystem
         SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => ClearGrants());
         SubscribeNetworkEvent<RequestBuildPartnerListEvent>(OnRequestList);
         SubscribeNetworkEvent<SetBuildPartnerEvent>(OnSetPartner);
+        SubscribeNetworkEvent<ClearBuildPartnersEvent>(OnClearPartners);
+    }
+
+    /// <summary>Notifies a player (if online) that their build-partner status with the owner changed.</summary>
+    private void NotifyPartner(NetUserId partner, ICommonSession owner, bool added)
+    {
+        if (!_playerManager.TryGetSessionById(partner, out var session) || session.AttachedEntity is not { } ent)
+            return;
+
+        _popup.PopupEntity(
+            Loc.GetString(added ? "build-partner-granted-to-you" : "build-partner-revoked-from-you",
+                ("name", owner.Name)),
+            ent, ent);
     }
 
     /// <summary>Sends the requester the list of other online players and whether each is currently their partner.</summary>
@@ -69,6 +82,21 @@ public sealed partial class BuildPartnerSystem : EntitySystem
             AddPartner(owner, ev.Partner);
         else
             RemovePartner(owner, ev.Partner);
+
+        NotifyPartner(ev.Partner, args.SenderSession, ev.Add);
+        OnRequestList(new RequestBuildPartnerListEvent(), args);
+    }
+
+    /// <summary>The requester revokes every one of their build partners at once, notifying each, then gets a fresh list.</summary>
+    private void OnClearPartners(ClearBuildPartnersEvent ev, EntitySessionEventArgs args)
+    {
+        var owner = args.SenderSession.UserId;
+        if (_grants.TryGetValue(owner, out var partners) && partners.Count > 0)
+        {
+            foreach (var partner in partners.ToList())
+                NotifyPartner(partner, args.SenderSession, added: false);
+            partners.Clear();
+        }
 
         OnRequestList(new RequestBuildPartnerListEvent(), args);
     }
