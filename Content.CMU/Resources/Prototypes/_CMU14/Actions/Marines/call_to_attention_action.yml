@@ -1,0 +1,13 @@
+- type: entity
+  parent: ActionMarineBase
+  id: ActionMarineCallToAttention
+  name: Call to Attention
+  description: Orders visible personnel to snap to attention and lower their voices.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _AU14/Actions/call_to_attention.rsi
+      state: attention
+  - type: InstantAction
+    event: !type:AU14CallToAttentionActionEvent
