@@ -16,7 +16,7 @@
 - type: loadout
   id: RMCPouchConstructionAU14
   equipment:
-    pocket1: RMCPouchConstruction
+    pocket1: AU14PouchConstructionFilled
 
 - type: loadout
   id: PouchAutoinjectorAU14
@@ -78,7 +78,7 @@
 - type: loadout
   id: RMCPouchConstructionRightAU14
   equipment:
-    pocket2: RMCPouchConstruction
+    pocket2: AU14PouchConstructionFilled
 
 - type: loadout
   id: PouchAutoinjectorRightAU14
