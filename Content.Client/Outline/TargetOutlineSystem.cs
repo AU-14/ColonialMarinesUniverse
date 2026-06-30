@@ -77,6 +77,7 @@ public sealed partial class TargetOutlineSystem : EntitySystem
     private ShaderInstance? _shaderTargetInvalid;
 
     private readonly HashSet<SpriteComponent> _highlightedSprites = new();
+    private readonly HashSet<EntityUid> _targetCandidates = new();
 
     public override void Initialize()
     {
@@ -129,10 +130,11 @@ public sealed partial class TargetOutlineSystem : EntitySystem
         // TODO: Duplicated in SpriteSystem and DragDropSystem. Should probably be cached somewhere for a frame?
         var mousePos = _eyeManager.PixelToMap(_inputManager.MouseScreenPosition).Position;
         var bounds = new Box2(mousePos - LookupVector, mousePos + LookupVector);
-        var pvsEntities = _lookup.GetEntitiesIntersecting(_eyeManager.CurrentEye.Position.MapId, bounds, LookupFlags.Approximate | LookupFlags.Static);
+        _targetCandidates.Clear();
+        _lookup.GetEntitiesIntersecting(_eyeManager.CurrentEye.Position.MapId, bounds, _targetCandidates, LookupFlags.Approximate | LookupFlags.Static);
         var spriteQuery = GetEntityQuery<SpriteComponent>();
 
-        foreach (var entity in pvsEntities)
+        foreach (var entity in _targetCandidates)
         {
             if (!spriteQuery.TryGetComponent(entity, out var sprite) || !sprite.Visible)
                 continue;

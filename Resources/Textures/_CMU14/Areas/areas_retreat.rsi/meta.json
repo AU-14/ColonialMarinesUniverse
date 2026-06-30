@@ -306,6 +306,18 @@
 	},
 	{
 	  "name": "oc_starport_warehouses"
+	},
+	{
+      "name": "smuggler_tunnel"
+	},
+	{
+	  "name": "hr_dorms_secondfloor"
+	},
+	{
+	  "name": "oc_hab_medbay_secondfloor"
+	},
+	{
+	  "name": "oc_hab_securitypost_secondfloor"
 	}
   ]
 }

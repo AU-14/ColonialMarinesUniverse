@@ -25,6 +25,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Random;
+using Robust.Shared.Spawners;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Xenonids.Bulwark;
@@ -257,7 +258,8 @@ public sealed partial class XenoBulwarkSystem : EntitySystem
         xeno.Comp.ReflectExpiresAt = _timing.CurTime + xeno.Comp.ReflectDuration;
         Dirty(xeno);
         _aura.GiveAura(xeno, Color.Blue, xeno.Comp.ReflectDuration, 2);
-        Spawn(xeno.Comp.ReflectEffectId, xeno.Owner.ToCoordinates());
+        var effect = Spawn(xeno.Comp.ReflectEffectId, xeno.Owner.ToCoordinates());
+        EnsureComp<TimedDespawnComponent>(effect).Lifetime = (float) xeno.Comp.ReflectDuration.TotalSeconds;
 
         foreach (var action in _rmcActions.GetActionsWithEvent<XenoReflectiveShieldActionEvent>(xeno))
             _actions.SetToggled(action.AsNullable(), true);

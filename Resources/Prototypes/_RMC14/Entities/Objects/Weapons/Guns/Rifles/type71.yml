@@ -1,4 +1,4 @@
-﻿- type: entity
+﻿- type: entity # Type 71 Base Rifle
   parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
   name: Type 71 assault rifle
   id: RMCWeaponRifleType71
@@ -104,7 +104,7 @@
     tags:
     - RMCWeaponRifleType71
 
-- type: entity
+- type: entity # Type 71 PVE
   parent: RMCWeaponRifleType71
   id: RMCWeaponRifleType71PVE
   suffix: PVE
@@ -114,7 +114,7 @@
   - type: Tag
     tags:
     - RMCWeaponRifleType71PVE
-- type: entity
+- type: entity # Type 71-F Flamer
   parent: RMCWeaponRifleType71
   name: Type 71-F assault rifle
   id: RMCWeaponRifleType71Flamer
@@ -153,7 +153,7 @@
           tags:
           - RMCAttachmentFlamer
 
-- type: entity
+- type: entity # Type 71 REG Magazine
   parent: CMMagazineRifleBase
   id: RMCMagazineRifleType71
   name: "Type 71 magazine (5.45x39mm)"
@@ -177,10 +177,10 @@
     - state: mag-1
       map: ["enum.GunVisualLayers.Mag"]
   - type: Appearance
-#  - type: RefillableByBulletBox no bullet box yet
-#    bulletType: RMCBoxBulletsRifle
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsRifleType71
 
-- type: entity
+- type: entity # Type 71 AP Magazine
   parent: RMCMagazineRifleType71
   id: RMCMagazineRifleType71AP
   name: "Type 71 AP magazine (5.45x39mm)"
@@ -205,10 +205,10 @@
       map: ["enum.GunVisualLayers.Mag"]
     - state: ammo_band
       color: "#1F951F"
-#  - type: RefillableByBulletBox no bullet box yet
-#    bulletType: RMCBoxBulletsRifle
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsRifleType71AP
 
-- type: entity
+- type: entity # Type 71 HEAP magazine
   parent: RMCMagazineRifleType71
   id: RMCMagazineRifleType71HEAP
   name: "Type 71 HEAP magazine (5.45x39mm)"
@@ -236,7 +236,7 @@
   - type: RefillableByBulletBox
     bulletType: null
 
-- type: entity
+- type: entity # 5.45x39mm REG Cartridge
   parent: CMBaseCartridgeRifle
   id: RMCCartridgeRifle545x39mm
   name: cartridge (5.45x39mm)
@@ -249,7 +249,7 @@
   - type: CartridgeAmmo
     proto: RMCBulletRifle545x39mm
 
-- type: entity
+- type: entity # 5.45x39mm AP Cartridge
   parent: CMBaseCartridgeRifle
   id: RMCCartridgeRifle545x39mmAP
   name: cartridge (5.45x39mm)
@@ -262,7 +262,7 @@
   - type: CartridgeAmmo
     proto: RMCBulletRifle545x39mmAP
 
-- type: entity
+- type: entity # 5.45x39mm HEAP Cartridge
   parent: CMBaseCartridgeRifle
   id: RMCCartridgeRifle545x39mmHEAP
   name: cartridge (5.45x39mm)
@@ -275,7 +275,7 @@
   - type: CartridgeAmmo
     proto: RMCBulletRifle545x39mmHEAP
 
-- type: entity
+- type: entity # 5.45x39mm REG Projectile 
   parent: RMCBaseBullet
   id: RMCBulletRifle545x39mm
   categories: [ HideSpawnMenu ]
@@ -299,7 +299,7 @@
     - range: 16
       falloff: 10
 
-- type: entity
+- type: entity # 5.45x39mm AP Projectile
   parent: RMCBulletRifle545x39mm
   id: RMCBulletRifle545x39mmAP
   categories: [ HideSpawnMenu ]
@@ -311,7 +311,7 @@
   - type: CMArmorPiercing
     amount: 50
 
-- type: entity
+- type: entity # 5.45x39mm HEAP Projectile
   parent: RMCBulletRifle545x39mm
   id: RMCBulletRifle545x39mmHEAP
   categories: [ HideSpawnMenu ]

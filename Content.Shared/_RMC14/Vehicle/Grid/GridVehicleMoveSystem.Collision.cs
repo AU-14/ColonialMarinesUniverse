@@ -1,6 +1,8 @@
 using System;
 using System.Numerics;
 using System.Collections.Generic;
+using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared._CMU14.ZLevels.Vehicles;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
 using Content.Shared.Doors.Components;
@@ -116,6 +118,9 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 continue;
 
             if (ignoredEntities != null && ignoredEntities.Contains(other))
+                continue;
+
+            if (ShouldIgnoreZHighGroundCollision(uid, other))
                 continue;
 
             // Heavy vehicles (APC/Tank) drive over consoles and similar tagged props
@@ -275,6 +280,12 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         AddProbe(false);
         _hitsDepth--;
         return true;
+    }
+
+    private bool ShouldIgnoreZHighGroundCollision(EntityUid vehicle, EntityUid other)
+    {
+        return HasComp<CMUVehicleZTraversalComponent>(vehicle) &&
+               HasComp<CMUZLevelHighGroundComponent>(other);
     }
 
     private bool TryBuildCollisionCandidate(
@@ -1547,7 +1558,14 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
 
         var tileArea = tileAabb.Width * tileAabb.Height;
         var minIntersectionArea = tileArea * PushTileBlockFraction;
-        foreach (var ent in lookup.GetEntitiesIntersecting(gridUid, worldBox, LookupFlags.Dynamic | LookupFlags.Static))
+        PhysicsComponent? mobBody = null;
+        FixturesComponent? mobFixtures = null;
+        var mobHasCollision = physicsQ.TryComp(mob, out mobBody) &&
+                              fixtureQ.TryComp(mob, out mobFixtures);
+
+        _pushTileIntersecting.Clear();
+        lookup.GetEntitiesIntersecting(gridUid, worldBox, _pushTileIntersecting, LookupFlags.Dynamic | LookupFlags.Static);
+        foreach (var ent in _pushTileIntersecting)
         {
             if (ent == vehicle || ent == mob)
                 continue;
@@ -1578,9 +1596,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             if (!fixtureQ.TryComp(ent, out var fixtures))
                 continue;
 
-            if (physicsQ.TryComp(mob, out var mobBody) &&
-                fixtureQ.TryComp(mob, out var mobFixtures) &&
-                !physics.IsHardCollidable((mob, mobFixtures, mobBody), (ent, fixtures, otherBody)))
+            if (mobHasCollision &&
+                !physics.IsHardCollidable((mob, mobFixtures!, mobBody!), (ent, fixtures, otherBody)))
             {
                 continue;
             }
@@ -1657,8 +1674,9 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         if (!checkAabb.IsValid())
             checkAabb = targetAabb;
 
-        var hits = lookup.GetEntitiesIntersecting(mapId, checkAabb, LookupFlags.Dynamic | LookupFlags.Static);
-        foreach (var other in hits)
+        _pushBlockedIntersecting.Clear();
+        lookup.GetEntitiesIntersecting(mapId, checkAabb, _pushBlockedIntersecting, LookupFlags.Dynamic | LookupFlags.Static);
+        foreach (var other in _pushBlockedIntersecting)
         {
             if (other == mob || other == vehicle)
                 continue;

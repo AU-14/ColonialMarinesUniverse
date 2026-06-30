@@ -1,5 +1,7 @@
+using Content.Shared._RMC14.Language.Systems;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.TacticalMap;
+using Content.Shared.Examine;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Mind;
 using Content.Shared.Popups;
@@ -11,13 +13,14 @@ namespace Content.Shared._RMC14.Marines.Skills.Pamphlets;
 
 public sealed partial class SkillPamphletSystem : EntitySystem
 {
-    [Dependency] private INetManager _net = default!;
-    [Dependency] private SharedMindSystem _mind = default!;
-    [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedJobSystem _job = default!;
+    [Dependency] private SharedLanguageSystem _language = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SquadSystem _squads = default!;
-    [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
 
     public override void Initialize()
     {
@@ -43,7 +46,7 @@ public sealed partial class SkillPamphletSystem : EntitySystem
         // Next go through the EntityWhitelist that's attached, if any, and deny them for the attached reason
         foreach (var whitelist in ent.Comp.Whitelists)
         {
-            if (_whitelistSystem.IsWhitelistFail(whitelist.Restrictions, args.User))
+            if (_whitelist.IsWhitelistFail(whitelist.Restrictions, args.User))
             {
                 _popup.PopupClient(Loc.GetString(whitelist.Popup), ent, args.User);
                 return;
@@ -96,7 +99,16 @@ public sealed partial class SkillPamphletSystem : EntitySystem
             ent.Comp.GaveSkill = true;
         }
 
-        if (ent.Comp.GaveSkill || ent.Comp.BypassSkill)
+        var gaveLanguage = false;
+        if (ent.Comp.Language is { } language &&
+            (!_language.CanSpeak(args.User, language) || !_language.CanUnderstand(args.User, language)))
+        {
+            gaveLanguage = true;
+            var ev = new SkillPamphletGrantLanguageEvent(args.User, language);
+            RaiseLocalEvent(ent, ref ev);
+        }
+
+        if (ent.Comp.GaveSkill || gaveLanguage || ent.Comp.BypassSkill)
         {
             _popup.PopupClient(Loc.GetString("rmc-pamphlets-reading"), args.User, args.User);
 

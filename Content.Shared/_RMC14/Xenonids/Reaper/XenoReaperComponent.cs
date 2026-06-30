@@ -40,7 +40,7 @@ public sealed partial class XenoReaperComponent : Component
     public TimeSpan FleshHarvestDelay = TimeSpan.FromSeconds(4);
 
     [DataField, AutoNetworkedField]
-    public int RaptureGain = 30;
+    public int RaptureGain = 60;
 
     [DataField, AutoNetworkedField]
     public EntProtoId RaptureEffect = "RMCEffectExtraSlash";
@@ -49,7 +49,7 @@ public sealed partial class XenoReaperComponent : Component
     public SoundSpecifier RaptureSound = new SoundCollectionSpecifier("AlienClaw");
 
     [DataField, AutoNetworkedField]
-    public int FleshBloomCost = 120;
+    public int FleshBloomCost = 100;
 
     [DataField, AutoNetworkedField]
     public EntProtoId FleshBloomPrototype = "XenoFleshBloom";
@@ -64,7 +64,7 @@ public sealed partial class XenoReaperComponent : Component
     public SoundSpecifier FleshBloomSound = new SoundCollectionSpecifier("XenoResinBreak");
 
     [DataField, AutoNetworkedField]
-    public int RedGasCost = 10;
+    public int RedGasCost = 20;
 
     [DataField, AutoNetworkedField]
     public int RedGasRange = 7;
@@ -91,7 +91,7 @@ public sealed partial class XenoReaperComponent : Component
     };
 
     [DataField, AutoNetworkedField]
-    public int CarrionMantleCost = 150;
+    public int CarrionMantleCost = 120;
 
     [DataField, AutoNetworkedField]
     public TimeSpan CarrionMantleDuration = TimeSpan.FromSeconds(8);
@@ -100,7 +100,7 @@ public sealed partial class XenoReaperComponent : Component
     public FixedPoint2 CarrionMantleShieldAmount = FixedPoint2.New(200);
 
     [DataField, AutoNetworkedField]
-    public int CarrionMantleShieldDecay = 100;
+    public int CarrionMantleShieldDecay = 80;
 
     [DataField, AutoNetworkedField]
     public string CarrionMantleShieldVisualState = "king-shield";
@@ -134,13 +134,13 @@ public sealed partial class XenoFleshBloomComponent : Component
     [DataField, AutoNetworkedField]
     public DamageSpecifier Damage = new()
     {
-        DamageDict = { ["Poison"] = 4 },
+        DamageDict = { ["Poison"] = 8 },
     };
 
     [DataField, AutoNetworkedField]
     public DamageSpecifier Heal = new()
     {
-        DamageDict = { ["Blunt"] = -2, ["Slash"] = -2 },
+        DamageDict = { ["Blunt"] = -8, ["Slash"] = -8 },
     };
 }
 
@@ -158,7 +158,7 @@ public sealed partial class XenoReaperRedGasComponent : Component
 
     public DamageSpecifier Damage = new()
     {
-        DamageDict = { ["Poison"] = 5 },
+        DamageDict = { ["Poison"] = 10 },
     };
 }
 

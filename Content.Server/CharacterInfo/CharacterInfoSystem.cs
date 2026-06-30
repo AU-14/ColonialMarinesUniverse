@@ -7,7 +7,7 @@ using Content.Shared.Mind;
 using Content.Server.GameTicking;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.AU14.Util;
-using Content.Shared.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Content.Shared.AU14.util;
 using Content.Shared.CharacterInfo;
 using Content.Shared.Inventory;
@@ -123,7 +123,7 @@ public sealed partial class CharacterInfoSystem : EntitySystem
         var presetId = (_ticker.CurrentPreset?.ID ?? _ticker.Preset?.ID ?? string.Empty).ToLowerInvariant();
 
         var selectedPlanet = _auRound.GetSelectedPlanet();
-        var selectedThreat = _auRound._selectedthreat;
+        var selectedThreat = _auRound.SelectedThreat;
 
         // Keep one deterministic knowledge line for the whole round.
         EnsureRoundKnowledgeLine(selectedThreat);
@@ -304,4 +304,3 @@ public sealed partial class CharacterInfoSystem : EntitySystem
     }
 
 }
-

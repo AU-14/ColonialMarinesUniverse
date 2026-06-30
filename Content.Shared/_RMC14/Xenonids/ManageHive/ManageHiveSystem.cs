@@ -1,6 +1,6 @@
 using System.Linq;
-using Content.Shared._AU14.Xeno;
-using Content.Shared._AU14.Xeno.ManageHive;
+using Content.Shared._CMU14.Threats.Mobs.Xeno;
+using Content.Shared._CMU14.Threats.Mobs.Xeno.ManageHive;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Commendations;
@@ -595,6 +595,9 @@ public sealed partial class ManageHiveSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("rmc-hivemanagement-cant-deevolve-larva"), watchedId, manage, PopupType.MediumCaution);
             return false;
         }
+
+        if (!_xenoEvolution.HivebrokenCheckPopup(watchedId, popupTarget: manage.Owner))
+            return false;
 
         if (!_xenoPlasma.HasPlasmaPopup(manage.Owner, manage.Comp.DevolvePlasmaCost, false))
             return false;

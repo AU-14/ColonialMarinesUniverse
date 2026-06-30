@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Numerics;
-using Content.Shared._CMU14.Xenonids.Warlock;
+using Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
 using Content.Shared._RMC14.Explosion.Components;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared.Actions.Components;
@@ -138,8 +138,7 @@ public sealed class CMUXenoPortTest
                 Assert.That(warlockComp.PsychicShieldSegments, Has.Count.EqualTo(1));
 
                 shield = warlockComp.PsychicShieldSegments[0];
-                var segment = entMan.GetComponent<CMUXenoPsychicShieldSegmentComponent>(shield.Value);
-                var incoming = segment.Direction.GetOpposite().ToVec() * 10;
+                var incoming = transform.GetWorldRotation(shield.Value).GetCardinalDir().GetOpposite().ToVec() * 10;
 
                 var projectileComp = entMan.GetComponent<ProjectileComponent>(projectile);
                 var projectilePhysics = entMan.GetComponent<PhysicsComponent>(projectile);

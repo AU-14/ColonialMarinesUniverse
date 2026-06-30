@@ -1,0 +1,16 @@
+- type: entity
+  name: makeshift zipties
+  description: Homemade zipties crafted from spare cables.
+  id: AU14MakeShiftZipties
+  parent: RMCZipties
+  suffix: AU14
+  components:
+  - type: Sprite
+    color: Firebrick
+
+- type: rmcConstruction
+  id: AU14MakeShiftZipties
+  name: makeshift zipties
+  prototype: AU14MakeShiftZipties
+  doAfterTime: 3
+  materialCost: 5

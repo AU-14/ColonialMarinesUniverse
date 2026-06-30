@@ -59,7 +59,6 @@ public sealed partial class RMCBruteLauncherSystem : EntitySystem
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private SharedGunSystem _gun = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
@@ -381,8 +380,8 @@ public sealed partial class RMCBruteLauncherSystem : EntitySystem
         if (userMap.MapId != targetMap.MapId)
             return true;
 
-        if (!_mapManager.TryFindGridAt(userMap, out var userGrid, out var grid) ||
-            !_mapManager.TryFindGridAt(targetMap, out var targetGrid, out _) ||
+        if (!_map.TryFindGridAt(userMap, out var userGrid, out var grid) ||
+            !_map.TryFindGridAt(targetMap, out var targetGrid, out _) ||
             userGrid != targetGrid)
         {
             return !_examine.InRangeUnOccluded(userMap, targetMap, 0, uid => uid == user || uid == target);

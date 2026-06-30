@@ -258,6 +258,15 @@
   tower: true
 
 - type: radioChannel
+  id: CCASOF
+  name: chat-radio-cca
+  keycode: "8"
+  frequency: 1537
+  color: "#ffae00"
+  longRange: true
+  tower: true
+
+- type: radioChannel
   id: radioVAI
   name: chat-radio-vai
   keycode: "z"

@@ -9,7 +9,7 @@ using Content.Client.Players.PlayTimeTracking;
 using Content.Shared._RMC14.Armor;
 using Content.Shared.AU14.Allegiance;
 using Content.Shared.AU14.Origin;
-using Content.Shared.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Content.Shared.CCVar;
 using Content.Shared.Clothing;
 using Content.Shared.GameTicking;

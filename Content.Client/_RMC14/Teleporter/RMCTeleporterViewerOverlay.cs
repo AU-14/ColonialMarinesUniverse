@@ -35,6 +35,7 @@ public sealed partial class RMCTeleporterViewerOverlay : Overlay
     private readonly EntityQuery<XenoComponent> _xenoQuery;
 
     private readonly List<(Entity<SpriteComponent> Ent, Vector2 Position, Angle Rotation)> _toDraw = new();
+    private readonly HashSet<EntityUid> _viewerContacts = new();
 
     public override OverlaySpace Space => _overlay.HasOverlay<NightVisionOverlay>()
         ? OverlaySpace.WorldSpace
@@ -79,7 +80,9 @@ public sealed partial class RMCTeleporterViewerOverlay : Overlay
                 var otherViewerAABB = _physics.GetWorldAABB(otherViewer);
 
                 _toDraw.Clear();
-                foreach (var viewerContact in _entityLookup.GetEntitiesIntersecting(otherViewerPosition.MapId, otherViewerAABB, Uncontained))
+                _viewerContacts.Clear();
+                _entityLookup.GetEntitiesIntersecting(otherViewerPosition.MapId, otherViewerAABB, _viewerContacts, Uncontained);
+                foreach (var viewerContact in _viewerContacts)
                 {
                     if (!_spriteQuery.TryComp(viewerContact, out var viewerContactSprite) ||
                         !viewerContactSprite.Visible ||

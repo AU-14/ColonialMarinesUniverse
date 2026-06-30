@@ -102,3 +102,12 @@
     size: Small
   - type: Sprite
     sprite: _AU14/Clothing/UPP/jumpsuits/cbrn.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14JoeUPP
+  name: android suit
+  description: Uniform designed for UPP security synthetics.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/jumpsuits/uppjoe.rsi

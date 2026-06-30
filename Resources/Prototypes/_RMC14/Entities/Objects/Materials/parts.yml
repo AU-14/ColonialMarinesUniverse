@@ -101,6 +101,9 @@
     amount: 2
     spawn:
     - id: CMSheetPlasteel1
+  - type: RMCConstructionItem
+    buildable:
+    - CMU14MultiZLadderBuild
 
 - type: entity
   parent: CMRodPlasteel

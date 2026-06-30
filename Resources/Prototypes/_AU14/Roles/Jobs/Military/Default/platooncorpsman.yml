@@ -1,6 +1,0 @@
-- type: job
-  parent: AU14JobPlatoonCorpsmanBase
-  id: AU14JobGOVFORPlatoonCorpsman
-  hidden: false
-  setPreference: true
-  basePlaytimeTracker: true

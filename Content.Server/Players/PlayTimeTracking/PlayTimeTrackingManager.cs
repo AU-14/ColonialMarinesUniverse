@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Database;
+using Content.Shared._CMU14.PlayTimeTracking;
 using Content.Shared.CCVar;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Roles;
@@ -467,7 +468,7 @@ public sealed partial class PlayTimeTrackingManager : ISharedPlaytimeManager, IP
             return false;
         }
 
-        time = data.TrackerTimes;
+        time = CMUThreatPlayTimeCompatibility.GetCompatibleTrackerTimes(data.TrackerTimes, _prototypes);
         return true;
     }
 
@@ -490,7 +491,7 @@ public sealed partial class PlayTimeTrackingManager : ISharedPlaytimeManager, IP
         if (!_playTimeData.TryGetValue(id, out var data) || !data.Initialized)
             throw new InvalidOperationException("Play time info is not yet loaded for this player!");
 
-        return data.TrackerTimes;
+        return CMUThreatPlayTimeCompatibility.GetCompatibleTrackerTimes(data.TrackerTimes, _prototypes);
     }
 
     public TimeSpan GetPlayTimeForTracker(ICommonSession id, string tracker)
@@ -499,6 +500,10 @@ public sealed partial class PlayTimeTrackingManager : ISharedPlaytimeManager, IP
             throw new InvalidOperationException("Play time info is not yet loaded for this player!");
 
         tracker = GetCanonicalTracker(tracker);
+        if (tracker == CMUThreatPlayTimeCompatibility.ThreatMemberTracker.Id)
+            return CMUThreatPlayTimeCompatibility.GetCompatibleTrackerTimes(data.TrackerTimes, _prototypes)
+                .GetValueOrDefault(tracker);
+
         return data.TrackerTimes.GetValueOrDefault(tracker);
     }
 

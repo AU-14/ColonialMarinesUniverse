@@ -12,6 +12,7 @@ using Content.Shared.Stunnable;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
+using CultistComponent = Content.Shared._CMU14.Threats.Mobs.Cultist.CultistComponent;
 
 namespace Content.Shared._RMC14.Xenonids.Construction.AcidPillar;
 

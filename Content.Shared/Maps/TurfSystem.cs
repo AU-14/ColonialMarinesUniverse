@@ -14,7 +14,8 @@ namespace Content.Shared.Maps;
 /// </summary>
 public sealed partial class TurfSystem : EntitySystem
 {
-    [Dependency] private IMapManager _mapManager = default!;
+    private readonly HashSet<EntityUid> _tileBlockedIntersecting = new();
+
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
@@ -32,7 +33,7 @@ public sealed partial class TurfSystem : EntitySystem
             return null;
 
         var pos = _transform.ToMapCoordinates(coordinates);
-        if (!_mapManager.TryFindGridAt(pos, out var gridUid, out var gridComp))
+        if (!_mapSystem.TryFindGridAt(pos, out var gridUid, out var gridComp))
             return null;
 
         if (!_mapSystem.TryGetTileRef(gridUid, gridComp, coordinates, out var tile))
@@ -91,7 +92,9 @@ public sealed partial class TurfSystem : EntitySystem
 
         var intersectionArea = 0f;
         var fixtureQuery = GetEntityQuery<FixturesComponent>();
-        foreach (var ent in _entityLookup.GetEntitiesIntersecting(gridUid, worldBox, LookupFlags.Dynamic | LookupFlags.Static))
+        _tileBlockedIntersecting.Clear();
+        _entityLookup.GetEntitiesIntersecting(gridUid, worldBox, _tileBlockedIntersecting, LookupFlags.Dynamic | LookupFlags.Static);
+        foreach (var ent in _tileBlockedIntersecting)
         {
             if (!fixtureQuery.TryGetComponent(ent, out var fixtures))
                 continue;

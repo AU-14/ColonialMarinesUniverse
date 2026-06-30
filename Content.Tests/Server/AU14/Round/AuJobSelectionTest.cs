@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Content.Server._CMU14.Threats;
 using Content.Server.AU14.Round;
-using Content.Server.AU14.Threats;
 using Content.Shared._RMC14.Rules;
-using Content.Shared.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using NUnit.Framework;
@@ -118,7 +118,7 @@ public sealed class AuJobSelectionTest
     {
         var held = new NetUserId(new Guid("00000000-0000-0000-0000-000000000001"));
         var other = new NetUserId(new Guid("00000000-0000-0000-0000-000000000002"));
-        var vote = new AuThreatVoteSystem();
+        var vote = new ThreatVoteSystem();
 
         vote.BlockRoundJoinsForHeldPlayers([held]);
 

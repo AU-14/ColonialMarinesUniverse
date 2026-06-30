@@ -189,7 +189,9 @@
       map: ["enum.GunVisualLayers.Mag"]
   - type: MagazineVisuals
     magState: mag
-
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsPistol9MM
+    
 - type: entity
   parent: CMBaseMagazinePistol
   id: RMCMagazinePistolNP92Extended
@@ -215,7 +217,9 @@
       map: ["enum.GunVisualLayers.Mag"]
   - type: MagazineVisuals
     magState: ext
-
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsPistol9MM
+    
 - type: entity
   parent: CMBulletBase
   id: RMCBulletPistolNP92

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Numerics;
 using CMUDrawDepth = Content.Shared.DrawDepth.DrawDepth;
 using Content.Shared.Actions;
-using Content.Shared._CMU14.Xenonids.Warlock;
+using Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
 using Content.Shared.FixedPoint;
 using Content.Shared.Physics;
 using NUnit.Framework;
@@ -18,15 +18,15 @@ public sealed class CMUXenoWarlockTest
     [Test]
     public void GetPsychicCrushDamageScalesWithCompletedPulses()
     {
-        Assert.That(CMUXenoWarlockSystem.GetPsychicCrushDamage(1), Is.EqualTo(40));
-        Assert.That(CMUXenoWarlockSystem.GetPsychicCrushDamage(5), Is.EqualTo(80));
+        Assert.That(CMUXenoWarlockSystem.GetPsychicCrushDamage(1), Is.EqualTo(100));
+        Assert.That(CMUXenoWarlockSystem.GetPsychicCrushDamage(5), Is.EqualTo(240));
     }
 
     [Test]
     public void GetPsychicCrushDamageClampsToValidPulseRange()
     {
-        Assert.That(CMUXenoWarlockSystem.GetPsychicCrushDamage(-1), Is.EqualTo(30));
-        Assert.That(CMUXenoWarlockSystem.GetPsychicCrushDamage(8), Is.EqualTo(80));
+        Assert.That(CMUXenoWarlockSystem.GetPsychicCrushDamage(-1), Is.EqualTo(65));
+        Assert.That(CMUXenoWarlockSystem.GetPsychicCrushDamage(8), Is.EqualTo(240));
     }
 
     [Test]
@@ -300,7 +300,7 @@ public sealed class CMUXenoWarlockTest
         Assert.That(CMUXenoWarlockSystem.GetPsychicShieldCooldownDuration().TotalSeconds, Is.EqualTo(10).Within(0.001));
         Assert.That(CMUXenoWarlockSystem.GetPsychicShieldIntegrity(), Is.EqualTo(FixedPoint2.New(650)));
         Assert.That(CMUXenoWarlockSystem.GetPsychicShieldBreakStunDuration().TotalSeconds, Is.EqualTo(1).Within(0.001));
-        Assert.That(CMUXenoWarlockSystem.GetPsychicShieldMaxFrozenProjectiles(), Is.EqualTo(8));
+        Assert.That(CMUXenoWarlockSystem.GetPsychicShieldMaxFrozenProjectiles(), Is.EqualTo(10));
     }
 
     [Test]

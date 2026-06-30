@@ -1,0 +1,118 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobIPIELawyer
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: IPIELawyer
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 1
+      RMCSkillOverwatch: 1
+  - type: CMVendorUser
+    id: AU14JobCivilianCorporateLiaison
+    points: 70
+  - type: JobPrefix
+    prefix: au14-job-prefix-corporateliaison
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: synth
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - SquadPMC
+  - type: NpcFactionMember
+    factions:
+    - GOVFOR
+  - type: Marine
+    Faction: govfor
+
+  name: IPIE Lawyer
+  description: au14-ipie-lawyer-description
+  playTimeTracker: AU14JobIPIELawyer
+  ranks:
+    RMCRankWeYaLegalSpecialist: []
+  spawnMenuRoleName: WY IPIE Lawyer (3rd party)
+  startingGear: AU14GearIPIELawyer
+  greeting: au14-ipie-lawyer-greeting
+  icon: "CMJobIconLiaison"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-wy
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  - auwy
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: AU14JobIPIELawyer
+  name: WY IPIE Lawyer (3rd party)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPMC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: IPIE Lawyer
+    description: au14-ipie-lawyer-description
+    reregister: false
+    job: AU14JobIPIELawyer
+    raffle:
+      settings: short
+    rules: au14-lpie-lawyer-description
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: AU14JobIPIELawyerSynth
+  name: WY IPIE Lawyer (3rd party, synth)
+  components:
+  - type: Synth
+    changeBrain: false
+    canUseGuns: true
+    hideGeneration: true
+    useHumanHealthIcons: true
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPMC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: IPIE Lawyer (!!!synth role, role knowledge required!!)
+    description: au14-ipie-lawyer-description
+    reregister: false
+    job: AU14JobIPIELawyer
+    raffle:
+      settings: short
+    requirements:
+    - !type:OverallPlaytimeRequirement
+      time: 18000 # 5 hours
+    rules: au14-lpie-lawyer-description
+
+- type: startingGear
+  id: AU14GearIPIELawyer
+  equipment:
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: RMCJacketCorporateBlack
+    jumpsuit: CMJumpsuitLiaisonBlack
+    shoes: RMCShoesLaceup
+    back: CMSatchel
+    ears: AU14ColonyWeylandHeadset
+  inhand:
+  - RMCPortableVendorCorporate
+  storage:
+    back:
+    - CMPenClicky
+    - CMClipboard
+
+- type: playTimeTracker
+  id: AU14JobIPIELawyer

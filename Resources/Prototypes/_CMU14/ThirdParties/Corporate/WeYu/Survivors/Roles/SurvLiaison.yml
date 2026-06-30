@@ -1,0 +1,123 @@
+- type: job
+  parent: AU14JobCivilianCorporateLiaisonBase
+  id: AU14JobCivilianCorporateLiaisonSurv
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: CivilianCorporateLiaisonSurv
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 1
+      RMCSkillOverwatch: 1
+  - type: EquipEntityPreset
+    preset: AU14WeYuSurvPistolPreset
+  - type: CMVendorUser
+    id: AU14JobCivilianCorporateLiaison
+    points: 70
+  - type: JobPrefix
+    prefix: au14-job-prefix-corporateliaison
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: synth
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - SquadPMC
+
+  name: au14-job-name-civiliancorporateliaison
+  description: au14-job-description-civiliancorporateliaison
+  ranks:
+    RMCRankWeYaAssistantManager:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateLiaison
+      time: 360000 # 100 hours
+    RMCRankWeYaExecutiveSupervisor:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateLiaison
+      time: 270000 # 75 hours
+    RMCRankWeYaExecutiveSpecialist:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateLiaison
+      time: 180000 # 50 hours
+    RMCRankWeYaSeniorExecutive:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateLiaison
+      time: 90000 # 25 hours
+    RMCRankWeYaExecutive:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateLiaison
+      time: 36000 # 10 hours
+    RMCRankWeYaJuniorExecutive: []
+  startingGear: AU14GearCivilianCorporateLiaisonSurv
+  greeting: au14-wysurv-greeting
+  icon: "CMJobIconLiaison"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: WY Liaison (Surv)
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  - auwy
+  access:
+  - AU14AccessCorporateWEYULiaison
+  roleWeight: 0.25
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: AU14JobWYSurvLiaison
+  name: WY Corporate Liaison (Survivor)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPMC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-civiliancorporateliaison
+    description: au14-wysurv-description
+    reregister: false
+    job: AU14JobCivilianCorporateLiaisonSurv
+    raffle:
+      settings: short
+    rules: au14-wysurv-description
+
+- type: startingGear
+  id: AU14GearCivilianCorporateLiaisonSurv
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonOutingRed
+    shoes: RMCBootsCorporate
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: RMCBrownWEYACoat
+    ears: RMCHeadsetDistressWeYa
+    ears2: RMCM5CameraGear
+    pocket1: AU14WEYULiasonSurvIntel
+    pocket2: RMCRadioHandheldColonyOff
+  inhand:
+  - RMCPortableVendorCorporate
+  storage:
+    outerClothing:
+    - CMCrowbar
+    - RMCFlashlight
+
+- type: entity
+  parent: RMCPouchDocumentSmall
+  id: AU14WEYULiasonSurvIntel
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCIntelTechnicalManual
+      - id: RMCIntelProgressReport
+      - id: RMCIntelProgressReport
+      - id: RMCIntelProgressReport

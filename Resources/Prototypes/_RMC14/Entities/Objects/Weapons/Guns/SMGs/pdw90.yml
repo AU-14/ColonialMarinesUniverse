@@ -151,6 +151,8 @@
     zeroVisible: false
     zeroOnlyOnEmpty: true
   - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsSMGP90
     
 - type: entity
   parent: CMMagazineRifleBase
@@ -182,7 +184,9 @@
       zeroVisible: false
       zeroOnlyOnEmpty: true
     - type: Appearance
-
+    - type: RefillableByBulletBox
+      bulletType: CMUBoxBulletsSMGP90AP
+    
 - type: entity
   parent: CMCartridge10x20mm
   id: RMCCartridge57x28mm

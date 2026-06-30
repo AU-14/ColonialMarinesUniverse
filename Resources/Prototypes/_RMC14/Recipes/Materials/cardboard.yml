@@ -88,47 +88,186 @@
   listed:
   - RMCBoxBulletsRifleEmptyBuild
   - RMCBoxBulletsRifleAPEmptyBuild
+  - CMUBoxBulletsRifleSLREmptyBuild
+  - CMUBoxBulletsRifleSLRAPEmptyBuild
+  - CMUBoxBulletsRifleL23EmptyBuild
+  - CMUBoxBulletsRifleL23APEmptyBuild
+  - CMUBoxBulletsRifleType71EmptyBuild
+  - CMUBoxBulletsRifleType71APEmptyBuild
+  - CMUBoxBulletsRifleAG80EmptyBuild
+  - CMUBoxBulletsRifleAG80APEmptyBuild
+  - CMUBoxBulletsRifle556x45MMEmptyBuild
+  - CMUBoxBulletsRifleMAREmptyBuild
   - RMCBoxBulletsSMGEmptyBuild
   - RMCBoxBulletsSMGAPEmptyBuild
+  - CMUBoxBulletsSMGP90EmptyBuild
+  - CMUBoxBulletsSMGP90APEmptyBuild
+  - CMUBoxBulletsSMGType19EmptyBuild
+  - CMUBoxBulletsSMG9MMEmptyBuild
   - RMCBoxBulletsPistolEmptyBuild
   - RMCBoxBulletsPistolAPEmptyBuild
+  - CMUBoxBulletsPistol9MMEmptyBuild
+  - CMUBoxBulletsPistol9MMAPEmptyBuild
+  - CMUBoxBulletsPistol9MMSHEmptyBuild
+  - CMUBoxBulletsPistolType73EmptyBuild
+  - CMUBoxBulletsPistol45EmptyBuild
+  - CMUBoxBulletsPistol50EmptyBuild
 
-- type: rmcConstruction
+- type: rmcConstruction #10x24mm
   parent: RMCCardboardBuildBase
   id: RMCBoxBulletsRifleEmptyBuild
-  name: rifle ammunition box (10x24mm)
+  name: rifle ammunition box (10×24mm)
   prototype: RMCBoxBulletsRifleEmpty
 
-- type: rmcConstruction
+- type: rmcConstruction #10x24mm AP
   parent: RMCCardboardBuildBase
   id: RMCBoxBulletsRifleAPEmptyBuild
-  name: rifle ammunition box (10x24mm AP)
+  name: rifle ammunition box (10×24mm AP)
   prototype: RMCBoxBulletsRifleAPEmpty
-
+  
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsRifleSLREmptyBuild
+  name: rifle ammunition box (7×43mm)
+  prototype: CMUBoxBulletsRifleSLREmpty
+  
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsRifleSLRAPEmptyBuild
+  name: rifle ammunition box (7×43mm AP)
+  prototype: CMUBoxBulletsRifleSLRAPEmpty
+  
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsRifleL23EmptyBuild
+  name: rifle ammunition box (8.88×51mm)
+  prototype: CMUBoxBulletsRifleL23Empty
+  
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsRifleL23APEmptyBuild
+  name: rifle ammunition box (8.88×51mm AP)
+  prototype: CMUBoxBulletsRifleL23APEmpty
+  
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsRifleType71EmptyBuild
+  name: rifle ammunition box (5.45×39mm)
+  prototype: CMUBoxBulletsRifleType71Empty
+  
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsRifleType71APEmptyBuild
+  name: rifle ammunition box (5.45×39mm AP)
+  prototype: CMUBoxBulletsRifleType71APEmpty
+  
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsRifleAG80EmptyBuild
+  name: rifle ammunition box (9.7×16mm)
+  prototype: CMUBoxBulletsRifleAG80Empty
+  
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsRifleAG80APEmptyBuild
+  name: rifle ammunition box (9.7×16mm AP)
+  prototype: CMUBoxBulletsRifleAG80APEmpty  
+  
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsRifle556x45MMEmptyBuild
+  name: rifle ammunition box (5.56×45mm)
+  prototype: CMUBoxBulletsRifle556x45MMEmpty
+  
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsRifleMAREmptyBuild
+  name: rifle ammunition box (7.62×39mm)
+  prototype: CMUBoxBulletsRifleMAREmpty
+  
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
   id: RMCBoxBulletsSMGEmptyBuild
-  name: SMG ammunition box (10x20mm)
+  name: SMG ammunition box (10×20mm)
   prototype: RMCBoxBulletsSMGEmpty
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
   id: RMCBoxBulletsSMGAPEmptyBuild
-  name: SMG ammunition box (10x20mm AP)
+  name: SMG ammunition box (10×20mm AP)
   prototype: RMCBoxBulletsSMGAPEmpty
-
+ 
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsSMGP90EmptyBuild
+  name: SMG ammunition box (5.7×28mm)
+  prototype: CMUBoxBulletsSMGP90Empty
+  
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsSMGP90APEmptyBuild
+  name: SMG ammunition box (5.7×28mm AP)
+  prototype: CMUBoxBulletsSMGP90APEmpty  
+  
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsSMGType19EmptyBuild
+  name: SMG ammunition box (7.62×25mm)
+  prototype: CMUBoxBulletsSMGType19Empty
+  
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsSMG9MMEmptyBuild
+  name: SMG ammunition box (9×19mm)
+  prototype: CMUBoxBulletsSMG9MMEmpty
+  
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
   id: RMCBoxBulletsPistolEmptyBuild
-  name: pistol ammunition box (10x20mm-APC)
+  name: pistol ammunition box (10×20mm-APC)
   prototype: RMCBoxBulletsPistolEmpty
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
   id: RMCBoxBulletsPistolAPEmptyBuild
-  name: pistol ammunition box (10x20mm-APC (AP))
+  name: pistol ammunition box (10×20mm-APC (AP))
   prototype: RMCBoxBulletsPistolAPEmpty
+  
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsPistol9MMEmptyBuild
+  name: pistol ammunition box (9×19mm Parabellum)
+  prototype: CMUBoxBulletsPistol9MMEmpty
+  
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsPistol9MMAPEmptyBuild
+  name: pistol ammunition box (9×19mm AP)
+  prototype: CMUBoxBulletsPistol9MMAPEmpty
+  
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsPistol9MMSHEmptyBuild
+  name: pistol ammunition box (9×19mm Squash-Head)
+  prototype: CMUBoxBulletsPistol9MMSHEmpty
 
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsPistolType73EmptyBuild
+  name: pistol ammunition box (7.62×25mm)
+  prototype: CMUBoxBulletsPistolType73Empty
+  
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsPistol45EmptyBuild
+  name: pistol ammunition box (.45)
+  prototype: CMUBoxBulletsPistol45Empty
+  
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsPistol50EmptyBuild
+  name: pistol ammunition box (.50)
+  prototype: CMUBoxBulletsPistol50Empty
 # empty rifle magazine boxes
 - type: rmcConstruction
   id: RMCEmptyRifleMagazineBoxesList

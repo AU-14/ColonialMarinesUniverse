@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Content.Shared._RMC14.Attachable.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Hands.Components;
@@ -108,8 +107,13 @@ public sealed partial class GunIFFSystem : EntitySystem
             user.Comp.Factions.Count == 0)
             return false;
 
-        faction = user.Comp.Factions.First();
-        return true;
+        foreach (var userFaction in user.Comp.Factions)
+        {
+            faction = userFaction;
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -118,12 +122,16 @@ public sealed partial class GunIFFSystem : EntitySystem
     public bool TryGetFaction(Entity<UserIFFComponent?> user, out EntProtoId<IFFFactionComponent> faction, SlotFlags slots = SlotFlags.IDCARD)
     {
         faction = default;
-        var buffer = new HashSet<EntProtoId<IFFFactionComponent>>();
-        if (!TryGetFactions(user, buffer, slots))
+        if (!TryGetFactions(user, _factionBuffer, slots))
             return false;
 
-        faction = buffer.First();
-        return true;
+        foreach (var userFaction in _factionBuffer)
+        {
+            faction = userFaction;
+            return true;
+        }
+
+        return false;
     }
 
     public bool TryGetFactions(Entity<UserIFFComponent?> user, HashSet<EntProtoId<IFFFactionComponent>> factions, SlotFlags slots = SlotFlags.IDCARD)
@@ -134,10 +142,8 @@ public sealed partial class GunIFFSystem : EntitySystem
 
         factions.UnionWith(user.Comp.Factions);
 
-        var ev = new GetIFFFactionEvent(slots, new HashSet<EntProtoId<IFFFactionComponent>>());
+        var ev = new GetIFFFactionEvent(slots, factions);
         RaiseLocalEvent(user, ref ev);
-
-        factions.UnionWith(ev.Factions);
 
         if (factions.Count == 0)
             return false;
@@ -155,10 +161,11 @@ public sealed partial class GunIFFSystem : EntitySystem
                 return true;
         }
 
-        var ev = new GetIFFFactionEvent(SlotFlags.IDCARD, new HashSet<EntProtoId<IFFFactionComponent>>());
+        _factionBuffer.Clear();
+        var ev = new GetIFFFactionEvent(SlotFlags.IDCARD, _factionBuffer);
         RaiseLocalEvent(uid, ref ev);
 
-        if (ev.Factions.Count > 0 && ev.Factions.Contains(faction))
+        if (_factionBuffer.Count > 0 && _factionBuffer.Contains(faction))
             return true;
 
         return false;

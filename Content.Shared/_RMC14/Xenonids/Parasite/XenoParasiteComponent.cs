@@ -44,4 +44,18 @@ public sealed partial class XenoParasiteComponent : Component
     ///     Whether the infector accepted becoming the larva from this infection.
     /// </summary>
     public bool InfectorWantsLarva;
+
+    /// <summary>
+    ///     Whether the infector has an unanswered larva claim prompt for this infection.
+    /// </summary>
+    public bool InfectorLarvaClaimPending;
+
+    [AutoNetworkedField]
+    public int BaseTemporaryCollisionMask;
+
+    [AutoNetworkedField]
+    public bool LeapCollisionActive;
+
+    [AutoNetworkedField]
+    public bool ThrownCollisionActive;
 }

@@ -1,5 +1,4 @@
 using System.Text;
-using System.Text.RegularExpressions;
 using Content.Server.Speech.Components;
 using Content.Shared.Speech.EntitySystems;
 using Content.Shared.StatusEffect;
@@ -11,10 +10,6 @@ namespace Content.Server.Speech.EntitySystems
     {
         [Dependency] private StatusEffectQuerySystem _statusEffectsSystem = default!;
         [Dependency] private IRobustRandom _random = default!;
-
-        // Regex of characters to stutter.
-        private static readonly Regex Stutter = new(@"[b-df-hj-np-tv-wxyz]",
-            RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public override void Initialize()
         {
@@ -36,39 +31,47 @@ namespace Content.Server.Speech.EntitySystems
 
         public string Accentuate(string message, StutteringAccentComponent component)
         {
-            var length = message.Length;
-
-            var finalMessage = new StringBuilder();
-
-            string newLetter;
-
-            for (var i = 0; i < length; i++)
+            var finalMessage = new StringBuilder(message.Length);
+            foreach (var letter in message)
             {
-                newLetter = message[i].ToString();
-                if (Stutter.IsMatch(newLetter) && _random.Prob(component.MatchRandomProb))
+                if (!IsStutterCharacter(letter) || !_random.Prob(component.MatchRandomProb))
                 {
-                    if (_random.Prob(component.FourRandomProb))
-                    {
-                        newLetter = $"{newLetter}-{newLetter}-{newLetter}-{newLetter}";
-                    }
-                    else if (_random.Prob(component.ThreeRandomProb))
-                    {
-                        newLetter = $"{newLetter}-{newLetter}-{newLetter}";
-                    }
-                    else if (_random.Prob(component.CutRandomProb))
-                    {
-                        newLetter = "";
-                    }
-                    else
-                    {
-                        newLetter = $"{newLetter}-{newLetter}";
-                    }
+                    finalMessage.Append(letter);
+                    continue;
                 }
 
-                finalMessage.Append(newLetter);
+                if (_random.Prob(component.FourRandomProb))
+                    AppendStutter(finalMessage, letter, 4);
+                else if (_random.Prob(component.ThreeRandomProb))
+                    AppendStutter(finalMessage, letter, 3);
+                else if (_random.Prob(component.CutRandomProb))
+                    continue;
+                else
+                    AppendStutter(finalMessage, letter, 2);
             }
 
             return finalMessage.ToString();
+        }
+
+        private static bool IsStutterCharacter(char letter)
+        {
+            return char.ToLowerInvariant(letter) is
+                >= 'b' and <= 'd' or
+                >= 'f' and <= 'h' or
+                >= 'j' and <= 'n' or
+                >= 'p' and <= 't' or
+                >= 'v' and <= 'z';
+        }
+
+        private static void AppendStutter(StringBuilder builder, char letter, int count)
+        {
+            for (var i = 0; i < count; i++)
+            {
+                if (i > 0)
+                    builder.Append('-');
+
+                builder.Append(letter);
+            }
         }
     }
 }

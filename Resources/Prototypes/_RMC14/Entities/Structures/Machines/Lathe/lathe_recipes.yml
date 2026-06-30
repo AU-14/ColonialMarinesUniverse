@@ -208,12 +208,12 @@
   materials:
     CMGlass: 6250 # 5000
 
-#- type: latheRecipe
-#  id: CMDrinkingGlass
-#  result: DrinkGlass <- todo RMC14, rest is already complete
-#  completetime: 4
-#  materials:
-#  CMGlass: 625 # 500
+- type: latheRecipe
+  id: RMCDrinkGlass
+  result: RMCDrinkGlass
+  completetime: 4
+  materials:
+    CMGlass: 625 # 500
 
 - type: latheRecipe
   id: RMCTablePartTan
@@ -265,3 +265,58 @@
   materials:
     CMSteel: 20 # 60
     CMGlass: 10 # 30
+
+- type: latheRecipe
+  id: RMCAshtrayGlass
+  result: RMCAshtrayGlass
+  completetime: 2
+  materials:
+    CMGlass: 120 # 60
+
+- type: latheRecipe
+  id: AU14SprayCleaner
+  result: AU14SprayCleaner
+  completetime: 2
+  materials:
+    CMSteel: 250 # 200
+    CMGlass: 125 # 100
+
+- type: latheRecipe
+  id: CleanerGrenade
+  result: CleanerGrenade
+  completetime: 4
+  materials:
+    CMSteel: 625 # 500
+    CMGlass: 250 # 200
+
+- type: latheRecipe
+  id: CMAPCElectronics
+  result: CMAPCElectronics
+  completetime: 4
+  materials:
+    CMSteel: 62 # 50
+    CMGlass: 62 # 50
+
+- type: latheRecipe
+  id: RemoteSignaller
+  result: RemoteSignaller
+  completetime: 4
+  materials:
+    CMSteel: 1250 # 100
+    CMGlass: 250 # 200
+
+- type: latheRecipe
+  id: RMCHelmetWelding
+  result: RMCHelmetWelding
+  completetime: 4
+  materials:
+    CMSteel: 3750 # 3000
+    CMGlass: 1250 # 1000
+
+- type: latheRecipe
+  id: AU14DoorElectronicsRecipe
+  result: DoorElectronics
+  completetime: 4
+  materials:
+    CMSteel: 62 # 50
+    CMGlass: 62 # 50

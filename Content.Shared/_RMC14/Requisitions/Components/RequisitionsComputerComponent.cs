@@ -19,6 +19,10 @@ public sealed partial class RequisitionsComputerComponent : Component
     [DataField(required: true), AutoNetworkedField, AlwaysPushInheritance]
     public List<RequisitionsCategory> Categories = new();
 
+    public readonly Dictionary<(int Category, int Order), RequisitionsStockStatus> Stock = new();
+
+    public TimeSpan NextStockUiUpdate;
+
     [DataField]
     public bool IsLastInteracted = false;
 
@@ -26,4 +30,11 @@ public sealed partial class RequisitionsComputerComponent : Component
     public string Faction = "none";
 
 
+}
+
+public sealed class RequisitionsStockStatus
+{
+    public int Current;
+
+    public TimeSpan NextReplenish;
 }

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Numerics;
 using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Intel.Tech;
+using Content.Shared._RMC14.Requisitions;
+using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Vehicle.Supply;
 using Content.Shared._RMC14.Vendors;
@@ -29,12 +31,14 @@ public sealed partial class VehicleSupplySystem : EntitySystem
     private const int VendedHardpointAmmoCount = 3;
 
     [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private IntelSystem _intel = default!;
     [Dependency] private IComponentFactory _compFactory = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private PhysicsSystem _physics = default!;
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private SharedRequisitionsSystem _requisitions = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private SharedCMAutomatedVendorSystem _vendor = default!;
@@ -105,6 +109,60 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         }
 
         return count;
+    }
+
+    private static string? GetEntryGroupKey(VehicleSupplyEntry entry)
+    {
+        return string.IsNullOrWhiteSpace(entry.Group)
+            ? null
+            : Normalize(entry.Group);
+    }
+
+    private static bool IsVehicleClaimed(VehicleSupplyLiftComponent lift, string key)
+    {
+        return lift.Ordered.Contains(key) ||
+               lift.Deployed.Contains(key) ||
+               !string.IsNullOrWhiteSpace(lift.PendingVehicle) &&
+               Normalize(lift.PendingVehicle) == key;
+    }
+
+    private static bool IsEntryGroupClaimedByOther(VehicleSupplyLiftComponent lift, VehicleSupplyEntry entry, string key)
+    {
+        var groupKey = GetEntryGroupKey(entry);
+        return groupKey != null &&
+               lift.OrderedGroups.TryGetValue(groupKey, out var claimedKey) &&
+               claimedKey != key;
+    }
+
+    private static bool IsEntryGroupPendingForOther(VehicleSupplyLiftComponent lift, VehicleSupplyEntry entry, string key)
+    {
+        var groupKey = GetEntryGroupKey(entry);
+        return groupKey != null &&
+               !string.IsNullOrWhiteSpace(lift.PendingVehicleGroup) &&
+               lift.PendingVehicleGroup == groupKey &&
+               Normalize(lift.PendingVehicle) != key;
+    }
+
+    private static bool IsEntryAvailableForConsole(VehicleSupplyLiftComponent lift, VehicleSupplyEntry entry, string key)
+    {
+        return GetStoredCount(lift, key) > 0 &&
+               !IsEntryGroupClaimedByOther(lift, entry, key) &&
+               !IsEntryGroupPendingForOther(lift, entry, key);
+    }
+
+    private static bool IsEntryClaimedForSeed(VehicleSupplyLiftComponent lift, VehicleSupplyEntry entry, string key)
+    {
+        return IsVehicleClaimed(lift, key) ||
+               IsEntryGroupClaimedByOther(lift, entry, key) ||
+               IsEntryGroupPendingForOther(lift, entry, key);
+    }
+
+    private static void ClaimOrderedEntry(VehicleSupplyLiftComponent lift, string key, string groupKey)
+    {
+        lift.Ordered.Add(key);
+
+        if (!string.IsNullOrWhiteSpace(groupKey))
+            lift.OrderedGroups.TryAdd(groupKey, key);
     }
 
     private static void AddStored(VehicleSupplyLiftComponent lift, string key, int amount = 1)
@@ -285,7 +343,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         var liftQuery = EntityQueryEnumerator<VehicleSupplyLiftComponent>();
         while (liftQuery.MoveNext(out var uid, out var lift))
         {
-            if (GetStoredCount(lift, unlock) > 0 || lift.Deployed.Contains(unlock))
+            if (GetStoredCount(lift, unlock) > 0 || IsVehicleClaimed(lift, unlock))
                 continue;
 
             AddStored(lift, unlock);
@@ -332,7 +390,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
                     continue;
 
                 var key = Normalize(entry.Vehicle.Id);
-                if (lift.Comp.Deployed.Contains(key))
+                if (IsEntryClaimedForSeed(lift.Comp, entry, key))
                     continue;
 
                 if (GetStoredCount(lift.Comp, key) > 0)
@@ -430,7 +488,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         if (Normalize(lift.Comp.PendingVehicle) == idKey)
             return;
 
-        if (GetStoredCount(lift.Comp, idKey) <= 0)
+        if (!IsEntryAvailableForConsole(lift.Comp, entry, idKey))
             return;
 
         if (Normalize(ent.Comp.SelectedVehicle) != idKey)
@@ -502,12 +560,14 @@ public sealed partial class VehicleSupplySystem : EntitySystem
                     if (IsEntryUnlocked(entry, unlocked))
                     {
                         var key = Normalize(selected);
-                        if (GetStoredCount(comp, key) > 0 && _prototypes.TryIndex<EntityPrototype>(selected, out _))
+                        if (IsEntryAvailableForConsole(comp, entry, key) &&
+                            _prototypes.TryIndex<EntityPrototype>(selected, out _))
                         {
                             if (TryRemoveStored(comp, key))
                             {
                                 canQueueVehicle = true;
                                 nextVehicle = selected;
+                                comp.PendingVehicleGroup = GetEntryGroupKey(entry) ?? string.Empty;
                                 comp.PendingVehicleEntity = null;
                                 if (TryTakeStoredEntity(comp, key, console.Comp.SelectedVehicleCopyIndex, out var pendingEntity))
                                     comp.PendingVehicleEntity = pendingEntity;
@@ -530,6 +590,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
             {
                 comp.PendingVehicle = string.Empty;
                 comp.PendingVehicleEntity = null;
+                comp.PendingVehicleGroup = string.Empty;
                 ClearPendingLoadout(comp);
             }
 
@@ -578,7 +639,29 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         lift.Comp.Mode = mode;
         lift.Comp.NextMode = nextMode;
         Dirty(lift);
+
+        RequisitionsRailingMode? railingMode = (mode, nextMode) switch
+        {
+            (VehicleSupplyLiftMode.Lowered, _) => RequisitionsRailingMode.Raised,
+            (VehicleSupplyLiftMode.Raised, _) => RequisitionsRailingMode.Lowering,
+            (_, VehicleSupplyLiftMode.Lowering) => RequisitionsRailingMode.Raising,
+            _ => null
+        };
+
+        if (railingMode != null)
+            UpdateRailings(lift, railingMode.Value);
+
         SendConsoleStateAll();
+    }
+
+    private void UpdateRailings(Entity<VehicleSupplyLiftComponent> lift, RequisitionsRailingMode mode)
+    {
+        var coordinates = _transform.GetMapCoordinates(lift);
+        var railings = _lookup.GetEntitiesInRange<RequisitionsRailingComponent>(coordinates, lift.Comp.Radius + 5);
+        foreach (var railing in railings)
+        {
+            _requisitions.SetRailingMode(railing, mode);
+        }
     }
 
     private void TryPlayAudio(Entity<VehicleSupplyLiftComponent> lift)
@@ -727,10 +810,20 @@ public sealed partial class VehicleSupplySystem : EntitySystem
             return;
         }
 
+        if (comp.Ordered.Contains(key))
+        {
+            comp.PendingVehicle = string.Empty;
+            comp.PendingVehicleGroup = string.Empty;
+            ClearPendingLoadout(comp);
+            UpdateVendorSectionsAll();
+            return;
+        }
+
         if (!_prototypes.TryIndex<EntityPrototype>(pending, out _))
         {
             AddStored(comp, key);
             comp.PendingVehicle = string.Empty;
+            comp.PendingVehicleGroup = string.Empty;
             ClearPendingLoadout(comp);
             UpdateVendorSectionsAll();
             return;
@@ -746,8 +839,10 @@ public sealed partial class VehicleSupplySystem : EntitySystem
     {
         lift.Comp.ActiveVehicle = vehicle;
         lift.Comp.ActiveVehicleId = vehicleId;
+        ClaimOrderedEntry(lift.Comp, key, lift.Comp.PendingVehicleGroup);
         lift.Comp.PendingVehicle = string.Empty;
         lift.Comp.PendingVehicleEntity = null;
+        lift.Comp.PendingVehicleGroup = string.Empty;
         lift.Comp.Deployed.Add(key);
 
         ApplyPendingLoadout(vehicle, lift.Comp);
@@ -968,6 +1063,9 @@ public sealed partial class VehicleSupplySystem : EntitySystem
             if (hasLift)
             {
                 var key = Normalize(entry.Vehicle.Id);
+                if (!IsEntryAvailableForConsole(lift.Comp, entry, key))
+                    continue;
+
                 var count = GetStoredCount(lift.Comp, key);
                 if (count <= 0)
                     continue;
@@ -1027,7 +1125,11 @@ public sealed partial class VehicleSupplySystem : EntitySystem
                 continue;
 
             var vehicleKey = Normalize(entry.Vehicle.Id);
-            var count = hasLift ? GetVendorAvailableVehicleCount(lift.Comp, vehicleKey) : 0;
+            var count = hasLift &&
+                        !IsEntryGroupClaimedByOther(lift.Comp, entry, vehicleKey) &&
+                        !IsEntryGroupPendingForOther(lift.Comp, entry, vehicleKey)
+                ? GetVendorAvailableVehicleCount(lift.Comp, vehicleKey)
+                : 0;
             var lastCount = previousCounts.TryGetValue(vehicleKey, out var prev) ? prev : 0;
             var delta = count - lastCount;
 

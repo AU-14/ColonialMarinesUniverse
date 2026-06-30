@@ -19,6 +19,7 @@
         - MobMask
         layer:
         - MobLayer
+  - type: GhostTakeoverAvailable
   - type: GhostRole
     name: Ape
     description: OO OO AH AH

@@ -37,7 +37,6 @@ public sealed partial class XenoPsychicCommunicationSystem : EntitySystem
     [Dependency] private SharedXenoWatchSystem _watch = default!;
 
     private static readonly Color PsychicColor = Color.FromHex("#921992");
-    private static readonly Regex NewLineRegex = new("\n{3,}", RegexOptions.Compiled);
 
     private readonly HashSet<Entity<MobStateComponent>> _nearbyMobs = new();
 
@@ -395,4 +394,6 @@ public sealed partial class XenoPsychicCommunicationSystem : EntitySystem
         Radiance,
         Order,
     }
+
+    private static readonly Regex NewLineRegex = new("\n{3,}");
 }

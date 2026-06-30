@@ -993,7 +993,12 @@
         isAppendSquadRoleName: false
         givePrefix: rmc-job-prefix-weapons-specialist-sniper
         isAppendPrefix: true
-
+      - id: RMCPyroSpecEquipmentCase
+        giveSquadRoleName: rmc-job-name-weapons-specialist-pyro
+        isAppendSquadRoleName: false
+        givePrefix: au14-job-prefix-specialist-pyro
+        isAppendPrefix: true
+        
 # AirCrew Weapons
 - type: entity
   parent: ColMarTechBase
@@ -1096,6 +1101,8 @@
         points: 2
       - id: DoorElectronics
         points: 2
+      - id: CMUDeployableZLevelLadder
+        points: 10
       - id: RMCPowerCellHigh
         points: 3
       - id: RMCPowerCellSuper

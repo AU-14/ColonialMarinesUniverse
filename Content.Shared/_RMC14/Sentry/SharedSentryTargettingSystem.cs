@@ -68,18 +68,20 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
         targeting.FriendlyFactions.Clear();
         targeting.HumanoidAdded.Clear();
 
-        var iffFactions = new HashSet<EntProtoId<IFFFactionComponent>>();
-        var ev = new GetIFFFactionEvent(SlotFlags.IDCARD | SlotFlags.BELT | SlotFlags.POCKET, iffFactions);
+        _targetIffBuffer.Clear();
+        var ev = new GetIFFFactionEvent(SlotFlags.IDCARD | SlotFlags.BELT | SlotFlags.POCKET, _targetIffBuffer);
         RaiseLocalEvent(deployer, ref ev);
 
-        if (iffFactions.Count > 0)
+        if (_targetIffBuffer.Count > 0)
         {
             foreach (var (sentryFaction, iffFaction) in SentryFactionToIff)
             {
-                if (iffFactions.Contains(iffFaction))
+                if (_targetIffBuffer.Contains(iffFaction))
                     targeting.FriendlyFactions.Add(sentryFaction);
             }
         }
+
+        _targetIffBuffer.Clear();
 
         // Fallback to NPC faction when IFF yielded nothing (no IFF at all, or IFF not in the standard map).
         if (targeting.FriendlyFactions.Count == 0 &&
@@ -109,20 +111,27 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
         ent.Comp.FriendlyFactions.Clear();
         ent.Comp.HumanoidAdded.Clear();
 
-        var friendly = factions
-            .Where(f => f != SentryExcludedFaction && f != "Humanoid" && SentryAllowedFactions.Contains(f))
-            .ToHashSet();
+        var includeHumanoid = false;
+        foreach (var faction in factions)
+        {
+            if (faction == "Humanoid")
+            {
+                includeHumanoid = true;
+                continue;
+            }
 
-        if (factions.Contains("Humanoid"))
+            if (faction != SentryExcludedFaction && SentryAllowedFactions.Contains(faction))
+                ent.Comp.FriendlyFactions.Add(faction);
+        }
+
+        if (includeHumanoid)
         {
             foreach (var faction in GetHumanoidFactions())
             {
-                if (friendly.Add(faction))
+                if (ent.Comp.FriendlyFactions.Add(faction))
                     ent.Comp.HumanoidAdded.Add(faction);
             }
         }
-
-        ent.Comp.FriendlyFactions.UnionWith(friendly);
 
         if (_net.IsServer)
             ApplyTargeting(ent);

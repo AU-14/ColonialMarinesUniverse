@@ -319,10 +319,10 @@ namespace Content.Server.DeviceNetwork.Systems
         /// <returns>false if the broadcast was canceled</returns>
         private bool CheckRecipientsList(DeviceNetworkPacketEvent packet, ref HashSet<DeviceNetworkComponent> recipients)
         {
-            if (!_networks.ContainsKey(packet.NetId) || !_networks[packet.NetId].Devices.ContainsKey(packet.SenderAddress))
+            if (!_networks.TryGetValue(packet.NetId, out var network) ||
+                !network.Devices.TryGetValue(packet.SenderAddress, out var sender))
                 return false;
 
-            var sender = _networks[packet.NetId].Devices[packet.SenderAddress];
             if (!sender.SendBroadcastAttemptEvent)
                 return true;
 

@@ -731,6 +731,8 @@
         amount: 1
       - id: RMCPackFlareCAS
         amount: 6
+      - id: AU14JoeUPP
+        amount: 5
     - name: Chevrons
       entries:
       - id: AU14ChevronUPPNIPrivate
@@ -975,6 +977,8 @@
         points: 2
       - id: DoorElectronics
         points: 2
+      - id: CMUDeployableZLevelLadder
+        points: 10
       - id: RMCPowerCellHigh
         points: 3
       - id: RMCPowerCellSuper

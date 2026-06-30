@@ -44,8 +44,7 @@ namespace Content.Server.Administration.Systems
         [Dependency] private IServerDbManager _dbManager = default!;
         [Dependency] private PlayerRateLimitManager _rateLimit = default!;
 
-        [GeneratedRegex(@"^https://discord\.com/api/webhooks/(\d+)/((?!.*/).*)$")]
-        private static partial Regex DiscordRegex();
+        private static readonly Regex DiscordRegex = new(@"^https://discord\.com/api/webhooks/(\d+)/((?!.*/).*)$");
 
         private string _webhookUrl = string.Empty;
         private WebhookData? _webhookData;
@@ -128,7 +127,7 @@ namespace Content.Server.Administration.Systems
             if (url == string.Empty)
                 return;
 
-            var match = DiscordRegex().Match(url);
+            var match = DiscordRegex.Match(url);
 
             if (!match.Success)
             {
@@ -348,7 +347,7 @@ namespace Content.Server.Administration.Systems
                 return;
 
             // Basic sanity check and capturing webhook ID and token
-            var match = DiscordRegex().Match(url);
+            var match = DiscordRegex.Match(url);
 
             if (!match.Success)
             {

@@ -1,0 +1,197 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobPlatOpBaseAbstract
+  name: au14-job-name-govforplatop
+  description: au14-job-description-govforplatop
+  icon: "AU14JobIconOpsOfc"
+  spawnMenuRoleName: Junior Officer (GOVFOR)
+  startingGear: AU14GearGOVFORPlatOp
+  dummyStartingGear: AU14GearGOVFORPlatOpDummy
+  playTimeTracker: AU14JobGOVFORPlatOp
+  requireAdminNotify: true
+  canBeAntag: false
+  accessGroups:
+  - AU14GovforCommand
+  - aulegacygroupcommand # NOTE: should remove & hard migrate
+
+- type: job
+  abstract: true
+  parent: AU14JobPlatOpBaseAbstract
+  id: AU14JobPlatOpBase
+  roundRole: JuniorOfficer
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetPlatoonJuniorOfficer
+  - type: RMCSpeechBubbleSpecificStyle
+    speechStyleClass: commanderSpeech
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforplatop
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: old_govfor_platco
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
+        state: old_platco
+    UPP:
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORPlatOpUPP
+    WYPMC:
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORPlatOpWYPMC
+
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankFirstLT:
+      entity: AU14ChevronFirstLT
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORPlatOp
+        time: 86400 # 24 hours
+    SecondLT:
+      entity: AU14ChevronSecondLT
+      requirements: []
+  requirements:
+  - !type:AgeRequirement
+    requiredAge: 25
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+    - NoEnglish
+
+- type: playTimeTracker
+  id: AU14JobGOVFORPlatOp
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORPlatOp
+  equipment:
+    id: AU14IDCardGOVFORPlatOp
+    ears: AU14HeadsetGovforCommand
+
+- type: startingGear
+  id: AU14GearGOVFORPlatOpDummy
+  equipment:
+    shoes: CMBootsBlack
+    head: AU14JunglePatrolCap
+    jumpsuit: CMJumpsuitXOFormal
+    ears: AU14HeadsetGovforCommand
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORPlatOp
+  name: Spawn Point GOVFOR Platoon Operations Officer
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORPlatOp
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobPlatOpBase
+  id: AU14JobGOVFORPlatOp
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: RMCSpeechBubbleSpecificStyle
+      speechStyleClass: commanderSpeech
+
+- type: roleLoadout
+  id: JobAU14JobGOVFORPlatOp
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - WeaponsRMC
+
+- type: job
+  parent: AU14JobPlatOpBase
+  id: AU14JobOPFORPlatOp
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFOROpsOfc"
+  spawnMenuRoleName: Junior Officer (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearOpforPlatOp
+  dummyStartingGear: AU14GearOpforPlatOpDummy
+  accessGroups:
+  - AU14OpforCommand
+
+- type: startingGear
+  id: AU14GearOpforPlatOp
+  equipment:
+    id: AU14IDCardopforPlatOp
+    ears: AU14HeadsetOpforCommand
+
+- type: startingGear
+  id: AU14GearOpforPlatOpDummy
+  equipment:
+    shoes: CMBootsBlack
+    head: AU14JunglePatrolCap
+    jumpsuit: CMJumpsuitXOFormal
+    ears: AU14HeadsetOpforCommand
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointopforPlatOp
+  name: Spawn Point opfor Platoon Operations Officer
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORPlatOp
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobPlatOpBase
+  id: AU14JobGOVFORPlatOpRMC
+  roundForce: RMC
+  name: au14-job-name-govforplatopRMC
+  spawnMenuRoleName: Junior Officer (TWE RMC)
+  ranks:
+    RMC_2Lieutenant: []
+
+- type: job
+  parent: AU14JobPlatOpBase
+  id: AU14JobGOVFORPlatOpUPP
+  roundForce: UPP
+  requirements: []
+  name: Staff Officer
+  spawnMenuRoleName: Junior Officer (UPP)
+  ranks:
+    UPP_Lieutenant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatOp
+      time: 216000 # 60 hours
+    UPP_JuniorLieutenant: []
+
+- type: job
+  parent: AU14JobPlatOpBase
+  id: AU14JobGOVFORPlatOpWYPMC
+  roundForce: WYPMC
+  requirements: []
+  name: PMC Operations Adjutant
+  description: au14-job-description-govforplatop
+  spawnMenuRoleName: Junior Officer (WYPMC)
+  ranks:
+    AU14RankWeYuAdjutant: []

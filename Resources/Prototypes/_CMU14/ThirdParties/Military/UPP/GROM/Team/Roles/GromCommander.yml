@@ -1,0 +1,123 @@
+- type: job
+  parent: CMJobBase
+  id: AU14UPPGROMCommander
+  roundSide: ThirdParty
+  roundForce: GROM
+  roundRole: AU14UPPGROMCommander
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_co
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - AU14SquadGROM # for future when there's a dedicated map for them, right now does nothing
+  - type: Skills
+    preset: AU14SkillPresetPlatoonCommander
+  - type: JobPrefix
+    prefix: au-14-job-prefix-rmcrrt-commander
+  - type: MarineOrders
+    moveOrderSoundMale:
+      collection: AU14MaleMoveOrder
+    moveOrderSoundFemale:
+      collection: AU14FemaleMoveOrder
+    focusOrderSoundMale:
+      collection: AU14MaleFocusOrder
+    focusOrderSoundFemale:
+      collection: AU14FemaleFocusOrder
+    holdOrderSoundMale:
+      collection: AU14MaleHoldOrder
+    holdOrderSoundFemale:
+      collection: AU14FemaleHoldOrder
+  - type: RMCTrackable
+  - type: RMCPointing
+  - type: Language
+    spokenLanguages:
+    - Polish
+    - English
+    - Russian
+    - Spanish
+    - Mandarin
+    - German
+    - TacticalSignLanguage
+    understoodLanguages:
+    - Polish
+    - English
+    - Russian
+    - Spanish
+    - Mandarin
+    - German
+    - TacticalSignLanguage
+    currentLanguage: Polish
+    defaultLanguage: Polish
+
+  name: au-14-job-name-rmcrrt-commander
+  description: au14-uppgrom-description
+  playTimeTracker: AU14JobUPPGROMCommander
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UPP_Major:
+      entity: AU14ChevronUPPNIMajor
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUPPGROMCommander
+        time: 18000 # 5 hours
+    UPP_Captain:
+      entity: AU14ChevronUPPNICaptain
+      requirements: []
+  spawnMenuRoleName: UPP GROM Commander (Survivor)
+  startingGear: AU14GearUPPGROMCommander
+  greeting: au14-uppgrom-greeting
+  icon: "AU14JobIconUPPGROMCommander"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - AU14GovforCommand
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUPPGROM
+  id: AU14JobUPPGROMCommander
+  name: UPP GROM Commander
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadGROM
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au-14-job-name-rmcrrt-commander
+    description: au14-uppgrom-description
+    reregister: false
+    job: AU14UPPGROMCommander
+    raffle:
+      settings: short
+    rules: au14-uppgrom-rules
+
+- type: startingGear
+  id: AU14GearUPPGROMCommander
+  equipment:
+    id: AU14IDCardUPPGROMCommander
+    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    jumpsuit: AU14FatiguesUPPGROM
+    shoes: RMCBootsSPPFilled
+    head: CMHeadCapSPPBeret
+    belt: AU14BeltMedicalUPPFull
+    pocket1: RMCPouchCommandFull
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelSPPFull
+    ears: RMCHeadsetGROM
+    suitstorage: AU14WeaponRifleAG80Filled
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconUPPGROMCommander
+  icon:
+    sprite: _RMC14/Interface/cm_job_icons.rsi
+    state: upp_co
+
+- type: playTimeTracker
+  id: AU14JobUPPGROMCommander

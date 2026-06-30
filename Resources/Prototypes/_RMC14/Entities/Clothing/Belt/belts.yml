@@ -2519,7 +2519,8 @@
   - type: FixedItemSizeStorage
   - type: LimitedStorage
     limits:
-    - popup: rmc-storage-limit-one-gun
+    - popup: rmc-storage-limit-two-guns
+      count: 2
       whitelist:
         components:
         - Gun

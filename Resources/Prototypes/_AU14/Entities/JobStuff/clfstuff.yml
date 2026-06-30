@@ -28,6 +28,15 @@
       - id: AU14WeaponRifleAR10
         amount: 3
         points: 4
+      - id: AU14WeaponRifleM16A2
+        amount: 3
+        points: 4
+      - id: AU14WeaponRifleM16A1
+        amount: 3
+        points: 2
+      - id: AU14WeaponRifleM16A2Larue
+        amount: 3
+        points: 5
       - id: RMCWeaponRifleL42A
         amount: 2
         points: 5
@@ -46,6 +55,21 @@
       - id: RMCType88SniperRifle
         amount: 1
         points: 20
+    - name: SMGs
+      entries:
+      - id: RMCWeaponSMGType19
+        amount: 2
+        points: 10
+      - id: RMCWeaponSMGType64
+        amount: 2
+        points: 7
+      - id: WeaponSMGMAC15
+        amount: 4
+        points: 5
+      - id: RMCWeaponSMGPDW90
+        amount: 2
+        points: 10
+
     - name: Shotguns
       entries:
       - id: RMCWeaponShotgunHG3712
@@ -60,8 +84,14 @@
       - id: WeaponShotgunM357
         amount: 3
         points: 5
+      - id: RMCWeaponShotgunType23
+        amount: 2
+        points: 8
     - name: Handguns
       entries:
+      - id: RMCWeaponPistolD18
+        amount: 8
+        points: 2
       - id: AU14WeaponPistolTPR23BEmpty
         amount: 1
         points: 3
@@ -103,7 +133,7 @@
     - name: Rifle Ammunition
       entries:
       - id: RMCMagazineRifleM16
-        amount: 85
+        amount: 95
         points: 1
       - id: RMCMagazineRifleL42A
         amount: 45
@@ -129,6 +159,27 @@
       - id: RMCMagazineSniperType88
         amount: 3
         points: 6
+    - name: SMG Ammunition
+      entries:
+      - id: RMCMagazineSMGType19
+        amount: 6
+        points: 3
+      - id: RMCMagazineSMGType19Drum
+        amount: 3
+        points: 7
+      - id: RMCMagazineSMGType64
+        amount: 7
+        points: 2
+      - id: RMCMagazineSMGMAC15Ext
+        amount: 10
+        points: 2
+      - id: RMCMagazineSMGPDW90
+        amount: 10
+        points: 4
+      - id: RMCMagazineSMGPDW90AP
+        amount: 4
+        points: 8
+
     - name: Shotgun Ammunition
       entries:
       - id: RMCBoxShotgunFlechette
@@ -140,8 +191,20 @@
       - id: RMCBoxShotgunSlugs
         amount: 6
         points: 1
+      - id: RMCBoxShotgunHeavyBuckshot
+        amount: 6
+        points: 2
+      - id: RMCBoxShotgunHeavySlugs
+        amount: 6
+        points: 2
+      - id: RMCBoxShotgunHeavyFlechette
+        amount: 6
+        points: 2
     - name: Handgun Ammunition
       entries:
+      - id: RMCMagazinePistolD18
+        amount: 30
+        points: 1
       - id: CMMagazinePistolM1984
         amount: 30
         points: 1
@@ -218,16 +281,19 @@
         amount: 10
         points: 1
       - id: AU14IED
-        amount: 6
+        amount: 12
         points: 6
       - id: AU14IEDVest
         amount: 2
         points: 10
       - id: AU14IEDLarge
-        amount: 2
+        amount: 3
         points: 15
     - name: Protective Equipment
       entries:
+      - id: CMUArmorProdigyFlakVestAlt
+        amount: 7
+        points: 4
       - id: AU14ExternalWebbing
         amount: 10
         points: 1
@@ -242,13 +308,19 @@
         points: 7
       - id: RMCCoatMilitiaVest
         amount: 5
-        points: 7
+        points: 5
       - id: RMCArmorHelmetMercenary
         amount: 2
-        points: 10
+        points: 20
       - id: RMCArmorMercenary
         amount: 2
-        points: 15
+        points: 25
+      - id: AU14ScoutWebbing
+        amount: 1
+        points: 25
+      - id: CMMaskCoif
+        amount: 15
+        points: 1
       - id: CMMaskGas
         amount: 5
         points: 3
@@ -260,6 +332,9 @@
         points: 5
     - name: Special Equipment
       entries:
+      - id: CMUDeployableZLevelLadder
+        amount: 2
+        points: 10
       - id: CMUCLFSynthSubversionKey
         amount: 1
         points: 20
@@ -369,7 +444,22 @@
   - type: Sprite
     state: green
   - type: SafehouseMarker
+  - type: ScenarioSpawnMarker
+    kind: ClfSafehouse
+    tags:
+    - force:clf:safehouse
 
+- type: entity
+  name: Generic CLF Safehouse Spawn Marker
+  parent: MarkerBase
+  id: scenarioclfsafehousespawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ScenarioSpawnMarker
+    kind: ClfSafehouse
+    tags:
+    - force:clf:safehouse
 
 - type: entity
   parent: RMCCrateBase
@@ -541,5 +631,3 @@
     - Utility
     startingAccessories:
     - AU14CLFHeadset
-
-

@@ -101,7 +101,9 @@
       map: ["enum.GunVisualLayers.Base"]
     - state: mag-1
       map: ["enum.GunVisualLayers.Mag"]
-
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsPistol45
+    
 - type: entity
   parent: CMCartridgePistolBase
   id: CMCartridgePistolMK45

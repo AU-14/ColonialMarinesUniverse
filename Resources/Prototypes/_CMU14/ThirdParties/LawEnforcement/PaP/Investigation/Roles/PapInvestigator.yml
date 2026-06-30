@@ -1,0 +1,108 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobPAPThirdpartyInvestigatorBase
+  name: au-14-job-name-papthirdparty-investigator
+  description: au14-papthirdparty-description
+  playTimeTracker: AU14JobPaPThirdpartyInvestigator
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: job
+  parent: AU14JobPAPThirdpartyInvestigatorBase
+  id: AU14PAPThirdpartyInvestigator
+  roundSide: ThirdParty
+  roundForce: PAP
+  roundRole: AU14PAPThirdpartyInvestigator
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_sec
+  - type: Skills
+    skills:
+      RMCSkillCqc: 2
+      RMCSkillMeleeWeapons: 1
+      RMCSkillFirearms: 2
+      RMCSkillPolice: 2
+      RMCSkillEndurance: 2
+      RMCSkillFireman: 2
+      RMCSkillMedical: 1
+      RMCSkillVehicles: 1
+      RMCSkillEngineer: 1
+      RMCSkillConstruction: 1
+  - type: JobPrefix
+    prefix: au-14-job-prefix-papthirdparty-investigator
+  - type: Language
+    preset: AU14LanguagePresetUPPOfficer
+
+  name: au-14-job-name-papthirdparty-investigator
+  description: au14-papthirdparty-description
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UPP_SeniorLieutenant:
+      entity: AU14ChevronUPPNISeniorLieutenant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobPaPThirdpartyInvestigator
+        time: 36000 # 10 hours
+    UPP_Lieutenant:
+      entity: AU14ChevronUPPNILieutenant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobPaPThirdpartyInvestigator
+        time: 18000 # 5 hours
+    UPP_JuniorLieutenant:
+      entity: AU14ChevronUPPNIJuniorLieutenant
+      requirements: []
+  spawnMenuRoleName: UPP PaP Investigator (3rd party)
+  startingGear: AU14GearPAPThirdpartyInvestigator
+  greeting: au14-papthirdparty-greeting
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: au-14-job-name-papthirdparty-captain
+  accessGroups:
+  - aucmb
+  - Colonist
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicPAPThirdparty
+  id: AU14JobPaPThirdpartyInvestigator
+  name: UPP PAP Investigator
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au-14-job-name-papthirdparty-investigator
+    description: au14-papthirdparty-description
+    reregister: false
+    job: AU14PAPThirdpartyInvestigator
+    raffle:
+      settings: short
+    rules: au14-papthirdparty-description
+
+- type: startingGear
+  id: AU14GearPAPThirdpartyInvestigator
+  equipment:
+    id: AU14IDCardPAPThirdpartyInvestigator
+    outerClothing: RMCCoatPaP
+    jumpsuit: RMCJumpsuitSPPPaP
+    shoes: CMBootsBlackFilled
+    gloves: RMCHandsVeteran
+    head: CMHeadCapSPPPeakedPolice
+    eyes: CMGlassesSecurity
+    belt: AU14BeltHolsterPistolUPPPAP
+    pocket1: AU14PouchPoliceEquipmentSupportSynth
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelBlack
+    ears: AU14CMBHeadset
+  storage:
+    back:
+    - RMCMaskGasSPP
+
+- type: playTimeTracker
+  id: AU14JobPaPThirdpartyInvestigator

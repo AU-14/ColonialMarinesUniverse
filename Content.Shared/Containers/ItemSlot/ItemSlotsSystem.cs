@@ -929,6 +929,32 @@ namespace Content.Shared.Containers.ItemSlots
         }
 
         /// <summary>
+        ///     Toggle whether normal interaction tries to insert held items into this slot.
+        /// </summary>
+        public void SetInsertOnInteract(EntityUid uid, string id, bool insertOnInteract, ItemSlotsComponent? itemSlots = null)
+        {
+            if (!Resolve(uid, ref itemSlots))
+                return;
+
+            if (!itemSlots.Slots.TryGetValue(id, out var slot))
+                return;
+
+            SetInsertOnInteract(uid, slot, insertOnInteract, itemSlots);
+        }
+
+        /// <summary>
+        ///     Toggle whether normal interaction tries to insert held items into this slot.
+        /// </summary>
+        public void SetInsertOnInteract(EntityUid uid, ItemSlot slot, bool insertOnInteract, ItemSlotsComponent? itemSlots = null)
+        {
+            if (!Resolve(uid, ref itemSlots))
+                return;
+
+            slot.InsertOnInteract = insertOnInteract;
+            Dirty(uid, itemSlots);
+        }
+
+        /// <summary>
         ///     Update the locked state of the managed item slots.
         /// </summary>
         /// <remarks>

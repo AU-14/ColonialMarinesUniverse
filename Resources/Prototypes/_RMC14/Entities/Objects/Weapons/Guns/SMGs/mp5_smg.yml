@@ -129,7 +129,9 @@
     zeroVisible: false
     zeroOnlyOnEmpty: true
   - type: Appearance
-
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsSMG9MM
+    
 - type: entity
   parent: CMCartridge10x20mm
   id: CMCartridge9mmSMG

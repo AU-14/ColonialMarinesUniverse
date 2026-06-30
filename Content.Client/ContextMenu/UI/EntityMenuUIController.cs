@@ -66,6 +66,7 @@ namespace Content.Client.ContextMenu.UI
         {
             _updating = true;
             _cfg.OnValueChanged(CCVars.EntityMenuGroupingType, OnGroupingChanged, true);
+            _context.OnContextClosed += OnContextClosed;
             _context.OnContextKeyEvent += OnKeyBindDown;
 
             CommandBinds.Builder
@@ -78,8 +79,14 @@ namespace Content.Client.ContextMenu.UI
             _updating = false;
             Elements.Clear();
             _cfg.UnsubValueChanged(CCVars.EntityMenuGroupingType, OnGroupingChanged);
+            _context.OnContextClosed -= OnContextClosed;
             _context.OnContextKeyEvent -= OnKeyBindDown;
             CommandBinds.Unregister<EntityMenuUIController>();
+        }
+
+        private void OnContextClosed()
+        {
+            Elements.Clear();
         }
 
         /// <summary>
@@ -312,11 +319,11 @@ namespace Content.Client.ContextMenu.UI
 
             // remove the element
             var parent = element.ParentMenu?.ParentElement;
-            element.Orphan();
             Elements.Remove(entity);
+            OrphanIfAlive(element);
 
             // update any parent elements
-            if (parent is EntityMenuElement e)
+            if (parent is EntityMenuElement { Disposed: false } e)
                 UpdateElement(e);
 
             // If this was the last entity, close the entity menu
@@ -332,15 +339,16 @@ namespace Content.Client.ContextMenu.UI
         /// </remarks>
         private void UpdateElement(EntityMenuElement element)
         {
-            if (element.SubMenu == null)
+            if (element is { Disposed: true } ||
+                element.SubMenu is not { Disposed: false } subMenu)
                 return;
 
             // Get the first entity in the sub-menus
-            var entity = GetFirstEntityOrNull(element.SubMenu);
+            var entity = GetFirstEntityOrNull(subMenu);
             if (entity == null)
             {
                 // This whole element has no associated entities. We should remove it
-                element.Orphan();
+                OrphanIfAlive(element);
                 return;
             }
 
@@ -352,14 +360,14 @@ namespace Content.Client.ContextMenu.UI
                 // There was only one entity in the sub-menu. So we will just remove the sub-menu and point directly to
                 // that entity.
                 element.Entity = entity;
-                element.SubMenu.Orphan();
+                OrphanIfAlive(subMenu);
                 element.SubMenu = null;
                 Elements[entity.Value] = element;
             }
 
             // update the parent element, so that it's count and entity icon gets updated.
             var parent = element.ParentMenu?.ParentElement;
-            if (parent is EntityMenuElement e)
+            if (parent is EntityMenuElement { Disposed: false } e)
                 UpdateElement(e);
         }
 
@@ -368,7 +376,7 @@ namespace Content.Client.ContextMenu.UI
         /// </summary>
         private EntityUid? GetFirstEntityOrNull(ContextMenuPopup? menu)
         {
-            if (menu == null)
+            if (menu is not { Disposed: false })
                 return null;
 
             foreach (var element in menu.MenuBody.Children)
@@ -390,6 +398,12 @@ namespace Content.Client.ContextMenu.UI
             }
 
             return null;
+        }
+
+        private static void OrphanIfAlive(Control? control)
+        {
+            if (control is { Disposed: false })
+                control.Orphan();
         }
     }
 }

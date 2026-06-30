@@ -19,6 +19,17 @@
     - type: NpcFactionMember
       factions:
       - SPP
+    - type: Language
+      spokenLanguages:
+      - Russian
+      - English
+      - Mandarin
+      understoodLanguages:
+      - Russian
+      - English
+      - Mandarin
+      currentLanguage: Russian
+      defaultLanguage: Russian
     - type: Skills
       skills:
         RMCSkillEndurance: 1

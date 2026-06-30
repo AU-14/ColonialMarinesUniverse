@@ -203,8 +203,11 @@
     RMCFoodSnackChipsPepper: 12
     RMCFoodSnackEATBar: 12
     RMCFoodSnackBoonie: 6
+    RMCFoodSnackBoonieBar: 4
     RMCFoodSnackCHUNK: 6
+    RMCFoodSnackHUNK: 1
     RMCFoodSnackBarcaridine: 6
+    CMMarineProteinBar: 8
 
 - type: entity
   parent: CMVendorSnack

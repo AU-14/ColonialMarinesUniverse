@@ -1,9 +1,13 @@
 using Content.Server.AU14.Round;
 using Content.Server.GameTicking;
+using Content.Server.AU14.Roles;
 using Content.Server.Spawners.Components;
 using Content.Server.Station.Systems;
+using Content.Shared._CMU14.Round.Roles;
 using Content.Shared.AU14;
+using Content.Shared.Roles;
 using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
 namespace Content.Server.Spawners.EntitySystems;
@@ -12,6 +16,8 @@ public sealed partial class SpawnPointSystem : EntitySystem
 {
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private RoundJobProfileSystem _roundJobProfiles = default!;
     [Dependency] private StationSystem _stationSystem = default!;
     [Dependency] private StationSpawningSystem _stationSpawning = default!;
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
@@ -28,8 +34,13 @@ public sealed partial class SpawnPointSystem : EntitySystem
 
         bool isLateJoin = _gameTicker.RunLevel == GameRunLevel.InRound;
         string? jobId = args.Job?.ToString();
-        bool isOpfor  = !string.IsNullOrEmpty(jobId) && jobId.Contains("opfor",  StringComparison.OrdinalIgnoreCase);
-        bool isGovfor = !string.IsNullOrEmpty(jobId) && jobId.Contains("govfor", StringComparison.OrdinalIgnoreCase);
+        JobPrototype? job = null;
+        if (args.Job is { } jobProto)
+            _prototype.TryIndex(jobProto, out job);
+
+        var side = _roundJobProfiles.GetRoundSide(job, jobId);
+        bool isOpfor = side == RoundJobSide.Opfor;
+        bool isGovfor = side == RoundJobSide.Govfor;
 
         // --- AU14: Faction spawn routing ---
         // If the player is govfor or opfor we decide where they spawn based solely on

@@ -1,0 +1,90 @@
+- type: job
+  parent: AU14JobLEOLeaderBase
+  id: AU14JobInvestigationNSPAInspector
+  roundSide: ThirdParty
+  roundForce: NSPA
+  roundRole: InvestigationNSPAInspector
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - NSPA
+  - type: Skills
+    skills:
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 2
+      RMCSkillIntel: 1
+      RMCSkillMedical: 1
+      RMCSkillMeleeWeapons: 1
+      RMCSkillOverwatch: 1
+      RMCSkillPolice: 2
+      RMCSkillLeadership: 1
+      RMCSkillVehicles: 1
+      RMCSkillEngineer: 1
+      RMCSkillConstruction: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliannspainspector
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: synth
+  - type: Language
+    preset: AU14LanguagePresetTWE
+
+  name: au14-job-name-civiliannspainspector
+  description: You are an Inspector of the Neroid Sector Policing Authority on routine patrol through the sector. Patrol the area with your constables and ensure that the law is enforced.
+  setPreference: false
+  canBeAntag: false
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    Inspector:
+      entity: AU14ChevronNSPAInspector
+      requirements: []
+  startingGear: AU14GearNSPAInspectorInvestigation
+  icon: "RMCJobIconTSEPAInspector"
+  spawnMenuRoleName: NSPA Inspector (3rd party)
+  requireAdminNotify: true
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - auadmin
+  - aucmb
+  - Colonist
+  - AUPrisonStaff
+  roleWeight: 0.25
+  hidden: false
+
+- type: startingGear
+  id: AU14GearNSPAInspectorInvestigation
+  equipment:
+    id: AU14IDCardColonyNSPAInspector
+    outerClothing: RMCCoatTSEPA
+    jumpsuit: RMCJumpsuitTSEPA
+    shoes: RMCBootsPMCFilled
+    head: RMCHeadCapTSEPAPeakedGold
+    belt: RMCBeltHolsterPistolTSEFilledL54
+    pocket1: AU14PouchPoliceEquipmentSupportSynth
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelTSEPA
+    ears: AU14CMBHeadsetOnlyCMB
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicNSPA
+  id: NSPAInvestigationPartyJobInspector
+  name: NSPA Inspector
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-civiliannspainspector
+    description: You are an Inspector of the Neroid Sector Policing Authority on routine patrol through the sector. Patrol the area with your constables and ensure that the law is enforced.
+    reregister: false
+    job: AU14JobInvestigationNSPAInspector
+    raffle:
+      settings: short
+    rules: You are an Inspector of the Neroid Sector Policing Authority on routine patrol through the sector. Patrol the area with your constables and ensure that the law is enforced.

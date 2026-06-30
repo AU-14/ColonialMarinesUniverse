@@ -4610,5 +4610,671 @@
   id: 327
   time: '2026-06-22T06:58:43.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1407
+- author: sunzu432
+  changes:
+  - message: 'Hope''s Retreat: Withdrawal consoles have spontaneously appeared in
+      the Fort Beauregard Command Center and Hope''s Retreat Administrator''s Office!'
+    type: Add
+  - message: 'Hope''s Retreat: An inaccurate TO&E has been updated, allowing for the
+      construction of an expanded specialist equipment area.'
+    type: Tweak
+  - message: 'Hope''s Retreat: Following an arduous set of committees and municipal
+      re-zoning struggles, the second floor of the Hope''s Retreat dormitories has
+      finally been permitted to have power.'
+    type: Fix
+  - message: 'Hope''s Retreat: A contract has been arbitrated with the Power and Lights
+      Spirit, allowing for APC and lighting issues with the Octanis Complex''s second
+      floor to be fixed (pertains to both the Security Post and Hospital).'
+    type: Fix
+  - message: 'Hope''s Retreat: Weyland-Yutani Cross-Dimensional Specialists have correctly
+      identified and removed reality-deviating upstream defibrillators from the Fort
+      Beauregard medbay.'
+    type: Fix
+  - message: 'Hope''s Retreat: The NSPA have received a supply shipment from a delayed
+      transport, finally allowing them to refill their emergency armory.'
+    type: Fix
+  id: 328
+  time: '2026-06-22T21:52:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1410
+- author: HotdogMan52
+  changes:
+  - message: Added MP brassards for USCM MPs
+    type: Add
+  - message: Adjusted Sam Browne Duty Belt to fit two guns, allowing for pistol/tazer
+      | tazer/tazer | pistol/pistol
+    type: Tweak
+  - message: Fixed gas not affecting people when gas mask is toggled off/hidden
+    type: Fix
+  id: 329
+  time: '2026-06-22T21:52:56.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1406
+- author: KriegersMustDie
+  changes:
+  - message: Ambassador Briefcases with some flavor.
+    type: Add
+  id: 330
+  time: '2026-06-23T03:17:39.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1417
+- author: maertayn
+  changes:
+  - message: '''serverlogs'' & ''serversawmills'' commands for live log access in-game
+      (host-only restricted perms), with a --tail option that sends server-side logs
+      into admin-chat as they arrive & use --filter to cut out noise. Adjust the Sawmill
+      (log group) verbosity level in-game with ''loglevel'' <sawmill> and use ''serversawmills''
+      to search/list all ~3500! groups and their current overrides'
+    type: Add
+  - message: the rejuvenate verb/trick now fully repairs vehicles/blackfoot - resets
+      damage & hardpoint health + integrity, clears all failure states and refills
+      fuel/battery - also rearms all the vehicle's mounted weaponry
+    type: Admin
+  - message: removed duplicate "rename" command that caused toolshed warnings
+    type: Fix
+  id: 331
+  time: '2026-06-23T03:39:16.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1416
+- author: ProspectorAres
+  changes:
+  - message: new lobby art
+    type: Add
+  id: 332
+  time: '2026-06-23T12:20:46.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1418
+- author: OverusedMeme
+  changes:
+  - message: Added the Pyro spec kit to select Factions WS Vendors (LACN/USCM/TWE/WY)
+    type: Add
+  id: 333
+  time: '2026-06-24T11:50:05.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1423
+- author: OverusedMeme
+  changes:
+  - message: Added two plant bags to the hydroponics crate
+    type: Add
+  id: 334
+  time: '2026-06-24T12:12:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1430
+- author: KriegersMustDie
+  changes:
+  - message: Xeno Queen is banned from Space Jam
+    type: Tweak
+  id: 335
+  time: '2026-06-24T12:22:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1428
+- author: nicholast013
+  changes:
+  - message: 2 amount scout webbing for 6 points
+    type: Add
+  - message: coif (balaclava) price -> 1
+    type: Add
+  - message: militia vest price -> 5
+    type: Tweak
+  - message: K12 armor and helmet is more pricey 10 -> 20
+    type: Tweak
+  - message: IED amount 6 -> 12
+    type: Tweak
+  - message: Huge IED amount 2 -> 3
+    type: Tweak
+  id: 336
+  time: '2026-06-24T12:25:40.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1411
+- author: TheHellFireo
+  changes:
+  - message: Fixed single-option threat votes not spawning a threat.
+    type: Fix
+  - message: Fixed Head of Engineering spawn and loadout issues.
+    type: Fix
+  - message: Prevented fishing rods from pulling vehicles.
+    type: Fix
+  - message: Fixed gamemode-specific job preference fallback behavior.
+    type: Fix
+  - message: Fixed deployables disappearing or breaking on moving grids.
+    type: Fix
+  - message: Fixed GOVFOR Weapon Specialist loadouts.
+    type: Fix
+  - message: Fixed tactical map faction handling for overwatch.
+    type: Fix
+  - message: Fixed First Recon rifleman skills.
+    type: Fix
+  - message: Fixed Reaper corrosive acid action behavior.
+    type: Fix
+  - message: Fixed viewport freeze when the main eye entered nullspace.
+    type: Fix
+  - message: Fixed signal flares settling into invalid airborne targets.
+    type: Fix
+  - message: Fixed z-level look-up fullbright while nested.
+    type: Fix
+  - message: Fixed Yautja wrench storage sprite.
+    type: Fix
+  - message: Fixed impossible burrowed larva queue offers.
+    type: Fix
+  - message: Fixed parasite collision after changing z-levels.
+    type: Fix
+  - message: Fixed CAS fire mission targeting validation.
+    type: Fix
+  - message: Fixed Vulture spotter tripod scope cleanup and stowed scoping.
+    type: Fix
+  - message: Prevented hivebroken xeno evolution/devolution issues.
+    type: Fix
+  - message: Preserved xeno spawn mute timers through evolution.
+    type: Fix
+  - message: Blocked downed marine hand actions while preserving missing-leg handling.
+    type: Fix
+  - message: Fixed xeno trap line-of-sight checks.
+    type: Fix
+  - message: Fixed Queen Eye camera switching after watching xenos.
+    type: Fix
+  - message: Filled colonist medical kit pouches.
+    type: Fix
+  - message: Fixed upper z-level placement rendering.
+    type: Fix
+  - message: Prevented holster melee cooldown bypass.
+    type: Fix
+  - message: Fixed queen healing across z-levels.
+    type: Fix
+  - message: Preserved folding barricade damage when redeployed or stacked.
+    type: Fix
+  - message: Fixed Queen Eye overlay on z-level maps.
+    type: Fix
+  - message: Fixed dropship exit fall damage behavior.
+    type: Fix
+  - message: Fixed stirring mixer interactions for drink recipes.
+    type: Fix
+  - message: Fixed infection stun on crit crawling hosts.
+    type: Fix
+  - message: Fixed per-hive ovipositor evolution point gating and tacmap live updates.
+    type: Fix
+  - message: Fixed Head Physician access to medical storage.
+    type: Fix
+  - message: Fixed synth mesons across z-level transitions.
+    type: Fix
+  - message: Fixed flesh abominations seeing synth markers.
+    type: Fix
+  - message: Fixed beds and buckled mob z-level behavior.
+    type: Fix
+  - message: Fixed threat leader playtime aggregation from derived threat-member roles.
+    type: Fix
+  - message: Fixed late-added job component initialization.
+    type: Fix
+  - message: Fixed vehicle driver state after unbuckling from internal viewport.
+    type: Fix
+  - message: Fixed vehicle F-key headlight toggling.
+    type: Fix
+  - message: Preserved queen action order through ovi changes.
+    type: Fix
+  - message: Prevented RVS drum mags from releasing live rounds on manual cycling.
+    type: Fix
+  - message: Fixed ID-locked gun prediction behavior.
+    type: Fix
+  - message: Allowed greenos to pull allied corpses.
+    type: Fix
+  - message: Fixed Wey-Yu facility faction membership for greeno alliances.
+    type: Fix
+  - message: Fixed Blackfoot cross-z landing and weapon audio.
+    type: Fix
+  - message: Preserved carried mob coordinates on fireman carry drops.
+    type: Fix
+  - message: Fixed build analyzer warnings and prototype startup warnings.
+    type: Fix
+  - message: Fixed nested z-level lookup startup subscriptions.
+    type: Fix
+  - message: Fixed viewport controller dependency registration.
+    type: Fix
+  - message: Added the remaining allowed vehicle supply console vehicle options.
+    type: Add
+  - message: Limited vehicle supply to one APC-group, one tank-group, and one support/rest-group
+      vehicle.
+    type: Tweak
+  - message: Prevented vehicle supply from offering duplicate or already-ordered vehicle
+      choices.
+    type: Fix
+  - message: Removed LTB, SPP railgun, and Blackfoot door gunner options from vehicle
+      lift selections.
+    type: Fix
+  id: 337
+  time: '2026-06-24T18:26:59.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1432
+- author: TheHellFireo
+  changes:
+  - message: Mortars and orbital bombardments now work properly with multi-Z maps,
+      including falling through openings to the correct level.
+    type: Add
+  - message: Vehicles now support multi-Z movement and support checks on connected
+      levels.
+    type: Add
+  - message: Dropships can now use tactical hover with level selection, downwash,
+      sound, shadow, timed return, and early return cancellation.
+    type: Add
+  - message: Improved the tactical landing UI and overlay so landing vs hover is clearer.
+    type: Tweak
+  - message: Fixed tactical landing/hover issues with z-level selection, openings,
+      and the tactical view falling between levels.
+    type: Fix
+  - message: Adds Deployable ladders to combat engineers working this time
+    type: Add
+  id: 338
+  time: '2026-06-24T21:10:04.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1434
+- author: TheHellFireo
+  changes:
+  - message: ASRS UI reworked to be nicer
+    type: Add
+  - message: Stock to equipment, right now only vehicle equipment have a stock limit,
+      limited to 2 and replenish their stock every 5 minutes.
+    type: Add
+  id: 339
+  time: '2026-06-24T22:22:45.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1439
+- author: potatoed6
+  changes:
+  - message: Ported languages from RMC!
+    type: Add
+  - message: 'Added more languages: Yautja, Ukrainian, Polish, Czech, Turkish, Korean,
+      Italian, Irish, Finnish, Hungarian, Albanian, Serbian, Lithuanian, Arabic, Afrikaans,
+      Dutch, Swahili, Persian, Hindi, Vietnamese, Portuguese, Indonesian, Filipino,
+      Urdu, Yoruba, Esperanto, Latin, TacticalSignLanguage, Brazilian, Slovak, Romanian,
+      Arcturian'
+    type: Add
+  - message: IASF ranks
+    type: Add
+  - message: Yautjas have translator in their bracelet
+    type: Add
+  - message: All humans can learn languages at a slow pace.
+    type: Tweak
+  - message: CLF and Mob gangs can choose their own language for larps
+    type: Add
+  - message: Tweaked third parties and other roles to have languages. F.e. UPP TD
+      speak only minor UPP languages.
+    type: Tweak
+  - message: Fixed 3rd party ranks (chevrons) not spawning. Now they spawn after rolling
+      so you can have your higher rank if you played enough.
+    type: Fix
+  id: 340
+  time: '2026-06-25T03:56:41.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1431
+- author: KeiKiyomi
+  changes:
+  - message: Increased Scout Spec cloak storage to 15 from 10
+    type: Tweak
+  id: 341
+  time: '2026-06-25T07:03:56.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1450
+- author: KeiKiyomi
+  changes:
+  - message: Fixed LACN Scout getting a sniper and not the scout rifle
+    type: Fix
+  id: 342
+  time: '2026-06-25T07:05:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1449
+- author: KeiKiyomi
+  changes:
+  - message: Fixed Scout webbing only having 3 slots instead of 4
+    type: Fix
+  id: 343
+  time: '2026-06-25T07:17:35.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1442
+- author: KeiKiyomi
+  changes:
+  - message: Changed BGEL/Napalm-B (Green Fire) armor shred from 50% to 75%
+    type: Tweak
+  id: 344
+  time: '2026-06-25T07:18:07.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1427
+- author: KeiKiyomi
+  changes:
+  - message: Added Scout webbing to all Snipers and Spotters
+    type: Add
+  - message: Added a crate of SMART SCOPES to ASRS for 800 dollars containing 5 smart
+      scopes
+    type: Add
+  - message: Added 5 SMART SCOPES to USCM and HAZOPS req vendor
+    type: Add
+  id: 345
+  time: '2026-06-25T12:12:00.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1443
+- author: deepdarkdepths
+  changes:
+  - message: Despoiler's Hypertension now utilizes armor to be better effective in
+      combat.
+    type: Add
+  - message: Caustic Embrace now has a preview to see where you're aiming, alongside
+      a range buff.
+    type: Add
+  - message: Acid Barrage scatter is more consistent.
+    type: Tweak
+  - message: Catalyze takes 2 stacks to empower, instead of 1.
+    type: Tweak
+  - message: Oozing Wounds stack use dynamically changes depending on HP; the lower
+      hp you are, the less stacks you consume.
+    type: Tweak
+  id: 346
+  time: '2026-06-25T12:52:44.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1343
+- author: maertayn
+  changes:
+  - message: We're ditching _AU14 & AU14 folders in favor of _CMU14 - structure to
+      follow - threats and gamerules are moved already
+    type: Code
+  - message: Refactored the gamerules & serverside threat classes by removing all
+      junk and extracting methods
+    type: Code
+  - message: Changelog is now also visible in-game
+    type: Add
+  id: 347
+  time: '2026-06-25T17:51:28.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1444
+- author: TheHellFireo
+  changes:
+  - message: Makes ladders collapse if they do not have support of some structure
+      next to them, if its a wall and it gets destroyed the ladder will collapse
+    type: Add
+  - message: Blackfoot can now fly again
+    type: Fix
+  id: 348
+  time: '2026-06-26T18:17:02.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1463
+- author: jok989372-lgtm
+  changes:
+  - message: Added android suit for UPP platoon joe.
+    type: Add
+  id: 349
+  time: '2026-06-27T01:30:22.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1462
+- author: KeiKiyomi
+  changes:
+  - message: Changed M240T Custom Fuel tanks size to 450 from 250, and the bgel sized
+      from 250 to 500
+    type: Tweak
+  id: 350
+  time: '2026-06-27T01:50:08.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1445
+- author: maertayn
+  changes:
+  - message: Refactored languages a bit
+    type: Code
+  id: 351
+  time: '2026-06-27T02:17:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1465
+- author: stranthbackup
+  changes:
+  - message: Moved weapons prototypes into subcategories from _AU14/AU14 folders to
+      the modern _CMU14 directory
+    type: Code
+  id: 352
+  time: '2026-06-27T02:23:54.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1464
+- author: stranthbackup
+  changes:
+  - message: Fixed UPP APC eating your tools for use later.
+    type: Fix
+  id: 353
+  time: '2026-06-27T02:27:29.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1467
+- author: Arcticular1
+  changes:
+  - message: Pyro armor is now immune to pounces, and is now light armor!
+    type: Tweak
+  id: 354
+  time: '2026-06-27T03:50:43.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1461
+- author: Arcticular1
+  changes:
+  - message: Clf now get 1 point per 15$
+    type: Tweak
+  id: 355
+  time: '2026-06-27T03:52:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1459
+- author: stranthbackup
+  changes:
+  - message: Ammo boxes of varying round sizes
+    type: Add
+  id: 356
+  time: '2026-06-27T07:04:30.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1466
+- author: ver0098
+  changes:
+  - message: Type-19 is now medium sized for CLF Hit and runs.
+    type: Add
+  - message: Added Type-19, Type-64, P-90, MAC-15 to CLF Rack.
+    type: Add
+  - message: Added Type-23 to CLF Rack
+    type: Add
+  - message: Added D18 to CLF Rack
+    type: Add
+  - message: Added more M16 Variants to CLF rack
+    type: Add
+  - message: Added Flak Vests to CLF Rack
+    type: Add
+  - message: CLF now has deployable ladders
+    type: Add
+  id: 357
+  time: '2026-06-27T08:14:49.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1460
+- author: OmerF-afk
+  changes:
+  - message: Added lots of new crafting recipes. Including additions to the lathe.
+    type: Add
+  - message: Removed black goo from roleplay drugs. They can be made now.
+    type: Add
+  id: 358
+  time: '2026-06-27T11:03:39.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1470
+- author: stranthbackup
+  changes:
+  - message: Type 19 ammo box is now craftable
+    type: Fix
+  id: 359
+  time: '2026-06-28T00:54:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1473
+- author: sunzu432
+  changes:
+  - message: 'Hope''s Retreat: Unregistered Tunnel area to help differentiate the
+      chokes and flanks on the map.'
+    type: Add
+  - message: 'Hope''s Retreat: A large portion of the Octanis Complex should now have
+      T2/T3 roofs instead of the T4 that they were initially mapped with, allowing
+      Marines to push through the area much more easily.'
+    type: Tweak
+  - message: 'Hope''s Retreat: Extra floor reinforcement has been added to Fort Beauregard,
+      meaning Xenos should no longer be able to burrow into the base unless they push
+      them from the colony.'
+    type: Fix
+  - message: 'Hope''s Retreat: DCC and DP should be able to use their own prep room''s
+      door now.'
+    type: Fix
+  - message: 'Hope''s Retreat: Vehicle pool has been modified slightly to hopefully
+      allow vehicles to get off of the lift.'
+    type: Fix
+  - message: 'Hope''s Retreat: After a budget increase, the NSPA now have proper equipment
+      vendors and access to their own prep room.'
+    type: Fix
+  - message: 'Hope''s Retreat: After seven rounds of appropriations, three cost overruns
+      and $30 million, the Fort Beauregard prep rooms are now properly labelled.'
+    type: Fix
+  id: 360
+  time: '2026-06-28T00:54:20.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1472
+- author: maertayn
+  changes:
+  - message: L91 missing RSI
+    type: Fix
+  - message: Doubled autoclicker rate limits warning
+    type: Admin
+  - message: Server gets 10 more seconds on restart to show 'Reconnect' when updating
+      - prevents trying to connect when it's not ready
+    type: Fix
+  - message: Abominations (mimics) now share the languages they assimilate
+    type: Add
+  - message: Scout specialist webbing now has a 6.5% move speed multipler & CLF gets
+      1 instead of 2
+    type: Tweak
+  id: 361
+  time: '2026-06-28T05:13:55.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1475
+- author: stranthbackup
+  changes:
+  - message: Sling clasps are now stronger and not dependent on your armour to hold
+      your gun in place.
+    type: Tweak
+  id: 362
+  time: '2026-06-28T13:10:00.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1476
+- author: deepdarkdepths
+  changes:
+  - message: Fixed a bug where guns affected by queen scream could permanently retain
+      their increased scatter if they were no longer being held when the effect expired.
+    type: Fix
+  id: 363
+  time: '2026-06-28T13:33:10.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1478
+- author: deepdarkdepths
+  changes:
+  - message: Reaper's values for its flesh resin gain, Rapture ability, Bloom ability,
+      Gas ability, and Mantle have been increased to better its viability.
+    type: Tweak
+  - message: Warlock's damage has been increased for all of its abilities, with a
+      slight buff to its shield bullet cap.
+    type: Tweak
+  id: 364
+  time: '2026-06-28T13:34:33.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1468
+- author: maertayn
+  changes:
+  - message: If you fail the threat roll you are sent back to the lobby so you can
+      Join-In-Progress (JIP)
+    type: Add
+  - message: Lowered the Threat Spawn time to 15-30 minutes (from 20-40)
+    type: Tweak
+  - message: Threat Leader playtime requirement is gone (again (again)) - go get 3
+      hours of Threat Member it will be back
+    type: Tweak
+  - message: Ape ghost role not working for the third-party spawns
+    type: Fix
+  - message: Firewalk grants slowdown immunity when walking on fire tiles
+    type: Add
+  id: 365
+  time: '2026-06-28T16:52:06.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1479
+- author: OverusedMeme
+  changes:
+  - message: Fixed the storage issue of Type 48-M General Utility Pouch not clipping
+      onto suit storage and not accepting medium sized items.
+    type: Fix
+  id: 366
+  time: '2026-06-29T04:13:19.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1486
+- author: JaSeNeSaJ
+  changes:
+  - message: 'Sheperds'': Vines (first pass)'
+    type: Add
+  - message: 'Sheperds'': Mob grow area'
+    type: Add
+  - message: 'Sheperds'': Tobacco & Cannabis growing supplies to Mob'
+    type: Add
+  - message: 'Sheperds'': More department consoles to colony admin office'
+    type: Add
+  - message: 'Sheperds'': Moved CLF/threat base from above LZ1'
+    type: Tweak
+  - message: 'Sheperds'':  TVs in Tavern/Casino basement now unanchorable & moveable'
+    type: Tweak
+  - message: 'Sheperds'': Experiment crate contents to Lab Freezer (non-abom)'
+    type: Add
+  - message: Nicotine chemical to tobacco leaves (non-dry)
+    type: Add
+  - message: 'Sheperds'': Beakers & Reagent Grinders to Mob & Hydro'
+    type: Add
+  id: 367
+  time: '2026-06-29T04:52:12.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1484
+- author: sunzu432
+  changes:
+  - message: 'Hope''s Retreat: Additional 2nd Z-Level areas on Hope''s Retreat (specifically
+      the Octanis Complex), intended to allow more dynamic movement through the map.'
+    type: Add
+  - message: 'Hope''s Retreat: Following the arrival of a mysteriously stealth dropship,
+      a Rec-Vend has been deployed to the Fort Beauregard medical break room.'
+    type: Add
+  - message: 'Hope''s Retreat: More areas to allow further specificity on the second
+      floor of the Octanis Complex as well as the central tunnel.'
+    type: Add
+  - message: 'Hope''s Retreat: Salvage job loop!'
+    type: Add
+  - message: 'Hope''s Retreat: Restoration of certain civilian vendors (synth and
+      logi).'
+    type: Add
+  - message: 'Hope''s Retreat: The majority of Octanis Complex (including the Smuggler''s
+      Tunnel) areas that were T4 roofs should have their areas adjusted properly to
+      T2.'
+    type: Fix
+  - message: 'Hope''s Retreat: Fax machines should now properly be connected to one
+      another, allowing you to send a litany of passive-aggressive messages across
+      space.'
+    type: Fix
+  id: 368
+  time: '2026-06-29T06:07:24.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1482
+- author: OverusedMeme
+  changes:
+  - message: The M240-T Flame-thrower is now un-meltable again.
+    type: Add
+  id: 369
+  time: '2026-06-29T06:16:32.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1485
+- author: deepdarkdepths
+  changes:
+  - message: Warlock's health and armor has been increased to help with its survivability.
+    type: Tweak
+  id: 370
+  time: '2026-06-29T06:57:12.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1483
+- author: TheHellFireo
+  changes:
+  - message: Fixed threat member playtime compatibility for evolved xenos.
+    type: Fix
+  - message: Fixed parasite larva claims being stolen by the normal larva queue.
+    type: Fix
+  - message: Fixed xeno corrosive acid targeting while keeping range/obstruction checks.
+    type: Fix
+  - message: Fixed Bulwark reflect visual duration matching the actual reflect phase.
+    type: Fix
+  - message: Fixed treadnailers crushing abomination tendons and carried mobs incorrectly.
+    type: Fix
+  - message: Fixed Hope's Retreat vehicle lift railings not syncing with the lift.
+    type: Fix
+  - message: Fixed UPP APC hardpoints eating tool interactions.
+    type: Fix
+  - message: Fixed deployable placement previews being offset.
+    type: Fix
+  - message: Fixed UPP phone directory category text.
+    type: Fix
+  - message: Made Xippy speak Xeno.
+    type: Fix
+  - message: Restored English handling for hivebroken/corrupted xenos.
+    type: Fix
+  - message: Made scenario plan failures announce publicly.
+    type: Fix
+  id: 371
+  time: '2026-06-29T16:47:19.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1491
+- author: TheHellFireo
+  changes:
+  - message: Updated RobustToolbox to v278.0.0.
+    type: Tweak
+  - message: Reduced allocations in common stuff including IFF, xeno HUD overlays,
+      status effects, and prediction-adjacent systems.
+    type: Tweak
+  - message: Updated the CMU xeno port integration test for the v278 upgrade.
+    type: Fix
+  - message: Avoid generated regex IL that Robust sandbox verification rejects.
+    type: Fix
+  - message: Preserve RMC attachable modifier defaults across v278 prototype serialization.
+    type: Fix
+  - message: Prevent disposed entity context menu controls from crashing the client.
+    type: Fix
+  - message: Fixed game audio sometimes staying muted after deafness, unconsciousness,
+      death, or returning from being unfocused.
+    type: Fix
+  id: 372
+  time: '2026-06-29T23:01:17.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1496
 Name: CMU
 Order: -1

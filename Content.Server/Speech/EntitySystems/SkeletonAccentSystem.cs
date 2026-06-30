@@ -9,8 +9,9 @@ public sealed partial class SkeletonAccentSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private ReplacementAccentSystem _replacement = default!;
 
-    [GeneratedRegex(@"(?<!\w)[^aeiou]one", RegexOptions.IgnoreCase, "en-US")]
-    private static partial Regex BoneRegex();
+    private static readonly Regex BoneRegex = new(
+        @"(?<!\w)[^aeiou]one",
+        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
     public override void Initialize()
     {
@@ -30,7 +31,7 @@ public sealed partial class SkeletonAccentSystem : EntitySystem
 
         // Character manipulations:
         // At the start of words, any non-vowel + "one" becomes "bone", e.g. tone -> bone ; lonely -> bonely; clone -> clone (remains unchanged).
-        msg = BoneRegex().Replace(msg, "bone");
+        msg = BoneRegex.Replace(msg, "bone");
 
         // apply word replacements
         msg = _replacement.ApplyReplacements(msg, "skeleton");

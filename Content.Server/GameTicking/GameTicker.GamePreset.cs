@@ -116,6 +116,7 @@ public sealed partial class GameTicker
         }
 
         Preset = preset;
+        _auRoundSystem.SetPreset(preset);
         ValidateMap();
         UpdateInfoText();
 

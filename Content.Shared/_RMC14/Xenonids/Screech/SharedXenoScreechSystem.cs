@@ -125,15 +125,15 @@ public sealed partial class XenoScreechSystem : EntitySystem
 
     private void OnScreechBlindStartup(Entity<ScreechBlindComponent> ent, ref ComponentStartup args)
     {
-        AddScatterToHeldGuns(ent);
+        AddScatterToTrackedGuns(ent.Owner, ent.Comp);
     }
 
     private void OnScreechBlindShutdown(Entity<ScreechBlindComponent> ent, ref ComponentShutdown args)
     {
-        RemoveScatterFromHeldGuns(ent);
+        RemoveScatterFromTrackedGuns(ent.Comp);
     }
 
-    private void AddScatterToHeldGuns(EntityUid user)
+    private void AddScatterToTrackedGuns(EntityUid user, ScreechBlindComponent blind)
     {
         if (!TryComp<HandsComponent>(user, out var hands))
             return;
@@ -148,30 +148,30 @@ public sealed partial class XenoScreechSystem : EntitySystem
                 if (!HasComp<GunComponent>(held))
                     continue;
 
-                EnsureComp<ScreechScatterComponent>(held);
+                if (!HasComp<ScreechScatterComponent>(held))
+                {
+                    EnsureComp<ScreechScatterComponent>(held);
+                    blind.ModifiedGuns.Add(held);
+                }
+
                 _gun.RefreshModifiers(held);
             }
         }
     }
 
-    private void RemoveScatterFromHeldGuns(EntityUid user)
+    private void RemoveScatterFromTrackedGuns(
+        ScreechBlindComponent blind)
     {
-        if (!TryComp<HandsComponent>(user, out var hands))
-            return;
-
-        foreach (var name in hands.Hands.Keys)
+        foreach (var gun in blind.ModifiedGuns)
         {
-            if (!_container.TryGetContainer(user, name, out var container))
+            if (TerminatingOrDeleted(gun))
                 continue;
 
-            foreach (var held in container.ContainedEntities)
-            {
-                if (!RemComp<ScreechScatterComponent>(held))
-                    continue;
-
-                _gun.RefreshModifiers(held);
-            }
+            if (RemComp<ScreechScatterComponent>(gun))
+                _gun.RefreshModifiers(gun);
         }
+
+        blind.ModifiedGuns.Clear();
     }
 
     public override void Update(float frameTime)

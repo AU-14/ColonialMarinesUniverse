@@ -33,7 +33,7 @@
   equipment:
     gloves: CMHandsLatex
     shoes: RMCShoesWhite
-    pocket2: RMCPouchMedkit
+    pocket2: RMCPouchMedkitFillAdvanced
 
 - type: entity
   parent: CMSpawnPointJobBase

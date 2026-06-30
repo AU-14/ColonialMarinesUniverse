@@ -1,16 +1,17 @@
-using Content.Server.AU14.ThirdParty;
+using Content.Server._CMU14.Ops.ThirdParty;
 using Content.Server.AU14.Round;
 using Content.Server.Chat.Systems;
 using Content.Server.Popups;
 using Content.Server.Stack;
 using Content.Shared.AU14.ColonyEconomy;
-using Content.Shared.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Content.Shared.Stacks;
 using Content.Shared.Interaction;
 using Content.Shared.Tag;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
+using ThirdPartySystem = Content.Server._CMU14.Ops.ThirdParty.ThirdPartySystem;
 
 namespace Content.Server.AU14.ColonyEconomy;
 
@@ -18,7 +19,7 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
 {
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private ChatSystem _chat = default!;
-    [Dependency] private AuThirdPartySystem _thirdParty = default!;
+    [Dependency] private ThirdPartySystem _thirdParty = default!;
     [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private StackSystem _stack = default!;
@@ -128,7 +129,7 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
             return;
         if (comp.CorporateBudget < cost)
             return;
-        if (!_proto.TryIndex<AuThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto))
+        if (!_proto.TryIndex<ThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto))
             return;
         if (!_auRound.IsThirdPartyAllowedForCurrentContext(partyProto))
             return;
@@ -226,7 +227,7 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
         var thirdParties = new Dictionary<string, (string DisplayName, float Cost)>();
         foreach (var (id, cost) in comp.CallableParties)
         {
-            if (_proto.TryIndex<AuThirdPartyPrototype>(id, out var proto) &&
+            if (_proto.TryIndex<ThirdPartyPrototype>(id, out var proto) &&
                 _auRound.IsThirdPartyAllowedForCurrentContext(proto))
                 thirdParties[id] = (proto.DisplayName ?? proto.ID, cost);
         }

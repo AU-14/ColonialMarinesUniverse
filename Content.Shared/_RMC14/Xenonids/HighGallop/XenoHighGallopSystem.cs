@@ -27,6 +27,9 @@ public sealed partial class XenoHighGallopSystem : EntitySystem
     [Dependency] private SharedRMCEmoteSystem _emote = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private RMCSizeStunSystem _size = default!;
+
+    private readonly HashSet<EntityUid> _areaHits = new();
+
     public override void Initialize()
     {
         SubscribeLocalEvent<XenoHighGallopComponent, XenoHighGallopActionEvent>(OnHighGallopAction);
@@ -68,7 +71,9 @@ public sealed partial class XenoHighGallopSystem : EntitySystem
             SpawnAtPosition(spawn, _turf.GetTileCenter(tile));
         }
 
-        foreach (var ent in _lookup.GetEntitiesIntersecting(Transform(xeno).MapID, rot))
+        _areaHits.Clear();
+        _lookup.GetEntitiesIntersecting(gridId, rot, _areaHits);
+        foreach (var ent in _areaHits)
         {
             if (_tags.HasTag(ent, xeno.Comp.Flingable))
             {

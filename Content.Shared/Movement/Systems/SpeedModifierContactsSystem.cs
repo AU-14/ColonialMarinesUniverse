@@ -1,5 +1,6 @@
-using Content.Shared.Movement.Components;
+using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Water;
+using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Gravity;
 using Content.Shared.Slippery;
@@ -97,6 +98,10 @@ public sealed partial class SpeedModifierContactsSystem : EntitySystem
 
             if (TryComp<SpeedModifierContactsComponent>(ent, out var slowContactsComponent))
             {
+                if (HasComp<RMCFireSlowImmunityComponent>(uid) &&
+                        (HasComp<TileFireComponent>(ent) || HasComp<RMCIgniteOnCollideComponent>(ent)))
+                    continue;
+
                 if (_whitelistSystem.IsWhitelistPass(slowContactsComponent.IgnoreWhitelist, uid))
                     continue;
 

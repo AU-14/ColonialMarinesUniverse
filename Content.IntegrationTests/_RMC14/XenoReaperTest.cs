@@ -5,6 +5,7 @@ using Content.Server.Body.Systems;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Shields;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Acid;
 using Content.Shared._RMC14.Xenonids.Construction;
 using Content.Shared._RMC14.Xenonids.Egg;
 using Content.Shared._RMC14.Xenonids.Evolution;
@@ -102,7 +103,9 @@ public sealed class XenoReaperTest
                     Assert.That(construction.CanOrderConstruction, Does.Contain("HiveCoreXenoConstructionNode"));
                     Assert.That(construction.CanUpgrade, Is.False);
                     Assert.That(entMan.HasComponent<XenoEggRetrieverComponent>(reaper), Is.False);
+                    Assert.That(entMan.HasComponent<XenoAcidComponent>(reaper), Is.True);
                     Assert.That(xeno.ActionIds, Does.Contain("ActionXenoReaperRedGas"));
+                    Assert.That(xeno.ActionIds, Does.Contain("ActionXenoAcidNormal"));
                 });
             }
             finally
@@ -595,7 +598,7 @@ public sealed class XenoReaperTest
 
             Assert.Multiple(() =>
             {
-                Assert.That(CountPrototype(entMan, "XenoReaperRedGas"), Is.EqualTo(4));
+                Assert.That(CountPrototype(entMan, "XenoReaperRedGas"), Is.EqualTo(2));
                 Assert.That(entMan.GetComponent<XenoReaperComponent>(reaper).FleshResin, Is.Zero);
             });
 

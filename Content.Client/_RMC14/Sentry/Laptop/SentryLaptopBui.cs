@@ -248,7 +248,7 @@ public sealed partial class SentryLaptopBui : BoundUserInterface
 
     private void OnSearchTextChanged(string text)
     {
-        _searchText = text.ToLower();
+        _searchText = text;
         FilterSentryCards();
     }
 
@@ -265,9 +265,10 @@ public sealed partial class SentryLaptopBui : BoundUserInterface
 
         foreach (var (netEntity, card) in _sentryCards)
         {
-            var name = card.SentryName.GetMessage()?.ToLower() ?? string.Empty;
-            var location = card.LocationLabel.Text?.ToLower() ?? string.Empty;
-            card.Visible = name.Contains(_searchText) || location.Contains(_searchText);
+            var name = card.SentryName.GetMessage() ?? string.Empty;
+            var location = card.LocationLabel.Text ?? string.Empty;
+            card.Visible = name.Contains(_searchText, StringComparison.OrdinalIgnoreCase) ||
+                           location.Contains(_searchText, StringComparison.OrdinalIgnoreCase);
         }
     }
 

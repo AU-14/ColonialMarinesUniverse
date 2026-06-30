@@ -83,6 +83,42 @@
     anchored: false
 
 - type: entity
+  parent: CMComputerDropshipNavigationERT
+  id: CMComputerDropshipNavigationERTThirdParty
+  suffix: Third Party
+  components:
+  - type: AccessReader
+    access: []
+  - type: WhitelistedShuttle
+    faction: thirdparty
+    ShuttleType: Dropship
+    autoReturn: true
+
+- type: entity
+  parent: CMComputerDropshipNavigationERTTSE
+  id: CMComputerDropshipNavigationERTTSEThirdParty
+  suffix: Third Party
+  components:
+  - type: AccessReader
+    access: []
+  - type: WhitelistedShuttle
+    faction: thirdparty
+    ShuttleType: Dropship
+    autoReturn: true
+
+- type: entity
+  parent: CMComputerDropshipNavigationERTCLF
+  id: CMComputerDropshipNavigationERTCLFThirdParty
+  suffix: Third Party
+  components:
+  - type: AccessReader
+    access: []
+  - type: WhitelistedShuttle
+    faction: thirdparty
+    ShuttleType: Dropship
+    autoReturn: true
+
+- type: entity
   parent: CMComputerDropship
   id: CMComputerDropshipNavigationPlanetside
   name: dropship navigation computer

@@ -14,9 +14,16 @@ public sealed partial class HomingProjectileSystem : EntitySystem
     [Dependency] private SharedPhysicsSystem _physics = default!;
 
     private readonly List<EntityUid> _toRemove = new();
+    private EntityQuery<PhysicsComponent> _physicsQuery;
+    private EntityQuery<ProjectileComponent> _projectileQuery;
+    private EntityQuery<TransformComponent> _xformQuery;
 
     public override void Initialize()
     {
+        _physicsQuery = GetEntityQuery<PhysicsComponent>();
+        _projectileQuery = GetEntityQuery<ProjectileComponent>();
+        _xformQuery = GetEntityQuery<TransformComponent>();
+
         SubscribeLocalEvent<HomingShotsComponent, AmmoShotEvent>(OnAmmoShot);
 
         SubscribeLocalEvent<HomingProjectileComponent, StartCollideEvent>(OnStartCollide);
@@ -73,13 +80,18 @@ public sealed partial class HomingProjectileSystem : EntitySystem
         var query = EntityQueryEnumerator<HomingProjectileComponent>();
         while (query.MoveNext(out var projectile, out var component))
         {
-            if(!TryComp(projectile, out PhysicsComponent? physics))
+            if (!_physicsQuery.TryComp(projectile, out var physics) ||
+                !_xformQuery.TryComp(projectile, out var projectileXform) ||
+                !_xformQuery.TryComp(component.Target, out var targetXform))
+            {
+                _toRemove.Add(projectile);
                 continue;
+            }
 
             // Get the map coordinates and the direction
             var target = component.Target;
-            var targetCoords = _transform.GetMapCoordinates(target, Transform(target));
-            var projectileCoords = _transform.GetMapCoordinates(projectile, Transform(projectile));
+            var targetCoords = _transform.GetMapCoordinates(target, targetXform);
+            var projectileCoords = _transform.GetMapCoordinates(projectile, projectileXform);
             if (targetCoords.MapId != projectileCoords.MapId)
             {
                 _toRemove.Add(projectile);
@@ -87,16 +99,17 @@ public sealed partial class HomingProjectileSystem : EntitySystem
             }
 
             var direction = targetCoords.Position - projectileCoords.Position;
+            var distanceSquared = direction.LengthSquared();
 
             // Remove the homing component once the projectile gets close to it's target.
-            if (_transform.InRange(Transform(projectile).Coordinates, Transform(target).Coordinates, 1f))
+            if (distanceSquared <= 1f)
             {
                 _toRemove.Add(projectile);
                 continue;
             }
 
             // Get the velocity of the target and the projectile
-            var targetMapVelocity = Vector2.Zero + direction.Normalized() * component.ProjectileSpeed;
+            var targetMapVelocity = direction / MathF.Sqrt(distanceSquared) * component.ProjectileSpeed;
             var currentMapVelocity = _physics.GetMapLinearVelocity(projectile, physics);
 
             // Adjust the velocity
@@ -104,7 +117,7 @@ public sealed partial class HomingProjectileSystem : EntitySystem
 
             _physics.SetLinearVelocity(projectile, newLinear, body: physics);
 
-            if (!TryComp(projectile, out ProjectileComponent? projectileComponent))
+            if (!_projectileQuery.TryComp(projectile, out var projectileComponent))
                 continue;
 
             _transform.SetWorldRotationNoLerp(projectile, direction.ToWorldAngle() + projectileComponent.Angle);

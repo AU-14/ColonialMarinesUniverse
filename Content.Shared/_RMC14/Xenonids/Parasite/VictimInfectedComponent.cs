@@ -94,6 +94,11 @@ public sealed partial class VictimInfectedComponent : Component
     /// </summary>
     public bool InfectorWantsLarva;
 
+    /// <summary>
+    ///     Whether the infector has an unanswered larva claim prompt for this infection.
+    /// </summary>
+    public bool InfectorLarvaClaimPending;
+
     [DataField]
     public int FinalStage = 6;
 

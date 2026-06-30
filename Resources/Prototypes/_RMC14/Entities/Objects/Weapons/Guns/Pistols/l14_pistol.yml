@@ -101,7 +101,9 @@
       map: ["enum.GunVisualLayers.Mag"]
   - type: MagazineVisuals
     magState: mag
-
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsPistol9MM
+    
 - type: entity
   parent: RMCMagazinePistolL14
   id: RMCMagazinePistolL14AP
@@ -130,7 +132,9 @@
       color: "#1F951F"
   - type: MagazineVisuals
     magState: mag
-
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsPistol9MMAP
+    
 - type: Tag
   id: RMCWeaponPistolL14
 

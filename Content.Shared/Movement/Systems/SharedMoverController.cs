@@ -66,6 +66,7 @@ public abstract partial class SharedMoverController : VirtualController
     private float _minDamping;
     private float _airDamping;
     private float _offGridDamping;
+    private readonly HashSet<EntityUid> _aroundColliderIntersecting = new();
 
     /// <summary>
     /// Cache the mob movement calculation to re-use elsewhere.
@@ -459,7 +460,9 @@ public abstract partial class SharedMoverController : VirtualController
         var (uid, collider, mover, transform) = entity;
         var enlargedAABB = _lookup.GetWorldAABB(entity.Owner, transform).Enlarged(mover.GrabRange);
 
-        foreach (var otherEntity in lookupSystem.GetEntitiesIntersecting(transform.MapID, enlargedAABB))
+        _aroundColliderIntersecting.Clear();
+        lookupSystem.GetEntitiesIntersecting(transform.MapID, enlargedAABB, _aroundColliderIntersecting);
+        foreach (var otherEntity in _aroundColliderIntersecting)
         {
             if (otherEntity == uid)
                 continue; // Don't try to push off of yourself!

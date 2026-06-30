@@ -1,0 +1,5 @@
+- type: rank
+  id: USArmy_SecondLieutenant
+  name: Second Lieutenant
+  prefix: 2Lt.
+  paygrade: O1

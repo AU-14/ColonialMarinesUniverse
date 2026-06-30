@@ -122,7 +122,8 @@
     zeroVisible: false
     zeroOnlyOnEmpty: true
   - type: Appearance
-
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsSMG
 - type: entity
   parent: CMCartridgeSMGBase
   id: RMCCartridgeType64

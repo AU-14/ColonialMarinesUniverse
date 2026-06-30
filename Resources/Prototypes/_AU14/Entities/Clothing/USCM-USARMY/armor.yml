@@ -334,15 +334,16 @@
   - type: Storage
     maxItemSize: Small
     grid:
-    - 0,0,5,1 # 4 slots
+    - 0,0,7,1 # 4 slots
   - type: RMCArmorSpeedTier
     speedTier: light
-  - type: Corrodible
-    isCorrodible: false
+  - type: ClothingSpeedModifier
+    walkModifier: .935
+    sprintModifier: .935
   - type: CMArmor
     bullet: 15
     bio: 15
-    explosionArmor: 15
+    explosionArmor: 10
 
 - type: entity
   parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]

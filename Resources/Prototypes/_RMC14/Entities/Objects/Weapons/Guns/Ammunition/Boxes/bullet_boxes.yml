@@ -1,3 +1,4 @@
+# -- Ammunition Box Base  --
 - type: entity
   abstract: true
   parent: BaseItem
@@ -56,6 +57,7 @@
     tags:
     - RMCAmmoBox
 
+# -- REG Rifle Ammunition Box Base --
 - type: entity
   parent: RMCBoxBulletsBase
   id: RMCBoxBulletsRifle
@@ -90,6 +92,7 @@
     bulletType: RMCBoxBulletsRifle
     amount: 0
 
+# -- AP Rifle Ammunition Box Base --
 - type: entity
   parent: RMCBoxBulletsBase
   id: RMCBoxBulletsRifleAP
@@ -124,6 +127,7 @@
     bulletType: RMCBoxBulletsRifleAP
     amount: 0
 
+# -- REG SMG Ammunition Box Base --
 - type: entity
   parent: RMCBoxBulletsBase
   id: RMCBoxBulletsSMG
@@ -158,6 +162,7 @@
     bulletType: RMCBoxBulletsSMG
     amount: 0
 
+# -- AP SMG Ammunition Box Base --
 - type: entity
   parent: RMCBoxBulletsBase
   id: RMCBoxBulletsSMGAP
@@ -192,6 +197,7 @@
     bulletType: RMCBoxBulletsSMGAP
     amount: 0
 
+# -- SG Ammunition Box Base --
 - type: entity
   parent: RMCBoxBulletsBase
   id: RMCBoxBulletsSmartGun
@@ -223,6 +229,7 @@
     bulletType: RMCBoxBulletsSmartGun
     amount: 0
 
+# -- REG Pistol Ammunition Box Base --
 - type: entity
   parent: RMCBoxBulletsBase
   id: RMCBoxBulletsPistol
@@ -259,6 +266,7 @@
     bulletType: RMCBoxBulletsPistol
     amount: 0
 
+# -- AP Pistol Ammunition Box Base --
 - type: entity
   parent: RMCBoxBulletsBase
   id: RMCBoxBulletsPistolAP
@@ -295,8 +303,9 @@
     bulletType: RMCBoxBulletsPistolAP
     amount: 0
 
-# 8.88x51mm
 
+# TWE Ammunition Boxes
+# -- REG 7x43mm Rifle Ammunition Box --
 - type: entity
   parent: RMCBoxBulletsBase
   id: RMCBoxBulletsRifleL90
@@ -328,6 +337,7 @@
     bulletType: RMCBoxBulletsRifleL90
     amount: 0
 
+# -- AP 7x43mm Rifle Ammunition Box --
 - type: entity
   parent: RMCBoxBulletsBase
   id: RMCBoxBulletsRifleL90AP
@@ -359,6 +369,7 @@
     bulletType: RMCBoxBulletsRifleL90AP
     amount: 0
 
+# -- REG 8.88x51mm Rifle Ammunition Box --
 - type: entity
   parent: RMCBoxBulletsBase
   id: RMCBoxBulletsRifleL24
@@ -390,6 +401,7 @@
     bulletType: RMCBoxBulletsRifleL24
     amount: 0
 
+# -- AP 8.88x51mm Rifle Ammunition Box --
 - type: entity
   parent: RMCBoxBulletsBase
   id: RMCBoxBulletsRifleL24AP
@@ -419,3 +431,10 @@
   components:
   - type: BulletBox
     bulletType: RMCBoxBulletsRifleL24AP
+
+# HAZOPS Ammunition Boxes
+# -- .50 JP Pistol Ammunition Box --
+# UPP Ammunition Boxes
+# CMB CIU Ammunition Boxes
+# Shared Ammunition Boxes
+# -- 9mm Ammunition Box --

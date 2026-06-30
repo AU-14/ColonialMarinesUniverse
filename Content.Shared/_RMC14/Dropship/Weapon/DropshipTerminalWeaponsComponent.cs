@@ -112,13 +112,18 @@ public sealed partial class DropshipTerminalWeaponsComponent : Component
 
     [DataRecord]
     [Serializable, NetSerializable]
-    public partial record struct Screen(
-        DropshipTerminalWeaponsScreen State,
-        NetEntity? Weapon,
-        NetEntity? System,
-        int? FireMissionId,
-        bool QuickMode
-    );
+    public partial record struct Screen
+    {
+        public Screen()
+        {
+        }
+
+        public DropshipTerminalWeaponsScreen State { get; set; }
+        public NetEntity? Weapon { get; set; }
+        public NetEntity? System { get; set; }
+        public int? FireMissionId { get; set; }
+        public bool QuickMode { get; set; }
+    }
 
     [DataRecord]
     [Serializable, NetSerializable]

@@ -31,14 +31,47 @@ using Content.Shared._RMC14.Xenonids.Finesse;
 using static Robust.Shared.Utility.SpriteSpecifier;
 using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Synth;
-using Content.Shared._RMC14.Xenonids.Hedgehog;
 using Content.Shared.FixedPoint;
+using AbominationComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationComponent;
+using AbominationMimicTransformedComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicTransformedComponent;
 
 namespace Content.Client._RMC14.Xenonids.Hud;
 
 public sealed partial class XenoHudOverlay : Overlay
 {
     private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
+    private static readonly ResPath RsiPath = new("/Textures/_RMC14/Interface/xeno_hud.rsi");
+    private static readonly ResPath DancerMarksRsiPath = new("/Textures/_CM13/Interface/Hud/dancer_marks.rsi");
+    private static readonly ResPath RsiPathSlow = new("/Textures/_RMC14/Effects/xeno_stomp.rsi");
+    private static readonly ResPath RsiPathFreeze = new("/Textures/_RMC14/Effects/xeno_freeze.rsi");
+    private static readonly ResPath RsiPathHypertension = new("/Textures/_RMC14/Interface/Alerts/hypertension.rsi");
+
+    private static readonly Rsi[] AcidStackIcons =
+    [
+        new(RsiPath, "acid_stacks0"),
+        new(RsiPath, "acid_stacks1"),
+        new(RsiPath, "acid_stacks2"),
+        new(RsiPath, "acid_stacks3"),
+        new(RsiPath, "acid_stacks4"),
+    ];
+
+    private static readonly Rsi[] RankIcons =
+    [
+        new(RsiPath, "hudxenoupgrade0"),
+        new(RsiPath, "hudxenoupgrade1"),
+        new(RsiPath, "hudxenoupgrade2"),
+        new(RsiPath, "hudxenoupgrade3"),
+        new(RsiPath, "hudxenoupgrade4"),
+        new(RsiPath, "hudxenoupgrade5"),
+        new(RsiPath, "hudxenoupgrade7"),
+        new(RsiPath, "hudxenoupgrade8"),
+    ];
+
+    private static readonly Rsi DancerMarkedIcon = new(DancerMarksRsiPath, "prae_tag");
+    private static readonly Rsi DancerYellowMarkedIcon = new(DancerMarksRsiPath, "prae_tag_yellow");
+    private static readonly Rsi SlowIcon = new(RsiPathSlow, "stomp");
+    private static readonly Rsi StunIcon = new(RsiPathFreeze, "freeze");
+    private static readonly Rsi SynthIcon = new(RsiPath, "fake_tall");
 
     [Dependency] private IEntityManager _entity = default!;
     [Dependency] private IOverlayManager _overlay = default!;
@@ -73,12 +106,6 @@ public sealed partial class XenoHudOverlay : Overlay
         ? OverlaySpace.WorldSpace
         : OverlaySpace.WorldSpaceBelowFOV;
 
-    private readonly ResPath _rsiPath = new("/Textures/_RMC14/Interface/xeno_hud.rsi");
-    private readonly ResPath _dancerMarksRsiPath = new("/Textures/_CM13/Interface/Hud/dancer_marks.rsi");
-    private readonly ResPath _rsiPathSlow = new("/Textures/_RMC14/Effects/xeno_stomp.rsi");
-    private readonly ResPath _rsiPathFreeze = new("/Textures/_RMC14/Effects/xeno_freeze.rsi");
-    private readonly ResPath _rsiPathHypertension = new("/Textures/_RMC14/Interface/Alerts/hypertension.rsi");
-
     public XenoHudOverlay()
     {
         IoCManager.InjectDependencies(this);
@@ -112,11 +139,13 @@ public sealed partial class XenoHudOverlay : Overlay
         var isAdminGhost = _entity.TryGetComponent(_players.LocalEntity, out GhostComponent? ghost) &&
                            ghost.CanGhostInteract;
         var isXeno = _entity.HasComponent<XenoComponent>(_players.LocalEntity);
+        var isAbomination = _entity.HasComponent<AbominationComponent>(_players.LocalEntity) ||
+                             _entity.HasComponent<AbominationMimicTransformedComponent>(_players.LocalEntity);
         var isGhost = false;
 
         if (!_entity.HasComponent<CMGhostXenoHudComponent>(_players.LocalEntity))
         {
-            if (!isXeno && !isAdminGhost)
+            if (!isXeno && !isAdminGhost && !isAbomination)
                 return;
         }
         else
@@ -149,10 +178,10 @@ public sealed partial class XenoHudOverlay : Overlay
         }
 
         if (isXeno || isAdminGhost)
-        {
             DrawInfectedIcon(in args, scaleMatrix, rotationMatrix);
+
+        if (isXeno || isAdminGhost || isAbomination)
             DrawSynthIcon(in args, scaleMatrix, rotationMatrix);
-        }
 
         handle.UseShader(null);
         handle.SetTransform(Matrix3x2.Identity);
@@ -266,7 +295,7 @@ public sealed partial class XenoHudOverlay : Overlay
             handle.SetTransform(matrix);
 
             var level = Math.Clamp(comp.Current, 0, 4);
-            var icon = new Rsi(_rsiPath, $"acid_stacks{level}");
+            var icon = AcidStackIcons[level];
             var texture = _sprite.GetFrame(icon, _timing.CurTime);
 
             var yOffset = (bounds.Height + sprite.Offset.Y) / 2f - (float) texture.Height / EyeManager.PixelsPerMeter * bounds.Height;
@@ -306,13 +335,8 @@ public sealed partial class XenoHudOverlay : Overlay
             var matrix = Matrix3x2.Multiply(rotationMatrix, scaledWorld);
             handle.SetTransform(matrix);
 
-            var rankState = comp.Rank switch
-            {
-                >= 7 => "hudxenoupgrade8",
-                6 => "hudxenoupgrade7",
-                _ => $"hudxenoupgrade{comp.Rank}"
-            };
-            var icon = new Rsi(_rsiPath, rankState);
+            var rankIndex = Math.Clamp(comp.Rank, 0, 7);
+            var icon = RankIcons[rankIndex];
             var texture = _sprite.GetFrame(icon, _timing.CurTime);
 
             var yOffset = (bounds.Height + sprite.Offset.Y) / 2f - (float) texture.Height / EyeManager.PixelsPerMeter * bounds.Height;
@@ -351,8 +375,7 @@ public sealed partial class XenoHudOverlay : Overlay
             var matrix = Matrix3x2.Multiply(rotationMatrix, scaledWorld);
             handle.SetTransform(matrix);
 
-            var icon = new Rsi(_dancerMarksRsiPath, "prae_tag");
-            var texture = _sprite.GetFrame(icon, _timing.CurTime - comp.TimeAdded, false);
+            var texture = _sprite.GetFrame(DancerMarkedIcon, _timing.CurTime - comp.TimeAdded, false);
 
             var yOffset = (bounds.Height + sprite.Offset.Y) / 2f - (float)texture.Height / EyeManager.PixelsPerMeter * bounds.Height;
             var xOffset = (bounds.Width + sprite.Offset.X) / 2f - (float)texture.Width / EyeManager.PixelsPerMeter * bounds.Width;
@@ -390,8 +413,7 @@ public sealed partial class XenoHudOverlay : Overlay
             var matrix = Matrix3x2.Multiply(rotationMatrix, scaledWorld);
             handle.SetTransform(matrix);
 
-            var icon = new Rsi(_dancerMarksRsiPath, "prae_tag_yellow");
-            var texture = _sprite.GetFrame(icon, _timing.CurTime, false);
+            var texture = _sprite.GetFrame(DancerYellowMarkedIcon, _timing.CurTime, false);
 
             var yOffset = (bounds.Height + sprite.Offset.Y) / 2f - (float)texture.Height / EyeManager.PixelsPerMeter * bounds.Height;
             var xOffset = (bounds.Width + sprite.Offset.X) / 2f - (float)texture.Width / EyeManager.PixelsPerMeter * bounds.Width;
@@ -432,8 +454,7 @@ public sealed partial class XenoHudOverlay : Overlay
             var matrix = Matrix3x2.Multiply(rotationMatrix, scaledWorld);
             handle.SetTransform(matrix);
 
-            var icon = new Rsi(_rsiPathSlow, $"stomp");
-            var texture = _sprite.GetFrame(icon, _timing.CurTime);
+            var texture = _sprite.GetFrame(SlowIcon, _timing.CurTime);
 
             var yOffset = (bounds.Height + sprite.Offset.Y) / 2f - (float)texture.Height / EyeManager.PixelsPerMeter * bounds.Height;
             var xOffset = (bounds.Width + sprite.Offset.X) / 2f - (float)texture.Width / EyeManager.PixelsPerMeter * bounds.Width;
@@ -474,8 +495,7 @@ public sealed partial class XenoHudOverlay : Overlay
             var matrix = Matrix3x2.Multiply(rotationMatrix, scaledWorld);
             handle.SetTransform(matrix);
 
-            var icon = new Rsi(_rsiPathFreeze, $"freeze");
-            var texture = _sprite.GetFrame(icon, _timing.CurTime);
+            var texture = _sprite.GetFrame(StunIcon, _timing.CurTime);
 
             var yOffset = (bounds.Height + sprite.Offset.Y) / 2f - (float)texture.Height / EyeManager.PixelsPerMeter * bounds.Height;
             var xOffset = (bounds.Width + sprite.Offset.X) / 2f - (float)texture.Width / EyeManager.PixelsPerMeter * bounds.Width;
@@ -549,8 +569,7 @@ public sealed partial class XenoHudOverlay : Overlay
             var matrix = Matrix3x2.Multiply(rotationMatrix, scaledWorld);
             handle.SetTransform(matrix);
 
-            var icon = new Rsi(_rsiPath, $"fake_tall");
-            var texture = _sprite.GetFrame(icon, _timing.CurTime);
+            var texture = _sprite.GetFrame(SynthIcon, _timing.CurTime);
 
             var yOffset = (bounds.Height + sprite.Offset.Y) / 2f - (float) texture.Height / EyeManager.PixelsPerMeter * bounds.Height;
             var xOffset = (bounds.Width + sprite.Offset.X) / 2f - (float) texture.Width / EyeManager.PixelsPerMeter * bounds.Width;
@@ -602,7 +621,7 @@ public sealed partial class XenoHudOverlay : Overlay
             state = $"xenohealth{name}";
         }
 
-        var icon = new Rsi(_rsiPath, state);
+        var icon = new Rsi(RsiPath, state);
         var rsi = _resourceCache.GetResource<RSIResource>(icon.RsiPath).RSI;
         if (!rsi.TryGetState(icon.RsiState, out _))
             return;
@@ -631,7 +650,7 @@ public sealed partial class XenoHudOverlay : Overlay
         var level = ContentHelpers.RoundToLevels(plasma.Double(), max, 11);
         var name = level > 0 ? $"{level * 10}" : "0";
         var state = $"plasma{name}";
-        var icon = new Rsi(new ResPath("/Textures/_RMC14/Interface/xeno_hud.rsi"), state);
+        var icon = new Rsi(RsiPath, state);
         var texture = _sprite.GetFrame(icon, _timing.CurTime);
 
         var bounds = _sprite.GetLocalBounds((uid, sprite));
@@ -649,7 +668,7 @@ public sealed partial class XenoHudOverlay : Overlay
             return;
 
         var level = Math.Clamp(hyper.Stacks, 0, hyper.MaxStacks);
-        var icon = new Rsi(_rsiPathHypertension, $"level_{level}");
+        var icon = new Rsi(RsiPathHypertension, $"level_{level}");
         var texture = _sprite.GetFrame(icon, _timing.CurTime);
 
         var bounds = _sprite.GetLocalBounds((uid, sprite));
@@ -686,7 +705,7 @@ public sealed partial class XenoHudOverlay : Overlay
         var level = ContentHelpers.RoundToLevels(shield.Double(), max, 11);
         var name = level > 0 ? $"{level * 10}" : "0";
         var state = $"xenoshield{name}";
-        var icon = new Rsi(new ResPath("/Textures/_RMC14/Interface/xeno_hud.rsi"), state);
+        var icon = new Rsi(RsiPath, state);
         var texture = _sprite.GetFrame(icon, _timing.CurTime);
 
         var bounds = _sprite.GetLocalBounds((uid, sprite));
@@ -714,7 +733,7 @@ public sealed partial class XenoHudOverlay : Overlay
         var level = ContentHelpers.RoundToLevels(energy, max, 11);
         var name = level > 0 ? $"{level * 10}" : "0";
         var state = $"xenoenergy{name}";
-        var icon = new Rsi(new ResPath("/Textures/_RMC14/Interface/xeno_hud.rsi"), state);
+        var icon = new Rsi(RsiPath, state);
         var texture = _sprite.GetFrame(icon, _timing.CurTime);
 
         var bounds = _sprite.GetLocalBounds((uid, sprite));
@@ -729,7 +748,7 @@ public sealed partial class XenoHudOverlay : Overlay
             var level2 = ContentHelpers.RoundToLevels(generationCap.Value, max, 11);
             var name2 = level2 > 0 ? $"{level2 * 10}" : "0";
             var state2 = $"cap{name2}";
-            var icon2 = new Rsi(new ResPath("/Textures/_RMC14/Interface/xeno_hud.rsi"), state2);
+            var icon2 = new Rsi(RsiPath, state2);
             var texture2 = _sprite.GetFrame(icon2, _timing.CurTime);
             handle.DrawTexture(texture2, position);
         }

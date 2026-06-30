@@ -1,0 +1,31 @@
+- type: loadoutGroup
+  id: SynthGlassesAU14
+  name: rmc-loadout-group-synthetic-glasses
+  minLimit: 0
+  maxLimit: 2
+  loadouts:
+  - GlassesMedicalHUDGlassesAU14
+  - AviatorsRMC
+  - EyepatchRMC
+  - GlassesRPGRMC
+  - GlassesRPGRMCOld
+  - GlassesPrescriptionRMC
+  - GogglesRMC
+  - GogglesPrescriptionRMC
+  - GogglesBlackRMC
+  - GogglesOrangeRMC # TODO add prescription variants of all the goggles
+  - GogglesAdvancedRMC
+  - GogglesM1A1RMC
+  - PersonalShadesRMC
+  - SunglassesRMC # TODO prescription sunglasses
+  - GlassesTriMaxYellowRMC
+  - GlassesTriMaxBronzeRMC
+  - GlassesTriMaxBlackRMC
+  - GogglesRedRMC
+  - GogglesBlueRMC
+  - GogglesPurpleRMC
+  - GogglesYellowRMC
+  - GogglesPolarizedBlueRMC
+  - GogglesPolarizedOrangeRMC
+  - GogglesM1A1BlueRMC
+  - GlassesSecurityRMC

@@ -27,7 +27,7 @@
     camouflageVariations: {}
 
 - type: entity
-  parent: CMBeltBaseStorage
+  parent: AU14BeltUtilityGeneralBlack
   id: AU14BeltUtilityGeneralUPP
   name: Type 48-M general utility pouch
   description: A small, lightweight pouch that can be clipped onto U-pattern UPP armor to provide additional storage. The newer 48-M model, while uncomfortable, can also be clipped around the waist.

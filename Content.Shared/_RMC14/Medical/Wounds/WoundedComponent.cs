@@ -32,15 +32,38 @@ public sealed partial class WoundedComponent : Component
 
 [DataRecord]
 [Serializable, NetSerializable]
-public partial record struct Wound(
-    FixedPoint2 Damage,
-    FixedPoint2 Healed,
-    float Bloodloss,
-    [field: DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
-    TimeSpan? StopBleedAt,
-    WoundType Type,
-    bool Treated
-);
+public partial record struct Wound
+{
+    public Wound()
+    {
+    }
+
+    public Wound(
+        FixedPoint2 damage,
+        FixedPoint2 healed,
+        float bloodloss,
+        TimeSpan? stopBleedAt,
+        WoundType type,
+        bool treated)
+    {
+        Damage = damage;
+        Healed = healed;
+        Bloodloss = bloodloss;
+        StopBleedAt = stopBleedAt;
+        Type = type;
+        Treated = treated;
+    }
+
+    public FixedPoint2 Damage { get; set; }
+    public FixedPoint2 Healed { get; set; }
+    public float Bloodloss { get; set; }
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
+    public TimeSpan? StopBleedAt { get; set; }
+
+    public WoundType Type { get; set; }
+    public bool Treated { get; set; }
+}
 
 [Serializable, NetSerializable]
 public enum WoundType

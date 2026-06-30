@@ -60,7 +60,128 @@
   description: A 10x24mm armor-piercing ammunition box. Used to refill M54C MK2, and M4SPR AP magazines. It comes with a leather strap allowing to wear it on the back.
   iconColor: "#7b8246"
   objectType: Item
+  
+# SLR
+- type: construction
+  parent: RMC
+  name: rifle ammunition box (7x43mm)
+  id: CMUBoxBulletsRifleSLR
+  graph: RMCBoxMagazine
+  startNode: start
+  targetNode: CMUBoxBulletsRifleSLREmpty
+  category: construction-category-cm-box-magazine
+  description: A 7x43mm ammunition box. Used to refill SLR and SLR Drum magazines. It comes with a leather strap allowing to wear it on the back.
+  iconColor: "#7b8246"
+  objectType: Item
+  
+- type: construction
+  parent: RMC
+  name: rifle ammunition box (7x43mm AP)
+  id: CMUBoxBulletsRifleSLRAP
+  graph: RMCBoxMagazine
+  startNode: start
+  targetNode: CMUBoxBulletsRifleSLRAPEmpty
+  category: construction-category-cm-box-magazine
+  description: A 7x43mm ammunition box. Used to refill armor-piercing SLR and SLR Drum magazines. It comes with a leather strap allowing to wear it on the back.
+  iconColor: "#7b8246"
+  objectType: Item
+# L23
+- type: construction
+  parent: RMC
+  name: rifle ammunition box (8.88x51mm)
+  id: CMUBoxBulletsRifleL23
+  graph: RMCBoxMagazine
+  startNode: start
+  targetNode: CMUBoxBulletsRifleL23Empty
+  category: construction-category-cm-box-magazine
+  description: A 8.88x51mm ammunition box. Used to refill L23 magazines. It comes with a leather strap allowing to wear it on the back.
+  iconColor: "#7b8246"
+  objectType: Item
+  
+- type: construction
+  parent: RMC
+  name: rifle ammunition box (8.88x51mm AP)
+  id: CMUBoxBulletsRifleL23AP
+  graph: RMCBoxMagazine
+  startNode: start
+  targetNode: CMUBoxBulletsRifleL23APEmpty
+  category: construction-category-cm-box-magazine
+  description: A 8.88x51mm ammunition box. Used to refill armor-piercing L23 magazines. It comes with a leather strap allowing to wear it on the back.
+  iconColor: "#7b8246"
+  objectType: Item
 
+# Type 71
+- type: construction
+  parent: RMC
+  name: rifle ammunition box (5.45x39mm)
+  id: CMUBoxBulletsRifleType71
+  graph: RMCBoxMagazine
+  startNode: start
+  targetNode: CMUBoxBulletsRifleType71Empty
+  category: construction-category-cm-box-magazine
+  description: A 5.45x39mm ammunition box. Used to refill Type 71 magazines. It comes with a leather strap allowing to wear it on the back.
+  iconColor: "#7b8246"
+  objectType: Item
+  
+- type: construction
+  parent: RMC
+  name: rifle ammunition box (5.45x39mm AP)
+  id: CMUBoxBulletsRifleType71AP
+  graph: RMCBoxMagazine
+  startNode: start
+  targetNode: CMUBoxBulletsRifleType71APEmpty
+  category: construction-category-cm-box-magazine
+  description: A 5.45x39mm ammunition box. Used to refill armor-piercing Type 71 magazines. It comes with a leather strap allowing to wear it on the back.
+  iconColor: "#7b8246"
+  objectType: Item
+# AG80
+- type: construction
+  parent: RMC
+  name: rifle ammunition box (9.7x16mm)
+  id: CMUBoxBulletsRifleAG80
+  graph: RMCBoxMagazine
+  startNode: start
+  targetNode: CMUBoxBulletsRifleAG80Empty
+  category: construction-category-cm-box-magazine
+  description: A 9.7x16mm ammunition box. Used to refill AG80 magazines. It comes with a leather strap allowing to wear it on the back.
+  iconColor: "#7b8246"
+  objectType: Item
+  
+- type: construction
+  parent: RMC
+  name: rifle ammunition box (9.7x16mm AP)
+  id: CMUBoxBulletsRifleAG80AP
+  graph: RMCBoxMagazine
+  startNode: start
+  targetNode: CMUBoxBulletsRifleAG80APEmpty
+  category: construction-category-cm-box-magazine
+  description: A 9.7x16mm ammunition box. Used to refill armor-piercing AG80 magazines. It comes with a leather strap allowing to wear it on the back.
+  iconColor: "#7b8246"
+  objectType: Item
+# M16
+- type: construction
+  parent: RMC
+  name: rifle ammunition box (5.56x45mm)
+  id: CMUBoxBulletsRifle556x45MM
+  graph: RMCBoxMagazine
+  startNode: start
+  targetNode: CMUBoxBulletsRifle556x45MMEmpty
+  category: construction-category-cm-box-magazine
+  description: A 5.56x45mm ammunition box. Used to refill M16 magazines. It comes with a leather strap allowing to wear it on the back.
+  iconColor: "#7b8246"
+  objectType: Item
+# MAR
+- type: construction
+  parent: RMC
+  name: rifle ammunition box (7.62x39mm)
+  id: CMUBoxBulletsRifleMAR
+  graph: RMCBoxMagazine
+  startNode: start
+  targetNode: CMUBoxBulletsRifleMAREmpty
+  category: construction-category-cm-box-magazine
+  description: A 7.62x39mm ammunition box. Used to refill MAR magazines. It comes with a leather strap allowing to wear it on the back.
+  iconColor: "#7b8246"
+  objectType: Item
 # M63
 - type: construction
   parent: RMC
@@ -121,7 +242,54 @@
   description: A 10x20mm armor-piercing ammunition box. Used to refill M63 AP magazines. It comes with a leather strap allowing to wear it on the back.
   iconColor: "#727e90"
   objectType: Item
+# P90
+- type: construction
+  parent: RMC
+  name: SMG ammunition box (5.7x28mm)
+  id: CMUBoxBulletsSMGP90Empty
+  graph: RMCBoxMagazine
+  startNode: start
+  targetNode: CMUBoxBulletsSMGP90Empty
+  category: construction-category-cm-box-magazine
+  description: A 5.7x28mm ammunition box. Used to refill P90 and FN9000 magazines. It comes with a leather strap allowing to wear it on the back.
+  iconColor: "#727e90"
+  objectType: Item
 
+- type: construction
+  parent: RMC
+  name: SMG ammunition box (5.7x28mm AP)
+  id: CMUBoxBulletsSMGP90APEmpty
+  graph: RMCBoxMagazine
+  startNode: start
+  targetNode: CMUBoxBulletsSMGP90APEmpty
+  category: construction-category-cm-box-magazine
+  description: A 5.7x28mm armor-piercing ammunition box. Used to refill P90 AP magazines. It comes with a leather strap allowing to wear it on the back.
+  iconColor: "#727e90"
+  objectType: Item
+# MP5  
+- type: construction
+  parent: RMC
+  name: SMG ammunition box (9×19mm)
+  id: CMUBoxBulletsSMG9MMEmpty
+  graph: RMCBoxMagazine
+  startNode: start
+  targetNode: CMUBoxBulletsSMG9MMEmpty
+  category: construction-category-cm-box-magazine
+  description: A 9×19mm ammunition box. Used to refill MP5 magazines. It comes with a leather strap allowing to wear it on the back.
+  iconColor: "#727e90"
+  objectType: Item
+# Type 19
+- type: construction
+  parent: RMC
+  name: SMG ammunition box (7.62×25mm)
+  id: CMUBoxBulletsSMGType19Empty
+  graph: RMCBoxMagazine
+  startNode: start
+  targetNode: CMUBoxBulletsSMGType19Empty
+  category: construction-category-cm-box-magazine
+  description: A 7.62×25mm ammunition box. Used to refill Type 19 magazines. It comes with a leather strap allowing to wear it on the back.
+  iconColor: "#727e90"
+  objectType: Item
 # M4SPR
 - type: construction
   parent: RMC
@@ -196,7 +364,29 @@
   description: A magazine box that can contain armor piercing M1984 mags.
   iconColor: "#b2976e"
   objectType: Item
+- type: construction
+  parent: RMC
+  name: pistol ammunition box (9mm)
+  id: CMUBoxBulletsPistol9MMEmpty
+  graph: RMCBoxMagazine
+  startNode: start
+  targetNode: CMUBoxBulletsPistol9MMEmpty
+  category: construction-category-cm-box-magazine
+  description: A 9mm ammunition box. Used to refill M4A3 magazines. It comes with a leather strap allowing to wear it on the back.
+  iconColor: "#727e90"
+  objectType: Item
 
+- type: construction
+  parent: RMC
+  name: pistol ammunition box (9mm AP)
+  id: CMUBoxBulletsPistol9MMAPEmpty
+  graph: RMCBoxMagazine
+  startNode: start
+  targetNode: CMUBoxBulletsPistol9MMAPEmpty
+  category: construction-category-cm-box-magazine
+  description: A 9mm ammunition box. Used to refill armor-piercing M4A3 and Mod 88 magazines. It comes with a leather strap allowing to wear it on the back.
+  iconColor: "#727e90"
+  objectType: Item
 # 88 mod 4 / 88m4
 - type: construction
   parent: RMC
@@ -222,7 +412,17 @@
   description: A magazine box that can contain regular MK80 mags.
   iconColor: "#4a4a4a"
   objectType: Item
-
+- type: construction
+  parent: RMC
+  name: pistol ammunition box (9mm Squash-Head)
+  id: CMUBoxBulletsPistol9MMSHEmpty
+  graph: RMCBoxMagazine
+  startNode: start
+  targetNode: CMUBoxBulletsPistol9MMSHEmpty
+  category: construction-category-cm-box-magazine
+  description: A 9mm ammunition box. Used to refill Squash-Head 9mm magazines. It comes with a leather strap allowing to wear it on the back.
+  iconColor: "#727e90"
+  objectType: Item
 # L165A1
 - type: construction
   parent: RMC
@@ -370,7 +570,42 @@
   description: A 10x20mm-APC armor-piercing ammunition box. Used to refill M13 regular, extended and drum AP magazines. It comes with a leather strap allowing to wear it on the back.
   iconColor: "#727e90"
   objectType: Item
-
+# Type 73 / Type 19
+- type: construction
+  parent: RMC
+  name: pistol ammunition box (7.62x25mm)
+  id: CMUBoxBulletsPistolType73Empty
+  graph: RMCBoxMagazine
+  startNode: start
+  targetNode: CMUBoxBulletsPistolType73Empty
+  category: construction-category-cm-box-magazine
+  description: A 7.62x25mm ammunition box. Used to refill Type 73 magazines. It comes with a leather strap allowing to wear it on the back.
+  iconColor: "#727e90"
+  objectType: Item
+# .45
+- type: construction
+  parent: RMC
+  name: pistol ammunition box (.45)
+  id: CMUBoxBulletsPistol45Empty
+  graph: RMCBoxMagazine
+  startNode: start
+  targetNode: CMUBoxBulletsPistol45Empty
+  category: construction-category-cm-box-magazine
+  description: A .45 ammunition box. Used to refill .45 magazines. It comes with a leather strap allowing to wear it on the back.
+  iconColor: "#727e90"
+  objectType: Item
+# .50
+- type: construction
+  parent: RMC
+  name: pistol ammunition box (.50 JP)
+  id: CMUBoxBulletsPistol50Empty
+  graph: RMCBoxMagazine
+  startNode: start
+  targetNode: CMUBoxBulletsPistol50Empty
+  category: construction-category-cm-box-magazine
+  description: A .50 JP ammunition box. Used to refill .50 JP magazines. It comes with a leather strap allowing to wear it on the back.
+  iconColor: "#727e90"
+  objectType: Item
 # M34 Incinerator
 
 - type: construction
@@ -553,7 +788,7 @@
   - node: start
     edges:
 
-    # M54C
+   # M54C
     - to: RMCBoxMagazineRifleM54CEmpty
       steps:
       - material: RMCSheetCardboard
@@ -579,15 +814,64 @@
       - material: RMCSheetCardboard
         amount: 1
         doAfter: 0.25
-
-    # AK4047
+   
+   # SLR
+    - to: CMUBoxBulletsRifleSLREmpty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+    - to: CMUBoxBulletsRifleSLRAPEmpty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+    
+    
+   # L23
+    - to: CMUBoxBulletsRifleL23Empty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+    - to: CMUBoxBulletsRifleL23APEmpty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+    
+   # Type 71
+    - to: CMUBoxBulletsRifleType71Empty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+    - to: CMUBoxBulletsRifleType71APEmpty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25   
+ 
+   # AG80
+    - to: CMUBoxBulletsRifleAG80Empty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+    - to: CMUBoxBulletsRifleAG80APEmpty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25   
+        
+   # AK4047
     - to: RMCBoxMagazineRifleAK4047Empty
       steps:
       - material: RMCSheetCardboard
         amount: 1
         doAfter: 0.25
 
-    # SSG45
+   # SSG45
     - to: RMCBoxMagazineRifleSSG45Empty
       steps:
       - material: RMCSheetCardboard
@@ -600,7 +884,7 @@
         amount: 1
         doAfter: 0.25
 
-    # M63
+   # M63
     - to: RMCBoxMagazineSMGM63Empty
       steps:
       - material: RMCSheetCardboard
@@ -626,8 +910,30 @@
       - material: RMCSheetCardboard
         amount: 1
         doAfter: 0.25
-
-    # M4SPR
+   # P90
+    - to: CMUBoxBulletsSMGP90Empty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+    - to: CMUBoxBulletsSMGP90APEmpty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+   # MP5
+    - to: CMUBoxBulletsSMG9MMEmpty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+   # Type 19
+    - to: CMUBoxBulletsSMGType19Empty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25  
+   # M4SPR
     - to: RMCBoxMagazineRifleM4SPREmpty
       steps:
       - material: RMCSheetCardboard
@@ -646,14 +952,14 @@
         amount: 1
         doAfter: 0.25
 
-    # SOCOM
+   # SOCOM
     - to: RMCBoxBullets458Empty
       steps:
       - material: RMCSheetCardboard
         amount: 1
         doAfter: 0.25
 
-    # M13 Auto Pistol
+   # M13 Auto Pistol
     - to: RMCBoxMagazinePistolM13Empty
       steps:
       - material: RMCSheetCardboard
@@ -702,14 +1008,27 @@
         amount: 1
         doAfter: 0.25
 
-    # M16
+   # M16
     - to: RMCBoxMagazineRifleM16Empty
       steps:
       - material: RMCSheetCardboard
         amount: 1
         doAfter: 0.25
-
-    # M1984
+        
+    - to: CMUBoxBulletsRifle556x45MMEmpty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+    
+   # MAR
+    - to: CMUBoxBulletsRifleMAREmpty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25   
+    
+   # M1984
     - to: RMCBoxMagazinePistolM1984Empty
       steps:
       - material: RMCSheetCardboard
@@ -721,36 +1040,70 @@
       - material: RMCSheetCardboard
         amount: 1
         doAfter: 0.25
+   
+    - to: CMUBoxBulletsPistol9MMEmpty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
 
-    # M77AP
+    - to: CMUBoxBulletsPistol9MMAPEmpty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+   # M77AP
     - to: RMCBoxMagazinePistolM77APEmpty
       steps:
       - material: RMCSheetCardboard
         amount: 1
         doAfter: 0.25
 
-    # MK80
+   # MK80
     - to: RMCBoxMagazinePistolMK80Empty
       steps:
       - material: RMCSheetCardboard
         amount: 1
         doAfter: 0.25
-
-    # L165A1
+    - to: CMUBoxBulletsPistol9MMSHEmpty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+    
+   # L165A1
     - to: AU14BoxMagazinePistolL165A1Empty
       steps:
       - material: RMCSheetCardboard
         amount: 1
         doAfter: 0.25
-
-    # SU-6
+        
+   # Type 73
+    - to: CMUBoxBulletsPistolType73Empty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+   # .45
+    - to: CMUBoxBulletsPistol45Empty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+   # .50
+    - to: CMUBoxBulletsPistol50Empty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25        
+   # SU-6
     - to: RMCBoxMagazinePistolSU6Empty
       steps:
       - material: RMCSheetCardboard
         amount: 1
         doAfter: 0.25
 
-    # M44
+   # M44
     - to: RMCBoxMagazineRevolverM44Empty
       steps:
       - material: RMCSheetCardboard
@@ -762,28 +1115,28 @@
         amount: 1
         doAfter: 0.25
 
-    # M34 Incinerator
+   # M34 Incinerator
     - to: RMCBoxFlamerTankEmpty
       steps:
       - material: RMCSheetCardboard
         amount: 1
         doAfter: 0.25
 
-    # Nailgun
+   # Nailgun
     - to: RMCBoxMagazineSMGNailgunEmpty
       steps:
       - material: RMCSheetCardboard
         amount: 1
         doAfter: 0.25
 
-    # XM88
+   # XM88
     - to: RMCBoxBullets458Empty
       steps:
       - material: RMCSheetCardboard
         amount: 1
         doAfter: 0.25
 
-    # Shotgun
+   # Shotgun
     - to: RMCBoxShellsBuckshotEmpty
       steps:
       - material: RMCSheetCardboard
@@ -820,7 +1173,7 @@
         amount: 1
         doAfter: 0.25
 
-    # Misc
+   # Misc
     - to: RMCBoxMREEmpty
       steps:
       - material: RMCSheetCardboard
@@ -848,8 +1201,9 @@
         doAfter: 0.25
 
   # Why the fuck do you even need these nodes???
-
-  # M54C
+  # I second the above, what the fuck is this???
+  
+ # M54C
   - node: RMCBoxMagazineRifleM54CEmpty
     entity: RMCBoxMagazineRifleM54CEmpty
   - node: RMCBoxMagazineRifleM54CAPEmpty
@@ -860,18 +1214,42 @@
     entity: RMCBoxBulletsRifleEmpty
   - node: RMCBoxBulletsRifleAPEmpty
     entity: RMCBoxBulletsRifleAPEmpty
-
-  # SSG45
+  
+ # SLR
+  - node: CMUBoxBulletsRifleSLREmpty
+    entity: CMUBoxBulletsRifleSLREmpty
+  - node: CMUBoxBulletsRifleSLRAPEmpty
+    entity: CMUBoxBulletsRifleSLRAPEmpty
+   
+ # L23
+  - node: CMUBoxBulletsRifleL23Empty
+    entity: CMUBoxBulletsRifleL23Empty
+  - node: CMUBoxBulletsRifleL23APEmpty
+    entity: CMUBoxBulletsRifleL23APEmpty
+ 
+ # Type 71
+  - node: CMUBoxBulletsRifleType71Empty
+    entity: CMUBoxBulletsRifleType71Empty
+  - node: CMUBoxBulletsRifleType71APEmpty
+    entity: CMUBoxBulletsRifleType71APEmpty
+ 
+ # AG80
+  - node: CMUBoxBulletsRifleAG80Empty
+    entity: CMUBoxBulletsRifleAG80Empty
+  - node: CMUBoxBulletsRifleAG80APEmpty
+    entity: CMUBoxBulletsRifleAG80APEmpty
+    
+ # SSG45
   - node: RMCBoxMagazineRifleSSG45Empty
     entity: RMCBoxMagazineRifleSSG45Empty
   - node: RMCBoxMagazineRifleSSG45APEmpty
     entity: RMCBoxMagazineRifleSSG45APEmpty
 
-  #AK4047
+ #AK4047
   - node: RMCBoxMagazineRifleAK4047Empty
     entity: RMCBoxMagazineRifleAK4047Empty
 
-  # M63
+ # M63
   - node: RMCBoxMagazineSMGM63Empty
     entity: RMCBoxMagazineSMGM63Empty
   - node: RMCBoxMagazineSMGM63APEmpty
@@ -883,7 +1261,19 @@
   - node: RMCBoxBulletsSMGAPEmpty
     entity: RMCBoxBulletsSMGAPEmpty
 
-  # M4SPR
+ # P90
+  - node: CMUBoxBulletsSMGP90Empty
+    entity: CMUBoxBulletsSMGP90Empty
+  - node: CMUBoxBulletsSMGP90APEmpty
+    entity: CMUBoxBulletsSMGP90APEmpty
+    
+ # MP5
+  - node: CMUBoxBulletsSMG9MMEmpty
+    entity: CMUBoxBulletsSMG9MMEmpty
+ # Type 19
+  - node: CMUBoxBulletsSMGType19Empty
+    entity: CMUBoxBulletsSMGType19Empty
+ # M4SPR
   - node: RMCBoxMagazineRifleM4SPREmpty
     entity: RMCBoxMagazineRifleM4SPREmpty
   - node: RMCBoxMagazineRifleM4SPRAPEmpty
@@ -891,11 +1281,11 @@
   - node: RMCBoxMagazineRifleM4SPRExtEmpty
     entity: RMCBoxMagazineRifleM4SPRExtEmpty
 
-  # SOCOM
+ # SOCOM
   - node: RMCBoxBullets458Empty
     entity: RMCBoxBullets458Empty
 
-  # M13
+ # M13
   - node: RMCBoxMagazinePistolM13Empty
     entity: RMCBoxMagazinePistolM13Empty
   - node: RMCBoxMagazinePistolM13ExtEmpty
@@ -912,52 +1302,71 @@
     entity: RMCBoxBulletsPistolEmpty
   - node: RMCBoxBulletsPistolAPEmpty
     entity: RMCBoxBulletsPistolAPEmpty
-
-  # M16
+ # Type 73
+  - node: CMUBoxBulletsPistolType73Empty
+    entity: CMUBoxBulletsPistolType73Empty
+ # .45
+  - node: CMUBoxBulletsPistol45Empty
+    entity: CMUBoxBulletsPistol45Empty
+ # .50
+  - node: CMUBoxBulletsPistol50Empty
+    entity: CMUBoxBulletsPistol50Empty
+ # M16
   - node: RMCBoxMagazineRifleM16Empty
     entity: RMCBoxMagazineRifleM16Empty
+  - node: CMUBoxBulletsRifle556x45MMEmpty
+    entity: CMUBoxBulletsRifle556x45MMEmpty
 
-  # M1984
+ # MAR
+  - node: CMUBoxBulletsRifleMAREmpty
+    entity: CMUBoxBulletsRifleMAREmpty
+ # M1984
   - node: RMCBoxMagazinePistolM1984Empty
     entity: RMCBoxMagazinePistolM1984Empty
   - node: RMCBoxMagazinePistolM1984APEmpty
     entity: RMCBoxMagazinePistolM1984APEmpty
-
-  # M77AP
+  - node: CMUBoxBulletsPistol9MMEmpty
+    entity: CMUBoxBulletsPistol9MMEmpty
+  - node: CMUBoxBulletsPistol9MMAPEmpty
+    entity: CMUBoxBulletsPistol9MMAPEmpty
+    
+ # M77AP
   - node: RMCBoxMagazinePistolM77APEmpty
     entity: RMCBoxMagazinePistolM77APEmpty
 
-  # MK80
+ # MK80
   - node: RMCBoxMagazinePistolMK80Empty
     entity: RMCBoxMagazinePistolMK80Empty
-
-  # L165A1
+  - node: CMUBoxBulletsPistol9MMSHEmpty
+    entity: CMUBoxBulletsPistol9MMSHEmpty
+    
+ # L165A1
   - node: AU14BoxMagazinePistolL165A1Empty
     entity: AU14BoxMagazinePistolL165A1Empty
 
-  # SU-6
+ # SU-6
   - node: RMCBoxMagazinePistolSU6Empty
     entity: RMCBoxMagazinePistolSU6Empty
 
-  # M44
+ # M44
   - node: RMCBoxMagazineRevolverM44Empty
     entity: RMCBoxMagazineRevolverM44Empty
   - node: RMCBoxMagazineRevolverM44MarksmanEmpty
     entity: RMCBoxMagazineRevolverM44MarksmanEmpty
 
-  # Nailgun
+ # Nailgun
   - node: RMCBoxMagazineSMGNailgunEmpty
     entity: RMCBoxMagazineSMGNailgunEmpty
 
-  # XM88
+ # XM88
   - node: RMCBoxBullets458Empty
     entity: RMCBoxBullets458Empty
 
-  # M34 Incinerator
+ # M34 Incinerator
   - node: RMCBoxFlamerTankEmpty
     entity: RMCBoxFlamerTankEmpty
 
-  # Shotgun
+ # Shotgun
   - node: RMCBoxShellsBuckshotEmpty
     entity: RMCBoxShellsBuckshotEmpty
   - node: RMCBoxShellsSlugsEmpty
@@ -973,7 +1382,7 @@
   - node: RMCBoxShellsBreachingEmpty
     entity: RMCBoxShellsBreachingEmpty
 
-  # Misc
+ # Misc
   - node: RMCBoxMREEmpty
     entity: RMCBoxMREEmpty
   - node: RMCBoxPackFlareEmpty

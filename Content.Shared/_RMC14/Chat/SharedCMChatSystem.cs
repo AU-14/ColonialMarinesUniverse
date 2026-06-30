@@ -43,7 +43,8 @@ public abstract partial class SharedCMChatSystem : EntitySystem
 
     protected bool IsHivebrokenXeno(EntityUid uid)
     {
-        return TryComp(uid, out YautjaThrallComponent? thrall) && thrall.Hivebroken;
+        return HasComp<YautjaHivebrokenXenoComponent>(uid) ||
+               TryComp(uid, out YautjaThrallComponent? thrall) && thrall.Hivebroken;
     }
 
     public virtual string SanitizeMessageReplaceWords(EntityUid source, string msg)

@@ -1,0 +1,105 @@
+- type: job
+  parent: CMJobBase
+  id: AU14UPPGROMMachinegunner
+  roundSide: ThirdParty
+  roundForce: GROM
+  roundRole: AU14UPPGROMMachinegunner
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_cont
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - AU14SquadGROM # for future when there's a dedicated map for them, right now does nothing
+  - type: Skills
+    preset: AU14SkillPresetPlatoonAutomaticRifleman
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforsquadautomaticriflemanRMC
+  - type: Language
+    spokenLanguages:
+    - Polish
+    - Russian
+    - Spanish
+    - Mandarin
+    - German
+    - TacticalSignLanguage
+    understoodLanguages:
+    - Polish
+    - Russian
+    - Spanish
+    - Mandarin
+    - German
+    - TacticalSignLanguage
+    currentLanguage: Polish
+    defaultLanguage: Polish
+
+  name: au14-job-name-govforsquadautomaticriflemanRMC
+  description: au14-uppgrom-description
+  playTimeTracker: AU14JobUPPGROMMachinegunner
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UPP_SeniorSergeant:
+      entity: AU14ChevronUPPNISeniorSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUPPGROMMachinegunner
+        time: 36000 # 10 hours
+    UPP_Sergeant:
+      entity: AU14ChevronUPPNISergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUPPGROMMachinegunner
+        time: 18000 # 5 hours
+    UPP_Plutonowy:
+      entity: AU14ChevronUPPNIPlutonowy
+      requirements: []
+  spawnMenuRoleName: UPP GROM Machinegunner (Survivor)
+  startingGear: AU14GearUPPGROMMachinegunner
+  greeting: au14-uppgrom-greeting
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: au-14-job-name-uppgrom-squadleader
+  accessGroups:
+  - AU14GovforCommand
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUPPGROM
+  id: AU14JobUPPGROMMachinegunner
+  name: UPP GROM Machinegunner
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadGROM
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-govforsquadautomaticriflemanRMC
+    description: au14-uppgrom-description
+    reregister: false
+    job: AU14UPPGROMMachinegunner
+    raffle:
+      settings: short
+    rules: au14-uppgrom-rules
+
+- type: startingGear
+  id: AU14GearUPPGROMMachinegunner
+  equipment:
+    id: AU14IDCardUPPGROMMachinegunner
+    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    jumpsuit: AU14FatiguesUPPGROM
+    shoes: RMCBootsSPPFilled
+    head: AU14UPPPatrolCap
+    belt: AU14BeltSmartGunOperatorPistolUPPFull
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelSPPFullMachinegunner
+    ears: RMCHeadsetGROM
+    suitstorage: RMCWeaponLMGQYJ72
+
+- type: playTimeTracker
+  id: AU14JobUPPGROMMachinegunner

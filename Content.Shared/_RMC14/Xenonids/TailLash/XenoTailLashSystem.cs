@@ -37,6 +37,8 @@ public sealed partial class XenoTailLashSystem : EntitySystem
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private RMCPullingSystem _pulling = default!;
 
+    private readonly HashSet<EntityUid> _areaHits = new();
+
     public override void Initialize()
     {
         base.Initialize();
@@ -116,8 +118,15 @@ public sealed partial class XenoTailLashSystem : EntitySystem
             return;
 
         args.Handled = true;
+        if (Transform(xeno).GridUid is not { } gridId)
+        {
+            xeno.Comp.Area = null;
+            return;
+        }
 
-        foreach (var ent in _lookup.GetEntitiesIntersecting(Transform(xeno).MapID, xeno.Comp.Area.Value, LookupFlags.Dynamic | LookupFlags.Static))
+        _areaHits.Clear();
+        _lookup.GetEntitiesIntersecting(gridId, xeno.Comp.Area.Value, _areaHits, LookupFlags.Dynamic | LookupFlags.Static);
+        foreach (var ent in _areaHits)
         {
             if (!_xeno.CanAbilityAttackTarget(xeno, ent))
                 continue;

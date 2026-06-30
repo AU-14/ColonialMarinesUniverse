@@ -2,6 +2,9 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 
+using Content.Shared.Maps;
+using Robust.Shared.Prototypes;
+
 namespace Content.Shared._RMC14.Mortar;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
@@ -34,4 +37,31 @@ public sealed partial class ActiveMortarShellComponent : Component
 
     [DataField, AutoNetworkedField]
     public TimeSpan LandAt;
+
+    [DataField, AutoNetworkedField]
+    public bool CarvesZLevels;
+
+    [DataField, AutoNetworkedField]
+    public bool CreatesZLevelOpening;
+
+    [DataField, AutoNetworkedField]
+    public ProtoId<ContentTileDefinition>? CarveOpeningTile;
+
+    [DataField, AutoNetworkedField]
+    public ProtoId<ContentTileDefinition>? CarveFringeTile;
+
+    [DataField, AutoNetworkedField]
+    public int CarveFringeRadius;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan CarveDelay;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan CarveCheckAt;
+
+    [DataField, AutoNetworkedField]
+    public bool Carving;
+
+    [DataField, AutoNetworkedField]
+    public int CarveImpactsRemaining;
 }

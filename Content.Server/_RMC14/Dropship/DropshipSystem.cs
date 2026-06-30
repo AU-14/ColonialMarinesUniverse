@@ -4,7 +4,7 @@ using Content.Server._CMU14.Dropship.TacticalLand;
 using Content.Server._RMC14.GameStates;
 using Content.Server._RMC14.Marines;
 using Content.Server.AU14.Round;
-using Content.Server.AU14.ThirdParty;
+using Content.Server._CMU14.Ops.ThirdParty;
 using Content.Server._RMC14.Shuttles;
 using Content.Server.Doors.Systems;
 using Content.Server.GameTicking;
@@ -12,6 +12,7 @@ using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.Shuttles.Systems;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared._CMU14.Dropship.TacticalLand;
 using Content.Shared._RMC14.AlertLevel;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Atmos;
@@ -55,6 +56,10 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
+using ThirdPartyDropshipAutoReturnComponent = Content.Server._CMU14.Ops.ThirdParty.ThirdPartyDropshipAutoReturnComponent ;
+using ThirdPartyDropshipDeactivatedConsoleComponent = Content.Server._CMU14.Ops.ThirdParty.ThirdPartyDropshipDeactivatedConsoleComponent ;
+using ThirdPartyDropshipReturnDestinationComponent = Content.Server._CMU14.Ops.ThirdParty.ThirdPartyDropshipReturnDestinationComponent ;
+using ThirdPartyDropshipReturnedComponent = Content.Server._CMU14.Ops.ThirdParty.ThirdPartyDropshipReturnedComponent ;
 
 namespace Content.Server._RMC14.Dropship;
 
@@ -513,6 +518,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         if (TryComp(computer.Owner, out WhitelistedShuttleComponent? whitelistComp) &&
             IsStrictThirdPartyFaction(whitelistComp.Faction) &&
             TryComp(destination, out DropshipDestinationComponent? destinationComp) &&
+            !HasComp<EphemeralDropshipDestinationComponent>(destination) &&
             !IsThirdPartyDestination(destinationComp))
         {
             if (user != null)
@@ -543,6 +549,15 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         if (!TryComp(dropshipId, out ShuttleComponent? shuttleComp))
         {
             Log.Warning($"Tried to launch {ToPrettyString(computer)} outside of a shuttle.");
+            return false;
+        }
+
+        if (TryComp(dropshipId.Value, out DropshipTacticalHoverComponent? tacticalHover) &&
+            tacticalHover.ReturnDestination != destination)
+        {
+            if (user != null)
+                _popup.PopupEntity("Tactical hover must return before routing elsewhere.", computer.Owner, user.Value, PopupType.MediumCaution);
+
             return false;
         }
 
@@ -780,10 +795,14 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         if (!_ui.IsUiOpen(computer.Owner, DropshipNavigationUiKey.Key))
             return;
 
+        if (_tacticalLand.TryRefreshActiveSessionUi(computer))
+            return;
+
         if (Transform(computer).GridUid is not { } grid)
             return;
 
         var doorLockStatus = GetDoorLockStatus(grid);
+        var canCancelTacticalHover = HasComp<DropshipTacticalHoverComponent>(grid);
 
         if (!TryComp(grid, out FTLComponent? ftl) ||
             !ftl.Running ||
@@ -854,7 +873,8 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                 destinations.Add(destination);
             }
 
-            var canTacticalLand = computer.Comp.CanTacticalLand || IsStrictThirdPartyFaction(whitelistedFaction);
+            var canTacticalLand = !canCancelTacticalHover &&
+                                  (computer.Comp.CanTacticalLand || IsStrictThirdPartyFaction(whitelistedFaction));
 
             var canWithdrawReturn = false;
             if (whitelistedFaction != null && _withdrawConsole.IsWithdrawReturnUnlocked(whitelistedFaction))
@@ -864,7 +884,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                                     (HasComp<RMCPlanetComponent>(gridXform.MapUid.Value) || HasComp<RMCPlanetComponent>(grid));
             }
 
-            var state = new DropshipNavigationDestinationsBuiState(flyBy, destinations, doorLockStatus, computer.Comp.RemoteControl, canTacticalLand, computer.Comp.LaunchAlarmStatus, canWithdrawReturn);
+            var state = new DropshipNavigationDestinationsBuiState(flyBy, destinations, doorLockStatus, computer.Comp.RemoteControl, canTacticalLand, computer.Comp.LaunchAlarmStatus, canWithdrawReturn, canCancelTacticalHover);
             _ui.SetUiState(computer.Owner, DropshipNavigationUiKey.Key, state);
             return;
         }
@@ -882,7 +902,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                 departureName = Name(departureUid);
         }
 
-        var travelState = new DropshipNavigationTravellingBuiState(ftl.State, ftl.StateTime, destinationName, departureName, doorLockStatus, computer.Comp.RemoteControl, computer.Comp.LaunchAlarmStatus);
+        var travelState = new DropshipNavigationTravellingBuiState(ftl.State, ftl.StateTime, destinationName, departureName, doorLockStatus, computer.Comp.RemoteControl, computer.Comp.LaunchAlarmStatus, canCancelTacticalHover);
         _ui.SetUiState(computer.Owner, DropshipNavigationUiKey.Key, travelState);
     }
 

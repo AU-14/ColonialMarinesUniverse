@@ -1,6 +1,0 @@
-- type: job
-  parent: AU14JobPlatCoBase
-  id: AU14JobGOVFORPlatCoRMC
-  name: au14-job-name-govforplatcoRMC
-  description: au14-job-description-govforplatco
-  spawnMenuRoleName: Platoon Commander (TWE RMC)

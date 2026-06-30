@@ -7,8 +7,6 @@ namespace Content.Server.Speech.EntitySystems;
 
 public sealed partial class ParrotAccentSystem : EntitySystem
 {
-    private static readonly Regex WordCleanupRegex = new Regex("[^A-Za-z0-9 -]");
-
     [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
@@ -39,9 +37,13 @@ public sealed partial class ParrotAccentSystem : EntitySystem
                 message = EnsurePunctuation(message);
 
                 // Capitalize the first letter of the repeated word
-                longest = string.Concat(longest[0].ToString().ToUpper(), longest.AsSpan(1));
+                longest = string.Create(longest.Length, longest, static (span, value) =>
+                {
+                    span[0] = char.ToUpperInvariant(value[0]);
+                    value.AsSpan(1).CopyTo(span[1..]);
+                });
 
-                message = string.Format("{0} {1} {2}!", message, GetRandomSquawk(entity), longest);
+                message = $"{message} {GetRandomSquawk(entity)} {longest}!";
                 return message; // No more changes, or it's too much
             }
         }
@@ -49,13 +51,13 @@ public sealed partial class ParrotAccentSystem : EntitySystem
         if (_random.Prob(entity.Comp.SquawkPrefixChance))
         {
             // AWWK! Sometimes add a squawk at the begining of the message
-            message = string.Format("{0} {1}", GetRandomSquawk(entity), message);
+            message = $"{GetRandomSquawk(entity)} {message}";
         }
         else
         {
             // Otherwise add a squawk at the end of the message! RAWWK!
             message = EnsurePunctuation(message);
-            message = string.Format("{0} {1}", message, GetRandomSquawk(entity));
+            message = $"{message} {GetRandomSquawk(entity)}";
         }
 
         return message;
@@ -78,4 +80,6 @@ public sealed partial class ParrotAccentSystem : EntitySystem
     {
         return Loc.GetString(_random.Pick(entity.Comp.Squawks));
     }
+
+    private static readonly Regex WordCleanupRegex = new("[^A-Za-z0-9 -]");
 }

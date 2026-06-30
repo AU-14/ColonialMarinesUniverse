@@ -144,9 +144,15 @@ namespace Content.Shared.Stacks
                 return false;
 
             transferred = Math.Min(donorStack.Count, GetAvailableSpace(recipientStack));
+            if (transferred <= 0)
+                return false;
+
             SetCount(donor, donorStack.Count - transferred, donorStack);
             SetCount(recipient, recipientStack.Count + transferred, recipientStack);
-            return transferred > 0;
+
+            var ev = new StackMergedEvent(donor, recipient, transferred);
+            RaiseLocalEvent(recipient, ref ev);
+            return true;
         }
 
         /// <summary>
@@ -373,8 +379,11 @@ namespace Content.Shared.Stacks
 
             var change = Math.Min(available, count);
 
-            SetCount(targetEnt, targetStack.Count + change, targetStack);
             SetCount(insertEnt, insertStack.Count - change, insertStack);
+            SetCount(targetEnt, targetStack.Count + change, targetStack);
+
+            var ev = new StackMergedEvent(insertEnt, targetEnt, change);
+            RaiseLocalEvent(targetEnt, ref ev);
             return true;
         }
 

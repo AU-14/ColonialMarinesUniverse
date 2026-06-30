@@ -27,16 +27,6 @@ public sealed partial class RatvarianLanguageSystem : SharedRatvarianLanguageSys
         * This only applies if they're being used as a proper noun: armorer/Nezbere
      */
 
-    private static Regex THPattern = new Regex(@"th\w\B", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-    private static Regex ETPattern = new Regex(@"\Bet", RegexOptions.Compiled);
-    private static Regex TEPattern = new Regex(@"te\B",RegexOptions.Compiled);
-    private static Regex OFPattern = new Regex(@"(\s)(of)");
-    private static Regex TIPattern = new Regex(@"ti\B", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-    private static Regex GUAPattern = new Regex(@"(gu)(a)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-    private static Regex ANDPattern = new Regex(@"\b(\s)(and)(\s)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-    private static Regex TOMYPattern = new Regex(@"(to|my)\s", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-    private static Regex ProperNouns = new Regex(@"(ratvar)|(nezbere)|(sevtuq)|(nzcrentr)|(inath-neq)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
     public override void Initialize()
     {
         // Activate before other modifications so translation works properly
@@ -62,14 +52,14 @@ public sealed partial class RatvarianLanguageSystem : SharedRatvarianLanguageSys
         var finalMessage = new StringBuilder();
         var newWord = new StringBuilder();
 
-        ruleTranslation = THPattern.Replace(ruleTranslation, "$&`");
-        ruleTranslation = TEPattern.Replace(ruleTranslation, "$&-");
-        ruleTranslation = ETPattern.Replace(ruleTranslation, "-$&");
-        ruleTranslation = OFPattern.Replace(ruleTranslation, "-$2");
-        ruleTranslation = TIPattern.Replace(ruleTranslation, "$&`");
-        ruleTranslation = GUAPattern.Replace(ruleTranslation, "$1-$2");
-        ruleTranslation = ANDPattern.Replace(ruleTranslation, "-$2-");
-        ruleTranslation = TOMYPattern.Replace(ruleTranslation, "$1-");
+        ruleTranslation = ThPattern.Replace(ruleTranslation, "$&`");
+        ruleTranslation = TePattern.Replace(ruleTranslation, "$&-");
+        ruleTranslation = EtPattern.Replace(ruleTranslation, "-$&");
+        ruleTranslation = OfPattern.Replace(ruleTranslation, "-$2");
+        ruleTranslation = TiPattern.Replace(ruleTranslation, "$&`");
+        ruleTranslation = GuaPattern.Replace(ruleTranslation, "$1-$2");
+        ruleTranslation = AndPattern.Replace(ruleTranslation, "-$2-");
+        ruleTranslation = ToMyPattern.Replace(ruleTranslation, "$1-");
 
         var temp = ruleTranslation.Split(' ');
 
@@ -110,8 +100,28 @@ public sealed partial class RatvarianLanguageSystem : SharedRatvarianLanguageSys
                     }
                 }
             }
-            finalMessage.Append(newWord + " ");
+
+            finalMessage.Append(newWord);
+            finalMessage.Append(' ');
         }
         return finalMessage.ToString().Trim();
     }
+
+    private static readonly Regex ThPattern = new(@"th\w\B", RegexOptions.IgnoreCase);
+
+    private static readonly Regex EtPattern = new(@"\Bet");
+
+    private static readonly Regex TePattern = new(@"te\B");
+
+    private static readonly Regex OfPattern = new(@"(\s)(of)");
+
+    private static readonly Regex TiPattern = new(@"ti\B", RegexOptions.IgnoreCase);
+
+    private static readonly Regex GuaPattern = new(@"(gu)(a)", RegexOptions.IgnoreCase);
+
+    private static readonly Regex AndPattern = new(@"\b(\s)(and)(\s)", RegexOptions.IgnoreCase);
+
+    private static readonly Regex ToMyPattern = new(@"(to|my)\s", RegexOptions.IgnoreCase);
+
+    private static readonly Regex ProperNouns = new(@"(ratvar)|(nezbere)|(sevtuq)|(nzcrentr)|(inath-neq)", RegexOptions.IgnoreCase);
 }

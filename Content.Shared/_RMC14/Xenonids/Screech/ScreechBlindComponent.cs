@@ -1,4 +1,5 @@
 using Robust.Shared.GameStates;
+using Robust.Shared.GameObjects;
 
 namespace Content.Shared._RMC14.Xenonids.Screech;
 
@@ -13,4 +14,7 @@ public sealed partial class ScreechBlindComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public float Radius = 2f;
+
+    [ViewVariables]
+    public readonly HashSet<EntityUid> ModifiedGuns = new();
 }

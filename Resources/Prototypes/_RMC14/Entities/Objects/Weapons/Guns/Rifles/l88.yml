@@ -263,7 +263,9 @@
     - state: mag-1
       map: ["enum.GunVisualLayers.Mag"]
   - type: Appearance
-
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifle
+    
 - type: entity
   parent: RMCMagazineRifleL88
   id: RMCMagazineRifleL88AP
@@ -290,7 +292,8 @@
     - state: ammo_band
       color: "#1F951F"
   - type: Appearance
-
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifleAP
 # Tags
 
 - type: Tag

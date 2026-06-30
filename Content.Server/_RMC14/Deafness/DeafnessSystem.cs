@@ -1,4 +1,3 @@
-using System.Linq;
 using Content.Server._RMC14.Chat.Chat;
 using Content.Server.Radio;
 using Content.Shared._RMC14.Deafness;
@@ -10,8 +9,6 @@ namespace Content.Server._RMC14.Deafness;
 public sealed partial class DeafnessSystem : SharedDeafnessSystem
 {
     [Dependency] private IRobustRandom _random = default!;
-
-    private readonly List<string> _punctuation = new List<string> { ",", "!", ".", ";", "?" };
 
     public override void Initialize()
     {
@@ -46,7 +43,7 @@ public sealed partial class DeafnessSystem : SharedDeafnessSystem
         {
             var words = args.Message.Split(' ');
             var heardWord = words[_random.Next(words.Length)];
-            var finalWord = RemovePunctuation(heardWord, _punctuation);
+            var finalWord = RemovePunctuation(heardWord);
 
             var isSelf = ent.Owner != args.Source ? "rmc-deaf-hear-others" : "rmc-deaf-hear-self";
             args.WrappedMessage = Loc.GetString(isSelf, ("message", finalWord));
@@ -60,14 +57,25 @@ public sealed partial class DeafnessSystem : SharedDeafnessSystem
         }
     }
 
-    public static string RemovePunctuation(string word, List<string> punctuation)
+    private static string RemovePunctuation(string word)
     {
-        if (punctuation.Contains(word.FirstOrDefault().ToString()))
-            word = word.Substring(1);
+        if (word.Length == 0)
+            return word;
 
-        if (punctuation.Contains(word.LastOrDefault().ToString()))
-            word = word.Substring(0, word.Length - 1);
+        var start = IsPunctuation(word[0]) ? 1 : 0;
+        var length = word.Length - start;
 
-        return word;
+        if (length > 0 && IsPunctuation(word[^1]))
+            length--;
+
+        if (start == 0 && length == word.Length)
+            return word;
+
+        return length <= 0 ? string.Empty : word.Substring(start, length);
+    }
+
+    private static bool IsPunctuation(char character)
+    {
+        return character is ',' or '!' or '.' or ';' or '?';
     }
 }

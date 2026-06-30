@@ -270,6 +270,9 @@ public sealed partial class SquadSystem : EntitySystem
 
     private void OnSquadLeaderHeadsetChannelsChanged(Entity<SquadLeaderHeadsetComponent> ent, ref EncryptionChannelsChangedEvent args)
     {
+        if (TerminatingOrDeleted(ent) || args.Component == null || ent.Comp.Channels == null)
+            return;
+
         foreach (var channel in ent.Comp.Channels)
         {
             args.Component.Channels.Add(channel);
@@ -838,7 +841,7 @@ public sealed partial class SquadSystem : EntitySystem
         if (!TryComp(marine, out SquadLeaderComponent? leader))
             return;
 
-        if (leader.Headset is { } headset)
+        if (leader.Headset is { } headset && !TerminatingOrDeleted(headset))
         {
             RemComp<SquadLeaderHeadsetComponent>(headset);
             if (TryComp(headset, out EncryptionKeyHolderComponent? holder))

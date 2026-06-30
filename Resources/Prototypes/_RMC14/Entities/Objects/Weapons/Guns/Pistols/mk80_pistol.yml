@@ -120,7 +120,8 @@
       map: ["enum.GunVisualLayers.Base"]
     - state: mag-1
       map: ["enum.GunVisualLayers.Mag"]
-
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsPistol9MMSH
 - type: entity
   parent: CMMagazinePistolMK80
   id: RMCMagazinePistolMK80Empty

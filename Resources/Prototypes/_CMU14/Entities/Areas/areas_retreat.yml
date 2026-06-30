@@ -56,7 +56,25 @@
 - type: entity
   parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatCaves
-  name: JE-1758 Ascanius - Caves
+  name: JE-1758 Ascanius - Outer Caves
+  abstract: true
+  components:
+  - type: Area
+    CAS: true
+    fulton: false
+    mortarPlacement: false
+    mortarFire: true
+    lasing: false
+    medevac: false
+    paradropping: false
+    OB: true
+    supplyDrop: false
+    weatherEnabled: false
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatCavesDeep
+  name: JE-1758 Ascanius - Inner Caves
   abstract: true
   components:
   - type: Area
@@ -89,6 +107,25 @@
     OB: false
     supplyDrop: false
     weatherEnabled: false
+
+- type: entity
+  parent: CMUAreaRetreat
+  id: CMUAreaRetreatFullProtectionMilitary
+  name: JE-1758 Ascanius - Military Base
+  abstract: true
+  components:
+  - type: Area
+    CAS: false
+    fulton: false
+    mortarPlacement: false
+    mortarFire: false
+    lasing: false
+    medevac: false
+    paradropping: false
+    OB: false
+    supplyDrop: false
+    weatherEnabled: false
+    noTunnel: true
     
 ### Entities
 
@@ -105,7 +142,7 @@
 ## Fort Beauregard
 
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBRequisitions
   name: Fort Beauregard - Requisitions
   components:
@@ -115,7 +152,7 @@
     minimapColor: '#573e19'
     
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBCommandIntelOffice
   name: Fort Beauregard - Intelligence Office
   components:
@@ -125,7 +162,7 @@
     minimapColor: '#573e19'
     
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBCommandCommandCenter
   name: Fort Beauregard - Command Center
   components:
@@ -135,7 +172,7 @@
     minimapColor: '#573e19'
     
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBBarracks
   name: Fort Beauregard - Barracks
   components:
@@ -145,7 +182,7 @@
     minimapColor: '#573e19'
     
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBBarracksMessHall
   name: Fort Beauregard - Mess Hall
   components:
@@ -155,7 +192,7 @@
     minimapColor: '#573e19'
     
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBEngineeringMaintenanceBay
   name: Fort Beauregard - Maintenace Bay
   components:
@@ -165,7 +202,7 @@
     minimapColor: '#573e19'
     
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBBrigProcessing
   name: Fort Beauregard - Brig Processing
   components:
@@ -175,7 +212,7 @@
     minimapColor: '#573e19'
     
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBBrig
   name: Fort Beauregard - Brig
   components:
@@ -185,7 +222,7 @@
     minimapColor: '#573e19'
     
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBBrigHoldingCells
   name: Fort Beauregard - Holding Cells
   components:
@@ -195,7 +232,7 @@
     minimapColor: '#573e19'
     
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBBrigLongTermConfinement
   name: Fort Beauregard - Long Term Confinement
   components:
@@ -205,7 +242,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBHospitalTriage
   name: Fort Beauregard - Hospital Triage
   components:
@@ -215,7 +252,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBHospitalTreatment
   name: Fort Beauregard - Hospital Treatment
   components:
@@ -225,7 +262,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBHospitalOperatingRooms
   name: Fort Beauregard - Operating Rooms
   components:
@@ -235,7 +272,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBHospitalChemistry
   name: Fort Beauregard - Chemistry
   components:
@@ -245,7 +282,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBHospitalMorgue
   name: Fort Beauregard - Morgue
   components:
@@ -255,7 +292,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBHospitalBreakroom
   name: Fort Beauregard - Hospital Breakroom
   components:
@@ -265,7 +302,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBExteriorNorth
   name: Fort Beauregard - North
   components:
@@ -275,7 +312,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBExteriorSouth
   name: Fort Beauregard - South
   components:
@@ -285,7 +322,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBExteriorEast
   name: Fort Beauregard - East
   components:
@@ -295,7 +332,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBExteriorWest
   name: Fort Beauregard - West
   components:
@@ -305,7 +342,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBExteriorLZAlpha
   name: Fort Beauregard - LZ Alpha (North Pad)
   components:
@@ -315,7 +352,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBExteriorLZBravo
   name: Fort Beauregard - LZ Bravo (South Pad)
   components:
@@ -325,7 +362,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBMiscBriefingArea
   name: Fort Beauregard - Briefing Area
   components:
@@ -335,7 +372,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatFullProtection
+  parent: CMUAreaRetreatFullProtectionMilitary
   id: CMUAreaRetreatFBMiscVehiclePool
   name: Fort Beauregard - Vehicle Pool
   components:
@@ -344,10 +381,20 @@
   - type: Area
     minimapColor: '#573e19'
 
-## Octanis Complex
+## Octanis Complex - "Indoor" Areas
 
 - type: entity
-  parent: CMUAreaRetreatCaves
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatOCUnregisteredTunnel
+  name: Octanis Complex - Unregistered Tunnel
+  components:
+  - type: Sprite
+    state: smuggler_tunnel
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatOCCavernNorth
   name: Octanis Complex - Northern Cavern
   components:
@@ -357,7 +404,7 @@
     minimapColor: '#714401CC'
 
 - type: entity
-  parent: CMUAreaRetreatCaves
+  parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatOCCavernCentral
   name: Octanis Complex - Central Cavern
   components:
@@ -367,7 +414,7 @@
     minimapColor: '#714401CC'
 
 - type: entity
-  parent: CMUAreaRetreatCaves
+  parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatOCCavernEast
   name: Octanis Complex - Eastern Cavern
   components:
@@ -377,7 +424,7 @@
     minimapColor: '#714401CC'
 
 - type: entity
-  parent: CMUAreaRetreatCaves
+  parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatOCSecPostNorth
   name: Octanis Complex - Northern Gate House
   components:
@@ -397,7 +444,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatCaves
+  parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatOCResearchEast
   name: Octanis Complex Research - East
   components:
@@ -417,7 +464,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatCaves
+  parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatOCHabitationSecurityPost
   name: Octanis Complex Habitation - Security Post
   components:
@@ -425,9 +472,19 @@
     state: oc_hab_securitypost
   - type: Area
     minimapColor: '#573e19'
+    
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatOCHabitationSecurityPostSecondFloor
+  name: Octanis Complex Habitation - Security Post Second Floor
+  components:
+  - type: Sprite
+    state: oc_hab_securitypost_secondfloor
+  - type: Area
+    minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatCaves
+  parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatOCHabitationNorthDorms
   name: Octanis Complex Habitation - Northern Dormitories
   components:
@@ -437,7 +494,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatCaves
+  parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatOCHabitationSouthDorms
   name: Octanis Complex Habitation - Southern Dormitories
   components:
@@ -447,7 +504,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatCaves
+  parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatOCHabitationAtrium
   name: Octanis Complex Habitation - Atrium
   components:
@@ -457,7 +514,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatCaves
+  parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatOCHabitationCafeteria
   name: Octanis Complex Habitation - Cafeteria
   components:
@@ -467,7 +524,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatCaves
+  parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatOCHabitationMedbay
   name: Octanis Complex Habitation - Medbay
   components:
@@ -475,9 +532,19 @@
     state: oc_hab_medbay
   - type: Area
     minimapColor: '#573e19'
+    
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatOCHabitationMedbaySecondFloor
+  name: Octanis Complex Habitation - Medbay Second Floor
+  components:
+  - type: Sprite
+    state: oc_hab_medbay_secondfloor
+  - type: Area
+    minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatCaves
+  parent: CMUAreaRetreatCavesDeep
   id: CMUAreaRetreatOCPowerplantOffice
   name: Octanis Complex Powerplant - Office
   components:
@@ -487,7 +554,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatCaves
+  parent: CMUAreaRetreatCavesDeep
   id: CMUAreaRetreatOCPowerplantTurbineRoom
   name: Octanis Complex Powerplant - Turbine Room
   components:
@@ -497,7 +564,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatCaves
+  parent: CMUAreaRetreatCavesDeep
   id: CMUAreaRetreatOCPowerplantStorageRoom
   name: Octanis Complex Powerplant - Storage Room
   components:
@@ -507,7 +574,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatCaves
+  parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatOCAdminLiaisonOffices
   name: Octanis Complex Administration - Liaison Offices
   components:
@@ -517,7 +584,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatCaves
+  parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatOCAdminPanicRoom
   name: Octanis Complex Administration - Panic Room
   components:
@@ -527,7 +594,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatCaves
+  parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatOCAdminAdminOffices
   name: Octanis Complex Administration - Administrative Offices
   components:
@@ -537,7 +604,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatCaves
+  parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatOCAdminAICore
   name: Octanis Complex Administration - AI Core
   components:
@@ -547,7 +614,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: CMUAreaRetreatCaves
+  parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatOCAdminLogistics
   name: Octanis Complex Administration - Logistics
   components:
@@ -577,7 +644,6 @@
     state: oc_starport_warehouses
   - type: Area
     minimapColor: '#573e19'
-
 
 - type: entity
   parent: CMUAreaRetreatIndoors
@@ -764,6 +830,16 @@
   components:
   - type: Sprite
     state: hr_dorms_livingspace
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRDormsUpstairs
+  name: Hope's Retreat - Dormitories Second Floor
+  components:
+  - type: Sprite
+    state: hr_dorms_secondfloor
   - type: Area
     minimapColor: '#573e19'
 

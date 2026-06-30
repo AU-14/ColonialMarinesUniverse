@@ -445,7 +445,9 @@ public sealed partial class AttachableHolderSystem : EntitySystem
     //Detaching
     public void StartDetach(Entity<AttachableHolderComponent> holder, string slotId, EntityUid userUid)
     {
-        if (TryGetAttachable(holder, slotId, out var attachable) && holder.Comp.Slots.ContainsKey(slotId) && !holder.Comp.Slots[slotId].Locked)
+        if (TryGetAttachable(holder, slotId, out var attachable) &&
+            holder.Comp.Slots.TryGetValue(slotId, out var slot) &&
+            !slot.Locked)
             StartDetach(holder, attachable.Owner, userUid);
     }
 

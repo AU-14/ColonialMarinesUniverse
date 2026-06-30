@@ -15,12 +15,12 @@ public sealed partial class CMURoofSystem : CMUSharedRoofSystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CMUZLevelsNetworkComponent, CMUZLevelNetworkUpdatedEvent>(OnNetworkUpdated);
+        SubscribeLocalEvent<CMUZLevelNetworkUpdatedEvent>(OnNetworkUpdated);
     }
 
-    private void OnNetworkUpdated(Entity<CMUZLevelsNetworkComponent> ent, ref CMUZLevelNetworkUpdatedEvent args)
+    private void OnNetworkUpdated(ref CMUZLevelNetworkUpdatedEvent args)
     {
-        RecalculateNetworkRoofs(ent);
+        RecalculateNetworkRoofs(args.Network);
     }
 
     public void RecalculateNetworkRoofs(Entity<CMUZLevelsNetworkComponent> network)

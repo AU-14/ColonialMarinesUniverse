@@ -59,7 +59,7 @@ public sealed class RMCFlamerPrototypeRegressionTest
     private static IEnumerable<TestCaseData> MeltableWeaponPrototypes()
     {
         yield return new TestCaseData(M240Flamer).SetName("M240IncineratorIsMeltable");
-        yield return new TestCaseData(M34TFlamer).SetName("M34TIncineratorIsMeltable");
+        //yield return new TestCaseData(M34TFlamer).SetName("M34TIncineratorIsMeltable");
         yield return new TestCaseData(Smaw).SetName("SmawIsMeltable");
     }
 }

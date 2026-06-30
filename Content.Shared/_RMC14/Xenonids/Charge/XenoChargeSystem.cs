@@ -90,6 +90,8 @@ public sealed partial class XenoChargeSystem : EntitySystem
     private EntityQuery<XenoToggleChargingRecentlyHitComponent> _xenoToggleChargingRecentlyHitQuery;
 
     private bool _relativeMovement;
+    private readonly HashSet<Entity<MobStateComponent>> _nearbyMobs = new();
+    private readonly List<EntityUid> _colorFlashTargets = new(1);
     private readonly HashSet<(Entity<ActiveXenoToggleChargingComponent> Crusher, EntityUid Target)> _hit = new();
 
     public override void Initialize()
@@ -364,7 +366,8 @@ public sealed partial class XenoChargeSystem : EntitySystem
             _xenoAnimations.PlayLungeAnimationEvent(xeno, charge);
         }
 
-        foreach (var slower in _lookup.GetEntitiesInRange<MobStateComponent>(_transform.GetMapCoordinates(xeno), xeno.Comp.SlowRange))
+        _lookup.GetEntitiesInRange(_transform.GetMapCoordinates(xeno), xeno.Comp.SlowRange, _nearbyMobs);
+        foreach (var slower in _nearbyMobs)
         {
             if (!_xeno.CanAbilityAttackTarget(xeno, slower))
                 continue;
@@ -427,7 +430,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
         if (damage?.GetTotal() > FixedPoint2.Zero && !TerminatingOrDeleted(targetId))
         {
             var filter = Filter.Pvs(targetId, entityManager: EntityManager).RemoveWhereAttachedEntity(o => o == xeno.Owner);
-            _colorFlash.RaiseEffect(Color.Red, new List<EntityUid> { targetId }, filter);
+            RaiseColorFlash(targetId, filter);
         }
 
         if (crush != null && crush.DestroyDamage != null)
@@ -493,7 +496,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
         _damageable.TryChangeDamage(target, ent.Comp.CollisionDamage, origin: ent);
 
         var filter = Filter.Pvs(target, entityManager: EntityManager);
-        _colorFlash.RaiseEffect(Color.Red, new List<EntityUid> { target }, filter);
+        RaiseColorFlash(target, filter);
 
         _stun.TryParalyze(target, ent.Comp.KnockdownTime, true);
         _slow.TrySlowdown(target, TimeSpan.FromSeconds(1.5));
@@ -549,8 +552,9 @@ public sealed partial class XenoChargeSystem : EntitySystem
 
         // Find the closest valid mob target near the click position.
         xeno.Comp.PrimaryTarget = null;
-        float closestDist = float.MaxValue;
-        foreach (var mob in _lookup.GetEntitiesInRange<MobStateComponent>(targetMap, 2f))
+        var closestDist = float.MaxValue;
+        _lookup.GetEntitiesInRange(targetMap, 2f, _nearbyMobs);
+        foreach (var mob in _nearbyMobs)
         {
             if (!_xeno.CanAbilityAttackTarget(xeno, mob))
                 continue;
@@ -559,7 +563,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
                 continue;
 
             var mobMap = _transform.GetMapCoordinates(mob);
-            var dist = (mobMap.Position - targetMap.Position).Length();
+            var dist = (mobMap.Position - targetMap.Position).LengthSquared();
             if (dist < closestDist)
             {
                 closestDist = dist;
@@ -906,5 +910,12 @@ public sealed partial class XenoChargeSystem : EntitySystem
             else if (time >= active.LastMovedAt + charging.LastMovedGrace)
                 ResetCharging((uid, active), false);
         }
+    }
+
+    private void RaiseColorFlash(EntityUid target, Filter filter)
+    {
+        _colorFlashTargets.Clear();
+        _colorFlashTargets.Add(target);
+        _colorFlash.RaiseEffect(Color.Red, _colorFlashTargets, filter);
     }
 }

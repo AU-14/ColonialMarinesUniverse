@@ -78297,7 +78297,7 @@ entities:
     - type: Transform
       pos: 16.5,-83.5
       parent: 1
-- proto: AU14SpawnPointCivilianColonist
+- proto: ScenarioClfCivilianColonistSpawnMarker
   entities:
   - uid: 167
     components:
@@ -78460,6 +78460,13 @@ entities:
     - type: Transform
       pos: -0.5,-100.5
       parent: 1
+- proto: AU14SpawnPointCivilianHeadOfEngineering
+  entities:
+  - uid: 33609
+    components:
+    - type: Transform
+      pos: 1.5,-100.5
+      parent: 1
 - proto: AU14SpawnPointCivilianFreightSystemsSpecialist
   entities:
   - uid: 196
@@ -78514,7 +78521,7 @@ entities:
     - type: Transform
       pos: 6.5,-101.5
       parent: 1
-- proto: AU14SpawnPointCLFCellLeader
+- proto: scenarioclfsafehousespawnmarker
   entities:
   - uid: 25
     components:

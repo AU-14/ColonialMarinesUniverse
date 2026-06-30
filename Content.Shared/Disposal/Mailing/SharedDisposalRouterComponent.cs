@@ -5,7 +5,7 @@ namespace Content.Shared.Disposal.Components
 {
     public sealed partial class SharedDisposalRouterComponent : Component
     {
-        public static readonly Regex TagRegex = new("^[a-zA-Z0-9, ]*$", RegexOptions.Compiled);
+        public static readonly Regex TagRegex = new("^[a-zA-Z0-9, ]*$");
 
         [Serializable, NetSerializable]
         public sealed class DisposalRouterUserInterfaceState : BoundUserInterfaceState
@@ -46,5 +46,6 @@ namespace Content.Shared.Disposal.Components
         {
             Key
         }
+
     }
 }

@@ -36,6 +36,10 @@ public sealed partial class XenoFlurrySystem : EntitySystem
     [Dependency] private SharedXenoHealSystem _xenoHeal = default!;
     [Dependency] private SharedHitLocationSystem _hitLocation = default!;
 
+    private readonly HashSet<EntityUid> _areaHits = new();
+    private readonly List<EntityUid> _mobs = new();
+    private readonly List<EntityUid> _colorFlashTargets = new(1);
+
     public override void Initialize()
     {
         SubscribeLocalEvent<XenoFlurryComponent, XenoFlurryActionEvent>(OnXenoFlurryAction);
@@ -60,17 +64,19 @@ public sealed partial class XenoFlurrySystem : EntitySystem
         var area = Box2.CenteredAround(xenoCoord.Position, new(1, xeno.Comp.Range)).Translated(new(0, (xeno.Comp.Range / 2) + 0.5f));
         var rot = new Box2Rotated(area, direction, xenoCoord.Position); // Correct the angle
 
-        List<EntityUid> mobs = new();
+        _mobs.Clear();
 
         if (_net.IsClient)
             return;
 
-        foreach (var ent in _lookup.GetEntitiesIntersecting(Transform(xeno).MapID, rot, LookupFlags.Dynamic | LookupFlags.Static))
+        _areaHits.Clear();
+        _lookup.GetEntitiesIntersecting(gridId, rot, _areaHits, LookupFlags.Dynamic | LookupFlags.Static);
+        foreach (var ent in _areaHits)
         {
             if (!_xeno.CanAbilityAttackTarget(xeno, ent))
                 continue;
 
-            mobs.Add(ent);
+            _mobs.Add(ent);
         }
 
         _emote.TryEmoteWithChat(xeno, xeno.Comp.Emote, cooldown: xeno.Comp.EmoteDelay);
@@ -85,7 +91,7 @@ public sealed partial class XenoFlurrySystem : EntitySystem
         EntityUid? hitEnt = null;
         using var targetingSuppression = _hitLocation.SuppressBodyZoneTargeting(xeno.Owner);
 
-        foreach (var victim in mobs)
+        foreach (var victim in _mobs)
         {
             if (!_interaction.InRangeUnobstructed(xeno.Owner, victim, xeno.Comp.Range + 0.5f))
                 continue;
@@ -100,7 +106,7 @@ public sealed partial class XenoFlurrySystem : EntitySystem
             if (change?.GetTotal() > FixedPoint2.Zero)
             {
                 var filter = Filter.Pvs(victim, entityManager: EntityManager).RemoveWhereAttachedEntity(o => o == xeno.Owner);
-                _colorFlash.RaiseEffect(Color.Red, new List<EntityUid> { victim }, filter);
+                RaiseColorFlash(victim, filter);
             }
 
             SpawnAttachedTo(xeno.Comp.AttackEffect, victim.ToCoordinates());
@@ -125,5 +131,12 @@ public sealed partial class XenoFlurrySystem : EntitySystem
 
             SpawnAtPosition(xeno.Comp.TelegraphEffect, _turf.GetTileCenter(tile));
         }
+    }
+
+    private void RaiseColorFlash(EntityUid target, Filter filter)
+    {
+        _colorFlashTargets.Clear();
+        _colorFlashTargets.Add(target);
+        _colorFlash.RaiseEffect(Color.Red, _colorFlashTargets, filter);
     }
 }

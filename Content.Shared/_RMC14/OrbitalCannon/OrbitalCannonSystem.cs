@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._CMU14.ZLevels.Ordnance;
 using Content.Shared._RMC14.Animations;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.ARES;
@@ -63,6 +64,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
     [Dependency] private SharedRMCPvsSystem _rmcPvs = default!;
     [Dependency] private TagSystem _tags = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private CMUTopDownOrdnanceSystem _topDownOrdnance = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private ARESCoreSystem _core = default!;
 
@@ -662,9 +664,12 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
             return false;
         }
 
-        if (!_area.CanOrbitalBombard(_transform.ToCoordinates(planetCoordinates), out var roofed))
+        if (!_topDownOrdnance.TryResolveImpactColumn(
+                planetCoordinates,
+                CMUTopDownOrdnanceKind.OrbitalBombardment,
+                out var bombardment))
         {
-            if (roofed)
+            if (bombardment?.BlockReason == CMUTopDownOrdnanceBlockReason.Roofed)
             {
                 _popup.PopupCursor("The target zone has strong biological protection. The orbital strike cannot reach here.", user, PopupType.LargeCaution);
                 return false;
@@ -719,6 +724,26 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
         return true;
     }
 
+    private void SpawnOrbitalTransitBlasts(Entity<OrbitalCannonWarheadComponent> warhead, CMUTopDownOrdnanceResult impactColumn)
+    {
+        if (warhead.Comp.TransitExplosionType is not { } explosionType)
+            return;
+
+        for (var i = 0; i < impactColumn.Surfaces.Count - 1; i++)
+        {
+            _rmcExplosion.QueueExplosion(
+                impactColumn.Surfaces[i].Coordinates,
+                explosionType,
+                warhead.Comp.TransitExplosionTotal,
+                warhead.Comp.TransitExplosionSlope,
+                warhead.Comp.TransitExplosionMax,
+                warhead.Owner,
+                warhead.Comp.TransitTileBreakScale,
+                warhead.Comp.TransitMaxTileBreak,
+                canCreateVacuum: false);
+        }
+    }
+
     public override void Update(float frameTime)
     {
         if (_net.IsClient)
@@ -761,13 +786,25 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
                 continue;
             }
 
+            if (!_topDownOrdnance.TryResolveImpactColumn(
+                    planetCoordinates,
+                    CMUTopDownOrdnanceKind.OrbitalBombardment,
+                    out var impactColumn) ||
+                impactColumn.TerminalImpact is not { } terminalImpact)
+            {
+                RemCompDeferred<OrbitalCannonFiringComponent>(uid);
+                continue;
+            }
+
+            var terminalCoordinates = terminalImpact.Coordinates;
+
             if (!firing.Alerted && time > firing.StartedAt + firing.AlertDelay)
             {
                 firing.Alerted = true;
                 Dirty(uid, firing);
 
                 var groundFilter = Filter
-                    .BroadcastMap(planetCoordinates.MapId)
+                    .BroadcastMap(terminalCoordinates.MapId)
                     .RemoveWhereAttachedEntity(e => !HasComp<SquadMemberComponent>(e) && !HasComp<GhostComponent>(e));
 
                 _audio.PlayGlobal(cannon.GroundAlertSound, groundFilter, true);
@@ -775,7 +812,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
                 var msg = "[font size=16][color=red]Orbital bombardment launch command detected![/color][/font]";
                 _rmcChat.ChatMessageToMany(msg, msg, groundFilter, ChatChannel.Radio);
 
-                if (_area.TryGetArea(planetCoordinates, out _, out var areaProto))
+                if (_area.TryGetArea(terminalCoordinates, out _, out var areaProto))
                 {
                     msg = $"[color=red]Launch command informs {firing.WarheadName}. Estimated impact area: {areaProto.Name}[/color]";
                     _rmcChat.ChatMessageToMany(msg, msg, groundFilter, ChatChannel.Radio);
@@ -793,7 +830,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
                 _audio.PlayPvs(cannon.FireSound, uid);
                 _animation.TryFlick(uid, cannon.FiringAnimation, cannon.ChamberedState, cannon.BaseLayerKey);
 
-                var msg = "[color=red]The deck of the UNS Almayer shudders as the orbital cannons open fire on the colony.[/color]";
+                var msg = "[color=red]The deckplate kicks hard beneath your feet as the warship's orbital batteries thunder to life, slamming fiery judgment down onto the colony.[/color]";
                 _rmcChat.ChatMessageToMany(msg, msg, sameMap, ChatChannel.Radio);
 
                 _marineAnnounce.AnnounceSquad("WARNING! Ballistic trans-atmospheric launch detected! Get outside of Danger Close!", firing.Squad);
@@ -804,24 +841,24 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
                 firing.Fired = true;
                 Dirty(uid, firing);
 
-                var planetEntCoordinates = _transform.ToCoordinates(planetCoordinates);
+                var planetEntCoordinates = _transform.ToCoordinates(terminalCoordinates);
                 _audio.PlayPvs(cannon.TravelSound, planetEntCoordinates, AudioParams.Default.WithMaxDistance(75));
 
-                _mortar.PopupWarning(planetCoordinates, firing.FirstWarningRange, "rmc-ob-warning-one", "rmc-ob-warning-above-one", true);
+                _mortar.PopupWarning(terminalCoordinates, firing.FirstWarningRange, "rmc-ob-warning-one", "rmc-ob-warning-above-one", true);
             }
 
             if (!firing.WarnedOne && time > firing.StartedAt + firing.WarnOneDelay)
             {
                 firing.WarnedOne = true;
                 Dirty(uid, firing);
-                _mortar.PopupWarning(planetCoordinates, firing.SecondWarningRange, "rmc-ob-warning-two", "rmc-ob-warning-above-two", true);
+                _mortar.PopupWarning(terminalCoordinates, firing.SecondWarningRange, "rmc-ob-warning-two", "rmc-ob-warning-above-two", true);
             }
 
             if (!firing.WarnedTwo && time > firing.StartedAt + firing.WarnTwoDelay)
             {
                 firing.WarnedTwo = true;
                 Dirty(uid, firing);
-                _mortar.PopupWarning(planetCoordinates, firing.ThirdWarningRange, "rmc-ob-warning-three", "rmc-ob-warning-above-three", true);
+                _mortar.PopupWarning(terminalCoordinates, firing.ThirdWarningRange, "rmc-ob-warning-three", "rmc-ob-warning-above-three", true);
             }
 
             if (!firing.AegisBoomed && time > firing.StartedAt + firing.AegisBoomDelay)
@@ -833,7 +870,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
                     TryComp(foundWarhead, out OrbitalCannonWarheadComponent? foundWarheadComp) &&
                     foundWarheadComp.IsAegis)
                 {
-                    var planetEntCoordinates = _transform.ToCoordinates(planetCoordinates);
+                    var planetEntCoordinates = _transform.ToCoordinates(terminalCoordinates);
                     var sound = _audio.PlayPvs(cannon.AegisBoomSound, planetEntCoordinates, AudioParams.Default.WithMaxDistance(300));
                     if (sound != null)
                         _rmcPvs.AddGlobalOverride(sound.Value.Entity);
@@ -851,7 +888,10 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
                 var fuel = CannonGetFuel(cannonEnt);
                 if (CannonHasWarhead(cannonEnt, out var warhead))
                 {
-                    var ev = new OrbitalBombardmentFireEvent(cannonEnt, warhead, fuel, planetCoordinates);
+                    if (TryComp(warhead, out OrbitalCannonWarheadComponent? warheadComp))
+                        SpawnOrbitalTransitBlasts((warhead, warheadComp), impactColumn);
+
+                    var ev = new OrbitalBombardmentFireEvent(cannonEnt, warhead, fuel, terminalCoordinates);
                     RaiseLocalEvent(warhead, ref ev);
                 }
 

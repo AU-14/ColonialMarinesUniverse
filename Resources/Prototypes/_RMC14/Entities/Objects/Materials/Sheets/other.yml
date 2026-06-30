@@ -159,7 +159,9 @@
     - AU14WoodenCrossBuild
     - AU14WoodenSandalsBuild
     # wooden door
-    # coffin
+    - AU14CoffinBuild
+    - AU14WoodenTableBuild
+    - AU14FancyWoodenTableBuild
     # wooden pole
   - type: UserInterface
     interfaces:

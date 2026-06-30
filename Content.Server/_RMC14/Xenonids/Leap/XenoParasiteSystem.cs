@@ -2,6 +2,7 @@ using Content.Server.Database;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Ghost;
 using Content.Server.Mind;
+using Content.Server._RMC14.Xenonids.JoinXeno;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Ghost;
@@ -20,6 +21,7 @@ public sealed partial class XenoParasiteSystem : SharedXenoParasiteSystem
     [Dependency] private MindSystem _mind = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private HTNSystem _htn = default!;
+    [Dependency] private LarvaQueueSystem _larvaQueue = default!;
     [Dependency] private ISharedPlayerManager _player = default!;
     [Dependency] private DialogSystem _dialog = default!;
 
@@ -63,8 +65,12 @@ public sealed partial class XenoParasiteSystem : SharedXenoParasiteSystem
 
     private void OpenLarvaClaimPrompt(EntityUid ghost, Entity<XenoParasiteComponent> parasite)
     {
-        if (parasite.Comp.InfectedVictim is not { } victim)
+        if (parasite.Comp.InfectedVictim is not { } victim ||
+            !TryComp(ghost, out ActorComponent? actor) ||
+            !TrySetLarvaClaimPending(parasite, victim, actor.PlayerSession.UserId))
+        {
             return;
+        }
 
         var ghostNet = GetNetEntity(ghost);
         var parasiteNet = GetNetEntity(parasite);
@@ -108,6 +114,13 @@ public sealed partial class XenoParasiteSystem : SharedXenoParasiteSystem
             !TryComp<VictimInfectedComponent>(victim.Value, out var infected) ||
             infected.SpawnedLarva is not { } spawned)
         {
+            if (!ev.Claim &&
+                TryComp<VictimInfectedComponent>(victim.Value, out var declinedInfected) &&
+                declinedInfected.SpawnedLarva is { } declinedSpawned)
+            {
+                _larvaQueue.TryClaimQueueable(declinedSpawned);
+            }
+
             return;
         }
 

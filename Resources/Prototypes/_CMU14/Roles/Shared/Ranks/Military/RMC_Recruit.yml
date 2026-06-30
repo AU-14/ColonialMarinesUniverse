@@ -1,0 +1,6 @@
+# enlisted
+- type: rank
+  id: RMC_Recruit
+  name: Recruit
+  prefix: Rct.
+  paygrade: E1

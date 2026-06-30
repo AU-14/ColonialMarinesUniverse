@@ -12,6 +12,7 @@ public sealed class AmbientSoundOverlay : Overlay
     private readonly IEntityManager _entManager;
     private readonly AmbientSoundSystem _ambient;
     private readonly EntityLookupSystem _lookup;
+    private readonly HashSet<EntityUid> _intersecting = new();
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
 
@@ -32,25 +33,31 @@ public sealed class AmbientSoundOverlay : Overlay
         const float Size = 0.25f;
         const float Alpha = 0.25f;
 
-        foreach (var ent in _lookup.GetEntitiesIntersecting(args.MapId, args.WorldBounds))
+        _intersecting.Clear();
+        _lookup.GetEntitiesIntersecting(args.MapId, args.WorldAABB, _intersecting);
+        foreach (var ent in _intersecting)
         {
             if (!ambientQuery.TryGetComponent(ent, out var ambientSound) ||
                 !xformQuery.TryGetComponent(ent, out var xform)) continue;
+
+            var worldPosition = xformSystem.GetWorldPosition(xform);
+            if (!args.WorldBounds.Contains(worldPosition))
+                continue;
 
             if (ambientSound.Enabled)
             {
                 if (_ambient.IsActive((ent, ambientSound)))
                 {
-                    worldHandle.DrawCircle(xformSystem.GetWorldPosition(xform), Size, Color.LightGreen.WithAlpha(Alpha * 2f));
+                    worldHandle.DrawCircle(worldPosition, Size, Color.LightGreen.WithAlpha(Alpha * 2f));
                 }
                 else
                 {
-                    worldHandle.DrawCircle(xformSystem.GetWorldPosition(xform), Size, Color.Orange.WithAlpha(Alpha));
+                    worldHandle.DrawCircle(worldPosition, Size, Color.Orange.WithAlpha(Alpha));
                 }
             }
             else
             {
-                worldHandle.DrawCircle(xformSystem.GetWorldPosition(xform), Size, Color.Red.WithAlpha(Alpha));
+                worldHandle.DrawCircle(worldPosition, Size, Color.Red.WithAlpha(Alpha));
             }
         }
     }

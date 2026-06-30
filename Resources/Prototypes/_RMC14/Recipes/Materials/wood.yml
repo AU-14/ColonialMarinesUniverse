@@ -67,6 +67,14 @@
   doAfterTime: 1
   materialCost: 1
 
+- type: rmcConstruction
+  id: AU14CoffinBuild
+  name: wooden coffin
+  prototype: CMCoffin
+  doAfterTime: 5
+  materialCost: 10
+  skill: RMCSkillConstruction
+  requiredSkillLevel: 1
 
 - type: rmcConstruction
   id: RMCWoodenBarricadeBuild
@@ -82,3 +90,23 @@
   noRotate: true
   doAfterTime: 2
   materialCost: 5
+
+- type: rmcConstruction
+  id: AU14WoodenTableBuild
+  name: wooden table
+  prototype: RMCTablePartWood
+  noRotate: true
+  doAfterTime: 4
+  materialCost: 5
+  skill: RMCSkillConstruction
+  requiredSkillLevel: 1
+
+- type: rmcConstruction
+  id: AU14FancyWoodenTableBuild
+  name: fancy wooden table
+  prototype: RMCTablePartWoodFancy
+  noRotate: true
+  doAfterTime: 4
+  materialCost: 5
+  skill: RMCSkillConstruction
+  requiredSkillLevel: 1

@@ -1,0 +1,623 @@
+# ├──[ Common tongue ]───────────────────────────────────────────────┤
+- type: language
+  id: English
+  name: "English"
+  description: "The standard galactic English language."
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: GB
+  expectedVocabularySize: 150
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["uh", "er", "eh", "um", "hmm", "ah", "oh", "th", "sha", "cha", "bra", "gra", "kra", "tra", "dra", "bla", "pla", "fra", "sta", "ska", "cla", "cra", "pra", "thra", "stra", "ba", "be", "bi", "bo", "bu", "da", "de", "di", "do", "du", "fa", "fe", "fi", "fo", "fu", "ga", "ge", "gi", "go", "gu", "ka", "ke", "ki", "ko", "ku", "la", "le", "li", "lo", "lu", "ma", "me", "mi", "mo", "mu", "na", "ne", "ni", "no", "nu", "ra", "re", "ri", "ro", "ru", "ta", "te", "ti", "to", "tu", "va", "ve", "vi", "vo", "vu", "ing", "en", "ar", "el", "on", "an", "or", "dos", "yuar", "mek", "ina", "mai", "neam", "iz", "liak", "fut", "bol", "kar", "rod", "aria", "sud"]
+    maxSyllables: 3
+
+- type: language
+  id: Xeno
+  name: "Xenoish"
+  description: "The alien language of the Xenomorphs."
+  typefaceId: null
+  languageIcon:
+    sprite: /Textures/_RMC14/Actions/xeno_actions.rsi
+    state: queen_word
+  randomizeObfuscation: true
+  firstContactMeaning: language-Xeno-first-contact
+  expectedVocabularySize: 120
+  minimumRequiredLearnedWords: 20
+  learningRateMultiplier: 0.45
+  obfuscationMethod:
+    !type:XenoObfuscation
+    xenoSounds: ["sss", "Sss", "sSs", "ssS"]
+    garbleChars: ['~', '?', '*', '#', '¿', '§']
+    intensityMultiplier: 1.0
+  speechOverride:
+    speechSoundsOverride: Xenonid
+    chatTypeOverride: null
+    speechVerbOverrides: null
+    messageWrapOverrides: {}
+
+- type: language
+  id: Primitive
+  name: "Primitive"
+  description: "A primitive animal language made up of screeches, hoots, and emphatic gestures."
+  typefaceId: DefaultItalic
+  languageIcon:
+    sprite: /Textures/Mobs/Animals/monkey.rsi
+    state: monkey
+  expectedVocabularySize: 40
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ook", "eek", "aa", "hoo", "ooka", "kee", "rah", "ik", "uh", "chit", "grk", "skree", "brak", "chuk", "vrek", "grul", "skrit", "hrak", "krch", "shrk", "ootch", "braak", "gritch", "skrk"]
+    maxSyllables: 3
+
+- type: language
+  id: SignLanguage
+  name: "Sign Language"
+  description: "A visual language using hand gestures and body movements."
+  typefaceId: DefaultItalic
+  languageIcon: "/Textures/Interface/Default/Slots/hand_m.png"
+  canUseRadio: false
+  needsSpeech: false
+  needsLOS: true
+  expectedVocabularySize: 100
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["*open hand*", "*closed fist*", "*finger spell*", "*points left*", "*points right*", "*points forward*", "*points above*", "*points below*", "*moves hand upward*", "*moves hand downward*", "*circles hand*", "*repeats motion*", "*quick motion*", "*slow motion*", "*sharp gesture*", "*soft gesture*", "*two-handed sign*", "*one-handed sign*", "*hands together*", "*hands apart*", "*touches chest*", "*touches forehead*", "*indicates self*", "*indicates other*", "*marks location*", "*sets reference point*", "*raises eyebrows*", "*frowns slightly*", "*nods affirmation*", "*shakes head denial*", "*questions expression*", "*emphasizes sign*", "*negates meaning*", "*shows time marker*", "*shows past marker*", "*shows future marker*", "*shows warning*", "*shows agreement*", "*shows confusion*"]
+    maxSyllables: 1
+
+- type: language
+  id: TacticalSignLanguage
+  name: "Tactical Sign Language"
+  description: "A visual language using hand gestures and body movements."
+  typefaceId: DefaultItalic
+  languageIcon: "/Textures/Interface/Default/Slots/hand_m.png"
+  canUseRadio: false
+  needsSpeech: false
+  needsLOS: true
+  expectedVocabularySize: 100
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["*waves*", "*gestures*", "*points*", "*nods*", "*shakes head*", "*thumbs up*", "*claps*", "*motions*", "*indicates*", "*signals*"]
+    maxSyllables: 1
+
+- type: language
+  id: Latin
+  name: "Latin"
+  description: "An ancient Earth language."
+  typefaceId: DefaultItalic
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: VA
+  expectedVocabularySize: 110
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["tra", "tri", "tru", "cra", "cre", "cri", "cro", "fru", "fra", "fre", "gra", "gri", "glor", "pla", "ple", "pri", "pro", "blu", "bra", "str", "spr", "rex", "vox", "lux", "sol", "mar", "vin", "dom", "fer"]
+    maxSyllables: 3
+
+- type: language
+  id: Portuguese
+  name: "Portuguese"
+  description: "An old Earth language."
+  typefaceId: DefaultItalic
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: PT
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["lhão", "nhê", "chã", "brio", "grão", "três", "prão", "frão", "vão", "ção", "rê", "dê", "fla", "cro", "gri", "plu", "são", "mão", "nho", "lho", "qui", "gue", "ria", "rio", "mar", "sol", "lua", "bom", "bem", "lar"]
+    maxSyllables: 3
+
+- type: language
+  id: Spanish
+  name: "Spanish"
+  description: "An old Earth language."
+  typefaceId: DefaultItalic
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: ES
+  expectedVocabularySize: 120
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["el", "la", "de", "que", "los", "las", "por", "con", "una", "para", "bra", "dro", "gre", "flo", "cla", "gri", "plo", "fre", "blo", "dra", "glo", "tre", "vra", "ñe", "ño", "ña", "ñi", "ñó", "brá", "dró", "gré", "fló", "clá", "grí", "pló", "fré", "bló", "drá", "gló", "tré", "vrá", "co", "me", "ra", "to", "pe", "ro", "sa", "mo", "te", "bo", "ca", "fe", "li", "no", "se", "vi", "do", "gu", "le", "ma", "ri", "su", "ta", "ve"]
+    maxSyllables: 3
+
+- type: language
+  id: Arabic
+  name: "Arabic"
+  description: "An old Earth language."
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: SA
+  expectedVocabularySize: 135
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["al", "ah", "ba", "da", "fa", "ha", "ja", "ka", "la", "ma", "na", "ra", "sa", "ta", "wa", "ya", "ib", "ad", "ar", "in", "ash", "ayn", "din", "rah", "hak", "nur", "qal", "sul", "bar", "zah"]
+
+- type: language
+  id: French
+  name: "French"
+  description: "An old Earth language."
+  typefaceId: DefaultItalic
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: FR
+  expectedVocabularySize: 120
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["le", "de", "un", "ce", "ne", "se", "que", "qui", "son", "une", "vêur", "bônt", "plêux", "râis", "tôir", "mêux", "dâin", "lôir", "gêux", "pônt", "rêur", "bâin", "gôit", "vàis", "têur", "nàit", "fêux", "dôit", "crêt", "flèr", "grôt", "pânt", "bêux", "sônt", "lânt", "drêt"]
+    maxSyllables: 3
+
+- type: language
+  id: German
+  name: "German"
+  description: "An old Earth language."
+  typefaceId: DefaultBold
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: DE
+  expectedVocabularySize: 125
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["der", "die", "das", "ein", "ist", "und", "mit", "von", "auf", "für", "schlüng", "krächt", "blünd", "ström", "klönd", "schnölf", "zwäck", "blünft", "sprünk", "schnält", "krümp", "sträch", "knürf", "bröcht"]
+    maxSyllables: 3
+
+- type: language
+  id: Russian
+  name: "Russian"
+  description: "An old Earth language."
+  typefaceId: DefaultBold
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: RU
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["да", "нет", "что", "как", "где", "кто", "все", "это", "был", "она", "строк", "вреж", "прок", "трел", "бреск", "крош", "грез", "дров", "стрев", "врон", "прос", "здрек", "взлок", "вруж"]
+
+- type: language
+  id: Japanese
+  name: "Japanese"
+  description: "An old Earth language."
+  typefaceId: NotoSansDisplay
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: JP
+  expectedVocabularySize: 140
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ka", "ri", "to", "mi", "ha", "so", "na", "mo", "shi", "re", "te", "ku", "ne", "ru", "ko", "su", "ni", "ma", "ro", "yu"]
+    minSyllables: 2
+    maxSyllables: 5
+
+- type: language
+  id: Mandarin
+  name: "Mandarin"
+  description: "An old Earth language."
+  typefaceId: NotoSansDisplay
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: CN
+  expectedVocabularySize: 140
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["nǐ", "hǎo", "shì", "de", "wǒ", "men", "zhè", "nà", "ma", "le", "qǐng", "xiè", "zài", "guó", "míng", "dōng", "tíng", "fēng", "píng", "zhōng", "chéng", "shēng", "bīng", "táng", "kōng", "qīng", "ráng", "páng", "líng", "děng", "tóng", "fāng"]
+
+- type: language
+  id: Binary
+  name: "Binary"
+  description: "The machine language of 1s and 0s."
+  expectedVocabularySize: 50
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: unknown # TODO: binary icon
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111"]
+    minSyllables: 2
+    maxSyllables: 6
+
+- type: language
+  id: Legalese
+  name: "Legalese"
+  description: "High-corporate elitist jargon."
+  expectedVocabularySize: 90
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: EU # TODO: law icon
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["here", "to", "fore", "with", "in", "af", "ter", "un", "der", "pur", "su", "ant", "not", "stand", "ing", "claus", "breach", "li", "a", "bil", "ty", "war", "ran", "tee", "cov", "en", "ant", "sever", "a", "ble", "ment", "tion", "ju", "ris", "dic", "tion", "ar", "bi", "tra", "tion", "com", "ply", "ance", "dis", "pute", "set", "tle", "ment", "pro", "vi", "sion", "clause", "sub", "sec", "tion", "par", "a", "graph", "ex", "hib", "it", "sched", "ule", "an", "nex", "amend", "ment", "waiv", "er", "in", "demn", "ty", "hold", "harm", "less", "force", "ma", "jeure"]
+
+# ├──[ Threats ]─────────────────────────────────────────────────────┤
+- type: language
+  id: Yautja
+  name: "Yautja"
+  description: "An ancient alien language."
+  typefaceId: DefaultBold
+  hideLanguageIcon: true
+  hideLanguageName: true
+  firstContactMeaning: language-Yautja-first-contact
+  languageIcon:
+    sprite: /Textures/_CMU14/Yautja/mask.rsi
+    state: icon
+  expectedVocabularySize: 140
+  minimumRequiredLearnedWords: 40
+  learningRateMultiplier: 0.45
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["krrk", "rrk", "krk", "krr", "krkr"]
+    maxSyllables: 3
+
+- type: language
+  id: Arcturian
+  name: "Arcturian"
+  description: "An ancient alien language from the Arcturian colonies."
+  typefaceId: DefaultBold
+  firstContactMeaning: language-Arcturian-first-contact
+  languageIcon:
+    sprite: Objects/Weapons/Melee/bone_spear.rsi
+    state: spear
+  expectedVocabularySize: 150
+  minimumRequiredLearnedWords: 40
+  learningRateMultiplier: 0.45
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["kha", "zra", "vok", "thaal", "qir", "dra", "xen", "vak", "oru", "zhak", "kra", "neth", "sha", "vra", "ulk", "yrr", "kaal", "tor", "vek", "sai", "qor", "mra", "zhir", "tal", "xur", "gra", "uun", "hek", "raal", "vor", "krii", "drax", "shel", "mor", "tza", "vrak", "ael", "nyr", "ghel", "qaal", "zir", "threx", "kor", "ulv", "saar", "jek", "vii", "nahl", "xaar", "brax"]
+
+# ├──[ Alternative tongues ]─────────────────────────────────────────┤
+- type: language
+  id: Afrikaans
+  name: "Afrikaans"
+  description: "An old Earth language."
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: ZA
+  expectedVocabularySize: 105
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["blief", "kraaf", "groof", "snuif", "skoef", "triek", "vlof", "knoef", "snoer", "proef", "bruif", "kloef", "stroel", "vlam", "drief", "bloem", "skryf", "gryn", "zwak", "frak"]
+    maxSyllables: 3
+
+- type: language
+  id: Brazilian
+  name: "Brazilian"
+  description: "An old Earth language."
+  typefaceId: DefaultBold
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: BR
+  expectedVocabularySize: 140
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ih", "tá", "okay", "ser", "tu", "opa", "me", "de", "senhor", "senhora", "nome", "copo", "prato", "talher", "um", "tipo", "aquilo", "pessoa", "fulano", "oi", "ei", "e", "é", "ah", "tem", "algo", "bem", "mal", "legal", "illegal", "maldito", "maldita", "arma", "sim", "não", "talvez", "quem", "onde", "quando", "como", "porquê", "porque", "eu", "você", "ele", "ela", "nós", "eles", "amigo", "inimigo", "homem", "mulher", "criança", "chefe", "soldado", "médico", "comandante", "ajuda", "perigo", "cuidado", "pare", "vá", "vem", "fica", "espera", "olha", "escuta", "fala", "silêncio", "água", "comida", "casa", "porta", "chão", "céu", "terra", "fogo", "luz", "escuro", "noite", "dia", "agora", "depois", "antes", "aqui", "lá", "perto", "longe", "rápido", "devagar", "forte", "fraco", "bom", "ruim", "novo", "velho", "grande", "pequeno", "verdade", "mentira", "seguro", "morto", "vivo"]
+    minSyllables: 2
+
+- type: language
+  id: Ukrainian
+  name: "Ukrainian"
+  description: "An old Earth language."
+  typefaceId: DefaultBold
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: UA
+  expectedVocabularySize: 125
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ба", "ве", "ги", "жа", "зі", "кі", "ла", "ме", "но", "па", "ра", "ті", "хо", "чу", "ші", "їв", "єр", "ня", "льо", "врі", "при", "тре", "кри", "зна", "дро", "мле", "плі", "єв", "цю", "ря"]
+
+- type: language
+  id: Korean
+  name: "Korean"
+  description: "An old Earth language."
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: KR
+  expectedVocabularySize: 135
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ga", "na", "da", "ra", "ma", "ba", "sa", "ja", "cha", "ka", "ta", "pa", "ha", "gi", "ni", "ri", "mi", "bi", "si", "ji", "go", "no", "do", "ro", "mo", "bo", "so", "jo", "han", "min", "seok", "young", "dae", "gung", "hwa", "juk", "rim", "sang", "won", "guk", "jeong", "hyun", "kyung", "su", "yeon"]
+
+- type: language
+  id: Polish
+  name: "Polish"
+  description: "An old Earth language."
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: PL
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["szcze", "prze", "strze", "krze", "trze", "czar", "dźwi", "źre", "grze", "wrze", "brze", "pstr", "chrze", "sztr", "rzec", "kąt", "łom", "mrok", "żar", "śnie", "błysk", "grz", "prz", "str", "chr", "dźw", "źć", "ńk", "łk", "rz"]
+
+- type: language
+  id: Czech
+  name: "Czech"
+  description: "An old Earth language."
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: CZ
+  expectedVocabularySize: 115
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["čar", "šer", "řek", "třes", "dřev", "přes", "větr", "křik", "žár", "hlub", "střel", "pláš", "smrk", "břeh", "dům", "tich", "chřap", "škr", "řít", "věž", "pln", "křes", "dřím", "stín", "řad", "čel", "šum", "trn", "chrám", "věk"]
+
+- type: language
+  id: Turkish
+  name: "Turkish"
+  description: "An old Earth language."
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: TR
+  expectedVocabularySize: 120
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ba", "be", "bi", "bo", "bu", "ça", "çe", "çi", "ço", "çu", "da", "de", "di", "do", "du", "ka", "ke", "ki", "ko", "ku", "la", "le", "li", "lo", "lu", "ma", "me", "mi", "mo", "mu", "na", "ne", "ni", "no", "nu", "ra", "re", "ri", "ro", "ru", "sa", "se", "si", "so", "su", "ta", "te", "ti", "to", "tu", "ya", "ye", "yi", "yo", "yu", "ak", "ek", "ik", "ok", "uk", "ar", "er", "ir", "or", "ur", "lar", "ler", "dan", "den", "tan", "ten", "ver", "yok", "ama", "dur", "gel", "yağ", "kül", "kör", "mağa", "ör", "aç", "ac", "ağ", "ay", "şek", "şık", ök ]
+    maxSyllables: 3
+
+- type: language
+  id: Swahili
+  name: "Swahili"
+  description: "An old Earth language."
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: KE
+  expectedVocabularySize: 110
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ba", "bi", "bo", "bu", "da", "di", "du", "fa", "fi", "ga", "gi", "ha", "ka", "ki", "la", "li", "ma", "mi", "na", "ni", "pa", "pi", "ra", "ri", "sa", "si", "ta", "ti", "wa", "ya", "za", "cha", "chi", "nga", "ngi", "ngo", "mba", "mbi", "nda", "ndi", "nza", "nzi", "mwa", "mwe"]
+    minSyllables: 2
+    maxSyllables: 5
+
+- type: language
+  id: Italian
+  name: "Italian"
+  description: "An old Earth language."
+  typefaceId: DefaultItalic
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: IT
+  expectedVocabularySize: 125
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["tra", "tre", "tri", "tro", "tra", "fra", "fre", "fri", "fla", "fle", "gli", "gna", "sci", "spa", "spe", "sco", "sta", "ste", "sto", "pre", "pra", "bre", "bri", "cro", "cre", "glo", "gra", "ple", "plo"]
+    maxSyllables: 3
+
+- type: language
+  id: Irish
+  name: "Irish"
+  description: "An old Earth language."
+  typefaceId: DefaultItalic
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: IE
+  expectedVocabularySize: 95
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["bho", "dho", "fha", "gha", "mha", "tho", "bhra", "dhra", "ghra", "mhra", "shai", "slea", "croi", "brei", "froi", "droi", "glen", "brua", "clan", "trai", "finn", "dail", "rua", "lair", "muir", "sean", "oire", "caol", "brea", "nial"]
+    maxSyllables: 3
+
+- type: language
+  id: Finnish
+  name: "Finnish"
+  description: "An old Earth language."
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: FI
+  expectedVocabularySize: 110
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ta", "te", "ti", "to", "tu", "ka", "ke", "ki", "ko", "ku", "sa", "se", "si", "so", "su", "la", "le", "li", "lo", "lu", "mä", "nä", "pä", "rä", "vä", "ty", "sy", "hy", "lö", "kö", "ää", "ee", "ii", "uu", "äy", "öy", "vai", "kai", "suo", "maa"]
+    minSyllables: 2
+    maxSyllables: 5
+
+- type: language
+  id: Hungarian
+  name: "Hungarian"
+  description: "An old Earth language."
+  typefaceId: DefaultBold
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: HU
+  expectedVocabularySize: 115
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["gyo", "nya", "sza", "csa", "zsa", "dza", "dzsa", "tör", "bőr", "fő", "kő", "tű", "szép", "vár", "kér", "lát", "még", "nagy", "ház", "rét", "pén", "cső", "gyűr", "nyár", "köz", "zöld", "szél", "tűz", "ér", "fal"]
+    maxSyllables: 3
+
+- type: language
+  id: Albanian
+  name: "Albanian"
+  description: "An old Earth language."
+  typefaceId: DefaultItalic
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: AL
+  expectedVocabularySize: 90
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["dhe", "gja", "nje", "shi", "thë", "llë", "rrë", "zhë", "xhë", "bë", "kë", "më", "për", "sht", "ndr", "ngë", "gjë", "që", "vër", "dor", "mal", "gur", "det", "flam", "zem", "nat", "yll", "bard", "kuq", "lir"]
+    maxSyllables: 3
+
+- type: language
+  id: Serbian
+  name: "Serbian"
+  description: "An old Earth language."
+  typefaceId: DefaultBold
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: RS
+  expectedVocabularySize: 120
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ба", "ва", "га", "да", "ђа", "жа", "за", "ка", "ља", "на", "ња", "па", "ра", "са", "та", "ћа", "ча", "џа", "ша", "би", "ли", "ђи", "жи", "ки", "љи", "ми", "ни", "њи", "ри", "ћи", "бра", "дра", "гра", "вра", "здр", "шта", "чар", "жар", "њег", "љуб", "ћир"]
+
+- type: language
+  id: Lithuanian
+  name: "Lithuanian"
+  description: "An old Earth language."
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: LT
+  expectedVocabularySize: 100
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["tra", "tre", "tri", "kla", "kle", "kli", "pra", "pre", "pri", "žra", "žre", "gra", "gre", "gri", "bra", "bre", "bru", "šla", "šle", "šri", "vra", "vre", "sna", "sne", "plė", "krė", "drė", "žem", "lau", "dai"]
+
+- type: language
+  id: Dutch
+  name: "Dutch"
+  description: "An old Earth language."
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: NL
+  expectedVocabularySize: 120
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["sch", "scho", "schr", "vla", "vle", "gro", "dro", "bro", "kno", "kru", "zw", "stroom", "bloem", "druif", "pruif", "klei", "vrij", "dijk", "koen", "noord", "vaart", "veld", "wind", "zand", "rood", "goed", "huis", "kerk", "meer"]
+    maxSyllables: 3
+
+- type: language
+  id: Persian
+  name: "Persian"
+  description: "An old Earth language."
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: IR
+  expectedVocabularySize: 135
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ah", "ar", "az", "ba", "be", "dar", "del", "dor", "far", "gol", "jan", "kam", "kha", "mah", "mehr", "nar", "par", "rah", "sar", "shah", "shir", "tar", "yar", "zar", "ruz", "rang", "bar", "baz", "darya", "khur", "nav", "omid", "rosh", "sor"]
+
+- type: language
+  id: Hindi
+  name: "Hindi"
+  description: "An old Earth language."
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: IN
+  expectedVocabularySize: 135
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["a", "aa", "ba", "bha", "cha", "da", "dha", "ga", "ha", "ja", "ka", "kha", "la", "ma", "na", "pa", "pha", "ra", "sa", "sha", "ta", "tha", "va", "ya", "raj", "dev", "ram", "krish", "sur", "prem", "dhar", "kar", "nagar", "mandir", "shakti", "ganga", "chandra", "akash"]
+
+- type: language
+  id: Vietnamese
+  name: "Vietnamese"
+  description: "An old Earth language."
+  typefaceId: DefaultItalic
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: VN
+  expectedVocabularySize: 120
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ba", "bà", "bá", "bả", "ca", "cá", "cà", "cha", "chà", "da", "đà", "đi", "ga", "gì", "ha", "hà", "khi", "kia", "la", "là", "ma", "mà", "na", "nhà", "nga", "ngô", "pha", "phê", "qua", "ra", "rồi", "thà", "thì", "trà", "trên", "và", "vào", "với", "xưa", "yên"]
+
+- type: language
+  id: Indonesian
+  name: "Indonesian"
+  description: "An old Earth language."
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: ID
+  expectedVocabularySize: 115
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ba", "ca", "da", "ga", "ha", "ja", "ka", "la", "ma", "na", "pa", "ra", "sa", "ta", "wa", "ya", "nga", "ngi", "ngu", "mba", "nda", "ndi", "bri", "tri", "kri", "sri", "mau", "kau", "dia", "aku"]
+    minSyllables: 2
+    maxSyllables: 5
+
+- type: language
+  id: Filipino
+  name: "Filipino"
+  description: "An old Earth language."
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: PH
+  expectedVocabularySize: 110
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["na", "nga", "ng", "ang", "ka", "ma", "pa", "sa", "ta", "ba", "la", "ra", "ga", "wa", "ya", "ko", "mo", "po", "si", "ni", "ala", "aya", "aga", "ama", "asa", "ata"]
+    minSyllables: 2
+    maxSyllables: 5
+
+- type: language
+  id: Urdu
+  name: "Urdu"
+  description: "An old Earth language."
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: PK
+  expectedVocabularySize: 95
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["bá", "bí", "bó", "bẹ́", "dá", "dí", "dó", "dẹ́", "fá", "fí", "gá", "gí", "já", "jí", "ká", "kí", "kó", "kẹ́", "lá", "lí", "ló", "lẹ́", "má", "mí", "ná", "ní", "pá", "pí", "rá", "rí", "ṣá", "ṣí", "ṣó", "ṣẹ́", "tá", "tí", "wá", "wí", "yá", "yí"]
+    maxSyllables: 3
+
+- type: language
+  id: Yoruba
+  name: "Yoruba"
+  description: "An old Earth language."
+  typefaceId: DefaultItalic
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: NG
+  expectedVocabularySize: 95
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["bá", "bí", "bó", "bẹ́", "dá", "dí", "dó", "dẹ́", "fá", "fí", "gá", "gí", "já", "jí", "ká", "kí", "kó", "kẹ́", "lá", "lí", "ló", "lẹ́", "má", "mí", "ná", "ní", "pá", "pí", "rá", "rí", "ṣá", "ṣí", "ṣó", "ṣẹ́", "tá", "tí", "wá", "wí", "yá", "yí"]
+    maxSyllables: 3
+
+- type: language
+  id: Esperanto
+  name: "Esperanto"
+  description: "A constructed interlanguage."
+  typefaceId: DefaultItalic
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: PL
+  expectedVocabularySize: 100
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ĉa", "ĉe", "ĉi", "ĉo", "ĝa", "ĝe", "ĝo", "ĥa", "ĥo", "ĵa", "ĵe", "ĵo", "ŝa", "ŝe", "ŝo", "ŭa", "ŭe", "pra", "tra", "gra", "kri", "blu", "stel", "mond", "ling", "ver", "bon"]
+    maxSyllables: 3
+
+- type: language
+  id: Swedish
+  name: "Swedish"
+  description: "An old Earth language."
+  typefaceId: DefaultBold
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: SE
+  expectedVocabularySize: 140
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["de", "vin", "meg", "og", "vi", "en", "nei", "ing", "gen", "et", "pur", "ke", "er", "nei", "hjort", "tysk", "de", "kjae", "en", "stein", "ja", "ull", "sil", "pa", "hun", "kjo", "erg", "ba", "re", "ol", "kyll", "menn", "esk", "gul", "gronn", "natt", "makt", "to", "fi", "re", "dag", "god", "jul", "ild", "fem", "jeg", "deg", "bjor", "en", "russ", "land", "sve", "rig", "nor", "ge", "dan", "is"]
+    minSyllables: 2
+
+- type: language
+  id: Slovak
+  name: "Slovak"
+  description: "An old Earth language."
+  typefaceId: DefaultBold
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: SK
+  expectedVocabularySize: 140
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ah", "áno", "nie", "som", "si", "ja", "ty", "on", "ona", "my", "vy", "oni", "dobrý", "zlý", "malý", "veľký", "človek", "meno", "priateľ", "nepriateľ", "pán", "pani", "dom", "voda", "jedlo", "chlieb", "ruka", "oko", "hlava", "srdce", "deň", "noc", "svetlo", "tma", "oheň", "zem", "vzduch", "čas", "teraz", "potom", "kde", "kto", "čo", "ako", "prečo", "tam", "tu", "choď", "poď", "stoj", "čakaj", "pomoc", "nebezpečie", "zbraň", "vojna", "mier", "silný", "slabý", "rýchlo", "pomaly", "dobré", "zlé", "nový", "starý", "pravda", "lož", "vidím", "počujem", "hovorím", "rozumiem"]
+    minSyllables: 2
+
+- type: language
+  id: Romanian
+  name: "Romanian"
+  description: "An old Earth language."
+  typefaceId: DefaultBold
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/flags.rsi
+    state: RO
+  expectedVocabularySize: 140
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["ah", "da", "nu", "eu", "tu", "el", "ea", "noi", "voi", "ei", "bun", "rău", "mic", "mare", "om", "nume", "prieten", "dușman", "domn", "doamnă", "casă", "apă", "mâncare", "pâine", "mână", "ochi", "cap", "inimă", "zi", "noapte", "lumină", "întuneric", "foc", "pământ", "aer", "timp", "acum", "apoi", "unde", "cine", "ce", "cum", "de ce", "aici", "acolo", "mergi", "vino", "stai", "așteaptă", "ajutor", "pericol", "armă", "război", "pace", "puternic", "slab", "repede", "încet", "bine", "rău", "nou", "vechi", "adevăr", "minciună", "văd", "aud", "vorbesc", "înțeleg"]
+    minSyllables: 2

@@ -438,6 +438,7 @@ public sealed partial class ShuttleSystem
     /// </summary>
     private bool CheckShouldLog(EntityUid uid)
     {
-        return !(_impactedAt.ContainsKey(uid) && _gameTiming.CurTime < _impactedAt[uid] + _adminLogSpacing);
+        return !(_impactedAt.TryGetValue(uid, out var impactedAt) &&
+                 _gameTiming.CurTime < impactedAt + _adminLogSpacing);
     }
 }

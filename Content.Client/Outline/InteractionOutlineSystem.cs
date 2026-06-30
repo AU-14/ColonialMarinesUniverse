@@ -41,7 +41,13 @@ public sealed partial class InteractionOutlineSystem : EntitySystem
         base.Initialize();
 
         Subs.CVar(_configManager, CCVars.OutlineEnabled, SetCvarEnabled);
+        SubscribeLocalEvent<InteractionOutlineComponent, ComponentShutdown>(OnOutlineShutdown);
         UpdatesAfter.Add(typeof(SharedEyeSystem));
+    }
+
+    private void OnOutlineShutdown(Entity<InteractionOutlineComponent> ent, ref ComponentShutdown args)
+    {
+        ent.Comp.OnShutdown(ent.Owner);
     }
 
     public void SetCvarEnabled(bool cvarEnabled)

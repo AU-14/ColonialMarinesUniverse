@@ -112,6 +112,14 @@ public sealed partial class RMCMagneticSystem : EntitySystem
 
     private bool CanReturn(Entity<RMCMagneticItemComponent> ent, EntityUid user, out EntityUid magnetizer, out EntityUid? receivingItem, out string receivingContainer)
     {
+        if (!ent.Comp.NeedsMagneticField)
+        {
+            magnetizer = user;
+            receivingItem = null;
+            receivingContainer = "";
+            return true;
+        }
+
         var ev = new RMCMagnetizeItemEvent(user, ent.Owner, ent.Comp.MagnetizeToSlots, SlotFlags.OUTERCLOTHING | SlotFlags.POCKET);
         RaiseLocalEvent(user, ref ev);
 

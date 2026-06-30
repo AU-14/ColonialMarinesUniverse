@@ -194,12 +194,15 @@ public sealed partial class CMGunSystem : EntitySystem
         if (direction == Vector2.Zero)
             return;
 
+        var directionLength = direction.Length();
+        var normalized = direction / directionLength;
+
         // Check for a max range from the ShootAtFixedPointComponent. If defined, take the minimum between that and the calculated distance.
-        var baseDistance = ent.Comp.MaxFixedRange != null ? Math.Min(ent.Comp.MaxFixedRange.Value, direction.Length()) : direction.Length();
+        var baseDistance = ent.Comp.MaxFixedRange != null ? Math.Min(ent.Comp.MaxFixedRange.Value, directionLength) : directionLength;
 
         if (ent.Comp.AutoAimClosestObstacle)
         {
-            var ray = new CollisionRay(from.Position, direction.Normalized(), ((int)Physics.CollisionGroup.Impassable));
+            var ray = new CollisionRay(from.Position, normalized, ((int)Physics.CollisionGroup.Impassable));
             var hitResults = _physics.IntersectRay(from.MapId, ray, baseDistance, returnOnFirstHit: true);
             if (hitResults.TryFirstOrNull(out var hitResult) && hitResult is RayCastResults trueHit)
             {
@@ -208,7 +211,6 @@ public sealed partial class CMGunSystem : EntitySystem
         }
         // Get current time and normalize the vector for physics math.
         var time = _timing.CurTime;
-        var normalized = direction.Normalized();
 
         // Send each FiredProjectile with a PhysicsComponent off with the same Vector. Max
         foreach (var projectile in args.FiredProjectiles)

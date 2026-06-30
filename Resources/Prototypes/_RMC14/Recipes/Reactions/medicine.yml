@@ -301,8 +301,6 @@
 - type: reaction
   id: RMCMethylphenidate
   reactants:
-    RMCBlackGoo: # TODO RMC14 remove this later
-      amount: 0.5
     RMCMindbreakerToxin:
       amount: 1
     RMCHydrogen:
@@ -313,8 +311,6 @@
 - type: reaction
   id: RMCCitalopram
   reactants:
-    RMCBlackGoo: # TODO RMC14 remove this later
-      amount: 0.5
     RMCMindbreakerToxin:
       amount: 1
     RMCCarbon:
@@ -325,8 +321,6 @@
 - type: reaction
   id: RMCParoxetine
   reactants:
-    RMCBlackGoo: # TODO RMC14 remove this later
-      amount: 0.5
     RMCMindbreakerToxin:
       amount: 1
     RMCOxygen:

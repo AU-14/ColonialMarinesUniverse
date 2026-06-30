@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Content.Shared._RMC14.Aura;
 using Content.Shared._RMC14.Xenonids.Bulwark;
@@ -11,6 +13,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Maths;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
+using Robust.Shared.Spawners;
 
 namespace Content.IntegrationTests._RMC14;
 
@@ -215,17 +218,23 @@ public sealed class XenoBulwarkTest
 
             try
             {
-                var effectsBefore = CountPrototype(entMan, ShieldEffectPrototype);
+                var effectsBefore = GetPrototypeEntities(entMan, ShieldEffectPrototype);
 
                 RaiseEncasedPlates(entMan, xeno, encaseAction);
                 RaiseReflectiveShield(entMan, xeno, reflectAction);
+
+                var effectsAfter = GetPrototypeEntities(entMan, ShieldEffectPrototype);
+                effectsAfter.ExceptWith(effectsBefore);
+                var effect = effectsAfter.Single();
+                var reflectDuration = entMan.GetComponent<XenoBulwarkComponent>(xeno).ReflectDuration;
 
                 Assert.Multiple(() =>
                 {
                     Assert.That(entMan.TryGetComponent<AuraComponent>(xeno, out var aura), Is.True);
                     Assert.That(aura!.Color, Is.EqualTo(Color.Blue));
                     Assert.That(aura.OutlineWidth, Is.EqualTo(2));
-                    Assert.That(CountPrototype(entMan, ShieldEffectPrototype), Is.EqualTo(effectsBefore + 1));
+                    Assert.That(entMan.TryGetComponent<TimedDespawnComponent>(effect, out var despawn), Is.True);
+                    Assert.That(despawn!.Lifetime, Is.EqualTo(reflectDuration.TotalSeconds).Within(0.01f));
                 });
             }
             finally
@@ -357,16 +366,16 @@ public sealed class XenoBulwarkTest
         return entMan.GetComponent<DamageableComponent>(target).Damage.GetTotal().Float();
     }
 
-    private static int CountPrototype(IEntityManager entMan, string prototypeId)
+    private static HashSet<EntityUid> GetPrototypeEntities(IEntityManager entMan, string prototypeId)
     {
-        var count = 0;
+        var entities = new HashSet<EntityUid>();
         var query = entMan.EntityQueryEnumerator<MetaDataComponent>();
-        while (query.MoveNext(out _, out var metadata))
+        while (query.MoveNext(out var uid, out var metadata))
         {
             if (metadata.EntityPrototype?.ID == prototypeId)
-                count++;
+                entities.Add(uid);
         }
 
-        return count;
+        return entities;
     }
 }

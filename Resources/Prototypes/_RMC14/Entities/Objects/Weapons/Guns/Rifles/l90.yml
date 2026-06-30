@@ -202,7 +202,7 @@
           - RMCMagazineRifleL90DrumHEAP
           - RMCMagazineRifleL90DrumIncendiary
   - type: Clothing
-    sprite: _RMC14/Objects/Weapons/Guns/Rifles/L91.rsi
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/l91.rsi
   - type: Gun
     selectedMode: FullAuto
     availableModes:
@@ -588,7 +588,7 @@
       map: ["enum.GunVisualLayers.Mag"]
   - type: Appearance
   - type: RefillableByBulletBox
-    bulletType: RMCBoxBulletsRifleL90
+    bulletType: CMUBoxBulletsRifleSLR
 
 - type: entity
   parent: RMCMagazineRifleL90
@@ -616,7 +616,7 @@
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Appearance
   - type: RefillableByBulletBox
-    bulletType: RMCBoxBulletsRifleL90
+    bulletType: CMUBoxBulletsRifleSLR
 
 - type: entity
   parent: RMCMagazineRifleL90
@@ -645,7 +645,7 @@
       color: "#1F951F"
   - type: Appearance
   - type: RefillableByBulletBox
-    bulletType: RMCBoxBulletsRifleL90AP
+    bulletType: CMUBoxBulletsRifleSLRAP
 
 - type: entity
   parent: RMCMagazineRifleL90AP
@@ -675,7 +675,7 @@
       color: "#1F951F"
   - type: Appearance
   - type: RefillableByBulletBox
-    bulletType: RMCBoxBulletsRifleL90AP
+    bulletType: CMUBoxBulletsRifleSLRAP
 
 - type: entity
   parent: RMCMagazineRifleL90

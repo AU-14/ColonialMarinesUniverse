@@ -17,3 +17,13 @@
   materialCost: 10
   skill: RMCSkillConstruction
   requiredSkillLevel: 1
+
+- type: rmcConstruction
+  id: CMU14MultiZLadderBuild
+  name: multi-z ladder
+  prototype: CMUDeployableZLevelLadder
+  noRotate: true
+  doAfterTime: 10
+  materialCost: 25
+  skill: RMCSkillConstruction
+  requiredSkillLevel: 3

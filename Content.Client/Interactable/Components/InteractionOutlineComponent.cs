@@ -16,7 +16,8 @@ namespace Content.Client.Interactable.Components
         private const float DefaultWidth = 1;
 
         private bool _inRange;
-        private ShaderInstance? _shader;
+        private ShaderInstance? _inRangeShader;
+        private ShaderInstance? _outOfRangeShader;
         private int _lastRenderScale;
 
         public void OnMouseEnter(EntityUid uid, bool inInteractionRange, int renderScale)
@@ -25,9 +26,7 @@ namespace Content.Client.Interactable.Components
             _inRange = inInteractionRange;
             if (_entMan.TryGetComponent(uid, out SpriteComponent? sprite) && sprite.PostShader == null)
             {
-                // TODO why is this creating a new instance of the outline shader every time the mouse enters???
-                _shader = MakeNewShader(inInteractionRange, renderScale);
-                sprite.PostShader = _shader;
+                sprite.PostShader = GetShader(inInteractionRange, renderScale);
             }
         }
 
@@ -35,35 +34,54 @@ namespace Content.Client.Interactable.Components
         {
             if (_entMan.TryGetComponent(uid, out SpriteComponent? sprite))
             {
-                if (sprite.PostShader == _shader)
+                if (IsOutlineShader(sprite.PostShader))
                     sprite.PostShader = null;
                 sprite.RenderOrder = 0;
             }
-
-            _shader?.Dispose();
-            _shader = null;
         }
 
         public void UpdateInRange(EntityUid uid, bool inInteractionRange, int renderScale)
         {
             if (_entMan.TryGetComponent(uid, out SpriteComponent? sprite)
-                && sprite.PostShader == _shader
+                && IsOutlineShader(sprite.PostShader)
                 && (inInteractionRange != _inRange || _lastRenderScale != renderScale))
             {
                 _inRange = inInteractionRange;
                 _lastRenderScale = renderScale;
 
-                _shader = MakeNewShader(_inRange, _lastRenderScale);
-                sprite.PostShader = _shader;
+                sprite.PostShader = GetShader(_inRange, _lastRenderScale);
             }
         }
 
-        private ShaderInstance MakeNewShader(bool inRange, int renderScale)
+        public void OnShutdown(EntityUid uid)
         {
-            var shaderName = inRange ? ShaderInRange : ShaderOutOfRange;
+            OnMouseLeave(uid);
+            _inRangeShader?.Dispose();
+            _outOfRangeShader?.Dispose();
+            _inRangeShader = null;
+            _outOfRangeShader = null;
+        }
 
-            var instance = _prototypeManager.Index(shaderName).InstanceUnique();
+        private bool IsOutlineShader(ShaderInstance? shader)
+        {
+            return shader != null &&
+                   (ReferenceEquals(shader, _inRangeShader) ||
+                    ReferenceEquals(shader, _outOfRangeShader));
+        }
+
+        private ShaderInstance GetShader(bool inRange, int renderScale)
+        {
+            var instance = inRange
+                ? _inRangeShader ??= MakeNewShader(ShaderInRange)
+                : _outOfRangeShader ??= MakeNewShader(ShaderOutOfRange);
+
             instance.SetParameter("outline_width", DefaultWidth * renderScale);
+            return instance;
+        }
+
+        private ShaderInstance MakeNewShader(ProtoId<ShaderPrototype> shaderName)
+        {
+            var instance = _prototypeManager.Index(shaderName).InstanceUnique();
             return instance;
         }
     }

@@ -1,0 +1,4 @@
+- type: loadout
+  id: PouchCommandFillRightAU14
+  equipment:
+    pocket2: AU14PouchCommandFill

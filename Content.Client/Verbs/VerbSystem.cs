@@ -36,6 +36,7 @@ namespace Content.Client.Verbs
         [Dependency] private EntityLookupSystem _lookup = default!;
 
         private float _lookupSize;
+        private readonly HashSet<EntityUid> _containedLookup = new();
 
         private static readonly ProtoId<TagPrototype> HideContextMenuTag = "HideContextMenu";
 
@@ -127,7 +128,9 @@ namespace Content.Client.Verbs
                 // with a large sprite aabb, but small broadphase might appear in the menu, but have its children added
                 // by this.
                 var flags = LookupFlags.All & ~LookupFlags.Sensors;
-                foreach (var e in _lookup.GetEntitiesInRange(targetPos, _lookupSize, flags: flags))
+                _containedLookup.Clear();
+                _lookup.GetEntitiesInRange(targetPos.MapId, targetPos.Position, _lookupSize, _containedLookup, flags);
+                foreach (var e in _containedLookup)
                 {
                     if (!entities.Contains(e))
                         entities.Add(e);

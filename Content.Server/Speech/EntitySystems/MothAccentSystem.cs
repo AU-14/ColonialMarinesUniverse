@@ -3,11 +3,8 @@ using Content.Server.Speech.Components;
 
 namespace Content.Server.Speech.EntitySystems;
 
-public sealed class MothAccentSystem : EntitySystem
+public sealed partial class MothAccentSystem : EntitySystem
 {
-    private static readonly Regex RegexLowerBuzz = new Regex("z{1,3}");
-    private static readonly Regex RegexUpperBuzz = new Regex("Z{1,3}");
-
     public override void Initialize()
     {
         base.Initialize();
@@ -19,10 +16,14 @@ public sealed class MothAccentSystem : EntitySystem
         var message = args.Message;
 
         // buzzz
-        message = RegexLowerBuzz.Replace(message, "zzz");
+        message = LowerBuzzRegex.Replace(message, "zzz");
         // buZZZ
-        message = RegexUpperBuzz.Replace(message, "ZZZ");
+        message = UpperBuzzRegex.Replace(message, "ZZZ");
 
         args.Message = message;
     }
+
+    private static readonly Regex LowerBuzzRegex = new("z{1,3}");
+
+    private static readonly Regex UpperBuzzRegex = new("Z{1,3}");
 }

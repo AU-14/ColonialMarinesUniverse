@@ -1,5 +1,5 @@
 - type: entity
-  parent: CMClosetBase
+  parent: CrateCoffin
   id: CMCoffin
   name: coffin
   description: It's a burial receptacle for the dearly departed.

@@ -14,7 +14,7 @@ using Content.Shared._RMC14.Intel;
 using Content.Shared.AU14.Objectives.Fetch;
 using Content.Shared.AU14.Objectives.Interact;
 using Content.Shared.AU14.Objectives.Kill;
-using Content.Shared.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Mobs.Components;
 using Robust.Shared.Prototypes; // added for prototype lookups
@@ -143,7 +143,7 @@ public sealed partial class AuObjectiveSystem : AuSharedObjectiveSystem
         else
         {
             var factionKey = component.Faction.ToLowerInvariant();
-            if (!component.FactionStatuses.ContainsKey(factionKey) || component.FactionStatuses[factionKey] !=
+            if (!component.FactionStatuses.TryGetValue(factionKey, out var status) || status !=
                 AuObjectiveComponent.ObjectiveStatus.Completed)
             {
                 // Use the assigned faction for non-neutral objectives
@@ -338,7 +338,7 @@ public sealed partial class AuObjectiveSystem : AuSharedObjectiveSystem
         ThreatPrototype? currentThreat = null;
         var auRoundSystem = _entityManager.EntitySysManager.GetEntitySystem<Content.Server.AU14.Round.AuRoundSystem>();
         if (auRoundSystem != null)
-            currentThreat = auRoundSystem._selectedthreat;
+            currentThreat = auRoundSystem.SelectedThreat;
         switch (factionLower)
         {
             case "govfor":
@@ -448,8 +448,8 @@ public sealed partial class AuObjectiveSystem : AuSharedObjectiveSystem
 
         if (objective.FactionNeutral)
         {
-            if (!objective.FactionStatuses.ContainsKey(factionKey) ||
-                objective.FactionStatuses[factionKey] != AuObjectiveComponent.ObjectiveStatus.Incomplete)
+            if (!objective.FactionStatuses.TryGetValue(factionKey, out var status) ||
+                status != AuObjectiveComponent.ObjectiveStatus.Incomplete)
                 return;
 
             objective.FactionStatuses[factionKey] = AuObjectiveComponent.ObjectiveStatus.Completed;

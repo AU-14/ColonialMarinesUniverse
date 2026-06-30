@@ -45,6 +45,9 @@ namespace Content.Shared._RMC14.Xenonids.Neurotoxin;
 
 public abstract partial class SharedNeurotoxinSystem : EntitySystem
 {
+    private static readonly string[] ModerateNeuroMessages = ["rmc-neuro-very-numb", "rmc-neuro-erratic", "rmc-neuro-panic"];
+    private static readonly string[] SevereNeuroMessages = ["rmc-neuro-pain", "rmc-neuro-agh", "rmc-neuro-so-numb", "rmc-neuro-limbs", "rmc-neuro-think"];
+
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
@@ -297,25 +300,27 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
                 continue;
             }
 
-            List<(NeuroHallucinations, int, TimeSpan, EntityCoordinates?)> toRemove = new();
-            List<(NeuroHallucinations, int, TimeSpan, EntityCoordinates?)> toAdd = new();
-
-            foreach (var entry in hallu.Hallucinations)
+            for (var i = 0; i < hallu.Hallucinations.Count;)
             {
+                var entry = hallu.Hallucinations[i];
                 if (entry.Item3 > time)
+                {
+                    i++;
                     continue;
+                }
 
                 var newEntry = ProcessHallucination(uid, hallu, entry);
 
-                toRemove.Add(entry);
-
                 if (newEntry != null)
-                    toAdd.Add(newEntry.Value);
+                {
+                    hallu.Hallucinations[i] = newEntry.Value;
+                    i++;
+                }
+                else
+                {
+                    hallu.Hallucinations.RemoveAt(i);
+                }
             }
-
-            hallu.Hallucinations.RemoveAll(a => toRemove.Contains(a));
-
-            hallu.Hallucinations.AddRange(toAdd);
         }
 
     }
@@ -346,7 +351,7 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
             }
             else
             {
-                message = _random.Pick(new List<string> {"rmc-neuro-very-numb", "rmc-neuro-erratic", "rmc-neuro-panic"});
+                message = _random.Pick(ModerateNeuroMessages);
                 poptype = PopupType.MediumCaution;
             }
             coughChance = 0.10f;
@@ -375,7 +380,7 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
             }
             else
             {
-                message = _random.Pick(new List<string> { "rmc-neuro-pain", "rmc-neuro-agh", "rmc-neuro-so-numb", "rmc-neuro-limbs", "rmc-neuro-think"});
+                message = _random.Pick(SevereNeuroMessages);
                 poptype = PopupType.LargeCaution;
             }
             coughChance = 0.25f;

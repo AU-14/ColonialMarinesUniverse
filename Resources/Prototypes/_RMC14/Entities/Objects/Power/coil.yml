@@ -51,6 +51,14 @@
     materialComposition:
       CMSteel: 50
       CMGlass: 20
+  - type: RMCConstructionItem
+    buildable:
+    - AU14MakeShiftZipties
+  - type: UserInterface
+    interfaces:
+      enum.RMCConstructionUiKey.Key:
+        type: RMCConstructionBui
+
 
 - type: entity
   parent: RMCCableCoil

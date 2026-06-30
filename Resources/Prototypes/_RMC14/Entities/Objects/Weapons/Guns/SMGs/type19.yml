@@ -12,6 +12,8 @@
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Item
+    size: Normal
   - type: Clothing
     sprite: _RMC14/Objects/Weapons/Guns/SMGs/type19.rsi
   - type: Gun
@@ -125,7 +127,9 @@
     zeroVisible: false
     zeroOnlyOnEmpty: true
   - type: Appearance
-
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsSMGType19
+    
 - type: entity
   parent: CMMagazineRifleBase
   id: RMCMagazineSMGType19Drum
@@ -156,7 +160,9 @@
     zeroVisible: false
     zeroOnlyOnEmpty: true
   - type: Appearance
-
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsSMGType19
+    
 - type: entity
   parent: CMCartridge10x20mm
   id: RMCCartridge762x25mm

@@ -1,0 +1,52 @@
+- type: entity
+  id: AU14LanguageLearningPresetAll
+  name: All Languages Learning
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: LanguageLearningPreset
+    learnableLanguages:
+    - English
+    - SignLanguage
+    - TacticalSignLanguage
+    - Primitive
+#   - Xeno
+#   - Yautja
+#   - Arcturian
+    - Binary
+    - Latin
+    - Legalese
+    - Portuguese
+    - Spanish
+    - Arabic
+    - French
+    - German
+    - Russian
+    - Japanese
+    - Mandarin
+    - Korean
+    - Turkish
+    - Swahili
+    - Afrikaans
+    - Swedish
+    - Esperanto
+    - Ukrainian
+    - Polish
+    - Czech
+    - Italian
+    - Irish
+    - Finnish
+    - Hungarian
+    - Albanian
+    - Serbian
+    - Lithuanian
+    - Dutch
+    - Persian
+    - Hindi
+    - Vietnamese
+    - Indonesian
+    - Filipino
+    - Urdu
+    - Yoruba
+    - Brazilian
+    - Slovak
+    - Romanian

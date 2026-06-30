@@ -1,4 +1,5 @@
 using Content.Server.Chat.Managers;
+using Content.Server._CMU14.Language;
 using Content.Server.Electrocution;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Actions;
@@ -67,6 +68,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private XenoSystem _xeno = default!;
+    [Dependency] private CMUXenoLanguageSystem _xenoLanguage = default!;
 
     public override void Initialize()
     {
@@ -487,6 +489,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         ApplyHivebrokenRegen(target);
         ApplyHivebrokenSpeech(target, hivebreaker);
         ApplyHivebrokenName(target);
+        _xenoLanguage.RefreshEnglish(target);
 
         if (hivebreaker.AuthorizeTechOnConversion)
             EnsureComp<YautjaTechAuthorizedComponent>(target);
@@ -769,6 +772,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         RestoreHivebrokenRegen(target, thrall);
         RestoreHivebrokenSpeech(target, thrall);
         RestoreHivebrokenName(target, thrall);
+        _xenoLanguage.RefreshEnglish(target);
         _movement.RefreshMovementSpeedModifiers(target);
     }
 

@@ -182,7 +182,9 @@
       map: ["enum.GunVisualLayers.Mag"]
   - type: MagazineVisuals
     magState: mag
-
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsPistolType73
+    
 - type: entity
   parent: CMBaseMagazinePistol
   id: RMCMagazinePistolT74Impact

@@ -134,15 +134,10 @@ public sealed partial class XenoRoleSystem : EntitySystem
         if (HasComp<XenoMaturingComponent>(ent) || !TryComp<XenoRankNamesComponent>(ent, out var rankNamesComp))
             return;
 
-        LocId? rank = null;
-
-        if (rankNamesComp.RankNames.ContainsKey(ent.Comp.Rank))
-            rank = rankNamesComp.RankNames[ent.Comp.Rank];
-
-        if (rank == null)
+        if (!rankNamesComp.RankNames.TryGetValue(ent.Comp.Rank, out var rank))
             return;
 
-        args.AddModifier(rank.Value);
+        args.AddModifier(rank);
     }
 
     private void UpdateRank(EntityUid xeno, ICommonSession player, string jobId, HumanoidCharacterProfile profile)

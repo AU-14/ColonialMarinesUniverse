@@ -6,6 +6,8 @@ using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
 using Content.Shared._AU14.Marines.Roles.Chevrons;
+using Content.Shared._CMU14.Round.Roles;
+using Robust.Shared.GameObjects;
 
 // ReSharper disable CheckNamespace
 namespace Content.Shared.Roles;
@@ -106,4 +108,58 @@ public sealed partial class JobPrototype : IInheritingPrototype, ICMSpecific
     /// </summary>
     [DataField]
     public bool InheritAddComponentSpecials = false;
+
+    /// <summary>
+    /// Explicit round-side metadata used for AU14/CMU side routing.
+    /// </summary>
+    [DataField]
+    public RoundJobSide RoundSide { get; private set; } = RoundJobSide.None;
+
+    /// <summary>
+    /// Force key within the round side, such as GOVFOR, OPFOR, WYPMC, CMB, ICRC, or CLF.
+    /// </summary>
+    [DataField]
+    public string? RoundForce { get; private set; }
+
+    /// <summary>
+    /// Stable role family key, such as SquadRifleman or JuniorOfficer.
+    /// </summary>
+    [DataField]
+    public string? RoundRole { get; private set; }
+
+    /// <summary>
+    /// Reusable role profiles applied before <see cref="RoundComponents"/>.
+    /// Use this for faction/family defaults so individual job files only need their unique overlays.
+    /// </summary>
+    [DataField]
+    [AlwaysPushInheritance]
+    public List<ProtoId<RoundJobProfilePrototype>> RoundProfiles { get; private set; } = new();
+
+    /// <summary>
+    /// Job-local round components applied after shared round profiles.
+    /// Prefer this for one-off role data instead of creating a separate per-job profile prototype.
+    /// </summary>
+    [DataField]
+    [AlwaysPushInheritance]
+    public ComponentRegistry RoundComponents { get; private set; } = new();
+
+    /// <summary>
+    /// Job-local components applied when <see cref="RoundSide"/> matches the dictionary key.
+    /// </summary>
+    [DataField]
+    [AlwaysPushInheritance]
+    public Dictionary<string, ComponentRegistry> RoundSideComponents { get; private set; } = new();
+
+    /// <summary>
+    /// Job-local components applied when <see cref="RoundForce"/> matches the dictionary key.
+    /// </summary>
+    [DataField]
+    [AlwaysPushInheritance]
+    public Dictionary<string, ComponentRegistry> RoundForceComponents { get; private set; } = new();
+
+    /// <summary>
+    /// Whether <see cref="RoundComponents"/> replaces existing components when applied.
+    /// </summary>
+    [DataField]
+    public bool RoundComponentsRemoveExisting { get; private set; } = true;
 }

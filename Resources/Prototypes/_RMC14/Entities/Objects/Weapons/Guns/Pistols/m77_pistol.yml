@@ -125,7 +125,9 @@
       map: ["enum.GunVisualLayers.Mag"]
   - type: MagazineVisuals
     magState: base_ap
-
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsPistol9MMAP
+    
 - type: entity
   parent: CMBulletBase
   id: CMBulletPistolM77AP

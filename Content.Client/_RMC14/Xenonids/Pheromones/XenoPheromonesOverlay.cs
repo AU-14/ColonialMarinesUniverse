@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using System.Numerics;
 using Content.Shared._RMC14.Mobs;
 using Content.Shared._RMC14.Xenonids;
@@ -18,14 +17,15 @@ namespace Content.Client._RMC14.Xenonids.Pheromones;
 public sealed partial class XenoPheromonesOverlay : Overlay
 {
     private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
+    private static readonly ResPath PheromonesRsiPath = new("/Textures/_RMC14/Interface/xeno_pheromones_hud.rsi");
+    private static readonly Rsi RecoveryIcon = new(PheromonesRsiPath, "aura_recovery");
+    private static readonly Rsi WardingIcon = new(PheromonesRsiPath, "aura_warding");
+    private static readonly Rsi FrenzyIcon = new(PheromonesRsiPath, "aura_frenzy");
 
     [Dependency] private IEntityManager _entity = default!;
     [Dependency] private IPlayerManager _players = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IGameTiming _timing = default!;
-
-    private static readonly ImmutableArray<XenoPheromones> AllPheromones =
-        Enum.GetValues<XenoPheromones>().ToImmutableArray();
 
     private readonly ContainerSystem _container;
     private readonly SpriteSystem _sprite;
@@ -83,11 +83,7 @@ public sealed partial class XenoPheromonesOverlay : Overlay
         var sources = _entity.AllEntityQueryEnumerator<XenoActivePheromonesComponent, SpriteComponent, TransformComponent>();
         while (sources.MoveNext(out var uid, out var pheromones, out var sprite, out var xform))
         {
-            var emitting = pheromones.Pheromones;
-            var name = $"aura_{emitting.ToString().ToLowerInvariant()}";
-            var icon = new Rsi(new ResPath("/Textures/_RMC14/Interface/xeno_pheromones_hud.rsi"), name);
-
-            DrawIcon((uid, sprite, xform), in args, icon, scaleMatrix, rotationMatrix);
+            DrawIcon((uid, sprite, xform), in args, GetIcon(pheromones.Pheromones), scaleMatrix, rotationMatrix);
         }
 
         var leaders = _entity.AllEntityQueryEnumerator<HiveLeaderComponent, SpriteComponent, TransformComponent>();
@@ -100,14 +96,21 @@ public sealed partial class XenoPheromonesOverlay : Overlay
                 continue;
             }
 
-            var emitting = active.Pheromones;
-            var name = $"aura_{emitting.ToString().ToLowerInvariant()}";
-            var icon = new Rsi(new ResPath("/Textures/_RMC14/Interface/xeno_pheromones_hud.rsi"), name);
-
-            DrawIcon((uid, sprite, xform), in args, icon, scaleMatrix, rotationMatrix);
+            DrawIcon((uid, sprite, xform), in args, GetIcon(active.Pheromones), scaleMatrix, rotationMatrix);
         }
 
         handle.UseShader(null);
+    }
+
+    private static Rsi GetIcon(XenoPheromones pheromones)
+    {
+        return pheromones switch
+        {
+            XenoPheromones.Recovery => RecoveryIcon,
+            XenoPheromones.Warding => WardingIcon,
+            XenoPheromones.Frenzy => FrenzyIcon,
+            _ => RecoveryIcon,
+        };
     }
 
     private void DrawIcon(

@@ -3,7 +3,7 @@ using System.Net;
 using System.Numerics;
 using System.Threading.Tasks;
 using Content.Server.Announcements;
-using Content.Server.AU14.Threats;
+using Content.Server._CMU14.Threats;
 using Content.Server.RoundEnd;
 using Content.Server.Discord;
 using Content.Server.GameTicking.Events;
@@ -477,12 +477,17 @@ namespace Content.Server.GameTicking
             }
 
             DebugTools.AssertEqual(readyPlayers.Count, ReadyPlayerCount());
+            _sawmill.Info(
+                $"[RoundStart] Context: round={RoundId}, force={force}, readyPlayers={readyPlayers.Count}, lobbyEnabled={LobbyEnabled}, currentPreset={CurrentPreset?.ID ?? "null"}, preset={Preset?.ID ?? "null"}, auPreset={_auRoundSystem.SelectedPreset?.ID ?? "null"}, planet={_auRoundSystem.GetSelectedPlanet()?.MapId ?? "null"}, threat={_auRoundSystem.SelectedThreat?.ID ?? "null"}");
 
             // Just in case it hasn't been loaded previously we'll try loading it.
+            _sawmill.Debug("[RoundStart] Loading maps.");
             LoadMaps();
+            _sawmill.Debug($"[RoundStart] Map load complete. defaultMap={DefaultMap}");
             // map has been selected so update the lobby info text
             // applies to players who didn't ready up
             UpdateInfoText();
+            _sawmill.Debug("[RoundStart] Starting game preset rules.");
             StartGamePresetRules();
 
             RoundLengthMetric.Set(0);
@@ -492,16 +497,22 @@ namespace Content.Server.GameTicking
             var origReadyPlayers = readyPlayers.ToArray();
             if (!StartPreset(origReadyPlayers, force))
             {
+                _sawmill.Warning(
+                    $"[RoundStart] StartPreset returned false. round={RoundId}, readyPlayers={readyPlayers.Count}, force={force}, currentPreset={CurrentPreset?.ID ?? "null"}, preset={Preset?.ID ?? "null"}");
                 _startingRound = false;
                 return;
             }
 
             // MapInitialize *before* spawning players, our codebase is too shit to do it afterwards...
+            _sawmill.Debug($"[RoundStart] Initializing default map {DefaultMap}.");
             _map.InitializeMap(DefaultMap);
             _power.RecalculatePower();
+            _sawmill.Debug("[RoundStart] Spawning players.");
             SpawnPlayers(readyPlayers, readyPlayerProfiles, force);
             _roundStartDateTime = DateTime.UtcNow;
             RunLevel = GameRunLevel.InRound;
+            _sawmill.Info(
+                $"[RoundStart] Round entered InRound. round={RoundId}, defaultMap={DefaultMap}, joinedNormally={PlayersJoinedRoundNormally}");
 
             RoundStartTimeSpan = _gameTiming.CurTime;
             SendStatusToAll();
@@ -525,7 +536,8 @@ namespace Content.Server.GameTicking
                     return;
                 }
 
-                _sawmill.Error($"Exception caught while trying to start the round! Restarting round...");
+                _sawmill.Error(
+                    $"Exception caught while trying to start the round! Restarting round... round={RoundId}, runLevel={RunLevel}, currentPreset={CurrentPreset?.ID ?? "null"}, preset={Preset?.ID ?? "null"}, auPreset={_auRoundSystem.SelectedPreset?.ID ?? "null"}, planet={_auRoundSystem.GetSelectedPlanet()?.MapId ?? "null"}, threat={_auRoundSystem.SelectedThreat?.ID ?? "null"}, defaultMap={DefaultMap}");
                 _runtimeLog.LogException(e, nameof(GameTicker));
                 // CMU debug: surface the exception to admin chat so we can diagnose prod-only round-start crashes.
                 _chatManager.SendAdminAlert($"[ROUND-START EXCEPTION] {e.GetType().Name}: {e.Message}\n{e.StackTrace}");

@@ -1,5 +1,5 @@
 using System.Linq;
-using Content.Server.AU14.ThirdParty;
+using Content.Server._CMU14.Ops.ThirdParty;
 using Content.Server.Chat.Systems;
 using Content.Server.Popups;
 using Content.Server.Radio;
@@ -7,7 +7,7 @@ using Content.Server.Radio.EntitySystems;
 using Content.Server.Stack;
 using Content.Shared.AU14.Ambassador;
 using Content.Shared.AU14.ColonyEconomy;
-using Content.Shared.AU14.Threats;
+using Content.Shared._CMU14.Threats;
 using Content.Shared._RMC14.Intel.Tech;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared.Stacks;
@@ -18,6 +18,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using ThirdPartySystem = Content.Server._CMU14.Ops.ThirdParty.ThirdPartySystem;
 
 namespace Content.Server.AU14.Ambassador;
 
@@ -27,7 +28,7 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     [Dependency] private IEntityManager _entities = default!;
     [Dependency] private StackSystem _stack = default!;
     [Dependency] private IPrototypeManager _proto = default!;
-    [Dependency] private AuThirdPartySystem _thirdParty = default!;
+    [Dependency] private ThirdPartySystem _thirdParty = default!;
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private RadioSystem _radio = default!;
     [Dependency] private IRobustRandom _random = default!;
@@ -336,7 +337,7 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         var thirdParties = new Dictionary<string, (string DisplayName, float Cost)>();
         foreach (var (id, cost) in comp.CallableParties)
         {
-            if (_proto.TryIndex<AuThirdPartyPrototype>(id, out var proto))
+            if (_proto.TryIndex<ThirdPartyPrototype>(id, out var proto))
             {
                 var displayName = proto.DisplayName ?? proto.ID;
                 thirdParties[id] = (displayName, cost);
@@ -378,7 +379,7 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         if (!comp.CallableParties.TryGetValue(msg.ThirdPartyId, out var cost)) return;
         if (comp.CalledParties.Contains(msg.ThirdPartyId)) return;
         if (comp.Budget < cost) return;
-        if (!_proto.TryIndex<AuThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto)) return;
+        if (!_proto.TryIndex<ThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto)) return;
         if (!_proto.TryIndex(partyProto.PartySpawn, out var spawnProto)) return;
         if (!_thirdParty.SpawnThirdParty(partyProto, spawnProto, false))
         {

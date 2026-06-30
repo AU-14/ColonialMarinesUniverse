@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Numerics;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Emote;
@@ -35,6 +34,12 @@ public sealed partial class XenoScissorCutSystem : EntitySystem
     [Dependency] private SharedRMCMeleeWeaponSystem _rmcMelee = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private TurfSystem _turf = default!;
+
+    private readonly HashSet<EntityUid> _areaHits = new();
+    private readonly List<EntityUid> _destructibles = new();
+    private readonly List<EntityUid> _mobs = new();
+    private readonly List<EntityUid> _colorFlashTargets = new(1);
+
     public override void Initialize()
     {
         SubscribeLocalEvent<XenoScissorCutComponent, XenoScissorCutActionEvent>(OnXenoScissorCutAction);
@@ -61,32 +66,38 @@ public sealed partial class XenoScissorCutSystem : EntitySystem
         var area = Box2.CenteredAround(xenoCoord.Position, new(1, xeno.Comp.Range)).Translated(new(0, (xeno.Comp.Range / 2) + 0.5f));
         var rot = new Box2Rotated(area, direction, xenoCoord.Position); // Correct the angle
 
-        List<EntityUid> destructibles = new();
-        List<EntityUid> mobs = new();
+        _destructibles.Clear();
+        _mobs.Clear();
 
         if (_net.IsClient)
             return;
 
-        foreach (var ent in _lookup.GetEntitiesIntersecting(Transform(xeno).MapID, rot, LookupFlags.Dynamic | LookupFlags.Static))
+        _areaHits.Clear();
+        _lookup.GetEntitiesIntersecting(gridId, rot, _areaHits, LookupFlags.Dynamic | LookupFlags.Static);
+        foreach (var ent in _areaHits)
         {
             if (HasComp<DamageOnXenoScissorsComponent>(ent) || HasComp<DestroyOnXenoPierceScissorComponent>(ent))
             {
-                destructibles.Add(ent);
+                _destructibles.Add(ent);
                 continue;
             }
 
             if (!_xeno.CanAbilityAttackTarget(xeno, ent, false, true))
                 continue;
-            mobs.Add(ent);
+            _mobs.Add(ent);
         }
 
         var selfCoords = _transform.GetMoverCoordinates(xeno);
 
         //Have to sort so multi fence destruction happens in order
-        destructibles = destructibles.OrderBy(a =>
-        (selfCoords.TryDistance(EntityManager, a.ToCoordinates(), out var distance) ? distance : 10)).ToList();
+        _destructibles.Sort((a, b) =>
+        {
+            var aDistance = selfCoords.TryDistance(EntityManager, a.ToCoordinates(), out var distanceA) ? distanceA : 10;
+            var bDistance = selfCoords.TryDistance(EntityManager, b.ToCoordinates(), out var distanceB) ? distanceB : 10;
+            return aDistance.CompareTo(bDistance);
+        });
 
-        foreach (var des in destructibles)
+        foreach (var des in _destructibles)
         {
             if (!_interaction.InRangeUnobstructed(xeno.Owner, des, xeno.Comp.Range + 0.5f))
                 continue;
@@ -98,7 +109,7 @@ public sealed partial class XenoScissorCutSystem : EntitySystem
                 if (dam?.GetTotal() > FixedPoint2.Zero)
                 {
                     var filter = Filter.Pvs(des, entityManager: EntityManager).RemoveWhereAttachedEntity(o => o == xeno.Owner);
-                    _colorFlash.RaiseEffect(Color.Red, new List<EntityUid> { des }, filter);
+                    RaiseColorFlash(des, filter);
                 }
 
                 continue;
@@ -119,7 +130,7 @@ public sealed partial class XenoScissorCutSystem : EntitySystem
 
         //Now mobs
         EntityUid? hitEnt = null;
-        foreach (var victim in mobs)
+        foreach (var victim in _mobs)
         {
             if (!_interaction.InRangeUnobstructed(xeno.Owner, victim, xeno.Comp.Range + 0.5f))
                 continue;
@@ -132,7 +143,7 @@ public sealed partial class XenoScissorCutSystem : EntitySystem
             if (change?.GetTotal() > FixedPoint2.Zero)
             {
                 var filter = Filter.Pvs(victim, entityManager: EntityManager).RemoveWhereAttachedEntity(o => o == xeno.Owner);
-                _colorFlash.RaiseEffect(Color.Red, new List<EntityUid> { victim }, filter);
+                RaiseColorFlash(victim, filter);
             }
 
             SpawnAttachedTo(xeno.Comp.AttackEffect, victim.ToCoordinates());
@@ -159,5 +170,12 @@ public sealed partial class XenoScissorCutSystem : EntitySystem
 
             SpawnAtPosition(spawn, _turf.GetTileCenter(tile));
         }
+    }
+
+    private void RaiseColorFlash(EntityUid target, Filter filter)
+    {
+        _colorFlashTargets.Clear();
+        _colorFlashTargets.Add(target);
+        _colorFlash.RaiseEffect(Color.Red, _colorFlashTargets, filter);
     }
 }

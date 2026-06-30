@@ -80,6 +80,13 @@
     layers:
     - state: alive
       shader: ""
+  - type: Language
+    spokenLanguages:
+    - Xeno
+    understoodLanguages:
+    - Xeno
+    currentLanguage: Xeno
+    defaultLanguage: Xeno
   - type: Speech
     speechSounds: Xenonid
 
