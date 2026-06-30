@@ -4,9 +4,27 @@
 using System;
 using System.Collections.Generic;
 using Robust.Shared.Map;
+using Robust.Shared.Network;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._AU14.SavedBuilds;
+
+/// <summary>
+/// Which selection/placement ruleset a saved-build action runs under. The server re-validates the caller's
+/// admin flags for any privileged mode, so a client asking for a mode it isn't authorized for is rejected.
+/// </summary>
+[Serializable, NetSerializable]
+public enum BuildSaveMode : byte
+{
+    /// <summary>Default. Select only entities you (or a build partner) built; place via costed construction ghosts.</summary>
+    Player = 0,
+
+    /// <summary>Admin (AdminFlags.Spawn): same player-built selection rules, but instant + free placement.</summary>
+    Admin = 1,
+
+    /// <summary>Mapper (AdminFlags.Mapping): select ANY world entity (map-placed, admin-spawned, anything) and place instantly + free.</summary>
+    Mapper = 2,
+}
 
 /// <summary>
 /// A square tile-range box used to select build entities. <see cref="Radius"/> is the half-extent in
@@ -38,6 +56,9 @@ public struct BuildSelectionData
 public sealed class RequestBuildSelectionEvent : EntityEventArgs
 {
     public BuildSelectionData Selection;
+
+    /// <summary>Which selection ruleset to resolve under (re-validated server-side against the caller's flags).</summary>
+    public BuildSaveMode Mode;
 }
 
 /// <summary>Server -> client: the resolved, whitelisted entities to highlight.</summary>
@@ -53,6 +74,9 @@ public sealed class RequestSaveBuildEvent : EntityEventArgs
 {
     public string Name = string.Empty;
     public BuildSelectionData Selection;
+
+    /// <summary>Which selection ruleset to save under (re-validated server-side against the caller's flags).</summary>
+    public BuildSaveMode Mode;
 }
 
 /// <summary>One entity in a build's placement preview: prototype + position relative to the anchor.</summary>
@@ -120,6 +144,40 @@ public sealed class RequestDeleteSavedBuildEvent : EntityEventArgs
 /// </summary>
 [Serializable, NetSerializable]
 public sealed class RequestOpenSavedBuildsFolderEvent : EntityEventArgs;
+
+// -------------------------------------------------------------------------
+// Build partners (the "Partners" menu button). A partner you add may include
+// YOUR built entities in THEIR saved builds. One-directional, round-scoped.
+// -------------------------------------------------------------------------
+
+/// <summary>Client -> server: send me the list of online players and whether each is currently my partner.</summary>
+[Serializable, NetSerializable]
+public sealed class RequestBuildPartnerListEvent : EntityEventArgs;
+
+/// <summary>One online player in the partner-management window.</summary>
+[Serializable, NetSerializable]
+public struct BuildPartnerInfo
+{
+    public NetUserId User;
+    public string Name;
+    /// <summary>True if this player is currently allowed to include the viewer's builds.</summary>
+    public bool IsPartner;
+}
+
+/// <summary>Server -> client: the online players (minus the viewer) with their partner status.</summary>
+[Serializable, NetSerializable]
+public sealed class BuildPartnerListEvent : EntityEventArgs
+{
+    public List<BuildPartnerInfo> Players = new();
+}
+
+/// <summary>Client -> server: grant (<see cref="Add"/> true) or revoke a player's access to my builds.</summary>
+[Serializable, NetSerializable]
+public sealed class SetBuildPartnerEvent : EntityEventArgs
+{
+    public NetUserId Partner;
+    public bool Add;
+}
 
 /// <summary>Client -> server: place a saved build at <see cref="Target"/>, rotated by <see cref="Rotation"/> radians.</summary>
 [Serializable, NetSerializable]

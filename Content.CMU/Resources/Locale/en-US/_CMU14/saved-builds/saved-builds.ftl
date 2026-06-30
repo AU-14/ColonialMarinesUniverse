@@ -50,9 +50,17 @@ saved-build-deleted = Deleted that saved build.
 saved-build-error-delete = Failed to delete that saved build.
 saved-build-error-delete-notyours = You can only delete builds you saved. (Admins can delete any.)
 
-# Admin/Player build-mode toggle at the top of the construction menu.
+# Build-mode dropdown at the top of the construction menu.
 gmod-construction-menu-mode-admin = Building: Admin (instant)
 gmod-construction-menu-mode-player = Building: Player (ghosts)
+gmod-construction-menu-mode-mapper = Building: Mapper (any entity)
+
+# Build partners window (the "Partners" button).
+build-partner-window-title = Build Partners
+build-partner-window-desc = Add a player to let them include YOUR built items in their saved builds.
+build-partner-window-empty = No other players are online.
+build-partner-window-add = Add
+build-partner-window-remove = Remove
 
 # Placement controls hint (top-left).
 saved-build-controls-mode-admin = Mode: Admin (instant, free)

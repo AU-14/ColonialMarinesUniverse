@@ -2,10 +2,13 @@
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
 using System.Numerics;
+using Content.Server.Chat.Managers;
 using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.CameraShake;
+using Content.Shared.Administration.Logs;
 using Content.Shared.Damage;
+using Content.Shared.Database;
 using Content.Shared.FixedPoint;
 using Content.Shared.Popups;
 using Content.Shared.Throwing;
@@ -45,9 +48,15 @@ public sealed class ZCaveInSystem : EntitySystem
     [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private readonly IChatManager _chat = default!;
 
-    private static readonly TimeSpan ScanInterval = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan WarningTime = TimeSpan.FromSeconds(8);
+
+    // How often the (small) set of dirty + pending tiles is re-evaluated. This is NOT a full scan - it only
+    // touches tiles that an event flagged plus tiles already counting down, so it is cheap. The interval just
+    // bounds how often warnings advance toward collapse; the maintainer's "every 2s is fine" guidance applies.
+    private static readonly TimeSpan EvalInterval = TimeSpan.FromSeconds(1);
 
     // A triggered cavern collapse buries tiles a batch at a time so it is a big, sustained event.
     private static readonly TimeSpan CollapseStepInterval = TimeSpan.FromSeconds(0.15);
@@ -57,29 +66,73 @@ public sealed class ZCaveInSystem : EntitySystem
     /// <summary>Safety cap on how many tiles one cavern collapse may bury.</summary>
     private const int CollapseTileCap = 600;
 
-    /// <summary>How far around each player (in tiles) we evaluate roof stability - keeps the scan cheap.</summary>
-    private const int ScanRadius = 12;
-
     private static readonly Vector2i[] Cardinals =
     {
         new(1, 0), new(-1, 0), new(0, 1), new(0, -1),
     };
 
-    private TimeSpan _nextScan;
+    private TimeSpan _nextEval;
 
     private EntityQuery<MapGridComponent> _gridQuery;
+    private EntityQuery<ZGeneratedStoneComponent> _stoneQuery;
 
     public override void Initialize()
     {
         base.Initialize();
         _gridQuery = GetEntityQuery<MapGridComponent>();
+        _stoneQuery = GetEntityQuery<ZGeneratedStoneComponent>();
+
+        // Event-driven instead of polling: the ONLY thing that changes a cavern roof's stability is an anchored
+        // solid (mined rock / built or destroyed pillar) appearing or disappearing. Hook that and flag a small
+        // region dirty, rather than re-scanning every dug tile every second forever (the old TPS sink).
+        SubscribeLocalEvent<TransformComponent, AnchorStateChangedEvent>(OnAnchorChanged);
+    }
+
+    /// <summary>
+    /// An anchored entity on an underground stone level changed (a rock was mined away, or a pillar was built or
+    /// destroyed). Removing a solid can unstable nearby open tiles; adding one can stabilise them. Flag the tiles
+    /// within a roof span of it dirty so the next evaluation pass re-checks just those, not the whole level.
+    /// </summary>
+    private void OnAnchorChanged(EntityUid uid, TransformComponent xform, ref AnchorStateChangedEvent args)
+    {
+        // Only a solid being REMOVED (rock mined, pillar destroyed) can destabilise a roof. A solid being ADDED
+        // (a pillar built, rocks spawned by generation or during a burial) only ever stabilises, and that case is
+        // already handled by the periodic re-check of pending tiles - so ignore anchor-adds and avoid the churn.
+        if (args.Anchored)
+            return;
+
+        if (xform.MapUid is not { } mapUid || !_stoneQuery.TryComp(mapUid, out var stone))
+            return;
+
+        if (xform.GridUid is not { } gridUid || gridUid != stone.StoneGrid || !_gridQuery.TryComp(gridUid, out var grid))
+            return;
+
+        // Don't accumulate dirty tiles while the level is mid-collapse; that region is already being handled.
+        if (stone.CollapseQueue.Count > 0)
+            return;
+
+        var settings = GetSettings(mapUid);
+        var span = Math.Max(1, settings.MaxRoofSpan);
+        var tile = _map.TileIndicesFor(gridUid, grid, xform.Coordinates);
+
+        // The changed solid affects the roof of every open tile within a span of it (and the tile itself, which
+        // may have just become open). Diamond (Manhattan) neighbourhood matches HasSupportWithin's metric.
+        for (var dx = -span; dx <= span; dx++)
+        {
+            for (var dy = -span; dy <= span; dy++)
+            {
+                if (Math.Abs(dx) + Math.Abs(dy) <= span)
+                    stone.DirtyTiles.Add(tile + new Vector2i(dx, dy));
+            }
+        }
     }
 
     public override void Update(float frameTime)
     {
         var now = _timing.CurTime;
 
-        // Advance any in-progress cavern collapses every tick so the shake + rumble stay sustained.
+        // Advance any in-progress cavern collapses every tick so the shake + rumble stay sustained. This only does
+        // work for maps that are actually mid-collapse (CollapseQueue non-empty); the rest are skipped instantly.
         var collapseQuery = EntityQueryEnumerator<ZGeneratedStoneComponent>();
         while (collapseQuery.MoveNext(out var mapUid, out var stone))
         {
@@ -87,49 +140,54 @@ public sealed class ZCaveInSystem : EntitySystem
                 ProcessCollapse((mapUid, stone), now);
         }
 
-        if (now < _nextScan)
+        if (now < _nextEval)
             return;
 
-        _nextScan = now + ScanInterval;
+        _nextEval = now + EvalInterval;
 
-        var stoneQuery = EntityQueryEnumerator<ZGeneratedStoneComponent>();
-        while (stoneQuery.MoveNext(out var mapUid, out var stone))
+        // Re-evaluate ONLY the tiles an event flagged dirty plus the few already counting down toward collapse.
+        // A level with no dirty tiles and no pending warnings costs nothing here.
+        var evalQuery = EntityQueryEnumerator<ZGeneratedStoneComponent>();
+        while (evalQuery.MoveNext(out var mapUid, out var stone))
         {
-            ScanLevel((mapUid, stone));
+            EvaluateDirtyAndPending((mapUid, stone), now);
         }
     }
 
-    private void ScanLevel(Entity<ZGeneratedStoneComponent> stoneMap)
+    /// <summary>
+    /// Evaluates the dirty tiles (flagged by an anchor change) and the pending tiles (counting down) for one
+    /// underground level. This replaces the old "scan every dug tile every second" pass with an event-driven,
+    /// O(changed + pending) check.
+    /// </summary>
+    private void EvaluateDirtyAndPending(Entity<ZGeneratedStoneComponent> stoneMap, TimeSpan now)
     {
-        if (!_gridQuery.TryComp(stoneMap.Comp.StoneGrid, out var grid))
+        // Don't evaluate a level that is mid-collapse; the dirty flags are reconsidered once it settles.
+        if (stoneMap.Comp.CollapseQueue.Count > 0)
             return;
+
+        if (stoneMap.Comp.DirtyTiles.Count == 0 && stoneMap.Comp.PendingCollapse.Count == 0)
+            return;
+
+        if (!_gridQuery.TryComp(stoneMap.Comp.StoneGrid, out var grid))
+        {
+            stoneMap.Comp.DirtyTiles.Clear();
+            return;
+        }
 
         var settings = GetSettings(stoneMap.Owner);
         var span = Math.Max(1, settings.MaxRoofSpan);
         var chunkSize = Math.Max(2, settings.ChunkSize);
 
-        // Don't keep scanning a level that is mid-collapse.
-        if (stoneMap.Comp.CollapseQueue.Count > 0)
-            return;
+        // Candidate set = newly-changed tiles + tiles already counting down (so their warning can elapse into a
+        // real collapse, and so a tile shored up in time is cleared). Both sets are small.
+        var candidates = new HashSet<Vector2i>(stoneMap.Comp.DirtyTiles);
+        candidates.UnionWith(stoneMap.Comp.PendingCollapse.Keys);
+        stoneMap.Comp.DirtyTiles.Clear();
 
-        var now = _timing.CurTime;
-
-        // Evaluate every generated (dug) tile, not just tiles near a player - an over-mined cavern caves in
-        // whether or not anyone is standing there to see it. Cost scales with how much has been dug (the
-        // generated chunk set), not the whole map; solid tiles are rejected cheaply by EvaluateTile.
-        foreach (var chunk in stoneMap.Comp.GeneratedChunks)
+        foreach (var tile in candidates)
         {
-            var baseX = chunk.X * chunkSize;
-            var baseY = chunk.Y * chunkSize;
-            for (var dx = 0; dx < chunkSize; dx++)
-            {
-                for (var dy = 0; dy < chunkSize; dy++)
-                {
-                    var tile = new Vector2i(baseX + dx, baseY + dy);
-                    if (EvaluateTile(stoneMap, (stoneMap.Comp.StoneGrid, grid), tile, span, chunkSize, now))
-                        return; // a collapse just started; stop scanning this level this tick
-                }
-            }
+            if (EvaluateTile(stoneMap, (stoneMap.Comp.StoneGrid, grid), tile, span, chunkSize, now))
+                return; // a collapse just started; stop evaluating this level this pass
         }
     }
 
@@ -212,6 +270,15 @@ public sealed class ZCaveInSystem : EntitySystem
             return;
 
         var settings = GetSettings(stoneMap.Owner);
+
+        // Accountability: log the cave-in (location + size) and alert admins, attributing it to the nearest
+        // player on the level (the most likely over-miner). A whole cavern collapses as ONE event, so this fires
+        // once per cave-in, not per tile.
+        var originWorld = _transform.ToMapCoordinates(_map.GridTileToLocal(grid.Owner, grid.Comp, origin)).Position;
+        var culprit = DescribeNearestPlayer(stoneMap.Owner, originWorld);
+        _adminLog.Add(LogType.Action, LogImpact.High,
+            $"Underground cave-in started at {origin} on {ToPrettyString(stoneMap.Owner)} ({region.Count} tiles); likely caused by {culprit}.");
+        _chat.SendAdminAlert(Loc.GetString("au-cavein-admin-alert", ("count", region.Count), ("culprit", culprit)));
 
         // Before the roof buries the cavern, fling loose rocks and lay see-through fog for atmosphere.
         ThrowDebris(grid, region, settings);
@@ -531,4 +598,31 @@ public sealed class ZCaveInSystem : EntitySystem
     }
 
     private static int FloorDiv(int a, int b) => (int) Math.Floor((double) a / b);
+
+    /// <summary>
+    /// Best-effort attribution for an environmental collapse: the nearest player on <paramref name="mapUid"/> to
+    /// <paramref name="worldPos"/> (the most likely person responsible, e.g. the over-miner). Returns a pretty
+    /// string for logs, or a "no nearby player" note if the level is empty.
+    /// </summary>
+    private string DescribeNearestPlayer(EntityUid mapUid, Vector2 worldPos)
+    {
+        EntityUid? best = null;
+        var bestDist = float.MaxValue;
+
+        var query = EntityQueryEnumerator<ActorComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out _, out var xform))
+        {
+            if (xform.MapUid != mapUid)
+                continue;
+
+            var dist = (_transform.GetWorldPosition(uid) - worldPos).LengthSquared();
+            if (dist < bestDist)
+            {
+                bestDist = dist;
+                best = uid;
+            }
+        }
+
+        return best is { } b ? ToPrettyString(b).ToString() : "no nearby player";
+    }
 }

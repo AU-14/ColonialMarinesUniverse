@@ -2,6 +2,8 @@
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
 using System.Collections.Generic;
+using System.Linq;
+using Content.Shared._AU14.SavedBuilds;
 using Content.Shared.GameTicking;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
@@ -31,6 +33,44 @@ public sealed partial class BuildPartnerSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<GetVerbsEvent<Verb>>(OnGetVerbs);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => ClearGrants());
+        SubscribeNetworkEvent<RequestBuildPartnerListEvent>(OnRequestList);
+        SubscribeNetworkEvent<SetBuildPartnerEvent>(OnSetPartner);
+    }
+
+    /// <summary>Sends the requester the list of other online players and whether each is currently their partner.</summary>
+    private void OnRequestList(RequestBuildPartnerListEvent ev, EntitySessionEventArgs args)
+    {
+        var owner = args.SenderSession.UserId;
+        _grants.TryGetValue(owner, out var partners);
+
+        var list = new BuildPartnerListEvent();
+        foreach (var session in _playerManager.Sessions)
+        {
+            if (session.UserId == owner)
+                continue;
+
+            list.Players.Add(new BuildPartnerInfo
+            {
+                User = session.UserId,
+                Name = session.Name,
+                IsPartner = partners != null && partners.Contains(session.UserId),
+            });
+        }
+
+        list.Players = list.Players.OrderBy(p => p.Name, StringComparer.InvariantCultureIgnoreCase).ToList();
+        RaiseNetworkEvent(list, args.SenderSession);
+    }
+
+    /// <summary>The requester grants or revokes a player's access to the requester's own builds, then gets a fresh list.</summary>
+    private void OnSetPartner(SetBuildPartnerEvent ev, EntitySessionEventArgs args)
+    {
+        var owner = args.SenderSession.UserId;
+        if (ev.Add)
+            AddPartner(owner, ev.Partner);
+        else
+            RemovePartner(owner, ev.Partner);
+
+        OnRequestList(new RequestBuildPartnerListEvent(), args);
     }
 
     /// <summary>True if <paramref name="saver"/> may capture an entity built by <paramref name="builder"/>.</summary>

@@ -30,6 +30,12 @@ public sealed class BuildSaveModeSystem : EntitySystem
     public bool Active { get; private set; }
     public int Radius { get; private set; } = 2;
 
+    /// <summary>
+    /// Selection ruleset, set by the construction menu's build-mode dropdown. Mapper mode (re-validated
+    /// server-side) lets you select ANY world entity, not just things you built. Default is Player.
+    /// </summary>
+    public BuildSaveMode Mode { get; set; } = BuildSaveMode.Player;
+
     public readonly List<BuildSelectionBox> CommittedBoxes = new();
     public readonly HashSet<NetEntity> ManualAdds = new();
     public readonly HashSet<NetEntity> ManualRemoves = new();
@@ -134,6 +140,7 @@ public sealed class BuildSaveModeSystem : EntitySystem
         {
             Name = name,
             Selection = BuildSelection(includeLive: true),
+            Mode = Mode,
         });
         _window?.Close();
     }
@@ -188,7 +195,7 @@ public sealed class BuildSaveModeSystem : EntitySystem
         if (!Active)
             return;
 
-        RaiseNetworkEvent(new RequestBuildSelectionEvent { Selection = BuildSelection(includeLive: true) });
+        RaiseNetworkEvent(new RequestBuildSelectionEvent { Selection = BuildSelection(includeLive: true), Mode = Mode });
     }
 
     private BuildSelectionData BuildSelection(bool includeLive)

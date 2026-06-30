@@ -6,6 +6,7 @@ using System.Numerics;
 using Content.Client.Administration.Managers;
 using Content.Client.Construction;
 using Content.Shared._AU14.SavedBuilds;
+using Content.Shared.Administration;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Popups;
 using Robust.Client.GameObjects;
@@ -51,10 +52,11 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
     public bool GridAligned { get; private set; }
 
     /// <summary>
-    /// Set by the construction menu's Admin/Player toggle. When true, an admin places vanilla construction
-    /// ghosts (the player flow) instead of placing the build instantly & free.
+    /// Set by the construction menu's build-mode dropdown (Player / Admin / Mapper). Admin and Mapper both place
+    /// instantly &amp; free (re-validated server-side); Player places costed construction ghosts. The client only
+    /// ever lets you pick a mode you hold the flag for, and the server re-checks anyway.
     /// </summary>
-    public bool ForcePlayerMode { get; set; }
+    public BuildSaveMode Mode { get; set; } = BuildSaveMode.Player;
 
     private SavedBuildInfo _current;
     private BuildPlaceOverlay? _overlay;
@@ -95,8 +97,10 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
         _altWasDown = altDown;
     }
 
-    /// <summary>Whether this placement acts as the admin (instant/free) flow, honouring the menu mode toggle.</summary>
-    private bool UseAdminPlacement => _admin.IsAdmin() && !ForcePlayerMode;
+    /// <summary>Whether this placement acts as the instant/free flow (Admin or Mapper, with the matching flag).</summary>
+    private bool UseAdminPlacement =>
+        (Mode == BuildSaveMode.Admin && _admin.HasFlag(AdminFlags.Spawn)) ||
+        (Mode == BuildSaveMode.Mapper && _admin.HasFlag(AdminFlags.Mapping));
 
     public void BeginPlacement(SavedBuildInfo info)
     {

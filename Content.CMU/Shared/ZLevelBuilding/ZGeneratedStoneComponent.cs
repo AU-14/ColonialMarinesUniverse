@@ -25,6 +25,15 @@ public sealed partial class ZGeneratedStoneComponent : Component
     public readonly HashSet<Vector2i> GeneratedChunks = new();
 
     /// <summary>
+    /// Event-driven cave-in: tiles whose roof stability may have changed and need re-evaluating. Populated when
+    /// an anchored solid (mined rock, a built/destroyed pillar) changes on this level - the only thing that can
+    /// alter roof support. The system evaluates ONLY these tiles (plus already-pending ones) instead of scanning
+    /// every dug tile every tick, so an idle underground costs nothing. Drained each evaluation pass.
+    /// </summary>
+    [ViewVariables]
+    public readonly HashSet<Vector2i> DirtyTiles = new();
+
+    /// <summary>
     /// Underground cave-in scheduling: open tiles whose roof is unstable, mapped to the time they will collapse
     /// (8s after they first became unstable). Cleared if the player stabilises the tile (mines less / builds a
     /// pillar) before the timer elapses.

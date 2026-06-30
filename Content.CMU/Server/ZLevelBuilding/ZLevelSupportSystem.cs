@@ -2,10 +2,13 @@
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
 using System.Numerics;
+using Content.Server.Chat.Managers;
 using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.CameraShake;
+using Content.Shared.Administration.Logs;
 using Content.Shared.Damage;
+using Content.Shared.Database;
 using Content.Shared.FixedPoint;
 using Content.Shared.Popups;
 using Content.Shared.Throwing;
@@ -44,6 +47,13 @@ public sealed class ZLevelSupportSystem : EntitySystem
     [Dependency] private readonly RMCCameraShakeSystem _shake = default!;
     [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private readonly IChatManager _chat = default!;
+
+    // Per-map cooldown so a cascading floor collapse (many structures at once) logs/alerts admins once, not per
+    // tile. Maps the collapsing level -> the time after which the next collapse there alerts again.
+    private readonly Dictionary<EntityUid, TimeSpan> _nextCollapseAlert = new();
+    private static readonly TimeSpan CollapseAlertCooldown = TimeSpan.FromSeconds(3);
 
     /// <summary>Crash SFX when an unsupported structure caves in (guarded against a missing path).</summary>
     private static readonly SoundSpecifier CollapseSound = new SoundPathSpecifier("/Audio/Effects/explosion3.ogg");
@@ -324,6 +334,23 @@ public sealed class ZLevelSupportSystem : EntitySystem
         var coords = xform.Coordinates;
         var mapUid = xform.MapUid;
 
+        // Accountability: log the collapse and alert admins, attributing it to the nearest player on the level
+        // (most likely the one who knocked out the support below). Throttled per map so a whole floor caving in
+        // is one alert, not dozens.
+        if (mapUid is { } collapseMap)
+        {
+            var now = _timing.CurTime;
+            if (!_nextCollapseAlert.TryGetValue(collapseMap, out var next) || now >= next)
+            {
+                _nextCollapseAlert[collapseMap] = now + CollapseAlertCooldown;
+                var worldPos = _transform.ToMapCoordinates(coords).Position;
+                var culprit = DescribeNearestPlayer(collapseMap, worldPos);
+                _adminLog.Add(LogType.Action, LogImpact.High,
+                    $"Upper z-level collapse: {ToPrettyString(uid)} lost structural support on {ToPrettyString(collapseMap)}; likely caused by {culprit}.");
+                _chat.SendAdminAlert(Loc.GetString("au-zsupport-admin-alert", ("culprit", culprit)));
+            }
+        }
+
         PlayCollapseEffects(coords, mapUid);
 
         var belowMap = mapUid != null && _zMapQuery.TryComp(mapUid.Value, out var zMap) ? zMap.MapBelow : null;
@@ -496,6 +523,33 @@ public sealed class ZLevelSupportSystem : EntitySystem
             return true;
 
         return !_zMapQuery.TryComp(mapUid.Value, out var z) || z.Depth <= 0;
+    }
+
+    /// <summary>
+    /// Best-effort attribution for a collapse: the nearest player on <paramref name="mapUid"/> to
+    /// <paramref name="worldPos"/> (most likely the one who removed the support). Returns a pretty string for the
+    /// admin log / alert, or a "no nearby player" note if the level is empty.
+    /// </summary>
+    private string DescribeNearestPlayer(EntityUid mapUid, Vector2 worldPos)
+    {
+        EntityUid? best = null;
+        var bestDist = float.MaxValue;
+
+        var query = EntityQueryEnumerator<ActorComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out _, out var xform))
+        {
+            if (xform.MapUid != mapUid)
+                continue;
+
+            var dist = (_transform.GetWorldPosition(uid) - worldPos).LengthSquared();
+            if (dist < bestDist)
+            {
+                bestDist = dist;
+                best = uid;
+            }
+        }
+
+        return best is { } b ? ToPrettyString(b).ToString() : "no nearby player";
     }
 
     /// <summary>

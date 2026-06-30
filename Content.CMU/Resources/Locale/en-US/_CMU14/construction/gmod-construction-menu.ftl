@@ -13,3 +13,4 @@ gmod-construction-menu-steps = Steps
 gmod-construction-menu-tools = Tools
 gmod-construction-menu-construction = Construction
 gmod-construction-menu-advanced-duplicator = AdvancedAtkinsonatorv2
+gmod-construction-menu-partners = Partners

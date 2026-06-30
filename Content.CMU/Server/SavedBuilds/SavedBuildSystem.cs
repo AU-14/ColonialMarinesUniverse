@@ -10,6 +10,7 @@ using Content.Shared._AU14.SavedBuilds;
 using Content.Shared.Administration;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Robust.Server.Player;
 using Robust.Shared.ContentPack;
@@ -162,8 +163,9 @@ public sealed partial class SavedBuildSystem : EntitySystem
         if (session.AttachedEntity is not { } user || string.IsNullOrEmpty(id))
             return;
 
-        // Instant, free placement is the ADMIN version; non-admins use client-side construction ghosts.
-        if (!_adminManager.HasAdminFlag(session, AdminFlags.Spawn))
+        // Instant, free placement is the privileged version: admins (Spawn) or mappers (Mapping). Non-privileged
+        // players use client-side construction ghosts instead.
+        if (!_adminManager.HasAdminFlag(session, AdminFlags.Spawn) && !_adminManager.HasAdminFlag(session, AdminFlags.Mapping))
         {
             _popup.PopupEntity(Loc.GetString("saved-build-error-notadmin"), user, user);
             return;
@@ -369,7 +371,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
     private void OnRequestSelection(RequestBuildSelectionEvent ev, EntitySessionEventArgs args)
     {
-        var resolved = ResolveSelection(args.SenderSession, ev.Selection);
+        var resolved = ResolveSelection(args.SenderSession, ev.Selection, ev.Mode);
         RaiseNetworkEvent(new BuildSelectionResultEvent
         {
             Entities = resolved.Select(e => GetNetEntity(e)).ToList(),
@@ -378,18 +380,23 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
     private void OnRequestSave(RequestSaveBuildEvent ev, EntitySessionEventArgs args)
     {
-        SaveBuild(args.SenderSession, ev.Name, ev.Selection);
+        SaveBuild(args.SenderSession, ev.Name, ev.Selection, ev.Mode);
     }
 
     /// <summary>
-    /// Resolves a selection descriptor to the concrete set of whitelisted entities the given player
-    /// may save: anything they (or someone who partnered them) built that falls in a selection box or
-    /// was manually added, minus manual removals.
+    /// Resolves a selection descriptor to the concrete set of entities the given player may save. In Player/Admin
+    /// mode that is anything they (or a build partner) built; in Mapper mode (requires AdminFlags.Mapping) it is
+    /// ANY world structure/item regardless of who built it (map-placed, admin-spawned, etc.) minus mobs/players.
+    /// The privileged mode is re-validated here against the caller's real flags, so a client can't spoof it.
     /// </summary>
-    public HashSet<EntityUid> ResolveSelection(ICommonSession saver, BuildSelectionData selection)
+    public HashSet<EntityUid> ResolveSelection(ICommonSession saver, BuildSelectionData selection, BuildSaveMode mode = BuildSaveMode.Player)
     {
         var result = new HashSet<EntityUid>();
         var saverId = saver.UserId;
+
+        // Mapper mode only takes effect if the caller actually holds the Mapping flag; otherwise fall back to the
+        // normal player-built rules (no error - the dropdown just shouldn't have offered it to them).
+        var mapperMode = mode == BuildSaveMode.Mapper && _adminManager.HasAdminFlag(saver, AdminFlags.Mapping);
 
         if (selection.Boxes != null)
         {
@@ -408,7 +415,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
                 _lookup.GetEntitiesIntersecting(map.MapId, box, found);
                 foreach (var uid in found)
                 {
-                    if (CanSave(uid, saverId))
+                    if (CanSave(uid, saverId, mapperMode))
                         result.Add(uid);
                 }
             }
@@ -418,7 +425,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
         {
             foreach (var net in selection.ManualAdds)
             {
-                if (TryGetEntity(net, out var uid) && CanSave(uid.Value, saverId))
+                if (TryGetEntity(net, out var uid) && CanSave(uid.Value, saverId, mapperMode))
                     result.Add(uid.Value);
             }
         }
@@ -435,15 +442,20 @@ public sealed partial class SavedBuildSystem : EntitySystem
         return result;
     }
 
-    private bool CanSave(EntityUid uid, NetUserId saver)
+    private bool CanSave(EntityUid uid, NetUserId saver, bool mapperMode)
     {
-        if (!TryComp<PlayerBuiltComponent>(uid, out var built))
-            return false;
-
         // Only world-placed entities (directly parented to the grid) — never things held in a hand or
         // inside a container, whose LocalPosition is in a different frame and would skew the anchor.
         var xform = Transform(uid);
         if (xform.GridUid is not { } grid || xform.ParentUid != grid)
+            return false;
+
+        // Mapper mode: any world structure/item counts, no matter who built it (map-placed, admin-spawned, etc.).
+        // Mobs and players are still excluded - you save builds, not creatures.
+        if (mapperMode)
+            return !HasComp<MobStateComponent>(uid);
+
+        if (!TryComp<PlayerBuiltComponent>(uid, out var built))
             return false;
 
         return _partners.CanInclude(saver, new NetUserId(built.BuilderUserId));
@@ -464,7 +476,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
         SaveBuild(session, name, selection);
     }
 
-    private void SaveBuild(ICommonSession saver, string rawName, BuildSelectionData selection)
+    private void SaveBuild(ICommonSession saver, string rawName, BuildSelectionData selection, BuildSaveMode mode = BuildSaveMode.Player)
     {
         if (saver.AttachedEntity is not { } user)
             return;
@@ -476,7 +488,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
             return;
         }
 
-        var entities = ResolveSelection(saver, selection);
+        var entities = ResolveSelection(saver, selection, mode);
         if (entities.Count == 0)
         {
             _popup.PopupEntity(Loc.GetString("saved-build-error-empty"), user, user);
