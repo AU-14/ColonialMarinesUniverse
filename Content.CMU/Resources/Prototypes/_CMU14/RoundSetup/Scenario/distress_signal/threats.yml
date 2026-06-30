@@ -11,7 +11,7 @@
       - bucket: Member
         count: 12
         bodies:
-          CMXenoLarva: 5
+          CMXenoLarva: 3
         scaling:
           CMXenoLarva:
             scale: 0.11
