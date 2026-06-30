@@ -1,6 +1,6 @@
-// SPDX-License-Identifier: LicenseRef-AdvancedAtkinsonatorv2-Proprietary
-// Copyright (c) 2026 wray-git. All rights reserved.
-// Proprietary - reuse only with the Author's prior written authorization. See LICENSE-AdvancedAtkinsonatorv2.md.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (c) 2026 wray-git
+// SPDX-License-Identifier: AGPL-3.0-only
 using Robust.Shared.GameObjects;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization.Manager.Attributes;

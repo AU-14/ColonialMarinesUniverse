@@ -1,6 +1,6 @@
-# SPDX-License-Identifier: LicenseRef-AdvancedAtkinsonatorv2-Proprietary
-# Copyright (c) 2026 wray-git. All rights reserved.
-# Proprietary - reuse only with the Author's prior written authorization. See LICENSE-AdvancedAtkinsonatorv2.md.
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright (c) 2026 wray-git
+# SPDX-License-Identifier: AGPL-3.0-only
 # Building overhaul: a curated set of constructable CM/RMC structures for the construction menu.
 #
 # Pattern follows the in-repo CM recipes (e.g. BarricadeMetalGraph in _RMC14/Recipes/Construction): a build
