@@ -46,7 +46,7 @@
 - type: loadout
   id: PouchFirstAidAU14
   equipment:
-    pocket1: RMCPouchFirstAid
+    pocket1: AU14PouchMedicalFilled
 
 - type: loadout
   id: PouchGeneralLargeAU14
