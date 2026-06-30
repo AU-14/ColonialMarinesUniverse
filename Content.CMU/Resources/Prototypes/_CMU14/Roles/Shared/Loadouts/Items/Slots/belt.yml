@@ -21,7 +21,7 @@
 - type: loadout
   id: EngiBeltUtilityFilledAU14
   equipment:
-    belt: CMBeltUtilityFilled
+    belt: AU14BeltUtilityFilled #Replaced CMUtilityBeltFilled with AU14BeltUtilityFilled since the CM lacks both an E-tool and the modified blowtorch, which is importance since Engineer's to not start with welding goggles
 
 - type: loadout
   id: BeltUtilityGeneralAU14

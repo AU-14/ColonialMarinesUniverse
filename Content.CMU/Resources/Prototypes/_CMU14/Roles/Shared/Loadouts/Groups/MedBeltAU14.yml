@@ -4,7 +4,7 @@
   minLimit: 1
   maxLimit: 1
   loadouts:
-  - BeltMedicalAU14
+  #- BeltMedicalAU14
   - BeltMedicBagAU14
 
 # COS
