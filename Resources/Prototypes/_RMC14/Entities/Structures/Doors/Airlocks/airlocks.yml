@@ -57,8 +57,6 @@
     sprite: _RMC14/Structures/Doors/Airlocks/com_door.rsi
   - type: PaintableAirlock
     department: CMCommand
-  - type: Repairable
-    fuelCost: 10  
 
 - type: entity
   parent: 
@@ -111,7 +109,7 @@
 
 - type: entity
   parent: 
-  - CMAirlock
+  - CMAirlockMaint
   - CMU14AirlockRepairable
   id: CMAirlockMaintReinforced
   name: reinforced maintenance hatch
@@ -301,7 +299,7 @@
 
 - type: entity
   parent: 
-  - CMAirlockGlass
+  - CMAirlockPrep
   - CMU14AirlockRepairable
   id: CMAirlockPrepAlpha
   name: alpha squad preparations
@@ -311,7 +309,7 @@
 
 - type: entity
   parent: 
-  - CMAirlockGlass
+  - CMAirlockPrep
   - CMU14AirlockRepairable
   id: CMAirlockPrepBravo
   name: bravo squad preparations
@@ -321,7 +319,7 @@
 
 - type: entity
   parent: 
-  - CMAirlockGlass
+  - CMAirlockPrep
   - CMU14AirlockRepairable
   id: CMAirlockPrepCharlie
   name: charlie squad preparations
@@ -331,7 +329,7 @@
 
 - type: entity
   parent: 
-  - CMAirlockGlass
+  - CMAirlockPrep
   - CMU14AirlockRepairable
   id: CMAirlockPrepDelta
   name: delta squad preparations
@@ -341,7 +339,7 @@
 
 - type: entity
   parent: 
-  - CMAirlockGlass
+  - CMAirlock
   - CMU14AirlockRepairable
   id: RMCAirlockStrata
   components:
