@@ -1850,6 +1850,64 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
                 new(0.3f, 0.3f),
                 new(0.7f, 0.7f),
                 Vector2.Zero),
+            CMUXenoWarlockParticleEffect.DroneOperatorTransfer => new("#6eb8ff",
+                28,
+                3,
+                16,
+                10,
+                -0.003f,
+                new(0, 0.04f),
+                new(0, 0.02f),
+                new(-0.05f, -0.04f),
+                new(0.05f, 0.08f),
+                new(4, 11),
+                new(0.08f, 0.08f),
+                new(0.18f, 0.18f),
+                Vector2.Zero),
+            CMUXenoWarlockParticleEffect.DroneAndroidDormant => new("#d44848",
+                24,
+                2,
+                18,
+                14,
+                -0.003f,
+                new(0, 0.02f),
+                new(0, 0.015f),
+                new(-0.04f, -0.03f),
+                new(0.04f, 0.05f),
+                new(3, 9),
+                new(0.07f, 0.07f),
+                new(0.16f, 0.16f),
+                Vector2.Zero),
+            CMUXenoWarlockParticleEffect.DroneTransferConnect => new("#6eb8ff",
+                48,
+                8,
+                6,
+                5,
+                -0.006f,
+                new(0, 0.2f),
+                Vector2.Zero,
+                new(-0.03f, -0.03f),
+                new(0.03f, 0.03f),
+                new(1, 3),
+                new(0.07f, 0.07f),
+                new(0.16f, 0.16f),
+                Vector2.Zero,
+                1100f),
+            CMUXenoWarlockParticleEffect.DroneTransferDisconnect => new("#d44848",
+                48,
+                8,
+                6,
+                5,
+                -0.006f,
+                new(0, 0.2f),
+                Vector2.Zero,
+                new(-0.03f, -0.03f),
+                new(0.03f, 0.03f),
+                new(1, 3),
+                new(0.07f, 0.07f),
+                new(0.16f, 0.16f),
+                Vector2.Zero,
+                1100f),
             _ => new("#6a59b3",
                 300,
                 15,
@@ -1890,6 +1948,26 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
         Vector2 normalized = direction / length;
         return new CMUXenoWarlockParticleMotion(normalized * (velocity * 0.5f), normalized * velocity);
+    }
+
+    public bool TrySetWarlockDirectedParticleMotion(
+        Entity<CMUXenoWarlockParticleEmitterComponent> particles,
+        Vector2 origin,
+        Vector2 target,
+        float velocity)
+    {
+        CMUXenoWarlockParticleMotion? motion = CMUXenoWarlockSystem.GetWarlockDirectedParticleMotion(
+            origin,
+            target,
+            velocity);
+        if (motion == null)
+            return false;
+
+        particles.Comp.UseMotionOverride = true;
+        particles.Comp.MotionVelocity = motion.Value.Velocity;
+        particles.Comp.MotionGravity = motion.Value.Gravity;
+        Dirty(particles);
+        return true;
     }
 
     public static string GetWarlockChannelLightPrototype(CMUXenoWarlockChannelKind kind, CMUXenoPsychicBlastMode mode)

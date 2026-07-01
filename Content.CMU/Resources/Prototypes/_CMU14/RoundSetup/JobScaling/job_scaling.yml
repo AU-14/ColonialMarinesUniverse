@@ -27,6 +27,11 @@
     AU14JobGOVFORSquadRifleman:
       scale: 0.5    # 2 slots
       whenToBeginScaling: 1
+    CMUJobGOVFORDroneOperator:
+      scale: 0
+      whenToBeginScaling: 1
+      benchmark: 1
+      maximum: 1
     AU14JobGOVFORPlatoonCorpsman:
       scale: 0.2    # 5 slots
       whenToBeginScaling: 50
@@ -77,6 +82,11 @@
     AU14JobGOVFORSquadRifleman:
       scale: 1
       whenToBeginScaling: 1
+    CMUJobGOVFORDroneOperator:
+      scale: 0
+      whenToBeginScaling: 1
+      benchmark: 1
+      maximum: 1
     AU14JobGOVFORPlatoonCorpsman:
       scale: 0.2
       whenToBeginScaling: 30
@@ -124,6 +134,11 @@
       scale: 0.018
       whenToBeginScaling: 40
       benchmark: 6
+    CMUJobGOVFORDroneOperator:
+      scale: 0
+      whenToBeginScaling: 40
+      benchmark: 1
+      maximum: 1
     AU14JobGOVFORPlatoonCorpsman:
       scale: 0.014
       whenToBeginScaling: 40

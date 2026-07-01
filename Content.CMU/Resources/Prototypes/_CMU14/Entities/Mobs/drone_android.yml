@@ -1,0 +1,89 @@
+- type: entity
+  parent: AU14MobWorkingJoe
+  id: CMUDroneAndroid
+  name: drone android
+  description: A stripped-down synthetic drone frame with exposed servos and a sparse combat-rated control bus.
+  suffix: CMU14
+  components:
+  - type: CMUDroneAndroid
+    nameDataset: CMUNamesDroneAndroid
+    maxNameLength: 24
+    followCloseRange: 1
+    followRange: 1.5
+  - type: Inventory
+    templateId: cmuDroneAndroid
+  - type: HumanoidAppearance
+    species: DroneAndroid
+    hideLayersOnEquip:
+    - UndergarmentTop
+    - HeadTop
+  - type: Synth
+    canUseGuns: true
+    removeComponents: CMUDroneAndroidRemoveComponents
+    generation: cmu-species-drone-android-generation
+    critThreshold: 74
+    deadThreshold: 80
+    repairTime: 35
+    selfRepairTime: 9999
+    hideGeneration: true
+    useHumanHealthIcons: true
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 10
+  - type: RMCInnateSlowdown
+    slowdown: 1.15
+  - type: NoClothingSlowdown
+    walkModifier: 1
+    sprintModifier: 1
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepBorg
+  - type: Skills
+    skills: {}
+  - type: HTN
+    rootTask:
+      task: CMUDroneFollowCompound
+    enabled: false
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: rifleman
+  - type: UserIFF
+    factions:
+    - GOVFOR
+  - type: NpcFactionMember
+    factions:
+    - GOVFOR
+  - type: GrantMarineIcons
+    factions:
+    - UNMC
+
+- type: entity
+  parent: BaseSpeciesDummy
+  id: CMUDroneAndroidDummy
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HumanoidAppearance
+    species: DroneAndroid
+
+- type: entity
+  parent: RMCSynthRemoveComponents
+  id: CMUDroneAndroidRemoveComponents
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: MindContainer
+  - type: SSDIndicator
+
+- type: entity
+  parent: BaseItem
+  id: CMURuinedDroneCore
+  name: ruined drone core
+  description: The scorched control core from a destroyed drone android. It is only useful as evidence now.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/module.rsi
+    state: mainboard
+  - type: Item
+    size: Small
+  - type: CMURuinedDroneCore
