@@ -27,7 +27,7 @@ public sealed class FactionLanguageBoundUserInterface : BoundUserInterface
 
     private void CreateWindow()
     {
-        _window?.Dispose();
+        CloseWindow();
         _window = new FactionLanguagePickerWindow();
         _window.OnLanguagePicked += OnPicked;
         _window.OpenCentered();
@@ -41,6 +41,16 @@ public sealed class FactionLanguageBoundUserInterface : BoundUserInterface
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        _window?.Dispose();
+        CloseWindow();
+    }
+
+    private void CloseWindow()
+    {
+        if (_window == null)
+            return;
+
+        _window.OnLanguagePicked -= OnPicked;
+        _window.Close();
+        _window = null;
     }
 }

@@ -255,7 +255,7 @@ namespace Content.Server.AU14.Round
                 foreach (var pid in planetIds)
                 {
                     if (_prototypeManager.TryIndex<EntityPrototype>(pid, out var proto) &&
-                        proto.TryGetComponent(out RMCPlanetMapPrototypeComponent? planetComp,
+                        proto.TryComp(out RMCPlanetMapPrototypeComponent? planetComp,
                             IoCManager.Resolve<IComponentFactory>()))
                     {
                         planetProtos.Add((pid, planetComp));
@@ -747,7 +747,7 @@ namespace Content.Server.AU14.Round
         public bool SetPlanet(string planetId)
         {
             if (_prototypeManager.TryIndex<EntityPrototype>(planetId, out var proto) &&
-                proto.TryGetComponent(out RMCPlanetMapPrototypeComponent? planetComp,
+                proto.TryComp(out RMCPlanetMapPrototypeComponent? planetComp,
                 IoCManager.Resolve<IComponentFactory>()))
             {
                 _state.SetPlanet(planetId, planetComp);
