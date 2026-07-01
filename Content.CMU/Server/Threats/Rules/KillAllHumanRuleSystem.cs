@@ -1,3 +1,4 @@
+using Content.Server._CMU14.RoundStatistics;
 using Content.Server.AU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
@@ -27,6 +28,7 @@ public sealed partial class KillAllHumanRuleSystem : GameRuleSystem<KillAllHuman
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
+    [Dependency] private CMURoundStatisticsSystem _roundStats = default!;
     [Dependency] private ThreatRuleHelper _threatRuleHelper = default!;
     private const string DefaultWinMsg = "Threat victory: Required percentage of humans eliminated.";
 
@@ -132,6 +134,7 @@ public sealed partial class KillAllHumanRuleSystem : GameRuleSystem<KillAllHuman
             ? ruleComp.WinMessage
             : _auRoundSystem.SelectedThreat?.WinMessage;
 
+        _roundStats.RecordKillAllHumanRule();
         _gameTicker.EndRound(!string.IsNullOrEmpty(winMessage) ? winMessage : DefaultWinMsg);
     }
 }
