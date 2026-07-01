@@ -92,6 +92,7 @@
     tags:
     - ForceNoFixRotations
     - Airlock
+    - Wall
     # This tag is used to nagivate the Airlock construction graph. It's needed because the construction graph is shared between Airlock, AirlockGlass, and HighSecDoor
   - type: PryUnpowered
   - type: RMCDropshipBlocked
@@ -148,7 +149,7 @@
   - type: AirlockReceiverXenoClaws
   - type: Damageable
     damageContainer: StructuralMarine
-    damageModifierSet: StructuralMarine
+    damageModifierSet: CMU14StructuralMarine
   - type: Destructible
     thresholds:
     - trigger:

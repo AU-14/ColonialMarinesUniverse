@@ -123,3 +123,7 @@
         amount: 10
       - id: d20Dice
         amount: 10
+      - id: d6Dice
+        amount: 20
+      - id: DiceBag
+        amount: 5

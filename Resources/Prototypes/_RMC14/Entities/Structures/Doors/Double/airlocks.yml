@@ -33,7 +33,18 @@
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
 
 - type: entity
-  parent: CMDoubleDoorBase
+  id: CMU14DoubleDoorRepairable
+  abstract: true
+  components:
+  - type: RMCRepairable
+    fuelUsed: 5
+    heal: 50
+    skillRequired: 0
+
+- type: entity
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: CMDoubleDoorAlmayerGlass
   suffix: Almayer, Glass
   components:
@@ -41,7 +52,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/Double/almayer_glass.rsi
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: CMDoubleDoorAlmayerSolid
   suffix: Almayer, Solid
   components:
@@ -50,7 +63,9 @@
   - type: Occluder
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: CMDoubleDoorCommandGlass
   suffix: Command, Glass
   components:
@@ -60,7 +75,9 @@
     department: CMCommand
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: CMDoubleDoorCommandSolid
   suffix: Command, Solid
   components:
@@ -71,7 +88,9 @@
     department: CMCommand
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: CMDoubleDoorEngineerGlass
   suffix: Engineer, Glass
   components:
@@ -81,7 +100,9 @@
     department: CMEngineering
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: CMDoubleDoorEngineerSolid
   suffix: Engineer, Solid
   components:
@@ -92,7 +113,9 @@
     department: CMEngineering
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: CMDoubleDoorGenericGlass
   suffix: Generic, Glass
   components:
@@ -100,7 +123,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/Double/generic_glass.rsi
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: RMCDoubleDoorGlassHybrisa
   suffix: Hybrisa, Glass
   components:
@@ -108,7 +133,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/Double/hybrisa_glass.rsi
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: RMCDoubleDoorSolidHybrisa
   suffix: Hybrisa, Solid
   components:
@@ -117,7 +144,9 @@
   - type: Occluder
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: RMCDoubleDoorHybrisaMecical
   suffix: Hybrisa, Solid
   components:
@@ -126,7 +155,9 @@
   - type: Occluder
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: RMCDoubleDoorHybrisaGlassMecical
   suffix: Hybrisa, Glass
   components:
@@ -134,7 +165,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/Double/hybrisa_medical_glass.rsi
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: CMDoubleDoorGenericSolid
   suffix: Generic, Solid
   components:
@@ -143,7 +176,9 @@
   - type: Occluder
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: CMDoubleDoorMedicalGlass
   suffix: Medical, Glass
   components:
@@ -153,7 +188,9 @@
     department: CMMedbay
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: CMDoubleDoorMedicalSolid
   suffix: Medical, Solid
   components:
@@ -164,7 +201,9 @@
     department: CMMedbay
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: CMDoubleDoorPersonalGlass
   suffix: Personal, Glass
   components:
@@ -172,7 +211,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/Double/personal_glass.rsi
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: CMDoubleDoorPersonalSolid
   suffix: Personal, Solid
   components:
@@ -181,7 +222,9 @@
   - type: Occluder
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: CMDoubleDoorPreparations
   suffix: Preparations
   components:
@@ -189,7 +232,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/Double/preparations.rsi
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: CMDoubleDoorPreparationsAlpha
   suffix: Preparations, Alpha
   components:
@@ -197,7 +242,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/Double/preparations_alpha.rsi
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: CMDoubleDoorPreparationsBravo
   suffix: Preparations, Bravo
   components:
@@ -205,7 +252,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/Double/preparations_bravo.rsi
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: CMDoubleDoorPreparationsCharlie
   suffix: Preparations, Charlie
   components:
@@ -213,7 +262,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/Double/preparations_charlie.rsi
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: CMDoubleDoorPreparationsDelta
   suffix: Preparations, Delta
   components:
@@ -221,7 +272,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/Double/preparations_delta.rsi
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: CMDoubleDoorSecurityGlass
   suffix: Security, Glass
   components:
@@ -231,7 +284,9 @@
     department: CMMilitaryPolice
 
 - type: entity
-  parent: CMDoubleDoorBase
+  parent:
+  - CMDoubleDoorBase
+  - CMU14DoubleDoorRepairable
   id: CMDoubleDoorSecuritySolid
   suffix: Security, Solid
   components:

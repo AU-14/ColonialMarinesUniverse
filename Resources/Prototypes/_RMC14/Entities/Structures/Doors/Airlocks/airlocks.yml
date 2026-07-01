@@ -11,7 +11,7 @@
     sprite: _RMC14/Structures/Doors/Airlocks/personal_door.rsi
   - type: Occluder
   - type: PaintableAirlock
-    department: CMSquad
+    department: CMSquad  
 
 - type: entity
   parent: CMAirlock
@@ -37,7 +37,18 @@
     isCorrodible: false
 
 - type: entity
-  parent: CMAirlock
+  id: CMU14AirlockRepairable
+  abstract: true
+  components:
+  - type: RMCRepairable
+    fuelUsed: 5
+    heal: 50
+    skillRequired: 0
+
+- type: entity
+  parent: 
+  - CMAirlock
+  - CMU14AirlockRepairable
   id: CMAirlockCommand
   name: command airlock
   suffix: Command
@@ -46,9 +57,13 @@
     sprite: _RMC14/Structures/Doors/Airlocks/com_door.rsi
   - type: PaintableAirlock
     department: CMCommand
+  - type: Repairable
+    fuelCost: 10  
 
 - type: entity
-  parent: CMAirlock
+  parent: 
+  - CMAirlock
+  - CMU14AirlockRepairable
   id: CMAirlockEngineer
   name: engineering airlock
   suffix: Engineering
@@ -59,7 +74,9 @@
     department: CMEngineering
 
 - type: entity
-  parent: CMAirlock
+  parent: 
+  - CMAirlock
+  - CMU14AirlockRepairable
   id: CMAirlockMedical
   name: medical airlock
   suffix: Medical
@@ -70,7 +87,9 @@
     department: CMMedbay
 
 - type: entity
-  parent: CMAirlock
+  parent: 
+  - CMAirlock
+  - CMU14AirlockRepairable
   id: CMAirlockSecurity
   name: security airlock
   suffix: Security
@@ -81,7 +100,9 @@
     department: CMMilitaryPolice
 
 - type: entity
-  parent: CMAirlock
+  parent: 
+  - CMAirlock
+  - CMU14AirlockRepairable
   id: CMAirlockMaint
   name: maintenance hatch
   components:
@@ -89,7 +110,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/maint_door.rsi
 
 - type: entity
-  parent: CMAirlockMaint
+  parent: 
+  - CMAirlock
+  - CMU14AirlockRepairable
   id: CMAirlockMaintReinforced
   name: reinforced maintenance hatch
   suffix: Reinforced
@@ -106,7 +129,9 @@
         acts: ["Destruction"]
 
 - type: entity
-  parent: CMAirlock
+  parent: 
+  - CMAirlock
+  - CMU14AirlockRepairable
   id: CMAirlockSecure
   name: secure airlock
   components:
@@ -114,7 +139,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/secure_door.rsi
 
 - type: entity
-  parent: CMAirlock
+  parent: 
+  - CMAirlock
+  - CMU14AirlockRepairable
   id: CMAirlockCell
   name: cell door
   components:
@@ -122,7 +149,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/cell_door.rsi
 
 - type: entity
-  parent: CMAirlock
+  parent: 
+  - CMAirlock
+  - CMU14AirlockRepairable
   id: CMAirlockPrison
   name: maintenance hatch
   components:
@@ -130,7 +159,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/prison_door.rsi
 
 - type: entity
-  parent: CMAirlock
+  parent: 
+  - CMAirlock
+  - CMU14AirlockRepairable
   id: RMCAirlockHybrisa
   name: airlock
   components:
@@ -138,7 +169,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/hybrisa_door.rsi
 
 - type: entity
-  parent: CMAirlock
+  parent: 
+  - CMAirlock
+  - CMU14AirlockRepairable
   id: RMCAirlockHybrisaPersonal
   name: airlock
   components:
@@ -146,7 +179,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/hybrisa_personal_door.rsi
 
 - type: entity
-  parent: CMAirlock
+  parent: 
+  - CMAirlock
+  - CMU14AirlockRepairable
   id: RMCAirlockRusted
   name: airlock
   components:
@@ -154,7 +189,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/rusted_door.rsi
 
 - type: entity
-  parent: CMAirlock
+  parent: 
+  - CMAirlock
+  - CMU14AirlockRepairable
   id: RMCAirlockRustedWhite
   name: airlock
   components:
@@ -195,7 +232,9 @@
     - GlassAirlock
 
 - type: entity
-  parent: CMAirlockGlass
+  parent: 
+  - CMAirlockGlass
+  - CMU14AirlockRepairable
   id: CMAirlockGlassEngineer
   name: engineering airlock
   suffix: Engineer
@@ -206,7 +245,9 @@
     department: CMEngineering
 
 - type: entity
-  parent: CMAirlockGlass
+  parent: 
+  - CMAirlockGlass
+  - CMU14AirlockRepairable
   id: CMAirlockGlassMedical
   name: medical airlock
   suffix: Medical
@@ -217,7 +258,9 @@
     department: CMMedbay
 
 - type: entity
-  parent: CMAirlockGlass
+  parent: 
+  - CMAirlockGlass
+  - CMU14AirlockRepairable
   id: CMAirlockGlassSecurity
   name: security airlock
   suffix: Security
@@ -228,14 +271,18 @@
     department: CMMilitaryPolice
 
 - type: entity
-  parent: CMAirlockGlass
+  parent: 
+  - CMAirlockGlass
+  - CMU14AirlockRepairable
   id: CMAirlockGlassHybrisa
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Doors/Airlocks/hybrisa_door_glass.rsi
 
 - type: entity
-  parent: CMAirlockGlass
+  parent: 
+  - CMAirlockGlass
+  - CMU14AirlockRepairable
   id: CMAirlockGlassHybrisaPersonal
   components:
   - type: Sprite
@@ -243,7 +290,9 @@
 
 # Prep
 - type: entity
-  parent: CMAirlockGlass
+  parent: 
+  - CMAirlockGlass
+  - CMU14AirlockRepairable
   id: CMAirlockPrep
   name: preparations airlock
   components:
@@ -251,7 +300,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/prep_door.rsi
 
 - type: entity
-  parent: CMAirlockPrep
+  parent: 
+  - CMAirlockGlass
+  - CMU14AirlockRepairable
   id: CMAirlockPrepAlpha
   name: alpha squad preparations
   components:
@@ -259,7 +310,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/prep_door_alpha.rsi
 
 - type: entity
-  parent: CMAirlockPrep
+  parent: 
+  - CMAirlockGlass
+  - CMU14AirlockRepairable
   id: CMAirlockPrepBravo
   name: bravo squad preparations
   components:
@@ -267,7 +320,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/prep_door_bravo.rsi
 
 - type: entity
-  parent: CMAirlockPrep
+  parent: 
+  - CMAirlockGlass
+  - CMU14AirlockRepairable
   id: CMAirlockPrepCharlie
   name: charlie squad preparations
   components:
@@ -275,7 +330,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/prep_door_charlie.rsi
 
 - type: entity
-  parent: CMAirlockPrep
+  parent: 
+  - CMAirlockGlass
+  - CMU14AirlockRepairable
   id: CMAirlockPrepDelta
   name: delta squad preparations
   components:
@@ -283,7 +340,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/prep_door_delta.rsi
 
 - type: entity
-  parent: CMAirlock
+  parent: 
+  - CMAirlockGlass
+  - CMU14AirlockRepairable
   id: RMCAirlockStrata
   components:
   - type: Sprite
