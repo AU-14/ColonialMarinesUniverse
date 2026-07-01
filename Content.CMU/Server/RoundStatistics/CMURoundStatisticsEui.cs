@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Content.Server.Administration;
-using Content.Server.Administration.Managers;
 using Content.Server.Database;
 using Content.Server.EUI;
 using Content.Shared._CMU14.RoundStatistics;
-using Content.Shared.Administration;
 using Content.Shared.Eui;
 using Robust.Shared.Asynchronous;
 using Robust.Shared.Log;
@@ -16,7 +13,6 @@ public sealed partial class CMURoundStatisticsEui : BaseEui
 {
     private const int RecentRounds = 30;
 
-    [Dependency] private IAdminManager _admin = default!;
     [Dependency] private IServerDbManager _db = default!;
     [Dependency] private ITaskManager _task = default!;
 
@@ -32,15 +28,7 @@ public sealed partial class CMURoundStatisticsEui : BaseEui
     {
         base.Opened();
 
-        _admin.OnPermsChanged += OnAdminPermsChanged;
         LoadFromDb();
-    }
-
-    public override void Closed()
-    {
-        base.Closed();
-
-        _admin.OnPermsChanged -= OnAdminPermsChanged;
     }
 
     public override EuiStateBase GetNewState()
@@ -51,9 +39,6 @@ public sealed partial class CMURoundStatisticsEui : BaseEui
     public override void HandleMessage(EuiMessageBase msg)
     {
         base.HandleMessage(msg);
-
-        if (!_admin.HasAdminFlag(Player, AdminFlags.Admin))
-            return;
 
         if (msg is CMURoundStatisticsRefreshMsg)
             LoadFromDb();
@@ -74,15 +59,6 @@ public sealed partial class CMURoundStatisticsEui : BaseEui
         {
             _sawmill.Error($"Failed to load CMU round statistics dashboard:\n{e}");
         }
-    }
-
-    private void OnAdminPermsChanged(AdminPermsChangedEventArgs args)
-    {
-        if (args.Player != Player)
-            return;
-
-        if (!_admin.HasAdminFlag(Player, AdminFlags.Admin))
-            Close();
     }
 
     private static CMURoundStatisticsDashboard EmptyDashboard()

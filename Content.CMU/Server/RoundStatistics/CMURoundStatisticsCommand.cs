@@ -1,11 +1,10 @@
-using Content.Server.Administration;
 using Content.Server.EUI;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
 namespace Content.Server._CMU14.RoundStatistics;
 
-[AdminCommand(AdminFlags.Admin)]
+[AnyCommand]
 public sealed partial class CMURoundStatisticsCommand : LocalizedCommands
 {
     [Dependency] private EuiManager _eui = default!;
