@@ -91,14 +91,4 @@
   - type: Sprite
     state: syn_spawn
 
-- type: rank
-  id: AU14RankOrbitalArbiter
-  name: Orbital Arbiter
-  prefix: Orb. Arb.
-
-- type: rank
-  id: AU14RankSeniorOrbitalArbiter
-  name: Senior Orbital Arbiter
-  prefix: Sr. Orb. Arb.
-
 # ├──[ ORBITAL COUNSEL ]─────────────────────────────────────────────┤

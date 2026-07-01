@@ -89,16 +89,6 @@
   - type: Sprite
     state: syn_spawn
 
-- type: rank
-  id: AU14RankOrbitalLawyer
-  name: Orbital Counsel
-  prefix: Orb. Cnsl.
-
-- type: rank
-  id: AU14RankSeniorOrbitalLawyer
-  name: Senior Orbital Counsel
-  prefix: Sr. Orb. Cnsl.
-
 - type: entity
   parent: ClothingNeckLawyerbadge
   id: AU14MedalLawyerBadge
