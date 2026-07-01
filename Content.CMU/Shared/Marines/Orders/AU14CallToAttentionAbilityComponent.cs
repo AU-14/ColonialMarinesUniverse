@@ -38,7 +38,7 @@ public sealed partial class AU14CallToAttentionAbilityComponent : Component
     /// How long non-exempt targets are forced to whisper after the order.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public TimeSpan WhisperDuration = TimeSpan.FromSeconds(5);
+    public TimeSpan WhisperDuration = TimeSpan.FromSeconds(10);
 
     /// <summary>
     /// Maximum sight range of the effect in tiles.
@@ -47,8 +47,15 @@ public sealed partial class AU14CallToAttentionAbilityComponent : Component
     public float Range = ExamineSystemShared.MaxRaycastRange;
 
     /// <summary>
+    /// Higher values are chosen as the officer everyone faces when the order is called.
+    /// Zero means this role can call the order but is not considered the officer focus.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public int AttentionFocusPriority;
+
+    /// <summary>
     /// Maximum random delay before each nearby humanoid responds.
     /// </summary>
     [DataField]
-    public TimeSpan ResponseStagger = TimeSpan.FromSeconds(1.5);
+    public TimeSpan ResponseStagger = TimeSpan.FromSeconds(2.5);
 }

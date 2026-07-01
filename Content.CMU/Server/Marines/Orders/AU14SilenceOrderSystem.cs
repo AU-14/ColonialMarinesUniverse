@@ -1,25 +1,25 @@
 using Content.Server.Actions;
+using Content.Server.Chat.Systems;
 using Content.Shared._AU14.Marines.Orders;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Marines;
 using Content.Shared.Chat;
-using Content.Shared.Humanoid;
-using Content.Shared.IdentityManagement;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
-using Robust.Shared.Player;
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
-using Robust.Shared.Utility;
 
 namespace Content.Server._AU14.Marines.Orders;
 
 public sealed partial class AU14SilenceOrderSystem : EntitySystem
 {
     [Dependency] private ActionsSystem _actions = default!;
+    [Dependency] private ChatSystem _chat = default!;
     [Dependency] private SharedCMChatSystem _cmChat = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     private readonly HashSet<Entity<MarineComponent>> _receivers = new();
@@ -70,6 +70,8 @@ public sealed partial class AU14SilenceOrderSystem : EntitySystem
 
         _actions.StartUseDelay(ent.Comp.SilenceActionEntity);
 
+        SendSilenceCallout(ent);
+
         var expiresAt = _timing.CurTime + ent.Comp.Duration;
 
         _receivers.Clear();
@@ -91,33 +93,14 @@ public sealed partial class AU14SilenceOrderSystem : EntitySystem
             _popup.PopupEntity(noticeMsg, receiver, receiver, PopupType.Small);
             _cmChat.ChatMessageToOne(noticeMsg, receiver, ChatChannel.Local, colorOverride: new Color(0.75f, 0.75f, 1f, 1f));
         }
-
-        SendSilenceEmote(ent.Owner);
     }
 
-    private void SendSilenceEmote(EntityUid source)
+    private void SendSilenceCallout(Entity<AU14SilenceOrderAbilityComponent> ent)
     {
-        var pronoun = Loc.GetString("au14-silence-order-emote-pronoun-other");
-        if (TryComp<HumanoidAppearanceComponent>(source, out var appearance))
-        {
-            pronoun = appearance.Sex switch
-            {
-                Sex.Male => Loc.GetString("au14-silence-order-emote-pronoun-male"),
-                Sex.Female => Loc.GetString("au14-silence-order-emote-pronoun-female"),
-                _ => pronoun,
-            };
-        }
+        if (ent.Comp.Callouts.Count == 0)
+            return;
 
-        var entityName = FormattedMessage.EscapeText(Name(Identity.Entity(source, EntityManager)));
-        var emoteAction = Loc.GetString("au14-silence-order-emote-action", ("pronoun", pronoun));
-        var wrappedMessage = $"[font size=14][bold][color=#C4A35A]{entityName} {emoteAction}[/color][/bold][/font]";
-
-        _cmChat.ChatMessageToMany(
-            emoteAction,
-            wrappedMessage,
-            Filter.Pvs(source),
-            ChatChannel.Emotes,
-            source
-        );
+        var callout = _random.Pick(ent.Comp.Callouts);
+        _chat.TrySendInGameICMessage(ent, Loc.GetString(callout), InGameICChatType.Speak, false, ignoreActionBlocker: true);
     }
 }
