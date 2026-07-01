@@ -1,0 +1,31 @@
+# RMC
+
+- type: entity
+  id: AU14CrateL165A1
+  parent: RMCCrateWeapons
+  name: L165A1 Hand Cannon Crate (x2)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14GunCasePistolL165A1
+      amount: 2
+    - id: AU14MagazinePistolL165A1
+      amount: 4
+
+- type: entity
+  id: AU14CrateFlamerSpec
+  parent: RMCCrateWeapons
+  name: M240-T Incinerator Crate (1x M240-T Incinerator, 1x Broiler-T, 1x Fuel Tank Pouch, 1x Large Incinerator Tank, 1x Large Custom Incinerator Tanks)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponFlamerSpec
+      amount: 1
+    - id: RMCBackpackBroiler
+      amount: 1
+    - id: RMCPouchFuelTank
+      amount: 1
+    - id: RMCTankFlamerLarge
+      amount: 1
+    - id: RMCTankFlamerLargeCustom
+      amount: 1

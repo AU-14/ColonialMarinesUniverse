@@ -1,0 +1,44 @@
+- type: entity
+  parent: RMCBoxMagazinePistolBase
+  id:  AU14BoxMagazinePistolL165A1Empty
+  name: magazine box (L165A1 x 16)
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: AU14BoxMagazinePistolL165A1Empty
+  - type: Sprite
+    layers:
+    - state: pistol_box
+      color: "#4a4a4a"
+    - state: pistol_ammo_full
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+      color: "#ffc000"
+    - state: pistol_box_80
+      color: "#ffcb26"
+    - state: pistol_box_marking
+      color: "#7c4c1b"
+    - state: pistol_lid
+      map: [ "lid" ]
+      color: "#4a4a4a"
+    - state: pistol_lid_marking
+      map: [ "lid_marking" ]
+      color: "#7c4c1b"
+  - type: CMItemSlots
+    count: 16
+    slot:
+      whitelist:
+        tags:
+        - CMMagazinePistolMK80
+
+- type: entity
+  parent: AU14BoxMagazinePistolL165A1Empty
+  id:  AU14BoxMagazinePistolL165A1
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: AU14MagazinePistolL165A1
+    count: 16
+    slot:
+      whitelist:
+        tags:
+        - CMMagazinePistolMK80

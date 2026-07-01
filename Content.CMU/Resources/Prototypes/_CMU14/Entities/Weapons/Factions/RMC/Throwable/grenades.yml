@@ -1,0 +1,55 @@
+- type: entity
+  parent: CMGrenadeHighExplosive
+  id: AU14GrenadeHighExplosiveRMC
+  name: R2175/A HEDP grenade
+  suffix: RM
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Grenades/RMC/HEDP.rsi
+
+#- type: entity
+#  parent: CMGrenadeSmoke
+#  id: AU14GrenadeSmokeRMC
+#  name: R2175/C HSDP grenade
+#  suffix: RM
+#  components:
+#  - type: Sprite
+#    sprite: _AU14/Weapons/Grenades/RMC/HSDP.rsi
+
+- type: entity
+  parent: RMCGrenadeIncendiary
+  id: AU14GrenadeIncendiaryRMC
+  name: R2175/B HIDP grenade
+  suffix: RM
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Grenades/RMC/HIDP.rsi
+  - type: Tag
+    tags:
+    - Grenade
+    - LauncherCompatibleGrenade
+    - RMCGrenadeM40
+    - RMCGrenadeHEDP
+
+
+- type: entity
+  parent: 
+  - CMGrenadeSmoke
+  - RMCM40DPTags
+  id: AU14GrenadeNeuroRMC
+  name: R2175/CN20 grenade
+  description: A small grenade containing a vial of deadly nerve gas. Usually knocks out the targets for long enough to allow RMCs to take them out. You can almost hear your Instructor's screaming in the back of your head, mentioning something about a gas mask. It is set to detonate in 3.5 seconds.
+  suffix: RM
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Grenades/RMC/HSDP.rsi
+  - type: SpawnOnTrigger
+    proto: AU14GrenadeNeuroGas
+  - type: OnUseTimerTrigger
+    delay: 3.5
+  - type: Tag
+    tags:
+    - Grenade
+    - LauncherCompatibleGrenade
+    - RMCGrenadeM40
+    - RMCGrenadeHEDP

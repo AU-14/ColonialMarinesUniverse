@@ -1,0 +1,17 @@
+- type: localizedDataset
+  id: AU14NamesMaleFirstPolish
+  values:
+    prefix: names-first-male-dataset-polish-
+    count: 79
+
+- type: localizedDataset
+  id: AU14NamesFemaleFirstPolish
+  values:
+    prefix: names-first-female-dataset-polish-
+    count: 66
+    
+- type: localizedDataset
+  id: AU14NamesLastPolish
+  values:
+    prefix: names-last-dataset-polish-
+    count: 151

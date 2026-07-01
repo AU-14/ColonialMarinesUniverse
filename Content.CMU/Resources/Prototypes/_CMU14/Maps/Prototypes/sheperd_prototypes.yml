@@ -1,0 +1,42 @@
+- type: entity
+  parent: MarkerBase
+  id: CMUShepSpawnerLZ4
+  name: LZ4 - Hidden LZ Spawner
+  components:
+  - type: TimedDespawn
+    lifetime: 300
+  - type: SpawnOnTerminate
+    spawn: CMUShepDropshipDestinationOpforLZ4
+  - type: Sprite
+    state: green
+
+- type: entity
+  parent: CMDropshipDestinationOpforWhitelist
+  id: CMUShepDropshipDestinationOpforLZ4
+  name: LZ4 - Hidden LZ
+  categories: [ HideSpawnMenu ]
+
+- type: entity
+  parent: RMCFogWallPermanent
+  id: CMUFogWall_forceonforce_inverted
+  description: It looks way too dangerous to traverse. Best wait until it has cleared up.
+  suffix: ForceOnForce Inverted, 20 minutes
+  components:
+  - type: DestroyOnPreset
+    preset: ForceOnForce
+    inverted: true
+  - type: TimedDespawn
+    lifetime: 1200
+
+
+- type: entity
+  parent: RMCFogWallPermanent
+  id: CMUFogWall_distress_inverted30min
+  description: It looks way too dangerous to traverse. Best wait until it has cleared up.
+  suffix: ForceOnForce Inverted, 20 minutes
+  components:
+  - type: DestroyOnPreset
+    preset: DistressSignal
+    inverted: true
+  - type: TimedDespawn
+    lifetime: 1200

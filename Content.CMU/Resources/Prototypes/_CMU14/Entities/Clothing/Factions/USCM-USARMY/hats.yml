@@ -1,0 +1,125 @@
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14ArtemisCap
+  name: USS Artemis Cap
+  description: A black cap with the patch of the USS Artemis.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/ussartemiscap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/ussartemiscap.rsi
+    
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14DesertPatrolCap
+  name: Desert Patrol Cap
+  description: A simple patrol cap.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/DesertHats/cap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/DesertHats/cap.rsi
+    
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14DesertFlapCap
+  name: Desert Patrol Flap-Cap
+  description: A simple patrol cap with a sun flap.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/DesertHats/flapcap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/DesertHats/flapcap.rsi
+  
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14DesertBoonieHat
+  name: Desert Boonie Hat
+  description: A brimmed hat to protect your face from the sun.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/DesertHats/booniehat.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/DesertHats/booniehat.rsi
+  
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14JunglePatrolCap
+  name: Jungle Patrol Cap
+  description: A simple patrol cap.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/cap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/cap.rsi
+    
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14JungleFlapCap
+  name: Jungle Patrol Flap-Cap
+  description: A simple patrol cap with a sun flap.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/flapcap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/flapcap.rsi
+    
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14JungleBoonieHat
+  name: Jungle Boonie Hat
+  description: A brimmed hat to protect your face from the sun.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/booniehat.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/booniehat.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14UACGPatrolCap
+  name: UACG Patrol Cap
+  description: A simple patrol cap.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/DesertHats/cap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/DesertHats/cap.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14USASFCap
+  name: USASF Cap
+  description: A simple USASF cap.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/cap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/cap.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14BeretUSArmy
+  name: US Army beret
+  description: The proud tradition of the US Army 1st Air Cav using black berets for their troopers is maintained since the 20th century.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/black_beret.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/black_beret.rsi
+
+- type: entity
+  parent: CMHeadBeretCOBlack
+  id: AU14BeretUSArmyMajor
+  name: army commander black beret
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14HatUSArmy
+  name: US cavalry hat
+  description: Also known as Cavalry Stetson, this hat is a symbol of tradition and remembrence of heroism that is ongoing from as far as 19th century. Even though cavalry divison had cashed in its horses for choppers, choppers for dropships, and gone tear-assing around space, looking for the shit.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/US_Army/Hats/cavalry.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/US_Army/Hats/cavalry.rsi

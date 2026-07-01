@@ -1,0 +1,24 @@
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14UPPNavalInfantryHelmet
+  name: UPP Naval Infantry Helmet
+  description: A UPP Naval Infantry helmet.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/helmets/upphelmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/UPP/helmets/upphelmet.rsi
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14ArmorHelmetArmyUPP
+  name: 6B82 combat helmet
+  suffix: AU14
+  description: An older version of the UPP Army's 6B92 combat helmet, still worn by certain units on planets the UPP deems less important.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/SPP/army_helmet.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/SPP/army_helmet.rsi
+  - type: ItemCamouflage
+    camouflageVariations: { }

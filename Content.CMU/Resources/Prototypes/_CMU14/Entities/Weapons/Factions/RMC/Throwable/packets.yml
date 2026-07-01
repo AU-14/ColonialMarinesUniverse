@@ -1,0 +1,334 @@
+- type: entity
+  abstract: true
+  parent: CMPacketBase
+  id: AU14PacketBaseRMC
+  suffix: RM
+  name: packet
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Throwable/RMC/packets.rsi
+    state: general_packet
+
+- type: entity
+  parent: AU14PacketBaseRMC
+  id: AU14PacketGrenadeHighExplosiveRMC
+  name: R2175/A HEDP grenade packet
+  suffix: RM
+  description: It contains three R2175/A HEDP grenades. Handle with care.
+  components:
+  - type: Sprite
+    layers:
+    - state: hedp_packet
+      map: [ "closedLayer" ]
+    - state: hedp_packet_e
+      map: [ "openLayer", "emptyLayer" ]
+
+- type: entity
+  parent: AU14PacketGrenadeHighExplosiveRMC
+  id: AU14PacketGrenadeHighExplosiveRMCFilled
+  suffix: Filled, RM
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14GrenadeHighExplosiveRMC
+      amount: 3
+
+- type: entity
+  parent: RMCBoxBase
+  id: AU14BoxHEDPRMC
+  suffix: RM
+  name: R2175/A HEDP grenade box
+  description: A secure box holding 18 30mm R2175/A High-Explosive Dual-Purpose grenades. High explosive, don't store near the flamer fuel.
+  components:
+  - type: Sprite
+    layers:
+    - state: d_nade_placeholder
+      map: [ "closedLayer" ]
+    - state: model_r2175
+    - state: rmchedp
+    - state: d_nade_placeholder_e
+      map: [ "openLayer", "emptyLayer" ]
+  - type: Storage
+    whitelist:
+      tags:
+      - RMCGrenadeHEDP
+  - type: StorageFill
+    contents:
+    - id: AU14GrenadeHighExplosiveRMC
+      amount: 18
+
+#- type: entity
+#  parent: AU14PacketBaseRMC
+#  id: AU14PacketGrenadeSmokeRMC
+#  name: R2175/C HSDP grenade packet
+#  suffix: RM
+#  description: It contains three R2175/C HSDP smoke grenades.
+#  components:
+#  - type: Sprite
+#    layers:
+#    - state: hsdp_packet
+#      map: [ "closedLayer" ]
+#    - state: hsdp_packet_e
+#      map: [ "openLayer", "emptyLayer"]
+
+#- type: entity
+#  parent: AU14PacketGrenadeSmokeRMC
+#  id: AU14PacketGrenadeSmokeRMCFilled
+#  suffix: Filled, RM
+#  components:
+#  - type: StorageFill
+#    contents:
+#    - id: AU14GrenadeSmokeRMC
+#      amount: 3
+
+- type: entity
+  parent: AU14PacketBaseRMC
+  id: AU14PacketGrenadeNeuroRMC
+  name: R2175/CN20 gas grenade packet
+  suffix: RM
+  description: It contains three 2175/B HIDP incendiary grenades.
+  components:
+  - type: Sprite
+    layers:
+    - state: hsdp_packet
+      map: [ "closedLayer" ]
+    - state: hsdp_packet_e
+      map: [ "openLayer", "emptyLayer"]
+
+- type: entity
+  parent: AU14PacketGrenadeNeuroRMC
+  id: AU14PacketGrenadeNeuroRMCFilled
+  suffix: Filled, RM
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14GrenadeNeuroRMC
+      amount: 3
+
+- type: entity
+  parent: RMCBoxBase
+  id: AU14BoxGasRMC
+  suffix: RM
+  name: R2175/CN20 gas grenade box
+  description: A secure box holding 18 R2175/CN20 nerve-gas grenades. Highly lethal, ensure caps are fitted securely before storage.
+  components:
+  - type: Sprite
+    layers:
+    - state: d_nade_placeholder
+      map: [ "closedLayer" ]
+    - state: model_r2175
+    - state: rmcgas
+    - state: d_nade_placeholder_e
+      map: [ "openLayer", "emptyLayer" ]
+  - type: Storage
+    whitelist:
+      tags:
+      - RMCGrenadeHEDP
+  - type: StorageFill
+    contents:
+    - id: AU14GrenadeNeuroRMC
+      amount: 18
+
+- type: entity
+  parent: AU14PacketBaseRMC
+  id: AU14PacketGrenadeIncendiaryRMC
+  name: R2175/B HIDP grenade packet
+  suffix: RM
+  description: It contains three 2175/B HIDP incendiary grenades.
+  components:
+  - type: Sprite
+    layers:
+    - state: hidp_packet
+      map: [ "closedLayer" ]
+    - state: hidp_packet_e
+      map: [ "openLayer", "emptyLayer"]
+
+- type: entity
+  parent: AU14PacketGrenadeIncendiaryRMC
+  id: AU14PacketGrenadeIncendiaryRMCFilled
+  suffix: Filled, RM
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14GrenadeIncendiaryRMC
+      amount: 3
+
+- type: entity
+  parent: RMCBoxBase
+  id: AU14BoxHIDPRMC
+  suffix: RM
+  name: R2175/B HIDP grenade box
+  description: A secure box holding 18 R2175/B HIDP grenades. Highly flammable, don't store near open flames.
+  components:
+  - type: Sprite
+    layers:
+    - state: d_nade_placeholder
+      map: [ "closedLayer" ]
+    - state: model_r2175
+    - state: rmchidp
+    - state: d_nade_placeholder_e
+      map: [ "openLayer", "emptyLayer" ]
+  - type: Storage
+    whitelist:
+      tags:
+      - RMCGrenadeHEDP
+  - type: StorageFill
+    contents:
+    - id: AU14GrenadeIncendiaryRMC
+      amount: 18
+
+- type: entity
+  parent: AU14PacketBaseRMC
+  id: AU14Packet20MMGrenadeFragRMC
+  name: L104A1 20mm fragmentation grenade packet
+  suffix: RM
+  description: It contains eight L104A1 20mm frag grenades. Handle with care.
+  components:
+  - type: Sprite
+    layers:
+    - state: rmc_packet
+      map: [ "closedLayer" ]
+    - state: wpsi-p
+    - state: rmc_packet_e
+      map: [ "openLayer", "emptyLayer" ]
+    - state: wpsi-p
+
+- type: entity
+  parent: AU14Packet20MMGrenadeFragRMC
+  id: AU14Packet20MMGrenadeFragRMCFilled
+  suffix: RM, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU1420MMGrenadeL104A1
+      amount: 8
+
+- type: entity
+  parent: AU14PacketBaseRMC
+  id: AU14Packet20MMGrenadeHERMC
+  name: L103A1 20mm HE grenade packet
+  suffix: RM
+  description: It contains eight L103A1 20mm HE grenades. Handle with care.
+  components:
+  - type: Sprite
+    layers:
+    - state: rmc_packet
+      map: [ "closedLayer" ]
+    - state: bfab-p
+    - state: rmc_packet_e
+      map: [ "openLayer", "emptyLayer" ]
+    - state: bfab-p
+
+- type: entity
+  parent: AU14Packet20MMGrenadeHERMC
+  id: AU14Packet20MMGrenadeHERMCFilled
+  suffix: RM, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU1420MMGrenadeL103A1
+      amount: 8
+
+- type: entity
+  parent: AU14PacketBaseRMC
+  id: AU14Packet20MMGrenadeIncendiaryRMC
+  name: L103A1/I 20mm incendiary grenade packet
+  suffix: RM
+  description: It contains eight L103A1/I 20mm incendiary grenades. Handle with care.
+  components:
+  - type: Sprite
+    layers:
+    - state: rmc_packet
+      map: [ "closedLayer" ]
+    - state: sebb-p
+    - state: rmc_packet_e
+      map: [ "openLayer", "emptyLayer" ]
+    - state: sebb-p
+
+- type: entity
+  parent: AU14Packet20MMGrenadeIncendiaryRMC
+  id: AU14Packet20MMGrenadeIncendiaryRMCFilled
+  suffix: RM, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU1420MMGrenadeL103A1I
+      amount: 8
+
+- type: entity
+  parent: AU14PacketBaseRMC
+  id: AU14Packet20MMGrenadeHoloRMC
+  name: L103A1/H 20mm holo-targetting grenade packet
+  suffix: RM
+  description: It contains eight L104A1/H 20mm holo-targetting grenades. Handle with care.
+  components:
+  - type: Sprite
+    layers:
+    - state: rmc_packet
+      map: [ "closedLayer" ]
+    - state: hiaf-p
+    - state: rmc_packet_e
+      map: [ "openLayer", "emptyLayer" ]
+    - state: hiaf-p
+
+- type: entity
+  parent: AU14Packet20MMGrenadeHoloRMC
+  id: AU14Packet20MMGrenadeHoloRMCFilled
+  suffix: RM, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14HornetShellL104A1H
+      amount: 8
+
+- type: entity
+  parent: AU14PacketBaseRMC
+  id: AU14Packet20MMGrenadeHESHRMC
+  name: L108A1 20mm HESH grenade packet
+  suffix: RM
+  description: It contains eight L108A1 high-explosive, squash-head grenades. Handle with care.
+  components:
+  - type: Sprite
+    layers:
+    - state: rmc_packet
+      map: [ "closedLayer" ]
+    - state: heap-p
+    - state: rmc_packet_e
+      map: [ "openLayer", "emptyLayer" ]
+    - state: heap-p
+
+- type: entity
+  parent: AU14Packet20MMGrenadeHESHRMC
+  id: AU14Packet20MMGrenadeHESHRMCFilled
+  suffix: RM, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU1420MMGrenadeL108A1
+      amount: 8
+
+- type: entity
+  parent: AU14PacketBaseRMC
+  id: AU14Packet20MMGrenadeNeuroRMC
+  name: L101A2 20mm nerve-agent grenade packet
+  suffix: RM
+  description: It contains eight L101A2 20mm nerve gas grenades. Handle with care.
+  components:
+  - type: Sprite
+    layers:
+    - state: rmc_packet
+      map: [ "closedLayer" ]
+    - state: hirr-p
+    - state: rmc_packet_e
+      map: [ "openLayer", "emptyLayer" ]
+    - state: hirr-p
+
+- type: entity
+  parent: AU14Packet20MMGrenadeNeuroRMC
+  id: AU14Packet20MMGrenadeNeuroRMCFilled
+  suffix: RM, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU1420MMGrenadeL101A2
+      amount: 3

@@ -1,0 +1,37 @@
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyCLF
+  name: modified colony encryption key
+  description: An encryption key used to communicate on colony and CLF radio channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - Colony
+    - radioCLF
+    defaultChannel: radioCLF
+
+- type: entity
+  parent: RMCBaseUniformAccessory
+  id: AU14CLFHeadset
+  name: CLF earpiece
+  description: A small, concealable earpiece used by CLF operatives. Virtually invisible when worn, it clips discreetly onto a uniform.
+  suffix: CLF, Colony
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/headsets.rsi
+    state: cmb_headset
+  - type: UniformAccessory
+    hidden: true
+    viewerWhitelist:
+      components:
+      - CLFMember
+    category: Utility
+    limit: 1
+    playerSprite:
+      sprite: _RMC14/Objects/Medals/bronze.rsi
+      state: equipped
+  - type: AccessoryHeadset
+    channels:
+    - Colony
+    - radioCLF
+    defaultChannel: radioCLF

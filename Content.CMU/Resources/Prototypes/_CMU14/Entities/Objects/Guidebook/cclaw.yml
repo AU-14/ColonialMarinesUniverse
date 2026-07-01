@@ -1,0 +1,104 @@
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLaw
+  name: Colonial Civil Code
+  text: "/ServerInfo/Guidebook/_AU14/CCLaw/AU14CCLaw.xml"
+  priority: 3
+  children:
+  - AU14CCLawGeneral
+  - AU14CCLawCorporate
+  - AU14CCLawProcedures
+  - AU14CCLawMilitary
+  - AU14CCLawCriminalCode
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawGeneral
+  name: General Provisions
+  priority: 1
+  text: "/ServerInfo/Guidebook/_AU14/CCLaw/AU14CCLawGeneral.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawCorporate
+  name: Corporate & Frontier Jurisdiction
+  priority: 2
+  text: "/ServerInfo/Guidebook/_AU14/CCLaw/AU14CCLawCorporate.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawProcedures
+  name: Civil Citations & Arrest Procedures
+  priority: 3
+  text: "/ServerInfo/Guidebook/_AU14/CCLaw/AU14CCLawProcedures.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawMilitary
+  name: Military Presence
+  priority: 4
+  text: "/ServerInfo/Guidebook/_AU14/CCLaw/AU14CCLawMilitary.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawCriminalCode
+  name: Criminal Code
+  priority: 5
+  text: "/ServerInfo/Guidebook/_AU14/CCLaw/AU14CCLawCriminalCode.xml"
+  children:
+  - AU14CCLawOptionalCharges
+  - AU14CCLawMinorCrimes
+  - AU14CCLawArmsControl
+  - AU14CCLawMajorCrimes
+  - AU14CCLawCapitalCrimes
+  - AU14CCLawPrecautionary
+  - AU14CCLawEmergency
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawOptionalCharges
+  name: Optional Add-On Charges
+  priority: 1
+  text: "/ServerInfo/Guidebook/_AU14/CCLaw/Crimes/AU14CCLawOptionalCharges.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawMinorCrimes
+  name: Minor Crimes
+  priority: 2
+  text: "/ServerInfo/Guidebook/_AU14/CCLaw/Crimes/AU14CCLawMinorCrimes.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawArmsControl
+  name: Arms Control & Weapons Statutes
+  priority: 3
+  text: "/ServerInfo/Guidebook/_AU14/CCLaw/Crimes/AU14CCLawArmsControl.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawMajorCrimes
+  name: Major Crimes
+  priority: 4
+  text: "/ServerInfo/Guidebook/_AU14/CCLaw/Crimes/AU14CCLawMajorCrimes.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawCapitalCrimes
+  name: Capital Crimes
+  priority: 5
+  text: "/ServerInfo/Guidebook/_AU14/CCLaw/Crimes/AU14CCLawCapitalCrimes.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawPrecautionary
+  name: Precautionary Confinement
+  priority: 6
+  text: "/ServerInfo/Guidebook/_AU14/CCLaw/Crimes/AU14CCLawPrecautionary.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawEmergency
+  name: Administrative Emergency Powers
+  priority: 7
+  text: "/ServerInfo/Guidebook/_AU14/CCLaw/Crimes/AU14CCLawEmergency.xml"

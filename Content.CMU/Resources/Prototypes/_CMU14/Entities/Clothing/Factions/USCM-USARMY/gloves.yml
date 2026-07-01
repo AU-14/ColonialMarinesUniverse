@@ -1,0 +1,37 @@
+- type: entity
+  parent: ClothingHandsBase
+  id: AU14PVEHandsInsulatedBlackMarine
+  name: insulated combat gloves
+  description: "Standard issue tactical gloves with insulated fibers."
+  components:
+  - type: Insulated
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Hands/Gloves/black.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Hands/Gloves/black.rsi
+  - type: Fiber
+    fiberMaterial: fibers-black
+    fiberColor: fibers-black
+  - type: FingerprintMask
+
+- type: entity
+  parent: ClothingHandsBase
+  id: AU14PVEHandsFingerlessBlackGloves
+  name: fingerless combat gloves
+  description: "Standard issue tactical gloves with the fingers cut off, no longer providing protection against electrical shocks."
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Hands/black-fingerless.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/Hands/black-fingerless.rsi
+
+- type: entity
+  parent: ClothingHandsBase
+  id: AU14PVEHandsFingerlessBrownGloves
+  name: fingerless combat gloves
+  description: "Standard issue tactical gloves with the fingers cut off, no longer providing protection against electrical shocks."
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Hands/brown-fingerless.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/Hands/brown-fingerless.rsi

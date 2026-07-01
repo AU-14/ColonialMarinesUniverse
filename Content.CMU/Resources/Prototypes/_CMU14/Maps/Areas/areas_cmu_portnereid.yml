@@ -1,0 +1,55 @@
+- type: entity
+  parent: RMCAreaPortNereidCargoComms
+  id: CMUAreaPortNereidSouthLZ1Comms
+  name: Port Nereid - South LZ1 Communications Tower
+  components:
+  - type: Sprite
+    sprite: _RMC14/Areas/areas_varadero.rsi
+    state: comms2
+  - type: Area
+    weatherEnabled: true
+
+- type: entity
+  parent: RMCAreaPortNereidCargoComms
+  id: CMUAreaPortNereidSouthLZ2Comms
+  name: Port Nereid - South LZ2 Communications Tower
+  components:
+  - type: Sprite
+    sprite: _RMC14/Areas/areas_varadero.rsi
+    state: comms2
+  - type: Area
+    weatherEnabled: true
+
+- type: entity
+  parent: RMCAreaPortNereidCargoComms
+  id: CMUAreaPortNereidNorthLZ2Comms
+  name: Port Nereid - North LZ2 Communications Tower
+  components:
+  - type: Sprite
+    sprite: _RMC14/Areas/areas_varadero.rsi
+    state: comms2
+  - type: Area
+    weatherEnabled: true
+
+- type: entity
+  parent: RMCAreaPortNereidCargoComms
+  id: CMUAreaPortNereidNorthJungleComms
+  name: Port Nereid - North Jungle Communications Tower
+  components:
+  - type: Sprite
+    sprite: _RMC14/Areas/areas_varadero.rsi
+    state: comms2
+  - type: Area
+    weatherEnabled: true
+
+- type: entity
+  parent: RMCAreaPortNereidCargoComms
+  id: CMUAreaPortNereidWestHabsComms
+  name: Port Nereid - Western Habitation Communications Tower
+  components:
+  - type: Sprite
+    sprite: _RMC14/Areas/areas_varadero.rsi
+    state: comms2
+  - type: Area
+    weatherEnabled: true
+

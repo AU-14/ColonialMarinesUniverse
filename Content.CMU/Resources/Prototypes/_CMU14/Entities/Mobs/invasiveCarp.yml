@@ -1,0 +1,182 @@
+- type: entity
+  parent: CMUBaseMobCarp
+  id: CMUMobCarpInvasive
+  name: invasive carp
+  description: It's an invasive species of carp. Adapted to hunt up hill both ways.
+  suffix: CMU
+  components:
+  - type: CombatMode
+    canDisarm: true
+    disarmFailChance: 0
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 100
+        mask:
+        - Impassable
+        - HighImpassable
+        - LowImpassable
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - MobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.40
+        density: 100
+        layer:
+        - BulletImpassable
+  - type: GhostRole
+    name: Invasive Carp
+    description: An invasive species of fish. They are adapted to hunt up hill both ways
+    rules: Hunt tall prey to satiate your hunger. Small animals are your bait to catch the larger prey. If you're well-fed... maintain a sustainable hunting ground but be sure to share with the others.
+    prob: 1
+  - type: GhostTakeoverAvailable
+  - type: Sprite
+    drawdepth: Mobs
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base"]
+      state: alive
+      sprite: _AU14/Mobs/Animals/sharkminnow.rsi
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      780: Critical
+      880: Dead
+  - type: MeleeWeapon
+    autoAttack: true
+    widePrimary: true
+    altDisarm: true
+    attackRate: 1.4
+    damage:
+      types:
+        Slash: 22.5
+        Bloodloss: 11.25
+  - type: Butcherable
+    butcheringType: Knife # Spike
+    spawned:
+    - id: FoodMeatFish
+      amount: 8
+  - type: Puller
+    needsHands: false
+  - type: Tag
+    tags:
+    - Carp
+    - DoorBumpOpener
+    - RMCSynthGrabbable
+  - type: BodyZoneTargeting
+    meleeAccuracy: 0.55
+  - type: NightVision
+    innate: true
+  - type: CMArmor
+    bullet: 10
+    bio: 20
+    explosionArmor: 10
+  - type: MobStateActions
+    actions:
+      Alive:
+      - ActionXenoRegurgitate
+      - ActionXenoTailStab
+      - ActionCarpTumble
+      - ActionCarpRam
+      - ActionCarpTailLash
+      - ActionXenoHeadbite
+      Critical:
+      - CMActionGhost
+      Dead:
+      - CMActionGhost
+  - type: RMCActionOrder
+    id: CMUMobCarpInvasive
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoDevour
+  - type: XenoTailStab
+    tailDamage:
+      groups:
+        Brute: 30
+      types:
+        Bloodloss: 15
+  - type: Tackle
+    min: 4
+    max: 5
+    chance: 0.4
+    stunMin: 4
+    stunMax: 4
+  - type: XenoTumble
+    damage:
+      types:
+        Blunt: 15
+  - type: XenoFling
+    paralyzeTime: 0
+    slowTime: 8
+  - type: XenoTailLash
+    cost: 0
+  - type: XenoHeadbite
+    damage:
+      groups:
+        Brute: 60
+      types:
+        Bloodloss: 30
+  - type: MovementIgnoreGravity
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 5.55
+    baseSprintSpeed: 10
+  - type: MobCollision
+    minimumSpeedModifier: 0.1
+  - type: SlowOnPull
+    slowdowns:
+    - multiplier: 0.68
+      whitelist:
+        components:
+        - Marine
+    - multiplier: 0.755
+      whitelist:
+        components:
+        - XenoLight
+    - multiplier: 0.5275
+      whitelist:
+        components:
+        - XenoHeavy
+  - type: RMCSize
+    size: Big
+  - type: ParalyzeOnPullAttempt
+  - type: FireVisuals
+    sprite: _RMC14/Mobs/Effects/on_fire_xeno.rsi
+    normalState: simple_onfire
+    lightEnergyPerStack: 0.2
+    lightRadiusPerStack: 0.1
+    maxLightRadius: 2
+    maxLightEnergy: 8
+  - type: RMCFireColor
+  - type: PressureImmunity
+  - type: Respirator
+    minSaturation: 5.0
+  - type: Temperature
+    damageCap: 0
+    heatDamageThreshold: 423
+    coldDamageThreshold: 0
+
+- type: entity
+  parent: ActionXenoTumble
+  id: ActionCarpTumble
+  name: Tumble
+  components:
+  - type: XenoActionPlasma
+    cost: 0
+
+- type: entity
+  parent: ActionXenoRam
+  id: ActionCarpRam
+  name: Ram
+  components:
+  - type: XenoActionPlasma
+    cost: 0
+
+- type: entity
+  parent: ActionXenoTailLash
+  id: ActionCarpTailLash
+  name: Tail Lash

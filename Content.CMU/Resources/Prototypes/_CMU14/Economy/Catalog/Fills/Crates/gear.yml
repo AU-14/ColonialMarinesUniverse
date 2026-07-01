@@ -1,0 +1,10 @@
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateGearPackFlareRMC
+  name: flare packs crate (x20)
+  suffix: RM
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14BoxPackFlareRMC
+      amount: 2

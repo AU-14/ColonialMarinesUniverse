@@ -1,0 +1,219 @@
+# ├──[ ENCRYPTIONKEYS ]──────────────────────────────────────────────┤
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyOpfor
+  name: OPFOR encryption key
+  description: An encryption key used to communicate on the OPFOR channel, it is automatically assigned the right channel.
+
+- type: entity
+  parent: AU14EncryptionKeyOpfor
+  id: AU14EncryptionKeyOpforBravo
+  name: OPFOR Bravo encryption key
+  description: An encryption key used to communicate on the OPFOR Bravo channel.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioOpforBravo
+    defaultChannel: radioOpforBravo
+
+- type: entity
+  parent: AU14EncryptionKeyOpfor
+  id: AU14EncryptionKeyOpforCharlie
+  name: OPFOR Charlie encryption key
+  description: An encryption key used to communicate on the OPFOR Charlie channel.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioOpforCharlie
+    defaultChannel: radioOpforCharlie
+
+- type: entity
+  parent: AU14EncryptionKeyOpfor
+  id: AU14EncryptionKeyOpforCommand
+  name: OPFOR Command encryption key
+  description: An encryption key used to communicate on all available OPFOR channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioOpforAlpha
+    - radioOpforCharlie
+    - radioOpforBravo
+    - radioOpforCommand
+    - radioOpforIntel
+    - radioOpforJTAC
+    - radioOpforMILP
+    defaultChannel: radioOpforCommand
+
+- type: entity
+  parent: AU14EncryptionKeyOpfor
+  id: AU14EncryptionKeyOpforCommandOnly
+  name: OPFOR Command-only encryption key
+  description: An encryption key used to communicate on the OPFOR Command channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioOpforCommand
+    defaultChannel: radioOpforCommand
+
+- type: entity
+  parent: AU14EncryptionKeyOpfor
+  id: AU14EncryptionKeyOpforIntel
+  name: OPFOR Intel encryption key
+  description: An encryption key used to communicate on the OPFOR Intel channel.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioOpforIntel
+    defaultChannel: radioOpforIntel
+
+- type: entity
+  parent: AU14EncryptionKeyOpfor
+  id: AU14EncryptionKeyOpforJTAC
+  name: OPFOR JTAC encryption key
+  description: An encryption key used to communicate on the OPFOR ATC channel.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioOpforJTAC
+
+- type: entity
+  parent: AU14EncryptionKeyOpfor
+  id: AU14EncryptionKeyOpforMILP
+  name: OPFOR MP encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioOpforMILP
+
+# ├──[ HEADSETS ]────────────────────────────────────────────────────┤
+- type: entity
+  parent: RMCHeadsetShip
+  id: AU14HeadsetOpforMarine
+  name: OPFOR section radio headset
+  description: This is used by OPFOR personnel to communicate on the radio.
+  components:
+  - type: Sprite
+    state: generic_headset
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyOpfor
+  - type: GrantSquadLeaderTracker
+    defaultMode: SquadLeader
+    trackerModes:
+    - SquadLeader
+    - FireteamLeader
+    - BattleBuddy
+    - SeniorEnlistedAdvisor
+    - PrimaryLandingZone
+
+- type: entity
+  parent: AU14HeadsetOpforMarine
+  id: AU14HeadsetOpforCommand
+  name: OPFOR Command radio headset
+  description: This is used by OPFOR command members to communicate on the radio.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyOpfor
+      - AU14EncryptionKeyOpforCommand
+      - AU14EncryptionKeyOpforBravo
+      - AU14EncryptionKeyOpforCharlie
+      - AU14EncryptionKeyOpforIntel
+      - AU14EncryptionKeyOpforJTAC
+      - AU14EncryptionKeyOpforMILP
+  - type: RMCStaticDefaultChannel
+  - type: EncryptionKeyHolder
+    defaultChannel: radioOpforCommand
+
+- type: entity
+  parent: AU14HeadsetOpforMarine
+  id: AU14HeadsetOpforMarineSL
+  name: OPFOR SL radio headset
+  description: This is used by OPFOR section leaders to communicate on the radio.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyOpfor
+      - AU14EncryptionKeyOpforCommandOnly
+      - AU14EncryptionKeyOpforJTAC
+
+- type: entity
+  parent: AU14HeadsetOpforMarine
+  id: AU14HeadsetOpforMarineFTL
+  name: OPFOR FTL radio headset
+  description: This is used by OPFOR fireteam leaders to communicate on the radio.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyOpfor
+      - AU14EncryptionKeyOpforJTAC
+
+- type: entity
+  parent: AU14HeadsetOpforMarine
+  id: AU14HeadsetOpforAuxiliary
+  name: OPFOR Auxiliary support radio headset
+  description: This is used by OPFOR auxiliary support personnel to communicate on the radio.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyOpfor
+      - AU14EncryptionKeyOpforCommandOnly
+      - AU14EncryptionKeyOpforIntel
+  - type: RMCStaticDefaultChannel
+  - type: EncryptionKeyHolder
+    defaultChannel: radioOpforCommand
+
+- type: entity
+  parent: AU14HeadsetOpforMarine
+  id: AU14HeadsetOpforMarineMP
+  name: OPFOR MP radio headset
+  description: This is used by OPFOR military police to communicate on the radio.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyOpfor
+      - AU14EncryptionKeyOpforCommand
+#     - AU14EncryptionKeyOpforCommandOnly
+      - AU14EncryptionKeyOpforMILP
+  - type: RMCStaticDefaultChannel
+  - type: EncryptionKeyHolder
+    defaultChannel: radioOpforCommand
+
+- type: entity
+  parent: RMCBaseUniformAccessory
+  id: AU14OPFORIOHeadset
+  name: OPFOR Intel earpiece
+  description: A small, concealable earpiece used by Intelligence operatives. Virtually invisible when worn, it clips discreetly onto a uniform, this one has a built in camera for remote viewing.
+  suffix: OPFOR, IO
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/headsets.rsi
+    state: cmb_headset
+  - type: UniformAccessory
+    hidden: true
+    #viewerWhitelist:
+    #  components:
+    #  - CLFMember
+    category: Utility
+    limit: 1
+    playerSprite:
+      sprite: _RMC14/Objects/Medals/bronze.rsi
+      state: equipped
+  - type: OverwatchCamera
+  - type: AccessoryHeadset
+    channels:
+    - Colony
+    - radioOpforAlpha
+    - radioOpforCharlie
+    - radioOpforBravo
+    - radioOpforCommand
+    - radioOpforIntel
+    - radioOpforJTAC
+    - radioOpforMILP
+    defaultChannel: radioOpforIntel

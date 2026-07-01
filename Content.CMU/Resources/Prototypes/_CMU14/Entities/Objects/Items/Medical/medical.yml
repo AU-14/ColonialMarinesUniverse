@@ -1,0 +1,1070 @@
+- type: entity
+  parent: CMPill
+  id: AU14PillEthylredoxrazine
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: CMEthylredoxrazine
+          Quantity: 15
+  - type: Sprite
+    layers:
+    - state: pill6
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-ethylredoxrazine
+
+- type: entity
+  parent: CMPill
+  id: AU14PillDermaline
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: CMDermaline
+          Quantity: 15
+  - type: Sprite
+    layers:
+    - state: pill7
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-dermaline
+
+- type: entity
+  parent: CMPill
+  id: AU14PillMeralyne
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: CMMeralyne
+          Quantity: 15
+  - type: Sprite
+    layers:
+    - state: pill4
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-meralyne
+
+- type: entity
+  parent: CMPill
+  id: AU14PillImidazoline
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: CMImidazoline
+          Quantity: 15
+  - type: Sprite
+    layers:
+    - state: pill2
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-imidazoline
+
+- type: entity
+  parent: CMPill
+  id: AU14PillCryoxadone
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: CMCryoxadone
+          Quantity: 15
+  - type: Sprite
+    layers:
+    - state: pill2
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-cryoxadone
+
+- type: entity
+  parent: CMPill
+  id: AU14PillLeporazine
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: CMLeporazine
+          Quantity: 15
+  - type: Sprite
+    layers:
+    - state: pill2
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-leporazine
+
+- type: entity
+  parent: CMPill
+  id: AU14PillAlbuterol
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: AU14Albuterol
+          Quantity: 15
+  - type: Sprite
+    layers:
+    - state: pill2
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-albuterol
+
+- type: entity
+  parent: CMPill
+  id: AU14PillCMUParacetamol
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: CMUParacetamol
+          Quantity: 10
+  - type: Sprite
+    layers:
+    - state: pill2
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-paracetamol
+
+- type: entity
+  parent: CMPill
+  id: AU14PillCMUTramadol
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: CMUTramadol
+          Quantity: 10
+  - type: Sprite
+    layers:
+    - state: pill10
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-tramadol
+
+- type: entity
+  parent: CMPill
+  id: AU14PillCMUOxycodone
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: CMUOxycodone
+          Quantity: 10
+  - type: Sprite
+    layers:
+    - state: pill2
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-oxycodone
+
+# organ pills
+
+- type: entity
+  parent: CMPill
+  id: AU14PillCMUHepatocytin
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: CMUHepatocytin
+          Quantity: 10
+  - type: Sprite
+    layers:
+    - state: pill2
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-hepatocytin
+
+- type: entity
+  parent: CMPill
+  id: AU14PillCMUPulmovine
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: CMUPulmovine
+          Quantity: 10
+  - type: Sprite
+    layers:
+    - state: pill2
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-pulmovine
+
+- type: entity
+  parent: CMPill
+  id: AU14PillCMUNephronate
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: CMUNephronate
+          Quantity: 10
+  - type: Sprite
+    layers:
+    - state: pill2
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-nephronate
+
+- type: entity
+  parent: CMPill
+  id: AU14PillCMUCardiocaine
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: CMUCardiocaine
+          Quantity: 10
+  - type: Sprite
+    layers:
+    - state: pill2
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-cardiocaine
+
+- type: entity
+  parent: CMPill
+  id: AU14PillCMUOsteoCalc
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: CMUOsteoCalc
+          Quantity: 10
+  - type: Sprite
+    layers:
+    - state: pill2
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-osteocalc
+
+#pill bottles
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterOsteoCalc
+  name: osteocalc pill bottle
+  suffix: osteocalc, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister1
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillCMUOsteoCalc
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-osteocalc-container-label-text
+
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterCardiocaine
+  name: cardiocaine pill bottle
+  suffix: cardiocaine, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister2
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillCMUCardiocaine
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-cardiocaine-container-label-text
+
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterNephronate
+  name: nephronate pill bottle
+  suffix: nephronate, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister3
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillCMUNephronate
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-nephronate-container-label-text
+
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterPulmovine
+  name: pulmovine pill bottle
+  suffix: pulmovine, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister4
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillCMUPulmovine
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-pulmovine-container-label-text
+
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterHepatocytin
+  name: hepatocytin pill bottle
+  suffix: hepatocytin, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister5
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillCMUHepatocytin
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-hepatocytin-container-label-text
+
+- type: entity
+  parent: CMPacketPills
+  id: AU14PacketPillsTramadol
+  name: tramadol pill packet
+  description: This packet contains tramadol pills. Alleviates moderate amounts of pain. Once you take them out, they don't go back in. Don't take more than 1 pill in a short period.
+  components:
+  - type: Sprite
+    state: tramadol_packet
+  - type: StorageFill
+    contents:
+    - id: AU14PillCMUTramadol
+      amount: 4
+  - type: IconLabel
+    labelTextLocId: rmc-tramadol-container-label-text
+
+- type: entity
+  parent: CMPacketPills
+  id: AU14PacketPillsEmpty
+  name: pill packet
+  description: An empty pills packet.
+  components:
+  - type: Sprite
+    state: pill_packet
+  - type: PhysicalComposition
+    materialComposition:
+      RMCPlastic: 100
+
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterParacetamol
+  name: paracetamol pill bottle
+  suffix: paracetamol, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister9
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillCMUParacetamol
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-paracetamol-container-label-text
+
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterTramadol
+  name: tramadol pill bottle
+  suffix: tramadol, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister3
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillCMUTramadol
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-tramadol-container-label-text
+
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterOxycodone
+  name: oxycodone pill bottle
+  suffix: oxycodone, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister5
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillCMUOxycodone
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-oxycodone-container-label-text
+
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterEthylredoxrazine
+  name: ethylredoxrazine pill bottle
+  suffix: ethylredoxrazine, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister10
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillEthylredoxrazine
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-ethylredoxrazine-container-label-text
+
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterDermaline
+  name: dermaline pill bottle
+  suffix: dermaline, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister8
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillDermaline
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-dermaline-container-label-text
+
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterMeralyne
+  name: meralyne pill bottle
+  suffix: meralyne, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillMeralyne
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-meralyne-container-label-text
+
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterImidazoline
+  name: imidazoline pill bottle
+  suffix: imidazoline, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister12
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillImidazoline
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-imidazoline-container-label-text
+
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterCryoxadone
+  name: cryoxadone pill bottle
+  suffix: cryoxadone, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister4
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillCryoxadone
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-cryoxadone-container-label-text
+
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterLeporazine
+  name: leporazine pill bottle
+  suffix: leporazine, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister5
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillLeporazine
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-leporazine-container-label-text
+
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterAlbuterol
+  name: albuterol pill bottle
+  suffix: albuterol, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister5
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillAlbuterol
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-albuterol-container-label-text
+
+#new medicines
+- type: reagent
+  parent: [ CMReagentMedicine, Dexalin ]
+  id: AU14Albuterol
+  name: reagent-name-albuterol
+  desc: reagent-desc-albuterol
+  color: "#1f83a7"
+  overdose: 35
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.04
+      effects:
+      - !type:EqualHealthChange
+        damage:
+        - Airloss: -4
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentThreshold
+          min: 30
+        damage:
+          groups:
+            Toxin: 0.5
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentThreshold
+          min: 50
+        damage:
+          groups:
+            Brute: 1
+            Toxin: 2
+
+- type: reagent
+  parent: [ CMReagentMedicine, DexalinPlus ]
+  id: AU14Naloxone
+  name: reagent-name-cmnaloxone
+  desc: reagent-desc-cmnaloxone
+  color: "#a3adbf"
+  overdose: 200
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.02
+      effects:
+      - !type:RemoveDamage
+        group: Toxin
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentThreshold
+          min: 15
+        damage:
+          groups:
+            Toxin: 0.75
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentThreshold
+          min: 25
+        damage:
+          groups:
+            Brute: 1.5
+            Toxin: 3
+
+#injectors
+- type: entity
+  parent: CMAutoInjector
+  id: AU14NaloxoneAutoInjector
+  name: naloxone autoinjector
+  description: An autoinjector loaded with naloxone, used to instantly counteract toxin damage. Primarily used to treat overdoses. Doesn't require any training to use.
+  components:
+  - type: Sprite
+    sprite: _AU14/Items/naloxone_auto_injector.rsi
+    layers:
+    - state: autoinjector
+    - state: autoinjector1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+  - type: Item
+    sprite: null
+  - type: Hypospray
+    transferAmount: 3
+    injectSound: /Audio/_RMC14/Medical/air_release.ogg
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 3
+        reagents:
+        - ReagentId: AU14Naloxone
+          Quantity: 3
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    changeColor: false
+  - type: MedicallyUnskilledDoAfter
+    min: 0
+    doAfter: 0
+  - type: IconLabel
+    labelTextLocId: AU14-naloxone-medicine-container-label-text
+
+- type: entity
+  parent: CMTricordrazineAutoInjector
+  id: AU14FirstAidAutoInjectorNoSkill
+  name: first-aid autoinjector
+  description: An autoinjector loaded with a dose of tricordrazine and a small ammount of dexalin for wounded soldiers to treat themselves with.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/auto_injectors.rsi
+    layers:
+    - state: tricord1
+      map: ["enum.SolutionContainerLayers.Fill"]
+  - type: MedicallyUnskilledDoAfter
+    min: 0
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 20
+        reagents:
+        - ReagentId: CMTricordrazine
+          Quantity: 15
+        - ReagentId: CMDexalin
+          Quantity: 5
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    emptySpriteName: tricord0
+    fillBaseName: tricord
+    changeColor: false
+  - type: CMRefillableSolution
+    reagents:
+      CMTricordrazine: 15
+      CMDexalin: 5
+  - type: IconLabel
+    labelTextLocId: rmc-first-aid-container-label-text
+
+- type: entity
+  parent: CMAutoInjector
+  id: AU14MeraBicAutoInjector
+  name: mera-bic autoinjector
+  description: An autoinjector loaded with 3 uses of both Meralyne and Bicaridine.
+  components:
+  - type: Hypospray
+    transferAmount: 30
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 90
+        reagents:
+        - ReagentId: CMMeralyne
+          Quantity: 45
+        - ReagentId: CMBicaridine
+          Quantity: 45
+  - type: CMRefillableSolution
+    reagents:
+      CMMeralyne: 90
+      CMBicaridine: 90
+  - type: IconLabel
+    labelTextLocId: rmc-merabic-container-label-text
+
+- type: entity
+  parent: CMAutoInjector
+  id: AU14KeloDermAutoInjector
+  name: kelo-derm autoinjector
+  description: An autoinjector loaded with 3 uses of both Meralyne and Bicaridine.
+  components:
+  - type: Hypospray
+    transferAmount: 30
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 90
+        reagents:
+        - ReagentId: CMKelotane
+          Quantity: 45
+        - ReagentId: CMDermaline
+          Quantity: 45
+  - type: CMRefillableSolution
+    reagents:
+      CMKelotane: 90
+      CMDermaline: 90
+  - type: IconLabel
+    labelTextLocId: rmc-keloderm-container-label-text
+
+- type: entity
+  parent: CMAutoInjector
+  id: AU14RevivalMixAutoInjector
+  name: revival mix autoinjector
+  description: An autoinjector loaded with 3 uses of Epinephrine, Inaprovaline and Tricordrazine.
+  components:
+  - type: Hypospray
+    transferAmount: 30
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 90
+        reagents:
+        - ReagentId: CMEpinephrine
+          Quantity: 30
+        - ReagentId: CMInaprovaline
+          Quantity: 30
+        - ReagentId: CMTricordrazine
+          Quantity: 30
+  - type: CMRefillableSolution
+    reagents:
+      CMEpinephrine: 30
+      CMInaprovaline: 30
+      CMTricordrazine: 30
+  - type: IconLabel
+    labelTextLocId: rmc-revivalmix-container-label-text
+
+- type: entity
+  parent: CMAutoInjector
+  id: AU14AlbuDexAutoInjector
+  name: albu-dex autoinjector
+  description: An autoinjector loaded with 3 uses of Albuterol and Dexalin as well as a small dose of Dexalin+.
+  components:
+  - type: Hypospray
+    transferAmount: 30
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 93
+        reagents:
+        - ReagentId: CMDexalin
+          Quantity: 45
+        - ReagentId: AU14Albuterol
+          Quantity: 45
+        - ReagentId: CMDexalinPlus
+          Quantity: 3
+  - type: CMRefillableSolution
+    reagents:
+      CMDexalin: 45
+      AU14Albuterol: 45
+      CMDexalinPlus: 3
+  - type: IconLabel
+    labelTextLocId: rmc-albudex-container-label-text
+
+- type: entity
+  parent: CMAutoInjector
+  id: AU14OxycodoneAutoInjector
+  name: oxycodone autoinjector
+  description: An autoinjector loaded with 3 uses of Oxycodone.
+  components:
+  - type: Hypospray
+    transferAmount: 20
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 60
+        reagents:
+        - ReagentId: CMUOxycodone
+          Quantity: 60
+  - type: CMRefillableSolution
+    reagents:
+      CMUOxycodone: 60
+  - type: IconLabel
+    labelTextLocId: rmc-oxycodone-container-label-text
+
+- type: entity
+  parent: CMAutoInjector
+  id: AU14TramadolAutoInjector
+  name: tramadol autoinjector
+  description: An autoinjector loaded with 3 uses of Tramadol.
+  components:
+  - type: Hypospray
+    transferAmount: 20
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 60
+        reagents:
+        - ReagentId: CMUTramadol
+          Quantity: 60
+  - type: CMRefillableSolution
+    reagents:
+      CMUTramadol: 20
+  - type: IconLabel
+    labelTextLocId: rmc-tramadol-container-label-text
+
+- type: entity
+  parent: CMAutoInjector
+  id: AU14ParacetamolAutoInjector
+  name: paracetamol autoinjector
+  description: An autoinjector loaded with 3 uses of Paracetamol.
+  components:
+  - type: Hypospray
+    transferAmount: 20
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 60
+        reagents:
+        - ReagentId: CMUParacetamol
+          Quantity: 60
+  - type: CMRefillableSolution
+    reagents:
+      CMUParacetamol: 60
+  - type: IconLabel
+    labelTextLocId: rmc-paracetamol-container-label-text
+
+#gauze
+
+- type: entity
+  parent: CMBaseHealingItem
+  id: AU14HemostaticGauzePacket
+  name: hemostatic gauze packet
+  description: A vacuum sealed packet of chemically treated gauze designed to stop arterial bleeding fast. The powder burns like hell, but it works. Single-use. Rip it open, jam it in, hope for the best.
+  components:
+  - type: Sprite
+    sprite: _AU14/Items/quickclot.rsi
+    state: quickclot
+  - type: Item
+    sprite: _AU14/Items/quickclot.rsi
+    inhandVisuals:
+      left:
+      - state: qc_left
+      right:
+      - state: qc_right
+  - type: SpawnItemsOnUse
+    items:
+    - id: AU14HemostaticGauzePacketTrash
+    - id: AU14HemostaticGauze
+    sound:
+      path: /Audio/Effects/unwrap.ogg
+  - type: Tag
+    tags:
+    - HemostaticGauzePacket
+# TAGS
+
+- type: Tag
+  id: HemostaticGauzePacket
+
+- type: entity
+  parent: CMBaseHealingItem
+  id: AU14HemostaticGauzePacketTrash
+  name: used hemostatic gauze packet
+  description: A vacuum sealed packet of chemically treated gauze designed to stop arterial bleeding fast. The powder burns like hell, but it works. Single-use. This one is trash, its already been used!
+  components:
+  - type: Sprite
+    sprite: _AU14/Items/quickclot.rsi
+    state: qc_ripped
+  - type: Tag
+    tags:
+    - Trash
+  - type: Item
+    sprite: _AU14/Items/quickclot.rsi
+    inhandVisuals:
+      left:
+      - state: qc_left
+      right:
+      - state: qc_right
+
+- type: entity
+  parent: CMBaseHealingItem
+  id: AU14HemostaticGauze
+  name: hemostatic gauze
+  description: A strip of gauze soaked with a powdery clotting agent. Once it’s out of the packet, the clock’s ticking, stuff it deep into the wound and stop the bleeding before it’s too late.
+  components:
+  - type: Tag
+    tags:
+    - Brutepack
+  - type: Sprite
+    sprite: _AU14/Items/quickclot.rsi
+    state: hemgauze
+  - type: Item
+    sprite: _AU14/Items/quickclot.rsi
+    inhandVisuals:
+      left:
+      - state: hemgauze_left
+      right:
+      - state: hemgauze_right
+  - type: WoundTreater
+    wound: Brute
+    treats: true
+    instantWoundTreatment: true
+    woundsTreatedPerUse: 1
+    group: Brute
+    consumable: true
+    canUseUnskilled: true
+    skills:
+      RMCSkillMedical: 2
+    cmuMechanisms: 7
+    cmuTreatmentQuality: Optimal
+    cmuCleanupClears: 16
+    treatBeginSound:
+      path: "/Audio/_RMC14/Medical/bandage.ogg"
+    treatEndSound:
+      path: "/Audio/Items/Medical/brutepack_end.ogg"
+    userPopup: au14-hs-user-popup
+    targetPopup: au14-hs-target-popup
+    othersPopup: au14-hs-others-popup
+    noneSelfPopup: cm-gauze-none-self-popup
+    noneOtherPopup: cm-gauze-none-other-popup
+    noWoundsOnUserPopup: cm-wounds-already-treated-self-popup
+    noWoundsOnTargetPopup: cm-wounds-already-treated-target-popup
+  - type: MedicallyUnskilledDoAfter
+    min: 1
+    doAfter: 2.5
+  - type: Stack
+    stackType: CMGauze
+    count: 10
+  - type: StackPrice
+    price: 6
+
+#tourniquet
+
+#to do: add pain when applied
+- type: entity
+  parent: CMBaseHealingItem
+  id: AU14Tourniquet
+  name: CAT tourniquet
+  description: A single use tourniquet designed for self-application under fire. The CAT uses a high-tension Velcro strap and windlass rod to cut off arterial bleeding on limbs. Effective, painful and not exactly gentle. Overuse can lead to nerve damage or amputation. Still, better maimed than dead.
+  components:
+  - type: Tag
+    tags:
+    - Brutepack
+  - type: Sprite
+    sprite: Objects/Specific/Medical/medical.rsi
+    state: tourniquet
+  - type: Item
+    sprite: Objects/Specific/Medical/medical.rsi
+    inhandVisuals:
+      left:
+      - state: tourniquet-inhand-left
+      right:
+      - state: tourniquet-inhand-right
+  - type: CMUTourniquetItem
+    applyDelay: 1.5
+    removeDelay: 1.0
+    consumedOnApply: true
+    refundOnRemove: AU14Tourniquet

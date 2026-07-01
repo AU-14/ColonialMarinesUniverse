@@ -1,0 +1,111 @@
+- type: entity
+  id: CMURandomClothingCivilian
+  name: random civilian clothing spawner
+  parent: MarkerBase
+  suffix: CMU
+  components:
+  - type: Sprite
+    layers:
+      - sprite: _AU14/Markers/landmarks.rsi
+        state: random_clothing
+  - type: RandomSpawner
+    chance: 0.5
+    prototypes:
+      #Foot Wear
+      - RMCShoesBlack
+      - RMCShoesBlue
+      - RMCShoesBrown
+      - RMCShoesGreen
+      - RMCShoesOrange
+      - RMCShoesPurple
+      - RMCShoesRed
+      - RMCShoesWhite
+      - RMCShoesYellow
+      - RMCBootsPMC
+      - RMCBootsVanBandolier
+      - RMCShoesLaceupBrown
+      - RMCShoesLaceup
+      - RMCShoesLeather
+      - CMBootsThigh #Sheperds'
+      #Work Wear
+      - AU14CivilianWorkwearYellow
+      - AU14CivilianWorkwearPink
+      - AU14CivilianWorkwearBlue
+      - AU14CivilianWorkwearGreen
+      #Business Attire
+      - CMJumpsuitLiaisonBlack
+      - CMJumpsuitLiaisonBlue
+      - CMJumpsuitLiaisonBrown
+      - CMJumpsuitLiaisonField
+      - CMJumpsuitLiaisonIvy
+      - CMJumpsuitLiaisonCorporateFormal
+      - CMJumpsuitLiaisonFormal
+      - CMJumpsuitLiaison
+      - CMJumpsuitLiaisonBlazer
+      - CMJumpsuitLiaisonCharcoal
+      #Miscellaneous Clothes
+      - RMCJumpsuitDutchBandolier
+      - RMCJumpsuitCivilian
+      - CMJumpsuitColonist
+      - CMJumpsuitTShirtWhite
+      - CMJumpsuitTShirtGray
+      - CMJumpsuitTShirtRed
+      - CMJumpsuitFishingColonist #Sheperds'
+      #Suit Jackets
+      - RMCJacketCorporateKhaki
+      - RMCJacketCorporateBlack
+      - RMCJacketCorporateBlue
+      - RMCJacketCorporateBrown
+      #Puffer Wear
+      - AU14CivilianJacketGrayPufferVest
+      - AU14CivilianJacketKhakiPufferVest
+      - AU14CivilianJacketTanPufferVest
+      - AU14CivilianJacketGrayPufferJacket
+      - AU14CivilianJacketOrangePufferJacket
+      - AU14CivilianJacketKhakiPufferJacket
+      #Windbreakers
+      - AU14WindbreakerBlue
+      - AU14WindbreakerGray
+      - AU14WindbreakerGreen
+      - AU14WindbreakerKhakiGreenMix
+      - AU14WindbreakerKhaki
+      #Parkas
+      - AU14CivilianJacketBlueParka
+      - AU14CivilianJacketGreenParka
+      - AU14CivilianJacketRedParka
+      - AU14CivilianJacketYellowParka
+      #Trench Coats
+      - AU14CivilianTanTrenchCoat
+      - AU14CivilianBrownTrenchCoat
+      - AU14CivilianGrayTrenchCoat
+      #Miscellaneous Jackets
+      - AU14CivilianJacketBomberJacket
+      - AU14CivilianJacketOldCoat
+      - AU14CivilianJacketSnowSuit
+      #Hats
+      - AU14CivBallCapBlack
+      - AU14CivBallCapBlueTrucker
+      - AU14CivBallCapRedTrucker
+      - AU14USCMVeteranCap
+      - AU14CivFedoraTan
+      - AU14CivFedoraBrown
+      - AU14CivFedoraGray
+      #Glasses
+      - RMCSunglasses
+      - RMCHipsterGlasses
+      - RMCSunglassesBig
+      - AU14GlassesPersonalOrange
+      - RMCGlassesAviators
+      - RMCGlassesTriMaxYellow
+      - RMCGlassesTriMaxBlack
+      - RMCGlassesTriMaxBronze
+      - AU14GlassesBiMexOrange
+      #Gloves
+      - CMHandsBrown
+      - CMHandsLightBrown
+      #Storage
+      - CMSatchel
+      - AU14SlingSatchelBlack
+      - AU14SlingSatchelBlue
+      - RMCBeltUtilityGeneral
+      - RMCPouchGeneral

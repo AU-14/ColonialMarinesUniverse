@@ -1,0 +1,75 @@
+- type: entity
+  id: AU14GrenadeNeuroGas
+  name: CN20 Nerve Gas
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        mask:
+        - MobMask
+        layer:
+        - MidImpassable
+  - type: Occluder
+  - type: Sprite
+    sprite: _RMC14/Effects/smoke.rsi
+    state: smoke2
+    color: "#FFBF58"
+  - type: SpriteColor
+    color: "#FFBF58"
+  - type: TimedDespawn
+    lifetime: 12
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: Appearance
+  - type: ActiveEdgeSpreader
+  - type: EdgeSpreader
+    id: AU14GrenadeNeuroGas
+  - type: EvenSmoke
+    spawn: AU14GrenadeNeuroGas
+    range: 4
+  - type: ChemicalIrritantInjector
+    irritantPerSecond: 10
+    affectsDead: false
+    affectsInfectedNested: false
+    filterDamage: 2
+    neurotoxinFilterDamage: true
+    depletionPerTick: 2.5
+    profile:
+      irritantType: NerveGas
+      irritantDamage:
+        types:
+          Asphyxiation: 1
+          Poison: 3
+      effectThreshold: 1
+      blindThreshold: 19
+      severeThreshold: 29
+      tripThreshold: 19
+      tripChance: 0.23
+      tripStunTime: 1.75
+      blurTime: 5
+      blindTime: 1
+      minimumDelayBetweenTrips: 8
+      severeSlowChance: 0.39
+      severeSlowTime: 4
+      dyloveneEfficiency: 3
+      exposureMessages:
+      - "You feel like dying!"
+      - "Your lungs burn!"
+      - "You cough uncontrollably!"
+      - "Make it stop!"
+      - "Your body stiffens!"
+  - type: DeleteOnExplosion
+
+
+- type: edgeSpreader
+  id: AU14GrenadeNeuroGas
+  updatesPerSecond: 2
+

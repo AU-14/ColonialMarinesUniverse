@@ -1,0 +1,112 @@
+- type: entity
+  parent: WeaponRifleM4SPRCustom
+  name: M49A2 battle rifle
+  id: AU14WeaponRifleM49A
+  suffix: Recon
+  description: An early modification of the M49A marksman rifle, the A2 has a tweaked gas-system and fire-control-group, giving it better cyclic rate and a two round burst-fire mode. Fielded almost exclusively by FORECON units in the USCM. This one is painted in a fresh coat of the newer Humbrol 76 camouflage.
+  components:
+  - type: GuideHelp
+    guides:
+    - RMCGuideRoleSpecScout
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/USCM/m49a.rsi
+    layers:
+    - state: bolt-open
+      map: [ "enum.GunVisualLayers.Base" ]
+    - sprite: _AU14/Weapons/Guns/Attachments/barrel.rsi
+      state: m49a_barrel
+      offset: 0.65, 0
+      map: [ "barrel" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    recoilWielded: 1
+    recoilUnwielded: 4
+    scatterWielded: 2.5
+    scatterUnwielded: 8
+    baseFireRate: 2.9
+    burstFireRateMultiplier: 15
+    modifiers:
+      Burst:
+        fireDelay: 0.1556
+        maxScatterModifier: 10
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 6
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.1
+  - type: GunDamageModifier
+    multiplier: 1.4
+  - type: WieldableSpeedModifiers
+    base: 0.725
+    light: 1
+    medium: 1
+    heavy: 1
+  - type: Gun
+    shotsPerBurst: 2
+    burstCooldown: 0.75
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    - Burst
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_m4spr.ogg
+#  - type: GunUserWhitelist
+#    whitelist:
+#      components:
+#      - ScoutWhitelist
+  - type: Corrodible
+    isCorrodible: false
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/USCM/m49a.rsi
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 26 # Yes this does this much damage in 13.
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentS42xTelescopicMiniscope
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentBipod
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentLaserSight
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentU7UnderbarrelShotgun
+          - RMCAttachmentExtinguisher
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_unload.ogg
+        priority: 2
+        startingItem: CMMagazineRifleM4SPRExt
+        whitelist:
+          tags:
+          - CMMagazineRifleM4SPR
+          - CMMagazineRifleM4SPRAP
+          - CMMagazineRifleM4SPRExt
+  - type: ItemCamouflage
+    camouflageVariations: { }
+    layers:
+      barrel: {}

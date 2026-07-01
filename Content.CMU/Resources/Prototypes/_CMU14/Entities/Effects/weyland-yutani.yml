@@ -1,0 +1,167 @@
+# floor flag
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniFloorFlagL
+  sprite:
+    sprite: _CMU14/Decals/weyufloorflag.rsi
+    state: wy_left
+
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniFloorFlagM
+  sprite:
+    sprite: _CMU14/Decals/weyufloorflag.rsi
+    state: wy_mid
+
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniFloorFlagR
+  sprite:
+    sprite: _CMU14/Decals/weyufloorflag.rsi
+    state: wy_right
+
+# floor logo
+  # regular
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniFloorLogoLeft
+  sprite:
+    sprite: _CMU14/Decals/weyufloorlogo.rsi
+    state: weylandyutanilogo1l
+
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniFloorLogoRight
+  sprite:
+    sprite: _CMU14/Decals/weyufloorlogo.rsi
+    state: weylandyutanilogo1r
+
+  # faded
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniFloorLogoFadedLeft
+  sprite:
+    sprite: _CMU14/Decals/weyufloorlogo.rsi
+    state: weylandyutanilogo2l
+
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniFloorLogoFadedRight
+  sprite:
+    sprite: _CMU14/Decals/weyufloorlogo.rsi
+    state: weylandyutanilogo2r
+
+# big floor logo
+  # lineless
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniHugeFloorLogo1
+  sprite:
+    sprite: _CMU14/Decals/weyuhugefloor.rsi
+    state: wy_huge_logo1
+
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniHugeFloorLogo2
+  sprite:
+    sprite: _CMU14/Decals/weyuhugefloor.rsi
+    state: wy_huge_logo2
+
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniHugeFloorLogo3
+  sprite:
+    sprite: _CMU14/Decals/weyuhugefloor.rsi
+    state: wy_huge_logo3
+
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniHugeFloorLogo4
+  sprite:
+    sprite: _CMU14/Decals/weyuhugefloor.rsi
+    state: wy_huge_logo4
+
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniHugeFloorLogo5
+  sprite:
+    sprite: _CMU14/Decals/weyuhugefloor.rsi
+    state: wy_huge_logo5
+
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniHugeFloorLogo6
+  sprite:
+    sprite: _CMU14/Decals/weyuhugefloor.rsi
+    state: wy_huge_logo6
+
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniHugeFloorLogo7
+  sprite:
+    sprite: _CMU14/Decals/weyuhugefloor.rsi
+    state: wy_huge_logo7
+
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniHugeFloorLogo8
+  sprite:
+    sprite: _CMU14/Decals/weyuhugefloor.rsi
+    state: wy_huge_logo8
+
+  # lines
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniHugeFloorLogoLines1
+  sprite:
+    sprite: _CMU14/Decals/weyuhugefloor.rsi
+    state: wy_huge_logo_lines1
+
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniHugeFloorLogoLines2
+  sprite:
+    sprite: _CMU14/Decals/weyuhugefloor.rsi
+    state: wy_huge_logo_lines2
+
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniHugeFloorLogoLines3
+  sprite:
+    sprite: _CMU14/Decals/weyuhugefloor.rsi
+    state: wy_huge_logo_lines3
+
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniHugeFloorLogoLines4
+  sprite:
+    sprite: _CMU14/Decals/weyuhugefloor.rsi
+    state: wy_huge_logo_lines4
+
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniHugeFloorLogoLines5
+  sprite:
+    sprite: _CMU14/Decals/weyuhugefloor.rsi
+    state: wy_huge_logo_lines5
+
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniHugeFloorLogoLines6
+  sprite:
+    sprite: _CMU14/Decals/weyuhugefloor.rsi
+    state: wy_huge_logo_lines6
+
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniHugeFloorLogoLines7
+  sprite:
+    sprite: _CMU14/Decals/weyuhugefloor.rsi
+    state: wy_huge_logo_lines7
+
+- type: decal
+  parent: RMCDecalHybrisaBase
+  id: CMUDecalWeylandYutaniHugeFloorLogoLines8
+  sprite:
+    sprite: _CMU14/Decals/weyuhugefloor.rsi
+    state: wy_huge_logo_lines8

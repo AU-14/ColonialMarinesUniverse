@@ -1,0 +1,53 @@
+﻿- type: entity
+  id: AU14MineDigger
+  parent: BaseStructure
+  name: mining machine
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: PlacementReplacement
+    key: walls
+  - type: Sprite
+    noRot: true
+    sprite: _AU14/Structures/digger.rsi
+    state: digger_orange
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.734375,-3.171875,-2.734375,3.171875"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 1000
+
+- type: entity
+  id: AU14MineDiggerAlt
+  parent: BaseStructure
+  name: mining machine
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: PlacementReplacement
+    key: walls
+  - type: Sprite
+    noRot: true
+    sprite: _AU14/Structures/digger.rsi
+    state: digger_gray
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.734375,-3.171875,-2.734375,3.171875"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 1000

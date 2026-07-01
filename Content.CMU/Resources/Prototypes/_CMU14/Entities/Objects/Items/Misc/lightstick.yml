@@ -1,0 +1,17 @@
+- type: entity
+  parent: RMCLightStick
+  id: CMULightStickWhite
+  name: lightstick
+  components:
+  - type: Sprite
+    sprite: _AU14/Objects/Misc/Lights/lightstick.rsi
+    state: lightstick_spoke1
+  - type: PointLight
+    color: "#FFEFD2"
+
+- type: entity
+  parent: CMULightStickWhite
+  id: CMULightStickWhiteSmall
+  components:
+  - type: Sprite
+    state: lightstick_white_variant1

@@ -1,0 +1,288 @@
+﻿
+- type: emote
+  id: WendigoAllYourFault
+  name: emote-name-wendigo-all-your-fault
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-all-your-fault
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoCloser
+  name: emote-name-wendigo-closer
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-closer
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoComeCloser
+  name: emote-name-wendigo-come-closer
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-come-closer
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoGuilty1
+  name: emote-name-wendigo-guilty-1
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-guilty-1
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoGuilty2
+  name: emote-name-wendigo-guilty-2
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-guilty-2
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoGuilty3
+  name: emote-name-wendigo-guilty-3
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-guilty-3
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoHelpMe
+  name: emote-name-wendigo-help-me
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-help-me
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoHungry
+  name: emote-name-wendigo-hungry
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-hungry
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoImComingToHelp
+  name: emote-name-wendigo-im-coming-to-help
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-im-coming-to-help
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoItsInTheHouse
+  name: emote-name-wendigo-its-in-the-house
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-its-in-the-house
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoItsStillOutThere
+  name: emote-name-wendigo-its-still-out-there
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-its-still-out-there
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoItsAlive
+  name: emote-name-wendigo-its-alive
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-its-alive
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoJustAStory
+  name: emote-name-wendigo-just-a-story
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-just-a-story
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoLetMeIn
+  name: emote-name-wendigo-let-me-in
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-let-me-in
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoLittleLight1
+  name: emote-name-wendigo-little-light-1
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-little-light-1
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoLittleLight2
+  name: emote-name-wendigo-little-light-2
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-little-light-2
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoNoNo
+  name: emote-name-wendigo-no-no
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-no-no
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoOpenTheDoor
+  name: emote-name-wendigo-open-the-door
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-open-the-door
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoPleaseNo
+  name: emote-name-wendigo-please-no
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-please-no
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoSaveMe
+  name: emote-name-wendigo-save-me
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-save-me
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoSecrets
+  name: emote-name-wendigo-secrets
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-secrets
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoSoAfraid
+  name: emote-name-wendigo-so-afraid
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-so-afraid
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoWeCantGetOut
+  name: emote-name-wendigo-we-cant-get-out
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-we-cant-get-out
+  whitelist:
+    tags:
+    - Wendigo
+
+- type: emote
+  id: WendigoWhereAreYou
+  name: emote-name-wendigo-where-are-you
+  category: General
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+  - emote-wendigo-where-are-you
+  whitelist:
+    tags:
+    - Wendigo

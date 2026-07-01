@@ -1,0 +1,155 @@
+- type: entity
+  parent: BaseItem
+  id: AU14ObjectiveItemPortableRadioTransceiver
+  name: "AN/PRC-982 portable radio transceiver box"
+  description: A gray radio box that is used to receive long-range communications. It also records all radio traffic it receives.
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite:  _AU14/Items/objectiveprops.rsi
+    state: objective1
+  - type: Corrodible
+    isCorrodible: false
+
+- type: entity
+  parent: BaseItem
+  id: AU14ObjectiveItemBlackboxRecorder
+  name: "CIR-60 'blackbox' colony information recorder"
+  description: A small red box that records colony announcements, colonist flatlines and other key readouts. Usually refered to the black box, although this one comes in bloody red.
+  components:
+  - type: Item
+    size: Normal
+  - type: Sprite
+    sprite:  _AU14/Items/objectiveprops.rsi
+    state: objective2
+  - type: Corrodible
+    isCorrodible: false
+
+- type: entity
+  parent: BaseItem
+  id: AU14ObjectiveItemAtmosphericRadarStorageUnit
+  name: "ARCS-9 atmospheric radar data storage unit"
+  description: A black data box that is used to store information from atmospheric radar arrays.
+  components:
+  - type: Item
+    size: Large
+  - type: Sprite
+    sprite:  _AU14/Items/objectiveprops.rsi
+    state: objective3
+  - type: Corrodible
+    isCorrodible: false
+
+- type: entity
+  parent: BaseItem
+  id: AU14ObjectiveItemWYLaptop
+  name: Weyland-Yutani Research Laptop
+  description: A portable computer containing research data from Weyland-Yutani. Password protected and encrypted, this will take a lot to crack.
+  components:
+  - type: Item
+    size: Normal
+  - type: Sprite
+    sprite:  _AU14/Items/laptop.rsi
+    state: laptop_off_objective
+  - type: Corrodible
+    isCorrodible: false
+
+- type: entity
+  parent: BaseItem
+  id: AU14ObjectiveItemTheaterHandbook
+  name: Theater Operations Handbook
+  description: A highly classified book containing the battle plans of a major faction within the current theater of war.
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/Books/Other/analysis.rsi
+    state: icon
+  - type: Corrodible
+    isCorrodible: false
+
+- type: entity
+  parent: BaseItem
+  id: AU14ObjectiveItemNuclearLaunchCodes
+  name: Nuclear Launch Codes Booklet
+  description: A highly classified book containing nuclear launch codes.
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/Books/Other/supermatter.rsi
+    state: icon
+  - type: Corrodible
+    isCorrodible: false
+
+- type: entity
+  id: AU14ObjectiveItemAIProcessor
+  parent: RMCAICoreProcessor
+  name: AI Processor
+  description: An external processor for an AI, used to process vast amounts of information.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: InteractionOutline
+  - type: Clickable
+  - type: Corrodible
+    isCorrodible: false
+  - type: ApcPowerReceiver
+    powerLoad: 250
+    needsPower: true
+  - type: RMCPowerReceiver
+    idleLoad: 5
+    activeLoad: 10
+    channel: Equipment
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/AIStuff/aicoremachinery.rsi
+    layers:
+    - state: cpu_off
+    - state: cpu
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.PowerDeviceVisuals.Powered:
+        enum.PowerDeviceVisualLayers.Powered:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Metallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 168
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+
+- type: entity
+  id: AU14ObjectiveItemHackableComputer
+  parent: BaseItem
+  name: "field operations computer"
+  description: A ruggedized military laptop containing encrypted communications data. It can be hacked to extract critical intelligence.
+  components:
+  - type: Item
+    size: Normal
+  - type: Sprite
+    sprite: _AU14/Items/laptop.rsi
+    state: laptop_off
+  - type: Corrodible
+    isCorrodible: false
+

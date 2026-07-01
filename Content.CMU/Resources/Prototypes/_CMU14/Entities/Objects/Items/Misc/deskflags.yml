@@ -1,0 +1,29 @@
+- type: entity
+  parent: BaseItem
+  id: AU14UADeskFlag
+  name: UA desk flag
+  description: A desk flag of the United Americas.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    sprite:  _AU14/Items/DeskFlags/uadeskflag.rsi
+    state: uaflag
+
+- type: entity
+  parent: BaseItem
+  id: AU14USCMDeskFlag
+  name: USCM desk flag
+  description: A desk flag of the United States Colonial Marine Corps.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    sprite:  _AU14/Items/DeskFlags/uscmdeskflag.rsi
+    state: uscmflag

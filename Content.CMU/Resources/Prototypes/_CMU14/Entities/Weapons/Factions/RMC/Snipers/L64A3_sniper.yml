@@ -1,0 +1,170 @@
+﻿- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  id: AU14L64A3SniperRifle
+  name: L64A3 designated marksman rifle
+  description: "A lightweight designated marksman rifle developed by Howatomo Precision Machining for the Royal Marines. Designed to provide commandos with responsive long range reach past what the old L90 could manage. A continuous-charge HESH payload removes the requirement for traditional armor piercing steel core ammunition, and improves damage retention at extended range. Faster cycle rate of the breech and a light trigger gives fast and precise followup shots even at thousand meter distances."
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/RMC/L64A3.rsi
+    layers:
+    - state: bolt-open
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - sprite: _AU14/Weapons/Guns/Attachments/royal_stock.rsi
+      state: rmc_dmr_stock
+      offset: -0.56, 0.025
+    - sprite: _RMC14/Objects/Weapons/Guns/Attachments/rail.rsi
+      state: sniperscope_a
+      offset: -0.1, 0.1
+  - type: Item
+    size: Large
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/RMC/L64A3.rsi
+  - type: Tag
+    tags:
+    - AU14L64A3SniperRifle
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 12
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    shotsPerBurst: 1
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_type88.ogg
+  - type: RMCSelectiveFire
+    recoilWielded: 1
+    scatterWielded: 0
+    baseFireRate: 0.955
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 3
+  - type: WieldableSpeedModifiers
+    base: 0.5
+    light: 0.69
+    medium: 0.75
+    heavy: 0.806
+  - type: WieldDelay
+    baseDelay: 1.2
+  - type: GunDualWielding
+    weaponGroup: Rifle
+  - type: GunPointBlank
+  - type: WieldedCrosshair
+    rsi:
+      sprite: _RMC14/Interface/MousePointer/sniper_mouse.rsi
+      state: all
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: AU14MagazineSniperL64A3
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mar40_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mar40_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineSniperL64A3
+  - type: GunRequiresWield
+  - type: Corrodible
+    isCorrodible: false
+  - type: GunIFF
+    enabled: false
+  - type: RMCNameItemOnVend
+    item: PrimaryGun
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-rail:
+        locked: true
+        startingAttachable: RMCM96SIntegratedScope
+        whitelist:
+          tags:
+          - RMCM96SIntegratedScope
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBipod
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-underbarrel: 0.21875, -0.343
+      rmc-aslot-rail: 0.5, 0.5
+  - type: ItemCamouflage
+    camouflageVariations: {}
+  - type: RMCGunChamber
+    enabled: false
+
+- type: entity
+  parent: BaseItem
+  id: AU14MagazineSniperL64A3
+  name: "L64A3 squash-head magazine (8.88x51mm)"
+  description: A magazine of L10A7 squash-head match-grade 8.88x51mm ammo.
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineSniper
+    - AU14MagazineSniperL64A3
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - AU14CartridgeRifleL64A3Squashhead
+    proto: AU14CartridgeRifleL64A3Squashhead
+    capacity: 25
+  - type: Item
+    size: Normal
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L64A3.rsi
+    layers:
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: band_e
+      color: "#9c7aff"
+  - type: MagazineVisuals
+    magState: mag
+    steps: 2
+    zeroVisible: false
+    zeroOnlyOnEmpty: true
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+  - type: Appearance
+  - type: Clothing
+    slots:
+    - suitStorage
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: AU14CartridgeRifleL64A3Squashhead
+  name: L10A7 Squash-head Cartridge (8.88x51mm)
+  description: A 8.88x51mm Squash-head rifle cartridge
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - AU14CartridgeRifleL64A3Squashhead
+  - type: CartridgeAmmo
+    proto: AU14BulletRifle888x51Squashhead
+
+- type: entity
+  parent: BulletRifle10x24mm
+  id: AU14BulletRifle888x51Squashhead
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+       types:
+         Piercing: 73
+  - type: CMArmorPiercing
+    amount: 10
+
+- type: Tag
+  id: AU14CartridgeRifleL64A3Squashhead
+
+- type: Tag
+  id: AU14L64A3SniperRifle
+
+- type: Tag
+  id: AU14MagazineSniperL64A3

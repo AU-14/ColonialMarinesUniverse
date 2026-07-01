@@ -1,0 +1,488 @@
+- type: entity
+  parent: CMVendor
+  id: AU14VendorKoorCigs
+  name: Koorlander Cigarette Machine
+  description: Manufactured by the Koorlander Corporation as part of their "Worker Morale Suite," these vending units were once standard issue for deep-bore miners, orbital rig crews and indentured work colonies. When Koorlander realized it was more profitable to sell cigarettes than drill oil or move rock, they laid off 32000 workers overnight and pivoted entirely to tobacco production. The machines stayed behind, now full of the only thing they still make.
+  components:
+  - type: XenoCrusherChargable
+    setDamage:
+      types:
+        Structural: 750
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/koorcigs.rsi
+  - type: VendingMachine
+    pack: AU14VendorKoorCigs
+
+- type: vendingMachineInventory
+  id: AU14VendorKoorCigs
+  startingInventory:
+    AU14CigaretteKoorlander: 50
+    AU14CigaretteLadyFingers: 20
+    RMCMatchboxFull: 15
+    RMCZippo: 10
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14CivilianSnowflakeVendor
+  name: Snowflake Clothing Vendor
+  description: "A vendor containing all the clothes you would ever need. You're such a fuckin' snowflake huh... so special."
+  suffix: Civ
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/snowflakevendor.rsi
+    layers:
+    - state: "base"
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "enum.VendingMachineVisualLayers.Base" ]
+  - type: CMAutomatedVendor
+    sections:
+    - name: Shoes
+      entries:
+      - id: RMCShoesBlack
+        amount: 30
+      - id: RMCShoesBlue
+        amount: 30
+      - id: RMCShoesBrown
+        amount: 30
+      - id: RMCShoesGreen
+        amount: 30
+      - id: RMCShoesOrange
+        amount: 30
+      - id: RMCShoesPurple
+        amount: 30
+      - id: RMCShoesRed
+        amount: 30
+      - id: RMCShoesWhite
+        amount: 30
+      - id: RMCShoesYellow
+        amount: 30
+      - id: RMCBootsPMC
+        amount: 30
+      - id: RMCBootsVanBandolier
+        amount: 30
+      - id: RMCShoesLaceupBrown
+        amount: 30
+      - id: RMCShoesLaceup
+        amount: 30
+      - id: RMCShoesLeather
+        amount: 30
+    - name: Work Wear
+      entries:
+      - id: AU14CivilianWorkwearYellow
+        amount: 30
+      - id: AU14CivilianWorkwearPink
+        amount: 30
+      - id: AU14CivilianWorkwearBlue
+        amount: 30
+      - id: AU14CivilianWorkwearGreen
+        amount: 30
+    - name: Business Attire
+      entries:
+      - id: CMJumpsuitLiaisonBlack
+        amount: 30
+      - id: CMJumpsuitLiaisonBlue
+        amount: 30
+      - id: CMJumpsuitLiaisonBrown
+        amount: 30
+      - id: CMJumpsuitLiaisonField
+        amount: 30
+      - id: CMJumpsuitLiaisonIvy
+        amount: 30
+      - id: CMJumpsuitLiaisonCorporateFormal
+        amount: 30
+      - id: CMJumpsuitLiaisonFormal
+        amount: 30
+      - id: CMJumpsuitLiaison
+        amount: 30
+      - id: CMJumpsuitLiaisonBlazer
+        amount: 30
+      - id: CMJumpsuitLiaisonCharcoal
+        amount: 30
+    - name: Miscellaneous Clothes
+      entries:
+      - id: RMCJumpsuitDutchBandolier
+        amount: 30
+      - id: RMCJumpsuitCivilian
+        amount: 30
+      - id: CMJumpsuitColonist
+        amount: 30
+      - id: CMJumpsuitTShirtWhite
+        amount: 30
+      - id: CMJumpsuitTShirtGray
+        amount: 30
+      - id: CMJumpsuitTShirtRed
+        amount: 30
+    - name: Suit Jackets
+      entries:
+      - id: RMCJacketCorporateKhaki
+        amount: 30
+      - id: RMCJacketCorporateBlack
+        amount: 30
+      - id: RMCJacketCorporateBlue
+        amount: 30
+      - id: RMCJacketCorporateBrown
+        amount: 30
+    - name: Puffer Vests
+      entries:
+      - id: AU14CivilianJacketGrayPufferVest
+        amount: 30
+      - id: AU14CivilianJacketKhakiPufferVest
+        amount: 30
+      - id: AU14CivilianJacketTanPufferVest
+        amount: 30
+    - name: Puffer Jackets
+      entries:
+      - id: AU14CivilianJacketGrayPufferJacket
+        amount: 30
+      - id: AU14CivilianJacketOrangePufferJacket
+        amount: 30
+      - id: AU14CivilianJacketKhakiPufferJacket
+        amount: 30
+    - name: Windbreakers
+      entries:
+      - id: AU14WindbreakerBlue
+        amount: 30
+      - id: AU14WindbreakerGray
+        amount: 30
+      - id: AU14WindbreakerGreen
+        amount: 30
+      - id: AU14WindbreakerKhakiGreenMix
+        amount: 30
+      - id: AU14WindbreakerKhaki
+        amount: 30
+    - name: Parkas
+      entries:
+      - id: AU14CivilianJacketBlueParka
+        amount: 30
+      - id: AU14CivilianJacketGreenParka
+        amount: 30
+      - id: AU14CivilianJacketRedParka
+        amount: 30
+      - id: AU14CivilianJacketYellowParka
+        amount: 30
+    - name: Trench Coats
+      entries:
+      - id: AU14CivilianTanTrenchCoat
+        amount: 30
+      - id: AU14CivilianBrownTrenchCoat
+        amount: 30
+      - id: AU14CivilianGrayTrenchCoat
+        amount: 30
+    - name: Miscellaneous Jackets
+      entries:
+      - id: AU14CivilianJacketBomberJacket
+        amount: 30
+      - id: AU14CivilianJacketOldCoat
+        amount: 30
+      - id: AU14CivilianJacketSnowSuit
+        amount: 30
+    - name: Hats
+      entries:
+      - id: AU14CivBallCapBlack
+        amount: 30
+      - id: AU14CivBallCapBlueTrucker
+        amount: 30
+      - id: AU14CivBallCapRedTrucker
+        amount: 30
+      - id: AU14USCMVeteranCap
+        amount: 30
+      - id: AU14CivFedoraTan
+        amount: 30
+      - id: AU14CivFedoraBrown
+        amount: 30
+      - id: AU14CivFedoraGray
+        amount: 30
+    - name: Glasses
+      entries:
+      - id: RMCSunglasses
+        amount: 30
+      - id: RMCHipsterGlasses
+        amount: 30
+      - id: RMCSunglassesBig
+        amount: 30
+      - id: AU14GlassesPersonalOrange
+        amount: 30
+      - id: RMCGlassesAviators
+        amount: 30
+      - id: RMCGlassesTriMaxYellow
+        amount: 30
+      - id: RMCGlassesTriMaxBlack
+        amount: 30
+      - id: RMCGlassesTriMaxBronze
+        amount: 30
+      - id: AU14GlassesBiMexOrange
+        amount: 30
+    - name: Gloves
+      entries:
+      - id: CMHandsBrown
+        amount: 30
+      - id: CMHandsLightBrown
+        amount: 30
+    - name: Storage
+      entries:
+      - id: CMSatchel
+        amount: 30
+      - id: AU14SlingSatchelBlack
+        amount: 30
+      - id: AU14SlingSatchelBlue
+        amount: 30
+      - id: RMCBeltUtilityGeneral
+        amount: 30
+      - id: RMCPouchGeneral
+        amount: 30
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14JOGenericVendor
+  name: junior officer equipment rack
+  description: An automated rack hooked up to a small storage of junior officer equipment.
+  components:
+  - type: AU14VendorJO
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+  - type: CMAutomatedVendor
+    jobs: [ AU14JobOPFORPlatOp, AU14JobGOVFORPlatOp, AU14JobPlatOpBase ]
+    sections:
+    - name: Senior Officer
+      choices: { CMUJOLoadoutVendorKit: 1 }
+      sharedJOLimit: 1
+      entries:
+      - id: AU14KitJOAdjutantKit
+        giveSquadRoleName: au14-job-name-juniorofficer-adj
+        givePrefix: au14-job-prefix-juniorofficer-adj
+        isAppendPrefix: false
+        isAppendSquadRoleName: false
+        giveIcon:
+          sprite: _AU14/Interface/au14govforjobicons.rsi
+          state: govfor_adj
+    - name: Staff Officers
+      choices: { CMUJOLoadoutVendorKit: 1 }
+      entries:
+      - id: AU14KitJOStaffOfficerKit
+        recommended: true
+        giveSquadRoleName: au14-job-name-juniorofficer-so
+        givePrefix: au14-job-prefix-juniorofficer-so
+        isAppendPrefix: false
+        isAppendSquadRoleName: false
+    - name: Specialized Officers
+      choices: { CMUJOLoadoutVendorKit: 1 }
+      sharedJOLimit: 2
+      entries:
+      - id: AU14KitJOIntelligenceOfficer
+        giveSquadRoleName: au14-job-name-juniorofficer-io
+        givePrefix: au14-job-prefix-juniorofficer-io
+        isAppendPrefix: false
+        isAppendSquadRoleName: false
+        giveIcon:
+          sprite: _AU14/Interface/au14govforjobicons.rsi
+          state: govfor_io
+      - id: AU14KitJOEngineeringKit
+        giveSquadRoleName: au14-job-name-juniorofficer-eo
+        givePrefix: au14-job-prefix-juniorofficer-eo
+        isAppendPrefix: false
+        isAppendSquadRoleName: false
+        giveIcon:
+          sprite: _AU14/Interface/au14govforjobicons.rsi
+          state: govfor_eo
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14MilitaryPolicemanGenericVendor
+  name: military policeman equipment rack
+  description: An automated rack hooked up to a small storage of military police equipment.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+  - type: AccessReader
+    access: [["AU14AccessGovforSecurity" ], [ "AU14AccessOpforSecurity" ]]
+  - type: CMAutomatedVendor
+    sections:
+    - name: Standard Equipment
+      takeAll: CMStandard
+      entries:
+      - id: CMGlassesSecurity
+      - id: CMBeltSecurityMPFilled
+      - id: RMCBoxZiptie
+      - id: AU14GuidebookLawMarine
+      - id: AU14GuidebookSOP
+      - id: AU14Scissors
+    - name: Hat
+      choices: { CMHat: 1 }
+      entries:
+      - id: CMHeadCapMP
+      - id: CMHeadBeretRed
+    - name: Backpack
+      choices: { CMBackpack: 1 }
+      entries:
+      - id: CMSatchelMarine
+      - id: CMSatchelSecurity
+    - name: Pouches
+      choices: { RMCPouch: 2 }
+      entries:
+      - id: RMCPouchGeneralMedium
+      - id: AU14PouchIFAKFill
+      - id: RMCPouchMagazinePistol
+      - id: RMCPouchPistol
+    - name: Record Keeping
+      takeAll: CMRecordKeeping
+      entries:
+      - id: RMCBoxRegulationTapesFull
+      - id: RMCUniversalRecorder
+      - id: CMHandLabeler
+      - id: RMCDigitalClock
+    - name: Inmate Restraining Gear
+      entries:
+      - id: AU14ClothingOuterStraitjacket
+        amount: 5 # TODO: bandaid - remove after mappers have placed this
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14MilitaryDoctorGenericVendor
+  name: military doctor equipment rack
+  description: An automated rack hooked up to a small storage of military doctor equipment.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+  - type: CMAutomatedVendor
+    jobs: [ AU14JobMilitaryDoctorBase, AU14JobGOVFORMilitaryDoctor, AU14JobOPFORMilitaryDoctor ]
+    sections:
+    - name: Essential Equipment
+      takeAll: CMUEssentialEquipment
+      entries:
+      - id: AU14VendorBundleMilitaryDoctorEssentials
+    - name: Clothing
+      choices: { CMUPlatoonMedicalClothing: 1 }
+      entries:
+      - id: RMCScrubsOlive
+    - name: Footwear
+      choices: { CMUPlatoonMedicalClothingFeet: 1 }
+      entries:
+      - id: RMCBootsSPPBlackFilled
+      - id: RMCShoesBlack
+    - name: Labcoats
+      choices: { CMUPlatoonMedicalClothingLabcoat: 1 }
+      entries:
+      - id: RMCLabcoat
+      - id: RMCLabcoatShort
+      - id: RMCLabcoatLong
+    - name: Cold Weather Gear
+      choices: { CMUPlatoonMedicalClothingCold: 1 }
+      entries:
+      - id: AU14CivilianJacketSnowSuit
+    - name: Storage
+      choices: { CMUPlatoonMedicalStorageBack: 1 }
+      entries:
+      - id: CMSatchelMarine
+    - name: Medical Pouches
+      choices: { CMUPlatoonMedicalPouch: 2 }
+      entries:
+      - id: RMCPouchAutoinjector
+      - id: RMCPouchFirstResponder
+      - id: RMCPouchMedical
+      - id: RMCPouchSyringeFill
+    - name: Medical Storage
+      choices: { CMUPlatoonMedicalStorage: 1 }
+      entries:
+      - id: CMBeltMedicBag
+      - id: AU14BeltMedicBagBlack
+    - name: Medical Webbing
+      choices: { CMUPlatoonSurgicalWebbing: 1 }
+      entries:
+      - id: CMWebbingSurgicalGreen
+    - name: Medical Gloves
+      choices: { CMUPlatoonMedicalGloves: 1 }
+      entries:
+      - id: CMHandsLatex
+      - id: ClothingHandsGlovesNitrile
+    - name: Medical Masks
+      choices: { CMUPlatoonMedicalMasks: 1 }
+      entries:
+      - id: CMMaskSterile
+
+- type: entity
+  parent: CMVendorBundleRiflemanApparel
+  id: AU14VendorBundleMilitaryDoctorEssentials
+  name: essential doctor set
+  description: Essential doctor equipment.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/first_aid_kits.rsi
+    state: firstaid
+  - type: CMVendorBundle
+    bundle:
+    - RMCGlassesMedicalHUDGlasses
+    - AU14CMDefibrillator
+    - CMHealthAnalyzer
+    - RMCFlashlightPen
+    - ClothingNeckStethoscope
+    - RMCPortableDialysis
+    - CMRollerBedSpawnFolded
+    - CMPortableSurgicalBedSpawnFolded
+    - AU14IVFoldableFolded
+
+#generic specvend
+- type: entity
+  abstract: true
+  id: AU14VendorWeaponsSpecialistGearBase
+  components:
+  - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFORWeaponsSpecialist
+    pointsType: Specialist
+    sections:
+    - name: Weapons Specialist Sets
+      takeOne: SquadSpecKit
+      sharedSpecLimit: 1
+      entries:
+      - id: RMCGrenadeSpecEquipmentCase
+        giveSquadRoleName: rmc-job-name-weapons-specialist-grenadier
+        isAppendSquadRoleName: false
+        givePrefix: rmc-job-prefix-weapons-specialist-grenadier
+        isAppendPrefix: true
+      - id: RMCSharpSpecEquipmentCase
+        giveSquadRoleName: rmc-job-name-weapons-specialist-sharp
+        isAppendSquadRoleName: false
+        givePrefix: rmc-job-prefix-weapons-specialist-sharp
+        isAppendPrefix: true
+      - id: RMCScoutSpecEquipmentCase
+        giveSquadRoleName: rmc-job-name-weapons-specialist-scout
+        isAppendSquadRoleName: false
+        givePrefix: rmc-job-prefix-weapons-specialist-scout
+        isAppendPrefix: true
+      - id: CMSniperEquipmentCase
+        giveSquadRoleName: rmc-job-name-weapons-specialist-sniper
+        isAppendSquadRoleName: false
+        givePrefix: rmc-job-prefix-weapons-specialist-sniper
+        isAppendPrefix: true
+      - id: RMCAntiMaterielEquipmentCase
+        giveSquadRoleName: rmc-job-name-weapons-specialist-anti-materiel-sniper
+        isAppendSquadRoleName: false
+        givePrefix: rmc-job-prefix-weapons-specialist-anti-materiel-sniper
+        isAppendPrefix: true
+      - id: RMCM707VultureCase
+        giveSquadRoleName: rmc-job-name-weapons-specialist-sniper
+        isAppendSquadRoleName: false
+        givePrefix: rmc-job-prefix-weapons-specialist-sniper
+        isAppendPrefix: true
+      - id: RMCMK481ShotgunCase
+        giveSquadRoleName: rmc-job-name-weapons-specialist-shotgunner
+        isAppendSquadRoleName: false
+        givePrefix: rmc-job-prefix-weapons-specialist-shotgunner
+        isAppendPrefix: true
+      - id: RMCPyroSpecEquipmentCase
+        giveSquadRoleName: rmc-job-name-weapons-specialist-pyro
+        isAppendSquadRoleName: false
+        givePrefix: au14-job-prefix-specialist-pyro
+        isAppendPrefix: true
+
+- type: entity
+  parent: [ColMarTechBase, AU14VendorWeaponsSpecialistGearBase]
+  id: AU14SpecVend
+  name: weapons specialist gear rack
+  description: An automated gear rack for Weapons Specialists.
+  components:
+  - type: RMCVendorSpecialist
+  - type: AccessReader
+    access:
+    - [ "AU14AccessGovforSquadWeaponsSpecialist" ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/specialist_gear.rsi
