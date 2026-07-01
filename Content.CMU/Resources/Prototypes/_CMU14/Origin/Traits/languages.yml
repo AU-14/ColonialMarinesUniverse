@@ -13,8 +13,8 @@
 
 - type: trait
   id: NoLanguageLearning
-  name: trait-no-language-learning-name
-  description: trait-no-language-learning-desc
+  name: au14-trait-no-language-learning-name
+  description: au14-trait-no-language-learning-desc
   components:
   - type: NoLanguageLearning
 
