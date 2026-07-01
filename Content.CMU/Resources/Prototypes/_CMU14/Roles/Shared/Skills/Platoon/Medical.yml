@@ -1,0 +1,34 @@
+- type: entity
+  id: AU14SkillPresetMilitaryDoctor
+  name: Military Doctor
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 1
+      RMCSkillOverwatch: 1
+      RMCSkillLeadership: 1
+      RMCSkillIntel: 1
+      RMCSkillMedical: 4
+      RMCSkillSurgery: 4
+      RMCSkillPolice: 1
+
+- type: entity
+  id: AU14SkillPresetPlatoonHospitalCorpsman
+  name: Hospital Corpsman
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillConstruction: 1
+      RMCSkillCqc: 1
+      RMCSkillEndurance: 1
+      RMCSkillEngineer: 1
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 3
+      RMCSkillVehicles: 1
+      RMCSkillMedical: 2
+      RMCSkillSurgery: 1
+      RMCSkillJtac: 1
