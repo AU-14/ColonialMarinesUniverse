@@ -56,9 +56,17 @@ public sealed partial class AnalyzerSystem : EntitySystem
 
     private void OnCashInserted(EntityUid uid, AnalyzerComponent component, EntInsertedIntoContainerMessage args)
     {
-        // Only CLF analyzers accept cash.
+        // Only CLF analyzers accept submissions.
         if (component.Faction.ToLowerInvariant() != ClfFaction)
             return;
+
+        // A faction can configure exactly what may be submitted and at what ratio. When it has, the
+        // classic dollars path is replaced by that table; otherwise fall back to plain dollars.
+        if (component.Conversions.Count > 0)
+        {
+            OnConfiguredInserted(uid, component, args.Entity);
+            return;
+        }
 
         // Count inserted credits (stack or single bill).
         int credits = 1;
@@ -82,6 +90,54 @@ public sealed partial class AnalyzerSystem : EntitySystem
         var msg = points > 0
             ? $"Analyzer credited {points} point(s) to CLF.{banked}"
             : $"Analyzer banked {credits} cr. ({component.CashStored}/{CashPerPoint} cr. until next point).";
+
+        _popupSystem.PopupEntity(msg, uid);
+    }
+
+    // Configured submission: only entities in the faction's conversion table convert, each at its own
+    // ratio, with a separate banked remainder so different goods never spill into each other. Anything
+    // not in the table is left alone in the slot for the player to take back out.
+    private void OnConfiguredInserted(EntityUid uid, AnalyzerComponent component, EntityUid inserted)
+    {
+        var protoId = MetaData(inserted).EntityPrototype?.ID;
+        if (protoId == null)
+            return;
+
+        AnalyzerConversionEntry? match = null;
+        foreach (var entry in component.Conversions)
+        {
+            if (string.Equals(entry.Entity.Id, protoId, System.StringComparison.Ordinal))
+            {
+                match = entry;
+                break;
+            }
+        }
+
+        if (match == null)
+            return;
+
+        // Guard the ratio: a zero or negative amount-per-point would mint infinite points.
+        var perPoint = System.Math.Max(1, match.AmountPerPoint);
+
+        var amount = 1;
+        if (TryComp(inserted, out StackComponent? stack))
+            amount = stack.Count;
+
+        var name = Name(inserted);
+
+        var banked = component.Banked.GetValueOrDefault(protoId) + amount;
+        var points = banked / perPoint;
+        banked -= points * perPoint;
+        component.Banked[protoId] = banked;
+
+        QueueDel(inserted);
+
+        if (points > 0)
+            _objectiveSystem.AwardRawPointsToFaction(ClfFaction, points);
+
+        var msg = points > 0
+            ? $"Analyzer credited {points} point(s) to CLF. ({banked}/{perPoint} until next point)"
+            : $"Analyzer banked {amount} {name}. ({banked}/{perPoint} until next point)";
 
         _popupSystem.PopupEntity(msg, uid);
     }

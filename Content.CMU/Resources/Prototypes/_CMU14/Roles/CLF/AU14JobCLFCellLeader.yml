@@ -80,7 +80,7 @@
     eyes: RMCGlassesAviators
     pocket1: AU14StampCLFCell
   inhand:
-  - AU14CLFCellKit
+  - AU14HeavyCellKit
   - AU14CLFHeadset
 
 - type: entity

@@ -1,0 +1,92 @@
+# CLF Sapper role (Phase 4). A Guerilla Fighter variant with high construction skill who spawns with
+# a special trap kit. The trap crafting/deploy behavior is layered on in later Phase 4 chunks; this
+# file defines the role itself, cloned from AU14JobCLFGuerilla so it shares the pre-lobby loadout and
+# civilian spawn behavior (the CLF spawn system routes any "CLF" job through the guerilla/safehouse path).
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobCLFSapper
+  roundSide: ThirdParty
+  roundForce: CLF
+  roundRole: CLFGuerilla
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - CLF
+  - type: CLFMember
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 1
+      RMCSkillFirearms: 2
+      # Higher construction than a plain guerilla: the Sapper is the cell's trap builder.
+      RMCSkillConstruction: 4
+      RMCSkillEngineer: 3
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillPolice: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-clfsapper
+  - type: StartingMindRole
+    mindRole: MindRoleCLFGuerrilla
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: colonist
+  - type: ShowMarineIcons
+    factions:
+    - CLF
+  - type: FactionLanguageMember
+    factionTag: CLF
+
+  name: au14-job-name-clfsapper
+  description: au14-job-description-clfsapper
+  setPreference: true
+  ignoreAllegiance: true
+  playTimeTracker: AU14JobCLFSapper
+  basePlaytimeTracker: true
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCLFSapper
+  icon: "RMCJobIconCLFSoldier"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-clflrs
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCLFSapper
+  equipment:
+    id: AU14IDCardCLFCivilian
+  inhand:
+  - AU14CLFHeadset
+  # TODO Phase 4c: add the Sapper's special trap kit (AU14SapperTrapKit) here once its deploy UI lands.
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCLFSapper
+  name: Spawn Point CLF Sapper
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCLFSapper
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCLFSapper
+  isHumanoid: true
+
+# Same pre-lobby loadout groups as the Guerilla Fighter.
+- type: roleLoadout
+  id: JobAU14JobCLFSapper
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - CivFootwearAU14
+  - CivJumpsuitAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
