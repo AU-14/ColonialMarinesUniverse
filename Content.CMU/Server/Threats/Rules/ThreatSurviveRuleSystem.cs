@@ -1,3 +1,4 @@
+using Content.Server._CMU14.RoundStatistics;
 using Content.Server.AU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
@@ -12,6 +13,7 @@ public sealed partial class ThreatSurviveRuleSystem : GameRuleSystem<ThreatSurvi
 {
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
     [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private CMURoundStatisticsSystem _roundStats = default!;
     [Dependency] private RoundEndSystem _roundEnd = default!;
     [Dependency] private IGameTiming _timing = default!;
 
@@ -35,6 +37,7 @@ public sealed partial class ThreatSurviveRuleSystem : GameRuleSystem<ThreatSurvi
             return;
 
         string? winMessage = _auRoundSystem.SelectedThreat?.WinMessage;
+        _roundStats.RecordThreatSurviveRule();
         _gameTicker.EndRound(!string.IsNullOrEmpty(winMessage)
             ? winMessage
             : $"Threat victory: Survived {_minutes} minutes.");
