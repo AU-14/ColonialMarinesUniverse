@@ -73,7 +73,6 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private NPCSystem _npc = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
-    [Dependency] private ISharedPlayerManager _player = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private QuickDialogSystem _quickDialog = default!;
@@ -99,14 +98,19 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
     private const float BodyMoveGraceDistance = 0.25f;
     private TimeSpan _nextLeashCheck;
     private readonly Dictionary<EntityUid, string> _pendingOperatorEndControls = new();
-    private readonly List<(EntityUid Operator, string Reason)> _pendingOperatorEndControlBuffer = new();
+    private readonly List<(EntityUid Entity, string Reason)> _pendingOperatorEndControlBuffer = new();
     private readonly Dictionary<EntityUid, string> _pendingSessionEndControls = new();
-    private readonly List<(EntityUid Drone, string Reason)> _pendingSessionEndControlBuffer = new();
+    private readonly List<(EntityUid Entity, string Reason)> _pendingSessionEndControlBuffer = new();
     private readonly ISawmill _sawmill = Logger.GetSawmill("cmu.drone");
+    private EntityQuery<ActorComponent> _actorQuery;
+    private EntityQuery<GhostHearingComponent> _ghostHearingQuery;
 
     public override void Initialize()
     {
         base.Initialize();
+
+        _actorQuery = GetEntityQuery<ActorComponent>();
+        _ghostHearingQuery = GetEntityQuery<GhostHearingComponent>();
 
         SubscribeLocalEvent<CMUDroneOperatorComponent, ComponentStartup>(OnOperatorStartup);
         SubscribeLocalEvent<CMUDroneOperatorComponent, ComponentShutdown>(OnOperatorShutdown);
@@ -886,22 +890,22 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
 
     private void OnExpandChatRecipients(ExpandICChatRecipientsEvent ev)
     {
-        foreach (var session in _player.Sessions)
+        var query = EntityQueryEnumerator<CMUDroneControlSessionComponent>();
+        while (query.MoveNext(out var drone, out var session))
         {
-            if (session.AttachedEntity is not { Valid: true } attached ||
-                !TryComp<CMUDroneControlSessionComponent>(attached, out var droneSession) ||
-                TerminatingOrDeleted(droneSession.Operator))
+            if (!_actorQuery.TryComp(drone, out var actor) ||
+                TerminatingOrDeleted(session.Operator))
             {
                 continue;
             }
 
-            if (!TryDistance(ev.Source, droneSession.Operator, out var distance) ||
+            if (!TryDistance(ev.Source, session.Operator, out var distance) ||
                 distance > ev.VoiceRange)
             {
                 continue;
             }
 
-            ev.Recipients.TryAdd(session, new ICChatRecipientData(distance, HasComp<GhostHearingComponent>(attached)));
+            ev.Recipients.TryAdd(actor.PlayerSession, new ICChatRecipientData(distance, _ghostHearingQuery.HasComp(drone)));
         }
     }
 
@@ -2273,17 +2277,8 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
 
     private void FlushPendingOperatorEndControls()
     {
-        if (_pendingOperatorEndControls.Count == 0)
+        if (!DrainPendingEndControls(_pendingOperatorEndControls, _pendingOperatorEndControlBuffer))
             return;
-
-        _pendingOperatorEndControlBuffer.Clear();
-
-        foreach (var pending in _pendingOperatorEndControls)
-        {
-            _pendingOperatorEndControlBuffer.Add((pending.Key, pending.Value));
-        }
-
-        _pendingOperatorEndControls.Clear();
 
         foreach (var (operatorUid, reason) in _pendingOperatorEndControlBuffer)
         {
@@ -2295,17 +2290,8 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
 
     private void FlushPendingSessionEndControls()
     {
-        if (_pendingSessionEndControls.Count == 0)
+        if (!DrainPendingEndControls(_pendingSessionEndControls, _pendingSessionEndControlBuffer))
             return;
-
-        _pendingSessionEndControlBuffer.Clear();
-
-        foreach (var pending in _pendingSessionEndControls)
-        {
-            _pendingSessionEndControlBuffer.Add((pending.Key, pending.Value));
-        }
-
-        _pendingSessionEndControls.Clear();
 
         foreach (var (droneUid, reason) in _pendingSessionEndControlBuffer)
         {
@@ -2316,6 +2302,24 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         _pendingSessionEndControlBuffer.Clear();
     }
 
+    private static bool DrainPendingEndControls(
+        Dictionary<EntityUid, string> pending,
+        List<(EntityUid Entity, string Reason)> buffer)
+    {
+        if (pending.Count == 0)
+            return false;
+
+        buffer.Clear();
+
+        foreach (var (entity, reason) in pending)
+        {
+            buffer.Add((entity, reason));
+        }
+
+        pending.Clear();
+        return true;
+    }
+
     private void EndControl(Entity<CMUDroneControlSessionComponent> drone, string reason)
     {
         RemoveEndControlAction(drone);
@@ -2323,13 +2327,15 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
 
         var operatorUid = drone.Comp.Operator;
         var mindId = drone.Comp.MindId;
+        var operatorExists = !TerminatingOrDeleted(operatorUid);
+        var droneExists = !TerminatingOrDeleted(drone.Owner);
 
         _pendingOperatorEndControls.Remove(operatorUid);
         _pendingSessionEndControls.Remove(drone.Owner);
 
         StopEntityMotion(drone.Owner);
 
-        if (!TerminatingOrDeleted(operatorUid))
+        if (operatorExists)
             DisableOperatorInputBlock(operatorUid);
 
         if (TryComp<MindComponent>(mindId, out var mind) &&
@@ -2340,16 +2346,17 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
 
         PopupControlEndReason(operatorUid, reason);
 
-        SuppressSsdIndicator(drone.Owner);
+        if (droneExists)
+            SuppressSsdIndicator(drone.Owner);
 
-        if (!TerminatingOrDeleted(drone.Owner) &&
+        if (droneExists &&
             TryComp<CMUDroneAndroidComponent>(drone.Owner, out var droneAndroid))
         {
             SpawnDroneDisconnectVisuals(operatorUid, (drone.Owner, droneAndroid));
             SetDroneDormantEffect((drone.Owner, droneAndroid), _mobState.IsAlive(drone.Owner));
         }
 
-        if (!TerminatingOrDeleted(operatorUid) &&
+        if (operatorExists &&
             TryComp<CMUDroneOperatorComponent>(operatorUid, out var operatorComp))
         {
             SetOperatorTransferEffect((operatorUid, operatorComp), false);
@@ -2358,16 +2365,16 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
                 operatorComp.ControlledDrone = null;
         }
 
-        if (!TerminatingOrDeleted(operatorUid) &&
+        if (operatorExists &&
             TryComp<CMURemotePilotingComponent>(operatorUid, out var piloting))
         {
             RestoreOperatorSsdIndicator((operatorUid, piloting));
         }
 
-        if (!TerminatingOrDeleted(operatorUid))
+        if (operatorExists)
             RemCompDeferred<CMURemotePilotingComponent>(operatorUid);
 
-        if (!TerminatingOrDeleted(drone.Owner))
+        if (droneExists)
             RemCompDeferred<CMUDroneControlSessionComponent>(drone.Owner);
     }
 
