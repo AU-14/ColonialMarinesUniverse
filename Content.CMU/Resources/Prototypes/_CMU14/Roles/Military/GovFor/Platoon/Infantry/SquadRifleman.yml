@@ -167,7 +167,7 @@
 - type: startingGear
   id: AU14GearopforSquadRifleman
   equipment:
-    id: AU14IDCardopforSquadRifleman
+    id: AU14IDCardOPFORSquadRifleman
     ears: AU14HeadsetOpforMarine
 
 - type: entity

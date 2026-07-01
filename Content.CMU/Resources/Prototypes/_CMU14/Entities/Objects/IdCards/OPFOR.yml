@@ -42,7 +42,7 @@
 
 - type: entity
   parent: AU14IDCardOPFOR
-  id: AU14IDCardopforDSPilot
+  id: AU14IDCardOPFORDSPilot
   name: dropship pilot ID card
   components:
   - type: PresetIdCard
@@ -50,7 +50,7 @@
 
 - type: entity
   parent: AU14IDCardOPFOR
-  id: AU14IDCardopforDCC
+  id: AU14IDCardOPFORDCC
   name: dropship crew chief ID card
   components:
   - type: PresetIdCard
@@ -74,7 +74,7 @@
 
 - type: entity
   parent: AU14IDCardOPFOR
-  id: AU14IDCardopforSquadRifleman
+  id: AU14IDCardOPFORSquadRifleman
   name: squad rifleman ID card
   components:
   - type: PresetIdCard
@@ -82,7 +82,7 @@
 
 - type: entity
   parent: AU14IDCardOPFOR
-  id: AU14IDCardopforSquadAutomaticRifleman
+  id: AU14IDCardOPFORSquadAutomaticRifleman
   name: squad automatic rifleman ID card
   components:
   - type: PresetIdCard
@@ -90,7 +90,7 @@
 
 - type: entity
   parent: AU14IDCardOPFOR
-  id: AU14JobIDCardopforPlatoonCorpsman
+  id: AU14JobIDCardOPFORPlatoonCorpsman
   name: platoon corpsman ID card
   components:
   - type: PresetIdCard
@@ -98,7 +98,7 @@
 
 - type: entity
   parent: AU14IDCardOPFOR
-  id: AU14JobIDCardopforRadioTelephoneOperator
+  id: AU14JobIDCardOPFORRadioTelephoneOperator
   name: radio telephone operator ID card
   components:
   - type: PresetIdCard
