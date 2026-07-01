@@ -42,11 +42,15 @@
     - NonResuscitable
     - NoEnglish
   ranks:
-    AU14RankSeniorOrbitalLawyer:
+    AU14RankOrbitalCounselorIC:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianOrbitalLawyer
+      time: 36000 # 10 hours
+    AU14RankOrbitalCounselorOC:
     - !type:RoleTimeRequirement
       role: AU14JobCivilianOrbitalLawyer
       time: 18000 # 5 hours
-    AU14RankOrbitalLawyer: []
+    AU14RankOrbitalCounselor: []
 
 - type: playTimeTracker
   id: AU14JobCivilianOrbitalLawyer

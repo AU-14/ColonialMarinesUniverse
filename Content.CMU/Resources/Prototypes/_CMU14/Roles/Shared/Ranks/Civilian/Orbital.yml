@@ -11,24 +11,34 @@
 
 # Orbital Law
 - type: rank
+  id: AU14RankOrbitalArbiterHS
+  name: Orbital Arbiter of the High Seat
+  prefix: Arb. HS
+
+- type: rank
+  id: AU14RankOrbitalArbiter1S
+  name: Orbital Arbiter of the First Seat
+  prefix: Arb. 1S
+
+- type: rank
   id: AU14RankOrbitalArbiter
   name: Orbital Arbiter
-  prefix: Orb. Arb.
+  prefix: Arbiter
 
 - type: rank
-  id: AU14RankSeniorOrbitalArbiter
-  name: Senior Orbital Arbiter
-  prefix: Sr. Orb. Arb.
+  id: AU14RankOrbitalCounselorIC
+  name: Orbital Counsel of the Inner Circle
+  prefix: Cnsl. IC
 
 - type: rank
-  id: AU14RankOrbitalLawyer
+  id: AU14RankOrbitalCounselorOC
+  name: Orbital Counsel of the Outer Circle
+  prefix: Cnsl. OC
+
+- type: rank
+  id: AU14RankOrbitalCounselor
   name: Orbital Counsel
-  prefix: Orb. Cnsl.
-
-- type: rank
-  id: AU14RankSeniorOrbitalLawyer
-  name: Senior Orbital Counsel
-  prefix: Sr. Orb. Cnsl.
+  prefix: Counselor
 
 # Flight Crew
 - type: rank
