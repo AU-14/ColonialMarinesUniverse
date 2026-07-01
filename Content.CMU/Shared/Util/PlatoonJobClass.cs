@@ -13,6 +13,7 @@ namespace Content.Shared.AU14.util
         PlatoonCorpsman,
         DSPilot,
         DCC,
-        SupportSynth
+        SupportSynth,
+        VehicleCrewman
     }
 }

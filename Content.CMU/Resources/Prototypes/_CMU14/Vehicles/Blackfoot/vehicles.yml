@@ -195,7 +195,6 @@
       required: false
   - type: HardpointIntegrity
     maxIntegrity: 500
-    repairFuelCost: 12
     bypassEntryOnZero: true
   - type: VehicleEnter
     interiorPath: /Maps/_CMU14/Vehicles/Blackfoot/blackfoot.yml
