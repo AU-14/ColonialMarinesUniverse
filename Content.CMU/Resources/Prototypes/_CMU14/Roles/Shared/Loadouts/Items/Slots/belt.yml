@@ -14,14 +14,9 @@
     belt: CMBeltSecurityMPFilled
 
 - type: loadout
-  id: BeltMedicalFilledAU14
-  equipment:
-    belt: CMBeltMedicalFilled
-
-- type: loadout
   id: EngiBeltUtilityFilledAU14
   equipment:
-    belt: AU14BeltUtilityFilled #Replaced CMUtilityBeltFilled with AU14BeltUtilityFilled since the CM lacks both an E-tool and the modified blowtorch, which is importance since Engineer's to not start with welding goggles
+    belt: AU14BeltUtilityFilled
 
 - type: loadout
   id: BeltUtilityGeneralAU14
@@ -29,11 +24,11 @@
     belt: RMCBeltUtilityGeneral
 
 - type: loadout
-  id: BeltMedicalAU14
+  id: BeltMedicalFilledAU14
   equipment:
-    belt: CMBeltMedical
+    belt: AU14BeltMedicalFilled
 
 - type: loadout
-  id: BeltMedicBagAU14
+  id: BeltMedicBagFilledAU14
   equipment:
     belt: AU14BeltMedicBagFilled
