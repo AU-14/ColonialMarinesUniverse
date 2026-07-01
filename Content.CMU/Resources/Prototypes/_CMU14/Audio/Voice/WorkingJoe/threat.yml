@@ -1,0 +1,167 @@
+- type: emote
+  id: WorkingJoeHoldStill
+  name: emote-name-workingjoe-hold-still
+  category: Threat
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-hold-still
+  chatTriggers:
+    - hold still
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeHushNow
+  name: emote-name-workingjoe-hush-now
+  category: Threat
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-hush-now
+  chatTriggers:
+    - hush now
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIAmAVeryPatientMachine
+  name: emote-name-workingjoe-i-am-a-very-patient-machine
+  category: Threat
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-i-am-a-very-patient-machine
+  chatTriggers:
+    - i am a very patient machine
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIAmGoingToCatchYou
+  name: emote-name-workingjoe-i-am-going-to-catch-you
+  category: Threat
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-i-am-going-to-catch-you
+  chatTriggers:
+    - i am going to catch you
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeICanWaitICanWaitForYouForAVeryLongTime
+  name: emote-name-workingjoe-i-can-wait-i-can-wait-for-you-for-a-very-long-time
+  category: Threat
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-i-can-wait-i-can-wait-for-you-for-a-very-long-time
+  chatTriggers:
+    - i can wait i can wait for you for a very long time
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeItSeemsYouAndIHaveAProblem
+  name: emote-name-workingjoe-it-seems-you-and-i-have-a-problem
+  category: Threat
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-it-seems-you-and-i-have-a-problem
+  chatTriggers:
+    - it seems you and i have a problem
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIveBeenVeryPatientWithYouSoFar
+  name: emote-name-workingjoe-ive-been-very-patient-with-you-so-far
+  category: Threat
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-ive-been-very-patient-with-you-so-far
+  chatTriggers:
+    - ive been very patient with you so far
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIveGotAllDayYouKnow
+  name: emote-name-workingjoe-ive-got-all-day-you-know
+  category: Threat
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-ive-got-all-day-you-know
+  chatTriggers:
+    - ive got all day you know
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeMyTurnNow
+  name: emote-name-workingjoe-my-turn-now
+  category: Threat
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-my-turn-now
+  chatTriggers:
+    - my turn now
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThatStings
+  name: emote-name-workingjoe-that-stings
+  category: Threat
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-that-stings
+  chatTriggers:
+    - that stings
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThisIsFutile
+  name: emote-name-workingjoe-this-is-futile
+  category: Threat
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-this-is-futile
+  chatTriggers:
+    - this is futile
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeYoureStartingToTestMyPatience
+  name: emote-name-workingjoe-youre-starting-to-test-my-patience
+  category: Threat
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-youre-starting-to-test-my-patience
+  chatTriggers:
+    - youre starting to test my patience
+  whitelist:
+    tags:
+      - WorkingJoe

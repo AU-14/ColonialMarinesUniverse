@@ -1,0 +1,63 @@
+# Player-operated shopkeeper vendor.
+# Authorized staff (shopkeep / food service worker) use items on this machine to stock it,
+# then set names and prices. Other players insert cash and buy listed items.
+- type: entity
+  id: AU14ShopkeeperVendorBase
+  abstract: true
+  parent: CMBaseStructureCorrodible
+  name: shop counter
+  description: A customisable vendor. Authorized staff can stock it with items and set prices.
+  components:
+  - type: AU14ShopkeeperVendor
+    stockBlacklist:
+      components:
+      - IdCard
+      - Headset
+  - type: ItemSlots
+    slots:
+      shopkeeper_cash:
+        whitelist:
+          tags:
+          - Currency
+  - type: AccessReader
+    access:
+    - - AU14AccessShopkeep
+  - type: ActivatableUI
+    key: enum.AU14ShopkeeperVendorUi.Shop
+  - type: UserInterface
+    interfaces:
+      enum.AU14ShopkeeperVendorUi.Shop:
+        type: AU14ShopkeeperVendorBui
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: ContainerContainer
+    containers:
+      shopkeeper_cash: !type:ContainerSlot {}
+      shopkeeper_stock: !type:Container {}
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.35,0.25,0.35"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/corp_wardrobe.rsi
+    layers:
+    - state: "base"
+  - type: InteractionOutline
+  - type: Appearance
+
+- type: entity
+  id: AU14ShopkeeperVendor
+  parent: AU14ShopkeeperVendorBase
+  name: shop counter
+  description: A customisable counter. The shopkeeper can stock it with any items and set prices. Prices are subject to the colony sales tax.
+  suffix: Shopkeeper

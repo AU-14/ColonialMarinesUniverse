@@ -1,0 +1,21 @@
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14CWPSCap
+  name: CWPS Ball Cap
+  description: A simple ball cap with the logo of the Colonial Wilderness Preservation Service.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/CWPS/cap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/CWPS/cap.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14CWPSCampaignHat
+  name: CWPS Campaign Hat
+  description: A wide brimed hat used by the rangers of the Colonial Wilderness Preservation Service.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/CWPS/hat.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/CWPS/hat.rsi

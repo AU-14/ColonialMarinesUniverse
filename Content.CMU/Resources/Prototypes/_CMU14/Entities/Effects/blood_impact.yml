@@ -1,0 +1,148 @@
+# ├──[ DEFAULT BLOOD ]───────────────────────────────────────────────┤
+- type: entity
+  id: CMUBloodImpactEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.2
+  - type: Sprite
+    drawdepth: Effects
+    scale: 0.75, 0.75
+    color: "#b40000"
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: _CMU14/Effects/blood_impact.rsi
+      state: cm_bloodsplatter
+  - type: SpriteColor
+    color: "#b40000"
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: CMUBloodImpactEffect
+  id: CMUBloodImpactEffect1
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    scale: 0.75, 0.75
+    color: "#b40000"
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: _CMU14/Effects/blood_impact.rsi
+      state: cmubloodsplatter1
+
+- type: entity
+  parent: CMUBloodImpactEffect
+  id: CMUBloodImpactEffect2
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    scale: 0.75, 0.75
+    color: "#b40000"
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: _CMU14/Effects/blood_impact.rsi
+      state: cmubloodsplatter2
+
+# ├──[ YAUTJA BLOOD ]────────────────────────────────────────────────┤
+- type: entity
+  parent: CMUBloodImpactEffect
+  id: CMUYautjaBloodImpactEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    scale: 0.75, 0.75
+    color: "#2cf274"
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: _CMU14/Effects/blood_impact.rsi
+      state: cm_bloodsplatter
+  - type: SpriteColor
+    color: "#2cf274"
+
+- type: entity
+  parent: CMUYautjaBloodImpactEffect
+  id: CMUYautjaBloodImpactEffect1
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    scale: 0.75, 0.75
+    color: "#2cf274"
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: _CMU14/Effects/blood_impact.rsi
+      state: cmubloodsplatter1
+
+- type: entity
+  parent: CMUYautjaBloodImpactEffect
+  id: CMUYautjaBloodImpactEffect2
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    scale: 0.75, 0.75
+    color: "#2cf274"
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: _CMU14/Effects/blood_impact.rsi
+      state: cmubloodsplatter2
+
+# ├──[ SYNTH BLOOD ]─────────────────────────────────────────────────┤
+- type: entity
+  parent: CMUBloodImpactEffect
+  id: CMUSynthBloodImpactEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    scale: 0.75, 0.75
+    color: "#EEEEEE"
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: _CMU14/Effects/blood_impact.rsi
+      state: cm_bloodsplatter
+  - type: SpriteColor
+    color: "#EEEEEE"
+
+- type: entity
+  parent: CMUSynthBloodImpactEffect
+  id: CMUSynthBloodImpactEffect1
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    scale: 0.75, 0.75
+    color: "#EEEEEE"
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: _CMU14/Effects/blood_impact.rsi
+      state: cmubloodsplatter1
+
+- type: entity
+  parent: CMUSynthBloodImpactEffect
+  id: CMUSynthBloodImpactEffect2
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    scale: 0.75, 0.75
+    color: "#EEEEEE"
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: _CMU14/Effects/blood_impact.rsi
+      state: cmubloodsplatter2

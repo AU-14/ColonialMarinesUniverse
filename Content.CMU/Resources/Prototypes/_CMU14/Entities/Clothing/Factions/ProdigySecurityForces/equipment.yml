@@ -1,0 +1,12 @@
+- type: entity
+  parent: RMCSynthResetKey
+  id: AU14SynthResetKeyProdigy
+  name: Prodigy synthetic reset key
+  description: A Prodigy-pattern reset key for rebooting synthetic units after critical failure. It must be recharged after use.
+  components:
+  - type: Sprite
+    layers:
+    - state: hyper_reset_key
+    - state: hyper_reset_key_on
+      map: [ "enum.ToggleableVisuals.Layer" ]
+      visible: false

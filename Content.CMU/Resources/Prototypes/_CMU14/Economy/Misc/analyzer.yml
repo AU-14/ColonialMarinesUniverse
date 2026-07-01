@@ -1,0 +1,231 @@
+- type: entity
+  parent: CMBaseStructure
+  id: AU14AnalyzerMachine
+  name: Analyzer Machine
+  description:  An intel analyzer
+  components:
+  - type: Transform
+    anchored: false
+    noRot: true
+  - type: Physics
+    bodyType: Dynamic
+  - type: InteractionOutline
+  - type: Corrodible
+    isCorrodible: false
+  - type: Anchorable
+    delay: 2
+  - type: AmbientOnPowered
+  - type: AmbientSound
+    volume: -9
+    range: 3
+    enabled: false
+    sound:
+      path: /Audio/Ambience/Objects/vending_machine_hum.ogg
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.95,-0.45,0.90,0.45"
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+        density: 200
+  - type: Electrified
+    enabled: false
+    usesApcPower: true
+  - type: PointLight
+    enabled: false
+    castShadows: false
+    radius: 1.5
+    color: "#39a1ff"
+  - type: LitOnPowered
+  - type: ApcPowerReceiver
+    needsPower: false # TODO RMC14
+    powerLoad: 0
+  - type: Appearance
+  - type: Sprite
+    sprite: _AU14/Structures/analyzermachine.rsi
+    state: analyzer_idle
+  - type: Analyzer
+    faction: govfor
+
+
+
+
+- type: entity
+  parent: AU14AnalyzerMachine
+  id: AU14AnalyzerMachineCLF
+  name: Analyzer Machine (CLF)
+  description:  An intel analyzer
+  components:
+  - type: Analyzer
+    faction: clf
+  - type: ItemSlots
+    slots:
+      cashSlot:
+        name: Cash Slot
+        whitelist:
+          tags:
+          - Currency
+  - type: CMAutomatedVendor
+    useObjectivePoints: true
+    faction: clf
+    sections:
+    - name: Rifles
+      entries:
+      - id: AU14WeaponRifleM16A1
+        amount: 2
+        points: 5
+      - id: AU14WeaponRifleM16A2
+        amount: 3
+        points: 5
+      - id: AU14WeaponRifleAR10
+        amount: 3
+        points: 8
+      - id: RMCWeaponBoltActionRifle
+        amount: 3
+        points: 6
+      - id: WeaponRifleMAR40
+        amount: 2
+        points: 8
+      - id: RMCWeaponRifleType71C
+        amount: 1
+        points: 12
+    - name: Shotguns
+      entries:
+      - id: RMCWeaponShotgunHG3712
+        amount: 1
+        points: 10
+      - id: WeaponShotgunM357Sawn
+        amount: 2
+        points: 6
+      - id: WeaponShotgunM357
+        amount: 3
+        points: 5
+    - name: Handguns
+      entries:
+      - id: CMWeaponPistolM1984Empty
+        amount: 3
+        points: 3
+      - id: RMCWeaponPistolB92FS
+        amount: 2
+        points: 4
+      - id: RMCWeaponRevolverM44
+        amount: 3
+        points: 4
+      - id: RMCWeaponPistolHoldout
+        amount: 6
+        points: 2
+      - id: RMCWeaponPistolD18
+        amount: 7
+        points: 3
+    - name: Special Weapons
+      entries:
+      - id: RMCWeaponLauncherHJRA12
+        amount: 1
+        points: 25
+      - id: RMCWeaponMar50LMG
+        amount: 1
+        points: 20
+    - name: Rifle Ammunition
+      entries:
+      - id: RMCMagazineRifleM16
+        amount: 85
+        points: 1
+      - id: RMCMagazineRifleHunting
+        amount: 25
+        points: 1
+      - id: RMCMagazineRifleMAR40
+        amount: 35
+        points: 1
+      - id: RMCMagazineMar50LMG
+        amount: 2
+        points: 3
+      - id: RMCMagazineLMGM60
+        amount: 5
+        points: 2
+      - id: RMCMagazineRifleType71
+        amount: 9
+        points: 2
+    - name: Shotgun Ammunition
+      entries:
+      - id: RMCBoxShotgunFlechette
+        amount: 7
+        points: 1
+      - id: RMCBoxShotgunBuckshot
+        amount: 6
+        points: 1
+      - id: RMCBoxShotgunSlugs
+        amount: 6
+        points: 1
+    - name: Handgun Ammunition
+      entries:
+      - id: CMMagazinePistolM1984
+        amount: 30
+        points: 1
+      - id: RMCMagazinePistolB92FS
+        amount: 20
+        points: 1
+      - id: RMCMagazinePistolHoldout
+        amount: 30
+        points: 1
+      - id: RMCSpeedLoaderM44
+        amount: 30
+        points: 1
+      - id: RMCSpeedLoader44Marksman
+        amount: 2
+        points: 2
+      - id: RMCMagazinePistolD18
+        amount: 35
+        points: 1
+    - name: Explosives
+      entries:
+      - id: RMCGrenadeMolotov
+        amount: 10
+        points: 2
+      - id: CMUPipeBomb
+        amount: 10
+        points: 2
+      - id: CMGrenadeSmoke
+        amount: 5
+        points: 2
+      - id: CMGrenadeFragOld
+        amount: 4
+        points: 3
+      - id: RMCExplosivePlastic
+        amount: 2
+        points: 8
+      - id: RMCRocketHJRA12HE
+        amount: 2
+        points: 10
+    - name: Improvised Explosive Devices
+      entries:
+      - id: AU14IEDGuide
+        amount: 5
+        points: 1
+      - id: AU14RemoteSignallerAdvanced
+        amount: 5
+        points: 2
+      - id: AU14IED
+        amount: 6
+        points: 4
+      - id: AU14IEDLarge
+        amount: 3
+        points: 6
+      - id: AU14IEDVest
+        amount: 2
+        points: 8
+
+
+
+
+- type: entity
+  parent: AU14AnalyzerMachine
+  id: AU14AnalyzerMachineOpfor
+  name: Analyzer Machine (Opfor)
+  description:  An intel analyzer
+  components:
+  - type: Analyzer
+    faction: opfor

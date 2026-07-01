@@ -1,0 +1,46 @@
+- type: entity
+  name: radio jammer
+  parent: BaseItem
+  id: AU14RadioJammer
+  description: This device will disrupt nearby outgoing radio communication, including friendly communications.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/atmos_scanner.rsi
+    layers:
+        - state: icon
+        - state: working
+          map: ["enum.RadioJammerLayers.LED"]
+          visible: false
+  - type: RadioJammer
+    settings:
+    - wattage: 2
+      range: 4
+      message: radio-jammer-component-set-message-low
+      name: radio-jammer-component-setting-low
+    - wattage: 4
+      range: 8
+      message: radio-jammer-component-set-message-medium
+      name: radio-jammer-component-setting-medium
+    - wattage: 8
+      range: 16
+      message: radio-jammer-component-set-message-high
+      name: radio-jammer-component-setting-high
+  - type: PowerCellSlot
+    cellSlotId: cell_slot
+  - type: ContainerContainer
+    containers:
+      cell_slot: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: RMCPowerCell
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.RadioJammerVisuals.LEDOn:
+        RadioJammerLayers.LED:
+          True: { visible: True }
+          False: { visible: False }
+  - type: StaticPrice
+    price: 1500

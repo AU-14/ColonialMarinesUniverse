@@ -1,0 +1,69 @@
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14WYPMCHelmet
+  name: WY PMC Helmet
+  description: A WY PMC helmet.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/WY_PMC/wypmchelmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/WY_PMC/wypmchelmet.rsi
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14WYPMCSniperHat
+  name: WY PMC Sniper Hat
+  description: A WY PMC helmet.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/WY_PMC/sniperhat.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/WY_PMC/sniperhat.rsi
+
+- type: entity
+  parent: [ArmorHelmetPMC, RMCMarineHelmetWithLightBase]
+  id: AU14ArmorHelmetPMCTactical
+  name: WY PMC Tactical Helmet
+  description: A contender for service with the Royal Marines Commandos, it is presently, exclusively, field tested by Weyland-Yutani mercenaries. Features a ballistic mask and integrated display connected to the visor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/WY_PMC/pmchelmet_closed.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/WY_PMC/pmchelmet_closed.rsi
+  - type: CMArmor
+    bullet: 25
+    bio: 25
+    # armor_internaldamage = 15
+  - type: HideLayerClothing
+    slots:
+    - Hair
+    - HeadTop
+    - HeadSide
+    - Snout
+    - FacialHair
+  - type: PointLight
+    color: "#73e6f5"
+  - type: IdentityBlocker
+
+- type: entity
+  parent: AU14ArmorHelmetPMCTactical
+  id: AU14ArmorHelmetPMCTacticalEngi
+  name: WY PMC Tactical Engineer Helmet
+  description: A contender for service with the Royal Marines Commandos, it is presently, exclusively, field tested by Weyland-Yutani mercenaries. Features a ballistic mask and integrated display connected to the visor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/WY_PMC/pmchelmet_engi.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/WY_PMC/pmchelmet_engi.rsi
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14WYPMCHelmetHeavy
+  name: WY PMC Heavy Helmet
+  description: A WY PMC helmet.
+  components:
+  - type: IdentityBlocker
+  - type: Sprite
+    sprite: _AU14/Clothing/WY_PMC/wypmcheavy.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/WY_PMC/wypmcheavy.rsi

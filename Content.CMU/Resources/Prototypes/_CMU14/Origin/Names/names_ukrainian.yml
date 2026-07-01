@@ -1,0 +1,17 @@
+- type: localizedDataset
+  id: AU14NamesMaleFirstUkrainian
+  values:
+    prefix: names-first-male-dataset-ukrainian-
+    count: 64
+
+- type: localizedDataset
+  id: AU14NamesFemaleFirstUkrainian
+  values:
+    prefix: names-first-female-dataset-ukrainian-
+    count: 60
+
+- type: localizedDataset
+  id: AU14NamesLastUkrainian
+  values:
+    prefix: names-last-dataset-ukrainian-
+    count: 69

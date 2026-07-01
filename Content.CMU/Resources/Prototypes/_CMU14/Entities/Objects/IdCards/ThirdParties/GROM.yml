@@ -1,0 +1,83 @@
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: AU14IDCardUPPGROMCommander
+  name: UPP GROM Commander ID card
+  components:
+  - type: PresetIdCard
+    job: AU14UPPGROMCommander
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUPPGROMMachinegunner
+  categories: [ HideSpawnMenu ]
+  name: UPP GROM Machinegunner ID card
+  components:
+  - type: PresetIdCard
+    job: AU14UPPGROMMachinegunner
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUPPGROMMarksman
+  categories: [ HideSpawnMenu ]
+  name: UPP GROM Marksman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14UPPGROMMarksman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUPPGROMPointman
+  categories: [ HideSpawnMenu ]
+  name: UPP GROM Pointman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14UPPGROMPointman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUPPGROMRifleman
+  categories: [ HideSpawnMenu ]
+  name: UPP GROM Rifleman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14UPPGROMRifleman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUPPGROMSquadleader
+  categories: [ HideSpawnMenu ]
+  name: UPP GROM Squad Leader ID card
+  components:
+  - type: PresetIdCard
+    job: AU14UPPGROMSquadleader
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUPPGROMSupportTech
+  categories: [ HideSpawnMenu ]
+  name: UPP GROM Support Tech ID card
+  components:
+  - type: PresetIdCard
+    job: AU14UPPGROMSupportTech
+  - type: ItemIFF
+    factions:
+    - GOVFOR

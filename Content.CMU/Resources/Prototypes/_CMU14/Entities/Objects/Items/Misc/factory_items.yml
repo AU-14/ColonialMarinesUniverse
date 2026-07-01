@@ -1,0 +1,32 @@
+- type: Tag
+  id: AUMetalScrap
+
+- type: Tag
+  id: AUMetalIngot
+
+- type: entity
+  parent: BaseItem
+  id: AUMetalIngot
+  name: metal ingot
+  description: A crude ingot of smelted metal. Ready for further processing.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: iron
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - AUMetalIngot
+
+- type: entity
+  parent: BaseItem
+  id: AUWeylandYutaniDoorknob
+  name: Weyland-Yutani doorknob
+  description: A precision-machined doorknob stamped with the Weyland-Yutani logo.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/coins.rsi
+    state: coin_gold
+  - type: Item
+    size: Tiny

@@ -1,0 +1,40 @@
+- type: entity
+  name: Hack Computer Objective
+  parent: MarkerBase
+  id: hackcomputerobjective
+  components:
+  - type: Sprite
+    state: red
+  - type: AuObjective
+    id: hackcomputerobj
+    factioneutral: false
+    applicableModes:
+    - ForceOnForce
+    - DistressSignal
+    possiblefactions:
+    - govfor
+    repeating: false
+    objectivelevel: 1
+    custompoints: 10
+    ObjectiveDescription: "Hack an enemy field operations computer"
+  - type: InteractObjective
+    Interactables:
+    - AU14ObjectiveItemHackableComputer
+    doAfterMessagebegin: "You begin hacking the computer..."
+    doAfterMessagecomplete: "You successfully extract the data."
+    spawn: true
+    spawnmarker: hackcomputerspawnmarker
+    amounttospawn: 1
+    interactionsneeded: 1
+    interacttime: 10
+
+- type: entity
+  name: Hack Computer Spawn Marker
+  parent: MarkerBase
+  id: hackcomputerspawnmarker
+  components:
+  - type: Sprite
+    state: red
+  - type: FetchObjectiveMarker
+    fetchid: hackcomputerspawnmarker
+

@@ -1,0 +1,61 @@
+- type: entity
+  parent: RMCPickaxe
+  id: AU14ToolPickaxe
+  name: pickaxe
+  description: Great for introducing rocks to gravity and heavy enough to convince even the toughest stone to move aside.
+  suffix: AU14
+  components:
+  - type: MeleeWeapon
+    attackRate: 0.7
+    wideAnimationRotation: -135
+    damage:
+      types:
+        Slash: 10
+        Blunt: 33
+    soundHit:
+      path: /Audio/Weapons/bladeslice.ogg
+  - type: MeleeDamageMultiplier
+    whitelist:
+      tags:
+      - Pickaxe     # fragile rock
+    multiplier: 0.7 # base (33)*1.7=56 -> 168HP/56 = rock in 3 hits
+  - type: Tag
+    tags:
+    - Pickaxe
+
+- type: entity
+  parent: CMM2132Machete
+  id: AU14ToolMachete
+  name: machete
+  description: Chop a path through dense jungles and thick vegetation with this brutal blade. A favorite for marines and warlords alike.
+  suffix: AU14
+  components:
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 47
+  - type: MeleeDamageMultiplier
+    whitelist:
+      tags:
+      - Tree
+    multiplier: 2 # base (47)*3=141 -> 1250HP/141 = tree in 9 hits
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Slash: 27
+  - type: UsableWhileDevoured
+  - type: DisarmMalus
+    malus: 0.225
+  - type: Tool
+    qualities:
+    - Prying
+  - type: CMSurgeryTool
+  - type: CMBoneSaw
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 2.1
+    mishapChance: 0.18
+    mishapDamageType: Slash
+    mishapDamageAmount: 5
+    failurePenalties:
+      retractor: 2
+      bone_saw: 1

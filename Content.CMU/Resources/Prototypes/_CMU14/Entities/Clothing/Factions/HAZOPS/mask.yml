@@ -1,0 +1,46 @@
+- type: entity
+  parent: [CMBaseMask, CMUBaseGasMaskFilterSlot]
+  id: AU14MaskGasHAZOPSM40
+  name: M40A4 gas mask
+  description: The distant cousin of the M40 gasmask from the 1990s. Designed specifically for HAZOPS teams, it provides heightened resistance to biological contaminants.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/HAZOPS/M40gasmask,rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/HAZOPS/M40gasmask,rsi
+  - type: HideLayerClothing
+    slots:
+    - HeadTop
+    - HeadSide
+    - Snout
+  - type: Tag
+    tags:
+    - GasMask
+  - type: CMArmor
+    bio: 20
+
+- type: entity
+  parent: AU14MaskGasHAZOPSM40
+  id: AU14MaskGasHAZOPSM17
+  name: M17A4 gas mask
+  description: The evolution of the same mask your great great grandaddy complained about during his deployment in 'Nam. Heavy, big, and uncomfortable to wear. Donned with a CBRN hood.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/HAZOPS/M17gasmask.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/HAZOPS/M17gasmask.rsi
+
+- type: entity
+  parent: AU14MaskGasHAZOPSM17
+  id: AU14MaskGasHAZOPSM17Flamer
+  name: M17A4-FLAME gas mask
+  description: This ain't your grandaddy's M17. Designed for high-temperture weapon use, this mask will make sure you don't burn up while you flame the push.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/HAZOPS/M17gasmaskflamer.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/HAZOPS/M17gasmaskflamer.rsi
+  - type: CMArmor
+    bio: 25
+  - type: FireProtection
+    reduction: 0.7

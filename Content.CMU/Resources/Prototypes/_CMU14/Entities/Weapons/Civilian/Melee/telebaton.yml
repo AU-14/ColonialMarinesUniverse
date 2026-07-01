@@ -1,0 +1,73 @@
+- type: entity
+  parent: RMCStunBatonDamaged
+  id: AU14TeleBaton
+  name: telescopic baton
+  description: A telescopic baton for incapacitating people with.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Melee/telebaton.rsi
+    layers:
+    - state: telebaton_off
+      map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Melee/telebaton.rsi
+    slots:
+    - Belt
+    - Suitstorage
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+     enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: {state: telebaton_on}
+          False: {state: telebaton_off}
+  - type: Item
+    heldPrefix: on
+    size: Small
+  - type: RMCStaminaDamageOnHit
+    damage: 5
+    jitterDuration: 0.3
+  - type: MeleeRequiresSkill
+    skills:
+      RMCSkillPolice: 1
+  - type: ItemToggle
+    predictable: false
+    soundActivate:
+      path: /Audio/_RMC14/Weapons/unload.ogg
+      params:
+        variation: 0
+    soundDeactivate:
+      path: /Audio/_RMC14/Weapons/flipblade.ogg
+      params:
+        variation: 0
+    soundFailToActivate:
+      path: /Audio/Machines/button.ogg
+      params:
+        variation: 0.250
+  - type: ItemToggleMeleeWeapon
+    activatedSoundOnHit:
+      path: /Audio/_RMC14/Weapons/synthpunch1.ogg
+      params:
+        variation: 0.1
+    activatedSoundOnHitNoDamage:
+      path: /Audio/_RMC14/Weapons/synthpunch1.ogg
+      params:
+        variation: 0.1
+    activatedDamage:
+      types:
+        Blunt: 18
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    damage:
+      types:
+        Blunt: 5
+    bluntStaminaDamageFactor: 1.5
+    angle: 60
+    animation: WeaponArcThrust
+  - type: RMCStaminaDamageOnCollide
+    damage: 10
+  - type: LandAtCursor # it deals stamina damage when thrown
+  - type: Battery
+    maxCharge: 1000
+    startingCharge: 1000
+  - type: UseDelay

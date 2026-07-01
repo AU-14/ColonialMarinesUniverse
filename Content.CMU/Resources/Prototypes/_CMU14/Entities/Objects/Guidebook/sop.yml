@@ -1,0 +1,55 @@
+- type: guideEntry
+  parent: RMC
+  id: AU14SOP
+  name: Military Standard Operating Procedure
+  text: "/ServerInfo/Guidebook/_AU14/SOP/AU14SOP.xml"
+  priority: 3
+  children:
+  - AU14SOPRulesofEngagement
+  - AU14SOPRankStructure
+  - AU14SOPEquipmentAndPersonnel
+  - AU14SOPCommand
+  - AU14SOPDropshipsandAircraft
+  - AU14SOPThirdParty
+
+- type: guideEntry
+  parent: RMC
+  id: AU14SOPRulesofEngagement
+  name: Rules of Engagement
+  priority: 0
+  text: "/ServerInfo/Guidebook/_AU14/SOP/AU14SOPRulesofEngagement.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14SOPEquipmentAndPersonnel
+  name: Equipment and Personnel
+  priority: 1
+  text: "/ServerInfo/Guidebook/_AU14/SOP/AU14SOPEquipmentAndPersonnel.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14SOPCommand
+  name: Command Regulations
+  priority: 1
+  text: "/ServerInfo/Guidebook/_AU14/SOP/AU14SOPCommand.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14SOPDropshipsandAircraft
+  name: Dropships and Aircraft
+  priority: 1
+  text: "/ServerInfo/Guidebook/_AU14/SOP/AU14SOPDropshipsandAircraft.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14SOPRankStructure
+  name: Rank Structure
+  priority: 1
+  text: "/ServerInfo/Guidebook/_AU14/SOP/AU14SOPRankStructure.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14SOPThirdParty
+  name: Third-Party Regulations
+  priority: 1
+  text: "/ServerInfo/Guidebook/_AU14/SOP/AU14SOPThirdParty.xml"

@@ -1,0 +1,579 @@
+﻿- type: entity
+  abstract: true
+  id: AU14ContainerBase
+  name: cargo container
+  description: A huge industrial shipping container.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,1.5"
+        density: 190
+        layer:
+        - MobMask
+  - type: Sprite
+    sprite: _AU14/Structures/containers.rsi
+    offset: 0, 0.5
+  - type: Clickable
+  - type: Occluder
+    boundingBox: "-0.5,-0.5,0.5,1.5"
+  - type: DeleteOnExplosion
+  - type: XenoToggleChargingDamage
+    stageLoss: 4
+    destroy: true
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerGreenAriousLeft
+  suffix: Arious, Left
+  components:
+  - type: Sprite
+    state: arious_lm
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerGreenAriousMiddle
+  suffix: Arious, Middle
+  components:
+  - type: Sprite
+    state: arious_m
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerDarkGreenCANC
+  suffix: CANC, Left
+  components:
+  - type: Sprite
+    state: canc_g_l
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerDarkGreenCANCRight
+  suffix: CANC, Right
+  components:
+  - type: Sprite
+    state: canc_g_r
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerDarkGreenCANCMiddle
+  suffix: CANC, Middle
+  components:
+  - type: Sprite
+    state: canc_g_m
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerTanCANC
+  suffix: CANC, Left
+  components:
+  - type: Sprite
+    state: canc_t_l
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerTanCANCRight
+  suffix: CANC, Right
+  components:
+  - type: Sprite
+    state: canc_t_r
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerTanCANCMiddle
+  suffix: CANC, Middle
+  components:
+  - type: Sprite
+    state: canc_t_m
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerBlueGraffitiLeft
+  suffix: Graffiti, Blue
+  components:
+  - type: Sprite
+    state: grafcontain_l
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerBlueGraffitiMiddle
+  suffix: Graffiti, Blue
+  components:
+  - type: Sprite
+    state: grafcontain_rm
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerBlueGraffitiRight
+  suffix: Graffiti, Blue
+  components:
+  - type: Sprite
+    state: grafcontain_r
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerRedGraffitiLeft
+  suffix: Graffiti, Red
+  components:
+  - type: Sprite
+    state: grafcontain2_l
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerRedGraffitiMiddle
+  suffix: Graffiti, Red
+  components:
+  - type: Sprite
+    state: grafcontain2_rm
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerRedGraffitiRight
+  suffix: Graffiti, Red
+  components:
+  - type: Sprite
+    state: grafcontain2_r
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerGreenGraffitiLeft
+  suffix: Graffiti, Green
+  components:
+  - type: Sprite
+    state: grafcontain3_l
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerGreenGraffitiMiddle
+  suffix: Graffiti, Green
+  components:
+  - type: Sprite
+    state: grafcontain3_rm
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerGreenGraffitiRight
+  suffix: Graffiti, Green
+  components:
+  - type: Sprite
+    state: grafcontain3_r
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerHyperdyneLeft
+  suffix: Hyperdyne, DarkBlue
+  components:
+  - type: Sprite
+    state: hd_l
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerHyperdyneMiddle
+  suffix: Hyperdyne, DarkBlue
+  components:
+  - type: Sprite
+    state: hd_m
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerHyperdyneRight
+  suffix: Hyperdyne, DarkBlue
+  components:
+  - type: Sprite
+    state: hd_r
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerLightHyperdyneLeft
+  suffix: Hyperdyne, LightBlue
+  components:
+  - type: Sprite
+    state: hd_l_alt
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerLightHyperdyneMiddle
+  suffix: Hyperdyne, LightBlue
+  components:
+  - type: Sprite
+    state: hd_m_alt
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerLightHyperdyneRight
+  suffix: Hyperdyne, LightBlue
+  components:
+  - type: Sprite
+    state: hd_r_alt
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerLockmartLeft
+  suffix: Lockmart, LightBlue
+  components:
+  - type: Sprite
+    state: lockmart_l
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerLockmartMiddle
+  suffix: Lockmart, LightBlue
+  components:
+  - type: Sprite
+    state: lockmart_m
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerLockmartRight
+  suffix: Lockmart, LightBlue
+  components:
+  - type: Sprite
+    state: lockmart_r
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerSeegsonLeft
+  suffix: Seegson, LightBlue
+  components:
+  - type: Sprite
+    state: seegson_l
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerSeegsonMiddle
+  suffix: Seegson, LightBlue
+  components:
+  - type: Sprite
+    state: seegson_m
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerSeegsonRight
+  suffix: Seegson, LightBlue
+  components:
+  - type: Sprite
+    state: seegson_r
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerUPPDarkGreenLeft
+  suffix: UPP, DarkGreen
+  components:
+  - type: Sprite
+    state: upp_l
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerUPPDarkGreenMiddle
+  suffix: UPP, DarkGreen
+  components:
+  - type: Sprite
+    state: upp_m
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerUPPDarkGreenRight
+  suffix: UPP, DarkGreen
+  components:
+  - type: Sprite
+    state: upp_r
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerUPPTanLeft
+  suffix: UPP, Tan
+  components:
+  - type: Sprite
+    state: upp_t_l
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerUPPTanMiddle
+  suffix: UPP, Tan
+  components:
+  - type: Sprite
+    state: upp_t_m
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerUPPTanRight
+  suffix: UPP, Tan
+  components:
+  - type: Sprite
+    state: upp_t_r
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerUSCMLeft
+  suffix: USCM, Gray
+  components:
+  - type: Sprite
+    state: uscm4_l
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerUSCMMiddle
+  suffix: USCM, Gray
+  components:
+  - type: Sprite
+    state: uscm4_m
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerUSCMRight
+  suffix: USCM, Gray
+  components:
+  - type: Sprite
+    state: uscm_r
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerWYLeft
+  suffix: WY, Gray
+  components:
+  - type: Sprite
+    state: wy_l
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerWYMiddle
+  suffix: WY, Gray
+  components:
+  - type: Sprite
+    state: wy_m
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerWYRight
+  suffix: WY, Gray
+  components:
+  - type: Sprite
+    state: wy_r
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerMK6Left
+  suffix: MK6, DarkGreen
+  components:
+  - type: Sprite
+    state: mk6_l
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerMK6Middle
+  suffix: MK6, DarkGreen
+  components:
+  - type: Sprite
+    state: mk6_m
+
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerMK6Right
+  suffix: MK6, DarkGreen
+  components:
+  - type: Sprite
+    state: mk6_r
+
+#Tartatus Containers
+- type: entity
+  parent: AU14ContainerBase
+  id: AU14ContainerTartarusLeft
+  suffix: Tartarus, Left
+  components:
+  - type: Sprite
+    state: grant_l
+  - type: Occluder
+    boundingBox: "-0.5,-0.5,0.5,0.8"
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.8"
+        density: 190
+        layer:
+        - MobMask
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusLeftBlackWY
+  suffix: Tartarus, Left
+  components:
+  - type: Sprite
+    state: blackwyleft
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusRightBlackWY
+  suffix: Tartarus, Right
+  components:
+  - type: Sprite
+    state: blackwyright
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusLeftBlueWYWings
+  suffix: Tartarus, Left
+  components:
+  - type: Sprite
+    state: bluewywingsleft
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusRightBlueWYWings
+  suffix: Tartarus, Right
+  components:
+  - type: Sprite
+    state: bluewywingsright
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusLeftMedicalEmpty
+  suffix: Tartarus, Left
+  components:
+  - type: Sprite
+    state: emptymedicalleft
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusRightMedicalEmpty
+  suffix: Tartarus, Right
+  components:
+  - type: Sprite
+    state: emptymedicalright
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusLeftGrayWY
+  suffix: Tartarus, Left
+  components:
+  - type: Sprite
+    state: greywyleft
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusRightGrayWY
+  suffix: Tartarus, Right
+  components:
+  - type: Sprite
+    state: greywyright
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusLeftKelland
+  suffix: Tartarus, Left
+  components:
+  - type: Sprite
+    state: kelland_alt_l
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusRightKelland
+  suffix: Tartarus, Right
+  components:
+  - type: Sprite
+    state: kelland_alt_r
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusLeftKellandAlt
+  suffix: Tartarus, Left
+  components:
+  - type: Sprite
+    state: kelland_l
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusRightKellandAlt
+  suffix: Tartarus, Right
+  components:
+  - type: Sprite
+    state: kelland_r
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusLeftLightGrayWY
+  suffix: Tartarus, Left
+  components:
+  - type: Sprite
+    state: lightgreywyleft
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusRightLightGrayWY
+  suffix: Tartarus, Right
+  components:
+  - type: Sprite
+    state: lightgreywyright
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusLeftMedicalEmptyAlt
+  suffix: Tartarus, Left
+  components:
+  - type: Sprite
+    state: medicalleft
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusRightMedicalEmptyAlt
+  suffix: Tartarus, Right
+  components:
+  - type: Sprite
+    state: medicalright
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusLeftRedWYWings
+  suffix: Tartarus, Left
+  components:
+  - type: Sprite
+    state: redwywingsleft
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusRightRedWYWings
+  suffix: Tartarus, Right
+  components:
+  - type: Sprite
+    state: redwywingsright
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusLeftTanWYWings
+  suffix: Tartarus, Left
+  components:
+  - type: Sprite
+    state: tanwywingsleft
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusRightTanWYWings
+  suffix: Tartarus, Right
+  components:
+  - type: Sprite
+    state: tanwywingsright
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusLeftOffBlueWY
+  suffix: Tartarus, Left
+  components:
+  - type: Sprite
+    state: whitewyleft
+
+- type: entity
+  parent: AU14ContainerTartarusLeft
+  id: AU14ContainerTartarusRightOffBlueWY
+  suffix: Tartarus, Right
+  components:
+  - type: Sprite
+    state: whitewyright

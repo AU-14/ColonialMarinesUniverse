@@ -1,0 +1,329 @@
+# United Americas
+- type: Origin
+  id: UAMexico
+  name: origin-ua-mexico-name
+  description: origin-ua-mexico-description
+  roundStart: true
+
+- type: Origin
+  id: UAColonies
+  name: origin-ua-colonies-name
+  description: origin-ua-colonies-description
+  roundStart: true
+
+- type: Origin
+  id: UAOther
+  name: origin-ua-other-name
+  description: origin-ua-other-description
+  roundStart: true
+
+- type: Origin
+  id: UALuna
+  name: origin-ua-luna-name
+  description: origin-ua-luna-description
+  roundStart: true
+
+- type: Origin
+  id: UACanada
+  name: origin-ua-canada-name
+  description: origin-ua-canada-description
+  roundStart: true
+
+- type: Origin
+  id: UAAmerica
+  name: origin-ua-america-name
+  description: origin-ua-america-description
+  roundStart: true
+
+- type: Origin
+  id: UABrazil
+  name: origin-ua-brazil-name
+  description: origin-ua-brazil-description
+  roundStart: true
+
+- type: Origin
+  id: UAArgentina
+  name: origin-ua-argentina-name
+  description: origin-ua-argentina-description
+  roundStart: true
+
+# Three World Empire
+- type: Origin
+  id: TWEJapan
+  name: origin-twe-japan-name
+  description: origin-twe-japan-description
+  roundStart: true
+
+- type: Origin
+  id: TWEIndia
+  name: origin-twe-india-name
+  description: origin-twe-india-description
+  roundStart: true
+
+- type: Origin
+  id: TWEColony
+  name: origin-twe-colony-name
+  description: origin-twe-colony-description
+  roundStart: true
+
+- type: Origin
+  id: TWEMars
+  name: origin-twe-mars-name
+  description: origin-twe-mars-description
+  roundStart: true
+
+- type: Origin
+  id: TWELuna
+  name: origin-twe-luna-name
+  description: origin-twe-luna-description
+  roundStart: true
+
+- type: Origin
+  id: TWEAustralia
+  name: origin-twe-australia-name
+  description: origin-twe-australia-description
+  roundStart: true
+
+- type: Origin
+  id: TWEOther
+  name: origin-twe-other-name
+  description: origin-twe-other-description
+  roundStart: true
+
+- type: Origin
+  id: TWETian
+  name: origin-twe-tian-name
+  description: origin-twe-tian-description
+  roundStart: true
+
+# Confederation of Central Africa
+- type: Origin
+  id: CCASouthAfrica
+  name: origin-cca-southafrica-name
+  description: origin-cca-southafrica-description
+  roundStart: true
+
+- type: Origin
+  id: CCAZimbabwe
+  name: origin-cca-zimbabwe-name
+  description: origin-cca-zimbabwe-description
+  roundStart: true
+
+- type: Origin
+  id: CCANigeria
+  name: origin-cca-nigeria-name
+  description: origin-cca-nigeria-description
+  roundStart: true
+
+- type: Origin
+  id: CCABotswana
+  name: origin-cca-botswana-name
+  description: origin-cca-botswana-description
+  roundStart: true
+
+- type: Origin
+  id: CCAColonies
+  name: origin-cca-colonies-name
+  description: origin-cca-colonies-description
+  roundStart: true
+
+- type: Origin
+  id: CCATunisia
+  name: origin-cca-tunisia-name
+  description: origin-cca-tunisia-description
+  roundStart: true
+
+- type: Origin
+  id: CCAOther
+  name: origin-cca-other-name
+  description: origin-cca-other-description
+  roundStart: true
+
+- type: Origin
+  id: CCALuna
+  name: origin-cca-luna-name
+  description: origin-cca-luna-description
+  roundStart: true
+
+# Union of Progressive Peoples
+- type: Origin
+  id: UPPRussia
+  name: origin-upp-russia-name
+  description: origin-upp-russia-description
+  roundStart: true
+
+- type: Origin
+  id: UPPGermany
+  name: origin-upp-germany-name
+  description: origin-upp-germany-description
+  roundStart: true
+
+- type: Origin
+  id: UPPAlgeria
+  name: origin-upp-algeria-name
+  description: origin-upp-algeria-description
+  roundStart: true
+
+- type: Origin
+  id: UPPChina
+  name: origin-upp-china-name
+  description: origin-upp-china-description
+  roundStart: true
+
+- type: Origin
+  id: UPPIndonesia
+  name: origin-upp-indonesia-name
+  description: origin-upp-indonesia-description
+  roundStart: true
+
+- type: Origin
+  id: UPPLuna
+  name: origin-upp-luna-name
+  description: origin-upp-luna-description
+  roundStart: true
+
+- type: Origin
+  id: UPPVietnam
+  name: origin-upp-vietnam-name
+  description: origin-upp-vietnam-description
+  roundStart: true
+
+- type: Origin
+  id: UPPKorea
+  name: origin-upp-korea-name
+  description: origin-upp-korea-description
+  roundStart: true
+
+- type: Origin
+  id: UPPColonies
+  name: origin-upp-colonies-name
+  description: origin-upp-colonies-description
+  roundStart: true
+
+- type: Origin
+  id: UPPSpain
+  name: origin-upp-spain-name
+  description: origin-upp-spain-description
+  roundStart: true
+
+- type: Origin
+  id: UPPItaly
+  name: origin-upp-italy-name
+  description: origin-upp-italy-description
+  roundStart: true
+
+# Independent Systems
+- type: Origin
+  id: ISVolcus
+  name: origin-is-volcus-name
+  description: origin-is-volcus-description
+  roundStart: true
+
+- type: Origin
+  id: ISArcturus
+  name: origin-is-arcturus-name
+  description: origin-is-arcturus-description
+  roundStart: true
+
+- type: Origin
+  id: ISTurkey
+  name: origin-is-turkey-name
+  description: origin-is-turkey-description
+  roundStart: true
+
+- type: Origin
+  id: ISSouthKorea
+  name: origin-is-southkorea-name
+  description: origin-is-southkorea-description
+  roundStart: true
+
+- type: Origin
+  id: ISFrance
+  name: origin-is-france-name
+  description: origin-is-france-description
+  roundStart: true
+
+- type: Origin
+  id: ISIran
+  name: origin-is-iran-name
+  description: origin-is-iran-description
+  roundStart: true
+
+- type: Origin
+  id: ISOther
+  name: origin-is-other-name
+  description: origin-is-other-description
+  roundStart: true
+
+- type: Origin
+  id: ISSaudiArabia
+  name: origin-is-saudiarabia-name
+  description: origin-is-saudiarabia-description
+  roundStart: true
+
+- type: Origin
+  id: ISPakistan
+  name: origin-is-pakistan-name
+  description: origin-is-pakistan-description
+  roundStart: true
+
+- type: Origin
+  id: ISGhana
+  name: origin-is-ghana-name
+  description: origin-is-ghana-description
+  roundStart: true
+
+- type: Origin
+  id: ISEgypt
+  name: origin-is-egypt-name
+  description: origin-is-egypt-description
+  roundStart: true
+
+- type: Origin
+  id: ICSCColonies
+  name: origin-is-icsc-name
+  description: origin-is-icsc-description
+  roundStart: true
+
+# Corporate
+- type: Origin
+  id: CorpMadagascar
+  name: origin-corp-madagascar-name
+  description: origin-corp-madagascar-description
+  roundStart: true
+
+- type: Origin
+  id: CorpDubai
+  name: origin-corp-dubai-name
+  description: origin-corp-dubai-description
+  roundStart: true
+
+- type: Origin
+  id: CorpMars
+  name: origin-corp-mars-name
+  description: origin-corp-mars-description
+  roundStart: true
+
+- type: Origin
+  id: CorpProdigyCity
+  name: origin-corp-prodigycity-name
+  description: origin-corp-prodigycity-description
+  roundStart: true
+
+- type: Origin
+  id: CorpLuna
+  name: origin-corp-luna-name
+  description: origin-corp-luna-description
+  roundStart: true
+
+- type: Origin
+  id: CorpColonies
+  name: origin-corp-colonies-name
+  description: origin-corp-colonies-description
+  roundStart: true
+
+- type: Origin
+  id: CorpOther
+  name: origin-corp-other-name
+  description: origin-corp-other-description
+  roundStart: true

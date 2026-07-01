@@ -1,0 +1,35 @@
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUPPTDRifleman
+  name: UPP TD Rifleman ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: AU14UPPTerritorialDefenseRifleman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUPPTDLoader
+  name: UPP TD Loader ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: AU14UPPTerritorialDefenseLoader
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUPPTDSquadLeader
+  name: UPP TD Squad Leader ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: AU14UPPTerritorialDefenseSquadLeader
+  - type: ItemIFF
+    factions:
+    - GOVFOR

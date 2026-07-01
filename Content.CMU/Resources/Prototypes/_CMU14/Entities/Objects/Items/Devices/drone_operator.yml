@@ -1,0 +1,176 @@
+- type: entity
+  parent: BaseItem
+  id: CMUDroneControlTablet
+  name: drone control tablet
+  description: A ruggedized command tablet used to link and remotely pilot one drone android within a short tactical leash.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/command_tablet.rsi
+    state: cotablet
+  - type: Item
+    size: Small
+  - type: CMUDroneControlTablet
+    range: 30
+
+- type: entity
+  parent: CMBackpackMarine
+  id: CMUDroneOperatorPackFilled
+  name: drone operator field pack
+  description: A compact field pack issued with a drone controller, disassembled drone android frame, tools, and swappable drone modules.
+  suffix: Filled
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/Marines/tech/jungle-desert-classic.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,29,2
+  - type: StorageFill
+    contents:
+    - id: CMUDroneControlTablet
+    - id: CMUDroneBodyFrame
+    - id: CMUDroneHeadAssembly
+    - id: CMUDroneLeftArmAssembly
+    - id: CMUDroneRightArmAssembly
+    - id: CMUDroneLeftLegAssembly
+    - id: CMUDroneRightLegAssembly
+    - id: CMUDroneSynthKey
+    - id: CMScrewdriver
+    - id: CMWrench
+    - id: CMWelder
+    - id: CMUDroneModuleCombat
+    - id: CMUDroneModuleCare
+
+- type: entity
+  parent: BaseItem
+  id: CMUDroneBodyFrame
+  name: drone android body frame
+  description: A bare synthetic torso frame with sealed limb ports and an empty activation socket.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: torso_m
+  - type: Item
+    size: Normal
+  - type: CMUDroneFrame
+    dronePrototype: CMUDroneAndroid
+
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: CMUDronePartBase
+  name: drone android part
+  description: A stripped synthetic assembly part for a drone android.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+  - type: Item
+    size: Small
+
+- type: entity
+  parent: CMUDronePartBase
+  id: CMUDroneHeadAssembly
+  name: drone android head
+  description: A bare synthetic head assembly with minimal sensor and control hardware.
+  components:
+  - type: Sprite
+    state: head_m
+  - type: CMUDroneAssemblyPart
+    part: Head
+
+- type: entity
+  parent: CMUDronePartBase
+  id: CMUDroneLeftArmAssembly
+  name: drone android left arm
+  description: A left arm assembly with exposed actuator bundles.
+  components:
+  - type: Sprite
+    state: l_arm
+  - type: CMUDroneAssemblyPart
+    part: LeftArm
+
+- type: entity
+  parent: CMUDronePartBase
+  id: CMUDroneRightArmAssembly
+  name: drone android right arm
+  description: A right arm assembly with exposed actuator bundles.
+  components:
+  - type: Sprite
+    state: r_arm
+  - type: CMUDroneAssemblyPart
+    part: RightArm
+
+- type: entity
+  parent: CMUDronePartBase
+  id: CMUDroneLeftLegAssembly
+  name: drone android left leg
+  description: A left leg assembly with reinforced knee servos.
+  components:
+  - type: Sprite
+    state: l_leg
+  - type: CMUDroneAssemblyPart
+    part: LeftLeg
+
+- type: entity
+  parent: CMUDronePartBase
+  id: CMUDroneRightLegAssembly
+  name: drone android right leg
+  description: A right leg assembly with reinforced knee servos.
+  components:
+  - type: Sprite
+    state: r_leg
+  - type: CMUDroneAssemblyPart
+    part: RightLeg
+
+- type: entity
+  parent: BaseItem
+  id: CMUDroneSynthKey
+  name: drone synth key
+  description: A locked synthetic authorization key used to bring a completed drone android frame online.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/synth_token.rsi
+    state: coin_synth
+  - type: Item
+    size: Tiny
+  - type: CMUDroneSynthKey
+
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: CMUDroneModuleBase
+  name: drone module
+  description: A swappable control module designed for a drone android's internal tool bus.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/module.rsi
+    state: std_mod
+  - type: Item
+    size: Small
+  - type: CMUDroneModule
+
+- type: entity
+  parent: CMUDroneModuleBase
+  id: CMUDroneModuleCombat
+  name: drone combat module
+  description: A tactical combat module loaded with close-quarters and firearms routines.
+  components:
+  - type: Sprite
+    state: mcontroller
+  - type: CMUDroneModule
+    skills:
+      RMCSkillCqc: 4
+      RMCSkillFirearms: 4
+
+- type: entity
+  parent: CMUDroneModuleBase
+  id: CMUDroneModuleCare
+  name: drone care module
+  description: A medical care module loaded with doctor-grade treatment and surgery routines.
+  components:
+  - type: Sprite
+    state: power_mod
+  - type: CMUDroneModule
+    skills:
+      RMCSkillMedical: 4
+      RMCSkillSurgery: 4

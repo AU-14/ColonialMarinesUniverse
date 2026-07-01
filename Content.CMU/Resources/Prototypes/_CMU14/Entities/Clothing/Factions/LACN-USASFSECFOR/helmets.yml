@@ -1,0 +1,32 @@
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14LACNHelmetStandard
+  name: LACN BK-9 Helmet
+  description: Standard Issue Helmet used by LACN landing forces. Provides modest protection from bullets and melee attacks at the head.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/LACN/HelmetsHats/lacnhelmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/LACN/HelmetsHats/lacnhelmet.rsi
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14LACNHelmetSL
+  name: LACN BK-9M Helmet
+  description: A slightly more modern helmet made for LACN landing forces NCOs and Officers. This one contains a small built-in camera and has cushioning to protect your fragile brain.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/LACN/HelmetsHats/lacnslhelmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/LACN/HelmetsHats/lacnslhelmet.rsi
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14LACNAirCrewHelmet
+  name: LACN LAH-99 aircrew helmet
+  description: A helmet made for LACN aircrew. This one contains a small built-in camera and has cushioning to protect your fragile brain.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/LACN/PilotGear/helmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/LACN/PilotGear/helmet.rsi

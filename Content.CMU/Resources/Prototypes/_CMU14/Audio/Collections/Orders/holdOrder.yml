@@ -1,0 +1,47 @@
+- type: soundCollection
+  id: AU14MaleHoldOrder
+  files:
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/Hold1.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/Hold2.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/Hold3.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/Hold4.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/Hold5.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/HunkerDown1.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/HunkerDown2.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/HunkerDown3.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/HunkerDown4.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/HunkerDown5.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/HunkerDown6.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/Halt1.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/Halt2.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/Halt3.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/Halt4.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/Halt5.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/Halt6.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/Halt7.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/Halt8.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/Hold_it1.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/Hold_it2.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/Hold_it3.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/Hold_it4.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/Hold_it5.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/Hold_it6.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/Hold_it7.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/CheckPointStop1.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/CheckPointStop2.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/CheckPointStop3.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/CheckPointStop4.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/CheckPointStop5.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/CheckPointStop6.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Hold/CheckPointStop7.ogg
+
+
+- type: soundCollection
+  id: AU14FemaleHoldOrder
+  files:   # None as of yet. Will be using these as placeholder for now.
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/femalewarcry6.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_1.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_2.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_3.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_11.ogg
+

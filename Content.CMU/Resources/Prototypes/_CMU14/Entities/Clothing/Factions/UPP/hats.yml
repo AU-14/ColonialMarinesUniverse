@@ -1,0 +1,49 @@
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14UPPBoonie
+  name: UPP boonie
+  description: UPP headgear issued to soldiers when they're not expected to face combat, and may be requested by officers and above.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/hats/uppboonie.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/UPP/hats/uppboonie.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14UPPPatrolCap
+  name: UPP UL2 patrol cap
+  description: UPP headgear issued to soldiers when they're not expected to face combat, and may be requested by officers and above.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/hats/uppcap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/UPP/hats/uppcap.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14UPPUshanka
+  name: UPP UL8 ushanka
+  description: UPP headgear issued to soldiers when they're not expected to face combat, and may be requested by officers and above.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/hats/uppushanka.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/UPP/hats/uppushanka.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14UPPCBRNHood
+  name: UPP MOPP hood
+  description: Hood from the UPP's Armed Forces MOPP costume.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/hats/cbrn.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/UPP/hats/cbrn.rsi
+  - type: HideLayerClothing
+    slots:
+    - HeadTop
+    - HeadSide
+    - Hair
+    - Snout

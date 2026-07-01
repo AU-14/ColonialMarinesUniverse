@@ -1,0 +1,199 @@
+- type: entity
+  abstract: true
+  save: false
+  parent: RMCBaseMobSpeciesOrganic
+  id: AU14MobWorkingJoe
+  name: Urist McJoe
+  suffix: AU14, Base
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "enum.HumanoidVisualLayers.Chest" ]
+    - map: [ "enum.HumanoidVisualLayers.Head" ]
+    - map: [ "enum.HumanoidVisualLayers.Snout" ]
+    - map: [ "enum.HumanoidVisualLayers.Eyes" ]
+      shader: unshaded
+    - map: [ "enum.HumanoidVisualLayers.RArm" ]
+    - map: [ "enum.HumanoidVisualLayers.LArm" ]
+    - map: [ "enum.HumanoidVisualLayers.RLeg" ]
+    - map: [ "enum.HumanoidVisualLayers.LLeg" ]
+    - map: [ "enum.HumanoidVisualLayers.UndergarmentBottom" ]
+    - map: [ "enum.HumanoidVisualLayers.UndergarmentTop" ]
+    - map: ["jumpsuit"]
+    - map: ["enum.HumanoidVisualLayers.LFoot"]
+    - map: ["enum.HumanoidVisualLayers.RFoot"]
+    - map: ["enum.HumanoidVisualLayers.LHand"]
+    - map: ["enum.HumanoidVisualLayers.RHand"]
+    - map: [ "gloves" ]
+    - map: [ "enum.SquadArmorLayers.Gloves" ]
+    - map: [ "shoes" ]
+    - map: [ "id" ] # RMC14 re-arrange id slot
+    - map: [ "ears" ]
+    - map: [ "eyes" ]
+    - map: [ "outerClothing" ]
+    - map: [ "belt" ]
+    - map: [ "enum.SquadArmorLayers.Armor" ]
+    - map: [ "enum.WebbingVisualLayers.Base" ]
+    - map: [ "enum.MedalVisualLayers.Base" ]
+    - map: [ "back" ]
+    - map: [ "enum.HumanoidVisualLayers.FacialHair" ]
+    - map: [ "neck" ] # RMC14 re-arrange neck slot
+    - map: [ "enum.HumanoidVisualLayers.Hair" ]
+    - map: [ "enum.HumanoidVisualLayers.HeadSide" ]
+    - map: [ "enum.HumanoidVisualLayers.HeadTop" ]
+    - map: [ "enum.HumanoidVisualLayers.Tail" ]
+    - map: [ "mask" ]
+    - map: [ "head" ]
+    - map: [ "enum.SquadArmorLayers.Helmet" ]
+    - map: [ "enum.VisorVisualLayers.Base" ]
+    - map: [ "pocket1" ]
+    - map: [ "pocket2" ]
+    - map: ["enum.HumanoidVisualLayers.Handcuffs"]
+      color: "#ffffff"
+      sprite: Objects/Misc/handcuffs.rsi
+      state: body-overlay-2
+      visible: false
+    - map: [ "clownedon" ] # Dynamically generated
+      sprite: "Effects/creampie.rsi"
+      state: "creampie_human"
+      visible: false
+    - map: [ "acided" ]
+    - map: [ "hooked" ]
+      sprite: "_RMC14/Effects/xeno_spray_acid.rsi"
+      state: hooked
+      visible: false
+    - map: [ "enum.NewPlayerLayers.Layer" ]
+      visible: false
+    - map: [ "focused" ]
+      sprite: _RMC14/Interface/xeno_hud.rsi
+      state: hudeye
+      visible: false
+    - map: [ "targetedDirection" ]
+      sprite: _RMC14/Effects/targeted.rsi
+      state: sniper_lockon_direction
+      visible: false
+    - map: [ "targetedDirectionIntense" ]
+      sprite: _RMC14/Effects/targeted.rsi
+      state: sniper_lockon_intense_direction
+      visible: false
+  - type: HumanoidAppearance
+    species: WorkingJoe
+    hideLayersOnEquip:
+    - UndergarmentTop
+    - HeadTop
+  - type: Speech
+    speechVerb: WorkingJoe
+    speechSounds: null
+  - type: Vocal
+    sounds:
+      Male: AU14WorkingJoeSounds
+      Female: AU14WorkingJoeSounds
+      Unsexed: AU14WorkingJoeSounds
+  - type: TypingIndicator
+    proto: joe
+  - type: Deathgasp
+    prototype: AU14WorkingJoeDeathGasp
+  - type: RMCInnateSlowdown
+    slowdown: 1.25
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/_RMC14/Weapons/synthpunch1.ogg
+      params:
+        variation: 0.15
+        volume: -1
+    angle: 30
+    animation: WeaponArcFist
+    attackRate: 1
+    damage:
+      types:
+        Blunt: 60
+  - type: Bloodstream
+    bloodReagent: RMCSynthBlood
+  - type: Synth
+    generation: "rmc-species-synth-generation-first"
+    critThreshold: 299
+    deadThreshold: 300
+    newDamageModifier: AU14WorkingJoe
+  - type: Skills
+    preset: AU14SkillPresetPlatoonWorkingJoe
+  - type: RMCRandomName
+    baseName: au14-species-name-working-joe
+    postFix: au14-species-name-working-joe-postfix
+    maxNumber: 5000
+  - type: RMCIntentsEyeColor
+  - type: RMCSetGenderOnMapInit
+    gender: Neuter
+  - type: WorkingJoeVoice
+  - type: UserInterface
+    interfaces:
+      enum.WorkingJoeVoiceUiKey.Key:
+        type: WorkingJoeVoiceBui
+      enum.VoiceMaskUIKey.Key:
+        type: VoiceMaskBoundUserInterface
+      enum.HumanoidMarkingModifierKey.Key:
+        type: HumanoidMarkingModifierBoundUserInterface
+      enum.StrippingUiKey.Key:
+        type: StrippableBoundUserInterface
+      enum.CMSurgeryUIKey.Key:
+        type: CMSurgeryBui
+      enum.HolocardChangeUIKey.Key:
+        type: HolocardChangeBoundUserInterface
+        interactionRange: 0
+        requireInputValidation: false
+      enum.CMMobStateActionsUI.Key:
+        type: CMGhostActionBui
+        requireInputValidation: false
+      enum.TacticalMapUserUi.Key:
+        type: TacticalMapUserBui
+      enum.SquadLeaderTrackerUI.Key:
+        type: SquadInfoBui
+      enum.DialogUiKey.Key:
+        type: DialogBui
+      enum.ViewIntelObjectivesUI.Key:
+        type: ViewIntelObjectivesBui
+  - type: IntrinsicRadioReceiver
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - radioAI
+    - Colony
+    - radioWEYU
+    - radioCMB
+  - type: ActiveRadio
+    channels:
+    - radioAI
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: synth
+  - type: Actions
+  - type: GrantAreaInfo
+  - type: GrantMarineIcons
+    factions:
+    - UNMC
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: Tag
+    tags:
+    - WorkingJoe
+    - CanPilot
+    - FootstepSound
+    - DoorBumpOpener
+
+- type: entity
+  parent: BaseSpeciesDummy
+  id: AU14MobWorkingJoeDummy
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HumanoidAppearance
+    species: WorkingJoe
+
+- type: entity
+  parent: RMCSynthRemoveComponents
+  id: AU14WorkingJoeRemoveComponents
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HiddenAppearance
+
+- type: Tag
+  id: WorkingJoe

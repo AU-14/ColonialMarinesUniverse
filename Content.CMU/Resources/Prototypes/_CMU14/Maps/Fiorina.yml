@@ -1,0 +1,14 @@
+- type: gameMap
+  id: aufiorina
+  mapName: Fiorina Prison
+  mapPath: /Maps/_AU14/fiorina.yml
+  minPlayers: 0
+  maxPlayers: 200
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    fiorina:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'Fiorina Prison'

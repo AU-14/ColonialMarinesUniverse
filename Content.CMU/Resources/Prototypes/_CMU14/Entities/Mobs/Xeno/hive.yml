@@ -1,0 +1,11 @@
+﻿- type: entity
+  id: CMUCorruptedHive
+  name: Corrupted Hive
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Hive
+    lateJoinGainLarva: false
+    hiveColor: "#80ff80" #they are green for an amazing reason
+    hiveUIColor: "#4d994d"
+    canMakeAlliances: true
+    corrupted: true

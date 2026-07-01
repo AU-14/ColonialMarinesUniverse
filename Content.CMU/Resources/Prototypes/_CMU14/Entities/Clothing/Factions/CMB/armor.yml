@@ -1,0 +1,8 @@
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14CMBCIUArmor
+  name: CMB CIU Armor
+  description: A set of CMB Crisis Intervention Unit armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/uacgarmor.rsi

@@ -1,0 +1,17 @@
+- type: localizedDataset
+  id: AU14NamesMaleFirstLatin
+  values:
+    prefix: names-first-male-dataset-latin-
+    count: 78
+
+- type: localizedDataset
+  id: AU14NamesFemaleFirstLatin
+  values:
+    prefix: names-first-female-dataset-latin-
+    count: 64
+
+- type: localizedDataset
+  id: AU14NamesLastLatin
+  values:
+    prefix: names-last-dataset-latin-
+    count: 79

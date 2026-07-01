@@ -1,0 +1,156 @@
+﻿# Rifleman
+- type: entity
+  parent: RMCSpawnerCorpse
+  id: AU14SpawnerCorpseUSCMRifleman
+  name: Corpse Spawner - USCM Rifleman
+  components:
+  - type: CorpseSpawner
+    spawn: AU14CorpseUSCMRifleman
+
+- type: randomHumanoidSettings
+  parent: RMCCorpse
+  id: AU14CorpseUSCMRifleman
+  components:
+  - type: Loadout
+    prototypes: [ AU14GearUSCMRiflemandead ]
+
+- type: startingGear
+  id: AU14GearUSCMRiflemandead
+  equipment:
+    jumpsuit: AU14JungleFatigues
+    back: CMSatchelMarine
+    shoes: CMBootsBlackFilled
+    pocket1: RMCPouchMagazine
+    pocket2: RMCPouchFirstAidSplintsGauzeOintment
+    outerClothing: AU14ArmorM3JungleOne
+    head: AU14JungleM10Helmet
+
+#Rifleman 2
+- type: entity
+  parent: RMCSpawnerCorpse
+  id: AU14SpawnerCorpseUSCMRifleman2
+  name: Corpse Spawner - USCM Rifleman 2
+  components:
+  - type: CorpseSpawner
+    spawn: AU14CorpseUSCMRifleman2
+
+- type: randomHumanoidSettings
+  parent: RMCCorpse
+  id: AU14CorpseUSCMRifleman2
+  components:
+  - type: Loadout
+    prototypes: [ AU14GearUSCMRifleman2dead ]
+
+- type: startingGear
+  id: AU14GearUSCMRifleman2dead
+  equipment:
+    jumpsuit: AU14JungleFatigues
+    shoes: CMBootsBlackFilled
+    pocket1: RMCPouchPistol
+    pocket2: RMCPouchFirstAid
+    outerClothing: AU14ArmorM3JungleTwo
+    head: AU14JungleM10Helmet
+
+#Rifleman 3
+- type: entity
+  parent: RMCSpawnerCorpse
+  id: AU14SpawnerCorpseUSCMRifleman3
+  name: Corpse Spawner - USCM Rifleman 3
+  components:
+  - type: CorpseSpawner
+    spawn: AU14CorpseUSCMRifleman3
+
+- type: randomHumanoidSettings
+  parent: RMCCorpse
+  id: AU14CorpseUSCMRifleman3
+  components:
+  - type: Loadout
+    prototypes: [ AU14GearUSCMRifleman3dead ]
+
+- type: startingGear
+  id: AU14GearUSCMRifleman3dead
+  equipment:
+    jumpsuit: AU14JungleFatigues
+    shoes: CMBootsBlackFilled
+    back: AU14IMPBackpackMarine
+    pocket2: RMCPouchFirstAidSplintsGauzeOintment
+    outerClothing: AU14ArmorM3JungleThree
+    head: AU14JungleM10Helmet
+
+# Squad Leader
+- type: entity
+  parent: RMCSpawnerCorpse
+  id: AU14SpawnerCorpseUSCMSquadLeader
+  name: Corpse Spawner - USCM Squad Leader
+  components:
+  - type: CorpseSpawner
+    spawn: AU14CorpseUSCMSquadLeader
+
+- type: randomHumanoidSettings
+  parent: RMCCorpse
+  id: AU14CorpseUSCMSquadLeader
+  components:
+  - type: Loadout
+    prototypes: [ AU14GearUSCMSquadLeaderDead ]
+
+- type: startingGear
+  id: AU14GearUSCMSquadLeaderDead
+  equipment:
+    jumpsuit: AU14JungleFatigues
+    back: CMSatchelMarine
+    shoes: CMBootsBlackFilled
+    pocket1: RMCPouchMagazinePistol
+    pocket2: RMCPouchRadio
+    outerClothing: AU14ArmorM3JungleOne
+    head: AU14JungleM11Helmet
+
+# USASF Pilot
+- type: entity
+  parent: RMCSpawnerCorpse
+  id: AU14SpawnerCorpseUSASFPilot
+  name: Corpse Spawner - USASF Pilot
+  components:
+  - type: CorpseSpawner
+    spawn: AU14CorpseUSASFPilot
+
+- type: randomHumanoidSettings
+  parent: RMCCorpse
+  id: AU14CorpseUSASFPilot
+  components:
+  - type: Loadout
+    prototypes: [ AU14GearUSASFPilotDead ]
+
+- type: startingGear
+  id: AU14GearUSASFPilotDead
+  equipment:
+    jumpsuit: AU14USASFPilotJumpsuit
+    back: CMSatchelMarine
+    shoes: CMBootsBlackFilled
+    outerClothing: AU14USASFICPS2
+    head: AU14USASFAirCrewHelmet
+
+# USASF Pilot 2
+
+- type: entity
+  parent: RMCSpawnerCorpse
+  id: AU14SpawnerCorpseUSASFPilot2
+  name: Corpse Spawner - USASF Pilot 2
+  components:
+  - type: CorpseSpawner
+    spawn: AU14CorpseUSASFPilot2
+
+- type: randomHumanoidSettings
+  parent: RMCCorpse
+  id: AU14CorpseUSASFPilot2
+  components:
+  - type: Loadout
+    prototypes: [ AU14GearUSASFPilotDead2 ]
+
+- type: startingGear
+  id: AU14GearUSASFPilotDead2
+  equipment:
+    jumpsuit: AU14USASFPilotJumpsuit
+    shoes: CMBootsBlackFilled
+    mask: AU14MaskUSASFPilotOxygen
+    outerClothing: AU14USASFICPS2
+    head: AU14USASFAirCrewHelmet

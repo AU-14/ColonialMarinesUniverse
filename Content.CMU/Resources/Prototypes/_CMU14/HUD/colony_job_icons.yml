@@ -1,0 +1,251 @@
+﻿- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyAdmin
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: admin
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconCivilianFreightSystemsSpecialist
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: fss
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconCivilianForeman
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: foreman
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconCivilianHeadOfService
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: head_of_service
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyAdvisor
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: advisor
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonySynth
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: synth
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconCivilianColonyPilot
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: colony_pilot
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOrbitalManager
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: orbital_manager
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconAdminAssistant
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: admin_assistant
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconCCAAmbassador
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: cca_ambassador
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconICSCAmbassador
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: icsc_ambassador
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconLaselleLiaison
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: laselle_liaison
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconTWEAmbassador
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: twe_ambassador
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconUAAmbassador
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: ua_ambassador
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconUPPAmbassador
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: upp_ambassador
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconCorporateAssistant
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: corporate_assistant
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOrbitalSecurity
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: orbital_security
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyWorkingJoe
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: working_joe
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyICRCCMO
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: icrc_cmo
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyICRCDoctor
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: icrc_doctor
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyICRCNurse
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: icrc_nurse
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyColonist
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: colonist
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyEngineer
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: engineer
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyERO
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: ero
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyFSW
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: fsw
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyHeadOfEngi
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: head_of_engineering
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyHeadPhysician
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: head_physician
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyJournalist
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: journalist
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyKellandWarden
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: kelland_warden
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyMobBoss
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: mob_boss
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyMobGoon
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: mob_goon
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyNurse
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: nurse
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyPhysician
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: physician
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyPrisoner
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: prisoner
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyShopkeep
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: shopkeep
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyWMS
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: wms

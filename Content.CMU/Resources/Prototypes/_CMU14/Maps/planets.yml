@@ -1,0 +1,1112 @@
+#Currently using both map and maprototype but will chang as I migrate all systems from CMdistress to au roles - eg
+
+- type: entity
+  id: AUPlanetLV747
+  name: Solaris Gulch
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Solaris Gulch"
+    mapId: AU747
+    lorePrimer: AU14PrimerPlanetLV747
+    Allegiance: UA
+    camouflage: Desert
+    announcement: "Weyland-Yutani has lost contact with one of its Biological Storage Facilities, Solaris Ridge, on the planet of LV-1413. The UNS Almayer has been requested to look into the blackout by Weyland-Yutani."
+    platoonsOpfor:
+    - UPP
+    - VAIPO
+    - ProdigySF
+    platoonsGovfor:
+    - LACN
+    - USCM
+    - WEYU
+    - RMC
+    - HAZOPS
+    defaultgovfor: USCM
+    defaultopfor: UPP
+    govforinship: true
+    opforinship: true
+    daycycleenabled: true
+    faction: ua
+    threats:
+    - cultistThreat
+    - XenoThreat
+    - XenoThreatCF
+    - wendigoThreat
+    - abominationsThreatDistress
+#    - badBloodClanThreat
+    thirdparties:
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
+    - FORECON
+    - FORECONAlt
+    - FORECONAlt2
+    - ICRCReliefParty
+    - TimeSharesSalesman
+    - UACGLostTeam
+    - NSPAInvestigationParty
+    - RMCRRT
+    - USArmyArmored
+    - cultistThirdParty
+    - CMBInvestigationParty
+    - CMBInvestigationPartyAlt
+    - ProfessorVonBandolier
+    - XenoParasiteRunnerParty
+    - ApeThirdParty
+    - FORECONFirstRecon
+    - IPIE
+    - IPIESynth
+    - WYHT
+    - WYPMCParty
+    - WYPMCPartyAlt
+    - abominationThirdParty
+    - tribalThirdParty
+    - DrugSmuggler
+    - CMBParoleeTransport
+    - CMBParoleeTransportBig
+    - ForeignCrimeGang
+    - MigratingCivs
+    - MigratingCivsMedium
+    - MigratingCivsLarge
+    - MissionariesParty
+    - MissionariesPartyMedium
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+
+- type: entity
+  id: AUPlanetShepherdsPride
+  name: Shepherds' Pride
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Shepherds' Pride"
+    mapId: Sheperds
+    lorePrimer: AU14PrimerPlanetShepherdsPride
+    Allegiance: UA
+    camouflage: Desert
+    announcement: "A remote research outpost, Shepherd's Pride, has gone silent. The UNS Almayer is dispatched to investigate the mysterious circumstances."
+    platoonsOpfor:
+    - UPP
+    - HAZOPS
+    - VAIPO
+    - ProdigySF
+    platoonsGovfor:
+    - LACN
+    - USCM
+    - WEYU
+    - RMC
+    - UPP
+    - HAZOPS
+    - VAIPO
+    - ProdigySF
+    defaultgovfor: USCM
+    defaultopfor: UPP
+    govforinship: true
+    opforinship: true
+    daycycleenabled: true
+    thirdparties:
+    - USArmy
+    - USArmyAlt
+    - USArmyAlt2
+    - USArmyTank
+    - ICRCReliefParty
+    - TimeSharesSalesman
+    - UACGLostTeam
+    - NSPAInvestigationParty
+    - LACNSniperteam
+    - RMCRRT
+    - USArmyArmored
+    - cultistThirdParty
+    - CMBInvestigationParty
+    - CMBInvestigationPartyAlt
+    - XenoParasiteRunnerParty
+    - ApeThirdParty
+    - CarpInvasiveParty
+    - ProfessorVonBandolier
+    - IPIE
+    - IPIESynth
+    - WYHT
+    - WYPMCParty
+    - WYPMCPartyAlt
+    - abominationThirdParty
+    - tribalThirdParty
+    - DrugSmuggler
+    - CMBParoleeTransport
+    - CMBParoleeTransportBig
+    - ForeignCrimeGang
+    - MigratingCivs
+    - MigratingCivsMedium
+    - MigratingCivsLarge
+    - MissionariesParty
+    - MissionariesPartyMedium
+    threats:
+    - cultistThreat
+    - XenoThreat
+    - XenoThreatCF
+    - wendigoThreat
+    - abominationsThreat
+    - abominationsThreatDistress
+#    - badBloodClanThreat
+    # Shepherds' Pride exposes CWPS Ranger as its map-specific LEO role.
+    joboverrides:
+      AU14JobLEOLeaderBase: AU14JobCivilianCWPSRanger
+      AU14JobLEOBase: AU14JobCivilianCWPSRanger
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+
+- type: entity
+  id: AUPlanetStableGarrison
+  name: Stable Garrison
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Stable Garrison"
+    mapId: stablegarrison
+    lorePrimer: AU14PrimerPlanetStableGarrison
+    Allegiance: UA
+    camouflage: Desert
+    announcement: "A remote research outpost, Shepherd's Pride, has gone silent. The UNS Almayer is dispatched to investigate the mysterious circumstances."
+    platoonsOpfor:
+    - UPP
+    - VAIPO
+    - ProdigySF
+    platoonsGovfor:
+    - WEYU
+    - USCM
+    - RMC
+    defaultgovfor: USCM
+    defaultopfor: UPP
+    govforinship: false
+    opforinship: true
+    daycycleenabled: true
+    thirdparties:
+    - ICRCReliefParty
+    - TimeSharesSalesman
+    - UPPGROM
+    - UPPGROMAlt
+    - UPPGROMAlt2
+    - USArmyTank
+    - UACGLostTeam
+    - LACNSniperteam
+    - cultistThirdParty
+    - CMBInvestigationParty
+    - CMBInvestigationPartyAlt
+    - cultistThirdPartyNoQueen
+    - ProfessorVonBandolier
+    - XenoParasiteRunnerParty
+    - ApeThirdParty
+    - IPIE
+    - IPIESynth
+    - WYHT
+    - WYPMCParty
+    - WYPMCPartyAlt
+    - abominationThirdParty
+    - tribalThirdParty
+    - DrugSmuggler
+    - CMBParoleeTransport
+    - CMBParoleeTransportBig
+    - ForeignCrimeGang
+    - MigratingCivs
+    - MigratingCivsMedium
+    - MigratingCivsLarge
+    - MissionariesParty
+    - MissionariesPartyMedium
+    threats:
+    - cultistThreat
+    - XenoThreatCF
+    - wendigoThreat
+    - abominationsThreat
+    - abominationsThreatDistress
+    joboverrides:
+      AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
+      AU14JobLEOBase: AU14JobCivilianCMBDeputy
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+
+- type: entity
+  id: AUPlanetLV624
+  name: LV624
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "LV624 Green Hell"
+    mapId: LV624
+    lorePrimer: AU14PrimerPlanetLV624
+    Allegiance: UA
+    camouflage: Desert
+    announcement: "A remote research outpost, Shepherd's Pride, has gone silent. The UNS Almayer is dispatched to investigate the mysterious circumstances."
+    platoonsOpfor:
+    - UPP
+    - WEYU
+    - ProdigySF
+    - VAIPO
+    platoonsGovfor:
+    - LACN
+    - USCM
+    - CMBCIU
+    - RMC
+    defaultgovfor: USCM
+    defaultopfor: UPP
+    govforinship: false
+    opforinship: true
+    daycycleenabled: true
+    thirdparties:
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
+    - ICRCReliefParty
+    - TimeSharesSalesman
+    - UACGLostTeam
+    - USArmyTank
+    - NSPAInvestigationParty
+    - LACNSniperteam
+    - RMCRRT
+    - USArmyArmored
+    - cultistThirdParty
+    - cultistThirdPartyNoQueen
+    - CMBInvestigationParty
+    - CMBInvestigationPartyAlt
+    - ProfessorVonBandolier
+    - XenoParasiteRunnerParty
+    - ApeThirdParty
+    - IPIE
+    - IPIESynth
+    - WYHT
+    - WYPMCParty
+    - WYPMCPartyAlt
+    - abominationThirdParty
+    - tribalThirdParty
+    - DrugSmuggler
+    - CMBParoleeTransport
+    - CMBParoleeTransportBig
+    - ForeignCrimeGang
+    - MigratingCivs
+    - MigratingCivsMedium
+    - MigratingCivsLarge
+    - MissionariesParty
+    - MissionariesPartyMedium
+    threats:
+    - cultistThreat
+    - wendigoThreat
+    - abominationsThreatDistress
+    joboverrides:
+      AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
+      AU14JobLEOBase: AU14JobCivilianCMBDeputy
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+
+- type: entity
+  id: AUPlanetGixensCaverns
+  name: Gixens Caverns
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Gixens Caverns"
+    mapId: GixensCaverns
+    lorePrimer: AU14PrimerPlanetGixensCaverns
+    Allegiance: UA
+    camouflage: Desert
+    announcement: "A remote research outpost, Shepherd's Pride, has gone silent. The UNS Almayer is dispatched to investigate the mysterious circumstances."
+    platoonsOpfor:
+    - UPP
+    - WEYU
+    platoonsGovfor:
+    - LACN
+    - ProdigySF
+    - HAZOPS
+    - VAIPO
+    defaultgovfor: HAZOPS
+    defaultopfor: UPP
+    govforinship: true
+    opforinship: true
+    daycycleenabled: false
+    #faction: ua
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+
+- type: entity
+  id: AUPlanetFlight
+  name: Flight
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Flight"
+    mapId: Flight
+    lorePrimer: AU14PrimerPlanetFlight
+    Allegiance: UA
+    camouflage: Urban
+    announcement: "A nine-story mixed-use building surrounded by an artificial city landscape, has gone dark. The UNS Almayer is dispatched to investigate the mysterious circumstances."
+    platoonsOpfor:
+    - UPP
+    - WEYU
+    - VAIPO
+    - ProdigySF
+    platoonsGovfor:
+    - LACN
+    - CMBCIU
+    - USCM
+    - RMC
+    - HAZOPS
+    defaultgovfor: USCM
+    defaultopfor: UPP
+    govforinship: true
+    opforinship: true
+    daycycleenabled: true
+    threats:
+    - XenoThreat
+    - abominationsThreatDistress
+    thirdparties:
+    - USArmy
+    - USArmyAlt
+    - USArmyAlt2
+   # - cultistThirdParty
+    - abominationThirdParty
+    joboverrides:
+      AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
+      AU14JobLEOBase: AU14JobCivilianCMBDeputy
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+
+- type: entity
+  id: AUPlanetLV759
+  name: Hybrisa Metropolitan
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Hybrisa Metropolitan"
+    mapId: hybrisametro
+    lorePrimer: AU14PrimerPlanetLV759
+    Allegiance: TWE
+    camouflage: Urban
+    announcement: "Weyland-Yutani has lost contact with one of its Biological Storage Facilities, Solaris Ridge, on the planet of LV-1413. The UNS Almayer has been requested to look into the blackout by Weyland-Yutani."
+    platoonsOpfor:
+    - WEYU
+    - VAIPO
+    - HAZOPS
+    platoonsGovfor:
+    - USCM
+    - ProdigySF
+    - UPP
+    - RMC
+    defaultgovfor: USCM
+    defaultopfor: RMC
+    govforinship: false
+    opforinship: true
+    daycycleenabled: false
+    faction: ua
+    threats:
+    - XenoThreatCF
+    - wendigoThreat
+    - abominationsThreatDistress
+
+    thirdparties:
+    - IASFSurvLarge
+    - IASFSurvMedium
+    - IASFSurvSmall
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
+    - USArmy
+    - USArmyAlt
+    - USArmyAlt2
+    - ICRCReliefParty
+    - TimeSharesSalesman
+    - LACNSniperteam
+    - RMCRRT
+    - USArmyArmored
+    - ProfessorVonBandolier
+    - XenoParasiteRunnerParty
+    - ApeThirdParty
+    - IPIE
+    - IPIESynth
+    - WYHT
+    - WYPMCParty
+    - WYPMCPartyAlt
+    - abominationThirdParty
+    joboverrides:
+      AU14JobLEOLeaderBase: AU14JobCivilianNSPAInspector
+      AU14JobLEOBase: AU14JobCivilianNSPAConstable
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+
+- type: entity
+  id: AUPlanetLV327
+  name: Port Nereid
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Port Nereid"
+    mapId: portneroid
+    lorePrimer: AU14PrimerPlanetLV327
+    Allegiance: UA
+    camouflage: Desert
+    announcement: "Weyland-Yutani has lost contact with one of its Biological Storage Facilities, Solaris Ridge, on the planet of LV-1413. The UNS Almayer has been requested to look into the blackout by Weyland-Yutani."
+    platoonsOpfor:
+    - WEYU
+    - VAIPO
+    - ProdigySF
+    - UPP
+    platoonsGovfor:
+    - LACN
+    - CMBCIU
+    - USCM
+    - RMC
+    defaultgovfor: RMC
+    defaultopfor: WEYU
+    govforinship: true
+    opforinship: true
+    daycycleenabled: true
+    faction: ua
+    threats:
+    - cultistThreat
+    - XenoThreat
+    - XenoThreatCF
+    - wendigoThreat
+    - abominationsThreatDistress
+#    - badBloodClanThreat
+
+    thirdparties:
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
+    - FORECON
+    - FORECONAlt
+    - FORECONAlt2
+    - USArmyTank
+    - ICRCReliefParty
+    - TimeSharesSalesman
+    - UACGLostTeam
+    - NSPAInvestigationParty
+    - LACNSniperteam
+    - ProfessorVonBandolier
+    - XenoParasiteRunnerParty
+    - ApeThirdParty
+    - IPIE
+    - IPIESynth
+    - WYHT
+    - WYPMCParty
+    - WYPMCPartyAlt
+    - abominationThirdParty
+    joboverrides:
+      AU14JobLEOLeaderBase: AU14JobCivilianNSPAInspector
+      AU14JobLEOBase: AU14JobCivilianNSPAConstable
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+
+- type: entity
+  id: AUPlanetCorsatStation
+  name: Corsat Station
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Corsat Station"
+    mapId: aucorsat
+    lorePrimer: AU14PrimerPlanetCorsatStation
+    Allegiance: UA
+    camouflage: Urban
+    announcement: "Weyland-Yutani has lost contact with one of its Biological Storage Facilities, Solaris Ridge, on the planet of LV-1413. The UNS Almayer has been requested to look into the blackout by Weyland-Yutani."
+    platoonsOpfor:
+    - ProdigySF
+    - WEYU
+    - VAIPO
+    platoonsGovfor:
+    - LACN
+    - CMBCIU
+    - USCM
+    - RMC
+    - UPP
+    - HAZOPS
+    defaultgovfor: USCM
+    defaultopfor: WEYU
+    govforinship: true
+    opforinship: true
+    daycycleenabled: true
+    faction: ua
+    threats:
+    - cultistThreat
+    - XenoThreat
+    - XenoThreatCF
+#    - badBloodClanThreat
+
+    thirdparties:
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - NSPAInvestigationParty
+    - UPPGROMAlt
+    - cultistThirdPartyNoQueen
+    - XenoParasiteRunnerParty
+    - ApeThirdParty
+    - WYPMCParty
+    - WYPMCPartyAlt
+    - abominationThirdParty
+    joboverrides:
+      AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
+      AU14JobLEOBase: AU14JobCivilianCMBDeputy
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+
+- type: entity
+  id: CMUPlanetLament
+  name: LV-376 "Ulixes"
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Barker's Lament"
+    mapId: CMULV376BarkersLament
+    lorePrimer: AU14PrimerPlanetLament
+    Allegiance: UA
+    camouflage: Urban
+    announcement: "The mining colony of Barker's Lament on LV-376 has gone dark."
+    platoonsGovfor:
+    - WEYU
+    - USCM
+    - RMC
+    - CMBCIU
+    platoonsOpfor:
+    - UPP
+    - ProdigySF
+    - VAIPO
+    - LACN
+    defaultgovfor: WEYU
+    defaultopfor: ProdigySF
+    govforinship: false
+    opforinship: true
+    daycycleenabled: true
+    faction: ua
+    thirdparties:
+    - ICRCReliefParty
+    - USArmyTank
+    - WYHT
+    - IPIE
+    - IPIESynth
+    - WYPMCParty
+    - WYPMCPartyAlt
+    - CMBInvestigationParty
+    - CMBInvestigationPartyAlt
+    - UPPGROM
+    - ICRCReliefParty
+    - UACGLostTeam
+    - USArmy
+    - abominationThirdParty
+    - tribalThirdParty
+    - DrugSmuggler
+    - CMBParoleeTransport
+    - CMBParoleeTransportBig
+    - ForeignCrimeGang
+    - MigratingCivs
+    - MigratingCivsMedium
+    - MigratingCivsLarge
+    - MissionariesParty
+    - MissionariesPartyMedium
+    threats:
+    - cultistThreatOnMarker
+    - XenoThreat
+    - XenoThreatCF
+    - wendigoThreat
+    - abominationsThreat
+    - abominationsThreatDistress
+#    - badBloodClanThreat
+
+    joboverrides:
+      AU14JobLEOBase: AU14JobCivilianCMBDeputy
+      AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+
+- type: entity
+  id: AUPlanetSorokyne
+  name: Sorokyne Strata
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Sorokyne Strata"
+    mapId: au14sorokyne
+    lorePrimer: AU14PrimerPlanetSorokyne
+    Allegiance: UPP
+    camouflage: Desert
+    announcement: "A remote research outpost, Shepherd's Pride, has gone silent. The UNS Almayer is dispatched to investigate the mysterious circumstances."
+    platoonsOpfor:
+    - LACN
+    - USCM
+    - RMC
+    platoonsGovfor:
+    - UPP
+    - ProdigySF
+    defaultgovfor: RMC
+    defaultopfor: UPP
+    govforinship: true
+    opforinship: true
+    daycycleenabled: true
+    faction: ua
+    thirdparties:
+    - ICRCReliefParty
+    - cultistThirdParty
+    - UPPGROM
+    - UPPGROMAlt
+    - UPPGROMAlt2
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - UPPTDLostTeam
+    - PAPInvestigationPartyAlt
+    - PAPInvestigationParty
+    - ProfessorVonBandolier
+    - XenoParasiteRunnerParty
+    - ApeThirdParty
+    - FORECONKillTeam
+    - IPIE
+    - IPIESynth
+    - WYHT
+    - WYPMCParty
+    - WYPMCPartyAlt
+    - abominationThirdParty
+    threats:
+    - cultistThreat
+    - XenoThreat
+    - wendigoThreat
+ #   - TribalsThreat
+    - abominationsThreatDistress
+#    - badBloodClanThreat
+
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+
+- type: entity
+  id: AUPlanetTrijent
+  name: Trijent
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Raijin Hydroelectric"
+    mapId: AUTrijentMap
+    lorePrimer: AU14PrimerPlanetTrijent
+    Allegiance: TWE
+    camouflage: Desert
+    announcement: "A remote research outpost, Shepherd's Pride, has gone silent. The UNS Almayer is dispatched to investigate the mysterious circumstances."
+    platoonsOpfor:
+    - UPP
+    - WEYU
+    - VAIPO
+    - ProdigySF
+    platoonsGovfor:
+    - LACN
+    - USCM
+    - RMC
+    defaultgovfor: RMC
+    defaultopfor: VAIPO
+    govforinship: true
+    opforinship: true
+    daycycleenabled: true
+    faction: ua
+    thirdparties:
+    - IASFSurvLarge
+    - IASFSurvMedium
+    - IASFSurvSmall
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
+    - ICRCReliefParty
+    - cultistThirdParty
+    - cultistThirdPartyNoQueen
+    - UPPGROM
+    - UPPGROMAlt
+    - UPPGROMAlt2
+    - FORECON
+    - FORECONAlt
+    - FORECONAlt2
+    - LACNSniperteam
+    - UPPTDLostTeam
+    - PAPInvestigationPartyAlt
+    - PAPInvestigationParty
+    - FORECONFirstRecon
+    - WYPMCParty
+    - WYPMCPartyAlt
+    - abominationThirdParty
+    threats:
+    - XenoThreat
+    #- TribalsThreat
+#    - badBloodClanThreat
+
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+
+- type: entity
+  id: AuPlanetShivasSnowball
+  name: Shivas' Snowball
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Shivas' Snowball"
+    mapId: auShivas
+    lorePrimer: AU14PrimerPlanetShivasSnowball
+    Allegiance: UA
+    camouflage: Snow
+    announcement: "A remote research outpost, Shepherd's Pride, has gone silent. The UNS Almayer is dispatched to investigate the mysterious circumstances."
+    platoonsGovfor:
+    - USCM
+    - WEYU
+    - VAIPO
+    - RMC
+    - UPP
+    - HAZOPS
+    defaultgovfor: USCM
+    defaultopfor: UPP
+    govforinship: true
+    opforinship: true
+    daycycleenabled: true
+    thirdparties:
+    - USArmy
+    - USArmyAlt
+    - USArmyAlt2
+    - USArmyTank
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
+    - ICRCReliefParty
+    - TimeSharesSalesman
+    - UACGLostTeam
+    - NSPAInvestigationParty
+    - LACNSniperteam
+    - RMCRRT
+    - USArmyArmored
+    - cultistThirdParty
+    - CMBInvestigationParty
+    - CMBInvestigationPartyAlt
+    - XenoParasiteRunnerParty
+    - ApeThirdParty
+    - ProfessorVonBandolier
+    - WYPMCParty
+    - WYPMCPartyAlt
+    - abominationThirdParty
+    threats:
+    - XenoThreat
+ #   - TribalsThreat
+#    - badBloodClanThreat
+
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+
+- type: entity
+  id: AuPlanetKutjevo
+  name: Kutjevo Biolab
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Kutjevo Biolab"
+    mapId: auKutjevo
+    lorePrimer: AU14PrimerPlanetKutjevo
+    Allegiance: UA
+    camouflage: Desert
+    announcement: "A remote research outpost, Shepherd's Pride, has gone silent. The UNS Almayer is dispatched to investigate the mysterious circumstances."
+    platoonsGovfor:
+    - USCM
+    - WEYU
+    - RMC
+    - UPP
+    - HAZOPS
+    - ProdigySF
+    - VAIPO
+    defaultgovfor: USCM
+    defaultopfor: UPP
+    govforinship: true
+    opforinship: true
+    daycycleenabled: true
+    thirdparties:
+    - USArmy
+    - USArmyAlt
+    - USArmyAlt2
+    - USArmyTank
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
+    - ICRCReliefParty
+    - TimeSharesSalesman
+    - UACGLostTeam
+    - NSPAInvestigationParty
+    - LACNSniperteam
+    - RMCRRT
+    - USArmyArmored
+    - CMBInvestigationParty
+    - CMBInvestigationPartyAlt
+    - XenoParasiteRunnerParty
+    - ApeThirdParty
+    - ProfessorVonBandolier
+    - WYPMCParty
+    - WYPMCPartyAlt
+    - abominationThirdParty
+    threats:
+    - XenoThreat
+#    - TribalsThreat
+#    - badBloodClanThreat
+
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+
+- type: entity
+  id: AuPlanetFiorina
+  name: Fiorina Prison
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Fiorina Prison"
+    mapId: aufiorina
+    lorePrimer: AU14PrimerPlanetFiorina
+    Allegiance: UA
+    camouflage: Urban
+    announcement: "A remote research outpost, Shepherd's Pride, has gone silent. The UNS Almayer is dispatched to investigate the mysterious circumstances."
+    platoonsGovfor:
+    - USCM
+    - WEYU
+    - VAIPO
+    - UPP
+    - HAZOPS
+    defaultgovfor: USCM
+    defaultopfor: UPP
+    govforinship: true
+    opforinship: true
+    daycycleenabled: false
+    thirdparties:
+    - USArmy
+    - USArmyAlt
+    - USArmyAlt2
+    - USArmyTank
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
+    - ICRCReliefParty
+    - TimeSharesSalesman
+    - UACGLostTeam
+    - NSPAInvestigationParty
+    - LACNSniperteam
+    - RMCRRT
+    - USArmyArmored
+    - CMBInvestigationParty
+    - CMBInvestigationPartyAlt
+    - XenoParasiteRunnerParty
+    - ApeThirdParty
+    - ProfessorVonBandolier
+    - IPIE
+    - IPIESynth
+    - WYHT
+    - WYPMCParty
+    - WYPMCPartyAlt
+    - abominationThirdParty
+    threats:
+    - abominationsThreatDistress
+    - XenoThreat
+#    - badBloodClanThreat
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+
+
+- type: entity
+  id: AuPlanetChances
+  name: Chances Claim
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Chances Claim"
+    mapId: auchances
+    lorePrimer: AU14PrimerPlanetChances
+    Allegiance: UA
+    camouflage: Urban
+    announcement: "A remote research outpost, Shepherd's Pride, has gone silent. The UNS Almayer is dispatched to investigate the mysterious circumstances."
+    platoonsGovfor:
+    - USCM
+    - WEYU
+    - VAIPO
+    - UPP
+    - HAZOPS
+    - ProdigySF
+    - RMC
+    - UPP
+    defaultgovfor: USCM
+    defaultopfor: UPP
+    govforinship: true
+    opforinship: true
+    daycycleenabled: false
+    thirdparties:
+    - USArmy
+    - USArmyAlt
+    - USArmyAlt2
+    - USArmyTank
+    - ICRCReliefParty
+    - TimeSharesSalesman
+    - UACGLostTeam
+    - NSPAInvestigationParty
+    - LACNSniperteam
+    - RMCRRT
+    - USArmyArmored
+    - CMBInvestigationParty
+    - CMBInvestigationPartyAlt
+    - XenoParasiteRunnerParty
+    - ApeThirdParty
+    - ProfessorVonBandolier
+    - IPIE
+    - IPIESynth
+    - WYHT
+    - WYPMCParty
+    - WYPMCPartyAlt
+    - abominationThirdParty
+    threats:
+    - abominationsThreatDistress
+    - XenoThreat
+#    - badBloodClanThreat
+
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+    joboverrides:
+      AU14JobLEOLeaderBase: AU14JobCivilianColonySecurityLeader
+      AU14JobLEOBase: AU14JobCivilianColonySecurityOfficer
+      AU14JobCivilianColonyAdministrator: AU14JobCivilianCorporateAdministrator
+
+- type: lorePrimer
+  id: AU14PrimerPlanetChances
+  planetText: "Date 2181 -  Chances Claim - Weyland Administrated Frontier Colony entangled with organized crime"
+
+- type: lorePrimer
+  id: AU14PrimerPlanetLV747
+  planetText: "Date 2181 - Solaris Gulch, UA controlled."
+
+- type: lorePrimer
+  id: AU14PrimerPlanetShepherdsPride
+  planetText: "Date 2181 - Shepherds' Pride, a wildlife reserve."
+
+- type: lorePrimer
+  id: AU14PrimerPlanetStableGarrison
+  planetText: "Date 2181 - Stable Garrison, a UA controlled frontier world with a joint base and sizeable urban community."
+
+- type: lorePrimer
+  id: AU14PrimerPlanetLV624
+  planetText: "Date 2181 - LV624 Green Hell, UA controlled."
+- type: lorePrimer
+  id: AU14PrimerPlanetGixensCaverns
+  planetText: "Date 2181 - Gixens Caverns."
+
+- type: lorePrimer
+  id: AU14PrimerPlanetFlight
+  planetText: "Date 2181 - Flight, a multistory colony megastructure."
+
+- type: lorePrimer
+  id: AU14PrimerPlanetLV759
+  planetText: "Date 2181 - Hybrisa Metropolitan, Three World Empire territory."
+
+- type: lorePrimer
+  id: AU14PrimerPlanetLV327
+  planetText: "Date 2181 - Port Nereid, a valuable waterport on a frontier world, UA controlled."
+
+- type: lorePrimer
+  id: AU14PrimerPlanetCorsatStation
+  planetText: "Date 2181 - Corsat Station, Weyland-Yutani operated research station."
+
+- type: lorePrimer
+  id: AU14PrimerPlanetLament
+  planetText: "Date 2181 - Barker's Lament, a mining and farming colony on the planet of LV-376 'Ulixes'. Primarily under the control of the United Americas, despite the constant interference of Weyland-Yutani."
+
+- type: lorePrimer
+  id: AU14PrimerPlanetSorokyne
+  planetText: "Date 2186 - Sorokyne Strata. Union of Progressive People's research outpost."
+
+- type: lorePrimer
+  id: AU14PrimerPlanetTrijent
+  planetText: "Date 2179 - LV-670 Raijin Hydroelectric (formerly known as Trijent Dam), a Three World Empire water treatment facility serving a major prospera."
+
+- type: lorePrimer
+  id: AU14PrimerPlanetShivasSnowball
+  planetText: "Date 2177 - Shivas' Snowball. United Americas mining and research colony."
+
+- type: lorePrimer
+  id: AU14PrimerPlanetKutjevo
+  planetText: "Date 2181 - Kutjevo Biolab. Level three facility operated by the Weyland-Yutani Corporation."
+
+- type: lorePrimer
+  id: AU14PrimerPlanetFiorina
+  planetText: "Date 2181 - Fiorina Prison. Privately owned  and operated by the Weyland-Yutani corporation, Fiorina 161 is a maximum security prison for the most dangerous criminals in the system."
+
+
+- type: entity
+  id: CMUPlanetHopesRetreat
+  name: JE-1758 "Ascanius"
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Hope's Retreat"
+    mapId: hopesretreat
+    lorePrimer: CMUPrimerHopesRetreat
+    Allegiance: TWE
+    camouflage: Desert
+    announcement: "The Octanis Research Complex and attached colony of Hope's Retreat on charted exoplanet JE-1758 have gone silent, investigate the cause of this communications blackout."
+    platoonsGovfor:
+    - WEYU
+    - USCM
+    - RMC
+    - CMBCIU
+    - LACN
+    - UPP
+    platoonsOpfor:
+    - HAZOPS
+    - ProdigySF
+    - VAIPO
+    defaultgovfor: WEYU
+    defaultopfor: ProdigySF
+    govforinship: false
+    opforinship: true
+    daycycleenabled: false
+    faction: ua
+    thirdparties:
+    - USArmy
+    - USArmyAlt
+    - USArmyAlt2
+    - USArmyTank
+    - USArmyArmored
+    - ICRCReliefParty
+    - TimeSharesSalesman
+    - UACGLostTeam
+    - NSPAInvestigationParty
+    - LACNSniperteam
+    - RMCRRT
+    - UPPGROM
+    - UPPGROMAlt
+    - cultistThirdParty
+    - CMBInvestigationParty
+    - CMBInvestigationPartyAlt
+    - XenoParasiteRunnerParty
+    - IPIE
+    - IPIESynth
+    - WYHT
+    - WYPMCParty
+    - WYPMCPartyAlt
+    - abominationThirdParty
+    - IASFSurvLarge
+    - IASFSurvMedium
+    - IASFSurvSmall
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    threats:
+    - XenoThreat
+    - cultistThreatOnMarker
+    - abominationsThreat
+    - abominationsThreatDistress
+    joboverrides:
+      AU14JobLEOLeaderBase: AU14JobCivilianNSPAInspector
+      AU14JobLEOBase: AU14JobCivilianNSPAConstable
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+
+
+- type: lorePrimer
+  id: CMUPrimerHopesRetreat
+  planetText: "Date: 2181. Tidally-locked planet JE-1758 Ascanius, locally referred to as Hope's Retreat by colonists. Nominally under an ICSC charter but host to various facilities of various allegiances, including the United Americas, Union of Progressive Peoples and Three-World Empire."

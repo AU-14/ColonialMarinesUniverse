@@ -1,0 +1,83 @@
+- type: emote
+  id: WorkingJoeDidThatBelongToYou
+  name: emote-name-workingjoe-did-that-belong-to-you
+  category: Identification
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-did-that-belong-to-you
+  chatTriggers:
+    - did that belong to you
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeDoesThisBelongToYou
+  name: emote-name-workingjoe-does-this-belong-to-you
+  category: Identification
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-does-this-belong-to-you
+  chatTriggers:
+    - does this belong to you
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIsAnybodyThere
+  name: emote-name-workingjoe-is-anybody-there
+  category: Identification
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-is-anybody-there
+  chatTriggers:
+    - is anybody there
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIsSomeoneThere
+  name: emote-name-workingjoe-is-someone-there
+  category: Identification
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-is-someone-there
+  chatTriggers:
+    - is someone there
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeWhatAreYou
+  name: emote-name-workingjoe-what-are-you
+  category: Identification
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-what-are-you
+  chatTriggers:
+    - what are you
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeWhosThere
+  name: emote-name-workingjoe-whos-there
+  category: Identification
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-whos-there
+  chatTriggers:
+    - whos there
+  whitelist:
+    tags:
+      - WorkingJoe

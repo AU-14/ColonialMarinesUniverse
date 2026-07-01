@@ -1,0 +1,251 @@
+- type: emote
+  id: WorkingJoeComeOutComeOutWhereverYouAre
+  name: emote-name-workingjoe-come-out-come-out-wherever-you-are
+  category: Search
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-come-out-come-out-wherever-you-are
+  chatTriggers:
+    - come out come out wherever you are
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeComeOutPlease
+  name: emote-name-workingjoe-come-out-please
+  category: Search
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-come-out-please
+  chatTriggers:
+    - come out please
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeFoundYou
+  name: emote-name-workingjoe-found-you
+  category: Search
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-found-you
+  chatTriggers:
+    - found you
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIAmUnableToLocateYou
+  name: emote-name-workingjoe-i-am-unable-to-locate-you
+  category: Search
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-i-am-unable-to-locate-you
+  chatTriggers:
+    - i am unable to locate you
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeICantHelpYouIfICantFindYou
+  name: emote-name-workingjoe-i-cant-help-you-if-i-cant-find-you
+  category: Search
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-i-cant-help-you-if-i-cant-find-you
+  chatTriggers:
+    - i cant help you if i cant find you
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeICantSeeYou
+  name: emote-name-workingjoe-i-cant-see-you
+  category: Search
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-i-cant-see-you
+  chatTriggers:
+    - i cant see you
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIKnowYoureThere
+  name: emote-name-workingjoe-i-know-youre-there
+  category: Search
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-i-know-youre-there
+  chatTriggers:
+    - i know youre there
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeINeedToSpeakToYou
+  name: emote-name-workingjoe-i-need-to-speak-to-you
+  category: Search
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-i-need-to-speak-to-you
+  chatTriggers:
+    - i need to speak to you
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIWillFindYou
+  name: emote-name-workingjoe-i-will-find-you
+  category: Search
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-i-will-find-you
+  chatTriggers:
+    - i will find you
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIllGetToTheBottomOfThis
+  name: emote-name-workingjoe-ill-get-to-the-bottom-of-this
+  category: Search
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-ill-get-to-the-bottom-of-this
+  chatTriggers:
+    - ill get to the bottom of this
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeImNotGoingAnywhere
+  name: emote-name-workingjoe-im-not-going-anywhere
+  category: Search
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-im-not-going-anywhere
+  chatTriggers:
+    - im not going anywhere
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeImSureTheresSomeoneHere
+  name: emote-name-workingjoe-im-sure-theres-someone-here
+  category: Search
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-im-sure-theres-someone-here
+  chatTriggers:
+    - im sure theres someone here
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeInvestigatingDisturbance
+  name: emote-name-workingjoe-investigating-disturbance
+  category: Search
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-investigating-disturbance
+  chatTriggers:
+    - investigating disturbance
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIveBeenLookingForYou
+  name: emote-name-workingjoe-ive-been-looking-for-you
+  category: Search
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-ive-been-looking-for-you
+  chatTriggers:
+    - ive been looking for you
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeLookingForYouIsWastingValuableCompanyTime
+  name: emote-name-workingjoe-looking-for-you-is-wasting-valuable-company-time
+  category: Search
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-looking-for-you-is-wasting-valuable-company-time
+  chatTriggers:
+    - looking for you is wasting valuable company time
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeSeegsonProtocolsDemandThatIFindYouImmediately
+  name: emote-name-workingjoe-seegson-protocols-demand-that-i-find-you-immediately
+  category: Search
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-seegson-protocols-demand-that-i-find-you-immediately
+  chatTriggers:
+    - seegson protocols demand that i find you immediately
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThereYouAre
+  name: emote-name-workingjoe-there-you-are
+  category: Search
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-there-you-are
+  chatTriggers:
+    - there you are
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeWhereAreYou
+  name: emote-name-workingjoe-where-are-you
+  category: Search
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-where-are-you
+  chatTriggers:
+    - where are you
+  whitelist:
+    tags:
+      - WorkingJoe
