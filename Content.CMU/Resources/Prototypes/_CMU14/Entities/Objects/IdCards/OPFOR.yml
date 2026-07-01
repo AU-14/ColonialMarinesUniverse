@@ -26,19 +26,67 @@
 
 - type: entity
   parent: AU14IDCardOPFOR
-  id: AU14IDCardopforPlatCo
-  name: platoon commander ID card
+  id: AU14IDCardOPFORPlatCo
+  name: plt. commander ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORPlatCo
 
 - type: entity
   parent: AU14IDCardOPFOR
-  id: AU14IDCardopforPlatOp
-  name: platoon operations officer ID card
+  id: AU14IDCardOPFORAdjutant
+  name: plt. adjutant officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORAdjutant
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFORPlatOp
+  name: plt. operations officer ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORPlatOp
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFOROfficerEngi
+  name: engineering officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFOROfficerEngi
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFOROfficerIntel
+  name: intelligence officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFOROfficerIntel
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFOROfficerLogistics
+  name: logistics officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFOROfficerLogistics
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFOROfficerMP
+  name: chief military police ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFOROfficerMP
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFOROfficerMedical
+  name: chief medical officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFOROfficerMedical
 
 - type: entity
   parent: AU14IDCardOPFOR

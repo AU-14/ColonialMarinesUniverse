@@ -154,6 +154,27 @@
 
 - type: jobIcon
   parent: CMJobIconBase
+  id: AU14JobIconGovCMP
+  icon:
+    sprite: _AU14/Interface/au14govforjobicons.rsi
+    state: old_govfor_rfn
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconGovMO
+  icon:
+    sprite: _AU14/Interface/au14govforjobicons.rsi
+    state: govfor_cmo
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconGovLO
+  icon:
+    sprite: _AU14/Interface/au14govforjobicons.rsi
+    state: old_govfor_platco
+
+- type: jobIcon
+  parent: CMJobIconBase
   id: AU14JobIconGovWeaponsSpecialist
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
