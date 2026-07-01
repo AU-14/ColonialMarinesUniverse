@@ -14,189 +14,149 @@
     - radioOpforMILP
 
 - type: entity
+  abstract: true
   parent: CMIDCardBase
+  id: AU14IDCardOPFOR
+  name: opfor identification card
+  description: An ID Card used by OPFOR personnel for identification and access control. You cannot tell who or what it belongs to.
+  components:
+  - type: ItemIFF
+    factions:
+    - OPFOR
+
+- type: entity
+  parent: AU14IDCardOPFOR
   id: AU14IDCardopforPlatCo
   name: platoon commander ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORPlatCo
-  - type: ItemIFF
-    factions:
-    - OPFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardOPFOR
   id: AU14IDCardopforPlatOp
   name: platoon operations officer ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORPlatOp
-  - type: ItemIFF
-    factions:
-    - OPFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardOPFOR
   id: AU14IDCardopforDSPilot
   name: dropship pilot ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORDSPilot
-  - type: ItemIFF
-    factions:
-    - OPFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardOPFOR
   id: AU14IDCardopforDCC
   name: dropship crew chief ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORDCC
-  - type: ItemIFF
-    factions:
-    - OPFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardOPFOR
   id: AU14IDCardopforSecSergeant
   name: platoon sergeant ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORSectionSergeant
-  - type: ItemIFF
-    factions:
-    - OPFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardOPFOR
   id: AU14IDCardopforSquadSergeant
   name: squad leader ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORSquadSergeant
-  - type: ItemIFF
-    factions:
-    - OPFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardOPFOR
   id: AU14IDCardopforSquadRifleman
   name: squad rifleman ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORSquadRifleman
-  - type: ItemIFF
-    factions:
-    - OPFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardOPFOR
   id: AU14IDCardopforSquadAutomaticRifleman
   name: squad automatic rifleman ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORSquadAutomaticRifleman
-  - type: ItemIFF
-    factions:
-    - OPFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardOPFOR
   id: AU14JobIDCardopforPlatoonCorpsman
   name: platoon corpsman ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORPlatoonCorpsman
-  - type: ItemIFF
-    factions:
-    - OPFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardOPFOR
   id: AU14JobIDCardopforRadioTelephoneOperator
   name: radio telephone operator ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORRadioTelephoneOperator
-  - type: ItemIFF
-    factions:
-    - OPFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardOPFOR
   id: AU14IDCardOPFORAuxSupportSynth
   name: support synthetic ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORAuxSupportSynth
-  - type: ItemIFF
-    factions:
-    - OPFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardOPFOR
   id: AU14JobIDCardOPFORAuxTech
   name: auxiliary technician ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORAuxTech
-  - type: ItemIFF
-    factions:
-    - OPFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardOPFOR
   id: AU14IDCardOPFORCT
   name: combat technician ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORSquadCombatTech
-  - type: ItemIFF
-    factions:
-    - OPFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardOPFOR
   id: AU14IDCardOPFORVehicleCrewman
   name: vehicle crewman ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORVehicleCrewman
-  - type: ItemIFF
-    factions:
-    - OPFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardOPFOR
   id: AU14IDCardOPFORAdvisor
   name: advisor ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORadvisor
-  - type: ItemIFF
-    factions:
-    - OPFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardOPFOR
   id: AU14IDCardOPFORDoctor
   name: doctor ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORMilitaryDoctor
-  - type: ItemIFF
-    factions:
-    - OPFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardOPFOR
   id: AU14IDCardOPFORWorkingJoe
   categories: [ HideSpawnMenu ]
   name: Working Joe ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORWorkingJoe
-  - type: ItemIFF
-    factions:
-    - OPFOR
