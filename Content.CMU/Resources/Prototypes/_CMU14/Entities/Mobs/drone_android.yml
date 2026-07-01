@@ -9,7 +9,6 @@
     nameDataset: CMUNamesDroneAndroid
     maxNameLength: 24
     followCloseRange: 1
-    followRange: 1.5
   - type: Inventory
     templateId: cmuDroneAndroid
   - type: HumanoidAppearance

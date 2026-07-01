@@ -111,9 +111,6 @@ public sealed partial class CMUDroneAndroidComponent : Component
     [DataField]
     public float FollowCloseRange = 1f;
 
-    [DataField]
-    public float FollowRange = 1.5f;
-
     public ContainerSlot? ModuleContainer;
 
     public EntityUid? InstalledModule;

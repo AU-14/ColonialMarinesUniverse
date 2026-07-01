@@ -3,7 +3,6 @@ using Content.Server.Administration;
 using Content.Server.Chat.Systems;
 using Content.Server.Mind;
 using Content.Server.NPC;
-using Content.Server.NPC.Components;
 using Content.Server.NPC.HTN;
 using Content.Server.NPC.Pathfinding;
 using Content.Server.NPC.Systems;
@@ -92,16 +91,12 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
     private const float TransferParticleMaxVelocity = 65f;
     private const string FollowCompoundTask = "CMUDroneFollowCompound";
     private const string FollowCloseRangeKey = "FollowCloseRange";
-    private const string FollowIdleTargetKey = "FollowIdleTarget";
-    private const string FollowRangeKey = "FollowRange";
-    private const string IdleTimeKey = "IdleTime";
     private const float BodyMoveGraceDistance = 0.25f;
     private TimeSpan _nextLeashCheck;
     private readonly Dictionary<EntityUid, string> _pendingOperatorEndControls = new();
     private readonly List<(EntityUid Entity, string Reason)> _pendingOperatorEndControlBuffer = new();
     private readonly Dictionary<EntityUid, string> _pendingSessionEndControls = new();
     private readonly List<(EntityUid Entity, string Reason)> _pendingSessionEndControlBuffer = new();
-    private readonly ISawmill _sawmill = Logger.GetSawmill("cmu.drone");
     private EntityQuery<ActorComponent> _actorQuery;
     private EntityQuery<GhostHearingComponent> _ghostHearingQuery;
 
@@ -210,8 +205,8 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
 
         args.Handled = true;
 
-        if (!TryGetLinkedDroneForCommand(ent, "start", out var drone, out var tablet, out var reason) ||
-            !CanCommandLinkedDrone(drone, tablet, ent.Owner, "start", out reason))
+        if (!TryGetLinkedDroneForCommand(ent, out var drone, out var tablet, out var reason) ||
+            !CanCommandLinkedDrone(drone, tablet, ent.Owner, out reason))
         {
             _popup.PopupEntity(reason, ent.Owner, ent.Owner, PopupType.SmallCaution);
             return;
@@ -219,14 +214,6 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
 
         if (drone.Comp.FollowingOperator)
         {
-            LogDroneFollowRejected(
-                "start",
-                ent.Owner,
-                drone.Owner,
-                tablet.Owner,
-                "already following",
-                Loc.GetString("cmu-drone-follow-already", ("drone", drone.Owner)));
-
             _popup.PopupEntity(
                 Loc.GetString("cmu-drone-follow-already", ("drone", drone.Owner)),
                 ent.Owner,
@@ -245,8 +232,8 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
 
         args.Handled = true;
 
-        if (!TryGetLinkedDroneForCommand(ent, "stop", out var drone, out var tablet, out var reason) ||
-            !CanCommandLinkedDrone(drone, tablet, ent.Owner, "stop", out reason))
+        if (!TryGetLinkedDroneForCommand(ent, out var drone, out var tablet, out var reason) ||
+            !CanCommandLinkedDrone(drone, tablet, ent.Owner, out reason))
         {
             _popup.PopupEntity(reason, ent.Owner, ent.Owner, PopupType.SmallCaution);
             return;
@@ -1312,7 +1299,6 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
 
     private bool TryGetLinkedDroneForCommand(
         Entity<CMUDroneOperatorComponent> ent,
-        string command,
         out Entity<CMUDroneAndroidComponent> drone,
         out Entity<CMUDroneControlTabletComponent> tablet,
         out string reason)
@@ -1339,13 +1325,6 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         if (tabletUid is not { } resolvedTablet ||
             tabletComp == null)
         {
-            LogDroneFollowRejected(
-                command,
-                ent.Owner,
-                ent.Comp.Drone,
-                ent.Comp.Tablet,
-                "no tablet",
-                reason);
             return false;
         }
 
@@ -1354,13 +1333,6 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
             Exists(tabletOperator))
         {
             reason = Loc.GetString("cmu-drone-tablet-bound");
-            LogDroneFollowRejected(
-                command,
-                ent.Owner,
-                ent.Comp.Drone,
-                resolvedTablet,
-                $"tablet bound to {FormatEntity(tabletOperator)}",
-                reason);
             return false;
         }
 
@@ -1372,13 +1344,6 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
                 !Exists(storedDrone))
             {
                 reason = Loc.GetString("cmu-drone-tablet-no-link");
-                LogDroneFollowRejected(
-                    command,
-                    ent.Owner,
-                    tabletComp.LinkedDrone,
-                    resolvedTablet,
-                    "tablet has no valid linked drone and operator has no valid stored drone",
-                    reason);
                 return false;
             }
 
@@ -1388,13 +1353,6 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         if (!TryComp<CMUDroneAndroidComponent>(resolvedDrone, out var droneComp))
         {
             reason = Loc.GetString("cmu-drone-link-invalid");
-            LogDroneFollowRejected(
-                command,
-                ent.Owner,
-                resolvedDrone,
-                resolvedTablet,
-                "linked entity is not a drone android",
-                reason);
             return false;
         }
 
@@ -1404,13 +1362,6 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
             !TerminatingOrDeleted(existingDrone))
         {
             reason = Loc.GetString("cmu-drone-assembly-existing");
-            LogDroneFollowRejected(
-                command,
-                ent.Owner,
-                resolvedDrone,
-                resolvedTablet,
-                $"operator already has different drone {FormatEntity(existingDrone)}",
-                reason);
             return false;
         }
 
@@ -1419,13 +1370,6 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
             Exists(droneOperator))
         {
             reason = Loc.GetString("cmu-drone-link-bound");
-            LogDroneFollowRejected(
-                command,
-                ent.Owner,
-                resolvedDrone,
-                resolvedTablet,
-                $"drone bound to {FormatEntity(droneOperator)}",
-                reason);
             return false;
         }
 
@@ -1445,7 +1389,6 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         Entity<CMUDroneAndroidComponent> drone,
         Entity<CMUDroneControlTabletComponent> tablet,
         EntityUid user,
-        string command,
         out string reason)
     {
         reason = string.Empty;
@@ -1453,39 +1396,18 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         if (!IsEntityContainedBy(tablet.Owner, user))
         {
             reason = Loc.GetString("cmu-drone-tablet-must-carry");
-            LogDroneFollowRejected(
-                command,
-                user,
-                drone.Owner,
-                tablet.Owner,
-                "tablet is not contained by operator",
-                reason);
             return false;
         }
 
         if (TerminatingOrDeleted(drone.Owner) || !_mobState.IsAlive(drone.Owner))
         {
             reason = Loc.GetString("cmu-drone-follow-drone-dead");
-            LogDroneFollowRejected(
-                command,
-                user,
-                drone.Owner,
-                tablet.Owner,
-                $"drone unavailable terminating={TerminatingOrDeleted(drone.Owner)} alive={_mobState.IsAlive(drone.Owner)}",
-                reason);
             return false;
         }
 
         if (!_mobState.IsAlive(user))
         {
             reason = Loc.GetString("cmu-drone-control-operator-disabled");
-            LogDroneFollowRejected(
-                command,
-                user,
-                drone.Owner,
-                tablet.Owner,
-                "operator is not alive",
-                reason);
             return false;
         }
 
@@ -1494,39 +1416,18 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
             Exists(operatorUid))
         {
             reason = Loc.GetString("cmu-drone-link-bound");
-            LogDroneFollowRejected(
-                command,
-                user,
-                drone.Owner,
-                tablet.Owner,
-                $"drone bound to {FormatEntity(operatorUid)}",
-                reason);
             return false;
         }
 
         if (HasComp<CMUDroneControlSessionComponent>(drone.Owner))
         {
             reason = Loc.GetString("cmu-drone-control-drone-busy");
-            LogDroneFollowRejected(
-                command,
-                user,
-                drone.Owner,
-                tablet.Owner,
-                "drone is controlled",
-                reason);
             return false;
         }
 
         if (!IsSameMapInRange(user, drone.Owner, tablet.Comp.Range))
         {
             reason = Loc.GetString("cmu-drone-follow-out-of-range");
-            LogDroneFollowRejected(
-                command,
-                user,
-                drone.Owner,
-                tablet.Owner,
-                $"out of range distance={FormatSameMapDistance(user, drone.Owner)} max={tablet.Comp.Range:0.##}",
-                reason);
             return false;
         }
 
@@ -1546,13 +1447,11 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         htn.Blackboard.SetValue(NPCBlackboard.OwnerCoordinates, Transform(drone.Owner).Coordinates);
         _npc.SetBlackboard(drone.Owner, NPCBlackboard.FollowTarget, new EntityCoordinates(user, Vector2.Zero), htn);
         htn.Blackboard.SetValue(FollowCloseRangeKey, drone.Comp.FollowCloseRange);
-        htn.Blackboard.SetValue(FollowRangeKey, drone.Comp.FollowRange);
 
         drone.Comp.FollowingOperator = true;
         _htn.SetHTNEnabled((drone.Owner, htn), true);
         _npc.WakeNPC(drone.Owner, htn);
         _htn.Replan(htn);
-        LogDroneFollowStart(user, drone, htn);
 
         _popup.PopupEntity(
             Loc.GetString("cmu-drone-follow-start", ("drone", drone.Owner)),
@@ -1568,10 +1467,6 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
     {
         if (!drone.Comp.FollowingOperator)
         {
-            _sawmill.Info(
-                $"[DroneFollow] stop ignored: drone was not following user={FormatEntity(user)} drone={FormatEntity(drone.Owner)} " +
-                $"distance={FormatNullableDistance(user, drone.Owner)}");
-
             if (popup && showNotFollowing && user is { } popupUser)
             {
                 _popup.PopupEntity(
@@ -1592,15 +1487,8 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
             _npc.SleepNPC(drone.Owner, htn);
             ClearDroneFollowBlackboard(htn);
         }
-        else
-        {
-            _sawmill.Warning($"[DroneFollow] stop could not find HTN component on drone={FormatEntity(drone.Owner)}");
-        }
 
         StopEntityMotion(drone.Owner);
-        _sawmill.Info(
-            $"[DroneFollow] stopped user={FormatEntity(user)} drone={FormatEntity(drone.Owner)} " +
-            $"distance={FormatNullableDistance(user, drone.Owner)}");
 
         if (popup && user is { } userUid)
         {
@@ -1613,18 +1501,8 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
 
     private void EnsureDroneFollowMovement(EntityUid drone)
     {
-        var hadInputMover = HasComp<InputMoverComponent>(drone);
-        var hadMobMover = HasComp<MobMoverComponent>(drone);
-
         EnsureComp<InputMoverComponent>(drone);
         EnsureComp<MobMoverComponent>(drone);
-
-        if (!hadInputMover || !hadMobMover)
-        {
-            _sawmill.Info(
-                $"[DroneFollow] restored dormant movement components drone={FormatEntity(drone)} " +
-                $"inputMoverAdded={!hadInputMover} mobMoverAdded={!hadMobMover}");
-        }
     }
 
     private HTNComponent EnsureDroneFollowHtn(EntityUid drone)
@@ -1633,10 +1511,6 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         if (htn.RootTask == null ||
             htn.RootTask.Task != FollowCompoundTask)
         {
-            _sawmill.Warning(
-                $"[DroneFollow] replacing invalid HTN root for drone={FormatEntity(drone)} " +
-                $"oldRoot={htn.RootTask?.Task.ToString() ?? "null"} newRoot={FollowCompoundTask}");
-
             htn.RootTask = new HTNCompoundTask
             {
                 Task = FollowCompoundTask,
@@ -1649,109 +1523,9 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
     private void ClearDroneFollowBlackboard(HTNComponent htn)
     {
         htn.Blackboard.Remove<EntityCoordinates>(NPCBlackboard.FollowTarget);
-        htn.Blackboard.Remove<EntityCoordinates>(FollowIdleTargetKey);
         htn.Blackboard.Remove<EntityCoordinates>(NPCBlackboard.OwnerCoordinates);
         htn.Blackboard.Remove<PathResultEvent>(NPCBlackboard.PathfindKey);
         htn.Blackboard.Remove<float>(FollowCloseRangeKey);
-        htn.Blackboard.Remove<float>(FollowRangeKey);
-        htn.Blackboard.Remove<float>(IdleTimeKey);
-    }
-
-    private void LogDroneFollowRejected(
-        string command,
-        EntityUid user,
-        EntityUid? drone,
-        EntityUid? tablet,
-        string detail,
-        string reason)
-    {
-        _sawmill.Info(
-            $"[DroneFollow] {command} rejected user={FormatEntity(user)} drone={FormatEntity(drone)} " +
-            $"tablet={FormatEntity(tablet)} reason=\"{reason}\" detail=\"{detail}\"");
-    }
-
-    private void LogDroneFollowStart(EntityUid user, Entity<CMUDroneAndroidComponent> drone, HTNComponent htn)
-    {
-        var hasFollowTarget = htn.Blackboard.TryGetValue<EntityCoordinates>(
-            NPCBlackboard.FollowTarget,
-            out var followTarget,
-            EntityManager);
-        var hasFollowRange = htn.Blackboard.TryGetValue<float>(FollowRangeKey, out var followRange, EntityManager);
-        var hasCloseRange = htn.Blackboard.TryGetValue<float>(FollowCloseRangeKey, out var followCloseRange, EntityManager);
-        var hasOwner = htn.Blackboard.TryGetValue<EntityUid>(NPCBlackboard.Owner, out var owner, EntityManager);
-        var hasInputMover = HasComp<InputMoverComponent>(drone.Owner);
-        var hasMobMover = HasComp<MobMoverComponent>(drone.Owner);
-        var hasActiveNpc = HasComp<ActiveNPCComponent>(drone.Owner);
-        var hasActor = HasComp<ActorComponent>(drone.Owner);
-        var hasSteering = TryComp<NPCSteeringComponent>(drone.Owner, out var steering);
-        var hasPhysics = TryComp<PhysicsComponent>(drone.Owner, out var physics);
-        var hasMovementSpeed = TryComp<MovementSpeedModifierComponent>(drone.Owner, out var movementSpeed);
-
-        _sawmill.Info(
-            $"[DroneFollow] start accepted user={FormatEntity(user)} drone={FormatEntity(drone.Owner)} " +
-            $"distance={FormatSameMapDistance(user, drone.Owner)} target={(hasFollowTarget ? followTarget.ToString() : "missing")} " +
-            $"owner={(hasOwner ? FormatEntity(owner) : "missing")} followRange={(hasFollowRange ? followRange.ToString("0.##") : "missing")} " +
-            $"closeRange={(hasCloseRange ? followCloseRange.ToString("0.##") : "missing")} htnEnabled={htn.Enabled} " +
-            $"root={htn.RootTask?.Task.ToString() ?? "null"} activeNpc={hasActiveNpc} inputMover={hasInputMover} " +
-            $"mobMover={hasMobMover} physics={hasPhysics} " +
-            $"moveSpeed={(movementSpeed != null ? $"{movementSpeed.BaseWalkSpeed:0.##}/{movementSpeed.BaseSprintSpeed:0.##}" : "missing")} " +
-            $"actor={hasActor} steering={hasSteering} steeringStatus={(steering != null ? steering.Status.ToString() : "none")}");
-
-        if (!hasInputMover)
-        {
-            _sawmill.Warning(
-                $"[DroneFollow] start blocker: drone={FormatEntity(drone.Owner)} lacks InputMover; " +
-                "NPC steering only updates entities with ActiveNPC, NPCSteering, InputMover, and Transform.");
-        }
-
-        if (!hasPhysics)
-            _sawmill.Warning($"[DroneFollow] start blocker: drone={FormatEntity(drone.Owner)} lacks Physics.");
-
-        if (!hasActiveNpc)
-            _sawmill.Warning($"[DroneFollow] start blocker: drone={FormatEntity(drone.Owner)} did not wake into ActiveNPC.");
-
-        if (!hasFollowTarget)
-            _sawmill.Warning($"[DroneFollow] start blocker: drone={FormatEntity(drone.Owner)} has no FollowTarget blackboard key.");
-
-        if (hasActor)
-            _sawmill.Warning($"[DroneFollow] start suspicious: drone={FormatEntity(drone.Owner)} still has an Actor attached.");
-
-        if (TryGetSameMapDistance(user, drone.Owner, out var distance) && distance <= drone.Comp.FollowCloseRange)
-        {
-            _sawmill.Info(
-                $"[DroneFollow] start note: drone={FormatEntity(drone.Owner)} is already within closeRange " +
-                $"distance={distance:0.##} closeRange={drone.Comp.FollowCloseRange:0.##}; steering will hold until the operator moves farther away.");
-        }
-    }
-
-    private string FormatEntity(EntityUid? uid)
-    {
-        if (uid is not { } entity)
-            return "null";
-
-        return Exists(entity) && !TerminatingOrDeleted(entity)
-            ? ToPrettyString(entity)
-            : entity.ToString();
-    }
-
-    private string FormatNullableDistance(EntityUid? first, EntityUid second)
-    {
-        return first is { } firstUid
-            ? FormatSameMapDistance(firstUid, second)
-            : "no-user";
-    }
-
-    private string FormatSameMapDistance(EntityUid first, EntityUid second)
-    {
-        if (TryGetSameMapDistance(first, second, out var distance))
-            return distance.ToString("0.##");
-
-        if (TerminatingOrDeleted(first) || TerminatingOrDeleted(second))
-            return "terminating-or-deleted";
-
-        var firstCoords = _transform.GetMapCoordinates(first);
-        var secondCoords = _transform.GetMapCoordinates(second);
-        return $"not-same-map firstMap={firstCoords.MapId} secondMap={secondCoords.MapId}";
     }
 
     private bool TryStartControl(Entity<CMUDroneControlTabletComponent> tablet, EntityUid user)
