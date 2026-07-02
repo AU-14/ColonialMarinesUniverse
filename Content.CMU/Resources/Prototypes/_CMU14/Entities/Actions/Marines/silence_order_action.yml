@@ -7,7 +7,7 @@
   - type: Action
     itemIconStyle: NoItem
     icon:
-      sprite: _AU14/Actions/commander_silence.rsi
+      sprite: _CMU14/Actions/GOVFOR/commander_silence.rsi
       state: silence
   - type: InstantAction
     event: !type:AU14SilenceActionEvent

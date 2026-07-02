@@ -7,7 +7,7 @@
   - type: Action
     itemIconStyle: NoItem
     icon:
-      sprite: _AU14/Actions/call_to_attention.rsi
+      sprite: _CMU14/Actions/GOVFOR/call_to_attention.rsi
       state: attention
   - type: InstantAction
     event: !type:AU14CallToAttentionActionEvent
