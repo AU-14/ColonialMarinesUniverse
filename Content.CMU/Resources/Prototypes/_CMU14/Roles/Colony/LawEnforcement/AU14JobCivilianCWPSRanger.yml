@@ -75,8 +75,16 @@
     shoes: RMCBootsPMCFilled
     id: AU14IDCardcivilianCWPSranger
     ears: AU14CMBHeadset
-    pocket1: AU14GuidebookLawColonial
-
+    outerClothing: AU14CWPSBomber
+    suitstorage: RMCBeltHolsterRevolver
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14PouchGeneralLargeLEOFilled
+  inhand:
+  - AU14GunCasePistolM44Civ
+  storage:
+    back:
+    - AU14GuidebookLawColonial
+  
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointCivilianCWPSRanger
