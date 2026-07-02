@@ -87,12 +87,26 @@ public sealed partial class AU14SilenceOrderSystem : EntitySystem
             if (_mobState.IsDead(receiver))
                 continue;
 
-            var silence = EnsureComp<AU14SilenceOrderComponent>(receiver);
-            silence.ExpiresAt = expiresAt;
+            ApplySilenceUntil(receiver, expiresAt);
 
             _popup.PopupEntity(noticeMsg, receiver, receiver, PopupType.Small);
             _cmChat.ChatMessageToOne(noticeMsg, receiver, ChatChannel.Local, colorOverride: new Color(0.75f, 0.75f, 1f, 1f));
         }
+    }
+
+    public void ApplySilenceFor(EntityUid target, TimeSpan duration)
+    {
+        ApplySilenceUntil(target, _timing.CurTime + duration);
+    }
+
+    public void ApplySilenceUntil(EntityUid target, TimeSpan expiresAt)
+    {
+        var silence = EnsureComp<AU14SilenceOrderComponent>(target);
+        if (silence.ExpiresAt >= expiresAt)
+            return;
+
+        silence.ExpiresAt = expiresAt;
+        Dirty(target, silence);
     }
 
     private void SendSilenceCallout(Entity<AU14SilenceOrderAbilityComponent> ent)
