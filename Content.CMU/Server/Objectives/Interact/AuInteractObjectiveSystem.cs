@@ -13,17 +13,15 @@ namespace Content.Server.AU14.Objectives.Interact;
 /// </summary>
 public sealed partial class AuInteractObjectiveSystem : EntitySystem
 {
-    [Dependency] private IEntityManager _entManager = default!;
     [Dependency] private AuObjectiveSystem _objectiveSystem = default!;
     [Dependency] private PopupSystem _popup = default!;
-    [Dependency] private ILogManager _logManager = default!;
 
-    private ISawmill _sawmill = default!;
+    private ISawmill _logs = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        _sawmill = _logManager.GetSawmill("obj-interact");
+        _logs = Logger.GetSawmill("obj-interact");
         SubscribeLocalEvent<InteractObjectiveComponent, ComponentStartup>(OnObjectiveStartup);
         SubscribeLocalEvent<InteractObjectiveTrackerComponent, InteractObjectiveDoAfterEvent>(OnInteractDoAfter);
     }
@@ -35,7 +33,7 @@ public sealed partial class AuInteractObjectiveSystem : EntitySystem
     /// </summary>
     public void ActivateInteractObjectiveIfNeeded(EntityUid uid, AuObjectiveComponent comp)
     {
-        if (!_entManager.TryGetComponent(uid, out InteractObjectiveComponent? interactComp))
+        if (!TryComp(uid, out InteractObjectiveComponent? interactComp))
             return;
         if (!comp.Active || interactComp.EntitiesSpawned)
             return;
@@ -60,7 +58,7 @@ public sealed partial class AuInteractObjectiveSystem : EntitySystem
                 return;
 
             component.EntitiesSpawned = true;
-            _sawmill.Info($"[INTERACT OBJ] Registered {registered} preplaced entities for objective {uid}");
+            _logs.Info($"[INTERACT OBJ] Registered {registered} preplaced entities for objective {uid}");
             return;
         }
 
@@ -70,7 +68,7 @@ public sealed partial class AuInteractObjectiveSystem : EntitySystem
 
         if (component.Interactables.Count == 0)
         {
-            _sawmill.Warning($"[INTERACT OBJ] Objective {uid} has no Interactables defined!");
+            _logs.Warning($"[INTERACT OBJ] Objective {uid} has no Interactables defined!");
             return;
         }
 
@@ -78,11 +76,13 @@ public sealed partial class AuInteractObjectiveSystem : EntitySystem
 
         var markers = new List<EntityUid>();
         var genericMarkers = new List<EntityUid>();
+        var objMap = Transform(uid).MapID;
         var markerQuery = AllEntityQuery<FetchObjectiveMarkerComponent, TransformComponent>();
-        while (markerQuery.MoveNext(out var markerUid, out var markerComp, out _))
+        while (markerQuery.MoveNext(out var markerUid, out var markerComp, out var markerXform))
         {
-            if (markerComp.Used)
+            if (markerComp.Used || markerXform.MapID != objMap)
                 continue;
+
             if (!string.IsNullOrEmpty(markerId) && markerComp.FetchId == markerId)
                 markers.Add(markerUid);
             else if (markerComp.Generic)
@@ -94,7 +94,7 @@ public sealed partial class AuInteractObjectiveSystem : EntitySystem
 
         if (markers.Count == 0 || string.IsNullOrEmpty(entityToSpawn))
         {
-            _sawmill.Warning($"[INTERACT OBJ] No markers found for objective {uid}");
+            _logs.Warning($"[INTERACT OBJ] No markers found for objective {uid}");
             return;
         }
 
@@ -121,13 +121,13 @@ public sealed partial class AuInteractObjectiveSystem : EntitySystem
 
             var xform = Comp<TransformComponent>(markerUid);
             var ent = Spawn(entityToSpawn, xform.Coordinates);
-            var tracker = _entManager.EnsureComponent<InteractObjectiveTrackerComponent>(ent);
+            var tracker = EnsureComp<InteractObjectiveTrackerComponent>(ent);
             tracker.ObjectiveUid = uid;
             markerComp.Used = true;
         }
 
         component.EntitiesSpawned = true;
-        _sawmill.Info($"[INTERACT OBJ] Spawned {toSpawn} interactable entities for objective {uid}");
+        _logs.Info($"[INTERACT OBJ] Spawned {toSpawn} interactable entities for objective {uid}");
     }
 
     /// <summary>
@@ -142,10 +142,11 @@ public sealed partial class AuInteractObjectiveSystem : EntitySystem
         var interactableSet = component.Interactables.ToHashSet(StringComparer.OrdinalIgnoreCase);
         var registered = 0;
 
-        var query = AllEntityQuery<MetaDataComponent>();
-        while (query.MoveNext(out var ent, out var meta))
+        var objMap = Transform(objectiveUid).MapID;
+        var query = AllEntityQuery<MetaDataComponent, TransformComponent>();
+        while (query.MoveNext(out var ent, out var meta, out var xform))
         {
-            if (ent == objectiveUid)
+            if (xform.MapID != objMap || ent == objectiveUid)
                 continue;
 
             if (HasComp<InteractObjectiveTrackerComponent>(ent))
@@ -155,7 +156,7 @@ public sealed partial class AuInteractObjectiveSystem : EntitySystem
             if (proto == null || !interactableSet.Contains(proto))
                 continue;
 
-            var tracker = _entManager.EnsureComponent<InteractObjectiveTrackerComponent>(ent);
+            var tracker = EnsureComp<InteractObjectiveTrackerComponent>(ent);
             tracker.ObjectiveUid = objectiveUid;
             registered++;
         }
@@ -171,10 +172,10 @@ public sealed partial class AuInteractObjectiveSystem : EntitySystem
         if (args.Cancelled)
             return;
 
-        if (!_entManager.TryGetComponent<InteractObjectiveComponent>(tracker.ObjectiveUid, out var interactComp))
+        if (!TryComp<InteractObjectiveComponent>(tracker.ObjectiveUid, out var interactComp))
             return;
 
-        if (!_entManager.TryGetComponent<AuObjectiveComponent>(tracker.ObjectiveUid, out var objComp))
+        if (!TryComp<AuObjectiveComponent>(tracker.ObjectiveUid, out var objComp))
             return;
 
         if (!objComp.Active)
@@ -210,7 +211,7 @@ public sealed partial class AuInteractObjectiveSystem : EntitySystem
         var popupUser = args.User != EntityUid.Invalid ? args.User : uid;
 
         _popup.PopupEntity(interactComp.DoAfterMessageComplete, uid, popupUser, PopupType.Medium);
-        _sawmill.Info($"[INTERACT OBJ] Entity {uid} interacted by {args.User} for faction {faction}. Interaction {currentInteractions}/{interactComp.Interactionsneeded}");
+        _logs.Info($"[INTERACT OBJ] Entity {uid} interacted by {args.User} for faction {faction}. Interaction {currentInteractions}/{interactComp.Interactionsneeded}");
 
         // Check if this entity has reached the required number of interactions for one completion
         if (currentInteractions < interactComp.Interactionsneeded)
@@ -231,15 +232,15 @@ public sealed partial class AuInteractObjectiveSystem : EntitySystem
             ? interactComp.TotalCompletionsNeeded
             : interactComp.AmountToSpawn;
 
-        _sawmill.Info($"[INTERACT OBJ] Entity {uid} completed for faction {faction}. Total completions: {interactComp.CompletionsPerFaction[faction]}/{totalNeeded}");
+        _logs.Info($"[INTERACT OBJ] Entity {uid} completed for faction {faction}. Total completions: {interactComp.CompletionsPerFaction[faction]}/{totalNeeded}");
 
         // Destroy entity if configured
         if (interactComp.DestroyOnComplete && tracker.CompletionsPerFaction[faction] >= interactComp.CompletionsPerEnt)
         {
-            if (_entManager.EntityExists(uid))
+            if (Exists(uid))
             {
-                _sawmill.Info($"[INTERACT OBJ] Destroying entity {uid} after completion");
-                _entManager.QueueDeleteEntity(uid);
+                _logs.Info($"[INTERACT OBJ] Destroying entity {uid} after completion");
+                QueueDel(uid);
             }
         }
 
@@ -250,7 +251,7 @@ public sealed partial class AuInteractObjectiveSystem : EntitySystem
         if (interactComp.CompletionsPerFaction[faction] < totalNeeded)
             return;
 
-        _sawmill.Info($"[INTERACT OBJ] Objective {tracker.ObjectiveUid} completed for faction {faction}!");
+        _logs.Info($"[INTERACT OBJ] Objective {tracker.ObjectiveUid} completed for faction {faction}!");
         _objectiveSystem.CompleteObjectiveForFaction(tracker.ObjectiveUid, objComp, faction);
     }
 
@@ -263,10 +264,12 @@ public sealed partial class AuInteractObjectiveSystem : EntitySystem
         component.EntitiesSpawned = false;
 
         // Reset all trackers linked to this objective
-        var query = EntityQueryEnumerator<InteractObjectiveTrackerComponent>();
-        while (query.MoveNext(out _, out var tracker))
+        var objMap = Transform(uid).MapID;
+        var query = EntityQueryEnumerator<InteractObjectiveTrackerComponent, TransformComponent>();
+        while (query.MoveNext(out _, out var tracker, out var xform))
+
         {
-            if (tracker.ObjectiveUid != uid)
+            if (xform.MapID != objMap || tracker.ObjectiveUid != uid)
                 continue;
 
             tracker.CurrentInteractions = 0;

@@ -12,7 +12,6 @@ namespace Content.Server.AU14.Objectives.Fetch;
 
 public sealed partial class AuFetchObjectiveSystem : EntitySystem
 {
-    [Dependency] private IEntityManager _entManager = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private AuObjectiveSystem _objectiveSystem = default!;
     [Dependency] private SharedTransformSystem _xformSys = default!;
@@ -36,10 +35,11 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
 
     public void ActivateFetchObjectiveIfNeeded(EntityUid uid, AuObjectiveComponent comp)
     {
-        if (!_entManager.TryGetComponent(uid, out FetchObjectiveComponent? fetchComp))
+        if (!TryComp(uid, out FetchObjectiveComponent? fetchComp))
             return;
         if (!comp.Active || fetchComp.ItemsSpawned)
             return;
+
         StartupFetchObjective(uid, fetchComp);
     }
 
@@ -82,7 +82,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
                 continue;
 
             // Attach the fetch item component and link it to this objective
-            var itemComp = _entManager.EnsureComponent<AuFetchItemComponent>(ent);
+            var itemComp = EnsureComp<AuFetchItemComponent>(ent);
             itemComp.FetchObjective = component;
             itemComp.ObjectiveUid = objectiveUid;
             registered++;
@@ -120,7 +120,6 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
         var entityToSpawn = component.EntityToSpawn;
         var markerFetchId = component.MarkerEntity;
         var amount = component.AmountToSpawn;
-
 
         var markers = new List<EntityUid>();
         var genericMarkers = new List<EntityUid>();
@@ -166,7 +165,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
                 continue; // Double check, should not happen
             var xform = Comp<TransformComponent>(markerUid);
             var ent = Spawn(entityToSpawn, xform.Coordinates);
-            var comp = _entManager.EnsureComponent<AuFetchItemComponent>(ent);
+            var comp = EnsureComp<AuFetchItemComponent>(ent);
             comp.FetchObjective = component;
             comp.ObjectiveUid = uid;
             // Mark this marker as used
@@ -360,7 +359,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
                     continue;
 
                 // Attach the fetch-item component if not already present, then check if already fetched.
-                var itemComp = _entManager.EnsureComponent<AuFetchItemComponent>(ent);
+                var itemComp = EnsureComp<AuFetchItemComponent>(ent);
                 if (itemComp.Fetched)
                     continue;
 
@@ -411,7 +410,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
     /// Completes a fetch objective for the given faction. Used by external systems (e.g. AnalyzerSystem)
     /// that need to complete an objective without going through the full item-drop flow.
     /// </summary>
-    public void CompleteFetchObjective(EntityUid uid, FetchObjectiveComponent _, AuObjectiveComponent auComp, string faction)
+    public void CompleteFetchObjective(EntityUid uid, AuObjectiveComponent auComp, string faction)
     {
         _objectiveSystem.CompleteObjectiveForFaction(uid, auComp, faction);
     }
@@ -463,7 +462,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
             objComp.FactionStatuses[factionKey] = AuObjectiveComponent.ObjectiveStatus.Failed;
             _logs.Info($"[FETCH FAIL] Objective ({comp.ObjectiveUid}) failed for faction '{factionKey}' due to destroyed fetch items");
             // Optionally, refresh consoles or notify
-            _objectiveSystem?.AwardPointsToFaction(factionKey, objComp); // Optionally award 0 points to trigger UI update
+            _objectiveSystem.AwardPointsToFaction(factionKey, objComp); // Optionally award 0 points to trigger UI update
         }
     }
 
@@ -472,8 +471,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
         MapId targetMap,
         ObjectiveMasterComponent master,
         List<(EntityUid Uid, AuObjectiveComponent Comp)> allObjectives,
-        IPrototypeManager proto,
-        ISawmill logs)
+        IPrototypeManager proto)
     {
         // Gather unused generic marker positions
         var markerPositions = new List<EntityCoordinates>();
@@ -486,7 +484,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
 
         if (markerPositions.Count == 0)
         {
-            logs.Warning("[OBJ SPAWN] No generic fetch markers found, mappers must place them!");
+            _logs.Warning("[OBJ SPAWN] No generic fetch markers found, mappers must place them!");
             return;
         }
 
@@ -504,9 +502,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
         {
             var factionData = master.GetOrCreateFactionData(faction);
             int maxMinor = factionData.MinorObjectives;
-            // int? minMinor = factionData.MinMinorObjectives;
             int maxMajor = factionData.MajorObjectives;
-            // int? minMajor = factionData.MinMajorObjectives;
 
             int currentMinor = allObjectives.Count(o =>
                 !o.Comp.Active &&
@@ -520,8 +516,8 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
                 o.Comp.ObjectiveLevel == 2 &&
                 o.Comp.ApplicableModes.Any(m => m.Equals(presetId, StringComparison.OrdinalIgnoreCase)));
 
-            SpawnObjectivesOfType(faction, 1, Math.Max(0, maxMinor - currentMinor), presetId, markerPositions, ref markerIdx, allObjectives, proto, logs);
-            SpawnObjectivesOfType(faction, 2, Math.Max(0, maxMajor - currentMajor), presetId, markerPositions, ref markerIdx, allObjectives, proto, logs);
+            SpawnObjectivesOfType(faction, 1, Math.Max(0, maxMinor - currentMinor), presetId, markerPositions, ref markerIdx, allObjectives, proto);
+            SpawnObjectivesOfType(faction, 2, Math.Max(0, maxMajor - currentMajor), presetId, markerPositions, ref markerIdx, allObjectives, proto);
         }
 
         // Neutral objectives
@@ -529,7 +525,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
             o.Comp is { Active: false, FactionNeutral: true } &&
             o.Comp.ApplicableModes.Any(m => m.Equals(presetId, StringComparison.OrdinalIgnoreCase)));
 
-        SpawnObjectivesOfType(null, 1, Math.Max(0, master.MaxNeutralObjectives - currentNeutral), presetId, markerPositions, ref markerIdx, allObjectives, proto, logs);
+        SpawnObjectivesOfType(null, 1, Math.Max(0, master.MaxNeutralObjectives - currentNeutral), presetId, markerPositions, ref markerIdx, allObjectives, proto);
     }
 
     private void SpawnObjectivesOfType(string? faction,
@@ -539,8 +535,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
         List<EntityCoordinates> markerPositions,
         ref int markerIdx,
         List<(EntityUid Uid, AuObjectiveComponent Comp)> allObjectives,
-        IPrototypeManager proto,
-        ISawmill logs)
+        IPrototypeManager proto)
     {
         if (count <= 0) return;
 
@@ -584,7 +579,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
             markerIdx++;
 
             Spawn(chosenProto.ID, coords);
-            logs.Debug($"[OBJ SPAWN] Spawned missing objective '{chosenProto.ID}' at {coords} for {faction ?? "neutral"} L{level}.");
+            _logs.Debug($"[OBJ SPAWN] Spawned missing objective '{chosenProto.ID}' at {coords} for {faction ?? "neutral"} L{level}.");
 
             candidates.RemoveAt(idx);
         }
