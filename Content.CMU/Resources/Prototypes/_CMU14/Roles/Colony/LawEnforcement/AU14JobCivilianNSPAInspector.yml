@@ -64,15 +64,13 @@
   id: AU14GearCivilianNSPAInspector
   equipment:
     id: AU14IDCardColonyNSPAInspector
-    outerClothing: RMCCoatTSEPA
     back: RMCSatchelTSEPA
     jumpsuit: RMCJumpsuitTSEPA
     shoes: RMCBootsPMCFilled
     head: RMCHeadCapTSEPAPeakedGold
     belt: CMBeltSecurityMarshalFilled
-    back: RMCSatchelTSEPA
     ears: AU14CMBHeadset
-    outerClothing: RMCArmorVestTSEPA
+    outerClothing: RMCCoatTSEPA
     suitstorage: AU14BeltHolsterPistolBlack
     pocket1: AU14PouchIFAKFill
     pocket2: AU14PouchGeneralLargeLEOFilled
