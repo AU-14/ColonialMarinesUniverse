@@ -73,11 +73,11 @@ public sealed partial class CaptureObjectiveSystem : EntitySystem
         string? allowed = null;
         foreach (var fac in new[] { "govfor", "opfor", "clf" })
         {
-            if (userFactions.Contains(fac))
-            {
-                allowed = fac;
-                break;
-            }
+            if (!userFactions.Contains(fac))
+                continue;
+
+            allowed = fac;
+            break;
         }
         if (allowed == null)
         {
@@ -167,39 +167,38 @@ public sealed partial class CaptureObjectiveSystem : EntitySystem
                 continue;
             if (comp.MaxHoldTimes > 0 && comp.timesincremented >= comp.MaxHoldTimes)
                 continue;
-            if (comp.OnceOnly && comp.timesincremented > 0)
+            if (comp is { OnceOnly: true, timesincremented: > 0 })
                 continue;
             if (string.IsNullOrEmpty(comp.CurrentController))
                 continue;
-            if (!_timeSinceLastIncrement.ContainsKey(uid))
-                _timeSinceLastIncrement[uid] = 0f;
+            _timeSinceLastIncrement.TryAdd(uid, 0f);
             _timeSinceLastIncrement[uid] += frameTime;
 
-            if (_timeSinceLastIncrement[uid] >= comp.PointIncrementTime)
+            if (!(_timeSinceLastIncrement[uid] >= comp.PointIncrementTime))
+                continue;
+
+            _timeSinceLastIncrement[uid] = 0f;
+            comp.timesincremented++;
+            // Increment per-faction count for progress display
+            var factionKey = comp.CurrentController.ToLowerInvariant();
+            comp.TimesIncrementedPerFaction.TryAdd(factionKey, 0);
+            comp.TimesIncrementedPerFaction[factionKey]++;
+            // Award points
+            _objectiveSystem.AwardPointsToFaction(comp.CurrentController, objComp);
+            _sawmill.Debug($"[CAPTURE OBJ] Awarded points to '{comp.CurrentController}' for ({uid}) (increment {comp.timesincremented}/{comp.MaxHoldTimes})");
+            // If OnceOnly, complete after first increment
+            if (comp is { OnceOnly: true, timesincremented: > 0 })
             {
-                _timeSinceLastIncrement[uid] = 0f;
-                comp.timesincremented++;
-                // Increment per-faction count for progress display
-                var factionKey = comp.CurrentController.ToLowerInvariant();
-                if (!comp.TimesIncrementedPerFaction.ContainsKey(factionKey))
-                    comp.TimesIncrementedPerFaction[factionKey] = 0;
-                comp.TimesIncrementedPerFaction[factionKey]++;
-                // Award points
-                _objectiveSystem.AwardPointsToFaction(comp.CurrentController, objComp);
-                _sawmill.Debug($"[CAPTURE OBJ] Awarded points to '{comp.CurrentController}' for ({uid}) (increment {comp.timesincremented}/{comp.MaxHoldTimes})");
-                // If OnceOnly, complete after first increment
-                if (comp.OnceOnly && comp.timesincremented > 0)
-                {
-                    _objectiveSystem.CompleteObjectiveForFaction(uid, objComp, comp.CurrentController);
-                    _sawmill.Debug($"[CAPTURE OBJ] Completed once-only capture objective ({uid}) for '{comp.CurrentController}'");
-                }
-                // If reached max hold times, complete (but only if maxholdtimes > 0)
-                if (!comp.OnceOnly && comp.MaxHoldTimes > 0 && comp.timesincremented >= comp.MaxHoldTimes)
-                {
-                    _objectiveSystem.CompleteObjectiveForFaction(uid, objComp, comp.CurrentController);
-                    _sawmill.Debug($"[CAPTURE OBJ] Completed capture objective ({uid}) for '{comp.CurrentController}' after max hold times");
-                }
+                _objectiveSystem.CompleteObjectiveForFaction(uid, objComp, comp.CurrentController);
+                _sawmill.Debug($"[CAPTURE OBJ] Completed once-only capture objective ({uid}) for '{comp.CurrentController}'");
             }
+            // If reached max hold times, complete (but only if maxholdtimes > 0)
+            if (comp is not { OnceOnly: false, MaxHoldTimes: > 0 }
+                || comp.timesincremented < comp.MaxHoldTimes)
+                continue;
+
+            _objectiveSystem.CompleteObjectiveForFaction(uid, objComp, comp.CurrentController);
+            _sawmill.Debug($"[CAPTURE OBJ] Completed capture objective ({uid}) for '{comp.CurrentController}' after max hold times");
             // --- Hoist/Lower timer logic removed ---
         }
     }

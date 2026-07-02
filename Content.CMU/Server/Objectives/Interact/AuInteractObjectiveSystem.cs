@@ -56,11 +56,11 @@ public sealed partial class AuInteractObjectiveSystem : EntitySystem
         if (!component.Spawn)
         {
             var registered = RegisterPreplacedEntities(uid, component);
-            if (registered > 0)
-            {
-                component.EntitiesSpawned = true;
-                _sawmill.Info($"[INTERACT OBJ] Registered {registered} preplaced entities for objective {uid}");
-            }
+            if (registered <= 0)
+                return;
+
+            component.EntitiesSpawned = true;
+            _sawmill.Info($"[INTERACT OBJ] Registered {registered} preplaced entities for objective {uid}");
             return;
         }
 
@@ -213,45 +213,45 @@ public sealed partial class AuInteractObjectiveSystem : EntitySystem
         _sawmill.Info($"[INTERACT OBJ] Entity {uid} interacted by {args.User} for faction {faction}. Interaction {currentInteractions}/{interactComp.Interactionsneeded}");
 
         // Check if this entity has reached the required number of interactions for one completion
-        if (currentInteractions >= interactComp.Interactionsneeded)
+        if (currentInteractions < interactComp.Interactionsneeded)
+            return;
+
+        // Reset interaction counter for next completion cycle on this entity
+        tracker.InteractionsPerFaction[faction] = 0;
+
+        // Increment per-entity completion
+        tracker.CompletionsPerFaction.TryAdd(faction, 0);
+        tracker.CompletionsPerFaction[faction]++;
+
+        // Increment objective-level completion
+        interactComp.CompletionsPerFaction.TryAdd(faction, 0);
+        interactComp.CompletionsPerFaction[faction]++;
+
+        var totalNeeded = interactComp.TotalCompletionsNeeded > 0
+            ? interactComp.TotalCompletionsNeeded
+            : interactComp.AmountToSpawn;
+
+        _sawmill.Info($"[INTERACT OBJ] Entity {uid} completed for faction {faction}. Total completions: {interactComp.CompletionsPerFaction[faction]}/{totalNeeded}");
+
+        // Destroy entity if configured
+        if (interactComp.DestroyOnComplete && tracker.CompletionsPerFaction[faction] >= interactComp.CompletionsPerEnt)
         {
-            // Reset interaction counter for next completion cycle on this entity
-            tracker.InteractionsPerFaction[faction] = 0;
-
-            // Increment per-entity completion
-            tracker.CompletionsPerFaction.TryAdd(faction, 0);
-            tracker.CompletionsPerFaction[faction]++;
-
-            // Increment objective-level completion
-            interactComp.CompletionsPerFaction.TryAdd(faction, 0);
-            interactComp.CompletionsPerFaction[faction]++;
-
-            var totalNeeded = interactComp.TotalCompletionsNeeded > 0
-                ? interactComp.TotalCompletionsNeeded
-                : interactComp.AmountToSpawn;
-
-            _sawmill.Info($"[INTERACT OBJ] Entity {uid} completed for faction {faction}. Total completions: {interactComp.CompletionsPerFaction[faction]}/{totalNeeded}");
-
-            // Destroy entity if configured
-            if (interactComp.DestroyOnComplete && tracker.CompletionsPerFaction[faction] >= interactComp.CompletionsPerEnt)
+            if (_entManager.EntityExists(uid))
             {
-                if (_entManager.EntityExists(uid))
-                {
-                    _sawmill.Info($"[INTERACT OBJ] Destroying entity {uid} after completion");
-                    _entManager.QueueDeleteEntity(uid);
-                }
-            }
-
-            // Award points for each completion
-            _objectiveSystem.AwardPointsToFaction(faction, objComp);
-
-            // Check if the overall objective is complete
-            if (interactComp.CompletionsPerFaction[faction] >= totalNeeded)
-            {
-                _sawmill.Info($"[INTERACT OBJ] Objective {tracker.ObjectiveUid} completed for faction {faction}!");
-                _objectiveSystem.CompleteObjectiveForFaction(tracker.ObjectiveUid, objComp, faction);
+                _sawmill.Info($"[INTERACT OBJ] Destroying entity {uid} after completion");
+                _entManager.QueueDeleteEntity(uid);
             }
         }
+
+        // Award points for each completion
+        _objectiveSystem.AwardPointsToFaction(faction, objComp);
+
+        // Check if the overall objective is complete
+        if (interactComp.CompletionsPerFaction[faction] < totalNeeded)
+            return;
+
+        _sawmill.Info($"[INTERACT OBJ] Objective {tracker.ObjectiveUid} completed for faction {faction}!");
+        _objectiveSystem.CompleteObjectiveForFaction(tracker.ObjectiveUid, objComp, faction);
     }
 
     /// <summary>

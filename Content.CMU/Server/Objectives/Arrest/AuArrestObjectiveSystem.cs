@@ -60,7 +60,7 @@ namespace Content.Server.AU14.Objectives.Arrest
             var factionComp = EntityManager.GetComponentOrNull<NpcFactionMemberComponent>(uid);
             var factions = factionComp?.Factions.Select(f => f.ToString().ToLowerInvariant()).ToHashSet() ?? new HashSet<string>();
             var ticker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
-            var presetId = ticker.Preset?.ID?.ToLowerInvariant();
+            var presetId = ticker.Preset?.ID.ToLowerInvariant();
             var mindContainer = EntityManager.GetComponentOrNull<MindContainerComponent>(uid);
             var mind = mindContainer?.Mind;
 #if DEBUG
@@ -141,7 +141,7 @@ namespace Content.Server.AU14.Objectives.Arrest
             _sawmill.Debug($"[ARREST DEBUG]   Entity ({uid}) arrested. Factions: [{string.Join(",", arrestedFactions)}]");
 
             var ticker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
-            var presetId = ticker.Preset?.ID?.ToLowerInvariant();
+            var presetId = ticker.Preset?.ID.ToLowerInvariant();
 
 
             // To avoid modifying the dictionary while iterating, collect to remove after
@@ -252,12 +252,12 @@ namespace Content.Server.AU14.Objectives.Arrest
                 if (arrestObj.RemoveKillMark)
                     RemComp<MarkedForKillComponent>(uid);
 
-                if (arrestObj.AmountArrestedPerFaction[factionKey] >= arrestObj.AmountToArrest)
-                {
-                    _objectiveSystem.CompleteObjectiveForFaction(objectiveUid, auObj, factionToCredit);
-                    _sawmill.Info($"[ARREST COMPLETE]   Objective {objectiveUid} completed for faction '{factionToCredit}'.");
-                    objectivesToRemove.Add(objectiveUid);
-                }
+                if (arrestObj.AmountArrestedPerFaction[factionKey] < arrestObj.AmountToArrest)
+                    continue;
+
+                _objectiveSystem.CompleteObjectiveForFaction(objectiveUid, auObj, factionToCredit);
+                _sawmill.Info($"[ARREST COMPLETE]   Objective {objectiveUid} completed for faction '{factionToCredit}'.");
+                objectivesToRemove.Add(objectiveUid);
             }
 
             // Remove completed objectives from AssociatedObjectives
