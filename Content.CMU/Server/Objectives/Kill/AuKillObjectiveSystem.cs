@@ -54,12 +54,12 @@ namespace Content.Server.AU14.Objectives.Kill
             if (_shuttingDown) return;
             if (HasComp<MarkedForKillComponent>(uid)) return;
 
-            var meta = EntityManager.GetComponentOrNull<MetaDataComponent>(uid);
+            TryComp(uid, out MetaDataComponent? meta);
             var protoId = meta?.EntityPrototype?.ID ?? string.Empty;
-            var factionComp = EntityManager.GetComponentOrNull<NpcFactionMemberComponent>(uid);
+            TryComp(uid, out NpcFactionMemberComponent? factionComp);
             var factions = factionComp?.Factions.Select(f => f.ToString().ToLowerInvariant()).ToHashSet() ?? new HashSet<string>();
             var presetId = _gameTicker.Preset?.ID.ToLowerInvariant();
-            var mindContainer = EntityManager.GetComponentOrNull<MindContainerComponent>(uid);
+            TryComp(uid, out MindContainerComponent? mindContainer);
             var mind = mindContainer?.Mind;
 #if DEBUG
             _logs.Debug($"[KILL START] DELAYED - Mob ({uid}) proto='{protoId}' factions=[{string.Join(",", factions)}] - has MindContainerComponent: {mindContainer != null}, Mind: {mind != null}");
@@ -124,12 +124,12 @@ namespace Content.Server.AU14.Objectives.Kill
             if (args.NewMobState != MobState.Dead)
                 return;
 
-            var mindContainer = EntityManager.GetComponentOrNull<MindContainerComponent>(uid);
+            TryComp(uid, out MindContainerComponent? mindContainer);
             var mind = mindContainer?.Mind;
 #if DEBUG
             _logs.Debug($"[KILL DEBUG] OnMobStateChanged: Entity ({uid}) has MindContainerComponent: {mindContainer != null}, Mind: {mind != null}");
 #endif
-            var killedFactionComp = EntityManager.GetComponentOrNull<NpcFactionMemberComponent>(uid);
+            TryComp(uid, out NpcFactionMemberComponent? killedFactionComp);
             var killedFactions = killedFactionComp?.Factions.Select(f => f.ToString().ToLowerInvariant()).ToHashSet() ?? new HashSet<string>();
             if (killedFactions.Count == 0)
                 _logs.Warning($"[KILL WARN] Entity ({uid}) killed but has no factions! Check prototype setup.");
@@ -206,7 +206,7 @@ namespace Content.Server.AU14.Objectives.Kill
 
                 if (!string.IsNullOrEmpty(killObj.MobToKill))
                 {
-                    var meta = EntityManager.GetComponentOrNull<MetaDataComponent>(uid);
+                    TryComp(uid, out MetaDataComponent? meta);
                     var protoId = meta?.EntityPrototype?.ID ?? string.Empty;
 
                     if (!string.Equals(protoId, killObj.MobToKill, StringComparison.OrdinalIgnoreCase))

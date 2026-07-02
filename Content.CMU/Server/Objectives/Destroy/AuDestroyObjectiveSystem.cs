@@ -175,8 +175,7 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
         {
             foreach (var objUid in objectives)
             {
-                var auObj = EntityManager.GetComponentOrNull<AuObjectiveComponent>(objUid);
-                if (auObj == null || !auObj.Active)
+                if (!TryComp(objUid, out AuObjectiveComponent? auObj) || !auObj.Active)
                     continue;
                 // Check map compatibility
                 if (Transform(uid).MapID != Transform(objUid).MapID)
@@ -197,8 +196,9 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
                 if (Transform(uid).MapID != Transform(objUid).MapID)
                     continue;
                 // If the wildcard objective also specifies a proto filter, respect it
-                var destroyComp = EntityManager.GetComponentOrNull<DestroyObjectiveComponent>(objUid);
-                if (destroyComp != null && !string.IsNullOrEmpty(destroyComp.EntityToDestroy) && !string.Equals(destroyComp.EntityToDestroy, proto, StringComparison.OrdinalIgnoreCase))
+                if (TryComp(objUid, out DestroyObjectiveComponent? destroyComp)
+                    && !string.IsNullOrEmpty(destroyComp.EntityToDestroy)
+                    && !string.Equals(destroyComp.EntityToDestroy, proto, StringComparison.OrdinalIgnoreCase))
                     continue;
                 var mark = EnsureComp<MarkedForDestroyComponent>(uid);
                 mark.AssociatedObjectives[objUid] = auObj.Faction.ToLowerInvariant();
@@ -218,7 +218,7 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
 
     private void TryMarkForDestroyDelayed(EntityUid uid)
     {
-        var meta = EntityManager.GetComponentOrNull<MetaDataComponent>(uid);
+        TryComp(uid, out MetaDataComponent? meta);
         var protoId = meta?.EntityPrototype?.ID ?? string.Empty;
         if (string.IsNullOrEmpty(protoId))
             return;
@@ -230,9 +230,11 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
         {
             foreach (var objUid in objList)
             {
-                var auObj = EntityManager.GetComponentOrNull<AuObjectiveComponent>(objUid);
-                if (auObj == null || !auObj.Active)
+                if (!TryComp(objUid, out AuObjectiveComponent? auObj) || !auObj.Active)
                     continue;
+                if (Transform(uid).MapID != Transform(objUid).MapID)
+                    continue;
+
                 var mark = EnsureComp<MarkedForDestroyComponent>(uid);
                 mark.AssociatedObjectives[objUid] = auObj.Faction.ToLowerInvariant();
             }
@@ -241,11 +243,13 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
         // Then handle wildcard objectives
         foreach (var objUid in _wildcardObjectives)
         {
-            var auObj = EntityManager.GetComponentOrNull<AuObjectiveComponent>(objUid);
-            if (auObj == null || !auObj.Active)
+            if (!TryComp(objUid, out AuObjectiveComponent? auObj) || !auObj.Active)
                 continue;
-            var destroyComp = EntityManager.GetComponentOrNull<DestroyObjectiveComponent>(objUid);
-            if (destroyComp != null && !string.IsNullOrEmpty(destroyComp.EntityToDestroy) && !string.Equals(destroyComp.EntityToDestroy, protoId, StringComparison.OrdinalIgnoreCase))
+            if (Transform(uid).MapID != Transform(objUid).MapID)
+                continue;
+            if (TryComp(objUid, out DestroyObjectiveComponent? destroyComp)
+                && !string.IsNullOrEmpty(destroyComp.EntityToDestroy)
+                && !string.Equals(destroyComp.EntityToDestroy, protoId, StringComparison.OrdinalIgnoreCase))
                 continue;
             var mark = EnsureComp<MarkedForDestroyComponent>(uid);
             mark.AssociatedObjectives[objUid] = auObj.Faction.ToLowerInvariant();
@@ -254,7 +258,7 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
 
     private void OnMarkedEntityDestroyed(EntityUid uid, MarkedForDestroyComponent comp, ref EntityTerminatingEvent args)
     {
-        var meta = EntityManager.GetComponentOrNull<MetaDataComponent>(uid);
+        TryComp(uid, out MetaDataComponent? meta);
         var objectivesToRemove = new List<EntityUid>();
         foreach (var kv in comp.AssociatedObjectives)
         {

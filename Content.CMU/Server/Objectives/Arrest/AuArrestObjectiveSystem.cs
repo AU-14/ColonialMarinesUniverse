@@ -54,12 +54,12 @@ namespace Content.Server.AU14.Objectives.Arrest
             if (_shuttingDown) return;
             if (HasComp<MarkedForArrestComponent>(uid)) return;
 
-            var meta = EntityManager.GetComponentOrNull<MetaDataComponent>(uid);
+            TryComp(uid, out MetaDataComponent? meta);
             var protoId = meta?.EntityPrototype?.ID ?? string.Empty;
-            var factionComp = EntityManager.GetComponentOrNull<NpcFactionMemberComponent>(uid);
+            TryComp(uid, out NpcFactionMemberComponent? factionComp);
             var factions = factionComp?.Factions.Select(f => f.ToString().ToLowerInvariant()).ToHashSet() ?? new HashSet<string>();
             var presetId = _gameTicker.Preset?.ID.ToLowerInvariant();
-            var mindContainer = EntityManager.GetComponentOrNull<MindContainerComponent>(uid);
+            TryComp(uid, out MindContainerComponent? mindContainer);
             var mind = mindContainer?.Mind;
 #if DEBUG
             _logs.Debug($"[ARREST START] DELAYED - Mob ({uid}) proto='{protoId}' factions=[{string.Join(",", factions)}] - has MindContainerComponent: {mindContainer != null}, Mind: {mind != null}");
@@ -127,12 +127,12 @@ namespace Content.Server.AU14.Objectives.Arrest
             if (!_cuffableSystem.IsCuffed((uid, cuffable), requireFullyCuffed: false))
                 return;
 
-            var mindContainer = EntityManager.GetComponentOrNull<MindContainerComponent>(uid);
+            TryComp(uid, out MindContainerComponent? mindContainer);
             var mind = mindContainer?.Mind;
 #if DEBUG
             _logs.Debug($"[ARREST DEBUG] OnCuffStateChanged: Entity ({uid}) has MindContainerComponent: {mindContainer != null}, Mind: {mind != null}");
 #endif
-            var arrestedFactionComp = EntityManager.GetComponentOrNull<NpcFactionMemberComponent>(uid);
+            TryComp(uid, out NpcFactionMemberComponent? arrestedFactionComp);
             var arrestedFactions = arrestedFactionComp?.Factions.Select(f => f.ToString().ToLowerInvariant()).ToHashSet() ?? new HashSet<string>();
             if (arrestedFactions.Count == 0)
                 _logs.Warning($"[ARREST WARN] Entity ({uid}) arrested but has no factions! Check prototype setup.");
@@ -213,7 +213,7 @@ namespace Content.Server.AU14.Objectives.Arrest
 
                 if (!string.IsNullOrEmpty(arrestObj.MobToArrest))
                 {
-                    var meta = EntityManager.GetComponentOrNull<MetaDataComponent>(uid);
+                    TryComp(uid, out MetaDataComponent? meta);
                     var protoId = meta?.EntityPrototype?.ID ?? string.Empty;
 
                     if (!string.Equals(protoId, arrestObj.MobToArrest, StringComparison.OrdinalIgnoreCase))
