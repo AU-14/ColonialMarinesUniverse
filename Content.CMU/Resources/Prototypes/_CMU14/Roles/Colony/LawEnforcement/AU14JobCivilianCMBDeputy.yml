@@ -82,9 +82,6 @@
     pocket2: AU14PouchGeneralLargeLEOFilled
   inhand:
   - RMCGunCasePistolM1984
-  storage:
-    back:
-    - AU14GuidebookLawColonial
 
 - type: entity
   parent: CMSpawnPointJobBase
