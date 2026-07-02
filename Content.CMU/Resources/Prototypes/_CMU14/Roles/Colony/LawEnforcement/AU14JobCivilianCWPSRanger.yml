@@ -71,6 +71,7 @@
   equipment:
     head: AU14CWPSCampaignHat
     jumpsuit: AU14CWPSUniform
+    back: CMSatchelSecurity
     belt: CMBeltSecurityMarshalFilled
     shoes: RMCBootsPMCFilled
     id: AU14IDCardcivilianCWPSranger

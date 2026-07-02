@@ -67,6 +67,7 @@
   equipment:
     head: CMHeadCapSPPPeakedPolice
     jumpsuit: RMCJumpsuitSPPPaP
+    back: CMSatchelSecurity
     belt: CMBeltSecurityMarshalFilled
     shoes: RMCBootsPMCFilled
     id: AU14IDCardcivilianPaPOfficer
