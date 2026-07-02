@@ -2,12 +2,12 @@
   parent: ActionMarineBase
   id: ActionMarineGovforSilence
   name: Issue Order - Silence
-  description: Commands the area into silence. Nearby personnel can only whisper for 10 seconds.
+  description: Commands the area into silence. Nearby personnel can only whisper for 15 seconds.
   components:
   - type: Action
     itemIconStyle: NoItem
     icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: psychic_whisper
+      sprite: _CMU14/Actions/GOVFOR/commander_silence.rsi
+      state: silence
   - type: InstantAction
     event: !type:AU14SilenceActionEvent

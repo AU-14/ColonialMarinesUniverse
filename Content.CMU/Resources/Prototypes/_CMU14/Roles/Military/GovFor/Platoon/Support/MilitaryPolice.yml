@@ -26,6 +26,7 @@
   roundComponents:
   - type: Skills
     preset: AU14SkillPresetMilitaryPolice
+  - type: AU14CallToAttentionAbility
   - type: JobPrefix
     prefix: au14-job-prefix-govformilitarypoliceman
   - type: TacticalMapIcon
