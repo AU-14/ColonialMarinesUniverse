@@ -1,8 +1,10 @@
 using System.Numerics;
+using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Spawners;
 
@@ -19,6 +21,8 @@ public sealed partial class AbominationAcidSpraySystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private GunIFFSystem _gunIFF = default!;
+    private static readonly EntProtoId<IFFFactionComponent> AbominationFaction = "FactionAbomination";
 
     public override void Initialize()
     {
@@ -56,6 +60,7 @@ public sealed partial class AbominationAcidSpraySystem : EntitySystem
             Vector2 velocity = dir * ent.Comp.Speed;
 
             EntityUid projectile = Spawn(ent.Comp.Projectile, origin);
+            _gunIFF.GiveAmmoIFF(projectile, AbominationFaction, true);
             _gun.ShootProjectile(projectile, velocity, Vector2.Zero, ent.Owner, ent.Owner, ent.Comp.Speed);
 
             var despawn = EnsureComp<TimedDespawnComponent>(projectile);

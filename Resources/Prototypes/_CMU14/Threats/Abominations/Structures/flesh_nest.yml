@@ -47,9 +47,6 @@
   # caste at it. Base cadence is 360s with one nest; each extra placed
   # nest speeds the global rate by 5%.
   - type: AbominationFleshNest
-  - type: UserIFF
-    factions:
-    - FactionAbomination
   - type: NpcFactionMember
     factions:
     - Abomination
