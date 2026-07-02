@@ -178,7 +178,7 @@ namespace Content.Server.AU14.Round.Commands
             var protoMan = IoCManager.Resolve<IPrototypeManager>();
             var factory = IoCManager.Resolve<IComponentFactory>();
             var options = protoMan.EnumeratePrototypes<EntityPrototype>()
-                .Where(p => p.TryGetComponent(out RMCPlanetMapPrototypeComponent? _, factory))
+                .Where(p => p.TryComp(out RMCPlanetMapPrototypeComponent? _, factory))
                 .OrderBy(p => p.ID)
                 .Select(p => p.ID)
                 .ToList();

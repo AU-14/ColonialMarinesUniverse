@@ -1,0 +1,70 @@
+- type: gameMap
+  id: hybrisametro
+  mapName: LV-759 Hybrisa Metropolitan
+  mapPath: /Maps/_AU14/hybrisametro.yml
+  minPlayers: 0
+  maxPlayers: 200
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    hybrisametro:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'Hybrisa Metropolitan'
+        - type: StationJobs
+          availableJobs:
+            AU14JobCivilianColonist: [-1, -1]
+            AU14JobCivilianJournalist: [2, 2]
+
+            AU14JobCivilianHeadOfService: [1, 1]
+            AU14JobCivilianShopkeep: [2, 2]
+            AU14JobCivilianFoodServiceWorker: [3, 3]
+            AU14JobCivilianWasteManagementSpecialist: [3, 3]
+
+            AU14JobCivilianColonySynthetic: [2, 2]
+            AU14JobColonyWorkingJoe: [4, 4]
+
+            # Colony Command (non department)
+            AU14JobCivilianColonyAdministrator: [1, 1]
+            AU14JobCivilianColonyAdminAssistant: [1, 1]
+
+            # Ambassadors
+            AU14JobCivilianAmbassadorTWE: [1, 1]
+            # AU14JobCivilianAmbassadorUPP: [1, 1]
+            # AU14JobCivilianAmbassadorICSC: [1, 1]
+
+            # Security/LEO
+            AU14JobCivilianNSPAInspector: [1, 1]
+            AU14JobCivilianNSPAConstable: [5, 5]
+
+            # Engineering/Logi
+            AU14JobCivilianForeman: [1, 1]
+            AU14JobCivilianFreightSystemsSpecialist: [2, 2]
+
+            AU14JobCivilianHeadOfEngineering: [1, 1]
+            AU14JobCivilianEngineer: [5, 5]
+
+            # Medical
+            AU14JobCivilianHeadPhysician: [1, 1]
+            AU14JobCivilianPhysician: [2, 2]
+            AU14JobCivilianNurse: [4, 4]
+            AU14JobCivilianEthicsAndWellnessAdvisor: [1, 1]
+            AU14JobCivilianEmergencyResponseOfficer: [2, 2]
+
+            # Corporate
+            AU14JobCivilianCorporateLiaison: [1, 1]
+            AU14JobCivilianCorporateAssistant: [1, 1]
+
+            AU14JobCivilianScientist: [4, 4]
+            AU14JobWYGuard: [2, 2]
+
+            # Orbital
+            AU14JobCivilianOrbitalArbiter: [1, 1]
+            AU14JobCivilianOrbitalLawyer: [2, 3]
+
+            # Other
+            AU14JobCivilianMiner: [10, 10]
+            AU14JobCivilianPrisoner: [3, 3]
+            # AU14JobMobBoss: [1, 1]
+            # AU14JobMobGoon: [3, 3]

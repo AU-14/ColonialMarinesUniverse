@@ -1,0 +1,59 @@
+- type: entity
+  parent: CMBaseWall
+  id: CMUWallMineableLV376
+  name: fragile rock
+  description: This section of rock seems fragile. A pickaxe could do away with it easily. Strike the earth!
+  suffix: Mining, Barren
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Walls/fragile_rock.rsi
+  - type: Icon
+    sprite: _CMU14/Structures/Walls/fragile_rock.rsi
+    state: strata_ice
+  - type: IconSmooth
+    key: walls
+    additionalKeys:
+    - windows
+    - doors
+    base: strata_ice
+  - type: Transform
+    noRot: true
+  - type: SoundOnGather
+  - type: Gatherable
+    toolWhitelist:
+  - type: Tag
+    tags:
+    - Pickaxe
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Metallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 168
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+
+- type: entity
+  parent: CMUWallMineableLV376
+  id: CMUWallMineableLV376Steel
+  name: high grade magnetite deposit
+  description: Your mining efforts were not in vain, you have struck gold- er, iron!
+  suffix: Mining, Steel
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Walls/steelore.rsi
+  - type: Icon
+    sprite: _CMU14/Structures/Walls/steelore.rsi
+    state: strata_ice
+  - type: IconSmooth
+    key: walls
+    additionalKeys:
+    - windows
+    - doors
+    base: strata_ice 
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: OreSteel

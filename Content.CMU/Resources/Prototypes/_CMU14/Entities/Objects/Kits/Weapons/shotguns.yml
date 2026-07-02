@@ -1,0 +1,25 @@
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponM357
+  name: M357 Rival shotgun case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,13,1
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: WeaponShotgunM357
+        amount: 1
+      - id: CMShellShotgunFlechette
+        amount: 2
+      - id: CMShellShotgunBuckshot
+        amount: 2
+      - id: CMShellShotgunSlugs
+        amount: 2

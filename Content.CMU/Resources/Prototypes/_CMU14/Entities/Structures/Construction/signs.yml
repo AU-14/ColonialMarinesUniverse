@@ -1,0 +1,205 @@
+- type: entity
+  parent: BaseStructure
+  id: DecorSignMinesProp
+  name: mines
+  suffix: Prop
+  description: danger of mines and death...
+  components:
+  - type: Sprite
+    sprite: _AU14/N14content/world.rsi
+    state: mine_sign
+  - type: Construction
+    graph: AU14SignGraph
+    node: sign_mines
+
+# ├──[ CONSTRUCTION MENU ]───────────────────────────────────────────┤
+- type: construction
+  parent: RMC
+  name: Mines Sign
+  id: AU14ConstructionSignMines
+  graph: AU14SignGraph
+  startNode: start
+  targetNode: sign_mines
+  category: construction-category-cm-furniture
+  description: A sign warning about mines.
+  objectType: Structure
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  parent: RMC
+  name: Traffic Director (Empty)
+  id: AU14ConstructionSignEmpty
+  graph: AU14SignGraph
+  startNode: start
+  targetNode: sign_empty
+  category: construction-category-cm-furniture
+  description: A blank traffic director sign.
+  objectType: Structure
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  parent: AU14ConstructionSignEmpty
+  name: Traffic Director (Evac Center)
+  id: AU14ConstructionSignEvacCenter
+  targetNode: sign_evaccenter
+  description: Directs to the evacuation center.
+
+- type: construction
+  parent: AU14ConstructionSignEmpty
+  name: Traffic Director (Checkpoint Ahead)
+  id: AU14ConstructionSignCheckpoint
+  targetNode: sign_cpahead
+  description: Warns of a checkpoint ahead.
+
+- type: construction
+  parent: AU14ConstructionSignEmpty
+  name: Traffic Director (Follow Army Orders)
+  id: AU14ConstructionSignFollowOrders
+  targetNode: sign_armyorders
+  description: Reminder to follow army orders.
+
+- type: construction
+  parent: AU14ConstructionSignEmpty
+  name: Traffic Director (Tune Freq)
+  id: AU14ConstructionSignTuneFreq
+  targetNode: sign_freqtune
+  description: Tells people to tune to 91.7 AM.
+
+- type: construction
+  parent: AU14ConstructionSignEmpty
+  name: Traffic Director (Slow Down)
+  id: AU14ConstructionSignSlowDown
+  targetNode: sign_slowdown
+  description: Instructs to slow down.
+
+# ├──[ CONSTRUCTION GRAPH ]──────────────────────────────────────────┤
+- type: constructionGraph
+  parent: RMC
+  id: AU14SignGraph
+  start: start
+  graph:
+  - node: start
+    actions:
+    - !type:DeleteEntity {}
+    edges:
+    - to: sign_mines
+      steps:
+      - material: RMCWood
+        amount: 2
+        doAfter: 2
+    - to: sign_evaccenter
+      steps:
+      - material: CMSteel
+        amount: 4
+        doAfter: 5
+    - to: sign_cpahead
+      steps:
+      - material: CMSteel
+        amount: 4
+        doAfter: 5
+    - to: sign_armyorders
+      steps:
+      - material: CMSteel
+        amount: 4
+        doAfter: 5
+    - to: sign_freqtune
+      steps:
+      - material: CMSteel
+        amount: 4
+        doAfter: 5
+    - to: sign_slowdown
+      steps:
+      - material: CMSteel
+        amount: 4
+        doAfter: 5
+    - to: sign_empty
+      steps:
+      - material: CMSteel
+        amount: 4
+        doAfter: 5
+  - node: sign_mines
+    entity: DecorSignMinesProp
+    edges:
+    - to: start
+      steps:
+      - tool: Screwing
+        doAfter: 3
+      completed:
+        - !type:SpawnPrototype
+          prototype: RMCPlankWood2
+  - node: sign_evaccenter
+    entity: AU14PropTrafficDirector1
+    edges:
+    - to: start
+      steps:
+      - tool: Anchoring
+        doAfter: 3
+      - tool: Prying
+        doAfter: 4
+      completed:
+        - !type:SpawnPrototype
+          prototype: CMSheetMetal1
+  - node: sign_cpahead
+    entity: AU14PropTrafficDirector2
+    edges:
+    - to: start
+      steps:
+      - tool: Anchoring
+        doAfter: 3
+      - tool: Prying
+        doAfter: 4
+      completed:
+        - !type:SpawnPrototype
+          prototype: CMSheetMetal1
+  - node: sign_armyorders
+    entity: AU14PropTrafficDirector3
+    edges:
+    - to: start
+      steps:
+      - tool: Anchoring
+        doAfter: 3
+      - tool: Prying
+        doAfter: 4
+      completed:
+        - !type:SpawnPrototype
+          prototype: CMSheetMetal1
+  - node: sign_freqtune
+    entity: AU14PropTrafficDirector4
+    edges:
+    - to: start
+      steps:
+      - tool: Anchoring
+        doAfter: 3
+      - tool: Prying
+        doAfter: 4
+      completed:
+        - !type:SpawnPrototype
+          prototype: CMSheetMetal1
+  - node: sign_slowdown
+    entity: AU14PropTrafficDirector5
+    edges:
+    - to: start
+      steps:
+      - tool: Anchoring
+        doAfter: 3
+      - tool: Prying
+        doAfter: 4
+      completed:
+        - !type:SpawnPrototype
+          prototype: CMSheetMetal1
+  - node: sign_empty
+    entity: AU14PropTrafficDirector6
+    edges:
+    - to: start
+      steps:
+      - tool: Anchoring
+        doAfter: 3
+      - tool: Prying
+        doAfter: 4
+      completed:
+        - !type:SpawnPrototype
+          prototype: CMSheetMetal1

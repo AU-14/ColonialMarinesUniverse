@@ -1,3 +1,4 @@
+using Content.Server._CMU14.RoundStatistics;
 using Content.Server.AU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
@@ -15,6 +16,7 @@ public sealed partial class KillAllYautjaRuleSystem : GameRuleSystem<KillAllYaut
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
     [Dependency] private IEntityManager _entMan = default!;
     [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private CMURoundStatisticsSystem _roundStats = default!;
     [Dependency] private ThreatRuleHelper _threatRuleHelper = default!;
     private const string DefaultWinMsg = "The Bad Blood Clan has been eliminated.";
 
@@ -69,6 +71,7 @@ public sealed partial class KillAllYautjaRuleSystem : GameRuleSystem<KillAllYaut
             return;
 
         string? winMessage = _auRoundSystem.SelectedThreat?.WinMessage;
+        _roundStats.RecordThreatDefeatedRule("KillAllYautjaRule");
         _gameTicker.EndRound(!string.IsNullOrEmpty(winMessage) ? winMessage : DefaultWinMsg);
     }
 }

@@ -1,0 +1,109 @@
+# Helmet garb
+
+# Armour garb
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbShinGuardsUPP
+  name: UM5 shin guards
+  description: An armor piece made to be used in combination with kestrel pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/garb/shinguards.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/UPP/garb/shinguards.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/UPP/garb/shinguards.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbShoulderPadsUPP
+  name: UM5 shoulder pads
+  description: An armor piece made to be used in combination with kestrel pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/garb/shoulderpads.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/UPP/garb/shoulderpads.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/UPP/garb/shoulderpads.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbCrotchPadUPP
+  name: UM5 crotch pad
+  description: An armor piece made to be used in combination with kestrel pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/garb/crotch.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/UPP/garb/crotch.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/UPP/garb/crotch.rsi
+      state: helmet
+
+# Universal
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbMagazineWebbingUPP
+  name: Type 41 pattern magazine webbing
+  description: A magazine webbing made to be attached to the outside of personal armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/garb/magazine_webbing.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/UPP/garb/magazine_webbing.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/UPP/garb/magazine_webbing.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbLargeWebbingUPP
+  name: Type 41 pattern large webbing
+  description: A large webbing made to be attached to the outside of personal armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/garb/large_webbing.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/UPP/garb/large_webbing.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/UPP/garb/large_webbing.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbSmallWebbingUPP
+  name: Type 41 pattern small webbing
+  description: A small webbing made to be attached to the outside of personal armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/garb/small_webbing.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/UPP/garb/small_webbing.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/UPP/garb/small_webbing.rsi
+      state: helmet
+
+- type: entity
+  parent: AU14ArmorGarbJunglePoncho
+  id: AU14ArmorGarbJunglePonchoUPP
+  name: Type 41 jungle rain poncho
+  description: A poncho made to be used in combination with personal armor.
+
+# Armour garb kits

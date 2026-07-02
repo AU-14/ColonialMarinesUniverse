@@ -1,0 +1,67 @@
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14FatiguesDesertRMC
+  name: desert royal marine fatigues
+  description: Standart-issue Three World Empire Royal Marines Commando fatigues.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/RMC/jumpsuits/desert.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14RMCPatch
+    - AU14TWEPatch
+
+- type: entity
+  parent: AU14FatiguesDesertRMC
+  id: AU14FatiguesBlackRMC
+  name: black royal marine fatigues
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/RMC/jumpsuits/black.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14FatiguesDesertRMCTeamlead
+  name: desert royal marine team leader fatigues
+  description: Standart-issue Three World Empire Royal Marines Commando fatigues. Usually worn by sergeants or officers.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/RMC/jumpsuits/desert_team_lead.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14RMCPatch
+    - AU14TWEPatch
+
+- type: entity
+  parent: AU14FatiguesDesertRMCTeamlead
+  id: AU14FatiguesBlackRMCTeamlead
+  name: black royal marine team leader fatigues
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/RMC/jumpsuits/black_team_lead.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14FatiguesServiceRMC
+  name: royal marine service uniform
+  description: Standart-issue Three World Empire Royal Marines Commando service uniform. Usually worn by officers.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/RMC/jumpsuits/service.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14RMCPatch
+    - AU14TWEPatch
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14PilotJumpsuitRMC
+  name: royal marine aircrew jumpsuit
+  description: A standard RMC Aircrew Jumpsuit. It has shards of light Kevlar to help protect against shrapnel.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USASFSecurityForces/USASFPilot/uniform.rsi # TODO: Proper RMC aircrew suit
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14RMCPatch
+    - AU14TWEPatch

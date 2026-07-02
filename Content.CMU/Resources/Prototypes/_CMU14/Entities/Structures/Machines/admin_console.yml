@@ -1,0 +1,50 @@
+# Admin Console — colony administration terminal.
+# Features:
+#   - Set global sales tax (0–50%) — applies to cash vendors and corporate ASRS orders
+#   - Call third parties (cost deducted from colony budget)
+#   - Announces tax changes colony-wide
+
+- type: entity
+  abstract: true
+  parent: RMCCommunicationsConsoleBase
+  id: AU14AdminConsoleBase
+  name: administration console
+  description: A colony administration console for managing economic policy and requesting third-party support.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+  - type: InteractionOutline
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: ActivatableUI
+    key: enum.AdminConsoleUi.Key
+  - type: AdminConsole
+  - type: UserInterface
+    interfaces:
+      enum.AdminConsoleUi.Key:
+        type: AdminConsoleBui
+      enum.AdminConsoleThirdPartyUi.Key:
+        type: AdminConsoleThirdPartyBui
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["AU14AccessColonyAdministrator"]]
+
+# Colony Admin Console — placed in admin office, can call any third party
+- type: entity
+  id: AU14AdminConsole
+  parent: AU14AdminConsoleBase
+  name: colony administration console
+  description: The colony administrator's terminal. Set sales tax rates and coordinate third-party support. All changes are announced colony-wide.
+  suffix: Colony, Admin
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+  - type: AdminConsole
+    callableParties:
+      CMBInvestigationPartyAlt: 4500
+      ICRCReliefParty: 2800
+      NSPAInvestigationPartyArmored: 6000
+      PAPInvestigationParty: 4500

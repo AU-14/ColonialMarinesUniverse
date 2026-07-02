@@ -1,0 +1,52 @@
+﻿- type: entity
+  name: L164A3 multi-shot grenade launcher
+  parent: [ RMCBaseWeaponGrenadeLauncher ]
+  id: AU14WeaponLauncherL164A3
+  description: A lightweight support weapon fielded by the Royal Marines. Chambered in small 20mm grenades, it lacks the punch of larger bore grenade launchers, but makes up for that in rate of fire.
+  components:
+  - type: Item
+    size: Huge
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/RMC/L164A3.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/RMC/L164A3.rsi
+    slots:
+    - Back
+    - suitStorage
+  - type: MagazineVisuals
+    magState: mag
+    steps: 2
+    zeroVisible: true
+    zeroOnlyOnEmpty: true
+  - type: RMCSelectiveFire
+    baseFireRate: 0.5
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - AU14LauncherCompatibleGrenadeRMC
+    capacity: 8
+    proto: AU1420MMGrenadeL103A1
+  - type: Corrodible
+    isCorrodible: false
+  - type: ExplosionResistance
+    damageCoefficient: 0
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentMagneticHarness
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-rail: 0.0, 0.185
+  - type: Tag
+    tags:
+    - AU14WeaponLauncherL164A3
+
+- type: Tag
+  id: AU14WeaponLauncherL164A3

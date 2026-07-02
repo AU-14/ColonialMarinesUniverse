@@ -1,0 +1,10 @@
+- type: entity
+  parent: AU14BootsCBRN
+  id: AU14BootsCBRNHAZOPS
+  name: hazjacks
+  description: High-quality CBRN boots for HAZOPS use.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/HAZOPS/hazjacks.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/HAZOPS/hazjacks.rsi

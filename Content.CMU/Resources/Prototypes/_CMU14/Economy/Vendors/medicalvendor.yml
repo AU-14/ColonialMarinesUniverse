@@ -1,0 +1,298 @@
+- type: entity
+  parent: ColMarTechBase
+  id: AU14GeneralMedicalVendor
+  name: We-Yu Medical Supply Vendor
+  description: An automated supply vendor hooked up to a storage of medical supplies.
+  suffix: AU14 MED
+  components:
+  - type: AU14MedVendorDistressLock
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/med.rsi
+    layers:
+    - state: "off"
+    - state: "normal-unshaded"
+  - type: CMAutomatedVendor
+    sections:
+    - name: General Medical Supplies
+      entries:
+      - id: CMOintment10
+        amount: 40
+      - id: CMUPlainTraumaDressing10
+        amount: 30
+      - id: CMUCoagulantPowder
+        amount: 20
+      - id: CMUBurnGel
+        amount: 20
+      - id: AU14HemostaticGauzePacket
+        amount: 40
+      - id: AU14Tourniquet
+        amount: 30
+      - id: CMUSplintItem
+        amount: 25
+      - id: CMBurnKit10
+        amount: 25
+      - id: CMTraumaKit10
+        amount: 25
+      - id: CMSurgicalLine
+        amount: 12
+      - id: CMSynthGraft
+        amount: 12
+      - id: CMUCastItem
+        amount: 12
+      - id: CMSyringe
+        amount: 30
+    - name: Pill Bottles
+      entries:
+      - id: CMPillCanisterDexalin
+        amount: 10
+      - id: CMPillCanisterDylovene
+        amount: 10
+      - id: CMPillCanisterInaprovaline
+        amount: 10
+      - id: CMPillCanisterBicaridine
+        amount: 10
+      - id: CMPillCanisterKelotane
+        amount: 10
+      - id: CMPillCanisterTricordrazine
+        amount: 10
+      - id: RMCPillCanisterIron
+        amount: 10
+# disabled until we get cryo med
+#      - id: AU14PillCanisterCryoxadone
+#        amount: 7
+#      - id: AU14PillCanisterLeporazine
+#        amount: 7
+      - id: AU14PillCanisterEthylredoxrazine
+        amount: 10
+    - name: Painkiller Pill Bottles
+      entries:
+      - id: AU14PillCanisterParacetamol
+        amount: 10
+      - id: AU14PillCanisterTramadol
+        amount: 10
+      - id: AU14PillCanisterOxycodone
+        amount: 10
+    - name: Organ Med Pill Bottles
+      entries:
+      - id: AU14PillCanisterCardiocaine
+        amount: 10
+      - id: AU14PillCanisterHepatocytin
+        amount: 10
+      - id: AU14PillCanisterNephronate
+        amount: 10
+      - id: AU14PillCanisterOsteoCalc
+        amount: 10
+      - id: AU14PillCanisterPulmovine
+        amount: 10
+      - id: AU14PillCanisterImidazoline
+        amount: 10
+    - name: Injectors
+      entries:
+      - id: CMEpinephrineAutoInjector
+        amount: 25
+      - id: AU14NaloxoneAutoInjector
+        amount: 25
+      - id: RMCIronAutoInjector
+        amount: 25
+      - id: CMInaprovalineAutoInjector
+        amount: 25
+      - id: CMDexalinPlusAutoInjector
+        amount: 25
+      - id: CMTricordrazineAutoInjector
+        amount: 25
+      - id: CMBicaridineAutoInjector
+        amount: 25
+      - id: CMKelotaneAutoInjector
+        amount: 25
+    - name: Painkiller Injectors
+      entries:
+      - id: AU14ParacetamolAutoInjector
+        amount: 25
+      - id: AU14TramadolAutoInjector
+        amount: 25
+      - id: AU14OxycodoneAutoInjector
+        amount: 25
+    - name: Medical Utilities
+      entries:
+      - id: CMRollerBedSpawnFolded
+        amount: 10
+      - id: CMPortableSurgicalBedSpawnFolded
+        amount: 5
+      - id: AU14Wheelchair
+        amount: 4
+      - id: RMCBoxBodyBag
+        amount: 4
+      - id: RMCBoxSterileMask
+        amount: 3
+      - id: RMCBoxLatexGloves
+        amount: 3
+      - id: RMCDefibrillatorCompact
+        amount: 2
+      - id: AU14CMDefibrillator
+        amount: 10
+      - id: CMHealthAnalyzer
+        amount: 25
+      - id: RMCVial
+        amount: 35
+     # FixOVien
+
+- type: entity
+  parent: ColMarTechBaseAnchorable
+  id: AU14VendorBlood
+  name: WeYu Blood Dispenser
+  description: The WeYu Med-Sci Brand Blood Pack Dispensary is the premier, top-of-the-line blood dispenser of 2105! Get yours today! #dont update year, that`s a joke from cm13
+  suffix: AU14 MED
+  components:
+  - type: AU14MedVendorDistressLock
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/blood.rsi
+    snapCardinals: true
+    layers:
+    - state: "off"
+      map: ["enum.VendingMachineVisualLayers.Base"]
+    - state: "normal-unshaded"
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded" ]
+      shader: unshaded
+    - state: "panel"
+      visible: false
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: ApcPowerReceiver
+    needsPower: false # TODO RMC14
+    powerLoad: 0
+  - type: CMAutomatedVendor
+    hackable: true
+    sections:
+    - name: Blood Packs
+      entries:
+      - id: CMBloodPackFull
+        amount: 45
+    - name: Empty Packs
+      entries:
+      - id: CMBloodPack
+        amount: 65
+        name: empty blood pack
+
+- type: entity
+  parent: ColMarTechBaseAnchorable
+  id: AU14VendorBloodField
+  name: WeYu Field Blood Dispenser
+  description: The WeYu Med-Sci Brand Blood Pack Dispensary is the premier, top-of-the-line blood dispenser of 2105! Get yours today! #dont update year, that`s a joke from cm13
+  suffix: AU14 MED
+  components:
+  - type: AU14MedVendorDistressLock
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/blood.rsi
+    snapCardinals: true
+    layers:
+    - state: "off"
+      map: ["enum.VendingMachineVisualLayers.Base"]
+    - state: "normal-unshaded"
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded" ]
+      shader: unshaded
+    - state: "panel"
+      visible: false
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: ApcPowerReceiver
+    needsPower: false # TODO RMC14
+    powerLoad: 0
+  - type: CMAutomatedVendor
+    hackable: true
+    sections:
+    - name: Blood Packs
+      entries:
+      - id: CMBloodPackFull
+        amount: 6
+    - name: Miscellaneous
+      entries:
+      - id: CMBloodPack
+        amount: 20
+        name: empty blood pack
+
+- type: entity
+  parent: AU14VendorBloodField
+  id: AU14VendorBloodFieldPowered
+  suffix: Powered
+  components:
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false # intentionally!
+  - type: CMAutomatedVendor
+    ejectContentsOnDestruction: true
+
+- type: entity
+  parent: ColMarTechBaseAnchorable
+  id: AU14GeneralMedicalVendorLight
+  name: WeYu Medical Field Supply Vendor
+  description: Medical Pharmaceutical dispenser with basic medical supplies.
+  components:
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.38,-0.5,0.35,0.5"
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+        density: 200
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/marine_medical.rsi
+    layers:
+    - state: "off"
+      map: [ "enum.VendingMachineVisualLayers.Base" ]
+    - state: "normal"
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded" ]
+  - type: CMSolutionRefiller
+    current: 600
+    max: 600
+    recharge: 125 # TODO RMC14 auto-restock items as well if round is >= 20 minutes in
+    rechargeCooldown: 4
+    reagents:
+    - CMTricordrazine
+#    - CMTramadol # TODO RMC14
+    whitelist:
+      components:
+      - Hypospray
+  - type: CMAutomatedVendor
+    sections:
+    - name: Autoinjectors
+      entries:
+      - id: CMTricordrazineAutoInjector
+        amount: 5
+      - id: CMEpinephrineAutoInjector
+        amount: 3
+      - id: RMCIronAutoInjector
+        amount: 3
+      - id: AU14NaloxoneAutoInjector
+        amount: 2
+    #- id: CMPainStopAutoinjector
+    - name: Devices
+      entries:
+      - id: CMHealthAnalyzer
+        amount: 3
+      - id: AU14CMDefibrillator
+        amount: 1
+    - name: Field Supplies
+      entries:
+      - id: CMFireExtinguisherPortable
+        amount: 2
+      - id: AU14Tourniquet
+        amount: 4
+      - id: AU14HemostaticGauzePacket
+        amount: 7
+      - id: CMOintment10
+        amount: 7
+#      - id: CMMedicalSplints5
+#        amount: 7
+
+- type: entity
+  parent: AU14GeneralMedicalVendorLight
+  id: AU14GeneralMedicalVendorLightAlwaysPowered
+  suffix: Powered
+  components:
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false # intentionally!
+  - type: CMAutomatedVendor
+    ejectContentsOnDestruction: true

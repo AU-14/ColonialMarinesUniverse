@@ -1,0 +1,7 @@
+- type: soundCollection
+  id: AU14SmartgunFireSound
+  files:
+  - /Audio/_AU14/Weapons/smartgun/gun_smartgun1.ogg
+  - /Audio/_AU14/Weapons/smartgun/gun_smartgun2.ogg
+  - /Audio/_AU14/Weapons/smartgun/gun_smartgun3.ogg
+  - /Audio/_AU14/Weapons/smartgun/gun_smartgun4.ogg

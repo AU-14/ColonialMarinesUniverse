@@ -1,0 +1,71 @@
+# Helmet garb
+
+# Armour garb
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbShinGuardsRMC
+  name: kestrel shin guards
+  description: An armor piece made to be used in combination with kestrel pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/RMC/garb/shinguards.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/RMC/garb/shinguards.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/RMC/garb/shinguards.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbShoulderPadsRMC
+  name: kestrel shoulder pads
+  description: An armor piece made to be used in combination with kestrel pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/RMC/garb/shoulderpads.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/RMC/garb/shoulderpads.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/RMC/garb/shoulderpads.rsi
+      state: helmet
+
+# Universal
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbMagazineWebbingRMC
+  name: 82 pattern magazine webbing
+  description: A magazine webbing made to be attached to the outside of kestrel pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/RMC/garb/magazine_webbing.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/RMC/garb/magazine_webbing.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/RMC/garb/magazine_webbing.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbSmallWebbingRMC
+  name: 67 pattern small webbing
+  description: A small webbing made to be attached to the outside of kestrel pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/RMC/garb/small_webbing.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/RMC/garb/small_webbing.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/RMC/garb/small_webbing.rsi
+      state: helmet
+
+# Armour garb kits

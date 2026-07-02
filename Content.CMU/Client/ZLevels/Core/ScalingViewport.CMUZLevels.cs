@@ -1212,7 +1212,7 @@ public sealed partial class ScalingViewport
             return;
 
         _stairPreviewGrids.Clear();
-        _mapManager.FindGridsIntersecting(mapId, worldAabb, ref _stairPreviewGrids, approx: true, includeMap: true);
+        _mapSystem.FindGridsIntersecting(mapId, worldAabb, ref _stairPreviewGrids, approx: true, includeMap: true);
 
         foreach (var grid in _stairPreviewGrids)
         {

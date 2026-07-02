@@ -1,0 +1,21 @@
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14UniversalBlackFatigues
+  name: Black Fatigues
+  description: A set of black fatigues. It has shards of light Kevlar to help protect against shrapnel.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/blackfatigues.rsi
+
+- type: entity
+  parent: ClothingOuterStraightjacket
+  id: AU14ClothingOuterStraitjacket
+  name: straitjacket
+  suffix: AU14
+  components:
+  - type: Handcuff
+    cuffedRSI: Clothing/OuterClothing/Misc/straight_jacket.rsi
+    breakoutTime: 100
+    cuffTime: 7
+    uncuffTime: 7
+    stunBonus: 3

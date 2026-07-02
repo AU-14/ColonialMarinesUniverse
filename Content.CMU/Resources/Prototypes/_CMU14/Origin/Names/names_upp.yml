@@ -1,0 +1,17 @@
+- type: localizedDataset
+  id: AU14NamesMaleFirstUPP
+  values:
+    prefix: names-first-male-dataset-upp-
+    count: 164
+
+- type: localizedDataset
+  id: AU14NamesFemaleFirstUPP
+  values:
+    prefix: names-first-female-dataset-upp-
+    count: 137
+
+- type: localizedDataset
+  id: AU14NamesLastUPP
+  values:
+    prefix: names-last-dataset-upp-
+    count: 180

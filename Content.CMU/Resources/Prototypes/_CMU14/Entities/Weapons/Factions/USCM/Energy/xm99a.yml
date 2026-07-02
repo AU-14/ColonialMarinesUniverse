@@ -1,0 +1,131 @@
+- type: entity
+  id: AU14WeaponXM99A
+  parent: [BaseWeaponBatterySmall, BaseGrandTheftContraband]
+  name: XM99A phased plasma pulse rifle
+  suffix: USCM
+  description: An experimental directed energy weapon system designed by Armat, the XM99A is a long-range prototype rifle that fires super-heated blasts of plasma. The XM99A will slowly recharge its lithium battery drum over time using static electricity.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/USCM/XM99A.rsi
+    layers:
+    - state: bolt-open
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/USCM/XM99A.rsi
+    slots:
+    - suitStorage
+    - Back
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/_AU14/Weapons/xm99/gun_xm99_fire.ogg
+  - type: HitscanBatteryAmmoProvider
+    proto: AU14PlasmaShot
+    fireCost: 1000
+  - type: BatterySelfRecharger
+    autoRecharge: true
+    autoRechargeRate: 150
+  - type: Appearance
+  - type: Item
+    size: Large
+  - type: GunRequiresWield
+  - type: WieldDelay
+    baseDelay: 0.7
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    recoilWielded: 6
+    recoilUnwielded: 8
+    scatterWielded: 1
+    scatterUnwielded: 90
+    baseFireRate: 5
+    modifiers:
+      FullAuto:
+        fireDelay: 0
+        maxScatterModifier: 13
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 4
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 4
+  - type: Wieldable
+  - type: AttachableHolder
+    randomAttachmentChance: 0.42
+    slots:
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-rail: -0.14, 0.13
+  - type: WieldedCrosshair
+    rsi:
+      sprite: _RMC14/Interface/MousePointer/sniper_mouse.rsi
+      state: all
+  - type: Tag
+    tags:
+    - AU14WeaponXM99A
+  - type: GunGroupPenalty
+  - type: GunPointBlank
+  - type: GunDualWielding
+    weaponGroup: Rifle
+  - type: GunUnskilledPenalty
+  - type: GunIFF
+    enabled: false
+  - type: GunIDLock
+
+
+- type: hitscan
+  id: AU14PlasmaShot
+  damage:
+    types:
+      Heat: 105
+      Blunt: 5
+      Asphyxiation: 25
+  muzzleFlash:
+    sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+    state: muzzle_blue
+  travelFlash:
+    sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+    state: beam_blue
+  impactFlash:
+    sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+    state: impact_blue
+
+- type: entity
+  parent: RMCBasePVEEquipmentCase
+  id: AU14CaseXM99A
+  name: XM99A phased plasma pulse rifle case
+  description: A large case for storing an phased plasma pulse rifle, an experimental directed energy weapon system designed by Armat
+  components:
+  - type: Sprite
+    sprite: _AU14/Items/Cases/XM99ACase.rsi
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,1,1
+    whitelist:
+      tags:
+      - AU14WeaponXM99A
+  - type: StorageFill
+    contents:
+    - id: AU14WeaponXM99A
+  - type: ItemMapper
+    mapLayers:
+      gun:
+        whitelist:
+          tags:
+          - AU14WeaponXM99A
+
+- type: Tag
+  id: AU14WeaponXM99A

@@ -11,27 +11,27 @@
 - type: loadout
   id: RMCPouchElectronicsAU14
   equipment:
-    pocket1: RMCPouchElectronics
+    pocket1: AU14PouchElectronicsFilled
 
 - type: loadout
   id: RMCPouchConstructionAU14
   equipment:
-    pocket1: RMCPouchConstruction
+    pocket1: AU14PouchConstructionFilled
 
 - type: loadout
   id: PouchAutoinjectorAU14
   equipment:
-    pocket1: RMCPouchAutoinjector
+    pocket1: AU14PouchAutoinjectorFilled
 
 - type: loadout
   id: PouchFirstResponderAU14
   equipment:
-    pocket1: RMCPouchFirstResponder
+    pocket1: AU14PouchFirstResponderFilled
 
 - type: loadout
   id: PouchMedicalAU14
   equipment:
-    pocket1: RMCPouchMedical
+    pocket1: AU14PouchMedicalFilled
 
 - type: loadout
   id: PouchSyringeFillAU14
@@ -46,7 +46,7 @@
 - type: loadout
   id: PouchFirstAidAU14
   equipment:
-    pocket1: RMCPouchFirstAid
+    pocket1: AU14PouchMedicalFilled
 
 - type: loadout
   id: PouchGeneralLargeAU14
@@ -73,27 +73,27 @@
 - type: loadout
   id: RMCPouchElectronicsRightAU14
   equipment:
-    pocket2: RMCPouchElectronics
+    pocket2: AU14PouchElectronicsFilled
 
 - type: loadout
   id: RMCPouchConstructionRightAU14
   equipment:
-    pocket2: RMCPouchConstruction
+    pocket2: AU14PouchConstructionFilled
 
 - type: loadout
   id: PouchAutoinjectorRightAU14
   equipment:
-    pocket2: RMCPouchAutoinjector
+    pocket2: AU14PouchAutoinjectorFilled
 
 - type: loadout
   id: PouchFirstResponderRightAU14
   equipment:
-    pocket2: RMCPouchFirstResponder
+    pocket2: AU14PouchFirstResponderFilled
 
 - type: loadout
   id: PouchMedicalRightAU14
   equipment:
-    pocket2: RMCPouchMedical
+    pocket2: AU14PouchMedicalFilled
 
 - type: loadout
   id: PouchSyringeFillRightAU14

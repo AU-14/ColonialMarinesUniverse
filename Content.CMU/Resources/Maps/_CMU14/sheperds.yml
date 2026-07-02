@@ -260735,6 +260735,9 @@ entities:
     - type: Transform
       pos: 11.5,101.5
       parent: 1
+    - type: ApcPowerReceiver
+      powerLoad: 0
+      needsPower: False
 - proto: RMCLamp
   entities:
   - uid: 288475

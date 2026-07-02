@@ -1,0 +1,78 @@
+- type: entity
+  parent: BaseItem
+  id: AU14ProdigyLaptop
+  name: Prodigy Advanced Systems Tampering System (PASTS)
+  description: A ruggedized military laptop used for remote control and programming made by Prodigy Security Corp. Can be placed on tables for easier access. Works as a sentry laptop as well!
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/sentrycomp.rsi
+    layers:
+    - state: sentrycomp_cl
+      map: ["enum.SentryLaptopVisualLayers.Base"]
+  - type: Item
+    size: Small
+    sprite: _RMC14/Objects/Devices/sentrycomp.rsi
+  - type: Clickable
+  - type: InteractionOutline
+  - type: CollisionWake
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.15,0.25,0.15"
+        density: 50
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.SentryLaptopVisuals.State:
+        enum.SentryLaptopVisualLayers.Base:
+          Closed: { state: sentrycomp_cl }
+          Open: { state: sentrycomp_op }
+          Active: { state: sentrycomp_on }
+    inHandsOnly: false
+  - type: UseDelay
+    delay: 0.5
+  - type: RequiresSkill
+    skills:
+      RMCSkillEngineer: 2
+
+- type: entity
+  parent: BaseItem
+  id: AU14ExtractionTeamBeacon
+  name: Prodigy Extraction Team Beacon
+  description: A disposable uplink used to call the Prodigy extraction team. It's useless after activation. What do you mean its just an expensive laser pointer? (OOC Note, if this fails to work please ahelp and ask them to spawn ProdigyExtractionParty)
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/scalpel.rsi
+    state: scalpel_laser
+  - type: Item
+    size: Small
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.15,0.25,0.15"
+        density: 50
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2
+  - type: Appearance
+  - type: SpawnThirdPartyTool
+    party: ProdigyExtractionParty
+    dropship: true
+  - type: UseDelay
+    delay: 0.5
+

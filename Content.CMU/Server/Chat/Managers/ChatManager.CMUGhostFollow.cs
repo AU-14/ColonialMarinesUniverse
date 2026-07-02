@@ -1,6 +1,7 @@
 // ReSharper disable CheckNamespace
 
 using Content.Server.Ghost;
+using Content.Shared._CMU14.Ghost;
 using Content.Shared.CCVar;
 using Robust.Shared.Network;
 
@@ -10,11 +11,29 @@ internal sealed partial class ChatManager
 {
     public string AddGhostFollowButton(string wrappedMessage, EntityUid source, INetChannel recipient)
     {
-        if (!source.Valid || !ShouldShowGhostFollowButton(recipient))
+        if (!TryCreateGhostFollowButton(wrappedMessage, source, recipient, out var customWrappedMessage, out _))
             return wrappedMessage;
 
+        return customWrappedMessage;
+    }
+
+    private bool TryCreateGhostFollowButton(
+        string wrappedMessage,
+        EntityUid source,
+        INetChannel recipient,
+        out string customWrappedMessage,
+        out NetEntity followEntity)
+    {
+        customWrappedMessage = wrappedMessage;
+        followEntity = default;
+
+        if (!source.Valid || !ShouldShowGhostFollowButton(recipient))
+            return false;
+
+        followEntity = _entityManager.GetNetEntity(source);
         var buttonText = Loc.GetString("cmu-chat-manager-follow-button");
-        return $"[cmdlink=\"{buttonText}\" command=\"{CMUGhostFollowEntityCommand.CommandName} {_entityManager.GetNetEntity(source)}\" /] {wrappedMessage}";
+        customWrappedMessage = $"[cmdlink=\"{buttonText}\" command=\"{CMUGhostFollowCommand.CommandName} {followEntity}\" /] {wrappedMessage}";
+        return true;
     }
 
     private bool ShouldShowGhostFollowButton(INetChannel recipient)

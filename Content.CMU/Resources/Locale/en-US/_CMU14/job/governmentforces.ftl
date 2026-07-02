@@ -71,6 +71,10 @@ au14-job-name-govforAuxTech = Technician
 au14-job-description-govforAuxTech = Run requisitions, keep the ship running and tidy. Provide your faction with shipside logistics and engineering support.
 au14-job-prefix-govforAuxTech = AXT
 
+au14-job-name-vehiclecrewman = Vehicle Crewman
+au14-job-description-vehiclecrewman = Operate, maintain and protect your faction's armored vehicles.
+au14-job-prefix-vehiclecrewman = VC
+
 au14-job-name-govforweaponsspecialist = Weapons Specialist
 au14-job-description-govforweaponsspecialist = Operate your factions fire support and cover your squad.
 au14-job-prefix-govforweaponsspecialist = WS
@@ -149,6 +153,8 @@ au14-job-name-juniorofficer-eo = Engineering Officer
 au14-job-prefix-juniorofficer-eo = EO
 au14-job-name-juniorofficer-adj = Adjutant Officer
 au14-job-prefix-juniorofficer-adj = AO
+au14-job-name-juniorofficer-cmo = Chief Medical Officer
+au14-job-prefix-juniorofficer-cmo = CMO
 
 au14-job-name-specialist-pyro = Pyrotechnician
 au14-job-prefix-specialist-pyro = PYRO

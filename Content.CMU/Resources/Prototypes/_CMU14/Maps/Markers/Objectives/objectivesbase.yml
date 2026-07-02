@@ -1,0 +1,129 @@
+- type: entity
+  name: Objective Master
+  parent: MarkerBase
+  id: ObjectiveMasterBaseFOF
+  components:
+  - type: Sprite
+    state: red
+  - type: ObjectiveMaster
+    Mode: ForceOnForce
+    govforMinorObjectives: 10
+    govforMajorObjectives: 5
+    opforMinorObjectives: 10
+    opforMajorObjectives: 5
+    requiredwinpointsgovfor: 100
+    requiredwinpointsopfor: 100
+
+    # winpointsgovfor: 100  # Deprecated, now additive
+    # winpointsopfor: 100   # Deprecated, now additive
+
+
+
+- type: entity
+  name: Objective Master
+  parent: MarkerBase
+  id: ObjectiveMasterBaseDistress
+  components:
+  - type: Sprite
+    state: red
+  - type: ObjectiveMaster
+    Mode: DistressSignal
+    govforMinorObjectives: 10
+    govforMajorObjectives: 5
+    requiredwinpointsgovfor: 100
+
+
+
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: ComputerObjectivesGovfor
+  name: GOVFOR Objectives Console
+  description: Used to check progress on objectives
+  components:
+  - type: ObjectivesConsole
+    faction: govfor
+  - type: UserInterface
+    interfaces:
+      enum.ObjectivesConsoleKey.Key:
+        type: ObjectivesConsoleBoundUserInterface
+  - type: ActivatableUI
+    key: enum.ObjectivesConsoleKey.Key
+  - type: PointLight
+    radius: 1.5
+    energy: 1.6
+    color: "#1f8c28"
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: ComputerObjectivesScientist
+  name: Scientist Objectives Console
+  description: Used to check progress on scientist objectives
+  components:
+  - type: ObjectivesConsole
+    faction: SCIENTIST
+  - type: UserInterface
+    interfaces:
+      enum.ObjectivesConsoleKey.Key:
+        type: ObjectivesConsoleBoundUserInterface
+  - type: ActivatableUI
+    key: enum.ObjectivesConsoleKey.Key
+  - type: PointLight
+    radius: 1.5
+    energy: 1.6
+    color: "#1f6c8c"
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: ComputerObjectivesCLF
+  name: CLF Objectives Console
+  description: Used to check progress on CLF objectives
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+  - type: ObjectivesConsole
+    faction: CLF
+  - type: UserInterface
+    interfaces:
+      enum.ObjectivesConsoleKey.Key:
+        type: ObjectivesConsoleBoundUserInterface
+  - type: ActivatableUI
+    key: enum.ObjectivesConsoleKey.Key
+  - type: PointLight
+    radius: 1.5
+    energy: 1.6
+    color: "#8c1f1f"
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: ComputerObjectivesOpfor
+  name: OPFOR Objectives Console
+  description: Used to check progress on OPFOR objectives
+  components:
+  - type: ObjectivesConsole
+    faction: opfor
+  - type: UserInterface
+    interfaces:
+      enum.ObjectivesConsoleKey.Key:
+        type: ObjectivesConsoleBoundUserInterface
+  - type: ActivatableUI
+    key: enum.ObjectivesConsoleKey.Key
+  - type: PointLight
+    radius: 1.5
+    energy: 1.6
+    color: "#8c8c1f"
+

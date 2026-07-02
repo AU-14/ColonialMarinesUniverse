@@ -3,3 +3,15 @@
   storage:
     back:
     - RMCGlassesMedicalHUDGlasses
+
+- type: loadout
+  id: GlassesSecurityHUDGlassesAU14
+  storage:
+    back:
+    - RMCGlassesHUDSecurity
+
+- type: loadout
+  id: GlassesReagentHUDGlassesAU14
+  storage:
+    back:
+    - RMCGlassesReagentHUDGlasses
