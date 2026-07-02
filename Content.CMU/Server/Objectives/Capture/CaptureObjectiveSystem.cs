@@ -9,12 +9,9 @@ public sealed partial class CaptureObjectiveSystem : EntitySystem
 {
     [Dependency] private IEntityManager _entManager = default!;
     [Dependency] private PopupSystem _popup = default!;
-    [Dependency] private Content.Server.AU14.Objectives.AuObjectiveSystem _objectiveSystem = default!;
-    [Dependency] private Content.Server.AU14.Round.PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
+    [Dependency] private AuObjectiveSystem _objectiveSystem = default!;
+    [Dependency] private Round.PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
     [Dependency] private ILogManager _logManager = default!;
-
-    // Tracks ongoing hoists to prevent multiple simultaneous hoists per structure
-    private readonly HashSet<EntityUid> _hoisting = new();
 
     // Tracks time since last increment for each capture objective
     private readonly Dictionary<EntityUid, float> _timeSinceLastIncrement = new();
@@ -144,9 +141,8 @@ public sealed partial class CaptureObjectiveSystem : EntitySystem
             {
                 float currentSlash = 0f;
                 if (damageable.Damage.DamageDict.TryGetValue("Slash", out var slash))
-                    currentSlash = (float)slash.Float();
-                float lastSlash = 0f;
-                _lastSlashDamage.TryGetValue(uid, out lastSlash);
+                    currentSlash = slash.Float();
+                _lastSlashDamage.TryGetValue(uid, out float lastSlash);
                 float delta = currentSlash - lastSlash;
                 if (delta > 0f)
                 {

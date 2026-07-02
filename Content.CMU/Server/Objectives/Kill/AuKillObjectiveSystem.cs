@@ -49,22 +49,6 @@ namespace Content.Server.AU14.Objectives.Kill
             });
         }
 
-        private string GetOppositeFaction(string faction, string? mode)
-        {
-            switch (mode?.ToLowerInvariant())
-            {
-                case "forceonforce":
-                    if (faction == "govfor") return "opfor";
-                    if (faction == "opfor") return "govfor";
-                    break;
-                case "insurgency":
-                    if (faction == "clf") return "govfor";
-                    if (faction == "govfor") return "clf";
-                    break;
-            }
-            return string.Empty;
-        }
-
         private void TryMarkForKillDelayed(EntityUid uid)
         {
 
@@ -93,7 +77,7 @@ namespace Content.Server.AU14.Objectives.Kill
                 {
                     foreach (var faction in factions)
                     {
-                        string opposite = GetOppositeFaction(faction, presetId);
+                        string opposite = _objectiveSystem.GetOppositeFaction(faction, presetId);
                         if (string.IsNullOrEmpty(opposite))
                             continue;
                         var mark = EnsureComp<MarkedForKillComponent>(uid);
@@ -172,7 +156,7 @@ namespace Content.Server.AU14.Objectives.Kill
                 string targetFaction;
                 if (auObj.FactionNeutral)
                 {
-                    targetFaction = GetOppositeFaction(factionKey, presetId);
+                    targetFaction = _objectiveSystem.GetOppositeFaction(factionKey, presetId);
                     if (string.IsNullOrEmpty(targetFaction))
                         continue;
                 }
@@ -286,14 +270,19 @@ namespace Content.Server.AU14.Objectives.Kill
             // Find all relevant markers
             var markers = new List<EntityUid>();
             var genericMarkers = new List<EntityUid>();
-            var markerQuery = AllEntityQuery<FetchObjectiveMarkerComponent>();
-            while (markerQuery.MoveNext(out var markerUid, out var markerComp))
+            var objMap = Transform(uid).MapID;
+            var markerQuery = AllEntityQuery<FetchObjectiveMarkerComponent, TransformComponent>();
+            while (markerQuery.MoveNext(out var markerUid, out var markerComp, out var markerXform))
             {
+                if (markerComp.Used || markerXform.MapID != objMap)
+                    continue;
+
                 if (!string.IsNullOrEmpty(killObj.SpawnMarker) && markerComp.FetchId == killObj.SpawnMarker)
                     markers.Add(markerUid);
                 else if (string.IsNullOrEmpty(killObj.SpawnMarker) && markerComp.Generic)
                     genericMarkers.Add(markerUid);
             }
+
             if (markers.Count == 0)
                 markers = genericMarkers;
             if (markers.Count == 0)

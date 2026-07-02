@@ -45,28 +45,9 @@ namespace Content.Server.AU14.Objectives.Arrest
             {
                 if (_shuttingDown || !Exists(uid))
                     return;
+
                 TryMarkForArrestDelayed(uid);
             });
-        }
-
-        private string GetOppositeFaction(string faction, string? mode)
-        {
-            switch (mode?.ToLowerInvariant())
-            {
-                case "forceonforce":
-                    if (faction == "govfor") return "opfor";
-                    if (faction == "opfor") return "govfor";
-                    break;
-                case "distresssignal":
-                    if (faction == "clf") return "govfor";
-                    if (faction == "govfor") return "clf";
-                    break;
-                case "insurgency":
-                    if (faction == "clf") return "govfor";
-                    if (faction == "govfor") return "clf";
-                    break;
-            }
-            return string.Empty;
         }
 
         private void TryMarkForArrestDelayed(EntityUid uid)
@@ -96,7 +77,7 @@ namespace Content.Server.AU14.Objectives.Arrest
                 {
                     foreach (var faction in factions)
                     {
-                        string opposite = GetOppositeFaction(faction, presetId);
+                        string opposite = _objectiveSystem.GetOppositeFaction(faction, presetId);
                         if (string.IsNullOrEmpty(opposite))
                             continue;
                         var mark = EnsureComp<MarkedForArrestComponent>(uid);
@@ -179,7 +160,7 @@ namespace Content.Server.AU14.Objectives.Arrest
                 string targetFaction;
                 if (auObj.FactionNeutral)
                 {
-                    targetFaction = GetOppositeFaction(factionKey, presetId);
+                    targetFaction = _objectiveSystem.GetOppositeFaction(factionKey, presetId);
                     if (string.IsNullOrEmpty(targetFaction))
                         continue;
                 }
@@ -253,8 +234,7 @@ namespace Content.Server.AU14.Objectives.Arrest
                     continue;
                 }
 
-                if (!arrestObj.AmountArrestedPerFaction.ContainsKey(factionKey))
-                    arrestObj.AmountArrestedPerFaction[factionKey] = 0;
+                arrestObj.AmountArrestedPerFaction.TryAdd(factionKey, 0);
 
                 // Prevent incrementing if already at or above required amount
                 if (arrestObj.AmountArrestedPerFaction[factionKey] >= arrestObj.AmountToArrest)
@@ -297,9 +277,13 @@ namespace Content.Server.AU14.Objectives.Arrest
             // Find all relevant markers
             var markers = new List<EntityUid>();
             var genericMarkers = new List<EntityUid>();
+            var objMap = Transform(uid).MapID;
             var markerQuery = AllEntityQuery<FetchObjectiveMarkerComponent, TransformComponent>();
-            while (markerQuery.MoveNext(out var markerUid, out var markerComp, out _))
+            while (markerQuery.MoveNext(out var markerUid, out var markerComp, out var markerXform))
             {
+                if (markerComp.Used || markerXform.MapID != objMap)
+                    continue;
+
                 if (!string.IsNullOrEmpty(arrestObj.SpawnMarker) && markerComp.FetchId == arrestObj.SpawnMarker)
                     markers.Add(markerUid);
                 else if (string.IsNullOrEmpty(arrestObj.SpawnMarker) && markerComp.Generic)

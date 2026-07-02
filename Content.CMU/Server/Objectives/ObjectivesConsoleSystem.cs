@@ -4,17 +4,17 @@ using Content.Shared.AU14.Objectives.Capture;
 using Content.Shared.AU14.Objectives.Fetch;
 using Content.Shared.AU14.Objectives.Kill;
 using Robust.Server.GameObjects;
-using Robust.Shared.GameObjects;
 using Content.Shared._RMC14.Intel;
-using Content.Shared.Ghost;
-using Content.Shared._RMC14.Marines;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.AU14.Objectives;
 
 public sealed partial class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
 {
     [Dependency] private UserInterfaceSystem _ui = default!;
-    [Dependency] private Content.Shared._RMC14.Intel.IntelSystem _intel = default!;
+    [Dependency] private IntelSystem _intel = default!;
+    [Dependency] private AuObjectiveSystem _objectiveSystem = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     public override void Initialize()
     {
@@ -46,37 +46,41 @@ public sealed partial class ObjectivesConsoleSystem : SharedObjectivesConsoleSys
         Logger.GetSawmill("objectives").Debug($"[OBJ CON] SendObjectives called for console='{ToPrettyString(uid)}', where faction='{comp.Faction}'");
         var objectives = new List<ObjectiveEntry>();
         var query = EntityQueryEnumerator<AuObjectiveComponent>();
-        int currentWinPoints = 0;
-        int requiredWinPoints = 0;
         // Find the ObjectiveMaster for this faction
-        foreach (var master in EntityQuery<ObjectiveMasterComponent>())
-        {
-            switch (comp.Faction.ToLowerInvariant())
-            {
-                case "govfor":
-                    currentWinPoints = master.CurrentWinPointsGovfor;
-                    requiredWinPoints = master.RequiredWinPointsGovfor;
-                    break;
-                case "opfor":
-                    currentWinPoints = master.CurrentWinPointsOpfor;
-                    requiredWinPoints = master.RequiredWinPointsOpfor;
-                    break;
-                case "clf":
-                    currentWinPoints = master.CurrentWinPointsClf;
-                    requiredWinPoints = master.RequiredWinPointsClf;
-                    break;
-                case "scientist":
-                    currentWinPoints = master.CurrentWinPointsScientist;
-                    requiredWinPoints = master.RequiredWinPointsScientist;
-                    break;
-            }
-            break; // Only use the first master found
-        }
+        // NOTE Future Proof: ask the AuObjectiveSystem for win points instead of grabbing first/only Master
+        // foreach (var master in EntityQuery<ObjectiveMasterComponent>())
+        // {
+        //     switch (comp.Faction.ToLowerInvariant())
+        //     {
+        //         case "govfor":
+        //             currentWinPoints = master.CurrentWinPointsGovfor;
+        //             requiredWinPoints = master.RequiredWinPointsGovfor;
+        //             break;
+        //         case "opfor":
+        //             currentWinPoints = master.CurrentWinPointsOpfor;
+        //             requiredWinPoints = master.RequiredWinPointsOpfor;
+        //             break;
+        //         case "clf":
+        //             currentWinPoints = master.CurrentWinPointsClf;
+        //             requiredWinPoints = master.RequiredWinPointsClf;
+        //             break;
+        //         case "scientist":
+        //             currentWinPoints = master.CurrentWinPointsScientist;
+        //             requiredWinPoints = master.RequiredWinPointsScientist;
+        //             break;
+        //     }
+        //     break; // Only use the first master found
+        // }
+        (int currentWinPoints, int requiredWinPoints) = _objectiveSystem.GetWinPoints(comp.Faction);
+
+        var planetMap = _objectiveSystem.GetPlanetMapId();
+        if (planetMap == null) return;
         while (query.MoveNext(out var objUid, out var objComp))
         {
             // NOTE: Previously we filtered out any objective where objComp.Active == false.
             // That caused completed objectives that had been deactivated to disappear from consoles.
             // New behavior: only hide an objective if it is inactive AND NOT completed for the console's faction.
+            if (Transform(objUid).MapID != planetMap) continue;
 
             var consoleFaction = comp.Faction.ToLowerInvariant();
 
@@ -157,8 +161,6 @@ public sealed partial class ObjectivesConsoleSystem : SharedObjectivesConsoleSys
 
                 // Determine display title/description based on unlocked intel tier for this console faction
                 var displayDesc = objComp.objectiveDescription;
-                var displayTitle = objComp.ID;
-                var protoMan = IoCManager.Resolve<Robust.Shared.Prototypes.IPrototypeManager>();
                 if (objComp.IntelTiers.Count > 0)
                 {
                     // Default to tier 0 unlocked (count == 1) if no entry exists
@@ -168,12 +170,10 @@ public sealed partial class ObjectivesConsoleSystem : SharedObjectivesConsoleSys
                     if (unlockedCount > 0)
                     {
                         // If unlockedCount exceeds number of tiers, show the last tier.
-                        var idx = System.Math.Min(unlockedCount, objComp.IntelTiers.Count) - 1;
+                        var idx = Math.Min(unlockedCount, objComp.IntelTiers.Count) - 1;
                         var protoId = objComp.IntelTiers[idx];
-                        if (protoMan.TryIndex<ObjectiveIntelTierPrototype>(protoId, out var proto))
+                        if (_proto.TryIndex(protoId, out var proto))
                         {
-                            if (!string.IsNullOrEmpty(proto.TitleText))
-                                displayTitle = proto.TitleText;
                             if (!string.IsNullOrEmpty(proto.DescriptionText))
                                 displayDesc = proto.DescriptionText;
                         }
@@ -187,7 +187,7 @@ public sealed partial class ObjectivesConsoleSystem : SharedObjectivesConsoleSys
                     objComp.ObjectiveLevel == 3 ? ObjectiveTypeDisplay.Win : objComp.ObjectiveLevel == 2 ? ObjectiveTypeDisplay.Major : ObjectiveTypeDisplay.Minor,
                     capProgress,
                     objComp.Repeating,
-                    objComp.Repeating ? objComp.TimesCompleted : (int?)null,
+                    objComp.Repeating ? objComp.TimesCompleted : null,
                     objComp.MaxRepeatable,
                     objComp.CustomPoints != 0 ? objComp.CustomPoints : (objComp.ObjectiveLevel == 1 ? 5 : 20)));
                 Logger.GetSawmill("objectives").Debug($"[OBJ CON] Added objective to list: id={objComp.ID} displayDesc={displayDesc} status={statusDisplay}");
@@ -224,7 +224,7 @@ public sealed partial class ObjectivesConsoleSystem : SharedObjectivesConsoleSys
             string? fetchProgress = null;
             if (TryComp(objUid, out FetchObjectiveComponent? fetchComp))
             {
-                int fetched = 0;
+                int fetched;
                 int toFetch = fetchComp.AmountToFetch;
                 if (objComp.FactionNeutral)
                 {
@@ -239,16 +239,13 @@ public sealed partial class ObjectivesConsoleSystem : SharedObjectivesConsoleSys
             // Add logic to display kill progress for KillObjectiveComponent
             if (TryComp(objUid, out KillObjectiveComponent? killComp))
             {
-                int killed = 0;
                 int toKill = killComp.AmountToKill;
-                killComp.AmountKilledPerFaction.TryGetValue(consoleFaction.ToLowerInvariant(), out killed);
+                killComp.AmountKilledPerFaction.TryGetValue(consoleFaction.ToLowerInvariant(), out int killed);
                 fetchProgress = $"{killed}/{toKill} kills";
             }
 
             // Determine display title/description based on unlocked intel tier for this console faction
             var displayDesc2 = objComp.objectiveDescription;
-            var displayTitle2 = objComp.ID;
-            var protoMan2 = IoCManager.Resolve<Robust.Shared.Prototypes.IPrototypeManager>();
             if (objComp.IntelTiers.Count > 0)
             {
                 // Default to tier 0 unlocked (count == 1) if no entry exists
@@ -257,19 +254,17 @@ public sealed partial class ObjectivesConsoleSystem : SharedObjectivesConsoleSys
                     unlockedCount2 = v2;
                 if (unlockedCount2 > 0)
                 {
-                    var idx2 = System.Math.Min(unlockedCount2, objComp.IntelTiers.Count) - 1;
+                    var idx2 = Math.Min(unlockedCount2, objComp.IntelTiers.Count) - 1;
                     var protoId2 = objComp.IntelTiers[idx2];
-                    if (protoMan2.TryIndex<ObjectiveIntelTierPrototype>(protoId2, out var proto2))
+                    if (_proto.TryIndex(protoId2, out var proto2))
                     {
-                        if (!string.IsNullOrEmpty(proto2.TitleText))
-                            displayTitle2 = proto2.TitleText;
                         if (!string.IsNullOrEmpty(proto2.DescriptionText))
                             displayDesc2 = proto2.DescriptionText;
                     }
                 }
             }
 
-            int? repeatsCompleted2 = objComp.Repeating ? objComp.TimesCompleted : (int?)null;
+            int? repeatsCompleted2 = objComp.Repeating ? objComp.TimesCompleted : null;
             int? maxRepeatable2 = objComp.MaxRepeatable;
             int points2 = objComp.CustomPoints != 0 ? objComp.CustomPoints : (objComp.ObjectiveLevel == 1 ? 5 : 20);
             objectives.Add(new ObjectiveEntry(objComp.ID, displayDesc2, statusDisplay, typeDisplay, fetchProgress, objComp.Repeating, repeatsCompleted2, maxRepeatable2, points2));
@@ -309,11 +304,10 @@ public sealed partial class ObjectivesConsoleSystem : SharedObjectivesConsoleSys
                 return;
             }
 
-            var protoMan = IoCManager.Resolve<Robust.Shared.Prototypes.IPrototypeManager>();
             for (int i = 0; i < objComp.IntelTiers.Count; i++)
             {
                 var protoId = objComp.IntelTiers[i];
-                if (!protoMan.TryIndex<ObjectiveIntelTierPrototype>(protoId, out var proto))
+                if (!_proto.TryIndex(protoId, out var proto))
                 {
                     // skip invalid prototype
                     Logger.GetSawmill("objectives").Debug($"[OBJ CON] Missing ObjectiveIntelTierPrototype protoId={protoId} for objective={objComp.ID}");
@@ -330,10 +324,9 @@ public sealed partial class ObjectivesConsoleSystem : SharedObjectivesConsoleSys
             var team = string.IsNullOrEmpty(comp.Faction) ? Team.None : comp.Faction.ToLowerInvariant();
 
             // Ensure the objective component has an entry for this team so the UI can always show a value
-            if (!objComp.IntelTierPerFaction.ContainsKey(team))
+            if (objComp.IntelTierPerFaction.TryAdd(team, 1))
             {
                 // Tier 0 is always unlocked by default, so initialize to 1 (count of unlocked tiers)
-                objComp.IntelTierPerFaction[team] = 1;
                 Dirty(objUid, objComp);
                 Logger.GetSawmill("objectives").Debug($"[OBJ CON] Initialized IntelTierPerFaction for objective={objComp.ID} team={team}");
             }
@@ -384,9 +377,8 @@ public sealed partial class ObjectivesConsoleSystem : SharedObjectivesConsoleSys
                 return;
             }
 
-            var protoMan = IoCManager.Resolve<Robust.Shared.Prototypes.IPrototypeManager>();
             var protoId = objComp.IntelTiers[msg.TierIndex];
-            if (!protoMan.TryIndex<ObjectiveIntelTierPrototype>(protoId, out var proto))
+            if (!_proto.TryIndex(protoId, out var proto))
             {
                 Logger.GetSawmill("objectives").Debug($"[OBJ CON] Unlock failed - missing proto for protoId={protoId} objective={objComp.ID}");
                 return;

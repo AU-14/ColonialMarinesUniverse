@@ -1,10 +1,10 @@
+using System.Linq;
 using Content.Shared.AU14;
 using Content.Shared.AU14.Objectives;
 using Content.Shared.AU14.Objectives.Fetch;
 using Content.Shared.DragDrop;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Movement.Pulling.Events;
-using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
@@ -125,11 +125,13 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
 
         var markers = new List<EntityUid>();
         var genericMarkers = new List<EntityUid>();
+        var objMap = Transform(uid).MapID;
         var markerQuery = AllEntityQuery<FetchObjectiveMarkerComponent, TransformComponent>();
-        while (markerQuery.MoveNext(out var markerUid, out var markerComp, out _))
+        while (markerQuery.MoveNext(out var markerUid, out var markerComp, out var markerXform))
         {
-            if (markerComp.Used)
-                continue; // Skip used markers
+            if (markerComp.Used || markerXform.MapID != objMap)
+                continue;
+
             if (markerComp.FetchId == markerFetchId)
                 markers.Add(markerUid);
             else if (markerComp.Generic)
@@ -468,9 +470,10 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
         }
     }
 
+    // Markers are being used up, so that we don't spawn multiple high value objs on the same spot
     public void SpawnMissingFetchObjectives(
         string presetId,
-        EntityCoordinates fallbackCoords,
+        MapId targetMap,
         ObjectiveMasterComponent master,
         List<(EntityUid Uid, AuObjectiveComponent Comp)> allObjectives,
         IPrototypeManager proto,
@@ -483,7 +486,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
         var markerQuery = EntityQueryEnumerator<FetchObjectiveMarkerComponent, TransformComponent>();
         while (markerQuery.MoveNext(out _, out var marker, out var xform))
         {
-            if (marker.Generic && !marker.Used)
+            if (marker.Generic && !marker.Used && xform.MapID == targetMap)
                 markerPositions.Add(xform.Coordinates);
         }
 
@@ -505,7 +508,11 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
         // Per-faction, per-level spawning respecting limits
         foreach (var faction in new[] { "govfor", "opfor", "clf", "scientist" })
         {
-            var (minMinor, maxMinor, minMajor, maxMajor) = GetFactionObjectiveBounds(master, faction);
+            var factionData = master.GetOrCreateFactionData(faction);
+            int maxMinor = factionData.MinorObjectives;
+            int? minMinor = factionData.MinMinorObjectives;
+            int maxMajor = factionData.MajorObjectives;
+            int? minMajor = factionData.MinMajorObjectives;
 
             int currentMinor = allObjectives.Count(o =>
                 !o.Comp.Active &&
@@ -550,7 +557,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
 
         foreach (var p in proto.EnumeratePrototypes<EntityPrototype>())
         {
-            if (!p.TryGetComponent<AuObjectiveComponent>(out var objComp, compFactory))
+            if (!p.TryComp<AuObjectiveComponent>(out var objComp, compFactory))
                 continue;
 
             if (!objComp.ApplicableModes.Any(m => m.Equals(presetId, StringComparison.OrdinalIgnoreCase)))
@@ -580,27 +587,14 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
         for (int i = 0; i < count && candidates.Count > 0; i++)
         {
             int idx = rng.Next(candidates.Count);
-            var proto = candidates[idx];
+            var chosenProto = candidates[idx];
             var coords = markerPositions[markerIdx % markerPositions.Count];
             markerIdx++;
 
-            Spawn(proto.ID, coords);
-            logs.Debug($"[OBJ SPAWN] Spawned missing objective '{proto.ID}' at {coords} for {faction ?? "neutral"} L{level}.");
+            Spawn(chosenProto.ID, coords);
+            logs.Debug($"[OBJ SPAWN] Spawned missing objective '{chosenProto.ID}' at {coords} for {faction ?? "neutral"} L{level}.");
 
             candidates.RemoveAt(idx);
         }
-    }
-
-    // Helper to get faction bounds (can be shared or duplicated)
-    private static (int? MinMinor, int MaxMinor, int? MinMajor, int MaxMajor) GetFactionObjectiveBounds(ObjectiveMasterComponent master, string faction)
-    {
-        return faction switch
-        {
-            "govfor" => (master.MinGovforMinorObjectives, master.GovforMinorObjectives, master.MinGovforMajorObjectives, master.GovforMajorObjectives),
-            "opfor" => (master.MinOpforMinorObjectives, master.OpforMinorObjectives, master.MinOpforMajorObjectives, master.OpforMajorObjectives),
-            "clf" => (master.MinCLFMinorObjectives, master.CLFMinorObjectives, master.MinCLFMajorObjectives, master.CLFMajorObjectives),
-            "scientist" => (master.MinScientistMinorObjectives, master.ScientistMinorObjectives, master.MinScientistMajorObjectives, master.ScientistMajorObjectives),
-            _ => (null, 0, null, 0)
-        };
     }
 }

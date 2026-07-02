@@ -20,11 +20,15 @@
     state: red
   - type: ObjectiveMaster
     gamePreset: ForceOnForce
-    govforMajorObjectives: 3 # default: 5
-    opforMajorObjectives: 3
-    govforMinorObjectives: 5 # default: 10
-    opforMinorObjectives: 5
-    maxNeutralObjectives: 7 # default: 5
+    maxNeutralObjectives: 7
+    factions:
+      govfor:
+        majorObjectives: 3   # default: 5
+        minorObjectives: 5   # default: 10
+      opfor:
+        majorObjectives: 3   # default: 5
+        minorObjectives: 5   # default: 10
+      # clf/scientist etc. inherit defaults
 
 # ├──[ OBJ CONSOLES ]────────────────────────────────────────────────┤
 - type: entity

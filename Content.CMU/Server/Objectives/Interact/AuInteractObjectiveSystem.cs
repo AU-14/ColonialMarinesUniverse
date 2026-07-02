@@ -4,7 +4,6 @@ using Content.Shared.AU14.Objectives;
 using Content.Shared.AU14.Objectives.Fetch;
 using Content.Shared.AU14.Objectives.Interact;
 using Content.Shared.Popups;
-using Robust.Shared.Log;
 
 namespace Content.Server.AU14.Objectives.Interact;
 
@@ -189,7 +188,7 @@ public sealed partial class AuInteractObjectiveSystem : EntitySystem
         if (!objComp.FactionNeutral && objComp.Faction.ToLowerInvariant() != faction)
         {
             // Non-neutral objective: only the assigned faction can complete it
-            if (!objComp.Factions.Any(f => f.ToLowerInvariant() == faction))
+            if (objComp.Factions.All(f => f.ToLowerInvariant() != faction))
                 return;
         }
 
@@ -204,8 +203,7 @@ public sealed partial class AuInteractObjectiveSystem : EntitySystem
             return;
 
         // Increment interaction count for this entity+faction
-        if (!tracker.InteractionsPerFaction.ContainsKey(faction))
-            tracker.InteractionsPerFaction[faction] = 0;
+        tracker.InteractionsPerFaction.TryAdd(faction, 0);
         tracker.InteractionsPerFaction[faction]++;
 
         var currentInteractions = tracker.InteractionsPerFaction[faction];
@@ -221,13 +219,11 @@ public sealed partial class AuInteractObjectiveSystem : EntitySystem
             tracker.InteractionsPerFaction[faction] = 0;
 
             // Increment per-entity completion
-            if (!tracker.CompletionsPerFaction.ContainsKey(faction))
-                tracker.CompletionsPerFaction[faction] = 0;
+            tracker.CompletionsPerFaction.TryAdd(faction, 0);
             tracker.CompletionsPerFaction[faction]++;
 
             // Increment objective-level completion
-            if (!interactComp.CompletionsPerFaction.ContainsKey(faction))
-                interactComp.CompletionsPerFaction[faction] = 0;
+            interactComp.CompletionsPerFaction.TryAdd(faction, 0);
             interactComp.CompletionsPerFaction[faction]++;
 
             var totalNeeded = interactComp.TotalCompletionsNeeded > 0

@@ -98,7 +98,7 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
         component.EntitiesSpawned = true;
 
         // Register interest in proto or wildcard for efficient marking
-        RegisterObjectiveInterest(uid, component, objcomp);
+        RegisterObjectiveInterest(uid, component);
 
         // Initial scan: only check entities of the protos we're interested in OR wildcard ones
         var objXform = Comp<TransformComponent>(uid);
@@ -132,7 +132,7 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
         }
     }
 
-    private void RegisterObjectiveInterest(EntityUid uid, DestroyObjectiveComponent comp, AuObjectiveComponent auComp)
+    private void RegisterObjectiveInterest(EntityUid uid, DestroyObjectiveComponent comp)
     {
         // Remove existing registration if present to avoid duplicates
         UnregisterObjectiveInterest(uid);
