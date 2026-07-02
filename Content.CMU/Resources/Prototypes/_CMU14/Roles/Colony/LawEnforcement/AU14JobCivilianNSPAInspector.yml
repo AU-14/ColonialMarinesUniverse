@@ -65,6 +65,7 @@
   equipment:
     id: AU14IDCardColonyNSPAInspector
     outerClothing: RMCCoatTSEPA
+    back: RMCSatchelTSEPA
     jumpsuit: RMCJumpsuitTSEPA
     shoes: RMCBootsPMCFilled
     head: RMCHeadCapTSEPAPeakedGold

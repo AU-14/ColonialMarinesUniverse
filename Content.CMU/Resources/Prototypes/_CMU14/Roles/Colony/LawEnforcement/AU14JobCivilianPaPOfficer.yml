@@ -71,6 +71,15 @@
     shoes: RMCBootsPMCFilled
     id: AU14IDCardcivilianPaPOfficer
     ears: AU14CMBHeadset
+    outerClothing: RMCCoatPaP
+    suitstorage: AU14BeltHolsterPistolBlack
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14PouchGeneralLargeLEOFilled
+  inhand:
+  - AU14GunCasePistolT73
+  storage:
+    back:
+    - AU14GuidebookLawColonial
 
 - type: entity
   parent: CMSpawnPointJobBase
