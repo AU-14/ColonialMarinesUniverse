@@ -69,6 +69,17 @@
     - id: CMBodyBagFolded #intended since giving Stasis Body Bag to Colony wouldn't make sense since all Stasis bag's is slow down larva growth and since First Contact and all
 
 - type: entity
+  parent: RMCPouchGeneralLarge
+  id: AU14PouchGeneralLargeLEOFilled
+  suffix: AU14, Filled, LEO
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCBinocularsCivPVE
+    - id: RMCHandcuffs
+    - id: RMCRadioHandheldColonyOff
+  
+- type: entity
   parent: RMCPouchPistol
   id: AU14PouchPistolAlt
   suffix: AU14, Black
