@@ -71,10 +71,16 @@
     belt: CMBeltSecurityMarshalFilled
     back: RMCSatchelTSEPA
     ears: AU14CMBHeadset
-    pocket1: AU14StampNSPA
+    outerClothing: RMCArmorVestTSEPA
+    suitstorage: AU14BeltHolsterPistolBlack
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14PouchGeneralLargeLEOFilled
+  inhand:
+  - AU14GunCasePistolL45
   storage:
     back:
     - AU14GuidebookLawColonial
+    - AU14StampNSPA
 
 - type: entity
   parent: CMSpawnPointJobBase
