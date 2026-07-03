@@ -12,11 +12,6 @@
   id: CivBallCapRedTruckerAU14
   equipment:
     head: AU14CivBallCapRedTrucker
-  
-- type: loadout
-  id: USCMVeteranCapAU14
-  equipment:
-    head: AU14USCMVeteranCap
 
 - type: loadout
   id: CivFedoraTanAU14
@@ -29,7 +24,7 @@
     head: AU14CivFedoraBrown
 
 - type: loadout
-  id: 
+  id: CivFedoraGrayAU14
   equipment:
     head: AU14CivFedoraGray
 

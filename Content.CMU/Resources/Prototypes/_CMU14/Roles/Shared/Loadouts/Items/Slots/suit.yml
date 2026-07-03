@@ -71,12 +71,6 @@
     - AU14WindbreakerBlue
 
 - type: loadout
-  id: CivilianJacketGreenParkaAU14
-  storage:
-    back:
-    - AU14CivilianJacketGreenParka
-
-- type: loadout
   id: CivilianJacketSnowSuitAU14
   storage:
     back:
@@ -111,6 +105,30 @@
   storage:
     back:
     - AU14CivilianGrayTrenchCoat
+
+- type: loadout
+  id: CivilianJacketBlueParkaAU14
+  storage:
+    back:
+    - AU14CivilianJacketBlueParka
+
+- type: loadout
+  id: CivilianJacketGreenParkaAU14
+  storage:
+    back:
+    - AU14CivilianJacketGreenParka
+
+- type: loadout
+  id: CivilianJacketRedParkaAU14
+  storage:
+    back:
+    - AU14CivilianJacketRedParka
+
+- type: loadout
+  id: CivilianJacketYellowParkaAU14
+  storage:
+    back:
+    - AU14CivilianJacketYellowParka
 
 - type: loadout
   id: CivilianFullSuitWeYuEngineerAU14
