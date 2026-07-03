@@ -12,6 +12,31 @@
   id: CivBallCapRedTruckerAU14
   equipment:
     head: AU14CivBallCapRedTrucker
+  
+- type: loadout
+  id: USCMVeteranCapAU14
+  equipment:
+    head: AU14USCMVeteranCap
+
+- type: loadout
+  id: CivFedoraTanAU14
+  equipment:
+    head: AU14CivFedoraTan
+
+- type: loadout
+  id: CivFedoraBrownAU14
+  equipment:
+    head: AU14CivFedoraBrown
+
+- type: loadout
+  id: 
+  equipment:
+    head: AU14CivFedoraGray
+
+- type: loadout
+  id: HeadCommandoBeanieAU14
+  equipment:
+    head: AU14HeadCommandoBeanie
 
 - type: loadout
   id: USCMVeteranCapAU14
