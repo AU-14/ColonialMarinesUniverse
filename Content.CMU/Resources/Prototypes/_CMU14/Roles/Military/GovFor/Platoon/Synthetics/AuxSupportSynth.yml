@@ -183,13 +183,13 @@
   points: 7
   groups:
   - GOVFORSynthSpecializationAU14
+  - SynthBackpackAU14
   - SynthUniformAU14
   - SynthUniformAccessoriesAU14
   - SynthEquipmentAU14
   - SynthAccesoriesSpecialAU14
   - SynthSuitAU14
   - SynthSuitSpecialAU14
-  - SynthBackpackAU14
   - SynthBeltAU14
   - SynthPouchesLeftAU14
   - SynthPouchesRightAU14
