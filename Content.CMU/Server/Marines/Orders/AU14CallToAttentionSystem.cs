@@ -26,7 +26,7 @@ public sealed partial class AU14CallToAttentionSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RotateToFaceSystem _rotateToFace = default!;
-    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private AU14SilenceOrderSystem _silence = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
     private readonly HashSet<Entity<HumanoidAppearanceComponent>> _receivers = new();
@@ -72,11 +72,13 @@ public sealed partial class AU14CallToAttentionSystem : EntitySystem
         var noticeMsg = Loc.GetString("au14-call-to-attention-notice");
         var emote = ent.Comp.Emote;
         var maxDelay = ent.Comp.ResponseStagger;
-        var whisperExpiresAt = _timing.CurTime + ent.Comp.WhisperDuration;
 
         _visibleTargets.Clear();
         foreach (var receiver in _receivers)
         {
+            if (receiver.Owner == ent.Owner)
+                continue;
+
             if (_mobState.IsDead(receiver))
                 continue;
 
@@ -90,7 +92,7 @@ public sealed partial class AU14CallToAttentionSystem : EntitySystem
         var attentionFocus = GetAttentionFocus(ent.Owner, _visibleTargets);
         foreach (var target in _visibleTargets)
         {
-            ApplyWhisperEffect(target, whisperExpiresAt);
+            ApplyWhisperEffect(target, ent.Comp.WhisperDuration);
 
             var delay = maxDelay <= TimeSpan.Zero
                 ? TimeSpan.Zero
@@ -118,14 +120,12 @@ public sealed partial class AU14CallToAttentionSystem : EntitySystem
         }
     }
 
-    private void ApplyWhisperEffect(EntityUid target, TimeSpan expiresAt)
+    private void ApplyWhisperEffect(EntityUid target, TimeSpan duration)
     {
         if (HasComp<AU14CallToAttentionWhisperImmuneComponent>(target))
             return;
 
-        var silence = EnsureComp<AU14SilenceOrderComponent>(target);
-        if (silence.ExpiresAt < expiresAt)
-            silence.ExpiresAt = expiresAt;
+        _silence.ApplySilenceFor(target, duration);
     }
 
     private void SnapToAttention(EntityUid target, EntityUid attentionFocus, ProtoId<EmotePrototype> emote, string noticeMsg)
