@@ -1,0 +1,80 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright (c) 2026 wray-git
+# SPDX-License-Identifier: AGPL-3.0-only
+# Building overhaul (z-level): construction recipes for the z-level staircases.
+# One graph per stair, in the ZLevel spawnlist, differing by the direction they lead (up / down).
+# Each costs 50 metal + 50 plasteel. isCM is required for the menu to enumerate them.
+
+- type: constructionGraph
+  id: AU14ZStairUpGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: stair
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 50
+        doAfter: 8
+      - material: CMPlasteel
+        amount: 50
+        doAfter: 8
+  - node: stair
+    entity: AU14ZStairUp
+
+- type: constructionGraph
+  id: AU14ZStairDownGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: stair
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 50
+        doAfter: 8
+      - material: CMPlasteel
+        amount: 50
+        doAfter: 8
+  - node: stair
+    entity: AU14ZStairDown
+
+- type: construction
+  id: AU14ZStairUp
+  name: z-level stairs (up)
+  description: A staircase leading up one z-level, with a standing platform laid on the level above and a support beam here.
+  graph: AU14ZStairUpGraph
+  startNode: start
+  targetNode: stair
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: ZLevel
+  conditions:
+  - !type:TileNotBlocked
+  # Mappers can forbid vertical building on a map with ZBuildableMap { enabled: false } (e.g. the UNS Almayer).
+  - !type:ZBuildAllowed
+
+- type: construction
+  id: AU14ZStairDown
+  name: z-level stairs (down)
+  description: A staircase leading down one z-level, with a support beam reflected on the level below.
+  graph: AU14ZStairDownGraph
+  startNode: start
+  targetNode: stair
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: ZLevel
+  conditions:
+  - !type:TileNotBlocked
+  # Mappers can forbid vertical building on a map with ZBuildableMap { enabled: false } (e.g. the UNS Almayer).
+  - !type:ZBuildAllowed
