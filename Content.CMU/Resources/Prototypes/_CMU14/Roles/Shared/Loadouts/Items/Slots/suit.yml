@@ -71,24 +71,6 @@
     - AU14WindbreakerBlue
 
 - type: loadout
-  id: WindbreakerKhakiAU14
-  storage:
-    back:
-    - AU14WindbreakerKhaki
-
-- type: loadout
-  id: WindbreakerGrayAU14
-  storage:
-    back:
-    - AU14WindbreakerGray
-
-- type: loadout
-  id: WindbreakerGreenAU14
-  storage:
-    back:
-    - AU14WindbreakerGreen
-
-- type: loadout
   id: CivilianJacketGreenParkaAU14
   storage:
     back:

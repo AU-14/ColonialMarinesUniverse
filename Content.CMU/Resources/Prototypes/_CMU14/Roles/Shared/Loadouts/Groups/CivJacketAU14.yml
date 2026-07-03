@@ -5,16 +5,16 @@
   maxLimit: 1
   loadouts:
   - JacketCorporateBrownAU14
+  - JacketCorporateBlueAU14
+  - JacketCorporateBlackAU14
+  - JacketCorporateKhakiAU14
   - CivilianJacketGrayPufferVestAU14
   - CivilianJacketKhakiPufferVestAU14
   - CivilianJacketTanPufferVestAU14
   - CivilianJacketGrayPufferJacketAU14
-  - CivilianJacketKhakiPufferVestAU14
+  - CivilianJacketKhakiPufferJacketAU14
   - CivilianJacketOrangePufferJacketAU14
   - WindbreakerBlueAU14
-  - WindbreakerKhakiAU14
-  - WindbreakerGrayAU14
-  - WindbreakerGreenAU14
   - CivilianJacketSnowSuitAU14
   - CivilianJacketOldCoatAU14
   - CivilianJacketGreenParkaAU14
