@@ -53,7 +53,7 @@
     - AU14CivilianJacketGrayPufferJacket
   
 - type: loadout
-  id: CivilianJacketKhakiPufferVestAU14
+  id: CivilianJacketKhakiPufferJacketAU14
   storage:
     back:
     - AU14CivilianJacketKhakiPufferJacket
