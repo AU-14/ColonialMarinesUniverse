@@ -42,7 +42,7 @@ internal sealed partial class ChatManager
             return false;
 
         if (!_entityManager.TrySystem(out GhostSystem? ghost) ||
-            !ghost.CanGhostWarp(session, out _))
+            !ghost.CanGhostFollow(session, out _))
         {
             return false;
         }
