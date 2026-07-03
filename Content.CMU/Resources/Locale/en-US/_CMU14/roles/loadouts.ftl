@@ -3,8 +3,10 @@ au14-loadout-group-synth-belt = Synthetic belt
 au14-loadout-group-synth-pouches = Synthetic pouches (left)
 au14-loadout-group-synth-pouches-right = Synthetic pouches (right)
 au14-loadout-group-gloves = Gloves
-au14-loadout-group-synth-suit-special = Suit (Special)
+au14-loadout-group-synth-suit-special = Synthetic Suit (Special)
 au14-loadout-group-synth-equipment = Synthetic Equipment
+au14-loadout-group-synth-webbing = Synthetic Webbing
+au14-loadout-group-synth-backpack = Synthetic Backpack
 AU14JobGOVFORAuxSupportSynth-loadout = GOVFOR Support Synth loadout
 
 au14-loadout-group-commander-sidearm-belt = Sidearm Belt

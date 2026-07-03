@@ -141,13 +141,13 @@
       entries:
       - id: AU14WindbreakerBlue
         amount: 30
-      - id: AU14WindbreakerGray
+      - id: RMCJacketWindbreakerGrey
         amount: 30
-      - id: AU14WindbreakerGreen
+      - id: RMCJacketWindbreaker
         amount: 30
-      - id: AU14WindbreakerKhakiGreenMix
+      - id: RMCJacketWindbreakerFirstResponder
         amount: 30
-      - id: AU14WindbreakerKhaki
+      - id: RMCJacketWindbreakerBrown
         amount: 30
     - name: Parkas
       entries:

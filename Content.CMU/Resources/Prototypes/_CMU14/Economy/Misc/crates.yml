@@ -61,10 +61,10 @@
     - id: AU14CivilianJacketOrangePufferJacket
     - id: AU14CivilianJacketKhakiPufferJacket
     - id: AU14WindbreakerBlue
-    - id: AU14WindbreakerGray
-    - id: AU14WindbreakerGreen
-    - id: AU14WindbreakerKhakiGreenMix
-    - id: AU14WindbreakerKhaki
+    - id: RMCJacketWindbreakerGrey
+    - id: RMCJacketWindbreaker
+    - id: RMCJacketWindbreakerFirstResponder
+    - id: RMCJacketWindbreakerBrown
     - id: AU14CivilianJacketBlueParka
     - id: AU14CivilianJacketGreenParka
     - id: AU14CivilianJacketRedParka

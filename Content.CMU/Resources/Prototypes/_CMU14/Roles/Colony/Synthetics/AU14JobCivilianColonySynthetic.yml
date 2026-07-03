@@ -108,6 +108,8 @@
   groups:
   - ColonySynthSpecializationAU14
   - ColonySynthUniformAU14
+  - ColonySynthSuitAU14
+  - ColonySynthHeadwearAU14
   - ColonySynthPouchesLeftAU14
   - ColonySynthPouchesRightAU14
   - ColonySynthSuitSpecialAU14

@@ -183,27 +183,27 @@
   points: 7
   groups:
   - GOVFORSynthSpecializationAU14
+  - SynthUniformAU14
+  - SynthUniformAccessoriesAU14
+  - SynthEquipmentAU14
+  - SynthAccesoriesSpecialAU14
+  - SynthSuitAU14
+  - SynthSuitSpecialAU14
   - SynthBackpackAU14
   - SynthBeltAU14
   - SynthPouchesLeftAU14
   - SynthPouchesRightAU14
-  - SynthGlovesAU14
   - SynthHeadwearAU14
   - SynthGlassesAU14
-  - SynthUniformAU14
-  - SynthUniformAccessoriesRMC
-  - SynthSuitAU14
-  - SynthSuitSpecialAU14
-  - SynthEquipmentAU14
+  - SynthGlovesAU14
   - SynthShoesRMC
   - SynthMasksAU14
-  - PaperworkRMC
-  - RecreationalRMC
   - HelmetGarbsRMC
   - SmokablesRMC
   - ForceStampApprovedAU14
   - ForceSynthResetKeyAU14
-  - SynthAccesoriesSpecialAU14
+  - PaperworkRMC
+  - RecreationalRMC
 
 - type: job
   parent: AU14JobAuxSupportSynthBase

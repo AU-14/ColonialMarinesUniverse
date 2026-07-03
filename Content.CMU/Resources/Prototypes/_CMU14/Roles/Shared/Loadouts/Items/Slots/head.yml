@@ -66,6 +66,16 @@
     head: RMCHeadBeretGreen
 
 - type: loadout
+  id: HeadBeretPurpleAU14
+  equipment:
+    head: RMCHeadBeretPurple
+
+- type: loadout
+  id: HeadFlapCapExpeditionAU14
+  equipment:
+    head: CMHeadFlapCap
+
+- type: loadout
   id: BeretIOAU14
   equipment:
     head: AU14HeadBeretIO
@@ -84,3 +94,8 @@
   id: WYHeadCapWeylandYutaniDarkAU14
   equipment:
     head: RMCHeadCapWestonYamadaDark
+
+- type: loadout
+  id: HeadBioHoodWeylandYutaniAU14
+  equipment:
+    head: RMCHoodBioWeYa

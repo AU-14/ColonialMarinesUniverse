@@ -114,7 +114,7 @@
 #Windbreakers
 
 - type: entity
-  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  parent: RMCJacketWindbreaker
   id: AU14WindbreakerBlue
   name: Blue Windbreaker
   description: A windbreaker designed to keep you warm in windy conditions. Its also waterproof.
@@ -123,50 +123,6 @@
     sprite: _AU14/Clothing/Civilian/Jacket/bluewindbreaker.rsi
   - type: Clothing
     sprite: _AU14/Clothing/Civilian/Jacket/bluewindbreaker.rsi
-
-- type: entity
-  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
-  id: AU14WindbreakerGray
-  name: Gray Windbreaker
-  description: A windbreaker designed to keep you warm in windy conditions. Its also waterproof.
-  components:
-  - type: Sprite
-    sprite: _AU14/Clothing/Civilian/Jacket/graywindbreaker.rsi
-  - type: Clothing
-    sprite: _AU14/Clothing/Civilian/Jacket/graywindbreaker.rsi
-
-- type: entity
-  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
-  id: AU14WindbreakerGreen
-  name: Green Windbreaker
-  description: A windbreaker designed to keep you warm in windy conditions. Its also waterproof.
-  components:
-  - type: Sprite
-    sprite: _AU14/Clothing/Civilian/Jacket/greenwindbreaker.rsi
-  - type: Clothing
-    sprite: _AU14/Clothing/Civilian/Jacket/greenwindbreaker.rsi
-
-- type: entity
-  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
-  id: AU14WindbreakerKhaki
-  name: Khaki Windbreaker
-  description: A windbreaker designed to keep you warm in windy conditions. Its also waterproof.
-  components:
-  - type: Sprite
-    sprite: _AU14/Clothing/Civilian/Jacket/kahkiwindbreaker.rsi
-  - type: Clothing
-    sprite: _AU14/Clothing/Civilian/Jacket/kahkiwindbreaker.rsi
-
-- type: entity
-  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
-  id: AU14WindbreakerKhakiGreenMix
-  name: Green-Khaki Windbreaker
-  description: A windbreaker designed to keep you warm in windy conditions. Its also waterproof.
-  components:
-  - type: Sprite
-    sprite: _AU14/Clothing/Civilian/Jacket/windbreakerkahkigreen.rsi
-  - type: Clothing
-    sprite: _AU14/Clothing/Civilian/Jacket/windbreakerkahkigreen.rsi
 
 #misc/other
 - type: entity
