@@ -59,10 +59,10 @@
     - RMCGlassesTriMaxBronze
 
 - type: loadout
-  id: GlassesAviatorsAU14
+  id: GlassesPersonalOrangeAU14
   storage:
     back:
-    - RMCGlassesAviators
+    - AU14GlassesPersonalOrange
 
 - type: loadout
   id: GlassesBiMexOrangeAU14
