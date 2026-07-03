@@ -24,6 +24,6 @@ internal sealed partial class CMUGhostFollowEntityCommand : LocalizedEntityComma
         if (!NetEntity.TryParse(args[0], out var target))
             return;
 
-        _ghost.GhostWarpRequest(player, target);
+        _ghost.GhostFollowRequest(player, target);
     }
 }

@@ -7,7 +7,7 @@ namespace Content.Server.Ghost;
 
 public sealed partial class GhostSystem
 {
-    public bool CanGhostWarp(ICommonSession session, out EntityUid entity)
+    public bool CanGhostFollow(ICommonSession session, out EntityUid entity)
     {
         if (session.AttachedEntity is not { Valid: true } sessionEntity ||
             !_ghostQuery.HasComp(sessionEntity))
@@ -20,21 +20,21 @@ public sealed partial class GhostSystem
         return true;
     }
 
-    public void GhostWarpRequest(ICommonSession player, NetEntity target)
+    public void GhostFollowRequest(ICommonSession player, NetEntity target)
     {
-        if (!CanGhostWarp(player, out var attached))
+        if (!CanGhostFollow(player, out var attached))
         {
-            Log.Warning($"User {player.Name} tried to warp to {target} without being a ghost.");
+            Log.Warning($"User {player.Name} tried to follow {target} without being a ghost.");
             return;
         }
 
         var targetEntity = GetEntity(target);
         if (!Exists(targetEntity))
         {
-            Log.Warning($"User {player.Name} tried to warp to an invalid entity id: {target}");
+            Log.Warning($"User {player.Name} tried to follow an invalid entity id: {target}");
             return;
         }
 
-        WarpTo(attached, targetEntity);
+        _followerSystem.StartFollowingEntity(attached, targetEntity);
     }
 }
