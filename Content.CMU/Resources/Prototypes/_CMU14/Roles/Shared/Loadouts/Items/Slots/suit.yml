@@ -95,6 +95,24 @@
     - AU14CivilianJacketBomberJacket
 
 - type: loadout
+  id: CivilianTanTrenchCoatAU14
+  storage:
+    back:
+    - AU14CivilianTanTrenchCoat
+
+- type: loadout
+  id: CivilianBrownTrenchCoatAU14
+  storage:
+    back:
+    - AU14CivilianBrownTrenchCoat
+
+- type: loadout
+  id: CivilianGrayTrenchCoatAU14
+  storage:
+    back:
+    - AU14CivilianGrayTrenchCoat
+
+- type: loadout
   id: CivilianFullSuitWeYuEngineerAU14
   storage:
     back:
