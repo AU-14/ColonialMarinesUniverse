@@ -16,6 +16,9 @@
     hideLayersOnEquip:
     - UndergarmentTop
     - HeadTop
+  - type: Body
+    prototype: CMUDroneAndroidBody
+    requiredLegs: 2
   - type: Synth
     canUseGuns: true
     removeComponents: CMUDroneAndroidRemoveComponents
