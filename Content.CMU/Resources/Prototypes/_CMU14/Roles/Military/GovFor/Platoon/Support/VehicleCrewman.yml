@@ -100,13 +100,6 @@
   - type: Sprite
     state: syn_spawn
 
-- type: job
-  parent: AU14JobVehicleCrewmanBase
-  id: AU14JobGOVFORVehicleCrewman
-  hidden: false
-  setPreference: true
-  basePlaytimeTracker: true
-
 - type: roleLoadout
   id: JobAU14JobGOVFORVehicleCrewman
   points: 7
