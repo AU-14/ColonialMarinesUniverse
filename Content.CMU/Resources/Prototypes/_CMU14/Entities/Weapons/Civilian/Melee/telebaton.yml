@@ -63,6 +63,6 @@
     prefixOn: on
     prefixOff: off
   - type: RMCStaminaDamageOnHit
-    damage: 40 # 3 hits to stun
-    jitterDuration: 0.5
+    damage: 15 # 7 hits
+    jitterDuration: 0.4
   - type: UseDelay
