@@ -4,6 +4,6 @@
   minLimit: 1
   maxLimit: 1
   loadouts:
-  - BeltMedicalFilledAU14
+  - BeltMedicalFilledAU14  
   - BeltMedicBagFilledAU14
   - EngiBeltUtilityFilledAU14
