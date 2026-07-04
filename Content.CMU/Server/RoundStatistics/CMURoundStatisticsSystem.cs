@@ -35,13 +35,21 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
 
     public void RecordKillAllGovforRule()
     {
-        if (GetCurrentPreset() != CMURoundStatisticsPreset.Insurgency)
-            return;
-
-        TrySetPendingOutcome(
-            CMURoundStatisticsWinner.Clf,
-            CMURoundStatisticsOutcome.InsurgencyClfVictory,
-            "KillAllGovforRule");
+        switch (GetCurrentPreset())
+        {
+            case CMURoundStatisticsPreset.Insurgency:
+                TrySetPendingOutcome(
+                    CMURoundStatisticsWinner.Clf,
+                    CMURoundStatisticsOutcome.InsurgencyClfVictory,
+                    "KillAllGovforRule");
+                break;
+            case CMURoundStatisticsPreset.DistressSignal:
+                TrySetPendingOutcome(
+                    CMURoundStatisticsWinner.Xeno,
+                    CMURoundStatisticsOutcome.XenoMajorHijackWin,
+                    "KillAllGovforRule");
+                break;
+        }
     }
 
     public void RecordKillAllClfRule()
@@ -79,24 +87,42 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
 
     public void RecordThreatSurviveRule()
     {
-        if (GetCurrentPreset() != CMURoundStatisticsPreset.ColonyFall)
-            return;
-
-        TrySetPendingOutcome(
-            CMURoundStatisticsWinner.Threat,
-            CMURoundStatisticsOutcome.ColonyFallThreatVictory,
-            "ThreatSurviveRule");
+        switch (GetCurrentPreset())
+        {
+            case CMURoundStatisticsPreset.ColonyFall:
+                TrySetPendingOutcome(
+                    CMURoundStatisticsWinner.Threat,
+                    CMURoundStatisticsOutcome.ColonyFallThreatVictory,
+                    "ThreatSurviveRule");
+                break;
+            case CMURoundStatisticsPreset.DistressSignal:
+                TrySetPendingOutcome(
+                    CMURoundStatisticsWinner.Xeno,
+                    CMURoundStatisticsOutcome.XenoMajorHijackWin,
+                    "ThreatSurviveRule");
+                break;
+        }
     }
 
     public void RecordThreatDefeatedRule(string source)
     {
-        if (GetCurrentPreset() != CMURoundStatisticsPreset.ColonyFall)
-            return;
+        switch (GetCurrentPreset())
+        {
+            case CMURoundStatisticsPreset.ColonyFall:
+                TrySetPendingOutcome(
+                    CMURoundStatisticsWinner.Colonists,
+                    CMURoundStatisticsOutcome.ColonyFallSurvivorVictory,
+                    source);
+                break;
+            case CMURoundStatisticsPreset.DistressSignal:
+                TrySetPendingOutcome(GetDistressThreatDefeatedOutcome(source));
+                break;
+        }
+    }
 
-        TrySetPendingOutcome(
-            CMURoundStatisticsWinner.Colonists,
-            CMURoundStatisticsOutcome.ColonyFallSurvivorVictory,
-            source);
+    private void TrySetPendingOutcome(PendingRoundOutcome outcome)
+    {
+        _pendingOutcome ??= outcome;
     }
 
     private void TrySetPendingOutcome(
@@ -123,7 +149,7 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
             return;
 
         var outcome = preset == CMURoundStatisticsPreset.DistressSignal
-            ? GetDistressOutcome()
+            ? GetDistressOutcome() ?? _pendingOutcome
             : _pendingOutcome;
 
         outcome ??= new PendingRoundOutcome(
@@ -195,6 +221,26 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
         }
 
         return null;
+    }
+
+    private PendingRoundOutcome GetDistressThreatDefeatedOutcome(string source)
+    {
+        var query = EntityQueryEnumerator<CMDistressSignalRuleComponent>();
+        while (query.MoveNext(out var distress))
+        {
+            if (!distress.Hijack)
+                continue;
+
+            return new PendingRoundOutcome(
+                CMURoundStatisticsWinner.Xeno,
+                CMURoundStatisticsOutcome.XenoMinorHijackLoss,
+                source);
+        }
+
+        return new PendingRoundOutcome(
+            CMURoundStatisticsWinner.Govfor,
+            CMURoundStatisticsOutcome.MarineMajorXenoWipe,
+            source);
     }
 
     private CMURoundStatisticsPreset? GetCurrentPreset()
