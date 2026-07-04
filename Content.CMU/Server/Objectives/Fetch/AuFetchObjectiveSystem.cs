@@ -1,42 +1,46 @@
 using System.Linq;
-using System.Runtime.CompilerServices;
+using Content.Shared.AU14;
 using Content.Shared.AU14.Objectives;
 using Content.Shared.AU14.Objectives.Fetch;
-using Content.Shared.Interaction.Events;
 using Content.Shared.DragDrop;
-using Robust.Shared.Map;
-using Content.Server.AU14.Objectives;
+using Content.Shared.Interaction.Events;
 using Content.Shared.Movement.Pulling.Events;
-using Robust.Shared.GameStates;
-using Robust.Shared.Log;
+using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.AU14.Objectives.Fetch;
 
 public sealed partial class AuFetchObjectiveSystem : EntitySystem
 {
-    [Robust.Shared.IoC.Dependency] private IEntityManager _entManager = default!;
-    [Robust.Shared.IoC.Dependency] private EntityLookupSystem _lookup = default!;
-    [Robust.Shared.IoC.Dependency] private AuObjectiveSystem _objectiveSystem = default!;
-    [Robust.Shared.IoC.Dependency] private SharedTransformSystem _xformSys = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private AuObjectiveSystem _objectiveSystem = default!;
+    [Dependency] private SharedTransformSystem _xformSys = default!;
+
+    private ISawmill _logs = default!;
 
     public override void Initialize()
     {
         base.Initialize();
+        _logs = Logger.GetSawmill("obj-fetch");
         SubscribeLocalEvent<FetchObjectiveComponent, ComponentStartup>(OnObjectiveStartup);
-        SubscribeLocalEvent<FetchObjectiveComponent, ComponentHandleState>(OnFetchObjectiveHandleState);
         SubscribeLocalEvent<AuFetchItemComponent, DroppedEvent>(OnFetchItemDropped);
         SubscribeLocalEvent<AuFetchItemComponent, PullStoppedMessage>(OnFetchItemUndragged);
         SubscribeLocalEvent<FetchObjectiveReturnPointComponent, DragDropTargetEvent>(OnReturnPointDragDropTarget);
         SubscribeLocalEvent<AuFetchItemComponent, EntityTerminatingEvent>(OnFetchItemDestroyed);
     }
 
+    private void OnObjectiveStartup(EntityUid uid, FetchObjectiveComponent component, ref ComponentStartup _) => StartupFetchObjective(uid, component);
+    private void OnFetchItemDropped(EntityUid uid, AuFetchItemComponent comp, ref DroppedEvent _) => TryHandleFetchItemDropOrUndrag(uid, comp);
+    private void OnFetchItemUndragged(EntityUid uid, AuFetchItemComponent comp, ref PullStoppedMessage _) => TryHandleFetchItemDropOrUndrag(uid, comp);
+
     public void ActivateFetchObjectiveIfNeeded(EntityUid uid, AuObjectiveComponent comp)
     {
-        if (!_entManager.TryGetComponent(uid, out FetchObjectiveComponent? fetchComp))
+        if (!TryComp(uid, out FetchObjectiveComponent? fetchComp))
             return;
         if (!comp.Active || fetchComp.ItemsSpawned)
             return;
-        OnObjectiveStartup(uid, fetchComp, ref Unsafe.NullRef<ComponentStartup>());
+
+        StartupFetchObjective(uid, fetchComp);
     }
 
     /// <summary>
@@ -78,26 +82,21 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
                 continue;
 
             // Attach the fetch item component and link it to this objective
-            var itemComp = _entManager.EnsureComponent<AuFetchItemComponent>(ent);
+            var itemComp = EnsureComp<AuFetchItemComponent>(ent);
             itemComp.FetchObjective = component;
             itemComp.ObjectiveUid = objectiveUid;
             registered++;
         }
 
-        if (registered > 0)
-        {
-            component.ItemsSpawned = true;
-            Logger.GetSawmill("content").Info($"[FETCH] Registered {registered} preplaced fetch entities for objective {objectiveUid}");
-        }
+        if (registered <= 0) return registered;
+
+        component.ItemsSpawned = true;
+        _logs.Info($"[FETCH OBJ] Registered '{registered}' preplaced fetch entities for objective ({objectiveUid})");
 
         return registered;
     }
 
-    private void OnFetchObjectiveHandleState(EntityUid uid, FetchObjectiveComponent component, ref ComponentHandleState args)
-    {
-    }
-
-    private void OnObjectiveStartup(EntityUid uid, FetchObjectiveComponent component, ref ComponentStartup args)
+    private void StartupFetchObjective(EntityUid uid, FetchObjectiveComponent component)
     {
         // Prevent duplicate spawns
         if (component.ItemsSpawned)
@@ -122,14 +121,15 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
         var markerFetchId = component.MarkerEntity;
         var amount = component.AmountToSpawn;
 
-
         var markers = new List<EntityUid>();
         var genericMarkers = new List<EntityUid>();
+        var objMap = Transform(uid).MapID;
         var markerQuery = AllEntityQuery<FetchObjectiveMarkerComponent, TransformComponent>();
-        while (markerQuery.MoveNext(out var markerUid, out var markerComp, out _))
+        while (markerQuery.MoveNext(out var markerUid, out var markerComp, out var markerXform))
         {
-            if (markerComp.Used)
-                continue; // Skip used markers
+            if (markerComp.Used || markerXform.MapID != objMap)
+                continue;
+
             if (markerComp.FetchId == markerFetchId)
                 markers.Add(markerUid);
             else if (markerComp.Generic)
@@ -165,7 +165,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
                 continue; // Double check, should not happen
             var xform = Comp<TransformComponent>(markerUid);
             var ent = Spawn(entityToSpawn, xform.Coordinates);
-            var comp = _entManager.EnsureComponent<AuFetchItemComponent>(ent);
+            var comp = EnsureComp<AuFetchItemComponent>(ent);
             comp.FetchObjective = component;
             comp.ObjectiveUid = uid;
             // Mark this marker as used
@@ -182,123 +182,110 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
     public void TryActivateFetchObjective(EntityUid uid, FetchObjectiveComponent component)
     {
         var objComp = EnsureComp<AuObjectiveComponent>(uid);
-        if (objComp.Active && !component.ItemsSpawned)
+        if (!objComp.Active || component.ItemsSpawned)
+            return;
+
+        // New behavior: when UseMarkers is false, items are registered by the Analyzer scan verb.
+        if (!component.UseMarkers)
+            return;
+
+        // If objective accepts preplaced entities, register them now before spawning
+        if (component.UseAnyEntity && !string.IsNullOrEmpty(component.EntityToSpawn))
         {
-            // New behavior: when UseMarkers is false, items are registered by the Analyzer scan verb.
-            if (!component.UseMarkers)
+            var registered = RegisterPreplacedFetchEntities(component.EntityToSpawn, uid, component);
+            if (registered > 0)
                 return;
-
-            // If objective accepts preplaced entities, register them now before spawning
-            if (component.UseAnyEntity && !string.IsNullOrEmpty(component.EntityToSpawn))
-            {
-                var registered = RegisterPreplacedFetchEntities(component.EntityToSpawn, uid, component);
-                if (registered > 0)
-                    return;
-            }
-
-            OnObjectiveStartup(uid, component, ref Unsafe.NullRef<ComponentStartup>());
         }
-    }
 
-    private void OnFetchItemDropped(EntityUid uid, AuFetchItemComponent comp, ref DroppedEvent args)
-    {
-        TryHandleFetchItemDropOrUndrag(uid, comp);
+        StartupFetchObjective(uid, component);
     }
-
-    private void OnFetchItemUndragged(EntityUid uid, AuFetchItemComponent comp, ref PullStoppedMessage args)
-    {
-        TryHandleFetchItemDropOrUndrag(uid, comp);
-    }
-
     private void TryHandleFetchItemDropOrUndrag(EntityUid uid, AuFetchItemComponent comp)
     {
-        Logger.GetSawmill("content").Info($"[FETCH DEBUG] TryHandleFetchItemDropOrUndrag called for {uid}");
+        _logs.Debug($"[FETCH START] TryHandleFetchItemDropOrUndrag called for ({uid})");
         var xform = Comp<TransformComponent>(uid);
         var tile = xform.Coordinates;
         var gridId = _xformSys.GetGrid(tile);
         var tilePos = _xformSys.GetWorldPosition(xform);
-        Logger.GetSawmill("content").Info($"[FETCH DEBUG] Item {uid} at grid {gridId}, pos {tilePos}");
+        _logs.Debug($"[FETCH START]     Item ({uid}) at grid {gridId}, pos {tilePos}");
         (FetchObjectiveReturnPointComponent rpComp, EntityUid rpUid)? usedReturnPoint = null;
         foreach (var ent in _lookup.GetEntitiesInRange(tile, 10f))
         {
-            Logger.GetSawmill("content").Info($"[FETCH DEBUG] Checking entity {ent} in range");
+            _logs.Debug($"[FETCH RANGE] Checking entity ({ent}) in range");
             if (!TryComp(ent, out FetchObjectiveReturnPointComponent? returnPoint))
                 continue;
             var returnXform = Comp<TransformComponent>(ent);
             var returnCoords = returnXform.Coordinates;
             var returnGridId = _xformSys.GetGrid(returnCoords);
             var returnTilePos = _xformSys.GetWorldPosition(returnXform);
-            Logger.GetSawmill("content").Info($"[FETCH DEBUG] Return point {ent} at grid {returnGridId}, pos {returnTilePos}, generic={returnPoint.Generic}, fetchid={returnPoint.FetchId}, faction={returnPoint.ReturnPointFaction}");
+            _logs.Debug($"[FETCH RETURN] Return point ({ent}) at grid {returnGridId}, pos {returnTilePos}, generic={returnPoint.Generic}, fetchid={returnPoint.FetchId}, faction={returnPoint.ReturnPointFaction}");
             // Check if on same grid and tile (rounded to int)
             if (gridId != returnGridId)
             {
-                Logger.GetSawmill("content").Info($"[FETCH DEBUG] Grid mismatch: item {gridId}, return {returnGridId}");
+                _logs.Warning($"[FETCH MISMATCH] Grid mismatch: item {gridId}, return {returnGridId}");
                 continue;
             }
             if ((int)tilePos.X != (int)returnTilePos.X || (int)tilePos.Y != (int)returnTilePos.Y)
             {
-                Logger.GetSawmill("content").Info($"[FETCH DEBUG] Tile mismatch: item ({(int)tilePos.X},{(int)tilePos.Y}), return ({(int)returnTilePos.X},{(int)returnTilePos.Y})");
+                _logs.Warning($"[FETCH MISMATCH] Tile mismatch: item ({(int)tilePos.X},{(int)tilePos.Y}), return ({(int)returnTilePos.X},{(int)returnTilePos.Y})");
                 continue;
             }
             var returnId = comp.FetchObjective.CustomReturnPointId;
             if (!string.IsNullOrEmpty(returnId))
             {
-                if (returnPoint.FetchId == returnId || (string.IsNullOrEmpty(returnPoint.FetchId) && returnPoint.Generic))
-                {
-                    Logger.GetSawmill("content").Info($"[FETCH DEBUG] Matched specific returnId {returnId}");
-                    usedReturnPoint = (returnPoint, ent);
-                    break;
-                }
+                if (returnPoint.FetchId != returnId
+                    && (!string.IsNullOrEmpty(returnPoint.FetchId) || !returnPoint.Generic))
+                    continue;
+                _logs.Info($"[FETCH MATCH] Matched specific returnId {returnId}");
+                usedReturnPoint = (returnPoint, ent);
+                break;
             }
             else if (returnPoint.Generic)
             {
-                Logger.GetSawmill("content").Info($"[FETCH DEBUG] Matched generic return point");
+                _logs.Info($"[FETCH MATCH] Matched generic return point");
                 usedReturnPoint = (returnPoint, ent);
                 break;
             }
         }
         if (usedReturnPoint == null)
         {
-            Logger.GetSawmill("content").Info($"[FETCH DEBUG] No valid return point found for fetch item {uid} at {tile} (grid {gridId}, pos {tilePos})");
+            _logs.Warning($"[FETCH RETURN] No valid return point found for fetch item ({uid}) at {tile} (grid {gridId}, pos {tilePos})");
             return;
         }
-        Logger.GetSawmill("content").Info($"[FETCH DEBUG] Found valid return point {usedReturnPoint.Value.rpUid} for fetch item {uid} at {tile} (grid {gridId}, pos {tilePos})");
+        _logs.Debug($"[FETCH RETURN] Found valid return point ({usedReturnPoint.Value.rpUid}) for fetch item ({uid}) at {tile} (grid {gridId}, pos {tilePos})");
         var returnPointFaction = usedReturnPoint.Value.rpComp.ReturnPointFaction.ToLowerInvariant();
         if (string.IsNullOrEmpty(returnPointFaction))
         {
-            Logger.GetSawmill("content").Info($"[FETCH DEBUG] Return point faction is empty");
+            _logs.Warning($"[FETCH RETURN] Return point faction is empty");
             return;
         }
         var fetchObj = comp.FetchObjective;
         // Initialize dictionary if needed
-        if (!fetchObj.AmountFetchedPerFaction.ContainsKey(returnPointFaction))
-            fetchObj.AmountFetchedPerFaction[returnPointFaction] = 0;
+        fetchObj.AmountFetchedPerFaction.TryAdd(returnPointFaction, 0);
         // Only mark this item as fetched for this faction
         if (!comp.Fetched)
         {
             fetchObj.AmountFetchedPerFaction[returnPointFaction]++;
             comp.Fetched = true;
-            Logger.GetSawmill("content").Info($"[FETCH DEBUG] Fetch item {uid} counted for faction {returnPointFaction}. Total: {fetchObj.AmountFetchedPerFaction[returnPointFaction]}/{fetchObj.AmountToFetch}");
+            _logs.Info($"[FETCH SUCCESS] Fetch item ({uid}) counted for faction '{returnPointFaction}'. Total: {fetchObj.AmountFetchedPerFaction[returnPointFaction]}/{fetchObj.AmountToFetch}");
         }
         var objComp = EnsureComp<AuObjectiveComponent>(comp.ObjectiveUid);
         if (objComp.FactionNeutral)
         {
-            if (fetchObj.AmountFetchedPerFaction[returnPointFaction] >= fetchObj.AmountToFetch)
-            {
-                Logger.GetSawmill("content").Info($"[FETCH DEBUG] Objective {comp.ObjectiveUid} completed for faction {returnPointFaction}!");
-                _objectiveSystem.CompleteObjectiveForFaction(comp.ObjectiveUid, objComp, returnPointFaction);
-            }
+            if (fetchObj.AmountFetchedPerFaction[returnPointFaction] < fetchObj.AmountToFetch)
+                return;
+
+            _logs.Info($"[FETCH SUCCESS] Neutral Objective ({comp.ObjectiveUid}) completed for faction '{returnPointFaction}'!");
+            _objectiveSystem.CompleteObjectiveForFaction(comp.ObjectiveUid, objComp, returnPointFaction);
         }
         else
         {
-            if (returnPointFaction == objComp.Faction.ToLowerInvariant())
-            {
-                if (fetchObj.AmountFetchedPerFaction[returnPointFaction] >= fetchObj.AmountToFetch)
-                {
-                    Logger.GetSawmill("content").Info($"[FETCH DEBUG] Objective {comp.ObjectiveUid} completed for faction {returnPointFaction}!");
-                    _objectiveSystem.CompleteObjectiveForFaction(comp.ObjectiveUid, objComp, returnPointFaction);
-                }
-            }
+            if (returnPointFaction != objComp.Faction.ToLowerInvariant())
+                return;
+            if (fetchObj.AmountFetchedPerFaction[returnPointFaction] < fetchObj.AmountToFetch)
+                return;
+
+            _logs.Info($"[FETCH SUCCESS] Objective ({comp.ObjectiveUid}) completed for faction '{returnPointFaction}'!");
+            _objectiveSystem.CompleteObjectiveForFaction(comp.ObjectiveUid, objComp, returnPointFaction);
         }
     }
 
@@ -324,7 +311,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
 
         // Read the analyzer's faction — this determines which objectives it can credit.
         var analyzerFaction = string.Empty;
-        if (TryComp(analyzerUid, out Content.Shared.AU14.AnalyzerComponent? analyzerComp))
+        if (TryComp(analyzerUid, out AnalyzerComponent? analyzerComp))
             analyzerFaction = analyzerComp.Faction.ToLowerInvariant();
 
         var analyzerCoords = analyzerXform.Coordinates;
@@ -372,7 +359,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
                     continue;
 
                 // Attach the fetch-item component if not already present, then check if already fetched.
-                var itemComp = _entManager.EnsureComponent<AuFetchItemComponent>(ent);
+                var itemComp = EnsureComp<AuFetchItemComponent>(ent);
                 if (itemComp.Fetched)
                     continue;
 
@@ -381,16 +368,15 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
                 itemComp.ObjectiveUid = objUid;
 
                 // Credit the faction — mirrors the return-point logic in TryHandleFetchItemDropOrUndrag.
-                if (!fetchComp.AmountFetchedPerFaction.ContainsKey(creditFaction))
-                    fetchComp.AmountFetchedPerFaction[creditFaction] = 0;
+                fetchComp.AmountFetchedPerFaction.TryAdd(creditFaction, 0);
 
                 fetchComp.AmountFetchedPerFaction[creditFaction]++;
                 itemComp.Fetched = true;
                 totalFetched++;
                 fetchedThisObjective++;
 
-                Logger.GetSawmill("content").Info($"[FETCH SCAN] Item {ent} ({proto}) fetched for faction {creditFaction}, objective {objUid}. " +
-                            $"Total: {fetchComp.AmountFetchedPerFaction[creditFaction]}/{fetchComp.AmountToFetch}");
+                _logs.Info($"[FETCH SCAN] Item {ent} ({proto}) fetched for faction '{creditFaction}', objective {objUid}. " +
+                    $"Total: {fetchComp.AmountFetchedPerFaction[creditFaction]}/{fetchComp.AmountToFetch}");
             }
 
             if (fetchedThisObjective == 0)
@@ -400,19 +386,20 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
             fetchComp.AmountFetchedPerFaction.TryGetValue(creditFaction, out var totalForFaction);
             if (auComp.FactionNeutral)
             {
-                if (totalForFaction >= fetchComp.AmountToFetch)
-                {
-                    Logger.GetSawmill("content").Info($"[FETCH SCAN] Objective {objUid} completed for faction {creditFaction}!");
-                    _objectiveSystem.CompleteObjectiveForFaction(objUid, auComp, creditFaction);
-                }
+                if (totalForFaction < fetchComp.AmountToFetch)
+                    continue;
+
+                _logs.Debug($"[FETCH SCAN] Objective ({objUid}) completed for faction '{creditFaction}'!");
+                _objectiveSystem.CompleteObjectiveForFaction(objUid, auComp, creditFaction);
             }
             else
             {
-                if (creditFaction == auComp.Faction.ToLowerInvariant() && totalForFaction >= fetchComp.AmountToFetch)
-                {
-                    Logger.GetSawmill("content").Info($"[FETCH SCAN] Objective {objUid} completed for faction {creditFaction}!");
-                    _objectiveSystem.CompleteObjectiveForFaction(objUid, auComp, creditFaction);
-                }
+                if (creditFaction != auComp.Faction.ToLowerInvariant()
+                    || totalForFaction < fetchComp.AmountToFetch)
+                    continue;
+
+                _logs.Debug($"[FETCH SCAN] Objective ({objUid}) completed for faction '{creditFaction}'!");
+                _objectiveSystem.CompleteObjectiveForFaction(objUid, auComp, creditFaction);
             }
         }
 
@@ -423,7 +410,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
     /// Completes a fetch objective for the given faction. Used by external systems (e.g. AnalyzerSystem)
     /// that need to complete an objective without going through the full item-drop flow.
     /// </summary>
-    public void CompleteFetchObjective(EntityUid uid, FetchObjectiveComponent fetchComp, AuObjectiveComponent auComp, string faction)
+    public void CompleteFetchObjective(EntityUid uid, AuObjectiveComponent auComp, string faction)
     {
         _objectiveSystem.CompleteObjectiveForFaction(uid, auComp, faction);
     }
@@ -435,11 +422,11 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
     {
         fetchComp.AmountFetched = 0;
         fetchComp.AmountFetchedPerFaction.Clear();
-        if (fetchComp.RespawnOnRepeat)
-        {
-            fetchComp.ItemsSpawned = false; // Reset so items can respawn
-            OnObjectiveStartup(uid, fetchComp, ref Unsafe.NullRef<ComponentStartup>());
-        }
+        if (!fetchComp.RespawnOnRepeat)
+            return;
+
+        fetchComp.ItemsSpawned = false; // Reset so items can respawn
+        StartupFetchObjective(uid, fetchComp);
     }
 
 
@@ -460,23 +447,141 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
                 unfetched++;
         }
 
-        var factions = objComp.FactionNeutral ? objComp.Factions : new List<string> { objComp.Faction };
+        var factions = objComp.FactionNeutral ? objComp.Factions : [objComp.Faction];
         foreach (var faction in factions)
         {
             var factionKey = faction.ToLowerInvariant();
-            int alreadyFetched = 0;
-            fetchObj.AmountFetchedPerFaction.TryGetValue(factionKey, out alreadyFetched);
+            fetchObj.AmountFetchedPerFaction.TryGetValue(factionKey, out int alreadyFetched);
             int possible = alreadyFetched + unfetched;
-            if (possible < fetchObj.AmountToFetch)
+            if (possible >= fetchObj.AmountToFetch)
+                continue;
+            if (!objComp.FactionStatuses.TryGetValue(factionKey, out var status)
+                || status != AuObjectiveComponent.ObjectiveStatus.Incomplete)
+                continue;
+
+            objComp.FactionStatuses[factionKey] = AuObjectiveComponent.ObjectiveStatus.Failed;
+            _logs.Info($"[FETCH FAIL] Objective ({comp.ObjectiveUid}) failed for faction '{factionKey}' due to destroyed fetch items");
+            // Optionally, refresh consoles or notify
+            _objectiveSystem.AwardPointsToFaction(factionKey, objComp); // Optionally award 0 points to trigger UI update
+        }
+    }
+
+    // Markers are being used up, so that we don't spawn multiple high value objs on the same spot
+    public void SpawnMissingFetchObjectives(string presetId,
+        MapId targetMap,
+        ObjectiveMasterComponent master,
+        List<(EntityUid Uid, AuObjectiveComponent Comp)> allObjectives,
+        IPrototypeManager proto)
+    {
+        // Gather unused generic marker positions
+        var markerPositions = new List<EntityCoordinates>();
+        var markerQuery = EntityQueryEnumerator<FetchObjectiveMarkerComponent, TransformComponent>();
+        while (markerQuery.MoveNext(out _, out var marker, out var xform))
+        {
+            if (marker is { Generic: true, Used: false } && xform.MapID == targetMap)
+                markerPositions.Add(xform.Coordinates);
+        }
+
+        if (markerPositions.Count == 0)
+        {
+            _logs.Warning("[OBJ SPAWN] No generic fetch markers found, mappers must place them!");
+            return;
+        }
+
+        // Shuffle markers
+        var rng = new Random();
+        for (int i = markerPositions.Count - 1; i > 0; i--)
+        {
+            int j = rng.Next(i + 1);
+            (markerPositions[i], markerPositions[j]) = (markerPositions[j], markerPositions[i]);
+        }
+        int markerIdx = 0;
+
+        // Per-faction, per-level spawning respecting limits
+        foreach (var faction in new[] { "govfor", "opfor", "clf", "scientist" })
+        {
+            var factionData = master.GetOrCreateFactionData(faction);
+            int maxMinor = factionData.MinorObjectives;
+            int maxMajor = factionData.MajorObjectives;
+
+            int currentMinor = allObjectives.Count(o =>
+                !o.Comp.Active &&
+                o.Comp.Factions.Any(f => f.ToLowerInvariant() == faction) &&
+                o.Comp.ObjectiveLevel == 1 &&
+                o.Comp.ApplicableModes.Any(m => m.Equals(presetId, StringComparison.OrdinalIgnoreCase)));
+
+            int currentMajor = allObjectives.Count(o =>
+                !o.Comp.Active &&
+                o.Comp.Factions.Any(f => f.ToLowerInvariant() == faction) &&
+                o.Comp.ObjectiveLevel == 2 &&
+                o.Comp.ApplicableModes.Any(m => m.Equals(presetId, StringComparison.OrdinalIgnoreCase)));
+
+            SpawnObjectivesOfType(faction, 1, Math.Max(0, maxMinor - currentMinor), presetId, markerPositions, ref markerIdx, allObjectives, proto);
+            SpawnObjectivesOfType(faction, 2, Math.Max(0, maxMajor - currentMajor), presetId, markerPositions, ref markerIdx, allObjectives, proto);
+        }
+
+        // Neutral objectives
+        int currentNeutral = allObjectives.Count(o =>
+            o.Comp is { Active: false, FactionNeutral: true } &&
+            o.Comp.ApplicableModes.Any(m => m.Equals(presetId, StringComparison.OrdinalIgnoreCase)));
+
+        SpawnObjectivesOfType(null, 1, Math.Max(0, master.MaxNeutralObjectives - currentNeutral), presetId, markerPositions, ref markerIdx, allObjectives, proto);
+    }
+
+    private void SpawnObjectivesOfType(string? faction,
+        int level,
+        int count,
+        string presetId,
+        List<EntityCoordinates> markerPositions,
+        ref int markerIdx,
+        List<(EntityUid Uid, AuObjectiveComponent Comp)> allObjectives,
+        IPrototypeManager proto)
+    {
+        if (count <= 0) return;
+
+        var compFactory = EntityManager.ComponentFactory;
+        var candidates = new List<EntityPrototype>();
+
+        foreach (var p in proto.EnumeratePrototypes<EntityPrototype>())
+        {
+            if (!p.TryComp<AuObjectiveComponent>(out var objComp, compFactory))
+                continue;
+
+            if (!objComp.ApplicableModes.Any(m => m.Equals(presetId, StringComparison.OrdinalIgnoreCase)))
+                continue;
+
+            if (faction != null)
             {
-                if (objComp.FactionStatuses.TryGetValue(factionKey, out var status) && status == AuObjectiveComponent.ObjectiveStatus.Incomplete)
-                {
-                    objComp.FactionStatuses[factionKey] = AuObjectiveComponent.ObjectiveStatus.Failed;
-                    Logger.GetSawmill("content").Info($"[FETCH FAIL] Objective {comp.ObjectiveUid} failed for faction {factionKey} due to destroyed fetch items");
-                    // Optionally, refresh consoles or notify
-                    _objectiveSystem?.AwardPointsToFaction(factionKey, objComp); // Optionally award 0 points to trigger UI update
-                }
+                if (objComp.Factions.All(f => f.ToLowerInvariant() != faction))
+                    continue;
             }
+            else
+            {
+                if (!objComp.FactionNeutral)
+                    continue;
+            }
+
+            if (objComp.ObjectiveLevel != level)
+                continue;
+
+            if (allObjectives.Any(o => o.Comp.ID == objComp.ID))
+                continue;
+
+            candidates.Add(p);
+        }
+
+        var rng = new Random();
+        for (int i = 0; i < count && candidates.Count > 0; i++)
+        {
+            int idx = rng.Next(candidates.Count);
+            var chosenProto = candidates[idx];
+            var coords = markerPositions[markerIdx % markerPositions.Count];
+            markerIdx++;
+
+            Spawn(chosenProto.ID, coords);
+            _logs.Debug($"[OBJ SPAWN] Spawned missing objective '{chosenProto.ID}' at {coords} for {faction ?? "neutral"} L{level}.");
+
+            candidates.RemoveAt(idx);
         }
     }
 }

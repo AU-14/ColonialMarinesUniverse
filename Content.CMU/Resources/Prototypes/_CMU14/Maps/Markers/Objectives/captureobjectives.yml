@@ -1,9 +1,9 @@
-## stable garrison
+# ├──[ Stable Garrison ]─────────────────────────────────────────────┤
 - type: entity
   name: Capture the Street
   parent: AU14WallFlagUA
   id: captureuaflagobjective
-  description: "Capture mainstreet  for your faction."
+  description: "Capture mainstreet for your faction."
   components:
     - type: AuObjective
       id: captureuaflagobj
@@ -17,7 +17,7 @@
         - clf
       objectivelevel: 2
       custompoints: 5
-      ObjectiveDescription: "Capture mainstreet  for your faction."
+      ObjectiveDescription: "Capture mainstreet for your faction."
       roundEndMessage: "By capturing the UA flag"
     - type: CaptureObjective
       hoisttime: 8
@@ -28,12 +28,11 @@
     - type: NavMapBeacon
       text: Main Street
 
-
 - type: entity
   name: Capture the Supermarket
   parent: AU14WallFlagUA
   id: capturesupermarketobjective
-  description: "Capture the supermarket  for your faction."
+  description: "Capture the supermarket for your faction."
   components:
   - type: AuObjective
     id: capturesupermarketobjective
@@ -41,14 +40,14 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
     - clf
     objectivelevel: 2
     custompoints: 5
-    ObjectiveDescription: "Capture the supermarket  for your faction."
+    ObjectiveDescription: "Capture the supermarket for your faction."
     roundEndMessage: "By capturing the UA flag"
     intelTiers:
     - supermarkettier0
@@ -89,14 +88,13 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-
     possiblefactions:
     - govfor
     - opfor
     - clf
     objectivelevel: 2
     custompoints: 5
-    ObjectiveDescription: "Capture the Tunnel  for your faction."
+    ObjectiveDescription: "Capture the Tunnel for your faction."
     roundEndMessage: "By capturing the Tunnel"
   - type: CaptureObjective
     hoisttime: 8
@@ -112,7 +110,7 @@
   name: Capture the Desert
   parent: AU14WallFlagUA
   id: capturedesertobjective
-  description: "Capture the Desert  for your faction."
+  description: "Capture the Desert for your faction."
   components:
   - type: AuObjective
     id: capturedesertobjective
@@ -120,14 +118,13 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-
     possiblefactions:
     - govfor
     - opfor
     - clf
     objectivelevel: 1
     custompoints: 3
-    ObjectiveDescription: "Capture the Desert  for your faction."
+    ObjectiveDescription: "Capture the Desert for your faction."
     roundEndMessage: "By capturing the Desert"
   - type: CaptureObjective
     hoisttime: 8
@@ -138,8 +135,7 @@
   - type: NavMapBeacon
     text: Desert
 
-#gixens
-
+# ├──[ Gixens ]──────────────────────────────────────────────────────┤
 - type: entity
   name: Capture the mine
   parent: AU14WallFlagUA
@@ -154,7 +150,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -171,9 +167,7 @@
     visibleonmap: true
     flaghealth: 250
 
-
-
-#solaris
+# ├──[ Solaris ]─────────────────────────────────────────────────────┤
 - type: entity
   name: Capture Solar Farms
   parent: AU14WallFlagUA
@@ -186,7 +180,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -203,8 +197,6 @@
   - type: NavMapBeacon
     text: Solar Farms
 
-
-
 - type: entity
   name: Capture the cabin
   parent: AU14WallFlagUA
@@ -216,7 +208,6 @@
     factioneutral: true
     applicableModes:
     - ForceOnForce
-    - DistressSignal
     - DistressSignal
     possiblefactions:
     - govfor
@@ -235,8 +226,6 @@
     text: Hermits Cabin
   - type: AreaLabel
 
-
-
 - type: entity
   name: Capture the Admins Office
   parent: AU14WallFlagUA
@@ -249,7 +238,6 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-
     possiblefactions:
     - govfor
     - opfor
@@ -267,7 +255,6 @@
     text: Admins Office
   - type: AreaLabel
 
-
 - type: entity
   name: Capture the Abandoned Camp
   parent: AU14WallFlagUA
@@ -280,7 +267,6 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-
     possiblefactions:
     - govfor
     - opfor
@@ -297,9 +283,7 @@
   - type: NavMapBeacon
     text: Abandoned Camp
 
-
-
-# Flight
+# ├──[ Flight ]──────────────────────────────────────────────────────┤
 - type: entity
   name: Capture the Basement
   parent: AU14WallFlagUA
@@ -312,7 +296,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -330,7 +314,6 @@
     text: Basement
   - type: AreaLabel
 
-
 - type: entity
   name: Capture the Roof
   parent: AU14WallFlagUA
@@ -343,7 +326,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -361,7 +344,6 @@
     text: Roof
   - type: AreaLabel
 
-
 - type: entity
   name: Capture the Middle Floor
   parent: AU14WallFlagUA
@@ -374,7 +356,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -392,8 +374,7 @@
     text: Middle Floor
   - type: AreaLabel
 
-#Port Neroid
-
+# ├──[ Port Neroid ]─────────────────────────────────────────────────┤
 - type: entity
   name: Capture the PAEK-500 Reactor Control
   parent: AU14WallFlagUA
@@ -406,7 +387,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -436,7 +417,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -466,7 +447,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -496,7 +477,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -526,7 +507,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -556,7 +537,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -586,7 +567,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -616,7 +597,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -646,7 +627,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -676,7 +657,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -694,8 +675,7 @@
   - type: NavMapBeacon
     text: Cargo Pier
 
-#Corsat
-
+# ├──[ Corsat ]──────────────────────────────────────────────────────┤
 - type: entity
   name: Capture Biodome Theta
   parent: AU14WallFlagUA
@@ -708,7 +688,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -738,7 +718,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -768,7 +748,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -798,7 +778,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -828,7 +808,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor

@@ -17,7 +17,7 @@
     objectivelevel: 1
     custompoints: 3
     maxrepeatable: 1
-    ObjectiveDescription: "kill the enemy"
+    ObjectiveDescription: "Kill the enemy"
     nexttier: destroy_mineable_solaris_steel
   - type: KillObjective
     factiontokill: govfor
@@ -82,7 +82,7 @@
     factioneutral: false
     id: clfkillplatcoobj
     applicableModes:
-    - insurgency
+    - Insurgency
     possiblefactions:
     - clf
     repeating: false
@@ -106,7 +106,7 @@
     id: killclfleaderobj
     factioneutral: false
     applicableModes:
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     repeating: false
@@ -131,7 +131,7 @@
     id: killinsurgentsobj
     factioneutral: false
     applicableModes:
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     repeating: true
@@ -154,7 +154,7 @@
     id: killgovforobj
     factioneutral: false
     applicableModes:
-    - insurgency
+    - Insurgency
     possiblefactions:
     - clf
     repeating: true
@@ -166,58 +166,57 @@
     factiontokill: GOVFOR
     amounttokill: 1
 
-
-- type: entity
-  name: Kill Platoon Commander UPP
-  parent: MarkerBase
-  id: killplatcoobjectiveupp
-  components:
-  - type: Sprite
-    state: red
-  - type: AuObjective
-    id: killplatcouppobj
-    factioneutral: false
-    applicableModes:
-    - ForceOnForce
-    possiblefactions:
-    - opfor
-    repeating: false
-    objectivelevel: 3
-    WhitelistedPlatoons:
-    - LACN
-    custompoints: 20
-    ObjectiveDescription: "Kill the Platoon Commander"
-    roundEndMessage: "By Killing the Commander"
-  - type: KillObjective
-    factiontokill: govfor
-    amounttokill: 1
-    specificjob: AU14JobGOVFORPlatCoUPP
-
-- type: entity
-  name: Kill Royal Marines Platoon Commander
-  parent: MarkerBase
-  id: killplatcoobjectivermc
-  components:
-  - type: Sprite
-    state: red
-  - type: AuObjective
-    id: killplatcormcobj
-    factioneutral: false
-    applicableModes:
-    - ForceOnForce
-    possiblefactions:
-    - opfor
-    repeating: false
-    objectivelevel: 3
-    WhitelistedPlatoons:
-    - UPP
-    custompoints: 20
-    ObjectiveDescription: "Kill the Platoon Commander"
-    roundEndMessage: "By Killing the Commander"
-  - type: KillObjective
-    factiontokill: govfor
-    amounttokill: 1
-    specificjob: AU14JobGOVFORPlatCoRMC
+# - type: entity
+#   name: Kill Platoon Commander UPP
+#   parent: MarkerBase
+#   id: killplatcoobjectiveupp
+#   components:
+#   - type: Sprite
+#     state: red
+#   - type: AuObjective
+#     id: killplatcouppobj
+#     factioneutral: false
+#     applicableModes:
+#     - ForceOnForce
+#     possiblefactions:
+#     - opfor
+#     repeating: false
+#     objectivelevel: 3
+#     WhitelistedPlatoons:
+#     - LACN
+#     custompoints: 20
+#     ObjectiveDescription: "Kill the Platoon Commander"
+#     roundEndMessage: "By Killing the Commander"
+#   - type: KillObjective
+#     factiontokill: govfor
+#     amounttokill: 1
+#     specificjob: AU14JobGOVFORPlatCoUPP
+#
+# - type: entity
+#   name: Kill Royal Marines Platoon Commander
+#   parent: MarkerBase
+#   id: killplatcoobjectivermc
+#   components:
+#   - type: Sprite
+#     state: red
+#   - type: AuObjective
+#     id: killplatcormcobj
+#     factioneutral: false
+#     applicableModes:
+#     - ForceOnForce
+#     possiblefactions:
+#     - opfor
+#     repeating: false
+#     objectivelevel: 3
+#     WhitelistedPlatoons:
+#     - UPP
+#     custompoints: 20
+#     ObjectiveDescription: "Kill the Platoon Commander"
+#     roundEndMessage: "By Killing the Commander"
+#   - type: KillObjective
+#     factiontokill: govfor
+#     amounttokill: 1
+#     specificjob: AU14JobGOVFORPlatCoRMC
 
 - type: entity
   name: "Kill the threat leader (DS)"
