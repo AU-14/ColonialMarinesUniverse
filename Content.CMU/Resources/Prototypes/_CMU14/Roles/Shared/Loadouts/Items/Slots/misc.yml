@@ -71,7 +71,7 @@
     - RMCPatchMedic
 
 - type: loadout
-  id: OliveBracnhPatchCMU14
+  id: OliveBranchPatchCMU14
   storage:
     back:
     - RMCPatchOliveBranch
