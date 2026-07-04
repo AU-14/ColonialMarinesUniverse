@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Medical.Surgery.Conditions;
+using Content.Shared._RMC14.Medical.Surgery.Conditions;
 using Content.Shared._RMC14.Medical.Surgery.Steps;
 using Content.Shared._RMC14.Medical.Surgery.Tools;
 using Content.Shared._RMC14.Xenonids.Parasite;
@@ -9,7 +9,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Popups;
 using Robust.Shared.Prototypes;
 
-using CMUAutodocContainedPatientComponent = Content.Shared._CMU14.Medical.Surgery.CMUAutodocContainedPatientComponent;
+using CMUAutodocContainedPatientComponent = Content.Shared._CMU14.Medical.Treatment.Surgery.CMUAutodocContainedPatientComponent;
 
 namespace Content.Shared._RMC14.Medical.Surgery;
 

@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Medical;
+using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared._RMC14.Medical.Wounds;

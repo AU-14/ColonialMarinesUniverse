@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Medical.BodyPart.Events;
+using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Melee;
 using Content.Shared.Body.Components;

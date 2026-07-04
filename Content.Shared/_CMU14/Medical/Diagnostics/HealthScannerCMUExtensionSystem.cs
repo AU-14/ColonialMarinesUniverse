@@ -1,13 +1,14 @@
 using System.Collections.Generic;
-using Content.Shared._CMU14.Medical;
-using Content.Shared._CMU14.Medical.Bones;
-using Content.Shared._CMU14.Medical.Items;
-using Content.Shared._CMU14.Medical.Organs;
-using Content.Shared._CMU14.Medical.Organs.Heart;
-using Content.Shared._CMU14.Medical.Shrapnel;
-using Content.Shared._CMU14.Medical.Stabilizers;
-using Content.Shared._CMU14.Medical.StatusEffects;
-using Content.Shared._CMU14.Medical.Wounds;
+using Content.Shared._CMU14.Medical.Core;
+using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared._CMU14.Medical.Anatomy.Bones;
+using Content.Shared._CMU14.Medical.Treatment.FirstAid;
+using Content.Shared._CMU14.Medical.Anatomy.Organs;
+using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
+using Content.Shared._CMU14.Medical.Injuries.Shrapnel;
+using Content.Shared._CMU14.Medical.Treatment.Stabilization;
+using Content.Shared._CMU14.Medical.Injuries.Pain;
+using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Scanner;
 using Content.Shared._RMC14.Medical.Wounds;
@@ -32,6 +33,7 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedPainShockSystem _pain = default!;
     [Dependency] private SharedCMUTraumaGovernorSystem _traumaGovernor = default!;
+    [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
     [Dependency] private SkillsSystem _skills = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> MedicalSkill = "RMCSkillMedical";
@@ -110,7 +112,7 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
         var seen = new HashSet<(BodyPartType, BodyPartSymmetry)>();
         foreach (var (partUid, partComp) in _body.GetBodyChildren(patient))
         {
-            if (!TryComp<BodyPart.BodyPartHealthComponent>(partUid, out var ph))
+            if (!TryComp<BodyPartHealthComponent>(partUid, out var ph))
                 continue;
 
             var key = (partComp.PartType, partComp.Symmetry);
@@ -124,7 +126,7 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
             var dictKey = ToDictKey(partComp.PartType, partComp.Symmetry);
             TryComp<CMUShrapnelComponent>(partUid, out var shrapnel);
             var woundReadout = TryComp<BodyPartWoundComponent>(partUid, out var pw)
-                ? WorstUntreatedWoundReadout(pw)
+                ? _woundLedger.GetWorstUntreatedWound(pw)
                 : null;
             parts[dictKey] = new CMUBodyPartReadout(
                 partComp.PartType,
@@ -142,35 +144,6 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
         }
         state.CMUParts = parts;
     }
-
-    private static (WoundSize Size, WoundMechanism Mechanism)? WorstUntreatedWoundReadout(BodyPartWoundComponent wounds)
-    {
-        (WoundSize Size, WoundMechanism Mechanism)? worst = null;
-        for (var i = 0; i < wounds.Wounds.Count; i++)
-        {
-            var wound = wounds.Wounds[i];
-            if (wound.Treated)
-                continue;
-
-            var size = i < wounds.Sizes.Count ? wounds.Sizes[i] : WoundSize.Deep;
-            if (worst is not null && (byte)size <= (byte)worst.Value.Size)
-                continue;
-
-            var mechanism = i < wounds.Mechanisms.Count
-                ? wounds.Mechanisms[i]
-                : LegacyMechanismFor(wound.Type);
-            worst = (size, mechanism);
-        }
-
-        return worst;
-    }
-
-    private static WoundMechanism LegacyMechanismFor(WoundType type) => type switch
-    {
-        WoundType.Burn => WoundMechanism.Burn,
-        WoundType.Surgery => WoundMechanism.Surgical,
-        _ => WoundMechanism.Generic,
-    };
 
     private static BodyPartType ToDictKey(BodyPartType type, BodyPartSymmetry sym)
     {

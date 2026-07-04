@@ -1,11 +1,11 @@
-using Content.Server._CMU14.Medical.Surgery;
+using Content.Server._CMU14.Medical.Treatment.Surgery;
 using Content.Server._RMC14.Medical.Wounds;
 using Content.Server.Body.Systems;
 using Content.Server.Chat.Systems;
 using Content.Server.Popups;
-using Content.Shared._CMU14.Medical;
-using Content.Shared._CMU14.Medical.Surgery;
-using Content.Shared._CMU14.Medical.StatusEffects;
+using Content.Shared._CMU14.Medical.Core;
+using Content.Shared._CMU14.Medical.Treatment.Surgery;
+using Content.Shared._CMU14.Medical.Injuries.Pain;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Conditions;

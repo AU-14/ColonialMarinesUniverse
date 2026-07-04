@@ -1,7 +1,7 @@
 using Content.Shared._CMU14.Yautja;
-using Content.Shared._CMU14.Medical.Bones;
-using Content.Shared._CMU14.Medical.Items;
-using Content.Shared._CMU14.Medical.Wounds;
+using Content.Shared._CMU14.Medical.Anatomy.Bones;
+using Content.Shared._CMU14.Medical.Treatment.FirstAid;
+using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;

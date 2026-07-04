@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Medical.StatusEffects;
+using Content.Shared._CMU14.Medical.Injuries.Pain;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Damage;
 using Content.Shared.EntityEffects;

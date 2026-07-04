@@ -3,7 +3,7 @@ using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Xenonids.Heal;
 using Content.Shared._RMC14.Xenonids.Rage;
 using Content.Shared._RMC14.Xenonids.Sweep;
-using Content.Shared._CMU14.Medical.BodyPart;
+using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Effects;

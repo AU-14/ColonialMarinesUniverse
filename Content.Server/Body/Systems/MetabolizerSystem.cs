@@ -1,6 +1,6 @@
 using Content.Server.Body.Components;
-using Content.Shared._CMU14.Medical;
-using Content.Shared._CMU14.Medical.Metabolism.Events;
+using Content.Shared._CMU14.Medical.Core;
+using Content.Shared._CMU14.Medical.Anatomy.Metabolism.Events;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Administration.Logs;

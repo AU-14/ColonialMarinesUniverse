@@ -1,9 +1,9 @@
-using Content.Shared._CMU14.Medical;
+using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Diagnostics;
-using Content.Shared._CMU14.Medical.Organs;
-using Content.Shared._CMU14.Medical.Organs.Heart;
-using Content.Shared._CMU14.Medical.Organs.Lungs;
-using Content.Shared._CMU14.Medical.StatusEffects;
+using Content.Shared._CMU14.Medical.Anatomy.Organs;
+using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
+using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs;
+using Content.Shared._CMU14.Medical.Injuries.Pain;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Scanner;
 using Content.Shared.Body.Systems;

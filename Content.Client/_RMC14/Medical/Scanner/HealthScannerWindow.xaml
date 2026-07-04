@@ -1,7 +1,7 @@
 <scanner:HealthScannerWindow
     xmlns="https://spacestation14.io"
     xmlns:scanner="clr-namespace:Content.Client._RMC14.Medical.Scanner"
-    xmlns:cmui="clr-namespace:Content.Client._CMU14.Medical.UI"
+    xmlns:cmui="clr-namespace:Content.Client._CMU14.Medical.Presentation.Windows"
     xmlns:cooldown="clr-namespace:Content.Client.Cooldown"
     xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"

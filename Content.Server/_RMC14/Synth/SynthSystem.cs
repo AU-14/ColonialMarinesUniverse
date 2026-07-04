@@ -1,5 +1,5 @@
 using Content.Server.Body.Systems;
-using Content.Shared._CMU14.Medical;
+using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._RMC14.Humanoid;
 using Content.Shared._RMC14.Medical.HUD.Components;
 using Content.Shared._RMC14.Synth;
