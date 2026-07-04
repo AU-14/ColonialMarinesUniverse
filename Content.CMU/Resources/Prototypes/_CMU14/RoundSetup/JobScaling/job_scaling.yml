@@ -27,11 +27,6 @@
     AU14JobGOVFORSquadRifleman:
       scale: 0.5    # 2 slots
       whenToBeginScaling: 1
-    CMUJobGOVFORDroneOperator:
-      scale: 0
-      whenToBeginScaling: 1
-      benchmark: 1
-      maximum: 1
     AU14JobGOVFORPlatoonCorpsman:
       scale: 0.2    # 5 slots
       whenToBeginScaling: 50
@@ -47,11 +42,6 @@
       whenToBeginScaling: 50
       benchmark: 2  # 2 slots available at 50 (whenToBeginScaling)
       maximum: 5
-    AU14JobGOVFORVehicleCrewman:
-      scale: 0
-      whenToBeginScaling: 50
-      benchmark: 2
-      maximum: 2
     AU14JobGOVFORWorkingJoe:
       scale: 0.034  # ~29 slots
       whenToBeginScaling: 50
@@ -65,11 +55,6 @@
     AU14JobOPFORSquadCombatTech:
       scale: 0.15
       whenToBeginScaling: 50
-    AU14JobOPFORVehicleCrewman:
-      scale: 0
-      whenToBeginScaling: 50
-      benchmark: 2
-      maximum: 2
     # TODO: MP/AuxTech prototypes
     AU14JobOPFORWorkingJoe:
       scale: 0.034
@@ -82,11 +67,6 @@
     AU14JobGOVFORSquadRifleman:
       scale: 1
       whenToBeginScaling: 1
-    CMUJobGOVFORDroneOperator:
-      scale: 0
-      whenToBeginScaling: 1
-      benchmark: 1
-      maximum: 1
     AU14JobGOVFORPlatoonCorpsman:
       scale: 0.2
       whenToBeginScaling: 30
@@ -134,11 +114,6 @@
       scale: 0.018
       whenToBeginScaling: 40
       benchmark: 6
-    CMUJobGOVFORDroneOperator:
-      scale: 0
-      whenToBeginScaling: 40
-      benchmark: 1
-      maximum: 1
     AU14JobGOVFORPlatoonCorpsman:
       scale: 0.014
       whenToBeginScaling: 40
@@ -165,11 +140,6 @@
         whenToBeginScaling: 50
         benchmark: 3
         maximum: 6
-    AU14JobGOVFORVehicleCrewman:
-        scale: 0
-        whenToBeginScaling: 50
-        benchmark: 2
-        maximum: 2
     AU14JobGOVFORWorkingJoe:
       scale: 0.034
       whenToBeginScaling: 50
