@@ -11,12 +11,10 @@ using Content.Shared._CMU14.Medical.Anatomy.Organs.Liver;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Stomach;
 using Content.Shared._CMU14.Medical.Injuries.Shrapnel;
-using Content.Shared._CMU14.Medical.Treatment.Stabilization;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Systems;
 using Content.Shared.FixedPoint;
-using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.Injuries.Pain;
 
@@ -24,7 +22,6 @@ public readonly record struct CMUPainSourceSnapshot(FixedPoint2 Target, FixedPoi
 
 public sealed partial class SharedPainSourceProfileSystem : EntitySystem
 {
-    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private SharedFractureSystem _fracture = default!;
 
@@ -32,7 +29,6 @@ public sealed partial class SharedPainSourceProfileSystem : EntitySystem
     private const float PainTargetCap = 95f;
     private const float PainRiseRateCap = 4.0f;
     private const float PainRiseRatePerTarget = 0.05f;
-    private const float StabilizedOrganPainMultiplier = 0.35f;
 
     public CMUPainSourceSnapshot ComputePainSourceProfile(EntityUid body)
     {
@@ -85,18 +81,13 @@ public sealed partial class SharedPainSourceProfileSystem : EntitySystem
                     SharedCMUShrapnelSystem.GetPainTarget(shrapnel));
         }
 
-        var hasOrganStabilizer = TryComp<CMUOrganStabilizedComponent>(body, out var stabilizer) &&
-                                 stabilizer.ExpiresAt > _timing.CurTime;
         foreach (var organ in _body.GetBodyOrgans(body))
         {
             if (!TryComp<OrganHealthComponent>(organ.Id, out var oh))
                 continue;
 
-            var organPain = OrganPainTarget(organ.Id, oh.Stage);
-            if (hasOrganStabilizer && IsStabilizedOrgan(organ.Id, stabilizer!))
-                organPain *= StabilizedOrganPainMultiplier;
-
-            AddPainSource(ref sourceCount, ref highest, ref total, ref riseRate, organPain);
+            AddPainSource(ref sourceCount, ref highest, ref total, ref riseRate,
+                OrganPainTarget(organ.Id, oh.Stage));
         }
 
         if (sourceCount == 0)
@@ -240,19 +231,4 @@ public sealed partial class SharedPainSourceProfileSystem : EntitySystem
         };
     }
 
-    private bool IsStabilizedOrgan(EntityUid organ, CMUOrganStabilizedComponent stabilizer)
-    {
-        return stabilizer.Target switch
-        {
-            CMUOrganStabilizerTarget.Brain => HasComp<CMUBrainComponent>(organ),
-            CMUOrganStabilizerTarget.Heart => HasComp<HeartComponent>(organ),
-            CMUOrganStabilizerTarget.Lungs => HasComp<LungsComponent>(organ),
-            CMUOrganStabilizerTarget.Liver => HasComp<LiverComponent>(organ),
-            CMUOrganStabilizerTarget.Kidneys => HasComp<KidneysComponent>(organ),
-            CMUOrganStabilizerTarget.Stomach => HasComp<CMUStomachComponent>(organ),
-            CMUOrganStabilizerTarget.Eyes => HasComp<EyesComponent>(organ),
-            CMUOrganStabilizerTarget.Ears => HasComp<EarsComponent>(organ),
-            _ => false,
-        };
-    }
 }

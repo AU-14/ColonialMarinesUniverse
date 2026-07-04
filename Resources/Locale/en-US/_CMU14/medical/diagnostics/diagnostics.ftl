@@ -119,14 +119,6 @@ cmu-medical-scanner-chip-wounds            = { $count } wound{ $count ->
 cmu-medical-scanner-skill-hint-fractures   = Insufficient training to detect fractures or internal bleeding (Med-1 required).
 cmu-medical-scanner-skill-hint-organs      = Insufficient training to assess organ damage (Med-2 required).
 cmu-medical-scanner-synthetic-physiology   = Synthetic physiology detected
-cmu-medical-scanner-stabilizer-missing     = Stabilizer: missing
-cmu-medical-scanner-stabilizer-ready       = Stabilizer: ready
-cmu-medical-scanner-stabilizer-cooling     = Stabilizer: cooling ({ $seconds }s)
-cmu-medical-scanner-stabilizer-empty       = Stabilizer: empty
-cmu-medical-scanner-stabilizer-unavailable = Stabilizer: unavailable
-cmu-medical-scanner-stabilizer-active      = Stabilizing { $organ } ({ $seconds }s)
-cmu-medical-scanner-stabilizer-vial-loaded-suffix =  + vial
-cmu-medical-scanner-stabilizer-vial-bypass-suffix =  + vial bypass
 
 # Legacy V2-ε Mix B keys (still referenced by tests / fallback paths)
 cmu-medical-scanner-vitals-pain            = Pain

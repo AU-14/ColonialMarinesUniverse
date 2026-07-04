@@ -6,7 +6,6 @@ using Content.Shared._CMU14.Medical.Treatment.FirstAid;
 using Content.Shared._CMU14.Medical.Anatomy.Organs;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
 using Content.Shared._CMU14.Medical.Injuries.Shrapnel;
-using Content.Shared._CMU14.Medical.Treatment.Stabilization;
 using Content.Shared._CMU14.Medical.Injuries.Pain;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Marines.Skills;
@@ -32,7 +31,6 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
     [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedPainShockSystem _pain = default!;
-    [Dependency] private SharedCMUTraumaGovernorSystem _traumaGovernor = default!;
     [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
     [Dependency] private SkillsSystem _skills = default!;
 
@@ -72,7 +70,6 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
         }
         var state = args.State;
 
-        state.CMUTraumaGovernor = _traumaGovernor.GetReadout(args.Patient);
         FillBodyParts(args.Patient, state);
         if (skill >= 2)
         {

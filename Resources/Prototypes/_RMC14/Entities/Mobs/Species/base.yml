@@ -181,9 +181,6 @@
         type: BodyPartPickerBui
       enum.CMUSurgeryUIKey.Key:
         type: CMUSurgeryBui
-      enum.CMUTraumaGovernorUI.Key:
-        type: CMUTraumaGovernorBui
-        requireInputValidation: false
       enum.CMUMedicalFieldCraftingUI.Key:
         type: CMUMedicalFieldCraftingBui
         requireInputValidation: false

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Content.Shared._CMU14.Medical.Anatomy.Bones;
 using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared._CMU14.Medical.Treatment.Stabilization;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared.Body.Part;
 using Content.Shared.Chemistry.Components;
@@ -33,7 +32,6 @@ public sealed class HealthScannerBuiState(
     public List<CMUInternalBleedReadout>? CMUInternalBleeds;
     public int? CMUHeartBpm;
     public bool? CMUHeartStopped;
-    public CMUTraumaGovernorReadout? CMUTraumaGovernor;
     public CMUPainShockRisk? CMUPainShockRisk;
     public bool CMUPainShockSuppressed;
     public bool CMUExternalBleeding;

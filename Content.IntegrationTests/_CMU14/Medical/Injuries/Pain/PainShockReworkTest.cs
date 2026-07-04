@@ -4,10 +4,8 @@ using Content.Shared._CMU14.Medical.Anatomy.Bones;
 using Content.Shared._CMU14.Medical.Treatment.Effects;
 using Content.Shared._CMU14.Medical.Anatomy.Organs;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Stomach;
 using Content.Shared._CMU14.Medical.Injuries.Shrapnel;
-using Content.Shared._CMU14.Medical.Treatment.Stabilization;
 using Content.Shared._CMU14.Medical.Injuries.Pain;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.Wounds;
@@ -533,41 +531,6 @@ public sealed class PainShockReworkTest
             {
                 entMan.DeleteEntity(heartPatient);
                 entMan.DeleteEntity(stomachPatient);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task StabilizedOrganReducesOrganPainPressure()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var timing = server.ResolveDependency<Robust.Shared.Timing.IGameTiming>();
-            var pain = entMan.System<SharedPainShockSystem>();
-            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-
-            try
-            {
-                SetOrganStage<LungsComponent>(entMan, human, OrganDamageStage.Damaged);
-
-                var baseline = pain.ComputePainSourceProfile(human);
-                var stabilized = entMan.EnsureComponent<CMUOrganStabilizedComponent>(human);
-                SetField(stabilized, nameof(CMUOrganStabilizedComponent.Target), CMUOrganStabilizerTarget.Lungs);
-                SetField(stabilized, nameof(CMUOrganStabilizedComponent.ExpiresAt), timing.CurTime + TimeSpan.FromMinutes(2));
-
-                var suppressed = pain.ComputePainSourceProfile(human);
-
-                Assert.That(suppressed.Target.Float(), Is.LessThan(baseline.Target.Float()));
-            }
-            finally
-            {
-                entMan.DeleteEntity(human);
             }
         });
 
