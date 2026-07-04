@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server._CMU14.RoundStatistics;
 using Content.Server.AU14.Objectives.Fetch;
 using Content.Server.AU14.Objectives.Interact;
 using Content.Server.AU14.Objectives.Kill;
@@ -34,6 +35,7 @@ public sealed partial class AuObjectiveSystem : AuSharedObjectiveSystem
 
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private RoundEnd.RoundEndSystem _roundEnd = default!;
+    [Dependency] private CMURoundStatisticsSystem _roundStats = default!;
     [Dependency] private Content.Server.AU14.Round.PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
     [Dependency] private AuFetchObjectiveSystem _fetchObjectiveSystem = default!;
     [Dependency] private AuKillObjectiveSystem _killObjectiveSystem = default!;
@@ -665,6 +667,7 @@ public sealed partial class AuObjectiveSystem : AuSharedObjectiveSystem
         var message = roundendmessage;
         if (string.IsNullOrEmpty(message))
             message = $"{faction.ToUpperInvariant()} has won the round!";
+        _roundStats.RecordObjectiveVictory(faction);
         _gameTicker.EndRound(faction.ToUpperInvariant() + " Won the round by: " + message);
 
         _roundEnd.EndRound();

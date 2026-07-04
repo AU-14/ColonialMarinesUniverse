@@ -866,6 +866,8 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
             CMURoundStatisticsOutcome.InsurgencyGovforVictory => "Govfor victory",
             CMURoundStatisticsOutcome.ColonyFallThreatVictory => "Threat victory",
             CMURoundStatisticsOutcome.ColonyFallSurvivorVictory => "Colonist victory",
+            CMURoundStatisticsOutcome.Stalemate => "Stalemate",
+            CMURoundStatisticsOutcome.ObjectiveVictory => "Objective victory",
             CMURoundStatisticsOutcome.Unknown => "Unknown / manual ending",
             _ => outcome.ToString(),
         };

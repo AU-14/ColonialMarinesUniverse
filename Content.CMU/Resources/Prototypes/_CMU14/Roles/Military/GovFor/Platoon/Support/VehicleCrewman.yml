@@ -59,7 +59,7 @@
   id: AU14GearGOVFORVehicleCrewman
   equipment:
     id: AU14IDCardGOVFORVehicleCrewman
-    ears: AU14HeadsetGovforMarine
+    ears: AU14HeadsetGovforCommand
 
 - type: startingGear
   id: AU14GearGOVFORVehicleCrewmanDummy
@@ -68,7 +68,7 @@
     shoes: AU14BootsJungle
     head: AU14JungleM10Helmet
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetGovforMarine
+    ears: AU14HeadsetGovforCommand
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -117,7 +117,7 @@
   id: AU14GearOPFORVehicleCrewman
   equipment:
     id: AU14IDCardOPFORVehicleCrewman
-    ears: AU14HeadsetOpforMarine
+    ears: AU14HeadsetOpforCommand
 
 - type: startingGear
   id: AU14GearOPFORVehicleCrewmanDummy
@@ -126,7 +126,7 @@
     shoes: AU14BootsJungle
     head: AU14JungleM10Helmet
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetOpforMarine
+    ears: AU14HeadsetOpforCommand
 
 - type: entity
   parent: CMSpawnPointJobBase

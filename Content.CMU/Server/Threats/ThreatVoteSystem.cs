@@ -198,13 +198,6 @@ public sealed partial class ThreatVoteSystem : EntitySystem
 
         if (prepared.Candidates.Count == 1)
         {
-            if (_ticker.RunLevel != GameRunLevel.InRound)
-            {
-                ClearRoundJoinBlocks();
-
-                return false;
-            }
-
             ThreatPrototype selected = prepared.Candidates[0].Threat;
             Sawmill.Info($"[ThreatVoteSystem] Only one threat candidate '{selected.ID}' prepared for preset {
                 prepared.PresetId
