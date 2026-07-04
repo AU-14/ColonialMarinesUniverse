@@ -12,6 +12,7 @@
   supervisors: au14-job-supervisors-workingjoe-military
   usePlayerProfile: false
   jobEntity: AU14MobWorkingJoeGOVFOR
+  displayWeight: -1
   accessGroups:
   - AU14GovforCommand
   - AUPrisonStaff
@@ -31,6 +32,7 @@
   supervisors: au14-job-supervisors-workingjoe-military
   usePlayerProfile: false
   jobEntity: AU14MobWorkingJoeOPFOR
+  displayWeight: -1
   accessGroups:
   - AU14OpforCommand
   - AUPrisonStaff

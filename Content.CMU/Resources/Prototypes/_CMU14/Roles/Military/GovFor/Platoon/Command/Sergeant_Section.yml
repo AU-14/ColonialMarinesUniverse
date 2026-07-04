@@ -13,6 +13,8 @@
   overwatchRoleName: Platoon Sergeant
   overwatchSortPriority: -6
   overwatchShowName: true
+  canBeAntag: false
+  displayWeight: 7
   accessGroups:
   - AU14GovforCommand
 

@@ -13,6 +13,7 @@
   overwatchRoleName: au14-job-name-govforMilitaryDoctor
   overwatchSortPriority: -6
   overwatchShowName: true
+  displayWeight: 4
   accessGroups:
   - AU14GovforCorpsman
   - AU14GovforSquad

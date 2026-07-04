@@ -12,6 +12,7 @@
   playTimeTracker: AU14JobGOVFOROfficerMedical
   requireAdminNotify: true
   canBeAntag: false
+  displayWeight: 8
   accessGroups:
   - AU14GovforCommand
   - AU14GovforCorpsman

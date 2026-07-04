@@ -13,6 +13,7 @@
   requireAdminNotify: true
   joinNotifyCrew: true
   canBeAntag: false
+  displayWeight: 10
   accessGroups:
   - AU14GovforCommand
   - aulegacygroupcommand # NOTE: should remove & hard migrate

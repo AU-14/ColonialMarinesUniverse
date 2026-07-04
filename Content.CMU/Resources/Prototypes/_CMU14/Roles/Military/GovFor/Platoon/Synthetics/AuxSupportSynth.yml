@@ -13,6 +13,7 @@
   canBeAntag: false
   whitelisted: true
   whitelistParent: AU14JobGeneralWhitelist
+  displayWeight: -1
   accessGroups:
   - AU14GovforCommand
   - CMCargoTech

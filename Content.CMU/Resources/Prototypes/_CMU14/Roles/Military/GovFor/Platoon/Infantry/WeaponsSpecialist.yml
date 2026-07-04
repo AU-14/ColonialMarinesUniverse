@@ -9,6 +9,7 @@
   startingGear: AU14GearGOVFORWeaponsSpecialist
   dummyStartingGear: AU14GearGOVFORRiflemanDummy
   playTimeTracker: AU14JobGOVFORWeaponsSpecialist
+  displayWeight: 4
   accessGroups:
   - AU14GovforWeaponsSpecialist
 

@@ -12,6 +12,7 @@
   playTimeTracker: AU14JobGOVFOROfficerMP
   requireAdminNotify: true
   canBeAntag: false
+  displayWeight: 7
   accessGroups:
   - AU14GovforCommand
   - AU14GovforSecurity
