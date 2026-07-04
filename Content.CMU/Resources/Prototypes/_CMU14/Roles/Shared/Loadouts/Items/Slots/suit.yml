@@ -11,10 +11,52 @@
     - RMCJacketCorporateBrown
 
 - type: loadout
+  id: JacketCorporateBlueAU14
+  storage:
+    back:
+    - RMCJacketCorporateBlue
+
+- type: loadout
+  id: JacketCorporateBlackAU14
+  storage:
+    back:
+    - RMCJacketCorporateBlack
+
+- type: loadout
+  id: JacketCorporateKhakiAU14
+  storage:
+    back:
+    - RMCJacketCorporateKhaki
+
+- type: loadout
   id: CivilianJacketGrayPufferVestAU14
   storage:
     back:
     - AU14CivilianJacketGrayPufferVest
+
+- type: loadout
+  id: CivilianJacketKhakiPufferVestAU14
+  storage:
+    back:
+    - AU14CivilianJacketKhakiPufferVest
+
+- type: loadout
+  id: CivilianJacketTanPufferVestAU14
+  storage:
+    back:
+    - AU14CivilianJacketTanPufferVest
+
+- type: loadout
+  id: CivilianJacketGrayPufferJacketAU14
+  storage:
+    back:
+    - AU14CivilianJacketGrayPufferJacket
+  
+- type: loadout
+  id: CivilianJacketKhakiPufferJacketAU14
+  storage:
+    back:
+    - AU14CivilianJacketKhakiPufferJacket
 
 - type: loadout
   id: CivilianJacketOrangePufferJacketAU14
@@ -29,12 +71,6 @@
     - AU14WindbreakerBlue
 
 - type: loadout
-  id: CivilianJacketGreenParkaAU14
-  storage:
-    back:
-    - AU14CivilianJacketGreenParka
-
-- type: loadout
   id: CivilianJacketSnowSuitAU14
   storage:
     back:
@@ -45,6 +81,54 @@
   storage:
     back:
     - AU14CivilianJacketOldCoat
+
+- type: loadout
+  id: CivilianJacketBomberJacketAU14
+  storage:
+    back:
+    - AU14CivilianJacketBomberJacket
+
+- type: loadout
+  id: CivilianTanTrenchCoatAU14
+  storage:
+    back:
+    - AU14CivilianTanTrenchCoat
+
+- type: loadout
+  id: CivilianBrownTrenchCoatAU14
+  storage:
+    back:
+    - AU14CivilianBrownTrenchCoat
+
+- type: loadout
+  id: CivilianGrayTrenchCoatAU14
+  storage:
+    back:
+    - AU14CivilianGrayTrenchCoat
+
+- type: loadout
+  id: CivilianJacketBlueParkaAU14
+  storage:
+    back:
+    - AU14CivilianJacketBlueParka
+
+- type: loadout
+  id: CivilianJacketGreenParkaAU14
+  storage:
+    back:
+    - AU14CivilianJacketGreenParka
+
+- type: loadout
+  id: CivilianJacketRedParkaAU14
+  storage:
+    back:
+    - AU14CivilianJacketRedParka
+
+- type: loadout
+  id: CivilianJacketYellowParkaAU14
+  storage:
+    back:
+    - AU14CivilianJacketYellowParka
 
 - type: loadout
   id: CivilianFullSuitWeYuEngineerAU14

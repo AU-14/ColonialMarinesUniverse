@@ -16,6 +16,7 @@ au14-loadout-group-doctor-equipment = Specialization
 au14-loadout-group-civilian-footwear = Civilian footwear
 au14-loadout-group-civilian-jumpsuit = Civilian jumpsuits
 au14-loadout-group-civilian-jacket = Civilian jackets
+au14-loadout-group-civilian-glasses = Civilian glasses
 au14-loadout-group-civilian-suit-special = Civilian suit (Special)
 au14-loadout-group-civilian-hat = Civilian hats
 au14-loadout-group-civilian-satchel = Civilian satchels
