@@ -104,8 +104,6 @@
     id: AU14IDCardGOVFOROfficerLogistics
     ears: AU14HeadsetGovforCommand
     pocket1: AU14StampLO
-  inhand:
-    - AU14TabletGovfor
 
 - type: startingGear
   id: AU14GearOPFOROfficerLogistics
@@ -113,8 +111,6 @@
     id: AU14IDCardOPFOROfficerLogistics
     ears: AU14HeadsetOpforCommand
     pocket1: AU14StampLO
-  inhand:
-    - AU14TabletOpfor
 
 - type: roleLoadout
   id: JobAU14JobGOVFOROfficerLogistics

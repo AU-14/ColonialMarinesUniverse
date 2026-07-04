@@ -104,7 +104,7 @@
     ears: AU14HeadsetGovforCommand
     pocket1: AU14StampIO
   inhand:
-    - AU14TabletGovfor
+    - AU14KitJOIntelligenceOfficer
 
 - type: startingGear
   id: AU14GearOPFOROfficerIntel
@@ -113,7 +113,7 @@
     ears: AU14HeadsetOpforCommand
     pocket1: AU14StampIO
   inhand:
-    - AU14TabletOpfor
+    - AU14KitJOIntelligenceOfficer
 
 - type: roleLoadout
   id: JobAU14JobGOVFOROfficerIntel

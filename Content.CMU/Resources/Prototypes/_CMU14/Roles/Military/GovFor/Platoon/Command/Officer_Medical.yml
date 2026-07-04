@@ -2,8 +2,8 @@
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobOfficerMedicalBaseAbstract
-  name: au14-job-name-govforcmo
-  description: au14-job-description-govforcmo
+  name: au14-job-name-govformo
+  description: au14-job-description-govformo
   icon: "AU14JobIconGovMO"
   spawnMenuRoleName: Chief Medical Officer (GOVFOR)
   supervisors: au14-job-supervisors-govforplatco
@@ -106,7 +106,7 @@
     ears: AU14HeadsetGovforCommand
     pocket1: AU14StampMO
   inhand:
-    - AU14TabletGovfor
+    - AU14KitJOMedicalOfficerKit
 
 - type: startingGear
   id: AU14GearOPFOROfficerMedical
@@ -115,7 +115,7 @@
     ears: AU14HeadsetOpforCommand
     pocket1: AU14StampMO
   inhand:
-    - AU14TabletOpfor
+    - AU14KitJOMedicalOfficerKit
 
 - type: roleLoadout
   id: JobAU14JobGOVFOROfficerMedical
@@ -182,7 +182,6 @@
   parent: AU14JobOfficerMedicalBase
   id: AU14JobGOVFOROfficerMedicalRMC
   roundForce: RMC
-  name: au14-job-name-govforcmoRMC
   spawnMenuRoleName: Chief Medical Officer (TWE RMC)
 
 - type: job

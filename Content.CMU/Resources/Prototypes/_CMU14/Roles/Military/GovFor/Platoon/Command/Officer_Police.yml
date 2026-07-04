@@ -105,8 +105,6 @@
     id: AU14IDCardGOVFOROfficerMP
     ears: AU14HeadsetGovforCommand
     pocket1: AU14StampCMP
-  inhand:
-    - AU14TabletGovfor
 
 - type: startingGear
   id: AU14GearOPFOROfficerMP
@@ -114,8 +112,6 @@
     id: AU14IDCardOPFOROfficerMP
     ears: AU14HeadsetOpforCommand
     pocket1: AU14StampCMP
-  inhand:
-    - AU14TabletOpfor
 
 - type: roleLoadout
   id: JobAU14JobGOVFOROfficerMP

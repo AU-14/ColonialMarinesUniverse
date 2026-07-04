@@ -106,8 +106,9 @@
     id: AU14IDCardGOVFORAdjutant
     ears: AU14HeadsetGovforCommand
     pocket1: AU14StampAO
+    pocket2: AU14TabletGovfor
   inhand:
-    - AU14TabletGovfor
+    - AU14KitJOAdjutantKit
 
 - type: startingGear
   id: AU14GearOPFORAdjutant
@@ -115,8 +116,9 @@
     id: AU14IDCardOPFORAdjutant
     ears: AU14HeadsetOpforCommand
     pocket1: AU14StampAO
+    pocket2: AU14TabletOpfor
   inhand:
-    - AU14TabletOpfor
+    - AU14KitJOAdjutantKit
 
 - type: roleLoadout
   id: JobAU14JobGOVFORAdjutant

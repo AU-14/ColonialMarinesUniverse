@@ -100,6 +100,8 @@
     id: AU14IDCardGOVFOROfficerEngi
     ears: AU14HeadsetGovforCommand
     pocket1: AU14StampEO
+  inhand:
+    - AU14KitJOEngineeringKit
 
 - type: startingGear
   id: AU14GearOpforOfficerEngi
@@ -107,6 +109,8 @@
     id: AU14IDCardOPFOROfficerEngi
     ears: AU14HeadsetOpforCommand
     pocket1: AU14StampEO
+  inhand:
+    - AU14KitJOEngineeringKit
 
 - type: roleLoadout
   id: JobAU14JobGOVFOROfficerEngi
