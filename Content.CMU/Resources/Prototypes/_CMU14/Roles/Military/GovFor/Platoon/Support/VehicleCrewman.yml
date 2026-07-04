@@ -30,7 +30,6 @@
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: vc
-
   requirements:
   - !type:TraitsRequirement
     inverted: true
@@ -59,7 +58,7 @@
   id: AU14GearGOVFORVehicleCrewman
   equipment:
     id: AU14IDCardGOVFORVehicleCrewman
-    ears: AU14HeadsetGovforMarine
+    ears: AU14HeadsetGovforAuxiliary
 
 - type: startingGear
   id: AU14GearGOVFORVehicleCrewmanDummy
@@ -68,7 +67,7 @@
     shoes: AU14BootsJungle
     head: AU14JungleM10Helmet
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetGovforMarine
+    ears: AU14HeadsetGovforAuxiliary
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -117,7 +116,7 @@
   id: AU14GearOPFORVehicleCrewman
   equipment:
     id: AU14IDCardOPFORVehicleCrewman
-    ears: AU14HeadsetOpforMarine
+    ears: AU14HeadsetOpforAuxiliary
 
 - type: startingGear
   id: AU14GearOPFORVehicleCrewmanDummy
@@ -126,7 +125,7 @@
     shoes: AU14BootsJungle
     head: AU14JungleM10Helmet
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetOpforMarine
+    ears: AU14HeadsetOpforAuxiliary
 
 - type: entity
   parent: CMSpawnPointJobBase
