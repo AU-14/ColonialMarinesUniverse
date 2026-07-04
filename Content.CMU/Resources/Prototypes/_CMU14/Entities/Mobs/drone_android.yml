@@ -9,6 +9,9 @@
     nameDataset: CMUNamesDroneAndroid
     maxNameLength: 24
     followCloseRange: 1
+  - type: RemoveComponents
+    components:
+    - type: WorkingJoeVoice
   - type: Inventory
     templateId: cmuDroneAndroid
   - type: HumanoidAppearance

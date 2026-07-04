@@ -23,10 +23,11 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
 {
     private const string SayStyle = "runechatSay";
     private const string WhisperStyle = "runechatWhisper";
+    private const string RadioStyle = "runechatRadio";
     private const string EmoteStyle = "runechatEmote";
     private const string LoocStyle = "runechatLooc";
 
-    private const int LongestText = 64;
+    private const int LongestText = 80;
     private const int ContinueTextLength = LongestText - 5;
     private const float SplitChunkSeconds = 4f;
     private const float SplitFinalSeconds = 6f;
@@ -42,6 +43,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
     private static readonly Color ObserverColor = Color.FromHex("#c51fb7");
     private static readonly Color LoocColor = Color.FromHex("#48d1cc");
     private static readonly Color PainColor = Color.FromHex("#c83232");
+    private static readonly Color RadioColor = Color.FromHex("#73d48f");
 
     [Dependency] private IEntityManager _entityManager = default!;
 
@@ -81,6 +83,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             SpeechType.Emote => EmoteStyle,
             SpeechType.Say => SayStyle,
             SpeechType.Whisper => WhisperStyle,
+            SpeechType.Radio => RadioStyle,
             SpeechType.Looc => LoocStyle,
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null),
         };
@@ -96,6 +99,9 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
 
         if (type == SpeechType.Looc)
             return LoocColor;
+
+        if (type == SpeechType.Radio)
+            return message.Display?.AccentColor ?? RadioColor;
 
         var entityManager = IoCManager.Resolve<IEntityManager>();
         if (entityManager.HasComponent<XenoComponent>(senderEntity))
@@ -131,6 +137,9 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         if (message.SpeechStyleClass == "commanderSpeech" ||
             speechStyleClass == SayStyle && IsBoldSpeech(message))
             return RunechatVisualStyle.Bolded;
+
+        if (speechStyleClass == RadioStyle)
+            return RunechatVisualStyle.Radio;
 
         if (speechStyleClass == WhisperStyle)
             return RunechatVisualStyle.Whisper;
@@ -168,7 +177,10 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         var text = speechStyleClass switch
         {
             EmoteStyle => message.Message,
-            SayStyle or WhisperStyle => SharedChatSystem.GetStringInsideTag(message, "BubbleContent"),
+            SayStyle => GetBubbleContent(message),
+            WhisperStyle => FormatWhisperText(message),
+            RadioStyle => FormatRadioText(message),
+            LoocStyle => $"LOOC: {message.Message}",
             _ => message.WrappedMessage,
         };
 
@@ -177,6 +189,39 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
 
         text = FormattedMessage.RemoveMarkupPermissive(text);
         return NormalizeWhitespace(text);
+    }
+
+    private static string GetBubbleContent(ChatMessage message)
+    {
+        return SharedChatSystem.GetStringInsideTag(message, "BubbleContent");
+    }
+
+    private static string FormatWhisperText(ChatMessage message)
+    {
+        return GetBubbleContent(message);
+    }
+
+    private static string FormatRadioText(ChatMessage message)
+    {
+        var label = GetRadioLabel(message);
+        return string.IsNullOrWhiteSpace(label)
+            ? message.Message
+            : $"[{label}] {message.Message}";
+    }
+
+    private static string? GetRadioLabel(ChatMessage message)
+    {
+        if (string.IsNullOrWhiteSpace(message.Display?.ChannelLabel))
+            return null;
+
+        var label = FormattedMessage.RemoveMarkupPermissive(message.Display.ChannelLabel);
+        label = NormalizeWhitespace(label)
+            .Trim('[', ']')
+            .Trim();
+
+        return string.IsNullOrWhiteSpace(label)
+            ? null
+            : label.ToUpperInvariant();
     }
 
     private static List<string> GetPages(string text)
@@ -245,10 +290,12 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         bool PrefixEmoteIcon,
         float MaxWidth,
         float LineHeightOffset = 0f,
-        bool UsePanicShake = false)
+        bool UsePanicShake = false,
+        bool UseItalic = false)
     {
         public static readonly RunechatVisualStyle Normal = new(7, false, false, CmssLangchatWidth);
-        public static readonly RunechatVisualStyle Whisper = new(7, false, false, CmssLangchatWidth);
+        public static readonly RunechatVisualStyle Whisper = new(6, false, false, CmssLangchatWidth, -1f, UseItalic: true);
+        public static readonly RunechatVisualStyle Radio = new(7, false, false, CmssSplitLangchatWidth);
         public static readonly RunechatVisualStyle Emote = new(6, false, true, CmssLangchatWidth, -1f);
         public static readonly RunechatVisualStyle EmoteYell = new(9, true, true, CmssLangchatWidth);
         public static readonly RunechatVisualStyle Bolded = new(8, true, false, CmssLangchatWidth);
@@ -277,7 +324,8 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         private const string SmallFontsFamily = "Small Fonts";
         private const string SmallFonts120Family = "Small Fonts (120)";
         private const string FallbackFontPath = "/Fonts/Cozette/CozetteVector.ttf";
-        private const float CmuMaxAlpha = 196f / 255f;
+        private const string FallbackItalicFontPath = "/Fonts/RobotoMono/RobotoMono-Italic.ttf";
+        private const float CmuMaxAlpha = 1f;
         private const float SyntheticBoldOffset = 1f;
         private const float TextShadowAlpha = 0.18f;
         private const float TextShadowOffset = 1f;
@@ -336,7 +384,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             _style = style;
             _scale = DefaultRunechatScale *
                      Math.Clamp(_configManager.GetCVar(CCVars.ChatRunechatBubbleScale), MinimumRunechatScale, MaximumRunechatScale);
-            _font = LoadRunechatFont(style.GetScaledFontSize(_scale));
+            _font = LoadRunechatFont(style.GetScaledFontSize(_scale), style.UseItalic);
         }
 
         protected override void FrameUpdate(FrameEventArgs args)
@@ -725,11 +773,11 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             handle.DrawRect(UIBox2.FromDimensions(position, size), color);
         }
 
-        private Font LoadRunechatFont(int size)
+        private Font LoadRunechatFont(int size, bool italic)
         {
             size = Math.Max(1, size);
 
-            if (!SmallFontsLoadFailed && TryGetSmallFontsFace() is { } face)
+            if (!SmallFontsLoadFailed && TryGetSmallFontsFace(italic) is { } face)
             {
                 try
                 {
@@ -741,28 +789,34 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
                 }
             }
 
-            return _resourceCache.GetFont(FallbackFontPath, size);
+            return _resourceCache.GetFont(italic ? FallbackItalicFontPath : FallbackFontPath, size);
         }
 
-        private ISystemFontFace? TryGetSmallFontsFace()
+        private ISystemFontFace? TryGetSmallFontsFace(bool italic)
         {
             if (!_systemFontManager.IsSupported)
                 return null;
 
-            ISystemFontFace? fallback = null;
+            ISystemFontFace? regularFallback = null;
 
             foreach (var face in _systemFontManager.SystemFontFaces)
             {
                 if (!IsSmallFontsFace(face))
                     continue;
 
-                fallback ??= face;
-
-                if (face.Weight == FontWeight.Regular && face.Slant == FontSlant.Normal)
+                if (italic && face.Slant != FontSlant.Normal)
                     return face;
+
+                if (!italic && face.Weight == FontWeight.Regular && face.Slant == FontSlant.Normal)
+                    return face;
+
+                if (face.Slant == FontSlant.Normal)
+                    regularFallback ??= face;
             }
 
-            return fallback;
+            return italic
+                ? null
+                : regularFallback;
         }
 
         private static bool IsSmallFontsFace(ISystemFontFace face)
