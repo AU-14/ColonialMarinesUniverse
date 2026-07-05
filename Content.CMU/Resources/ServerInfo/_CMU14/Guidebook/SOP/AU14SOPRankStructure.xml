@@ -2,96 +2,96 @@
   # Rank Structure
 
   ## Rank Authority
-    Authority is determined by command structure. Department heads have sole authority over their departments and may only be overridden by the Commander, Adjutant or CMP.
+  Authority is determined by command structure. Department heads have sole authority over their departments and may only be overridden by the Commander, Adjutant or CMP.
 
   ## Department Authority
-    Heads of Department (LO, CMP, CMO and APOLLO) hold the most authority over those operating in their department; no outside authority may overrule a department head's internal orders to their subordinates, unless approved by the Commander or Adjutant.
+  Heads of Department (LO, CMP, CMO and APOLLO) hold the most authority over those operating in their department; no outside authority may overrule a department head's internal orders to their subordinates, unless approved by the Commander or Adjutant.
 
-    Department members may not have their orders overruled by anyone unless approved by the Commander or Adjutant.
+  Department members may not have their orders overruled by anyone unless approved by the Commander or Adjutant.
 
-    The Commander and Adjutant hold final authority on all department decisions, including dismissal of a Department Head if found to be in violation of SOP or UCMJ.
+  The Commander and Adjutant hold final authority on all department decisions, including dismissal of a Department Head if found to be in violation of SOP or UCMJ.
 
   ## Specialised Authority
-    Certain jobs and roles have specialised authority depending on their location and use; these are outlined below.
-      - Logistic Technicians and the LO hold authority over requisitions and, for any reason they deem fit, may deny service or use of the budget.
-      - Ordnance Technicians and the LO hold authority over their workshop; if anyone poses a hazard, they may have it removed from them for any reason they deem fit.
-      - DCCs hold the same authority as a DP regarding aircraft interiors and may dismiss anyone from the interior if they find them disruptive to operations, so long as it does not violate dropship SOP.
-      - Weapon Specialists hold the sole authority over their preferred speciality. They cannot be ordered by Command or their SL to pick a certain speciality.
+  Certain jobs and roles have specialised authority depending on their location and use; these are outlined below.
+  - Logistic Technicians and the LO hold authority over requisitions and, for any reason they deem fit, may deny service or use of the budget.
+  - Ordnance Technicians and the LO hold authority over their workshop; if anyone poses a hazard, they may have it removed from them for any reason they deem fit.
+  - DCCs hold the same authority as a DP regarding aircraft interiors and may dismiss anyone from the interior if they find them disruptive to operations, so long as it does not violate dropship SOP.
+  - Weapon Specialists hold the sole authority over their preferred speciality. They cannot be ordered by Command or their SL to pick a certain speciality.
 
   ## Change of Command
-    If at any point during an operation, commandership of the unit needs to be handed over, the following SOP’s should be followed.
-      - If an Adjutant is available, they should be next in line to become the Commander
-      - If no Adjutant is available, a member of the command staff should be placed as Commander
-      - If no command staff remains, the highest-ranking officer is to assume command.
+  If at any point during an operation, commandership of the unit needs to be handed over, the following SOP’s should be followed.
+  - If an Adjutant is available, they should be next in line to become the Commander
+  - If no Adjutant is available, a member of the command staff should be placed as Commander
+  - If no command staff remains, the highest-ranking officer is to assume command.
 
   ## Field & Tactical Authority
-    Tactical Authority refers to the right to direct the placement and employment of members of a combat arms unit and the unit itself.
-    - The Squad Leader and relative Staff Officers have tactical authority over their respective squad, which can only be overwritten by a member of the command staff.
-    - The Commanding Officer has full authority over their unit regardless of the presence of an individual of higher rank on their vessel or installation, unless that individual is of the rank of O6 or higher, such as a Colonel or Provost Marshal.
+  Tactical Authority refers to the right to direct the placement and employment of members of a combat arms unit and the unit itself.
+  - The Squad Leader and relative Staff Officers have tactical authority over their respective squad, which can only be overwritten by a member of the command staff.
+  - The Commanding Officer has full authority over their unit regardless of the presence of an individual of higher rank on their vessel or installation, unless that individual is of the rank of O6 or higher, such as a Colonel or Provost Marshal.
 
   # Current Rank Structure
 
-    Below is the currently enforced rank structure for use, subject to change at the demand of High Command
+  Below is the currently enforced rank structure for use, subject to change at the demand of High Command
 
   ## The Commander
-    The following report to the above role
-      - APOLLO
-      - Adjutant
+  The following report to the above role
+  - APOLLO
+  - Adjutant
 
   ## The Adjutant
-    The following report to the above role
-      - All Department Heads (LO, CMO, CMP)
-      - All Junior Officers (IO, EO & Staff)
+  The following report to the above role
+  - All Department Heads (LO, CMO, CMP)
+  - All Junior Officers (IO, EO & Staff)
 
   ## APOLLO
-    The following report to the above role
-      - Support Synthetics
-      - Working Joes
+  The following report to the above role
+  - Support Synthetics
+  - Working Joes
 
   ## The CMP
-    The following report to the above role
-      - Military Police.
+  The following report to the above role
+  - Military Police.
 
   ## The CMO
-    The following report to the above role
-      - Doctors
-      - Medical Technicians
+  The following report to the above role
+  - Doctors
+  - Medical Technicians
 
   ## The Dropship Pilots
-    The following report to the above role
-      - Dropship Crew Chiefs
+  The following report to the above role
+  - Dropship Crew Chiefs
 
   ## The LO
-    The following report to the above role
-      - Auxiliary technicians
+  The following report to the above role
+  - Auxiliary technicians
 
   ## The Engineering Officer
-    The following report to the above role
-      - Workshop Technicians
-      - Maintenance Technicians
+  The following report to the above role
+  - Workshop Technicians
+  - Maintenance Technicians
 
   ## The Intelligence Officer
-    The following report to the above role
-      - Intelligence Technician
+  The following report to the above role
+  - Intelligence Technician
 
   ## The Vehicle Commander
-    The following report to the above role
-      - Vehicle Crew
+  The following report to the above role
+  - Vehicle Crew
 
   ## The Junior Officers
-    The following report to the above role
-      - Squad Leaders
-      - Advisors
-      - Mechanised Crew
-      - Flight Crew
+  The following report to the above role
+  - Squad Leaders
+  - Advisors
+  - Mechanised Crew
+  - Flight Crew
 
   ## The Squad Leaders
-    The following report to the above role
-      - Fire Team Leader
-      - Radio Traffic Operator
-      - Corpsman
-      - Combat Technician
-      - Automatic Rifleman
-      - Rifleman
-      - Weapons Specialist
+  The following report to the above role
+  - Fire Team Leader
+  - Radio Traffic Operator
+  - Corpsman
+  - Combat Technician
+  - Automatic Rifleman
+  - Rifleman
+  - Weapons Specialist
 </Document>
