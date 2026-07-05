@@ -50,7 +50,7 @@
 
 - type: entity
   id: AU14SkillPresetPlatoonJuniorOfficer
-  name: Junior Officer
+  name: Staff Officer
   categories: [ HideSpawnMenu ]
   components:
   - type: SkillPreset

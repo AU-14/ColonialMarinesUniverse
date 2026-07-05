@@ -1,6 +1,6 @@
 - type: entity
   id: AU14SkillPresetOfficerMP
-  name: Chief MP
+  name: Chief MP Officer
   categories: [ HideSpawnMenu ]
   components:
   - type: SkillPreset
