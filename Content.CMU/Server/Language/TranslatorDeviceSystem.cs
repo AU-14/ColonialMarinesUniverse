@@ -4,7 +4,7 @@ using Content.Shared.Inventory.Events;
 
 namespace Content.Server._CMU14.Language;
 
-public sealed class TranslatorDeviceSystem : EntitySystem
+public sealed partial class TranslatorDeviceSystem : EntitySystem
 {
     [Dependency] private LanguageSystem _language = default!;
 

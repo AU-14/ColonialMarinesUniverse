@@ -1,0 +1,15 @@
+- type: entity
+  parent: ClothingHandsBase
+  id: AU14LACNGloves
+  name: LACN combat gloves
+  description: Standard issue LACN combat gloves with insulated fibers.
+  components:
+  - type: Insulated
+  - type: Sprite
+    sprite: _AU14/Clothing/LACN/lacngloves.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/LACN/lacngloves.rsi
+  - type: Fiber
+    fiberMaterial: fibers-black
+    fiberColor: fibers-black
+  - type: FingerprintMask

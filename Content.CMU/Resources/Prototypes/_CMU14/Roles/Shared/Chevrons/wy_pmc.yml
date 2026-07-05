@@ -1,0 +1,253 @@
+# base
+- type: entity
+  parent: RMCArmbandBase
+  id: AU14ChevronWeYuBase
+  abstract: true
+  suffix: WeYu Chevron
+  description: WeYu Private Military Company rank insignia. Wearing this makes you feel like you have the power to do anything, as long as you read the memo first.
+
+# ├──[ Platoon Ranks ]────────────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: AU14ChevronWeYuAssociateOperator
+  name: associate operator chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: AU14RankWeYuRecruit
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: AU14ChevronWeYuOperator
+  name: operator chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: AU14RankWeYuOperator
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: AU14ChevronWeYuSeniorOperator
+  name: senior operator chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: AU14RankWeYuSeniorOperator
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: AU14ChevronWeYuEnforcer
+  name: enforcer chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_nco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_nco
+  - type: RankChanger
+    rank: AU14RankWeYuEnforcer
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: AU14ChevronWeYuEnforcerSenior
+  name: senior enforcer chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_nco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_nco
+  - type: RankChanger
+    rank: AU14RankWeYuEnforcerSenior
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: AU14ChevronWeYuEnforcerLead
+  name: lead enforcer chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: AU14RankWeYuEnforcerLead
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: AU14ChevronWeYuAdjutant
+  name: adjutant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_officer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: AU14RankWeYuAdjutant
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: AU14ChevronWeYuCommander
+  name: commander chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_officer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: AU14RankWeYuCommander
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: AU14ChevronWeYuCommanderSenior
+  name: senior commander chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_officer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: AU14RankWeYuCommanderSenior
+    override: true
+
+# ├──[ Aviation ]─────────────────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: AU14ChevronWeYuPilot
+  name: pilot chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_officer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: AU14RankWeYuPilot
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: AU14ChevronWeYuSeniorPilot
+  name: senior pilot chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_officer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: AU14RankWeYuSeniorPilot
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: AU14ChevronWeYuCrewChief
+  name: crew chief chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: AU14RankWeYuCrewChief
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: AU14ChevronWeYuSeniorCrewChief
+  name: senior crew chief chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: AU14RankWeYuSeniorCrewChief
+    override: true
+
+# ├──[ Command ]──────────────────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: AU14ChevronWeYuDeputyDirector
+  name: deputy site director chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: AU14RankWeYuDeputyDirector
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: AU14ChevronWeYuSiteDirector
+  name: site director chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: AU14RankWeYuSiteDirector
+    override: true

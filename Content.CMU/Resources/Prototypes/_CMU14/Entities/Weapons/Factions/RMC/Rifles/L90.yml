@@ -1,0 +1,1181 @@
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  id: AU14WeaponRifleL90
+  name: L90 assault rifle # F9030A1 in CM13
+  description: The L90 Rifle, a variant of the old standard-issue rifle of the royal marine.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/RMC/L90.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/RMC/L90.rsi
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+  - type: Gun
+    selectedMode: FullAuto
+    availableModes:
+    - SemiAuto
+    - FullAuto
+    - Burst
+    soundGunshot:
+      collection: AU14M41FireSound
+    shotsPerBurst: 3
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - FullAuto
+    - Burst
+    recoilUnwielded: 4
+    scatterWielded: 5
+    scatterUnwielded: 20
+    baseFireRate: 4
+    burstScatterMult: 1
+    modifiers:
+      FullAuto:
+        fireDelay: 0
+        maxScatterModifier: 7
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 5
+      Burst:
+        fireDelay: 0.1665
+        maxScatterModifier: 10
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 3
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.25
+    accuracyMultiplierUnwielded: 0.65
+  - type: MagazineAmmoProvider
+    autoEject: false
+    soundAutoEject: null
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineRifleL90
+          - AU14MagazineRifleL90AP
+          - AU14MagazineRifleL90HEAP
+          - AU14MagazineRifleL90Incendiary
+          - AU14MagazineRifleL90extended
+  - type: GunDamageModifier
+    multiplier: 1.1
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentBipod
+          - RMCAttachmentBurstFireAssembly
+          - RMCAttachmentExtinguisher
+          - RMCAttachmentFlamer
+          - RMCAttachmentU1GrenadeLauncher
+          - RMCAttachmentU7UnderbarrelShotgun
+          - RMCAttachmentLaserSight
+          - RMCAttachmentM203GrenadeLauncher
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.81, -0.0305
+      rmc-aslot-rail: 0.1, 0.12
+      rmc-aslot-underbarrel: 0.42, -0.31
+
+- type: entity
+  parent: AU14WeaponRifleL90
+  id: AU14WeaponRifleL90Full
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: AU14MagazineRifleL90
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineRifleL90
+          - AU14MagazineRifleL90AP
+          - AU14MagazineRifleL90HEAP
+          - AU14MagazineRifleL90Incendiary
+          - AU14MagazineRifleL90extended
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        startingAttachable: AU14AttachmentTwoPointSling
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentBipod
+          - RMCAttachmentBurstFireAssembly
+          - RMCAttachmentExtinguisher
+          - RMCAttachmentFlamer
+          - RMCAttachmentU1GrenadeLauncher
+          - RMCAttachmentU7UnderbarrelShotgun
+          - RMCAttachmentLaserSight
+          - RMCAttachmentM203GrenadeLauncher
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: AU14MagazineRifleL90
+  name: L90 Magazine (10x24mm)
+  description: "A magazine of 10x24mm rounds for use in the L90 rifle."
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleL90
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMCartridgeRifle10x24mm
+    proto: CMCartridgeRifle10x24mm
+    capacity: 40
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifle
+
+- type: entity
+  parent: AU14MagazineRifleL90
+  id: AU14MagazineRifleL90AP
+  description: "A magazine of armor-piercing 10x24mm rounds for use in the L90 rifle."
+  name: L90 AP Magazine (10x24mm)
+  suffix: AP
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleL90
+    - AU14MagazineRifleL90AP
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMCartridgeRifle10x24mmAP
+    proto: CMCartridgeRifle10x24mmAP
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-1
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - state: ammo_band
+      color: "#1F951F"
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifleAP
+
+- type: entity
+  parent: AU14MagazineRifleL90
+  id: AU14MagazineRifleL90extended
+  description: "An extended magazine for the L90 rifle."
+  name: L90 Extended Magazine (10x24mm)
+  suffix: Extended
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleL90
+    - AU14MagazineRifleL90extended
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMCartridgeRifle10x24mm
+    proto: CMCartridgeRifle10x24mm
+    capacity: 60
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90extended.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-1
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifle
+
+- type: entity
+  parent: AU14MagazineRifleL90
+  id: AU14MagazineRifleL90HEAP
+  description: "A magazine of HEAP 10x24mm rounds for use in the L90 rifle."
+  name: L90 HEAP Magazine (10x24mm)
+  suffix: HEAP
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleL90
+    - AU14MagazineRifleL90HEAP
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RMCCartridgeRifle10x24mmHEAP
+    proto: RMCCartridgeRifle10x24mmHEAP
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-1
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - state: ammo_band
+      color: "#9C9A19"
+  - type: Appearance
+  - type: RefillableByBulletBox # i guess no ammo box? same stuff on the mk1 rifle
+    bulletType: null
+
+- type: entity
+  parent: AU14MagazineRifleL90
+  id: AU14MagazineRifleL90Incendiary
+  description: "A magazine of incendiary 10x24mm rounds for use in the L90 rifle."
+  name: L90 Incendiary Magazine (10x24mm)
+  suffix: Incendiary
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleL90
+    - AU14MagazineRifleL90Incendiary
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RMCCartridgeRifle10x24mmIncendiary
+    proto: RMCCartridgeRifle10x24mmIncendiary
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-1
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - state: ammo_band
+      color: "#771A10"
+  - type: Appearance
+  # no ammo box for now
+
+# Breacher Variant
+
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  id: AU14WeaponRifleL90B
+  name: L90/B 'Breacher' assault rifle
+  description: a variant of the old standard-issue rifle of the royal marine with a heavily modified firing mechanism, giving it a burst-fire option. Comes with built-in underbarell shotgun.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/RMC/L90B.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/RMC/L90B.rsi
+  - type: Gun
+    shotsPerBurst: 3
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    - Burst
+    - SemiAuto
+    soundGunshot:
+      collection: AU14M41FireSound
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - FullAuto
+    - Burst
+    - SemiAuto
+    recoilUnwielded: 0.5
+    scatterWielded: 5
+    scatterUnwielded: 7
+    baseFireRate: 4
+    burstScatterMult: 1
+    modifiers:
+      FullAuto:
+        fireDelay: 0
+        maxScatterModifier: 7
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 5
+      Burst:
+        fireDelay: 0.08
+        maxScatterModifier: 10
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 3
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.3
+    accuracyMultiplierUnwielded: 0.75
+  - type: MagazineAmmoProvider
+    autoEject: false
+    soundAutoEject: null
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineRifleL90
+          - AU14MagazineRifleL90AP
+          - AU14MagazineRifleL90HEAP
+          - AU14MagazineRifleL90Incendiary
+          - AU14MagazineRifleL90extended
+  - type: GunDamageModifier
+    multiplier: 1.5
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-underbarrel:
+        locked: true
+        startingAttachable: RMCAttachmentL90BUnderbarrelShotgun
+        whitelist:
+          tags:
+          - RMCAttachmentL90BUnderbarrelShotgun
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.81, -0.0305
+      rmc-aslot-rail: -0.15, 0.215
+      rmc-aslot-underbarrel: 0.375, -0.335
+
+- type: entity
+  parent: AU14WeaponRifleL90B
+  id: AU14WeaponRifleL90BFull
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: AU14MagazineRifleL90
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineRifleL90
+          - AU14MagazineRifleL90AP
+          - AU14MagazineRifleL90HEAP
+          - AU14MagazineRifleL90Incendiary
+          - AU14MagazineRifleL90extended
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        startingAttachable: AU14AttachmentTwoPointSling
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-underbarrel:
+        locked: true
+        startingAttachable: RMCAttachmentL90BUnderbarrelShotgun
+        whitelist:
+          tags:
+          - RMCAttachmentL90BUnderbarrelShotgun
+
+- type: entity
+  parent: RMCAttachmentS84xTelescopicScope
+  id: AU14AttachmentL90MScope
+  name: 4x telescopic scope
+  description: L90 Marksman 4x telescopic eye piece. Fixed at 4x zoom.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Attachments/commando_4xscope.rsi
+    state: staticscope
+  - type: AttachableVisuals
+    suffix: ""
+  - type: Tag
+    tags:
+    - RMCAttachmentRail
+    - AU14AttachmentL90MScope
+  - type: AttachableToggleable
+    icon:
+      sprite: _AU14/Weapons/Guns/Attachments/commando_4xscope.rsi
+      state: staticscope
+    actionName: Look through the 4x Telescopic Scope
+    actionDesc: Price, have wind speed and Coriolis effect in mind. Fixed at 4x zoom.
+
+- type: entity
+  parent: RMCAttachmentU7UnderbarrelShotgun
+  id: RMCAttachmentL90BUnderbarrelShotgun
+  name: underbarrel shotgun
+  description: Tactical shotgun. Attaches to the underbarrel of most weapons. Only capable of loading up to five buckshot shells. Specialized for breaching into buildings.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Attachments/commando_under.rsi
+    state: masterkey
+  - type: Tag
+    tags:
+    - RMCAttachmentUnderbarrel
+    - RMCAttachmentL90BUnderbarrelShotgun
+  - type: AttachableToggleable
+    userOnly: true
+    attachedOnly: true
+    supercedeHolder: true
+    wieldedUseOnly: true
+    activatePopupText: attachable-popup-switch-to-generic
+    deactivatePopupText: attachable-popup-switch-from-generic
+    activateSound:
+      path: /Audio/_RMC14/Attachable/gun_u7_activate.ogg
+      params:
+        volume: -2
+    actionName: Switch to the underbarrel shotgun
+    actionDesc: Switch to using the underbarrel shotgun.
+    icon:
+      sprite: _AU14/Weapons/Guns/Attachments/commando_under.rsi
+      state: masterkey
+    iconActive:
+      sprite: _AU14/Weapons/Guns/Attachments/commando_under.rsi
+      state: masterkey-on
+
+- type: entity
+  parent: RMCAttachmentVerticalGrip
+  id: AU14AttachmentL90MVerticalGrip
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Attachments/commando_under.rsi
+    state: verticalgrip
+  - type: Tag
+    tags:
+    - RMCAttachmentUnderbarrel
+    - AU14AttachmentL90MVerticalGrip
+  - type: AttachableWeaponRangedMods
+    modifiers:
+    - conditions:
+        wieldedOnly: true
+      accuracyAddMult: 0.15
+      recoilFlat: -1
+      scatterFlat: -2
+      burstScatterAddMult: -2
+    - conditions:
+        unwieldedOnly: true
+      accuracyAddMult: 0
+      scatterFlat: 2
+
+# Marksman L90 Variant
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  id: AU14WeaponRifleL90M
+  name: L90M Marksman rifle
+  description: The L90M Marksman rifle, a variant of the old standard-issue rifle of the royal marine. This particular version of the weapon has been given a custom stock, a variable zoom scope and a longer barrel. Reliable and deadly.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/RMC/L90M.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/RMC/L90M.rsi
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_m16.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    recoilWielded: 3.5
+    recoilUnwielded: 4
+    scatterWielded: 6
+    scatterUnwielded: 20
+    baseFireRate: 4
+    modifiers:
+      FullAuto:
+        fireDelay: 0
+        maxScatterModifier: 13
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 4
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.3
+    accuracyMultiplierUnwielded: 0.75
+  - type: MagazineAmmoProvider
+    autoEject: false
+    soundAutoEject: null
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineRifleL90M
+          - AU14MagazineRifleL90MAP
+          - AU14MagazineRifleL90MHEAP
+          - AU14MagazineRifleL90MIncendiary
+          - AU14MagazineRifleL90Mextended
+  - type: GunDamageModifier
+    multiplier: 1.7
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        locked: true
+        startingAttachable: RMCAttachmentExtendedBarrel
+        whitelist:
+          tags:
+          - RMCAttachmentExtendedBarrel
+      rmc-aslot-rail:
+        locked: true
+        startingAttachable: AU14AttachmentL90MScope
+        whitelist:
+          tags:
+          - AU14AttachmentL90MScope
+      rmc-aslot-underbarrel:
+        locked: true
+        startingAttachable: AU14AttachmentL90MVerticalGrip
+        whitelist:
+          tags:
+          - AU14AttachmentL90MVerticalGrip
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.81, -0.0305
+      rmc-aslot-rail: 0.06, 0.055
+      rmc-aslot-underbarrel: 0.4, -0.28
+
+- type: entity
+  parent: AU14WeaponRifleL90M
+  id: AU14WeaponRifleL90MFull
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: AU14MagazineRifleL90M
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineRifleL90M
+          - AU14MagazineRifleL90MAP
+          - AU14MagazineRifleL90MHEAP
+          - AU14MagazineRifleL90MIncendiary
+          - AU14MagazineRifleL90Mextended
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: AU14MagazineRifleL90M
+  name: L90M Magazine (10x24mm)
+  description: "A magazine of 10x24mm rounds for use in the L90M rifle."
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleL90M
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMCartridgeRifle10x24mm
+    proto: CMCartridgeRifle10x24mm
+    capacity: 20
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90M.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifle
+
+- type: entity
+  parent: AU14MagazineRifleL90M
+  id: AU14MagazineRifleL90MAP
+  description: "A magazine of armor-piercing 10x24mm rounds for use in the L90M rifle."
+  name: L90M AP Magazine (10x24mm)
+  suffix: AP
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleL90M
+    - AU14MagazineRifleL90MAP
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMCartridgeRifle10x24mmAP
+    proto: CMCartridgeRifle10x24mmAP
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90M.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-1
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - state: ammo_band
+      color: "#1F951F"
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifleAP
+    
+- type: entity
+  parent: AU14MagazineRifleL90M
+  id: AU14MagazineRifleL90Mextended
+  description: "An extended magazine for the L90M rifle."
+  name: L90M Extended Magazine (10x24mm)
+  suffix: Extended
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleL90M
+    - AU14MagazineRifleL90Mextended
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMCartridgeRifle10x24mm
+    proto: CMCartridgeRifle10x24mm
+    capacity: 30
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90Mextended.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-1
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifle
+- type: entity
+  parent: AU14MagazineRifleL90M
+  id: AU14MagazineRifleL90MHEAP
+  description: "A magazine of HEAP 10x24mm rounds for use in the L90M rifle."
+  name: L90M HEAP Magazine (10x24mm)
+  suffix: HEAP
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleL90M
+    - AU14MagazineRifleL90MHEAP
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RMCCartridgeRifle10x24mmHEAP
+    proto: RMCCartridgeRifle10x24mmHEAP
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90M.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-1
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - state: ammo_band
+      color: "#9C9A19"
+  - type: Appearance
+
+- type: entity
+  parent: AU14MagazineRifleL90M
+  id: AU14MagazineRifleL90MIncendiary
+  description: "A magazine of incendiary 10x24mm rounds for use in the L90M rifle."
+  name: L90M Incendiary Magazine (10x24mm)
+  suffix: Incendiary
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleL90M
+    - AU14MagazineRifleL90MIncendiary
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RMCCartridgeRifle10x24mmIncendiary
+    proto: RMCCartridgeRifle10x24mmIncendiary
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90M.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-1
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - state: ammo_band
+      color: "#771A10"
+  - type: Appearance
+
+# Commando/ Shortened barrel version
+
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  id: AU14WeaponSMGL90A2
+  name: L90A2 'Commando' PDW
+  description: The L90A2 personal defense weapon, found commonly in Three World Empire's armories. This version has shortened barrel and modified fire mechanism, allowing full-auto and burst fire. Chambered in 10x20mm Parabellum.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/RMC/L90A2.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/RMC/L90A2.rsi
+  - type: Gun
+    selectedMode: FullAuto
+    availableModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_m16.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    recoilWielded: 3.75
+    recoilUnwielded: 4.5
+    scatterWielded: 6.5
+    scatterUnwielded: 24
+    baseFireRate: 4.0
+    burstScatterMult: 4
+    modifiers:
+      Burst:
+        fireDelay: 0.0999
+        maxScatterModifier: 10
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 4
+      FullAuto:
+        maxScatterModifier: 3
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 4
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.7
+    accuracyMultiplierUnwielded: 0.75
+  - type: MagazineAmmoProvider
+    autoEject: false
+    soundAutoEject: null
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineSMGL90A2
+          - AU14MagazineSMGL90A2AP
+          - AU14MagazineSMGL90A2HEAP
+          - AU14MagazineSMGL90A2Incendiary
+          - AU14MagazineSMGL90A2extended
+  - type: GunDamageModifier
+    multiplier: 1.2
+  - type: AttachableHolder
+    randomAttachmentChance: 0.42
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-underbarrel:
+        locked: true
+        startingAttachable: AU14AttachmentL90MVerticalGrip
+        whitelist:
+          tags:
+          - AU14AttachmentL90MVerticalGrip
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.81, -0.0305
+      rmc-aslot-rail: 0.1, 0.08
+      rmc-aslot-underbarrel: 0.34, -0.28
+
+- type: entity
+  parent: AU14WeaponSMGL90A2
+  id: AU14WeaponSMGL90A2old
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/RMC/L90A2old.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/RMC/L90A2old.rsi
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: AU14MagazineSMGL90A2extended
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineSMGL90A2
+          - AU14MagazineSMGL90A2AP
+          - AU14MagazineSMGL90A2HEAP
+          - AU14MagazineSMGL90A2Incendiary
+          - AU14MagazineSMGL90A2extended
+  - type: AttachableHolder
+    randomAttachmentChance: 0.42
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        startingAttachable: AU14AttachmentTwoPointSling
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-underbarrel:
+        locked: true
+        startingAttachable: AU14AttachmentL90MVerticalGrip
+        whitelist:
+          tags:
+          - AU14AttachmentL90MVerticalGrip
+
+- type: entity
+  parent: AU14WeaponSMGL90A2old
+  id: AU14WeaponSMGL90A2oldnoattachments
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: AU14MagazineSMGL90A2
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineSMGL90A2
+          - AU14MagazineSMGL90A2AP
+          - AU14MagazineSMGL90A2HEAP
+          - AU14MagazineSMGL90A2Incendiary
+          - AU14MagazineSMGL90A2extended
+  - type: AttachableHolder
+    randomAttachmentChance: 0.42
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-underbarrel:
+        locked: true
+        startingAttachable: AU14AttachmentL90MVerticalGrip
+        whitelist:
+          tags:
+          - AU14AttachmentL90MVerticalGrip
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: AU14MagazineSMGL90A2
+  name: L90A2 Magazine (10x20mm)
+  description: "A magazine of 10x20mm rounds for use in the L90A2 PDW."
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineSMGL90A2
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMCartridge10x20mm
+    proto: CMCartridge10x20mm
+    capacity: 40
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90A2.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsSMG
+- type: entity
+  parent: AU14MagazineSMGL90A2
+  id: AU14MagazineSMGL90A2AP
+  description: "A magazine of armor-piercing 10x20mm rounds for use in the L90A2 PDW."
+  name: L90A2 AP Magazine (10x20mm)
+  suffix: AP
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineSMGL90A2
+    - AU14MagazineSMGL90A2AP
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMCartridge10x20mmAP
+    proto: CMCartridge10x20mmAP
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90A2.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-1
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - state: ammo_band
+      color: "#1F951F"
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsSMGAP
+- type: entity
+  parent: AU14MagazineSMGL90A2
+  id: AU14MagazineSMGL90A2extended
+  description: "An extended magazine for the L90A2 PDW."
+  name: L90A2 Extended Magazine (10x20mm)
+  suffix: Extended
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineSMGL90A2
+    - AU14MagazineSMGL90A2extended
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMCartridge10x20mm
+    proto: CMCartridge10x20mm
+    capacity: 66
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90A2extended.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-1
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsSMG
+- type: entity
+  parent: AU14MagazineSMGL90A2
+  id: AU14MagazineSMGL90A2HEAP
+  description: "A magazine of HEAP 10x20mm rounds for use in the L90A2 PDW."
+  name: L90A2 HEAP Magazine (10x20mm)
+  suffix: HEAP
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineSMGL90A2
+    - AU14MagazineSMGL90A2HEAP
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RMCCartridge10x20mmHEAP
+    proto: RMCCartridge10x20mmHEAP
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90A2.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-1
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - state: ammo_band
+      color: "#9C9A19"
+  - type: Appearance
+
+- type: entity
+  parent: AU14MagazineSMGL90A2
+  id: AU14MagazineSMGL90A2Incendiary
+  description: "A magazine of incendiary 10x20mm rounds for use in the L90A2 PDW."
+  name: L90A2 Incendiary Magazine (10x20mm)
+  suffix: Incendiary
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineSMGL90A2
+    - AU14MagazineSMGL90A2Incendiary
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RMCCartridge10x20mmIncendiary
+    proto: RMCCartridge10x20mmIncendiary
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90A2.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-1
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - state: ammo_band
+      color: "#771A10"
+  - type: Appearance
+
+- type: Tag
+  id: AU14MagazineRifleL90
+
+- type: Tag
+  id: AU14MagazineRifleL90AP
+
+- type: Tag
+  id: AU14MagazineRifleL90extended
+
+- type: Tag
+  id: AU14MagazineRifleL90HEAP
+
+- type: Tag
+  id: AU14MagazineRifleL90Incendiary
+
+- type: Tag
+  id: AU14AttachmentL90MScope
+
+- type: Tag
+  id: AU14AttachmentL90MVerticalGrip
+
+- type: Tag
+  id: RMCAttachmentL90BUnderbarrelShotgun
+
+- type: Tag
+  id: AU14MagazineRifleL90M
+
+- type: Tag
+  id: AU14MagazineRifleL90MAP
+
+- type: Tag
+  id: AU14MagazineRifleL90Mextended
+
+- type: Tag
+  id: AU14MagazineRifleL90MHEAP
+
+- type: Tag
+  id: AU14MagazineRifleL90MIncendiary
+
+- type: Tag
+  id: AU14MagazineSMGL90A2
+
+- type: Tag
+  id: AU14MagazineSMGL90A2AP
+
+- type: Tag
+  id: AU14MagazineSMGL90A2extended
+
+- type: Tag
+  id: AU14MagazineSMGL90A2HEAP
+
+- type: Tag
+  id: AU14MagazineSMGL90A2Incendiary

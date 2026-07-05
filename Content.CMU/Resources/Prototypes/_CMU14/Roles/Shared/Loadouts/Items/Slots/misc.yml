@@ -63,3 +63,33 @@
   storage:
     back:
     - AU14CCAFPatch
+
+- type: loadout
+  id: MedicPatchCMU14
+  storage:
+    back:
+    - RMCPatchMedic
+
+- type: loadout
+  id: OliveBranchPatchCMU14
+  storage:
+    back:
+    - RMCPatchOliveBranch
+
+- type: loadout
+  id: PeacePatchCMU14
+  storage:
+    back:
+    - RMCPatchPeace
+
+- type: loadout
+  id: BlackSquareWeYuCMU14
+  storage:
+    back:
+    - RMCPatchWeYaBlackSquare
+
+- type: loadout
+  id: EMTArmBandCMU14
+  storage:
+    back:
+    - RMCMedEMTArmband

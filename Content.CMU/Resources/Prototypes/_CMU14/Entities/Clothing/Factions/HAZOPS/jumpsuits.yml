@@ -1,0 +1,12 @@
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14HAZOPUrbanFatigues
+  name: USCM urban warfare fatigues
+  description: Specialized USCM fatigues. Favorited by HAZOPS.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/snowfatigues.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUSCM
+    - AU14HAZOPShecuPatch

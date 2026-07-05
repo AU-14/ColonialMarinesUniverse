@@ -1,0 +1,32 @@
+- type: entity
+  parent: RMCPVECaseMotionDetector
+  id: AU14CaseMotionDetectorRMC
+  name: RMC motion detectors case
+  description: A case containing four individual handheld motion detectors programmed to operate with RMC IFF.
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MotionDetectorRMC
+    - id: AU14MotionDetectorRMC
+    - id: AU14MotionDetectorCompactRMC
+    - id: AU14MotionDetectorCompactRMC
+
+- type: entity
+  parent: RMCGunCaseBase
+  id: AU14GunCasePistolL165A1
+  name: L165A1 pistol case
+  description: A gun case containing the L165A1. Comes with two magazines.
+  components:
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,5,1
+    whitelist:
+      tags:
+      - RMCMK80
+      - CMMagazinePistolMK80
+  - type: StorageFill
+    contents:
+    - id: AU14L165A1
+    - id: AU14MagazinePistolL165A1
+      amount: 2

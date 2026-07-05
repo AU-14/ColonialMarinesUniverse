@@ -11,7 +11,7 @@ public sealed class SubvertedSynthSystem : EntitySystem
         SubscribeLocalEvent<SubvertedSynthComponent, ComponentRemove>(OnRemove);
     }
 
-    // hacky hack just to dirty the entity
+    // Synth visuals derive from SynthComponent, so dirty both components when this marker changes.
     private void OnInit(EntityUid uid, SubvertedSynthComponent comp, ComponentInit args)
     {
         if (TryComp(uid, out SynthComponent? sc)) Dirty(uid, sc);

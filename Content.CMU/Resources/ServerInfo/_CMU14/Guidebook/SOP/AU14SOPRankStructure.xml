@@ -31,16 +31,16 @@
 
 
 
-  ## The Acting Commanding Officer
+  ## The Acting Commanding Officer / Operations Command (OPSCOM)
   The following report to the above role
-    - Apollo (AI)
-      - Support Synth
-      - Working Joe
-    - Adjutant Officer
+    - Apollo (AI) - Only reports to ACO
+      - Support Synth - Reports to AI
+      - Working Joe - Reports to AI
+    - Adjutant Officer - Reports to AO
       - Staff Officer
-      - Support Synth
-      - Working Joe
-        - Advisor
+      - Support Synth - Reports to AO
+      - Working Joe - Reports to AO
+        - Advisor - Reports to AO/CO/SO
 
   ## Operation Command (OPSCOM) consisnts of the above jobs and is directed by the Advisor (E6-E9) and Staff Officer (O2)
   The follow report to the above role
@@ -54,43 +54,44 @@
 
   ## Logisitics (LOGI) Reports to Operation Command
   The following jobs are apart of LOGI and report to their Head
-    - Logistics Officer
+    - Logistics Officer - Department Head
       - Requisitions Technician
 
   ## Military Police (MP) Reports to Operation Command
   The following jobs are apart of MP and report to their Head
-    - Chief Military Policeman
+    - Chief Military Policeman - Department Head
       - Military Policeman
 
   ## Medical (MED) Reports to Operation Command
   The following jobs are apart of MED and report to their Head
-    - Chief Medical Officer
+    - Chief Medical Officer - Department Head
       - Doctor
       - Medical Technician
 
   ## Intelligence (INTI.) Reports to Operation Command
   The following jobs are apart of INTI and report to their Head
-    - Intelligence Officer
+    - Intelligence Officer - Department Head
       - Intelligence Technician
 
   ## Engineering (ENGI) Reports to Operation Command
   The following jobs are apart of ENGI and report to their Head
-    - Engineering Officer
+    - Engineering Officer - Department Head
       - Maintenance Technician
       - Ordance Technician
 
   ## Vehilce Crew (VC) Reports to Operation Command
   The following jobs are apart of VC and report to their Head
-    - Dropship Pilot
+    - Dropship/Gunship Pilot
       - Dropship Crew Chief
-    - Vehicle Commander
+    - Vehicle Commander - Vehicle Department Head
       - Vehicle Crewman
 
   ## Combat Arms (COMARMS) Reports to Operation Command
   The following jobs are apart of COMARMS and report to their Head
     - Sqaud Leader
       - Fire Team Leader
-        - Corpsman
+        - Radio Traffic Operator
+          - Corpsman
           - Combat Technician
           - Automatic Rifleman
           - Rifleman

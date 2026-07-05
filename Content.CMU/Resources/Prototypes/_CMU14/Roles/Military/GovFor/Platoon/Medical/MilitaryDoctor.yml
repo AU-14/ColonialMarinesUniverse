@@ -20,7 +20,6 @@
       icon:
         sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
         state: doctor
-
   requirements:
   - !type:AgeRequirement
     requiredAge: 25

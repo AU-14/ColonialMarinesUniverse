@@ -1,0 +1,14 @@
+- type: gameMap
+  id: Riptide
+  mapName: USS Riptide (USCM)
+  mapPath: /Maps/_AU14/USSRiptide.yml
+  minPlayers: 0
+  maxPlayers: 75
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    Savannah:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'USS Riptide'

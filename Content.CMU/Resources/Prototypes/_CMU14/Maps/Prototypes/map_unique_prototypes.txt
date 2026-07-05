@@ -1,0 +1,1 @@
+Place your custom map prototypes in this folder

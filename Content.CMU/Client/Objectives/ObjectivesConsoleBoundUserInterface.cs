@@ -1,15 +1,12 @@
 using Content.Shared.AU14.Objectives;
 using Robust.Client.UserInterface;
-using Robust.Shared.Log;
 
 namespace Content.Client.AU14.Objectives;
 
-public sealed class ObjectivesConsoleBoundUserInterface : BoundUserInterface
+public sealed class ObjectivesConsoleBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
     private ObjectivesConsoleWindow? _window;
     private ObjectiveIntelWindow? _intelWindow;
-
-    public ObjectivesConsoleBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey) { }
 
     protected override void Open()
     {
@@ -46,7 +43,7 @@ public sealed class ObjectivesConsoleBoundUserInterface : BoundUserInterface
     public void RequestIntel(string objectiveId)
     {
         // Send request to server and wait for it to respond with the intel state.
-        Logger.GetSawmill("content").Info($"[ObjectivesConsoleBUI] Sending RequestIntel for objective={objectiveId} owner={Owner}");
+        Logger.GetSawmill("objectives").Debug($"[OBJ CON BUI] Sending RequestIntel for objective={objectiveId} owner={Owner}");
         SendMessage(new ObjectivesConsoleRequestIntelMessage(objectiveId));
     }
 
@@ -55,7 +52,7 @@ public sealed class ObjectivesConsoleBoundUserInterface : BoundUserInterface
         base.UpdateState(state);
         if (state is ObjectivesConsoleBoundUserInterfaceState cast)
         {
-            Logger.GetSawmill("content").Info($"[ObjectivesConsoleBUI] Received Objectives state: objectives={cast.Objectives.Count} win={cast.CurrentWinPoints}/{cast.RequiredWinPoints}");
+            Logger.GetSawmill("objectives").Debug($"[OBJ CON BUI] Received Objectives state: objectives={cast.Objectives.Count} win={cast.CurrentWinPoints}/{cast.RequiredWinPoints}");
             if (_window == null)
             {
                 _window = this.CreateWindow<ObjectivesConsoleWindow>();
@@ -70,23 +67,24 @@ public sealed class ObjectivesConsoleBoundUserInterface : BoundUserInterface
         if (state is ObjectiveIntelBoundUserInterfaceState intelState)
         {
 
-                Logger.GetSawmill("content").Info("[ObjectivesConsoleBUI] Creating intel window and populating");
-                _intelWindow = new ObjectiveIntelWindow();
-                _intelWindow.OpenCentered();
-                Logger.GetSawmill("content").Info($"[ObjectivesConsoleBUI] After OpenCentered: IsOpen={_intelWindow.IsOpen} Disposed={_intelWindow.Disposed} Parent={( _intelWindow.Parent == null ? "null" : _intelWindow.Parent.GetType().FullName)}");
-                _intelWindow.Populate(
-                    intelState.ObjectiveId,
-                    intelState.ObjectiveDefaultTitle,
-                    intelState.Tiers ?? new List<ObjectiveIntelTierEntry>(),
-                    intelState.UnlockedTier,
-                    intelState.FactionPoints,
-                    idx => {
-                        Logger.GetSawmill("content").Info($"[ObjectivesConsoleBUI] Sending Unlock request objective={intelState.ObjectiveId} tier={idx}");
-                        SendMessage(new ObjectivesConsoleUnlockIntelMessage(intelState.ObjectiveId, idx));
-                    }
-                );
-                Logger.GetSawmill("content").Info($"[ObjectivesConsoleBUI] After Populate: IsOpen={_intelWindow.IsOpen} Disposed={_intelWindow.Disposed} Parent={( _intelWindow.Parent == null ? "null" : _intelWindow.Parent.GetType().FullName)}");
-                _intelWindow.OnClose += () => _intelWindow = null;
+            Logger.GetSawmill("objectives").Debug("[OBJ CON BUI] Creating intel window and populating");
+            _intelWindow = new ObjectiveIntelWindow();
+            _intelWindow.OpenCentered();
+            Logger.GetSawmill("objectives").Debug($"[OBJ CON BUI] After OpenCentered: IsOpen={_intelWindow.IsOpen} Disposed={_intelWindow.Disposed} Parent={(_intelWindow.Parent == null ? "null" : _intelWindow.Parent.GetType().FullName)}");
+            _intelWindow.Populate(
+                intelState.ObjectiveId,
+                intelState.ObjectiveDefaultTitle,
+                intelState.Tiers ?? new List<ObjectiveIntelTierEntry>(),
+                intelState.UnlockedTier,
+                intelState.FactionPoints,
+                idx =>
+                {
+                    Logger.GetSawmill("objectives").Debug($"[OBJ CON BUI] Sending Unlock request objective={intelState.ObjectiveId} tier={idx}");
+                    SendMessage(new ObjectivesConsoleUnlockIntelMessage(intelState.ObjectiveId, idx));
+                }
+            );
+            Logger.GetSawmill("objectives").Debug($"[OBJ CON BUI] After Populate: IsOpen={_intelWindow.IsOpen} Disposed={_intelWindow.Disposed} Parent={(_intelWindow.Parent == null ? "null" : _intelWindow.Parent.GetType().FullName)}");
+            _intelWindow.OnClose += () => _intelWindow = null;
 
         }
     }

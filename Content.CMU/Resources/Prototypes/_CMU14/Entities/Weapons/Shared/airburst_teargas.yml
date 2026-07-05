@@ -1,0 +1,41 @@
+- type: entity
+  parent: RMCBaseAirBurstGrenade
+  id: CM14AirBurstTearGas
+  name: M74 AGM-PDC tear gas grenade
+  description: M74 - Airburst Grenade Munition - Personnel Denial Canister. This grenade must be launched with a grenade launcher, and detonates once it reaches its destination. It dispenses a cloud of irritant gas with temporary neuromuscular effects.
+  components:
+  - type: Sprite
+    sprite:  _CMU14/Objects/Weapons/Guns/Ammunition/teargascanister.rsi
+    layers:
+    - state: grenade_teargas
+  - type: Tag
+    tags:
+    - Grenade
+    - LauncherCompatibleGrenade
+    - RMCAirburstGrenade
+    - RMCGrenadeAGMF
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+  - type: TriggerOnFixedDistanceStop
+    delay: 1
+  - type: CartridgeAmmo
+    deleteOnSpawn: true
+    proto: CMU14AirBurstProjectileTearGas
+
+- type: entity
+  parent: RMCBaseAirBurstProjectile
+  id: CMU14AirBurstProjectileTearGas
+  name: M74 AGM-PDC tear gas grenade
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Weapons/Guns/Ammunition/teargascanister.rsi
+    layers:
+    - state: grenade_teargas_active
+  - type: SpawnOnTerminate
+    spawn: CMU14InstantTearGas
+    projectileAdjust: false
+  - type: SoundOnTrigger
+    sound: /Audio/Effects/smoke.ogg
+  - type: DeleteOnTrigger

@@ -1,0 +1,190 @@
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardFORECONMarksmanDetachment
+  categories: [ HideSpawnMenu ]
+  name: FORECON Marksman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14FORECONMarksmanDetachment
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardFORECONSniperDetachment
+  categories: [ HideSpawnMenu ]
+  name: FORECON Sniper ID card
+  components:
+  - type: PresetIdCard
+    job: AU14FORECONSniperDetachment
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardFORECONSpotterDetachment
+  categories: [ HideSpawnMenu ]
+  name: FORECON Spotter ID card
+  components:
+  - type: PresetIdCard
+    job: AU14FORECONSpotterDetachment
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardFORECONFirstReconCorpsman
+  categories: [ HideSpawnMenu ]
+  name: FORECON Corpsman 2. Class ID card
+  components:
+  - type: PresetIdCard
+    job: AU14FORECONFirstReconCorpsman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardFORECONFirstReconSmartGunOperator
+  categories: [ HideSpawnMenu ]
+  name: FORECON Automatic Rifleman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14FORECONFirstReconSmartGunOperator
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardFORECONFirstReconRifleman
+  categories: [ HideSpawnMenu ]
+  name: FORECON Rifleman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14FORECONFirstReconRifleman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardFORECONFirstReconSquadleader
+  categories: [ HideSpawnMenu ]
+  name: FORECON Section Leader ID card
+  components:
+  - type: PresetIdCard
+    job: AU14FORECONFirstReconSquadleader
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardFORECONKillTeamSniper
+  categories: [ HideSpawnMenu ]
+  name: FORECON Sniper ID card
+  components:
+  - type: PresetIdCard
+    job: AU14FORECONKillTeamSniper
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardFORECONKillTeamSpotter
+  categories: [ HideSpawnMenu ]
+  name: FORECON Spotter ID card
+  components:
+  - type: PresetIdCard
+    job: AU14FORECONKillTeamSpotter
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardGold
+  id: AU14IDCardFORECONCommander
+  categories: [ HideSpawnMenu ]
+  name: FORECON Commander ID card
+  components:
+  - type: PresetIdCard
+    job: AU14FORECONCommander
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardFORECONMarksman
+  categories: [ HideSpawnMenu ]
+  name: FORECON Marksman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14FORECONMarksman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardFORECONRifleman
+  categories: [ HideSpawnMenu ]
+  name: FORECON Rifleman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14FORECONRifleman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardFORECONSmartGunOperator
+  categories: [ HideSpawnMenu ]
+  name: FORECON Smart Gun Operator ID card
+  components:
+  - type: PresetIdCard
+    job: AU14FORECONSmartGunOperator
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardFORECONSquadleader
+  categories: [ HideSpawnMenu ]
+  name: FORECON Section Leader ID card
+  components:
+  - type: PresetIdCard
+    job: AU14FORECONSquadleader
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardFORECONSupportTech
+  categories: [ HideSpawnMenu ]
+  name: FORECON Support Tech ID card
+  components:
+  - type: PresetIdCard
+    job: AU14FORECONSupportTech
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardFORECONSynth
+  name: FORECON Synth ID card
+  components:
+  - type: PresetIdCard
+    job: AU14FORECONSynth
+  - type: ItemIFF
+    factions:
+    - GOVFOR

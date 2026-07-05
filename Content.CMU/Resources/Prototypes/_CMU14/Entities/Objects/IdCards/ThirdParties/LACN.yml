@@ -1,0 +1,23 @@
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardLACNCommandoSniper
+  categories: [ HideSpawnMenu ]
+  name: LACN commando sniper ID card
+  components:
+  - type: PresetIdCard
+    job: AU14LACNCommandoSniper
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardLACNCommandoSpotter
+  categories: [ HideSpawnMenu ]
+  name: LACN commando spotter ID card
+  components:
+  - type: PresetIdCard
+    job: AU14LACNCommandoSpotter
+  - type: ItemIFF
+    factions:
+    - GOVFOR

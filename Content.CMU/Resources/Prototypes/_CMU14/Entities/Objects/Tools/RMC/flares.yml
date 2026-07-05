@@ -1,0 +1,125 @@
+- type: entity
+  parent: CMFlare
+  id: AU14FlareRMC
+  suffix: Alt
+  description: An RMC issued flare that burns in both the visual and ultraviolet spectrum. There are instructions on the side, it reads 'pull cord, make light'.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/flares.rsi
+    layers:
+      - map: [ "enum.ExpendableLightVisualLayers.Base" ]
+        state: flare
+      - map: [ "enum.ExpendableLightVisualLayers.Glow" ]
+        state: flare_flame
+        color: "#d79be5"
+        visible: false
+      - map: [ "enum.ExpendableLightVisualLayers.Overlay" ]
+        state: overlay
+  - type: PointLight
+    color: "#d79be5"
+  - type: Tag
+    tags:
+    - AU14FlareRMC
+    - RMCFlare
+
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: AU14PackFlareBaseRMC
+  name: L96 marking flare pack
+  suffix: Alt
+  description: A packet of eight M94 Marking Flares. Carried by Marine soldiers to light dark areas that cannot be reached with the usual TNR Shoulder Lamp.
+  components:
+  - type: Item
+    size: Normal
+  - type: Tag
+    tags:
+    - CMFlarePack
+  - type: CMItemSlots
+    count: 8
+    slot:
+      name: Flare
+      whitelist:
+        tags:
+        - AU14FlareRMC
+  - type: Sprite
+    sprite: _AU14/Weapons/Throwable/RMC/packets.rsi
+    layers:
+    - state: l96_e
+      map: [ "emptyLayer" ]
+    - state: l96
+      map: [ "fullLayer" ]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMItemSlotsLayers.Fill:
+        fullLayer:
+          Empty: { visible: false }
+          Low: { visible: true }
+          Medium: { visible: true }
+          High: { visible: true }
+          Full: { visible: true }
+        emptyLayer:
+          Empty: { visible: true }
+          Low: { visible: false }
+          Medium: { visible: false }
+          High: { visible: false }
+          Full: { visible: false }
+
+- type: entity
+  parent: AU14PackFlareBaseRMC
+  id: AU14PackFlareRMC
+  suffix: Filled, Alt
+  components:
+  - type: CMItemSlots
+    startingItem: AU14FlareRMC
+
+- type: entity
+  parent: RMCBoxMagazineSupplySmallBase
+  id: AU14BoxPackFlareRMCEmpty
+  name: box of L96 flare packs (x10)
+  description: A box of L96 marking flare packs, to brighten up your day.
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RMCBoxPackFlareEmpty
+  - type: Item
+    size: Huge
+  - type: CMItemSlots
+    count: 10
+    slot:
+      name: FlarePack
+      whitelist:
+        tags:
+        - AU14FlarePackRMC
+  - type: Sprite
+    layers:
+    - state: supply_box_small
+      color: "#646a3c"
+    - state: supply_ammo_small_full
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+      color: "#867872"
+    - state: supply_box_small_flare
+      color: "#646a3c"
+    - state: supply_box_small_flare_colour
+      color: "#f0c16f"
+    - state: supply_lid_small_closed
+      map: [ "lid" ]
+      color: "#646a3c"
+    - state: supply_lid_small_closed_marking
+      map: [ "lid_marking" ]
+      color: "#646a3c"
+
+- type: entity
+  parent: AU14BoxPackFlareRMCEmpty
+  id: AU14BoxPackFlareRMC
+  suffix: Filled, Alt
+  components:
+  - type: CMItemSlots
+    startingItem: AU14PackFlareRMC
+
+- type: Tag
+  id: AU14FlareRMC
+
+- type: Tag
+  id: AU14FlarePackRMC

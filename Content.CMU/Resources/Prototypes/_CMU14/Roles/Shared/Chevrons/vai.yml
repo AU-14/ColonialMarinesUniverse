@@ -1,0 +1,105 @@
+# base
+- type: entity
+  parent: RMCArmbandBase
+  id: AU14ChevronVASCBase
+  abstract: true
+  suffix: VAI Chevron
+  description: VAI private military company rank insignia. The onboarding agent told you you're more likely to sit on this than wear it, on account of all the covert shit you do.
+
+# ├──[ Mercenary Line ]──────────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14ChevronVASCBase
+  id: AU14ChevronVASCMercenary
+  name: vasc mercenary chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: VAI_Mercenary
+    override: true
+
+- type: entity
+  parent: AU14ChevronVASCBase
+  id: AU14ChevronVASCTeamLeader
+  name: vasc team leader chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_nco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_nco
+  - type: RankChanger
+    rank: VAI_TeamLeader
+    override: true
+
+- type: entity
+  parent: AU14ChevronVASCBase
+  id: AU14ChevronVASCMachinegunner
+  name: vasc machinegunner chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_nco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_nco
+  - type: RankChanger
+    rank: VAI_Machinegunner
+    override: true
+
+- type: entity
+  parent: AU14ChevronVASCBase
+  id: AU14ChevronVASCEngineer
+  name: vasc engineering specialist chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_nco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_nco
+  - type: RankChanger
+    rank: VAI_Engineer
+    override: true
+
+- type: entity
+  parent: AU14ChevronVASCBase
+  id: AU14ChevronVASCMedicalSpecialist
+  name: vasc medical specialist chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_nco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_nco
+  - type: RankChanger
+    rank: VAI_MedicalSpecialist
+    override: true
+
+- type: entity
+  parent: AU14ChevronVASCBase
+  id: AU14ChevronVASCSynthetic
+  name: vasc synthetic chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: VAI_Synthetic
+    override: true

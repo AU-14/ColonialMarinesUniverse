@@ -1,0 +1,210 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobOfficerLogisticsBaseAbstract
+  name: au14-job-name-govforlogistics
+  description: au14-job-description-govforlogistics
+  icon: "AU14JobIconGovLO"
+  spawnMenuRoleName: Logistics Officer (GOVFOR)
+  supervisors: au14-job-supervisors-govforplatco
+  startingGear: AU14GearGOVFOROfficerLogistics
+  dummyStartingGear: AU14GearGOVFOROfficerLogisticsDummy
+  playTimeTracker: AU14JobGOVFOROfficerLogistics
+  requireAdminNotify: true
+  canBeAntag: false
+  displayWeight: 6
+  accessGroups:
+  - AU14GovforCommand
+  - AU14GovforAuxTech
+  - aulegacygroupcommand
+
+- type: job
+  abstract: true
+  parent: AU14JobOfficerLogisticsBaseAbstract
+  id: AU14JobOfficerLogisticsBase
+  roundRole: LogisticsOfficer
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetOfficerLogistics
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforlogistics
+  - type: RMCSpeechBubbleSpecificStyle
+    speechStyleClass: commanderSpeech
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: old_govfor_platco # TODO: LO icon
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
+        state: old_platco # TODO: LO icon
+    # UPP:
+    # - type: JobPrefix
+    #   prefix: au14-job-prefix-govforlogisticsUPP
+    # WYPMC:
+    # - type: JobPrefix
+    #   prefix: au14-job-prefix-govforlogisticsWYPMC
+    # CMBCIU:
+    # - type: JobPrefix
+    #   prefix: au14-job-prefix-govforlogisticsCMBCIU
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
+  - !type:AgeRequirement
+    requiredAge: 25
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxiety
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankSecondLT:
+      entity: AU14ChevronSecondLT
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFOROfficerLogistics
+  isHumanoid: true
+
+# ├──[ Job Prototypes ]──────────────────────────────────────────────┤
+- type: job
+  parent: AU14JobOfficerLogisticsBase
+  id: AU14JobGOVFOROfficerLogistics
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: job
+  parent: AU14JobOfficerLogisticsBase
+  id: AU14JobOPFOROfficerLogistics
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORLO"
+  spawnMenuRoleName: Logistics Officer (OPFOR)
+  supervisors: au14-job-supervisors-opforplatco
+  startingGear: AU14GearOPFOROfficerLogistics
+  dummyStartingGear: AU14GearOPFOROfficerLogisticsDummy
+  accessGroups:
+  - AU14OpforCommand
+  - aulegacygroupcommand
+
+# ├──[ Starting Gear ]───────────────────────────────────────────────┤
+- type: startingGear
+  id: AU14GearGOVFOROfficerLogistics
+  equipment:
+    id: AU14IDCardGOVFOROfficerLogistics
+    ears: AU14HeadsetGovforCommand
+    pocket1: AU14StampLO
+  inhand:
+    - AU14KitJOLogisticsKit
+
+- type: startingGear
+  id: AU14GearOPFOROfficerLogistics
+  equipment:
+    id: AU14IDCardOPFOROfficerLogistics
+    ears: AU14HeadsetOpforCommand
+    pocket1: AU14StampLO
+  inhand:
+    - AU14KitJOLogisticsKit
+
+- type: roleLoadout
+  id: JobAU14JobGOVFOROfficerLogistics
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+- type: startingGear
+  id: AU14GearGOVFOROfficerLogisticsDummy
+  equipment:
+    shoes: CMBootsBlack
+    head: CMHeadCapPeakedFormal
+    jumpsuit: CMJumpsuitXOFormal
+    ears: AU14HeadsetGovforCommand
+
+- type: startingGear
+  id: AU14GearOPFOROfficerLogisticsDummy
+  equipment:
+    shoes: CMBootsBlack
+    head: CMHeadCapPeakedFormal
+    jumpsuit: CMJumpsuitXOFormal
+    ears: AU14HeadsetOpforCommand
+
+# ├──[ Spawnpoints ]─────────────────────────────────────────────────┤
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFOROfficerLogistics
+  name: Spawn Point GOVFOR Logistics Officer
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFOROfficerLogistics
+  - type: Sprite
+    state: syn_spawn
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointopforOfficerLogistics
+  name: Spawn Point OPFOR Logistics Officer
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFOROfficerLogistics
+  - type: Sprite
+    state: syn_spawn
+
+# ├──[ Factions ]────────────────────────────────────────────────────┤
+- type: job
+  parent: AU14JobOfficerLogisticsBase
+  id: AU14JobGOVFOROfficerLogisticsCMBCIU
+  roundForce: CMBCIU
+  name: Logistics Officer
+  spawnMenuRoleName: Logistics Officer (CMBCIU)
+  ranks:
+    AU14RankCMBMarshal: []
+
+- type: job
+  parent: AU14JobOfficerLogisticsBase
+  id: AU14JobGOVFOROfficerLogisticsRMC
+  roundForce: RMC
+  name: au14-job-name-govforlogisticsRMC
+  spawnMenuRoleName: Logistics Officer (TWE RMC)
+
+- type: job
+  parent: AU14JobOfficerLogisticsBase
+  id: AU14JobGOVFOROfficerLogisticsUPP
+  roundForce: UPP
+  requirements: []
+  name: Logistics Officer
+  spawnMenuRoleName: Logistics Officer (UPP)
+  ranks:
+    UPP_Lieutenant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFOROfficerLogistics
+      time: 216000 # 60 hours
+    UPP_JuniorLieutenant: []
+
+- type: job
+  parent: AU14JobOfficerLogisticsBase
+  id: AU14JobGOVFOROfficerLogisticsWYPMC
+  roundForce: WYPMC
+  requirements: []
+  name: PMC Logistics Adjutant
+  spawnMenuRoleName: Logistics Officer (WYPMC)
+  ranks:
+    AU14RankWeYuAdjutant: []

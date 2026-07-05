@@ -2315,7 +2315,7 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
         int count,
         List<ResolvedSpawnMarker> markers)
     {
-        if (entityPrototype.TryGetComponent<ScenarioSpawnMarkerComponent>(out var scenarioMarker, _componentFactory))
+        if (entityPrototype.TryComp<ScenarioSpawnMarkerComponent>(out var scenarioMarker, _componentFactory))
         {
             markers.Add(new ResolvedSpawnMarker(
                 prototypeId,
@@ -2323,16 +2323,16 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
                 ToScenarioMarkerKind(scenarioMarker.Kind),
                 ScenarioMarkerTagsFor(
                     scenarioMarker.Tags,
-                    entityPrototype.TryGetComponent<ParachuteMarkerComponent>(out _, _componentFactory)),
+                    entityPrototype.TryComp<ParachuteMarkerComponent>(out _, _componentFactory)),
                 count * Math.Max(1, scenarioMarker.Count),
                 sourcePath));
             return;
         }
 
-        if (entityPrototype.TryGetComponent<ThreatSpawnMarkerComponent>(out var threatMarker, _componentFactory))
+        if (entityPrototype.TryComp<ThreatSpawnMarkerComponent>(out var threatMarker, _componentFactory))
         {
             var thirdParty = threatMarker.ThirdParty;
-            var parachute = entityPrototype.TryGetComponent<ParachuteMarkerComponent>(out _, _componentFactory);
+            var parachute = entityPrototype.TryComp<ParachuteMarkerComponent>(out _, _componentFactory);
             markers.Add(new ResolvedSpawnMarker(
                 prototypeId,
                 mapId,
@@ -2342,7 +2342,7 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
                 sourcePath));
         }
 
-        if (entityPrototype.TryGetComponent<SafehouseMarkerComponent>(out _, _componentFactory))
+        if (entityPrototype.TryComp<SafehouseMarkerComponent>(out _, _componentFactory))
         {
             markers.Add(new ResolvedSpawnMarker(
                 prototypeId,
@@ -2353,7 +2353,7 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
                 sourcePath));
         }
 
-        if (entityPrototype.TryGetComponent<SpawnPointComponent>(out var spawnPoint, _componentFactory) &&
+        if (entityPrototype.TryComp<SpawnPointComponent>(out var spawnPoint, _componentFactory) &&
             spawnPoint.Job != null &&
             spawnPoint.Job.Value.Id.Equals(ColonyCivilianJobId, StringComparison.OrdinalIgnoreCase))
         {
@@ -2371,7 +2371,7 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
     {
         planet = default!;
         if (!_prototypes.TryIndex<EntityPrototype>(planetId, out var planetPrototype) ||
-            !planetPrototype.TryGetComponent<RMCPlanetMapPrototypeComponent>(out var planetComp, _componentFactory))
+            !planetPrototype.TryComp<RMCPlanetMapPrototypeComponent>(out var planetComp, _componentFactory))
         {
             return false;
         }

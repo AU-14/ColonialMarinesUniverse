@@ -6,3 +6,66 @@
 
 - type: Tag
   id: CMUYautjaToolbelt
+
+- type: Tag
+  id: MeatWheat
+
+- type: Tag
+  id: Oat
+
+- type: Tag
+  id: Sugarcane
+
+- type: Tag
+  id: Papercane
+
+- type: Tag
+  id: Cabbage
+
+- type: Tag
+  id: Garlic
+
+- type: Tag
+  id: Orange
+
+- type: Tag
+  id: Pineapple
+
+- type: Tag
+  id: Tomato
+
+- type: Tag
+  id: Eggplant
+
+- type: Tag
+  id: Apple
+
+- type: Tag
+  id: Cocoa
+
+- type: Tag
+  id: Onion
+
+- type: Tag
+  id: Rice
+
+- type: Tag
+  id: Soybeans
+
+- type: Tag
+  id: Watermelon
+
+- type: Tag
+  id: Grape
+
+- type: Tag
+  id: Berries
+
+- type: Tag
+  id: Pea
+
+- type: Tag
+  id: Pumpkin
+
+- type: Tag
+  id: Cherry

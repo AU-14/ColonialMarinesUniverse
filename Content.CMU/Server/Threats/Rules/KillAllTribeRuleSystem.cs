@@ -1,3 +1,4 @@
+using Content.Server._CMU14.RoundStatistics;
 using Content.Server.AU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
@@ -15,6 +16,7 @@ public sealed partial class KillAllTribeRuleSystem : GameRuleSystem<KillAllTribe
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
     [Dependency] private EntityManager _entMan = default!;
     [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private CMURoundStatisticsSystem _roundStats = default!;
     [Dependency] private ThreatRuleHelper _threatRuleHelper = default!;
     private const string DefaultWinMsg = "The Threat has been Eliminated";
 
@@ -71,6 +73,7 @@ public sealed partial class KillAllTribeRuleSystem : GameRuleSystem<KillAllTribe
             return;
 
         string? winMessage = _auRoundSystem.SelectedThreat?.WinMessage;
+        _roundStats.RecordThreatDefeatedRule("KillAllTribeRule");
         _gameTicker.EndRound(!string.IsNullOrEmpty(winMessage) ? winMessage : DefaultWinMsg);
     }
 }

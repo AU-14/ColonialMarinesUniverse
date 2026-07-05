@@ -1,0 +1,8 @@
+- type: entity
+  parent: RMCPouchCommand
+  id: AU14PouchCommandFill
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCLaserDesignator

@@ -1,0 +1,103 @@
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitFORECONDetachmentUniform
+  name: FORECON Uniform Kit
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,13,1
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: AU14ArmorGhillie
+      - id: AU14HelmetGhillie
+      - id: AU14JungleFatiguesFORECON
+      - id: RMCPatchFORECON
+      - id: RMCScoutShoes
+      - id: CMBackpackSniper
+      - id: AU14PVEHandsInsulatedBlackMarine
+      - id: AU14BeltPostelPistolM48A4
+      - id: AU14PouchIFAKFill
+
+- type: entity
+  parent: RMCBasePVEEquipmentCase
+  id: AU14CaseM4RA
+  suffix: AU14, FORECON
+  name: M49A battle rifle case
+  description: A large case for storing an M49A a battle rifle.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/PVE_Cases/rifle.rsi
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,7,1
+    whitelist:
+      tags:
+      - RMCWeaponRifleM4SPR
+      - CMMagazineRifleM4SPR
+      - CMMagazineRifleM4SPRAP
+      - CMMagazineRifleM4SPRExt
+      - RMCAttachmentSuppressor
+  - type: StorageFill
+    contents:
+    - id: AU14WeaponRifleM49A
+    - id: CMMagazineRifleM4SPRExt
+      amount: 3
+    - id: CMMagazineRifleM4SPRAP
+      amount: 3
+    - id: RMCAttachmentSuppressor
+  - type: ItemMapper
+    mapLayers:
+      gun:
+        whitelist:
+          tags:
+          - RMCWeaponRifleM4SPR
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitFORECONDetachmentSpotter
+  name: FORECON Spotter Kit
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,13,1
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+    - id: AU14WeaponRifleM41AMK1ReconSuppressed
+    - id: CMMagazineRifleM54CMK1
+      amount: 5
+    - id: AU14PouchSlingBinocs
+
+- type: entity
+  parent: RMCBaseEquipmentCase
+  id: AU14KitFORECONDetachmentSniper
+  name: FORECON sniper equipment case
+  description: "A large case containing your very own long-range M96S-B sniper rifle, M45 ghillie armor and helmet, ammunition and additional pieces of equipment.\n\nNOTE: You cannot put items back inside this case."
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,11,1
+  - type: StorageFill
+    contents:
+    - id: CMMagazineSniperM96S
+      amount: 3
+    - id: CMMagazineSniperM96SFlak
+      amount: 2
+    - id: RMCM96SBSniperRifle

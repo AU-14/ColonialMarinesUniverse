@@ -1,0 +1,220 @@
+# ├──[ ENCRYPTIONKEYS ]──────────────────────────────────────────────┤
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyGovfor # blank key, channel set by SquadSystem.cs
+  name: GOVFOR encryption key
+  description: An encryption key used to communicate on the GOVFOR channel, it is automatically assigned the right channel.
+
+- type: entity
+  parent: AU14EncryptionKeyGovfor
+  id: AU14EncryptionKeyGovforBravo
+  name: GOVFOR Bravo encryption key
+  description: An encryption key used to communicate on the GOVFOR Bravo channel.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioGovforBravo
+    defaultChannel: radioGovforBravo
+
+- type: entity
+  parent: AU14EncryptionKeyGovfor
+  id: AU14EncryptionKeyGovforCharlie
+  name: GOVFOR Charlie encryption key
+  description: An encryption key used to communicate on the GOVFOR Charlie channel.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioGovforCharlie
+    defaultChannel: radioGovforCharlie
+
+- type: entity
+  parent: AU14EncryptionKeyGovfor
+  id: AU14EncryptionKeyGovforCommand
+  name: GOVFOR Command encryption key
+  description: An encryption key used to communicate on all available GOVFOR channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioGovforAlpha
+    - radioGovforBravo
+    - radioGovforCharlie
+    - radioGovforCommand
+    - radioGovforIntel
+    - radioGovforJTAC
+    - radioGovforMILP
+    defaultChannel: radioGovforCommand
+
+- type: entity
+  parent: AU14EncryptionKeyGovfor
+  id: AU14EncryptionKeyGovforCommandOnly
+  name: GOVFOR Command-only encryption key
+  description: An encryption key used to communicate on the GOVFOR Command channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioGovforCommand
+    defaultChannel: radioGovforCommand
+
+- type: entity
+  parent: AU14EncryptionKeyGovfor
+  id: AU14EncryptionKeyGovforIntel
+  name: GOVFOR Intel encryption key
+  description: An encryption key used to communicate on the GOVFOR Intel channel.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioGovforIntel
+    defaultChannel: radioGovforIntel
+
+- type: entity
+  parent: AU14EncryptionKeyGovfor
+  id: AU14EncryptionKeyGovforJTAC
+  name: GOVFOR JTAC encryption key
+  description: An encryption key used to communicate on the GOVFOR ATC channel.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioGovforJTAC
+
+- type: entity
+  parent: AU14EncryptionKeyGovfor
+  id: AU14EncryptionKeyGovforMILP
+  name: GOVFOR MP encryption key
+  description: An encryption key used to communicate on the GOVFOR MP channel.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioGovforMILP
+
+# ├──[ HEADSETS ]────────────────────────────────────────────────────┤
+- type: entity
+  parent: RMCHeadsetShip
+  id: AU14HeadsetGovforMarine
+  name: GOVFOR section radio headset
+  description: This is used by GOVFOR personnel to communicate on the radio.
+  components:
+  - type: Sprite
+    state: generic_headset
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyGovfor
+  - type: GrantSquadLeaderTracker
+    defaultMode: SquadLeader
+    trackerModes:
+    - SquadLeader
+    - FireteamLeader
+    - BattleBuddy
+    - SeniorEnlistedAdvisor
+    - PrimaryLandingZone
+
+- type: entity
+  parent: AU14HeadsetGovforMarine
+  id: AU14HeadsetGovforCommand
+  name: GOVFOR Command radio headset
+  description: This is used by GOVFOR command members to communicate on the radio.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots: # give all usable keys for emergencies/promotions
+      - AU14EncryptionKeyGovfor # empty key when taken out
+      - AU14EncryptionKeyGovforCommand
+      - AU14EncryptionKeyGovforBravo
+      - AU14EncryptionKeyGovforCharlie
+      - AU14EncryptionKeyGovforIntel
+      - AU14EncryptionKeyGovforJTAC
+      - AU14EncryptionKeyGovforMILP
+  - type: RMCStaticDefaultChannel
+  - type: EncryptionKeyHolder
+    defaultChannel: radioGovforCommand
+
+- type: entity
+  parent: AU14HeadsetGovforMarine
+  id: AU14HeadsetGovforMarineSL
+  name: GOVFOR SL radio headset
+  description: This is used by GOVFOR section leaders to communicate on the radio.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyGovfor
+      - AU14EncryptionKeyGovforCommandOnly
+      - AU14EncryptionKeyGovforJTAC
+
+- type: entity
+  parent: AU14HeadsetGovforMarine
+  id: AU14HeadsetGovforMarineFTL
+  name: GOVFOR FTL radio headset
+  description: This is used by GOVFOR fireteam leaders to communicate on the radio.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyGovfor
+      - AU14EncryptionKeyGovforJTAC
+
+- type: entity
+  parent: RMCHeadsetShip
+  id: AU14HeadsetGovforAuxiliary
+  name: GOVFOR Auxiliary support headset
+  description: This is used by GOVFOR auxiliary support members to communicate on the radio.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyGovfor
+      - AU14EncryptionKeyGovforCommandOnly
+      - AU14EncryptionKeyGovforIntel
+  - type: RMCStaticDefaultChannel
+  - type: EncryptionKeyHolder
+    defaultChannel: radioGovforCommand
+
+- type: entity
+  parent: AU14HeadsetGovforMarine
+  id: AU14HeadsetGovforMarineMP
+  name: GOVFOR MP radio headset
+  description: This is used by GOVFOR military police to communicate on the radio.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyGovfor
+      - AU14EncryptionKeyGovforCommand
+#     - AU14EncryptionKeyGovforCommandOnly
+      - AU14EncryptionKeyGovforMILP
+  - type: RMCStaticDefaultChannel
+  - type: EncryptionKeyHolder
+    defaultChannel: radioGovforCommand
+
+- type: entity
+  parent: RMCBaseUniformAccessory
+  id: AU14GOVFORIOHeadset
+  name: GOVFOR Intel earpiece
+  description: A small, concealable earpiece used by Intelligence operatives. Virtually invisible when worn, it clips discreetly onto a uniform, this one has a built in camera for remote viewing.
+  suffix: GOVFOR, IO
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/headsets.rsi
+    state: cmb_headset
+  - type: UniformAccessory
+    hidden: true
+    #viewerWhitelist:
+    #  components:
+    #  - CLFMember
+    category: Utility
+    limit: 1
+    playerSprite:
+      sprite: _RMC14/Objects/Medals/bronze.rsi
+      state: equipped
+  - type: OverwatchCamera
+  - type: AccessoryHeadset
+    channels:
+    - Colony
+    - radioGovforAlpha
+    - radioGovforBravo
+    - radioGovforCharlie
+    - radioGovforCommand
+    - radioGovforIntel
+    - radioGovforJTAC
+    - radioGovforMILP
+    defaultChannel: radioGovforIntel

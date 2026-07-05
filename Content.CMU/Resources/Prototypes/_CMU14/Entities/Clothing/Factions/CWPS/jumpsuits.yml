@@ -1,0 +1,8 @@
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CWPSUniform
+  name: CWPS Uniform
+  description: The standard uniform of the Colonial Wilderness Preservation Service rangers.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/CWPS/uniform.rsi

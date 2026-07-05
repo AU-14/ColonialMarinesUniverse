@@ -11,7 +11,6 @@ namespace Content.Shared._CMU14.ZLevels.Ordnance;
 public sealed partial class CMUTopDownOrdnanceSystem : EntitySystem
 {
     [Dependency] private AreaSystem _area = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private ITileDefinitionManager _tile = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -142,7 +141,7 @@ public sealed partial class CMUTopDownOrdnanceSystem : EntitySystem
 
     public bool IsOpening(MapCoordinates coordinates)
     {
-        if (!_mapManager.TryFindGridAt(coordinates, out var gridUid, out var grid))
+        if (!_map.TryFindGridAt(coordinates, out var gridUid, out var grid))
             return true;
 
         var tile = _map.WorldToTile(gridUid, grid, coordinates.Position);

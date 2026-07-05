@@ -1,0 +1,112 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: CMUJobDroneOperatorBaseAbstract
+  name: cmu-job-name-govfordroneoperator
+  description: cmu-job-description-govfordroneoperator
+  icon: "AU14JobIconGovRifleman"
+  spawnMenuRoleName: Drone Operator (GOVFOR)
+  startingGear: CMUGearGOVFORDroneOperator
+  dummyStartingGear: CMUGearGOVFORDroneOperatorDummy
+  playTimeTracker: CMUJobGOVFORDroneOperator
+  accessGroups:
+  - AU14GovforSquad
+
+- type: job
+  abstract: true
+  parent: CMUJobDroneOperatorBaseAbstract
+  id: CMUJobDroneOperatorBase
+  roundRole: DroneOperator
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: CMUDroneOperator
+  - type: Skills
+    preset: AU14SkillPresetPlatoonCombatTechnician
+  - type: JobPrefix
+    prefix: cmu-job-prefix-govfordroneoperator
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: rifleman
+
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankPrivateFirstClass:
+      entity: AU14ChevronUSCMPrivateFirstClass
+      requirements:
+      - !type:RoleTimeRequirement
+        role: CMUJobGOVFORDroneOperator
+        time: 36000
+    RMCRankPrivate:
+      entity: AU14ChevronUSCMPrivate
+      requirements: []
+
+- type: playTimeTracker
+  id: CMUJobGOVFORDroneOperator
+  isHumanoid: true
+
+- type: startingGear
+  id: CMUGearGOVFORDroneOperator
+  equipment:
+    id: CMUIDCardDroneOperator
+    ears: AU14HeadsetGovforMarine
+    back: CMUDroneOperatorPackFilled
+
+- type: startingGear
+  id: CMUGearGOVFORDroneOperatorDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleThree
+    shoes: AU14BootsJungle
+    head: AU14JungleM10Helmet
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetGovforMarine
+    back: CMUDroneOperatorPackFilled
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardDroneOperator
+  name: drone operator ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobGOVFORDroneOperator
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointGOVFORDroneOperator
+  name: Spawn Point GOVFOR Drone Operator
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobGOVFORDroneOperator
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: CMUJobDroneOperatorBase
+  id: CMUJobGOVFORDroneOperator
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: roleLoadout
+  id: JobCMUJobGOVFORDroneOperator
+  points: 7
+  groups:
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC

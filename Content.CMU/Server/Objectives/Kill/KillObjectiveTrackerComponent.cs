@@ -1,9 +1,4 @@
-using Robust.Shared.GameStates;
+namespace Content.Server.AU14.Objectives.Kill;
 
-namespace Content.Server.AU14.Objectives.Kill
-{
-    [RegisterComponent]
-    public sealed partial class KillObjectiveTrackerComponent : Component
-    {
-    }
-}
+[RegisterComponent]
+public sealed partial class KillObjectiveTrackerComponent : Component;

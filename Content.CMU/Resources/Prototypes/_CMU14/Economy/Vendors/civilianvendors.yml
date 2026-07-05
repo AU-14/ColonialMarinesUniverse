@@ -1,0 +1,503 @@
+- type: entity
+  parent: ColMarTechBase
+  id: AU14CivilianClothingVendor
+  name: Civilian Clothing Wardrobe
+  description: A wardrobe containing all the clothes a civilian would ever need.
+  suffix: Civ
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/corp_wardrobe.rsi
+    layers:
+    - state: "base"
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "enum.VendingMachineVisualLayers.Base" ]
+  - type: CMAutomatedVendor
+    sections:
+    - name: Foot Wear
+      choices: { CMUcivilianshoes: 2 }
+      entries:
+      - id: RMCShoesBlack
+      - id: RMCShoesBlue
+      - id: RMCShoesBrown
+      - id: RMCShoesGreen
+      - id: RMCShoesOrange
+      - id: RMCShoesPurple
+      - id: RMCShoesRed
+      - id: RMCShoesWhite
+      - id: RMCShoesYellow
+      - id: RMCBootsPMC
+      - id: RMCBootsVanBandolier
+      - id: RMCShoesLaceupBrown
+      - id: RMCShoesLaceup
+      - id: RMCShoesLeather
+    - name: Work Wear
+      choices: { CMUcivilianworkwear: 1 }
+      entries:
+      - id: AU14CivilianWorkwearYellow
+      - id: RMCJumpsuitLiaisonGreyWorkwear
+      - id: AU14CivilianWorkwearPink
+      - id: AU14CivilianWorkwearBlue
+      - id: AU14CivilianWorkwearGreen
+    - name: Business Attire
+      choices: { CMUcivilianbusinessatrire: 1 }
+      entries:
+      - id: CMJumpsuitLiaisonBlack
+      - id: CMJumpsuitLiaisonBlue
+      - id: CMJumpsuitLiaisonBrown
+      - id: CMJumpsuitLiaisonField
+      - id: CMJumpsuitLiaisonIvy
+      - id: CMJumpsuitLiaisonCorporateFormal
+      - id: CMJumpsuitLiaisonFormal
+      - id: CMJumpsuitLiaison
+      - id: CMJumpsuitLiaisonBlazer
+      - id: CMJumpsuitLiaisonCharcoal
+    - name: Flannels
+      choices: { CMUcivilianflannel: 1 }
+      entries:
+      - id: AU14CivilianFlannelWhite
+      - id: AU14CivilianFlannelRed
+      - id: AU14CivilianFlannelPurple
+    - name: Floral Shirts
+      choices: { CMUcivilianfloral: 1 }
+      entries:
+      - id: AU14CivilianFloralRed
+      - id: AU14CivilianFloralBlue
+      - id: AU14CivilianFloralYellow
+    - name: Miscellaneous Clothes
+      choices: { CMUcivilianclothesmisc: 1 }
+      entries:
+      - id: RMCJumpsuitDutchBandolier
+      - id: RMCJumpsuitCivilian
+      - id: CMJumpsuitColonist
+      - id: CMJumpsuitTShirtWhite
+      - id: CMJumpsuitTShirtGray
+      - id: CMJumpsuitTShirtRed
+    - name: Suit Jackets
+      choices: { CMUcivilianclothessuitjacket: 1 }
+      entries:
+      - id: RMCJacketCorporateKhaki
+      - id: RMCJacketCorporateBlack
+      - id: RMCJacketCorporateBlue
+      - id: RMCJacketCorporateBrown
+    - name: Puffer Wear
+      choices: { CMUcivilianclothespuffervest: 1 }
+      entries:
+      - id: AU14CivilianJacketGrayPufferVest
+      - id: AU14CivilianJacketKhakiPufferVest
+      - id: AU14CivilianJacketTanPufferVest
+      - id: AU14CivilianJacketGrayPufferJacket
+      - id: AU14CivilianJacketOrangePufferJacket
+      - id: AU14CivilianJacketKhakiPufferJacket
+    - name: Windbreakers
+      choices: { CMUcivilianclotheswindbreaker: 1 }
+      entries:
+      - id: AU14WindbreakerBlue
+      - id: RMCJacketWindbreakerGrey
+      - id: RMCJacketWindbreaker
+      - id: RMCJacketWindbreakerFirstResponder
+      - id: RMCJacketWindbreakerBrown
+    - name: Parkas
+      choices: { CMUcivilianclothesparka: 1 }
+      entries:
+      - id: AU14CivilianJacketBlueParka
+      - id: AU14CivilianJacketGreenParka
+      - id: AU14CivilianJacketRedParka
+      - id: AU14CivilianJacketYellowParka
+    - name: Trench Coats
+      choices: { CMUcivilianclothestrenchcoat: 1 }
+      entries:
+      - id: AU14CivilianTanTrenchCoat
+      - id: AU14CivilianBrownTrenchCoat
+      - id: AU14CivilianGrayTrenchCoat
+    - name: Miscellaneous Jackets
+      choices: { CMUcivilianclothesmiscjacket: 1 }
+      entries:
+      - id: AU14CivilianJacketBomberJacket
+      - id: AU14CivilianJacketOldCoat
+      - id: AU14CivilianJacketSnowSuit
+    - name: Hats
+      choices: { CMUcivilianclotheshat: 2 }
+      entries:
+      - id: AU14CivBallCapBlack
+      - id: AU14CivBallCapBlueTrucker
+      - id: AU14CivBallCapRedTrucker
+      - id: AU14USCMVeteranCap
+      - id: AU14CivFedoraTan
+      - id: AU14CivFedoraBrown
+      - id: AU14CivFedoraGray
+      - id: AU14HeadCommandoBeanie
+    - name: Glasses
+      choices: { CMUcivilianclothesglasses: 2 }
+      entries:
+      - id: RMCSunglasses
+      - id: RMCHipsterGlasses
+      - id: RMCSunglassesBig
+      - id: AU14GlassesPersonalOrange
+      - id: RMCGlassesAviators
+      - id: RMCGlassesTriMaxYellow
+      - id: RMCGlassesTriMaxBlack
+      - id: RMCGlassesTriMaxBronze
+      - id: AU14GlassesBiMexOrange
+    - name: Gloves
+      choices: { CMUcivilianclothesgloves: 1 }
+      entries:
+      - id: CMHandsBrown
+      - id: CMHandsLightBrown
+    - name: Storage
+      choices: { CMUcivilianclothesstorage: 2 }
+      entries:
+      - id: CMSatchel
+      - id: AU14SlingSatchelBlack
+      - id: AU14SlingSatchelBlue
+      - id: RMCBeltUtilityGeneral
+      - id: RMCPouchGeneral
+    - name: Field Tents
+      entries:
+      - id: RMCTentUNMCStandardFolded
+        amount: 1
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14CivilianEngineerVendor
+  name: Civilian Engineering and Logistics Vendor
+  description: A vendor containing all the equipment an engineer or logistician would ever need.
+  suffix: Civ
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+    layers:
+    - state: "base"
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "enum.VendingMachineVisualLayers.Base" ]
+  - type: CMAutomatedVendor
+    sections:
+    - name: Shoes
+      choices: { CMUcivilianengineeringshoes: 1 }
+      entries:
+      - id: RMCBootsCorporate
+    - name: Hard Hats
+      choices: { CMUcivilianengineeringhats: 1 }
+      entries:
+      - id: RMCHardhatOrange
+      - id: RMCHardHat
+      - id: RMCHardhatWhite
+      - id: RMCHardhatBlue
+    - name: Engineering Clothing
+      takeAll: CMUEngineeringClothes
+      entries:
+      - id: AU14CivilianWeYuEngineerClothes
+      - id: AU14CivilianFullSuitWeYuEngineer
+      - id: RMCWeldingGoggles
+    - name: Waste Management Clothing
+      takeAll: CMUEngineeringClothesWM
+      entries:
+      - id: AU14CivilianSanitationClothes
+      - id: AU14CivilianFullSuitSanitation
+      - id: AU14CivilianHazardVestSanitation
+    - name: Jackets & Vests
+      choices: { CMUcivilianengineeringjackets: 2 }
+      entries:
+      - id: RMCHazardVest
+      - id: AU14CivilianJacketSnowSuit
+    - name: Gloves
+      choices: { CMUcivilianengineeringgloves: 1 }
+      entries:
+      - id: RMCHandsVeteranInsulated
+    - name: Storage & Belts
+      choices: { CMUcivilianengineeringstorage: 4 }
+      entries:
+      - id: RMCSatchelLightpackWelder
+      - id: CMSatchel
+      - id: AU14SlingSatchelBlack
+      - id: AU14SlingSatchelBlue
+      - id: CMSatchelEngineer
+      - id: CMBeltUtilityFilled
+      - id: RMCBeltUtilityGeneral
+      - id: RMCPouchGeneral
+      - id: AU14PouchIFAKFill
+      - id: RMCPouchToolsFill
+      - id: RMCPouchElectronics
+      - id: RMCPouchConstruction
+      - id: RMCWebbingDropPouch
+    - name: Miscellaneous
+      takeAll: CMUEngineeringMisc
+      entries:
+      - id: RMCSynthResetKey
+      - id: CMStampApproved
+      - id: RMCRadioHandheldColonyOff
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14CivilianMedicalClothingVendor
+  name: Civilian Medical Vendor
+  description: A wardrobe containing all the clothes and supplies medical personnel would ever need.
+  suffix: Civ
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
+    layers:
+    - state: "base"
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "enum.VendingMachineVisualLayers.Base" ]
+  - type: CMAutomatedVendor
+    jobs: [ AU14JobCivilianNurse, AU14JobCivilianPhysician, AU14JobCivilianHeadPhysician, AU14JobCLFPhysician, AU14JobCLFSurgeon ]
+    sections:
+    - name: Shoes
+      choices: { CMUcivilianmedicalshoes: 1 }
+      entries:
+      - id: RMCShoesBlack
+      - id: RMCShoesBlue
+      - id: RMCShoesBrown
+      - id: RMCShoesGreen
+      - id: RMCShoesOrange
+      - id: RMCShoesPurple
+      - id: RMCShoesRed
+      - id: RMCShoesWhite
+      - id: RMCShoesYellow
+      - id: RMCShoesLaceupBrown
+      - id: RMCShoesLaceup
+      - id: RMCShoesLeather
+    - name: Work Wear
+      choices: { CMUcivilianmedicalworkwear: 1 }
+      entries:
+      - id: AU14CivilianWorkwearYellow
+      - id: AU14CivilianWorkwearPink
+      - id: AU14CivilianWorkwearBlue
+      - id: AU14CivilianWorkwearGreen
+    - name: Medical Scrubs
+      choices: { CMUcivilianmedicalscrubs: 1 }
+      entries:
+      - id: CMScrubsBlue
+      - id: CMScrubsGreen
+      - id: RMCScrubsLightBlue
+    - name: Medical Scrub Caps
+      choices: { CMUcivilianmedicalscrubcap: 1 }
+      entries:
+      - id: CMHeadCapSurgBlue
+      - id: CMHeadCapSurgGreen
+    - name: Jackets
+      choices: { CMUcivilianmedicaljackets: 2 }
+      entries:
+      - id: RMCLabcoat
+      - id: RMCLabcoatShort
+      - id: RMCLabcoatLong
+      - id: RMCCoatSnow
+    - name: Medical Gloves
+      choices: { CMUcivilianmedicalgloves: 1 }
+      entries:
+      - id: CMHandsLatex
+      - id: ClothingHandsGlovesNitrile
+    - name: Medical Masks
+      choices: { CMUcivilianmedicalmasks: 1 }
+      entries:
+      - id: CMMaskSterile
+    - name: Essential Equipment
+      takeAll: CMUEssentialEquipment
+      entries:
+      - id: AU14VendorBundleMilitaryDoctorEssentials
+      - id: RMCSurgicalTray
+    - name: Medical Pouches
+      choices: { CMUMedicalPouchCivDoc: 2 }
+      entries:
+      - id: AU14PouchAutoinjectorFilledMilitaryDoctor
+      - id: RMCPouchFirstResponder
+      - id: RMCPouchMedical
+      - id: RMCPouchSyringeFill
+    - name: Medical Storage
+      choices: { CMUPlatoonMedicalStorage: 1 }
+      entries:
+      - id: CMBeltMedicBag
+      - id: AU14BeltMedicBagBlack
+    - name: Medical Equipment
+      entries:
+      - id: AU14CMDefibrillator
+        amount: 10
+      - id: AU14IVFoldableFolded
+        amount: 20
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14CivilianEmergencyResponderOfficerVendor
+  name: Civilian Emergency Response Officer Vendor
+  description: A wardrobe containing all the clothes and supplies an ERO would ever need.
+  suffix: Civ
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
+    layers:
+    - state: "base"
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "enum.VendingMachineVisualLayers.Base" ]
+  - type: CMAutomatedVendor
+    jobs: [ AU14JobCivilianEmergencyResponseOfficer, AU14JobCLFPhysician, AU14JobCLFSurgeon ]
+    sections:
+    - name: Shoes
+      choices: { CMUcivilianmedicalshoes: 1 }
+      entries:
+      - id: RMCBootsVanBandolier
+    - name: Jackets & Vests
+      choices: { CMUcivilianmedicalouterwear: 3 }
+      entries:
+      - id: AU14CivilianFullSuitParamedicGreen
+      - id: AU14CivilianFullSuitParamedicRed
+      - id: AU14CivilianTurnoutGear
+      - id: AU14CivilianHazardVestParamedicWhite
+      - id: AU14CivilianHazardVestParamedicGreen
+      - id: RMCOuterClothingExternalWebbingBlack
+      - id: AU14CivilianJacketSnowSuit
+    - name: Innerwear
+      choices: { CMUcivilianmedicalinnerwear: 1 }
+      entries:
+      - id: AU14CivilianParamedicClothesGreen
+      - id: AU14CivilianParamedicClothesRed
+    - name: Headgear
+      choices: { CMUcivilianmedicalheadwear: 2 }
+      entries:
+      - id: AU14CivBallCapBlack
+      - id: RMCHardhatRed
+    - name: Gloves
+      choices: { CMUcivilianmedicalgloves: 2 }
+      entries:
+      - id: CMHandsLatex
+      - id: ClothingHandsGlovesNitrile
+      - id: RMCHandsVeteranInsulated
+    - name: Masks
+      choices: { CMUcivilianmedicalmasks: 1 }
+      entries:
+      - id: CMMaskSterile
+    - name: Pouches
+      choices: { CMUcivilianmedicalpouches: 3 }
+      entries:
+      - id: RMCPouchAutoinjectorFill
+      - id: RMCPouchFirstResponder
+      - id: RMCPouchFirstAidPills
+      - id: RMCPouchToolsSocFill
+      - id: RMCPouchGeneralLarge
+      - id: RMCWebbingDropPouch
+    - name: Belts
+      choices: { CMUcivilianmedicalbelts: 2 }
+      entries:
+      - id: CMBeltUtilityFilled
+      - id: CMBeltMedicalFilled
+      - id: CMBeltMedicBagFilled
+    - name: Bags
+      choices: { CMUcivilianmedicalbags: 1 }
+      entries:
+      - id: CMSatchel
+      - id: AU14SlingSatchelBlack
+      - id: AU14SlingSatchelBlue
+    - name: Assorted Utilities
+      takeAll: CMUEssentialEquipmentAssorted
+      entries:
+      - id: RMCGlassesMedicalHUDGlasses
+      - id: CMRollerBedSpawnFolded
+      - id: CMHealthAnalyzer
+      - id: RMCFlashlightPen
+      - id: RMCFireAxe
+      - id: CMFireExtinguisher
+      - id: CMFireExtinguisherPortable
+      - id: RMCRadioHandheldColonyOff
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14CivilianColonyOperationsSyntheticVendor
+  name: Civilian Colony Operations Synthetic Vendor
+  description: A wardrobe containing all the clothes and supplies a COS would ever need.
+  suffix: Civ
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+    layers:
+    - state: "base"
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "enum.VendingMachineVisualLayers.Base" ]
+  - type: CMAutomatedVendor
+    sections:
+    - name: Outerwear
+      choices: { CMUciviliansynthoutterwear: 1 }
+      entries:
+      - id: CMUtilityVestSynth
+      - id: AU14ExternalWebbing
+      - id: RMCOuterClothingExternalWebbingBlack
+    - name: Innerwear
+      choices: { CMUciviliansynthinnerwear: 1 }
+      entries:
+      - id: CMJumpsuitSyntheticOutdated
+      - id: RMCJumpsuitSteward
+      - id: RMCJumpsuitCivilian
+      - id: RMCJumpsuitCivilianYellow
+      - id: RMCJumpsuitCivilianRed
+      - id: RMCJumpsuitCivilianBrown
+      - id: RMCJumpsuitCivilianBlue
+      - id: RMCJumpsuitCivilianGreen
+      - id: AU14CivilianBoilerSuitWhite
+      - id: AU14CivilianBoilerSuitGray
+      - id: AU14CivilianBoilerSuitLightBlue
+      - id: AU14CivilianBoilerSuitDarkBlue
+      - id: AU14CivilianBoilerSuitCyan
+      - id: AU14CivilianBoilerSuitKhaki
+      - id: AU14CivilianBoilerSuitGreen
+    - name: Backpacks
+      choices: { CMUciviliansynthsmartpack: 1 }
+      entries:
+      - id: RMCSmartpack
+        name: S-V42 smartpack, blue
+      - id: RMCSmartpackBlack
+        name: S-V42 smartpack, black
+      - id: RMCSmartpackGreen
+        name: S-V42 smartpack, green
+      - id: RMCSmartpackTan
+        name: S-V42 smartpack, tan
+      - id: RMCSmartpackWhite
+        name: S-V42 smartpack, white
+      - id: RMCSmartpackA1
+        name: S-V42A1 smartpack, blue
+      - id: RMCSmartpackA1Black
+        name: S-V42A1 smartpack, black
+      - id: RMCSmartpackA1Green
+        name: S-V42A1 smartpack, green
+      - id: RMCSmartpackA1Tan
+        name: S-V42A1 smartpack, tan
+      - id: RMCSmartpackA1White
+        name: S-V42A1 smartpack, white
+    - name: Headgear
+      choices: { CMUciviliansynthheadgear: 1 }
+      entries:
+      - id: AU14CivBallCapBlack
+      - id: RMCHardhatBlue
+      - id: RMCHardhatOrange
+      - id: RMCHardHat
+      - id: RMCHardhatWhite
+    - name: Gloves
+      choices: { CMUciviliansynthgloves: 1 }
+      entries:
+      - id: RMCHandsVeteranInsulated
+    - name: Belts
+      choices: { CMUciviliansynthstoragebelt: 1 }
+      entries:
+      - id: CMBeltUtilityFilled
+        name: M276 pattern toolbelt rig (filled)
+      - id: RMCBeltUtilityGeneral
+      - id: AU14BeltMedicBagSupportSynth
+        name: M276 pattern lifesaver bag (filled, advanced)
+    - name: Bags
+      choices: { CMUciviliansynthstoragebag: 1 }
+      entries:
+      - id: RMCSatchelLightpackWelder
+      - id: CMSatchelEngineer
+      - id: CMSatchel
+      - id: AU14SlingSatchelBlack
+      - id: AU14SlingSatchelBlue
+    - name: Pouches
+      choices: { CMUciviliansynthstoragepouch: 2 }
+      entries:
+      - id: RMCPouchGeneralLarge
+      - id: RMCPouchToolsSocFill
+      - id: RMCPouchElectronics
+      - id: RMCPouchConstruction
+      - id: RMCPouchMedkitFillAdvanced
+    - name: Utilities
+      takeAll: CMUEssentialEquipmentSynth
+      entries:
+      - id: RMCSynthBreachingHammer
+      - id: CMRollerBedSpawnFolded
+      - id: RMCRadioHandheldColonyOff
+      - id: CMFireExtinguisherPortable
+      - id: RMCFlashlightPen
+      - id: AU14CMDefibrillator
+      - id: RMCSynthResetKey

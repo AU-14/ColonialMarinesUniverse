@@ -1,0 +1,204 @@
+# More Grass
+
+- type: tile
+  parent: CMPlanetGrass
+  id: CMPlanetGrassWeedable
+  name: tiles-cm-grass
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrass1
+  id: CMPlanetGrass1Weedable
+  name: tiles-cm-grass
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrass2
+  id: CMPlanetGrass2Weedable
+  name: tiles-cm-grass
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrass3
+  id: CMPlanetGrass3Weedable
+  name: tiles-cm-grass
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirt
+  id: CMPlanetGrassDirtWeedable
+  name: grass dirt
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirtNW
+  id: CMPlanetGrassDirtNWWeedable
+  name: grass dirt nw
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirtNE
+  id: CMPlanetGrassDirtNEWeedable
+  name: grass dirt ne
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirtSE
+  id: CMPlanetGrassDirtSEWeedable
+  name: grass dirt se
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirtSW
+  id: CMPlanetGrassDirtSWWeedable
+  name: grass dirt sw
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirtNW2
+  id: CMPlanetGrassDirtNW2Weedable
+  name: grass dirt nw 2
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirtSE2
+  id: CMPlanetGrassDirtSE2Weedable
+  name: grass dirt se 2
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirtNE2
+  id: CMPlanetGrassDirtNE2Weedable
+  name: grass dirt ne 2
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirtSW2
+  id: CMPlanetGrassDirtSW2Weedable
+  name: grass dirt sw 2
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirtNorth
+  id: CMPlanetGrassDirtNorthWeedable
+  name: grass dirt north
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirtSouth
+  id: CMPlanetGrassDirtSouthWeedable
+  name: grass dirt south
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirtWest
+  id: CMPlanetGrassDirtWestWeedable
+  name: grass dirt west
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirtEast
+  id: CMPlanetGrassDirtEastWeedable
+  name: grass dirt east
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirt2NW
+  id: CMPlanetGrassDirt2NWWeedable
+  name: grass dirt2 nw
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirt2NE
+  id: CMPlanetGrassDirt2NEWeedable
+  name: grass dirt2 ne
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirt2SE
+  id: CMPlanetGrassDirt2SEWeedable
+  name: grass dirt2 se
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirt2SW
+  id: CMPlanetGrassDirt2SWWeedable
+  name: grass dirt2 sw
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirt2NW2
+  id: CMPlanetGrassDirt2NW2Weedable
+  name: grass dirt2 nw 2
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirt2SE2
+  id: CMPlanetGrassDirt2SE2Weedable
+  name: grass dirt2 se 2
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirt2NE2
+  id: CMPlanetGrassDirt2NE2Weedable
+  name: grass dirt2 ne 2
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirt2SW2
+  id: CMPlanetGrassDirt2SW2Weedable
+  name: grass dirt2 sw 2
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirt2North
+  id: CMPlanetGrassDirt2NorthWeedable
+  name: grass dirt2 north
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirt2South
+  id: CMPlanetGrassDirt2SouthWeedable
+  name: grass dirt2 south
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirt2West
+  id: CMPlanetGrassDirt2WestWeedable
+  name: grass dirt2 west
+  weedsSpreadable: true
+  semiWeedable: true
+
+- type: tile
+  parent: CMPlanetGrassDirt2East
+  id: CMPlanetGrassDirt2EastWeedable
+  name: grass dirt2 east
+  weedsSpreadable: true
+  semiWeedable: true

@@ -130,9 +130,6 @@ public sealed partial class AbominationMimicSystem : EntitySystem
     private void OnTransformAction(Entity<AbominationMimicComponent> mimic,
         ref AbominationMimicTransformActionEvent args)
     {
-        Log.Info($"[mimic] OnTransformAction fired on {ToPrettyString(mimic)} performer={ToPrettyString(args.Performer)
-        } action={ToPrettyString(args.Action.Owner)} pool={mimic.Comp.AssimilatedPool.Count}");
-
         if (args.Handled)
             return;
 
@@ -140,8 +137,6 @@ public sealed partial class AbominationMimicSystem : EntitySystem
         // on the disguised form is a no-op so they don't double-pick.
         if (HasComp<AbominationMimicTransformedComponent>(mimic))
         {
-            Log.Info($"[mimic] OnTransformAction rejected: {ToPrettyString(mimic)} already transformed");
-
             return;
         }
 
@@ -166,9 +161,6 @@ public sealed partial class AbominationMimicSystem : EntitySystem
 
     private void OnSelectForm(Entity<AbominationMimicComponent> mimic, ref AbominationMimicSelectFormMessage args)
     {
-        Log.Info($"[mimic] OnSelectForm fired on {ToPrettyString(mimic)} actor={ToPrettyString(args.Actor)} idx={
-            args.Index} pool={mimic.Comp.AssimilatedPool.Count}");
-
         if (args.Index < 0 || args.Index >= mimic.Comp.AssimilatedPool.Count)
         {
             Log.Warning($"[mimic] OnSelectForm rejected: index {args.Index} out of range for pool {
@@ -180,15 +172,18 @@ public sealed partial class AbominationMimicSystem : EntitySystem
         AbominationAssimilationProfile profile = mimic.Comp.AssimilatedPool[args.Index];
         _ui.CloseUi(mimic.Owner, AbominationMimicUiKey.Key, args.Actor);
         EntityUid? result = StartDisguise(mimic, profile, mimic.Comp.TransformDuration);
-        if (result is { } r)
-            Log.Info($"[mimic] disguise spawned: {ToPrettyString(r)}");
-        else
+        if (result == null)
             Log.Warning($"[mimic] disguise FAILED (PolymorphEntity returned null) for {ToPrettyString(mimic)}");
     }
 
     private void PushBuiState(Entity<AbominationMimicComponent> mimic)
     {
-        List<string> names = mimic.Comp.AssimilatedPool.Select(p => p.Name).ToList();
+        var names = new List<string>(mimic.Comp.AssimilatedPool.Count);
+        foreach (var profile in mimic.Comp.AssimilatedPool)
+        {
+            names.Add(profile.Name);
+        }
+
         _ui.SetUiState(mimic.Owner, AbominationMimicUiKey.Key, new AbominationMimicBuiState(names, null));
     }
 
@@ -203,9 +198,6 @@ public sealed partial class AbominationMimicSystem : EntitySystem
     public EntityUid? StartDisguise(Entity<AbominationMimicComponent> mimic, AbominationAssimilationProfile profile,
         TimeSpan duration)
     {
-        Log.Info($"[mimic] StartDisguise mimic={ToPrettyString(mimic)} profile={profile.Name} sourceProto={
-            profile.SourceProtoId ?? "(humanoid)"}");
-
         EntityUid? disguised;
 
         // Animal profiles carry a SourceProtoId — polymorph straight into that

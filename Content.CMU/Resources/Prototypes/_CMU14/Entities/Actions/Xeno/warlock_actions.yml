@@ -1,0 +1,62 @@
+- type: entity
+  parent: ActionXenoBase
+  id: CMUActionXenoPsychicCrush
+  name: Psychic Crush
+  description: Channel psychic pressure at a location, then crush enemies in the expanding area.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/Xeno/warlock.rsi
+      state: psy_crush
+    iconOn:
+      sprite: _CMU14/Actions/Xeno/warlock.rsi
+      state: psy_crush_activate
+    useDelay: 0.25
+  - type: TargetAction
+    range: 7
+    checkCanAccess: true
+  - type: WorldTargetAction
+    event: !type:CMUXenoPsychicCrushActionEvent
+  - type: ActionBlockIfResting
+  - type: RMCDazeableAction
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMUActionXenoPsychicBlast
+  name: Psychic Blast
+  description: Detonate psychic force at a location, damaging and slowing nearby enemies.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/Xeno/warlock.rsi
+      state: psy_blast
+    useDelay: 8
+  - type: TargetAction
+    range: 7
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:CMUXenoPsychicBlastActionEvent
+  - type: ActionBlockIfResting
+  - type: RMCDazeableAction
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMUActionXenoPsychicShield
+  name: Psychic Shield
+  description: Raise a forward psychic shield that catches projectiles and can be detonated.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/Xeno/warlock.rsi
+      state: psy_shield
+    iconOn:
+      sprite: _CMU14/Actions/Xeno/warlock.rsi
+      state: psy_shield_reflect
+    useDelay: 0.25
+  - type: InstantAction
+    event: !type:CMUXenoPsychicShieldActionEvent
+  - type: ActionBlockIfResting
+  - type: RMCDazeableAction

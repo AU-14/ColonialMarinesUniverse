@@ -1,0 +1,172 @@
+- type: entity
+  parent: CMAirlockGovforLocked
+  id: CMAirlockOpforLocked
+  suffix: Opfor, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpfor"]]
+
+- type: entity
+  parent: CMAirlockGovforGlassLocked
+  id: CMAirlockOpforGlassLocked
+  suffix: Opfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpfor"]]
+
+- type: entity
+  parent: CMDoubleDoorGovforLocked
+  id: CMDoubleDoorOpforLocked
+  suffix: Opfor, Solid, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpfor"]]
+
+- type: entity
+  parent: CMDoubleDoorGovforGlassLocked
+  id: CMDoubleDoorOpforGlassLocked
+  suffix: Opfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpfor"]]
+
+- type: entity
+  parent: CMAirlockOpforLocked
+  id: CMAirlockOpforLockedFTL
+  suffix: FTL, Opfor, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpforFTL"]]
+
+- type: entity
+  parent: CMAirlockOpforLockedFTL
+  id: CMAirlockOpforGlassLockedFTL
+  suffix: FTL, Opfor, Glass, Locked
+
+- type: entity
+  parent: CMAirlockCommandGovforLocked
+  id: CMAirlockCommandOpforLocked
+  suffix: Command, Opfor, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpforCommand"]]
+
+- type: entity
+  parent: CMAirlockCommandGovforGlassLocked
+  id: CMAirlockCommandOpforGlassLocked
+  suffix: Command, Opfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpforCommand"]]
+
+- type: entity
+  parent: CMDoubleDoorCommandGovforLocked
+  id: CMDoubleDoorCommandOpforLocked
+  suffix: Command, Opfor, Solid, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpforCommand"]]
+
+- type: entity
+  parent: CMDoubleDoorCommandGovforGlassLocked
+  id: CMDoubleDoorCommandOpforGlassLocked
+  suffix: Command, Opfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpforCommand"]]
+
+- type: entity
+  parent: CMAirlockSecurityGovforLocked
+  id: CMAirlockSecurityOpforLocked
+  suffix: Security, Opfor, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpforSecurity"]]
+
+- type: entity
+  parent: CMAirlockSecurityGovforGlassLocked
+  id: CMAirlockSecurityOpforGlassLocked
+  suffix: Security, Opfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpforSecurity"]]
+
+- type: entity
+  parent: CMDoubleDoorSecurityGovforLocked
+  id: CMDoubleDoorSecurityOpforLocked
+  suffix: Security, Opfor, Solid, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpforSecurity"]]
+
+- type: entity
+  parent: CMDoubleDoorSecurityGovforGlassLocked
+  id: CMDoubleDoorSecurityOpforGlassLocked
+  suffix: Security, Opfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpforSecurity"]]
+
+- type: entity
+  parent: CMAirlockMedicalGovforLocked
+  id: CMAirlockMedicalOpforLocked
+  suffix: Medical, Opfor, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpfor"]]
+
+- type: entity
+  parent: CMAirlockMedicalGovforGlassLocked
+  id: CMAirlockMedicalOpforGlassLocked
+  suffix: Medical, Opfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpfor"]]
+
+- type: entity
+  parent: CMDoubleDoorMedicalGovforLocked
+  id: CMDoubleDoorMedicalOpforLocked
+  suffix: Medical, Opfor, Solid, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpfor"]]
+
+- type: entity
+  parent: CMDoubleDoorMedicalGovforGlassLocked
+  id: CMDoubleDoorMedicalOpforGlassLocked
+  suffix: Medical, Opfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpfor"]]
+
+- type: entity
+  parent: CMAirlockEngineerGovforLocked
+  id: CMAirlockEngineerOpforLocked
+  suffix: Engineer, Opfor, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpfor"]]
+
+- type: entity
+  parent: CMAirlockEngineerGovforGlassLocked
+  id: CMAirlockEngineerOpforGlassLocked
+  suffix: Engineer, Opfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpfor"]]
+
+- type: entity
+  parent: CMDoubleDoorEngineerGovforLocked
+  id: CMDoubleDoorEngineerOpforLocked
+  suffix: Engineer, Opfor, Solid, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpfor"]]
+
+- type: entity
+  parent: CMDoubleDoorEngineerGovforGlassLocked
+  id: CMDoubleDoorEngineerOpforGlassLocked
+  suffix: Engineer, Opfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpfor"]]

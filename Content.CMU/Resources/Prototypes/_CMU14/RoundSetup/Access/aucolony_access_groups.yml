@@ -1,0 +1,64 @@
+- type: accessGroup
+  id: auadmin
+  tags:
+  - CMAccessResearch
+  - CMAccessMedical
+  - CMAccessColonyPublic
+  - CMAccessColonyResearch
+  - CMAccessColonyEngineering
+  - CMAccessColonyLogistics
+  - CMAccessColonyBrig
+  - CMAccessRequisitions
+  - CMAccessColonyMedbay
+  - CMAccessColonyArmory
+  - CMAccessColonyCommand
+
+- type: accessGroup
+  id: auheadsofcolony
+  tags:
+  - AU14AccessColonyHeadPhysician
+  - AU14AccessColonyForeman
+  - AU14AccessColonyHeadEngineer
+  - AU14AccessColonyHeadOfService
+
+- type: accessGroup
+  id: auengi
+  tags:
+  - CMAccessColonyPublic
+  - CMAccessColonyEngineering
+  - CMAccessColonyLogistics
+
+- type: accessGroup
+  id: aucmb
+  tags:
+  - CMAccessColonyPublic
+  - CMAccessColonyBrig
+  - CMAccessColonyCommand
+  - CMAccessColonyEngineering
+  - CMAccessColonyMedbay
+  - CMAccessColonyArmory
+
+- type: accessGroup
+  id: aumed
+  tags:
+  - CMAccessColonyPublic
+  - CMAccessColonyResearch
+  - CMAccessColonyMedbay
+  - CMAccessColonyChem
+  - CMAccessMedical
+
+- type: accessGroup
+  id: aunews
+  tags:
+  - CMAccessColonyPublic
+
+- type: accessGroup
+  id: auorbitalmanagement
+  tags:
+  - AU14AccessOrbitalManagement
+  - AU14AccessOrbitalLaw
+
+- type: accessGroup
+  id: auorbitallaw
+  tags:
+  - AU14AccessOrbitalLaw

@@ -1,0 +1,210 @@
+- type: entity
+  id: OPFOR
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IFFFaction
+  - type: FactionFrequencies
+    channels:
+    - radioOpforAlpha
+    - radioOpforBravo
+    - radioOpforCharlie
+    - radioOpforCommand
+    - radioOpforIntel
+    - radioOpforJTAC
+    - radioOpforMILP
+
+- type: entity
+  abstract: true
+  parent: CMIDCardBase
+  id: AU14IDCardOPFOR
+  name: opfor identification card
+  description: An ID Card used by OPFOR personnel for identification and access control. You cannot tell who or what it belongs to.
+  components:
+  - type: ItemIFF
+    factions:
+    - OPFOR
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFORPlatCo
+  name: plt. commander ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORPlatCo
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFORAdjutant
+  name: plt. adjutant officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORAdjutant
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFORPlatOp
+  name: plt. operations officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORPlatOp
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFOROfficerEngi
+  name: engineering officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFOROfficerEngi
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFOROfficerIntel
+  name: intelligence officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFOROfficerIntel
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFOROfficerLogistics
+  name: logistics officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFOROfficerLogistics
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFOROfficerMP
+  name: chief military police ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFOROfficerMP
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFOROfficerMedical
+  name: chief medical officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFOROfficerMedical
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFORDSPilot
+  name: dropship pilot ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORDSPilot
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFORDCC
+  name: dropship crew chief ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORDCC
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFORSecSergeant
+  name: platoon sergeant ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORSectionSergeant
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFORSquadSergeant
+  name: squad leader ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORSquadSergeant
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFORSquadRifleman
+  name: squad rifleman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORSquadRifleman
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFORSquadAutomaticRifleman
+  name: squad automatic rifleman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORSquadAutomaticRifleman
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14JobIDCardOPFORPlatoonCorpsman
+  name: platoon corpsman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORPlatoonCorpsman
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14JobIDCardOPFORRadioTelephoneOperator
+  name: radio telephone operator ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORRadioTelephoneOperator
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFORAuxSupportSynth
+  name: support synthetic ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORAuxSupportSynth
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14JobIDCardOPFORAuxTech
+  name: auxiliary technician ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORAuxTech
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFORCT
+  name: combat technician ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORSquadCombatTech
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFORVehicleCrewman
+  name: vehicle crewman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORVehicleCrewman
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFORAdvisor
+  name: advisor ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORadvisor
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFORDoctor
+  name: doctor ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORMilitaryDoctor
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFORWorkingJoe
+  categories: [ HideSpawnMenu ]
+  name: Working Joe ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORWorkingJoe

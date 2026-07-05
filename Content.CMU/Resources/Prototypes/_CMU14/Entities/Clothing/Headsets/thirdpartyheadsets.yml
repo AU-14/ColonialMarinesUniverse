@@ -1,0 +1,116 @@
+- type: entity
+  parent: AU14HeadsetGovforMarine
+  id: AU14HeadsetUSArmy
+  name: US Army headset
+  description: Issued to US Army units.
+  suffix: US Army
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/headsets.rsi
+    state: soc_headset
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMEncryptionKeyColony
+  - type: RMCHeadset
+    channels:
+    - UASOF
+  - type: GrantSquadLeaderTracker
+    defaultMode: SquadLeader
+    trackerModes:
+    - SquadLeader
+    - USArmyCommandingOfficer
+    - BattleBuddy
+    - PrimaryLandingZone
+
+- type: entity
+  parent: AU14HeadsetGovforCommand
+  id: AU14HeadsetUSArmyERT
+  name: US Army ERT radio headset
+  description: Issued to US Army units.
+  components:
+  - type: RMCHeadset
+    channels:
+    - UASOF
+
+- type: entity
+  parent: AU14HeadsetUSArmyERT
+  id: AU14HeadsetFORECONERT
+  name: UNMC SOF headset
+  description: Issued exclusively to Marine Raiders and members of the UNMC's Force Reconnaissance.
+
+- type: entity
+  parent: AU14HeadsetGovforCommand
+  id: AU14HeadsetRMCRRT
+  name: RMC RRT radio headset
+  description: Issued to Royal Commandos units.
+  components:
+  - type: RMCHeadset
+    channels:
+    - TWESOF
+
+- type: entity
+  parent: AU14HeadsetGovforMarine
+  id: AU14HeadsetVAI
+  name: vanguard's arrow headset
+  description: A special headset used by Vanguard's Arrow Incorporated mercenaries, features a non-standard brace.
+  suffix: VAI, Ambassador
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMEncryptionKeyColony
+  - type: RMCHeadset
+    channels:
+    - radioVAI
+  - type: GrantSquadLeaderTracker
+    defaultMode: SquadLeader
+    trackerModes:
+    - SquadLeader
+    - BattleBuddy
+    - PrimaryLandingZone
+
+- type: entity
+  parent: AU14HeadsetGovforCommand
+  id: AU14HeadsetVAIERT
+  name: vanguard's arrow headset
+  suffix: VAI, GOVFOR
+  description: A special headset used by Vanguard's Arrow Incorporated mercenaries, features a non-standard brace.
+  components:
+  - type: RMCHeadset
+    channels:
+    - radioVAI
+
+- type: entity
+  parent: AU14ColonyAdminHeadset
+  id: AU14HeadsetVAIColony
+  name: vanguard's arrow headset
+  description: A special headset used by Vanguard's Arrow Incorporated mercenaries, features a non-standard brace.
+  suffix: VAI, Colony
+  components:
+  - type: RMCHeadset
+    channels:
+    - radioVAI
+
+- type: entity
+  parent: AU14HeadsetGovforMarine
+  id: AU14HeadsetPART
+  name: Prodigy Armed Repair Team headset
+  description: A special headset used by Prodigy Armed Repair Team, features a unique brace.
+  suffix: PART, 3rd Party
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMEncryptionKeyColony
+  - type: RMCHeadset
+    channels:
+    - PART
+    - radioCMB
+    - colonyAlert
+  - type: GrantSquadLeaderTracker
+    defaultMode: SquadLeader
+    trackerModes:
+    - SquadLeader
+    - PrimaryLandingZone
+    - BattleBuddy

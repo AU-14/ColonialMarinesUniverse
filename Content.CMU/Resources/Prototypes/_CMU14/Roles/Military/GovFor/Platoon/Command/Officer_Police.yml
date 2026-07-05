@@ -1,0 +1,213 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobOfficerMPBaseAbstract
+  name: au14-job-name-govforpolicechief
+  description: au14-job-description-govforpolicechief
+  icon: "AU14JobIconGovCMP"
+  spawnMenuRoleName: Chief MP (GOVFOR)
+  supervisors: au14-job-supervisors-govforplatco
+  startingGear: AU14GearGOVFOROfficerMP
+  dummyStartingGear: AU14GearGOVFOROfficerMPDummy
+  playTimeTracker: AU14JobGOVFOROfficerMP
+  requireAdminNotify: true
+  canBeAntag: false
+  displayWeight: 7
+  accessGroups:
+  - AU14GovforCommand
+  - AU14GovforSecurity
+  - aulegacygroupcommand
+
+- type: job
+  abstract: true
+  parent: AU14JobOfficerMPBaseAbstract
+  id: AU14JobOfficerMPBase
+  roundRole: ChiefMP
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetOfficerMP
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforpolicechief
+  - type: RMCSpeechBubbleSpecificStyle
+    speechStyleClass: commanderSpeech
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: old_govfor_rfn # TODO: CMP icon
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
+        state: old_rfn # TODO: CMP icon
+    # UPP:
+    # - type: JobPrefix
+    #   prefix: au14-job-prefix-govforpolicechiefUPP
+    # WYPMC:
+    # - type: JobPrefix
+    #   prefix: au14-job-prefix-govforpolicechiefWYPMC
+    # CMBCIU:
+    # - type: JobPrefix
+    #   prefix: au14-job-prefix-govforpolicechiefCMBCIU
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
+  - !type:AgeRequirement
+    requiredAge: 30
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxiety
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankSecondLT:
+      entity: AU14ChevronSecondLT
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFOROfficerMP
+  isHumanoid: true
+
+# ├──[ Job Prototypes ]──────────────────────────────────────────────┤
+- type: job
+  parent: AU14JobOfficerMPBase
+  id: AU14JobGOVFOROfficerMP
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: job
+  parent: AU14JobOfficerMPBase
+  id: AU14JobOPFOROfficerMP
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORCMP"
+  spawnMenuRoleName: Chief MP (OPFOR)
+  supervisors: au14-job-supervisors-opforplatco
+  startingGear: AU14GearOPFOROfficerMP
+  dummyStartingGear: AU14GearOPFOROfficerMPDummy
+  accessGroups:
+  - AU14OpforCommand
+  - aulegacygroupcommand
+
+# ├──[ Starting Gear ]───────────────────────────────────────────────┤
+- type: startingGear
+  id: AU14GearGOVFOROfficerMP
+  equipment:
+    id: AU14IDCardGOVFOROfficerMP
+    ears: AU14HeadsetGovforCommand
+    pocket1: AU14StampCMP
+  inhand:
+    - AU14KitJOCMPKit
+
+- type: startingGear
+  id: AU14GearOPFOROfficerMP
+  equipment:
+    id: AU14IDCardOPFOROfficerMP
+    ears: AU14HeadsetOpforCommand
+    pocket1: AU14StampCMP
+  inhand:
+    - AU14KitJOCMPKit
+
+- type: roleLoadout
+  id: JobAU14JobGOVFOROfficerMP
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - WeaponsRMC
+
+- type: startingGear
+  id: AU14GearGOVFOROfficerMPDummy
+  equipment:
+    shoes: CMBootsBlack
+    jumpsuit: CMJumpsuitXOFormal
+    ears: AU14HeadsetGovforCommand
+
+- type: startingGear
+  id: AU14GearOPFOROfficerMPDummy
+  equipment:
+    shoes: CMBootsBlack
+    jumpsuit: CMJumpsuitXOFormal
+    ears: AU14HeadsetOpforCommand
+
+# ├──[ Spawnpoints ]─────────────────────────────────────────────────┤
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFOROfficerMP
+  name: Spawn Point GOVFOR Chief MP
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFOROfficerMP
+  - type: Sprite
+    state: syn_spawn
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointopforOfficerMP
+  name: Spawn Point OPFOR Chief MP
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFOROfficerMP
+  - type: Sprite
+    state: syn_spawn
+
+# ├──[ Factions ]────────────────────────────────────────────────────┤
+- type: job
+  parent: AU14JobOfficerMPBase
+  id: AU14JobGOVFOROfficerMPCMBCIU
+  roundForce: CMBCIU
+  name: Chief MP
+  spawnMenuRoleName: Chief MP (CMBCIU)
+  ranks:
+    AU14RankCMBMarshal: []
+
+- type: job
+  parent: AU14JobOfficerMPBase
+  id: AU14JobGOVFOROfficerMPRMC
+  roundForce: RMC
+  name: au14-job-name-govforpolicechiefRMC
+  spawnMenuRoleName: Chief MP (TWE RMC)
+
+- type: job
+  parent: AU14JobOfficerMPBase
+  id: AU14JobGOVFOROfficerMPUPP
+  roundForce: UPP
+  requirements: []
+  name: Chief MP
+  spawnMenuRoleName: Chief MP (UPP)
+  ranks:
+    UPP_Captain:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFOROfficerMP
+      time: 360000 # 100 hours
+    UPP_SeniorLieutenant: []
+
+- type: job
+  parent: AU14JobOfficerMPBase
+  id: AU14JobGOVFOROfficerMPWYPMC
+  roundForce: WYPMC
+  requirements: []
+  name: PMC Chief of Security
+  spawnMenuRoleName: Chief MP (WYPMC)
+  ranks:
+    AU14RankWeYuCommanderSenior:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFOROfficerMP
+      time: 360000 # 100 hours
+    AU14RankWeYuCommander: []

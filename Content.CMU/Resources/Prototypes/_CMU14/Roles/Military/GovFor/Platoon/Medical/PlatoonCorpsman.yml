@@ -11,6 +11,7 @@
   playTimeTracker: AU14JobGOVFORPlatoonCorpsman
   overwatchRoleName: au14-job-name-govforplatooncorpsman-plural
   overwatchSortPriority: -2
+  displayWeight: 3
   accessGroups:
   - AU14GovforCorpsman
   - AU14GovforSquad
@@ -176,7 +177,7 @@
 - type: startingGear
   id: AU14GearopforPlatoonCorpsman
   equipment:
-    id: AU14JobIDCardopforPlatoonCorpsman
+    id: AU14JobIDCardOPFORPlatoonCorpsman
     ears: AU14HeadsetOpforMarine
 
 - type: entity

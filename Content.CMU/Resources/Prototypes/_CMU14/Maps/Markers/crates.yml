@@ -1,0 +1,20 @@
+- type: entity
+  parent: MarkerBase
+  id: AU14SpawnerRandomWeYuSupply
+  name: WeYu experimental supply spawner
+  description: Spawns a research experiment crate, consisting of drugs and other goodies for WY researchers.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Markers/landmarks.rsi
+    layers:
+    - state: random_kit
+  - type: RandomSpawner
+    chance: 1.0
+    prototypes:
+      - AU14CrateSecureWeYuXenoEggs
+      - AU14CrateSecureWeYuMMI
+      - AU14CrateSecureWeYuMindBreaker # x2
+      - AU14CrateSecureWeYuMindBreaker
+      - AU14CrateSecureWeYuDrug # x2
+      - AU14CrateSecureWeYuDrug
+      - AU14CrateSecureWeYuClottedSyringes # x1 abom toxin sucks

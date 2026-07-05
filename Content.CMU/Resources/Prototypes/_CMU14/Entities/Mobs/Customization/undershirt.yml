@@ -1,0 +1,21 @@
+- type: marking
+  id: AU14UndershirtWY
+  bodyPart: UndergarmentTop
+  markingCategory: UndergarmentTop
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  speciesRestriction: [Human, Dwarf, Felinid, Arachnid, Reptilian, Diona, Moth, SlimePerson, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: _AU14/Mobs/Human_Customization/undershirts.rsi
+    state: wy_shirt
+
+- type: marking
+  id: AU14UndershirtUSCM
+  bodyPart: UndergarmentTop
+  markingCategory: UndergarmentTop
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  speciesRestriction: [Human, Dwarf, Felinid, Arachnid, Reptilian, Diona, Moth, SlimePerson, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: _AU14/Mobs/Human_Customization/undershirts.rsi
+    state: uscm_shirt

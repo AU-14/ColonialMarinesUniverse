@@ -115,7 +115,7 @@ public sealed class CMUZLevelOpeningCache
         combinedOpeningBounds = default;
         gridScratch.Clear();
 
-        mapManager.FindGridsIntersecting(mapId, worldAabb, ref gridScratch, approx: true, includeMap: true);
+        map.FindGridsIntersecting(mapId, worldAabb, ref gridScratch, approx: true, includeMap: true);
         if (gridScratch.Count == 0)
             return false;
 
@@ -214,7 +214,7 @@ public sealed class CMUZLevelOpeningCache
     {
         var searchBounds = Box2.CenteredAround(sourcePosition, new Vector2(searchRadius * 2f, searchRadius * 2f));
         gridScratch.Clear();
-        mapManager.FindGridsIntersecting(mapId, searchBounds, ref gridScratch, approx: true, includeMap: true);
+        map.FindGridsIntersecting(mapId, searchBounds, ref gridScratch, approx: true, includeMap: true);
 
         if (gridScratch.Count == 0)
             return;
@@ -303,7 +303,7 @@ public sealed class CMUZLevelOpeningCache
 
         var searchBounds = Box2.CenteredAround(sourcePosition, new Vector2(searchRadius * 2f, searchRadius * 2f));
         gridScratch.Clear();
-        mapManager.FindGridsIntersecting(mapId, searchBounds, ref gridScratch, approx: true, includeMap: true);
+        map.FindGridsIntersecting(mapId, searchBounds, ref gridScratch, approx: true, includeMap: true);
 
         if (gridScratch.Count == 0)
             return false;

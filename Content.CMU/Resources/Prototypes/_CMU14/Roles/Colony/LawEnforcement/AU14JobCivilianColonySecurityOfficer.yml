@@ -51,11 +51,21 @@
   id: AU14GearColonySecurityOfficer
   equipment:
     head: RMCHeadCapBureau
+    back: CMSatchelSecurity
     jumpsuit: AU14CMBUniform
     belt: CMBeltSecurityMarshalFilled
     shoes: RMCBootsPMCFilled
     id: AU14IDCardColonyCMBDeputy
-    outerClothing: AU14CMBDeputyWindbreaker
+    ears: AU14ColonySecurityHeadset
+    outerClothing: RMCCoatSnowSurvivorCMBDeputy
+    suitstorage: AU14BeltHolsterPistolBlack
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14PouchGeneralLargeLEOFilled
+  inhand:
+  - RMCGunCasePistolM1984
+  storage:
+    back:
+    - AU14GuidebookLawColonial
 
 - type: entity
   parent: CMSpawnPointJobBase

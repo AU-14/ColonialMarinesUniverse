@@ -107,13 +107,15 @@
   points: 7
   groups:
   - ColonySynthSpecializationAU14
+  - SynthBackpackAU14
   - ColonySynthUniformAU14
+  - ColonySynthSuitAU14
+  - ColonySynthHeadwearAU14
   - ColonySynthPouchesLeftAU14
   - ColonySynthPouchesRightAU14
   - ColonySynthSuitSpecialAU14
   - ColonySynthBeltAU14
   - SynthGlovesAU14
-  - SynthBackpackAU14
   - SynthEquipmentAU14
   - SynthGlassesAU14
   - SynthMasksAU14

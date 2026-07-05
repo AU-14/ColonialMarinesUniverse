@@ -1,0 +1,15 @@
+- type: loadoutGroup
+  id: CivGlassesAU14
+  name: au14-loadout-group-civilian-glasses
+  minLimit: 0
+  maxLimit: 2
+  loadouts:
+  - SunglassesAU14
+  - HipsterGlassesAU14
+  - SunglassesBigAU14
+  - GlassesAviatorsAU14
+  - GlassesTriMaxYellowAU14
+  - GlassesTriMaxBlackAU14
+  - GlassesTriMaxBronzeAU14
+  - GlassesPersonalOrangeAU14
+  - GlassesBiMexOrangeAU14

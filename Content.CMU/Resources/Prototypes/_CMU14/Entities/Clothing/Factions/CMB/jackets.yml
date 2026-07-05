@@ -1,0 +1,22 @@
+#Windbreakers
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CMBDeputyWindbreaker
+  name: CMB Deputy Windbreaker
+  description: A windbreaker made for CMB deputies.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/CMB/cmbdeputywindbreaker.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/CMB/cmbdeputywindbreaker.rsi
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CMBMarshalWindbreaker
+  name: CMB Marshal Windbreaker
+  description: A windbreaker made for CMB marshals.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/CMB/cmbmarshalwindbreaker.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/CMB/cmbmarshalwindbreaker.rsi

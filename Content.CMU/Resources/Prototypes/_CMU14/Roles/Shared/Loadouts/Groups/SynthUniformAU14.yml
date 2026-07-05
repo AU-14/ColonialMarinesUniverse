@@ -3,9 +3,25 @@
   name: rmc-loadout-group-synthetic-uniform
   minLimit: 1
   loadouts:
-  - CivilianBoilerSuitDarkBlueSynthAU14
   - SynthUniformRMC
   - SynthJumpsuitPristineRMC
+  - CivilianBoilerSuitDarkBlueSynthAU14 #will be in colony synth aswell
+  - BlueUtilityUniformSynthCMU14
+  - BrownUtilityUniformSynthCMU14
+  - RedUtilityUniformSynthCMU14
+  - YellowUtilityUniformSynthCMU14
+  - WorkingJoeUniformSynthCMU14
+  - WhiteBoilerUniformSynthCMU14
+  - LightBlueBoilerUniformSynthCMU14
+  - KhakiBoilerUniformSynthCMU14
+  - GreyBoilerUniformSynthCMU14
+  - GreenBoilerUniformSynthCMU14
+  - FrontierUniformSynthCMU14
+  - OutdatedUniformSynthCMU14 # ends here
+  - BlackSupportOfficerUniformSynthCMU14 #Since we're not getting Aux Staff Officer and synths are Warrant officers in Aux roles.
+  - AltBlackSupportOfficerUniformSynthCMU14
+  - FormalSupportOfficerUniformSynthCMU14
+  - AltFormalSupportOfficerUniformSynthCMU14
   - ScrubsBlueRMC
   - ScrubsLightBlueRMC
   - ScrubsGreenRMC
