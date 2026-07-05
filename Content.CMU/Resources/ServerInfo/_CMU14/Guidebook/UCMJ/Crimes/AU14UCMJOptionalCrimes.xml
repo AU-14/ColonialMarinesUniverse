@@ -1,21 +1,21 @@
 ﻿<Document>
   # Optional Crimes
-  These crimes can be added to existing charges where relevant.
+    These crimes can be added to existing charges where relevant.
 
   ## Resisting Arrest
-  To resist the Military Police's lawful order, arrest or search.
-  - 5 minutes, refusing to comply with a lawful search or arrest.
-  - 10 minutes, resisting a legal arrest by fleeing or using force.
+    To resist the Military Police's lawful order, arrest or search.
+      - 5 minutes, refusing to comply with a lawful search or arrest.
+      - 10 minutes, resisting a legal arrest by fleeing or using force.
 
   ## Aiding and Abetting
-  Assisting others in committing a crime, directly or indirectly, or encouraging them to commit one. Any person who aids and abets is required to be informed of the crimes of the person they aided.
-  - Same punishment as the crime committed.
+    Assisting others in committing a crime, directly or indirectly, or encouraging them to commit one. Any person who aids and abets is required to be informed of the crimes of the person they aided.
+      - Same punishment as the crime committed.
 
   ## Disorderly Conduct in Confinement
-  To cause disruption in a significant manner while in Brig and under arrest. This can be added on to any charge.
-  - 7 minutes.
+    To cause disruption in a significant manner while in Brig and under arrest. This can be added on to any charge.
+      - 7 minutes.
 
   ## Dereliction of Duty
-  Failure to salute an officer of higher rank when told or refusal to salute.
-  - NJP.
+    Refusal to salute an officer of higher rank.
+      - NJP.
 </Document>
