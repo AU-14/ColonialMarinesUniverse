@@ -1,8 +1,6 @@
-using System.Buffers;
 using System.Buffers.Binary;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Content.Shared._CMU14.Administration.Console;
@@ -15,6 +13,9 @@ namespace Content.Client._CMU14.Administration.Console;
 
 public sealed partial class ServerLogsDownloadManager : IPostInjectInit
 {
+    private const int CopyBufferSize = 64 * 1024;
+    private const int MaxClientFileNameLength = 120;
+
     [Dependency] private IClientConsoleHost _console = default!;
     [Dependency] private ILogManager _log = default!;
     [Dependency] private IResourceManager _resource = default!;
@@ -78,8 +79,8 @@ public sealed partial class ServerLogsDownloadManager : IPostInjectInit
 
     private ResPath GetUniqueDownloadPath(string fileName)
     {
-        var extension = Path.GetExtension(fileName);
-        var stem = Path.GetFileNameWithoutExtension(fileName);
+        var extension = GetExtension(fileName);
+        var stem = GetFileNameWithoutExtension(fileName);
         if (string.IsNullOrWhiteSpace(stem))
             stem = "server-log";
 
@@ -97,30 +98,56 @@ public sealed partial class ServerLogsDownloadManager : IPostInjectInit
 
     private static string SanitizeFileName(string fileName)
     {
-        fileName = Path.GetFileName(fileName);
+        fileName = GetLeafFileName(fileName);
 
-        var invalid = Path.GetInvalidFileNameChars();
         var builder = new StringBuilder(fileName.Length);
         foreach (var c in fileName)
         {
-            builder.Append(c < ' ' || invalid.Contains(c) ? '_' : c);
+            builder.Append(IsInvalidFileNameChar(c) ? '_' : c);
         }
 
         var sanitized = builder.ToString().Trim();
         if (!ResPath.IsValidFilename(sanitized) || sanitized is "." or "..")
             sanitized = "server-log.txt";
 
-        var extension = Path.GetExtension(sanitized);
+        var extension = GetExtension(sanitized);
         if (!ServerLogsDownloadConstants.IsAllowedLogExtension(extension))
             sanitized += ".txt";
 
-        if (sanitized.Length <= 120)
+        if (sanitized.Length <= MaxClientFileNameLength)
             return sanitized;
 
-        extension = Path.GetExtension(sanitized);
-        var stem = Path.GetFileNameWithoutExtension(sanitized);
-        var maxStemLength = Math.Max(1, 120 - extension.Length);
+        extension = GetExtension(sanitized);
+        var stem = GetFileNameWithoutExtension(sanitized);
+        var maxStemLength = Math.Max(1, MaxClientFileNameLength - extension.Length);
         return $"{stem[..Math.Min(stem.Length, maxStemLength)]}{extension}";
+    }
+
+    private static string GetLeafFileName(string fileName)
+    {
+        fileName = fileName.Replace('\\', '/');
+        var separator = fileName.LastIndexOf('/');
+        return separator >= 0 ? fileName[(separator + 1)..] : fileName;
+    }
+
+    private static bool IsInvalidFileNameChar(char c)
+    {
+        return c < ' ' || c is '/' or '\\' or ':' or '*' or '?' or '"' or '<' or '>' or '|';
+    }
+
+    private static string GetExtension(string fileName)
+    {
+        var dot = fileName.LastIndexOf('.');
+        if (dot <= 0 || dot == fileName.Length - 1)
+            return string.Empty;
+
+        return fileName[dot..];
+    }
+
+    private static string GetFileNameWithoutExtension(string fileName)
+    {
+        var extension = GetExtension(fileName);
+        return extension.Length == 0 ? fileName : fileName[..^extension.Length];
     }
 
     private static async Task<string> ReadFileName(Stream stream)
@@ -146,23 +173,16 @@ public sealed partial class ServerLogsDownloadManager : IPostInjectInit
 
     private static async Task CopyExactly(Stream source, Stream destination, long length)
     {
-        var buffer = ArrayPool<byte>.Shared.Rent(64 * 1024);
-        try
+        var buffer = new byte[CopyBufferSize];
+        var remaining = length;
+        while (remaining > 0)
         {
-            var remaining = length;
-            while (remaining > 0)
-            {
-                var read = await source.ReadAsync(buffer.AsMemory(0, (int) Math.Min(buffer.Length, remaining)));
-                if (read == 0)
-                    throw new EndOfStreamException("Server log transfer ended early.");
+            var read = await source.ReadAsync(buffer.AsMemory(0, (int) Math.Min(buffer.Length, remaining)));
+            if (read == 0)
+                throw new InvalidDataException("Server log transfer ended early.");
 
-                await destination.WriteAsync(buffer.AsMemory(0, read));
-                remaining -= read;
-            }
-        }
-        finally
-        {
-            ArrayPool<byte>.Shared.Return(buffer);
+            await destination.WriteAsync(buffer.AsMemory(0, read));
+            remaining -= read;
         }
     }
 }
