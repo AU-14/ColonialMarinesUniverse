@@ -86,7 +86,7 @@
     ears: AU14HeadsetGovforMarineMP
     ears2: RMCM5CameraGear
   inhand:
-    - AU14StampCMP
+    - AU14StampMP
 
 - type: startingGear
   id: AU14GearGOVFORMilitaryPoliceManDummy

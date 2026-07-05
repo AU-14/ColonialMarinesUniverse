@@ -40,7 +40,6 @@
       - id: AU14StampSO
         amount: 1
 
-
 - type: entity
   parent: AU14KitPlatoonOfficer
   id: AU14KitJOIntelligenceOfficer
@@ -140,8 +139,6 @@
         amount: 1
       - id: RMCM5CameraGear
         amount: 1
-      - id: AU14StampAO
-        amount: 1
       - id: CMStampApproved
         amount: 1
       - id: CMStampDenied
@@ -208,3 +205,80 @@
         amount: 1
       - id: CMStampCMO
         amount: 1
+
+- type: entity
+  parent: AU14KitPlatoonOfficer
+  id: AU14KitJOCMPKit
+  name: Chief MP (CMP) Kit
+  description: >-
+    Who knows what it holds?
+  components:
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,5,6
+  - type: StorageFill
+    contents:
+    - id: CMHeadBeretCMP
+      amount: 1
+    - id: RMCHeadCapPeakedCMP
+      amount: 1
+    - id: CMArmorHelmetM10ChiefMP
+      amount: 1
+    - id: CMJumpsuitWO # TODO: lore descriptions
+      amount: 1
+    - id: CMCoatChiefMP
+      amount: 1
+    - id: CMArmorM3WO
+      amount: 1
+    - id: RMCMPArmband
+      amount: 2
+    - id: CMClipboard
+      amount: 1
+    - id: CMStampApproved
+      amount: 1
+    - id: CMStampDenied
+      amount: 1
+    - id: RMCWeaponRevolverRSh9
+      amount: 1
+    - id: RMCAttachmentRailFlashlight
+      amount: 1
+    - id: RMCSpeedLoaderRsh9 # TODO: munition swap/fix
+      amount: 3
+    - id: RMCBeltBrowne
+      amount: 1
+    - id: AU14TeleBaton
+      amount: 1
+    - id: AU14BackpackRTOPackGray
+      amount: 1
+
+- type: entity
+  parent: AU14KitPlatoonOfficer
+  id: AU14KitJOLogisticsKit
+  name: Logistics Officer (LO) Kit
+  description: >-
+    Who knows what it holds?
+  components:
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,5,5
+  - type: StorageFill
+    contents:
+    - id: RMCQuartermasterJacket # TODO: lore descriptions
+      amount: 1
+    - id: CMJumpsuitQM
+      amount: 1
+    - id: CMClipboard
+      amount: 1
+    - id: CMStampApproved
+      amount: 1
+    - id: CMStampDenied
+      amount: 1
+    - id: CMPen
+      amount: 1
+    - id: CMPaperBin30
+      amount: 2
+    - id: AU14BackpackRTOPackDesert
+      amount: 1
+
