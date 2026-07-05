@@ -80,6 +80,7 @@
   accessGroups:
   - Colonist
   - auadmin
+  - auheadsofcolony
   roleWeight: 0.25
 
 - type: startingGear
