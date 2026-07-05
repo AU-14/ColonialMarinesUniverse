@@ -6,6 +6,9 @@ using Content.Server.NPC;
 using Content.Server.NPC.HTN;
 using Content.Server.NPC.Pathfinding;
 using Content.Server.NPC.Systems;
+using Content.Server.Radio;
+using Content.Server.Radio.Components;
+using Content.Server.Radio.EntitySystems;
 using Content.Server._RMC14.Humanoid.Markings;
 using Content.Shared._CMU14.DroneOperator;
 using Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
@@ -36,6 +39,7 @@ using Content.Shared.Movement.Pulling.Events;
 using Content.Shared.NPC;
 using Content.Shared.Popups;
 using Content.Shared.Random.Helpers;
+using Content.Shared.Radio.Components;
 using Content.Shared.SSDIndicator;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.Throwing;
@@ -48,6 +52,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
+using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -70,12 +75,14 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private MindSystem _mind = default!;
     [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private INetManager _netMan = default!;
     [Dependency] private NPCSystem _npc = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private QuickDialogSystem _quickDialog = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private RadioSystem _radio = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedStatusEffectsSystem _statusEffects = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -146,6 +153,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         SubscribeLocalEvent<CMURemotePilotingComponent, ComponentShutdown>(OnPilotingShutdown);
         SubscribeLocalEvent<CMURemotePilotingComponent, PlayerAttachedEvent>(OnPilotingPlayerAttached, after: [typeof(SSDIndicatorSystem)]);
         SubscribeLocalEvent<CMURemotePilotingComponent, PlayerDetachedEvent>(OnPilotingPlayerDetached, after: [typeof(SSDIndicatorSystem)]);
+        SubscribeLocalEvent<CMURemotePilotingComponent, HeadsetRadioReceiveRelayEvent>(OnPilotingHeadsetReceive);
         SubscribeLocalEvent<CMURemotePilotingComponent, UpdateCanMoveEvent>(OnPilotingUpdateCanMove);
         SubscribeLocalEvent<CMURemotePilotingComponent, MoveEvent>(OnPilotingMove);
         SubscribeLocalEvent<CMURemotePilotingComponent, MobStateChangedEvent>(OnPilotingMobStateChanged);
@@ -498,6 +506,17 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
             return;
         }
 
+        if (args.Channel != null &&
+            TryComp<WearingHeadsetComponent>(session.Operator, out var wearing) &&
+            TryComp<EncryptionKeyHolderComponent>(wearing.Headset, out var keys) &&
+            keys.Channels.Contains(args.Channel.ID) &&
+            !keys.ReadOnlyChannels.Contains(args.Channel.ID))
+        {
+            _radio.SendRadioMessage(session.Operator, args.Message, args.Channel, wearing.Headset, args.Language);
+            args.Channel = null;
+            return;
+        }
+
         _chat.TrySendInGameICMessage(
             session.Operator,
             args.Message,
@@ -827,6 +846,12 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
     private void OnPilotingPlayerDetached(Entity<CMURemotePilotingComponent> ent, ref PlayerDetachedEvent args)
     {
         SuppressSsdIndicator(ent.Owner);
+    }
+
+    private void OnPilotingHeadsetReceive(Entity<CMURemotePilotingComponent> ent, ref HeadsetRadioReceiveRelayEvent args)
+    {
+        if (_actorQuery.TryComp(ent.Comp.Drone, out var actor))
+            _netMan.ServerSendMessage(args.RelayedEvent.ChatMsg, actor.PlayerSession.Channel);
     }
 
     private void OnPilotingUpdateCanMove(Entity<CMURemotePilotingComponent> ent, ref UpdateCanMoveEvent args)

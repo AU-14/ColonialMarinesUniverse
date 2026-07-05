@@ -2,14 +2,15 @@
   # Rank Structure
 
   ## Rank Authority
-  Authority is determined by command structure. Department heads have sole authority over their departments and may only be overridden by the Commander, Adjutant or CMP.
+  Authority is determined by rank. The highest ranking individual present is the acting authority and holds final decision making power, unless command is explicitly delegated by an individual of higher rank. Department heads have sole authority over their departments and may only be overridden by the Acting Commander or Executive Officer.
+  If two individuals of equal rank are present, authority defaults to the individual with greater seniority (time served).
 
   ## Department Authority
-  Heads of Department (LO, CMP, CMO and APOLLO) hold the most authority over those operating in their department; no outside authority may overrule a department head's internal orders to their subordinates, unless approved by the Commander or Adjutant.
+  Heads of Department (LO, CMP, CMO, IO, EO, and APOLLO) hold the final authority over those operating in their department regardless of rank. If cross department operations would be required (LO and EO working on logisitcs together) it then falls to highest rank.
 
-  Department members may not have their orders overruled by anyone unless approved by the Commander or Adjutant.
+  Departments members may not have their orders overruled by anyone unless approved by the XO or ACO.
 
-  The Commander and Adjutant hold final authority on all department decisions, including dismissal of a Department Head if found to be in violation of SOP or UCMJ.
+  XO and CO hold final authority on all department decisions including dismissal of a Department Head if found to be in violation of SOP or UCMJ.
 
   ## Specialised Authority
   Certain jobs and roles have specialised authority depending on their location and use; these are outlined below.
@@ -25,9 +26,10 @@
   - If no command staff remains, the highest-ranking officer is to assume command.
 
   ## Field & Tactical Authority
-  Tactical Authority refers to the right to direct the placement and employment of members of a combat arms unit and the unit itself.
-  - The Squad Leader and relative Staff Officers have tactical authority over their respective squad, which can only be overwritten by a member of the command staff.
-  - The Commanding Officer has full authority over their unit regardless of the presence of an individual of higher rank on their vessel or installation, unless that individual is of the rank of O6 or higher, such as a Colonel or Provost Marshal.
+  Tactical Authority refers to the right to direct placement and employment of members of a combat arms unit, and the unit itself.
+   - The Squad Leader and relative Staff Officers have tactical authority over their respective squad which cannot be overwritten by any personnel not directly involved with the tactical operations of the combat arms, this includes Junior Officers or Senior Enlisted who have deployed and attached to squads.
+   - The SL can relinquish authority to another individual of higher rank on their own will, only with approval from the ACO or XO, and only to complete objectives relevant to the new authority (IOs gathering Intel, SEA conducting training, MPs conducting a field arrest.)
+   - The Acting Commanding Officer, following the line of succession, has full authority over their unit regardless of the presence of an individual of higher rank on their vessel or installation, unless that individual commands a unit of greater scale such as a Battalion, Brigade, etc., or unless that individual has signed permission from the Commanding Officer's own superior. (I.E. A Major Pilot cannot overwrite a Captain CO, nor can a LtCol. Company Commander overwrite the CO of another Marine Company without express permission.)
 
   # Current Rank Structure
 

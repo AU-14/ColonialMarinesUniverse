@@ -1,0 +1,62 @@
+# Orbital Management
+- type: rank
+  id: AU14RankSeniorOrbitalManager
+  name: Senior Manager
+  prefix: Sn. Man.
+
+- type: rank
+  id: AU14RankOrbitalManager
+  name: Manager
+  prefix: Man.
+
+# Orbital Law
+- type: rank
+  id: AU14RankOrbitalArbiterHS
+  name: Orbital Arbiter of the High Seat
+  prefix: Arb. HS
+
+- type: rank
+  id: AU14RankOrbitalArbiter1S
+  name: Orbital Arbiter of the First Seat
+  prefix: Arb. 1S
+
+- type: rank
+  id: AU14RankOrbitalArbiter
+  name: Orbital Arbiter
+  prefix: Arbiter
+
+- type: rank
+  id: AU14RankOrbitalCounselorIC
+  name: Orbital Counsel of the Inner Circle
+  prefix: Cnsl. IC
+
+- type: rank
+  id: AU14RankOrbitalCounselorOC
+  name: Orbital Counsel of the Outer Circle
+  prefix: Cnsl. OC
+
+- type: rank
+  id: AU14RankOrbitalCounselor
+  name: Orbital Counsel
+  prefix: Counselor
+
+# Flight Crew
+- type: rank
+  id: AU14RankFlightCaptain
+  name: Flight Captain
+  prefix: Flt. Cpt.
+
+- type: rank
+  id: AU14RankCaptain
+  name: Captain
+  prefix: Cpt.
+
+- type: rank
+  id: AU14RankSeniorFirstOfficer
+  name: Senior First Officer
+  prefix: Sen. 1st Off.
+
+- type: rank
+  id: AU14RankFirstOfficer
+  name: First Officer
+  prefix: 1st Off.

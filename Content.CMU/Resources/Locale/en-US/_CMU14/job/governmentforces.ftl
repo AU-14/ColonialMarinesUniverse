@@ -8,9 +8,33 @@ au14-job-name-govforplatco = Commander
 au14-job-description-govforplatco = Command the unit. Manage strategy, unit coordination and liaise with command from the CIC.
 au14-job-prefix-govforplatco = CMNDR
 
-au14-job-name-govforplatop = Junior Officer
-au14-job-description-govforplatop = Assist the Commander with logistics, coordination, and operational oversight.
-au14-job-prefix-govforplatop = JO
+au14-job-name-govforadjutant = Adjutant Officer
+au14-job-description-govforadjutant = Stand ready to assume command. Handle unit administration and keep the chain of command running smoothly.
+au14-job-prefix-govforadjutant = XO
+
+au14-job-name-govforplatop = Staff Officer
+au14-job-description-govforplatop = Plan operations and track the battlefield. Turn the Commander's intent into orders, assist with coordination, and operational oversight.
+au14-job-prefix-govforplatop = SO
+
+au14-job-name-govforengineering = Engineering Officer
+au14-job-description-govforengineering = Keep the unit's structures, assets and equipment operational under pressure. Renovate the ship as you deem fit.
+au14-job-prefix-govforengineering = EO
+
+au14-job-name-govforintel = Intelligence Officer
+au14-job-description-govforintel = Assist the Commander with intelligence.
+au14-job-prefix-govforintel = IO
+
+au14-job-name-govforlogistics = Logistics Officer
+au14-job-description-govforlogistics = Keep the frontline supplied. Aid your technicians in managing requisitions and distribution, while keeping the budget under control.
+au14-job-prefix-govforlogistics = LO
+
+au14-job-name-govformo = Chief Medical Officer
+au14-job-description-govformo = Oversee the unit's medical staff and resources. Keep the wounded alive and the sick fit to fight.
+au14-job-prefix-govformo = CMO
+
+au14-job-name-govforpolicechief = Chief MP Officer
+au14-job-description-govforpolicechief = Oversee military police operations. Enforce discipline and maintain order within the unit.
+au14-job-prefix-govforpolicechief = CMP
 
 au14-job-name-govfordspilot = Dropship Pilot
 au14-job-description-govfordspilot = Fly the dropship. Insert troops, extract casualties, and deliver fire support.
@@ -143,17 +167,6 @@ au14-job-prefix-govforspecialist-pointmanUPP = PNM
 
 au-14-job-name-uppgrom-squadleader = Squad Leader
 au-14-job-prefix-uppgrom-squadleader = SL
-
-au14-job-name-juniorofficer-so = Staff Officer
-au14-job-prefix-juniorofficer-so = SO
-au14-job-name-juniorofficer-io = Intelligence Officer
-au14-job-prefix-juniorofficer-io = IO
-au14-job-name-juniorofficer-eo = Engineering Officer
-au14-job-prefix-juniorofficer-eo = EO
-au14-job-name-juniorofficer-adj = Adjutant Officer
-au14-job-prefix-juniorofficer-adj = AO
-au14-job-name-juniorofficer-cmo = Chief Medical Officer
-au14-job-prefix-juniorofficer-cmo = CMO
 
 au14-job-name-specialist-pyro = Pyrotechnician
 au14-job-prefix-specialist-pyro = PYRO
