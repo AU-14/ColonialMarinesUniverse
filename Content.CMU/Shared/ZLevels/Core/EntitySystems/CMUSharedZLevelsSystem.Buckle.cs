@@ -14,7 +14,7 @@ public abstract partial class CMUSharedZLevelsSystem
     private void OnZPhysicsBuckled(Entity<CMUZPhysicsComponent> ent, ref BuckledEvent args)
     {
         if (TrySyncZPhysicsWithStrap(ent, args.Strap.Owner))
-            SleepZPhysicsDeferred(ent.Owner);
+            RemCompDeferred<CMUZFallingComponent>(ent.Owner);
     }
 
     private void OnZPhysicsUnbuckled(Entity<CMUZPhysicsComponent> ent, ref UnbuckledEvent args)

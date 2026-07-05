@@ -116,7 +116,7 @@ public sealed partial class CMUZLevelsSystem
             WakeZPhysics(ent);
         else
         {
-            SleepZPhysicsDeferred(ent);
+            RemCompDeferred<CMUZFallingComponent>(ent);
         }
     }
 

@@ -69,7 +69,7 @@ public sealed partial class CMUZLevelsSystem
         var resolved = new Entity<CMUZPhysicsComponent>(ent.Owner, ent.Comp);
         if (!CanUseZPhysics(resolved))
         {
-            SleepZPhysicsDeferred(ent.Owner);
+            RemCompDeferred<CMUZFallingComponent>(ent.Owner);
             return;
         }
 
@@ -82,7 +82,7 @@ public sealed partial class CMUZLevelsSystem
                 ent.Comp.Velocity,
                 HasComp<CMUVehicleZTraversalComponent>(ent.Owner)))
         {
-            SleepZPhysicsDeferred(ent.Owner);
+            RemCompDeferred<CMUZFallingComponent>(ent.Owner);
             return;
         }
 

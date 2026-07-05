@@ -310,7 +310,7 @@ public abstract partial class CMUSharedZLevelsSystem
                                 uid,
                                 "sleep",
                                 $"settledDistance={settledDistanceToGround:F3} sticky={stickyGround} local={zPhys.LocalPosition:F3}");
-                            SleepZPhysics(uid);
+                            RemComp<CMUZFallingComponent>(uid);
                         }
 
                         continue;
@@ -332,7 +332,7 @@ public abstract partial class CMUSharedZLevelsSystem
                     ShouldSleepZPhysics(0f, stickyGround, zPhys.LocalPosition, zPhys.Velocity, isVehicle))
                 {
                     DebugLogFalling(uid, "sleep", $"settledDistance=0.000 sticky={stickyGround} local={zPhys.LocalPosition:F3}");
-                    SleepZPhysics(uid);
+                    RemComp<CMUZFallingComponent>(uid);
                     DirtyZPhysics(uid, zPhys, oldVelocity, oldHeight);
                     continue;
                 }
@@ -617,7 +617,7 @@ public abstract partial class CMUSharedZLevelsSystem
         zPhys.Velocity = 0;
         zPhys.LocalPosition = 0;
         DirtyZPhysics(uid, zPhys, oldVelocity, oldHeight);
-        SleepZPhysics(uid);
+        RemComp<CMUZFallingComponent>(uid);
     }
 
     private void TryProcessZLevelBoundary(EntityUid uid, CMUZPhysicsComponent zPhys, bool stickyGround)
@@ -762,7 +762,7 @@ public abstract partial class CMUSharedZLevelsSystem
                     HasComp<CMUVehicleZTraversalComponent>(uid)))
             {
                 DebugLogFalling(uid, "post-down-sleep", $"local={zPhys.LocalPosition:F3} sticky={stickyGround}");
-                SleepZPhysics(uid);
+                RemComp<CMUZFallingComponent>(uid);
             }
         }
 
@@ -797,27 +797,6 @@ public abstract partial class CMUSharedZLevelsSystem
 
         if (Math.Abs(oldHeight - zPhys.LocalPosition) > 0.01f)
             DirtyField(uid, zPhys, nameof(CMUZPhysicsComponent.LocalPosition));
-    }
-
-    private void SleepZPhysics(EntityUid uid)
-    {
-        SetZPhysicsBodyOnGround(uid);
-        RemComp<CMUZFallingComponent>(uid);
-    }
-
-    protected void SleepZPhysicsDeferred(EntityUid uid)
-    {
-        SetZPhysicsBodyOnGround(uid);
-        RemCompDeferred<CMUZFallingComponent>(uid);
-    }
-
-    private void SetZPhysicsBodyOnGround(EntityUid uid)
-    {
-        if (TryComp<PhysicsComponent>(uid, out var physics) &&
-            physics.BodyStatus != BodyStatus.OnGround)
-        {
-            _physics.SetBodyStatus(uid, physics, BodyStatus.OnGround);
-        }
     }
 
     protected virtual bool CanProcessZLevelTransition(EntityUid ent, int offset)

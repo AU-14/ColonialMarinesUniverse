@@ -126,7 +126,7 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
         switch (GetCurrentPreset())
         {
             case CMURoundStatisticsPreset.DistressSignal:
-                TrySetPendingOutcome(GetManualWithdrawalOutcome(faction, isStalemate));
+                TrySetPendingOutcome(GetDistressWithdrawalOutcome(faction, isStalemate));
                 break;
             case CMURoundStatisticsPreset.Insurgency:
                 TrySetPendingOutcome(GetInsurgencyWithdrawalOutcome(faction, isStalemate));
@@ -276,6 +276,23 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
             source);
     }
 
+    private PendingRoundOutcome GetDistressWithdrawalOutcome(string? faction, bool isStalemate)
+    {
+        var source = GetWithdrawalSource(faction, isStalemate);
+        if (isStalemate)
+        {
+            return new PendingRoundOutcome(
+                CMURoundStatisticsWinner.Draw,
+                CMURoundStatisticsOutcome.Stalemate,
+                source);
+        }
+
+        return new PendingRoundOutcome(
+            CMURoundStatisticsWinner.Xeno,
+            CMURoundStatisticsOutcome.XenoMinorHijackLoss,
+            source);
+    }
+
     private PendingRoundOutcome GetInsurgencyWithdrawalOutcome(string? faction, bool isStalemate)
     {
         var source = GetWithdrawalSource(faction, isStalemate);
@@ -307,14 +324,6 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
             CMURoundStatisticsWinner.Unknown,
             CMURoundStatisticsOutcome.Unknown,
             source);
-    }
-
-    private PendingRoundOutcome GetManualWithdrawalOutcome(string? faction, bool isStalemate)
-    {
-        return new PendingRoundOutcome(
-            CMURoundStatisticsWinner.Unknown,
-            CMURoundStatisticsOutcome.Unknown,
-            GetWithdrawalSource(faction, isStalemate));
     }
 
     private PendingRoundOutcome GetColonyFallWithdrawalOutcome(string? faction, bool isStalemate)
