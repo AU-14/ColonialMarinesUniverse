@@ -294,8 +294,8 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         bool UseItalic = false)
     {
         public static readonly RunechatVisualStyle Normal = new(7, false, false, CmssLangchatWidth);
-        public static readonly RunechatVisualStyle Whisper = new(6, false, false, CmssLangchatWidth, -1f, UseItalic: true);
-        public static readonly RunechatVisualStyle Radio = new(7, false, false, CmssSplitLangchatWidth);
+        public static readonly RunechatVisualStyle Whisper = new(4, false, false, CmssLangchatWidth, -1f, UseItalic: false);
+        public static readonly RunechatVisualStyle Radio = new(4, false, false, CmssSplitLangchatWidth, UseItalic: false);
         public static readonly RunechatVisualStyle Emote = new(6, false, true, CmssLangchatWidth, -1f);
         public static readonly RunechatVisualStyle EmoteYell = new(9, true, true, CmssLangchatWidth);
         public static readonly RunechatVisualStyle Bolded = new(8, true, false, CmssLangchatWidth);
