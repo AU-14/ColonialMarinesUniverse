@@ -1,0 +1,392 @@
+- type: localizedDataset
+  id: AU14NamesK9
+  values:
+    prefix: names-k9-first-dataset-
+    count: 13
+
+# OG DOG
+- type: entity
+  parent:
+  - BaseMob
+  - MobDamageable
+  id: AU14MobK9
+  name: Synthetic K9
+  description: "A Weyland-Yutani produced synthetic dog."
+  components:
+  - type: RandomMetadata
+    nameSegments:
+     - AU14NamesK9
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _AU14/Mobs/MiscMob/synthk9.rsi
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base"]
+      state: k9_closed
+  - type: MobThresholds
+    allowRevives: true
+    thresholds:
+      0: Alive
+      290: Critical
+      400: Dead
+  - type: HealthExaminable
+    examinableTypes:
+    - Blunt
+    - Slash
+    - Piercing
+    - Heat
+    - Shock
+  - type: SlowOnDamage
+    speedModifierThresholds:
+      100: 0.85
+      150: 0.7
+  - type: Pullable
+  - type: Repairable
+    fuelCost: 5
+  - type: Physics
+  - type: MovementSpeedModifier
+    baseWalkSpeed : 4
+    baseSprintSpeed : 6.4
+  - type: RMCHandEmotes
+  - type: RMCBuckleDrawDepth
+  - type: RMCObstacleSlamming
+  - type: Puller
+    needsHands: false
+  - type: FiremanCarriable
+  - type: CanFiremanCarry
+  - type: CombatMode
+    canDisarm: false
+  - type: MobState
+  - type: GhostTakeoverAvailable
+  - type: CrashLandable
+  - type: StunShakeable
+  - type: StunShakeableUser
+  - type: CanBeFirePatted
+  - type: EmoteCooldown
+  - type: Speech
+    speechVerb: Canine
+    allowedEmotes: [ 'Bark', 'Snarl', 'Whine', 'Growl', 'Yip' ]
+    speechSounds: Dog
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: k9_closed
+      Critical:
+        Base: dead
+      Dead:
+        Base: dead
+  - type: ReplacementAccent
+    accent: dog
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.38
+        density: 50
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: Inventory
+    speciesId: dog
+    templateId: pet
+  - type: InteractionPopup
+    interactSuccessString: petting-success-dog
+    interactFailureString: petting-failure-generic
+    interactSuccessSound:
+      path: /Audio/_RMC14/Voice/Vulpkanin/dog_bark2.ogg
+  - type: Grammar
+    attributes:
+      gender: epicene
+  - type: MeleeWeapon
+    soundHit:
+      collection: AU14DogAttack
+      params:
+        variation: 0
+        volume: 0.9
+    angle: 30
+    animation: WeaponArcFist
+    attackRate: 1.4
+    damage:
+      types:
+        Blunt: 5
+        Piercing: 3
+        Slash: 15
+  - type: Synth
+
+- type: soundCollection
+  id: AU14DogAttack
+  files:
+  - /Audio/_RMC14/Voice/Vulpkanin/dog_growl2.ogg
+  - /Audio/_RMC14/Voice/Vulpkanin/dog_growl3.ogg
+  - /Audio/_RMC14/Voice/Vulpkanin/dog_snarl1.ogg
+  - /Audio/_RMC14/Voice/Vulpkanin/dog_snarl2.ogg
+  - /Audio/_RMC14/Voice/Vulpkanin/dog_snarl3.ogg
+
+- type: entity
+  parent: AU14MobK9
+  id: AU14MobK9GhostRole
+  suffix: "Ghost Role"
+  components:
+  - type: GhostRole
+    name: Synthetic K9
+    description: A Weyland-Yutani produced synthetic dog.
+    raffle:
+      settings: short
+
+# MEDIC DOG
+- type: entity
+  parent: AU14MobK9
+  id: AU14MobK9BagMedic
+  name: Search and Rescue K9
+  description: "A Weyland-Yutani produced synthetic dog. This model is designed to aid in search and rescue and comes equipped with medical equipment storage."
+  suffix: "S&R"
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _AU14/Mobs/MiscMob/synthk9.rsi
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base"]
+      state: k9_closed_medpack
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: k9_closed_medpack
+      Critical:
+        Base: dead_medpack
+      Dead:
+        Base: dead_medpack
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,13,5 # 21 slots
+    whitelist:
+      tags:
+      - DiscreteHealthAnalyzer
+      - Dropper
+      - GlassBeaker
+      - Bottle
+      - PillPacket
+      - PillCanister
+      - Syringe
+      - CMSurgicalLine
+      - CMSynthGraft
+      - Brutepack
+      - CMBloodPack
+      - Gauze
+      - Ointment
+      - CMOintment
+      - CMTraumaKit
+      - CMBurnKit
+      - CMAutoInjector
+      - CMRollerItem
+      - BodyBag
+      - RMCGlovesLatex
+      - SterileMask
+      - Hypospray
+      - CigPack
+      - RMCPenlight
+      - Flare
+      - CMUBoneGraft
+      - CMUCastItem
+      - CMUOrganClamp
+      - CMUSplintItem
+      components:
+      - CMSurgeryTool
+      - Hypospray
+      - Defibrillator
+      - Pill
+      - RMCHandLabeler
+      - RMCStethoscope
+      - RMCLighter
+  - type: FixedItemSizeStorage
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - PillCanister
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+
+- type: entity
+  parent: AU14MobK9BagMedic
+  id: AU14MobK9BagMedicGhostRole
+  suffix: "S&R, Ghost Role"
+  components:
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Synthetic Search and Rescue K9
+    description: A Weyland-Yutani produced synthetic dog.
+    raffle:
+      settings: short
+  - type: NpcFactionMember
+    factions:
+    - Civilian
+
+# REGULAR DOG
+- type: entity
+  parent: AU14MobK9
+  id: AU14MobK9Bag
+  name: Synthetic K9
+  description: "A Weyland-Yutani produced synthetic dog. This one comes equipped with general equipment storage."
+  suffix: Backpack
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _AU14/Mobs/MiscMob/synthk9.rsi
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base"]
+      state: k9_closed_backpack
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: k9_closed_backpack
+      Critical:
+        Base: dead_backpack
+      Dead:
+        Base: dead_backpack
+  - type: Storage
+    grid:
+    - 0,0,14,1 # 15
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+
+- type: entity
+  parent: AU14MobK9Bag
+  id: AU14MobK9BagGhostRole
+  suffix: "Backpack, Ghost Role"
+  components:
+  - type: GhostRole
+    name: Synthetic K9
+    description: A Weyland-Yutani produced synthetic dog.
+    raffle:
+      settings: short
+
+# MIL POL DOG
+- type: entity
+  parent: AU14MobK9
+  id: AU14MobK9MP
+  name: Synthetic K9
+  description: "A Weyland-Yutani produced synthetic dog designed to support Military Police personnel."
+  suffix: MP
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _AU14/Mobs/MiscMob/synthk9.rsi
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base"]
+      state: k9_closed_mp
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: k9_closed_mp
+      Critical:
+        Base: dead_medpack
+      Dead:
+        Base: dead_medpack
+
+- type: entity
+  parent: AU14MobK9MP
+  id: AU14MobK9MPGhostRole
+  suffix: "MP, Ghost Role"
+  components:
+  - type: GhostRole
+    name: Synthetic Military Police K9
+    description: A Weyland-Yutani produced synthetic dog.
+    raffle:
+      settings: short
+
+
+# - type: entity
+#   parent: AU14MobK9BagMedic
+#   id: AU14MobK9BagMedicGhostRoleGOVFOR
+#   suffix: "S&R, GOVFOR"
+#   components:
+#   - type: NpcFactionMember
+#     factions:
+#     - GOVFOR
+#
+# - type: entity
+#   parent: AU14MobK9Bag
+#   id: AU14MobK9BagGhostRoleGOVFOR
+#   suffix: "Backpack, GOVFOR"
+#   components:
+#   - type: NpcFactionMember
+#     factions:
+#     - GOVFOR
+#
+# - type: entity
+#   parent: AU14MobK9MP
+#   id: AU14MobK9MPGhostRoleGOVFOR
+#   suffix: "MP, GOVFOR"
+#   components:
+#   - type: NpcFactionMember
+#     factions:
+#     - GOVFOR
+#
+# - type: entity
+#   parent: AU14MobK9
+#   id: AU14MobK9GhostRoleGOVFOR
+#   suffix: "GOVFOR"
+#   components:
+#   - type: NpcFactionMember
+#     factions:
+#     - GOVFOR
+#
+#
+# - type: entity
+#   parent: AU14MobK9BagMedic
+#   id: AU14MobK9BagMedicGhostRoleOPFOR
+#   suffix: "S&R, OPFOR"
+#   components:
+#   - type: NpcFactionMember
+#     factions:
+#     - OPFOR
+#
+# - type: entity
+#   parent: AU14MobK9Bag
+#   id: AU14MobK9BagGhostRoleOPFOR
+#   suffix: "Backpack, OPFOR"
+#   components:
+#   - type: NpcFactionMember
+#     factions:
+#     - OPFOR
+#
+# - type: entity
+#   parent: AU14MobK9MP
+#   id: AU14MobK9MPGhostRoleOPFOR
+#   suffix: "MP, OPFOR"
+#   components:
+#   - type: NpcFactionMember
+#     factions:
+#     - OPFOR
+#
+# - type: entity
+#   parent: AU14MobK9
+#   id: AU14MobK9GhostRoleOPFOR
+#   suffix: "OPFOR"
+#   components:
+#   - type: NpcFactionMember
+#     factions:
+#     - OPFOR

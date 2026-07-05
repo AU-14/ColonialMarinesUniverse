@@ -12,6 +12,7 @@
   playTimeTracker: AU14JobGOVFORMilitaryPoliceMan
   requireAdminNotify: true
   canBeAntag: false
+  displayWeight: 5
   accessGroups:
   - AU14GovforSecurity
   - aulegacygroupmilp # NOTE: should remove & hard migrate
@@ -26,6 +27,7 @@
   roundComponents:
   - type: Skills
     preset: AU14SkillPresetMilitaryPolice
+  - type: AU14CallToAttentionAbility
   - type: JobPrefix
     prefix: au14-job-prefix-govformilitarypoliceman
   - type: TacticalMapIcon
@@ -84,7 +86,7 @@
     ears: AU14HeadsetGovforMarineMP
     ears2: RMCM5CameraGear
   inhand:
-    - AU14StampCMP
+    - AU14StampMP
 
 - type: startingGear
   id: AU14GearGOVFORMilitaryPoliceManDummy

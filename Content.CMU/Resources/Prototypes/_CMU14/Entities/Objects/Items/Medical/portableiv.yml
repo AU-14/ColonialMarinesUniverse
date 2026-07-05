@@ -1,0 +1,90 @@
+- type: entity
+  parent: CMBaseStructureCorrodible
+  id: AU14IVFoldable
+  name: folding intravenous drip
+  description: Allows you to inject blood into a patient or extract blood from them to do a blood transfusion. This one can fold for easy storage and transport.
+  suffix: IV, empty
+  components:
+  - type: Item
+    size: Small
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        density: 60
+        mask:
+        - MobMask
+  - type: Transform
+    anchored: false
+    noRot: true
+  - type: InteractionOutline
+  - type: Clickable
+  - type: Sprite
+    sprite: _AU14/Structures/portable_iv_drip.rsi
+    layers:
+    - state: unhooked
+      map: ["unfoldedLayer"]
+      visible: true
+    - state: folded
+      map: ["foldedLayer"]
+      visible: false
+    - state: reagent0
+      map: [ "enum.IVDripVisualLayers.Reagent" ]
+      visible: false
+    - state: folded
+      map: [ "enum.IVDripVisualLayers.Base" ]
+      visible: false
+  - type: Icon
+    sprite: _AU14/Structures/portable_iv_drip.rsi
+    state: folded
+  - type: Appearance
+  - type: IVDrip
+    reagentStates:
+    - 0: reagent0
+    - 10: reagent10
+    - 25: reagent25
+    - 50: reagent50
+    - 75: reagent75
+    - 80: reagent80
+    - 100: reagent100
+    ripDamage:
+      types:
+        Piercing: 3
+  - type: ItemSlots
+    slots:
+      pack:
+        name: pack
+        whitelist:
+          components:
+          - BloodPack
+  - type: ContainerContainer
+    containers:
+      pack: !type:ContainerSlot {}
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: RMCMesonsNonviewable
+  - type: GenericVisualizer
+    visuals:
+      enum.FoldedVisuals.State:
+        foldedLayer:
+          True: {visible: true}
+          False: {visible: false}
+        unfoldedLayer:
+          True: {visible: false}
+          False: {visible: true}
+  - type: Foldable
+  - type: DeployFoldable
+
+- type: entity
+  parent: AU14IVFoldable
+  id: AU14IVFoldableFolded
+  suffix: folded
+  components:
+  - type: Foldable
+    folded: true

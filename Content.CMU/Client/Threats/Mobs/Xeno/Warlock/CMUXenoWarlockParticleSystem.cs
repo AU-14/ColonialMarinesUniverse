@@ -42,7 +42,6 @@ public sealed partial class CMUXenoWarlockParticleOverlay : Overlay
     private static readonly ResPath ParticleSprite = new("/Textures/_CMU14/Effects/Xeno/warlock_particles.rsi");
     private const float PixelsPerMeter = EyeManager.PixelsPerMeter;
     private const float CullPadding = 9f;
-    private const float MaxDirectedTravelPixels = 250f;
     private readonly Texture _particleTexture;
     private readonly List<EntityUid> _remove = new();
     private readonly HashSet<EntityUid> _seen = new();
@@ -64,7 +63,7 @@ public sealed partial class CMUXenoWarlockParticleOverlay : Overlay
         _unshaded = _prototype.Index(UnshadedShader).Instance();
     }
 
-    public override OverlaySpace Space => OverlaySpace.WorldSpace;
+    public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV;
 
     protected override void Draw(in OverlayDrawArgs args)
     {
@@ -139,8 +138,8 @@ public sealed partial class CMUXenoWarlockParticleOverlay : Overlay
                 CMUXenoWarlockParticleOverlay.Hash01(seed, i, 4), CMUXenoWarlockParticleOverlay.Hash01(seed, i, 5));
             Vector2 motion = velocity * rawAge + drift * rawAge + gravity * (0.5f * rawAge * rawAge);
             if (particles.UseMotionOverride
-                && motion.LengthSquared() > MaxDirectedTravelPixels * MaxDirectedTravelPixels)
-                motion = Vector2.Normalize(motion) * MaxDirectedTravelPixels;
+                && motion.LengthSquared() > profile.MaxDirectedTravelPixels * profile.MaxDirectedTravelPixels)
+                motion = Vector2.Normalize(motion) * profile.MaxDirectedTravelPixels;
 
             Vector2 scale = CMUXenoWarlockParticleOverlay.Lerp(profile.ScaleMin, profile.ScaleMax,
                     CMUXenoWarlockParticleOverlay.Hash01(seed, i, 6), CMUXenoWarlockParticleOverlay.Hash01(seed, i, 7))

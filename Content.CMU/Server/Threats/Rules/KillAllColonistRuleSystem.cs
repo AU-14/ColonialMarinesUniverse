@@ -1,3 +1,4 @@
+using Content.Server._CMU14.RoundStatistics;
 using Content.Server.AU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
@@ -22,6 +23,7 @@ public sealed partial class KillAllColonistRuleSystem : GameRuleSystem<KillAllCo
     [Dependency] private IEntityManager _entMan = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
+    [Dependency] private CMURoundStatisticsSystem _roundStats = default!;
     [Dependency] private ThreatRuleHelper _threatRuleHelper = default!;
     private const string DefaultWinMsg = "Threat victory: Required percentage of Colonists eliminated.";
 
@@ -107,6 +109,7 @@ public sealed partial class KillAllColonistRuleSystem : GameRuleSystem<KillAllCo
             return;
 
         string? winMessage = _auRoundSystem.SelectedThreat?.WinMessage;
+        _roundStats.RecordKillAllColonistRule();
         _gameTicker.EndRound(!string.IsNullOrEmpty(winMessage) ? winMessage : DefaultWinMsg);
     }
 }

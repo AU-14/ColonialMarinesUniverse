@@ -73,12 +73,21 @@
   id: AU14GearCivilianNSPAConstable
   equipment:
     head: RMCHeadCapTSEPAPeaked
+    back: RMCSatchelTSEPA
     jumpsuit: RMCJumpsuitTSEPA
     belt: CMBeltSecurityMarshalFilled
     shoes: RMCBootsPMCFilled
     id: AU14IDCardCivilianNSPAConstable
     ears: AU14CMBHeadset
-    pocket1: AU14GuidebookLawColonial
+    outerClothing: RMCArmorVestTSEPA
+    suitstorage: AU14BeltHolsterPistolBlack
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14PouchGeneralLargeLEOFilled
+  inhand:
+  - AU14GunCasePistolL45
+  storage:
+    back:
+    - AU14GuidebookLawColonial
 
 - type: entity
   parent: CMSpawnPointJobBase

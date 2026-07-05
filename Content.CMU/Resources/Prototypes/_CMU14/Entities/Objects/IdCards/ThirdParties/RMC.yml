@@ -1,0 +1,71 @@
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardRMCRRTBreacher
+  name: RMC RRT breacher ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: AU14RMCRRTBreacher
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardRMCRRTCommander
+  name: RMC RRT commander ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: AU14RMCRRTCommander
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardRMCRRTCorpsman
+  name: RMC RRT corpsman ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: AU14RMCRRTCorpsman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardRMCRRTMarksman
+  name: RMC RRT marksman ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: AU14RMCRRTMarksman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardRMCRRTRifleman
+  name: RMC RRT rifleman ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: AU14RMCRRTRifleman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardRMCRRTSmartgunner
+  name: RMC RRT machinegunner ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: AU14RMCRRTSmartgunner
+  - type: ItemIFF
+    factions:
+    - GOVFOR

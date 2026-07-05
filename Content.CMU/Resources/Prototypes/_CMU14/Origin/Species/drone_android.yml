@@ -1,0 +1,122 @@
+- type: species
+  id: DroneAndroid
+  name: cmu-species-name-drone-android
+  roundStart: false
+  prototype: CMUDroneAndroid
+  sprites: CMUMobDroneAndroidSprites
+  markingLimits: MobHumanMarkingLimits
+  dollPrototype: CMUDroneAndroidDummy
+  skinColoration: Hues
+
+- type: speciesBaseSprites
+  id: CMUMobDroneAndroidSprites
+  sprites:
+    Head: CMUMobDroneAndroidHead
+    Chest: CMUMobDroneAndroidTorso
+    Eyes: MobHumanoidEyes
+    LArm: CMUMobDroneAndroidLArm
+    RArm: CMUMobDroneAndroidRArm
+    LHand: CMUMobDroneAndroidLHand
+    RHand: CMUMobDroneAndroidRHand
+    LLeg: CMUMobDroneAndroidLLeg
+    RLeg: CMUMobDroneAndroidRLeg
+    LFoot: CMUMobDroneAndroidLFoot
+    RFoot: CMUMobDroneAndroidRFoot
+
+- type: humanoidBaseSprite
+  id: CMUMobDroneAndroidHead
+  matchSkin: false
+  baseSprite:
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: head_m
+
+- type: humanoidBaseSprite
+  id: CMUMobDroneAndroidHeadMale
+  matchSkin: false
+  baseSprite:
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: head_m
+
+- type: humanoidBaseSprite
+  id: CMUMobDroneAndroidHeadFemale
+  matchSkin: false
+  baseSprite:
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: head_f
+
+- type: humanoidBaseSprite
+  id: CMUMobDroneAndroidTorso
+  matchSkin: false
+  baseSprite:
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: torso_m
+
+- type: humanoidBaseSprite
+  id: CMUMobDroneAndroidTorsoMale
+  matchSkin: false
+  baseSprite:
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: torso_m
+
+- type: humanoidBaseSprite
+  id: CMUMobDroneAndroidTorsoFemale
+  matchSkin: false
+  baseSprite:
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: torso_f
+
+- type: humanoidBaseSprite
+  id: CMUMobDroneAndroidLLeg
+  matchSkin: false
+  baseSprite:
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: l_leg
+
+- type: humanoidBaseSprite
+  id: CMUMobDroneAndroidLHand
+  matchSkin: false
+  baseSprite:
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: l_hand
+
+- type: humanoidBaseSprite
+  id: CMUMobDroneAndroidLArm
+  matchSkin: false
+  baseSprite:
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: l_arm
+
+- type: humanoidBaseSprite
+  id: CMUMobDroneAndroidLFoot
+  matchSkin: false
+  baseSprite:
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: l_foot
+
+- type: humanoidBaseSprite
+  id: CMUMobDroneAndroidRLeg
+  matchSkin: false
+  baseSprite:
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: r_leg
+
+- type: humanoidBaseSprite
+  id: CMUMobDroneAndroidRHand
+  matchSkin: false
+  baseSprite:
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: r_hand
+
+- type: humanoidBaseSprite
+  id: CMUMobDroneAndroidRArm
+  matchSkin: false
+  baseSprite:
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: r_arm
+
+- type: humanoidBaseSprite
+  id: CMUMobDroneAndroidRFoot
+  matchSkin: false
+  baseSprite:
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: r_foot

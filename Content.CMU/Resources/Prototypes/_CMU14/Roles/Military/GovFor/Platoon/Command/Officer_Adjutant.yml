@@ -1,0 +1,222 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobAdjutantBaseAbstract
+  name: au14-job-name-govforadjutant
+  description: au14-job-description-govforadjutant
+  icon: "AU14JobIconGovAdjutant"
+  spawnMenuRoleName: Adjutant Officer (GOVFOR)
+  supervisors: au14-job-supervisors-govforplatco
+  startingGear: AU14GearGOVFORAdjutant
+  dummyStartingGear: AU14GearGOVFORAdjutantDummy
+  playTimeTracker: AU14JobGOVFORAdjutant
+  requireAdminNotify: true
+  joinNotifyCrew: true
+  canBeAntag: false
+  displayWeight: 9
+  accessGroups:
+  - AU14GovforCommand
+  - aulegacygroupcommand
+
+- type: job
+  abstract: true
+  parent: AU14JobAdjutantBaseAbstract
+  id: AU14JobAdjutantBase
+  roundRole: ExecutiveOfficer
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: CommendationGiver
+  - type: InnateCommandSpeech
+  - type: Skills
+    preset: AU14SkillPresetOfficerAdjutant
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforadjutant
+  - type: RMCSpeechBubbleSpecificStyle
+    speechStyleClass: commanderSpeech
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: govfor_adj
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
+        state: adj
+    # UPP:
+    # - type: JobPrefix
+    #   prefix: au14-job-prefix-govforadjutantUPP
+    # WYPMC:
+    # - type: JobPrefix
+    #   prefix: au14-job-prefix-govforadjutantWYPMC
+    # CMBCIU:
+    # - type: JobPrefix
+    #   prefix: au14-job-prefix-govforadjutantCMBCIU
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
+  - !type:AgeRequirement
+    requiredAge: 30
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxiety
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankCaptain:
+      entity: AU14ChevronCaptain
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFORAdjutant
+  isHumanoid: true
+
+# ├──[ Job Prototypes ]──────────────────────────────────────────────┤
+- type: job
+  parent: AU14JobAdjutantBase
+  id: AU14JobGOVFORAdjutant
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: job
+  parent: AU14JobAdjutantBase
+  id: AU14JobOPFORAdjutant
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORAdjutant"
+  spawnMenuRoleName: Executive Officer (OPFOR)
+  supervisors: au14-job-supervisors-opforplatco
+  startingGear: AU14GearOPFORAdjutant
+  dummyStartingGear: AU14GearOPFORAdjutantDummy
+  accessGroups:
+  - AU14OpforCommand
+
+  # ├──[ Starting Gear ]───────────────────────────────────────────────┤
+- type: startingGear
+  id: AU14GearGOVFORAdjutant
+  equipment:
+    id: AU14IDCardGOVFORAdjutant
+    ears: AU14HeadsetGovforCommand
+    pocket1: AU14StampAO
+    pocket2: AU14TabletGovfor
+  inhand:
+    - AU14KitJOAdjutantKit
+
+- type: startingGear
+  id: AU14GearOPFORAdjutant
+  equipment:
+    id: AU14IDCardOPFORAdjutant
+    ears: AU14HeadsetOpforCommand
+    pocket1: AU14StampAO
+    pocket2: AU14TabletOpfor
+  inhand:
+    - AU14KitJOAdjutantKit
+
+- type: roleLoadout
+  id: JobAU14JobGOVFORAdjutant
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - GOVFORPlatCOSidearmBeltAU14
+
+- type: startingGear
+  id: AU14GearGOVFORAdjutantDummy
+  equipment:
+    shoes: CMBootsBlack
+    head: CMHeadCapPeakedFormal
+    jumpsuit: CMJumpsuitXOFormal
+    ears: AU14HeadsetGovforCommand
+
+- type: startingGear
+  id: AU14GearOPFORAdjutantDummy
+  equipment:
+    shoes: CMBootsBlack
+    head: CMHeadCapPeakedFormal
+    jumpsuit: CMJumpsuitXOFormal
+    ears: AU14HeadsetOpforCommand
+
+# ├──[ Spawnpoints ]─────────────────────────────────────────────────┤
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORAdjutant
+  name: Spawn Point GOVFOR Adjutant Officer
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORAdjutant
+  - type: Sprite
+    state: syn_spawn
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointopforAdjutant
+  name: Spawn Point OPFOR Executive Officer
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORAdjutant
+  - type: Sprite
+    state: syn_spawn
+
+# ├──[ Factions ]────────────────────────────────────────────────────┤
+- type: job
+  parent: AU14JobAdjutantBase
+  id: AU14JobGOVFORAdjutantCMBCIU
+  roundForce: CMBCIU
+  name: Executive Officer
+  spawnMenuRoleName: Executive Officer (CMBCIU)
+  ranks:
+    AU14RankCMBMarshal: []
+
+- type: job
+  parent: AU14JobAdjutantBase
+  id: AU14JobGOVFORAdjutantRMC
+  roundForce: RMC
+  name: au14-job-name-govforadjutantRMC
+  spawnMenuRoleName: Executive Officer (TWE RMC)
+
+- type: job
+  parent: AU14JobAdjutantBase
+  id: AU14JobGOVFORAdjutantUPP
+  roundForce: UPP
+  requirements: []
+  name: Executive Officer
+  spawnMenuRoleName: Executive Officer (UPP)
+  ranks:
+    UPP_Captain:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORAdjutant
+      time: 360000 # 100 hours
+    UPP_SeniorLieutenant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORAdjutant
+      time: 108000 # 30 hours
+    UPP_Lieutenant: []
+
+- type: job
+  parent: AU14JobAdjutantBase
+  id: AU14JobGOVFORAdjutantWYPMC
+  roundForce: WYPMC
+  requirements: []
+  name: PMC Deputy Director
+  spawnMenuRoleName: Executive Officer (WYPMC)
+  ranks:
+    AU14RankWeYuCommanderSenior:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORAdjutant
+      time: 360000 # 100 hours
+    AU14RankWeYuCommander: []

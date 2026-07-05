@@ -1,0 +1,949 @@
+- type: entity
+  parent: RMCAreaBase
+  id: CMUAreaShep
+  name: LV-112 Sheperds' Pride
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _AU14/Areas/areas_sheperd.rsi
+    state: oob
+  - type: Area
+    buildSpecial: true
+    powerNet: ground
+    minimapColor: '#97A0A6CC'
+
+- type: entity
+  parent: CMUAreaShep
+  id: CMUAreaShepIndoors
+  name: Sheperds' - Indoors
+  abstract: true
+  components:
+  - type: Area
+    lasing: false
+    mortarPlacement: false
+    medevac: false
+    paradropping: false
+    weatherEnabled: false
+
+- type: entity
+  parent: CMUAreaShepIndoors
+  id: CMUAreaShepWY
+  name: We-Yu Research Lab
+  components:
+  - type: Sprite
+    state: wy
+  - type: Area
+    minimapColor: '#9F9F09CC'
+    fulton: false
+    mortarFire: false
+    supplyDrop: false
+    CAS: false
+    OB: false
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYW
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYN
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYS
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYE
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYC
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYBarracks
+  name: We-Yu Research Lab - Barracks
+  components:
+  - type: Sprite
+    state: wy_barracks
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYBreakroom
+  name: We-Yu Research Lab - Breakroom
+  components:
+  - type: Sprite
+    state: wy_breakroom
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYCIC
+  name: We-Yu Research Lab - CIC
+  components:
+  - type: Sprite
+    state: wy_cic
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYDec
+  name: We-Yu Research Lab - Decontamination
+  components:
+  - type: Sprite
+    state: wy_dec
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYEntrance
+  name: We-Yu Research Lab - Entrance
+  components:
+  - type: Sprite
+    state: wy_entrance
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYLab
+  name: We-Yu Research Lab - Experimentation
+  components:
+  - type: Sprite
+    state: wy_lab
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYLab2
+  name: We-Yu Research Lab - Containment
+  components:
+  - type: Sprite
+    state: wy_lab
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYLab2C
+  name: We-Yu Research Lab - Specimen Chamber
+  components:
+  - type: Sprite
+    state: wy_lab
+  - type: Area
+    noTunnel: true
+    alwaysPowered: true
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYQuarantine
+  name: We-Yu Research Lab - Quarantine
+  components:
+  - type: Sprite
+    state: wy_quarantine
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYLQ
+  name: We-Yu Research Lab - Living Quarters
+  components:
+  - type: Sprite
+    state: wy_quarters
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYStorage
+  name: We-Yu Research Lab - Storage
+  components:
+  - type: Sprite
+    state: wy_storage
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYLab3
+  name: We-Yu Research Lab - Examination
+  components:
+  - type: Sprite
+    state: wy_lab
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYLab4
+  name: We-Yu Research Lab - Botany
+  components:
+  - type: Sprite
+    state: wy_lab
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYStorageC
+  name: We-Yu Research Lab - Cold Storage
+  components:
+  - type: Sprite
+    state: wy_storage
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYLoadingBay
+  name: We-Yu Research Lab - Loading Bay
+  components:
+  - type: Sprite
+    state: wy_storage
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYASRS
+  name: We-Yu Research Lab - ASRS
+  components:
+  - type: Sprite
+    state: wy_storage
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYLiaison
+  name: We-Yu Research Lab - Liaison Office
+  components:
+  - type: Sprite
+    state: wy_quarters
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYAssistant
+  name: We-Yu Research Lab - Assistant Quarters
+  components:
+  - type: Sprite
+    state: wy_quarters
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYRange
+  name: We-Yu Research Lab - Firing Range
+  components:
+  - type: Sprite
+    state: wy_barracks
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYArmory
+  name: We-Yu Research Lab - Armory
+  components:
+  - type: Sprite
+    state: wy_barracks
+
+- type: entity
+  parent: CMUAreaShepIndoors
+  id: CMUAreaShepNorthColonyDorms
+  name: North Colony
+  components:
+  - type: Sprite
+    state: n_colony_dorms
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: CMUAreaShepIndoors
+  id: CMUAreaShepNorthColonyShop
+  name: North Colony - Shop
+  components:
+  - type: Sprite
+    state: n_colony_dorms
+  - type: Area
+    minimapColor: '#92673ECC'
+
+- type: entity
+  parent: CMUAreaShepIndoors
+  id: CMUAreaShepRiverboatCasino
+  name: Riverboat Casino
+  components:
+  - type: Sprite
+    state: n_colony_dorms
+  - type: Area
+    minimapColor: '#295B43CC'
+
+- type: entity
+  parent: CMUAreaShepIndoors
+  id: CMUAreaShepSouthColonyDorms
+  name: South Colony
+  components:
+  - type: Sprite
+    state: s_colony_dorms
+  - type: Area
+    minimapColor: '#806721CC'
+
+- type: entity
+  parent: CMUAreaShepIndoors
+  id: CMUAreaShepHospital
+  name: Hospital
+  components:
+  - type: Sprite
+    state: hospital
+  - type: Area
+    minimapColor: '#218F39CC'
+
+- type: entity
+  parent: CMUAreaShepHospital
+  id: CMUAreaShepHospitalBreakroom
+  name: Hospital - Breakroom
+  components:
+  - type: Sprite
+    state: hospital_breakroom
+
+- type: entity
+  parent: CMUAreaShepHospital
+  id: CMUAreaShepHospitalMorgue
+  name: Hospital - Morgue
+  components:
+  - type: Sprite
+    state: hospital_morgue
+
+- type: entity
+  parent: CMUAreaShepHospital
+  id: CMUAreaShepHospitalPsychology
+  name: Hospital - Psychology
+  components:
+  - type: Sprite
+    state: hospital_psychology
+
+- type: entity
+  parent: CMUAreaShepHospital
+  id: CMUAreaShepHospitalSurgery
+  name: Hospital - Surgery
+  components:
+  - type: Sprite
+    state: hospital_surgery
+
+- type: entity
+  parent: CMUAreaShepHospital
+  id: CMUAreaShepHospitalHeadPhys
+  name: Hospital - Head Physician Office
+
+- type: entity
+  parent: CMUAreaShepIndoors
+  id: CMUAreaShepTavern
+  name: The Drunk Carp
+  components:
+  - type: Sprite
+    state: tavern
+  - type: Area
+    minimapColor: '#7B0920CC'
+
+- type: entity
+  parent: CMUAreaShepIndoors
+  id: CMUAreaShepEALASRS
+  name: Logistics & ASRS
+  components:
+  - type: Sprite
+    state: eal_asrs
+  - type: Area
+    minimapColor: '#92673ECC'
+
+- type: entity
+  parent: CMUAreaShepIndoors
+  id: CMUAreaShepForeman
+  name: Foreman Office
+  components:
+  - type: Sprite
+    state: eal_foreman
+  - type: Area
+    minimapColor: '#92673ECC'
+
+- type: entity
+  parent: CMUAreaShepIndoors
+  id: CMUAreaShepHeadofEngineering
+  name: Head of Engineering Office
+  components:
+  - type: Sprite
+    state: eal_foreman
+  - type: Area
+    minimapColor: '#92673ECC'
+
+- type: entity
+  parent: CMUAreaShepIndoors
+  id: CMUAreaShepEALReactor
+  name: Engineering & Reactor
+  components:
+  - type: Sprite
+    state: eal_reactor
+  - type: Area
+    minimapColor: '#92673ECC'
+
+- type: entity
+  parent: CMUAreaShepIndoors
+  id: CMUAreaShepEALStorage
+  name: Engineering & Logistics - Storage
+  components:
+  - type: Sprite
+    state: eal_storage
+  - type: Area
+    minimapColor: '#92673ECC'
+
+- type: entity
+  parent: CMUAreaShepIndoors
+  id: CMUAreaShepAdmin
+  name: Colony Administrator Office
+  components:
+  - type: Sprite
+    state: admin
+  - type: Area
+    minimapColor: '#986566CC'
+
+- type: entity
+  parent: CMUAreaShepIndoors
+  id: CMUAreaShepCWPS
+  name: CWPS - Ranger Office
+  components:
+  - type: Sprite
+    state: cwps
+  - type: Area
+    minimapColor: '#295B43CC'
+
+- type: entity
+  parent: CMUAreaShepIndoors
+  id: CMUAreaShepJournalist
+  name: Journalist Office
+  components:
+  - type: Sprite
+    state: journalist
+  - type: Area
+    minimapColor: '#6E7598CC'
+
+- type: entity
+  parent: CMUAreaShepIndoors
+  id: CMUAreaShepFishery
+  name: Fishery
+  components:
+  - type: Sprite
+    state: fishery
+  - type: Area
+    minimapColor: '#C5A06FCC'
+
+- type: entity
+  parent: CMUAreaShepIndoors
+  id: CMUAreaShepChapel
+  name: Chapel
+  components:
+  - type: Sprite
+    state: chapel
+  - type: Area
+    minimapColor: '#C5A06FCC'
+
+- type: entity
+  parent: CMUAreaShepIndoors
+  id: CMUAreaShepTheatre
+  name: South Colony - Theatre
+  components:
+  - type: Sprite
+    state: chapel
+  - type: Area
+    minimapColor: '#C5A06FCC'
+
+- type: entity
+  parent: CMUAreaShep
+  id: CMUAreaShepOutdoors
+  name: Sheperds' - Outdoors
+  abstract: true
+  components:
+  - type: Area
+    minimapColor: '#141D25CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepAdminPerimeter
+  name: Colony Administrator Office
+  components:
+  - type: Sprite
+    state: admin
+  - type: Area
+    minimapColor: '#986566CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepRiverboatCasinoPerimeter
+  name: Riverboat Casino
+  components:
+  - type: Sprite
+    state: n_colony_dorms
+  - type: Area
+    minimapColor: '#295B43CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepTavernPerimeter
+  name: The Drunk Carp
+  components:
+  - type: Sprite
+    state: tavern
+  - type: Area
+    minimapColor: '#7B0920CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepJournalistPerimeter
+  name: Journalist Office
+  components:
+  - type: Sprite
+    state: journalist
+  - type: Area
+    minimapColor: '#6E7598CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepFisheryPerimeter
+  name: Fishery
+  components:
+  - type: Sprite
+    state: fishery
+  - type: Area
+    minimapColor: '#C5A06FCC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepLZ1
+  name: 'LZ1: Southwest Jungle'
+  components:
+  - type: Sprite
+    state: military_lz1
+  - type: Area
+    resinAllowed: false
+    minimapColor: '#141D25CC'
+    linkedLz: dropship_lz1
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepWYPerimeter
+  name: We-Yu Research Lab - Perimeter
+  components:
+  - type: Sprite
+    state: wy_perimeter
+  - type: Area
+    minimapColor: '#494901CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepNorthColony
+  name: North Colony
+  components:
+  - type: Sprite
+    state: n_colony
+  - type: Area
+    minimapColor: '#211101CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepSouthColony
+  name: South Colony
+  components:
+  - type: Sprite
+    state: s_colony
+  - type: Area
+    minimapColor: '#1D1609CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepLZ2
+  name: 'LZ2: Northwest Jungle'
+  components:
+  - type: Sprite
+    state: s_colony_lz2
+  - type: Area
+    resinAllowed: false
+    minimapColor: '#1D1609CC'
+    linkedLz: dropship_lz2
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepLZ3
+  name: 'LZ3: North Colony'
+  components:
+  - type: Sprite
+    state: eal_lz3
+  - type: Area
+    resinAllowed: false
+    minimapColor: '#2F231BCC'
+    linkedLz: dropship_lz3
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepEALYard
+  name: Engineering & Logistics
+  components:
+  - type: Sprite
+    state: eal_yard
+  - type: Area
+    minimapColor: '#2F231BCC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepEALEngYard
+  name: Engineering
+  components:
+  - type: Sprite
+    state: eal_yard
+  - type: Area
+    minimapColor: '#2F231BCC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepEALLogYard
+  name: Logistics
+  components:
+  - type: Sprite
+    state: eal_yard
+  - type: Area
+    minimapColor: '#2F231BCC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepCWPSPerimeter
+  name: CWPS - Perimeter
+  components:
+  - type: Sprite
+    state: cwps_perimeter
+  - type: Area
+    minimapColor: '#091111CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepCWPSPreserve
+  name: CWPS - Preserve
+  components:
+  - type: Sprite
+    state: cwps_preserve
+  - type: Area
+    minimapColor: '#091111CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepNRoad
+  name: North Road
+  components:
+  - type: Sprite
+    state: n_road
+  - type: Area
+    minimapColor: '#6B562ACC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepCRoad
+  name: Central Road
+  components:
+  - type: Sprite
+    state: c_road
+  - type: Area
+    minimapColor: '#6B562ACC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepSRoad
+  name: South Road
+  components:
+  - type: Sprite
+    state: s_road
+  - type: Area
+    minimapColor: '#6B562ACC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepNEJungle
+  name: Northeast Jungle
+  components:
+  - type: Sprite
+    state: ne_jungle
+  - type: Area
+    minimapColor: '#295B43CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepNWJungle
+  name: Northwest Jungle
+  components:
+  - type: Sprite
+    state: nw_jungle
+  - type: Area
+    minimapColor: '#295B43CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepWJungle
+  name: West Jungle
+  components:
+  - type: Sprite
+    state: w_jungle
+  - type: Area
+    minimapColor: '#295B43CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepSWJungle
+  name: Southwest Jungle
+  components:
+  - type: Sprite
+    state: w_jungle
+  - type: Area
+    minimapColor: '#295B43CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepCJungle
+  name: Central Jungle
+  components:
+  - type: Sprite
+    state: c_jungle
+  - type: Area
+    minimapColor: '#295B43CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepEJungle
+  name: East Jungle
+  components:
+  - type: Sprite
+    state: e_jungle
+  - type: Area
+    minimapColor: '#295B43CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepSEJungle
+  name: Southeast Jungle
+  components:
+  - type: Sprite
+    state: se_jungle
+  - type: Area
+    minimapColor: '#295B43CC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepNRiver
+  name: North River
+  components:
+  - type: Sprite
+    state: n_river
+  - type: Area
+    resinAllowed: false
+    noTunnel: true
+    unweedable: true
+    minimapColor: '#015B6BCC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepCRiver
+  name: Central River
+  components:
+  - type: Sprite
+    state: c_river
+  - type: Area
+    resinAllowed: false
+    noTunnel: true
+    unweedable: true
+    minimapColor: '#015B6BCC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepSRiver
+  name: South River
+  components:
+  - type: Sprite
+    state: s_river
+  - type: Area
+    resinAllowed: false
+    noTunnel: true
+    unweedable: true
+    minimapColor: '#015B6BCC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepNComms
+  name: North Colony - Comms
+  components:
+  - type: Sprite
+    state: comms
+  - type: Area
+    resinAllowed: false
+    minimapColor: '#C5A06FCC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepCComms
+  name: Chapel - Comms
+  components:
+  - type: Sprite
+    state: comms
+  - type: Area
+    resinAllowed: false
+    minimapColor: '#C5A06FCC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepSComms
+  name: We-Yu - Comms
+  components:
+  - type: Sprite
+    state: comms
+  - type: Area
+    resinAllowed: false
+    minimapColor: '#C5A06FCC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepESTower
+  name: Experimental Sensor Tower
+  components:
+  - type: Sprite
+    state: comms
+  - type: Area
+    resinAllowed: false
+    minimapColor: '#C5A06FCC'
+
+- type: entity
+  parent: CMUAreaShepOutdoors
+  id: CMUAreaShepHiddenLZ4
+  name: Northwest Jungle - LZ4
+  components:
+  - type: Sprite
+    state: hdn_lz4
+  - type: Area
+    resinAllowed: false
+    minimapColor: '#EBE5E5EE'
+    linkedLz: dropship_lz4
+
+- type: entity
+  parent: CMUAreaShep
+  id: CMUAreaShepOOB
+  name: Out Of Bounds
+  abstract: true
+  components:
+  - type: Sprite
+    state: oob
+  - type: Area
+    CAS: false
+    fulton: false
+    lasing: false
+    mortarPlacement: false
+    mortarFire: false
+    medevac: false
+    paradropping: false
+    OB: false
+    supplyDrop: false
+    resinAllowed: false
+    avoidBioscan: false
+    noTunnel: true
+    unweedable: false
+    minimapColor: '#EBE5E5EE'
+    weatherEnabled: false
+    alwaysPowered: true
+
+- type: entity
+  parent: CMUAreaShepOOB
+  id: CMUAreaShepWYOOB
+  name: We-Yu Research Lab - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: wy
+    - state: oob
+
+- type: entity
+  parent: CMUAreaShepOOB
+  id: CMUAreaShepNEJungleOOB
+  name: Northeast Jungle - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: ne_jungle
+    - state: oob
+
+- type: entity
+  parent: CMUAreaShepOOB
+  id: CMUAreaShepNWJungleOOB
+  name: Northwest Jungle - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: nw_jungle
+    - state: oob
+
+- type: entity
+  parent: CMUAreaShepOOB
+  id: CMUAreaShepWJungleOOB
+  name: West Jungle - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: w_jungle
+    - state: oob
+
+- type: entity
+  parent: CMUAreaShepOOB
+  id: CMUAreaShepCJungleOOB
+  name: Central Jungle - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: c_jungle
+    - state: oob
+
+- type: entity
+  parent: CMUAreaShepOOB
+  id: CMUAreaShepEJungleOOB
+  name: East Jungle - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: e_jungle
+    - state: oob
+
+- type: entity
+  parent: CMUAreaShepOOB
+  id: CMUAreaShepSEJungleOOB
+  name: Southeast Jungle - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: se_jungle
+    - state: oob
+
+- type: entity
+  parent: CMUAreaShepOOB
+  id: CMUAreaShepSWJungleOOB
+  name: Southwest Jungle - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: sw_jungle
+    - state: oob
+
+- type: entity
+  parent: CMUAreaShepOOB
+  id: CMUAreaShepNRiverOOB
+  name: North River - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: n_river
+    - state: oob
+  - type: Area
+    unweedable: true
+    weatherEnabled: true
+    minimapColor: '#012644CC'
+
+- type: entity
+  parent: CMUAreaShepOOB
+  id: CMUAreaShepCRiverOOB
+  name: Central River - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: c_river
+    - state: oob
+  - type: Area
+    unweedable: true
+    weatherEnabled: true
+    minimapColor: '#012644CC'
+
+- type: entity
+  parent: CMUAreaShepOOB
+  id: CMUAreaShepSRiverOOB
+  name: South River - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: s_river
+    - state: oob
+  - type: Area
+    unweedable: true
+    weatherEnabled: true
+    minimapColor: '#012644CC'

@@ -111,7 +111,7 @@ public abstract partial class CMUSharedZLevelsSystem
             return false;
 
         if (!TryGetMapCoordinates(mapAboveUid.Value, worldPosition, out var aboveMapCoordinates) ||
-            !_mapManager.TryFindGridAt(aboveMapCoordinates, out var gridUid, out var mapAboveGrid))
+            !_map.TryFindGridAt(aboveMapCoordinates, out var gridUid, out var mapAboveGrid))
             return false;
 
         return !CMUZLevelOpeningCache.IsOpeningTile(gridUid, mapAboveGrid, worldPosition, _map, TilDefMan);

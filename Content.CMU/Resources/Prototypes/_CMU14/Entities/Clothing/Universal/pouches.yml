@@ -1,0 +1,119 @@
+- type: entity
+  parent: RMCPouchShotgunLargeBuckshot
+  id: AU14PouchShotgunLargeBuckshot
+  suffix: AU14
+
+- type: entity
+  parent: RMCPouchConstruction
+  id: AU14PouchConstructionFilled
+  suffix: AU14, Filled, Colonist
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMSheetMetal50
+    - id: CMSheetPlasteel50
+    - id: CMSheetGlassReinforced30
+
+- type: entity
+  parent: RMCPouchElectronics
+  id: AU14PouchElectronicsFilled
+  suffix: AU14, Filled, Colonist
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMAPCElectronics
+      amount: 2
+    - id: RMCPowerCellHigh
+      amount: 2
+    - id: DoorElectronics
+      amount: 2
+
+- type: entity
+  parent: RMCPouchAutoinjector
+  id: AU14PouchAutoinjectorFilled
+  suffix: AU14, Filled, Colonist
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMEpinephrineAutoInjector
+      amount: 3
+    - id: CMDexalinPlusAutoInjector
+      amount: 3
+    - id: AU14NaloxoneAutoInjector
+
+- type: entity
+  parent: RMCPouchMedical
+  id: AU14PouchMedicalFilled
+  suffix: AU14, Filled, Colonist
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUCoagulantPowder
+      amount: 2
+    - id: CMUBurnGel
+      amount: 2
+    - id: CMUPlainTraumaDressing10
+      amount: 3
+
+- type: entity
+  parent: RMCPouchFirstResponder
+  id: AU14PouchFirstResponderFilled
+  suffix: AU14, Filled, Colonist
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMRollerBedSpawnFolded
+    - id: CMFireExtinguisherPortable
+    - id: AU14NaloxoneAutoInjector
+    - id: CMBodyBagFolded
+    - id: CMStasisBagFolded
+
+- type: entity
+  parent: RMCPouchGeneralLarge
+  id: AU14PouchGeneralLargeLEOFilled
+  suffix: AU14, Filled, LEO
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCBinocularsCivPVE
+    - id: RMCHandcuffs
+    - id: RMCRadioHandheldColonyOff
+
+- type: entity
+  parent: RMCPouchPistol
+  id: AU14PouchPistolAlt
+  suffix: AU14, Black
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Pouches/pistol_alt.rsi
+    layers:
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: _m77
+      map: [ "_m77_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: m1984
+      map: [ "m1984_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: m13
+      map: [ "m13_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: m44r
+      map: [ "m44r_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: mk80
+      map: [ "mk80_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: smartpistol
+      map: [ "su6_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: cmateba
+      map: [ "mateba_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: b92fs
+      map: [ "b92fs_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: highpower
+      map: [ "mk45_fill" ]
+    - state: icon
+    - state: closed
+      map: [ "holstered" ]

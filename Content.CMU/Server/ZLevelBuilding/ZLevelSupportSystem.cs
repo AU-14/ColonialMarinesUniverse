@@ -104,6 +104,15 @@ public sealed class ZLevelSupportSystem : EntitySystem
         SubscribeLocalEvent<StructuralSupportComponent, ComponentShutdown>(OnSupportShutdown);
         SubscribeLocalEvent<StructuralSupportComponent, AnchorStateChangedEvent>(OnSupportAnchorChanged);
         SubscribeLocalEvent<StructuralSupportComponent, DamageChangedEvent>(OnSupportDamaged);
+
+        // All of these are keyed by round-scoped uids; drop them with the round so stale entries never accumulate.
+        SubscribeLocalEvent<Content.Shared.GameTicking.RoundRestartCleanupEvent>(_ =>
+        {
+            _lastSupportDamager.Clear();
+            _nextCollapseAlert.Clear();
+            _pendingUnsupported.Clear();
+            _dirtyGrids.Clear();
+        });
     }
 
     /// <summary>Records the last player to damage a support on a level, so a resulting collapse names the real culprit.</summary>
@@ -404,6 +413,9 @@ public sealed class ZLevelSupportSystem : EntitySystem
             // body to fall, so don't move it.
             if (HasComp<TileFloorSupportComponent>(ent))
             {
+                if (TryComp<TransformComponent>(ent, out var supportXform) && supportXform.Anchored)
+                    _transform.Unanchor(ent, supportXform);
+
                 QueueDel(ent);
                 continue;
             }

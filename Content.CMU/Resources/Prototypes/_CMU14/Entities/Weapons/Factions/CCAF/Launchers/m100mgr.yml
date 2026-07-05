@@ -1,0 +1,100 @@
+- type: entity
+  parent: CMBaseWeaponRifle
+  name: M100 MGR
+  id: AUWeaponRifleM100MGR
+  description: An airburst grenade launcher platform designed for CCAF section grenadiers, replacing the M41As underslung launcher. It fires mag-fed 40mm airburst grenades. This weapon is equipped with IFF and is still in limited field testing among select CCAF infantry units.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/CCAF/M100MGR.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/CCAF/M100MGR.rsi
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/grenade_launcher.ogg
+    resetOnHandSelected: false
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    recoilUnwielded: 4
+    scatterWielded: 6
+    scatterUnwielded: 20
+    baseFireRate: 0.45
+    burstScatterMult: 1
+  - type: GunIFF
+    enabled: true
+  - type: ShootAtFixedPoint
+    shootArcProj: true
+    maxFixedRange: 7
+  - type: AmmoCounter
+  - type: GunRequiresWield
+  - type: WieldDelay
+    baseDelay: 0.5
+  - type: OnShootTriggerAmmoTimer
+    delay: 1
+    beepInterval: 2
+    initialBeepDelay: 0
+    beepSound:
+      path: "/Audio/Effects/beep1.ogg"
+      params:
+        volume: 5
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.3
+    accuracyMultiplierUnwielded: 0.65
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineRifleM100MGR
+  - type: WieldedCrosshair
+    rsi:
+      sprite: _RMC14/Interface/MousePointer/explosive_mouse.rsi
+      state: all
+  - type: GunIgnorePrediction
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: AU14MagazineRifleM100MGR
+  name: "M100MGR Magazine (40mm)"
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleM100MGR
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - LauncherCompatibleGrenade
+    proto: RMC40MMGrenadeM74AGMF
+    capacity: 4
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/CCAF/m100magazine.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Appearance
+
+- type: Tag
+  id: AU14MagazineRifleM100MGR
+
+- type: Tag
+  id: AU14CartridgeRifleM100MGR

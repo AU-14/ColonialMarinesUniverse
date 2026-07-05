@@ -1,0 +1,14 @@
+- type: gameMap
+  id: Daybreak
+  mapName: Daybreak
+  mapPath: /Maps/_AU14/daybreak.yml
+  minPlayers: 0
+  maxPlayers: 75
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    Daybreak:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'USCSS Daybreak'

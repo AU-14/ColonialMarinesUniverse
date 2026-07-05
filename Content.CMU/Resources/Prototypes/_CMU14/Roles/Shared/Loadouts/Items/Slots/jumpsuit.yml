@@ -49,6 +49,31 @@
     jumpsuit: CMJumpsuitTShirtRed
 
 - type: loadout
+  id: CivilianFloralRedAU14
+  equipment:
+    jumpsuit: AU14CivilianFloralRed
+
+- type: loadout
+  id: CivilianFloralBlueAU14
+  equipment:
+    jumpsuit: AU14CivilianFloralBlue
+
+- type: loadout
+  id: CivilianFloralYellowAU14
+  equipment:
+    jumpsuit: AU14CivilianFloralYellow
+
+- type: loadout
+  id: CivilianFlannelRedAU14
+  equipment:
+    jumpsuit: AU14CivilianFlannelRed
+
+- type: loadout
+  id: CivilianFlannelPurpleAU14
+  equipment:
+    jumpsuit: AU14CivilianFlannelPurple
+
+- type: loadout
   id: HazardVestAU14
   equipment:
     jumpsuit: RMCHazardVest
@@ -122,6 +147,11 @@
   id: WYJumpsuitLiaisonCharcoalAU14
   equipment:
     jumpsuit: CMJumpsuitLiaisonCharcoal
+
+- type: loadout
+  id: WYJumpsuitLiaisonIvyAU14
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonIvy
 
 - type: loadout
   id: WYJumpsuitLiaisonFormalAU14

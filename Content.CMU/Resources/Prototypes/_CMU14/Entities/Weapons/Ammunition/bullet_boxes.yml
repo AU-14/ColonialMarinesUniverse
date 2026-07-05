@@ -1,0 +1,603 @@
+# -- RIFLE AMMUNITION BOXES --
+#   -- REG 5.56x45mm Rifle Ammunition Box --
+- type: entity
+  parent: RMCBoxBulletsRifle
+  id: CMUBoxBulletsRifle556x45MM
+  name: rifle ammunition box (5.56×45mm)
+  description: A 5.56×45mm ammunition box. Used to refill M16 magazines. It comes with a leather strap allowing to wear it on the back.
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#485c63"
+    - state: rifle_box_marking
+      color: "#7c4c1b"
+    - state: rifle_box_generic
+      color: "#ffcb26"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#ffc000"
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifle556x45MM
+
+- type: entity
+  parent: CMUBoxBulletsRifle556x45MM
+  id: CMUBoxBulletsRifle556x45MMEmpty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: CMUBoxBulletsRifle556x45MMEmpty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifle556x45MM
+    amount: 0
+#   -- REG 5.45x39mm Rifle Ammunition Box --
+- type: entity
+  parent: RMCBoxBulletsRifle
+  id: CMUBoxBulletsRifleType71
+  name: rifle ammunition box (5.45×39mm)
+  description: A 5.45×39mm ammunition box. Used to refill regular Type 71 and extended Type 71 magazines. It comes with a leather strap allowing someone to wear it on their back.
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#962e23"
+    - state: rifle_box_marking
+      color: "#7c4c1b"
+    - state: rifle_box_generic
+      color: "#ffcb26"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#ffc000"
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleType71
+
+- type: entity
+  parent: CMUBoxBulletsRifleType71
+  id: CMUBoxBulletsRifleType71Empty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: CMUBoxBulletsRifleType71Empty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleType71
+    amount: 0
+#   -- AP 5.45x39mm Rifle Ammunition Box --
+- type: entity
+  parent: RMCBoxBulletsRifleL90AP
+  id: CMUBoxBulletsRifleType71AP
+  name: rifle ammunition box (5.45×39mm AP)
+  description: A 5.45×39mm ammunition box. Used to refill armor-piercing Type 71 magazines. It comes with a leather strap allowing someone to wear it on their back.
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#962e23"
+    - state: rifle_box_marking
+      color: "#318b11"
+    - state: rifle_box_generic
+      color: "#ffcb26"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#318b11"
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleType71AP
+
+- type: entity
+  parent: CMUBoxBulletsRifleType71AP
+  id: CMUBoxBulletsRifleType71APEmpty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: CMUBoxBulletsRifleType71APEmpty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleType71AP
+    amount: 0
+#   -- REG 7x43mm Rifle Ammunition Box --
+- type: entity
+  parent: RMCBoxBulletsRifleL90
+  id: CMUBoxBulletsRifleSLR
+  name: rifle ammunition box (7×43mm)
+  description: A 7×43mm ammunition box. Used to refill SLR and SLR Drum magazines. It comes with a leather strap allowing to wear it on the back.
+  components:
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleSLR
+
+- type: entity
+  parent: CMUBoxBulletsRifleSLR
+  id: CMUBoxBulletsRifleSLREmpty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: CMUBoxBulletsRifleSLREmpty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleSLR
+    amount: 0
+#   -- AP 7x43mm Rifle Ammunition Box --
+- type: entity
+  parent: RMCBoxBulletsRifleL90AP
+  id: CMUBoxBulletsRifleSLRAP
+  name: rifle ammunition box (7×43mm AP)
+  description: A 7×43mm ammunition box. Used to refill armor-piercing SLR and SLR Drum magazines. It comes with a leather strap allowing to wear it on the back.
+  components:
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleSLRAP
+
+- type: entity
+  parent: CMUBoxBulletsRifleSLRAP
+  id: CMUBoxBulletsRifleSLRAPEmpty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: CMUBoxBulletsRifleSLRAPEmpty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleSLRAP
+    amount: 0
+#   -- REG 7.62x39mm Rifle Ammunition Box--
+- type: entity
+  parent: RMCBoxBulletsRifle
+  id: CMUBoxBulletsRifleMAR
+  name: rifle ammunition box (7.62×39mm)
+  description: A 7.62×39mm ammunition box. Used to refill MAR magazines. It comes with a leather strap allowing to wear it on the back.
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#727E90"
+    - state: rifle_box_marking
+      color: "#ffc000"
+    - state: rifle_box_generic
+      color: "#ffcb26"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#ffc000"
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleMAR
+- type: entity
+  parent: CMUBoxBulletsRifleMAR
+  id: CMUBoxBulletsRifleMAREmpty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: CMUBoxBulletsRifleMAREmpty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleMAR
+    amount: 0
+#   -- REG 8.88x51mm Rifle Ammunition Box --
+- type: entity
+  parent: RMCBoxBulletsRifleL24
+  id: CMUBoxBulletsRifleL23
+  name: rifle ammunition box (8.88×51mm)
+  description: A 8.88×51mm ammunition box. Used to refill L23 magazines. It comes with a leather strap allowing to wear it on the back.
+  components:
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleL23
+
+- type: entity
+  parent: CMUBoxBulletsRifleL23
+  id: CMUBoxBulletsRifleL23Empty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: CMUBoxBulletsRifleL23Empty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleL23
+    amount: 0
+#   -- AP 8.88x51mm Rifle Ammunition Box --
+- type: entity
+  parent: RMCBoxBulletsRifleL24AP
+  id: CMUBoxBulletsRifleL23AP
+  name: rifle ammunition box (8.88×51mm AP)
+  description: A 8.88×51mm ammunition box. Used to refill armor-piercing L23 magazines. It comes with a leather strap allowing to wear it on the back.
+  components:
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleL23AP
+
+- type: entity
+  parent: CMUBoxBulletsRifleL23AP
+  id: CMUBoxBulletsRifleL23APEmpty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: CMUBoxBulletsRifleL23APEmpty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleL23AP
+    amount: 0
+#   -- REG 9.7x16mm Rifle Ammunition Box --
+- type: entity
+  parent: RMCBoxBulletsRifleL24
+  id: CMUBoxBulletsRifleAG80
+  name: rifle ammunition box (9.7×16mm)
+  description: A 9.7x16mm ammunition box. Used to refill AG80 magazines. It comes with a leather strap allowing someone to wear it on their back.
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#8c2912"
+    - state: rifle_box_marking
+      color: "#7c4c1b"
+    - state: rifle_box_generic
+      color: "#ffcb26"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#ffc000"
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleAG80
+
+- type: entity
+  parent: CMUBoxBulletsRifleAG80
+  id: CMUBoxBulletsRifleAG80Empty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: CMUBoxBulletsRifleAG80Empty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleAG80
+    amount: 0
+
+#   -- AP 9.7x16mm Rifle Ammunition Box --
+- type: entity
+  parent: RMCBoxBulletsRifleL24AP
+  id: CMUBoxBulletsRifleAG80AP
+  name: rifle ammunition box (9.7×16mm AP)
+  description: A 9.7x16mm ammunition box. Used to refill armor-piercing AG80 magazines. It comes with a leather strap allowing someone to wear it on their back.
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#8c2912"
+    - state: rifle_box_marking
+      color: "#318b11"
+    - state: rifle_box_generic
+      color: "#ffcb26"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#318b11"
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleAG80AP
+
+- type: entity
+  parent: CMUBoxBulletsRifleAG80AP
+  id: CMUBoxBulletsRifleAG80APEmpty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: CMUBoxBulletsRifleAG80APEmpty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleAG80AP
+    amount: 0
+
+# -- SMG AMMUNITION BOXES --
+#   -- REG 5.7x28mm SMG Ammunition Box --
+- type: entity
+  parent: RMCBoxBulletsRifleL24
+  id: CMUBoxBulletsSMGP90
+  name: SMG ammunition box (5.7×28mm)
+  description: A 5.7×28mm ammunition box. Used to refill P90 and FN9000 magazines. It comes with a leather strap allowing to wear it on the back.
+  components:
+  - type: BulletBox
+    bulletType: CMUBoxBulletsSMGP90
+
+- type: entity
+  parent: CMUBoxBulletsSMGP90
+  id: CMUBoxBulletsSMGP90Empty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: CMUBoxBulletsSMGP90Empty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsSMGP90
+    amount: 0
+#   -- AP 5.7x28mm SMG Ammunition Box --
+- type: entity
+  parent: RMCBoxBulletsRifleL24AP
+  id: CMUBoxBulletsSMGP90AP
+  name: SMG ammunition box (5.7×28mm AP)
+  description: A 5.7×28mm ammunition box. Used to refill armor-piercing P90 magazines. It comes with a leather strap allowing to wear it on the back.
+  components:
+  - type: BulletBox
+    bulletType: CMUBoxBulletsSMGP90AP
+
+- type: entity
+  parent: CMUBoxBulletsSMGP90AP
+  id: CMUBoxBulletsSMGP90APEmpty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: CMUBoxBulletsSMGP90APEmpty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsSMGP90AP
+    amount: 0
+
+#
+- type: entity
+  parent: RMCBoxBulletsSMG
+  id: CMUBoxBulletsSMGType19
+  name: SMG ammunition box (7.62×25mm)
+  description: A 7.62×25mm ammunition box. Used to refill Type 19 magazines. It comes with a leather strap allowing to wear it on the back.
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#287562"
+    - state: rifle_box_marking
+      color: "#7c4c1b"
+    - state: rifle_box_generic
+      color: "#ffcb26"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#727e90"
+  - type: BulletBox
+    bulletType: CMUBoxBulletsSMGType19
+
+- type: entity
+  parent: CMUBoxBulletsSMGType19
+  id: CMUBoxBulletsSMGType19Empty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: CMUBoxBulletsSMGType19Empty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsSMGType19
+    amount: 0
+#   -- REG 9mm SMG Ammunition Box --
+- type: entity
+  parent: RMCBoxBulletsSMG
+  id: CMUBoxBulletsSMG9MM
+  name: smg ammunition box (9×19mm)
+  description: A 9×19mm ammunition box. Used to refill MP5 magazines. It comes with a leather strap allowing to wear it on the back.
+  components:
+  - type: BulletBox
+    bulletType: CMUBoxBulletsSMG9MM
+
+- type: entity
+  parent: CMUBoxBulletsSMG9MM
+  id: CMUBoxBulletsSMG9MMEmpty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: CMUBoxBulletsSMG9MMEmpty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsSMG9MM
+    amount: 0
+
+# -- PISTOL AMMUNITION BOXES --
+#   -- REG 7.62x25mm Pistol Ammunition Box --
+- type: entity
+  parent: RMCBoxBulletsPistol
+  id: CMUBoxBulletsPistolType73
+  name: pistol ammunition box (7.62×25mm)
+  description: A 7.62×25mm ammunition box. Used to refill Type 73 magazines. It comes with a leather strap allowing to wear it on the back.
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#929614"
+    - state: rifle_box_marking
+      color: "#7c4c1b"
+    - state: rifle_box_generic
+      color: "#ffcb26"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#704506"
+  - type: BulletBox
+    bulletType: CMUBoxBulletsPistolType73
+
+- type: entity
+  parent: CMUBoxBulletsPistolType73
+  id: CMUBoxBulletsPistolType73Empty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: CMUBoxBulletsPistolType73Empty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsPistolType73
+    amount: 0
+#   -- REG 9mm Pistol Ammunition Box --
+- type: entity
+  parent: RMCBoxBulletsPistol
+  id: CMUBoxBulletsPistol9MM
+  name: pistol ammunition box (9×19mm Parabellum)
+  description: A 9×19mm ammunition box. Used to refill 9×19mm pistol magazines. It comes with a leather strap allowing to wear it on the back.
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#b2976e"
+    - state: rifle_box_marking
+      color: "#7c4c1b"
+    - state: rifle_box_generic
+      color: "#ffcb26"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#704506"
+  - type: BulletBox
+    bulletType: CMUBoxBulletsPistol9MM
+
+- type: entity
+  parent: CMUBoxBulletsPistol9MM
+  id: CMUBoxBulletsPistol9MMEmpty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: CMUBoxBulletsPistol9MMEmpty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsPistol9MM
+    amount: 0
+#   -- AP 9mm Pistol Ammunition Box --
+- type: entity
+  parent: RMCBoxBulletsPistolAP
+  id: CMUBoxBulletsPistol9MMAP
+  name: pistol ammunition box (9×19mm AP)
+  description: A 9×19mm ammunition box. Used to refill armor-piercing 9×19mm pistol magazines. It comes with a leather strap allowing to wear it on the back.
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#b2976e"
+    - state: rifle_box_marking
+      color: "#0A4306"
+    - state: rifle_box_generic
+      color: "#ffcb26"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#0A4306"
+  - type: BulletBox
+    bulletType: CMUBoxBulletsPistol9MMAP
+
+- type: entity
+  parent: CMUBoxBulletsPistol9MMAP
+  id: CMUBoxBulletsPistol9MMAPEmpty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: CMUBoxBulletsPistol9MMAPEmpty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsPistol9MMAP
+    amount: 0
+#   -- 9mm SH Pistol Ammunition Box Base --
+- type: entity
+  parent: RMCBoxBulletsPistol
+  id: CMUBoxBulletsPistol9MMSH
+  name: pistol ammunition box (9×19mm Squash-Head)
+  description: A 9×19mm Squash-Head ammunition box. Used to refill L165A1 magazines. It comes with a leather strap allowing to wear it on the back.
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#4a4a4a"
+    - state: rifle_box_marking
+      color: "#7c4c1b"
+    - state: rifle_box_generic
+      color: "#ffcb26"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#704506"
+  - type: BulletBox
+    bulletType: CMUBoxBulletsPistol9MMSH
+
+- type: entity
+  parent: CMUBoxBulletsPistol9MMSH
+  id: CMUBoxBulletsPistol9MMSHEmpty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: CMUBoxBulletsPistol9MMSHEmpty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsPistol9MMSH
+    amount: 0
+
+#   -- REG .45 Pistol Ammunition Box --
+- type: entity
+  parent: RMCBoxBulletsPistol
+  id: CMUBoxBulletsPistol45
+  name: pistol ammunition box (.45)
+  description: A .45 ammunition box. Used to refill .45 magazines. It comes with a leather strap allowing to wear it on the back.
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#323b3e"
+    - state: rifle_box_marking
+      color: "#7c4c1b"
+    - state: rifle_box_generic
+      color: "#ffcb26"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#704506"
+  - type: BulletBox
+    bulletType: CMUBoxBulletsPistol45
+    max: 984
+    amount: 984
+
+- type: entity
+  parent: CMUBoxBulletsPistol45
+  id: CMUBoxBulletsPistol45Empty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: CMUBoxBulletsPistol45Empty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsPistol45
+    amount: 0
+#   -- REG .50 Pistol Ammunition Box --
+- type: entity
+  parent: RMCBoxBulletsPistol
+  id: CMUBoxBulletsPistol50
+  name: pistol ammunition box (.50 JP)
+  description: A .50 JP ammunition box. Used to refill .50 JP magazines. It comes with a leather strap allowing to wear it on the back.
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#727E90"
+    - state: rifle_box_marking
+      color: "#7c4c1b"
+    - state: rifle_box_generic
+      color: "#ffcb26"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#704506"
+  - type: BulletBox
+    bulletType: CMUBoxBulletsPistol50
+    max: 984
+    amount: 984
+
+- type: entity
+  parent: CMUBoxBulletsPistol50
+  id: CMUBoxBulletsPistol50Empty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: CMUBoxBulletsPistol50Empty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsPistol50
+    amount: 0
+
+
+

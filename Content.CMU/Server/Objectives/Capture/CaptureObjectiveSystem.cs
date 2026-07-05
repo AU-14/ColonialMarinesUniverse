@@ -1,39 +1,30 @@
 using System.Linq;
-using Content.Shared.AU14.Objectives.Capture;
-using Robust.Shared.IoC;
-using Robust.Shared.Log;
 using Content.Server.Popups;
-using Content.Shared.Damage;
-using Content.Shared.Interaction;
-using Content.Shared.Pinpointer;
+using Content.Server.AU14.Objectives;
+using Content.Shared.AU14.Objectives;
+using Content.Shared.AU14.Objectives.Capture;
 using Content.Shared.Popups;
-using Robust.Client.GameObjects;
 
 namespace Content.Server.AU14.Objectives.Capture;
 
 public sealed partial class CaptureObjectiveSystem : EntitySystem
 {
-    [Dependency] private IEntityManager _entManager = default!;
     [Dependency] private PopupSystem _popup = default!;
-    [Dependency] private Content.Server.AU14.Objectives.AuObjectiveSystem _objectiveSystem = default!;
-    [Dependency] private Content.Server.AU14.Round.PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
-    [Dependency] private ILogManager _logManager = default!;
-
-    // Tracks ongoing hoists to prevent multiple simultaneous hoists per structure
-    private readonly HashSet<EntityUid> _hoisting = new();
+    [Dependency] private AuObjectiveSystem _objectiveSystem = default!;
+    [Dependency] private Round.PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
 
     // Tracks time since last increment for each capture objective
     private readonly Dictionary<EntityUid, float> _timeSinceLastIncrement = new();
-
     // Tracks last known slash damage for each capture objective
     private readonly Dictionary<EntityUid, float> _lastSlashDamage = new();
-
-    private ISawmill _sawmill = default!;
+    // Factions allowed to hoist flags
+    private static readonly string[] HoistAllowedFactions = { "govfor", "opfor", "clf" };
+    private ISawmill _logs = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        _sawmill = _logManager.GetSawmill("capture-obj");
+        _logs = Logger.GetSawmill("obj-capture");
         SubscribeLocalEvent<CaptureObjectiveComponent, FlagHoistStartedEvent>(OnFlagHoistStarted);
         SubscribeLocalEvent<CaptureObjectiveComponent, HoistFlagDoAfterEvent>(OnHoistFlagDoAfter); // Subscribe to DoAfter completion
         // Removed broken damage event subscription
@@ -60,14 +51,16 @@ public sealed partial class CaptureObjectiveSystem : EntitySystem
             _popup.PopupEntity($"The flag is already being {(comp.ActionState == CaptureObjectiveComponent.FlagActionState.Hoisting ? "hoisted" : "lowered")}!", uid, args.User, PopupType.Medium);
             return;
         }
+
         var userFactions = new List<string>();
-        if (args.User != EntityUid.Invalid && _entManager.TryGetComponent(args.User, out Content.Shared.NPC.Components.NpcFactionMemberComponent? factionComp))
+        if (args.User != EntityUid.Invalid && TryComp(args.User, out Content.Shared.NPC.Components.NpcFactionMemberComponent? factionComp))
         {
             userFactions.AddRange(factionComp.Factions.Select(f => f.ToString().ToLowerInvariant()));
         }
         var hoistingFaction = args.Faction.ToLowerInvariant();
         if (!userFactions.Contains(hoistingFaction))
             userFactions.Add(hoistingFaction);
+
         // Lowering: anyone can lower if the flag is raised and not being lowered
         if (!string.IsNullOrEmpty(comp.CurrentController))
         {
@@ -78,27 +71,29 @@ public sealed partial class CaptureObjectiveSystem : EntitySystem
             _popup.PopupEntity($"You begin lowering the flag...", uid, args.User, PopupType.Medium);
             return;
         }
+
         // Raising: only allowed factions can raise if the flag is lowered and not being hoisted
         string? allowed = null;
-        foreach (var fac in new[] { "govfor", "opfor", "clf" })
+        foreach (var fac in HoistAllowedFactions)
         {
-            if (userFactions.Contains(fac))
-            {
-                allowed = fac;
-                break;
-            }
+            if (!userFactions.Contains(fac))
+                continue;
+            allowed = fac;
+            break;
         }
+
         if (allowed == null)
         {
             _popup.PopupEntity($"Your faction cannot raise this flag.", uid, args.User, PopupType.Medium);
             return;
         }
+
         comp.ActionState = CaptureObjectiveComponent.FlagActionState.Hoisting;
         comp.ActionUser = args.User;
         comp.ActionTimeRemaining = comp.HoistTime;
         comp.ActionUserFaction = allowed; // Track which faction is being raised
-        var platoonName = GetPlatoonNameForFaction(allowed);
 
+        var platoonName = GetPlatoonNameForFaction(allowed);
         var displayName = !string.IsNullOrEmpty(platoonName) ? platoonName : allowed;
 
         _popup.PopupEntity($"You begin raising the flag for {displayName}...", uid, args.User, PopupType.Medium);
@@ -142,17 +137,16 @@ public sealed partial class CaptureObjectiveSystem : EntitySystem
         // If both have the same non-empty flag, opfor uses default
         if (!string.IsNullOrEmpty(govforFlag) && govforFlag == opforFlag)
             opforFlag = "uaflagworn";
-        var query = EntityQueryEnumerator<CaptureObjectiveComponent, Content.Shared.AU14.Objectives.AuObjectiveComponent>();
+        var query = EntityQueryEnumerator<CaptureObjectiveComponent, AuObjectiveComponent>();
         while (query.MoveNext(out var uid, out var comp, out var objComp))
         {
             // --- Begin: Slash damage tracking ---
-            if (_entManager.TryGetComponent(uid, out Content.Shared.Damage.DamageableComponent? damageable))
+            if (TryComp(uid, out Content.Shared.Damage.DamageableComponent? damageable))
             {
                 float currentSlash = 0f;
                 if (damageable.Damage.DamageDict.TryGetValue("Slash", out var slash))
-                    currentSlash = (float)slash.Float();
-                float lastSlash = 0f;
-                _lastSlashDamage.TryGetValue(uid, out lastSlash);
+                    currentSlash = slash.Float();
+                _lastSlashDamage.TryGetValue(uid, out float lastSlash);
                 float delta = currentSlash - lastSlash;
                 if (delta > 0f)
                 {
@@ -177,39 +171,38 @@ public sealed partial class CaptureObjectiveSystem : EntitySystem
                 continue;
             if (comp.MaxHoldTimes > 0 && comp.timesincremented >= comp.MaxHoldTimes)
                 continue;
-            if (comp.OnceOnly && comp.timesincremented > 0)
+            if (comp is { OnceOnly: true, timesincremented: > 0 })
                 continue;
             if (string.IsNullOrEmpty(comp.CurrentController))
                 continue;
-            if (!_timeSinceLastIncrement.ContainsKey(uid))
-                _timeSinceLastIncrement[uid] = 0f;
+            _timeSinceLastIncrement.TryAdd(uid, 0f);
             _timeSinceLastIncrement[uid] += frameTime;
 
-            if (_timeSinceLastIncrement[uid] >= comp.PointIncrementTime)
+            if (!(_timeSinceLastIncrement[uid] >= comp.PointIncrementTime))
+                continue;
+
+            _timeSinceLastIncrement[uid] = 0f;
+            comp.timesincremented++;
+            // Increment per-faction count for progress display
+            var factionKey = comp.CurrentController.ToLowerInvariant();
+            comp.TimesIncrementedPerFaction.TryAdd(factionKey, 0);
+            comp.TimesIncrementedPerFaction[factionKey]++;
+            // Award points
+            _objectiveSystem.AwardPointsToFaction(comp.CurrentController, objComp);
+            _logs.Debug($"[CAPTURE OBJ] Awarded points to '{comp.CurrentController}' for ({uid}) (increment {comp.timesincremented}/{comp.MaxHoldTimes})");
+            // If OnceOnly, complete after first increment
+            if (comp is { OnceOnly: true, timesincremented: > 0 })
             {
-                _timeSinceLastIncrement[uid] = 0f;
-                comp.timesincremented++;
-                // Increment per-faction count for progress display
-                var factionKey = comp.CurrentController.ToLowerInvariant();
-                if (!comp.TimesIncrementedPerFaction.ContainsKey(factionKey))
-                    comp.TimesIncrementedPerFaction[factionKey] = 0;
-                comp.TimesIncrementedPerFaction[factionKey]++;
-                // Award points
-                _objectiveSystem.AwardPointsToFaction(comp.CurrentController, objComp);
-                _sawmill.Info($"[CAPTURE OBJ] Awarded points to {comp.CurrentController} for {uid} (increment {comp.timesincremented}/{comp.MaxHoldTimes})");
-                // If OnceOnly, complete after first increment
-                if (comp.OnceOnly && comp.timesincremented > 0)
-                {
-                    _objectiveSystem.CompleteObjectiveForFaction(uid, objComp, comp.CurrentController);
-                    _sawmill.Info($"[CAPTURE OBJ] Completed once-only capture objective {uid} for {comp.CurrentController}");
-                }
-                // If reached max hold times, complete (but only if maxholdtimes > 0)
-                if (!comp.OnceOnly && comp.MaxHoldTimes > 0 && comp.timesincremented >= comp.MaxHoldTimes)
-                {
-                    _objectiveSystem.CompleteObjectiveForFaction(uid, objComp, comp.CurrentController);
-                    _sawmill.Info($"[CAPTURE OBJ] Completed capture objective {uid} for {comp.CurrentController} after max hold times");
-                }
+                _objectiveSystem.CompleteObjectiveForFaction(uid, objComp, comp.CurrentController);
+                _logs.Debug($"[CAPTURE OBJ] Completed once-only capture objective ({uid}) for '{comp.CurrentController}'");
             }
+            // If reached max hold times, complete (but only if maxholdtimes > 0)
+            if (comp is not { OnceOnly: false, MaxHoldTimes: > 0 }
+                || comp.timesincremented < comp.MaxHoldTimes)
+                continue;
+
+            _objectiveSystem.CompleteObjectiveForFaction(uid, objComp, comp.CurrentController);
+            _logs.Debug($"[CAPTURE OBJ] Completed capture objective ({uid}) for '{comp.CurrentController}' after max hold times");
             // --- Hoist/Lower timer logic removed ---
         }
     }

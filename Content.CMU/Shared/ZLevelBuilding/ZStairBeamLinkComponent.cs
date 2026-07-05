@@ -31,4 +31,10 @@ public sealed partial class ZStairBeamLinkComponent : Component
 
     /// <summary>True for up stairs, which laid a platform that should be removed when the beam falls.</summary>
     public bool HasPlatform;
+
+    /// <summary>
+    /// The exact platform tiles the stair LAID (pre-existing floor is skipped when laying). Beam destruction
+    /// clears only these, so it can never delete player-built or mapped floor inside the platform radius.
+    /// </summary>
+    public readonly List<Vector2i> LaidTiles = new();
 }

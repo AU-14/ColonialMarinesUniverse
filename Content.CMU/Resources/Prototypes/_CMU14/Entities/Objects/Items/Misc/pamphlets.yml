@@ -1,0 +1,397 @@
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageEnglish
+  name: Treatise of the Universal Tongue
+  description: This appears to be a comprehensive guide to the interstellar common language, English.
+  components:
+  - type: SkillPamphlet
+    language: English
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguagePrimitive
+  name: Treatise of the First Voices
+  description: This appears to be a bestiary of primal sounds, hoots, and gestures used by early sentients.
+  components:
+  - type: SkillPamphlet
+    language: Primitive
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageSign
+  name: Treatise of the Silent Hand
+  description: This appears to be an illustrated guide to communicating with your hands. Covers everything from 'all clear' to 'run, the ceiling is breathing'.
+  components:
+  - type: SkillPamphlet
+    language: SignLanguage
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageSignTactical
+  name: Treatise of the Silent Command
+  description: This field manual contains the complete tactical-sign language. It can be used to silently coordinate an ambush, request a medevac, or inform your squadmate that they've been promoted to bait.
+  components:
+  - type: SkillPamphlet
+    language: TacticalSignLanguage
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageYautja
+  name: Treatise of the Hunt's Tongue
+  description: This bloodstained codex is filled with the clicks and growls of the Yautja language. The cover warns that reading aloud some parts may attract unwanted attention, or worse, an honorary duel.
+  components:
+  - type: SkillPamphlet
+    language: Yautja
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageArcturian
+  name: arcturian language pamphlet
+  description: todo
+  components:
+  - type: SkillPamphlet
+    language: Arcturian
+
+# ├──[ Common tongues ]──────────────────────────────────────────────┤
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageLatin
+  name: Treatise of the Eternal Republic
+  description: This appears to be a preserved record of ancient Roman governance, culture, and language.
+  components:
+  - type: SkillPamphlet
+    language: Latin
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguagePortuguese
+  name: Treatise of the Lusitanian Voyages
+  description: This appears to be a collection of records concerning explorers, sailors, and distant colonies.
+  components:
+  - type: SkillPamphlet
+    language: Portuguese
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageSpanish
+  name: Treatise of the Two Spains
+  description: This appears to be a chronicle of the kingdoms, poets, and revolutions that shaped the Spanish-speaking worlds.
+  components:
+  - type: SkillPamphlet
+    language: Spanish
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageArabic
+  name: Treatise of the Golden Caliphates
+  description: This appears to be a collection of writings concerning the great civilizations of the Arab world.
+  components:
+  - type: SkillPamphlet
+    language: Arabic
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageFrench
+  name: Treatise of the Courtly Tongues
+  description: This appears to be a record of the refined speech of diplomats, revolutionaries, and philosophers from old France.
+  components:
+  - type: SkillPamphlet
+    language: French
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageGerman
+  name: Treatise of the Iron Lexicon
+  description: This appears to be a compendium of precise compound words and the unyielding grammar of the German language.
+  components:
+  - type: SkillPamphlet
+    language: German
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageRussian
+  name: Treatise of the Frozen Expanse
+  description: This appears to be a history of the Russian people, their vast lands, and the Cyrillic script that captured their soul.
+  components:
+  - type: SkillPamphlet
+    language: Russian
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageJapanese
+  name: Treatise of the Rising Sun
+  description: This appears to be a record of the islands of Japan, their layered politeness, and the brushstrokes of their language.
+  components:
+  - type: SkillPamphlet
+    language: Japanese
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageMandarin
+  name: Treatise of the Celestial Court
+  description: This appears to be a chronicle of the Middle Kingdom, its tonal tongue, and the thousands of characters that carry its history.
+  components:
+  - type: SkillPamphlet
+    language: Mandarin
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageTurkish
+  name: Treatise of the Anatolian Realms
+  description: This appears to be a record of the peoples and empires that once flourished across Anatolia.
+  components:
+  - type: SkillPamphlet
+    language: Turkish
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageKorean
+  name: Treatise of the Morning Calm
+  description: This appears to be a chronicle of the Korean peninsula and its long history.
+  components:
+  - type: SkillPamphlet
+    language: Korean
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageSwahili
+  name: Treatise of the Swahili Coast
+  description: This appears to be a history of the coastal cities and trade networks of East Africa.
+  components:
+  - type: SkillPamphlet
+    language: Swahili
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageAfrikaans
+  name: Treatise of the Cape Frontiers
+  description: This appears to be a historical account of the settlements and cultures of southern Africa.
+  components:
+  - type: SkillPamphlet
+    language: Afrikaans
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageBinary
+  name: Treatise of the Zero‑One Codex
+  description: This appears to be a data slug containing the foundational logic of machine speech, pure information stripped of emotion.
+  components:
+  - type: SkillPamphlet
+    language: Binary
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageLegalese
+  name: Treatise of the Binding Clause
+  description: This appears to be a standard form contract, composed entirely of sub‑clauses, waivers, and definitions, from which the language of corporate power is learned.
+  components:
+  - type: SkillPamphlet
+    language: Legalese
+
+# ├──[ Alternative tongues ]─────────────────────────────────────────┤
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageUkrainian
+  name: Treatise of the Ukrainian Steppes
+  description: This appears to be a collection of stories, history, and traditions from the vast Ukrainian steppes.
+  components:
+  - type: SkillPamphlet
+    language: Ukrainian
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguagePolish
+  name: Treatise of the Polish Commonwealth
+  description: This appears to be a detailed account of the old Polish Commonwealth and its cultural legacy.
+  components:
+  - type: SkillPamphlet
+    language: Polish
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageCzech
+  name: Treatise of the Bohemian Crownlands
+  description: This appears to be a historical record of the Bohemian lands and their people.
+  components:
+  - type: SkillPamphlet
+    language: Czech
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageItalian
+  name: Treatise of the Italian Peninsula
+  description: This appears to be a historical account of the city-states and nations of Italy.
+  components:
+  - type: SkillPamphlet
+    language: Italian
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageIrish
+  name: Treatise of the Emerald Isle
+  description: This appears to be a collection of Irish folklore, history, and traditions.
+  components:
+  - type: SkillPamphlet
+    language: Irish
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageFinnish
+  name: Treatise of the Northern Lakes
+  description: This appears to be a record of Finland's wilderness and resilient people.
+  components:
+  - type: SkillPamphlet
+    language: Finnish
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageHungarian
+  name: Treatise of the Carpathian Basin
+  description: This appears to be a history of the kingdoms and peoples of the Carpathian Basin.
+  components:
+  - type: SkillPamphlet
+    language: Hungarian
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageAlbanian
+  name: Treatise of the Eagle's Mountains
+  description: This appears to be a record of the rugged lands and traditions of Albania.
+  components:
+  - type: SkillPamphlet
+    language: Albanian
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageSerbian
+  name: Treatise of the Balkan Heartlands
+  description: This appears to be a chronicle of the peoples and kingdoms of the central Balkans.
+  components:
+  - type: SkillPamphlet
+    language: Serbian
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageLithuanian
+  name: Treatise of the Baltic Duchies
+  description: This appears to be a record of the Baltic peoples and their ancient heritage.
+  components:
+  - type: SkillPamphlet
+    language: Lithuanian
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageDutch
+  name: Treatise of the Low Countries
+  description: This appears to be a record of the merchant republics and kingdoms of the Low Countries.
+  components:
+  - type: SkillPamphlet
+    language: Dutch
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguagePersian
+  name: Treatise of the Persian Plateau
+  description: This appears to be a chronicle of empires, scholars, and poets from Persia.
+  components:
+  - type: SkillPamphlet
+    language: Persian
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageHindi
+  name: Treatise of the Ganges Plains
+  description: This appears to be a record of the cultures and peoples of northern India.
+  components:
+  - type: SkillPamphlet
+    language: Hindi
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageVietnamese
+  name: Treatise of the Red River Delta
+  description: This appears to be a historical account of Vietnam and its enduring traditions.
+  components:
+  - type: SkillPamphlet
+    language: Vietnamese
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageIndonesian
+  name: Treatise of the Emerald Archipelago
+  description: This appears to be a record of the many islands and peoples of Indonesia.
+  components:
+  - type: SkillPamphlet
+    language: Indonesian
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageFilipino
+  name: Treatise of the Pearl Islands
+  description: This appears to be a history of the islands, cultures, and peoples of the Philippines.
+  components:
+  - type: SkillPamphlet
+    language: Filipino
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageUrdu
+  name: Treatise of the Mughal Courts
+  description: This appears to be a collection of literature and records from the courts of South Asia.
+  components:
+  - type: SkillPamphlet
+    language: Urdu
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageYoruba
+  name: Treatise of the Forest Kingdoms
+  description: This appears to be a chronicle of the kingdoms and traditions of the Yoruba people.
+  components:
+  - type: SkillPamphlet
+    language: Yoruba
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageEsperanto
+  name: Treatise of the Hopeful Language
+  description: This appears to be a manifesto for a constructed tongue that seeks to unite all peoples under a single, regular grammar.
+  components:
+  - type: SkillPamphlet
+    language: Esperanto
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageSwedish
+  name: Treatise of the Swedish Frontiers
+  description: This appears to be a record of the Scandinavian frontiers, a shadowy region that is the subject of much controversy from the conflict between the Socialist Progressive Peoples and its separatists.
+  components:
+  - type: SkillPamphlet
+    language: Swedish
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageBrazilian
+  name: Treatise of the Verdant Empire
+  description: This appears to be a chronicle of the vast forests, diverse peoples, and vibrant dialects of Brazil.
+  components:
+  - type: SkillPamphlet
+    language: Brazilian
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageSlovak
+  name: Treatise of the Tatra Mountains
+  description: This appears to be a record of the proud nation between the peaks, its language a bridge between Slavic brothers.
+  components:
+  - type: SkillPamphlet
+    language: Slovak
+
+- type: entity
+  parent: CMPamphletLanguage
+  id: AU14PamphletLanguageRomanian
+  name: Treatise of the Carpathian Crossroads
+  description: This appears to be a history of the Romanians, whose Latin roots survived amidst centuries of change.
+  components:
+  - type: SkillPamphlet
+    language: Romanian

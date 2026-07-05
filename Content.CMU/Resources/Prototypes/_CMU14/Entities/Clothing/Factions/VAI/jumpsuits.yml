@@ -1,0 +1,145 @@
+- type: entity
+  parent: CMJumpsuitTShirtGray
+  id: AU14JumpsuitTShirtGrayVAIMAR40
+  suffix: VAIPO, MAR40
+  components:
+  - type: WebbingClothing
+    startingWebbing: AU14WebbingMagazineFilledMAR40
+
+- type: entity
+  parent: AU14CivilianWorkwearGreen
+  id: AU14JumpsuitTShirtGrayVAIL42A
+  suffix: VAIPO, L42A
+  components:
+  - type: WebbingClothing
+    startingWebbing: AU14WebbingMagazineFilledL42AAP
+
+- type: entity
+  parent: AU14CivilianWorkwearPink
+  id: AU14JumpsuitTShirtGrayVAIM41A
+  suffix: VAIPO, M41
+  components:
+  - type: WebbingClothing
+    startingWebbing: AU14WebbingMagazineFilledM41A
+
+- type: entity
+  parent: CMJumpsuitTShirtGray
+  id: AU14JumpsuitTShirtGrayVAIMAR50
+  suffix: VAIPO, MAR50
+  components:
+  - type: WebbingClothing
+    startingWebbing: AU14WebbingMagazineFilledMAR50
+
+- type: entity
+  parent: RMCJumpsuitKhakiWorkwearJacketless
+  id: AU14JumpsuitTShirtGrayVAIM41AE2
+  suffix: VAIPO, M41AE2
+  components:
+  - type: WebbingClothing
+    startingWebbing: AU14WebbingMagazineFilledM41AE2
+
+- type: entity
+  parent: RMCJumpsuitKhakiWorkwearJacketless
+  id: AU14JumpsuitTShirtGrayVAIHEDP
+  suffix: VAIPO, HEDP
+  components:
+  - type: WebbingClothing
+    startingWebbing: AU14WebbingBlackHEDP
+
+- type: entity
+  parent: CMJumpsuitTShirtRed
+  id: AU14JumpsuitTShirtWhiteVAIToolWebbing
+  suffix: VAIPO, Engi
+  components:
+  - type: WebbingClothing
+    startingWebbing: RMCToolWebbingFilled
+
+- type: entity
+  parent: AU14CivilianWorkwearPink
+  id: AU14JumpsuitTShirtWhiteVAIWebbingSurgical
+  suffix: VAIMS, Surgical
+  components:
+  - type: WebbingClothing
+    startingWebbing: CMWebbingSurgicalBlue
+
+- type: entity
+  parent: CMJumpsuitLiaisonField
+  id: AU14JumpsuitTShirtRedVAIHEDP
+  suffix: VAIPO, HEDP
+  components:
+  - type: WebbingClothing
+    startingWebbing: AU14WebbingBlackHEDP
+
+# VAISO
+
+- type: entity
+  parent: RMCJumpsuitCivilian
+  id: AU14JumpsuitCivilianVAIMAR40
+  suffix: VAIPO, MAR40
+  components:
+  - type: WebbingClothing
+    startingWebbing: AU14WebbingMagazineFilledMAR40
+
+- type: entity
+  parent: RMCJumpsuitCivilianYellow
+  id: AU14JumpsuitCivilianYellowVAIL42A
+  suffix: VAIPO, L42A
+  components:
+  - type: WebbingClothing
+    startingWebbing: AU14WebbingMagazineFilledL42AAP
+
+- type: entity
+  parent: RMCJumpsuitCivilianBrown
+  id: AU14JumpsuitCivilianBrownVAIM41A
+  suffix: VAIPO, M41
+  components:
+  - type: WebbingClothing
+    startingWebbing: AU14WebbingMagazineFilledM41A
+
+- type: entity
+  parent: RMCJumpsuitCivilian
+  id: AU14JumpsuitCivilianVAIMAR50
+  suffix: VAIPO, MAR50
+  components:
+  - type: WebbingClothing
+    startingWebbing: AU14WebbingMagazineFilledMAR50
+
+- type: entity
+  parent: RMCJumpsuitCivilianYellow
+  id: AU14JumpsuitCivilianYellowVAIM41AE2
+  suffix: VAIPO, M41AE2
+  components:
+  - type: WebbingClothing
+    startingWebbing: AU14WebbingMagazineFilledM41AE2
+
+- type: entity
+  parent: RMCJumpsuitCivilianBrown
+  id: AU14JumpsuitCivilianBrownVAIHEDP
+  suffix: VAIPO, HEDP
+  components:
+  - type: WebbingClothing
+    startingWebbing: AU14WebbingBlackHEDP
+
+- type: entity
+  parent: RMCJumpsuitCivilianYellow
+  id: AU14JumpsuitCivilianYellowVAIToolWebbing
+  suffix: VAIPO, Engi
+  components:
+  - type: WebbingClothing
+    startingWebbing: RMCToolWebbingFilled
+
+- type: entity
+  parent: RMCJumpsuitCivilianBlue
+  id: AU14JumpsuitCivilianBlueVAIWebbingSurgical
+  suffix: VAIMS, Surgical
+  components:
+  - type: WebbingClothing
+    startingWebbing: CMWebbingSurgicalBlue
+
+- type: entity
+  parent: RMCJumpsuitCivilianRed
+  id: AU14JumpsuitCivilianRedVAIHEDP
+  suffix: VAIPO, HEDP
+  components:
+  - type: WebbingClothing
+    startingWebbing: AU14WebbingBlackHEDP

@@ -1,0 +1,612 @@
+- type: entity
+  parent: CMBeltMedical
+  id: AU14BeltMedical
+
+- type: entity
+  parent: CMBeltMedicalFilled
+  id: AU14BeltMedicalFilled # TODO: Make this purpose unique against AU14BeltMedicBagFilled (like hold more small items, or accepting mags etc.)
+
+- type: entity
+  parent: CMBeltMedicBag
+  id: AU14BeltMedicBagFilled
+  suffix: AU14, Filled, Colonist
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMPillCanisterBicaridine
+    - id: CMPillCanisterKelotane
+    - id: CMPillCanisterTricordrazine
+    - id: CMPillCanisterInaprovaline
+    - id: CMPillCanisterDylovene
+    - id: CMPillCanisterDexalin
+    - id: RMCPillCanisterIron
+    - id: AU14PillCanisterTramadol
+    - id: AU14PillCanisterOxycodone
+    - id: AU14PillCanisterOsteoCalc
+    - id: CMEpinephrineAutoInjector
+    - id: AU14NaloxoneAutoInjector
+    - id: CMUSplintItem
+    - id: CMUCastItem
+    - id: CMSurgicalLine
+    - id: CMSynthGraft
+    - id: CMHealthAnalyzer
+    - id: CMRollerBedSpawnFolded
+    - id: CMPortableSurgicalBedSpawnFolded
+    - id: CMBloodPackFull
+      amount: 2
+
+- type: entity
+  parent: CMBeltMedicBag
+  id: AU14BeltMedicBagSupportSynth
+  suffix: Filled, Support Synth
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14Tourniquet
+    - id: AU14Tourniquet
+    - id: AU14PillCanisterMeralyne
+    - id: AU14PillCanisterDermaline
+    - id: RMCPillCanisterIron
+    # - id: CMPillCanisterTramadol
+    - id: CMPillCanisterDylovene
+    # - id: CMPillCanisterPeridaxon
+    - id: AU14PillCanisterAlbuterol
+    # - id: CMPillCanisterAlkysine
+    - id: RMCPillCanisterImidazoline
+    - id: CMTraumaKit10
+      amount: 3
+    - id: CMBurnKit10
+      amount: 3
+    # - id: RMCSplint
+    - id: AU14NaloxoneAutoInjector
+    - id: CMEpinephrineAutoInjector
+    - id: CMHealthAnalyzer
+    - id: CMHandsLatex
+
+- type: entity
+  parent: AU14BeltMedicBagSupportSynth
+  id: AU14BeltMedicBagSupportSynthRMC
+  suffix: Filled, Support Synth, RMC
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/RMC/belt/medicbag.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/RMC/belt/medicbag.rsi
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: AU14BeltMedicBagSupportSynth
+  id: AU14BeltMedicBagSupportSynthBlack
+  suffix: Filled, Support Synth, Black
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UniversalBelts/Black/medicbag.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/UniversalBelts/Black/medicbag.rsi
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: CMBeltMedicBag
+  id: AU14BeltMedicBagBlack
+  suffix: Empty, Black
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UniversalBelts/Black/medicbag.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/UniversalBelts/Black/medicbag.rsi
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: CMBeltUtility
+  id: AU14BeltUtilityFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMScrewdriver
+    - id: CMWrench
+    - id: RMCWelderPVE
+    - id: CMCrowbar
+    - id: CMWirecutter
+    - id: RMCCableCoil30
+    - id: CMMultitool
+    - id: CMEntrenchingTool
+
+- type: entity
+  parent: CMBeltUtilityCombat
+  id: AU14BeltUtilityCombatFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMScrewdriver
+    - id: CMWrench
+    - id: RMCWelderPVE
+    - id: CMCrowbar
+    - id: CMWirecutter
+    - id: RMCCableCoil30
+    - id: CMMultitool
+    - id: CMEntrenchingTool
+
+- type: entity
+  parent: RMCPouchToolsSoc
+  id: AU14PouchToolsFilledComtech
+  suffix: Filled, Comtech
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMScrewdriver
+    - id: CMWrench
+    - id: RMCWelderPVE
+    - id: CMCrowbar
+    - id: CMWirecutter
+    - id: RMCCableCoil30
+    - id: CMMultitool
+    - id: CMEntrenchingTool
+
+- type: entity
+  parent: RMCBeltBaseStorageNoVisuals
+  id: AU14M276ShotgunShellLoadingRigBlack
+  name: M276 pattern shotgun shell loading rig
+  suffix: Black, AU14
+  description: An ammunition belt designed to hold shotgun shells. # or individual bullets. TODO RMC14
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UniversalBelts/Black/shotgunbelt.rsi
+    layers:
+    - state: icon
+    - state: sixth
+      visible: false
+    - state: third
+      visible: false
+    - state: half
+      visible: false
+    - state: twothirds
+      visible: false
+    - state: fivesixths
+      visible: false
+    - state: full
+      visible: false
+  - type: Clothing
+    sprite: _AU14/Clothing/UniversalBelts/Black/shotgunbelt.rsi
+  - type: Item
+    size: Large
+  - type: Storage
+    maxItemSize: Large
+    grid:
+    - 0,0,13,3 # 14 slots
+    whitelist:
+      tags:
+      - RMCShellShotgun
+      - RMCCartridge458SOCOM
+      - AU14CartridgeRifleTwoBore
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - CMMagazineRifle
+      - RMCMagazineShotgun
+      - CMMagazineSmg
+  - type: FixedItemSizeStorage
+  - type: ItemMapper
+    mapLayers:
+      sixth:
+        minCount: 1
+        whitelist:
+          tags:
+          - RMCShellShotgun
+          - RMCCartridge458SOCOM
+      third:
+        minCount: 3
+        whitelist:
+          tags:
+          - RMCShellShotgun
+          - RMCCartridge458SOCOM
+      half:
+        minCount: 6
+        whitelist:
+          tags:
+          - RMCShellShotgun
+          - RMCCartridge458SOCOM
+      twothirds:
+        minCount: 9
+        whitelist:
+          tags:
+          - RMCShellShotgun
+          - RMCCartridge458SOCOM
+      fivesixths:
+        minCount: 12
+        whitelist:
+          tags:
+          - RMCShellShotgun
+          - RMCCartridge458SOCOM
+      full:
+        minCount: 14
+        whitelist:
+          tags:
+          - RMCShellShotgun
+          - RMCCartridge458SOCOM
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: CMBeltMarine
+  id: AU14BeltHolsterPistolBlack
+  name: M276 pattern general pistol holster rig
+  suffix: Black, AU14
+  description: The M276 is standard load-bearing equipment. It consists of a modular belt with various clips. This version has a holster assembly that allows one to carry the most common pistols. It also contains side pouches that can store most pistol magazines.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UniversalBelts/Black/pistolbelt.rsi
+    layers:
+    - state: icon
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: _m77
+      map: [ "_m77_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: m1984
+      map: [ "m1984_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: mk80
+      map: [ "mk80_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: b92fs
+      map: [ "b92fs_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: m13
+      map: [ "m13_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: highpower
+      map: [ "mk45_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: tt
+      map: [ "t73_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: l54
+      map: [ "l54_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: deagle
+      map: [ "handcannon_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: g_deagle
+      map: [ "g_handcannon_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: c_deagle
+      map: [ "co_handcannon_fill" ]
+    - state: icon-front
+      map: [ "holstered" ]
+    - state: half
+      map: [ "openLayer" ]
+    - state: full
+      map: [ "closedLayer" ]
+  - type: Clothing
+    sprite: _AU14/Clothing/UniversalBelts/Black/pistolbelt.rsi
+    slots:
+    - suitStorage
+    - belt
+  - type: Storage # holds up to 6 mags plus gun
+    maxItemSize: Normal
+    grid:
+    - 0,0,13,1 # 7 slots
+    whitelist:
+      tags:
+      - Sidearm
+      - CMMagazinePistol
+    blacklist:
+      tags:
+      - RMCSmartPistol
+      - RMCMagazinePistolSU6
+      - RMCRevolver
+  - type: FixedItemSizeStorage
+  - type: LimitedStorage
+    limits:
+    - popup: rmc-storage-limit-one-gun
+      whitelist:
+        tags:
+        - Sidearm
+    - popup: rmc-storage-limit-max-mags
+      count: 6
+      whitelist:
+        tags:
+        - CMMagazinePistol
+  - type: CMHolster
+    whitelist:
+      tags:
+      - Sidearm
+  - type: Tag
+    tags:
+    - RMCGeneralPistolHolster
+  - type: ItemMapper
+    spriteLayers:
+    - holstered
+    - _m77_fill
+    - m1984_fill
+    - mk80_fill
+    - b92fs_fill
+    - mk45_fill
+    - t73_fill
+    - m13_fill
+    - l54_fill
+    - handcannon_fill
+    - g_handcannon_fill
+    - co_handcannon_fill
+    mapLayers:
+      holstered:
+        whitelist:
+          tags:
+          - Sidearm
+      _m77_fill:
+        whitelist:
+          tags:
+          - RMCWeaponPistolM77
+      m1984_fill:
+        whitelist:
+          tags:
+          - CMWeaponPistolM1984
+      mk80_fill:
+        whitelist:
+          tags:
+          - RMCMK80
+      b92fs_fill:
+        whitelist:
+          tags:
+          - RMCb92fs
+      mk45_fill:
+        whitelist:
+          tags:
+          - RMCMK45
+      m13_fill:
+        whitelist:
+          tags:
+          - RMCWeaponPistolM13
+      t73_fill:
+        whitelist:
+          tags:
+          - RMCWeaponPistolT73
+      l54_fill:
+        whitelist:
+          tags:
+          - RMCWeaponPistolL54
+      handcannon_fill:
+        whitelist:
+          tags:
+          - RMCWeaponPistolHandcannon
+      g_handcannon_fill:
+        whitelist:
+          tags:
+          - RMCWeaponPistolHandcannonGold
+      co_handcannon_fill:
+        whitelist:
+          tags:
+          - RMCWeaponPistolHandcannonWyvern
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: CMBeltMarine
+  id: AU14BeltSmartGunOperatorBlack
+  name: M280 pattern smart gun drum belt
+  suffix: Black, AU14
+  description: Despite the fact that 1. drum magazines are incredibly non-ergonomical, and 2. require incredibly precise machining in order to fit universally (spoiler, they don't, adding further to the myth of 'Smart Gun Personalities'), the government decided to issue a modified belt (more formally known by the designation M280) with hooks and dust covers. When the carry catch on the drum isn't getting stuck in the oiled up velcro, the rig actually does do a decent job at holding a plentiful amount of drums. But at the end of the day, compared to standard rigs.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UniversalBelts/Black/sgbelt.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/UniversalBelts/Black/sgbelt.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,11,1 # 6 slots
+    whitelist:
+      tags:
+      - CMMagazinePistol
+      - CMMagazineRifle
+      - RMCMagazineShotgun
+      - CMMagazineSmg
+      - CMMagazineSniper
+      - RMCMagazineSmartGun
+      - RMCShellShotgun
+      - Flare
+  - type: FixedItemSizeStorage
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - RMCMagazineSmartGun
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: CMBeltBase
+  id: AU14BeltKnifeBlack
+  name: M276 pattern knife rig
+  suffix: Black, AU14
+  description: The M276 is standard load-bearing equipment. It consists of a modular belt with various clips. This version is specially designed to store knives. Not commonly issued, but kept in service.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UniversalBelts/Black/knifebelt.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/UniversalBelts/Black/knifebelt.rsi
+  - type: ItemSlots
+  - type: CMHolster
+  - type: UsableWhileDevoured
+  - type: CMItemSlots
+    cooldown: 1
+    cooldownPopup: You need to wait before drawing another knife!
+    count: 12
+    slot:
+      name: Knife
+      whitelist:
+        tags:
+        - ThrowingKnife
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: AU14BeltKnifeBlack
+  id: AU14BeltKnifeBlackFilled
+  suffix: Filled
+  components:
+  - type: CMItemSlots
+    startingItem: CMM11Knife
+
+- type: entity
+  parent: CMBeltMarine
+  id: AU14BeltSmartGunOperatorPistolBlack
+  name: M802 pattern smart gun sidearm rig
+  suffix: Black, AU14
+  description: The M802 is a limited-issue mark of load-bearing equipment, designed to carry smartgun ammunition and a sidearm.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UniversalBelts/Black/sgbeltpistol.rsi
+    layers:
+    - state: icon
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: m1984 # TODO RMC14 per-gun underlay
+      offset: 0.15625, 0.0
+      map: [ "enum.CMHolsterLayers.Fill" ]
+      visible: false
+    - sprite: _AU14/Clothing/UniversalBelts/Black/sgbeltpistol.rsi
+      state: icon-front
+    - state: half
+      map: [ "openLayer" ]
+    - state: full
+      map: [ "closedLayer" ]
+  - type: Clothing
+    sprite: _AU14/Clothing/UniversalBelts/Black/sgbeltpistol.rsi
+  - type: Storage   # Holds up to 4 drums/magazines and 1 sidearm
+    maxItemSize: Normal
+    grid:
+    - 0,0,9,1 # 5 slots
+    whitelist:
+      tags:
+      - Sidearm
+      - CMMagazinePistol
+      - RMCMagazineRevolver
+      - RMCMagazineSmartGun
+      - Flare
+  - type: FixedItemSizeStorage
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - RMCMagazineSmartGun
+  - type: LimitedStorage
+    limits:
+    - popup: rmc-storage-limit-one-gun
+      whitelist:
+        tags:
+        - Sidearm
+    - popup: rmc-storage-limit-max-ammo
+      count: 4
+      whitelist:
+        tags:
+        - CMMagazinePistol
+        - RMCMagazineRevolver
+        - RMCMagazineSmartGun
+  - type: CMHolster
+    whitelist:
+      tags:
+      - Sidearm
+  - type: Tag
+    tags:
+    - RMCSmartGunSidearmHolster
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: CMBeltBaseStorage
+  id: AU14BeltUtilityGeneralBlack
+  suffix: Black, AU14
+  name: M276 G8-A general utility pouch
+  description: A small, lightweight pouch. The newer G8-A model, while uncomfortable, can also be clipped around the waist.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UniversalBelts/Black/generalpouchbelt.rsi
+  - type: Clothing
+    slots:
+    - suitStorage
+    - belt
+    sprite: _AU14/Clothing/UniversalBelts/Black/generalpouchbelt.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,9,1 # 9 slots
+    blacklist:
+      tags:
+      - CMFirstAidKit
+      - RMCEngineerKit
+  - type: Tag
+    tags:
+    - RMCG8Pouch
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: CMBeltBaseStorage
+  id: AU14BeltMarineBlack
+  suffix: Black, AU14
+  name: M276 pattern ammo load rig
+  description: The M276 is standard load-bearing equipment. It consists of a modular belt with various clips. This is the standard variant, designed for bulk ammunition-carrying operations.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UniversalBelts/Black/ammorig.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/UniversalBelts/Black/ammorig.rsi
+  - type: Item
+    size: Large
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,9,1 # 5 slots
+    whitelist:
+      tags:
+      - Flare
+      - RMCShellShotgun
+      - CMMagazinePistol
+      - RMCMagazineRevolver
+      - CMMagazineRifle
+      - RMCMagazineShotgun
+      - CMMagazineSmg
+      - CMMagazineSniper
+      - Grenade
+      #      - # TODO RMC14 mines
+      #      - # TODO RMC14 snacks
+      components:
+      - BallisticAmmoProvider
+    blacklist:
+      tags:
+      - RMCAttachmentUnderbarrel
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - CMMagazineRifle
+      - RMCMagazineShotgun
+      - CMMagazineSmg
+  - type: FixedItemSizeStorage
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: RMCMatebaBelt
+  id: AU14MatebaCustomBeltFilledAmmo
+  name: M276 pattern Mateba Custom holster rig
+  suffix: AU14, Mateba Custom, Filled, No Stun
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSpeedLoaderMateba
+      amount: 6
+    - id: RMCWeaponRevolverMatebaNoStun
+
+- type: entity
+  parent: RMCMatebaBelt
+  id: AU14MatebaSpecialBeltFilledAmmo
+  name: M276 pattern Mateba Special holster rig
+  suffix: AU14, Mateba Special, Filled, No Stun
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSpeedLoaderMateba
+      amount: 6
+    - id: RMCWeaponRevolverMatebaSpecialNoStun

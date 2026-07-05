@@ -1,0 +1,60 @@
+- type: soundCollection
+  id: AU14MaleMoveOrder
+  files:
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Jordan(Scottish)/charge1.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Jordan(Scottish)/charge2.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Jordan(Scottish)/charge3.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Jordan(Scottish)/charge4.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Jordan(Scottish)/charge5.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Jordan(Scottish)/charge6.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Jordan(Scottish)/letsGo1.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Jordan(Scottish)/letsGo2.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Jordan(Scottish)/letsGo3.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Jordan(Scottish)/letsGo4.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Jordan(Scottish)/letsGo5.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Jordan(Scottish)/forward1.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Jordan(Scottish)/forward2.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Jordan(Scottish)/forward3.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Move/Charge1.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Move/Charge2.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Move/Charge3.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Move/Move1.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Move/Move2.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Move/Move3.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Move/Move4.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Move/Move5.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Move/Move6.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Move/Move7.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Move/Move8.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Move/Move9.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Move/Move10.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Move/Move11.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Move/DoubleTime1.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Move/DoubleTime2.ogg
+
+
+- type: soundCollection
+  id: AU14FemaleMoveOrder
+  files:
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_1.ogg #most of these are move/charge lines. (there probably is a few that have to be remove from here though.)
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_2.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/femalewarcry3.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_4.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_5.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_6.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_7.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_8.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_9.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_12.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_13.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_14.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_15.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_16.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_17.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_18.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_19.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_20.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/female_charge.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Melissa/Warcry/Warcry1.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Melissa/Warcry/Warcry2.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Melissa/Warcry/Warcry3.ogg

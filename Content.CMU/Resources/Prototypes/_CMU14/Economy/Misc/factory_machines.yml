@@ -1,0 +1,137 @@
+# Weyland-Yutani factory job loop machines.
+# Step 1: Insert ScrapSteel into the smelter → metal ingot after 5s.
+# Step 2: Insert metal ingot into the fabricator → WY doorknob.
+
+- type: entity
+  parent: BaseStructure
+  id: AUSmelterMachine
+  name: Weyland-Yutani Ore Smelter
+  description: An industrial smelter. Insert a pile of metal scrap and wait for it to be processed into a usable ingot.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/biofabricator.rsi
+    layers:
+    - state: icon
+    - state: unlit
+      shader: unshaded
+  - type: InteractionOutline
+  - type: ItemSlots
+    slots:
+      processorInput:
+        name: Scrap Input
+        whitelist:
+          tags:
+          - AUMetalScrap
+  - type: ContainerContainer
+    containers:
+      processorInput: !type:ContainerSlot {}
+  - type: AUProcessorMachine
+    inputTag: AUMetalScrap
+    output: AUMetalIngot
+    processTime: 5
+    breakChance: 0.1
+    processSound: !type:SoundPathSpecifier
+      path: /Audio/Machines/reclaimer_startup.ogg
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: null
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Breakage" ]
+  - type: MaxDamage
+    max: 200
+  - type: RMCRepairable
+    heal: 50
+    skillRequired: 1
+    delay: 5
+    fuelUsed: 0
+
+- type: entity
+  parent: BaseStructure
+  id: AUDoorknobFabricator
+  name: Weyland-Yutani Parts Fabricator
+  description: A Weyland-Yutani precision fabricator. Insert a metal ingot to manufacture a doorknob.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/autolathe.rsi
+    layers:
+    - state: icon
+    - state: unlit
+      shader: unshaded
+  - type: InteractionOutline
+  - type: ItemSlots
+    slots:
+      processorInput:
+        name: Ingot Input
+        whitelist:
+          tags:
+          - AUMetalIngot
+  - type: ContainerContainer
+    containers:
+      processorInput: !type:ContainerSlot {}
+  - type: AUProcessorMachine
+    inputTag: AUMetalIngot
+    output: AUWeylandYutaniDoorknob
+    processTime: 5
+    breakChance: 0.1
+    processSound: !type:SoundPathSpecifier
+      path: /Audio/Machines/circuitprinter.ogg
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: null
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Breakage" ]
+  - type: MaxDamage
+    max: 200
+  - type: RMCRepairable
+    heal: 50
+    skillRequired: 1
+    delay: 5
+    fuelUsed: 0
+
+- type: entity
+  parent: BaseStructure
+  id: AUTrashChute
+  name: trash chute
+  description: A grimy disposal chute. Sorting through the refuse below dredges up piles of blasted steel.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Piping/disposal.rsi
+    state: disposal
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+            radius: 0.25
+        density: 1000
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: InteractionOutline
+  - type: SalvageSpawner
+    doAfterTime: 5
+    loot:
+    - ScrapSteel

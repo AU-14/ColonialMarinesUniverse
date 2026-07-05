@@ -25,5 +25,6 @@
   equipment:
     ears: RMCFlashlightPen
     suitstorage: RMCFireAxe
+    eyes: RMCGlassesMedicalHUDGlasses
   inhand:
   - CMFireExtinguisher

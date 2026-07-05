@@ -1,0 +1,22 @@
+- type: entity
+  parent: RMCHandsVeteran
+  id: AU14HandsRMC
+  suffix: AU14
+  name: L6 pattern combat gloves
+  description: Standard issue tactical gloves used by the Royal Marines Commando.
+  components:
+  - type: Insulated
+  - type: Sprite
+    sprite: _AU14/Clothing/RMC/hands/basic.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/RMC/hands/basic.rsi
+
+- type: entity
+  parent: AU14HandsRMC
+  id: AU14HandsSilverRMC
+  name: L6 pattern silver combat gloves
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/RMC/hands/silver.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/RMC/hands/silver.rsi

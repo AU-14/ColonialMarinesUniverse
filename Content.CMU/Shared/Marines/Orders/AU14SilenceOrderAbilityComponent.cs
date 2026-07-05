@@ -25,11 +25,20 @@ public sealed partial class AU14SilenceOrderAbilityComponent : Component
     /// How long targets remain whisper-only.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public TimeSpan Duration = TimeSpan.FromSeconds(10);
+    public TimeSpan Duration = TimeSpan.FromSeconds(15);
 
     /// <summary>
     /// Radius of the effect in tiles.
     /// </summary>
     [DataField, AutoNetworkedField]
     public float Range = 7f;
+
+    [DataField]
+    public List<LocId> Callouts = new()
+    {
+        "au14-silence-order-callout-silence",
+        "au14-silence-order-callout-shhhh",
+        "au14-silence-order-callout-ahem",
+        "au14-silence-order-callout-lock-it-up",
+    };
 }

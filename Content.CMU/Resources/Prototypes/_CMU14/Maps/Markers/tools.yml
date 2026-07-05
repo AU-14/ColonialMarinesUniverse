@@ -1,0 +1,143 @@
+- type: entity
+  id: CMURandomEngineering
+  name: random engineering spawner
+  parent: MarkerBase
+  suffix: CMU
+  components:
+  - type: Sprite
+    layers:
+      - sprite: _AU14/Markers/landmarks.rsi
+        state: random_tool
+  - type: RandomSpawner
+    chance: 0.5
+    prototypes:
+      #Tools
+      - CMScrewdriver # x4
+      - CMScrewdriver
+      - CMScrewdriver
+      - CMScrewdriver
+      - CMWrench # x4
+      - CMWrench
+      - CMWrench
+      - CMWrench
+      - CMWelder # x4
+      - CMWelder
+      - CMWelder
+      - CMWelder
+      - CMCrowbar # x4
+      - CMCrowbar
+      - CMCrowbar
+      - CMCrowbar
+      - CMWirecutter # x4
+      - CMWirecutter
+      - CMWirecutter
+      - CMWirecutter
+      - CMMultitool # x4
+      - CMMultitool
+      - CMMultitool
+      - CMMultitool
+      - CMEntrenchingTool # x2
+      - CMEntrenchingTool
+      - RMCFireAxe # x2
+      - RMCFireAxe
+      - RMCFlashlight # x2
+      - RMCFlashlight
+      - CMFireExtinguisher # x2
+      - CMFireExtinguisher
+      - CMFireExtinguisherPortable
+      #Work Wear
+      - RMCWeldingGoggles # x2
+      - RMCWeldingGoggles
+      - RMCHelmetWelding # x4
+      - RMCHelmetWelding
+      - RMCHelmetWelding
+      - RMCHelmetWelding
+      #Materials
+      - RMCCableCoil10 # x2
+      - RMCCableCoil10
+      - RMCCableCoil20
+      - CMSheetGlass10 # x2
+      - CMSheetGlass10
+      - CMSheetGlassReinforced10 # x2
+      - CMSheetGlassReinforced10
+      - CMSheetMetal10 # x2
+      - CMSheetMetal10
+      - CMSheetMetal20
+      - CMSheetPlasteel10 # x2
+      - CMSheetPlasteel10
+      - CMSheetPlasteel20
+      - RMCPlankWood10 # x2
+      - RMCPlankWood10
+      - RMCPlankWood25
+      - CMSandbagEmpty25
+      #Power Cell
+      - RMCPowerCell # x4
+      - RMCPowerCell
+      - RMCPowerCell
+      - RMCPowerCell
+      #Miscellaneous
+      - RMCScabbardMacheteFilled
+      - BedrollFolded
+      - RMCBinoculars
+      - RMCBinocularsPVE
+      - RMCBinocularsCivPVE
+    rareChance: 0.125 # 1/8 # 1/16
+    rarePrototypes:
+      #Tools
+      - CMWelderSmall # x4
+      - CMWelderSmall
+      - CMWelderSmall
+      - CMWelderSmall
+      - RMCWelderPVE # x2
+      - RMCWelderPVE
+      - RMCWelderIndustrial
+      #Materials
+      - RMCCableCoil30 # x2
+      - RMCCableCoil30
+      - CMSheetGlass30 # x2
+      - CMSheetGlass30
+      - CMSheetGlass # 50
+      - CMSheetGlassReinforced30 # x2
+      - CMSheetGlassReinforced30
+      - CMSheetGlassReinforced # 50
+      - CMSheetMetal30 # x2
+      - CMSheetMetal30
+      - CMSheetMetal40
+      - CMSheetMetal50
+      - CMSheetPlasteel30 # x2
+      - CMSheetPlasteel30
+      - CMSheetPlasteel40
+      - CMSheetPlasteel50
+      - RMCPlankWood50 # x2
+      - RMCPlankWood50
+      #Toolbox
+      - RMCToolboxMechanicalFilled # x6
+      - RMCToolboxMechanicalFilled
+      - RMCToolboxMechanicalFilled
+      - RMCToolboxMechanicalFilled
+      - RMCToolboxMechanicalFilled
+      - RMCToolboxMechanicalFilled
+      - RMCToolboxElectricalFilled # x4
+      - RMCToolboxElectricalFilled
+      - RMCToolboxElectricalFilled
+      - RMCToolboxElectricalFilled
+      - RMCToolboxMechanicalGreenFilled # x4
+      - RMCToolboxMechanicalGreenFilled
+      - RMCToolboxMechanicalGreenFilled
+      - RMCToolboxMechanicalGreenFilled
+      - RMCToolboxEmergencyFilled # x2
+      - RMCToolboxEmergencyFilled
+      - AU14BeltUtilityCombatFilled
+      - AU14PouchToolsFilledComtech
+      - AU14BeltUtilityFilled
+      - RMCPouchConstruction
+      - RMCPouchElectronics
+      - RMCPouchTools
+      #Power Cell
+      - RMCPowerCellCrap
+      - RMCPowerCellHigh # x4
+      - RMCPowerCellHigh
+      - RMCPowerCellHigh
+      - RMCPowerCellHigh
+      - RMCPowerCellSuper
+      - RMCPowerCellHyper

@@ -1,0 +1,5 @@
+- type: localizedDataset
+  id: CMUNamesDroneAndroid
+  values:
+    prefix: cmu-name-drone-android-
+    count: 32

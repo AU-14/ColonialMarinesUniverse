@@ -16,7 +16,7 @@ public sealed partial class ServerLogsCommand : LocalizedCommands
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IEntityManager _entityManager = default!;
 
-    private static readonly string LogDir = Environment.CurrentDirectory;
+    private static readonly string LogDir = $"{Environment.CurrentDirectory}/bin/logs/logs/"; // yes its double
     private static readonly string PrimaryClr = Color.Green.ToHex();
     private static readonly string SecondaryClr = Color.Yellow.ToHex();
     private static readonly int MaxLines = 5000; // client default: con.max_entries=3000
@@ -25,8 +25,7 @@ public sealed partial class ServerLogsCommand : LocalizedCommands
     public override string Description
         => "Prints the server (or specified file) logs to the client's console, with --tail to chat.";
 
-    public override string Help => $"Usage: {Command} [filter] [lines] | {Command} --list | {Command
-    } --file <path> [filter] | {Command} --follow [filter] | {Command} --stop";
+    public override string Help => $"Usage: {Command} [filter] [lines] | {Command} --list | {Command} --file <path> [filter] | {Command} --follow [filter] | {Command} --stop";
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -73,8 +72,7 @@ public sealed partial class ServerLogsCommand : LocalizedCommands
 
             var output = new StringBuilder();
             string filterPrefix = !string.IsNullOrEmpty(filter) ? $"filtered '{filter}' on " : string.Empty;
-            output.AppendLine($"[color={PrimaryClr}]--- {logFile.Name} ({filterPrefix}last {lines.Count
-            } lines) ---[/color]");
+            output.AppendLine($"[color={PrimaryClr}]--- {logFile.Name} ({filterPrefix}last {lines.Count} lines) ---[/color]");
 
             foreach (string line in lines)
             {
@@ -109,12 +107,10 @@ public sealed partial class ServerLogsCommand : LocalizedCommands
 
                 if (string.IsNullOrEmpty(filter))
                 {
-                    shell.WriteMarkup($"[co lor={SecondaryClr
-                    }]No filter set, consider using a filter to reduce noise.[/color]");
+                    shell.WriteMarkup($"[color={SecondaryClr}]No filter set, consider using a filter to reduce noise.[/color]");
                 }
 
-                shell.WriteMarkup($"[color={PrimaryClr}]Now following {logFile.Name} for '{filter
-                }', use 'serverlogs --stop' to cancel.[/color]");
+                shell.WriteMarkup($"[color={PrimaryClr}]Now following {logFile.Name} for '{filter}', use 'serverlogs --stop' to cancel.[/color]");
             }
         }
         catch (Exception ex) { shell.WriteError($"Failed to read log file '{logFile.Name}': {ex.Message}"); }
@@ -122,31 +118,19 @@ public sealed partial class ServerLogsCommand : LocalizedCommands
 
     private void ListLogFiles(IConsoleShell shell)
     {
-        List<FileInfo> fileInfos = Directory.GetFiles(LogDir, "*.log").Concat(Directory.GetFiles(LogDir, "*.txt"))
-            .Select(f => new FileInfo(f)).ToList();
+        var files = Directory.GetFiles(LogDir, "*.log")
+            .Concat(Directory.GetFiles(LogDir, "*.txt"))
+            .Select(f => new FileInfo(f))
+            .OrderBy(f => f.LastWriteTimeUtc)
+            .ToList();
 
-        string logsSub = Path.Combine(LogDir, "logs");
-        if (Directory.Exists(logsSub))
+        if (files.Count == 0) { shell.WriteLine("No log files found."); return; }
+
+        shell.WriteMarkup($"[color={PrimaryClr}]--- {files.Count} log file(s) in {LogDir} ---[/color]");
+        foreach (var file in files)
         {
-            fileInfos.AddRange(Directory.GetFiles(logsSub, "*.log").Select(f => new FileInfo(f)));
-            fileInfos.AddRange(Directory.GetFiles(logsSub, "*.txt").Select(f => new FileInfo(f)));
-        }
-
-        fileInfos = fileInfos.OrderBy(f => f.LastWriteTimeUtc).ToList();
-
-        if (fileInfos.Count == 0)
-        {
-            shell.WriteLine("No log files found.");
-            return;
-        }
-
-        shell.WriteMarkup($"[color={PrimaryClr}]--- {fileInfos.Count} log file(s) in {LogDir} ---[/color]");
-
-        foreach (FileInfo file in fileInfos)
-        {
-            string color = file.Length == 0 ? SecondaryClr : PrimaryClr;
-            string sizeStr = file.Length > 0 ? $"{file.Length,8:N0} B" : "  empty  ";
-
+            var color = file.Length == 0 ? SecondaryClr : PrimaryClr;
+            var sizeStr = file.Length > 0 ? $"{file.Length,8:N0} B" : "  empty  ";
             shell.WriteMarkup($"[color={color}]{file.Name,-40}[/color]" +
                 $" [color={SecondaryClr}]{sizeStr}  {file.LastWriteTimeUtc:yyyy-MM-dd HH:mm:ss} UTC[/color]");
         }
@@ -154,38 +138,30 @@ public sealed partial class ServerLogsCommand : LocalizedCommands
 
     private FileInfo? ResolveLogFile(string? explicitFile)
     {
-        static FileInfo? TryFind(string fileName)
-        {
-            foreach (string sub in new[] { string.Empty, "logs/" })
-            {
-                string fullPath = Path.GetFullPath(Path.Combine(LogDir, sub, fileName));
-                if (fullPath.StartsWith(Path.GetFullPath(LogDir)) && File.Exists(fullPath))
-                    return new(fullPath);
-
-                if (!Path.HasExtension(fileName))
-                {
-                    foreach (string ext in new[] { ".txt", ".log" })
-                    {
-                        string withExt = Path.GetFullPath(Path.Combine(LogDir, sub, fileName + ext));
-                        if (withExt.StartsWith(Path.GetFullPath(LogDir)) && File.Exists(withExt))
-                            return new(withExt);
-                    }
-                }
-            }
-
-            return null;
-        }
-
         if (!string.IsNullOrEmpty(explicitFile))
-            return TryFind(explicitFile);
+            return TryFindLogFile(explicitFile);
 
         return Directory.GetFiles(LogDir, "server-log*.txt")
-            .Concat(Directory.Exists(Path.Combine(LogDir, "logs"))
-                ? Directory.GetFiles(Path.Combine(LogDir, "logs"), "server*.txt")
-                : Array.Empty<string>())
             .Select(f => new FileInfo(f))
             .OrderByDescending(f => f.LastWriteTimeUtc)
             .FirstOrDefault();
+    }
+
+    private FileInfo? TryFindLogFile(string fileName)
+    {
+        var fullPath = Path.GetFullPath(Path.Combine(LogDir, fileName));
+        if (fullPath.StartsWith(Path.GetFullPath(LogDir)) && File.Exists(fullPath))
+            return new FileInfo(fullPath);
+
+        foreach (var ext in new[] { ".txt", ".log" })
+        {
+            var withExt = Path.Combine(LogDir, fileName + ext);
+            fullPath = Path.GetFullPath(withExt);
+            if (fullPath.StartsWith(Path.GetFullPath(LogDir)) && File.Exists(fullPath))
+                return new FileInfo(fullPath);
+        }
+
+        return null;
     }
 
     // supports standard SGR colors (30‑37 + 90‑97) and reset (0)
@@ -488,24 +464,13 @@ public sealed partial class ServerLogsCommand : LocalizedCommands
         var completions = new List<CompletionOption>();
         try
         {
-            IEnumerable<string> files = Directory.GetFiles(LogDir, "*.log", SearchOption.TopDirectoryOnly)
+            var files = Directory.GetFiles(LogDir, "*.log", SearchOption.TopDirectoryOnly)
                 .Concat(Directory.GetFiles(LogDir, "*.txt", SearchOption.TopDirectoryOnly));
 
-            string logsSubDir = Path.Combine(LogDir, "logs");
-            if (Directory.Exists(logsSubDir))
-            {
-                files = files
-                    .Concat(Directory.GetFiles(logsSubDir, "*.log", SearchOption.TopDirectoryOnly))
-                    .Concat(Directory.GetFiles(logsSubDir, "*.txt", SearchOption.TopDirectoryOnly))
-                    .ToArray();
-            }
-            else
-                files = files.ToArray();
-
-            foreach (string fullPath in files)
+            foreach (var fullPath in files)
             {
                 string relPath = Path.GetRelativePath(LogDir, fullPath);
-                if (relPath.StartsWith(filter, StringComparison.OrdinalIgnoreCase) || string.IsNullOrEmpty(filter))
+                if (string.IsNullOrEmpty(filter) || relPath.StartsWith(filter, StringComparison.OrdinalIgnoreCase))
                     completions.Add(new(relPath, "log file"));
             }
         }

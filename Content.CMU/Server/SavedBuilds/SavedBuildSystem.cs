@@ -55,8 +55,34 @@ public sealed partial class SavedBuildSystem : EntitySystem
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
 
     public const string SaveDir = "/saved_builds";
-    private const int MaxRadius = 5; // 11x11
+    // ============================================
+    // 🔧 TUNABLE: selection / naming limits
+    // ============================================
+    private const int MaxRadius = 5; // selection half-extent in tiles (5 => 11x11 box)
+    private const int MaxSelectionBoxes = 64; // boxes per selection request (spam cap)
+    private const int MaxManualEntities = 512; // manual add/remove entities per request (spam cap)
+    private const int MaxNameLength = 64; // build name length (also bounds the file name)
     private const int FormatVersion = 1;
+
+    // The saved-build list is re-sent often (menu opens, refreshes) but files only change on save/delete/
+    // rename - so cache the parsed metadata and invalidate on writes. Parsing every .build.yml (full entity
+    // blobs included) per request was a free client-spammable IO/CPU sink.
+    private List<SavedBuildInfo>? _listCache;
+
+    private void InvalidateBuildList() => _listCache = null;
+
+    /// <summary>
+    /// Validates a client-sent saved-build file id: must be a plain "&lt;author&gt;__&lt;name&gt;.build.yml"
+    /// file name with no path separators or traversal, exactly as produced by <see cref="SaveBuild"/>.
+    /// Every network handler that turns an id into a path must go through this.
+    /// </summary>
+    private static bool IsValidBuildId(string? id)
+    {
+        return !string.IsNullOrEmpty(id)
+               && id.EndsWith(".build.yml", StringComparison.Ordinal)
+               && !id.Contains('/') && !id.Contains('\\') && !id.Contains("..")
+               && id.Contains("__", StringComparison.Ordinal);
+    }
 
     public override void Initialize()
     {
@@ -77,17 +103,14 @@ public sealed partial class SavedBuildSystem : EntitySystem
         var user = session.AttachedEntity;
 
         var id = ev.Id;
-        if (string.IsNullOrEmpty(id)
-            || !id.EndsWith(".build.yml", StringComparison.Ordinal)
-            || id.Contains('/') || id.Contains('\\') || id.Contains("..")
-            || !id.Contains("__", StringComparison.Ordinal))
-        {
+        if (!IsValidBuildId(id))
             return;
-        }
 
         var newName = ev.NewName.Trim();
         if (string.IsNullOrEmpty(newName))
             return;
+        if (newName.Length > MaxNameLength)
+            newName = newName[..MaxNameLength];
 
         var dir = new ResPath(SaveDir).ToRootedPath();
         var path = dir / id;
@@ -131,6 +154,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
         _adminLog.Add(LogType.Action, LogImpact.Low,
             $"{session.Name} (user {session.UserId}) renamed saved build '{id}' to '{newName}'");
+        InvalidateBuildList();
         RaiseNetworkEvent(new SavedBuildListEvent { Builds = EnumerateSavedBuilds() }, session);
     }
 
@@ -142,12 +166,8 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
         // Reject anything that isn't a plain build file name (no path traversal out of the save dir).
         var id = ev.Id;
-        if (string.IsNullOrEmpty(id)
-            || !id.EndsWith(".build.yml", StringComparison.Ordinal)
-            || id.Contains('/') || id.Contains('\\') || id.Contains(".."))
-        {
+        if (!IsValidBuildId(id))
             return;
-        }
 
         var dir = new ResPath(SaveDir).ToRootedPath();
         var path = dir / id;
@@ -181,6 +201,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("saved-build-deleted"), popupEnt, popupEnt);
 
         // Refresh the requester's list so the deleted build disappears from the menu immediately.
+        InvalidateBuildList();
         RaiseNetworkEvent(new SavedBuildListEvent { Builds = EnumerateSavedBuilds() }, session);
     }
 
@@ -225,7 +246,9 @@ public sealed partial class SavedBuildSystem : EntitySystem
     /// </summary>
     public void PlaceBuild(ICommonSession session, string id, EntityCoordinates target, Angle rotation, bool atOriginal = false)
     {
-        if (session.AttachedEntity is not { } user || string.IsNullOrEmpty(id))
+        // Same file-name validation as delete/rename: the id becomes a path, so it must never carry
+        // separators or traversal (also covers the placebuild console command).
+        if (session.AttachedEntity is not { } user || !IsValidBuildId(id))
             return;
 
         // Instant, free placement is the privileged version: admins (Spawn) or mappers (Mapping). Non-privileged
@@ -370,6 +393,9 @@ public sealed partial class SavedBuildSystem : EntitySystem
     /// <summary>Reads the metadata header of every saved-build file in the save directory.</summary>
     public List<SavedBuildInfo> EnumerateSavedBuilds()
     {
+        if (_listCache != null)
+            return _listCache;
+
         var result = new List<SavedBuildInfo>();
         var dir = new ResPath(SaveDir).ToRootedPath();
         if (!_resource.UserData.Exists(dir))
@@ -408,6 +434,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
         }
 
         result.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.InvariantCultureIgnoreCase));
+        _listCache = result;
         return result;
     }
 
@@ -505,7 +532,9 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
         if (selection.Boxes != null)
         {
-            foreach (var sel in selection.Boxes)
+            // Take() caps: the selection lists come from the client and are otherwise unbounded - tens of
+            // thousands of boxes would be tens of thousands of lookup queries per (spammable) request.
+            foreach (var sel in selection.Boxes.Take(MaxSelectionBoxes))
             {
                 var radius = Math.Clamp(sel.Radius, 0, MaxRadius);
                 var coords = GetCoordinates(sel.Center);
@@ -528,7 +557,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
         if (selection.ManualAdds != null)
         {
-            foreach (var net in selection.ManualAdds)
+            foreach (var net in selection.ManualAdds.Take(MaxManualEntities))
             {
                 if (TryGetEntity(net, out var uid) && CanSave(uid.Value, saverId, mapperMode, includeLoose))
                     result.Add(uid.Value);
@@ -537,7 +566,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
         if (selection.ManualRemoves != null)
         {
-            foreach (var net in selection.ManualRemoves)
+            foreach (var net in selection.ManualRemoves.Take(MaxManualEntities))
             {
                 if (TryGetEntity(net, out var uid))
                     result.Remove(uid.Value);
@@ -597,6 +626,9 @@ public sealed partial class SavedBuildSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("saved-build-error-no-name"), user, user);
             return;
         }
+        // Bounded: the name flows into the file name; a multi-KB name would throw in the file open.
+        if (name.Length > MaxNameLength)
+            name = name[..MaxNameLength];
 
         var entities = ResolveSelection(saver, selection, mode, includeLoose);
         if (entities.Count == 0)
@@ -690,6 +722,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
             return;
         }
 
+        InvalidateBuildList();
         _adminLog.Add(LogType.Action, LogImpact.Low,
             $"{ToPrettyString(user):player} (user {saver.UserId}) saved build '{name}' with {entities.Count} entities to {path}");
         _popup.PopupEntity(

@@ -93,6 +93,9 @@ public sealed class ZCaveInSystem : EntitySystem
         // region dirty, rather than re-scanning every dug tile every second forever (the old TPS sink).
         SubscribeLocalEvent<TransformComponent, AnchorStateChangedEvent>(OnAnchorChanged);
         SubscribeLocalEvent<DamageableComponent, DamageChangedEvent>(OnDamaged);
+
+        // Attribution entries are keyed by map uid; drop them with the round so stale maps don't accumulate.
+        SubscribeLocalEvent<Content.Shared.GameTicking.RoundRestartCleanupEvent>(_ => _lastDigger.Clear());
     }
 
     /// <summary>Records the last player to deal damage on an underground level (the likely over-miner), for attribution.</summary>

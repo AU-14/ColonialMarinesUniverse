@@ -1,0 +1,33 @@
+# CLF team identifier - visible only to other CLF members
+- type: factionIcon
+  id: CLFFaction
+  priority: 12
+  showTo:
+    components:
+    - ShowAntagIcons
+    - CLFMember
+  icon:
+    sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+    state: hudCLF
+
+- type: factionIcon
+  id: CLFFactionLeader
+  priority: 11
+  showTo:
+    components:
+    - ShowAntagIcons
+    - CLFMember
+  icon:
+    sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+    state: clf_cellcom
+
+- type: factionIcon
+  id: CLFFactionMedic
+  priority: 12
+  showTo:
+    components:
+    - ShowAntagIcons
+    - CLFMember
+  icon:
+    sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+    state: clf_med

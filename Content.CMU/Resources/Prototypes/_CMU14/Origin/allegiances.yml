@@ -1,0 +1,47 @@
+- type: Allegiance
+  id: UA
+  name: allegiance-ua-name
+  description: allegiance-ua-description
+  roundStart: true
+
+- type: Allegiance
+  id: UPP
+  name: allegiance-upp-name
+  description: allegiance-upp-description
+  roundStart: true
+
+- type: Allegiance
+  id: CCA
+  name: allegiance-cca-name
+  description: allegiance-cca-description
+  roundStart: true
+
+- type: Allegiance
+  id: IndependentSystems
+  name: allegiance-is-name
+  description: allegiance-is-description
+  roundStart: true
+
+- type: Allegiance
+  id: CLF
+  name: allegiance-clf-name
+  description: allegiance-clf-description
+  roundStart: true
+
+- type: Allegiance
+  id: LaselleBionational
+  name: allegiance-laselle-name
+  description: allegiance-laselle-description
+  roundStart: true
+
+- type: Allegiance
+  id: WeylandYutani
+  name: allegiance-wy-name
+  description: allegiance-wy-description
+  roundStart: true
+
+- type: Allegiance
+  id: TWE
+  name: allegiance-twe-name
+  description: allegiance-twe-description
+  roundStart: true

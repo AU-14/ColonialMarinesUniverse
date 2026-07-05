@@ -1,0 +1,119 @@
+- type: entity
+  id: ActionBlackfootEngineToggle
+  name: Toggle Blackfoot Engines
+  description: Start or stop the Blackfoot engines.
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Blackfoot.BlackfootEngineToggleActionEvent
+  - type: Action
+    icon:
+      sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
+      state: integrity
+    itemIconStyle: BigItem
+
+- type: entity
+  id: ActionBlackfootTakeoff
+  name: Blackfoot Takeoff
+  description: Begin the VTOL takeoff sequence.
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Blackfoot.BlackfootTakeoffActionEvent
+  - type: Action
+    icon:
+      sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
+      state: fuel
+    itemIconStyle: BigItem
+
+- type: entity
+  id: ActionBlackfootLand
+  name: Blackfoot Landing
+  description: Begin the VTOL landing sequence.
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Blackfoot.BlackfootLandActionEvent
+  - type: Action
+    icon:
+      sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
+      state: targeting-reticle
+    itemIconStyle: BigItem
+
+- type: entity
+  id: ActionBlackfootFlightModeToggle
+  name: Toggle Blackfoot Flight Mode
+  description: Switch between VTOL hover and forward flight.
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Blackfoot.BlackfootFlightModeToggleActionEvent
+  - type: Action
+    icon:
+      sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
+      state: battery
+    itemIconStyle: BigItem
+
+- type: entity
+  id: ActionBlackfootRearDoorToggle
+  name: Toggle Blackfoot Rear Door
+  description: Open or close the Blackfoot rear door.
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Blackfoot.BlackfootRearDoorToggleActionEvent
+  - type: Action
+    icon:
+      sprite: _CMU14/Structures/Vehicles/Blackfoot/interiors/blackfoot.rsi
+      state: rear-door-open
+    itemIconStyle: BigItem
+
+- type: entity
+  id: ActionBlackfootStowToggle
+  name: Stow Blackfoot
+  description: Fold or deploy the Blackfoot while grounded.
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Blackfoot.BlackfootStowToggleActionEvent
+  - type: Action
+    icon:
+      sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_hardpoints.rsi
+      state: engines
+    itemIconStyle: BigItem
+
+- type: entity
+  id: ActionBlackfootAscendZLevel
+  name: Blackfoot Ascend
+  description: Climb the Blackfoot up one Z-level.
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Blackfoot.BlackfootAscendZLevelActionEvent
+  - type: Action
+    checkCanInteract: false
+    icon:
+      sprite: _CMU14/ZLevels/Actions/misc.rsi
+      state: up
+    itemIconStyle: BigItem
+
+- type: entity
+  id: ActionBlackfootDescendZLevel
+  name: Blackfoot Descend
+  description: Descend the Blackfoot down one Z-level.
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Blackfoot.BlackfootDescendZLevelActionEvent
+  - type: Action
+    checkCanInteract: false
+    icon:
+      sprite: _CMU14/ZLevels/Actions/misc.rsi
+      state: down
+    itemIconStyle: BigItem
+
+- type: entity
+  id: ActionBlackfootDoorGunZModeToggle
+  name: Toggle M866 Z-Fire
+  description: Switch the M866 between current Z-level fire and one-level-down fire.
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Blackfoot.BlackfootDoorGunZModeToggleActionEvent
+  - type: Action
+    checkCanInteract: false
+    icon:
+      sprite: _CMU14/ZLevels/Actions/misc.rsi
+      state: down
+    itemIconStyle: BigItem

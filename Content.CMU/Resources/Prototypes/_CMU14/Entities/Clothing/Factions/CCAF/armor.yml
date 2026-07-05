@@ -1,0 +1,26 @@
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14CCAFArmor
+  name: ISAS Armor
+  description: Standard body armor worn by frontline CCAF infantry. This unit has been modified for compatibility with the Integrated Soldier Armor System backpack, which links to a CG982 ISACV to deliver real time combat data. Currently in field trials with select CCAF infantry units.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/CCAF/armor.rsi
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14CCAFArmorPadless
+  name: ISAS Padless Armor
+  description: Standard body armor worn by frontline CCAF infantry. This unit has been modified for compatibility with the Integrated Soldier Armor System backpack, which links to a CG982 ISACV to deliver real time combat data. Currently in field trials with select CCAF infantry units. This unit has had its shoulder pads removed.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/CCAF/armornopadss.rsi
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14CCAFArmorStripped
+  name: ISAS Stripped Armor
+  description: Standard body armor worn by frontline CCAF infantry. This unit has been modified for compatibility with the Integrated Soldier Armor System backpack, which links to a CG982 ISACV to deliver real time combat data. Currently in field trials with select CCAF infantry units. This unit has had its shoulder pads and greaves removed.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/CCAF/armorstripped.rsi

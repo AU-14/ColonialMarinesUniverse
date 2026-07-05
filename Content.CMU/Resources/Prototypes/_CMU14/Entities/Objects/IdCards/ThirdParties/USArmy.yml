@@ -1,0 +1,143 @@
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUSArmyCET
+  categories: [ HideSpawnMenu ]
+  name: US Army Combat Engineering Tech ID card
+  components:
+  - type: PresetIdCard
+    job: AU14USArmyCET
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUSArmyCMT
+  categories: [ HideSpawnMenu ]
+  name: US Army Combat Medical Tech ID card
+  components:
+  - type: PresetIdCard
+    job: AU14USArmyCMT
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUSArmyHeavyGunner
+  categories: [ HideSpawnMenu ]
+  name: US Army Heavy Gunner Operator ID card
+  components:
+  - type: PresetIdCard
+    job: AU14USArmyHeavyGunner
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUSArmyMarksman
+  categories: [ HideSpawnMenu ]
+  name: US Army Marksman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14USArmyMarksman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUSArmySquadleader
+  categories: [ HideSpawnMenu ]
+  name: US Army Section Leader ID card
+  components:
+  - type: PresetIdCard
+    job: AU14USArmySquadLeader
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUSArmySynth
+  name: US Army Synth ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: AU14USArmySynth
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUSArmyTrooper
+  categories: [ HideSpawnMenu ]
+  name: US Army Trooper ID card
+  components:
+  - type: PresetIdCard
+    job: AU14USArmyTrooper
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUSArmyTankCommander
+  categories: [ HideSpawnMenu ]
+  name: US Army Tank Commander ID card
+  components:
+  - type: PresetIdCard
+    job: AU14USArmyTankCommander
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUSArmyTankDriver
+  categories: [ HideSpawnMenu ]
+  name: US Army Tank Driver ID card
+  components:
+  - type: PresetIdCard
+    job: AU14USArmyTankDriver
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUSArmyTankGunner
+  categories: [ HideSpawnMenu ]
+  name: US Army Tank Gunner ID card
+  components:
+  - type: PresetIdCard
+    job: AU14USArmyTankGunner
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUSArmyTankLoader
+  categories: [ HideSpawnMenu ]
+  name: US Army Tank Loader ID card
+  components:
+  - type: PresetIdCard
+    job: AU14USArmyTankLoader
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardGold
+  id: AU14IDCardUSArmyCommander
+  categories: [ HideSpawnMenu ]
+  name: US Army Commander ID card
+  components:
+  - type: PresetIdCard
+    job: AU14USArmyCommander
+  - type: ItemIFF
+    factions:
+    - GOVFOR
