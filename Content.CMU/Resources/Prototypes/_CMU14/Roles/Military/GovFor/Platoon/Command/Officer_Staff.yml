@@ -11,6 +11,7 @@
   playTimeTracker: AU14JobGOVFORPlatOp
   requireAdminNotify: true
   canBeAntag: false
+  displayWeight: 6
   accessGroups:
   - AU14GovforCommand
   - aulegacygroupcommand # NOTE: should remove & hard migrate

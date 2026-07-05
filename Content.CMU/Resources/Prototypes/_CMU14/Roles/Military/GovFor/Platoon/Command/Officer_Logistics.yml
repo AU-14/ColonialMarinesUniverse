@@ -12,6 +12,7 @@
   playTimeTracker: AU14JobGOVFOROfficerLogistics
   requireAdminNotify: true
   canBeAntag: false
+  displayWeight: 6
   accessGroups:
   - AU14GovforCommand
   - AU14GovforAuxTech
