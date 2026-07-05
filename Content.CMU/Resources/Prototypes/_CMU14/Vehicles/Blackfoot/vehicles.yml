@@ -112,6 +112,7 @@
     reverseAcceleration: 2
     turnDelay: 0.25
     turnInPlace: true
+    movementCollisionInset: 0.17
     xenoBlockMinimumSize: Immobile
     canXenosPush: false
     speedAtZeroIntegrity: 0.25
