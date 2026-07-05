@@ -249,6 +249,12 @@
       amount: 1
     - id: AU14BackpackRTOPackGray
       amount: 1
+    - id: RMCMegaphone
+      amount: 1
+    - id: RMCGlassesHUDSecurity
+      amount: 1
+    - id: CMU14USCMMPBrassard
+      amount: 3
 
 - type: entity
   parent: AU14KitPlatoonOfficer
