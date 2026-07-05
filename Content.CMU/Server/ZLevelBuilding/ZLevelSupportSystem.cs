@@ -413,6 +413,9 @@ public sealed class ZLevelSupportSystem : EntitySystem
             // body to fall, so don't move it.
             if (HasComp<TileFloorSupportComponent>(ent))
             {
+                if (TryComp<TransformComponent>(ent, out var supportXform) && supportXform.Anchored)
+                    _transform.Unanchor(ent, supportXform);
+
                 QueueDel(ent);
                 continue;
             }

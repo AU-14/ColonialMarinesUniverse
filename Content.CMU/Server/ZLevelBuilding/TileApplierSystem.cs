@@ -22,6 +22,7 @@ namespace Content.Server._AU14.ZLevelBuilding;
 public sealed class TileApplierSystem : EntitySystem
 {
     [Dependency] private readonly MapSystem _map = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ITileDefinitionManager _tileDef = default!;
 
     /// <summary>The invisible per-tile support marker spawned on laid floors (see tiles.yml).</summary>
@@ -69,6 +70,7 @@ public sealed class TileApplierSystem : EntitySystem
             return;
 
         var tile = _map.TileIndicesFor(gridUid, grid, xform.Coordinates);
+        _transform.Unanchor(ent.Owner, xform);
         _map.SetTile(gridUid, grid, tile, Tile.Empty);
     }
 
