@@ -1,0 +1,54 @@
+- type: entity
+  parent: RMCArmbandBase
+  id: AU14ChevronNSPABase
+  abstract: true
+  suffix: NSPA Rank Chevron
+  description: Civil policing rank insignia. The last series of pins were metal, but a senior inspector complained about getting stabbed, so these are made of plastic.
+
+- type: entity
+  parent: AU14ChevronNSPABase
+  id: AU14ChevronNSPAConstable
+  name: constable chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: AU14RankNSPAConstable
+    override: true
+
+- type: entity
+  parent: AU14ChevronNSPABase
+  id: AU14ChevronNSPASeniorConstable
+  name: senior constable chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_nco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_nco
+  - type: RankChanger
+    rank: AU14RankNSPASeniorConstable
+    override: true
+
+- type: entity
+  parent: AU14ChevronNSPABase
+  id: AU14ChevronNSPAInspector
+  name: inspector chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_officer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: AU14RankNSPAInspector
+    override: true

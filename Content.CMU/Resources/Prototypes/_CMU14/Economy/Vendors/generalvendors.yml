@@ -234,7 +234,7 @@
   parent: ColMarTechBase
   id: AU14JOGenericVendor
   name: junior officer equipment rack
-  description: An automated rack hooked up to a small storage of junior officer equipment.
+  description: An automated rack hooked up to a small storage of junior officer equipment. There's a wooden sign hanging, with a red marker written on it that reads "moved". Behind it the interface shows its barely holding any of the usual stock.
   components:
   - type: AU14VendorJO
   - type: Sprite
@@ -242,47 +242,56 @@
   - type: CMAutomatedVendor
     jobs: [ AU14JobOPFORPlatOp, AU14JobGOVFORPlatOp, AU14JobPlatOpBase ]
     sections:
-    - name: Senior Officer
-      choices: { CMUJOLoadoutVendorKit: 1 }
-      sharedJOLimit: 1
+    # - name: Senior Officer
+    #   choices: { CMUJOLoadoutVendorKit: 1 }
+    #   sharedJOLimit: 1
+    #   entries:
+    #   - id: AU14KitJOAdjutantKit
+    #     giveSquadRoleName: au14-job-name-juniorofficer-adj
+    #     givePrefix: au14-job-prefix-juniorofficer-adj
+    #     isAppendPrefix: false
+    #     isAppendSquadRoleName: false
+    #     giveIcon:
+    #       sprite: _AU14/Interface/au14govforjobicons.rsi
+    #       state: govfor_adj
+    # - name: Staff Officers
+    #   choices: { CMUJOLoadoutVendorKit: 1 }
+    #   entries:
+    #   - id: AU14KitJOStaffOfficerKit
+    #     recommended: true
+    #     giveSquadRoleName: au14-job-name-juniorofficer-so
+    #     givePrefix: au14-job-prefix-juniorofficer-so
+    #     isAppendPrefix: false
+    #     isAppendSquadRoleName: false
+    # - name: Specialized Officers
+    #   choices: { CMUJOLoadoutVendorKit: 1 }
+    #   sharedJOLimit: 2
+    #   entries:
+    #   - id: AU14KitJOIntelligenceOfficer
+    #     giveSquadRoleName: au14-job-name-juniorofficer-io
+    #     givePrefix: au14-job-prefix-juniorofficer-io
+    #     isAppendPrefix: false
+    #     isAppendSquadRoleName: false
+    #     giveIcon:
+    #       sprite: _AU14/Interface/au14govforjobicons.rsi
+    #       state: govfor_io
+    #   - id: AU14KitJOEngineeringKit
+    #     giveSquadRoleName: au14-job-name-juniorofficer-eo
+    #     givePrefix: au14-job-prefix-juniorofficer-eo
+    #     isAppendPrefix: false
+    #     isAppendSquadRoleName: false
+    #     giveIcon:
+    #       sprite: _AU14/Interface/au14govforjobicons.rsi
+    #       state: govfor_eo
+    - name: Spare Equipment
       entries:
-      - id: AU14KitJOAdjutantKit
-        giveSquadRoleName: au14-job-name-juniorofficer-adj
-        givePrefix: au14-job-prefix-juniorofficer-adj
-        isAppendPrefix: false
-        isAppendSquadRoleName: false
-        giveIcon:
-          sprite: _AU14/Interface/au14govforjobicons.rsi
-          state: govfor_adj
-    - name: Staff Officers
-      choices: { CMUJOLoadoutVendorKit: 1 }
-      entries:
-      - id: AU14KitJOStaffOfficerKit
-        recommended: true
-        giveSquadRoleName: au14-job-name-juniorofficer-so
-        givePrefix: au14-job-prefix-juniorofficer-so
-        isAppendPrefix: false
-        isAppendSquadRoleName: false
-    - name: Specialized Officers
-      choices: { CMUJOLoadoutVendorKit: 1 }
-      sharedJOLimit: 2
-      entries:
-      - id: AU14KitJOIntelligenceOfficer
-        giveSquadRoleName: au14-job-name-juniorofficer-io
-        givePrefix: au14-job-prefix-juniorofficer-io
-        isAppendPrefix: false
-        isAppendSquadRoleName: false
-        giveIcon:
-          sprite: _AU14/Interface/au14govforjobicons.rsi
-          state: govfor_io
-      - id: AU14KitJOEngineeringKit
-        giveSquadRoleName: au14-job-name-juniorofficer-eo
-        givePrefix: au14-job-prefix-juniorofficer-eo
-        isAppendPrefix: false
-        isAppendSquadRoleName: false
-        giveIcon:
-          sprite: _AU14/Interface/au14govforjobicons.rsi
-          state: govfor_eo
+      - id: RMCMegaphone
+      - id: RMCLaserDesignator
+        amount: 2
+      - id: RMCPouchCommand
+        amount: 3
+      - id: CMStampApproved
+      - id: CMStampDenied
 
 - type: entity
   parent: ColMarTechBase

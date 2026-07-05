@@ -1,0 +1,64 @@
+- type: entity
+  id: AU14SkillPresetPlatoonAuxTech
+  name: Auxiliary Technician
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillConstruction: 4
+      RMCSkillCqc: 1
+      RMCSkillEndurance: 1
+      RMCSkillEngineer: 4
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 1
+      RMCSkillJtac: 2
+      RMCSkillPowerLoader: 2
+      RMCSkillIntel: 1
+      RMCSkillDomestics: 2
+
+- type: entity
+  id: AU14SkillPresetPlatoonWorkingJoe
+  name: Working Joe
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillCqc: 5
+      RMCSkillEndurance: 1
+      RMCSkillEngineer: 4
+      RMCSkillConstruction: 4
+      RMCSkillFirearms: 1
+      RMCSkillMeleeWeapons: 2
+      RMCSkillPolice: 2
+      RMCSkillFireman: 5
+      RMCSkillPowerLoader: 2
+      RMCSkillVehicles: 2
+      RMCSkillDomestics: 2
+
+- type: entity
+  id: AU14SkillPresetPlatoonAuxiliarySupportSynth
+  name: Auxiliary Support Synth
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillCqc: 5
+      RMCSkillEndurance: 1
+      RMCSkillEngineer: 4
+      RMCSkillConstruction: 3
+      RMCSkillFirearms: 2
+      RMCSkillOverwatch: 1
+      RMCSkillMedical: 4
+      RMCSkillSurgery: 3
+      RMCSkillResearch: 1
+      RMCSkillMeleeWeapons: 2
+      RMCSkillPilot: 2
+      RMCSkillPolice: 2
+      RMCSkillFireman: 5
+      RMCSkillPowerLoader: 2
+      RMCSkillVehicles: 2
+      RMCSkillJtac: 3
+      RMCSkillIntel: 2
+      RMCSkillDomestics: 2
+      RMCSkillNavigations: 1

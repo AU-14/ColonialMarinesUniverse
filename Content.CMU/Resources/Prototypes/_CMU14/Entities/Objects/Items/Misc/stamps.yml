@@ -99,6 +99,16 @@
     stampState: "paper_stamp-ro"
 
 - type: entity
+  parent: AU14StampAUX
+  id: AU14StampLO
+  name: logistics officer's rubber stamp
+  components:
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-lo
+    stampedColor: "#725c0e"
+    stampState: "paper_stamp-ro"
+
+- type: entity
   parent: AU14StampBase
   id: AU14StampEO
   name: engineering officer's rubber stamp

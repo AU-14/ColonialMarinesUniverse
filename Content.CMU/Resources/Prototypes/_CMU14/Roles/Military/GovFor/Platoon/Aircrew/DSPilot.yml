@@ -11,6 +11,7 @@
   playTimeTracker: AU14JobGOVFORDSPilot
   requireAdminNotify: true
   canBeAntag: false
+  displayWeight: 6
   accessGroups:
   - AU14GovforPilot
   - AU14GovforCorpsman
@@ -199,7 +200,7 @@
 - type: startingGear
   id: AU14GearopforDSPilot
   equipment:
-    id: AU14IDCardopforDSPilot
+    id: AU14IDCardOPFORDSPilot
     ears: AU14HeadsetOpforCommand
 
 - type: entity

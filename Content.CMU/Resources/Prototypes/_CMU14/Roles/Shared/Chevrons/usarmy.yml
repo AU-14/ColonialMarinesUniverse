@@ -1,0 +1,380 @@
+- type: entity
+  parent: RMCArmbandBase
+  id: AU14ChevronUSArmyBase
+  abstract: true
+  suffix: US Army Chevron
+  description: United States Army chevron. Smells like oil and burgers.
+
+# enlisted
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmyPrivate1
+  name: private chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/usarmy.rsi
+    state: ranks_ae1
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/usarmy.rsi
+      state: equipped-ranks_ae1
+  - type: RankChanger
+    rank: USArmy_Private1
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmyPrivate2
+  name: private chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/usarmy.rsi
+    state: ranks_ae2
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/usarmy.rsi
+      state: equipped-ranks_ae2
+  - type: RankChanger
+    rank: USArmy_Private2
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmyPFC
+  name: private first class chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/usarmy.rsi
+    state: ranks_ae3
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/usarmy.rsi
+      state: equipped-ranks_ae3
+  - type: RankChanger
+    rank: USArmy_PFC
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmySpecialist
+  name: specialist chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/usarmy.rsi
+    state: ranks_ae4s
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/usarmy.rsi
+      state: equipped-ranks_ae4s
+  - type: RankChanger
+    rank: USArmy_Specialist
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmyCorporal
+  name: corporal chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/usarmy.rsi
+    state: ranks_ae4
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/usarmy.rsi
+      state: equipped-ranks_ae4
+  - type: RankChanger
+    rank: USArmy_Corporal
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmySergeant
+  name: sergeant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/usarmy.rsi
+    state: ranks_ae5
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/usarmy.rsi
+      state: equipped-ranks_ae5
+  - type: RankChanger
+    rank: USArmy_Sergeant
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmyStaffSergeant
+  name: staff sergeant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/usarmy.rsi
+    state: ranks_ae6
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/usarmy.rsi
+      state: equipped-ranks_ae6
+  - type: RankChanger
+    rank: USArmy_StaffSergeant
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmySergeantFirstClass
+  name: sergeant first class chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/usarmy.rsi
+    state: ranks_ae7
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/usarmy.rsi
+      state: equipped-ranks_ae7
+  - type: RankChanger
+    rank: USArmy_SergeantFirstClass
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmyMasterSergeant
+  name: master sergeant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: USArmy_MasterSergeant
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmyFirstSergeant
+  name: first sergeant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: USArmy_FirstSergeant
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmySergeantMajor
+  name: sergeant major chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: USArmy_SergeantMajor
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmyCommandSergeantMajor
+  name: command sergeant major chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: USArmy_CommandSergeantMajor
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmySeniorEnlistedAdvisor
+  name: senior enlisted advisor chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: USArmy_SEA
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmySergeantMajorArmy
+  name: sergeant major of the army chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: USArmy_SergeantMajorArmy
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmySEAChairman
+  name: senior enlisted advisor to the chairman chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: USArmy_SEAChairman
+    override: true
+
+# warrant officers
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmyWarrantOfficer
+  name: warrant officer chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_warrant
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_warrant
+  - type: RankChanger
+    rank: USArmy_WarrantOfficer1
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmyChiefWarrantOfficer2
+  name: chief warrant officer 2 chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_chiefwarrant
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_warrant
+  - type: RankChanger
+    rank: USArmy_ChiefWarrantOfficer2
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmyChiefWarrantOfficer3
+  name: chief warrant officer 3 chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_chiefwarrant
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_warrant
+  - type: RankChanger
+    rank: USArmy_ChiefWarrantOfficer3
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmyChiefWarrantOfficer4
+  name: chief warrant officer 4 chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_chiefwarrant
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_warrant
+  - type: RankChanger
+    rank: USArmy_ChiefWarrantOfficer4
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmyChiefWarrantOfficer5
+  name: chief warrant officer 5 chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_chiefwarrant
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_warrant
+  - type: RankChanger
+    rank: USArmy_ChiefWarrantOfficer5
+    override: true
+
+# generals
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmyLieutenantGeneral
+  name: lieutenant general chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+    state: ranks_o9
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+      state: equipped-ranks_o9
+  - type: RankChanger
+    rank: USArmy_LieutenantGeneral
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmyGeneral
+  name: general chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+    state: ranks_o10
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+      state: equipped-ranks_o10
+  - type: RankChanger
+    rank: USArmy_General
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSArmyBase
+  id: AU14ChevronUSArmyGeneralArmy
+  name: general of the army chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+    state: ranks_o11
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+      state: equipped-ranks_o11
+  - type: RankChanger
+    rank: USArmy_GeneralArmy
+    override: true

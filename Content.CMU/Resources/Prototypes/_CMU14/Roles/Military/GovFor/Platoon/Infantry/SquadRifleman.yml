@@ -9,6 +9,7 @@
   startingGear: AU14GearGOVFORSquadRifleman
   dummyStartingGear: AU14GearGOVFORRiflemanDummy
   playTimeTracker: AU14JobGOVFORSquadRifleman
+  displayWeight: -1
   accessGroups:
   - AU14GovforSquad
   hasIcon: false
@@ -167,7 +168,7 @@
 - type: startingGear
   id: AU14GearopforSquadRifleman
   equipment:
-    id: AU14IDCardopforSquadRifleman
+    id: AU14IDCardOPFORSquadRifleman
     ears: AU14HeadsetOpforMarine
 
 - type: entity

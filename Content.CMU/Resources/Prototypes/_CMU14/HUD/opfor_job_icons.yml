@@ -130,3 +130,45 @@
   icon:
     sprite: _AU14/Interface/au14opforjobicons.rsi
     state: rifleman
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFORAdjutant
+  icon:
+    sprite: _AU14/Interface/au14opforjobicons.rsi
+    state: adj
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFOREO
+  icon:
+    sprite: _AU14/Interface/au14opforjobicons.rsi
+    state: eo
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFORIO
+  icon:
+    sprite: _AU14/Interface/au14opforjobicons.rsi
+    state: io
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFORCMP
+  icon:
+    sprite: _AU14/Interface/au14opforjobicons.rsi
+    state: old_platco
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFORMO
+  icon:
+    sprite: _AU14/Interface/au14opforjobicons.rsi
+    state: old_opsofc
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFORLO
+  icon:
+    sprite: _AU14/Interface/au14opforjobicons.rsi
+    state: old_platco

@@ -7,24 +7,30 @@
   faction: govfor
   roles:
   - AU14JobGOVFORPlatCo
+  - AU14JobGOVFORAdjutant
   - AU14JobGOVFORPlatOp
   - AU14JobGOVFORadvisor
+  - AU14JobGOVFOROfficerIntel
   - AU14JobGOVFORSectionSergeant
   - AU14JobGOVFORSquadSergeant
-  - AU14JobGOVFORWeaponsSpecialist
   - AU14JobGOVFORRadioTelephoneOperator
   - AU14JobGOVFORSquadRifleman
   - CMUJobGOVFORDroneOperator
+  - AU14JobGOVFORWeaponsSpecialist
   - AU14JobGOVFORSquadAutomaticRifleman
   - AU14JobGOVFORSquadCombatTech
-  - AU14JobGOVFORVehicleCrewman
-  - AU14JobGOVFORPlatoonCorpsman
+  - AU14JobGOVFOROfficerLogistics
   - AU14JobGOVFORAuxTech
+  - AU14JobGOVFOROfficerMedical
+  - AU14JobGOVFORMilitaryDoctor
+  - AU14JobGOVFORPlatoonCorpsman
+  - AU14JobGOVFOROfficerMP
+  - AU14JobGOVFORMilitaryPoliceMan
+  - AU14JobGOVFOROfficerEngi
+  - AU14JobGOVFORVehicleCrewman
   - AU14JobGOVFORDSPilot
   - AU14JobGOVFORDCC
   - AU14JobGOVFORAuxSupportSynth
   - AU14JobGOVFORWorkingJoe
-  - AU14JobGOVFORMilitaryDoctor
-  - AU14JobGOVFORMilitaryPoliceMan
   departmentRadio: null
-  headOfDepartment: null
+  headOfDepartment: AU14JobGOVFORPlatCo
