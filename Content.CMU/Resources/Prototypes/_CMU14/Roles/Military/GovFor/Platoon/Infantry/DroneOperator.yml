@@ -97,6 +97,7 @@
   hidden: false
   setPreference: true
   basePlaytimeTracker: true
+  ignoreAllegiance: true
 
 - type: roleLoadout
   id: JobCMUJobGOVFORDroneOperator
