@@ -76,6 +76,9 @@ public sealed class InsurgencyFactionSelectWindow : DefaultWindow
 
         RebuildDefault(state);
         RebuildCustom();
+
+        // Matches the improved construction menu; safe to re-run per state push.
+        InsforUiStyle.Apply(this);
     }
 
     private void RebuildDefault(InsurgencyFactionSelectEuiState state)
@@ -139,8 +142,8 @@ public sealed class InsurgencyFactionSelectWindow : DefaultWindow
     // One selectable faction row: flag sprite (if any), title, a short description, and a Choose button.
     private Control BuildRow(string title, string description, string? flagEntity, bool enabled, string? disabledReason, Action onPressed)
     {
-        var panel = new PanelContainer { Margin = new Thickness(0, 0, 0, 6) };
-        var row = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, Margin = new Thickness(6) };
+        var panel = new PanelContainer { Margin = new Thickness(0, 0, 0, 6), HorizontalExpand = true };
+        var row = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, Margin = new Thickness(6), HorizontalExpand = true };
 
         if (flagEntity != null && _prototype.HasIndex<EntityPrototype>(flagEntity))
         {
@@ -150,9 +153,11 @@ public sealed class InsurgencyFactionSelectWindow : DefaultWindow
         }
 
         var text = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, HorizontalExpand = true, Margin = new Thickness(6, 0) };
-        text.AddChild(new Label { Text = title, StyleClasses = { "LabelHeading" } });
+        // ClipText: a long title/description otherwise forces the row's min width past the window,
+        // shoving the Choose button out of view (the reported "have to scroll to Choose" bug).
+        text.AddChild(new Label { Text = title, StyleClasses = { "LabelHeading" }, ClipText = true });
         if (!string.IsNullOrWhiteSpace(description))
-            text.AddChild(new Label { Text = Truncate(description, 160), MaxWidth = 460 });
+            text.AddChild(new Label { Text = Truncate(description, 160), ClipText = true });
         if (!enabled && disabledReason != null)
             text.AddChild(new Label { Text = disabledReason, StyleClasses = { "LabelSubText" } });
         row.AddChild(text);

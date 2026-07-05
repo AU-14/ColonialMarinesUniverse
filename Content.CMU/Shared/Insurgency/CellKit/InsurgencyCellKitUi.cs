@@ -18,12 +18,18 @@ public enum InsurgencyCellKitUiKey : byte
 [Serializable, NetSerializable]
 public sealed class InsurgencyCellKitBuiState : BoundUserInterfaceState
 {
+    /// <summary>Prototype ids, in order, used for the sprite preview.</summary>
     public List<string> Entries { get; }
+
+    /// <summary>Display labels parallel to <see cref="Entries"/> (faction vendor name, or the proto name).</summary>
+    public List<string> Names { get; }
+
     public float DeployTime { get; }
 
-    public InsurgencyCellKitBuiState(List<string> entries, float deployTime)
+    public InsurgencyCellKitBuiState(List<string> entries, List<string> names, float deployTime)
     {
         Entries = entries;
+        Names = names;
         DeployTime = deployTime;
     }
 }

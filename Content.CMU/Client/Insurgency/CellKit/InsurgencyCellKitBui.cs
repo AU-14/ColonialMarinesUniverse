@@ -29,6 +29,6 @@ public sealed class InsurgencyCellKitBui : BoundUserInterface
     {
         base.UpdateState(state);
         if (state is InsurgencyCellKitBuiState s)
-            _window?.SetEntries(s.Entries);
+            _window?.SetEntries(s.Entries, s.Names);
     }
 }

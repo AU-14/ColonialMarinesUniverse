@@ -13,6 +13,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Client._AU14.Insurgency.Editor;
 
@@ -44,6 +45,7 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
 
     private List<EditorFactionEntry> _factions = new();
     private string? _govforPlatoon;
+    private InsurgencyEditorScope _scope = InsurgencyEditorScope.Default;
 
     public InsurgencyFactionEditorWindow(
         Action<int?, bool, FactionDefinition> onSave,
@@ -60,8 +62,14 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
 
         var root = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, HorizontalExpand = true, VerticalExpand = true };
 
-        // Left: faction list + New button.
+        // Left: help button, faction list + New button.
         var left = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, MinSize = new Vector2(230, 0) };
+        var help = new Button { Text = "Help - what do these fields mean?" };
+        help.OnPressed += _ => new InsurgencyEditorHelpWindow().OpenCentered();
+        left.AddChild(help);
+
+        // The custom flag pipeline (template export + PNG import) was cancelled as too logically
+        // complicated; its code was removed entirely (see git history to resurrect it).
         left.AddChild(new Label { Text = "Factions", StyleClasses = { "LabelHeading" } });
         _list = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, VerticalExpand = true };
         left.AddChild(new ScrollContainer { Children = { _list }, VerticalExpand = true, HorizontalExpand = true });
@@ -81,7 +89,10 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
     {
         _factions = state.Factions;
         _govforPlatoon = state.GovforPlatoon;
+        _scope = state.Scope;
+        Title = _scope == InsurgencyEditorScope.Custom ? "INSFOR Custom Faction Editor" : "INSFOR Faction Editor";
         RebuildList();
+        InsforUiStyle.Apply(this); // improved-construction-menu look; re-run safe
     }
 
     private void RebuildList()
@@ -113,17 +124,28 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
 
         _pane.AddChild(Header(entry == null ? "New faction" : $"Editing: {NonEmpty(meta.Title, "(untitled)")}"));
 
-        var title = LabeledLine("Title", meta.Title);
-        var recruited = LabeledLine("Recruited message", meta.RecruitedMessage);
-        var description = LabeledLine("Description", meta.Description);
-        var roleplay = LabeledLine("Roleplay style", meta.RoleplayText);
-        var flag = EntityField("Flag entity", meta.FlagEntity?.Id);
+        // These four are free-form prose players read, so they get roomy multi-line boxes rather than a
+        // single cramped line. Nudge MultilineHeight below to change how tall the boxes start.
+        var title = LabeledMultiline("Title", meta.Title);
+        var recruited = LabeledMultiline("Recruited message", meta.RecruitedMessage);
+        var description = LabeledMultiline("Description", meta.Description);
+        var roleplay = LabeledMultiline("Roleplay style", meta.RoleplayText);
+        // DISABLED: picking a flag for an INSFOR faction is cancelled for now - the whole flag
+        // feature (selection + import/export) proved too logically complicated. The stored value
+        // is preserved untouched on save so nothing is lost if this comes back.
+        // var flag = FlagField("Flag entity", meta.FlagEntity?.Id);
         var icon = IconField("Status icon", meta.StatusIcon?.Id);
         var dollars = LabeledLine("Dollars to points rate", def.Economy.DollarsToPointsRate.ToString(System.Globalization.CultureInfo.InvariantCulture));
 
-        var isDefault = new CheckBox { Text = "Default faction (host-authored, DB stored)", Pressed = entry?.IsDefault ?? true };
+        // The Custom editor can only author Custom factions, so the toggle disappears and stays off.
+        var isDefault = new CheckBox
+        {
+            Text = "Default faction (host-authored, DB stored)",
+            Pressed = _scope == InsurgencyEditorScope.Default && (entry?.IsDefault ?? true),
+            Visible = _scope == InsurgencyEditorScope.Default,
+        };
 
-        foreach (var c in new Control[] { title.Control, recruited.Control, description.Control, roleplay.Control, flag.Control, icon.Control, dollars.Control, isDefault })
+        foreach (var c in new Control[] { title.Control, recruited.Control, description.Control, roleplay.Control, icon.Control, dollars.Control, isDefault })
             _pane.AddChild(c);
 
         var opposed = PlatoonListEditor("Opposed GOVFOR factions", meta.OpposedGovforFactions);
@@ -140,6 +162,10 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
         // What the analyzer machine accepts for points, and at what ratio. Empty = plain dollars.
         var submissions = PointsSubmissionListEditor(def.Economy.PointsSubmissions);
         _pane.AddChild(submissions.Control);
+
+        // Dollars stay valid alongside any custom submittables unless the author turns them off.
+        var includeDollars = new CheckBox { Text = "Also accept plain dollars for points", Pressed = def.Economy.IncludeDollars };
+        _pane.AddChild(includeDollars);
 
         var vendors = VendorListEditor(def.CellKit.VendorDefinitions);
         _pane.AddChild(vendors.Control);
@@ -160,7 +186,8 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
                 Description = description.Read(),
                 RoleplayText = roleplay.Read(),
                 RecruitedMessage = recruited.Read(),
-                FlagEntity = ToEntProtoIdOrNull(flag.Read()),
+                // Flag selection is disabled (see above); carry the existing value through unchanged.
+                FlagEntity = meta.FlagEntity,
                 StatusIcon = ToIconOrNull(icon.Read()),
                 OpposedGovforFactions = opposed.Read(),
             },
@@ -168,6 +195,7 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
             {
                 DollarsToPointsRate = ParseFloat(dollars.Read(), FactionDefinition.DefaultDollarsToPointsRate),
                 PointsSubmissions = submissions.Read(),
+                IncludeDollars = includeDollars.Pressed,
             },
             CellKit =
             {
@@ -182,7 +210,7 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
             RoleLoadouts = loadouts.Read(),
         };
 
-        var save = new Button { Text = "Save (server / Default)" };
+        var save = new Button { Text = _scope == InsurgencyEditorScope.Custom ? "Save (server / Custom)" : "Save (server / Default)" };
         save.OnPressed += _ => _onSave(entry?.Id, isDefault.Pressed, BuildDef());
         buttons.AddChild(save);
 
@@ -198,16 +226,25 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
 
         if (entry != null)
         {
-            var select = new Button { Text = "Apply for round" };
-            select.OnPressed += _ => _onSelect(entry.Id);
-            buttons.AddChild(select);
+            // Applying a faction to the round is a Default-editor (host) function; the Custom editor
+            // also cannot touch host-authored rows. The server enforces both regardless.
+            if (_scope == InsurgencyEditorScope.Default)
+            {
+                var select = new Button { Text = "Apply for round" };
+                select.OnPressed += _ => _onSelect(entry.Id);
+                buttons.AddChild(select);
+            }
 
-            var delete = new Button { Text = "Delete" };
-            delete.OnPressed += _ => _onDelete(entry.Id);
-            buttons.AddChild(delete);
+            if (_scope == InsurgencyEditorScope.Default || !entry.IsDefault)
+            {
+                var delete = new Button { Text = "Delete" };
+                delete.OnPressed += _ => _onDelete(entry.Id);
+                buttons.AddChild(delete);
+            }
         }
 
         _pane.AddChild(buttons);
+        InsforUiStyle.Apply(this); // restyle the freshly built pane controls
     }
 
     // ----- pickers --------------------------------------------------------------
@@ -245,17 +282,41 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
 
     // A single-value field backed by a picker: a button showing the current id (or "Choose..."),
     // plus a Clear. Clicking the button opens the given picker.
+    // A small sprite preview shown next to picked values; hidden when the id isn't an entity
+    // (platoons, jobs, icons), so the same picker plumbing serves every id type.
+    private EntityPrototypeView MakeEntityIcon(string id, out Action<string> setIcon)
+    {
+        var view = new EntityPrototypeView { MinSize = new Vector2(24, 24), VerticalAlignment = VAlignment.Center, Margin = new Thickness(0, 0, 4, 0) };
+        var icon = view;
+        setIcon = value =>
+        {
+            if (!string.IsNullOrEmpty(value) && _prototype.HasIndex<EntityPrototype>(value))
+            {
+                icon.SetPrototype(new EntProtoId(value));
+                icon.Visible = true;
+            }
+            else
+            {
+                icon.Visible = false;
+            }
+        };
+        setIcon(id);
+        return view;
+    }
+
     private Editor<string> PickerField(string label, string? current, Action<Action<string>> openPicker)
     {
         var box = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal };
         box.AddChild(new Label { Text = label, MinSize = new Vector2(190, 0) });
 
         var selected = current ?? string.Empty;
+        var icon = MakeEntityIcon(selected, out var setIcon);
         var button = new Button { Text = PickerText(selected), HorizontalExpand = true };
         button.OnPressed += _ => openPicker(id =>
         {
             selected = id;
             button.Text = PickerText(id);
+            setIcon(id);
         });
 
         var clear = new Button { Text = "Clear" };
@@ -263,8 +324,10 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
         {
             selected = string.Empty;
             button.Text = PickerText(string.Empty);
+            setIcon(string.Empty);
         };
 
+        box.AddChild(icon);
         box.AddChild(button);
         box.AddChild(clear);
         return new Editor<string>(box, () => selected);
@@ -292,11 +355,14 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
         {
             var row = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal };
             var current = value ?? string.Empty;
+            var icon = MakeEntityIcon(current, out var setIcon);
+            row.AddChild(icon);
             var button = new Button { Text = PickerText(current), HorizontalExpand = true };
             button.OnPressed += _ => openPicker(id =>
             {
                 current = id;
                 button.Text = PickerText(id);
+                setIcon(id);
             });
 
             var remove = new Button { Text = "X" };
@@ -352,14 +418,29 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
                 button.Text = PickerText(id);
             });
 
-            var amount = new LineEdit { Text = entry.AmountPerPoint.ToString(), MinSize = new Vector2(70, 0), PlaceHolder = "per point" };
+            // Mode 0 = this many items make one point. Mode 1 = one item is worth this many points.
+            var mode = new OptionButton();
+            mode.AddItem("items per point", 0);
+            mode.AddItem("points per item", 1);
+            mode.SelectId(entry.PointsPerItemMode ? 1 : 0);
+            mode.OnItemSelected += args => mode.SelectId(args.Id);
+
+            var startValue = entry.PointsPerItemMode ? entry.PointsPerItem : entry.AmountPerPoint;
+            var value = new LineEdit { Text = startValue.ToString(), MinSize = new Vector2(60, 0), PlaceHolder = "ratio" };
 
             var remove = new Button { Text = "X" };
-            Func<PointsSubmissionEntry> reader = () => new PointsSubmissionEntry
+            Func<PointsSubmissionEntry> reader = () =>
             {
-                Entity = new EntProtoId(current),
-                // At least one so a submission can never mint infinite points.
-                AmountPerPoint = Math.Max(1, ParseIntOrNull(amount.Text) ?? 15),
+                var pointsPerItemMode = mode.SelectedId == 1;
+                // At least one either way so a submission can never mint infinite points.
+                var parsed = Math.Max(1, ParseIntOrNull(value.Text) ?? 1);
+                return new PointsSubmissionEntry
+                {
+                    Entity = new EntProtoId(current),
+                    PointsPerItemMode = pointsPerItemMode,
+                    AmountPerPoint = pointsPerItemMode ? 15 : parsed,
+                    PointsPerItem = pointsPerItemMode ? parsed : 1,
+                };
             };
             remove.OnPressed += _ =>
             {
@@ -368,8 +449,8 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
             };
 
             row.AddChild(button);
-            row.AddChild(new Label { Text = "  per point ", VerticalAlignment = VAlignment.Center });
-            row.AddChild(amount);
+            row.AddChild(mode);
+            row.AddChild(value);
             row.AddChild(remove);
             rows.AddChild(row);
             readers.Add(reader);
@@ -404,8 +485,12 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
             var inner = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical };
             var name = LabeledLine("Vendor name", vendor.Name);
             var model = EntityField("Base model", vendor.BaseModel.Id);
+            var wrenchable = new CheckBox { Text = "Wrenchable (can be wrenched down and moved)", Pressed = vendor.Wrenchable };
             var invulnerable = new CheckBox { Text = "Invulnerable (base entity won't break / change on damage)", Pressed = vendor.Invulnerable };
             var intelPoints = new CheckBox { Text = "Uses cell intel points (money at the intel computer stocks this vendor)", Pressed = vendor.UsesIntelPoints };
+            // For built-in vendors that reuse a fully authored prototype (the CLF requisitions rack): keep
+            // the base entity's own arsenal instead of the sections below. Leave off for normal vendors.
+            var useBaseSections = new CheckBox { Text = "Use base model's own arsenal (ignore the sections below)", Pressed = vendor.UseBaseModelSections };
             var sections = SectionListEditor(vendor.Sections);
 
             var remove = new Button { Text = "Remove vendor" };
@@ -414,8 +499,10 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
                 Name = name.Read(),
                 BaseModel = new EntProtoId(model.Read()),
                 Sections = sections.Read(),
+                Wrenchable = wrenchable.Pressed,
                 Invulnerable = invulnerable.Pressed,
                 UsesIntelPoints = intelPoints.Pressed,
+                UseBaseModelSections = useBaseSections.Pressed,
             };
             remove.OnPressed += _ =>
             {
@@ -425,8 +512,10 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
 
             inner.AddChild(name.Control);
             inner.AddChild(model.Control);
+            inner.AddChild(wrenchable);
             inner.AddChild(invulnerable);
             inner.AddChild(intelPoints);
+            inner.AddChild(useBaseSections);
             inner.AddChild(sections.Control);
             inner.AddChild(remove);
             panel.AddChild(inner);
@@ -646,7 +735,6 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
 
         return new Editor<List<string>>(box, () => checks.Where(c => c.Box.Pressed).Select(c => c.Proto).ToList());
     }
-
     // ----- small helpers --------------------------------------------------------
 
     private static Label Header(string text) => new() { Text = text, StyleClasses = { "LabelHeading" } };
@@ -658,6 +746,29 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
         var line = new LineEdit { Text = value ?? string.Empty, HorizontalExpand = true };
         box.AddChild(line);
         return new Editor<string>(box, () => line.Text.Trim());
+    }
+
+    // ---------------------------------------------------------------------
+    // How tall the multi-line prose boxes start, in pixels. Bump this up for even more room.
+    // ---------------------------------------------------------------------
+    private const float MultilineHeight = 90f;
+
+    // A label above a multi-line text box, for prose fields (title, description, roleplay, recruited)
+    // where authors want to write more than one line. Reads back the collapsed, trimmed text.
+    private static Editor<string> LabeledMultiline(string label, string? value)
+    {
+        var box = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, Margin = new Thickness(0, 0, 0, 6) };
+        box.AddChild(new Label { Text = label });
+
+        var edit = new TextEdit
+        {
+            TextRope = new Rope.Leaf(value ?? string.Empty),
+            HorizontalExpand = true,
+            MinSize = new Vector2(0, MultilineHeight),
+        };
+        box.AddChild(edit);
+
+        return new Editor<string>(box, () => Rope.Collapse(edit.TextRope).Trim());
     }
 
     private static string PickerText(string? id) => string.IsNullOrEmpty(id) ? "Choose..." : id;

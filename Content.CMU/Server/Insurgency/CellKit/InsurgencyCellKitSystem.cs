@@ -77,7 +77,13 @@ public sealed class InsurgencyCellKitSystem : EntitySystem
         for (var i = 0; i < faction.CellKit.VendorDefinitions.Count; i++)
         {
             var vendor = faction.CellKit.VendorDefinitions[i];
-            ent.Comp.Remaining.Add(new CellKitDeployable { Proto = vendor.BaseModel.Id, IsVendor = true, VendorIndex = i });
+            ent.Comp.Remaining.Add(new CellKitDeployable
+            {
+                Proto = vendor.BaseModel.Id,
+                DisplayName = vendor.Name,
+                IsVendor = true,
+                VendorIndex = i,
+            });
         }
     }
 
@@ -146,6 +152,7 @@ public sealed class InsurgencyCellKitSystem : EntitySystem
     private void PushState(Entity<InsurgencyCellKitComponent> ent)
     {
         var entries = ent.Comp.Remaining.Select(d => d.Proto).ToList();
-        _ui.SetUiState(ent.Owner, InsurgencyCellKitUiKey.Key, new InsurgencyCellKitBuiState(entries, ent.Comp.DeployTime));
+        var names = ent.Comp.Remaining.Select(d => d.DisplayName).ToList();
+        _ui.SetUiState(ent.Owner, InsurgencyCellKitUiKey.Key, new InsurgencyCellKitBuiState(entries, names, ent.Comp.DeployTime));
     }
 }

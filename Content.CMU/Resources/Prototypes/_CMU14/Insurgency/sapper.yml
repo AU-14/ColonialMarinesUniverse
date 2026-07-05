@@ -14,16 +14,20 @@
     factions:
     - CLF
   - type: CLFMember
+  # Marks the mob as a trained sapper: the only role that can deploy sapper traps.
+  - type: Sapper
+  # Same skill sheet as the CLF Guerilla Fighter, except construction: GOVFOR's Combat Technician
+  # (their combat engineer) has construction 4, and the Sapper gets one better.
   - type: Skills
     skills:
       RMCSkillEndurance: 1
       RMCSkillFirearms: 2
-      # Higher construction than a plain guerilla: the Sapper is the cell's trap builder.
-      RMCSkillConstruction: 4
+      RMCSkillConstruction: 5
       RMCSkillEngineer: 3
       RMCSkillFireman: 1
       RMCSkillVehicles: 1
       RMCSkillPolice: 1
+      RMCSkillSpecialistWeapons: 1
   - type: JobPrefix
     prefix: au14-job-prefix-clfsapper
   - type: StartingMindRole
@@ -60,9 +64,12 @@
   id: AU14GearCLFSapper
   equipment:
     id: AU14IDCardCLFCivilian
+    # A full colonist toolbelt so the sapper can build and disarm without scavenging tools first.
+    belt: CMBeltUtilityFilled
   inhand:
   - AU14CLFHeadset
-  # TODO Phase 4c: add the Sapper's special trap kit (AU14SapperTrapKit) here once its deploy UI lands.
+  # The Sapper's signature trap kit (Phase 4b). Later phases let them refill it by crafting at a workbench.
+  - AU14SapperTrapToolbox
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -78,7 +85,7 @@
   id: AU14JobCLFSapper
   isHumanoid: true
 
-# Same pre-lobby loadout groups as the Guerilla Fighter.
+# Same lobby loadout as the CLF Guerilla Fighter.
 - type: roleLoadout
   id: JobAU14JobCLFSapper
   points: 7
@@ -90,3 +97,6 @@
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14

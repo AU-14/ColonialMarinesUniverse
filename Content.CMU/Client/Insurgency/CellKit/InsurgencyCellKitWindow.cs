@@ -32,7 +32,7 @@ public sealed class InsurgencyCellKitWindow : DefaultWindow
         Contents.AddChild(scroll);
     }
 
-    public void SetEntries(List<string> entries)
+    public void SetEntries(List<string> entries, List<string> names)
     {
         _rows.RemoveAllChildren();
 
@@ -57,7 +57,10 @@ public sealed class InsurgencyCellKitWindow : DefaultWindow
                 row.AddChild(view);
             }
 
-            var name = _prototype.TryIndex<EntityPrototype>(proto, out var p) ? p.Name : proto;
+            // Prefer the faction-authored display name (e.g. the vendor's name); fall back to the proto's.
+            var name = i < names.Count && !string.IsNullOrWhiteSpace(names[i])
+                ? names[i]
+                : _prototype.TryIndex<EntityPrototype>(proto, out var p) ? p.Name : proto;
             row.AddChild(new Label { Text = name, HorizontalExpand = true, Margin = new Thickness(8, 0), VerticalAlignment = VAlignment.Center });
 
             var deploy = new Button { Text = Loc.GetString("insfor-cell-kit-deploy"), VerticalAlignment = VAlignment.Center };

@@ -18,6 +18,7 @@
       RMCSkillFireman: 2
       RMCSkillVehicles: 1
       RMCSkillPolice: 1
+      RMCSkillSpecialistWeapons: 1
   - type: JobPrefix
     prefix: au14-job-prefix-clfmachinegunner
   - type: TacticalMapIcon

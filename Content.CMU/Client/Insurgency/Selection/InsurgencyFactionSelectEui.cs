@@ -31,4 +31,12 @@ public sealed class InsurgencyFactionSelectEui : BaseEui
         if (state is InsurgencyFactionSelectEuiState s)
             _window.SetState(s);
     }
+
+    // The server closes this EUI the moment a faction is picked (or is re-validated and applied). Without
+    // this the window would linger open on the client, hiding the reveal popup that opens right behind it.
+    public override void Closed()
+    {
+        base.Closed();
+        _window.Close();
+    }
 }

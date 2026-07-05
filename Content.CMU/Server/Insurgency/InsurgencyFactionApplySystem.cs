@@ -33,6 +33,7 @@ public sealed class InsurgencyFactionApplySystem : EntitySystem
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private SharedGodmodeSystem _godmode = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
 
     // ---------------------------------------------------------------------
     // Presentation tunables. One place to change how the faction announcement
@@ -52,6 +53,21 @@ public sealed class InsurgencyFactionApplySystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+        SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnPlayerSpawnComplete);
+    }
+
+    // A cell member who spawns after the faction was already chosen (a late join) still needs the faction's
+    // icon, briefing, and reveal popup - the one-shot announcement at apply time only reached whoever was
+    // already in.
+    private void OnPlayerSpawnComplete(PlayerSpawnCompleteEvent ev)
+    {
+        if (_activeFaction is not { } definition)
+            return;
+
+        if (!TryComp<CLFMemberComponent>(ev.Mob, out var member))
+            return;
+
+        ApplyToMember(ev.Mob, member, ev.Player, definition);
     }
 
     private void OnRoundRestart(RoundRestartCleanupEvent ev)
@@ -101,13 +117,16 @@ public sealed class InsurgencyFactionApplySystem : EntitySystem
     /// </summary>
     public void ConfigureFactionVendor(EntityUid vendor, FactionVendorDefinition definition, int index)
     {
+        // Show the faction-authored name on the placed vendor, whichever configuration branch runs below.
+        if (!string.IsNullOrWhiteSpace(definition.Name))
+            _metaData.SetEntityName(vendor, definition.Name);
+
         // Built-in factions reuse a real, fully-configured vendor prototype. Keep its own arsenal,
         // points mode, and UI exactly as the prototype ships them; only apply the placement niceties
         // (unanchored, freely re-wrenchable, optional invulnerability) and the tracking marker.
         if (definition.UseBaseModelSections)
         {
-            EnsureComp<AnchorableComponent>(vendor);
-            _transform.Unanchor(vendor);
+            ApplyWrenchable(vendor, definition.Wrenchable);
 
             if (definition.Invulnerable)
                 _godmode.EnableGodmode(vendor);
@@ -168,10 +187,7 @@ public sealed class InsurgencyFactionApplySystem : EntitySystem
         activatable.Key = CMAutomatedVendorUI.Key;
         Dirty(vendor, activatable);
 
-        // Build unwrenched and freely un/re-wrenchable regardless of the base entity: add anchoring
-        // support and leave it unanchored so the leader can wrench it down or pick a new spot.
-        EnsureComp<AnchorableComponent>(vendor);
-        _transform.Unanchor(vendor);
+        ApplyWrenchable(vendor, definition.Wrenchable);
 
         // Optional invulnerability so base entities that break or change state on damage stay put.
         if (definition.Invulnerable)
@@ -179,6 +195,24 @@ public sealed class InsurgencyFactionApplySystem : EntitySystem
 
         var marker = EnsureComp<InsurgencyFactionVendorComponent>(vendor);
         marker.VendorIndex = index;
+    }
+
+    /// <summary>
+    ///     Applies the vendor's wrenchable choice. Wrenchable vendors are built unanchored and gain
+    ///     anchoring support so the leader can wrench them down or reposition them, whatever the base
+    ///     entity allowed. Non-wrenchable vendors have anchoring stripped so they cannot be moved.
+    /// </summary>
+    private void ApplyWrenchable(EntityUid vendor, bool wrenchable)
+    {
+        if (wrenchable)
+        {
+            EnsureComp<AnchorableComponent>(vendor);
+            _transform.Unanchor(vendor);
+        }
+        else
+        {
+            RemComp<AnchorableComponent>(vendor);
+        }
     }
 
     /// <summary>
@@ -192,25 +226,29 @@ public sealed class InsurgencyFactionApplySystem : EntitySystem
         if (_activeFaction == null)
             return;
 
-        var submissions = _activeFaction.Economy.PointsSubmissions;
-        if (submissions.Count == 0)
-            return;
-
         if (!TryComp(analyzer, out AnalyzerComponent? comp))
             return;
 
+        var economy = _activeFaction.Economy;
+
+        // Whether plain dollars still count is a faction-wide switch, independent of custom submittables.
+        comp.IncludeDollars = economy.IncludeDollars;
+
+        var submissions = economy.PointsSubmissions;
         comp.Conversions.Clear();
         foreach (var entry in submissions)
         {
             comp.Conversions.Add(new AnalyzerConversionEntry
             {
                 Entity = entry.Entity,
+                PointsPerItemMode = entry.PointsPerItemMode,
                 AmountPerPoint = System.Math.Max(1, entry.AmountPerPoint),
+                PointsPerItem = System.Math.Max(1, entry.PointsPerItem),
             });
         }
 
         // Open the cash slot so the configured (possibly non-currency) goods can be inserted at all.
-        if (TryComp(analyzer, out ItemSlotsComponent? slots))
+        if (submissions.Count > 0 && TryComp(analyzer, out ItemSlotsComponent? slots))
         {
             foreach (var slot in slots.Slots.Values)
                 slot.Whitelist = null;
@@ -252,22 +290,25 @@ public sealed class InsurgencyFactionApplySystem : EntitySystem
     /// </summary>
     private void AnnounceToMembers(FactionDefinition definition)
     {
-        var briefing = BuildBriefing(definition);
-
         var query = EntityQueryEnumerator<CLFMemberComponent, ActorComponent>();
         while (query.MoveNext(out var uid, out var member, out var actor))
-        {
-            // Swap the team status icon so members read as this faction instead of generic CLF.
-            if (definition.Metadata.StatusIcon is { } icon)
-            {
-                member.StatusIcon = icon;
-                Dirty(uid, member);
-            }
+            ApplyToMember(uid, member, actor.PlayerSession, definition);
+    }
 
-            ICommonSession session = actor.PlayerSession;
-            _antag.SendBriefing(session, briefing, BriefingColor, BriefingSound);
-            _eui.OpenEui(new InsurgencyFactionRevealEui(definition), session);
+    // Everything a single cell member gets from the applied faction: the team status icon swap, the chat
+    // briefing, and the reveal popup with the title / roleplay style. Shared by the initial announcement and
+    // by late-joining members so both paths behave identically.
+    private void ApplyToMember(EntityUid uid, CLFMemberComponent member, ICommonSession session, FactionDefinition definition)
+    {
+        // Swap the team status icon so members read as this faction instead of generic CLF.
+        if (definition.Metadata.StatusIcon is { } icon)
+        {
+            member.StatusIcon = icon;
+            Dirty(uid, member);
         }
+
+        _antag.SendBriefing(session, BuildBriefing(definition), BriefingColor, BriefingSound);
+        _eui.OpenEui(new InsurgencyFactionRevealEui(definition), session);
     }
 
     /// <summary>
@@ -283,8 +324,7 @@ public sealed class InsurgencyFactionApplySystem : EntitySystem
             parts.Add(meta.Title);
         if (!string.IsNullOrWhiteSpace(meta.Description))
             parts.Add(meta.Description);
-        if (!string.IsNullOrWhiteSpace(meta.RoleplayText))
-            parts.Add(meta.RoleplayText);
+        // The roleplay style deliberately stays out of chat; it lives in the reveal popup only.
 
         return string.Join("\n\n", parts);
     }

@@ -6,6 +6,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Client._AU14.Insurgency.Selection;
 
@@ -60,13 +61,13 @@ public sealed class InsurgencyFactionRevealWindow : DefaultWindow
         if (!string.IsNullOrWhiteSpace(state.Roleplay))
         {
             root.AddChild(new Label { Text = Loc.GetString("insfor-reveal-roleplay-header"), StyleClasses = { "LabelHeading" }, Margin = new Thickness(0, 10, 0, 2) });
-            root.AddChild(new Label { Text = state.Roleplay, MaxWidth = 420 });
+            root.AddChild(WrappedText(state.Roleplay));
         }
 
         if (!string.IsNullOrWhiteSpace(state.Description))
         {
             root.AddChild(new Label { Text = Loc.GetString("insfor-reveal-about-header"), StyleClasses = { "LabelHeading" }, Margin = new Thickness(0, 10, 0, 2) });
-            root.AddChild(new Label { Text = state.Description, MaxWidth = 420 });
+            root.AddChild(WrappedText(state.Description));
         }
 
         var close = new Button { Text = Loc.GetString("insfor-reveal-close"), HorizontalAlignment = HAlignment.Center, Margin = new Thickness(0, 14, 0, 0) };
@@ -74,5 +75,20 @@ public sealed class InsurgencyFactionRevealWindow : DefaultWindow
         root.AddChild(close);
 
         Contents.AddChild(root);
+        InsforUiStyle.Apply(this);
+    }
+
+    // Roleplay style and description can now be several lines (the editor uses multi-line boxes), so
+    // render them with a width-constrained RichTextLabel that wraps instead of a single-line Label.
+    private static RichTextLabel WrappedText(string text)
+    {
+        // AddText, not SetMessage(string): author text is rendered literally, so a stray '[' can't be
+        // parsed as broken markup and throw mid-construction (which would silently kill the whole popup).
+        var msg = new FormattedMessage();
+        msg.AddText(text);
+
+        var label = new RichTextLabel { MaxWidth = 430, Margin = new Thickness(0, 0, 0, 4) };
+        label.SetMessage(msg);
+        return label;
     }
 }

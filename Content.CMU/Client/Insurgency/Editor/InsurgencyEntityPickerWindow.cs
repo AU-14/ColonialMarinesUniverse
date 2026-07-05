@@ -52,6 +52,7 @@ public sealed class InsurgencyEntityPickerWindow : DefaultWindow
 
         BuildIndex();
         Refresh(string.Empty);
+        InsforUiStyle.Apply(this);
 
         _search.OnTextChanged += args => Refresh(args.Text);
     }

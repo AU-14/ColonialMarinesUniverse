@@ -18,9 +18,32 @@ public static class InsurgencyAuthorization
     // Change this one constant to move the gate (for example to a future HRP whitelist manager).
     public const AdminFlags AuthorizedFlag = AdminFlags.Admin;
 
+    // The Custom-faction editor (insforcustomeditor) is open to players job-whitelisted for this job
+    // via the jobwhitelistadd command - a separate, wider group than the host flag. Change this one
+    // constant to gate it on a different whitelist job.
+    public const string CustomEditorWhitelistJob = "AU14JobCLFCellLeader";
+
+    // Players job-whitelisted for this marker job (jobwhitelistadd <player> InsforEditor) may open
+    // the INSFOR editor without being admins. The job exists only as a whitelist key.
+    public const string EditorWhitelistJob = "InsforEditor";
+
     public static bool IsAuthorized(IAdminManager admin, ICommonSession player)
     {
         var data = admin.GetAdminData(player);
-        return data != null && data.HasFlag(AuthorizedFlag);
+        if (data != null && data.HasFlag(AuthorizedFlag))
+            return true;
+
+        var jobWhitelist = IoCManager.Resolve<Players.JobWhitelist.JobWhitelistManager>();
+        return jobWhitelist.IsWhitelisted(player.UserId, EditorWhitelistJob);
+    }
+
+    public static bool IsCustomAuthorized(IAdminManager admin, ICommonSession player)
+    {
+        // Hosts/admins always qualify, so the Default group never locks itself out of the Custom editor.
+        if (IsAuthorized(admin, player))
+            return true;
+
+        var jobWhitelist = IoCManager.Resolve<Players.JobWhitelist.JobWhitelistManager>();
+        return jobWhitelist.IsWhitelisted(player.UserId, CustomEditorWhitelistJob);
     }
 }

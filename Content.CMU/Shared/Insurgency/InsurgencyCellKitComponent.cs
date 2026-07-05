@@ -44,6 +44,13 @@ public sealed partial class CellKitDeployable
     [DataField]
     public string Proto = string.Empty;
 
+    /// <summary>
+    ///     Label shown in the cell kit UI. For vendors this is the faction-authored vendor name; empty
+    ///     falls back to the prototype's own name.
+    /// </summary>
+    [DataField]
+    public string DisplayName = string.Empty;
+
     [DataField]
     public bool IsVendor;
 

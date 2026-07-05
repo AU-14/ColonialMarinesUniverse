@@ -10,11 +10,15 @@ using Robust.Shared.Console;
 namespace Content.Server._AU14.Insurgency.Commands;
 
 /// <summary>
-///     Opens the Default-faction editor for the calling player. Groundwork: the plan later hosts
-///     this same editor under the Improved Construction Menu "Tools" section, but a console command
-///     is the launch point for now.
+///     Opens the Default-faction editor for the calling player. This console command is the
+///     permanent, always-available entry point: the Improved Construction Menu's "Tools" section may
+///     additionally host the editor on servers that ship that menu, but nothing here depends on it,
+///     so servers without it lose nothing.
 /// </summary>
-[AdminCommand(AdminFlags.Admin)]
+// AnyCommand + an explicit IsAuthorized check: admins pass as before, and players job-whitelisted
+// for InsurgencyAuthorization.EditorWhitelistJob (jobwhitelistadd <player> InsforEditor) also pass.
+// An [AdminCommand] gate would lock the whitelisted non-admins out before our check ran.
+[AnyCommand]
 public sealed class InsurgencyEditorCommand : IConsoleCommand
 {
     public string Command => "insforeditor";
@@ -27,6 +31,13 @@ public sealed class InsurgencyEditorCommand : IConsoleCommand
         if (player == null)
         {
             shell.WriteError("This command can only be run by a player.");
+            return;
+        }
+
+        var adminCheck = IoCManager.Resolve<IAdminManager>();
+        if (!InsurgencyAuthorization.IsAuthorized(adminCheck, player))
+        {
+            shell.WriteError("You are not whitelisted for the INSFOR editor.");
             return;
         }
 

@@ -39,7 +39,7 @@ insfor-reveal-title = Your Faction
 insfor-reveal-untitled = Unnamed Cell
 insfor-reveal-roleplay-header = How to play this faction
 insfor-reveal-about-header = About
-insfor-reveal-close = Understood
+insfor-reveal-close = Got it
 
 # Faction editor pickers.
 insfor-picker-search = Search...
@@ -47,3 +47,7 @@ insfor-picker-entity-title = Select an entity
 insfor-picker-job-title = Select a job
 insfor-picker-platoon-title = Select a GOVFOR faction (platoon)
 insfor-picker-icon-title = Select a status icon
+insfor-picker-flag-title = Select a flag
+
+# Marker job used only as an INSFOR editor whitelist key.
+au14-job-name-insfor-editor = INSFOR Editor Access

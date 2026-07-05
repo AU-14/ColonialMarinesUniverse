@@ -20,11 +20,30 @@ public sealed class InsurgencyFactionEditorEuiState : EuiStateBase
     /// </summary>
     public string? GovforPlatoon { get; }
 
-    public InsurgencyFactionEditorEuiState(List<EditorFactionEntry> factions, string? govforPlatoon)
+    /// <summary>
+    ///     Which editor the server opened. The client only adapts its UI to this; the server enforces
+    ///     the scope on every message regardless of what the client shows.
+    /// </summary>
+    public InsurgencyEditorScope Scope { get; }
+
+    public InsurgencyFactionEditorEuiState(List<EditorFactionEntry> factions, string? govforPlatoon, InsurgencyEditorScope scope)
     {
         Factions = factions;
         GovforPlatoon = govforPlatoon;
+        Scope = scope;
     }
+}
+
+/// <summary>
+///     The two faction-editor entry points. Default is the host-flag INSFOR editor over host-authored
+///     factions; Custom is the separate editor (own console command, own authorization gate) over
+///     player-authored Custom factions only.
+/// </summary>
+[Serializable, NetSerializable]
+public enum InsurgencyEditorScope : byte
+{
+    Default,
+    Custom,
 }
 
 [Serializable, NetSerializable]

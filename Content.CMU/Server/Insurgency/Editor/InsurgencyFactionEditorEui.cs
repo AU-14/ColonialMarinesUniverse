@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Content.Server.Administration.Managers;
 using Content.Server.AU14.Round;
 using Content.Server.EUI;
 using Content.Server._AU14.Insurgency.Database;
+using Content.Shared._AU14.Insurgency;
 using Content.Shared._AU14.Insurgency.Editor;
 using Content.Shared.Eui;
 
@@ -23,6 +25,7 @@ public sealed class InsurgencyFactionEditorEui : BaseEui
     private readonly InsurgencyFactionDbSystem _db;
     private readonly InsurgencyFactionApplySystem _apply;
     private readonly PlatoonSpawnRuleSystem _platoons;
+    private readonly InsurgencyEditorScope _scope;
 
     private List<EditorFactionEntry> _factions = new();
 
@@ -30,17 +33,19 @@ public sealed class InsurgencyFactionEditorEui : BaseEui
         IAdminManager admin,
         InsurgencyFactionDbSystem db,
         InsurgencyFactionApplySystem apply,
-        PlatoonSpawnRuleSystem platoons)
+        PlatoonSpawnRuleSystem platoons,
+        InsurgencyEditorScope scope = InsurgencyEditorScope.Default)
     {
         _admin = admin;
         _db = db;
         _apply = apply;
         _platoons = platoons;
+        _scope = scope;
     }
 
     public override EuiStateBase GetNewState()
     {
-        return new InsurgencyFactionEditorEuiState(_factions, _platoons.SelectedGovforPlatoon?.ID);
+        return new InsurgencyFactionEditorEuiState(_factions, _platoons.SelectedGovforPlatoon?.ID, _scope);
     }
 
     public override void Opened()
@@ -58,8 +63,16 @@ public sealed class InsurgencyFactionEditorEui : BaseEui
 
         var stored = await _db.GetFactionsAsync();
         _factions = stored
+            // The Custom editor only ever sees Custom factions; Default (host) sees everything.
+            .Where(s => _scope == InsurgencyEditorScope.Default || !s.IsDefault)
             .Select(s => new EditorFactionEntry(s.Id, s.IsDefault, s.Definition))
             .ToList();
+
+        // The built-in vanilla CLF lives in code, not the DB, so show it at the top for viewing and as a
+        // starting point. Saving it writes a new DB copy (handled below); it cannot be deleted.
+        _factions.Insert(0, new EditorFactionEntry(
+            InsurgencyBuiltinFactions.VanillaClfId, true, InsurgencyBuiltinFactions.VanillaClf()));
+
         StateDirty();
     }
 
@@ -91,29 +104,70 @@ public sealed class InsurgencyFactionEditorEui : BaseEui
     {
         var def = InsurgencyFactionValidator.Sanitize(msg.Definition);
 
-        if (msg.Id is { } id)
-            await _db.UpdateFactionAsync(id, def, msg.IsDefault);
+        // The Custom editor can only author Custom factions, whatever the client claims.
+        var isDefault = _scope == InsurgencyEditorScope.Default && msg.IsDefault;
+
+        // The built-in vanilla CLF has no DB row, so saving an edited copy of it creates a new faction
+        // rather than trying to update a non-existent id.
+        if (msg.Id is { } id && id != InsurgencyBuiltinFactions.VanillaClfId)
+        {
+            // The Custom editor may only touch rows it can see: Custom ones.
+            if (_scope == InsurgencyEditorScope.Custom && await IsDefaultRow(id))
+                return;
+
+            await _db.UpdateFactionAsync(id, def, isDefault);
+        }
         else
-            await _db.AddFactionAsync(def, msg.IsDefault);
+        {
+            await _db.AddFactionAsync(def, isDefault);
+        }
 
         Refresh();
     }
 
     private async void HandleDelete(InsurgencyFactionDeleteMessage msg)
     {
+        // The built-in vanilla CLF is code-defined and cannot be deleted.
+        if (msg.Id == InsurgencyBuiltinFactions.VanillaClfId)
+            return;
+
+        // The Custom editor cannot delete host-authored Default factions.
+        if (_scope == InsurgencyEditorScope.Custom && await IsDefaultRow(msg.Id))
+            return;
+
         await _db.DeleteFactionAsync(msg.Id);
         Refresh();
     }
 
     private async void HandleSelect(InsurgencyFactionSelectMessage msg)
     {
+        // Applying a faction to the round stays a Default-editor (host) function.
+        if (_scope == InsurgencyEditorScope.Custom)
+            return;
+
+        // Applying the built-in comes straight from code; everything else is loaded from the DB.
+        if (msg.Id == InsurgencyBuiltinFactions.VanillaClfId)
+        {
+            _apply.ApplyFaction(InsurgencyBuiltinFactions.VanillaClf());
+            return;
+        }
+
         var def = await _db.GetFactionAsync(msg.Id);
         if (def != null)
             _apply.ApplyFaction(def);
     }
 
+    // A row is Default when the DB says so; the client's claim is never consulted.
+    private async Task<bool> IsDefaultRow(int id)
+    {
+        var stored = await _db.GetFactionsAsync();
+        return stored.Any(s => s.Id == id && s.IsDefault);
+    }
+
     private bool IsAllowed()
     {
-        return InsurgencyAuthorization.IsAuthorized(_admin, Player);
+        return _scope == InsurgencyEditorScope.Custom
+            ? InsurgencyAuthorization.IsCustomAuthorized(_admin, Player)
+            : InsurgencyAuthorization.IsAuthorized(_admin, Player);
     }
 }

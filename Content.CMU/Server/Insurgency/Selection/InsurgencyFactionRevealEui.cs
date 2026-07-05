@@ -19,6 +19,14 @@ public sealed class InsurgencyFactionRevealEui : BaseEui
         _definition = definition;
     }
 
+    // EUIs only push a state when flagged dirty; without this the client never gets the data and the
+    // popup window is never built.
+    public override void Opened()
+    {
+        base.Opened();
+        StateDirty();
+    }
+
     public override EuiStateBase GetNewState()
     {
         var meta = _definition.Metadata;

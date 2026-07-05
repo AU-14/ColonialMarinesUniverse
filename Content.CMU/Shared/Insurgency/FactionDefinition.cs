@@ -125,18 +125,27 @@ public sealed partial class FactionEconomy
     public float DollarsToPointsRate = FactionDefinition.DefaultDollarsToPointsRate;
 
     /// <summary>
-    ///     What the analyzer machine accepts and converts into cell points. Each entry says how many of
-    ///     a given entity make one point. Left empty means the classic behavior: plain dollars at the
-    ///     analyzer's built-in rate. The editor exposes these so the creator can add, change, or remove
-    ///     what can be submitted and at what ratio.
+    ///     What the analyzer machine accepts and converts into cell points, on top of (or instead of)
+    ///     plain dollars. The editor exposes these so the creator can add, change, or remove what can be
+    ///     submitted and at what ratio.
     /// </summary>
     [DataField]
     public List<PointsSubmissionEntry> PointsSubmissions = new();
+
+    /// <summary>
+    ///     Whether plain dollars still convert to points at the analyzer's built-in rate even when custom
+    ///     submittables are configured. On by default so adding a custom item never silently disables
+    ///     cash. Turn off for a faction whose economy should reject dollars entirely.
+    /// </summary>
+    [DataField]
+    public bool IncludeDollars = true;
 }
 
 /// <summary>
-///     One submittable-for-points item: insert <see cref="AmountPerPoint"/> of <see cref="Entity"/> to
-///     earn one cell point. Ratios are per entity, so different goods can be worth different amounts.
+///     One submittable-for-points item. Two ratio styles are supported and the creator picks per entry:
+///     "<see cref="AmountPerPoint"/> of the entity make one point" (good for cheap goods), or "one entity
+///     is worth <see cref="PointsPerItem"/> points" (good for valuable goods). <see cref="PointsPerItemMode"/>
+///     selects which one is used.
 /// </summary>
 [DataDefinition]
 [Serializable, NetSerializable]
@@ -149,11 +158,25 @@ public sealed partial class PointsSubmissionEntry
     public EntProtoId Entity;
 
     /// <summary>
-    ///     How many of <see cref="Entity"/> convert into a single point. Clamped to at least one so a
-    ///     submission can never mint infinite points.
+    ///     When true, one of <see cref="Entity"/> is worth <see cref="PointsPerItem"/> points. When false,
+    ///     it takes <see cref="AmountPerPoint"/> of the entity to earn a single point.
+    /// </summary>
+    [DataField]
+    public bool PointsPerItemMode;
+
+    /// <summary>
+    ///     How many of <see cref="Entity"/> convert into a single point, in amount-per-point mode. Clamped
+    ///     to at least one so a submission can never mint infinite points.
     /// </summary>
     [DataField]
     public int AmountPerPoint = 15;
+
+    /// <summary>
+    ///     How many points a single <see cref="Entity"/> is worth, in points-per-item mode. Clamped to at
+    ///     least one.
+    /// </summary>
+    [DataField]
+    public int PointsPerItem = 1;
 }
 
 /// <summary>
@@ -205,6 +228,14 @@ public sealed partial class FactionVendorDefinition
     /// </summary>
     [DataField]
     public List<CMVendorSection> Sections = new();
+
+    /// <summary>
+    ///     When true the deployed vendor is built unanchored and can be freely wrenched down and moved,
+    ///     whatever the base entity normally allows. When false it is not wrenchable at all, so it cannot
+    ///     be picked up or repositioned once placed.
+    /// </summary>
+    [DataField]
+    public bool Wrenchable = true;
 
     /// <summary>
     ///     When true the deployed vendor is made invulnerable, so a base entity that would normally

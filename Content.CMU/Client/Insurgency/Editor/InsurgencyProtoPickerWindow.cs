@@ -44,6 +44,7 @@ public sealed class InsurgencyProtoPickerWindow : DefaultWindow
 
         Refresh(string.Empty);
         search.OnTextChanged += args => Refresh(args.Text);
+        InsforUiStyle.Apply(this);
     }
 
     private void Refresh(string filter)
