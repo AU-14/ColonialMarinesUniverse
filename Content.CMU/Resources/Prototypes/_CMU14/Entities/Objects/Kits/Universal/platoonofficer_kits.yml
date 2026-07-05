@@ -203,7 +203,11 @@
         amount: 1
       - id: CMFolderWhite
         amount: 1
-      - id: CMStampCMO
+      - id: CMBeltMedicalFilled
+        amount: 1
+      - id: RMCPouchMedicalFill
+        amount: 1
+      - id: RMCPouchMedkitFill
         amount: 1
 
 - type: entity
