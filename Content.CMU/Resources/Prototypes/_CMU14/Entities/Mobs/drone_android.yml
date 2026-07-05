@@ -12,6 +12,9 @@
   - type: RemoveComponents
     components:
     - type: WorkingJoeVoice
+    - type: IntrinsicRadioReceiver
+    - type: IntrinsicRadioTransmitter
+    - type: ActiveRadio
   - type: Inventory
     templateId: cmuDroneAndroid
   - type: HumanoidAppearance
