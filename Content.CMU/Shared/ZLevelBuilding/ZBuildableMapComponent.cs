@@ -72,7 +72,9 @@ public sealed partial class ZBuildableMapComponent : Component
     /// nothing holding the middle and it collapses; plant a pillar (a vertical <see cref="StructuralSupportComponent"/>)
     /// to make a bigger span safe - exactly like real mine support pillars.
     /// </summary>
-    [DataField]
+    // Networked so the client structural-scanner heat-map uses the map's REAL span instead of assuming the
+    // default (otherwise a tuned map would show "stable" where the server will collapse).
+    [DataField, AutoNetworkedField]
     public int MaxRoofSpan = 3;
 
     /// <summary>Rumble/crash sound played to everyone on a level while a cave-in is collapsing.</summary>

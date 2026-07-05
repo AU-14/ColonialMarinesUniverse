@@ -28,8 +28,8 @@ public sealed class StructuralScannerOverlay : Overlay
 {
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
 
-    /// <summary>Matches the default <see cref="ZBuildableMapComponent.MaxRoofSpan"/> (client has no per-map value).</summary>
-    private const int RoofSpan = 3;
+    /// <summary>Fallback when no <see cref="ZBuildableMapComponent"/> is resolvable (matches its default).</summary>
+    private const int DefaultRoofSpan = 3;
 
     /// <summary>How many tiles around the player to evaluate; bounds the per-frame cost.</summary>
     private const int DrawRadius = 14;
@@ -74,7 +74,7 @@ public sealed class StructuralScannerOverlay : Overlay
 
         if (_entMan.HasComponent<ZGeneratedStoneComponent>(mapUid))
         {
-            DrawUndergroundInstability(handle, gridUid, grid, center);
+            DrawUndergroundInstability(handle, gridUid, grid, center, GetRoofSpan(mapUid));
             return;
         }
 
@@ -87,8 +87,25 @@ public sealed class StructuralScannerOverlay : Overlay
         }
     }
 
+    /// <summary>
+    /// The map's real roof span. Settings live on the source map ABOVE a stone level (mirrors the server's
+    /// GetSettings); falls back to the stone map itself, then the default.
+    /// </summary>
+    private int GetRoofSpan(EntityUid mapUid)
+    {
+        if (_entMan.TryGetComponent(mapUid, out CMUZLevelMapComponent? z) && z.MapAbove is { } above &&
+            _entMan.TryGetComponent(above, out ZBuildableMapComponent? aboveSettings))
+        {
+            return Math.Max(1, aboveSettings.MaxRoofSpan);
+        }
+
+        return _entMan.TryGetComponent(mapUid, out ZBuildableMapComponent? own)
+            ? Math.Max(1, own.MaxRoofSpan)
+            : DefaultRoofSpan;
+    }
+
     /// <summary>Underground: shade open tiles whose roof is unsupported (red) or marginal (yellow).</summary>
-    private void DrawUndergroundInstability(DrawingHandleWorld handle, EntityUid gridUid, MapGridComponent grid, Vector2i center)
+    private void DrawUndergroundInstability(DrawingHandleWorld handle, EntityUid gridUid, MapGridComponent grid, Vector2i center, int roofSpan)
     {
         for (var dx = -DrawRadius; dx <= DrawRadius; dx++)
         {
@@ -98,11 +115,11 @@ public sealed class StructuralScannerOverlay : Overlay
                 if (IsSolid(gridUid, grid, tile))
                     continue;
 
-                var nearest = NearestSolidDistance(gridUid, grid, tile);
+                var nearest = NearestSolidDistance(gridUid, grid, tile, roofSpan);
                 Color color;
-                if (nearest > RoofSpan)
+                if (nearest > roofSpan)
                     color = UnstableColor;
-                else if (nearest == RoofSpan)
+                else if (nearest == roofSpan)
                     color = MarginalColor;
                 else
                     continue;
@@ -188,10 +205,10 @@ public sealed class StructuralScannerOverlay : Overlay
         return false;
     }
 
-    /// <summary>Manhattan distance to the nearest solid tile, capped at RoofSpan + 1.</summary>
-    private int NearestSolidDistance(EntityUid gridUid, MapGridComponent grid, Vector2i tile)
+    /// <summary>Manhattan distance to the nearest solid tile, capped at roofSpan + 1.</summary>
+    private int NearestSolidDistance(EntityUid gridUid, MapGridComponent grid, Vector2i tile, int roofSpan)
     {
-        for (var r = 1; r <= RoofSpan; r++)
+        for (var r = 1; r <= roofSpan; r++)
         {
             for (var dx = -r; dx <= r; dx++)
             {
@@ -204,6 +221,6 @@ public sealed class StructuralScannerOverlay : Overlay
             }
         }
 
-        return RoofSpan + 1;
+        return roofSpan + 1;
     }
 }

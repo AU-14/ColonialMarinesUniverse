@@ -95,6 +95,7 @@ public sealed partial class CustomConstructionMenuSystem
         {
             if (File.Exists(path))
                 File.Delete(path);
+            DbDelete(DbKindLathe, Path.GetFileName(msg.RecipeId));
             RegenerateLathePacks();
         }
         catch (Exception e)
@@ -134,17 +135,19 @@ public sealed partial class CustomConstructionMenuSystem
             return;
         }
 
-        var time = msg.CompleteTime <= 0 ? 4f : msg.CompleteTime;
+        // NaN passes a "<= 0" check and would emit a literal "NaN" the prototype parser rejects next restart.
+        var time = float.IsFinite(msg.CompleteTime) && msg.CompleteTime > 0
+            ? Math.Min(msg.CompleteTime, MaxStepSeconds)
+            : 4f;
         var key = $"{msg.Lathe}__{Sanitize(msg.ResultId)}";
         var recipeId = $"{LatheRecipePrefix}{key}";
 
         try
         {
             Directory.CreateDirectory(LatheDir);
-            File.WriteAllText(
-                Path.Combine(LatheDir, $"{recipeId}.yml"),
-                BuildLatheRecipeYaml(recipeId, msg.Lathe, msg.ResultId, steel, glass, plastic, time),
-                Encoding.UTF8);
+            var yaml = BuildLatheRecipeYaml(recipeId, msg.Lathe, msg.ResultId, steel, glass, plastic, time);
+            File.WriteAllText(Path.Combine(LatheDir, $"{recipeId}.yml"), yaml, Encoding.UTF8);
+            DbUpsert(DbKindLathe, recipeId, yaml);
 
             RegenerateLathePacks();
         }

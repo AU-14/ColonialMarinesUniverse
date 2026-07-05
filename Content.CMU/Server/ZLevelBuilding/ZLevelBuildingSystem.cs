@@ -400,7 +400,9 @@ public sealed class ZLevelBuildingSystem : EntitySystem
 
         var settings = GetSettings(GetSourceMapForStone(below.Owner));
 
-        EnsureChunkAt(below, sourceMap, landingTile);
+        // NOTE: pass the STONE level itself (below.Owner), not the digger's current map - EnsureChunkAt
+        // resolves generation settings relative to the map it is handed.
+        EnsureChunkAt(below, below.Owner, landingTile);
         ClearLandingPocket((below.Comp.StoneGrid, belowGrid), landingTile, settings.StoneRockEntity);
 
         // One traversal stair on the LOWER (stone) level, and an OPEN shaft on the surface above it so the dig

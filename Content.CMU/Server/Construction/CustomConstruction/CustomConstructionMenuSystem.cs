@@ -114,6 +114,10 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
         SubscribeNetworkEvent<SubmitCustomLatheEditorEvent>(OnSubmitLathe);
         SubscribeNetworkEvent<RemoveCustomLatheRecipeEvent>(OnRemoveLatheRecipe);
 
+        // The database is the durable store (the Docker filesystem is wiped on redeploy): put back
+        // any stored entry whose generated file is gone, and hot-load its prototypes for this boot.
+        RestoreFromDatabase();
+
         // Safety net: drop any previously-generated entries that reference things that no longer exist
         // (e.g. a recipe saved with an invalid material before validation existed). Prevents broken
         // "can't build / no steps" menu entries from lingering.
@@ -301,6 +305,7 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
             try
             {
                 File.Delete(file);
+                DbDelete(DbKindEntries, Path.GetFileNameWithoutExtension(file));
                 removed++;
             }
             catch (Exception e)
@@ -340,6 +345,11 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
         if (string.IsNullOrEmpty(recipeId))
             return;
 
+        // Must be a REAL construction recipe id: kills YAML injection through the overrides file (the id is
+        // written into it verbatim) and stops garbage ids accumulating forever.
+        if (!_prototype.HasIndex<Content.Shared.Construction.Prototypes.ConstructionPrototype>(recipeId))
+            return;
+
         var dir = Path.Combine(_generatedDir, OverridesSubDir);
         var path = Path.Combine(dir, OverridesFileName);
 
@@ -353,7 +363,9 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
         try
         {
             Directory.CreateDirectory(dir);
-            File.WriteAllText(path, BuildOverridesYaml(hidden), Encoding.UTF8);
+            var overridesYaml = BuildOverridesYaml(hidden);
+            File.WriteAllText(path, overridesYaml, Encoding.UTF8);
+            DbUpsert(DbKindOverrides, Path.GetFileNameWithoutExtension(OverridesFileName), overridesYaml);
         }
         catch (Exception e)
         {
@@ -456,8 +468,10 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
             return;
         }
 
-        var spawnlist = Fallback(msg.Spawnlist, DefaultSpawnlist);
-        var category = Fallback(msg.Category, DefaultCategory);
+        // Whitelisted: these strings are embedded verbatim in generated YAML, so they must never carry
+        // newlines or YAML syntax (injection), and must keep the DB entry key under its column limit.
+        var spawnlist = SanitizeName(msg.Spawnlist, DefaultSpawnlist);
+        var category = SanitizeName(msg.Category, DefaultCategory);
 
         // An entry is keyed by entity + spawnlist + category. Editing and changing the spawnlist/category
         // moves the entry, so we delete the old file first; same key just overwrites in place.
@@ -473,9 +487,12 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
                 var oldPath = FilePathForKey(msg.EntryKey);
                 if (File.Exists(oldPath))
                     File.Delete(oldPath);
+                DbDelete(DbKindEntries, $"{FilePrefix}{msg.EntryKey}");
             }
 
-            File.WriteAllText(FilePathForKey(newKey), BuildGeneratedYaml(proto, newKey, spawnlist, category, steps, deconstructSteps, msg.Health), Encoding.UTF8);
+            var yaml = BuildGeneratedYaml(proto, newKey, spawnlist, category, steps, deconstructSteps, msg.Health);
+            File.WriteAllText(FilePathForKey(newKey), yaml, Encoding.UTF8);
+            DbUpsert(DbKindEntries, $"{FilePrefix}{newKey}", yaml);
         }
         catch (Exception e)
         {
@@ -507,6 +524,7 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
             var path = FilePathForKey(entryKey);
             if (File.Exists(path))
                 File.Delete(path);
+            DbDelete(DbKindEntries, $"{FilePrefix}{entryKey}");
         }
         catch (Exception e)
         {
@@ -816,6 +834,7 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
             try
             {
                 File.Delete(file);
+                DbDelete(DbKindEntries, Path.GetFileNameWithoutExtension(file));
                 Log.Warning($"Removed invalid custom construction entry '{Path.GetFileName(file)}': {reason}");
             }
             catch (Exception e)
@@ -962,8 +981,12 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
 
         void EmitStep(CustomConstructionStepData step)
         {
-            var doAfter = step.DoAfter <= 0 ? 1 : (int)Math.Ceiling(step.DoAfter);
-            var amount = step.Amount < 1 ? 1 : step.Amount;
+            // Clamped: a hostile Amount (int.MaxValue) would otherwise emit one YAML block per unit (OOM),
+            // and a NaN DoAfter passes a "<= 0" check but casts to int.MinValue.
+            var doAfter = float.IsFinite(step.DoAfter) && step.DoAfter > 0
+                ? Math.Min((int)Math.Ceiling(step.DoAfter), MaxStepSeconds)
+                : 1;
+            var amount = Math.Clamp(step.Amount, 1, MaxStepAmount);
             switch (step.Kind)
             {
                 case CustomConstructionStepKind.EntityMaterial:
@@ -996,7 +1019,7 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
         // entity -> the entity itself). Tool/entity-tool steps consume nothing, so they refund nothing.
         void EmitRefund(CustomConstructionStepData step)
         {
-            var refundAmount = step.Amount < 1 ? 1 : step.Amount;
+            var refundAmount = Math.Clamp(step.Amount, 1, MaxStepAmount);
             switch (step.Kind)
             {
                 case CustomConstructionStepKind.Material when MaterialSheets.TryGetValue(step.Value, out var sheet):
@@ -1180,6 +1203,40 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
 
     private static string Fallback(string? value, string fallback) =>
         string.IsNullOrWhiteSpace(value) ? fallback : value.Trim();
+
+    // ============================================
+    // 🔧 TUNABLE: limits on client-sent editor values
+    // ============================================
+    /// <summary>Max length of a client-sent spawnlist/category name.</summary>
+    private const int MaxNameLength = 64;
+    /// <summary>Max per-step material amount (also caps generated YAML size).</summary>
+    private const int MaxStepAmount = 30;
+    /// <summary>Max per-step build time in seconds.</summary>
+    private const int MaxStepSeconds = 300;
+
+    /// <summary>
+    /// Whitelists a client-sent spawnlist/category name before it is embedded in generated YAML: letters,
+    /// digits, space, '_' and '-' only, max <see cref="MaxNameLength"/> chars. Anything else (newlines,
+    /// YAML syntax, etc.) is stripped so a hostile string can never inject prototype documents.
+    /// </summary>
+    private static string SanitizeName(string? value, string fallback)
+    {
+        var trimmed = (value ?? string.Empty).Trim();
+        if (trimmed.Length == 0)
+            return fallback;
+
+        var sb = new StringBuilder(Math.Min(trimmed.Length, MaxNameLength));
+        foreach (var c in trimmed)
+        {
+            if (char.IsLetterOrDigit(c) || c is ' ' or '_' or '-')
+                sb.Append(c);
+            if (sb.Length >= MaxNameLength)
+                break;
+        }
+
+        var result = sb.ToString().Trim();
+        return result.Length == 0 ? fallback : result;
+    }
 
     private static string Sanitize(string id)
     {

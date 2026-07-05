@@ -56,13 +56,12 @@ public sealed class ZStairSystem : EntitySystem
     {
         var link = ent.Comp;
 
+        // Only clear the tiles the stair actually LAID - never player-built or mapped floor that happened to
+        // sit inside the platform radius (laying skipped those, so destruction must skip them too).
         if (link.HasPlatform && !TerminatingOrDeleted(link.PlatformGrid) && _gridQuery.TryComp(link.PlatformGrid, out var platformGrid))
         {
-            for (var dx = -link.PlatformRadius; dx <= link.PlatformRadius; dx++)
-            {
-                for (var dy = -link.PlatformRadius; dy <= link.PlatformRadius; dy++)
-                    _map.SetTile(link.PlatformGrid, platformGrid, link.PlatformCenter + new Vector2i(dx, dy), Tile.Empty);
-            }
+            foreach (var tile in link.LaidTiles)
+                _map.SetTile(link.PlatformGrid, platformGrid, tile, Tile.Empty);
         }
 
         if (link.Stair is { Valid: true } stair && !TerminatingOrDeleted(stair))
@@ -109,18 +108,21 @@ public sealed class ZStairSystem : EntitySystem
         if (!_building.EnsureNeighborLevel(mapUid, 1, gridUid, stairWorld, out _, out var upperGrid))
             return;
 
-        LayPlatformRingWithShaft(upperGrid, stairWorld, ent.Comp.ReflectFloorTile, ent.Comp.PlatformRadius);
+        var laid = LayPlatformRingWithShaft(upperGrid, stairWorld, ent.Comp.ReflectFloorTile, ent.Comp.PlatformRadius);
 
         // Link the beam to this stair + its platform so destroying the beam collapses both.
-        if (PlaceBeamWall(gridUid, beamWorld, ent.Comp.ReflectBeam) is { } beam && _gridQuery.TryComp(upperGrid, out var upperGridComp))
+        if (PlaceBeamWall(gridUid, beamWorld, ent.Comp.ReflectBeam) is { } beam
+            && _gridQuery.TryComp(upperGrid, out var upperGridComp)
+            && Transform(upperGrid).MapUid is { } upperMapUid
+            && TryComp<MapComponent>(upperMapUid, out var upperMap))
         {
-            var upperMapId = Comp<MapComponent>(Transform(upperGrid).MapUid!.Value).MapId;
             var link = EnsureComp<ZStairBeamLinkComponent>(beam);
             link.Stair = ent.Owner;
             link.PlatformGrid = upperGrid;
-            link.PlatformCenter = _map.TileIndicesFor(upperGrid, upperGridComp, new MapCoordinates(stairWorld, upperMapId));
+            link.PlatformCenter = _map.TileIndicesFor(upperGrid, upperGridComp, new MapCoordinates(stairWorld, upperMap.MapId));
             link.PlatformRadius = ent.Comp.PlatformRadius;
             link.HasPlatform = true;
+            link.LaidTiles.AddRange(laid);
         }
     }
 
@@ -159,8 +161,10 @@ public sealed class ZStairSystem : EntitySystem
         if (!_gridQuery.TryComp(gridUid, out var grid) || string.IsNullOrEmpty(proto))
             return null;
 
-        var mapId = Comp<MapComponent>(Transform(gridUid).MapUid!.Value).MapId;
-        var tile = _map.TileIndicesFor(gridUid, grid, new MapCoordinates(worldPos, mapId));
+        if (Transform(gridUid).MapUid is not { } mapUid || !TryComp<MapComponent>(mapUid, out var mapComp))
+            return null;
+
+        var tile = _map.TileIndicesFor(gridUid, grid, new MapCoordinates(worldPos, mapComp.MapId));
 
         foreach (var anchored in _map.GetAnchoredEntities(gridUid, grid, tile))
         {
@@ -176,8 +180,10 @@ public sealed class ZStairSystem : EntitySystem
         if (!_gridQuery.TryComp(gridUid, out var grid) || string.IsNullOrEmpty(beam))
             return null;
 
-        var mapId = Comp<MapComponent>(Transform(gridUid).MapUid!.Value).MapId;
-        var tile = _map.TileIndicesFor(gridUid, grid, new MapCoordinates(worldPos, mapId));
+        if (Transform(gridUid).MapUid is not { } mapUid || !TryComp<MapComponent>(mapUid, out var mapComp))
+            return null;
+
+        var tile = _map.TileIndicesFor(gridUid, grid, new MapCoordinates(worldPos, mapComp.MapId));
 
         EntityUid? beamUid = null;
         foreach (var anchored in _map.GetAnchoredEntities(gridUid, grid, tile))
@@ -206,13 +212,16 @@ public sealed class ZStairSystem : EntitySystem
     /// Lays a floor ring on the upper level so the player has somewhere to stand when they surface, but leaves
     /// the CENTER (shaft) tile open so descent works. Any pre-existing tile on the shaft tile is cleared.
     /// </summary>
-    private void LayPlatformRingWithShaft(EntityUid gridUid, Vector2 worldPos, string tileId, int radius)
+    private List<Vector2i> LayPlatformRingWithShaft(EntityUid gridUid, Vector2 worldPos, string tileId, int radius)
     {
+        var laid = new List<Vector2i>();
         if (!_gridQuery.TryComp(gridUid, out var grid) || !_tileDef.TryGetDefinition(tileId, out var def))
-            return;
+            return laid;
 
-        var mapId = Comp<MapComponent>(Transform(gridUid).MapUid!.Value).MapId;
-        var center = _map.TileIndicesFor(gridUid, grid, new MapCoordinates(worldPos, mapId));
+        if (Transform(gridUid).MapUid is not { } mapUid || !TryComp<MapComponent>(mapUid, out var mapComp))
+            return laid;
+
+        var center = _map.TileIndicesFor(gridUid, grid, new MapCoordinates(worldPos, mapComp.MapId));
 
         for (var dx = -radius; dx <= radius; dx++)
         {
@@ -232,7 +241,10 @@ public sealed class ZStairSystem : EntitySystem
                     continue;
 
                 _map.SetTile(gridUid, grid, tile, new Tile(def.TileId));
+                laid.Add(tile);
             }
         }
+
+        return laid;
     }
 }

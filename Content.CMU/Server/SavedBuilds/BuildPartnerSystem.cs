@@ -28,6 +28,11 @@ public sealed partial class BuildPartnerSystem : EntitySystem
     // owner -> set of users the owner has granted to include the owner's builds.
     private readonly Dictionary<NetUserId, HashSet<NetUserId>> _grants = new();
 
+    // ============================================
+    // 🔧 TUNABLE: max build partners one player may grant
+    // ============================================
+    private const int MaxPartners = 32;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -78,6 +83,12 @@ public sealed partial class BuildPartnerSystem : EntitySystem
     private void OnSetPartner(SetBuildPartnerEvent ev, EntitySessionEventArgs args)
     {
         var owner = args.SenderSession.UserId;
+
+        // Grants may only target a real, connected player: without this a client could spam arbitrary
+        // GUIDs and grow its grant set without bound (and grant users the UI never offered).
+        if (ev.Add && !_playerManager.TryGetSessionById(ev.Partner, out _))
+            return;
+
         if (ev.Add)
             AddPartner(owner, ev.Partner);
         else
@@ -113,7 +124,11 @@ public sealed partial class BuildPartnerSystem : EntitySystem
         if (owner == partner)
             return;
 
-        _grants.GetOrNew(owner).Add(partner);
+        var partners = _grants.GetOrNew(owner);
+        if (partners.Count >= MaxPartners)
+            return;
+
+        partners.Add(partner);
     }
 
     public void RemovePartner(NetUserId owner, NetUserId partner)

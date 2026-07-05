@@ -78,18 +78,18 @@ public sealed partial class CustomConstructionMenuSystem
             return;
         }
 
-        var amount = Math.Max(1, msg.Amount);
-        var spawnlist = msg.ZLevelPage ? TilesSpawnlist : Fallback(msg.Spawnlist, DefaultSpawnlist);
-        var category = Fallback(msg.Category, DefaultTileCategory);
+        var amount = Math.Clamp(msg.Amount, 1, MaxStepAmount);
+        // Whitelisted (see SanitizeName): embedded verbatim in generated YAML - never trust raw client strings.
+        var spawnlist = msg.ZLevelPage ? TilesSpawnlist : SanitizeName(msg.Spawnlist, DefaultSpawnlist);
+        var category = SanitizeName(msg.Category, DefaultTileCategory);
         var key = $"{Sanitize(msg.TileId)}__{Sanitize(spawnlist)}__{Sanitize(category)}";
 
         try
         {
             Directory.CreateDirectory(TilesDir);
-            File.WriteAllText(
-                Path.Combine(TilesDir, $"{TileFilePrefix}{key}.yml"),
-                BuildTileYaml(key, msg.TileId, material, amount, spawnlist, category, msg.ZLevelPage),
-                Encoding.UTF8);
+            var yaml = BuildTileYaml(key, msg.TileId, material, amount, spawnlist, category, msg.ZLevelPage);
+            File.WriteAllText(Path.Combine(TilesDir, $"{TileFilePrefix}{key}.yml"), yaml, Encoding.UTF8);
+            DbUpsert(DbKindTiles, $"{TileFilePrefix}{key}", yaml);
         }
         catch (Exception e)
         {
