@@ -106,6 +106,7 @@
   equipment:
     id: AU14IDCardSquadAdvisor
     ears: AU14HeadsetGovforCommand
+    belt: AU14BeltPostelPistolM48A5NoSuper
     back: AU14SatchelMarineAdvisorMilitary # removed by ImaginaryFriend
     pocket1: AU14StampSEA # removed by ImaginaryFriend
 
@@ -114,6 +115,7 @@
   equipment:
     id: AU14IDCardOPFORAdvisor
     ears: AU14HeadsetOpforCommand
+    belt: AU14BeltPostelPistolM48A5NoSuper
     back: AU14SatchelMarineAdvisorMilitary
 
 - type: roleLoadout
