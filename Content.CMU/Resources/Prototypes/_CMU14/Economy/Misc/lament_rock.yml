@@ -27,6 +27,9 @@
   - type: Damageable
     damageContainer: StructuralInorganic
     damageModifierSet: Metallic
+  - type: ReceiverXenoClaws
+    maxHealth: 168
+    hitsToDestroy: 3
   - type: Destructible
     thresholds:
     - trigger:
