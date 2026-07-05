@@ -1,6 +1,7 @@
 - type: gameMap
   id: stablegarrison
   mapName: Stable Garrison
+  allegiance: UA
   mapPath: /Maps/_AU14/garrison.yml
   mapsBelow:
   - /Maps/_AU14/garrison_below.yml
@@ -36,6 +37,7 @@
 
             # Ambassadors
             AU14JobCivilianAmbassadorUA: [1, 1]
+            AU14JobCivilianUSASFRecruiter: [1, 1]
 
             # Corporate
             AU14JobCivilianCorporateLiaison: [1, 1]

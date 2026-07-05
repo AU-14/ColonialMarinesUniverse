@@ -1,6 +1,7 @@
 - type: gameMap
   id: auKutjevo
   mapName: Kutjevo Biolab
+  allegiance: WeylandYutani
   mapPath: /Maps/_AU14/kutjevo.yml
   mapsBelow:
   - /Maps/_AU14/kutjevo_below.yml
