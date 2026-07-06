@@ -27,6 +27,8 @@
   - CMAccessBrig
   - CMAccessArmory
   - CMAccessMedPrep
+  - CMAccessMedical
+  - CMAccessChemistry
   - CMAccessMarineRifleman
   - CMAccessMarinePrep
   - CMAccessSmartPrep
