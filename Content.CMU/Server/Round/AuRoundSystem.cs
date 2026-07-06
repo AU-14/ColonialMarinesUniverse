@@ -407,37 +407,130 @@ namespace Content.Server.AU14.Round
                     candidates.Add(proto);
             }
 
+            var playerCount = _playerManager.PlayerCount;
+            var bodyBudget = CalculateThirdPartyBodyBudget(playerCount, SelectedThreat.ThirdPartyRatio);
+            if (TryCalculateThreatBodyCount(SelectedThreat, playerCount, out var threatBodyCount))
+                bodyBudget = Math.Min(bodyBudget, threatBodyCount.Total);
+
             _sawmill.Debug(
-                $"[AuRoundSystem] Third-party candidates for planet {_selectedPlanet.MapId}: listed={allThirdParties.Count}, allowed={candidates.Count}, max={SelectedThreat.MaxThirdParties}.");
+                $"[AuRoundSystem] Third-party candidates for planet {_selectedPlanet.MapId}: listed={allThirdParties.Count}, allowed={candidates.Count}, max={SelectedThreat.MaxThirdParties}, bodyBudget={bodyBudget}.");
             if (candidates.Count == 0)
                 return;
 
             var maxThirdParties = Math.Max(0, SelectedThreat.MaxThirdParties);
-            if (maxThirdParties <= 0)
+            if (maxThirdParties <= 0 || bodyBudget <= 0)
                 return;
 
-            var roundStartParties = new List<ThirdPartyPrototype>();
-            var delayedParties = new List<ThirdPartyPrototype>();
-            while (roundStartParties.Count + delayedParties.Count < maxThirdParties && candidates.Count > 0)
-            {
-                var pick = PickWeightedThirdParty(candidates);
-                if (pick == null)
-                    break;
+            List<ThirdPartyPrototype> selected = SelectThirdPartiesWithinBodyBudget(
+                candidates,
+                maxThirdParties,
+                bodyBudget,
+                PickWeightedThirdParty,
+                GetThirdPartyBodyCount,
+                out var selectedBodyCount);
 
-                candidates.Remove(pick);
-                if (pick.RoundStart)
-                    roundStartParties.Add(pick);
-                else
-                    delayedParties.Add(pick);
-            }
+            var roundStartParties = selected.Where(party => party.RoundStart).ToList();
+            var delayedParties = selected.Where(party => !party.RoundStart).ToList();
 
             _selectedThirdParties.AddRange(roundStartParties);
             _selectedThirdParties.AddRange(delayedParties);
             if (_sawmill.Level <= Robust.Shared.Log.LogLevel.Debug)
             {
                 _sawmill.Debug(
-                    $"[AuRoundSystem] Selected third parties: {string.Join(", ", _selectedThirdParties.Select(party => $"{party.ID}(roundStart={party.RoundStart})"))}");
+                    $"[AuRoundSystem] Selected third parties: bodies={selectedBodyCount}/{bodyBudget}, {string.Join(", ", _selectedThirdParties.Select(party => $"{party.ID}(roundStart={party.RoundStart}, bodies={GetThirdPartyBodyCount(party)})"))}");
             }
+
+            int GetThirdPartyBodyCount(ThirdPartyPrototype party)
+                => TryCalculateThirdPartyBodyCount(party, playerCount, out var bodyCount)
+                    ? bodyCount
+                    : 0;
+        }
+
+        internal static int CalculateThirdPartyBodyBudget(
+            int playerCount,
+            float thirdPartyRatio,
+            ThreatVoteBodyCount? threatBodyCount = null)
+        {
+            if (playerCount <= 0 ||
+                thirdPartyRatio <= 0 ||
+                float.IsNaN(thirdPartyRatio) ||
+                float.IsInfinity(thirdPartyRatio))
+            {
+                return 0;
+            }
+
+            var budget = (int) Math.Floor(playerCount * thirdPartyRatio);
+            if (threatBodyCount is { } cap)
+                budget = Math.Min(budget, cap.Total);
+
+            return Math.Max(0, budget);
+        }
+
+        internal static List<ThirdPartyPrototype> SelectThirdPartiesWithinBodyBudget(
+            IReadOnlyList<ThirdPartyPrototype> candidates,
+            int maxThirdParties,
+            int bodyBudget,
+            Func<IReadOnlyList<ThirdPartyPrototype>, ThirdPartyPrototype?> pickThirdParty,
+            Func<ThirdPartyPrototype, int> getBodyCount,
+            out int selectedBodyCount)
+        {
+            selectedBodyCount = 0;
+            var selected = new List<ThirdPartyPrototype>();
+            if (maxThirdParties <= 0 || bodyBudget <= 0 || candidates.Count == 0)
+                return selected;
+
+            var remaining = candidates.ToList();
+            while (selected.Count < maxThirdParties &&
+                   selectedBodyCount < bodyBudget &&
+                   remaining.Count > 0)
+            {
+                var remainingBudget = bodyBudget - selectedBodyCount;
+                var fitting = remaining
+                    .Where(candidate =>
+                    {
+                        var bodyCount = getBodyCount(candidate);
+                        return bodyCount > 0 && bodyCount <= remainingBudget;
+                    })
+                    .ToList();
+                if (fitting.Count == 0)
+                    break;
+
+                var pick = pickThirdParty(fitting);
+                if (pick == null)
+                    break;
+
+                remaining.Remove(pick);
+                var pickedBodies = getBodyCount(pick);
+                if (pickedBodies <= 0 || pickedBodies > remainingBudget)
+                    continue;
+
+                selected.Add(pick);
+                selectedBodyCount += pickedBodies;
+            }
+
+            return selected;
+        }
+
+        private bool TryCalculateThreatBodyCount(ThreatPrototype threat,
+            int playerCount,
+            out ThreatVoteBodyCount bodyCount)
+        {
+            bodyCount = default;
+            if (!_prototypeManager.TryIndex(threat.RoundStartSpawn, out PartySpawnPrototype? spawn))
+                return false;
+
+            bodyCount = ThreatVoteSelection.CalculateBodyCount(spawn, playerCount);
+            return true;
+        }
+
+        private bool TryCalculateThirdPartyBodyCount(ThirdPartyPrototype party, int playerCount, out int bodyCount)
+        {
+            bodyCount = 0;
+            if (!_prototypeManager.TryIndex(party.PartySpawn, out PartySpawnPrototype? spawn))
+                return false;
+
+            bodyCount = ThreatVoteSelection.CalculateBodyCount(spawn, playerCount).Total;
+            return true;
         }
 
         private ThirdPartyPrototype? PickWeightedThirdParty(IReadOnlyList<ThirdPartyPrototype> candidates)
