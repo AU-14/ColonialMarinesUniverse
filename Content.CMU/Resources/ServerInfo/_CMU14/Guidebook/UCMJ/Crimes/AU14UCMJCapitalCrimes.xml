@@ -1,30 +1,31 @@
 ﻿<Document>
   # Capital Crimes
-  These crimes are extreme severity. All of these crimes are be punished by permanent confinement and demotion.
+    These crimes are of extreme severity. All of these crimes will be punished by permanent confinement and demotion.
 
- ## Jailbreak/Escape
-To escape, assist in an escape, attempt escape, or be willfully and knowingly broken out from a cell.
+  ## Jailbreak/Escape
+    To escape, assist in an escape, attempt escape, or be willfully and knowingly broken out of a cell.
 
+  ## Attempted Murder
+    Attempting to murder a person but failing to do so. If the evidence shows that the arrested person was clearly trying to kill someone with ill intent but failed in the action itself.
 
- ## Attempted Murder
-Attempting to murder a person but failing to do so. If the evidence shows that the arrested person was clearly trying to kill someone with ill intent but failed in the action itself.
+  ## Murder
+    Killing someone with malicious intent. This includes Synthetic units. The charge applies even if the victim is later revived.
 
+  ## Terrorism
+    The use or threat of violence against non-combatants or critical infrastructure with the intent to intimidate, coerce, or achieve political, ideological, or religious objectives.
 
- ## Murder
- Killing someone with malicious intent. This includes Synthetic units. The charge applies even if the victim is later revived.
+  ## Sedition
+    To engage in actions or refuse to follow orders to overthrow or usurp the legitimate command structure. Creating a massive threat to the ship without the knowledge and approval of the command falls under sedition.
 
+  ## Espionage
+    The covert collection of sensitive or classified information with the intent to distribute that information to an enemy force willingly.
 
- ## Sedition
-To engage in actions or refuse to follow orders as to overthrow or usurp the legitimate command structure. Creating a massive threat to the ship without the knowledge and approval of the command falls under sedition.
+  ## Desertion
+    Refusing to carry out the duties essential to one’s post or abandoning one's post without authorisation, without intent to return. (Retreating from the planet when the FOB is breached is not Desertion; refusing to return when ordered is).
 
+  ## Crimes against humanity
+    To engage in actions that violate human rights or are otherwise heinous acts against human life. Examples are torture, cannibalism and forced infection of any kind, which may not be stacked on top of a WICH Violation.
 
- ## Desertion
-Refusing to carry out the duties essential to one’s post or abandoning post unauthorized, without intent to return. (Retreating from the planet when the FOB is breached is not Desertion, refusing to return when ordered is).
-
-
- ## Crimes against humanity
-To engage in actions that violate human rights or otherwise are heinous acts against human life. Examples are torture, cannibalism and forced infection of any kind, may not be stacked ontop of a WICH Violation.
-
- ## Violation of Warfare Interstellar Charter of Humanity (WICH)
-To engage in actions that violate the [textlink="WICH Convention" link="WarfareInterstellarCharterofHumanity"], may not be stacked ontop of Crimes againts humanity.
+  ## Violation of the Warfare Interstellar Charter of Humanity (WICH)
+    Engaging in actions that violate the [textlink="WICH Convention" link="WarfareInterstellarCharterofHumanity"], may not be stacked on top of Crimes against humanity.
 </Document>
