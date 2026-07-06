@@ -37,6 +37,7 @@
   - CMAccessPilot
   - CMAccessCrewman
   - CMAccessRequisitions
+  - RMCAccessVehicleCrew
 
 - type: accessGroup
   id: aulegacygroupmilp
