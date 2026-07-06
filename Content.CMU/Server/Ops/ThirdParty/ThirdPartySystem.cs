@@ -277,39 +277,8 @@ public sealed partial class ThirdPartySystem : EntitySystem
             EnsureComp<DropshipComponent>(mainGridUid);
             _sharedDropshipSystem.SetDropshipDestination(mainGridUid, returnDestination);
 
-            EntityQueryEnumerator<DropshipNavigationComputerComponent, TransformComponent> navQuery = _entityManager
-                .EntityQueryEnumerator<DropshipNavigationComputerComponent, TransformComponent>();
-            EntityUid? navUid = null;
-            DropshipNavigationComputerComponent? navComp = null;
-            while (navQuery.MoveNext(out EntityUid uid, out DropshipNavigationComputerComponent? comp,
-                out TransformComponent? xform))
-            {
-                if (xform.ParentUid == mainGridUid)
-                {
-                    navUid = uid;
-                    navComp = comp;
-                    break;
-                }
-            }
-
-            if (navUid != null && navComp != null)
-            {
-                var navEntity = new Entity<DropshipNavigationComputerComponent>(navUid.Value, navComp);
-                if (!_sharedDropshipSystem.FlyTo(navEntity, destination, null))
-                {
-                    _sawmill.Error($"[ThirdPartySystem] Dropship nav computer {navUid} rejected launch to destination {
-                        destination}. Aborting third party spawn.");
-                    return false;
-                }
-
-                _sawmill.Debug($"[ThirdPartySystem] Commanded dropship nav computer {navUid} to fly to destination {
-                    destination}");
-            }
-            else
-            {
-                _sawmill.Warning($"[ThirdPartySystem] Could not find navigation computer on dropship grid {mainGridUid
-                }; the dropship may not be able to travel.");
-            }
+            _sawmill.Debug($"[ThirdPartySystem] Third-party dropship {mainGridUid} loaded and waiting for manual launch to destination {
+                destination}.");
 
             // Collect markers on dropship grid
             EntityQueryEnumerator<AuInsertMarkerComponent> query = _entityManager
