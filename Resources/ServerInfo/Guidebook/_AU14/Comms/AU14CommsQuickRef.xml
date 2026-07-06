@@ -1,0 +1,390 @@
+<Document>
+  # Comms Quick Reference
+
+  One page for mid-operation checks.
+
+  For full details, read [textlink="AN/PRC-117G Radio" link="AU14CommsANPRC"] and [textlink="Field Headsets" link="AU14CommsHeadsets"].
+
+  ## Talking
+
+  <Table Columns="2" MinForcedColumnWidth="120">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Key[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Use[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[color=#3FCF8E]:h[/color]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Headset default net.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[color=#3FCF8E]:v[/color], [color=#3FCF8E]:a[/color], etc.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Other keyed nets. Examine your headset to see its letters.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[color=#3FCF8E]:r[/color]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">AN/PRC active net. Trained roles only.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[color=#3FCF8E]:x[/color]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Headset direct frequency. Tune the headset first.</Box>
+    </ColorBox>
+  </Table>
+
+  Trained AN/PRC roles are RTO, Commander, Officer Adjutant and Advisor.
+
+  For CLF, the Cell Leader is trained.
+
+  ## Range
+
+  Stock figures assume whip antenna and TX MED.
+
+  <Table Columns="3" MinForcedColumnWidth="90">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]System[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Clean[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Weak or Lost[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Named net via relay</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">0 to 30 tiles from radio.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Garbled to 45. Dead past 45.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Direct frequency</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">0 to 30 tiles from speaker.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Garbled to 50. Dead past 50.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Direct frequency bridged</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Both users within 50 tiles of the AN/PRC.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Fails if either user is outside bridge range.</Box>
+    </ColorBox>
+  </Table>
+
+  Transmit power and antenna change these ranges.
+
+  ## Antennas
+
+  <Table Columns="3" MinForcedColumnWidth="90">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Antenna[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Best Use[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Note[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]WHIP[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Patrols and moving RTOs.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Stock range while moving or standing.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]MAST[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Command posts and retrans stations.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">About double range while stationary. About half stock range while moving.</Box>
+    </ColorBox>
+  </Table>
+
+  Use the whip when moving.
+
+  Use the mast when the radio is planted or staying still.
+
+  ## Operating Modes
+
+  <Table Columns="4" MinForcedColumnWidth="80">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Mode[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Use[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Good[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Bad[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]FH[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Enemy EW or jamming.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Jamming reduced by 1 tier. Can transmit inside jam fields.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">1.5x battery. Small DF signature even when secured.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]SC[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Normal secured radio work.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">0.75x battery. No DF signature while secured.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">No jam resistance.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]CT[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Command-only AN/PRC traffic.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Invisible to interceptors. No DF signature.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Only fill-loaded AN/PRCs decode it. No jam resistance.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]PT[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Open broadcast or dying battery.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">0.5x battery.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Readable by everyone. Jamming +1 tier. Worst DF risk.</Box>
+    </ColorBox>
+  </Table>
+
+  Fill secures every mode except PT.
+
+  Quick rule:
+  - FH under enemy EW.
+  - SC when the air is quiet.
+  - CT for command-only traffic.
+  - PT when you accept that everyone can read it.
+
+  ## Transmit Power
+
+  <Table Columns="4" MinForcedColumnWidth="70">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]TX[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Range[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Battery[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]DF[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]LO[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">0.6x</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">0.5x</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">0.5x</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]MED[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">1x</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">1x</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">1x</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]HI[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">1.5x</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">2x</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">2x</Box>
+    </ColorBox>
+  </Table>
+
+  Use LO when your people are close.
+
+  Use MED by default.
+
+  Use HI when you need reach. Send the message and move if needed.
+
+  ## Squelch
+
+  Squelch filters noise. Clean traffic still passes.
+
+  <Table Columns="2" MinForcedColumnWidth="90">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]SQL[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Effect[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]0[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Open. Lets all static through.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]1[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Cuts heavy static and undecodable crypto.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]2[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Cuts medium jammer garble.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]3[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Default. Cuts jammer garble.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]4[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Maximum. May cut weak edge-of-range signals.</Box>
+    </ColorBox>
+  </Table>
+
+  If you only hear silence near a jammer, drop to SQL 2 or 1.
+
+  ## COMSEC
+
+  <Table Columns="2" MinForcedColumnWidth="110">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Action[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Result[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Insert fill card</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Secures faction nets, except PT.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]ZEROIZE[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Ejects the card intact.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]DESTROY[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Deletes the card when there is no time to save it.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]RECRYPTO[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Makes all older faction cards stale, including captured ones.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Captured enemy card</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Loads into your radio and decodes their net until they recrypto.</Box>
+    </ColorBox>
+  </Table>
+
+  Replacement fill comes through normal supply.
+
+  ## Staying Alive on the Net
+
+  DF risk, brightest first:
+  - PT.
+  - Faction net traffic without matching fill.
+  - Secured FH.
+
+  Secured SC and CT have no DF signature.
+
+  Repeated open transmissions from one spot help enemy EW locate you.
+
+  Keep it short, move after sending, or go quiet for a minute to reset the risk.
+
+  [bold]RADIO CHECK[/bold] reports which stations hear you clean or degraded.
+
+  Inside jamming, it also gives a bearing to the strongest emitter.
+</Document>

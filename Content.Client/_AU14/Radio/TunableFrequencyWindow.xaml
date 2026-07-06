@@ -1,0 +1,19 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               Title="{Loc tunable-radio-window-title}"
+               MinWidth="240"
+               MinHeight="110">
+
+  <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="6">
+    <Label Name="CurrentLabel" Text="FREQ: ---.---" FontColorOverride="#C8D2E8" />
+    <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+      <LineEdit Name="FreqInput"
+                HorizontalExpand="True"
+                PlaceHolder="{Loc tunable-radio-input-placeholder}" />
+      <Button Name="ConfirmButton" Text="{Loc tunable-radio-set-button}" MinWidth="48" />
+    </BoxContainer>
+    <Label Name="RangeLabel"
+           Text="{Loc tunable-radio-range-note}"
+           FontColorOverride="#687A9A" />
+  </BoxContainer>
+
+</DefaultWindow>

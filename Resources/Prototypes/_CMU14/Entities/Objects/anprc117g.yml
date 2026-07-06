@@ -1,0 +1,129 @@
+﻿- type: entity
+  id: ANPRC117GRadio
+  name: AN/PRC-117G
+  description: >-
+    A ruggedized multiband tactical radio used by Radio Telephone Operators.
+    Program up to four preset nets with the panel, then transmit with :r.
+    While worn and powered, it relays headset traffic for everyone nearby,
+    bridging squad nets to command without a communications tower.
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/RTOPack/blackrtopack.rsi
+    layers:
+    - state: icon
+      map: [ "base" ]
+  - type: Item
+    size: Huge
+    shape:
+    - 0,0,1,1
+  - type: ANPRCRadio
+    activeSlot: -1
+    enabled: true
+    requiredSlot: back
+    operatorFaction: govfor
+    dfReportFactions:
+    - OPFOR
+    - CLF
+  - type: ANPRCCryptoSlot
+  - type: PowerCellSlot
+    cellSlotId: cell_slot
+  - type: PowerCellDraw
+    enabled: false
+    drawRate: 0.2
+    useRate: 0
+  - type: ContainerContainer
+    containers:
+      fill_card: !type:ContainerSlot
+      antenna: !type:ContainerSlot
+      cell_slot: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      fill_card:
+        name: COMSEC fill card
+        whitelist:
+          components:
+          - ANPRCFillCard
+      antenna:
+        name: antenna
+        whitelist:
+          components:
+          - ANPRCAntenna
+        startingItem: ANPRCWhipAntenna
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: RMCPowerCellHigh
+  - type: RTORelay
+    bridgedChannels:
+    - radioGovforAlpha
+    - radioGovforBravo
+    - radioGovforCharlie
+  - type: UserInterface
+    interfaces:
+      enum.ANPRCRadioUI.Key:
+        type: ANPRCRadioBoundUserInterface
+  - type: Appearance
+  - type: ClothingSpeedModifier
+    walkModifier: 0.95
+    sprintModifier: 0.95
+  - type: Clothing
+    slots:
+    - back
+
+- type: entity
+  parent: ANPRC117GRadio
+  id: ANPRC117GRadioOPFOR
+  suffix: OPFOR
+  components:
+  - type: ANPRCRadio
+    operatorFaction: opfor
+    dfReportFactions:
+    - GOVFOR
+  - type: RTORelay
+    bridgedChannels:
+    - radioOpforAlpha
+    - radioOpforBravo
+    - radioOpforCharlie
+
+- type: entity
+  parent: ANPRC117GRadio
+  id: ANPRC117GRadioCLF
+  suffix: CLF
+  components:
+  - type: ANPRCRadio
+    operatorFaction: clf
+    dfReportFactions:
+    - GOVFOR
+  - type: RTORelay
+    bridgedChannels:
+    - radioCLF
+
+- type: entity
+  parent: ANPRC117GRadio
+  id: ANPRC117GRadioFilled
+  suffix: GOVFOR, Filled
+  components:
+  - type: ContainerFill
+    containers:
+      fill_card:
+      - ANPRCFillCardGOVFOR
+
+- type: entity
+  parent: ANPRC117GRadioOPFOR
+  id: ANPRC117GRadioOPFORFilled
+  suffix: OPFOR, Filled
+  components:
+  - type: ContainerFill
+    containers:
+      fill_card:
+      - ANPRCFillCardOPFOR
+
+- type: entity
+  parent: ANPRC117GRadioCLF
+  id: ANPRC117GRadioCLFFilled
+  suffix: CLF, Filled
+  components:
+  - type: ContainerFill
+    containers:
+      fill_card:
+      - ANPRCFillCardCLF

@@ -10,6 +10,7 @@
     - CLF
   - type: CLFMember
     statusIcon: CLFFactionLeader
+  - type: ANPRCRadioUser
   - type: Skills
     skills:
       RMCSkillCqc: 2
@@ -82,6 +83,9 @@
   inhand:
   - AU14CLFCellKit
   - AU14CLFHeadset
+  storage:
+    back:
+    - ANPRCFillCardCLF
 
 - type: entity
   parent: CMSpawnPointJobBase

@@ -90,6 +90,12 @@
         crate: RMCCrateFoodIngredients
     - name: Gear
       entries:
+      # OPFOR's fill crate existed but was sold nowhere — without this entry the
+      # faction had no COMSEC resupply after a recrypto.
+      - cost: 300
+        crate: ANPRCFillCardResupplyCrateOPFOR
+      - cost: 1500
+        crate: ANPRCRadioResupplyCrateOPFOR
       - cost: 1200
         crate: AU14CrateTacticalMonocular
       - cost: 1700

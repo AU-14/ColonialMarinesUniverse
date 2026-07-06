@@ -266,6 +266,12 @@
         amount: 2
     - name: Miscellaneous
       entries:
+      - id: ANPRCFillCardCLF
+        amount: 3
+      - id: ANPRC117GRadioCLFFilled
+        amount: 1
+      - id: ANPRCMastAntenna
+        amount: 1
       - id: RMCEngineerKit
         amount: 1
       #- id: CMMap

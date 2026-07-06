@@ -5826,5 +5826,12 @@
   id: 406
   time: '2026-07-06T00:29:24.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1543
+- author: maertayn
+  changes:
+  - message: Insurgency min pop from 40 to 35 required
+    type: Tweak
+  id: 407
+  time: '2026-07-06T11:05:59.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1546
 Name: CMU
 Order: -1

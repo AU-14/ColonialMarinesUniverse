@@ -283,3 +283,19 @@
   color: "#92969A"
   longRange: true
   tower: true
+
+- type: radioChannel
+  id: ANPRCActiveChannel
+  name: chat-radio-anprc-sentinel
+  keycode: "r"
+  frequency: 0
+  color: "#3fcf8e"
+  longRange: true
+
+- type: radioChannel
+  id: TunableFrequencyChannel
+  name: chat-radio-tunable-sentinel
+  keycode: "x"
+  frequency: 0
+  color: "#5B9BD5"
+  longRange: false

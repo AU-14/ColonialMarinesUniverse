@@ -1,0 +1,55 @@
+<Document>
+  # Communications Reference
+
+  This section covers ground force radio systems.
+
+  Good comms keep people alive. Report contacts, keep messages short, and stay on the net.
+
+  <Box>
+    <GuideEntityEmbed Entity="ANPRC117GRadio" Caption="AN/PRC-117G"/>
+    <GuideEntityEmbed Entity="AU14HeadsetGovforMarineFTL" Caption="Field Headset"/>
+  </Box>
+
+  ## Guides
+
+  - [textlink="AN/PRC-117G Radio" link="AU14CommsANPRC"]
+  The RTO manpack radio. Covers setup, slots, operating modes, COMSEC fill, retrans stations, enemy intercepts and the net log.
+
+  - [textlink="Field Headsets" link="AU14CommsHeadsets"]
+  The standard headset. Covers named nets, encryption keys, relay range, jamming and direct frequency tuning.
+
+  - [textlink="Comms Quick Reference" link="AU14CommsQuickRef"]
+  One-page cheat sheet for chat prefixes, ranges, antennas, radio modes, transmit power, squelch and COMSEC actions.
+
+  ## Quick Pick
+
+  <Table Columns="2" MinForcedColumnWidth="120">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Need[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Open[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Set up or operate the RTO radio</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">[textlink="AN/PRC-117G Radio" link="AU14CommsANPRC"]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Use your issued headset</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">[textlink="Field Headsets" link="AU14CommsHeadsets"]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Check a value during combat</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">[textlink="Comms Quick Reference" link="AU14CommsQuickRef"]</Box>
+    </ColorBox>
+  </Table>
+</Document>
