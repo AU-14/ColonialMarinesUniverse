@@ -66,6 +66,10 @@
   - type: Icon
     sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
     state: l_hand
+  - type: BodyPartHealth
+    max: 35
+    current: 35
+    severanceThreshold: 45
   - type: CMURoboticLimb
     baseLayers:
       LHand: CMUMobDroneAndroidLHand
@@ -86,6 +90,10 @@
   - type: Icon
     sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
     state: r_hand
+  - type: BodyPartHealth
+    max: 35
+    current: 35
+    severanceThreshold: 45
   - type: CMURoboticLimb
     baseLayers:
       RHand: CMUMobDroneAndroidRHand
@@ -164,6 +172,10 @@
   - type: Icon
     sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
     state: l_foot
+  - type: BodyPartHealth
+    max: 45
+    current: 45
+    severanceThreshold: 50
   - type: CMURoboticLimb
     baseLayers:
       LFoot: CMUMobDroneAndroidLFoot
@@ -184,6 +196,10 @@
   - type: Icon
     sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
     state: r_foot
+  - type: BodyPartHealth
+    max: 45
+    current: 45
+    severanceThreshold: 50
   - type: CMURoboticLimb
     baseLayers:
       RFoot: CMUMobDroneAndroidRFoot

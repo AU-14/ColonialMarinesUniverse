@@ -5,7 +5,10 @@ using Content.Shared._CMU14.Medical.Anatomy.Bones;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Brain;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
+using Content.Shared._CMU14.Medical.Anatomy.Organs.Kidneys;
+using Content.Shared._CMU14.Medical.Anatomy.Organs.Liver;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs;
+using Content.Shared._CMU14.Medical.Anatomy.Organs.Stomach;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
@@ -110,7 +113,7 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
         if (args.Trauma.HighEnergy)
             heavyOrganHit = true;
 
-        DistributeOrganDamage(args.Body, args.Delta, args.ContainedOrgans, passThrough, heavyOrganHit);
+        DistributeOrganDamage(args.Body, args.Delta, args.ContainedOrgans, passThrough, heavyOrganHit, args.TargetZone);
     }
 
     public void DistributeOrganDamage(
@@ -118,12 +121,13 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
         DamageSpecifier delta,
         IReadOnlyList<EntityUid> organs,
         float passThrough = 1f,
-        bool heavyOrganHit = false)
+        bool heavyOrganHit = false,
+        TargetBodyZone? targetZone = null)
     {
         if (organs.Count == 0 || passThrough <= 0f)
             return;
 
-        var affected = PickAffectedOrgans(organs, heavyOrganHit);
+        var affected = PickAffectedOrgans(organs, heavyOrganHit, targetZone);
         foreach (var (organ, oh) in affected)
         {
             var weighted = WeightDamage(delta, oh.DamageWeight, organs.Count, passThrough);
@@ -136,7 +140,8 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
 
     private List<(EntityUid Organ, OrganHealthComponent Health)> PickAffectedOrgans(
         IReadOnlyList<EntityUid> organs,
-        bool heavyOrganHit)
+        bool heavyOrganHit,
+        TargetBodyZone? targetZone)
     {
         var candidates = new List<(EntityUid Organ, OrganHealthComponent Health, float Weight)>();
         foreach (var organ in organs)
@@ -144,7 +149,7 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
             if (!TryComp<OrganHealthComponent>(organ, out var oh))
                 continue;
 
-            candidates.Add((organ, oh, GetOrganSelectionWeight(organ)));
+            candidates.Add((organ, oh, GetOrganSelectionWeight(organ, targetZone)));
         }
 
         var count = Math.Min(heavyOrganHit ? 2 : 1, candidates.Count);
@@ -171,8 +176,21 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
         return selected;
     }
 
-    private float GetOrganSelectionWeight(EntityUid organ)
+    private float GetOrganSelectionWeight(EntityUid organ, TargetBodyZone? targetZone)
     {
+        if (targetZone == TargetBodyZone.GroinPelvis)
+        {
+            var lowerWeight = 0.5f;
+            if (HasComp<KidneysComponent>(organ))
+                lowerWeight += 2.5f;
+            if (HasComp<CMUStomachComponent>(organ))
+                lowerWeight += 2f;
+            if (HasComp<LiverComponent>(organ))
+                lowerWeight += 1.5f;
+
+            return lowerWeight;
+        }
+
         var weight = 1f;
         if (HasComp<HeartComponent>(organ))
             weight += 2f;

@@ -74,6 +74,7 @@ public readonly record struct CMUTraumaContactSettings
     public float PierceInternalBleedRate { get; init; }
     public float SlashInternalBleedRate { get; init; }
     public float BluntInternalBleedRate { get; init; }
+    public float GroinOrganChanceMultiplier { get; init; }
 
     public static CMUTraumaContactSettings Default => new()
     {
@@ -112,6 +113,7 @@ public readonly record struct CMUTraumaContactSettings
         PierceInternalBleedRate = 0.30f,
         SlashInternalBleedRate = 0.25f,
         BluntInternalBleedRate = 0.20f,
+        GroinOrganChanceMultiplier = 2.0f,
     };
 }
 

@@ -430,13 +430,13 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
         (string Slot, EntProtoId Prototype)? child = type switch
         {
             BodyPartType.Arm when symmetry == BodyPartSymmetry.Left =>
-                (Slot: "left_hand", Prototype: "LeftHandHuman"),
+                (Slot: "left_hand", Prototype: "CMUPartHumanLeftHand"),
             BodyPartType.Arm when symmetry == BodyPartSymmetry.Right =>
-                (Slot: "right_hand", Prototype: "RightHandHuman"),
+                (Slot: "right_hand", Prototype: "CMUPartHumanRightHand"),
             BodyPartType.Leg when symmetry == BodyPartSymmetry.Left =>
-                (Slot: "left_foot", Prototype: "LeftFootHuman"),
+                (Slot: "left_foot", Prototype: "CMUPartHumanLeftFoot"),
             BodyPartType.Leg when symmetry == BodyPartSymmetry.Right =>
-                (Slot: "right_foot", Prototype: "RightFootHuman"),
+                (Slot: "right_foot", Prototype: "CMUPartHumanRightFoot"),
             _ => null
         };
 

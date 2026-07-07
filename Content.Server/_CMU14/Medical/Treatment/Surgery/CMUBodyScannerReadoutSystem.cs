@@ -220,7 +220,6 @@ public sealed partial class CMUBodyScannerReadoutSystem : EntitySystem
             "CMUOrganHumanKidneys" or "kidneys" => Loc.GetString("cmu-medical-scanner-organ-kidneys"),
             "CMUOrganHumanStomach" or "stomach" => Loc.GetString("cmu-medical-scanner-organ-stomach"),
             "CMUOrganHumanEyes" or "eyes" => Loc.GetString("cmu-medical-scanner-organ-eyes"),
-            "CMUOrganHumanEars" or "ears" => Loc.GetString("cmu-medical-scanner-organ-ears"),
             _ => null,
         };
     }

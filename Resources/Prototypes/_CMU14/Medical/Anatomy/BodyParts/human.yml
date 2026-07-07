@@ -83,6 +83,46 @@
     drawdepth: Items
 
 - type: entity
+  parent: LeftHandHuman
+  id: CMUPartHumanLeftHand
+  components:
+  - type: BodyPartHealth
+    max: 35
+    current: 35
+    severanceThreshold: 45
+  - type: Bone
+    integrity: 45
+    integrityMax: 45
+    bruteAbsorbFraction: 0.5
+    fractureThresholds:
+      Hairline: 30
+      Simple: 20
+      Compound: 10
+      Shattered: 3
+  - type: Sprite
+    drawdepth: Items
+
+- type: entity
+  parent: RightHandHuman
+  id: CMUPartHumanRightHand
+  components:
+  - type: BodyPartHealth
+    max: 35
+    current: 35
+    severanceThreshold: 45
+  - type: Bone
+    integrity: 45
+    integrityMax: 45
+    bruteAbsorbFraction: 0.5
+    fractureThresholds:
+      Hairline: 30
+      Simple: 20
+      Compound: 10
+      Shattered: 3
+  - type: Sprite
+    drawdepth: Items
+
+- type: entity
   parent: LeftLegHuman
   id: CMUPartHumanLeftLeg
   components:
@@ -119,4 +159,45 @@
       Simple: 45
       Compound: 22
       Shattered: 5
+  - type: Sprite
+    drawdepth: Items
 
+- type: entity
+  parent: LeftFootHuman
+  id: CMUPartHumanLeftFoot
+  components:
+  - type: BodyPartHealth
+    max: 45
+    current: 45
+    severanceThreshold: 50
+  - type: Bone
+    integrity: 55
+    integrityMax: 55
+    bruteAbsorbFraction: 0.55
+    fractureThresholds:
+      Hairline: 40
+      Simple: 28
+      Compound: 14
+      Shattered: 3
+  - type: Sprite
+    drawdepth: Items
+
+- type: entity
+  parent: RightFootHuman
+  id: CMUPartHumanRightFoot
+  components:
+  - type: BodyPartHealth
+    max: 45
+    current: 45
+    severanceThreshold: 50
+  - type: Bone
+    integrity: 55
+    integrityMax: 55
+    bruteAbsorbFraction: 0.55
+    fractureThresholds:
+      Hairline: 40
+      Simple: 28
+      Compound: 14
+      Shattered: 3
+  - type: Sprite
+    drawdepth: Items

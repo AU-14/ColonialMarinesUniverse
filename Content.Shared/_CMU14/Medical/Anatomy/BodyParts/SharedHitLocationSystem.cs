@@ -105,9 +105,9 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
             return;
 
         var suppressBodyZone = args.Origin is { } origin && IsBodyZoneTargetingSuppressed(origin);
-        var (forced, forcedSymmetry) = ResolveForcedSource(ent, args.Origin, suppressBodyZone);
+        var (forced, forcedSymmetry, forcedZone) = ResolveForcedSource(ent, args.Origin, suppressBodyZone);
 
-        var resolve = new HitLocationResolveEvent(ent, args.Origin, args.Damage, forced, forcedSymmetry);
+        var resolve = new HitLocationResolveEvent(ent, args.Origin, args.Damage, forced, forcedSymmetry, forcedZone);
         RaiseLocalEvent(ent, ref resolve);
 
         if (!resolve.Handled)
@@ -117,7 +117,7 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
         {
             _pendingHits[ent.Owner] = resolve;
             var resolved = new HitLocationResolvedEvent(
-                ent, args.Origin, resolve.ResolvedPart, resolve.ResolvedPartEntity);
+                ent, args.Origin, resolve.ResolvedPart, resolve.ResolvedPartEntity, resolve.ResolvedZone);
             RaiseLocalEvent(ent, ref resolved);
         }
 
@@ -125,24 +125,24 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
         Dirty(ent);
     }
 
-    private (BodyPartType? Forced, BodyPartSymmetry? Symmetry) ResolveForcedSource(
+    private (BodyPartType? Forced, BodyPartSymmetry? Symmetry, TargetBodyZone? Zone) ResolveForcedSource(
         Entity<HitLocationComponent> target,
         EntityUid? attacker,
         bool suppressBodyZone)
     {
         if (target.Comp.NextHitOverride is { } sentinel)
-            return (sentinel, null);
+            return (sentinel, null, null);
 
         if (suppressBodyZone)
-            return (null, null);
+            return (null, null, null);
 
         if (attacker is { } a && ZoneTargeting.TryGetFreshSelection(a) is { } zone)
         {
             var (partType, symmetry) = SharedBodyZoneTargetingSystem.ToBodyPart(zone);
-            return (partType, symmetry);
+            return (partType, symmetry, zone);
         }
 
-        return (null, null);
+        return (null, null, null);
     }
 
     private void ResolveRandomly(
@@ -154,7 +154,7 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
         {
             if (RollAimAccuracy(ent.Owner, args.Attacker, forced))
             {
-                AssignResolvedPart(ent.Owner, ref args, forced, args.ForcedSymmetry);
+                AssignResolvedPart(ent.Owner, ref args, forced, args.ForcedSymmetry, args.ForcedZone);
                 return;
             }
 
@@ -245,7 +245,8 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
         EntityUid bodyId,
         ref HitLocationResolveEvent args,
         BodyPartType type,
-        BodyPartSymmetry? symmetry = null)
+        BodyPartSymmetry? symmetry = null,
+        TargetBodyZone? zone = null)
     {
         args.ResolvedPart = type;
         args.ResolvedPartEntity = FindBestDamagePart(bodyId, type, symmetry);
@@ -255,6 +256,7 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
             args.ResolvedPart = part.PartType;
         }
 
+        args.ResolvedZone = zone;
         args.Handled = true;
     }
 

@@ -17,4 +17,5 @@ public readonly record struct BodyPartDamagedEvent(
     IReadOnlyList<EntityUid> ContainedOrgans,
     EntityUid? Tool,
     DamageImpact Impact,
-    CMUTraumaContactResult Trauma);
+    CMUTraumaContactResult Trauma,
+    TargetBodyZone? TargetZone = null);

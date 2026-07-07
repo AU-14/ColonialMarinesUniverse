@@ -13,4 +13,5 @@ public readonly record struct HitLocationResolvedEvent(
     EntityUid Body,
     EntityUid? Attacker,
     BodyPartType ResolvedPart,
-    EntityUid? ResolvedPartEntity);
+    EntityUid? ResolvedPartEntity,
+    TargetBodyZone? ResolvedZone = null);

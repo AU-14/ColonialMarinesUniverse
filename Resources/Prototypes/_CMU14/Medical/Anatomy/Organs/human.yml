@@ -141,23 +141,3 @@
     internalBleedAt: Dead
     nativeRegenPerTick: 0.5
   - type: Eyes
-
-- type: entity
-  parent: OrganHumanEars
-  id: CMUOrganHumanEars
-  components:
-  - type: OrganHealth
-    max: 30
-    current: 30
-    damageWeight:
-      Brute: 1.0
-      Burn: 1.0
-    stageThresholds:
-      Healthy: 30
-      Bruised: 22
-      Damaged: 12
-      Failing: 4
-      Dead: 0
-    internalBleedAt: Dead
-    nativeRegenPerTick: 0.5
-  - type: Ears

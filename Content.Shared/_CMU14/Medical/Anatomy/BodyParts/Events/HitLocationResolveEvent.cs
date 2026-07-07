@@ -19,9 +19,11 @@ public record struct HitLocationResolveEvent
     public readonly DamageSpecifier Damage;
     public readonly BodyPartType? Forced;
     public readonly BodyPartSymmetry? ForcedSymmetry;
+    public readonly TargetBodyZone? ForcedZone;
 
     public BodyPartType ResolvedPart;
     public EntityUid? ResolvedPartEntity;
+    public TargetBodyZone? ResolvedZone;
     public bool Handled;
 
     public HitLocationResolveEvent(
@@ -29,15 +31,18 @@ public record struct HitLocationResolveEvent
         EntityUid? attacker,
         DamageSpecifier damage,
         BodyPartType? forced,
-        BodyPartSymmetry? forcedSymmetry = null)
+        BodyPartSymmetry? forcedSymmetry = null,
+        TargetBodyZone? forcedZone = null)
     {
         Target = target;
         Attacker = attacker;
         Damage = damage;
         Forced = forced;
         ForcedSymmetry = forcedSymmetry;
+        ForcedZone = forcedZone;
         ResolvedPart = BodyPartType.Other;
         ResolvedPartEntity = null;
+        ResolvedZone = null;
         Handled = false;
     }
 }

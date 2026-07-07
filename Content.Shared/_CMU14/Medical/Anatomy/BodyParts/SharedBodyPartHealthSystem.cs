@@ -100,7 +100,7 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         if (resolved.ResolvedPartEntity is not { } partUid)
             return;
 
-        TryApplyPartDamage(ent.Owner, partUid, damage, tool: tool, origin: origin, impact: impact);
+        TryApplyPartDamage(ent.Owner, partUid, damage, tool: tool, origin: origin, impact: impact, targetZone: resolved.ResolvedZone);
     }
 
     public bool TryApplyPartDamage(
@@ -111,7 +111,8 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         EntityUid? tool = null,
         CMUTraumaMechanism? mechanism = null,
         EntityUid? origin = null,
-        DamageImpact impact = default)
+        DamageImpact impact = default,
+        TargetBodyZone? targetZone = null)
     {
         if (!_medicalEnabled || !_bodyPartEnabled)
             return false;
@@ -126,7 +127,7 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         if (scale != 1f)
             localizable *= scale;
 
-        return TryApplyPartDamageToPart(body, partUid, localizable, origin, tool, mechanism, impact);
+        return TryApplyPartDamageToPart(body, partUid, localizable, origin, tool, mechanism, impact, targetZone);
     }
 
     private bool TryApplyPartDamageToPart(
@@ -136,7 +137,8 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         EntityUid? origin,
         EntityUid? tool,
         CMUTraumaMechanism? mechanism,
-        DamageImpact impact)
+        DamageImpact impact,
+        TargetBodyZone? targetZone)
     {
         if (!TryComp<BodyPartHealthComponent>(partUid, out var health))
             return false;
@@ -156,8 +158,8 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
 
         var organs = CollectOrgans(partUid);
         var partType = TryComp<BodyPartComponent>(partUid, out var partComp) ? partComp.PartType : BodyPartType.Other;
-        var trauma = Trauma.CreateContactResult(partType, modified, organs.Count > 0, origin, tool, impact, mechanism);
-        var damaged = new BodyPartDamagedEvent(body, partUid, partType, modified, health.Current, organs, tool, impact, trauma);
+        var trauma = Trauma.CreateContactResult(partType, modified, organs.Count > 0, origin, tool, impact, mechanism, targetZone);
+        var damaged = new BodyPartDamagedEvent(body, partUid, partType, modified, health.Current, organs, tool, impact, trauma, targetZone);
         RaiseLocalEvent(partUid, ref damaged);
 
         if (health.SeveranceDamage >= health.Max + health.SeveranceThreshold && !IsSeveranceLocked(partType))

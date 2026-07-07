@@ -43,6 +43,9 @@ public sealed partial class CMUMedicalCCVars : CVars
     public static readonly CVarDef<bool> PainEnabled =
         CVarDef.Create("cmu.medical.pain.enabled", true, CVar.REPLICATED | CVar.SERVER);
 
+    public static readonly CVarDef<bool> TargetedHealingEnabled =
+        CVarDef.Create("cmu.medical.targeted_healing.enabled", false, CVar.REPLICATED | CVar.SERVER);
+
     public static readonly CVarDef<float> HitLocationHeadWeight =
         CVarDef.Create("cmu.medical.hit_location.head_weight", 0.15f, CVar.REPLICATED | CVar.SERVER);
 
@@ -136,6 +139,9 @@ public sealed partial class CMUMedicalCCVars : CVars
 
     public static readonly CVarDef<float> TraumaBluntVascularChance =
         CVarDef.Create("cmu.medical.trauma.blunt_vascular_chance", 0.02f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> TraumaGroinOrganChanceMultiplier =
+        CVarDef.Create("cmu.medical.trauma.groin_organ_chance_multiplier", 2.0f, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<float> FractureCompoundInternalBleed =
         CVarDef.Create("cmu.medical.fracture.compound_internal_bleed", 0.5f, CVar.REPLICATED | CVar.SERVER);

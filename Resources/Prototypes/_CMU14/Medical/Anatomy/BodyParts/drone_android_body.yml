@@ -10,7 +10,6 @@
       organs:
         brain: CMUOrganHumanBrain
         eyes: CMUOrganHumanEyes
-        ears: CMUOrganHumanEars
     torso:
       part: CMUPartHumanTorso
       connections:

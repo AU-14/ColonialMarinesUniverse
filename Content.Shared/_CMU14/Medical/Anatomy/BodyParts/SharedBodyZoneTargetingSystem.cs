@@ -50,6 +50,16 @@ public abstract partial class SharedBodyZoneTargetingSystem : EntitySystem
         return shooter.Comp.Selected;
     }
 
+    public TargetBodyZone? TryGetSelection(Entity<BodyZoneTargetingComponent?> shooter)
+    {
+        if (!_medicalEnabled || !_hitLocationEnabled)
+            return null;
+        if (!Resolve(shooter.Owner, ref shooter.Comp, logMissing: false))
+            return null;
+
+        return shooter.Comp.Selected;
+    }
+
     public void SelectZone(Entity<BodyZoneTargetingComponent?> shooter, TargetBodyZone zone)
     {
         if (!Resolve(shooter.Owner, ref shooter.Comp, logMissing: false))

@@ -1,5 +1,6 @@
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
+using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.Body.Part;
 using Content.Shared.Projectiles;
 using Content.Shared._RMC14.Xenonids;
@@ -57,6 +58,7 @@ public sealed partial class SharedCMUTraumaSystem : EntitySystem
         _cfg.OnValueChanged(CMUMedicalCCVars.TraumaBluntBoneChance, v => _settings = _settings with { BluntBoneChance = v }, true);
         _cfg.OnValueChanged(CMUMedicalCCVars.TraumaBluntOrganChance, v => _settings = _settings with { BluntOrganChance = v }, true);
         _cfg.OnValueChanged(CMUMedicalCCVars.TraumaBluntVascularChance, v => _settings = _settings with { BluntVascularChance = v }, true);
+        _cfg.OnValueChanged(CMUMedicalCCVars.TraumaGroinOrganChanceMultiplier, v => _settings = _settings with { GroinOrganChanceMultiplier = v }, true);
     }
 
     public CMUTraumaContactResult CreateContactResult(
@@ -64,9 +66,10 @@ public sealed partial class SharedCMUTraumaSystem : EntitySystem
         DamageSpecifier damage,
         bool hasOrgans,
         EntityUid? tool,
-        CMUTraumaMechanism? explicitMechanism = null)
+        CMUTraumaMechanism? explicitMechanism = null,
+        TargetBodyZone? targetZone = null)
     {
-        return CreateContactResult(partType, damage, hasOrgans, null, tool, default, explicitMechanism);
+        return CreateContactResult(partType, damage, hasOrgans, null, tool, default, explicitMechanism, targetZone);
     }
 
     public CMUTraumaContactResult CreateContactResult(
@@ -76,14 +79,15 @@ public sealed partial class SharedCMUTraumaSystem : EntitySystem
         EntityUid? origin,
         EntityUid? tool,
         DamageImpact impact = default,
-        CMUTraumaMechanism? explicitMechanism = null)
+        CMUTraumaMechanism? explicitMechanism = null,
+        TargetBodyZone? targetZone = null)
     {
         var mechanism = explicitMechanism ?? InferMechanism(damage, tool);
         impact = ResolveImpact(damage, mechanism, origin, tool, impact);
         var brute = GetTypeAmount(damage, "Blunt") +
                     GetTypeAmount(damage, "Slash") +
                     GetTypeAmount(damage, "Piercing");
-        var settings = GetContactSettings(partType, mechanism, origin, tool);
+        var settings = GetContactSettings(partType, mechanism, origin, tool, targetZone);
 
         return CMUTraumaContactModel.Create(
             mechanism,
@@ -99,44 +103,61 @@ public sealed partial class SharedCMUTraumaSystem : EntitySystem
         BodyPartType partType,
         CMUTraumaMechanism mechanism,
         EntityUid? origin,
-        EntityUid? tool)
+        EntityUid? tool,
+        TargetBodyZone? targetZone)
     {
+        var settings = partType == BodyPartType.Torso && targetZone == TargetBodyZone.GroinPelvis
+            ? ApplyGroinOrganChanceBoost(_settings)
+            : _settings;
+
         if (partType != BodyPartType.Torso)
-            return _settings;
+            return settings;
 
         if (mechanism == CMUTraumaMechanism.Ballistic)
         {
-            return _settings with
+            return settings with
             {
-                BallisticOrganPassThrough = MultiplyTorsoPassThrough(_settings.BallisticOrganPassThrough),
-                HighEnergyOrganPassThrough = MultiplyTorsoPassThrough(_settings.HighEnergyOrganPassThrough),
+                BallisticOrganPassThrough = MultiplyTorsoPassThrough(settings.BallisticOrganPassThrough),
+                HighEnergyOrganPassThrough = MultiplyTorsoPassThrough(settings.HighEnergyOrganPassThrough),
             };
         }
 
         if (!TryGetXenoSource(origin, tool, out _, out var xeno) ||
             xeno.Tier < XenoTorsoOrganPassThroughMinimumTier)
         {
-            return _settings;
+            return settings;
         }
 
         return mechanism switch
         {
-            CMUTraumaMechanism.Pierce => _settings with
+            CMUTraumaMechanism.Pierce => settings with
             {
-                PierceOrganPassThrough = MultiplyTorsoPassThrough(_settings.PierceOrganPassThrough),
-                HighEnergyOrganPassThrough = MultiplyTorsoPassThrough(_settings.HighEnergyOrganPassThrough),
+                PierceOrganPassThrough = MultiplyTorsoPassThrough(settings.PierceOrganPassThrough),
+                HighEnergyOrganPassThrough = MultiplyTorsoPassThrough(settings.HighEnergyOrganPassThrough),
             },
-            CMUTraumaMechanism.Slash => _settings with
+            CMUTraumaMechanism.Slash => settings with
             {
-                SlashOrganPassThrough = MultiplyTorsoPassThrough(_settings.SlashOrganPassThrough),
-                HighEnergyOrganPassThrough = MultiplyTorsoPassThrough(_settings.HighEnergyOrganPassThrough),
+                SlashOrganPassThrough = MultiplyTorsoPassThrough(settings.SlashOrganPassThrough),
+                HighEnergyOrganPassThrough = MultiplyTorsoPassThrough(settings.HighEnergyOrganPassThrough),
             },
-            CMUTraumaMechanism.Blunt => _settings with
+            CMUTraumaMechanism.Blunt => settings with
             {
-                BluntOrganPassThrough = MultiplyTorsoPassThrough(_settings.BluntOrganPassThrough),
-                HighEnergyOrganPassThrough = MultiplyTorsoPassThrough(_settings.HighEnergyOrganPassThrough),
+                BluntOrganPassThrough = MultiplyTorsoPassThrough(settings.BluntOrganPassThrough),
+                HighEnergyOrganPassThrough = MultiplyTorsoPassThrough(settings.HighEnergyOrganPassThrough),
             },
-            _ => _settings,
+            _ => settings,
+        };
+    }
+
+    private static CMUTraumaContactSettings ApplyGroinOrganChanceBoost(CMUTraumaContactSettings settings)
+    {
+        var multiplier = MathF.Max(0f, settings.GroinOrganChanceMultiplier);
+        return settings with
+        {
+            BallisticTorsoOrganChance = settings.BallisticTorsoOrganChance * multiplier,
+            PierceOrganChance = settings.PierceOrganChance * multiplier,
+            SlashOrganChance = settings.SlashOrganChance * multiplier,
+            BluntOrganChance = settings.BluntOrganChance * multiplier,
         };
     }
 
