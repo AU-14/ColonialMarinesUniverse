@@ -1,11 +1,12 @@
 using Content.Shared.Body.Systems;
+using Content.Shared.FixedPoint;
 using Content.Shared._RMC14.Medical.Wounds;
 
 namespace Content.Shared._CMU14.Medical.Injuries.Wounds;
 
 public readonly record struct CMUWoundCount(int Untreated, int Treated);
 
-public readonly record struct CMUWorstUntreatedWound(WoundSize Size, WoundMechanism Mechanism);
+public readonly record struct CMUWorstUntreatedWound(WoundSize Size, WoundMechanism Mechanism, FixedPoint2 Damage);
 
 public sealed partial class CMUWoundLedgerSystem : EntitySystem
 {
@@ -41,20 +42,29 @@ public sealed partial class CMUWoundLedgerSystem : EntitySystem
     public CMUWorstUntreatedWound? GetWorstUntreatedWound(BodyPartWoundComponent wounds)
     {
         CMUWorstUntreatedWound? worst = null;
+        var worstRank = -1;
+        var worstDamage = 0f;
         for (var i = 0; i < wounds.Wounds.Count; i++)
         {
             var wound = wounds.Wounds[i];
             if (wound.Treated)
                 continue;
 
-            var size = i < wounds.Sizes.Count ? wounds.Sizes[i] : WoundSize.Deep;
-            if (worst is not null && (byte) size <= (byte) worst.Value.Size)
+            var size = i < wounds.Sizes.Count ? wounds.Sizes[i] : WoundSize.CutDeep;
+            var damage = wound.Damage.Float();
+            var rank = WoundSizeProfile.SeverityRank(size, damage);
+            if (worst is not null &&
+                (rank < worstRank || rank == worstRank && damage <= worstDamage))
+            {
                 continue;
+            }
 
             var mechanism = i < wounds.Mechanisms.Count
                 ? wounds.Mechanisms[i]
                 : LegacyMechanismFor(wound.Type);
-            worst = new CMUWorstUntreatedWound(size, mechanism);
+            worst = new CMUWorstUntreatedWound(size, mechanism, wound.Damage);
+            worstRank = rank;
+            worstDamage = damage;
         }
 
         return worst;

@@ -62,11 +62,13 @@ public sealed partial class SharedPainSourceProfileSystem : EntitySystem
             {
                 for (var i = 0; i < pw.Wounds.Count; i++)
                 {
-                    if (pw.Wounds[i].Treated)
+                    var wound = pw.Wounds[i];
+                    if (wound.Treated)
                         continue;
 
-                    var size = i < pw.Sizes.Count ? pw.Sizes[i] : WoundSize.Deep;
-                    AddPainSource(ref sourceCount, ref highest, ref total, ref riseRate, WoundPainTarget(size));
+                    var size = i < pw.Sizes.Count ? pw.Sizes[i] : WoundSize.CutDeep;
+                    AddPainSource(ref sourceCount, ref highest, ref total, ref riseRate,
+                        WoundPainTarget(size, wound.Damage.Float()));
                 }
             }
 
@@ -132,16 +134,9 @@ public sealed partial class SharedPainSourceProfileSystem : EntitySystem
         };
     }
 
-    private static float WoundPainTarget(WoundSize size)
+    private static float WoundPainTarget(WoundSize size, float damage)
     {
-        return size switch
-        {
-            WoundSize.Small => 5f,
-            WoundSize.Deep => 15f,
-            WoundSize.Gaping => 30f,
-            WoundSize.Massive => 50f,
-            _ => 0f,
-        };
+        return WoundSizeProfile.PainTarget(size, damage);
     }
 
     private float OrganPainTarget(EntityUid organ, OrganDamageStage stage)

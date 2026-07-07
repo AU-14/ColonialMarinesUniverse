@@ -132,6 +132,7 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
                 ph.Max,
                 woundReadout?.Size,
                 woundReadout?.Mechanism,
+                woundReadout?.Damage ?? FixedPoint2.Zero,
                 shrapnel?.Fragments ?? 0,
                 shrapnel?.Severity ?? 0f,
                 HasComp<CMUEscharComponent>(partUid),

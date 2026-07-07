@@ -21,7 +21,7 @@ public sealed partial class BodyPartWoundComponent : Component
     /// <summary>
     ///     Kept in lockstep with <see cref="Wounds"/>. A shorter list is
     ///     tolerated for save-game forward-compat — readers treat missing
-    ///     entries as <see cref="WoundSize.Deep"/>.
+    ///     entries as <see cref="WoundSize.CutDeep"/>.
     /// </summary>
     [DataField, AutoNetworkedField]
     public List<WoundSize> Sizes = new();

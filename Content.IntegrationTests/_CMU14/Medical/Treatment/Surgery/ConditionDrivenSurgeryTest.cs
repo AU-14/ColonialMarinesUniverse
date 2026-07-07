@@ -1818,7 +1818,7 @@ public sealed class ConditionDrivenSurgeryTest
         var wounds = entMan.EnsureComponent<BodyPartWoundComponent>(part);
         GetWoundField<List<Wound>>(wounds, nameof(BodyPartWoundComponent.Wounds))
             .Add(new Wound(FixedPoint2.New(10), FixedPoint2.Zero, 0f, null, type, false));
-        GetWoundField<List<WoundSize>>(wounds, nameof(BodyPartWoundComponent.Sizes)).Add(WoundSize.Deep);
+        GetWoundField<List<WoundSize>>(wounds, nameof(BodyPartWoundComponent.Sizes)).Add(WoundSize.CutDeep);
         GetWoundField<List<int>>(wounds, nameof(BodyPartWoundComponent.Bandages)).Add(0);
         GetWoundField<List<WoundMechanism>>(wounds, nameof(BodyPartWoundComponent.Mechanisms))
             .Add(type == WoundType.Burn ? WoundMechanism.Burn : WoundMechanism.Generic);

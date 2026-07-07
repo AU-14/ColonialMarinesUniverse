@@ -190,7 +190,7 @@ public sealed class RMCHumanPrototypeRegressionTest
                     Assert.That(entMan.HasComponent<CMUBandagePendingComponent>(patient), Is.False);
                     Assert.That(treated, Is.EqualTo(2));
                     Assert.That(bandages.Count, Is.EqualTo(2));
-                    Assert.That(bandages, Has.All.EqualTo(WoundSizeProfile.BandagesRequired(WoundSize.Deep)));
+                    Assert.That(bandages, Has.All.EqualTo(WoundSizeProfile.BandagesRequired(WoundSize.CutDeep)));
                     Assert.That(entMan.GetComponent<StackComponent>(treater).Count, Is.EqualTo(9));
                 });
             }
@@ -231,7 +231,7 @@ public sealed class RMCHumanPrototypeRegressionTest
             part = GetFirstBodyPart(entMan, patient);
 
             skills.SetSkill(patient, "RMCSkillMedical", 2);
-            AddBodyPartWound(entMan, part, woundType, FixedPoint2.New(1), cleanup, WoundSize.Small);
+            AddBodyPartWound(entMan, part, woundType, FixedPoint2.New(1), cleanup, WoundSize.CutSmall);
             var health = entMan.GetComponent<BodyPartHealthComponent>(part);
             partHealth.SetCurrent((part, health), health.Max - FixedPoint2.New(4));
 
@@ -2146,7 +2146,7 @@ public sealed class RMCHumanPrototypeRegressionTest
         WoundType type,
         FixedPoint2? damage = null,
         WoundCleanupFlags cleanup = WoundCleanupFlags.None,
-        WoundSize size = WoundSize.Deep)
+        WoundSize size = WoundSize.CutDeep)
     {
         var wounds = entMan.EnsureComponent<BodyPartWoundComponent>(part);
         GetField<List<Wound>>(wounds, nameof(BodyPartWoundComponent.Wounds)).Add(new Wound(damage ?? FixedPoint2.New(10), FixedPoint2.Zero, 0f, null, type, false));

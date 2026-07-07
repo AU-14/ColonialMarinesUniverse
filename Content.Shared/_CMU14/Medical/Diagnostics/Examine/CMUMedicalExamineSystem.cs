@@ -216,7 +216,7 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
                     if (wound.Treated)
                         continue;
 
-                    var size = i < wounds.Sizes.Count ? wounds.Sizes[i] : WoundSize.Deep;
+                    var size = i < wounds.Sizes.Count ? wounds.Sizes[i] : WoundSize.CutDeep;
                     var mechanism = i < wounds.Mechanisms.Count ? wounds.Mechanisms[i] : CMUWoundLedgerSystem.LegacyMechanismFor(wound.Type);
                     var header = GetInspectWoundHeader(mechanism, wound.Type);
                     var key = header;
@@ -231,7 +231,7 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
                         group.Order = partOrder;
                     }
 
-                    group.AddWound(partName, size);
+                    group.AddWound(partName, size, wound.Damage.Float());
                 }
 
                 if (wounds.ExternalBleeding == ExternalBleedTier.Arterial)
@@ -467,38 +467,14 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
     private static string DescribeVisibleWound(BodyPartWoundComponent wounds, int index)
     {
         var wound = wounds.Wounds[index];
-        var size = index < wounds.Sizes.Count ? wounds.Sizes[index] : WoundSize.Deep;
-        var sizeText = size switch
-        {
-            WoundSize.Small => "small",
-            WoundSize.Deep => "moderate",
-            WoundSize.Gaping => "large",
-            WoundSize.Massive => "massive",
-            _ => "moderate",
-        };
-
-        var kind = wound.Type switch
-        {
-            WoundType.Burn => "burn",
-            WoundType.Surgery => "wound",
-            _ => GetVisibleWoundKind(wounds, index),
-        };
-
-        return $"a {sizeText} {kind}";
+        var size = index < wounds.Sizes.Count ? wounds.Sizes[index] : WoundSize.CutDeep;
+        return $"a {WoundSizeProfile.StageName(size, wound.Damage.Float())}";
     }
 
     private static string DescribeVisibleTreatedWounds(int count, string treatment)
     {
         var noun = count == 1 ? "wound" : "wounds";
         return $"{noun} {treatment}";
-    }
-
-    private static string GetVisibleWoundKind(BodyPartWoundComponent wounds, int index)
-    {
-        if (index < wounds.Mechanisms.Count && wounds.Mechanisms[index] == WoundMechanism.Burn)
-            return "burn";
-
-        return "wound";
     }
 
     private static string DescribeVisibleFracture(FractureSeverity severity, bool stabilized)
@@ -537,22 +513,22 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
         _ => type == WoundType.Burn ? "Burns" : "Wounds",
     };
 
-    private static string InspectSeverity(WoundSize size) => size switch
+    private static string InspectSeverity(WoundSize size, float damage) => WoundSizeProfile.SeverityRank(size, damage) switch
     {
-        WoundSize.Small => "Minor",
-        WoundSize.Deep => "Moderate",
-        WoundSize.Gaping => "Severe",
-        WoundSize.Massive => "Massive",
+        0 => "Minor",
+        1 => "Moderate",
+        2 => "Severe",
+        3 => "Massive",
         _ => "Moderate",
     };
 
     private static DetailedWoundDetails GetDetailedWoundDetails(BodyPartWoundComponent wounds, int index)
     {
         var wound = wounds.Wounds[index];
-        var size = index < wounds.Sizes.Count ? wounds.Sizes[index] : WoundSize.Deep;
+        var size = index < wounds.Sizes.Count ? wounds.Sizes[index] : WoundSize.CutDeep;
         var mechanism = index < wounds.Mechanisms.Count ? wounds.Mechanisms[index] : CMUWoundLedgerSystem.LegacyMechanismFor(wound.Type);
 
-        var header = Color($"{DescribeDetailedSize(size)} {DescribeMechanism(mechanism, wound.Type)}", WoundColorFor(mechanism, wound.Type));
+        var header = Color(WoundSizeProfile.StageName(size, wound.Damage.Float()), WoundColorFor(mechanism, wound.Type));
         var details = Color(
             DescribeTreatment(wound.Treated),
             TreatmentColorFor(wound.Treated));
@@ -605,28 +581,6 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
             _ => "fracture",
         };
     }
-
-    private static string DescribeDetailedSize(WoundSize size) => size switch
-    {
-        WoundSize.Small => "small",
-        WoundSize.Deep => "deep",
-        WoundSize.Gaping => "gaping",
-        WoundSize.Massive => "massive",
-        _ => "deep",
-    };
-
-    private static string DescribeMechanism(WoundMechanism mechanism, WoundType type) => mechanism switch
-    {
-        WoundMechanism.Bullet => "bullet wound",
-        WoundMechanism.Stab => "stab wound",
-        WoundMechanism.Slash => "slash wound",
-        WoundMechanism.Crush => "crush wound",
-        WoundMechanism.Burn => "burn",
-        WoundMechanism.Blast => "blast wound",
-        WoundMechanism.Fragment => "fragment wound",
-        WoundMechanism.Surgical => "surgical wound",
-        _ => type == WoundType.Burn ? "burn" : "wound",
-    };
 
     private static string DescribeTreatment(bool treated) => treated ? "treated" : "untreated";
 
@@ -722,9 +676,9 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
             _siteColor = siteColor;
         }
 
-        public void AddWound(string part, WoundSize size)
+        public void AddWound(string part, WoundSize size, float damage)
         {
-            AddSite($"{InspectSeverity(size)} {part}");
+            AddSite($"{InspectSeverity(size, damage)} {part}");
         }
 
         public void AddSite(string site)

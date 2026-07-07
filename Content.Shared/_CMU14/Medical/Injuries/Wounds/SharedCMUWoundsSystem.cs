@@ -76,7 +76,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     ///     Untreated wounds do not progress; only <c>Treated = true</c>
     ///     unlocks the heal accumulator.
     /// </summary>
-    public const float HealPerSecond = 0.6f;
+    public const float HealPerSecond = 0.375f;
 
     private const float WoundScanInterval = 0.5f;
 
@@ -140,12 +140,13 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         var bleedDuration = ComputeBleedDuration(args.Delta);
         var stopBleedAt = Timing.CurTime + bleedDuration;
 
-        var size = WoundSizeProfile.FromDamage(bruteOrBurn.Float());
-        var bleedScale = WoundSizeProfile.BleedMultiplier(size);
-        var bloodloss = type == WoundType.Brute ? ComputeBleedAmount(brute) * bleedScale : 0f;
         var mechanism = ClassifyMechanism(args, brute, burn);
+        var sizeDamage = type == WoundType.Burn ? burn.Float() : brute.Float();
+        var size = WoundSizeProfile.FromDamage(type, mechanism, sizeDamage);
+        var bleedScale = WoundSizeProfile.BleedMultiplier(size, sizeDamage);
+        var bloodloss = type == WoundType.Brute ? ComputeBleedAmount(brute) * bleedScale : 0f;
         var secondary = ClassifySecondaryMechanisms(args, mechanism, brute, burn);
-        var cleanup = DefaultCleanupFor(mechanism, secondary, size);
+        var cleanup = DefaultCleanupFor(mechanism, secondary, size, sizeDamage);
 
         AddOrMergeWound(partWound, new Wound(
             bruteOrBurn,
@@ -154,7 +155,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             stopBleedAt,
             type,
             false), size, mechanism, secondary, cleanup);
-        UpgradeExternalBleeding(partWound, ComputeExternalBleedTier(mechanism, secondary, size));
+        UpgradeExternalBleeding(partWound, ComputeExternalBleedTier(mechanism, secondary, size, sizeDamage));
         Dirty(ent.Owner, partWound);
 
         var woundApplied = new BodyPartWoundAppliedEvent(
@@ -486,10 +487,14 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             return true;
         }
 
-        var size = WoundSizeProfile.FromDamage(MathF.Max(WoundThreshold, severity));
+        var woundDamage = MathF.Max(WoundThreshold, severity);
+        var size = WoundSizeProfile.FromDamage(
+            WoundType.Brute,
+            WoundMechanism.Fragment,
+            woundDamage);
         comp.Wounds.Add(new Wound(FixedPoint2.Zero, FixedPoint2.Zero, 0f, null, WoundType.Brute, true));
         comp.Sizes.Add(size);
-        comp.Bandages.Add(WoundSizeProfile.BandagesRequired(size));
+        comp.Bandages.Add(WoundSizeProfile.BandagesRequired(size, woundDamage));
         comp.Mechanisms.Add(WoundMechanism.Fragment);
         comp.SecondaryMechanisms.Add(WoundMechanismFlags.None);
         comp.TreatmentQualities.Add(WoundTreatmentQuality.Adequate);
@@ -605,7 +610,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             return false;
 
         var size = GetWoundSize(comp, idx);
-        var required = WoundSizeProfile.BandagesRequired(size);
+        var required = WoundSizeProfile.BandagesRequired(size, comp.Wounds[idx].Damage.Float());
         comp.Bandages[idx] = Math.Min(required, comp.Bandages[idx] + 1);
         completed = comp.Bandages[idx] >= required;
 
@@ -659,7 +664,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         while (treated < maxWounds && TryPickWorstUntreatedWound(comp, type, mechanismMask, out var idx))
         {
             var size = GetWoundSize(comp, idx);
-            var required = WoundSizeProfile.BandagesRequired(size);
+            var required = WoundSizeProfile.BandagesRequired(size, comp.Wounds[idx].Damage.Float());
             comp.Bandages[idx] = required;
 
             var picked = comp.Wounds[idx];
@@ -816,10 +821,40 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             if (!WoundAppliesCapBurden(comp, i))
                 continue;
 
-            penalty += FieldTreatmentPenalty(GetWoundSize(comp, i));
+            penalty += WoundSizeProfile.FieldTreatmentPenalty(
+                GetWoundSize(comp, i),
+                comp.Wounds[i].Damage.Float());
         }
 
         return Math.Clamp(1f - penalty, 0.35f, 1f);
+    }
+
+    public static float ComputeLargestWoundFieldTreatmentCap(BodyPartWoundComponent comp)
+    {
+        EnsureWoundMetadataSlots(comp);
+
+        WoundSize? largest = null;
+        var largestRank = -1;
+        var largestDamage = 0f;
+        for (var i = 0; i < comp.Wounds.Count; i++)
+        {
+            if (!WoundAppliesCapBurden(comp, i))
+                continue;
+
+            var size = GetWoundSize(comp, i);
+            var damage = comp.Wounds[i].Damage.Float();
+            var rank = WoundSizeProfile.SeverityRank(size, damage);
+            if (largest is null || rank > largestRank || rank == largestRank && damage > largestDamage)
+            {
+                largest = size;
+                largestRank = rank;
+                largestDamage = damage;
+            }
+        }
+
+        return largest is { } woundSize
+            ? Math.Clamp(1f - WoundSizeProfile.FieldTreatmentPenalty(woundSize, largestDamage), 0.35f, 1f)
+            : 1f;
     }
 
     private static bool HasUntreatedBurden(BodyPartWoundComponent comp)
@@ -842,15 +877,6 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
         return !comp.Wounds[index].Treated;
     }
-
-    private static float FieldTreatmentPenalty(WoundSize size) => size switch
-    {
-        WoundSize.Small => 0.05f,
-        WoundSize.Deep => 0.12f,
-        WoundSize.Gaping => 0.20f,
-        WoundSize.Massive => 0.30f,
-        _ => 0.12f,
-    };
 
     public override void Update(float frameTime)
     {
@@ -1096,7 +1122,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
     private static WoundSize GetWoundSize(BodyPartWoundComponent comp, int index)
     {
-        return index < comp.Sizes.Count ? comp.Sizes[index] : WoundSize.Deep;
+        return index < comp.Sizes.Count ? comp.Sizes[index] : WoundSize.CutDeep;
     }
 
     private static void EnsureBandageSlots(BodyPartWoundComponent comp)
@@ -1107,7 +1133,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     private static void EnsureWoundMetadataSlots(BodyPartWoundComponent comp)
     {
         while (comp.Sizes.Count < comp.Wounds.Count)
-            comp.Sizes.Add(WoundSize.Deep);
+            comp.Sizes.Add(WoundSize.CutDeep);
 
         if (comp.Sizes.Count > comp.Wounds.Count)
             comp.Sizes.RemoveRange(comp.Wounds.Count, comp.Sizes.Count - comp.Wounds.Count);
@@ -1182,10 +1208,10 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
         comp.Wounds[index] = merged;
 
-        var mergedSize = WoundSizeProfile.FromDamage(merged.Damage.Float());
+        var mergedSize = WoundSizeProfile.FromDamage(merged.Type, comp.Mechanisms[index], merged.Damage.Float());
         comp.Sizes[index] = mergedSize;
 
-        var required = WoundSizeProfile.BandagesRequired(mergedSize);
+        var required = WoundSizeProfile.BandagesRequired(mergedSize, merged.Damage.Float());
         comp.Bandages[index] = Math.Min(comp.Bandages[index], Math.Max(0, required - 1));
 
         var existingMechanism = comp.Mechanisms[index];
@@ -1446,7 +1472,8 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     private static WoundCleanupFlags DefaultCleanupFor(
         WoundMechanism mechanism,
         WoundMechanismFlags secondary,
-        WoundSize size)
+        WoundSize size,
+        float damage)
     {
         var cleanup = WoundCleanupFlags.DirtyDressing;
 
@@ -1458,7 +1485,9 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             WoundMechanism.Fragment => WoundCleanupFlags.RetainedFragment,
             WoundMechanism.Burn => WoundCleanupFlags.CharredTissue,
             WoundMechanism.Blast => WoundCleanupFlags.CrushDebris,
-            WoundMechanism.Crush => size >= WoundSize.Deep ? WoundCleanupFlags.CrushDebris : WoundCleanupFlags.None,
+            WoundMechanism.Crush => WoundSizeProfile.SeverityRank(size, damage) >= 1
+                ? WoundCleanupFlags.CrushDebris
+                : WoundCleanupFlags.None,
             WoundMechanism.Stab or WoundMechanism.Slash or WoundMechanism.Surgical => WoundCleanupFlags.PoorClosure,
             _ => WoundCleanupFlags.None,
         };
@@ -1469,7 +1498,8 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     private static ExternalBleedTier ComputeExternalBleedTier(
         WoundMechanism mechanism,
         WoundMechanismFlags secondary,
-        WoundSize size)
+        WoundSize size,
+        float damage)
     {
         if (mechanism == WoundMechanism.Burn &&
             (secondary & (WoundMechanismFlags.Blast | WoundMechanismFlags.Fragment)) == WoundMechanismFlags.None)
@@ -1479,16 +1509,20 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
         return mechanism switch
         {
-            WoundMechanism.Blast => size >= WoundSize.Gaping ? ExternalBleedTier.Severe : ExternalBleedTier.Moderate,
-            WoundMechanism.Bullet or WoundMechanism.Stab or WoundMechanism.Slash or WoundMechanism.Fragment => size switch
+            WoundMechanism.Blast => WoundSizeProfile.SeverityRank(size, damage) >= 2
+                ? ExternalBleedTier.Severe
+                : ExternalBleedTier.Moderate,
+            WoundMechanism.Bullet or WoundMechanism.Stab or WoundMechanism.Slash or WoundMechanism.Fragment => WoundSizeProfile.SeverityRank(size, damage) switch
             {
-                WoundSize.Small => ExternalBleedTier.Minor,
-                WoundSize.Deep => ExternalBleedTier.Moderate,
-                WoundSize.Gaping => ExternalBleedTier.Severe,
-                WoundSize.Massive => ExternalBleedTier.Arterial,
+                0 => ExternalBleedTier.Minor,
+                1 => ExternalBleedTier.Moderate,
+                2 => ExternalBleedTier.Severe,
+                3 => ExternalBleedTier.Arterial,
                 _ => ExternalBleedTier.Moderate,
             },
-            WoundMechanism.Crush => size >= WoundSize.Gaping ? ExternalBleedTier.Moderate : ExternalBleedTier.Minor,
+            WoundMechanism.Crush => WoundSizeProfile.SeverityRank(size, damage) >= 2
+                ? ExternalBleedTier.Moderate
+                : ExternalBleedTier.Minor,
             _ => ExternalBleedTier.None,
         };
     }

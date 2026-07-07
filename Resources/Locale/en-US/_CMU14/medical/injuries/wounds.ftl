@@ -5,10 +5,6 @@ cmu-medical-eschar-name = eschar
 cmu-medical-eschar-debride-success = The eschar is debrided.
 
 # ζ.M3 — Multi-stage wound descriptors.
-cmu-medical-wound-size-small = small
-cmu-medical-wound-size-deep = deep
-cmu-medical-wound-size-gaping = gaping
-cmu-medical-wound-size-massive = massive
 
 # ζ.M4 — Tourniquet apply / remove / necrosis.
 cmu-medical-tourniquet-applying = Applying tourniquet...

@@ -93,7 +93,7 @@ public sealed class PainShockReworkTest
                 var part = GetFirstPart(entMan, human);
                 var frac = entMan.EnsureComponent<FractureComponent>(part);
                 fracture.SetSeverity((part, frac), FractureSeverity.Shattered);
-                AddWound(entMan, part, WoundSize.Massive, treated: false);
+                AddWound(entMan, part, WoundSize.CutMassive, treated: false);
                 entMan.EnsureComponent<CMUEscharComponent>(part);
 
                 var profile = pain.ComputePainSourceProfile(human);
@@ -130,7 +130,7 @@ public sealed class PainShockReworkTest
             try
             {
                 var part = GetFirstPart(entMan, human);
-                var wounds = AddWound(entMan, part, WoundSize.Massive, treated: false);
+                var wounds = AddWound(entMan, part, WoundSize.CutMassive, treated: false);
 
                 Assert.That(pain.ComputePainSourceProfile(human).Target.Float(), Is.EqualTo(50f).Within(0.001f));
 

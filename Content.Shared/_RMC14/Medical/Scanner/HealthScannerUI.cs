@@ -90,6 +90,7 @@ public readonly record struct CMUBodyPartReadout(
     FixedPoint2 Max,
     WoundSize? WoundDescriptor,
     WoundMechanism? WoundMechanism,
+    FixedPoint2 WoundDamage,
     int ShrapnelFragments,
     float ShrapnelSeverity,
     bool Eschar,

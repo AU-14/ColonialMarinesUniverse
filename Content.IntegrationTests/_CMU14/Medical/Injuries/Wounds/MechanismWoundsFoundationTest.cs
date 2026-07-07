@@ -110,7 +110,7 @@ public sealed class MechanismWoundsFoundationTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(torsoReadout.WoundDescriptor, Is.EqualTo(WoundSize.Deep));
+                    Assert.That(torsoReadout.WoundDescriptor, Is.EqualTo(WoundSize.CutFlesh));
                     Assert.That(torsoReadout.WoundMechanism, Is.EqualTo(WoundMechanism.Bullet));
                 });
             }
@@ -191,7 +191,7 @@ public sealed class MechanismWoundsFoundationTest
                     Assert.That(wounds.Mechanisms, Has.Count.EqualTo(1));
                     Assert.That(wounds.Mechanisms[0], Is.EqualTo(WoundMechanism.Slash));
                     Assert.That(wounds.Wounds[0].Damage, Is.EqualTo(FixedPoint2.New(36)));
-                    Assert.That(wounds.Sizes[0], Is.EqualTo(WoundSize.Gaping));
+                    Assert.That(wounds.Sizes[0], Is.EqualTo(WoundSize.CutFlesh));
                 });
             }
             finally
@@ -433,12 +433,12 @@ public sealed class MechanismWoundsFoundationTest
     {
         var wounds = new BodyPartWoundComponent();
         WoundsOf(wounds).Add(new Wound(10, FixedPoint2.Zero, 0f, null, WoundType.Brute, false));
-        SizesOf(wounds).Add(WoundSize.Deep);
+        SizesOf(wounds).Add(WoundSize.CutDeep);
         TreatmentQualitiesOf(wounds).Add(WoundTreatmentQuality.Untreated);
         CleanupOf(wounds).Add(WoundCleanupFlags.PoorClosure);
 
         WoundsOf(wounds).Add(new Wound(10, FixedPoint2.Zero, 0f, null, WoundType.Brute, true));
-        SizesOf(wounds).Add(WoundSize.Massive);
+        SizesOf(wounds).Add(WoundSize.CutMassive);
         TreatmentQualitiesOf(wounds).Add(WoundTreatmentQuality.Adequate);
         CleanupOf(wounds).Add(WoundCleanupFlags.CrushDebris);
 
@@ -447,7 +447,7 @@ public sealed class MechanismWoundsFoundationTest
         for (var i = 0; i < 4; i++)
         {
             WoundsOf(wounds).Add(new Wound(10, FixedPoint2.Zero, 0f, null, WoundType.Brute, false));
-            SizesOf(wounds).Add(WoundSize.Massive);
+            SizesOf(wounds).Add(WoundSize.CutMassive);
             TreatmentQualitiesOf(wounds).Add(WoundTreatmentQuality.Untreated);
             CleanupOf(wounds).Add(WoundCleanupFlags.CrushDebris);
         }
@@ -661,10 +661,10 @@ public sealed class MechanismWoundsFoundationTest
                 var torso = GetBodyPart(entMan, human, BodyPartType.Torso);
                 var wounds = entMan.EnsureComponent<BodyPartWoundComponent>(torso);
 
-                AddVisibleWound(wounds, WoundSize.Massive, WoundTreatmentQuality.Adequate);
-                AddVisibleWound(wounds, WoundSize.Deep, WoundTreatmentQuality.Adequate);
-                AddVisibleWound(wounds, WoundSize.Massive, WoundTreatmentQuality.Optimal);
-                AddVisibleWound(wounds, WoundSize.Small, WoundTreatmentQuality.Optimal);
+                AddVisibleWound(wounds, WoundSize.CutMassive, WoundTreatmentQuality.Adequate);
+                AddVisibleWound(wounds, WoundSize.CutDeep, WoundTreatmentQuality.Adequate);
+                AddVisibleWound(wounds, WoundSize.CutMassive, WoundTreatmentQuality.Optimal);
+                AddVisibleWound(wounds, WoundSize.CutSmall, WoundTreatmentQuality.Optimal);
 
                 var examine = new ExaminedEvent(new FormattedMessage(), human, human, true, false);
                 entMan.EventBus.RaiseLocalEvent(human, examine);
@@ -764,7 +764,7 @@ public sealed class MechanismWoundsFoundationTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(text, Does.Contain("[bold][color=#9fc7ff]Head[/color][/bold]"));
-                    Assert.That(text, Does.Contain("[color=#ffb86c]small slash wound[/color]"));
+                    Assert.That(text, Does.Contain("[color=#ffb86c]ripped cut[/color]"));
                     Assert.That(headIndex, Is.GreaterThanOrEqualTo(0));
                     Assert.That(torsoIndex, Is.GreaterThan(headIndex));
                     Assert.That(armIndex, Is.GreaterThan(torsoIndex));
