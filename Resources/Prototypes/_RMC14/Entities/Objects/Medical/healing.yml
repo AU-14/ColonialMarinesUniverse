@@ -194,9 +194,11 @@
     group: Brute
     cmuTreatsWounds: false
     cmuStopsArterialBleeding: true
+    cmuHealingCurrentPartDamageHalfCap: true
+    cmuHealingUsesLargestWoundCap: true
     consumable: false
     scalingDoAfter: 0.07
-    damage: -16
+    damage: -10
     canUseUnskilled: false
     skills:
       RMCSkillMedical: 2
@@ -247,9 +249,11 @@
     treats: false
     group: Burn
     cmuTreatsWounds: false
+    cmuHealingCurrentPartDamageHalfCap: true
+    cmuHealingUsesLargestWoundCap: true
     consumable: false
     scalingDoAfter: 0.07
-    damage: -16
+    damage: -10
     canUseUnskilled: false
     skills:
       RMCSkillMedical: 2

@@ -134,12 +134,14 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
         EntityUid tool,
         ProtoId<DamageGroupPrototype> group,
         FixedPoint2 damage,
-        EntityUid? origin = null)
+        EntityUid? origin = null,
+        FixedPoint2? partHealthCap = null,
+        bool useLargestWoundCap = false)
     {
         if (damage == FixedPoint2.Zero)
             return false;
 
-        damage = LimitHealingToWoundCap(damage, origin);
+        damage = LimitHealingToWoundCap(damage, origin, partHealthCap, useLargestWoundCap);
         if (damage == FixedPoint2.Zero)
             return false;
 
@@ -150,34 +152,82 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
         if (spec.Empty)
             return false;
 
-        return Damageable.TryChangeDamage(body,
+        var changed = Damageable.TryChangeDamage(body,
             spec,
             ignoreResistances: true,
             interruptsDoAfters: false,
             damageable: damageable,
             origin: origin ?? user,
             tool: tool) is not null;
+
+        if (changed)
+            ClampTreaterPartHealth(origin, partHealthCap, useLargestWoundCap);
+
+        return changed;
     }
 
-    private FixedPoint2 LimitHealingToWoundCap(FixedPoint2 damage, EntityUid? origin)
+    private FixedPoint2 LimitHealingToWoundCap(
+        FixedPoint2 damage,
+        EntityUid? origin,
+        FixedPoint2? partHealthCap,
+        bool useLargestWoundCap)
     {
         if (damage >= FixedPoint2.Zero || origin is not { } part)
             return damage;
 
-        if (!TryComp<BodyPartHealthComponent>(part, out var health) ||
-            !TryComp<BodyPartWoundComponent>(part, out var wounds))
-        {
+        if (!TryComp<BodyPartHealthComponent>(part, out var health))
             return damage;
-        }
-
-        var cap = health.Max * ComputeFieldTreatmentCap(wounds);
-        var room = cap - health.Current;
-        if (room <= FixedPoint2.Zero)
-            return FixedPoint2.Zero;
 
         var requestedHealing = -damage;
-        return requestedHealing <= room
-            ? damage
-            : -room;
+        var allowedHealing = requestedHealing;
+
+        if (TryComp<BodyPartWoundComponent>(part, out var wounds))
+        {
+            var woundCapFraction = useLargestWoundCap
+                ? ComputeLargestWoundFieldTreatmentCap(wounds)
+                : ComputeFieldTreatmentCap(wounds);
+
+            var cap = health.Max * (FixedPoint2) woundCapFraction;
+            var room = cap - health.Current;
+            if (room <= FixedPoint2.Zero)
+                return FixedPoint2.Zero;
+
+            allowedHealing = FixedPoint2.Min(allowedHealing, room);
+        }
+
+        if (partHealthCap is { } healthCap)
+        {
+            var room = healthCap - health.Current;
+            if (room <= FixedPoint2.Zero)
+                return FixedPoint2.Zero;
+
+            allowedHealing = FixedPoint2.Min(allowedHealing, room);
+        }
+
+        return -allowedHealing;
+    }
+
+    private void ClampTreaterPartHealth(EntityUid? origin, FixedPoint2? partHealthCap, bool useLargestWoundCap)
+    {
+        if (origin is not { } part || !TryComp<BodyPartHealthComponent>(part, out var health))
+            return;
+
+        FixedPoint2? cap = null;
+        if (TryComp<BodyPartWoundComponent>(part, out var wounds))
+        {
+            var woundCapFraction = useLargestWoundCap
+                ? ComputeLargestWoundFieldTreatmentCap(wounds)
+                : ComputeFieldTreatmentCap(wounds);
+
+            cap = health.Max * (FixedPoint2) woundCapFraction;
+        }
+
+        if (partHealthCap is { } healthCap)
+            cap = cap is { } woundCap ? FixedPoint2.Min(woundCap, healthCap) : healthCap;
+
+        if (cap is not { } finalCap || health.Current <= finalCap)
+            return;
+
+        PartHealth.SetCurrent((part, health), finalCap);
     }
 }

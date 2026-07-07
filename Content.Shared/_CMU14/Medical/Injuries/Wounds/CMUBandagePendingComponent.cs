@@ -1,3 +1,4 @@
+using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._CMU14.Medical.Injuries.Wounds;
@@ -16,4 +17,10 @@ public sealed partial class CMUBandagePendingComponent : Component
 
     [DataField]
     public EntityUid Treater;
+
+    [DataField]
+    public EntityUid? PartHealthCapPart;
+
+    [DataField]
+    public FixedPoint2? PartHealthCap;
 }

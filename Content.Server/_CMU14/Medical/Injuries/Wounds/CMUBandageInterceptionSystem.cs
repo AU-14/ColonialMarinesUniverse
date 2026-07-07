@@ -45,6 +45,9 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
     [Dependency] private CMUWoundsSystem _wounds = default!;
 
     private static readonly TimeSpan TreatDelay = TimeSpan.FromSeconds(1);
+    private static readonly TimeSpan SearchTreatmentDelay = TimeSpan.FromSeconds(0.2);
+
+    private readonly record struct TreatmentTarget(EntityUid Part, bool UsedSearch);
 
     public override void Initialize()
     {
@@ -78,11 +81,12 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         }
 
         var woundTarget = PickBandageTarget(args.User, patient, treater);
-        if (woundTarget is not { } targetPart)
+        var target = woundTarget;
+        if (target is not { } targetSelection)
         {
             var fallbackTarget = PickBleedingTarget(args.User, patient, treater) ??
                                  PickDamageOnlyTarget(args.User, patient, treater);
-            if (fallbackTarget is not { } fallbackPart)
+            if (fallbackTarget is not { } fallbackSelection)
             {
                 if (TryHandleArmedSurgeryTool(args.User, patient, used, out var surgeryHandled))
                 {
@@ -95,9 +99,10 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
                 return;
             }
 
-            targetPart = fallbackPart;
+            targetSelection = fallbackSelection;
         }
 
+        var targetPart = targetSelection.Part;
         var canInstantWound = woundTarget != null && CanApplyInstantWoundTreatment(args.User, treater);
         var canInstantKit = CanApplyInstantKit(args.User, used);
         if ((canInstantWound || canInstantKit) &&
@@ -107,10 +112,12 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
             return;
         }
 
-        var delay = ResolveBandageDelay(args.User, patient, targetPart, used, treater, out var fumblingDelay);
+        var delay = ResolveBandageDelay(args.User, patient, targetPart, used, treater, out var fumblingDelay) +
+                    ResolveSearchDelay(targetSelection);
         if (fumblingDelay > TimeSpan.Zero)
             _popup.PopupClient(Loc.GetString("cm-wounds-start-fumbling", ("name", used)), patient, args.User);
 
+        var partHealthCap = ResolveTreaterDamagePartHealthCap(targetPart, treater);
         var doAfterEv = new CMUBandageDoAfterEvent(GetNetEntity(targetPart));
 
         var doAfter = new DoAfterArgs(EntityManager, args.User, delay, doAfterEv,
@@ -130,6 +137,8 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         var pending = EnsureComp<CMUBandagePendingComponent>(args.User);
         pending.Patient = patient;
         pending.Treater = used;
+        pending.PartHealthCapPart = targetPart;
+        pending.PartHealthCap = partHealthCap;
         Dirty(args.User, pending);
 
         _audio.PlayPvs(treater.TreatBeginSound, args.User);
@@ -139,27 +148,12 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         args.Handled = true;
     }
 
-    private EntityUid? PickBandageTarget(EntityUid medic, EntityUid patient, WoundTreaterComponent treater)
+    private TreatmentTarget? PickBandageTarget(EntityUid medic, EntityUid patient, WoundTreaterComponent treater)
     {
         if (!treater.CMUTreatsWounds)
             return null;
 
-        var aimed = _zoneTargeting.TryGetFreshSelection(medic);
-
-        if (aimed is { } zone &&
-            PartForZone(patient, zone) is { } aimedPart &&
-            PartHasTreatableWound(aimedPart, treater))
-        {
-            return aimedPart;
-        }
-
-        foreach (var fallbackZone in BandageFallbackOrder)
-        {
-            if (PartForZone(patient, fallbackZone) is { } fallback && PartHasTreatableWound(fallback, treater))
-                return fallback;
-        }
-
-        return null;
+        return PickTreatmentTarget(medic, patient, part => PartHasTreatableWound(part, treater));
     }
 
     private bool PartHasTreatableWound(EntityUid part, WoundTreaterComponent treater)
@@ -197,57 +191,112 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         return _surgery.TryHandleArmedToolUse(patient, armed, medic, used, patient, out handled, out _);
     }
 
-    private EntityUid? PickDamageOnlyTarget(EntityUid medic, EntityUid patient, WoundTreaterComponent treater)
+    private TreatmentTarget? PickDamageOnlyTarget(
+        EntityUid medic,
+        EntityUid patient,
+        WoundTreaterComponent treater,
+        EntityUid? cappedPart = null,
+        FixedPoint2? cappedPartHealthCap = null)
     {
         if (!HasTreatableDamage(medic, patient, treater))
             return null;
 
-        var aimed = _zoneTargeting.TryGetFreshSelection(medic);
-        if (aimed is { } zone &&
-            PartForZone(patient, zone) is { } aimedPart &&
-            PartHasDamageHealingRoom(patient, aimedPart))
-        {
-            return aimedPart;
-        }
-
-        foreach (var fallbackZone in BandageFallbackOrder)
-        {
-            if (PartForZone(patient, fallbackZone) is { } fallback &&
-                PartHasDamageHealingRoom(patient, fallback))
-            {
-                return fallback;
-            }
-        }
-
-        return null;
+        return PickTreatmentTarget(medic,
+            patient,
+            part => PartHasDamageHealingRoom(patient,
+                part,
+                treater,
+                part == cappedPart ? cappedPartHealthCap : null));
     }
 
-    private EntityUid? PickBleedingTarget(EntityUid medic, EntityUid patient, WoundTreaterComponent treater)
+    private TreatmentTarget? PickBleedingTarget(EntityUid medic, EntityUid patient, WoundTreaterComponent treater)
     {
         if (!treater.CMUStopsArterialBleeding)
             return null;
 
-        var aimed = _zoneTargeting.TryGetFreshSelection(medic);
-        if (aimed is { } zone &&
-            PartForZone(patient, zone) is { } aimedPart &&
-            PartHasStoppableBleeding(patient, aimedPart, treater))
+        return PickTreatmentTarget(medic, patient, part => PartHasStoppableBleeding(patient, part, treater));
+    }
+
+    private TreatmentTarget? PickTreatmentTarget(EntityUid medic, EntityUid patient, Func<EntityUid, bool> predicate)
+    {
+        var targetedHealing = IsTargetedHealingEnabled();
+        var aimed = targetedHealing
+            ? _zoneTargeting.TryGetSelection(medic)
+            : _zoneTargeting.TryGetFreshSelection(medic);
+
+        EntityUid? aimedPart = null;
+        if (aimed is { } zone && PartForZone(patient, zone) is { } targetPart)
         {
-            return aimedPart;
+            aimedPart = targetPart;
+            if (predicate(targetPart))
+                return new TreatmentTarget(targetPart, false);
+
+            if (targetedHealing)
+                return null;
+        }
+        else if (targetedHealing)
+        {
+            return null;
         }
 
         foreach (var fallbackZone in BandageFallbackOrder)
         {
-            if (PartForZone(patient, fallbackZone) is { } fallback &&
-                PartHasStoppableBleeding(patient, fallback, treater))
-            {
-                return fallback;
-            }
+            if (PartForZone(patient, fallbackZone) is not { } fallback)
+                continue;
+            if (aimedPart is { } aimedUid && fallback == aimedUid)
+                continue;
+            if (!predicate(fallback))
+                continue;
+
+            return new TreatmentTarget(fallback, true);
         }
 
         return null;
     }
 
-    private bool PartHasDamageHealingRoom(EntityUid patient, EntityUid part)
+    private bool IsTargetedHealingEnabled()
+    {
+        return _cfg.GetCVar(CMUMedicalCCVars.TargetedHealingEnabled);
+    }
+
+    private static TimeSpan ResolveSearchDelay(TreatmentTarget target)
+    {
+        return target.UsedSearch ? SearchTreatmentDelay : TimeSpan.Zero;
+    }
+
+    private FixedPoint2? ResolveTreaterDamagePartHealthCap(EntityUid part, WoundTreaterComponent treater)
+    {
+        if (!treater.CMUHealingCurrentPartDamageHalfCap)
+            return null;
+
+        if (!TryComp<BodyPartHealthComponent>(part, out var health))
+            return null;
+
+        var missing = health.Max - health.Current;
+        if (missing <= FixedPoint2.Zero)
+            return health.Current;
+
+        var cap = health.Current + FixedPoint2.New(missing.Float() * 0.5f);
+        return FixedPoint2.Min(health.Max, cap);
+    }
+
+    private FixedPoint2? SetPendingTreaterDamagePartHealthCap(
+        Entity<CMUBandagePendingComponent> pending,
+        EntityUid part,
+        WoundTreaterComponent treater)
+    {
+        var cap = ResolveTreaterDamagePartHealthCap(part, treater);
+        pending.Comp.PartHealthCapPart = part;
+        pending.Comp.PartHealthCap = cap;
+        Dirty(pending.Owner, pending.Comp);
+        return cap;
+    }
+
+    private bool PartHasDamageHealingRoom(
+        EntityUid patient,
+        EntityUid part,
+        WoundTreaterComponent treater,
+        FixedPoint2? partHealthCap = null)
     {
         if (!IsAttachedPart(patient, part))
             return false;
@@ -258,11 +307,54 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         if (!TryComp<BodyPartHealthComponent>(part, out var health))
             return false;
 
-        var cap = health.Max;
-        if (TryComp<BodyPartWoundComponent>(part, out var wounds))
-            cap = health.Max * SharedCMUWoundsSystem.ComputeFieldTreatmentCap(wounds);
+        var cap = ResolvePartDamageHealingCap(part, treater, partHealthCap, health);
 
         return health.Current < cap;
+    }
+
+    private FixedPoint2 ResolvePartDamageHealingCap(
+        EntityUid part,
+        WoundTreaterComponent treater,
+        FixedPoint2? partHealthCap,
+        BodyPartHealthComponent health)
+    {
+        var cap = health.Max;
+        if (TryComp<BodyPartWoundComponent>(part, out var wounds))
+        {
+            var woundCapFraction = treater.CMUHealingUsesLargestWoundCap
+                ? SharedCMUWoundsSystem.ComputeLargestWoundFieldTreatmentCap(wounds)
+                : SharedCMUWoundsSystem.ComputeFieldTreatmentCap(wounds);
+
+            cap = health.Max * (FixedPoint2) woundCapFraction;
+        }
+
+        if (partHealthCap is { } healthCap)
+            cap = FixedPoint2.Min(cap, healthCap);
+
+        return cap;
+    }
+
+    private bool WillReachDamageHealingCap(
+        EntityUid part,
+        WoundTreaterComponent treater,
+        FixedPoint2? partHealthCap,
+        FixedPoint2 treaterDamage)
+    {
+        if (treaterDamage >= FixedPoint2.Zero)
+            return false;
+
+        if (!TryComp<BodyPartHealthComponent>(part, out var health))
+            return false;
+
+        var cap = ResolvePartDamageHealingCap(part, treater, partHealthCap, health);
+        return health.Current + -treaterDamage >= cap;
+    }
+
+    private FixedPoint2? CurrentPartHealth(EntityUid part)
+    {
+        return TryComp<BodyPartHealthComponent>(part, out var health)
+            ? health.Current
+            : null;
     }
 
     private bool PartHasStoppableBleeding(EntityUid patient, EntityUid part, WoundTreaterComponent treater)
@@ -375,18 +467,30 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
             return TreatDelay;
 
         WoundSize? worst = null;
+        var worstRank = -1;
+        var worstDamage = 0f;
         for (var i = 0; i < pw.Wounds.Count; i++)
         {
-            if (pw.Wounds[i].Treated)
+            var wound = pw.Wounds[i];
+            if (wound.Treated)
                 continue;
-            if (i >= pw.Sizes.Count)
+            var sz = i < pw.Sizes.Count ? pw.Sizes[i] : WoundSize.CutDeep;
+            var damage = wound.Damage.Float();
+            var rank = WoundSizeProfile.SeverityRank(sz, damage);
+            if (worst is not null &&
+                (rank < worstRank || rank == worstRank && damage <= worstDamage))
+            {
                 continue;
-            var sz = pw.Sizes[i];
-            if (worst is null || (byte)sz > (byte)worst.Value)
-                worst = sz;
+            }
+
+            worst = sz;
+            worstRank = rank;
+            worstDamage = damage;
         }
 
-        return worst is { } w ? WoundSizeProfile.BandageDelay(w) : TreatDelay;
+        return worst is { } w
+            ? TreatDelay + WoundSizeProfile.BandageDelay(w, worstDamage)
+            : TreatDelay;
     }
 
     private bool CanApplyInstantWoundTreatment(EntityUid user, WoundTreaterComponent treater)
@@ -430,6 +534,15 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
             return;
         }
 
+        var partHealthCap = ent.Comp.PartHealthCapPart == part
+            ? ent.Comp.PartHealthCap
+            : null;
+
+        if (ent.Comp.PartHealthCapPart != part ||
+            treater.CMUHealingCurrentPartDamageHalfCap && partHealthCap is null)
+        {
+            partHealthCap = SetPendingTreaterDamagePartHealthCap(ent, part, treater);
+        }
         var treated = false;
         var damageOnly = false;
         if (treater.CMUTreatsWounds && IsAttachedPart(patient, part))
@@ -443,9 +556,14 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         if (!treated)
         {
             if (!PartHasStoppableBleeding(patient, part, treater) &&
-                PickBleedingTarget(medic, patient, treater) is { } bleedingPart)
+                PickBleedingTarget(medic, patient, treater) is { } bleedingTarget)
             {
-                part = bleedingPart;
+                var nextPart = bleedingTarget.Part;
+                if (nextPart != part)
+                {
+                    part = nextPart;
+                    partHealthCap = SetPendingTreaterDamagePartHealthCap(ent, part, treater);
+                }
             }
 
             treated = TryStopBleedingWithTreater(patient, part, treater);
@@ -459,15 +577,16 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
                 return;
             }
 
-            if (!PartHasDamageHealingRoom(patient, part))
+            if (!PartHasDamageHealingRoom(patient, part, treater, partHealthCap))
             {
-                if (PickDamageOnlyTarget(medic, patient, treater) is not { } damagePart)
+                if (PickDamageOnlyTarget(medic, patient, treater, part, partHealthCap) is not { } damageTarget)
                 {
                     RemComp<CMUBandagePendingComponent>(ent);
                     return;
                 }
 
-                part = damagePart;
+                part = damageTarget.Part;
+                partHealthCap = SetPendingTreaterDamagePartHealthCap(ent, part, treater);
             }
 
             treated = true;
@@ -475,7 +594,18 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         }
 
         var treaterDamage = ResolveTreaterDamage(medic, treater);
-        var appliedTreaterDamage = _wounds.TryApplyTreaterDamage(patient, medic, treaterUid, treater.Group, treaterDamage, part);
+        var repeatPartHealthCap = WillReachDamageHealingCap(part, treater, partHealthCap, treaterDamage)
+            ? CurrentPartHealth(part)
+            : partHealthCap;
+
+        var appliedTreaterDamage = _wounds.TryApplyTreaterDamage(patient,
+            medic,
+            treaterUid,
+            treater.Group,
+            treaterDamage,
+            part,
+            partHealthCap,
+            treater.CMUHealingUsesLargestWoundCap);
         if (damageOnly && !appliedTreaterDamage)
         {
             RemComp<CMUBandagePendingComponent>(ent);
@@ -485,12 +615,17 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         _audio.PlayPvs(treater.TreatEndSound, medic);
 
         var hasTreater = ConsumeTreater(treaterUid, treater);
-        var repeatPart = GetRepeatPart(medic, patient, part, treater);
+        var repeatPart = GetRepeatPart(medic, patient, part, treater, repeatPartHealthCap);
         args.Repeat = hasTreater && repeatPart != null;
-        if (args.Repeat && repeatPart is { } nextPart)
+        if (args.Repeat && repeatPart is { } nextTarget)
         {
+            var nextPart = nextTarget.Part;
+            if (nextPart != part)
+                SetPendingTreaterDamagePartHealthCap(ent, nextPart, treater);
+
             args.Part = GetNetEntity(nextPart);
-            args.Args.Delay = ResolveBandageDelay(medic, patient, nextPart, treaterUid, treater, out var fumblingDelay);
+            args.Args.Delay = ResolveBandageDelay(medic, patient, nextPart, treaterUid, treater, out var fumblingDelay) +
+                ResolveSearchDelay(nextTarget);
 
             if (fumblingDelay > TimeSpan.Zero)
                 _popup.PopupClient(Loc.GetString("cm-wounds-start-fumbling", ("name", treaterUid)), patient, medic);
@@ -514,18 +649,38 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString(targetPopup, ("user", medic)), patient, patient);
     }
 
-    private EntityUid? GetRepeatPart(EntityUid medic, EntityUid patient, EntityUid currentPart, WoundTreaterComponent treater)
+    private TreatmentTarget? GetRepeatPart(
+        EntityUid medic,
+        EntityUid patient,
+        EntityUid currentPart,
+        WoundTreaterComponent treater,
+        FixedPoint2? partHealthCap)
     {
         if (treater.CMUTreatsWounds &&
             IsAttachedPart(patient, currentPart) &&
             PartHasTreatableWound(currentPart, treater))
         {
-            return currentPart;
+            return new TreatmentTarget(currentPart, false);
         }
 
-        return PickBandageTarget(medic, patient, treater)
-            ?? PickBleedingTarget(medic, patient, treater)
-            ?? PickDamageOnlyTarget(medic, patient, treater);
+        if (PickBandageTarget(medic, patient, treater) is { } woundTarget)
+            return woundTarget;
+
+        if (PartHasStoppableBleeding(patient, currentPart, treater))
+            return new TreatmentTarget(currentPart, false);
+
+        if (PickBleedingTarget(medic, patient, treater) is { } bleedingTarget)
+            return bleedingTarget;
+
+        if (!HasTreatableDamage(medic, patient, treater))
+            return null;
+
+        if (PartHasDamageHealingRoom(patient, currentPart, treater, partHealthCap))
+        {
+            return new TreatmentTarget(currentPart, false);
+        }
+
+        return PickDamageOnlyTarget(medic, patient, treater, currentPart, partHealthCap);
     }
 
     private bool TryTreatOneWoundWithTreater(EntityUid part, WoundTreaterComponent treater, out bool completed)
@@ -559,6 +714,7 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         var maxWounds = Math.Max(1, treater.WoundsTreatedPerUse);
         var treatedWounds = 0;
         var part = firstPart;
+        var partHealthCap = ResolveTreaterDamagePartHealthCap(part, treater);
         while (treater.CMUTreatsWounds && treatedWounds < maxWounds)
         {
             if (!TryTreatWoundsWithTreater(part, treater, maxWounds - treatedWounds, out var treatedOnPart))
@@ -568,10 +724,11 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
             if (treatedWounds >= maxWounds)
                 break;
 
-            if (PickBandageTarget(medic, patient, treater) is not { } nextPart)
+            if (PickBandageTarget(medic, patient, treater) is not { } nextTarget)
                 break;
 
-            part = nextPart;
+            part = nextTarget.Part;
+            partHealthCap = ResolveTreaterDamagePartHealthCap(part, treater);
         }
 
         var treated = treatedWounds > 0;
@@ -580,9 +737,14 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         if (!treated)
         {
             if (!PartHasStoppableBleeding(patient, part, treater) &&
-                PickBleedingTarget(medic, patient, treater) is { } bleedingPart)
+                PickBleedingTarget(medic, patient, treater) is { } bleedingTarget)
             {
-                part = bleedingPart;
+                var nextPart = bleedingTarget.Part;
+                if (nextPart != part)
+                {
+                    part = nextPart;
+                    partHealthCap = ResolveTreaterDamagePartHealthCap(part, treater);
+                }
             }
 
             treated = TryStopBleedingWithTreater(patient, part, treater);
@@ -593,12 +755,13 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
             if (!HasTreatableDamage(medic, patient, treater))
                 return false;
 
-            if (!PartHasDamageHealingRoom(patient, part))
+            if (!PartHasDamageHealingRoom(patient, part, treater, partHealthCap))
             {
-                if (PickDamageOnlyTarget(medic, patient, treater) is not { } damagePart)
+                if (PickDamageOnlyTarget(medic, patient, treater, part, partHealthCap) is not { } damageTarget)
                     return false;
 
-                part = damagePart;
+                part = damageTarget.Part;
+                partHealthCap = ResolveTreaterDamagePartHealthCap(part, treater);
             }
 
             treated = true;
@@ -606,7 +769,14 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         }
 
         var treaterDamage = ResolveTreaterDamage(medic, treater);
-        var appliedTreaterDamage = _wounds.TryApplyTreaterDamage(patient, medic, treaterUid, treater.Group, treaterDamage, part);
+        var appliedTreaterDamage = _wounds.TryApplyTreaterDamage(patient,
+            medic,
+            treaterUid,
+            treater.Group,
+            treaterDamage,
+            part,
+            partHealthCap,
+            treater.CMUHealingUsesLargestWoundCap);
         if (damageOnly && !appliedTreaterDamage)
             return false;
 

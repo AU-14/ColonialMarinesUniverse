@@ -47,6 +47,12 @@ public sealed partial class WoundTreaterComponent : Component
     [DataField("cmuStopsArterialBleeding"), AutoNetworkedField]
     public bool CMUStopsArterialBleeding;
 
+    [DataField("cmuHealingCurrentPartDamageHalfCap")]
+    public bool CMUHealingCurrentPartDamageHalfCap;
+
+    [DataField("cmuHealingUsesLargestWoundCap")]
+    public bool CMUHealingUsesLargestWoundCap;
+
     [DataField(required: true), AutoNetworkedField]
     public ProtoId<DamageGroupPrototype> Group;
 
