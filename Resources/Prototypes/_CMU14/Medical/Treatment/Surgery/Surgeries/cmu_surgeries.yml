@@ -225,20 +225,6 @@
     - CMUSurgeryStepCauterizeBleed
     - CMUSurgeryStepCloseIncision
 
-- type: entity
-  parent: CMSurgeryBase
-  id: CMUSurgeryCauterizeInternalBleedingCavity
-  name: Stop Internal Bleeding
-  components:
-  - type: CMSurgery
-    priority: 7
-    requirement: CMUSurgeryOpenBoneCavity
-    steps:
-    - CMUSurgeryStepCauterizeBleed
-    - CMSurgeryStepCloseBones
-    - CMSurgeryStepMendRibcage
-    - CMUSurgeryStepCloseIncision
-
 # ---- Organ removal (torso, bone-cavity flow) -------------------------
 
 - type: entity
@@ -470,7 +456,7 @@
     - CMSurgeryStepMendRibcage
     - CMUSurgeryStepCloseIncision
 
-# ---- Brain / eye / ear repair (head, skull-flow) --------------------
+# ---- Brain / eye repair ---------------------------------------------
 
 - type: entity
   parent: CMSurgeryBase
@@ -493,25 +479,9 @@
   components:
   - type: CMSurgery
     priority: 6
-    requirement: CMUSurgeryOpenBoneCavity
+    requirement: CMUSurgeryOpenSoftTissue
     steps:
     - CMUSurgeryStepRepairEyes
-    - CMSurgeryStepCloseBones
-    - CMSurgeryStepMendRibcage
-    - CMUSurgeryStepCloseIncision
-
-- type: entity
-  parent: CMSurgeryBase
-  id: CMUSurgeryRepairEars
-  name: Repair Ears
-  components:
-  - type: CMSurgery
-    priority: 6
-    requirement: CMUSurgeryOpenBoneCavity
-    steps:
-    - CMUSurgeryStepRepairEars
-    - CMSurgeryStepCloseBones
-    - CMSurgeryStepMendRibcage
     - CMUSurgeryStepCloseIncision
 
 # ---- Larva extraction (torso, bone-cavity flow) ----------------------

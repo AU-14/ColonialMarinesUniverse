@@ -764,7 +764,7 @@
     state: cautery
   - type: CMSurgeryStepEmoteEffect
 
-# ---- Brain / eye / ear repair ---------------------------------------
+# ---- Brain / eye repair ---------------------------------------------
 
 - type: entity
   parent: CMSurgeryStepBase
@@ -798,24 +798,6 @@
     minStage: Bruised
   - type: CMUSurgeryStepRepairOrganEffect
     organSlot: eyes
-  - type: Sprite
-    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
-    state: hemostat
-
-- type: entity
-  parent: CMSurgeryStepBase
-  id: CMUSurgeryStepRepairEars
-  name: Repair ears
-  components:
-  - type: CMSurgeryStep
-    skill: 2
-    tool:
-    - type: CMHemostat
-  - type: CMUOrganDamagedSurgeryCondition
-    organSlot: ears
-    minStage: Bruised
-  - type: CMUSurgeryStepRepairOrganEffect
-    organSlot: ears
   - type: Sprite
     sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
     state: hemostat

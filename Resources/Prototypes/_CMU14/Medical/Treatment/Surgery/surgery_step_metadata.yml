@@ -54,16 +54,9 @@
   id: CMUSurgeryStepMetaCauterizeInternalBleeding
   surgery: CMUSurgeryCauterizeInternalBleeding
   displayName: Stop Internal Bleeding
-  validParts: [Arm, Leg]
+  validParts: [Head, Torso, Arm, Leg]
   allowSelfSurgery: true
   selfSurgeryValidParts: [Arm, Leg]
-  category: bleed
-
-- type: cmuSurgeryStepMetadata
-  id: CMUSurgeryStepMetaCauterizeInternalBleedingCavity
-  surgery: CMUSurgeryCauterizeInternalBleedingCavity
-  displayName: Stop Internal Bleeding
-  validParts: [Head, Torso]
   category: bleed
 
 # ---- Organ removal (torso only) -------------------------------------
@@ -192,7 +185,7 @@
   category: suture
   minSkill: 2
 
-# ---- Brain / eye / ear repair (head only) ---------------------------
+# ---- Brain / eye repair (head only) ---------------------------------
 
 - type: cmuSurgeryStepMetadata
   id: CMUSurgeryStepMetaRepairBrain
@@ -206,14 +199,6 @@
   id: CMUSurgeryStepMetaRepairEyes
   surgery: CMUSurgeryRepairEyes
   displayName: Repair Eyes
-  validParts: [Head]
-  category: head_organ
-  minSkill: 2
-
-- type: cmuSurgeryStepMetadata
-  id: CMUSurgeryStepMetaRepairEars
-  surgery: CMUSurgeryRepairEars
-  displayName: Repair Ears
   validParts: [Head]
   category: head_organ
   minSkill: 2

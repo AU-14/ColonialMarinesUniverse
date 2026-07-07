@@ -5,15 +5,22 @@ using Content.Shared._CMU14.Medical.Anatomy.Bones;
 using Content.Shared._CMU14.Medical.Treatment.FirstAid;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
 using Content.Shared._CMU14.Medical.Treatment.Surgery.Markers;
+using Content.Shared._RMC14.Emote;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
 using Content.Shared._RMC14.Repairable;
+using Content.Shared._RMC14.Stun;
+using Content.Shared.Bed.Sleep;
 using Content.Shared.Body.Part;
 using Content.Shared.Buckle.Components;
+using Content.Shared.Chat.Prototypes;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Jittering;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -30,13 +37,20 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
     [Dependency] private IComponentFactory _compFactory = default!;
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private CMUSurgeryDispatchSystem _dispatch = default!;
+    [Dependency] private SharedRMCEmoteSystem _emote = default!;
+    [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SkillsSystem _skills = default!;
 
     private const float StepDoAfterSeconds = 2f;
     private const float PostOpCastWindowMinutes = 5f;
     private const float PostOpMalunionChance = 0.3f;
+    private const float SurgeryPainSuppressionMinimum = 0.5f;
+    private const int SurgeryPainSuppressionTierMinimum = 2;
     private const string OpenIncisionScalpelStep = "CMSurgeryStepOpenIncisionScalpel";
+    private const string SurgeryUnconsciousStatus = "StatusEffectCMUUnconscious";
+    private const string SurgeryForcedSleepingStatus = "StatusEffectForcedSleeping";
+    private static readonly ProtoId<EmotePrototype> ScreamEmote = "Scream";
     private static readonly EntProtoId<SkillDefinitionComponent> SurgerySkill = "RMCSkillSurgery";
     private static readonly float[] SurgeryStepDelayMultipliers = { 1.25f, 1f, 0.75f, 0.55f, 0.4f };
 
@@ -531,6 +545,9 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             return false;
 
         ApplySurgeryFailure(patient, surgeon, tool);
+        if (ShouldAgitatePatientOnSurgeryFailure(patient))
+            ApplySurgeryPainFeedback(patient);
+
         return true;
     }
 
@@ -641,6 +658,49 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             patient,
             surgeon,
             PopupType.MediumCaution);
+    }
+
+    private bool ShouldAgitatePatientOnSurgeryFailure(EntityUid patient)
+    {
+        return CanFeelSurgeryPain(patient)
+            && !HasAnesthesiaForSurgery(patient)
+            && !HasPainSuppressionForSurgery(patient);
+    }
+
+    private bool HasAnesthesiaForSurgery(EntityUid patient)
+    {
+        return HasComp<SleepingComponent>(patient)
+            || Status.HasStatusEffect(patient, SurgeryForcedSleepingStatus)
+            || Status.HasStatusEffect(patient, SurgeryUnconsciousStatus);
+    }
+
+    private bool HasPainSuppressionForSurgery(EntityUid patient)
+    {
+        return Pain.GetAccumulationSuppression(patient) >= SurgeryPainSuppressionMinimum
+            || Pain.GetTierSuppression(patient) >= SurgeryPainSuppressionTierMinimum;
+    }
+
+    private void ApplySurgeryPainFeedback(EntityUid patient)
+    {
+        if (!CanFeelSurgeryPain(patient))
+            return;
+
+        _jitter.DoJitter(patient, TimeSpan.FromSeconds(1.25), true, 14f, 5f, true);
+        _emote.TryEmoteWithChat(patient, ScreamEmote, forceEmote: true, cooldown: TimeSpan.Zero);
+    }
+
+    private bool CanFeelSurgeryPain(EntityUid patient)
+    {
+        if (TryComp<MobStateComponent>(patient, out var mobState)
+            && mobState.CurrentState is MobState.Critical or MobState.Dead)
+        {
+            return false;
+        }
+
+        return !HasComp<RMCUnconsciousComponent>(patient)
+            && !HasComp<SleepingComponent>(patient)
+            && !Status.HasStatusEffect(patient, SurgeryForcedSleepingStatus)
+            && !Status.HasStatusEffect(patient, SurgeryUnconsciousStatus);
     }
 
     private bool TryApplyIncisionManagementSystemOpening(string stepProtoId, EntityUid stepPart, EntityUid? tool)

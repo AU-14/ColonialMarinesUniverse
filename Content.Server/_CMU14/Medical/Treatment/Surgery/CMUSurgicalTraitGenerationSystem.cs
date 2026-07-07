@@ -6,6 +6,7 @@ using Content.Shared._CMU14.Medical.Treatment.Surgery.Traits;
 using Content.Shared._CMU14.Medical.Injuries.Shrapnel;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
+using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Random;
 
@@ -17,8 +18,10 @@ public sealed partial class CMUSurgicalTraitGenerationSystem : EntitySystem
     public const float ShatteredSecondTraitChance = 0.5f;
     public const float DamagedOrganComplicationChance = 0.25f;
     public const float FailingOrganComplicationChance = 0.6f;
+    private const string EyesOrganSlot = "eyes";
 
     [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedCMUSurgicalTraitSystem _surgicalTraits = default!;
     [Dependency] private IRobustRandom _random = default!;
 
@@ -60,7 +63,9 @@ public sealed partial class CMUSurgicalTraitGenerationSystem : EntitySystem
 
     private void OnOrganStageChanged(ref OrganStageChangedEvent args)
     {
-        if (!TryGetContainingPart(args.Body, args.Organ, out var part))
+        if (!TryGetContainingPart(args.Body, args.Organ, out var part, out var slotId))
+            return;
+        if (slotId == EyesOrganSlot)
             return;
 
         switch (args.New)
@@ -88,21 +93,37 @@ public sealed partial class CMUSurgicalTraitGenerationSystem : EntitySystem
         _surgicalTraits.TryEnsureTrait(args.Part, CMUSurgicalTrait.EmbeddedForeignBody);
     }
 
-    private bool TryGetContainingPart(EntityUid body, EntityUid organ, out EntityUid part)
+    private bool TryGetContainingPart(EntityUid body, EntityUid organ, out EntityUid part, out string slotId)
     {
-        foreach (var (partUid, _) in _body.GetBodyChildren(body))
+        foreach (var (partUid, partComp) in _body.GetBodyChildren(body))
         {
-            foreach (var (organUid, _) in _body.GetPartOrgans(partUid))
+            foreach (var (candidateSlotId, _) in partComp.Organs)
             {
-                if (organUid != organ)
+                var containerId = SharedBodySystem.GetOrganContainerId(candidateSlotId);
+                if (!_containers.TryGetContainer(partUid, containerId, out var container))
+                    continue;
+                if (!ContainerHasOrgan(container.ContainedEntities, organ))
                     continue;
 
                 part = partUid;
+                slotId = candidateSlotId;
                 return true;
             }
         }
 
         part = default;
+        slotId = string.Empty;
+        return false;
+    }
+
+    private static bool ContainerHasOrgan(IReadOnlyList<EntityUid> containedEntities, EntityUid organ)
+    {
+        foreach (var contained in containedEntities)
+        {
+            if (contained == organ)
+                return true;
+        }
+
         return false;
     }
 
