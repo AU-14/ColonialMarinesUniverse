@@ -6,6 +6,7 @@ using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.DoAfter;
+using Content.Shared.Examine;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
@@ -43,6 +44,7 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<CMUSplintItemComponent, AfterInteractEvent>(OnSplintInteract);
+        SubscribeLocalEvent<CMUSplintItemComponent, ExaminedEvent>(OnSplintExamined);
         SubscribeLocalEvent<CMUSplintItemComponent, CMUSplintApplyDoAfterEvent>(OnSplintDoAfter);
         SubscribeLocalEvent<CMUSplintedComponent, BodyPartDamagedEvent>(OnSplintedPartDamaged);
         SubscribeLocalEvent<CMUCastItemComponent, AfterInteractEvent>(OnCastInteract);
@@ -52,6 +54,16 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
 
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
         Cfg.OnValueChanged(CMUMedicalCCVars.BoneEnabled, v => _boneEnabled = v, true);
+    }
+
+    private void OnSplintExamined(Entity<CMUSplintItemComponent> ent, ref ExaminedEvent args)
+    {
+        if (!args.IsInDetailsRange || !ent.Comp.ConsumedOnApply)
+            return;
+
+        args.PushMarkup(Loc.GetString(
+            "cmu-splint-item-uses-remaining",
+            ("uses", Math.Max(0, ent.Comp.Uses))));
     }
 
     public bool IsLayerEnabled()
