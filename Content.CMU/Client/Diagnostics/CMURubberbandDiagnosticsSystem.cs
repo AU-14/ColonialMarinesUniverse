@@ -139,8 +139,7 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
         if (!_enabled || !TryGetSnapshot(out var snapshot))
             return;
 
-        _sawmill.Info(FormattableString.Invariant(
-            $"local-player-attached {FormatSnapshot(snapshot)} {FormatTiming()}"));
+        _sawmill.Info($"local-player-attached {FormatSnapshot(snapshot)} {FormatTiming()}");
     }
 
     private void OnLocalPlayerDetached(EntityUid uid)
@@ -150,8 +149,7 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
         if (!_enabled)
             return;
 
-        _sawmill.Info(FormattableString.Invariant(
-            $"local-player-detached ent={uid} player={FormatPlayer()} {FormatTiming()}"));
+        _sawmill.Info($"local-player-detached ent={uid} player={FormatPlayer()} {FormatTiming()}");
     }
 
     private void OnEnabledChanged(bool enabled)
@@ -162,8 +160,7 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
         if (!_enabled)
             return;
 
-        _sawmill.Info(FormattableString.Invariant(
-            $"diagnostics-enabled snapThreshold={F(_snapThreshold)} catchupApplyThreshold={_catchupApplyThreshold} cooldown={F(_logCooldown)}"));
+        _sawmill.Info($"diagnostics-enabled snapThreshold={F(_snapThreshold)} catchupApplyThreshold={_catchupApplyThreshold} cooldown={F(_logCooldown)}");
     }
 
     private void MaybeLogCatchup(GameStateAppliedArgs args, LocalPlayerSnapshot? snapshot, uint stateTickGap)
@@ -179,8 +176,7 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
         if (!CanLog(ref _nextCatchupLog))
             return;
 
-        _sawmill.Warning(FormattableString.Invariant(
-            $"state-catchup appliesThisFrame={_stateApplicationsThisFrame} lowBuffer={lowBuffer} skippedStateTick={skippedStateTick} {FormatState(args, stateTickGap)} {(snapshot is { } value ? FormatSnapshot(value) : $"player={FormatPlayer()} ent=none")} {FormatTiming()}"));
+        _sawmill.Warning($"state-catchup appliesThisFrame={_stateApplicationsThisFrame} lowBuffer={lowBuffer} skippedStateTick={skippedStateTick} {FormatState(args, stateTickGap)} {(snapshot is { } value ? FormatSnapshot(value) : $"player={FormatPlayer()} ent=none")} {FormatTiming()}");
     }
 
     private bool TryGetSnapshot(out LocalPlayerSnapshot snapshot)
@@ -239,32 +235,27 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
             ? FormatState(args, stateTickGap)
             : "state=none";
 
-        _sawmill.Warning(FormattableString.Invariant(
-            $"snap reason={reason} dist={F(distance)} {state} previous={FormatPrevious(previous)} current={FormatSnapshot(current)} {FormatTiming()}"));
+        _sawmill.Warning($"snap reason={reason} dist={F(distance)} {state} previous={FormatPrevious(previous)} current={FormatSnapshot(current)} {FormatTiming()}");
     }
 
     private string FormatState(GameStateAppliedArgs args, uint stateTickGap)
     {
-        return FormattableString.Invariant(
-            $"stateFrom={args.AppliedState.FromSequence} stateTo={args.AppliedState.ToSequence} stateTickGap={stateTickGap} payload={args.AppliedState.PayloadSize} detached={args.Detached.Count} bufferApplicable={_gameStates.GetApplicableStateCount()} bufferTotal={_gameStates.StateCount} bufferTarget={_gameStates.TargetBufferSize} bufferMin={_gameStates.MinBufferSize} mergeThreshold={_gameStates.StateBufferMergeThreshold} predictionEnabled={_gameStates.IsPredictionEnabled}");
+        return $"stateFrom={args.AppliedState.FromSequence} stateTo={args.AppliedState.ToSequence} stateTickGap={stateTickGap} payload={args.AppliedState.PayloadSize} detached={args.Detached.Count} bufferApplicable={_gameStates.GetApplicableStateCount()} bufferTotal={_gameStates.StateCount} bufferTarget={_gameStates.TargetBufferSize} bufferMin={_gameStates.MinBufferSize} mergeThreshold={_gameStates.StateBufferMergeThreshold} predictionEnabled={_gameStates.IsPredictionEnabled}";
     }
 
     private string FormatSnapshot(LocalPlayerSnapshot snapshot)
     {
-        return FormattableString.Invariant(
-            $"player={FormatPlayer()} ping={_players.LocalSession?.Ping ?? -1} ent={ToPrettyString(snapshot.Entity)} net={snapshot.NetEntity} map={snapshot.MapId} grid={FormatEntity(snapshot.GridUid)} parent={FormatEntity(snapshot.ParentUid)} pos={FormatVector(snapshot.MapPosition)} local={FormatVector(snapshot.LocalPosition)} vel={FormatVector(snapshot.LinearVelocity)} speed={F(snapshot.Speed)} snapTick={snapshot.CurTick} snapRealTick={snapshot.LastRealTick} snapFrame={snapshot.Frame} snapTime={F(snapshot.RealTime.TotalSeconds)} physics=\"{snapshot.Physics}\" mover=\"{snapshot.Mover}\" relay=\"{snapshot.Relay}\"");
+        return $"player={FormatPlayer()} ping={_players.LocalSession?.Ping ?? -1} ent={ToPrettyString(snapshot.Entity)} net={snapshot.NetEntity} map={snapshot.MapId} grid={FormatEntity(snapshot.GridUid)} parent={FormatEntity(snapshot.ParentUid)} pos={FormatVector(snapshot.MapPosition)} local={FormatVector(snapshot.LocalPosition)} vel={FormatVector(snapshot.LinearVelocity)} speed={F(snapshot.Speed)} snapTick={snapshot.CurTick} snapRealTick={snapshot.LastRealTick} snapFrame={snapshot.Frame} snapTime={F(snapshot.RealTime.TotalSeconds)} physics=\"{snapshot.Physics}\" mover=\"{snapshot.Mover}\" relay=\"{snapshot.Relay}\"";
     }
 
     private static string FormatPrevious(LocalPlayerSnapshot snapshot)
     {
-        return FormattableString.Invariant(
-            $"ent={snapshot.Entity} net={snapshot.NetEntity} map={snapshot.MapId} grid={FormatEntity(snapshot.GridUid)} parent={FormatEntity(snapshot.ParentUid)} pos={FormatVector(snapshot.MapPosition)} local={FormatVector(snapshot.LocalPosition)} vel={FormatVector(snapshot.LinearVelocity)} speed={F(snapshot.Speed)} tick={snapshot.CurTick} realTick={snapshot.LastRealTick} frame={snapshot.Frame} time={F(snapshot.RealTime.TotalSeconds)}");
+        return $"ent={snapshot.Entity} net={snapshot.NetEntity} map={snapshot.MapId} grid={FormatEntity(snapshot.GridUid)} parent={FormatEntity(snapshot.ParentUid)} pos={FormatVector(snapshot.MapPosition)} local={FormatVector(snapshot.LocalPosition)} vel={FormatVector(snapshot.LinearVelocity)} speed={F(snapshot.Speed)} tick={snapshot.CurTick} realTick={snapshot.LastRealTick} frame={snapshot.Frame} time={F(snapshot.RealTime.TotalSeconds)}";
     }
 
     private string FormatTiming()
     {
-        return FormattableString.Invariant(
-            $"timing cur={_timing.CurTick} lastReal={_timing.LastRealTick} lastProcessed={_timing.LastProcessedTick} tickFraction={_timing.TickFraction} inPrediction={_timing.InPrediction} firstPrediction={_timing.IsFirstTimePredicted} applyingState={_timing.ApplyingState} tickAdjust={F(_timing.TickTimingAdjustment)} realFrameMs={F(_timing.RealFrameTime.TotalMilliseconds)} avgFps={F(_timing.FramesPerSecondAvg)}");
+        return $"timing cur={_timing.CurTick} lastReal={_timing.LastRealTick} lastProcessed={_timing.LastProcessedTick} tickFraction={_timing.TickFraction} inPrediction={_timing.InPrediction} firstPrediction={_timing.IsFirstTimePredicted} applyingState={_timing.ApplyingState} tickAdjust={F(_timing.TickTimingAdjustment)} realFrameMs={F(_timing.RealFrameTime.TotalMilliseconds)} avgFps={F(_timing.FramesPerSecondAvg)}";
     }
 
     private string FormatMover(EntityUid entity)
@@ -272,8 +263,7 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
         if (!TryComp(entity, out InputMoverComponent? mover))
             return "none";
 
-        return FormattableString.Invariant(
-            $"held={mover.HeldMoveButtons} wish={FormatVector(mover.WishDir)} sprinting={mover.Sprinting} canMove={mover.CanMove} relative={FormatEntity(mover.RelativeEntity)} relativeRot={F(mover.RelativeRotation.Theta)} targetRot={F(mover.TargetRelativeRotation.Theta)} lastInput={mover.LastInputTick}/{mover.LastInputSubTick}");
+        return $"held={mover.HeldMoveButtons} wish={FormatVector(mover.WishDir)} sprinting={mover.Sprinting} canMove={mover.CanMove} relative={FormatEntity(mover.RelativeEntity)} relativeRot={F(mover.RelativeRotation.Theta)} targetRot={F(mover.TargetRelativeRotation.Theta)} lastInput={mover.LastInputTick}/{mover.LastInputSubTick}";
     }
 
     private string FormatRelay(EntityUid entity)
@@ -286,8 +276,7 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
             ? FormatEntity(relayTarget.Source)
             : "none";
 
-        return FormattableString.Invariant(
-            $"relayTo={relay} relaySource={relaySource} pilotedByClothing={HasComp<PilotedByClothingComponent>(entity)}");
+        return $"relayTo={relay} relaySource={relaySource} pilotedByClothing={HasComp<PilotedByClothingComponent>(entity)}";
     }
 
     private string FormatPlayer()
@@ -305,7 +294,7 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
 
     private static string FormatVector(Vector2 vector)
     {
-        return FormattableString.Invariant($"({F(vector.X)},{F(vector.Y)})");
+        return $"({F(vector.X)},{F(vector.Y)})";
     }
 
     private static string F(float value)
