@@ -162,7 +162,7 @@ public sealed partial class RMCPlanetSystem : EntitySystem
         var planetPaths = new Dictionary<string, EntProtoId<RMCPlanetMapPrototypeComponent>>();
         foreach (var entity in _prototypes.EnumeratePrototypes<EntityPrototype>())
         {
-            if (!entity.TryGetComponent(out RMCPlanetMapPrototypeComponent? planetMapPrototype, _compFactory))
+            if (!entity.TryComp(out RMCPlanetMapPrototypeComponent? planetMapPrototype, _compFactory))
                 continue;
 
             // Use the entity ID as the key to allow multiple planets with the same map path

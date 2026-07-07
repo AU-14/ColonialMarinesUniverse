@@ -2,6 +2,7 @@ using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Power;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Access.Systems;
+using Content.Shared.Climbing.Events;
 using Content.Shared.Directions;
 using Content.Shared.Doors;
 using Content.Shared.Doors.Components;
@@ -64,6 +65,7 @@ public sealed partial class CMDoorSystem : EntitySystem
         SubscribeLocalEvent<LayerChangeOnWeldComponent, DoorBoltsChangedEvent>(OnDoorBoltStateChanged);
 
         SubscribeLocalEvent<RMCOpenOnlyWhenUnanchoredComponent, BeforeDoorClosedEvent>(OnOpenOnlyWhenUnanchoredBeforeClosed);
+        SubscribeLocalEvent<RMCShutterBlockClimbingComponent, AttemptClimbEvent>(OnShutterAttemptClimb);
     }
 
     private void OnDoorStateChanged(Entity<CMDoubleDoorComponent> door, ref DoorStateChangedEvent args)
@@ -293,6 +295,17 @@ public sealed partial class CMDoorSystem : EntitySystem
         }
 
         args.Cancel();
+    }
+
+    private void OnShutterAttemptClimb(Entity<RMCShutterBlockClimbingComponent> ent, ref AttemptClimbEvent args)
+    {
+        if (!_doorQuery.TryGetComponent(ent, out var door) ||
+            door.State == DoorState.Open)
+        {
+            return;
+        }
+
+        args.Cancelled = true;
     }
 
     private AnchoredEntitiesEnumerator? GetAdjacentEnumerator(Entity<CMDoubleDoorComponent> ent)

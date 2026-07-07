@@ -1,4 +1,5 @@
 using System;
+using Content.Shared._CMU14.DroneOperator;
 using Content.Shared._CMU14.Medical;
 using Content.Shared._CMU14.Medical.Bones;
 using Content.Shared._CMU14.Medical.BodyPart;
@@ -80,6 +81,12 @@ public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
             return;
         }
 
+        if (!CanPatientAcceptLimb(body, limb))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-medical-reattach-requires-robotic-limb"), body, user, PopupType.SmallCaution);
+            return;
+        }
+
         if (!TryFindPartSlot(body, limbPart.PartType, limbPart.Symmetry, out var rootPart, out var slotId))
         {
             _popup.PopupEntity(Loc.GetString("cmu-medical-reattach-slot-occupied"), user, user, PopupType.SmallCaution);
@@ -122,6 +129,12 @@ public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
         TryClearMissingLimbStatus(body, limbPart.PartType, limbPart.Symmetry);
 
         _popup.PopupEntity(Loc.GetString("cmu-medical-reattach-success"), body, user, PopupType.Medium);
+    }
+
+    private bool CanPatientAcceptLimb(EntityUid body, EntityUid limb)
+    {
+        return !HasComp<CMUDroneAndroidComponent>(body) ||
+               HasComp<CMURoboticLimbComponent>(limb);
     }
 
     private void ClearSynthLimbOrganicMedicalState(EntityUid limb)

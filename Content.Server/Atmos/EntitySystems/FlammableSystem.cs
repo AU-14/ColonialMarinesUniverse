@@ -498,8 +498,8 @@ namespace Content.Server.Atmos.EntitySystems
             _timer -= UpdateTime;
 
             // TODO: This needs cleanup to take off the crust from TemperatureComponent and shit.
-            var query = EntityQueryEnumerator<FlammableComponent, TransformComponent>();
-            while (query.MoveNext(out var uid, out var flammable, out _))
+            var query = EntityQueryEnumerator<FlammableComponent>();
+            while (query.MoveNext(out var uid, out var flammable))
             {
                 // Slowly dry ourselves off if wet.
                 if (flammable.FireStacks < 0)
@@ -508,13 +508,20 @@ namespace Content.Server.Atmos.EntitySystems
                     Dirty(uid, flammable);
                 }
 
-                if (!flammable.OnFire)
+                var last = flammable.LastOnFire;
+                flammable.LastOnFire = flammable.OnFire;
+                if (flammable.LastOnFire != last)
                 {
-                    _rmcFlammable.UpdateFireAlert(uid);
-                    continue;
+                    Dirty(uid, flammable);
+
+                    if (flammable.OnFire)
+                        _alertsSystem.ShowAlert(uid, flammable.FireAlert);
+                    else
+                        _alertsSystem.ClearAlert(uid, flammable.FireAlert);
                 }
 
-                _rmcFlammable.UpdateFireAlert(uid);
+                if (!flammable.OnFire)
+                    continue;
 
                 if (flammable.FireStacks > 0)
                 {

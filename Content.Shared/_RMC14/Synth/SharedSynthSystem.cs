@@ -125,9 +125,23 @@ public abstract partial class SharedSynthSystem : EntitySystem
         if (TryComp<RMCHealthIconsComponent>(ent.Owner, out var healthIcons))
         {
             if (ent.Comp.UseHumanHealthIcons)
-                healthIcons.Icons = new();
+            {
+                healthIcons.Icons = new()
+                {
+                    [RMCHealthIconTypes.Healthy] = "CMHealthIconHealthy",
+                    [RMCHealthIconTypes.DeadDefib] = "CMHealthIconDeadDefib",
+                    [RMCHealthIconTypes.DeadClose] = "CMHealthIconDeadClose",
+                    [RMCHealthIconTypes.DeadAlmost] = "CMHealthIconDeadAlmost",
+                    [RMCHealthIconTypes.DeadDNR] = "CMHealthIconDeadDNR",
+                    [RMCHealthIconTypes.Dead] = "CMHealthIconDead",
+                    [RMCHealthIconTypes.HCDead] = "CMHealthIconHCDead",
+                };
+            }
             else
+            {
                 healthIcons.Icons = ent.Comp.HealthIconOverrides;
+            }
+
             Dirty(ent.Owner, healthIcons);
         }
 

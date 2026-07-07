@@ -26,10 +26,10 @@ public sealed class ReflectiveResinWallTest
         await server.WaitAssertion(() =>
         {
             Assert.That(prototypes.TryIndex<EntityPrototype>(ReflectiveWallPrototype, out var wall), Is.True);
-            Assert.That(wall!.TryGetComponent<RMCReflectiveComponent>(out var reflective, components), Is.True);
-            Assert.That(wall.TryGetComponent<XenoSecretionLimitedComponent>(out var limited, components), Is.True);
-            Assert.That(wall.TryGetComponent<XenoConstructionPlasmaCostComponent>(out var plasmaCost, components), Is.True);
-            Assert.That(wall.TryGetComponent<DamageableComponent>(out var damageable, components), Is.True);
+            Assert.That(wall!.TryComp<RMCReflectiveComponent>(out var reflective, components), Is.True);
+            Assert.That(wall.TryComp<XenoSecretionLimitedComponent>(out var limited, components), Is.True);
+            Assert.That(wall.TryComp<XenoConstructionPlasmaCostComponent>(out var plasmaCost, components), Is.True);
+            Assert.That(wall.TryComp<DamageableComponent>(out var damageable, components), Is.True);
 
             Assert.Multiple(() =>
             {
@@ -60,8 +60,8 @@ public sealed class ReflectiveResinWallTest
         await server.WaitAssertion(() =>
         {
             Assert.That(prototypes.TryIndex<EntityPrototype>(UnstableReflectiveWallPrototype, out var unstableWall), Is.True);
-            Assert.That(unstableWall!.TryGetComponent<RMCReflectiveComponent>(out _, components), Is.True);
-            Assert.That(unstableWall.TryGetComponent<TimedDespawnComponent>(out var despawn, components), Is.True);
+            Assert.That(unstableWall!.TryComp<RMCReflectiveComponent>(out _, components), Is.True);
+            Assert.That(unstableWall.TryComp<TimedDespawnComponent>(out var despawn, components), Is.True);
             Assert.That(despawn!.Lifetime, Is.EqualTo(13f));
         });
 

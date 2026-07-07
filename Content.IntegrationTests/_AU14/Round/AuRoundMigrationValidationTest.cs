@@ -88,7 +88,7 @@ public sealed class AuRoundMigrationValidationTest
                     continue;
                 }
 
-                if (!planetProto.TryGetComponent<RMCPlanetMapPrototypeComponent>(out var planet, componentFactory))
+                if (!planetProto.TryComp<RMCPlanetMapPrototypeComponent>(out var planet, componentFactory))
                 {
                     errors.Add($"{planetId} has no RMCPlanetMapPrototypeComponent");
                     continue;

@@ -2,6 +2,7 @@ using Content.Shared.Body.Part;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
+using Content.Shared.Stacks;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -162,6 +163,7 @@ public sealed partial class CMULimbPrinterComponent : Component
 {
     public const string BeakerSlotId = "cmu-limb-printer-beakerSlot";
     public const string SyringeSlotId = "cmu-limb-printer-syringeSlot";
+    public const string MaterialSlotId = "cmu-limb-printer-materialSlot";
 
     [DataField]
     public ProtoId<ReagentPrototype> SynthesisReagent = "CMUBiogenicMatrix";
@@ -171,6 +173,12 @@ public sealed partial class CMULimbPrinterComponent : Component
 
     [DataField]
     public FixedPoint2 BloodCost = FixedPoint2.New(7.5);
+
+    [DataField]
+    public ProtoId<StackPrototype> RoboticMetalStack = "CMSteel";
+
+    [DataField]
+    public int RoboticMetalCost = 15;
 
     [DataField]
     public EntProtoId LeftArmPrototype = "CMUPartHumanLeftArm";
@@ -183,6 +191,18 @@ public sealed partial class CMULimbPrinterComponent : Component
 
     [DataField]
     public EntProtoId RightLegPrototype = "CMUPartHumanRightLeg";
+
+    [DataField]
+    public EntProtoId RoboticLeftArmPrototype = "CMUPartRoboticLeftArm";
+
+    [DataField]
+    public EntProtoId RoboticRightArmPrototype = "CMUPartRoboticRightArm";
+
+    [DataField]
+    public EntProtoId RoboticLeftLegPrototype = "CMUPartRoboticLeftLeg";
+
+    [DataField]
+    public EntProtoId RoboticRightLegPrototype = "CMUPartRoboticRightLeg";
 
     [ViewVariables]
     public TimeSpan WorkingUntil;

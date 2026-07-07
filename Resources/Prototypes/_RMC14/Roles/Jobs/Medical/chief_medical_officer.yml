@@ -79,6 +79,10 @@
     jumpsuit: CMJumpsuitCMO
     shoes: ClothingShoesColorWhite
     id: CMIDCardCMO
+    ears: CMHeadsetCMO
+    belt: CMBeltMedicalFilled
+    pocket1: RMCPouchMedicalFill
+    pocket2: RMCPouchMedkitFill
     # TODO RMC14 random chemical synthesis note
 
 - type: startingGear
@@ -92,6 +96,8 @@
     id: CMIDCardCMO
     ears: CMHeadsetCMO
     belt: CMBeltMedicalFilled
+    pocket1: RMCPouchMedicalFill
+    pocket2: RMCPouchMedkitFill
 
 - type: entity
   parent: CMSpawnPointJobBase

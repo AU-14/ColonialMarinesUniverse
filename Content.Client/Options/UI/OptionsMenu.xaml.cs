@@ -30,9 +30,10 @@ namespace Content.Client.Options.UI
             Tabs.SetTabTitle(3, Loc.GetString("ui-options-tab-audio"));
             Tabs.SetTabTitle(4, Loc.GetString("rmc-ui-options-tab-voicelines")); // RMC14
             Tabs.SetTabTitle(5, Loc.GetString("ui-options-tab-accessibility"));
-            Tabs.SetTabTitle(6, Loc.GetString("ui-options-tab-admin"));
+            Tabs.SetTabTitle(6, Loc.GetString("ui-options-tab-cmu"));
+            Tabs.SetTabTitle(7, Loc.GetString("ui-options-tab-admin"));
 
-            GraphicsTab.CrtUiPreviewChanged += OnCrtUiPreviewChanged;
+            CmuTab.CrtUiPreviewChanged += OnCrtUiPreviewChanged;
             OnClose += ResetCrtUiPreview;
             UpdateTabs();
             _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
@@ -46,7 +47,7 @@ namespace Content.Client.Options.UI
 
             _cfg.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
-            GraphicsTab.CrtUiPreviewChanged -= OnCrtUiPreviewChanged;
+            CmuTab.CrtUiPreviewChanged -= OnCrtUiPreviewChanged;
             OnClose -= ResetCrtUiPreview;
             ResetCrtUiPreview();
         }
@@ -81,10 +82,11 @@ namespace Content.Client.Options.UI
         public void UpdateTabs()
         {
             var isAdmin = _adminManager.IsAdmin(true);
-            Tabs.SetTabVisible(6, isAdmin);
+            Tabs.SetTabVisible(7, isAdmin);
 
             GraphicsTab.Control.ReloadValues();
             MiscTab.Control.ReloadValues();
+            CmuTab.Control.ReloadValues();
             AccessibilityTab.Control.ReloadValues();
             AudioTab.Control.ReloadValues();
             VoicelinesTab.Control.ReloadValues();

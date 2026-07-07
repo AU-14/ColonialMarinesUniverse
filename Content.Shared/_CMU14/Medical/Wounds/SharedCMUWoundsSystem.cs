@@ -125,6 +125,9 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         if (HasComp<SynthComponent>(args.Body))
             return;
 
+        if (HasComp<CMURoboticLimbComponent>(ent.Owner))
+            return;
+
         var brute = GroupSum(args.Delta, BruteGroup);
         var burn = GroupSum(args.Delta, BurnGroup);
         var bruteOrBurn = brute + burn;
@@ -420,6 +423,12 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         RaiseLocalEvent(ref ev);
     }
 
+    private void RaiseWoundsChanged(EntityUid part, bool removed)
+    {
+        var ev = new BodyPartWoundsChangedEvent(part, removed);
+        RaiseLocalEvent(ref ev);
+    }
+
     public void ClearAllWounds(Entity<BodyPartWoundComponent?> part)
     {
         if (!Resolve(part.Owner, ref part.Comp, logMissing: false))
@@ -612,6 +621,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         if (completed)
             CompleteWoundTreatment(part, comp, idx, quality, cleanupClears);
         Dirty(part, comp);
+        RaiseWoundsChanged(part, false);
 
         // Body resolution can fail on detached parts; the wound is still
         // treated but there's no pain owner to notify, so skip the raise.
@@ -638,6 +648,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         treated = 0;
         if (maxWounds <= 0)
             return false;
+
         if (!Resolve(part, ref comp, logMissing: false))
             return false;
 
@@ -669,6 +680,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
         ClearExternalBleeding(comp, stopArterialBleeding);
         Dirty(part, comp);
+        RaiseWoundsChanged(part, false);
 
         // Body resolution can fail on detached parts; the wounds are still
         // treated but there's no pain owner to notify, so skip the raise.
@@ -938,10 +950,12 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             {
                 OnPartWoundsCleared(body, partUid);
                 RemComp<BodyPartWoundComponent>(partUid);
+                RaiseWoundsChanged(partUid, true);
             }
             else if (dirty)
             {
                 Dirty(partUid, pw);
+                RaiseWoundsChanged(partUid, false);
             }
         }
     }
@@ -1015,6 +1029,8 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
     private bool IsSynthOwned(EntityUid part)
     {
+        if (HasComp<CMURoboticLimbComponent>(part))
+            return true;
         if (HasComp<SynthComponent>(part))
             return true;
         return TryGetBodyOwner(part) is { } body && HasComp<SynthComponent>(body);

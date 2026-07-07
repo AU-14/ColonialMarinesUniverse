@@ -5,10 +5,34 @@
     - CMStampApproved
 
 - type: loadout
-  id: SynthResetKeyAU14
+  id: SynthResetKeyAU14 # WeYu
   storage:
     back:
     - RMCSynthResetKey
+
+- type: loadout
+  id: SynthResetKeySeegsonAU14
+  storage:
+    back:
+    - RMCSynthResetKeySeegson
+
+- type: loadout
+  id: SynthResetKeyProdigyAU14
+  storage:
+    back:
+    - AU14SynthResetKeyProdigy
+
+- type: loadout
+  id: SynthResetKeyNovarisAU14
+  storage:
+    back:
+    - RMCSynthResetKeyNovaris
+
+- type: loadout
+  id: SynthResetKeyHyperdyneAU14
+  storage:
+    back:
+    - RMCSynthResetKeyHyperdyne
 
 - type: loadout
   id: PatchFORECONAU14
@@ -63,3 +87,33 @@
   storage:
     back:
     - AU14CCAFPatch
+
+- type: loadout
+  id: MedicPatchCMU14
+  storage:
+    back:
+    - RMCPatchMedic
+
+- type: loadout
+  id: OliveBranchPatchCMU14
+  storage:
+    back:
+    - RMCPatchOliveBranch
+
+- type: loadout
+  id: PeacePatchCMU14
+  storage:
+    back:
+    - RMCPatchPeace
+
+- type: loadout
+  id: BlackSquareWeYuCMU14
+  storage:
+    back:
+    - RMCPatchWeYaBlackSquare
+
+- type: loadout
+  id: EMTArmBandCMU14
+  storage:
+    back:
+    - RMCMedEMTArmband

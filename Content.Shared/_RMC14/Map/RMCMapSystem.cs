@@ -92,7 +92,7 @@ public sealed partial class RMCMapSystem : EntitySystem
 
     public RMCAnchoredEntitiesEnumerator GetAnchoredEntitiesEnumerator(MapCoordinates coords, Direction? offset = null, DirectionFlag facing = DirectionFlag.None)
     {
-        if (!_mapManager.TryFindGridAt(coords, out var gridId, out var gridComp))
+        if (!_map.TryFindGridAt(coords, out var gridId, out var gridComp))
             return RMCAnchoredEntitiesEnumerator.Empty;
 
         var indices = _map.CoordinatesToTile(gridId, gridComp, coords);
@@ -127,7 +127,7 @@ public sealed partial class RMCMapSystem : EntitySystem
 
     public RMCAnchoredEntitiesEnumerator<T> GetAnchoredEntitiesEnumerator<T>(MapCoordinates coords, Direction? offset = null, DirectionFlag facing = DirectionFlag.None) where T : IComponent
     {
-        if (!_mapManager.TryFindGridAt(coords, out var gridId, out var gridComp))
+        if (!_map.TryFindGridAt(coords, out var gridId, out var gridComp))
             return RMCAnchoredEntitiesEnumerator<T>.Empty;
 
         var indices = _map.CoordinatesToTile(gridId, gridComp, coords);

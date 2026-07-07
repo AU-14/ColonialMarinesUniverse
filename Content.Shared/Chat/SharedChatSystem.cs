@@ -135,7 +135,7 @@ public abstract partial class SharedChatSystem : EntitySystem
         if (!_validPrefixes.Contains(input[0]))
             return;
 
-        var lookupKey = input[..2];
+        var lookupKey = $"{input[0]}{char.ToLowerInvariant(input[1])}";
         if (!_channelLookup.ContainsKey(lookupKey))
             return;
         // RMC14
@@ -176,13 +176,10 @@ public abstract partial class SharedChatSystem : EntitySystem
                 ? _prototypeManager.Index<RadioChannelPrototype>(HivemindChannel)
                 : _prototypeManager.Index<RadioChannelPrototype>(CommonChannel);
 
-        // RMC14
-        if (channel?.ID == HivemindChannel.Id &&
-            !_xenoEvolution.HasLiving<XenoEvolutionGranterComponent>(1, null, hive))
+            // RMC14
+            if (channel?.ID == HivemindChannel.Id &&
+                !CanUseHivemind(source, hive, quiet))
             {
-                if (!quiet)
-                    _popup.PopupEntity(Loc.GetString("rmc-no-queen-hivemind-chat"), source, source, PopupType.LargeCaution);
-
                 output = SanitizeMessageCapital(input[1..].TrimStart());
                 return false;
             }
@@ -212,7 +209,7 @@ public abstract partial class SharedChatSystem : EntitySystem
         // RMC14
         var prefix = input[0];
         var channelKey = input[1];
-        var lookupKey = $"{prefix}{char.ToLower(channelKey)}";
+        var lookupKey = $"{prefix}{char.ToLowerInvariant(channelKey)}";
 
         var foundChannel = _channelLookup.TryGetValue(lookupKey, out channel);
 
@@ -224,11 +221,8 @@ public abstract partial class SharedChatSystem : EntitySystem
             RaiseLocalEvent(source, ev);
 
             if (ev.Channel == HivemindChannel.Id &&
-                !_xenoEvolution.HasLiving<XenoEvolutionGranterComponent>(1, null, hive))
+                !CanUseHivemind(source, hive, quiet))
             {
-                if (!quiet)
-                    _popup.PopupEntity(Loc.GetString("rmc-no-queen-hivemind-chat"), source, source, PopupType.LargeCaution);
-
                 output = SanitizeMessageCapital(input[1..].TrimStart());
                 return false;
             }
@@ -249,6 +243,12 @@ public abstract partial class SharedChatSystem : EntitySystem
         RaiseLocalEvent(source, ref prefixEv);
         channel = prefixEv.Channel;
 
+        if (channel?.ID == HivemindChannel.Id &&
+            !CanUseHivemind(source, hive, quiet))
+        {
+            return false;
+        }
+
         if (HasComp<XenoComponent>(source) && !IsHivebrokenXeno(source) && channel == null)
         {
             Log.Info("Has XenoComponent but no channel, returning false");
@@ -257,6 +257,17 @@ public abstract partial class SharedChatSystem : EntitySystem
         // RMC14
 
         return true;
+    }
+
+    private bool CanUseHivemind(EntityUid source, Entity<HiveComponent>? hive, bool quiet)
+    {
+        if (_xenoEvolution.HasLiving<XenoEvolutionGranterComponent>(1, null, hive))
+            return true;
+
+        if (!quiet)
+            _popup.PopupEntity(Loc.GetString("rmc-no-queen-hivemind-chat"), source, source, PopupType.LargeCaution);
+
+        return false;
     }
 
     private bool IsHivebrokenXeno(EntityUid uid)

@@ -52,7 +52,7 @@ public sealed class FootPrintsSystemTest
             var xform = entMan.System<SharedTransformSystem>();
 
             map.CreateMap(out var mapId);
-            var grid = mapManager.CreateGridEntity(mapId);
+            var grid = map.CreateGridEntity(mapId);
             entMan.EnsureComponent<DecalGridComponent>(grid.Owner);
 
             var floorTile = new Tile(tileDefinitionManager["FloorSteel"].TileId);

@@ -61,7 +61,7 @@ public sealed partial class XenoAnnounceSystem : SharedXenoAnnounceSystem
             _generalAnnounce.AnnounceAdvanced(request, filter);
         }
 
-        _chat.ChatMessageToManyFiltered(filter, ChatChannel.Radio, message, wrapped, source, false, true, null);
+        _chat.ChatMessageToManyFiltered(filter, ChatChannel.Radio, message, wrapped, source, false, true, null, hidePopup: true);
         _audio.PlayGlobal(sound, filter, true);
 
         if (popup == null)

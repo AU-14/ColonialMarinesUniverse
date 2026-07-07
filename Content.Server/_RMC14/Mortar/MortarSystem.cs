@@ -229,7 +229,7 @@ public sealed partial class MortarSystem : SharedMortarSystem
             return false;
         }
 
-        if (!_mapManager.TryFindGridAt(coordinates, out var gridUid, out var grid))
+        if (!_map.TryFindGridAt(coordinates, out var gridUid, out var grid))
             return true;
 
         var tile = _map.WorldToTile(gridUid, grid, coordinates.Position);

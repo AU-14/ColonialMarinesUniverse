@@ -40,4 +40,3 @@ public sealed class BounceAnimation : IAnnouncementAnimation
         return AnnouncementAnimationStatus.Running;
     }
 }
-

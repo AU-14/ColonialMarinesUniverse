@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Vendors;
 using Content.Shared.AU14.Objectives;
+using Content.Server.AU14.Objectives;
 using Robust.Server.GameObjects;
 
 namespace Content.Server._RMC14.Vendors;
@@ -7,6 +8,7 @@ namespace Content.Server._RMC14.Vendors;
 public sealed partial class CMAutomatedVendorSystem : SharedCMAutomatedVendorSystem
 {
     [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private AuObjectiveSystem _objectiveSystem = default!;
 
     public override void Initialize()
     {
@@ -20,24 +22,8 @@ public sealed partial class CMAutomatedVendorSystem : SharedCMAutomatedVendorSys
         if (!vendor.UseObjectivePoints)
             return;
 
-        var faction = vendor.Faction.ToLowerInvariant();
-        var masterQuery = EntityQueryEnumerator<ObjectiveMasterComponent>();
-        while (masterQuery.MoveNext(out _, out var master))
-        {
-            if (!master.IsActive)
-                continue;
-
-            vendor.CachedFactionWinPoints = faction switch
-            {
-                "govfor"    => master.CurrentWinPointsGovfor,
-                "opfor"     => master.CurrentWinPointsOpfor,
-                "clf"       => master.CurrentWinPointsClf,
-                "scientist" => master.CurrentWinPointsScientist,
-                _           => 0
-            };
-            Dirty(uid, vendor);
-            break;
-        }
+        vendor.CachedFactionWinPoints = _objectiveSystem.GetWinPoints(vendor.Faction).current;
+        Dirty(uid, vendor);
     }
 
     protected override void OnVendBui(Entity<CMAutomatedVendorComponent> vendor, ref CMVendorVendBuiMsg args)

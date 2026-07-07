@@ -330,10 +330,10 @@ public sealed partial class CMArmorSystem : EntitySystem
         RaiseLocalEvent(ent, ref ev);
 
         var armorPiercing = args.ArmorPiercing;
-        if (args.Tool != null)
+        if (args.Tool is { } tool && Exists(tool))
         {
             var piercingEv = new CMGetArmorPiercingEvent(ent);
-            RaiseLocalEvent(args.Tool.Value, ref piercingEv);
+            RaiseLocalEvent(tool, ref piercingEv);
             armorPiercing += piercingEv.Piercing;
         }
 

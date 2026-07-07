@@ -11,6 +11,7 @@
             <tabs:AudioTab Name="AudioTab" />
             <options:VoicelinesTab Name="VoicelinesTab" />
             <tabs:AccessibilityTab Name="AccessibilityTab" />
+            <tabs:CmuTab Name="CmuTab" />
             <tabs:AdminOptionsTab Name="AdminOptionsTab" />
         </TabContainer>
     </PanelContainer>

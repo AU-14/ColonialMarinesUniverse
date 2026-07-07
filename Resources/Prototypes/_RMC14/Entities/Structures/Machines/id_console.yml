@@ -86,6 +86,7 @@
     - CMAccessMarinePrep
     - CMAccessResearch
     - CMAccessCE
+    - RMCAccessVehicleCrew
     accessGroups:
     - RMCBaseMarineAccess
     - RMCBaseMPAccess

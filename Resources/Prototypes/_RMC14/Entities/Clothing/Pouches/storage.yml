@@ -458,6 +458,7 @@
       tags:
       - RMCCircuitboard
       - PowerCell
+      - DoorElectronics #CMU Change
 #      - # TODO RMC14 6 different stock parts
       components:
       - ComputerBoard

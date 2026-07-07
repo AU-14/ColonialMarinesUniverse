@@ -221,7 +221,7 @@ public sealed partial class GuideReagentEmbed : BoxContainer, IDocumentTag, ISea
 
             if (_prototype.TryIndex<EntityPrototype>(reagent.FireEntity, out var fire))
             {
-                if (fire.TryGetComponent<RMCIgniteOnCollideComponent>(out var comp, _componentFactory) && comp.ArmorMultiplier < 1)
+                if (fire.TryComp<RMCIgniteOnCollideComponent>(out var comp, _componentFactory) && comp.ArmorMultiplier < 1)
                 {
                     descMsg.PushNewline();
                     descMsg.AddMarkupOrThrow(Loc.GetString("rmc-flamer-guidebook-description-shred"));

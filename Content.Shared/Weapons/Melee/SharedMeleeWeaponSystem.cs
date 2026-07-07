@@ -117,6 +117,7 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
         _configuration.OnValueChanged(RMCCVars.CMMaxHeavyAttackTargets, v => MaxTargets = v, true);
 
         SubscribeLocalEvent<MeleeWeaponComponent, HandSelectedEvent>(OnMeleeSelected);
+        SubscribeLocalEvent<MeleeWeaponComponent, HandDeselectedEvent>(OnMeleeDeselected); // RMC14
         SubscribeLocalEvent<MeleeWeaponComponent, ShotAttemptedEvent>(OnMeleeShotAttempted);
         SubscribeLocalEvent<MeleeWeaponComponent, GunShotEvent>(OnMeleeShot);
         SubscribeLocalEvent<BonusMeleeDamageComponent, GetMeleeDamageEvent>(OnGetBonusMeleeDamage);
@@ -202,11 +203,29 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
             minimum = userMelee.NextAttack;
         }
 
+        // RMC14
+        if (TryComp(args.User, out RMCMeleeUserCooldownComponent? userCooldown) &&
+            minimum < userCooldown.NextAttack)
+        {
+            minimum = userCooldown.NextAttack;
+        }
+
         if (minimum < component.NextAttack)
             return;
 
         component.NextAttack = minimum;
         DirtyField(uid, component, nameof(MeleeWeaponComponent.NextAttack));
+    }
+
+    // RMC14
+    private void OnMeleeDeselected(Entity<MeleeWeaponComponent> weapon, ref HandDeselectedEvent args)
+    {
+        var userCooldown = EnsureComp<RMCMeleeUserCooldownComponent>(args.User);
+        if (userCooldown.NextAttack < weapon.Comp.NextAttack)
+        {
+            userCooldown.NextAttack = weapon.Comp.NextAttack;
+            DirtyField(args.User, userCooldown, nameof(RMCMeleeUserCooldownComponent.NextAttack));
+        }
     }
 
     private void OnGetBonusMeleeDamage(EntityUid uid, BonusMeleeDamageComponent component, ref GetMeleeDamageEvent args)
@@ -424,6 +443,13 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
     {
         var curTime = Timing.CurTime;
 
+        // RMC14
+        if (TryComp(user, out RMCMeleeUserCooldownComponent? globalCooldown) &&
+            globalCooldown.NextAttack > curTime)
+        {
+            return false;
+        }
+
         if (weapon.NextAttack > curTime)
             return false;
 
@@ -547,6 +573,13 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
 
     private void SyncUserMeleeCooldown(EntityUid user, EntityUid weaponUid, TimeSpan nextAttack)
     {
+        var userCooldown = EnsureComp<RMCMeleeUserCooldownComponent>(user);
+        if (userCooldown.NextAttack < nextAttack)
+        {
+            userCooldown.NextAttack = nextAttack;
+            DirtyField(user, userCooldown, nameof(RMCMeleeUserCooldownComponent.NextAttack));
+        }
+
         if (weaponUid == user ||
             !TryComp(user, out MeleeWeaponComponent? userMelee) ||
             userMelee.NextAttack >= nextAttack)

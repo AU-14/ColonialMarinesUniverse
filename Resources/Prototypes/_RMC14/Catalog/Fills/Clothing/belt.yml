@@ -376,7 +376,8 @@
     - id: RMCHandcuffs
       amount: 2
     - id: RMCGrenadeFlashBang
-
+    - id: CMClipboard # CMU change
+    - id: RMCUniversalRecorder #CMU Change
 - type: entity
   parent: RMCBeltHolsterNailgun
   id: RMCBeltHolsterNailgunFill

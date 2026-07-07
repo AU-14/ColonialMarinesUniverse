@@ -50,7 +50,7 @@ public sealed partial class PlanetLightSystem : EntitySystem
         _overlayMan.AddOverlay(new RoofOverlay(EntityManager));
         _overlayMan.AddOverlay(new TileEmissionOverlay(EntityManager));
         _overlayMan.AddOverlay(new LightBlurOverlay());
-        _overlayMan.AddOverlay(new SunShadowOverlay());
+        _overlayMan.AddOverlay(new SunShadowOverlay(EntityManager));
         _overlayMan.AddOverlay(new AfterLightTargetOverlay());
     }
 

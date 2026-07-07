@@ -196,15 +196,15 @@ public sealed partial class XenoAbductSystem : EntitySystem
                 break;
 
             var ent = targets[i];
+            var origin = _transform.GetMoverCoordinates(xeno);
+            var mapCoords = _transform.GetMapCoordinates(xeno);
+            var target = _transform.GetMoverCoordinates(ent);
+            if (!origin.TryDistance(EntityManager, target, out var dis))
+                continue;
+
             if (_hook.TryHookTarget(hookEnt, ent))
             {
                 _pulling.TryStopAllPullsFromAndOn(ent);
-
-                var origin = _transform.GetMoverCoordinates(xeno);
-                var mapCoords = _transform.GetMapCoordinates(xeno);
-                var target = _transform.GetMoverCoordinates(ent);
-                if (!origin.TryDistance(EntityManager, target, out var dis))
-                    return;
 
                 //TODO RMC14 Camera shake
 
@@ -217,7 +217,8 @@ public sealed partial class XenoAbductSystem : EntitySystem
                     ? -hook.MinimumHookDistance
                     : -(dis - hook.TargetStopDistance);
                 _rmcObstacleSlamming.MakeImmune(ent);
-                _size.KnockBack(ent, mapCoords, knockBackDistance, knockBackDistance, 10);
+                if (!_size.KnockBack(ent, mapCoords, knockBackDistance, knockBackDistance, 10))
+                    _hook.UnhookTarget(hookEnt, ent);
             }
         }
     }

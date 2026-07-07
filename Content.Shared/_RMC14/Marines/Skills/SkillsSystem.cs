@@ -106,8 +106,27 @@ public sealed partial class SkillsSystem : EntitySystem
         if (!presetPrototype.TryGet(out var skillPreset, _prototypes, _compFactory))
             return;
 
+        var oldSkills = ent.Comp.Skills;
         ent.Comp.Skills = new(skillPreset.Skills);
         Dirty(ent);
+
+        foreach (var (skill, level) in ent.Comp.Skills)
+        {
+            if (oldSkills.GetValueOrDefault(skill) == level)
+                continue;
+
+            var ev = new SkillChangedEvent(ent.Owner, skill, level);
+            RaiseLocalEvent(ent.Owner, ref ev);
+        }
+
+        foreach (var (skill, _) in oldSkills)
+        {
+            if (ent.Comp.Skills.ContainsKey(skill))
+                continue;
+
+            var ev = new SkillChangedEvent(ent.Owner, skill, 0);
+            RaiseLocalEvent(ent.Owner, ref ev);
+        }
     }
 
     private void OnSkillsVerbExamine(Entity<SkillsComponent> ent, ref GetVerbsEvent<ExamineVerb> args)

@@ -226,7 +226,7 @@ public sealed partial class XenoConstructionGhostSystem : EntitySystem
         if (TryConfigureIconSmoothSprite((ghost, sprite), prototype))
             return;
 
-        if (prototype.TryGetComponent<SpriteComponent>(out _, _compFactory))
+        if (prototype.TryComp<SpriteComponent>(out _, _compFactory))
         {
             var dummy = Spawn(prototype.ID, MapCoordinates.Nullspace);
             if (TryComp(dummy, out SpriteComponent? prototypeSprite))
@@ -246,8 +246,8 @@ public sealed partial class XenoConstructionGhostSystem : EntitySystem
 
     private bool TryConfigureIconSmoothSprite(Entity<SpriteComponent?> sprite, EntityPrototype prototype)
     {
-        if (!prototype.TryGetComponent(out IconSmoothComponent? iconSmooth, _compFactory) ||
-            !prototype.TryGetComponent(out SpriteComponent? prototypeSprite, _compFactory) ||
+        if (!prototype.TryComp(out IconSmoothComponent? iconSmooth, _compFactory) ||
+            !prototype.TryComp(out SpriteComponent? prototypeSprite, _compFactory) ||
             string.IsNullOrEmpty(iconSmooth.StateBase))
         {
             return false;
@@ -315,7 +315,7 @@ public sealed partial class XenoConstructionGhostSystem : EntitySystem
             return player != null ? _transform.GetMoverCoordinates(player.Value) : EntityCoordinates.Invalid;
         }
 
-        if (!_mapManager.TryFindGridAt(mapCoords, out var gridUid, out var grid))
+        if (!_mapSystem.TryFindGridAt(mapCoords, out var gridUid, out var grid))
             return _transform.ToCoordinates(mapCoords);
 
         var gridCoords = _transform.ToCoordinates(gridUid, mapCoords);

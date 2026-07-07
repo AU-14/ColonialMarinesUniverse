@@ -39,7 +39,7 @@ public sealed partial class RMCMeleeWeaponSystem : SharedRMCMeleeWeaponSystem
         var mousePos = _eye.PixelToMap(_input.MouseScreenPosition);
         EntityUid grid;
 
-        if (_mapManager.TryFindGridAt(mousePos, out var gridUid, out _))
+        if (_map.TryFindGridAt(mousePos, out var gridUid, out _))
             grid = gridUid;
         else if (_map.TryGetMap(mousePos.MapId, out var map))
             grid = map.Value;

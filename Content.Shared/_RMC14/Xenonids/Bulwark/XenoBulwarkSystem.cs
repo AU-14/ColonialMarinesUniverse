@@ -10,6 +10,7 @@ using Content.Shared._RMC14.Xenonids.Sweep;
 using Content.Shared.Actions;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Interaction;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Physics;
@@ -38,6 +39,7 @@ public sealed partial class XenoBulwarkSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -196,12 +198,15 @@ public sealed partial class XenoBulwarkSystem : EntitySystem
         var origin = _transform.GetMoverCoordinates(xeno);
         var mapOrigin = _transform.GetMapCoordinates(xeno);
         _nearbyTargets.Clear();
-        _entityLookup.GetEntitiesInRange(origin, 1.75f, _nearbyTargets);
+        _entityLookup.GetEntitiesInRange(origin, xeno.Comp.TailSwingRange, _nearbyTargets);
 
         var hit = false;
         foreach (var target in _nearbyTargets)
         {
             if (target == xeno.Owner)
+                continue;
+
+            if (!_interaction.InRangeUnobstructed(xeno.Owner, target, xeno.Comp.TailSwingRange))
                 continue;
 
             if (_tags.HasTag(target, xeno.Comp.TailSwingFlingable))

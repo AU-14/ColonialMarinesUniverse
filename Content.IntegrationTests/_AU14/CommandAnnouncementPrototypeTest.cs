@@ -37,7 +37,7 @@ public sealed class CommandAnnouncementPrototypeTest
         string expected)
     {
         Assert.That(prototypes.TryIndex<EntityPrototype>(prototype, out var entity), Is.True, prototype);
-        Assert.That(entity!.TryGetComponent<MarineCommunicationsComputerComponent>(out var computer, factory), Is.True, prototype);
+        Assert.That(entity!.TryComp<MarineCommunicationsComputerComponent>(out var computer, factory), Is.True, prototype);
         Assert.That(computer!.Faction, Is.EqualTo(expected), prototype);
     }
 
@@ -48,7 +48,7 @@ public sealed class CommandAnnouncementPrototypeTest
         string expected)
     {
         Assert.That(prototypes.TryIndex<EntityPrototype>(prototype, out var entity), Is.True, prototype);
-        Assert.That(entity!.TryGetComponent<MarineControlComputerComponent>(out var computer, factory), Is.True, prototype);
+        Assert.That(entity!.TryComp<MarineControlComputerComponent>(out var computer, factory), Is.True, prototype);
         Assert.That(computer!.Faction, Is.EqualTo(expected), prototype);
     }
 }

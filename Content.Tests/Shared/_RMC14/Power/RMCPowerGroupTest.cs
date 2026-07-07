@@ -1,3 +1,5 @@
+#nullable enable
+
 using System.Reflection;
 using Content.Shared._RMC14.Power;
 using NUnit.Framework;

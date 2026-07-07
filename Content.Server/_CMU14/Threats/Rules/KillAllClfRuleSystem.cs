@@ -1,3 +1,4 @@
+using Content.Server._CMU14.RoundStatistics;
 using Content.Server.AU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
@@ -27,6 +28,7 @@ public sealed partial class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRule
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
+    [Dependency] private CMURoundStatisticsSystem _roundStats = default!;
     [Dependency] private ThreatRuleHelper _threatRuleHelper = default!;
     private const string DefaultWinMsg = "Govfor victory: Required percentage of CLF eliminated.";
 
@@ -132,6 +134,7 @@ public sealed partial class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRule
         string? winMessage = !string.IsNullOrEmpty(ruleComp.WinMessage)
             ? ruleComp.WinMessage
             : _auRoundSystem.SelectedThreat?.WinMessage;
+        _roundStats.RecordKillAllClfRule();
         _gameTicker.EndRound(!string.IsNullOrEmpty(winMessage) ? winMessage : DefaultWinMsg);
     }
 }

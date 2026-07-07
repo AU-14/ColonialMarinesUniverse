@@ -28,7 +28,7 @@
     key: enum.VehicleSupplyUIKey.Key
   - type: ActivatableUIRequiresAccess
   - type: AccessReader
-    access: [ [ "CMAccessRequisitions" ] ]
+    access: [ [ "RMCAccessVehicleCrew" ] ]
   - type: UserInterface
     interfaces:
       enum.VehicleSupplyUIKey.Key:
@@ -794,3 +794,4 @@
       tags:
       - Catwalk
   - type: VehicleSupplyLift
+    railingRange: 7

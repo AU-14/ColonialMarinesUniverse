@@ -11,6 +11,7 @@ using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.CustomControls;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using static System.StringComparison;
@@ -97,7 +98,7 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
                     uiEntry.Texture.Textures = EntMan.System<SpriteSystem>().GetPrototypeTextures(entity)
                         .Select(o => o.Default)
                         .ToList();
-                    if (entity.TryGetComponent<SpriteComponent>("Sprite", out var entitySprites) &&
+                    if (entity.TryComp<SpriteComponent>(CompName.Get<SpriteComponent>(EntMan.ComponentFactory), out var entitySprites) &&
                         entitySprites.AllLayers.FirstOrDefault() is { } firstLayer)
                     {
                         uiEntry.Texture.Modulate = firstLayer.Color;

@@ -1,0 +1,64 @@
+- type: gameMap
+  id: au14sorokyne
+  mapName: LV-976 Sorokyne Strata
+  allegiance: UPP
+  mapPath: /Maps/_AU14/SorokyneMultiZ/sorokyne0.yml
+  mapsBelow:
+  - /Maps/_AU14/SorokyneMultiZ/sorokyne-1.yml
+  mapsAbove:
+  - /Maps/_AU14/SorokyneMultiZ/sorokyne1.yml
+  - /Maps/_AU14/SorokyneMultiZ/sorokyne2.yml
+  minPlayers: 0
+  maxPlayers: 200
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    au14sorokyne:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'Sorokyne Strata'
+        - type: StationJobs
+          availableJobs:
+
+            AU14JobCivilianColonist: [-1, -1]
+            AU14JobCivilianJournalist: [1, 1]
+
+            # Colony Service
+            AU14JobCivilianHeadOfService: [1, 1]
+            AU14JobCivilianShopkeep: [1, 1]
+            AU14JobCivilianFoodServiceWorker: [3, 3]
+            AU14JobCivilianWasteManagementSpecialist: [3, 3]
+
+            AU14JobCivilianColonySynthetic: [1, 1]
+            AU14JobColonyWorkingJoe: [2, 2]
+
+            # Colony Command (non department)
+            AU14JobCivilianColonyAdministrator: [1, 1]
+            AU14JobCivilianColonyAdminAssistant: [1, 1]
+
+            # Ambassadors
+            AU14JobCivilianAmbassadorICSC: [1, 1]
+
+            # todo UPP researcher job overrides
+
+            # Security/LEO
+            AU14JobCivilianPaPOfficer: [5, 5]
+
+            # Engineering/Logi
+            AU14JobCivilianForeman: [1, 1]
+            AU14JobCivilianFreightSystemsSpecialist: [2, 2]
+
+            AU14JobCivilianHeadOfEngineering: [1, 1]
+            AU14JobCivilianEngineer: [5, 5]
+
+            # Medical
+            AU14JobCivilianHeadPhysician: [1, 1]
+            AU14JobCivilianPhysician: [2, 2]
+            AU14JobCivilianNurse: [4, 4]
+            AU14JobCivilianEthicsAndWellnessAdvisor: [1, 1]
+            AU14JobCivilianEmergencyResponseOfficer: [1, 1]
+
+            # Orbital
+            AU14JobCivilianOrbitalArbiter: [1, 1]
+            AU14JobCivilianOrbitalLawyer: [2, 3]

@@ -1,0 +1,14 @@
+- type: loadout
+  id: ExpeditionSatchelSynthAU14
+  equipment:
+    back: CMSatchelMarineIntel
+
+- type: loadout
+  id: ExpeditionSidewaySatchelSynthAU14
+  equipment:
+    back: RMCSatchelMarineIntelSatchel
+
+- type: loadout
+  id: ExpeditionChestRigSatchelSynthAU14
+  equipment:
+    back: RMCSatchelMarineChestrigPVE

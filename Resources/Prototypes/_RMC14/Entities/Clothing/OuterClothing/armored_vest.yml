@@ -101,9 +101,6 @@
     explosionArmor: 0
   - type: Item
     size: Huge
-  - type: RMCDefibrillatorBlocked
-    popup: cm-defib-take-off-armor
-    showOnExamine: false
   - type: InteractedBlacklist
     blacklist:
       components:

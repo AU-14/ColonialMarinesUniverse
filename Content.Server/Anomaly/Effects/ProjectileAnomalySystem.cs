@@ -98,7 +98,7 @@ public sealed partial class ProjectileAnomalySystem : EntitySystem
     {
         var mapPos = _xform.ToMapCoordinates(coords);
 
-        var spawnCoords = _mapManager.TryFindGridAt(mapPos, out var gridUid, out _)
+        var spawnCoords = _map.TryFindGridAt(mapPos, out var gridUid, out _)
                 ? _xform.WithEntityId(coords, gridUid)
                 : new(_map.GetMapOrInvalid(mapPos.MapId), mapPos.Position);
 

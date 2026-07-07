@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Content.Server._CMU14.Ops.ThirdParty;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared.AU14.Round;
 using Content.Shared.AU14.Scenario;
@@ -7,7 +8,9 @@ using Content.Shared._CMU14.Threats;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using ThirdPartySystem = Content.Server._CMU14.Ops.ThirdParty.ThirdPartySystem;
 
 namespace Content.IntegrationTests._AU14.ThirdParty;
 
@@ -33,6 +36,8 @@ public sealed class RmcErtThirdPartyDropshipMapTest
         (new("/Maps/_CMU14/Shuttles/icrctransport_ert.yml"), 4, 6, 3),
         (new("/Maps/_CMU14/Shuttles/white_ert.yml"), 4, 8, 3),
     };
+
+    private static readonly ProtoId<ThirdPartyPrototype> MissionariesParty = "MissionariesParty";
 
     [Test]
     public async Task RmcErtThirdPartyDropshipsLoadWithSpawnPlans()
@@ -141,6 +146,60 @@ public sealed class RmcErtThirdPartyDropshipMapTest
             {
                 Assert.That(scenarioLeaderMarkers, Is.EqualTo(1));
                 Assert.That(legacyLeaderMarkers, Is.EqualTo(1));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ThirdPartyShuttleSpawnUsesAvailableThirdPartyLandingDestination()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid genericDestination = EntityUid.Invalid;
+        EntityUid returnedDestination = EntityUid.Invalid;
+        EntityUid thirdPartyDestination = EntityUid.Invalid;
+
+        await server.WaitPost(() =>
+        {
+            var entities = server.EntMan;
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var thirdPartySystem = server.System<ThirdPartySystem>();
+            var thirdParty = prototypes.Index<ThirdPartyPrototype>(MissionariesParty);
+            var partySpawn = prototypes.Index<PartySpawnPrototype>(thirdParty.PartySpawn);
+
+            genericDestination = entities.SpawnEntity("CMDropshipDestination", map.GridCoords);
+
+            returnedDestination = entities.SpawnEntity("CMDropshipDestinationThirdPartyReturn", map.GridCoords);
+            var returnDestination = entities.EnsureComponent<ThirdPartyDropshipReturnDestinationComponent>(
+                returnedDestination);
+            returnDestination.Shuttle = EntityUid.Invalid;
+
+            thirdPartyDestination = entities.SpawnEntity("CMDropshipDestinationThirdPartyWhitelist", map.GridCoords);
+
+            thirdPartySystem.SpawnThirdParty(thirdParty, partySpawn, false);
+        });
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            Assert.Multiple(() =>
+            {
+                Assert.That(
+                    entities.GetComponent<DropshipDestinationComponent>(genericDestination).Ship,
+                    Is.Null,
+                    "Generic dropship destinations must not be selected for strict third-party shuttles.");
+                Assert.That(
+                    entities.GetComponent<DropshipDestinationComponent>(returnedDestination).Ship,
+                    Is.Null,
+                    "Returned third-party holding vectors must not be reused as active landing destinations.");
+                Assert.That(
+                    entities.GetComponent<DropshipDestinationComponent>(thirdPartyDestination).Ship,
+                    Is.Not.Null,
+                    "The spawned third-party shuttle should be routed to the active third-party landing destination.");
             });
         });
 

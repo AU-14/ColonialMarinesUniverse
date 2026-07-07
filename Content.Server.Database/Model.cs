@@ -64,6 +64,9 @@ namespace Content.Server.Database
         public DbSet<RMCPlayerActionOrder> RMCPlayerActionOrder { get; set; } = default!;
         public DbSet<RMCChatBans> RMCPlayerChatBans { get; set; } = default!;
 
+        // CMU14
+        public DbSet<CMURoundOutcome> CMURoundOutcomes { get; set; } = default!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Preference>()
@@ -170,6 +173,12 @@ namespace Content.Server.Database
 
             modelBuilder.Entity<Round>()
                 .HasIndex(round => round.StartDate);
+
+            modelBuilder.Entity<CMURoundOutcome>()
+                .HasOne(outcome => outcome.Round)
+                .WithOne()
+                .HasForeignKey<CMURoundOutcome>(outcome => outcome.RoundId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<AdminLogPlayer>()
                 .HasKey(logPlayer => new {logPlayer.RoundId, logPlayer.LogId, logPlayer.PlayerUserId});

@@ -639,6 +639,15 @@
     addSkills:
       RMCSkillSurgery: 3
 
+- type: entity
+  parent: RMCPamphletAdmin
+  id: RMCPamphletAdminSurgery4
+  name: surgery 4 instructional pamphlet
+  components:
+  - type: SkillPamphlet
+    addSkills:
+      RMCSkillSurgery: 4
+
 # Vehicles
 
 - type: entity

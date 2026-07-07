@@ -84,7 +84,7 @@ public sealed class CMUAsrsVehicleAmmoCatalogTest
     {
         Assert.That(prototypes.TryIndex<EntityPrototype>(catalogId, out var catalog), Is.True,
             $"{catalogId} prototype does not exist");
-        Assert.That(catalog!.TryGetComponent<RequisitionsComputerComponent>(out var req, factory), Is.True,
+        Assert.That(catalog!.TryComp<RequisitionsComputerComponent>(out var req, factory), Is.True,
             $"{catalogId} has no RequisitionsComputer component");
 
         var vehicleAmmo = req!.Categories.FirstOrDefault(category => category.Name == VehicleAmmoCategory);

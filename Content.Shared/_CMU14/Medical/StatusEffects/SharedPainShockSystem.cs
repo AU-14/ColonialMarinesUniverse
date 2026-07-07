@@ -135,10 +135,16 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         => OnPartRecomputeTrigger(args.Part);
 
     private void OnCastStartup(Entity<CMUCastComponent> ent, ref ComponentStartup args)
-        => OnPartRecomputeTrigger(ent.Owner);
+    {
+        RaiseCastChanged(ent.Owner, false);
+        OnPartRecomputeTrigger(ent.Owner);
+    }
 
     private void OnCastRemove(Entity<CMUCastComponent> ent, ref ComponentRemove args)
-        => OnPartRecomputeTrigger(ent.Owner);
+    {
+        RaiseCastChanged(ent.Owner, true);
+        OnPartRecomputeTrigger(ent.Owner);
+    }
 
     private void OnBodyPartDamaged(ref BodyPartDamagedEvent args)
         => OnRecomputeTrigger(args.Body);
@@ -153,10 +159,16 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         => OnRecomputeTrigger(args.Body);
 
     private void OnWoundsStartup(Entity<BodyPartWoundComponent> ent, ref ComponentStartup args)
-        => OnPartRecomputeTrigger(ent.Owner);
+    {
+        RaiseWoundsChanged(ent.Owner, false);
+        OnPartRecomputeTrigger(ent.Owner);
+    }
 
     private void OnWoundsRemove(Entity<BodyPartWoundComponent> ent, ref ComponentRemove args)
-        => OnPartRecomputeTrigger(ent.Owner);
+    {
+        RaiseWoundsChanged(ent.Owner, true);
+        OnPartRecomputeTrigger(ent.Owner);
+    }
 
     private void OnWoundTreated(ref WoundTreatedEvent args)
         => OnRecomputeTrigger(args.Body);
@@ -169,6 +181,18 @@ public abstract partial class SharedPainShockSystem : EntitySystem
 
     private void OnInternalBleedChanged(ref InternalBleedingChangedEvent args)
         => OnRecomputeTrigger(args.Body);
+
+    private void RaiseCastChanged(EntityUid part, bool removed)
+    {
+        var ev = new CMUCastChangedEvent(part, removed);
+        RaiseLocalEvent(ref ev);
+    }
+
+    private void RaiseWoundsChanged(EntityUid part, bool removed)
+    {
+        var ev = new BodyPartWoundsChangedEvent(part, removed);
+        RaiseLocalEvent(ref ev);
+    }
 
     private void OnPartRecomputeTrigger(EntityUid part)
     {

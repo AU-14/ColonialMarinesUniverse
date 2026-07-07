@@ -49,7 +49,7 @@ public sealed partial class QueenEyeOverlaySystem : EntitySystem
         }
 
         if (!_overlay.HasOverlay<QueenEyeOverlay>())
-            _overlay.AddOverlay(new QueenEyeOverlay());
+            _overlay.AddOverlay(new QueenEyeOverlay(EntityManager));
     }
 
     public override void Update(float frameTime)

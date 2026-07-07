@@ -45,6 +45,7 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
         system.PlayerAttached += OnPlayerAttached;
         system.PlayerDetached += OnPlayerDetached;
         system.GhostWarpsResponse += OnWarpsResponse;
+        system.GhostWarpsReset += OnWarpsReset;
         system.GhostRoleCountUpdated += OnRoleCountUpdated;
     }
 
@@ -55,6 +56,7 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
         system.PlayerAttached -= OnPlayerAttached;
         system.PlayerDetached -= OnPlayerDetached;
         system.GhostWarpsResponse -= OnWarpsResponse;
+        system.GhostWarpsReset -= OnWarpsReset;
         system.GhostRoleCountUpdated -= OnRoleCountUpdated;
     }
 
@@ -100,6 +102,11 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
 
         window.UpdateWarps(msg.Warps);
         window.Populate();
+    }
+
+    private void OnWarpsReset()
+    {
+        Gui?.TargetWindow.ClearWarps(clearSearch: true);
     }
 
     private void OnRoleCountUpdated(GhostUpdateGhostRoleCountEvent msg)
@@ -156,7 +163,11 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
 
     private void RequestWarps()
     {
-        Gui?.TargetWindow.OpenCentered();
+        if (Gui?.TargetWindow is not { } window)
+            return;
+
+        window.ClearWarps();
+        window.OpenCentered();
         _system?.RequestWarps();
     }
 

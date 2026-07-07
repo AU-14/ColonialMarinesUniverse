@@ -658,7 +658,7 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
     {
         if (!Prototypes.TryIndex<EntityPrototype>(surgeryId, out var proto))
             return null;
-        if (!proto.TryGetComponent<CMSurgeryComponent>(out var surgeryComp, _compFactory))
+        if (!proto.TryComp<CMSurgeryComponent>(out var surgeryComp, _compFactory))
             return null;
         if (stepIndex < 0 || stepIndex >= surgeryComp.Steps.Count)
             return null;

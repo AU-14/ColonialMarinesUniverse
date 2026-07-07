@@ -9,6 +9,12 @@ namespace Content.Shared._RMC14.Megaphone;
 public sealed partial class RMCMegaphoneUserComponent : Component
 {
     /// <summary>
+    /// The local chat range used while broadcasting through the megaphone.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float Range = 20f;
+
+    /// <summary>
     /// The sound played when the megaphone is used.
     /// </summary>
     [DataField, AutoNetworkedField]

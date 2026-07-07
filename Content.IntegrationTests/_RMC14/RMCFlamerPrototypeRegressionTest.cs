@@ -24,7 +24,7 @@ public sealed class RMCFlamerPrototypeRegressionTest
             var factory = server.EntMan.ComponentFactory;
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(prototype, out var flamer), Is.True);
-            Assert.That(flamer!.TryGetComponent<UseDelayComponent>(out var useDelay, factory), Is.True);
+            Assert.That(flamer!.TryComp<UseDelayComponent>(out var useDelay, factory), Is.True);
             Assert.That(useDelay!.Delay, Is.EqualTo(TimeSpan.FromSeconds(expectedDelaySeconds)));
         });
 
@@ -43,7 +43,7 @@ public sealed class RMCFlamerPrototypeRegressionTest
             var factory = server.EntMan.ComponentFactory;
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(prototype, out var weapon), Is.True);
-            Assert.That(weapon!.TryGetComponent<CorrodibleComponent>(out var corrodible, factory), Is.True);
+            Assert.That(weapon!.TryComp<CorrodibleComponent>(out var corrodible, factory), Is.True);
             Assert.That(corrodible!.IsCorrodible, Is.True);
         });
 

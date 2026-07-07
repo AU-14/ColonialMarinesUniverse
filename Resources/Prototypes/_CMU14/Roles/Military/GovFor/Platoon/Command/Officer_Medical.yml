@@ -1,0 +1,213 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobOfficerMedicalBaseAbstract
+  name: au14-job-name-govformo
+  description: au14-job-description-govformo
+  icon: "AU14JobIconGovMO"
+  spawnMenuRoleName: Chief Medical Officer (GOVFOR)
+  supervisors: au14-job-supervisors-govforplatco
+  startingGear: AU14GearGOVFOROfficerMedical
+  dummyStartingGear: AU14GearGOVFOROfficerMedicalDummy
+  playTimeTracker: AU14JobGOVFOROfficerMedical
+  requireAdminNotify: true
+  canBeAntag: false
+  displayWeight: 8
+  accessGroups:
+  - AU14GovforCommand
+  - AU14GovforCorpsman
+  - aulegacygroupcommand
+
+- type: job
+  abstract: true
+  parent: AU14JobOfficerMedicalBaseAbstract
+  id: AU14JobOfficerMedicalBase
+  roundRole: CMO
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetOfficerMedical
+  - type: JobPrefix
+    prefix: au14-job-prefix-govformo
+  - type: RMCSpeechBubbleSpecificStyle
+    speechStyleClass: commanderSpeech
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: govfor_cmo
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
+        state: doctor # TODO: CMO Opfor icon
+    # UPP:
+    # - type: JobPrefix
+    #   prefix: au14-job-prefix-govformoUPP
+    # WYPMC:
+    # - type: JobPrefix
+    #   prefix: au14-job-prefix-govformoWYPMC
+    # CMBCIU:
+    # - type: JobPrefix
+    #   prefix: au14-job-prefix-govformoCMBCIU
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
+  - !type:AgeRequirement
+    requiredAge: 30
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxiety
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankFirstLT:
+      entity: AU14ChevronFirstLT
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFOROfficerMedical
+  isHumanoid: true
+
+# ├──[ Job Prototypes ]──────────────────────────────────────────────┤
+- type: job
+  parent: AU14JobOfficerMedicalBase
+  id: AU14JobGOVFOROfficerMedical
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: job
+  parent: AU14JobOfficerMedicalBase
+  id: AU14JobOPFOROfficerMedical
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORMO"
+  spawnMenuRoleName: Chief Medical Officer (OPFOR)
+  supervisors: au14-job-supervisors-opforplatco
+  startingGear: AU14GearOPFOROfficerMedical
+  dummyStartingGear: AU14GearOPFOROfficerMedicalDummy
+  accessGroups:
+  - AU14OpforCommand
+  - aulegacygroupcommand
+
+# ├──[ Starting Gear ]───────────────────────────────────────────────┤
+- type: startingGear
+  id: AU14GearGOVFOROfficerMedical
+  equipment:
+    id: AU14IDCardGOVFOROfficerMedical
+    ears: AU14HeadsetGovforCommand
+    pocket1: AU14StampMO
+  inhand:
+    - AU14KitJOMedicalOfficerKit
+
+- type: startingGear
+  id: AU14GearOPFOROfficerMedical
+  equipment:
+    id: AU14IDCardOPFOROfficerMedical
+    ears: AU14HeadsetOpforCommand
+    pocket1: AU14StampMO
+  inhand:
+    - AU14KitJOMedicalOfficerKit
+
+- type: roleLoadout
+  id: JobAU14JobGOVFOROfficerMedical
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+- type: startingGear
+  id: AU14GearGOVFOROfficerMedicalDummy
+  equipment:
+    shoes: CMBootsBlack
+    head: CMHeadCapPeakedFormal
+    jumpsuit: CMJumpsuitCMO
+    ears: AU14HeadsetGovforCommand
+
+- type: startingGear
+  id: AU14GearOPFOROfficerMedicalDummy
+  equipment:
+    shoes: CMBootsBlack
+    head: CMHeadCapPeakedFormal
+    jumpsuit: CMJumpsuitCMO
+    ears: AU14HeadsetOpforCommand
+
+# ├──[ Spawnpoints ]─────────────────────────────────────────────────┤
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFOROfficerMedical
+  name: Spawn Point GOVFOR Chief Medical Officer
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFOROfficerMedical
+  - type: Sprite
+    state: syn_spawn
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointopforOfficerMedical
+  name: Spawn Point OPFOR Chief Medical Officer
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFOROfficerMedical
+  - type: Sprite
+    state: syn_spawn
+
+# ├──[ Factions ]────────────────────────────────────────────────────┤
+- type: job
+  parent: AU14JobOfficerMedicalBase
+  id: AU14JobGOVFOROfficerMedicalCMBCIU
+  roundForce: CMBCIU
+  name: Chief Medical Officer
+  spawnMenuRoleName: CMO (CMBCIU)
+  ranks:
+    AU14RankCMBMarshal: []
+
+- type: job
+  parent: AU14JobOfficerMedicalBase
+  id: AU14JobGOVFOROfficerMedicalRMC
+  roundForce: RMC
+  spawnMenuRoleName: Chief Medical Officer (TWE RMC)
+
+- type: job
+  parent: AU14JobOfficerMedicalBase
+  id: AU14JobGOVFOROfficerMedicalUPP
+  roundForce: UPP
+  requirements: []
+  name: Chief Medical Officer
+  spawnMenuRoleName: CMO (UPP)
+  ranks:
+    UPP_Captain:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFOROfficerMedical
+      time: 360000 # 100 hours
+    UPP_SeniorLieutenant: []
+
+- type: job
+  parent: AU14JobOfficerMedicalBase
+  id: AU14JobGOVFOROfficerMedicalWYPMC
+  roundForce: WYPMC
+  requirements: []
+  name: PMC Chief Medical Officer
+  spawnMenuRoleName: CMO (WYPMC)
+  ranks:
+    AU14RankWeYuCommanderSenior:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFOROfficerMedical
+      time: 360000 # 100 hours
+    AU14RankWeYuCommander: []

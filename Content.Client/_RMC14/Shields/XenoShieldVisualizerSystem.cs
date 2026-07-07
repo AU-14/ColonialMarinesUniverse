@@ -8,7 +8,7 @@ namespace Content.Client._RMC14.Shields
     {
         protected override void OnAppearanceChange(EntityUid uid, XenoShieldComponent component, ref AppearanceChangeEvent args)
         {
-            if (!TryComp<SpriteComponent>(uid, out var sprite) || !SpriteSystem.LayerMapTryGet((uid, sprite), RMCShieldVisuals.Base, out var layer, true))
+            if (!TryComp<SpriteComponent>(uid, out var sprite) || !SpriteSystem.LayerMapTryGet((uid, sprite), RMCShieldVisuals.Base, out var layer, false))
                 return;
 
             if (!AppearanceSystem.TryGetData<bool>(uid, RMCShieldVisuals.Active, out var active))

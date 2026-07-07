@@ -7,4 +7,7 @@ public sealed partial class HardpointSlotTypePrototype : IPrototype
 {
     [IdDataField]
     public string ID { get; private set; } = string.Empty;
+
+    [DataField]
+    public float RepairRate = 0.05f;
 }

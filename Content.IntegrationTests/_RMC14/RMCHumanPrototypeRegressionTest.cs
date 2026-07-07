@@ -1311,7 +1311,7 @@ public sealed class RMCHumanPrototypeRegressionTest
             var wounds = entMan.System<CMUWoundsSystem>();
 
             map.CreateMap(out var mapId);
-            var grid = mapManager.CreateGridEntity(mapId);
+            var grid = map.CreateGridEntity(mapId);
             var tile = Vector2i.Zero;
             map.SetTile(grid, tile, new Tile(1));
 
@@ -1386,7 +1386,7 @@ public sealed class RMCHumanPrototypeRegressionTest
             var woundsSystem = entMan.System<CMUWoundsSystem>();
 
             map.CreateMap(out var mapId);
-            var grid = mapManager.CreateGridEntity(mapId);
+            var grid = map.CreateGridEntity(mapId);
             var tile = Vector2i.Zero;
             map.SetTile(grid, tile, new Tile(tileDefinitionManager["FloorSteel"].TileId));
 

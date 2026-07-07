@@ -140,7 +140,7 @@ namespace Content.Server.Atmos.EntitySystems
                     new Vector2(LocalViewRange, LocalViewRange));
 
                 _grids.Clear();
-                _mapManager.FindGridsIntersecting(transform.MapID, worldBounds, ref _grids);
+                _mapSystem.FindGridsIntersecting(transform.MapID, worldBounds, ref _grids);
 
                 foreach (var grid in _grids)
                 {

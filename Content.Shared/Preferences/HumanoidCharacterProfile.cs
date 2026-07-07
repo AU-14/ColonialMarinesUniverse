@@ -1080,7 +1080,7 @@ namespace Content.Shared.Preferences
             ArmorPreference = armorPreference;
 
             if (!prototypeManager.TryIndex(SquadPreference, out var squad) ||
-                !squad.TryGetComponent(out SquadTeamComponent? team, compFactory) ||
+                !squad.TryComp(out SquadTeamComponent? team, compFactory) ||
                 !team.RoundStart)
             {
                 SquadPreference = null;

@@ -17,6 +17,12 @@ public sealed partial class XenoStompComponent : Component
     public DamageSpecifier Damage = new();
 
     [DataField, AutoNetworkedField]
+    public bool KnocksBack = false;
+
+    [DataField, AutoNetworkedField]
+    public float KnockbackPower = 2f;
+
+    [DataField, AutoNetworkedField]
     public TimeSpan ParalyzeTime = TimeSpan.FromSeconds(0.4);
 
     [DataField, AutoNetworkedField]

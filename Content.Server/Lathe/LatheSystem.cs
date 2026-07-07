@@ -208,7 +208,7 @@ namespace Content.Server.Lathe
             // RMC14
             var recipeTime = recipe.CompleteTime;
             if (_proto.TryIndex(recipe.Result, out var result) &&
-                result.TryGetComponent(out ItemComponent? item, _compFactory) &&
+                result.TryComp(out ItemComponent? item, _compFactory) &&
                 _proto.TryIndex(item.Size, out var size))
             {
                 recipeTime = size.LatheTime;

@@ -25,6 +25,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.StatusEffect;
+using Content.Shared.StatusEffectNew;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
@@ -58,6 +59,7 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
     [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private XenoStrainSystem _xenoStrain = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private SharedStatusEffectsSystem _statusEffect = default!;
     [Dependency] private StatusEffectQuerySystem _status = default!;
 
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
@@ -359,6 +361,10 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
             _status.TryRemoveStatusEffect(target, status);
         }
 
+        foreach (var status in args.AilmentsRemoveNew)
+        {
+            _statusEffect.TryRemoveStatusEffect(target, status);
+        }
 
         EntityManager.RemoveComponents(target, args.ComponentsRemove);
 

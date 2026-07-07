@@ -18,6 +18,7 @@ using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Screens;
 using Content.Client.UserInterface.Systems.Chat.Widgets;
 using Content.Client.UserInterface.Systems.Gameplay;
+using Content.Shared._CMU14.Chat;
 using Content.Shared._RMC14.Chat;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
@@ -205,7 +206,10 @@ public sealed partial class ChatUIController : UIController
         _config.OnValueChanged(CCVars.ChatEnableColorName, (value) => { _chatNameColorsEnabled = value; });
         _chatNameColorsEnabled = _config.GetCVar(CCVars.ChatEnableColorName);
 
-        _speechBubbleRoot = new LayoutContainer();
+        _speechBubbleRoot = new LayoutContainer
+        {
+            MouseFilter = Control.MouseFilterMode.Ignore,
+        };
 
         UpdateChannelPermissions();
 
@@ -472,7 +476,18 @@ public sealed partial class ChatUIController : UIController
             return;
         }
 
+        if (ShouldHideRunechatSelfRadioBubble(ent, msg, speechType))
+            return;
+
         EnqueueSpeechBubble(ent, msg, speechType);
+    }
+
+    private bool ShouldHideRunechatSelfRadioBubble(EntityUid sender, ChatMessage msg, SpeechBubble.SpeechType speechType)
+    {
+        return speechType == SpeechBubble.SpeechType.Radio &&
+               msg.Channel == ChatChannel.Radio &&
+               _config.GetCVar(CCVars.ChatEnableRunechatBubbles) &&
+               _player.LocalSession?.AttachedEntity == sender;
     }
 
     private void CreateSpeechBubble(EntityUid entity, SpeechBubbleData speechData)
@@ -518,6 +533,14 @@ public sealed partial class ChatUIController : UIController
         if (!CanShowSpeechBubble(entity, out _))
             return;
 
+        if (_config.GetCVar(CCVars.ChatEnableRunechatBubbles) &&
+            CMURunechatStyles.IsInterrupting(message.SpeechStyleClass))
+        {
+            ClearSpeechBubbles(entity);
+            CreateSpeechBubble(entity, new SpeechBubbleData(message, speechType));
+            return;
+        }
+
         if (!_queuedSpeechBubbles.TryGetValue(entity, out var queueData))
         {
             queueData = new SpeechBubbleQueueData();
@@ -525,6 +548,19 @@ public sealed partial class ChatUIController : UIController
         }
 
         queueData.MessageQueue.Enqueue(new SpeechBubbleData(message, speechType));
+    }
+
+    private void ClearSpeechBubbles(EntityUid entity)
+    {
+        _queuedSpeechBubbles.Remove(entity);
+
+        if (!_activeSpeechBubbles.TryGetValue(entity, out var active))
+            return;
+
+        foreach (var bubble in active.ToArray())
+        {
+            RemoveSpeechBubble(entity, bubble);
+        }
     }
 
     private bool CanShowSpeechBubble(EntityUid entity, out bool sameMap)
@@ -1012,6 +1048,10 @@ public sealed partial class ChatUIController : UIController
                 // RMC14
                 AddSpeechBubble(msg, msg.UseEmoteSpeechBubble ? SpeechBubble.SpeechType.Emote : SpeechBubble.SpeechType.Whisper);
                 // RMC14
+                break;
+
+            case ChatChannel.Radio:
+                AddSpeechBubble(msg, SpeechBubble.SpeechType.Radio);
                 break;
 
             case ChatChannel.Dead:

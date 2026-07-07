@@ -112,6 +112,14 @@ public sealed partial class RMCWeldEffectSystem : EntitySystem
         active.Effect = effect;
     }
 
+    /// <summary>
+    ///     Stops any welding spark effect currently attached to the target.
+    /// </summary>
+    public void ClearWeldEffect(EntityUid target)
+    {
+        ClearActiveEffect(target);
+    }
+
     private void OnWeldFinished(WeldFinishedEvent args)
     {
         if (args.Cancelled && args.Target is { } target)

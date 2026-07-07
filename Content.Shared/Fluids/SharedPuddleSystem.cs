@@ -194,6 +194,31 @@ public abstract partial class SharedPuddleSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    ///     Removes cleanable decals from a tile. Server-side puddle systems override this.
+    /// </summary>
+    public virtual bool CleanDecalsAt(TileRef tileRef)
+    {
+        return false;
+    }
+
+    /// <summary>
+    ///     Returns true if a tile has any cleanable decals. Server-side puddle systems override this.
+    /// </summary>
+    public virtual bool HasCleanableDecalsAt(TileRef tileRef)
+    {
+        return false;
+    }
+
+    /// <summary>
+    ///     Tries to get the puddle entity for a tile. On the client, this always returns false.
+    /// </summary>
+    public virtual bool TryGetPuddle(TileRef tile, out EntityUid puddleUid)
+    {
+        puddleUid = EntityUid.Invalid;
+        return false;
+    }
+
     #region Spill
     // These methods are in Shared to make it easier to interact with PuddleSystem in Shared code.
     // Note that they always fail when run on the client, not creating a puddle and returning false.

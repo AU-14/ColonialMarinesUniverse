@@ -60,6 +60,9 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
 
     private void OnCollide(Entity<DamageOnCollideComponent> ent, EntityUid other)
     {
+        if (ent.Comp.Disabled)
+            return;
+
         if (ent.Comp.Damaged.Contains(other))
             return;
 
@@ -144,6 +147,15 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
             return;
 
         ent.Comp.Chain = chain;
+        Dirty(ent);
+    }
+
+    public void DisableDamageOnCollide(Entity<DamageOnCollideComponent?> ent)
+    {
+        if (!_damageOnCollideQuery.Resolve(ent, ref ent.Comp, false))
+            return;
+
+        ent.Comp.Disabled = true;
         Dirty(ent);
     }
 

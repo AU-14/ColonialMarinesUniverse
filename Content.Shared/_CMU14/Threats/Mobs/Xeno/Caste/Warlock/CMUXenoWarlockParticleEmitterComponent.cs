@@ -10,7 +10,11 @@ public enum CMUXenoWarlockParticleEffect : byte
     PsychicCrushCharge,
     PsychicBlastCharge,
     PsychicLanceCharge,
-    CrushWarning
+    CrushWarning,
+    DroneOperatorTransfer,
+    DroneAndroidDormant,
+    DroneTransferConnect,
+    DroneTransferDisconnect
 }
 
 public readonly record struct CMUXenoWarlockParticleProfile(
@@ -27,7 +31,8 @@ public readonly record struct CMUXenoWarlockParticleProfile(
     Vector2 PositionRadius,
     Vector2 ScaleMin,
     Vector2 ScaleMax,
-    Vector2 HolderOffset
+    Vector2 HolderOffset,
+    float MaxDirectedTravelPixels = 250f
 );
 
 public readonly record struct CMUXenoWarlockParticleMotion(Vector2 Velocity, Vector2 Gravity);

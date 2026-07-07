@@ -27,14 +27,14 @@ public sealed class FillLevelSpriteTest
             var protos = protoMan.EnumeratePrototypes<EntityPrototype>()
                 .Where(p => !p.Abstract)
                 .Where(p => !pair.IsTestPrototype(p))
-                .Where(p => p.TryGetComponent<SolutionContainerVisualsComponent>(out _, componentFactory))
+                .Where(p => p.TryComp<SolutionContainerVisualsComponent>(out _, componentFactory))
                 .OrderBy(p => p.ID)
                 .ToList();
 
             foreach (var proto in protos)
             {
-                Assert.That(proto.TryGetComponent<SolutionContainerVisualsComponent>(out var visuals, componentFactory));
-                Assert.That(proto.TryGetComponent<SpriteComponent>(out var sprite, componentFactory));
+                Assert.That(proto.TryComp<SolutionContainerVisualsComponent>(out var visuals, componentFactory));
+                Assert.That(proto.TryComp<SpriteComponent>(out var sprite, componentFactory));
 
                 var rsi = sprite.BaseRSI;
 

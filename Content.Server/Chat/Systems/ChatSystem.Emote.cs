@@ -1,4 +1,5 @@
 using System.Collections.Frozen;
+using Content.Shared._CMU14.Chat;
 using Content.Shared._RMC14.Voicelines;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Speech;
@@ -12,6 +13,37 @@ namespace Content.Server.Chat.Systems;
 // emotes using emote prototype
 public partial class ChatSystem
 {
+    private const string ScreamEmoteId = "Scream";
+
+    private static readonly string[] RunechatPainMessages =
+    [
+        "OW!!",
+        "AGH!!",
+        "ARGH!!",
+        "OUCH!!",
+        "ACK!!",
+        "OUF!",
+    ];
+
+    private static readonly string[] RunechatScreamMessages =
+    [
+        "FUCK!!!",
+        "AGH!!!",
+        "ARGH!!!",
+        "AAAA!!!",
+        "HGH!!!",
+        "NGHHH!!!",
+        "NNHH!!!",
+        "SHIT!!!",
+    ];
+
+    private static readonly FrozenSet<string> PainEmoteIds = new[]
+    {
+        "PainGrimace",
+        "TroubleEyeOpen",
+        "TroubleStanding",
+    }.ToFrozenSet();
+
     private FrozenDictionary<string, EmotePrototype> _wordEmoteDict = FrozenDictionary<string, EmotePrototype>.Empty;
 
     [Dependency] private HumanoidVoicelinesSystem _humanoidVoicelines = default!;
@@ -98,11 +130,39 @@ public partial class ChatSystem
         {
             // not all emotes are loc'd, but for the ones that are we pass in entity
             var action = Loc.GetString(_random.Pick(emote.ChatMessages), ("entity", source));
-            SendEntityEmote(source, action, range, nameOverride, hideLog: hideLog, checkEmote: false, ignoreActionBlocker: ignoreActionBlocker);
+            var bubbleMessage = GetRunechatEmoteMessage(emote, out var speechStyleClass);
+            SendEntityEmote(
+                source,
+                action,
+                range,
+                nameOverride,
+                hideLog: hideLog,
+                checkEmote: false,
+                ignoreActionBlocker: ignoreActionBlocker,
+                speechBubbleMessage: bubbleMessage,
+                speechStyleClass: speechStyleClass);
         }
 
         // do the rest of emote event logic here
         TryEmoteWithoutChat(source, emote, ignoreActionBlocker);
+    }
+
+    private string? GetRunechatEmoteMessage(EmotePrototype emote, out string? speechStyleClass)
+    {
+        if (emote.ID == ScreamEmoteId)
+        {
+            speechStyleClass = CMURunechatStyles.Scream;
+            return _random.Pick(RunechatScreamMessages);
+        }
+
+        if (PainEmoteIds.Contains(emote.ID))
+        {
+            speechStyleClass = CMURunechatStyles.Pain;
+            return _random.Pick(RunechatPainMessages);
+        }
+
+        speechStyleClass = null;
+        return null;
     }
 
     /// <summary>

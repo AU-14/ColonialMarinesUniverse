@@ -129,7 +129,7 @@ public sealed partial class RMCFoldingBarricadeSystem : EntitySystem
         var coords = _transform.GetMoverCoordinates(args.User);
         var barricade = SpawnAtPosition(ent.Comp.DeployedPrototype, coords);
         var barricadeXform = Transform(barricade);
-        barricadeXform.LocalRotation = direction.ToAngle();
+        _transform.SetLocalRotation(barricade, direction.ToAngle(), barricadeXform);
 
         if (!barricadeXform.Anchored)
             _transform.AnchorEntity((barricade, barricadeXform));

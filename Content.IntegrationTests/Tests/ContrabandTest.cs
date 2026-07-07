@@ -24,7 +24,7 @@ public sealed class ContrabandTest
                     if (proto.Abstract || pair.IsTestPrototype(proto))
                         continue;
 
-                    if (!proto.TryGetComponent<ContrabandComponent>(out var contraband, componentFactory))
+                    if (!proto.TryComp<ContrabandComponent>(out var contraband, componentFactory))
                         continue;
 
                     Assert.That(protoMan.Resolve(contraband.Severity, out var severity),

@@ -390,7 +390,7 @@ public sealed class ScenarioPlanValidateCommand : IConsoleCommand
     {
         mapId = null;
         if (!prototypes.TryIndex<EntityPrototype>(planetId, out var prototype) ||
-            !prototype.TryGetComponent(out RMCPlanetMapPrototypeComponent? planet, componentFactory))
+            !prototype.TryComp(out RMCPlanetMapPrototypeComponent? planet, componentFactory))
         {
             return false;
         }
@@ -415,7 +415,7 @@ public sealed class ScenarioPlanValidateCommand : IConsoleCommand
         var prototypes = IoCManager.Resolve<IPrototypeManager>();
         var componentFactory = IoCManager.Resolve<IComponentFactory>();
         return prototypes.EnumeratePrototypes<EntityPrototype>()
-            .Where(prototype => prototype.TryGetComponent(out RMCPlanetMapPrototypeComponent? _, componentFactory))
+            .Where(prototype => prototype.TryComp(out RMCPlanetMapPrototypeComponent? _, componentFactory))
             .Select(prototype => prototype.ID)
             .Order(StringComparer.OrdinalIgnoreCase)
             .ToList();

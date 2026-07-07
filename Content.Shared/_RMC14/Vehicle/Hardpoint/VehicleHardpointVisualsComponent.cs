@@ -29,12 +29,7 @@ public partial record struct VehicleHardpointLayerState
 }
 
 [Serializable, NetSerializable]
-public sealed class VehicleHardpointVisualsComponentState : ComponentState
+public enum VehicleHardpointVisualsVisuals : byte
 {
-    public readonly List<VehicleHardpointLayerState> Layers;
-
-    public VehicleHardpointVisualsComponentState(List<VehicleHardpointLayerState> layers)
-    {
-        Layers = layers;
-    }
+    Layers,
 }

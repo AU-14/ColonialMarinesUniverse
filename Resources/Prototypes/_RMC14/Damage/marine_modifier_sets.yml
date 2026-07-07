@@ -65,6 +65,11 @@
   id: StructuralMarine
 
 - type: damageModifierSet
+  id: CMU14StructuralMarine
+  flatReductions:
+    Blunt: 10
+
+- type: damageModifierSet
   id: RMCMetalFoamWall
   coefficients:
     Blunt: 2

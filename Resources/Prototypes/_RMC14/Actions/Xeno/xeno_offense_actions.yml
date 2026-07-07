@@ -792,6 +792,21 @@
 
 - type: entity
   parent: ActionXenoBase
+  id: ActionXenoCursorCharging
+  name: Begin Charging
+  description: Begin charging, gaining momentum and force. Use this ability again during the charge to lunge forward, throwing yourself as a projectile and dealing massive damage to mobs or vehicles. Barricades will be unanchored on hit.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: ready_charge
+    useDelay: 0.25
+  - type: InstantAction
+    event: !type:XenoCursorChargingActionEvent
+
+- type: entity
+  parent: ActionXenoBase
   id: ActionXenoToggleCharging
   name: Toggle Charging
   description: Enable charging when moving in a straight line, which increases your speed and impact damage depending on the total distance travelled.
@@ -1467,6 +1482,21 @@
     event: !type:XenoFlingActionEvent
   - type: XenoOffensiveAction
   - type: RMCDazeableAction
+
+- type: entity
+  parent: ActionXenoBase
+  id: ActionXenoChargerLunge
+  name: Lunge
+  description: Leap forwards, knocking back and damaging enemies in your way. If used during charge, inherits all your momentum for a devastating all-in charge.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: tumble
+  - type: InstantAction
+    event: !type:XenoChargerLungeActionEvent
+  - type: ActionBlockIfResting
 
 - type: entity
   parent: ActionXenoBase

@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
@@ -27,7 +27,7 @@ public sealed partial class TotalJobsTimeRequirement : JobRequirement
         reason = null;
         var playtime = TimeSpan.Zero;
         var trackers = new HashSet<string>();
-        if (!prototypes.Index(Group).TryGetComponent(out JobGroupComponent? comp, entManager.ComponentFactory))
+        if (!prototypes.Index(Group).TryComp(out JobGroupComponent? comp, entManager.ComponentFactory))
         {
             var sawmill = Logger.GetSawmill("job.requirements");
             sawmill.Error($"No {nameof(DepartmentGroupComponent)} found on entity {Group}");

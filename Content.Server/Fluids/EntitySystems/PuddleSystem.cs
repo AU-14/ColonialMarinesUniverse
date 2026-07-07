@@ -1,5 +1,7 @@
+using System.Numerics;
 using Content.Server.Administration.Logs;
 using Content.Server.Chemistry.TileReactions;
+using Content.Server.Decals;
 using Content.Server.Fluids.Components;
 using Content.Server.Spreader;
 using Content.Shared.ActionBlocker;
@@ -11,8 +13,10 @@ using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reaction;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Database;
+using Content.Shared.Decals;
 using Content.Shared.Effects;
 using Content.Shared.FixedPoint;
+using Content.Shared.FootPrint;
 using Content.Shared.Fluids;
 using Content.Shared.Fluids.Components;
 using Content.Shared.Friction;
@@ -40,22 +44,27 @@ namespace Content.Server.Fluids.EntitySystems;
 /// </summary>
 public sealed partial class PuddleSystem : SharedPuddleSystem
 {
+    private static readonly EntProtoId PuddlePrototype = "Puddle";
+    private static readonly EntProtoId BloodDecalPuddlePrototype = "BloodDecalPuddle";
+    private static readonly ProtoId<ReagentPrototype> BloodReagent = "Blood";
+
     [Dependency] private ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private IAdminLogManager _adminLogger = default!;
-    [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private SharedMapSystem _map = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
-    [Dependency] private RMCReagentSystem _reagent = default!;
-    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private AudioSystem _audio = default!;
-    [Dependency] private EntityLookupSystem _lookup = default!;
-    [Dependency] private ReactiveSystem _reactive = default!;
     [Dependency] private SharedColorFlashEffectSystem _color = default!;
+    [Dependency] private DecalSystem _decals = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SharedPopupSystem _popups = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ReactiveSystem _reactive = default!;
+    [Dependency] private RMCReagentSystem _reagent = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
-    [Dependency] private StepTriggerSystem _stepTrigger = default!;
     [Dependency] private SpeedModifierContactsSystem _speedModContacts = default!;
+    [Dependency] private StepTriggerSystem _stepTrigger = default!;
     [Dependency] private TileFrictionController _tile = default!;
+    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private TurfSystem _turf = default!;
 
@@ -81,10 +90,20 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
         SubscribeLocalEvent<PuddleComponent, AnchorStateChangedEvent>(OnAnchorChanged);
         SubscribeLocalEvent<PuddleComponent, SpreadNeighborsEvent>(OnPuddleSpread);
         SubscribeLocalEvent<PuddleComponent, SlipEvent>(OnPuddleSlip);
+        SubscribeLocalEvent<PuddleDecalVisualsComponent, ComponentShutdown>(OnPuddleDecalShutdown);
 
         SubscribeLocalEvent<EvaporationComponent, MapInitEvent>(OnEvaporationMapInit);
 
         InitializeTransfers();
+    }
+
+    private void OnPuddleDecalShutdown(Entity<PuddleDecalVisualsComponent> entity, ref ComponentShutdown args)
+    {
+        if (entity.Comp.DecalId is { } decalId &&
+            entity.Comp.GridUid is { } gridUid)
+        {
+            _decals.RemoveDecal(gridUid, decalId);
+        }
     }
 
     private void OnPuddleSpread(Entity<PuddleComponent> entity, ref SpreadNeighborsEvent args)
@@ -335,6 +354,8 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
         if (!TryComp<StepTriggerComponent>(entity, out var comp))
             return;
 
+        var canPrintFootprints = HasComp<PuddleFootPrintsComponent>(entity);
+
         // Ensure we actually have the component
         EnsureComp<TileFrictionModifierComponent>(entity);
 
@@ -360,13 +381,22 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
         // Check if the puddle is big enough to slip in to avoid doing unnecessary logic
         if (solution.Volume <= smallPuddleThreshold)
         {
-            _stepTrigger.SetActive(entity, false, comp);
+            _stepTrigger.SetActive(entity, canPrintFootprints, comp);
+            if (canPrintFootprints)
+                _stepTrigger.SetRequiredTriggerSpeed(entity, 0f, comp);
+
             _tile.SetModifier(entity, 1f);
             return;
         }
 
         if (!TryComp<SlipperyComponent>(entity, out var slipComp))
+        {
+            _stepTrigger.SetActive(entity, canPrintFootprints, comp);
+            if (canPrintFootprints)
+                _stepTrigger.SetRequiredTriggerSpeed(entity, 0f, comp);
+
             return;
+        }
 
         foreach (var (reagent, quantity) in solution.Contents)
         {
@@ -392,13 +422,15 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
                 superSlipperyUnits += quantity;
         }
 
-        // Turn on the step trigger if it's slippery
-        _stepTrigger.SetActive(entity, slipperyUnits > smallPuddleThreshold, comp);
-
         // This is based of the total volume and not just the slippery volume because there is a default
         // slippery for all reagents even if they aren't technically slippery.
-        slipComp.SlipData.RequiredSlipSpeed = (float)(slipStepTrigger / solution.Volume);
+        slipComp.SlipData.RequiredSlipSpeed = canPrintFootprints
+            ? 0f
+            : (float)(slipStepTrigger / solution.Volume);
         _stepTrigger.SetRequiredTriggerSpeed(entity, slipComp.SlipData.RequiredSlipSpeed);
+
+        // Turn on the step trigger if it's slippery or can transfer footprints.
+        _stepTrigger.SetActive(entity, canPrintFootprints || slipperyUnits > smallPuddleThreshold, comp);
 
         // Divide these both by only total amount of slippery reagents.
         // A puddle with 10 units of lube vs a puddle with 10 of lube and 20 catchup should stun and launch forward the same amount.
@@ -473,7 +505,8 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
         bool sound = true,
         bool checkForOverflow = true,
         PuddleComponent? puddleComponent = null,
-        SolutionContainerManagerComponent? sol = null)
+        SolutionContainerManagerComponent? sol = null,
+        EntityCoordinates? decalCoordinates = null)
     {
         if (!Resolve(puddleUid, ref puddleComponent, ref sol))
             return false;
@@ -494,12 +527,10 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
             EnsureComp<ActiveEdgeSpreaderComponent>(puddleUid);
         }
 
-        if (!sound)
-        {
-            return true;
-        }
+        if (sound)
+            _audio.PlayPvs(puddleComponent.SpillSound, puddleUid);
 
-        _audio.PlayPvs(puddleComponent.SpillSound, puddleUid);
+        TrySpawnPuddleDecal(puddleUid, decalCoordinates);
         return true;
     }
 
@@ -608,7 +639,7 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
             return false;
         }
 
-        return TrySpillAt(_map.GetTileRef(gridUid.Value, mapGrid, coordinates), solution, out puddleUid, sound);
+        return TrySpillAt(_map.GetTileRef(gridUid.Value, mapGrid, coordinates), coordinates, solution, out puddleUid, sound);
     }
 
     /// <inheritdoc/>
@@ -628,6 +659,25 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
     public override bool TrySpillAt(TileRef tileRef, Solution solution, out EntityUid puddleUid, bool sound = true,
         bool tileReact = true)
     {
+        var gridId = tileRef.GridUid;
+        if (!TryComp<MapGridComponent>(gridId, out var mapGrid))
+        {
+            puddleUid = EntityUid.Invalid;
+            return false;
+        }
+
+        var coords = _map.GridTileToLocal(gridId, mapGrid, tileRef.GridIndices);
+        return TrySpillAt(tileRef, coords, solution, out puddleUid, sound, tileReact, mapGrid);
+    }
+
+    private bool TrySpillAt(TileRef tileRef,
+        EntityCoordinates spillCoordinates,
+        Solution solution,
+        out EntityUid puddleUid,
+        bool sound = true,
+        bool tileReact = true,
+        MapGridComponent? mapGrid = null)
+    {
         if (solution.Volume <= 0)
         {
             puddleUid = EntityUid.Invalid;
@@ -643,7 +693,7 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
 
         // Let's not spill to invalid grids.
         var gridId = tileRef.GridUid;
-        if (!TryComp<MapGridComponent>(gridId, out var mapGrid))
+        if (!Resolve(gridId, ref mapGrid, false))
         {
             puddleUid = EntityUid.Invalid;
             return false;
@@ -664,6 +714,10 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
 
         // Get normalized co-ordinate for spill location and spill it in the centre
         // TODO: Does SnapGrid or something else already do this?
+        var puddlePrototype = GetPuddlePrototype(solution);
+        var decalCoordinates = puddlePrototype == BloodDecalPuddlePrototype
+            ? spillCoordinates
+            : _map.GridTileToLocal(gridId, mapGrid, tileRef.GridIndices);
         var anchored = _map.GetAnchoredEntitiesEnumerator(gridId, mapGrid, tileRef.GridIndices);
         var puddleQuery = GetEntityQuery<PuddleComponent>();
         var sparklesQuery = GetEntityQuery<EvaporationSparkleComponent>();
@@ -680,7 +734,7 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
             if (!puddleQuery.TryGetComponent(ent, out var puddle))
                 continue;
 
-            if (TryAddSolution(ent.Value, solution, sound, puddleComponent: puddle))
+            if (TryAddSolution(ent.Value, solution, sound, puddleComponent: puddle, decalCoordinates: decalCoordinates))
             {
                 EnsureComp<ActiveEdgeSpreaderComponent>(ent.Value);
             }
@@ -690,9 +744,9 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
         }
 
         var coords = _map.GridTileToLocal(gridId, mapGrid, tileRef.GridIndices);
-        puddleUid = Spawn("Puddle", coords);
+        puddleUid = Spawn(puddlePrototype, coords);
         EnsureComp<PuddleComponent>(puddleUid);
-        if (TryAddSolution(puddleUid, solution, sound))
+        if (TryAddSolution(puddleUid, solution, sound, decalCoordinates: decalCoordinates))
         {
             EnsureComp<ActiveEdgeSpreaderComponent>(puddleUid);
         }
@@ -702,10 +756,162 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
 
     #endregion
 
+    private EntProtoId GetPuddlePrototype(Solution solution)
+    {
+        foreach (var (reagent, _) in solution.Contents)
+        {
+            if (reagent.Prototype == BloodReagent)
+                return BloodDecalPuddlePrototype;
+        }
+
+        return PuddlePrototype;
+    }
+
+    private void TrySpawnPuddleDecal(EntityUid puddleUid, EntityCoordinates? coordinates = null)
+    {
+        if (TryComp<PuddleDecalVisualsComponent>(puddleUid, out var decalVisuals))
+            TrySpawnPuddleDecal((puddleUid, decalVisuals), coordinates ?? Transform(puddleUid).Coordinates);
+    }
+
+    private void TrySpawnPuddleDecal(Entity<PuddleDecalVisualsComponent> ent, EntityCoordinates coordinates)
+    {
+        if (ent.Comp.DecalId != null ||
+            ent.Comp.Decals.Count == 0)
+            return;
+
+        if (_transform.GetGrid(coordinates) is not { } gridUid)
+            return;
+
+        var rotation = ent.Comp.RandomRotation ? _random.NextAngle() : Angle.Zero;
+        if (_decals.TryAddDecal(
+                _random.Pick(ent.Comp.Decals),
+                coordinates.Offset(ent.Comp.Offset),
+                out var decalId,
+                rotation: rotation,
+                zIndex: ent.Comp.ZIndex,
+                cleanable: ent.Comp.Cleanable))
+        {
+            ent.Comp.DecalId = decalId;
+            ent.Comp.GridUid = gridUid;
+        }
+    }
+
+    public override bool CleanDecalsAt(TileRef tileRef)
+    {
+        if (!TryGetDecalsAt(tileRef, out var grid, out var decalGrid, out var decals))
+            return false;
+
+        var removedAny = false;
+
+        ClearMissingPuddleDecalReferences(tileRef, grid, decalGrid);
+
+        foreach (var (index, decal) in decals)
+        {
+            if (!decal.Cleanable)
+                continue;
+
+            if (!_decals.RemoveDecal(tileRef.GridUid, index, decalGrid))
+                continue;
+
+            ClearPuddleDecalReference(tileRef, grid, index);
+            removedAny = true;
+        }
+
+        return removedAny;
+    }
+
+    public override bool HasCleanableDecalsAt(TileRef tileRef)
+    {
+        if (!TryGetDecalsAt(tileRef, out _, out _, out var decals))
+            return false;
+
+        foreach (var (_, decal) in decals)
+        {
+            if (decal.Cleanable)
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool TryGetDecalsAt(
+        TileRef tileRef,
+        out MapGridComponent grid,
+        out DecalGridComponent decalGrid,
+        out HashSet<(uint Index, Decal Decal)> decals)
+    {
+        grid = default!;
+        decalGrid = default!;
+        decals = default!;
+
+        if (!TryComp<MapGridComponent>(tileRef.GridUid, out var gridComp) ||
+            !TryComp<DecalGridComponent>(tileRef.GridUid, out var decalGridComp))
+        {
+            return false;
+        }
+
+        grid = gridComp;
+        decalGrid = decalGridComp;
+
+        var bounds = _lookup.GetLocalBounds(tileRef, grid.TileSize)
+            .Enlarged(0.5f)
+            .Translated(new Vector2(-0.5f, -0.5f));
+        decals = _decals.GetDecalsIntersecting(tileRef.GridUid, bounds, decalGrid);
+        return true;
+    }
+
+    private void ClearMissingPuddleDecalReferences(TileRef tileRef, MapGridComponent grid, DecalGridComponent decalGrid)
+    {
+        var anchored = _map.GetAnchoredEntitiesEnumerator(tileRef.GridUid, grid, tileRef.GridIndices);
+
+        while (anchored.MoveNext(out var ent))
+        {
+            if (!TryComp<PuddleDecalVisualsComponent>(ent.Value, out var decalVisuals) ||
+                decalVisuals.GridUid != tileRef.GridUid ||
+                decalVisuals.DecalId is not { } decalId ||
+                PuddleDecalExists(decalGrid, decalId))
+            {
+                continue;
+            }
+
+            decalVisuals.DecalId = null;
+            decalVisuals.GridUid = null;
+        }
+    }
+
+    private static bool PuddleDecalExists(DecalGridComponent decalGrid, uint decalId)
+    {
+        foreach (var chunk in decalGrid.ChunkCollection.ChunkCollection.Values)
+        {
+            if (chunk.Decals.ContainsKey(decalId))
+                return true;
+        }
+
+        return false;
+    }
+
+    private void ClearPuddleDecalReference(TileRef tileRef, MapGridComponent grid, uint decalId)
+    {
+        var anchored = _map.GetAnchoredEntitiesEnumerator(tileRef.GridUid, grid, tileRef.GridIndices);
+
+        while (anchored.MoveNext(out var ent))
+        {
+            if (!TryComp<PuddleDecalVisualsComponent>(ent.Value, out var decalVisuals) ||
+                decalVisuals.GridUid != tileRef.GridUid ||
+                decalVisuals.DecalId != decalId)
+            {
+                continue;
+            }
+
+            decalVisuals.DecalId = null;
+            decalVisuals.GridUid = null;
+        }
+    }
+
     /// <summary>
     /// Tries to get the relevant puddle entity for a tile.
     /// </summary>
-    public bool TryGetPuddle(TileRef tile, out EntityUid puddleUid)
+    public override bool TryGetPuddle(TileRef tile, out EntityUid puddleUid)
     {
         puddleUid = EntityUid.Invalid;
 

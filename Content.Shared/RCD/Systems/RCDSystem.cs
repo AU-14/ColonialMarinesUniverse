@@ -541,13 +541,13 @@ public sealed partial class RCDSystem : EntitySystem
                 switch (prototype.Rotation)
                 {
                     case RcdRotation.Fixed:
-                        Transform(ent).LocalRotation = Angle.Zero;
+                        _transform.SetLocalRotation(ent, Angle.Zero);
                         break;
                     case RcdRotation.Camera:
-                        Transform(ent).LocalRotation = Transform(uid).LocalRotation;
+                        _transform.SetLocalRotation(ent, Transform(uid).LocalRotation);
                         break;
                     case RcdRotation.User:
-                        Transform(ent).LocalRotation = direction.ToAngle();
+                        _transform.SetLocalRotation(ent, direction.ToAngle());
                         break;
                 }
 

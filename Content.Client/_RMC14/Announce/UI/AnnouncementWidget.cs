@@ -181,6 +181,4 @@ public sealed partial class AnnouncementWidget : UIWidget
     {
         return Parent is UIScreen screen ? screen.Size : FallbackScreenSize;
     }
-
 }
-

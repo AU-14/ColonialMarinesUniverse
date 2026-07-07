@@ -73,7 +73,7 @@ public sealed partial class TetherGunSystem : SharedTetherGunSystem
 
         EntityCoordinates coords;
 
-        if (_mapManager.TryFindGridAt(mouseWorldPos, out var gridUid, out _))
+        if (_mapSystem.TryFindGridAt(mouseWorldPos, out var gridUid, out _))
         {
             coords = TransformSystem.ToCoordinates(gridUid, mouseWorldPos);
         }

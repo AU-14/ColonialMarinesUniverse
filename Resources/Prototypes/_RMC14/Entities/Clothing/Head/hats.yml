@@ -469,7 +469,7 @@
   parent: CMHeadCapMP
   id: CMHeadFlapCap
   name: USCM expedition cap
-  description: It's a cap, with flaps. A patch stitched across the front reads "UNS ALMAYER".
+  description: It's a cap, with flaps. A patch stitched across the front reads "USS BARACK OBAMA".
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Head/Hats/flapcap/jungle.rsi

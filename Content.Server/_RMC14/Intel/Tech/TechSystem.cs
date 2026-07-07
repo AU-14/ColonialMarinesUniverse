@@ -83,7 +83,7 @@ public sealed partial class ServerTechSystem : EntitySystem
     private void SpawnCryo(EntProtoId spawnerId, uint amount)
     {
         if (!_proto.TryIndex(spawnerId, out var spawner) ||
-            !spawner.TryGetComponent<RandomHumanoidSpawnerComponent>(out var human, _componentFactory) ||
+            !spawner.TryComp<RandomHumanoidSpawnerComponent>(out var human, _componentFactory) ||
             human.SettingsPrototypeId is null ||
             !_proto.TryIndex<RandomHumanoidSettingsPrototype>(human.SettingsPrototypeId, out var settings) ||
             settings.Components is null ||

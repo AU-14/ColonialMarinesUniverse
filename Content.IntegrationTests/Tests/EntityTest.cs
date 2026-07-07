@@ -100,7 +100,7 @@ namespace Content.IntegrationTests.Tests
                     foreach (var spawn in chunk)
                     {
                         mapSystem.CreateMap(out var mapId);
-                        var grid = mapManager.CreateGridEntity(mapId);
+                        var grid = mapSystem.CreateGridEntity(mapId);
                         // TODO: Fix this better in engine.
                         mapSystem.SetTile(grid.Owner, grid.Comp, Vector2i.Zero, new Tile(1));
                         var coord = new EntityCoordinates(grid.Owner, 0, 0);
@@ -248,7 +248,7 @@ namespace Content.IntegrationTests.Tests
                     foreach (var protoId in chunk)
                     {
                         mapSys.CreateMap(out var mapId);
-                        var grid = mapManager.CreateGridEntity(mapId);
+                        var grid = mapSys.CreateGridEntity(mapId);
                         // TODO: Fix this better in engine.
                         mapSys.SetTile(grid.Owner, grid.Comp, Vector2i.Zero, new Tile(1));
                         var ent = sEntMan.SpawnEntity(protoId, new EntityCoordinates(grid.Owner, 0.5f, 0.5f));

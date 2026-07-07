@@ -32,7 +32,7 @@ public sealed class RMCSmartGunPrototypeRegressionTest
             var factory = server.EntMan.ComponentFactory;
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(projectileId, out var bullet), Is.True);
-            Assert.That(bullet!.TryGetComponent<RMCProjectileDamageFalloffComponent>(out var falloff, factory), Is.True);
+            Assert.That(bullet!.TryComp<RMCProjectileDamageFalloffComponent>(out var falloff, factory), Is.True);
 
             Assert.Multiple(() =>
             {
@@ -61,11 +61,11 @@ public sealed class RMCSmartGunPrototypeRegressionTest
             var factory = server.EntMan.ComponentFactory;
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(HazopsMagazine, out var magazine), Is.True);
-            Assert.That(magazine!.TryGetComponent<BallisticAmmoProviderComponent>(out var ammo, factory), Is.True);
+            Assert.That(magazine!.TryComp<BallisticAmmoProviderComponent>(out var ammo, factory), Is.True);
             Assert.That(ammo!.Proto, Is.EqualTo((EntProtoId) HazopsCartridge));
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(HazopsCartridge, out var cartridge), Is.True);
-            Assert.That(cartridge!.TryGetComponent<CartridgeAmmoComponent>(out var cartridgeAmmo, factory), Is.True);
+            Assert.That(cartridge!.TryComp<CartridgeAmmoComponent>(out var cartridgeAmmo, factory), Is.True);
             Assert.That(cartridgeAmmo!.Prototype, Is.EqualTo((EntProtoId) HazopsBullet));
         });
 

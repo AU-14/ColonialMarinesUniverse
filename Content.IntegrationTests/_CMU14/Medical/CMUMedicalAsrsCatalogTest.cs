@@ -51,7 +51,7 @@ public sealed class CMUMedicalAsrsCatalogTest
             var factory = server.EntMan.ComponentFactory;
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(FieldTreatmentCrate, out var crate), Is.True);
-            Assert.That(crate!.TryGetComponent<StorageFillComponent>(out var storage, factory), Is.True);
+            Assert.That(crate!.TryComp<StorageFillComponent>(out var storage, factory), Is.True);
 
             var actualContents = storage!.Contents
                 .Where(entry => entry.PrototypeId != null)
@@ -73,7 +73,7 @@ public sealed class CMUMedicalAsrsCatalogTest
                 {
                     Assert.That(prototypes.TryIndex<EntityPrototype>(consoleId, out var console), Is.True,
                         $"{consoleId} prototype does not exist");
-                    Assert.That(console!.TryGetComponent<RequisitionsComputerComponent>(out var req, factory), Is.True,
+                    Assert.That(console!.TryComp<RequisitionsComputerComponent>(out var req, factory), Is.True,
                         $"{consoleId} has no RequisitionsComputer component");
 
                     var medical = req!.Categories.FirstOrDefault(category => category.Name == "Medical");
@@ -86,7 +86,7 @@ public sealed class CMUMedicalAsrsCatalogTest
                 {
                     Assert.That(prototypes.TryIndex<EntityPrototype>(catalogId, out var catalog), Is.True,
                         $"{catalogId} prototype does not exist");
-                    Assert.That(catalog!.TryGetComponent<RequisitionsComputerComponent>(out var req, factory), Is.True,
+                    Assert.That(catalog!.TryComp<RequisitionsComputerComponent>(out var req, factory), Is.True,
                         $"{catalogId} has no RequisitionsComputer component");
 
                     var medical = req!.Categories.FirstOrDefault(category => category.Name == "Medical");

@@ -110,7 +110,7 @@ public sealed class RMCFlamerPreviewOverlay : Overlay
             if (tile.Coordinates.MapId != args.MapId)
                 continue;
 
-            if (!_mapManager.TryFindGridAt(tile.Coordinates, out var gridUid, out var grid))
+            if (!_mapSystem.TryFindGridAt(tile.Coordinates, out var gridUid, out var grid))
                 continue;
 
             var indices = _mapSystem.CoordinatesToTile(gridUid, grid, tile.Coordinates);

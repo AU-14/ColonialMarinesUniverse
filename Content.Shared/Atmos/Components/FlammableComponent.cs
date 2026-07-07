@@ -85,6 +85,9 @@ namespace Content.Shared.Atmos.Components
         public ProtoId<AlertPrototype> FireAlert = "Fire";
 
         [DataField, AutoNetworkedField]
+        public bool LastOnFire;
+
+        [DataField, AutoNetworkedField]
         public int ResistStacks = -10;
 
         [DataField, AutoNetworkedField]

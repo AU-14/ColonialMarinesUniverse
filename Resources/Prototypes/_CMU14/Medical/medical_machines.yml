@@ -218,7 +218,7 @@
   parent: BaseStructure
   id: CMULimbPrinter
   name: limb printer
-  description: A surgical bioprinter that grows replacement human arms and legs from matrix reagent and a blood sample.
+  description: A surgical bioprinter that grows replacement human limbs from matrix reagent and fabricates robotic limbs from metal sheets.
   placement:
     mode: SnapgridCenter
   components:
@@ -272,10 +272,16 @@
         whitelist:
           tags:
           - Syringe
+      cmu-limb-printer-materialSlot:
+        name: cmu-limb-printer-slot-metal
+        whitelist:
+          tags:
+          - RMCSheetMetal
   - type: ContainerContainer
     containers:
       cmu-limb-printer-beakerSlot: !type:ContainerSlot
       cmu-limb-printer-syringeSlot: !type:ContainerSlot
+      cmu-limb-printer-materialSlot: !type:ContainerSlot
   - type: CMULimbPrinter
   - type: Appearance
   - type: GenericVisualizer
@@ -291,6 +297,7 @@
     containers:
     - cmu-limb-printer-beakerSlot
     - cmu-limb-printer-syringeSlot
+    - cmu-limb-printer-materialSlot
   - type: Damageable
     damageContainer: StructuralInorganic
     damageModifierSet: Electronic

@@ -15,33 +15,43 @@
 
 - type: hardpointSlotType
   id: Wheel
+  repairRate: 0.033
 
 - type: hardpointSlotType
   id: Turret
+  repairRate: 0.016
 
 - type: hardpointSlotType
   id: Cannon
+  repairRate: 0.020
 
 - type: hardpointSlotType
   id: Launcher
+  repairRate: 0.025
 
 - type: hardpointSlotType
   id: RoofAttachment
+  repairRate: 0.025
 
 - type: hardpointSlotType
   id: FrontAttachment
+  repairRate: 0.025
 
 - type: hardpointSlotType
   id: SupportAttachment
+  repairRate: 0.025
 
 - type: hardpointSlotType
   id: Armor
+  repairRate: 0.014
 
 - type: hardpointSlotType
   id: Treads
+  repairRate: 0.033
 
 - type: hardpointSlotType
   id: Tires
+  repairRate: 0.033
 
 - type: hardpointSlotType
   id: Thruster

@@ -9,9 +9,7 @@ using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Stun;
-using Content.Shared._RMC14.Xenonids.Construction.Nest;
-using Content.Shared._RMC14.Xenonids.Devour;
-using Content.Shared._RMC14.Xenonids.Hive;
+using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.ScissorCut;
 using Content.Shared.ActionBlocker;
@@ -63,7 +61,6 @@ public abstract partial class SharedXenoDestroySystem : EntitySystem
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private RMCSizeStunSystem _size = default!;
     [Dependency] private SharedBodySystem _body = default!;
-    [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private RMCGibSystem _rmcGib = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private RMCCameraShakeSystem _cameraShake = default!;
@@ -73,6 +70,7 @@ public abstract partial class SharedXenoDestroySystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private RMCPullingSystem _rmcPull = default!;
     [Dependency] private ActionBlockerSystem _blocker = default!;
+    [Dependency] private XenoSystem _xeno = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _mobs = new();
 
@@ -267,20 +265,7 @@ public abstract partial class SharedXenoDestroySystem : EntitySystem
 
     private bool CanGib(EntityUid king, EntityUid target)
     {
-        if (king == target)
-            return false;
-
-        // hiveless xenos can attack eachother
-        if (_hive.FromSameHive(king, target))
-            return false;
-
-        if (HasComp<DevouredComponent>(target))
-            return false;
-
-        if (HasComp<XenoNestedComponent>(target))
-            return false;
-
-        return HasComp<MobStateComponent>(target);
+        return _xeno.CanAbilityAttackTarget(king, target);
     }
 
     public override void Update(float frameTime)

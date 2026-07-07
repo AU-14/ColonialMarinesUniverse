@@ -1,12 +1,10 @@
 using System.Collections.Generic;
 using System.Numerics;
 using Content.Shared._RMC14.Vehicle;
-using Content.Shared._RMC14.CCVar;
 using Content.Shared.Vehicle.Components;
 using ClientPhysicsSystem = Robust.Client.Physics.PhysicsSystem;
 using Robust.Client.Player;
 using Robust.Client.Graphics;
-using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Client.Physics;
@@ -15,7 +13,6 @@ namespace Content.Client.Vehicle;
 
 public sealed partial class GridVehicleMoverSystem : EntitySystem
 {
-    [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private ClientPhysicsSystem _physics = default!;
     [Dependency] private IOverlayManager _overlayManager = default!;
@@ -30,51 +27,11 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     public override void Initialize()
     {
         _overlay = new GridVehicleMoverOverlay(EntityManager);
-        _overlay.DebugEnabled = _cfg.GetCVar(RMCCVars.VehicleDebugOverlay);
-        _overlay.CollisionsEnabled = _cfg.GetCVar(RMCCVars.VehicleCollisionOverlay);
-        _overlay.MovementEnabled = _cfg.GetCVar(RMCCVars.VehicleMovementOverlay);
         RefreshSharedDebugFlags();
-        _hardpointOverlay = new VehicleHardpointDebugOverlay(EntityManager)
-        {
-            Enabled = _cfg.GetCVar(RMCCVars.VehicleHardpointOverlay)
-        };
-
-        _cfg.OnValueChanged(RMCCVars.VehicleDebugOverlay, val =>
-        {
-            if (_overlay != null)
-                _overlay.DebugEnabled = val;
-
-            RefreshSharedDebugFlags();
-            RefreshVehicleDebugOverlay();
-        }, true);
-
-        _cfg.OnValueChanged(RMCCVars.VehicleHardpointOverlay, val =>
-        {
-            if (_hardpointOverlay != null)
-                _hardpointOverlay.Enabled = val;
-        }, true);
-
-        _cfg.OnValueChanged(RMCCVars.VehicleCollisionOverlay, val =>
-        {
-            if (_overlay != null)
-                _overlay.CollisionsEnabled = val;
-
-            RefreshSharedDebugFlags();
-            RefreshVehicleDebugOverlay();
-        }, true);
-
-        _cfg.OnValueChanged(RMCCVars.VehicleMovementOverlay, val =>
-        {
-            if (_overlay != null)
-                _overlay.MovementEnabled = val;
-
-            RefreshSharedDebugFlags();
-            RefreshVehicleDebugOverlay();
-        }, true);
+        _hardpointOverlay = new VehicleHardpointDebugOverlay(EntityManager);
 
         SubscribeLocalEvent<GridVehicleMoverComponent, UpdateIsPredictedEvent>(OnUpdateIsPredicted);
 
-        RefreshVehicleDebugOverlay();
         _overlayManager.AddOverlay(_hardpointOverlay);
     }
 
@@ -84,6 +41,48 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             _overlayManager.RemoveOverlay(_overlay);
         if (_hardpointOverlay != null)
             _overlayManager.RemoveOverlay(_hardpointOverlay);
+    }
+
+    public bool ToggleDebugOverlay()
+    {
+        if (_overlay == null)
+            return false;
+
+        _overlay.DebugEnabled = !_overlay.DebugEnabled;
+        RefreshSharedDebugFlags();
+        RefreshVehicleDebugOverlay();
+        return _overlay.DebugEnabled;
+    }
+
+    public bool ToggleHardpointOverlay()
+    {
+        if (_hardpointOverlay == null)
+            return false;
+
+        _hardpointOverlay.Enabled = !_hardpointOverlay.Enabled;
+        return _hardpointOverlay.Enabled;
+    }
+
+    public bool ToggleCollisionOverlay()
+    {
+        if (_overlay == null)
+            return false;
+
+        _overlay.CollisionsEnabled = !_overlay.CollisionsEnabled;
+        RefreshSharedDebugFlags();
+        RefreshVehicleDebugOverlay();
+        return _overlay.CollisionsEnabled;
+    }
+
+    public bool ToggleMovementOverlay()
+    {
+        if (_overlay == null)
+            return false;
+
+        _overlay.MovementEnabled = !_overlay.MovementEnabled;
+        RefreshSharedDebugFlags();
+        RefreshVehicleDebugOverlay();
+        return _overlay.MovementEnabled;
     }
 
     private void RefreshSharedDebugFlags()

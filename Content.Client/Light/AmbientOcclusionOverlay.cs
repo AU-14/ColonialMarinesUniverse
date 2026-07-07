@@ -118,7 +118,7 @@ public sealed partial class AmbientOcclusionOverlay : Overlay
                 worldHandle.UseShader(_proto.Index(UnshadedShader).Instance());
 
                 _intersectingGrids.Clear();
-                _mapManager.FindGridsIntersecting(mapId, worldBounds, ref _intersectingGrids);
+                maps.FindGridsIntersecting(mapId, worldBounds, ref _intersectingGrids);
                 foreach (var grid in _intersectingGrids)
                 {
                     var transform = xformSystem.GetWorldMatrix(grid.Owner);

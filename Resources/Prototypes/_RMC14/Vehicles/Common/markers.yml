@@ -5,6 +5,8 @@
   placement:
     mode: PlaceFree
   components:
+  - type: Transform
+    anchored: true
   - type: Icon
     sprite: _RMC14/Markers/landmarks.rsi
     state: invisible_wall

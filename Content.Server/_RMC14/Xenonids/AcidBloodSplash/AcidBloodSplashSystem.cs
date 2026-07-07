@@ -69,7 +69,7 @@ public sealed partial class AcidBloodSplashSystem : EntitySystem
         var splashCoords = _transform.GetMoverCoordinates(ent.Owner);
 
         if (!_prototypes.TryIndex(ent.Comp.BloodDecalSpawnerPrototype, out var prototype) ||
-            !prototype.TryGetComponent(out RandomDecalSpawnerComponent? spawner, _compFactory) ||
+            !prototype.TryComp(out RandomDecalSpawnerComponent? spawner, _compFactory) ||
             _rmcDecal.GetDecalsInTile(ent, spawner.Decals) < spawner.MaxDecalsPerTile)
         {
             Spawn(ent.Comp.BloodDecalSpawnerPrototype, splashCoords);

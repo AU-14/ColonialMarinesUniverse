@@ -252,6 +252,9 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         if (!IsAttachedPart(patient, part))
             return false;
 
+        if (HasComp<CMURoboticLimbComponent>(part))
+            return false;
+
         if (!TryComp<BodyPartHealthComponent>(part, out var health))
             return false;
 

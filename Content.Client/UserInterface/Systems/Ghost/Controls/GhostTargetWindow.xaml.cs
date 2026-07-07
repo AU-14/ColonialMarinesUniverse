@@ -114,6 +114,19 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
                 .ToList();
         }
 
+        public void ClearWarps(bool clearSearch = false)
+        {
+            _warps.Clear();
+
+            if (clearSearch)
+            {
+                _searchText = string.Empty;
+                SearchBar.Text = string.Empty;
+            }
+
+            Populate();
+        }
+
         public void Populate()
         {
             var previousTab = _activeTab?.Name;

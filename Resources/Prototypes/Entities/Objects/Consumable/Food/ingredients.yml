@@ -879,6 +879,7 @@
         Quantity: 2
   - type: Tag
     tags:
+      - Cocoa
       - Ingredient
 
 - type: entity

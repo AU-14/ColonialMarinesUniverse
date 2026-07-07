@@ -1,6 +1,7 @@
 using Content.Client._RMC14.Sprite;
 using Content.Shared._RMC14.Sprite;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Bulwark;
 using Content.Shared._RMC14.Xenonids.Charge;
 using Content.Shared._RMC14.Xenonids.Egg;
 using Content.Shared._RMC14.Xenonids.Leap;
@@ -107,6 +108,14 @@ public sealed partial class XenoVisualizerSystem : VisualizerSystem<XenoComponen
                     TryComp(entity, out XenoOvipositorCapableComponent? capable))
                 {
                     oviState = capable.AttachedState;
+                    break;
+                }
+
+                if (TryComp(entity, out XenoBulwarkComponent? bulwark) &&
+                    bulwark.Encased &&
+                    rsi.TryGetState("shield", out _))
+                {
+                    SpriteSystem.LayerSetRsiState((entity.Owner, sprite), layer, "shield");
                     break;
                 }
 

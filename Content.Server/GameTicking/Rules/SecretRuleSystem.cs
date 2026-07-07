@@ -11,6 +11,7 @@ using Content.Shared.Database;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Configuration;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Utility;
 
 namespace Content.Server.GameTicking.Rules;
@@ -156,7 +157,7 @@ public sealed partial class SecretRuleSystem : GameRuleSystem<SecretRuleComponen
         foreach (var ruleId in selected.Rules)
         {
             if (!_prototypeManager.TryIndex(ruleId, out EntityPrototype? rule)
-                || !rule.TryGetComponent(_ruleCompName, out GameRuleComponent? ruleComp))
+                || !rule.TryComp<GameRuleComponent>(new CompName(_ruleCompName, Factory), out var ruleComp))
             {
                 Log.Error($"Encountered invalid rule {ruleId} in preset {selected.ID}");
                 return false;

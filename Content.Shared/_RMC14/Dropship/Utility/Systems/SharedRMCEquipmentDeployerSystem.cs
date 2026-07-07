@@ -28,6 +28,7 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SentrySystem _sentry = default!;
     [Dependency] private SharedWeaponMountSystem _weaponMount = default!;
 
@@ -234,7 +235,7 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
             {
                 _container.EmptyContainer(container, false, Transform(deployer).Coordinates.Offset(deployOffset));
                 if (equipmentDeployerComponent.DeployEntity != null)
-                    Transform(deployingEntity.Value).LocalRotation += Angle.FromDegrees(rotationOffset);
+                    _transform.SetLocalRotation(deployingEntity.Value, Transform(deployingEntity.Value).LocalRotation + Angle.FromDegrees(rotationOffset));
             }
         }
 

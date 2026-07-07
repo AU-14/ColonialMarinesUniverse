@@ -541,7 +541,7 @@
 - type: entity
   parent: CMSatchelMarine
   id: RMCSatchelMarineChestrigPVE # Reskin for PVE
-  name: UNMC IMP chestrig
+  name: USCM IMP chestrig
   description: A heavy-duty IMP based chestrig, can quickly be accessed with only one hand.
   suffix: PVE
   components:
@@ -558,8 +558,8 @@
 - type: entity
   parent: CMSatchelMarineIntel
   id: RMCSatchelMarineIntelSatchel
-  name: UNMC lightweight expedition satchel
-  description: A heavy-duty IMP based satchel, reinforced with kevlar so it doesn't rip. Can quickly be accessed with only one hand. Usually issued to UNMC intelligence officers.
+  name: USCM lightweight expedition satchel
+  description: A heavy-duty IMP based satchel, reinforced with kevlar so it doesn't rip. Can quickly be accessed with only one hand. Usually issued to USCM intelligence officers.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Satchels/Marines/intel.rsi

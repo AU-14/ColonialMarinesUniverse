@@ -12,6 +12,12 @@
   parent: RMCBaseMarineAccess
   name: cm-job-name-messtech
 
+#vehicles
+- type: accessLevel
+  id: RMCAccessVehicleCrew
+  parent: RMCBaseMarineAccess
+  name: Vehicle Bay
+
 
 #engineering
 - type: accessLevel
@@ -67,4 +73,3 @@
   id: RMCAccessSynth
   parent: RMCBaseHidden
   name: rmc-job-name-synth
-

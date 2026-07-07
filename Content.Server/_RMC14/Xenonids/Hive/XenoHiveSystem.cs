@@ -188,16 +188,16 @@ public sealed partial class XenoHiveSystem : SharedXenoHiveSystem
 
                 _metaData.SetEntityName(ent, replace.Name);
 
-                if (replace.TryGetComponent(out DamageableComponent? damageable, _compFactory))
+                if (replace.TryComp(out DamageableComponent? damageable, _compFactory))
                     AddComp(ent, _serialization.CreateCopy(damageable, notNullableOverride: true), true);
 
-                if (replace.TryGetComponent(out DestructibleComponent? destructible, _compFactory))
+                if (replace.TryComp(out DestructibleComponent? destructible, _compFactory))
                     AddComp(ent, _serialization.CreateCopy(destructible, notNullableOverride: true), true);
 
-                if (replace.TryGetComponent(out RMCWallExplosionDeletableComponent? wallDeletable, _compFactory))
+                if (replace.TryComp(out RMCWallExplosionDeletableComponent? wallDeletable, _compFactory))
                     AddComp(ent, _serialization.CreateCopy(wallDeletable, notNullableOverride: true), true);
 
-                if (replace.TryGetComponent(out XenoConstructionRequiresSupportComponent? requiresSupport, _compFactory))
+                if (replace.TryComp(out XenoConstructionRequiresSupportComponent? requiresSupport, _compFactory))
                     AddComp(ent, _serialization.CreateCopy(requiresSupport, notNullableOverride: true), true);
             }
         }
@@ -276,23 +276,31 @@ public sealed partial class XenoHiveSystem : SharedXenoHiveSystem
             if (time < burrowed.NextSurgeAt)
                 continue;
 
-            if (GetHiveCore((id, hive)) == null)
+            if (!HasBurrowedLarvaSpawnPoint((id, hive)))
             {
-                //Reset time between if no core
+                // Reset time between surges until larva have somewhere to emerge.
                 if (burrowed.SurgeEvery != burrowed.ResetSurgeTime)
                     burrowed.SurgeEvery = burrowed.ResetSurgeTime;
+
+                burrowed.NextSurgeAt = time + burrowed.SurgeEvery;
+                Dirty(id, burrowed);
                 continue;
             }
 
-            ChangeBurrowedLarva(1);
+            ChangeBurrowedLarva((id, hive), 1);
             burrowed.PooledLarva--;
             if (burrowed.PooledLarva < 1)
+            {
+                Dirty(id, burrowed);
                 RemCompDeferred<HijackBurrowedSurgeComponent>(id);
+                continue;
+            }
 
             if (burrowed.SurgeEvery > burrowed.MinSurgeTime)
                 burrowed.SurgeEvery -= burrowed.ReduceSurgeBy;
 
             burrowed.NextSurgeAt = time + burrowed.SurgeEvery;
+            Dirty(id, burrowed);
 
         }
 

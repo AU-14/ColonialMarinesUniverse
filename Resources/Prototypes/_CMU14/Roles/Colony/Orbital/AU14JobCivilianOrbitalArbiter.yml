@@ -35,16 +35,21 @@
   - Colonist
   - auadmin # uncertain, though they receive ColAdmin encr. key
   - auorbitalmanagement
+  roleWeight: 0.25
   requirements:
   - !type:AgeRequirement
-    requiredAge: 35
+    requiredAge: 21
   - !type:TraitsRequirement
     inverted: true
     traits:
     - NonResuscitable
     - NoEnglish
   ranks:
-    AU14RankSeniorOrbitalArbiter:
+    AU14RankOrbitalArbiterHS:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianOrbitalArbiter
+      time: 36000 # 10 hours
+    AU14RankOrbitalArbiter1S:
     - !type:RoleTimeRequirement
       role: AU14JobCivilianOrbitalArbiter
       time: 18000 # 5 hours
@@ -91,14 +96,14 @@
   - type: Sprite
     state: syn_spawn
 
-- type: rank
-  id: AU14RankOrbitalArbiter
-  name: Orbital Arbiter
-  prefix: Orb. Arb.
-
-- type: rank
-  id: AU14RankSeniorOrbitalArbiter
-  name: Senior Orbital Arbiter
-  prefix: Sr. Orb. Arb.
+- type: roleLoadout
+  id: JobAU14JobCivilianOrbitalArbiter
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
 
 # ├──[ ORBITAL COUNSEL ]─────────────────────────────────────────────┤

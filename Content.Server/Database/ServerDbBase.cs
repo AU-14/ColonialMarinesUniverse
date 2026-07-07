@@ -14,6 +14,7 @@ using Content.Shared._RMC14.NamedItems;
 using Content.Shared.Administration.Logs;
 using Content.Shared.AU14.Allegiance;
 using Content.Shared.AU14.Origin;
+using Content.Shared._CMU14.RoundStatistics;
 using Content.Shared._CMU14.Threats;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Database;
@@ -1099,6 +1100,376 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             }
 
             await db.DbContext.SaveChangesAsync();
+        }
+
+        public async Task UpsertCMURoundOutcome(CMURoundOutcomeRecord record)
+        {
+            await using var db = await GetDb();
+
+            var outcome = await db.DbContext.CMURoundOutcomes
+                .FirstOrDefaultAsync(outcome => outcome.RoundId == record.RoundId);
+
+            outcome ??= db.DbContext.CMURoundOutcomes
+                .Add(new CMURoundOutcome { RoundId = record.RoundId })
+                .Entity;
+
+            outcome.PresetId = record.Preset.ToString();
+            outcome.Winner = record.Winner.ToString();
+            outcome.Outcome = record.Outcome.ToString();
+            outcome.Source = record.Source;
+            outcome.SelectedThreatId = record.SelectedThreatId;
+            outcome.PlanetId = record.PlanetId;
+            outcome.GovforPlatoonId = record.GovforPlatoonId;
+            outcome.OpforPlatoonId = record.OpforPlatoonId;
+            outcome.PlayerCount = record.PlayerCount;
+            outcome.DurationSeconds = record.DurationSeconds;
+            outcome.RecordedAt = record.RecordedAt.ToUniversalTime();
+
+            await db.DbContext.SaveChangesAsync();
+        }
+
+        public async Task<CMURoundStatisticsDashboard> GetCMURoundStatisticsDashboard(
+            int recentRounds,
+            CancellationToken cancel = default)
+        {
+            await using var db = await GetDb();
+
+            var records = (await db.DbContext.CMURoundOutcomes
+                    .AsNoTracking()
+                    .OrderByDescending(outcome => outcome.RecordedAt)
+                    .ToListAsync(cancel))
+                .Select(MakeCMURoundOutcomeRecord)
+                .ToList();
+
+            var modes = new List<CMURoundModeStatistics>
+            {
+                BuildModeStatistics(
+                    records,
+                    CMURoundStatisticsPreset.DistressSignal,
+                    "Distress Signal",
+                    "Xeno",
+                    "Govfor"),
+                BuildModeStatistics(
+                    records,
+                    CMURoundStatisticsPreset.Insurgency,
+                    "Insurgency",
+                    "Govfor",
+                    "CLF"),
+                BuildModeStatistics(
+                    records,
+                    CMURoundStatisticsPreset.ColonyFall,
+                    "Colony Fall",
+                    "Colonists",
+                    "Threat"),
+            };
+
+            return new CMURoundStatisticsDashboard(
+                modes,
+                records.Take(Math.Max(0, recentRounds)).ToList());
+        }
+
+        private CMURoundOutcomeRecord MakeCMURoundOutcomeRecord(CMURoundOutcome outcome)
+        {
+            var preset = Enum.TryParse(outcome.PresetId, out CMURoundStatisticsPreset parsedPreset)
+                ? parsedPreset
+                : CMURoundStatisticsPreset.DistressSignal;
+            var winner = Enum.TryParse(outcome.Winner, out CMURoundStatisticsWinner parsedWinner)
+                ? parsedWinner
+                : CMURoundStatisticsWinner.Unknown;
+            var result = Enum.TryParse(outcome.Outcome, out CMURoundStatisticsOutcome parsedOutcome)
+                ? parsedOutcome
+                : CMURoundStatisticsOutcome.Unknown;
+
+            return new CMURoundOutcomeRecord(
+                outcome.RoundId,
+                preset,
+                winner,
+                result,
+                outcome.Source,
+                outcome.SelectedThreatId,
+                outcome.PlanetId,
+                outcome.GovforPlatoonId,
+                outcome.OpforPlatoonId,
+                outcome.PlayerCount,
+                outcome.DurationSeconds,
+                NormalizeDatabaseTime(outcome.RecordedAt));
+        }
+
+        private static CMURoundModeStatistics BuildModeStatistics(
+            List<CMURoundOutcomeRecord> records,
+            CMURoundStatisticsPreset preset,
+            string title,
+            string sideA,
+            string sideB)
+        {
+            var modeRecords = records
+                .Where(record => record.Preset == preset)
+                .OrderByDescending(record => record.RecordedAt)
+                .ThenByDescending(record => record.RoundId)
+                .ToList();
+
+            var sideAWins = modeRecords.Count(IsSideAWin);
+            var sideBWins = modeRecords.Count(IsSideBWin);
+            var draws = modeRecords.Count(record => record.Winner == CMURoundStatisticsWinner.Draw);
+            var unknown = modeRecords.Count(record => record.Winner == CMURoundStatisticsWinner.Unknown);
+            var recentRecords = modeRecords.Take(10).ToList();
+
+            var outcomes = modeRecords
+                .GroupBy(record => new { record.Outcome, record.Winner })
+                .OrderByDescending(group => group.Count())
+                .ThenBy(group => group.Key.Outcome.ToString())
+                .Select(group => new CMURoundOutcomeBreakdown(
+                    group.Key.Outcome,
+                    group.Key.Winner,
+                    group.Count()))
+                .ToList();
+
+            var manualReasons = modeRecords
+                .Where(record => record.Outcome == CMURoundStatisticsOutcome.Unknown)
+                .GroupBy(record => NormalizeCMURoundOutcomeSource(record.Source))
+                .OrderByDescending(group => group.Count())
+                .ThenBy(group => group.Key)
+                .Select(group => new CMURoundManualReasonBreakdown(
+                    group.Key,
+                    group.Count()))
+                .ToList();
+
+            var threats = modeRecords
+                .Where(record => !string.IsNullOrWhiteSpace(record.SelectedThreatId))
+                .GroupBy(record => record.SelectedThreatId!)
+                .OrderByDescending(group => group.Count())
+                .ThenBy(group => group.Key)
+                .Select(group =>
+                {
+                    var groupedRecords = group.ToList();
+                    return new CMURoundThreatBreakdown(
+                        group.Key,
+                        groupedRecords.Count(IsSideAWin),
+                        groupedRecords.Count(IsSideBWin),
+                        groupedRecords.Count(record => record.Winner == CMURoundStatisticsWinner.Draw),
+                        groupedRecords.Count(record => record.Winner == CMURoundStatisticsWinner.Unknown),
+                        groupedRecords.Count);
+                })
+                .ToList();
+
+            var planets = modeRecords
+                .Where(record => !string.IsNullOrWhiteSpace(record.PlanetId))
+                .GroupBy(record => record.PlanetId!.Trim())
+                .OrderByDescending(group => group.Count())
+                .ThenBy(group => group.Key)
+                .Select(group =>
+                {
+                    var groupedRecords = group.ToList();
+                    return new CMURoundPlanetBreakdown(
+                        group.Key,
+                        groupedRecords.Count(IsSideAWin),
+                        groupedRecords.Count(IsSideBWin),
+                        groupedRecords.Count(record => record.Winner == CMURoundStatisticsWinner.Draw),
+                        groupedRecords.Count(record => record.Winner == CMURoundStatisticsWinner.Unknown),
+                        groupedRecords.Count,
+                        AverageDurationSeconds(groupedRecords));
+                })
+                .ToList();
+
+            var platoonMatchups = modeRecords
+                .Where(record => !string.IsNullOrWhiteSpace(record.GovforPlatoonId) ||
+                                 !string.IsNullOrWhiteSpace(record.OpforPlatoonId))
+                .GroupBy(record => new
+                {
+                    Govfor = string.IsNullOrWhiteSpace(record.GovforPlatoonId)
+                        ? "Unknown"
+                        : record.GovforPlatoonId!.Trim(),
+                    Opfor = string.IsNullOrWhiteSpace(record.OpforPlatoonId)
+                        ? "Unknown"
+                        : record.OpforPlatoonId!.Trim(),
+                })
+                .OrderByDescending(group => group.Count())
+                .ThenBy(group => group.Key.Govfor)
+                .ThenBy(group => group.Key.Opfor)
+                .Select(group =>
+                {
+                    var groupedRecords = group.ToList();
+                    return new CMURoundPlatoonMatchupBreakdown(
+                        group.Key.Govfor,
+                        group.Key.Opfor,
+                        groupedRecords.Count(IsSideAWin),
+                        groupedRecords.Count(IsSideBWin),
+                        groupedRecords.Count(record => record.Winner == CMURoundStatisticsWinner.Draw),
+                        groupedRecords.Count(record => record.Winner == CMURoundStatisticsWinner.Unknown),
+                        groupedRecords.Count);
+                })
+                .ToList();
+
+            return new CMURoundModeStatistics(
+                preset,
+                title,
+                sideA,
+                sideB,
+                sideAWins,
+                sideBWins,
+                draws,
+                unknown,
+                outcomes,
+                manualReasons,
+                threats,
+                new CMURoundRecentForm(
+                    recentRecords.Count,
+                    recentRecords.Count(IsSideAWin),
+                    recentRecords.Count(IsSideBWin),
+                    recentRecords.Count(record => record.Winner == CMURoundStatisticsWinner.Draw),
+                    recentRecords.Count(record => record.Winner == CMURoundStatisticsWinner.Unknown),
+                    recentRecords.Select(record => record.Winner).ToList()),
+                BuildCurrentStreak(modeRecords),
+                BuildLongestStreak(modeRecords),
+                new CMURoundDurationBreakdown(
+                    AverageDurationSeconds(modeRecords),
+                    AverageDurationSeconds(modeRecords.Where(IsSideAWin)),
+                    AverageDurationSeconds(modeRecords.Where(IsSideBWin)),
+                    AverageDurationSeconds(modeRecords.Where(record => record.Winner == CMURoundStatisticsWinner.Draw)),
+                    AverageDurationSeconds(modeRecords.Where(record => record.Winner == CMURoundStatisticsWinner.Unknown))),
+                planets,
+                platoonMatchups,
+                BuildPlayerCountBands(modeRecords));
+        }
+
+        private static CMURoundStreak BuildCurrentStreak(List<CMURoundOutcomeRecord> records)
+        {
+            if (records.Count == 0)
+                return new CMURoundStreak(CMURoundStatisticsWinner.Unknown, 0);
+
+            var winner = GetDecidedWinner(records.FirstOrDefault());
+            if (winner == null)
+                return new CMURoundStreak(CMURoundStatisticsWinner.Unknown, 0);
+
+            var count = 0;
+            foreach (var record in records)
+            {
+                if (GetDecidedWinner(record) != winner)
+                    break;
+
+                count++;
+            }
+
+            return new CMURoundStreak(winner.Value, count);
+        }
+
+        private static CMURoundStreak BuildLongestStreak(List<CMURoundOutcomeRecord> records)
+        {
+            var bestWinner = CMURoundStatisticsWinner.Unknown;
+            var bestCount = 0;
+            CMURoundStatisticsWinner? currentWinner = null;
+            var currentCount = 0;
+
+            foreach (var record in records.OrderBy(record => record.RecordedAt).ThenBy(record => record.RoundId))
+            {
+                var winner = GetDecidedWinner(record);
+                if (winner == null)
+                {
+                    currentWinner = null;
+                    currentCount = 0;
+                    continue;
+                }
+
+                if (winner == currentWinner)
+                {
+                    currentCount++;
+                }
+                else
+                {
+                    currentWinner = winner;
+                    currentCount = 1;
+                }
+
+                if (currentCount <= bestCount)
+                    continue;
+
+                bestWinner = winner.Value;
+                bestCount = currentCount;
+            }
+
+            return new CMURoundStreak(bestWinner, bestCount);
+        }
+
+        private static CMURoundStatisticsWinner? GetDecidedWinner(CMURoundOutcomeRecord record)
+        {
+            if (IsSideAWin(record) || IsSideBWin(record))
+                return record.Winner;
+
+            return null;
+        }
+
+        private static int AverageDurationSeconds(IEnumerable<CMURoundOutcomeRecord> records)
+        {
+            var durations = records
+                .Where(record => record.DurationSeconds > 0)
+                .Select(record => record.DurationSeconds)
+                .ToList();
+
+            return durations.Count == 0
+                ? 0
+                : (int) Math.Round(durations.Average());
+        }
+
+        private static string NormalizeCMURoundOutcomeSource(string source)
+        {
+            return string.IsNullOrWhiteSpace(source)
+                ? "Unknown"
+                : source.Trim();
+        }
+
+        private static List<CMURoundPlayerCountBandBreakdown> BuildPlayerCountBands(List<CMURoundOutcomeRecord> records)
+        {
+            return new List<CMURoundPlayerCountBandBreakdown>
+            {
+                BuildPlayerCountBand(records, "0-59", 0, 59),
+                BuildPlayerCountBand(records, "60-99", 60, 99),
+                BuildPlayerCountBand(records, "100+", 100, int.MaxValue),
+            }
+                .Where(band => band.Total > 0)
+                .ToList();
+        }
+
+        private static CMURoundPlayerCountBandBreakdown BuildPlayerCountBand(
+            List<CMURoundOutcomeRecord> records,
+            string label,
+            int min,
+            int max)
+        {
+            var bandRecords = records
+                .Where(record => record.PlayerCount >= min && record.PlayerCount <= max)
+                .ToList();
+
+            return new CMURoundPlayerCountBandBreakdown(
+                label,
+                min,
+                max == int.MaxValue ? -1 : max,
+                bandRecords.Count(IsSideAWin),
+                bandRecords.Count(IsSideBWin),
+                bandRecords.Count(record => record.Winner == CMURoundStatisticsWinner.Draw),
+                bandRecords.Count(record => record.Winner == CMURoundStatisticsWinner.Unknown),
+                bandRecords.Count);
+        }
+
+        private static bool IsSideAWin(CMURoundOutcomeRecord record)
+        {
+            return record.Preset switch
+            {
+                CMURoundStatisticsPreset.DistressSignal => record.Winner == CMURoundStatisticsWinner.Xeno,
+                CMURoundStatisticsPreset.Insurgency => record.Winner == CMURoundStatisticsWinner.Govfor,
+                CMURoundStatisticsPreset.ColonyFall => record.Winner == CMURoundStatisticsWinner.Colonists,
+                _ => false,
+            };
+        }
+
+        private static bool IsSideBWin(CMURoundOutcomeRecord record)
+        {
+            return record.Preset switch
+            {
+                CMURoundStatisticsPreset.DistressSignal => record.Winner == CMURoundStatisticsWinner.Govfor,
+                CMURoundStatisticsPreset.Insurgency => record.Winner == CMURoundStatisticsWinner.Clf,
+                CMURoundStatisticsPreset.ColonyFall => record.Winner == CMURoundStatisticsWinner.Threat,
+                _ => false,
+            };
         }
 
         [return: NotNullIfNotNull(nameof(round))]

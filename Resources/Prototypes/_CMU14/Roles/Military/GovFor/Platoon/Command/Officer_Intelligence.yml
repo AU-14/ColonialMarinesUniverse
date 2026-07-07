@@ -1,0 +1,214 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobOfficerIntelBaseAbstract
+  name: au14-job-name-govforintel
+  description: au14-job-description-govforintel
+  icon: "AU14JobIconGovIO"
+  spawnMenuRoleName: Intelligence Officer (GOVFOR)
+  supervisors: au14-job-supervisors-govforplatco
+  startingGear: AU14GearGOVFOROfficerIntel
+  dummyStartingGear: AU14GearGOVFOROfficerIntelDummy
+  playTimeTracker: AU14JobGOVFOROfficerIntel
+  requireAdminNotify: true
+  canBeAntag: false
+  displayWeight: 6
+  accessGroups:
+  - AU14GovforCommand
+  - aulegacygroupcommand
+
+- type: job
+  abstract: true
+  parent: AU14JobOfficerIntelBaseAbstract
+  id: AU14JobOfficerIntelBase
+  roundRole: IntelOfficer
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetOfficerIntel
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforintel
+  - type: RMCSpeechBubbleSpecificStyle
+    speechStyleClass: commanderSpeech
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: govfor_io
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
+        state: io
+    # UPP:
+    # - type: JobPrefix
+    #   prefix: au14-job-prefix-govforintelUPP
+    # WYPMC:
+    # - type: JobPrefix
+    #   prefix: au14-job-prefix-govforintelWYPMC
+    # CMBCIU:
+    # - type: JobPrefix
+    #   prefix: au14-job-prefix-govforintelCMBCIU
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
+  - !type:AgeRequirement
+    requiredAge: 30
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxiety
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankSecondLT:
+      entity: AU14ChevronSecondLT
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFOROfficerIntel
+  isHumanoid: true
+
+# ├──[ Job Prototypes ]──────────────────────────────────────────────┤
+- type: job
+  parent: AU14JobOfficerIntelBase
+  id: AU14JobGOVFOROfficerIntel
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: job
+  parent: AU14JobOfficerIntelBase
+  id: AU14JobOPFOROfficerIntel
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORIO"
+  spawnMenuRoleName: Intelligence Officer (OPFOR)
+  supervisors: au14-job-supervisors-opforplatco
+  startingGear: AU14GearOPFOROfficerIntel
+  dummyStartingGear: AU14GearOPFOROfficerIntelDummy
+  accessGroups:
+  - AU14OpforCommand
+  - aulegacygroupcommand
+
+# ├──[ Starting Gear ]───────────────────────────────────────────────┤
+- type: startingGear
+  id: AU14GearGOVFOROfficerIntel
+  equipment:
+    id: AU14IDCardGOVFOROfficerIntel
+    ears: AU14HeadsetGovforCommand
+    pocket1: AU14StampIO
+  inhand:
+    - AU14KitJOIntelligenceOfficer
+
+- type: startingGear
+  id: AU14GearOPFOROfficerIntel
+  equipment:
+    id: AU14IDCardOPFOROfficerIntel
+    ears: AU14HeadsetOpforCommand
+    pocket1: AU14StampIO
+  inhand:
+    - AU14KitJOIntelligenceOfficer
+
+- type: roleLoadout
+  id: JobAU14JobGOVFOROfficerIntel
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - WeaponsRMC
+
+- type: startingGear
+  id: AU14GearGOVFOROfficerIntelDummy
+  equipment:
+    shoes: CMBootsBlack
+    head: CMHeadCapPeakedFormal
+    jumpsuit: CMJumpsuitXOFormal
+    ears: AU14HeadsetGovforCommand
+
+- type: startingGear
+  id: AU14GearOPFOROfficerIntelDummy
+  equipment:
+    shoes: CMBootsBlack
+    head: CMHeadCapPeakedFormal
+    jumpsuit: CMJumpsuitXOFormal
+    ears: AU14HeadsetOpforCommand
+
+# ├──[ Spawnpoints ]─────────────────────────────────────────────────┤
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFOROfficerIntel
+  name: Spawn Point GOVFOR Intelligence Officer
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFOROfficerIntel
+  - type: Sprite
+    state: syn_spawn
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointopforOfficerIntel
+  name: Spawn Point OPFOR Intelligence Officer
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFOROfficerIntel
+  - type: Sprite
+    state: syn_spawn
+
+# ├──[ Factions ]────────────────────────────────────────────────────┤
+- type: job
+  parent: AU14JobOfficerIntelBase
+  id: AU14JobGOVFOROfficerIntelCMBCIU
+  roundForce: CMBCIU
+  name: Intelligence Officer
+  spawnMenuRoleName: Intelligence Officer (CMBCIU)
+  ranks:
+    AU14RankCMBMarshal: []
+
+- type: job
+  parent: AU14JobOfficerIntelBase
+  id: AU14JobGOVFOROfficerIntelRMC
+  roundForce: RMC
+  name: au14-job-name-govforintelRMC
+  spawnMenuRoleName: Intelligence Officer (TWE RMC)
+
+- type: job
+  parent: AU14JobOfficerIntelBase
+  id: AU14JobGOVFOROfficerIntelUPP
+  roundForce: UPP
+  requirements: []
+  name: Intelligence Officer
+  spawnMenuRoleName: Intelligence Officer (UPP)
+  ranks:
+    UPP_Captain:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFOROfficerIntel
+      time: 360000 # 100 hours
+    UPP_SeniorLieutenant: []
+
+- type: job
+  parent: AU14JobOfficerIntelBase
+  id: AU14JobGOVFOROfficerIntelWYPMC
+  roundForce: WYPMC
+  requirements: []
+  name: PMC Intelligence Analyst
+  spawnMenuRoleName: Intelligence Officer (WYPMC)
+  ranks:
+    AU14RankWeYuCommanderSenior:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFOROfficerIntel
+      time: 360000 # 100 hours
+    AU14RankWeYuCommander: []

@@ -68,6 +68,7 @@
     useContainerOwner: false
   - type: HardpointVisual
     vehicleState: flamer_0
+    damagedVehicleState: flamer_1
 
 - type: entity
   parent: VehicleTankHardpointBase
@@ -137,6 +138,7 @@
     useContainerOwner: false
   - type: HardpointVisual
     vehicleState: glauncher_0
+    damagedVehicleState: glauncher_1
 
 - type: entity
   parent: VehicleTankHardpointBase
@@ -202,6 +204,7 @@
     useContainerOwner: false
   - type: HardpointVisual
     vehicleState: towlauncher_0
+    damagedVehicleState: towlauncher_1
 
 - type: entity
   parent: VehicleTankHardpointBase
@@ -266,6 +269,7 @@
     useContainerOwner: false
   - type: HardpointVisual
     vehicleState: m56cupola_0
+    damagedVehicleState: m56cupola_1
 
 - type: entity
   parent: VehicleTankHardpointBase
@@ -328,4 +332,5 @@
     useContainerOwner: false
   - type: HardpointVisual
     vehicleState: m56cupola_0
+    damagedVehicleState: m56cupola_1
 

@@ -194,7 +194,7 @@ namespace Content.Client.NPC
                 var found = false;
 
                 _grids.Clear();
-                _mapManager.FindGridsIntersecting(mouseWorldPos.MapId, aabb, ref _grids);
+                _mapSystem.FindGridsIntersecting(mouseWorldPos.MapId, aabb, ref _grids);
 
                 foreach (var grid in _grids)
                 {
@@ -270,7 +270,7 @@ namespace Content.Client.NPC
             if ((_system.Modes & PathfindingDebugMode.Poly) != 0x0 &&
                 mouseWorldPos.MapId == args.MapId)
             {
-                if (!_mapManager.TryFindGridAt(mouseWorldPos, out var gridUid, out var grid) || !xformQuery.TryGetComponent(gridUid, out var gridXform))
+                if (!_mapSystem.TryFindGridAt(mouseWorldPos, out var gridUid, out var grid) || !xformQuery.TryGetComponent(gridUid, out var gridXform))
                     return;
 
                 if (!_system.Polys.TryGetValue(_entManager.GetNetEntity(gridUid), out var data))
@@ -347,7 +347,7 @@ namespace Content.Client.NPC
                 mouseWorldPos.MapId == args.MapId)
             {
                 _grids.Clear();
-                _mapManager.FindGridsIntersecting(mouseWorldPos.MapId, aabb, ref _grids);
+                _mapSystem.FindGridsIntersecting(mouseWorldPos.MapId, aabb, ref _grids);
 
                 foreach (var grid in _grids)
                 {
@@ -409,7 +409,7 @@ namespace Content.Client.NPC
                 mouseWorldPos.MapId == args.MapId)
             {
                 _grids.Clear();
-                _mapManager.FindGridsIntersecting(args.MapId, aabb, ref _grids);
+                _mapSystem.FindGridsIntersecting(args.MapId, aabb, ref _grids);
 
                 foreach (var grid in _grids)
                 {
@@ -448,7 +448,7 @@ namespace Content.Client.NPC
                 mouseWorldPos.MapId == args.MapId)
             {
                 _grids.Clear();
-                _mapManager.FindGridsIntersecting(args.MapId, aabb, ref _grids);
+                _mapSystem.FindGridsIntersecting(args.MapId, aabb, ref _grids);
 
                 foreach (var grid in _grids)
                 {
@@ -507,7 +507,7 @@ namespace Content.Client.NPC
             if ((_system.Modes & PathfindingDebugMode.Chunks) != 0x0)
             {
                 _grids.Clear();
-                _mapManager.FindGridsIntersecting(args.MapId, args.WorldBounds, ref _grids);
+                _mapSystem.FindGridsIntersecting(args.MapId, args.WorldBounds, ref _grids);
 
                 foreach (var grid in _grids)
                 {

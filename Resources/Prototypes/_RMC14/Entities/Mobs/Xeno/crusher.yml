@@ -18,6 +18,7 @@
     name: cm-job-name-xeno-crusher
   - type: Sprite
     sprite: _AU14/Mobs/Xenos/Crusher/crusher.rsi # AU14-Edit
+    scale: 1.3, 1.3
   - type: MobState
     allowedStates:
     - Alive
@@ -38,7 +39,7 @@
     - ActionXenoDirectionalStomp
     - ActionXenoDevolve
     tier: 3
-    hudOffset: -0.15,0.1
+    hudOffset: 0.25,0.70
     unlockAt: 900 # 15 minutes
   - type: XenoRegen
     standHealingMultiplier: 0.66
@@ -113,6 +114,12 @@
     armorPiercing: 5
   - type: RMCSize
     size: Immobile
+  - type: XenoChargerJockey
+    maxRiders: 3
+    riderLocalPositions:
+    - 0,0
+    - -0.5625,0
+    - 0.5625,0
   - type: RMCXenoDamageVisuals
     prefix: crusher
   - type: TacticalMapIcon
@@ -181,10 +188,9 @@
     - ActionXenoRegurgitate
     - ActionXenoWatch
     - ActionXenoTailStab
-    - ActionXenoToggleCharging
+    - ActionXenoCursorCharging
     - ActionXenoStomp
-    - ActionXenoTumble
-    - ActionXenoRam
+    - ActionXenoFling
     - ActionXenoDevolve
   - type: CMArmor
     xenoArmor: 20
@@ -207,21 +213,21 @@
     popup: rmc-xeno-charger-popup
   - type: CombatMode
     toggleMouseRotator: false
-  - type: XenoTumble
-    damage:
-      types:
-        Blunt: 15
   - type: XenoFling
-    paralyzeTime: 0
+    hasAltFling: true
+    paralyzeTime: 1
     slowTime: 8
-  - type: XenoStomp # TODO RMC14 screen shake?
+  - type: XenoStomp
+    directional: false
     plasmaCost: 25
-    paralyzeUnderOnly: true
-    range: 3.95
+    knocksBack: true
+    knockbackPower: 2
+    paralyzeTime: 1.5
+    range: 3
     damage:
       types:
-        Blunt: 75
-  - type: XenoToggleCharging
+        Blunt: 35
+  - type: XenoCharger
   - type: XenoHidden
   - type: RMCActionOrder
     id: RMCXenoCrusherCharger

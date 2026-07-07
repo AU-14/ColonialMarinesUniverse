@@ -262,7 +262,7 @@ public sealed partial class AtmosDebugOverlay : Overlay
     private void GetGrids(MapId mapId, Box2Rotated box)
     {
         _grids.Clear();
-        _mapManager.FindGridsIntersecting(
+        _map.FindGridsIntersecting(
             mapId,
             box,
             ref _grids,

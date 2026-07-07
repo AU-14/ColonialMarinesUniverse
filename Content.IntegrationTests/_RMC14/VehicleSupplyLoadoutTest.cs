@@ -39,7 +39,7 @@ public sealed class VehicleSupplyLoadoutTest
             var factory = server.EntMan.ComponentFactory;
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(ConsoleId, out var consoleProto), Is.True);
-            Assert.That(consoleProto!.TryGetComponent<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
+            Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
             foreach (var entry in console!.Vehicles)
             {
@@ -68,7 +68,7 @@ public sealed class VehicleSupplyLoadoutTest
             var factory = server.EntMan.ComponentFactory;
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(ConsoleId, out var consoleProto), Is.True);
-            Assert.That(consoleProto!.TryGetComponent<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
+            Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
             foreach (var entry in console!.Vehicles)
             {
@@ -101,7 +101,7 @@ public sealed class VehicleSupplyLoadoutTest
             var factory = server.EntMan.ComponentFactory;
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(ConsoleId, out var consoleProto), Is.True);
-            Assert.That(consoleProto!.TryGetComponent<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
+            Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
             var blackfoots = console!.Vehicles
                 .Where(v => v.Vehicle.Id.StartsWith("VehicleBlackfoot"))
@@ -136,7 +136,7 @@ public sealed class VehicleSupplyLoadoutTest
             var factory = server.EntMan.ComponentFactory;
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(ConsoleId, out var consoleProto), Is.True);
-            Assert.That(consoleProto!.TryGetComponent<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
+            Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
             var entries = console!.Vehicles.ToDictionary(v => v.Vehicle.Id);
             Assert.That(entries.Keys, Is.SupersetOf(new[]
@@ -211,7 +211,7 @@ public sealed class VehicleSupplyLoadoutTest
             var factory = server.EntMan.ComponentFactory;
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(ConsoleId, out var consoleProto), Is.True);
-            Assert.That(consoleProto!.TryGetComponent<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
+            Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
             var entries = console!.Vehicles.ToDictionary(v => v.Vehicle.Id);
 
@@ -259,7 +259,7 @@ public sealed class VehicleSupplyLoadoutTest
             var factory = entMan.ComponentFactory;
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(ConsoleId, out var consoleProto), Is.True);
-            Assert.That(consoleProto!.TryGetComponent<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
+            Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
             vehicleIds = console!.Vehicles.Select(v => v.Vehicle.Id.ToLowerInvariant()).ToList();
 
@@ -359,7 +359,7 @@ public sealed class VehicleSupplyLoadoutTest
             var factory = entMan.ComponentFactory;
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(ConsoleId, out var consoleProto), Is.True);
-            Assert.That(consoleProto!.TryGetComponent<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
+            Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
             vehicleIds = console!.Vehicles.Select(v => v.Vehicle.Id.ToLowerInvariant()).ToList();
             lift = entMan.SpawnEntity("VehicleLift", map.GridCoords);
@@ -410,7 +410,7 @@ public sealed class VehicleSupplyLoadoutTest
             var supply = server.EntMan.System<VehicleSupplySystem>();
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(ConsoleId, out var consoleProto), Is.True);
-            Assert.That(consoleProto!.TryGetComponent<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
+            Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
             var entry = console!.Vehicles.Single(v => v.Vehicle.Id == "VehicleBlackfoot");
             Assert.That(supply.DebugSpawnBundleForTest(lift, entry), Is.True);
@@ -455,7 +455,7 @@ public sealed class VehicleSupplyLoadoutTest
             var itemSlots = entMan.System<ItemSlotsSystem>();
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(ConsoleId, out var consoleProto), Is.True);
-            Assert.That(consoleProto!.TryGetComponent<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
+            Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
             var entry = console!.Vehicles.Single(v => v.Vehicle.Id == "VehicleTank");
             var selections = new Dictionary<string, string>
@@ -503,7 +503,7 @@ public sealed class VehicleSupplyLoadoutTest
             var itemSlots = entMan.System<ItemSlotsSystem>();
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(ConsoleId, out var consoleProto), Is.True);
-            Assert.That(consoleProto!.TryGetComponent<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
+            Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
             var reconEntry = console!.Vehicles.Single(v => v.Vehicle.Id == "VehicleBlackfootRecon");
             Assert.That(supply.DebugApplyLoadoutForTest(

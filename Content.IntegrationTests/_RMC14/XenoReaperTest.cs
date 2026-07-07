@@ -475,11 +475,11 @@ public sealed class XenoReaperTest
         await client.WaitAssertion(() =>
         {
             Assert.That(prototypes.TryIndex<EntityPrototype>(ReaperRedGasPrototype, out var proto), Is.True);
-            Assert.That(proto!.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True);
+            Assert.That(proto!.TryComp<SpriteComponent>(out var sprite, factory), Is.True);
 
             Assert.Multiple(() =>
             {
-                Assert.That(proto.TryGetComponent<OccluderComponent>(out _, factory), Is.False);
+                Assert.That(proto.TryComp<OccluderComponent>(out _, factory), Is.False);
                 Assert.That(sprite!.Color.A, Is.LessThan(1f));
                 Assert.That(sprite.Color.A, Is.GreaterThan(0.5f));
             });

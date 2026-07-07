@@ -228,6 +228,7 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         if (preferredPart is { } preferred &&
             TryComp<BodyPartComponent>(preferred, out var preferredPartComp) &&
             preferredPartComp.Body == body &&
+            !HasComp<CMURoboticLimbComponent>(preferred) &&
             TryComp<BodyPartHealthComponent>(preferred, out var preferredHealth))
         {
             HealOneDamagedPart(body, preferred, preferredPartComp, preferredHealth, ref remaining);
@@ -239,6 +240,9 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         foreach (var (partUid, part) in Body.GetBodyChildren(body))
         {
             if (partUid == preferredPart)
+                continue;
+
+            if (HasComp<CMURoboticLimbComponent>(partUid))
                 continue;
 
             if (!TryComp<BodyPartHealthComponent>(partUid, out var health))
@@ -308,6 +312,9 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         while (query.MoveNext(out var uid, out var health, out var part))
         {
             if (part.Body is not { } body || Unrevivable.IsUnrevivable(body))
+                continue;
+
+            if (HasComp<CMURoboticLimbComponent>(uid))
                 continue;
 
             if (health.PassiveHealMultiplier <= 0 || health.Current >= health.Max)

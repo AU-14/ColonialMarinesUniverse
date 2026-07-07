@@ -9,6 +9,7 @@ using Content.Shared.Popups;
 using Content.Shared.Timing;
 using Content.Shared.Weapons.Melee;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 
@@ -50,11 +51,18 @@ public abstract partial class SharedAbsorbentSystem : EntitySystem
 
     private void OnAfterInteract(Entity<AbsorbentComponent> ent, ref AfterInteractEvent args)
     {
-        if (!args.CanReach || args.Handled || args.Target is not { } target)
+        if (!args.CanReach || args.Handled)
             return;
 
-        Mop(ent, args.User, target);
-        args.Handled = true;
+        if (args.Target is { } target)
+        {
+            Mop(ent, args.User, target);
+            args.Handled = true;
+            return;
+        }
+
+        if (TryTileInteract(ent, args.User, args.ClickLocation))
+            args.Handled = true;
     }
 
     private void OnAbsorbentSolutionChange(Entity<AbsorbentComponent> ent, ref SolutionContainerChangedEvent args)
@@ -105,6 +113,71 @@ public abstract partial class SharedAbsorbentSystem : EntitySystem
 
         // If it's refillable try to transfer
         TryRefillableInteract((absorbEnt.Owner, absorbEnt.Comp, useDelay), absorberSoln.Value, user, target);
+    }
+
+    private bool TryTileInteract(Entity<AbsorbentComponent> absorbEnt, EntityUid user, EntityCoordinates clickLocation)
+    {
+        if (!TryGetTileRef(clickLocation, out var tileRef))
+            return false;
+
+        if (Puddle.TryGetPuddle(tileRef, out var puddle))
+        {
+            Mop(absorbEnt, user, puddle);
+            return true;
+        }
+
+        if (!Puddle.HasCleanableDecalsAt(tileRef))
+            return false;
+
+        if (!SolutionContainer.TryGetSolution(absorbEnt.Owner, absorbEnt.Comp.SolutionName, out var absorberSoln))
+            return false;
+
+        if (TryComp<UseDelayComponent>(absorbEnt, out var useDelay)
+            && _useDelay.IsDelayed((absorbEnt.Owner, useDelay)))
+        {
+            return false;
+        }
+
+        var absorber = absorbEnt.Comp;
+        if (absorber.UseAbsorberSolution)
+        {
+            var absorberSolution = absorberSoln.Value.Comp.Solution;
+            var available = absorberSolution.GetTotalPrototypeQuantity(Puddle.GetAbsorbentReagents(absorberSolution));
+
+            if (available == FixedPoint2.Zero)
+            {
+                _popups.PopupClient(Loc.GetString("mopping-system-no-water", ("used", absorbEnt)), absorbEnt, user);
+                return true;
+            }
+
+            Puddle.DoTileReactions(tileRef, absorberSolution);
+            SolutionContainer.UpdateChemicals(absorberSoln.Value);
+        }
+
+        Puddle.CleanDecalsAt(tileRef);
+
+        _audio.PlayPredicted(absorber.PickupSound, absorbEnt, user);
+        PredictedSpawnAttachedTo(absorber.MoppedEffect, clickLocation);
+
+        if (useDelay != null)
+            _useDelay.TryResetDelay((absorbEnt.Owner, useDelay));
+
+        DoMopLunge(user, absorbEnt, clickLocation);
+        return true;
+    }
+
+    private bool TryGetTileRef(EntityCoordinates coordinates, out TileRef tileRef)
+    {
+        tileRef = default;
+        var gridUid = _transform.GetGrid(coordinates);
+        if (gridUid == null ||
+            !TryComp<MapGridComponent>(gridUid, out var mapGrid) ||
+            !_mapSystem.TryGetTileRef(gridUid.Value, mapGrid, coordinates, out tileRef))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -320,6 +393,7 @@ public abstract partial class SharedAbsorbentSystem : EntitySystem
             {
                 var tileRef = _mapSystem.GetTileRef(gridUid.Value, mapGrid, targetXform.Coordinates);
                 Puddle.DoTileReactions(tileRef, absorberSplit);
+                Puddle.CleanDecalsAt(tileRef);
             }
             SolutionContainer.AddSolution(puddle.Solution.Value, absorberSplit);
         }
@@ -331,7 +405,15 @@ public abstract partial class SharedAbsorbentSystem : EntitySystem
             if (puddleSolution.Volume == FixedPoint2.Zero)
             {
                 // Spawn a *sparkle*
-                PredictedSpawnAttachedTo(absorber.MoppedEffect, Transform(target).Coordinates);
+                var targetXform = Transform(target);
+                var gridUid = targetXform.GridUid;
+                if (TryComp<MapGridComponent>(gridUid, out var mapGrid))
+                {
+                    var tileRef = _mapSystem.GetTileRef(gridUid.Value, mapGrid, targetXform.Coordinates);
+                    Puddle.CleanDecalsAt(tileRef);
+                }
+
+                PredictedSpawnAttachedTo(absorber.MoppedEffect, targetXform.Coordinates);
                 PredictedQueueDel(target);
                 isRemoved = true;
             }
@@ -344,13 +426,18 @@ public abstract partial class SharedAbsorbentSystem : EntitySystem
         if (useDelay != null)
             _useDelay.TryResetDelay((absorbEnt, useDelay));
 
+        DoMopLunge(user, absorbEnt, Transform(target).Coordinates);
+
+        return true;
+    }
+
+    private void DoMopLunge(EntityUid user, Entity<AbsorbentComponent> absorbEnt, EntityCoordinates targetCoordinates)
+    {
         var userXform = Transform(user);
-        var targetPos = _transform.GetWorldPosition(target);
+        var targetPos = _transform.ToMapCoordinates(targetCoordinates).Position;
         var localPos = Vector2.Transform(targetPos, _transform.GetInvWorldMatrix(userXform));
         localPos = userXform.LocalRotation.RotateVec(localPos);
 
         _melee.DoLunge(user, absorbEnt, Angle.Zero, localPos, null);
-
-        return true;
     }
 }

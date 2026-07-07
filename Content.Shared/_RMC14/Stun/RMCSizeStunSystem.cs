@@ -187,30 +187,31 @@ public sealed partial class RMCSizeStunSystem : EntitySystem
     /// <summary>
     ///     Tries to knock back the target.
     /// </summary>
-    public void KnockBack(EntityUid target, MapCoordinates? knockedBackFrom, float knockBackPowerMin = 1f, float knockBackPowerMax = 1f, float knockBackSpeed = 5f, bool ignoreSize = false)
+    public bool KnockBack(EntityUid target, MapCoordinates? knockedBackFrom, float knockBackPowerMin = 1f, float knockBackPowerMax = 1f, float knockBackSpeed = 5f, bool ignoreSize = false)
     {
         if ((!TryComp<RMCSizeComponent>(target, out var size) || size.Size >= RMCSizes.Big) && !ignoreSize)
-            return;
+            return false;
 
         if (knockedBackFrom == null)
-            return;
+            return false;
 
         var vec = _transform.GetMoverCoordinates(target).Position - knockedBackFrom.Value.Position;
-        if (vec.Length() != 0)
-        {
-            var knockBackPower = _random.NextFloat(knockBackPowerMin, knockBackPowerMax);
-            var direction = vec.Normalized() * knockBackPower;
+        if (vec.Length() == 0)
+            return false;
 
-            //TODO Camera Shake
-            if (TryComp(target, out PhysicsComponent? physics))
-            {
-                _physics.SetLinearVelocity(target, Vector2.Zero, body: physics);
-                _physics.SetAngularVelocity(target, 0f, body: physics);
-            }
+        var knockBackPower = _random.NextFloat(knockBackPowerMin, knockBackPowerMax);
+        var direction = vec.Normalized() * knockBackPower;
 
-            _rmcPulling.TryStopPullsOn(target);
-            _throwing.TryThrow(target, direction, knockBackSpeed, animated: false, playSound: false, compensateFriction: true);
-        }
+        //TODO Camera Shake
+        if (!TryComp(target, out PhysicsComponent? physics))
+            return false;
+
+        _physics.SetLinearVelocity(target, Vector2.Zero, body: physics);
+        _physics.SetAngularVelocity(target, 0f, body: physics);
+
+        _rmcPulling.TryStopPullsOn(target);
+        _throwing.TryThrow(target, direction, knockBackSpeed, animated: false, playSound: false, compensateFriction: true);
+        return true;
     }
 
     /// <summary>

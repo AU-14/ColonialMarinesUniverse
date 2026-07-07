@@ -541,7 +541,7 @@
     arc: 360
   - type: DropshipNavigationComputer
     canTacticalLand: true
-    tacticalLandFootprintOverride: 7, 13
+    tacticalLandFootprintOverride: 9, 15
   - type: RequiresSkill
     skills:
       RMCSkillPilot: 1

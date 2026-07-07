@@ -22,6 +22,7 @@ using Content.Shared._RMC14.Language.Prototypes;
 using Content.Shared._RMC14.Language.Systems;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._AU14.Marines.Orders;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
@@ -254,6 +255,12 @@ public sealed partial class ChatSystem : SharedChatSystem
             // prevent radios and remove prefix.
             checkRadioPrefix = false;
             message = message[1..];
+        }
+
+        if (desiredType == InGameICChatType.Speak && HasComp<AU14SilenceOrderComponent>(source))
+        {
+            desiredType = InGameICChatType.Whisper;
+            checkRadioPrefix = false;
         }
 
         bool shouldCapitalize = (desiredType != InGameICChatType.Emote);
@@ -500,7 +507,9 @@ public sealed partial class ChatSystem : SharedChatSystem
         bool hideLog = false,
         bool checkEmote = true,
         bool ignoreActionBlocker = false,
-        NetUserId? author = null
+        NetUserId? author = null,
+        string? speechBubbleMessage = null,
+        string? speechStyleClass = null
         )
     {
         if (!_actionBlocker.CanEmote(source) && !ignoreActionBlocker && !_mobStateSystem.IsCritical(source)) // mobs that are in critical can emote
@@ -518,7 +527,7 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         if (checkEmote)
             TryEmoteChatInput(source, action);
-        SendInVoiceRange(ChatChannel.Emotes, action, wrappedMessage, source, range, author);
+        SendInVoiceRange(ChatChannel.Emotes, speechBubbleMessage ?? action, wrappedMessage, source, range, author, speechStyleClass);
         if (!hideLog)
             if (name != Name(source))
                 _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Emote from {ToPrettyString(source):user} as {name}: {action}");
@@ -653,7 +662,7 @@ public sealed partial class ChatSystem : SharedChatSystem
     /// <summary>
     ///     Sends a chat message to the given players in range of the source entity.
     /// </summary>
-    private void SendInVoiceRange(ChatChannel channel, string message, string wrappedMessage, EntityUid source, ChatTransmitRange range, NetUserId? author = null)
+    private void SendInVoiceRange(ChatChannel channel, string message, string wrappedMessage, EntityUid source, ChatTransmitRange range, NetUserId? author = null, string? speechStyleClass = null)
     {
         foreach (var (session, data) in GetRecipients(source, VoiceRange))
         {
@@ -675,10 +684,10 @@ public sealed partial class ChatSystem : SharedChatSystem
             else
                 RaiseLocalEvent(source, ref ev);
 
-            _chatManager.ChatMessageToOne(channel, ev.Message, GetYautjaVisibleWrappedMessage(ev.WrappedMessage, source, session), source, ev.EntHideChat, session.Channel, author: author);
+            _chatManager.ChatMessageToOne(channel, ev.Message, GetYautjaVisibleWrappedMessage(ev.WrappedMessage, source, session), source, ev.EntHideChat, session.Channel, author: author, speechStyleClass: speechStyleClass);
         }
 
-        _replay.RecordServerMessage(new ChatMessage(channel, message, wrappedMessage, GetNetEntity(source), null, MessageRangeHideChatForReplay(range), speechStyleClass: CompOrNull<RMCSpeechBubbleSpecificStyleComponent>(source)?.SpeechStyleClass, repeatCheckSender: !HasComp<ChatRepeatIgnoreSenderComponent>(source)));
+        _replay.RecordServerMessage(new ChatMessage(channel, message, wrappedMessage, GetNetEntity(source), null, MessageRangeHideChatForReplay(range), speechStyleClass: speechStyleClass ?? CompOrNull<RMCSpeechBubbleSpecificStyleComponent>(source)?.SpeechStyleClass, repeatCheckSender: !HasComp<ChatRepeatIgnoreSenderComponent>(source)));
     }
 
     private string GetYautjaVisibleWrappedMessage(string wrappedMessage, EntityUid source, ICommonSession session)

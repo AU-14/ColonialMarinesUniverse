@@ -141,7 +141,7 @@ public sealed partial class EntityStorageSystem : SharedEntityStorageSystem
     {
         var targetCoordinates = TransformSystem.ToMapCoordinates(new EntityCoordinates(uid, component.EnteringOffset));
 
-        if (_map.TryFindGridAt(targetCoordinates, out var gridId, out var grid))
+        if (_mapSystem.TryFindGridAt(targetCoordinates, out var gridId, out var grid))
         {
             return _mapSystem.GetTileRef(gridId, grid, targetCoordinates);
         }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Content.Shared._CMU14.Medical;
+using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Shared._CMU14.Medical.Cosmetic;
 using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared.Body.Components;
@@ -25,6 +26,7 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private CMUMedicalVisibilitySystem _medicalVisibility = default!;
     [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedCMURoboticLimbSystem _roboticLimbs = default!;
 
     /// <summary>
     ///     Bodies queued for next-tick hand-removal / glove-drop / shoe-drop / force-down.
@@ -70,6 +72,9 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
             if (Deleted(d.Body))
                 continue;
 
+            if (TryComp<BodyComponent>(d.Body, out var body) && body.LegEntities.Count >= 2)
+                continue;
+
             if (_inventory.TryGetSlotEntity(d.Body, "shoes", out _))
                 _inventory.TryUnequip(d.Body, "shoes", force: true);
 
@@ -80,6 +85,7 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
     private void OnPartRemoved(Entity<CMUHumanMedicalComponent> ent, ref BodyPartRemovedEvent args)
     {
         _medicalVisibility.RefreshSubtree(args.Part.Owner);
+        _roboticLimbs.BodyPartRemoved(ent.Owner);
 
         var partType = args.Part.Comp.PartType;
         var symmetry = args.Part.Comp.Symmetry;
@@ -113,6 +119,7 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
     private void OnPartAdded(Entity<CMUHumanMedicalComponent> ent, ref BodyPartAddedEvent args)
     {
         _medicalVisibility.RefreshSubtree(args.Part.Owner);
+        _roboticLimbs.BodyPartAdded(ent.Owner, args.Part);
 
         var partType = args.Part.Comp.PartType;
         var symmetry = args.Part.Comp.Symmetry;

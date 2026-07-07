@@ -28,7 +28,7 @@
     <GuideEntityEmbed Entity="CMXenoDefender" />
     <GuideEntityEmbed Entity="CMXenoWarrior" />
     <GuideEntityEmbed Entity="RMCXenoCrusher" />
-    <GuideEntityEmbed Entity="CMXenoQueen" />
+    <GuideEntityEmbed Entity="RMCGuidebookXenoQueen" />
   </Box>
 
   - Xenonidss must be stored in the research containment room on the second floor of medical.

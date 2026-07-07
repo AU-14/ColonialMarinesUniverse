@@ -10,6 +10,7 @@ using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids.Actions;
 using Content.Shared._RMC14.Xenonids.Animation;
+using Content.Shared._RMC14.Xenonids.Charge.CursorCharge;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.HiveLeader;
 using Content.Shared._RMC14.Xenonids.Plasma;
@@ -343,7 +344,6 @@ public sealed partial class XenoChargeSystem : EntitySystem
         var ev = new XenoChargeDoAfterEvent(GetNetCoordinates(args.Target));
         var doAfter = new DoAfterArgs(EntityManager, xeno, xeno.Comp.ChargeDelay, ev, xeno)
         {
-            BreakOnMove = true,
             Hidden = true,
         };
 
@@ -366,6 +366,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
             _xenoAnimations.PlayLungeAnimationEvent(xeno, charge);
         }
 
+        _nearbyMobs.Clear();
         _lookup.GetEntitiesInRange(_transform.GetMapCoordinates(xeno), xeno.Comp.SlowRange, _nearbyMobs);
         foreach (var slower in _nearbyMobs)
         {
@@ -553,6 +554,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
         // Find the closest valid mob target near the click position.
         xeno.Comp.PrimaryTarget = null;
         var closestDist = float.MaxValue;
+        _nearbyMobs.Clear();
         _lookup.GetEntitiesInRange(targetMap, 2f, _nearbyMobs);
         foreach (var mob in _nearbyMobs)
         {
@@ -634,9 +636,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
 
     private void OnXenoToggleChargingAction(Entity<XenoToggleChargingComponent> ent, ref XenoToggleChargingActionEvent args)
     {
-        if (_timing.ApplyingState)
-            return;
-
+        // Original behavior preserved below
         if (RemComp<ActiveXenoToggleChargingComponent>(ent))
             return;
 
@@ -647,7 +647,6 @@ public sealed partial class XenoChargeSystem : EntitySystem
         var active = new ActiveXenoToggleChargingComponent();
         AddComp(ent, active, true);
 
-        // Moving diagonally
         if ((direction & (direction - 1)) != DirectionFlag.None)
             return;
 

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Content.Server._RMC14.LinkAccount;
 using Content.Server.Administration.Logs;
 using Content.Shared.Administration.Logs;
+using Content.Shared._CMU14.RoundStatistics;
 using Content.Shared.CCVar;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Database;
@@ -241,6 +242,10 @@ namespace Content.Server.Database
         Task<int> AddNewRound(Server server, params Guid[] playerIds);
         Task<Round> GetRound(int id);
         Task AddRoundPlayers(int id, params Guid[] playerIds);
+        Task UpsertCMURoundOutcome(CMURoundOutcomeRecord record);
+        Task<CMURoundStatisticsDashboard> GetCMURoundStatisticsDashboard(
+            int recentRounds,
+            CancellationToken cancel = default);
 
         #endregion
 
@@ -824,6 +829,20 @@ namespace Content.Server.Database
         {
             DbWriteOpsMetric.Inc();
             return RunDbCommand(() => _db.AddRoundPlayers(id, playerIds));
+        }
+
+        public Task UpsertCMURoundOutcome(CMURoundOutcomeRecord record)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.UpsertCMURoundOutcome(record));
+        }
+
+        public Task<CMURoundStatisticsDashboard> GetCMURoundStatisticsDashboard(
+            int recentRounds,
+            CancellationToken cancel = default)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetCMURoundStatisticsDashboard(recentRounds, cancel));
         }
 
         public Task UpdateAdminRankAsync(AdminRank rank, CancellationToken cancel = default)

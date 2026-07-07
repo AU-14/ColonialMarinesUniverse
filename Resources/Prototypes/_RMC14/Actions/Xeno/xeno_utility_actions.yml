@@ -256,7 +256,6 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    backgroundOn: null
     icon:
       sprite: _RMC14/Actions/xeno_actions.rsi
       state: apply_salve
@@ -266,6 +265,7 @@
   - type: EntityTargetAction
     event: !type:XenoApplySalveActionEvent
   - type: RMCDazeableAction
+  - type: ActionBlockIfResting
 
 - type: entity
   parent: ActionXenoBase
@@ -275,7 +275,6 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    backgroundOn: null
     icon:
       sprite: _RMC14/Actions/xeno_actions.rsi
       state: screech

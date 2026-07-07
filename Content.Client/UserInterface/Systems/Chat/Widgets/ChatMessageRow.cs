@@ -1,6 +1,10 @@
 using System;
+using System.Numerics;
+using Content.Client.Stylesheets;
 using Content.Client.Resources;
+using Content.Shared._CMU14.Ghost;
 using Content.Shared.Chat;
+using Robust.Client.Console;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface.Controls;
@@ -11,6 +15,7 @@ namespace Content.Client.UserInterface.Systems.Chat.Widgets;
 
 public sealed partial class ChatMessageRow : PanelContainer
 {
+    [Dependency] private IClientConsoleHost _consoleHost = default!;
     [Dependency] private IResourceCache _resourceCache = default!;
 
     private readonly Label _repeatBadge;
@@ -29,7 +34,7 @@ public sealed partial class ChatMessageRow : PanelContainer
             BackgroundColor = GetBackground(message.Channel),
             BorderColor = accent,
             BorderThickness = new Thickness(2, 0, 0, 0),
-            ContentMarginLeftOverride = 5,
+            ContentMarginLeftOverride = 4,
             ContentMarginRightOverride = 4,
             ContentMarginTopOverride = metrics.VerticalPadding,
             ContentMarginBottomOverride = metrics.VerticalPadding
@@ -62,6 +67,12 @@ public sealed partial class ChatMessageRow : PanelContainer
             });
         }
 
+        if (message.GhostFollowEntity.Valid)
+        {
+            var followButton = CreateFollowButton(message, metrics, textColor);
+            row.AddChild(followButton);
+        }
+
         _messageLabel = new RichTextLabel
         {
             HorizontalExpand = true,
@@ -82,6 +93,31 @@ public sealed partial class ChatMessageRow : PanelContainer
             FontOverride = sideFont
         };
         row.AddChild(_repeatBadge);
+    }
+
+    private Button CreateFollowButton(ChatMessage message, RowMetrics metrics, Color textColor)
+    {
+        var followButtonSize = new Vector2(metrics.FollowButtonSize, metrics.FollowButtonSize);
+        var followButtonColor = textColor.WithAlpha(1f);
+        var followButton = new Button
+        {
+            Text = Loc.GetString("cmu-chat-manager-follow-button"),
+            ToolTip = Loc.GetString("cmu-chat-manager-follow-button-tooltip"),
+            MinSize = followButtonSize,
+            MaxSize = followButtonSize,
+            Margin = new Thickness(2, 5, 2, 0),
+            ModulateSelfOverride = followButtonColor,
+            VerticalAlignment = VAlignment.Top,
+            StyleClasses = { StyleNano.StyleClassChatGhostFollowButton }
+        };
+
+        followButton.Label.HorizontalExpand = true;
+        followButton.Label.HorizontalAlignment = HAlignment.Center;
+        followButton.Label.VerticalAlignment = VAlignment.Center;
+        followButton.Label.Align = Label.AlignMode.Center;
+        followButton.Label.FontColorOverride = followButtonColor;
+        followButton.OnPressed += _ => _consoleHost.ExecuteCommand($"{CMUGhostFollowCommand.CommandName} {message.GhostFollowEntity}");
+        return followButton;
     }
 
     public void SetRepeatCount(int count)
@@ -110,14 +146,14 @@ public sealed partial class ChatMessageRow : PanelContainer
     private static RowMetrics GetMetrics(int? fontSize)
     {
         if (fontSize == null)
-            return new RowMetrics(3, 6, 0, 1.12f, 58, 88, 28);
+            return new RowMetrics(2, 4, 0, 1.06f, 42, 58, 25, 16);
 
         return fontSize.Value switch
         {
-            <= 9 => new RowMetrics(1, 4, 0, 1.0f, 42, 72, 20),
-            <= 11 => new RowMetrics(2, 5, 0, 1.03f, 50, 80, 23),
-            <= 13 => new RowMetrics(2, 5, 0, 1.06f, 54, 84, 25),
-            _ => new RowMetrics(3, 6, 0, 1.12f, 58, 88, 28)
+            <= 9 => new RowMetrics(1, 3, 0, 1.0f, 34, 46, 20, 14),
+            <= 11 => new RowMetrics(1, 3, 0, 1.02f, 38, 52, 22, 15),
+            <= 13 => new RowMetrics(2, 4, 0, 1.04f, 40, 56, 24, 16),
+            _ => new RowMetrics(2, 4, 0, 1.06f, 42, 58, 25, 18)
         };
     }
 
@@ -171,7 +207,7 @@ public sealed partial class ChatMessageRow : PanelContainer
         {
             ChatChannel.Radio => Color.FromHex("#121f18"),
             ChatChannel.OOC or ChatChannel.LOOC => Color.FromHex("#12202a"),
-            ChatChannel.Dead => Color.FromHex("#181729"),
+            ChatChannel.Dead => Color.FromHex("#13141d"),
             ChatChannel.Server or ChatChannel.Notifications => Color.FromHex("#211c12"),
             ChatChannel.Whisper => Color.FromHex("#151515"),
             _ => Color.FromHex("#101214")
@@ -191,7 +227,7 @@ public sealed partial class ChatMessageRow : PanelContainer
             ChatChannel.Radio => Color.FromHex("#73d48f"),
             ChatChannel.LOOC => Color.FromHex("#61d7d6"),
             ChatChannel.OOC => Color.FromHex("#73bdf6"),
-            ChatChannel.Dead => Color.FromHex("#9b83df"),
+            ChatChannel.Dead => Color.FromHex("#8d7bd4"),
             ChatChannel.Admin or ChatChannel.AdminAlert => Color.FromHex("#ff5f5f"),
             ChatChannel.AdminChat => Color.FromHex("#ff72c7"),
             ChatChannel.MentorChat => Color.FromHex("#ffb55f"),
@@ -207,5 +243,6 @@ public sealed partial class ChatMessageRow : PanelContainer
         float LineHeightScale,
         int PrefixMinWidth,
         int PrefixMaxWidth,
-        int RepeatMinWidth);
+        int RepeatMinWidth,
+        int FollowButtonSize);
 }

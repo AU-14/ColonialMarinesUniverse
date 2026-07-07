@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Content.Shared._CMU14.Medical;
 using Content.Shared._CMU14.Medical.Bones;
+using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Shared._CMU14.Medical.Items;
 using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared._RMC14.Medical.Wounds;
@@ -9,6 +10,7 @@ using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Examine;
+using Content.Shared.FixedPoint;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 
@@ -30,6 +32,8 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
     private const string DetailedBurnColor = "#ff704d";
     private const string DetailedBleedColor = "#ff5f5f";
     private const string DetailedUntreatedColor = "#ffd166";
+    private const string RoboticLimbColor = "#8fd8ff";
+    private const string RoboticDamageColor = "#b9ecff";
 
     public override void Initialize()
     {
@@ -66,6 +70,8 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
         foreach (var (partUid, part) in _body.GetBodyChildren(body))
         {
             var sections = new List<string>();
+
+            AddRoboticVisibleSections(partUid, sections);
 
             if (includeWounds)
             {
@@ -142,6 +148,8 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
         {
             var sections = new List<string>();
 
+            AddRoboticDetailedSections(partUid, sections);
+
             if (TryComp<BodyPartWoundComponent>(partUid, out var wounds))
             {
                 for (var i = 0; i < wounds.Wounds.Count; i++)
@@ -195,6 +203,8 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
         {
             var partName = FormatPartName(part.PartType, part.Symmetry);
             var partOrder = BodyPartSortOrder(part.PartType, part.Symmetry);
+
+            AddRoboticInspectSite(groups, partUid, partName, partOrder);
 
             if (TryComp<BodyPartWoundComponent>(partUid, out var wounds))
             {
@@ -320,6 +330,92 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
         }
 
         group.AddSite(partName);
+    }
+
+    private void AddRoboticVisibleSections(EntityUid part, List<string> sections)
+    {
+        if (!TryComp<CMURoboticLimbComponent>(part, out var robotic))
+            return;
+
+        var details = GetRoboticDetails(robotic);
+        sections.Add(ToSentence(details));
+    }
+
+    private void AddRoboticDetailedSections(EntityUid part, List<string> sections)
+    {
+        if (!TryComp<CMURoboticLimbComponent>(part, out var robotic))
+            return;
+
+        sections.Add(Color(Loc.GetString("cmu-robotic-limb-detailed-state"), RoboticLimbColor));
+
+        if (robotic.BruteDamage > FixedPoint2.Zero)
+            sections.Add(Color(Loc.GetString("cmu-robotic-limb-detailed-brute"), RoboticDamageColor));
+
+        if (robotic.BurnDamage > FixedPoint2.Zero)
+            sections.Add(Color(Loc.GetString("cmu-robotic-limb-detailed-burn"), RoboticDamageColor));
+    }
+
+    private void AddRoboticInspectSite(
+        Dictionary<string, InspectInjuryGroup> groups,
+        EntityUid part,
+        string partName,
+        int partOrder)
+    {
+        if (!TryComp<CMURoboticLimbComponent>(part, out var robotic))
+            return;
+
+        var details = GetRoboticDamageDetails(robotic);
+        if (details.Count == 0)
+            return;
+
+        const string key = "robotic limb damage";
+        var header = Color(Loc.GetString("cmu-robotic-limb-inspect-header"), RoboticLimbColor);
+        if (!groups.TryGetValue(key, out var group))
+        {
+            group = new InspectInjuryGroup(partOrder, header, RoboticDamageColor);
+            groups.Add(key, group);
+        }
+        else if (partOrder < group.Order)
+        {
+            group.Order = partOrder;
+        }
+
+        group.AddSite($"{partName} ({ToSentence(details)})");
+    }
+
+    private List<string> GetRoboticDetails(CMURoboticLimbComponent robotic)
+    {
+        var details = new List<string>
+        {
+            Color(Loc.GetString("cmu-robotic-limb-examine-state"), RoboticLimbColor),
+        };
+
+        AddRoboticDamageDetails(robotic, details, true);
+        return details;
+    }
+
+    private List<string> GetRoboticDamageDetails(CMURoboticLimbComponent robotic)
+    {
+        var details = new List<string>();
+        AddRoboticDamageDetails(robotic, details);
+        return details;
+    }
+
+    private void AddRoboticDamageDetails(
+        CMURoboticLimbComponent robotic,
+        List<string> details,
+        bool colorDamage = false)
+    {
+        if (robotic.BruteDamage > FixedPoint2.Zero)
+            AddRoboticDamageDetail(details, Loc.GetString("cmu-robotic-limb-examine-brute"), colorDamage);
+
+        if (robotic.BurnDamage > FixedPoint2.Zero)
+            AddRoboticDamageDetail(details, Loc.GetString("cmu-robotic-limb-examine-burn"), colorDamage);
+    }
+
+    private static void AddRoboticDamageDetail(List<string> details, string detail, bool colorDamage)
+    {
+        details.Add(colorDamage ? Color(detail, RoboticDamageColor) : detail);
     }
 
     private List<(BodyPartType Type, BodyPartSymmetry Symmetry)> GetMissingPartSlots(EntityUid body)

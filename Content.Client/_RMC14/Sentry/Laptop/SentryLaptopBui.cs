@@ -675,7 +675,7 @@ public sealed partial class SentryLaptopBui : BoundUserInterface
         if (!_entities.TryGetComponent<TransformComponent>(_cameraEntity.Value, out var camXform))
             return;
 
-        camXform.LocalRotation = sentryXform.LocalRotation;
+        _transform.SetLocalRotation(_cameraEntity.Value, sentryXform.LocalRotation, camXform);
 
         var eye = _entities.AddComponent<EyeComponent>(_cameraEntity.Value);
 

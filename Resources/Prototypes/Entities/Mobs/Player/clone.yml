@@ -26,6 +26,10 @@
   - PermanentBlindness
   - Snoring
   - Unrevivable
+  - CMUProstheticLeftArm
+  - CMUProstheticRightArm
+  - CMUProstheticLeftLeg
+  - CMUProstheticRightLeg
   # job specific
   - BibleUser
   - CommandStaff

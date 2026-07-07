@@ -2,7 +2,7 @@
 
   #So, you've ascended to the throne of the Hive!
   <Box>
-    <GuideEntityEmbed Entity="CMXenoQueen"/>
+    <GuideEntityEmbed Entity="RMCGuidebookXenoQueen"/>
   </Box>\n
   - As the matriarch, your duty is to expand, defend, and lead. Without you, the Hive crumbles, but with you, it thrives.
   - For intermediate players wishing to try out the commanding side of Xenonids, this will start with what should be done at the start.

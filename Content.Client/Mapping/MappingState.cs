@@ -790,9 +790,10 @@ public sealed partial class MappingState : GameplayStateBase
         if (!uid.IsValid())
         {
             var mapPos = _transform.ToMapCoordinates(coords);
+            var mapSystem = _entityManager.System<SharedMapSystem>();
 
-            if (_mapMan.TryFindGridAt(mapPos, out var gridUid, out var grid) &&
-                _entityManager.System<SharedMapSystem>().TryGetTileRef(gridUid, grid, coords, out var tileRef) &&
+            if (mapSystem.TryFindGridAt(mapPos, out var gridUid, out var grid) &&
+                mapSystem.TryGetTileRef(gridUid, grid, coords, out var tileRef) &&
                 _allPrototypesDict.TryGetValue(_entityManager.System<TurfSystem>().GetContentTileDefinition(tileRef), out button))
             {
                 OnSelected(button);

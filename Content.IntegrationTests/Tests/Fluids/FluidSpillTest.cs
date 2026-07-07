@@ -56,7 +56,7 @@ public sealed class FluidSpill
         await server.WaitPost(() =>
         {
             mapSystem.CreateMap(out var mapId);
-            var grid = mapManager.CreateGridEntity(mapId);
+            var grid = mapSystem.CreateGridEntity(mapId);
             gridId = grid.Owner;
 
             for (var x = 0; x < 3; x++)

@@ -49,8 +49,8 @@ namespace Content.IntegrationTests.Tests
             await server.WaitAssertion(() =>
             {
                 var mapId = testMap.MapId;
-                grid1 = mapMan.CreateGridEntity(mapId);
-                grid2 = mapMan.CreateGridEntity(mapId);
+                grid1 = mapSys.CreateGridEntity(mapId);
+                grid2 = mapSys.CreateGridEntity(mapId);
 
                 mapSys.SetTile(grid1, grid1, Vector2i.Zero, new Tile(1));
                 mapSys.SetTile(grid2, grid2, Vector2i.Zero, new Tile(1));

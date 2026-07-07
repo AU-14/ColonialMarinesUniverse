@@ -18,6 +18,7 @@ public sealed partial class GridDraggingSystem : SharedGridDraggingSystem
     [Dependency] private IInputManager _inputManager = default!;
     [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private InputSystem _inputSystem = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
 
     public bool Enabled { get; set; }
@@ -99,7 +100,7 @@ public sealed partial class GridDraggingSystem : SharedGridDraggingSystem
 
         if (_dragging == null)
         {
-            if (!_mapManager.TryFindGridAt(mousePos, out var gridUid, out var grid))
+            if (!_mapSystem.TryFindGridAt(mousePos, out var gridUid, out var grid))
                 return;
 
             StartDragging(gridUid, Vector2.Transform(mousePos.Position, _transformSystem.GetInvWorldMatrix(gridUid)));

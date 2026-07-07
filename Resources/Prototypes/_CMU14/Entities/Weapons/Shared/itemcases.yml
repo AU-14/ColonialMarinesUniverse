@@ -1,0 +1,223 @@
+- type: entity
+  parent: RMCBasePVEEquipmentCase
+  id: AU14CaseSentry
+  name: 571-C sentry gun case
+  description: A gun case containing the 571-C sentry unit and a spare drum.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/PVE_Cases/sentry.rsi
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,3,1
+    whitelist:
+      tags:
+      - RMCSentry
+      - RMCMagazineSentry
+  - type: StorageFill
+    contents:
+    - id: RMCSentry
+    - id: RMCMagazineSentry
+  - type: ItemMapper
+    mapLayers:
+      gun:
+        whitelist:
+          tags:
+          - RMCSentry
+
+- type: entity
+  parent: RMCBasePVEEquipmentCase
+  id: AU14CaseSentryMini
+  name: 512-M mini sentry gun case
+  description: A gun case containing the 512-M sentry unit and a spare drum.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/PVE_Cases/sentry.rsi
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,3,1
+    whitelist:
+      tags:
+      - RMCSentry
+      - RMCMagazineSentry
+  - type: StorageFill
+    contents:
+    - id: RMCSentryMini
+    - id: RMCMagazineSentry
+  - type: ItemMapper
+    mapLayers:
+      gun:
+        whitelist:
+          tags:
+          - RMCSentry
+
+- type: entity
+  parent: RMCBasePVEEquipmentCase
+  id: AU14CaseSentrySniper
+  name: 725-D sniper sentry gun case
+  description: A gun case containing the 725-D sniper sentry unit and a spare drum.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/PVE_Cases/sentry.rsi
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,3,1
+    whitelist:
+      tags:
+      - RMCSentry
+      - RMCMagazineSentry
+  - type: StorageFill
+    contents:
+    - id: RMCSentrySniper
+    - id: RMCMagazineSentry
+  - type: ItemMapper
+    mapLayers:
+      gun:
+        whitelist:
+          tags:
+          - RMCSentry
+
+- type: entity
+  parent: RMCBasePVEEquipmentCase
+  id: AU14CaseSentryShotgun
+  name: 12-G shotgun sentry gun case
+  description: A gun case containing the 12-G shotgun sentry unit and a spare drum.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/PVE_Cases/sentry.rsi
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,3,1
+    whitelist:
+      tags:
+      - RMCSentry
+      - RMCMagazineSentry
+  - type: StorageFill
+    contents:
+    - id: RMCSentryShotgun
+    - id: RMCMagazineSentryShotgun
+  - type: ItemMapper
+    mapLayers:
+      gun:
+        whitelist:
+          tags:
+          - RMCSentry
+
+- type: entity
+  parent: RMCBasePVEEquipmentCase
+  id: AU14CaseSentryFlamer
+  name: 55-FA assault sentry flamer case
+  description: A gun case containing the 55-FA assault sentry unit and a spare drum.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/PVE_Cases/sentry.rsi
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,3,1
+    whitelist:
+      tags:
+      - RMCSentry
+      - RMCMagazineSentry
+  - type: StorageFill
+    contents:
+    - id: RMCSentryFire
+    - id: RMCMagazineSentryFire
+  - type: ItemMapper
+    mapLayers:
+      gun:
+        whitelist:
+          tags:
+          - RMCSentry
+
+- type: entity
+  parent: RMCBasePVEEquipmentCase
+  id: AU14CaseSentryFlamerMini
+  name: 45-FM mini sentry flamer case
+  description: A gun case containing the 45-FM mini sentry unit and a spare drum.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/PVE_Cases/sentry.rsi
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,3,1
+    whitelist:
+      tags:
+      - RMCSentry
+      - RMCMagazineSentry
+  - type: StorageFill
+    contents:
+    - id: RMCSentryMiniFire
+    - id: RMCMagazineSentryFire
+  - type: ItemMapper
+    mapLayers:
+      gun:
+        whitelist:
+          tags:
+          - RMCSentry
+
+- type: entity
+  parent: AU14KitPlatoonOfficer
+  id: AU14InfiltratorApparelBundle
+  name: infiltrator's civilian apparel bundle
+  description: "A bundle of civilian clothing and accessories for infiltrators to blend in with the local population."
+  components:
+  - type: Sprite
+    sprite: _CMU14/Items/infiltrator_briefcase.rsi
+  - type: Icon
+    sprite: _CMU14/Items/infiltrator_briefcase.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,21,3
+  - type: StorageFill
+    contents:
+      - id: AU14IDCardColonyColonist
+        amount: 1
+      - id: AU14IDCardColonyEngineer
+        amount: 1
+      - id: AU14IDCardColonyCorporateLiaison
+        amount: 1
+      - id: RMCHardhatWhite
+        amount: 1
+      - id: AU14CivilianSanitationClothes
+        amount: 1
+      - id: AU14CivilianHazardVestSanitation
+        amount: 1
+      - id: AU14CivilianFullSuitSanitation
+        amount: 1
+      - id: AU14CivilianWeYuEngineerClothes
+        amount: 1
+      - id: AU14CivilianFullSuitWeYuEngineer
+        amount: 1
+      - id: RMCJumpsuitLiaisonGreyWorkwear
+        amount: 1
+      - id: AU14CivilianJacketGreenParka
+        amount: 1
+      - id: CMJumpsuitLiaisonField
+        amount: 1
+      - id: AU14CivilianBrownTrenchCoat
+        amount: 1
+      - id: RMCJacketCorporateBrown
+        amount: 1
+      - id: CMJumpsuitColonist
+        amount: 1
+      - id: CMJumpsuitTShirtWhite
+        amount: 1
+      - id: RMCShoesLaceup
+        amount: 1
+      - id: RMCShoesBlack
+        amount: 1
+      - id: RMCGlassesAviators
+        amount: 1
+      - id: RMCHippieGlasses
+        amount: 1
+      - id: RMCSunglasses
+        amount: 1
+      - id: RMCCLFArmband
+        amount: 1
+        prob: 0.02

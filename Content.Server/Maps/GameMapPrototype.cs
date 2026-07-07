@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Numerics;
 using Content.Server.AU14;
 using Content.Shared.AU14;
+using Content.Shared.AU14.Allegiance;
 
 namespace Content.Server.Maps;
 
@@ -84,4 +85,7 @@ public sealed partial class GameMapPrototype : IPrototype
         clone.MapPath = mapPath;
         return clone;
     }
+
+    [DataField]
+    public ProtoId<AllegiancePrototype>? Allegiance { get; private set; }
 }

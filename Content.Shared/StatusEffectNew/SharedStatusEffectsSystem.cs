@@ -147,7 +147,7 @@ public abstract partial class SharedStatusEffectsSystem : EntitySystem
         if (!_proto.TryIndex(effectProto, out var effectProtoData))
             return false;
 
-        if (!effectProtoData.TryGetComponent<StatusEffectComponent>(out var effectProtoComp, _compFactory))
+        if (!effectProtoData.TryComp<StatusEffectComponent>(out var effectProtoComp, _compFactory))
             return false;
 
         if (!_whitelist.CheckBoth(uid, effectProtoComp.Blacklist, effectProtoComp.Whitelist))

@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.BlurredVision;
 using Content.Shared._RMC14.Deafness;
@@ -241,6 +242,7 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
             }
         }
     }
+
 
     public void TryDoEffect(Entity<CMExplosionEffectComponent?> ent)
     {

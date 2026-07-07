@@ -212,7 +212,7 @@ public sealed partial class RMCPlaytimeStatsWindow : FancyWindow
         {
             if (job.Medals.TryGetValue(type, out var medalId) &&
                 _prototypeManager.TryIndex(medalId, out EntityPrototype? medalProto) &&
-                medalProto.TryGetComponent<SpriteComponent>(out var sprite, _componentFactory))
+                medalProto.TryComp<SpriteComponent>(out var sprite, _componentFactory))
             {
                 foreach (var layer in sprite.AllLayers)
                 {

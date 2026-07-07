@@ -2,6 +2,7 @@ namespace Content.Server.Chat;
 
 using Content.Server.Chat.Systems;
 using Content.Shared.Chat.Prototypes;
+using Content.Shared.FixedPoint;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Set;
 
@@ -16,6 +17,12 @@ public sealed partial class EmoteOnDamageComponent : Component
     /// </summary>
     [DataField("emoteChance"), ViewVariables(VVAccess.ReadWrite)]
     public float EmoteChance = 0.5f;
+
+    /// <summary>
+    /// Minimum damage delta required to perform an emote.
+    /// </summary>
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    public FixedPoint2 DamageThreshold = FixedPoint2.Zero;
 
     /// <summary>
     /// A set of emotes that will be randomly picked from.

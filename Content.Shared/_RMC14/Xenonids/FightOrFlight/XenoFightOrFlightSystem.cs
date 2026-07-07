@@ -5,6 +5,7 @@ using Content.Shared.Coordinates;
 using Content.Shared.Jittering;
 using Content.Shared.Popups;
 using Content.Shared.StatusEffect;
+using Content.Shared.StatusEffectNew;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 
@@ -17,6 +18,7 @@ public sealed partial class XenoFightOrFlightSystem : EntitySystem
     [Dependency] private XenoEnergySystem _energy = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private SharedStatusEffectsSystem _statusEffect = default!;
     [Dependency] private StatusEffectQuerySystem _status = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
@@ -59,6 +61,11 @@ public sealed partial class XenoFightOrFlightSystem : EntitySystem
             foreach (var status in xeno.Comp.AilmentsRemove)
             {
                 _status.TryRemoveStatusEffect(otherXeno, status);
+            }
+
+            foreach (var status in xeno.Comp.AilmentsRemoveNew)
+            {
+                _statusEffect.TryRemoveStatusEffect(otherXeno, status);
             }
 
             EntityManager.RemoveComponents(otherXeno, xeno.Comp.ComponentsRemove);

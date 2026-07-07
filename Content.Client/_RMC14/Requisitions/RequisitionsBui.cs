@@ -8,6 +8,7 @@ using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using static Content.Shared._RMC14.Requisitions.Components.RequisitionsElevatorMode;
@@ -467,7 +468,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
             .Select(layer => layer.Default)
             .ToList();
 
-        if (prototype.TryGetComponent<SpriteComponent>("Sprite", out var sprite) &&
+        if (prototype.TryComp<SpriteComponent>(CompName.Get<SpriteComponent>(EntMan.ComponentFactory), out var sprite) &&
             sprite.AllLayers.FirstOrDefault() is { } firstLayer)
         {
             texture.Modulate = firstLayer.Color;

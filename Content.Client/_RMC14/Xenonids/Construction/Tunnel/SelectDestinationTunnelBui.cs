@@ -598,8 +598,6 @@ public sealed partial class SelectDestinationTunnelBui : BoundUserInterface
         _window.SetBlipUpdateCallback(() => UpdateBlips());
 
         var wrapper = _window.TacticalMapWrapper;
-        TabContainer.SetTabVisible(wrapper.CanvasTab, false);
-        wrapper.Tabs.CurrentTab = 0;
 
         wrapper.Map.MouseFilter = MouseFilterMode.Stop;
         wrapper.Canvas.MouseFilter = MouseFilterMode.Stop;

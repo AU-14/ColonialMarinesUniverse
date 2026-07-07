@@ -575,7 +575,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         var angle = GetRecoilAngle(gunUid, Timing.CurTime, gun, mapDirection.ToAngle());
 
         // If applicable, this ensures the projectile is parented to grid on spawn, instead of the map.
-        var fromEnt = MapManager.TryFindGridAt(fromMap, out var gridUid, out var grid)
+        var fromEnt = MapSystem.TryFindGridAt(fromMap, out var gridUid, out var grid)
             ? TransformSystem.WithEntityId(fromCoordinates, gridUid)
             : new EntityCoordinates(MapSystem.GetMap(fromMap.MapId), fromMap.Position);
 

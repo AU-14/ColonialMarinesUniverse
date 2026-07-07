@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Content.Shared._CMU14.DroneOperator;
+using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Shared._CMU14.Medical.Items;
 using Content.Shared._CMU14.Medical.Surgery.Markers;
 using Content.Shared._CMU14.Medical.Surgery.Traits;
@@ -1196,6 +1198,8 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             return false;
         if (heldBp.PartType != targetType || heldBp.Symmetry != targetSymmetry)
             return false;
+        if (!CanPatientAcceptLimb(patient, heldLimb))
+            return false;
         if (targetType is not (BodyPartType.Arm or BodyPartType.Leg))
             return false;
 
@@ -1226,6 +1230,12 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         }
 
         return false;
+    }
+
+    public bool CanPatientAcceptLimb(EntityUid patient, EntityUid heldLimb)
+    {
+        return !HasComp<CMUDroneAndroidComponent>(patient) ||
+               HasComp<CMURoboticLimbComponent>(heldLimb);
     }
 
     public bool ToolMatchesCategory(EntityUid tool, string? category)

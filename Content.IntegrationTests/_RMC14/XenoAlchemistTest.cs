@@ -16,6 +16,7 @@ using Content.Shared.Damage;
 using Content.Shared.EntityEffects;
 using Content.Shared.EntityEffects.Effects;
 using Content.Shared.FixedPoint;
+using Content.Shared.StatusEffectNew;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -338,6 +339,7 @@ public sealed class XenoAlchemistTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var status = entMan.System<SharedStatusEffectsSystem>();
             var alchemist = entMan.SpawnEntity("RMCTestXenoSpitterAlchemistNoctineFull", map.GridCoords);
             var target = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
             var action = SpawnAction(entMan);
@@ -346,7 +348,7 @@ public sealed class XenoAlchemistTest
             {
                 RaiseTailInjection(entMan, alchemist, target, action);
 
-                Assert.That(entMan.HasComponent<RMCDazedComponent>(target), Is.True);
+                Assert.That(status.HasStatusEffect(target, RMCDazedSystem.StatusEffectDazed), Is.True);
             }
             finally
             {
@@ -400,6 +402,7 @@ public sealed class XenoAlchemistTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var status = entMan.System<SharedStatusEffectsSystem>();
             var alchemist = entMan.SpawnEntity("RMCTestXenoSpitterAlchemistPyrinineFull", map.GridCoords);
             var target = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
             var action = SpawnAction(entMan);
@@ -408,7 +411,7 @@ public sealed class XenoAlchemistTest
             {
                 RaiseTailInjection(entMan, alchemist, target, action);
 
-                Assert.That(entMan.HasComponent<RMCDazedComponent>(target), Is.True);
+                Assert.That(status.HasStatusEffect(target, RMCDazedSystem.StatusEffectDazed), Is.True);
             }
             finally
             {

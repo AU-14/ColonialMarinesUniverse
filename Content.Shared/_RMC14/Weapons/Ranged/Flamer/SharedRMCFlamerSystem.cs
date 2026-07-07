@@ -147,6 +147,9 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
 
     private void OnFlamerTankBeforeRangedInteract(Entity<RMCFlamerTankComponent> tank, ref BeforeRangedInteractEvent args)
     {
+        if (!args.CanReach)
+            return;
+
         if (!HasComp<RMCFlamerAmmoProviderComponent>(tank))
         {
             RefillTank(tank, ref args);

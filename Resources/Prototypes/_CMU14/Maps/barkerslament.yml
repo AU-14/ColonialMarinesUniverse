@@ -1,0 +1,78 @@
+- type: gameMap
+  id: CMULV376BarkersLament
+  mapName: LV-376 Ulixes
+  allegiance: UA
+  mapPath: /Maps/_AU14/BarkersMultiZ/barkers0.yml
+  mapsBelow:
+  - /Maps/_AU14/BarkersMultiZ/barkers-1.yml
+  mapsAbove:
+  - /Maps/_AU14/BarkersMultiZ/barkers1.yml
+  - /Maps/_AU14/BarkersMultiZ/barkers2.yml
+  minPlayers: 40
+  maxPlayers: 140
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    LV-376:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'LV-376 Ulixes'
+        - type: StationJobs
+          availableJobs:
+            AU14JobCivilianColonist: [-1, -1]
+            AU14JobCivilianJournalist: [2, 2]
+
+            # Colony Service
+            AU14JobCivilianHeadOfService: [1, 1]
+            AU14JobCivilianShopkeep: [2, 2]
+            AU14JobCivilianFoodServiceWorker: [3, 3]
+            AU14JobCivilianWasteManagementSpecialist: [3, 3]
+
+            AU14JobCivilianColonySynthetic: [2, 2]
+            AU14JobColonyWorkingJoe: [4, 4]
+
+            # Colony Command (non department)
+            AU14JobCivilianColonyAdministrator: [1, 1]
+            AU14JobCivilianColonyAdminAssistant: [1, 1]
+
+            # Ambassadors
+            AU14JobCivilianAmbassadorTWE: [1, 1]
+            AU14JobCivilianAmbassadorUA: [1, 1]
+            AU14JobCivilianUSASFRecruiter: [1, 1]
+
+            # Corporate
+            AU14JobCivilianCorporateLiaison: [1, 1]
+            AU14JobCivilianCorporateAssistant: [1, 1]
+
+            AU14JobCivilianScientist: [6, 6]
+            AU14JobWYGuard: [4,4]
+
+            # Security/LEO
+            AU14JobCivilianCMBMarshal: [1, 1]
+            AU14JobCivilianCMBDeputy: [5, 5]
+
+            # Engineering/Logi
+            AU14JobCivilianForeman: [1, 1]
+            AU14JobCivilianFreightSystemsSpecialist: [3, 3]
+
+            AU14JobCivilianHeadOfEngineering: [1, 1]
+            AU14JobCivilianEngineer: [5, 5]
+
+            # Medical
+            AU14JobCivilianHeadPhysician: [1, 1]
+            AU14JobCivilianPhysician: [3, 3]
+            AU14JobCivilianNurse: [3, 3]
+            AU14JobCivilianEthicsAndWellnessAdvisor: [1, 1]
+            AU14JobCivilianEmergencyResponseOfficer: [2, 2]
+
+            # Orbital
+            AU14JobCivilianOrbitalArbiter: [1, 1]
+            AU14JobCivilianOrbitalLawyer: [2, 3]
+
+            # Other
+            AU14JobCivilianMiner: [10, 10]
+            AU14JobCivilianPrisoner: [3, 3]
+
+            AU14JobMobBoss: [1, 1]
+            AU14JobMobGoon: [3, 3]

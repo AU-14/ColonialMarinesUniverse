@@ -273,11 +273,3 @@
     stampedName: stamp-component-stamped-name-cm-free-press
     stampedColor: "#1e5bd2"
     stampState: "paper_stamp-free-press"
-
-- type: entity
-  parent: CMStampXO
-  id: AU14StampAdjutant
-  name: adjutant's rubber stamp
-  components:
-  - type: Stamp
-    stampedName: Adjutant

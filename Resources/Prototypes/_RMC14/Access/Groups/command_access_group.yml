@@ -34,6 +34,7 @@
   - CMAccessRequisitions # (cargo)
   - CMAccessResearch # research access
   - CMAccessSEA # senior enlisted
+  - RMCAccessVehicleCrew # vehicle bay
   - CMAccessSmartPrep # smart gun operator
   - CMAccessSpecPrep # weapons specialist
   - CMAccessSquadLeaderPrep # squad leader access
@@ -92,6 +93,7 @@
   - CMAccessRequisitions # (cargo)
   - CMAccessResearch # research access
   - CMAccessSEA # senior enlisted
+  - RMCAccessVehicleCrew # vehicle bay
   - CMAccessSmartPrep # smart gun operator
   - CMAccessSpecPrep # weapons specialist
   - CMAccessSquadLeaderPrep # squad leader access
@@ -141,6 +143,7 @@
   - CMAccessRequisitions
   - CMAccessResearch
   - CMAccessSEA
+  - RMCAccessVehicleCrew
   - CMAccessSmartPrep
   - CMAccessSpecPrep
   - CMAccessSquadLeaderPrep
@@ -200,6 +203,7 @@
   - RMCAccessCommand
   - CMAccessDropship
   - CMAccessMedical
+  - RMCAccessVehicleCrew
   - RMCAccessDatabase
 
 # Corp access, probably not needed

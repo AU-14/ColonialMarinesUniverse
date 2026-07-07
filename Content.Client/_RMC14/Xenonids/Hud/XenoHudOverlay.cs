@@ -549,6 +549,9 @@ public sealed partial class XenoHudOverlay : Overlay
         var synth = _entity.AllEntityQueryEnumerator<SynthComponent, SpriteComponent, TransformComponent>();
         while (synth.MoveNext(out var uid, out var comp, out var sprite, out var xform))
         {
+            if (comp.UseHumanHealthIcons)
+                continue;
+
             if (xform.MapID != args.MapId)
                 continue;
 

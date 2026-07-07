@@ -9,6 +9,9 @@ namespace Content.Shared._RMC14.Xenonids.Fling;
 [Access(typeof(XenoFlingSystem))]
 public sealed partial class XenoFlingComponent : Component
 {
+    [DataField, AutoNetworkedField]
+    public bool HasAltFling = false;
+
     [DataField]
     public DamageSpecifier Damage = new();
 

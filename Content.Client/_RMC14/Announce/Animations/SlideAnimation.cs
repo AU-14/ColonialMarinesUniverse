@@ -38,4 +38,3 @@ public sealed class SlideAnimation : IAnnouncementAnimation
         return AnnouncementAnimationStatus.Running;
     }
 }
-

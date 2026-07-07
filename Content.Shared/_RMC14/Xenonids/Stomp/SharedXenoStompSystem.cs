@@ -57,6 +57,7 @@ public sealed partial class XenoStompSystem : EntitySystem
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private TurfSystem _turf = default!;
 
+
     public override void Initialize()
     {
         base.Initialize();
@@ -191,6 +192,11 @@ public sealed partial class XenoStompSystem : EntitySystem
 
             if (xeno.Comp.Slows)
                 _slow.TrySuperSlowdown(receiver, xeno.Comp.SlowTime, true);
+
+            if (xeno.Comp.KnocksBack)
+            {
+                _size.KnockBack(receiver, origin, xeno.Comp.KnockbackPower, xeno.Comp.KnockbackPower + 1f);
+            }
 
             if (xform.Coordinates.TryDistance(EntityManager, receiver.Owner.ToCoordinates(), out var distance) && distance <= xeno.Comp.ShortRange)
             {

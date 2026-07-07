@@ -42,6 +42,7 @@ namespace Content.Client.Chat.UI
             Emote,
             Say,
             Whisper,
+            Radio,
             Looc
         }
 
@@ -86,6 +87,9 @@ namespace Content.Client.Chat.UI
 
         public static SpeechBubble CreateSpeechBubble(SpeechType type, ChatMessage message, EntityUid senderEntity)
         {
+            if (IoCManager.Resolve<IConfigurationManager>().GetCVar(CCVars.ChatEnableRunechatBubbles))
+                return new RunechatSpeechBubble(type, message, senderEntity);
+
             switch (type)
             {
                 case SpeechType.Emote:
@@ -97,6 +101,9 @@ namespace Content.Client.Chat.UI
                 case SpeechType.Whisper:
                     return new FancyTextSpeechBubble(message, senderEntity, "whisperBox");
 
+                case SpeechType.Radio:
+                    return new TextSpeechBubble(message, senderEntity, "sayBox", message.Display?.AccentColor ?? Color.FromHex("#73d48f"));
+
                 case SpeechType.Looc:
                     return new TextSpeechBubble(message, senderEntity, "emoteBox", Color.FromHex("#48d1cc"));
 
@@ -105,12 +112,13 @@ namespace Content.Client.Chat.UI
             }
         }
 
-        public SpeechBubble(ChatMessage message, EntityUid senderEntity, string speechStyleClass, Color? fontColor = null)
+        public SpeechBubble(ChatMessage message, EntityUid senderEntity, string speechStyleClass, Color? fontColor = null, TimeSpan? totalTime = null)
         {
             IoCManager.InjectDependencies(this);
             _senderEntity = senderEntity;
             _transformSystem = _entityManager.System<SharedTransformSystem>();
             _zLevels = _entityManager.System<CMUClientZLevelsSystem>();
+            MouseFilter = MouseFilterMode.Ignore;
 
             // Use text clipping so new messages don't overlap old ones being pushed up.
             RectClipContent = true;
@@ -124,10 +132,20 @@ namespace Content.Client.Chat.UI
             bubble.Measure(Vector2Helpers.Infinity);
             ContentSize = bubble.DesiredSize;
             _verticalOffsetAchieved = -ContentSize.Y;
-            _deathTime = _timing.RealTime + TotalTime;
+            _deathTime = _timing.RealTime + (totalTime ?? TotalTime);
         }
 
         protected abstract Control BuildBubble(ChatMessage message, string speechStyleClass, Color? fontColor = null);
+
+        protected virtual Vector2 GetWorldPositionOffset(EntityUid senderEntity, TransformComponent xform)
+        {
+            return Vector2.Zero;
+        }
+
+        protected virtual Vector2 GetScreenPositionOffset(EntityUid senderEntity, TransformComponent xform)
+        {
+            return Vector2.Zero;
+        }
 
         protected override void FrameUpdate(FrameEventArgs args)
         {
@@ -189,9 +207,13 @@ namespace Content.Client.Chat.UI
                 baseOffset = speech.SpeechBubbleOffset;
 
             var offset = (-_eyeManager.CurrentEye.Rotation).ToWorldVec() * -(EntityVerticalOffset + baseOffset);
-            var worldPos = _transformSystem.GetWorldPosition(xform) + offset - zPassOffset;
+            var worldPos = _transformSystem.GetWorldPosition(xform) +
+                           offset +
+                           GetWorldPositionOffset(_senderEntity, xform) -
+                           zPassOffset;
 
-            var lowerCenter = _eyeManager.WorldToScreen(worldPos) / UIScale;
+            var lowerCenter = _eyeManager.WorldToScreen(worldPos) / UIScale +
+                              GetScreenPositionOffset(_senderEntity, xform);
             var screenPos = lowerCenter - new Vector2(ContentSize.X / 2, ContentSize.Y + _verticalOffsetAchieved);
             // Round to nearest 0.5
             screenPos = (screenPos * 2).Rounded() / 2;

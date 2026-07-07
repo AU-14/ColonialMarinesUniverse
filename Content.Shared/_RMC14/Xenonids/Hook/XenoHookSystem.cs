@@ -84,4 +84,12 @@ public sealed partial class XenoHookSystem : EntitySystem
 
         return true;
     }
+
+    public void UnhookTarget(Entity<XenoHookComponent> xeno, EntityUid target)
+    {
+        if (xeno.Comp.Hooked.Remove(target))
+            Dirty(xeno);
+
+        RemCompDeferred<XenoHookedComponent>(target);
+    }
 }

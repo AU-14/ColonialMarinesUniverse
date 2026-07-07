@@ -1,4 +1,5 @@
 using Content.Shared._CMU14.Medical.BodyPart.Events;
+using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Shared._CMU14.Medical.Bones.Events;
 using Content.Shared._CMU14.Medical.Items;
 using Content.Shared._CMU14.Medical.Organs;
@@ -75,6 +76,9 @@ public abstract partial class SharedBoneSystem : EntitySystem
 
     private bool PartBelongsToSynth(EntityUid part)
     {
+        if (HasComp<CMURoboticLimbComponent>(part))
+            return true;
+
         return TryComp<BodyPartComponent>(part, out var bodyPart) &&
                bodyPart.Body is { } body &&
                HasComp<SynthComponent>(body);

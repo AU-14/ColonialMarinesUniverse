@@ -17,10 +17,10 @@ public sealed partial class QueenEyeOverlay : Overlay
     private static readonly ProtoId<ShaderPrototype> StencilDrawShader = "StencilDraw";
 
     [Dependency] private IClyde _clyde = default!;
-    [Dependency] private IEntityManager _entities = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private IGameTiming _timing = default!;
+    private readonly IEntityManager _entities;
+    private readonly SharedMapSystem _mapSystem;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
 
@@ -34,9 +34,11 @@ public sealed partial class QueenEyeOverlay : Overlay
     private readonly float _updateRate = 1f / 30f;
     private float _accumulator;
 
-    public QueenEyeOverlay()
+    public QueenEyeOverlay(IEntityManager entManager)
     {
+        _entities = entManager;
         IoCManager.InjectDependencies(this);
+        _mapSystem = _entities.System<SharedMapSystem>();
         ZIndex = 2;
     }
 
@@ -146,7 +148,7 @@ public sealed partial class QueenEyeOverlay : Overlay
         out BroadphaseComponent broadphase)
     {
         _renderGrids.Clear();
-        _mapManager.FindGridsIntersecting(mapId, worldBounds, ref _renderGrids, approx: true, includeMap: true);
+        _mapSystem.FindGridsIntersecting(mapId, worldBounds, ref _renderGrids, approx: true, includeMap: true);
 
         foreach (var candidate in _renderGrids)
         {

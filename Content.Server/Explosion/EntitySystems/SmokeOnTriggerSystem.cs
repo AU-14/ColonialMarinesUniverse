@@ -33,7 +33,7 @@ public sealed partial class SmokeOnTriggerSystem : SharedSmokeOnTriggerSystem
     {
         var xform = Transform(uid);
         var mapCoords = _transform.GetMapCoordinates(uid, xform);
-        if (!_mapMan.TryFindGridAt(mapCoords, out var gridUid, out var grid) ||
+        if (!_map.TryFindGridAt(mapCoords, out var gridUid, out var grid) ||
             !_map.TryGetTileRef(gridUid, grid, xform.Coordinates, out var tileRef) ||
             tileRef.Tile.IsEmpty)
         {

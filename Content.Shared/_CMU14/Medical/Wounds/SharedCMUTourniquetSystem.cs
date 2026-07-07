@@ -191,6 +191,8 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
     {
         if (!HasComp<BodyPartComponent>(part))
             return false;
+        if (HasComp<CMURoboticLimbComponent>(part))
+            return false;
         if (HasComp<SynthComponent>(part))
             return false;
         if (Wounds.TryGetBodyOwner(part) is { } body && HasComp<SynthComponent>(body))
@@ -243,6 +245,10 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
                 {
                     continue;
                 }
+                if (HasComp<CMURoboticLimbComponent>(id))
+                {
+                    continue;
+                }
 
                 if (HasComp<CMUTourniquetComponent>(id))
                 {
@@ -264,6 +270,8 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
         {
             if (!IsTourniquetable(partComp.PartType))
                 continue;
+            if (HasComp<CMURoboticLimbComponent>(id))
+                continue;
             if (HasComp<CMUTourniquetComponent>(id))
             {
                 part = id;
@@ -275,6 +283,8 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
         foreach (var (id, partComp) in Body.GetBodyChildren(patient))
         {
             if (!IsTourniquetable(partComp.PartType))
+                continue;
+            if (HasComp<CMURoboticLimbComponent>(id))
                 continue;
             if (HasComp<BodyPartWoundComponent>(id) || HasComp<InternalBleedingComponent>(id))
             {
@@ -353,8 +363,13 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUTourniquetComponent, BodyPartComponent>();
         while (query.MoveNext(out var partUid, out var tq, out var part))
         {
-            if (part.Body is not { } body || Unrevivable.IsUnrevivable(body) || HasComp<SynthComponent>(body))
+            if (part.Body is not { } body ||
+                Unrevivable.IsUnrevivable(body) ||
+                HasComp<SynthComponent>(body) ||
+                HasComp<CMURoboticLimbComponent>(partUid))
+            {
                 continue;
+            }
 
             if (tq.NextUpdate > now)
                 continue;

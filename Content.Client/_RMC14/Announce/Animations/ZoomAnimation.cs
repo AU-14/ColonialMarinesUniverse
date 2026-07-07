@@ -36,4 +36,3 @@ public sealed class ZoomAnimation : IAnnouncementAnimation
         return AnnouncementAnimationStatus.Running;
     }
 }
-

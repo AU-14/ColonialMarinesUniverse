@@ -10,3 +10,12 @@ cmu-medical-detailed-examine-none = No obvious injuries found.
 cmu-medical-detailed-examine-window-title = Injuries - { $target }
 cmu-medical-detailed-examine-window-heading = Injury report
 cmu-medical-detailed-examine-window-bleeding = Bleeding: { $tier }
+
+cmu-robotic-limb-material-synthetic = synthetic
+cmu-robotic-limb-examine-state = prosthesis
+cmu-robotic-limb-examine-brute = dented plating
+cmu-robotic-limb-examine-burn = scorched wiring
+cmu-robotic-limb-detailed-state = prosthesis
+cmu-robotic-limb-detailed-brute = mechanical trauma: dented plating
+cmu-robotic-limb-detailed-burn = thermal damage: scorched wiring
+cmu-robotic-limb-inspect-header = Robotic Limb Damage

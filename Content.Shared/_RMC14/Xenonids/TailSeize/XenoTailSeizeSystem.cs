@@ -62,22 +62,28 @@ public sealed partial class XenoTailSeizeSystem : EntitySystem
         if (!TryComp<XenoHookComponent>(args.Shooter, out var hookComp))
             return;
 
-        if (!_hook.TryHookTarget((args.Shooter.Value, hookComp), args.Target))
-            return;
-
-        _pulling.TryStopAllPullsFromAndOn(args.Target);
-
         var origin = _transform.GetMoverCoordinates(args.Shooter.Value);
         var mapCoords = _transform.GetMapCoordinates(args.Shooter.Value);
         var target = _transform.GetMoverCoordinates(args.Target);
         if (!origin.TryDistance(EntityManager, target, out var dis))
             return;
 
+        var hookEnt = (args.Shooter.Value, hookComp);
+        if (!_hook.TryHookTarget(hookEnt, args.Target))
+            return;
+
+        _pulling.TryStopAllPullsFromAndOn(args.Target);
+
         var knockBackDistance = dis < hook.Comp.TargetStopDistance
             ? -hook.Comp.MinimumHookDistance
             : -(dis - hook.Comp.TargetStopDistance);
         _obstacleSlamming.MakeImmune(args.Target);
-        _size.KnockBack(args.Target, mapCoords, knockBackDistance, knockBackDistance, 10);
+        if (!_size.KnockBack(args.Target, mapCoords, knockBackDistance, knockBackDistance, 10))
+        {
+            _hook.UnhookTarget(hookEnt, args.Target);
+            return;
+        }
+
         EnsureComp<VictimTailSeizedComponent>(args.Target);
     }
 

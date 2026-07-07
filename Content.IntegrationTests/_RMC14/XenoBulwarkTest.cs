@@ -30,6 +30,13 @@ public sealed class XenoBulwarkTest
   components:
   - type: XenoBulwark
     reflecting: true
+
+- type: entity
+  parent: CMXenoWarriorBulwark
+  id: RMCTestXenoBulwarkLongTailSwing
+  components:
+  - type: XenoBulwark
+    tailSwingRange: 3
 ";
 
     [Test]
@@ -195,6 +202,39 @@ public sealed class XenoBulwarkTest
             {
                 entMan.DeleteEntity(xeno);
                 entMan.DeleteEntity(grenade);
+                entMan.DeleteEntity(action.Owner);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task TailSwingDoesNotHitThroughWalls()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var xeno = entMan.SpawnEntity("RMCTestXenoBulwarkLongTailSwing", map.GridCoords);
+            var wall = entMan.SpawnEntity("CMWallMetal", map.GridCoords.Offset(new Vector2(1, 0)));
+            var target = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(2, 0)));
+            var action = SpawnAction(entMan);
+
+            try
+            {
+                RaiseTailSwing(entMan, xeno, action);
+
+                Assert.That(TotalDamage(entMan, target), Is.Zero);
+            }
+            finally
+            {
+                entMan.DeleteEntity(xeno);
+                entMan.DeleteEntity(wall);
+                entMan.DeleteEntity(target);
                 entMan.DeleteEntity(action.Owner);
             }
         });

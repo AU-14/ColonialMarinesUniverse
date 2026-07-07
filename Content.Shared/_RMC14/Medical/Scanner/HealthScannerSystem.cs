@@ -111,7 +111,7 @@ public sealed partial class HealthScannerSystem : EntitySystem
         Dirty(scanner);
 
         _audio.PlayPredicted(scanner.Comp.Sound, scanner, args.User);
-        UpdateUI(scanner);
+        UpdateUI(scanner, args.User);
 
         if (scanner.Comp.Target != null)
             _ui.OpenUi(scanner.Owner, HealthScannerUIKey.Key, args.User);
@@ -165,7 +165,7 @@ public sealed partial class HealthScannerSystem : EntitySystem
         return true;
     }
 
-    private void UpdateUI(Entity<HealthScannerComponent> scanner)
+    private void UpdateUI(Entity<HealthScannerComponent> scanner, EntityUid? examinerOverride = null)
     {
         if (scanner.Comp.Target is not { } target)
             return;
@@ -179,7 +179,7 @@ public sealed partial class HealthScannerSystem : EntitySystem
             return;
         }
 
-        if (!_rmcHands.TryGetHolder(scanner, out _))
+        if (examinerOverride == null && !_rmcHands.TryGetHolder(scanner, out _))
             return;
 
         FixedPoint2 blood = 0;
@@ -197,8 +197,8 @@ public sealed partial class HealthScannerSystem : EntitySystem
         var state = new HealthScannerBuiState(GetNetEntity(target), blood, maxBlood, temperature, chemicals, bleeding);
         FillBaseMedicalReadout(target, state);
 
-        EntityUid? examiner = null;
-        if (_rmcHands.TryGetHolder(scanner, out var holder))
+        var examiner = examinerOverride;
+        if (examiner == null && _rmcHands.TryGetHolder(scanner, out var holder))
             examiner = holder;
         var buildEv = new HealthScannerBuildStateEvent(scanner.Owner, target, examiner, state);
         RaiseLocalEvent(scanner.Owner, ref buildEv);

@@ -231,6 +231,9 @@ public sealed partial class RMCPullingSystem : EntitySystem
         if (!TryComp<XenoParasiteComponent>(target, out var paraComp))
             return;
 
+        if (!HasComp<InfectableComponent>(user))
+            return;
+
         Entity<XenoParasiteComponent> comp = (target, paraComp);
         args.Cancelled = true;
 

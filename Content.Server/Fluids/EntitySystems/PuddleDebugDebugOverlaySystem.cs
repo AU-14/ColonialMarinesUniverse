@@ -62,7 +62,7 @@ public sealed partial class PuddleDebugDebugOverlaySystem : SharedPuddleDebugOve
                 new Vector2(LocalViewRange, LocalViewRange));
 
             _grids.Clear();
-            _mapManager.FindGridsIntersecting(transform.MapID, worldBounds, ref _grids);
+            _map.FindGridsIntersecting(transform.MapID, worldBounds, ref _grids);
 
             foreach (var grid in _grids)
             {

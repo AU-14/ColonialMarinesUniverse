@@ -93,7 +93,7 @@ public partial class ChatBox : UIWidget
     private readonly Queue<RepeatedMessage> _primaryRepeatQueue = new();
     private readonly Queue<RepeatedMessage> _secondaryRepeatQueue = new();
     private readonly Queue<RepeatedMessage> _legacyRepeatQueue = new();
-    private readonly HashSet<string> _whitelist = ["mono", "scramble", "bolditalic", "bold", "bullet", "color", "font", "head", "italic", "langicon"];
+    private readonly HashSet<string> _whitelist = ["mono", "scramble", "bolditalic", "bold", "bullet", "cmdlink", "color", "font", "head", "italic", "langicon"];
     // RMC14
 
     public ChatBox()
@@ -1163,7 +1163,8 @@ public partial class ChatBox : UIWidget
 
     private FormattedMessage CreateFormattedMessage(ChatMessage message, Color color, ChatStyleSettings? style = null)
     {
-        var markup = StripDuplicateChannelPrefix(message.WrappedMessage, message);
+        var markup = StripGhostFollowCommandLink(message.WrappedMessage, message);
+        markup = StripDuplicateChannelPrefix(markup, message);
         markup = _colorWholeMessage
             ? ChatUserSettings.ApplyStyleMarkup(markup, style, ChatUserSettings.DefaultFontSize)
             : ChatUserSettings.ApplyFontMarkup(RemoveOuterColorMarkup(markup), style, ChatUserSettings.DefaultFontSize);
@@ -1177,7 +1178,26 @@ public partial class ChatBox : UIWidget
         if (_colorWholeMessage)
             formatted.Pop();
 
-        return FilterProblematicTags(formatted);
+        return FilterProblematicTags(formatted, allowCommandLinks: false);
+    }
+
+    private static string StripGhostFollowCommandLink(string markup, ChatMessage message)
+    {
+        if (!message.GhostFollowEntity.Valid ||
+            !markup.StartsWith("[cmdlink=", StringComparison.OrdinalIgnoreCase))
+        {
+            return markup;
+        }
+
+        var tagEnd = markup.IndexOf("/]", StringComparison.Ordinal);
+        if (tagEnd < 0)
+            return markup;
+
+        var afterTag = tagEnd + 2;
+        if (afterTag < markup.Length && markup[afterTag] == ' ')
+            afterTag++;
+
+        return markup[afterTag..];
     }
 
     private static string RemoveOuterColorMarkup(string markup)
@@ -1208,7 +1228,7 @@ public partial class ChatBox : UIWidget
 
         formatted.Pop();
 
-        return FilterProblematicTags(formatted);
+        return FilterProblematicTags(formatted, allowCommandLinks: true);
     }
 
     private static string StripDuplicateChannelPrefix(string markup, ChatMessage message)
@@ -1277,11 +1297,14 @@ public partial class ChatBox : UIWidget
     }
 
     // RMC14
-    private FormattedMessage FilterProblematicTags(FormattedMessage message)
+    private FormattedMessage FilterProblematicTags(FormattedMessage message, bool allowCommandLinks)
     {
         var output = new FormattedMessage(message.Count);
         foreach (var tag in message)
         {
+            if (tag.Name == "cmdlink" && !allowCommandLinks)
+                continue;
+
             if (tag.Name is not { } name || _whitelist.Contains(name))
                 output.PushTag(tag);
         }

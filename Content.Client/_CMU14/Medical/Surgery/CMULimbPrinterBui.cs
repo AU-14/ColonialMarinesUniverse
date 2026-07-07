@@ -27,6 +27,7 @@ public sealed class CMULimbPrinterBui : BoundUserInterface
         _window.Title = Loc.GetString("cmu-limb-printer-window-title");
         _window.EjectBeakerButton.OnPressed += _ => SendMessage(new CMULimbPrinterEjectBeakerMessage());
         _window.EjectSyringeButton.OnPressed += _ => SendMessage(new CMULimbPrinterEjectSyringeMessage());
+        _window.EjectMaterialButton.OnPressed += _ => SendMessage(new CMULimbPrinterEjectMaterialMessage());
 
         if (State is CMULimbPrinterBuiState state)
             Refresh(state);
@@ -46,8 +47,10 @@ public sealed class CMULimbPrinterBui : BoundUserInterface
 
         _window.StatusLabel.Text = state.Status;
         _window.MatrixTitleLabel.Text = state.SynthesisReagentName;
+        _window.MetalTitleLabel.Text = state.RoboticMetalName;
         _window.BeakerLabel.Text = state.BeakerName ?? Loc.GetString("cmu-limb-printer-no-beaker");
         _window.SyringeLabel.Text = state.SyringeName ?? Loc.GetString("cmu-limb-printer-no-syringe");
+        _window.MaterialLabel.Text = state.MaterialName ?? Loc.GetString("cmu-limb-printer-no-metal");
         _window.MatrixAmountLabel.Text = Loc.GetString(
             "cmu-limb-printer-fluid-amount",
             ("current", MathF.Round(state.SynthesisUnits, 1)),
@@ -56,14 +59,21 @@ public sealed class CMULimbPrinterBui : BoundUserInterface
             "cmu-limb-printer-fluid-amount",
             ("current", MathF.Round(state.BloodUnits, 1)),
             ("max", MathF.Round(state.BloodMaxUnits, 1)));
+        _window.MaterialAmountLabel.Text = Loc.GetString(
+            "cmu-limb-printer-stack-amount",
+            ("current", state.RoboticMetalUnits),
+            ("max", state.RoboticMetalMaxUnits));
         _window.MatrixCostLabel.Text = Loc.GetString("cmu-limb-printer-matrix-cost", ("cost", state.SynthesisCost));
         _window.BloodCostLabel.Text = Loc.GetString("cmu-limb-printer-blood-cost", ("cost", state.BloodCost));
+        _window.MaterialCostLabel.Text = Loc.GetString("cmu-limb-printer-metal-cost", ("cost", state.RoboticMetalCost));
 
         SetBar(_window.MatrixBar, state.SynthesisUnits, state.SynthesisMaxUnits);
         SetBar(_window.BloodBar, state.BloodUnits, state.BloodMaxUnits);
+        SetBar(_window.MaterialBar, state.RoboticMetalUnits, state.RoboticMetalMaxUnits);
 
         _window.EjectBeakerButton.Disabled = state.BeakerName is null;
         _window.EjectSyringeButton.Disabled = state.SyringeName is null;
+        _window.EjectMaterialButton.Disabled = state.MaterialName is null;
 
         _window.LeftList.RemoveAllChildren();
         _window.RightList.RemoveAllChildren();
@@ -135,7 +145,7 @@ public sealed class CMULimbPrinterBui : BoundUserInterface
             new Thickness(0),
             new Thickness(2)));
 
-        button.OnPressed += _ => SendMessage(new CMULimbPrinterPrintMessage(option.Type, option.Symmetry));
+        button.OnPressed += _ => SendMessage(new CMULimbPrinterPrintMessage(option.Kind, option.Type, option.Symmetry));
         return button;
     }
 
@@ -151,16 +161,22 @@ public sealed class CMULimbPrinterWindow : FancyWindow
 {
     public Label StatusLabel = default!;
     public Label MatrixTitleLabel = default!;
+    public Label MetalTitleLabel = default!;
     public Label BeakerLabel = default!;
     public Label SyringeLabel = default!;
+    public Label MaterialLabel = default!;
     public Label MatrixAmountLabel = default!;
     public Label BloodAmountLabel = default!;
+    public Label MaterialAmountLabel = default!;
     public Label MatrixCostLabel = default!;
     public Label BloodCostLabel = default!;
+    public Label MaterialCostLabel = default!;
     public ProgressBar MatrixBar = default!;
     public ProgressBar BloodBar = default!;
+    public ProgressBar MaterialBar = default!;
     public Button EjectBeakerButton = default!;
     public Button EjectSyringeButton = default!;
+    public Button EjectMaterialButton = default!;
     public BoxContainer LeftList = default!;
     public BoxContainer RightList = default!;
 
@@ -236,6 +252,16 @@ public sealed class CMULimbPrinterWindow : FancyWindow
             out BloodBar,
             out EjectSyringeButton,
             Loc.GetString("cmu-limb-printer-remove-syringe")));
+        fluids.AddChild(BuildFluidPanel(
+            Loc.GetString("cmu-limb-printer-metal-heading"),
+            CMUMedicalMachineStyle.Warning,
+            out MetalTitleLabel,
+            out MaterialLabel,
+            out MaterialAmountLabel,
+            out MaterialCostLabel,
+            out MaterialBar,
+            out EjectMaterialButton,
+            Loc.GetString("cmu-limb-printer-remove-metal")));
 
         var columns = new BoxContainer
         {

@@ -85,7 +85,7 @@ public sealed class BlackfootPrototypeTest
             {
                 var variantName = variant.Id.ToString();
                 Assert.That(prototypes.TryIndex<EntityPrototype>(variant.Id, out var proto), Is.True);
-                Assert.That(proto!.TryGetComponent<BlackfootFlightComponent>(out var flight, factory), Is.True, variantName);
+                Assert.That(proto!.TryComp<BlackfootFlightComponent>(out var flight, factory), Is.True, variantName);
                 Assert.That(flight!.State, Is.EqualTo(BlackfootFlightState.Stowed), variantName);
                 Assert.That(flight.VTOLSpeedMultiplier, Is.GreaterThan(1f), variantName);
                 Assert.That(flight.FlightSpeedMultiplier, Is.GreaterThan(flight.VTOLSpeedMultiplier), variantName);
@@ -103,13 +103,13 @@ public sealed class BlackfootPrototypeTest
                     }),
                     variantName);
 
-                Assert.That(proto.TryGetComponent<BlackfootFuelPowerComponent>(out var fuel, factory), Is.True, variantName);
+                Assert.That(proto.TryComp<BlackfootFuelPowerComponent>(out var fuel, factory), Is.True, variantName);
                 Assert.That(fuel!.FuelLeakDrain, Is.GreaterThan(0f), variantName);
 
                 AssertBlackfootXenoProjectileTarget(proto, factory, variantName);
 
-                Assert.That(proto.TryGetComponent<VehicleWeaponsComponent>(out _, factory), Is.True, variantName);
-                Assert.That(proto.TryGetComponent<VehicleEnterComponent>(out var enter, factory), Is.True, variantName);
+                Assert.That(proto.TryComp<VehicleWeaponsComponent>(out _, factory), Is.True, variantName);
+                Assert.That(proto.TryComp<VehicleEnterComponent>(out var enter, factory), Is.True, variantName);
                 Assert.That(enter.EntryPoints, Has.Count.EqualTo(3), variantName);
                 AssertEntryPoint(enter.EntryPoints[0], new Vector2(0f, 2f), new Vector2(8f, 9.5f), variantName);
                 AssertEntryPoint(enter.EntryPoints[1], new Vector2(-1f, -1f), new Vector2(6.75f, 8.75f), variantName);
@@ -117,19 +117,19 @@ public sealed class BlackfootPrototypeTest
                 Assert.That(enter.MaxPassengers, Is.EqualTo(9), variantName);
                 Assert.That(enter.MaxXenos, Is.EqualTo(5), variantName);
 
-                Assert.That(proto.TryGetComponent<ItemSlotsComponent>(out var itemSlots, factory), Is.True, variantName);
+                Assert.That(proto.TryComp<ItemSlotsComponent>(out var itemSlots, factory), Is.True, variantName);
                 Assert.That(itemSlots!.Slots["thrusters"].StartingItem, Is.EqualTo("VehicleBlackfootThrusters"), variantName);
                 Assert.That(itemSlots.Slots["launchers"].StartingItem, Is.EqualTo("VehicleBlackfootLaunchers"), variantName);
 
-                Assert.That(proto.TryGetComponent<HardpointSlotsComponent>(out var hardpoints, factory), Is.True, variantName);
+                Assert.That(proto.TryComp<HardpointSlotsComponent>(out var hardpoints, factory), Is.True, variantName);
                 Assert.That(hardpoints!.VehicleFamily?.ToString(), Is.EqualTo("Blackfoot"), variantName);
                 Assert.That(hardpoints.Slots.Any(slot => slot.Id == "thrusters" && slot.HardpointType == "Thruster"), Is.True, variantName);
                 Assert.That(hardpoints.Slots.Any(slot => slot.Id == "launchers" && slot.HardpointType == "Launcher"), Is.True, variantName);
 
-                Assert.That(proto.TryGetComponent<BlackfootRearDoorComponent>(out var rearDoor, factory), Is.EqualTo(variant.RearDoor), variantName);
+                Assert.That(proto.TryComp<BlackfootRearDoorComponent>(out var rearDoor, factory), Is.EqualTo(variant.RearDoor), variantName);
                 Assert.That(rearDoor!.Open, Is.False, variantName);
                 Assert.That(rearDoor.RearEntryIndex, Is.EqualTo(0), variantName);
-                Assert.That(proto.TryGetComponent<BlackfootStealthComponent>(out _, factory), Is.EqualTo(variant.Recon), variantName);
+                Assert.That(proto.TryComp<BlackfootStealthComponent>(out _, factory), Is.EqualTo(variant.Recon), variantName);
             }
         });
 
@@ -153,7 +153,7 @@ public sealed class BlackfootPrototypeTest
             }
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(TugId, out var tugProto), Is.True);
-            Assert.That(tugProto!.TryGetComponent<BlackfootTowComponent>(out var tow, factory), Is.True);
+            Assert.That(tugProto!.TryComp<BlackfootTowComponent>(out var tow, factory), Is.True);
             Assert.That(tow!.CanTow, Is.True);
             Assert.That(tow.CanBeTowed, Is.False);
             Assert.That(tow.AllowAirborneTowing, Is.False);
@@ -165,21 +165,21 @@ public sealed class BlackfootPrototypeTest
             Assert.That(tow.TaxiAccelerationMultiplier, Is.GreaterThan(0));
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(FuelPumpId, out var fuelPumpProto), Is.True);
-            Assert.That(fuelPumpProto!.TryGetComponent<BlackfootFuelPumpComponent>(out _, factory), Is.True);
-            Assert.That(fuelPumpProto.TryGetComponent<PhysicsComponent>(out var fuelPumpPhysics, factory), Is.True);
+            Assert.That(fuelPumpProto!.TryComp<BlackfootFuelPumpComponent>(out _, factory), Is.True);
+            Assert.That(fuelPumpProto.TryComp<PhysicsComponent>(out var fuelPumpPhysics, factory), Is.True);
             Assert.That(fuelPumpPhysics!.CanCollide, Is.False);
             AssertMountedPadSupport(prototypes, factory, FuelPumpId);
             AssertPackable(prototypes, factory, FuelPumpId, FuelPumpCrateId);
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(FlightComputerId, out var flightComputerProto), Is.True);
-            Assert.That(flightComputerProto!.TryGetComponent<ActivatableUIComponent>(out var activatableUi, factory), Is.True);
+            Assert.That(flightComputerProto!.TryComp<ActivatableUIComponent>(out var activatableUi, factory), Is.True);
             Assert.That(activatableUi!.Key, Is.EqualTo(BlackfootFlightComputerUiKey.Key));
-            Assert.That(flightComputerProto.TryGetComponent<UserInterfaceComponent>(out _, factory), Is.True);
+            Assert.That(flightComputerProto.TryComp<UserInterfaceComponent>(out _, factory), Is.True);
             AssertMountedPadSupport(prototypes, factory, FlightComputerId);
             AssertPackable(prototypes, factory, FlightComputerId, FlightComputerCrateId);
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(LandingPadId, out var landingPadProto), Is.True);
-            Assert.That(landingPadProto!.TryGetComponent<BlackfootLandingPadComponent>(out var landingPad, factory), Is.True);
+            Assert.That(landingPadProto!.TryComp<BlackfootLandingPadComponent>(out var landingPad, factory), Is.True);
             Assert.That(landingPad!.State, Is.EqualTo(BlackfootLandingPadState.Deployed));
             Assert.That(landingPad.FuelPumpOffset.X, Is.EqualTo(-1.15625f).Within(0.001f));
             Assert.That(landingPad.FuelPumpOffset.Y, Is.EqualTo(0f).Within(0.001f));
@@ -188,11 +188,11 @@ public sealed class BlackfootPrototypeTest
             AssertPackable(prototypes, factory, LandingPadId, FoldedLandingPadId);
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(PadLightId, out var padLightProto), Is.True);
-            Assert.That(padLightProto!.TryGetComponent<BlackfootLandingPadLightComponent>(out var padLight, factory), Is.True);
+            Assert.That(padLightProto!.TryComp<BlackfootLandingPadLightComponent>(out var padLight, factory), Is.True);
             Assert.That(padLight!.State, Is.EqualTo(BlackfootLandingPadLightState.Off));
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(PadLightOnId, out var padLightOnProto), Is.True);
-            Assert.That(padLightOnProto!.TryGetComponent<BlackfootLandingPadLightComponent>(out var padLightOn, factory), Is.True);
+            Assert.That(padLightOnProto!.TryComp<BlackfootLandingPadLightComponent>(out var padLightOn, factory), Is.True);
             Assert.That(padLightOn!.State, Is.EqualTo(BlackfootLandingPadLightState.Servicing));
 
             AssertBlackfootShadowVisualOnly(prototypes, factory);
@@ -300,7 +300,7 @@ public sealed class BlackfootPrototypeTest
         BlackfootLandingPadAttachment attachment = BlackfootLandingPadAttachment.None)
     {
         Assert.That(prototypes.TryIndex<EntityPrototype>(id, out var proto), Is.True, id.ToString());
-        Assert.That(proto!.TryGetComponent<BlackfootDeployableSupportComponent>(out var deploy, factory), Is.True, id.ToString());
+        Assert.That(proto!.TryComp<BlackfootDeployableSupportComponent>(out var deploy, factory), Is.True, id.ToString());
         Assert.That(deploy!.Prototype, Is.EqualTo(prototype), id.ToString());
         Assert.That(deploy.DeployTool.ToString(), Is.EqualTo("Anchoring"), id.ToString());
         Assert.That(deploy.DeployDelay, Is.GreaterThan(0), id.ToString());
@@ -323,9 +323,9 @@ public sealed class BlackfootPrototypeTest
         EntProtoId id)
     {
         Assert.That(prototypes.TryIndex<EntityPrototype>(id, out var proto), Is.True, id.ToString());
-        Assert.That(proto!.TryGetComponent<TransformComponent>(out var xform, factory), Is.True, id.ToString());
+        Assert.That(proto!.TryComp<TransformComponent>(out var xform, factory), Is.True, id.ToString());
         Assert.That(xform!.Anchored, Is.False, id.ToString());
-        Assert.That(proto.TryGetComponent<PullableComponent>(out _, factory), Is.False, id.ToString());
+        Assert.That(proto.TryComp<PullableComponent>(out _, factory), Is.False, id.ToString());
     }
 
     private static void AssertPackable(
@@ -335,7 +335,7 @@ public sealed class BlackfootPrototypeTest
         EntProtoId packedPrototype)
     {
         Assert.That(prototypes.TryIndex<EntityPrototype>(id, out var proto), Is.True, id.ToString());
-        Assert.That(proto!.TryGetComponent<BlackfootPackableSupportComponent>(out var packable, factory), Is.True, id.ToString());
+        Assert.That(proto!.TryComp<BlackfootPackableSupportComponent>(out var packable, factory), Is.True, id.ToString());
         Assert.That(packable!.PackedPrototype, Is.EqualTo(packedPrototype), id.ToString());
         Assert.That(packable.InitialTool.ToString(), Is.EqualTo("Anchoring"), id.ToString());
         Assert.That(packable.PanelTool.ToString(), Is.EqualTo("Screwing"), id.ToString());
@@ -351,7 +351,7 @@ public sealed class BlackfootPrototypeTest
         EntProtoId id)
     {
         Assert.That(prototypes.TryIndex<EntityPrototype>(id, out var proto), Is.True, id.ToString());
-        Assert.That(proto!.TryGetComponent<ItemComponent>(out _, factory), Is.False, id.ToString());
+        Assert.That(proto!.TryComp<ItemComponent>(out _, factory), Is.False, id.ToString());
     }
 
     private static void AssertBlackfootXenoProjectileTarget(
@@ -359,7 +359,7 @@ public sealed class BlackfootPrototypeTest
         IComponentFactory factory,
         string context)
     {
-        Assert.That(proto.TryGetComponent<FixturesComponent>(out var fixtures, factory), Is.True, context);
+        Assert.That(proto.TryComp<FixturesComponent>(out var fixtures, factory), Is.True, context);
         Assert.That(fixtures!.Fixtures.Values.Any(fixture =>
             (fixture.CollisionLayer & (int) CollisionGroup.XenoProjectileImpassable) != 0), Is.True, context);
     }
@@ -369,9 +369,9 @@ public sealed class BlackfootPrototypeTest
         IComponentFactory factory)
     {
         Assert.That(prototypes.TryIndex<EntityPrototype>(ShadowId, out var proto), Is.True);
-        Assert.That(proto!.TryGetComponent<DamageableComponent>(out _, factory), Is.False);
-        Assert.That(proto.TryGetComponent<RequireProjectileTargetComponent>(out _, factory), Is.False);
-        Assert.That(proto.TryGetComponent<FixturesComponent>(out _, factory), Is.False);
+        Assert.That(proto!.TryComp<DamageableComponent>(out _, factory), Is.False);
+        Assert.That(proto.TryComp<RequireProjectileTargetComponent>(out _, factory), Is.False);
+        Assert.That(proto.TryComp<FixturesComponent>(out _, factory), Is.False);
     }
 
     private static void AssertEntryPoint(VehicleEntryPoint entry, Vector2 offset, Vector2 interiorCoords, string context)
@@ -392,7 +392,7 @@ public sealed class BlackfootPrototypeTest
         int amount)
     {
         Assert.That(prototypes.TryIndex<EntityPrototype>(id, out var proto), Is.True, id.ToString());
-        Assert.That(proto!.TryGetComponent<BulletBoxComponent>(out var bulletBox, factory), Is.True, id.ToString());
+        Assert.That(proto!.TryComp<BulletBoxComponent>(out var bulletBox, factory), Is.True, id.ToString());
         Assert.That(bulletBox!.BulletType, Is.EqualTo(bulletType), id.ToString());
         Assert.That(bulletBox.Amount, Is.EqualTo(amount), id.ToString());
         Assert.That(bulletBox.Max, Is.EqualTo(amount), id.ToString());

@@ -1,0 +1,26 @@
+<tabs:CmuTab xmlns="https://spacestation14.io"
+             xmlns:tabs="clr-namespace:Content.Client.Options.UI.Tabs"
+             xmlns:ui="clr-namespace:Content.Client.Options.UI">
+    <BoxContainer Orientation="Vertical">
+        <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
+            <BoxContainer Orientation="Vertical" Margin="8 8 8 8" VerticalExpand="True">
+                <Label Text="{Loc 'ui-options-cmu-crt'}" StyleClasses="LabelKeyText" />
+                <CheckBox Name="CrtUiEnabledCheckBox" Text="{Loc 'ui-options-crt-ui-enabled'}" />
+                <ui:OptionColorSlider Name="CrtUiColorSlider"
+                                      Title="{Loc 'ui-options-crt-ui-color'}"
+                                      Example="{Loc 'ui-options-crt-ui-color-example'}" />
+
+                <Label Text="{Loc 'ui-options-cmu-runechat'}" StyleClasses="LabelKeyText" />
+                <CheckBox Name="RunechatSpeechBubblesCheckBox" Text="{Loc 'ui-options-runechat-speech'}" />
+                <ui:OptionSlider Name="RunechatSpeechBubbleScaleSlider" Title="{Loc 'ui-options-runechat-speech-scale'}" />
+
+                <Label Text="{Loc 'ui-options-cmu-chat'}" StyleClasses="LabelKeyText" />
+                <CheckBox Name="ChatGhostFollowButton" Text="{Loc 'cmu-ui-options-chat-follow-button'}" />
+
+                <Label Text="{Loc 'ui-options-cmu-zlevels'}" StyleClasses="LabelKeyText" />
+                <ui:OptionSlider Name="ZLevelBlurSlider" Title="{Loc 'ui-options-zlevel-blur'}" />
+            </BoxContainer>
+        </ScrollContainer>
+        <ui:OptionsTabControlRow Name="Control" Access="Public" />
+    </BoxContainer>
+</tabs:CmuTab>

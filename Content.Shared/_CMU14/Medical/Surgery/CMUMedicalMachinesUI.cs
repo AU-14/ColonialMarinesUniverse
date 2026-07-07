@@ -35,6 +35,13 @@ public enum CMULimbPrinterVisuals : byte
 }
 
 [Serializable, NetSerializable]
+public enum CMULimbPrinterPrintKind : byte
+{
+    Organic,
+    Robotic,
+}
+
+[Serializable, NetSerializable]
 public enum CMUMedicalPodVisuals : byte
 {
     Occupied,
@@ -286,41 +293,56 @@ public sealed class CMULimbPrinterBuiState : BoundUserInterfaceState
 {
     public string Status;
     public string SynthesisReagentName;
+    public string RoboticMetalName;
     public string? BeakerName;
     public string? SyringeName;
+    public string? MaterialName;
     public float SynthesisUnits;
     public float SynthesisMaxUnits;
     public float BloodUnits;
     public float BloodMaxUnits;
     public float SynthesisCost;
     public float BloodCost;
+    public int RoboticMetalUnits;
+    public int RoboticMetalMaxUnits;
+    public int RoboticMetalCost;
     public TimeSpan? WorkingUntil;
     public List<CMULimbPrinterOption> Options;
 
     public CMULimbPrinterBuiState(
         string status,
         string synthesisReagentName,
+        string roboticMetalName,
         string? beakerName,
         string? syringeName,
+        string? materialName,
         float synthesisUnits,
         float synthesisMaxUnits,
         float bloodUnits,
         float bloodMaxUnits,
         float synthesisCost,
         float bloodCost,
+        int roboticMetalUnits,
+        int roboticMetalMaxUnits,
+        int roboticMetalCost,
         TimeSpan? workingUntil,
         List<CMULimbPrinterOption> options)
     {
         Status = status;
         SynthesisReagentName = synthesisReagentName;
+        RoboticMetalName = roboticMetalName;
         BeakerName = beakerName;
         SyringeName = syringeName;
+        MaterialName = materialName;
         SynthesisUnits = synthesisUnits;
         SynthesisMaxUnits = synthesisMaxUnits;
         BloodUnits = bloodUnits;
         BloodMaxUnits = bloodMaxUnits;
         SynthesisCost = synthesisCost;
         BloodCost = bloodCost;
+        RoboticMetalUnits = roboticMetalUnits;
+        RoboticMetalMaxUnits = roboticMetalMaxUnits;
+        RoboticMetalCost = roboticMetalCost;
         WorkingUntil = workingUntil;
         Options = options;
     }
@@ -328,6 +350,7 @@ public sealed class CMULimbPrinterBuiState : BoundUserInterfaceState
 
 [Serializable, NetSerializable]
 public sealed record CMULimbPrinterOption(
+    CMULimbPrinterPrintKind Kind,
     BodyPartType Type,
     BodyPartSymmetry Symmetry,
     string Name,
@@ -338,11 +361,13 @@ public sealed record CMULimbPrinterOption(
 [Serializable, NetSerializable]
 public sealed class CMULimbPrinterPrintMessage : BoundUserInterfaceMessage
 {
+    public CMULimbPrinterPrintKind Kind;
     public BodyPartType Type;
     public BodyPartSymmetry Symmetry;
 
-    public CMULimbPrinterPrintMessage(BodyPartType type, BodyPartSymmetry symmetry)
+    public CMULimbPrinterPrintMessage(CMULimbPrinterPrintKind kind, BodyPartType type, BodyPartSymmetry symmetry)
     {
+        Kind = kind;
         Type = type;
         Symmetry = symmetry;
     }
@@ -355,5 +380,10 @@ public sealed class CMULimbPrinterEjectBeakerMessage : BoundUserInterfaceMessage
 
 [Serializable, NetSerializable]
 public sealed class CMULimbPrinterEjectSyringeMessage : BoundUserInterfaceMessage
+{
+}
+
+[Serializable, NetSerializable]
+public sealed class CMULimbPrinterEjectMaterialMessage : BoundUserInterfaceMessage
 {
 }

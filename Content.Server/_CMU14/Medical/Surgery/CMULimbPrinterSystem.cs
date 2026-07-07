@@ -1,3 +1,4 @@
+using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Shared._CMU14.Medical.Surgery;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Body.Part;
@@ -7,6 +8,7 @@ using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.FixedPoint;
 using Content.Shared.Popups;
+using Content.Shared.Stacks;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -26,6 +28,7 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
     [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private SharedStackSystem _stack = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
 
@@ -46,6 +49,7 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
             subs.Event<CMULimbPrinterPrintMessage>(OnPrint);
             subs.Event<CMULimbPrinterEjectBeakerMessage>(OnEjectBeaker);
             subs.Event<CMULimbPrinterEjectSyringeMessage>(OnEjectSyringe);
+            subs.Event<CMULimbPrinterEjectMaterialMessage>(OnEjectMaterial);
         });
 
         SubscribeLocalEvent<CMULimbPrinterComponent, EntInsertedIntoContainerMessage>(OnContainerChanged);
@@ -96,30 +100,33 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
         RefreshUi(ent.Owner, ent.Comp);
     }
 
+    private void OnEjectMaterial(Entity<CMULimbPrinterComponent> ent, ref CMULimbPrinterEjectMaterialMessage msg)
+    {
+        EjectSlot(ent.Owner, CMULimbPrinterComponent.MaterialSlotId, msg.Actor);
+        RefreshUi(ent.Owner, ent.Comp);
+    }
+
     private void OnPrint(Entity<CMULimbPrinterComponent> ent, ref CMULimbPrinterPrintMessage msg)
     {
-        if (!TryGetLimbPrototype(ent.Comp, msg.Type, msg.Symmetry, out var limbPrototype, out var limbName))
+        if (!TryGetLimbPrototype(ent.Comp, msg.Kind, msg.Type, msg.Symmetry, out var limbPrototype, out var limbName))
             return;
 
-        if (!TryCanPrint(ent.Owner, ent.Comp, out var reason))
+        if (!TryCanPrint(ent.Owner, ent.Comp, msg.Kind, out var reason))
         {
             _popup.PopupEntity(reason, ent.Owner, msg.Actor, PopupType.SmallCaution);
             RefreshUi(ent.Owner, ent.Comp);
             return;
         }
 
-        if (!TryGetSynthesisSolution(ent.Owner, out var synthesisSolution, out var synthesis)
-            || !TryGetSyringeSolution(ent.Owner, out var syringeSolution, out var blood))
+        if (!TryConsumePrintResources(ent.Owner, ent.Comp, msg.Kind, out reason))
         {
+            _popup.PopupEntity(reason, ent.Owner, msg.Actor, PopupType.SmallCaution);
             RefreshUi(ent.Owner, ent.Comp);
             return;
         }
 
-        ConsumeReagent(synthesisSolution, synthesis, ent.Comp.SynthesisReagent, ent.Comp.SynthesisCost);
-        ConsumeReagent(syringeSolution, blood, BloodReagent, ent.Comp.BloodCost);
-
         var limb = Spawn(limbPrototype, Transform(ent.Owner).Coordinates);
-        AttachPrintedExtremity(limb, msg.Type, msg.Symmetry);
+        AttachPrintedExtremity(limb, msg.Kind, msg.Type, msg.Symmetry);
         _transform.PlaceNextTo(limb, ent.Owner);
 
         ent.Comp.WorkingUntil = _timing.CurTime + TimeSpan.FromSeconds(1.2);
@@ -129,7 +136,21 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
         RefreshUi(ent.Owner, ent.Comp);
     }
 
-    private bool TryCanPrint(EntityUid uid, CMULimbPrinterComponent comp, out string reason)
+    private bool TryCanPrint(
+        EntityUid uid,
+        CMULimbPrinterComponent comp,
+        CMULimbPrinterPrintKind kind,
+        out string reason)
+    {
+        return kind switch
+        {
+            CMULimbPrinterPrintKind.Organic => TryCanPrintOrganic(uid, comp, out reason),
+            CMULimbPrinterPrintKind.Robotic => TryCanPrintRobotic(uid, comp, out reason),
+            _ => TryCanPrintOrganic(uid, comp, out reason),
+        };
+    }
+
+    private bool TryCanPrintOrganic(EntityUid uid, CMULimbPrinterComponent comp, out string reason)
     {
         if (!TryGetSynthesisSolution(uid, out _, out var synthesis))
         {
@@ -159,19 +180,92 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
         return true;
     }
 
+    private bool TryCanPrintRobotic(EntityUid uid, CMULimbPrinterComponent comp, out string reason)
+    {
+        if (!TryGetRoboticMetalStack(uid, comp, out _, out var materialStack, out reason))
+            return false;
+
+        if (materialStack.Count < GetRoboticMetalCost(comp))
+        {
+            reason = Loc.GetString("cmu-limb-printer-missing-metal");
+            return false;
+        }
+
+        reason = string.Empty;
+        return true;
+    }
+
+    private bool TryConsumePrintResources(
+        EntityUid uid,
+        CMULimbPrinterComponent comp,
+        CMULimbPrinterPrintKind kind,
+        out string reason)
+    {
+        switch (kind)
+        {
+            case CMULimbPrinterPrintKind.Robotic:
+                if (!TryGetRoboticMetalStack(uid, comp, out var material, out var stack, out reason))
+                    return false;
+
+                if (!_stack.Use(material, GetRoboticMetalCost(comp), stack))
+                {
+                    reason = Loc.GetString("cmu-limb-printer-missing-metal");
+                    return false;
+                }
+
+                reason = string.Empty;
+                return true;
+
+            case CMULimbPrinterPrintKind.Organic:
+            default:
+                if (!TryGetSynthesisSolution(uid, out var synthesisSolution, out var synthesis))
+                {
+                    reason = Loc.GetString("cmu-limb-printer-missing-beaker");
+                    return false;
+                }
+
+                if (!TryGetSyringeSolution(uid, out var syringeSolution, out var blood))
+                {
+                    reason = Loc.GetString("cmu-limb-printer-missing-syringe");
+                    return false;
+                }
+
+                if (GetReagentVolume(synthesis, comp.SynthesisReagent) < comp.SynthesisCost)
+                {
+                    reason = Loc.GetString("cmu-limb-printer-missing-matrix");
+                    return false;
+                }
+
+                if (GetReagentVolume(blood, BloodReagent) < comp.BloodCost)
+                {
+                    reason = Loc.GetString("cmu-limb-printer-missing-blood");
+                    return false;
+                }
+
+                ConsumeReagent(synthesisSolution, synthesis, comp.SynthesisReagent, comp.SynthesisCost);
+                ConsumeReagent(syringeSolution, blood, BloodReagent, comp.BloodCost);
+                reason = string.Empty;
+                return true;
+        }
+    }
+
     private void RefreshUi(EntityUid uid, CMULimbPrinterComponent comp)
     {
-        var canPrint = TryCanPrint(uid, comp, out var reason);
-        var status = canPrint
+        var organicCanPrint = TryCanPrint(uid, comp, CMULimbPrinterPrintKind.Organic, out var organicReason);
+        var roboticCanPrint = TryCanPrint(uid, comp, CMULimbPrinterPrintKind.Robotic, out var roboticReason);
+        var status = organicCanPrint || roboticCanPrint
             ? Loc.GetString("cmu-limb-printer-status-ready")
-            : reason;
+            : organicReason;
 
         var beaker = _slots.GetItemOrNull(uid, CMULimbPrinterComponent.BeakerSlotId);
         var syringe = _slots.GetItemOrNull(uid, CMULimbPrinterComponent.SyringeSlotId);
+        var material = _slots.GetItemOrNull(uid, CMULimbPrinterComponent.MaterialSlotId);
         var synthesisUnits = 0f;
         var synthesisMax = 0f;
         var bloodUnits = 0f;
         var bloodMax = 0f;
+        var materialUnits = 0;
+        var materialMax = 0;
 
         if (TryGetSynthesisSolution(uid, out _, out var synthesis))
         {
@@ -185,6 +279,12 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
             bloodMax = blood.MaxVolume.Float();
         }
 
+        if (material is { } materialUid && TryComp<StackComponent>(materialUid, out var materialStack))
+        {
+            materialUnits = materialStack.Count;
+            materialMax = _stack.GetMaxCount(materialStack);
+        }
+
         var reagentName = _reagents.TryIndex(comp.SynthesisReagent, out var reagent)
             ? reagent.LocalizedName
             : comp.SynthesisReagent.ToString();
@@ -192,44 +292,60 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
         var state = new CMULimbPrinterBuiState(
             status,
             reagentName,
+            Loc.GetString("cmu-limb-printer-metal-type"),
             beaker is { } beakerUid ? Name(beakerUid) : null,
             syringe is { } syringeUid ? Name(syringeUid) : null,
+            material is { } materialNameUid ? Name(materialNameUid) : null,
             synthesisUnits,
             synthesisMax,
             bloodUnits,
             bloodMax,
             comp.SynthesisCost.Float(),
             comp.BloodCost.Float(),
+            materialUnits,
+            materialMax,
+            GetRoboticMetalCost(comp),
             comp.WorkingUntil > _timing.CurTime ? comp.WorkingUntil : null,
-            BuildOptions(comp, canPrint, reason));
+            BuildOptions(comp, organicCanPrint, organicReason, roboticCanPrint, roboticReason));
 
         _ui.SetUiState(uid, CMULimbPrinterUIKey.Key, state);
     }
 
-    private List<CMULimbPrinterOption> BuildOptions(CMULimbPrinterComponent comp, bool canPrint, string disabledReason)
+    private List<CMULimbPrinterOption> BuildOptions(
+        CMULimbPrinterComponent comp,
+        bool organicCanPrint,
+        string organicDisabledReason,
+        bool roboticCanPrint,
+        string roboticDisabledReason)
     {
         return
         [
-            MakeOption(comp, BodyPartType.Arm, BodyPartSymmetry.Left, canPrint, disabledReason),
-            MakeOption(comp, BodyPartType.Leg, BodyPartSymmetry.Left, canPrint, disabledReason),
-            MakeOption(comp, BodyPartType.Arm, BodyPartSymmetry.Right, canPrint, disabledReason),
-            MakeOption(comp, BodyPartType.Leg, BodyPartSymmetry.Right, canPrint, disabledReason),
+            MakeOption(comp, CMULimbPrinterPrintKind.Organic, BodyPartType.Arm, BodyPartSymmetry.Left, organicCanPrint, organicDisabledReason),
+            MakeOption(comp, CMULimbPrinterPrintKind.Robotic, BodyPartType.Arm, BodyPartSymmetry.Left, roboticCanPrint, roboticDisabledReason),
+            MakeOption(comp, CMULimbPrinterPrintKind.Organic, BodyPartType.Leg, BodyPartSymmetry.Left, organicCanPrint, organicDisabledReason),
+            MakeOption(comp, CMULimbPrinterPrintKind.Robotic, BodyPartType.Leg, BodyPartSymmetry.Left, roboticCanPrint, roboticDisabledReason),
+            MakeOption(comp, CMULimbPrinterPrintKind.Organic, BodyPartType.Arm, BodyPartSymmetry.Right, organicCanPrint, organicDisabledReason),
+            MakeOption(comp, CMULimbPrinterPrintKind.Robotic, BodyPartType.Arm, BodyPartSymmetry.Right, roboticCanPrint, roboticDisabledReason),
+            MakeOption(comp, CMULimbPrinterPrintKind.Organic, BodyPartType.Leg, BodyPartSymmetry.Right, organicCanPrint, organicDisabledReason),
+            MakeOption(comp, CMULimbPrinterPrintKind.Robotic, BodyPartType.Leg, BodyPartSymmetry.Right, roboticCanPrint, roboticDisabledReason),
         ];
     }
 
     private CMULimbPrinterOption MakeOption(
         CMULimbPrinterComponent comp,
+        CMULimbPrinterPrintKind kind,
         BodyPartType type,
         BodyPartSymmetry symmetry,
         bool canPrint,
         string disabledReason)
     {
-        TryGetLimbPrototype(comp, type, symmetry, out var prototype, out var name);
-        return new CMULimbPrinterOption(type, symmetry, name, prototype, canPrint, canPrint ? string.Empty : disabledReason);
+        TryGetLimbPrototype(comp, kind, type, symmetry, out var prototype, out var name);
+        return new CMULimbPrinterOption(kind, type, symmetry, name, prototype, canPrint, canPrint ? string.Empty : disabledReason);
     }
 
     private bool TryGetLimbPrototype(
         CMULimbPrinterComponent comp,
+        CMULimbPrinterPrintKind kind,
         BodyPartType type,
         BodyPartSymmetry symmetry,
         out EntProtoId prototype,
@@ -238,59 +354,108 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
         prototype = default;
         name = string.Empty;
 
-        if (type == BodyPartType.Arm && symmetry == BodyPartSymmetry.Left)
+        if (kind == CMULimbPrinterPrintKind.Organic && type == BodyPartType.Arm && symmetry == BodyPartSymmetry.Left)
         {
             prototype = comp.LeftArmPrototype;
             name = Loc.GetString("cmu-limb-printer-left-arm");
             return true;
         }
 
-        if (type == BodyPartType.Leg && symmetry == BodyPartSymmetry.Left)
+        if (kind == CMULimbPrinterPrintKind.Organic && type == BodyPartType.Leg && symmetry == BodyPartSymmetry.Left)
         {
             prototype = comp.LeftLegPrototype;
             name = Loc.GetString("cmu-limb-printer-left-leg");
             return true;
         }
 
-        if (type == BodyPartType.Arm && symmetry == BodyPartSymmetry.Right)
+        if (kind == CMULimbPrinterPrintKind.Organic && type == BodyPartType.Arm && symmetry == BodyPartSymmetry.Right)
         {
             prototype = comp.RightArmPrototype;
             name = Loc.GetString("cmu-limb-printer-right-arm");
             return true;
         }
 
-        if (type == BodyPartType.Leg && symmetry == BodyPartSymmetry.Right)
+        if (kind == CMULimbPrinterPrintKind.Organic && type == BodyPartType.Leg && symmetry == BodyPartSymmetry.Right)
         {
             prototype = comp.RightLegPrototype;
             name = Loc.GetString("cmu-limb-printer-right-leg");
             return true;
         }
 
+        if (kind == CMULimbPrinterPrintKind.Robotic && type == BodyPartType.Arm && symmetry == BodyPartSymmetry.Left)
+        {
+            prototype = comp.RoboticLeftArmPrototype;
+            name = Loc.GetString("cmu-limb-printer-left-robotic-arm");
+            return true;
+        }
+
+        if (kind == CMULimbPrinterPrintKind.Robotic && type == BodyPartType.Leg && symmetry == BodyPartSymmetry.Left)
+        {
+            prototype = comp.RoboticLeftLegPrototype;
+            name = Loc.GetString("cmu-limb-printer-left-robotic-leg");
+            return true;
+        }
+
+        if (kind == CMULimbPrinterPrintKind.Robotic && type == BodyPartType.Arm && symmetry == BodyPartSymmetry.Right)
+        {
+            prototype = comp.RoboticRightArmPrototype;
+            name = Loc.GetString("cmu-limb-printer-right-robotic-arm");
+            return true;
+        }
+
+        if (kind == CMULimbPrinterPrintKind.Robotic && type == BodyPartType.Leg && symmetry == BodyPartSymmetry.Right)
+        {
+            prototype = comp.RoboticRightLegPrototype;
+            name = Loc.GetString("cmu-limb-printer-right-robotic-leg");
+            return true;
+        }
+
         return false;
     }
 
-    private void AttachPrintedExtremity(EntityUid limb, BodyPartType type, BodyPartSymmetry symmetry)
+    private void AttachPrintedExtremity(
+        EntityUid limb,
+        CMULimbPrinterPrintKind kind,
+        BodyPartType type,
+        BodyPartSymmetry symmetry)
     {
-        (string Slot, BodyPartType Type, EntProtoId Prototype)? child = type switch
+        if (kind == CMULimbPrinterPrintKind.Robotic)
+        {
+            if (TryComp<CMURoboticLimbComponent>(limb, out var robotic))
+                AttachPrintedChild(limb, robotic.ChildSlot, robotic.ChildPrototype);
+
+            return;
+        }
+
+        (string Slot, EntProtoId Prototype)? child = type switch
         {
             BodyPartType.Arm when symmetry == BodyPartSymmetry.Left =>
-                (Slot: "left_hand", Type: BodyPartType.Hand, Prototype: "LeftHandHuman"),
+                (Slot: "left_hand", Prototype: "LeftHandHuman"),
             BodyPartType.Arm when symmetry == BodyPartSymmetry.Right =>
-                (Slot: "right_hand", Type: BodyPartType.Hand, Prototype: "RightHandHuman"),
+                (Slot: "right_hand", Prototype: "RightHandHuman"),
             BodyPartType.Leg when symmetry == BodyPartSymmetry.Left =>
-                (Slot: "left_foot", Type: BodyPartType.Foot, Prototype: "LeftFootHuman"),
+                (Slot: "left_foot", Prototype: "LeftFootHuman"),
             BodyPartType.Leg when symmetry == BodyPartSymmetry.Right =>
-                (Slot: "right_foot", Type: BodyPartType.Foot, Prototype: "RightFootHuman"),
+                (Slot: "right_foot", Prototype: "RightFootHuman"),
             _ => null
         };
 
         if (child is not { } childInfo)
             return;
 
-        var childUid = Spawn(childInfo.Prototype, Transform(limb).Coordinates);
+        AttachPrintedChild(limb, childInfo.Slot, childInfo.Prototype);
+    }
+
+    private void AttachPrintedChild(EntityUid limb, string? slot, EntProtoId? prototype)
+    {
+        if (string.IsNullOrWhiteSpace(slot) || prototype is not { } childPrototype)
+            return;
+
+        var childUid = Spawn(childPrototype, Transform(limb).Coordinates);
         var attached = TryComp<BodyPartComponent>(limb, out var limbPart)
-            && (_body.AttachPart(limb, childInfo.Slot, childUid, limbPart)
-                || _body.TryCreatePartSlotAndAttach(limb, childInfo.Slot, childUid, childInfo.Type, limbPart));
+            && TryComp<BodyPartComponent>(childUid, out var childPart)
+            && (_body.AttachPart(limb, slot, childUid, limbPart, childPart)
+                || _body.TryCreatePartSlotAndAttach(limb, slot, childUid, childPart.PartType, limbPart, childPart));
 
         if (!attached)
             QueueDel(childUid);
@@ -342,6 +507,41 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
         }
 
         return total;
+    }
+
+    private bool TryGetRoboticMetalStack(
+        EntityUid uid,
+        CMULimbPrinterComponent comp,
+        out EntityUid material,
+        out StackComponent stack,
+        out string reason)
+    {
+        material = default;
+        stack = default!;
+
+        var item = _slots.GetItemOrNull(uid, CMULimbPrinterComponent.MaterialSlotId);
+        if (item is not { } materialUid)
+        {
+            reason = Loc.GetString("cmu-limb-printer-missing-metal-slot");
+            return false;
+        }
+
+        if (!TryComp<StackComponent>(materialUid, out var foundStack) ||
+            !foundStack.StackTypeId.Equals(comp.RoboticMetalStack.ToString(), StringComparison.Ordinal))
+        {
+            reason = Loc.GetString("cmu-limb-printer-wrong-metal");
+            return false;
+        }
+
+        material = materialUid;
+        stack = foundStack;
+        reason = string.Empty;
+        return true;
+    }
+
+    private static int GetRoboticMetalCost(CMULimbPrinterComponent comp)
+    {
+        return Math.Max(0, comp.RoboticMetalCost);
     }
 
     private void ConsumeReagent(Entity<SolutionComponent> solutionEnt, Solution solution, string reagent, FixedPoint2 amount)

@@ -137,6 +137,7 @@
   - type: Temperature
   - type: Stamina
   - type: DamageForceSay
+  - type: DamageMobState
   - type: Dna
   - type: InjectableSolution
   - type: IVDripTarget

@@ -18,7 +18,7 @@ public sealed partial class RMCCVars : CVars
         CVarDef.Create("rmc.xeno_speed_multiplier", 1f, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<bool> RMCAutoPunctuate =
-        CVarDef.Create("rmc.auto_punctuate", true, CVar.REPLICATED | CVar.CLIENT | CVar.ARCHIVE);
+        CVarDef.Create("rmc.auto_punctuate", false, CVar.REPLICATED | CVar.CLIENT | CVar.ARCHIVE);
 
     public static readonly CVarDef<bool> RMCAutoEjectMagazines =
         CVarDef.Create("rmc.auto_eject_magazines", true, CVar.REPLICATED | CVar.CLIENT | CVar.ARCHIVE);
@@ -133,18 +133,6 @@ public sealed partial class RMCCVars : CVars
 
     public static readonly CVarDef<int> RMCWithdrawTimerMinutes =
         CVarDef.Create("rmc.withdraw_timer_minutes", 6, CVar.REPLICATED | CVar.SERVER);
-
-    public static readonly CVarDef<bool> VehicleDebugOverlay =
-        CVarDef.Create("rmc.vehicle.debug_overlay", false, CVar.CLIENT | CVar.ARCHIVE);
-
-    public static readonly CVarDef<bool> VehicleHardpointOverlay =
-        CVarDef.Create("rmc.vehicle.hardpoint_overlay", false, CVar.CLIENT | CVar.ARCHIVE);
-
-    public static readonly CVarDef<bool> VehicleCollisionOverlay =
-        CVarDef.Create("rmc.vehicle.collision_overlay", false, CVar.CLIENT | CVar.ARCHIVE);
-
-    public static readonly CVarDef<bool> VehicleMovementOverlay =
-        CVarDef.Create("rmc.vehicle.movement_overlay", false, CVar.CLIENT | CVar.ARCHIVE);
 
     public static readonly CVarDef<bool> RMCGasTileOverlayUpdate =
         CVarDef.Create("rmc.gas_tile_overlay_update", false, CVar.REPLICATED | CVar.SERVER);
@@ -606,4 +594,10 @@ public sealed partial class RMCCVars : CVars
 
     public static readonly CVarDef<string> RMCChemMasterPresets =
         CVarDef.Create("rmc.chemmaster_presets", "", CVar.CLIENT | CVar.ARCHIVE);
+
+    public static readonly CVarDef<float> RMCWeedSpreadMaxProcessTimeMilliseconds =
+        CVarDef.Create("rmc.weed_spread_max_process_time_milliseconds", 1f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> RMCDoAfterCancelMaxProcessTimeMilliseconds =
+        CVarDef.Create("rmc.do_after_cancel_max_process_time_milliseconds", 1f, CVar.REPLICATED | CVar.SERVER);
 }

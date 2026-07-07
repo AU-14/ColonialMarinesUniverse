@@ -54,6 +54,8 @@ namespace Content.Server._RMC14.TacticalMap;
 
 public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 {
+    private const string PresetMarineCommand = "MarineCommand";
+
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private IConfigurationManager _config = default!;
@@ -2049,9 +2051,8 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
         var request = new AnnouncementRequest
         {
             Message = message,
-            Preset = "MarineCommand",
+            Preset = PresetMarineCommand,
             Target = AnnouncementTarget.Marines,
-            ShowSprite = false
         };
 
         _generalAnnounce.AnnounceAdvanced(request, BuildFactionAnnouncementFilter(faction));

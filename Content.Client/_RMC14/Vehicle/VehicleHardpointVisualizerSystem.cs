@@ -2,40 +2,30 @@ using System.Collections.Generic;
 using Content.Shared._RMC14.Vehicle;
 using Robust.Client.GameObjects;
 using Robust.Shared.GameObjects;
-using Robust.Shared.GameStates;
 
 namespace Content.Client._RMC14.Vehicle;
 
-public sealed partial class VehicleHardpointVisualizerSystem : EntitySystem
+public sealed partial class VehicleHardpointVisualizerSystem : VisualizerSystem<VehicleHardpointVisualsComponent>
 {
     [Dependency] private SpriteSystem _sprite = default!;
 
-    public override void Initialize()
+    protected override void OnAppearanceChange(EntityUid uid, VehicleHardpointVisualsComponent component, ref AppearanceChangeEvent args)
     {
-        SubscribeLocalEvent<VehicleHardpointVisualsComponent, ComponentStartup>(OnStartup);
-        SubscribeLocalEvent<VehicleHardpointVisualsComponent, ComponentHandleState>(OnHandleState);
-    }
-
-    private void OnStartup(EntityUid uid, VehicleHardpointVisualsComponent component, ref ComponentStartup args)
-    {
-        ApplyLayers(uid, component);
-    }
-
-    private void OnHandleState(EntityUid uid, VehicleHardpointVisualsComponent component, ref ComponentHandleState args)
-    {
-        if (args.Current is not VehicleHardpointVisualsComponentState state)
+        var sprite = args.Sprite;
+        if (sprite == null)
             return;
 
-        component.Layers = new List<VehicleHardpointLayerState>(state.Layers);
-        ApplyLayers(uid, component);
-    }
-
-    private void ApplyLayers(EntityUid uid, VehicleHardpointVisualsComponent component)
-    {
-        if (!TryComp(uid, out SpriteComponent? sprite))
+        if (!AppearanceSystem.TryGetData(
+                uid,
+                VehicleHardpointVisualsVisuals.Layers,
+                out List<VehicleHardpointLayerState>? layers,
+                args.Component) ||
+            layers == null)
+        {
             return;
+        }
 
-        foreach (var entry in component.Layers)
+        foreach (var entry in layers)
         {
             UpdateLayer(uid, sprite, entry.Layer, entry.State);
         }

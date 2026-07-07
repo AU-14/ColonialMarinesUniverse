@@ -30,3 +30,16 @@ cmu-medical-cast-removed = The cast is removed.
 cmu-medical-cast-ready-remove = The cast is ready to come off.
 cmu-medical-cast-broke = The cast cracks apart as the bone breaks again.
 cmu-medical-cast-malunion = The bone has set wrong.
+
+cmu-robotic-limb-repair-brute-start-self = You begin repairing dents in your { $limb }.
+cmu-robotic-limb-repair-brute-start-user = You begin repairing dents in { THE($target) }'s { $limb }.
+cmu-robotic-limb-repair-brute-start-others = { THE($user) } begins repairing dents in { THE($target) }'s { $limb }.
+cmu-robotic-limb-repair-burn-start-self = You begin repairing scorched wiring in your { $limb }.
+cmu-robotic-limb-repair-burn-start-user = You begin repairing scorched wiring in { THE($target) }'s { $limb }.
+cmu-robotic-limb-repair-burn-start-others = { THE($user) } begins repairing scorched wiring in { THE($target) }'s { $limb }.
+cmu-robotic-limb-repair-brute-finish-self = You repair dents in your { $limb } with { THE($tool) }.
+cmu-robotic-limb-repair-brute-finish-user = You repair dents in { THE($target) }'s { $limb } with { THE($tool) }.
+cmu-robotic-limb-repair-brute-finish-others = { THE($user) } repairs dents in { THE($target) }'s { $limb } with { THE($tool) }.
+cmu-robotic-limb-repair-burn-finish-self = You repair scorched wiring in your { $limb } with { THE($tool) }.
+cmu-robotic-limb-repair-burn-finish-user = You repair scorched wiring in { THE($target) }'s { $limb } with { THE($tool) }.
+cmu-robotic-limb-repair-burn-finish-others = { THE($user) } repairs scorched wiring in { THE($target) }'s { $limb } with { THE($tool) }.

@@ -1,5 +1,6 @@
 // ReSharper disable CheckNamespace
 
+using Content.Shared._CMU14.Ghost;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 using Robust.Shared.Network;
@@ -9,7 +10,7 @@ namespace Content.Server.Ghost;
 [AnyCommand]
 internal sealed partial class CMUGhostFollowEntityCommand : LocalizedEntityCommands
 {
-    public const string CommandName = "cmu_ghost_follow_entity";
+    public const string CommandName = CMUGhostFollowCommand.CommandName;
 
     [Dependency] private GhostSystem _ghost = default!;
 
@@ -23,6 +24,6 @@ internal sealed partial class CMUGhostFollowEntityCommand : LocalizedEntityComma
         if (!NetEntity.TryParse(args[0], out var target))
             return;
 
-        _ghost.GhostWarpRequest(player, target);
+        _ghost.GhostFollowRequest(player, target);
     }
 }

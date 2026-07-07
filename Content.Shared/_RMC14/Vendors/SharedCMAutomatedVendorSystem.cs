@@ -733,7 +733,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         for (var i = 0; i < entry.Spawn; i++)
         {
             var offset = _random.NextVector2Box(min.X, min.Y, max.X, max.Y);
-            if (entity.TryGetComponent(out CMVendorBundleComponent? bundle, _compFactory))
+            if (entity.TryComp(out CMVendorBundleComponent? bundle, _compFactory))
             {
                 foreach (var bundled in bundle.Bundle)
                 {
@@ -746,7 +746,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
             }
         }
 
-        if (entity.TryGetComponent(out CMChangeUserOnVendComponent? change, _compFactory) &&
+        if (entity.TryComp(out CMChangeUserOnVendComponent? change, _compFactory) &&
             change.AddComponents != null)
         {
             EntityManager.AddComponents(actor, change.AddComponents);
@@ -755,7 +755,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
 
     private void Vend(EntityUid vendor, EntityUid player, EntProtoId toVend, Vector2 offset, SlotFlags? replaceSlot = null)
     {
-        if (_prototypes.Index(toVend).TryGetComponent(out CMVendorMapToSquadComponent? mapTo, _compFactory))
+        if (_prototypes.Index(toVend).TryComp(out CMVendorMapToSquadComponent? mapTo, _compFactory))
         {
             if (TryComp(player, out SquadMemberComponent? member) &&
                 member.Squad is { } squad &&
@@ -922,7 +922,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         if (entry.BoxSlots is not { } boxSlots)
         {
             if (!_prototypes.TryIndex(entry.Id, out var boxProto) ||
-                !boxProto.TryGetComponent(out CMItemSlotsComponent? slots, _compFactory) ||
+                !boxProto.TryComp(out CMItemSlotsComponent? slots, _compFactory) ||
                 slots.Count is not { } count)
             {
                 return 1;
