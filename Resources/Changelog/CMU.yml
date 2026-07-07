@@ -3816,8 +3816,7 @@
       moving, with movement checks around 0.75 tile accumulated movement and a 1.25
       second pulse cooldown.
     type: Add
-  - message: "Fracture names changed. The old top tier was \u201CShattered\u201D\
-      ; it is now \u201CShattered\u201D."
+  - message: Fracture top tier naming is now Shattered everywhere.
     type: Tweak
   - message: Fracture tiers are now Hairline, Simple, Compound, and Shattered.
     type: Tweak
