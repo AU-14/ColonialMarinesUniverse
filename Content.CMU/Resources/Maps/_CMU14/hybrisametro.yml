@@ -140386,7 +140386,7 @@ entities:
       parent: 11760
     - type: Physics
       canCollide: False
-- proto: RMCFireAxeCabinetFilled
+- proto: RMCFireAxeCabinet
   entities:
   - uid: 11756
     components:
