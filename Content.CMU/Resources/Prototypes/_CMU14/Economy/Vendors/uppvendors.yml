@@ -879,7 +879,7 @@
         givePrefix: au14-job-prefix-govforspecialist-marksmanUPP
         isAppendSquadRoleName: false
         isAppendPrefix: true
-      - id: AU14KitUPPPyroLPO80
+      - id: CMU14PyroSpecEquipmentCaseUPP
         giveSquadRoleName: au14-job-name-specialist-pyro
         givePrefix: au14-job-prefix-specialist-pyro
         isAppendSquadRoleName: false
