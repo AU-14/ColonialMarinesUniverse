@@ -112,7 +112,7 @@ namespace Content.Server.AU14.Objectives.Arrest
                     }
                     else
                     {
-                        _logs.Warning($"[ARREST MATCH] Mob ({uid}) does NOT match target faction '{targetFaction}' for objective {objUid}");
+                        _logs.Debug($"[ARREST MATCH] Mob ({uid}) does NOT match target faction '{targetFaction}' for objective {objUid}");
                     }
                 }
             }
