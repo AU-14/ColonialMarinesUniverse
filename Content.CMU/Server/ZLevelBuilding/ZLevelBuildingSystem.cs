@@ -7,6 +7,7 @@ using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
+using Content.Shared.Ghost;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
 using Robust.Server.GameObjects;
@@ -60,11 +61,13 @@ public sealed class ZLevelBuildingSystem : EntitySystem
     private static readonly TimeSpan StreamInterval = TimeSpan.FromSeconds(1);
 
     private EntityQuery<MapGridComponent> _gridQuery;
+    private EntityQuery<GhostComponent> _ghostQuery;
 
     public override void Initialize()
     {
         base.Initialize();
         _gridQuery = GetEntityQuery<MapGridComponent>();
+        _ghostQuery = GetEntityQuery<GhostComponent>();
     }
 
     /// <summary>Whether the building overhaul is allowed to operate on the given map.</summary>
@@ -564,6 +567,10 @@ public sealed class ZLevelBuildingSystem : EntitySystem
         var query = EntityQueryEnumerator<ActorComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out _, out var xform))
         {
+            // Ghosts (dead/observers) drift the map freely; only real spawned players should carve caves.
+            if (_ghostQuery.HasComponent(uid))
+                continue;
+
             if (xform.MapUid is not { } mapUid ||
                 !TryComp<ZGeneratedStoneComponent>(mapUid, out var stone) ||
                 !_gridQuery.TryComp(stone.StoneGrid, out var grid))
