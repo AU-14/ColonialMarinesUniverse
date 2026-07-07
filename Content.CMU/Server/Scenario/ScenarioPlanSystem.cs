@@ -7,6 +7,7 @@ using Content.Server.Maps;
 using Content.Server.Spawners.Components;
 using Content.Shared._CMU14.Threats;
 using Content.Shared._RMC14.Rules;
+using Content.Shared._RMC14.Spawners;
 using Content.Shared.AU14;
 using Content.Shared.AU14.Scenario;
 using Content.Shared.AU14.util;
@@ -2342,6 +2343,30 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
                 sourcePath));
         }
 
+        if (entityPrototype.TryComp<XenoLeaderSpawnPointComponent>(out _, _componentFactory))
+        {
+            markers.Add(new ResolvedSpawnMarker(
+                prototypeId,
+                mapId,
+                ScenarioMarkerKind.ThreatMarker,
+                ThreatMarkerTags(ThreatMarkerType.Leader, string.Empty, thirdParty: false),
+                count,
+                sourcePath));
+            return;
+        }
+
+        if (entityPrototype.TryComp<XenoSpawnPointComponent>(out _, _componentFactory))
+        {
+            markers.Add(new ResolvedSpawnMarker(
+                prototypeId,
+                mapId,
+                ScenarioMarkerKind.ThreatMarker,
+                ThreatMarkerTags(ThreatMarkerType.Member, string.Empty, thirdParty: false),
+                count,
+                sourcePath));
+            return;
+        }
+
         if (entityPrototype.TryComp<SafehouseMarkerComponent>(out _, _componentFactory))
         {
             markers.Add(new ResolvedSpawnMarker(
@@ -2515,6 +2540,34 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
 
             var markerTags = new[] { ClfCivilianSpawnTag() };
             if (requiredTags.All(tag => markerTags.Contains(tag, StringComparer.OrdinalIgnoreCase)))
+                markers.Add(uid);
+        }
+
+        var leaderTags = ThreatMarkerTags(ThreatMarkerType.Leader, string.Empty, thirdParty: false);
+        var leaderQuery = EntityQueryEnumerator<XenoLeaderSpawnPointComponent, TransformComponent>();
+        while (leaderQuery.MoveNext(out var uid, out _, out var transform))
+        {
+            if (transform.MapID != mapId ||
+                explicitMarkers.Contains(uid))
+            {
+                continue;
+            }
+
+            if (requiredTags.All(tag => leaderTags.Contains(tag, StringComparer.OrdinalIgnoreCase)))
+                markers.Add(uid);
+        }
+
+        var memberTags = ThreatMarkerTags(ThreatMarkerType.Member, string.Empty, thirdParty: false);
+        var memberQuery = EntityQueryEnumerator<XenoSpawnPointComponent, TransformComponent>();
+        while (memberQuery.MoveNext(out var uid, out _, out var transform))
+        {
+            if (transform.MapID != mapId ||
+                explicitMarkers.Contains(uid))
+            {
+                continue;
+            }
+
+            if (requiredTags.All(tag => memberTags.Contains(tag, StringComparer.OrdinalIgnoreCase)))
                 markers.Add(uid);
         }
 

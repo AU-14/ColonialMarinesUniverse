@@ -58,7 +58,6 @@
   equipment:
     id: CMUIDCardDroneOperator
     ears: AU14HeadsetGovforMarine
-    back: CMUDroneOperatorPackFilled
 
 - type: startingGear
   id: CMUGearGOVFORDroneOperatorDummy
@@ -97,11 +96,13 @@
   hidden: false
   setPreference: true
   basePlaytimeTracker: true
+  ignoreAllegiance: true
 
 - type: roleLoadout
   id: JobCMUJobGOVFORDroneOperator
   points: 7
   groups:
+  - CMUDroneOperatorBackpack
   - EyewearRMCPVE
   - MasksRMCPVE
   - HeadwearRMCPVE
@@ -110,3 +111,16 @@
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
+
+- type: loadoutGroup
+  id: CMUDroneOperatorBackpack
+  name: rmc-loadout-group-backpack
+  minLimit: 1
+  hidden: true
+  loadouts:
+  - CMUDroneOperatorPackLoadout
+
+- type: loadout
+  id: CMUDroneOperatorPackLoadout
+  equipment:
+    back: CMUDroneOperatorPackFilled

@@ -4,6 +4,10 @@
   id: ForceSynthResetKeyAU14
   name: rmc-loadout-group-backpack
   minLimit: 1
-  hidden: true
+  maxLimit: 1
   loadouts:
   - SynthResetKeyAU14
+  - SynthResetKeySeegsonAU14
+  - SynthResetKeyProdigyAU14
+  - SynthResetKeyNovarisAU14
+  - SynthResetKeyHyperdyneAU14

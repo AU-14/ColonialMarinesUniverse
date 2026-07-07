@@ -1,7 +1,9 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Content.Server.Administration;
+using Content.Shared._CMU14.Administration.Console;
 using Content.Shared.Administration;
 using Robust.Server.Player;
 using Robust.Shared.Console;
@@ -15,19 +17,22 @@ public sealed partial class ServerLogsCommand : LocalizedCommands
 {
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private ServerLogsDownloadManager _download = default!;
 
-    private static readonly string LogDir = $"{Environment.CurrentDirectory}/bin/logs/logs/"; // yes its double
+    private static readonly string LogDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "bin", "logs", "logs")); // yes its double
     private static readonly string PrimaryClr = Color.Green.ToHex();
     private static readonly string SecondaryClr = Color.Yellow.ToHex();
-    private static readonly int MaxLines = 5000; // client default: con.max_entries=3000
+    private static readonly string[] LogSearchPatterns = ["*.log", "*.txt"];
+    private static readonly char[] DirectorySeparators = [Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar];
+    private const int MaxLines = 5000; // client default: con.max_entries=3000
     public override string Command => "serverlogs";
 
     public override string Description
-        => "Prints the server (or specified file) logs to the client's console, with --tail to chat.";
+        => "Prints or downloads the server (or specified file) logs, with --tail to chat.";
 
-    public override string Help => $"Usage: {Command} [filter] [lines] | {Command} --list | {Command} --file <path> [filter] | {Command} --follow [filter] | {Command} --stop";
+    public override string Help => $"Usage: {Command} [filter] [lines] | {Command} --list | {Command} --download [--file <name>] | {Command} --file <name> [filter] | {Command} --follow [filter] | {Command} --stop";
 
-    public override void Execute(IConsoleShell shell, string argStr, string[] args)
+    public override async void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         if (args.Contains("--stop"))
         {
@@ -54,13 +59,25 @@ public sealed partial class ServerLogsCommand : LocalizedCommands
             return;
         }
 
-        (bool followMode, string? filter, int lineCount, string? explicitFile) = ServerLogsCommand.ParseArgs(args);
+        (bool followMode, bool downloadMode, string? filter, int lineCount, string? explicitFile) = ServerLogsCommand.ParseArgs(args);
+        if (downloadMode && followMode)
+        {
+            shell.WriteError("--download cannot be combined with --follow or --tail.");
+            return;
+        }
+
         FileInfo? logFile = ResolveLogFile(explicitFile);
         if (logFile == null)
         {
             shell.WriteError(string.IsNullOrEmpty(explicitFile)
                 ? "No default server log file found, try specifying one."
-                : $"Log file '{explicitFile}' not found.");
+                : "Log file not found or not allowed.");
+            return;
+        }
+
+        if (downloadMode)
+        {
+            await DownloadLogFile(shell, logFile);
             return;
         }
 
@@ -116,17 +133,54 @@ public sealed partial class ServerLogsCommand : LocalizedCommands
         catch (Exception ex) { shell.WriteError($"Failed to read log file '{logFile.Name}': {ex.Message}"); }
     }
 
+    private async Task DownloadLogFile(IConsoleShell shell, FileInfo logFile)
+    {
+        if (shell.Player == null)
+        {
+            shell.WriteError("You must run serverlogs --download from a connected client console.");
+            return;
+        }
+
+        if (!_playerManager.TryGetSessionById(shell.Player.UserId, out ICommonSession? session))
+        {
+            shell.WriteError("Unable to find your session.");
+            return;
+        }
+
+        logFile.Refresh();
+        if (!TryCreateSafeLogFileInfo(logFile.FullName, out logFile))
+        {
+            shell.WriteError("Log file is no longer available or is not allowed.");
+            return;
+        }
+
+        if (logFile.Length > ServerLogsDownloadConstants.MaxDownloadBytes)
+        {
+            shell.WriteError($"Log file is too large to download safely. Limit: {ByteHelpers.FormatBytes(ServerLogsDownloadConstants.MaxDownloadBytes)}.");
+            return;
+        }
+
+        try
+        {
+            shell.WriteLine($"Starting download of {logFile.Name} ({ByteHelpers.FormatBytes(logFile.Length)}).");
+            await _download.SendLogFile(session, logFile);
+            shell.WriteLine($"Finished sending {logFile.Name}. It will save on your client under user data path {ServerLogsDownloadConstants.ClientDownloadDirectory}.");
+        }
+        catch (Exception)
+        {
+            shell.WriteError($"Failed to download log file '{logFile.Name}'.");
+        }
+    }
+
     private void ListLogFiles(IConsoleShell shell)
     {
-        var files = Directory.GetFiles(LogDir, "*.log")
-            .Concat(Directory.GetFiles(LogDir, "*.txt"))
-            .Select(f => new FileInfo(f))
+        var files = EnumerateLogFiles()
             .OrderBy(f => f.LastWriteTimeUtc)
             .ToList();
 
         if (files.Count == 0) { shell.WriteLine("No log files found."); return; }
 
-        shell.WriteMarkup($"[color={PrimaryClr}]--- {files.Count} log file(s) in {LogDir} ---[/color]");
+        shell.WriteMarkup($"[color={PrimaryClr}]--- {files.Count} log file(s) ---[/color]");
         foreach (var file in files)
         {
             var color = file.Length == 0 ? SecondaryClr : PrimaryClr;
@@ -141,27 +195,97 @@ public sealed partial class ServerLogsCommand : LocalizedCommands
         if (!string.IsNullOrEmpty(explicitFile))
             return TryFindLogFile(explicitFile);
 
-        return Directory.GetFiles(LogDir, "server-log*.txt")
-            .Select(f => new FileInfo(f))
+        return EnumerateLogFiles("server-log*.txt")
             .OrderByDescending(f => f.LastWriteTimeUtc)
             .FirstOrDefault();
     }
 
     private FileInfo? TryFindLogFile(string fileName)
     {
-        var fullPath = Path.GetFullPath(Path.Combine(LogDir, fileName));
-        if (fullPath.StartsWith(Path.GetFullPath(LogDir)) && File.Exists(fullPath))
-            return new FileInfo(fullPath);
+        if (!IsSafeExplicitFileName(fileName))
+            return null;
 
-        foreach (var ext in new[] { ".txt", ".log" })
+        var candidates = new List<string> { fileName };
+        if (string.IsNullOrEmpty(Path.GetExtension(fileName)))
         {
-            var withExt = Path.Combine(LogDir, fileName + ext);
-            fullPath = Path.GetFullPath(withExt);
-            if (fullPath.StartsWith(Path.GetFullPath(LogDir)) && File.Exists(fullPath))
-                return new FileInfo(fullPath);
+            candidates.Add(fileName + ".txt");
+            candidates.Add(fileName + ".log");
+        }
+
+        foreach (var candidate in candidates.Distinct(StringComparer.OrdinalIgnoreCase))
+        {
+            var fullPath = Path.GetFullPath(Path.Combine(LogDir, candidate));
+            if (TryCreateSafeLogFileInfo(fullPath, out var info))
+                return info;
         }
 
         return null;
+    }
+
+    private static IEnumerable<FileInfo> EnumerateLogFiles(string? pattern = null)
+    {
+        if (!Directory.Exists(LogDir))
+            yield break;
+
+        var searchPatterns = pattern != null ? new[] { pattern } : LogSearchPatterns;
+        foreach (var searchPattern in searchPatterns)
+        {
+            IEnumerable<string> files;
+            try
+            {
+                files = Directory.EnumerateFiles(LogDir, searchPattern, SearchOption.TopDirectoryOnly);
+            }
+            catch
+            {
+                yield break;
+            }
+
+            foreach (var file in files)
+            {
+                var fullPath = Path.GetFullPath(file);
+                if (TryCreateSafeLogFileInfo(fullPath, out var info))
+                    yield return info;
+            }
+        }
+    }
+
+    private static bool IsSafeExplicitFileName(string fileName)
+    {
+        if (string.IsNullOrWhiteSpace(fileName)
+            || Path.IsPathRooted(fileName)
+            || fileName.IndexOfAny(DirectorySeparators) != -1
+            || fileName is "." or ".."
+            || fileName.IndexOfAny(Path.GetInvalidFileNameChars()) != -1)
+        {
+            return false;
+        }
+
+        var extension = Path.GetExtension(fileName);
+        return string.IsNullOrEmpty(extension) || ServerLogsDownloadConstants.IsAllowedLogExtension(extension);
+    }
+
+    private static bool TryCreateSafeLogFileInfo(string fullPath, out FileInfo fileInfo)
+    {
+        fileInfo = new FileInfo(fullPath);
+        if (!File.Exists(fullPath)
+            || !IsInLogDirectory(fullPath)
+            || !ServerLogsDownloadConstants.IsAllowedLogExtension(fileInfo.Extension)
+            || (fileInfo.Attributes & FileAttributes.ReparsePoint) != 0)
+        {
+            fileInfo = null!;
+            return false;
+        }
+
+        return true;
+    }
+
+    private static bool IsInLogDirectory(string fullPath)
+    {
+        var relative = Path.GetRelativePath(LogDir, fullPath);
+        return !Path.IsPathRooted(relative)
+            && relative != ".."
+            && !relative.StartsWith($"..{Path.DirectorySeparatorChar}", StringComparison.Ordinal)
+            && !relative.StartsWith($"..{Path.AltDirectorySeparatorChar}", StringComparison.Ordinal);
     }
 
     // supports standard SGR colors (30‑37 + 90‑97) and reset (0)
@@ -302,9 +426,10 @@ public sealed partial class ServerLogsCommand : LocalizedCommands
         return true;
     }
 
-    private static (bool followMode, string? filter, int lineCount, string? explicitFile) ParseArgs(string[] args)
+    private static (bool followMode, bool downloadMode, string? filter, int lineCount, string? explicitFile) ParseArgs(string[] args)
     {
         var followMode = false;
+        var downloadMode = false;
         string? filter = null;
         var lineCount = 50;
         string? explicitFile = null;
@@ -314,6 +439,8 @@ public sealed partial class ServerLogsCommand : LocalizedCommands
             string arg = args[i];
             if (arg.Equals("--follow") || arg.Equals("--tail"))
                 followMode = true;
+            else if (arg.Equals("--download"))
+                downloadMode = true;
             else if (arg.Equals("--filter") && i + 1 < args.Length)
                 filter = args[++i];
             else if (arg.Equals("--file") && i + 1 < args.Length)
@@ -324,7 +451,7 @@ public sealed partial class ServerLogsCommand : LocalizedCommands
                 filter = arg;
         }
 
-        return (followMode, filter, lineCount, explicitFile);
+        return (followMode, downloadMode, filter, lineCount, explicitFile);
     }
 
     // single 64KB chunk, scan in mem for \n, read forward -> avoids O(n) disk seeks and large heap allocations of
@@ -409,7 +536,7 @@ public sealed partial class ServerLogsCommand : LocalizedCommands
         if (args.Length == 0 || (args.Length == 1 && string.IsNullOrEmpty(args[0])))
         {
             return CompletionResult.FromHintOptions(
-                ["--list", "--follow", "--stop", "--file", "--filter"],
+                ["--list", "--download", "--follow", "--stop", "--file", "--filter"],
                 "option");
         }
 
@@ -439,6 +566,7 @@ public sealed partial class ServerLogsCommand : LocalizedCommands
             HashSet<string> usedFlags = args.Where(a => a.StartsWith('-')).ToHashSet();
             var flags = new List<string>();
             if (!usedFlags.Contains("--list")) flags.Add("--list");
+            if (!usedFlags.Contains("--download")) flags.Add("--download");
             if (!usedFlags.Contains("--follow") && !usedFlags.Contains("--tail"))
             {
                 flags.Add("--follow");
@@ -464,12 +592,9 @@ public sealed partial class ServerLogsCommand : LocalizedCommands
         var completions = new List<CompletionOption>();
         try
         {
-            var files = Directory.GetFiles(LogDir, "*.log", SearchOption.TopDirectoryOnly)
-                .Concat(Directory.GetFiles(LogDir, "*.txt", SearchOption.TopDirectoryOnly));
-
-            foreach (var fullPath in files)
+            foreach (var file in EnumerateLogFiles())
             {
-                string relPath = Path.GetRelativePath(LogDir, fullPath);
+                string relPath = file.Name;
                 if (string.IsNullOrEmpty(filter) || relPath.StartsWith(filter, StringComparison.OrdinalIgnoreCase))
                     completions.Add(new(relPath, "log file"));
             }

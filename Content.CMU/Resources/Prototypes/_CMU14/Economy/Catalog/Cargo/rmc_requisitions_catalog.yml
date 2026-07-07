@@ -304,38 +304,9 @@
         crate: AU14CrateMagazineSpecScoutFLAK
       - cost: 1500
         crate: AU14CrateMagazineSpecScoutMixed
-    - name: Specialist Ammo
-      entries:
-      # Sniper
-      - cost: 2000
-        crate: AU14CrateMagazineSpecSniperM96S
-      - cost: 2000
-        crate: AU14CrateMagazineSpecSniperM96SIncendiary
-      - cost: 2000
-        crate: AU14CrateMagazineSpecSniperM96SFlak
-      - cost: 1500
-        crate: AU14CrateMagazineSpecSniperM96SMixed
-      # AMR
-      - cost: 2000
-        crate: AU14CrateMagazineSpecAMRXM43E1
-      # SHARP (worst spec ever btw - kenyap)
-      - cost: 2000
-        crate: AU14CrateMagazineSpecSharpHE
-      - cost: 2000
-        crate: AU14CrateMagazineSpecSharpFLC
-      - cost: 2000
-        crate: AU14CrateMagazineSpecSharpINCEN
-      - cost: 1500
-        crate: AU14CrateMagazineSpecSharpMixed
-      # Scout
-      - cost: 2000
-        crate: AU14CrateMagazineSpecScoutStandard
-      - cost: 2000
-        crate: AU14CrateMagazineSpecScoutINCEN
-      - cost: 2000
-        crate: AU14CrateMagazineSpecScoutFLAK
-      - cost: 1500
-        crate: AU14CrateMagazineSpecScoutMixed
+      # CMP
+      - cost: 450
+        crate: AU14CrateBoxRSH9SL
     - name: AP Ammo
       entries:
       - cost: 1000

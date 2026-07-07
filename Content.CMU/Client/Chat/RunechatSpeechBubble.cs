@@ -294,8 +294,8 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         bool UseItalic = false)
     {
         public static readonly RunechatVisualStyle Normal = new(7, false, false, CmssLangchatWidth);
-        public static readonly RunechatVisualStyle Whisper = new(6, false, false, CmssLangchatWidth, -1f, UseItalic: true);
-        public static readonly RunechatVisualStyle Radio = new(7, false, false, CmssSplitLangchatWidth);
+        public static readonly RunechatVisualStyle Whisper = new(4, false, false, CmssLangchatWidth, -1f, UseItalic: false);
+        public static readonly RunechatVisualStyle Radio = new(4, false, false, CmssSplitLangchatWidth, UseItalic: false);
         public static readonly RunechatVisualStyle Emote = new(6, false, true, CmssLangchatWidth, -1f);
         public static readonly RunechatVisualStyle EmoteYell = new(9, true, true, CmssLangchatWidth);
         public static readonly RunechatVisualStyle Bolded = new(8, true, false, CmssLangchatWidth);
@@ -327,8 +327,10 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         private const string FallbackItalicFontPath = "/Fonts/RobotoMono/RobotoMono-Italic.ttf";
         private const float CmuMaxAlpha = 1f;
         private const float SyntheticBoldOffset = 1f;
-        private const float TextShadowAlpha = 0.18f;
-        private const float TextShadowOffset = 1f;
+        private const float TextStrokeAlpha = 0.9f;
+        private const float TextHaloAlpha = 0.35f;
+        private const float TextStrokeOffset = 1f;
+        private const float TextHaloOffset = 2f;
         private const float EmoteIconBaseSize = 9f;
         private const float DefaultEmoteIconPixelSize = 1.4f;
         private const float PanicShakeDuration = 0.85f;
@@ -343,6 +345,26 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         private static readonly Color EmoteIconBlue = Color.FromHex("#3399ff");
         private static readonly CultureInfo EnUsCulture = CultureInfo.GetCultureInfo("en-US");
         private static bool SmallFontsLoadFailed;
+
+        private static readonly Vector2[] TextStrokeOffsets =
+        {
+            new(-1f, -1f),
+            new(0f, -1f),
+            new(1f, -1f),
+            new(-1f, 0f),
+            new(1f, 0f),
+            new(-1f, 1f),
+            new(0f, 1f),
+            new(1f, 1f),
+        };
+
+        private static readonly Vector2[] TextHaloOffsets =
+        {
+            new(0f, -1f),
+            new(-1f, 0f),
+            new(1f, 0f),
+            new(0f, 1f),
+        };
 
         private static readonly string[] EmoteIcon =
         {
@@ -421,7 +443,6 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
 
             var layout = _layouts[Math.Min(_currentPage, _layouts.Count - 1)];
             var textOpacity = _configManager.GetCVar(CCVars.SpeechBubbleTextOpacity) * CmuMaxAlpha;
-            var outlineColor = Color.Black.WithAlpha(textOpacity);
             var textColor = _color.WithAlpha(_color.A * textOpacity);
             var lineHeight = GetLineHeight();
             var y = (PixelSize.Y - layout.Height) / 2f;
@@ -448,11 +469,10 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
                     DrawEmoteIcon(
                         handle,
                         new Vector2(position.X - iconGap - iconWidth - GetVisibleIconLeft(), iconY),
-                        outlineColor,
                         textColor);
                 }
 
-                DrawOutlinedString(handle, position, line, outlineColor, textColor);
+                DrawOutlinedString(handle, position, line, textColor);
                 y += lineHeight;
             }
         }
@@ -702,26 +722,30 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             DrawingHandleScreen handle,
             Vector2 position,
             string text,
-            Color outlineColor,
             Color textColor)
         {
-            var shadowOffset = TextShadowOffset * _scale * UIScale;
-            var shadowColor = Color.Black.WithAlpha(textColor.A * TextShadowAlpha);
-            var outlineOffset = _scale * UIScale;
-            DrawStringPass(handle, position + new Vector2(shadowOffset, shadowOffset), text, shadowColor);
+            var strokeOffset = GetTextPixelOffset(TextStrokeOffset);
+            var haloOffset = GetTextPixelOffset(TextHaloOffset);
+            var strokeColor = Color.Black.WithAlpha(textColor.A * TextStrokeAlpha);
+            var haloColor = Color.Black.WithAlpha(textColor.A * TextHaloAlpha);
 
-            for (var x = -1; x <= 1; x++)
-            {
-                for (var y = -1; y <= 1; y++)
-                {
-                    if (x == 0 && y == 0)
-                        continue;
-
-                    DrawStringPass(handle, position + new Vector2(x * outlineOffset, y * outlineOffset), text, outlineColor);
-                }
-            }
-
+            DrawStringPasses(handle, position, text, TextHaloOffsets, haloOffset, haloColor);
+            DrawStringPasses(handle, position, text, TextStrokeOffsets, strokeOffset, strokeColor);
             DrawStringPass(handle, position, text, textColor);
+        }
+
+        private void DrawStringPasses(
+            DrawingHandleScreen handle,
+            Vector2 position,
+            string text,
+            IReadOnlyList<Vector2> offsets,
+            float offset,
+            Color color)
+        {
+            foreach (var direction in offsets)
+            {
+                DrawStringPass(handle, position + direction * offset, text, color);
+            }
         }
 
         private void DrawStringPass(DrawingHandleScreen handle, Vector2 position, string text, Color color)
@@ -732,10 +756,14 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
                 handle.DrawString(_font, position + new Vector2(GetSyntheticBoldOffset(), 0f), text, UIScale, color);
         }
 
+        private float GetTextPixelOffset(float pixels)
+        {
+            return MathF.Max(1f, MathF.Round(pixels * UIScale));
+        }
+
         private void DrawEmoteIcon(
             DrawingHandleScreen handle,
             Vector2 position,
-            Color outlineColor,
             Color textColor)
         {
             var scale = MathF.Max(1f, GetIconPixelSize() * UIScale);

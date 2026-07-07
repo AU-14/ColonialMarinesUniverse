@@ -157,7 +157,7 @@
   id: AU14JobIconGovCMP
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
-    state: old_govfor_rfn
+    state: govfor_cmp
 
 - type: jobIcon
   parent: CMJobIconBase

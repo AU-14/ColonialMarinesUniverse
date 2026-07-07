@@ -45,3 +45,9 @@
   name: allegiance-twe-name
   description: allegiance-twe-description
   roundStart: true
+
+- type: Allegiance
+  id: Neutral
+  name: allegiance-neutral-name
+  description: allegiance-neutral-description
+  roundStart: true

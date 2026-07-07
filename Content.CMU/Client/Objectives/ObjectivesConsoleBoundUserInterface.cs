@@ -12,38 +12,20 @@ public sealed class ObjectivesConsoleBoundUserInterface(EntityUid owner, Enum ui
     {
         base.Open();
         _window = this.CreateWindow<ObjectivesConsoleWindow>();
-        _window.OnClose += Close;
         _window.RequestIntelCallback = id => RequestIntel(id);
-        _window.OpenCentered();
 
         // If we already have a state for this BUI (server sent it before Open was called), apply it now
         if (State is ObjectivesConsoleBoundUserInterfaceState cast)
-        {
             _window.UpdateObjectives(cast.Objectives, cast.CurrentWinPoints, cast.RequiredWinPoints);
-        }
 
         // If the server already sent an intel state (possible before open), open/populate the intel window
         if (State is ObjectiveIntelBoundUserInterfaceState intelState)
-        {
-            // Create a separate popup window without registering it as the primary BUI control
-            _intelWindow = new ObjectiveIntelWindow();
-            _intelWindow.OpenCentered();
-            _intelWindow.Populate(
-                intelState.ObjectiveId,
-                intelState.ObjectiveDefaultTitle,
-                intelState.Tiers ?? new List<ObjectiveIntelTierEntry>(),
-                intelState.UnlockedTier,
-                intelState.FactionPoints,
-                idx => SendMessage(new ObjectivesConsoleUnlockIntelMessage(intelState.ObjectiveId, idx))
-            );
-            _intelWindow.OnClose += () => _intelWindow = null;
-        }
+            ShowIntelWindow(intelState);
     }
 
     public void RequestIntel(string objectiveId)
     {
         // Send request to server and wait for it to respond with the intel state.
-        Logger.GetSawmill("objectives").Debug($"[OBJ CON BUI] Sending RequestIntel for objective={objectiveId} owner={Owner}");
         SendMessage(new ObjectivesConsoleRequestIntelMessage(objectiveId));
     }
 
@@ -52,72 +34,61 @@ public sealed class ObjectivesConsoleBoundUserInterface(EntityUid owner, Enum ui
         base.UpdateState(state);
         if (state is ObjectivesConsoleBoundUserInterfaceState cast)
         {
-            Logger.GetSawmill("objectives").Debug($"[OBJ CON BUI] Received Objectives state: objectives={cast.Objectives.Count} win={cast.CurrentWinPoints}/{cast.RequiredWinPoints}");
-            if (_window == null)
+            if (_window == null || _window.Disposed)
             {
                 _window = this.CreateWindow<ObjectivesConsoleWindow>();
-                _window.OnClose += Close;
                 _window.RequestIntelCallback = id => RequestIntel(id);
-                _window.OpenCentered();
             }
+
             _window.UpdateObjectives(cast.Objectives, cast.CurrentWinPoints, cast.RequiredWinPoints);
             return;
         }
 
         if (state is ObjectiveIntelBoundUserInterfaceState intelState)
+            ShowIntelWindow(intelState);
+    }
+
+    private void ShowIntelWindow(ObjectiveIntelBoundUserInterfaceState intelState)
+    {
+        if (_intelWindow == null || _intelWindow.Disposed)
         {
-
-            Logger.GetSawmill("objectives").Debug("[OBJ CON BUI] Creating intel window and populating");
             _intelWindow = new ObjectiveIntelWindow();
+            _intelWindow.OnClose += OnIntelWindowClosed;
             _intelWindow.OpenCentered();
-            Logger.GetSawmill("objectives").Debug($"[OBJ CON BUI] After OpenCentered: IsOpen={_intelWindow.IsOpen} Disposed={_intelWindow.Disposed} Parent={(_intelWindow.Parent == null ? "null" : _intelWindow.Parent.GetType().FullName)}");
-            _intelWindow.Populate(
-                intelState.ObjectiveId,
-                intelState.ObjectiveDefaultTitle,
-                intelState.Tiers ?? new List<ObjectiveIntelTierEntry>(),
-                intelState.UnlockedTier,
-                intelState.FactionPoints,
-                idx =>
-                {
-                    Logger.GetSawmill("objectives").Debug($"[OBJ CON BUI] Sending Unlock request objective={intelState.ObjectiveId} tier={idx}");
-                    SendMessage(new ObjectivesConsoleUnlockIntelMessage(intelState.ObjectiveId, idx));
-                }
-            );
-            Logger.GetSawmill("objectives").Debug($"[OBJ CON BUI] After Populate: IsOpen={_intelWindow.IsOpen} Disposed={_intelWindow.Disposed} Parent={(_intelWindow.Parent == null ? "null" : _intelWindow.Parent.GetType().FullName)}");
-            _intelWindow.OnClose += () => _intelWindow = null;
-
         }
+        else if (!_intelWindow.IsOpen)
+        {
+            _intelWindow.OpenCentered();
+        }
+
+        _intelWindow.Populate(
+            intelState.ObjectiveId,
+            intelState.ObjectiveDefaultTitle,
+            intelState.Tiers ?? new List<ObjectiveIntelTierEntry>(),
+            intelState.UnlockedTier,
+            intelState.FactionPoints,
+            idx => SendMessage(new ObjectivesConsoleUnlockIntelMessage(intelState.ObjectiveId, idx)));
+    }
+
+    private void OnIntelWindowClosed()
+    {
+        if (_intelWindow != null)
+            _intelWindow.OnClose -= OnIntelWindowClosed;
+
+        _intelWindow = null;
     }
 
     protected override void Dispose(bool disposing)
     {
-        base.Dispose(disposing);
-        if (_window != null)
+        if (disposing && _intelWindow != null)
         {
-            try
-            {
-                if (!_window.Disposed)
-                    _window.Orphan(); // Remove from UI tree instead of Dispose
-            }
-            catch
-            {
-                // Swallow: if orphaning fails because control is already disposed, just clear reference
-            }
-            _window = null;
-        }
-
-        if (_intelWindow != null)
-        {
-            try
-            {
-                if (!_intelWindow.Disposed)
-                    _intelWindow.Orphan();
-            }
-            catch
-            {
-                // If already disposed, nothing to do
-            }
+            _intelWindow.OnClose -= OnIntelWindowClosed;
+            _intelWindow.Close();
+            _intelWindow.Orphan();
             _intelWindow = null;
         }
+
+        _window = null;
+        base.Dispose(disposing);
     }
 }

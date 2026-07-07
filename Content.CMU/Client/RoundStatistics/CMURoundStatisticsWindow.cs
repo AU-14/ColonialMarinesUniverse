@@ -213,6 +213,9 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
 
         container.AddChild(MakeOutcomeBreakdown(mode));
 
+        if (mode.ManualReasons.Count > 0)
+            container.AddChild(MakeManualReasonBreakdown(mode));
+
         if (mode.Threats.Count > 0)
             container.AddChild(MakeThreatBreakdown(mode));
         if (mode.Planets.Count > 0)
@@ -482,6 +485,30 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         return box;
     }
 
+    private Control MakeManualReasonBreakdown(CMURoundModeStatistics mode)
+    {
+        var box = new BoxContainer
+        {
+            Orientation = LayoutOrientation.Vertical,
+            SeparationOverride = 6,
+            HorizontalExpand = true,
+        };
+
+        box.AddChild(MakeSectionLabel("Manual Ending Reasons"));
+
+        var manualTotal = mode.ManualReasons.Sum(reason => reason.Count);
+        foreach (var reason in mode.ManualReasons)
+        {
+            box.AddChild(MakeBreakdownRow(
+                FormatOutcomeSource(reason.Reason),
+                $"{FormatRate(reason.Count, manualTotal)} of manual endings",
+                reason.Count,
+                UnknownGray));
+        }
+
+        return box;
+    }
+
     private Control MakeDistressSplit(CMURoundModeStatistics mode)
     {
         var box = new BoxContainer
@@ -710,6 +737,13 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
             ClipText = true,
             HorizontalExpand = true,
         });
+        box.AddChild(new Label
+        {
+            Text = $"{(record.Outcome == CMURoundStatisticsOutcome.Unknown ? "Manual reason" : "Recorded source")}: {FormatOutcomeSource(record.Source)}",
+            FontColorOverride = Muted,
+            ClipText = true,
+            HorizontalExpand = true,
+        });
 
         var threat = string.IsNullOrWhiteSpace(record.SelectedThreatId)
             ? "no threat"
@@ -825,6 +859,53 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         return seconds <= 0
             ? "No data"
             : FormatDuration(seconds);
+    }
+
+    private static string FormatOutcomeSource(string source)
+    {
+        if (string.IsNullOrWhiteSpace(source))
+            return "Unknown source";
+
+        source = source.Trim();
+        if (source.Equals("Unknown", StringComparison.OrdinalIgnoreCase))
+            return "Unknown source";
+
+        if (source.Equals("NoPendingOutcome", StringComparison.OrdinalIgnoreCase) ||
+            source.Equals("RoundEndMessageEvent", StringComparison.OrdinalIgnoreCase))
+        {
+            return "No stats outcome was recorded before round end";
+        }
+
+        if (source.Equals("WithdrawConsoleStalemate", StringComparison.OrdinalIgnoreCase))
+            return "Withdraw console stalemate";
+
+        const string withdrawPrefix = "WithdrawConsole:";
+        if (source.StartsWith(withdrawPrefix, StringComparison.OrdinalIgnoreCase))
+            return $"Withdraw console: {FormatFaction(source[withdrawPrefix.Length..])}";
+
+        const string objectivePrefix = "AuObjective:";
+        if (source.StartsWith(objectivePrefix, StringComparison.OrdinalIgnoreCase))
+            return $"AU objective: {FormatFaction(source[objectivePrefix.Length..])}";
+
+        return source;
+    }
+
+    private static string FormatFaction(string faction)
+    {
+        if (string.IsNullOrWhiteSpace(faction))
+            return "unknown faction";
+
+        return faction.Trim().ToLowerInvariant() switch
+        {
+            "govfor" => "Govfor",
+            "opfor" => "Opfor",
+            "clf" => "CLF",
+            "colony" or "colonist" => "Colonists",
+            "threat" => "Threat",
+            "xeno" => "Xeno",
+            "unknown" => "unknown faction",
+            var other => other,
+        };
     }
 
     private static string PresetName(CMURoundStatisticsPreset preset)

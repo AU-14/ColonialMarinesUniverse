@@ -203,7 +203,11 @@
         amount: 1
       - id: CMFolderWhite
         amount: 1
-      - id: CMStampCMO
+      - id: CMBeltMedicBagFilled
+        amount: 1
+      - id: RMCPouchMedicalFill
+        amount: 1
+      - id: RMCPouchMedkitFill
         amount: 1
 
 - type: entity
@@ -239,18 +243,18 @@
       amount: 1
     - id: CMStampDenied
       amount: 1
-    - id: RMCWeaponRevolverRSh9
-      amount: 1
     - id: RMCAttachmentRailFlashlight
       amount: 1
-    - id: RMCSpeedLoaderRsh9 # TODO: munition swap/fix
-      amount: 3
-    - id: RMCBeltBrowne
-      amount: 1
-    - id: AU14TeleBaton
+    - id: AU14BeltBrowneFilledCMP
       amount: 1
     - id: AU14BackpackRTOPackGray
       amount: 1
+    - id: RMCMegaphone
+      amount: 1
+    - id: RMCGlassesHUDSecurity
+      amount: 1
+    - id: CMU14USCMMPBrassard
+      amount: 3
 
 - type: entity
   parent: AU14KitPlatoonOfficer

@@ -14,6 +14,7 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
     private const string DistressSignalPreset = "DistressSignal";
     private const string InsurgencyPreset = "Insurgency";
     private const string ColonyFallPreset = "ColonyFall";
+    private const string NoPendingOutcomeSource = "NoPendingOutcome";
 
     [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private GameTicker _gameTicker = default!;
@@ -124,6 +125,9 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
     {
         switch (GetCurrentPreset())
         {
+            case CMURoundStatisticsPreset.DistressSignal:
+                TrySetPendingOutcome(GetDistressWithdrawalOutcome(faction, isStalemate));
+                break;
             case CMURoundStatisticsPreset.Insurgency:
                 TrySetPendingOutcome(GetInsurgencyWithdrawalOutcome(faction, isStalemate));
                 break;
@@ -184,7 +188,7 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
         outcome ??= new PendingRoundOutcome(
             CMURoundStatisticsWinner.Unknown,
             CMURoundStatisticsOutcome.Unknown,
-            "RoundEndMessageEvent");
+            NoPendingOutcomeSource);
 
         var record = new CMURoundOutcomeRecord(
             ev.RoundId,
@@ -269,6 +273,23 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
         return new PendingRoundOutcome(
             CMURoundStatisticsWinner.Govfor,
             CMURoundStatisticsOutcome.MarineMajorXenoWipe,
+            source);
+    }
+
+    private PendingRoundOutcome GetDistressWithdrawalOutcome(string? faction, bool isStalemate)
+    {
+        var source = GetWithdrawalSource(faction, isStalemate);
+        if (isStalemate)
+        {
+            return new PendingRoundOutcome(
+                CMURoundStatisticsWinner.Draw,
+                CMURoundStatisticsOutcome.Stalemate,
+                source);
+        }
+
+        return new PendingRoundOutcome(
+            CMURoundStatisticsWinner.Xeno,
+            CMURoundStatisticsOutcome.XenoMinorHijackLoss,
             source);
     }
 

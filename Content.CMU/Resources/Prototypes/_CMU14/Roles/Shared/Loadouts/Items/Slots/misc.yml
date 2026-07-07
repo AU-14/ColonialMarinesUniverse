@@ -5,10 +5,34 @@
     - CMStampApproved
 
 - type: loadout
-  id: SynthResetKeyAU14
+  id: SynthResetKeyAU14 # WeYu
   storage:
     back:
     - RMCSynthResetKey
+
+- type: loadout
+  id: SynthResetKeySeegsonAU14
+  storage:
+    back:
+    - RMCSynthResetKeySeegson
+
+- type: loadout
+  id: SynthResetKeyProdigyAU14
+  storage:
+    back:
+    - AU14SynthResetKeyProdigy
+
+- type: loadout
+  id: SynthResetKeyNovarisAU14
+  storage:
+    back:
+    - RMCSynthResetKeyNovaris
+
+- type: loadout
+  id: SynthResetKeyHyperdyneAU14
+  storage:
+    back:
+    - RMCSynthResetKeyHyperdyne
 
 - type: loadout
   id: PatchFORECONAU14
