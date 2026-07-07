@@ -2,6 +2,7 @@
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
 using Content.Client.Administration.Managers;
+using Content.Client.Players.PlayTimeTracking;
 using Content.Shared._AU14.Construction.CustomConstruction;
 using Content.Shared.Popups;
 
@@ -16,7 +17,22 @@ namespace Content.Client._AU14.Construction.CustomConstruction;
 public sealed class CustomConstructionEditorClientSystem : EntitySystem
 {
     [Dependency] private readonly IClientAdminManager _admin = default!;
+    [Dependency] private readonly JobRequirementsManager _jobRequirements = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+
+    /// <summary>
+    /// Whitelist-only "role" that unlocks the editor tools for a trusted non-admin (granted with
+    /// <c>jobwhitelistadd &lt;player&gt; JModEditor</c>). Must match the server's EditorWhitelistJob.
+    /// </summary>
+    private const string EditorWhitelistJob = "JModEditor";
+
+    /// <summary>
+    /// Client-side pre-check mirroring the server gate: a Host-flagged admin OR a player holding the
+    /// <see cref="EditorWhitelistJob"/> whitelist. General admin access is intentionally NOT enough. The
+    /// server always re-validates before acting.
+    /// </summary>
+    private bool CanUseEditor() =>
+        _admin.HasFlag(Shared.Administration.AdminFlags.Host) || _jobRequirements.IsWhitelisted(EditorWhitelistJob);
 
     private ConstructionEditorWindow? _window;
     private EntitySelectorWindow? _selector;
@@ -56,7 +72,7 @@ public sealed class CustomConstructionEditorClientSystem : EntitySystem
     /// <summary>Admin Tools > Tiles Editor: ask the server (which re-checks permission) to open the tile editor.</summary>
     public void OpenTilesEditor()
     {
-        if (!_admin.IsAdmin())
+        if (!CanUseEditor())
         {
             _popup.PopupCursor(Loc.GetString("construction-menu-editor-not-admin"), PopupType.MediumCaution);
             return;
@@ -68,7 +84,7 @@ public sealed class CustomConstructionEditorClientSystem : EntitySystem
     /// <summary>Admin Tools > Lathe Editor: ask the server (which re-checks permission) to open the lathe editor.</summary>
     public void OpenLatheEditor()
     {
-        if (!_admin.IsAdmin())
+        if (!CanUseEditor())
         {
             _popup.PopupCursor(Loc.GetString("construction-menu-editor-not-admin"), PopupType.MediumCaution);
             return;
@@ -104,7 +120,7 @@ public sealed class CustomConstructionEditorClientSystem : EntitySystem
     /// </summary>
     public void OpenItemsEditor()
     {
-        if (!_admin.IsAdmin())
+        if (!CanUseEditor())
         {
             _popup.PopupCursor(Loc.GetString("construction-menu-editor-not-admin"), PopupType.MediumCaution);
             return;
@@ -127,7 +143,7 @@ public sealed class CustomConstructionEditorClientSystem : EntitySystem
     /// </summary>
     public void RequestChangeRecipe(string targetEntityId)
     {
-        if (!_admin.IsAdmin())
+        if (!CanUseEditor())
         {
             _popup.PopupCursor(Loc.GetString("construction-menu-editor-not-admin"), PopupType.MediumCaution);
             return;
@@ -143,7 +159,7 @@ public sealed class CustomConstructionEditorClientSystem : EntitySystem
     /// </summary>
     public void HideRecipe(string constructionId)
     {
-        if (!_admin.IsAdmin())
+        if (!CanUseEditor())
         {
             _popup.PopupCursor(Loc.GetString("construction-menu-editor-not-admin"), PopupType.MediumCaution);
             return;

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Content.Server.Administration.Managers;
+using Content.Server.Players.JobWhitelist;
 using Content.Shared._AU14.Construction.CustomConstruction;
 using Content.Shared.Administration;
 using Content.Shared.Administration.Logs;
@@ -12,6 +13,7 @@ using Content.Shared.CCVar;
 using Content.Shared.Database;
 using Content.Shared.Item;
 using Content.Shared.Popups;
+using Content.Shared.Roles;
 using Content.Shared.Stacks;
 using Content.Shared.Tools;
 using Content.Shared.Verbs;
@@ -45,6 +47,7 @@ namespace Content.Server._AU14.Construction.CustomConstruction;
 public sealed partial class CustomConstructionMenuSystem : EntitySystem
 {
     [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private JobWhitelistManager _jobWhitelist = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
@@ -58,6 +61,13 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
     /// compose these flags, so "Moderator / Senior Moderator / Owner" is expressed through admin ranks.
     /// </summary>
     public const AdminFlags RequiredFlag = AdminFlags.Host;
+
+    /// <summary>
+    /// Whitelist-only "role" that also unlocks the editor tools, so a trusted non-admin can be granted
+    /// access with <c>jobwhitelistadd &lt;player&gt; JModEditor</c> (see JModEditor.yml) instead of a Host
+    /// admin rank. Checked in addition to <see cref="RequiredFlag"/>.
+    /// </summary>
+    public static readonly ProtoId<JobPrototype> EditorWhitelistJob = "JModEditor";
 
     private const string GeneratedSubDir = "Prototypes/_AU14/CustomConstruction/Generated";
     private const string DefaultSpawnlist = "AU14";
@@ -130,7 +140,8 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
     /// </summary>
     public bool CanEditConstructionMenu(ICommonSession session)
     {
-        return _adminManager.HasAdminFlag(session, RequiredFlag);
+        return _adminManager.HasAdminFlag(session, RequiredFlag)
+            || _jobWhitelist.IsWhitelisted(session.UserId, EditorWhitelistJob);
     }
 
     // -------------------------------------------------------------------------
