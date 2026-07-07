@@ -1,7 +1,5 @@
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
 using Robust.Shared.Console;
 using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
@@ -21,15 +19,14 @@ public sealed partial class CMUClientMemoryCommand : IConsoleCommand
     [Dependency] private IGameTiming _timing = default!;
 
     public string Command => "cmu_client_memory";
-    public string Description => "Prints client memory, entity, component, prototype, and map counts.";
+    public string Description => "Prints client entity, component, prototype, and map counts.";
     public string Help =>
         "Usage:\n" +
         "  cmu_client_memory snapshot [top=15]\n" +
         "  cmu_client_memory baseline [top=15]\n" +
         "  cmu_client_memory diff [top=15]\n" +
-        "  cmu_client_memory gc [top=15]\n" +
         "\n" +
-        "Use baseline, wait while memory grows, then diff. Use gc to separate managed heap growth from native/resource cache growth.";
+        "Use baseline, wait while counts grow, then diff.";
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -51,9 +48,6 @@ public sealed partial class CMUClientMemoryCommand : IConsoleCommand
                 WriteSnapshot(shell, current, top, _baseline);
                 _baseline = current;
                 break;
-            case "gc":
-                RunGc(shell, top);
-                break;
             case "help":
                 shell.WriteLine(Help);
                 break;
@@ -67,44 +61,18 @@ public sealed partial class CMUClientMemoryCommand : IConsoleCommand
     public CompletionResult GetCompletion(IConsoleShell shell, string[] args)
     {
         return args.Length == 1
-            ? CompletionResult.FromOptions(["snapshot", "baseline", "diff", "gc", "help"])
+            ? CompletionResult.FromOptions(["snapshot", "baseline", "diff", "help"])
             : CompletionResult.Empty;
     }
 
-    private void RunGc(IConsoleShell shell, int top)
+    private Snapshot CollectSnapshot()
     {
-        var before = CollectSnapshot();
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
-        GC.Collect();
-        var after = CollectSnapshot(forceFullCollection: true);
-
-        shell.WriteLine("== CMU Client Memory After Forced GC ==");
-        WriteMemorySummary(shell, "before", before, null);
-        WriteMemorySummary(shell, "after ", after, before);
-        shell.WriteLine("Managed falling while working/private stay high usually means native, graphics, audio, or resource cache pressure.");
-        shell.WriteLine("Managed staying high after GC points at retained C# objects.");
-        shell.WriteLine("");
-        WriteSnapshot(shell, after, top, before);
-    }
-
-    private Snapshot CollectSnapshot(bool forceFullCollection = false)
-    {
-        using var process = Process.GetCurrentProcess();
-
         var componentCounts = CollectComponentCounts();
         var prototypeCounts = CollectPrototypeCounts(out var entityCount);
         var mapCounts = CollectMapCounts();
 
         return new Snapshot(
             _timing.CurTick.Value,
-            GC.GetTotalMemory(forceFullCollection),
-            process.WorkingSet64,
-            process.PrivateMemorySize64,
-            GC.GetTotalAllocatedBytes(false),
-            GC.CollectionCount(0),
-            GC.CollectionCount(1),
-            GC.CollectionCount(2),
             entityCount,
             componentCounts.Values.Sum(),
             componentCounts,
@@ -170,34 +138,16 @@ public sealed partial class CMUClientMemoryCommand : IConsoleCommand
 
     private static void WriteSnapshot(IConsoleShell shell, Snapshot snapshot, int top, Snapshot? previous)
     {
-        shell.WriteLine("== CMU Client Memory ==");
+        shell.WriteLine("== CMU Client Counts ==");
         shell.WriteLine($"Tick: {snapshot.Tick:N0}");
-        WriteMemorySummary(shell, "now   ", snapshot, previous);
+        shell.WriteLine("Runtime memory, GC, process, and ThreadPool counters are omitted by the content sandbox.");
         shell.WriteLine($"Entities: {snapshot.EntityCount:N0}{FormatDelta(snapshot.EntityCount, previous?.EntityCount)} | Components: {snapshot.ComponentCount:N0}{FormatDelta(snapshot.ComponentCount, previous?.ComponentCount)}");
-        shell.WriteLine($"GC collections: gen0={snapshot.Gen0:N0}{FormatDelta(snapshot.Gen0, previous?.Gen0)} gen1={snapshot.Gen1:N0}{FormatDelta(snapshot.Gen1, previous?.Gen1)} gen2={snapshot.Gen2:N0}{FormatDelta(snapshot.Gen2, previous?.Gen2)}");
-        WriteThreadPool(shell);
         shell.WriteLine("");
         WriteCounterRows(shell, "Top components", snapshot.ComponentCounts, previous?.ComponentCounts, top);
         shell.WriteLine("");
         WriteCounterRows(shell, "Top prototypes", snapshot.PrototypeCounts, previous?.PrototypeCounts, top);
         shell.WriteLine("");
         WriteCounterRows(shell, "Maps", snapshot.MapCounts, previous?.MapCounts, Math.Min(top, 30));
-    }
-
-    private static void WriteMemorySummary(IConsoleShell shell, string label, Snapshot snapshot, Snapshot? previous)
-    {
-        shell.WriteLine(
-            $"Memory {label}: managed={FormatBytes(snapshot.ManagedBytes)}{FormatDelta(snapshot.ManagedBytes, previous?.ManagedBytes)} " +
-            $"working={FormatBytes(snapshot.WorkingBytes)}{FormatDelta(snapshot.WorkingBytes, previous?.WorkingBytes)} " +
-            $"private={FormatBytes(snapshot.PrivateBytes)}{FormatDelta(snapshot.PrivateBytes, previous?.PrivateBytes)} " +
-            $"allocated={FormatBytes(snapshot.TotalAllocatedBytes)}{FormatDelta(snapshot.TotalAllocatedBytes, previous?.TotalAllocatedBytes)}");
-    }
-
-    private static void WriteThreadPool(IConsoleShell shell)
-    {
-        ThreadPool.GetAvailableThreads(out var workerAvailable, out var ioAvailable);
-        ThreadPool.GetMaxThreads(out var workerMax, out var ioMax);
-        shell.WriteLine($"ThreadPool: worker busy={workerMax - workerAvailable:N0}/{workerMax:N0} io busy={ioMax - ioAvailable:N0}/{ioMax:N0}");
     }
 
     private static void WriteCounterRows(
@@ -245,17 +195,6 @@ public sealed partial class CMUClientMemoryCommand : IConsoleCommand
         return Math.Clamp(top, 1, MaxTop);
     }
 
-    private static string FormatDelta(long current, long? previous)
-    {
-        if (previous == null)
-            return string.Empty;
-
-        var delta = current - previous.Value;
-        return delta >= 0
-            ? $" (+{FormatBytes(delta)})"
-            : $" (-{FormatBytes(-delta)})";
-    }
-
     private static string FormatDelta(int current, int? previous)
     {
         if (previous == null)
@@ -267,30 +206,8 @@ public sealed partial class CMUClientMemoryCommand : IConsoleCommand
             : $" ({delta:N0})";
     }
 
-    private static string FormatBytes(long bytes)
-    {
-        string[] units = ["B", "KiB", "MiB", "GiB"];
-        var value = (double) bytes;
-        var unit = 0;
-
-        while (value >= 1024 && unit < units.Length - 1)
-        {
-            value /= 1024;
-            unit++;
-        }
-
-        return $"{value:N1}{units[unit]}";
-    }
-
     private sealed record Snapshot(
         uint Tick,
-        long ManagedBytes,
-        long WorkingBytes,
-        long PrivateBytes,
-        long TotalAllocatedBytes,
-        int Gen0,
-        int Gen1,
-        int Gen2,
         int EntityCount,
         int ComponentCount,
         Dictionary<string, int> ComponentCounts,
