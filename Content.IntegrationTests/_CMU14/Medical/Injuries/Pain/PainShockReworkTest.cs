@@ -487,13 +487,14 @@ public sealed class PainShockReworkTest
                 var part = GetFirstPart(entMan, human);
                 shrapnel.AddShrapnel(part, 2, 12f);
 
-                Assert.That(shrapnel.ComputeMovementPainPulse(human), Is.GreaterThan(0f));
+                var shrapnelOnlyPulse = shrapnel.ComputeMovementPainPulse(human);
+                Assert.That(shrapnelOnlyPulse, Is.EqualTo(1f).Within(0.001f));
 
                 var leg = GetBodyPart(entMan, human, BodyPartType.Leg, BodyPartSymmetry.Left);
                 var frac = entMan.EnsureComponent<FractureComponent>(leg);
                 fracture.SetSeverity((leg, frac), FractureSeverity.Simple);
 
-                Assert.That(shrapnel.ComputeMovementPainPulse(human), Is.GreaterThan(12f));
+                Assert.That(shrapnel.ComputeMovementPainPulse(human), Is.EqualTo(shrapnelOnlyPulse + 8f).Within(0.001f));
             }
             finally
             {

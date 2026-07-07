@@ -1,12 +1,14 @@
-using Content.Shared._CMU14.Medical.Core;
 using System.Collections.Generic;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._CMU14.Medical.Anatomy.Bones;
+using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Injuries.Pain;
+using Content.Shared._CMU14.Medical.Injuries.Trauma;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._CMU14.Medical.Injuries.Wounds.Events;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
+using Content.Shared.Buckle.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.DoAfter;
@@ -16,12 +18,14 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Content.Shared.Explosion;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Standing;
 using Content.Shared.Verbs;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.Injuries.Shrapnel;
@@ -32,21 +36,30 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedFractureSystem _fracture = default!;
     [Dependency] private SharedPainShockSystem _pain = default!;
     [Dependency] private SharedCMUWoundsSystem _wounds = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
 
     private const float PainTargetCap = 70f;
     private const float MovementDistanceThreshold = 0.75f;
     private const float MovementPulseCooldownSeconds = 1.25f;
     private const float MinimumMoveDistance = 0.05f;
     private const float HighForceShrapnelExposure = 0.62f;
+    private const float ExplosionShrapnelChanceStart = 0.35f;
+    private const float ExplosionShrapnelGuaranteed = 0.85f;
+    private const float FragmentingExplosionGuaranteedExposure = 0.62f;
+    private const float MovementDamagePerFragment = 0.5f;
     private const int MaxExplosionFragments = 8;
+    private static readonly DamageImpact ShrapnelMovementImpact =
+        new(DamageImpactDelivery.Contact, DamageImpactContact.Fragment, DamageImpactPenetration.Low, DamageImpactEnergy.Low);
 
     private readonly Dictionary<EntityUid, float> _movementAccumulators = new();
     private readonly Dictionary<EntityUid, TimeSpan> _movementPainCooldowns = new();
@@ -88,6 +101,14 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
 
         var fragmentPressure = 4f + shrapnel.Fragments * 3.5f;
         return MathF.Min(PainTargetCap, MathF.Max(shrapnel.Severity, fragmentPressure));
+    }
+
+    public static FixedPoint2 GetMovementDamage(CMUShrapnelComponent shrapnel)
+    {
+        if (shrapnel.Fragments <= 0)
+            return FixedPoint2.Zero;
+
+        return FixedPoint2.New(MovementDamagePerFragment * shrapnel.Fragments);
     }
 
     public bool AddShrapnel(EntityUid part, int fragments, float severity)
@@ -134,6 +155,17 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
             return 0;
         if (!IsShrapnelCapable(explosion, exposure))
             return 0;
+
+        var chance = GetExplosionShrapnelChance(explosion, exposure);
+        if (chance <= 0f)
+            return 0;
+
+        if (!IsGuaranteedExplosionShrapnel(explosion, exposure) &&
+            chance < 1f &&
+            !_random.Prob(chance))
+        {
+            return 0;
+        }
 
         var desiredFragments = Math.Clamp((int)MathF.Ceiling(exposure * MaxExplosionFragments), 1, MaxExplosionFragments);
         var applied = 0;
@@ -223,7 +255,7 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
         foreach (var (partUid, part) in _body.GetBodyChildren(body))
         {
             if (TryComp<CMUShrapnelComponent>(partUid, out var shrapnel))
-                pulse += GetPainTarget(shrapnel);
+                pulse += GetMovementDamage(shrapnel).Float();
 
             if (part.PartType is not (BodyPartType.Leg or BodyPartType.Foot))
                 continue;
@@ -386,11 +418,15 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
         }
 
         _movementAccumulators[ent.Owner] = accumulated % MovementDistanceThreshold;
-        var pulse = ComputeMovementPainPulse(ent.Owner);
-        if (pulse <= 0f)
+        if (!IsEligibleForEmbeddedMovement(ent.Owner))
             return;
 
         if (!CanPulseMovementPain(ent.Owner))
+            return;
+
+        var pulse = ApplyShrapnelMovementDamage(ent.Owner);
+        pulse += (FixedPoint2)GetMovementFracturePainPulse(ent.Owner);
+        if (pulse <= FixedPoint2.Zero)
             return;
 
         _pain.AddPainPulse(ent.Owner, (FixedPoint2)pulse);
@@ -412,6 +448,68 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
 
         _movementPainCooldowns[body] = now + TimeSpan.FromSeconds(MovementPulseCooldownSeconds);
         return true;
+    }
+
+    private FixedPoint2 ApplyShrapnelMovementDamage(EntityUid body)
+    {
+        var total = FixedPoint2.Zero;
+        foreach (var (partUid, _) in _body.GetBodyChildren(body))
+        {
+            if (!TryComp<CMUShrapnelComponent>(partUid, out var shrapnel))
+                continue;
+
+            var amount = GetMovementDamage(shrapnel);
+            if (amount <= FixedPoint2.Zero)
+                continue;
+
+            var damage = new DamageSpecifier();
+            damage.DamageDict["Piercing"] = amount;
+            if (!_partHealth.TryApplyPartDamage(
+                    body,
+                    partUid,
+                    damage,
+                    tool: partUid,
+                    mechanism: CMUTraumaMechanism.Pierce,
+                    origin: partUid,
+                    impact: ShrapnelMovementImpact))
+            {
+                continue;
+            }
+
+            total += amount;
+        }
+
+        return total;
+    }
+
+    private float GetMovementFracturePainPulse(EntityUid body)
+    {
+        if (!_painEnabled)
+            return 0f;
+
+        var pulse = 0f;
+        foreach (var (partUid, part) in _body.GetBodyChildren(body))
+        {
+            if (part.PartType is not (BodyPartType.Leg or BodyPartType.Foot))
+                continue;
+            if (!TryComp<FractureComponent>(partUid, out var fracture))
+                continue;
+
+            pulse += MovementFracturePulse(_fracture.GetEffectiveSeverity((partUid, fracture)));
+        }
+
+        return pulse;
+    }
+
+    private bool IsEligibleForEmbeddedMovement(EntityUid body)
+    {
+        if (TryComp<MobStateComponent>(body, out var mob) && mob.CurrentState == MobState.Dead)
+            return false;
+
+        if (_standing.IsDown(body))
+            return false;
+
+        return !TryComp<BuckleComponent>(body, out var buckle) || !buckle.Buckled;
     }
 
     private bool TryFindExtractionPart(
@@ -482,14 +580,49 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
         if (exposure >= HighForceShrapnelExposure)
             return true;
 
+        return IsFragmentingExplosion(explosion)
+            || explosion == "Minibomb"
+            || explosion == "MicroBomb"
+            || explosion == "HardBomb";
+    }
+
+    private static float GetExplosionShrapnelChance(
+        ProtoId<ExplosionPrototype> explosion,
+        float exposure)
+    {
+        if (exposure >= ExplosionShrapnelGuaranteed)
+            return 1f;
+
+        if (IsFragmentingExplosion(explosion))
+        {
+            if (exposure >= FragmentingExplosionGuaranteedExposure)
+                return 1f;
+
+            return Math.Clamp(0.35f + exposure * 0.75f, 0.25f, 0.95f);
+        }
+
+        return Math.Clamp(
+            (exposure - ExplosionShrapnelChanceStart) /
+            (ExplosionShrapnelGuaranteed - ExplosionShrapnelChanceStart),
+            0f,
+            1f);
+    }
+
+    private static bool IsGuaranteedExplosionShrapnel(
+        ProtoId<ExplosionPrototype> explosion,
+        float exposure)
+    {
+        return exposure >= ExplosionShrapnelGuaranteed ||
+            IsFragmentingExplosion(explosion) && exposure >= FragmentingExplosionGuaranteedExposure;
+    }
+
+    private static bool IsFragmentingExplosion(ProtoId<ExplosionPrototype> explosion)
+    {
         return explosion == "Default"
             || explosion == "RMC"
             || explosion == "RMCMortar"
             || explosion == "RMCOB"
-            || explosion == "RMCOBXenoTunnel"
-            || explosion == "Minibomb"
-            || explosion == "MicroBomb"
-            || explosion == "HardBomb";
+            || explosion == "RMCOBXenoTunnel";
     }
 
     private static float MovementFracturePulse(FractureSeverity severity) => severity switch
