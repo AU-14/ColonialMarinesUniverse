@@ -26,3 +26,7 @@ reagent-name-cmu-tramadol                    = Tramadol
 reagent-desc-cmu-tramadol                    = A moderate opioid pain reliever. Strongly masks pain and helps excess pain fade.
 reagent-name-cmu-oxycodone                   = Oxycodone
 reagent-desc-cmu-oxycodone                   = A heavy opioid for severe pain. Can fully mask pain shock while it lasts.
+reagent-name-cmu-sleen                       = Sleen
+reagent-desc-cmu-sleen                       = A strong experimental painkiller. Masks severe pain, but overdoses become toxic and disorienting.
+reagent-name-cmu-soporific                   = Soporific
+reagent-desc-cmu-soporific                   = A powerful sedative painkiller. Causes drowsiness and can force sleep at surgical doses.

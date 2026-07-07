@@ -17,6 +17,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.EntityEffects;
 using Content.Shared.EntityEffects.EffectConditions;
 using Content.Shared.EntityEffects.Effects;
+using Content.Shared.EntityEffects.Effects.StatusEffects;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Verbs;
@@ -32,8 +33,11 @@ namespace Content.IntegrationTests._CMU14.Medical.Injuries.Pain;
 [TestFixture]
 public sealed class PainShockReworkTest
 {
+    private static readonly ProtoId<ReagentPrototype> Paracetamol = "CMUParacetamol";
     private static readonly ProtoId<ReagentPrototype> Tramadol = "CMUTramadol";
+    private static readonly ProtoId<ReagentPrototype> Sleen = "CMUSleen";
     private static readonly ProtoId<ReagentPrototype> Oxycodone = "CMUOxycodone";
+    private static readonly ProtoId<ReagentPrototype> Soporific = "CMUSoporific";
     private static readonly ProtoId<ReagentPrototype> Epinephrine = "CMEpinephrine";
     private static readonly ProtoId<ReagentPrototype> Inaprovaline = "CMInaprovaline";
 
@@ -660,6 +664,61 @@ public sealed class PainShockReworkTest
     }
 
     [Test]
+    public async Task ChemistryPainkillersMapToSurgeryPainControl()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+
+            var paracetamol = prototypes.Index(Paracetamol);
+            var tramadol = prototypes.Index(Tramadol);
+            var sleen = prototypes.Index(Sleen);
+            var oxycodone = prototypes.Index(Oxycodone);
+            var soporific = prototypes.Index(Soporific);
+
+            var paracetamolSuppression = AssertMedicinePainSuppression(paracetamol);
+            var tramadolSuppression = AssertMedicinePainSuppression(tramadol);
+            var sleenSuppression = AssertMedicinePainSuppression(sleen);
+            var oxycodoneSuppression = AssertMedicinePainSuppression(oxycodone);
+            var soporificSuppression = AssertMedicinePainSuppression(soporific);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(paracetamol.Overdose, Is.EqualTo(FixedPoint2.New(60)));
+                Assert.That(paracetamol.CriticalOverdose, Is.EqualTo(FixedPoint2.New(100)));
+                Assert.That(tramadol.Overdose, Is.EqualTo(FixedPoint2.New(30)));
+                Assert.That(tramadol.CriticalOverdose, Is.EqualTo(FixedPoint2.New(50)));
+                Assert.That(oxycodone.Overdose, Is.EqualTo(FixedPoint2.New(20)));
+                Assert.That(oxycodone.CriticalOverdose, Is.EqualTo(FixedPoint2.New(30)));
+                Assert.That(sleen.Overdose, Is.EqualTo(FixedPoint2.New(20)));
+                Assert.That(sleen.CriticalOverdose, Is.EqualTo(FixedPoint2.New(30)));
+                Assert.That(soporific.Overdose, Is.EqualTo(FixedPoint2.New(30)));
+                Assert.That(soporific.CriticalOverdose, Is.EqualTo(FixedPoint2.New(50)));
+
+                Assert.That(paracetamolSuppression.TierSuppression, Is.EqualTo(1));
+                Assert.That(tramadolSuppression.TierSuppression, Is.EqualTo(2));
+                Assert.That(sleenSuppression.TierSuppression, Is.EqualTo(3));
+                Assert.That(oxycodoneSuppression.TierSuppression, Is.EqualTo(4));
+                Assert.That(soporificSuppression.TierSuppression, Is.EqualTo(5));
+
+                Assert.That(IsEnoughForSurgeryPainControl(paracetamolSuppression), Is.False);
+                Assert.That(IsEnoughForSurgeryPainControl(tramadolSuppression), Is.True);
+                Assert.That(IsEnoughForSurgeryPainControl(sleenSuppression), Is.True);
+                Assert.That(IsEnoughForSurgeryPainControl(oxycodoneSuppression), Is.True);
+                Assert.That(IsEnoughForSurgeryPainControl(soporificSuppression), Is.True);
+            });
+
+            AssertReagentAppliesStatusEffect(soporific, "StatusEffectDrowsiness");
+            AssertReagentAppliesStatusEffect(soporific, "StatusEffectForcedSleeping");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task EpinephrineAndInaprovalineReducePain()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -849,6 +908,41 @@ public sealed class PainShockReworkTest
 
         Assert.Fail($"{reagent.ID} must apply CMU pain suppression.");
         return default!;
+    }
+
+    private static CMUApplyPainSuppressionEffect AssertMedicinePainSuppression(ReagentPrototype reagent)
+    {
+        var metabolism = GetMedicineMetabolism(reagent);
+        foreach (var effect in metabolism.Effects)
+        {
+            if (effect is CMUApplyPainSuppressionEffect suppression)
+                return suppression;
+        }
+
+        Assert.Fail($"{reagent.ID} must apply CMU pain suppression.");
+        return default!;
+    }
+
+    private static bool IsEnoughForSurgeryPainControl(CMUApplyPainSuppressionEffect suppression)
+        => suppression.AccumulationSuppression >= 0.5f || suppression.TierSuppression >= 2;
+
+    private static void AssertReagentAppliesStatusEffect(ReagentPrototype reagent, EntProtoId effectProto)
+    {
+        var metabolism = GetMedicineMetabolism(reagent);
+        foreach (var effect in metabolism.Effects)
+        {
+            if (effect is ModifyStatusEffect statusEffect && statusEffect.EffectProto == effectProto)
+                return;
+        }
+
+        Assert.Fail($"{reagent.ID} must apply status effect {effectProto}.");
+    }
+
+    private static ReagentEffectsEntry GetMedicineMetabolism(ReagentPrototype reagent)
+    {
+        Assert.That(reagent.Metabolisms, Is.Not.Null, reagent.ID);
+        Assert.That(reagent.Metabolisms!.TryGetValue(new ProtoId<MetabolismGroupPrototype>("Medicine"), out var metabolism), Is.True, reagent.ID);
+        return metabolism!;
     }
 
     private static bool HasReagentThreshold(EntityEffect effect, FixedPoint2 min)

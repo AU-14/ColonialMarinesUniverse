@@ -241,6 +241,12 @@
       - !type:AdjustReagent
         reagent: CMUOxycodone
         amount: -0.4
+      - !type:AdjustReagent
+        reagent: CMUSleen
+        amount: -0.4
+      - !type:AdjustReagent
+        reagent: CMUSoporific
+        amount: -0.4
 
 - type: reagent
   parent: CMReagent

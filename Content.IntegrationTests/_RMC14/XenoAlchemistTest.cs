@@ -244,6 +244,8 @@ public sealed class XenoAlchemistTest
             AssertAdjusts(pain, "CMUParacetamol", -0.4f);
             AssertAdjusts(pain, "CMUTramadol", -0.4f);
             AssertAdjusts(pain, "CMUOxycodone", -0.4f);
+            AssertAdjusts(pain, "CMUSleen", -0.4f);
+            AssertAdjusts(pain, "CMUSoporific", -0.4f);
             AssertAdjusts(bloodloss, "CMDexalin", -0.4f);
             AssertAdjusts(bloodloss, "CMDexalinPlus", -0.4f);
             AssertAdjusts(bloodloss, "CMInaprovaline", -0.4f);
