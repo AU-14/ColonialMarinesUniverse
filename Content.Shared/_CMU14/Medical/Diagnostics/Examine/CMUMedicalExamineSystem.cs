@@ -508,7 +508,7 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
         {
             FractureSeverity.Simple => $"a {prefix}simple fracture",
             FractureSeverity.Compound => $"a {prefix}compound fracture",
-            FractureSeverity.Comminuted => $"a {prefix}shattered bone",
+            FractureSeverity.Shattered => $"a {prefix}shattered bone",
             _ => "a broken bone",
         };
     }
@@ -601,7 +601,7 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
             FractureSeverity.Hairline => $"{prefix}hairline fracture",
             FractureSeverity.Simple => $"{prefix}simple fracture",
             FractureSeverity.Compound => $"{prefix}compound fracture",
-            FractureSeverity.Comminuted => $"{prefix}comminuted fracture",
+            FractureSeverity.Shattered => $"{prefix}shattered fracture",
             _ => "fracture",
         };
     }

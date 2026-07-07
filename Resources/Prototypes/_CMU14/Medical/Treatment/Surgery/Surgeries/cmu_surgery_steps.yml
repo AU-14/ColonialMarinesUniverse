@@ -61,19 +61,19 @@
 
 - type: entity
   parent: CMSurgeryStepBase
-  id: CMUSurgeryStepRealignComminutedBone
-  name: Realign comminuted fracture
+  id: CMUSurgeryStepRealignShatteredBone
+  name: Realign shattered fracture
   components:
   - type: CMSurgeryStep
     skill: 1
     tool:
     - type: CMBoneSetter
     add:
-    - type: CMUComminutedBoneRealignedMarker
+    - type: CMUShatteredBoneRealignedMarker
   - type: CMUFracturedSurgeryCondition
-    requireSeverity: Comminuted
+    requireSeverity: Shattered
   - type: CMUSurgeryStepSetBoneEffect
-    downgradeFrom: Comminuted
+    downgradeFrom: Shattered
     downgradeTo: Compound
     integrityRestore: 25
   - type: Sprite
@@ -82,7 +82,7 @@
 
 - type: entity
   parent: CMSurgeryStepBase
-  id: CMUSurgeryStepApplyComminutedBoneGel
+  id: CMUSurgeryStepApplyShatteredBoneGel
   name: Apply bone gel
   components:
   - type: CMSurgeryStep
@@ -90,9 +90,9 @@
     tool:
     - type: CMBoneGel
     add:
-    - type: CMUComminutedBoneGelAppliedMarker
+    - type: CMUShatteredBoneGelAppliedMarker
     remove:
-    - type: CMUComminutedBoneRealignedMarker
+    - type: CMUShatteredBoneRealignedMarker
   - type: CMUFracturedSurgeryCondition
     requireSeverity: Compound
   - type: Sprite
@@ -111,7 +111,7 @@
     add:
     - type: CMUBoneAlignedMarker
     remove:
-    - type: CMUComminutedBoneGelAppliedMarker
+    - type: CMUShatteredBoneGelAppliedMarker
   - type: CMUFracturedSurgeryCondition
     requireSeverity: Compound
   - type: CMUSurgeryStepSetBoneEffect
@@ -298,8 +298,8 @@
     - type: CMBleedersClamped
     - type: CMIncisionOpen
     - type: CMUBoneAlignedMarker
-    - type: CMUComminutedBoneRealignedMarker
-    - type: CMUComminutedBoneGelAppliedMarker
+    - type: CMUShatteredBoneRealignedMarker
+    - type: CMUShatteredBoneGelAppliedMarker
     - type: CMULiverVesselsClampedMarker
     - type: CMULungsVesselsClampedMarker
     - type: CMUKidneysVesselsClampedMarker

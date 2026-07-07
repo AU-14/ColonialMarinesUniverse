@@ -113,7 +113,7 @@ public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
             _partHealth.SetCurrent((limb, bph), bph.Max * (FixedPoint2)hpFraction);
 
         // forceUpgrade:false — if the limb already carries a higher severity
-        // (Comminuted) from prior trauma, leave it.
+        // (Shattered) from prior trauma, leave it.
         if (HasComp<SynthComponent>(body))
         {
             ClearSynthLimbOrganicMedicalState(limb);

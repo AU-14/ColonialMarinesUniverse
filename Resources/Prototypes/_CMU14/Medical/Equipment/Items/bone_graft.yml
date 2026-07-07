@@ -2,7 +2,7 @@
   parent: BaseItem
   id: CMUBoneGraftItem
   name: bone graft
-  description: A vial of synthetic bone material for grafting comminuted fractures.
+  description: A vial of synthetic bone material for grafting shattered fractures.
   components:
   - type: Item
     size: Small

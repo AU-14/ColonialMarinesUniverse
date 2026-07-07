@@ -16,7 +16,7 @@
       Hairline: 80
       Simple: 50
       Compound: 25
-      Comminuted: 5
+      Shattered: 5
   - type: Sprite
     drawdepth: Items
 
@@ -38,7 +38,7 @@
       Hairline: 65
       Simple: 40
       Compound: 20
-      Comminuted: 5
+      Shattered: 5
   - type: Sprite
     drawdepth: Items
 
@@ -58,7 +58,7 @@
       Hairline: 65
       Simple: 40
       Compound: 20
-      Comminuted: 5
+      Shattered: 5
   - type: Sprite
     drawdepth: Items
 
@@ -78,7 +78,7 @@
       Hairline: 65
       Simple: 40
       Compound: 20
-      Comminuted: 5
+      Shattered: 5
   - type: Sprite
     drawdepth: Items
 
@@ -98,7 +98,7 @@
       Hairline: 70
       Simple: 45
       Compound: 22
-      Comminuted: 5
+      Shattered: 5
   - type: Sprite
     drawdepth: Items
 
@@ -118,5 +118,5 @@
       Hairline: 70
       Simple: 45
       Compound: 22
-      Comminuted: 5
+      Shattered: 5
 

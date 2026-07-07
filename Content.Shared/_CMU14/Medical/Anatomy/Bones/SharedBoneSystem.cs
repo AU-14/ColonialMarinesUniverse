@@ -136,7 +136,7 @@ public abstract partial class SharedBoneSystem : EntitySystem
         // Audio for Compound+ spawns is played server-side by Content.Server's
         // sealed BoneSystem to avoid a double-play on prediction rollback.
 
-        if (args.Type == BodyPartType.Torso && newSeverity == FractureSeverity.Comminuted)
+        if (args.Type == BodyPartType.Torso && newSeverity == FractureSeverity.Shattered)
             RaiseRibBurst(args.Body, args.ContainedOrgans, args.Delta);
     }
 
@@ -149,7 +149,7 @@ public abstract partial class SharedBoneSystem : EntitySystem
     /// </summary>
     private void RaiseRibBurst(EntityUid body, IReadOnlyList<EntityUid> partOrgans, DamageSpecifier delta)
     {
-        // Use a small, fixed slice of the damage so a single Comminuted hit
+        // Use a small, fixed slice of the damage so a single Shattered hit
         // doesn't multi-apply the full Brute load to organs already taking the
         // distributed share.
         var burst = new DamageSpecifier();
@@ -173,13 +173,13 @@ public abstract partial class SharedBoneSystem : EntitySystem
 
     /// <summary>
     ///     Walk descending: lowest threshold first wins so a hit that crashes
-    ///     integrity from 80 down to 3 lands as Comminuted, not Hairline.
+    ///     integrity from 80 down to 3 lands as Shattered, not Hairline.
     /// </summary>
     private static FractureSeverity SeverityFromIntegrity(BoneComponent bone)
     {
         var i = bone.Integrity;
-        if (bone.FractureThresholds.TryGetValue(FractureSeverity.Comminuted, out var c) && i <= c)
-            return FractureSeverity.Comminuted;
+        if (bone.FractureThresholds.TryGetValue(FractureSeverity.Shattered, out var c) && i <= c)
+            return FractureSeverity.Shattered;
         if (bone.FractureThresholds.TryGetValue(FractureSeverity.Compound, out var co) && i <= co)
             return FractureSeverity.Compound;
         if (bone.FractureThresholds.TryGetValue(FractureSeverity.Simple, out var s) && i <= s)

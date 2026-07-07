@@ -981,8 +981,8 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             or "CMUSurgerySetSimpleFractureCavity"
             or "CMUSurgerySetCompoundFracture"
             or "CMUSurgerySetCompoundFractureCavity"
-            or "CMUSurgerySetComminutedFracture"
-            or "CMUSurgerySetComminutedFractureCavity";
+            or "CMUSurgerySetShatteredFracture"
+            or "CMUSurgerySetShatteredFractureCavity";
     }
 
     public static bool IsCloseUpSurgeryId(string surgeryId)

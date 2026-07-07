@@ -14,7 +14,7 @@ namespace Content.Server._CMU14.Medical.Treatment.Surgery;
 public sealed partial class CMUSurgicalTraitGenerationSystem : EntitySystem
 {
     public const float CompoundContaminationChance = 0.65f;
-    public const float ComminutedSecondTraitChance = 0.5f;
+    public const float ShatteredSecondTraitChance = 0.5f;
     public const float DamagedOrganComplicationChance = 0.25f;
     public const float FailingOrganComplicationChance = 0.6f;
 
@@ -40,12 +40,12 @@ public sealed partial class CMUSurgicalTraitGenerationSystem : EntitySystem
             return;
         }
 
-        if (args.New != FractureSeverity.Comminuted)
+        if (args.New != FractureSeverity.Shattered)
             return;
 
         _surgicalTraits.TryEnsureTrait(args.Part, CMUSurgicalTrait.BoneSplintered);
 
-        if (!ShouldSeedComminutedSecondTrait(_random.NextFloat()))
+        if (!ShouldSeedShatteredSecondTrait(_random.NextFloat()))
             return;
 
         if (!TryComp<BodyPartComponent>(args.Part, out var part))
@@ -111,9 +111,9 @@ public sealed partial class CMUSurgicalTraitGenerationSystem : EntitySystem
         return roll < CompoundContaminationChance;
     }
 
-    public static bool ShouldSeedComminutedSecondTrait(float roll)
+    public static bool ShouldSeedShatteredSecondTrait(float roll)
     {
-        return roll < ComminutedSecondTraitChance;
+        return roll < ShatteredSecondTraitChance;
     }
 
     public static bool ShouldSeedDamagedOrganComplication(float roll)

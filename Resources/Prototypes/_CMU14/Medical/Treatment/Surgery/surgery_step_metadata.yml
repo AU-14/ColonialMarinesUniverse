@@ -33,8 +33,8 @@
   category: fracture
 
 - type: cmuSurgeryStepMetadata
-  id: CMUSurgeryStepMetaSetComminutedFracture
-  surgery: CMUSurgerySetComminutedFracture
+  id: CMUSurgeryStepMetaSetShatteredFracture
+  surgery: CMUSurgerySetShatteredFracture
   displayName: Set Fracture
   validParts: [Arm, Leg]
   allowSelfSurgery: true
@@ -42,8 +42,8 @@
   category: fracture
 
 - type: cmuSurgeryStepMetadata
-  id: CMUSurgeryStepMetaSetComminutedFractureCavity
-  surgery: CMUSurgerySetComminutedFractureCavity
+  id: CMUSurgeryStepMetaSetShatteredFractureCavity
+  surgery: CMUSurgerySetShatteredFractureCavity
   displayName: Set Fracture
   validParts: [Head, Torso]
   category: fracture

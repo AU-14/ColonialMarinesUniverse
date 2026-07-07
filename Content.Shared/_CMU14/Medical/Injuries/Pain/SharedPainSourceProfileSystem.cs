@@ -127,7 +127,7 @@ public sealed partial class SharedPainSourceProfileSystem : EntitySystem
             FractureSeverity.Hairline => 10f,
             FractureSeverity.Simple => 25f,
             FractureSeverity.Compound => 45f,
-            FractureSeverity.Comminuted => 65f,
+            FractureSeverity.Shattered => 65f,
             _ => 0f,
         };
     }

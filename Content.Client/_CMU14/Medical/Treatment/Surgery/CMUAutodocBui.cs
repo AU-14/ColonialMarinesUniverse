@@ -401,7 +401,7 @@ public sealed partial class CMUAutodocBui : BoundUserInterface
         if (surgery.SurgeryId == "CMUAutodocRepairWounds")
             return 120f;
 
-        if (surgery.SurgeryId.Contains("Comminuted", StringComparison.OrdinalIgnoreCase))
+        if (surgery.SurgeryId.Contains("Shattered", StringComparison.OrdinalIgnoreCase))
             return 240f;
 
         if (surgery.SurgeryId.Contains("Compound", StringComparison.OrdinalIgnoreCase))

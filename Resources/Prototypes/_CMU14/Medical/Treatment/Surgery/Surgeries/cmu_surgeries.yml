@@ -112,39 +112,39 @@
 
 - type: entity
   parent: CMSurgeryBase
-  id: CMUSurgerySetComminutedFracture
-  name: Set Comminuted Fracture
+  id: CMUSurgerySetShatteredFracture
+  name: Set Shattered Fracture
   components:
   - type: CMSurgery
     priority: 7
     requirement: CMUSurgeryOpenSoftTissue
     steps:
-    - CMUSurgeryStepRealignComminutedBone
-    - CMUSurgeryStepApplyComminutedBoneGel
+    - CMUSurgeryStepRealignShatteredBone
+    - CMUSurgeryStepApplyShatteredBoneGel
     - CMUSurgeryStepInsertBoneGraft
     - CMUSurgeryStepFinalizeGraftedBone
     - CMUSurgeryStepCloseIncision
   - type: CMUFracturedSurgeryCondition
-    requireSeverity: Comminuted
+    requireSeverity: Shattered
 
 - type: entity
   parent: CMSurgeryBase
-  id: CMUSurgerySetComminutedFractureCavity
-  name: Set Comminuted Fracture
+  id: CMUSurgerySetShatteredFractureCavity
+  name: Set Shattered Fracture
   components:
   - type: CMSurgery
     priority: 7
     requirement: CMUSurgeryOpenBoneCavity
     steps:
-    - CMUSurgeryStepRealignComminutedBone
-    - CMUSurgeryStepApplyComminutedBoneGel
+    - CMUSurgeryStepRealignShatteredBone
+    - CMUSurgeryStepApplyShatteredBoneGel
     - CMUSurgeryStepInsertBoneGraft
     - CMUSurgeryStepFinalizeGraftedBone
     - CMSurgeryStepCloseBones
     - CMSurgeryStepMendRibcage
     - CMUSurgeryStepCloseIncision
   - type: CMUFracturedSurgeryCondition
-    requireSeverity: Comminuted
+    requireSeverity: Shattered
 
 # ---- Condition-driven cleanup steps ----------------------------------
 

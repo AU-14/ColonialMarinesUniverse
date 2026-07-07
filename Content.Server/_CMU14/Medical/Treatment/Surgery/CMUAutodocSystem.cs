@@ -670,7 +670,7 @@ public sealed partial class CMUAutodocSystem : EntitySystem
         if (surgery.SurgeryId == AutodocWoundRepairId)
             return 30f;
 
-        if (surgery.SurgeryId.Contains("Comminuted", StringComparison.OrdinalIgnoreCase))
+        if (surgery.SurgeryId.Contains("Shattered", StringComparison.OrdinalIgnoreCase))
             return 60f;
 
         if (surgery.SurgeryId.Contains("Compound", StringComparison.OrdinalIgnoreCase))

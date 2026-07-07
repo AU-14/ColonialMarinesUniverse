@@ -70,7 +70,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     ///     Splints stabilize catastrophic fractures but cannot fully control
     ///     the internal bleeding from a shattered bone.
     /// </summary>
-    public const float SplintedComminutedInternalBleedMultiplier = 0.5f;
+    public const float SplintedShatteredInternalBleedMultiplier = 0.5f;
 
     /// <summary>
     ///     Untreated wounds do not progress; only <c>Treated = true</c>
@@ -350,8 +350,8 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         if (rate <= 0f || ignoreSplint || !HasComp<CMUSplintedComponent>(part))
             return rate;
 
-        return fracture.Severity == FractureSeverity.Comminuted
-            ? rate * SplintedComminutedInternalBleedMultiplier
+        return fracture.Severity == FractureSeverity.Shattered
+            ? rate * SplintedShatteredInternalBleedMultiplier
             : 0f;
     }
 

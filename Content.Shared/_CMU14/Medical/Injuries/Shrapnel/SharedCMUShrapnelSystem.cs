@@ -497,7 +497,7 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
         FractureSeverity.Hairline => 3f,
         FractureSeverity.Simple => 8f,
         FractureSeverity.Compound => 14f,
-        FractureSeverity.Comminuted => 22f,
+        FractureSeverity.Shattered => 22f,
         _ => 0f,
     };
 }

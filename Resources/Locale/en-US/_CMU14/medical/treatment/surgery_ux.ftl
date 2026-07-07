@@ -150,7 +150,7 @@ cmu-medical-surgery-tool-category-cable_coil = Cable Coil
 
 cmu-medical-surgery-step-realign-simple-label = Realign Simple Fracture
 cmu-medical-surgery-step-realign-compound-label = Realign Compound Fracture
-cmu-medical-surgery-step-realign-comminuted-label = Realign Comminuted Fracture
+cmu-medical-surgery-step-realign-shattered-label = Realign Shattered Fracture
 cmu-medical-surgery-step-apply-gel-label = Apply Bone Gel
 cmu-medical-surgery-step-apply-gel-second-label = Apply Bone Gel (Second Layer)
 cmu-medical-surgery-step-insert-graft-label = Insert Bone Graft

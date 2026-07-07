@@ -140,8 +140,8 @@ public sealed partial class CMUMedicalCCVars : CVars
     public static readonly CVarDef<float> FractureCompoundInternalBleed =
         CVarDef.Create("cmu.medical.fracture.compound_internal_bleed", 0.5f, CVar.REPLICATED | CVar.SERVER);
 
-    public static readonly CVarDef<float> FractureComminutedInternalBleed =
-        CVarDef.Create("cmu.medical.fracture.comminuted_internal_bleed", 1.0f, CVar.REPLICATED | CVar.SERVER);
+    public static readonly CVarDef<float> FractureShatteredInternalBleed =
+        CVarDef.Create("cmu.medical.fracture.shattered_internal_bleed", 1.0f, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<float> OrganPassiveHealMultiplier =
         CVarDef.Create("cmu.medical.organ.passive_heal_multiplier", 0.5f, CVar.REPLICATED | CVar.SERVER);

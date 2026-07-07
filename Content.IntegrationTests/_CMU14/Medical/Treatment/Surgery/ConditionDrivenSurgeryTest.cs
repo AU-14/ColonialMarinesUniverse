@@ -94,7 +94,7 @@ public sealed class ConditionDrivenSurgeryTest
                 OpenSoftTissue(entMan, arm);
 
                 var frac = entMan.EnsureComponent<FractureComponent>(arm);
-                fracture.SetSeverity((arm, frac), FractureSeverity.Comminuted);
+                fracture.SetSeverity((arm, frac), FractureSeverity.Shattered);
 
                 traits.EnsureTrait(arm, CMUSurgicalTrait.VascularTear);
                 traits.EnsureTrait(arm, CMUSurgicalTrait.EmbeddedForeignBody);
@@ -117,7 +117,7 @@ public sealed class ConditionDrivenSurgeryTest
                 AssertNext(flow, human, arm, "CMUSurgeryRemoveBoneFragments");
                 traits.RemoveTrait(arm, CMUSurgicalTrait.BoneSplintered);
 
-                AssertNext(flow, human, arm, "CMUSurgerySetComminutedFracture");
+                AssertNext(flow, human, arm, "CMUSurgerySetShatteredFracture");
             }
             finally
             {
@@ -251,7 +251,7 @@ public sealed class ConditionDrivenSurgeryTest
     }
 
     [Test]
-    public async Task ComminutedFractureRepairAdvancesPastFirstBoneGel()
+    public async Task ShatteredFractureRepairAdvancesPastFirstBoneGel()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -274,14 +274,14 @@ public sealed class ConditionDrivenSurgeryTest
                 OpenSoftTissue(entMan, arm);
 
                 var frac = entMan.EnsureComponent<FractureComponent>(arm);
-                fracture.SetSeverity((arm, frac), FractureSeverity.Comminuted);
+                fracture.SetSeverity((arm, frac), FractureSeverity.Shattered);
                 ClearSurgicalTraits(traits, arm);
 
                 var armed = flow.TryArmStep(
                     surgeon,
                     human,
                     arm,
-                    "CMUSurgerySetComminutedFracture",
+                    "CMUSurgerySetShatteredFracture",
                     0,
                     BodyPartType.Arm,
                     BodyPartSymmetry.Right);
@@ -306,7 +306,7 @@ public sealed class ConditionDrivenSurgeryTest
                 armed = entMan.GetComponent<CMUSurgeryArmedStepComponent>(human);
                 Assert.Multiple(() =>
                 {
-                    Assert.That(armed.SurgeryId, Is.EqualTo("CMUSurgerySetComminutedFracture"));
+                    Assert.That(armed.SurgeryId, Is.EqualTo("CMUSurgerySetShatteredFracture"));
                     Assert.That(armed.RequiredToolCategory, Is.EqualTo("bone_graft"));
                     Assert.That(armed.StepIndex, Is.EqualTo(2));
                 });
@@ -322,7 +322,7 @@ public sealed class ConditionDrivenSurgeryTest
     }
 
     [Test]
-    public async Task ComminutedFractureWithBoneFragmentsCleanupAdvancesPastRealign()
+    public async Task ShatteredFractureWithBoneFragmentsCleanupAdvancesPastRealign()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -345,7 +345,7 @@ public sealed class ConditionDrivenSurgeryTest
                 OpenSoftTissue(entMan, arm);
 
                 var frac = entMan.EnsureComponent<FractureComponent>(arm);
-                fracture.SetSeverity((arm, frac), FractureSeverity.Comminuted);
+                fracture.SetSeverity((arm, frac), FractureSeverity.Shattered);
                 ClearSurgicalTraits(traits, arm);
                 traits.EnsureTrait(arm, CMUSurgicalTrait.BoneSplintered);
 
@@ -354,10 +354,10 @@ public sealed class ConditionDrivenSurgeryTest
                     surgeon,
                     human,
                     arm,
-                    "CMUSurgerySetComminutedFracture",
+                    "CMUSurgerySetShatteredFracture",
                     BodyPartType.Arm,
                     BodyPartSymmetry.Right,
-                    "comminuted fracture with bone fragments");
+                    "shattered fracture with bone fragments");
 
                 Assert.Multiple(() =>
                 {
@@ -372,12 +372,12 @@ public sealed class ConditionDrivenSurgeryTest
                     surgeon,
                     armed,
                     "hemostat",
-                    "remove bone fragments before comminuted repair")!;
+                    "remove bone fragments before shattered repair")!;
 
                 Assert.Multiple(() =>
                 {
                     Assert.That(traits.HasTrait(arm, CMUSurgicalTrait.BoneSplintered), Is.False);
-                    Assert.That(armed.SurgeryId, Is.EqualTo("CMUSurgerySetComminutedFracture"));
+                    Assert.That(armed.SurgeryId, Is.EqualTo("CMUSurgerySetShatteredFracture"));
                     Assert.That(armed.StepIndex, Is.EqualTo(0));
                     Assert.That(armed.RequiredToolCategory, Is.EqualTo("bone_setter"));
                 });
@@ -389,9 +389,9 @@ public sealed class ConditionDrivenSurgeryTest
                     surgeon,
                     armed,
                     "bone_setter",
-                    "realign comminuted fracture after bone fragments cleanup")!;
+                    "realign shattered fracture after bone fragments cleanup")!;
 
-                if (armed.SurgeryId != "CMUSurgerySetComminutedFracture")
+                if (armed.SurgeryId != "CMUSurgerySetShatteredFracture")
                 {
                     Assert.That(flow.TryCompleteAutomatedStep(human, armed, surgeon), Is.True, "injected cleanup after realign");
                     armed = entMan.GetComponent<CMUSurgeryArmedStepComponent>(human);
@@ -399,7 +399,7 @@ public sealed class ConditionDrivenSurgeryTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(armed.SurgeryId, Is.EqualTo("CMUSurgerySetComminutedFracture"));
+                    Assert.That(armed.SurgeryId, Is.EqualTo("CMUSurgerySetShatteredFracture"));
                     Assert.That(armed.StepIndex, Is.EqualTo(1));
                     Assert.That(armed.RequiredToolCategory, Is.EqualTo("bone_gel"));
                 });
@@ -415,7 +415,7 @@ public sealed class ConditionDrivenSurgeryTest
     }
 
     [Test]
-    public async Task ComminutedFractureContaminatedCleanupBeforeFinalSetDoesNotRepeatBoneGel()
+    public async Task ShatteredFractureContaminatedCleanupBeforeFinalSetDoesNotRepeatBoneGel()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -438,7 +438,7 @@ public sealed class ConditionDrivenSurgeryTest
                 OpenSoftTissue(entMan, arm);
 
                 var frac = entMan.EnsureComponent<FractureComponent>(arm);
-                fracture.SetSeverity((arm, frac), FractureSeverity.Comminuted);
+                fracture.SetSeverity((arm, frac), FractureSeverity.Shattered);
                 ClearSurgicalTraits(traits, arm);
 
                 var armed = ArmStep(
@@ -446,10 +446,10 @@ public sealed class ConditionDrivenSurgeryTest
                     surgeon,
                     human,
                     arm,
-                    "CMUSurgerySetComminutedFracture",
+                    "CMUSurgerySetShatteredFracture",
                     BodyPartType.Arm,
                     BodyPartSymmetry.Right,
-                    "comminuted fracture with late contamination");
+                    "shattered fracture with late contamination");
 
                 armed = CompleteExpectedStep(
                     entMan,
@@ -458,8 +458,8 @@ public sealed class ConditionDrivenSurgeryTest
                     surgeon,
                     armed,
                     "bone_setter",
-                    "realign comminuted fracture")!;
-                armed = CompleteInjectedCleanupsUntilLeaf(entMan, flow, traits, human, surgeon, arm, armed, "CMUSurgerySetComminutedFracture");
+                    "realign shattered fracture")!;
+                armed = CompleteInjectedCleanupsUntilLeaf(entMan, flow, traits, human, surgeon, arm, armed, "CMUSurgerySetShatteredFracture");
                 ClearSurgicalTraits(traits, arm);
 
                 armed = CompleteExpectedStep(
@@ -469,7 +469,7 @@ public sealed class ConditionDrivenSurgeryTest
                     surgeon,
                     armed,
                     "bone_gel",
-                    "apply comminuted bone gel")!;
+                    "apply shattered bone gel")!;
                 ClearSurgicalTraits(traits, arm);
 
                 armed = CompleteExpectedStep(
@@ -483,7 +483,7 @@ public sealed class ConditionDrivenSurgeryTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(armed.SurgeryId, Is.EqualTo("CMUSurgerySetComminutedFracture"));
+                    Assert.That(armed.SurgeryId, Is.EqualTo("CMUSurgerySetShatteredFracture"));
                     Assert.That(armed.StepIndex, Is.EqualTo(3));
                     Assert.That(armed.RequiredToolCategory, Is.EqualTo("bone_setter"));
                 });
@@ -510,7 +510,7 @@ public sealed class ConditionDrivenSurgeryTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(traits.HasTrait(arm, CMUSurgicalTrait.ContaminatedWound), Is.False);
-                    Assert.That(armed.SurgeryId, Is.EqualTo("CMUSurgerySetComminutedFracture"));
+                    Assert.That(armed.SurgeryId, Is.EqualTo("CMUSurgerySetShatteredFracture"));
                     Assert.That(armed.StepIndex, Is.EqualTo(3));
                     Assert.That(armed.RequiredToolCategory, Is.EqualTo("bone_setter"));
                 });
@@ -1172,7 +1172,7 @@ public sealed class ConditionDrivenSurgeryTest
             {
                 var arm = GetBodyPart(entMan, human, BodyPartType.Arm, BodyPartSymmetry.Right);
                 traits.EnsureTrait(arm, CMUSurgicalTrait.VascularTear);
-                wounds.SeedInternalBleed(arm, "fracture:Comminuted", 0.5f);
+                wounds.SeedInternalBleed(arm, "fracture:Shattered", 0.5f);
 
                 var step = rmcSurgery.GetSingleton("CMUSurgeryStepTieVascularTear");
                 Assert.That(step, Is.Not.Null);
@@ -1303,10 +1303,10 @@ public sealed class ConditionDrivenSurgeryTest
                 var torso = GetBodyPart(entMan, human, BodyPartType.Torso, BodyPartSymmetry.None);
 
                 var armFrac = entMan.EnsureComponent<FractureComponent>(arm);
-                fracture.SetSeverity((arm, armFrac), FractureSeverity.Comminuted);
+                fracture.SetSeverity((arm, armFrac), FractureSeverity.Shattered);
 
                 var torsoFrac = entMan.EnsureComponent<FractureComponent>(torso);
-                fracture.SetSeverity((torso, torsoFrac), FractureSeverity.Comminuted);
+                fracture.SetSeverity((torso, torsoFrac), FractureSeverity.Shattered);
 
                 Assert.Multiple(() =>
                 {
@@ -1331,13 +1331,13 @@ public sealed class ConditionDrivenSurgeryTest
         Assert.Multiple(() =>
         {
             Assert.That(CMUSurgicalTraitGenerationSystem.CompoundContaminationChance, Is.EqualTo(0.65f));
-            Assert.That(CMUSurgicalTraitGenerationSystem.ComminutedSecondTraitChance, Is.EqualTo(0.5f));
+            Assert.That(CMUSurgicalTraitGenerationSystem.ShatteredSecondTraitChance, Is.EqualTo(0.5f));
             Assert.That(CMUSurgicalTraitGenerationSystem.DamagedOrganComplicationChance, Is.EqualTo(0.25f));
             Assert.That(CMUSurgicalTraitGenerationSystem.FailingOrganComplicationChance, Is.EqualTo(0.6f));
             Assert.That(CMUSurgicalTraitGenerationSystem.ShouldSeedCompoundContamination(0.64f), Is.True);
             Assert.That(CMUSurgicalTraitGenerationSystem.ShouldSeedCompoundContamination(0.65f), Is.False);
-            Assert.That(CMUSurgicalTraitGenerationSystem.ShouldSeedComminutedSecondTrait(0.49f), Is.True);
-            Assert.That(CMUSurgicalTraitGenerationSystem.ShouldSeedComminutedSecondTrait(0.5f), Is.False);
+            Assert.That(CMUSurgicalTraitGenerationSystem.ShouldSeedShatteredSecondTrait(0.49f), Is.True);
+            Assert.That(CMUSurgicalTraitGenerationSystem.ShouldSeedShatteredSecondTrait(0.5f), Is.False);
             Assert.That(CMUSurgicalTraitGenerationSystem.ShouldSeedDamagedOrganComplication(0.24f), Is.True);
             Assert.That(CMUSurgicalTraitGenerationSystem.ShouldSeedDamagedOrganComplication(0.25f), Is.False);
             Assert.That(CMUSurgicalTraitGenerationSystem.ShouldSeedFailingOrganComplication(0.59f), Is.True);
@@ -1347,7 +1347,7 @@ public sealed class ConditionDrivenSurgeryTest
 
     private static void AssertNext(SharedCMUSurgeryFlowSystem flow, EntityUid human, EntityUid part, string surgeryId)
     {
-        Assert.That(flow.TryResolveNextStep(human, part, "CMUSurgerySetComminutedFracture", out var resolved), Is.True);
+        Assert.That(flow.TryResolveNextStep(human, part, "CMUSurgerySetShatteredFracture", out var resolved), Is.True);
         Assert.That(resolved.ResolvedSurgeryId, Is.EqualTo(surgeryId));
     }
 

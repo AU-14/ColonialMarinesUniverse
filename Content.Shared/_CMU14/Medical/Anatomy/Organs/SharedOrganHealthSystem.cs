@@ -32,7 +32,7 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
 
     private const float RegenScanInterval = 1f;
     private const float CompoundOrganPassThrough = 0.30f;
-    private const float ComminutedOrganPassThrough = 0.50f;
+    private const float ShatteredOrganPassThrough = 0.50f;
     private const float NegativePartPassThroughBonus = 0.15f;
     private float _regenScanAccumulator;
 
@@ -98,7 +98,7 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
                 if (passThrough <= 0f)
                     return;
 
-                heavyOrganHit = severity.IsAtLeast(FractureSeverity.Comminuted) ||
+                heavyOrganHit = severity.IsAtLeast(FractureSeverity.Shattered) ||
                                 args.NewCurrent < FixedPoint2.Zero;
             }
         }
@@ -337,7 +337,7 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
     {
         var scale = severity switch
         {
-            FractureSeverity.Comminuted => ComminutedOrganPassThrough,
+            FractureSeverity.Shattered => ShatteredOrganPassThrough,
             FractureSeverity.Compound => CompoundOrganPassThrough,
             _ => 0f,
         };

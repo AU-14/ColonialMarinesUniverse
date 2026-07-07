@@ -11,10 +11,10 @@ namespace Content.Shared._CMU14.Medical.Treatment.Surgery.Markers;
 public sealed partial class CMUBoneAlignedMarkerComponent : Component;
 
 [RegisterComponent, NetworkedComponent]
-public sealed partial class CMUComminutedBoneRealignedMarkerComponent : Component;
+public sealed partial class CMUShatteredBoneRealignedMarkerComponent : Component;
 
 [RegisterComponent, NetworkedComponent]
-public sealed partial class CMUComminutedBoneGelAppliedMarkerComponent : Component;
+public sealed partial class CMUShatteredBoneGelAppliedMarkerComponent : Component;
 
 /// <summary>
 ///     Per-organ-slot "removed" markers. The framework's <c>OnToolCheck</c>

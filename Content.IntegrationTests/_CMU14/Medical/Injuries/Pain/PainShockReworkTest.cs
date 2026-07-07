@@ -38,7 +38,7 @@ public sealed class PainShockReworkTest
     private static readonly ProtoId<ReagentPrototype> Inaprovaline = "CMInaprovaline";
 
     [Test]
-    public async Task ComminutedFractureAloneIsSeverePressureNotShock()
+    public async Task ShatteredFractureAloneIsSeverePressureNotShock()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -54,7 +54,7 @@ public sealed class PainShockReworkTest
             {
                 var part = GetFirstPart(entMan, human);
                 var frac = entMan.EnsureComponent<FractureComponent>(part);
-                fracture.SetSeverity((part, frac), FractureSeverity.Comminuted);
+                fracture.SetSeverity((part, frac), FractureSeverity.Shattered);
 
                 var profile = pain.ComputePainSourceProfile(human);
                 var rawTier = PainTierThresholds.Get(PainTier.None, profile.Target, 0f, pain.ShockThreshold);
@@ -92,7 +92,7 @@ public sealed class PainShockReworkTest
             {
                 var part = GetFirstPart(entMan, human);
                 var frac = entMan.EnsureComponent<FractureComponent>(part);
-                fracture.SetSeverity((part, frac), FractureSeverity.Comminuted);
+                fracture.SetSeverity((part, frac), FractureSeverity.Shattered);
                 AddWound(entMan, part, WoundSize.Massive, treated: false);
                 entMan.EnsureComponent<CMUEscharComponent>(part);
 

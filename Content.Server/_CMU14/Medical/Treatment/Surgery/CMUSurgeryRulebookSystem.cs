@@ -267,7 +267,7 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
                     FractureSeverity.Hairline => "hairline",
                     FractureSeverity.Simple => "simple",
                     FractureSeverity.Compound => "compound",
-                    FractureSeverity.Comminuted => "comminuted",
+                    FractureSeverity.Shattered => "shattered",
                     _ => "fracture",
                 };
                 bits.Add(Loc.GetString("cmu-medical-surgery-condition-fracture",

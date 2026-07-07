@@ -31,7 +31,7 @@ public sealed partial class BoneComponent : Component
         { FractureSeverity.Hairline,   80 },
         { FractureSeverity.Simple,     50 },
         { FractureSeverity.Compound,   25 },
-        { FractureSeverity.Comminuted, 5 },
+        { FractureSeverity.Shattered, 5 },
     };
 
     [DataField]

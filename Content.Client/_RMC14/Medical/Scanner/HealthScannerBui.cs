@@ -923,7 +923,7 @@ public sealed partial class HealthScannerBui : BoundUserInterface
             Content.Shared._CMU14.Medical.Anatomy.Bones.FractureSeverity.Hairline => PartSeverity.Bruised,
             Content.Shared._CMU14.Medical.Anatomy.Bones.FractureSeverity.Simple => PartSeverity.Damaged,
             Content.Shared._CMU14.Medical.Anatomy.Bones.FractureSeverity.Compound => PartSeverity.Critical,
-            Content.Shared._CMU14.Medical.Anatomy.Bones.FractureSeverity.Comminuted => PartSeverity.Critical,
+            Content.Shared._CMU14.Medical.Anatomy.Bones.FractureSeverity.Shattered => PartSeverity.Critical,
             _ => PartSeverity.Bruised,
         };
 
