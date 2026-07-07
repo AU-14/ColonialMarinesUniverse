@@ -17,9 +17,7 @@
   accessGroups:
   - AU14GovforCommand
   - CMCargoTech
-  access:
-  - CMAccessMedical
-  - CMAccessChemistry
+  - aulegacygroupcommand
 
 - type: job
   abstract: true
@@ -219,9 +217,7 @@
   accessGroups:
   - AU14OpforCommand
   - CMCargoTech
-  access:
-  - CMAccessMedical
-  - CMAccessChemistry
+  - aulegacygroupcommand
 
 - type: startingGear
   id: AU14GearOPFORAuxSupportSynth

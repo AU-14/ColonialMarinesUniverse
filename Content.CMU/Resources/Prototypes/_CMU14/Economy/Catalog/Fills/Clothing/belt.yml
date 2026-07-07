@@ -11,3 +11,17 @@
     - id: RMCHandcuffs
     - id: RMCHandcuffs
     - id: ForensicScanner
+
+- type: entity
+  parent: RMCBeltBrowne
+  id: AU14BeltBrowneFilledCMP
+  suffix: Filled, CMP
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponRevolverRSh9
+    - id: RMCSpeedLoaderRsh9
+    - id: RMCSpeedLoaderRsh9
+    - id: RMCSpeedLoaderRsh9
+    - id: CMFlash
+    - id: AU14TeleBaton

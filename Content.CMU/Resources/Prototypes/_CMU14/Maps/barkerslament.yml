@@ -1,6 +1,7 @@
 - type: gameMap
   id: CMULV376BarkersLament
   mapName: LV-376 Ulixes
+  allegiance: UA
   mapPath: /Maps/_AU14/BarkersMultiZ/barkers0.yml
   mapsBelow:
   - /Maps/_AU14/BarkersMultiZ/barkers-1.yml
@@ -38,6 +39,7 @@
             # Ambassadors
             AU14JobCivilianAmbassadorTWE: [1, 1]
             AU14JobCivilianAmbassadorUA: [1, 1]
+            AU14JobCivilianUSASFRecruiter: [1, 1]
 
             # Corporate
             AU14JobCivilianCorporateLiaison: [1, 1]

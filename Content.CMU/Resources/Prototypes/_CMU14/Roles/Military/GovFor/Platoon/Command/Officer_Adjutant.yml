@@ -28,6 +28,9 @@
   roundComponents:
   - type: CommendationGiver
   - type: InnateCommandSpeech
+  - type: AU14SilenceOrderAbility
+  - type: AU14CallToAttentionAbility
+  - type: AU14CallToAttentionWhisperImmune
   - type: Skills
     preset: AU14SkillPresetOfficerAdjutant
   - type: JobPrefix

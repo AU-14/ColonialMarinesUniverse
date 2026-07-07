@@ -1,6 +1,7 @@
 - type: gameMap
   id: hopesretreat
   mapName: JE-1758 Ascanius
+  allegiance: IndependentSystems # ICSC
   mapPath: /Maps/_CMU14/retreat.yml
   mapsBelow:
   - /Maps/_CMU14/retreat_below.yml

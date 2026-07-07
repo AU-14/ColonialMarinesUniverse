@@ -1,6 +1,7 @@
 - type: gameMap
   id: USSBushRedux
   mapName: USS George Bush
+  allegiance: Neutral
   mapPath: /Maps/_AU14/USSBushMultiZ/USSBushReworkFinalize0.yml
   mapsBelow:
   - /Maps/_AU14/USSBushMultiZ/USSBushReworkFinalize-1.yml

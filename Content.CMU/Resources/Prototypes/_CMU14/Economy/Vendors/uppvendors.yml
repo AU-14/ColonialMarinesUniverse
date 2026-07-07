@@ -357,7 +357,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
   - type: CMAutomatedVendor
-    jobs: [ AU14JobPlatoonCorpsmanBase, AU14JobGOVFORPlatoonCorpsman, AU14JobOPFORPlatoonCorpsman ]
+    jobs: [ AU14JobPlatoonCorpsmanBase, AU14JobGOVFORPlatoonCorpsman, AU14JobOPFORPlatoonCorpsman, AU14JobGOVFOROfficerMedical, AU14JobOPFOROfficerMedical ]
     sections:
     - name: Essential Equipment
       takeAll: CMUEssentialEquipment

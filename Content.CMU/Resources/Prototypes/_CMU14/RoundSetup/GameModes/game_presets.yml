@@ -34,7 +34,7 @@
   name: Insurgency
   showInVote: true
   description: Insurgency mode
-  minPlayers: 40
+  minPlayers: 35
   requiresGovforVote: true
   supportedPlanets:
     - AUPlanetShepherdsPride
@@ -83,7 +83,6 @@
   - colonyfall
   name: Colony Fall
   showInVote: true
-  minPlayers: 0
   maxPlayers: 60
   description: Live in an offworld colony as it falls into chaos.
   supportedPlanets:

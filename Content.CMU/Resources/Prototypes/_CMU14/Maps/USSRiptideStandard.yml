@@ -1,6 +1,7 @@
 - type: gameMap
   id: Riptide
   mapName: USS Riptide (USCM)
+  allegiance: Neutral
   mapPath: /Maps/_AU14/USSRiptide.yml
   minPlayers: 0
   maxPlayers: 75

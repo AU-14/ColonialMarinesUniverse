@@ -1,39 +1,31 @@
 ﻿<Document>
   # Dropships and Aircraft
 
-  These regulations govern the authority, modification and operational use of all aircraft and dropships.
+    These regulations govern the authority, modification and operational use of all aircraft and dropships.
 
   ## Flight Crew Authority
-  - The Pilot(s) are responsible for their assigned aircraft and any modifications made to them.
-  - Pilot(s) may modify their aircraft without requesting permission.
-  - These modifications may not be overridden by the Acting Commander.
-  - Flight Crew have final authority over who is permitted aboard their aircraft.
-  - Flight Crew may remove personnel of any rank from their aircraft for any reason.
+    - Flight Crew may modify their aircraft with permission from a member of the command, as long as the modifications provide a benefit in mind, not solely for decorative purposes. 
+    - Commander or Adjutant may deny any modifications made to the aircraft.
+    - Flight crew may deny access to personnel onboard their ship unless said personnel are deploying to the area of operations or returning from them.
+    - Flight Crew may remove any personnel, except Command Staff, for any reason unless doing so would breach the previous ruling.
 
   ## Aircraft Integrity
-  - Dismantling aircraft components to obtain materials for other purposes is strictly forbidden.
-  - Ship doors must remain intact at all times.
-  - Ship doors may not be tampered in a way that causes them to remain INOP in flight (i.e. bolting them open then taking off.)
+    - Dismantling aircraft components to obtain materials for other purposes is strictly forbidden.
+    - Ship doors must remain intact at all times.
+    - Ship doors may not be tampered with in a way that causes them to remain INOP in flight (i.e. bolting them open then taking off.)
 
   ## Seating and Cargo
-  - Seating capacity may be reduced to accommodate additional ammunition or cargo.
-  - Seating may not be completely removed on the primary dropship, seating may be completely removed on the Gunship if it is NOT the only operatable ship.
+    - Seating capacity may be reduced to accommodate additional ammunition or cargo.
+    - Seating may not be completely removed on the primary dropship; seating may be completely removed on the Gunship if it is NOT the only operable ship.
 
   ## Primary Transport Role
-  - If a dropship becomes inaccessible or inoperable, another aircraft must assume the transport role.
-  - The replacement aircraft must be configured with appropriate troop seating whenever possible.
+    - If a dropship becomes inaccessible or inoperable, another aircraft must assume the transport role.
+    - The replacement aircraft must be configured with appropriate troop seating whenever possible.
 
   ## Parachute Operations
-  - When conducting parachute drops, Flight Crew are responsible for:
-    - Ensuring the drop zone is safe.
-    - Notifying personnel when to deploy.
-    - Ensuring that they are not deploying troops into an active firefight for safety reasons.
-    - Blind Drops are forbidden unless the operating platoon is a certified para-operations platoon (i.e. RMC, USCM, and UPP)
-
-  ## Purchasing of Munitions
-  - When Purchasing Munitions for the dropship, Flight Crew may only:
-    - Spend 20% of the budget freely (rounding down to nearest whole number, i.e. 2109.77 is 2109). Anymore then this falls under the approval of the LO, if none is present the Tech. If the installitation grants a DP access to their own purchases, violators may be charged with NUR and FTFP
-    - May request any munition at anytime as long as it does not conflict with the first regulation.
-    - Are responsible for the transportation of all their munitions, but may REQUEST (not order) assistance from Technicians or other staff authorized to use a powerloader.
-
+    - When conducting parachute drops, the Flight Crew are responsible for:
+      - Ensuring the drop zone is safe.
+      - Notifying personnel when to deploy.
+      - Blind Drops are permitted with groups of four or fewer members and with permission from a member of the command staff.
+      - Blind Drops with five or more members require a scout first, then all remaining personnel drop at their location via a flare or laser-designated mark, also requiring command staff permission.
 </Document>

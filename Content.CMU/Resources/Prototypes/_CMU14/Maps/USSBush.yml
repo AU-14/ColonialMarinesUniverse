@@ -1,6 +1,7 @@
 - type: gameMap
   id: USSBush
   mapName: USSBush
+  allegiance: Neutral
   mapPath: /Maps/_AU14/USSBush.yml
   mapsBelow:
   - /Maps/_AU14/USSBush_below.yml

@@ -292,7 +292,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_equipment.rsi
   - type: CMAutomatedVendor
-    jobs: [ AU14JobPlatoonCorpsmanBase, AU14JobGOVFORPlatoonCorpsman, AU14JobOPFORPlatoonCorpsman ]
+    jobs: [ AU14JobPlatoonCorpsmanBase, AU14JobGOVFORPlatoonCorpsman, AU14JobOPFORPlatoonCorpsman, AU14JobGOVFOROfficerMedical, AU14JobOPFOROfficerMedical ]
     sections:
     - name: Essential Equipment
       takeAll: CMUEssentialEquipment
@@ -827,7 +827,7 @@
         isAppendSquadRoleName: false
         givePrefix: au14-job-prefix-specialist-pyro
         isAppendPrefix: true
-        
+
 - type: entity
   parent: ColMarTechBase
   id: AU14MilitaryPolicemanVendorLACN

@@ -27,6 +27,8 @@
   - CMAccessBrig
   - CMAccessArmory
   - CMAccessMedPrep
+  - CMAccessMedical
+  - CMAccessChemistry
   - CMAccessMarineRifleman
   - CMAccessMarinePrep
   - CMAccessSmartPrep
@@ -35,6 +37,7 @@
   - CMAccessPilot
   - CMAccessCrewman
   - CMAccessRequisitions
+  - RMCAccessVehicleCrew
 
 - type: accessGroup
   id: aulegacygroupmilp

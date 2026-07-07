@@ -18,6 +18,9 @@
   - type: Damageable
     damageContainer: StructuralInorganic
     damageModifierSet: Metallic
+  - type: ReceiverXenoClaws
+    maxHealth: 168
+    hitsToDestroy: 3
   - type: Destructible
     thresholds:
     - trigger:
@@ -58,6 +61,5 @@
     currentOre: OreSteel
 
 #need to add a gold sprite, might just do a nonrotatable one, could have all veins unmarked but still in specific areas, could be interesting
-
 
 

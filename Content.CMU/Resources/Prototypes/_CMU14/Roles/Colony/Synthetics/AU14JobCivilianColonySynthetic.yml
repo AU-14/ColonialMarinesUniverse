@@ -80,6 +80,7 @@
   accessGroups:
   - Colonist
   - auadmin
+  - auheadsofcolony
   roleWeight: 0.25
 
 - type: startingGear
@@ -119,6 +120,7 @@
   - SynthEquipmentAU14
   - SynthGlassesAU14
   - SynthMasksAU14
+  - ForceSynthResetKeyAU14
   - PaperworkRMC
   - RecreationalRMC
   - CannedDrinksAU14

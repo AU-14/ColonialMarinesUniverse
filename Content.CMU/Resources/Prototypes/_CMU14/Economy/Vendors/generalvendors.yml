@@ -352,7 +352,7 @@
   - type: Sprite
     sprite: _AU14/Structures/Vendors/assortedequipment.rsi
   - type: CMAutomatedVendor
-    jobs: [ AU14JobMilitaryDoctorBase, AU14JobGOVFORMilitaryDoctor, AU14JobOPFORMilitaryDoctor ]
+    jobs: [ AU14JobMilitaryDoctorBase, AU14JobGOVFORMilitaryDoctor, AU14JobOPFORMilitaryDoctor, AU14JobGOVFOROfficerMedical, AU14JobOPFOROfficerMedical ]
     sections:
     - name: Essential Equipment
       takeAll: CMUEssentialEquipment

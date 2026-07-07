@@ -37,7 +37,6 @@
 - type: accent
   id: CMChatSanitizeXeno
   wordReplacements:
-    cm-chatsan-word-admin-xeno: cm-chatsan-replacement-admin-xeno
     cm-chatsan-word-admins-xeno: cm-chatsan-replacement-admins-xeno
     cm-chatsan-word-eorg-xeno: cm-chatsan-replacement-eorg-xeno
     cm-chatsan-word-sniper: cm-chatsan-replacement-sniper

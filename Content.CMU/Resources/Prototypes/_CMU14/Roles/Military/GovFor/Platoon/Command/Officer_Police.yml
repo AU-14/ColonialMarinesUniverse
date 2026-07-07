@@ -32,16 +32,19 @@
     prefix: au14-job-prefix-govforpolicechief
   - type: RMCSpeechBubbleSpecificStyle
     speechStyleClass: commanderSpeech
+  - type: AU14SilenceOrderAbility
+  - type: AU14CallToAttentionAbility
+  - type: AU14CallToAttentionWhisperImmune
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
-      state: old_govfor_rfn # TODO: CMP icon
+      state: govfor_cmp
   roundForceComponents:
     OPFOR:
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
-        state: old_rfn # TODO: CMP icon
+        state: old_rfn # TODO: Opfor CMP icon
     # UPP:
     # - type: JobPrefix
     #   prefix: au14-job-prefix-govforpolicechiefUPP

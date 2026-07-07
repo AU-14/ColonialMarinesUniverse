@@ -1,5 +1,5 @@
 - type: entity
-  parent: CMFlare
+  parent: RMCFlareL96
   id: AU14FlareRMC
   suffix: Alt
   description: An RMC issued flare that burns in both the visual and ultraviolet spectrum. There are instructions on the side, it reads 'pull cord, make light'.

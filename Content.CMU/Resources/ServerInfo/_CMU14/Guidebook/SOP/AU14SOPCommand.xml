@@ -1,26 +1,29 @@
 ﻿<Document>
   # Command Regulations
 
+  ## Command Staff
+    Command staff consist of the following ranks and military roles.
+      - The Commander.
+      - The Adjutant.
+      - Junior Officers and all of their rankings (CMO, LO, IO, EO, CMP.)
+      - Anyone with the rank of 06 or higher.
+
   ## Command Arms
-  Command must obide by the following regulations regarding arming themselves on the ship or in the field:
-  - Command may not take any type of special weapon from Req or Vendors, and may only use standard issue arms found in their respective armory, or rifleman prep. (This does not include magazines)
-  - Command may only arm with a Pistol, PDW, or SMG while shipside and it must be stored on their belt, back, or in a bag.
-  - Command are allowed to operative heavy weapons only if no one else in the vincinity is doing so or there is a emergency situtation going on.
+    Command must abide by the following regulations regarding arming themselves on the ship or in the field:
+      - Command may not take any type of special weapon or heavy weaponry from Req or Vendors, and may only use standard issue arms found in their respective armoury, or rifleman prep. (This does not include magazines)
+      - Command Staff are allowed to operate special weapons only if no one else in the vicinity is doing so, or there is an emergency going on.
 
   ## Conduct of Briefing
-  The Acting Commander is responsible for ensuring a proper briefing is conducted before any operation begins and personnel are deployed.
-  - It must be performed in an area where a proper inspection of personnel can be held and where personnel can hear any orders.
-  - Areas that interfere with non-combat personnel must be avoided, for example the medbay.
-  - Briefings at minimum must include all deploying faction command (SLs, JOs, etc).
+    The Commander must ensure that personnel receive a thorough briefing before deployment and operations. If a Commander is not present to ensure a proper briefing is held, the chain of command is to follow.
+      - It must be performed in an area where a proper inspection of personnel can be held and where personnel can hear any orders.
+      - Areas that interfere with non-combat personnel must be avoided, for example, the medbay.
+      - Briefings at a minimum must include all deploying faction command (SLs, JOs, etc).
 
   ## Command Field Deployment
-  The Command Staff has the right to deploy to the frontline for the sake of commanding their personnel from a direct point of view. Deployments must be for the sake of the personnel and operation, and not for the personal glory of the Command Staff. At least one member of Command Staff must remain on the ship/installation to man the CIC.
-    - The Adjutant(XO) may deploy to the field if they beleive it is more beneficial to the operation. However cannot be deployed if they are the Acting Commander.
-    - The LO and CMP may never deploy to the area of operations unless for emergency situtations or granted special permission by the acting commander.
+    Command Staff have the right to deploy to the frontline for the sake of commanding their personnel from a direct point of view. Deployments must be for the sake of the personnel and operation, and not for the personal glory of the Command Staff. At least one member of the Command Staff must remain on the ship/installation to man the CIC at all times.
 
   When Deployed:
-  - The deploying Command Staff must still command and communicate frequently with their faction.
-  - Combat should be reserved when assisting personnel in a supporting capacity, in defense of others and self, or directly leading an offensive maneuver.
-  - They should avoid unnecessarily putting themselves in danger and remain close to personnel to focus on providing clear orders.
-
+    - The deploying Command Staff must still command and communicate frequently with their faction.
+    - Combat should be reserved when assisting personnel in a supporting capacity, in defence of others and self, or directly leading an offensive manoeuvre.
+    - They should avoid unnecessarily putting themselves in danger and remain close to personnel to focus on providing clear orders.
 </Document>

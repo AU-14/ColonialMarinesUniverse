@@ -566,6 +566,8 @@ public sealed partial class ThreatSystem : EntitySystem
             List<EntityUid> leaderMarkers = GetSpawnMarkers(ThreatMarkerType.Leader);
             List<EntityUid> memberMarkers = GetSpawnMarkers(ThreatMarkerType.Member);
             List<EntityUid> entityMarkers = GetSpawnMarkers(ThreatMarkerType.Entity);
+            List<EntityUid> originalLeaderMarkers = leaderMarkers.ToList();
+            List<EntityUid> originalMemberMarkers = memberMarkers.ToList();
             if (_sawmill.Level <= LogLevel.Debug)
             {
                 ThreatAssignmentCounts assignmentCounts = ThreatSystem.CountThreatAssignments(assignedJobs);
@@ -635,6 +637,61 @@ public sealed partial class ThreatSystem : EntitySystem
                 return spawned;
             }
 
+            string? GetExtraMemberPrototype()
+            {
+                foreach ((string protoId, int count) in memberBodies)
+                {
+                    if (count > 0)
+                        return protoId;
+                }
+
+                return null;
+            }
+
+            int SpawnExtraVoteMemberBodies(int count)
+            {
+                if (count <= 0)
+                    return 0;
+
+                string? protoId = GetExtraMemberPrototype();
+                if (protoId == null)
+                {
+                    _sawmill.Warning($"[ThreatSystem] Threat '{threatId}' needs {count} extra voted member body/bodies but has no member body prototype configured.");
+
+                    return 0;
+                }
+
+                List<EntityUid> markers = originalMemberMarkers.Count > 0
+                    ? originalMemberMarkers
+                    : originalLeaderMarkers;
+                if (markers.Count == 0)
+                {
+                    _sawmill.Warning($"[ThreatSystem] Threat '{threatId}' needs {count} extra voted member body/bodies but has no member or leader markers to reuse.");
+
+                    return 0;
+                }
+
+                var spawned = 0;
+                for (var i = 0; i < count; i++)
+                {
+                    EntityUid marker = markers[_random.Next(markers.Count)];
+                    EntityCoordinates coords = _entityManager.GetComponent<TransformComponent>(marker).Coordinates;
+
+                    try
+                    {
+                        EntityUid ent = _entityManager.SpawnEntity(protoId, coords);
+                        spawnedMembers.Add(ent);
+                        spawned++;
+                    }
+                    catch (Exception ex)
+                    {
+                        _sawmill.Error($"[ThreatSystem] Failed to spawn extra voted member ({protoId}) for threat '{threatId}' at marker {marker}: {ex}");
+                    }
+                }
+
+                return spawned;
+            }
+
             // Spawn leaders — each entity proto gets its own scaled count
             foreach ((string protoId, int count) in leaderBodies)
             {
@@ -667,6 +724,13 @@ public sealed partial class ThreatSystem : EntitySystem
             {
                 List<NetUserId> eligibleHeldPlayers = GetEligibleVoteHeldPlayers(voteHeldPlayers,
                     requireObserverForVotePlayers);
+                int missingVoteBodies = eligibleHeldPlayers.Count - spawnedLeaders.Count - spawnedMembers.Count;
+                int extraMembers = SpawnExtraVoteMemberBodies(missingVoteBodies);
+                if (extraMembers > 0)
+                {
+                    _sawmill.Info($"[ThreatSystem] Spawned {extraMembers} extra voted threat member body/bodies for '{threatId}' so held voters can enter the round.");
+                }
+
                 _random.Shuffle(eligibleHeldPlayers);
                 var heldAssignments = new List<ThreatVoteAssignment>(eligibleHeldPlayers.Count);
                 foreach (NetUserId player in eligibleHeldPlayers)

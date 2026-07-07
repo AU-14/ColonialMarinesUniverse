@@ -315,9 +315,6 @@
       - id: RMCArmorMercenary
         amount: 2
         points: 25
-      - id: AU14ScoutWebbing
-        amount: 1
-        points: 25
       - id: CMMaskCoif
         amount: 15
         points: 1

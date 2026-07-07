@@ -1,5 +1,5 @@
 - type: entity
-  id: AU14LanguagePresetXeno
+  id: AU14LanguagePresetXenoCultist
   name: Xenoish Language
   categories: [ HideSpawnMenu ]
   components:
@@ -7,9 +7,11 @@
     spokenLanguages:
     - English
     - Xeno
+    - Latin
     understoodLanguages:
     - English
     - Xeno
+    - Latin
     currentLanguage: English
     defaultLanguage: English
 
