@@ -164,7 +164,7 @@ public sealed partial class ZombieSummonerZombieLabelComponent : Component
     public LocId Name = "cmu-zombie-summoner-zombie-name";
 }
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent]
 public sealed partial class ZombieSummonerMinionComponent : Component
 {
     [DataField]
