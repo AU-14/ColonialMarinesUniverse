@@ -2,12 +2,12 @@
   id: portneroid
   mapName: LV-327 Port Nereid
   allegiance: UA
-  mapPath: /Maps/_AU14/PortNeroidMultiZ/portneroidmultiz0.yml
+  mapPath: /Maps/_AU14/PortNeroidMultiZ/PortNeroidMultiZ0.yml
   mapsBelow:
-  - /Maps/_AU14/PortNeroidMultiZ/portneroidmultiz-1.yml
+  - /Maps/_AU14/PortNeroidMultiZ/PortNeroidMultiZ-1.yml
   mapsAbove:
-  - /Maps/_AU14/PortNeroidMultiZ/portneroidmultiz1.yml
-  - /Maps/_AU14/PortNeroidMultiZ/portneroidmultiz2.yml
+  - /Maps/_AU14/PortNeroidMultiZ/PortNeroidMultiZ1.yml
+  - /Maps/_AU14/PortNeroidMultiZ/PortNeroidMultiZ2.yml
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0
