@@ -122,7 +122,7 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         SubscribeLocalEvent<ZombieSummonerMinionComponent, MobStateChangedEvent>(OnMinionMobStateChanged,
             after: [typeof(ZombieSystem)]);
         SubscribeLocalEvent<ZombieSummonerZombieLabelComponent, RefreshNameModifiersEvent>(OnRefreshZombieLabel);
-        SubscribeLocalEvent<MeleeWeaponComponent, MeleeHitEvent>(OnMeleeHit);
+        SubscribeLocalEvent<ZombieSummonerMinionComponent, MeleeHitEvent>(OnMeleeHit);
 
         Subs.BuiEvents<ZombieSummonerComponent>(ZombieSummonerUiKey.Key, subs =>
         {
