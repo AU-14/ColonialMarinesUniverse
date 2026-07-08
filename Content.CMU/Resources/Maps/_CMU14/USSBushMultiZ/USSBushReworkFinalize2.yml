@@ -837,18 +837,6 @@ entities:
     - type: Transform
       pos: 23.5,24.5
       parent: 1
-    - type: TacticalMapUser
-      action: 27
-      marines: False
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - 27
-    - type: Actions
-      actions:
-      - 27
 - proto: CMApcHighCapacity
   entities:
   - uid: 212
@@ -4750,18 +4738,6 @@ entities:
     - type: Transform
       pos: 28.63763,15.345125
       parent: 1
-- proto: RMCActionOpenTacticalMapMarine
-  entities:
-  - uid: 27
-    mapInit: true
-    paused: true
-    components:
-    - type: Transform
-      parent: 96
-    - type: Action
-      originalIconColor: '#FFFFFFFF'
-      container: 96
-      attachedEntity: 96
 - proto: RMCAIConsoleARES
   entities:
   - uid: 142
