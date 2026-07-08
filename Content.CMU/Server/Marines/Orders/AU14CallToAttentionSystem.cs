@@ -199,7 +199,7 @@ public sealed partial class AU14CallToAttentionSystem : EntitySystem
 
     private bool IsValidTarget(EntityUid target)
     {
-        if (HasComp<AU14CallToAttentionWhisperImmuneComponent>(target))
+        if (HasComp<AU14CallToAttentionImmuneComponent>(target))
             return false;
 
         return TryComp<OriginalRoleComponent>(target, out var orig)

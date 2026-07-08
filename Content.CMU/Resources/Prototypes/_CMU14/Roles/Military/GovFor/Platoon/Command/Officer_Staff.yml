@@ -28,7 +28,7 @@
     preset: AU14SkillPresetPlatoonJuniorOfficer
   - type: AU14CallToAttentionAbility
     attentionFocusPriority: 200
-  - type: AU14CallToAttentionWhisperImmune
+  - type: AU14CallToAttentionImmune
   - type: RMCSpeechBubbleSpecificStyle
     speechStyleClass: commanderSpeech
   - type: JobPrefix

@@ -3,7 +3,7 @@
   id: AU14MobWorkingJoeGOVFOR
   suffix: AU14, GOVFOR
   components:
-  - type: AU14CallToAttentionWhisperImmune
+  - type: AU14CallToAttentionImmune
   # - type: GhostTakeoverAvailable
   # - type: GhostRoleApplySpecial
   # - type: GhostRole
@@ -32,7 +32,7 @@
   id: AU14MobWorkingJoeOPFOR
   suffix: AU14, OPFOR
   components:
-  - type: AU14CallToAttentionWhisperImmune
+  - type: AU14CallToAttentionImmune
   # - type: GhostTakeoverAvailable
   # - type: GhostRoleApplySpecial
   # - type: GhostRole
