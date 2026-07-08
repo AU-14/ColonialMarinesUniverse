@@ -35,7 +35,7 @@
   - type: AU14SilenceOrderAbility
   - type: AU14CallToAttentionAbility
     attentionFocusPriority: 300
-  - type: AU14CallToAttentionWhisperImmune
+  - type: AU14CallToAttentionImmune
   - type: RMCSpeechBubbleSpecificStyle
     speechStyleClass: commanderSpeech
   - type: TacticalMapIcon

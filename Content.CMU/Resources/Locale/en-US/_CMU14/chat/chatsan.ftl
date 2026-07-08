@@ -86,9 +86,6 @@ cm-chatsan-replacement-sw = south-west
 
 
 # Xeno
-cm-chatsan-word-admin-xeno = admin
-cm-chatsan-replacement-admin-xeno = grandmother
-
 cm-chatsan-word-admins-xeno = admins
 cm-chatsan-replacement-admins-xeno = grandmothers
 

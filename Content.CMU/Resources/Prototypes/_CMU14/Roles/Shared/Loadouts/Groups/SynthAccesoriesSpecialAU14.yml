@@ -6,6 +6,9 @@
   loadouts:
   - WebbingSurgicalBlueAU14
   - WebbingSurgicalGreenCMU14
+  - DropSurgicalGreenCMU14
+  - DropSurgicalBlueCMU14
+  - DropSurgicalBlackCMU14
   # - AU14GOVFORIOHeadset # I dont see OPFOR loadouts so use AU14OPFORIOHeadset for OPFOR
 
 # Doctor

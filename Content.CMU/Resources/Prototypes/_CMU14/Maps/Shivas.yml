@@ -11,7 +11,7 @@
   maxRandomOffset: 0
   randomRotation: false
   stations:
-    shiva:
+    shivas:
       stationProto: StandardUNMCWarship
       components:
         - type: StationNameSetup

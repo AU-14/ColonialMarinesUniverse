@@ -80,6 +80,7 @@
     canUseGuns: true
     hideGeneration: true
     useHumanHealthIcons: true
+    hideXenoSynthIcon: true
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: SquadPMC

@@ -35,6 +35,7 @@
     selfRepairTime: 9999
     hideGeneration: true
     useHumanHealthIcons: true
+    hideXenoSynthIcon: true
   - type: MeleeWeapon
     damage:
       types:

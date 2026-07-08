@@ -1,33 +1,21 @@
 ﻿<Document>
   # Optional Crimes
-  These crimes can be added on to existing charges where relevant.
+    These crimes can be added to existing charges where relevant.
 
- ## Resisting Arrest
- To resist a lawful arrest or search by an officer.
-  - 5 minutes, refusing to comply with a lawful search or arrest.
-  - 10 minutes, resisting a legal arrest by fleeing or using force.
+  ## Resisting Arrest
+    To resist the Military Police's lawful order, arrest or search.
+      - 5 minutes, refusing to comply with a lawful search or arrest.
+      - 10 minutes, resisting a legal arrest by fleeing or using force.
 
- ## Aiding and Abetting
- Assisting others in committing a crime, directly or indirectly, or encouraging them to commit one. Any person Aiding and Abetting is required to be told the crimes of the person they aided.
-  - Same punishment as crime committed.
+  ## Aiding and Abetting
+    Assisting others in committing a crime, directly or indirectly, or encouraging them to commit one. Any person who aids and abets is required to be informed of the crimes of the person they aided.
+      - Same punishment as the crime committed.
 
- ## Disorderly Conduct in Confinement
- To cause disruption in a significant manner while in Brig and under arrest. This can be added on to any charge.
-  - 7 minutes.
+  ## Disorderly Conduct in Confinement
+    To cause disruption in a significant manner while in Brig and under arrest. This can be added on to any charge.
+      - 7 minutes.
 
- ## Saluting in Vehicle Operations Area (SVO)
- Saluting on flight line, in garages, on designated vehicle travel paths, ACTIVE parking lots, is forbidden for personnel safety.
-  - First Offense: Verbal Warning
-  - Second Offense: Verbal Warning
-  - Third Offense: NJP
-  - Fourth Offense: NJP
-  - Fith Offense: 3 minutes
-
- ## Head Covers in Vehicle Operations Area (HCVO)
- Wearing a non-strapped head cover (i.e. berets, patrol caps, beanies, etc.) on flight line, in garages, on designated vehicle travel paths, ACTIVE parking lots, is forbidden for personnel safety.
-  - First Offense: Verbal Warning
-  - Second Offense: Verbal Warning
-  - Third Offense: NJP
-  - Fourth Offense: NJP
-  - Fith Offense: 3 minutes
+  ## Dereliction of Duty
+    Failure to salute an officer of higher rank when told or refusal to salute.
+      - NJP.
 </Document>
