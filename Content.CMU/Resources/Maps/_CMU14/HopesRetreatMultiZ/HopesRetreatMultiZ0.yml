@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 07/08/2026 07:47:39
-  entityCount: 39093
+  entityCount: 39091
 maps:
 - 1
 grids:
@@ -125902,19 +125902,7 @@ entities:
       pos: 6.5,-38.5
       parent: 1
     - type: TacticalMapUser
-      action: 625
       marines: False
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - 624
-          - 625
-    - type: Actions
-      actions:
-      - 624
-      - 625
 - proto: AU14AICoreSubstrateMUTHUR
   entities:
   - uid: 58776
@@ -177237,28 +177225,6 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 74.5,-60.5
       parent: 1
-- proto: RMCActionOpenTacticalMapMarine
-  entities:
-  - uid: 624
-    mapInit: true
-    paused: true
-    components:
-    - type: Transform
-      parent: 58742
-    - type: Action
-      originalIconColor: '#FFFFFFFF'
-      container: 58742
-      attachedEntity: 58742
-  - uid: 625
-    mapInit: true
-    paused: true
-    components:
-    - type: Transform
-      parent: 58742
-    - type: Action
-      originalIconColor: '#FFFFFFFF'
-      container: 58742
-      attachedEntity: 58742
 - proto: RMCAIConsoleInterface
   entities:
   - uid: 58749
