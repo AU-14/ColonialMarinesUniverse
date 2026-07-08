@@ -186,7 +186,7 @@ public sealed partial class ZombieSummonerMinionComponent : Component
     public float HitScreamChance = 0.5f;
 }
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent]
 public sealed partial class ZombieSummonerInsanityComponent : Component
 {
     [DataField]
