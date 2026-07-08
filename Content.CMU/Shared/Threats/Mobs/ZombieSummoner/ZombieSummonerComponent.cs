@@ -1,12 +1,13 @@
 using Content.Shared.Actions;
 using Content.Shared.Damage;
+using Robust.Shared.GameStates;
 using Robust.Shared.Localization;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._CMU14.Threats.Mobs.ZombieSummoner;
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent]
 public sealed partial class ZombieSummonerComponent : Component
 {
     [DataField]

@@ -48,6 +48,9 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
     private const string ZombieScream = "Scream";
     private const string ZombieFaction = "Zombie";
     private const string ZombieSummonerBuiClientType = "ZombieSummonerBui";
+    private const float UpdateInterval = 1f;
+
+    private float _updateAccumulator;
 
     private static readonly Color[] RealisticEyeColors =
     {
@@ -73,6 +76,7 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         "cmu-zombie-summoner-insanity-stage2-3",
         "cmu-zombie-summoner-insanity-stage2-4",
         "cmu-zombie-summoner-insanity-stage2-5",
+        "cmu-zombie-summoner-insanity-stage2-6",
     };
 
     private static readonly string[] InsanityStageThreeMessages =
@@ -82,6 +86,10 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         "cmu-zombie-summoner-insanity-stage3-3",
         "cmu-zombie-summoner-insanity-stage3-4",
         "cmu-zombie-summoner-insanity-stage3-5",
+        "cmu-zombie-summoner-insanity-stage3-6",
+        "cmu-zombie-summoner-insanity-stage3-7",
+        "cmu-zombie-summoner-insanity-stage3-8",
+        "cmu-zombie-summoner-insanity-stage3-9",
     };
 
     [Dependency] private ActionsSystem _actions = default!;
@@ -122,7 +130,7 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         SubscribeLocalEvent<ZombieSummonerMinionComponent, MobStateChangedEvent>(OnMinionMobStateChanged,
             after: [typeof(ZombieSystem)]);
         SubscribeLocalEvent<ZombieSummonerZombieLabelComponent, RefreshNameModifiersEvent>(OnRefreshZombieLabel);
-        SubscribeLocalEvent<ZombieSummonerMinionComponent, MeleeHitEvent>(OnMeleeHit);
+        SubscribeLocalEvent<MeleeWeaponComponent, MeleeHitEvent>(OnMeleeHit);
 
         Subs.BuiEvents<ZombieSummonerComponent>(ZombieSummonerUiKey.Key, subs =>
         {
@@ -132,14 +140,21 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
 
     public override void Update(float frameTime)
     {
+        _updateAccumulator += frameTime;
+        if (_updateAccumulator < UpdateInterval)
+            return;
+
+        var elapsed = _updateAccumulator;
+        _updateAccumulator = 0f;
+
         var query = EntityQueryEnumerator<ZombieSummonerComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
-            UpdatePoints(uid, comp, frameTime);
+            UpdatePoints(uid, comp, elapsed);
         }
 
-        UpdateInsanityCurses(frameTime);
-        UpdateDelayedFaceMarks(frameTime);
+        UpdateInsanityCurses(elapsed);
+        UpdateDelayedFaceMarks();
     }
 
     private void UpdatePoints(EntityUid uid, ZombieSummonerComponent comp, float frameTime)
@@ -184,6 +199,9 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
 
     private void OnSummonerMobStateChanged(Entity<ZombieSummonerComponent> ent, ref MobStateChangedEvent args)
     {
+        if (args.NewMobState == MobState.Dead)
+            PerishSummonedZombies(ent);
+
         RefreshSummonerActions(ent);
     }
 
@@ -207,13 +225,25 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
 
     private void OnComponentShutdown(Entity<ZombieSummonerComponent> ent, ref ComponentShutdown args)
     {
-        foreach (var zombie in ent.Comp.Zombies)
-        {
-            if (TryComp(zombie, out ZombieSummonerMinionComponent? minion))
-                minion.Summoner = null;
-        }
-
+        PerishSummonedZombies(ent);
         RemoveSummonerActions(ent);
+    }
+
+    private void PerishSummonedZombies(Entity<ZombieSummonerComponent> ent)
+    {
+        if (ent.Comp.Zombies.Count == 0)
+            return;
+
+        var zombies = new List<EntityUid>(ent.Comp.Zombies);
+        ent.Comp.Zombies.Clear();
+
+        foreach (var zombie in zombies)
+        {
+            if (Deleted(zombie))
+                continue;
+
+            QueueDel(zombie);
+        }
     }
 
     private void RemoveSummonerActions(Entity<ZombieSummonerComponent> ent)
@@ -386,37 +416,27 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
             return;
         }
 
-        var validTargetHit = false;
+        var hitValidTarget = false;
         foreach (var target in args.HitEntities)
         {
             if (!CanCursedZombieDamageTarget(target))
                 continue;
 
-            validTargetHit = true;
-            break;
-        }
+            hitValidTarget = true;
 
-        if (validTargetHit && !minion.BonusMeleeDamage.Empty)
-            args.BonusDamage += minion.BonusMeleeDamage;
-
-        foreach (var target in args.HitEntities)
-        {
             if (CanStartInsanityCurse(target))
                 StartInsanityCurse(target);
-        }
 
-        foreach (var target in args.HitEntities)
-        {
-            if (!CanCursedZombieDamageTarget(target) ||
-                _mobState.IsDead(target) ||
-                !TryComp<BodyComponent>(target, out _) ||
-                !_random.Prob(minion.DelimbChance))
+            if (_mobState.IsAlive(target) &&
+                HasComp<BodyComponent>(target) &&
+                _random.Prob(minion.DelimbChance))
             {
-                continue;
+                TrySeverRandomLimb(target);
             }
-
-            TrySeverRandomLimb(target);
         }
+
+        if (hitValidTarget && !minion.BonusMeleeDamage.Empty)
+            args.BonusDamage += minion.BonusMeleeDamage;
     }
 
     private void StartInsanityCurse(EntityUid target)
@@ -591,7 +611,7 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         return false;
     }
 
-    private void UpdateDelayedFaceMarks(float frameTime)
+    private void UpdateDelayedFaceMarks()
     {
         var query = EntityQueryEnumerator<ZombieSummonerDelayedFaceMarkComponent>();
         while (query.MoveNext(out var uid, out var delayedMark))
@@ -824,7 +844,7 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         _movementSpeed.RefreshMovementSpeedModifiers(zombie);
     }
 
-    private void UpdateAllZombies(Entity<ZombieSummonerComponent> ent, bool forceReplan = true)
+    private void UpdateAllZombies(Entity<ZombieSummonerComponent> ent)
     {
         var stale = new List<EntityUid>();
 
@@ -838,7 +858,7 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
                 continue;
             }
 
-            UpdateZombieNpc(ent.Owner, zombie, ent.Comp, forceReplan);
+            UpdateZombieNpc(ent.Owner, zombie, ent.Comp);
         }
 
         foreach (var zombie in stale)
@@ -850,23 +870,18 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
     private void UpdateZombieNpc(
         EntityUid summoner,
         EntityUid zombie,
-        ZombieSummonerComponent comp,
-        bool forceReplan = true)
+        ZombieSummonerComponent comp)
     {
         if (!TryComp(zombie, out HTNComponent? htn))
             return;
 
-        var changed = false;
         htn.RootTask = new HTNCompoundTask { Task = comp.ZombieOrderCompound };
-        changed |= SetBlackboard(zombie, htn, NPCBlackboard.Owner, zombie);
-        changed |= SetBlackboard(zombie, htn, NPCBlackboard.FollowTarget, new EntityCoordinates(summoner, Vector2.Zero));
-        changed |= SetBlackboard(zombie, htn, NPCBlackboard.CurrentOrders, comp.CurrentOrder);
+        SetBlackboard(zombie, htn, NPCBlackboard.Owner, zombie);
+        SetBlackboard(zombie, htn, NPCBlackboard.FollowTarget, new EntityCoordinates(summoner, Vector2.Zero));
+        SetBlackboard(zombie, htn, NPCBlackboard.CurrentOrders, comp.CurrentOrder);
 
         if (comp.CurrentOrder != ZombieSummonerOrderType.CheeseEm)
-            changed |= RemoveBlackboard<EntityUid>(htn, NPCBlackboard.CurrentOrderedTarget);
-
-        if (!forceReplan && !changed)
-            return;
+            RemoveBlackboard<EntityUid>(htn, NPCBlackboard.CurrentOrderedTarget);
 
         if (htn.Plan != null)
             _htn.ShutdownPlan(htn);
@@ -874,21 +889,21 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         _htn.Replan(htn);
     }
 
-    private bool SetBlackboard<T>(EntityUid npc, HTNComponent htn, string key, T value)
+    private void SetBlackboard<T>(EntityUid npc, HTNComponent htn, string key, T value)
     {
         if (htn.Blackboard.TryGetValue<T>(key, out var existing, EntityManager) &&
             EqualityComparer<T>.Default.Equals(existing, value))
         {
-            return false;
+            return;
         }
 
         _npc.SetBlackboard(npc, key, value!, htn);
-        return true;
     }
 
-    private bool RemoveBlackboard<T>(HTNComponent htn, string key)
+    private void RemoveBlackboard<T>(HTNComponent htn, string key)
     {
-        return htn.Blackboard.ContainsKey(key) && htn.Blackboard.Remove<T>(key);
+        if (htn.Blackboard.ContainsKey(key))
+            htn.Blackboard.Remove<T>(key);
     }
 
     private void UpdateOrderActions(Entity<ZombieSummonerComponent> ent)
