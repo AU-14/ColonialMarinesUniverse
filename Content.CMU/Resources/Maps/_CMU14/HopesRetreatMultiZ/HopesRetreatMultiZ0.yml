@@ -4,8 +4,8 @@ meta:
   engineVersion: v277.0.0
   forkId: ""
   forkVersion: ""
-  time: 07/08/2026 06:12:03
-  entityCount: 39078
+  time: 07/08/2026 07:47:39
+  entityCount: 39093
 maps:
 - 1
 grids:
@@ -125902,7 +125902,7 @@ entities:
       pos: 6.5,-38.5
       parent: 1
     - type: TacticalMapUser
-      action: 624
+      action: 625
       marines: False
     - type: ActionsContainer
     - type: ContainerContainer
@@ -125910,9 +125910,11 @@ entities:
         actions: !type:Container
           ents:
           - 624
+          - 625
     - type: Actions
       actions:
       - 624
+      - 625
 - proto: AU14AICoreSubstrateMUTHUR
   entities:
   - uid: 58776
@@ -177247,6 +177249,16 @@ entities:
       originalIconColor: '#FFFFFFFF'
       container: 58742
       attachedEntity: 58742
+  - uid: 625
+    mapInit: true
+    paused: true
+    components:
+    - type: Transform
+      parent: 58742
+    - type: Action
+      originalIconColor: '#FFFFFFFF'
+      container: 58742
+      attachedEntity: 58742
 - proto: RMCAIConsoleInterface
   entities:
   - uid: 58749
@@ -182246,7 +182258,7 @@ entities:
       pos: -29.5,-46.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -53122.797
+      secondsUntilStateChange: -53549.773
       state: Closing
   - uid: 9768
     components:
@@ -332083,6 +332095,14 @@ entities:
     - type: Transform
       pos: 66.5,-56.5
       parent: 1
+- proto: scenariothirdpartyleaderspawnmarker
+  entities:
+  - uid: 628
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 101.5,-10.5
+      parent: 1
 - proto: SeedExtractor
   entities:
   - uid: 49517
@@ -332218,6 +332238,88 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -56.5,57.5
+      parent: 1
+- proto: thirdpartyentityspawnmarker
+  entities:
+  - uid: 627
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 100.5,-10.5
+      parent: 1
+- proto: thirdpartymemberspawnmarker
+  entities:
+  - uid: 626
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 101.5,-12.5
+      parent: 1
+  - uid: 629
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 100.5,-12.5
+      parent: 1
+  - uid: 630
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 100.5,-13.5
+      parent: 1
+  - uid: 631
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 99.5,-12.5
+      parent: 1
+  - uid: 632
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 99.5,-13.5
+      parent: 1
+  - uid: 633
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 98.5,-12.5
+      parent: 1
+  - uid: 634
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 98.5,-13.5
+      parent: 1
+  - uid: 635
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 101.5,-13.5
+      parent: 1
+  - uid: 636
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 102.5,-13.5
+      parent: 1
+  - uid: 637
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 103.5,-13.5
+      parent: 1
+  - uid: 638
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 102.5,-12.5
+      parent: 1
+  - uid: 665
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 103.5,-12.5
       parent: 1
 - proto: threatentityspawnmarker
   entities:

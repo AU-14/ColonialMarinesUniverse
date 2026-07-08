@@ -68,8 +68,8 @@
 #  - AuPlanetFiorina
 #  - AuPlanetKutjevo
   - AuPlanetShivasSnowball
-#  - AUPlanetLV327
-  - AuPlanetChances
+  - AUPlanetLV327
+#  - AuPlanetChances
   - CMUPlanetHopesRetreat
   rules:
   - AuVoteRule

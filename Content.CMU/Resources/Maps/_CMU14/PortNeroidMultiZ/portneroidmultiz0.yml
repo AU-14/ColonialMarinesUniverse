@@ -4,8 +4,8 @@ meta:
   engineVersion: v277.0.0
   forkId: ""
   forkVersion: ""
-  time: 07/08/2026 00:11:48
-  entityCount: 40176
+  time: 07/08/2026 07:55:38
+  entityCount: 40190
 maps:
 - 1
 grids:
@@ -183053,7 +183053,7 @@ entities:
     - type: CMDoubleDoor
       lastOpeningAt: 17408.4159249
     - type: Door
-      secondsUntilStateChange: -56274.77
+      secondsUntilStateChange: -56440.227
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -183067,7 +183067,7 @@ entities:
     - type: CMDoubleDoor
       lastOpeningAt: 17408.4159249
     - type: Door
-      secondsUntilStateChange: -56274.77
+      secondsUntilStateChange: -56440.227
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -271708,6 +271708,12 @@ entities:
       parent: 1
 - proto: scenariothirdpartyleaderspawnmarker
   entities:
+  - uid: 35747
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -7.5,54.5
+      parent: 1
   - uid: 35761
     components:
     - type: Transform
@@ -272143,6 +272149,88 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 22.5,157.5
+      parent: 1
+- proto: thirdpartyleaderspawnmarker
+  entities:
+  - uid: 35760
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -8.5,54.5
+      parent: 1
+- proto: thirdpartymemberspawnmarker
+  entities:
+  - uid: 35748
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -9.5,53.5
+      parent: 1
+  - uid: 35749
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -9.5,52.5
+      parent: 1
+  - uid: 35750
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -8.5,53.5
+      parent: 1
+  - uid: 35751
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -7.5,53.5
+      parent: 1
+  - uid: 35752
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -7.5,52.5
+      parent: 1
+  - uid: 35753
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -6.5,53.5
+      parent: 1
+  - uid: 35754
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -6.5,52.5
+      parent: 1
+  - uid: 35758
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -5.5,53.5
+      parent: 1
+  - uid: 35759
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -5.5,52.5
+      parent: 1
+  - uid: 35762
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -8.5,52.5
+      parent: 1
+  - uid: 35763
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -10.5,53.5
+      parent: 1
+  - uid: 35764
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -10.5,52.5
       parent: 1
 - proto: TrashBag
   entities:
