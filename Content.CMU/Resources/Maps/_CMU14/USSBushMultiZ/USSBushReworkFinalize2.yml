@@ -4,8 +4,8 @@ meta:
   engineVersion: v277.0.0
   forkId: ""
   forkVersion: ""
-  time: 06/17/2026 23:50:14
-  entityCount: 840
+  time: 07/08/2026 08:10:36
+  entityCount: 841
 maps:
 - 1
 grids:
@@ -818,6 +818,18 @@ entities:
     - type: Transform
       pos: 23.5,24.5
       parent: 1
+    - type: TacticalMapUser
+      action: 27
+      marines: False
+    - type: ActionsContainer
+    - type: ContainerContainer
+      containers:
+        actions: !type:Container
+          ents:
+          - 27
+    - type: Actions
+      actions:
+      - 27
 - proto: CMApcHighCapacity
   entities:
   - uid: 212
@@ -4719,6 +4731,18 @@ entities:
     - type: Transform
       pos: 28.63763,15.345125
       parent: 1
+- proto: RMCActionOpenTacticalMapMarine
+  entities:
+  - uid: 27
+    mapInit: true
+    paused: true
+    components:
+    - type: Transform
+      parent: 96
+    - type: Action
+      originalIconColor: '#FFFFFFFF'
+      container: 96
+      attachedEntity: 96
 - proto: RMCAIConsoleARES
   entities:
   - uid: 142
@@ -5111,49 +5135,49 @@ entities:
     - type: Transform
       pos: 23.5,22.5
       parent: 1
-- proto: RMCWindowAIReinforced
+- proto: RMCWindowReinforcedAIHull
   entities:
-  - uid: 27
+  - uid: 32
     components:
     - type: Transform
       pos: 23.5,8.5
       parent: 1
-  - uid: 32
+  - uid: 37
     components:
     - type: Transform
       pos: 22.5,8.5
       parent: 1
-  - uid: 37
+  - uid: 38
     components:
     - type: Transform
       pos: 24.5,8.5
       parent: 1
-  - uid: 38
+  - uid: 61
     components:
     - type: Transform
       pos: 17.5,12.5
       parent: 1
-  - uid: 61
+  - uid: 67
     components:
     - type: Transform
       pos: 17.5,16.5
       parent: 1
-  - uid: 67
+  - uid: 77
     components:
     - type: Transform
       pos: 17.5,15.5
       parent: 1
-  - uid: 77
+  - uid: 78
     components:
     - type: Transform
       pos: 17.5,11.5
       parent: 1
-  - uid: 78
+  - uid: 79
     components:
     - type: Transform
       pos: 17.5,10.5
       parent: 1
-  - uid: 79
+  - uid: 213
     components:
     - type: Transform
       pos: 17.5,14.5
