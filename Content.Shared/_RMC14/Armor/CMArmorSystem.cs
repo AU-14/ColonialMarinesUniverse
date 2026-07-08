@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Text;
+using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Steps;
@@ -9,6 +10,7 @@ using Content.Shared._RMC14.Xenonids.Projectile.Spit.Slowing;
 using Content.Shared._RMC14.Xenonids.Sunder;
 using Content.Shared.Alert;
 using Content.Shared.Armor;
+using Content.Shared.Body.Part;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
@@ -161,6 +163,9 @@ public sealed partial class CMArmorSystem : EntitySystem
 
     private void OnGetArmor(Entity<CMArmorComponent> armored, ref CMGetArmorEvent args)
     {
+        if (!ShouldApplyArmor(armored.Comp, args.TargetPart, args.TargetZone))
+            return;
+
         args.ExplosionArmor += armored.Comp.ExplosionArmor;
         args.FrontalArmor += armored.Comp.FrontalArmor;
         args.SideArmor += armored.Comp.SideArmor;
@@ -179,6 +184,9 @@ public sealed partial class CMArmorSystem : EntitySystem
 
     private void OnGetArmorRelayed(Entity<CMArmorComponent> armored, ref InventoryRelayedEvent<CMGetArmorEvent> args)
     {
+        if (!ShouldApplyArmor(armored.Comp, args.Args.TargetPart, args.Args.TargetZone))
+            return;
+
         args.Args.ExplosionArmor += armored.Comp.ExplosionArmor;
         args.Args.FrontalArmor += armored.Comp.FrontalArmor;
         args.Args.SideArmor += armored.Comp.SideArmor;
@@ -225,7 +233,7 @@ public sealed partial class CMArmorSystem : EntitySystem
         if (!args.CanInteract || !args.CanAccess || HasComp<XenoComponent>(uid))
             return;
 
-        var examineMarkup = GetArmorExamine(component);
+        var examineMarkup = GetArmorExamine((uid, component));
 
         _examine.AddDetailedExamineVerb(args, component, examineMarkup,
             Loc.GetString("armor-examinable-verb-text"), "/Textures/Interface/Actions/actions_fakemindshield.rsi/icon-on.png",
@@ -333,11 +341,10 @@ public sealed partial class CMArmorSystem : EntitySystem
 
     private void ModifyDamage(EntityUid ent, ref DamageModifyEvent args)
     {
-        // TODO RMC14 the slot should depend on the part that is receiving the damage once part damage is in
         var xeno = HasComp<XenoComponent>(ent);
         TryComp<XenoSunderComponent>(ent, out var sunder);
 
-        var ev = new CMGetArmorEvent(SlotFlags.OUTERCLOTHING | SlotFlags.INNERCLOTHING);
+        var ev = new CMGetArmorEvent(args.TargetSlots, TargetPart: args.TargetPart, TargetZone: args.TargetZone);
         RaiseLocalEvent(ent, ref ev);
 
         var armorPiercing = args.ArmorPiercing;
@@ -413,6 +420,26 @@ public sealed partial class CMArmorSystem : EntitySystem
         {
             Resist(args.Damage, ev.XenoArmor, ArmorGroup, mod.RangedArmorModifier);
         }
+    }
+
+    private static bool ShouldApplyArmor(CMArmorComponent armor, BodyPartType? targetPart, TargetBodyZone? targetZone)
+    {
+        if (armor.CoveredZones.Count == 0)
+            return true;
+
+        if (targetZone is { } zone)
+            return armor.CoveredZones.Contains(zone);
+
+        if (targetPart is not { } part)
+            return true;
+
+        foreach (var covered in armor.CoveredZones)
+        {
+            if (SharedBodyZoneTargetingSystem.ToBodyPart(covered).Type == part)
+                return true;
+        }
+
+        return false;
     }
 
     private void Resist(DamageSpecifier damage, int armor, ProtoId<DamageGroupPrototype> group, int mult)
@@ -569,13 +596,12 @@ public sealed partial class CMArmorSystem : EntitySystem
         return Math.Clamp(sunder.Amount.Float() / sunder.Max.Float() * 100, 0, 100);
     }
 
-    private FormattedMessage GetArmorExamine(CMArmorComponent armorComponent)
+    private FormattedMessage GetArmorExamine(Entity<CMArmorComponent> armored)
     {
+        var armorComponent = armored.Comp;
         var msg = new FormattedMessage();
         msg.AddMarkupOrThrow(Loc.GetString("armor-examine"));
 
-        // You can add any new armor types here, and they should show up
-        // Maybe add what body part is protects in the future? "It has the following protection for your torso:"
         var armorRatings = new[]
         {
             (Loc.GetString("rmc-armor-melee"), armorComponent.Melee),
@@ -602,6 +628,89 @@ public sealed partial class CMArmorSystem : EntitySystem
             msg.AddMarkupOrThrow(Loc.GetString("rmc-examine-armor-piercing-immune"));
         }
 
+        var coveredZones = GetArmorCoveredZones(armored);
+        if (coveredZones.Count > 0)
+        {
+            var parts = string.Join(", ", coveredZones.Select(GetArmorZoneName));
+            msg.PushNewline();
+            msg.AddMarkupOrThrow(Loc.GetString("rmc-examine-armor-covers", ("parts", parts)));
+        }
+
         return msg;
     }
+
+    private List<TargetBodyZone> GetArmorCoveredZones(Entity<CMArmorComponent> armored)
+    {
+        var zones = new List<TargetBodyZone>();
+        if (armored.Comp.CoveredZones.Count > 0)
+        {
+            AddCoveredZones(zones, armored.Comp.CoveredZones);
+            return zones;
+        }
+
+        if (!TryComp<ClothingComponent>(armored, out var clothing))
+            return zones;
+
+        AddSlotCoveredZones(zones, clothing.Slots);
+        return zones;
+    }
+
+    private static void AddSlotCoveredZones(List<TargetBodyZone> zones, SlotFlags slots)
+    {
+        if ((slots & SlotFlags.HEAD) != 0)
+            AddCoveredZone(zones, TargetBodyZone.Head);
+
+        if ((slots & (SlotFlags.OUTERCLOTHING | SlotFlags.INNERCLOTHING)) != 0)
+            AddCoveredZones(zones, TargetBodyZone.Chest, TargetBodyZone.GroinPelvis);
+
+        if ((slots & (SlotFlags.OUTERCLOTHING | SlotFlags.INNERCLOTHING)) != 0)
+            AddCoveredZones(zones, TargetBodyZone.LeftArm, TargetBodyZone.RightArm);
+
+        if ((slots & SlotFlags.GLOVES) != 0)
+            AddCoveredZones(zones, TargetBodyZone.LeftHand, TargetBodyZone.RightHand);
+
+        if ((slots & (SlotFlags.OUTERCLOTHING | SlotFlags.INNERCLOTHING | SlotFlags.LEGS)) != 0)
+            AddCoveredZones(zones, TargetBodyZone.LeftLeg, TargetBodyZone.RightLeg);
+
+        if ((slots & SlotFlags.FEET) != 0)
+            AddCoveredZones(zones, TargetBodyZone.LeftFoot, TargetBodyZone.RightFoot);
+    }
+
+    private static void AddCoveredZones(List<TargetBodyZone> zones, params TargetBodyZone[] additions)
+    {
+        foreach (var zone in additions)
+        {
+            AddCoveredZone(zones, zone);
+        }
+    }
+
+    private static void AddCoveredZones(List<TargetBodyZone> zones, IEnumerable<TargetBodyZone> additions)
+    {
+        foreach (var zone in additions)
+        {
+            AddCoveredZone(zones, zone);
+        }
+    }
+
+    private static void AddCoveredZone(List<TargetBodyZone> zones, TargetBodyZone zone)
+    {
+        if (!zones.Contains(zone))
+            zones.Add(zone);
+    }
+
+    private string GetArmorZoneName(TargetBodyZone zone) => zone switch
+    {
+        TargetBodyZone.Head => Loc.GetString("rmc-armor-zone-head"),
+        TargetBodyZone.Chest => Loc.GetString("rmc-armor-zone-chest"),
+        TargetBodyZone.GroinPelvis => Loc.GetString("rmc-armor-zone-groin-pelvis"),
+        TargetBodyZone.LeftArm => Loc.GetString("rmc-armor-zone-left-arm"),
+        TargetBodyZone.RightArm => Loc.GetString("rmc-armor-zone-right-arm"),
+        TargetBodyZone.LeftHand => Loc.GetString("rmc-armor-zone-left-hand"),
+        TargetBodyZone.RightHand => Loc.GetString("rmc-armor-zone-right-hand"),
+        TargetBodyZone.LeftLeg => Loc.GetString("rmc-armor-zone-left-leg"),
+        TargetBodyZone.RightLeg => Loc.GetString("rmc-armor-zone-right-leg"),
+        TargetBodyZone.LeftFoot => Loc.GetString("rmc-armor-zone-left-foot"),
+        TargetBodyZone.RightFoot => Loc.GetString("rmc-armor-zone-right-foot"),
+        _ => Loc.GetString("rmc-armor-zone-chest"),
+    };
 }

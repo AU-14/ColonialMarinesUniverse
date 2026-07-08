@@ -7,6 +7,7 @@ using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
+using Content.Shared.Inventory;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
@@ -119,6 +120,10 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
             var resolved = new HitLocationResolvedEvent(
                 ent, args.Origin, resolve.ResolvedPart, resolve.ResolvedPartEntity, resolve.ResolvedZone);
             RaiseLocalEvent(ent, ref resolved);
+
+            args.TargetPart = resolve.ResolvedPart;
+            args.TargetZone = resolve.ResolvedZone;
+            args.TargetSlots = SlotsForPart(resolve.ResolvedPart);
         }
 
         ent.Comp.NextHitOverride = null;
@@ -256,9 +261,33 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
             args.ResolvedPart = part.PartType;
         }
 
-        args.ResolvedZone = zone;
+        args.ResolvedZone = zone ?? ToTargetBodyZone(args.ResolvedPart, TryComp<BodyPartComponent>(args.ResolvedPartEntity, out var resolvedPart)
+            ? resolvedPart.Symmetry
+            : null);
         args.Handled = true;
     }
+
+    private static SlotFlags SlotsForPart(BodyPartType type) => type switch
+    {
+        BodyPartType.Head => SlotFlags.HEAD,
+        BodyPartType.Torso => SlotFlags.OUTERCLOTHING | SlotFlags.INNERCLOTHING,
+        BodyPartType.Arm => SlotFlags.OUTERCLOTHING | SlotFlags.INNERCLOTHING,
+        BodyPartType.Hand => SlotFlags.GLOVES,
+        BodyPartType.Leg => SlotFlags.OUTERCLOTHING | SlotFlags.INNERCLOTHING | SlotFlags.LEGS,
+        BodyPartType.Foot => SlotFlags.FEET,
+        _ => SlotFlags.WITHOUT_POCKET,
+    };
+
+    private static TargetBodyZone? ToTargetBodyZone(BodyPartType type, BodyPartSymmetry? symmetry) => type switch
+    {
+        BodyPartType.Head => TargetBodyZone.Head,
+        BodyPartType.Torso => TargetBodyZone.Chest,
+        BodyPartType.Arm => symmetry == BodyPartSymmetry.Left ? TargetBodyZone.LeftArm : TargetBodyZone.RightArm,
+        BodyPartType.Hand => symmetry == BodyPartSymmetry.Left ? TargetBodyZone.LeftHand : TargetBodyZone.RightHand,
+        BodyPartType.Leg => symmetry == BodyPartSymmetry.Left ? TargetBodyZone.LeftLeg : TargetBodyZone.RightLeg,
+        BodyPartType.Foot => symmetry == BodyPartSymmetry.Left ? TargetBodyZone.LeftFoot : TargetBodyZone.RightFoot,
+        _ => null,
+    };
 
     private EntityUid? FindBestDamagePart(EntityUid bodyId, BodyPartType type, BodyPartSymmetry? symmetry)
     {

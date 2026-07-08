@@ -1,3 +1,4 @@
+using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._RMC14.Armor;
@@ -29,6 +30,14 @@ public sealed partial class CMArmorComponent : Component
     // TODO RMC14 tank/sniper flak/shotgun incendiary burst is resisted by this but penetrated
     [DataField, AutoNetworkedField]
     public int ExplosionArmor;
+
+    /// <summary>
+    ///     Optional locational override. Empty means the item uses inventory slot
+    ///     targeting only; filled means the item only protects these body zones
+    ///     after the hit has reached one of its equipped slots.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public List<TargetBodyZone> CoveredZones = new();
 
     [DataField, AutoNetworkedField]
     public bool ImmuneToAP = false;

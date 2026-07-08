@@ -1,3 +1,5 @@
+using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.Body.Part;
 using Content.Shared.Inventory;
 
 namespace Content.Shared._RMC14.Armor;
@@ -12,5 +14,7 @@ public record struct CMGetArmorEvent(
     int FrontalArmor = 0,
     int SideArmor = 0,
     double ArmorModifier = 1,
-    int ExplosionArmor = 0
+    int ExplosionArmor = 0,
+    BodyPartType? TargetPart = null,
+    TargetBodyZone? TargetZone = null
 ) : IInventoryRelayEvent;

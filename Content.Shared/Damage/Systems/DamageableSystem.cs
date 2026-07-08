@@ -1,7 +1,9 @@
 using System.Linq;
 using Content.Shared.CCVar;
 using Content.Shared.Chemistry;
+using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._RMC14.Damage;
+using Content.Shared.Body.Part;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Inventory;
@@ -218,7 +220,15 @@ namespace Content.Shared.Damage
                     damage = DamageSpecifier.ApplyModifierSet(damage, modifierSet);
                 }
 
-                var ev = new DamageModifyEvent(damage, origin, tool, armorPiercing, impact);
+                var ev = new DamageModifyEvent(
+                    damage,
+                    origin,
+                    tool,
+                    armorPiercing,
+                    impact,
+                    before.TargetSlots,
+                    before.TargetPart,
+                    before.TargetZone);
                 RaiseLocalEvent(uid.Value, ev);
                 damage = ev.Damage;
                 impact = ev.Impact;
@@ -410,7 +420,15 @@ namespace Content.Shared.Damage
     ///     Raised before damage is done, so stuff can cancel it if necessary.
     /// </summary>
     [ByRefEvent]
-    public record struct BeforeDamageChangedEvent(DamageSpecifier Damage, EntityUid? Origin = null, EntityUid? Source = null, DamageImpact Impact = default, bool Cancelled = false); //RMC14
+    public record struct BeforeDamageChangedEvent(
+        DamageSpecifier Damage,
+        EntityUid? Origin = null,
+        EntityUid? Source = null,
+        DamageImpact Impact = default,
+        SlotFlags TargetSlots = SlotFlags.WITHOUT_POCKET,
+        BodyPartType? TargetPart = null,
+        TargetBodyZone? TargetZone = null,
+        bool Cancelled = false); //RMC14
 
     /// <summary>
     ///     Raised on an entity when damage is about to be dealt,
@@ -421,8 +439,7 @@ namespace Content.Shared.Damage
     /// </summary>
     public sealed partial class DamageModifyEvent : EntityEventArgs, IInventoryRelayEvent
     {
-        // Whenever locational damage is a thing, this should just check only that bit of armour.
-        public SlotFlags TargetSlots { get; } = ~SlotFlags.POCKET;
+        public SlotFlags TargetSlots { get; }
 
         public readonly DamageSpecifier OriginalDamage;
         public DamageSpecifier Damage;
@@ -430,8 +447,18 @@ namespace Content.Shared.Damage
         public EntityUid? Tool;
         public int ArmorPiercing;
         public DamageImpact Impact;
+        public BodyPartType? TargetPart;
+        public TargetBodyZone? TargetZone;
 
-        public DamageModifyEvent(DamageSpecifier damage, EntityUid? origin = null, EntityUid? tool = null, int armorPiercing = 0, DamageImpact impact = default)
+        public DamageModifyEvent(
+            DamageSpecifier damage,
+            EntityUid? origin = null,
+            EntityUid? tool = null,
+            int armorPiercing = 0,
+            DamageImpact impact = default,
+            SlotFlags targetSlots = SlotFlags.WITHOUT_POCKET,
+            BodyPartType? targetPart = null,
+            TargetBodyZone? targetZone = null)
         {
             OriginalDamage = damage;
             Damage = damage;
@@ -439,6 +466,9 @@ namespace Content.Shared.Damage
             Tool = tool;
             ArmorPiercing = armorPiercing;
             Impact = impact;
+            TargetSlots = targetSlots;
+            TargetPart = targetPart;
+            TargetZone = targetZone;
         }
     }
 
