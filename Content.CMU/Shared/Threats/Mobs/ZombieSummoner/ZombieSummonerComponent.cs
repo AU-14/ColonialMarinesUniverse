@@ -229,7 +229,7 @@ public sealed partial class ZombieSummonerInsanityComponent : Component
     public Color FaceMarkingColor = Color.FromHex("#c00000");
 }
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent]
 public sealed partial class ZombieSummonerDelayedFaceMarkComponent : Component
 {
     [DataField]
