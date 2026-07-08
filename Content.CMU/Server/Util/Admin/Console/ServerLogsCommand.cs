@@ -19,7 +19,8 @@ public sealed partial class ServerLogsCommand : LocalizedCommands
     [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private ServerLogsDownloadManager _download = default!;
 
-    private static readonly string LogDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "bin", "logs", "logs")); // yes its double
+    // private static readonly string LogDir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "bin", "logs", "logs")); // yes its double
+    private static readonly string LogDir = Path.GetFullPath("/App/persist/logs/live");
     private static readonly string PrimaryClr = Color.Green.ToHex();
     private static readonly string SecondaryClr = Color.Yellow.ToHex();
     private static readonly string[] LogSearchPatterns = ["*.log", "*.txt"];
