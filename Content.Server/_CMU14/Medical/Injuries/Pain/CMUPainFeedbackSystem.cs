@@ -3,6 +3,7 @@ using Content.Server.Body.Systems;
 using Content.Server.Speech.Components;
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Injuries.Pain;
+using Content.Shared._CMU14.Medical.Injuries.Pain.Events;
 using Content.Shared._CMU14.Medical.Injuries.Vision;
 using Content.Shared._RMC14.Emote;
 using Content.Shared._RMC14.Synth;
@@ -40,6 +41,11 @@ public sealed partial class CMUPainFeedbackSystem : EntitySystem
 
         UpdatesAfter.Add(typeof(RMCDamageableSystem));
         UpdatesAfter.Add(typeof(RespiratorSystem));
+
+        SubscribeLocalEvent<CMUPainFeedbackComponent, ComponentStartup>(OnFeedbackStartup);
+        SubscribeLocalEvent<CMUPainFeedbackComponent, ComponentShutdown>(OnFeedbackShutdown);
+        SubscribeLocalEvent<CMUPainFeedbackComponent, MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<CMUPainFeedbackComponent, PainTierChangedEvent>(OnPainTierChanged);
     }
 
     public override void Update(float frameTime)
@@ -50,15 +56,22 @@ public sealed partial class CMUPainFeedbackSystem : EntitySystem
             return;
 
         var now = _timing.CurTime;
-        var query = EntityQueryEnumerator<CMUPainFeedbackComponent, PainShockComponent, CMUHumanMedicalComponent, MobStateComponent>();
-        while (query.MoveNext(out var uid, out var feedback, out var pain, out _, out var mob))
+        var query = EntityQueryEnumerator<CMUPainFeedbackActiveComponent, CMUPainFeedbackComponent, PainShockComponent, MobStateComponent>();
+        while (query.MoveNext(out var uid, out _, out var feedback, out var pain, out var mob))
         {
-            if (mob.CurrentState == MobState.Dead || HasComp<SynthComponent>(uid))
+            if (!HasComp<CMUHumanMedicalComponent>(uid) ||
+                mob.CurrentState == MobState.Dead ||
+                HasComp<SynthComponent>(uid))
+            {
+                feedback.NextEffect = TimeSpan.Zero;
+                RemCompDeferred<CMUPainFeedbackActiveComponent>(uid);
                 continue;
+            }
 
             if (pain.Tier < PainTier.Severe)
             {
                 feedback.NextEffect = TimeSpan.Zero;
+                RemCompDeferred<CMUPainFeedbackActiveComponent>(uid);
                 continue;
             }
 
@@ -68,6 +81,45 @@ public sealed partial class CMUPainFeedbackSystem : EntitySystem
             feedback.NextEffect = now + feedback.EffectInterval;
             ApplyFeedback(uid, feedback, pain);
         }
+    }
+
+    private void OnFeedbackStartup(Entity<CMUPainFeedbackComponent> ent, ref ComponentStartup args)
+    {
+        var active = TryComp<PainShockComponent>(ent, out var pain) && pain.Tier >= PainTier.Severe;
+        SetFeedbackActive(ent, active);
+    }
+
+    private void OnFeedbackShutdown(Entity<CMUPainFeedbackComponent> ent, ref ComponentShutdown args)
+    {
+        RemCompDeferred<CMUPainFeedbackActiveComponent>(ent.Owner);
+    }
+
+    private void OnMobStateChanged(Entity<CMUPainFeedbackComponent> ent, ref MobStateChangedEvent args)
+    {
+        var active = args.NewMobState != MobState.Dead &&
+                     TryComp<PainShockComponent>(ent, out var pain) &&
+                     pain.Tier >= PainTier.Severe;
+        SetFeedbackActive(ent, active);
+    }
+
+    private void OnPainTierChanged(Entity<CMUPainFeedbackComponent> ent, ref PainTierChangedEvent args)
+    {
+        SetFeedbackActive(ent, args.NewTier >= PainTier.Severe);
+    }
+
+    private void SetFeedbackActive(Entity<CMUPainFeedbackComponent> ent, bool active)
+    {
+        if (active &&
+            HasComp<CMUHumanMedicalComponent>(ent.Owner) &&
+            !HasComp<SynthComponent>(ent.Owner) &&
+            (!TryComp<MobStateComponent>(ent, out var mob) || mob.CurrentState != MobState.Dead))
+        {
+            EnsureComp<CMUPainFeedbackActiveComponent>(ent.Owner);
+            return;
+        }
+
+        ent.Comp.NextEffect = TimeSpan.Zero;
+        RemCompDeferred<CMUPainFeedbackActiveComponent>(ent.Owner);
     }
 
     private void ApplyFeedback(EntityUid uid, CMUPainFeedbackComponent feedback, PainShockComponent pain)

@@ -276,9 +276,11 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         var ib = EnsureComp<InternalBleedingComponent>(part);
         ib.BloodlossPerSecond = maxRate;
         ib.Source = source;
-        Dirty(part, ib);
         if (changed)
+        {
+            Dirty(part, ib);
             RaiseInternalBleedingChanged(part, false);
+        }
     }
 
     private void ComputeInternalBleedSource(EntityUid part, bool ignoreSplint, out float maxRate, out string source)
@@ -372,9 +374,11 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         var ib = EnsureComp<InternalBleedingComponent>(part);
         ib.BloodlossPerSecond = rate;
         ib.Source = source;
-        Dirty(part, ib);
         if (changed)
+        {
+            Dirty(part, ib);
             RaiseInternalBleedingChanged(part, false);
+        }
     }
 
     public void ClearInternalBleed(EntityUid part)
@@ -551,7 +555,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         BodyPartWoundComponent? comp = null,
         WoundMechanismFlags mechanismMask = WoundMechanismFlags.None,
         WoundTreatmentQuality quality = WoundTreatmentQuality.Adequate,
-        WoundCleanupFlags cleanupClears = WoundCleanupFlags.None,
+        WoundCleanupFlags cleanupClears = WoundCleanupFlags.All,
         bool stopArterialBleeding = true)
         => TryTreatWound(part, out completed, comp, type, quality, mechanismMask, cleanupClears, stopArterialBleeding);
 
@@ -562,7 +566,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         BodyPartWoundComponent? comp = null,
         WoundType? type = null,
         WoundMechanismFlags mechanismMask = WoundMechanismFlags.None,
-        WoundCleanupFlags cleanupClears = WoundCleanupFlags.None,
+        WoundCleanupFlags cleanupClears = WoundCleanupFlags.All,
         bool stopArterialBleeding = true)
         => TryTreatWound(part, out completed, comp, type, quality, mechanismMask, cleanupClears, stopArterialBleeding);
 
@@ -578,7 +582,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         WoundType? type = null,
         WoundTreatmentQuality quality = WoundTreatmentQuality.Adequate,
         WoundMechanismFlags mechanismMask = WoundMechanismFlags.None,
-        WoundCleanupFlags cleanupClears = WoundCleanupFlags.None,
+        WoundCleanupFlags cleanupClears = WoundCleanupFlags.All,
         bool stopArterialBleeding = true)
     {
         completed = false;
@@ -647,7 +651,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         BodyPartWoundComponent? comp = null,
         WoundMechanismFlags mechanismMask = WoundMechanismFlags.None,
         WoundTreatmentQuality quality = WoundTreatmentQuality.Adequate,
-        WoundCleanupFlags cleanupClears = WoundCleanupFlags.None,
+        WoundCleanupFlags cleanupClears = WoundCleanupFlags.All,
         bool stopArterialBleeding = true)
     {
         treated = 0;
@@ -703,7 +707,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         out bool completed,
         BodyPartWoundComponent? comp = null,
         WoundMechanismFlags mechanismMask = WoundMechanismFlags.None,
-        WoundCleanupFlags cleanupClears = WoundCleanupFlags.None,
+        WoundCleanupFlags cleanupClears = WoundCleanupFlags.All,
         bool stopArterialBleeding = true)
     {
         completed = false;
@@ -794,15 +798,15 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         BodyPartWoundComponent comp,
         int index,
         WoundTreatmentQuality quality,
-        WoundCleanupFlags cleanupClears = WoundCleanupFlags.None)
+        WoundCleanupFlags cleanupClears)
     {
         EnsureWoundMetadataSlots(comp);
 
         if (index < 0 || index >= comp.Wounds.Count)
             return;
 
-        comp.Cleanup[index] = WoundCleanupFlags.None;
-        comp.TreatmentQualities[index] = WoundTreatmentQuality.Adequate;
+        comp.Cleanup[index] &= ~cleanupClears;
+        comp.TreatmentQualities[index] = quality;
         RestorePartToFieldCap(part, comp);
     }
 
@@ -878,13 +882,8 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         return !comp.Wounds[index].Treated;
     }
 
-    public override void Update(float frameTime)
+    protected void UpdateServer(float frameTime)
     {
-        base.Update(frameTime);
-
-        if (Net.IsClient)
-            return;
-
         if (!IsEnabled())
             return;
 
@@ -911,7 +910,6 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
                 continue;
 
             wounds.NextExternalBleedTick = now + TimeSpan.FromSeconds(1);
-            Dirty(partUid, wounds);
 
             var bodyOwner = TryGetBodyOwner(partUid);
             if (bodyOwner is null)

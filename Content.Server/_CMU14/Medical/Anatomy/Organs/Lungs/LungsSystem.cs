@@ -13,6 +13,12 @@ public sealed partial class LungsSystem : SharedLungsSystem
 
     private static readonly ProtoId<DamageTypePrototype> Asphyxiation = "Asphyxiation";
 
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+        UpdateServer(frameTime);
+    }
+
     /// <summary>
     ///     Bypasses resistances so a marine drowning on damaged lungs cannot
     ///     be saved by armour.

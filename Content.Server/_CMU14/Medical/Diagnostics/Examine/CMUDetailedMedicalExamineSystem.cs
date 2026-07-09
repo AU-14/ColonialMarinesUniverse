@@ -1,7 +1,6 @@
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Diagnostics.Examine;
 using Content.Shared._RMC14.Marines.Skills;
-using Content.Shared.Verbs;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._CMU14.Medical.Diagnostics.Examine;
@@ -20,12 +19,7 @@ public sealed partial class CMUDetailedMedicalExamineSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<GetVerbsEvent<InteractionVerb>>(OnGetInteractionVerbs);
         SubscribeLocalEvent<CMUHumanMedicalComponent, CMUDetailedPhysicalExamineDoAfterEvent>(OnDetailedExamineDoAfter);
-    }
-
-    private void OnGetInteractionVerbs(GetVerbsEvent<InteractionVerb> args)
-    {
     }
 
     public bool TryStartDetailedExamine(EntityUid user, EntityUid target)

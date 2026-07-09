@@ -23,6 +23,12 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
 
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+        UpdateServer(frameTime);
+    }
+
     protected override void ApplyInternalBleed(EntityUid body, EntityUid part, float amount)
     {
         if (amount <= 0f)

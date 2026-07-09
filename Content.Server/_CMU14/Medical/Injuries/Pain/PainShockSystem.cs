@@ -45,6 +45,12 @@ public sealed partial class PainShockSystem : SharedPainShockSystem
         "cmu-medical-pain-relief-3",
     };
 
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+        UpdateServer(frameTime);
+    }
+
     protected override void ApplyShockEntryEffect(EntityUid body)
     {
         _stun.TryKnockdown(body, TimeSpan.FromSeconds(1), refresh: false);

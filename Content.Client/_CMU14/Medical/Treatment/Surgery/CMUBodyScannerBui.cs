@@ -1515,11 +1515,6 @@ public sealed partial class CMUScannerSweepControl : Control
         }
     }
 
-    protected override void FrameUpdate(FrameEventArgs args)
-    {
-        base.FrameUpdate(args);
-    }
-
     protected override void Draw(DrawingHandleScreen handle)
     {
         base.Draw(handle);
@@ -1545,17 +1540,39 @@ public sealed partial class CMUScannerSweepControl : Control
             return;
         }
 
-        DrawPhaseBand(handle, scanRect, _targetPhase, _windowSize, CMUMedicalMachineStyle.Cyan.WithAlpha(active ? 0.9f : 0.34f), previewScale);
+        if (active)
+        {
+            DrawPhaseBand(handle,
+                scanRect,
+                _targetPhase,
+                _windowSize,
+                CMUMedicalMachineStyle.Cyan.WithAlpha(0.9f),
+                previewScale);
 
-        var phase = CurrentPhase();
-        var y = scanRect.Top + scanRect.Height * phase;
-        var lineColor = active ? CMUMedicalMachineStyle.Text : CMUMedicalMachineStyle.Dim;
-        var lineOverhang = 3f * previewScale;
-        var markerWidth = 3f * previewScale;
-        var markerHalfHeight = 2f * previewScale;
-        handle.DrawLine(new Vector2(scanRect.Left - lineOverhang, y), new Vector2(scanRect.Right + lineOverhang, y), lineColor);
-        handle.DrawRect(new UIBox2(scanRect.Left - lineOverhang - markerWidth, y - markerHalfHeight, scanRect.Left - lineOverhang, y + markerHalfHeight), lineColor);
-        handle.DrawRect(new UIBox2(scanRect.Right + lineOverhang, y - markerHalfHeight, scanRect.Right + lineOverhang + markerWidth, y + markerHalfHeight), lineColor);
+            var phase = CurrentPhase();
+            var y = scanRect.Top + scanRect.Height * phase;
+            var lineOverhang = 3f * previewScale;
+            var markerWidth = 3f * previewScale;
+            var markerHalfHeight = 2f * previewScale;
+            handle.DrawLine(
+                new Vector2(scanRect.Left - lineOverhang, y),
+                new Vector2(scanRect.Right + lineOverhang, y),
+                CMUMedicalMachineStyle.Text);
+            handle.DrawRect(
+                new UIBox2(
+                    scanRect.Left - lineOverhang - markerWidth,
+                    y - markerHalfHeight,
+                    scanRect.Left - lineOverhang,
+                    y + markerHalfHeight),
+                CMUMedicalMachineStyle.Text);
+            handle.DrawRect(
+                new UIBox2(
+                    scanRect.Right + lineOverhang,
+                    y - markerHalfHeight,
+                    scanRect.Right + lineOverhang + markerWidth,
+                    y + markerHalfHeight),
+                CMUMedicalMachineStyle.Text);
+        }
 
         if (feedbackActive)
         {

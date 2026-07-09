@@ -11,7 +11,6 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
-using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -21,7 +20,6 @@ public abstract partial class SharedLungsSystem : EntitySystem
 {
     [Dependency] protected IConfigurationManager Cfg = default!;
     [Dependency] protected IGameTiming Timing = default!;
-    [Dependency] protected INetManager Net = default!;
     [Dependency] protected SharedBodySystem Body = default!;
     [Dependency] protected DamageableSystem Damageable = default!;
     [Dependency] protected SharedStatusEffectsSystem Status = default!;
@@ -115,13 +113,8 @@ public abstract partial class SharedLungsSystem : EntitySystem
         args.Multiplier *= best;
     }
 
-    public override void Update(float frameTime)
+    protected void UpdateServer(float frameTime)
     {
-        base.Update(frameTime);
-
-        if (Net.IsClient)
-            return;
-
         if (!_medicalEnabled || !_organEnabled)
             return;
 

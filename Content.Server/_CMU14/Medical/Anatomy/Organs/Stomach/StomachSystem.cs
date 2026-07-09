@@ -8,6 +8,12 @@ public sealed partial class StomachSystem : SharedStomachSystem
 {
     [Dependency] private VomitSystem _vomit = default!;
 
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+        UpdateServer(frameTime);
+    }
+
     protected override void ApplyVomit(EntityUid body)
     {
         _vomit.Vomit(body, -20f, -20f);

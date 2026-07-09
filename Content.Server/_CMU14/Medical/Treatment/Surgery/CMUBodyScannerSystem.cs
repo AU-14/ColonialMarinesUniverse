@@ -120,7 +120,7 @@ public sealed partial class CMUBodyScannerSystem : EntitySystem
 
     private void RefreshUi(EntityUid console, CMUBodyScannerConsoleComponent comp, EntityUid? viewer = null)
     {
-        if (!_ui.HasUi(console, CMUBodyScannerUIKey.Key))
+        if (!_ui.IsUiOpen(console, CMUBodyScannerUIKey.Key))
             return;
 
         if (viewer is not { } validViewer || !validViewer.IsValid())

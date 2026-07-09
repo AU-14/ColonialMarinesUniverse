@@ -56,46 +56,47 @@ public sealed partial class CMUMedicalFieldMixingSystem : EntitySystem
 
     public IReadOnlyList<CMUMedicalFieldCraftingOption> GetCraftableOptions(EntityUid user)
     {
-        var options = new List<CMUMedicalFieldCraftingOption>();
-        var seen = new HashSet<(CMUFieldTreatmentFamily Family, CMUFieldTreatmentBaseKind BaseKind)>();
         var items = _itemDiscovery.GetAccessibleItems(user);
+        var options = new List<CMUMedicalFieldCraftingOption>(items.Count);
+        var seen = new HashSet<(CMUFieldTreatmentFamily Family, CMUFieldTreatmentBaseKind BaseKind)>(items.Count);
+        var ingredients = new List<AccessibleIngredient>(items.Count);
+        var bases = new List<AccessibleBase>(items.Count);
 
-        foreach (var ingredientUid in items)
+        foreach (var item in items)
         {
-            if (!TryComp<CMUMedicalIngredientComponent>(ingredientUid, out var ingredient) ||
-                !TryComp<StackComponent>(ingredientUid, out var ingredientStack))
-            {
+            if (!TryComp<StackComponent>(item, out var stack))
                 continue;
+
+            if (TryComp<CMUMedicalIngredientComponent>(item, out var ingredient))
+            {
+                var ingredientCost = ResolveIngredientUnitCost(_skills.GetSkill(user, ingredient.Skill));
+                if (stack.Count >= ingredientCost)
+                    ingredients.Add(new AccessibleIngredient(ingredient, ingredientCost));
             }
 
-            var ingredientCost = ResolveIngredientUnitCost(_skills.GetSkill(user, ingredient.Skill));
-            if (ingredientStack.Count < ingredientCost)
-                continue;
+            if (stack.Count >= 1 && TryComp<CMUMedicalMixingBaseComponent>(item, out var mixingBase))
+                bases.Add(new AccessibleBase(mixingBase, stack));
+        }
 
-            foreach (var baseUid in items)
+        foreach (var ingredient in ingredients)
+        {
+            foreach (var baseItem in bases)
             {
-                if (!TryComp<CMUMedicalMixingBaseComponent>(baseUid, out var mixingBase) ||
-                    !TryComp<StackComponent>(baseUid, out var baseStack) ||
-                    baseStack.Count < 1)
+                if (!IsAllowedRecipe(ingredient.Component, baseItem.Component, baseItem.Stack) ||
+                    !TryGetProduct(ingredient.Component, baseItem.Component.Kind, out var product))
                 {
                     continue;
                 }
 
-                if (!IsAllowedRecipe(ingredient, mixingBase, baseStack) ||
-                    !TryGetProduct(ingredient, mixingBase.Kind, out var product))
-                {
-                    continue;
-                }
-
-                var key = (ingredient.Family, mixingBase.Kind);
+                var key = (ingredient.Component.Family, baseItem.Component.Kind);
                 if (!seen.Add(key))
                     continue;
 
                 options.Add(new CMUMedicalFieldCraftingOption(
-                    ingredient.Family,
-                    mixingBase.Kind,
+                    ingredient.Component.Family,
+                    baseItem.Component.Kind,
                     product,
-                    ingredientCost));
+                    ingredient.Cost));
             }
         }
 
@@ -127,15 +128,21 @@ public sealed partial class CMUMedicalFieldMixingSystem : EntitySystem
         if (!CanUseFieldCraftingMenu(user) || !_actionBlocker.CanInteract(user, null))
             return false;
 
+        var isOpen = _ui.IsUiOpen(user, CMUMedicalFieldCraftingUI.Key);
         var options = GetCraftableOptions(user);
         if (options.Count == 0)
         {
+            if (isOpen)
+                _ui.CloseUi(user, CMUMedicalFieldCraftingUI.Key, user);
+
             _popup.PopupEntity(Loc.GetString("cmu-field-treatment-no-craft-options"), user, user);
             return false;
         }
 
         _ui.SetUiState(user, CMUMedicalFieldCraftingUI.Key, new CMUMedicalFieldCraftingBuiState(new List<CMUMedicalFieldCraftingOption>(options)));
-        _ui.OpenUi(user, CMUMedicalFieldCraftingUI.Key, user);
+        if (!isOpen)
+            _ui.OpenUi(user, CMUMedicalFieldCraftingUI.Key, user);
+
         return true;
     }
 
@@ -323,4 +330,12 @@ public sealed partial class CMUMedicalFieldMixingSystem : EntitySystem
                mixingBase.Kind == CMUFieldTreatmentBaseKind.TraumaDressing &&
                baseStack.StackTypeId == PackedTraumaDressingStack;
     }
+
+    private readonly record struct AccessibleIngredient(
+        CMUMedicalIngredientComponent Component,
+        int Cost);
+
+    private readonly record struct AccessibleBase(
+        CMUMedicalMixingBaseComponent Component,
+        StackComponent Stack);
 }

@@ -1,3 +1,5 @@
+using System.Collections.Frozen;
+using System.Collections.Generic;
 using Content.Client.Damage;
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Presentation.Visuals;
@@ -79,6 +81,12 @@ public sealed partial class CMUMedicalOverlayVisualsSystem : EntitySystem
     private static readonly string[] LFootStates = ["gauze_l_foot", "splint_l_foot"];
     private static readonly string[] RFootStates = ["gauze_r_foot", "splint_r_foot"];
 
+    private static readonly FrozenDictionary<DamageOverlayMapKey, string> DamageMapKeys = CreateDamageMapKeys();
+    private static readonly FrozenDictionary<TreatmentOverlayMapKey, string> TreatmentMapKeys = CreateTreatmentMapKeys();
+    private static readonly string[] AllOverlayMapKeys = CreateAllOverlayMapKeys();
+
+    private readonly List<DesiredOverlay> _desiredOverlays = new(AllOverlayMapKeys.Length);
+    private readonly HashSet<string> _desiredOverlayKeys = new(AllOverlayMapKeys.Length, StringComparer.Ordinal);
     private readonly HashSet<EntityUid> _queuedBodies = new();
 
     public override void Initialize()
@@ -138,26 +146,26 @@ public sealed partial class CMUMedicalOverlayVisualsSystem : EntitySystem
 
         Entity<SpriteComponent> bodySprite = (body, sprite);
         DisableAggregateDamageVisuals(bodySprite);
-        ClearOverlayLayers(bodySprite);
+        _desiredOverlays.Clear();
+        _desiredOverlayKeys.Clear();
 
-        if (!TryComp<CMUMedicalOverlayVisualsComponent>(body, out var medicalVisuals) || medicalVisuals.Parts.Count == 0)
-            return;
-
-        var insertIndex = GetOverlayInsertIndex(bodySprite);
-        foreach (var part in medicalVisuals.Parts)
+        if (TryComp<CMUMedicalOverlayVisualsComponent>(body, out var medicalVisuals))
         {
-            if (!_sprite.LayerMapTryGet(bodySprite.AsNullable(), part.Layer, out _, false))
-                continue;
+            foreach (var part in medicalVisuals.Parts)
+            {
+                if (!_sprite.LayerMapTryGet(bodySprite.AsNullable(), part.Layer, out _, false))
+                    continue;
 
-            AddDamageOverlays(bodySprite, ref insertIndex, part);
-            AddTreatmentOverlays(bodySprite, ref insertIndex, part);
+                AddDamageOverlays(part);
+                AddTreatmentOverlays(part);
+            }
         }
+
+        RemoveStaleOverlayLayers(bodySprite);
+        ApplyDesiredOverlays(bodySprite);
     }
 
-    private void AddDamageOverlays(
-        Entity<SpriteComponent> body,
-        ref int? insertIndex,
-        CMUMedicalOverlayPartVisual part)
+    private void AddDamageOverlays(CMUMedicalOverlayPartVisual part)
     {
         foreach (var kind in DamageOverlayOrder)
         {
@@ -171,14 +179,11 @@ public sealed partial class CMUMedicalOverlayVisualsSystem : EntitySystem
             if (!TryGetDamageOverlayState(part.Layer, kind, level, out var rsi, out var state, out var color))
                 continue;
 
-            AddOverlay(body, ref insertIndex, DamageOverlayKey(part.Layer, kind), rsi, state, out _, color);
+            AddDesiredOverlay(DamageOverlayKey(part.Layer, kind), rsi, state, color);
         }
     }
 
-    private void AddTreatmentOverlays(
-        Entity<SpriteComponent> body,
-        ref int? insertIndex,
-        CMUMedicalOverlayPartVisual part)
+    private void AddTreatmentOverlays(CMUMedicalOverlayPartVisual part)
     {
         foreach (var kind in TreatmentOverlayOrder)
         {
@@ -195,7 +200,7 @@ public sealed partial class CMUMedicalOverlayVisualsSystem : EntitySystem
             if (!TryGetTreatmentOverlayState(part.VariantSeed, part.Layer, kind, out var state))
                 continue;
 
-            AddOverlay(body, ref insertIndex, TreatmentOverlayKey(part.Layer, kind), TreatmentOverlays, state, out _);
+            AddDesiredOverlay(TreatmentOverlayKey(part.Layer, kind), TreatmentOverlays, state);
         }
     }
 
@@ -230,52 +235,92 @@ public sealed partial class CMUMedicalOverlayVisualsSystem : EntitySystem
         }
     }
 
-    private void ClearOverlayLayers(Entity<SpriteComponent> body)
+    private void AddDesiredOverlay(string mapKey, ResPath rsi, string state, Color? color = null)
+    {
+        if (!_desiredOverlayKeys.Add(mapKey))
+            return;
+
+        _desiredOverlays.Add(new DesiredOverlay(mapKey, rsi, state, color));
+    }
+
+    private void RemoveStaleOverlayLayers(Entity<SpriteComponent> body)
     {
         var bodySprite = body.AsNullable();
-        foreach (var layer in DamageOverlayLayers)
+        foreach (var mapKey in AllOverlayMapKeys)
         {
-            _sprite.RemoveLayer(bodySprite, DamageOverlayKey(layer, DamageOverlayKind.Brute), false);
-            _sprite.RemoveLayer(bodySprite, DamageOverlayKey(layer, DamageOverlayKind.Burn), false);
-        }
-
-        foreach (var layer in TreatmentOverlayLayers)
-        {
-            _sprite.RemoveLayer(bodySprite, TreatmentOverlayKey(layer, TreatmentOverlayKind.Bandage), false);
-            _sprite.RemoveLayer(bodySprite, TreatmentOverlayKey(layer, TreatmentOverlayKind.Splint), false);
+            if (!_desiredOverlayKeys.Contains(mapKey))
+                _sprite.RemoveLayer(bodySprite, mapKey, false);
         }
     }
 
-    private int? GetOverlayInsertIndex(Entity<SpriteComponent> body)
+    private void ApplyDesiredOverlays(Entity<SpriteComponent> body)
     {
-        return _sprite.LayerMapTryGet(body.AsNullable(), HumanoidVisualLayers.Handcuffs, out var index, false)
-            ? index
+        var bodySprite = body.AsNullable();
+        var insertIndex = GetOverlayStartIndex(body);
+        // Desired overlays are built in deterministic render order. Stale layers are
+        // removed first, so new layers can be inserted without rebuilding unchanged ones.
+        foreach (var overlay in _desiredOverlays)
+        {
+            var applied = true;
+            if (_sprite.LayerMapTryGet(bodySprite, overlay.MapKey, out var layerIndex, false))
+            {
+                if (insertIndex is { } expectedIndex && layerIndex != expectedIndex)
+                {
+                    _sprite.RemoveLayer(bodySprite, overlay.MapKey, false);
+                    applied = AddOverlay(body, expectedIndex, overlay);
+                }
+                else
+                {
+                    _sprite.LayerSetRsiState(bodySprite, layerIndex, overlay.State);
+                    if (overlay.Color is { } layerColor)
+                        _sprite.LayerSetColor(bodySprite, layerIndex, layerColor);
+                }
+            }
+            else
+            {
+                applied = AddOverlay(body, insertIndex, overlay);
+            }
+
+            if (insertIndex is not null && applied)
+                insertIndex++;
+        }
+    }
+
+    private int? GetOverlayStartIndex(Entity<SpriteComponent> body)
+    {
+        var bodySprite = body.AsNullable();
+        int? startIndex = null;
+        foreach (var overlay in _desiredOverlays)
+        {
+            if (!_sprite.LayerMapTryGet(bodySprite, overlay.MapKey, out var layerIndex, false))
+                continue;
+
+            if (startIndex is null || layerIndex < startIndex)
+                startIndex = layerIndex;
+        }
+
+        if (startIndex is not null)
+            return startIndex;
+
+        return _sprite.LayerMapTryGet(bodySprite, HumanoidVisualLayers.Handcuffs, out var handcuffsIndex, false)
+            ? handcuffsIndex
             : null;
     }
 
-    private bool AddOverlay(
-        Entity<SpriteComponent> body,
-        ref int? index,
-        string key,
-        ResPath rsi,
-        string state,
-        out int layerIndex,
-        Color? color = null)
+    private bool AddOverlay(Entity<SpriteComponent> body, int? index, DesiredOverlay overlay)
     {
-        layerIndex = _sprite.AddLayer(
+        var bodySprite = body.AsNullable();
+        var layerIndex = _sprite.AddLayer(
             body.AsNullable(),
-            new SpriteSpecifier.Rsi(rsi, state),
+            new SpriteSpecifier.Rsi(overlay.Rsi, overlay.State),
             index);
 
         if (layerIndex < 0)
             return false;
 
-        _sprite.LayerMapSet(body.AsNullable(), key, layerIndex);
-        if (color is { } layerColor)
-            _sprite.LayerSetColor(body.AsNullable(), layerIndex, layerColor);
-
-        if (index is not null)
-            index++;
+        _sprite.LayerMapSet(bodySprite, overlay.MapKey, layerIndex);
+        if (overlay.Color is { } layerColor)
+            _sprite.LayerSetColor(bodySprite, layerIndex, layerColor);
 
         return true;
     }
@@ -386,13 +431,76 @@ public sealed partial class CMUMedicalOverlayVisualsSystem : EntitySystem
 
     private static string DamageOverlayKey(HumanoidVisualLayers layer, DamageOverlayKind kind)
     {
-        return $"cmu-medical-damage-{kind}-{layer}";
+        return DamageMapKeys[new DamageOverlayMapKey(layer, kind)];
     }
 
     private static string TreatmentOverlayKey(HumanoidVisualLayers layer, TreatmentOverlayKind kind)
     {
-        return $"cmu-medical-treatment-{kind}-{layer}";
+        return TreatmentMapKeys[new TreatmentOverlayMapKey(layer, kind)];
     }
+
+    private static FrozenDictionary<DamageOverlayMapKey, string> CreateDamageMapKeys()
+    {
+        var keys = new Dictionary<DamageOverlayMapKey, string>(
+            DamageOverlayLayers.Length * DamageOverlayOrder.Length);
+        foreach (var layer in DamageOverlayLayers)
+        {
+            foreach (var kind in DamageOverlayOrder)
+            {
+                keys.Add(
+                    new DamageOverlayMapKey(layer, kind),
+                    $"cmu-medical-damage-{kind}-{layer}");
+            }
+        }
+
+        return keys.ToFrozenDictionary();
+    }
+
+    private static FrozenDictionary<TreatmentOverlayMapKey, string> CreateTreatmentMapKeys()
+    {
+        var keys = new Dictionary<TreatmentOverlayMapKey, string>(
+            TreatmentOverlayLayers.Length * TreatmentOverlayOrder.Length);
+        foreach (var layer in TreatmentOverlayLayers)
+        {
+            foreach (var kind in TreatmentOverlayOrder)
+            {
+                keys.Add(
+                    new TreatmentOverlayMapKey(layer, kind),
+                    $"cmu-medical-treatment-{kind}-{layer}");
+            }
+        }
+
+        return keys.ToFrozenDictionary();
+    }
+
+    private static string[] CreateAllOverlayMapKeys()
+    {
+        var keys = new string[DamageMapKeys.Count + TreatmentMapKeys.Count];
+        var index = 0;
+        foreach (var layer in DamageOverlayLayers)
+        {
+            foreach (var kind in DamageOverlayOrder)
+            {
+                keys[index++] = DamageOverlayKey(layer, kind);
+            }
+        }
+
+        foreach (var layer in TreatmentOverlayLayers)
+        {
+            foreach (var kind in TreatmentOverlayOrder)
+            {
+                keys[index++] = TreatmentOverlayKey(layer, kind);
+            }
+        }
+
+        return keys;
+    }
+
+    private readonly record struct DesiredOverlay(string MapKey, ResPath Rsi, string State, Color? Color);
+
+    private readonly record struct DamageOverlayMapKey(HumanoidVisualLayers Layer, DamageOverlayKind Kind);
+
+    private readonly record struct TreatmentOverlayMapKey(HumanoidVisualLayers Layer, TreatmentOverlayKind Kind);
 
     private enum DamageOverlayKind : byte
     {

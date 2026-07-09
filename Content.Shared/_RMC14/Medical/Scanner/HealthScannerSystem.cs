@@ -22,7 +22,6 @@ using Content.Shared.Storage.EntitySystems;
 using Content.Shared.Timing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
-using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Medical.Scanner;
 
@@ -39,13 +38,15 @@ public sealed partial class HealthScannerSystem : EntitySystem
     [Dependency] private RMCUnrevivableSystem _rmcUnrevivable = default!;
     [Dependency] private SharedRottingSystem _rotting = default!;
     [Dependency] private SkillsSystem _skills = default!;
-    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private UseDelaySystem _useDelay = default!;
     [Dependency] private MobStateSystem _mob = default!;
     [Dependency] private MobThresholdSystem _thresholds = default!;
     [Dependency] private SharedWoundsSystem _wounds = default!;
+
+    private const float UiUpdateInterval = 1f;
+    private float _uiUpdateAccumulator;
 
     public override void Initialize()
     {
@@ -68,7 +69,7 @@ public sealed partial class HealthScannerSystem : EntitySystem
         var doAfter = new DoAfterArgs(EntityManager, args.User, delay, ev, scanner, target, scanner)
         {
             BreakOnMove = true,
-            AttemptFrequency = AttemptFrequency.EveryTick
+            AttemptFrequency = AttemptFrequency.StartAndEnd
         };
 
         if (delay > TimeSpan.Zero)
@@ -108,7 +109,6 @@ public sealed partial class HealthScannerSystem : EntitySystem
             _useDelay.TryResetDelay((scanner, useDelay));
 
         scanner.Comp.Target = target;
-        Dirty(scanner);
 
         _audio.PlayPredicted(scanner.Comp.Sound, scanner, args.User);
         UpdateUI(scanner);
@@ -324,15 +324,18 @@ public sealed partial class HealthScannerSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        var time = _timing.CurTime;
+        _uiUpdateAccumulator += frameTime;
+        if (_uiUpdateAccumulator < UiUpdateInterval)
+            return;
+
+        _uiUpdateAccumulator = 0f;
         var scanners = EntityQueryEnumerator<HealthScannerComponent>();
-        while (scanners.MoveNext(out var uid, out var active))
+        while (scanners.MoveNext(out var uid, out var scanner))
         {
-            if (time < active.UpdateAt)
+            if (!_ui.IsUiOpen(uid, HealthScannerUIKey.Key))
                 continue;
 
-            active.UpdateAt = time + active.UpdateCooldown;
-            UpdateUI((uid, active));
+            UpdateUI((uid, scanner));
         }
     }
 }

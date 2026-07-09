@@ -452,7 +452,7 @@ public sealed class CMUMedicalFieldMixingTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(treated, Is.EqualTo(1));
-                    Assert.That(wounds.TreatmentQualities[bulletIndex], Is.EqualTo(WoundTreatmentQuality.Adequate));
+                    Assert.That(wounds.TreatmentQualities[bulletIndex], Is.EqualTo(WoundTreatmentQuality.Optimal));
                     Assert.That(wounds.Cleanup[bulletIndex], Is.EqualTo(WoundCleanupFlags.None));
                     Assert.That(wounds.TreatmentQualities[slashIndex], Is.EqualTo(WoundTreatmentQuality.Untreated));
                     Assert.That(wounds.Wounds[slashIndex].Treated, Is.False);

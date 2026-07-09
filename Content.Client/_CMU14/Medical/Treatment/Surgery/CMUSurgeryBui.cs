@@ -73,7 +73,6 @@ public sealed partial class CMUSurgeryBui : BoundUserInterface
 
         RefreshInProgressPanel(state);
         RefreshPartStack(state);
-        _window.ApplyUniformScale(true);
     }
 
     private void RefreshInProgressPanel(CMUSurgeryBuiState state)

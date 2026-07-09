@@ -54,6 +54,7 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
 
         SubscribeLocalEvent<CMULimbPrinterComponent, EntInsertedIntoContainerMessage>(OnContainerChanged);
         SubscribeLocalEvent<CMULimbPrinterComponent, EntRemovedFromContainerMessage>(OnContainerChanged);
+        SubscribeLocalEvent<CMULimbPrinterComponent, ComponentShutdown>(OnPrinterShutdown);
     }
 
     public override void Update(float frameTime)
@@ -61,11 +62,14 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
         base.Update(frameTime);
 
         var now = _timing.CurTime;
-        var query = EntityQueryEnumerator<CMULimbPrinterComponent>();
-        while (query.MoveNext(out var uid, out var comp))
+        var workingQuery = EntityQueryEnumerator<CMULimbPrinterWorkingComponent, CMULimbPrinterComponent>();
+        while (workingQuery.MoveNext(out var uid, out _, out var comp))
         {
-            var working = comp.WorkingUntil > now;
-            _appearance.SetData(uid, CMULimbPrinterVisuals.Working, working);
+            if (comp.WorkingUntil > now)
+                continue;
+
+            _appearance.SetData(uid, CMULimbPrinterVisuals.Working, false);
+            RemCompDeferred<CMULimbPrinterWorkingComponent>(uid);
         }
 
         _uiAccumulator += frameTime;
@@ -73,7 +77,7 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
             return;
 
         _uiAccumulator = 0f;
-        query = EntityQueryEnumerator<CMULimbPrinterComponent>();
+        var query = EntityQueryEnumerator<CMULimbPrinterComponent>();
         while (query.MoveNext(out var uid, out var comp))
             RefreshUi(uid, comp);
     }
@@ -86,6 +90,11 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
     private void OnContainerChanged<T>(Entity<CMULimbPrinterComponent> ent, ref T args)
     {
         RefreshUi(ent.Owner, ent.Comp);
+    }
+
+    private void OnPrinterShutdown(Entity<CMULimbPrinterComponent> ent, ref ComponentShutdown args)
+    {
+        RemCompDeferred<CMULimbPrinterWorkingComponent>(ent.Owner);
     }
 
     private void OnEjectBeaker(Entity<CMULimbPrinterComponent> ent, ref CMULimbPrinterEjectBeakerMessage msg)
@@ -130,6 +139,7 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
         _transform.PlaceNextTo(limb, ent.Owner);
 
         ent.Comp.WorkingUntil = _timing.CurTime + TimeSpan.FromSeconds(1.2);
+        EnsureComp<CMULimbPrinterWorkingComponent>(ent.Owner);
         _appearance.SetData(ent.Owner, CMULimbPrinterVisuals.Working, true);
         _audio.PlayPvs(PrintSound, ent.Owner);
         _popup.PopupEntity(Loc.GetString("cmu-limb-printer-printed", ("limb", limbName)), ent.Owner, msg.Actor);
@@ -251,6 +261,9 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
 
     private void RefreshUi(EntityUid uid, CMULimbPrinterComponent comp)
     {
+        if (!_ui.IsUiOpen(uid, CMULimbPrinterUIKey.Key))
+            return;
+
         var organicCanPrint = TryCanPrint(uid, comp, CMULimbPrinterPrintKind.Organic, out var organicReason);
         var roboticCanPrint = TryCanPrint(uid, comp, CMULimbPrinterPrintKind.Robotic, out var roboticReason);
         var status = organicCanPrint || roboticCanPrint

@@ -450,13 +450,8 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
         RaiseLocalEvent(ref ev);
     }
 
-    public override void Update(float frameTime)
+    protected void UpdateServer(float frameTime)
     {
-        base.Update(frameTime);
-
-        if (Net.IsClient)
-            return;
-
         if (!IsLayerEnabled())
             return;
 

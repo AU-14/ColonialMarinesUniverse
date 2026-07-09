@@ -126,8 +126,11 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
             args.TargetSlots = SlotsForPart(resolve.ResolvedPart);
         }
 
-        ent.Comp.NextHitOverride = null;
-        Dirty(ent);
+        if (ent.Comp.NextHitOverride is not null)
+        {
+            ent.Comp.NextHitOverride = null;
+            Dirty(ent);
+        }
     }
 
     private (BodyPartType? Forced, BodyPartSymmetry? Symmetry, TargetBodyZone? Zone) ResolveForcedSource(

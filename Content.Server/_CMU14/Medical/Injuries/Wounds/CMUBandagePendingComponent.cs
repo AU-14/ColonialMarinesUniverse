@@ -1,15 +1,15 @@
 using Content.Shared.FixedPoint;
-using Robust.Shared.GameStates;
+using Content.Shared._CMU14.Medical.Injuries.Wounds;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Wounds;
+namespace Content.Server._CMU14.Medical.Injuries.Wounds;
 
 /// <summary>
 ///     Transient routing handle for the bandage picker BUI. Carries the
 ///     patient + treater context because the
-///     <see cref="BodyPartPickerSelectMessage"/> only carries the picked
-///     part. Server-only.
+///     <see cref="BodyPartPickerSelectMessage"/> only carries the picked part.
+///     Server-only.
 /// </summary>
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent]
 public sealed partial class CMUBandagePendingComponent : Component
 {
     [DataField]

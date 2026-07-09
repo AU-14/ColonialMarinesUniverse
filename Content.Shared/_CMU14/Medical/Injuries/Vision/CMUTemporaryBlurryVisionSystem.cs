@@ -12,6 +12,9 @@ public sealed partial class CMUTemporaryBlurryVisionSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private INetManager _net = default!;
 
+    private const float BlurScanInterval = 1f;
+    private float _blurScanAccumulator;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -78,6 +81,11 @@ public sealed partial class CMUTemporaryBlurryVisionSystem : EntitySystem
         if (_net.IsClient)
             return;
 
+        _blurScanAccumulator += frameTime;
+        if (_blurScanAccumulator < BlurScanInterval)
+            return;
+
+        _blurScanAccumulator = 0f;
         var now = _timing.CurTime;
         var query = EntityQueryEnumerator<CMUTemporaryBlurryVisionComponent>();
         while (query.MoveNext(out var uid, out var blur))

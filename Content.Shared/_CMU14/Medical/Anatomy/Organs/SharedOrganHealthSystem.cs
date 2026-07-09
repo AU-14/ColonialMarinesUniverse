@@ -16,7 +16,6 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Body.Organ;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
-using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -28,7 +27,6 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
 {
     [Dependency] protected IConfigurationManager Cfg = default!;
     [Dependency] protected IGameTiming Timing = default!;
-    [Dependency] protected INetManager Net = default!;
     [Dependency] protected IPrototypeManager Proto = default!;
     [Dependency] protected IRobustRandom Random = default!;
     [Dependency] protected RMCUnrevivableSystem Unrevivable = default!;
@@ -408,13 +406,8 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
         return result;
     }
 
-    public override void Update(float frameTime)
+    protected void UpdateServer(float frameTime)
     {
-        base.Update(frameTime);
-
-        if (Net.IsClient)
-            return;
-
         if (!_medicalEnabled || !_organEnabled)
             return;
 

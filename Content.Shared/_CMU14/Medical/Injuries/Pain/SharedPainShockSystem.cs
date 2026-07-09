@@ -245,13 +245,8 @@ public abstract partial class SharedPainShockSystem : EntitySystem
             Dirty(body, pain);
     }
 
-    public override void Update(float frameTime)
+    protected void UpdateServer(float frameTime)
     {
-        base.Update(frameTime);
-
-        if (Net.IsClient)
-            return;
-
         if (!IsLayerEnabled())
             return;
 
@@ -521,7 +516,6 @@ public abstract partial class SharedPainShockSystem : EntitySystem
             pain.Pain + amount * (FixedPoint2)GetAccumulationMultiplier(body));
         pain.NextUpdate = TimeSpan.Zero;
         UpdateTier(body, pain, true);
-        Dirty(body, pain);
     }
 
     private void AddPainSuppressionProfile(
@@ -567,7 +561,7 @@ public abstract partial class SharedPainShockSystem : EntitySystem
             if (CMUPainSuppressionResolver.SuppressionImproved(sup, oldAccumulation, oldTier, oldDecay)
                 && (pain.Pain > 0 || pain.PainTarget > 0 || pain.RawTier != PainTier.None))
             {
-                SchedulePainRelief(body, pain);
+                SchedulePainRelief(pain);
             }
         }
     }
@@ -639,14 +633,13 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         return Math.Clamp(pain.Pain.Float() / pain.PainMax.Float(), 0f, 1f);
     }
 
-    private void SchedulePainRelief(EntityUid body, PainShockComponent pain)
+    private void SchedulePainRelief(PainShockComponent pain)
     {
         var now = Timing.CurTime;
         if (pain.NextPainRelief > now)
             return;
 
         pain.NextPainRelief = now + RandomPainReliefDelay();
-        Dirty(body, pain);
     }
 
     private void TryShowPainRelief(EntityUid body, PainShockComponent pain)
@@ -660,13 +653,9 @@ public abstract partial class SharedPainShockSystem : EntitySystem
 
         pain.NextPainRelief = TimeSpan.Zero;
         if (!TryGetPainSuppression(body, out _))
-        {
-            Dirty(body, pain);
             return;
-        }
 
         ApplyPainRelief(body, pain.Tier);
-        Dirty(body, pain);
     }
 
     private void TriggerShockEntry(EntityUid body, PainShockComponent pain)
@@ -685,7 +674,6 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         if (pain.NextShockPulse == TimeSpan.Zero)
         {
             pain.NextShockPulse = now + RandomShockPulseDelay();
-            Dirty(body, pain);
             return;
         }
 

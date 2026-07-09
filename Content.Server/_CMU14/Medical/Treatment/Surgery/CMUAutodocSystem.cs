@@ -699,7 +699,7 @@ public sealed partial class CMUAutodocSystem : EntitySystem
 
     private void RefreshUi(EntityUid console, CMUAutodocConsoleComponent comp, EntityUid? viewer = null)
     {
-        if (!_ui.HasUi(console, CMUAutodocUIKey.Key))
+        if (!_ui.IsUiOpen(console, CMUAutodocUIKey.Key))
             return;
 
         if (viewer is not { } validViewer || !validViewer.IsValid())

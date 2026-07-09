@@ -389,7 +389,48 @@ public sealed class MechanismWoundsFoundationTest
     }
 
     [Test]
-    public async Task OptimalTreatmentRequestFallsBackToNormalTreatedState()
+    public async Task WoundTreatmentOnlyClearsRequestedCleanupFlags()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var partHealth = entMan.System<SharedBodyPartHealthSystem>();
+            var woundsSystem = entMan.System<CMUWoundsSystem>();
+            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+
+            try
+            {
+                var torso = GetBodyPart(entMan, human, BodyPartType.Torso);
+
+                Assert.That(partHealth.TryApplyPartDamage(human, torso, Damage("Slash", 10), impact: DamageImpact.MeleeSlash), Is.True);
+                var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
+                CleanupOf(wounds)[0] = WoundCleanupFlags.PoorClosure | WoundCleanupFlags.DirtyDressing;
+
+                Assert.That(woundsSystem.TryTreatWound(
+                    torso,
+                    out var completed,
+                    cleanupClears: WoundCleanupFlags.DirtyDressing), Is.True);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(completed, Is.True);
+                    Assert.That(wounds.Cleanup[0], Is.EqualTo(WoundCleanupFlags.PoorClosure));
+                });
+            }
+            finally
+            {
+                entMan.DeleteEntity(human);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task OptimalTreatmentRequestPreservesRequestedQuality()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -415,7 +456,7 @@ public sealed class MechanismWoundsFoundationTest
                 {
                     Assert.That(completed, Is.True);
                     Assert.That(wounds.Wounds[0].Treated, Is.True);
-                    Assert.That(wounds.TreatmentQualities[0], Is.EqualTo(WoundTreatmentQuality.Adequate));
+                    Assert.That(wounds.TreatmentQualities[0], Is.EqualTo(WoundTreatmentQuality.Optimal));
                     Assert.That(wounds.Cleanup[0], Is.EqualTo(WoundCleanupFlags.None));
                 });
             }

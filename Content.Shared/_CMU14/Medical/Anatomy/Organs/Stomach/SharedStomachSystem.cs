@@ -6,7 +6,6 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
-using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -17,7 +16,6 @@ public abstract partial class SharedStomachSystem : EntitySystem
 {
     [Dependency] protected IConfigurationManager Cfg = default!;
     [Dependency] protected IGameTiming Timing = default!;
-    [Dependency] protected INetManager Net = default!;
     [Dependency] protected IRobustRandom Random = default!;
     [Dependency] protected SharedStatusEffectsSystem Status = default!;
 
@@ -52,13 +50,8 @@ public abstract partial class SharedStomachSystem : EntitySystem
             Status.TryRemoveStatusEffect(body, Nausea);
     }
 
-    public override void Update(float frameTime)
+    protected void UpdateServer(float frameTime)
     {
-        base.Update(frameTime);
-
-        if (Net.IsClient)
-            return;
-
         if (!_medicalEnabled || !_organEnabled)
             return;
 

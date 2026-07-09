@@ -16,6 +16,12 @@ public sealed partial class BrainSystem : SharedBrainSystem
 
     private static readonly EntProtoId ForcedSleeping = "StatusEffectForcedSleeping";
 
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+        UpdateServer(frameTime);
+    }
+
     /// <summary>
     ///     Server-only because mob-state mutation cannot run on a predicted
     ///     client tick.

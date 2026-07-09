@@ -19,6 +19,12 @@ public sealed partial class LiverSystem : SharedLiverSystem
     // accumulates over many metabolize cycles.
     private static readonly FixedPoint2 BloodstreamDirectAmount = (FixedPoint2)0.05f;
 
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+        UpdateServer(frameTime);
+    }
+
     protected override void ApplyToxin(EntityUid body, EntityUid liver, FixedPoint2 amount)
     {
         if (!_proto.TryIndex(Poison, out _))

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using Content.Client.UserInterface.Controls;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
@@ -14,6 +15,10 @@ namespace Content.Client._CMU14.Medical.Treatment.Surgery;
 [UsedImplicitly]
 public sealed class CMULimbPrinterBui : BoundUserInterface
 {
+    private readonly Dictionary<CMULimbPrinterOptionKey, CMULimbPrinterOptionRow> _optionRows = new();
+    private readonly HashSet<CMULimbPrinterOptionKey> _seenOptionKeys = new();
+    private readonly List<CMULimbPrinterOptionKey> _removedOptionKeys = new();
+
     private CMULimbPrinterWindow? _window;
 
     public CMULimbPrinterBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
@@ -23,6 +28,7 @@ public sealed class CMULimbPrinterBui : BoundUserInterface
     protected override void Open()
     {
         base.Open();
+        ClearOptionRows();
         _window = this.CreateWindow<CMULimbPrinterWindow>();
         _window.Title = Loc.GetString("cmu-limb-printer-window-title");
         _window.EjectBeakerButton.OnPressed += _ => SendMessage(new CMULimbPrinterEjectBeakerMessage());
@@ -75,78 +81,202 @@ public sealed class CMULimbPrinterBui : BoundUserInterface
         _window.EjectSyringeButton.Disabled = state.SyringeName is null;
         _window.EjectMaterialButton.Disabled = state.MaterialName is null;
 
-        _window.LeftList.RemoveAllChildren();
-        _window.RightList.RemoveAllChildren();
+        _seenOptionKeys.Clear();
+        var leftIndex = 0;
+        var rightIndex = 0;
         foreach (var option in state.Options)
         {
+            if (option.Symmetry is not (BodyPartSymmetry.Left or BodyPartSymmetry.Right))
+                continue;
+
+            var key = new CMULimbPrinterOptionKey(option.Kind, option.Type, option.Symmetry);
+            _seenOptionKeys.Add(key);
+
+            if (!_optionRows.TryGetValue(key, out var row))
+            {
+                row = new CMULimbPrinterOptionRow(option, OnOptionPressed);
+                _optionRows.Add(key, row);
+
+                if (option.Symmetry == BodyPartSymmetry.Left)
+                    _window.LeftList.AddChild(row);
+                else if (option.Symmetry == BodyPartSymmetry.Right)
+                    _window.RightList.AddChild(row);
+            }
+            else
+            {
+                row.SetOption(option);
+            }
+
             if (option.Symmetry == BodyPartSymmetry.Left)
-                _window.LeftList.AddChild(BuildOption(option));
+            {
+                if (row.GetPositionInParent() != leftIndex)
+                    row.SetPositionInParent(leftIndex);
+                leftIndex++;
+            }
             else if (option.Symmetry == BodyPartSymmetry.Right)
-                _window.RightList.AddChild(BuildOption(option));
+            {
+                if (row.GetPositionInParent() != rightIndex)
+                    row.SetPositionInParent(rightIndex);
+                rightIndex++;
+            }
+        }
+
+        _removedOptionKeys.Clear();
+        foreach (var (key, _) in _optionRows)
+        {
+            if (!_seenOptionKeys.Contains(key))
+                _removedOptionKeys.Add(key);
+        }
+
+        foreach (var key in _removedOptionKeys)
+        {
+            var row = _optionRows[key];
+            _optionRows.Remove(key);
+            row.Release();
         }
     }
 
-    private Control BuildOption(CMULimbPrinterOption option)
+    private void OnOptionPressed(CMULimbPrinterOption option)
     {
-        var button = new Button
-        {
-            HorizontalExpand = true,
-            MinHeight = 66,
-            Disabled = !option.CanPrint,
-            ToolTip = option.CanPrint ? option.Name : option.DisabledReason,
-        };
+        SendMessage(new CMULimbPrinterPrintMessage(option.Kind, option.Type, option.Symmetry));
+    }
 
-        var row = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            SeparationOverride = 8,
-            Margin = new Thickness(8, 6),
-            HorizontalExpand = true,
-        };
+    private void ClearOptionRows()
+    {
+        foreach (var row in _optionRows.Values)
+            row.Release();
 
-        var icon = new EntityPrototypeView
-        {
-            MinSize = new Vector2(48, 48),
-            Scale = new Vector2(2.2f, 2.2f),
-            Stretch = SpriteView.StretchMode.Fill,
-            VerticalAlignment = Control.VAlignment.Center,
-        };
-        icon.SetPrototype(option.Prototype);
-        row.AddChild(icon);
+        _optionRows.Clear();
+        _seenOptionKeys.Clear();
+        _removedOptionKeys.Clear();
+    }
 
-        var text = new BoxContainer
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+            ClearOptionRows();
+
+        base.Dispose(disposing);
+    }
+
+    private readonly record struct CMULimbPrinterOptionKey(
+        CMULimbPrinterPrintKind Kind,
+        BodyPartType Type,
+        BodyPartSymmetry Symmetry);
+
+    private sealed class CMULimbPrinterOptionRow : Button
+    {
+        private readonly EntityPrototypeView _icon;
+        private readonly Label _nameLabel;
+        private readonly PanelContainer _panel;
+        private readonly Label _statusLabel;
+        private Action<CMULimbPrinterOption>? _onSelected;
+        private CMULimbPrinterOption? _option;
+
+        public CMULimbPrinterOptionRow(
+            CMULimbPrinterOption option,
+            Action<CMULimbPrinterOption> onSelected)
         {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            HorizontalExpand = true,
-            VerticalAlignment = Control.VAlignment.Center,
-        };
-        text.AddChild(new Label
+            _onSelected = onSelected;
+
+            HorizontalExpand = true;
+            MinHeight = 66;
+
+            var row = new BoxContainer
+            {
+                Orientation = BoxContainer.LayoutOrientation.Horizontal,
+                SeparationOverride = 8,
+                Margin = new Thickness(8, 6),
+                HorizontalExpand = true,
+            };
+
+            _icon = new EntityPrototypeView
+            {
+                MinSize = new Vector2(48, 48),
+                Scale = new Vector2(2.2f, 2.2f),
+                Stretch = SpriteView.StretchMode.Fill,
+                VerticalAlignment = Control.VAlignment.Center,
+            };
+            row.AddChild(_icon);
+
+            var text = new BoxContainer
+            {
+                Orientation = BoxContainer.LayoutOrientation.Vertical,
+                HorizontalExpand = true,
+                VerticalAlignment = Control.VAlignment.Center,
+            };
+            _nameLabel = new Label
+            {
+                StyleClasses = { "LabelKeyText" },
+                FontColorOverride = CMUMedicalMachineStyle.Text,
+                ClipText = true,
+            };
+            _statusLabel = new Label
+            {
+                StyleClasses = { "LabelSubText" },
+                ClipText = true,
+            };
+            text.AddChild(_nameLabel);
+            text.AddChild(_statusLabel);
+            row.AddChild(text);
+
+            _panel = CMUMedicalMachineStyle.Wrap(
+                row,
+                CMUMedicalMachineStyle.DeepCardBg,
+                CMUMedicalMachineStyle.Cyan,
+                new Thickness(0),
+                new Thickness(2));
+            AddChild(_panel);
+
+            OnPressed += OnButtonPressed;
+            SetOption(option);
+        }
+
+        public void SetOption(CMULimbPrinterOption option)
         {
-            Text = option.Name,
-            StyleClasses = { "LabelKeyText" },
-            FontColorOverride = CMUMedicalMachineStyle.Text,
-            ClipText = true,
-        });
-        text.AddChild(new Label
-        {
-            Text = option.CanPrint
+            if (_option == option)
+                return;
+
+            var prototypeChanged = _option is null || _option.Prototype != option.Prototype;
+            var availabilityChanged = _option is null || _option.CanPrint != option.CanPrint;
+            _option = option;
+            Disabled = !option.CanPrint;
+            ToolTip = option.CanPrint ? option.Name : option.DisabledReason;
+            if (prototypeChanged)
+                _icon.SetPrototype(option.Prototype);
+            _nameLabel.Text = option.Name;
+            _statusLabel.Text = option.CanPrint
                 ? Loc.GetString("cmu-limb-printer-print-ready")
-                : option.DisabledReason,
-            StyleClasses = { "LabelSubText" },
-            FontColorOverride = option.CanPrint ? CMUMedicalMachineStyle.Cyan : CMUMedicalMachineStyle.Dim,
-            ClipText = true,
-        });
-        row.AddChild(text);
+                : option.DisabledReason;
+            _statusLabel.FontColorOverride = option.CanPrint
+                ? CMUMedicalMachineStyle.Cyan
+                : CMUMedicalMachineStyle.Dim;
 
-        button.AddChild(CMUMedicalMachineStyle.Wrap(
-            row,
-            option.CanPrint ? CMUMedicalMachineStyle.DeepCardBg : CMUMedicalMachineStyle.Surface,
-            option.CanPrint ? CMUMedicalMachineStyle.Cyan : CMUMedicalMachineStyle.MutedBorder,
-            new Thickness(0),
-            new Thickness(2)));
+            if (availabilityChanged)
+            {
+                _panel.PanelOverride = CMUMedicalMachineStyle.Flat(
+                    option.CanPrint ? CMUMedicalMachineStyle.DeepCardBg : CMUMedicalMachineStyle.Surface,
+                    option.CanPrint ? CMUMedicalMachineStyle.Cyan : CMUMedicalMachineStyle.MutedBorder,
+                    new Thickness(2));
+            }
+        }
 
-        button.OnPressed += _ => SendMessage(new CMULimbPrinterPrintMessage(option.Kind, option.Type, option.Symmetry));
-        return button;
+        private void OnButtonPressed(BaseButton.ButtonEventArgs args)
+        {
+            if (_option is { } option)
+                _onSelected?.Invoke(option);
+        }
+
+        public void Release()
+        {
+            OnPressed -= OnButtonPressed;
+            _onSelected = null;
+            _option = null;
+            _icon.SetPrototype(null);
+
+            if (Parent is not null)
+                Orphan();
+        }
     }
 
     private static void SetBar(ProgressBar bar, float value, float max)

@@ -77,7 +77,6 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
         marker.Patient = patient;
         marker.TargetPartType = parts[0].Type;
         marker.TargetSymmetry = parts[0].Symmetry;
-        Dirty(surgeon, marker);
 
         var state = _flowSurgery.BuildBuiState(patient, Name(patient), parts, armed, surgeon);
 
@@ -327,7 +326,6 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
 
         marker.TargetPartType = armedType;
         marker.TargetSymmetry = armedSymmetry;
-        Dirty(medic, marker);
 
         if (_flowSurgery.TryGetMetadata(args.SurgeryId, out var metadata)
             && !_rulebook.HasRequiredSurgerySkill(medic, metadata.MinSkill))

@@ -14,6 +14,12 @@ public sealed partial class KidneysSystem : SharedKidneysSystem
 
     private static readonly ProtoId<DamageTypePrototype> Poison = "Poison";
 
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+        UpdateServer(frameTime);
+    }
+
     protected override void ApplyToxin(EntityUid body, EntityUid kidneys, FixedPoint2 amount)
     {
         if (!_proto.TryIndex(Poison, out _))

@@ -122,9 +122,13 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
             return;
 
         var aim = EnsureComp<CMUAimAccuracyComponent>(body);
-        aim.SwayMultiplier = ComputeAimSwayMultiplier(body);
-        aim.SpreadMultiplier = aim.SwayMultiplier;
-        Dirty(body, aim);
+        var multiplier = ComputeAimSwayMultiplier(body);
+        if (aim.SwayMultiplier != multiplier || aim.SpreadMultiplier != multiplier)
+        {
+            aim.SwayMultiplier = multiplier;
+            aim.SpreadMultiplier = multiplier;
+            Dirty(body, aim);
+        }
 
         Movement.RefreshMovementSpeedModifiers(body);
         RefreshAimDependentWeapons(body);

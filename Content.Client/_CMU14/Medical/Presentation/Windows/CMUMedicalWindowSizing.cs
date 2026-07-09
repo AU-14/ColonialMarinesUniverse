@@ -58,6 +58,9 @@ internal static class CMUMedicalWindowSizing
         if (!IsValidSize(size))
             return;
 
+        if (RememberedSizes.TryGetValue(key, out var remembered) && remembered == size)
+            return;
+
         RememberedSizes[key] = size;
     }
 

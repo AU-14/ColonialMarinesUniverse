@@ -13,7 +13,6 @@ using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
-using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -23,7 +22,6 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
 {
     [Dependency] protected IConfigurationManager Cfg = default!;
     [Dependency] protected IGameTiming Timing = default!;
-    [Dependency] protected INetManager Net = default!;
     [Dependency] protected SharedBodySystem Body = default!;
     [Dependency] protected SharedHitLocationSystem HitLocation = default!;
     [Dependency] protected SharedCMUTraumaSystem Trauma = default!;
@@ -296,13 +294,8 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         remaining -= healed;
     }
 
-    public override void Update(float frameTime)
+    protected void UpdateServer(float frameTime)
     {
-        base.Update(frameTime);
-
-        if (Net.IsClient)
-            return;
-
         if (!_medicalEnabled || !_bodyPartEnabled)
             return;
 

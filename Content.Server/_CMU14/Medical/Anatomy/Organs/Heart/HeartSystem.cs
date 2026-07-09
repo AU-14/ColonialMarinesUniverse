@@ -14,6 +14,12 @@ public sealed partial class HeartSystem : SharedHeartSystem
 
     private static readonly ProtoId<DamageTypePrototype> Asphyxiation = "Asphyxiation";
 
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+        UpdateServer(frameTime);
+    }
+
     protected override void ApplyCardiacArrestAsphyx(EntityUid body, EntityUid heart, FixedPoint2 amount)
     {
         if (!_proto.TryIndex(Asphyxiation, out _))

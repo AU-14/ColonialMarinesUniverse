@@ -1,28 +1,27 @@
 using System.Collections.Generic;
-using Robust.Shared.GameStates;
 
 namespace Content.Shared._CMU14.Medical.Treatment.Surgery;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent]
 public sealed partial class CMUImprovisedSurgeryToolComponent : Component
 {
-    [DataField, AutoNetworkedField]
+    [DataField]
     public float DelayMultiplier = 2f;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public float MishapChance = 0.12f;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public string MishapDamageType = "Slash";
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public float MishapDamageAmount = 3f;
 
     /// <summary>
     ///     Default surgical failure penalty for this improvised tool. Most
     ///     substitutes intentionally stay at 0; bad and awful substitutes opt in.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public int FailurePenalty;
 
     /// <summary>

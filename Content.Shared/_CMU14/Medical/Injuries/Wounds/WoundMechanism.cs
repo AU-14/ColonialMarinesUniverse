@@ -50,6 +50,7 @@ public enum WoundCleanupFlags
     CharredTissue = 1 << 2,
     CrushDebris = 1 << 3,
     DirtyDressing = 1 << 4,
+    All = RetainedFragment | PoorClosure | CharredTissue | CrushDebris | DirtyDressing,
 }
 
 [Serializable, NetSerializable]
