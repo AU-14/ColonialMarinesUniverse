@@ -1,5 +1,6 @@
 using Content.Shared._AU14.Chemistry.Reagents;
 using Content.Shared._AU14.Chemistry.Research;
+using Content.Shared.GameTicking;
 using System;
 using System.Collections.Generic;
 using System.Text;

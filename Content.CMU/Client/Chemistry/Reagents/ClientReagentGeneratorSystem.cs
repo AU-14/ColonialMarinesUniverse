@@ -26,10 +26,12 @@ public sealed partial class ClientReagentGeneratorSystem : SharedReagentGenerato
     {
         base.Initialize();
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnCleanup);
-        SubscribeNetworkEvent<GeneratedReagentDataEvent>(OnRecieveData);
+        SubscribeNetworkEvent<SendReagentDataEvent>(OnRecieveData);
+        SubscribeNetworkEvent<SyncKnownPropertiesEvent>(OnPropertySync);
+        SubscribeNetworkEvent<IdentifyChemicalEvent>(OnChemIdentified);
         _sawmill = _logMan.GetSawmill("reagent");
     }
-    private void OnRecieveData(GeneratedReagentDataEvent args)
+    private void OnRecieveData(SendReagentDataEvent args)
     {
         _sawmill.Info("Recieved reagent data from server.");
         foreach (var reagent in args.Reagents)
@@ -55,6 +57,21 @@ public sealed partial class ClientReagentGeneratorSystem : SharedReagentGenerato
                 _generatedReagents.Remove(generatedReagent);
             }
         }
+        IdentifiedChemicals = args.IdentifiedChemicals;
+        KnownProperties = args.KnownProperties;
+        _lockedDownChems = args.LockedDownChems;
+        ChemicalGenClassesList = args.ChemicalList;
+        _unfoldedConflicts = args.Conflicts;
+        _unfoldedCombinations = args.Combinations;
+    }
+    private void OnPropertySync(SyncKnownPropertiesEvent args)
+    {
+        KnownProperties.Clear();
+        KnownProperties = args.KnownProperties;
+    }
+    private void OnChemIdentified(IdentifyChemicalEvent args)
+    {
+        IdentifiedChemicals.Add(args.Chem, args.Reward);
     }
     private void OnCleanup(RoundRestartCleanupEvent args)
     {
@@ -78,5 +95,10 @@ public sealed partial class ClientReagentGeneratorSystem : SharedReagentGenerato
             }
             DebugTools.Assert(_generatedReagents.Count == 0);
         }
+        IdentifiedChemicals.Clear();
+        KnownProperties.Clear();
+        _lockedDownChems.Clear();
+        ChemicalGenClassesList.Clear();
+        _unfoldedConflicts = UnfoldConflicts();
     }
 }

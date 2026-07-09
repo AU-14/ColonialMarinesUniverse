@@ -1,4 +1,5 @@
 using Content.Server.Administration;
+using Content.Shared._AU14.Chemistry.Research;
 using Content.Shared._CMU14.Chemistry.Reagent;
 using Robust.Shared.Console;
 using Robust.Shared.Prototypes;
@@ -26,6 +27,12 @@ internal sealed partial class PickReagentCommand : LocalizedEntityCommands
 
         if (_research.Selectable.Count > 0)
         {
+            if (int.TryParse(args[0], out int result))
+            {
+                shell.WriteLine($"{_research.Selectable[result].ID} was picked.");
+                _research.PickChem(_research.Selectable[result].ID);
+                return;
+            }
             foreach (var chem in _research.Selectable)
             {
                 if (args[0] == chem.ID)
@@ -79,5 +86,38 @@ internal sealed partial class GetTerminalChemicals : LocalizedEntityCommands
             }
             shell.WriteLine(line.ID + " | " + line.GenTier + " |" + props);
         }
+    }
+}
+
+[AdminCommand(Shared.Administration.AdminFlags.Admin)]
+internal sealed partial class GetTerminalPoints : LocalizedEntityCommands
+{
+    public override string Command =>  "research:getpoints";
+    [Dependency] private ServerResearchDataTerminalSystem _dat = default!;
+    public override void Execute(IConsoleShell shell, string argStr, string[] args)
+    {
+        string clearance = (_dat.Clearance == 6) ? "X" : _dat.Clearance.ToString();
+        shell.WriteLine(_dat.Credits.ToString() + " points at " + clearance + " clearance.");
+    }
+}
+
+[AdminCommand(Shared.Administration.AdminFlags.Admin)]
+internal sealed partial class SetTerminalPoints : LocalizedEntityCommands
+{
+    [Dependency] private SharedResearchDataTerminalSystem _term = default!;
+    public override string Command =>  "research:setpointsclearance";
+    public override void Execute(IConsoleShell shell, string argStr, string[] args)
+    {
+        if (args.Length < 1 || args.Length > 2)
+            shell.WriteError("research:setpointsclearance takes in a minimum of one argument and a maximum of two arguments.");
+        int clearance = -1;
+        if (args.Length == 2)
+        {
+            clearance = Convert.ToInt32(args[1]);
+            if (args[1] == "X")
+                clearance = 6;
+        }
+        int points = Convert.ToInt32(args[0]);
+        _term.UpdateClearance(points, clearance);
     }
 }

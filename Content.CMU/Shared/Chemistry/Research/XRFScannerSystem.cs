@@ -2,13 +2,18 @@ using Content.Shared._AU14.Chemistry.Reagents;
 using Content.Shared._RMC14.Chemistry;
 using Content.Shared._RMC14.DoAfter;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
+using Content.Shared.Paper;
 using Content.Shared.Popups;
 using Robust.Shared.Containers;
+using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using System;
 using System.Collections.Generic;
@@ -16,7 +21,7 @@ using System.Text;
 
 namespace Content.Shared._AU14.Chemistry.Research;
 
-public sealed partial class XRFScannerSystem : EntitySystem
+public abstract partial class XRFScannerSystem : EntitySystem
 {
     [Dependency] private SharedResearchDataTerminalSystem _data = default!;
     [Dependency] private SharedPopupSystem _popups = default!;
@@ -26,8 +31,12 @@ public sealed partial class XRFScannerSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doafter = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private PaperSystem _paper = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private IPrototypeManager _protoman = default!;
+    [Dependency] private MetaDataSystem _mets = default!;
 
-    private int _sample = 1;
     public override void Initialize()
     {
         base.Initialize();
@@ -50,7 +59,7 @@ public sealed partial class XRFScannerSystem : EntitySystem
         _consys.TryGetContainer(ent.Owner, "sample", out var sample);
         if (sample is null)
             return;
-        if (!TryComp<VialComponent>(args.Used, out var vial))
+        if (!TryComp<VialComponent>(args.Used, out _))
         {
             _popups.PopupClient(Loc.GetString("research-xrf-scanner-only-vials"), args.User);
             return;
@@ -62,6 +71,7 @@ public sealed partial class XRFScannerSystem : EntitySystem
         }
         if (_consys.Insert(args.Used, sample))
         {
+            _appearance.SetData(ent.Owner, XRFScannerVisuals.State, XRFScannerState.Sample);
             _popups.PopupClient(Loc.GetString("research-xrf-scanner-config"), args.User);
             var dargs = new DoAfterArgs(EntityManager, args.User, 1, new XRFDoAfterEvent(), args.Target, args.Target, args.Target)
             {
@@ -87,30 +97,68 @@ public sealed partial class XRFScannerSystem : EntitySystem
             return;
         }
         ent.Comp.Processing = true;
-        Timer.Spawn(ent.Comp.Inefficiency, () =>
+        _solutions.TryGetSolution(sample.ContainedEntities[0], "beaker", out var solution);
+        if (solution is not null)
         {
-            if (sample.Count == 0)
+            if (solution.Value.Comp.Solution.Volume < 30 || solution.Value.Comp.Solution.Contents.Count > 1)
             {
-                PrintResult(ent, false, Loc.GetString("research-xrf-sample-missing"));
-                _sample++;
-                return;
+                _appearance.SetData(ent.Owner, XRFScannerVisuals.State, XRFScannerState.Error);
             }
-            if (_solutions.TryGetSolution(sample.ContainedEntities[0], null, out var solution) &&
-            (solution is null || solution.Value.Comp.Solution.Volume == FixedPoint2.Zero))
+            else
             {
-                PrintResult(ent, false, Loc.GetString("research-xrf-sample-empty"));
-                _sample++;
-                return;
+                _appearance.SetData(ent.Owner, XRFScannerVisuals.State, XRFScannerState.Processing);
             }
-            if (solution is null)
-                return;
-            if (solution.Value.Comp.Solution.Volume < 30)
+        }
+        else
+        {
+            _appearance.SetData(ent.Owner, XRFScannerVisuals.State, XRFScannerState.Error);
+        }
+        if (!_net.IsClient)
+            Timer.Spawn(ent.Comp.Inefficiency, () => FinishProcess(ent, sample));
+    }
+    private void FinishProcess(Entity<XRFScannerComponent> ent, BaseContainer sample)
+    {
+        if (_solutions.TryGetSolution(sample.ContainedEntities[0], "beaker", out var solution))
+        {
+            var chems = solution.Value.Comp.Solution;
+            if (sample.Count == 0 || chems.Volume < 30 || chems.Contents.Count > 1)
             {
-                PrintResult(ent, false, Loc.GetString("research-xrf-sample-insufficient"));
-                _sample++;
-                return;
+                if (sample.Count == 0)
+                {
+                    PrintResult(ent, false, Loc.GetString("xrf-scanner-fail-missing"));
+                }
+                else if (chems.Volume == FixedPoint2.Zero)
+                {
+                    PrintResult(ent, false, Loc.GetString("xrf-scanner-fail-empty"));
+                }
+                else if (chems.Volume < 30)
+                {
+                    PrintResult(ent, false, Loc.GetString("xrf-scanner-fail-insufficient"));
+                }
+                else if (chems.Contents.Count > 1)
+                {
+                    PrintResult(ent, false, Loc.GetString("xrf-scanner-fail-contaminated"));
+                }
+                else
+                {
+                    PrintResult(ent, false, Loc.GetString("xrf-scanner-fail-unknown"));
+                }
+                _appearance.SetData(ent.Owner, XRFScannerVisuals.State, XRFScannerState.Failed);
             }
-        });
+            else
+            {
+                _appearance.SetData(ent.Owner, XRFScannerVisuals.State, XRFScannerState.Finished);
+                PrintResult(ent, true, string.Empty);
+            }
+        }
+        else
+        {
+            PrintResult(ent, false, Loc.GetString("xrf-scanner-fail-invalid"));
+            _appearance.SetData(ent.Owner, XRFScannerVisuals.State, XRFScannerState.Failed);
+        }
+        ent.Comp.Sample++;
+        ent.Comp.Processing = false;
+        Dirty(ent);
     }
 
     public void OnInteractHand(Entity<XRFScannerComponent> ent, ref InteractHandEvent args)
@@ -118,6 +166,7 @@ public sealed partial class XRFScannerSystem : EntitySystem
         if (ent.Comp.Processing)
         {
             _popups.PopupClient(Loc.GetString("research-xrf-scanner-processing"), args.User);
+            return;
         }
         if (_consys.TryGetContainer(ent.Owner, "sample", out var container))
         {
@@ -128,6 +177,7 @@ public sealed partial class XRFScannerSystem : EntitySystem
             else
             {
                 //_consys.Remove(container.ContainedEntities[0], container);
+                _appearance.SetData(ent.Owner, XRFScannerVisuals.State, XRFScannerState.Scanner);
                 _hands.PickupOrDrop(args.User, container.ContainedEntities[0]);
             }
         }
@@ -135,6 +185,37 @@ public sealed partial class XRFScannerSystem : EntitySystem
 
     public void PrintResult(Entity<XRFScannerComponent> ent, bool result, string reason)
     {
-
+        string contents = string.Empty;
+        if (result)
+        {
+            if (!_consys.TryGetContainer(ent.Owner, "sample", out var sample))
+                return;
+            if (!_solutions.TryGetSolution(sample.ContainedEntities[0], "beaker", out var solution))
+                return;
+            var reagentname = solution.Value.Comp.Solution.Contents[0].Reagent.Prototype;
+            var reagent = _protoman.GetInstances<ReagentPrototype>()[reagentname];
+            _mets.SetEntityName(sample.ContainedEntities[0], string.Format("vial ({0})", reagent.LocalizedName));
+            DirtyEntity(sample.ContainedEntities[0]);
+            if (_net.IsServer)
+            {
+                var ev = new XRFScannedReagentEvent(reagent.ID, ent.Comp.Sample, GetNetEntity(ent.Owner));
+                RaiseLocalEvent(ev);
+            }
+        }
+        else
+        {
+            DirtyEntity(ent.Owner);
+            if (_net.IsClient)
+                return;
+            var paper = SpawnNextToOrDrop("CMUWYPaper", ent.Owner);
+            _mets.SetEntityName(paper, Loc.GetString("xrf-report-error"));
+            contents += Loc.GetString("cmu-paper-header-wy") + '\n';
+            //TODO: replace below with proper loc.getstring
+            contents += Loc.GetString("cmu-paper-subheader-research-xrf-fail") + " #" + ent.Comp.Sample + '\n';
+            contents += Loc.GetString("cmu-paper-research-fail-reason", ("REASON", reason)) + '\n';
+            contents += Loc.GetString("cmu-paper-xrf-footer");
+            _paper.SetContent(paper, contents);
+            DirtyEntity(paper);
+        }
     }
 }

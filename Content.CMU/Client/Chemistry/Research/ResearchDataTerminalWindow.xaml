@@ -5,8 +5,96 @@
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:uiControls="clr-namespace:Content.Client.UserInterface.Controls"
     Title="{Loc ui-research-data-terminal-name}"
-    MinSize="400 300">
+    MinSize="600 400">
     <PanelContainer>
-        
+        <PanelContainer.PanelOverride>
+            <graphics:StyleBoxFlat
+                BackgroundColor="#0f0f00">
+            </graphics:StyleBoxFlat>
+        </PanelContainer.PanelOverride>
+        <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+            <PanelContainer>
+                <PanelContainer.PanelOverride>
+                    <graphics:StyleBoxFlat
+                        BackgroundColor="#0f0f00"
+                        BorderColor="#ffbf00"
+                        BorderThickness="2">
+                    </graphics:StyleBoxFlat>
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Horizontal" VerticalExpand="True" HorizontalExpand="True">
+                    <RichTextLabel Name="Clearance" Access="Public" Text="[color=#ffbf00][head=2]Clearance Level 1[/head][/color]"
+                                   Margin="10,10" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <uiControls:VSpacer HorizontalAlignment="Center" HorizontalExpand="True"></uiControls:VSpacer>
+                    <Button Name ="Reprint" Access="Public" Margin="1,10" HorizontalAlignment="Right" VerticalAlignment="Center"
+                            Disabled="False">
+                        <Button.StyleBoxOverride>
+                            <graphics:StyleBoxFlat
+                                BackgroundColor="#ffbf00">
+                            </graphics:StyleBoxFlat>
+                        </Button.StyleBoxOverride>
+                        <RichTextLabel Text="[color=#ffbf00][head=3]Reprint Last Contract[/head][/color]" Margin="3,0"/>
+                    </Button>
+                    <Button Name="Upgrade" Access="Public" Margin="1,10" HorizontalAlignment="Right" VerticalAlignment="Center"
+                            Disabled="True">
+                        <Button.StyleBoxOverride>
+                            <graphics:StyleBoxFlat
+                                BackgroundColor="#ffbf00">
+                            </graphics:StyleBoxFlat>
+                        </Button.StyleBoxOverride>
+                        <RichTextLabel Name="UpgradeText" Access="Public" Text="[color=#ffbf00][head=3]Improve 4CR[/head][/color]" Margin="3,0"/>
+                    </Button>
+                    <uiControls:VSpacer Spacing="7"></uiControls:VSpacer>
+                </BoxContainer>
+            </PanelContainer>
+            <PanelContainer VerticalExpand="True">
+                <PanelContainer.PanelOverride>
+                    <graphics:StyleBoxFlat
+                        BackgroundColor="#0f0f00"
+                        BorderColor="#ffbf00"
+                        BorderThickness="2">
+                    </graphics:StyleBoxFlat>
+                </PanelContainer.PanelOverride>
+                <!--This needs to expand to fit the space it has available-->
+                <BoxContainer Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True">
+                    <ScrollContainer HScrollEnabled="False" VScrollEnabled="True" VScrollBarHidden="False" VerticalExpand="True" HorizontalExpand="True">
+                        <BoxContainer VerticalExpand="True" Orientation="Vertical">
+                            <TabContainer Name="Tabs" Access="Public" VerticalExpand="True">
+                                <BoxContainer VerticalExpand="True" Orientation="Vertical" Name="ManageResearch" Access="Public">
+                                    <uiControls:HSpacer Spacing="15" Name="Spacer" Access="Public"></uiControls:HSpacer>
+                                    <RichTextLabel Name="Credits" Access="Public" Text="[color=#ffbf00][head=3]Credits available: 0[/head][/color]"></RichTextLabel>
+                                    <uiControls:HLine Thickness="3" Color="#FFBF00" Margin="0, 5"></uiControls:HLine>
+                                    <PanelContainer HorizontalExpand="True" VerticalExpand="True">
+                                        <RichTextLabel
+                                            Text="[head=2][color=#ffbf00]Chemical Contracts[/color][/head]"
+                                            Margin="5, 10"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Top"/>
+                                    </PanelContainer>
+                                    <PanelContainer HorizontalExpand="True">
+                                        <PanelContainer.PanelOverride>
+                                            <graphics:StyleBoxFlat
+                                                BackgroundColor="#0f0f00"
+                                                BorderColor="#ffbf00"
+                                                BorderThickness="2">
+                                            </graphics:StyleBoxFlat>
+                                        </PanelContainer.PanelOverride>
+                                        <ProgressBar Name="TimeLeftBar" Access="Public" Margin="5,5">
+                                            <RichTextLabel Name="TimeLeft" Access="Public"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+                                        </ProgressBar>
+                                    </PanelContainer>
+                                    <BoxContainer VerticalExpand="True" HorizontalExpand="True" Orientation="Vertical" Name="ChemContainer" Access="Public">
+                                        
+                                    </BoxContainer>
+                                </BoxContainer>
+                                <BoxContainer VerticalExpand="True" Orientation="Vertical" Name="ViewChemicals" Access="Public">
+                                </BoxContainer>
+                            </TabContainer>
+                        </BoxContainer>
+                    </ScrollContainer>
+                </BoxContainer>
+            </PanelContainer>
+        </BoxContainer>
     </PanelContainer>
 </controls:ResearchDataTerminalWindow>

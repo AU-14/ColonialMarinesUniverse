@@ -19,6 +19,13 @@ using Robust.Shared.Serialization.Markdown.Value;
 using Content.Shared._CMU14.Chemistry.Reagent;
 using Robust.Shared.Serialization.Markdown.Sequence;
 using Robust.Shared.Network;
+using Content.Shared._AU14.Chemistry.Research;
+using Content.Shared._RMC14.Chemistry.Reagent;
+using Content.Shared._RMC14.Chemistry.Effects;
+using Content.Shared.FixedPoint;
+using System.Reflection;
+using Content.Shared.Dataset;
+using System.Linq;
 
 namespace Content.Shared._AU14.Chemistry.Reagents;
 
@@ -28,17 +35,33 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
     [Dependency] private IPrototypeManager _protoMan = default!;
     [Dependency] private ILogManager _logMan = default!;
     [Dependency] private INetManager _netMan = default!;
+    [Dependency] private SharedResearchDataTerminalSystem _researchdata = default!;
     private ISawmill _sawmill = default!;
+    protected static readonly ProtoId<DatasetPrototype> _conflicts = "CMUConflictingProperties";
+    protected List<List<string>> _unfoldedConflicts = [];
+    public List<List<string>> UnfoldedConflicts { get => _unfoldedConflicts; }
+    protected Dictionary<string, List<string>> _unfoldedCombinations = [];
     [ViewVariables(VVAccess.ReadOnly)]
     protected HashSet<string> _generatedReagents = [];
+    public HashSet<string> GeneratedReagents { get => _generatedReagents; }
     [ViewVariables(VVAccess.ReadOnly)]
     protected HashSet<string> _generatedRecipes = [];
+    public HashSet<string> GeneratedRecipes { get => _generatedRecipes; }
+    [ViewVariables(VVAccess.ReadOnly)]
+    protected HashSet<string> _lockedDownChems = [];
+    public HashSet<string> LockedDownChems { get => _lockedDownChems; }
+    [ViewVariables(VVAccess.ReadOnly)]
+    public HashSet<string> KnownProperties = [];
+    [ViewVariables(VVAccess.ReadOnly)]
+    public Dictionary<string, int> IdentifiedChemicals = [];
+    public Dictionary<string, HashSet<string>> ChemicalGenClassesList = [];
+
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeAllEvent<GenerateReagentEvent>(CreateReagent);
-        //SubscribeLocalEvent<RoundRestartCleanupEvent>(OnCleanup);
+        SubscribeAllEvent<RetroactiveLockdownEvent>(OnRetroactiveLockdown);
         _sawmill = _logMan.GetSawmill("reagent");
         
     }
@@ -50,22 +73,25 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
     {
         var reagents = _protoMan.GetInstances<ReagentPrototype>();
         var properties = _protoMan.GetInstances<ReagentPropertyPrototype>();
+        string description = string.Empty;
         MappingDataNode reagent = [];
         reagent.Add("type", "reagent");
         reagent.Add("id", args.ID);
         reagent.Add("name", args.Name);
-        reagent.Add("desc", "An unidentified chemical");
+        //reagent.Add("desc", "An unidentified chemical");
         reagent.Add("color", args.Color.ToHexNoAlpha());
         reagent.Add("unknown", "true");
         reagent.Add("group", "Generated");
-        reagent.Add("class", "Ultra");
+        reagent.Add("class", args.Class.ToString());
         reagent.Add("flags", "Scannable");
         reagent.Add("reward", args.ScanPointYield.ToString());
         reagent.Add("overdose", args.Overdose.ToString());
         reagent.Add("criticalOverdose", args.CriticalOverdose.ToString());
         reagent.Add("isCM", "true");
+        reagent.Add("generated", "true");
         reagent.Add("physicalDesc", "reagent-physical-desc-unidentifiable");
         reagent.Add("flavor", "flavor-base-horrible");
+        reagent.Add("genTier", args.GenTier.ToString());
 
         SequenceDataNode effects = [];
         foreach (var effect in args.Effects)
@@ -74,7 +100,11 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
             e.Tag = "!type:" + properties[effect.Key].EffectName;
             e.Add("potency", effect.Value.ToString());
             effects.Add(e);
+            description += string.Format("[bold]{0} Level {1}[/bold]\n",
+                properties[effect.Key].LocalizedName, effect.Value.ToString());
+            description += properties[effect.Key].LocalizedDescription + '\n';
         }
+        reagent.Add("desc", description);
         MappingDataNode medicine = [];
         medicine.Add("metabolismRate", args.MetabolismRate.ToString());
         medicine.Add("effects", effects);
@@ -111,5 +141,161 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         recipe.Add("products", product);
         recipe.Add("reactants", ingredients);
         _protoMan.TryLoadDynamic(recipe);
+    }
+
+    /// <summary>
+    /// this is so that prototyped chems can be used in the research machines
+    /// </summary>
+    /// <param name="proto"></param>
+    /// <returns></returns>
+    public GeneratedReagentData ConvertToGRD(ReagentPrototype proto)
+    {
+        var props = _protoMan.GetInstances<ReagentPropertyPrototype>();
+        var recips = _protoMan.GetInstances<ReactionPrototype>();
+        GeneratedReagentData working = new();
+        working.ID = proto.ID;
+        working.Name = proto.LocalizedName;
+        working.Class = proto.Class;
+        Dictionary<string, int> effects = [];
+        FixedPoint2 meanMetab = 0.1;
+        List<FixedPoint2> metabs = [];
+        if (proto.Metabolisms is not null)
+        {
+            foreach (var metab in proto.Metabolisms.Values)
+            {
+                metabs.Add(metab.MetabolismRate);
+                foreach (var effect in metab.Effects)
+                {
+
+                    if (props.TryGetValue(effect.GetType().Name, out var prop))
+                    {
+                        var ef = effect as RMCChemicalEffect;
+                        int num = 1;
+                        if (ef is not null)
+                        {
+                            num = (int)Math.Round(ef.Potency);
+                        }
+                        effects.Add(effect.GetType().Name, num);
+                    }
+                }
+            }
+        }
+        working.Effects = effects;
+        if (metabs.Count != 0)
+        {
+            FixedPoint2 sum = 0;
+            foreach (var idx in metabs)
+            {
+                sum += idx;
+            }
+            meanMetab = sum / metabs.Count;
+        }
+        working.MetabolismRate = meanMetab;
+        working.ScanPointYield = proto.Reward;
+        working.GenTier = proto.GenTier;
+        working.Color = proto.SubstanceColor;
+        working.Overdose = proto.Overdose ?? 5;
+        working.CriticalOverdose = proto.CriticalOverdose ?? 10;
+        Dictionary<string, (int, bool)> recipe = [];
+        if (recips.TryGetValue(proto.ID, out var react))
+        {
+            foreach (var ing in react.Reactants)
+            {
+                recipe.Add(ing.Key, ((int)ing.Value.Amount, ing.Value.Catalyst));
+            }
+        }
+        working.Recipe = recipe;
+        return working;
+    }
+
+    public void SaveNewProperties(HashSet<ReagentPropertyPrototype> props)
+    {
+        foreach (var prop in props)
+        {
+            if (prop.Category.HasFlag(ReagentPropertyTypeEnum.Unadjustable)
+                || prop.Category.HasFlag(ReagentPropertyTypeEnum.Anomalous))
+                continue;
+            KnownProperties.Add(prop.ID);
+        }
+        if (_netMan.IsClient)
+            return;
+        var ev = new SyncKnownPropertiesEvent(KnownProperties);
+        RaiseNetworkEvent(ev);
+    }
+
+    protected List<List<string>> UnfoldConflicts()
+    {
+        _protoMan.TryIndex(_conflicts, out var confs);
+        if (confs is null)
+            return [];
+        var vals = confs.Values.ToList();
+        var list = new List<List<string>>();
+        foreach (var val in vals)
+        {
+            var sublist = val.Split(',').ToList<string>();
+            list.Add(sublist);
+        }
+        return list;
+    }
+    private void OnRetroactiveLockdown(RetroactiveLockdownEvent args)
+    {
+        _lockedDownChems.UnionWith(args.Chems);
+    }
+    protected void PrepareChems()
+    {
+        var chems = _protoMan.GetInstances<ReagentPrototype>();
+        ChemicalGenClassesList.Add("C", []);
+        ChemicalGenClassesList.Add("C1", []);
+        ChemicalGenClassesList.Add("C2", []);
+        ChemicalGenClassesList.Add("C3", []);
+        ChemicalGenClassesList.Add("C4", []);
+        ChemicalGenClassesList.Add("C5", []);
+        ChemicalGenClassesList.Add("C6", []);
+        ChemicalGenClassesList.Add("H1", []);
+        //_chemicalGenClassesList.Add("T1", []);
+        //_chemicalGenClassesList.Add("T2", []);
+        //_chemicalGenClassesList.Add("T3", []);
+        //_chemicalGenClassesList.Add("T4", []);
+        //_chemicalGenClassesList.Add("T5", []);
+        ChemicalGenClassesList.Add("TAU", []);
+        foreach (var chem in chems)
+        {
+            if (chem.Value.Flags.HasFlag(ReagentFlags.NoGeneration))
+                continue;
+            switch (chem.Value.Class)
+            {
+                case ReagentClass.Basic:
+                    ChemicalGenClassesList["C1"].Add(chem.Value.ID);
+                    break;
+                case ReagentClass.Common:
+                    ChemicalGenClassesList["C2"].Add(chem.Value.ID);
+                    break;
+                case ReagentClass.Uncommon:
+                    ChemicalGenClassesList["C3"].Add(chem.Value.ID);
+                    break;
+                case ReagentClass.Rare:
+                    ChemicalGenClassesList["C4"].Add(chem.Value.ID);
+                    break;
+                case ReagentClass.Special:
+                    ChemicalGenClassesList["C5"].Add(chem.Value.ID);
+                    break;
+                case ReagentClass.Ultra:
+                    ChemicalGenClassesList["C6"].Add(chem.Value.ID);
+                    break;
+                case ReagentClass.Hydro:
+                    ChemicalGenClassesList["H1"].Add(chem.Value.ID);
+                    break;
+                default:
+                    break;
+            }
+            if (chem.Value.Class != ReagentClass.None)
+            {
+                ChemicalGenClassesList["C"].Add(chem.Value.ID);
+            }
+        }
+        if (_netMan.IsClient)
+            return;
+        var ev = new SyncGenClassesEvent(ChemicalGenClassesList);
+        RaiseNetworkEvent(ev);
     }
 }

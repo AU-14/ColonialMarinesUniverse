@@ -9,7 +9,7 @@ namespace Content.Shared._AU14.Chemistry.Research;
 public sealed partial class ResearchNoteComponent : Component
 {
     [ViewVariables(VVAccess.ReadOnly)]
-    public GeneratedReagentData Data;
+    public GeneratedReagentData? Data;
     [ViewVariables(VVAccess.ReadOnly)]
     public List<string> Hints = [];
     [ViewVariables(VVAccess.ReadOnly)]
@@ -24,5 +24,6 @@ public sealed partial class ResearchNoteComponent : Component
     public int GrantReward = 0;
     [ViewVariables]
     public bool Contract = false;
-
+    [ViewVariables]
+    public ResearchNoteType NoteType = ResearchNoteType.Uninitialized;
 }
