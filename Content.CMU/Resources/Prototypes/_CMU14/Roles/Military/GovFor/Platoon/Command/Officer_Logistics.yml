@@ -35,13 +35,13 @@
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
-      state: old_govfor_platco # TODO: LO icon
+      state: govfor_lo
   roundForceComponents:
     OPFOR:
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
-        state: old_platco # TODO: LO icon
+        state: lo
     # UPP:
     # - type: JobPrefix
     #   prefix: au14-job-prefix-govforlogisticsUPP
