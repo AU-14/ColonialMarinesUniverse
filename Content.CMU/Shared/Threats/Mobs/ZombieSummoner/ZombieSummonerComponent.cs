@@ -53,7 +53,10 @@ public sealed partial class ZombieSummonerComponent : Component
     public int MilitaryZombieCost = 20;
 
     [DataField]
-    public float PointsPerSecond = 1f;
+    public float PointsPerSecond = 0.4f;
+
+    [DataField]
+    public int MaxControlledZombies = 20;
 
     [DataField]
     public EntProtoId ZombiePrototype = "CMUZombieSummonerInfected";
@@ -110,7 +113,7 @@ public sealed partial class ZombieSummonerComponent : Component
     };
 
     [DataField]
-    public float ZombieDelimbChance = 0.15f;
+    public float ZombieDelimbChance = 0.01f;
 
     [DataField]
     public float ZombieHitScreamChance = 0.5f;
@@ -172,6 +175,9 @@ public sealed partial class ZombieSummonerMinionComponent : Component
     public EntityUid? Summoner;
 
     [DataField]
+    public EntityUid? SpawnedWeapon;
+
+    [DataField]
     public DamageSpecifier BonusMeleeDamage = new()
     {
         DamageDict = new()
@@ -181,7 +187,7 @@ public sealed partial class ZombieSummonerMinionComponent : Component
     };
 
     [DataField]
-    public float DelimbChance = 0.15f;
+    public float DelimbChance = 0.01f;
 
     [DataField]
     public float HitScreamChance = 0.5f;
@@ -218,7 +224,7 @@ public sealed partial class ZombieSummonerInsanityComponent : Component
     public int TransformedStartingPoints;
 
     [DataField]
-    public float TransformedPointsPerSecond = 0.5f;
+    public float TransformedPointsPerSecond = 0.4f;
 
     [DataField]
     public float DelayedFaceMarkTime = 30f;
@@ -270,18 +276,28 @@ public sealed class ZombieSummonerSpawnMessage : BoundUserInterfaceMessage
 [Serializable, NetSerializable]
 public sealed class ZombieSummonerBuiState : BoundUserInterfaceState
 {
-    public ZombieSummonerBuiState(int points, int maxPoints, int zombieCost, int militaryZombieCost)
+    public ZombieSummonerBuiState(
+        int points,
+        int maxPoints,
+        int zombieCost,
+        int militaryZombieCost,
+        int controlledZombies,
+        int maxControlledZombies)
     {
         Points = points;
         MaxPoints = maxPoints;
         ZombieCost = zombieCost;
         MilitaryZombieCost = militaryZombieCost;
+        ControlledZombies = controlledZombies;
+        MaxControlledZombies = maxControlledZombies;
     }
 
     public int Points { get; }
     public int MaxPoints { get; }
     public int ZombieCost { get; }
     public int MilitaryZombieCost { get; }
+    public int ControlledZombies { get; }
+    public int MaxControlledZombies { get; }
 }
 
 [Serializable, NetSerializable]

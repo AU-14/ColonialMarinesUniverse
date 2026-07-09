@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Server.Actions;
 using Content.Server.Chat;
 using Content.Server.Chat.Systems;
+using Content.Server.Ghost.Roles.Components;
 using Content.Server.Humanoid.Systems;
 using Content.Server.Mobs;
 using Content.Server.NPC;
@@ -10,6 +11,7 @@ using Content.Server.NPC.Systems;
 using Content.Server.Prayer;
 using Content.Server.Zombies;
 using Content.Shared._RMC14.NightVision;
+using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._CMU14.Medical.BodyPart.Events;
 using Content.Shared.Actions.Components;
 using Content.Shared._CMU14.Threats.Mobs.ZombieSummoner;
@@ -49,8 +51,15 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
     private const string ZombieFaction = "Zombie";
     private const string ZombieSummonerBuiClientType = "ZombieSummonerBui";
     private const float UpdateInterval = 1f;
+    private const int SummonerFirearmsSkillLevel = 3;
+    private const int SummonerMedicalSkillLevel = 2;
+    private const int SummonerSurgerySkillLevel = 2;
 
     private float _updateAccumulator;
+
+    private static readonly EntProtoId<SkillDefinitionComponent> FirearmsSkill = "RMCSkillFirearms";
+    private static readonly EntProtoId<SkillDefinitionComponent> MedicalSkill = "RMCSkillMedical";
+    private static readonly EntProtoId<SkillDefinitionComponent> SurgerySkill = "RMCSkillSurgery";
 
     private static readonly Color[] RealisticEyeColors =
     {
@@ -109,6 +118,7 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
     [Dependency] private PrayerSystem _prayer = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private ZombieSystem _zombie = default!;
@@ -185,6 +195,7 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         ent.Comp.ZombieCost = Math.Max(1, ent.Comp.ZombieCost);
         ent.Comp.MilitaryZombieCost = Math.Max(1, ent.Comp.MilitaryZombieCost);
         ent.Comp.PointsPerSecond = Math.Max(0, ent.Comp.PointsPerSecond);
+        ent.Comp.MaxControlledZombies = Math.Max(1, ent.Comp.MaxControlledZombies);
         ent.Comp.SpawnRadius = Math.Max(0, ent.Comp.SpawnRadius);
         ent.Comp.ZombieMovementSpeedModifier = Math.Clamp(ent.Comp.ZombieMovementSpeedModifier, 0.1f, 2f);
         ent.Comp.MilitaryZombieMovementSpeedModifier = Math.Clamp(ent.Comp.MilitaryZombieMovementSpeedModifier, 0.1f, 2f);
@@ -194,6 +205,7 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
 
     private void OnComponentStartup(Entity<ZombieSummonerComponent> ent, ref ComponentStartup args)
     {
+        EnsureSummonerSkills(ent.Owner);
         RefreshSummonerActions(ent);
     }
 
@@ -241,6 +253,9 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         {
             if (Deleted(zombie))
                 continue;
+
+            if (TryComp(zombie, out ZombieSummonerMinionComponent? minion))
+                DeleteSpawnedWeapon(minion);
 
             QueueDel(zombie);
         }
@@ -377,6 +392,8 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
 
     private void OnMinionShutdown(Entity<ZombieSummonerMinionComponent> ent, ref ComponentShutdown args)
     {
+        DeleteSpawnedWeapon(ent.Comp);
+
         if (ent.Comp.Summoner is not { } summoner ||
             !TryComp(summoner, out ZombieSummonerComponent? summonerComp))
         {
@@ -384,15 +401,37 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         }
 
         summonerComp.Zombies.Remove(ent.Owner);
+        Dirty(summoner, summonerComp);
+
+        if (_ui.IsUiOpen(summoner, ZombieSummonerUiKey.Key))
+            PushBuiState(summoner, summonerComp);
     }
 
     private void OnMinionMobStateChanged(Entity<ZombieSummonerMinionComponent> ent, ref MobStateChangedEvent args)
     {
+        if (args.NewMobState == MobState.Dead)
+        {
+            DeleteSpawnedWeapon(ent.Comp);
+            QueueDel(ent.Owner);
+            return;
+        }
+
         if (args.NewMobState != MobState.Alive)
             return;
 
         SuppressZombiePassiveGroan(ent.Owner);
         SuppressZombieDamageScream(ent.Owner);
+    }
+
+    private void DeleteSpawnedWeapon(ZombieSummonerMinionComponent minion)
+    {
+        if (minion.SpawnedWeapon is not { } weapon)
+            return;
+
+        minion.SpawnedWeapon = null;
+
+        if (!Deleted(weapon))
+            QueueDel(weapon);
     }
 
     private void OnMinionDamageChanged(Entity<ZombieSummonerMinionComponent> ent, ref DamageChangedEvent args)
@@ -580,11 +619,19 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         EnsureComp<ZombieImmuneComponent>(uid);
 
         EnsureComp<NightVisionComponent>(uid);
+        EnsureSummonerSkills(uid);
 
         _faction.AddFaction((uid, CompOrNull<NpcFactionMemberComponent>(uid)), ZombieFaction);
 
         if (TryComp(uid, out HumanoidAppearanceComponent? humanoid))
             EnsureRealisticEyeColor(uid, humanoid, summoner.EyeColors);
+    }
+
+    private void EnsureSummonerSkills(EntityUid uid)
+    {
+        _skills.SetSkill(uid, FirearmsSkill, SummonerFirearmsSkillLevel);
+        _skills.SetSkill(uid, MedicalSkill, SummonerMedicalSkillLevel);
+        _skills.SetSkill(uid, SurgerySkill, SummonerSurgerySkillLevel);
     }
 
     private void EnsureRealisticEyeColor(
@@ -647,10 +694,27 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
             return;
 
         var costPerZombie = GetZombieCost(ent.Comp, args.Type);
-        var maxSummonable = ent.Comp.Points / costPerZombie;
+        var controlledZombies = PruneControlledZombies(ent.Owner, ent.Comp);
+        var openSlots = Math.Max(0, ent.Comp.MaxControlledZombies - controlledZombies);
+        if (openSlots <= 0)
+        {
+            _popup.PopupEntity(
+                Loc.GetString("cmu-zombie-summoner-too-many-zombies", ("max", ent.Comp.MaxControlledZombies)),
+                ent.Owner,
+                args.Actor,
+                PopupType.SmallCaution);
+            PushBuiState(ent.Owner, ent.Comp);
+            return;
+        }
+
+        var maxSummonable = Math.Min(ent.Comp.Points / costPerZombie, openSlots);
         if (args.Count > maxSummonable)
         {
-            _popup.PopupEntity(Loc.GetString("cmu-zombie-summoner-not-enough-points"), ent.Owner, args.Actor, PopupType.SmallCaution);
+            var popup = args.Count > openSlots
+                ? Loc.GetString("cmu-zombie-summoner-too-many-zombies", ("max", ent.Comp.MaxControlledZombies))
+                : Loc.GetString("cmu-zombie-summoner-not-enough-points");
+
+            _popup.PopupEntity(popup, ent.Owner, args.Actor, PopupType.SmallCaution);
             PushBuiState(ent.Owner, ent.Comp);
             return;
         }
@@ -677,9 +741,9 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
             minion.BonusMeleeDamage = new DamageSpecifier(ent.Comp.ZombieBonusMeleeDamage);
             minion.DelimbChance = ent.Comp.ZombieDelimbChance;
             minion.HitScreamChance = ent.Comp.ZombieHitScreamChance;
+            minion.SpawnedWeapon = ConfigureCursedZombie(zombie, ent.Comp, args.Type, skinColor, eyeColor, hasHumanoidAppearance);
             Dirty(zombie, minion);
 
-            ConfigureCursedZombie(zombie, ent.Comp, args.Type, skinColor, eyeColor, hasHumanoidAppearance);
             MakeZombieMove(zombie, GetZombieMovementSpeedModifier(ent.Comp, args.Type));
 
             ent.Comp.Zombies.Add(zombie);
@@ -695,7 +759,7 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         PushBuiState(ent.Owner, ent.Comp);
     }
 
-    private void ConfigureCursedZombie(
+    private EntityUid? ConfigureCursedZombie(
         EntityUid zombie,
         ZombieSummonerComponent comp,
         ZombieSummonerSpawnType type,
@@ -707,11 +771,12 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         if (restoreHumanoidAppearance)
             RestoreCursedAppearance(zombie, comp, skinColor, eyeColor);
 
+        MakeZombieNonGhostRole(zombie);
         SuppressZombiePassiveGroan(zombie);
         SuppressZombieDamageScream(zombie);
         ConfigureZombieDeathgasp(zombie);
         GiveZombieHands(zombie);
-        GiveZombieWeapon(zombie, comp, type);
+        return GiveZombieWeapon(zombie, comp, type);
     }
 
     private void SuppressZombiePassiveGroan(EntityUid zombie)
@@ -746,6 +811,12 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         Dirty(zombie, zombieComp);
     }
 
+    private void MakeZombieNonGhostRole(EntityUid zombie)
+    {
+        RemCompDeferred<GhostRoleComponent>(zombie);
+        RemCompDeferred<GhostTakeoverAvailableComponent>(zombie);
+    }
+
     private void RestoreCursedAppearance(
         EntityUid zombie,
         ZombieSummonerComponent comp,
@@ -776,11 +847,11 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
             _hands.TrySetActiveHand((zombie, hands), "right_hand");
     }
 
-    private void GiveZombieWeapon(EntityUid zombie, ZombieSummonerComponent comp, ZombieSummonerSpawnType type)
+    private EntityUid? GiveZombieWeapon(EntityUid zombie, ZombieSummonerComponent comp, ZombieSummonerSpawnType type)
     {
         var prototypes = GetZombieWeaponPrototypes(comp, type);
         if (prototypes.Count == 0)
-            return;
+            return null;
 
         var start = _random.Next(prototypes.Count);
         for (var i = 0; i < prototypes.Count; i++)
@@ -791,10 +862,12 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
 
             var weapon = Spawn(prototype, Transform(zombie).Coordinates);
             if (_hands.TryPickupAnyHand(zombie, weapon, checkActionBlocker: false, animate: false))
-                return;
+                return weapon;
 
             QueueDel(weapon);
         }
+
+        return null;
     }
 
     private List<EntProtoId> GetZombieWeaponPrototypes(ZombieSummonerComponent comp, ZombieSummonerSpawnType type)
@@ -865,6 +938,33 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         {
             ent.Comp.Zombies.Remove(zombie);
         }
+    }
+
+    private int PruneControlledZombies(EntityUid summoner, ZombieSummonerComponent comp)
+    {
+        List<EntityUid>? stale = null;
+        foreach (var zombie in comp.Zombies)
+        {
+            if (!Deleted(zombie) &&
+                TryComp(zombie, out ZombieSummonerMinionComponent? minion) &&
+                minion.Summoner == summoner)
+            {
+                continue;
+            }
+
+            stale ??= new List<EntityUid>();
+            stale.Add(zombie);
+        }
+
+        if (stale == null)
+            return comp.Zombies.Count;
+
+        foreach (var zombie in stale)
+        {
+            comp.Zombies.Remove(zombie);
+        }
+
+        return comp.Zombies.Count;
     }
 
     private void UpdateZombieNpc(
@@ -948,10 +1048,14 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
 
     private void PushBuiState(EntityUid uid, ZombieSummonerComponent comp)
     {
+        var controlledZombies = PruneControlledZombies(uid, comp);
+
         _ui.SetUiState(uid, ZombieSummonerUiKey.Key, new ZombieSummonerBuiState(
             comp.Points,
             comp.MaxPoints,
             comp.ZombieCost,
-            comp.MilitaryZombieCost));
+            comp.MilitaryZombieCost,
+            controlledZombies,
+            comp.MaxControlledZombies));
     }
 }

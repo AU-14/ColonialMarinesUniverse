@@ -1,11 +1,13 @@
 cmu-zombie-summoner-title = Summon Zombies
 cmu-zombie-summoner-points = Points: {$points}/{$max}
+cmu-zombie-summoner-controlled = Controlled: {$count}/{$max}
 cmu-zombie-summoner-available-civilian = Civilian zombies available: {$count} ({$cost} each)
 cmu-zombie-summoner-available-military = Military zombies available: {$count} ({$cost} each)
 cmu-zombie-summoner-amount = Zombies
 cmu-zombie-summoner-submit-civilian = Summon Civilian Zombies
 cmu-zombie-summoner-submit-military = Summon Military Zombies
 cmu-zombie-summoner-not-enough-points = You don't have enough points.
+cmu-zombie-summoner-too-many-zombies = You can only control {$max} cursed at once.
 cmu-zombie-summoner-summoned-civilian = Summoned {$count} civilian zombies.
 cmu-zombie-summoner-summoned-military = Summoned {$count} military zombies.
 cmu-zombie-summoner-zombie-name = Cursed
