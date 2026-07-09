@@ -45,7 +45,7 @@ namespace Content.Server._CMU14.Threats.Mobs.ZombieSummoner;
 public sealed partial class ZombieSummonerSystem : EntitySystem
 {
     private const string ZombiePassiveGroan = "ZombieGroan";
-    private const string ZombieScream = "Scream";
+    private const string HumanScream = "Scream";
     private const string ZombieFaction = "Zombie";
     private const string ZombieSummonerBuiClientType = "ZombieSummonerBui";
     private const string TargetKey = "Target";
@@ -414,8 +414,9 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         if (args.NewMobState != MobState.Alive)
             return;
 
+        UseHumanScreamAudio(ent.Owner);
         SuppressZombiePassiveGroan(ent.Owner);
-        SuppressZombieDamageScream(ent.Owner);
+        SuppressAutomaticDamageScream(ent.Owner);
     }
 
     private void DeleteSpawnedWeapon(ZombieSummonerMinionComponent minion)
@@ -438,7 +439,7 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
             return;
         }
 
-        _chat.TryEmoteWithoutChat(ent.Owner, ZombieScream);
+        _chat.TryEmoteWithoutChat(ent.Owner, HumanScream);
     }
 
     private void OnMeleeHit(Entity<MeleeWeaponComponent> weapon, ref MeleeHitEvent args)
@@ -755,13 +756,24 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         bool restoreHumanoidAppearance)
     {
         MakeZombieNonSpreading(zombie);
+        UseHumanScreamAudio(zombie);
         if (restoreHumanoidAppearance)
             RestoreCursedAppearance(zombie, comp, skinColor, eyeColor);
 
         SuppressZombiePassiveGroan(zombie);
-        SuppressZombieDamageScream(zombie);
+        SuppressAutomaticDamageScream(zombie);
         ConfigureZombieDeathgasp(zombie);
         GiveZombieHands(zombie);
+    }
+
+    private void UseHumanScreamAudio(EntityUid zombie)
+    {
+        if (!TryComp(zombie, out ZombieComponent? zombieComp))
+            return;
+
+        zombieComp.EmoteSoundsId = null;
+        zombieComp.EmoteSounds = null;
+        Dirty(zombie, zombieComp);
     }
 
     private void SuppressZombiePassiveGroan(EntityUid zombie)
@@ -770,16 +782,16 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
             _autoEmote.RemoveEmote(zombie, ZombiePassiveGroan, autoEmote);
     }
 
-    private void SuppressZombieDamageScream(EntityUid zombie)
+    private void SuppressAutomaticDamageScream(EntityUid zombie)
     {
         if (TryComp(zombie, out EmoteOnDamageComponent? emoteOnDamage))
-            _emoteOnDamage.RemoveEmote(zombie, ZombieScream, emoteOnDamage);
+            _emoteOnDamage.RemoveEmote(zombie, HumanScream, emoteOnDamage);
     }
 
     private void ConfigureZombieDeathgasp(EntityUid zombie)
     {
         var deathgasp = EnsureComp<DeathgaspComponent>(zombie);
-        deathgasp.Prototype = ZombieScream;
+        deathgasp.Prototype = HumanScream;
     }
 
     private void MakeZombieNonSpreading(EntityUid zombie)
