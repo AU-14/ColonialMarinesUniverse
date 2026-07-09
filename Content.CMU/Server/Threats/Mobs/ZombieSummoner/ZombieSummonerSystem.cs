@@ -2,7 +2,6 @@ using System.Numerics;
 using Content.Server.Actions;
 using Content.Server.Chat;
 using Content.Server.Chat.Systems;
-using Content.Server.Ghost.Roles.Components;
 using Content.Server.Humanoid.Systems;
 using Content.Server.Mobs;
 using Content.Server.NPC;
@@ -11,7 +10,6 @@ using Content.Server.NPC.Systems;
 using Content.Server.Prayer;
 using Content.Server.Zombies;
 using Content.Shared._RMC14.NightVision;
-using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._CMU14.Medical.BodyPart.Events;
 using Content.Shared.Actions.Components;
 using Content.Shared._CMU14.Threats.Mobs.ZombieSummoner;
@@ -50,16 +48,11 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
     private const string ZombieScream = "Scream";
     private const string ZombieFaction = "Zombie";
     private const string ZombieSummonerBuiClientType = "ZombieSummonerBui";
+    private const string TargetKey = "Target";
+    private const string TargetCoordinatesKey = "TargetCoordinates";
     private const float UpdateInterval = 1f;
-    private const int SummonerFirearmsSkillLevel = 3;
-    private const int SummonerMedicalSkillLevel = 2;
-    private const int SummonerSurgerySkillLevel = 2;
 
     private float _updateAccumulator;
-
-    private static readonly EntProtoId<SkillDefinitionComponent> FirearmsSkill = "RMCSkillFirearms";
-    private static readonly EntProtoId<SkillDefinitionComponent> MedicalSkill = "RMCSkillMedical";
-    private static readonly EntProtoId<SkillDefinitionComponent> SurgerySkill = "RMCSkillSurgery";
 
     private static readonly Color[] RealisticEyeColors =
     {
@@ -118,7 +111,6 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
     [Dependency] private PrayerSystem _prayer = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private ZombieSystem _zombie = default!;
@@ -205,7 +197,6 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
 
     private void OnComponentStartup(Entity<ZombieSummonerComponent> ent, ref ComponentStartup args)
     {
-        EnsureSummonerSkills(ent.Owner);
         RefreshSummonerActions(ent);
     }
 
@@ -311,6 +302,7 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
 
         args.Handled = true;
         ent.Comp.CurrentOrder = args.Type;
+        ent.Comp.OrderedTarget = null;
         Dirty(ent);
 
         DoCommandCallout(ent);
@@ -326,12 +318,15 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         if (!CanCheeseTarget(args.Pointed))
             return;
 
+        ent.Comp.OrderedTarget = args.Pointed;
+        Dirty(ent);
+
         foreach (var zombie in ent.Comp.Zombies)
         {
             if (!TryComp(zombie, out HTNComponent? htn))
                 continue;
 
-            _npc.SetBlackboard(zombie, NPCBlackboard.CurrentOrderedTarget, args.Pointed, htn);
+            SetZombieCheeseTarget(zombie, htn, args.Pointed);
             if (htn.Plan != null)
                 _htn.ShutdownPlan(htn);
 
@@ -619,19 +614,11 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         EnsureComp<ZombieImmuneComponent>(uid);
 
         EnsureComp<NightVisionComponent>(uid);
-        EnsureSummonerSkills(uid);
 
         _faction.AddFaction((uid, CompOrNull<NpcFactionMemberComponent>(uid)), ZombieFaction);
 
         if (TryComp(uid, out HumanoidAppearanceComponent? humanoid))
             EnsureRealisticEyeColor(uid, humanoid, summoner.EyeColors);
-    }
-
-    private void EnsureSummonerSkills(EntityUid uid)
-    {
-        _skills.SetSkill(uid, FirearmsSkill, SummonerFirearmsSkillLevel);
-        _skills.SetSkill(uid, MedicalSkill, SummonerMedicalSkillLevel);
-        _skills.SetSkill(uid, SurgerySkill, SummonerSurgerySkillLevel);
     }
 
     private void EnsureRealisticEyeColor(
@@ -741,7 +728,8 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
             minion.BonusMeleeDamage = new DamageSpecifier(ent.Comp.ZombieBonusMeleeDamage);
             minion.DelimbChance = ent.Comp.ZombieDelimbChance;
             minion.HitScreamChance = ent.Comp.ZombieHitScreamChance;
-            minion.SpawnedWeapon = ConfigureCursedZombie(zombie, ent.Comp, args.Type, skinColor, eyeColor, hasHumanoidAppearance);
+            ConfigureCursedZombie(zombie, ent.Comp, skinColor, eyeColor, hasHumanoidAppearance);
+            minion.SpawnedWeapon = GiveZombieWeapon(zombie, ent.Comp, args.Type);
             Dirty(zombie, minion);
 
             MakeZombieMove(zombie, GetZombieMovementSpeedModifier(ent.Comp, args.Type));
@@ -759,10 +747,9 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         PushBuiState(ent.Owner, ent.Comp);
     }
 
-    private EntityUid? ConfigureCursedZombie(
+    private void ConfigureCursedZombie(
         EntityUid zombie,
         ZombieSummonerComponent comp,
-        ZombieSummonerSpawnType type,
         Color skinColor,
         Color eyeColor,
         bool restoreHumanoidAppearance)
@@ -771,12 +758,10 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         if (restoreHumanoidAppearance)
             RestoreCursedAppearance(zombie, comp, skinColor, eyeColor);
 
-        MakeZombieNonGhostRole(zombie);
         SuppressZombiePassiveGroan(zombie);
         SuppressZombieDamageScream(zombie);
         ConfigureZombieDeathgasp(zombie);
         GiveZombieHands(zombie);
-        return GiveZombieWeapon(zombie, comp, type);
     }
 
     private void SuppressZombiePassiveGroan(EntityUid zombie)
@@ -809,12 +794,6 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         zombieComp.BaseZombieInfectionChance = 0f;
         zombieComp.MinZombieInfectionChance = 0f;
         Dirty(zombie, zombieComp);
-    }
-
-    private void MakeZombieNonGhostRole(EntityUid zombie)
-    {
-        RemCompDeferred<GhostRoleComponent>(zombie);
-        RemCompDeferred<GhostTakeoverAvailableComponent>(zombie);
     }
 
     private void RestoreCursedAppearance(
@@ -980,8 +959,16 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         SetBlackboard(zombie, htn, NPCBlackboard.FollowTarget, new EntityCoordinates(summoner, Vector2.Zero));
         SetBlackboard(zombie, htn, NPCBlackboard.CurrentOrders, comp.CurrentOrder);
 
-        if (comp.CurrentOrder != ZombieSummonerOrderType.CheeseEm)
-            RemoveBlackboard<EntityUid>(htn, NPCBlackboard.CurrentOrderedTarget);
+        if (comp.CurrentOrder == ZombieSummonerOrderType.CheeseEm &&
+            comp.OrderedTarget is { } target &&
+            CanCheeseTarget(target))
+        {
+            SetZombieCheeseTarget(zombie, htn, target);
+        }
+        else
+        {
+            ClearZombieCheeseTarget(htn);
+        }
 
         if (htn.Plan != null)
             _htn.ShutdownPlan(htn);
@@ -1004,6 +991,20 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
     {
         if (htn.Blackboard.ContainsKey(key))
             htn.Blackboard.Remove<T>(key);
+    }
+
+    private void SetZombieCheeseTarget(EntityUid zombie, HTNComponent htn, EntityUid target)
+    {
+        _npc.SetBlackboard(zombie, NPCBlackboard.CurrentOrderedTarget, target, htn);
+        RemoveBlackboard<EntityUid>(htn, TargetKey);
+        RemoveBlackboard<EntityCoordinates>(htn, TargetCoordinatesKey);
+    }
+
+    private void ClearZombieCheeseTarget(HTNComponent htn)
+    {
+        RemoveBlackboard<EntityUid>(htn, NPCBlackboard.CurrentOrderedTarget);
+        RemoveBlackboard<EntityUid>(htn, TargetKey);
+        RemoveBlackboard<EntityCoordinates>(htn, TargetCoordinatesKey);
     }
 
     private void UpdateOrderActions(Entity<ZombieSummonerComponent> ent)

@@ -144,6 +144,9 @@ public sealed partial class ZombieSummonerComponent : Component
     public ZombieSummonerOrderType CurrentOrder = ZombieSummonerOrderType.Attack;
 
     [DataField]
+    public EntityUid? OrderedTarget;
+
+    [DataField]
     public string ZombieOrderCompound = "CMUZombieSummonerZombieCompound";
 
     [DataField]
