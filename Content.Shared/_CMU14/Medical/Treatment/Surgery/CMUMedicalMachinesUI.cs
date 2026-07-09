@@ -90,6 +90,12 @@ public sealed class CMUAutodocBuiState : BoundUserInterfaceState
 }
 
 [Serializable, NetSerializable]
+public sealed class CMUAutodocStateMessage(CMUAutodocBuiState state) : BoundUserInterfaceMessage
+{
+    public CMUAutodocBuiState State = state;
+}
+
+[Serializable, NetSerializable]
 public sealed record CMUAutodocQueueEntry(
     int Index,
     NetEntity Part,
@@ -235,6 +241,12 @@ public sealed class CMUBodyScannerBuiState : BoundUserInterfaceState
 }
 
 [Serializable, NetSerializable]
+public sealed class CMUBodyScannerStateMessage(CMUBodyScannerBuiState state) : BoundUserInterfaceMessage
+{
+    public CMUBodyScannerBuiState State = state;
+}
+
+[Serializable, NetSerializable]
 public sealed record CMUBodyScannerPuzzleChoice(string Id, string Text);
 
 [Serializable, NetSerializable]
@@ -258,7 +270,41 @@ public enum CMUBodyScannerScanCategory : byte
 }
 
 [Serializable, NetSerializable]
-public sealed record CMUBodyScannerScanLine(CMUBodyScannerScanCategory Category, string Text);
+public enum CMUBodyScannerScanKind : byte
+{
+    State,
+    Damage,
+    Blood,
+    Heart,
+    BodyPart,
+    MissingLimb,
+    Organ,
+    MissingOrgan,
+    NoData,
+}
+
+[Serializable, NetSerializable]
+public enum CMUBodyScannerScanSeverity : byte
+{
+    Stable,
+    Warning,
+    Critical,
+}
+
+/// <summary>
+///     Structured scanner projection. Presentation code must not infer meaning by parsing localized text.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed record CMUBodyScannerScanLine(
+    CMUBodyScannerScanCategory Category,
+    CMUBodyScannerScanKind Kind,
+    CMUBodyScannerScanSeverity Severity,
+    string Title,
+    string Detail,
+    List<string> Details,
+    bool HasRange,
+    float Current,
+    float Maximum);
 
 [Serializable, NetSerializable]
 public sealed record CMUBodyScannerPuzzleAssignment(string LayerId, string SignalId);

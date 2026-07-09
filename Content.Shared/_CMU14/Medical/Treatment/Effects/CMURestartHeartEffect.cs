@@ -1,6 +1,6 @@
 using Content.Shared._CMU14.Medical.Anatomy.Organs;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
-using Content.Shared.Body.Systems;
+using Content.Shared._CMU14.Medical.Core;
 using Content.Shared.EntityEffects;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
@@ -27,19 +27,19 @@ public sealed partial class CMURestartHeartEffect : EntityEffect
         if (!random.Prob(ChancePerTick))
             return;
 
-        var bodySys = entMan.System<SharedBodySystem>();
+        var medicalIndex = entMan.System<CMUMedicalBodyIndexSystem>();
         var heartSys = entMan.System<SharedHeartSystem>();
-        foreach (var organ in bodySys.GetBodyOrgans(reagent.TargetEntity))
+        foreach (var organ in medicalIndex.GetOrgans(reagent.TargetEntity))
         {
-            if (!entMan.TryGetComponent<HeartComponent>(organ.Id, out var heart))
+            if (!entMan.TryGetComponent<HeartComponent>(organ.Owner, out var heart))
                 continue;
             if (!heart.Stopped)
                 continue;
-            if (entMan.TryGetComponent<OrganHealthComponent>(organ.Id, out var oh) &&
+            if (entMan.TryGetComponent<OrganHealthComponent>(organ.Owner, out var oh) &&
                 oh.Stage == OrganDamageStage.Dead)
                 continue;
 
-            heartSys.TryRestartHeart((organ.Id, heart));
+            heartSys.TryRestartHeart((organ.Owner, heart));
         }
     }
 

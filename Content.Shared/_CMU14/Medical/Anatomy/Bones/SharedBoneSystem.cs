@@ -130,7 +130,7 @@ public abstract partial class SharedBoneSystem : EntitySystem
         Fracture.SetSeverity((ent.Owner, fracture), newSeverity);
 
         var fracEv = new BoneFracturedEvent(args.Body, ent.Owner, current, newSeverity);
-        RaiseLocalEvent(ent, ref fracEv);
+        RaiseLocalEvent(ent, ref fracEv, broadcast: true);
         // Audio for Compound+ spawns is played server-side by Content.Server's
         // sealed BoneSystem to avoid a double-play on prediction rollback.
 
@@ -165,7 +165,7 @@ public abstract partial class SharedBoneSystem : EntitySystem
                 continue;
 
             var ev = new OrganDamagedEvent(body, organ, burst, OrganDamageSource.RibFracture);
-            RaiseLocalEvent(organ, ref ev);
+            RaiseLocalEvent(organ, ref ev, broadcast: true);
         }
     }
 

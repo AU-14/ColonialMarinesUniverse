@@ -132,7 +132,7 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
             if (weighted.GetTotal() <= FixedPoint2.Zero)
                 continue;
             var ev = new OrganDamagedEvent(body, organ, weighted, OrganDamageSource.PartDistribution);
-            RaiseLocalEvent(organ, ref ev);
+            RaiseLocalEvent(organ, ref ev, broadcast: true);
         }
     }
 

@@ -10,10 +10,10 @@ using Content.Shared._CMU14.Medical.Anatomy.Organs.Kidneys;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Liver;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Stomach;
+using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Injuries.Shrapnel;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Synth;
-using Content.Shared.Body.Systems;
 using Content.Shared.FixedPoint;
 
 namespace Content.Shared._CMU14.Medical.Injuries.Pain;
@@ -22,8 +22,9 @@ public readonly record struct CMUPainSourceSnapshot(FixedPoint2 Target, FixedPoi
 
 public sealed partial class SharedPainSourceProfileSystem : EntitySystem
 {
-    [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private SharedFractureSystem _fracture = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
+    [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
 
     private const float SourceStackMultiplier = 0.30f;
     private const float PainTargetCap = 95f;
@@ -40,7 +41,7 @@ public sealed partial class SharedPainSourceProfileSystem : EntitySystem
         var total = 0f;
         var riseRate = 0f;
 
-        foreach (var (partUid, _) in _body.GetBodyChildren(body))
+        foreach (var (partUid, _) in _medicalIndex.GetBodyParts(body))
         {
             if (TryComp<FractureComponent>(partUid, out var frac))
                 AddPainSource(ref sourceCount, ref highest, ref total, ref riseRate,
@@ -60,15 +61,13 @@ public sealed partial class SharedPainSourceProfileSystem : EntitySystem
 
             if (TryComp<BodyPartWoundComponent>(partUid, out var pw))
             {
-                for (var i = 0; i < pw.Wounds.Count; i++)
+                foreach (var entry in _woundLedger.GetEntries(pw))
                 {
-                    var wound = pw.Wounds[i];
-                    if (wound.Treated)
+                    if (entry.Wound.Treated)
                         continue;
 
-                    var size = i < pw.Sizes.Count ? pw.Sizes[i] : WoundSize.CutDeep;
                     AddPainSource(ref sourceCount, ref highest, ref total, ref riseRate,
-                        WoundPainTarget(size, wound.Damage.Float()));
+                        WoundPainTarget(entry.Size, entry.Wound.Damage.Float()));
                 }
             }
 
@@ -83,13 +82,13 @@ public sealed partial class SharedPainSourceProfileSystem : EntitySystem
                     SharedCMUShrapnelSystem.GetPainTarget(shrapnel));
         }
 
-        foreach (var organ in _body.GetBodyOrgans(body))
+        foreach (var organ in _medicalIndex.GetOrgans(body))
         {
-            if (!TryComp<OrganHealthComponent>(organ.Id, out var oh))
+            if (!TryComp<OrganHealthComponent>(organ.Owner, out var oh))
                 continue;
 
             AddPainSource(ref sourceCount, ref highest, ref total, ref riseRate,
-                OrganPainTarget(organ.Id, oh.Stage));
+                OrganPainTarget(organ.Owner, oh.Stage));
         }
 
         if (sourceCount == 0)

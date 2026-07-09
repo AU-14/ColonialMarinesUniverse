@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Numerics;
 using System.Reflection;
 using Content.Shared._CMU14.Medical.Core;
@@ -160,6 +159,7 @@ public sealed class RMCHumanPrototypeRegressionTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var skills = entMan.System<SkillsSystem>();
             var patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var treater = entMan.SpawnEntity(treaterId, MapCoordinates.Nullspace);
@@ -175,12 +175,11 @@ public sealed class RMCHumanPrototypeRegressionTest
                 entMan.EventBus.RaiseLocalEvent(treater, interact);
 
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(part);
-                var woundList = GetField<List<Wound>>(wounds, nameof(BodyPartWoundComponent.Wounds));
-                var bandages = GetField<List<int>>(wounds, nameof(BodyPartWoundComponent.Bandages));
+                var entries = ledger.GetEntries(wounds);
                 var treated = 0;
-                foreach (var wound in woundList)
+                foreach (var entry in entries)
                 {
-                    if (wound.Type == woundType && wound.Treated)
+                    if (entry.Wound.Type == woundType && entry.Wound.Treated)
                         treated++;
                 }
 
@@ -189,8 +188,12 @@ public sealed class RMCHumanPrototypeRegressionTest
                     Assert.That(interact.Handled, Is.True);
                     Assert.That(entMan.HasComponent<CMUBandagePendingComponent>(patient), Is.False);
                     Assert.That(treated, Is.EqualTo(2));
-                    Assert.That(bandages.Count, Is.EqualTo(2));
-                    Assert.That(bandages, Has.All.EqualTo(WoundSizeProfile.BandagesRequired(WoundSize.CutDeep)));
+                    Assert.That(entries, Has.Count.EqualTo(2));
+                    foreach (var entry in entries)
+                    {
+                        Assert.That(entry.Bandages,
+                            Is.EqualTo(WoundSizeProfile.BandagesRequired(entry.Size, entry.Wound.Damage.Float())));
+                    }
                     Assert.That(entMan.GetComponent<StackComponent>(treater).Count, Is.EqualTo(9));
                 });
             }
@@ -213,6 +216,7 @@ public sealed class RMCHumanPrototypeRegressionTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var skills = entMan.System<SkillsSystem>();
             var targeting = entMan.System<SharedBodyZoneTargetingSystem>();
             var patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
@@ -232,7 +236,7 @@ public sealed class RMCHumanPrototypeRegressionTest
                 entMan.EventBus.RaiseLocalEvent(gauze, interact);
 
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(rightArm);
-                var wound = GetField<List<Wound>>(wounds, nameof(BodyPartWoundComponent.Wounds))[0];
+                var wound = ledger.GetEntries(wounds)[0].Wound;
 
                 Assert.Multiple(() =>
                 {
@@ -331,6 +335,7 @@ public sealed class RMCHumanPrototypeRegressionTest
         {
             var entMan = server.EntMan;
             var flow = entMan.System<CMUSurgeryFlowSystem>();
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var mobState = entMan.System<MobStateSystem>();
             var shrapnel = entMan.System<SharedCMUShrapnelSystem>();
             var skills = entMan.System<SkillsSystem>();
@@ -360,12 +365,12 @@ public sealed class RMCHumanPrototypeRegressionTest
                 entMan.EventBus.RaiseLocalEvent(treater, interact);
 
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(part);
-                var woundList = GetField<List<Wound>>(wounds, nameof(BodyPartWoundComponent.Wounds));
+                var entries = ledger.GetEntries(wounds);
 
                 Assert.Multiple(() =>
                 {
                     Assert.That(interact.Handled, Is.True);
-                    Assert.That(woundList[0].Treated, Is.EqualTo(instantTreatment));
+                    Assert.That(entries[0].Wound.Treated, Is.EqualTo(instantTreatment));
                     Assert.That(entMan.HasComponent<CMUBandagePendingComponent>(surgeon), Is.EqualTo(!instantTreatment));
                     Assert.That(entMan.GetComponent<StackComponent>(treater).Count, Is.EqualTo(expectedStackCount));
                 });
@@ -390,6 +395,7 @@ public sealed class RMCHumanPrototypeRegressionTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var skills = entMan.System<SkillsSystem>();
             var unskilled = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var unskilledTreater = entMan.SpawnEntity("CMUHemostaticTraumaDressing4", MapCoordinates.Nullspace);
@@ -422,12 +428,12 @@ public sealed class RMCHumanPrototypeRegressionTest
                 {
                     Assert.That(unskilledInteract.Handled, Is.True);
                     Assert.That(entMan.HasComponent<CMUBandagePendingComponent>(unskilled), Is.True);
-                    Assert.That(CountTreatedWounds(unskilledWounds, WoundType.Brute), Is.EqualTo(0));
+                    Assert.That(CountTreatedWounds(ledger, unskilledWounds, WoundType.Brute), Is.EqualTo(0));
                     Assert.That(entMan.GetComponent<StackComponent>(unskilledTreater).Count, Is.EqualTo(6));
 
                     Assert.That(corpsmanInteract.Handled, Is.True);
                     Assert.That(entMan.HasComponent<CMUBandagePendingComponent>(corpsman), Is.False);
-                    Assert.That(CountTreatedWounds(corpsmanWounds, WoundType.Brute), Is.EqualTo(2));
+                    Assert.That(CountTreatedWounds(ledger, corpsmanWounds, WoundType.Brute), Is.EqualTo(2));
                     Assert.That(entMan.GetComponent<StackComponent>(corpsmanTreater).Count, Is.EqualTo(5));
                 });
             }
@@ -497,15 +503,15 @@ public sealed class RMCHumanPrototypeRegressionTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
-            var wound = GetField<List<Wound>>(wounds, nameof(BodyPartWoundComponent.Wounds))[0];
-            var quality = GetField<List<WoundTreatmentQuality>>(wounds, nameof(BodyPartWoundComponent.TreatmentQualities))[0];
+            var entry = ledger.GetEntries(wounds)[0];
             var afterHealth = entMan.GetComponent<BodyPartHealthComponent>(torso);
 
             Assert.Multiple(() =>
             {
-                Assert.That(wound.Treated, Is.False);
-                Assert.That(quality, Is.EqualTo(WoundTreatmentQuality.Untreated));
+                Assert.That(entry.Wound.Treated, Is.False);
+                Assert.That(entry.TreatmentQuality, Is.EqualTo(WoundTreatmentQuality.Untreated));
                 Assert.That(afterHealth.Current, Is.EqualTo(cap));
             });
         });
@@ -586,17 +592,18 @@ public sealed class RMCHumanPrototypeRegressionTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var torsoHealth = entMan.GetComponent<BodyPartHealthComponent>(torso);
             var armHealth = entMan.GetComponent<BodyPartHealthComponent>(rightArm);
-            var torsoWound = GetField<List<Wound>>(entMan.GetComponent<BodyPartWoundComponent>(torso), nameof(BodyPartWoundComponent.Wounds))[0];
-            var armWound = GetField<List<Wound>>(entMan.GetComponent<BodyPartWoundComponent>(rightArm), nameof(BodyPartWoundComponent.Wounds))[0];
+            var torsoEntry = ledger.GetEntries(entMan.GetComponent<BodyPartWoundComponent>(torso))[0];
+            var armEntry = ledger.GetEntries(entMan.GetComponent<BodyPartWoundComponent>(rightArm))[0];
 
             Assert.Multiple(() =>
             {
                 Assert.That(torsoHealth.Current, Is.EqualTo(torsoCap));
                 Assert.That(armHealth.Current, Is.EqualTo(armCap));
-                Assert.That(torsoWound.Treated, Is.False);
-                Assert.That(armWound.Treated, Is.False);
+                Assert.That(torsoEntry.Wound.Treated, Is.False);
+                Assert.That(armEntry.Wound.Treated, Is.False);
             });
         });
 
@@ -692,6 +699,7 @@ public sealed class RMCHumanPrototypeRegressionTest
         EntityUid patient = default;
         EntityUid treater = default;
         EntityUid torso = default;
+        FixedPoint2 expectedCap = default;
 
         await server.WaitPost(() =>
         {
@@ -711,7 +719,9 @@ public sealed class RMCHumanPrototypeRegressionTest
             AddBodyPartWound(entMan, torso, woundType, size: WoundSize.CutSmall);
 
             var health = entMan.GetComponent<BodyPartHealthComponent>(torso);
-            partHealth.SetCurrent((torso, health), FixedPoint2.New(85));
+            var initialHealth = health.Max - FixedPoint2.New(15);
+            expectedCap = initialHealth + (health.Max - initialHealth) / 2;
+            partHealth.SetCurrent((torso, health), initialHealth);
 
             var damage = entMan.GetComponent<DamageableComponent>(patient);
             damageable.SetDamage(patient, damage, new DamageSpecifier
@@ -733,7 +743,7 @@ public sealed class RMCHumanPrototypeRegressionTest
             var entMan = server.EntMan;
             var afterHealth = entMan.GetComponent<BodyPartHealthComponent>(torso);
 
-            Assert.That(afterHealth.Current, Is.EqualTo(FixedPoint2.New(92.5f)));
+            Assert.That(afterHealth.Current, Is.EqualTo(expectedCap));
         });
 
         await server.WaitPost(() =>
@@ -830,6 +840,7 @@ public sealed class RMCHumanPrototypeRegressionTest
         {
             var entMan = server.EntMan;
             var hands = entMan.System<SharedHandsSystem>();
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var skills = entMan.System<SkillsSystem>();
 
             patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
@@ -842,8 +853,7 @@ public sealed class RMCHumanPrototypeRegressionTest
             AddBodyPartWound(entMan, rightArm, WoundType.Brute);
 
             var wounds = entMan.GetComponent<BodyPartWoundComponent>(rightArm);
-            SetField(wounds, nameof(BodyPartWoundComponent.ExternalBleeding), ExternalBleedTier.Arterial);
-            entMan.Dirty(rightArm, wounds);
+            Assert.That(ledger.TryUpdateExternalBleeding(rightArm, ExternalBleedTier.Arterial, wounds), Is.True);
 
             var interact = new AfterInteractEvent(patient, line, patient, default, true);
             entMan.EventBus.RaiseLocalEvent(line, interact);
@@ -857,13 +867,14 @@ public sealed class RMCHumanPrototypeRegressionTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var wounds = entMan.GetComponent<BodyPartWoundComponent>(rightArm);
-            var wound = GetField<List<Wound>>(wounds, nameof(BodyPartWoundComponent.Wounds))[0];
+            var entry = ledger.GetEntries(wounds)[0];
 
             Assert.Multiple(() =>
             {
                 Assert.That(wounds.ExternalBleeding, Is.EqualTo(ExternalBleedTier.None));
-                Assert.That(wound.Treated, Is.False);
+                Assert.That(entry.Wound.Treated, Is.False);
             });
         });
 
@@ -1276,6 +1287,7 @@ public sealed class RMCHumanPrototypeRegressionTest
             var body = entMan.System<SharedBodySystem>();
             var flow = entMan.System<CMUSurgeryFlowSystem>();
             var hands = entMan.System<SharedHandsSystem>();
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var standing = entMan.System<StandingStateSystem>();
             var skills = entMan.System<SkillsSystem>();
             var xform = entMan.System<SharedTransformSystem>();
@@ -1375,6 +1387,7 @@ public sealed class RMCHumanPrototypeRegressionTest
             var body = entMan.System<SharedBodySystem>();
             var flow = entMan.System<CMUSurgeryFlowSystem>();
             var hands = entMan.System<SharedHandsSystem>();
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var standing = entMan.System<StandingStateSystem>();
             var skills = entMan.System<SkillsSystem>();
             var xform = entMan.System<SharedTransformSystem>();
@@ -1395,7 +1408,7 @@ public sealed class RMCHumanPrototypeRegressionTest
 
             AddBodyPartWound(entMan, leftArm, WoundType.Brute);
             var wounds = entMan.GetComponent<BodyPartWoundComponent>(leftArm);
-            SetField(wounds, nameof(BodyPartWoundComponent.ExternalBleeding), ExternalBleedTier.Arterial);
+            Assert.That(ledger.TryUpdateExternalBleeding(leftArm, ExternalBleedTier.Arterial, wounds), Is.True);
             entMan.EnsureComponent<InternalBleedingComponent>(leftArm);
             entMan.EnsureComponent<CMUTourniquetComponent>(leftArm);
             entMan.EnsureComponent<CMUEscharComponent>(leftArm);
@@ -1561,6 +1574,7 @@ public sealed class RMCHumanPrototypeRegressionTest
             var entMan = server.EntMan;
             var body = entMan.System<SharedBodySystem>();
             var map = entMan.System<SharedMapSystem>();
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var solutions = entMan.System<SharedSolutionContainerSystem>();
             var wounds = entMan.System<CMUWoundsSystem>();
 
@@ -1636,6 +1650,7 @@ public sealed class RMCHumanPrototypeRegressionTest
         {
             var entMan = server.EntMan;
             var map = entMan.System<SharedMapSystem>();
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var solutions = entMan.System<SharedSolutionContainerSystem>();
             var woundsSystem = entMan.System<CMUWoundsSystem>();
 
@@ -1652,8 +1667,7 @@ public sealed class RMCHumanPrototypeRegressionTest
                 AddBodyPartWound(entMan, rightArm, WoundType.Brute);
 
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(rightArm);
-                SetField(wounds, nameof(BodyPartWoundComponent.ExternalBleeding), ExternalBleedTier.Arterial);
-                entMan.Dirty(rightArm, wounds);
+                Assert.That(ledger.TryUpdateExternalBleeding(rightArm, ExternalBleedTier.Arterial, wounds), Is.True);
 
                 var bloodstream = entMan.GetComponent<BloodstreamComponent>(patient);
                 typeof(BloodstreamComponent)
@@ -2118,6 +2132,7 @@ public sealed class RMCHumanPrototypeRegressionTest
         {
             var entMan = server.EntMan;
             var body = entMan.System<SharedBodySystem>();
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
 
             try
@@ -2138,7 +2153,7 @@ public sealed class RMCHumanPrototypeRegressionTest
                 foreach (var (partUid, _) in body.GetBodyChildren(human))
                 {
                     if (entMan.TryGetComponent<BodyPartWoundComponent>(partUid, out var wounds) &&
-                        wounds.Wounds.Count > 0)
+                        ledger.GetEntries(wounds).Count > 0)
                     {
                         woundedParts++;
                     }
@@ -2402,33 +2417,32 @@ public sealed class RMCHumanPrototypeRegressionTest
         WoundCleanupFlags cleanup = WoundCleanupFlags.None,
         WoundSize size = WoundSize.CutDeep)
     {
+        var ledger = entMan.System<CMUWoundLedgerSystem>();
         var wounds = entMan.EnsureComponent<BodyPartWoundComponent>(part);
-        GetField<List<Wound>>(wounds, nameof(BodyPartWoundComponent.Wounds)).Add(new Wound(damage ?? FixedPoint2.New(10), FixedPoint2.Zero, 0f, null, type, false));
-        GetField<List<WoundSize>>(wounds, nameof(BodyPartWoundComponent.Sizes)).Add(size);
-        GetField<List<int>>(wounds, nameof(BodyPartWoundComponent.Bandages)).Add(0);
-        GetField<List<WoundMechanism>>(wounds, nameof(BodyPartWoundComponent.Mechanisms)).Add(type == WoundType.Burn ? WoundMechanism.Burn : WoundMechanism.Generic);
-        GetField<List<WoundMechanismFlags>>(wounds, nameof(BodyPartWoundComponent.SecondaryMechanisms)).Add(WoundMechanismFlags.None);
-        GetField<List<WoundTreatmentQuality>>(wounds, nameof(BodyPartWoundComponent.TreatmentQualities)).Add(WoundTreatmentQuality.Untreated);
-        GetField<List<WoundCleanupFlags>>(wounds, nameof(BodyPartWoundComponent.Cleanup)).Add(cleanup);
+        Assert.That(ledger.AddEntry(wounds, new CMUWoundEntry(
+            new Wound(damage ?? FixedPoint2.New(10), FixedPoint2.Zero, 0f, null, type, false),
+            size,
+            0,
+            type == WoundType.Burn ? WoundMechanism.Burn : WoundMechanism.Generic,
+            WoundMechanismFlags.None,
+            WoundTreatmentQuality.Untreated,
+            cleanup)), Is.GreaterThanOrEqualTo(0));
     }
 
-    private static int CountTreatedWounds(BodyPartWoundComponent comp, WoundType type)
+    private static int CountTreatedWounds(
+        CMUWoundLedgerSystem ledger,
+        BodyPartWoundComponent comp,
+        WoundType type)
     {
         var count = 0;
-        foreach (var wound in GetField<List<Wound>>(comp, nameof(BodyPartWoundComponent.Wounds)))
+        foreach (var entry in ledger.GetEntries(comp))
         {
-            if (wound.Type == type && wound.Treated)
+            if (entry.Wound.Type == type && entry.Wound.Treated)
                 count++;
         }
 
         return count;
     }
-
-    private static T GetField<T>(BodyPartWoundComponent comp, string name)
-        => (T) typeof(BodyPartWoundComponent).GetField(name, BindingFlags.Instance | BindingFlags.Public)!.GetValue(comp)!;
-
-    private static void SetField<T>(BodyPartWoundComponent comp, string name, T value)
-        => typeof(BodyPartWoundComponent).GetField(name, BindingFlags.Instance | BindingFlags.Public)!.SetValue(comp, value);
 
     private static FixedPoint2 DamageInGroup(IPrototypeManager prototypes, DamageSpecifier damage, string groupId)
     {

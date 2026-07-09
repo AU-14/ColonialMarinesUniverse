@@ -1,7 +1,6 @@
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared.Body.Organ;
-using Content.Shared.Body.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -17,7 +16,7 @@ public abstract partial class SharedKidneysSystem : EntitySystem
 {
     [Dependency] protected IConfigurationManager Cfg = default!;
     [Dependency] protected IGameTiming Timing = default!;
-    [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
     [Dependency] protected SharedStatusEffectsSystem Status = default!;
 
     private static readonly EntProtoId RenalFailure = "StatusEffectCMURenalFailure";
@@ -70,7 +69,7 @@ public abstract partial class SharedKidneysSystem : EntitySystem
     public float GetClearanceMultiplier(EntityUid body)
     {
         var best = -1f;
-        foreach (var (organId, _) in Body.GetBodyOrgans(body))
+        foreach (var (organId, _) in MedicalIndex.GetOrgans(body))
         {
             if (!TryComp<KidneysComponent>(organId, out var kidney))
                 continue;

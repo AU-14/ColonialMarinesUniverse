@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Content.Shared.Body.Part;
 using Robust.Shared.GameObjects;
 
 namespace Content.Shared._CMU14.Medical.Treatment.Surgery.Traits;
@@ -37,6 +38,9 @@ public sealed partial class SharedCMUSurgicalTraitSystem : EntitySystem
 
     public void EnsureTrait(EntityUid part, CMUSurgicalTrait trait)
     {
+        if (HasTrait(part, trait))
+            return;
+
         switch (trait)
         {
             case CMUSurgicalTrait.VascularTear:
@@ -61,6 +65,11 @@ public sealed partial class SharedCMUSurgicalTraitSystem : EntitySystem
                 EnsureComp<CMUOrganHemorrhageComponent>(part);
                 break;
         }
+
+        if (!HasTrait(part, trait))
+            return;
+
+        RaiseTraitChanged(part, trait, false);
     }
 
     public bool RemoveTrait(EntityUid part, CMUSurgicalTrait trait)
@@ -93,6 +102,7 @@ public sealed partial class SharedCMUSurgicalTraitSystem : EntitySystem
                 break;
         }
 
+        RaiseTraitChanged(part, trait, true);
         return true;
     }
 
@@ -115,5 +125,14 @@ public sealed partial class SharedCMUSurgicalTraitSystem : EntitySystem
             if (HasTrait(part, trait))
                 yield return trait;
         }
+    }
+
+    private void RaiseTraitChanged(EntityUid part, CMUSurgicalTrait trait, bool removed)
+    {
+        if (!TryComp<BodyPartComponent>(part, out var partComp) || partComp.Body is not { } body)
+            return;
+
+        var ev = new CMUSurgicalTraitChangedEvent(body, part, trait, removed);
+        RaiseLocalEvent(ref ev);
     }
 }

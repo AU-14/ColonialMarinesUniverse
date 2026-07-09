@@ -1,5 +1,5 @@
 using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared.Body.Systems;
+using Content.Shared._CMU14.Medical.Core;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
 using JetBrains.Annotations;
@@ -33,14 +33,14 @@ public sealed partial class HealOrganEffect : EntityEffect
         if (!compFactory.TryGetRegistration(OrganComponent, out var reg))
             return;
 
-        var bodySys = entMan.System<SharedBodySystem>();
+        var medicalIndex = entMan.System<CMUMedicalBodyIndexSystem>();
         var organSys = entMan.System<SharedOrganHealthSystem>();
 
-        foreach (var organ in bodySys.GetBodyOrgans(reagent.TargetEntity))
+        foreach (var organ in medicalIndex.GetOrgans(reagent.TargetEntity))
         {
-            if (!entMan.HasComponent(organ.Id, reg.Type))
+            if (!entMan.HasComponent(organ.Owner, reg.Type))
                 continue;
-            organSys.HealOrgan((organ.Id, null), reagent.TargetEntity, Amount);
+            organSys.HealOrgan((organ.Owner, null), reagent.TargetEntity, Amount);
         }
     }
 

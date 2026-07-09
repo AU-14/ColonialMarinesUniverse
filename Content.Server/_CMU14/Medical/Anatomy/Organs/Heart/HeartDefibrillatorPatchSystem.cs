@@ -2,7 +2,6 @@ using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.Organs;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
 using Content.Shared._RMC14.Medical.Defibrillator;
-using Content.Shared.Body.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
@@ -12,8 +11,8 @@ namespace Content.Server._CMU14.Medical.Anatomy.Organs.Heart;
 public sealed partial class HeartDefibrillatorPatchSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _cfg = default!;
-    [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private SharedHeartSystem _heart = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
 
     public override void Initialize()
     {
@@ -55,17 +54,14 @@ public sealed partial class HeartDefibrillatorPatchSystem : EntitySystem
         heartId = default;
         heart = default!;
         health = default!;
-        foreach (var (organId, _) in _body.GetBodyOrgans(body))
-        {
-            if (!TryComp<HeartComponent>(organId, out var h))
-                continue;
-            if (!TryComp<OrganHealthComponent>(organId, out var oh))
-                continue;
-            heartId = organId;
-            heart = h;
-            health = oh;
-            return true;
-        }
-        return false;
+        if (!_medicalIndex.TryGetOrgan<HeartComponent>(body, out var organId) ||
+            !TryComp<HeartComponent>(organId, out var h) ||
+            !TryComp<OrganHealthComponent>(organId, out var oh))
+            return false;
+
+        heartId = organId;
+        heart = h;
+        health = oh;
+        return true;
     }
 }

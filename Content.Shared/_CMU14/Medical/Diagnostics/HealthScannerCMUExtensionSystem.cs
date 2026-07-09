@@ -13,10 +13,8 @@ using Content.Shared._RMC14.Medical.Scanner;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Configuration;
-using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -28,8 +26,7 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IComponentFactory _compFactory = default!;
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private SharedBodySystem _body = default!;
-    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedPainShockSystem _pain = default!;
     [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
     [Dependency] private SkillsSystem _skills = default!;
@@ -107,7 +104,7 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
     {
         var parts = new Dictionary<BodyPartType, CMUBodyPartReadout>();
         var seen = new HashSet<(BodyPartType, BodyPartSymmetry)>();
-        foreach (var (partUid, partComp) in _body.GetBodyChildren(patient))
+        foreach (var (partUid, partComp) in _medicalIndex.GetBodyParts(patient))
         {
             if (!TryComp<BodyPartHealthComponent>(partUid, out var ph))
                 continue;
@@ -152,12 +149,12 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
     {
         var organs = new List<CMUOrganReadout>();
 
-        foreach (var organ in _body.GetBodyOrgans(patient))
+        foreach (var organ in _medicalIndex.GetOrgans(patient))
         {
-            if (!TryComp<OrganHealthComponent>(organ.Id, out var oh))
+            if (!TryComp<OrganHealthComponent>(organ.Owner, out var oh))
                 continue;
             organs.Add(new CMUOrganReadout(
-                OrganName(organ.Id),
+                OrganName(organ.Owner),
                 oh.Stage,
                 oh.Current,
                 oh.Max,
@@ -168,17 +165,14 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
         // was extracted (or never present) — emit a Removed row keyed by the
         // slot id so the medic sees the missing organ instead of inferring it
         // from a shorter list.
-        foreach (var (partUid, partComp) in _body.GetBodyChildren(patient))
+        foreach (var (partUid, partComp) in _medicalIndex.GetBodyParts(patient))
         {
-            foreach (var (slotId, _) in partComp.Organs)
+            foreach (var slot in _medicalIndex.GetOrganSlots(partUid))
             {
-                var containerId = SharedBodySystem.OrganSlotContainerIdPrefix + slotId;
-                if (!_containers.TryGetContainer(partUid, containerId, out var container))
-                    continue;
-                if (container.ContainedEntities.Count > 0)
+                if (slot.Organ is not null)
                     continue;
                 organs.Add(new CMUOrganReadout(
-                    slotId,
+                    slot.SlotId,
                     OrganDamageStage.Dead,
                     FixedPoint2.Zero,
                     FixedPoint2.Zero,
@@ -192,7 +186,7 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
     private void FillFractures(EntityUid patient, HealthScannerBuiState state, bool exactSeverity)
     {
         var fractures = new List<CMUFractureReadout>();
-        foreach (var (partUid, partComp) in _body.GetBodyChildren(patient))
+        foreach (var (partUid, partComp) in _medicalIndex.GetBodyParts(patient))
         {
             if (!TryComp<FractureComponent>(partUid, out var frac))
                 continue;
@@ -209,7 +203,7 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
     private void FillInternalBleeds(EntityUid patient, HealthScannerBuiState state, bool exactLocation)
     {
         var bleeds = new List<CMUInternalBleedReadout>();
-        foreach (var (partUid, partComp) in _body.GetBodyChildren(patient))
+        foreach (var (partUid, partComp) in _medicalIndex.GetBodyParts(patient))
         {
             if (!TryComp<InternalBleedingComponent>(partUid, out var ib))
                 continue;
@@ -221,7 +215,7 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
         }
         state.CMUInternalBleeds = bleeds;
 
-        foreach (var (partUid, _) in _body.GetBodyChildren(patient))
+        foreach (var (partUid, _) in _medicalIndex.GetBodyParts(patient))
         {
             if (!TryComp<BodyPartWoundComponent>(partUid, out var pw))
                 continue;
@@ -235,14 +229,12 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
 
     private void FillHeart(EntityUid patient, HealthScannerBuiState state)
     {
-        foreach (var organ in _body.GetBodyOrgans(patient))
-        {
-            if (!TryComp<HeartComponent>(organ.Id, out var heart))
-                continue;
-            state.CMUHeartBpm = heart.BeatsPerMinute;
-            state.CMUHeartStopped = heart.Stopped;
+        if (!_medicalIndex.TryGetOrgan<HeartComponent>(patient, out var organ) ||
+            !TryComp<HeartComponent>(organ, out var heart))
             return;
-        }
+
+        state.CMUHeartBpm = heart.BeatsPerMinute;
+        state.CMUHeartStopped = heart.Stopped;
     }
 
     private string OrganName(EntityUid organ)

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Content.Shared._RMC14.Medical.Surgery;
+using Content.Shared._RMC14.Medical.Surgery.Steps;
 using Content.Shared.Body.Part;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -6,10 +8,11 @@ using Robust.Shared.Serialization;
 namespace Content.Shared._CMU14.Medical.Treatment.Surgery;
 
 /// <summary>
-///     Tool categories are resolved at click time. Allowed values include:
+///     Tool categories are compiled into the surgery registry and matched at
+///     click time. Allowed values include:
 ///     <c>scalpel</c>, <c>hemostat</c>, <c>retractor</c>, <c>cautery</c>,
 ///     <c>bone_saw</c>, <c>bone_setter</c>, <c>bone_gel</c>,
-    ///     <c>bone_graft</c>, <c>organ_clamp</c>, <c>scalpel_or_burn_kit</c>.
+///     <c>bone_graft</c>, <c>organ_clamp</c>, <c>scalpel_or_burn_kit</c>.
 /// </summary>
 [Prototype("cmuSurgeryStepMetadata")]
 public sealed partial class CMUSurgeryStepMetadataPrototype : IPrototype
@@ -22,7 +25,7 @@ public sealed partial class CMUSurgeryStepMetadataPrototype : IPrototype
     ///     entity prototype) this metadata describes.
     /// </summary>
     [DataField(required: true)]
-    public string Surgery = string.Empty;
+    public EntProtoId<CMSurgeryComponent> Surgery;
 
     /// <summary>
     ///     Leave null to fall back to the surgery prototype's
@@ -60,9 +63,9 @@ public sealed partial class CMUSurgeryStepMetadataPrototype : IPrototype
     public List<BodyPartType> SelfSurgeryValidParts = new();
 
     /// <summary>
-    ///     Order MUST match the surgery prototype's <c>steps:</c> list. The
-    ///     V2 system reads this by index — entries beyond the list length
-    ///     fall back to "no specific tool required" / unlabelled.
+    ///     Optional labels and tool categories keyed by the actual surgery
+    ///     step prototype id. Entry order is irrelevant. An entirely empty
+    ///     list uses the step prototypes' legacy labels and tool components.
     /// </summary>
     [DataField]
     public List<CMUSurgeryStepMetadataEntry> Steps = new();
@@ -71,8 +74,8 @@ public sealed partial class CMUSurgeryStepMetadataPrototype : IPrototype
 [Serializable, NetSerializable, DataDefinition]
 public sealed partial class CMUSurgeryStepMetadataEntry
 {
-    [DataField]
-    public string StepId = string.Empty;
+    [DataField(required: true)]
+    public EntProtoId<CMSurgeryStepComponent> StepId;
 
     [DataField]
     public string Label = string.Empty;

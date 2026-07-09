@@ -6,22 +6,18 @@ using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._CMU14.Medical.Treatment.FirstAid;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.Wounds;
-using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Configuration;
-using Robust.Shared.Containers;
 
 namespace Content.Shared._CMU14.Medical.Diagnostics.Examine;
 
 public sealed partial class CMUMedicalExamineSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _cfg = default!;
-    [Dependency] private SharedBodySystem _body = default!;
-    [Dependency] private SharedContainerSystem _containers = default!;
-    [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
+    [Dependency] private CMUMedicalExamineProjectionSystem _woundProjection = default!;
 
     private const string UntreatedWoundColor = "#ff4d4d";
     private const string TreatedWoundColor = "#7bd88f";
@@ -67,8 +63,9 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
         bool includeMissingParts)
     {
         var partSummaries = new List<BodyPartExamineSummary>();
+        TryComp<CMUMedicalExamineProjectionComponent>(body, out var woundProjection);
 
-        foreach (var (partUid, part) in _body.GetBodyChildren(body))
+        foreach (var (partUid, part) in _medicalIndex.GetBodyParts(body))
         {
             var sections = new List<string>();
 
@@ -78,18 +75,21 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
             {
                 var untreated = new List<string>();
                 var treatedWounds = 0;
-                if (TryComp<BodyPartWoundComponent>(partUid, out var wounds))
+                if (woundProjection != null &&
+                    _woundProjection.TryGetPart(woundProjection, part.PartType, part.Symmetry, out var projectedPart))
                 {
-                    treatedWounds = _woundLedger.CountWounds(wounds).Treated;
-                    for (var i = 0; i < wounds.Wounds.Count; i++)
+                    foreach (var wound in projectedPart.Wounds)
                     {
-                        if (wounds.Wounds[i].Treated)
+                        if (wound.Treated)
+                        {
+                            treatedWounds++;
                             continue;
+                        }
 
-                        untreated.Add(DescribeVisibleWound(wounds, i));
+                        untreated.Add(DescribeVisibleWound(wound));
                     }
 
-                    if (wounds.ExternalBleeding != ExternalBleedTier.None)
+                    if (projectedPart.ExternalBleeding != ExternalBleedTier.None)
                         untreated.Add("active bleeding");
                 }
 
@@ -145,22 +145,22 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
     public string GetDetailedExamineText(EntityUid body)
     {
         var partSummaries = new List<BodyPartExamineSummary>();
+        TryComp<CMUMedicalExamineProjectionComponent>(body, out var woundProjection);
 
-        foreach (var (partUid, part) in _body.GetBodyChildren(body))
+        foreach (var (partUid, part) in _medicalIndex.GetBodyParts(body))
         {
             var sections = new List<string>();
 
             AddRoboticDetailedSections(partUid, sections);
 
-            if (TryComp<BodyPartWoundComponent>(partUid, out var wounds))
+            if (woundProjection != null &&
+                _woundProjection.TryGetPart(woundProjection, part.PartType, part.Symmetry, out var projectedPart))
             {
-                for (var i = 0; i < wounds.Wounds.Count; i++)
-                {
-                    sections.Add(DescribeDetailedWound(wounds, i));
-                }
+                foreach (var wound in projectedPart.Wounds)
+                    sections.Add(DescribeDetailedWound(wound));
 
-                if (wounds.ExternalBleeding != ExternalBleedTier.None)
-                    sections.Add(Color($"external bleeding: {DescribeBleedTier(wounds.ExternalBleeding)}", DetailedBleedColor));
+                if (projectedPart.ExternalBleeding != ExternalBleedTier.None)
+                    sections.Add(Color($"external bleeding: {DescribeBleedTier(projectedPart.ExternalBleeding)}", DetailedBleedColor));
             }
 
             if (HasComp<CMUEscharComponent>(partUid))
@@ -200,25 +200,24 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
     public string GetInspectInjuriesText(EntityUid body)
     {
         var groups = new Dictionary<string, InspectInjuryGroup>();
+        TryComp<CMUMedicalExamineProjectionComponent>(body, out var woundProjection);
 
-        foreach (var (partUid, part) in _body.GetBodyChildren(body))
+        foreach (var (partUid, part) in _medicalIndex.GetBodyParts(body))
         {
             var partName = FormatPartName(part.PartType, part.Symmetry);
             var partOrder = BodyPartSortOrder(part.PartType, part.Symmetry);
 
             AddRoboticInspectSite(groups, partUid, partName, partOrder);
 
-            if (TryComp<BodyPartWoundComponent>(partUid, out var wounds))
+            if (woundProjection != null &&
+                _woundProjection.TryGetPart(woundProjection, part.PartType, part.Symmetry, out var projectedPart))
             {
-                for (var i = 0; i < wounds.Wounds.Count; i++)
+                foreach (var wound in projectedPart.Wounds)
                 {
-                    var wound = wounds.Wounds[i];
                     if (wound.Treated)
                         continue;
 
-                    var size = i < wounds.Sizes.Count ? wounds.Sizes[i] : WoundSize.CutDeep;
-                    var mechanism = i < wounds.Mechanisms.Count ? wounds.Mechanisms[i] : CMUWoundLedgerSystem.LegacyMechanismFor(wound.Type);
-                    var header = GetInspectWoundHeader(mechanism, wound.Type);
+                    var header = GetInspectWoundHeader(wound.Mechanism, wound.Type);
                     var key = header;
 
                     if (!groups.TryGetValue(key, out var group))
@@ -231,10 +230,10 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
                         group.Order = partOrder;
                     }
 
-                    group.AddWound(partName, size, wound.Damage.Float());
+                    group.AddWound(partName, wound.Size, wound.Damage.Float());
                 }
 
-                if (wounds.ExternalBleeding == ExternalBleedTier.Arterial)
+                if (projectedPart.ExternalBleeding == ExternalBleedTier.Arterial)
                     AddArterialBleedingSite(groups, partName, partOrder);
             }
 
@@ -300,20 +299,9 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
 
     public ExternalBleedTier GetWorstExternalBleeding(EntityUid body)
     {
-        var bleeding = ExternalBleedTier.None;
-
-        foreach (var (partUid, _) in _body.GetBodyChildren(body))
-        {
-            if (!TryComp<BodyPartWoundComponent>(partUid, out var wounds) ||
-                wounds.ExternalBleeding <= bleeding)
-            {
-                continue;
-            }
-
-            bleeding = wounds.ExternalBleeding;
-        }
-
-        return bleeding;
+        return TryComp<CMUMedicalExamineProjectionComponent>(body, out var projection)
+            ? _woundProjection.GetWorstExternalBleeding(projection)
+            : ExternalBleedTier.None;
     }
 
     private static void AddArterialBleedingSite(Dictionary<string, InspectInjuryGroup> groups, string partName, int partOrder)
@@ -423,52 +411,32 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
     private List<(BodyPartType Type, BodyPartSymmetry Symmetry)> GetMissingPartSlots(EntityUid body)
     {
         var missing = new List<(BodyPartType Type, BodyPartSymmetry Symmetry)>();
-        if (!TryComp<BodyComponent>(body, out var bodyComp))
-            return missing;
-
-        if (_body.GetRootPartOrNull(body, bodyComp) is not { } root)
-            return missing;
-
-        AddMissingChildSlots(root.Entity, root.BodyPart, missing);
-
-        foreach (var (partUid, part) in _body.GetBodyChildren(body, bodyComp))
-        {
-            if (partUid == root.Entity)
-                continue;
-
-            AddMissingChildSlots(partUid, part, missing);
-        }
+        foreach (var (partUid, part) in _medicalIndex.GetBodyParts(body))
+            AddMissingChildSlots(partUid, part.Symmetry, missing);
 
         return missing;
     }
 
     private void AddMissingChildSlots(
         EntityUid parent,
-        BodyPartComponent parentPart,
+        BodyPartSymmetry parentSymmetry,
         List<(BodyPartType Type, BodyPartSymmetry Symmetry)> missing)
     {
-        foreach (var (slotId, slot) in parentPart.Children)
+        foreach (var slot in _medicalIndex.GetBodyPartSlots(parent))
         {
             if (!CMUBodyPartSlots.IsReportableMissingPart(slot.Type))
                 continue;
-
-            var containerId = SharedBodySystem.GetPartSlotContainerId(slotId);
-            if (_containers.TryGetContainer(parent, containerId, out var container) &&
-                container.ContainedEntities.Count > 0)
-            {
+            if (slot.Part is not null)
                 continue;
-            }
 
-            if (CMUBodyPartSlots.TryGetSymmetry(slotId, parentPart.Symmetry, out var symmetry))
+            if (CMUBodyPartSlots.TryGetSymmetry(slot.SlotId, parentSymmetry, out var symmetry))
                 missing.Add((slot.Type, symmetry));
         }
     }
 
-    private static string DescribeVisibleWound(BodyPartWoundComponent wounds, int index)
+    private static string DescribeVisibleWound(CMUMedicalVisibleWound wound)
     {
-        var wound = wounds.Wounds[index];
-        var size = index < wounds.Sizes.Count ? wounds.Sizes[index] : WoundSize.CutDeep;
-        return $"a {WoundSizeProfile.StageName(size, wound.Damage.Float())}";
+        return $"a {WoundSizeProfile.StageName(wound.Size, wound.Damage.Float())}";
     }
 
     private static string DescribeVisibleTreatedWounds(int count, string treatment)
@@ -489,9 +457,9 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
         };
     }
 
-    private static string DescribeDetailedWound(BodyPartWoundComponent wounds, int index)
+    private static string DescribeDetailedWound(CMUMedicalVisibleWound wound)
     {
-        var details = GetDetailedWoundDetails(wounds, index);
+        var details = GetDetailedWoundDetails(wound);
         return ToDetailedLines(details.Header, details.Body);
     }
 
@@ -522,13 +490,11 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
         _ => "Moderate",
     };
 
-    private static DetailedWoundDetails GetDetailedWoundDetails(BodyPartWoundComponent wounds, int index)
+    private static DetailedWoundDetails GetDetailedWoundDetails(CMUMedicalVisibleWound wound)
     {
-        var wound = wounds.Wounds[index];
-        var size = index < wounds.Sizes.Count ? wounds.Sizes[index] : WoundSize.CutDeep;
-        var mechanism = index < wounds.Mechanisms.Count ? wounds.Mechanisms[index] : CMUWoundLedgerSystem.LegacyMechanismFor(wound.Type);
-
-        var header = Color(WoundSizeProfile.StageName(size, wound.Damage.Float()), WoundColorFor(mechanism, wound.Type));
+        var header = Color(
+            WoundSizeProfile.StageName(wound.Size, wound.Damage.Float()),
+            WoundColorFor(wound.Mechanism, wound.Type));
         var details = Color(
             DescribeTreatment(wound.Treated),
             TreatmentColorFor(wound.Treated));

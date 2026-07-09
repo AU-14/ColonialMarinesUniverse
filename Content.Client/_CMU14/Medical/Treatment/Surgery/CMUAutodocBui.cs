@@ -25,6 +25,7 @@ public sealed partial class CMUAutodocBui : BoundUserInterface
     [Dependency] private IPlayerManager _players = default!;
 
     private CMUAutodocWindow? _window;
+    private CMUAutodocBuiState? _latestState;
     private CMUSurgeryPartKey? _selectedPart;
 
     public CMUAutodocBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
@@ -42,15 +43,30 @@ public sealed partial class CMUAutodocBui : BoundUserInterface
         _window.ClearButton.OnPressed += ClearPressed;
         _window.EjectButton.OnPressed += EjectPressed;
 
-        if (State is CMUAutodocBuiState state)
+        if (_latestState is { } state)
             Refresh(state);
+        else if (State is CMUAutodocBuiState legacyState)
+            Refresh(legacyState);
+    }
+
+    protected override void ReceiveMessage(BoundUserInterfaceMessage message)
+    {
+        base.ReceiveMessage(message);
+        if (message is not CMUAutodocStateMessage update)
+            return;
+
+        _latestState = update.State;
+        Refresh(update.State);
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
     {
         base.UpdateState(state);
         if (state is CMUAutodocBuiState autodoc)
+        {
+            _latestState = autodoc;
             Refresh(autodoc);
+        }
     }
 
     private void Refresh(CMUAutodocBuiState state)

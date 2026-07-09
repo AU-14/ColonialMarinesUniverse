@@ -1,5 +1,5 @@
+using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
-using Content.Shared.Body.Systems;
 using Content.Shared.Eye.Blinding.Components;
 using Robust.Shared.GameObjects;
 
@@ -7,7 +7,7 @@ namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Eyes;
 
 public abstract partial class SharedEyesSystem : EntitySystem
 {
-    [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
 
     public override void Initialize()
     {
@@ -30,7 +30,7 @@ public abstract partial class SharedEyesSystem : EntitySystem
     {
         var best = OrganDamageStage.Dead;
         var any = false;
-        foreach (var (organId, _) in Body.GetBodyOrgans(body))
+        foreach (var (organId, _) in MedicalIndex.GetOrgans(body))
         {
             if (!HasComp<EyesComponent>(organId))
                 continue;

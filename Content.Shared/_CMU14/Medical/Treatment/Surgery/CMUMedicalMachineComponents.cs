@@ -9,7 +9,7 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared._CMU14.Medical.Treatment.Surgery;
 
-[RegisterComponent]
+[RegisterComponent, AutoGenerateComponentPause]
 public sealed partial class CMUAutodocPodComponent : Component
 {
     public const string BodyContainerId = "cmu-autodoc-bodyContainer";
@@ -32,7 +32,7 @@ public sealed partial class CMUAutodocPodComponent : Component
     [ViewVariables]
     public EntityUid Operator;
 
-    [ViewVariables]
+    [ViewVariables, AutoPausedField]
     public TimeSpan NextStepAt;
 
     [ViewVariables]
@@ -44,9 +44,6 @@ public sealed partial class CMUAutodocConsoleComponent : Component
 {
     [DataField]
     public float LinkRange = 4f;
-
-    [ViewVariables]
-    public EntityUid LastViewer;
 }
 
 [RegisterComponent]
@@ -100,8 +97,6 @@ public sealed partial class CMUBodyScannerConsoleComponent : Component
     [DataField]
     public float PulseGraceSize = 0.1f;
 
-    [ViewVariables]
-    public EntityUid LastViewer;
 }
 
 [RegisterComponent]
@@ -135,30 +130,30 @@ public sealed partial class CMUBodyScannerPuzzleProgressComponent : Component
     public CMUBodyScannerFeedbackKind LastFeedbackKind;
 }
 
-[RegisterComponent]
+[RegisterComponent, AutoGenerateComponentPause]
 public sealed partial class CMUBodyScannerSurgerySpeedComponent : Component
 {
     [DataField]
     public EntityUid Patient;
 
-    [DataField]
+    [DataField, AutoPausedField]
     public TimeSpan ExpiresAt;
 
     [DataField]
     public float DelayMultiplier = 0.5f;
 }
 
-[RegisterComponent]
+[RegisterComponent, AutoGenerateComponentPause]
 public sealed partial class CMUBodyScannerCalibrationLockoutComponent : Component
 {
     [ViewVariables]
     public EntityUid Patient;
 
-    [ViewVariables]
+    [ViewVariables, AutoPausedField]
     public TimeSpan ExpiresAt;
 }
 
-[RegisterComponent]
+[RegisterComponent, AutoGenerateComponentPause]
 public sealed partial class CMULimbPrinterComponent : Component
 {
     public const string BeakerSlotId = "cmu-limb-printer-beakerSlot";
@@ -204,7 +199,7 @@ public sealed partial class CMULimbPrinterComponent : Component
     [DataField]
     public EntProtoId RoboticRightLegPrototype = "CMUPartRoboticRightLeg";
 
-    [ViewVariables]
+    [ViewVariables, AutoPausedField]
     public TimeSpan WorkingUntil;
 }
 

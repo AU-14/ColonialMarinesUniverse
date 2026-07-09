@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
@@ -26,8 +25,8 @@ namespace Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 public abstract partial class SharedHitLocationSystem : EntitySystem
 {
     [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
     [Dependency] protected IRobustRandom Random = default!;
-    [Dependency] protected SharedBodySystem Body = default!;
     [Dependency] protected SharedBodyZoneTargetingSystem ZoneTargeting = default!;
     [Dependency] protected SharedTransformSystem _transform = default!;
     [Dependency] protected SkillsSystem Skills = default!;
@@ -238,7 +237,13 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
 
     private EntityUid? FindFirstPartOfType(EntityUid bodyId, BodyPartType type, BodyPartSymmetry? symmetry = null)
     {
-        foreach (var (uid, partComp) in Body.GetBodyChildren(bodyId))
+        if (symmetry is { } exact &&
+            MedicalIndex.TryGetBodyPart(bodyId, new CMUMedicalBodyPartKey(type, exact), out var exactPart))
+        {
+            return exactPart;
+        }
+
+        foreach (var (uid, partComp) in MedicalIndex.GetBodyParts(bodyId))
         {
             if (partComp.PartType != type)
                 continue;
@@ -323,7 +328,14 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
 
     private EntityUid? FindFirstDamageablePartOfType(EntityUid bodyId, BodyPartType type, BodyPartSymmetry? symmetry = null)
     {
-        foreach (var (uid, partComp) in Body.GetBodyChildren(bodyId))
+        if (symmetry is { } exact &&
+            MedicalIndex.TryGetBodyPart(bodyId, new CMUMedicalBodyPartKey(type, exact), out var exactPart) &&
+            HasComp<BodyPartHealthComponent>(exactPart))
+        {
+            return exactPart;
+        }
+
+        foreach (var (uid, partComp) in MedicalIndex.GetBodyParts(bodyId))
         {
             if (partComp.PartType != type)
                 continue;

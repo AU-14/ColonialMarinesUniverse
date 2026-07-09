@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared._CMU14.Medical.Core;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Rejuvenate;
@@ -14,6 +15,7 @@ public sealed partial class CMUProstheticLimbTraitSystem : EntitySystem
 {
     [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
 
     private static readonly EntProtoId LeftArmPrototype = "CMUPartRoboticLeftArm";
     private static readonly EntProtoId RightArmPrototype = "CMUPartRoboticRightArm";
@@ -161,7 +163,7 @@ public sealed partial class CMUProstheticLimbTraitSystem : EntitySystem
         BodyPartSymmetry symmetry,
         out EntityUid part)
     {
-        foreach (var (partUid, bodyPart) in _body.GetBodyChildren(body))
+        foreach (var (partUid, bodyPart) in _medicalIndex.GetBodyParts(body))
         {
             if (bodyPart.PartType != type ||
                 bodyPart.Symmetry != symmetry)

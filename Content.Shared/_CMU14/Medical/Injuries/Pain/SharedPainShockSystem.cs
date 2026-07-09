@@ -153,10 +153,16 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         => OnRecomputeTrigger(args.Body);
 
     private void OnEscharStartup(Entity<CMUEscharComponent> ent, ref ComponentStartup args)
-        => OnPartRecomputeTrigger(ent.Owner);
+    {
+        RaiseEscharChanged(ent.Owner, false);
+        OnPartRecomputeTrigger(ent.Owner);
+    }
 
     private void OnEscharRemove(Entity<CMUEscharComponent> ent, ref ComponentRemove args)
-        => OnPartRecomputeTrigger(ent.Owner);
+    {
+        RaiseEscharChanged(ent.Owner, true);
+        OnPartRecomputeTrigger(ent.Owner);
+    }
 
     private void OnInternalBleedChanged(ref InternalBleedingChangedEvent args)
         => OnRecomputeTrigger(args.Body);
@@ -170,6 +176,15 @@ public abstract partial class SharedPainShockSystem : EntitySystem
     private void RaiseWoundsChanged(EntityUid part, bool removed)
     {
         var ev = new BodyPartWoundsChangedEvent(part, removed);
+        RaiseLocalEvent(ref ev);
+    }
+
+    private void RaiseEscharChanged(EntityUid part, bool removed)
+    {
+        if (!TryComp<BodyPartComponent>(part, out var partComp) || partComp.Body is not { } body)
+            return;
+
+        var ev = new CMUEscharChangedEvent(body, part, removed);
         RaiseLocalEvent(ref ev);
     }
 
@@ -376,7 +391,7 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         SwapTierStatuses(body, pain, oldTier, newTier);
 
         var ev = new PainTierChangedEvent(body, oldTier, newTier);
-        RaiseLocalEvent(body, ref ev);
+        RaiseLocalEvent(body, ref ev, broadcast: true);
 
         if (newTier == PainTier.Shock && oldTier != PainTier.Shock)
             TriggerShockEntry(body, pain);

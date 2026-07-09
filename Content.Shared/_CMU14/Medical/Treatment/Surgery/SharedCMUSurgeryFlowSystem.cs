@@ -1,8 +1,13 @@
+using System.Collections.Frozen;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using Content.Shared._CMU14.DroneOperator;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._CMU14.Medical.Anatomy.Bones;
+using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Treatment.FirstAid;
+using Content.Shared._CMU14.Medical.Treatment.Surgery.Conditions;
+using Content.Shared._CMU14.Medical.Treatment.Surgery.Effects;
 using Content.Shared._CMU14.Medical.Treatment.Surgery.Markers;
 using Content.Shared._CMU14.Medical.Treatment.Surgery.Traits;
 using Content.Shared._CMU14.Medical.Injuries.Pain;
@@ -38,10 +43,13 @@ namespace Content.Shared._CMU14.Medical.Treatment.Surgery;
 public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
 {
     [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] protected IComponentFactory ComponentFactory = default!;
     [Dependency] protected INetManager Net = default!;
     [Dependency] protected IPrototypeManager Prototypes = default!;
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
+    [Dependency] protected CMUMedicalSchedulerSystem MedicalScheduler = default!;
     [Dependency] protected SharedDoAfterSystem DoAfter = default!;
     [Dependency] protected SharedHandsSystem Hands = default!;
     [Dependency] protected ItemToggleSystem ItemToggle = default!;
@@ -52,11 +60,10 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     [Dependency] protected SharedUserInterfaceSystem UserInterface = default!;
     [Dependency] protected SharedCMSurgerySystem RmcSurgery = default!;
 
-    private readonly Dictionary<string, CMUSurgeryStepMetadataPrototype> _bySurgery = new();
+    private CMUSurgeryRegistry _registry = CMUSurgeryRegistry.Empty;
 
     private readonly Dictionary<string, Type[]> _toolCategories = new();
 
-    private const float ArmedStepScanInterval = 0.5f;
     private const float SurgeryPainSuppressionMinimum = 0.5f;
     private const int SurgeryPainSuppressionTierMinimum = 2;
     private const string SurgeryUnconsciousStatus = "StatusEffectCMUUnconscious";
@@ -68,7 +75,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     private const string RemoveBoneFragmentsSurgery = "CMUSurgeryRemoveBoneFragments";
     private const string FreeOrganAdhesionsSurgery = "CMUSurgeryFreeOrganAdhesions";
     private const string PackOrganBleedSurgery = "CMUSurgeryPackOrganBleed";
-    private static readonly EntProtoId OpenBoneCavitySurgery = "CMUSurgeryOpenBoneCavity";
+    private static readonly EntProtoId<CMSurgeryComponent> OpenBoneCavitySurgery = "CMUSurgeryOpenBoneCavity";
     private static readonly EntProtoId MendRibcageStep = "CMSurgeryStepMendRibcage";
     private static readonly EntProtoId TieVascularTearStep = "CMUSurgeryStepTieVascularTear";
     private static readonly EntProtoId ExtractForeignBodyStep = "CMUSurgeryStepExtractForeignBody";
@@ -77,14 +84,14 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     private static readonly EntProtoId RemoveBoneFragmentsStep = "CMUSurgeryStepRemoveBoneFragments";
     private static readonly EntProtoId FreeOrganAdhesionsStep = "CMUSurgeryStepFreeOrganAdhesions";
     private static readonly EntProtoId PackOrganBleedStep = "CMUSurgeryStepPackOrganBleed";
-    private float _armedStepScanAccumulator;
+    private static readonly CMUMedicalWorkKey ArmedStepExpiryWork = new("surgery-armed-step-expiry");
 
     public override void Initialize()
     {
         base.Initialize();
 
         BuildToolCategoryTable();
-        IndexMetadata();
+        RebuildRegistry();
 
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
 
@@ -92,21 +99,181 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         SubscribeLocalEvent<CMUSurgeryArmedStepComponent, InteractHandEvent>(OnArmedInteractHand);
         SubscribeLocalEvent<CMUSurgeryArmedStepComponent, DoAfterAttemptEvent<CMUSurgeryStepDoAfterEvent>>(OnStepDoAfterAttempt);
         SubscribeLocalEvent<CMUSurgeryArmedStepComponent, CMUSurgeryStepDoAfterEvent>(OnStepDoAfter);
+        SubscribeLocalEvent<CMUSurgeryArmedStepComponent, CMUMedicalWorkDueEvent>(OnArmedStepExpiryDue);
     }
 
     private void OnPrototypesReloaded(PrototypesReloadedEventArgs args)
     {
-        if (args.WasModified<CMUSurgeryStepMetadataPrototype>())
-            IndexMetadata();
+        if (args.WasModified<CMUSurgeryStepMetadataPrototype>() || args.WasModified<EntityPrototype>())
+            RebuildRegistry();
     }
 
-    private void IndexMetadata()
+    private void RebuildRegistry()
     {
-        _bySurgery.Clear();
-        foreach (var proto in Prototypes.EnumeratePrototypes<CMUSurgeryStepMetadataPrototype>())
+        var metadataBySurgery = new Dictionary<EntProtoId<CMSurgeryComponent>, CMUSurgeryStepMetadataPrototype>();
+        var orderedMetadata = new List<CMUSurgeryStepMetadataPrototype>();
+        foreach (var metadata in Prototypes.EnumeratePrototypes<CMUSurgeryStepMetadataPrototype>())
         {
-            _bySurgery[proto.Surgery] = proto;
+            if (!metadataBySurgery.TryAdd(metadata.Surgery, metadata))
+            {
+                throw new InvalidOperationException(
+                    $"Surgery '{metadata.Surgery}' has more than one CMU surgery metadata prototype.");
+            }
+
+            orderedMetadata.Add(metadata);
         }
+
+        var definitions = new Dictionary<EntProtoId<CMSurgeryComponent>, CMUSurgeryDefinition>();
+        foreach (var prototype in Prototypes.EnumeratePrototypes<EntityPrototype>())
+        {
+            if (!prototype.TryComp(out CMSurgeryComponent? surgery, ComponentFactory))
+                continue;
+
+            var surgeryId = new EntProtoId<CMSurgeryComponent>(prototype.ID);
+            metadataBySurgery.TryGetValue(surgeryId, out var metadata);
+            definitions.Add(surgeryId, CompileDefinition(surgeryId, prototype, surgery, metadata));
+        }
+
+        var metadataDefinitions = ImmutableArray.CreateBuilder<CMUSurgeryDefinition>(orderedMetadata.Count);
+        var eligibleByPart = new Dictionary<BodyPartType, List<CMUSurgeryDefinition>>();
+        foreach (var metadata in orderedMetadata)
+        {
+            if (!definitions.TryGetValue(metadata.Surgery, out var definition))
+            {
+                throw new InvalidOperationException(
+                    $"CMU surgery metadata '{metadata.ID}' references unknown surgery '{metadata.Surgery}'.");
+            }
+
+            metadataDefinitions.Add(definition);
+            foreach (var partType in definition.ValidParts)
+            {
+                if (!eligibleByPart.TryGetValue(partType, out var eligible))
+                {
+                    eligible = new List<CMUSurgeryDefinition>();
+                    eligibleByPart.Add(partType, eligible);
+                }
+
+                eligible.Add(definition);
+            }
+        }
+
+        _registry = new CMUSurgeryRegistry(
+            definitions.ToFrozenDictionary(),
+            metadataDefinitions.MoveToImmutable(),
+            eligibleByPart.ToFrozenDictionary(
+                pair => pair.Key,
+                pair => pair.Value.ToImmutableArray()));
+    }
+
+    private CMUSurgeryDefinition CompileDefinition(
+        EntProtoId<CMSurgeryComponent> surgeryId,
+        EntityPrototype surgeryPrototype,
+        CMSurgeryComponent surgery,
+        CMUSurgeryStepMetadataPrototype? metadata)
+    {
+        var actualStepIds = new List<EntProtoId<CMSurgeryStepComponent>>(surgery.Steps.Count);
+        var actualStepSet = new HashSet<EntProtoId<CMSurgeryStepComponent>>();
+        foreach (var untypedStepId in surgery.Steps)
+        {
+            var stepId = new EntProtoId<CMSurgeryStepComponent>(untypedStepId.Id);
+            if (!actualStepSet.Add(stepId))
+            {
+                throw new InvalidOperationException(
+                    $"Surgery '{surgeryId}' contains duplicate step '{stepId}', which cannot be indexed by StepId.");
+            }
+
+            actualStepIds.Add(stepId);
+        }
+
+        Dictionary<EntProtoId<CMSurgeryStepComponent>, CMUSurgeryStepMetadataEntry>? metadataByStep = null;
+        if (metadata is { Steps.Count: > 0 })
+        {
+            metadataByStep = new Dictionary<EntProtoId<CMSurgeryStepComponent>, CMUSurgeryStepMetadataEntry>();
+            foreach (var stepMetadata in metadata.Steps)
+            {
+                if (!metadataByStep.TryAdd(stepMetadata.StepId, stepMetadata))
+                {
+                    throw new InvalidOperationException(
+                        $"CMU surgery metadata '{metadata.ID}' contains duplicate step metadata for '{stepMetadata.StepId}'.");
+                }
+
+                if (!actualStepSet.Contains(stepMetadata.StepId))
+                {
+                    throw new InvalidOperationException(
+                        $"CMU surgery metadata '{metadata.ID}' references unknown step '{stepMetadata.StepId}' " +
+                        $"for surgery '{surgeryId}'.");
+                }
+            }
+
+            foreach (var stepId in actualStepIds)
+            {
+                if (!metadataByStep.ContainsKey(stepId))
+                {
+                    throw new InvalidOperationException(
+                        $"CMU surgery metadata '{metadata.ID}' is missing step metadata for '{stepId}' " +
+                        $"in surgery '{surgeryId}'.");
+                }
+            }
+        }
+
+        var steps = ImmutableArray.CreateBuilder<CMUSurgeryStepDefinition>(actualStepIds.Count);
+        var stepsById = new Dictionary<EntProtoId<CMSurgeryStepComponent>, CMUSurgeryStepDefinition>(actualStepIds.Count);
+        for (var index = 0; index < actualStepIds.Count; index++)
+        {
+            var stepId = actualStepIds[index];
+            if (!Prototypes.TryIndex<EntityPrototype>(stepId.Id, out var stepPrototype)
+                || !stepPrototype.TryComp(out CMSurgeryStepComponent? step, ComponentFactory))
+            {
+                throw new InvalidOperationException(
+                    $"Surgery '{surgeryId}' references unknown surgery step prototype '{stepId}'.");
+            }
+
+            CMUSurgeryStepMetadataEntry? stepMetadata = null;
+            metadataByStep?.TryGetValue(stepId, out stepMetadata);
+            var label = stepMetadata?.Label ?? stepPrototype.Name;
+            var toolCategory = stepMetadata is null
+                ? ResolveLegacyStepToolCategory(step)
+                : stepMetadata.ToolCategory;
+
+            CMUSurgeryOrganCondition? organCondition = null;
+            if (stepPrototype.TryComp(out CMUOrganDamagedSurgeryConditionComponent? condition, ComponentFactory))
+                organCondition = new CMUSurgeryOrganCondition(condition.OrganSlot, condition.MinStage);
+
+            string? reinsertOrganSlot = null;
+            if (stepPrototype.TryComp(out CMUSurgeryStepReinsertOrganEffectComponent? reinsert, ComponentFactory))
+                reinsertOrganSlot = reinsert.OrganSlot;
+
+            var definition = new CMUSurgeryStepDefinition(
+                stepId,
+                index,
+                label,
+                toolCategory,
+                organCondition,
+                reinsertOrganSlot);
+            steps.Add(definition);
+            stepsById.Add(stepId, definition);
+        }
+
+        EntProtoId<CMSurgeryComponent>? requirement = default;
+        if (surgery.Requirement is { } requirementId)
+            requirement = new EntProtoId<CMSurgeryComponent>(requirementId.Id);
+        var validParts = metadata?.ValidParts.ToFrozenSet() ?? FrozenSet<BodyPartType>.Empty;
+        var selfSurgeryValidParts = metadata?.SelfSurgeryValidParts.ToFrozenSet() ?? FrozenSet<BodyPartType>.Empty;
+
+        return new CMUSurgeryDefinition(
+            surgeryId,
+            surgeryPrototype,
+            surgery.Priority,
+            requirement,
+            metadata?.DisplayName ?? surgeryPrototype.Name,
+            metadata?.Category ?? string.Empty,
+            metadata?.MinSkill ?? 0,
+            metadata?.AllowSelfSurgery ?? false,
+            validParts,
+            selfSurgeryValidParts,
+            steps.MoveToImmutable(),
+            stepsById.ToFrozenDictionary(),
+            metadata);
     }
 
     private void BuildToolCategoryTable()
@@ -130,31 +297,6 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         // Synth surgery tools.
         _toolCategories["blowtorch"] = new[] { typeof(BlowtorchComponent) };
         _toolCategories["cable_coil"] = new[] { typeof(RMCCableCoilComponent) };
-    }
-
-    public override void Update(float frameTime)
-    {
-        base.Update(frameTime);
-
-        // Server drives expire; the armed component is networked so the
-        // server's deletion mirrors over to the client.
-        if (!Net.IsServer)
-            return;
-
-        _armedStepScanAccumulator += frameTime;
-        if (_armedStepScanAccumulator < ArmedStepScanInterval)
-            return;
-        _armedStepScanAccumulator = 0f;
-
-        var now = Timing.CurTime;
-        var query = EntityQueryEnumerator<CMUSurgeryArmedStepComponent>();
-        while (query.MoveNext(out var uid, out var armed))
-        {
-            if (now - armed.ArmedAt < armed.ExpireAfter)
-                continue;
-
-            ClearArmed(uid, armed, expired: true);
-        }
     }
 
     public CMUSurgeryArmedStepComponent? TryArmStep(
@@ -229,6 +371,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             existing.Surgeon = surgeon;
             existing.ArmedAt = Timing.CurTime;
             Dirty(patient, existing);
+            ScheduleArmedExpiry(patient, existing);
             return existing;
         }
 
@@ -252,6 +395,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         armed.LastCompletedLeafStepIndex = -1;
         armed.ArmedAt = Timing.CurTime;
         Dirty(patient, armed);
+        ScheduleArmedExpiry(patient, armed);
         return armed;
     }
 
@@ -339,6 +483,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             return;
 
         var surgeon = armed.Surgeon;
+        MedicalScheduler.Cancel(patient, ArmedStepExpiryWork);
         RemComp<CMUSurgeryArmedStepComponent>(patient);
 
         if (Net.IsServer && surgeon.IsValid())
@@ -348,6 +493,32 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
                 : "cmu-medical-surgery-armed-cancelled";
             Popup.PopupEntity(Loc.GetString(msg), surgeon, surgeon, PopupType.SmallCaution);
         }
+    }
+
+    /// <summary>
+    ///     Replaces the sparse expiry deadline whenever an armed surgery step is refreshed or advanced.
+    /// </summary>
+    protected void ScheduleArmedExpiry(EntityUid patient, CMUSurgeryArmedStepComponent armed)
+    {
+        if (Net.IsServer)
+            MedicalScheduler.Schedule(patient, ArmedStepExpiryWork, armed.ArmedAt + armed.ExpireAfter);
+    }
+
+    private void OnArmedStepExpiryDue(
+        Entity<CMUSurgeryArmedStepComponent> ent,
+        ref CMUMedicalWorkDueEvent args)
+    {
+        if (args.Key != ArmedStepExpiryWork)
+            return;
+
+        var expiresAt = ent.Comp.ArmedAt + ent.Comp.ExpireAfter;
+        if (expiresAt > Timing.CurTime)
+        {
+            MedicalScheduler.Schedule(ent.Owner, ArmedStepExpiryWork, expiresAt);
+            return;
+        }
+
+        ClearArmed(ent.Owner, ent.Comp, expired: true);
     }
 
     public bool CanOperateOnPatient(EntityUid patient, EntityUid surgeon, bool popup = false)
@@ -556,13 +727,10 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     {
         stepEnt = default;
 
-        if (RmcSurgery.GetSingleton(armed.SurgeryId) is not { } surgeryEnt)
+        if (!TryGetDefinition(armed.SurgeryId, out var surgery)
+            || !surgery.TryGetStepAt(armed.StepIndex, out var step))
             return false;
-        if (!TryComp<CMSurgeryComponent>(surgeryEnt, out var surgeryComp))
-            return false;
-        if (armed.StepIndex < 0 || armed.StepIndex >= surgeryComp.Steps.Count)
-            return false;
-        if (RmcSurgery.GetSingleton(surgeryComp.Steps[armed.StepIndex]) is not { } resolvedStepEnt)
+        if (RmcSurgery.GetSingleton(step.Id) is not { } resolvedStepEnt)
             return false;
 
         stepEnt = resolvedStepEnt;
@@ -735,22 +903,49 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             && armed.TargetSymmetry == args.TargetSymmetry;
     }
 
+    /// <summary>
+    ///     Gets the optional CMU metadata associated with a compiled surgery definition.
+    /// </summary>
     public bool TryGetMetadata(string surgeryId, out CMUSurgeryStepMetadataPrototype metadata)
     {
-        return _bySurgery.TryGetValue(surgeryId, out metadata!);
+        if (_registry.TryGetDefinition(surgeryId, out var definition)
+            && definition.Metadata is { } source)
+        {
+            metadata = source;
+            return true;
+        }
+
+        metadata = default!;
+        return false;
+    }
+
+    /// <summary>
+    ///     Gets an immutable surgery definition from the current validated registry.
+    /// </summary>
+    public bool TryGetDefinition(string surgeryId, out CMUSurgeryDefinition definition)
+    {
+        return _registry.TryGetDefinition(surgeryId, out definition!);
+    }
+
+    /// <summary>
+    ///     Gets the pre-indexed surgery definitions eligible for a body-part type.
+    /// </summary>
+    public ImmutableArray<CMUSurgeryDefinition> GetEligibleDefinitions(BodyPartType partType)
+    {
+        return _registry.GetEligibleDefinitions(partType);
     }
 
     public bool CanSelfOperateSurgery(string surgeryId, BodyPartType partType)
     {
-        if (!_bySurgery.TryGetValue(surgeryId, out var metadata))
+        if (!TryGetDefinition(surgeryId, out var definition) || definition.Metadata is null)
             return IsSelfCloseUpSurgery(surgeryId, partType);
 
-        if (!metadata.AllowSelfSurgery)
+        if (!definition.AllowSelfSurgery)
             return false;
 
-        var validParts = metadata.SelfSurgeryValidParts.Count > 0
-            ? metadata.SelfSurgeryValidParts
-            : metadata.ValidParts;
+        var validParts = definition.SelfSurgeryValidParts.Count > 0
+            ? definition.SelfSurgeryValidParts
+            : definition.ValidParts;
 
         return validParts.Contains(partType);
     }
@@ -773,7 +968,11 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
 
     public IEnumerable<CMUSurgeryStepMetadataPrototype> EnumerateMetadata()
     {
-        return _bySurgery.Values;
+        foreach (var definition in _registry.MetadataDefinitions)
+        {
+            if (definition.Metadata is { } metadata)
+                yield return metadata;
+        }
     }
 
     /// <summary>
@@ -805,8 +1004,6 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         if (resolvedSurgeryProtoId is null)
             return false;
 
-        var totalSteps = resolvedSurgery.Comp.Steps.Count;
-
         if (ShouldInjectSurgicalTraits(surgeryId, resolvedSurgeryProtoId)
             && TryResolveSurgicalTraitCleanupStep(targetPart.Value, surgeryId, out var traitStep))
         {
@@ -814,33 +1011,18 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             return true;
         }
 
-        var stepLabel = string.Empty;
-        string? toolCategory = null;
-
         var stepProtoId = resolvedSurgery.Comp.Steps[stepIdx];
-        if (TryGetMetadata(resolvedSurgeryProtoId, out var metadata) && stepIdx < metadata.Steps.Count)
-        {
-            var stepMeta = metadata.Steps[stepIdx];
-            stepLabel = ResolveContextualStepLabel(stepProtoId, stepMeta.Label, targetPart);
-            toolCategory = stepMeta.ToolCategory;
-        }
-        else
-        {
-            // Fall back to the step entity's prototype name + a heuristic
-            // tool category from the step's tool registry.
-            if (RmcSurgery.GetSingleton(stepProtoId) is { } stepEnt)
-            {
-                stepLabel = ResolveContextualStepLabel(stepProtoId, MetaData(stepEnt).EntityName, targetPart);
-                toolCategory = ResolveLegacyStepToolCategory(stepEnt);
-            }
-        }
+        var typedStepId = new EntProtoId<CMSurgeryStepComponent>(stepProtoId.Id);
+        if (!TryGetDefinition(resolvedSurgeryProtoId, out var definition)
+            || !definition.TryGetStep(typedStepId, out var step))
+            return false;
 
         resolved = new CMUResolvedStep(
             resolvedSurgeryProtoId,
             stepIdx,
-            stepLabel,
-            toolCategory,
-            totalSteps,
+            ResolveContextualStepLabel(step.Id, step.Label, targetPart),
+            step.ToolCategory,
+            definition.Steps.Length,
             // Gating prereq id only when the leaf surgery isn't the one
             // being armed - lets the BUI flag "(via Open Incision)".
             resolvedSurgeryProtoId == surgeryId ? null : resolvedSurgeryProtoId);
@@ -864,12 +1046,9 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
 
     private bool RequiresBoneCavityAccess(string surgeryId)
     {
-        if (RmcSurgery.GetSingleton(new EntProtoId(surgeryId)) is not { } surgeryEnt)
-            return false;
-        if (!TryComp<CMSurgeryComponent>(surgeryEnt, out var surgery))
-            return false;
-
-        return surgery.Requirement is { } requirement && requirement == OpenBoneCavitySurgery;
+        return TryGetDefinition(surgeryId, out var surgery)
+            && surgery.Requirement is { } requirement
+            && requirement == OpenBoneCavitySurgery;
     }
 
     private bool HasBrokenCavityAccess(EntityUid targetPart)
@@ -941,15 +1120,12 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         out CMUResolvedStep resolved)
     {
         resolved = default!;
-        if (RmcSurgery.GetSingleton(surgeryId) is not { } surgeryEnt)
-            return false;
-        if (!TryComp<CMSurgeryComponent>(surgeryEnt, out var surgeryComp))
+        if (!TryGetDefinition(surgeryId, out var surgery))
             return false;
 
-        for (var i = Math.Max(0, startIndex); i < surgeryComp.Steps.Count; i++)
+        for (var i = Math.Max(0, startIndex); i < surgery.Steps.Length; i++)
         {
-            var stepId = surgeryComp.Steps[i];
-            if (RmcSurgery.IsStepComplete(patient, targetPart, stepId))
+            if (RmcSurgery.IsStepComplete(patient, targetPart, surgery.Steps[i].Id))
                 continue;
 
             return TryResolveStepAt(surgeryId, i, out resolved, targetPart);
@@ -1137,38 +1313,16 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     public bool TryResolveStepAt(string surgeryId, int stepIndex, out CMUResolvedStep resolved, EntityUid? targetPart = null)
     {
         resolved = default!;
-        if (RmcSurgery.GetSingleton(surgeryId) is not { } surgeryEnt)
+        if (!TryGetDefinition(surgeryId, out var surgery)
+            || !surgery.TryGetStepAt(stepIndex, out var step))
             return false;
-        if (!TryComp<CMSurgeryComponent>(surgeryEnt, out var surgeryComp))
-            return false;
-        if (stepIndex < 0 || stepIndex >= surgeryComp.Steps.Count)
-            return false;
-
-        var stepLabel = string.Empty;
-        string? toolCategory = null;
-
-        var stepProtoId = surgeryComp.Steps[stepIndex];
-        if (TryGetMetadata(surgeryId, out var metadata) && stepIndex < metadata.Steps.Count)
-        {
-            var stepMeta = metadata.Steps[stepIndex];
-            stepLabel = ResolveContextualStepLabel(stepProtoId, stepMeta.Label, targetPart);
-            toolCategory = stepMeta.ToolCategory;
-        }
-        else
-        {
-            if (RmcSurgery.GetSingleton(stepProtoId) is { } stepEnt)
-            {
-                stepLabel = ResolveContextualStepLabel(stepProtoId, MetaData(stepEnt).EntityName, targetPart);
-                toolCategory = ResolveLegacyStepToolCategory(stepEnt);
-            }
-        }
 
         resolved = new CMUResolvedStep(
             surgeryId,
             stepIndex,
-            stepLabel,
-            toolCategory,
-            surgeryComp.Steps.Count,
+            ResolveContextualStepLabel(step.Id, step.Label, targetPart),
+            step.ToolCategory,
+            surgery.Steps.Length,
             null);
         return true;
     }
@@ -1206,12 +1360,12 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         return fallback;
     }
 
-    protected string? ResolveLegacyStepToolCategory(EntityUid stepEnt)
+    private string? ResolveLegacyStepToolCategory(CMSurgeryStepComponent step)
     {
-        if (!TryComp<CMSurgeryStepComponent>(stepEnt, out var stepComp) || stepComp.Tool is null)
+        if (step.Tool is null)
             return null;
 
-        foreach (var (_, reg) in stepComp.Tool)
+        foreach (var (_, reg) in step.Tool)
         {
             if (reg.Component is null)
                 continue;
@@ -1242,7 +1396,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             return true;
         }
 
-        foreach (var (childId, childComp) in Body.GetBodyChildren(patient))
+        foreach (var (childId, childComp) in MedicalIndex.GetBodyParts(patient))
         {
             if (childComp.PartType != type || childComp.Symmetry != symmetry)
                 continue;
@@ -1256,12 +1410,10 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     public bool TryGetReattachAnchorPart(EntityUid patient, out EntityUid anchor)
     {
         anchor = default;
-        if (!TryComp<BodyComponent>(patient, out var bodyComp))
-            return false;
-        if (Body.GetRootPartOrNull(patient, bodyComp) is not { } root)
+        if (!MedicalIndex.TryGetRootPart(patient, out var root))
             return false;
 
-        anchor = root.Entity;
+        anchor = root.Owner;
         return true;
     }
 
@@ -1276,9 +1428,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         if (targetType is not (BodyPartType.Arm or BodyPartType.Leg))
             return false;
 
-        if (!TryComp<BodyComponent>(patient, out var bodyComp))
-            return false;
-        if (Body.GetRootPartOrNull(patient, bodyComp) is not { } root)
+        if (!MedicalIndex.TryGetRootPart(patient, out var root))
             return false;
 
         var targetSide = targetSymmetry switch
@@ -1290,12 +1440,12 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         if (targetSide is null)
             return false;
 
-        foreach (var (slotId, slot) in root.BodyPart.Children)
+        foreach (var slot in MedicalIndex.GetBodyPartSlots(root.Owner))
         {
             if (slot.Type != targetType)
                 continue;
             // Slot id encodes side — left_arm / right_leg / etc.
-            if (!slotId.Contains(targetSide, System.StringComparison.Ordinal))
+            if (!slot.SlotId.Contains(targetSide, System.StringComparison.Ordinal))
                 continue;
             // Accept the matching slot — if it's filled, the attach call
             // no-ops with a "slot occupied" popup, which is the right UX.
@@ -1382,10 +1532,8 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
 
     public string ResolveSurgeryDisplayName(string surgeryId)
     {
-        if (TryGetMetadata(surgeryId, out var metadata))
-            return metadata.DisplayName ?? surgeryId;
-        if (Prototypes.TryIndex<EntityPrototype>(surgeryId, out var proto))
-            return proto.Name;
+        if (TryGetDefinition(surgeryId, out var definition))
+            return definition.DisplayName;
         return surgeryId;
     }
 

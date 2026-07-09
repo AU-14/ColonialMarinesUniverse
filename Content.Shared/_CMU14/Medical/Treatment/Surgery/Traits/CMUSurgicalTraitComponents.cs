@@ -1,3 +1,4 @@
+using Robust.Shared.GameObjects;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._CMU14.Medical.Treatment.Surgery.Traits;
@@ -22,3 +23,10 @@ public sealed partial class CMUOrganAdhesionComponent : Component;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class CMUOrganHemorrhageComponent : Component;
+
+[ByRefEvent]
+public readonly record struct CMUSurgicalTraitChangedEvent(
+    EntityUid Body,
+    EntityUid Part,
+    CMUSurgicalTrait Trait,
+    bool Removed);

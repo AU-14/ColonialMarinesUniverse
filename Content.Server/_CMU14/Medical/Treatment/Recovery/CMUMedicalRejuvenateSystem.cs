@@ -27,6 +27,7 @@ public sealed partial class CMUMedicalRejuvenateSystem : EntitySystem
     [Dependency] private SharedFractureSystem _fracture = default!;
     [Dependency] private CMUHandRestorationSystem _handRestoration = default!;
     [Dependency] private SharedHeartSystem _heart = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedOrganHealthSystem _organHealth = default!;
     [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
     [Dependency] private IPrototypeManager _protoMgr = default!;
@@ -79,11 +80,11 @@ public sealed partial class CMUMedicalRejuvenateSystem : EntitySystem
         RestoreMissingParts(body);
         _handRestoration.RestoreUsableHands(body);
 
-        foreach (var (partId, partComp) in _body.GetBodyChildren(body))
+        foreach (var (partId, _) in _medicalIndex.GetBodyParts(body))
         {
             ResetPart(body, partId);
-            foreach (var organ in _body.GetPartOrgans(partId, partComp))
-                ResetOrgan(body, organ.Id);
+            foreach (var organ in _medicalIndex.GetPartOrgans(partId))
+                ResetOrgan(body, organ.Owner);
         }
 
         foreach (var effect in CmuStatusEffects)
@@ -96,11 +97,11 @@ public sealed partial class CMUMedicalRejuvenateSystem : EntitySystem
             return;
         if (!_protoMgr.TryIndex(bodyComp.Prototype.Value, out var proto))
             return;
-        if (_body.GetRootPartOrNull(body, bodyComp) is not { } root)
+        if (!_medicalIndex.TryGetRootPart(body, out var root))
             return;
 
         var rootSlotId = proto.Root;
-        var slotEntities = new Dictionary<string, EntityUid> { [rootSlotId] = root.Entity };
+        var slotEntities = new Dictionary<string, EntityUid> { [rootSlotId] = root.Owner };
         var visited = new HashSet<string> { rootSlotId };
         var frontier = new Queue<string>();
         frontier.Enqueue(rootSlotId);

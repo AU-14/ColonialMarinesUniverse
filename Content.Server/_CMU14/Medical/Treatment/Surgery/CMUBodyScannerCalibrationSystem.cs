@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._CMU14.Medical.Anatomy.Bones;
 using Content.Shared._CMU14.Medical.Treatment.FirstAid;
@@ -9,9 +10,7 @@ using Content.Shared._CMU14.Medical.Treatment.Surgery;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Body;
 using Content.Shared.Body.Organ;
-using Content.Shared.Body.Systems;
 using Content.Shared.FixedPoint;
-using Robust.Shared.Containers;
 using Robust.Shared.Timing;
 
 namespace Content.Server._CMU14.Medical.Treatment.Surgery;
@@ -40,10 +39,12 @@ public readonly record struct CMUBodyScannerPuzzleSignal(string Id, string Layer
 public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private SharedBodySystem _body = default!;
-    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
+    [Dependency] private CMUMedicalChangeSystem _medicalChanges = default!;
     [Dependency] private SharedRMCBloodstreamSystem _bloodstream = default!;
     [Dependency] private CMUBodyScannerReadoutSystem _readout = default!;
+    [Dependency] private CMUMedicalSchedulerSystem _scheduler = default!;
+    [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
 
     private const int MaxPuzzleSignals = 8;
     private const string SliceVitals = "vitals";
@@ -51,6 +52,8 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
     private const string SliceOrgans = "organs";
     private const string SliceTissue = "tissue";
     private const string DecoySignalPrefix = "noise:";
+    private static readonly CMUMedicalWorkKey BoostExpiryWork = new("body-scanner-boost-expiry");
+    private static readonly CMUMedicalWorkKey LockoutExpiryWork = new("body-scanner-lockout-expiry");
 
     private static readonly List<CMUBodyScannerPuzzleChoice> ScannerSlices =
     [
@@ -60,28 +63,44 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
         new(SliceTissue, "Tissue"),
     ];
 
-    public override void Update(float frameTime)
+    public override void Initialize()
     {
-        base.Update(frameTime);
+        base.Initialize();
 
-        var now = _timing.CurTime;
-        var boostQuery = EntityQueryEnumerator<CMUBodyScannerSurgerySpeedComponent>();
-        while (boostQuery.MoveNext(out var uid, out var boost))
+        SubscribeLocalEvent<CMUBodyScannerSurgerySpeedComponent, CMUMedicalWorkDueEvent>(OnBoostExpiryDue);
+        SubscribeLocalEvent<CMUBodyScannerCalibrationLockoutComponent, CMUMedicalWorkDueEvent>(OnLockoutExpiryDue);
+    }
+
+    private void OnBoostExpiryDue(
+        Entity<CMUBodyScannerSurgerySpeedComponent> ent,
+        ref CMUMedicalWorkDueEvent args)
+    {
+        if (args.Key != BoostExpiryWork)
+            return;
+
+        if (ent.Comp.ExpiresAt > _timing.CurTime)
         {
-            if (now < boost.ExpiresAt)
-                continue;
-
-            RemCompDeferred<CMUBodyScannerSurgerySpeedComponent>(uid);
+            _scheduler.Schedule(ent.Owner, BoostExpiryWork, ent.Comp.ExpiresAt);
+            return;
         }
 
-        var lockoutQuery = EntityQueryEnumerator<CMUBodyScannerCalibrationLockoutComponent>();
-        while (lockoutQuery.MoveNext(out var uid, out var lockout))
-        {
-            if (now < lockout.ExpiresAt)
-                continue;
+        RemCompDeferred<CMUBodyScannerSurgerySpeedComponent>(ent);
+    }
 
-            RemCompDeferred<CMUBodyScannerCalibrationLockoutComponent>(uid);
+    private void OnLockoutExpiryDue(
+        Entity<CMUBodyScannerCalibrationLockoutComponent> ent,
+        ref CMUMedicalWorkDueEvent args)
+    {
+        if (args.Key != LockoutExpiryWork)
+            return;
+
+        if (ent.Comp.ExpiresAt > _timing.CurTime)
+        {
+            _scheduler.Schedule(ent.Owner, LockoutExpiryWork, ent.Comp.ExpiresAt);
+            return;
         }
+
+        RemCompDeferred<CMUBodyScannerCalibrationLockoutComponent>(ent);
     }
 
     public float GetSurgeryDelayMultiplier(EntityUid surgeon, EntityUid patient)
@@ -106,7 +125,7 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
         if (GetCalibrationLockoutExpiry(user, patient) is not null)
             return true;
 
-        var signals = BuildPuzzleSignals(patient);
+        var signals = GetPuzzleProjection(patient).Signals;
         if (signals.Count == 0 || !IsValidLayerId(layerId))
             return false;
 
@@ -180,7 +199,7 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
         if (GetCalibrationLockoutExpiry(user, patient) is not null)
             return true;
 
-        var signals = BuildPuzzleSignals(patient);
+        var signals = GetPuzzleProjection(patient).Signals;
         if (signals.Count == 0)
             return true;
 
@@ -213,8 +232,11 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
     {
         var boostExpires = GetBoostExpiry(viewer, patient);
         var lockoutExpires = GetCalibrationLockoutExpiry(viewer, patient);
-        var signals = canScan && patient is { } puzzlePatient ? BuildPuzzleSignals(puzzlePatient) : [];
-        var targets = BuildPuzzleTargets(signals);
+        var projection = canScan && patient is { } puzzlePatient
+            ? GetPuzzleProjection(puzzlePatient)
+            : default;
+        var signals = projection.Signals ?? [];
+        var targets = projection.Targets ?? [];
         CMUBodyScannerPuzzleProgressComponent? progress = null;
         if (canScan &&
             viewer is { } progressViewer &&
@@ -295,6 +317,7 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
         boost.Patient = patient;
         boost.DelayMultiplier = 0.5f;
         boost.ExpiresAt = _timing.CurTime + TimeSpan.FromSeconds(scanner.BoostDurationSeconds);
+        _scheduler.Schedule(user, BoostExpiryWork, boost.ExpiresAt);
         RemComp<CMUBodyScannerPuzzleProgressComponent>(user);
     }
 
@@ -331,6 +354,7 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
         var lockout = EnsureComp<CMUBodyScannerCalibrationLockoutComponent>(user);
         lockout.Patient = patient;
         lockout.ExpiresAt = _timing.CurTime + TimeSpan.FromSeconds(scanner.CalibrationLockoutSeconds);
+        _scheduler.Schedule(user, LockoutExpiryWork, lockout.ExpiresAt);
 
         if (HasComp<CMUBodyScannerPuzzleProgressComponent>(user))
             RemComp<CMUBodyScannerPuzzleProgressComponent>(user);
@@ -338,29 +362,49 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
         return lockout.ExpiresAt;
     }
 
+    private (List<CMUBodyScannerPuzzleSignal> Signals, List<CMUBodyScannerSliceSignal> Targets)
+        GetPuzzleProjection(EntityUid patient)
+    {
+        var cache = EnsureComp<CMUBodyScannerAnatomyCacheComponent>(patient);
+        var revision = _medicalChanges.GetRevision(patient);
+        var tick = _timing.CurTick;
+        if (!cache.PuzzleValid ||
+            cache.PuzzleMedicalRevision != revision ||
+            cache.PuzzleBuiltAt != tick)
+        {
+            cache.PuzzleSignals = BuildPuzzleSignals(patient);
+            cache.PuzzleTargets = BuildPuzzleTargets(cache.PuzzleSignals);
+            cache.PuzzleMedicalRevision = revision;
+            cache.PuzzleBuiltAt = tick;
+            cache.PuzzleValid = true;
+        }
+
+        return (cache.PuzzleSignals, cache.PuzzleTargets);
+    }
+
     private List<CMUBodyScannerPuzzleSignal> BuildPuzzleSignals(EntityUid patient)
     {
         var signals = new List<CMUBodyScannerPuzzleSignal>();
 
-        foreach (var organ in _body.GetBodyOrgans(patient))
+        foreach (var organ in _medicalIndex.GetOrgans(patient))
         {
-            if (TryComp<HeartComponent>(organ.Id, out var heart) && heart.Stopped)
+            if (TryComp<HeartComponent>(organ.Owner, out var heart) && heart.Stopped)
             {
                 AddPuzzleSignal(
                     signals,
-                    $"cardiac:{organ.Id}",
+                    $"cardiac:{organ.Owner}",
                     Loc.GetString("cmu-body-scanner-signal-heart-stopped"),
                     Loc.GetString("cmu-body-scanner-slice-detail-cardiac"),
                     SliceVitals,
                     0);
             }
 
-            if (TryComp<OrganHealthComponent>(organ.Id, out var organHealth) && organHealth.Stage != OrganDamageStage.Healthy)
+            if (TryComp<OrganHealthComponent>(organ.Owner, out var organHealth) && organHealth.Stage != OrganDamageStage.Healthy)
             {
                 AddPuzzleSignal(
                     signals,
-                    $"organ:{organ.Id}",
-                    Loc.GetString("cmu-body-scanner-signal-organ-damage", ("organ", _readout.OrganName(organ.Id)), ("stage", CMUBodyScannerReadoutSystem.FormatOrganStage(organHealth.Stage))),
+                    $"organ:{organ.Owner}",
+                    Loc.GetString("cmu-body-scanner-signal-organ-damage", ("organ", _readout.OrganName(organ.Owner)), ("stage", CMUBodyScannerReadoutSystem.FormatOrganStage(organHealth.Stage))),
                     Loc.GetString("cmu-body-scanner-slice-detail-organ"),
                     SliceOrgans,
                     organHealth.Stage.IsAtLeast(OrganDamageStage.Failing) ? 1 : 4);
@@ -381,7 +425,7 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
             }
         }
 
-        foreach (var (part, partComp) in _body.GetBodyChildren(patient))
+        foreach (var (part, partComp) in _medicalIndex.GetBodyParts(patient))
         {
             var partName = SharedCMUSurgeryFlowSystem.FormatPartName(partComp.PartType, partComp.Symmetry);
 
@@ -410,9 +454,9 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
             if (TryComp<BodyPartWoundComponent>(part, out var wounds))
             {
                 var untreated = 0;
-                foreach (var wound in wounds.Wounds)
+                foreach (var entry in _woundLedger.GetEntries(wounds))
                 {
-                    if (!wound.Treated)
+                    if (!entry.Wound.Treated)
                         untreated++;
                 }
 
@@ -441,18 +485,15 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
                     6);
             }
 
-            foreach (var (slotId, _) in partComp.Organs)
+            foreach (var slot in _medicalIndex.GetOrganSlots(part))
             {
-                var containerId = SharedBodySystem.OrganSlotContainerIdPrefix + slotId;
-                if (!_containers.TryGetContainer(part, containerId, out var container))
-                    continue;
-                if (container.ContainedEntities.Count > 0)
+                if (slot.Organ is not null)
                     continue;
 
                 AddPuzzleSignal(
                     signals,
-                    $"missing:{part}:{slotId}",
-                    Loc.GetString("cmu-body-scanner-signal-missing-organ", ("organ", _readout.OrganSlotName(slotId)), ("part", partName)),
+                    $"missing:{part}:{slot.SlotId}",
+                    Loc.GetString("cmu-body-scanner-signal-missing-organ", ("organ", _readout.OrganSlotName(slot.SlotId)), ("part", partName)),
                     Loc.GetString("cmu-body-scanner-slice-detail-missing-organ"),
                     SliceOrgans,
                     0);

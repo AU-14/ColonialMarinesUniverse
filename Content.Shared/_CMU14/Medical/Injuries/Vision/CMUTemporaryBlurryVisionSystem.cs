@@ -1,4 +1,5 @@
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Eyes;
+using Content.Shared._CMU14.Medical.Core;
 using Content.Shared.Eye.Blinding.Systems;
 using Content.Shared.Rejuvenate;
 using Robust.Shared.Network;
@@ -11,9 +12,9 @@ public sealed partial class CMUTemporaryBlurryVisionSystem : EntitySystem
     [Dependency] private BlurryVisionSystem _blur = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private INetManager _net = default!;
+    [Dependency] private CMUMedicalSchedulerSystem _scheduler = default!;
 
-    private const float BlurScanInterval = 1f;
-    private float _blurScanAccumulator;
+    private static readonly CMUMedicalWorkKey BlurExpiryWork = new("temporary-blur-expiry");
 
     public override void Initialize()
     {
@@ -23,6 +24,8 @@ public sealed partial class CMUTemporaryBlurryVisionSystem : EntitySystem
             OnGetBlur,
             after: new[] { typeof(CMUBlurDelaySystem) });
         SubscribeLocalEvent<CMUTemporaryBlurryVisionComponent, RejuvenateEvent>(OnRejuvenate);
+        SubscribeLocalEvent<CMUTemporaryBlurryVisionComponent, EntityUnpausedEvent>(OnUnpaused);
+        SubscribeLocalEvent<CMUTemporaryBlurryVisionComponent, CMUMedicalWorkDueEvent>(OnBlurExpiryDue);
     }
 
     public void AddTemporaryBlurModifier(
@@ -41,7 +44,7 @@ public sealed partial class CMUTemporaryBlurryVisionSystem : EntitySystem
             Strength = strength,
         });
 
-        blur.NextUpdate = _timing.CurTime + blur.UpdateRate;
+        ScheduleNextExpiry(uid, blur);
         _blur.UpdateBlurMagnitude(uid);
     }
 
@@ -70,37 +73,50 @@ public sealed partial class CMUTemporaryBlurryVisionSystem : EntitySystem
     private void OnRejuvenate(Entity<CMUTemporaryBlurryVisionComponent> ent, ref RejuvenateEvent args)
     {
         ent.Comp.Modifiers.Clear();
+        _scheduler.Cancel(ent.Owner, BlurExpiryWork);
         _blur.UpdateBlurMagnitude(ent.Owner);
         RemCompDeferred<CMUTemporaryBlurryVisionComponent>(ent.Owner);
     }
 
-    public override void Update(float frameTime)
+    private void OnUnpaused(Entity<CMUTemporaryBlurryVisionComponent> ent, ref EntityUnpausedEvent args)
     {
-        base.Update(frameTime);
+        foreach (var modifier in ent.Comp.Modifiers)
+            modifier.ExpiresAt += args.PausedTime;
+    }
 
-        if (_net.IsClient)
+    private void OnBlurExpiryDue(
+        Entity<CMUTemporaryBlurryVisionComponent> ent,
+        ref CMUMedicalWorkDueEvent args)
+    {
+        if (args.Key != BlurExpiryWork)
             return;
 
-        _blurScanAccumulator += frameTime;
-        if (_blurScanAccumulator < BlurScanInterval)
-            return;
-
-        _blurScanAccumulator = 0f;
         var now = _timing.CurTime;
-        var query = EntityQueryEnumerator<CMUTemporaryBlurryVisionComponent>();
-        while (query.MoveNext(out var uid, out var blur))
+        var removed = ent.Comp.Modifiers.RemoveAll(modifier => modifier.ExpiresAt <= now) > 0;
+        if (removed)
+            _blur.UpdateBlurMagnitude(ent.Owner);
+
+        if (ent.Comp.Modifiers.Count == 0)
         {
-            if (blur.NextUpdate > now)
-                continue;
-
-            blur.NextUpdate = now + blur.UpdateRate;
-            var removed = blur.Modifiers.RemoveAll(modifier => modifier.ExpiresAt <= now) > 0;
-            if (!removed)
-                continue;
-
-            _blur.UpdateBlurMagnitude(uid);
-            if (blur.Modifiers.Count == 0)
-                RemCompDeferred<CMUTemporaryBlurryVisionComponent>(uid);
+            RemCompDeferred<CMUTemporaryBlurryVisionComponent>(ent.Owner);
+            return;
         }
+
+        ScheduleNextExpiry(ent.Owner, ent.Comp);
+    }
+
+    private void ScheduleNextExpiry(EntityUid uid, CMUTemporaryBlurryVisionComponent blur)
+    {
+        if (_net.IsClient || blur.Modifiers.Count == 0)
+            return;
+
+        var nextExpiry = blur.Modifiers[0].ExpiresAt;
+        for (var i = 1; i < blur.Modifiers.Count; i++)
+        {
+            if (blur.Modifiers[i].ExpiresAt < nextExpiry)
+                nextExpiry = blur.Modifiers[i].ExpiresAt;
+        }
+
+        _scheduler.Schedule(uid, BlurExpiryWork, nextExpiry);
     }
 }

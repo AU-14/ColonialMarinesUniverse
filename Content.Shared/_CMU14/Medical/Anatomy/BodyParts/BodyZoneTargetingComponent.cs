@@ -8,6 +8,8 @@ namespace Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 [Access(typeof(SharedBodyZoneTargetingSystem))]
 public sealed partial class BodyZoneTargetingComponent : Component
 {
+    public override bool SendOnlyToOwner => true;
+
     [DataField, AutoNetworkedField]
     public TargetBodyZone Selected = TargetBodyZone.Chest;
 

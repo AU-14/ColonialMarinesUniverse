@@ -1,8 +1,8 @@
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.Bones;
+using Content.Shared._CMU14.Medical.Diagnostics.Examine;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.Wounds;
-using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Examine;
@@ -16,7 +16,8 @@ namespace Content.Shared._RMC14.HealthExaminable;
 public sealed partial class RMCHealthExaminableSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _cfg = default!;
-    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
+    [Dependency] private CMUMedicalExamineProjectionSystem _woundProjection = default!;
 
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
@@ -84,27 +85,19 @@ public sealed partial class RMCHealthExaminableSystem : EntitySystem
         var showWounds = _cfg.GetCVar(CMUMedicalCCVars.WoundsEnabled);
         var brute = false;
         var burn = false;
+        if (showWounds && TryComp<CMUMedicalExamineProjectionComponent>(body, out var projection))
+        {
+            brute = _woundProjection.GetRemainingDamage(projection, WoundType.Brute) > FixedPoint2.Zero;
+            burn = _woundProjection.GetRemainingDamage(projection, WoundType.Burn) > FixedPoint2.Zero;
+        }
 
-        foreach (var (partUid, _) in _body.GetBodyChildren(body))
+        foreach (var (partUid, _) in _medicalIndex.GetBodyParts(body))
         {
             if (showBones
                 && TryComp<FractureComponent>(partUid, out var fracture)
                 && fracture.Severity != FractureSeverity.None)
             {
                 brute = true;
-            }
-
-            if (showWounds
-                && TryComp<BodyPartWoundComponent>(partUid, out var wounds)
-                && wounds.Wounds.Count > 0)
-            {
-                foreach (var wound in wounds.Wounds)
-                {
-                    if (wound.Type == WoundType.Burn)
-                        burn = true;
-                    else
-                        brute = true;
-                }
             }
 
             if (showWounds && HasComp<CMUEscharComponent>(partUid))

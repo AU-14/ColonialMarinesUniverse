@@ -3,7 +3,6 @@ using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs.Events;
 using Content.Shared.Body.Events;
 using Content.Shared.Body.Organ;
-using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
@@ -20,7 +19,7 @@ public abstract partial class SharedLungsSystem : EntitySystem
 {
     [Dependency] protected IConfigurationManager Cfg = default!;
     [Dependency] protected IGameTiming Timing = default!;
-    [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
     [Dependency] protected DamageableSystem Damageable = default!;
     [Dependency] protected SharedStatusEffectsSystem Status = default!;
 
@@ -99,7 +98,7 @@ public abstract partial class SharedLungsSystem : EntitySystem
             return;
 
         var best = -1f;
-        foreach (var (organId, _) in Body.GetBodyOrgans(ent))
+        foreach (var (organId, _) in MedicalIndex.GetOrgans(ent))
         {
             if (!TryComp<LungsComponent>(organId, out var lungs))
                 continue;
@@ -147,7 +146,7 @@ public abstract partial class SharedLungsSystem : EntitySystem
         var missingQuery = EntityQueryEnumerator<MissingLungsComponent>();
         while (missingQuery.MoveNext(out var uid, out var missing))
         {
-            if (Body.GetBodyOrganEntityComps<LungsComponent>(uid).Count != 0)
+            if (MedicalIndex.TryGetOrgan<LungsComponent>(uid, out _))
             {
                 RemCompDeferred<MissingLungsComponent>(uid);
                 continue;

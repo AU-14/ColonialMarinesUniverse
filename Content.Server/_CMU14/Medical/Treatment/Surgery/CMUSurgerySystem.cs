@@ -11,7 +11,6 @@ using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Popups;
@@ -209,15 +208,10 @@ public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
         rootPart = default;
         slotId = string.Empty;
 
-        if (!TryComp<BodyComponent>(body, out var bodyComp))
+        if (!MedicalIndex.TryGetRootPart(body, out var root))
             return false;
 
-        if (Body.GetRootPartOrNull(body, bodyComp) is not { } root)
-            return false;
-
-        rootPart = root.Entity;
-        var rootBp = root.BodyPart;
-
+        rootPart = root.Owner;
         var sideToken = symmetry switch
         {
             BodyPartSymmetry.Left => "left",
@@ -227,21 +221,16 @@ public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
         if (sideToken is null)
             return false;
 
-        foreach (var (id, slot) in rootBp.Children)
+        foreach (var slot in MedicalIndex.GetBodyPartSlots(rootPart))
         {
             if (slot.Type != type)
                 continue;
-            if (!id.Contains(sideToken, StringComparison.Ordinal))
+            if (!slot.SlotId.Contains(sideToken, StringComparison.Ordinal))
+                continue;
+            if (slot.Part is not null)
                 continue;
 
-            var containerId = SharedBodySystem.GetPartSlotContainerId(id);
-            if (Containers.TryGetContainer(rootPart, containerId, out var container)
-                && container.ContainedEntities.Count > 0)
-            {
-                continue;
-            }
-
-            slotId = id;
+            slotId = slot.SlotId;
             return true;
         }
 

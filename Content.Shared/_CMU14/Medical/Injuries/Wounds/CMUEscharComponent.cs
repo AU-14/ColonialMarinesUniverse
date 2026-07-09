@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Robust.Shared.GameObjects;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._CMU14.Medical.Injuries.Wounds;
@@ -13,3 +13,6 @@ public sealed partial class CMUEscharComponent : Component
     [DataField, AutoNetworkedField, AutoPausedField]
     public TimeSpan AppliedAt;
 }
+
+[ByRefEvent]
+public readonly record struct CMUEscharChangedEvent(EntityUid Body, EntityUid Part, bool Removed);

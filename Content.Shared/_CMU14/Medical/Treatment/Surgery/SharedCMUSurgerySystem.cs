@@ -12,13 +12,11 @@ using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Conditions;
 using Content.Shared._RMC14.Medical.Surgery.Steps;
-using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Configuration;
-using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Content.Shared._CMU14.Medical.Core;
 
@@ -35,9 +33,9 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
     [Dependency] protected IConfigurationManager Cfg = default!;
     [Dependency] protected SharedBodySystem Body = default!;
     [Dependency] protected SharedBoneSystem Bone = default!;
-    [Dependency] protected SharedContainerSystem Containers = default!;
     [Dependency] protected SharedFractureSystem Fracture = default!;
     [Dependency] protected SharedHeartSystem Heart = default!;
+    [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
     [Dependency] protected SharedOrganHealthSystem OrganHealth = default!;
     [Dependency] protected SharedCMUSurgicalTraitSystem SurgicalTraits = default!;
     [Dependency] protected SharedCMUShrapnelSystem Shrapnel = default!;
@@ -300,17 +298,6 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
 
     public bool TryGetOrganInSlot(EntityUid part, string slotId, out EntityUid organ)
     {
-        organ = default;
-        var containerId = SharedBodySystem.GetOrganContainerId(slotId);
-        if (!Containers.TryGetContainer(part, containerId, out var container))
-            return false;
-        foreach (var contained in container.ContainedEntities)
-        {
-            if (!HasComp<OrganComponent>(contained))
-                continue;
-            organ = contained;
-            return true;
-        }
-        return false;
+        return MedicalIndex.TryGetOrganInSlot(part, slotId, out organ);
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Content.Shared.Destructible;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
 using Content.Shared._RMC14.Marines.Skills;
@@ -20,6 +21,8 @@ public sealed partial class CMUBodyScannerSystem : EntitySystem
 
     private static readonly EntProtoId<SkillDefinitionComponent> SurgerySkill = "RMCSkillSurgery";
 
+    private readonly HashSet<EntityUid> _openConsoles = new();
+    private readonly List<EntityUid> _staleConsoles = new();
     private float _uiAccumulator;
 
     public override void Initialize()
@@ -29,6 +32,7 @@ public sealed partial class CMUBodyScannerSystem : EntitySystem
         Subs.BuiEvents<CMUBodyScannerConsoleComponent>(CMUBodyScannerUIKey.Key, subs =>
         {
             subs.Event<BoundUIOpenedEvent>(OnUiOpened);
+            subs.Event<BoundUIClosedEvent>(OnUiClosed);
             subs.Event<CMUBodyScannerConfirmPuzzleMessage>(OnConfirmPuzzle);
             subs.Event<CMUBodyScannerResetPuzzleMessage>(OnResetPuzzle);
             subs.Event<CMUBodyScannerEjectPatientMessage>(OnEjectPatient);
@@ -40,6 +44,7 @@ public sealed partial class CMUBodyScannerSystem : EntitySystem
         SubscribeLocalEvent<CMUBodyScannerPodComponent, GetVerbsEvent<AlternativeVerb>>(OnPodAlternativeVerbs);
         SubscribeLocalEvent<CMUBodyScannerPodComponent, ContainerRelayMovementEntityEvent>(OnPodRelayMovement);
         SubscribeLocalEvent<CMUBodyScannerPodComponent, CMUMedicalPodInsertDoAfterEvent>(OnPodInsertDoAfter);
+        SubscribeLocalEvent<CMUBodyScannerConsoleComponent, ComponentShutdown>(OnConsoleShutdown);
     }
 
     public override void Update(float frameTime)
@@ -51,9 +56,21 @@ public sealed partial class CMUBodyScannerSystem : EntitySystem
             return;
 
         _uiAccumulator = 0f;
-        var consoleQuery = EntityQueryEnumerator<CMUBodyScannerConsoleComponent>();
-        while (consoleQuery.MoveNext(out var uid, out var comp))
-            RefreshUi(uid, comp, comp.LastViewer);
+        _staleConsoles.Clear();
+        foreach (var console in _openConsoles)
+        {
+            if (!TryComp<CMUBodyScannerConsoleComponent>(console, out var comp) ||
+                !_ui.IsUiOpen(console, CMUBodyScannerUIKey.Key))
+            {
+                _staleConsoles.Add(console);
+                continue;
+            }
+
+            RefreshUi(console, comp);
+        }
+
+        foreach (var console in _staleConsoles)
+            _openConsoles.Remove(console);
     }
 
     public float GetSurgeryDelayMultiplier(EntityUid surgeon, EntityUid patient)
@@ -63,8 +80,19 @@ public sealed partial class CMUBodyScannerSystem : EntitySystem
 
     private void OnUiOpened(Entity<CMUBodyScannerConsoleComponent> ent, ref BoundUIOpenedEvent args)
     {
-        ent.Comp.LastViewer = args.Actor;
+        _openConsoles.Add(ent.Owner);
         RefreshUi(ent.Owner, ent.Comp, args.Actor);
+    }
+
+    private void OnUiClosed(Entity<CMUBodyScannerConsoleComponent> ent, ref BoundUIClosedEvent args)
+    {
+        if (!_ui.IsUiOpen(ent.Owner, CMUBodyScannerUIKey.Key))
+            _openConsoles.Remove(ent.Owner);
+    }
+
+    private void OnConsoleShutdown(Entity<CMUBodyScannerConsoleComponent> ent, ref ComponentShutdown args)
+    {
+        _openConsoles.Remove(ent.Owner);
     }
 
     private void OnConfirmPuzzle(Entity<CMUBodyScannerConsoleComponent> ent, ref CMUBodyScannerConfirmPuzzleMessage msg)
@@ -72,9 +100,8 @@ public sealed partial class CMUBodyScannerSystem : EntitySystem
         if (!CanUsePuzzle(ent.Owner, ent.Comp, msg.Actor, out var patient))
             return;
 
-        ent.Comp.LastViewer = msg.Actor;
         if (_calibration.TryConfirmPuzzle(msg.Actor, patient, ent.Comp, msg.LayerId, msg.SignalId, msg.ClientPhase))
-            RefreshUi(ent.Owner, ent.Comp, msg.Actor);
+            RefreshUi(ent.Owner, ent.Comp);
     }
 
     private void OnResetPuzzle(Entity<CMUBodyScannerConsoleComponent> ent, ref CMUBodyScannerResetPuzzleMessage msg)
@@ -82,14 +109,12 @@ public sealed partial class CMUBodyScannerSystem : EntitySystem
         if (!CanUsePuzzle(ent.Owner, ent.Comp, msg.Actor, out var patient))
             return;
 
-        ent.Comp.LastViewer = msg.Actor;
         if (_calibration.ResetPuzzle(msg.Actor, patient, ent.Comp))
-            RefreshUi(ent.Owner, ent.Comp, msg.Actor);
+            RefreshUi(ent.Owner, ent.Comp);
     }
 
     private void OnEjectPatient(Entity<CMUBodyScannerConsoleComponent> ent, ref CMUBodyScannerEjectPatientMessage msg)
     {
-        ent.Comp.LastViewer = msg.Actor;
         if (!_skills.HasSkill(msg.Actor, SurgerySkill, 1))
             return;
 
@@ -100,7 +125,7 @@ public sealed partial class CMUBodyScannerSystem : EntitySystem
         }
 
         EjectPatient(pod, podComp);
-        RefreshUi(ent.Owner, ent.Comp, msg.Actor);
+        RefreshUi(ent.Owner, ent.Comp);
     }
 
     private bool CanUsePuzzle(EntityUid console, CMUBodyScannerConsoleComponent comp, EntityUid user, out EntityUid patient)
@@ -120,14 +145,25 @@ public sealed partial class CMUBodyScannerSystem : EntitySystem
 
     private void RefreshUi(EntityUid console, CMUBodyScannerConsoleComponent comp, EntityUid? viewer = null)
     {
-        if (!_ui.IsUiOpen(console, CMUBodyScannerUIKey.Key))
+        if (viewer is { } target && target.IsValid())
+        {
+            if (_ui.IsUiOpen(console, CMUBodyScannerUIKey.Key, target))
+                SendState(console, comp, target);
             return;
+        }
 
-        if (viewer is not { } validViewer || !validViewer.IsValid())
-            viewer = comp.LastViewer.IsValid() ? comp.LastViewer : null;
+        foreach (var actor in _ui.GetActors(console, CMUBodyScannerUIKey.Key))
+            SendState(console, comp, actor);
+    }
 
+    private void SendState(EntityUid console, CMUBodyScannerConsoleComponent comp, EntityUid viewer)
+    {
         var state = BuildState(console, comp, viewer);
-        _ui.SetUiState(console, CMUBodyScannerUIKey.Key, state);
+        _ui.ServerSendUiMessage(
+            console,
+            CMUBodyScannerUIKey.Key,
+            new CMUBodyScannerStateMessage(state),
+            viewer);
     }
 
     private CMUBodyScannerBuiState BuildState(EntityUid console, CMUBodyScannerConsoleComponent comp, EntityUid? viewer)
@@ -283,7 +319,7 @@ public sealed partial class CMUBodyScannerSystem : EntitySystem
                 continue;
             }
 
-            RefreshUi(console, consoleComp, consoleComp.LastViewer);
+            RefreshUi(console, consoleComp);
         }
     }
 }

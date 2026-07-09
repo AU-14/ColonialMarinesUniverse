@@ -6,7 +6,6 @@ using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.Bones;
 using Content.Shared._CMU14.Medical.Anatomy.Organs;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Brain;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Ears;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Eyes;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Kidneys;
@@ -744,10 +743,10 @@ public sealed class ConditionDrivenSurgeryTest
                 entMan,
                 flow,
                 wounds,
-                "CMUSurgeryCauterizeInternalBleedingCavity",
+                "CMUSurgeryCauterizeInternalBleeding",
                 BodyPartType.Torso,
                 BodyPartSymmetry.None,
-                OpenBoneCavity);
+                OpenSoftTissue);
 
             RunEscharCase(entMan, flow);
             RunAmputationCase(entMan, flow);
@@ -905,15 +904,6 @@ public sealed class ConditionDrivenSurgeryTest
                 BodyPartSymmetry.None,
                 "hemostat");
 
-            RunOrganRepairCase<EarsComponent>(
-                entMan,
-                flow,
-                traits,
-                organHealth,
-                "CMUSurgeryRepairEars",
-                BodyPartType.Head,
-                BodyPartSymmetry.None,
-                "hemostat");
         });
 
         await pair.CleanReturnAsync();
@@ -1815,25 +1805,17 @@ public sealed class ConditionDrivenSurgeryTest
 
     private static void AddBodyPartWound(IEntityManager entMan, EntityUid part, WoundType type)
     {
+        var ledger = entMan.System<CMUWoundLedgerSystem>();
         var wounds = entMan.EnsureComponent<BodyPartWoundComponent>(part);
-        GetWoundField<List<Wound>>(wounds, nameof(BodyPartWoundComponent.Wounds))
-            .Add(new Wound(FixedPoint2.New(10), FixedPoint2.Zero, 0f, null, type, false));
-        GetWoundField<List<WoundSize>>(wounds, nameof(BodyPartWoundComponent.Sizes)).Add(WoundSize.CutDeep);
-        GetWoundField<List<int>>(wounds, nameof(BodyPartWoundComponent.Bandages)).Add(0);
-        GetWoundField<List<WoundMechanism>>(wounds, nameof(BodyPartWoundComponent.Mechanisms))
-            .Add(type == WoundType.Burn ? WoundMechanism.Burn : WoundMechanism.Generic);
-        GetWoundField<List<WoundMechanismFlags>>(wounds, nameof(BodyPartWoundComponent.SecondaryMechanisms))
-            .Add(WoundMechanismFlags.None);
-        GetWoundField<List<WoundTreatmentQuality>>(wounds, nameof(BodyPartWoundComponent.TreatmentQualities))
-            .Add(WoundTreatmentQuality.Untreated);
-        GetWoundField<List<WoundCleanupFlags>>(wounds, nameof(BodyPartWoundComponent.Cleanup))
-            .Add(WoundCleanupFlags.None);
+        Assert.That(ledger.AddEntry(wounds, new CMUWoundEntry(
+            new Wound(FixedPoint2.New(10), FixedPoint2.Zero, 0f, null, type, false),
+            WoundSize.CutDeep,
+            0,
+            type == WoundType.Burn ? WoundMechanism.Burn : WoundMechanism.Generic,
+            WoundMechanismFlags.None,
+            WoundTreatmentQuality.Untreated,
+            WoundCleanupFlags.None)), Is.GreaterThanOrEqualTo(0));
     }
-
-    private static T GetWoundField<T>(BodyPartWoundComponent comp, string name)
-        => (T) typeof(BodyPartWoundComponent).GetField(
-            name,
-            BindingFlags.Instance | BindingFlags.Public)!.GetValue(comp)!;
 
     private static List<CMUSurgeryPartEntry> BuildAutodocPartEntries(
         CMUAutodocSystem autodoc,

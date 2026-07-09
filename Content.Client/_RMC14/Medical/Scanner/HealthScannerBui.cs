@@ -34,6 +34,7 @@ public sealed partial class HealthScannerBui : BoundUserInterface
 
     [ViewVariables]
     private HealthScannerWindow? _window;
+    private HealthScannerBuiState? _latestState;
     private NetEntity _lastTarget;
     private bool _hasLastTarget;
 
@@ -63,8 +64,20 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         if (!window.IsOpen)
             window.OpenCentered();
 
-        if (State is HealthScannerBuiState state)
+        if (_latestState is { } latestState)
+            UpdateState(latestState);
+        else if (State is HealthScannerBuiState state)
             UpdateState(state);
+    }
+
+    protected override void ReceiveMessage(BoundUserInterfaceMessage message)
+    {
+        base.ReceiveMessage(message);
+        if (message is not HealthScannerStateMessage update)
+            return;
+
+        _latestState = update.State;
+        UpdateState(update.State);
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
@@ -75,6 +88,7 @@ public sealed partial class HealthScannerBui : BoundUserInterface
 
     private void UpdateState(HealthScannerBuiState uiState)
     {
+        _latestState = uiState;
         _window = EnsureWindow();
 
         if (_entities.GetEntity(uiState.Target) is not { Valid: true } target)

@@ -1,51 +1,25 @@
 using System.Collections.Generic;
-using Content.Shared._RMC14.Medical.Wounds;
 using Robust.Shared.GameStates;
-using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.Injuries.Wounds;
 
 /// <summary>
-///     Per-body-part wound ledger. Each entry mirrors into RMC's entity-level
-///     <see cref="WoundedComponent"/> on the body owner so the existing
-///     health analyzer / holocard / bandage pipelines keep working unchanged.
+///     Server-owned per-body-part wound ledger. Clients receive only the
+///     compact body-level public examine and overlay projections.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
-[Access(typeof(SharedCMUWoundsSystem))]
+[RegisterComponent, AutoGenerateComponentPause]
+[Access(typeof(SharedCMUWoundsSystem), typeof(CMUWoundLedgerSystem))]
 public sealed partial class BodyPartWoundComponent : Component
 {
-    [DataField, AutoNetworkedField]
-    public List<Wound> Wounds = new();
-
     /// <summary>
-    ///     Kept in lockstep with <see cref="Wounds"/>. A shorter list is
-    ///     tolerated for save-game forward-compat — readers treat missing
-    ///     entries as <see cref="WoundSize.CutDeep"/>.
+    ///     The sole source of truth for wound and treatment state. Callers
+    ///     cross <see cref="CMUWoundLedgerSystem"/> instead of mutating it.
     /// </summary>
-    [DataField, AutoNetworkedField]
-    public List<WoundSize> Sizes = new();
+    [DataField]
+    internal List<CMUWoundEntry> Entries = new();
 
-    /// <summary>
-    ///     Number of bandages applied to each wound. The wound becomes
-    ///     <c>Treated</c> once this reaches the size profile requirement.
-    /// </summary>
-    [DataField, AutoNetworkedField]
-    public List<int> Bandages = new();
-
-    [DataField, AutoNetworkedField]
-    public List<WoundMechanism> Mechanisms = new();
-
-    [DataField, AutoNetworkedField]
-    public List<WoundMechanismFlags> SecondaryMechanisms = new();
-
-    [DataField, AutoNetworkedField]
-    public List<WoundTreatmentQuality> TreatmentQualities = new();
-
-    [DataField, AutoNetworkedField]
-    public List<WoundCleanupFlags> Cleanup = new();
-
-    [DataField, AutoNetworkedField]
+    [DataField]
     public ExternalBleedTier ExternalBleeding;
 
     [DataField, AutoPausedField]

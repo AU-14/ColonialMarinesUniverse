@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Content.Shared.Atmos.Rotting;
 using Content.Shared._RMC14.Body;
 using Content.Shared._RMC14.Hands;
@@ -46,13 +47,25 @@ public sealed partial class HealthScannerSystem : EntitySystem
     [Dependency] private SharedWoundsSystem _wounds = default!;
 
     private const float UiUpdateInterval = 1f;
+    private readonly HashSet<EntityUid> _openScanners = new();
+    private readonly List<EntityUid> _refreshScanners = new();
+    private readonly List<EntityUid> _staleScanners = new();
     private float _uiUpdateAccumulator;
 
     public override void Initialize()
     {
+        base.Initialize();
+
+        Subs.BuiEvents<HealthScannerComponent>(HealthScannerUIKey.Key, subs =>
+        {
+            subs.Event<BoundUIOpenedEvent>(OnUiOpened);
+            subs.Event<BoundUIClosedEvent>(OnUiClosed);
+        });
+
         SubscribeLocalEvent<HealthScannerComponent, AfterInteractEvent>(OnAfterInteract);
         SubscribeLocalEvent<HealthScannerComponent, DoAfterAttemptEvent<HealthScannerDoAfterEvent>>(OnDoAfterAttempt);
         SubscribeLocalEvent<HealthScannerComponent, HealthScannerDoAfterEvent>(OnDoAfter);
+        SubscribeLocalEvent<HealthScannerComponent, ComponentShutdown>(OnScannerShutdown);
     }
 
     private void OnAfterInteract(Entity<HealthScannerComponent> scanner, ref AfterInteractEvent args)
@@ -111,9 +124,9 @@ public sealed partial class HealthScannerSystem : EntitySystem
         scanner.Comp.Target = target;
 
         _audio.PlayPredicted(scanner.Comp.Sound, scanner, args.User);
-        UpdateUI(scanner);
-
-        if (scanner.Comp.Target != null)
+        if (_ui.IsUiOpen(scanner.Owner, HealthScannerUIKey.Key, args.User))
+            RefreshUi(scanner, args.User);
+        else
             _ui.OpenUi(scanner.Owner, HealthScannerUIKey.Key, args.User);
     }
 
@@ -165,8 +178,28 @@ public sealed partial class HealthScannerSystem : EntitySystem
         return true;
     }
 
-    private void UpdateUI(Entity<HealthScannerComponent> scanner)
+    private void OnUiOpened(Entity<HealthScannerComponent> scanner, ref BoundUIOpenedEvent args)
     {
+        _openScanners.Add(scanner.Owner);
+        RefreshUi(scanner, args.Actor);
+    }
+
+    private void OnUiClosed(Entity<HealthScannerComponent> scanner, ref BoundUIClosedEvent args)
+    {
+        if (!_ui.IsUiOpen(scanner.Owner, HealthScannerUIKey.Key))
+            _openScanners.Remove(scanner.Owner);
+    }
+
+    private void OnScannerShutdown(Entity<HealthScannerComponent> scanner, ref ComponentShutdown args)
+    {
+        _openScanners.Remove(scanner.Owner);
+    }
+
+    private void RefreshUi(Entity<HealthScannerComponent> scanner, EntityUid? viewer = null)
+    {
+        if (_net.IsClient)
+            return;
+
         if (scanner.Comp.Target is not { } target)
             return;
 
@@ -182,6 +215,33 @@ public sealed partial class HealthScannerSystem : EntitySystem
         if (!_rmcHands.TryGetHolder(scanner, out _))
             return;
 
+        if (viewer is { } targetViewer && targetViewer.IsValid())
+        {
+            if (_ui.IsUiOpen(scanner.Owner, HealthScannerUIKey.Key, targetViewer))
+                SendState(scanner.Owner, target, targetViewer);
+            return;
+        }
+
+        foreach (var actor in _ui.GetActors(scanner.Owner, HealthScannerUIKey.Key))
+            SendState(scanner.Owner, target, actor);
+    }
+
+    private void SendState(EntityUid scanner, EntityUid target, EntityUid viewer)
+    {
+        var state = BuildStateForViewer(scanner, target, viewer);
+        _ui.ServerSendUiMessage(
+            scanner,
+            HealthScannerUIKey.Key,
+            new HealthScannerStateMessage(state),
+            viewer);
+    }
+
+    /// <summary>
+    ///     Builds an isolated scanner projection for one viewer. Skill-gated
+    ///     medical details must never be shared between UI actors.
+    /// </summary>
+    public HealthScannerBuiState BuildStateForViewer(EntityUid scanner, EntityUid target, EntityUid viewer)
+    {
         FixedPoint2 blood = 0;
         FixedPoint2 maxBlood = 0;
         if (_rmcBloodstream.TryGetBloodSolution(target, out var bloodstream))
@@ -197,13 +257,10 @@ public sealed partial class HealthScannerSystem : EntitySystem
         var state = new HealthScannerBuiState(GetNetEntity(target), blood, maxBlood, temperature, chemicals, bleeding);
         FillBaseMedicalReadout(target, state);
 
-        EntityUid? examiner = null;
-        if (_rmcHands.TryGetHolder(scanner, out var holder))
-            examiner = holder;
-        var buildEv = new HealthScannerBuildStateEvent(scanner.Owner, target, examiner, state);
-        RaiseLocalEvent(scanner.Owner, ref buildEv);
+        var buildEv = new HealthScannerBuildStateEvent(scanner, target, viewer, state);
+        RaiseLocalEvent(scanner, ref buildEv);
 
-        _ui.SetUiState(scanner.Owner, HealthScannerUIKey.Key, state);
+        return state;
     }
 
     private void FillBaseMedicalReadout(EntityUid target, HealthScannerBuiState state)
@@ -321,6 +378,8 @@ public sealed partial class HealthScannerSystem : EntitySystem
 
     public override void Update(float frameTime)
     {
+        base.Update(frameTime);
+
         if (_net.IsClient)
             return;
 
@@ -329,13 +388,22 @@ public sealed partial class HealthScannerSystem : EntitySystem
             return;
 
         _uiUpdateAccumulator = 0f;
-        var scanners = EntityQueryEnumerator<HealthScannerComponent>();
-        while (scanners.MoveNext(out var uid, out var scanner))
+        _refreshScanners.Clear();
+        _refreshScanners.AddRange(_openScanners);
+        _staleScanners.Clear();
+        foreach (var uid in _refreshScanners)
         {
-            if (!_ui.IsUiOpen(uid, HealthScannerUIKey.Key))
+            if (!TryComp<HealthScannerComponent>(uid, out var scanner) ||
+                !_ui.IsUiOpen(uid, HealthScannerUIKey.Key))
+            {
+                _staleScanners.Add(uid);
                 continue;
+            }
 
-            UpdateUI((uid, scanner));
+            RefreshUi((uid, scanner));
         }
+
+        foreach (var uid in _staleScanners)
+            _openScanners.Remove(uid);
     }
 }

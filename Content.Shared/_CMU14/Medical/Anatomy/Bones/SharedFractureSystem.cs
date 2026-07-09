@@ -48,7 +48,7 @@ public abstract partial class SharedFractureSystem : EntitySystem
             return;
 
         var ev = new FractureSeverityChangedEvent(body, part, old, @new);
-        RaiseLocalEvent(part, ref ev);
+        RaiseLocalEvent(part, ref ev, broadcast: true);
     }
 
     /// <summary>

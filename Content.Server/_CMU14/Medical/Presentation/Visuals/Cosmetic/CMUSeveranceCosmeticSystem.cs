@@ -13,7 +13,6 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Standing;
-using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Serialization;
 
@@ -27,7 +26,7 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
     [Dependency] private StandingStateSystem _standing = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private CMUMedicalVisibilitySystem _medicalVisibility = default!;
-    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedCMURoboticLimbSystem _roboticLimbs = default!;
 
     /// <summary>
@@ -141,13 +140,13 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
 
     private void RestoreArmHand(EntityUid body, EntityUid arm, string armSlot)
     {
-        if (!TryComp<BodyPartComponent>(arm, out var armComp))
+        if (!HasComp<BodyPartComponent>(arm))
             return;
 
         if (SymmetryForArmSlot(armSlot) is not { } slotSymmetry)
             return;
 
-        foreach (var (slotId, slot) in armComp.Children)
+        foreach (var slot in _medicalIndex.GetBodyPartSlots(arm))
         {
             if (slot.Type != BodyPartType.Hand)
                 continue;
@@ -159,7 +158,7 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
                 _ => HandLocation.Middle,
             };
 
-            var handId = HandIdForArmSlot(armSlot) ?? SharedBodySystem.PartSlotContainerIdPrefix + slotId;
+            var handId = HandIdForArmSlot(armSlot) ?? SharedBodySystem.PartSlotContainerIdPrefix + slot.SlotId;
             if (!_hands.TrySetHandLocation((body, null), handId, location))
                 _hands.AddHand((body, null), handId, location);
 
@@ -209,33 +208,19 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
     /// </summary>
     private bool HasAttachedHandForArmSlot(EntityUid body, string armSlot)
     {
-        if (SymmetryForArmSlot(armSlot) is null
-            || !TryComp<BodyComponent>(body, out var bodyComp)
-            || bodyComp.RootContainer.ContainedEntity is not { } root)
-        {
+        if (SymmetryForArmSlot(armSlot) is null || !_medicalIndex.TryGetRootPart(body, out var root))
             return false;
-        }
 
         var bareArmSlot = BarePartSlot(armSlot);
-        if (!_container.TryGetContainer(root, SharedBodySystem.GetPartSlotContainerId(bareArmSlot), out var armContainer))
+        if (!_medicalIndex.TryGetBodyPartInSlot(root.Owner, bareArmSlot, out var arm))
             return false;
 
-        foreach (var arm in armContainer.ContainedEntities)
+        foreach (var slot in _medicalIndex.GetBodyPartSlots(arm))
         {
-            if (!TryComp<BodyPartComponent>(arm, out var armComp))
+            if (slot.Type != BodyPartType.Hand)
                 continue;
-
-            foreach (var (slotId, slot) in armComp.Children)
-            {
-                if (slot.Type != BodyPartType.Hand)
-                    continue;
-
-                if (!_container.TryGetContainer(arm, SharedBodySystem.GetPartSlotContainerId(slotId), out var handContainer))
-                    continue;
-
-                if (handContainer.ContainedEntities.Count > 0)
-                    return true;
-            }
+            if (slot.Part is not null)
+                return true;
         }
 
         return false;

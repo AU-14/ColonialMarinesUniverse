@@ -1,7 +1,5 @@
-using Content.Server._RMC14.Damage;
-using Content.Server.Body.Systems;
-using Content.Server.Speech.Components;
 using Content.Shared._CMU14.Medical.Core;
+using Content.Server.Speech.Components;
 using Content.Shared._CMU14.Medical.Injuries.Pain;
 using Content.Shared._CMU14.Medical.Injuries.Pain.Events;
 using Content.Shared._CMU14.Medical.Injuries.Vision;
@@ -29,9 +27,11 @@ public sealed partial class CMUPainFeedbackSystem : EntitySystem
     [Dependency] private SharedPainShockSystem _pain = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private CMUMedicalSchedulerSystem _scheduler = default!;
     [Dependency] private StatusEffectQuerySystem _status = default!;
     [Dependency] private IGameTiming _timing = default!;
 
+    private static readonly CMUMedicalWorkKey FeedbackWork = new("pain-feedback");
     private static readonly ProtoId<StatusEffectPrototype> Stutter = "Stutter";
     private const float SevereBlurMax = 0.49f;
 
@@ -39,87 +39,92 @@ public sealed partial class CMUPainFeedbackSystem : EntitySystem
     {
         base.Initialize();
 
-        UpdatesAfter.Add(typeof(RMCDamageableSystem));
-        UpdatesAfter.Add(typeof(RespiratorSystem));
-
         SubscribeLocalEvent<CMUPainFeedbackComponent, ComponentStartup>(OnFeedbackStartup);
         SubscribeLocalEvent<CMUPainFeedbackComponent, ComponentShutdown>(OnFeedbackShutdown);
+        SubscribeLocalEvent<CMUPainFeedbackComponent, CMUMedicalWorkDueEvent>(OnFeedbackDue);
         SubscribeLocalEvent<CMUPainFeedbackComponent, MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<CMUPainFeedbackComponent, PainTierChangedEvent>(OnPainTierChanged);
     }
 
-    public override void Update(float frameTime)
-    {
-        base.Update(frameTime);
-
-        if (!_pain.IsLayerEnabled())
-            return;
-
-        var now = _timing.CurTime;
-        var query = EntityQueryEnumerator<CMUPainFeedbackActiveComponent, CMUPainFeedbackComponent, PainShockComponent, MobStateComponent>();
-        while (query.MoveNext(out var uid, out _, out var feedback, out var pain, out var mob))
-        {
-            if (!HasComp<CMUHumanMedicalComponent>(uid) ||
-                mob.CurrentState == MobState.Dead ||
-                HasComp<SynthComponent>(uid))
-            {
-                feedback.NextEffect = TimeSpan.Zero;
-                RemCompDeferred<CMUPainFeedbackActiveComponent>(uid);
-                continue;
-            }
-
-            if (pain.Tier < PainTier.Severe)
-            {
-                feedback.NextEffect = TimeSpan.Zero;
-                RemCompDeferred<CMUPainFeedbackActiveComponent>(uid);
-                continue;
-            }
-
-            if (feedback.NextEffect > now)
-                continue;
-
-            feedback.NextEffect = now + feedback.EffectInterval;
-            ApplyFeedback(uid, feedback, pain);
-        }
-    }
-
     private void OnFeedbackStartup(Entity<CMUPainFeedbackComponent> ent, ref ComponentStartup args)
     {
-        var active = TryComp<PainShockComponent>(ent, out var pain) && pain.Tier >= PainTier.Severe;
-        SetFeedbackActive(ent, active);
+        SetFeedbackActive(ent);
     }
 
     private void OnFeedbackShutdown(Entity<CMUPainFeedbackComponent> ent, ref ComponentShutdown args)
     {
-        RemCompDeferred<CMUPainFeedbackActiveComponent>(ent.Owner);
+        _scheduler.Cancel(ent.Owner, FeedbackWork);
+    }
+
+    private void OnFeedbackDue(Entity<CMUPainFeedbackComponent> ent, ref CMUMedicalWorkDueEvent args)
+    {
+        if (args.Key != FeedbackWork)
+            return;
+
+        if (!TryGetActivePain(ent.Owner, out var pain))
+        {
+            CancelFeedback(ent);
+            return;
+        }
+
+        ent.Comp.NextEffect = _timing.CurTime + ent.Comp.EffectInterval;
+        _scheduler.Schedule(ent.Owner, FeedbackWork, ent.Comp.NextEffect);
+
+        if (_pain.IsLayerEnabled())
+            ApplyFeedback(ent.Owner, ent.Comp, pain);
     }
 
     private void OnMobStateChanged(Entity<CMUPainFeedbackComponent> ent, ref MobStateChangedEvent args)
     {
-        var active = args.NewMobState != MobState.Dead &&
-                     TryComp<PainShockComponent>(ent, out var pain) &&
-                     pain.Tier >= PainTier.Severe;
-        SetFeedbackActive(ent, active);
+        if (args.NewMobState == MobState.Dead)
+            CancelFeedback(ent);
+        else
+            SetFeedbackActive(ent);
     }
 
     private void OnPainTierChanged(Entity<CMUPainFeedbackComponent> ent, ref PainTierChangedEvent args)
     {
-        SetFeedbackActive(ent, args.NewTier >= PainTier.Severe);
+        if (args.NewTier >= PainTier.Severe)
+            SetFeedbackActive(ent);
+        else
+            CancelFeedback(ent);
     }
 
-    private void SetFeedbackActive(Entity<CMUPainFeedbackComponent> ent, bool active)
+    private void SetFeedbackActive(Entity<CMUPainFeedbackComponent> ent)
     {
-        if (active &&
-            HasComp<CMUHumanMedicalComponent>(ent.Owner) &&
-            !HasComp<SynthComponent>(ent.Owner) &&
-            (!TryComp<MobStateComponent>(ent, out var mob) || mob.CurrentState != MobState.Dead))
+        if (!TryGetActivePain(ent.Owner, out _))
         {
-            EnsureComp<CMUPainFeedbackActiveComponent>(ent.Owner);
+            CancelFeedback(ent);
             return;
         }
 
+        if (ent.Comp.NextEffect <= _timing.CurTime)
+            ent.Comp.NextEffect = _timing.CurTime;
+
+        _scheduler.Schedule(ent.Owner, FeedbackWork, ent.Comp.NextEffect);
+    }
+
+    private void CancelFeedback(Entity<CMUPainFeedbackComponent> ent)
+    {
         ent.Comp.NextEffect = TimeSpan.Zero;
-        RemCompDeferred<CMUPainFeedbackActiveComponent>(ent.Owner);
+        _scheduler.Cancel(ent.Owner, FeedbackWork);
+    }
+
+    private bool TryGetActivePain(EntityUid uid, out PainShockComponent pain)
+    {
+        pain = default!;
+        if (!HasComp<CMUHumanMedicalComponent>(uid) ||
+            HasComp<SynthComponent>(uid) ||
+            !TryComp<MobStateComponent>(uid, out var mob) ||
+            mob.CurrentState == MobState.Dead ||
+            !TryComp<PainShockComponent>(uid, out var foundPain) ||
+            foundPain.Tier < PainTier.Severe)
+        {
+            return false;
+        }
+
+        pain = foundPain;
+        return true;
     }
 
     private void ApplyFeedback(EntityUid uid, CMUPainFeedbackComponent feedback, PainShockComponent pain)

@@ -406,7 +406,7 @@ public sealed class CMUMedicalFieldMixingTest
     }
 
     [Test]
-    public async Task MechanismTreatmentOnlyTreatsMatchingWoundAsOptimal()
+    public async Task MechanismTreatmentOnlyTreatsMatchingWoundAsAdequate()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -414,6 +414,7 @@ public sealed class CMUMedicalFieldMixingTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var woundsSystem = entMan.System<CMUWoundsSystem>();
             var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
@@ -435,8 +436,9 @@ public sealed class CMUMedicalFieldMixingTest
                     impact: DamageImpact.MeleeSlash), Is.True);
 
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
-                var bulletIndex = FindMechanism(wounds, WoundMechanism.Bullet);
-                var slashIndex = FindMechanism(wounds, WoundMechanism.Slash);
+                var entries = ledger.GetEntries(wounds);
+                var bulletIndex = FindMechanism(ledger, wounds, WoundMechanism.Bullet);
+                var slashIndex = FindMechanism(ledger, wounds, WoundMechanism.Slash);
 
                 Assert.That(bulletIndex, Is.GreaterThanOrEqualTo(0));
                 Assert.That(slashIndex, Is.GreaterThanOrEqualTo(0));
@@ -452,10 +454,10 @@ public sealed class CMUMedicalFieldMixingTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(treated, Is.EqualTo(1));
-                    Assert.That(wounds.TreatmentQualities[bulletIndex], Is.EqualTo(WoundTreatmentQuality.Optimal));
-                    Assert.That(wounds.Cleanup[bulletIndex], Is.EqualTo(WoundCleanupFlags.None));
-                    Assert.That(wounds.TreatmentQualities[slashIndex], Is.EqualTo(WoundTreatmentQuality.Untreated));
-                    Assert.That(wounds.Wounds[slashIndex].Treated, Is.False);
+                    Assert.That(entries[bulletIndex].TreatmentQuality, Is.EqualTo(WoundTreatmentQuality.Adequate));
+                    Assert.That(entries[bulletIndex].Cleanup, Is.EqualTo(WoundCleanupFlags.None));
+                    Assert.That(entries[slashIndex].TreatmentQuality, Is.EqualTo(WoundTreatmentQuality.Untreated));
+                    Assert.That(entries[slashIndex].Wound.Treated, Is.False);
                 });
             }
             finally
@@ -476,6 +478,7 @@ public sealed class CMUMedicalFieldMixingTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var user = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
@@ -491,6 +494,7 @@ public sealed class CMUMedicalFieldMixingTest
                     impact: DamageImpact.MeleeSlash), Is.True);
 
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(arm);
+                var entries = ledger.GetEntries(wounds);
                 Assert.That(wounds.ExternalBleeding, Is.EqualTo(ExternalBleedTier.Moderate));
 
                 var interact = new AfterInteractEvent(user, gauze, patient, default, true);
@@ -500,8 +504,8 @@ public sealed class CMUMedicalFieldMixingTest
                 {
                     Assert.That(interact.Handled, Is.True);
                     Assert.That(wounds.ExternalBleeding, Is.EqualTo(ExternalBleedTier.None));
-                    Assert.That(wounds.Wounds[0].Treated, Is.False);
-                    Assert.That(wounds.TreatmentQualities[0], Is.EqualTo(WoundTreatmentQuality.Untreated));
+                    Assert.That(entries[0].Wound.Treated, Is.False);
+                    Assert.That(entries[0].TreatmentQuality, Is.EqualTo(WoundTreatmentQuality.Untreated));
                     Assert.That(entMan.GetComponent<StackComponent>(gauze).Count, Is.EqualTo(49));
                 });
             }
@@ -525,6 +529,7 @@ public sealed class CMUMedicalFieldMixingTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var user = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
@@ -540,6 +545,7 @@ public sealed class CMUMedicalFieldMixingTest
                     impact: DamageImpact.MeleeSlash), Is.True);
 
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(arm);
+                var entries = ledger.GetEntries(wounds);
                 Assert.That(wounds.ExternalBleeding, Is.EqualTo(ExternalBleedTier.Arterial));
 
                 var interact = new AfterInteractEvent(user, gauze, patient, default, true);
@@ -549,8 +555,8 @@ public sealed class CMUMedicalFieldMixingTest
                 {
                     Assert.That(interact.Handled, Is.True);
                     Assert.That(wounds.ExternalBleeding, Is.EqualTo(ExternalBleedTier.Arterial));
-                    Assert.That(wounds.Wounds[0].Treated, Is.False);
-                    Assert.That(wounds.TreatmentQualities[0], Is.EqualTo(WoundTreatmentQuality.Untreated));
+                    Assert.That(entries[0].Wound.Treated, Is.False);
+                    Assert.That(entries[0].TreatmentQuality, Is.EqualTo(WoundTreatmentQuality.Untreated));
                     Assert.That(entMan.GetComponent<StackComponent>(gauze).Count, Is.EqualTo(50));
                 });
             }
@@ -574,6 +580,7 @@ public sealed class CMUMedicalFieldMixingTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var user = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
@@ -589,6 +596,7 @@ public sealed class CMUMedicalFieldMixingTest
                     impact: DamageImpact.MeleeSlash), Is.True);
 
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
+                var entries = ledger.GetEntries(wounds);
                 Assert.That(wounds.ExternalBleeding, Is.EqualTo(ExternalBleedTier.Moderate));
 
                 var interact = new AfterInteractEvent(user, gauze, patient, default, true);
@@ -598,8 +606,8 @@ public sealed class CMUMedicalFieldMixingTest
                 {
                     Assert.That(interact.Handled, Is.True);
                     Assert.That(wounds.ExternalBleeding, Is.EqualTo(ExternalBleedTier.None));
-                    Assert.That(wounds.Wounds[0].Treated, Is.False);
-                    Assert.That(wounds.TreatmentQualities[0], Is.EqualTo(WoundTreatmentQuality.Untreated));
+                    Assert.That(entries[0].Wound.Treated, Is.False);
+                    Assert.That(entries[0].TreatmentQuality, Is.EqualTo(WoundTreatmentQuality.Untreated));
                     Assert.That(entMan.GetComponent<StackComponent>(gauze).Count, Is.EqualTo(49));
                 });
             }
@@ -662,13 +670,15 @@ public sealed class CMUMedicalFieldMixingTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
+            var entries = ledger.GetEntries(wounds);
 
             Assert.Multiple(() =>
             {
                 Assert.That(wounds.ExternalBleeding, Is.EqualTo(ExternalBleedTier.None));
-                Assert.That(wounds.Wounds[0].Treated, Is.False);
-                Assert.That(wounds.TreatmentQualities[0], Is.EqualTo(WoundTreatmentQuality.Untreated));
+                Assert.That(entries[0].Wound.Treated, Is.False);
+                Assert.That(entries[0].TreatmentQuality, Is.EqualTo(WoundTreatmentQuality.Untreated));
                 Assert.That(entMan.GetComponent<StackComponent>(trauma).Count, Is.EqualTo(49));
             });
 
@@ -688,6 +698,7 @@ public sealed class CMUMedicalFieldMixingTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var hands = entMan.System<SharedHandsSystem>();
             var skills = entMan.System<SkillsSystem>();
@@ -709,6 +720,7 @@ public sealed class CMUMedicalFieldMixingTest
                     impact: DamageImpact.MeleeSlash), Is.True);
 
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
+                var entries = ledger.GetEntries(wounds);
                 Assert.That(wounds.ExternalBleeding, Is.EqualTo(ExternalBleedTier.Arterial));
 
                 var interact = new AfterInteractEvent(user, trauma, patient, default, true);
@@ -718,8 +730,8 @@ public sealed class CMUMedicalFieldMixingTest
                 {
                     Assert.That(interact.Handled, Is.True);
                     Assert.That(wounds.ExternalBleeding, Is.EqualTo(ExternalBleedTier.None));
-                    Assert.That(wounds.Wounds[0].Treated, Is.False);
-                    Assert.That(wounds.TreatmentQualities[0], Is.EqualTo(WoundTreatmentQuality.Untreated));
+                    Assert.That(entries[0].Wound.Treated, Is.False);
+                    Assert.That(entries[0].TreatmentQuality, Is.EqualTo(WoundTreatmentQuality.Untreated));
                     Assert.That(entMan.GetComponent<StackComponent>(trauma).Count, Is.EqualTo(49));
                 });
             }
@@ -743,6 +755,7 @@ public sealed class CMUMedicalFieldMixingTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var user = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
@@ -758,6 +771,7 @@ public sealed class CMUMedicalFieldMixingTest
                     impact: DamageImpact.MeleeSlash), Is.True);
 
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
+                var entries = ledger.GetEntries(wounds);
                 Assert.That(wounds.ExternalBleeding, Is.EqualTo(ExternalBleedTier.Moderate));
 
                 var interact = new AfterInteractEvent(user, gauze, patient, default, true);
@@ -767,9 +781,9 @@ public sealed class CMUMedicalFieldMixingTest
                 {
                     Assert.That(interact.Handled, Is.True);
                     Assert.That(wounds.ExternalBleeding, Is.EqualTo(ExternalBleedTier.None));
-                    Assert.That(wounds.Wounds[0].Treated, Is.True);
-                    Assert.That(wounds.TreatmentQualities[0], Is.EqualTo(WoundTreatmentQuality.Adequate));
-                    Assert.That(wounds.Cleanup[0], Is.EqualTo(WoundCleanupFlags.None));
+                    Assert.That(entries[0].Wound.Treated, Is.True);
+                    Assert.That(entries[0].TreatmentQuality, Is.EqualTo(WoundTreatmentQuality.Adequate));
+                    Assert.That(entries[0].Cleanup, Is.EqualTo(WoundCleanupFlags.None));
                     Assert.That(entMan.GetComponent<StackComponent>(gauze).Count, Is.EqualTo(9));
                 });
             }
@@ -793,6 +807,7 @@ public sealed class CMUMedicalFieldMixingTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var woundsSystem = entMan.System<CMUWoundsSystem>();
             var user = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
@@ -809,10 +824,11 @@ public sealed class CMUMedicalFieldMixingTest
                     impact: DamageImpact.MeleeSlash), Is.True);
 
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
+                var entries = ledger.GetEntries(wounds);
                 Assert.That(woundsSystem.TryTreatWound(torso, out var completed), Is.True);
                 Assert.That(completed, Is.True);
-                Assert.That(wounds.TreatmentQualities[0], Is.EqualTo(WoundTreatmentQuality.Adequate));
-                Assert.That(wounds.Cleanup[0], Is.EqualTo(WoundCleanupFlags.None));
+                Assert.That(entries[0].TreatmentQuality, Is.EqualTo(WoundTreatmentQuality.Adequate));
+                Assert.That(entries[0].Cleanup, Is.EqualTo(WoundCleanupFlags.None));
 
                 var interact = new AfterInteractEvent(user, gauze, patient, default, true);
                 entMan.EventBus.RaiseLocalEvent(gauze, interact);
@@ -820,8 +836,8 @@ public sealed class CMUMedicalFieldMixingTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(interact.Handled, Is.True);
-                    Assert.That(wounds.TreatmentQualities[0], Is.EqualTo(WoundTreatmentQuality.Adequate));
-                    Assert.That(wounds.Cleanup[0], Is.EqualTo(WoundCleanupFlags.None));
+                    Assert.That(entries[0].TreatmentQuality, Is.EqualTo(WoundTreatmentQuality.Adequate));
+                    Assert.That(entries[0].Cleanup, Is.EqualTo(WoundCleanupFlags.None));
                     Assert.That(entMan.GetComponent<StackComponent>(gauze).Count, Is.EqualTo(10));
                 });
             }
@@ -845,6 +861,7 @@ public sealed class CMUMedicalFieldMixingTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var woundsSystem = entMan.System<CMUWoundsSystem>();
             var user = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
@@ -861,10 +878,11 @@ public sealed class CMUMedicalFieldMixingTest
                     impact: new DamageImpact(DamageImpactDelivery.Contact, DamageImpactContact.Burn, DamageImpactPenetration.None, DamageImpactEnergy.Medium)), Is.True);
 
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
+                var entries = ledger.GetEntries(wounds);
                 Assert.That(woundsSystem.TryTreatWound(torso, out var completed), Is.True);
                 Assert.That(completed, Is.True);
-                Assert.That(wounds.Wounds[0].Type, Is.EqualTo(WoundType.Burn));
-                Assert.That(wounds.Cleanup[0], Is.EqualTo(WoundCleanupFlags.None));
+                Assert.That(entries[0].Wound.Type, Is.EqualTo(WoundType.Burn));
+                Assert.That(entries[0].Cleanup, Is.EqualTo(WoundCleanupFlags.None));
 
                 var interact = new AfterInteractEvent(user, antiseptic, patient, default, true);
                 entMan.EventBus.RaiseLocalEvent(antiseptic, interact);
@@ -872,9 +890,9 @@ public sealed class CMUMedicalFieldMixingTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(interact.Handled, Is.True);
-                    Assert.That(wounds.Cleanup[0] & WoundCleanupFlags.DirtyDressing, Is.EqualTo(WoundCleanupFlags.None));
-                    Assert.That(wounds.Cleanup[0] & WoundCleanupFlags.CharredTissue, Is.EqualTo(WoundCleanupFlags.None));
-                    Assert.That(wounds.TreatmentQualities[0], Is.EqualTo(WoundTreatmentQuality.Adequate));
+                    Assert.That(entries[0].Cleanup & WoundCleanupFlags.DirtyDressing, Is.EqualTo(WoundCleanupFlags.None));
+                    Assert.That(entries[0].Cleanup & WoundCleanupFlags.CharredTissue, Is.EqualTo(WoundCleanupFlags.None));
+                    Assert.That(entries[0].TreatmentQuality, Is.EqualTo(WoundTreatmentQuality.Adequate));
                     Assert.That(entMan.GetComponent<StackComponent>(antiseptic).Count, Is.EqualTo(10));
                 });
             }
@@ -898,6 +916,7 @@ public sealed class CMUMedicalFieldMixingTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var user = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
@@ -913,6 +932,7 @@ public sealed class CMUMedicalFieldMixingTest
                     impact: DamageImpact.MeleeSlash), Is.True);
 
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
+                var entries = ledger.GetEntries(wounds);
                 Assert.That(wounds.ExternalBleeding, Is.EqualTo(ExternalBleedTier.Arterial));
 
                 var interact = new AfterInteractEvent(user, gauze, patient, default, true);
@@ -922,9 +942,9 @@ public sealed class CMUMedicalFieldMixingTest
                 {
                     Assert.That(interact.Handled, Is.True);
                     Assert.That(wounds.ExternalBleeding, Is.EqualTo(ExternalBleedTier.Arterial));
-                    Assert.That(wounds.Wounds[0].Treated, Is.True);
-                    Assert.That(wounds.TreatmentQualities[0], Is.EqualTo(WoundTreatmentQuality.Adequate));
-                    Assert.That(wounds.Cleanup[0], Is.EqualTo(WoundCleanupFlags.None));
+                    Assert.That(entries[0].Wound.Treated, Is.True);
+                    Assert.That(entries[0].TreatmentQuality, Is.EqualTo(WoundTreatmentQuality.Adequate));
+                    Assert.That(entries[0].Cleanup, Is.EqualTo(WoundCleanupFlags.None));
                     Assert.That(entMan.GetComponent<StackComponent>(gauze).Count, Is.EqualTo(9));
                 });
             }
@@ -982,19 +1002,21 @@ public sealed class CMUMedicalFieldMixingTest
             });
         });
 
-        await pair.RunTicksSync(pair.SecondsToTicks(5f));
+        await pair.RunTicksSync(pair.SecondsToTicks(6f));
 
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
+            var entries = ledger.GetEntries(wounds);
 
             Assert.Multiple(() =>
             {
                 Assert.That(wounds.ExternalBleeding, Is.EqualTo(ExternalBleedTier.None));
-                Assert.That(wounds.Wounds[0].Treated, Is.True);
-                Assert.That(wounds.TreatmentQualities[0], Is.EqualTo(WoundTreatmentQuality.Adequate));
-                Assert.That(wounds.Cleanup[0], Is.EqualTo(WoundCleanupFlags.None));
+                Assert.That(entries[0].Wound.Treated, Is.True);
+                Assert.That(entries[0].TreatmentQuality, Is.EqualTo(WoundTreatmentQuality.Adequate));
+                Assert.That(entries[0].Cleanup, Is.EqualTo(WoundCleanupFlags.None));
                 Assert.That(entMan.GetComponent<StackComponent>(trauma).Count, Is.EqualTo(5));
             });
 
@@ -1104,11 +1126,15 @@ public sealed class CMUMedicalFieldMixingTest
         return EntityUid.Invalid;
     }
 
-    private static int FindMechanism(BodyPartWoundComponent wounds, WoundMechanism mechanism)
+    private static int FindMechanism(
+        CMUWoundLedgerSystem ledger,
+        BodyPartWoundComponent wounds,
+        WoundMechanism mechanism)
     {
-        for (var i = 0; i < wounds.Mechanisms.Count; i++)
+        var entries = ledger.GetEntries(wounds);
+        for (var i = 0; i < entries.Count; i++)
         {
-            if (wounds.Mechanisms[i] == mechanism)
+            if (entries[i].Mechanism == mechanism)
                 return i;
         }
 

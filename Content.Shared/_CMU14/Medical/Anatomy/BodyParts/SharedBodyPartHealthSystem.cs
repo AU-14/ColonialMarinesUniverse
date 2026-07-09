@@ -5,9 +5,7 @@ using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Injuries.Trauma;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.Unrevivable;
-using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
@@ -22,8 +20,8 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
 {
     [Dependency] protected IConfigurationManager Cfg = default!;
     [Dependency] protected IGameTiming Timing = default!;
-    [Dependency] protected SharedBodySystem Body = default!;
     [Dependency] protected SharedHitLocationSystem HitLocation = default!;
+    [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
     [Dependency] protected SharedCMUTraumaSystem Trauma = default!;
     [Dependency] protected RMCUnrevivableSystem Unrevivable = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
@@ -158,7 +156,7 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         var partType = TryComp<BodyPartComponent>(partUid, out var partComp) ? partComp.PartType : BodyPartType.Other;
         var trauma = Trauma.CreateContactResult(partType, modified, organs.Count > 0, origin, tool, impact, mechanism, targetZone);
         var damaged = new BodyPartDamagedEvent(body, partUid, partType, modified, health.Current, organs, tool, impact, trauma, targetZone);
-        RaiseLocalEvent(partUid, ref damaged);
+        RaiseLocalEvent(partUid, ref damaged, broadcast: true);
 
         if (health.SeveranceDamage >= health.Max + health.SeveranceThreshold && !IsSeveranceLocked(partType))
         {
@@ -239,7 +237,7 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         }
 
         var damaged = new List<(EntityUid Uid, BodyPartComponent Part, BodyPartHealthComponent Health)>();
-        foreach (var (partUid, part) in Body.GetBodyChildren(body))
+        foreach (var (partUid, part) in MedicalIndex.GetBodyParts(body))
         {
             if (partUid == preferredPart)
                 continue;
@@ -363,7 +361,7 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
             return;
 
         var healed = new BodyPartHealedEvent(bodyUid, part, type, prevFraction, nextFraction, HealedThresholdFraction);
-        RaiseLocalEvent(part, ref healed);
+        RaiseLocalEvent(part, ref healed, broadcast: true);
     }
 
     private void RaisePainThresholdEvents(
@@ -440,10 +438,10 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
     private IReadOnlyList<EntityUid> CollectOrgans(EntityUid partUid)
     {
         List<EntityUid>? list = null;
-        foreach (var organ in Body.GetPartOrgans(partUid))
+        foreach (var organ in MedicalIndex.GetPartOrgans(partUid))
         {
             list ??= new List<EntityUid>();
-            list.Add(organ.Id);
+            list.Add(organ.Owner);
         }
         if (list is null)
             return System.Array.Empty<EntityUid>();

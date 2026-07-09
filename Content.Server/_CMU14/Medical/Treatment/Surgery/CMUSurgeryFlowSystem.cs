@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.Bones;
 using Content.Shared._CMU14.Medical.Treatment.FirstAid;
+using Content.Server._CMU14.Medical.Treatment.FirstAid;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
 using Content.Shared._CMU14.Medical.Treatment.Surgery.Markers;
 using Content.Shared._RMC14.Emote;
@@ -41,6 +42,7 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private CMUSplintItemSystem _splints = default!;
 
     private const float StepDoAfterSeconds = 2f;
     private const float PostOpCastWindowMinutes = 5f;
@@ -351,6 +353,7 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
         armed.StepLabel = resolved.StepLabel;
         armed.ArmedAt = Timing.CurTime;
         Dirty(patient, armed);
+        ScheduleArmedExpiry(patient, armed);
     }
 
     private static bool ArmedMatchesResolvedStep(CMUSurgeryArmedStepComponent armed, CMUResolvedStep resolved)
@@ -374,6 +377,7 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
         postOp.MalunionCheckAt = Timing.CurTime + TimeSpan.FromMinutes(PostOpCastWindowMinutes);
         postOp.MalunionChance = PostOpMalunionChance;
         Dirty(part, postOp);
+        _splints.SchedulePostOpMalunion(part, postOp);
 
         Popup.PopupEntity(
             Loc.GetString("cmu-medical-cast-needed"),

@@ -4,9 +4,8 @@ using Content.Server._RMC14.Medical.Surgery;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._CMU14.Medical.Anatomy.Bones;
 using Content.Shared._CMU14.Medical.Anatomy.Organs;
+using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
-using Content.Shared._CMU14.Medical.Treatment.Surgery.Conditions;
-using Content.Shared._CMU14.Medical.Treatment.Surgery.Effects;
 using Content.Shared._CMU14.Medical.Treatment.Surgery.Traits;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Marines.Skills;
@@ -15,20 +14,15 @@ using Content.Shared._RMC14.Medical.Surgery.Conditions;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Components;
-using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.Prototypes;
-using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._CMU14.Medical.Treatment.Surgery;
 
 public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototypes = default!;
-    [Dependency] private SharedBodySystem _body = default!;
-    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private CMSurgerySystem _rmcSurgery = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedCMUSurgeryFlowSystem _flowSurgery = default!;
@@ -43,14 +37,10 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
             return parts;
 
         TryComp<CMUSurgeryInProgressComponent>(patient, out var lockComp);
-        var attachedSlots = new HashSet<(BodyPartType, BodyPartSymmetry)>();
-
-        foreach (var (childId, childComp) in _body.GetBodyChildren(patient))
+        foreach (var (childId, childComp) in _medicalIndex.GetBodyParts(patient))
         {
             if (!IsSurgicallySupportedPart(childComp.PartType))
                 continue;
-
-            attachedSlots.Add((childComp.PartType, childComp.Symmetry));
 
             var eligible = BuildEligibleSurgeries(
                 patient,
@@ -80,17 +70,16 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
                 eligible));
         }
 
-        if (TryComp<BodyComponent>(patient, out var bodyComp)
-            && _body.GetRootPartOrNull(patient, bodyComp) is { } root)
+        if (_medicalIndex.TryGetRootPart(patient, out var root))
         {
             var patientNetEntity = GetNetEntity(patient);
-            foreach (var (slotId, slot) in root.BodyPart.Children)
+            foreach (var slot in _medicalIndex.GetBodyPartSlots(root.Owner))
             {
                 if (slot.Type is not (BodyPartType.Arm or BodyPartType.Leg))
                     continue;
-                if (!CMUBodyPartSlots.TryGetSymmetry(slotId, BodyPartSymmetry.None, out var symmetry))
+                if (!CMUBodyPartSlots.TryGetSymmetry(slot.SlotId, BodyPartSymmetry.None, out var symmetry))
                     continue;
-                if (attachedSlots.Contains((slot.Type, symmetry)))
+                if (slot.Part is not null)
                     continue;
 
                 var displayName = SharedCMUSurgeryFlowSystem.FormatPartName(slot.Type, symmetry);
@@ -136,7 +125,7 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
 
         if (targetPart is null)
         {
-            foreach (var (childId, childComp) in _body.GetBodyChildren(patient))
+            foreach (var (childId, childComp) in _medicalIndex.GetBodyParts(patient))
             {
                 if (childComp.PartType != partType || childComp.Symmetry != symmetry)
                     continue;
@@ -148,23 +137,17 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
 
         TryComp<CMUSurgeryInProgressComponent>(patient, out var lockComp);
 
-        foreach (var metadata in _flowSurgery.EnumerateMetadata())
+        foreach (var surgery in _flowSurgery.GetEligibleDefinitions(partType))
         {
-            if (!_prototypes.TryIndex<EntityPrototype>(metadata.Surgery, out var surgeryProto))
+            if (patient == surgeon && !_flowSurgery.CanSelfOperateSurgery(surgery.Id.Id, partType))
                 continue;
 
-            if (!metadata.ValidParts.Contains(partType))
-                continue;
-
-            if (patient == surgeon && !_flowSurgery.CanSelfOperateSurgery(metadata.Surgery, partType))
-                continue;
-
-            if (!ignoreSkillRequirements && !HasRequiredSurgerySkill(surgeon, metadata.MinSkill))
+            if (!ignoreSkillRequirements && !HasRequiredSurgerySkill(surgeon, surgery.MinSkill))
                 continue;
 
             if (lockComp is not null && !ignoreInProgressLock)
             {
-                if (SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(metadata.Surgery))
+                if (SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(surgery.Id.Id))
                 {
                     if (lockComp.TargetPartType != partType || lockComp.TargetSymmetry != symmetry)
                         continue;
@@ -176,26 +159,26 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
 
                 if (lockComp.AwaitingClosureChoice)
                 {
-                    if (!IsContinuationChoiceCategory(metadata.Category))
+                    if (!IsContinuationChoiceCategory(surgery.Category))
                         continue;
-                    if (lockComp.LeafSurgeryId == metadata.Surgery)
+                    if (lockComp.LeafSurgeryId == surgery.Id.Id)
                         continue;
                 }
-                else if (lockComp.LeafSurgeryId != metadata.Surgery)
+                else if (lockComp.LeafSurgeryId != surgery.Id.Id)
                 {
                     continue;
                 }
             }
 
-            if (!IsNeededSurgeryForPart(patient, targetPart, surgeryProto.ID, metadata.Category, partType))
+            if (!IsNeededSurgeryForPart(patient, targetPart, surgery.Id.Id, surgery.Category, partType))
                 continue;
 
-            if (!IsSurgeryEligible(patient, targetPart, surgeryProto, partType, surgeon))
+            if (!IsSurgeryEligible(patient, targetPart, surgery, partType, surgeon))
                 continue;
 
             var resolveTarget = targetPart;
             if (resolveTarget is null
-                && SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(metadata.Surgery))
+                && SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(surgery.Id.Id))
             {
                 if (!_flowSurgery.TryGetReattachAnchorPart(patient, out var anchor))
                     continue;
@@ -205,19 +188,19 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
 
             CMUResolvedStep resolved;
             if (TryComp<CMUSurgeryArmedStepComponent>(patient, out var armedComp)
-                && armedComp.LeafSurgeryId == metadata.Surgery
+                && armedComp.LeafSurgeryId == surgery.Id.Id
                 && armedComp.TargetPartType == partType
                 && armedComp.TargetSymmetry == symmetry)
             {
                 if (!_flowSurgery.TryResolveStepAt(armedComp.SurgeryId, armedComp.StepIndex, out resolved, targetPart))
                     continue;
             }
-            else if (!_flowSurgery.TryResolveNextStep(patient, resolveTarget, metadata.Surgery, out resolved))
+            else if (!_flowSurgery.TryResolveNextStep(patient, resolveTarget, surgery.Id.Id, out resolved))
             {
                 continue;
             }
 
-            entries.Add(BuildEntry(metadata, surgeryProto, resolved));
+            entries.Add(BuildEntry(surgery, resolved));
         }
 
         TryAddCloseUpEntries(patient, targetPart, partType, lockComp, entries, surgeon);
@@ -230,19 +213,18 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
     }
 
     private static CMUSurgeryEntry BuildEntry(
-        CMUSurgeryStepMetadataPrototype metadata,
-        EntityPrototype surgeryProto,
+        CMUSurgeryDefinition surgery,
         CMUResolvedStep resolved)
     {
         return new CMUSurgeryEntry(
-            metadata.Surgery,
-            metadata.DisplayName ?? surgeryProto.Name,
+            surgery.Id.Id,
+            surgery.DisplayName,
             resolved.StepLabel,
             resolved.ToolCategory,
             resolved.AbsoluteStepIndex,
             resolved.TotalSteps,
             resolved.GatingSurgeryId,
-            metadata.Category);
+            surgery.Category);
     }
 
     private static bool IsSurgicallySupportedPart(BodyPartType type)
@@ -343,9 +325,9 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
     {
         if (patient == surgeon && !_flowSurgery.CanSelfOperateSurgery(surgeryId, partType))
             return;
-        if (_flowSurgery.TryGetMetadata(surgeryId, out var metadata) && !HasRequiredSurgerySkill(surgeon, metadata.MinSkill))
+        if (!_flowSurgery.TryGetDefinition(surgeryId, out var surgery))
             return;
-        if (!_prototypes.TryIndex<EntityPrototype>(surgeryId, out var proto))
+        if (!HasRequiredSurgerySkill(surgeon, surgery.MinSkill))
             return;
         if (!_flowSurgery.TryResolveNextStep(patient, part, surgeryId, out var resolved))
             return;
@@ -354,7 +336,7 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
 
         entries.Add(new CMUSurgeryEntry(
             surgeryId,
-            proto.Name,
+            surgery.DisplayName,
             resolved.StepLabel,
             resolved.ToolCategory,
             resolved.AbsoluteStepIndex,
@@ -434,21 +416,7 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
 
     private bool TryGetOrganInSlot(EntityUid part, string slotId, out EntityUid organ)
     {
-        organ = default;
-        var containerId = SharedBodySystem.GetOrganContainerId(slotId);
-        if (!_containers.TryGetContainer(part, containerId, out var container))
-            return false;
-
-        foreach (var contained in container.ContainedEntities)
-        {
-            if (!HasComp<OrganComponent>(contained))
-                continue;
-
-            organ = contained;
-            return true;
-        }
-
-        return false;
+        return _medicalIndex.TryGetOrganInSlot(part, slotId, out organ);
     }
 
     private bool TryGetOrganConditionForSurgery(string surgeryId, out string slot, out OrganDamageStage minStage)
@@ -456,19 +424,13 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
         slot = string.Empty;
         minStage = OrganDamageStage.Bruised;
 
-        if (_rmcSurgery.GetSingleton(new EntProtoId(surgeryId)) is not { } surgeryEnt
-            || !TryComp<CMSurgeryComponent>(surgeryEnt, out var surgery))
-        {
+        if (!_flowSurgery.TryGetDefinition(surgeryId, out var surgery))
             return false;
-        }
 
-        foreach (var stepId in surgery.Steps)
+        foreach (var step in surgery.Steps)
         {
-            if (_rmcSurgery.GetSingleton(stepId) is not { } stepEnt
-                || !TryComp<CMUOrganDamagedSurgeryConditionComponent>(stepEnt, out var condition))
-            {
+            if (step.OrganCondition is not { } condition)
                 continue;
-            }
 
             slot = condition.OrganSlot;
             minStage = condition.MinStage;
@@ -482,21 +444,15 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
     {
         slot = string.Empty;
 
-        if (_rmcSurgery.GetSingleton(new EntProtoId(surgeryId)) is not { } surgeryEnt
-            || !TryComp<CMSurgeryComponent>(surgeryEnt, out var surgery))
-        {
+        if (!_flowSurgery.TryGetDefinition(surgeryId, out var surgery))
             return false;
-        }
 
-        foreach (var stepId in surgery.Steps)
+        foreach (var step in surgery.Steps)
         {
-            if (_rmcSurgery.GetSingleton(stepId) is not { } stepEnt
-                || !TryComp<CMUSurgeryStepReinsertOrganEffectComponent>(stepEnt, out var reinsert))
-            {
+            if (step.ReinsertOrganSlot is not { } reinsertOrganSlot)
                 continue;
-            }
 
-            slot = reinsert.OrganSlot;
+            slot = reinsertOrganSlot;
             return true;
         }
 
@@ -514,16 +470,16 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
         if (patient == surgeon && !_flowSurgery.CanSelfOperateSurgery(surgeryId, partType))
             return;
 
-        if (!_prototypes.TryIndex<EntityPrototype>(surgeryId, out var proto))
+        if (!_flowSurgery.TryGetDefinition(surgeryId, out var surgery))
             return;
-        if (!IsSurgeryEligible(patient, part, proto, partType, surgeon))
+        if (!IsSurgeryEligible(patient, part, surgery, partType, surgeon))
             return;
         if (!_flowSurgery.TryResolveNextStep(patient, part, surgeryId, out var resolved))
             return;
 
         entries.Add(new CMUSurgeryEntry(
             surgeryId,
-            proto.Name,
+            surgery.DisplayName,
             resolved.StepLabel,
             resolved.ToolCategory,
             resolved.AbsoluteStepIndex,
@@ -535,17 +491,17 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
     private bool IsSurgeryEligible(
         EntityUid patient,
         EntityUid? targetPart,
-        EntityPrototype surgeryProto,
+        CMUSurgeryDefinition surgery,
         BodyPartType partType,
         EntityUid surgeon)
     {
         var patientIsSynth = HasComp<SynthComponent>(patient);
-        var surgeryIsSynth = surgeryProto.HasComponent<RMCSynthSurgeryComponent>();
+        var surgeryIsSynth = surgery.Prototype.HasComponent<RMCSynthSurgeryComponent>();
 
         if (patientIsSynth != surgeryIsSynth)
             return false;
 
-        if (surgeryProto.ID == "CMUSurgeryReattachLimb" || surgeryProto.ID == "RMCSynthSurgeryReattachLimb")
+        if (surgery.Id.Id is "CMUSurgeryReattachLimb" or "RMCSynthSurgeryReattachLimb")
         {
             if (targetPart is not null)
                 return false;
@@ -556,7 +512,7 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
         if (targetPart is not { } part)
             return false;
 
-        if (_rmcSurgery.GetSingleton(new EntProtoId(surgeryProto.ID)) is not { } surgeryEnt)
+        if (_rmcSurgery.GetSingleton(surgery.Id) is not { } surgeryEnt)
             return false;
 
         var validEv = new CMSurgeryValidEvent(patient, part);
@@ -566,20 +522,15 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
 
     private bool ReattachHasAnyMissingSlot(EntityUid patient)
     {
-        if (!TryComp<BodyComponent>(patient, out var bodyComp))
-            return false;
-        if (_body.GetRootPartOrNull(patient, bodyComp) is not { } root)
+        if (!_medicalIndex.TryGetRootPart(patient, out var root))
             return false;
 
-        foreach (var (slotId, slot) in root.BodyPart.Children)
+        foreach (var slot in _medicalIndex.GetBodyPartSlots(root.Owner))
         {
             if (slot.Type is not (BodyPartType.Arm or BodyPartType.Leg))
                 continue;
 
-            var containerId = SharedBodySystem.GetPartSlotContainerId(slotId);
-            if (!_containers.TryGetContainer(root.Entity, containerId, out var container))
-                return true;
-            if (container.ContainedEntities.Count == 0)
+            if (slot.Part is null)
                 return true;
         }
 

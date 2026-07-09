@@ -12,7 +12,6 @@ using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs;
 using Content.Shared._CMU14.Medical.Injuries.Pain;
 using Content.Shared._CMU14.Medical.Injuries.Pain.Events;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.Movement.Systems;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Configuration;
@@ -24,9 +23,9 @@ namespace Content.Shared._CMU14.Medical.Injuries.Pain.Penalties;
 
 public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
 {
-    [Dependency] protected SharedBodySystem Body = default!;
     [Dependency] protected IConfigurationManager Cfg = default!;
     [Dependency] protected SharedFractureSystem Fracture = default!;
+    [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
     [Dependency] protected MovementSpeedModifierSystem Movement = default!;
     [Dependency] protected INetManager Net = default!;
     [Dependency] protected SharedPainShockSystem Pain = default!;
@@ -142,7 +141,7 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
     {
         var mult = 1f;
 
-        foreach (var (partUid, partComp) in Body.GetBodyChildren(body))
+        foreach (var (partUid, partComp) in MedicalIndex.GetBodyParts(body))
         {
             if (partComp.PartType is not (BodyPartType.Leg or BodyPartType.Foot))
                 continue;
@@ -161,9 +160,9 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
 
         var hasLungs = false;
         var impairedLungs = false;
-        foreach (var organ in Body.GetBodyOrgans(body))
+        foreach (var organ in MedicalIndex.GetOrgans(body))
         {
-            if (!TryComp<LungsComponent>(organ.Id, out var lungs))
+            if (!TryComp<LungsComponent>(organ.Owner, out var lungs))
                 continue;
 
             hasLungs = true;
@@ -183,7 +182,7 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
     {
         var mult = 1f;
 
-        foreach (var (partUid, partComp) in Body.GetBodyChildren(body))
+        foreach (var (partUid, partComp) in MedicalIndex.GetBodyParts(body))
         {
             if (partComp.PartType is not (BodyPartType.Arm or BodyPartType.Hand))
                 continue;
@@ -197,11 +196,11 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
         if (TryComp<PainShockComponent>(body, out var pain))
             mult *= CMUPainTierPenaltyMultipliers.GetAimSwayMultiplier(Pain.GetEffectiveTier(body, pain));
 
-        foreach (var organ in Body.GetBodyOrgans(body))
+        foreach (var organ in MedicalIndex.GetOrgans(body))
         {
-            if (!HasComp<EyesComponent>(organ.Id))
+            if (!HasComp<EyesComponent>(organ.Owner))
                 continue;
-            if (!TryComp<OrganHealthComponent>(organ.Id, out var oh))
+            if (!TryComp<OrganHealthComponent>(organ.Owner, out var oh))
                 continue;
             mult *= oh.Stage switch
             {
@@ -219,9 +218,9 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
     {
         var mult = 1f;
 
-        foreach (var organ in Body.GetBodyOrgans(body))
+        foreach (var organ in MedicalIndex.GetOrgans(body))
         {
-            if (TryComp<CMUBrainComponent>(organ.Id, out var brain) && brain.ActionSpeedMultiplier > 0f)
+            if (TryComp<CMUBrainComponent>(organ.Owner, out var brain) && brain.ActionSpeedMultiplier > 0f)
                 mult *= 1f / brain.ActionSpeedMultiplier;
         }
 

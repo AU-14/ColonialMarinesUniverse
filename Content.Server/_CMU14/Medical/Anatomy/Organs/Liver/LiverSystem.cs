@@ -41,6 +41,6 @@ public sealed partial class LiverSystem : SharedLiverSystem
 
         var spec = new DamageSpecifier { DamageDict = { [Poison.Id] = BloodstreamDirectAmount } };
         var ev = new OrganDamagedEvent(body, liver, spec, OrganDamageSource.Reagent);
-        RaiseLocalEvent(liver, ref ev);
+        RaiseLocalEvent(liver, ref ev, broadcast: true);
     }
 }

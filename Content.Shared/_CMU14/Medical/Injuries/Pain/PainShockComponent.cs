@@ -6,6 +6,11 @@ namespace Content.Shared._CMU14.Medical.Injuries.Pain;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 public sealed partial class PainShockComponent : Component
 {
+    /// <summary>
+    ///     Pain feedback is private player state. Public injury presentation is carried by the medical overlay projection.
+    /// </summary>
+    public override bool SendOnlyToOwner => true;
+
     [DataField]
     public FixedPoint2 Pain;
 

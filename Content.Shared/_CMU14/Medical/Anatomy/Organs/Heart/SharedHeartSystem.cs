@@ -3,7 +3,6 @@ using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart.Events;
 using Content.Shared._RMC14.Body;
 using Content.Shared.Body.Events;
 using Content.Shared.Body.Organ;
-using Content.Shared.Body.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -23,7 +22,7 @@ public abstract partial class SharedHeartSystem : EntitySystem
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected IPrototypeManager Proto = default!;
     [Dependency] protected IRobustRandom Random = default!;
-    [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
     [Dependency] protected SharedRMCBloodstreamSystem Bloodstream = default!;
     [Dependency] protected SharedStatusEffectsSystem Status = default!;
 
@@ -106,7 +105,7 @@ public abstract partial class SharedHeartSystem : EntitySystem
         var missingQuery = EntityQueryEnumerator<MissingHeartComponent>();
         while (missingQuery.MoveNext(out var uid, out var missing))
         {
-            if (Body.GetBodyOrganEntityComps<HeartComponent>(uid).Count != 0)
+            if (MedicalIndex.TryGetOrgan<HeartComponent>(uid, out _))
             {
                 RemCompDeferred<MissingHeartComponent>(uid);
                 continue;
@@ -213,7 +212,7 @@ public abstract partial class SharedHeartSystem : EntitySystem
                 baseBpm = (int)(baseBpm * 0.5f);
         }
 
-        foreach (var (organId, _) in Body.GetBodyOrgans(body))
+        foreach (var (organId, _) in MedicalIndex.GetOrgans(body))
         {
             if (!TryComp<OrganHealthComponent>(organId, out var organHealth))
                 continue;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Frozen;
 using System.Collections.Generic;
+using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.Destructible;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
@@ -10,7 +11,6 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DragDrop;
@@ -31,23 +31,26 @@ public sealed partial class CMUAutodocSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
-    [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private CMUSurgeryDispatchSystem _dispatch = default!;
     [Dependency] private SharedCMUSurgeryFlowSystem _flow = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private CMUMedicalPatientBaySystem _patientBay = default!;
     [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
     [Dependency] private RMCSurgerySystem _rmcSurgery = default!;
+    [Dependency] private CMUMedicalSchedulerSystem _scheduler = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private SharedCMUWoundsSystem _wounds = default!;
+    [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> SurgerySkill = "RMCSkillSurgery";
     private const string AutodocWoundRepairId = "CMUAutodocRepairWounds";
     private const string AutodocWoundRepairCategory = "wound_repair";
     private const float DefaultProcedureSeconds = 45f;
+    private static readonly CMUMedicalWorkKey ProcedureStepWork = new("autodoc-procedure-step");
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
 
@@ -61,6 +64,8 @@ public sealed partial class CMUAutodocSystem : EntitySystem
             ["suture"] = new SoundCollectionSpecifier("RMCSurgeryOrgan"),
         }.ToFrozenDictionary();
 
+    private readonly HashSet<EntityUid> _openConsoles = new();
+    private readonly List<EntityUid> _staleConsoles = new();
     private float _uiAccumulator;
 
     public override void Initialize()
@@ -70,6 +75,7 @@ public sealed partial class CMUAutodocSystem : EntitySystem
         Subs.BuiEvents<CMUAutodocConsoleComponent>(CMUAutodocUIKey.Key, subs =>
         {
             subs.Event<BoundUIOpenedEvent>(OnUiOpened);
+            subs.Event<BoundUIClosedEvent>(OnUiClosed);
             subs.Event<CMUAutodocQueueStepMessage>(OnQueueStep);
             subs.Event<CMUAutodocRemoveQueueStepMessage>(OnRemoveQueueStep);
             subs.Event<CMUAutodocClearQueueMessage>(OnClearQueue);
@@ -84,43 +90,71 @@ public sealed partial class CMUAutodocSystem : EntitySystem
         SubscribeLocalEvent<CMUAutodocPodComponent, GetVerbsEvent<AlternativeVerb>>(OnPodAlternativeVerbs);
         SubscribeLocalEvent<CMUAutodocPodComponent, ContainerRelayMovementEntityEvent>(OnPodRelayMovement);
         SubscribeLocalEvent<CMUAutodocPodComponent, CMUMedicalPodInsertDoAfterEvent>(OnPodInsertDoAfter);
+        SubscribeLocalEvent<CMUAutodocPodComponent, CMUMedicalWorkDueEvent>(OnProcedureStepDue);
+        SubscribeLocalEvent<CMUAutodocConsoleComponent, ComponentShutdown>(OnConsoleShutdown);
     }
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
 
-        var now = _timing.CurTime;
-        var podQuery = EntityQueryEnumerator<CMUAutodocPodComponent>();
-        while (podQuery.MoveNext(out var pod, out var comp))
-        {
-            if (!comp.IsRunning)
-                continue;
-            if (now < comp.NextStepAt)
-                continue;
-
-            ProcessPod(pod, comp);
-        }
-
         _uiAccumulator += frameTime;
         if (_uiAccumulator < 1f)
             return;
 
         _uiAccumulator = 0f;
-        var consoleQuery = EntityQueryEnumerator<CMUAutodocConsoleComponent>();
-        while (consoleQuery.MoveNext(out var console, out var comp))
-            RefreshUi(console, comp, comp.LastViewer);
+        _staleConsoles.Clear();
+        foreach (var console in _openConsoles)
+        {
+            if (!TryComp<CMUAutodocConsoleComponent>(console, out var comp) ||
+                !_ui.IsUiOpen(console, CMUAutodocUIKey.Key))
+            {
+                _staleConsoles.Add(console);
+                continue;
+            }
+
+            RefreshUi(console, comp);
+        }
+
+        foreach (var console in _staleConsoles)
+            _openConsoles.Remove(console);
+    }
+
+    private void OnProcedureStepDue(
+        Entity<CMUAutodocPodComponent> ent,
+        ref CMUMedicalWorkDueEvent args)
+    {
+        if (args.Key != ProcedureStepWork || !ent.Comp.IsRunning || ent.Comp.NextStepAt == TimeSpan.Zero)
+            return;
+
+        if (ent.Comp.NextStepAt > _timing.CurTime)
+        {
+            _scheduler.Schedule(ent.Owner, ProcedureStepWork, ent.Comp.NextStepAt);
+            return;
+        }
+
+        ProcessPod(ent.Owner, ent.Comp);
     }
 
     private void OnUiOpened(Entity<CMUAutodocConsoleComponent> ent, ref BoundUIOpenedEvent args)
     {
-        ent.Comp.LastViewer = args.Actor;
+        _openConsoles.Add(ent.Owner);
         RefreshUi(ent.Owner, ent.Comp, args.Actor);
+    }
+
+    private void OnUiClosed(Entity<CMUAutodocConsoleComponent> ent, ref BoundUIClosedEvent args)
+    {
+        if (!_ui.IsUiOpen(ent.Owner, CMUAutodocUIKey.Key))
+            _openConsoles.Remove(ent.Owner);
+    }
+
+    private void OnConsoleShutdown(Entity<CMUAutodocConsoleComponent> ent, ref ComponentShutdown args)
+    {
+        _openConsoles.Remove(ent.Owner);
     }
 
     private void OnQueueStep(Entity<CMUAutodocConsoleComponent> ent, ref CMUAutodocQueueStepMessage msg)
     {
-        ent.Comp.LastViewer = msg.Actor;
         if (!CanControl(msg.Actor))
             return;
 
@@ -156,7 +190,7 @@ public sealed partial class CMUAutodocSystem : EntitySystem
                     "cmu-autodoc-automated-step-label",
                     part.DisplayName,
                     GetProcedureDurationSeconds(surgery)));
-                RefreshUi(ent.Owner, ent.Comp, msg.Actor);
+                RefreshUi(ent.Owner, ent.Comp);
                 return;
             }
         }
@@ -164,7 +198,6 @@ public sealed partial class CMUAutodocSystem : EntitySystem
 
     private void OnRemoveQueueStep(Entity<CMUAutodocConsoleComponent> ent, ref CMUAutodocRemoveQueueStepMessage msg)
     {
-        ent.Comp.LastViewer = msg.Actor;
         if (!CanControl(msg.Actor))
             return;
 
@@ -180,16 +213,15 @@ public sealed partial class CMUAutodocSystem : EntitySystem
         else if (podComp.IsRunning && msg.Index == 0)
         {
             if (TryGetPatient(pod, out var patient))
-                StartProcedureTimer(patient, podComp, podComp.Queue[0]);
+                StartProcedureTimer(pod, patient, podComp, podComp.Queue[0]);
             else
                 StopPod(pod, podComp);
         }
-        RefreshUi(ent.Owner, ent.Comp, msg.Actor);
+        RefreshUi(ent.Owner, ent.Comp);
     }
 
     private void OnClearQueue(Entity<CMUAutodocConsoleComponent> ent, ref CMUAutodocClearQueueMessage msg)
     {
-        ent.Comp.LastViewer = msg.Actor;
         if (!CanControl(msg.Actor))
             return;
 
@@ -198,12 +230,11 @@ public sealed partial class CMUAutodocSystem : EntitySystem
 
         StopPod(pod, podComp);
         podComp.Queue.Clear();
-        RefreshUi(ent.Owner, ent.Comp, msg.Actor);
+        RefreshUi(ent.Owner, ent.Comp);
     }
 
     private void OnStart(Entity<CMUAutodocConsoleComponent> ent, ref CMUAutodocStartMessage msg)
     {
-        ent.Comp.LastViewer = msg.Actor;
         if (!CanControl(msg.Actor))
             return;
 
@@ -216,14 +247,13 @@ public sealed partial class CMUAutodocSystem : EntitySystem
 
         podComp.Operator = msg.Actor;
         podComp.IsRunning = true;
-        StartProcedureTimer(patient, podComp, podComp.Queue[0]);
+        StartProcedureTimer(pod, patient, podComp, podComp.Queue[0]);
         _appearance.SetData(pod, CMUAutodocVisuals.Operating, true);
-        RefreshUi(ent.Owner, ent.Comp, msg.Actor);
+        RefreshUi(ent.Owner, ent.Comp);
     }
 
     private void OnStop(Entity<CMUAutodocConsoleComponent> ent, ref CMUAutodocStopMessage msg)
     {
-        ent.Comp.LastViewer = msg.Actor;
         if (!CanControl(msg.Actor))
             return;
 
@@ -231,12 +261,11 @@ public sealed partial class CMUAutodocSystem : EntitySystem
             return;
 
         StopPod(pod, podComp);
-        RefreshUi(ent.Owner, ent.Comp, msg.Actor);
+        RefreshUi(ent.Owner, ent.Comp);
     }
 
     private void OnEjectPatient(Entity<CMUAutodocConsoleComponent> ent, ref CMUAutodocEjectPatientMessage msg)
     {
-        ent.Comp.LastViewer = msg.Actor;
         if (!CanControl(msg.Actor))
             return;
 
@@ -247,7 +276,7 @@ public sealed partial class CMUAutodocSystem : EntitySystem
         }
 
         EjectPatient(pod, podComp);
-        RefreshUi(ent.Owner, ent.Comp, msg.Actor);
+        RefreshUi(ent.Owner, ent.Comp);
     }
 
     private void ProcessPod(EntityUid pod, CMUAutodocPodComponent comp)
@@ -281,14 +310,19 @@ public sealed partial class CMUAutodocSystem : EntitySystem
             return;
         }
 
-        StartProcedureTimer(patient, comp, comp.Queue[0]);
+        StartProcedureTimer(pod, patient, comp, comp.Queue[0]);
         RefreshLinkedConsoles(pod);
     }
 
-    private void StartProcedureTimer(EntityUid patient, CMUAutodocPodComponent comp, CMUAutodocQueuedStep queued)
+    private void StartProcedureTimer(
+        EntityUid pod,
+        EntityUid patient,
+        CMUAutodocPodComponent comp,
+        CMUAutodocQueuedStep queued)
     {
         comp.CurrentStep = FormatQueuedStep(queued);
         comp.NextStepAt = _timing.CurTime + GetProcedureDelay(comp, queued);
+        _scheduler.Schedule(pod, ProcedureStepWork, comp.NextStepAt);
         PlayProcedureSound(patient, queued);
     }
 
@@ -378,13 +412,12 @@ public sealed partial class CMUAutodocSystem : EntitySystem
             return queued.Part;
         }
 
-        foreach (var (part, partComp) in _body.GetBodyChildren(patient))
-        {
-            if (partComp.PartType == queued.Type && partComp.Symmetry == queued.Symmetry)
-                return part;
-        }
-
-        return EntityUid.Invalid;
+        return _medicalIndex.TryGetBodyPart(
+            patient,
+            new CMUMedicalBodyPartKey(queued.Type, queued.Symmetry),
+            out var indexedPart)
+            ? indexedPart
+            : EntityUid.Invalid;
     }
 
     private bool TryApplyAutodocWoundRepair(EntityUid patient, EntityUid part)
@@ -397,8 +430,9 @@ public sealed partial class CMUAutodocSystem : EntitySystem
 
         if (TryComp<BodyPartWoundComponent>(part, out var wounds))
         {
-            foreach (var wound in wounds.Wounds)
+            foreach (var entry in _woundLedger.GetEntries(wounds))
             {
+                var wound = entry.Wound;
                 var remaining = wound.Damage - wound.Healed;
                 if (remaining <= FixedPoint2.Zero)
                     continue;
@@ -516,6 +550,7 @@ public sealed partial class CMUAutodocSystem : EntitySystem
 
     private void StopPod(EntityUid pod, CMUAutodocPodComponent comp, bool clearSurgery = true)
     {
+        _scheduler.Cancel(pod, ProcedureStepWork);
         comp.IsRunning = false;
         comp.CurrentStep = null;
         comp.NextStepAt = TimeSpan.Zero;
@@ -582,7 +617,7 @@ public sealed partial class CMUAutodocSystem : EntitySystem
         List<CMUSurgeryPartEntry> result,
         HashSet<EntityUid> listedParts)
     {
-        foreach (var (partUid, part) in _body.GetBodyChildren(patient))
+        foreach (var (partUid, part) in _medicalIndex.GetBodyParts(patient))
         {
             if (listedParts.Contains(partUid) || !NeedsAutodocWoundRepair(partUid))
                 continue;
@@ -604,7 +639,7 @@ public sealed partial class CMUAutodocSystem : EntitySystem
         if (HasComp<CMUEscharComponent>(part))
             return Loc.GetString("cmu-medical-surgery-condition-eschar");
 
-        if (TryComp<BodyPartWoundComponent>(part, out var wounds) && wounds.Wounds.Count > 0)
+        if (TryComp<BodyPartWoundComponent>(part, out var wounds) && _woundLedger.GetEntries(wounds).Count > 0)
             return Loc.GetString("cmu-medical-surgery-condition-wounds");
 
         return Loc.GetString("cmu-medical-surgery-condition-damaged");
@@ -636,7 +671,7 @@ public sealed partial class CMUAutodocSystem : EntitySystem
         if (HasComp<CMUEscharComponent>(part))
             return true;
 
-        if (TryComp<BodyPartWoundComponent>(part, out var wounds) && wounds.Wounds.Count > 0)
+        if (TryComp<BodyPartWoundComponent>(part, out var wounds) && _woundLedger.GetEntries(wounds).Count > 0)
             return true;
 
         return TryComp<BodyPartHealthComponent>(part, out var health) && health.Current < health.Max;
@@ -650,7 +685,7 @@ public sealed partial class CMUAutodocSystem : EntitySystem
         if (HasComp<CMUEscharComponent>(part))
             return true;
 
-        if (TryComp<BodyPartWoundComponent>(part, out var wounds) && wounds.Wounds.Count > 0)
+        if (TryComp<BodyPartWoundComponent>(part, out var wounds) && _woundLedger.GetEntries(wounds).Count > 0)
             return true;
 
         return TryComp<BodyPartHealthComponent>(part, out var health) && health.Current < health.Max;
@@ -699,13 +734,25 @@ public sealed partial class CMUAutodocSystem : EntitySystem
 
     private void RefreshUi(EntityUid console, CMUAutodocConsoleComponent comp, EntityUid? viewer = null)
     {
-        if (!_ui.IsUiOpen(console, CMUAutodocUIKey.Key))
+        if (viewer is { } target && target.IsValid())
+        {
+            if (_ui.IsUiOpen(console, CMUAutodocUIKey.Key, target))
+                SendState(console, comp, target);
             return;
+        }
 
-        if (viewer is not { } validViewer || !validViewer.IsValid())
-            viewer = comp.LastViewer.IsValid() ? comp.LastViewer : null;
+        foreach (var actor in _ui.GetActors(console, CMUAutodocUIKey.Key))
+            SendState(console, comp, actor);
+    }
 
-        _ui.SetUiState(console, CMUAutodocUIKey.Key, BuildState(console, comp, viewer));
+    private void SendState(EntityUid console, CMUAutodocConsoleComponent comp, EntityUid viewer)
+    {
+        var state = BuildState(console, comp, viewer);
+        _ui.ServerSendUiMessage(
+            console,
+            CMUAutodocUIKey.Key,
+            new CMUAutodocStateMessage(state),
+            viewer);
     }
 
     private CMUAutodocBuiState BuildState(EntityUid console, CMUAutodocConsoleComponent comp, EntityUid? viewer)
@@ -886,7 +933,7 @@ public sealed partial class CMUAutodocSystem : EntitySystem
                 continue;
             }
 
-            RefreshUi(console, consoleComp, consoleComp.LastViewer);
+            RefreshUi(console, consoleComp);
         }
     }
 }

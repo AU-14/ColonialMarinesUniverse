@@ -3,6 +3,7 @@ using Content.Shared._CMU14.Medical.Anatomy.Bones;
 using Content.Shared._CMU14.Medical.Diagnostics.Examine;
 using Content.Shared._CMU14.Medical.Injuries.Trauma;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared._CMU14.Medical.Injuries.Wounds.Events;
 using Content.Server._CMU14.Medical.Diagnostics.Examine;
 using Content.Server._CMU14.Medical.Injuries.Wounds;
 using Content.Shared.Body.Part;
@@ -25,13 +26,76 @@ using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace Content.IntegrationTests._CMU14.Medical.Injuries.Wounds;
 
 [TestFixture]
 public sealed class MechanismWoundsFoundationTest
 {
+    [Test]
+    public async Task LedgerEntryStaysCoherentAcrossAddTreatAndRemove()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
+            var woundsSystem = entMan.System<CMUWoundsSystem>();
+            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+
+            try
+            {
+                var torso = GetBodyPart(entMan, human, BodyPartType.Torso);
+                var wounds = entMan.EnsureComponent<BodyPartWoundComponent>(torso);
+                var wound = new Wound(12, FixedPoint2.Zero, 1f, TimeSpan.FromSeconds(10), WoundType.Brute, false);
+
+                Assert.That(ledger.AddEntry(wounds, new CMUWoundEntry(
+                    wound,
+                    WoundSize.CutSmall,
+                    0,
+                    WoundMechanism.Bullet,
+                    WoundMechanismFlags.Fragment,
+                    WoundTreatmentQuality.Untreated,
+                    WoundCleanupFlags.RetainedFragment | WoundCleanupFlags.DirtyDressing)), Is.EqualTo(0));
+
+                Assert.That(woundsSystem.TryTreatWound(
+                    torso,
+                    WoundTreatmentQuality.Optimal,
+                    out var completed,
+                    wounds,
+                    type: WoundType.Brute,
+                    mechanismMask: WoundMechanismFlags.Bullet,
+                    cleanupClears: WoundCleanupFlags.DirtyDressing), Is.True);
+
+                var entries = ledger.GetEntries(wounds);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(completed, Is.True);
+                    Assert.That(entries, Has.Count.EqualTo(1));
+                    Assert.That(entries[0].Wound.Damage, Is.EqualTo(wound.Damage));
+                    Assert.That(entries[0].Wound.Treated, Is.True);
+                    Assert.That(entries[0].Size, Is.EqualTo(WoundSize.CutSmall));
+                    Assert.That(entries[0].Bandages, Is.EqualTo(WoundSizeProfile.BandagesRequired(WoundSize.CutSmall, wound.Damage.Float())));
+                    Assert.That(entries[0].Mechanism, Is.EqualTo(WoundMechanism.Bullet));
+                    Assert.That(entries[0].SecondaryMechanisms, Is.EqualTo(WoundMechanismFlags.Fragment));
+                    Assert.That(entries[0].TreatmentQuality, Is.EqualTo(WoundTreatmentQuality.Adequate));
+                    Assert.That(entries[0].Cleanup, Is.EqualTo(WoundCleanupFlags.None));
+                });
+
+                Assert.That(ledger.TryRemoveEntry(wounds, 0), Is.True);
+                Assert.That(ledger.GetEntries(wounds), Is.Empty);
+            }
+            finally
+            {
+                entMan.DeleteEntity(human);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task ProjectilePiercingCreatesBulletWound()
     {
@@ -41,6 +105,7 @@ public sealed class MechanismWoundsFoundationTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
 
@@ -55,13 +120,13 @@ public sealed class MechanismWoundsFoundationTest
                     impact: DamageImpact.Projectile), Is.True);
 
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
+                var entries = ledger.GetEntries(wounds);
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(wounds.Wounds, Has.Count.EqualTo(1));
-                    Assert.That(wounds.Mechanisms, Has.Count.EqualTo(1));
-                    Assert.That(wounds.Mechanisms[0], Is.EqualTo(WoundMechanism.Bullet));
-                    Assert.That(wounds.TreatmentQualities[0], Is.EqualTo(WoundTreatmentQuality.Untreated));
+                    Assert.That(entries, Has.Count.EqualTo(1));
+                    Assert.That(entries[0].Mechanism, Is.EqualTo(WoundMechanism.Bullet));
+                    Assert.That(entries[0].TreatmentQuality, Is.EqualTo(WoundTreatmentQuality.Untreated));
                 });
             }
             finally
@@ -132,6 +197,7 @@ public sealed class MechanismWoundsFoundationTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
 
@@ -147,12 +213,13 @@ public sealed class MechanismWoundsFoundationTest
                     impact: DamageImpact.Explosion), Is.True);
 
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
+                var entries = ledger.GetEntries(wounds);
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(wounds.Wounds, Has.Count.EqualTo(1));
-                    Assert.That(wounds.Mechanisms[0], Is.EqualTo(WoundMechanism.Blast));
-                    Assert.That(wounds.SecondaryMechanisms[0] & WoundMechanismFlags.Burn, Is.Not.EqualTo(WoundMechanismFlags.None));
+                    Assert.That(entries, Has.Count.EqualTo(1));
+                    Assert.That(entries[0].Mechanism, Is.EqualTo(WoundMechanism.Blast));
+                    Assert.That(entries[0].SecondaryMechanisms & WoundMechanismFlags.Burn, Is.Not.EqualTo(WoundMechanismFlags.None));
                 });
             }
             finally
@@ -173,6 +240,7 @@ public sealed class MechanismWoundsFoundationTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
 
@@ -184,14 +252,14 @@ public sealed class MechanismWoundsFoundationTest
                 Assert.That(partHealth.TryApplyPartDamage(human, torso, Damage("Slash", 20), impact: DamageImpact.MeleeSlash), Is.True);
 
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
+                var entries = ledger.GetEntries(wounds);
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(wounds.Wounds, Has.Count.EqualTo(1));
-                    Assert.That(wounds.Mechanisms, Has.Count.EqualTo(1));
-                    Assert.That(wounds.Mechanisms[0], Is.EqualTo(WoundMechanism.Slash));
-                    Assert.That(wounds.Wounds[0].Damage, Is.EqualTo(FixedPoint2.New(36)));
-                    Assert.That(wounds.Sizes[0], Is.EqualTo(WoundSize.CutFlesh));
+                    Assert.That(entries, Has.Count.EqualTo(1));
+                    Assert.That(entries[0].Mechanism, Is.EqualTo(WoundMechanism.Slash));
+                    Assert.That(entries[0].Wound.Damage, Is.EqualTo(FixedPoint2.New(36)));
+                    Assert.That(entries[0].Size, Is.EqualTo(WoundSize.CutFlesh));
                 });
             }
             finally
@@ -212,6 +280,7 @@ public sealed class MechanismWoundsFoundationTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
 
@@ -228,15 +297,7 @@ public sealed class MechanismWoundsFoundationTest
                 Assert.That(partHealth.TryApplyPartDamage(human, torso, Damage("Slash", 10), impact: new DamageImpact(DamageImpactDelivery.Thrown, DamageImpactContact.Fragment, DamageImpactPenetration.Low, DamageImpactEnergy.Medium)), Is.True);
 
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(wounds.Wounds, Has.Count.EqualTo(6));
-                    Assert.That(wounds.Mechanisms, Has.Count.EqualTo(6));
-                    Assert.That(wounds.SecondaryMechanisms, Has.Count.EqualTo(6));
-                    Assert.That(wounds.TreatmentQualities, Has.Count.EqualTo(6));
-                    Assert.That(wounds.Cleanup, Has.Count.EqualTo(6));
-                });
+                Assert.That(ledger.GetEntries(wounds), Has.Count.EqualTo(6));
             }
             finally
             {
@@ -357,6 +418,7 @@ public sealed class MechanismWoundsFoundationTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var woundsSystem = entMan.System<CMUWoundsSystem>();
             var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
@@ -367,16 +429,17 @@ public sealed class MechanismWoundsFoundationTest
 
                 Assert.That(partHealth.TryApplyPartDamage(human, torso, Damage("Slash", 10), impact: DamageImpact.MeleeSlash), Is.True);
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
-                Assert.That(wounds.Cleanup[0], Is.Not.EqualTo(WoundCleanupFlags.None));
+                var entries = ledger.GetEntries(wounds);
+                Assert.That(entries[0].Cleanup, Is.Not.EqualTo(WoundCleanupFlags.None));
 
                 Assert.That(woundsSystem.TryTreatWound(torso, out var completed), Is.True);
 
                 Assert.Multiple(() =>
                 {
                     Assert.That(completed, Is.True);
-                    Assert.That(wounds.Wounds[0].Treated, Is.True);
-                    Assert.That(wounds.TreatmentQualities[0], Is.EqualTo(WoundTreatmentQuality.Adequate));
-                    Assert.That(wounds.Cleanup[0], Is.EqualTo(WoundCleanupFlags.None));
+                    Assert.That(entries[0].Wound.Treated, Is.True);
+                    Assert.That(entries[0].TreatmentQuality, Is.EqualTo(WoundTreatmentQuality.Adequate));
+                    Assert.That(entries[0].Cleanup, Is.EqualTo(WoundCleanupFlags.None));
                 });
             }
             finally
@@ -389,7 +452,7 @@ public sealed class MechanismWoundsFoundationTest
     }
 
     [Test]
-    public async Task WoundTreatmentOnlyClearsRequestedCleanupFlags()
+    public async Task WoundTreatmentClearsAllCleanupFlags()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -397,6 +460,7 @@ public sealed class MechanismWoundsFoundationTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var woundsSystem = entMan.System<CMUWoundsSystem>();
             var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
@@ -407,7 +471,11 @@ public sealed class MechanismWoundsFoundationTest
 
                 Assert.That(partHealth.TryApplyPartDamage(human, torso, Damage("Slash", 10), impact: DamageImpact.MeleeSlash), Is.True);
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
-                CleanupOf(wounds)[0] = WoundCleanupFlags.PoorClosure | WoundCleanupFlags.DirtyDressing;
+                var entry = ledger.GetEntries(wounds)[0];
+                Assert.That(ledger.TryUpdateEntry(wounds, 0, entry with
+                {
+                    Cleanup = WoundCleanupFlags.PoorClosure | WoundCleanupFlags.DirtyDressing,
+                }), Is.True);
 
                 Assert.That(woundsSystem.TryTreatWound(
                     torso,
@@ -417,7 +485,7 @@ public sealed class MechanismWoundsFoundationTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(completed, Is.True);
-                    Assert.That(wounds.Cleanup[0], Is.EqualTo(WoundCleanupFlags.PoorClosure));
+                    Assert.That(ledger.GetEntries(wounds)[0].Cleanup, Is.EqualTo(WoundCleanupFlags.None));
                 });
             }
             finally
@@ -430,7 +498,7 @@ public sealed class MechanismWoundsFoundationTest
     }
 
     [Test]
-    public async Task OptimalTreatmentRequestPreservesRequestedQuality()
+    public async Task OptimalTreatmentRequestFallsBackToNormalTreatedState()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -438,6 +506,7 @@ public sealed class MechanismWoundsFoundationTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var woundsSystem = entMan.System<CMUWoundsSystem>();
             var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
@@ -448,16 +517,17 @@ public sealed class MechanismWoundsFoundationTest
 
                 Assert.That(partHealth.TryApplyPartDamage(human, torso, Damage("Slash", 10), impact: DamageImpact.MeleeSlash), Is.True);
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
-                Assert.That(wounds.Cleanup[0], Is.Not.EqualTo(WoundCleanupFlags.None));
+                var entries = ledger.GetEntries(wounds);
+                Assert.That(entries[0].Cleanup, Is.Not.EqualTo(WoundCleanupFlags.None));
 
                 Assert.That(woundsSystem.TryTreatWound(torso, WoundTreatmentQuality.Optimal, out var completed), Is.True);
 
                 Assert.Multiple(() =>
                 {
                     Assert.That(completed, Is.True);
-                    Assert.That(wounds.Wounds[0].Treated, Is.True);
-                    Assert.That(wounds.TreatmentQualities[0], Is.EqualTo(WoundTreatmentQuality.Optimal));
-                    Assert.That(wounds.Cleanup[0], Is.EqualTo(WoundCleanupFlags.None));
+                    Assert.That(entries[0].Wound.Treated, Is.True);
+                    Assert.That(entries[0].TreatmentQuality, Is.EqualTo(WoundTreatmentQuality.Adequate));
+                    Assert.That(entries[0].Cleanup, Is.EqualTo(WoundCleanupFlags.None));
                 });
             }
             finally
@@ -470,30 +540,51 @@ public sealed class MechanismWoundsFoundationTest
     }
 
     [Test]
-    public void FieldTreatmentCapCombinesWoundBurdenAndClamps()
+    public async Task FieldTreatmentCapCombinesWoundBurdenAndClamps()
     {
-        var wounds = new BodyPartWoundComponent();
-        WoundsOf(wounds).Add(new Wound(10, FixedPoint2.Zero, 0f, null, WoundType.Brute, false));
-        SizesOf(wounds).Add(WoundSize.CutDeep);
-        TreatmentQualitiesOf(wounds).Add(WoundTreatmentQuality.Untreated);
-        CleanupOf(wounds).Add(WoundCleanupFlags.PoorClosure);
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
 
-        WoundsOf(wounds).Add(new Wound(10, FixedPoint2.Zero, 0f, null, WoundType.Brute, true));
-        SizesOf(wounds).Add(WoundSize.CutMassive);
-        TreatmentQualitiesOf(wounds).Add(WoundTreatmentQuality.Adequate);
-        CleanupOf(wounds).Add(WoundCleanupFlags.CrushDebris);
-
-        Assert.That(SharedCMUWoundsSystem.ComputeFieldTreatmentCap(wounds), Is.EqualTo(0.88f).Within(0.001f));
-
-        for (var i = 0; i < 4; i++)
+        await server.WaitAssertion(() =>
         {
-            WoundsOf(wounds).Add(new Wound(10, FixedPoint2.Zero, 0f, null, WoundType.Brute, false));
-            SizesOf(wounds).Add(WoundSize.CutMassive);
-            TreatmentQualitiesOf(wounds).Add(WoundTreatmentQuality.Untreated);
-            CleanupOf(wounds).Add(WoundCleanupFlags.CrushDebris);
-        }
+            var ledger = server.EntMan.System<CMUWoundLedgerSystem>();
+            var wounds = new BodyPartWoundComponent();
 
-        Assert.That(SharedCMUWoundsSystem.ComputeFieldTreatmentCap(wounds), Is.EqualTo(0.35f).Within(0.001f));
+            Assert.That(ledger.AddEntry(wounds, new CMUWoundEntry(
+                new Wound(10, FixedPoint2.Zero, 0f, null, WoundType.Brute, false),
+                WoundSize.CutDeep,
+                0,
+                WoundMechanism.Generic,
+                WoundMechanismFlags.None,
+                WoundTreatmentQuality.Untreated,
+                WoundCleanupFlags.PoorClosure)), Is.EqualTo(0));
+            Assert.That(ledger.AddEntry(wounds, new CMUWoundEntry(
+                new Wound(10, FixedPoint2.Zero, 0f, null, WoundType.Brute, true),
+                WoundSize.CutMassive,
+                WoundSizeProfile.BandagesRequired(WoundSize.CutMassive, 10f),
+                WoundMechanism.Generic,
+                WoundMechanismFlags.None,
+                WoundTreatmentQuality.Adequate,
+                WoundCleanupFlags.CrushDebris)), Is.EqualTo(1));
+
+            Assert.That(SharedCMUWoundsSystem.ComputeFieldTreatmentCap(wounds), Is.EqualTo(0.88f).Within(0.001f));
+
+            for (var i = 0; i < 4; i++)
+            {
+                Assert.That(ledger.AddEntry(wounds, new CMUWoundEntry(
+                    new Wound(10, FixedPoint2.Zero, 0f, null, WoundType.Brute, false),
+                    WoundSize.CutMassive,
+                    0,
+                    WoundMechanism.Generic,
+                    WoundMechanismFlags.None,
+                    WoundTreatmentQuality.Untreated,
+                    WoundCleanupFlags.CrushDebris)), Is.EqualTo(i + 2));
+            }
+
+            Assert.That(SharedCMUWoundsSystem.ComputeFieldTreatmentCap(wounds), Is.EqualTo(0.35f).Within(0.001f));
+        });
+
+        await pair.CleanReturnAsync();
     }
 
     [Test]
@@ -509,6 +600,7 @@ public sealed class MechanismWoundsFoundationTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var woundsSystem = entMan.System<CMUWoundsSystem>();
             human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
@@ -516,12 +608,15 @@ public sealed class MechanismWoundsFoundationTest
 
             Assert.That(partHealth.TryApplyPartDamage(human, torso, Damage("Slash", 10), impact: DamageImpact.MeleeSlash), Is.True);
             var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
-            var woundList = WoundsOf(wounds);
-            woundList[0] = woundList[0] with { Damage = FixedPoint2.New(1) };
+            var entry = ledger.GetEntries(wounds)[0];
+            Assert.That(ledger.TryUpdateEntry(wounds, 0, entry with
+            {
+                Wound = entry.Wound with { Damage = FixedPoint2.New(1) },
+            }), Is.True);
 
             Assert.That(woundsSystem.TryTreatWound(torso, WoundTreatmentQuality.Optimal, out var completed), Is.True);
             Assert.That(completed, Is.True);
-            Assert.That(wounds.Cleanup[0], Is.EqualTo(WoundCleanupFlags.None));
+            Assert.That(ledger.GetEntries(wounds)[0].Cleanup, Is.EqualTo(WoundCleanupFlags.None));
         });
 
         await pair.RunTicksSync(pair.SecondsToTicks(3f));
@@ -551,33 +646,40 @@ public sealed class MechanismWoundsFoundationTest
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
+        EntityUid human = default;
 
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var fractureSystem = entMan.System<SharedFractureSystem>();
+            human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var torso = GetBodyPart(entMan, human, BodyPartType.Torso);
+
+            Assert.That(partHealth.TryApplyPartDamage(
+                human,
+                torso,
+                Damage("Slash", 20),
+                impact: DamageImpact.MeleeSlash), Is.True);
+            var fracture = entMan.EnsureComponent<FractureComponent>(torso);
+            fractureSystem.SetSeverity((torso, fracture), FractureSeverity.Hairline);
+        });
+
+        await pair.RunTicksSync(1);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
             var examine = entMan.System<CMUMedicalExamineSystem>();
-            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
 
             try
             {
-                var torso = GetBodyPart(entMan, human, BodyPartType.Torso);
-
-                Assert.That(partHealth.TryApplyPartDamage(
-                    human,
-                    torso,
-                    Damage("Slash", 20),
-                    impact: DamageImpact.MeleeSlash), Is.True);
-                var fracture = entMan.EnsureComponent<FractureComponent>(torso);
-                fractureSystem.SetSeverity((torso, fracture), FractureSeverity.Hairline);
-
                 var text = examine.GetDetailedExamineText(human);
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(text, Does.Contain("slash wound"));
-                    Assert.That(text, Does.Contain("slash wound[/color]\n  [color=#ffd166]untreated[/color]\n  [color=#ff5f5f]external bleeding: moderate[/color]"));
+                    Assert.That(text, Does.Contain("deep cut"));
+                    Assert.That(text, Does.Contain("deep cut[/color]\n  [color=#ffd166]untreated[/color]\n  [color=#ff5f5f]external bleeding: moderate[/color]"));
                     Assert.That(text, Does.Not.Contain("optimal:"));
                     Assert.That(text, Does.Not.Contain("adequate treatment"));
                     Assert.That(text, Does.Not.Contain("cleanup needed"));
@@ -601,32 +703,39 @@ public sealed class MechanismWoundsFoundationTest
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
+        EntityUid human = default;
 
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var woundsSystem = entMan.System<CMUWoundsSystem>();
+            human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var torso = GetBodyPart(entMan, human, BodyPartType.Torso);
+
+            Assert.That(partHealth.TryApplyPartDamage(
+                human,
+                torso,
+                Damage("Slash", 10),
+                impact: DamageImpact.MeleeSlash), Is.True);
+            Assert.That(woundsSystem.TryTreatWound(torso, out var completed), Is.True);
+            Assert.That(completed, Is.True);
+        });
+
+        await pair.RunTicksSync(1);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
             var examine = entMan.System<CMUMedicalExamineSystem>();
-            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
 
             try
             {
-                var torso = GetBodyPart(entMan, human, BodyPartType.Torso);
-
-                Assert.That(partHealth.TryApplyPartDamage(
-                    human,
-                    torso,
-                    Damage("Slash", 10),
-                    impact: DamageImpact.MeleeSlash), Is.True);
-                Assert.That(woundsSystem.TryTreatWound(torso, out var completed), Is.True);
-                Assert.That(completed, Is.True);
-
                 var text = examine.GetDetailedExamineText(human);
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(text, Does.Contain("slash wound[/color]\n  [color=#7bd88f]treated[/color]"));
+                    Assert.That(text, Does.Contain("cut[/color]\n  [color=#7bd88f]treated[/color]"));
                     Assert.That(text, Does.Not.Contain("adequate treatment"));
                     Assert.That(text, Does.Not.Contain("cleanup needed"));
                     Assert.That(text, Does.Not.Contain("dirty dressing"));
@@ -648,32 +757,39 @@ public sealed class MechanismWoundsFoundationTest
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
+        EntityUid human = default;
 
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var woundsSystem = entMan.System<CMUWoundsSystem>();
+            human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var torso = GetBodyPart(entMan, human, BodyPartType.Torso);
+
+            Assert.That(partHealth.TryApplyPartDamage(
+                human,
+                torso,
+                Damage("Slash", 10),
+                impact: DamageImpact.MeleeSlash), Is.True);
+            Assert.That(woundsSystem.TryTreatWound(torso, WoundTreatmentQuality.Optimal, out var completed), Is.True);
+            Assert.That(completed, Is.True);
+        });
+
+        await pair.RunTicksSync(1);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
             var examine = entMan.System<CMUMedicalExamineSystem>();
-            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
 
             try
             {
-                var torso = GetBodyPart(entMan, human, BodyPartType.Torso);
-
-                Assert.That(partHealth.TryApplyPartDamage(
-                    human,
-                    torso,
-                    Damage("Slash", 10),
-                    impact: DamageImpact.MeleeSlash), Is.True);
-                Assert.That(woundsSystem.TryTreatWound(torso, WoundTreatmentQuality.Optimal, out var completed), Is.True);
-                Assert.That(completed, Is.True);
-
                 var text = examine.GetDetailedExamineText(human);
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(text, Does.Contain("slash wound[/color]\n  [color=#7bd88f]treated[/color]"));
+                    Assert.That(text, Does.Contain("cut[/color]\n  [color=#7bd88f]treated[/color]"));
                     Assert.That(text, Does.Not.Contain("optimal treatment"));
                 });
             }
@@ -691,22 +807,32 @@ public sealed class MechanismWoundsFoundationTest
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
+        EntityUid human = default;
 
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
+            human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var torso = GetBodyPart(entMan, human, BodyPartType.Torso);
+            var wounds = entMan.EnsureComponent<BodyPartWoundComponent>(torso);
+
+            AddVisibleWound(ledger, wounds, WoundSize.CutMassive, WoundTreatmentQuality.Adequate);
+            AddVisibleWound(ledger, wounds, WoundSize.CutDeep, WoundTreatmentQuality.Adequate);
+            AddVisibleWound(ledger, wounds, WoundSize.CutMassive, WoundTreatmentQuality.Optimal);
+            AddVisibleWound(ledger, wounds, WoundSize.CutSmall, WoundTreatmentQuality.Optimal);
+            var changed = new BodyPartWoundsChangedEvent(torso, false);
+            entMan.EventBus.RaiseEvent(EventSource.Local, ref changed);
+        });
+
+        await pair.RunTicksSync(1);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
 
             try
             {
-                var torso = GetBodyPart(entMan, human, BodyPartType.Torso);
-                var wounds = entMan.EnsureComponent<BodyPartWoundComponent>(torso);
-
-                AddVisibleWound(wounds, WoundSize.CutMassive, WoundTreatmentQuality.Adequate);
-                AddVisibleWound(wounds, WoundSize.CutDeep, WoundTreatmentQuality.Adequate);
-                AddVisibleWound(wounds, WoundSize.CutMassive, WoundTreatmentQuality.Optimal);
-                AddVisibleWound(wounds, WoundSize.CutSmall, WoundTreatmentQuality.Optimal);
-
                 var examine = new ExaminedEvent(new FormattedMessage(), human, human, true, false);
                 entMan.EventBus.RaiseLocalEvent(human, examine);
                 var text = examine.GetTotalMessage().ToMarkup();
@@ -779,24 +905,31 @@ public sealed class MechanismWoundsFoundationTest
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
+        EntityUid human = default;
 
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
+            human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var head = GetBodyPart(entMan, human, BodyPartType.Head);
+            var torso = GetBodyPart(entMan, human, BodyPartType.Torso);
+            var leftArm = GetBodyPart(entMan, human, BodyPartType.Arm, BodyPartSymmetry.Left);
+
+            Assert.That(partHealth.TryApplyPartDamage(human, leftArm, Damage("Slash", 10), impact: DamageImpact.MeleeSlash), Is.True);
+            Assert.That(partHealth.TryApplyPartDamage(human, torso, Damage("Slash", 10), impact: DamageImpact.MeleeSlash), Is.True);
+            Assert.That(partHealth.TryApplyPartDamage(human, head, Damage("Slash", 10), impact: DamageImpact.MeleeSlash), Is.True);
+        });
+
+        await pair.RunTicksSync(1);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
             var examine = entMan.System<CMUMedicalExamineSystem>();
-            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
 
             try
             {
-                var head = GetBodyPart(entMan, human, BodyPartType.Head);
-                var torso = GetBodyPart(entMan, human, BodyPartType.Torso);
-                var leftArm = GetBodyPart(entMan, human, BodyPartType.Arm, BodyPartSymmetry.Left);
-
-                Assert.That(partHealth.TryApplyPartDamage(human, leftArm, Damage("Slash", 10), impact: DamageImpact.MeleeSlash), Is.True);
-                Assert.That(partHealth.TryApplyPartDamage(human, torso, Damage("Slash", 10), impact: DamageImpact.MeleeSlash), Is.True);
-                Assert.That(partHealth.TryApplyPartDamage(human, head, Damage("Slash", 10), impact: DamageImpact.MeleeSlash), Is.True);
-
                 var text = examine.GetDetailedExamineText(human);
                 var headIndex = text.IndexOf("Head", StringComparison.Ordinal);
                 var torsoIndex = text.IndexOf("Torso", StringComparison.Ordinal);
@@ -884,22 +1017,29 @@ public sealed class MechanismWoundsFoundationTest
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
+        EntityUid human = default;
 
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
+            human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var torso = GetBodyPart(entMan, human, BodyPartType.Torso);
+            var rightArm = GetBodyPart(entMan, human, BodyPartType.Arm, BodyPartSymmetry.Right);
+
+            Assert.That(partHealth.TryApplyPartDamage(human, torso, Damage("Slash", 80), impact: DamageImpact.MeleeSlash), Is.True);
+            Assert.That(partHealth.TryApplyPartDamage(human, rightArm, Damage("Slash", 20), impact: DamageImpact.MeleeSlash), Is.True);
+        });
+
+        await pair.RunTicksSync(1);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
             var examine = entMan.System<CMUMedicalExamineSystem>();
-            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
 
             try
             {
-                var torso = GetBodyPart(entMan, human, BodyPartType.Torso);
-                var rightArm = GetBodyPart(entMan, human, BodyPartType.Arm, BodyPartSymmetry.Right);
-
-                Assert.That(partHealth.TryApplyPartDamage(human, torso, Damage("Slash", 80), impact: DamageImpact.MeleeSlash), Is.True);
-                Assert.That(partHealth.TryApplyPartDamage(human, rightArm, Damage("Slash", 20), impact: DamageImpact.MeleeSlash), Is.True);
-
                 var text = examine.GetInspectInjuriesText(human);
 
                 Assert.Multiple(() =>
@@ -924,20 +1064,27 @@ public sealed class MechanismWoundsFoundationTest
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
+        EntityUid human = default;
 
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
+            human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var rightArm = GetBodyPart(entMan, human, BodyPartType.Arm, BodyPartSymmetry.Right);
+
+            Assert.That(partHealth.TryApplyPartDamage(human, rightArm, Damage("Slash", 80), impact: DamageImpact.MeleeSlash), Is.True);
+        });
+
+        await pair.RunTicksSync(1);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
             var examine = entMan.System<CMUMedicalExamineSystem>();
-            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
 
             try
             {
-                var rightArm = GetBodyPart(entMan, human, BodyPartType.Arm, BodyPartSymmetry.Right);
-
-                Assert.That(partHealth.TryApplyPartDamage(human, rightArm, Damage("Slash", 80), impact: DamageImpact.MeleeSlash), Is.True);
-
                 var text = examine.GetInspectInjuriesText(human);
 
                 Assert.That(text, Does.Contain("[bold][color=#ff5f5f]Arterial Bleeding[/color][/bold]\n  [color=#ff5f5f]Right arm[/color]"));
@@ -960,6 +1107,7 @@ public sealed class MechanismWoundsFoundationTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
 
@@ -974,10 +1122,11 @@ public sealed class MechanismWoundsFoundationTest
                     impact: DamageImpact.Projectile), Is.True);
 
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
+                var entry = ledger.GetEntries(wounds)[0];
                 Assert.Multiple(() =>
                 {
-                    Assert.That(wounds.Mechanisms[0], Is.EqualTo(WoundMechanism.Bullet));
-                    Assert.That(wounds.Cleanup[0] & WoundCleanupFlags.RetainedFragment, Is.EqualTo(WoundCleanupFlags.None));
+                    Assert.That(entry.Mechanism, Is.EqualTo(WoundMechanism.Bullet));
+                    Assert.That(entry.Cleanup & WoundCleanupFlags.RetainedFragment, Is.EqualTo(WoundCleanupFlags.None));
                     Assert.That(entMan.HasComponent<CMUShrapnelComponent>(torso), Is.False);
                 });
             }
@@ -1036,6 +1185,7 @@ public sealed class MechanismWoundsFoundationTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var projectile = entMan.SpawnEntity(projectilePrototype, MapCoordinates.Nullspace);
@@ -1049,10 +1199,11 @@ public sealed class MechanismWoundsFoundationTest
                 Assert.That(entMan.TryGetComponent<CMUShrapnelComponent>(torso, out var shrapnel), Is.True);
 
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
+                var entry = ledger.GetEntries(wounds)[0];
                 Assert.Multiple(() =>
                 {
                     Assert.That(shrapnel!.Fragments, Is.EqualTo(1));
-                    Assert.That(wounds.Cleanup[0] & WoundCleanupFlags.RetainedFragment, Is.Not.EqualTo(WoundCleanupFlags.None));
+                    Assert.That(entry.Cleanup & WoundCleanupFlags.RetainedFragment, Is.Not.EqualTo(WoundCleanupFlags.None));
                 });
             }
             finally
@@ -1163,42 +1314,23 @@ public sealed class MechanismWoundsFoundationTest
         return damage.TryGetDamageInGroup(group, out var total) ? total : FixedPoint2.Zero;
     }
 
-    private static List<Wound> WoundsOf(BodyPartWoundComponent comp)
-        => GetField<List<Wound>>(comp, nameof(BodyPartWoundComponent.Wounds));
-
-    private static void AddVisibleWound(BodyPartWoundComponent comp, WoundSize size, WoundTreatmentQuality quality)
+    private static void AddVisibleWound(
+        CMUWoundLedgerSystem ledger,
+        BodyPartWoundComponent comp,
+        WoundSize size,
+        WoundTreatmentQuality quality)
     {
-        WoundsOf(comp).Add(new Wound(10, FixedPoint2.Zero, 0f, null, WoundType.Brute, true));
-        SizesOf(comp).Add(size);
-        BandagesOf(comp).Add(WoundSizeProfile.BandagesRequired(size));
-        MechanismsOf(comp).Add(WoundMechanism.Slash);
-        SecondaryMechanismsOf(comp).Add(WoundMechanismFlags.None);
-        TreatmentQualitiesOf(comp).Add(quality);
-        CleanupOf(comp).Add(quality == WoundTreatmentQuality.Adequate
-            ? WoundCleanupFlags.PoorClosure
-            : WoundCleanupFlags.None);
+        Assert.That(ledger.AddEntry(comp, new CMUWoundEntry(
+            new Wound(10, FixedPoint2.Zero, 0f, null, WoundType.Brute, true),
+            size,
+            WoundSizeProfile.BandagesRequired(size, 10f),
+            WoundMechanism.Slash,
+            WoundMechanismFlags.None,
+            quality,
+            quality == WoundTreatmentQuality.Adequate
+                ? WoundCleanupFlags.PoorClosure
+                : WoundCleanupFlags.None)), Is.GreaterThanOrEqualTo(0));
     }
-
-    private static List<WoundSize> SizesOf(BodyPartWoundComponent comp)
-        => GetField<List<WoundSize>>(comp, nameof(BodyPartWoundComponent.Sizes));
-
-    private static List<int> BandagesOf(BodyPartWoundComponent comp)
-        => GetField<List<int>>(comp, nameof(BodyPartWoundComponent.Bandages));
-
-    private static List<WoundMechanism> MechanismsOf(BodyPartWoundComponent comp)
-        => GetField<List<WoundMechanism>>(comp, nameof(BodyPartWoundComponent.Mechanisms));
-
-    private static List<WoundMechanismFlags> SecondaryMechanismsOf(BodyPartWoundComponent comp)
-        => GetField<List<WoundMechanismFlags>>(comp, nameof(BodyPartWoundComponent.SecondaryMechanisms));
-
-    private static List<WoundTreatmentQuality> TreatmentQualitiesOf(BodyPartWoundComponent comp)
-        => GetField<List<WoundTreatmentQuality>>(comp, nameof(BodyPartWoundComponent.TreatmentQualities));
-
-    private static List<WoundCleanupFlags> CleanupOf(BodyPartWoundComponent comp)
-        => GetField<List<WoundCleanupFlags>>(comp, nameof(BodyPartWoundComponent.Cleanup));
-
-    private static T GetField<T>(BodyPartWoundComponent comp, string name)
-        => (T) typeof(BodyPartWoundComponent).GetField(name, BindingFlags.Instance | BindingFlags.Public)!.GetValue(comp)!;
 
     private static bool ContainsVerb(IEnumerable<Verb> verbs, string text)
     {

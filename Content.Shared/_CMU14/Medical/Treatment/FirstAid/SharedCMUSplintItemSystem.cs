@@ -4,7 +4,6 @@ using Content.Shared._CMU14.Medical.Anatomy.Bones.Events;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
@@ -26,16 +25,18 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected INetManager Net = default!;
     [Dependency] protected SharedAudioSystem Audio = default!;
-    [Dependency] protected SharedBodySystem Body = default!;
     [Dependency] protected SharedDoAfterSystem DoAfter = default!;
     [Dependency] protected SharedFractureSystem Fracture = default!;
+    [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
+    [Dependency] protected CMUMedicalSchedulerSystem MedicalScheduler = default!;
     [Dependency] protected SharedPopupSystem Popup = default!;
     [Dependency] protected IRobustRandom Random = default!;
 
-    private const float CastScanInterval = 1f;
     private const float CastRemovePromptSeconds = 30f;
     private const float CastRemoveDoAfterSeconds = 1f;
-    private float _castScanAccumulator;
+    private static readonly CMUMedicalWorkKey CastHealWork = new("cast-heal-complete");
+    private static readonly CMUMedicalWorkKey CastRemovePromptWork = new("cast-remove-prompt");
+    private static readonly CMUMedicalWorkKey PostOpMalunionWork = new("post-op-malunion-check");
 
     private bool _medicalEnabled;
     private bool _boneEnabled;
@@ -50,6 +51,8 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
         SubscribeLocalEvent<CMUCastItemComponent, AfterInteractEvent>(OnCastInteract);
         SubscribeLocalEvent<CMUCastItemComponent, CMUCastApplyDoAfterEvent>(OnCastDoAfter);
         SubscribeLocalEvent<CMUCastComponent, BoneFracturedEvent>(OnCastPartFractured);
+        SubscribeLocalEvent<CMUCastComponent, CMUMedicalWorkDueEvent>(OnCastWorkDue);
+        SubscribeLocalEvent<CMUPostOpBoneSetComponent, CMUMedicalWorkDueEvent>(OnPostOpWorkDue);
         SubscribeLocalEvent<CMUHumanMedicalComponent, CMUCastVerbRemoveDoAfterEvent>(OnCastVerbRemoveDoAfter);
 
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
@@ -221,6 +224,9 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
         if ((byte)ent.Comp.MaxSuppressed > (byte)cast.MaxSuppressed)
             cast.MaxSuppressed = ent.Comp.MaxSuppressed;
         Dirty(part, cast);
+        MedicalScheduler.Schedule(part, CastHealWork, cast.HealCompletesAt);
+        MedicalScheduler.Cancel(part, CastRemovePromptWork);
+        MedicalScheduler.Cancel(part, PostOpMalunionWork);
         var ev = new CMUCastChangedEvent(part, false);
         RaiseLocalEvent(ref ev);
         if (HasComp<CMUSplintedComponent>(part))
@@ -299,6 +305,8 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
         if (!TryComp<CMUCastComponent>(part, out var cast) || !cast.ReadyToRemove)
             return;
 
+        MedicalScheduler.Cancel(part, CastHealWork);
+        MedicalScheduler.Cancel(part, CastRemovePromptWork);
         RemComp<CMUCastComponent>(part);
         var ev = new CMUCastChangedEvent(part, true);
         RaiseLocalEvent(ref ev);
@@ -325,7 +333,7 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
             && aim.LastSelectedAt > TimeSpan.Zero)
         {
             var (partType, symmetry) = SharedBodyZoneTargetingSystem.ToBodyPart(aim.Selected);
-            foreach (var (id, partComp) in Body.GetBodyChildren(body))
+            foreach (var (id, partComp) in MedicalIndex.GetBodyParts(body))
             {
                 if (partComp.PartType != partType)
                     continue;
@@ -339,7 +347,7 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
             }
         }
 
-        foreach (var (id, _) in Body.GetBodyChildren(body))
+        foreach (var (id, _) in MedicalIndex.GetBodyParts(body))
         {
             if (HasComp<FractureComponent>(id) && !HasComp<CMUSplintedComponent>(id))
             {
@@ -348,7 +356,7 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
             }
         }
 
-        foreach (var (id, _) in Body.GetBodyChildren(body))
+        foreach (var (id, _) in MedicalIndex.GetBodyParts(body))
         {
             if (HasComp<FractureComponent>(id))
             {
@@ -368,7 +376,7 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
             && aim.LastSelectedAt > TimeSpan.Zero)
         {
             var (partType, symmetry) = SharedBodyZoneTargetingSystem.ToBodyPart(aim.Selected);
-            foreach (var (id, partComp) in Body.GetBodyChildren(body))
+            foreach (var (id, partComp) in MedicalIndex.GetBodyParts(body))
             {
                 if (partComp.PartType != partType)
                     continue;
@@ -382,7 +390,7 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
             }
         }
 
-        foreach (var (id, _) in Body.GetBodyChildren(body))
+        foreach (var (id, _) in MedicalIndex.GetBodyParts(body))
         {
             if (IsCastTarget(id) && !HasComp<CMUCastComponent>(id))
             {
@@ -391,7 +399,7 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
             }
         }
 
-        foreach (var (id, _) in Body.GetBodyChildren(body))
+        foreach (var (id, _) in MedicalIndex.GetBodyParts(body))
         {
             if (IsCastTarget(id))
             {
@@ -412,7 +420,7 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
     private bool FindRemovableCast(EntityUid body, out EntityUid part)
     {
         part = default;
-        foreach (var (id, _) in Body.GetBodyChildren(body))
+        foreach (var (id, _) in MedicalIndex.GetBodyParts(body))
         {
             if (TryComp<CMUCastComponent>(id, out var cast) && cast.ReadyToRemove)
             {
@@ -443,6 +451,9 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
         if (!ent.Comp.ReadyToRemove)
             Popup.PopupEntity(Loc.GetString("cmu-medical-cast-broke"), args.Body, args.Body, PopupType.MediumCaution);
 
+        MedicalScheduler.Cancel(ent.Owner, CastHealWork);
+        MedicalScheduler.Cancel(ent.Owner, CastRemovePromptWork);
+        MedicalScheduler.Cancel(ent.Owner, PostOpMalunionWork);
         RemComp<CMUCastComponent>(ent.Owner);
         if (HasComp<CMUPostOpBoneSetComponent>(ent.Owner))
             RemComp<CMUPostOpBoneSetComponent>(ent.Owner);
@@ -450,68 +461,102 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
         RaiseLocalEvent(ref ev);
     }
 
-    protected void UpdateServer(float frameTime)
+    /// <summary>
+    ///     Registers the one authoritative malunion deadline created by fracture surgery.
+    /// </summary>
+    public void SchedulePostOpMalunion(EntityUid part, CMUPostOpBoneSetComponent? postOp = null)
     {
-        if (!IsLayerEnabled())
+        if (Net.IsClient || !Resolve(part, ref postOp, false))
             return;
 
-        _castScanAccumulator += frameTime;
-        if (_castScanAccumulator < CastScanInterval)
+        MedicalScheduler.Schedule(part, PostOpMalunionWork, postOp.MalunionCheckAt);
+    }
+
+    private void OnCastWorkDue(Entity<CMUCastComponent> ent, ref CMUMedicalWorkDueEvent args)
+    {
+        if (args.Key != CastHealWork && args.Key != CastRemovePromptWork)
             return;
-        _castScanAccumulator = 0f;
+        if (!IsLayerEnabled())
+        {
+            MedicalScheduler.Schedule(ent.Owner, args.Key, Timing.CurTime + TimeSpan.FromSeconds(1));
+            return;
+        }
 
         var now = Timing.CurTime;
-        var castQuery = EntityQueryEnumerator<CMUCastComponent, BodyPartComponent>();
-        while (castQuery.MoveNext(out var partUid, out var cast, out var part))
+        if (args.Key == CastHealWork)
         {
-            if (cast.ReadyToRemove)
+            if (ent.Comp.ReadyToRemove)
+                return;
+            if (ent.Comp.HealCompletesAt > now)
             {
-                if (cast.NextRemovePrompt <= now && part.Body is { } body)
-                {
-                    Popup.PopupEntity(Loc.GetString("cmu-medical-cast-ready-remove"), body, body, PopupType.Medium);
-                    cast.NextRemovePrompt = now + TimeSpan.FromSeconds(CastRemovePromptSeconds);
-                    Dirty(partUid, cast);
-                }
-                continue;
+                MedicalScheduler.Schedule(ent.Owner, CastHealWork, ent.Comp.HealCompletesAt);
+                return;
             }
 
-            if (cast.HealCompletesAt > now)
-                continue;
+            if (TryComp<FractureComponent>(ent.Owner, out var frac))
+                Fracture.SetSeverity((ent.Owner, frac), FractureSeverity.None, forceUpgrade: false);
+            if (HasComp<CMUMalunionComponent>(ent.Owner))
+                RemComp<CMUMalunionComponent>(ent.Owner);
+            if (HasComp<CMUPostOpBoneSetComponent>(ent.Owner))
+                RemComp<CMUPostOpBoneSetComponent>(ent.Owner);
+            MedicalScheduler.Cancel(ent.Owner, PostOpMalunionWork);
 
-            if (TryComp<FractureComponent>(partUid, out var frac))
-                Fracture.SetSeverity((partUid, frac), FractureSeverity.None, forceUpgrade: false);
-            if (HasComp<CMUMalunionComponent>(partUid))
-                RemComp<CMUMalunionComponent>(partUid);
-            if (HasComp<CMUPostOpBoneSetComponent>(partUid))
-                RemComp<CMUPostOpBoneSetComponent>(partUid);
-
-            cast.ReadyToRemove = true;
-            cast.NextRemovePrompt = now;
-            Dirty(partUid, cast);
-            var ev = new CMUCastChangedEvent(partUid, false);
+            ent.Comp.ReadyToRemove = true;
+            ent.Comp.NextRemovePrompt = now;
+            Dirty(ent.Owner, ent.Comp);
+            var ev = new CMUCastChangedEvent(ent.Owner, false);
             RaiseLocalEvent(ref ev);
+            MedicalScheduler.Schedule(ent.Owner, CastRemovePromptWork, now);
+            return;
         }
 
-        var postOpQuery = EntityQueryEnumerator<CMUPostOpBoneSetComponent, BodyPartComponent>();
-        while (postOpQuery.MoveNext(out var partUid, out var postOp, out var part))
+        if (args.Key != CastRemovePromptWork || !ent.Comp.ReadyToRemove)
+            return;
+        if (ent.Comp.NextRemovePrompt > now)
         {
-            if (HasComp<CMUCastComponent>(partUid) || postOp.MalunionCheckAt > now)
-                continue;
-
-            if (Random.Prob(postOp.MalunionChance))
-            {
-                var frac = EnsureComp<FractureComponent>(partUid);
-                Fracture.SetSeverity((partUid, frac), FractureSeverity.Simple);
-                var malunion = EnsureComp<CMUMalunionComponent>(partUid);
-                malunion.AppearedAt = now;
-                Dirty(partUid, malunion);
-
-                if (part.Body is { } body)
-                    Popup.PopupEntity(Loc.GetString("cmu-medical-cast-malunion"), body, body, PopupType.MediumCaution);
-            }
-
-            RemComp<CMUPostOpBoneSetComponent>(partUid);
+            MedicalScheduler.Schedule(ent.Owner, CastRemovePromptWork, ent.Comp.NextRemovePrompt);
+            return;
         }
+
+        if (TryComp<BodyPartComponent>(ent.Owner, out var part) && part.Body is { } body)
+            Popup.PopupEntity(Loc.GetString("cmu-medical-cast-ready-remove"), body, body, PopupType.Medium);
+        ent.Comp.NextRemovePrompt = now + TimeSpan.FromSeconds(CastRemovePromptSeconds);
+        Dirty(ent.Owner, ent.Comp);
+        MedicalScheduler.Schedule(ent.Owner, CastRemovePromptWork, ent.Comp.NextRemovePrompt);
+    }
+
+    private void OnPostOpWorkDue(
+        Entity<CMUPostOpBoneSetComponent> ent,
+        ref CMUMedicalWorkDueEvent args)
+    {
+        if (args.Key != PostOpMalunionWork)
+            return;
+        if (!IsLayerEnabled())
+        {
+            MedicalScheduler.Schedule(ent.Owner, PostOpMalunionWork, Timing.CurTime + TimeSpan.FromSeconds(1));
+            return;
+        }
+
+        var now = Timing.CurTime;
+        if (ent.Comp.MalunionCheckAt > now)
+        {
+            MedicalScheduler.Schedule(ent.Owner, PostOpMalunionWork, ent.Comp.MalunionCheckAt);
+            return;
+        }
+
+        if (!HasComp<CMUCastComponent>(ent.Owner) && Random.Prob(ent.Comp.MalunionChance))
+        {
+            var fracture = EnsureComp<FractureComponent>(ent.Owner);
+            Fracture.SetSeverity((ent.Owner, fracture), FractureSeverity.Simple);
+            var malunion = EnsureComp<CMUMalunionComponent>(ent.Owner);
+            malunion.AppearedAt = now;
+            Dirty(ent.Owner, malunion);
+
+            if (TryComp<BodyPartComponent>(ent.Owner, out var part) && part.Body is { } body)
+                Popup.PopupEntity(Loc.GetString("cmu-medical-cast-malunion"), body, body, PopupType.MediumCaution);
+        }
+
+        RemComp<CMUPostOpBoneSetComponent>(ent.Owner);
     }
 }
 

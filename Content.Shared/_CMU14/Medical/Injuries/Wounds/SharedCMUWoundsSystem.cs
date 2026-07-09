@@ -13,16 +13,13 @@ using Content.Shared._CMU14.Medical.Injuries.Wounds.Events;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared._RMC14.Synth;
-using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Robust.Shared.Configuration;
-using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
@@ -40,10 +37,10 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     [Dependency] protected IConfigurationManager Cfg = default!;
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected IPrototypeManager Proto = default!;
-    [Dependency] protected SharedBodySystem Body = default!;
     [Dependency] protected SharedBodyPartHealthSystem PartHealth = default!;
+    [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
+    [Dependency] protected CMUWoundLedgerSystem WoundLedger = default!;
     [Dependency] protected DamageableSystem Damageable = default!;
-    [Dependency] protected SharedContainerSystem Containers = default!;
     [Dependency] protected INetManager Net = default!;
     [Dependency] protected RMCUnrevivableSystem Unrevivable = default!;
 
@@ -90,17 +87,20 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        // after: ordering so we read updated bone integrity / fracture
-        // severity / organ stage from the same hit.
-        SubscribeLocalEvent<BodyPartComponent, BodyPartDamagedEvent>(
-            OnBodyPartDamaged,
-            after: new[] { typeof(SharedBoneSystem), typeof(SharedOrganHealthSystem) });
+        if (!Net.IsClient)
+        {
+            // after: ordering so we read updated bone integrity / fracture
+            // severity / organ stage from the same hit.
+            SubscribeLocalEvent<BodyPartComponent, BodyPartDamagedEvent>(
+                OnBodyPartDamaged,
+                after: new[] { typeof(SharedBoneSystem), typeof(SharedOrganHealthSystem) });
 
-        SubscribeLocalEvent<FractureComponent, BoneFracturedEvent>(OnBoneFractured);
-        SubscribeLocalEvent<CMUSplintedComponent, ComponentStartup>(OnSplintStartup);
-        SubscribeLocalEvent<CMUSplintedComponent, ComponentRemove>(OnSplintRemove);
-        SubscribeLocalEvent<CMUSplintChangedEvent>(OnSplintChanged);
-        SubscribeLocalEvent<OrganHealthComponent, OrganStageChangedEvent>(OnOrganStageChanged);
+            SubscribeLocalEvent<FractureComponent, BoneFracturedEvent>(OnBoneFractured);
+            SubscribeLocalEvent<CMUSplintedComponent, ComponentStartup>(OnSplintStartup);
+            SubscribeLocalEvent<CMUSplintedComponent, ComponentRemove>(OnSplintRemove);
+            SubscribeLocalEvent<CMUSplintChangedEvent>(OnSplintChanged);
+            SubscribeLocalEvent<OrganHealthComponent, OrganStageChangedEvent>(OnOrganStageChanged);
+        }
 
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
         Cfg.OnValueChanged(CMUMedicalCCVars.WoundsEnabled, v => _woundsEnabled = v, true);
@@ -115,7 +115,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
     private void OnBodyPartDamaged(Entity<BodyPartComponent> ent, ref BodyPartDamagedEvent args)
     {
-        if (!IsEnabled())
+        if (Net.IsClient || !IsEnabled())
             return;
 
         if (!HasComp<CMUHumanMedicalComponent>(args.Body))
@@ -156,7 +156,6 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             type,
             false), size, mechanism, secondary, cleanup);
         UpgradeExternalBleeding(partWound, ComputeExternalBleedTier(mechanism, secondary, size, sizeDamage));
-        Dirty(ent.Owner, partWound);
 
         var woundApplied = new BodyPartWoundAppliedEvent(
             args.Body,
@@ -166,7 +165,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             args.Tool,
             args.Impact,
             args.Trauma);
-        RaiseLocalEvent(ent.Owner, ref woundApplied);
+        RaiseLocalEvent(ent.Owner, ref woundApplied, broadcast: true);
 
         // No-op when a catastrophic fracture or other source already drives a
         // higher rate (recompute picks the max).
@@ -299,7 +298,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             }
         }
 
-        foreach (var (organId, _) in Body.GetPartOrgans(part))
+        foreach (var (organId, _) in MedicalIndex.GetPartOrgans(part))
         {
             if (!TryComp<OrganHealthComponent>(organId, out var oh))
                 continue;
@@ -436,23 +435,18 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
     public void ClearAllWounds(Entity<BodyPartWoundComponent?> part)
     {
+        if (Net.IsClient)
+            return;
+
         if (!Resolve(part.Owner, ref part.Comp, logMissing: false))
             return;
-        if (part.Comp.Wounds.Count == 0 &&
-            part.Comp.Sizes.Count == 0 &&
-            part.Comp.Bandages.Count == 0 &&
+        if (part.Comp.Entries.Count == 0 &&
             part.Comp.ExternalBleeding == ExternalBleedTier.None)
         {
             return;
         }
 
-        part.Comp.Wounds.Clear();
-        part.Comp.Sizes.Clear();
-        part.Comp.Bandages.Clear();
-        part.Comp.Mechanisms.Clear();
-        part.Comp.SecondaryMechanisms.Clear();
-        part.Comp.TreatmentQualities.Clear();
-        part.Comp.Cleanup.Clear();
+        WoundLedger.ClearEntries(part.Comp);
         ClearExternalBleeding(part.Comp);
 
         if (TryGetBodyOwner(part.Owner) is { } body)
@@ -464,13 +458,11 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
         if (part.Comp.ExternalBleeding == ExternalBleedTier.None)
             RemComp<BodyPartWoundComponent>(part.Owner);
-        else
-            Dirty(part.Owner, part.Comp);
     }
 
     public bool MarkRetainedFragmentCleanup(EntityUid part, int fragments, float severity)
     {
-        if (fragments <= 0 || severity <= 0f)
+        if (Net.IsClient || fragments <= 0 || severity <= 0f)
             return false;
 
         if (TryGetBodyOwner(part) is not { } body || !HasComp<CMUHumanMedicalComponent>(body))
@@ -480,14 +472,17 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             return false;
 
         var comp = EnsureComp<BodyPartWoundComponent>(part);
-        EnsureWoundMetadataSlots(comp);
 
         var index = FindRetainedFragmentTarget(comp);
         if (index >= 0)
         {
-            comp.SecondaryMechanisms[index] |= WoundMechanismFlags.Fragment;
-            comp.Cleanup[index] |= WoundCleanupFlags.RetainedFragment;
-            Dirty(part, comp);
+            var entry = comp.Entries[index];
+            WoundLedger.TryUpdateEntry(comp, index, entry with
+            {
+                SecondaryMechanisms = entry.SecondaryMechanisms | WoundMechanismFlags.Fragment,
+                Cleanup = entry.Cleanup | WoundCleanupFlags.RetainedFragment,
+            });
+            RaiseWoundsChanged(part, false);
             return true;
         }
 
@@ -496,48 +491,53 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             WoundType.Brute,
             WoundMechanism.Fragment,
             woundDamage);
-        comp.Wounds.Add(new Wound(FixedPoint2.Zero, FixedPoint2.Zero, 0f, null, WoundType.Brute, true));
-        comp.Sizes.Add(size);
-        comp.Bandages.Add(WoundSizeProfile.BandagesRequired(size, woundDamage));
-        comp.Mechanisms.Add(WoundMechanism.Fragment);
-        comp.SecondaryMechanisms.Add(WoundMechanismFlags.None);
-        comp.TreatmentQualities.Add(WoundTreatmentQuality.Adequate);
-        comp.Cleanup.Add(WoundCleanupFlags.RetainedFragment);
-        Dirty(part, comp);
+        WoundLedger.AddEntry(comp, new CMUWoundEntry(
+            new Wound(FixedPoint2.Zero, FixedPoint2.Zero, 0f, null, WoundType.Brute, true),
+            size,
+            WoundSizeProfile.BandagesRequired(size, woundDamage),
+            WoundMechanism.Fragment,
+            WoundMechanismFlags.None,
+            WoundTreatmentQuality.Adequate,
+            WoundCleanupFlags.RetainedFragment));
+        RaiseWoundsChanged(part, false);
         return true;
     }
 
     public bool ClearRetainedFragmentCleanup(EntityUid part)
     {
-        if (!TryComp<BodyPartWoundComponent>(part, out var comp))
+        if (Net.IsClient || !TryComp<BodyPartWoundComponent>(part, out var comp))
             return false;
 
-        EnsureWoundMetadataSlots(comp);
-
         var changed = false;
-        for (var i = comp.Wounds.Count - 1; i >= 0; i--)
+        for (var i = comp.Entries.Count - 1; i >= 0; i--)
         {
-            if ((comp.Cleanup[i] & WoundCleanupFlags.RetainedFragment) == WoundCleanupFlags.None)
+            var entry = comp.Entries[i];
+            if ((entry.Cleanup & WoundCleanupFlags.RetainedFragment) == WoundCleanupFlags.None)
                 continue;
 
-            comp.Cleanup[i] &= ~WoundCleanupFlags.RetainedFragment;
+            entry.Cleanup &= ~WoundCleanupFlags.RetainedFragment;
             changed = true;
 
-            if (comp.Wounds[i].Damage <= FixedPoint2.Zero &&
-                comp.Cleanup[i] == WoundCleanupFlags.None &&
-                comp.TreatmentQualities[i] != WoundTreatmentQuality.Untreated)
+            if (entry.Wound.Damage <= FixedPoint2.Zero &&
+                entry.Cleanup == WoundCleanupFlags.None &&
+                entry.TreatmentQuality != WoundTreatmentQuality.Untreated)
             {
                 RemoveWoundAt(comp, i);
+                continue;
             }
+
+            WoundLedger.TryUpdateEntry(comp, i, entry);
         }
 
         if (!changed)
             return false;
 
-        if (comp.Wounds.Count == 0 && comp.ExternalBleeding == ExternalBleedTier.None)
+        if (comp.Entries.Count == 0 && comp.ExternalBleeding == ExternalBleedTier.None)
             RemComp<BodyPartWoundComponent>(part);
         else
-            Dirty(part, comp);
+        {
+            RaiseWoundsChanged(part, false);
+        }
 
         return true;
     }
@@ -586,16 +586,14 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         bool stopArterialBleeding = true)
     {
         completed = false;
-        if (!Resolve(part, ref comp, logMissing: false))
+        if (Net.IsClient || !Resolve(part, ref comp, logMissing: false))
             return false;
-
-        EnsureBandageSlots(comp);
 
         var idx = -1;
         var worst = FixedPoint2.Zero;
-        for (var i = 0; i < comp.Wounds.Count; i++)
+        for (var i = 0; i < comp.Entries.Count; i++)
         {
-            var w = comp.Wounds[i];
+            var w = comp.Entries[i].Wound;
             if (w.Treated ||
                 (type is { } woundType && w.Type != woundType) ||
                 !MatchesMechanism(comp, i, mechanismMask))
@@ -613,23 +611,26 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         if (idx < 0)
             return false;
 
-        var size = GetWoundSize(comp, idx);
-        var required = WoundSizeProfile.BandagesRequired(size, comp.Wounds[idx].Damage.Float());
-        comp.Bandages[idx] = Math.Min(required, comp.Bandages[idx] + 1);
-        completed = comp.Bandages[idx] >= required;
+        var entry = comp.Entries[idx];
+        var required = WoundSizeProfile.BandagesRequired(entry.Size, entry.Wound.Damage.Float());
+        var bandages = Math.Min(required, entry.Bandages + 1);
+        completed = bandages >= required;
 
-        var picked = comp.Wounds[idx];
+        var picked = entry.Wound;
         picked = picked with
         {
             Bloodloss = 0f,
             StopBleedAt = Timing.CurTime,
             Treated = completed,
         };
-        comp.Wounds[idx] = picked;
+        WoundLedger.TryUpdateEntry(comp, idx, entry with
+        {
+            Wound = picked,
+            Bandages = bandages,
+        });
         ClearExternalBleeding(comp, stopArterialBleeding);
         if (completed)
             CompleteWoundTreatment(part, comp, idx, quality, cleanupClears);
-        Dirty(part, comp);
         RaiseWoundsChanged(part, false);
 
         // Body resolution can fail on detached parts; the wound is still
@@ -655,29 +656,29 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         bool stopArterialBleeding = true)
     {
         treated = 0;
-        if (maxWounds <= 0)
+        if (Net.IsClient || maxWounds <= 0)
             return false;
 
         if (!Resolve(part, ref comp, logMissing: false))
             return false;
 
-        EnsureBandageSlots(comp);
-
         var now = Timing.CurTime;
         var changed = false;
         while (treated < maxWounds && TryPickWorstUntreatedWound(comp, type, mechanismMask, out var idx))
         {
-            var size = GetWoundSize(comp, idx);
-            var required = WoundSizeProfile.BandagesRequired(size, comp.Wounds[idx].Damage.Float());
-            comp.Bandages[idx] = required;
-
-            var picked = comp.Wounds[idx];
-            comp.Wounds[idx] = picked with
+            var entry = comp.Entries[idx];
+            var required = WoundSizeProfile.BandagesRequired(entry.Size, entry.Wound.Damage.Float());
+            var picked = entry.Wound with
             {
                 Bloodloss = 0f,
                 StopBleedAt = now,
                 Treated = true,
             };
+            WoundLedger.TryUpdateEntry(comp, idx, entry with
+            {
+                Wound = picked,
+                Bandages = required,
+            });
             CompleteWoundTreatment(part, comp, idx, quality, cleanupClears);
 
             treated++;
@@ -688,7 +689,6 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             return false;
 
         ClearExternalBleeding(comp, stopArterialBleeding);
-        Dirty(part, comp);
         RaiseWoundsChanged(part, false);
 
         // Body resolution can fail on detached parts; the wounds are still
@@ -722,9 +722,9 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     {
         idx = -1;
         var worst = FixedPoint2.Zero;
-        for (var i = 0; i < comp.Wounds.Count; i++)
+        for (var i = 0; i < comp.Entries.Count; i++)
         {
-            var wound = comp.Wounds[i];
+            var wound = comp.Entries[i].Wound;
             if (wound.Treated || wound.Type != type || !MatchesMechanism(comp, i, mechanismMask))
                 continue;
             if (idx < 0 || wound.Damage > worst)
@@ -745,16 +745,12 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         if (mechanismMask == WoundMechanismFlags.None)
             return true;
 
-        EnsureWoundMetadataSlots(comp);
-        if (index < 0 || index >= comp.Wounds.Count)
+        if (index < 0 || index >= comp.Entries.Count)
             return false;
 
-        var primary = index < comp.Mechanisms.Count
-            ? ToFlag(comp.Mechanisms[index])
-            : WoundMechanismFlags.Generic;
-        var secondary = index < comp.SecondaryMechanisms.Count
-            ? comp.SecondaryMechanisms[index]
-            : WoundMechanismFlags.None;
+        var entry = comp.Entries[index];
+        var primary = ToFlag(entry.Mechanism);
+        var secondary = entry.SecondaryMechanisms;
 
         return ((primary | secondary) & mechanismMask) != WoundMechanismFlags.None;
     }
@@ -767,21 +763,25 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     /// </summary>
     public bool StopSurfaceBleedingOnPart(EntityUid part, BodyPartWoundComponent? comp = null)
     {
-        if (!Resolve(part, ref comp, logMissing: false))
+        if (Net.IsClient || !Resolve(part, ref comp, logMissing: false))
             return false;
 
         var now = Timing.CurTime;
         var changed = false;
-        for (var i = 0; i < comp.Wounds.Count; i++)
+        for (var i = 0; i < comp.Entries.Count; i++)
         {
-            var wound = comp.Wounds[i];
+            var entry = comp.Entries[i];
+            var wound = entry.Wound;
             if (wound.Treated)
                 continue;
 
             if (wound.Bloodloss <= 0f && wound.StopBleedAt is { } stopBleedAt && stopBleedAt <= now)
                 continue;
 
-            comp.Wounds[i] = wound with { Bloodloss = 0f, StopBleedAt = now };
+            WoundLedger.TryUpdateEntry(comp, i, entry with
+            {
+                Wound = wound with { Bloodloss = 0f, StopBleedAt = now },
+            });
             changed = true;
         }
 
@@ -789,7 +789,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             return false;
 
         ClearExternalBleeding(comp);
-        Dirty(part, comp);
+        RaiseWoundsChanged(part, false);
         return true;
     }
 
@@ -800,13 +800,15 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         WoundTreatmentQuality quality,
         WoundCleanupFlags cleanupClears)
     {
-        EnsureWoundMetadataSlots(comp);
-
-        if (index < 0 || index >= comp.Wounds.Count)
+        if (index < 0 || index >= comp.Entries.Count)
             return;
 
-        comp.Cleanup[index] &= ~cleanupClears;
-        comp.TreatmentQualities[index] = quality;
+        var entry = comp.Entries[index];
+        WoundLedger.TryUpdateEntry(comp, index, entry with
+        {
+            Cleanup = WoundCleanupFlags.None,
+            TreatmentQuality = WoundTreatmentQuality.Adequate,
+        });
         RestorePartToFieldCap(part, comp);
     }
 
@@ -817,17 +819,15 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
     public static float ComputeFieldTreatmentCap(BodyPartWoundComponent comp)
     {
-        EnsureWoundMetadataSlots(comp);
-
         var penalty = 0f;
-        for (var i = 0; i < comp.Wounds.Count; i++)
+        for (var i = 0; i < comp.Entries.Count; i++)
         {
             if (!WoundAppliesCapBurden(comp, i))
                 continue;
 
             penalty += WoundSizeProfile.FieldTreatmentPenalty(
                 GetWoundSize(comp, i),
-                comp.Wounds[i].Damage.Float());
+                comp.Entries[i].Wound.Damage.Float());
         }
 
         return Math.Clamp(1f - penalty, 0.35f, 1f);
@@ -835,18 +835,17 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
     public static float ComputeLargestWoundFieldTreatmentCap(BodyPartWoundComponent comp)
     {
-        EnsureWoundMetadataSlots(comp);
-
         WoundSize? largest = null;
         var largestRank = -1;
         var largestDamage = 0f;
-        for (var i = 0; i < comp.Wounds.Count; i++)
+        for (var i = 0; i < comp.Entries.Count; i++)
         {
             if (!WoundAppliesCapBurden(comp, i))
                 continue;
 
-            var size = GetWoundSize(comp, i);
-            var damage = comp.Wounds[i].Damage.Float();
+            var entry = comp.Entries[i];
+            var size = entry.Size;
+            var damage = entry.Wound.Damage.Float();
             var rank = WoundSizeProfile.SeverityRank(size, damage);
             if (largest is null || rank > largestRank || rank == largestRank && damage > largestDamage)
             {
@@ -863,9 +862,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
     private static bool HasUntreatedBurden(BodyPartWoundComponent comp)
     {
-        EnsureWoundMetadataSlots(comp);
-
-        for (var i = 0; i < comp.Wounds.Count; i++)
+        for (var i = 0; i < comp.Entries.Count; i++)
         {
             if (WoundAppliesCapBurden(comp, i))
                 return true;
@@ -876,10 +873,10 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
     private static bool WoundAppliesCapBurden(BodyPartWoundComponent comp, int index)
     {
-        if (index < 0 || index >= comp.Wounds.Count)
+        if (index < 0 || index >= comp.Entries.Count)
             return false;
 
-        return !comp.Wounds[index].Treated;
+        return !comp.Entries[index].Wound.Treated;
     }
 
     protected void UpdateServer(float frameTime)
@@ -935,13 +932,12 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             if (part.Body is not { } body || Unrevivable.IsUnrevivable(body))
                 continue;
 
-            EnsureBandageSlots(pw);
-
             var dirty = false;
             var untreatedBlocked = HasUntreatedBurden(pw);
-            for (var i = pw.Wounds.Count - 1; i >= 0; i--)
+            for (var i = pw.Entries.Count - 1; i >= 0; i--)
             {
-                var w = pw.Wounds[i];
+                var entry = pw.Entries[i];
+                var w = entry.Wound;
                 if (!w.Treated || untreatedBlocked)
                     continue;
 
@@ -965,12 +961,12 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
                 }
                 else
                 {
-                    pw.Wounds[i] = w;
+                    WoundLedger.TryUpdateEntry(pw, i, entry with { Wound = w });
                     dirty = true;
                 }
             }
 
-            if (pw.Wounds.Count == 0)
+            if (pw.Entries.Count == 0)
             {
                 OnPartWoundsCleared(body, partUid);
                 RemComp<BodyPartWoundComponent>(partUid);
@@ -978,7 +974,6 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             }
             else if (dirty)
             {
-                Dirty(partUid, pw);
                 RaiseWoundsChanged(partUid, false);
             }
         }
@@ -1062,24 +1057,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
     public EntityUid? TryGetContainingPart(EntityUid organ)
     {
-        if (Containers.TryGetContainingContainer((organ, null, null), out var container)
-            && HasComp<BodyPartComponent>(container.Owner))
-        {
-            return container.Owner;
-        }
-        // Fallback covers organs where the slot container lookup misses
-        // (detached organs that still report OrganComponent.Body).
-        if (!TryComp<OrganComponent>(organ, out var organComp) || organComp.Body is not { } bodyId)
-            return null;
-        foreach (var part in Body.GetBodyChildren(bodyId))
-        {
-            foreach (var (organId, _) in Body.GetPartOrgans(part.Id, part.Component))
-            {
-                if (organId == organ)
-                    return part.Id;
-            }
-        }
-        return null;
+        return MedicalIndex.TryGetOrganPart(organ, out var part) ? part : null;
     }
 
     private FixedPoint2 GroupSum(DamageSpecifier delta, ProtoId<DamageGroupPrototype> group)
@@ -1120,59 +1098,10 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
     private static WoundSize GetWoundSize(BodyPartWoundComponent comp, int index)
     {
-        return index < comp.Sizes.Count ? comp.Sizes[index] : WoundSize.CutDeep;
+        return comp.Entries[index].Size;
     }
 
-    private static void EnsureBandageSlots(BodyPartWoundComponent comp)
-    {
-        EnsureWoundMetadataSlots(comp);
-    }
-
-    private static void EnsureWoundMetadataSlots(BodyPartWoundComponent comp)
-    {
-        while (comp.Sizes.Count < comp.Wounds.Count)
-            comp.Sizes.Add(WoundSize.CutDeep);
-
-        if (comp.Sizes.Count > comp.Wounds.Count)
-            comp.Sizes.RemoveRange(comp.Wounds.Count, comp.Sizes.Count - comp.Wounds.Count);
-
-        while (comp.Bandages.Count < comp.Wounds.Count)
-            comp.Bandages.Add(0);
-
-        if (comp.Bandages.Count > comp.Wounds.Count)
-            comp.Bandages.RemoveRange(comp.Wounds.Count, comp.Bandages.Count - comp.Wounds.Count);
-
-        while (comp.Mechanisms.Count < comp.Wounds.Count)
-            comp.Mechanisms.Add(LegacyMechanismFor(comp.Wounds[comp.Mechanisms.Count].Type));
-
-        if (comp.Mechanisms.Count > comp.Wounds.Count)
-            comp.Mechanisms.RemoveRange(comp.Wounds.Count, comp.Mechanisms.Count - comp.Wounds.Count);
-
-        while (comp.SecondaryMechanisms.Count < comp.Wounds.Count)
-            comp.SecondaryMechanisms.Add(WoundMechanismFlags.None);
-
-        if (comp.SecondaryMechanisms.Count > comp.Wounds.Count)
-            comp.SecondaryMechanisms.RemoveRange(comp.Wounds.Count, comp.SecondaryMechanisms.Count - comp.Wounds.Count);
-
-        while (comp.TreatmentQualities.Count < comp.Wounds.Count)
-        {
-            var wound = comp.Wounds[comp.TreatmentQualities.Count];
-            comp.TreatmentQualities.Add(wound.Treated
-                ? WoundTreatmentQuality.Adequate
-                : WoundTreatmentQuality.Untreated);
-        }
-
-        if (comp.TreatmentQualities.Count > comp.Wounds.Count)
-            comp.TreatmentQualities.RemoveRange(comp.Wounds.Count, comp.TreatmentQualities.Count - comp.Wounds.Count);
-
-        while (comp.Cleanup.Count < comp.Wounds.Count)
-            comp.Cleanup.Add(WoundCleanupFlags.None);
-
-        if (comp.Cleanup.Count > comp.Wounds.Count)
-            comp.Cleanup.RemoveRange(comp.Wounds.Count, comp.Cleanup.Count - comp.Wounds.Count);
-    }
-
-    private static void AddOrMergeWound(
+    private void AddOrMergeWound(
         BodyPartWoundComponent comp,
         Wound wound,
         WoundSize size,
@@ -1180,48 +1109,50 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         WoundMechanismFlags secondary,
         WoundCleanupFlags cleanup)
     {
-        EnsureWoundMetadataSlots(comp);
-
         var index = FindMergeTarget(comp, wound.Type, mechanism);
         if (index < 0)
         {
-            comp.Wounds.Add(wound);
-            comp.Sizes.Add(size);
-            comp.Bandages.Add(0);
-            comp.Mechanisms.Add(mechanism);
-            comp.SecondaryMechanisms.Add(secondary);
-            comp.TreatmentQualities.Add(WoundTreatmentQuality.Untreated);
-            comp.Cleanup.Add(cleanup);
+            WoundLedger.AddEntry(comp, new CMUWoundEntry(
+                wound,
+                size,
+                0,
+                mechanism,
+                secondary,
+                WoundTreatmentQuality.Untreated,
+                cleanup));
             return;
         }
 
-        var existing = comp.Wounds[index];
-        var merged = existing with
+        var entry = comp.Entries[index];
+        var merged = entry.Wound with
         {
-            Damage = existing.Damage + wound.Damage,
-            Bloodloss = existing.Bloodloss + wound.Bloodloss,
-            StopBleedAt = MaxTime(existing.StopBleedAt, wound.StopBleedAt),
+            Damage = entry.Wound.Damage + wound.Damage,
+            Bloodloss = entry.Wound.Bloodloss + wound.Bloodloss,
+            StopBleedAt = MaxTime(entry.Wound.StopBleedAt, wound.StopBleedAt),
             Treated = false,
         };
 
-        comp.Wounds[index] = merged;
-
-        var mergedSize = WoundSizeProfile.FromDamage(merged.Type, comp.Mechanisms[index], merged.Damage.Float());
-        comp.Sizes[index] = mergedSize;
-
+        var mergedSize = WoundSizeProfile.FromDamage(merged.Type, entry.Mechanism, merged.Damage.Float());
         var required = WoundSizeProfile.BandagesRequired(mergedSize, merged.Damage.Float());
-        comp.Bandages[index] = Math.Min(comp.Bandages[index], Math.Max(0, required - 1));
-
-        var existingMechanism = comp.Mechanisms[index];
+        var bandages = Math.Min(entry.Bandages, Math.Max(0, required - 1));
+        var existingMechanism = entry.Mechanism;
+        var mergedMechanism = existingMechanism;
         if (existingMechanism == WoundMechanism.Generic && mechanism != WoundMechanism.Generic)
-            comp.Mechanisms[index] = mechanism;
+            mergedMechanism = mechanism;
 
         if (existingMechanism != mechanism)
             secondary |= ToFlag(mechanism);
 
-        comp.SecondaryMechanisms[index] |= secondary;
-        comp.TreatmentQualities[index] = WoundTreatmentQuality.Untreated;
-        comp.Cleanup[index] |= cleanup;
+        WoundLedger.TryUpdateEntry(comp, index, entry with
+        {
+            Wound = merged,
+            Size = mergedSize,
+            Bandages = bandages,
+            Mechanism = mergedMechanism,
+            SecondaryMechanisms = entry.SecondaryMechanisms | secondary,
+            TreatmentQuality = WoundTreatmentQuality.Untreated,
+            Cleanup = entry.Cleanup | cleanup,
+        });
     }
 
     private static int FindMergeTarget(BodyPartWoundComponent comp, WoundType type, WoundMechanism mechanism)
@@ -1230,7 +1161,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         if (index >= 0)
             return index;
 
-        if (comp.Wounds.Count < MaxWoundsPerPart)
+        if (comp.Entries.Count < MaxWoundsPerPart)
             return -1;
 
         index = FindWorstMatchingMechanism(comp, mechanism, exact: false);
@@ -1259,7 +1190,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         if (index >= 0)
             return index;
 
-        if (comp.Wounds.Count < MaxWoundsPerPart)
+        if (comp.Entries.Count < MaxWoundsPerPart)
             return -1;
 
         return FindWorstLegacyWound(comp, WoundType.Brute);
@@ -1269,16 +1200,17 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     {
         var index = -1;
         var worst = FixedPoint2.Zero;
-        for (var i = 0; i < comp.Wounds.Count; i++)
+        for (var i = 0; i < comp.Entries.Count; i++)
         {
-            if ((comp.Cleanup[i] & flag) == WoundCleanupFlags.None)
+            var entry = comp.Entries[i];
+            if ((entry.Cleanup & flag) == WoundCleanupFlags.None)
                 continue;
 
-            if (index >= 0 && comp.Wounds[i].Damage <= worst)
+            if (index >= 0 && entry.Wound.Damage <= worst)
                 continue;
 
             index = i;
-            worst = comp.Wounds[i].Damage;
+            worst = entry.Wound.Damage;
         }
 
         return index;
@@ -1288,17 +1220,18 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     {
         var index = -1;
         var worst = FixedPoint2.Zero;
-        for (var i = 0; i < comp.Wounds.Count; i++)
+        for (var i = 0; i < comp.Entries.Count; i++)
         {
-            var mechanism = ToFlag(comp.Mechanisms[i]);
+            var entry = comp.Entries[i];
+            var mechanism = ToFlag(entry.Mechanism);
             if ((mechanism & mechanismMask) == WoundMechanismFlags.None)
                 continue;
 
-            if (index >= 0 && comp.Wounds[i].Damage <= worst)
+            if (index >= 0 && entry.Wound.Damage <= worst)
                 continue;
 
             index = i;
-            worst = comp.Wounds[i].Damage;
+            worst = entry.Wound.Damage;
         }
 
         return index;
@@ -1308,17 +1241,18 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     {
         var index = -1;
         var worst = FixedPoint2.Zero;
-        for (var i = 0; i < comp.Wounds.Count; i++)
+        for (var i = 0; i < comp.Entries.Count; i++)
         {
-            var secondary = comp.SecondaryMechanisms[i];
+            var entry = comp.Entries[i];
+            var secondary = entry.SecondaryMechanisms;
             if ((secondary & mechanismMask) == WoundMechanismFlags.None)
                 continue;
 
-            if (index >= 0 && comp.Wounds[i].Damage <= worst)
+            if (index >= 0 && entry.Wound.Damage <= worst)
                 continue;
 
             index = i;
-            worst = comp.Wounds[i].Damage;
+            worst = entry.Wound.Damage;
         }
 
         return index;
@@ -1328,13 +1262,14 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     {
         var index = -1;
         var worst = FixedPoint2.Zero;
-        for (var i = 0; i < comp.Wounds.Count; i++)
+        for (var i = 0; i < comp.Entries.Count; i++)
         {
-            var wound = comp.Wounds[i];
+            var entry = comp.Entries[i];
+            var wound = entry.Wound;
             if (wound.Treated)
                 continue;
 
-            var existing = comp.Mechanisms[i];
+            var existing = entry.Mechanism;
             var match = exact
                 ? existing == mechanism
                 : SameMergeFamily(existing, mechanism);
@@ -1356,9 +1291,9 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     {
         var index = -1;
         var worst = FixedPoint2.Zero;
-        for (var i = 0; i < comp.Wounds.Count; i++)
+        for (var i = 0; i < comp.Entries.Count; i++)
         {
-            var wound = comp.Wounds[i];
+            var wound = comp.Entries[i].Wound;
             if (wound.Treated || wound.Type != type)
                 continue;
 
@@ -1372,9 +1307,9 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         if (index >= 0)
             return index;
 
-        for (var i = 0; i < comp.Wounds.Count; i++)
+        for (var i = 0; i < comp.Entries.Count; i++)
         {
-            var wound = comp.Wounds[i];
+            var wound = comp.Entries[i].Wound;
             if (index >= 0 && wound.Damage <= worst)
                 continue;
 
@@ -1546,16 +1481,6 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         ClearExternalBleeding(comp);
     }
 
-    private static WoundMechanism LegacyMechanismFor(WoundType type)
-    {
-        return type switch
-        {
-            WoundType.Burn => WoundMechanism.Burn,
-            WoundType.Surgery => WoundMechanism.Surgical,
-            _ => WoundMechanism.Generic,
-        };
-    }
-
     private static bool SameMergeFamily(WoundMechanism a, WoundMechanism b)
     {
         return MergeFamily(a) == MergeFamily(b);
@@ -1605,26 +1530,8 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         return a > b ? a : b;
     }
 
-    private static void RemoveWoundAt(BodyPartWoundComponent comp, int index)
+    private void RemoveWoundAt(BodyPartWoundComponent comp, int index)
     {
-        comp.Wounds.RemoveAt(index);
-
-        if (index < comp.Sizes.Count)
-            comp.Sizes.RemoveAt(index);
-
-        if (index < comp.Bandages.Count)
-            comp.Bandages.RemoveAt(index);
-
-        if (index < comp.Mechanisms.Count)
-            comp.Mechanisms.RemoveAt(index);
-
-        if (index < comp.SecondaryMechanisms.Count)
-            comp.SecondaryMechanisms.RemoveAt(index);
-
-        if (index < comp.TreatmentQualities.Count)
-            comp.TreatmentQualities.RemoveAt(index);
-
-        if (index < comp.Cleanup.Count)
-            comp.Cleanup.RemoveAt(index);
+        WoundLedger.TryRemoveEntry(comp, index);
     }
 }

@@ -1,11 +1,10 @@
-using System.Text;
 using Content.Shared._CMU14.Medical.Core;
+using Content.Shared._CMU14.Medical.Diagnostics.Examine;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Stun;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Verbs;
@@ -19,8 +18,8 @@ public sealed partial class RMCMedicalExamineSystem : EntitySystem
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private RMCSizeStunSystem _sizeStun = default!;
     [Dependency] private RMCUnrevivableSystem _unrevivable = default!;
-    [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private CMUMedicalExamineProjectionSystem _woundProjection = default!;
 
     public override void Initialize()
     {
@@ -82,41 +81,29 @@ public sealed partial class RMCMedicalExamineSystem : EntitySystem
             return false;
         }
 
-        foreach (var (partUid, _) in _body.GetBodyChildren(body))
-        {
-            if (!TryComp<BodyPartWoundComponent>(partUid, out var pw))
-                continue;
-
-            if (pw.ExternalBleeding != ExternalBleedTier.None)
-                return true;
-        }
-
-        return false;
+        return TryComp<CMUMedicalExamineProjectionComponent>(body, out var projection) &&
+               _woundProjection.GetWorstExternalBleeding(projection) != ExternalBleedTier.None;
     }
 
     private string? GetBleedingPartsText(EntityUid body)
     {
         var seen = new HashSet<(BodyPartType, BodyPartSymmetry)>();
-        StringBuilder? sb = null;
+        var parts = new List<string>();
+        if (!TryComp<CMUMedicalExamineProjectionComponent>(body, out var projection))
+            return null;
 
-        foreach (var (partUid, partComp) in _body.GetBodyChildren(body))
+        foreach (var part in _woundProjection.GetParts(projection))
         {
-            if (!TryComp<BodyPartWoundComponent>(partUid, out var pw))
+            if (part.ExternalBleeding == ExternalBleedTier.None)
                 continue;
 
-            if (pw.ExternalBleeding == ExternalBleedTier.None)
+            if (!seen.Add((part.Type, part.Symmetry)))
                 continue;
 
-            if (!seen.Add((partComp.PartType, partComp.Symmetry)))
-                continue;
-
-            sb ??= new StringBuilder();
-            if (sb.Length > 0)
-                sb.Append(", ");
-            sb.Append(FormatPart(partComp.PartType, partComp.Symmetry));
+            parts.Add(FormatPart(part.Type, part.Symmetry));
         }
 
-        return sb?.ToString();
+        return parts.Count > 0 ? string.Join(", ", parts) : null;
     }
 
     private static string FormatPart(BodyPartType type, BodyPartSymmetry symmetry)

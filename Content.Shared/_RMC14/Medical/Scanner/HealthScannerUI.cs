@@ -50,6 +50,12 @@ public sealed class HealthScannerBuiState(
 }
 
 [Serializable, NetSerializable]
+public sealed class HealthScannerStateMessage(HealthScannerBuiState state) : BoundUserInterfaceMessage
+{
+    public HealthScannerBuiState State = state;
+}
+
+[Serializable, NetSerializable]
 public sealed class HealthScannerDamageReadout
 {
     public FixedPoint2 Brute;

@@ -1,6 +1,5 @@
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared.Body.Organ;
-using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
@@ -18,7 +17,7 @@ public abstract partial class SharedLiverSystem : EntitySystem
 {
     [Dependency] protected IConfigurationManager Cfg = default!;
     [Dependency] protected IGameTiming Timing = default!;
-    [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
     [Dependency] protected DamageableSystem Damageable = default!;
     [Dependency] protected SharedStatusEffectsSystem Status = default!;
 
@@ -73,7 +72,7 @@ public abstract partial class SharedLiverSystem : EntitySystem
     public float GetClearanceMultiplier(EntityUid body)
     {
         var worst = -1f;
-        foreach (var (organId, _) in Body.GetBodyOrgans(body))
+        foreach (var (organId, _) in MedicalIndex.GetOrgans(body))
         {
             if (!TryComp<LiverComponent>(organId, out var liver))
                 continue;
@@ -91,7 +90,7 @@ public abstract partial class SharedLiverSystem : EntitySystem
         if (group != "Poison" && group != "Alcohol")
             return;
 
-        foreach (var (organId, _) in Body.GetBodyOrgans(body))
+        foreach (var (organId, _) in MedicalIndex.GetOrgans(body))
         {
             if (!HasComp<LiverComponent>(organId))
                 continue;

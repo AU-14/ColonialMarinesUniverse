@@ -6,7 +6,6 @@ using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
@@ -20,7 +19,7 @@ public sealed partial class CMUMedicalFieldBleedControlSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private INetManager _net = default!;
-    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedBodyZoneTargetingSystem _zoneTargeting = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -197,7 +196,7 @@ public sealed partial class CMUMedicalFieldBleedControlSystem : EntitySystem
     {
         var (type, symmetry) = SharedBodyZoneTargetingSystem.ToBodyPart(zone);
 
-        foreach (var (partUid, part) in _body.GetBodyChildren(patient))
+        foreach (var (partUid, part) in _medicalIndex.GetBodyParts(patient))
         {
             if (part.PartType != type)
                 continue;

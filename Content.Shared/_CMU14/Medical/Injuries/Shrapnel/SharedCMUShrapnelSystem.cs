@@ -7,7 +7,6 @@ using Content.Shared._CMU14.Medical.Injuries.Trauma;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._CMU14.Medical.Injuries.Wounds.Events;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -35,10 +34,10 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private INetManager _net = default!;
-    [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedFractureSystem _fracture = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedPainShockSystem _pain = default!;
     [Dependency] private SharedCMUWoundsSystem _wounds = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -252,7 +251,7 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
             return 0f;
 
         var pulse = 0f;
-        foreach (var (partUid, part) in _body.GetBodyChildren(body))
+        foreach (var (partUid, part) in _medicalIndex.GetBodyParts(body))
         {
             if (TryComp<CMUShrapnelComponent>(partUid, out var shrapnel))
                 pulse += GetMovementDamage(shrapnel).Float();
@@ -272,7 +271,7 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
     {
         var fragments = 0;
         var severity = 0f;
-        foreach (var (partUid, _) in _body.GetBodyChildren(body))
+        foreach (var (partUid, _) in _medicalIndex.GetBodyParts(body))
         {
             if (!TryComp<CMUShrapnelComponent>(partUid, out var shrapnel))
                 continue;
@@ -453,7 +452,7 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
     private FixedPoint2 ApplyShrapnelMovementDamage(EntityUid body)
     {
         var total = FixedPoint2.Zero;
-        foreach (var (partUid, _) in _body.GetBodyChildren(body))
+        foreach (var (partUid, _) in _medicalIndex.GetBodyParts(body))
         {
             if (!TryComp<CMUShrapnelComponent>(partUid, out var shrapnel))
                 continue;
@@ -488,7 +487,7 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
             return 0f;
 
         var pulse = 0f;
-        foreach (var (partUid, part) in _body.GetBodyChildren(body))
+        foreach (var (partUid, part) in _medicalIndex.GetBodyParts(body))
         {
             if (part.PartType is not (BodyPartType.Leg or BodyPartType.Foot))
                 continue;
@@ -534,7 +533,7 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
             && aim.LastSelectedAt > TimeSpan.Zero)
         {
             var (type, symmetry) = SharedBodyZoneTargetingSystem.ToBodyPart(aim.Selected);
-            foreach (var (partUid, bodyPart) in _body.GetBodyChildren(body))
+            foreach (var (partUid, bodyPart) in _medicalIndex.GetBodyParts(body))
             {
                 if (bodyPart.PartType != type)
                     continue;
@@ -549,7 +548,7 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
         }
 
         var bestScore = 0f;
-        foreach (var (partUid, _) in _body.GetBodyChildren(body))
+        foreach (var (partUid, _) in _medicalIndex.GetBodyParts(body))
         {
             if (!TryComp<CMUShrapnelComponent>(partUid, out var shrapnel))
                 continue;
@@ -571,7 +570,7 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
             return;
 
         var ev = new CMUShrapnelChangedEvent(body, part, removed);
-        RaiseLocalEvent(part, ref ev);
+        RaiseLocalEvent(part, ref ev, broadcast: true);
         _pain.OnRecomputeTrigger(body);
     }
 

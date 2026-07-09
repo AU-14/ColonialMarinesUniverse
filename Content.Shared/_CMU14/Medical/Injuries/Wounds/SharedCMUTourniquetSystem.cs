@@ -7,7 +7,6 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
@@ -28,8 +27,8 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected INetManager Net = default!;
     [Dependency] protected SharedAudioSystem Audio = default!;
-    [Dependency] protected SharedBodySystem Body = default!;
     [Dependency] protected SharedDoAfterSystem DoAfter = default!;
+    [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
     [Dependency] protected SharedPopupSystem Popup = default!;
     [Dependency] protected SkillsSystem Skills = default!;
     [Dependency] protected SharedCMUWoundsSystem Wounds = default!;
@@ -233,7 +232,7 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
         {
             var (partType, symmetry) = SharedBodyZoneTargetingSystem.ToBodyPart(aim.Selected);
             EntityUid? firstMatch = null;
-            foreach (var (id, partComp) in Body.GetBodyChildren(patient))
+            foreach (var (id, partComp) in MedicalIndex.GetBodyParts(patient))
             {
                 if (partComp.PartType != partType)
                     continue;
@@ -266,7 +265,7 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
             }
         }
 
-        foreach (var (id, partComp) in Body.GetBodyChildren(patient))
+        foreach (var (id, partComp) in MedicalIndex.GetBodyParts(patient))
         {
             if (!IsTourniquetable(partComp.PartType))
                 continue;
@@ -280,7 +279,7 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
             }
         }
 
-        foreach (var (id, partComp) in Body.GetBodyChildren(patient))
+        foreach (var (id, partComp) in MedicalIndex.GetBodyParts(patient))
         {
             if (!IsTourniquetable(partComp.PartType))
                 continue;
@@ -303,7 +302,7 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
         if (TryComp<BodyZoneTargetingComponent>(user, out var aim) && aim.LastSelectedAt > TimeSpan.Zero)
         {
             var (partType, symmetry) = SharedBodyZoneTargetingSystem.ToBodyPart(aim.Selected);
-            foreach (var (id, partComp) in Body.GetBodyChildren(patient))
+            foreach (var (id, partComp) in MedicalIndex.GetBodyParts(patient))
             {
                 if (partComp.PartType != partType)
                     continue;
@@ -316,7 +315,7 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
             }
         }
 
-        foreach (var (id, partComp) in Body.GetBodyChildren(patient))
+        foreach (var (id, partComp) in MedicalIndex.GetBodyParts(patient))
         {
             if (!IsTourniquetable(partComp.PartType))
                 continue;

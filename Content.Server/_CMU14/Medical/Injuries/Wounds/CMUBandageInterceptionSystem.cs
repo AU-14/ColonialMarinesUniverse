@@ -8,7 +8,6 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DoAfter;
@@ -34,7 +33,7 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedBodyZoneTargetingSystem _zoneTargeting = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -43,6 +42,7 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
     [Dependency] private SharedStackSystem _stacks = default!;
     [Dependency] private SharedCMUSurgeryFlowSystem _surgery = default!;
     [Dependency] private CMUWoundsSystem _wounds = default!;
+    [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
 
     private static readonly TimeSpan TreatDelay = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan SearchTreatmentDelay = TimeSpan.FromSeconds(0.2);
@@ -139,7 +139,6 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         pending.Treater = used;
         pending.PartHealthCapPart = targetPart;
         pending.PartHealthCap = partHealthCap;
-        Dirty(args.User, pending);
 
         _audio.PlayPvs(treater.TreatBeginSound, args.User);
         if (args.User != patient && treater.TargetStartPopup is { } startPopup)
@@ -164,9 +163,9 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         if (!TryComp<BodyPartWoundComponent>(part, out var pw))
             return false;
 
-        for (var i = 0; i < pw.Wounds.Count; i++)
+        foreach (var entry in _woundLedger.GetEntries(pw))
         {
-            var wound = pw.Wounds[i];
+            var wound = entry.Wound;
             if (!wound.Treated && wound.Type == treater.Wound)
                 return true;
         }
@@ -288,7 +287,6 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         var cap = ResolveTreaterDamagePartHealthCap(part, treater);
         pending.Comp.PartHealthCapPart = part;
         pending.Comp.PartHealthCap = cap;
-        Dirty(pending.Owner, pending.Comp);
         return cap;
     }
 
@@ -412,7 +410,7 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
     {
         var (type, symmetry) = SharedBodyZoneTargetingSystem.ToBodyPart(zone);
 
-        foreach (var (childId, childComp) in _body.GetBodyChildren(patient))
+        foreach (var (childId, childComp) in _medicalIndex.GetBodyParts(patient))
         {
             if (childComp.PartType != type)
                 continue;
@@ -469,13 +467,13 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         WoundSize? worst = null;
         var worstRank = -1;
         var worstDamage = 0f;
-        for (var i = 0; i < pw.Wounds.Count; i++)
+        foreach (var entry in _woundLedger.GetEntries(pw))
         {
-            var wound = pw.Wounds[i];
-            if (wound.Treated)
+            if (entry.Wound.Treated)
                 continue;
-            var sz = i < pw.Sizes.Count ? pw.Sizes[i] : WoundSize.CutDeep;
-            var damage = wound.Damage.Float();
+
+            var sz = entry.Size;
+            var damage = entry.Wound.Damage.Float();
             var rank = WoundSizeProfile.SeverityRank(sz, damage);
             if (worst is not null &&
                 (rank < worstRank || rank == worstRank && damage <= worstDamage))

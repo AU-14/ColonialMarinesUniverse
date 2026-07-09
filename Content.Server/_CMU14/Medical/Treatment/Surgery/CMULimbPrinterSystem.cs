@@ -1,3 +1,4 @@
+using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
 using Content.Shared._RMC14.Chemistry.Reagent;
@@ -27,6 +28,7 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private CMUMedicalSchedulerSystem _scheduler = default!;
     [Dependency] private SharedSolutionContainerSystem _solutions = default!;
     [Dependency] private SharedStackSystem _stack = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -35,8 +37,11 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
     private const string BloodReagent = "Blood";
     private const string SyringeSolutionName = "injector";
     private const float UiRefreshInterval = 1f;
+    private static readonly CMUMedicalWorkKey WorkingExpiryWork = new("limb-printer-working-expiry");
     private static readonly SoundSpecifier PrintSound = new SoundCollectionSpecifier("Welder");
 
+    private readonly HashSet<EntityUid> _openPrinters = new();
+    private readonly List<EntityUid> _stalePrinters = new();
     private float _uiAccumulator;
 
     public override void Initialize()
@@ -46,6 +51,7 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
         Subs.BuiEvents<CMULimbPrinterComponent>(CMULimbPrinterUIKey.Key, subs =>
         {
             subs.Event<BoundUIOpenedEvent>(OnUiOpened);
+            subs.Event<BoundUIClosedEvent>(OnUiClosed);
             subs.Event<CMULimbPrinterPrintMessage>(OnPrint);
             subs.Event<CMULimbPrinterEjectBeakerMessage>(OnEjectBeaker);
             subs.Event<CMULimbPrinterEjectSyringeMessage>(OnEjectSyringe);
@@ -55,36 +61,45 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
         SubscribeLocalEvent<CMULimbPrinterComponent, EntInsertedIntoContainerMessage>(OnContainerChanged);
         SubscribeLocalEvent<CMULimbPrinterComponent, EntRemovedFromContainerMessage>(OnContainerChanged);
         SubscribeLocalEvent<CMULimbPrinterComponent, ComponentShutdown>(OnPrinterShutdown);
+        SubscribeLocalEvent<CMULimbPrinterComponent, CMUMedicalWorkDueEvent>(OnScheduledWorkDue);
     }
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
 
-        var now = _timing.CurTime;
-        var workingQuery = EntityQueryEnumerator<CMULimbPrinterWorkingComponent, CMULimbPrinterComponent>();
-        while (workingQuery.MoveNext(out var uid, out _, out var comp))
-        {
-            if (comp.WorkingUntil > now)
-                continue;
-
-            _appearance.SetData(uid, CMULimbPrinterVisuals.Working, false);
-            RemCompDeferred<CMULimbPrinterWorkingComponent>(uid);
-        }
-
         _uiAccumulator += frameTime;
         if (_uiAccumulator < UiRefreshInterval)
             return;
 
         _uiAccumulator = 0f;
-        var query = EntityQueryEnumerator<CMULimbPrinterComponent>();
-        while (query.MoveNext(out var uid, out var comp))
-            RefreshUi(uid, comp);
+        _stalePrinters.Clear();
+        foreach (var printer in _openPrinters)
+        {
+            if (!TryComp<CMULimbPrinterComponent>(printer, out var comp) ||
+                !_ui.IsUiOpen(printer, CMULimbPrinterUIKey.Key))
+            {
+                _stalePrinters.Add(printer);
+                continue;
+            }
+
+            RefreshUi(printer, comp);
+        }
+
+        foreach (var printer in _stalePrinters)
+            _openPrinters.Remove(printer);
     }
 
     private void OnUiOpened(Entity<CMULimbPrinterComponent> ent, ref BoundUIOpenedEvent args)
     {
+        _openPrinters.Add(ent.Owner);
         RefreshUi(ent.Owner, ent.Comp);
+    }
+
+    private void OnUiClosed(Entity<CMULimbPrinterComponent> ent, ref BoundUIClosedEvent args)
+    {
+        if (!_ui.IsUiOpen(ent.Owner, CMULimbPrinterUIKey.Key))
+            _openPrinters.Remove(ent.Owner);
     }
 
     private void OnContainerChanged<T>(Entity<CMULimbPrinterComponent> ent, ref T args)
@@ -94,7 +109,24 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
 
     private void OnPrinterShutdown(Entity<CMULimbPrinterComponent> ent, ref ComponentShutdown args)
     {
-        RemCompDeferred<CMULimbPrinterWorkingComponent>(ent.Owner);
+        _openPrinters.Remove(ent.Owner);
+        _scheduler.Cancel(ent.Owner, WorkingExpiryWork);
+    }
+
+    private void OnScheduledWorkDue(Entity<CMULimbPrinterComponent> ent, ref CMUMedicalWorkDueEvent args)
+    {
+        if (args.Key != WorkingExpiryWork)
+            return;
+
+        if (ent.Comp.WorkingUntil > _timing.CurTime)
+        {
+            _scheduler.Schedule(ent.Owner, WorkingExpiryWork, ent.Comp.WorkingUntil);
+            return;
+        }
+
+        ent.Comp.WorkingUntil = TimeSpan.Zero;
+        _appearance.SetData(ent.Owner, CMULimbPrinterVisuals.Working, false);
+        RefreshUi(ent.Owner, ent.Comp);
     }
 
     private void OnEjectBeaker(Entity<CMULimbPrinterComponent> ent, ref CMULimbPrinterEjectBeakerMessage msg)
@@ -138,12 +170,20 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
         AttachPrintedExtremity(limb, msg.Kind, msg.Type, msg.Symmetry);
         _transform.PlaceNextTo(limb, ent.Owner);
 
-        ent.Comp.WorkingUntil = _timing.CurTime + TimeSpan.FromSeconds(1.2);
-        EnsureComp<CMULimbPrinterWorkingComponent>(ent.Owner);
-        _appearance.SetData(ent.Owner, CMULimbPrinterVisuals.Working, true);
+        StartWorking(ent, TimeSpan.FromSeconds(1.2));
         _audio.PlayPvs(PrintSound, ent.Owner);
         _popup.PopupEntity(Loc.GetString("cmu-limb-printer-printed", ("limb", limbName)), ent.Owner, msg.Actor);
         RefreshUi(ent.Owner, ent.Comp);
+    }
+
+    /// <summary>
+    ///     Starts or extends the printer's working presentation and replaces its scheduled expiry.
+    /// </summary>
+    public void StartWorking(Entity<CMULimbPrinterComponent> ent, TimeSpan duration)
+    {
+        ent.Comp.WorkingUntil = _timing.CurTime + duration;
+        _scheduler.Schedule(ent.Owner, WorkingExpiryWork, ent.Comp.WorkingUntil);
+        _appearance.SetData(ent.Owner, CMULimbPrinterVisuals.Working, true);
     }
 
     private bool TryCanPrint(

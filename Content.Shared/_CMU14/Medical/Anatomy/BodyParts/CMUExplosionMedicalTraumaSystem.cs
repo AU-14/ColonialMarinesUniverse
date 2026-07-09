@@ -5,7 +5,6 @@ using Content.Shared._CMU14.Medical.Injuries.Shrapnel;
 using Content.Shared._CMU14.Medical.Injuries.Trauma;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Map;
@@ -15,7 +14,7 @@ namespace Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 
 public sealed partial class CMUExplosionMedicalTraumaSystem : EntitySystem
 {
-    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private DamageableSystem _damageable = default!;
@@ -100,7 +99,7 @@ public sealed partial class CMUExplosionMedicalTraumaSystem : EntitySystem
         var totalWeight = 0f;
         var hasDirection = TryGetBlastDirection(body, epicenter, out var facingDot, out var lateralSide);
 
-        foreach (var (partUid, part) in _body.GetBodyChildren(body))
+        foreach (var (partUid, part) in _medicalIndex.GetBodyParts(body))
         {
             var weight = GetBaseWeight(part.PartType) *
                          GetOrientationMultiplier(part.PartType, part.Symmetry, hasDirection, facingDot, lateralSide);

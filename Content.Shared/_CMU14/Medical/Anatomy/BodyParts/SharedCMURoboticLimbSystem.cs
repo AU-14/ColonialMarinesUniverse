@@ -55,6 +55,7 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
     [Dependency] private SkillsSystem _skills = default!;
@@ -371,7 +372,7 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
         out EntityUid part,
         out CMURoboticLimbComponent robotic)
     {
-        foreach (var (childId, childComp) in _body.GetBodyChildren(patient))
+        foreach (var (childId, childComp) in _medicalIndex.GetBodyParts(patient))
         {
             if (childComp.PartType != type)
                 continue;
@@ -507,7 +508,7 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
 
         var desired = _desiredVisualLayers;
         desired.Clear();
-        foreach (var (partUid, _) in _body.GetBodyChildren(body))
+        foreach (var (partUid, _) in _medicalIndex.GetBodyParts(body))
         {
             if (!TryComp<CMURoboticLimbComponent>(partUid, out var robotic))
                 continue;
@@ -574,7 +575,7 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
 
     private bool HasRoboticLimb(EntityUid body)
     {
-        foreach (var (partUid, _) in _body.GetBodyChildren(body))
+        foreach (var (partUid, _) in _medicalIndex.GetBodyParts(body))
         {
             if (HasComp<CMURoboticLimbComponent>(partUid))
                 return true;

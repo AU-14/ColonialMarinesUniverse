@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Numerics;
 using Content.Client._CMU14.Medical.Presentation.Windows;
 using Content.Client.UserInterface.Controls;
@@ -33,16 +32,10 @@ public sealed partial class CMUBodyScannerBui : BoundUserInterface
 
     private SharedAudioSystem _audio = default!;
     private CMUBodyScannerWindow? _window;
+    private CMUBodyScannerBuiState? _latestState;
     private string? _selectedLayer;
     private TimeSpan? _lastPlayedFeedbackAt;
     private CMUBodyScannerFeedbackKind _lastPlayedFeedbackKind;
-
-    private enum ScanSeverity : byte
-    {
-        Stable,
-        Warning,
-        Critical,
-    }
 
     public CMUBodyScannerBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
@@ -58,15 +51,30 @@ public sealed partial class CMUBodyScannerBui : BoundUserInterface
         _window.ResetButton.OnPressed += ResetPressed;
         _window.EjectButton.OnPressed += EjectPressed;
 
-        if (State is CMUBodyScannerBuiState state)
+        if (_latestState is { } state)
             Refresh(state);
+        else if (State is CMUBodyScannerBuiState legacyState)
+            Refresh(legacyState);
+    }
+
+    protected override void ReceiveMessage(BoundUserInterfaceMessage message)
+    {
+        base.ReceiveMessage(message);
+        if (message is not CMUBodyScannerStateMessage update)
+            return;
+
+        _latestState = update.State;
+        Refresh(update.State);
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
     {
         base.UpdateState(state);
         if (state is CMUBodyScannerBuiState scanner)
+        {
+            _latestState = scanner;
             Refresh(scanner);
+        }
     }
 
     private void Refresh(CMUBodyScannerBuiState state)
@@ -342,7 +350,7 @@ public sealed partial class CMUBodyScannerBui : BoundUserInterface
 
     private Control BuildScanBanner(CMUBodyScannerBuiState state)
     {
-        var severity = ScanSeverity.Stable;
+        var severity = CMUBodyScannerScanSeverity.Stable;
         var concerns = new List<string>();
 
         foreach (var line in state.ScanLines)
@@ -351,18 +359,17 @@ public sealed partial class CMUBodyScannerBui : BoundUserInterface
             if (lineSeverity > severity)
                 severity = lineSeverity;
 
-            if (lineSeverity == ScanSeverity.Stable)
+            if (lineSeverity == CMUBodyScannerScanSeverity.Stable)
                 continue;
 
-            if (TrySplitDiagnosticLine(line.Text, out var title, out _))
-                concerns.Add(title);
+            concerns.Add(line.Title);
         }
 
         var accent = SeverityAccent(severity);
         var titleText = severity switch
         {
-            ScanSeverity.Critical => Loc.GetString("cmu-body-scanner-triage-critical"),
-            ScanSeverity.Warning => Loc.GetString("cmu-body-scanner-triage-serious"),
+            CMUBodyScannerScanSeverity.Critical => Loc.GetString("cmu-body-scanner-triage-critical"),
+            CMUBodyScannerScanSeverity.Warning => Loc.GetString("cmu-body-scanner-triage-serious"),
             _ => Loc.GetString("cmu-body-scanner-triage-stable"),
         };
 
@@ -423,22 +430,17 @@ public sealed partial class CMUBodyScannerBui : BoundUserInterface
 
     private Control BuildDiagnosticRow(CMUBodyScannerScanLine line)
     {
-        if (!TrySplitDiagnosticLine(line.Text, out var title, out var detail))
-            return CMUMedicalMachineStyle.Metric(line.Text, "-", GetScanLineAccent(line));
-
         return line.Category switch
         {
-            CMUBodyScannerScanCategory.Body => BuildBodyPartCard(title, detail),
-            CMUBodyScannerScanCategory.Organs => BuildDiagnosticCard(title, detail, CMUMedicalMachineStyle.Purple),
-            _ => CMUMedicalMachineStyle.Metric(title, detail, GetScanLineAccent(line)),
+            CMUBodyScannerScanCategory.Body => BuildBodyPartCard(line),
+            CMUBodyScannerScanCategory.Organs => BuildDiagnosticCard(line.Title, line.Detail, GetScanLineAccent(line)),
+            _ => CMUMedicalMachineStyle.Metric(line.Title, line.Detail, GetScanLineAccent(line)),
         };
     }
 
-    private Control BuildBodyPartCard(string title, string detail)
+    private Control BuildBodyPartCard(CMUBodyScannerScanLine line)
     {
-        var details = SplitDetailPieces(detail);
-        var hasHp = TryFindHp(details, out var current, out var max, out var hpText);
-        var severity = hasHp ? SeverityFromHp(current, max) : GetLineSeverity(detail);
+        var severity = line.Severity;
         var accent = SeverityAccent(severity);
 
         var stack = new BoxContainer
@@ -464,7 +466,7 @@ public sealed partial class CMUBodyScannerBui : BoundUserInterface
 
         row.AddChild(new Label
         {
-            Text = title,
+            Text = line.Title,
             MinWidth = 90,
             HorizontalExpand = true,
             FontColorOverride = CMUMedicalMachineStyle.Text,
@@ -472,7 +474,7 @@ public sealed partial class CMUBodyScannerBui : BoundUserInterface
             VerticalAlignment = Control.VAlignment.Center,
         });
 
-        if (hasHp)
+        if (line.HasRange)
         {
             row.AddChild(new Label
             {
@@ -494,19 +496,22 @@ public sealed partial class CMUBodyScannerBui : BoundUserInterface
 
             hpRow.AddChild(new Label
             {
-                Text = hpText,
+                Text = Loc.GetString(
+                    "cmu-body-scanner-part-health",
+                    ("current", line.Current),
+                    ("max", line.Maximum)),
                 MinWidth = 150,
                 HorizontalExpand = true,
                 ClipText = true,
                 VerticalAlignment = Control.VAlignment.Center,
             });
-            hpRow.AddChild(BuildHpBar(current, max, accent));
+            hpRow.AddChild(BuildHpBar(line.Current, line.Maximum, accent));
         }
         else
         {
             row.AddChild(new Label
             {
-                Text = detail,
+                Text = line.Detail,
                 HorizontalExpand = true,
                 ClipText = true,
                 VerticalAlignment = Control.VAlignment.Center,
@@ -521,13 +526,8 @@ public sealed partial class CMUBodyScannerBui : BoundUserInterface
             HorizontalExpand = true,
         };
 
-        foreach (var piece in details)
-        {
-            if (piece == hpText)
-                continue;
-
-            chips.AddChild(BuildScanChip(piece, GetScanLineAccent(piece)));
-        }
+        foreach (var piece in line.Details)
+            chips.AddChild(BuildScanChip(piece, accent));
 
         if (chips.ChildCount > 0)
             stack.AddChild(chips);
@@ -1054,304 +1054,44 @@ public sealed partial class CMUBodyScannerBui : BoundUserInterface
         return layerId;
     }
 
-    private static bool TrySplitDiagnosticLine(string line, out string title, out string detail)
+    private static CMUBodyScannerScanSeverity GetLineSeverity(CMUBodyScannerScanLine line)
     {
-        var index = line.IndexOf(':');
-        if (index <= 0 || index >= line.Length - 1)
-        {
-            title = string.Empty;
-            detail = string.Empty;
-            return false;
-        }
-
-        title = line[..index];
-        detail = line[(index + 1)..].Trim();
-        return true;
+        return line.Severity;
     }
 
-    private static List<string> SplitDetailPieces(string detail)
-    {
-        var pieces = new List<string>();
-        foreach (var raw in detail.Split(','))
-        {
-            var piece = raw.Trim();
-            if (!string.IsNullOrWhiteSpace(piece))
-                pieces.Add(piece);
-        }
-
-        return pieces;
-    }
-
-    private static bool TryFindHp(List<string> details, out float current, out float max, out string hpText)
-    {
-        current = 0f;
-        max = 0f;
-        hpText = string.Empty;
-
-        foreach (var detail in details)
-        {
-            if (!TryParseHp(detail, out current, out max))
-                continue;
-
-            hpText = detail;
-            return true;
-        }
-
-        return false;
-    }
-
-    private static bool TryParseHp(string detail, out float current, out float max)
-    {
-        current = 0f;
-        max = 0f;
-        if (!detail.StartsWith("HP ", StringComparison.OrdinalIgnoreCase))
-            return false;
-
-        var slash = detail.IndexOf('/');
-        if (slash <= 0 || slash >= detail.Length - 1)
-            return false;
-
-        var currentText = detail[3..slash].Trim();
-        var maxText = detail[(slash + 1)..].Trim();
-        return float.TryParse(currentText, NumberStyles.Float, CultureInfo.InvariantCulture, out current) &&
-               float.TryParse(maxText, NumberStyles.Float, CultureInfo.InvariantCulture, out max);
-    }
-
-    private static ScanSeverity SeverityFromHp(float current, float max)
-    {
-        if (max <= 0f || current <= 0f)
-            return ScanSeverity.Critical;
-
-        var pct = current / max;
-        if (pct < 0.35f)
-            return ScanSeverity.Critical;
-
-        if (pct < 0.75f)
-            return ScanSeverity.Warning;
-
-        return ScanSeverity.Stable;
-    }
-
-    private static ScanSeverity GetLineSeverity(CMUBodyScannerScanLine line)
-    {
-        if (line.Category == CMUBodyScannerScanCategory.Organs)
-            return GetOrganSeverity(line.Text);
-
-        if (!TrySplitDiagnosticLine(line.Text, out var title, out var detail))
-            return GetLineSeverity(line.Text);
-
-        if (title.Equals("Damage", StringComparison.OrdinalIgnoreCase))
-            return GetDamageSeverity(detail);
-
-        if (title.Equals("Blood", StringComparison.OrdinalIgnoreCase))
-            return GetFractionSeverity(detail, 0.75f, 0.4f);
-
-        if (title.Equals("Heart", StringComparison.OrdinalIgnoreCase))
-            return detail.Contains("no activity", StringComparison.OrdinalIgnoreCase)
-                ? ScanSeverity.Critical
-                : ScanSeverity.Stable;
-
-        if (line.Category == CMUBodyScannerScanCategory.Body)
-            return GetBodySeverity(detail);
-
-        return GetLineSeverity(line.Text);
-    }
-
-    private static ScanSeverity GetLineSeverity(string line)
-    {
-        if (line.Contains("dead", StringComparison.OrdinalIgnoreCase) ||
-            line.Contains("no activity", StringComparison.OrdinalIgnoreCase) ||
-            line.Contains("bleed", StringComparison.OrdinalIgnoreCase) ||
-            line.Contains("missing", StringComparison.OrdinalIgnoreCase))
-        {
-            return ScanSeverity.Critical;
-        }
-
-        if (line.Contains("damage", StringComparison.OrdinalIgnoreCase) ||
-            line.Contains("wound", StringComparison.OrdinalIgnoreCase) ||
-            line.Contains("fracture", StringComparison.OrdinalIgnoreCase))
-        {
-            return ScanSeverity.Warning;
-        }
-
-        return ScanSeverity.Stable;
-    }
-
-    private static ScanSeverity GetBodySeverity(string detail)
-    {
-        var severity = ScanSeverity.Stable;
-        var pieces = SplitDetailPieces(detail);
-        if (TryFindHp(pieces, out var current, out var max, out _))
-            severity = SeverityFromHp(current, max);
-
-        foreach (var piece in pieces)
-        {
-            var pieceSeverity = GetLineSeverity(piece);
-            if (pieceSeverity > severity)
-                severity = pieceSeverity;
-        }
-
-        return severity;
-    }
-
-    private static ScanSeverity GetOrganSeverity(string line)
-    {
-        if (line.StartsWith("Missing ", StringComparison.OrdinalIgnoreCase))
-            return ScanSeverity.Critical;
-
-        if (!TrySplitDiagnosticLine(line, out _, out var detail))
-            return GetLineSeverity(line);
-
-        if (detail.StartsWith("Healthy", StringComparison.OrdinalIgnoreCase))
-            return ScanSeverity.Stable;
-
-        if (detail.StartsWith("Dead", StringComparison.OrdinalIgnoreCase) ||
-            detail.StartsWith("Failing", StringComparison.OrdinalIgnoreCase))
-        {
-            return ScanSeverity.Critical;
-        }
-
-        if (detail.StartsWith("Damaged", StringComparison.OrdinalIgnoreCase) ||
-            detail.StartsWith("Bruised", StringComparison.OrdinalIgnoreCase))
-        {
-            return ScanSeverity.Warning;
-        }
-
-        return GetLineSeverity(detail);
-    }
-
-    private static ScanSeverity GetDamageSeverity(string detail)
-    {
-        if (!TryParseAfter(detail, "total ", out var total))
-            return GetLineSeverity(detail);
-
-        if (total <= 0f)
-            return ScanSeverity.Stable;
-
-        return total >= 100f ? ScanSeverity.Critical : ScanSeverity.Warning;
-    }
-
-    private static ScanSeverity GetFractionSeverity(string detail, float warningRatio, float criticalRatio)
-    {
-        if (!TryParseFraction(detail, out var current, out var max) || max <= 0f)
-            return GetLineSeverity(detail);
-
-        var ratio = current / max;
-        if (ratio < criticalRatio)
-            return ScanSeverity.Critical;
-
-        if (ratio < warningRatio)
-            return ScanSeverity.Warning;
-
-        return ScanSeverity.Stable;
-    }
-
-    private static bool TryParseAfter(string text, string marker, out float value)
-    {
-        value = 0f;
-        var index = text.IndexOf(marker, StringComparison.OrdinalIgnoreCase);
-        if (index < 0)
-            return false;
-
-        return TryParseLeadingFloat(text[(index + marker.Length)..], out value);
-    }
-
-    private static bool TryParseFraction(string text, out float current, out float max)
-    {
-        current = 0f;
-        max = 0f;
-        var slash = text.IndexOf('/');
-        if (slash <= 0 || slash >= text.Length - 1)
-            return false;
-
-        return TryParseTrailingFloat(text[..slash], out current) &&
-               TryParseLeadingFloat(text[(slash + 1)..], out max);
-    }
-
-    private static bool TryParseLeadingFloat(string text, out float value)
-    {
-        value = 0f;
-        text = text.TrimStart();
-        var end = 0;
-        while (end < text.Length && (char.IsDigit(text[end]) || text[end] == '.' || text[end] == '-'))
-            end++;
-
-        return end > 0 && float.TryParse(text[..end], NumberStyles.Float, CultureInfo.InvariantCulture, out value);
-    }
-
-    private static bool TryParseTrailingFloat(string text, out float value)
-    {
-        value = 0f;
-        var end = text.Length - 1;
-        while (end >= 0 && char.IsWhiteSpace(text[end]))
-            end--;
-
-        var start = end;
-        while (start >= 0 && (char.IsDigit(text[start]) || text[start] == '.' || text[start] == '-'))
-            start--;
-
-        return start < end && float.TryParse(text[(start + 1)..(end + 1)], NumberStyles.Float, CultureInfo.InvariantCulture, out value);
-    }
-
-    private static Color SeverityAccent(ScanSeverity severity)
+    private static Color SeverityAccent(CMUBodyScannerScanSeverity severity)
     {
         return severity switch
         {
-            ScanSeverity.Critical => CMUMedicalMachineStyle.Red,
-            ScanSeverity.Warning => CMUMedicalMachineStyle.Warning,
+            CMUBodyScannerScanSeverity.Critical => CMUMedicalMachineStyle.Red,
+            CMUBodyScannerScanSeverity.Warning => CMUMedicalMachineStyle.Warning,
             _ => CMUMedicalMachineStyle.Cyan,
         };
     }
 
-    private static string SeverityText(ScanSeverity severity)
+    private static string SeverityText(CMUBodyScannerScanSeverity severity)
     {
         return severity switch
         {
-            ScanSeverity.Critical => Loc.GetString("cmu-body-scanner-health-critical"),
-            ScanSeverity.Warning => Loc.GetString("cmu-body-scanner-health-damaged"),
+            CMUBodyScannerScanSeverity.Critical => Loc.GetString("cmu-body-scanner-health-critical"),
+            CMUBodyScannerScanSeverity.Warning => Loc.GetString("cmu-body-scanner-health-damaged"),
             _ => Loc.GetString("cmu-body-scanner-health-stable"),
         };
     }
 
     private static Color GetScanLineAccent(CMUBodyScannerScanLine line)
     {
-        return GetLineSeverity(line) switch
+        return line.Severity switch
         {
-            ScanSeverity.Critical => CMUMedicalMachineStyle.Red,
-            ScanSeverity.Warning => CMUMedicalMachineStyle.Warning,
-            _ => line.Category switch
+            CMUBodyScannerScanSeverity.Critical => CMUMedicalMachineStyle.Red,
+            CMUBodyScannerScanSeverity.Warning => CMUMedicalMachineStyle.Warning,
+            _ => line.Kind switch
             {
-                CMUBodyScannerScanCategory.Organs => CMUMedicalMachineStyle.Purple,
-                _ when line.Text.Contains("heart", StringComparison.OrdinalIgnoreCase) ||
-                       line.Text.Contains("blood", StringComparison.OrdinalIgnoreCase) => CMUMedicalMachineStyle.Red,
+                CMUBodyScannerScanKind.Organ or CMUBodyScannerScanKind.MissingOrgan => CMUMedicalMachineStyle.Purple,
+                CMUBodyScannerScanKind.Heart or CMUBodyScannerScanKind.Blood => CMUMedicalMachineStyle.Red,
                 _ => CMUMedicalMachineStyle.Cyan,
             },
         };
-    }
-
-    private static Color GetScanLineAccent(string line)
-    {
-        if (line.Contains("damage", StringComparison.OrdinalIgnoreCase) ||
-            line.Contains("wound", StringComparison.OrdinalIgnoreCase) ||
-            line.Contains("fracture", StringComparison.OrdinalIgnoreCase))
-        {
-            return CMUMedicalMachineStyle.Warning;
-        }
-
-        if (line.Contains("heart", StringComparison.OrdinalIgnoreCase) ||
-            line.Contains("blood", StringComparison.OrdinalIgnoreCase) ||
-            line.Contains("bleed", StringComparison.OrdinalIgnoreCase))
-        {
-            return CMUMedicalMachineStyle.Red;
-        }
-
-        if (line.Contains("organ", StringComparison.OrdinalIgnoreCase) ||
-            line.Contains("missing", StringComparison.OrdinalIgnoreCase))
-        {
-            return CMUMedicalMachineStyle.Purple;
-        }
-
-        return CMUMedicalMachineStyle.Cyan;
     }
 
     private static Color CategoryAccent(CMUBodyScannerScanCategory category)

@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery.Conditions;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
@@ -25,11 +26,11 @@ namespace Content.Shared._RMC14.Medical.Surgery;
 public abstract partial class SharedCMSurgerySystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private IComponentFactory _compFactory = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
@@ -122,7 +123,7 @@ public abstract partial class SharedCMSurgerySystem : EntitySystem
     private void OnXenoHeartValid(Entity<RMCSurgeryXenoHeartConditionComponent> ent, ref CMSurgeryValidEvent args)
     {
         if (!HasComp<RMCSurgeryXenoHeartComponent>(args.Body) ||
-            _body.GetBodyOrganEntityComps<XenoHeartComponent>(args.Body).Count == 0)
+            !MedicalIndex.TryGetOrgan<XenoHeartComponent>(args.Body, out _))
             args.Cancelled = true;
     }
 

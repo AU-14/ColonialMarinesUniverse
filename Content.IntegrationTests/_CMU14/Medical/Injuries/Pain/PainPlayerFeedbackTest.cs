@@ -9,12 +9,66 @@ using Content.Shared.StatusEffect;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.IntegrationTests._CMU14.Medical.Injuries.Pain;
 
 [TestFixture]
 public sealed class PainPlayerFeedbackTest
 {
+    [Test]
+    public async Task ShockFeedbackWaitsForDeadlineAndStopsWhenPainDrops()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var timing = server.ResolveDependency<IGameTiming>();
+        EntityUid human = default;
+        var damageAfterDue = FixedPoint2.Zero;
+
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+            human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var feedback = entMan.GetComponent<CMUPainFeedbackComponent>(human);
+            feedback.EffectInterval = TimeSpan.FromSeconds(0.25);
+            feedback.NextEffect = timing.CurTime + TimeSpan.FromSeconds(0.4);
+            SetPainTier(entMan, human, PainTier.Shock);
+        });
+
+        await pair.RunTicksSync(pair.SecondsToTicks(0.2f));
+
+        await server.WaitAssertion(() =>
+        {
+            var damageable = server.EntMan.GetComponent<DamageableComponent>(human);
+            Assert.That(damageable.Damage.DamageDict["Asphyxiation"], Is.EqualTo(FixedPoint2.Zero));
+        });
+
+        await pair.RunTicksSync(pair.SecondsToTicks(0.3f));
+
+        await server.WaitAssertion(() =>
+        {
+            var damageable = server.EntMan.GetComponent<DamageableComponent>(human);
+            damageAfterDue = damageable.Damage.DamageDict["Asphyxiation"];
+            Assert.That(damageAfterDue, Is.GreaterThan(FixedPoint2.Zero));
+        });
+
+        await server.WaitPost(() => SetPainTier(server.EntMan, human, PainTier.Moderate));
+        await pair.RunTicksSync(pair.SecondsToTicks(0.5f));
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var damageable = entMan.GetComponent<DamageableComponent>(human);
+            Assert.That(
+                damageable.Damage.DamageDict["Asphyxiation"],
+                Is.LessThan(damageAfterDue),
+                "Natural respiration should reduce asphyxiation when no new shock feedback is scheduled.");
+            entMan.DeleteEntity(human);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task SeverePainAppliesBlurOnly()
     {

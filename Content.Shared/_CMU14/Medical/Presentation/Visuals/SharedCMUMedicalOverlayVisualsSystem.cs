@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Content.Shared._CMU14.Medical.Core;
+using Content.Shared._CMU14.Medical.Diagnostics.Examine;
 using Content.Shared._CMU14.Medical.Treatment.FirstAid;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
-using Content.Shared._CMU14.Medical.Injuries.Wounds.Events;
 using Content.Shared._RMC14.Medical.Wounds;
-using Content.Shared.Body.Components;
-using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Humanoid;
 using Robust.Shared.GameObjects;
@@ -17,10 +14,16 @@ namespace Content.Shared._CMU14.Medical.Presentation.Visuals;
 
 public sealed partial class SharedCMUMedicalOverlayVisualsSystem : EntitySystem
 {
-    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private CMUMedicalExamineProjectionSystem _examineProjection = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private INetManager _net = default!;
+    [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
 
     private const int SnapshotLayerCount = 10;
+
+    private const CMUMedicalChangeFlags ProjectionChanges =
+        CMUMedicalChangeFlags.Anatomy |
+        CMUMedicalChangeFlags.Visuals;
 
     private static readonly byte[] DamageThresholds = [10, 20, 30, 50, 70, 100];
 
@@ -39,56 +42,23 @@ public sealed partial class SharedCMUMedicalOverlayVisualsSystem : EntitySystem
 
     private readonly Dictionary<HumanoidVisualLayers, MedicalOverlayPartVisualBuilder> _builders = new(SnapshotLayerCount);
     private readonly List<CMUMedicalOverlayPartVisual> _parts = new(SnapshotLayerCount);
+    private readonly List<CMUMedicalExaminePartProjection> _examineParts = new(SnapshotLayerCount);
 
     public override void Initialize()
     {
         base.Initialize();
 
-        SubscribeLocalEvent<BodyPartWoundAppliedEvent>(OnWoundApplied);
-        SubscribeLocalEvent<WoundTreatedEvent>(OnWoundTreated);
-        SubscribeLocalEvent<BodyPartWoundsChangedEvent>(OnWoundsChanged);
-        SubscribeLocalEvent<CMUSplintChangedEvent>(OnSplintChanged);
-        SubscribeLocalEvent<CMUCastChangedEvent>(OnCastChanged);
-        SubscribeLocalEvent<BodyComponent, BodyPartAddedEvent>(OnBodyPartChanged);
-        SubscribeLocalEvent<BodyComponent, BodyPartRemovedEvent>(OnBodyPartChanged);
+        SubscribeLocalEvent<CMUHumanMedicalComponent, CMUMedicalChangedEvent>(OnMedicalChanged);
     }
 
-    private void OnWoundApplied(ref BodyPartWoundAppliedEvent args)
+    private void OnMedicalChanged(
+        Entity<CMUHumanMedicalComponent> ent,
+        ref CMUMedicalChangedEvent args)
     {
-        RefreshBody(args.Body);
-    }
-
-    private void OnWoundTreated(ref WoundTreatedEvent args)
-    {
-        RefreshBody(args.Body);
-    }
-
-    private void OnWoundsChanged(ref BodyPartWoundsChangedEvent args)
-    {
-        RefreshPart(args.Part);
-    }
-
-    private void OnSplintChanged(ref CMUSplintChangedEvent args)
-    {
-        RefreshPart(args.Part);
-    }
-
-    private void OnCastChanged(ref CMUCastChangedEvent args)
-    {
-        RefreshPart(args.Part);
-    }
-
-    private void OnBodyPartChanged<TEvent>(Entity<BodyComponent> ent, ref TEvent args)
-    {
-        RefreshBody(ent.Owner);
-    }
-
-    private void RefreshPart(EntityUid part)
-    {
-        if (!TryComp<BodyPartComponent>(part, out var bodyPart) || bodyPart.Body is not { } body)
+        if ((args.Changes & ProjectionChanges) == CMUMedicalChangeFlags.None)
             return;
 
-        RefreshBody(body);
+        RefreshBody(ent.Owner);
     }
 
     private void RefreshBody(EntityUid body)
@@ -100,20 +70,73 @@ public sealed partial class SharedCMUMedicalOverlayVisualsSystem : EntitySystem
             return;
 
         _builders.Clear();
-        foreach (var (partUid, part) in _body.GetBodyChildren(body))
+        _examineParts.Clear();
+        var totalBrute = FixedPoint2.Zero;
+        var totalBurn = FixedPoint2.Zero;
+        foreach (var (partUid, part) in _medicalIndex.GetBodyParts(body))
         {
+            var bandaged = false;
+            var partBrute = FixedPoint2.Zero;
+            var partBurn = FixedPoint2.Zero;
+            if (TryComp<BodyPartWoundComponent>(partUid, out var wound))
+            {
+                var entries = _woundLedger.GetEntries(wound);
+                var visibleWounds = new List<CMUMedicalVisibleWound>(entries.Count);
+                foreach (var entry in entries)
+                {
+                    visibleWounds.Add(new CMUMedicalVisibleWound(
+                        entry.Wound.Type,
+                        entry.Size,
+                        entry.Wound.Damage,
+                        entry.Mechanism,
+                        entry.Wound.Treated,
+                        entry.Cleanup));
+
+                    bandaged |= entry.Bandages > 0;
+                    var remaining = entry.Wound.Damage - entry.Wound.Healed;
+                    if (remaining <= FixedPoint2.Zero)
+                        continue;
+
+                    if (entry.Wound.Type == WoundType.Burn)
+                        totalBurn += remaining;
+                    else
+                        totalBrute += remaining;
+
+                    switch (entry.Wound.Type)
+                    {
+                        case WoundType.Brute:
+                            partBrute += remaining;
+                            break;
+                        case WoundType.Burn:
+                            partBurn += remaining;
+                            break;
+                    }
+                }
+
+                if (visibleWounds.Count > 0 || wound.ExternalBleeding != ExternalBleedTier.None)
+                {
+                    _examineParts.Add(new CMUMedicalExaminePartProjection(
+                        part.PartType,
+                        part.Symmetry,
+                        visibleWounds,
+                        wound.ExternalBleeding));
+                }
+            }
+
             if (part.ToHumanoidLayers() is not { } layer)
                 continue;
 
-            var bandaged = HasBandageOverlay(partUid);
             var splinted = HasComp<CMUSplintedComponent>(partUid) || HasComp<CMUCastComponent>(partUid);
             if (bandaged || splinted)
                 AddTreatmentVisual(_builders, layer, bandaged, splinted, partUid.GetHashCode());
 
-            var (bruteDamageLevel, burnDamageLevel) = GetDamageLevels(partUid);
+            var bruteDamageLevel = PickDamageLevel(partBrute.Float());
+            var burnDamageLevel = PickDamageLevel(partBurn.Float());
             if (bruteDamageLevel > 0 || burnDamageLevel > 0)
                 AddDamageVisual(_builders, ToDamageLayer(layer), bruteDamageLevel, burnDamageLevel, partUid.GetHashCode());
         }
+
+        _examineProjection.Replace(body, _examineParts, totalBrute, totalBurn);
 
         BuildVisuals(_builders, _parts);
         if (_parts.Count == 0)
@@ -131,47 +154,6 @@ public sealed partial class SharedCMUMedicalOverlayVisualsSystem : EntitySystem
         visuals.Parts.Clear();
         visuals.Parts.AddRange(_parts);
         Dirty(body, visuals);
-    }
-
-    private bool HasBandageOverlay(EntityUid part)
-    {
-        if (!TryComp<BodyPartWoundComponent>(part, out var wound))
-            return false;
-
-        foreach (var woundBandages in wound.Bandages)
-        {
-            if (woundBandages > 0)
-                return true;
-        }
-
-        return false;
-    }
-
-    private (byte Brute, byte Burn) GetDamageLevels(EntityUid part)
-    {
-        if (!TryComp<BodyPartWoundComponent>(part, out var wound))
-            return (0, 0);
-
-        var brute = 0f;
-        var burn = 0f;
-        foreach (var entry in wound.Wounds)
-        {
-            var remaining = entry.Damage - entry.Healed;
-            if (remaining <= FixedPoint2.Zero)
-                continue;
-
-            switch (entry.Type)
-            {
-                case WoundType.Brute:
-                    brute += remaining.Float();
-                    break;
-                case WoundType.Burn:
-                    burn += remaining.Float();
-                    break;
-            }
-        }
-
-        return (PickDamageLevel(brute), PickDamageLevel(burn));
     }
 
     private static byte PickDamageLevel(float damage)

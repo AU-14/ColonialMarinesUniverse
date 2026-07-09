@@ -26,6 +26,7 @@ public sealed class CMURMCWoundBoundaryTest
             var entMan = server.EntMan;
             var damageable = entMan.System<DamageableSystem>();
             var hitLocation = entMan.System<SharedHitLocationSystem>();
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
 
             try
@@ -45,12 +46,13 @@ public sealed class CMURMCWoundBoundaryTest
 
                 var damage = entMan.GetComponent<DamageableComponent>(human);
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
+                var entries = ledger.GetEntries(wounds);
 
                 Assert.Multiple(() =>
                 {
                     Assert.That(damage.TotalDamage, Is.GreaterThan(beforeDamage));
-                    Assert.That(wounds.Wounds, Has.Count.EqualTo(1));
-                    Assert.That(wounds.Wounds[0].Damage, Is.GreaterThan(FixedPoint2.Zero));
+                    Assert.That(entries, Has.Count.EqualTo(1));
+                    Assert.That(entries[0].Wound.Damage, Is.GreaterThan(FixedPoint2.Zero));
                     Assert.That(entMan.HasComponent<WoundedComponent>(human), Is.False);
                 });
             }

@@ -128,6 +128,7 @@ public sealed class PainShockReworkTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var pain = entMan.System<SharedPainShockSystem>();
             var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
 
@@ -138,8 +139,12 @@ public sealed class PainShockReworkTest
 
                 Assert.That(pain.ComputePainSourceProfile(human).Target.Float(), Is.EqualTo(50f).Within(0.001f));
 
-                var woundList = WoundsOf(wounds);
-                woundList[0] = woundList[0] with { Treated = true };
+                var entry = ledger.GetEntries(wounds)[0];
+                Assert.That(ledger.TryUpdateEntry(wounds, 0, entry with
+                {
+                    Wound = entry.Wound with { Treated = true },
+                    TreatmentQuality = WoundTreatmentQuality.Adequate,
+                }), Is.True);
                 Assert.That(pain.ComputePainSourceProfile(human).Target, Is.EqualTo(FixedPoint2.Zero));
             }
             finally
@@ -229,6 +234,7 @@ public sealed class PainShockReworkTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var ledger = entMan.System<CMUWoundLedgerSystem>();
             var shrapnel = entMan.System<SharedCMUShrapnelSystem>();
             var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var tool = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
@@ -239,14 +245,14 @@ public sealed class PainShockReworkTest
                 shrapnel.AddShrapnel(part, 2, 12f);
 
                 var wounds = entMan.GetComponent<BodyPartWoundComponent>(part);
-                Assert.That(HasRetainedFragmentCleanup(wounds), Is.True);
+                Assert.That(HasRetainedFragmentCleanup(ledger, wounds), Is.True);
 
                 var extractor = entMan.EnsureComponent<CMUShrapnelExtractorComponent>(tool);
 
                 Assert.That(shrapnel.TryExtractShrapnel(human, (tool, extractor), out var removed), Is.True);
                 Assert.That(removed, Is.EqualTo(2));
                 Assert.That(entMan.HasComponent<CMUShrapnelComponent>(part), Is.False);
-                Assert.That(HasRetainedFragmentCleanup(wounds), Is.False);
+                Assert.That(HasRetainedFragmentCleanup(ledger, wounds), Is.False);
             }
             finally
             {
@@ -796,30 +802,24 @@ public sealed class PainShockReworkTest
 
     private static BodyPartWoundComponent AddWound(IEntityManager entMan, EntityUid part, WoundSize size, bool treated)
     {
+        var ledger = entMan.System<CMUWoundLedgerSystem>();
         var wounds = entMan.EnsureComponent<BodyPartWoundComponent>(part);
-        WoundsOf(wounds).Add(new Wound(10, FixedPoint2.Zero, 0f, null, WoundType.Brute, treated));
-        SizesOf(wounds).Add(size);
-        BandagesOf(wounds).Add(0);
+        Assert.That(ledger.AddEntry(wounds, new CMUWoundEntry(
+            new Wound(10, FixedPoint2.Zero, 0f, null, WoundType.Brute, treated),
+            size,
+            0,
+            WoundMechanism.Generic,
+            WoundMechanismFlags.None,
+            treated ? WoundTreatmentQuality.Adequate : WoundTreatmentQuality.Untreated,
+            WoundCleanupFlags.None)), Is.GreaterThanOrEqualTo(0));
         return wounds;
     }
 
-    private static List<Wound> WoundsOf(BodyPartWoundComponent comp)
-        => GetField<List<Wound>>(comp, "Wounds");
-
-    private static List<WoundSize> SizesOf(BodyPartWoundComponent comp)
-        => GetField<List<WoundSize>>(comp, "Sizes");
-
-    private static List<int> BandagesOf(BodyPartWoundComponent comp)
-        => GetField<List<int>>(comp, "Bandages");
-
-    private static List<WoundCleanupFlags> CleanupOf(BodyPartWoundComponent comp)
-        => GetField<List<WoundCleanupFlags>>(comp, nameof(BodyPartWoundComponent.Cleanup));
-
-    private static bool HasRetainedFragmentCleanup(BodyPartWoundComponent comp)
+    private static bool HasRetainedFragmentCleanup(CMUWoundLedgerSystem ledger, BodyPartWoundComponent comp)
     {
-        foreach (var cleanup in CleanupOf(comp))
+        foreach (var entry in ledger.GetEntries(comp))
         {
-            if ((cleanup & WoundCleanupFlags.RetainedFragment) != WoundCleanupFlags.None)
+            if ((entry.Cleanup & WoundCleanupFlags.RetainedFragment) != WoundCleanupFlags.None)
                 return true;
         }
 
@@ -853,9 +853,6 @@ public sealed class PainShockReworkTest
             });
         }
     }
-
-    private static T GetField<T>(BodyPartWoundComponent comp, string name)
-        => (T) typeof(BodyPartWoundComponent).GetField(name, BindingFlags.Instance | BindingFlags.Public)!.GetValue(comp)!;
 
     private static void SetField<TComponent, TValue>(TComponent comp, string name, TValue value)
         => typeof(TComponent).GetField(name, BindingFlags.Instance | BindingFlags.Public)!.SetValue(comp, value);

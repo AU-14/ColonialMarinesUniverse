@@ -43,6 +43,7 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
     [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
     private static readonly ProtoId<DamageTypePrototype> Bloodloss = "Bloodloss";
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
@@ -139,9 +140,9 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
 
         var brute = FixedPoint2.Zero;
         var burn = FixedPoint2.Zero;
-        for (var i = 0; i < wounds.Wounds.Count; i++)
+        foreach (var entry in _woundLedger.GetEntries(wounds))
         {
-            var wound = wounds.Wounds[i];
+            var wound = entry.Wound;
             var remaining = wound.Damage - wound.Healed;
             if (remaining <= FixedPoint2.Zero)
                 continue;
