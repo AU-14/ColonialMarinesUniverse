@@ -43,6 +43,7 @@ public sealed partial class CMUZLevelsSystem
     private readonly Dictionary<EntityUid, Dictionary<int, EntityUid>> _viewerProbeEyes = new();
     private readonly Dictionary<EntityUid, (EntityUid Viewer, int Depth)> _probeEyeIndex = new();
     private readonly Dictionary<EntityUid, Dictionary<ICommonSession, int>> _extraViewerProbeSubscribers = new();
+    private readonly HashSet<EntityUid> _movedViewerProbeEyes = new();
     private readonly HashSet<EntityUid> _viewSubscriptionViewers = new();
     private readonly CMUZLevelOpeningCache _zOpeningCache = new();
     private readonly List<int> _wantedProbeDepths = new();
@@ -103,8 +104,12 @@ public sealed partial class CMUZLevelsSystem
             return;
 
         if (_gameTiming.CurTime < _nextZLevelViewerUpdate)
+        {
+            UpdateMovedViewerProbeEyes();
             return;
+        }
 
+        _movedViewerProbeEyes.Clear();
         _nextZLevelViewerUpdate = _gameTiming.CurTime + _zLevelViewerUpdateRate;
 
         using var profile = Prof.Group("CMU Z PVS Probes");
@@ -208,6 +213,28 @@ public sealed partial class CMUZLevelsSystem
         return count;
     }
 
+    private void UpdateMovedViewerProbeEyes()
+    {
+        if (_movedViewerProbeEyes.Count == 0)
+            return;
+
+        foreach (var uid in _movedViewerProbeEyes)
+        {
+            if (TerminatingOrDeleted(uid) ||
+                !_viewerProbeEyes.ContainsKey(uid) ||
+                !TryComp(uid, out CMUZLevelViewerComponent? viewer))
+            {
+                continue;
+            }
+
+            var globalPos = _transform.GetWorldPosition(uid);
+            var eyeOffset = GetViewerProbeOffset(uid);
+            UpdateProbeEyes(uid, viewer, globalPos, eyeOffset);
+        }
+
+        _movedViewerProbeEyes.Clear();
+    }
+
     private void OnViewerStartup(Entity<CMUZLevelViewerComponent> ent, ref ComponentStartup args)
     {
         _meta.AddFlag(ent, MetaDataFlags.ExtraTransformEvents);
@@ -219,6 +246,7 @@ public sealed partial class CMUZLevelsSystem
 
         QueueDeleteViewerProbeEyes(ent);
         _extraViewerProbeSubscribers.Remove(ent);
+        _movedViewerProbeEyes.Remove(ent);
         _viewSubscriptionViewers.Remove(ent);
     }
 
@@ -235,15 +263,8 @@ public sealed partial class CMUZLevelsSystem
     {
         base.OnViewerMove(ent, ref args);
 
-        var globalPos = _transform.GetWorldPosition(ent);
-        if (!_viewerProbeEyes.TryGetValue(ent, out var probes))
-            return;
-
-        var eyeOffset = GetViewerProbeOffset(ent);
-        foreach (var (depth, eye) in probes)
-        {
-            _transform.SetWorldPosition(eye, GetProbeWorldPosition(ent.Comp, depth, globalPos, eyeOffset));
-        }
+        if (_viewerProbeEyes.ContainsKey(ent))
+            _movedViewerProbeEyes.Add(ent);
     }
 
     private void OnPlayerAttached(PlayerAttachedEvent ev)

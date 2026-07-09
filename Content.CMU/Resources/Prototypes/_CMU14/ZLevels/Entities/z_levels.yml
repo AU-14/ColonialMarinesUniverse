@@ -2,6 +2,9 @@
   id: CMUZLevelEye
   save: false
   categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    gridTraversal: false
 
 - type: entity
   id: CMUMultiZStairs

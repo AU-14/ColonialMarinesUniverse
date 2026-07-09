@@ -8,13 +8,14 @@
     sprite: _RMC14/Objects/Consumable/Food/mre_tse.rsi
 
 - type: entity
-  parent: CMMRE
+  parent: RMCSurvivalRationSPP
   id: AU14MREUPP
   name: UPP ration pack
   description: An Individual Meal Ration, mainly composed of a selection of canned food, despite being heavier, it has proven to be a lot more reliable.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/mre_spp.rsi
+    state: closed
 
 - type: entity
   parent: RMCBoxMREEmpty

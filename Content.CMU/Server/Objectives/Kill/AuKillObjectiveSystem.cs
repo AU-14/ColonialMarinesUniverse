@@ -113,7 +113,7 @@ namespace Content.Server.AU14.Objectives.Kill
                     }
                     else
                     {
-                        _logs.Warning($"[KILL MATCH]   Mob ({uid}) does NOT match target faction '{targetFaction}' for objective {objUid}");
+                        _logs.Debug($"[KILL MATCH]   Mob ({uid}) does NOT match target faction '{targetFaction}' for objective {objUid}");
                     }
                 }
             }

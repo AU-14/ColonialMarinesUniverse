@@ -277,3 +277,80 @@
       contents:
         - id: CMM11Knife
           amount: 5
+
+- type: entity
+  parent: CMWebbingBase
+  id: CMU14DropSurgicalGreen
+  name: green surgical drop pouch
+  description: A greenish synthcotton drop pouch purpose-made for holding surgical tools.
+  suffix: Medical, Filled
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UniversalWebbing/drop_surgical_green.rsi
+    state: webbing
+  - type: Webbing
+    components:
+    - type: Storage
+      maxItemSize: Small
+      grid:
+      - 0,0,13,3 # 14 slots
+      whitelist:
+        tags:
+        - CMTraumaKit
+        - CMBurnKit
+        - CMSurgicalLine
+        - CMSynthGraft
+        - CMUCastItem
+        components:
+        - CMSurgeryTool
+    - type: FixedItemSizeStorage
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,13,3 # 14 slots
+    whitelist:
+      tags:
+      - CMTraumaKit
+      - CMBurnKit
+      - CMSurgicalLine
+      - CMSynthGraft
+      - CMUCastItem
+      components:
+      - CMSurgeryTool
+  - type: FixedItemSizeStorage
+  - type: StorageFill
+    contents:
+    - id: CMScalpel
+    - id: CMHemostat
+    - id: CMRetractor
+    - id: CMTraumaKit10
+    - id: CMCautery
+    - id: CMCircularSaw
+    - id: CMSurgicalDrill
+    - id: CMBoneGel
+    - id: CMBonesetter
+    - id: CMUBoneGraftItem
+    - id: CMUOrganClampItem
+    - id: CMSurgicalLine
+    - id: CMSynthGraft
+    - id: CMUCastItem
+
+- type: entity
+  parent: CMU14DropSurgicalGreen
+  id: CMU14DropSurgicalBlue
+  name: blue surgical drop pouch
+  description: A matte blue synthcotton drop pouch purpose-made for holding surgical tools.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UniversalWebbing/drop_surgical_blue.rsi
+    state: webbing
+
+- type: entity
+  parent: CMU14DropSurgicalGreen
+  id: CMU14DropSurgicalBlack
+  name: black surgical drop pouch
+  description: A tactical black synthcotton drop pouch purpose-made for holding surgical tools.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UniversalWebbing/drop_surgical_black.rsi
+    state: webbing

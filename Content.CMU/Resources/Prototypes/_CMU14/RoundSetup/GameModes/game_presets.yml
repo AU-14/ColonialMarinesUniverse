@@ -42,8 +42,8 @@
     - CMUPlanetLament
     - AUPlanetStableGarrison
     #- AUPlanetLV747
-    - AUPlanetSorokyne
-    - AuPlanetChances
+    #- AUPlanetSorokyne
+    #- AuPlanetChances
     - CMUPlanetHopesRetreat
   rules:
   - AuVoteRule
@@ -62,14 +62,14 @@
   supportedPlanets:
 #  - AUPlanetLV747
 #  - AUPlanetShepherdsPride
-  - AUPlanetSorokyne
-  - AUPlanetCorsatStation
+#  - AUPlanetSorokyne
+#  - AUPlanetCorsatStation
   - AUPlanetTrijent
 #  - AuPlanetFiorina
-  - AuPlanetKutjevo
+#  - AuPlanetKutjevo
   - AuPlanetShivasSnowball
   - AUPlanetLV327
-  - AuPlanetChances
+#  - AuPlanetChances
   - CMUPlanetHopesRetreat
   rules:
   - AuVoteRule
@@ -87,11 +87,11 @@
   description: Live in an offworld colony as it falls into chaos.
   supportedPlanets:
     - AUPlanetShepherdsPride
-    - AUPlanetLV327
+#    - AUPlanetLV327
     - AUPlanetStableGarrison
     - CMUPlanetLament
-    - AUPlanetSorokyne
-    - AuPlanetChances
+#    - AUPlanetSorokyne
+#    - AuPlanetChances
     - CMUPlanetHopesRetreat
   rules:
   - AuVoteRule

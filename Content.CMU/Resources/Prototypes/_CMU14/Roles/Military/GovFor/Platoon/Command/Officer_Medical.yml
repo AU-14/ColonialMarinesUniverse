@@ -41,7 +41,7 @@
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
-        state: doctor # TODO: CMO Opfor icon
+        state: cmo
     # UPP:
     # - type: JobPrefix
     #   prefix: au14-job-prefix-govformoUPP
