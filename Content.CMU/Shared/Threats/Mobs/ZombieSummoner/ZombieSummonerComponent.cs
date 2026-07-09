@@ -7,7 +7,7 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared._CMU14.Threats.Mobs.ZombieSummoner;
 
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent, NetworkedComponent, ComponentProtoName("ZombieSummoner")]
 public sealed partial class ZombieSummonerComponent : Component
 {
     [DataField]
@@ -158,7 +158,7 @@ public sealed partial class ZombieSummonerComponent : Component
     public float PointAccumulator;
 }
 
-[RegisterComponent]
+[RegisterComponent, ComponentProtoName("ZombieSummonerZombieLabel")]
 public sealed partial class ZombieSummonerZombieLabelComponent : Component
 {
     [DataField]
