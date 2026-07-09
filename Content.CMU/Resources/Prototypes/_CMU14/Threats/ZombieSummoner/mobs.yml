@@ -86,6 +86,11 @@
   - type: NightVision
     alert: XenoNightVision
     overlay: true
+  - type: Skills
+    skills:
+      RMCSkillFirearms: 3
+      RMCSkillMedical: 2
+      RMCSkillSurgery: 2
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -102,7 +107,8 @@
     maxPoints: 200
     zombieCost: 10
     militaryZombieCost: 20
-    pointsPerSecond: 1
+    pointsPerSecond: 0.4
+    maxControlledZombies: 20
     zombiePrototype: CMUZombieSummonerInfected
     militaryZombiePrototype: CMUZombieSummonerMilitaryInfected
     zombieWeaponPrototypes:
@@ -133,7 +139,7 @@
     zombieBonusMeleeDamage:
       types:
         Slash: 25
-    zombieDelimbChance: 0.15
+    zombieDelimbChance: 0.01
     zombieHitScreamChance: 0.5
     zombieMovementSpeedModifier: 1
     militaryZombieMovementSpeedModifier: 1
