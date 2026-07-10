@@ -7,6 +7,7 @@ namespace Content.Client._CMU14.Threats.Mobs.ZombieSummoner;
 public sealed class ZombieSummonerWindow : DefaultWindow
 {
     private readonly Label _pointsLabel;
+    private readonly Label _controlledLabel;
     private readonly Label _civilianAvailableLabel;
     private readonly Label _militaryAvailableLabel;
     private readonly SpinBox _amount;
@@ -22,7 +23,7 @@ public sealed class ZombieSummonerWindow : DefaultWindow
     public ZombieSummonerWindow()
     {
         Title = Loc.GetString("cmu-zombie-summoner-title");
-        SetSize = MinSize = new(500, 215);
+        SetSize = MinSize = new(500, 235);
 
         var root = new BoxContainer
         {
@@ -36,6 +37,9 @@ public sealed class ZombieSummonerWindow : DefaultWindow
 
         _pointsLabel = new Label { HorizontalExpand = true };
         root.AddChild(_pointsLabel);
+
+        _controlledLabel = new Label { HorizontalExpand = true };
+        root.AddChild(_controlledLabel);
 
         _civilianAvailableLabel = new Label { HorizontalExpand = true };
         root.AddChild(_civilianAvailableLabel);
@@ -96,14 +100,19 @@ public sealed class ZombieSummonerWindow : DefaultWindow
     {
         var zombieCost = Math.Max(1, state.ZombieCost);
         var militaryZombieCost = Math.Max(1, state.MilitaryZombieCost);
-        _civilianMaxSummonable = state.Points / zombieCost;
-        _militaryMaxSummonable = state.Points / militaryZombieCost;
+        var openSlots = Math.Max(0, state.MaxControlledZombies - state.ControlledZombies);
+        _civilianMaxSummonable = Math.Min(state.Points / zombieCost, openSlots);
+        _militaryMaxSummonable = Math.Min(state.Points / militaryZombieCost, openSlots);
         _maxSummonable = Math.Max(_civilianMaxSummonable, _militaryMaxSummonable);
 
         _pointsLabel.Text = Loc.GetString(
             "cmu-zombie-summoner-points",
             ("points", state.Points),
             ("max", state.MaxPoints));
+        _controlledLabel.Text = Loc.GetString(
+            "cmu-zombie-summoner-controlled",
+            ("count", state.ControlledZombies),
+            ("max", state.MaxControlledZombies));
         _civilianAvailableLabel.Text = Loc.GetString(
             "cmu-zombie-summoner-available-civilian",
             ("count", _civilianMaxSummonable),
