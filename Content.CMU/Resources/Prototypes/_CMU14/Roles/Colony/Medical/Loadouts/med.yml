@@ -9,6 +9,7 @@
     - CMSurgicalCaseFilled
     - ClothingNeckStethoscope
     - AU14CMDefibrillator
+    - CMSyringe
   equipment:
     ears2: RMCFlashlightPen
     eyes: RMCGlassesMedicalHUDGlasses
