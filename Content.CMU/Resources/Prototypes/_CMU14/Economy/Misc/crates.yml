@@ -130,28 +130,33 @@
   table: !type:GroupSelector
     children:
     - !type:GroupSelector
-      children:
-      - id: MobCow
-      - id: MobGoat
-      - id: MobGorilla
-      - id: MobKangaroo
-      - id: MobPig
+      children: # require InfectableComponent
+      - id: RMCMobSmallHostFarwa
+        amount: 3
+      - id: CMMobSmallHostKobold
+        amount: 3
+      - id: CMMobSmallHostMonkey
+        amount: 3
+      - id: RMCMobSmallHostNeaera
+        amount: 3
+      - id: RMCMobSmallHostStok
+        amount: 3
+      - id: RMCMobSmallHostYiren
+        amount: 3
       - !type:GroupSelector
         weight: 0.75
         children:
-        - id: RMCMobSmallHostFarwa
-          amount: 3
-        - id: CMMobSmallHostKobold
-          amount: 3
-          weight: 2
-        - id: CMMobSmallHostMonkey
-          amount: 3
-          weight: 4
-        - id: RMCMobSmallHostNeaera
-          amount: 3
-        - id: RMCMobSmallHostStok
-          amount: 3
-        - id: RMCMobSmallHostYiren
-          amount: 3
         - id: CMUMobCarp
+          amount: 3
+        - id: MobCow
+          amount: 3
+        - id: MobGoat
+          amount: 3
+        - id: MobGorilla
+          amount: 2
+        - id: MobKangaroo
+          amount: 3
+        - id: MobPig
+          amount: 3
+        - id: MobPenguin
           amount: 3
