@@ -14,4 +14,11 @@ public sealed partial class AU14CCVars : CVars
 
     public static readonly CVarDef<bool> SellCargoRewards =
         CVarDef.Create("au14.sell_cargo_rewards", true, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Master switch for the AU14 comms overhaul. When off, radio reverts to
+    /// stock behavior
+    /// </summary>
+    public static readonly CVarDef<bool> NewCommsSystem =
+        CVarDef.Create("au14.new_comms_system", true, CVar.SERVERONLY);
 }
