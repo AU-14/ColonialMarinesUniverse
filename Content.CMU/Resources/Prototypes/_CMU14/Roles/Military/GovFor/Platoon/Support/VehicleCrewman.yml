@@ -27,9 +27,9 @@
   - type: JobPrefix
     prefix: au14-job-prefix-vehiclecrewman
   - type: TacticalMapIcon
-    icon:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: vc
+    icon: # TODO: copy paste this for OPFOR but use their version of course
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: govfor_vc
   requirements:
   - !type:TraitsRequirement
     inverted: true
