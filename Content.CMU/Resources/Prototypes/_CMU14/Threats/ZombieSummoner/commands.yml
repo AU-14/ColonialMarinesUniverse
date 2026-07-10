@@ -33,8 +33,10 @@
   id: CMUZombieSummonerTargetAttackCompound
   branches:
   - tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:ZombieSummonerOrderedTargetOperator
     - !type:HTNCompoundTask
-      task: CMUZombieSummonerCombatCompound
+      task: CMUZombieSummonerBeforeMeleeAttackOrderedTargetCompound
   - tasks:
     - !type:HTNCompoundTask
       task: FollowCompound
@@ -131,8 +133,28 @@
         key: Target
 
 - type: htnCompound
-  id: CMUZombieSummonerCombatCompound
+  id: CMUZombieSummonerBeforeMeleeAttackOrderedTargetCompound
   branches:
+  - preconditions:
+    - !type:BuckledPrecondition
+      isBuckled: true
+    tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:UnbuckleOperator
+        shutdownState: TaskFinished
+  - preconditions:
+    - !type:PulledPrecondition
+      isPulled: true
+    tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:UnPullOperator
+        shutdownState: TaskFinished
+  - preconditions:
+    - !type:InContainerPrecondition
+      isInContainer: true
+    tasks:
+    - !type:HTNCompoundTask
+      task: EscapeCompound
   - preconditions:
     - !type:ActiveHandComponentPrecondition
       components:
@@ -145,9 +167,6 @@
     - !type:HTNCompoundTask
       task: PickupMeleeCompound
   - tasks:
-    - !type:HTNPrimitiveTask
-      operator: !type:UtilityOperator
-        proto: CMUZombieSummonerOrderedTargets
     - !type:HTNCompoundTask
       task: CMUZombieSummonerMeleeAttackOrderedTargetCompound
 
@@ -175,28 +194,6 @@
       - !type:TargetInRangePrecondition
         targetKey: Target
         rangeKey: MeleeRange
-      services:
-      - !type:UtilityService
-        id: MeleeService
-        proto: CMUZombieSummonerOrderedTargets
-        key: Target
-
-- type: utilityQuery
-  id: CMUZombieSummonerOrderedTargets
-  query:
-  - !type:ComponentQuery
-    components:
-    - type: Damageable
-  considerations:
-  - !type:TargetDistanceCon
-    curve: !type:PresetCurve
-      preset: TargetDistance
-  - !type:TargetAccessibleCon
-    curve: !type:BoolCurve
-  - !type:TargetInLOSOrCurrentCon
-    curve: !type:BoolCurve
-  - !type:OrderedTargetCon
-    curve: !type:BoolCurve
 
 - type: localizedDataset
   id: ZombieSummonerCommandHalt

@@ -45,9 +45,11 @@ namespace Content.Server._CMU14.Threats.Mobs.ZombieSummoner;
 public sealed partial class ZombieSummonerSystem : EntitySystem
 {
     private const string ZombiePassiveGroan = "ZombieGroan";
-    private const string ZombieScream = "Scream";
+    private const string HumanScream = "Scream";
     private const string ZombieFaction = "Zombie";
     private const string ZombieSummonerBuiClientType = "ZombieSummonerBui";
+    private const string TargetKey = "Target";
+    private const string TargetCoordinatesKey = "TargetCoordinates";
     private const float UpdateInterval = 1f;
 
     private float _updateAccumulator;
@@ -185,6 +187,7 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         ent.Comp.ZombieCost = Math.Max(1, ent.Comp.ZombieCost);
         ent.Comp.MilitaryZombieCost = Math.Max(1, ent.Comp.MilitaryZombieCost);
         ent.Comp.PointsPerSecond = Math.Max(0, ent.Comp.PointsPerSecond);
+        ent.Comp.MaxControlledZombies = Math.Max(1, ent.Comp.MaxControlledZombies);
         ent.Comp.SpawnRadius = Math.Max(0, ent.Comp.SpawnRadius);
         ent.Comp.ZombieMovementSpeedModifier = Math.Clamp(ent.Comp.ZombieMovementSpeedModifier, 0.1f, 2f);
         ent.Comp.MilitaryZombieMovementSpeedModifier = Math.Clamp(ent.Comp.MilitaryZombieMovementSpeedModifier, 0.1f, 2f);
@@ -242,6 +245,9 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
             if (Deleted(zombie))
                 continue;
 
+            if (TryComp(zombie, out ZombieSummonerMinionComponent? minion))
+                DeleteSpawnedWeapon(minion);
+
             QueueDel(zombie);
         }
     }
@@ -296,6 +302,7 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
 
         args.Handled = true;
         ent.Comp.CurrentOrder = args.Type;
+        ent.Comp.OrderedTarget = null;
         Dirty(ent);
 
         DoCommandCallout(ent);
@@ -311,12 +318,15 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         if (!CanCheeseTarget(args.Pointed))
             return;
 
+        ent.Comp.OrderedTarget = args.Pointed;
+        Dirty(ent);
+
         foreach (var zombie in ent.Comp.Zombies)
         {
             if (!TryComp(zombie, out HTNComponent? htn))
                 continue;
 
-            _npc.SetBlackboard(zombie, NPCBlackboard.CurrentOrderedTarget, args.Pointed, htn);
+            SetZombieCheeseTarget(zombie, htn, args.Pointed);
             if (htn.Plan != null)
                 _htn.ShutdownPlan(htn);
 
@@ -377,6 +387,8 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
 
     private void OnMinionShutdown(Entity<ZombieSummonerMinionComponent> ent, ref ComponentShutdown args)
     {
+        DeleteSpawnedWeapon(ent.Comp);
+
         if (ent.Comp.Summoner is not { } summoner ||
             !TryComp(summoner, out ZombieSummonerComponent? summonerComp))
         {
@@ -384,15 +396,38 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         }
 
         summonerComp.Zombies.Remove(ent.Owner);
+        Dirty(summoner, summonerComp);
+
+        if (_ui.IsUiOpen(summoner, ZombieSummonerUiKey.Key))
+            PushBuiState(summoner, summonerComp);
     }
 
     private void OnMinionMobStateChanged(Entity<ZombieSummonerMinionComponent> ent, ref MobStateChangedEvent args)
     {
+        if (args.NewMobState == MobState.Dead)
+        {
+            DeleteSpawnedWeapon(ent.Comp);
+            QueueDel(ent.Owner);
+            return;
+        }
+
         if (args.NewMobState != MobState.Alive)
             return;
 
+        UseHumanScreamAudio(ent.Owner);
         SuppressZombiePassiveGroan(ent.Owner);
-        SuppressZombieDamageScream(ent.Owner);
+        SuppressAutomaticDamageScream(ent.Owner);
+    }
+
+    private void DeleteSpawnedWeapon(ZombieSummonerMinionComponent minion)
+    {
+        if (minion.SpawnedWeapon is not { } weapon)
+            return;
+
+        minion.SpawnedWeapon = null;
+
+        if (!Deleted(weapon))
+            QueueDel(weapon);
     }
 
     private void OnMinionDamageChanged(Entity<ZombieSummonerMinionComponent> ent, ref DamageChangedEvent args)
@@ -404,7 +439,7 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
             return;
         }
 
-        _chat.TryEmoteWithoutChat(ent.Owner, ZombieScream);
+        _chat.TryEmoteWithoutChat(ent.Owner, HumanScream);
     }
 
     private void OnMeleeHit(Entity<MeleeWeaponComponent> weapon, ref MeleeHitEvent args)
@@ -647,10 +682,27 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
             return;
 
         var costPerZombie = GetZombieCost(ent.Comp, args.Type);
-        var maxSummonable = ent.Comp.Points / costPerZombie;
+        var controlledZombies = PruneControlledZombies(ent.Owner, ent.Comp);
+        var openSlots = Math.Max(0, ent.Comp.MaxControlledZombies - controlledZombies);
+        if (openSlots <= 0)
+        {
+            _popup.PopupEntity(
+                Loc.GetString("cmu-zombie-summoner-too-many-zombies", ("max", ent.Comp.MaxControlledZombies)),
+                ent.Owner,
+                args.Actor,
+                PopupType.SmallCaution);
+            PushBuiState(ent.Owner, ent.Comp);
+            return;
+        }
+
+        var maxSummonable = Math.Min(ent.Comp.Points / costPerZombie, openSlots);
         if (args.Count > maxSummonable)
         {
-            _popup.PopupEntity(Loc.GetString("cmu-zombie-summoner-not-enough-points"), ent.Owner, args.Actor, PopupType.SmallCaution);
+            var popup = args.Count > openSlots
+                ? Loc.GetString("cmu-zombie-summoner-too-many-zombies", ("max", ent.Comp.MaxControlledZombies))
+                : Loc.GetString("cmu-zombie-summoner-not-enough-points");
+
+            _popup.PopupEntity(popup, ent.Owner, args.Actor, PopupType.SmallCaution);
             PushBuiState(ent.Owner, ent.Comp);
             return;
         }
@@ -677,9 +729,10 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
             minion.BonusMeleeDamage = new DamageSpecifier(ent.Comp.ZombieBonusMeleeDamage);
             minion.DelimbChance = ent.Comp.ZombieDelimbChance;
             minion.HitScreamChance = ent.Comp.ZombieHitScreamChance;
+            ConfigureCursedZombie(zombie, ent.Comp, skinColor, eyeColor, hasHumanoidAppearance);
+            minion.SpawnedWeapon = GiveZombieWeapon(zombie, ent.Comp, args.Type);
             Dirty(zombie, minion);
 
-            ConfigureCursedZombie(zombie, ent.Comp, args.Type, skinColor, eyeColor, hasHumanoidAppearance);
             MakeZombieMove(zombie, GetZombieMovementSpeedModifier(ent.Comp, args.Type));
 
             ent.Comp.Zombies.Add(zombie);
@@ -698,20 +751,29 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
     private void ConfigureCursedZombie(
         EntityUid zombie,
         ZombieSummonerComponent comp,
-        ZombieSummonerSpawnType type,
         Color skinColor,
         Color eyeColor,
         bool restoreHumanoidAppearance)
     {
         MakeZombieNonSpreading(zombie);
+        UseHumanScreamAudio(zombie);
         if (restoreHumanoidAppearance)
             RestoreCursedAppearance(zombie, comp, skinColor, eyeColor);
 
         SuppressZombiePassiveGroan(zombie);
-        SuppressZombieDamageScream(zombie);
+        SuppressAutomaticDamageScream(zombie);
         ConfigureZombieDeathgasp(zombie);
         GiveZombieHands(zombie);
-        GiveZombieWeapon(zombie, comp, type);
+    }
+
+    private void UseHumanScreamAudio(EntityUid zombie)
+    {
+        if (!TryComp(zombie, out ZombieComponent? zombieComp))
+            return;
+
+        zombieComp.EmoteSoundsId = null;
+        zombieComp.EmoteSounds = null;
+        Dirty(zombie, zombieComp);
     }
 
     private void SuppressZombiePassiveGroan(EntityUid zombie)
@@ -720,16 +782,16 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
             _autoEmote.RemoveEmote(zombie, ZombiePassiveGroan, autoEmote);
     }
 
-    private void SuppressZombieDamageScream(EntityUid zombie)
+    private void SuppressAutomaticDamageScream(EntityUid zombie)
     {
         if (TryComp(zombie, out EmoteOnDamageComponent? emoteOnDamage))
-            _emoteOnDamage.RemoveEmote(zombie, ZombieScream, emoteOnDamage);
+            _emoteOnDamage.RemoveEmote(zombie, HumanScream, emoteOnDamage);
     }
 
     private void ConfigureZombieDeathgasp(EntityUid zombie)
     {
         var deathgasp = EnsureComp<DeathgaspComponent>(zombie);
-        deathgasp.Prototype = ZombieScream;
+        deathgasp.Prototype = HumanScream;
     }
 
     private void MakeZombieNonSpreading(EntityUid zombie)
@@ -776,11 +838,11 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
             _hands.TrySetActiveHand((zombie, hands), "right_hand");
     }
 
-    private void GiveZombieWeapon(EntityUid zombie, ZombieSummonerComponent comp, ZombieSummonerSpawnType type)
+    private EntityUid? GiveZombieWeapon(EntityUid zombie, ZombieSummonerComponent comp, ZombieSummonerSpawnType type)
     {
         var prototypes = GetZombieWeaponPrototypes(comp, type);
         if (prototypes.Count == 0)
-            return;
+            return null;
 
         var start = _random.Next(prototypes.Count);
         for (var i = 0; i < prototypes.Count; i++)
@@ -791,10 +853,12 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
 
             var weapon = Spawn(prototype, Transform(zombie).Coordinates);
             if (_hands.TryPickupAnyHand(zombie, weapon, checkActionBlocker: false, animate: false))
-                return;
+                return weapon;
 
             QueueDel(weapon);
         }
+
+        return null;
     }
 
     private List<EntProtoId> GetZombieWeaponPrototypes(ZombieSummonerComponent comp, ZombieSummonerSpawnType type)
@@ -867,6 +931,33 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         }
     }
 
+    private int PruneControlledZombies(EntityUid summoner, ZombieSummonerComponent comp)
+    {
+        List<EntityUid>? stale = null;
+        foreach (var zombie in comp.Zombies)
+        {
+            if (!Deleted(zombie) &&
+                TryComp(zombie, out ZombieSummonerMinionComponent? minion) &&
+                minion.Summoner == summoner)
+            {
+                continue;
+            }
+
+            stale ??= new List<EntityUid>();
+            stale.Add(zombie);
+        }
+
+        if (stale == null)
+            return comp.Zombies.Count;
+
+        foreach (var zombie in stale)
+        {
+            comp.Zombies.Remove(zombie);
+        }
+
+        return comp.Zombies.Count;
+    }
+
     private void UpdateZombieNpc(
         EntityUid summoner,
         EntityUid zombie,
@@ -880,8 +971,16 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         SetBlackboard(zombie, htn, NPCBlackboard.FollowTarget, new EntityCoordinates(summoner, Vector2.Zero));
         SetBlackboard(zombie, htn, NPCBlackboard.CurrentOrders, comp.CurrentOrder);
 
-        if (comp.CurrentOrder != ZombieSummonerOrderType.CheeseEm)
-            RemoveBlackboard<EntityUid>(htn, NPCBlackboard.CurrentOrderedTarget);
+        if (comp.CurrentOrder == ZombieSummonerOrderType.CheeseEm &&
+            comp.OrderedTarget is { } target &&
+            CanCheeseTarget(target))
+        {
+            SetZombieCheeseTarget(zombie, htn, target);
+        }
+        else
+        {
+            ClearZombieCheeseTarget(htn);
+        }
 
         if (htn.Plan != null)
             _htn.ShutdownPlan(htn);
@@ -904,6 +1003,20 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
     {
         if (htn.Blackboard.ContainsKey(key))
             htn.Blackboard.Remove<T>(key);
+    }
+
+    private void SetZombieCheeseTarget(EntityUid zombie, HTNComponent htn, EntityUid target)
+    {
+        _npc.SetBlackboard(zombie, NPCBlackboard.CurrentOrderedTarget, target, htn);
+        RemoveBlackboard<EntityUid>(htn, TargetKey);
+        RemoveBlackboard<EntityCoordinates>(htn, TargetCoordinatesKey);
+    }
+
+    private void ClearZombieCheeseTarget(HTNComponent htn)
+    {
+        RemoveBlackboard<EntityUid>(htn, NPCBlackboard.CurrentOrderedTarget);
+        RemoveBlackboard<EntityUid>(htn, TargetKey);
+        RemoveBlackboard<EntityCoordinates>(htn, TargetCoordinatesKey);
     }
 
     private void UpdateOrderActions(Entity<ZombieSummonerComponent> ent)
@@ -948,10 +1061,14 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
 
     private void PushBuiState(EntityUid uid, ZombieSummonerComponent comp)
     {
+        var controlledZombies = PruneControlledZombies(uid, comp);
+
         _ui.SetUiState(uid, ZombieSummonerUiKey.Key, new ZombieSummonerBuiState(
             comp.Points,
             comp.MaxPoints,
             comp.ZombieCost,
-            comp.MilitaryZombieCost));
+            comp.MilitaryZombieCost,
+            controlledZombies,
+            comp.MaxControlledZombies));
     }
 }
