@@ -11,6 +11,7 @@ cmu-medical-tourniquet-applying = Applying tourniquet...
 cmu-medical-tourniquet-removing = Removing tourniquet...
 
 cmu-medical-bandage-no-wounds = No untreated wounds to bandage.
+cmu-medical-bandage-no-wounds-on-body-part = No untreated wounds on the selected body part.
 cmu-medical-bandage-synth-requires-repair-tools = Synthetics require a welder for brute damage and cable coils for burns.
 cmu-medical-tourniquet-applied = The tourniquet is applied.
 cmu-medical-tourniquet-removed = The tourniquet is removed.

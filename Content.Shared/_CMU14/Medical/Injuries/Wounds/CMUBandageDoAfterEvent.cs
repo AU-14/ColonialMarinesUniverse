@@ -9,14 +9,18 @@ public sealed partial class CMUBandageDoAfterEvent : DoAfterEvent
     [DataField]
     public NetEntity Part;
 
-    public CMUBandageDoAfterEvent(NetEntity part)
+    [DataField]
+    public bool ApplyInstantTreatment;
+
+    public CMUBandageDoAfterEvent(NetEntity part, bool applyInstantTreatment = false)
     {
         Part = part;
+        ApplyInstantTreatment = applyInstantTreatment;
     }
 
     public CMUBandageDoAfterEvent()
     {
     }
 
-    public override DoAfterEvent Clone() => new CMUBandageDoAfterEvent(Part);
+    public override DoAfterEvent Clone() => new CMUBandageDoAfterEvent(Part, ApplyInstantTreatment);
 }

@@ -17,6 +17,11 @@
                 <Label Text="{Loc 'ui-options-cmu-chat'}" StyleClasses="LabelKeyText" />
                 <CheckBox Name="ChatGhostFollowButton" Text="{Loc 'cmu-ui-options-chat-follow-button'}" />
 
+                <Label Text="{Loc 'cmu-ui-options-medical'}" StyleClasses="LabelKeyText" />
+                <CheckBox Name="TargetedHealingCheckBox"
+                          Text="{Loc 'cmu-ui-options-targeted-healing'}"
+                          ToolTip="{Loc 'cmu-ui-options-targeted-healing-tooltip'}" />
+
                 <Label Text="{Loc 'ui-options-cmu-zlevels'}" StyleClasses="LabelKeyText" />
                 <ui:OptionSlider Name="ZLevelBlurSlider" Title="{Loc 'ui-options-zlevel-blur'}" />
             </BoxContainer>

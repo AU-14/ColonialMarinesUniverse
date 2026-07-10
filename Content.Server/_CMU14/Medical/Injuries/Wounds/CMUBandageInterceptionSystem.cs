@@ -19,6 +19,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._CMU14.Medical.Injuries.Wounds;
@@ -27,11 +28,14 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
 {
     private const int CorpsmanMedicalSkillLevel = 2;
     private const string BurnKitStack = "CMBurnKit";
+    private const string NoWoundsLocId = "cmu-medical-bandage-no-wounds";
+    private const string NoWoundsOnBodyPartLocId = "cmu-medical-bandage-no-wounds-on-body-part";
     private const string TraumaKitStack = "CMTraumaKit";
     private static readonly EntProtoId<SkillDefinitionComponent> MedicalSkill = "RMCSkillMedical";
 
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private INetManager _net = default!;
+    [Dependency] private INetConfigurationManager _netConfig = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedBodyZoneTargetingSystem _zoneTargeting = default!;
@@ -94,7 +98,10 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
                     return;
                 }
 
-                _popup.PopupEntity(Loc.GetString("cmu-medical-bandage-no-wounds"), patient, args.User, PopupType.SmallCaution);
+                var popup = IsTargetedHealingEnabled(args.User)
+                    ? NoWoundsOnBodyPartLocId
+                    : NoWoundsLocId;
+                _popup.PopupEntity(Loc.GetString(popup), patient, args.User, PopupType.SmallCaution);
                 args.Handled = true;
                 return;
             }
@@ -105,20 +112,26 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         var targetPart = targetSelection.Part;
         var canInstantWound = woundTarget != null && CanApplyInstantWoundTreatment(args.User, treater);
         var canInstantKit = CanApplyInstantKit(args.User, used);
-        if ((canInstantWound || canInstantKit) &&
+        var canApplyInstantTreatment = canInstantWound || canInstantKit;
+        if (canApplyInstantTreatment &&
+            !targetSelection.UsedSearch &&
             TryApplyInstantTreatment(args.User, patient, targetPart, used, treater))
         {
             args.Handled = true;
             return;
         }
 
-        var delay = ResolveBandageDelay(args.User, patient, targetPart, used, treater, out var fumblingDelay) +
-                    ResolveSearchDelay(targetSelection);
+        var deferInstantTreatment = canApplyInstantTreatment && targetSelection.UsedSearch;
+        var fumblingDelay = TimeSpan.Zero;
+        var delay = ResolveSearchDelay(targetSelection);
+        if (!deferInstantTreatment)
+            delay += ResolveBandageDelay(args.User, patient, targetPart, used, treater, out fumblingDelay);
+
         if (fumblingDelay > TimeSpan.Zero)
             _popup.PopupClient(Loc.GetString("cm-wounds-start-fumbling", ("name", used)), patient, args.User);
 
         var partHealthCap = ResolveTreaterDamagePartHealthCap(targetPart, treater);
-        var doAfterEv = new CMUBandageDoAfterEvent(GetNetEntity(targetPart));
+        var doAfterEv = new CMUBandageDoAfterEvent(GetNetEntity(targetPart), deferInstantTreatment);
 
         var doAfter = new DoAfterArgs(EntityManager, args.User, delay, doAfterEv,
             args.User, target: patient, used: used)
@@ -127,10 +140,12 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
             BreakOnHandChange = true,
             NeedHand = true,
             BlockDuplicate = true,
+            CancelDuplicate = false,
             DuplicateCondition = DuplicateConditions.SameTool | DuplicateConditions.SameTarget,
             MovementThreshold = 0.5f,
             TargetEffect = "RMCEffectHealBusy",
         };
+        args.Handled = true;
         if (!_doAfter.TryStartDoAfter(doAfter))
             return;
 
@@ -143,8 +158,6 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         _audio.PlayPvs(treater.TreatBeginSound, args.User);
         if (args.User != patient && treater.TargetStartPopup is { } startPopup)
             _popup.PopupEntity(Loc.GetString(startPopup, ("user", args.User)), patient, patient, PopupType.Medium);
-
-        args.Handled = true;
     }
 
     private TreatmentTarget? PickBandageTarget(EntityUid medic, EntityUid patient, WoundTreaterComponent treater)
@@ -217,7 +230,7 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
 
     private TreatmentTarget? PickTreatmentTarget(EntityUid medic, EntityUid patient, Func<EntityUid, bool> predicate)
     {
-        var targetedHealing = IsTargetedHealingEnabled();
+        var targetedHealing = IsTargetedHealingEnabled(medic);
         var aimed = targetedHealing
             ? _zoneTargeting.TryGetSelection(medic)
             : _zoneTargeting.TryGetFreshSelection(medic);
@@ -252,9 +265,10 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         return null;
     }
 
-    private bool IsTargetedHealingEnabled()
+    private bool IsTargetedHealingEnabled(EntityUid medic)
     {
-        return _cfg.GetCVar(CMUMedicalCCVars.TargetedHealingEnabled);
+        return TryComp<ActorComponent>(medic, out var actor) &&
+            _netConfig.GetClientCVar(actor.PlayerSession.Channel, CMUMedicalCCVars.TargetedHealingEnabled);
     }
 
     private static TimeSpan ResolveSearchDelay(TreatmentTarget target)
@@ -531,6 +545,13 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
             return;
         }
 
+        if (args.ApplyInstantTreatment)
+        {
+            TryApplyInstantTreatment(medic, patient, part, treaterUid, treater);
+            RemComp<CMUBandagePendingComponent>(ent);
+            return;
+        }
+
         var partHealthCap = ent.Comp.PartHealthCapPart == part
             ? ent.Comp.PartHealthCap
             : null;
@@ -712,21 +733,8 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         var treatedWounds = 0;
         var part = firstPart;
         var partHealthCap = ResolveTreaterDamagePartHealthCap(part, treater);
-        while (treater.CMUTreatsWounds && treatedWounds < maxWounds)
-        {
-            if (!TryTreatWoundsWithTreater(part, treater, maxWounds - treatedWounds, out var treatedOnPart))
-                break;
-
-            treatedWounds += treatedOnPart;
-            if (treatedWounds >= maxWounds)
-                break;
-
-            if (PickBandageTarget(medic, patient, treater) is not { } nextTarget)
-                break;
-
-            part = nextTarget.Part;
-            partHealthCap = ResolveTreaterDamagePartHealthCap(part, treater);
-        }
+        if (treater.CMUTreatsWounds)
+            TryTreatWoundsWithTreater(part, treater, maxWounds, out treatedWounds);
 
         var treated = treatedWounds > 0;
         var damageOnly = false;
