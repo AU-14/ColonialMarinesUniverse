@@ -40,7 +40,7 @@
 
 - type: accessLevel
   id: AU14AccessGovforJuniorOfficer
-  name: Junior Officer
+  name: Staff Officer
 
 - type: accessLevel
   id: AU14AccessGovforReq

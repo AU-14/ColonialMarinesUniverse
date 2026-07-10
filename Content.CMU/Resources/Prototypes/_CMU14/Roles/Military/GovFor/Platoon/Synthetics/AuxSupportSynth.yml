@@ -114,6 +114,10 @@
     - NonResuscitable
     - Epilepsy
     - NoEnglish
+    - CMUProstheticLeftArm
+    - CMUProstheticRightArm
+    - CMUProstheticLeftLeg
+    - CMUProstheticRightLeg
   ranks:
     RMCRankSyntheticColonist: []
   chevrons:
