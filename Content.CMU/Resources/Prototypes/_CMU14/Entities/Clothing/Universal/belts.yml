@@ -27,9 +27,6 @@
     - id: AU14NaloxoneAutoInjector
     - id: CMUSplintItem
     - id: CMUCastItem
-    - id: CMSurgicalLine
-    - id: CMSynthGraft
-    - id: CMHealthAnalyzer
     - id: CMRollerBedSpawnFolded
     - id: CMPortableSurgicalBedSpawnFolded
     - id: CMBloodPackFull
