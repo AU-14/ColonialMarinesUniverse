@@ -82,10 +82,6 @@
       whenToBeginScaling: 60
       benchmark: 3
       maximum: 6
-    AU14JobGOVFORVehicleCrewman:
-      scale: 0
-      whenToBeginScaling: 60
-      maximum: 3
     AU14JobGOVFORWorkingJoe:
       scale: 0.034
       whenToBeginScaling: 50
