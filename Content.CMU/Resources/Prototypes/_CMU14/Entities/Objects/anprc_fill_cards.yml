@@ -1,0 +1,49 @@
+- type: entity
+  abstract: true
+  id: ANPRCFillCard
+  name: COMSEC fill card
+  description: A hardened cryptographic fill card for the AN/PRC-117G radio. Worth more than the radio it slots into.
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/synth_reset_key.rsi
+    state: reset_key
+  - type: Item
+    size: Tiny
+  - type: ANPRCFillCard
+
+- type: entity
+  parent: ANPRCFillCard
+  id: ANPRCFillCardGOVFOR
+  name: GOVFOR COMSEC fill card
+  description: >-
+    A GOVFOR KY-99A cryptographic fill card. Signal section property, loss
+    must be reported immediately and nobody enjoys what happens next.
+  components:
+  - type: ANPRCFillCard
+    faction: govfor
+    designation: KY-99A
+
+- type: entity
+  parent: ANPRCFillCard
+  id: ANPRCFillCardOPFOR
+  name: OPFOR COMSEC fill card
+  description: >-
+    An OPFOR KY-58 cryptographic fill card. The serial number has been
+    stamped over three times.
+  components:
+  - type: ANPRCFillCard
+    faction: opfor
+    designation: KY-58
+
+- type: entity
+  parent: ANPRCFillCard
+  id: ANPRCFillCardCLF
+  name: CLF COMSEC fill card
+  description: >-
+    A CLF KY-38 cryptographic fill card, scuffed and lovingly maintained.
+    Harder to replace than the radio, and everyone knows it.
+  components:
+  - type: ANPRCFillCard
+    faction: clf
+    designation: KY-38
