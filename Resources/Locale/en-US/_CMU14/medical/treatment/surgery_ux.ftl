@@ -29,7 +29,7 @@ cmu-medical-surgery-armed-heading = ARMED
 
 cmu-medical-surgery-in-progress-heading = IN PROGRESS
 cmu-medical-surgery-in-progress-subtitle = { $surgery } · { $part }
-cmu-medical-surgery-in-progress-credit = Started by { $surgeon } · { $elapsed } ago
+cmu-medical-surgery-in-progress-credit = Last step by { $surgeon } · started { $elapsed } ago
 cmu-medical-surgery-step-now = Step { $step }: { $label }
 cmu-medical-surgery-action-hint = Click { $part } with a { $tool }.
 cmu-medical-surgery-action-hint-no-tool = Click { $part } to continue.
@@ -84,8 +84,8 @@ cmu-medical-surgery-category-general = Other
 
 # ---- Examine surface (CMUSurgeryStateExamineSystem) ------------------
 
-cmu-medical-surgery-examine-patient-in-progress = [color=#dca94c]{ $surgery } in progress (by { $surgeon }) — next: { $next }.[/color]
-cmu-medical-surgery-examine-part-in-progress = [color=#dca94c]{ $surgery } in progress (by { $surgeon }) — next: { $next }.[/color]
+cmu-medical-surgery-examine-patient-in-progress = [color=#dca94c]{ $surgery } in progress (last step by { $surgeon }) — next: { $next }.[/color]
+cmu-medical-surgery-examine-part-in-progress = [color=#dca94c]{ $surgery } in progress (last step by { $surgeon }) — next: { $next }.[/color]
 cmu-medical-surgery-examine-part-abandoned = [color=#888888]Open wound — no surgery in progress.[/color]
 
 # ---- Close-up step labels (RMC fallback resolution) ------------------
@@ -117,6 +117,7 @@ cmu-medical-surgery-step-failed-with-tool = The { $tool } slips and causes surgi
 cmu-medical-surgery-no-tool = You need a surgical tool to perform this step.
 cmu-medical-surgery-missing-skills = You don't know how to perform this step.
 cmu-medical-surgery-cannot-start = That surgery is no longer available.
+cmu-medical-surgery-step-busy = Another surgery action is already in progress on this patient.
 cmu-medical-surgery-needs-operating-table = Move them to an operating table first.
 cmu-medical-surgery-remove-helmet = Remove their helmet first.
 cmu-medical-surgery-remove-armor = Remove the obstructing armor first.

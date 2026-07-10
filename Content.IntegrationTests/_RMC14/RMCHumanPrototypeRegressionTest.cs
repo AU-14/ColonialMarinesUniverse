@@ -1702,7 +1702,7 @@ public sealed class RMCHumanPrototypeRegressionTest
     }
 
     [Test]
-    public async Task CmuSurgeryToolUseOnOtherSurgeonInFlightOpensUiInsteadOfAutoResuming()
+    public async Task CmuSurgeryToolUseOnInFlightProcedureContinuesWithDifferentSurgeon()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -1713,6 +1713,7 @@ public sealed class RMCHumanPrototypeRegressionTest
             var body = entMan.System<SharedBodySystem>();
             var dispatch = entMan.System<CMUSurgeryDispatchSystem>();
             var flow = entMan.System<CMUSurgeryFlowSystem>();
+            var sessions = entMan.System<CMUSurgerySessionSystem>();
             var standing = entMan.System<StandingStateSystem>();
             var skills = entMan.System<SkillsSystem>();
 
@@ -1749,32 +1750,37 @@ public sealed class RMCHumanPrototypeRegressionTest
 
                 Assert.That(dispatch.TryDispatch(newSurgeon, patient, scalpel), Is.True);
 
+                var currentArmed = entMan.GetComponent<CMUSurgeryArmedStepComponent>(patient);
+                Assert.That(sessions.TryGetSession(patient, out var session), Is.True);
+
                 Assert.Multiple(() =>
                 {
-                    Assert.That(entMan.HasComponent<CMUSurgeryWindowOpenComponent>(newSurgeon), Is.True);
-                    Assert.That(entMan.HasComponent<CMUSurgeryArmedStepComponent>(patient), Is.False);
+                    Assert.That(entMan.HasComponent<CMUSurgeryWindowOpenComponent>(newSurgeon), Is.False);
+                    Assert.That(currentArmed.LastOperator, Is.EqualTo(newSurgeon));
                     Assert.That(entMan.GetComponent<CMUSurgeryInFlightComponent>(leftArm).Surgeon, Is.EqualTo(originalSurgeon));
+                    Assert.That(session.Site, Is.EqualTo(new CMUMedicalBodyPartKey(BodyPartType.Arm, BodyPartSymmetry.Left)));
+                    Assert.That(session.Phase, Is.EqualTo(CMUSurgerySessionPhase.Performing));
+                    Assert.That(session.ActiveSurgeon, Is.EqualTo(newSurgeon));
+                    Assert.That(session.ActiveAttempt, Is.Not.Null);
                 });
 
                 var originalState = flow.BuildBuiState(
                     patient,
                     "Patient",
                     dispatch.BuildPartEntries(patient, originalSurgeon),
-                    null,
-                    originalSurgeon);
+                    currentArmed);
                 var newState = flow.BuildBuiState(
                     patient,
                     "Patient",
                     dispatch.BuildPartEntries(patient, newSurgeon),
-                    null,
-                    newSurgeon);
+                    currentArmed);
 
                 Assert.Multiple(() =>
                 {
                     Assert.That(originalState.InFlight, Is.Not.Null);
-                    Assert.That(originalState.InFlight!.OwnedByViewer, Is.True);
                     Assert.That(newState.InFlight, Is.Not.Null);
-                    Assert.That(newState.InFlight!.OwnedByViewer, Is.False);
+                    Assert.That(originalState.CurrentArmedStep, Is.Not.Null);
+                    Assert.That(newState.CurrentArmedStep, Is.Not.Null);
                 });
             }
             finally
@@ -1790,7 +1796,7 @@ public sealed class RMCHumanPrototypeRegressionTest
     }
 
     [Test]
-    public async Task CmuSurgeryToolUseByOtherSurgeonExposesArmedStepForTakeover()
+    public async Task CmuArmedSurgeryStepContinuesWithDifferentSurgeon()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -1801,6 +1807,7 @@ public sealed class RMCHumanPrototypeRegressionTest
             var body = entMan.System<SharedBodySystem>();
             var dispatch = entMan.System<CMUSurgeryDispatchSystem>();
             var flow = entMan.System<CMUSurgeryFlowSystem>();
+            var sessions = entMan.System<CMUSurgerySessionSystem>();
             var standing = entMan.System<StandingStateSystem>();
             var skills = entMan.System<SkillsSystem>();
 
@@ -1840,23 +1847,24 @@ public sealed class RMCHumanPrototypeRegressionTest
                 Assert.That(dispatch.TryDispatch(newSurgeon, patient, scalpel), Is.True);
 
                 var currentArmed = entMan.GetComponent<CMUSurgeryArmedStepComponent>(patient);
+                Assert.That(sessions.TryGetSession(patient, out var session), Is.True);
                 var originalState = flow.BuildBuiState(
                     patient,
                     "Patient",
                     dispatch.BuildPartEntries(patient, originalSurgeon),
-                    currentArmed,
-                    originalSurgeon);
+                    currentArmed);
                 var newState = flow.BuildBuiState(
                     patient,
                     "Patient",
                     dispatch.BuildPartEntries(patient, newSurgeon),
-                    currentArmed,
-                    newSurgeon);
+                    currentArmed);
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(entMan.HasComponent<CMUSurgeryWindowOpenComponent>(newSurgeon), Is.True);
-                    Assert.That(currentArmed.Surgeon, Is.EqualTo(originalSurgeon));
+                    Assert.That(entMan.HasComponent<CMUSurgeryWindowOpenComponent>(newSurgeon), Is.False);
+                    Assert.That(currentArmed.LastOperator, Is.EqualTo(newSurgeon));
+                    Assert.That(session.Phase, Is.EqualTo(CMUSurgerySessionPhase.Performing));
+                    Assert.That(session.ActiveSurgeon, Is.EqualTo(newSurgeon));
                     Assert.That(originalState.CurrentArmedStep, Is.Not.Null);
                     Assert.That(newState.CurrentArmedStep, Is.Not.Null);
                 });
@@ -1874,7 +1882,7 @@ public sealed class RMCHumanPrototypeRegressionTest
     }
 
     [Test]
-    public async Task CmuOwningSurgeonCanReopenMenuWithScalpelWhenAnotherToolIsArmed()
+    public async Task CmuSurgeonCanReopenMenuWithScalpelWhenAnotherToolIsArmed()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -1937,7 +1945,7 @@ public sealed class RMCHumanPrototypeRegressionTest
                 {
                     Assert.That(handled, Is.False);
                     Assert.That(started, Is.False);
-                    Assert.That(entMan.GetComponent<CMUSurgeryArmedStepComponent>(patient).Surgeon, Is.EqualTo(surgeon));
+                    Assert.That(entMan.GetComponent<CMUSurgeryArmedStepComponent>(patient).LastOperator, Is.EqualTo(surgeon));
                 });
 
                 Assert.That(dispatch.TryDispatch(surgeon, patient, scalpel), Is.True);
@@ -1947,13 +1955,12 @@ public sealed class RMCHumanPrototypeRegressionTest
                     patient,
                     "Patient",
                     dispatch.BuildPartEntries(patient, surgeon),
-                    currentArmed,
-                    surgeon);
+                    currentArmed);
 
                 Assert.Multiple(() =>
                 {
                     Assert.That(entMan.HasComponent<CMUSurgeryWindowOpenComponent>(surgeon), Is.True);
-                    Assert.That(currentArmed.Surgeon, Is.EqualTo(surgeon));
+                    Assert.That(currentArmed.LastOperator, Is.EqualTo(surgeon));
                     Assert.That(state.CurrentArmedStep, Is.Not.Null);
                     Assert.That(state.CurrentArmedStep!.ToolCategory, Is.EqualTo("hemostat"));
                 });

@@ -122,6 +122,18 @@ internal sealed class CMUSurgeryRegistry
         return _definitions.TryGetValue(new EntProtoId<CMSurgeryComponent>(surgeryId), out definition!);
     }
 
+    public bool ContainsStep(string stepId)
+    {
+        var typedStep = new EntProtoId<CMSurgeryStepComponent>(stepId);
+        foreach (var definition in _definitions.Values)
+        {
+            if (definition.StepsById.ContainsKey(typedStep))
+                return true;
+        }
+
+        return false;
+    }
+
     public ImmutableArray<CMUSurgeryDefinition> GetEligibleDefinitions(BodyPartType partType)
     {
         return _eligibleByPart.GetValueOrDefault(partType, ImmutableArray<CMUSurgeryDefinition>.Empty);

@@ -21,15 +21,14 @@ public sealed partial class CMUSurgeryInFlightComponent : Component
     public string LeafSurgeryDisplayName = string.Empty;
 
     /// <summary>
-    ///     May be deleted by the time a fresh surgeon walks up — UI should
-    ///     fall back to <see cref="SurgeonName"/> in that case.
+    ///     Historical credit for the most recent completed step. This is not
+    ///     an owner or authorization check and may refer to a deleted entity.
     /// </summary>
     [DataField, AutoNetworkedField]
     public EntityUid Surgeon;
 
     /// <summary>
-    ///     Persists even if the surgeon entity gets deleted (round-end
-    ///     disconnect, etc).
+    ///     Historical operator name that persists if the entity is deleted.
     /// </summary>
     [DataField, AutoNetworkedField]
     public string SurgeonName = string.Empty;

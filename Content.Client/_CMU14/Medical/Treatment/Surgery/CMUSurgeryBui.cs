@@ -33,6 +33,12 @@ public sealed partial class CMUSurgeryBui : BoundUserInterface
     // Missing limb slots share the patient NetEntity, so type/symmetry are
     // part of the key.
     private CMUSurgeryPartKey? _selectedPart;
+    private CMUSurgerySessionId? _sessionId;
+    private CMUSurgeryAttemptToken? _activeAttempt;
+    private CMUSurgeryArmedStateId? _armedStateId;
+    private NetEntity _patient;
+    private ulong _viewRevision;
+    private bool _canAbandon;
 
     public CMUSurgeryBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
@@ -60,16 +66,35 @@ public sealed partial class CMUSurgeryBui : BoundUserInterface
         if (_window is null)
             return;
 
+        _sessionId = state.SessionId;
+        _activeAttempt = state.ActiveAttempt;
+        _armedStateId = state.ArmedStateId;
+        _patient = state.Patient;
+        _viewRevision = state.ViewRevision;
+        _canAbandon = state.CanAbandon;
+
         _window.PatientLabel.Text = string.IsNullOrEmpty(state.PatientName)
             ? Loc.GetString("cmu-medical-surgery-window-title")
             : state.PatientName;
 
-        _window.WorkflowStatusLabel.Text = state.InFlight is { } inFlight
-            ? Loc.GetString(
+        if (state.InFlight is { } inFlight)
+        {
+            _window.WorkflowStatusLabel.Text = Loc.GetString(
                 "cmu-medical-surgery-workflow-active",
                 ("surgery", inFlight.LeafSurgeryDisplayName),
-                ("part", inFlight.PartDisplayName))
-            : Loc.GetString("cmu-medical-surgery-workflow-ready");
+                ("part", inFlight.PartDisplayName));
+        }
+        else if (TryGetSessionPart(state, out var sessionPart))
+        {
+            _window.WorkflowStatusLabel.Text = Loc.GetString(
+                "cmu-medical-surgery-workflow-active",
+                ("surgery", state.CurrentArmedStep?.SurgeryDisplayName ?? "-"),
+                ("part", sessionPart.DisplayName));
+        }
+        else
+        {
+            _window.WorkflowStatusLabel.Text = Loc.GetString("cmu-medical-surgery-workflow-ready");
+        }
 
         RefreshInProgressPanel(state);
         RefreshPartStack(state);
@@ -226,14 +251,25 @@ public sealed partial class CMUSurgeryBui : BoundUserInterface
 
     private void AddAbandonButton()
     {
-        if (_window is null)
+        if (_window is null || !_canAbandon)
             return;
 
         var abandonButton = CreateActionButton(
             Loc.GetString("cmu-medical-surgery-abandon-button"),
             MutedBorder,
             new Thickness(0, 5, 0, 0));
-        abandonButton.OnPressed += _ => SendMessage(new CMUSurgeryClearArmedMessage());
+        var expectedSession = _sessionId;
+        var expectedAttempt = _activeAttempt;
+        var expectedArmedState = _armedStateId;
+        var expectedPatient = _patient;
+        var expectedViewRevision = _viewRevision;
+        abandonButton.OnPressed += _ => SendMessage(
+            new CMUSurgeryClearArmedMessage(
+                expectedPatient,
+                expectedSession,
+                expectedAttempt,
+                expectedArmedState,
+                expectedViewRevision));
         _window.InProgressChoiceContainer.AddChild(abandonButton);
     }
 
@@ -244,13 +280,23 @@ public sealed partial class CMUSurgeryBui : BoundUserInterface
 
         var capturedPart = part;
         var capturedEntry = entry;
+        var expectedSession = _sessionId;
+        var expectedAttempt = _activeAttempt;
+        var expectedArmedState = _armedStateId;
+        var expectedPatient = _patient;
+        var expectedViewRevision = _viewRevision;
         var button = CreateActionButton(text, closeUp ? Active : GetCategoryColor(entry.Category), new Thickness(0));
         button.OnPressed += _ => SendMessage(new CMUSurgeryArmStepMessage(
+            expectedPatient,
             capturedPart.Part,
             capturedPart.Type,
             capturedPart.Symmetry,
             capturedEntry.SurgeryId,
-            capturedEntry.NextStepIndex));
+            capturedEntry.NextStepIndex,
+            expectedSession,
+            expectedAttempt,
+            expectedArmedState,
+            expectedViewRevision));
         _window.InProgressChoiceContainer.AddChild(button);
     }
 
@@ -301,6 +347,27 @@ public sealed partial class CMUSurgeryBui : BoundUserInterface
         foreach (var part in state.Parts)
         {
             if (!part.IsInFlightHere && part.Part != inFlight.Part)
+                continue;
+
+            entry = part;
+            return true;
+        }
+
+        entry = default!;
+        return false;
+    }
+
+    private static bool TryGetSessionPart(CMUSurgeryBuiState state, out CMUSurgeryPartEntry entry)
+    {
+        if (state.SessionPartType is not { } type || state.SessionPartSymmetry is not { } symmetry)
+        {
+            entry = default!;
+            return false;
+        }
+
+        foreach (var part in state.Parts)
+        {
+            if (part.Type != type || part.Symmetry != symmetry)
                 continue;
 
             entry = part;
@@ -590,13 +657,23 @@ public sealed partial class CMUSurgeryBui : BoundUserInterface
         beginButton.MinWidth = 140;
         beginButton.HorizontalExpand = false;
         beginButton.VerticalAlignment = Control.VAlignment.Center;
+        var expectedSession = _sessionId;
+        var expectedAttempt = _activeAttempt;
+        var expectedArmedState = _armedStateId;
+        var expectedPatient = _patient;
+        var expectedViewRevision = _viewRevision;
         beginButton.OnPressed += _ => SendMessage(
             new CMUSurgeryArmStepMessage(
+                expectedPatient,
                 partCaptured.Part,
                 partCaptured.Type,
                 partCaptured.Symmetry,
                 captured.SurgeryId,
-                captured.NextStepIndex));
+                captured.NextStepIndex,
+                expectedSession,
+                expectedAttempt,
+                expectedArmedState,
+                expectedViewRevision));
         root.AddChild(beginButton);
 
         return panel;

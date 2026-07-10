@@ -13,4 +13,7 @@ public sealed partial class CMUSurgeryWindowOpenComponent : Component
 
     [DataField]
     public BodyPartSymmetry TargetSymmetry;
+
+    [ViewVariables]
+    public ulong ViewRevision;
 }

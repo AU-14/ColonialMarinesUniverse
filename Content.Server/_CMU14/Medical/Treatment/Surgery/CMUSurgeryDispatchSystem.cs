@@ -19,6 +19,9 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private SharedCMUSurgeryFlowSystem _flowSurgery = default!;
     [Dependency] private CMUSurgeryRulebookSystem _rulebook = default!;
+    [Dependency] private CMUSurgerySessionSystem _sessions = default!;
+
+    private ulong _lastViewRevision;
 
     public override void Initialize()
     {
@@ -44,7 +47,7 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
 
             var parts = BuildPartEntries(patient, medic);
             var armed = CompOrNull<CMUSurgeryArmedStepComponent>(patient);
-            var state = _flowSurgery.BuildBuiState(patient, Name(patient), parts, armed, medic);
+            var state = BuildBuiStateForViewer(patient, medic, marker, parts, armed);
             _ui.SetUiState(medic, CMUSurgeryUIKey.Key, state);
         }
     }
@@ -65,9 +68,18 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
             return false;
 
         var armed = CompOrNull<CMUSurgeryArmedStepComponent>(patient);
+        if (tool is { } armedTool
+            && armed is not null
+            && _flowSurgery.TryHandleArmedToolUse(patient, armed, surgeon, armedTool, patient, out var handled, out _)
+            && handled)
+        {
+            RefreshUiForPatient(patient);
+            return true;
+        }
+
         if (tool is { } usedTool
             && armed is null
-            && CanAutoHandleToolIntent(surgeon, patient)
+            && CanAutoHandleToolIntent(patient)
             && TryArmByToolIntent(surgeon, patient, usedTool, parts))
         {
             return true;
@@ -78,7 +90,7 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
         marker.TargetPartType = parts[0].Type;
         marker.TargetSymmetry = parts[0].Symmetry;
 
-        var state = _flowSurgery.BuildBuiState(patient, Name(patient), parts, armed, surgeon);
+        var state = BuildBuiStateForViewer(patient, surgeon, marker, parts, armed);
 
         _ui.SetUiState(surgeon, CMUSurgeryUIKey.Key, state);
         _ui.OpenUi(surgeon, CMUSurgeryUIKey.Key, surgeon);
@@ -118,13 +130,94 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
             && _cfg.GetCVar(CMUMedicalCCVars.SurgeryEnabled);
     }
 
-    private bool CanAutoHandleToolIntent(EntityUid surgeon, EntityUid patient)
+    public bool IsUiStateCurrent(
+        EntityUid patient,
+        CMUSurgerySessionId? expectedSession,
+        CMUSurgeryAttemptToken? expectedAttempt,
+        CMUSurgeryArmedStateId? expectedArmedState)
+    {
+        if (!_sessions.MatchesExpectedState(patient, expectedSession, expectedAttempt))
+            return false;
+
+        var currentArmedState = CompOrNull<CMUSurgeryArmedStepComponent>(patient)?.StateId;
+        return currentArmedState == expectedArmedState;
+    }
+
+    public bool CanAbandonSurgery(EntityUid patient, EntityUid surgeon)
+    {
+        if (_sessions.TryGetSession(patient, out var session))
+        {
+            // This is authority over one active action, not ownership of the
+            // surgery. As soon as it stops, any qualified medic may take over.
+            if (session.Phase == CMUSurgerySessionPhase.Performing)
+                return session.ActiveSurgeon == surgeon;
+
+            return HasRequiredSkillForProcedure(surgeon, session.Procedure.Id);
+        }
+
+        if (!TryComp<CMUSurgeryArmedStepComponent>(patient, out var armed))
+            return false;
+
+        var procedure = string.IsNullOrEmpty(armed.LeafSurgeryId)
+            ? armed.SurgeryId
+            : armed.LeafSurgeryId;
+        return HasRequiredSkillForProcedure(surgeon, procedure);
+    }
+
+    private bool HasRequiredSkillForProcedure(EntityUid surgeon, string surgeryId)
+    {
+        return !_flowSurgery.TryGetDefinition(surgeryId, out var definition)
+            || _rulebook.HasRequiredSurgerySkill(surgeon, definition.MinSkill);
+    }
+
+    private CMUSurgeryBuiState BuildBuiStateForViewer(
+        EntityUid patient,
+        EntityUid viewer,
+        CMUSurgeryWindowOpenComponent marker,
+        List<CMUSurgeryPartEntry> parts,
+        CMUSurgeryArmedStepComponent? armed)
+    {
+        marker.ViewRevision = NextViewRevision();
+        var state = _flowSurgery.BuildBuiState(patient, Name(patient), parts, armed);
+        state.ViewRevision = marker.ViewRevision;
+        state.CanAbandon = CanAbandonSurgery(patient, viewer);
+        return state;
+    }
+
+    private bool IsUiCommandCurrent(
+        CMUSurgeryWindowOpenComponent marker,
+        NetEntity expectedPatient,
+        ulong expectedViewRevision,
+        CMUSurgerySessionId? expectedSession,
+        CMUSurgeryAttemptToken? expectedAttempt,
+        CMUSurgeryArmedStateId? expectedArmedState)
+    {
+        if (marker.ViewRevision != expectedViewRevision
+            || !TryGetEntity(expectedPatient, out var patient)
+            || patient is null
+            || patient.Value != marker.Patient)
+        {
+            return false;
+        }
+
+        return IsUiStateCurrent(marker.Patient, expectedSession, expectedAttempt, expectedArmedState);
+    }
+
+    private ulong NextViewRevision()
+    {
+        _lastViewRevision = unchecked(_lastViewRevision + 1);
+        if (_lastViewRevision == 0)
+            _lastViewRevision = 1;
+
+        return _lastViewRevision;
+    }
+
+    private bool CanAutoHandleToolIntent(EntityUid patient)
     {
         if (!TryComp<CMUSurgeryInProgressComponent>(patient, out var lockComp))
             return false;
 
-        return TryComp<CMUSurgeryInFlightComponent>(lockComp.Part, out var inFlight)
-            && inFlight.Surgeon == surgeon;
+        return HasComp<CMUSurgeryInFlightComponent>(lockComp.Part);
     }
 
     private bool IsCmuOrganicSurgeryPatient(EntityUid patient)
@@ -304,30 +397,75 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
         if (!marker.Patient.IsValid())
             return;
 
-        EntityUid targetPart = GetEntity(args.Part);
-        BodyPartType armedType = args.TargetPartType;
-        BodyPartSymmetry armedSymmetry = args.TargetSymmetry;
-        if (TryComp<BodyPartComponent>(targetPart, out var partComp)
-            && (!SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(args.SurgeryId)
-                || (partComp.PartType == armedType && partComp.Symmetry == armedSymmetry)))
+        if (!IsUiCommandCurrent(
+                marker,
+                args.Patient,
+                args.ExpectedViewRevision,
+                args.ExpectedSession,
+                args.ExpectedAttempt,
+                args.ExpectedArmedState))
         {
-            armedType = partComp.PartType;
-            armedSymmetry = partComp.Symmetry;
-        }
-        else if (SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(args.SurgeryId)
-                 && _flowSurgery.TryGetReattachAnchorPart(marker.Patient, out var anchor))
-        {
-            targetPart = anchor;
-        }
-        else
-        {
-            targetPart = marker.Patient;
+            RefreshUiForPatient(marker.Patient);
+            return;
         }
 
+        CMUSurgeryPartEntry? selectedPart = null;
+        CMUSurgeryEntry? selectedSurgery = null;
+        foreach (var part in BuildPartEntries(marker.Patient, medic))
+        {
+            if (part.Part != args.Part
+                || part.Type != args.TargetPartType
+                || part.Symmetry != args.TargetSymmetry)
+            {
+                continue;
+            }
+
+            foreach (var surgery in part.EligibleSurgeries)
+            {
+                if (surgery.SurgeryId != args.SurgeryId || surgery.NextStepIndex != args.StepIndex)
+                    continue;
+
+                selectedPart = part;
+                selectedSurgery = surgery;
+                break;
+            }
+
+            if (selectedSurgery is not null)
+                break;
+        }
+
+        if (selectedPart is null
+            || selectedSurgery is null
+            || !TryGetEntity(selectedPart.Part, out var selectedTarget)
+            || selectedTarget is null)
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-medical-surgery-cannot-start"), marker.Patient, medic);
+            RefreshUiForPatient(marker.Patient);
+            return;
+        }
+
+        var targetPart = selectedTarget.Value;
+        if (!HasComp<BodyPartComponent>(targetPart))
+        {
+            if (SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(selectedSurgery.SurgeryId)
+                && _flowSurgery.TryGetReattachAnchorPart(marker.Patient, out var anchor))
+            {
+                targetPart = anchor;
+            }
+            else
+            {
+                _popup.PopupEntity(Loc.GetString("cmu-medical-surgery-cannot-start"), marker.Patient, medic);
+                RefreshUiForPatient(marker.Patient);
+                return;
+            }
+        }
+
+        var armedType = selectedPart.Type;
+        var armedSymmetry = selectedPart.Symmetry;
         marker.TargetPartType = armedType;
         marker.TargetSymmetry = armedSymmetry;
 
-        if (_flowSurgery.TryGetMetadata(args.SurgeryId, out var metadata)
+        if (_flowSurgery.TryGetMetadata(selectedSurgery.SurgeryId, out var metadata)
             && !_rulebook.HasRequiredSurgerySkill(medic, metadata.MinSkill))
         {
             _popup.PopupEntity(Loc.GetString("cmu-medical-surgery-missing-skills"), marker.Patient, medic);
@@ -341,14 +479,15 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
             medic,
             marker.Patient,
             targetPart,
-            args.SurgeryId,
-            args.StepIndex,
+            selectedSurgery.SurgeryId,
+            selectedSurgery.NextStepIndex,
             armedType,
             armedSymmetry,
             allowSamePartInFlightSwitch: allowChoiceSwitch);
         if (armed is null)
         {
             _popup.PopupEntity(Loc.GetString("cmu-medical-surgery-cannot-start"), marker.Patient, medic);
+            RefreshUiForPatient(marker.Patient);
             return;
         }
 
@@ -358,15 +497,13 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
                 marker.Patient,
                 targetPart,
                 medic,
-                args.SurgeryId,
-                _flowSurgery.ResolveSurgeryDisplayName(args.SurgeryId),
+                selectedSurgery.SurgeryId,
+                _flowSurgery.ResolveSurgeryDisplayName(selectedSurgery.SurgeryId),
                 armedType,
                 armedSymmetry);
         }
 
-        var parts = BuildPartEntries(marker.Patient, medic);
-        var state = _flowSurgery.BuildBuiState(marker.Patient, Name(marker.Patient), parts, armed, medic);
-        _ui.SetUiState(medic, CMUSurgeryUIKey.Key, state);
+        RefreshUiForPatient(marker.Patient);
     }
 
     private void OnClearArmedMessage(Entity<CMUSurgeryWindowOpenComponent> ent, ref CMUSurgeryClearArmedMessage args)
@@ -375,14 +512,32 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
         if (!marker.Patient.IsValid())
             return;
 
-        var medic = ent.Owner;
+        if (!IsUiCommandCurrent(
+                marker,
+                args.Patient,
+                args.ExpectedViewRevision,
+                args.ExpectedSession,
+                args.ExpectedAttempt,
+                args.ExpectedArmedState))
+        {
+            RefreshUiForPatient(marker.Patient);
+            return;
+        }
+
+        if (!CanAbandonSurgery(marker.Patient, ent.Owner))
+        {
+            var message = _sessions.IsPerforming(marker.Patient)
+                ? "cmu-medical-surgery-step-busy"
+                : "cmu-medical-surgery-missing-skills";
+            _popup.PopupEntity(Loc.GetString(message), marker.Patient, ent.Owner);
+            RefreshUiForPatient(marker.Patient);
+            return;
+        }
+
         _flowSurgery.ClearArmed(marker.Patient);
         _flowSurgery.ClearSurgeryInFlight(marker.Patient);
 
-        var parts = BuildPartEntries(marker.Patient, medic);
-        var refreshedArmed = CompOrNull<CMUSurgeryArmedStepComponent>(marker.Patient);
-        var state = _flowSurgery.BuildBuiState(marker.Patient, Name(marker.Patient), parts, refreshedArmed, medic);
-        _ui.SetUiState(medic, CMUSurgeryUIKey.Key, state);
+        RefreshUiForPatient(marker.Patient);
     }
 
     private void OnUiClosed(Entity<CMUSurgeryWindowOpenComponent> ent, ref BoundUIClosedEvent args)

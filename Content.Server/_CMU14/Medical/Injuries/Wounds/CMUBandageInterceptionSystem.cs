@@ -180,8 +180,7 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         if (!TryComp<CMUSurgeryArmedStepComponent>(patient, out var armed))
             return false;
 
-        if (armed.Surgeon != medic
-            || armed.RequiredToolCategory is not { } category
+        if (armed.RequiredToolCategory is not { } category
             || !_surgery.ToolMatchesCategory(used, category))
         {
             return false;

@@ -19,19 +19,39 @@ public sealed class CMUSurgeryBuiState : BoundUserInterfaceState
     public List<CMUSurgeryPartEntry> Parts;
     public CMUArmedStepInfo? CurrentArmedStep;
     public CMUSurgeryInFlightInfo? InFlight;
+    public CMUSurgerySessionId? SessionId;
+    public CMUSurgeryAttemptToken? ActiveAttempt;
+    public CMUSurgeryArmedStateId? ArmedStateId;
+    public CMUSurgerySessionPhase? SessionPhase;
+    public BodyPartType? SessionPartType;
+    public BodyPartSymmetry? SessionPartSymmetry;
+    public ulong ViewRevision;
+    public bool CanAbandon;
 
     public CMUSurgeryBuiState(
         NetEntity patient,
         string patientName,
         List<CMUSurgeryPartEntry> parts,
         CMUArmedStepInfo? currentArmedStep,
-        CMUSurgeryInFlightInfo? inFlight)
+        CMUSurgeryInFlightInfo? inFlight,
+        CMUSurgerySessionId? sessionId,
+        CMUSurgeryAttemptToken? activeAttempt,
+        CMUSurgeryArmedStateId? armedStateId,
+        CMUSurgerySessionPhase? sessionPhase,
+        BodyPartType? sessionPartType,
+        BodyPartSymmetry? sessionPartSymmetry)
     {
         Patient = patient;
         PatientName = patientName;
         Parts = parts;
         CurrentArmedStep = currentArmedStep;
         InFlight = inFlight;
+        SessionId = sessionId;
+        ActiveAttempt = activeAttempt;
+        ArmedStateId = armedStateId;
+        SessionPhase = sessionPhase;
+        SessionPartType = sessionPartType;
+        SessionPartSymmetry = sessionPartSymmetry;
     }
 }
 
@@ -42,8 +62,7 @@ public sealed record CMUSurgeryInFlightInfo(
     string LeafSurgeryId,
     string LeafSurgeryDisplayName,
     string SurgeonName,
-    TimeSpan StartedAt,
-    bool OwnedByViewer);
+    TimeSpan StartedAt);
 
 [Serializable, NetSerializable]
 public sealed record CMUSurgeryPartEntry(
@@ -79,24 +98,63 @@ public sealed record CMUArmedStepInfo(
 public sealed class CMUSurgeryArmStepMessage : BoundUserInterfaceMessage
 {
     public NetEntity Part;
+    public NetEntity Patient;
     public BodyPartType TargetPartType;
     public BodyPartSymmetry TargetSymmetry;
     public string SurgeryId;
     public int StepIndex;
+    public CMUSurgerySessionId? ExpectedSession;
+    public CMUSurgeryAttemptToken? ExpectedAttempt;
+    public CMUSurgeryArmedStateId? ExpectedArmedState;
+    public ulong ExpectedViewRevision;
 
-    public CMUSurgeryArmStepMessage(NetEntity part, BodyPartType type, BodyPartSymmetry symmetry, string surgeryId, int stepIndex)
+    public CMUSurgeryArmStepMessage(
+        NetEntity patient,
+        NetEntity part,
+        BodyPartType type,
+        BodyPartSymmetry symmetry,
+        string surgeryId,
+        int stepIndex,
+        CMUSurgerySessionId? expectedSession,
+        CMUSurgeryAttemptToken? expectedAttempt,
+        CMUSurgeryArmedStateId? expectedArmedState,
+        ulong expectedViewRevision)
     {
+        Patient = patient;
         Part = part;
         TargetPartType = type;
         TargetSymmetry = symmetry;
         SurgeryId = surgeryId;
         StepIndex = stepIndex;
+        ExpectedSession = expectedSession;
+        ExpectedAttempt = expectedAttempt;
+        ExpectedArmedState = expectedArmedState;
+        ExpectedViewRevision = expectedViewRevision;
     }
 }
 
 [Serializable, NetSerializable]
 public sealed class CMUSurgeryClearArmedMessage : BoundUserInterfaceMessage
 {
+    public CMUSurgerySessionId? ExpectedSession;
+    public NetEntity Patient;
+    public CMUSurgeryAttemptToken? ExpectedAttempt;
+    public CMUSurgeryArmedStateId? ExpectedArmedState;
+    public ulong ExpectedViewRevision;
+
+    public CMUSurgeryClearArmedMessage(
+        NetEntity patient,
+        CMUSurgerySessionId? expectedSession,
+        CMUSurgeryAttemptToken? expectedAttempt,
+        CMUSurgeryArmedStateId? expectedArmedState,
+        ulong expectedViewRevision)
+    {
+        Patient = patient;
+        ExpectedSession = expectedSession;
+        ExpectedAttempt = expectedAttempt;
+        ExpectedArmedState = expectedArmedState;
+        ExpectedViewRevision = expectedViewRevision;
+    }
 }
 
 public readonly record struct CMUResolvedStep(

@@ -26,6 +26,7 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
     [Dependency] private CMSurgerySystem _rmcSurgery = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedCMUSurgeryFlowSystem _flowSurgery = default!;
+    [Dependency] private CMUSurgerySessionSystem _sessions = default!;
     [Dependency] private SharedCMUSurgicalTraitSystem _surgicalTraits = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> SurgerySkill = "RMCSkillSurgery";
@@ -37,6 +38,9 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
             return parts;
 
         TryComp<CMUSurgeryInProgressComponent>(patient, out var lockComp);
+        var hasSession = _sessions.TryGetSession(patient, out var session);
+        var sessionBlocksOtherSites = hasSession
+            && (session.Phase == CMUSurgerySessionPhase.Performing || lockComp is not null);
         foreach (var (childId, childComp) in _medicalIndex.GetBodyParts(patient))
         {
             if (!IsSurgicallySupportedPart(childComp.PartType))
@@ -57,7 +61,9 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
                 && lockComp.Part == childId
                 && (!isReattachLock
                     || (lockComp.TargetPartType == childComp.PartType && lockComp.TargetSymmetry == childComp.Symmetry));
-            var lockedByOtherPart = lockComp is not null && !isInFlightHere;
+            isInFlightHere |= hasSession
+                && session.Site == new CMUMedicalBodyPartKey(childComp.PartType, childComp.Symmetry);
+            var lockedByOtherPart = (lockComp is not null || sessionBlocksOtherSites) && !isInFlightHere;
 
             parts.Add(new CMUSurgeryPartEntry(
                 GetNetEntity(childId),
@@ -95,7 +101,9 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
                     && SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(lockComp.LeafSurgeryId)
                     && lockComp.TargetPartType == slot.Type
                     && lockComp.TargetSymmetry == symmetry;
-                var lockedByOtherPart = lockComp is not null && !isInFlightHere;
+                isInFlightHere |= hasSession
+                    && session.Site == new CMUMedicalBodyPartKey(slot.Type, symmetry);
+                var lockedByOtherPart = (lockComp is not null || sessionBlocksOtherSites) && !isInFlightHere;
 
                 parts.Add(new CMUSurgeryPartEntry(
                     patientNetEntity,
@@ -122,6 +130,13 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
         bool ignoreSkillRequirements = false)
     {
         var entries = new List<CMUSurgeryEntry>();
+
+        if (!ignoreInProgressLock
+            && _sessions.TryGetSession(patient, out var session)
+            && session.Phase == CMUSurgerySessionPhase.Performing)
+        {
+            return entries;
+        }
 
         if (targetPart is null)
         {

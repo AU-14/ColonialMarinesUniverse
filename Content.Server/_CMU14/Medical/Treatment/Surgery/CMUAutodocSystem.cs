@@ -34,6 +34,7 @@ public sealed partial class CMUAutodocSystem : EntitySystem
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private CMUSurgeryDispatchSystem _dispatch = default!;
     [Dependency] private SharedCMUSurgeryFlowSystem _flow = default!;
+    [Dependency] private CMUSurgerySessionSystem _sessions = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private CMUMedicalPatientBaySystem _patientBay = default!;
     [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
@@ -288,9 +289,18 @@ public sealed partial class CMUAutodocSystem : EntitySystem
             return;
         }
 
+        if (_sessions.TryGetSession(patient, out _)
+            || HasComp<CMUSurgeryArmedStepComponent>(patient)
+            || HasComp<CMUSurgeryInProgressComponent>(patient))
+        {
+            // Automated work does not claim or erase a live manual session.
+            StopPod(pod, comp);
+            RefreshLinkedConsoles(pod);
+            return;
+        }
+
         var queued = comp.Queue[0];
         comp.CurrentStep = FormatQueuedStep(queued);
-        ClearPatientSurgeryState(patient);
 
         if (!TryApplyAutomatedProcedure(patient, comp.Operator, queued))
         {
@@ -361,13 +371,6 @@ public sealed partial class CMUAutodocSystem : EntitySystem
         return step;
     }
 
-    private void ClearPatientSurgeryState(EntityUid patient)
-    {
-        if (HasComp<CMUSurgeryArmedStepComponent>(patient))
-            RemComp<CMUSurgeryArmedStepComponent>(patient);
-        _flow.ClearSurgeryInFlight(patient);
-    }
-
     private bool TryApplyAutomatedProcedure(EntityUid patient, EntityUid operatorUid, CMUAutodocQueuedStep queued)
     {
         var targetPart = ResolveQueuedPart(patient, queued);
@@ -404,14 +407,9 @@ public sealed partial class CMUAutodocSystem : EntitySystem
 
     private EntityUid ResolveQueuedPart(EntityUid patient, CMUAutodocQueuedStep queued)
     {
-        if (Exists(queued.Part) &&
-            TryComp<BodyPartComponent>(queued.Part, out var queuedPart) &&
-            queuedPart.PartType == queued.Type &&
-            queuedPart.Symmetry == queued.Symmetry)
-        {
-            return queued.Part;
-        }
-
+        // Queue entries describe a logical body site, not an enduring entity
+        // capability. Resolve through the current patient's body index so a
+        // stale UID can never make work spill onto a previous occupant.
         return _medicalIndex.TryGetBodyPart(
             patient,
             new CMUMedicalBodyPartKey(queued.Type, queued.Symmetry),
@@ -548,7 +546,11 @@ public sealed partial class CMUAutodocSystem : EntitySystem
             origin: origin);
     }
 
-    private void StopPod(EntityUid pod, CMUAutodocPodComponent comp, bool clearSurgery = true)
+    /// <summary>
+    ///     Stops only machine-owned work. Manual surgery sessions are
+    ///     patient-scoped and are never claimed by the pod or its operator.
+    /// </summary>
+    private void StopPod(EntityUid pod, CMUAutodocPodComponent comp)
     {
         _scheduler.Cancel(pod, ProcedureStepWork);
         comp.IsRunning = false;
@@ -556,16 +558,6 @@ public sealed partial class CMUAutodocSystem : EntitySystem
         comp.NextStepAt = TimeSpan.Zero;
         _appearance.SetData(pod, CMUAutodocVisuals.Operating, false);
         _patientBay.UpdatePodAppearance(pod, comp.BodyContainer);
-
-        if (!clearSurgery || !TryGetPatient(pod, out var patient))
-            return;
-
-        if (TryComp<CMUSurgeryArmedStepComponent>(patient, out var armed)
-            && armed.Surgeon == comp.Operator)
-        {
-            _flow.ClearArmed(patient, armed);
-            _flow.ClearSurgeryInFlight(patient);
-        }
     }
 
     private bool CanControl(EntityUid user)
@@ -916,6 +908,8 @@ public sealed partial class CMUAutodocSystem : EntitySystem
             return null;
 
         StopPod(pod, comp);
+        comp.Queue.Clear();
+        comp.Operator = EntityUid.Invalid;
         RemCompDeferred<CMUAutodocContainedPatientComponent>(patient);
         _patientBay.TryEjectPatient(pod, comp.BodyContainer, patient);
         RefreshLinkedConsoles(pod);

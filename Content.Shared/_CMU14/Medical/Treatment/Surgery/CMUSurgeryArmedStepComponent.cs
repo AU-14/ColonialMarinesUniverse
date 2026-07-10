@@ -7,8 +7,15 @@ namespace Content.Shared._CMU14.Medical.Treatment.Surgery;
 [Access(typeof(SharedCMUSurgeryFlowSystem))]
 public sealed partial class CMUSurgeryArmedStepComponent : Component
 {
+    /// <summary>
+    ///     Compatibility attribution for UI feedback and legacy projections.
+    ///     Manual execution authority lives on the active session attempt.
+    /// </summary>
     [DataField, AutoNetworkedField]
-    public EntityUid Surgeon;
+    public EntityUid LastOperator;
+
+    [DataField, AutoNetworkedField]
+    public CMUSurgeryArmedStateId StateId;
 
     [DataField, AutoNetworkedField]
     public string SurgeryId = string.Empty;

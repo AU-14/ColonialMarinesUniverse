@@ -77,7 +77,6 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
 
         if (IsSynthReattachStepTool(args.Used)
             && TryComp<CMUSurgeryArmedStepComponent>(ent.Owner, out var armed)
-            && armed.Surgeon == args.User
             && armed.LeafSurgeryId == "RMCSynthSurgeryReattachLimb")
         {
             if (!_cmuFlow.ToolMatchesCategory(args.Used, armed.RequiredToolCategory))

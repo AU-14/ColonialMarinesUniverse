@@ -9,6 +9,7 @@ using Content.Shared._CMU14.Medical.Treatment.Surgery.Markers;
 using Content.Shared._RMC14.Emote;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery;
+using Content.Shared._RMC14.Medical.Surgery.Steps;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
 using Content.Shared._RMC14.Repairable;
 using Content.Shared._RMC14.Stun;
@@ -35,7 +36,6 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private CMUBodyScannerSystem _bodyScanner = default!;
-    [Dependency] private IComponentFactory _compFactory = default!;
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private CMUSurgeryDispatchSystem _dispatch = default!;
     [Dependency] private SharedRMCEmoteSystem _emote = default!;
@@ -99,14 +99,39 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
 
     protected override bool StartStepDoAfter(EntityUid patient, CMUSurgeryArmedStepComponent armed, EntityUid surgeon, EntityUid tool, EntityUid targetPart)
     {
+        var stepProtoId = ResolveStepPrototypeId(armed.SurgeryId, armed.StepIndex);
+        if (stepProtoId is not { } committedStep)
+            return false;
+
+        var leafId = string.IsNullOrEmpty(armed.LeafSurgeryId) ? armed.SurgeryId : armed.LeafSurgeryId;
+        var startResult = SurgerySessions.TryBeginAttempt(
+            patient,
+            surgeon,
+            tool,
+            targetPart,
+            new CMUMedicalBodyPartKey(armed.TargetPartType, armed.TargetSymmetry),
+            new EntProtoId<CMSurgeryComponent>(leafId),
+            committedStep,
+            out var token);
+        if (startResult != CMUSurgeryAttemptStartResult.Started)
+        {
+            var message = startResult == CMUSurgeryAttemptStartResult.Busy
+                ? "cmu-medical-surgery-step-busy"
+                : "cmu-medical-surgery-cannot-start";
+            Popup.PopupEntity(Loc.GetString(message), patient, surgeon, PopupType.SmallCaution);
+            return false;
+        }
+
         var delay = ResolveStepDoAfterDelay(surgeon, patient);
         if (TryComp<CMUImprovisedSurgeryToolComponent>(tool, out var improvised))
             delay = TimeSpan.FromSeconds(delay.TotalSeconds * MathF.Max(1f, improvised.DelayMultiplier));
 
         var ev = new CMUSurgeryStepDoAfterEvent(
+            token,
             armed.SurgeryId,
             armed.LeafSurgeryId,
             armed.StepIndex,
+            committedStep,
             armed.TargetPartType,
             armed.TargetSymmetry);
         var doAfter = new DoAfterArgs(EntityManager, surgeon, delay, ev, patient, targetPart, tool)
@@ -116,10 +141,14 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             BreakOnMove = true,
             MovementThreshold = 0.5f,
             NeedHand = true,
-            CancelDuplicate = false,
+            CancelDuplicate = true,
         };
         if (!DoAfter.TryStartDoAfter(doAfter))
+        {
+            SurgerySessions.TryConsumeAttempt(patient, token, surgeon, tool, targetPart, committedStep);
+            OnSurgerySessionStateChanged(patient);
             return false;
+        }
 
         if (HasComp<BlowtorchComponent>(tool))
         {
@@ -131,6 +160,42 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             && ToolCategorySounds.TryGetValue(category, out var sound))
         {
             _audio.PlayPvs(sound, patient);
+        }
+
+        return true;
+    }
+
+    protected override void OnSurgerySessionStateChanged(EntityUid patient)
+    {
+        _dispatch.RefreshUiForPatient(patient);
+    }
+
+    protected override bool CanStartArmedProcedure(
+        EntityUid patient,
+        CMUSurgeryArmedStepComponent armed,
+        EntityUid surgeon)
+    {
+        var leafId = string.IsNullOrEmpty(armed.LeafSurgeryId) ? armed.SurgeryId : armed.LeafSurgeryId;
+        if (surgeon == patient && !CanSelfOperateSurgery(leafId, armed.TargetPartType))
+        {
+            Popup.PopupEntity(
+                Loc.GetString("cmu-medical-surgery-self-not-allowed"),
+                patient,
+                surgeon,
+                PopupType.SmallCaution);
+            return false;
+        }
+
+        if (TryGetDefinition(leafId, out var procedure)
+            && procedure.MinSkill > 0
+            && !_skills.HasSkill(surgeon, SurgerySkill, procedure.MinSkill))
+        {
+            Popup.PopupEntity(
+                Loc.GetString("cmu-medical-surgery-missing-skills"),
+                patient,
+                surgeon,
+                PopupType.SmallCaution);
+            return false;
         }
 
         return true;
@@ -165,7 +230,13 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             PopupType.MediumCaution);
     }
 
-    protected override void RunStepEffect(EntityUid patient, CMUSurgeryArmedStepComponent armed, EntityUid surgeon, EntityUid? tool, EntityUid? targetPart)
+    protected override void RunStepEffect(
+        EntityUid patient,
+        CMUSurgeryArmedStepComponent armed,
+        EntityUid surgeon,
+        EntityUid? tool,
+        EntityUid? targetPart,
+        EntProtoId<CMSurgeryStepComponent>? committedStep = null)
     {
         var leafId = string.IsNullOrEmpty(armed.LeafSurgeryId) ? armed.SurgeryId : armed.LeafSurgeryId;
         var stepPart = ResolveStepPart(patient, armed, targetPart, leafId);
@@ -177,20 +248,20 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
         // (which may be a prereq like CMSurgeryOpenIncision, not the leaf
         // the medic picked) so V1 SharedCMUSurgerySystem applies the
         // organ remove / bone set / cauterize / reattach side effects.
-        var stepProtoId = ResolveStepPrototypeId(armed.SurgeryId, armed.StepIndex);
-        if (stepProtoId is null)
+        var stepProtoId = committedStep ?? ResolveStepPrototypeId(armed.SurgeryId, armed.StepIndex);
+        if (stepProtoId is not { } stepId)
         {
             ClearArmed(patient, armed);
             return;
         }
 
-        if (RmcSurgery.GetSingleton(stepProtoId) is not { } stepEnt)
+        if (RmcSurgery.GetSingleton(stepId) is not { } stepEnt)
         {
             ClearArmed(patient, armed);
             return;
         }
 
-        if (TryFailSurgeryStep(patient, stepProtoId, armed.RequiredToolCategory, surgeon, tool))
+        if (TryFailSurgeryStep(patient, stepId.Id, armed.RequiredToolCategory, surgeon, tool))
         {
             RearmAfterFailedStep(patient, armed, surgeon, stepPart, leafId);
             _dispatch.RefreshUiForPatient(patient);
@@ -207,13 +278,13 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
                 tools.Add(held);
         }
 
-        if (!TryApplyIncisionManagementSystemOpening(stepProtoId, stepPart, tool))
+        if (!TryApplyIncisionManagementSystemOpening(stepId.Id, stepPart, tool))
         {
             var stepEvent = new CMSurgeryStepEvent(surgeon, patient, stepPart, tools);
             RaiseLocalEvent(stepEnt, ref stepEvent);
         }
 
-        if (IsReattachLimbStep(stepProtoId)
+        if (IsReattachLimbStep(stepId.Id)
             && TryFindClickedPart(patient, null, armed.TargetPartType, armed.TargetSymmetry, out var reattachedPart))
         {
             MoveReattachSurgeryStateToLimb(stepPart, reattachedPart);
@@ -347,6 +418,7 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
 
     private void ApplyResolvedStep(EntityUid patient, CMUSurgeryArmedStepComponent armed, CMUResolvedStep resolved)
     {
+        RefreshArmedStateId(armed);
         armed.SurgeryId = resolved.ResolvedSurgeryId;
         armed.StepIndex = resolved.StepIndex;
         armed.RequiredToolCategory = resolved.ToolCategory;
@@ -483,7 +555,7 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
     private bool IsClosureStep(string surgeryId, int stepIndex)
     {
         var stepId = ResolveStepPrototypeId(surgeryId, stepIndex);
-        return stepId is not null && ClosureStepIds.Contains(stepId);
+        return stepId is { } resolved && ClosureStepIds.Contains(resolved.Id);
     }
 
     private static bool IsReattachLimbStep(string stepProtoId)
@@ -722,14 +794,14 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
         return true;
     }
 
-    private string? ResolveStepPrototypeId(string surgeryId, int stepIndex)
+    private EntProtoId<CMSurgeryStepComponent>? ResolveStepPrototypeId(string surgeryId, int stepIndex)
     {
-        if (!Prototypes.TryIndex<EntityPrototype>(surgeryId, out var proto))
+        if (!TryGetDefinition(surgeryId, out var surgery)
+            || !surgery.TryGetStepAt(stepIndex, out var step))
+        {
             return null;
-        if (!proto.TryComp<CMSurgeryComponent>(out var surgeryComp, _compFactory))
-            return null;
-        if (stepIndex < 0 || stepIndex >= surgeryComp.Steps.Count)
-            return null;
-        return surgeryComp.Steps[stepIndex];
+        }
+
+        return step.Id;
     }
 }

@@ -55,12 +55,14 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     [Dependency] protected ItemToggleSystem ItemToggle = default!;
     [Dependency] protected SharedPopupSystem Popup = default!;
     [Dependency] protected SharedPainShockSystem Pain = default!;
+    [Dependency] protected CMUSurgerySessionSystem SurgerySessions = default!;
     [Dependency] protected SharedCMUSurgicalTraitSystem SurgicalTraits = default!;
     [Dependency] protected SharedStatusEffectsSystem Status = default!;
     [Dependency] protected SharedUserInterfaceSystem UserInterface = default!;
     [Dependency] protected SharedCMSurgerySystem RmcSurgery = default!;
 
     private CMUSurgeryRegistry _registry = CMUSurgeryRegistry.Empty;
+    private ulong _lastArmedStateId;
 
     private readonly Dictionary<string, Type[]> _toolCategories = new();
 
@@ -85,6 +87,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     private static readonly EntProtoId FreeOrganAdhesionsStep = "CMUSurgeryStepFreeOrganAdhesions";
     private static readonly EntProtoId PackOrganBleedStep = "CMUSurgeryStepPackOrganBleed";
     private static readonly CMUMedicalWorkKey ArmedStepExpiryWork = new("surgery-armed-step-expiry");
+    private static readonly CMUMedicalWorkKey SessionTargetValidationWork = new("surgery-session-target-validation");
 
     public override void Initialize()
     {
@@ -96,16 +99,55 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
 
         SubscribeLocalEvent<CMUSurgeryArmedStepComponent, InteractUsingEvent>(OnArmedInteractUsing);
-        SubscribeLocalEvent<CMUSurgeryArmedStepComponent, InteractHandEvent>(OnArmedInteractHand);
         SubscribeLocalEvent<CMUSurgeryArmedStepComponent, DoAfterAttemptEvent<CMUSurgeryStepDoAfterEvent>>(OnStepDoAfterAttempt);
         SubscribeLocalEvent<CMUSurgeryArmedStepComponent, CMUSurgeryStepDoAfterEvent>(OnStepDoAfter);
+        SubscribeLocalEvent<CMUSurgeryArmedStepComponent, CMUSurgeryAttemptActorLostEvent>(OnAttemptActorLost);
         SubscribeLocalEvent<CMUSurgeryArmedStepComponent, CMUMedicalWorkDueEvent>(OnArmedStepExpiryDue);
+        SubscribeLocalEvent<BodyComponent, BodyPartRemovedEvent>(OnSessionBodyPartRemoved);
+        SubscribeLocalEvent<BodyComponent, CMUMedicalWorkDueEvent>(OnSessionTargetValidationDue);
     }
 
     private void OnPrototypesReloaded(PrototypesReloadedEventArgs args)
     {
-        if (args.WasModified<CMUSurgeryStepMetadataPrototype>() || args.WasModified<EntityPrototype>())
-            RebuildRegistry();
+        if (!args.WasModified<CMUSurgeryStepMetadataPrototype>() && !args.WasModified<EntityPrototype>())
+            return;
+
+        var invalidatesLiveSessions = args.WasModified<CMUSurgeryStepMetadataPrototype>();
+        if (!invalidatesLiveSessions
+            && args.TryGetModified<EntityPrototype>(out var modifiedEntities))
+        {
+            foreach (var prototypeId in modifiedEntities)
+            {
+                if (_registry.TryGetDefinition(prototypeId, out _)
+                    || _registry.ContainsStep(prototypeId))
+                {
+                    invalidatesLiveSessions = true;
+                    break;
+                }
+            }
+        }
+
+        RebuildRegistry();
+        if (!Net.IsServer || !invalidatesLiveSessions)
+            return;
+
+        // A live attempt is compiled against one exact step definition. Hot
+        // reload invalidates that contract instead of allowing an old action
+        // to execute whatever now happens to occupy the same list index.
+        var patients = new List<EntityUid>();
+        var query = EntityQueryEnumerator<CMUSurgerySessionComponent>();
+        while (query.MoveNext(out var patient, out _))
+        {
+            patients.Add(patient);
+        }
+
+        foreach (var patient in patients)
+        {
+            if (TryComp<CMUSurgeryArmedStepComponent>(patient, out var armed))
+                ClearArmed(patient, armed);
+            ClearSurgeryInFlight(patient);
+            OnSurgerySessionStateChanged(patient);
+        }
     }
 
     private void RebuildRegistry()
@@ -345,6 +387,33 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             return null;
         }
 
+        var requestedSite = new CMUMedicalBodyPartKey(armedType, armedSymmetry);
+        if (SurgerySessions.TryGetSession(patient, out var session))
+        {
+            if (session.Phase == CMUSurgerySessionPhase.Performing)
+            {
+                if (TryComp<CMUSurgeryArmedStepComponent>(patient, out var performing)
+                    && performing.LeafSurgeryId == surgeryId
+                    && performing.TargetPartType == armedType
+                    && performing.TargetSymmetry == armedSymmetry)
+                {
+                    return performing;
+                }
+
+                return null;
+            }
+
+            if (session.Site != requestedSite)
+            {
+                // No step has committed yet, so an idle first attempt may be
+                // replaced without leaving an invisible site lock behind.
+                if (HasComp<CMUSurgeryInProgressComponent>(patient))
+                    return null;
+
+                SurgerySessions.EndSession(patient);
+            }
+        }
+
         // Patient-level lock: only one in-flight surgery per patient. A
         // mismatch refuses the arm so the BUI can surface "finish or abandon"
         // instead of silently switching surgeries.
@@ -368,7 +437,8 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             && existing.TargetPartType == armedType
             && existing.TargetSymmetry == armedSymmetry)
         {
-            existing.Surgeon = surgeon;
+            existing.LastOperator = surgeon;
+            RefreshArmedStateId(existing);
             existing.ArmedAt = Timing.CurTime;
             Dirty(patient, existing);
             ScheduleArmedExpiry(patient, existing);
@@ -382,7 +452,8 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             return null;
 
         var armed = EnsureComp<CMUSurgeryArmedStepComponent>(patient);
-        armed.Surgeon = surgeon;
+        armed.LastOperator = surgeon;
+        RefreshArmedStateId(armed);
         // SurgeryId = resolved (drives V1 step-event raise in RunStepEffect).
         // LeafSurgeryId = what the medic picked (drives BUI display).
         armed.SurgeryId = resolved.ResolvedSurgeryId;
@@ -403,6 +474,14 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     {
         var lockComp = EnsureComp<CMUSurgeryInProgressComponent>(patient);
         var alreadyInFlight = lockComp.LeafSurgeryId == leafSurgeryId && lockComp.Part == part;
+        var previousPart = lockComp.Part;
+        if (previousPart.IsValid()
+            && previousPart != part
+            && HasComp<CMUSurgeryInFlightComponent>(previousPart))
+        {
+            RemComp<CMUSurgeryInFlightComponent>(previousPart);
+        }
+
         lockComp.Part = part;
         lockComp.LeafSurgeryId = leafSurgeryId;
         lockComp.TargetPartType = targetType;
@@ -429,11 +508,15 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
 
         lockComp.AwaitingClosureChoice = true;
         Dirty(patient, lockComp);
+        SurgerySessions.SetAwaitingDecision(patient);
         return true;
     }
 
     public void ClearSurgeryInFlight(EntityUid patient)
     {
+        MedicalScheduler.Cancel(patient, SessionTargetValidationWork);
+        SurgerySessions.EndSession(patient);
+
         if (TryComp<CMUSurgeryInProgressComponent>(patient, out var lockComp))
         {
             ClearAbandonedReattachState(patient, lockComp);
@@ -482,7 +565,11 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         if (!Resolve(patient, ref armed, false))
             return;
 
-        var surgeon = armed.Surgeon;
+        var surgeon = armed.LastOperator;
+        SurgerySessions.CancelActiveAttempt(patient);
+        if (!HasComp<CMUSurgeryInProgressComponent>(patient))
+            SurgerySessions.EndSession(patient);
+        MedicalScheduler.Cancel(patient, SessionTargetValidationWork);
         MedicalScheduler.Cancel(patient, ArmedStepExpiryWork);
         RemComp<CMUSurgeryArmedStepComponent>(patient);
 
@@ -493,6 +580,8 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
                 : "cmu-medical-surgery-armed-cancelled";
             Popup.PopupEntity(Loc.GetString(msg), surgeon, surgeon, PopupType.SmallCaution);
         }
+
+        OnSurgerySessionStateChanged(patient);
     }
 
     /// <summary>
@@ -631,9 +720,6 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         handled = false;
         started = false;
 
-        if (user != armed.Surgeon)
-            return false;
-
         var isRightTool = ToolMatchesCategory(used, armed.RequiredToolCategory);
         var hasWrongDamage = TryGetWrongToolDamage(used, out var damageType, out var amount);
 
@@ -650,10 +736,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         handled = true;
 
         if (!CanOperateOnPatient(patient, user, popup: true))
-        {
-            ClearArmed(patient, armed);
             return true;
-        }
 
         var hasTargetPart = TryFindClickedPart(patient, clickTarget, armed.TargetPartType, armed.TargetSymmetry, out var targetPart);
         if (!hasTargetPart && !TryResolveReattachAnchorForUse(patient, clickTarget, armed, out targetPart))
@@ -664,6 +747,9 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
 
         if (isRightTool)
         {
+            if (!CanStartArmedProcedure(patient, armed, user))
+                return true;
+
             if (!TryResolveArmedStepEntity(armed, out var stepEnt))
             {
                 ClearArmed(patient, armed);
@@ -692,7 +778,22 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
 
             if (Net.IsServer)
             {
+                var previousOperator = armed.LastOperator;
+                armed.LastOperator = user;
+                Dirty(patient, armed);
                 started = StartStepDoAfter(patient, armed, user, used, targetPart);
+                if (!started)
+                {
+                    armed.LastOperator = previousOperator;
+                    Dirty(patient, armed);
+                }
+                else
+                {
+                    armed.ArmedAt = Timing.CurTime;
+                    Dirty(patient, armed);
+                    ScheduleArmedExpiry(patient, armed);
+                    OnSurgerySessionStateChanged(patient);
+                }
             }
             return true;
         }
@@ -766,21 +867,6 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         return surgeryId == "CMUSurgeryReattachLimb" || surgeryId == "RMCSynthSurgeryReattachLimb";
     }
 
-    private void OnArmedInteractHand(Entity<CMUSurgeryArmedStepComponent> ent, ref InteractHandEvent args)
-    {
-        if (args.Handled)
-            return;
-
-        var (patient, armed) = ent;
-
-        if (args.User != armed.Surgeon)
-            return;
-
-        Popup.PopupEntity(Loc.GetString("cmu-medical-surgery-no-tool"), patient, args.User, PopupType.SmallCaution);
-        ClearArmed(patient, armed);
-        args.Handled = true;
-    }
-
     /// <summary>
     ///     Override in the sealed server class so prediction rollback can't
     ///     re-raise the step event on the client.
@@ -788,6 +874,30 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     protected virtual bool StartStepDoAfter(EntityUid patient, CMUSurgeryArmedStepComponent armed, EntityUid surgeon, EntityUid tool, EntityUid targetPart)
     {
         return false;
+    }
+
+    protected virtual bool CanStartArmedProcedure(
+        EntityUid patient,
+        CMUSurgeryArmedStepComponent armed,
+        EntityUid surgeon)
+    {
+        return true;
+    }
+
+    protected virtual void OnSurgerySessionStateChanged(EntityUid patient)
+    {
+    }
+
+    protected void RefreshArmedStateId(CMUSurgeryArmedStepComponent armed)
+    {
+        if (!Net.IsServer)
+            return;
+
+        _lastArmedStateId = unchecked(_lastArmedStateId + 1);
+        if (_lastArmedStateId == 0)
+            _lastArmedStateId = 1;
+
+        armed.StateId = new CMUSurgeryArmedStateId(_lastArmedStateId);
     }
 
     protected virtual void ApplyWrongToolDamage(EntityUid surgeon, EntityUid patient, EntityUid tool, string damageType, float amount)
@@ -799,7 +909,13 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     ///     or raises <c>CMSurgeryCompleteEvent</c>. Shared no-ops so
     ///     prediction rollback can't double-apply state mutations.
     /// </summary>
-    protected virtual void RunStepEffect(EntityUid patient, CMUSurgeryArmedStepComponent armed, EntityUid surgeon, EntityUid? tool, EntityUid? targetPart)
+    protected virtual void RunStepEffect(
+        EntityUid patient,
+        CMUSurgeryArmedStepComponent armed,
+        EntityUid surgeon,
+        EntityUid? tool,
+        EntityUid? targetPart,
+        EntProtoId<CMSurgeryStepComponent>? committedStep = null)
     {
     }
 
@@ -808,14 +924,9 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         if (!Net.IsServer)
             return false;
 
-        if (armed.Surgeon != surgeon)
+        if (!CanOperateOnPatient(patient, surgeon, popup: true)
+            || !CanStartArmedProcedure(patient, armed, surgeon))
             return false;
-
-        if (!CanOperateOnPatient(patient, surgeon, popup: true))
-        {
-            ClearArmed(patient, armed);
-            return false;
-        }
 
         EntityUid targetPart;
         if (TryFindClickedPart(patient, null, armed.TargetPartType, armed.TargetSymmetry, out var foundPart))
@@ -842,8 +953,9 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         var (patient, armed) = ent;
         var ev = args.Event;
 
-        if (armed.Surgeon != ev.User
-            || !ArmedMatchesDoAfter(armed, ev)
+        if (!ArmedMatchesDoAfter(armed, ev)
+            || (Net.IsServer && !SurgerySessions.IsAttemptCurrent(patient, ev.Attempt, ev.User, ev.Used, ev.Target, ev.StepId))
+            || (Net.IsServer && !IsAttemptTargetStillValid(patient, armed, ev.Target))
             || !CanOperateOnPatient(patient, ev.User)
             || ShouldInterruptSurgeryStep(patient))
         {
@@ -858,14 +970,26 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         if (!ArmedMatchesDoAfter(armed, args))
             return;
 
+        if (!Net.IsServer
+            || !SurgerySessions.IsAttemptCurrent(patient, args.Attempt, args.User, args.Used, args.Target, args.StepId))
+        {
+            return;
+        }
+
         if (args.Cancelled)
         {
-            if (args.User == armed.Surgeon)
+            if (SurgerySessions.TryConsumeAttempt(patient, args.Attempt, args.User, args.Used, args.Target, args.StepId))
             {
+                if (!IsAttemptTargetStillValid(patient, armed, args.Target))
+                {
+                    AbandonInvalidTarget(patient, armed);
+                    return;
+                }
+
                 if (ShouldInterruptSurgeryStep(patient))
                     Popup.PopupEntity(Loc.GetString("cmu-medical-surgery-step-pain-interrupted"), patient, args.User, PopupType.MediumCaution);
 
-                ClearArmed(patient, armed);
+                ReturnToAwaitingAction(patient, armed);
             }
             return;
         }
@@ -874,33 +998,148 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             return;
         args.Handled = true;
 
-        if (armed.Surgeon != args.User)
-            return;
-
         if (!CanOperateOnPatient(patient, args.User, popup: true))
         {
-            ClearArmed(patient, armed);
+            SurgerySessions.TryConsumeAttempt(patient, args.Attempt, args.User, args.Used, args.Target, args.StepId);
+            ReturnToAwaitingAction(patient, armed);
             return;
         }
 
         if (ShouldInterruptSurgeryStep(patient))
         {
             Popup.PopupEntity(Loc.GetString("cmu-medical-surgery-step-pain-interrupted"), patient, args.User, PopupType.MediumCaution);
-            ClearArmed(patient, armed);
+            SurgerySessions.TryConsumeAttempt(patient, args.Attempt, args.User, args.Used, args.Target, args.StepId);
+            ReturnToAwaitingAction(patient, armed);
             return;
         }
 
-        if (Net.IsServer)
-            RunStepEffect(patient, armed, args.User, args.Used, args.Target);
+        if (!IsAttemptTargetStillValid(patient, armed, args.Target))
+        {
+            if (SurgerySessions.TryConsumeAttempt(patient, args.Attempt, args.User, args.Used, args.Target, args.StepId))
+                AbandonInvalidTarget(patient, armed);
+            return;
+        }
+
+        if (!SurgerySessions.TryConsumeAttempt(patient, args.Attempt, args.User, args.Used, args.Target, args.StepId))
+            return;
+
+        RunStepEffect(patient, armed, args.User, args.Used, args.Target, args.StepId);
     }
 
-    private static bool ArmedMatchesDoAfter(CMUSurgeryArmedStepComponent armed, CMUSurgeryStepDoAfterEvent args)
+    private void ReturnToAwaitingAction(EntityUid patient, CMUSurgeryArmedStepComponent armed)
     {
-        return armed.SurgeryId == args.SurgeryId
-            && armed.LeafSurgeryId == args.LeafSurgeryId
-            && armed.StepIndex == args.StepIndex
-            && armed.TargetPartType == args.TargetPartType
-            && armed.TargetSymmetry == args.TargetSymmetry;
+        RefreshArmedStateId(armed);
+        armed.ArmedAt = Timing.CurTime;
+        Dirty(patient, armed);
+        ScheduleArmedExpiry(patient, armed);
+        OnSurgerySessionStateChanged(patient);
+    }
+
+    private void OnAttemptActorLost(
+        Entity<CMUSurgeryArmedStepComponent> ent,
+        ref CMUSurgeryAttemptActorLostEvent args)
+    {
+        ReturnToAwaitingAction(ent.Owner, ent.Comp);
+    }
+
+    private void OnSessionBodyPartRemoved(Entity<BodyComponent> ent, ref BodyPartRemovedEvent args)
+    {
+        if (Net.IsServer && SurgerySessions.TryGetSession(ent.Owner, out _))
+            MedicalScheduler.Schedule(ent.Owner, SessionTargetValidationWork, Timing.CurTime);
+    }
+
+    private void OnSessionTargetValidationDue(Entity<BodyComponent> ent, ref CMUMedicalWorkDueEvent args)
+    {
+        if (args.Key != SessionTargetValidationWork
+            || !SurgerySessions.TryGetSession(ent.Owner, out var session))
+        {
+            return;
+        }
+
+        bool targetAttached;
+        if (TryComp<CMUSurgeryInProgressComponent>(ent.Owner, out var inProgress))
+        {
+            targetAttached = IsIndexedBodyPart(ent.Owner, inProgress.Part);
+        }
+        else if (session.ActiveTarget is { } activeTarget)
+        {
+            targetAttached = IsIndexedBodyPart(ent.Owner, activeTarget);
+        }
+        else if ((TryComp<CMUSurgeryArmedStepComponent>(ent.Owner, out var armed)
+                  && IsReattachSurgeryId(armed.LeafSurgeryId))
+                 || IsReattachSurgeryId(session.Procedure.Id))
+        {
+            targetAttached = TryGetReattachAnchorPart(ent.Owner, out var anchor)
+                && IsIndexedBodyPart(ent.Owner, anchor);
+        }
+        else
+        {
+            targetAttached = MedicalIndex.TryGetBodyPart(ent.Owner, session.Site, out _);
+        }
+
+        if (targetAttached)
+            return;
+
+        if (TryComp<CMUSurgeryArmedStepComponent>(ent.Owner, out var currentArmed))
+            ClearArmed(ent.Owner, currentArmed);
+        ClearSurgeryInFlight(ent.Owner);
+        OnSurgerySessionStateChanged(ent.Owner);
+    }
+
+    private bool IsIndexedBodyPart(EntityUid patient, EntityUid part)
+    {
+        foreach (var indexed in MedicalIndex.GetBodyParts(patient))
+        {
+            if (indexed.Owner == part)
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool IsAttemptTargetStillValid(
+        EntityUid patient,
+        CMUSurgeryArmedStepComponent armed,
+        EntityUid? target)
+    {
+        if (target is not { } targetUid)
+            return false;
+
+        if (TryFindClickedPart(
+                patient,
+                targetUid,
+                armed.TargetPartType,
+                armed.TargetSymmetry,
+                out var currentPart))
+        {
+            return currentPart == targetUid;
+        }
+
+        return TryResolveReattachAnchorForUse(patient, targetUid, armed, out var anchor)
+            && anchor == targetUid;
+    }
+
+    private void AbandonInvalidTarget(EntityUid patient, CMUSurgeryArmedStepComponent armed)
+    {
+        ClearArmed(patient, armed);
+        ClearSurgeryInFlight(patient);
+        OnSurgerySessionStateChanged(patient);
+    }
+
+    private bool ArmedMatchesDoAfter(CMUSurgeryArmedStepComponent armed, CMUSurgeryStepDoAfterEvent args)
+    {
+        if (armed.SurgeryId != args.SurgeryId
+            || armed.LeafSurgeryId != args.LeafSurgeryId
+            || armed.StepIndex != args.StepIndex
+            || armed.TargetPartType != args.TargetPartType
+            || armed.TargetSymmetry != args.TargetSymmetry)
+        {
+            return false;
+        }
+
+        return TryGetDefinition(armed.SurgeryId, out var surgery)
+            && surgery.TryGetStepAt(armed.StepIndex, out var step)
+            && step.Id == args.StepId;
     }
 
     /// <summary>
@@ -1386,25 +1625,14 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     public bool TryFindClickedPart(EntityUid patient, EntityUid? clickTarget, BodyPartType type, BodyPartSymmetry symmetry, out EntityUid part)
     {
         part = default;
+        if (!MedicalIndex.TryGetBodyPart(patient, new CMUMedicalBodyPartKey(type, symmetry), out var indexedPart))
+            return false;
 
-        if (clickTarget is { } direct
-            && TryComp<BodyPartComponent>(direct, out var directBp)
-            && directBp.PartType == type
-            && directBp.Symmetry == symmetry)
-        {
-            part = direct;
-            return true;
-        }
+        if (clickTarget is { } direct && direct != patient && direct != indexedPart)
+            return false;
 
-        foreach (var (childId, childComp) in MedicalIndex.GetBodyParts(patient))
-        {
-            if (childComp.PartType != type || childComp.Symmetry != symmetry)
-                continue;
-            part = childId;
-            return true;
-        }
-
-        return false;
+        part = indexedPart;
+        return true;
     }
 
     public bool TryGetReattachAnchorPart(EntityUid patient, out EntityUid anchor)
@@ -1495,8 +1723,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         EntityUid patient,
         string patientName,
         List<CMUSurgeryPartEntry> parts,
-        CMUSurgeryArmedStepComponent? armed,
-        EntityUid? viewer = null)
+        CMUSurgeryArmedStepComponent? armed)
     {
         CMUArmedStepInfo? armedInfo = null;
         if (armed is not null)
@@ -1523,11 +1750,35 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
                 flight.LeafSurgeryId,
                 flight.LeafSurgeryDisplayName,
                 flight.SurgeonName,
-                flight.StartedAt,
-                viewer is null || flight.Surgeon == viewer.Value);
+                flight.StartedAt);
         }
 
-        return new CMUSurgeryBuiState(GetNetEntity(patient), patientName, parts, armedInfo, inFlight);
+        CMUSurgerySessionId? sessionId = null;
+        CMUSurgeryAttemptToken? activeAttempt = null;
+        CMUSurgerySessionPhase? sessionPhase = null;
+        BodyPartType? sessionPartType = null;
+        BodyPartSymmetry? sessionPartSymmetry = null;
+        if (SurgerySessions.TryGetSession(patient, out var session))
+        {
+            sessionId = session.Id;
+            activeAttempt = session.ActiveAttempt;
+            sessionPhase = session.Phase;
+            sessionPartType = session.Site.Type;
+            sessionPartSymmetry = session.Site.Symmetry;
+        }
+
+        return new CMUSurgeryBuiState(
+            GetNetEntity(patient),
+            patientName,
+            parts,
+            armedInfo,
+            inFlight,
+            sessionId,
+            activeAttempt,
+            armed?.StateId,
+            sessionPhase,
+            sessionPartType,
+            sessionPartSymmetry);
     }
 
     public string ResolveSurgeryDisplayName(string surgeryId)
