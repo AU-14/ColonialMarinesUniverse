@@ -114,31 +114,35 @@ public sealed partial class ANPRCRadioSystem
         return string.Empty;
     }
 
-    private bool ValidateTransmit(Entity<ANPRCRadioComponent> ent, EntityUid user)
+    private bool ValidateTransmit(Entity<ANPRCRadioComponent> ent, EntityUid user, bool quiet = false)
     {
         var radio = ent.Comp;
 
         if (!radio.Enabled || (!radio.IsEquipped && !radio.Planted))
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-radio-off"), user);
+            if (!quiet)
+                _cmChat.ChatMessageToOne(Loc.GetString("anprc-radio-off"), user);
             return false;
         }
 
         if (radio.MonitorEnabled)
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-monitor-no-transmit"), user);
+            if (!quiet)
+                _cmChat.ChatMessageToOne(Loc.GetString("anprc-monitor-no-transmit"), user);
             return false;
         }
 
         if (radio.ActiveSlot < 0)
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-no-active-slot"), user);
+            if (!quiet)
+                _cmChat.ChatMessageToOne(Loc.GetString("anprc-no-active-slot"), user);
             return false;
         }
 
         if (!_powerCell.HasCharge(ent.Owner, GetTransmitCost(radio)))
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-battery-insufficient"), user);
+            if (!quiet)
+                _cmChat.ChatMessageToOne(Loc.GetString("anprc-battery-insufficient"), user);
             return false;
         }
 

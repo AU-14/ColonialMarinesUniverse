@@ -8,7 +8,7 @@
   parent: BaseStructure
   id: AU14CommsArrayBase
   name: comms array
-  description: A high-power communications array. While powered it anchors its faction's radio nets across the site.
+  description: A high-power communications array. As long as it stands and hums, the garrison stays on the net.
   components:
   - type: Transform
     anchored: true
@@ -28,7 +28,17 @@
   - type: Sprite
     sprite: _RMC14/Structures/communications_tower.rsi
     offset: 0.5, 1.5
-    state: static1
+    layers:
+    - state: static1
+      map: [ "base" ]
+  - type: Appearance
+  - type: AU14CommsStructureVisuals
+  - type: GenericVisualizer
+    visuals:
+      enum.AU14CommsStructureVisuals.Damaged:
+        base:
+          True: { state: static1_broken }
+          False: { state: static1 }
   - type: Damageable
     damageContainer: Inorganic
     damageModifierSet: null
@@ -106,12 +116,20 @@
   parent: AU14CommsArrayBase
   id: AU14CommsMastBase
   name: antenna mast
-  description: A guyed field antenna mast. Anchors its faction's radio nets around the command post, no power required.
+  description: A guyed field antenna mast, the kind two signalmen can raise in an hour. Keeps the command post talking.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/communications_tower_alt.rsi
     offset: 0, 1
-    state: comm_tower_destroyed
+    layers:
+    - state: comm_tower_off
+      map: [ "base" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.AU14CommsStructureVisuals.Damaged:
+        base:
+          True: { state: comm_tower_destroyed }
+          False: { state: comm_tower_off }
   - type: ApcPowerReceiver
     needsPower: false
   - type: RMCPowerReceiver

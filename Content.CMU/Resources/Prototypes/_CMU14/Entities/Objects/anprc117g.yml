@@ -45,6 +45,7 @@
       fill_card: !type:ContainerSlot
       antenna: !type:ContainerSlot
       cell_slot: !type:ContainerSlot
+      anprc_handset: !type:ContainerSlot
   - type: ItemSlots
     slots:
       fill_card:
@@ -120,6 +121,22 @@
   - type: RTORelay
     bridgedChannels:
     - radioCLF
+
+- type: entity
+  parent: BaseItem
+  id: AU14ANPRCHandset
+  name: AN/PRC-117G handset
+  description: >-
+    A corded handset wired into an AN/PRC-117G manpack. The cord never
+    stretches quite as far as you need it to.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/phone.rsi
+    state: rpb_phone
+  - type: Item
+    size: Invalid
+  - type: ANPRCHandset
+  - type: Undisposable
 
 - type: entity
   parent: ANPRC117GRadio

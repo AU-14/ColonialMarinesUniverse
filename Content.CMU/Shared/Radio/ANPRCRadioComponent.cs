@@ -61,6 +61,14 @@ public sealed partial class ANPRCRadioComponent : Component
 
     public EntityUid? HandsetUser;
 
+    [DataField]
+    public EntProtoId HandsetId = "AU14ANPRCHandset";
+
+    public const string HandsetContainerId = "anprc_handset";
+
+    [AutoNetworkedField]
+    public EntityUid? Handset;
+
     public bool NameMaskActive;
 
     public const int MaxLabelLength = 8;

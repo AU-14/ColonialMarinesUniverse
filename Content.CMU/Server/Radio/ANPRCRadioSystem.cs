@@ -13,6 +13,8 @@ using Content.Shared._RMC14.Chat;
 using Content.Shared.Chat;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DoAfter;
+using Content.Shared.Hands;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Item;
 using Content.Shared.PowerCell;
@@ -50,6 +52,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private IConfigurationManager _config = default!;
 
     public static readonly ProtoId<RadioChannelPrototype> ANPRCSentinelChannel = "ANPRCActiveChannel";
@@ -98,6 +101,10 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         SubscribeLocalEvent<ANPRCHandsetUserComponent, EntitySpokeEvent>(
             OnHandsetSpeak,
             before: [typeof(HeadsetSystem)]);
+
+        SubscribeLocalEvent<ANPRCRadioComponent, MapInitEvent>(OnRadioMapInit);
+        SubscribeLocalEvent<ANPRCHandsetComponent, GotEquippedHandEvent>(OnHandsetEquippedHand);
+        SubscribeLocalEvent<ANPRCHandsetComponent, GotUnequippedHandEvent>(OnHandsetUnequippedHand);
     }
 
     private void OnRadioReceive(Entity<ANPRCRadioComponent> ent, ref RadioReceiveEvent args)
