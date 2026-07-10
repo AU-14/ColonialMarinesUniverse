@@ -309,12 +309,4 @@ public sealed partial class AU14CallsignSystem : EntitySystem
         args.VoiceName = ent.Comp.Callsign;
     }
 
-    // no-op stubs, the directory console partial fills these in
-    private void InitializeConsole()
-    {
-    }
-
-    private void PushConsoleStates(string faction)
-    {
-    }
 }

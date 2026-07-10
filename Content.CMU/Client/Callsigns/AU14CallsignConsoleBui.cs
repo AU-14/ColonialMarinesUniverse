@@ -1,0 +1,58 @@
+using Content.Shared._AU14.Callsigns;
+using Content.Shared._AU14.Radio;
+using Content.Shared._CMU14.Threats.Mobs.CLF;
+using Content.Shared._RMC14.Marines;
+using Robust.Client.Player;
+using Robust.Client.UserInterface;
+
+namespace Content.Client._AU14.Callsigns;
+
+public sealed partial class AU14CallsignConsoleBui : BoundUserInterface
+{
+    [Dependency] private IPlayerManager _player = default!;
+
+    private AU14CallsignConsoleWindow? _window;
+
+    public AU14CallsignConsoleBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
+    {
+    }
+
+    protected override void Open()
+    {
+        base.Open();
+
+        _window = this.CreateWindow<AU14CallsignConsoleWindow>();
+
+        _window.OnRenameElement += (squad, word) =>
+            SendMessage(new AU14CallsignRenameElementMsg(squad, word));
+
+        _window.OnSetSuffix += (member, suffix) =>
+            SendMessage(new AU14CallsignSetSuffixMsg(member, suffix));
+    }
+
+    protected override void UpdateState(BoundUserInterfaceState state)
+    {
+        base.UpdateState(state);
+
+        if (_window == null || state is not AU14CallsignConsoleState consoleState)
+            return;
+
+        _window.UpdateState(consoleState, CanEdit(consoleState.Faction));
+    }
+
+    // editing needs radio training and matching faction, the server checks this too
+    private bool CanEdit(string faction)
+    {
+        if (_player.LocalEntity is not { } local ||
+            !EntMan.HasComponent<ANPRCRadioUserComponent>(local))
+        {
+            return false;
+        }
+
+        var localFaction = EntMan.HasComponent<CLFMemberComponent>(local)
+            ? "clf"
+            : EntMan.GetComponentOrNull<MarineComponent>(local)?.Faction;
+
+        return localFaction == faction;
+    }
+}
