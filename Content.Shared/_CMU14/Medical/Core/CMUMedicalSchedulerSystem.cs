@@ -1,6 +1,7 @@
 using Content.Shared.GameTicking;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
+using Robust.Shared.Utility;
 
 namespace Content.Shared._CMU14.Medical.Core;
 
@@ -17,7 +18,7 @@ public sealed partial class CMUMedicalSchedulerSystem : EntitySystem
 
     private readonly Dictionary<EntityUid, HashSet<CMUMedicalWorkKey>> _keysByEntity = new();
     private readonly List<PendingEnqueue> _pendingEnqueues = new();
-    private readonly PriorityQueue<QueueEntry, TimeSpan> _queue = new();
+    private readonly PriorityQueue<QueuedWork> _queue = new(QueuedWorkComparer.Instance);
     private readonly Dictionary<ScheduledWork, ScheduledState> _scheduled = new();
 
     private bool _dispatching;
@@ -102,9 +103,10 @@ public sealed partial class CMUMedicalSchedulerSystem : EntitySystem
         _dispatching = true;
         try
         {
-            while (_queue.TryPeek(out var entry, out var dueAt) && dueAt <= _dispatchTime)
+            while (_queue.Count > 0 && _queue.Peek().DueAt <= _dispatchTime)
             {
-                _queue.Dequeue();
+                var queued = _queue.Take();
+                var entry = queued.Entry;
 
                 if (!_scheduled.TryGetValue(entry.Work, out var state) ||
                     state.Version != entry.Version ||
@@ -132,7 +134,7 @@ public sealed partial class CMUMedicalSchedulerSystem : EntitySystem
         {
             _dispatching = false;
             foreach (var pending in _pendingEnqueues)
-                _queue.Enqueue(pending.Entry, pending.DueAt);
+                _queue.Add(new QueuedWork(pending.Entry, pending.DueAt));
 
             _pendingEnqueues.Clear();
             CompactQueueIfNeeded();
@@ -216,7 +218,7 @@ public sealed partial class CMUMedicalSchedulerSystem : EntitySystem
             return;
         }
 
-        _queue.Enqueue(entry, dueAt);
+        _queue.Add(new QueuedWork(entry, dueAt));
         CompactQueueIfNeeded();
     }
 
@@ -240,7 +242,7 @@ public sealed partial class CMUMedicalSchedulerSystem : EntitySystem
             if (state.Paused)
                 continue;
 
-            _queue.Enqueue(new QueueEntry(work, state.Version), state.DueAt);
+            _queue.Add(new QueuedWork(new QueueEntry(work, state.Version), state.DueAt));
         }
     }
 
@@ -252,6 +254,8 @@ public sealed partial class CMUMedicalSchedulerSystem : EntitySystem
     private readonly record struct ScheduledWork(EntityUid Target, CMUMedicalWorkKey Key);
 
     private readonly record struct QueueEntry(ScheduledWork Work, ulong Version);
+
+    private readonly record struct QueuedWork(QueueEntry Entry, TimeSpan DueAt);
 
     private readonly record struct PendingEnqueue(QueueEntry Entry, TimeSpan DueAt);
 
@@ -265,6 +269,19 @@ public sealed partial class CMUMedicalSchedulerSystem : EntitySystem
         public static ScheduledState CreatePaused(ulong version, TimeSpan remaining)
         {
             return new ScheduledState(version, TimeSpan.Zero, remaining, true);
+        }
+    }
+
+    private sealed class QueuedWorkComparer : IComparer<QueuedWork>
+    {
+        public static readonly QueuedWorkComparer Instance = new();
+
+        public int Compare(QueuedWork x, QueuedWork y)
+        {
+            var dueAt = y.DueAt.CompareTo(x.DueAt);
+            return dueAt != 0
+                ? dueAt
+                : y.Entry.Version.CompareTo(x.Entry.Version);
         }
     }
 }

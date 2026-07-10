@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Text;
 using Robust.Shared.ContentPack;
 using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
@@ -44,13 +46,10 @@ public sealed partial class TacticalMapSettingsManager
         var path = new ResPath(SettingsPath);
         if (_resourceMan.UserData.Exists(path))
         {
-            try
+            if (!LoadSettingsFile(path, false, true))
             {
-                LoadSettingsFile(path, false, true);
-            }
-            catch (Exception e)
-            {
-                _logger.Error("Failed to load user tactical map settings: " + e);
+                _logger.Warning("Resetting invalid user tactical map settings to defaults");
+                SaveToUserData();
             }
         }
 
@@ -148,7 +147,7 @@ public sealed partial class TacticalMapSettingsManager
         }
     }
 
-    private void LoadSettingsFile(ResPath file, bool defaultRegistration, bool userData = false)
+    private bool LoadSettingsFile(ResPath file, bool defaultRegistration, bool userData = false)
     {
         TextReader reader;
         if (userData)
@@ -172,7 +171,7 @@ public sealed partial class TacticalMapSettingsManager
                 if (settingsNode == null)
                 {
                     _logger.Warning("Settings node is null, skipping settings load");
-                    return;
+                    return false;
                 }
 
                 TacticalMapSettingRegistration[]? settings = null;
@@ -183,13 +182,13 @@ public sealed partial class TacticalMapSettingsManager
                 catch (Exception parseEx)
                 {
                     _logger.Error($"Failed to parse settings array: {parseEx}");
-                    return;
+                    return false;
                 }
 
                 if (settings == null)
                 {
                     _logger.Warning("Parsed settings array is null, skipping settings load");
-                    return;
+                    return false;
                 }
 
                 foreach (var setting in settings)
@@ -255,6 +254,8 @@ public sealed partial class TacticalMapSettingsManager
                     }
                 }
             }
+
+            return true;
         }
         catch (Exception ex)
         {
@@ -263,6 +264,8 @@ public sealed partial class TacticalMapSettingsManager
             {
                 _logger.Info("Continuing with default settings due to parse failure");
             }
+
+            return false;
         }
     }
 
@@ -282,35 +285,12 @@ public sealed partial class TacticalMapSettingsManager
         try
         {
             using var writer = _resourceMan.UserData.OpenWriteText(path);
-
-            writer.WriteLine("version: \"1\"");
-            writer.WriteLine("settings:");
-
             var modifiedSettings = _modifiedSettings
                 .Where(key => _currentSettings.ContainsKey(key))
                 .Select(key => _currentSettings[key])
                 .Where(setting => setting.Key != null);
-
-            foreach (var setting in modifiedSettings)
-            {
-                writer.WriteLine("  - Key: \"" + setting.Key + "\"");
-                writer.WriteLine("    Value: " + FormatValueForYaml(setting.Value));
-                if (!string.IsNullOrEmpty(setting.PlanetId))
-                {
-                    writer.WriteLine("    PlanetId: \"" + setting.PlanetId + "\"");
-                }
-                else
-                {
-                    writer.WriteLine("    PlanetId: null");
-                }
-            }
-
-            writer.WriteLine("unsetSettings:");
             var unsetSettings = _modifiedSettings.Where(key => !_currentSettings.ContainsKey(key));
-            foreach (var unsetKey in unsetSettings)
-            {
-                writer.WriteLine("  - \"" + unsetKey + "\"");
-            }
+            WriteSettingsYaml(writer, modifiedSettings, unsetSettings);
         }
         catch (Exception ex)
         {
@@ -318,18 +298,102 @@ public sealed partial class TacticalMapSettingsManager
         }
     }
 
-    private string FormatValueForYaml(object? value)
+    internal static void WriteSettingsYaml(
+        TextWriter writer,
+        IEnumerable<TacticalMapSettingRegistration> modifiedSettings,
+        IEnumerable<string> unsetSettings)
+    {
+        var settings = modifiedSettings
+            .Where(setting => !string.IsNullOrEmpty(setting.Key))
+            .ToArray();
+        var unset = unsetSettings.ToArray();
+
+        writer.WriteLine("version: \"1\"");
+        writer.WriteLine(settings.Length == 0 ? "settings: []" : "settings:");
+
+        foreach (var setting in settings)
+        {
+            writer.WriteLine("  - Key: " + QuoteYamlString(setting.Key!));
+            writer.WriteLine("    Value: " + FormatValueForYaml(setting.Value));
+            if (!string.IsNullOrEmpty(setting.PlanetId))
+            {
+                writer.WriteLine("    PlanetId: " + QuoteYamlString(setting.PlanetId));
+            }
+            else
+            {
+                writer.WriteLine("    PlanetId: null");
+            }
+        }
+
+        writer.WriteLine(unset.Length == 0 ? "unsetSettings: []" : "unsetSettings:");
+        foreach (var unsetKey in unset)
+        {
+            writer.WriteLine("  - " + QuoteYamlString(unsetKey));
+        }
+    }
+
+    private static string FormatValueForYaml(object? value)
     {
         if (value == null) return "null";
 
         return value switch
         {
-            string str => "\"" + str.Replace("\"", "\\\"") + "\"",
-            bool b => b.ToString().ToLower(),
-            float f => f.ToString("F6"),
-            int i => i.ToString(),
-            _ => "\"" + value.ToString() + "\""
+            string str => QuoteYamlString(str),
+            bool b => b ? "true" : "false",
+            float f => f.ToString("F6", CultureInfo.InvariantCulture),
+            double d => d.ToString("R", CultureInfo.InvariantCulture),
+            decimal d => d.ToString(CultureInfo.InvariantCulture),
+            sbyte i => i.ToString(CultureInfo.InvariantCulture),
+            byte i => i.ToString(CultureInfo.InvariantCulture),
+            short i => i.ToString(CultureInfo.InvariantCulture),
+            ushort i => i.ToString(CultureInfo.InvariantCulture),
+            int i => i.ToString(CultureInfo.InvariantCulture),
+            uint i => i.ToString(CultureInfo.InvariantCulture),
+            long i => i.ToString(CultureInfo.InvariantCulture),
+            ulong i => i.ToString(CultureInfo.InvariantCulture),
+            _ => QuoteYamlString(value.ToString() ?? string.Empty),
         };
+    }
+
+    private static string QuoteYamlString(string value)
+    {
+        var builder = new StringBuilder(value.Length + 2);
+        builder.Append('"');
+        foreach (var character in value)
+        {
+            switch (character)
+            {
+                case '\\':
+                    builder.Append("\\\\");
+                    break;
+                case '"':
+                    builder.Append("\\\"");
+                    break;
+                case '\t':
+                    builder.Append("\\t");
+                    break;
+                case '\n':
+                    builder.Append("\\n");
+                    break;
+                case '\r':
+                    builder.Append("\\r");
+                    break;
+                default:
+                    if (char.IsControl(character))
+                    {
+                        builder.Append("\\x");
+                        builder.Append(((int) character).ToString("X2", CultureInfo.InvariantCulture));
+                    }
+                    else
+                    {
+                        builder.Append(character);
+                    }
+                    break;
+            }
+        }
+
+        builder.Append('"');
+        return builder.ToString();
     }
 
     public TacticalMapSettings LoadSettings(string? planetId = null)
