@@ -2181,7 +2181,7 @@ public sealed class RMCHumanPrototypeRegressionTest
                     BodyPartSymmetry.Left);
 
                 Assert.That(armed, Is.Not.Null);
-                Assert.That(armed!.RequiredToolCategory, Is.EqualTo("hemostat"));
+                Assert.That(armed!.RequiredToolCategory, Is.EqualTo("fix_o_vein"));
                 Assert.That(
                     flow.TryHandleArmedToolUse(
                         patient,
@@ -2213,7 +2213,7 @@ public sealed class RMCHumanPrototypeRegressionTest
                     Assert.That(entMan.HasComponent<CMUSurgeryWindowOpenComponent>(surgeon), Is.True);
                     Assert.That(currentArmed.LastOperator, Is.EqualTo(surgeon));
                     Assert.That(state.CurrentArmedStep, Is.Not.Null);
-                    Assert.That(state.CurrentArmedStep!.ToolCategory, Is.EqualTo("hemostat"));
+                    Assert.That(state.CurrentArmedStep!.ToolCategory, Is.EqualTo("fix_o_vein"));
                 });
             }
             finally

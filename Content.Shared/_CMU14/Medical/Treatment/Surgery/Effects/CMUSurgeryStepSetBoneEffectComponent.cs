@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Content.Shared._CMU14.Medical.Anatomy.Bones;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
@@ -17,6 +18,13 @@ public sealed partial class CMUSurgeryStepSetBoneEffectComponent : Component
 {
     [DataField]
     public FractureSeverity DowngradeFrom = FractureSeverity.Simple;
+
+    /// <summary>
+    ///     Optional set of accepted starting severities. When populated it
+    ///     takes precedence over <see cref="DowngradeFrom"/>.
+    /// </summary>
+    [DataField]
+    public HashSet<FractureSeverity> DowngradeFromAnyOf = new();
 
     [DataField]
     public FractureSeverity DowngradeTo = FractureSeverity.None;

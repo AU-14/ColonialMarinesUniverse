@@ -36,6 +36,13 @@ public sealed partial class CMUSurgeryArmedStepComponent : Component
     [DataField, AutoNetworkedField]
     public int LastCompletedLeafStepIndex = -1;
 
+    /// <summary>
+    ///     UI-less procedures may continue from retracted tissue without
+    ///     making the optional hemostasis action a linear prerequisite.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool AllowOptionalHemostasis;
+
     [DataField, AutoNetworkedField]
     public BodyPartType TargetPartType;
 

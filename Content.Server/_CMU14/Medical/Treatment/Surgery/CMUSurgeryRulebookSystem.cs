@@ -31,7 +31,11 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
 
     private static readonly EntProtoId<SkillDefinitionComponent> SurgerySkill = "RMCSkillSurgery";
 
-    public List<CMUSurgeryPartEntry> BuildPartEntries(EntityUid patient, EntityUid surgeon, bool ignoreSkillRequirements = false)
+    public List<CMUSurgeryPartEntry> BuildPartEntries(
+        EntityUid patient,
+        EntityUid surgeon,
+        bool ignoreSkillRequirements = false,
+        bool allowOptionalHemostasis = false)
     {
         var parts = new List<CMUSurgeryPartEntry>();
         if (!_flowSurgery.CanOperateOnPatient(patient, surgeon))
@@ -52,7 +56,8 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
                 childComp.Symmetry,
                 surgeon,
                 childId,
-                ignoreSkillRequirements: ignoreSkillRequirements);
+                ignoreSkillRequirements: ignoreSkillRequirements,
+                allowOptionalHemostasis: allowOptionalHemostasis);
 
             var displayName = SharedCMUSurgeryFlowSystem.FormatPartName(childComp.PartType, childComp.Symmetry);
             var conditionSummary = BuildConditionSummary(childId, childComp.PartType);
@@ -96,7 +101,8 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
                     symmetry,
                     surgeon,
                     null,
-                    ignoreSkillRequirements: ignoreSkillRequirements);
+                    ignoreSkillRequirements: ignoreSkillRequirements,
+                    allowOptionalHemostasis: allowOptionalHemostasis);
                 var isInFlightHere = lockComp is not null
                     && SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(lockComp.LeafSurgeryId)
                     && lockComp.TargetPartType == slot.Type
@@ -127,7 +133,8 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
         EntityUid surgeon,
         EntityUid? targetPart = null,
         bool ignoreInProgressLock = false,
-        bool ignoreSkillRequirements = false)
+        bool ignoreSkillRequirements = false,
+        bool allowOptionalHemostasis = false)
     {
         var entries = new List<CMUSurgeryEntry>();
 
@@ -210,7 +217,12 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
                 if (!_flowSurgery.TryResolveStepAt(armedComp.SurgeryId, armedComp.StepIndex, out resolved, targetPart))
                     continue;
             }
-            else if (!_flowSurgery.TryResolveNextStep(patient, resolveTarget, surgery.Id.Id, out resolved))
+            else if (!_flowSurgery.TryResolveNextStep(
+                         patient,
+                         resolveTarget,
+                         surgery.Id.Id,
+                         out resolved,
+                         allowOptionalHemostasis))
             {
                 continue;
             }

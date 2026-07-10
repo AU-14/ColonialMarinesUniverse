@@ -77,6 +77,18 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         if (!HasComp<CMUHumanMedicalComponent>(patient))
             return;
 
+        var selectedZone = _zoneTargeting.TryGetSelection(args.User);
+        var selectedPart = selectedZone is { } zone
+            ? PartForZone(patient, zone)
+            : null;
+        if (treater.Wound == WoundType.Brute
+            && selectedPart is { } amputationTarget
+            && _surgery.TryCancelPendingAmputation(patient, args.User, amputationTarget))
+        {
+            args.Handled = true;
+            return;
+        }
+
         if (IsSynthPatient(patient))
         {
             _popup.PopupEntity(Loc.GetString("cmu-medical-bandage-synth-requires-repair-tools"), patient, args.User, PopupType.SmallCaution);

@@ -980,6 +980,7 @@
     - id: CMBoneGel
     - id: CMBonesetter
     - id: CMUBoneGraftItem
+    - id: CMUFixOVein
     - id: CMUOrganClampItem
     - id: CMSurgicalLine
     - id: CMSynthGraft
@@ -1036,6 +1037,7 @@
     - id: CMBoneGel
     - id: CMBonesetter
     - id: CMUBoneGraftItem
+    - id: CMUFixOVein
     - id: CMUOrganClampItem
     - id: CMSurgicalLine
     - id: CMSynthGraft
@@ -1126,6 +1128,7 @@
     - id: CMBoneGel
     - id: CMBonesetter
     - id: CMUBoneGraftItem
+    - id: CMUFixOVein
     - id: CMUOrganClampItem
     - id: CMSurgicalLine
     - id: CMSynthGraft

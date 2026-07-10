@@ -56,3 +56,9 @@ public sealed partial class CMUHeartVesselsClampedMarkerComponent : Component;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class CMUStomachVesselsClampedMarkerComponent : Component;
+
+[RegisterComponent, NetworkedComponent]
+public sealed partial class CMUBrainVesselsClampedMarkerComponent : Component;
+
+[RegisterComponent, NetworkedComponent]
+public sealed partial class CMUEyesVesselsClampedMarkerComponent : Component;

@@ -88,6 +88,18 @@ cmu-medical-surgery-examine-patient-in-progress = [color=#dca94c]{ $surgery } in
 cmu-medical-surgery-examine-part-in-progress = [color=#dca94c]{ $surgery } in progress (last step by { $surgeon }) — next: { $next }.[/color]
 cmu-medical-surgery-examine-part-abandoned = [color=#888888]Open wound — no surgery in progress.[/color]
 
+cmu-medical-surgery-examine-incision = [color=#888888]There is a surgical incision on the { $part }.[/color]
+cmu-medical-surgery-examine-site-details = [color=#dca94c]{ $part }: { $access }; { $hemostasis }; current step: { $step }.[/color]
+cmu-medical-surgery-examine-no-active-step = no active procedure
+cmu-medical-surgery-access-closed = closed
+cmu-medical-surgery-access-incised = incision only
+cmu-medical-surgery-access-shallow = shallow access
+cmu-medical-surgery-access-bone-cut = bone cut, not yet opened
+cmu-medical-surgery-access-deep = deep access
+cmu-medical-surgery-hemostasis-none = no surgical bleeding
+cmu-medical-surgery-hemostasis-uncontrolled = uncontrolled surgical bleeding
+cmu-medical-surgery-hemostasis-clamped = bleeders clamped
+
 # ---- Close-up step labels (RMC fallback resolution) ------------------
 
 cmu-medical-surgery-step-close-incision-label = Close Incision
@@ -103,6 +115,10 @@ cmu-medical-surgery-armed-step = Armed: { $surgery } — Step { $step } ({ $tool
 cmu-medical-surgery-armed-cancelled = Surgery cancelled.
 cmu-medical-surgery-armed-expired = The surgery pick timed out.
 cmu-medical-surgery-auto-armed = Selected { $surgery }.
+cmu-medical-surgery-ui-less-select-part = Select a body part before using a surgery tool.
+cmu-medical-surgery-ui-less-no-action = That tool has no clear action at the selected surgical site.
+cmu-medical-surgery-unclamped-closure = The incision is closed over uncontrolled bleeding, causing internal bleeding.
+cmu-medical-surgery-amputation-cancelled = You pack the incision and cancel the pending amputation.
 cmu-medical-surgery-auto-continue = Continuing with { $surgery }.
 cmu-medical-surgery-choose-repair-or-close = Choose an organ repair or close them up.
 
@@ -141,6 +157,7 @@ cmu-medical-surgery-tool-category-bone_saw = Bone Saw
 cmu-medical-surgery-tool-category-bone_setter = Bone Setter
 cmu-medical-surgery-tool-category-bone_gel = Bone Gel
 cmu-medical-surgery-tool-category-bone_graft = Bone Graft
+cmu-medical-surgery-tool-category-fix_o_vein = Fix-O-Vein
 cmu-medical-surgery-tool-category-organ_clamp = Organ Clamp
 cmu-medical-surgery-tool-category-scalpel_or_burn_kit = Scalpel or burn kit
 cmu-medical-surgery-tool-category-severed_limb = Matching Limb
@@ -155,7 +172,7 @@ cmu-medical-surgery-step-realign-shattered-label = Realign Shattered Fracture
 cmu-medical-surgery-step-apply-gel-label = Apply Bone Gel
 cmu-medical-surgery-step-apply-gel-second-label = Apply Bone Gel (Second Layer)
 cmu-medical-surgery-step-insert-graft-label = Insert Bone Graft
-cmu-medical-surgery-step-cauterize-bleed-label = Clamp Internal Bleed
+cmu-medical-surgery-step-cauterize-bleed-label = Mend Internal Bleed
 cmu-medical-surgery-step-tie-vessel-label = Tie Off Torn Vessel
 cmu-medical-surgery-step-extract-foreign-body-label = Extract Foreign Body
 cmu-medical-surgery-step-relieve-pressure-label = Relieve Compartment Pressure

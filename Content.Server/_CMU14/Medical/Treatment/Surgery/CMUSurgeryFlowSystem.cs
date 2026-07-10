@@ -2,8 +2,10 @@ using System.Collections.Frozen;
 using System.Collections.Generic;
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.Bones;
+using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._CMU14.Medical.Treatment.FirstAid;
 using Content.Server._CMU14.Medical.Treatment.FirstAid;
+using Content.Server._RMC14.Medical.Wounds;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
 using Content.Shared._CMU14.Medical.Treatment.Surgery.Markers;
 using Content.Shared._RMC14.Emote;
@@ -11,6 +13,7 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Steps;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
+using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared._RMC14.Repairable;
 using Content.Shared._RMC14.Stun;
 using Content.Shared.Bed.Sleep;
@@ -36,13 +39,16 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private CMUBodyScannerSystem _bodyScanner = default!;
+    [Dependency] private SharedCMUWoundsSystem _cmuWounds = default!;
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private CMUSurgeryDispatchSystem _dispatch = default!;
     [Dependency] private SharedRMCEmoteSystem _emote = default!;
+    [Dependency] private SharedFractureSystem _fracture = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private CMUSplintItemSystem _splints = default!;
+    [Dependency] private WoundsSystem _wounds = default!;
 
     private const float StepDoAfterSeconds = 2f;
     private const float PostOpCastWindowMinutes = 5f;
@@ -93,6 +99,7 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             ["cautery"] = new SoundCollectionSpecifier("RMCSurgeryCautery"),
             ["bone_saw"] = new SoundCollectionSpecifier("RMCSurgerySaw"),
             ["bone_setter"] = new SoundCollectionSpecifier("RMCSurgerySplint"),
+            ["fix_o_vein"] = new SoundCollectionSpecifier("RMCSurgeryHemostat"),
             ["organ_clamp"] = new SoundCollectionSpecifier("RMCSurgeryOrgan"),
             ["scalpel_or_burn_kit"] = new SoundCollectionSpecifier("RMCSurgeryScalpel"),
         }.ToFrozenDictionary();
@@ -278,11 +285,28 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
                 tools.Add(held);
         }
 
+        var closedUnclampedIncision = IsIncisionClosureStep(stepId.Id)
+            && HasComp<CMIncisionOpenComponent>(stepPart)
+            && !HasComp<CMBleedersClampedComponent>(stepPart);
+
         if (!TryApplyIncisionManagementSystemOpening(stepId.Id, stepPart, tool))
         {
             var stepEvent = new CMSurgeryStepEvent(surgeon, patient, stepPart, tools);
             RaiseLocalEvent(stepEnt, ref stepEvent);
         }
+
+        if (closedUnclampedIncision)
+        {
+            _wounds.RemoveWounds(patient, WoundType.Surgery);
+            _cmuWounds.SeedSurgicalInternalBleed(stepPart);
+            Popup.PopupEntity(
+                Loc.GetString("cmu-medical-surgery-unclamped-closure"),
+                patient,
+                surgeon,
+                PopupType.MediumCaution);
+        }
+
+        UpdateSurgicalBoneAccess(stepId.Id, stepPart, leafId);
 
         if (IsReattachLimbStep(stepId.Id)
             && TryFindClickedPart(patient, null, armed.TargetPartType, armed.TargetSymmetry, out var reattachedPart))
@@ -354,7 +378,12 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
         EntityUid stepPart,
         string leafId)
     {
-        if (TryResolveNextStep(patient, stepPart, leafId, out var resolved))
+        if (TryResolveNextStep(
+                patient,
+                stepPart,
+                leafId,
+                out var resolved,
+                armed.AllowOptionalHemostasis))
         {
             ApplyResolvedStep(patient, armed, resolved);
             return;
@@ -388,7 +417,8 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
                 armed.SurgeryId,
                 armed.StepIndex,
                 resumeAfterLeafStepIndex,
-                out var next))
+                out var next,
+                armed.AllowOptionalHemostasis))
         {
             return false;
         }
@@ -556,6 +586,31 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
     {
         var stepId = ResolveStepPrototypeId(surgeryId, stepIndex);
         return stepId is { } resolved && ClosureStepIds.Contains(resolved.Id);
+    }
+
+    private static bool IsIncisionClosureStep(string stepProtoId)
+    {
+        return stepProtoId is "CMSurgeryStepCloseIncision"
+            or "CMUSurgeryStepCloseIncision"
+            or "CMUSurgeryStepCloseReattach";
+    }
+
+    private void UpdateSurgicalBoneAccess(string stepProtoId, EntityUid stepPart, string leafId)
+    {
+        if (stepProtoId == "CMSurgeryStepSawBones" && !HasComp<FractureComponent>(stepPart))
+        {
+            var fracture = EnsureComp<FractureComponent>(stepPart);
+            _fracture.SetSeverity((stepPart, fracture), FractureSeverity.Simple);
+        }
+
+        if (!SharedCMUSurgeryFlowSystem.IsFractureSurgeryId(leafId)
+            || HasComp<FractureComponent>(stepPart))
+        {
+            return;
+        }
+
+        RemComp<CMRibcageOpenComponent>(stepPart);
+        RemComp<CMRibcageSawedComponent>(stepPart);
     }
 
     private static bool IsReattachLimbStep(string stepProtoId)

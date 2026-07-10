@@ -89,6 +89,9 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
 
         if (ent.Comp.RequireAtLeast is { } min && !frac.Severity.IsAtLeast(min))
             args.Cancelled = true;
+
+        if (ent.Comp.RequireAtMost is { } max && frac.Severity.IsAtLeast(max) && frac.Severity != max)
+            args.Cancelled = true;
     }
 
     private void OnOrganDamagedValid(Entity<CMUOrganDamagedSurgeryConditionComponent> ent, ref CMSurgeryValidEvent args)
@@ -186,7 +189,7 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
 
         if (!TryComp<FractureComponent>(args.Part, out var frac))
             return;
-        if (frac.Severity != ent.Comp.DowngradeFrom)
+        if (!MatchesBoneEffectSeverity(ent.Comp, frac.Severity))
             return;
 
         Bone.RestoreIntegrity((args.Part, null), ent.Comp.IntegrityRestore);
@@ -209,8 +212,17 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
             return;
         if (!TryComp<FractureComponent>(args.Part, out var frac))
             return;
-        if (frac.Severity == ent.Comp.DowngradeFrom)
+        if (MatchesBoneEffectSeverity(ent.Comp, frac.Severity))
             args.Cancelled = true;
+    }
+
+    private static bool MatchesBoneEffectSeverity(
+        CMUSurgeryStepSetBoneEffectComponent effect,
+        FractureSeverity severity)
+    {
+        return effect.DowngradeFromAnyOf.Count > 0
+            ? effect.DowngradeFromAnyOf.Contains(severity)
+            : severity == effect.DowngradeFrom;
     }
 
     private void OnRepairOrganStep(Entity<CMUSurgeryStepRepairOrganEffectComponent> ent, ref CMSurgeryStepEvent args)

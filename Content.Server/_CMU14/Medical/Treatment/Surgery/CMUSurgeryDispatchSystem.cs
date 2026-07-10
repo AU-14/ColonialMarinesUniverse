@@ -3,23 +3,28 @@ using System.Collections.Generic;
 using Content.Server.Popups;
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared._CMU14.Medical.Anatomy.Organs;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
+using Content.Shared._CMU14.Medical.Treatment.Surgery.Traits;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
 using Content.Shared.Body.Part;
 using Robust.Server.GameObjects;
 using Robust.Shared.Configuration;
+using Robust.Shared.Player;
 
 namespace Content.Server._CMU14.Medical.Treatment.Surgery;
 
 public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _cfg = default!;
-    [Dependency] private PopupSystem _popup = default!;
-    [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private SharedCMUSurgeryFlowSystem _flowSurgery = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
+    [Dependency] private INetConfigurationManager _netConfig = default!;
+    [Dependency] private PopupSystem _popup = default!;
     [Dependency] private CMUSurgeryRulebookSystem _rulebook = default!;
     [Dependency] private CMUSurgerySessionSystem _sessions = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
 
     private ulong _lastViewRevision;
 
@@ -60,6 +65,9 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
         if (!IsCmuOrganicSurgeryPatient(patient))
             return false;
 
+        if (tool is { } usedTool && IsUiLessSurgeryEnabled(surgeon))
+            return TryDispatchUiLess(surgeon, patient, usedTool);
+
         if (!_flowSurgery.CanOperateOnPatient(patient, surgeon, popup: true))
             return true;
 
@@ -77,10 +85,10 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
             return true;
         }
 
-        if (tool is { } usedTool
+        if (tool is { } intentTool
             && armed is null
             && CanAutoHandleToolIntent(patient)
-            && TryArmByToolIntent(surgeon, patient, usedTool, parts))
+            && TryArmByToolIntent(surgeon, patient, intentTool, parts))
         {
             return true;
         }
@@ -97,12 +105,268 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
         return true;
     }
 
+    /// <summary>
+    ///     Resolves one direct tool click from the selected surgical site. The
+    ///     regular surgery flow still validates and performs the armed step.
+    /// </summary>
+    public bool TryDispatchUiLess(EntityUid surgeon, EntityUid patient, EntityUid tool)
+    {
+        if (!IsLayerEnabled() || !IsCmuOrganicSurgeryPatient(patient))
+            return false;
+
+        if (!_flowSurgery.CanOperateOnPatient(patient, surgeon, popup: true))
+            return true;
+
+        if (!TryGetSelectedPart(surgeon, out var selectedType, out var selectedSymmetry))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-medical-surgery-ui-less-select-part"), patient, surgeon);
+            return true;
+        }
+
+        var current = CompOrNull<CMUSurgeryArmedStepComponent>(patient);
+        if (!_flowSurgery.TryFindClickedPart(
+                patient,
+                patient,
+                selectedType,
+                selectedSymmetry,
+                out var targetPart))
+        {
+            return TryDispatchUiLessMissingSite(
+                surgeon,
+                patient,
+                tool,
+                selectedType,
+                selectedSymmetry,
+                current);
+        }
+
+        var siteCurrent = current is not null
+            && current.TargetPartType == selectedType
+            && current.TargetSymmetry == selectedSymmetry
+                ? current
+                : null;
+        var site = _flowSurgery.GetSiteState(targetPart);
+        if (siteCurrent is not null
+            && _flowSurgery.ToolMatchesCategory(tool, siteCurrent.RequiredToolCategory)
+            && _flowSurgery.TryHandleArmedToolUse(
+                patient,
+                siteCurrent,
+                surgeon,
+                tool,
+                targetPart,
+                out var currentHandled,
+                out _)
+            && currentHandled)
+        {
+            RefreshUiForPatient(patient);
+            return true;
+        }
+
+        if (!TryResolveUiLessAccessAction(tool, targetPart, selectedType, site, out var action))
+        {
+            if (siteCurrent is not null
+                && _flowSurgery.TryHandleArmedToolUse(
+                    patient,
+                    siteCurrent,
+                    surgeon,
+                    tool,
+                    targetPart,
+                    out var fallbackHandled,
+                    out _)
+                && fallbackHandled)
+            {
+                RefreshUiForPatient(patient);
+                return true;
+            }
+
+            var parts = BuildPartEntries(patient, surgeon, allowOptionalHemostasis: true);
+            if (TryArmByToolIntent(surgeon, patient, tool, parts, uiLess: true))
+                return true;
+
+            _popup.PopupEntity(Loc.GetString("cmu-medical-surgery-ui-less-no-action"), patient, surgeon);
+            return true;
+        }
+
+        return TryStartUiLessAccessAction(
+            surgeon,
+            patient,
+            tool,
+            targetPart,
+            selectedType,
+            selectedSymmetry,
+            action);
+    }
+
+    private bool TryDispatchUiLessMissingSite(
+        EntityUid surgeon,
+        EntityUid patient,
+        EntityUid tool,
+        BodyPartType selectedType,
+        BodyPartSymmetry selectedSymmetry,
+        CMUSurgeryArmedStepComponent? current)
+    {
+        if (!_flowSurgery.TryGetReattachAnchorPart(patient, out var anchor))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-medical-surgery-ui-less-select-part"), patient, surgeon);
+            return true;
+        }
+
+        var siteCurrent = current is not null
+            && current.TargetPartType == selectedType
+            && current.TargetSymmetry == selectedSymmetry
+                ? current
+                : null;
+        if (siteCurrent is not null
+            && _flowSurgery.ToolMatchesCategory(tool, siteCurrent.RequiredToolCategory)
+            && _flowSurgery.TryHandleArmedToolUse(
+                patient,
+                siteCurrent,
+                surgeon,
+                tool,
+                anchor,
+                out var currentHandled,
+                out _)
+            && currentHandled)
+        {
+            RefreshUiForPatient(patient);
+            return true;
+        }
+
+        var parts = BuildPartEntries(patient, surgeon, allowOptionalHemostasis: true);
+        var reattachSurgeryId = siteCurrent is not null
+            && SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(siteCurrent.LeafSurgeryId)
+                ? siteCurrent.LeafSurgeryId
+                : ResolveSelectedReattachSurgery(parts, selectedType, selectedSymmetry);
+
+        if (reattachSurgeryId == "CMUSurgeryReattachLimb")
+        {
+            var site = _flowSurgery.GetSiteState(anchor);
+            if (TryResolveUiLessAccessAction(tool, anchor, selectedType, site, out var action)
+                && action.SurgeryId == "CMUSurgeryOpenSoftTissue")
+            {
+                return TryStartUiLessAccessAction(
+                    surgeon,
+                    patient,
+                    tool,
+                    anchor,
+                    selectedType,
+                    selectedSymmetry,
+                    action,
+                    reattachSurgeryId);
+            }
+        }
+
+        if (TryArmByToolIntent(surgeon, patient, tool, parts, uiLess: true))
+            return true;
+
+        if (siteCurrent is not null
+            && _flowSurgery.TryHandleArmedToolUse(
+                patient,
+                siteCurrent,
+                surgeon,
+                tool,
+                anchor,
+                out var fallbackHandled,
+                out _)
+            && fallbackHandled)
+        {
+            RefreshUiForPatient(patient);
+            return true;
+        }
+
+        _popup.PopupEntity(Loc.GetString("cmu-medical-surgery-ui-less-no-action"), patient, surgeon);
+        return true;
+    }
+
+    private static string? ResolveSelectedReattachSurgery(
+        List<CMUSurgeryPartEntry> parts,
+        BodyPartType selectedType,
+        BodyPartSymmetry selectedSymmetry)
+    {
+        foreach (var part in parts)
+        {
+            if (part.Type != selectedType || part.Symmetry != selectedSymmetry)
+                continue;
+
+            foreach (var surgery in part.EligibleSurgeries)
+            {
+                if (SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(surgery.SurgeryId))
+                    return surgery.SurgeryId;
+            }
+        }
+
+        return null;
+    }
+
+    private bool TryStartUiLessAccessAction(
+        EntityUid surgeon,
+        EntityUid patient,
+        EntityUid tool,
+        EntityUid targetPart,
+        BodyPartType selectedType,
+        BodyPartSymmetry selectedSymmetry,
+        UiLessAccessAction action,
+        string? leafSurgeryId = null)
+    {
+        var armed = _flowSurgery.TryArmExactStep(
+            surgeon,
+            patient,
+            targetPart,
+            action.SurgeryId,
+            action.StepIndex,
+            selectedType,
+            selectedSymmetry,
+            allowSamePartInFlightSwitch: true,
+            allowOptionalHemostasis: true,
+            leafSurgeryId: leafSurgeryId);
+        if (armed is null)
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-medical-surgery-cannot-start"), patient, surgeon);
+            RefreshUiForPatient(patient);
+            return true;
+        }
+
+        if (!_flowSurgery.TryHandleArmedToolUse(
+                patient,
+                armed,
+                surgeon,
+                tool,
+                targetPart,
+                out var handled,
+                out var started)
+            || !handled)
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-medical-surgery-cannot-start"), patient, surgeon);
+            RefreshUiForPatient(patient);
+            return true;
+        }
+
+        if (started)
+        {
+            var displaySurgeryId = leafSurgeryId ?? action.SurgeryId;
+            _popup.PopupEntity(
+                Loc.GetString(
+                    "cmu-medical-surgery-auto-armed",
+                    ("surgery", _flowSurgery.ResolveSurgeryDisplayName(displaySurgeryId))),
+                patient,
+                surgeon);
+        }
+
+        RefreshUiForPatient(patient);
+        return true;
+    }
+
     public List<CMUSurgeryPartEntry> BuildPartEntries(
         EntityUid patient,
         EntityUid surgeon,
-        bool ignoreSkillRequirements = false)
+        bool ignoreSkillRequirements = false,
+        bool allowOptionalHemostasis = false)
     {
-        return _rulebook.BuildPartEntries(patient, surgeon, ignoreSkillRequirements);
+        return _rulebook.BuildPartEntries(
+            patient,
+            surgeon,
+            ignoreSkillRequirements,
+            allowOptionalHemostasis);
     }
 
     public List<CMUSurgeryEntry> BuildEligibleSurgeries(
@@ -112,7 +376,8 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
         EntityUid surgeon,
         EntityUid? targetPart = null,
         bool ignoreInProgressLock = false,
-        bool ignoreSkillRequirements = false)
+        bool ignoreSkillRequirements = false,
+        bool allowOptionalHemostasis = false)
     {
         return _rulebook.BuildEligibleSurgeries(
             patient,
@@ -121,7 +386,8 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
             surgeon,
             targetPart,
             ignoreInProgressLock,
-            ignoreSkillRequirements);
+            ignoreSkillRequirements,
+            allowOptionalHemostasis);
     }
 
     public bool IsLayerEnabled()
@@ -226,10 +492,81 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
             || HasComp<YautjaComponent>(patient);
     }
 
-    private bool TryArmByToolIntent(EntityUid surgeon, EntityUid patient, EntityUid tool, List<CMUSurgeryPartEntry> parts)
+    private bool IsUiLessSurgeryEnabled(EntityUid surgeon)
+    {
+        return TryComp<ActorComponent>(surgeon, out var actor)
+            && _netConfig.GetClientCVar(actor.PlayerSession.Channel, CMUMedicalCCVars.UiLessSurgeryEnabled);
+    }
+
+    private bool TryResolveUiLessAccessAction(
+        EntityUid tool,
+        EntityUid targetPart,
+        BodyPartType partType,
+        CMUSurgicalSiteState site,
+        out UiLessAccessAction action)
+    {
+        action = default;
+
+        if (site.Access == CMUSurgicalAccess.Closed && _flowSurgery.ToolMatchesCategory(tool, "scalpel"))
+        {
+            action = new UiLessAccessAction("CMUSurgeryOpenSoftTissue", 0);
+            return true;
+        }
+
+        if (site.Hemostasis == CMUSurgicalHemostasis.Uncontrolled
+            && _flowSurgery.ToolMatchesCategory(tool, "hemostat"))
+        {
+            action = new UiLessAccessAction("CMUSurgeryOpenSoftTissue", 1);
+            return true;
+        }
+
+        if (site.Access == CMUSurgicalAccess.Incised && _flowSurgery.ToolMatchesCategory(tool, "retractor"))
+        {
+            action = new UiLessAccessAction("CMUSurgeryOpenSoftTissue", 2);
+            return true;
+        }
+
+        if (site.Access is CMUSurgicalAccess.Shallow or CMUSurgicalAccess.Deep
+            && HasComp<CMUContaminatedWoundComponent>(targetPart)
+            && _flowSurgery.ToolMatchesCategory(tool, "scalpel"))
+        {
+            action = new UiLessAccessAction("CMUSurgeryDebrideContaminatedWound", 0);
+            return true;
+        }
+
+        if (site.Access == CMUSurgicalAccess.Shallow
+            && partType is BodyPartType.Head or BodyPartType.Torso
+            && _flowSurgery.ToolMatchesCategory(tool, "bone_saw"))
+        {
+            action = new UiLessAccessAction("CMUSurgeryOpenBoneCavity", 0);
+            return true;
+        }
+
+        if (site.Access == CMUSurgicalAccess.BoneCut && _flowSurgery.ToolMatchesCategory(tool, "retractor"))
+        {
+            action = new UiLessAccessAction("CMUSurgeryOpenBoneCavity", 1);
+            return true;
+        }
+
+        if (site.Access != CMUSurgicalAccess.Closed && _flowSurgery.ToolMatchesCategory(tool, "cautery"))
+        {
+            action = new UiLessAccessAction("CMUSurgeryCloseIncision", 0);
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool TryArmByToolIntent(
+        EntityUid surgeon,
+        EntityUid patient,
+        EntityUid tool,
+        List<CMUSurgeryPartEntry> parts,
+        bool uiLess = false)
     {
         var candidates = new List<ToolIntentCandidate>();
         var hasSelectedPart = TryGetSelectedPart(surgeon, out var selectedType, out var selectedSymmetry);
+        var organRepairIntent = uiLess && _flowSurgery.ToolMatchesCategory(tool, "organ_clamp");
 
         foreach (var part in parts)
         {
@@ -242,8 +579,12 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
             {
                 if (!_flowSurgery.ToolMatchesCategory(tool, entry.NextStepToolCategory))
                     continue;
+                if (organRepairIntent && entry.Category is not ("suture" or "head_organ"))
+                    continue;
 
                 var score = ScoreToolIntentCandidate(part, entry, hasSelectedPart);
+                if (organRepairIntent)
+                    score += ScoreOrganRepairIntent(GetEntity(part.Part), entry.SurgeryId);
                 candidates.Add(new ToolIntentCandidate(part, entry, score));
             }
         }
@@ -314,7 +655,8 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
             best.Entry.SurgeryId,
             best.Entry.NextStepIndex,
             best.Part.Type,
-            best.Part.Symmetry);
+            best.Part.Symmetry,
+            allowOptionalHemostasis: uiLess);
 
         if (armed is null)
             return false;
@@ -332,6 +674,41 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
 
         RefreshUiForPatient(patient);
         return true;
+    }
+
+    private int ScoreOrganRepairIntent(EntityUid part, string surgeryId)
+    {
+        if (!_flowSurgery.TryGetDefinition(surgeryId, out var surgery))
+            return 0;
+
+        foreach (var step in surgery.Steps)
+        {
+            if (step.OrganCondition is not { } condition
+                || !_medicalIndex.TryGetOrganInSlot(part, condition.OrganSlot, out var organ)
+                || !TryComp<OrganHealthComponent>(organ, out var health))
+            {
+                continue;
+            }
+
+            return (int) health.Stage * 100 + OrganRepairTieBreak(surgeryId);
+        }
+
+        return 0;
+    }
+
+    private static int OrganRepairTieBreak(string surgeryId)
+    {
+        return surgeryId switch
+        {
+            "CMUSurgeryRepairHeart" => 7,
+            "CMUSurgeryRepairBrain" => 6,
+            "CMUSurgeryRepairLungs" => 5,
+            "CMUSurgeryRepairLiver" => 4,
+            "CMUSurgeryRepairKidneys" => 3,
+            "CMUSurgeryRepairStomach" => 2,
+            "CMUSurgeryRepairEyes" => 1,
+            _ => 0,
+        };
     }
 
     private int ScoreToolIntentCandidate(CMUSurgeryPartEntry part, CMUSurgeryEntry entry, bool hasSelectedPart)
@@ -549,4 +926,5 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
     }
 
     private readonly record struct ToolIntentCandidate(CMUSurgeryPartEntry Part, CMUSurgeryEntry Entry, int Score);
+    private readonly record struct UiLessAccessAction(string SurgeryId, int StepIndex);
 }

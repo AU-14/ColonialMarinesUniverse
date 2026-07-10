@@ -5,6 +5,7 @@ using Content.Shared._CMU14.DroneOperator;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._CMU14.Medical.Anatomy.Bones;
 using Content.Shared._CMU14.Medical.Core;
+using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._CMU14.Medical.Treatment.FirstAid;
 using Content.Shared._CMU14.Medical.Treatment.Surgery.Conditions;
 using Content.Shared._CMU14.Medical.Treatment.Surgery.Effects;
@@ -330,6 +331,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         _toolCategories["bone_setter"] = new[] { typeof(CMBoneSetterComponent) };
         _toolCategories["bone_gel"] = new[] { typeof(CMBoneGelComponent) };
         _toolCategories["bone_graft"] = new[] { typeof(CMUBoneGraftComponent) };
+        _toolCategories["fix_o_vein"] = new[] { typeof(CMUFixOVeinComponent) };
         _toolCategories["organ_clamp"] = new[] { typeof(CMUOrganClampComponent) };
         _toolCategories["scalpel_or_burn_kit"] = new[] { typeof(CMUBurnDebridementToolComponent) };
         // Resolver only checks "is this a BodyPart" — the matching-symmetry
@@ -349,7 +351,63 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         int stepIndex,
         BodyPartType? fallbackType = null,
         BodyPartSymmetry? fallbackSymmetry = null,
-        bool allowSamePartInFlightSwitch = false)
+        bool allowSamePartInFlightSwitch = false,
+        bool allowOptionalHemostasis = false)
+    {
+        return TryArmStepInternal(
+            surgeon,
+            patient,
+            targetPart,
+            surgeryId,
+            fallbackType,
+            fallbackSymmetry,
+            allowSamePartInFlightSwitch,
+            allowOptionalHemostasis,
+            null);
+    }
+
+    /// <summary>
+    ///     Arms one exact validated action instead of walking the procedure's
+    ///     linear requirement chain. UI-less intent uses this for independent
+    ///     access actions such as retracting before clamping bleeders.
+    /// </summary>
+    public CMUSurgeryArmedStepComponent? TryArmExactStep(
+        EntityUid surgeon,
+        EntityUid patient,
+        EntityUid targetPart,
+        string surgeryId,
+        int stepIndex,
+        BodyPartType? fallbackType = null,
+        BodyPartSymmetry? fallbackSymmetry = null,
+        bool allowSamePartInFlightSwitch = false,
+        bool allowOptionalHemostasis = false,
+        string? leafSurgeryId = null)
+    {
+        if (!TryResolveStepAt(surgeryId, stepIndex, out var resolved, targetPart))
+            return null;
+
+        return TryArmStepInternal(
+            surgeon,
+            patient,
+            targetPart,
+            leafSurgeryId ?? surgeryId,
+            fallbackType,
+            fallbackSymmetry,
+            allowSamePartInFlightSwitch,
+            allowOptionalHemostasis,
+            resolved);
+    }
+
+    private CMUSurgeryArmedStepComponent? TryArmStepInternal(
+        EntityUid surgeon,
+        EntityUid patient,
+        EntityUid targetPart,
+        string surgeryId,
+        BodyPartType? fallbackType,
+        BodyPartSymmetry? fallbackSymmetry,
+        bool allowSamePartInFlightSwitch,
+        bool allowOptionalHemostasis,
+        CMUResolvedStep? exactStep)
     {
         // Missing-limb reattach rows do not have a limb entity yet, so they
         // resolve through a real body-part anchor while keeping the missing
@@ -435,9 +493,13 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         if (TryComp<CMUSurgeryArmedStepComponent>(patient, out var existing)
             && existing.LeafSurgeryId == surgeryId
             && existing.TargetPartType == armedType
-            && existing.TargetSymmetry == armedSymmetry)
+            && existing.TargetSymmetry == armedSymmetry
+            && (exactStep is null
+                || existing.SurgeryId == exactStep.Value.ResolvedSurgeryId
+                && existing.StepIndex == exactStep.Value.StepIndex))
         {
             existing.LastOperator = surgeon;
+            existing.AllowOptionalHemostasis = allowOptionalHemostasis;
             RefreshArmedStateId(existing);
             existing.ArmedAt = Timing.CurTime;
             Dirty(patient, existing);
@@ -448,9 +510,25 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         // Resolve via the requirement chain so prereqs (open-incision,
         // open-ribcage, etc.) can't be skipped. Legacy RMC prereqs without
         // a CMU metadata entry get a synthesized label from the step proto.
-        if (!TryResolveNextStep(patient, operationPart, surgeryId, out var resolved))
+        CMUResolvedStep resolved;
+        if (exactStep is { } exact)
+        {
+            resolved = exact;
+        }
+        else if (!TryResolveNextStep(
+                     patient,
+                     operationPart,
+                     surgeryId,
+                     out resolved,
+                     allowOptionalHemostasis))
+        {
             return null;
+        }
 
+        var preserveLeafProgress = existing is not null
+            && existing.LeafSurgeryId == surgeryId
+            && existing.TargetPartType == armedType
+            && existing.TargetSymmetry == armedSymmetry;
         var armed = EnsureComp<CMUSurgeryArmedStepComponent>(patient);
         armed.LastOperator = surgeon;
         RefreshArmedStateId(armed);
@@ -463,7 +541,9 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         armed.RequiredToolCategory = resolved.ToolCategory;
         armed.StepLabel = resolved.StepLabel;
         armed.LeafSurgeryId = surgeryId;
-        armed.LastCompletedLeafStepIndex = -1;
+        armed.AllowOptionalHemostasis = allowOptionalHemostasis;
+        if (!preserveLeafProgress)
+            armed.LastCompletedLeafStepIndex = -1;
         armed.ArmedAt = Timing.CurTime;
         Dirty(patient, armed);
         ScheduleArmedExpiry(patient, armed);
@@ -560,7 +640,11 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         RemComp<CMUReattachCompleteComponent>(uid);
     }
 
-    public void ClearArmed(EntityUid patient, CMUSurgeryArmedStepComponent? armed = null, bool expired = false)
+    public void ClearArmed(
+        EntityUid patient,
+        CMUSurgeryArmedStepComponent? armed = null,
+        bool expired = false,
+        bool popup = true)
     {
         if (!Resolve(patient, ref armed, false))
             return;
@@ -573,7 +657,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         MedicalScheduler.Cancel(patient, ArmedStepExpiryWork);
         RemComp<CMUSurgeryArmedStepComponent>(patient);
 
-        if (Net.IsServer && surgeon.IsValid())
+        if (popup && Net.IsServer && surgeon.IsValid())
         {
             var msg = expired
                 ? "cmu-medical-surgery-armed-expired"
@@ -582,6 +666,23 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         }
 
         OnSurgerySessionStateChanged(patient);
+    }
+
+    public bool TryCancelPendingAmputation(EntityUid patient, EntityUid user, EntityUid targetPart)
+    {
+        if (!TryComp<CMUSurgeryArmedStepComponent>(patient, out var armed)
+            || armed.LeafSurgeryId != "CMUSurgeryRemoveLimb"
+            || !TryComp<BodyPartComponent>(targetPart, out var bodyPart)
+            || bodyPart.PartType != armed.TargetPartType
+            || bodyPart.Symmetry != armed.TargetSymmetry)
+        {
+            return false;
+        }
+
+        ClearArmed(patient, armed, popup: false);
+        ClearSurgeryInFlight(patient);
+        SurgeryConditionPopup(user, "cmu-medical-surgery-amputation-cancelled", true);
+        return true;
     }
 
     /// <summary>
@@ -629,6 +730,33 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
 
         SurgeryConditionPopup(surgeon, "cmu-medical-surgery-patient-not-lying", popup);
         return false;
+    }
+
+    public CMUSurgicalSiteState GetSiteState(EntityUid part)
+    {
+        if (!HasComp<CMIncisionOpenComponent>(part))
+            return new CMUSurgicalSiteState(CMUSurgicalAccess.Closed, CMUSurgicalHemostasis.None);
+
+        var hemostasis = HasComp<CMBleedersClampedComponent>(part)
+            ? CMUSurgicalHemostasis.Clamped
+            : CMUSurgicalHemostasis.Uncontrolled;
+
+        if (!HasComp<CMSkinRetractedComponent>(part))
+            return new CMUSurgicalSiteState(CMUSurgicalAccess.Incised, hemostasis);
+
+        var access = CMUSurgicalAccess.Shallow;
+        if (HasComp<CMRibcageOpenComponent>(part)
+            || TryComp<FractureComponent>(part, out var fracture)
+            && fracture.Severity is FractureSeverity.Compound or FractureSeverity.Shattered)
+        {
+            access = CMUSurgicalAccess.Deep;
+        }
+        else if (HasComp<CMRibcageSawedComponent>(part))
+        {
+            access = CMUSurgicalAccess.BoneCut;
+        }
+
+        return new CMUSurgicalSiteState(access, hemostasis);
     }
 
     private void SurgeryConditionPopup(EntityUid user, string locKey, bool popup)
@@ -1219,17 +1347,46 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     ///     chain so picking "Set Compound Fracture" arms open-incision first
     ///     when the part isn't yet incised.
     /// </summary>
-    public bool TryResolveNextStep(EntityUid patient, EntityUid? targetPart, string surgeryId, out CMUResolvedStep resolved)
+    public bool TryResolveNextStep(
+        EntityUid patient,
+        EntityUid? targetPart,
+        string surgeryId,
+        out CMUResolvedStep resolved,
+        bool allowOptionalHemostasis = false)
     {
         resolved = default!;
         if (targetPart is null)
             return false;
 
-        if (TryResolveReattachNextStep(patient, targetPart.Value, surgeryId, out resolved))
+        if (TryResolveReattachNextStep(
+                patient,
+                targetPart.Value,
+                surgeryId,
+                out resolved,
+                allowOptionalHemostasis))
             return true;
 
-        if (TryResolveBrokenCavityAccessNextStep(patient, targetPart.Value, surgeryId, out resolved))
+        if (allowOptionalHemostasis
+            && TryResolveAccessibleInternalBleedNextStep(patient, targetPart.Value, surgeryId, out resolved))
+        {
             return true;
+        }
+
+        if (TryResolveBrokenCavityAccessNextStep(
+                patient,
+                targetPart.Value,
+                surgeryId,
+                allowOptionalHemostasis,
+                out resolved))
+        {
+            return true;
+        }
+
+        if (allowOptionalHemostasis
+            && TryResolveSoftTissueAccessNextStep(patient, targetPart.Value, surgeryId, out resolved))
+        {
+            return true;
+        }
 
         if (RmcSurgery.GetSingleton(surgeryId) is not { } surgeryEnt)
             return false;
@@ -1268,16 +1425,72 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         return true;
     }
 
-    private bool TryResolveBrokenCavityAccessNextStep(
+    private bool TryResolveSoftTissueAccessNextStep(
         EntityUid patient,
         EntityUid targetPart,
         string surgeryId,
         out CMUResolvedStep resolved)
     {
-        if (!RequiresBoneCavityAccess(surgeryId) || !HasBrokenCavityAccess(targetPart))
+        var access = GetSiteState(targetPart).Access;
+        if (!RequiresSoftTissueAccess(surgeryId)
+            || access is not (CMUSurgicalAccess.Shallow or CMUSurgicalAccess.BoneCut or CMUSurgicalAccess.Deep))
         {
             resolved = default!;
             return false;
+        }
+
+        if (ShouldInjectSurgicalTraits(surgeryId, surgeryId)
+            && TryResolveSurgicalTraitCleanupStep(targetPart, surgeryId, out resolved))
+        {
+            return true;
+        }
+
+        return TryResolveIncompleteStepFromIndex(patient, targetPart, surgeryId, 0, out resolved);
+    }
+
+    private bool RequiresSoftTissueAccess(string surgeryId)
+    {
+        return TryGetDefinition(surgeryId, out var surgery)
+            && surgery.Requirement is { } requirement
+            && requirement == "CMUSurgeryOpenSoftTissue";
+    }
+
+    private bool TryResolveAccessibleInternalBleedNextStep(
+        EntityUid patient,
+        EntityUid targetPart,
+        string surgeryId,
+        out CMUResolvedStep resolved)
+    {
+        var access = GetSiteState(targetPart).Access;
+        if (surgeryId != "CMUSurgeryCauterizeInternalBleeding"
+            || !HasComp<InternalBleedingComponent>(targetPart)
+            || access is not (CMUSurgicalAccess.Shallow or CMUSurgicalAccess.Deep))
+        {
+            resolved = default!;
+            return false;
+        }
+
+        return TryResolveIncompleteStepFromIndex(patient, targetPart, surgeryId, 0, out resolved);
+    }
+
+    private bool TryResolveBrokenCavityAccessNextStep(
+        EntityUid patient,
+        EntityUid targetPart,
+        string surgeryId,
+        bool allowOptionalHemostasis,
+        out CMUResolvedStep resolved)
+    {
+        if (!RequiresBoneCavityAccess(surgeryId)
+            || !HasBrokenCavityAccess(targetPart, allowOptionalHemostasis))
+        {
+            resolved = default!;
+            return false;
+        }
+
+        if (ShouldInjectSurgicalTraits(surgeryId, surgeryId)
+            && TryResolveSurgicalTraitCleanupStep(targetPart, surgeryId, out resolved))
+        {
+            return true;
         }
 
         return TryResolveIncompleteStepFromIndex(patient, targetPart, surgeryId, 0, out resolved);
@@ -1290,21 +1503,16 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             && requirement == OpenBoneCavitySurgery;
     }
 
-    private bool HasBrokenCavityAccess(EntityUid targetPart)
+    private bool HasBrokenCavityAccess(EntityUid targetPart, bool allowOptionalHemostasis)
     {
         if (!TryComp<BodyPartComponent>(targetPart, out var bodyPart))
             return false;
         if (bodyPart.PartType is not (BodyPartType.Head or BodyPartType.Torso))
             return false;
-        if (!HasComp<CMIncisionOpenComponent>(targetPart)
-            || !HasComp<CMBleedersClampedComponent>(targetPart)
-            || !HasComp<CMSkinRetractedComponent>(targetPart))
-        {
-            return false;
-        }
 
-        return TryComp<FractureComponent>(targetPart, out var fracture)
-            && fracture.Severity is FractureSeverity.Compound or FractureSeverity.Shattered;
+        var site = GetSiteState(targetPart);
+        return site.Access == CMUSurgicalAccess.Deep
+            && (allowOptionalHemostasis || site.Hemostasis == CMUSurgicalHemostasis.Clamped);
     }
 
     protected bool TryResolveNextStepAfterCompletedStep(
@@ -1314,7 +1522,8 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         string completedSurgeryId,
         int completedStepIndex,
         int resumeAfterLeafStepIndex,
-        out CMUResolvedStep resolved)
+        out CMUResolvedStep resolved,
+        bool allowOptionalHemostasis = false)
     {
         if (completedSurgeryId != leafSurgeryId)
         {
@@ -1334,7 +1543,12 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
                     out resolved);
             }
 
-            return TryResolveNextStep(patient, targetPart, leafSurgeryId, out resolved);
+            return TryResolveNextStep(
+                patient,
+                targetPart,
+                leafSurgeryId,
+                out resolved,
+                allowOptionalHemostasis);
         }
 
         if (ShouldInjectSurgicalTraits(leafSurgeryId, leafSurgeryId)
@@ -1493,7 +1707,12 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             or "CMUSurgeryRepairBrain";
     }
 
-    private bool TryResolveReattachNextStep(EntityUid patient, EntityUid targetPart, string surgeryId, out CMUResolvedStep resolved)
+    private bool TryResolveReattachNextStep(
+        EntityUid patient,
+        EntityUid targetPart,
+        string surgeryId,
+        out CMUResolvedStep resolved,
+        bool allowOptionalHemostasis)
     {
         resolved = default!;
         if (targetPart == default)
@@ -1516,7 +1735,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
 
         if (!HasComp<CMIncisionOpenComponent>(targetPart))
             return TryResolveGatedStep("CMUSurgeryOpenSoftTissue", 0, targetPart, out resolved);
-        if (!HasComp<CMBleedersClampedComponent>(targetPart))
+        if (!allowOptionalHemostasis && !HasComp<CMBleedersClampedComponent>(targetPart))
             return TryResolveGatedStep("CMUSurgeryOpenSoftTissue", 1, targetPart, out resolved);
         if (!HasComp<CMSkinRetractedComponent>(targetPart))
             return TryResolveGatedStep("CMUSurgeryOpenSoftTissue", 2, targetPart, out resolved);

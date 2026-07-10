@@ -1,0 +1,15 @@
+- type: entity
+  parent: CMBaseToolSurgery
+  id: CMUFixOVein
+  name: Fix-O-Vein
+  description: A surgical applicator used to seal damaged blood vessels and stop internal bleeding.
+  components:
+  - type: Item
+    size: Small
+    sprite: _RMC14/Objects/Medical/Surgery/healing.rsi
+  - type: CMUFixOVein
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/healing.rsi
+    state: fixovein
+  - type: CMSurgeryTool
+    skill: 1

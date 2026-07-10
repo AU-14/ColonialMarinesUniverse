@@ -81,6 +81,14 @@
     CMSteel: 2350
 
 - type: latheRecipe
+  id: CMUFixOVein
+  result: CMUFixOVein
+  completetime: 4
+  materials:
+    RMCPlastic: 6250
+    CMSteel: 1250
+
+- type: latheRecipe
   id: CMStasisBag
   result: CMStasisBagFolded
   completetime: 4

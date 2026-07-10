@@ -230,6 +230,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     {
         if (IsSynthOwned(part))
         {
+            RemComp<CMUSurgicalInternalBleedingComponent>(part);
             if (HasComp<InternalBleedingComponent>(part))
             {
                 RemComp<InternalBleedingComponent>(part);
@@ -286,6 +287,13 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     {
         maxRate = 0f;
         source = string.Empty;
+
+        if (TryComp<CMUSurgicalInternalBleedingComponent>(part, out var surgical)
+            && surgical.BloodlossPerSecond > maxRate)
+        {
+            maxRate = surgical.BloodlossPerSecond;
+            source = "surgical:unclamped-incision";
+        }
 
         if (TryComp<FractureComponent>(part, out var f))
         {
@@ -380,6 +388,18 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         }
     }
 
+    public void SeedSurgicalInternalBleed(EntityUid part, float rate = 0.5f)
+    {
+        if (IsSynthOwned(part) || rate <= 0f)
+            return;
+
+        RemComp<CMUInternalBleedingSuppressedComponent>(part);
+        var surgical = EnsureComp<CMUSurgicalInternalBleedingComponent>(part);
+        surgical.BloodlossPerSecond = MathF.Max(surgical.BloodlossPerSecond, rate);
+        Dirty(part, surgical);
+        RecomputeInternalBleed(part);
+    }
+
     public void ClearInternalBleed(EntityUid part)
     {
         ClearInternalBleed(part, false);
@@ -392,6 +412,8 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
     private void ClearInternalBleed(EntityUid part, bool suppressCurrentSource)
     {
+        RemComp<CMUSurgicalInternalBleedingComponent>(part);
+
         if (suppressCurrentSource && !IsSynthOwned(part))
         {
             if (TryComp<InternalBleedingComponent>(part, out var existing))

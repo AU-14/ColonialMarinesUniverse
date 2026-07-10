@@ -24,6 +24,7 @@ public static class CMUWrongToolDamageTable
             (typeof(CMRetractorComponent),     "Piercing", 6f),
             (typeof(CMUCastItemComponent),     "Blunt",    6f),
             (typeof(CMUOrganClampComponent),   "Blunt",    5f),
+            (typeof(CMUFixOVeinComponent),     "Piercing", 5f),
             (typeof(CMHemostatComponent),      "Slash",    4f),
             (typeof(CMUSplintItemComponent),   "Blunt",    4f),
             (typeof(CMUBoneGraftComponent),    "Blunt",    3f),

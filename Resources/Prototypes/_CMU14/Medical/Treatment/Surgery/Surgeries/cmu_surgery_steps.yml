@@ -12,7 +12,8 @@
     add:
     - type: CMUBoneAlignedMarker
   - type: CMUFracturedSurgeryCondition
-    requireSeverity: Simple
+    requireAtLeast: Hairline
+    requireAtMost: Simple
   - type: Sprite
     sprite: _RMC14/Objects/Medical/Surgery/bonesetter.rsi
     state: bonesetter
@@ -50,9 +51,10 @@
     remove:
     - type: CMUBoneAlignedMarker
   - type: CMUFracturedSurgeryCondition
-    requireAtLeast: Simple
+    requireAtLeast: Hairline
+    requireAtMost: Simple
   - type: CMUSurgeryStepSetBoneEffect
-    downgradeFrom: Simple
+    downgradeFromAnyOf: [Hairline, Simple]
     downgradeTo: None
     integrityRestore: 60
   - type: Sprite
@@ -269,19 +271,19 @@
 - type: entity
   parent: CMSurgeryStepBase
   id: CMUSurgeryStepCauterizeBleed
-  name: Clamp internal bleed
+  name: Mend internal bleed
   components:
   - type: CMSurgeryStep
     skill: 1
     tool:
-    - type: CMHemostat
+    - type: CMUFixOVein
     remove:
     - type: InternalBleeding
   - type: CMUInternalBleedingSurgeryCondition
   - type: CMUSurgeryStepCauterizeBleedEffect
   - type: Sprite
-    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
-    state: hemostat
+    sprite: _RMC14/Objects/Medical/Surgery/healing.rsi
+    state: fixovein
 
 # ---- CMU close-up step -----------------------------------------------
 
@@ -305,6 +307,8 @@
     - type: CMUKidneysVesselsClampedMarker
     - type: CMUHeartVesselsClampedMarker
     - type: CMUStomachVesselsClampedMarker
+    - type: CMUBrainVesselsClampedMarker
+    - type: CMUEyesVesselsClampedMarker
   - type: Sprite
     sprite: _RMC14/Objects/Medical/Surgery/cautery.rsi
     state: cautery
@@ -768,6 +772,36 @@
 
 - type: entity
   parent: CMSurgeryStepBase
+  id: CMUSurgeryStepClampBrainVessels
+  name: Clamp brain vessels
+  components:
+  - type: CMSurgeryStep
+    skill: 2
+    tool:
+    - type: CMUOrganClamp
+    add:
+    - type: CMUBrainVesselsClampedMarker
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepClampEyeVessels
+  name: Clamp eye vessels
+  components:
+  - type: CMSurgeryStep
+    skill: 2
+    tool:
+    - type: CMUOrganClamp
+    add:
+    - type: CMUEyesVesselsClampedMarker
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
   id: CMUSurgeryStepRepairBrain
   name: Repair brain
   components:
@@ -775,6 +809,8 @@
     skill: 2
     tool:
     - type: CMHemostat
+    remove:
+    - type: CMUBrainVesselsClampedMarker
   - type: CMUOrganDamagedSurgeryCondition
     organSlot: brain
     minStage: Bruised
@@ -793,6 +829,8 @@
     skill: 2
     tool:
     - type: CMHemostat
+    remove:
+    - type: CMUEyesVesselsClampedMarker
   - type: CMUOrganDamagedSurgeryCondition
     organSlot: eyes
     minStage: Bruised

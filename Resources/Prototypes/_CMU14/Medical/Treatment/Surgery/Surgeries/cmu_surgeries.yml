@@ -59,7 +59,8 @@
     - CMUSurgeryStepApplyBoneGel
     - CMUSurgeryStepCloseIncision
   - type: CMUFracturedSurgeryCondition
-    requireSeverity: Simple
+    requireAtLeast: Hairline
+    requireAtMost: Simple
 
 - type: entity
   parent: CMSurgeryBase
@@ -76,7 +77,8 @@
     - CMSurgeryStepMendRibcage
     - CMUSurgeryStepCloseIncision
   - type: CMUFracturedSurgeryCondition
-    requireSeverity: Simple
+    requireAtLeast: Hairline
+    requireAtMost: Simple
 
 - type: entity
   parent: CMSurgeryBase
@@ -467,6 +469,7 @@
     priority: 6
     requirement: CMUSurgeryOpenBoneCavity
     steps:
+    - CMUSurgeryStepClampBrainVessels
     - CMUSurgeryStepRepairBrain
     - CMSurgeryStepCloseBones
     - CMSurgeryStepMendRibcage
@@ -481,6 +484,7 @@
     priority: 6
     requirement: CMUSurgeryOpenSoftTissue
     steps:
+    - CMUSurgeryStepClampEyeVessels
     - CMUSurgeryStepRepairEyes
     - CMUSurgeryStepCloseIncision
 
