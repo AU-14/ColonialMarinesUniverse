@@ -81,8 +81,40 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         SubscribeLocalEvent<ANPRCRadioComponent, TransformSpeakerNameEvent>(
             OnRadioSpeakerName,
             after: [typeof(RankSystem)]);
+        SubscribeLocalEvent<ANPRCHandsetUserComponent, TransformSpeakerNameEvent>(
+            OnHandsetSpeakerName,
+            after: [typeof(RankSystem)]);
+
+        SubscribeLocalEvent<ANPRCHandsetUserComponent, ChatGetPrefixEvent>(OnHandsetChatGetPrefix);
+        SubscribeLocalEvent<ANPRCHandsetUserComponent, EntitySpokeEvent>(
+            OnHandsetSpeak,
+            before: [typeof(HeadsetSystem)]);
+
+        SubscribeLocalEvent<ANPRCRadioComponent, MapInitEvent>(OnRadioMapInit);
+        SubscribeLocalEvent<ANPRCHandsetComponent, GotEquippedHandEvent>(OnHandsetEquippedHand);
+        SubscribeLocalEvent<ANPRCHandsetComponent, GotUnequippedHandEvent>(OnHandsetUnequippedHand);
 
         SubscribeLocalEvent<ANPRCRadioComponent, RadioReceiveEvent>(OnRadioReceive);
+        SubscribeLocalEvent<ANPRCRadioComponent, GetVerbsEvent<AlternativeVerb>>(OnGetAltVerbs);
+        SubscribeLocalEvent<WearingANPRCComponent, GetVerbsEvent<AlternativeVerb>>(OnWearerGetAltVerbs);
+
+        Subs.BuiEvents<ANPRCRadioComponent>(ANPRCRadioUI.Key, subs =>
+        {
+            subs.Event<ANPRCSelectSlotMsg>(OnSelectSlot);
+            subs.Event<ANPRCTogglePowerMsg>(OnTogglePower);
+            subs.Event<ANPRCToggleMonitorMsg>(OnToggleMonitor);
+            subs.Event<ANPRCSetModeMsg>(OnSetMode);
+            subs.Event<ANPRCSetScanMsg>(OnSetScan);
+            subs.Event<ANPRCSetTxPowerMsg>(OnSetTxPower);
+            subs.Event<ANPRCSetSquelchMsg>(OnSetSquelch);
+            subs.Event<ANPRCSetCallsignMsg>(OnSetCallsign);
+            subs.Event<ANPRCAddSlotMsg>(OnAddSlot);
+            subs.Event<ANPRCDeleteSlotMsg>(OnDeleteSlot);
+            subs.Event<ANPRCSetSlotChannelMsg>(OnSetSlotChannel);
+            subs.Event<ANPRCClearSlotMsg>(OnClearSlot);
+            subs.Event<ANPRCManualFrequencyMsg>(OnManualFrequency);
+            subs.Event<ANPRCRadioCheckMsg>(OnRadioCheck);
+        });
 
         SubscribeLocalEvent<ANPRCRadioComponent, ANPRCPlantDoAfterEvent>(OnPlantDoAfter);
         SubscribeLocalEvent<ANPRCRadioComponent, ANPRCPackUpDoAfterEvent>(OnPackUpDoAfter);
@@ -93,18 +125,8 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         SubscribeLocalEvent<ANPRCRadioComponent, PowerCellSlotEmptyEvent>(OnBatteryEmpty);
         SubscribeLocalEvent<ANPRCRadioComponent, EntInsertedIntoContainerMessage>(OnAntennaInserted);
         SubscribeLocalEvent<ANPRCRadioComponent, EntRemovedFromContainerMessage>(OnAntennaRemoved);
-        SubscribeLocalEvent<WearingANPRCComponent, GetVerbsEvent<AlternativeVerb>>(OnWearerGetAltVerbs);
-        SubscribeLocalEvent<ANPRCHandsetUserComponent, TransformSpeakerNameEvent>(
-            OnHandsetSpeakerName,
-            after: [typeof(RankSystem)]);
-        SubscribeLocalEvent<ANPRCHandsetUserComponent, ChatGetPrefixEvent>(OnHandsetChatGetPrefix);
-        SubscribeLocalEvent<ANPRCHandsetUserComponent, EntitySpokeEvent>(
-            OnHandsetSpeak,
-            before: [typeof(HeadsetSystem)]);
 
-        SubscribeLocalEvent<ANPRCRadioComponent, MapInitEvent>(OnRadioMapInit);
-        SubscribeLocalEvent<ANPRCHandsetComponent, GotEquippedHandEvent>(OnHandsetEquippedHand);
-        SubscribeLocalEvent<ANPRCHandsetComponent, GotUnequippedHandEvent>(OnHandsetUnequippedHand);
+        SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
     }
 
     private void OnRadioReceive(Entity<ANPRCRadioComponent> ent, ref RadioReceiveEvent args)
@@ -596,6 +618,4 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
             radio.NetLog.Dequeue();
         }
     }
-
-    private void UpdateBuiState(Entity<ANPRCRadioComponent> ent) { }
 }
