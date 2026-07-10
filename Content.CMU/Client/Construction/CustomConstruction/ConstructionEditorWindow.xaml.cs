@@ -349,17 +349,16 @@ public sealed partial class ConstructionEditorWindow : DefaultWindow
         RefreshSteps();
     }
 
-    /// <summary>Opens the entity selector and adds a custom material/tool step for the chosen prototype, using the
-    /// amount + duration fields (material picker reads the material amount/sec fields; tool picker reads the tool
-    /// sec field) so a custom material/tool can have a set count and do-after just like the dropdown steps.</summary>
+    /// <summary>Opens the entity selector and adds a custom material/tool step for the chosen prototype. Uses the
+    /// dedicated amount/seconds boxes on the custom row (amount only applies to consumed materials), so a custom
+    /// material/tool gets a set count and do-after just like the dropdown steps.</summary>
     private void PickEntityStep(CustomConstructionStepKind kind)
     {
         var isMaterial = kind == CustomConstructionStepKind.EntityMaterial;
 
         // Capture the amount/duration now, before the selector takes focus.
-        var amount = isMaterial && int.TryParse(AmountEdit.Text.Trim(), out var a) && a > 0 ? a : 1;
-        var doAfterText = (isMaterial ? MatDoAfterEdit.Text : ToolDoAfterEdit.Text).Trim();
-        var doAfter = float.TryParse(doAfterText, NumberStyles.Float, CultureInfo.InvariantCulture, out var d) && d > 0 ? d : 1f;
+        var amount = isMaterial && int.TryParse(CustomAmountEdit.Text.Trim(), out var a) && a > 0 ? a : 1;
+        var doAfter = float.TryParse(CustomDoAfterEdit.Text.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out var d) && d > 0 ? d : 1f;
 
         var selector = new EntitySelectorWindow();
         selector.OnEntitySelected += id =>
@@ -368,6 +367,8 @@ public sealed partial class ConstructionEditorWindow : DefaultWindow
                 return;
 
             _steps.Add(new CustomConstructionStepData { Kind = kind, Value = id, Amount = amount, DoAfter = doAfter });
+            CustomAmountEdit.Text = string.Empty;
+            CustomDoAfterEdit.Text = string.Empty;
             RefreshSteps();
         };
         selector.OpenCentered();

@@ -103,6 +103,16 @@
   suffix: AU14 z-build
   description: A stairwell leading down one z-level. Opens a shaft here, generates the level below, and places a return stair down there.
   components:
+  # Slightly darker than the up/return stairs: this frame never carries you up itself (it is the cap over
+  # the descent shaft), so the tint is the at-a-glance cue for "this staircase leads DOWN".
+  # 🔧 TUNABLE: darkness of the down-stair sprite (white = no tint).
+  - type: Sprite
+    noRot: true
+    sprite: _CMU14/Structures/stairs.rsi
+    state: p_stair_solo_cap
+    offset: 0,0.5
+    drawdepth: WallMountedItems
+    color: "#A8A8A8"
   - type: ZStair
     direction: -1
     partnerProto: AU14ZStairPure

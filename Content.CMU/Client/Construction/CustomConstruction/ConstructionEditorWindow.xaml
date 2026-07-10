@@ -52,8 +52,14 @@ SPDX-License-Identifier: AGPL-3.0-only
             <Button Name="AddToolButton" Text="{Loc 'construction-editor-add-tool'}"/>
         </BoxContainer>
 
-        <!-- Custom material / tool by ANY entity prototype (picked from the entity selector) -->
+        <!-- Custom material / tool by ANY entity prototype (picked from the entity selector).
+             Own amount/seconds boxes: amount applies to the custom MATERIAL (consumed copies), the
+             seconds box applies to whichever of the two is picked. -->
         <BoxContainer Orientation="Horizontal" Margin="0 0 0 6">
+            <LineEdit Name="CustomAmountEdit" MinWidth="50" Margin="0 0 2 0"
+                      PlaceHolder="{Loc 'construction-editor-amount'}"/>
+            <LineEdit Name="CustomDoAfterEdit" MinWidth="50" Margin="0 0 2 0"
+                      PlaceHolder="{Loc 'construction-editor-doafter'}"/>
             <Button Name="PickEntityMaterialButton" Text="{Loc 'construction-editor-pick-entity-material'}"
                     HorizontalExpand="True" Margin="0 0 2 0"/>
             <Button Name="PickEntityToolButton" Text="{Loc 'construction-editor-pick-entity-tool'}"

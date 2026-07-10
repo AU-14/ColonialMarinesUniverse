@@ -14,6 +14,8 @@
 # override), so the wall behaviours are added here explicitly instead.
 
 # Blue - the staircase's own support beam (spawned by ZStairSystem, not built). Anchors the staircase.
+# NON-BLOCKING (hard: false): it sits right next to the stair shaft, and a solid beam there could wall the
+# player off from stepping back onto the return staircase. It stays shootable/attackable via Destructible.
 - type: entity
   parent: AU14NavalisSupportBeamBlue
   id: AU14NavalisSupportBeamBlue1Tile
@@ -37,6 +39,7 @@
         layer:
         - WallLayer
         density: 1000
+        hard: false
   - type: StructuralSupport
     isAnchor: true
     isVerticalSupport: true

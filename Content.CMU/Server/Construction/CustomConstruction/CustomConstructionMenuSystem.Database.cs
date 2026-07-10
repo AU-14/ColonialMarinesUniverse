@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Content.Server.Database;
+using Robust.Shared.Upload;
 
 namespace Content.Server._AU14.Construction.CustomConstruction;
 
@@ -23,6 +24,7 @@ namespace Content.Server._AU14.Construction.CustomConstruction;
 public sealed partial class CustomConstructionMenuSystem
 {
     [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private IGamePrototypeLoadManager _protoLoad = default!;
 
     // DB "kind" = generated subdirectory ("" is the root entries dir). Mirrors the file layout.
     private const string DbKindEntries = "";
@@ -57,24 +59,30 @@ public sealed partial class CustomConstructionMenuSystem
         }
 
         var restored = 0;
-        var restoredLathe = false;
+        var anyLathe = false;
         foreach (var row in rows)
         {
             var path = DbEntryFilePath(row.Kind, row.EntryKey);
-            if (path == null || File.Exists(path))
+            if (path == null)
                 continue;
 
             try
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-                File.WriteAllText(path, row.Yaml, Encoding.UTF8);
+                if (!File.Exists(path))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+                    File.WriteAllText(path, row.Yaml, Encoding.UTF8);
+                    restored++;
+                }
 
-                // The file missed this boot's prototype load from disk, so load it now. Only known
-                // prototype YAML we generated ourselves is ever stored/loaded - never uploads.
-                _prototype.LoadString(row.Yaml);
-
-                restored++;
-                restoredLathe |= row.Kind == DbKindLathe;
+                // ALWAYS publish, even when the file already exists: the DB is the source of truth. On
+                // servers whose resource VFS doesn't pick the written files up (packaged/Docker), the
+                // disk copy alone never loads - and plain LoadString would leave every connecting CLIENT
+                // without the prototypes (=> "Unknown LatheRecipePrototype" in the lathe UI). Publishing
+                // through the prototype-upload channel loads it server-side (overwrite) and replays it to
+                // every current and late-joining client. Only YAML we generated ourselves is ever stored.
+                PublishYaml(row.Yaml, $"{row.Kind}/{row.EntryKey}");
+                anyLathe |= row.Kind == DbKindLathe;
             }
             catch (Exception e)
             {
@@ -82,17 +90,47 @@ public sealed partial class CustomConstructionMenuSystem
             }
         }
 
-        if (restored == 0)
-            return;
-
-        _prototype.ResolveResults();
-
-        // The lathe pack files are derived from the recipe files, so rebuild them (this also
-        // re-writes the pack .yml on disk; the packs themselves are not stored in the DB).
-        if (restoredLathe)
+        // The lathe pack files are derived from the recipe files, so rebuild and publish them (the packs
+        // themselves are not stored in the DB).
+        if (anyLathe)
             RegenerateLathePacks();
 
-        Log.Info($"Restored {restored} custom construction entries from the database.");
+        if (restored > 0)
+            Log.Info($"Restored {restored} custom construction entries from the database.");
+    }
+
+    /// <summary>
+    /// Hot-loads generated prototype YAML on the server AND every connected client, and queues it for
+    /// late joiners (same channel the admin <c>loadprototype</c> command uses). This is what makes edits
+    /// apply without a full rebuild and what keeps clients in sync with DB-restored entries.
+    /// </summary>
+    private void PublishYaml(string yaml, string what)
+    {
+        try
+        {
+            _protoLoad.SendGamePrototype(yaml);
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to publish generated prototypes ({what}): {e}");
+        }
+    }
+
+    /// <summary>
+    /// Server-side unload of the prototypes defined in generated YAML (used when an entry is deleted, so
+    /// the removal applies this round instead of "after the next full restart"). Clients cannot unload
+    /// prototypes at runtime; menu-visible leftovers are handled by hiding the recipe id instead.
+    /// </summary>
+    private void UnloadYaml(string yaml, string what)
+    {
+        try
+        {
+            _prototype.RemoveString(yaml);
+        }
+        catch (Exception e)
+        {
+            Log.Warning($"Failed to unload generated prototypes ({what}): {e}");
+        }
     }
 
     /// <summary>Maps a DB row back to its file path: &lt;generated&gt;/&lt;kind&gt;/&lt;stem&gt;.yml.</summary>

@@ -123,40 +123,19 @@ public struct SavedBuildInfo
     public float AnchorY;
 }
 
-/// <summary>Client -> server: list the saved builds available on the server.</summary>
-[Serializable, NetSerializable]
-public sealed class RequestSavedBuildListEvent : EntityEventArgs;
-
-/// <summary>Server -> client: the available saved builds.</summary>
-[Serializable, NetSerializable]
-public sealed class SavedBuildListEvent : EntityEventArgs
-{
-    public List<SavedBuildInfo> Builds = new();
-}
-
 /// <summary>
-/// Client -> server: delete a saved build file. The server re-validates permission (admin, or the build's
-/// own author) before deleting, then sends the requester a refreshed list.
+/// Server -> client (requester ONLY): the serialized build produced by a save request. The CLIENT writes
+/// this to its own local user-data folder - saved builds are private local files, never stored on or
+/// listed by the server, and shared by players copying files between their folders themselves.
 /// </summary>
 [Serializable, NetSerializable]
-public sealed class RequestDeleteSavedBuildEvent : EntityEventArgs
+public sealed class SavedBuildDataEvent : EntityEventArgs
 {
-    public string Id = string.Empty;
-}
+    /// <summary>Suggested file name ("&lt;author&gt;__&lt;name&gt;.build.yml").</summary>
+    public string FileName = string.Empty;
 
-/// <summary>
-/// Client -> server: open the saved-builds folder in the host OS file explorer (admin only). On a localhost
-/// host this opens on the player's own machine; on a remote/headless server it no-ops (no desktop).
-/// </summary>
-[Serializable, NetSerializable]
-public sealed class RequestOpenSavedBuildsFolderEvent : EntityEventArgs;
-
-/// <summary>Client -> server: rename a saved build (re-validated: admin or the build's author). Replies with a fresh list.</summary>
-[Serializable, NetSerializable]
-public sealed class RequestRenameSavedBuildEvent : EntityEventArgs
-{
-    public string Id = string.Empty;
-    public string NewName = string.Empty;
+    /// <summary>The full saved-build YAML document (meta header + serialized entities).</summary>
+    public string Yaml = string.Empty;
 }
 
 // -------------------------------------------------------------------------
@@ -197,11 +176,20 @@ public sealed class SetBuildPartnerEvent : EntityEventArgs
 [Serializable, NetSerializable]
 public sealed class ClearBuildPartnersEvent : EntityEventArgs;
 
-/// <summary>Client -> server: place a saved build at <see cref="Target"/>, rotated by <see cref="Rotation"/> radians.</summary>
+/// <summary>
+/// Client -> server: place a saved build at <see cref="Target"/>, rotated by <see cref="Rotation"/> radians.
+/// The build file lives on the CLIENT, so the client uploads its YAML here; the server re-validates the
+/// caller's admin flags (Spawn/Mapping) and size caps before loading anything from it.
+/// </summary>
 [Serializable, NetSerializable]
 public sealed class RequestPlaceBuildEvent : EntityEventArgs
 {
+    /// <summary>The local file name, used only for logging/popups.</summary>
     public string Id = string.Empty;
+
+    /// <summary>The full saved-build YAML document read from the client's local file.</summary>
+    public string Yaml = string.Empty;
+
     public NetCoordinates Target;
     public double Rotation;
 

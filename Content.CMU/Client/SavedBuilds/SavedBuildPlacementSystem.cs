@@ -125,7 +125,14 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
     {
         if (UseAdminPlacement)
         {
-            RaiseNetworkEvent(new RequestPlaceBuildEvent { Id = info.Id, AtOriginal = true });
+            // The build file is LOCAL: upload its YAML for the server to load (admin-gated server-side).
+            if (!EntityManager.System<SavedBuildListSystem>().TryGetYaml(info.Id, out var yaml))
+            {
+                _popup.PopupCursor(Loc.GetString("saved-build-error-load"));
+                return;
+            }
+
+            RaiseNetworkEvent(new RequestPlaceBuildEvent { Id = info.Id, Yaml = yaml, AtOriginal = true });
             return;
         }
 
@@ -201,9 +208,17 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
         if (!_mapManager.TryFindGridAt(target, out var gridUid, out _))
             return;
 
+        // The build file is LOCAL: upload its YAML for the server to load (admin-gated server-side).
+        if (!EntityManager.System<SavedBuildListSystem>().TryGetYaml(_current.Id, out var yaml))
+        {
+            _popup.PopupCursor(Loc.GetString("saved-build-error-load"));
+            return;
+        }
+
         RaiseNetworkEvent(new RequestPlaceBuildEvent
         {
             Id = _current.Id,
+            Yaml = yaml,
             Target = GetNetCoordinates(_transform.ToCoordinates(gridUid, target)),
             Rotation = Rotation.Theta,
         });

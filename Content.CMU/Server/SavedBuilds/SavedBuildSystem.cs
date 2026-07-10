@@ -2,6 +2,7 @@
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -24,6 +25,7 @@ using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Serialization;
+using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Serialization.Markdown.Mapping;
 using Robust.Shared.Serialization.Markdown.Sequence;
 using Robust.Shared.Serialization.Markdown.Value;
@@ -37,8 +39,10 @@ namespace Content.Server._AU14.SavedBuilds;
 /// Server-authoritative save side of the saved-builds feature. Resolves a client's selection
 /// descriptor against the soft-whitelist (entities must carry <see cref="PlayerBuiltComponent"/> and
 /// be owned by the saver or a build partner), serializes the resulting entity set through the engine
-/// entity serializer, wraps it in a metadata header, and writes it to the user-data dir so players can
-/// share the file externally. Selection resolution is echoed back to the client for highlighting.
+/// entity serializer, wraps it in a metadata header, and SENDS THE RESULT BACK TO THE CLIENT.
+/// Saved builds are private LOCAL files: the server never stores, lists, or shares them - the client
+/// writes them to its own user-data folder, and players share by copying files between their folders.
+/// Placement uploads the file's YAML back (admin/mapper gated + size capped).
 /// </summary>
 public sealed partial class SavedBuildSystem : EntitySystem
 {
@@ -51,218 +55,77 @@ public sealed partial class SavedBuildSystem : EntitySystem
     [Dependency] private PlayerBuiltSystem _playerBuilt = default!;
     [Dependency] private IAdminManager _adminManager = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private IResourceManager _resource = default!;
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
 
-    public const string SaveDir = "/saved_builds";
     // ============================================
-    // 🔧 TUNABLE: selection / naming limits
+    // 🔧 TUNABLE: selection / naming / upload limits
     // ============================================
     private const int MaxRadius = 5; // selection half-extent in tiles (5 => 11x11 box)
     private const int MaxSelectionBoxes = 64; // boxes per selection request (spam cap)
     private const int MaxManualEntities = 512; // manual add/remove entities per request (spam cap)
     private const int MaxNameLength = 64; // build name length (also bounds the file name)
+    private const int MaxBuildYamlLength = 4_000_000; // max chars of client-uploaded build YAML (~4 MB)
     private const int FormatVersion = 1;
-
-    // The saved-build list is re-sent often (menu opens, refreshes) but files only change on save/delete/
-    // rename - so cache the parsed metadata and invalidate on writes. Parsing every .build.yml (full entity
-    // blobs included) per request was a free client-spammable IO/CPU sink.
-    private List<SavedBuildInfo>? _listCache;
-
-    private void InvalidateBuildList() => _listCache = null;
-
-    /// <summary>
-    /// Validates a client-sent saved-build file id: must be a plain "&lt;author&gt;__&lt;name&gt;.build.yml"
-    /// file name with no path separators or traversal, exactly as produced by <see cref="SaveBuild"/>.
-    /// Every network handler that turns an id into a path must go through this.
-    /// </summary>
-    private static bool IsValidBuildId(string? id)
-    {
-        return !string.IsNullOrEmpty(id)
-               && id.EndsWith(".build.yml", StringComparison.Ordinal)
-               && !id.Contains('/') && !id.Contains('\\') && !id.Contains("..")
-               && id.Contains("__", StringComparison.Ordinal);
-    }
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeNetworkEvent<RequestBuildSelectionEvent>(OnRequestSelection);
         SubscribeNetworkEvent<RequestSaveBuildEvent>(OnRequestSave);
-        SubscribeNetworkEvent<RequestSavedBuildListEvent>(OnRequestList);
         SubscribeNetworkEvent<RequestPlaceBuildEvent>(OnRequestPlace);
-        SubscribeNetworkEvent<RequestDeleteSavedBuildEvent>(OnRequestDelete);
-        SubscribeNetworkEvent<RequestOpenSavedBuildsFolderEvent>(OnRequestOpenFolder);
-        SubscribeNetworkEvent<RequestRenameSavedBuildEvent>(OnRequestRename);
-    }
-
-    /// <summary>Renames a saved build (updates the metadata name and the file), if the requester is an admin or author.</summary>
-    private void OnRequestRename(RequestRenameSavedBuildEvent ev, EntitySessionEventArgs args)
-    {
-        var session = args.SenderSession;
-        var user = session.AttachedEntity;
-
-        var id = ev.Id;
-        if (!IsValidBuildId(id))
-            return;
-
-        var newName = ev.NewName.Trim();
-        if (string.IsNullOrEmpty(newName))
-            return;
-        if (newName.Length > MaxNameLength)
-            newName = newName[..MaxNameLength];
-
-        var dir = new ResPath(SaveDir).ToRootedPath();
-        var path = dir / id;
-        if (!_resource.UserData.Exists(path) || !_mapLoader.TryReadFile(path, out var root))
-            return;
-
-        var isAdmin = _adminManager.HasAdminFlag(session, AdminFlags.Spawn);
-        if (!isAdmin && !IsAuthor(path, session.UserId))
-        {
-            if (user is { } notYours)
-                _popup.PopupEntity(Loc.GetString("saved-build-error-delete-notyours"), notYours, notYours);
-            return;
-        }
-
-        // Update the metadata name and write under a new file name (same author prefix), then drop the old file.
-        if (root.TryGet<MappingDataNode>("meta", out var meta))
-        {
-            meta.Remove("name");
-            meta.Add("name", new ValueDataNode(newName));
-        }
-
-        var prefix = id[..id.IndexOf("__", StringComparison.Ordinal)];
-        var newPath = dir / $"{prefix}__{Sanitize(newName)}.build.yml";
-
-        try
-        {
-            using (var writer = _resource.UserData.OpenWriteText(newPath))
-            {
-                var stream = new YamlStream { new YamlDocument(root.ToYaml()) };
-                stream.Save(new YamlMappingFix(new Emitter(writer)), false);
-            }
-
-            if (newPath != path)
-                _resource.UserData.Delete(path);
-        }
-        catch (Exception e)
-        {
-            Log.Error($"Failed to rename saved build '{id}' -> '{newName}' for {session.Name}: {e}");
-            return;
-        }
-
-        _adminLog.Add(LogType.Action, LogImpact.Low,
-            $"{session.Name} (user {session.UserId}) renamed saved build '{id}' to '{newName}'");
-        InvalidateBuildList();
-        RaiseNetworkEvent(new SavedBuildListEvent { Builds = EnumerateSavedBuilds() }, session);
-    }
-
-    /// <summary>Deletes a saved-build file, if the requester is an admin or the build's own author.</summary>
-    private void OnRequestDelete(RequestDeleteSavedBuildEvent ev, EntitySessionEventArgs args)
-    {
-        var session = args.SenderSession;
-        var user = session.AttachedEntity;
-
-        // Reject anything that isn't a plain build file name (no path traversal out of the save dir).
-        var id = ev.Id;
-        if (!IsValidBuildId(id))
-            return;
-
-        var dir = new ResPath(SaveDir).ToRootedPath();
-        var path = dir / id;
-        if (!_resource.UserData.Exists(path))
-            return;
-
-        // Permission: server admins (Spawn) may delete any build; otherwise only the original author.
-        var isAdmin = _adminManager.HasAdminFlag(session, AdminFlags.Spawn);
-        if (!isAdmin && !IsAuthor(path, session.UserId))
-        {
-            if (user is { } ent)
-                _popup.PopupEntity(Loc.GetString("saved-build-error-delete-notyours"), ent, ent);
-            return;
-        }
-
-        try
-        {
-            _resource.UserData.Delete(path);
-        }
-        catch (Exception e)
-        {
-            Log.Error($"Failed to delete saved build '{id}' for {session.Name}: {e}");
-            if (user is { } ent)
-                _popup.PopupEntity(Loc.GetString("saved-build-error-delete"), ent, ent);
-            return;
-        }
-
-        _adminLog.Add(LogType.Action, LogImpact.Low,
-            $"{session.Name} (user {session.UserId}) deleted saved build '{id}'");
-        if (user is { } popupEnt)
-            _popup.PopupEntity(Loc.GetString("saved-build-deleted"), popupEnt, popupEnt);
-
-        // Refresh the requester's list so the deleted build disappears from the menu immediately.
-        InvalidateBuildList();
-        RaiseNetworkEvent(new SavedBuildListEvent { Builds = EnumerateSavedBuilds() }, session);
-    }
-
-    /// <summary>Opens the saved-builds folder in the host's OS file explorer (admin only; localhost host).</summary>
-    private void OnRequestOpenFolder(RequestOpenSavedBuildsFolderEvent ev, EntitySessionEventArgs args)
-    {
-        var session = args.SenderSession;
-        if (!_adminManager.HasAdminFlag(session, AdminFlags.Spawn))
-            return;
-
-        var dir = new ResPath(SaveDir).ToRootedPath();
-        try
-        {
-            _resource.UserData.CreateDir(dir);
-            _resource.UserData.OpenOsWindow(dir);
-        }
-        catch (Exception e)
-        {
-            Log.Warning($"Failed to open saved-builds folder for {session.Name}: {e}");
-        }
-    }
-
-    /// <summary>True if the saved-build file at <paramref name="path"/> records <paramref name="user"/> as its author.</summary>
-    private bool IsAuthor(ResPath path, NetUserId user)
-    {
-        if (!_mapLoader.TryReadFile(path, out var root) || !root.TryGet<MappingDataNode>("meta", out var meta))
-            return false;
-
-        return Guid.TryParse(MetaString(meta, "authorUserId"), out var author) && new NetUserId(author) == user;
+        // No list/delete/rename/open-folder handlers: saved builds are the CLIENT's local files. The
+        // server never stores or enumerates them, so no player can ever see another player's builds.
     }
 
     private void OnRequestPlace(RequestPlaceBuildEvent ev, EntitySessionEventArgs args)
     {
-        PlaceBuild(args.SenderSession, ev.Id, GetCoordinates(ev.Target), new Angle(ev.Rotation), ev.AtOriginal);
+        PlaceBuild(args.SenderSession, ev.Id, ev.Yaml, GetCoordinates(ev.Target), new Angle(ev.Rotation), ev.AtOriginal);
     }
 
     /// <summary>
-    /// Loads a saved build and places it on the grid at <paramref name="target"/>, rotated by
-    /// <paramref name="rotation"/>. Entities load as orphans (the source grid wasn't serialized), so each
+    /// Loads a CLIENT-UPLOADED saved build and places it on the grid at <paramref name="target"/>, rotated
+    /// by <paramref name="rotation"/>. Entities load as orphans (the source grid wasn't serialized), so each
     /// root is repositioned by (savedLocal - anchor) rotated, then re-parented/anchored to the target grid.
+    /// Upload security: gated behind Spawn/Mapping admin flags (spawning arbitrary serialized entities is
+    /// admin-tier power, same class as loadgamemap) and a hard YAML size cap.
     /// NOTE (Phase 4a): this currently spawns the build for free; material cost is Phase 4c.
     /// </summary>
-    public void PlaceBuild(ICommonSession session, string id, EntityCoordinates target, Angle rotation, bool atOriginal = false)
+    public void PlaceBuild(ICommonSession session, string id, string yaml, EntityCoordinates target, Angle rotation, bool atOriginal = false)
     {
-        // Same file-name validation as delete/rename: the id becomes a path, so it must never carry
-        // separators or traversal (also covers the placebuild console command).
-        if (session.AttachedEntity is not { } user || !IsValidBuildId(id))
+        if (session.AttachedEntity is not { } user || string.IsNullOrWhiteSpace(yaml))
             return;
 
         // Instant, free placement is the privileged version: admins (Spawn) or mappers (Mapping). Non-privileged
-        // players use client-side construction ghosts instead.
+        // players use client-side construction ghosts instead. This gate is also what makes accepting client
+        // YAML acceptable - never relax it without adding real content validation.
         if (!_adminManager.HasAdminFlag(session, AdminFlags.Spawn) && !_adminManager.HasAdminFlag(session, AdminFlags.Mapping))
         {
             _popup.PopupEntity(Loc.GetString("saved-build-error-notadmin"), user, user);
             return;
         }
 
-        var path = new ResPath(SaveDir).ToRootedPath() / id;
-        if (!_resource.UserData.Exists(path)
-            || !_mapLoader.TryReadFile(path, out var root)
-            || !root.TryGet<MappingDataNode>("build", out var buildNode))
+        if (yaml.Length > MaxBuildYamlLength)
+        {
+            Log.Warning($"{session.Name} sent an oversized saved-build upload ({yaml.Length} chars), rejected.");
+            _popup.PopupEntity(Loc.GetString("saved-build-error-load"), user, user);
+            return;
+        }
+
+        MappingDataNode root;
+        try
+        {
+            using var reader = new System.IO.StringReader(yaml);
+            root = DataNodeParser.ParseYamlStream(reader).First().Root as MappingDataNode
+                   ?? throw new InvalidDataException("Root is not a mapping.");
+        }
+        catch (Exception e)
+        {
+            Log.Warning($"Failed to parse saved-build upload '{id}' from {session.Name}: {e.Message}");
+            _popup.PopupEntity(Loc.GetString("saved-build-error-load"), user, user);
+            return;
+        }
+
+        if (!root.TryGet<MappingDataNode>("build", out var buildNode))
         {
             _popup.PopupEntity(Loc.GetString("saved-build-error-load"), user, user);
             return;
@@ -293,7 +156,6 @@ public sealed partial class SavedBuildSystem : EntitySystem
             return;
 
         var anchor = ReadAnchor(root);
-        var targetLocal = _transform.ToCoordinates(gridUid, targetMap).Position;
 
         LoadResult result;
         try
@@ -315,9 +177,13 @@ public sealed partial class SavedBuildSystem : EntitySystem
             return;
         }
 
-        // After the merge the build's root entities are parented to the target map.
+        // After the merge the build's root entities are normally parented to the target map - but if a loaded
+        // orphan happened to land where a grid already sits, the loader can parent it straight onto that grid.
+        // Those must be repositioned too: skipping them left entities stranded at their ORIGINAL saved spot
+        // (the "completely messed up placement" bug).
         var roots = result.Entities
-            .Where(e => EntityManager.EntityExists(e) && Transform(e).ParentUid == targetMapUid)
+            .Where(e => EntityManager.EntityExists(e)
+                && (Transform(e).ParentUid == targetMapUid || HasComp<MapGridComponent>(Transform(e).ParentUid)))
             .ToList();
 
         // The serialized anchored flag is lost in the nullspace/map phase, so we restore it from the saved
@@ -327,17 +193,21 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
         foreach (var rootEnt in roots)
         {
-            var xform = Transform(rootEnt);
-            var savedLocal = xform.LocalPosition; // map-local == original grid-local (merge offset is zero)
-            var savedRot = xform.LocalRotation;
+            // WORLD-frame math throughout, not raw transform locals: a map's transform is identity, so for
+            // map-parented roots world == the original saved grid-local (merge offset is zero). For roots the
+            // loader parented onto a grid, world position resolves through that grid's own offset/rotation.
+            // The old local-frame arithmetic silently mixed a MAP-frame offset into GRID-local coordinates,
+            // which scrambled placements whenever the target grid was offset or rotated relative to its map.
+            var savedWorld = _transform.GetWorldPosition(rootEnt);
+            var savedRot = _transform.GetWorldRotation(rootEnt);
 
-            var rel = rotation.RotateVec(savedLocal - anchor);
-            _transform.SetCoordinates(rootEnt, new EntityCoordinates(gridUid, targetLocal + rel));
-            _transform.SetLocalRotation(rootEnt, savedRot + rotation);
+            var desired = new MapCoordinates(targetMap.Position + rotation.RotateVec(savedWorld - anchor), targetMap.MapId);
+            _transform.SetCoordinates(rootEnt, new EntityCoordinates(gridUid, _transform.ToCoordinates(gridUid, desired).Position));
+            _transform.SetWorldRotation(rootEnt, savedRot + rotation);
 
             // Restore the original anchored state. Prefer the recorded intent (handles props anchored without a
             // Static physics body - the mapper-mode case); fall back to "Static body => anchored" for old saves.
-            var relSave = savedLocal - anchor;
+            var relSave = savedWorld - anchor;
             var protoId = MetaData(rootEnt).EntityPrototype?.ID ?? string.Empty;
             var wasAnchored = anchoredByKey.TryGetValue((protoId, QuantizeOffset(relSave.X), QuantizeOffset(relSave.Y)), out var recorded)
                 ? recorded
@@ -385,59 +255,6 @@ public sealed partial class SavedBuildSystem : EntitySystem
         return new Vector2(x, y);
     }
 
-    private void OnRequestList(RequestSavedBuildListEvent ev, EntitySessionEventArgs args)
-    {
-        RaiseNetworkEvent(new SavedBuildListEvent { Builds = EnumerateSavedBuilds() }, args.SenderSession);
-    }
-
-    /// <summary>Reads the metadata header of every saved-build file in the save directory.</summary>
-    public List<SavedBuildInfo> EnumerateSavedBuilds()
-    {
-        if (_listCache != null)
-            return _listCache;
-
-        var result = new List<SavedBuildInfo>();
-        var dir = new ResPath(SaveDir).ToRootedPath();
-        if (!_resource.UserData.Exists(dir))
-            return result;
-
-        foreach (var entry in _resource.UserData.DirectoryEntries(dir))
-        {
-            if (!entry.EndsWith(".build.yml", StringComparison.Ordinal))
-                continue;
-
-            var path = dir / entry;
-            if (!_mapLoader.TryReadFile(path, out var root))
-                continue;
-
-            if (!root.TryGet<MappingDataNode>("meta", out var meta))
-                continue;
-
-            int.TryParse(MetaString(meta, "entityCount"), out var count);
-            NetEntity.TryParse(MetaString(meta, "sourceGrid"), out var sourceGrid);
-            result.Add(new SavedBuildInfo
-            {
-                Id = entry,
-                Name = MetaString(meta, "name"),
-                Source = MetaString(meta, "source"),
-                Author = MetaString(meta, "author"),
-                EntityCount = count,
-                RelMinX = MetaFloat(meta, "relMinX"),
-                RelMinY = MetaFloat(meta, "relMinY"),
-                RelMaxX = MetaFloat(meta, "relMaxX"),
-                RelMaxY = MetaFloat(meta, "relMaxY"),
-                Preview = ReadPreview(meta),
-                SourceGrid = sourceGrid,
-                AnchorX = MetaFloat(meta, "anchorX"),
-                AnchorY = MetaFloat(meta, "anchorY"),
-            });
-        }
-
-        result.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.InvariantCultureIgnoreCase));
-        _listCache = result;
-        return result;
-    }
-
     private static string MetaString(MappingDataNode meta, string key)
     {
         return meta.TryGet<ValueDataNode>(key, out var node) ? node.Value : string.Empty;
@@ -447,29 +264,6 @@ public sealed partial class SavedBuildSystem : EntitySystem
     {
         float.TryParse(MetaString(meta, key), NumberStyles.Float, CultureInfo.InvariantCulture, out var value);
         return value;
-    }
-
-    private static List<BuildPreviewEntity> ReadPreview(MappingDataNode meta)
-    {
-        var list = new List<BuildPreviewEntity>();
-        if (!meta.TryGet<SequenceDataNode>("preview", out var seq))
-            return list;
-
-        foreach (var node in seq)
-        {
-            if (node is not MappingDataNode m)
-                continue;
-
-            list.Add(new BuildPreviewEntity
-            {
-                Proto = MetaString(m, "proto"),
-                X = MetaFloat(m, "x"),
-                Y = MetaFloat(m, "y"),
-                Rot = MetaFloat(m, "rot"),
-            });
-        }
-
-        return list;
     }
 
     /// <summary>
@@ -706,25 +500,28 @@ public sealed partial class SavedBuildSystem : EntitySystem
         root.Add("build", buildData);
 
         var fileName = $"{Sanitize(saver.UserId.ToString())}__{Sanitize(name)}.build.yml";
-        var path = new ResPath(SaveDir).ToRootedPath() / fileName;
 
+        // Serialize to a string and hand it to the SAVER's client: saved builds are private local files.
+        // The server keeps nothing, so no other player can ever list or read them.
+        string yaml;
         try
         {
-            _resource.UserData.CreateDir(path.Directory);
-            using var writer = _resource.UserData.OpenWriteText(path);
+            using var writer = new StringWriter(CultureInfo.InvariantCulture);
             var stream = new YamlStream { new YamlDocument(root.ToYaml()) };
             stream.Save(new YamlMappingFix(new Emitter(writer)), false);
+            yaml = writer.ToString();
         }
         catch (Exception e)
         {
-            Log.Error($"Failed to write saved build '{name}' to {path}: {e}");
+            Log.Error($"Failed to emit saved build '{name}' for {saver.Name}: {e}");
             _popup.PopupEntity(Loc.GetString("saved-build-error-write"), user, user);
             return;
         }
 
-        InvalidateBuildList();
+        RaiseNetworkEvent(new SavedBuildDataEvent { FileName = fileName, Yaml = yaml }, saver);
+
         _adminLog.Add(LogType.Action, LogImpact.Low,
-            $"{ToPrettyString(user):player} (user {saver.UserId}) saved build '{name}' with {entities.Count} entities to {path}");
+            $"{ToPrettyString(user):player} (user {saver.UserId}) saved build '{name}' with {entities.Count} entities (sent to client)");
         _popup.PopupEntity(
             Loc.GetString("saved-build-success", ("name", name), ("count", entities.Count)), user, user);
     }

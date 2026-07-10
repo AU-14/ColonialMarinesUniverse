@@ -94,7 +94,13 @@ public sealed partial class CustomConstructionMenuSystem
         try
         {
             if (File.Exists(path))
+            {
+                // Unload server-side so printing it stops working this round; the packs republished below
+                // drop it from every client's lathe UI (a leftover recipe prototype on clients is harmless,
+                // only a pack referencing a MISSING recipe ever errors).
+                UnloadYaml(File.ReadAllText(path), msg.RecipeId);
                 File.Delete(path);
+            }
             DbDelete(DbKindLathe, Path.GetFileName(msg.RecipeId));
             RegenerateLathePacks();
         }
@@ -149,6 +155,10 @@ public sealed partial class CustomConstructionMenuSystem
             File.WriteAllText(Path.Combine(LatheDir, $"{recipeId}.yml"), yaml, Encoding.UTF8);
             DbUpsert(DbKindLathe, recipeId, yaml);
 
+            // Publish the RECIPE before the packs that reference it: a client must never receive a pack
+            // listing a recipe id it doesn't know (that is exactly the UnknownPrototypeException the lathe
+            // UI throws). RegenerateLathePacks publishes the updated packs afterwards.
+            PublishYaml(yaml, $"lathe recipe {recipeId}");
             RegenerateLathePacks();
         }
         catch (Exception e)
@@ -210,8 +220,15 @@ public sealed partial class CustomConstructionMenuSystem
         autolathe.Sort(StringComparer.Ordinal);
         armylathe.Sort(StringComparer.Ordinal);
 
-        File.WriteAllText(Path.Combine(LatheDir, AutolathePackFile), BuildPackYaml(AutolathePackId, "CMAutolathe", autolathe), Encoding.UTF8);
-        File.WriteAllText(Path.Combine(LatheDir, ArmylathePackFile), BuildPackYaml(ArmylathePackId, "CMArmylathe", armylathe), Encoding.UTF8);
+        var autolatheYaml = BuildPackYaml(AutolathePackId, "CMAutolathe", autolathe);
+        var armylatheYaml = BuildPackYaml(ArmylathePackId, "CMArmylathe", armylathe);
+        File.WriteAllText(Path.Combine(LatheDir, AutolathePackFile), autolatheYaml, Encoding.UTF8);
+        File.WriteAllText(Path.Combine(LatheDir, ArmylathePackFile), armylatheYaml, Encoding.UTF8);
+
+        // Publish the packs live so lathe UIs (server and every client) reflect the recipe list right away.
+        // Callers must have published any newly-added recipe BEFORE this runs (see OnSubmitLathe).
+        PublishYaml(autolatheYaml, "autolathe pack");
+        PublishYaml(armylatheYaml, "armylathe pack");
     }
 
     private CustomLatheTarget ReadLatheTarget(string path)

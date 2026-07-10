@@ -141,6 +141,14 @@ public sealed class ZStairSystem : EntitySystem
             return;
 
         var companion = PlaceTraversalStair(stoneGrid, stairWorld, ent.Comp.PartnerProto);
+
+        // Guarantee solid ground at and around the landing BEFORE the shaft opens. Stone chunk generation is
+        // lazy (per-chunk-on-approach), so a landing spot near a chunk edge can still have EMPTY neighbour
+        // tiles when the player drops in - and falling onto an empty tile punches them through to the level
+        // below the intended one. A small always-laid floor patch closes that hole; the cave streams in
+        // around it later.
+        LayLandingPatch(stoneGrid, stairWorld, ent.Comp.ReflectFloorTile, LandingPatchRadius);
+
         // Open the shaft on this level so walking onto the frame tile drops you onto the stair below.
         _map.SetTile(gridUid, grid, stairTile, Tile.Empty);
 
@@ -206,6 +214,36 @@ public sealed class ZStairSystem : EntitySystem
         }
 
         return beamUid;
+    }
+
+    // 🔧 TUNABLE: radius (in tiles) of the guaranteed floor patch laid under a down-stair's landing.
+    private const int LandingPatchRadius = 1;
+
+    /// <summary>
+    /// Lays a solid floor patch (center INCLUDED - this is the landing, not a shaft ring) on the lower level,
+    /// skipping tiles that already have real floor. Ensures the player always lands on something even when the
+    /// surrounding cave chunk has not generated yet.
+    /// </summary>
+    private void LayLandingPatch(EntityUid gridUid, Vector2 worldPos, string tileId, int radius)
+    {
+        if (!_gridQuery.TryComp(gridUid, out var grid) || !_tileDef.TryGetDefinition(tileId, out var def))
+            return;
+
+        if (Transform(gridUid).MapUid is not { } mapUid || !TryComp<MapComponent>(mapUid, out var mapComp))
+            return;
+
+        var center = _map.TileIndicesFor(gridUid, grid, new MapCoordinates(worldPos, mapComp.MapId));
+        for (var dx = -radius; dx <= radius; dx++)
+        {
+            for (var dy = -radius; dy <= radius; dy++)
+            {
+                var tile = center + new Vector2i(dx, dy);
+                if (_map.TryGetTileRef(gridUid, grid, tile, out var existing) && !existing.Tile.IsEmpty)
+                    continue;
+
+                _map.SetTile(gridUid, grid, tile, new Tile(def.TileId));
+            }
+        }
     }
 
     /// <summary>

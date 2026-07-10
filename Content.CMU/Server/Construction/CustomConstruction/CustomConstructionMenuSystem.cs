@@ -132,6 +132,9 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
         // (e.g. a recipe saved with an invalid material before validation existed). Prevents broken
         // "can't build / no steps" menu entries from lingering.
         ValidateExistingEntries();
+
+        // Drop hide-tombstones for generated entries that no longer exist after this restart.
+        PruneStaleHiddenRecipes();
     }
 
     /// <summary>
@@ -315,8 +318,7 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
 
             try
             {
-                File.Delete(file);
-                DbDelete(DbKindEntries, Path.GetFileNameWithoutExtension(file));
+                RetireEntryFile(file);
                 removed++;
             }
             catch (Exception e)
@@ -361,26 +363,15 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
         if (!_prototype.HasIndex<Content.Shared.Construction.Prototypes.ConstructionPrototype>(recipeId))
             return;
 
-        var dir = Path.Combine(_generatedDir, OverridesSubDir);
-        var path = Path.Combine(dir, OverridesFileName);
-
-        var hidden = ReadHiddenRecipes(path);
-        if (!hidden.Add(recipeId))
+        var result = HideRecipeId(recipeId);
+        if (result == HideResult.AlreadyHidden)
         {
             PopupTo(session, Loc.GetString("construction-menu-recipe-already-hidden", ("recipe", recipeId)), PopupType.Medium);
             return;
         }
 
-        try
+        if (result == HideResult.Failed)
         {
-            Directory.CreateDirectory(dir);
-            var overridesYaml = BuildOverridesYaml(hidden);
-            File.WriteAllText(path, overridesYaml, Encoding.UTF8);
-            DbUpsert(DbKindOverrides, Path.GetFileNameWithoutExtension(OverridesFileName), overridesYaml);
-        }
-        catch (Exception e)
-        {
-            Log.Error($"Failed to write construction menu overrides for hidden recipe {recipeId}: {e}");
             PopupTo(session, Loc.GetString("construction-menu-recipe-hide-failed"), PopupType.MediumCaution);
             return;
         }
@@ -388,6 +379,109 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
         _adminLogger.Add(LogType.Action, LogImpact.Medium,
             $"{session.Name} removed (hid) construction menu recipe {recipeId}");
         PopupTo(session, Loc.GetString("construction-menu-recipe-hidden", ("recipe", recipeId)), PopupType.Medium);
+    }
+
+    private enum HideResult { Hidden, AlreadyHidden, Failed }
+
+    /// <summary>
+    /// Adds a recipe id to the hidden-overrides prototype, persists it (file + DB) and publishes the updated
+    /// overrides to the server and every client, so the hide applies THIS round. Also used when a generated
+    /// entry is deleted: clients can't unload prototypes at runtime, so hiding the id is what actually makes
+    /// the deleted recipe vanish from open menus.
+    /// </summary>
+    private HideResult HideRecipeId(string recipeId)
+    {
+        if (_generatedDir == null)
+            return HideResult.Failed;
+
+        var dir = Path.Combine(_generatedDir, OverridesSubDir);
+        var path = Path.Combine(dir, OverridesFileName);
+
+        var hidden = ReadHiddenRecipes(path);
+        if (!hidden.Add(recipeId))
+            return HideResult.AlreadyHidden;
+
+        try
+        {
+            Directory.CreateDirectory(dir);
+            var overridesYaml = BuildOverridesYaml(hidden);
+            File.WriteAllText(path, overridesYaml, Encoding.UTF8);
+            DbUpsert(DbKindOverrides, Path.GetFileNameWithoutExtension(OverridesFileName), overridesYaml);
+            PublishYaml(overridesYaml, "menu overrides");
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to write construction menu overrides for hidden recipe {recipeId}: {e}");
+            return HideResult.Failed;
+        }
+
+        return HideResult.Hidden;
+    }
+
+    /// <summary>
+    /// Removes a recipe id from the hidden-overrides list (file + DB + live publish). Called when an entry
+    /// is (re)added, so a delete-tombstone from earlier in the round can't keep the new recipe invisible.
+    /// </summary>
+    private void UnhideRecipeId(string recipeId)
+    {
+        if (_generatedDir == null)
+            return;
+
+        var dir = Path.Combine(_generatedDir, OverridesSubDir);
+        var path = Path.Combine(dir, OverridesFileName);
+
+        var hidden = ReadHiddenRecipes(path);
+        if (!hidden.Remove(recipeId))
+            return;
+
+        try
+        {
+            Directory.CreateDirectory(dir);
+            var overridesYaml = BuildOverridesYaml(hidden);
+            File.WriteAllText(path, overridesYaml, Encoding.UTF8);
+            DbUpsert(DbKindOverrides, Path.GetFileNameWithoutExtension(OverridesFileName), overridesYaml);
+            PublishYaml(overridesYaml, "menu overrides");
+        }
+        catch (Exception e)
+        {
+            Log.Warning($"Failed to unhide recipe id {recipeId}: {e}");
+        }
+    }
+
+    /// <summary>
+    /// Boot-time cleanup for the overrides list: ids of OUR generated entries (AU14Custom_/AU14Tile_) are
+    /// hidden as a client-side tombstone when the entry is deleted mid-round; once a real restart has
+    /// happened the prototype is gone for good and the tombstone is dead weight, so drop it. Hand-hidden
+    /// vanilla recipe ids are always kept.
+    /// </summary>
+    private void PruneStaleHiddenRecipes()
+    {
+        if (_generatedDir == null)
+            return;
+
+        var dir = Path.Combine(_generatedDir, OverridesSubDir);
+        var path = Path.Combine(dir, OverridesFileName);
+        var hidden = ReadHiddenRecipes(path);
+        if (hidden.Count == 0)
+            return;
+
+        var removed = hidden.RemoveWhere(id =>
+            (id.StartsWith(FilePrefix, StringComparison.Ordinal) || id.StartsWith(TileFilePrefix, StringComparison.Ordinal))
+            && !_prototype.HasIndex<Content.Shared.Construction.Prototypes.ConstructionPrototype>(id));
+
+        if (removed == 0)
+            return;
+
+        try
+        {
+            var overridesYaml = BuildOverridesYaml(hidden);
+            File.WriteAllText(path, overridesYaml, Encoding.UTF8);
+            DbUpsert(DbKindOverrides, Path.GetFileNameWithoutExtension(OverridesFileName), overridesYaml);
+        }
+        catch (Exception e)
+        {
+            Log.Warning($"Failed to prune stale hidden recipe ids: {e}");
+        }
     }
 
     /// <summary>Reads the hidden-recipe id set from the overrides file (the <c>hiddenRecipes:</c> sequence).</summary>
@@ -494,16 +588,16 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
             Directory.CreateDirectory(_generatedDir);
 
             if (isChange && !string.Equals(msg.EntryKey, newKey, StringComparison.Ordinal))
-            {
-                var oldPath = FilePathForKey(msg.EntryKey);
-                if (File.Exists(oldPath))
-                    File.Delete(oldPath);
-                DbDelete(DbKindEntries, $"{FilePrefix}{msg.EntryKey}");
-            }
+                RetireEntryFile(FilePathForKey(msg.EntryKey));
 
             var yaml = BuildGeneratedYaml(proto, newKey, spawnlist, category, steps, deconstructSteps, msg.Health);
             File.WriteAllText(FilePathForKey(newKey), yaml, Encoding.UTF8);
             DbUpsert(DbKindEntries, $"{FilePrefix}{newKey}", yaml);
+
+            // Apply live: load on the server (overwrite) and push to every client, so the new/changed
+            // recipe shows up this round instead of "after the next restart".
+            PublishYaml(yaml, $"entry {newKey}");
+            UnhideRecipeId($"{FilePrefix}{newKey}");
         }
         catch (Exception e)
         {
@@ -522,6 +616,38 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
             PopupType.Medium);
     }
 
+    /// <summary>
+    /// Deletes a generated entry file everywhere it lives: disk, DB row, the server's loaded prototypes,
+    /// and (because clients can't unload prototypes mid-round) hides its construction id as a client-side
+    /// tombstone so it vanishes from menus immediately. The tombstone is pruned on the next restart.
+    /// </summary>
+    private void RetireEntryFile(string path)
+    {
+        var stem = Path.GetFileNameWithoutExtension(path);
+        string? yaml = null;
+        if (File.Exists(path))
+        {
+            try
+            {
+                yaml = File.ReadAllText(path);
+                File.Delete(path);
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to delete generated entry {path}: {e}");
+                throw;
+            }
+        }
+
+        DbDelete(DbKindEntries, stem);
+
+        if (yaml != null)
+            UnloadYaml(yaml, stem);
+
+        // The generated construction recipe id IS the file stem (AU14Custom_<key> / AU14Tile_<key>).
+        HideRecipeId(stem);
+    }
+
     private void RemoveEntry(ICommonSession session, EntityUid user, EntityPrototype proto, string entryKey)
     {
         if (_generatedDir == null)
@@ -532,10 +658,7 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
 
         try
         {
-            var path = FilePathForKey(entryKey);
-            if (File.Exists(path))
-                File.Delete(path);
-            DbDelete(DbKindEntries, $"{FilePrefix}{entryKey}");
+            RetireEntryFile(FilePathForKey(entryKey));
         }
         catch (Exception e)
         {

@@ -90,6 +90,10 @@ public sealed partial class CustomConstructionMenuSystem
             var yaml = BuildTileYaml(key, msg.TileId, material, amount, spawnlist, category, msg.ZLevelPage);
             File.WriteAllText(Path.Combine(TilesDir, $"{TileFilePrefix}{key}.yml"), yaml, Encoding.UTF8);
             DbUpsert(DbKindTiles, $"{TileFilePrefix}{key}", yaml);
+
+            // Apply live (server + all clients) instead of waiting for a restart.
+            PublishYaml(yaml, $"tile {key}");
+            UnhideRecipeId($"{TileFilePrefix}{key}");
         }
         catch (Exception e)
         {
