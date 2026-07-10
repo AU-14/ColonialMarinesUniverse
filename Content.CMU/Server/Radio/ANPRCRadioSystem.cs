@@ -90,6 +90,14 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         SubscribeLocalEvent<ANPRCRadioComponent, PowerCellSlotEmptyEvent>(OnBatteryEmpty);
         SubscribeLocalEvent<ANPRCRadioComponent, EntInsertedIntoContainerMessage>(OnAntennaInserted);
         SubscribeLocalEvent<ANPRCRadioComponent, EntRemovedFromContainerMessage>(OnAntennaRemoved);
+        SubscribeLocalEvent<WearingANPRCComponent, GetVerbsEvent<AlternativeVerb>>(OnWearerGetAltVerbs);
+        SubscribeLocalEvent<ANPRCHandsetUserComponent, TransformSpeakerNameEvent>(
+            OnHandsetSpeakerName,
+            after: [typeof(RankSystem)]);
+        SubscribeLocalEvent<ANPRCHandsetUserComponent, ChatGetPrefixEvent>(OnHandsetChatGetPrefix);
+        SubscribeLocalEvent<ANPRCHandsetUserComponent, EntitySpokeEvent>(
+            OnHandsetSpeak,
+            before: [typeof(HeadsetSystem)]);
     }
 
     private void OnRadioReceive(Entity<ANPRCRadioComponent> ent, ref RadioReceiveEvent args)
@@ -583,5 +591,4 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
     }
 
     private void UpdateBuiState(Entity<ANPRCRadioComponent> ent) { }
-    private string GetHandsetOnAirName(EntityUid speaker, Entity<ANPRCRadioComponent> pack) => Name(pack);
 }

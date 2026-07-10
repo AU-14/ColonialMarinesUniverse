@@ -24,7 +24,11 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallsignRole
+    suffix: OPS
+    commandElement: true
   - type: SeeNewPlayers
+  - type: ANPRCRadioUser
   - type: Skills
     preset: AU14SkillPresetPlatoonAdvisor
   - type: RMCSpeechBubbleSpecificStyle
@@ -129,6 +133,9 @@
     belt: AU14BeltPostelPistolM48A5NoSuper
     back: AU14SatchelMarineAdvisorMilitary # removed by ImaginaryFriend
     pocket1: AU14StampSEA # removed by ImaginaryFriend
+  storage:
+    back:
+    - ANPRCFillCardOPFOR
 
 - type: startingGear
   id: AU14GearOPFORadvisor

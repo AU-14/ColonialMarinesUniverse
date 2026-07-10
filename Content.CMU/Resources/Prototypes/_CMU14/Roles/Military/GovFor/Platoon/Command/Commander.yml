@@ -26,8 +26,12 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallsignRole
+    suffix: "6"
+    commandElement: true
   - type: CommendationGiver
   - type: InnateCommandSpeech
+  - type: ANPRCRadioUser
   - type: Skills
     preset: AU14SkillPresetPlatoonCommander
   - type: JobPrefix
@@ -120,7 +124,10 @@
     ears: AU14HeadsetGovforCommand
     pocket1: AU14StampCO
   inhand:
-    -  AU14TabletGovfor
+    - AU14TabletGovfor
+  storage:
+    back:
+    - ANPRCFillCardGOVFOR
 
 - type: startingGear
   id: AU14GearOPFORPlatCo
@@ -129,7 +136,10 @@
     ears: AU14HeadsetOpforCommand
     pocket1: AU14StampCO
   inhand:
-   -  AU14TabletOpfor
+    - AU14TabletOpfor
+  storage:
+    back:
+    - ANPRCFillCardOPFOR
 
 - type: roleLoadout
   id: JobAU14JobGOVFORPlatCo

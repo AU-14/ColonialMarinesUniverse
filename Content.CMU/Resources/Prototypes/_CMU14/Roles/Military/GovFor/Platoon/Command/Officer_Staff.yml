@@ -24,6 +24,9 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallsignRole
+    suffix: OPS
+    commandElement: true
   - type: Skills
     preset: AU14SkillPresetPlatoonJuniorOfficer
   - type: AU14CallToAttentionAbility
