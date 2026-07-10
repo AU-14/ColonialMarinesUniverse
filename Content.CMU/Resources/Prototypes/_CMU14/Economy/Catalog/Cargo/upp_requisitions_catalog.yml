@@ -272,6 +272,8 @@
         crate: RMCCrateMagazineBGel
     - name: Specialist Ammo
       entries:
+      - cost: 2000
+        crate: RMCCratePyroTankMixedUPP
       # Sniper
       - cost: 2000
         crate: AU14CrateMagazineSpecSniperM96S
