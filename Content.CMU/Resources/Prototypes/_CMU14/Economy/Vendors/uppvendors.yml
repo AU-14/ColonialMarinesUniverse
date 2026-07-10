@@ -958,12 +958,13 @@
       - id: RMCSatchelSPPWelder
         recommended: true
     - name: Engineering Storage Pouch
-      choices: { CMUPouchesCT: 1 }
+      choices: { CMUPouchesCT: 2 }
       entries:
       - id: RMCPouchConstruction
         recommended: true
+      - id: RMCPouchEngineerKit
       - id: RMCPouchElectronics
-    - name: Engineering Supplies
+    - name: Engineering Materials
       entries:
       - id: CMSheetMetal50
         name: metal x50
@@ -973,22 +974,52 @@
         name: plasteel x50
         points: 10
         recommended: true
-      - id: CMAPCElectronics
+      - id: CMSandbagEmpty50
+        name: sandbags x50
+        points: 4
+      - id: RMCPlankWood
+        name: wood x50
         points: 2
-      - id: DoorElectronics
+    - name: Engineering Supplies
+      entries:
+      - id: CMFoldingBarricadesMB6x3
+        name: MB-6 folding barricade x3
+        points: 5
+      - id: MaintenanceJack
+        points: 5
+      - id: RMCShovel
         points: 2
-      - id: CMUDeployableZLevelLadder
-        points: 10
+      - id: RMCES11MobileFuelCanister
+        points: 5
+      - id: RMCPowerCell
+        points: 2
       - id: RMCPowerCellHigh
-        points: 3
+        points: 4
       - id: RMCPowerCellSuper
         points: 8
       - id: RMCMagazineSMGNailgun
         points: 5
+      - id: RMCEngineerKit
+        points: 5
+      - id: CMAPCElectronics
+        points: 2
+      - id: DoorElectronics
+        points: 2
+      - id: RMCPortableGeneratorPacmanMachineCircuitBoard
+        name: PACMAN generator machine board
+        points: 8
+      - id: RMCPortableGeneratorSuperPacmanMachineCircuitboard
+        name: super PACMAN generator machine board
+        points: 12
+      - id: CMSheetPhoron30
+        name: phoron x30
+        points: 12
     #- id: CMES11MobileFuelCanister
     #  points: 4
     - name: Explosives
       entries:
+      - id: RMCGrenadeCustomMetalFoam
+        points: 10
       - id: RMCExplosivePlastic
         points: 5
       - id: RMCExplosiveBreachingCharge

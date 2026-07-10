@@ -546,7 +546,7 @@
 - type: entity
   parent: VmarkerShip
   id: VMarkerShipJuniorOfficer
-  name: junior officer marker
+  name: staff officer marker
   components:
   - type: VendorMarker
     class: JuniorOfficer
