@@ -15,8 +15,10 @@ namespace Content.Server._AU14.Insurgency;
 public static class InsurgencyAuthorization
 {
     // The admin flag that authorizes editing Default factions and selecting Custom factions.
+    // Host-gated to match the other Improved Construction Menu tools (Construction Item / Lathe / Tiles
+    // editors all require AdminFlags.Host), so a regular admin cannot open the INSFOR editor.
     // Change this one constant to move the gate (for example to a future HRP whitelist manager).
-    public const AdminFlags AuthorizedFlag = AdminFlags.Admin;
+    public const AdminFlags AuthorizedFlag = AdminFlags.Host;
 
     // The Custom-faction editor (insforcustomeditor) is open to players job-whitelisted for this job
     // via the jobwhitelistadd command - a separate, wider group than the host flag. Change this one

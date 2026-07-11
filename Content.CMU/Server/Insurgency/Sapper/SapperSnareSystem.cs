@@ -1,24 +1,26 @@
-using Content.Server.Explosion.EntitySystems;
 using Content.Shared._AU14.Insurgency.Sapper;
 using Content.Shared._CMU14.Threats.Mobs.CLF;
 using Content.Shared._RMC14.Slow;
+using Content.Server.Explosion.EntitySystems;
+using Content.Shared.Cuffs;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
-using Content.Shared.Interaction.Events;
 using Content.Shared.Kitchen.Components;
-using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
-using Content.Shared.Weapons.Ranged.Components;
-using Content.Shared.Weapons.Ranged.Systems;
 
 namespace Content.Server._AU14.Insurgency.Sapper;
 
 /// <summary>
 ///     Runs the snare trap's non-lethal payload. When a snare goes off it binds the tripper: they are
-///     rooted in place (cannot walk) and their hands are bound (cannot use items, attack, or fire), and
-///     their view and sprite are flipped upside down. They break out on their own after a long struggle,
-///     or a friend cuts them loose fast with a knife.
+///     rooted in place (cannot walk) and cuffed (dropping whatever they held and unable to use items,
+///     attack, or fire), and their view and sprite are flipped upside down. They break out on their own
+///     after a long struggle, or a friend cuts them loose fast with a knife.
+///
+///     Hand-binding is done with real cuffs (see <see cref="SharedCuffableSystem"/>) rather than by
+///     server-only interaction/attack blocks: the cuffable state is networked and shared, so the client
+///     predicts the victim's helplessness instead of mispredicting and rubber-banding. The root is also
+///     driven by the networked <see cref="RMCRootedComponent"/> (predicted the same way).
 ///
 ///     The upside-down view and sprite are done entirely client-side from the networked
 ///     <see cref="SapperSnaredComponent"/> (see the client SapperSnareVisualsSystem); the eye flip cannot
@@ -30,7 +32,7 @@ public sealed class SapperSnareSystem : EntitySystem
     [Dependency] private MovementSpeedModifierSystem _speed = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedCuffableSystem _cuffable = default!;
 
     public override void Initialize()
     {
@@ -42,20 +44,6 @@ public sealed class SapperSnareSystem : EntitySystem
         SubscribeLocalEvent<SapperSnaredComponent, InteractUsingEvent>(OnSnaredInteractUsing);
         SubscribeLocalEvent<SapperSnaredComponent, SapperStruggleDoAfterEvent>(OnStruggleComplete);
         SubscribeLocalEvent<SapperSnaredComponent, SapperCutFreeDoAfterEvent>(OnCutFreeComplete);
-
-        // While snared their hands are bound: block every generic interaction and every attack (which is
-        // what gun fire and melee both route through), so a caught victim really is helpless.
-        SubscribeLocalEvent<SapperSnaredComponent, InteractionAttemptEvent>(OnInteractionAttempt);
-        SubscribeLocalEvent<SapperSnaredComponent, AttackAttemptEvent>(OnAttackAttempt);
-        // Gun fire is gated on the GUN, not the shooter, and GunComponent+AttemptShootEvent already has a
-        // subscriber (ThermalCloak), so the block runs through a marker put on the victim's held guns.
-        SubscribeLocalEvent<SapperSnaredGunComponent, AttemptShootEvent>(OnShootAttempt);
-    }
-
-    private void OnShootAttempt(Entity<SapperSnaredGunComponent> ent, ref AttemptShootEvent args)
-    {
-        if (HasComp<SapperSnaredComponent>(args.User))
-            args.Cancelled = true;
     }
 
     private void OnSnareTriggered(EntityUid uid, SapperSnareComponent comp, TriggerEvent args)
@@ -71,6 +59,10 @@ public sealed class SapperSnareSystem : EntitySystem
         snared.StruggleTime = comp.StruggleTime;
         snared.CutFreeTime = comp.CutFreeTime;
         snared.FlipAngle = comp.FlipAngle;
+
+        // Cuff them: this drops what they held and blocks item use, attacks, and gun fire in a predicted,
+        // shared way. Track the cuffs so they come off again when the snare ends.
+        snared.Cuffs = _cuffable.TryAddCuffsInstant(tripper, comp.CuffPrototype);
         Dirty(tripper, snared);
 
         // Root them for the whole struggle so they cannot move. Refresh the speed modifiers a second time
@@ -79,19 +71,12 @@ public sealed class SapperSnareSystem : EntitySystem
         _slow.TryRoot(tripper, comp.StruggleTime, true);
         _speed.RefreshMovementSpeedModifiers(tripper);
 
-        // Mark every gun they're holding so its shots are blocked while they're snared (they can't pick up
-        // anything new: the interaction block covers that).
-        foreach (var held in _hands.EnumerateHeld(tripper))
-        {
-            if (HasComp<GunComponent>(held))
-                EnsureComp<SapperSnaredGunComponent>(held);
-        }
-
         _popup.PopupEntity(Loc.GetString("insfor-sapper-snare-caught"), tripper, tripper, PopupType.LargeCaution);
 
-        // Begin the self-struggle. It cannot be moved or attacked out of (they are rooted and bound) and
-        // does not break on damage, so the only ways out are finishing it or being cut free. RequireCanInteract
-        // is off so the hand-binding above does not instantly cancel their own struggle.
+        // Begin the self-struggle. It cannot be moved or attacked out of (they are rooted and cuffed) and
+        // does NOT break on damage, so being shot while snared does not free the victim: the only ways out
+        // are finishing this struggle or being cut free. RequireCanInteract is off so the cuffs above do not
+        // instantly cancel their own struggle.
         var doAfter = new DoAfterArgs(EntityManager, tripper, comp.StruggleTime, new SapperStruggleDoAfterEvent(), tripper)
         {
             BreakOnMove = false,
@@ -108,9 +93,9 @@ public sealed class SapperSnareSystem : EntitySystem
         RemComp<RMCRootedComponent>(ent);
         _speed.RefreshMovementSpeedModifiers(ent);
 
-        // Unmark whatever guns they still hold (guns dropped while snared keep a harmless stale marker).
-        foreach (var held in _hands.EnumerateHeld(ent.Owner))
-            RemComp<SapperSnaredGunComponent>(held);
+        // Take the cuffs back off (no user: they simply drop to the floor).
+        if (ent.Comp.Cuffs is { } cuffs && !TerminatingOrDeleted(cuffs))
+            _cuffable.Uncuff(ent, null, cuffs);
     }
 
     private void OnSnaredInteractUsing(Entity<SapperSnaredComponent> ent, ref InteractUsingEvent args)
@@ -150,17 +135,5 @@ public sealed class SapperSnareSystem : EntitySystem
 
         _popup.PopupEntity(Loc.GetString("insfor-sapper-snare-cut-free"), ent, ent);
         RemComp<SapperSnaredComponent>(ent);
-    }
-
-    // ----- hand-binding: nothing the victim tries with their hands gets through while snared ----------
-
-    private void OnInteractionAttempt(Entity<SapperSnaredComponent> ent, ref InteractionAttemptEvent args)
-    {
-        args.Cancelled = true;
-    }
-
-    private void OnAttackAttempt(Entity<SapperSnaredComponent> ent, ref AttackAttemptEvent args)
-    {
-        args.Cancel();
     }
 }

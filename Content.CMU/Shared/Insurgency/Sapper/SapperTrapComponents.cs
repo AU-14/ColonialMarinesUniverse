@@ -267,6 +267,10 @@ public sealed partial class SapperSnareComponent : Component
     /// <summary>How far the victim's view and sprite are rotated while snared (180 = upside down).</summary>
     [DataField]
     public Angle FlipAngle = Angle.FromDegrees(180);
+
+    /// <summary>The cuffs clapped onto the victim when the snare goes off (dropped/removed when they get free).</summary>
+    [DataField]
+    public EntProtoId CuffPrototype = "Handcuffs";
 }
 
 /// <summary>
@@ -288,17 +292,10 @@ public sealed partial class SapperSnaredComponent : Component
     /// <summary>How far the victim's view and sprite are rotated (180 = upside down).</summary>
     [DataField, AutoNetworkedField]
     public Angle FlipAngle = Angle.FromDegrees(180);
-}
 
-/// <summary>
-///     Put on any gun a snared victim is holding. The engine only allows one subscriber per
-///     component+event pair and GunComponent+AttemptShootEvent is already taken (ThermalCloak), so the
-///     shot block subscribes through this marker instead. Stale copies are harmless: the handler
-///     re-checks that the shooter is actually snared.
-/// </summary>
-[RegisterComponent, NetworkedComponent]
-public sealed partial class SapperSnaredGunComponent : Component
-{
+    /// <summary>The cuffs clapped on the victim, tracked so they can be removed when the snare ends. Server-only.</summary>
+    [ViewVariables]
+    public EntityUid? Cuffs;
 }
 
 /// <summary>DoAfter for the victim struggling out of a snare on their own.</summary>
