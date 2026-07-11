@@ -111,6 +111,7 @@
   - type: Body
     prototype: CMUHumanBody
     requiredLegs: 2
+  - type: Internals
   - type: BodyZoneTargeting
   - type: CMUHumanMedical
   - type: HitLocation

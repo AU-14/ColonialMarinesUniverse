@@ -217,9 +217,6 @@ public sealed class OrganDamageEffectsTest
             SetField(lungsComp, nameof(LungsComponent.NextAsphyxTick), timing.CurTime);
             SetField(lungsComp, nameof(LungsComponent.NextBloodCoughCheck), timing.CurTime);
             DamageOrgan(entMan, human, lungs, 33);
-            Assert.That(
-                entMan.System<SharedLungsSystem>().CanReceiveInhaledAnesthesia(human),
-                Is.False);
         });
 
         await pair.RunTicksSync(pair.SecondsToTicks(1.5f));

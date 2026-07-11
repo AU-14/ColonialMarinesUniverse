@@ -117,30 +117,6 @@ public abstract partial class SharedLungsSystem : EntitySystem
         args.Multiplier *= best;
     }
 
-    /// <summary>
-    ///     Nitrous anesthesia requires at least one lung that has not ruptured.
-    ///     Other painkillers can still satisfy surgery's pain-suppression check.
-    /// </summary>
-    public bool CanReceiveInhaledAnesthesia(EntityUid body)
-    {
-        if (!_medicalEnabled || !_organEnabled)
-            return true;
-
-        foreach (var (organId, _) in MedicalIndex.GetOrgans(body))
-        {
-            if (!HasComp<LungsComponent>(organId) ||
-                !TryComp<OrganHealthComponent>(organId, out var health))
-            {
-                continue;
-            }
-
-            if (!health.Stage.IsAtLeast(OrganDamageStage.Damaged))
-                return true;
-        }
-
-        return false;
-    }
-
     protected void UpdateServer(float frameTime)
     {
         if (!_medicalEnabled || !_organEnabled)

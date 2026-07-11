@@ -767,16 +767,13 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         Popup.PopupEntity(Loc.GetString(locKey), user, user, PopupType.SmallCaution);
     }
 
-    private bool IsPatientStableForSurgery(EntityUid patient)
+    private bool IsPainControlledForSurgery(EntityUid patient)
     {
         if (TryComp<MobStateComponent>(patient, out var mobState)
             && mobState.CurrentState != MobState.Alive)
         {
             return true;
         }
-
-        if (IsHorizontallyRestrained(patient))
-            return true;
 
         if (HasComp<SleepingComponent>(patient)
             || Status.HasStatusEffect(patient, SurgeryForcedSleepingStatus)
@@ -796,24 +793,11 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
 
     private bool ShouldInterruptSurgeryStep(EntityUid patient)
     {
-        if (IsPatientStableForSurgery(patient))
+        if (IsPainControlledForSurgery(patient))
             return false;
 
         return TryComp<PainShockComponent>(patient, out var pain)
             && Pain.GetEffectiveTier(patient, pain) >= PainTier.Severe;
-    }
-
-    private bool IsHorizontallyRestrained(EntityUid patient)
-    {
-        if (!TryComp<BuckleComponent>(patient, out var buckle)
-            || buckle.BuckledTo is not { } strapUid
-            || !TryComp<StrapComponent>(strapUid, out var strap))
-        {
-            return false;
-        }
-
-        var rotation = strap.Rotation;
-        return rotation.GetCardinalDir() is Direction.West or Direction.East;
     }
 
     private bool IsBuckledToStrap(EntityUid patient)
@@ -1032,6 +1016,10 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     {
     }
 
+    protected virtual void ApplySurgeryPainInterruptionFeedback(EntityUid patient)
+    {
+    }
+
     /// <summary>
     ///     Server-only — raises V1 <c>CMSurgeryStepEvent</c> + either re-arms
     ///     or raises <c>CMSurgeryCompleteEvent</c>. Shared no-ops so
@@ -1115,7 +1103,10 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
                 }
 
                 if (ShouldInterruptSurgeryStep(patient))
+                {
+                    ApplySurgeryPainInterruptionFeedback(patient);
                     Popup.PopupEntity(Loc.GetString("cmu-medical-surgery-step-pain-interrupted"), patient, args.User, PopupType.MediumCaution);
+                }
 
                 ReturnToAwaitingAction(patient, armed);
             }
@@ -1135,6 +1126,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
 
         if (ShouldInterruptSurgeryStep(patient))
         {
+            ApplySurgeryPainInterruptionFeedback(patient);
             Popup.PopupEntity(Loc.GetString("cmu-medical-surgery-step-pain-interrupted"), patient, args.User, PopupType.MediumCaution);
             SurgerySessions.TryConsumeAttempt(patient, args.Attempt, args.User, args.Used, args.Target, args.StepId);
             ReturnToAwaitingAction(patient, armed);

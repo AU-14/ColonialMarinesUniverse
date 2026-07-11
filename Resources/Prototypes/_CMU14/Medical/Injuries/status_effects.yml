@@ -200,6 +200,14 @@
   components:
   - type: ForcedSleepingStatusEffect
 
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUAnesthesia
+  name: anesthetized
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ForcedSleepingStatusEffect
+
 # ----- Semi-permanent injuries --------------------------------------------
 
 - type: entity
