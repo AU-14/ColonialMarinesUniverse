@@ -413,6 +413,10 @@
         name: first-aid pouch (gauze, ointment) # TODO RMC14 splints
       - id: RMCPouchFirstAidPills
         name: first-aid pouch (pills)
+    - name: Medical Headgear
+      entries:
+      - id: CMArmorHelmetM10Medic
+        amount: 9
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
