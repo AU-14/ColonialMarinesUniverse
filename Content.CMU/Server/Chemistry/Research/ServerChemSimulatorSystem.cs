@@ -30,7 +30,7 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
     [Dependency] private SharedContainerSystem _con = default!;
     [Dependency] private SharedPopupSystem _pop = default!;
     [Dependency] private ServerReagentGeneratorSystem _gen = default!;
-    [Dependency] private SharedResearchDataTerminalSystem _dat = default!;
+    [Dependency] private ServerResearchDataTerminalSystem _dat = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private IPrototypeManager _protoman = default!;
     [Dependency] private MetaDataSystem _mets = default!;
@@ -262,7 +262,8 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
             Dirty(ent);
             return;
         }
-        if (ent.Comp.PickedRecipeChem is null || ent.Comp.Overdose is null || ent.Comp.TargetProperty is null)
+        if (ent.Comp.PickedRecipeChem is null || ent.Comp.Overdose is null ||
+            (ent.Comp.TargetProperty is null && ent.Comp.Mode != ChemSimulatorMode.Add))
         {
             //impressive failure
             //todo: visuals
@@ -313,6 +314,14 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
         int credloss = 0;
         if (ent.Comp.Mode != ChemSimulatorMode.Add)
         {
+            if (ent.Comp.TargetProperty is null)
+            {
+                //impressive failure
+                //todo: visuals
+                ent.Comp.Stage = ChemSimulatorStage.Failure;
+                Dirty(ent);
+                return;
+            }
             credloss = ent.Comp.PropertyCosts[ent.Comp.TargetProperty];
         }
         else
@@ -387,6 +396,10 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
         contents += Loc.GetString("cmu-paper-sim-footer");
         _mets.SetEntityName(realpaper, name);
         _paper.SetContent(realpaper, contents);
+        if (repcomp is not null && repcomp.Valid && repcomp.Completed && repcomp.Data is not null)
+        {
+            _dat.ResearchData.Add(ID, (contents, _time.CurTime, true, repcomp.Data.Value));
+        }
         DirtyEntity(realpaper);
         Dirty(ent);
     }

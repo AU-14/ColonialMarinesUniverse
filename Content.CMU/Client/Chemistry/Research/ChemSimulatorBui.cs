@@ -19,8 +19,6 @@ public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : Boun
     [Dependency] private SharedReagentGeneratorSystem _gen = default!;
 
 
-
-
     private ChemSimulatorWindow? _window;
     
 
@@ -33,6 +31,18 @@ public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : Boun
         _window.Relate.Group = _mode;
         _window.Amplify.Group = _mode;
         _window.Suppress.Group = _mode;
+
+        _window.Finalize.OnPressed += _ => SendPredictedMessage(new ChemSimulatorFinalizeBuiMsg());
+        _window.Simulate.OnPressed += _ => SendPredictedMessage(new ChemSimulatorAttemptSimulateBuiMsg());
+        _window.Override.OnPressed += _ => SendPredictedMessage(new ChemSimulatorToggleOverrideBuiMsg());
+        _window.EjectReference.OnPressed += _ =>
+        SendPredictedMessage(new ChemSimulatorEjectBuiMsg(true, EntMan.GetNetEntity(PlayerManager.LocalEntity)));
+        _window.EjectTarget.OnPressed += _ =>
+        SendPredictedMessage(new ChemSimulatorEjectBuiMsg(false, EntMan.GetNetEntity(PlayerManager.LocalEntity)));
+        _window.Amplify.OnPressed += _ => SendPredictedMessage(new ChemSimulatorPickModeBuiMsg(ChemSimulatorMode.Amplify));
+        _window.Suppress.OnPressed += _ => SendPredictedMessage(new ChemSimulatorPickModeBuiMsg(ChemSimulatorMode.Suppress));
+        _window.Relate.OnPressed += _ => SendPredictedMessage(new ChemSimulatorPickModeBuiMsg(ChemSimulatorMode.Relate));
+        _window.Add.OnPressed += _ => SendPredictedMessage(new ChemSimulatorPickModeBuiMsg(ChemSimulatorMode.Add));
 
         if (State is ChemSimulatorBuiState s)
         {
@@ -82,28 +92,22 @@ public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : Boun
             if (state.RecipePicked is not null)
                 _window.Finalize.Disabled = false;
         }
-        _window.Finalize.OnPressed += _ => SendPredictedMessage(new ChemSimulatorFinalizeBuiMsg());
-        _window.Simulate.OnPressed += _ => SendPredictedMessage(new ChemSimulatorAttemptSimulateBuiMsg());
+        
         _window.Override.Pressed = state.Override;
-        _window.Override.OnPressed += _ => SendPredictedMessage(new ChemSimulatorToggleOverrideBuiMsg());
+        
         _window.NoDat.Visible = true;
         _window.ModeChange.Visible = false;
         _window.ModeRelateAdd.Visible = false;
         _window.TargetPropertyContainer.RemoveAllChildren();
         _window.ReferencePropertyContainer.RemoveAllChildren();
         _window.EjectTarget.Disabled = true;
-        _window.EjectTarget.OnPressed += _ =>
-        SendPredictedMessage(new ChemSimulatorEjectBuiMsg(false, EntMan.GetNetEntity(PlayerManager.LocalEntity)));
+        
         _window.EjectReference.Disabled = true;
-        _window.EjectReference.OnPressed += _ =>
-        SendPredictedMessage(new ChemSimulatorEjectBuiMsg(true, EntMan.GetNetEntity(PlayerManager.LocalEntity)));
+        
         _window.TargPickBox.Visible = false;
         _window.RefPickBox.Visible = false;
 
-        _window.Amplify.OnPressed += _ => SendPredictedMessage(new ChemSimulatorPickModeBuiMsg(ChemSimulatorMode.Amplify));
-        _window.Suppress.OnPressed += _ => SendPredictedMessage(new ChemSimulatorPickModeBuiMsg(ChemSimulatorMode.Suppress));
-        _window.Relate.OnPressed += _ => SendPredictedMessage(new ChemSimulatorPickModeBuiMsg(ChemSimulatorMode.Relate));
-        _window.Add.OnPressed += _ => SendPredictedMessage(new ChemSimulatorPickModeBuiMsg(ChemSimulatorMode.Add));
+        
 
         _window.Amplify.Disabled = LockControl;
         _window.Suppress.Disabled = LockControl;

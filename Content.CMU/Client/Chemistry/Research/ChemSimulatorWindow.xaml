@@ -36,55 +36,55 @@
                 <Button Name="Simulate" Access="Public" StyleClasses="ButtonSquare">
                     <BoxContainer>
                         <SpriteView Name="SimSpr"/>
-                        <Label Text="SIMULATE"/>
+                        <Label Text="{Loc research-sim-ui-simulate}"/>
                     </BoxContainer>
                 </Button>
                 <Button Name="EjectTarget" Access="Public" StyleClasses="ButtonSquare">
                     <BoxContainer Orientation="Horizontal">
                         <SpriteView Name="EjectTargSpr"/>
-                        <Label Text="EJECT TARGET"/>
+                        <Label Text="{Loc research-sim-ui-eject-targ}"/>
                     </BoxContainer>
                 </Button>
                 <Button Name="EjectReference" Access="Public" StyleClasses="ButtonSquare">
                     <BoxContainer Orientation="Horizontal">
                         <SpriteView Name="EjectRefSpr"/>
-                        <Label Text="EJECT REFERENCE"/>
+                        <Label Text="{Loc research-sim-ui-eject-ref}"/>
                     </BoxContainer>
                 </Button>
                 <Button Name="Override" Access="Public" ToggleMode="True" StyleClasses="ButtonSquare" ToolTip="asdfasfaf">
                     <BoxContainer Orientation="Horizontal">
                         <SpriteView Name="OverrideSpr"/>
-                        <Label Text="OVERRIDE"/>
+                        <Label Text="{Loc research-sim-ui-override}"/>
                     </BoxContainer>
                 </Button>
-                <Button Name="Suppress" Access="Public" StyleClasses="ButtonSquare" ToolTip="Asdfafaf">
+                <Button Name="Suppress" Access="Public" StyleClasses="ButtonSquare" ToolTip="{Loc research-sim-ui-suppress-tooltip}">
                     <BoxContainer Orientation="Horizontal">
                         <SpriteView Name="SupSpr"/>
-                        <Label Text="SUPPRESS"/>
+                        <Label Text="{Loc research-sim-ui-suppress}"/>
                     </BoxContainer>
                 </Button>
-                <Button Name="Amplify" Access="Public" StyleClasses="ButtonSquare" ToolTip="asdafafaf">
+                <Button Name="Amplify" Access="Public" StyleClasses="ButtonSquare" ToolTip="{Loc research-sim-ui-amplify-tooltip}">
                     <BoxContainer Orientation="Horizontal">
                         <SpriteView Name="AmpSpr"/>
-                        <Label Text="AMPLIFY"/>
+                        <Label Text="{Loc research-sim-ui-amplify}"/>
                     </BoxContainer>
                 </Button>
-                <Button Name="Add" Access="Public" StyleClasses="ButtonSquare" ToolTip="Afhashfhf">
+                <Button Name="Add" Access="Public" StyleClasses="ButtonSquare" ToolTip="{Loc research-sim-ui-add-tooltip}">
                     <BoxContainer Orientation="Horizontal">
                         <SpriteView Name="AddSpr"/>
-                        <Label Text="ADD"/>
+                        <Label Text="{Loc research-sim-ui-add}"/>
                     </BoxContainer>
                 </Button>
-                <Button Name="Relate" Access="Public" StyleClasses="ButtonSquare" ToolTip="fjhkjkl">
+                <Button Name="Relate" Access="Public" StyleClasses="ButtonSquare" ToolTip="{Loc research-sim-ui-relate-tooltip}">
                     <BoxContainer Orientation="Horizontal">
                         <SpriteView Name="RelSpr"/>
-                        <Label Text="RELATE"/>
+                        <Label Text="{Loc research-sim-ui-relate}"/>
                     </BoxContainer>
                 </Button>
             </WrapContainer>
             <BoxContainer Orientation="Vertical" Name="ControlsFinalize" Access="Public" MinWidth="307"
                           Visible="False">
-                <Button Name="Finalize" Text="Finalize" Access="Public" StyleClasses="ButtonSquare" HorizontalExpand="True"/>
+                <Button Name="Finalize" Text="{Loc research-sim-ui-finalize}" Access="Public" StyleClasses="ButtonSquare" HorizontalExpand="True"/>
                 <uiControls:HSpacer Spacing="10"/>
                 <BoxContainer Orientation="Vertical" Name="PickRecipeContainer" Access="Public">
                     
@@ -98,7 +98,7 @@
                     BackgroundColor="#BB9B68">
                 </graphics:StyleBoxFlat>
             </PanelContainer.PanelOverride>
-            <RichTextLabel Text="[color=black][bold]No Data Inserted![/bold][/color]" Margin="5,0"/>
+            <RichTextLabel Text="{Loc research-sim-ui-no-data}" Margin="5,0"/>
         </PanelContainer>
         <BoxContainer Name="ModeChange" Orientation="Horizontal" Access="Public" Margin="40,0" SeparationOverride="10" Visible="False">
             <BoxContainer MaxWidth="266" Orientation="Vertical" Name="ModeChangeTargDatCon" Access="Public">
@@ -108,7 +108,7 @@
                             BackgroundColor="#1A1A1AB3">
                         </graphics:StyleBoxFlat>
                     </PanelContainer.PanelOverride>
-                    <RichTextLabel Text="[head=3]Target Data[/head]" HorizontalAlignment="Center">
+                    <RichTextLabel Text="{Loc research-sim-ui-target-data}" HorizontalAlignment="Center">
                     </RichTextLabel>
                 </PanelContainer>
                 <!--<WrapContainer Name="PropertyContainer" Access="Public" EqualSize="True"  SeparationOverride="10" CrossSeparationOverride="5"
@@ -153,7 +153,7 @@
                             BackgroundColor="#1A1A1AB3">
                         </graphics:StyleBoxFlat>
                     </PanelContainer.PanelOverride>
-                    <RichTextLabel Text="[head=3]Target Data[/head]" HorizontalAlignment="Center">
+                    <RichTextLabel Text="{Loc research-sim-ui-target-data}" HorizontalAlignment="Center">
                     </RichTextLabel>
                 </PanelContainer>
                 <WrapContainer Name="TargetPropertyContainer" Access="Public" EqualSize="True"  SeparationOverride="10" CrossSeparationOverride="5"
@@ -167,7 +167,7 @@
                             BackgroundColor="#1A1A1A">
                         </graphics:StyleBoxFlat>
                     </PanelContainer.PanelOverride>
-                    <RichTextLabel Text="[head=3]Reference Data[/head]" HorizontalAlignment="Center">
+                    <RichTextLabel Text="{Loc research-sim-ui-reference-data}" HorizontalAlignment="Center">
                     </RichTextLabel>
                 </PanelContainer>
                 <WrapContainer Name="ReferencePropertyContainer" Access="Public" EqualSize="True"  SeparationOverride="10" CrossSeparationOverride="5"

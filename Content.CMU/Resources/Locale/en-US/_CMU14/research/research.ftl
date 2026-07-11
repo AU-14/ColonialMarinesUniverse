@@ -42,3 +42,47 @@ research-report-simulation-name = Simulation result for {$ID}
 cmu-paper-header-wy-sim = [italic][bold]Official Company Document[/bold]{"\u000a"}Simulated Synthesis Report[/italic]{"\u000a"}[head=2]Result for {$ID}[/head]
 
 cmu-paper-sim-footer = [italic]This report was automatically printed by the Synthesis Simulator.[/italic]
+
+research-chem-terminal-update = Chemical contracts have been updated!
+
+research-data-ui-clearance = [color=#ffbf00][head=2]Clearance Level {$NUM}[/head][/color]
+research-data-ui-credits = [color=#ffbf00][head=2]Credits available: {$NUM}[/head][/color]
+
+research-data-ui-manage = Manage Research
+research-data-ui-view = View Chemicals
+
+research-data-ui-chem-name = [color=#ffbf00][head=3]{$NAME}[/head][/color]
+
+research-data-ui-diff-hard = Hard
+research-data-ui-diff-inter = Intermediate
+research-data-ui-diff-easy = Easy
+
+research-data-ui-chem-difficulty = [color=#ffbf00][head=3]Difficulty: {$DIFF}[/head][/color]
+
+research-data-ui-chem-desc = [color=#ffbf00]Early assesment shows one part of the recipe is {$RECIHINT}{"\u000a"}Early testing shows property of {$PROPHINT}[/color]
+
+research-data-ui-time-left = [color=#ffbf00]Contracts Refresh in: {$TIME}[/color]
+
+research-data-ui-chem-take = [color=#ffbf00][head=3]Take Contract[/head][/color]
+
+research-data-synthesis-name = Synthesis of {$NAME}
+
+research-data-contract-name = Contract for {$NAME}
+
+research-data-ui-analysis-scan = [color=#ffbf00][bold]Analysis[/bold][/color]
+research-data-ui-analysis-sim = [color=#ffbf00][bold]Simulation[/bold][/color]
+research-data-ui-compound-idx = [color=#ffbf00][bold]{$NAME}[/bold][/color]
+
+research-data-ui-scan-time = [color=#ffbf00][bold]Scan Time[/bold][/color]
+research-data-ui-vc-type = [color=#ffbf00][bold]Type[/bold][/color]
+research-data-ui-compound = [color=#ffbf00][bold]Compound[/bold][/color]
+research-data-ui-actions = [color=#ffbf00][bold]Actions[/bold][/color]
+
+research-data-ui-reprint = [color=#ffbf00][head=3]Reprint Last Contract[/head][/color]
+research-data-ui-contracts = [color=#ffbf00][head=3]Chemical Contracts[/head][/color]
+research-data-ui-scan-time-idx = [color=#ffbf00][bold]{$TIME}[/bold][/color]
+research-data-ui-improve = [color=#ffbf00][head=3]Improve: {$NUM}CR[/head][/color]
+ui-research-data-terminal-name = Research Data Terminal
+
+research-data-ui-read = [color=#ffbf00][bold]Read[/bold][/color]
+research-data-ui-print = [color=#ffbf00][bold]Print[/bold][/color]

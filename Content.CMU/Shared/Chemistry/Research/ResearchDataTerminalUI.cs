@@ -14,6 +14,7 @@ public sealed class ResearchDataTerminalBuiState(
     List<GeneratedReagentData> ids,
     Dictionary<string, (string, TimeSpan, bool, GeneratedReagentData)> data,
     TimeSpan nextUpdate,
+    TimeSpan lastTime,
     int credits,
     int clearance,
     int upgradecost,
@@ -22,6 +23,7 @@ public sealed class ResearchDataTerminalBuiState(
     public readonly List<GeneratedReagentData> IDs = ids;
     public readonly Dictionary<string, (string, TimeSpan, bool, GeneratedReagentData)> Data = data;
     public readonly TimeSpan NextUpdate = nextUpdate;
+    public readonly TimeSpan LastTime = lastTime;
     public readonly int Credits = credits;
     public readonly int Clearance = clearance;
     public readonly int UpgradeCost = upgradecost;
@@ -37,6 +39,9 @@ public sealed class ResearchDataTerminalPickChemBuiMsg(string pick) : BoundUserI
 
 [Serializable, NetSerializable]
 public sealed class ResearchDataTerminalAttemptUpgradeBuiMsg : BoundUserInterfaceMessage;
+
+[Serializable, NetSerializable]
+public sealed class ResearchDataTerminalPrintLastBuiMsg : BoundUserInterfaceMessage;
 
 [Serializable, NetSerializable]
 public sealed class ResearchDataTerminalPrintChemBuiMsg(string chem) : BoundUserInterfaceMessage

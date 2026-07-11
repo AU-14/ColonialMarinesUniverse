@@ -413,6 +413,10 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
                             ent.Comp.PropertyCosts.Add(targprop.Key, 2);
                             break;
                         case ChemSimulatorMode.Relate:
+                            if (refcomp is null && referenceCon is not null && referenceCon.Count != 0)
+                            {
+                                TryComp<ResearchReportComponent>(referenceCon.ContainedEntities[0], out refcomp);
+                            }
                             if (ent.Comp.ReferenceProperty is not null && refcomp is not null && refcomp.Data is not null)
                             {
                                 var refprop = props[ent.Comp.ReferenceProperty];

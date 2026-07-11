@@ -32,7 +32,7 @@
                                 BackgroundColor="#ffbf00">
                             </graphics:StyleBoxFlat>
                         </Button.StyleBoxOverride>
-                        <RichTextLabel Text="[color=#ffbf00][head=3]Reprint Last Contract[/head][/color]" Margin="3,0"/>
+                        <RichTextLabel Text="{Loc research-data-ui-reprint}" Margin="3,0"/>
                     </Button>
                     <Button Name="Upgrade" Access="Public" Margin="1,10" HorizontalAlignment="Right" VerticalAlignment="Center"
                             Disabled="True">
@@ -54,18 +54,31 @@
                         BorderThickness="2">
                     </graphics:StyleBoxFlat>
                 </PanelContainer.PanelOverride>
-                <!--This needs to expand to fit the space it has available-->
                 <BoxContainer Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True">
                     <ScrollContainer HScrollEnabled="False" VScrollEnabled="True" VScrollBarHidden="False" VerticalExpand="True" HorizontalExpand="True">
                         <BoxContainer VerticalExpand="True" Orientation="Vertical">
                             <TabContainer Name="Tabs" Access="Public" VerticalExpand="True">
+                                <TabContainer.PanelStyleBoxOverride>
+                                    <graphics:StyleBoxFlat
+                                        BackgroundColor="#0f0f00"
+                                        BorderColor="#ffbf00"
+                                        BorderThickness="2">
+                                    </graphics:StyleBoxFlat>
+                                </TabContainer.PanelStyleBoxOverride>
                                 <BoxContainer VerticalExpand="True" Orientation="Vertical" Name="ManageResearch" Access="Public">
                                     <uiControls:HSpacer Spacing="15" Name="Spacer" Access="Public"></uiControls:HSpacer>
                                     <RichTextLabel Name="Credits" Access="Public" Text="[color=#ffbf00][head=3]Credits available: 0[/head][/color]"></RichTextLabel>
                                     <uiControls:HLine Thickness="3" Color="#FFBF00" Margin="0, 5"></uiControls:HLine>
                                     <PanelContainer HorizontalExpand="True" VerticalExpand="True">
+                                        <PanelContainer.PanelOverride>
+                                            <graphics:StyleBoxFlat
+                                                BackgroundColor="#0f0f00"
+                                                BorderColor="#ffbf00"
+                                                BorderThickness="2">
+                                            </graphics:StyleBoxFlat>
+                                        </PanelContainer.PanelOverride>
                                         <RichTextLabel
-                                            Text="[head=2][color=#ffbf00]Chemical Contracts[/color][/head]"
+                                            Text="{Loc research-data-ui-contracts}"
                                             Margin="5, 10"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Top"/>
@@ -79,6 +92,19 @@
                                             </graphics:StyleBoxFlat>
                                         </PanelContainer.PanelOverride>
                                         <ProgressBar Name="TimeLeftBar" Access="Public" Margin="5,5">
+                                            <ProgressBar.BackgroundStyleBoxOverride>
+                                                <graphics:StyleBoxFlat
+                                                    BackgroundColor="#0f0f00"
+                                                    BorderColor="#ff9800"
+                                                    Padding="15"
+                                                    BorderThickness="2"></graphics:StyleBoxFlat>
+                                            </ProgressBar.BackgroundStyleBoxOverride>
+                                            <ProgressBar.ForegroundStyleBoxOverride>
+                                                <graphics:StyleBoxFlat
+                                                    BackgroundColor="#FF9800"
+                                                    Padding="15"
+                                                    BorderColor="#FF9800"></graphics:StyleBoxFlat>
+                                            </ProgressBar.ForegroundStyleBoxOverride>
                                             <RichTextLabel Name="TimeLeft" Access="Public"
                                                            HorizontalAlignment="Center"
                                                            VerticalAlignment="Center"/>
@@ -88,7 +114,50 @@
                                         
                                     </BoxContainer>
                                 </BoxContainer>
-                                <BoxContainer VerticalExpand="True" Orientation="Vertical" Name="ViewChemicals" Access="Public">
+                                <BoxContainer HorizontalExpand="True" Orientation="Vertical" Name="ViewChemicals" Access="Public">
+                                    <uiControls:HLine Thickness="3" Color="#FFBF00" Margin="0, 5"></uiControls:HLine>
+                                    <uiControls:TableContainer Name="DataTable" Access="Public" Columns="4" Margin="5,0">
+                                        <PanelContainer>
+                                            <PanelContainer.PanelOverride>
+                                                <graphics:StyleBoxFlat
+                                                    BackgroundColor="#0f0f00"
+                                                    BorderColor="#ffbf00"
+                                                    BorderThickness="2, 2, 1, 1">
+                                                </graphics:StyleBoxFlat>
+                                            </PanelContainer.PanelOverride>
+                                            <RichTextLabel Text="{Loc research-data-ui-scan-time}"/>
+                                        </PanelContainer>
+                                        <PanelContainer>
+                                            <PanelContainer.PanelOverride>
+                                                <graphics:StyleBoxFlat
+                                                    BackgroundColor="#0f0f00"
+                                                    BorderColor="#ffbf00"
+                                                    BorderThickness="1, 2, 1, 1">
+                                                </graphics:StyleBoxFlat>
+                                            </PanelContainer.PanelOverride>
+                                            <RichTextLabel Text="{Loc research-data-ui-vc-type}"/>
+                                        </PanelContainer>
+                                        <PanelContainer>
+                                            <PanelContainer.PanelOverride>
+                                                <graphics:StyleBoxFlat
+                                                    BackgroundColor="#0f0f00"
+                                                    BorderColor="#ffbf00"
+                                                    BorderThickness="1, 2, 1, 1">
+                                                </graphics:StyleBoxFlat>
+                                            </PanelContainer.PanelOverride>
+                                            <RichTextLabel Text="{Loc research-data-ui-compound}"/>
+                                        </PanelContainer>
+                                        <PanelContainer  Name="TableAfter" Access="Public">
+                                            <PanelContainer.PanelOverride>
+                                                <graphics:StyleBoxFlat
+                                                    BackgroundColor="#0f0f00"
+                                                    BorderColor="#ffbf00"
+                                                    BorderThickness="1, 2, 2, 1">
+                                                </graphics:StyleBoxFlat>
+                                            </PanelContainer.PanelOverride>
+                                            <RichTextLabel Text="{Loc research-data-ui-actions}"/>
+                                        </PanelContainer>
+                                    </uiControls:TableContainer>
                                 </BoxContainer>
                             </TabContainer>
                         </BoxContainer>

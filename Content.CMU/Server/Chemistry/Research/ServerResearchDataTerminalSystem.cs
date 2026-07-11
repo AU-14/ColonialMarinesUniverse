@@ -1,4 +1,5 @@
 using Content.Server._AU14.Chemistry.Reagents;
+using Content.Server.AU14.ColonyEconomy;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
@@ -6,7 +7,10 @@ using Content.Shared._AU14.Chemistry.Reagents;
 using Content.Shared._AU14.Chemistry.Research;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.GameTicking;
+using Content.Shared.Paper;
+using Discord.Rest;
 using Robust.Client.UserInterface;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using System;
@@ -31,6 +35,8 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     [ViewVariables(VVAccess.ReadWrite)]
     public TimeSpan PickedRerollTime = TimeSpan.FromSeconds(360); //6 minutes
 
+    public TimeSpan LastTime = TimeSpan.Zero;
+
     private string LastPickName = string.Empty;
     private string LastPick = string.Empty;
 
@@ -53,6 +59,13 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private PaperSystem _paper = default!;
+    [Dependency] private IPrototypeManager _protoman = default!;
+    [Dependency] private MetaDataSystem _mets = default!;
+    [Dependency] private CorporateConsoleSystem _corpo = default!;
+
+    private Dictionary<Entity<ResearchDataTerminalComponent>, string> _printing = [];
+    private HashSet<Entity<ResearchDataTerminalComponent>> _printingLast = [];
 
     private bool _upgrading = false;
     public override void Initialize()
@@ -66,6 +79,8 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         {
             subs.Event<ResearchDataTerminalAttemptUpgradeBuiMsg>(OnUpgradeAttempt);
             subs.Event<ResearchDataTerminalPickChemBuiMsg>(OnPickChem);
+            subs.Event<ResearchDataTerminalPrintLastBuiMsg>(OnPrintLast);
+            subs.Event<ResearchDataTerminalPrintChemBuiMsg>(OnPrintRequest);
         });
     }
 
@@ -90,9 +105,12 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         _upgrading = false;
         DDISecured = false;
         NextReroll = TimeSpan.Zero;
+        LastTime = TimeSpan.Zero;
         ResearchData.Clear();
         LastPick = string.Empty;
         LastPickName = string.Empty;
+        _printing.Clear();
+        _printingLast.Clear();
     }
 
     public void OnLoadingMaps(PostGameMapLoad args)
@@ -129,8 +147,29 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             if (Clearance < 6)
             {
                 UpdateClearance(Credits - cost, Clearance + 1);
+                var query = EntityQueryEnumerator<ResearchDataTerminalComponent>();
+                while(query.MoveNext(out var ent, out var comp))
+                {
+                    UpdateUI(ent);
+                }
             }
             _upgrading = false;
+        }
+        if (_printingLast.Count > 0)
+        {
+            foreach(var printee in _printingLast)
+            {
+                PrintLast(printee);
+                _printingLast.Remove(printee);
+            }
+        }
+        if (_printing.Count > 0)
+        {
+            foreach(var printee in _printing)
+            {
+                PrintData(printee.Key, printee.Value);
+                _printing.Remove(printee.Key);
+            }
         }
         if (!ready)
             return;
@@ -163,6 +202,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         RaiseNetworkEvent(ev);
         var ncv = new IdentifyChemicalEvent(proto.ID, proto.Reward);
         RaiseNetworkEvent(ncv);
+        _corpo.AddToCorporateBudget(1000f * proto.Reward);
     }
 
     private void OnUiOpen(Entity<ResearchDataTerminalComponent> ent, ref BoundUIOpenedEvent args)
@@ -182,6 +222,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             ids: _selectable,
             data: ResearchData,
             nextUpdate: NextReroll,
+            lastTime: LastTime,
             credits: Credits,
             clearance: Clearance,
             upgradecost: cost,
@@ -200,13 +241,14 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             ids: _selectable,
             data: ResearchData,
             nextUpdate: NextReroll,
+            lastTime: LastTime,
             credits: Credits,
             clearance: Clearance,
-            upgradecost: cost
+            upgradecost: cost,
             picked: Picked);
         _ui.SetUiState(ent, ResearchDataTerminalUI.Key, state);
     }
-    public void PickChem(string id)
+    public void PickChem(string id, Entity<ResearchDataTerminalComponent>? ent = null)
     {
         Picked = true;
         foreach (var reagent in _selectable)
@@ -216,7 +258,12 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
                 LegalizeChem(reagent);
                 _selectable.Remove(reagent);
                 IDS.Remove(reagent.ID);
+                if (ent is not null)
+                {
+                    PrintContract(ent.Value, reagent.ID);
+                }
                 NextReroll = _timer.CurTime + PickedRerollTime;
+                LastTime = _timer.CurTime;
                 var ev = new UpdateResearchConsoleEvent(_selectable, NextReroll);
                 RaiseNetworkEvent(ev);
                 break;
@@ -225,18 +272,103 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     }
     private void OnPickChem(Entity<ResearchDataTerminalComponent> ent, ref ResearchDataTerminalPickChemBuiMsg args)
     {
-        PickChem(args.Pick);
+        PickChem(args.Pick, ent);
         UpdateUI(ent);
     }
 
+    private void OnPrintLast(Entity<ResearchDataTerminalComponent> ent, ref ResearchDataTerminalPrintLastBuiMsg args)
+    {
+        _printingLast.Add(ent);
+    }
+
+    private void OnPrintRequest(Entity<ResearchDataTerminalComponent> ent, ref ResearchDataTerminalPrintChemBuiMsg args)
+    {
+        _printing.Add(ent, args.Chem);
+    }
 
     private void PrintLast(Entity<ResearchDataTerminalComponent> ent)
     {
         if (LastPickName == string.Empty || LastPick == string.Empty)
             return;
-
+        string name = Loc.GetString("research-data-synthesis-name", ("NAME", LastPickName));
+        var paper = SpawnNextToOrDrop("CMUWYPaper", ent.Owner);
+        _mets.SetEntityName(paper, name);
+        //unparity, because the experiment number is re-randomized
+        _paper.SetContent(paper, LastPick);
+        RemCompDeferred<ResearchReportComponent>(paper);
     }
 
+    private void PrintContract(Entity<ResearchDataTerminalComponent> ent, string id)
+    {
+        var dat = _generator.ProceduralReagentData[id];
+        var reagents = _protoman.GetInstances<ReagentPrototype>();
+        string name = Loc.GetString("research-data-contract-name", ("NAME", dat.Name));
+
+        string text = string.Empty;
+        text += Loc.GetString("cmu-paper-header-experiment") + '\n';
+        text += Loc.GetString("cmu-paper-subheader-experiment", ("NAME", dat.Name)) + '\n';
+        string expnum = string.Empty;
+        List<string> exppre = new List<string>{ "C", "Q", "V", "W", "X", "Y", "Z" };
+        expnum += _random.Pick(exppre);
+        expnum += _random.Next(100, 1000);
+        List<string> expsuf = new List<string> { "a", "b", "c" };
+        text += Loc.GetString("cmu-paper-contract-experiment", ("EXP", expnum), ("NAME", dat.Name)) + '\n';
+        HashSet<string> ingredients = [];
+        HashSet<string> catalysts = [];
+        foreach(var ingredient in dat.Recipe)
+        {
+            if (ingredient.Value.Item2)
+            {
+                catalysts.Add(Loc.GetString("research-report-ingredient", ("AMOUNT", ingredient.Value.Item1),
+                    ("NAME", reagents[ingredient.Key].LocalizedName)) + '\n');
+            }
+            else
+            {
+                ingredients.Add(Loc.GetString("research-report-ingredient", ("AMOUNT", ingredient.Value.Item1),
+                    ("NAME", reagents[ingredient.Key].LocalizedName)) + '\n');
+            }
+        }
+        foreach(string str in ingredients)
+        {
+            text += str;
+        }
+        if (catalysts.Count > 0)
+        {
+            text += Loc.GetString("research-chem-catalyst") + '\n';
+            foreach(string str in catalysts)
+            {
+                text += str;
+            }
+        }
+        text += Loc.GetString("cmu-paper-contract-footer") + '\n';
+        var paper = SpawnNextToOrDrop("CMUResearchContract", ent.Owner);
+        _mets.SetEntityName(paper, name);
+        _paper.SetContent(paper, text);
+        LastPickName = dat.Name;
+        LastPick = text;
+    }
+    private void PrintData(Entity<ResearchDataTerminalComponent> ent, string id)
+    {
+        if(ResearchData.TryGetValue(id, out var key))
+        {
+            string name = string.Empty;
+            if (key.Item3)
+            {
+                name = Loc.GetString("research-report-simulation-name", ("ID", key.Item4.Name));
+            }
+            else
+            {
+                name = Loc.GetString("research-report-analysis-name", ("NAME1", key.Item4.Name), ("NAME2", string.Empty));
+            }
+            var paper = SpawnNextToOrDrop("CMUWYPaper", ent.Owner);
+            _mets.SetEntityName(paper, name);
+            _paper.SetContent(paper, key.Item1);
+            var datcomp = EnsureComp<ResearchReportComponent>(paper);
+            datcomp.Valid = true;
+            datcomp.Completed = true;
+            datcomp.Data = key.Item4;
+        }
+    }
     private void RerollChems()
     {
         _selectable.Clear();
@@ -282,6 +414,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             IDS.Add(data.ID);
         }
         NextReroll = _timer.CurTime + RerollTime;
+        LastTime = _timer.CurTime;
         var ev = new UpdateResearchConsoleEvent(_selectable, NextReroll);
         RaiseLocalEvent(ev);
         RaiseNetworkEvent(ev);
