@@ -8,6 +8,7 @@ using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs;
 using Content.Shared._CMU14.Medical.Injuries.Pain;
 using Content.Shared._CMU14.Medical.Injuries.Trauma;
+using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.StatusEffectNew;
 using Content.Shared._RMC14.Medical.Unrevivable;
@@ -103,14 +104,24 @@ public abstract partial class SharedBoneSystem : EntitySystem
         if (brute <= FixedPoint2.Zero)
             return;
 
-        if (!args.Trauma.BoneContact)
+        var shatterExposedRibs = IsShallowChestMeleeHit(ent, args);
+        if (!args.Trauma.BoneContact && !shatterExposedRibs)
             return;
 
-        var effectiveBrute = args.Trauma.Mechanism == CMUTraumaMechanism.Ballistic
-            ? brute * _projectileBruteMultiplier
-            : brute;
-        var absorbed = effectiveBrute * (FixedPoint2)ent.Comp.BruteAbsorbFraction;
-        ent.Comp.Integrity = FixedPoint2.Max(FixedPoint2.Zero, ent.Comp.Integrity - absorbed);
+        if (shatterExposedRibs)
+        {
+            // A direct strike against exposed ribs deliberately substitutes for sawing the cavity open.
+            ent.Comp.Integrity = FixedPoint2.Zero;
+        }
+        else
+        {
+            var effectiveBrute = args.Trauma.Mechanism == CMUTraumaMechanism.Ballistic
+                ? brute * _projectileBruteMultiplier
+                : brute;
+            var absorbed = effectiveBrute * (FixedPoint2)ent.Comp.BruteAbsorbFraction;
+            ent.Comp.Integrity = FixedPoint2.Max(FixedPoint2.Zero, ent.Comp.Integrity - absorbed);
+        }
+
         Dirty(ent);
 
         var newSeverity = SeverityFromIntegrity(ent.Comp);
@@ -142,6 +153,24 @@ public abstract partial class SharedBoneSystem : EntitySystem
 
         if (args.Type == BodyPartType.Torso && newSeverity == FractureSeverity.Shattered)
             RaiseRibBurst(args.Body, args.ContainedOrgans, args.Delta);
+    }
+
+    private bool IsShallowChestMeleeHit(Entity<BoneComponent> ent, BodyPartDamagedEvent args)
+    {
+        if (args.Type != BodyPartType.Torso ||
+            args.TargetZone != TargetBodyZone.Chest ||
+            args.Impact.Delivery != DamageImpactDelivery.Melee ||
+            PartBelongsToSynth(ent.Owner) ||
+            !HasComp<CMIncisionOpenComponent>(ent) ||
+            !HasComp<CMSkinRetractedComponent>(ent) ||
+            HasComp<CMRibcageSawedComponent>(ent) ||
+            HasComp<CMRibcageOpenComponent>(ent))
+        {
+            return false;
+        }
+
+        return !TryComp<FractureComponent>(ent, out var fracture) ||
+               fracture.Severity is not (FractureSeverity.Compound or FractureSeverity.Shattered);
     }
 
     /// <summary>

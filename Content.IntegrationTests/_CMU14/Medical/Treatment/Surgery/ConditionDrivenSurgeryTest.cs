@@ -797,6 +797,55 @@ public sealed class ConditionDrivenSurgeryTest
     }
 
     [Test]
+    public async Task TargetedMeleeHitShattersRetractedChestAndProvidesDeepAccess()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var flow = entMan.System<SharedCMUSurgeryFlowSystem>();
+            var partHealth = entMan.System<SharedBodyPartHealthSystem>();
+            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+
+            try
+            {
+                var torso = GetBodyPart(entMan, human, BodyPartType.Torso, BodyPartSymmetry.None);
+                entMan.EnsureComponent<CMIncisionOpenComponent>(torso);
+                entMan.EnsureComponent<CMSkinRetractedComponent>(torso);
+
+                Assert.That(flow.GetSiteState(torso).Access, Is.EqualTo(CMUSurgicalAccess.Shallow));
+
+                var hit = new DamageSpecifier();
+                hit.DamageDict["Blunt"] = FixedPoint2.New(1);
+                Assert.That(
+                    partHealth.TryApplyPartDamage(
+                        human,
+                        torso,
+                        hit,
+                        impact: DamageImpact.ForMelee(hit),
+                        targetZone: TargetBodyZone.Chest),
+                    Is.True);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(entMan.GetComponent<FractureComponent>(torso).Severity,
+                        Is.EqualTo(FractureSeverity.Shattered));
+                    Assert.That(entMan.GetComponent<BoneComponent>(torso).Integrity, Is.EqualTo(FixedPoint2.Zero));
+                    Assert.That(flow.GetSiteState(torso).Access, Is.EqualTo(CMUSurgicalAccess.Deep));
+                });
+            }
+            finally
+            {
+                entMan.DeleteEntity(human);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task OpenFractureWithoutTraitsResolvesNormalRepairStep()
     {
         await using var pair = await PoolManager.GetServerClient();
