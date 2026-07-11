@@ -8,6 +8,8 @@ public sealed class InsurgencyEndRuleSystem : GameRuleSystem<InsurgencyRuleCompo
 {
     [Dependency] private readonly GameTicker _gameTicker = default!;
 
+    private const string DefaultWinMsg = "Neutral outcome: The CLF have failed to gain a significant foothold in the colony during their time there. The cell and the military fall into a stalemate, both sides silently operating in the colony for days to come.";
+
     private static readonly TimeSpan RoundTimeLimit = TimeSpan.FromHours(2);
 
     public override void Update(float frameTime)
@@ -23,6 +25,6 @@ public sealed class InsurgencyEndRuleSystem : GameRuleSystem<InsurgencyRuleCompo
         if (_gameTicker.RoundDuration() < RoundTimeLimit)
             return;
 
-        _gameTicker.EndRound("The CLF have failed to gain a significant foothold in the colony during their time there. The cell and the military fall into a stalemate, both sides silently operating in the colony for days to come.");
+        _gameTicker.EndRound(DefaultWinMsg);
     }
 }
