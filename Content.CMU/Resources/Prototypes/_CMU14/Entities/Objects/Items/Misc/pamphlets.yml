@@ -173,7 +173,7 @@
 - type: entity
   parent: CMPamphletLanguage
   id: AU14PamphletLanguageBinary
-  name: Treatise of the Zero‑One Codex
+  name: Treatise of the Zero-One Codex
   description: This appears to be a data slug containing the foundational logic of machine speech, pure information stripped of emotion.
   components:
   - type: SkillPamphlet
