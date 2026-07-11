@@ -1,6 +1,6 @@
 - type: loadoutGroup
   id: SynthBackpackAU14
-  name: rmc-loadout-group-backpack
+  name: au14-loadout-group-synth-backpack
   minLimit: 1
   loadouts:
   - SmarpackAU14
@@ -21,3 +21,6 @@
   - SmarpackA1BlackAU14
   - SmarpackA1AU14
   - SmarpackA1WhiteAU14
+  - ExpeditionSatchelSynthAU14
+  - ExpeditionSidewaySatchelSynthAU14
+  - ExpeditionChestRigSatchelSynthAU14

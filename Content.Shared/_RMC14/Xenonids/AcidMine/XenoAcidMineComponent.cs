@@ -11,7 +11,7 @@ namespace Content.Shared._RMC14.Xenonids.AcidMine;
 public sealed partial class XenoAcidMineComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public int Range = 8;
+    public int Range = 13;
 
     [DataField, AutoNetworkedField]
     public FixedPoint2 PlasmaCost = 40;

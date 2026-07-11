@@ -294,6 +294,120 @@
     - type: PyroWhitelist
 
 - type: entity
+  parent: RMCBaseEquipmentCase
+  id: CMU14PyroSpecEquipmentCaseHAZOPS
+  name: pyrotechnician equipment case
+  suffix: HAZOPS
+  description: "A large case containing M240A2, M35 pyrotechnician armor and helmet, and additional pieces of equipment.\nNOTE: You cannot put items back inside this case."
+  components:
+  - type: Sprite
+    layers:
+    - state: closed
+      map: [ base ]
+    - state: pyro
+      map: [ label ]
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,11,3
+  - type: StorageFill
+    contents:
+    - id: CMArmorM35
+    - id: CMArmorHelmetM35
+    - id: AU14FuelM240A2FuelTankFilled
+    - id: AU14WeaponFlamerM240A2HAZOPS
+    - id: AU14TankFlamerM240A2HAZOPS
+    - id: AU14TankFlamerM240A2HAZOPSNapalmB
+    - id: AU14TankFlamerM240A2HAZOPSNapalmX
+    - id: RMCPouchFuelTank
+    - id: CMFireExtinguisher
+    - id: CMFireExtinguisherPortable
+    - id: RMCBinoculars
+    - id: RMCPamphletAdminWeaponsSpecialistPyro
+    #- id: RMCMK80
+    #- id: CMMagazinePistolMK80
+    #  amount: 2
+  - type: CMChangeUserOnVend
+    addComponents:
+    - type: PyroWhitelist
+
+- type: entity
+  parent: RMCBaseEquipmentCase
+  id: CMU14PyroSpecEquipmentCaseWeylandYutani
+  name: pyrotechnician equipment case
+  suffix: WY
+  description: "A large case containing Flammenwerfer-3, M35 pyrotechnician armor and helmet, and additional pieces of equipment.\nNOTE: You cannot put items back inside this case."
+  components:
+  - type: Sprite
+    layers:
+    - state: closed
+      map: [ base ]
+    - state: pyro
+      map: [ label ]
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,11,3
+  - type: StorageFill
+    contents:
+    - id: CMArmorM35
+    - id: CMArmorHelmetM35
+    - id: CMU14FuelFL3FuelTankFilled
+    - id: RMCWeaponFL3Flamer
+    - id: RMCTankFlamerFL3
+    - id: RMCTankFlamerFL3B
+    - id: RMCTankFlamerFL3X
+    - id: RMCPouchFuelTank
+    - id: CMFireExtinguisher
+    - id: CMFireExtinguisherPortable
+    - id: RMCBinoculars
+    - id: RMCPamphletAdminWeaponsSpecialistPyro
+    #- id: RMCMK80
+    #- id: CMMagazinePistolMK80
+    #  amount: 2
+  - type: CMChangeUserOnVend
+    addComponents:
+    - type: PyroWhitelist
+
+- type: entity
+  parent: RMCBaseEquipmentCase
+  id: CMU14PyroSpecEquipmentCaseUPP
+  name: pyrotechnician equipment case
+  suffix: UPP
+  description: "A large case containing LPO80-T, M35 pyrotechnician armor and helmet, and additional pieces of equipment.\nNOTE: You cannot put items back inside this case."
+  components:
+  - type: Sprite
+    layers:
+    - state: closed
+      map: [ base ]
+    - state: pyro
+      map: [ label ]
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,11,3
+  - type: StorageFill
+    contents:
+    - id: CMArmorM35
+    - id: CMArmorHelmetM35
+    - id: RMCBackpackBroilerUPP
+    - id: RMCWeaponFlamerSpecUPP
+    - id: RMCTankFlamerLargeUPP
+    - id: RMCTankFlamerBLargeUPP
+    - id: RMCTankFlamerXLargeUPP
+    - id: RMCPouchFuelTank
+    - id: CMFireExtinguisher
+    - id: CMFireExtinguisherPortable
+    - id: RMCBinoculars
+    - id: RMCPamphletAdminWeaponsSpecialistPyro
+    #- id: RMCMK80
+    #- id: CMMagazinePistolMK80
+    #  amount: 2
+  - type: CMChangeUserOnVend
+    addComponents:
+    - type: PyroWhitelist
+
+- type: entity
   parent: RMCKitBase
   id: RMCKitLoader
   name: loader kit

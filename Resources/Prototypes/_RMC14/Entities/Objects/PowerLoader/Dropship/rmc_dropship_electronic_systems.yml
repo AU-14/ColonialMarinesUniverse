@@ -29,6 +29,9 @@
       sprite: _RMC14/Objects/dropship_electronic_system_attachments.rsi
       state: targeting_system_installed
   - type: DropshipTargetingSystem
+  - type: DropshipFabricatorPrintable
+    category: Equipment
+    cost: 400
 
 - type: entity
   parent: RMCDropshipAttachmentElectronicSystem
@@ -44,6 +47,9 @@
       sprite: _RMC14/Objects/dropship_electronic_system_attachments.rsi
       state: spotlights_off
   - type: DropshipSpotlight
+  - type: DropshipFabricatorPrintable
+    category: Equipment
+    cost: 50
 
 - type: entity
   parent: RMCDropshipAttachmentElectronicSystem
@@ -61,3 +67,6 @@
   - type: CameraSignalGranter
     protoIds:
     - RMCMonitorCameraLandingZone
+  - type: DropshipFabricatorPrintable
+    category: Equipment
+    cost: 50

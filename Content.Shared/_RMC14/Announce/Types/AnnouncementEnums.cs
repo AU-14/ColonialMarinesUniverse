@@ -3,6 +3,21 @@ using Robust.Shared.Serialization;
 namespace Content.Shared._RMC14.Announce;
 
 [Serializable, NetSerializable]
+public enum AnnouncementAnimation : byte
+{
+    Typewriter,
+    Slide,
+    Zoom,
+    Bounce,
+    Fade,
+    Pulse,
+    Heartbeat,
+    Warp,
+    Glitch,
+    None
+}
+
+[Serializable, NetSerializable]
 public enum AnnouncementPosition : byte
 {
     TopLeft,

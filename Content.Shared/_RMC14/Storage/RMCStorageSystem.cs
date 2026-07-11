@@ -124,7 +124,7 @@ public sealed partial class RMCStorageSystem : EntitySystem
 
             // TODO RMC14 make this error if this is a cm-specific storage
             if (CMPrototypeExtensions.FilterCM)
-                Log.Warning($"Storage {ToPrettyString(storage)} can't fit {ToPrettyString(args.Item)}");
+                Log.Debug($"Expanding storage {ToPrettyString(storage)} to fit {ToPrettyString(args.Item)}");
 
             foreach (var shape in _item.GetItemShape((storage, args.Storage), (args.Item, args.Item)))
             {
@@ -144,6 +144,13 @@ public sealed partial class RMCStorageSystem : EntitySystem
 
                 grid[^1] = expanded;
             }
+        }
+
+        if (CMPrototypeExtensions.FilterCM &&
+            !_storage.CanInsert(storage, args.Item, null, out var finalReason, ignoreStacks: true) &&
+            finalReason == "comp-storage-insufficient-capacity")
+        {
+            Log.Warning($"Storage {ToPrettyString(storage)} still can't fit {ToPrettyString(args.Item)} after expanding");
         }
     }
 

@@ -26,6 +26,9 @@ public sealed partial class EmoteOnDamageSystem : EntitySystem
         if (!args.DamageIncreased)
             return;
 
+        if (args.DamageDelta == null || args.DamageDelta.GetTotal() < emoteOnDamage.DamageThreshold)
+            return;
+
         if (emoteOnDamage.LastEmoteTime + emoteOnDamage.EmoteCooldown > _gameTiming.CurTime)
             return;
 
@@ -42,7 +45,7 @@ public sealed partial class EmoteOnDamageSystem : EntitySystem
         }
         else
         {
-            _chatSystem.TryEmoteWithoutChat(uid,emote);
+            _chatSystem.TryEmoteWithoutChat(uid, emote);
         }
 
         emoteOnDamage.LastEmoteTime = _gameTiming.CurTime;

@@ -191,13 +191,13 @@
   - type: Vocal
     sounds:
       Unsexed: ApeEmotes
+  - type: NoSlip
 
 - type: emoteSounds
   id: ApeEmotes
   params:
     variation: 0.125
   sounds:
-
     Scream:
       path: /Audio/_AU14/Ape/aperoarlong.ogg
 

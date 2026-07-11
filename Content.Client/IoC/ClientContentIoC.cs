@@ -1,3 +1,4 @@
+using Content.Client._CMU14.Administration.Console;
 using Content.Client._RMC14.Commendations;
 using Content.Client._RMC14.LinkAccount;
 using Content.Client._RMC14.PlayTimeTracking;
@@ -67,6 +68,9 @@ namespace Content.Client.IoC
             collection.Register<SharedPlayerRateLimitManager, PlayerRateLimitManager>();
             collection.Register<TitleWindowManager>();
             collection.Register<ClientsidePlaytimeTrackingManager>();
+
+            // CMU14
+            collection.Register<ServerLogsDownloadManager>();
 
             // RMC14
             collection.Register<LinkAccountManager>();

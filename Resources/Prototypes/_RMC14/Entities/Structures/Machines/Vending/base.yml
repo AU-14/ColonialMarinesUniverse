@@ -42,6 +42,7 @@
     interfaces:
       enum.CMAutomatedVendorUI.Key:
         type: CMAutomatedVendorBui
+        interactionRange: 2.5
   - type: AmbientOnPowered
   - type: AmbientSound
     volume: -9

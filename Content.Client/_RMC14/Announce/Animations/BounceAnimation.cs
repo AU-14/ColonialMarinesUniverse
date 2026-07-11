@@ -1,43 +1,40 @@
+using System;
 using System.Numerics;
-using Content.Shared._RMC14.Announce.Animations;
 
 namespace Content.Client._RMC14.Announce.Animations;
 
 public sealed class BounceAnimation : IAnnouncementAnimation
 {
-    private readonly BounceAnimationConfig _config;
-    private float _timer;
-    private int _phase;
-
-    public BounceAnimation(BounceAnimationConfig config) => _config = config;
-
     public void Reset(AnnouncementAnimationContext context)
     {
-        _timer = 0f;
-        _phase = 0;
-        context.Output.CurrentBounceOffset = Vector2.Zero;
+        context.State.BounceTimer = 0f;
+        context.State.BouncePhase = 0;
+        context.State.CurrentBounceOffset = Vector2.Zero;
     }
 
     public AnnouncementAnimationStatus Update(AnnouncementAnimationContext context, float deltaTime)
     {
-        var totalPhases = _config.BounceCount * 2;
+        var enhancements = context.Style.AnimationConfig.AnimationEnhancements;
+        var bounceCount = enhancements?.BounceCount ?? 3;
+        var bounceHeight = enhancements?.BounceHeight ?? 15f;
+        var totalPhases = bounceCount * 2;
 
-        if (_phase >= totalPhases)
+        if (context.State.BouncePhase >= totalPhases)
         {
-            context.Output.CurrentBounceOffset = Vector2.Zero;
+            context.State.CurrentBounceOffset = Vector2.Zero;
             context.SetAllLabels();
             return AnnouncementAnimationStatus.Finished;
         }
 
-        _timer += deltaTime * 4f;
-        var bounceProgress = _timer % 1f;
-        var bounceY = MathF.Sin(bounceProgress * MathF.PI) * _config.BounceHeight * MathF.Max(0f, 1f - _phase * 0.3f);
-        context.Output.CurrentBounceOffset = new Vector2(0, -bounceY);
+        context.State.BounceTimer += deltaTime * 4f;
+        var bounceProgress = context.State.BounceTimer % 1f;
+        var bounceY = MathF.Sin(bounceProgress * MathF.PI) * bounceHeight * (1f - context.State.BouncePhase * 0.3f);
+        context.State.CurrentBounceOffset = new Vector2(0, -bounceY);
 
-        if (_timer >= 1f)
+        if (context.State.BounceTimer >= 1f)
         {
-            _timer = 0f;
-            _phase++;
+            context.State.BounceTimer = 0f;
+            context.State.BouncePhase++;
         }
 
         return AnnouncementAnimationStatus.Running;

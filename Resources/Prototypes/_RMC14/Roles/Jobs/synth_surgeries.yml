@@ -82,6 +82,8 @@
   surgery: RMCSynthSurgeryReattachLimb
   displayName: Reattach Synth Limb
   validParts: [Arm, Leg]
+  allowSelfSurgery: true
+  selfSurgeryValidParts: [Arm, Leg]
   category: reattach
   steps:
   - stepId: RMCSynthSurgeryStepCutChassis

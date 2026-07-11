@@ -117,6 +117,7 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
         _configuration.OnValueChanged(RMCCVars.CMMaxHeavyAttackTargets, v => MaxTargets = v, true);
 
         SubscribeLocalEvent<MeleeWeaponComponent, HandSelectedEvent>(OnMeleeSelected);
+        SubscribeLocalEvent<MeleeWeaponComponent, HandDeselectedEvent>(OnMeleeDeselected); // RMC14
         SubscribeLocalEvent<MeleeWeaponComponent, ShotAttemptedEvent>(OnMeleeShotAttempted);
         SubscribeLocalEvent<MeleeWeaponComponent, GunShotEvent>(OnMeleeShot);
         SubscribeLocalEvent<BonusMeleeDamageComponent, GetMeleeDamageEvent>(OnGetBonusMeleeDamage);
@@ -202,11 +203,29 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
             minimum = userMelee.NextAttack;
         }
 
+        // RMC14
+        if (TryComp(args.User, out RMCMeleeUserCooldownComponent? userCooldown) &&
+            minimum < userCooldown.NextAttack)
+        {
+            minimum = userCooldown.NextAttack;
+        }
+
         if (minimum < component.NextAttack)
             return;
 
         component.NextAttack = minimum;
         DirtyField(uid, component, nameof(MeleeWeaponComponent.NextAttack));
+    }
+
+    // RMC14
+    private void OnMeleeDeselected(Entity<MeleeWeaponComponent> weapon, ref HandDeselectedEvent args)
+    {
+        var userCooldown = EnsureComp<RMCMeleeUserCooldownComponent>(args.User);
+        if (userCooldown.NextAttack < weapon.Comp.NextAttack)
+        {
+            userCooldown.NextAttack = weapon.Comp.NextAttack;
+            DirtyField(args.User, userCooldown, nameof(RMCMeleeUserCooldownComponent.NextAttack));
+        }
     }
 
     private void OnGetBonusMeleeDamage(EntityUid uid, BonusMeleeDamageComponent component, ref GetMeleeDamageEvent args)
@@ -424,6 +443,13 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
     {
         var curTime = Timing.CurTime;
 
+        // RMC14
+        if (TryComp(user, out RMCMeleeUserCooldownComponent? globalCooldown) &&
+            globalCooldown.NextAttack > curTime)
+        {
+            return false;
+        }
+
         if (weapon.NextAttack > curTime)
             return false;
 
@@ -547,6 +573,13 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
 
     private void SyncUserMeleeCooldown(EntityUid user, EntityUid weaponUid, TimeSpan nextAttack)
     {
+        var userCooldown = EnsureComp<RMCMeleeUserCooldownComponent>(user);
+        if (userCooldown.NextAttack < nextAttack)
+        {
+            userCooldown.NextAttack = nextAttack;
+            DirtyField(user, userCooldown, nameof(RMCMeleeUserCooldownComponent.NextAttack));
+        }
+
         if (weaponUid == user ||
             !TryComp(user, out MeleeWeaponComponent? userMelee) ||
             userMelee.NextAttack >= nextAttack)
@@ -725,7 +758,10 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
         if (!TryComp(user, out TransformComponent? userXform))
             return false;
 
-        var targetMap = TransformSystem.ToMapCoordinates(GetCoordinates(ev.Coordinates));
+        if (!TryGetAttackCoordinates(ev.Coordinates, out var targetCoordinates))
+            return false;
+
+        var targetMap = TransformSystem.ToMapCoordinates(targetCoordinates);
 
         if (targetMap.MapId != userXform.MapID)
             return false;
@@ -735,7 +771,7 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
         var distance = Math.Min(component.Range, direction.Length());
 
         var damage = GetDamage(meleeUid, user, component);
-        var entities = GetEntityList(ev.Entities);
+        var entities = GetValidAttackEntities(ev.Entities);
 
         if (entities.Count == 0)
         {
@@ -836,7 +872,7 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
                 continue;
             }
 
-            var attackedEvent = new AttackedEvent(meleeUid, user, GetCoordinates(ev.Coordinates));
+            var attackedEvent = new AttackedEvent(meleeUid, user, targetCoordinates);
             RaiseLocalEvent(entity, attackedEvent);
             var modifiedDamage = DamageSpecifier.ApplyModifierSets(damage + hitEvent.BonusDamage + attackedEvent.BonusDamage, hitEvent.ModifiersList);
 
@@ -884,6 +920,43 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
         }
 
         return true;
+    }
+
+    private bool TryGetAttackCoordinates(NetCoordinates netCoordinates, out EntityCoordinates coordinates)
+    {
+        coordinates = default;
+
+        if (!float.IsFinite(netCoordinates.Position.X) ||
+            !float.IsFinite(netCoordinates.Position.Y) ||
+            !TryGetEntity(netCoordinates.NetEntity, out var entity) ||
+            entity == null ||
+            TerminatingOrDeleted(entity.Value) ||
+            !HasComp<TransformComponent>(entity.Value))
+        {
+            return false;
+        }
+
+        coordinates = new EntityCoordinates(entity.Value, netCoordinates.Position);
+        return true;
+    }
+
+    private List<EntityUid> GetValidAttackEntities(List<NetEntity> netEntities)
+    {
+        var entities = new List<EntityUid>(netEntities.Count);
+
+        foreach (var netEntity in netEntities)
+        {
+            if (!TryGetEntity(netEntity, out var entity) ||
+                entity == null ||
+                TerminatingOrDeleted(entity.Value))
+            {
+                continue;
+            }
+
+            entities.Add(entity.Value);
+        }
+
+        return entities;
     }
 
     public HashSet<EntityUid> ArcRayCast(Vector2 position, Angle angle, Angle arcWidth, float range, MapId mapId, EntityUid ignore)

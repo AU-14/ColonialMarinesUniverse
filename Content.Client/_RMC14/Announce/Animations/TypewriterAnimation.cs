@@ -1,22 +1,17 @@
-using Content.Shared._RMC14.Announce.Animations;
+using Content.Client._RMC14.Announce.Styling;
+using Content.Shared._RMC14.Announce;
 using Robust.Shared.Utility;
+using System;
 
 namespace Content.Client._RMC14.Announce.Animations;
 
 public sealed class TypewriterAnimation : IAnnouncementAnimation
 {
-    private readonly TypewriterAnimationConfig _config;
-    private int _currentLine;
-    private int _currentChar;
-    private float _timer;
-
-    public TypewriterAnimation(TypewriterAnimationConfig config) => _config = config;
-
     public void Reset(AnnouncementAnimationContext context)
     {
-        _currentLine = 0;
-        _currentChar = 0;
-        _timer = 0f;
+        context.State.CurrentLine = 0;
+        context.State.CurrentChar = 0;
+        context.State.TypewriterTimer = 0f;
 
         for (var i = context.TitleOffset; i < context.Labels.Length; i++)
         {
@@ -26,33 +21,37 @@ public sealed class TypewriterAnimation : IAnnouncementAnimation
 
     public AnnouncementAnimationStatus Update(AnnouncementAnimationContext context, float deltaTime)
     {
-        _timer += deltaTime;
-        if (_timer < _config.PrintSpeed)
+        var style = context.Style;
+
+        context.State.TypewriterTimer += deltaTime;
+        if (context.State.TypewriterTimer < style.AnimationConfig.PrintSpeed)
             return AnnouncementAnimationStatus.Running;
 
-        _timer = 0f;
+        context.State.TypewriterTimer = 0f;
 
         var cleanText = context.CleanText;
+        var currentLine = context.State.CurrentLine;
+        var currentChar = context.State.CurrentChar;
 
-        if (_currentLine >= cleanText.Length)
+        if (currentLine >= cleanText.Length)
             return AnnouncementAnimationStatus.Finished;
 
-        var lineText = cleanText[_currentLine];
-        if (_currentChar >= lineText.Length)
+        var lineText = cleanText[currentLine];
+        if (currentChar >= lineText.Length)
         {
-            _currentLine++;
-            _currentChar = 0;
-            return _currentLine >= cleanText.Length
+            context.State.CurrentLine++;
+            context.State.CurrentChar = 0;
+            return context.State.CurrentLine >= cleanText.Length
                 ? AnnouncementAnimationStatus.Finished
                 : AnnouncementAnimationStatus.Running;
         }
 
-        _currentChar++;
+        context.State.CurrentChar++;
         UpdateDisplay(context);
         return AnnouncementAnimationStatus.Running;
     }
 
-    private void UpdateDisplay(AnnouncementAnimationContext context)
+    private static void UpdateDisplay(AnnouncementAnimationContext context)
     {
         var cleanText = context.CleanText;
         var originalText = context.OriginalText;
@@ -61,18 +60,18 @@ public sealed class TypewriterAnimation : IAnnouncementAnimation
         for (var i = context.TitleOffset; i < context.Labels.Length; i++)
         {
             var textIndex = i - context.TitleOffset;
-            if (textIndex < _currentLine)
+            if (textIndex < context.State.CurrentLine)
             {
                 var message = context.FormatMessage(originalText[textIndex], style);
-                context.Labels[i].SetMessage(message);
+                context.Labels[i].SetMessage(message, AnnouncementStyling.AnnouncementMarkupTags);
             }
-            else if (textIndex == _currentLine)
+            else if (textIndex == context.State.CurrentLine)
             {
                 var currentLineText = cleanText[textIndex];
-                var maxLength = Math.Min(_currentChar, currentLineText.Length);
-                var partialText = currentLineText[..maxLength];
+                var maxLength = Math.Min(context.State.CurrentChar, currentLineText.Length);
+                var partialText = currentLineText.Substring(0, maxLength);
                 var message = context.FormatMessage(partialText, style);
-                context.Labels[i].SetMessage(message);
+                context.Labels[i].SetMessage(message, AnnouncementStyling.AnnouncementMarkupTags);
             }
             else
             {

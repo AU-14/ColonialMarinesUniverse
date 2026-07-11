@@ -125,13 +125,18 @@ public sealed class JobTest
     {
         foreach (var addComponentSpecial in job.Special.OfType<AddComponentSpecial>())
         {
-            if (!addComponentSpecial.Components.TryGetComponent(SpeechBubbleStyleComponent, out var component) ||
-                component is not RMCSpeechBubbleSpecificStyleComponent bubbleStyle)
+            if (addComponentSpecial.Components.TryGetComponent(SpeechBubbleStyleComponent, out var comp)
+                && comp is RMCSpeechBubbleSpecificStyleComponent bubbleStyle)
             {
-                continue;
+                style = bubbleStyle.SpeechStyleClass;
+                return true;
             }
+        }
 
-            style = bubbleStyle.SpeechStyleClass;
+        if (job.RoundComponents.TryGetValue(SpeechBubbleStyleComponent, out var roundEntry)
+            && roundEntry.Component is RMCSpeechBubbleSpecificStyleComponent bubbleStyle2)
+        {
+            style = bubbleStyle2.SpeechStyleClass;
             return true;
         }
 
@@ -146,6 +151,10 @@ public sealed class JobTest
             if (addComponentSpecial.Components.ContainsKey(componentName))
                 return true;
         }
+
+        if (job.RoundComponents.TryGetValue(componentName, out var roundEntry)
+                && roundEntry.Component != null)
+            return true;
 
         return false;
     }

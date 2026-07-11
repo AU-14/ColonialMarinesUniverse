@@ -13,12 +13,11 @@
   canBeAntag: false
   whitelisted: true
   whitelistParent: AU14JobGeneralWhitelist
+  displayWeight: -1
   accessGroups:
   - AU14GovforCommand
   - CMCargoTech
-  access:
-  - CMAccessMedical
-  - CMAccessChemistry
+  - aulegacygroupcommand
 
 - type: job
   abstract: true
@@ -115,6 +114,10 @@
     - NonResuscitable
     - Epilepsy
     - NoEnglish
+    - CMUProstheticLeftArm
+    - CMUProstheticRightArm
+    - CMUProstheticLeftLeg
+    - CMUProstheticRightLeg
   ranks:
     RMCRankSyntheticColonist: []
   chevrons:
@@ -184,26 +187,26 @@
   groups:
   - GOVFORSynthSpecializationAU14
   - SynthBackpackAU14
+  - SynthUniformAU14
+  - SynthUniformAccessoriesAU14
+  - SynthEquipmentAU14
+  - SynthAccesoriesSpecialAU14
+  - SynthSuitAU14
+  - SynthSuitSpecialAU14
   - SynthBeltAU14
   - SynthPouchesLeftAU14
   - SynthPouchesRightAU14
-  - SynthGlovesAU14
   - SynthHeadwearAU14
   - SynthGlassesAU14
-  - SynthUniformAU14
-  - SynthUniformAccessoriesRMC
-  - SynthSuitAU14
-  - SynthSuitSpecialAU14
-  - SynthEquipmentAU14
+  - SynthGlovesAU14
   - SynthShoesRMC
   - SynthMasksAU14
-  - PaperworkRMC
-  - RecreationalRMC
   - HelmetGarbsRMC
   - SmokablesRMC
   - ForceStampApprovedAU14
   - ForceSynthResetKeyAU14
-  - SynthAccesoriesSpecialAU14
+  - PaperworkRMC
+  - RecreationalRMC
 
 - type: job
   parent: AU14JobAuxSupportSynthBase
@@ -218,9 +221,7 @@
   accessGroups:
   - AU14OpforCommand
   - CMCargoTech
-  access:
-  - CMAccessMedical
-  - CMAccessChemistry
+  - aulegacygroupcommand
 
 - type: startingGear
   id: AU14GearOPFORAuxSupportSynth

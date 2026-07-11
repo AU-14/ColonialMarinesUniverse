@@ -124,9 +124,10 @@ public sealed partial class HealthScannerSystem : EntitySystem
         scanner.Comp.Target = target;
 
         _audio.PlayPredicted(scanner.Comp.Sound, scanner, args.User);
-        if (_ui.IsUiOpen(scanner.Owner, HealthScannerUIKey.Key, args.User))
-            RefreshUi(scanner, args.User);
-        else
+        var uiOpen = _ui.IsUiOpen(scanner.Owner, HealthScannerUIKey.Key, args.User);
+        RefreshUi(scanner, args.User);
+
+        if (!uiOpen && scanner.Comp.Target != null)
             _ui.OpenUi(scanner.Owner, HealthScannerUIKey.Key, args.User);
     }
 
@@ -212,7 +213,7 @@ public sealed partial class HealthScannerSystem : EntitySystem
             return;
         }
 
-        if (!_rmcHands.TryGetHolder(scanner, out _))
+        if (viewer == null && !_rmcHands.TryGetHolder(scanner, out _))
             return;
 
         if (viewer is { } targetViewer && targetViewer.IsValid())

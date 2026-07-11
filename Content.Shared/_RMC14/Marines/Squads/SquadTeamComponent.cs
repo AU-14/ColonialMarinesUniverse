@@ -1,5 +1,4 @@
 ﻿using Content.Shared._RMC14.TacticalMap;
-using Content.Shared._RMC14.Announce;
 using Content.Shared._RMC14.Tracker.SquadLeader;
 using Content.Shared.Access;
 using Content.Shared.Radio;
@@ -62,9 +61,6 @@ public sealed partial class SquadTeamComponent : Component
 
     [DataField]
     public SpriteSpecifier.Rsi LeaderIcon = new(new ResPath("_RMC14/Interface/cm_job_icons.rsi"), "hudsquad_leader_a");
-
-    [DataField]
-    public ProtoId<AnnouncementPresetPrototype> OverwatchAnnouncementPreset = "MarineOverwatch";
 
     /// <summary>
     /// Squad objectives assigned to this squad. Key is the objective type, value is the objective text.

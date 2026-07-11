@@ -95,7 +95,7 @@
       <GuideEntityEmbed Entity="RMCPraetorianMapIcon"/>
     </Box>
     <Box Orientation="Vertical">
-      <GuideEntityEmbed Entity="CMXenoQueen" Caption=""/>
+      <GuideEntityEmbed Entity="RMCGuidebookXenoQueen" Caption=""/>
       <GuideEntityEmbed Entity="RMCQueenMapIcon"/>
     </Box>
   </Box>

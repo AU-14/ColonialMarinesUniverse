@@ -11,6 +11,7 @@
   playTimeTracker: AU14JobGOVFORRadioTelephoneOperator
   overwatchSortPriority: -3
   overwatchRoleName: Fire Team Leaders
+  displayWeight: 5
   accessGroups:
   - AU14GovforFTL
 
@@ -75,6 +76,10 @@
     - Epilepsy
     - NonResuscitable
     - NoEnglish
+    - CMUProstheticLeftArm
+    - CMUProstheticRightArm
+    - CMUProstheticLeftLeg
+    - CMUProstheticRightLeg
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -148,7 +153,7 @@
 - type: startingGear
   id: AU14GearopforRadioTelephoneOperator
   equipment:
-    id: AU14JobIDCardopforRadioTelephoneOperator
+    id: AU14JobIDCardOPFORRadioTelephoneOperator
     ears: AU14HeadsetOpforMarineFTL
 
 - type: entity

@@ -87,10 +87,10 @@
   - type: SolutionContainerManager
     solutions:
       rmc_flamer_tank:
-        maxVol: 500
+        maxVol: 250
         reagents:
         - ReagentId: RMCNapalmB
-          Quantity: 500
+          Quantity: 250
 
 - type: entity
   parent: RMCTankFlamerLarge
@@ -103,10 +103,10 @@
   - type: SolutionContainerManager
     solutions:
       rmc_flamer_tank:
-        maxVol: 450
+        maxVol: 250
         reagents:
         - ReagentId: RMCNapalmX
-          Quantity: 450
+          Quantity: 250
 
 - type: entity
   parent: RMCTankFlamerLarge
@@ -119,10 +119,10 @@
   - type: SolutionContainerManager
     solutions:
       rmc_flamer_tank:
-        maxVol: 450
+        maxVol: 250
         reagents:
         - ReagentId: RMCNapalmEX
-          Quantity: 450
+          Quantity: 250
 
 - type: entity
   parent: RMCTankFlamerLarge

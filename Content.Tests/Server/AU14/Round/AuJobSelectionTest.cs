@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Content.Server._CMU14.Threats;
 using Content.Server.AU14.Round;
 using Content.Shared._RMC14.Rules;
@@ -131,6 +132,49 @@ public sealed class AuJobSelectionTest
     }
 
     [Test]
+    public void ThirdPartyBodyBudgetUsesRatioAndThreatBodyCap()
+    {
+        Assert.That(
+            AuRoundSystem.CalculateThirdPartyBodyBudget(35, 0.15f),
+            Is.EqualTo(5));
+        Assert.That(
+            AuRoundSystem.CalculateThirdPartyBodyBudget(35, 0.15f, new ThreatVoteBodyCount(1, 4)),
+            Is.EqualTo(5));
+        Assert.That(
+            AuRoundSystem.CalculateThirdPartyBodyBudget(35, 0.15f, new ThreatVoteBodyCount(1, 2)),
+            Is.EqualTo(3));
+    }
+
+    [Test]
+    public void ThirdPartySelectionSkipsPartiesThatDoNotFitRemainingBodyBudget()
+    {
+        var large = CreateThirdPartyPrototype();
+        var medium = CreateThirdPartyPrototype();
+        var small = CreateThirdPartyPrototype();
+        var bodyCounts = new Dictionary<ThirdPartyPrototype, int>
+        {
+            [large] = 8,
+            [medium] = 4,
+            [small] = 2,
+        };
+
+        var selected = AuRoundSystem.SelectThirdPartiesWithinBodyBudget(
+            [large, medium, small],
+            maxThirdParties: 7,
+            bodyBudget: 5,
+            PickFirst,
+            party => bodyCounts[party],
+            out var selectedBodies);
+
+        Assert.That(selected, Is.EqualTo(new List<ThirdPartyPrototype> { medium }));
+        Assert.That(selectedBodies, Is.EqualTo(4));
+        return;
+
+        static ThirdPartyPrototype PickFirst(IReadOnlyList<ThirdPartyPrototype> candidates)
+            => candidates[0];
+    }
+
+    [Test]
     public void PlanetVoteOptionsUseStableCarryoverKey()
     {
         var planets = new List<RMCPlanetMapPrototypeComponent>
@@ -157,4 +201,7 @@ public sealed class AuJobSelectionTest
             .SetValue(planet, voteName);
         return planet;
     }
+
+    private static ThirdPartyPrototype CreateThirdPartyPrototype()
+        => (ThirdPartyPrototype) RuntimeHelpers.GetUninitializedObject(typeof(ThirdPartyPrototype));
 }

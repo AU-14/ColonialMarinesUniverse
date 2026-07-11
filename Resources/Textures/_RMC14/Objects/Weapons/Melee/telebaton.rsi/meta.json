@@ -14,15 +14,15 @@
       "name": "telebaton_on"
     },
     {
-      "name": "on-inhand-right",
-      "directions": 4
-    },
-    {
       "name": "off-inhand-right",
       "directions": 4
     },
     {
       "name": "off-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "on-inhand-right",
       "directions": 4
     },
     {

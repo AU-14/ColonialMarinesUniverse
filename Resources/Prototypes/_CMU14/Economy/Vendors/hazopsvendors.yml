@@ -323,7 +323,7 @@
         isAppendSquadRoleName: false
         givePrefix: rmc-job-prefix-weapons-specialist-shotgunner
         isAppendPrefix: true
-      - id: AU14KitHAZOPSPyroM240A2
+      - id: CMU14PyroSpecEquipmentCaseHAZOPS
         giveSquadRoleName: au14-job-name-specialist-pyro
         givePrefix: au14-job-prefix-specialist-pyro
         isAppendSquadRoleName: false

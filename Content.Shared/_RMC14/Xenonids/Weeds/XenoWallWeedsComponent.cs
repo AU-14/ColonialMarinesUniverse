@@ -2,10 +2,10 @@
 
 namespace Content.Shared._RMC14.Xenonids.Weeds;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent]
 [Access(typeof(SharedXenoWeedsSystem))]
 public sealed partial class XenoWallWeedsComponent : Component
 {
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? Weeds;
 }

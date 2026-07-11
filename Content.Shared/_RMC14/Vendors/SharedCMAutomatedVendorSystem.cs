@@ -399,6 +399,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
     private void OnRecentlyGotEquipped<T>(Entity<RMCRecentlyVendedComponent> ent, ref T args)
     {
         RemCompDeferred<WallMountComponent>(ent);
+        RemCompDeferred<RMCRecentlyVendedComponent>(ent);
     }
 
     protected virtual void OnVendBui(Entity<CMAutomatedVendorComponent> vendor, ref CMVendorVendBuiMsg args)
@@ -613,7 +614,6 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         {
             if (vendor.Comp.UseObjectivePoints)
             {
-                Log.Info($"[VENDOR DEBUG] Objective purchase: actor={ToPrettyString(actor)}, entry={entry.Id}, cost={entry.Points}");
                 // Read the cached faction win points directly from the vendor component
                 var available = vendor.Comp.CachedFactionWinPoints;
 
@@ -636,8 +636,6 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
                 // Update the vendor cache immediately so the UI reflects the new balance
                 var newBalance = available - entry.Points.Value;
                 UpdateVendorFactionPointsCache(faction, newBalance);
-
-                Log.Info($"[VENDOR DEBUG] Points deducted successfully, new balance: {newBalance}");
             }
             else
             {
@@ -729,7 +727,6 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
 
         var min = comp.MinOffset;
         var max = comp.MaxOffset;
-        Log.Info($"[VENDOR DEBUG] Spawning {entry.Spawn} copies of {entry.Id}");
         for (var i = 0; i < entry.Spawn; i++)
         {
             var offset = _random.NextVector2Box(min.X, min.Y, max.X, max.Y);
@@ -793,14 +790,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
 
     private void AfterVend(EntityUid spawn, EntityUid player, EntityUid vendor, Vector2 offset, bool vended = false, SlotFlags? replaceSlot = null)
     {
-        var recently = EnsureComp<RMCRecentlyVendedComponent>(spawn);
-        var anchored = _rmcMap.GetAnchoredEntitiesEnumerator(spawn);
-        while (anchored.MoveNext(out var uid))
-        {
-            recently.PreventCollide.Add(uid);
-        }
-
-        Dirty(spawn, recently);
+        EnsureComp<RMCRecentlyVendedComponent>(spawn);
 
         var mount = EnsureComp<WallMountComponent>(spawn);
         mount.Arc = Angle.FromDegrees(360);

@@ -16,7 +16,6 @@ using Content.Shared.Body.Part;
 using Content.Shared.Damage;
 using Content.Shared.GameTicking;
 using Robust.Shared.GameObjects;
-using Robust.Shared.Log;
 using Robust.Shared.Timing;
 
 namespace Content.Server._CMU14.Medical.Diagnostics.Telemetry;
@@ -24,9 +23,6 @@ namespace Content.Server._CMU14.Medical.Diagnostics.Telemetry;
 public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private ILogManager _log = default!;
-
-    private ISawmill _sawmill = default!;
 
     private readonly Dictionary<BodyPartType, int> _hitCounts = new();
     private readonly Dictionary<FractureSeverity, int> _fractureCounts = new();
@@ -34,7 +30,6 @@ public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
     private readonly Dictionary<EntityUid, int> _organStageTransitions = new();
     private readonly Dictionary<EntityUid, int> _painShockEntries = new();
     private int _defibAttempts;
-    private int _defibCancels;
     private int _severedLimbs;
     private int _internalBleedsStarted;
     private int _internalBleedsStopped;
@@ -45,7 +40,6 @@ public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        _sawmill = _log.GetSawmill("cmu.medical.telemetry");
 
         SubscribeLocalEvent<HitLocationComponent, HitLocationResolvedEvent>(OnHitResolved);
         SubscribeLocalEvent<Content.Shared._CMU14.Medical.Anatomy.BodyParts.BodyPartHealthComponent, BoneFracturedEvent>(OnFractureSpawn);
@@ -93,8 +87,6 @@ public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
     private void OnDefibAttempt(Entity<DamageableComponent> ent, ref RMCDefibrillatorAttemptEvent ev)
     {
         _defibAttempts++;
-        if (ev.Cancelled)
-            _defibCancels++;
     }
 
     private void OnPainShockEntered(Entity<CMUPainShockStatusComponent> ent, ref ComponentStartup args)
@@ -192,58 +184,18 @@ public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
 
     private void OnRoundEnd(RoundRestartCleanupEvent ev)
     {
-        EmitRoundSummary();
         _hitCounts.Clear();
         _fractureCounts.Clear();
         _surgeriesPerMarine.Clear();
         _organStageTransitions.Clear();
         _painShockEntries.Clear();
         _defibAttempts = 0;
-        _defibCancels = 0;
         _severedLimbs = 0;
         _internalBleedsStarted = 0;
         _internalBleedsStopped = 0;
         _shrapnelEmbedded = 0;
         _shrapnelExtracted = 0;
         _limbsReattached = 0;
-    }
-
-    private void EmitRoundSummary()
-    {
-        _sawmill.Info("=== CMU medical round summary ===");
-
-        var hitTotal = SumValues(_hitCounts);
-        if (hitTotal == 0)
-        {
-            _sawmill.Info("hits: none recorded this round");
-        }
-        else
-        {
-            foreach (var (zone, count) in _hitCounts)
-            {
-                var pct = 100f * count / hitTotal;
-                _sawmill.Info($"hits zone={zone} count={count} pct={pct:F1}%");
-            }
-        }
-
-        var fractureTotal = SumValues(_fractureCounts);
-        _sawmill.Info($"fractures total={fractureTotal}");
-        foreach (var (severity, count) in _fractureCounts)
-            _sawmill.Info($"fractures severity={severity} count={count}");
-
-        var organTotal = SumValues(_organStageTransitions);
-        _sawmill.Info($"organStageTransitions total={organTotal} marinesAffected={_organStageTransitions.Count}");
-
-        var surgeryTotal = SumValues(_surgeriesPerMarine);
-        _sawmill.Info($"surgeries total={surgeryTotal} marinesOperated={_surgeriesPerMarine.Count}");
-
-        _sawmill.Info($"defib attempts={_defibAttempts} cancels={_defibCancels} (CMU layer rejections only)");
-        _sawmill.Info($"painShockEntries total={SumValues(_painShockEntries)} marinesAffected={_painShockEntries.Count}");
-        _sawmill.Info($"severedLimbs total={_severedLimbs}");
-        _sawmill.Info($"internalBleeds started={_internalBleedsStarted} stopped={_internalBleedsStopped}");
-        _sawmill.Info($"shrapnel embedded={_shrapnelEmbedded} extracted={_shrapnelExtracted}");
-        _sawmill.Info($"limbsReattached total={_limbsReattached}");
-        _sawmill.Info("=== end CMU medical round summary ===");
     }
 
     private static int SumValues<T>(Dictionary<T, int> counts)

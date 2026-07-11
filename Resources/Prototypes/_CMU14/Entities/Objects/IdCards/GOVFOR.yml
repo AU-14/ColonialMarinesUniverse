@@ -14,158 +14,175 @@
     - radioGovforMILP
 
 - type: entity
+  abstract: true
   parent: CMIDCardBase
+  id: AU14IDCardGOVFOR
+  name: govfor identification card
+  description: An ID Card used by GOVFOR personnel for identification and access control. You cannot tell who or what it belongs to.
+  components:
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: AU14IDCardGOVFOR
   id: AU14IDCardGOVFORPlatCo
-  name: platoon commander ID card
+  name: plt. commander ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORPlatCo
-  - type: ItemIFF
-    factions:
-    - GOVFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardGOVFOR
+  id: AU14IDCardGOVFORAdjutant
+  name: plt. adjutant officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobGOVFORAdjutant
+
+- type: entity
+  parent: AU14IDCardGOVFOR
   id: AU14IDCardGOVFORPlatOp
-  name: platoon operations officer ID card
+  name: plt. operations officer ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORPlatOp
-  - type: ItemIFF
-    factions:
-    - GOVFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardGOVFOR
+  id: AU14IDCardGOVFOROfficerEngi
+  name: engineering officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobGOVFOROfficerEngi
+
+- type: entity
+  parent: AU14IDCardGOVFOR
+  id: AU14IDCardGOVFOROfficerIntel
+  name: intelligence officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobGOVFOROfficerIntel
+
+- type: entity
+  parent: AU14IDCardGOVFOR
+  id: AU14IDCardGOVFOROfficerLogistics
+  name: logistics officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobGOVFOROfficerLogistics
+
+- type: entity
+  parent: AU14IDCardGOVFOR
+  id: AU14IDCardGOVFOROfficerMP
+  name: chief military police ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobGOVFOROfficerMP
+
+- type: entity
+  parent: AU14IDCardGOVFOR
+  id: AU14IDCardGOVFOROfficerMedical
+  name: chief medical officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobGOVFOROfficerMedical
+
+- type: entity
+  parent: AU14IDCardGOVFOR
   id: AU14IDCardGOVFORDSPilot
   name: dropship pilot ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORDSPilot
-  - type: ItemIFF
-    factions:
-    - GOVFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardGOVFOR
   id: AU14IDCardGOVFORDCC
   name: dropship crew chief ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORDCC
-  - type: ItemIFF
-    factions:
-    - GOVFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardGOVFOR
   id: AU14IDCardSecSergeant
   name: platoon sergeant ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORSectionSergeant
-  - type: ItemIFF
-    factions:
-    - GOVFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardGOVFOR
   id: AU14IDCardSquadSergeant
   name: squad leader ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORSquadSergeant
-  - type: ItemIFF
-    factions:
-    - GOVFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardGOVFOR
   id: AU14IDCardSquadRifleman
   name: squad rifleman ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORSquadRifleman
-  - type: ItemIFF
-    factions:
-    - GOVFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardGOVFOR
   id: AU14IDCardWeaponsSpecialist
   name: weapons specialist ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORWeaponsSpecialist
-  - type: ItemIFF
-    factions:
-    - GOVFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardGOVFOR
   id: AU14IDCardSquadAutomaticRifleman
   name: squad automatic rifleman ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORSquadAutomaticRifleman
-  - type: ItemIFF
-    factions:
-    - GOVFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardGOVFOR
   id: AU14JobIDCardGOVFORPlatoonCorpsman
   name: platoon corpsman ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORPlatoonCorpsman
-  - type: ItemIFF
-    factions:
-    - GOVFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardGOVFOR
   id: AU14JobIDCardGOVFORRadioTelephoneOperator
   name: radio telephone operator ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORRadioTelephoneOperator
-  - type: ItemIFF
-    factions:
-    - GOVFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardGOVFOR
   id: AU14JobIDCardGOVFORAuxTech
   name: auxiliary technician ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORAuxTech
-  - type: ItemIFF
-    factions:
-    - GOVFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardGOVFOR
   id: AU14IDCardGOVFORVehicleCrewman
   name: vehicle crewman ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORVehicleCrewman
-  - type: ItemIFF
-    factions:
-    - GOVFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardGOVFOR
   id: AU14IDCardGOVFORAuxSupportSynth
   name: support synthetic ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORAuxSupportSynth
-  - type: ItemIFF
-    factions:
-    - GOVFOR
 
 - type: entity
   parent: AU14IDCardGOVFORAuxSupportSynth
@@ -208,37 +225,28 @@
     jobTitle: Intelligence Support Synthetic
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardGOVFOR
   id: AU14IDCardSquadCombatTech
   name: combat technician ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORSquadCombatTech
-  - type: ItemIFF
-    factions:
-    - GOVFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardGOVFOR
   id: AU14IDCardSquadAdvisor
   name: advisor ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORadvisor
-  - type: ItemIFF
-    factions:
-    - GOVFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardGOVFOR
   id: AU14IDCardGOVFORDoctor
   name: doctor ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORMilitaryDoctor
-  - type: ItemIFF
-    factions:
-    - GOVFOR
 
 - type: entity
   parent: AU14IDCardGOVFORDoctor
@@ -265,24 +273,18 @@
     jobTitle: Mortician
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardGOVFOR
   id: AU14IDCardGOVFORMilitaryPoliceMan
   name: military policeman ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORMilitaryPoliceMan
-  - type: ItemIFF
-    factions:
-    - GOVFOR
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardGOVFOR
   id: AU14IDCardGOVFORWorkingJoe
   categories: [ HideSpawnMenu ]
   name: Working Joe ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORWorkingJoe
-  - type: ItemIFF
-    factions:
-    - GOVFOR

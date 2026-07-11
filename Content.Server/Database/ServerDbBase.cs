@@ -1224,6 +1224,16 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                     group.Count()))
                 .ToList();
 
+            var manualReasons = modeRecords
+                .Where(record => record.Outcome == CMURoundStatisticsOutcome.Unknown)
+                .GroupBy(record => NormalizeCMURoundOutcomeSource(record.Source))
+                .OrderByDescending(group => group.Count())
+                .ThenBy(group => group.Key)
+                .Select(group => new CMURoundManualReasonBreakdown(
+                    group.Key,
+                    group.Count()))
+                .ToList();
+
             var threats = modeRecords
                 .Where(record => !string.IsNullOrWhiteSpace(record.SelectedThreatId))
                 .GroupBy(record => record.SelectedThreatId!)
@@ -1300,6 +1310,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 draws,
                 unknown,
                 outcomes,
+                manualReasons,
                 threats,
                 new CMURoundRecentForm(
                     recentRecords.Count,
@@ -1397,6 +1408,13 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             return durations.Count == 0
                 ? 0
                 : (int) Math.Round(durations.Average());
+        }
+
+        private static string NormalizeCMURoundOutcomeSource(string source)
+        {
+            return string.IsNullOrWhiteSpace(source)
+                ? "Unknown"
+                : source.Trim();
         }
 
         private static List<CMURoundPlayerCountBandBreakdown> BuildPlayerCountBands(List<CMURoundOutcomeRecord> records)

@@ -1,6 +1,7 @@
 - type: gameMap
   id: Flight
   mapName: Flight
+  allegiance: Neutral
   mapPath: /Maps/_AU14/flight.yml
   minPlayers: 0
   maxPlayers: 75

@@ -62,7 +62,7 @@ public sealed partial class CCVars
 
     public static readonly CVarDef<float> ChatRunechatBubbleScale =
         CVarDef.Create("chat.runechat_bubble_scale",
-            1f,
+            0.85f,
             CVar.CLIENTONLY | CVar.ARCHIVE,
             "Scales CMSS-style runechat speech bubbles relative to the default size.");
 

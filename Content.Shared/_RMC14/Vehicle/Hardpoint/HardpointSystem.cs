@@ -1367,6 +1367,12 @@ public sealed partial class HardpointSystem : EntitySystem
         RaiseLocalEvent(vehicle, ev, broadcast: true);
     }
 
+    private void RaiseIntegrityChanged(EntityUid hardpoint)
+    {
+        var ev = new HardpointIntegrityChangedEvent();
+        RaiseLocalEvent(hardpoint, ev, broadcast: true);
+    }
+
     private void RaiseVehicleSlotsChanged(EntityUid owner)
     {
         if (!TryGetContainingVehicleFrame(owner, out var vehicle))
@@ -1755,6 +1761,7 @@ public sealed partial class HardpointSystem : EntitySystem
             ent.Comp.Integrity = ent.Comp.MaxIntegrity;
 
         UpdateFrameDamageAppearance(ent.Owner, ent.Comp);
+        RaiseIntegrityChanged(ent.Owner);
     }
 
     private void OnHardpointExamined(Entity<HardpointIntegrityComponent> ent, ref ExaminedEvent args)
@@ -2019,6 +2026,7 @@ public sealed partial class HardpointSystem : EntitySystem
 
         Dirty(hardpoint, integrity);
         UpdateFrameDamageAppearance(hardpoint, integrity);
+        RaiseIntegrityChanged(hardpoint);
 
         if (hardpoint == vehicle)
             _lock.RefreshForcedOpen(vehicle);
@@ -2364,6 +2372,8 @@ public sealed partial class HardpointSystem : EntitySystem
 
         Dirty(ent.Owner, ent.Comp);
         UpdateFrameDamageAppearance(ent.Owner, ent.Comp);
+        RaiseIntegrityChanged(ent.Owner);
+
         if (isFrame)
             _lock.RefreshForcedOpen(ent.Owner);
 

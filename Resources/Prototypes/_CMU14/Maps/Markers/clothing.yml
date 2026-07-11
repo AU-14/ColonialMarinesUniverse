@@ -65,10 +65,10 @@
       - AU14CivilianJacketKhakiPufferJacket
       #Windbreakers
       - AU14WindbreakerBlue
-      - AU14WindbreakerGray
-      - AU14WindbreakerGreen
-      - AU14WindbreakerKhakiGreenMix
-      - AU14WindbreakerKhaki
+      - RMCJacketWindbreakerGrey
+      - RMCJacketWindbreaker
+      - RMCJacketWindbreakerFirstResponder
+      - RMCJacketWindbreakerBrown
       #Parkas
       - AU14CivilianJacketBlueParka
       - AU14CivilianJacketGreenParka

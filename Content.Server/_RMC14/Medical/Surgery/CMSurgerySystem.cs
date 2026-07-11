@@ -72,7 +72,7 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
 
     private void OnSynthRepairToolUseAttempt(Entity<SynthComponent> ent, ref RMCSynthRepairToolUseAttemptEvent args)
     {
-        if (args.Handled || args.User == ent.Owner || !HasComp<CMSurgeryTargetComponent>(ent.Owner))
+        if (args.Handled || !HasComp<CMSurgeryTargetComponent>(ent.Owner))
             return;
 
         if (IsSynthReattachStepTool(args.Used)
@@ -147,9 +147,6 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
             return;
 
         if (!HasComp<SynthComponent>(target) || !HasComp<CMSurgeryTargetComponent>(target))
-            return;
-
-        if (args.User == target)
             return;
 
         if (!HasMissingSynthLimbSlot(target))

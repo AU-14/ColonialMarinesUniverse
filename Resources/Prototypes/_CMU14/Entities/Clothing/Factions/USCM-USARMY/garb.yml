@@ -194,20 +194,18 @@
       state: helmet
 
 - type: entity
-  parent: BaseItem
+  parent: RMCPonchoBase
   id: AU14ArmorGarbJunglePoncho
   name: M3 Jungle Rain Poncho
-  description: A poncho made to be used in combination with M3 pattern armor.
+  description: The standard USCM poncho has variations for every climate. Custom fitted to be attached to standard USCM armor variants and worn over uniforms, it is comfortable, warming or cooling as needed, and well-fit. A marine couldn't ask for more.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMArmorGarb/jungleponcho.rsi
+    sprite: _RMC14/Objects/Clothing/Accessory/Ponchos/jungle.rsi
     state: icon
-  - type: Item
-    sprite: _AU14/Clothing/USCMArmorGarb/jungleponcho.rsi
-  - type: OuterClothingAccessory
-    rsi:
-      sprite: _AU14/Clothing/USCMArmorGarb/jungleponcho.rsi
-      state: helmet
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _RMC14/Objects/Clothing/Accessory/Ponchos/jungle.rsi
+      state: poncho
 
 #desert
 
@@ -308,20 +306,50 @@
       state: helmet
 
 - type: entity
-  parent: BaseItem
+  parent: RMCPonchoBase
   id: AU14ArmorGarbDesertPoncho
-  name: M3 Desert Rain Poncho
-  description: A poncho made to be used in combination with M3 pattern armor.
+  name: M3 Desert Poncho
+  description: The standard USCM poncho has variations for every climate. Custom fitted to be attached to standard USCM armor variants and worn over uniforms, it is comfortable, warming or cooling as needed, and well-fit. A marine couldn't ask for more.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMArmorGarb/desertponcho.rsi
+    sprite: _RMC14/Objects/Clothing/Accessory/Ponchos/desert.rsi
     state: icon
-  - type: Item
-    sprite: _AU14/Clothing/USCMArmorGarb/desertponcho.rsi
-  - type: OuterClothingAccessory
-    rsi:
-      sprite: _AU14/Clothing/USCMArmorGarb/desertponcho.rsi
-      state: helmet
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _RMC14/Objects/Clothing/Accessory/Ponchos/desert.rsi
+      state: poncho
+
+#Snow
+
+- type: entity
+  parent: RMCPonchoBase
+  id: AU14ArmorGarbSnowPoncho
+  name: M3 Snow Poncho
+  description: The standard USCM poncho has variations for every climate. Custom fitted to be attached to standard USCM armor variants and worn over uniforms, it is comfortable, warming or cooling as needed, and well-fit. A marine couldn't ask for more.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Accessory/Ponchos/snow.rsi
+    state: icon
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _RMC14/Objects/Clothing/Accessory/Ponchos/snow.rsi
+      state: poncho
+
+#Urban
+
+- type: entity
+  parent: RMCPonchoBase
+  id: AU14ArmorGarbUrbanPoncho
+  name: M3 Urban Poncho
+  description: The standard USCM poncho has variations for every climate. Custom fitted to be attached to standard USCM armor variants and worn over uniforms, it is comfortable, warming or cooling as needed, and well-fit. A marine couldn't ask for more.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Accessory/Ponchos/urban.rsi
+    state: icon
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _RMC14/Objects/Clothing/Accessory/Ponchos/urban.rsi
+      state: poncho
 
 #Universal
 - type: entity

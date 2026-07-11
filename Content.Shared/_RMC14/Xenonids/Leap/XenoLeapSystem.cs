@@ -180,8 +180,16 @@ public sealed partial class XenoLeapSystem : EntitySystem
         if (!_physicsQuery.TryGetComponent(xeno, out var physics))
             return;
 
-        if (EnsureComp<XenoLeapingComponent>(xeno, out var leaping))
+        if (HasComp<XenoLeapingComponent>(xeno))
             return;
+
+        if (xeno.Comp.PlasmaCost > FixedPoint2.Zero &&
+            !_xenoPlasma.TryRemovePlasmaPopup(xeno.Owner, xeno.Comp.PlasmaCost))
+        {
+            return;
+        }
+
+        var leaping = EnsureComp<XenoLeapingComponent>(xeno);
 
         args.Handled = true;
 
@@ -194,12 +202,6 @@ public sealed partial class XenoLeapSystem : EntitySystem
         leaping.TargetCameraShakeStrength = xeno.Comp.TargetCameraShakeStrength;
         leaping.IgnoredCollisionGroupLarge = xeno.Comp.IgnoredCollisionGroupLarge;
         leaping.IgnoredCollisionGroupSmall = xeno.Comp.IgnoredCollisionGroupSmall;
-
-        if (xeno.Comp.PlasmaCost > FixedPoint2.Zero &&
-            !_xenoPlasma.TryRemovePlasmaPopup(xeno.Owner, xeno.Comp.PlasmaCost))
-        {
-            return;
-        }
 
         _rmcPulling.TryStopAllPullsFromAndOn(xeno);
 

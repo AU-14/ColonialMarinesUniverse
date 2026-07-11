@@ -60,3 +60,6 @@
       range: 3
       total: 16
     deleteOnEmpty: true
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 500

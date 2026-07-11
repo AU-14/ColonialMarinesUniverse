@@ -21,6 +21,8 @@ using Content.Shared._RMC14.Xenonids.Projectile.Spit.Queen;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Standard;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
+using Content.Shared.Alert;
+using Content.Shared.Atmos.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Coordinates;
@@ -46,6 +48,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
 {
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedColorFlashEffectSystem _colorFlash = default!;
     [Dependency] private DamageableSystem _damageable = default!;
@@ -70,6 +73,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private XenoInsightSystem _insight = default!;
 
+    private static readonly ProtoId<AlertPrototype> FireAlert = "Fire";
     private static readonly ProtoId<ReagentPrototype> AcidRemovedBy = "Water";
 
     private EntityQuery<ProjectileComponent> _projectileQuery;
@@ -455,11 +459,21 @@ public sealed partial class XenoSpitSystem : EntitySystem
         ent.Comp.ExpiresAt = _timing.CurTime + ent.Comp.Duration;
         Dirty(ent);
         UpdateAppearance(ent);
+
+        _alerts.ShowAlert(ent, FireAlert);
     }
 
     private void OnUserAcidedRemove(Entity<UserAcidedComponent> ent, ref ComponentRemove args)
     {
         _appearance.SetData(ent, UserAcidedVisuals.Acided, UserAcidedEffects.None);
+
+        if (TryComp(ent, out FlammableComponent? flammable) &&
+            flammable.FireStacks > 0)
+        {
+            return;
+        }
+
+        _alerts.ClearAlert(ent, FireAlert);
     }
 
     private void OnUserAcidedShowFireAlert(Entity<UserAcidedComponent> ent, ref ShowFireAlertEvent args)

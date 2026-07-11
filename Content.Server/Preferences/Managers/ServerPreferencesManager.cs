@@ -279,7 +279,7 @@ namespace Content.Server.Preferences.Managers
 
         public bool HavePreferencesLoaded(ICommonSession session)
         {
-            return _cachedPlayerPrefs.ContainsKey(session.UserId);
+            return _cachedPlayerPrefs.TryGetValue(session.UserId, out var prefs) && prefs.PrefsLoaded;
         }
 
 

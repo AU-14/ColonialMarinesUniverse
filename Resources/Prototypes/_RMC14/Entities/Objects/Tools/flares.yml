@@ -588,6 +588,7 @@
     sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/airburst_projectiles.rsi
     layers:
     - state: flare
+      color: "#C8BFE7"
   - type: ScatteringGrenade
     fillPrototype: RMCFlareL96
   - type: PointLight

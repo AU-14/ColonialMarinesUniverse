@@ -79,7 +79,6 @@
       enum.DialogUiKey.Key:
         type: DialogBui
   - type: MarineCommunicationsComputer
-    sendAnnouncementOverlay: false
   - type: OverwatchConsole
     canMessageSquad: false
   - type: TacticalMapComputer
@@ -91,7 +90,6 @@
   components:
   - type: MarineCommunicationsComputer
     faction: govfor
-    sendAnnouncementOverlay: false
   - type: OverwatchConsole
     canMessageSquad: false
     group: GOVFOR
@@ -105,7 +103,6 @@
   components:
   - type: MarineCommunicationsComputer
     faction: opfor
-    sendAnnouncementOverlay: false
   - type: OverwatchConsole
     canMessageSquad: false
     group: OPFOR

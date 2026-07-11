@@ -157,6 +157,8 @@ namespace Content.Client.Examine
             // opening at the old tooltip rather than the cursor/another entity,
             // since there's probably one open already if it's coming in from the server.
             var entity = GetEntity(ev.EntityUid);
+            if (!Exists(entity) || !HasComp<TransformComponent>(entity))
+                return;
 
             OpenTooltip(player.Value, entity, ev.CenterAtCursor, ev.OpenAtOldTooltip, ev.KnowTarget);
             UpdateTooltipInfo(player.Value, entity, ev.Message, ev.Verbs, getVerbs: false);

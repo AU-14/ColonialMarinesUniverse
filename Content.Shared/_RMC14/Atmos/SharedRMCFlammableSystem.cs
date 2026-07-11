@@ -9,7 +9,6 @@ using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.OnCollide;
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids.Plasma;
-using Content.Shared.Alert;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Chemistry.EntitySystems;
@@ -47,7 +46,6 @@ namespace Content.Shared._RMC14.Atmos;
 
 public abstract partial class SharedRMCFlammableSystem : EntitySystem
 {
-    [Dependency] private AlertsSystem _alerts = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private DamageableSystem _damageable = default!;
@@ -74,7 +72,6 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
-    private static readonly ProtoId<AlertPrototype> FireAlert = "Fire";
     private static readonly ProtoId<ReagentPrototype> WaterReagent = "Water";
     private static readonly ProtoId<TagPrototype> StructureTag = "Structure";
     private static readonly ProtoId<TagPrototype> WallTag = "Wall";
@@ -379,17 +376,6 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
     {
         RemCompDeferred<OnFireComponent>(ent);
         RemCompDeferred<RMCFireBypassActiveComponent>(ent);
-    }
-
-    public void UpdateFireAlert(EntityUid ent)
-    {
-        var ev = new ShowFireAlertEvent();
-        RaiseLocalEvent(ent, ref ev);
-
-        if (ev.Show)
-            _alerts.ShowAlert(ent, FireAlert);
-        else
-            _alerts.ClearAlert(ent, FireAlert);
     }
 
     public bool IsOnFire(Entity<FlammableComponent?> ent)
@@ -1026,7 +1012,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
                     TryIgnite((uid, apply), contact, true);
                 }
 
-                RemCompDeferred<DamageOnCollideComponent>(uid);
+                _onCollide.DisableDamageOnCollide(uid);
             }
         }
         catch (Exception e)

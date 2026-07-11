@@ -59,6 +59,7 @@ public abstract partial class CMUSharedZLevelsSystem
     private readonly HashSet<(EntityUid Puller, EntityUid Pulled)> _deferredPullJointRefreshes = new();
     private readonly List<(EntityUid Puller, EntityUid Pulled)> _deferredPullJointRefreshBuffer = new();
     private readonly List<Vector2> _vehicleSupportSamples = new();
+    private readonly List<EntityUid> _zMovementUpdateQueue = new();
     private int _profileZMovementStoppedParent;
     private int _profileZMovementStoppedNoMap;
     private int _profileZMovementGroundContacts;
@@ -199,9 +200,23 @@ public abstract partial class CMUSharedZLevelsSystem
             ResetZMovementProfileCounters();
 
         var processed = 0;
+        _zMovementUpdateQueue.Clear();
         var query = EntityQueryEnumerator<CMUZPhysicsComponent, CMUZFallingComponent, TransformComponent, PhysicsComponent>();
-        while (query.MoveNext(out var uid, out var zPhys, out _, out var xform, out var physics))
+        while (query.MoveNext(out var uid, out _, out _, out _, out _))
         {
+            _zMovementUpdateQueue.Add(uid);
+        }
+
+        foreach (var uid in _zMovementUpdateQueue)
+        {
+            if (!TryComp<CMUZPhysicsComponent>(uid, out var zPhys) ||
+                !HasComp<CMUZFallingComponent>(uid) ||
+                !TryComp(uid, out TransformComponent? xform) ||
+                !TryComp<PhysicsComponent>(uid, out var physics))
+            {
+                continue;
+            }
+
             processed++;
 
             if (xform.ParentUid != xform.MapUid)
@@ -349,6 +364,7 @@ public abstract partial class CMUSharedZLevelsSystem
 
             DirtyZPhysics(uid, zPhys, oldVelocity, oldHeight);
         }
+        _zMovementUpdateQueue.Clear();
 
         if (profiling)
         {

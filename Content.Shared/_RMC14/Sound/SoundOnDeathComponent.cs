@@ -10,6 +10,6 @@ public sealed partial class SoundOnDeathComponent : Component
     [DataField(required: true), AutoNetworkedField]
     public SoundSpecifier? Sound;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? Entity;
 }

@@ -1,0 +1,31 @@
+# Administration
+- type: rank
+  id: AU14RankColonyAdministrator
+  name: Administrator
+  prefix: Admin.
+
+- type: rank
+  id: AU14RankColonySeniorAdministrator
+  name: Senior Administrator
+  prefix: Sr. Admin.
+
+- type: rank
+  id: AU14RankColonySeniorAdminAssistant
+  name: Senior Assistant
+  prefix: Sn. Assist.
+
+- type: rank
+  id: AU14RankColonyAdminAssistant
+  name: Assistant
+  prefix: Assist.
+
+# Diplomatic
+- type: rank
+  id: AU14RankTWEAmbassador
+  name: High Commisioner
+  prefix: High Comm.
+
+- type: rank
+  id: AU14RankAmbassador
+  name: Ambassador
+  prefix: Amb.

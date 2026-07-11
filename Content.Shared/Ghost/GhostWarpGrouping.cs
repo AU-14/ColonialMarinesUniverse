@@ -19,6 +19,7 @@ public static class GhostWarpGrouping
     public const string TabTseRoyal = "TSE/Royal";
     public const string TabCmbProvost = "CMB/Provost";
     public const string TabThreat = "Threat";
+    public const string TabCursed = "Cursed";
     public const string TabApe = "APE";
     public const string TabLocations = "Locations";
     public const string TabOther = "Other";
@@ -39,6 +40,7 @@ public static class GhostWarpGrouping
     public const string SectionAbominations = "Abominations";
     public const string SectionLeaders = "Leaders";
     public const string SectionMembers = "Members";
+    public const string SectionSummoners = "Summoners";
     public const string SectionWarpPoints = "Warp Points";
     public const string SectionOther = "Other";
 
@@ -113,10 +115,14 @@ public static class GhostWarpGrouping
         int? xenoTier,
         int realDisplayWeight,
         bool isYautjaThrall = false,
-        bool isYautjaAbomination = false)
+        bool isYautjaAbomination = false,
+        bool isCursedSummoner = false)
     {
         if (isWarpPoint)
             return new GhostWarpGroupingResult(TabLocations, SectionWarpPoints);
+
+        if (isCursedSummoner)
+            return new GhostWarpGroupingResult(TabCursed, SectionSummoners);
 
         if ((isXeno || IsXenoJob(jobId)) && isCorruptedHive)
             return new GhostWarpGroupingResult(TabCorruptedHive, GetXenoSection(jobId, xenoTier));
@@ -162,6 +168,7 @@ public static class GhostWarpGrouping
             TabWeYaPmc => "PMC",
             TabTseRoyal => "TSE",
             TabCmbProvost => "CMB",
+            TabCursed => "CUR",
             TabLocations => "LOC",
             TabOther => "OTH",
             _ => tab,

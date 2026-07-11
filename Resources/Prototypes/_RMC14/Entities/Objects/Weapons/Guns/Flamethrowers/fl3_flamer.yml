@@ -4,6 +4,7 @@
   name: flammenwerfer 3 heavy incineration unit
   description: A heavy industrial incineration unit produced by the Weyland Corporation and later by Weyland-Yutani. Often found among foliage cleaning missions on frontier colonies, it usually isn't seen in combat, but is devastating when actually used.
   components:
+  - type: RMCMagneticItem
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Flamethrower/FL3/fl3_inhands.rsi
     layers:
@@ -41,6 +42,8 @@
         whitelist:
           tags:
           - RMCTankFlamerFL3
+          - RMCTankFlamerFL3X
+          - RMCTankFlamerFL3B
   - type: RMCIgniter
     sound:
       path: /Audio/_RMC14/Weapons/Guns/Flamer/wy_flamer_ignite.ogg
@@ -109,6 +112,69 @@
     - RMCTankFlamerFL3
 
 - type: entity
+  parent: RMCTankFlamer
+  id: RMCTankFlamerFL3B
+  name: FW3 heavy incinerator tank (B)
+  description: A heavy, high capacity tank utilized by the Flammenwerfer 3 Heavy Incineration Unit. This one has a blue, heat-resistant Weyland-Yutani logo on it. This one seems to contain 'Napalm-B'.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/fl3.rsi
+    state: flametank
+    layers:
+    - state: flametank
+    - state: flametank_strip1
+    - state: flametank_strip2
+      map: [ "enum.SolutionContainerLayers.Fill" ]
+  - type: RMCFlamerTank
+    maxIntensity: 70
+    maxRange: 8
+  - type: SolutionContainerManager
+    solutions:
+      rmc_flamer_tank:
+        maxVol: 300
+        reagents:
+        - ReagentId: RMCNapalmB
+          Quantity: 300
+  - type: SolutionContainerVisuals
+    maxFillLevels: 2
+    fillBaseName: flametank_strip
+  - type: Tag
+    tags:
+    - RMCTankFlamerFL3B
+
+- type: entity
+  parent: RMCTankFlamer
+  id: RMCTankFlamerFL3X
+  name: FW3 heavy incinerator tank (X)
+  description: A heavy, high capacity tank utilized by the Flammenwerfer 3 Heavy Incineration Unit. This one has a blue, heat-resistant Weyland-Yutani logo on it. This one seems to contain 'Napalm-X'.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/fl3.rsi
+    state: flametank
+    layers:
+    - state: flametank
+    - state: flametank_strip1
+    - state: flametank_strip2
+      map: [ "enum.SolutionContainerLayers.Fill" ]
+  - type: RMCFlamerTank
+    maxIntensity: 70
+    maxRange: 8
+  - type: SolutionContainerManager
+    solutions:
+      rmc_flamer_tank:
+        maxVol: 300
+        reagents:
+        - ReagentId: RMCNapalmX
+          Quantity: 300
+  - type: SolutionContainerVisuals
+    maxFillLevels: 2
+    fillBaseName: flametank_strip
+  - type: Tag
+    tags:
+    - RMCTankFlamerFL3X
+
+
+- type: entity
   parent: RMCTankFlamerFL3
   id: RMCTankFlamerFL3Whiteout
   name: FW3 heavy incinerator tank (EX)
@@ -127,3 +193,17 @@
 
 - type: Tag
   id: RMCTankFlamerFL3
+
+- type: entity
+  parent: RMCBackpackFlamer
+  id: CMU14FuelFL3FuelTankFilled
+  suffix: WY
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCTankFlamerFL3B
+      amount: 2
+    - id: RMCTankFlamerFL3X
+      amount: 1
+
+

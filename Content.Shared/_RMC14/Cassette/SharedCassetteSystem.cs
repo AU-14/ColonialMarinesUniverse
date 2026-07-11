@@ -267,7 +267,7 @@ public abstract partial class SharedCassetteSystem : EntitySystem
 
     private void OnPlayerRemovedFromContainer(Entity<CassettePlayerComponent> ent, ref EntRemovedFromContainerMessage args)
     {
-        _audio.Stop(_net.IsServer ? ent.Comp.AudioStream : ent.Comp.CustomAudioStream);
+        StopAllAudio(ent);
         ent.Comp.State = AudioState.Stopped;
         ent.Comp.Tape = 0;
         Dirty(ent);
@@ -371,8 +371,8 @@ public abstract partial class SharedCassetteSystem : EntitySystem
 
     private void StopAllAudio(Entity<CassettePlayerComponent> ent)
     {
-        _audio.Stop(ent.Comp.AudioStream);
-        _audio.Stop(ent.Comp.CustomAudioStream);
+        ent.Comp.AudioStream = _audio.Stop(ent.Comp.AudioStream);
+        ent.Comp.CustomAudioStream = _audio.Stop(ent.Comp.CustomAudioStream);
 
         ent.Comp.State = AudioState.Stopped;
         Dirty(ent);

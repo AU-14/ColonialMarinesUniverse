@@ -1,6 +1,6 @@
 name: Publish Test Merge
 
-run-name: "Publish test merge PR #${{ inputs.pr_number }} to main server"
+run-name: "Publish test merge PRs ${{ inputs.pr_numbers }} to main server"
 
 concurrency:
   group: publish
@@ -9,10 +9,10 @@ concurrency:
 on:
   workflow_dispatch:
     inputs:
-      pr_number:
-        description: Pull request number to merge-test and publish to the main server.
+      pr_numbers:
+        description: Pull request number(s) to merge-test and publish, separated by spaces, commas, or new lines.
         required: true
-        type: number
+        type: string
 permissions:
   contents: read
   issues: write
@@ -21,62 +21,134 @@ permissions:
 env:
   DOTNET_VERSION: 10.0.x
   CONFIGURATION: Release
-  TEST_MERGE_REF: ${{ format('refs/pull/{0}/merge', inputs.pr_number) }}
 
 jobs:
   prepare:
-    name: Resolve PR merge
+    name: Resolve PR merges
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
     outputs:
       base_sha: ${{ steps.pr.outputs.base_sha }}
-      head_sha: ${{ steps.pr.outputs.head_sha }}
-      merge_ref: ${{ steps.merge.outputs.ref }}
+      base_ref: ${{ steps.pr.outputs.base_ref }}
+      prs_json: ${{ steps.pr.outputs.prs_json }}
       merge_sha: ${{ steps.merge.outputs.sha }}
     steps:
-      - name: Validate PR
+      - name: Validate PRs
         id: pr
         uses: actions/github-script@v9.0.0
+        env:
+          PR_NUMBERS: ${{ inputs.pr_numbers }}
         with:
           script: |
-            const pullNumber = Number('${{ inputs.pr_number }}');
-            if (!Number.isInteger(pullNumber) || pullNumber <= 0) {
-              core.setFailed('pr_number must be a positive integer.');
-              return;
-            }
+            const raw = process.env.PR_NUMBERS ?? '';
+            const pullNumbers = [...new Set((raw.match(/\d+/g) ?? []).map(Number))]
+              .filter(number => Number.isInteger(number) && number > 0);
 
-            const { data: pull } = await github.rest.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: pullNumber,
-            });
-
-            if (pull.state !== 'open') {
-              core.setFailed(`PR #${pullNumber} is ${pull.state}; only open PRs can be test-merge published.`);
+            if (pullNumbers.length === 0) {
+              core.setFailed('pr_numbers must contain at least one positive pull request number.');
               return;
             }
 
             const allowedBases = new Set(['master', 'staging', 'stable']);
-            if (!allowedBases.has(pull.base.ref)) {
-              core.setFailed(`PR #${pullNumber} targets ${pull.base.ref}; test-merge publish only supports master, staging, or stable.`);
+            const pulls = [];
+
+            for (const pullNumber of pullNumbers) {
+              const { data: pull } = await github.rest.pulls.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pullNumber,
+              });
+
+              if (pull.state !== 'open') {
+                core.setFailed(`PR #${pullNumber} is ${pull.state}; only open PRs can be test-merge published.`);
+                return;
+              }
+
+              if (!allowedBases.has(pull.base.ref)) {
+                core.setFailed(`PR #${pullNumber} targets ${pull.base.ref}; test-merge publish only supports master, staging, or stable.`);
+                return;
+              }
+
+              pulls.push({
+                number: pullNumber,
+                title: pull.title,
+                url: pull.html_url,
+                base_ref: pull.base.ref,
+                base_sha: pull.base.sha,
+                head_sha: pull.head.sha,
+              });
+            }
+
+            const baseRef = pulls[0].base_ref;
+            if (pulls.some(pull => pull.base_ref !== baseRef)) {
+              core.setFailed(`All PRs must target the same base branch. Got: ${pulls.map(pull => `#${pull.number}->${pull.base_ref}`).join(', ')}`);
               return;
             }
 
-            core.setOutput('base_sha', pull.base.sha);
-            core.setOutput('head_sha', pull.head.sha);
-            core.notice(`Publishing PR #${pullNumber}: ${pull.title}`);
+            const { data: baseBranch } = await github.rest.git.getRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `heads/${baseRef}`,
+            });
+            const baseSha = baseBranch.object.sha;
+
+            core.setOutput('base_ref', baseRef);
+            core.setOutput('base_sha', baseSha);
+            core.setOutput('prs_json', JSON.stringify(pulls));
+            core.notice(`Publishing test merge for ${pulls.map(pull => `#${pull.number}`).join(', ')} onto ${baseRef} @ ${baseSha}.`);
 
       - uses: actions/checkout@v6.0.2
         with:
-          ref: ${{ env.TEST_MERGE_REF }}
+          ref: ${{ steps.pr.outputs.base_sha }}
+          fetch-depth: 0
           persist-credentials: true
           submodules: false
 
-      - name: Resolve merge version
+      - name: Merge PRs
         id: merge
         shell: bash
+        env:
+          PRS_JSON: ${{ steps.pr.outputs.prs_json }}
         run: |
-          echo "ref=$TEST_MERGE_REF" >> "$GITHUB_OUTPUT"
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B test-merge-source "${{ steps.pr.outputs.base_sha }}"
+
+          echo "$PRS_JSON" | jq -r '.[].number' | while read -r pr_number; do
+            echo "Merging PR #$pr_number"
+            git fetch --no-tags origin "pull/${pr_number}/head:refs/remotes/origin/test-merge-pr-${pr_number}"
+            git merge --no-ff --no-edit "refs/remotes/origin/test-merge-pr-${pr_number}"
+          done
+
+          if ! git diff --quiet "${{ steps.pr.outputs.base_sha }}" -- .github/workflows; then
+            echo "::notice::Test merge includes workflow file changes; restoring .github/workflows to base before creating the test merge patch."
+            git checkout "${{ steps.pr.outputs.base_sha }}" -- .github/workflows
+          fi
+
+          pull_list="$(echo "$PRS_JSON" | jq -r 'map("#" + (.number | tostring)) | join(", ")')"
+          git diff --binary --output=test-merge.patch "${{ steps.pr.outputs.base_sha }}"
+          git reset --soft "${{ steps.pr.outputs.base_sha }}"
+
+          if git diff --cached --quiet; then
+            echo "::warning::Test merge produced no content changes after sanitizing workflow files; using base ref."
+            echo "sha=${{ steps.pr.outputs.base_sha }}" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git commit -m "Test merge ${pull_list}"
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Upload merge patch
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: test-merge-patch
+          path: test-merge.patch
+          if-no-files-found: error
+          retention-days: 1
 
   package:
     name: Package ${{ matrix.name }}
@@ -99,9 +171,25 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.2
         with:
-          ref: ${{ needs.prepare.outputs.merge_ref }}
+          ref: ${{ needs.prepare.outputs.base_sha }}
           persist-credentials: true
           submodules: false
+
+      - uses: actions/download-artifact@v8.0.1
+        with:
+          name: test-merge-patch
+          path: .test-merge
+
+      - name: Apply test merge patch
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ -s .test-merge/test-merge.patch ]; then
+            git apply --index --binary .test-merge/test-merge.patch
+          else
+            echo "No content changes to apply."
+          fi
 
       - name: Checkout submodules
         run: |
@@ -145,9 +233,25 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.2
         with:
-          ref: ${{ needs.prepare.outputs.merge_ref }}
+          ref: ${{ needs.prepare.outputs.base_sha }}
           persist-credentials: true
           submodules: false
+
+      - uses: actions/download-artifact@v8.0.1
+        with:
+          name: test-merge-patch
+          path: .test-merge
+
+      - name: Apply test merge patch
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ -s .test-merge/test-merge.patch ]; then
+            git apply --index --binary .test-merge/test-merge.patch
+          else
+            echo "No content changes to apply."
+          fi
 
       - name: Checkout RobustToolbox
         run: |
@@ -173,13 +277,13 @@ jobs:
         uses: actions/github-script@v9.0.0
         env:
           BASE_SHA: ${{ needs.prepare.outputs.base_sha }}
-          HEAD_SHA: ${{ needs.prepare.outputs.head_sha }}
           MERGE_SHA: ${{ needs.prepare.outputs.merge_sha }}
+          PRS_JSON: ${{ needs.prepare.outputs.prs_json }}
         with:
           script: |
             const baseSha = process.env.BASE_SHA;
-            const headSha = process.env.HEAD_SHA;
             const mergeSha = process.env.MERGE_SHA;
+            const pulls = JSON.parse(process.env.PRS_JSON ?? '[]');
 
             function shortSha(sha) {
               return sha.substring(0, 7);
@@ -198,6 +302,8 @@ jobs:
             }
 
             const publishedAt = formatUtc(new Date());
+            const pullLines = pulls.map(pull =>
+              `PR #${pull.number}: [${shortSha(pull.head_sha)}](${commitLink(pull.head_sha)}) ${pull.title}`);
 
             const body = [
               '<details>',
@@ -206,23 +312,25 @@ jobs:
               '**Revision**',
               '',
               `Origin: [${shortSha(baseSha)}](${commitLink(baseSha)})`,
-              `Pull Request: [${shortSha(headSha)}](${commitLink(headSha)})`,
+              ...pullLines,
               `Server: ${mergeSha}`,
               '</details>',
             ].join('\n');
 
-            try {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: Number('${{ inputs.pr_number }}'),
-                body,
-              });
-            } catch (error) {
-              if (error.status === 403 && error.response?.data?.message === 'Resource not accessible by integration') {
-                core.warning(`Could not comment on PR #${{ inputs.pr_number }} because GITHUB_TOKEN cannot write issue comments in this context.`);
-                return;
-              }
+            for (const pull of pulls) {
+              try {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pull.number,
+                  body,
+                });
+              } catch (error) {
+                if (error.status === 403 && error.response?.data?.message === 'Resource not accessible by integration') {
+                  core.warning(`Could not comment on PR #${pull.number} because GITHUB_TOKEN cannot write issue comments in this context.`);
+                  continue;
+                }
 
-              throw error;
+                throw error;
+              }
             }

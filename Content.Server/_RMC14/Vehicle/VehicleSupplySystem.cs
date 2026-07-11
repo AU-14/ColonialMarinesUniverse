@@ -18,6 +18,7 @@ using Content.Shared.UserInterface;
 using Content.Shared.Vehicle.Components;
 using Robust.Server.Audio;
 using Robust.Server.GameObjects;
+using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
@@ -38,6 +39,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private PhysicsSystem _physics = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private SharedRequisitionsSystem _requisitions = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -933,13 +935,33 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         if (!TryResolveLoadoutSlot(vehicle, option.Slot, out var slotOwner, out var slot))
             return false;
 
-        if (slot.Item is { })
+        if (slot.Item is { } existing &&
+            TryComp(existing, out MetaDataComponent? meta) &&
+            meta.EntityPrototype?.ID == option.Item.Id)
         {
-            if (!_itemSlots.TryEject(slotOwner, slot, null, out var removed, excludeUserAudio: true))
-                return false;
+            return true;
+        }
 
-            if (removed is { } removedEntity && !Deleted(removedEntity))
-                QueueDel(removedEntity);
+        if (slot.Item is { } existingItem)
+        {
+            EntityUid removed;
+            if (_itemSlots.TryEject(slotOwner, slot, null, out var ejected, excludeUserAudio: true))
+            {
+                removed = ejected.Value;
+            }
+            else
+            {
+                if (slot.ContainerSlot == null ||
+                    !_containers.Remove(existingItem, slot.ContainerSlot, force: true, destination: Transform(vehicle).Coordinates))
+                {
+                    return false;
+                }
+
+                removed = existingItem;
+            }
+
+            if (!Deleted(removed))
+                QueueDel(removed);
         }
 
         var item = Spawn(option.Item.Id, Transform(vehicle).Coordinates);

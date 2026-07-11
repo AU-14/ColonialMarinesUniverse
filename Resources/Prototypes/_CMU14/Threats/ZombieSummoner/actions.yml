@@ -1,0 +1,104 @@
+- type: entity
+  abstract: true
+  id: ActionZombieSummonerBase
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    backgroundOn:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: template_active_big
+
+- type: entity
+  parent: ActionZombieSummonerBase
+  id: ActionZombieSummonerOpen
+  name: Summon Zombies
+  description: Spend stored power to summon zombies.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: reserve_parasite
+    useDelay: 1
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Threats.Mobs.ZombieSummoner.ZombieSummonerOpenActionEvent
+
+- type: entity
+  parent: ActionZombieSummonerBase
+  id: ActionZombieSummonerOrderHalt
+  name: Halt
+  description: Command your zombies to stop and hold position.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: mark_hold
+    iconOn:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: mark_hold
+    priority: 6
+    useDelay: 1
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Threats.Mobs.ZombieSummoner.ZombieSummonerOrderActionEvent
+      type: Halt
+
+- type: entity
+  parent: ActionZombieSummonerBase
+  id: ActionZombieSummonerOrderAttack
+  name: Attack
+  description: Command your zombies to attack nearby enemies.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: mark_attack
+    iconOn:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: mark_attack
+    priority: 7
+    useDelay: 1
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Threats.Mobs.ZombieSummoner.ZombieSummonerOrderActionEvent
+      type: Attack
+
+- type: entity
+  parent: ActionZombieSummonerBase
+  id: ActionZombieSummonerOrderFollow
+  name: Follow Me
+  description: Command your zombies to follow you.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: mark_rally
+    iconOn:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: mark_rally
+    priority: 8
+    useDelay: 1
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Threats.Mobs.ZombieSummoner.ZombieSummonerOrderActionEvent
+      type: Follow
+
+- type: entity
+  parent: ActionZombieSummonerBase
+  id: ActionZombieSummonerOrderCheeseEm
+  name: Cheese 'Em
+  description: Command your zombies to attack whoever you point at.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: mark_danger
+    iconOn:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: mark_danger
+    priority: 9
+    useDelay: 1
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Threats.Mobs.ZombieSummoner.ZombieSummonerOrderActionEvent
+      type: CheeseEm

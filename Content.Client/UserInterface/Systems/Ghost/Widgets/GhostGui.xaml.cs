@@ -34,6 +34,7 @@ public sealed partial class GhostGui : UIWidget
 
     public void Hide()
     {
+        TargetWindow.ClearWarps(clearSearch: true);
         TargetWindow.Close();
         Visible = false;
     }

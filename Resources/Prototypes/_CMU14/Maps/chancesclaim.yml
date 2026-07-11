@@ -1,6 +1,7 @@
 - type: gameMap
   id: auchances
   mapName: Chances Claim
+  allegiance: WeylandYutani
   mapPath: /Maps/_CMU14/chances.yml
   mapsBelow:
   - /Maps/_CMU14/chances_below.yml

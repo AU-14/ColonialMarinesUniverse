@@ -94,6 +94,10 @@ internal sealed partial class BuckleSystem : SharedBuckleSystem
     /// </summary>
     private void OnBuckledEvent(Entity<BuckleComponent> ent, ref BuckledEvent args)
     {
+        // RMC14
+        if (HasComp<RMCStrapNoDrawDepthChangeComponent>(args.Strap))
+            return;
+
         if (!args.Strap.Comp.ModifyBuckleDrawDepth)
             return;
 

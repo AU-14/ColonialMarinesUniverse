@@ -213,6 +213,20 @@
     - state: xenoqueen
 
 - type: entity
+  parent: CMXenoQueen
+  id: RMCGuidebookXenoQueen
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RemoveComponents
+    components:
+    - type: EmitSoundOnSpawn
+      sound:
+        path: /Audio/_RMC14/Xeno/alien_queen_command.ogg
+        params:
+          volume: -8
+    - type: Gibbable
+
+- type: entity
   parent: RMCBaseMapIcon
   id: RMCLeaderMapIcon
   name: Leader Crown

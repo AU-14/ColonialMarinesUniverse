@@ -39,7 +39,7 @@
     - ActionXenoDirectionalStomp
     - ActionXenoDevolve
     tier: 3
-    hudOffset: -0.15,0.1
+    hudOffset: 0.25,0.70
     unlockAt: 900 # 15 minutes
   - type: XenoRegen
     standHealingMultiplier: 0.66
@@ -114,6 +114,12 @@
     armorPiercing: 5
   - type: RMCSize
     size: Immobile
+  - type: XenoChargerJockey
+    maxRiders: 3
+    riderLocalPositions:
+    - 0,0
+    - -0.5625,0
+    - 0.5625,0
   - type: RMCXenoDamageVisuals
     prefix: crusher
   - type: TacticalMapIcon
@@ -221,10 +227,7 @@
     damage:
       types:
         Blunt: 35
-  - type: XenoChargerJockey
-    maxRiders: 4
   - type: XenoCharger
   - type: XenoHidden
   - type: RMCActionOrder
     id: RMCXenoCrusherCharger
-

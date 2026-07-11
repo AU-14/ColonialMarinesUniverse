@@ -1,25 +1,22 @@
 using System.Numerics;
-using Content.Client._RMC14.Announce.Styling;
 using Content.Shared._RMC14.Announce;
-using Content.Shared._RMC14.Announce.Animations;
+using Content.Client._RMC14.Announce.Styling;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
 using Robust.Shared.Maths;
-using Robust.Client.ResourceManagement;
-using Robust.Shared.Log;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Robust.Client.ResourceManagement;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client._RMC14.Announce;
 
 public sealed partial class AnnouncementWidget : UIWidget
 {
     private static readonly Vector2 FallbackScreenSize = new(1920f, 1080f);
-    private static readonly ISawmill Sawmill = Logger.GetSawmill("rmc.announcement");
 
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IEntityManager _entityManager = default!;
@@ -27,11 +24,9 @@ public sealed partial class AnnouncementWidget : UIWidget
     [Dependency] private IResourceCache _resCache = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
 
-    public event Action<NetEntity?>? OnAnnouncementFinished;
+    public event Action? OnAnnouncementFinished;
 
     public ActiveAnnouncement? ActiveAnnouncement { get; private set; }
-    public bool PreviewMode { get; set; }
-    public Vector2? ForcedScreenSize { get; set; }
 
     private RichTextLabel[] _richTextLabels = Array.Empty<RichTextLabel>();
     private Control? _spriteContainer;
@@ -57,50 +52,31 @@ public sealed partial class AnnouncementWidget : UIWidget
         Visible = false;
     }
 
-    private static string ResolveFontPath(string fontId)
-    {
-        return fontId switch
-        {
-            "Cozette" => "/Fonts/Cozette/CozetteVector.ttf",
-            "CozetteBold" => "/Fonts/Cozette/CozetteVectorBold.ttf",
-            "Default" => "/Fonts/NotoSans/NotoSans-Regular.ttf",
-            "DefaultBold" => "/Fonts/NotoSans/NotoSans-Bold.ttf",
-            _ => "/Fonts/NotoSans/NotoSans-Bold.ttf"
-        };
-    }
-
-    public void ShowAnnouncement(AnnouncementDisplayData announcement)
+    public void ShowAnnouncement(AnnouncementNetData announcement)
     {
         if (ActiveAnnouncement != null)
             CleanupCurrentAnnouncement();
 
         ResetLayoutState();
-        var resolvedStyle = AnnouncementStyling.CreateDisplayStyle(announcement.Style, announcement.VisualScale);
-        AnnouncementStyling.ApplyLocalAppearanceOverrides(resolvedStyle, announcement);
 
         ActiveAnnouncement = new ActiveAnnouncement
         {
             Data = announcement,
-            ResolvedStyle = resolvedStyle,
             StartTime = _timing.CurTime,
+            CurrentLine = 0,
+            CurrentChar = 0,
             State = AnnouncementState.Animating,
             CleanText = PreprocessText(announcement.Text),
-            SlideStartPosition = GetSlideStartPosition(resolvedStyle),
-            ZoomCurrentScale = resolvedStyle.AnimationConfig.Animation is ZoomAnimationConfig zoomConfig
-                ? zoomConfig.StartScale
+            SlideStartPosition = GetSlideStartPosition(announcement.Style),
+            ZoomCurrentScale = announcement.Style.AnimationConfig.Animation == AnnouncementAnimation.Zoom
+                ? announcement.Style.AnimationConfig.AnimationEnhancements?.ZoomStartScale ?? 0.1f
                 : 1.0f,
-            FadeAlpha = 1.0f,
+            FadeAlpha = announcement.Style.AnimationConfig.Animation == AnnouncementAnimation.Fade ? 0.0f : 1.0f,
+            PulseScale = 1.0f,
             PulseAlpha = 1.0f
         };
 
         SetupUI();
-        if (PreviewMode)
-        {
-            SetAllLabelsText();
-            Visible = true;
-            return;
-        }
-
         ConfigureAnimationAndEffects();
         Visible = true;
     }
@@ -112,12 +88,6 @@ public sealed partial class AnnouncementWidget : UIWidget
         if (ActiveAnnouncement == null)
             return;
 
-        if (PreviewMode)
-        {
-            UpdatePosition();
-            return;
-        }
-
         var deltaTime = (float) args.DeltaSeconds;
         var currentTime = _timing.CurTime;
 
@@ -127,10 +97,9 @@ public sealed partial class AnnouncementWidget : UIWidget
 
     private void FinishAnnouncement()
     {
-        var speaker = ActiveAnnouncement?.Data.SpeakerEntity;
         CleanupCurrentAnnouncement();
         Visible = false;
-        OnAnnouncementFinished?.Invoke(speaker);
+        OnAnnouncementFinished?.Invoke();
     }
 
     private void CleanupCurrentAnnouncement()
@@ -210,21 +179,6 @@ public sealed partial class AnnouncementWidget : UIWidget
 
     private Vector2 ResolveScreenSize()
     {
-        if (ForcedScreenSize is { } forcedSize &&
-            forcedSize.X > 0f &&
-            forcedSize.Y > 0f)
-        {
-            return forcedSize;
-        }
-
-        if (Parent is Control control &&
-            control.Size.X > 0f &&
-            control.Size.Y > 0f)
-        {
-            return control.Size;
-        }
-
-        return FallbackScreenSize;
+        return Parent is UIScreen screen ? screen.Size : FallbackScreenSize;
     }
-
 }

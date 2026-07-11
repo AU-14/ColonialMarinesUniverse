@@ -1,6 +1,7 @@
 - type: gameMap
   id: au14sorokyne
   mapName: LV-976 Sorokyne Strata
+  allegiance: UPP
   mapPath: /Maps/_AU14/SorokyneMultiZ/sorokyne0.yml
   mapsBelow:
   - /Maps/_AU14/SorokyneMultiZ/sorokyne-1.yml

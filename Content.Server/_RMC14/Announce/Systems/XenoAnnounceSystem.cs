@@ -1,24 +1,28 @@
 using Content.Server.Administration.Logs;
 using Content.Shared._RMC14.Announce;
-using Content.Shared._RMC14.Xenonids.Announce;
 using Content.Shared._RMC14.Xenonids.Evolution;
+using Content.Server.Chat.Managers;
+using Content.Shared._RMC14.Xenonids.Announce;
 using Content.Shared._RMC14.Xenonids.Word;
 using Content.Shared.Chat;
 using Content.Shared.Database;
 using Content.Shared.Ghost;
 using Content.Shared.Popups;
+using Robust.Server.Audio;
 using Robust.Shared.Audio;
 using Robust.Shared.Player;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server._RMC14.Announce;
 
 public sealed partial class XenoAnnounceSystem : SharedXenoAnnounceSystem
 {
-    private static readonly ProtoId<AnnouncementPresetPrototype> QueenAnnouncementPreset = "XenoQueen";
+    private const string QueenAnnouncementPreset = "XenoQueen";
 
     [Dependency] private IAdminLogManager _adminLogs = default!;
-    [Dependency] private AnnouncementRouterSystem _announcementRouter = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private GeneralAnnounceSystem _generalAnnounce = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Announce(EntityUid source, Filter filter, string message, string wrapped, SoundSpecifier? sound = null, PopupType? popup = null, bool needsQueen = false)
     {
@@ -42,42 +46,32 @@ public sealed partial class XenoAnnounceSystem : SharedXenoAnnounceSystem
         if (source.IsValid())
             _adminLogs.Add(LogType.RMCXenoAnnounce, $"{ToPrettyString(source):source} xeno announced message: {message}");
 
-        var channels = AnnouncementChannels.Chat | AnnouncementChannels.Sound;
         if (source.IsValid() && IsQueenAnnouncementSource(source))
-            channels |= AnnouncementChannels.Overlay;
-
-        if (popup != null)
-            channels |= AnnouncementChannels.Popup;
-
-        _announcementRouter.Announce(new AnnouncementRequest
         {
-            Message = message,
-            Preset = QueenAnnouncementPreset,
-            Route = new AnnouncementRoute
-            {
-                Target = AnnouncementTarget.Xenos,
-                Speaker = source.IsValid() ? source : null,
-                Source = source.IsValid() ? source : null,
-                Channels = channels,
-            },
-            Chat = new AnnouncementChatOptions
+            var request = new AnnouncementRequest
             {
                 Message = message,
-                WrappedMessage = wrapped,
-                Channel = ChatChannel.Radio,
-            },
-            Sound = new AnnouncementSoundOptions
-            {
-                Sound = sound,
-            },
-            Popup = popup == null
-                ? null
-                : new AnnouncementPopupOptions
-                {
-                    Type = popup.Value,
-                    Message = message,
-                }
-        }, filter);
+                Preset = QueenAnnouncementPreset,
+                Target = AnnouncementTarget.Xenos,
+                Speaker = source,
+                Source = source,
+                ShowSprite = false,
+            };
+
+            _generalAnnounce.AnnounceAdvanced(request, filter);
+        }
+
+        _chat.ChatMessageToManyFiltered(filter, ChatChannel.Radio, message, wrapped, source, false, true, null, hidePopup: true);
+        _audio.PlayGlobal(sound, filter, true);
+
+        if (popup == null)
+            return;
+
+        foreach (var session in filter.Recipients)
+        {
+            if (session.AttachedEntity is { } recipient)
+                _popup.PopupEntity(message, recipient, recipient, popup.Value);
+        }
     }
 
     private bool IsQueenAnnouncementSource(EntityUid source)

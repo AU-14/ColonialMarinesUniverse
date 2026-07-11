@@ -157,7 +157,11 @@ public sealed partial class ThrowingSystem : EntitySystem
         bool unanchor = false,
         bool rotate = true)
     {
-        if (baseThrowSpeed <= 0 || direction == Vector2Helpers.Infinity || direction == Vector2Helpers.NaN || direction == Vector2.Zero || friction < 0)
+        if (!direction.IsValid()) { Logger.GetSawmill("cmu").Warning($"[TryThrow] Throw invalid direction {direction} entity: {ToPrettyString(uid)}"); return; }
+        if (!float.IsFinite(baseThrowSpeed)) { Logger.GetSawmill("cmu").Warning($"[TryThrow] Throw invalid speed {baseThrowSpeed} entity: {ToPrettyString(uid)}"); return; }
+        if (friction.HasValue && !float.IsFinite(friction.Value)) { Logger.GetSawmill("cmu").Warning($"[TryThrow] Throw invalid friction {friction.Value} entity: {ToPrettyString(uid)} using default"); friction = null; }
+
+        if (baseThrowSpeed <= 0 || direction == Vector2.Zero || friction < 0)
             return;
 
         if (unanchor && HasComp<AnchorableComponent>(uid))
@@ -187,6 +191,7 @@ public sealed partial class ThrowingSystem : EntitySystem
         var flyTime = direction.Length() / baseThrowSpeed;
         if (compensateFriction)
             flyTime *= FlyTimePercentage;
+
         comp.ThrownTime = _gameTiming.CurTime;
         comp.LandTime = comp.ThrownTime + TimeSpan.FromSeconds(flyTime);
         comp.PlayLandSound = playSound;

@@ -1,6 +1,6 @@
 - type: entity
-  parent: RMCStunBatonDamaged
   id: AU14TeleBaton
+  parent: RMCStunBatonDamaged
   name: telescopic baton
   description: A telescopic baton for incapacitating people with.
   components:
@@ -24,9 +24,6 @@
   - type: Item
     heldPrefix: on
     size: Small
-  - type: RMCStaminaDamageOnHit
-    damage: 5
-    jitterDuration: 0.3
   - type: MeleeRequiresSkill
     skills:
       RMCSkillPolice: 1
@@ -55,19 +52,17 @@
         variation: 0.1
     activatedDamage:
       types:
-        Blunt: 18
+        Blunt: 45 # It's meant to be a very strong melee option for Officers (CO gets one) and Synthetics. Instant stuns utilize flash anyway so I didn't add that as a feature
   - type: MeleeWeapon
     wideAnimationRotation: -135
     damage:
       types:
         Blunt: 5
-    bluntStaminaDamageFactor: 1.5
-    angle: 60
-    animation: WeaponArcThrust
-  - type: RMCStaminaDamageOnCollide
-    damage: 10
-  - type: LandAtCursor # it deals stamina damage when thrown
-  - type: Battery
-    maxCharge: 1000
-    startingCharge: 1000
+    animation: WeaponArcPunch
+  - type: ItemTogglePrefix
+    prefixOn: on
+    prefixOff: off
+  - type: RMCStaminaDamageOnHit
+    damage: 15 # 7 hits
+    jitterDuration: 0.4
   - type: UseDelay

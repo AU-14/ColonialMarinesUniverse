@@ -60,7 +60,9 @@ public sealed partial class XenoDancerSystem : EntitySystem
         xeno.Comp.ProjectileHitsSeen = 0;
         Dirty(xeno);
         args.Cancelled = true;
-        QueueDel(args.ProjUid);
+        if (_net.IsServer || IsClientSide(args.ProjUid))
+            QueueDel(args.ProjUid);
+
         _popup.PopupClient(Loc.GetString("cm-xeno-dancer-projectile-dodge"), xeno, xeno);
     }
 

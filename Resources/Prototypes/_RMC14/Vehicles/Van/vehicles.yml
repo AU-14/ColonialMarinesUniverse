@@ -672,10 +672,10 @@
     entryPoints:
     - offset: 1,-0.25
       radius: 0.6
-      interiorCoords: 0.4,1.65
+      interiorCoords: -0.42,1.6
     - offset: -1,-0.25
       radius: 0.6
-      interiorCoords: 0.55,0.43
+      interiorCoords: -0.53,0.84
     - offset: 0,2
       radius: 0.75
-      interiorCoords: -0.75,1.2
+      interiorCoords: -1.74,1.22

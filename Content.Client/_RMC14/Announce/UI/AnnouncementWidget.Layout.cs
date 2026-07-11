@@ -1,13 +1,12 @@
 using System.Numerics;
 using Content.Client._RMC14.Announce.Styling;
 using Content.Shared._RMC14.Announce;
-using Content.Shared._RMC14.Announce.Animations;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
-using System.Linq;
 using Robust.Shared.Maths;
+using System.Linq;
 using Robust.Shared.Utility;
 using Robust.Shared.Log;
 
@@ -24,47 +23,49 @@ public sealed partial class AnnouncementWidget
         _textContainers.Clear();
 
         var announcement = ActiveAnnouncement.Data;
-        var style = ActiveAnnouncement.ResolvedStyle;
-        var screenSize = ResolveScreenSize();
-        var screenScaleFactor = AnnouncementStyling.CalculateScreenScaleFactor(screenSize);
-        var spriteSeparation = CalculateSpriteSeparation(style, screenScaleFactor);
+        var style = announcement.Style;
 
         var titleText = !string.IsNullOrEmpty(announcement.Title) ? announcement.Title : style.TitleConfig.Title;
         _hasTitle = style.TitleConfig.ShowTitle && !string.IsNullOrEmpty(titleText);
         _titleOffset = _hasTitle ? 1 : 0;
 
-        _spriteContainer = _spriteBuilder.CreateSpriteContainer(announcement, style, screenSize);
-        var contentAlignment = GetTextAlignment(style, _spriteContainer != null);
-
         var contentContainer = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            HorizontalAlignment = contentAlignment,
+            HorizontalAlignment = HAlignment.Center,
             VerticalAlignment = VAlignment.Top,
-            SeparationOverride = spriteSeparation
+            SeparationOverride = 0
         };
 
-        var titleSpansAnnouncement = _hasTitle &&
-            (style.LayoutConfig.SpritePosition == AnnouncementSpritePosition.Left || style.LayoutConfig.SpritePosition == AnnouncementSpritePosition.Right) &&
-            style.LayoutConfig.TitlePosition is AnnouncementTitlePosition.Above or AnnouncementTitlePosition.Below;
+        var screenSize = ResolveScreenSize();
+        _spriteContainer = _spriteBuilder.CreateSpriteContainer(announcement, screenSize);
 
         var textLayout = _textLayoutBuilder.BuildTextLayout(
             announcement.Text,
-            titleSpansAnnouncement ? null : titleText,
+            titleText,
             style,
             _spriteContainer,
-            _hasTitle && !titleSpansAnnouncement,
-            titleSpansAnnouncement ? 0 : _titleOffset,
+            _hasTitle,
+            _titleOffset,
             announcement.TextOffset,
             screenSize);
 
-        var resolvedTextWidth = textLayout.MaxAllowedWidth;
+        _richTextLabels = textLayout.Labels;
         _textContainers.Add(textLayout.Container);
+        _activeTextMaxWidth = textLayout.MaxAllowedWidth;
+        ActiveAnnouncement.TitleLabels = textLayout.TitleLabels;
+        ActiveAnnouncement.TitleTrack = textLayout.TitleTrack;
+        ActiveAnnouncement.TitleViewportWidth = textLayout.TitleViewportWidth;
+        ActiveAnnouncement.TitleContentWidth = textLayout.TitleContentWidth;
+        ActiveAnnouncement.TitleScrollGap = textLayout.TitleScrollGap;
+        ActiveAnnouncement.TitleText = titleText;
+        ActiveAnnouncement.TitleRenderedFontSize = textLayout.TitleRenderedFontSize;
         ApplyTextStyling();
 
         if (_spriteContainer != null)
         {
             var spritePos = style.LayoutConfig.SpritePosition;
+
             var spriteWrapper = new Control
             {
                 HorizontalAlignment = HAlignment.Center,
@@ -83,7 +84,7 @@ public sealed partial class AnnouncementWidget
                         Orientation = BoxContainer.LayoutOrientation.Vertical,
                         HorizontalAlignment = HAlignment.Center,
                         VerticalAlignment = VAlignment.Top,
-                        SeparationOverride = spriteSeparation,
+                        SeparationOverride = 0,
                         HorizontalExpand = true,
                         VerticalExpand = true
                     };
@@ -110,7 +111,7 @@ public sealed partial class AnnouncementWidget
                     Orientation = BoxContainer.LayoutOrientation.Vertical,
                     HorizontalAlignment = HAlignment.Center,
                     VerticalAlignment = VAlignment.Top,
-                    SeparationOverride = spriteSeparation,
+                    SeparationOverride = 0,
                     HorizontalExpand = true,
                     VerticalExpand = true
                 };
@@ -138,124 +139,8 @@ public sealed partial class AnnouncementWidget
             }
         }
 
-        if (titleSpansAnnouncement)
-        {
-            contentContainer.Measure(screenSize);
-            var maxAnnouncementWidth = CalculateMaxAnnouncementWidth(screenSize, style, _spriteContainer, spriteSeparation);
-            var preferredAnnouncementWidth = _textLayoutBuilder.CalculateStandaloneTitlePreferredWidth(
-                titleText,
-                style,
-                screenSize,
-                contentContainer.DesiredSize.X,
-                maxAnnouncementWidth);
-
-            if (preferredAnnouncementWidth > contentContainer.DesiredSize.X)
-            {
-                resolvedTextWidth += preferredAnnouncementWidth - contentContainer.DesiredSize.X;
-                _textLayoutBuilder.ExpandTextLayoutWidth(textLayout, resolvedTextWidth);
-                contentContainer.Measure(screenSize);
-            }
-
-            _activeTextMaxWidth = resolvedTextWidth;
-            var titleAlignment = GetTextAlignment(style, _spriteContainer != null);
-            var titleBuild = _textLayoutBuilder.BuildStandaloneTitleLayout(
-                titleText,
-                style,
-                screenSize,
-                MathF.Max(contentContainer.DesiredSize.X, textLayout.MaxAllowedWidth),
-                titleAlignment);
-
-            _richTextLabels = new[] { titleBuild.PrimaryLabel }.Concat(textLayout.Labels).ToArray();
-            ActiveAnnouncement.TitleLabels = titleBuild.TitleLabels;
-            ActiveAnnouncement.TitleTrack = titleBuild.TitleTrack;
-            ActiveAnnouncement.TitleViewportWidth = titleBuild.TitleViewportWidth;
-            ActiveAnnouncement.TitleContentWidth = titleBuild.TitleContentWidth;
-            ActiveAnnouncement.TitleScrollGap = titleBuild.TitleScrollGap;
-            ActiveAnnouncement.TitleText = titleText;
-            ActiveAnnouncement.TitleRenderedFontSize = titleBuild.TitleRenderedFontSize;
-
-            var root = new BoxContainer
-            {
-                Orientation = BoxContainer.LayoutOrientation.Vertical,
-                HorizontalAlignment = contentAlignment,
-                VerticalAlignment = VAlignment.Top,
-                SeparationOverride = Math.Max(2, (int) MathF.Ceiling(style.TextConfig.LineHeight * 0.15f))
-            };
-
-            if (style.LayoutConfig.TitlePosition == AnnouncementTitlePosition.Above)
-            {
-                root.AddChild(titleBuild.Container);
-                root.AddChild(contentContainer);
-            }
-            else
-            {
-                root.AddChild(contentContainer);
-                root.AddChild(titleBuild.Container);
-            }
-
-            AddChild(root);
-        }
-        else
-        {
-            _activeTextMaxWidth = resolvedTextWidth;
-            _richTextLabels = textLayout.Labels;
-            ActiveAnnouncement.TitleLabels = textLayout.TitleLabels;
-            ActiveAnnouncement.TitleTrack = textLayout.TitleTrack;
-            ActiveAnnouncement.TitleViewportWidth = textLayout.TitleViewportWidth;
-            ActiveAnnouncement.TitleContentWidth = textLayout.TitleContentWidth;
-            ActiveAnnouncement.TitleScrollGap = textLayout.TitleScrollGap;
-            ActiveAnnouncement.TitleText = titleText;
-            ActiveAnnouncement.TitleRenderedFontSize = textLayout.TitleRenderedFontSize;
-            AddChild(contentContainer);
-        }
-
+        AddChild(contentContainer);
         SetInitialVisibility();
-        ApplyUIScale(style.LayoutConfig.UIScale);
-    }
-
-    private static float CalculateMaxAnnouncementWidth(
-        Vector2 screenSize,
-        AnnouncementStyle style,
-        Control? spriteContainer,
-        int spriteSeparation)
-    {
-        var maxTextWidth = AnnouncementStyling.CalculateMaxTextWidth(screenSize, style.LayoutConfig.Position);
-        if (spriteContainer == null)
-            return maxTextWidth;
-
-        if (style.LayoutConfig.SpritePosition != AnnouncementSpritePosition.Left &&
-            style.LayoutConfig.SpritePosition != AnnouncementSpritePosition.Right)
-        {
-            return maxTextWidth;
-        }
-
-        spriteContainer.Measure(screenSize);
-        return maxTextWidth + spriteContainer.DesiredSize.X + spriteSeparation;
-    }
-
-    private static int CalculateSpriteSeparation(AnnouncementStyle style, float screenScaleFactor)
-    {
-        var configured = Math.Max(0f, style.LayoutConfig.SpriteSpacing);
-        var fontDriven = Math.Max(
-            style.TextConfig.FontSize * 0.20f,
-            style.TextConfig.ShowSpeakerName ? style.TextConfig.SpeakerNameFontSize * 0.50f : 0f);
-
-        if (style.SpriteConfig.ShowSpriteBox)
-            fontDriven = Math.Max(fontDriven, style.SpriteConfig.SpriteBoxBorderThickness * 2f);
-
-        var spacing = MathF.Max(configured, MathF.Max(2f * screenScaleFactor, fontDriven));
-        return Math.Max(0, (int)MathF.Ceiling(spacing));
-    }
-
-    private static int CalculateSpeakerNameSeparation(AnnouncementStyle style, float screenScaleFactor)
-    {
-        var configured = Math.Max(0f, style.LayoutConfig.SpriteSpacing * 0.5f);
-        var fontDriven = Math.Max(
-            style.TextConfig.SpeakerNameFontSize * 0.35f,
-            style.TextConfig.FontSize * 0.15f);
-
-        var spacing = MathF.Max(configured, MathF.Max(2f * screenScaleFactor, fontDriven));
-        return Math.Max(0, (int)MathF.Ceiling(spacing));
     }
 
     private void SetSpriteDisplayProperties(Control clipContainer, SpriteView spriteView, AnnouncementStyle style, float spriteScale, float screenScaleFactor)
@@ -344,7 +229,7 @@ public sealed partial class AnnouncementWidget
 
         if (!_prototypeManager.TryIndex<ShaderPrototype>(style.SpriteConfig.SpriteBoxShader, out var shaderPrototype))
         {
-            Sawmill.Warning($"[AnnouncementWidget] Sprite box shader '{style.SpriteConfig.SpriteBoxShader}' not found.");
+            Logger.GetSawmill("content").Warning($"[AnnouncementWidget] Sprite box shader '{style.SpriteConfig.SpriteBoxShader}' not found.");
             return;
         }
 
@@ -365,31 +250,12 @@ public sealed partial class AnnouncementWidget
             overlay.SetPositionFirst();
     }
 
-    private void ApplyUIScale(float uiScale)
-    {
-        if (MathHelper.CloseTo(uiScale, 1.0f))
-            return;
-
-        var screenSize = ResolveScreenSize();
-        Measure(screenSize);
-        var desired = DesiredSize;
-        if (desired.X <= 0f || desired.Y <= 0f)
-            return;
-
-        var scaledWidth = desired.X * uiScale;
-        var scaledHeight = desired.Y * uiScale;
-        SetWidth = scaledWidth;
-        SetHeight = scaledHeight;
-        MinWidth = scaledWidth;
-        MinHeight = scaledHeight;
-    }
-
     private CRTSettings GetCRTSettingsFromStyle(AnnouncementStyle style)
     {
-        if (style.AnimationConfig.EnableCRT &&
-            style.AnimationConfig.CRTSettings != null)
+        if (style.AnimationConfig.AnimationEnhancements?.EnableCRT == true &&
+            style.AnimationConfig.AnimationEnhancements.CRTSettings != null)
         {
-            return style.AnimationConfig.CRTSettings;
+            return style.AnimationConfig.AnimationEnhancements.CRTSettings;
         }
 
         return new CRTSettings
@@ -412,7 +278,7 @@ public sealed partial class AnnouncementWidget
         if (ActiveAnnouncement == null)
             return;
 
-        var style = ActiveAnnouncement.ResolvedStyle;
+        var style = ActiveAnnouncement.Data.Style;
 
         foreach (var outerContainer in _textContainers)
         {
@@ -444,9 +310,9 @@ public sealed partial class AnnouncementWidget
         if (ActiveAnnouncement == null)
             return;
 
-        var animation = ActiveAnnouncement.ResolvedStyle.AnimationConfig.Animation;
+        var animation = ActiveAnnouncement.Data.Style.AnimationConfig.Animation;
 
-        if (animation is TypewriterAnimationConfig or GlitchAnimationConfig)
+        if (animation == AnnouncementAnimation.Typewriter || animation == AnnouncementAnimation.Glitch)
         {
             for (var i = _titleOffset; i < _richTextLabels.Length; i++)
             {
@@ -498,40 +364,27 @@ public sealed partial class AnnouncementWidget
 
     private void UpdatePosition()
     {
-        if (Parent is not Control parent || ActiveAnnouncement == null)
+        if (Parent is not UIScreen screen || ActiveAnnouncement == null)
             return;
 
-        var screenSize = parent.Size.X > 0f && parent.Size.Y > 0f
-            ? parent.Size
-            : ResolveScreenSize();
+        var screenSize = screen.Size;
         Measure(screenSize);
         var widgetSize = DesiredSize;
-        if (Width > 0f && Height > 0f)
-            widgetSize = new Vector2(Width, Height);
-        var announcement = ActiveAnnouncement.Data;
-        var style = ActiveAnnouncement.ResolvedStyle;
+        var style = ActiveAnnouncement.Data.Style;
 
-        var position = CalculatePosition(screenSize, widgetSize, announcement, style);
+        var position = CalculatePosition(screenSize, widgetSize, style);
         position += ActiveAnnouncement.CurrentSlideOffset + ActiveAnnouncement.CurrentBounceOffset;
 
         UpdateLayoutRect(position, widgetSize);
 
-        if (style.AnimationConfig.Animation is ZoomAnimationConfig)
+        if (style.AnimationConfig.Animation == AnnouncementAnimation.Zoom)
         {
             SetWidth = widgetSize.X * ActiveAnnouncement.ZoomCurrentScale;
             SetHeight = widgetSize.Y * ActiveAnnouncement.ZoomCurrentScale;
         }
     }
 
-    private static Vector2 CalculatePosition(Vector2 screenSize, Vector2 widgetSize, AnnouncementDisplayData announcement, AnnouncementStyle style)
-    {
-        if (announcement.ScreenPositionOverride is { } normalizedPosition)
-            return CalculateCustomPosition(screenSize, widgetSize, normalizedPosition);
-
-        return CalculateStylePosition(screenSize, widgetSize, style);
-    }
-
-    private static Vector2 CalculateStylePosition(Vector2 screenSize, Vector2 widgetSize, AnnouncementStyle style)
+    private static Vector2 CalculatePosition(Vector2 screenSize, Vector2 widgetSize, AnnouncementStyle style)
     {
         const float padding = 50f;
         const float topPadding = 100f;
@@ -547,33 +400,8 @@ public sealed partial class AnnouncementWidget
             AnnouncementPosition.BottomLeft => new Vector2(padding, screenSize.Y - widgetSize.Y - padding),
             AnnouncementPosition.BottomCenter => new Vector2((screenSize.X - widgetSize.X) / 2, screenSize.Y - widgetSize.Y - padding),
             AnnouncementPosition.BottomRight => new Vector2(screenSize.X - widgetSize.X - padding, screenSize.Y - widgetSize.Y - padding),
-            AnnouncementPosition.FullScreen => Vector2.Zero,
             _ => new Vector2((screenSize.X - widgetSize.X) / 2, (screenSize.Y - widgetSize.Y) / 2)
         };
-    }
-
-    private static Vector2 CalculateCustomPosition(Vector2 screenSize, Vector2 widgetSize, Vector2 normalizedPosition)
-    {
-        var clamped = new Vector2(
-            Math.Clamp(normalizedPosition.X, 0f, 1f),
-            Math.Clamp(normalizedPosition.Y, 0f, 1f));
-
-        var position = new Vector2(screenSize.X * clamped.X, screenSize.Y * clamped.Y);
-
-        const float minVisible = 48f;
-        position.X = ClampPositionAxis(position.X, widgetSize.X, screenSize.X, minVisible);
-        position.Y = ClampPositionAxis(position.Y, widgetSize.Y, screenSize.Y, minVisible);
-        return position;
-    }
-
-    private static float ClampPositionAxis(float position, float size, float screenSize, float minVisible)
-    {
-        var min = minVisible - size;
-        var max = screenSize - minVisible;
-        if (min > max)
-            return (screenSize - size) * 0.5f;
-
-        return Math.Clamp(position, min, max);
     }
 
     private void UpdateLayoutRect(Vector2 position, Vector2 size)

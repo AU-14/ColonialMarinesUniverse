@@ -16,6 +16,8 @@ allegiance-wy-name = Weyland-Yutani
 allegiance-wy-description = Weyland-Yutani Corporation. "Building Better Worlds." The dominant megacorporation in human space.
 allegiance-twe-name = Three World Empire
 allegiance-twe-description = Three World Empire. A constitutional monarchy spanning the United Kingdom, Japan, India, and Australia.
+allegiance-neutral-name = Non-Aligned
+allegiance-neutral-description = Neither friend nor foe to any banner. Unaligned free ports and drifting outposts open to honest traders or the desperate.
 
 # Origins - United Americas
 origin-ua-mexico-name = UA - Mexico

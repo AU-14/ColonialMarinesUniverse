@@ -160,15 +160,19 @@ public abstract partial class SharedXenoWeedsSystem : EntitySystem
 
     private void OnWeedsTerminating(Entity<XenoWeedsComponent> ent, ref EntityTerminatingEvent args)
     {
+        PruneNetworkedWeedRefs(ent);
+
         _designerBinding.CleanupWeeds(ent.Owner);
         _weedboundWall.HandleWeedsTerminating(ent.Owner, ent.Comp);
 
         if (!ent.Comp.IsSource)
         {
-            if (_weedsQuery.TryComp(ent.Comp.Source, out var weeds))
+            if (ent.Comp.Source is { } source &&
+                _weedsQuery.TryComp(source, out var weeds))
             {
                 weeds.Spread.Remove(ent);
-                Dirty(ent.Comp.Source.Value, weeds);
+                PruneNetworkedWeedRefs((source, weeds));
+                Dirty(source, weeds);
             }
 
             foreach (var weededEntity in ent.Comp.LocalWeeded)
@@ -214,6 +218,8 @@ public abstract partial class SharedXenoWeedsSystem : EntitySystem
 
     private void OnWeedsMapInit(Entity<XenoWeedsComponent> ent, ref MapInitEvent args)
     {
+        PruneNetworkedWeedRefs(ent);
+
         // Weedbound structures register themselves on their own MapInit/Startup.
         // Only do the expensive rebuild pass if we have serialized runtime bookkeeping to clear.
         if (ent.Comp.WeedboundStructures.Count > 0)
@@ -242,11 +248,13 @@ public abstract partial class SharedXenoWeedsSystem : EntitySystem
 
     private void OnWallWeedsRemove<T>(Entity<XenoWallWeedsComponent> ent, ref T args)
     {
-        if (!TryComp(ent.Comp.Weeds, out XenoWeedsComponent? weeds))
+        if (ent.Comp.Weeds is not { } weedsUid ||
+            !TryComp(weedsUid, out XenoWeedsComponent? weeds))
             return;
 
         weeds.Spread.Remove(ent);
-        Dirty(ent.Comp.Weeds.Value, weeds);
+        PruneNetworkedWeedRefs((weedsUid, weeds));
+        Dirty(weedsUid, weeds);
     }
 
     private void OnWeedableAnchorStateChanged(Entity<XenoWeedableComponent> weedable, ref AnchorStateChangedEvent args)
@@ -257,7 +265,12 @@ public abstract partial class SharedXenoWeedsSystem : EntitySystem
 
     private void OnWeedableRemove<T>(Entity<XenoWeedableComponent> weedable, ref T args)
     {
-        if (_net.IsServer && weedable.Comp.Entity != null)
+        if (!_net.IsServer)
+            return;
+
+        RemoveLocalWeeded(weedable);
+
+        if (weedable.Comp.Entity != null)
         {
             QueueDel(weedable.Comp.Entity);
         }
@@ -640,16 +653,65 @@ public abstract partial class SharedXenoWeedsSystem : EntitySystem
     {
         weeds.Comp ??= EnsureComp<XenoWeedsComponent>(weeds);
         weeds.Comp.IsSource = false;
-        weeds.Comp.Source = source;
+        weeds.Comp.Source = TerminatingOrDeleted(source) ? null : source.Owner;
+        PruneNetworkedWeedRefs((weeds.Owner, weeds.Comp));
         Dirty(weeds);
 
-        if (Resolve(source, ref source.Comp, false))
+        if (!TerminatingOrDeleted(source) &&
+            Resolve(source, ref source.Comp, false))
         {
-            source.Comp.Spread.Add(weeds);
+            if (!source.Comp.Spread.Contains(weeds))
+                source.Comp.Spread.Add(weeds);
+
+            PruneNetworkedWeedRefs((source.Owner, source.Comp));
             Dirty(source);
         }
 
         return (weeds, weeds.Comp);
+    }
+
+    private void RemoveLocalWeeded(Entity<XenoWeedableComponent> weedable)
+    {
+        RemoveLocalWeededAt(weedable.Owner);
+
+        foreach (var direction in _rmcMap.CardinalDirections)
+        {
+            RemoveLocalWeededAt(weedable.Owner, direction);
+        }
+    }
+
+    private void RemoveLocalWeededAt(EntityUid weeded, Direction? direction = null)
+    {
+        using var nearbyWeeds = _rmcMap.GetAnchoredEntitiesEnumerator<XenoWeedsComponent>(weeded, direction);
+        while (nearbyWeeds.MoveNext(out var weedUid))
+        {
+            if (!_weedsQuery.TryComp(weedUid, out var weeds))
+                continue;
+
+            if (!weeds.LocalWeeded.Remove(weeded))
+                continue;
+
+            PruneNetworkedWeedRefs((weedUid, weeds));
+            Dirty(weedUid, weeds);
+        }
+    }
+
+    private void PruneNetworkedWeedRefs(Entity<XenoWeedsComponent> weeds)
+    {
+        var dirty = false;
+
+        if (weeds.Comp.Source is { } source && TerminatingOrDeleted(source))
+        {
+            weeds.Comp.Source = null;
+            dirty = true;
+        }
+
+        dirty |= weeds.Comp.Spread.RemoveAll(uid => TerminatingOrDeleted(uid)) > 0;
+        dirty |= weeds.Comp.LocalWeeded.RemoveAll(uid => TerminatingOrDeleted(uid)) > 0;
+        dirty |= weeds.Comp.WeedboundStructures.RemoveAll(uid => TerminatingOrDeleted(uid)) > 0;
+
+        if (dirty && !TerminatingOrDeleted(weeds.Owner))
+            Dirty(weeds);
     }
 
     public override void Update(float frameTime)

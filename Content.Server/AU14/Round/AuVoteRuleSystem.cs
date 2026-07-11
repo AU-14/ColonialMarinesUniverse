@@ -60,6 +60,6 @@ public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponen
 
         _waitingForMinimumPlayers = false;
         var voteManagerSystem = _entityManager.System<AuRoundSystem>();
-        voteManagerSystem.StartVoteSequence(() => {});
+        voteManagerSystem.StartVoteSequence(() => { });
     }
 }

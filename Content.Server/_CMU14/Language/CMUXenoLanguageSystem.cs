@@ -17,12 +17,17 @@ public sealed partial class CMUXenoLanguageSystem : EntitySystem
     {
         SubscribeLocalEvent<XenoComponent, DetermineEntityLanguagesEvent>(OnXenoDetermineEntityLanguages);
         SubscribeLocalEvent<XenoComponent, DetermineLanguageEvent>(OnXenoDetermineLanguage);
+        SubscribeLocalEvent<LanguageComponent, HiveChangedEvent>(OnLanguageHiveChanged);
     }
 
     private void OnXenoDetermineEntityLanguages(Entity<XenoComponent> ent, ref DetermineEntityLanguagesEvent args)
     {
         if (!ShouldUseEnglish(ent.Owner))
+        {
+            args.SpokenLanguages.Remove(SharedLanguageSystem.CommonLanguage);
+            args.UnderstoodLanguages.Remove(SharedLanguageSystem.CommonLanguage);
             return;
+        }
 
         args.SpokenLanguages.Add(SharedLanguageSystem.CommonLanguage);
         args.UnderstoodLanguages.Add(SharedLanguageSystem.CommonLanguage);
@@ -30,8 +35,16 @@ public sealed partial class CMUXenoLanguageSystem : EntitySystem
 
     private void OnXenoDetermineLanguage(Entity<XenoComponent> ent, ref DetermineLanguageEvent args)
     {
-        if (ShouldUseEnglish(ent.Owner))
+        if (ShouldUseEnglish(ent.Owner) &&
+            !_language.CanSpeak(ent.Owner, args.Language))
+        {
             args.Language = SharedLanguageSystem.CommonLanguage;
+        }
+    }
+
+    private void OnLanguageHiveChanged(Entity<LanguageComponent> ent, ref HiveChangedEvent args)
+    {
+        RefreshEnglish(ent.Owner);
     }
 
     public void RefreshEnglish(EntityUid uid)
@@ -43,6 +56,11 @@ public sealed partial class CMUXenoLanguageSystem : EntitySystem
         }
 
         _language.UpdateEntityLanguages(uid);
+        if (ShouldUseEnglish(uid) &&
+            _language.CanSpeak(uid, SharedLanguageSystem.CommonLanguage))
+        {
+            _language.SetLanguage(uid, SharedLanguageSystem.CommonLanguage);
+        }
     }
 
     private bool ShouldUseEnglish(EntityUid uid)

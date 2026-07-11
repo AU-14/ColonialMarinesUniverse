@@ -74,6 +74,18 @@
   id: RMCSmartPistol
 
 - type: Tag
+  id: RMCTankFlamerSPP
+
+- type: Tag
+  id: RMCTankFlamerFL3B
+
+- type: Tag
+  id: RMCTankFlamerFL3X
+
+- type: Tag
+  id: RMCWeaponFlamerSpecUPP
+
+- type: Tag
   id: RMCMK80
 
 - type: Tag

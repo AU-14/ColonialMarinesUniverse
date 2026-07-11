@@ -110,6 +110,7 @@
     - id: RMCMagazineRifleM4SPRA19Incendiary
       amount: 2
 
+
 - type: entity
   parent: RMCCrateAmmo
   id: RMCCrateMagazineM4SPRCustomStandard
@@ -194,6 +195,39 @@
     - id: RMCTankFlamerLarge
     - id: RMCTankFlamerLargeB
     - id: RMCTankFlamerLargeX
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCratePyroTankMixedUPP
+  name: LPO80-T Mixed Fuel Tank Crate (extended x1, type-B x1, type-X x1)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCTankFlamerXLargeUPP
+    - id: RMCTankFlamerBLargeUPP
+    - id: RMCTankFlamerLargeUPP
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCratePyroTankMixedWY
+  name: Flammenwerfer-3 Mixed Fuel Tank Crate (extended x1, type-B x1, type-X x1)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCTankFlamerFL3
+    - id: RMCTankFlamerFL3B
+    - id: RMCTankFlamerFL3X
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCratePyroTankMixedHAZOPS
+  name: M240A2 Mixed Fuel Tank Crate (extended x1, type-B x1, type-X x1)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14TankFlamerM240A2HAZOPS
+    - id: AU14TankFlamerM240A2HAZOPSNapalmB
+    - id: AU14TankFlamerM240A2HAZOPSNapalmX
 
 - type: entity
   parent: RMCCrateAmmo

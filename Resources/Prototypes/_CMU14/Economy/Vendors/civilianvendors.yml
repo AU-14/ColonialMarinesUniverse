@@ -91,10 +91,10 @@
       choices: { CMUcivilianclotheswindbreaker: 1 }
       entries:
       - id: AU14WindbreakerBlue
-      - id: AU14WindbreakerGray
-      - id: AU14WindbreakerGreen
-      - id: AU14WindbreakerKhakiGreenMix
-      - id: AU14WindbreakerKhaki
+      - id: RMCJacketWindbreakerGrey
+      - id: RMCJacketWindbreaker
+      - id: RMCJacketWindbreakerFirstResponder
+      - id: RMCJacketWindbreakerBrown
     - name: Parkas
       choices: { CMUcivilianclothesparka: 1 }
       entries:

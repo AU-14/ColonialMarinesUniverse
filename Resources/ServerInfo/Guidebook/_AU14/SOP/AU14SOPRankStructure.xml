@@ -2,99 +2,96 @@
   # Rank Structure
 
   ## Rank Authority
-  Authority is determined by rank. The highest ranking individual present is the acting authority and holds final decision making power, unless command is explicitly delegated by an individual of higher rank. Department heads have sole authority over their departments and may only be overridden by the Acting Commander or Executive Officer.
-  If two individuals of equal rank are present, authority defaults to the individual with greater seniority (time served).
+    Authority is determined by command structure. Department heads have sole authority over their departments and may only be overridden by the Commander, Adjutant or CMP.
 
   ## Department Authority
-  Heads of Department (LO, CMP, CMO, IO, EO, and APOLLO) hold the final authority over those operating in their department regardless of rank. If cross department operations would be required (LO and EO working on logisitcs together) it then falls to highest rank.
+    Heads of Department (LO, CMP, CMO and APOLLO) hold the most authority over those operating in their department; no outside authority may overrule a department head's internal orders to their subordinates, unless approved by the Commander or Adjutant.
 
-  Departments members may not have their orders overruled by anyone unless approved by the XO or ACO.
+    Department members may not have their orders overruled by anyone unless approved by the Commander or Adjutant.
 
-  XO and CO hold final authority on all department decisions including dismissal of a Department Head if found to be in violation of SOP or UCMJ.
+  The Commander and Adjutant hold final authority on all department decisions, including dismissal of a Department Head if found to be in violation of SOP or UCMJ.
 
-  ## Specialized Authority
-  Certain jobs and roles have specialized authority depending on their location and use, these are outlined below.
-    - Logistic Technicians hold authority over Req, and may order the arrest of any member that violate their orders in regard of REQ MATTERS (i.e. a rifleman is refusing to leave the line / REQ interior. NOT the CO is refusing to increase budget after already doing so once)
-    - Ordnance Technicians hold authority over their workshop, if anyone poses a hazard they may be dismissed (i.e. a rifleman is refusing to disable the pilot light on their M34 or a pyro on their M34T)
-    - DCCs hold the same authority as a DP in regards to aircraft interiors, and may dismiss anyone from the interior if they find them disruptive to operations
-    - Weapon Specialists hold the sole authority over their preferred speciality. They cannot be ordered by Command or their SL to pick a certain speciality. This does NOT apply to WS called in or awoken by Command
+  ## Specialised Authority
+    Certain jobs and roles have specialised authority depending on their location and use; these are outlined below.
+      - Logistic Technicians and the LO hold authority over requisitions and, for any reason they deem fit, may deny service or use of the budget.
+      - Ordnance Technicians and the LO hold authority over their workshop; if anyone poses a hazard, they may have it removed from them for any reason they deem fit.
+      - DCCs hold the same authority as a DP regarding aircraft interiors and may dismiss anyone from the interior if they find them disruptive to operations, so long as it does not violate dropship SOP.
+      - Weapon Specialists hold the sole authority over their preferred speciality. They cannot be ordered by Command or their SL to pick a certain speciality.
+
+  ## Change of Command
+    If at any point during an operation, commandership of the unit needs to be handed over, the following SOP’s should be followed.
+      - If an Adjutant is available, they should be next in line to become the Commander
+      - If no Adjutant is available, a member of the command staff should be placed as Commander
+      - If no command staff remains, the highest-ranking officer is to assume command.
 
   ## Field & Tactical Authority
-  Tactical Authority refers to the right to direct placement and employment of members of a combat arms unit, and the unit itself.
-   - The Squad Leader and relative Staff Officers have tactical authority over their respective squad which cannot be overwritten by any personnel not directly involved with the tactical operations of the combat arms, this includes Junior Officers or Senior Enlisted who have deployed and attached to squads.
-   - The SL can relinquish authority to another individual of higher rank on their own will, only with approval from the ACO or XO, and only to complete objectives relevant to the new authority (IOs gathering Intel, SEA conducting training, MPs conducting a field arrest.)
-   - The Acting Commanding Officer, following the line of succession, has full authority over their unit regardless of the presence of an individual of higher rank on their vessel or installation, unless that individual commands a unit of greater scale such as a Battalion, Brigade, etc., or unless that individual has signed permission from the Commanding Officer's own superior. (I.E. A Major Pilot cannot overwrite a Captain CO, nor can a LtCol. Company Commander overwrite the CO of another Marine Company without express permission.)
+    Tactical Authority refers to the right to direct the placement and employment of members of a combat arms unit and the unit itself.
+      - The Squad Leader and relative Staff Officers have tactical authority over their respective squad, which can only be overwritten by a member of the command staff.
+      - The Commanding Officer has full authority over their unit regardless of the presence of an individual of higher rank on their vessel or installation, unless that individual is of the rank of O6 or higher, such as a Colonel or Provost Marshal.
 
   # Current Rank Structure
 
-    Below is the currently enforced rank structure for use, subject to change at demand of High Command
+    Below is the currently enforced rank structure for use, subject to change at the demand of High Command
 
+  ## The Commander
+    The following report to the above role
+      - APOLLO
+      - Adjutant
 
+  ## The Adjutant
+    The following report to the above role
+      - All Department Heads (LO, CMO, CMP)
+      - All Junior Officers (IO, EO & Staff)
+      - Advisors
 
-  ## The Acting Commanding Officer / Operations Command (OPSCOM)
-  The following report to the above role
-    - Apollo (AI) - Only reports to ACO
-      - Support Synth - Reports to AI
-      - Working Joe - Reports to AI
-    - Adjutant Officer - Reports to AO
-      - Staff Officer
-      - Support Synth - Reports to AO
-      - Working Joe - Reports to AO
-        - Advisor - Reports to AO/CO/SO
+  ## APOLLO
+    The following report to the above role
+      - Support Synthetics
+      - Working Joes
 
-  ## Operation Command (OPSCOM) consisnts of the above jobs and is directed by the Advisor (E6-E9) and Staff Officer (O2)
-  The follow report to the above role
-    - Logistics
-    - Military Police
-    - Medical
-    - Combat Arms
-    - Intelligence
-    - Vehicle Crew
-    - Engineering
+  ## The CMP
+    The following report to the above role
+      - Military Police.
 
-  ## Logisitics (LOGI) Reports to Operation Command
-  The following jobs are apart of LOGI and report to their Head
-    - Logistics Officer - Department Head
-      - Requisitions Technician
+  ## The CMO
+    The following report to the above role
+      - Doctors
+      - Medical Technicians
 
-  ## Military Police (MP) Reports to Operation Command
-  The following jobs are apart of MP and report to their Head
-    - Chief Military Policeman - Department Head
-      - Military Policeman
+  ## The Dropship Pilots
+    The following report to the above role
+      - Dropship Crew Chiefs
 
-  ## Medical (MED) Reports to Operation Command
-  The following jobs are apart of MED and report to their Head
-    - Chief Medical Officer - Department Head
-      - Doctor
-      - Medical Technician
+  ## The LO
+    The following report to the above role
+      - Auxiliary technicians
 
-  ## Intelligence (INTI.) Reports to Operation Command
-  The following jobs are apart of INTI and report to their Head
-    - Intelligence Officer - Department Head
-      - Intelligence Technician
+  ## The Engineering Officer
+    The following report to the above role
+      - Workshop Technicians
+      - Maintenance Technicians
 
-  ## Engineering (ENGI) Reports to Operation Command
-  The following jobs are apart of ENGI and report to their Head
-    - Engineering Officer - Department Head
-      - Maintenance Technician
-      - Ordance Technician
+  ## The Intelligence Officer
+    The following report to the above role
+    -  Intelligence Technician
 
-  ## Vehilce Crew (VC) Reports to Operation Command
-  The following jobs are apart of VC and report to their Head
-    - Dropship/Gunship Pilot
-      - Dropship Crew Chief
-    - Vehicle Commander - Vehicle Department Head
-      - Vehicle Crewman
+  ## The Vehicle Commander
+    The following report to the above role
+      - Vehicle Crew
 
-  ## Combat Arms (COMARMS) Reports to Operation Command
-  The following jobs are apart of COMARMS and report to their Head
-    - Sqaud Leader
+  ## The Junior Officers
+    The following report to the above role
+      - Squad Leaders
+      - Mechanised Crew
+      - Flight Crew
+
+  ## The Squad Leaders
+    The following report to the above role
       - Fire Team Leader
-        - Radio Traffic Operator
-          - Corpsman
-          - Combat Technician
-          - Automatic Rifleman
-          - Rifleman
-          - Weapons Specialist
-
-  </Document>
+      - Radio Traffic Operator
+      - Corpsman
+      - Combat Technician
+      - Automatic Rifleman
+      - Rifleman
+      - Weapons Specialist
+</Document>

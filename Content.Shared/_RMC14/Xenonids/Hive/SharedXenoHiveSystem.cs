@@ -568,7 +568,7 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
     {
         if (TryGetBurrowedLarvaSpawnPositionAt<HiveCoreComponent>(hive, out position) ||
             TryGetBurrowedLarvaSpawnPositionAt<XenoEvolutionGranterComponent>(hive, out position) ||
-            TryGetBurrowedLarvaSpawnPositionAt<XenoComponent>(hive, out position))
+            TryGetBurrowedLarvaSpawnPositionAtXeno(hive, out position))
         {
             return true;
         }
@@ -583,10 +583,24 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
         var candidates = EntityQueryEnumerator<T, HiveMemberComponent>();
         while (candidates.MoveNext(out var uid, out _, out var member))
         {
-            if (member.Hive != hive.Owner ||
-                TerminatingOrDeleted(uid) ||
-                HasComp<BurrowedLarvaSpawnBlockedComponent>(uid) ||
-                _mobState.IsDead(uid))
+            if (!CanSpawnBurrowedLarvaAt(uid, member, hive))
+                continue;
+
+            position = _transform.GetMoverCoordinates(uid);
+            return true;
+        }
+
+        position = default;
+        return false;
+    }
+
+    private bool TryGetBurrowedLarvaSpawnPositionAtXeno(Entity<HiveComponent> hive, out EntityCoordinates position)
+    {
+        var candidates = EntityQueryEnumerator<XenoComponent, HiveMemberComponent>();
+        while (candidates.MoveNext(out var uid, out var xeno, out var member))
+        {
+            if (!CanSpawnBurrowedLarvaAt(uid, member, hive) ||
+                !CanXenoSpawnBurrowedLarva(xeno))
             {
                 continue;
             }
@@ -597,6 +611,19 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
 
         position = default;
         return false;
+    }
+
+    private bool CanSpawnBurrowedLarvaAt(EntityUid uid, HiveMemberComponent member, Entity<HiveComponent> hive)
+    {
+        return member.Hive == hive.Owner &&
+               !TerminatingOrDeleted(uid) &&
+               !HasComp<BurrowedLarvaSpawnBlockedComponent>(uid) &&
+               !_mobState.IsDead(uid);
+    }
+
+    private static bool CanXenoSpawnBurrowedLarva(XenoComponent xeno)
+    {
+        return xeno.Tier > 0 || xeno.BypassTierCount;
     }
 
     private void OnAutoAssignHiveAdded(Entity<AutoAssignHiveComponent> ent, ref ComponentStartup args)

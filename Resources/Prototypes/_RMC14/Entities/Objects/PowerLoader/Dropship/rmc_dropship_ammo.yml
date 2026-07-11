@@ -46,6 +46,9 @@
         volume: -6
     impactEffects:
     - RMCEffectExplosionParticle
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 400
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoGAU
@@ -65,6 +68,9 @@
         Brute: 80
     armorPiercing: 40
     travelTime: 6
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 450
 
 - type: entity
   id: RMCEffectExplosionParticle
@@ -126,7 +132,7 @@
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocket
   id: RMCDropshipAttachmentAmmoRocketWidowmaker
-  name: AIM-224B 'Widowmaker'
+  name: AIM-224A 'Widowmaker'
   description: The AIM-224B missile is a retrofit of the latest in air-to-air missile technology. Earning the nickname of 'Widowmaker' from various dropship pilots after improvements to its guidance warhead prevents it from being jammed leading to its high kill rate. Not well suited for ground bombardment but its high velocity makes it reach its target quickly. This one has been modified to be a free-fall bomb as a result of dropship ammo shortages. Can be loaded into the LAU-444 Guided Missile Launcher.
   components:
   - type: DropshipAmmo
@@ -135,6 +141,10 @@
       total: 3000
       slope: 5.5
       max: 55
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 700
+
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocket
   id: AU14DropshipAttachmentAmmoRocketWidowmakerDoubleADMIN
@@ -172,6 +182,9 @@
       total: 905
       slope: 15
       max: 45
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 500
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocket
@@ -194,6 +207,9 @@
       type: RMCTileFireNapalm
       range: 3
       cardinalRange: 5
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 2500
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocket
@@ -211,6 +227,9 @@
       total: 1850
       slope: 3.2
       max: 32
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 400
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocket
@@ -235,6 +254,9 @@
       ordinalRange: 3
     soundWarning: /Audio/_RMC14/Effects/rocketpod_fire.ogg
     markerWarning: true
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 1000
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocket
@@ -257,6 +279,9 @@
       range: 1
       cardinalRange: 3
       ordinalRange: 3
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 500
 
 - type: entity
   abstract: true
@@ -294,6 +319,9 @@
     impactEffects:
     - RMCEffectExplosionParticle
     - RMCSmokeExplosionProofSmall
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 500
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocketMiniMike
@@ -311,6 +339,9 @@
       type: RMCTileFireMiniMike
       range: 1
       cardinalRange: 2
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 700
 
 - type: entity
   parent: RMCDropshipAttachmentBase
@@ -331,6 +362,9 @@
     deployBlacklist:
       components:
       - Turret
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 400
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocket
@@ -357,6 +391,9 @@
     markerWarning: true
     impactEffects:
     - RMCSmokeExplosionProofSmall
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 450
 
 - type: entity
   parent: RMCSmokeExplosionProof
@@ -405,6 +442,9 @@
       max: 100000000
     impactEffects:
     - AU14EffectExplosionParticleJDAM
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 7500
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocket
@@ -429,6 +469,9 @@
     impactEffects:
     - AU14EffectExplosionParticleJDAM
     - AU14SmokeExplosionProofJDAM
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 8000
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocket
@@ -453,6 +496,9 @@
     impactEffects:
     - RMCEffectExplosionParticle
     - RMCSmokeExplosionProofSmall
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 400
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocket
@@ -474,6 +520,9 @@
       total: 3000
       slope: 5.5
       max: 55
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 900
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocket
@@ -498,6 +547,9 @@
     impactEffects:
     - RMCEffectExplosionParticle
     - RMCSmokeExplosionProofSmall
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 700
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocket
@@ -522,3 +574,6 @@
     impactEffects:
     - RMCEffectExplosionParticle
     - RMCSmokeExplosionProofSmall
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 500

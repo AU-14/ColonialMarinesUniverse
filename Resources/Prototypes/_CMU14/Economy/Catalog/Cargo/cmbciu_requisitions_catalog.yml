@@ -268,6 +268,8 @@
         crate: RMCCrateMagazineBGel
     - name: Specialist Ammo
       entries:
+      - cost: 2000
+        crate: RMCCratePyroTankMixed
       # Sniper
       - cost: 2000
         crate: AU14CrateMagazineSpecSniperM96S
@@ -298,6 +300,9 @@
         crate: AU14CrateMagazineSpecScoutFLAK
       - cost: 1500
         crate: AU14CrateMagazineSpecScoutMixed
+      # CMP
+      - cost: 450
+        crate: AU14CrateBoxRSH9SL
     - name: AP Ammo
       entries:
       - cost: 1000

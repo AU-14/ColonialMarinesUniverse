@@ -65,6 +65,7 @@ public abstract partial class SharedDoorSystem : EntitySystem
 
         SubscribeLocalEvent<DoorComponent, ComponentInit>(OnComponentInit);
         SubscribeLocalEvent<DoorComponent, ComponentRemove>(OnRemove);
+        SubscribeLocalEvent<EntityTerminatingEvent>(OnEntityTerminating);
 
         SubscribeLocalEvent<DoorComponent, AfterAutoHandleStateEvent>(OnHandleState);
 
@@ -114,6 +115,23 @@ public abstract partial class SharedDoorSystem : EntitySystem
     private void OnRemove(Entity<DoorComponent> door, ref ComponentRemove args)
     {
         _activeDoors.Remove(door);
+    }
+
+    private void OnEntityTerminating(ref EntityTerminatingEvent args)
+    {
+        var terminating = args.Entity.Owner;
+
+        foreach (var ent in _activeDoors)
+        {
+            var door = ent.Comp;
+            if (door.Deleted || door.CurrentlyCrushing.Count == 0)
+                continue;
+
+            if (!door.CurrentlyCrushing.Remove(terminating))
+                continue;
+
+            Dirty(ent.Owner, door);
+        }
     }
 
     private void OnEmagged(EntityUid uid, DoorComponent door, ref GotEmaggedEvent args)
@@ -251,7 +269,7 @@ public abstract partial class SharedDoorSystem : EntitySystem
 
     private void OnWeldAttempt(EntityUid uid, DoorComponent component, WeldableAttemptEvent args)
     {
-        if (component.CurrentlyCrushing.Count > 0)
+        if (HasCurrentlyCrushing((uid, component)))
         {
             args.Cancel();
             return;
@@ -518,7 +536,10 @@ public abstract partial class SharedDoorSystem : EntitySystem
             PhysicsSystem.SetCanCollide(uid, collidable, body: physics);
 
         if (!collidable)
+        {
             door.CurrentlyCrushing.Clear();
+            door.IsCrushing = false;
+        }
 
         if (door.Occludes)
             _occluder.SetEnabled(uid, collidable, occluder);
@@ -535,10 +556,15 @@ public abstract partial class SharedDoorSystem : EntitySystem
         if (!door.CanCrush)
             return;
 
+        PruneCurrentlyCrushing((uid, door));
+
         // Find entities and apply curshing effects
         var stunTime = door.DoorStunTime + door.OpenTimeOne;
         foreach (var entity in GetColliding(uid, physics))
         {
+            if (TerminatingOrDeleted(entity))
+                continue;
+
             door.CurrentlyCrushing.Add(entity);
             if (door.CrushDamage != null)
                 _damageableSystem.TryChangeDamage(entity, door.CrushDamage, origin: uid);
@@ -546,6 +572,7 @@ public abstract partial class SharedDoorSystem : EntitySystem
             _stunSystem.TryParalyze(entity, stunTime, true);
         }
 
+        door.IsCrushing = door.CurrentlyCrushing.Count != 0;
         if (door.CurrentlyCrushing.Count == 0)
             return;
 
@@ -608,6 +635,7 @@ public abstract partial class SharedDoorSystem : EntitySystem
 
     private void PreventCollision(EntityUid uid, DoorComponent component, ref PreventCollideEvent args)
     {
+        PruneCurrentlyCrushing((uid, component));
         if (component.CurrentlyCrushing.Contains(args.OtherEntity))
         {
             args.Cancelled = true;
@@ -755,6 +783,8 @@ public abstract partial class SharedDoorSystem : EntitySystem
                 continue;
             }
 
+            PruneCurrentlyCrushing(ent);
+
             if (Paused(ent))
                 continue;
 
@@ -779,7 +809,7 @@ public abstract partial class SharedDoorSystem : EntitySystem
         var door = ent.Comp;
         door.NextStateChange = null;
 
-        if (door.CurrentlyCrushing.Count > 0 && door.State != DoorState.Opening)
+        if (HasCurrentlyCrushing(ent) && door.State != DoorState.Opening)
         {
             // This is a closed door that is crushing people and needs to auto-open. Note that we don't check "can open"
             // here. The door never actually finished closing and we don't want people to get stuck inside of doors.
@@ -830,6 +860,22 @@ public abstract partial class SharedDoorSystem : EntitySystem
                 Log.Error($"Welded door was in the list of active doors. Door: {ToPrettyString(ent)}");
                 break;
         }
+    }
+
+    private bool HasCurrentlyCrushing(Entity<DoorComponent> door)
+    {
+        PruneCurrentlyCrushing(door);
+        return door.Comp.CurrentlyCrushing.Count > 0;
+    }
+
+    private void PruneCurrentlyCrushing(Entity<DoorComponent> door)
+    {
+        var wasCrushing = door.Comp.IsCrushing;
+        door.Comp.CurrentlyCrushing.RemoveWhere(uid => TerminatingOrDeleted(uid));
+        door.Comp.IsCrushing = door.Comp.CurrentlyCrushing.Count != 0;
+
+        if (wasCrushing != door.Comp.IsCrushing)
+            Dirty(door);
     }
     #endregion
 }

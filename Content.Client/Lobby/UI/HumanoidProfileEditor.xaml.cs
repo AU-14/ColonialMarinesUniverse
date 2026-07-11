@@ -1605,17 +1605,21 @@ namespace Content.Client.Lobby.UI
             var id = job.ID;
             var name = job.LocalizedName;
 
-            if (job.MarineAuthorityLevel > 0 ||
-                ContainsAny(id, name, "PlatCo", "PlatOp", "Commander", "Command", "Officer", "Leader", "Sergeant", "Advisor"))
-            {
+            if (job.MarineAuthorityLevel > 0
+                    || ContainsAny(id, name, "PlatCo", "Adjutant", "PlatOp", "Commander", "Command", "Advisor"))
                 return ("command", Loc.GetString("humanoid-profile-editor-segment-command"));
-            }
 
             if (ContainsAny(id, name, "Pilot", "Dropship", "Crew Chief", "DCC"))
                 return ("flight", Loc.GetString("humanoid-profile-editor-segment-flight"));
 
-            if (ContainsAny(id, name, "Doctor", "Corpsman", "Medic", "Technician", "Tech", "Police", "Synth", "Working Joe", "Auxiliary"))
+            if (ContainsAny(id, name, "Officer", "Chief")) // after Crew Chief
+                return ("officer", Loc.GetString("humanoid-profile-editor-segment-officer"));
+
+            if (ContainsAny(id, name, "Doctor", "AuxTech", "Police", "VehicleCrewman", "Synth", "Working Joe", "Auxiliary"))
                 return ("support", Loc.GetString("humanoid-profile-editor-segment-support"));
+
+            if (ContainsAny(id, name, "Leader", "Sergeant", "RadioTelephone"))
+                return ("leader", Loc.GetString("humanoid-profile-editor-segment-leader"));
 
             return ("line", Loc.GetString("humanoid-profile-editor-segment-line"));
         }
@@ -1628,9 +1632,11 @@ namespace Content.Client.Lobby.UI
             return GetMilitaryJobSegment(job).Key switch
             {
                 "command" => 0,
-                "flight" => 1,
-                "support" => 2,
-                _ => 3,
+                "officer" => 1,
+                "flight" => 2,
+                "support" => 3,
+                "leader" => 4,
+                _ => 5,
             };
         }
 

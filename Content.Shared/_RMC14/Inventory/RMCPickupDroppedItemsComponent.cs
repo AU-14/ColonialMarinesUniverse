@@ -2,10 +2,10 @@
 
 namespace Content.Shared._RMC14.Inventory;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent]
 [Access(typeof(SharedCMInventorySystem))]
 public sealed partial class RMCPickupDroppedItemsComponent : Component
 {
-    [DataField, AutoNetworkedField]
+    [DataField]
     public List<EntityUid> DroppedItems = new();
 }

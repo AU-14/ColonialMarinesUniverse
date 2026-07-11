@@ -342,12 +342,13 @@ public sealed partial class PullingSystem : EntitySystem
         if (pullableComp.Puller == null)
             return;
 
+        var oldPuller = pullableComp.Puller;
         if (!_timing.ApplyingState)
         {
             // Joint shutdown
             if (pullableComp.PullJointId != null)
             {
-                _joints.RemoveJoint(pullableUid, pullableComp.PullJointId);
+                RemovePullJoint(pullableUid, oldPuller, pullableComp.PullJointId);
                 pullableComp.PullJointId = null;
             }
 
@@ -357,7 +358,6 @@ public sealed partial class PullingSystem : EntitySystem
             }
         }
 
-        var oldPuller = pullableComp.Puller;
         if (oldPuller != null)
             RemComp<ActivePullerComponent>(oldPuller.Value);
 
@@ -509,8 +509,7 @@ public sealed partial class PullingSystem : EntitySystem
             return true;
 
         resolvedPullable.PullJointId = null;
-        _joints.RemoveJoint(pullableUid, pullJointId);
-        _joints.RemoveJoint(pullerUid, pullJointId);
+        RemovePullJoint(pullableUid, pullerUid, pullJointId);
         Dirty(pullableUid, resolvedPullable);
         return true;
     }
@@ -539,12 +538,10 @@ public sealed partial class PullingSystem : EntitySystem
             if (resolvedPullable.PullJointId is { } oldJointId)
             {
                 resolvedPullable.PullJointId = null;
-                _joints.RemoveJoint(pullableUid, oldJointId);
-                _joints.RemoveJoint(pullerUid, oldJointId);
+                RemovePullJoint(pullableUid, pullerUid, oldJointId);
             }
 
-            _joints.RemoveJoint(pullableUid, pullJointId);
-            _joints.RemoveJoint(pullerUid, pullJointId);
+            RemovePullJoint(pullableUid, pullerUid, pullJointId);
 
             if (!TryComp(pullerUid, out PhysicsComponent? pullerPhysics) ||
                 !TryComp(pullableUid, out PhysicsComponent? pullablePhysics))
@@ -583,6 +580,27 @@ public sealed partial class PullingSystem : EntitySystem
                Resolve(pullableUid, ref pullableComp, false) &&
                pullerComp.Pulling == pullableUid &&
                pullableComp.Puller == pullerUid;
+    }
+
+    private void RemovePullJoint(EntityUid pullableUid, EntityUid? pullerUid, string pullJointId)
+    {
+        _joints.RemoveJoint(pullableUid, pullJointId);
+
+        if (pullerUid is { } puller && puller != pullableUid)
+            _joints.RemoveJoint(puller, pullJointId);
+
+        var query = EntityQueryEnumerator<JointComponent>();
+        while (query.MoveNext(out var uid, out var joints))
+        {
+            if (uid == pullableUid ||
+                pullerUid is { } currentPuller && uid == currentPuller ||
+                !joints.GetJoints.ContainsKey(pullJointId))
+            {
+                continue;
+            }
+
+            _joints.RemoveJoint(uid, pullJointId);
+        }
     }
 
     public bool TryStartPull(EntityUid pullerUid, EntityUid pullableUid,
@@ -659,8 +677,7 @@ public sealed partial class PullingSystem : EntitySystem
         {
             // Pull joint IDs are deterministic per pulled entity. If stale joint state
             // survived a previous pull, clear it before creating the replacement.
-            _joints.RemoveJoint(pullableUid, pullJointId);
-            _joints.RemoveJoint(pullerUid, pullJointId);
+            RemovePullJoint(pullableUid, pullerUid, pullJointId);
 
             var joint = _joints.CreateDistanceJoint(pullableUid, pullerUid,
                     pullablePhysics.LocalCenter, pullerPhysics.LocalCenter,

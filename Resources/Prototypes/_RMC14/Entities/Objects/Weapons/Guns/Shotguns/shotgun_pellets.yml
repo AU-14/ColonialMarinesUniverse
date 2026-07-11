@@ -76,8 +76,6 @@
       falloff: 1
   - type: CMArmorPiercing
     amount: 20
-  - type: XenoSundering
-    amount: 0.75
   - type: RMCStunOnHit
     stuns:
     - whitelist:
@@ -132,8 +130,6 @@
       shader: unshaded
   - type: Projectile
     damage: {}
-  - type: XenoSundering
-    amount: 0
   - type: RMCProjectileDamageFalloff
     thresholds:
     - range: 12
@@ -162,8 +158,6 @@
     damage:
       types:
         Piercing: 30
-  - type: XenoSundering
-    amount: 0.1
   - type: ProjectileSpread
     proto: CMPelletShotgunFlechette
     count: 4

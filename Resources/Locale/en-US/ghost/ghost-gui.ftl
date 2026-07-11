@@ -32,6 +32,7 @@ ghost-target-window-tab-spp = SPP
 ghost-target-window-tab-tse-royal = TSE/Royal
 ghost-target-window-tab-cmb-provost = CMB/Provost
 ghost-target-window-tab-threat = Threat
+ghost-target-window-tab-cursed = Cursed
 ghost-target-window-tab-ape = APE
 ghost-target-window-tab-locations = Locations
 ghost-target-window-tab-other = Other
@@ -52,6 +53,7 @@ ghost-target-window-subtab-thralls = Thralls
 ghost-target-window-subtab-abominations = Abominations
 ghost-target-window-subtab-leaders = Leaders
 ghost-target-window-subtab-members = Members
+ghost-target-window-subtab-summoners = Summoners
 ghost-target-window-subtab-warp-points = Warp Points
 
 ghost-roles-window-title = Threats and Third Parties

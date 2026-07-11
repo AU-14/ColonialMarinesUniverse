@@ -905,6 +905,76 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         return _hands.CountFreeHands(user.Owner) > 0;
     }
 
+    internal bool TryGetActivePowerLoader(EntityUid user, [NotNullWhen(true)] out Entity<PowerLoaderComponent>? loader)
+    {
+        loader = default;
+
+        if (TryComp(user, out PowerLoaderComponent? loaderComp))
+        {
+            loader = (user, loaderComp);
+            return true;
+        }
+
+        if (!HasComp<ActivePowerLoaderPilotComponent>(user) ||
+            !TryComp(user, out BuckleComponent? buckle) ||
+            buckle.BuckledTo is not { } buckledTo ||
+            !TryComp(buckledTo, out PowerLoaderComponent? buckledLoader))
+        {
+            return false;
+        }
+
+        loader = (buckledTo, buckledLoader);
+        return true;
+    }
+
+    internal bool TryGetInteractionUser(EntityUid user, out EntityUid actor)
+    {
+        actor = user;
+
+        if (!TryComp(user, out PowerLoaderComponent? _) ||
+            !TryComp(user, out StrapComponent? strap))
+        {
+            return true;
+        }
+
+        foreach (var buckled in strap.BuckledEntities)
+        {
+            if (HasComp<ActivePowerLoaderPilotComponent>(buckled))
+            {
+                actor = buckled;
+                return true;
+            }
+        }
+
+        actor = default;
+        return false;
+    }
+
+    internal bool CanPickupWithActiveHand(EntityUid user)
+    {
+        if (!TryGetActivePowerLoader(user, out var loader) ||
+            !TryGetLoaderHandForUser(user, loader.Value, out var loaderHand))
+        {
+            return false;
+        }
+
+        return !_hands.TryGetHeldItem(loader.Value.Owner, loaderHand, out _);
+    }
+
+    internal bool TryPickupWithActiveHand(EntityUid user, EntityUid target)
+    {
+        if (!TryGetActivePowerLoader(user, out var loader) ||
+            !TryGetLoaderHandForUser(user, loader.Value, out var loaderHand) ||
+            _hands.TryGetHeldItem(loader.Value.Owner, loaderHand, out _))
+        {
+            return false;
+        }
+
+        _hands.DoPickup(loader.Value, loaderHand, target);
+        SyncHands(loader.Value);
+        return true;
+    }
+
     private bool CanPickupPopup(
         Entity<PowerLoaderComponent> loader,
         Entity<PowerLoaderGrabbableComponent?> grabbable,
@@ -936,6 +1006,45 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         {
             yield return entity;
         }
+    }
+
+    private bool TryGetLoaderHandForUser(
+        EntityUid user,
+        Entity<PowerLoaderComponent> loader,
+        [NotNullWhen(true)] out string? loaderHandId)
+    {
+        loaderHandId = null;
+
+        var activeUser = user;
+        if (user == loader.Owner)
+        {
+            foreach (var buckled in GetBuckled(loader.Owner))
+            {
+                if (HasComp<ActivePowerLoaderPilotComponent>(buckled))
+                {
+                    activeUser = buckled;
+                    break;
+                }
+            }
+        }
+
+        if (_hands.GetActiveHand(activeUser) is not { } activeHandId ||
+            !_hands.TryGetHand(activeUser, activeHandId, out var activeHand))
+        {
+            return false;
+        }
+
+        if (!_hands.EnumerateHands(loader.Owner).TryFirstOrDefault(
+                handId =>
+                    _hands.TryGetHand(loader.Owner, handId, out var loaderHand) &&
+                    loaderHand.Value.Location == activeHand.Value.Location,
+                out var matchedHand))
+        {
+            return false;
+        }
+
+        loaderHandId = matchedHand;
+        return true;
     }
 
     private void SyncHands(Entity<PowerLoaderComponent> loader)

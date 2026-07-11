@@ -163,6 +163,7 @@
   - type: DeleteOnTrigger
   - type: SpawnOnTerminate
     spawn: VehicleDragonFlameImpact
+    spawnOffset: 0.5
     projectileAdjust: false
   - type: IgnoreArc
   - type: IgnorePredictionHide

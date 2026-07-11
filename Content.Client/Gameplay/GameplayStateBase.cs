@@ -215,21 +215,29 @@ namespace Content.Client.Gameplay
             if (args.Viewport is IViewportControl vp && kArgs.PointerLocation.IsValid)
             {
                 var mousePosWorld = vp.PixelToMap(kArgs.PointerLocation.Position);
+                var mapSystem = _entitySystemManager.GetEntitySystem<MapSystem>();
 
-                if (vp is ScalingViewport svp)
+                if (!mapSystem.MapExists(mousePosWorld.MapId))
                 {
-                    entityToClick = GetClickedEntity(mousePosWorld, svp.Eye);
+                    coordinates = EntityCoordinates.Invalid;
                 }
                 else
                 {
-                    entityToClick = GetClickedEntity(mousePosWorld);
-                }
-                var transformSystem = _entitySystemManager.GetEntitySystem<SharedTransformSystem>();
-                var mapSystem = _entitySystemManager.GetEntitySystem<MapSystem>();
+                    if (vp is ScalingViewport svp)
+                    {
+                        entityToClick = GetClickedEntity(mousePosWorld, svp.Eye);
+                    }
+                    else
+                    {
+                        entityToClick = GetClickedEntity(mousePosWorld);
+                    }
 
-                coordinates = mapSystem.TryFindGridAt(mousePosWorld, out var uid, out _) ?
-                    mapSystem.MapToGrid(uid, mousePosWorld) :
-                    transformSystem.ToCoordinates(mousePosWorld);
+                    var transformSystem = _entitySystemManager.GetEntitySystem<SharedTransformSystem>();
+
+                    coordinates = mapSystem.TryFindGridAt(mousePosWorld, out var uid, out _) ?
+                        mapSystem.MapToGrid(uid, mousePosWorld) :
+                        transformSystem.ToCoordinates(mousePosWorld);
+                }
             }
             else
             {

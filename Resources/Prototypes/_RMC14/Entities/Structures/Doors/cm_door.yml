@@ -148,7 +148,7 @@
   - type: AirlockReceiverXenoClaws
   - type: Damageable
     damageContainer: StructuralMarine
-    damageModifierSet: StructuralMarine
+    damageModifierSet: CMU14StructuralMarine
   - type: Destructible
     thresholds:
     - trigger:

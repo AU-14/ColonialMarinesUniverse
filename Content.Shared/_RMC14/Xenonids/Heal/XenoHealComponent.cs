@@ -24,12 +24,6 @@ public sealed partial class XenoHealComponent : Component
     [DataField, AutoNetworkedField]
     public TimeSpan TimeBetweenHeals = TimeSpan.FromSeconds(2);
 
-    [DataField, AutoNetworkedField]
-    public FixedPoint2 SunderHeal = 1.5;
-
-    [DataField, AutoNetworkedField]
-    public FixedPoint2 SunderHealRecoveryMultiplier = 0.0003;
-
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan NextHeal;
 }

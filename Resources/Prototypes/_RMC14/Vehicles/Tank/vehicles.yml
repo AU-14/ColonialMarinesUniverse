@@ -101,6 +101,8 @@
   - type: Damageable
     damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameTank
+  - type: ReceiverXenoClaws
+    minimumClawStrength: Sharp
   - type: InteractionOutline
   - type: Sprite
     drawdepth: Mobs

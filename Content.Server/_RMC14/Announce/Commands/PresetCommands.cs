@@ -7,9 +7,9 @@ using Content.Shared._RMC14.Announce;
 using Robust.Shared.Console;
 using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server._RMC14.Announce.Commands;
+
 
 [AdminCommand(AdminFlags.Moderator)]
 public sealed class AnnouncePresetCommand : IConsoleCommand
@@ -20,8 +20,7 @@ public sealed class AnnouncePresetCommand : IConsoleCommand
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        var announceSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<AnnouncementRouterSystem>();
-        var presetResolver = new Core.AnnouncementPresetResolver(IoCManager.Resolve<IPrototypeManager>());
+        var announceSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<GeneralAnnounceSystem>();
 
         if (args.Length < 2)
         {
@@ -38,42 +37,35 @@ public sealed class AnnouncePresetCommand : IConsoleCommand
             return;
         }
 
-        var resolvedPreset = presetResolver.Resolve(presetId);
-        if (resolvedPreset == null)
-        {
-            shell.WriteError($"Unknown announcement preset '{presetId}'");
-            return;
-        }
-
         var request = new AnnouncementRequest
         {
             Message = message,
-            Preset = resolvedPreset.ID
+            Preset = presetId
         };
 
         if (options.TryGetValue("entity", out var entityStr) &&
             EntityUid.TryParse(entityStr, out var entityId))
         {
-            request.Route.Speaker = entityId;
+            request.Speaker = entityId;
         }
         else if (shell.Player?.AttachedEntity is { } playerEntity)
         {
-            request.Route.Speaker = playerEntity;
+            request.Speaker = playerEntity;
         }
 
         if (options.TryGetValue("name", out var name))
         {
-            request.Route.SpeakerNameOverride = name;
+            request.SpeakerNameOverride = name;
         }
 
         if (options.TryGetValue("target", out var targetStr) &&
             Enum.TryParse<AnnouncementTarget>(targetStr, true, out var target))
         {
-            request.Route.Target = target;
+            request.Target = target;
         }
 
-        announceSystem.Announce(request);
-        shell.WriteLine($"Sent announcement preset '{resolvedPreset.ID}': {message}");
+        announceSystem.AnnounceAdvanced(request);
+        shell.WriteLine($"Sent announcement preset '{presetId}': {message}");
     }
 
     private (string message, Dictionary<string, string> options) ParseMessageAndOptions(string[] args)
@@ -81,7 +73,7 @@ public sealed class AnnouncePresetCommand : IConsoleCommand
         var options = new Dictionary<string, string>();
         var messageParts = new List<string>();
         var inQuotes = false;
-        var currentMessage = string.Empty;
+        var currentMessage = "";
 
         foreach (var arg in args)
         {

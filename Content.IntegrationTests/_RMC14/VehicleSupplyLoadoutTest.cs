@@ -480,6 +480,69 @@ public sealed class VehicleSupplyLoadoutTest
     }
 
     [Test]
+    public async Task SppTankLauncherLoadoutInstallsIntoLauncherSlot()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        EntityUid vehicle = default;
+
+        await server.WaitPost(() =>
+        {
+            vehicle = server.EntMan.SpawnEntity("VehicleSPPTank", map.GridCoords);
+        });
+
+        await pair.RunTicksSync(5);
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var factory = server.EntMan.ComponentFactory;
+            var entMan = server.EntMan;
+            var supply = entMan.System<VehicleSupplySystem>();
+            var itemSlots = entMan.System<ItemSlotsSystem>();
+
+            Assert.That(prototypes.TryIndex<EntityPrototype>(ConsoleId, out var consoleProto), Is.True);
+            Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
+
+            var entry = console!.Vehicles.Single(v => v.Vehicle.Id == "VehicleSPPTank");
+            var commandEntry = console.Vehicles.Single(v => v.Vehicle.Id == "VehicleSPPTankCommand");
+            var entries = new Dictionary<string, VehicleSupplyEntry>
+            {
+                ["VehicleSPPTank"] = entry,
+                ["VehicleSPPTankCommand"] = commandEntry,
+            };
+
+            AssertLoadoutOption(
+                entries,
+                "VehicleSPPTank",
+                "secondary",
+                "VehicleSPPTankHJ35TLauncher",
+                "primary::turret-launcher");
+            AssertLoadoutOption(
+                entries,
+                "VehicleSPPTankCommand",
+                "secondary",
+                "VehicleSPPTankHJ35TLauncher",
+                "primary::turret-launcher");
+
+            Assert.That(supply.DebugApplyLoadoutForTest(
+                vehicle,
+                entry,
+                new Dictionary<string, string> { ["secondary"] = "VehicleSPPTankHJ35TLauncher" }),
+                Is.True);
+
+            Assert.That(itemSlots.TryGetSlot(vehicle, "primary", out var turretSlot), Is.True);
+            Assert.That(turretSlot!.Item, Is.Not.Null);
+
+            AssertSlotItem(entMan, itemSlots, turretSlot.Item!.Value, "turret-cannon", "VehicleSPPTankP17702");
+            AssertSlotItem(entMan, itemSlots, turretSlot.Item!.Value, "turret-launcher", "VehicleSPPTankHJ35TLauncher");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task BlackfootLoadoutOptionsInstallIntoDeclaredSlots()
     {
         await using var pair = await PoolManager.GetServerClient();

@@ -1,7 +1,6 @@
-using System.Numerics;
-using Content.Shared._RMC14.Announce.Animations;
 using Robust.Shared.Maths;
 using Robust.Shared.Serialization;
+using System.Numerics;
 
 namespace Content.Shared._RMC14.Announce;
 
@@ -9,7 +8,10 @@ namespace Content.Shared._RMC14.Announce;
 public sealed partial class AnnouncementAnimationConfig
 {
     [DataField]
-    public IAnnouncementAnimationConfig Animation { get; set; } = new TypewriterAnimationConfig();
+    public AnnouncementAnimation Animation { get; set; } = AnnouncementAnimation.Typewriter;
+
+    [DataField]
+    public float PrintSpeed { get; set; } = 0.03f;
 
     [DataField]
     public float HoldDuration { get; set; } = 3f;
@@ -18,10 +20,10 @@ public sealed partial class AnnouncementAnimationConfig
     public float FlickerChance { get; set; } = 0.01f;
 
     [DataField]
-    public bool EnableCRT { get; set; } = false;
+    public float GlitchChance { get; set; } = 0.005f;
 
     [DataField]
-    public CRTSettings? CRTSettings { get; set; }
+    public RealisticAnimations AnimationEnhancements { get; set; } = new();
 }
 
 [DataDefinition, Serializable, NetSerializable]
@@ -329,4 +331,32 @@ public sealed partial class CRTSettings
 
     [DataField]
     public float FlashMaxBrightness { get; set; } = 0.05f;
+}
+
+[DataDefinition, Serializable, NetSerializable]
+public sealed partial class RealisticAnimations
+{
+    [DataField]
+    public float SlideDuration { get; set; } = 1.0f;
+
+    [DataField]
+    public SlideDirection SlideFrom { get; set; } = SlideDirection.Top;
+
+    [DataField]
+    public float ZoomStartScale { get; set; } = 0.1f;
+
+    [DataField]
+    public float ZoomDuration { get; set; } = 1.0f;
+
+    [DataField]
+    public int BounceCount { get; set; } = 3;
+
+    [DataField]
+    public float BounceHeight { get; set; } = 15f;
+
+    [DataField]
+    public bool EnableCRT { get; set; } = false;
+
+    [DataField]
+    public CRTSettings? CRTSettings { get; set; }
 }

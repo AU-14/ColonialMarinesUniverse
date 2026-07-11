@@ -92,6 +92,10 @@
     - Epilepsy
     - NonResuscitable
     - NoEnglish
+    - CMUProstheticLeftArm
+    - CMUProstheticRightArm
+    - CMUProstheticLeftLeg
+    - CMUProstheticRightLeg
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -185,7 +189,7 @@
 - type: startingGear
   id: AU14GearopforDCC
   equipment:
-    id: AU14IDCardopforDCC
+    id: AU14IDCardOPFORDCC
     ears: AU14HeadsetOpforCommand
 
 - type: entity

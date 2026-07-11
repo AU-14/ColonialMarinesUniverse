@@ -125,4 +125,3 @@ rmc-vehicle-key-invalid = The key does not fit this vehicle.
 rmc-vehicle-key-examine-blank = [color=lightblue]This blank key can be imprinted onto a vehicle by using it on the vehicle.[/color]
 rmc-vehicle-key-examine-duplicator = [color=lightblue]This blank key can copy an existing vehicle key by using it on that key.[/color]
 rmc-vehicle-key-examine-bound = [color=lightblue]This key is bound to a vehicle lock.[/color]
-rmc-hardpoint-remove-blocked = That hardpoint is fixed in place.

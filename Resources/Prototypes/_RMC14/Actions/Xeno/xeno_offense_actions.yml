@@ -1607,7 +1607,7 @@
     icon:
       sprite: _RMC14/Actions/xeno_actions.rsi
       state: acid_mine
-    useDelay: 8
+    useDelay: 5.5
   - type: XenoAcidMine
     actionIconEmpowered:
       sprite: _RMC14/Actions/xeno_actions.rsi
@@ -1615,7 +1615,7 @@
   - type: TargetAction
     deselectOnMiss: false
     checkCanAccess: false
-    range: 9 #Actual range on the AcidMine component.
+    range: 15 #Actual range on the AcidMine component.
   - type: WorldTargetAction
     event: !type:XenoAcidMineActionEvent
   - type: ActionBlockIfResting

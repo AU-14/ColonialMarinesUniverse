@@ -356,6 +356,12 @@ rmc-xeno-soak-end-fail = We stop tanking incoming damage.
 rmc-xeno-soak-end-self = We feel enraged after taking in oncoming damage! Our tail slam's cooldown is reset and we heal!
 rmc-xeno-soak-end-others =  {CAPITALIZE(THE($xeno))} gets enraged after being damaged enough!
 
+# Charger Jockey
+rmc-xeno-jockey-verb = Ride
+rmc-xeno-jockey-start-self = We start climbing onto {$charger}.
+rmc-xeno-jockey-start-others = {$rider} starts climbing onto {$charger}.
+rmc-xeno-jockey-mount = {$rider} climbs onto {$charger}.
+
 # Tail Fountain
 rmc-xeno-tail-fountain-self = We use our tail to pour acid over {$target}.
 rmc-xeno-tail-fountain-others = {CAPITALIZE(THE($user))} pours acid all over {$target} using its tail.

@@ -476,7 +476,18 @@ public sealed partial class ChatUIController : UIController
             return;
         }
 
+        if (ShouldHideRunechatSelfRadioBubble(ent, msg, speechType))
+            return;
+
         EnqueueSpeechBubble(ent, msg, speechType);
+    }
+
+    private bool ShouldHideRunechatSelfRadioBubble(EntityUid sender, ChatMessage msg, SpeechBubble.SpeechType speechType)
+    {
+        return speechType == SpeechBubble.SpeechType.Radio &&
+               msg.Channel == ChatChannel.Radio &&
+               _config.GetCVar(CCVars.ChatEnableRunechatBubbles) &&
+               _player.LocalSession?.AttachedEntity == sender;
     }
 
     private void CreateSpeechBubble(EntityUid entity, SpeechBubbleData speechData)
@@ -1037,6 +1048,10 @@ public sealed partial class ChatUIController : UIController
                 // RMC14
                 AddSpeechBubble(msg, msg.UseEmoteSpeechBubble ? SpeechBubble.SpeechType.Emote : SpeechBubble.SpeechType.Whisper);
                 // RMC14
+                break;
+
+            case ChatChannel.Radio:
+                AddSpeechBubble(msg, SpeechBubble.SpeechType.Radio);
                 break;
 
             case ChatChannel.Dead:

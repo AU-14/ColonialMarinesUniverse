@@ -145,3 +145,6 @@
     contents:
     - id: RMCUniversalRecorderTape
       amount: 7
+
+- type: Tag
+  id: Recorder

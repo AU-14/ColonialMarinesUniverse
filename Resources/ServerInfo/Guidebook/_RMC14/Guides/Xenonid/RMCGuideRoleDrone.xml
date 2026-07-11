@@ -38,7 +38,7 @@
   - Parasites can be extracted from the eggs, but be wary that parasites have short lifespans away from the weeds!
 
   <Box>
-    <GuideEntityEmbed Entity="CMXenoQueen"/>
+    <GuideEntityEmbed Entity="RMCGuidebookXenoQueen"/>
     <GuideEntityEmbed Entity="XenoEgg"/>
     <GuideEntityEmbed Entity="XenoHiveWeeds"/>
     <GuideEntityEmbed Entity="CMXenoParasite"/>

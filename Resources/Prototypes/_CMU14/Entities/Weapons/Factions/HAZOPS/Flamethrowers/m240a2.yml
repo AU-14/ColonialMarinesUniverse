@@ -4,6 +4,7 @@
   name: M240A2 heavy incinerator unit
   description: The USCMC's answer to WY's Flammerwerfer 3. Much more effective than the standard M240, but inflicts a movement penality. Typically issued to HAZOPS.
   components:
+  - type: RMCMagneticItem
   - type: Sprite
     sprite: _AU14/Weapons/Guns/HAZOPS/M240A2.rsi
     state: base
@@ -24,7 +25,7 @@
     - Back
   - type: Gun
     cameraRecoilScalar: 0
-    fireRate: 2.5
+    fireRate: 0.8
     selectedMode: FullAuto
     availableModes:
     - FullAuto
@@ -45,6 +46,8 @@
         whitelist:
           tags:
           - AU14TankFlamerM240A2HAZOPS
+          - AU14TankFlamerM240A2HAZOPSNapalmB
+          - AU14TankFlamerM240A2HAZOPSNapalmX
   - type: Wieldable
   - type: WieldableSpeedModifiers
     base: 0.70
@@ -107,10 +110,10 @@
   - type: SolutionContainerManager
     solutions:
       rmc_flamer_tank:
-        maxVol: 150
+        maxVol: 300
         reagents:
         - ReagentId: RMCNapalmUT
-          Quantity: 150
+          Quantity: 300
   - type: SolutionContainerVisuals
     maxFillLevels: 2
     fillBaseName: flametank_strip
@@ -120,3 +123,87 @@
 
 - type: Tag
   id: AU14TankFlamerM240A2HAZOPS
+
+
+- type: entity
+  parent: RMCTankFlamer
+  id: AU14TankFlamerM240A2HAZOPSNapalmB
+  name: M240A2 heavy incinerator tank (B)
+  description: A heavy, high capacity tank utilized by the M240A2. Has a colorless HAZOPS logo imprinted on the side. This one seems to contain 'Napalm-B'
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/fl3.rsi
+    state: flametank
+    layers:
+    - state: flametank
+    - state: flametank_strip1
+    - state: flametank_strip2
+      map: [ "enum.SolutionContainerLayers.Fill" ]
+  - type: RMCFlamerTank
+    maxIntensity: 70
+    maxRange: 7
+  - type: SolutionContainerManager
+    solutions:
+      rmc_flamer_tank:
+        maxVol: 300
+        reagents:
+        - ReagentId: RMCNapalmB
+          Quantity: 300
+  - type: SolutionContainerVisuals
+    maxFillLevels: 2
+    fillBaseName: flametank_strip
+  - type: Tag
+    tags:
+    - AU14TankFlamerM240A2HAZOPSNapalmB
+
+- type: Tag
+  id: AU14TankFlamerM240A2HAZOPSNapalmB
+
+
+- type: entity
+  parent: RMCTankFlamer
+  id: AU14TankFlamerM240A2HAZOPSNapalmX
+  name: M240A2 heavy incinerator tank (X)
+  description: A heavy, high capacity tank utilized by the M240A2. Has a colorless HAZOPS logo imprinted on the side. This one seems to contain 'Napalm-X'
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/fl3.rsi
+    state: flametank
+    layers:
+    - state: flametank
+    - state: flametank_strip1
+    - state: flametank_strip2
+      map: [ "enum.SolutionContainerLayers.Fill" ]
+  - type: RMCFlamerTank
+    maxIntensity: 70
+    maxRange: 6
+  - type: SolutionContainerManager
+    solutions:
+      rmc_flamer_tank:
+        maxVol: 300
+        reagents:
+        - ReagentId: RMCNapalmX
+          Quantity: 300
+  - type: SolutionContainerVisuals
+    maxFillLevels: 2
+    fillBaseName: flametank_strip
+  - type: Tag
+    tags:
+    - AU14TankFlamerM240A2HAZOPSNapalmX
+
+- type: Tag
+  id: AU14TankFlamerM240A2HAZOPSNapalmX
+
+- type: entity
+  parent: RMCBackpackFlamer
+  id: AU14FuelM240A2FuelTankFilled
+  suffix: HAZOPS
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14TankFlamerM240A2HAZOPSNapalmB
+      amount: 2
+    - id: AU14TankFlamerM240A2HAZOPSNapalmX
+      amount: 1
+
+

@@ -41,7 +41,6 @@
       icon:
         sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
         state: advisor
-
   requirements:
   - !type:OverallPlaytimeRequirement
     time: 3600
@@ -75,32 +74,7 @@
   id: AU14JobGOVFORadvisor
   isHumanoid: true
 
-- type: startingGear
-  id: AU14GearGOVFORadvisor
-  equipment:
-    id: AU14IDCardSquadAdvisor
-    ears: AU14HeadsetGovforCommand
-    back: AU14SatchelMarineAdvisorMilitary # removed by ImaginaryFriend
-    pocket1: AU14StampSEA # removed by ImaginaryFriend
-
-- type: startingGear
-  id: AU14GearGOVFORadvisorDummy
-  equipment:
-    shoes: CMBootsBrownFilled
-    head: CMHeadCapDrill
-    jumpsuit: CMJumpsuitBO
-    ears: AU14HeadsetGovforCommand
-
-- type: entity
-  parent: CMSpawnPointJobBase
-  id: AU14SpawnPointGOVFORadvisor
-  name: Spawn Point GOVFOR Advisor
-  components:
-  - type: SpawnPoint
-    job_id: AU14JobGOVFORadvisor
-  - type: Sprite
-    state: syn_spawn
-
+# ├──[ Job Prototypes ]──────────────────────────────────────────────┤
 - type: job
   parent: AU14JobadvisorBase
   id: AU14JobGOVFORadvisor
@@ -112,6 +86,37 @@
     components:
     - type: RMCSpeechBubbleSpecificStyle
       speechStyleClass: commanderSpeech
+
+- type: job
+  parent: AU14JobadvisorBase
+  id: AU14JobOPFORadvisor
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORAdvisor"
+  spawnMenuRoleName: Platoon Advisor (OPFOR)
+  startingGear: AU14GearOPFORadvisor
+  dummyStartingGear: AU14GearOPFORadvisorDummy
+  supervisors: au14-job-supervisors-opfor
+  accessGroups:
+  - AU14OpforCommand
+
+# ├──[ Starting Gear ]───────────────────────────────────────────────┤
+- type: startingGear
+  id: AU14GearGOVFORadvisor
+  equipment:
+    id: AU14IDCardSquadAdvisor
+    ears: AU14HeadsetGovforCommand
+    belt: AU14BeltPostelPistolM48A5NoSuper
+    back: AU14SatchelMarineAdvisorMilitary # removed by ImaginaryFriend
+    pocket1: AU14StampSEA # removed by ImaginaryFriend
+
+- type: startingGear
+  id: AU14GearOPFORadvisor
+  equipment:
+    id: AU14IDCardOPFORAdvisor
+    ears: AU14HeadsetOpforCommand
+    belt: AU14BeltPostelPistolM48A5NoSuper
+    back: AU14SatchelMarineAdvisorMilitary
 
 - type: roleLoadout
   id: JobAU14JobGOVFORadvisor
@@ -128,25 +133,42 @@
   - SmokablesRMC
   - WeaponsRMC
 
-- type: job
-  parent: AU14JobadvisorBase
-  id: AU14JobOPFORadvisor
-  roundSide: Opfor
-  roundForce: OPFOR
-  icon: "AU14JobIconOPFORAdvisor"
-  spawnMenuRoleName: Platoon Advisor (OPFOR)
-  startingGear: AU14GearOPFORadvisor
-  dummyStartingGear: AU14GearOPFORadvisorDummy
-  supervisors: au14-job-supervisors-opfor
-  accessGroups:
-  - AU14OpforCommand
+- type: startingGear
+  id: AU14GearImaginaryAdvisor
+  equipment:
+    head: CMHeadCapDrill
+    eyes: CMGlassesSecurity
+    jumpsuit: CMJumpsuitBO
+    outerClothing: RMCProvostJacketFilled
+    gloves: CMHandsBlackMarine
+    shoes: CMBootsBrownFilled
 
 - type: startingGear
-  id: AU14GearOPFORadvisor
+  id: AU14GearGOVFORadvisorDummy
   equipment:
-    id: AU14IDCardOPFORAdvisor
+    shoes: CMBootsBrownFilled
+    head: CMHeadCapDrill
+    jumpsuit: CMJumpsuitBO
+    ears: AU14HeadsetGovforCommand
+
+- type: startingGear
+  id: AU14GearOPFORadvisorDummy
+  equipment:
+    shoes: CMBootsBrownFilled
+    head: CMHeadCapDrill
+    jumpsuit: CMJumpsuitBO
     ears: AU14HeadsetOpforCommand
-    back: AU14SatchelMarineAdvisorMilitary
+
+# ├──[ Spawnpoints ]─────────────────────────────────────────────────┤
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORadvisor
+  name: Spawn Point GOVFOR Advisor
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORadvisor
+  - type: Sprite
+    state: syn_spawn
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -158,14 +180,7 @@
   - type: Sprite
     state: syn_spawn
 
-- type: startingGear
-  id: AU14GearOPFORadvisorDummy
-  equipment:
-    shoes: CMBootsBrownFilled
-    head: CMHeadCapDrill
-    jumpsuit: CMJumpsuitBO
-    ears: AU14HeadsetOpforCommand
-
+# ├──[ Factions ]────────────────────────────────────────────────────┤
 - type: job
   parent: AU14JobadvisorBase
   id: AU14JobGOVFORadvisorRMC

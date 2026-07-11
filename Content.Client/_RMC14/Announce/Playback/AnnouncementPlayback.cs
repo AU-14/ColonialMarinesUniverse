@@ -46,12 +46,9 @@ public sealed class AnnouncementPlayback
         if (IsFinished || _animation == null)
             return;
 
-        var titleText = !string.IsNullOrEmpty(state.Data.Title) ? state.Data.Title : style.TitleConfig.Title;
-        var hasTitle = style.TitleConfig.ShowTitle && !string.IsNullOrEmpty(titleText);
+        ResetBaseLabelColor(style, state, labels);
 
         var status = _animation.Update(animationContext, deltaTime);
-
-        ResetBaseLabelColor(style, state, labels, hasTitle);
         if (status == AnnouncementAnimationStatus.Hold || status == AnnouncementAnimationStatus.Finished)
         {
             BeginHold(state, animationContext, currentTime);
@@ -71,7 +68,7 @@ public sealed class AnnouncementPlayback
             }
         }
 
-        ApplyVisualEffects(style, state, labels, currentTime, hasTitle);
+        ApplyVisualEffects(style, state, labels, currentTime);
     }
 
     private void BeginHold(ActiveAnnouncement state, AnnouncementAnimationContext context, TimeSpan currentTime)
@@ -84,21 +81,21 @@ public sealed class AnnouncementPlayback
         context.SetAllLabels();
     }
 
-    private static void ResetBaseLabelColor(AnnouncementStyle style, ActiveAnnouncement state, IReadOnlyList<RichTextLabel> labels, bool hasTitle)
+    private static void ResetBaseLabelColor(AnnouncementStyle style, ActiveAnnouncement state, IReadOnlyList<RichTextLabel> labels)
     {
-        var alpha = state.FadeAlpha * state.PulseAlpha;
+        var titleText = !string.IsNullOrEmpty(state.Data.Title) ? state.Data.Title : style.TitleConfig.Title;
+        var hasTitle = style.TitleConfig.ShowTitle && !string.IsNullOrEmpty(titleText);
+
         for (var i = 0; i < labels.Count; i++)
         {
-            var baseColor = hasTitle && i == 0
+            labels[i].Modulate = hasTitle && i == 0
                 ? style.TitleConfig.TitleColor
                 : style.TextConfig.PrimaryColor;
-            labels[i].Modulate = new Color(baseColor.R, baseColor.G, baseColor.B, baseColor.A * alpha);
         }
 
         foreach (var titleLabel in state.TitleLabels)
         {
-            var baseColor = style.TitleConfig.TitleColor;
-            titleLabel.Modulate = new Color(baseColor.R, baseColor.G, baseColor.B, baseColor.A * alpha);
+            titleLabel.Modulate = style.TitleConfig.TitleColor;
         }
     }
 
@@ -106,12 +103,13 @@ public sealed class AnnouncementPlayback
         AnnouncementStyle style,
         ActiveAnnouncement state,
         IReadOnlyList<RichTextLabel> labels,
-        TimeSpan currentTime,
-        bool hasTitle)
+        TimeSpan currentTime)
     {
         if (_effects.Count == 0)
             return;
 
+        var titleText = !string.IsNullOrEmpty(state.Data.Title) ? state.Data.Title : style.TitleConfig.Title;
+        var hasTitle = style.TitleConfig.ShowTitle && !string.IsNullOrEmpty(titleText);
         var effectContext = new AnnouncementEffectContext(style, state, labels, hasTitle);
         foreach (var effect in _effects)
         {

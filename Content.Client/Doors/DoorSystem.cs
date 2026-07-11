@@ -122,7 +122,7 @@ public sealed partial class DoorSystem : SharedDoorSystem
 
                 return;
             case DoorState.Closing:
-                if (entity.Comp.ClosingAnimationTime == 0.0 || entity.Comp.CurrentlyCrushing.Count != 0)
+                if (entity.Comp.ClosingAnimationTime == 0.0 || entity.Comp.IsCrushing)
                     return;
 
                 _animationSystem.Play(entity, (Animation)entity.Comp.ClosingAnimation, DoorComponent.AnimationKey);

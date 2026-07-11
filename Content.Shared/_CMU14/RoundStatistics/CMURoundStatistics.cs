@@ -38,6 +38,8 @@ public enum CMURoundStatisticsOutcome : byte
     InsurgencyGovforVictory,
     ColonyFallThreatVictory,
     ColonyFallSurvivorVictory,
+    Stalemate,
+    ObjectiveVictory,
 }
 
 [Serializable, NetSerializable]
@@ -59,6 +61,11 @@ public readonly record struct CMURoundOutcomeRecord(
 public readonly record struct CMURoundOutcomeBreakdown(
     CMURoundStatisticsOutcome Outcome,
     CMURoundStatisticsWinner Winner,
+    int Count);
+
+[Serializable, NetSerializable]
+public readonly record struct CMURoundManualReasonBreakdown(
+    string Reason,
     int Count);
 
 [Serializable, NetSerializable]
@@ -134,6 +141,7 @@ public sealed class CMURoundModeStatistics(
     int draws,
     int unknown,
     List<CMURoundOutcomeBreakdown> outcomes,
+    List<CMURoundManualReasonBreakdown> manualReasons,
     List<CMURoundThreatBreakdown> threats,
     CMURoundRecentForm recentForm,
     CMURoundStreak currentStreak,
@@ -152,6 +160,7 @@ public sealed class CMURoundModeStatistics(
     public readonly int Draws = draws;
     public readonly int Unknown = unknown;
     public readonly List<CMURoundOutcomeBreakdown> Outcomes = outcomes;
+    public readonly List<CMURoundManualReasonBreakdown> ManualReasons = manualReasons;
     public readonly List<CMURoundThreatBreakdown> Threats = threats;
     public readonly CMURoundRecentForm RecentForm = recentForm;
     public readonly CMURoundStreak CurrentStreak = currentStreak;

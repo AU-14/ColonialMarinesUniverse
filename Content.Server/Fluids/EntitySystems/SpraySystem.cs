@@ -179,11 +179,12 @@ public sealed partial class SpraySystem : EntitySystem
                 {
                     // push back the grid the player is standing on
                     var userTransform = Transform(user);
-                    if (userTransform.GridUid == userTransform.ParentUid)
+                    if (userTransform.GridUid == userTransform.ParentUid &&
+                        TryComp<PhysicsComponent>(userTransform.GridUid.Value, out var gridBody))
                     {
                         // apply both linear and angular momentum depending on the player position
                         // multiply by a cvar because grid mass is currently extremely small compared to all other masses
-                        _physics.ApplyLinearImpulse(userTransform.GridUid.Value, -impulseDirection * _gridImpulseMultiplier * entity.Comp.PushbackAmount, userTransform.LocalPosition);
+                        _physics.ApplyLinearImpulse(userTransform.GridUid.Value, -impulseDirection * _gridImpulseMultiplier * entity.Comp.PushbackAmount, userTransform.LocalPosition, body: gridBody);
                     }
                 }
             }

@@ -19,6 +19,8 @@
     - AU14JobGOVFORAuxTech
     - AU14JobGOVFORWorkingJoe
     - AU14JobGOVFORWeaponsSpecialist
+    - AU14JobGOVFORVehicleCrewman
+    - CMUJobGOVFORDroneOperator
 
 - type: antagJobBlacklist
   id: AllOpforJobs
@@ -40,6 +42,8 @@
     - AU14JobOPFORSectionSergeant
     - AU14JobOPFORAuxTech
     - AU14JobOPFORWorkingJoe
+    - AU14JobOPFORVehicleCrewman
+#   - CMUJobOPFORDroneOperator
 #   - AU14JobOPFORWeaponsSpecialist
 
 - type: entity

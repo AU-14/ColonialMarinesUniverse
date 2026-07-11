@@ -2,6 +2,7 @@ using Content.Client._RMC14.NightVision;
 using Content.Client.Movement.Systems;
 using Content.Shared._RMC14.Mentor.ImaginaryFriend;
 using Content.Shared.Actions;
+using Content.Shared.GameTicking;
 using Content.Shared.Ghost;
 using Robust.Client.Console;
 using Robust.Client.GameObjects;
@@ -54,6 +55,7 @@ namespace Content.Client.Ghost
         public event Action<GhostComponent>? PlayerAttached;
         public event Action? PlayerDetached;
         public event Action<GhostWarpsResponseEvent>? GhostWarpsResponse;
+        public event Action? GhostWarpsReset;
         public event Action<GhostUpdateGhostRoleCountEvent>? GhostRoleCountUpdated;
 
         public override void Initialize()
@@ -68,6 +70,7 @@ namespace Content.Client.Ghost
             SubscribeLocalEvent<GhostComponent, LocalPlayerDetachedEvent>(OnGhostPlayerDetach);
 
             SubscribeNetworkEvent<GhostWarpsResponseEvent>(OnGhostWarpsResponse);
+            SubscribeNetworkEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
             SubscribeNetworkEvent<GhostUpdateGhostRoleCountEvent>(OnUpdateGhostRoleCount);
 
             SubscribeLocalEvent<EyeComponent, ToggleLightingActionEvent>(OnToggleLighting);
@@ -191,6 +194,11 @@ namespace Content.Client.Ghost
             }
 
             GhostWarpsResponse?.Invoke(msg);
+        }
+
+        private void OnRoundRestartCleanup(RoundRestartCleanupEvent _)
+        {
+            GhostWarpsReset?.Invoke();
         }
 
         private void OnUpdateGhostRoleCount(GhostUpdateGhostRoleCountEvent msg)

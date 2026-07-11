@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Body.Organ;
@@ -121,9 +122,10 @@ public sealed partial class CMStasisBagSystem : EntitySystem
                 continue;
 
             bool inStasis = false;
-            foreach (var ent in container.ContainedEntities)
+            var containedEntities = container.ContainedEntities.ToList();
+            foreach (var ent in containedEntities)
             {
-                if(_mobstate.IsDead(ent))
+                if (_mobstate.IsDead(ent))
                 {
                     _entStorage.OpenStorage(uid);
                     _popup.PopupEntity(Loc.GetString("rmc-stasis-reject-dead"), uid, PopupType.SmallCaution);
@@ -139,7 +141,7 @@ public sealed partial class CMStasisBagSystem : EntitySystem
 
             bag.StasisLeft -= TimeSpan.FromSeconds(frameTime);
 
-            if(bag.StasisLeft <= TimeSpan.Zero)
+            if (bag.StasisLeft <= TimeSpan.Zero)
             {
                 _entStorage.EmptyContents(uid);
                 SpawnAtPosition(bag.UsedBag, uid.ToCoordinates());

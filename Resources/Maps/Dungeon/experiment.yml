@@ -8733,13 +8733,6 @@ entities:
     - type: Transform
       pos: 10.533063,27.58727
       parent: 1653
-- proto: RPED
-  entities:
-  - uid: 1646
-    components:
-    - type: Transform
-      pos: 32.49994,15.5244
-      parent: 1653
 - proto: SalvageCanisterSpawner
   entities:
   - uid: 493
@@ -9919,13 +9912,6 @@ entities:
     components:
     - type: Transform
       pos: 24.538218,15.750836
-      parent: 1653
-- proto: VehicleJanicartDestroyed
-  entities:
-  - uid: 729
-    components:
-    - type: Transform
-      pos: 6.5,25.5
       parent: 1653
 - proto: VendingMachineCigs
   entities:

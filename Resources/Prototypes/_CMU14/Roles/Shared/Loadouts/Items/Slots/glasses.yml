@@ -15,3 +15,57 @@
   storage:
     back:
     - RMCGlassesReagentHUDGlasses
+
+- type: loadout
+  id: SunglassesAU14
+  storage:
+    back:
+    - RMCSunglasses
+
+- type: loadout
+  id: HipsterGlassesAU14
+  storage:
+    back:
+    - RMCHipsterGlasses
+
+- type: loadout
+  id: SunglassesBigAU14
+  storage:
+    back:
+    - RMCSunglassesBig
+
+- type: loadout
+  id: GlassesAviatorsAU14
+  storage:
+    back:
+    - RMCGlassesAviators
+
+- type: loadout
+  id: GlassesTriMaxYellowAU14
+  storage:
+    back:
+    - RMCGlassesTriMaxYellow
+
+- type: loadout
+  id: GlassesTriMaxBlackAU14
+  storage:
+    back:
+    - RMCGlassesTriMaxBlack
+
+- type: loadout
+  id: GlassesTriMaxBronzeAU14
+  storage:
+    back:
+    - RMCGlassesTriMaxBronze
+
+- type: loadout
+  id: GlassesPersonalOrangeAU14
+  storage:
+    back:
+    - AU14GlassesPersonalOrange
+
+- type: loadout
+  id: GlassesBiMexOrangeAU14
+  storage:
+    back:
+    - AU14GlassesBiMexOrange

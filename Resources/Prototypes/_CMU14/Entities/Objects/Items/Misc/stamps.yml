@@ -65,10 +65,20 @@
 - type: entity
   parent: AU14StampBase
   id: AU14StampCMP
-  name: military police officer's rubber stamp
+  name: chief MP officer's rubber stamp
   components:
   - type: Sprite
     state: stamp-hos
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-cmp
+    stampedColor: "#b34444"
+    stampState: "paper_stamp-hos"
+
+- type: entity
+  parent: AU14StampCMP
+  id: AU14StampMP
+  name: military police's rubber stamp
+  components:
   - type: Stamp
     stampedName: stamp-component-stamped-name-au14-mp
     stampedColor: "#b34444"
@@ -95,6 +105,16 @@
     state: stamp-ro
   - type: Stamp
     stampedName: stamp-component-stamped-name-au14-aux
+    stampedColor: "#725c0e"
+    stampState: "paper_stamp-ro"
+
+- type: entity
+  parent: AU14StampAUX
+  id: AU14StampLO
+  name: logistics officer's rubber stamp
+  components:
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-lo
     stampedColor: "#725c0e"
     stampState: "paper_stamp-ro"
 

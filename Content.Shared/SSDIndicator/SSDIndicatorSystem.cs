@@ -14,6 +14,7 @@ namespace Content.Shared.SSDIndicator;
 public sealed partial class SSDIndicatorSystem : EntitySystem
 {
     public static readonly EntProtoId StatusEffectSSDSleeping = "StatusEffectSSDSleeping";
+    private static readonly TimeSpan SsdSleepRetrySuppression = TimeSpan.FromDays(365);
 
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -95,7 +96,7 @@ public sealed partial class SSDIndicatorSystem : EntitySystem
 
                 // Don't keep retrying every tick once the effect is applied — TrySetStatusEffectDuration
                 // walks ActiveStatusEffects on the target every call. Reset on PlayerDetached.
-                ssd.FallAsleepTime = TimeSpan.MaxValue;
+                ssd.FallAsleepTime = _timing.CurTime + SsdSleepRetrySuppression;
                 Dirty(uid, ssd);
             }
         }

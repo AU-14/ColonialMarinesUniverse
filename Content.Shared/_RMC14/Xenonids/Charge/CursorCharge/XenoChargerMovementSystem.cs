@@ -1,8 +1,12 @@
 ﻿using System.Numerics;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Emote;
+using Content.Shared._RMC14.Pulling;
+using Content.Shared.Mobs;
 using Content.Shared.Movement.Events;
+using Content.Shared.Movement.Pulling.Events;
 using Content.Shared.Movement.Systems;
+using Content.Shared.Pulling.Events;
 using Content.Shared.Stunnable;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
@@ -21,6 +25,7 @@ public sealed partial class XenoChargerMovementSystem : EntitySystem
     [Dependency] private XenoChargerCollisionSystem _collision = default!;
     [Dependency] private SharedRMCFlammableSystem _flammable = default!;
     [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private RMCPullingSystem _rmcPulling = default!;
 
     private EntityQuery<PhysicsComponent> _physicsQuery;
 
@@ -30,6 +35,9 @@ public sealed partial class XenoChargerMovementSystem : EntitySystem
 
         SubscribeNetworkEvent<XenoCursorSteeringMessage>(OnCursorSteeringMessage);
         SubscribeLocalEvent<XenoChargerStateComponent, MoveInputEvent>(OnMoveInput);
+        SubscribeLocalEvent<XenoChargerStateComponent, MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<XenoChargerStateComponent, StartPullAttemptEvent>(OnStartPullAttempt);
+        SubscribeLocalEvent<XenoChargerStateComponent, PullAttemptEvent>(OnPullAttempt);
 
     }
 
@@ -39,11 +47,14 @@ public sealed partial class XenoChargerMovementSystem : EntitySystem
 
     public void StartCharge(EntityUid xeno)
     {
+        _rmcPulling.TryStopAllPullsFromAndOn(xeno);
+
         var stateComp = EnsureComp<XenoChargerStateComponent>(xeno);
 
         var currentRotation = _transform.GetWorldRotation(xeno);
-        stateComp.TargetHeading = currentRotation;
-        stateComp.CurrentHeading = currentRotation;
+        var currentHeading = currentRotation.ToWorldVec().ToAngle();
+        stateComp.TargetHeading = currentHeading;
+        stateComp.CurrentHeading = currentHeading;
 
         stateComp.MoveState = XenoChargerMoveState.Charging;
         stateComp.Stage = 0;
@@ -56,6 +67,8 @@ public sealed partial class XenoChargerMovementSystem : EntitySystem
 
     public void StartLunge(EntityUid uid)
     {
+        _rmcPulling.TryStopAllPullsFromAndOn(uid);
+
         if (!TryComp(uid, out XenoChargerComponent? xeno))
             return;
 
@@ -161,7 +174,7 @@ public sealed partial class XenoChargerMovementSystem : EntitySystem
         _physics.SetAwake((xeno, physics), true);
         _physics.SetLinearVelocity(xeno, vel, body: physics);
 
-        _transform.SetWorldRotation(xeno, stateComp.CurrentHeading.GetDir().ToAngle());
+        _transform.SetWorldRotation(xeno, GetWorldRotation(stateComp.CurrentHeading));
 
         // Stomp sound.
         stateComp.SoundDistanceAccumulator += distThisFrame;
@@ -186,6 +199,7 @@ public sealed partial class XenoChargerMovementSystem : EntitySystem
 
         _physics.SetAwake((xeno, physics), true);
         _physics.SetLinearVelocity(xeno, stateComp.LungeDirection * speed, body: physics);
+        _transform.SetWorldRotation(xeno, stateComp.LungeDirection.ToWorldAngle());
 
         stateComp.LungeDistanceRemaining -= speed * frameTime;
         Dirty(xeno, stateComp);
@@ -230,5 +244,34 @@ public sealed partial class XenoChargerMovementSystem : EntitySystem
     private void OnMoveInput(Entity<XenoChargerStateComponent> ent, ref MoveInputEvent args)
     {
         args.Entity.Comp.HeldMoveButtons &= ~MoveButtons.AnyDirection;
+    }
+
+    private void OnMobStateChanged(Entity<XenoChargerStateComponent> ent, ref MobStateChangedEvent args)
+    {
+        if (_net.IsClient || args.NewMobState == MobState.Alive)
+            return;
+
+        ResetToIdle(ent.Owner);
+    }
+
+    private void OnStartPullAttempt(Entity<XenoChargerStateComponent> ent, ref StartPullAttemptEvent args)
+    {
+        if (args.Puller != ent.Owner)
+            return;
+
+        args.Cancel();
+    }
+
+    private void OnPullAttempt(Entity<XenoChargerStateComponent> ent, ref PullAttemptEvent args)
+    {
+        if (args.PullerUid != ent.Owner)
+            return;
+
+        args.Cancelled = true;
+    }
+
+    private static Angle GetWorldRotation(Angle heading)
+    {
+        return heading.ToVec().ToWorldAngle();
     }
 }

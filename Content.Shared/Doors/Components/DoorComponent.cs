@@ -131,8 +131,11 @@ public sealed partial class DoorComponent : Component
     /// <summary>
     /// List of EntityUids of entities we're currently crushing. Cleared in OnPartialOpen().
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public HashSet<EntityUid> CurrentlyCrushing = new();
+
+    [AutoNetworkedField]
+    public bool IsCrushing;
     #endregion
 
     #region Graphics

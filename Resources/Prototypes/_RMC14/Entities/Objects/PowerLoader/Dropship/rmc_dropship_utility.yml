@@ -31,7 +31,7 @@
     layers:
     - state: medevac_system
   - type: DropshipFabricatorPrintable
-    cost: 300
+    cost: 50
   - type: DropshipUtility
     activateDelay: 20
     activateInTransport: true
@@ -55,7 +55,7 @@
     layers:
     - state: fulton_system
   - type: DropshipFabricatorPrintable
-    cost: 200
+    cost: 50
   - type: DropshipUtility
     activateDelay: 5
     activateInTransport: true
@@ -130,7 +130,7 @@
     layers:
     - state: sentry_system
   - type: DropshipFabricatorPrintable
-    cost: 1200
+    cost: 300
   - type: DropshipUtility
   - type: DropshipAttachedSprite
     sprite:
@@ -170,7 +170,7 @@
     layers:
     - state: launch_bay
   - type: DropshipFabricatorPrintable
-    cost: 200
+    cost: 300
   - type: DropshipUtility
   - type: DropshipAttachedSprite
     sprite:

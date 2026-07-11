@@ -22,6 +22,7 @@ using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Robust.Shared.Configuration;
 using Robust.Shared.Console;
+using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
@@ -121,7 +122,8 @@ public sealed partial class RMCAdminSystem : SharedRMCAdminSystem
             return;
 
         if (!TryComp(target, out ActorComponent? actor) ||
-            !_transform.TryGetMapOrGridCoordinates(target, out var coords))
+            !_transform.TryGetMapOrGridCoordinates(target, out var coords) ||
+            _transform.GetMapId(coords.Value) == MapId.Nullspace)
         {
             _popup.PopupEntity(Loc.GetString("admin-player-spawn-failed"), user, user);
             return;
@@ -134,7 +136,7 @@ public sealed partial class RMCAdminSystem : SharedRMCAdminSystem
         var newMind = _mind.CreateMind(player.UserId, profile.Name);
         _mind.SetUserId(newMind, player.UserId);
         _playTimeTracking.PlayerRolesChanged(player);
-        var mobUid = _stationSpawning.SpawnPlayerCharacterOnStation(stationUid, job, profile);
+        var mobUid = _stationSpawning.SpawnPlayerMob(coords.Value, job, profile, stationUid);
 
         _mind.TransferTo(newMind, mobUid);
         _role.MindAddJobRole(newMind, jobPrototype: job);
@@ -142,23 +144,19 @@ public sealed partial class RMCAdminSystem : SharedRMCAdminSystem
         var jobName = _job.MindTryGetJobName(newMind);
         _admin.UpdatePlayerList(player);
 
-        if (mobUid != null)
-        {
-            EnsureComp<RMCAdminSpawnedComponent>(mobUid.Value);
-            _transform.SetCoordinates(mobUid.Value, coords.Value);
+        EnsureComp<RMCAdminSpawnedComponent>(mobUid);
 
-            var spawnEv = new PlayerSpawnCompleteEvent(
-                mobUid.Value,
-                player,
-                job,
-                true,
-                true,
-                0,
-                default,
-                profile
-            );
-            RaiseLocalEvent(mobUid.Value, spawnEv, true);
-        }
+        var spawnEv = new PlayerSpawnCompleteEvent(
+            mobUid,
+            player,
+            job,
+            true,
+            true,
+            0,
+            default,
+            profile
+        );
+        RaiseLocalEvent(mobUid, spawnEv, true);
 
         if (HasComp<GhostComponent>(target))
         {

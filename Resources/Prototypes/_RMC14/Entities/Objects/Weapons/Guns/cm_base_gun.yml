@@ -67,8 +67,6 @@
       shader: unshaded
   - type: BulletholeGenerator
   - type: RMCBullet
-  - type: XenoSundering
-    amount: 0.05
   - type: RMCProjectileAccuracy
   - type: Projectile
     soundHit:

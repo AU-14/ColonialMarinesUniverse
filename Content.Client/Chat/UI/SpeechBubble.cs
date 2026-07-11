@@ -42,6 +42,7 @@ namespace Content.Client.Chat.UI
             Emote,
             Say,
             Whisper,
+            Radio,
             Looc
         }
 
@@ -99,6 +100,9 @@ namespace Content.Client.Chat.UI
 
                 case SpeechType.Whisper:
                     return new FancyTextSpeechBubble(message, senderEntity, "whisperBox");
+
+                case SpeechType.Radio:
+                    return new TextSpeechBubble(message, senderEntity, "sayBox", message.Display?.AccentColor ?? Color.FromHex("#73d48f"));
 
                 case SpeechType.Looc:
                     return new TextSpeechBubble(message, senderEntity, "emoteBox", Color.FromHex("#48d1cc"));

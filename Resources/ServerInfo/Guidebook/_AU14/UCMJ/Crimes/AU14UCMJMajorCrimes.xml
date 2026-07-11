@@ -1,46 +1,37 @@
 ﻿<Document>
   # Major Crimes
-  These crimes are high severity.
+    These crimes are of high severity.
 
- ## Disorderly Conduct
- Directly and intentionally disrupting primary operations of the group. Fighting in the requisitions line, extensively or repeatedly disrupting the briefing.
-  - 10 Minutes.
+  ## Disorderly Conduct
+    Directly and intentionally disrupting primary operations of the group. Fighting in the requisitions line, extensively or repeatedly disrupting the briefing.
+      - 10 Minutes.
 
+  ## Neglect of duty
+    Failure to perform one’s role to an acceptable standard. For example, a Commander failing to properly organise and ensure their personnel are given orders, failing to follow proper procedure to the detriment of their duties, or ship crew leaving the ship/installation or their post without authorisation from their respective department head or command.
+      - 15 minutes.
 
- ## Neglect of duty
- Failure to perform one’s role to an acceptable standard. For example, a Commander failing to properly organize and ensure their personnel are given orders, failing to follow proper procedure in detriment of one’s duties, or ship crew leaving the ship/installation or their post without authorization from Command.
-  - 15 minutes.
+  ## Wrongful Disposition of Military Property
+    To sell, give away, or otherwise provide military property to civilians without permission from the commander.
+      - 15 minutes.
 
+  ## Assault
+    To threaten or use physical force against someone with ill intent.
+      - 10 minutes, without a deadly weapon.
+      - 15 minutes, with a deadly weapon.
 
- ## Assault
-To threaten or use physical force against someone with ill intent.
-  - 10 minutes, without a deadly weapon.
-  - 15 minutes, with a deadly weapon.
+  ## Prevarication
+    To intentionally order the arrest of a person on false charges who is then found to be innocent, or to apply an improper or abusive NJP. This includes intentionally arresting a person on false charges, on one's own initiative without orders.
+      - 10 minutes
 
- ## Prevarication
-To intentionally order the arrest of a person on false charges who is then found to be innocent, or to apply an improper or abusive NJP. This includes intentionally arresting a person on false charges, on ones own initiative without orders.
-  - 10 minutes
+  ## Manslaughter
+    Killing someone without malicious intent. Manslaughter may be applied if someone dies as a result of a fight where the intent was not to kill.
+      - 15 Minutes
 
+  ## Illegal Confinement
+    Unlawfully detaining a person against their will. Includes kidnapping, hostage-taking, and confining people in cells without charging them for a crime. It does not apply to Prisoners of War.
+      - 20 Minutes.
 
- ## Manslaughter
-Killing someone without malicious intent. Manslaughter may be applied if someone dies as a result of a fight where the intent was not to kill.
-  - 15 Minutes
-
-
- ## Illegal Confinement
-Unlawfully detaining a person against their will. Includes, kidnapping, hostage-taking, and confining people in cells without charging them for a crime. It does not apply to Prisoners of War.
-  - 20 Minutes.
-
-
- ## Unauthorized Deployment
-To deploy into the area of operations without permission of the relevant command.
-  - 20 minutes.
-
- ## Violation of Legal DNR (VoL)
-To violate a medically issued DNR or DNR approved by NEMO/HighComm, (if there is no record of the DNR being approved outside of a verbal agreement, it is considered void)
-  - 20 minutes.
-
- ## AI Area Trespass (AAT)
-To illegally enter an AI area and refuse to leave after 2 attempts
-  - 15 minutes.
+  ## Unauthorised Deployment
+    To deploy into the area of operations without permission from the relevant command.
+      - 20 minutes.
 </Document>

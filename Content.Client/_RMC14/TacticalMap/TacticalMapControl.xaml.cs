@@ -51,6 +51,7 @@ public sealed partial class TacticalMapControl : TextureRect
     private const float PingMaxAlpha = 0.65f;
     private const float PingRingThickness = 1.5f;
 
+    private static readonly Color VehicleOccupantCountColor = Color.FromHex("#FFD84D");
 
     [Dependency] private IResourceCache _resourceCache = default!;
     [Dependency] private IEntityManager _entityManager = default!;
@@ -671,7 +672,7 @@ public sealed partial class TacticalMapControl : TextureRect
                     Vector2 badgeOrigin = position + new Vector2(scaledBlipSize - measured.X - 1f, -measured.Y * 0.15f);
                     UIBox2 badgeRect = UIBox2.FromDimensions(badgeOrigin - new Vector2(2f, 0f), measured + new Vector2(4f, 1f));
                     handle.DrawRect(badgeRect, Color.Black.WithAlpha(0.75f));
-                    handle.DrawString(countFont, badgeOrigin, countText, Color.White);
+                    handle.DrawString(countFont, badgeOrigin, countText, VehicleOccupantCountColor);
                 }
                 catch (Exception ex) { Logger.GetSawmill("tacmap").Error($"[DrawBlips] Failed to render vehicle OccupantCount (missing/corrupt blip/font or count): {ex}"); }
             }

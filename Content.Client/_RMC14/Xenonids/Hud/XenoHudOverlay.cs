@@ -549,7 +549,7 @@ public sealed partial class XenoHudOverlay : Overlay
         var synth = _entity.AllEntityQueryEnumerator<SynthComponent, SpriteComponent, TransformComponent>();
         while (synth.MoveNext(out var uid, out var comp, out var sprite, out var xform))
         {
-            if (comp.UseHumanHealthIcons)
+            if (!ShouldDrawSynthIcon(comp))
                 continue;
 
             if (xform.MapID != args.MapId)
@@ -580,6 +580,11 @@ public sealed partial class XenoHudOverlay : Overlay
             var position = new Vector2(xOffset, yOffset);
             handle.DrawTexture(texture, position);
         }
+    }
+
+    public static bool ShouldDrawSynthIcon(SynthComponent synth)
+    {
+        return !synth.HideXenoSynthIcon;
     }
 
     private void UpdateHealth(Entity<XenoComponent, SpriteComponent, MobStateComponent?> ent, DrawingHandleWorld handle)

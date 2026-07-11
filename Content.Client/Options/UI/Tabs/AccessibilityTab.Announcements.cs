@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Content.Client._RMC14.Announce;
@@ -12,12 +13,19 @@ namespace Content.Client.Options.UI.Tabs;
 public sealed partial class AccessibilityTab
 {
     [Dependency] private IPrototypeManager _prototypeManager = default!;
-    private AnnouncementLayoutEditorWindow? _announcementLayoutEditorWindow;
 
     private void RegisterAnnouncementOptions()
     {
+        var announcementEntries = new List<OptionDropDownCVar<AnnouncementDisplayPreference>.ValueOption>
+        {
+            new(AnnouncementDisplayPreference.Stylized, Loc.GetString("rmc-ui-options-announcements-style-stylized")),
+            new(AnnouncementDisplayPreference.Default, Loc.GetString("rmc-ui-options-announcements-style-default")),
+            new(AnnouncementDisplayPreference.Simplified, Loc.GetString("rmc-ui-options-announcements-style-simplified")),
+            new(AnnouncementDisplayPreference.Disabled, Loc.GetString("rmc-ui-options-announcements-style-disabled"))
+        };
+
+        Control.AddOptionDropDown(RMCCVars.RMCAnnouncementStyle, AnnouncementStyleDropDown, announcementEntries);
         AddPerAnnouncementOverrides();
-        RegisterAnnouncementLayoutEditor();
     }
 
     private void AddPerAnnouncementOverrides()
@@ -49,15 +57,29 @@ public sealed partial class AccessibilityTab
                 _cfg,
                 dropDown,
                 preset.ID,
-                availablePreferences,
-                preset.DefaultPreference ?? AnnouncementDisplayPreference.Stylized));
+                availablePreferences));
         }
     }
 
     private List<AnnouncementPresetPrototype> GetRootPresets()
     {
-        return _prototypeManager.EnumeratePrototypes<AnnouncementPresetPrototype>()
-            .Where(preset => preset.VisibleInSettings)
+        var presets = _prototypeManager.EnumeratePrototypes<AnnouncementPresetPrototype>().ToList();
+        var variantIds = new HashSet<string>();
+
+        foreach (var preset in presets)
+        {
+            if (!string.IsNullOrWhiteSpace(preset.StylizedVariant))
+                variantIds.Add(preset.StylizedVariant);
+
+            if (!string.IsNullOrWhiteSpace(preset.DefaultVariant))
+                variantIds.Add(preset.DefaultVariant);
+
+            if (!string.IsNullOrWhiteSpace(preset.SimplifiedVariant))
+                variantIds.Add(preset.SimplifiedVariant);
+        }
+
+        return presets
+            .Where(preset => !variantIds.Contains(preset.ID) && preset.VisibleInSettings)
             .ToList();
     }
 
@@ -68,10 +90,10 @@ public sealed partial class AccessibilityTab
             AnnouncementDisplayPreference.Stylized
         };
 
-        if (preset.Presentations.Default != null)
+        if (!string.IsNullOrWhiteSpace(preset.DefaultVariant))
             list.Add(AnnouncementDisplayPreference.Default);
 
-        if (preset.Presentations.Simplified != null)
+        if (!string.IsNullOrWhiteSpace(preset.SimplifiedVariant))
             list.Add(AnnouncementDisplayPreference.Simplified);
 
         list.Add(AnnouncementDisplayPreference.Disabled);
@@ -79,55 +101,14 @@ public sealed partial class AccessibilityTab
         return list;
     }
 
-    private void RegisterAnnouncementLayoutEditor()
-    {
-        AnnouncementLayoutEditorButton.OnPressed += _ =>
-        {
-            if (_announcementLayoutEditorWindow != null &&
-                !_announcementLayoutEditorWindow.Disposed)
-            {
-                _announcementLayoutEditorWindow.OpenCentered();
-                return;
-            }
-
-            _announcementLayoutEditorWindow = new AnnouncementLayoutEditorWindow();
-            _announcementLayoutEditorWindow.OnClose += () => _announcementLayoutEditorWindow = null;
-            _announcementLayoutEditorWindow.OpenCentered();
-        };
-
-        AnnouncementLayoutResetButton.OnPressed += _ =>
-        {
-            _cfg.SetCVar(RMCCVars.RMCAnnouncementLayout, string.Empty);
-            _cfg.SetCVar(RMCCVars.RMCAnnouncementLayoutOverrides, string.Empty);
-            UpdateAnnouncementLayoutSummary();
-        };
-
-        _cfg.OnValueChanged(RMCCVars.RMCAnnouncementLayout, _ => UpdateAnnouncementLayoutSummary(), true);
-        _cfg.OnValueChanged(RMCCVars.RMCAnnouncementLayoutOverrides, _ => UpdateAnnouncementLayoutSummary(), true);
-    }
-
-    private void UpdateAnnouncementLayoutSummary()
-    {
-        var globalOverride = AnnouncementLayoutOverrides.ParseSingle(_cfg.GetCVar(RMCCVars.RMCAnnouncementLayout));
-        var overrides = AnnouncementLayoutOverrides.Parse(_cfg.GetCVar(RMCCVars.RMCAnnouncementLayoutOverrides));
-
-        AnnouncementLayoutSummaryLabel.Text = Loc.GetString(
-            "rmc-ui-options-announcements-layout-summary",
-            ("global", globalOverride != null
-                ? Loc.GetString("rmc-ui-options-announcements-layout-summary-custom")
-                : Loc.GetString("rmc-ui-options-announcements-layout-summary-default")),
-            ("count", overrides.Count));
-    }
-
-    private sealed class AnnouncementPresetOverrideOption : BaseOption
+    private sealed partial class AnnouncementPresetOverrideOption : BaseOption
     {
         private readonly IConfigurationManager _cfg;
         private readonly OptionDropDown _dropDown;
         private readonly string _presetId;
         private readonly HashSet<AnnouncementDisplayPreference> _availablePreferences;
-        private readonly AnnouncementDisplayPreference _defaultPreference;
         private readonly Dictionary<AnnouncementDisplayPreference, int> _entryIds = new();
-        private Dictionary<string, AnnouncementDisplayPreference> _cachedOverrides = new();
+        private readonly int _inheritId;
 
         private AnnouncementDisplayPreference? SelectedPreference
         {
@@ -141,9 +122,13 @@ public sealed partial class AccessibilityTab
             }
             set
             {
-                var target = value ?? _defaultPreference;
-                if (_entryIds.TryGetValue(target, out var id))
+                if (value is { } preference && _entryIds.TryGetValue(preference, out var id))
+                {
                     _dropDown.Button.SelectId(id);
+                    return;
+                }
+
+                _dropDown.Button.SelectId(_inheritId);
             }
         }
 
@@ -152,16 +137,18 @@ public sealed partial class AccessibilityTab
             IConfigurationManager cfg,
             OptionDropDown dropDown,
             string presetId,
-            IReadOnlyCollection<AnnouncementDisplayPreference> availablePreferences,
-            AnnouncementDisplayPreference defaultPreference) : base(controller)
+            IReadOnlyCollection<AnnouncementDisplayPreference> availablePreferences) : base(controller)
         {
             _cfg = cfg;
             _dropDown = dropDown;
             _presetId = presetId;
-            _defaultPreference = defaultPreference;
             _availablePreferences = new HashSet<AnnouncementDisplayPreference>(availablePreferences);
 
-            var nextId = 0;
+            _dropDown.Button.AddItem(Loc.GetString("rmc-ui-options-announcements-style-inherit"), 0);
+            _dropDown.Button.SetItemMetadata(_dropDown.Button.GetIdx(0), -1);
+            _inheritId = 0;
+
+            var nextId = 1;
             foreach (var preference in availablePreferences)
             {
                 var key = preference switch
@@ -187,14 +174,6 @@ public sealed partial class AccessibilityTab
                 _dropDown.Button.SelectId(args.Id);
                 ValueChanged();
             };
-
-            _cachedOverrides = AnnouncementPreferenceOverrides.Parse(_cfg.GetCVar(RMCCVars.RMCAnnouncementStyleOverrides));
-            _cfg.OnValueChanged(RMCCVars.RMCAnnouncementStyleOverrides, OnOverridesChanged);
-        }
-
-        private void OnOverridesChanged(string serialized)
-        {
-            _cachedOverrides = AnnouncementPreferenceOverrides.Parse(serialized);
         }
 
         public override void LoadValue()
@@ -204,12 +183,11 @@ public sealed partial class AccessibilityTab
 
         public override void SaveValue()
         {
-            var overrides = new Dictionary<string, AnnouncementDisplayPreference>(_cachedOverrides);
-            var preference = SelectedPreference ?? _defaultPreference;
-            if (preference == _defaultPreference)
-                overrides.Remove(_presetId);
-            else
+            var overrides = GetStoredOverrides();
+            if (SelectedPreference is { } preference)
                 overrides[_presetId] = preference;
+            else
+                overrides.Remove(_presetId);
 
             _cfg.SetCVar(RMCCVars.RMCAnnouncementStyleOverrides, AnnouncementPreferenceOverrides.Serialize(overrides));
         }
@@ -221,19 +199,24 @@ public sealed partial class AccessibilityTab
 
         public override bool IsModified()
         {
-            var selected = SelectedPreference ?? _defaultPreference;
-            var stored = GetStoredPreference() ?? _defaultPreference;
-            return selected != stored;
+            return SelectedPreference != GetStoredPreference();
         }
 
         public override bool IsModifiedFromDefault()
         {
-            return (SelectedPreference ?? _defaultPreference) != _defaultPreference;
+            return SelectedPreference != null;
+        }
+
+        private Dictionary<string, AnnouncementDisplayPreference> GetStoredOverrides()
+        {
+            var serialized = _cfg.GetCVar(RMCCVars.RMCAnnouncementStyleOverrides);
+            return AnnouncementPreferenceOverrides.Parse(serialized);
         }
 
         private AnnouncementDisplayPreference? GetStoredPreference()
         {
-            if (!_cachedOverrides.TryGetValue(_presetId, out var preference))
+            var overrides = GetStoredOverrides();
+            if (!overrides.TryGetValue(_presetId, out var preference))
                 return null;
 
             return _availablePreferences.Contains(preference) ? preference : null;

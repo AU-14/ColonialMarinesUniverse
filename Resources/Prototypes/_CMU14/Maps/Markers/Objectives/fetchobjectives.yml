@@ -1,5 +1,5 @@
 - type: entity
-  name: Fetch Ore Objecive
+  name: Fetch Ore Objective
   parent: MarkerBase
   id: fetchoreobjective
   components:
@@ -24,7 +24,7 @@
     useanyentity: true
 
 - type: entity
-  name: Fetch BlackBox Objecive Spawn Marker
+  name: Fetch BlackBox Objective Spawn Marker
   parent: MarkerBase
   id: fetchoreobjectivemarker
   components:
@@ -32,9 +32,6 @@
     state: red
   - type: FetchObjectiveMarker
     fetchid: fetchoreobjectivemarker
-
-
-
 
 - type: entity
   name: Fetch Generic Return point Opfor
@@ -58,10 +55,8 @@
     returnpointfaction: govfor
     generic: true
 
-
-
 - type: entity
-  name: Fetch crown Objecive
+  name: Fetch crown Objective
   parent: MarkerBase
   id: fetchcrownobjective
   components:
@@ -87,7 +82,7 @@
     amounttofetch: 1
 
 - type: entity
-  name: Fetch AN/PRC-982 Objecive
+  name: Fetch AN/PRC-982 Objective
   parent: MarkerBase
   id: fetchanprcobjective
   components:
@@ -98,9 +93,13 @@
     factioneutral: true
     applicableModes:
     - ForceOnForce
+    - Insurgency
+    - ColonyFall
     possiblefactions:
     - opfor
     - govfor
+    - scientist
+    - CLF
     repeating: false
     objectivelevel: 1
     custompoints: 5
@@ -113,7 +112,7 @@
     amounttofetch: 1
 
 - type: entity
-  name: Fetch CIR-60 Blackbox Objecive
+  name: Fetch CIR-60 Blackbox Objective
   parent: MarkerBase
   id: fetchblackboxobjective
   components:
@@ -125,9 +124,13 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
+    - ColonyFall
+    - Insurgency
     possiblefactions:
     - opfor
     - govfor
+    - scientist
+    - CLF
     repeating: false
     objectivelevel: 1
     custompoints: 5
@@ -141,7 +144,7 @@
     useanyentity: true
 
 - type: entity
-  name: Fetch Nuclear Launch Codes Booklet Objecive
+  name: Fetch Nuclear Launch Codes Booklet Objective
   parent: MarkerBase
   id: fetchnuclearlaunchcodesobjective
   components:
@@ -153,9 +156,13 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
+    - ColonyFall
+    - Insurgency
     possiblefactions:
     - opfor
     - govfor
+    - scientist
+    - CLF
     repeating: false
     objectivelevel: 1
     custompoints: 5
@@ -168,7 +175,7 @@
     amounttofetch: 1
 
 - type: entity
-  name: Fetch Theater Operations Handbook Objecive
+  name: Fetch Theater Operations Handbook Objective
   parent: MarkerBase
   id: fetchtheaterhandbookobjective
   components:
@@ -180,9 +187,13 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
+    - ColonyFall
+    - Insurgency
     possiblefactions:
     - opfor
     - govfor
+    - scientist
+    - CLF
     repeating: false
     objectivelevel: 1
     custompoints: 5
@@ -195,7 +206,7 @@
     amounttofetch: 1
 
 - type: entity
-  name: Fetch RCS-9 ARDSU Objecive
+  name: Fetch RCS-9 ARDSU Objective
   parent: MarkerBase
   id: fetchattmosdatastorageunitobjective
   components:
@@ -207,9 +218,13 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
+    - ColonyFall
+    - Insurgency
     possiblefactions:
     - opfor
     - govfor
+    - scientist
+    - CLF
     repeating: false
     objectivelevel: 1
     custompoints: 10
@@ -222,7 +237,7 @@
     amounttofetch: 2
 
 - type: entity
-  name: Fetch WY Laptop Objecive
+  name: Fetch WY Laptop Objective
   parent: MarkerBase
   id: fetchwylaptopobjective
   components:
@@ -233,7 +248,7 @@
     factioneutral: true
     applicableModes:
     - ForceOnForce
-    - insurgency
+    - Insurgency
     - DistressSignal
     possiblefactions:
     - opfor

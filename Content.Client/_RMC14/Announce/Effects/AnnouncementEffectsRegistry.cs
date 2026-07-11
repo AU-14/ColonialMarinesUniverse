@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using Content.Shared._RMC14.Announce;
+using System.Collections.Generic;
 
 namespace Content.Client._RMC14.Announce.Effects;
 
@@ -12,6 +12,12 @@ public static class AnnouncementEffectsRegistry
 
         if (style.AnimationConfig.FlickerChance > 0)
             yield return new FlickerEffect();
+
+        if (style.AnimationConfig.Animation == AnnouncementAnimation.Fade)
+            yield return new FadeEffect();
+
+        if (style.AnimationConfig.Animation == AnnouncementAnimation.Pulse || style.AnimationConfig.Animation == AnnouncementAnimation.Heartbeat)
+            yield return new PulseEffect();
 
         if (style.TitleConfig.Effect.Type == AnnouncementTitleEffectType.AssaultPulse)
             yield return new TitleAssaultPulseEffect();

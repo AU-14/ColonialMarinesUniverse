@@ -1,10 +1,12 @@
 using System.Linq;
 using Content.Server.Chat.Systems;
+using Content.Server.Radio;
 using Content.Shared._RMC14.Language;
 using Content.Shared._RMC14.Language.Components;
 using Content.Shared._RMC14.Language.Prototypes;
 using Content.Shared._RMC14.Language.Systems;
 using Content.Shared.Examine;
+using Content.Shared.Mobs.Systems;
 using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -17,16 +19,21 @@ public sealed partial class LanguageLearningSystem : SharedLanguageLearningSyste
     [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private LanguageSystem _languages = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     private const float MaxHearingRange = 10.0f;
+    private const float RadioLearningDistance = 0.0f;
+    private const float LearningDurationMultiplier = 3.0f;
     private readonly HashSet<EntityUid> _potentialLearners = [];
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<EntitySpokeEvent>(OnEntitySpoke);
+        SubscribeLocalEvent<LanguageLearningComponent, HeadsetRadioReceiveRelayEvent>(OnHeadsetRadioReceive);
         SubscribeLocalEvent<LanguageLearningComponent, MapInitEvent>(OnLearningMapInit);
+        SubscribeLocalEvent<LanguageLearningComponent, RadioReceiveEvent>(OnRadioReceive);
         SubscribeLocalEvent<LanguageLearningComponent, DetermineEntityLanguagesEvent>(OnDetermineEntityLanguages);
     }
 
@@ -97,23 +104,8 @@ public sealed partial class LanguageLearningSystem : SharedLanguageLearningSyste
 
         foreach (var potentialLearner in _potentialLearners)
         {
-            if (potentialLearner == args.Source)
-                continue;
-
             if (!TryComp<LanguageLearningComponent>(potentialLearner, out var learnerComp))
                 continue;
-
-            if (!learnerComp.Languages.ContainsKey(args.Language))
-                continue;
-
-            if (TryComp<LanguageComponent>(potentialLearner, out var langComp))
-            {
-                var canSpeak = langComp.SpokenLanguages.Contains(args.Language);
-                var canUnderstand = langComp.UnderstoodLanguages.Contains(args.Language);
-
-                if (canSpeak && canUnderstand)
-                    continue;
-            }
 
             if (languageProto.NeedsLOS &&
                 !_examine.InRangeUnOccluded(args.Source, potentialLearner, MaxHearingRange))
@@ -121,16 +113,64 @@ public sealed partial class LanguageLearningSystem : SharedLanguageLearningSyste
                 continue;
             }
 
-            TryHandleFirstContact((potentialLearner, learnerComp), args.Language);
-
             if (!sourceCoordinates.TryDistance(EntityManager, Transform(potentialLearner).Coordinates, out var distance))
                 continue;
 
-            if (distance > learnerComp.LearningRange)
-                continue;
-
-            TryLearnWords((potentialLearner, learnerComp), args.Source, args.Message, args.Language, distance);
+            TryLearnHeardSpeech((potentialLearner, learnerComp), args.Source, args.Message, args.Language, distance);
         }
+    }
+
+    private void OnHeadsetRadioReceive(Entity<LanguageLearningComponent> learner, ref HeadsetRadioReceiveRelayEvent args)
+    {
+        TryLearnHeardSpeech(
+            learner,
+            args.RelayedEvent.MessageSource,
+            args.RelayedEvent.Message,
+            args.RelayedEvent.Language,
+            RadioLearningDistance);
+    }
+
+    private void OnRadioReceive(Entity<LanguageLearningComponent> learner, ref RadioReceiveEvent args)
+    {
+        TryLearnHeardSpeech(
+            learner,
+            args.MessageSource,
+            args.Message,
+            args.Language,
+            RadioLearningDistance);
+    }
+
+    private void TryLearnHeardSpeech(
+        Entity<LanguageLearningComponent> learner,
+        EntityUid source,
+        string messageText,
+        ProtoId<LanguagePrototype> language,
+        float distance)
+    {
+        if (learner.Owner == source)
+            return;
+
+        if (_mobState.IsDead(learner.Owner))
+            return;
+
+        if (!learner.Comp.Languages.ContainsKey(language))
+            return;
+
+        if (TryComp<LanguageComponent>(learner, out var langComp))
+        {
+            var canSpeak = langComp.SpokenLanguages.Contains(language);
+            var canUnderstand = langComp.UnderstoodLanguages.Contains(language);
+
+            if (canSpeak && canUnderstand)
+                return;
+        }
+
+        TryHandleFirstContact(learner, language);
+
+        if (distance > learner.Comp.LearningRange)
+            return;
+
+        TryLearnWords(learner, source, messageText, language, distance);
     }
 
     private void TryHandleFirstContact(
@@ -286,6 +326,7 @@ public sealed partial class LanguageLearningSystem : SharedLanguageLearningSyste
             var learningRate = baseRate + frequencyBonus;
             var actualLearning = learningRate * diminishingFactor * distancePenalty;
             actualLearning *= languageProto.LearningRateMultiplier;
+            actualLearning /= LearningDurationMultiplier;
             actualLearning *= _random.NextFloat(0.9f, 1.1f);
 
             var newComprehension = Math.Min(comp.MaxWordComprehension, currentComprehension + actualLearning);

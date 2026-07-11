@@ -15,10 +15,10 @@ public sealed partial class DropshipComponent : Component
     [DataField, AutoNetworkedField]
     public FTLState State;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? Destination;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? DepartureLocation;
 
     [DataField, AutoNetworkedField]
@@ -87,7 +87,7 @@ public sealed partial class DropshipComponent : Component
     [DataField, AutoNetworkedField]
     public TimeSpan CancelFlightTime = TimeSpan.FromSeconds(10);
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? LaunchAlarmEntity;
 
     [DataField]

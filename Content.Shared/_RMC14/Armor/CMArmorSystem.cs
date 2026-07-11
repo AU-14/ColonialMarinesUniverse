@@ -7,7 +7,6 @@ using Content.Shared._RMC14.Medical.Surgery.Steps;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Slowing;
-using Content.Shared._RMC14.Xenonids.Sunder;
 using Content.Shared.Alert;
 using Content.Shared.Armor;
 using Content.Shared.Body.Part;
@@ -124,29 +123,22 @@ public sealed partial class CMArmorSystem : EntitySystem
 
         var ev = new CMGetArmorEvent(SlotFlags.OUTERCLOTHING | SlotFlags.INNERCLOTHING);
         RaiseLocalEvent(armored, ref ev);
-        var sunder = CompOrNull<XenoSunderComponent>(armored);
-        var xenoArmor = GetEffectiveXenoArmor(ev.XenoArmor * ev.ArmorModifier, sunder);
-        var frontalArmor = GetEffectiveXenoArmor((ev.XenoArmor + ev.FrontalArmor) * ev.ArmorModifier, sunder);
-        var sideArmor = GetEffectiveXenoArmor((ev.XenoArmor + ev.SideArmor) * ev.ArmorModifier, sunder);
         var armorMessage = ev.FrontalArmor == 0 &&
                            ev.SideArmor == 0 &&
                            armored.Comp.FrontalArmor == 0 &&
                            armored.Comp.SideArmor == 0
-            ? $"{FixedPoint2.New(xenoArmor)} / {armored.Comp.XenoArmor}"
-            : $"Overall: {FixedPoint2.New(xenoArmor)} / {armored.Comp.XenoArmor}";
+            ? $"{FixedPoint2.New(ev.XenoArmor * ev.ArmorModifier)} / {armored.Comp.XenoArmor}"
+            : $"Overall: {FixedPoint2.New(ev.XenoArmor * ev.ArmorModifier)} / {armored.Comp.XenoArmor}";
 
         if (armored.Comp.FrontalArmor != 0 || ev.FrontalArmor != 0)
-            armorMessage = $"{armorMessage}\nFrontal: {FixedPoint2.New(frontalArmor)} / {armored.Comp.XenoArmor + armored.Comp.FrontalArmor}";
+            armorMessage = $"{armorMessage}\nFrontal: {FixedPoint2.New((ev.XenoArmor + ev.FrontalArmor) * ev.ArmorModifier)} / {armored.Comp.XenoArmor + armored.Comp.FrontalArmor}";
 
         if (armored.Comp.SideArmor != 0 || ev.SideArmor != 0)
-            armorMessage = $"{armorMessage}\nSide: {FixedPoint2.New(sideArmor)} / {armored.Comp.XenoArmor + armored.Comp.SideArmor}";
-
-        if (sunder != null && sunder.Amount > FixedPoint2.Zero)
-            armorMessage = $"{armorMessage}\nSunder: {FixedPoint2.New(GetSunderPercent(sunder))}%";
+            armorMessage = $"{armorMessage}\nSide: {FixedPoint2.New((ev.XenoArmor + ev.SideArmor) * ev.ArmorModifier)} / {armored.Comp.XenoArmor + armored.Comp.SideArmor}";
 
         var max = _alerts.GetMaxSeverity(xeno.ArmorAlert);
 
-        var severity = max - ContentHelpers.RoundToLevels(xenoArmor, MaxXenoArmor, max + 1);
+        var severity = max - ContentHelpers.RoundToLevels(ev.XenoArmor * ev.ArmorModifier, MaxXenoArmor, max + 1);
         _alerts.ShowAlert(armored, xeno.ArmorAlert, (short)severity, dynamicMessage: armorMessage);
     }
 
@@ -341,22 +333,19 @@ public sealed partial class CMArmorSystem : EntitySystem
 
     private void ModifyDamage(EntityUid ent, ref DamageModifyEvent args)
     {
-        var xeno = HasComp<XenoComponent>(ent);
-        TryComp<XenoSunderComponent>(ent, out var sunder);
-
         var ev = new CMGetArmorEvent(args.TargetSlots, TargetPart: args.TargetPart, TargetZone: args.TargetZone);
         RaiseLocalEvent(ent, ref ev);
 
         var armorPiercing = args.ArmorPiercing;
-        if (args.Tool != null)
+        if (args.Tool is { } tool && Exists(tool))
         {
             var piercingEv = new CMGetArmorPiercingEvent(ent);
-            RaiseLocalEvent(args.Tool.Value, ref piercingEv);
+            RaiseLocalEvent(tool, ref piercingEv);
             armorPiercing += piercingEv.Piercing;
         }
 
         var immuneToAP = TryComp<CMArmorComponent>(ent, out var armorComp) && armorComp.ImmuneToAP;
-        if (xeno)
+        if (HasComp<XenoComponent>(ent))
         {
             ev.XenoArmor = (int)(ev.XenoArmor * ev.ArmorModifier);
             if (!immuneToAP)
@@ -397,14 +386,11 @@ public sealed partial class CMArmorSystem : EntitySystem
             }
         }
 
-        if (xeno)
-            ev.XenoArmor = Math.Max((int)Math.Round(GetEffectiveXenoArmor(ev.XenoArmor, sunder)), 0);
-
         //Default modifier
         var mod = EnsureComp<RMCArmorModifierComponent>(ent);
 
         args.Damage = new DamageSpecifier(args.Damage);
-        if (!xeno)
+        if (!HasComp<XenoComponent>(ent))
         {
             if (HasComp<RMCBulletComponent>(args.Tool))
             {
@@ -574,26 +560,6 @@ public sealed partial class CMArmorSystem : EntitySystem
             return;
 
         EntityManager.AddComponents(ent, allowed);
-    }
-
-    private static double GetEffectiveXenoArmor(double armor, XenoSunderComponent? sunder)
-    {
-        if (sunder == null ||
-            sunder.Amount <= FixedPoint2.Zero ||
-            sunder.Max <= FixedPoint2.Zero)
-        {
-            return armor;
-        }
-
-        return armor * Math.Clamp(1 - sunder.Amount.Float() / sunder.Max.Float(), 0, 1);
-    }
-
-    private static double GetSunderPercent(XenoSunderComponent sunder)
-    {
-        if (sunder.Max <= FixedPoint2.Zero)
-            return 0;
-
-        return Math.Clamp(sunder.Amount.Float() / sunder.Max.Float() * 100, 0, 100);
     }
 
     private FormattedMessage GetArmorExamine(Entity<CMArmorComponent> armored)

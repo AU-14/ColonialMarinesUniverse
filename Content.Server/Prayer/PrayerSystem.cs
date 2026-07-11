@@ -82,6 +82,18 @@ public sealed partial class PrayerSystem : EntitySystem
     /// <param name="popupMessage">The popup to notify the player, also prepended to the messageString</param>
     public void SendSubtleMessage(ICommonSession target, ICommonSession source, string messageString, string popupMessage)
     {
+        SendSubtleMessage(target, source.Name, messageString, popupMessage);
+    }
+
+    /// <summary>
+    /// Subtly messages a player by giving them a popup and a chat message.
+    /// </summary>
+    /// <param name="target">The IPlayerSession that you want to send the message to</param>
+    /// <param name="sourceName">The name to show as the subtle message source in admin logs</param>
+    /// <param name="messageString">The main message sent to the player via the chatbox</param>
+    /// <param name="popupMessage">The popup to notify the player, also prepended to the messageString</param>
+    public void SendSubtleMessage(ICommonSession target, string sourceName, string messageString, string popupMessage)
+    {
         if (target.AttachedEntity == null)
             return;
 
@@ -89,7 +101,7 @@ public sealed partial class PrayerSystem : EntitySystem
 
         _popupSystem.PopupEntity(popupMessage, target.AttachedEntity.Value, target, PopupType.Large);
         _chatManager.ChatMessageToOne(ChatChannel.Local, messageString, message, EntityUid.Invalid, false, target.Channel);
-        _adminLogger.Add(LogType.AdminMessage, LogImpact.Low, $"{ToPrettyString(target.AttachedEntity.Value):player} received subtle message from {source.Name}: {message}");
+        _adminLogger.Add(LogType.AdminMessage, LogImpact.Low, $"{ToPrettyString(target.AttachedEntity.Value):player} received subtle message from {sourceName}: {message}");
     }
 
     /// <summary>

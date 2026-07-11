@@ -2,10 +2,10 @@
 
 namespace Content.Shared._RMC14.Sound;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent]
 [Access(typeof(CMSoundSystem))]
 public sealed partial class SoundOnDeathSoundComponent : Component
 {
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? Parent;
 }

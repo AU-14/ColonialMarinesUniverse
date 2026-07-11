@@ -26,7 +26,9 @@ public sealed partial class DoorComponent
     [DataField]
     public SoundSpecifier XenoPodDoorPrySound = new SoundPathSpecifier("/Audio/Machines/airlock_creaking.ogg");
 
-    [DataField, AutoNetworkedField]
+    /// <summary>
+    /// Runtime handle for the xeno pry audio stream.
+    /// </summary>
     public EntityUid? SoundEntity;
 }
 

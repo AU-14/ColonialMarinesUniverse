@@ -22,7 +22,7 @@ public sealed partial class AnnouncementWidget
             _owner = owner;
         }
 
-        public Control? ApplyDecalPlacement(Control? spriteContainer, Control? decalControl, AnnouncementDisplayData announcement, Vector2 screenSize)
+        public Control? ApplyDecalPlacement(Control? spriteContainer, Control? decalControl, AnnouncementNetData announcement, Vector2 screenSize)
         {
             if (decalControl == null || spriteContainer == null)
                 return spriteContainer;
@@ -115,7 +115,7 @@ public sealed partial class AnnouncementWidget
             return finalContainer ?? spriteContainer;
         }
 
-        public Control? CreateDecalContainer(AnnouncementDisplayData announcement, Vector2 screenSize)
+        public Control? CreateDecalContainer(AnnouncementNetData announcement, Vector2 screenSize)
         {
             try
             {
@@ -170,7 +170,7 @@ public sealed partial class AnnouncementWidget
             }
             catch (Exception ex)
             {
-                Sawmill.Error($"[AnnouncementWidget] Failed to load decal {announcement.DecalRsi}:{announcement.DecalState}: {ex}");
+                Logger.GetSawmill("content").Error($"[AnnouncementWidget] Failed to load decal {announcement.DecalRsi}:{announcement.DecalState}: {ex}");
                 return null;
             }
         }

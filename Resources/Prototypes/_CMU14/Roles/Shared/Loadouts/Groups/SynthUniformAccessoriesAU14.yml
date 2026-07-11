@@ -1,0 +1,20 @@
+- type: loadoutGroup
+  id: SynthUniformAccessoriesAU14
+  name: rmc-loadout-group-synthetic-accessories
+  minLimit: 0
+  maxLimit: 3
+  loadouts:
+  - ScienceArmbandRMC
+  - EngiArmbandRMC
+  - MedArmbandRMC
+  - EMTArmBandCMU14
+  - MedicPatchCMU14
+  - OliveBranchPatchCMU14
+  - PeacePatchCMU14
+  - BlackSquareWeYuCMU14
+  - TieRMC
+  - TieGreenRMC
+  - TieBlackRMC
+  - TieGoldRMC
+  - TieRedRMC
+  - TiePurpleRMC

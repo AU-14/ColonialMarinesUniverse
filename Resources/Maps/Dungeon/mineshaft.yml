@@ -528,13 +528,6 @@ entities:
     - type: Transform
       pos: 24.5,32.5
       parent: 2
-- proto: BorgModuleGPS
-  entities:
-  - uid: 800
-    components:
-    - type: Transform
-      pos: 43.60813,21.699238
-      parent: 2
 - proto: BorgModuleL6C
   entities:
   - uid: 802
@@ -1691,13 +1684,6 @@ entities:
     components:
     - type: Transform
       pos: 20.506927,28.78566
-      parent: 2
-- proto: ClothingNeckCloakMiner
-  entities:
-  - uid: 1039
-    components:
-    - type: Transform
-      pos: 13.46296,18.77332
       parent: 2
 - proto: ClothingOuterHardsuitSalvage
   entities:

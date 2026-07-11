@@ -63,7 +63,7 @@ public sealed partial class CMUXenoWarlockParticleOverlay : Overlay
         _unshaded = _prototype.Index(UnshadedShader).Instance();
     }
 
-    public override OverlaySpace Space => OverlaySpace.WorldSpace;
+    public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV;
 
     protected override void Draw(in OverlayDrawArgs args)
     {

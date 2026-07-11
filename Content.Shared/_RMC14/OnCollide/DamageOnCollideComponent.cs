@@ -15,7 +15,7 @@ public sealed partial class DamageOnCollideComponent : Component
     [DataField, AutoNetworkedField]
     public bool InitDamaged;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? Chain;
 
     [DataField(required: true)]
@@ -25,7 +25,7 @@ public sealed partial class DamageOnCollideComponent : Component
     [DataField]
     public DamageSpecifier ChainDamage = new();
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public HashSet<EntityUid> Damaged = new();
 
     [DataField]
@@ -75,4 +75,7 @@ public sealed partial class DamageOnCollideComponent : Component
 
     [DataField]
     public bool CanRehit;
+
+    [DataField, AutoNetworkedField]
+    public bool Disabled = false;
 }

@@ -49,6 +49,9 @@ public sealed partial class XenoBulwarkComponent : Component
     public TimeSpan TailSwingParalyzeTime = TimeSpan.FromSeconds(1.2);
 
     [DataField, AutoNetworkedField]
+    public float TailSwingRange = 1.75f;
+
+    [DataField, AutoNetworkedField]
     public ProtoId<TagPrototype> TailSwingFlingable = "Grenade";
 
     [DataField, AutoNetworkedField]

@@ -494,16 +494,26 @@ public sealed partial class HiveBoonSystem : EntitySystem
             return;
         }
 
-        foreach (var curWeed in oldWeeds.Spread)
+        foreach (var curWeed in oldWeeds.Spread.ToArray())
         {
+            if (TerminatingOrDeleted(curWeed))
+            {
+                oldWeeds.Spread.Remove(curWeed);
+                continue;
+            }
+
             var curWeedComp = EnsureComp<XenoWeedsComponent>(curWeed);
             curWeedComp.Range = newWeedSourceComp.Range;
             curWeedComp.Source = newWeedSource;
-            newWeedSourceComp.Spread.Add(curWeed);
+            Dirty(curWeed, curWeedComp);
+
+            if (!newWeedSourceComp.Spread.Contains(curWeed))
+                newWeedSourceComp.Spread.Add(curWeed);
         }
 
         oldWeeds.Spread.Clear();
         Dirty(cluster, oldWeeds);
+        Dirty(newWeedSource, newWeedSourceComp);
 
         RemComp<XenoWeedsSpreadingComponent>(newWeedSource);
         QueueDel(cluster);

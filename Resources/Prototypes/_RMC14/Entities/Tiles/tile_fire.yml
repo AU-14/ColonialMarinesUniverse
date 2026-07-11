@@ -89,7 +89,7 @@
     tileDamage:
       types:
         Heat: 1
-    armorMultiplier: 0.75
+    armorMultiplier: 0.5
     armorWhitelist:
       components:
       - Xeno
@@ -100,8 +100,8 @@
     patExtinguishMultiplier: 2
     sprayExtinguishMultiplier: 3
   - type: SpeedModifierContacts
-    walkSpeedModifier: 0.4
-    sprintSpeedModifier: 0.4
+    walkSpeedModifier: 0.666
+    sprintSpeedModifier: 0.666
   - type: GenericVisualizer
     visuals:
       enum.TileFireLayers.Base:

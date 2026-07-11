@@ -1,6 +1,7 @@
 using Content.Server.GameTicking;
 using Content.Server.Mind;
 using Content.Server.Players.PlayTimeTracking;
+using Content.Server.Preferences.Managers;
 using Content.Server.Roles;
 using Content.Server._RMC14.PlayTimeTracking;
 using Content.Server._RMC14.Xenonids.JoinXeno;
@@ -31,6 +32,7 @@ public sealed partial class XenoRoleSystem : EntitySystem
     [Dependency] private NameModifierSystem _nameModifier = default!;
     [Dependency] private PlayTimeTrackingSystem _playTime = default!;
     [Dependency] private PlayTimeTrackingManager _playTimeManager = default!;
+    [Dependency] private IServerPreferencesManager _preferences = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private PvsOverrideSystem _pvsOverride = default!;
     [Dependency] private RMCPlayTimeManager _rmcPlaytime = default!;
@@ -202,6 +204,7 @@ public sealed partial class XenoRoleSystem : EntitySystem
             for (var i = _toUpdate.Count - 1; i >= 0; i--)
             {
                 var removed = false;
+                var retry = false;
                 try
                 {
                     var xeno = _toUpdate[i];
@@ -217,6 +220,12 @@ public sealed partial class XenoRoleSystem : EntitySystem
                     var player = actor.PlayerSession;
                     if (!_mind.TryGetMind(player.UserId, out var mind))
                         continue;
+
+                    if (!_preferences.HavePreferencesLoaded(player))
+                    {
+                        retry = true;
+                        continue;
+                    }
 
                     if (_hive.GetHive(xeno.Owner) is { } hive)
                         _pvsOverride.AddForceSend(hive, player);
@@ -236,7 +245,7 @@ public sealed partial class XenoRoleSystem : EntitySystem
                 }
                 finally
                 {
-                    if (!removed)
+                    if (!removed && !retry)
                         _toUpdate.RemoveAt(i);
                 }
             }

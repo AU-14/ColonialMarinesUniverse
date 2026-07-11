@@ -294,4 +294,6 @@ public sealed partial class VehicleHardpointFailureRepairDoAfterEvent : DoAfterE
 
 public readonly record struct HardpointSlotsChangedEvent(EntityUid Vehicle);
 
+public readonly record struct HardpointIntegrityChangedEvent;
+
 public readonly record struct VehicleFrameIntegrityChangedEvent(EntityUid Vehicle, bool Intact);

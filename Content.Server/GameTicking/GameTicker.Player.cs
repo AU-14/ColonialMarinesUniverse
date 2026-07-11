@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
@@ -11,18 +12,23 @@ using Robust.Shared.Enums;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
+using Stopwatch = System.Diagnostics.Stopwatch;
 
 namespace Content.Server.GameTicking
 {
     [UsedImplicitly]
     public sealed partial class GameTicker
     {
-        private static readonly TimeSpan JoinTimingWarnThreshold = TimeSpan.FromSeconds(1);
+        [ViewVariables]
+        private TimeSpan _joinTimingWarnThreshold = TimeSpan.FromSeconds(5);
 
         [Dependency] private IPlayerManager _playerManager = default!;
 
         private void InitializePlayer()
         {
+            Subs.CVar(_cfg, CCVars.GameJoinTimingWarnSeconds,
+                seconds => _joinTimingWarnThreshold = TimeSpan.FromSeconds(Math.Max(0f, seconds)), true);
+
             _playerManager.PlayerStatusChanged += PlayerStatusChanged;
         }
 
@@ -84,19 +90,26 @@ namespace Content.Server.GameTicking
 
                 case SessionStatus.InGame:
                 {
+                    var inGameAt = DateTime.UtcNow;
                     LogSlowJoinTransition(session, "GameTicker received InGame");
-
-                    _userDb.ClientConnected(session);
 
                     if (mind == null)
                     {
                         if (LobbyEnabled)
-                            PlayerJoinLobby(session);
+                        {
+                            PlayerJoinLobby(session, inGameAt);
+                            StartUserDataLoad(session);
+                        }
                         else
+                        {
+                            StartUserDataLoad(session);
                             SpawnWaitDb();
+                        }
 
                         break;
                     }
+
+                    StartUserDataLoad(session);
 
                     if (mind.CurrentEntity == null || Deleted(mind.CurrentEntity))
                     {
@@ -146,7 +159,7 @@ namespace Content.Server.GameTicking
             {
                 try
                 {
-                    await _userDb.WaitLoadComplete(session);
+                    await WaitUserDataLoad(session, "GameTicker waiting to spawn player");
                 }
                 catch (OperationCanceledException)
                 {
@@ -162,7 +175,7 @@ namespace Content.Server.GameTicking
             {
                 try
                 {
-                    await _userDb.WaitLoadComplete(session);
+                    await WaitUserDataLoad(session, "GameTicker waiting to spawn observer");
                 }
                 catch (OperationCanceledException)
                 {
@@ -183,14 +196,60 @@ namespace Content.Server.GameTicking
             }
         }
 
-        private void LogSlowJoinTransition(ICommonSession session, string step)
+        private void StartUserDataLoad(ICommonSession session)
         {
-            var elapsed = DateTime.UtcNow - session.ConnectedTime;
-            if (elapsed < JoinTimingWarnThreshold)
+            var stopwatch = Stopwatch.StartNew();
+            _userDb.ClientConnected(session);
+            LogSlowJoinPhase(session, "GameTicker starting user data load", stopwatch.Elapsed);
+        }
+
+        private async Task WaitUserDataLoad(ICommonSession session, string step)
+        {
+            var stopwatch = Stopwatch.StartNew();
+            await _userDb.WaitLoadComplete(session);
+            LogSlowJoinPhase(session, step, stopwatch.Elapsed);
+        }
+
+        private void LogSlowJoinTransition(
+            ICommonSession session,
+            string step,
+            DateTime? start = null,
+            string baseline = "Connected status was set")
+        {
+            var elapsed = DateTime.UtcNow - (start ?? session.ConnectedTime);
+            if (elapsed < _joinTimingWarnThreshold)
+            {
+                Log.Debug(
+                    "[JOIN-TIMING] {Step} for {Player} {Elapsed:N0} ms after {Baseline}",
+                    step,
+                    session,
+                    elapsed.TotalMilliseconds,
+                    baseline);
                 return;
+            }
 
             Log.Warning(
-                "[JOIN-TIMING] {Step} for {Player} {Elapsed:N0} ms after Connected status was set",
+                "[JOIN-TIMING] {Step} for {Player} {Elapsed:N0} ms after {Baseline}",
+                step,
+                session,
+                elapsed.TotalMilliseconds,
+                baseline);
+        }
+
+        private void LogSlowJoinPhase(ICommonSession session, string step, TimeSpan elapsed)
+        {
+            if (elapsed < _joinTimingWarnThreshold)
+            {
+                Log.Debug(
+                    "[JOIN-TIMING] {Step} for {Player} took {Elapsed:N0} ms",
+                    step,
+                    session,
+                    elapsed.TotalMilliseconds);
+                return;
+            }
+
+            Log.Warning(
+                "[JOIN-TIMING] {Step} for {Player} took {Elapsed:N0} ms",
                 step,
                 session,
                 elapsed.TotalMilliseconds);
@@ -224,12 +283,19 @@ namespace Content.Server.GameTicking
             RaiseNetworkEvent(GetRoundStatusMsg(), session.Channel);
         }
 
-        private void PlayerJoinLobby(ICommonSession session)
+        private void PlayerJoinLobby(ICommonSession session, DateTime? initialInGameAt = null)
         {
-            LogSlowJoinTransition(session, "GameTicker sending lobby join");
+            if (initialInGameAt != null)
+            {
+                LogSlowJoinTransition(session, "GameTicker sending initial lobby join");
+                LogSlowJoinTransition(
+                    session,
+                    "GameTicker post-InGame lobby handoff",
+                    initialInGameAt,
+                    "InGame status was set");
+            }
 
             _playerGameStatuses[session.UserId] = LobbyEnabled ? PlayerGameStatus.NotReadyToPlay : PlayerGameStatus.ReadyToPlay;
-            _db.AddRoundPlayers(RoundId, session.UserId);
 
             var client = session.Channel;
             RaiseNetworkEvent(new TickerJoinLobbyEvent(), client);
@@ -237,6 +303,7 @@ namespace Content.Server.GameTicking
             RaiseNetworkEvent(GetInfoMsg(), client);
             RaiseNetworkEvent(GetRoundStatusMsg(), client);
             RaiseLocalEvent(new PlayerJoinedLobbyEvent(session));
+            _db.AddRoundPlayers(RoundId, session.UserId);
         }
 
         private void ReqWindowAttentionAll()

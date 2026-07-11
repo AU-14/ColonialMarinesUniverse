@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Prototypes;
+using Content.Shared._RMC14.Prototypes;
 
 // ReSharper disable CheckNamespace
 namespace Content.Server.Announcements;

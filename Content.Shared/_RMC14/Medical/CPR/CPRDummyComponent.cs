@@ -17,10 +17,15 @@ public sealed partial class CPRDummyComponent : Component
     [DataField, AutoNetworkedField]
     public List<ProtoId<JobPrototype>> ResetCPRCounterJobs = new()
     {
-        "CMSeniorEnlistedAdvisor",
-        "CMCMO",
-        "AU14JobadvisorBase",
-        // TODO: AU14 CMO
+        "AU14JobGOVFORadvisor",
+        "AU14JobOPFORadvisor",
+        "AU14JobGOVFOROfficerMedical",
+        "AU14JobOPFOROfficerMedical",
+        "AU14JobGOVFORMilitaryDoctor",
+        "AU14JobOPFORMilitaryDoctor",
+        "AU14JobCivilianHeadPhysician",
+        "AU14JobCivilianPhysician"
+        // TODO: faction specific roles (e.g. AU14JobGOVFORadvisorUPP), preferably support Base
     };
 }
 

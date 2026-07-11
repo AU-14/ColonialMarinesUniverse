@@ -162,6 +162,12 @@ public sealed partial class SynthComponent : Component
     public bool UseHumanHealthIcons = false;
 
     /// <summary>
+    /// If true, xeno HUDs do not draw the synth identifier over this entity.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool HideXenoSynthIcon;
+
+    /// <summary>
     ///     True once <see cref="SharedSynthSystem.MakeSynth"/> has run, so the
     ///     same setup isn't re-applied if the entity hits both MapInit and a
     ///     later ComponentStartup (the AddComponentSpecial path).

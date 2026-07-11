@@ -30,6 +30,9 @@
       sprite: _RMC14/Objects/dropship_attachments.rsi
       state: fuel_enhancer_installed
   - type: DropshipFlightMultiplier
+  - type: DropshipFabricatorPrintable
+    category: Equipment
+    cost: 100
 
 - type: entity
   parent: RMCDropshipAttachmentEngine
@@ -45,3 +48,6 @@
       sprite: _RMC14/Objects/dropship_attachments.rsi
       state: cooling_system_installed
   - type: DropshipRechargeMultiplier
+  - type: DropshipFabricatorPrintable
+    category: Equipment
+    cost: 100

@@ -55,6 +55,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
     private static readonly ProtoId<JobPrototype> ThirdPartyLeaderJobId = new("AU14JobThirdPartyLeader");
     private static readonly ProtoId<JobPrototype> ThirdPartyMemberJobId = new("AU14JobThirdPartyMember");
     private static readonly ThreatMarkerType[] ThreatMarkerTypes = Enum.GetValues<ThreatMarkerType>();
+    private const string ThirdPartyFaction = "thirdparty";
     private readonly ISawmill _sawmill = Logger.GetSawmill("thirdparty");
 
     // --- State for round third party spawning ---
@@ -227,7 +228,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
             while (destQuery.MoveNext(out EntityUid destUid, out DropshipDestinationComponent? destComp,
                 out TransformComponent? destXform))
             {
-                if (destComp.Ship == null && string.IsNullOrEmpty(destComp.FactionController))
+                if (IsAvailableThirdPartyDropshipDestination(destUid, destComp))
                 {
                     chosenDestination = destUid;
                     break;
@@ -237,7 +238,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
             if (chosenDestination == null)
             {
                 _sawmill.Error(
-                    "[ThirdPartySystem] No valid dropship destination found (not landed, not controlled). Aborting third party spawn.");
+                    "[ThirdPartySystem] No valid third-party dropship landing destination found. Aborting third party spawn.");
                 return false;
             }
 
@@ -276,33 +277,8 @@ public sealed partial class ThirdPartySystem : EntitySystem
             EnsureComp<DropshipComponent>(mainGridUid);
             _sharedDropshipSystem.SetDropshipDestination(mainGridUid, returnDestination);
 
-            EntityQueryEnumerator<DropshipNavigationComputerComponent, TransformComponent> navQuery = _entityManager
-                .EntityQueryEnumerator<DropshipNavigationComputerComponent, TransformComponent>();
-            EntityUid? navUid = null;
-            DropshipNavigationComputerComponent? navComp = null;
-            while (navQuery.MoveNext(out EntityUid uid, out DropshipNavigationComputerComponent? comp,
-                out TransformComponent? xform))
-            {
-                if (xform.ParentUid == mainGridUid)
-                {
-                    navUid = uid;
-                    navComp = comp;
-                    break;
-                }
-            }
-
-            if (navUid != null && navComp != null)
-            {
-                var navEntity = new Entity<DropshipNavigationComputerComponent>(navUid.Value, navComp);
-                _sharedDropshipSystem.FlyTo(navEntity, destination, null);
-                _sawmill.Debug($"[ThirdPartySystem] Commanded dropship nav computer {navUid} to fly to destination {
-                    destination}");
-            }
-            else
-            {
-                _sawmill.Warning($"[ThirdPartySystem] Could not find navigation computer on dropship grid {mainGridUid
-                }; the dropship may not be able to travel.");
-            }
+            _sawmill.Debug($"[ThirdPartySystem] Third-party dropship {mainGridUid} loaded and waiting for manual launch to destination {
+                destination}.");
 
             // Collect markers on dropship grid
             EntityQueryEnumerator<AuInsertMarkerComponent> query = _entityManager
@@ -880,6 +856,16 @@ public sealed partial class ThirdPartySystem : EntitySystem
     private static bool IsOnGrid(TransformComponent transform, EntityUid gridUid)
         => (transform.GridUid.HasValue && transform.GridUid.Value == gridUid) ||
             transform.ParentUid == gridUid;
+
+    private bool IsAvailableThirdPartyDropshipDestination(
+        EntityUid destination,
+        DropshipDestinationComponent destinationComponent)
+    {
+        return destinationComponent.Ship == null &&
+               !destinationComponent.Home &&
+               !HasComp<ThirdPartyDropshipReturnDestinationComponent>(destination) &&
+               string.Equals(destinationComponent.FactionController, ThirdPartyFaction, StringComparison.OrdinalIgnoreCase);
+    }
 
     private List<EntityUid> FilterScenarioMarkers(ThreatMarkerType markerType,
         IReadOnlyList<EntityUid> candidateMarkers,

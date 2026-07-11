@@ -8,6 +8,7 @@ using Content.Server.Mind;
 using Content.Server.Roles.Jobs;
 using Content.Server.Warps;
 using Content.Shared._CMU14.Yautja;
+using Content.Shared._CMU14.Threats.Mobs.ZombieSummoner;
 using Content.Shared._RMC14.Ghost;
 using Content.Shared._RMC14.Mentor.ImaginaryFriend;
 using Content.Shared._RMC14.Xenonids;
@@ -424,6 +425,7 @@ namespace Content.Server.Ghost
                 var isYautja = HasComp<YautjaComponent>(attached);
                 var isYautjaThrall = HasComp<YautjaThrallComponent>(attached);
                 var isYautjaAbomination = HasComp<YautjaAbominationComponent>(attached);
+                var isCursedSummoner = HasComp<ZombieSummonerComponent>(attached);
                 var isCorruptedHive = xeno != null &&
                                       _xenoHive.GetHive(attached) is { Comp.Corrupted: true };
                 var grouping = GhostWarpGrouping.Classify(
@@ -437,7 +439,8 @@ namespace Content.Server.Ghost
                     xenoTier: xeno?.Tier,
                     realDisplayWeight: job?.RealDisplayWeight ?? 0,
                     isYautjaThrall: isYautjaThrall,
-                    isYautjaAbomination: isYautjaAbomination);
+                    isYautjaAbomination: isYautjaAbomination,
+                    isCursedSummoner: isCursedSummoner);
                 var roleName = job?.LocalizedName ?? Loc.GetString("generic-unknown-title");
                 var meta = Comp<MetaDataComponent>(attached);
 

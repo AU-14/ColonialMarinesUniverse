@@ -114,6 +114,19 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
                 .ToList();
         }
 
+        public void ClearWarps(bool clearSearch = false)
+        {
+            _warps.Clear();
+
+            if (clearSearch)
+            {
+                _searchText = string.Empty;
+                SearchBar.Text = string.Empty;
+            }
+
+            Populate();
+        }
+
         public void Populate()
         {
             var previousTab = _activeTab?.Name;
@@ -709,7 +722,8 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
                 GhostWarpGrouping.TabTseRoyal => 10,
                 GhostWarpGrouping.TabCmbProvost => 11,
                 GhostWarpGrouping.TabThreat => 12,
-                GhostWarpGrouping.TabApe => 13,
+                GhostWarpGrouping.TabCursed => 13,
+                GhostWarpGrouping.TabApe => 14,
                 GhostWarpGrouping.TabLocations => 98,
                 GhostWarpGrouping.TabOther => 99,
                 _ => 50,
@@ -745,9 +759,10 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
                 GhostWarpGrouping.SectionThralls => 27,
                 GhostWarpGrouping.SectionAbominations => 28,
                 GhostWarpGrouping.SectionMembers => 29,
-                GhostWarpGrouping.SectionLine => 30,
-                GhostWarpGrouping.SectionLinePersonnel => 31,
-                GhostWarpGrouping.SectionPersonnel => 32,
+                GhostWarpGrouping.SectionSummoners => 30,
+                GhostWarpGrouping.SectionLine => 31,
+                GhostWarpGrouping.SectionLinePersonnel => 32,
+                GhostWarpGrouping.SectionPersonnel => 33,
                 GhostWarpGrouping.SectionUnknownTier => 90,
                 GhostWarpGrouping.SectionOther => 99,
                 _ => 50,
@@ -871,6 +886,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
                 GhostWarpGrouping.TabTseRoyal => Loc.GetString("ghost-target-window-tab-tse-royal"),
                 GhostWarpGrouping.TabCmbProvost => Loc.GetString("ghost-target-window-tab-cmb-provost"),
                 GhostWarpGrouping.TabThreat => Loc.GetString("ghost-target-window-tab-threat"),
+                GhostWarpGrouping.TabCursed => Loc.GetString("ghost-target-window-tab-cursed"),
                 GhostWarpGrouping.TabApe => Loc.GetString("ghost-target-window-tab-ape"),
                 GhostWarpGrouping.TabLocations => Loc.GetString("ghost-target-window-tab-locations"),
                 GhostWarpGrouping.TabOther => Loc.GetString("ghost-target-window-tab-other"),
@@ -890,6 +906,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
                 GhostWarpGrouping.SectionAbominations => Loc.GetString("ghost-target-window-subtab-abominations"),
                 GhostWarpGrouping.SectionLeaders => Loc.GetString("ghost-target-window-subtab-leaders"),
                 GhostWarpGrouping.SectionMembers => Loc.GetString("ghost-target-window-subtab-members"),
+                GhostWarpGrouping.SectionSummoners => Loc.GetString("ghost-target-window-subtab-summoners"),
                 GhostWarpGrouping.SectionWarpPoints => Loc.GetString("ghost-target-window-subtab-warp-points"),
                 _ => name,
             };
@@ -915,6 +932,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
                 GhostWarpGrouping.SectionPersonnel => "Pers",
                 GhostWarpGrouping.SectionUnknownTier => "Unk",
                 GhostWarpGrouping.SectionAbominations => "Abom",
+                GhostWarpGrouping.SectionSummoners => "Summ",
                 GhostWarpGrouping.SectionWarpPoints => "Warp",
                 _ => GetDisplayName(section),
             };

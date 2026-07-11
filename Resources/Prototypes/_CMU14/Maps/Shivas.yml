@@ -1,17 +1,17 @@
 - type: gameMap
   id: auShivas
   mapName: Shivas Snowball
-  mapPath: /Maps/_AU14/shivas.yml
+  mapPath: /Maps/_AU14/ShivasSnowballMultiZ/ShivasSnowballMultiZ0.yml
   mapsBelow:
-  - /Maps/_AU14/shivas_below.yml
+  - /Maps/_AU14/ShivasSnowballMultiZ/ShivasSnowballMultiZ-1.yml
   mapsAbove:
-  - /Maps/_AU14/shivas_above.yml
+  - /Maps/_AU14/ShivasSnowballMultiZ/ShivasSnowballMultiZ1.yml
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0
   randomRotation: false
   stations:
-    shiva:
+    shivas:
       stationProto: StandardUNMCWarship
       components:
         - type: StationNameSetup

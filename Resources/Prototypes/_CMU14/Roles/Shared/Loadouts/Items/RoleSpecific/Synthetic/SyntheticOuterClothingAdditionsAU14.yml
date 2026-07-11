@@ -1,0 +1,53 @@
+- type: loadout
+  id: BioSuitOuterClothingSynthCMU14
+  storage:
+    back:
+    - AU14SuitBioWeYu
+
+- type: loadout
+  id: ExpeditionWindbreakerOuterClothingSynthCMU14
+  storage:
+    back:
+    - RMCJacketWindbreakerExpedition
+
+- type: loadout
+  id: MilitaryPoliceCoatOuterClothingSynthCMU14
+  storage:
+    back:
+    - CMCoatMP
+
+- type: loadout
+  id: LabcoatScienceOuterClothingSynthCMU14
+  storage:
+    back:
+    - RMCLabcoatScience
+
+- type: loadout
+  id: ServiceCoatOuterClothingSynthCMU14
+  storage:
+    back:
+    - RMCCoatService
+
+- type: loadout
+  id: AuxBlackOuterClothingSynthCMU14
+  storage:
+    back:
+    - RMCCoatASOBlack
+
+- type: loadout
+  id: AuxBlackAltOuterClothingSynthCMU14
+  storage:
+    back:
+    - RMCCoatASOBlackAlt
+
+- type: loadout
+  id: AuxWhiteOuterClothingSynthCMU14
+  storage:
+    back:
+    - RMCCoatASOWhite
+
+- type: loadout
+  id: AuxWhiteAltOuterClothingSynthCMU14
+  storage:
+    back:
+    - RMCCoatASOWhiteAlt

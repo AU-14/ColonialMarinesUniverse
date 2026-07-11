@@ -7,7 +7,7 @@ using Robust.Shared.Maths;
 
 namespace Content.Shared._RMC14.Vehicle;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 [Access(typeof(VehicleWeaponsSystem), typeof(HardpointSystem))]
 public sealed partial class VehicleWeaponsComponent : Component
 {
@@ -118,6 +118,9 @@ public sealed partial class VehicleTurretComponent : Component
 
     [DataField, AutoNetworkedField]
     public string OverlayState = string.Empty;
+
+    [DataField, AutoNetworkedField]
+    public string OverlayDamagedState = string.Empty;
 
     [DataField, AutoNetworkedField]
     public bool UseDirectionalOffsets = false;

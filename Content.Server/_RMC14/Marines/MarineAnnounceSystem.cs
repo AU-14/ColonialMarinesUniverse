@@ -1,13 +1,13 @@
-using Content.Server._RMC14.Announce;
 using Content.Server._RMC14.Rules;
+using Content.Server._RMC14.Announce;
 using Content.Server.Administration.Logs;
+using Content.Server.Chat.Managers;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared._RMC14.AlertLevel;
 using Content.Shared._RMC14.Announce;
 using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
 using Content.Shared._RMC14.Dropship;
-using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Marines.Squads;
@@ -17,7 +17,7 @@ using Content.Shared.Chat;
 using Content.Shared.Database;
 using Content.Shared.Ghost;
 using Content.Shared.Radio;
-using Content.Shared.UserInterface;
+using Robust.Server.Audio;
 using Robust.Shared.Audio;
 using Robust.Shared.Maths;
 using Robust.Shared.Player;
@@ -29,21 +29,17 @@ namespace Content.Server._RMC14.Marines;
 public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
 {
     [Dependency] private IAdminLogManager _adminLogs = default!;
-    [Dependency] private AnnouncementRouterSystem _announcementRouter = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private IChatManager _chatManager = default!;
     [Dependency] private ARESCoreSystem _core = default!;
     [Dependency] private CMDistressSignalRuleSystem _distressSignal = default!;
     [Dependency] private SharedDropshipSystem _dropship = default!;
+    [Dependency] private GeneralAnnounceSystem _generalAnnounce = default!;
     [Dependency] private RadioSystem _radio = default!;
     [Dependency] private SquadSystem _squad = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     private static readonly EntProtoId<ARESLogTypeComponent> LogCat = "ARESTabAnnouncementLogs";
-    private static readonly ProtoId<AnnouncementPresetPrototype> PresetMarineOverwatch = "MarineOverwatch";
-    private static readonly ProtoId<AnnouncementPresetPrototype> PresetMarineAlertGreen = "MarineAlertGreen";
-    private static readonly ProtoId<AnnouncementPresetPrototype> PresetMarineAlertBlue = "MarineAlertBlue";
-    private static readonly ProtoId<AnnouncementPresetPrototype> PresetMarineAlertRed = "MarineAlertRed";
-    private static readonly ProtoId<AnnouncementPresetPrototype> PresetMarineAlertDelta = "MarineAlertDelta";
-    private static readonly ProtoId<AnnouncementPresetPrototype> PresetMarineAlertLevel = "MarineAlertLevel";
 
     public override void Initialize()
     {
@@ -92,10 +88,10 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
         }
 
         if (!string.IsNullOrWhiteSpace(computer.Comp.Faction))
-            _dropship.SetFactionController(lz.Value, computer.Comp.Faction.ToLowerInvariant());
+            _dropship.SetFactionController(lz.Value, computer.Comp.Faction!.ToLowerInvariant());
 
         _dropship.TryDesignatePrimaryLZ(user, lz.Value);
-        _core.CreateARESLog(computer, LogCat, $"{Name(args.Actor)} designated Primary LZ as: {Name(lz.Value)}");
+        _core.CreateARESLog(computer, LogCat, (string) $"{Name(args.Actor)} designated Primary LZ as: {Name(lz.Value)}");
     }
 
     private void UpdatePlanetMap(Entity<MarineCommunicationsComputerComponent> computer)
@@ -104,10 +100,7 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
         var operation = _distressSignal.OperationName ?? string.Empty;
         var landingZones = new List<LandingZone>();
 
-        var compFaction = string.IsNullOrWhiteSpace(computer.Comp.Faction)
-            ? null
-            : computer.Comp.Faction.ToLowerInvariant();
-
+        string? compFaction = string.IsNullOrWhiteSpace(computer.Comp.Faction) ? null : computer.Comp.Faction.ToLowerInvariant();
         foreach (var (id, metaData) in _dropship.GetPrimaryLZCandidates(compFaction))
         {
             if (!string.IsNullOrWhiteSpace(computer.Comp.Faction) &&
@@ -133,31 +126,24 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
         bool excludeSurvivors = true,
         string? faction = null)
     {
-        filter ??= string.IsNullOrWhiteSpace(faction)
-            ? BuildAllMarineAnnouncementFilter()
-            : BuildMarineAnnouncementFilter(faction);
+        if (filter == null)
+        {
+            var targetFaction = ResolveAnnouncementFaction(faction);
+            filter = Filter.Empty().AddWhereAttachedEntity(e =>
+            {
+                if (TryComp<MarineComponent>(e, out var marine))
+                    return IsMarineAnnouncementRecipient(marine.Faction, targetFaction);
 
+                return HasComp<GhostComponent>(e);
+            });
+        }
+
+        // TODO RMC14
         if (excludeSurvivors)
             filter.RemoveWhereAttachedEntity(HasComp<RMCSurvivorComponent>);
 
-        filter.RemoveWhereAttachedEntity(HasComp<IntelRescueSurvivorObjectiveComponent>);
-
-        _announcementRouter.Announce(new AnnouncementRequest
-        {
-            Message = message,
-            Route = new AnnouncementRoute
-            {
-                Target = AnnouncementTarget.Marines,
-                Channels = AnnouncementChannels.Chat | AnnouncementChannels.Sound,
-            },
-            Chat = new AnnouncementChatOptions
-            {
-                Message = message,
-                WrappedMessage = message,
-                Channel = ChatChannel.Radio,
-            },
-            Sound = CreateSoundOptions(sound ?? DefaultAnnouncementSound),
-        }, filter);
+        _chatManager.ChatMessageToManyFiltered(filter, ChatChannel.Radio, message, message, default, false, true, null);
+        _audio.PlayGlobal(sound ?? DefaultAnnouncementSound, filter, true, AudioParams.Default.WithVolume(-2f));
     }
 
     public override void AnnounceHighCommand(
@@ -166,7 +152,7 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
         SoundSpecifier? sound = null)
     {
         var wrappedMessage = FormatHighCommand(author, message);
-        AnnounceToMarines(wrappedMessage, sound);
+        AnnounceToMarines(wrappedMessage);
     }
 
     public override void AnnounceRadio(
@@ -196,7 +182,7 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
             : BuildMarineAnnouncementFilter(faction);
 
         AnnounceToMarines(message, sound, filter);
-        _adminLogs.Add(LogType.RMCMarineAnnounce, $"{ToPrettyString(source):player} APOLLO announced message: {message}");
+        _adminLogs.Add(LogType.RMCMarineAnnounce, $"{ToPrettyString(source):player} ARES announced message: {message}");
     }
 
     public override void AnnounceSquad(string message, EntProtoId<SquadTeamComponent> squad, SoundSpecifier? sound = null)
@@ -204,7 +190,9 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
         base.AnnounceSquad(message, squad, sound);
 
         var filter = Filter.Empty().AddWhereAttachedEntity(e => _squad.IsInSquad(e, squad));
-        AnnounceToFilter(message, filter, sound ?? DefaultSquadSound);
+
+        _chatManager.ChatMessageToManyFiltered(filter, ChatChannel.Radio, message, message, default, false, true, null);
+        _audio.PlayGlobal(sound ?? DefaultSquadSound, filter, true, AudioParams.Default.WithVolume(-2f));
     }
 
     public override void AnnounceSquad(string message, EntityUid squad, SoundSpecifier? sound = null)
@@ -212,18 +200,19 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
         base.AnnounceSquad(message, squad, sound);
 
         var filter = Filter.Empty().AddWhereAttachedEntity(e => _squad.IsInSquad(e, squad));
-        AnnounceToFilter(message, filter, sound ?? DefaultSquadSound);
+
+        _chatManager.ChatMessageToManyFiltered(filter, ChatChannel.Radio, message, message, default, false, true, null);
+        _audio.PlayGlobal(sound ?? DefaultSquadSound, filter, true, AudioParams.Default.WithVolume(-2f));
     }
 
     public override void AnnounceSingle(string message, EntityUid receiver, SoundSpecifier? sound = null)
     {
         base.AnnounceSingle(message, receiver, sound);
 
-        if (!TryComp(receiver, out ActorComponent? actor))
-            return;
+        if (TryComp(receiver, out ActorComponent? actor))
+            _chatManager.ChatMessageToOne(ChatChannel.Radio, message, message, default, false, actor.PlayerSession.Channel);
 
-        var filter = Filter.Empty().AddPlayer(actor.PlayerSession);
-        AnnounceToFilter(message, filter, sound);
+        _audio.PlayEntity(sound, receiver, receiver, AudioParams.Default.WithVolume(-2f));
     }
 
     protected override void AnnounceSignedUi(
@@ -236,27 +225,24 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
         bool excludeSurvivors,
         string? faction)
     {
-        var overlayFilter = filter == null
+        var uiMessage = message;
+        var request = new AnnouncementRequest
+        {
+            Message = uiMessage,
+            Preset = "MarineCommand",
+            Target = AnnouncementTarget.Marines,
+            Speaker = sender,
+            ShowSprite = true
+        };
+
+        var uiFilter = filter == null
             ? BuildMarineAnnouncementFilter(faction)
             : Filter.Empty().AddPlayers(filter.Recipients);
 
         if (excludeSurvivors)
-            overlayFilter.RemoveWhereAttachedEntity(HasComp<RMCSurvivorComponent>);
+            uiFilter.RemoveWhereAttachedEntity(HasComp<RMCSurvivorComponent>);
 
-        overlayFilter.RemoveWhereAttachedEntity(HasComp<IntelRescueSurvivorObjectiveComponent>);
-
-        _announcementRouter.Announce(new AnnouncementRequest
-        {
-            Message = message,
-            Preset = AnnouncementRouterSystem.PresetMarineCommand,
-            Route = new AnnouncementRoute
-            {
-                Target = AnnouncementTarget.Marines,
-                Speaker = sender,
-                Source = sender,
-                Channels = AnnouncementChannels.Overlay,
-            },
-        }, overlayFilter);
+        _generalAnnounce.AnnounceAdvanced(request, uiFilter);
     }
 
     private Filter BuildMarineAnnouncementFilter(string? faction)
@@ -286,95 +272,100 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
         string squadName,
         SoundSpecifier? sound = null)
     {
-        var color = squadColor;
-        ProtoId<AnnouncementPresetPrototype> preset = PresetMarineOverwatch;
-
-        if (TryComp(squad, out SquadTeamComponent? squadComp))
-        {
-            color = squadComp.AccessibleColor ?? squadComp.Color;
-            preset = squadComp.OverwatchAnnouncementPreset;
-        }
-
-        var colorHex = color.ToHex();
+        var colorHex = squadColor.ToHex();
         var chatMessage =
             $"[color={colorHex}][bold]Overwatch:[/bold] transmits: [font size=16][bold]{message}[/bold][/font][/color]";
 
-        var filter = Filter.Empty().AddWhereAttachedEntity(e => _squad.IsInSquad(e, squad));
-        _announcementRouter.Announce(new AnnouncementRequest
+        AnnounceSquad(chatMessage, squad, sound);
+
+        var title = BuildOverwatchTitle(squadName);
+        var styleOverride = new AnnouncementStyleOverride
+        {
+            PrimaryColor = squadColor,
+            TitleColor = squadColor
+        };
+
+        var request = new AnnouncementRequest
         {
             Message = $"Overwatch transmits: {message}",
-            Preset = preset,
-            Route = new AnnouncementRoute
-            {
-                Target = AnnouncementTarget.Marines,
-                Channels = AnnouncementChannels.Chat | AnnouncementChannels.Overlay | AnnouncementChannels.Sound,
-            },
-            Chat = new AnnouncementChatOptions
-            {
-                Message = chatMessage,
-                WrappedMessage = chatMessage,
-                Channel = ChatChannel.Radio,
-            },
-            Sound = CreateSoundOptions(sound),
-        }, filter);
+            Preset = "MarineOverwatch",
+            Target = AnnouncementTarget.Marines,
+            Title = title,
+            ShowSprite = true,
+            StyleOverride = styleOverride
+        };
+
+        var filter = Filter.Empty().AddWhereAttachedEntity(e => _squad.IsInSquad(e, squad));
+        _generalAnnounce.AnnounceAdvanced(request, filter);
     }
 
     public override void AnnounceAlertLevel(RMCAlertLevels level, string message, Filter? filter = null)
     {
-        var preset = level switch
+        var (title, color, decalState) = BuildAlertLevelStyle(level);
+        var styleOverride = new AnnouncementStyleOverride
         {
-            RMCAlertLevels.Green => PresetMarineAlertGreen,
-            RMCAlertLevels.Blue => PresetMarineAlertBlue,
-            RMCAlertLevels.Red => PresetMarineAlertRed,
-            RMCAlertLevels.Delta => PresetMarineAlertDelta,
-            _ => PresetMarineAlertLevel,
+            PrimaryColor = color,
+            TitleColor = color
         };
 
         var request = new AnnouncementRequest
         {
             Message = message,
-            Preset = preset,
-            Route = new AnnouncementRoute
-            {
-                Target = AnnouncementTarget.Marines,
-                Channels = AnnouncementChannels.Overlay,
-            },
+            Preset = "MarineAlertLevel",
+            Target = AnnouncementTarget.Marines,
+            Title = title,
+            ShowSprite = false,
+            StyleOverride = styleOverride
         };
+
+        if (!string.IsNullOrEmpty(decalState))
+        {
+            request.DecalRsi = "/Textures/_RMC14/Structures/Machines/status_display.rsi";
+            request.DecalState = decalState;
+            request.DecalPlacement = AnnouncementDecalPlacement.ReplaceSprite;
+            request.DecalScale = 3.0f;
+        }
 
         if (filter != null)
-            _announcementRouter.Announce(request, filter);
+            _generalAnnounce.AnnounceAdvanced(request, filter);
         else
-            _announcementRouter.Announce(request);
+            _generalAnnounce.AnnounceAdvanced(request);
     }
 
-    private void AnnounceToFilter(string message, Filter filter, SoundSpecifier? sound)
+    private static (string Title, Color Color, string? DecalState) BuildAlertLevelStyle(RMCAlertLevels level)
     {
-        _announcementRouter.Announce(new AnnouncementRequest
+        var title = $"ALERT LEVEL: {level.ToString().ToUpperInvariant()}";
+        var color = level switch
         {
-            Message = message,
-            Route = new AnnouncementRoute
-            {
-                Target = AnnouncementTarget.Marines,
-                Channels = AnnouncementChannels.Chat | AnnouncementChannels.Sound,
-            },
-            Chat = new AnnouncementChatOptions
-            {
-                Message = message,
-                WrappedMessage = message,
-                Channel = ChatChannel.Radio,
-            },
-            Sound = CreateSoundOptions(sound),
-        }, filter);
-    }
-
-    private static AnnouncementSoundOptions? CreateSoundOptions(SoundSpecifier? sound)
-    {
-        if (sound == null)
-            return null;
-
-        return new AnnouncementSoundOptions
-        {
-            Sound = sound,
+            RMCAlertLevels.Green => Color.LawnGreen,
+            RMCAlertLevels.Blue => Color.DodgerBlue,
+            RMCAlertLevels.Red => Color.Red,
+            RMCAlertLevels.Delta => Color.DarkRed,
+            _ => Color.White
         };
+
+        var decalState = level switch
+        {
+            RMCAlertLevels.Green => null,
+            RMCAlertLevels.Blue => "bluealert",
+            RMCAlertLevels.Red => "redalert",
+            RMCAlertLevels.Delta => "evac",
+            _ => "default"
+        };
+
+        return (title, color, decalState);
+    }
+
+    private static string BuildOverwatchTitle(string squadName)
+    {
+        var trimmed = squadName.Trim();
+        const string suffix = " Squad";
+        if (trimmed.EndsWith(suffix, StringComparison.OrdinalIgnoreCase))
+            trimmed = trimmed[..^suffix.Length].Trim();
+
+        if (string.IsNullOrWhiteSpace(trimmed))
+            trimmed = squadName.Trim();
+
+        return $"{trimmed.ToUpperInvariant()} OVERWATCH";
     }
 }

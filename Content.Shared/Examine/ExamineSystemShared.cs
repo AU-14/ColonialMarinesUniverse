@@ -224,7 +224,7 @@ namespace Content.Shared.Examine
 
             if (length > MaxRaycastRange)
             {
-                Log.Warning("InRangeUnOccluded check performed over extreme range. Limiting CollisionRay size.");
+                Log.Debug("InRangeUnOccluded check performed over extreme range. Limiting CollisionRay size.");
                 length = MaxRaycastRange;
             }
 

@@ -72,6 +72,14 @@ namespace Content.Shared.Verbs
             SortedSet<Verb> verbs = new();
             extraCategories = new();
 
+            if (!Exists(user) ||
+                !Exists(target) ||
+                !HasComp<TransformComponent>(user) ||
+                !HasComp<TransformComponent>(target))
+            {
+                return verbs;
+            }
+
             // accessibility checks
             var canAccess = force || _interactionSystem.InRangeAndAccessible(user, target);
 

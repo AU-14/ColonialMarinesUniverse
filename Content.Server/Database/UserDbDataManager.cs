@@ -2,6 +2,8 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Preferences.Managers;
+using Content.Shared.CCVar;
+using Robust.Shared.Configuration;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
@@ -18,8 +20,7 @@ namespace Content.Server.Database;
 /// </remarks>
 public sealed partial class UserDbDataManager : IPostInjectInit
 {
-    private static readonly TimeSpan LoadTimingWarnThreshold = TimeSpan.FromSeconds(1);
-
+    [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private ILogManager _logManager = default!;
 
     private readonly Dictionary<NetUserId, UserData> _users = new();
@@ -28,11 +29,15 @@ public sealed partial class UserDbDataManager : IPostInjectInit
     private readonly List<OnPlayerDisconnect> _onPlayerDisconnect = [];
 
     private ISawmill _sawmill = default!;
+    private TimeSpan _loadTimingWarnThreshold = TimeSpan.FromSeconds(5);
+    private bool _loadTimingCVarSubscribed;
 
     // TODO: Ideally connected/disconnected would be subscribed to IPlayerManager directly,
     // but this runs into ordering issues with game ticker.
     public void ClientConnected(ICommonSession session)
     {
+        EnsureLoadTimingCVarSubscribed();
+
         _sawmill.Verbose($"Initiating load for user {session}");
 
         DebugTools.Assert(!_users.ContainsKey(session.UserId), "We should not have any cached data on client connect.");
@@ -124,7 +129,7 @@ public sealed partial class UserDbDataManager : IPostInjectInit
 
     private void LogLoadComplete(ICommonSession session, TimeSpan elapsed)
     {
-        if (elapsed < LoadTimingWarnThreshold)
+        if (elapsed < _loadTimingWarnThreshold)
         {
             _sawmill.Verbose($"Load complete for user {session} in {elapsed.TotalMilliseconds:N0} ms");
             return;
@@ -140,7 +145,7 @@ public sealed partial class UserDbDataManager : IPostInjectInit
 
     private void LogSlowAction(string phase, Delegate action, ICommonSession session, TimeSpan elapsed)
     {
-        if (elapsed < LoadTimingWarnThreshold)
+        if (elapsed < _loadTimingWarnThreshold)
             return;
 
         _sawmill.Warning(
@@ -201,6 +206,17 @@ public sealed partial class UserDbDataManager : IPostInjectInit
     void IPostInjectInit.PostInject()
     {
         _sawmill = _logManager.GetSawmill("userdb");
+        EnsureLoadTimingCVarSubscribed();
+    }
+
+    private void EnsureLoadTimingCVarSubscribed()
+    {
+        if (_loadTimingCVarSubscribed || !_cfg.IsCVarRegistered(CCVars.GameJoinTimingWarnSeconds.Name))
+            return;
+
+        _cfg.OnValueChanged(CCVars.GameJoinTimingWarnSeconds,
+            seconds => _loadTimingWarnThreshold = TimeSpan.FromSeconds(Math.Max(0f, seconds)), true);
+        _loadTimingCVarSubscribed = true;
     }
 
     private sealed record UserData(CancellationTokenSource Cancel, Task Task);

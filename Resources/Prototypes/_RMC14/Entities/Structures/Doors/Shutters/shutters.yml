@@ -53,6 +53,7 @@
     performCollisionCheck: false
     canCrush: false
     canPry: false
+  - type: RMCShutterBlockClimbing
   - type: Appearance
   - type: UserInterface
     interfaces:

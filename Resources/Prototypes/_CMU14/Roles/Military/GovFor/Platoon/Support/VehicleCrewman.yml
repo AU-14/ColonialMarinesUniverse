@@ -30,7 +30,6 @@
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: vc
-
   requirements:
   - !type:TraitsRequirement
     inverted: true
@@ -55,20 +54,41 @@
   id: AU14JobGOVFORVehicleCrewman
   isHumanoid: true
 
+# ├──[ Job Prototypes ]──────────────────────────────────────────────┤
+- type: job
+  parent: AU14JobVehicleCrewmanBase
+  id: AU14JobGOVFORVehicleCrewman
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: job
+  parent: AU14JobVehicleCrewmanBase
+  id: AU14JobOPFORVehicleCrewman
+  roundSide: Opfor
+  roundForce: OPFOR
+  spawnMenuRoleName: Vehicle Crewman (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearOPFORVehicleCrewman
+  dummyStartingGear: AU14GearOPFORVehicleCrewmanDummy
+  accessGroups:
+  - AU14OpforVehicleCrew
+
+# ├──[ Starting Gear ]───────────────────────────────────────────────┤
 - type: startingGear
   id: AU14GearGOVFORVehicleCrewman
   equipment:
     id: AU14IDCardGOVFORVehicleCrewman
-    ears: AU14HeadsetGovforMarine
+    ears: AU14HeadsetGovforCommand
 
 - type: startingGear
-  id: AU14GearGOVFORVehicleCrewmanDummy
+  id: AU14GearOPFORVehicleCrewman
   equipment:
     outerClothing: AU14ArmorM3JungleThree
     shoes: AU14BootsJungle
     head: AU14JungleM10Helmet
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetGovforMarine
+    ears: AU14HeadsetGovforCommand
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -79,13 +99,6 @@
     job_id: AU14JobGOVFORVehicleCrewman
   - type: Sprite
     state: syn_spawn
-
-- type: job
-  parent: AU14JobVehicleCrewmanBase
-  id: AU14JobGOVFORVehicleCrewman
-  hidden: false
-  setPreference: true
-  basePlaytimeTracker: true
 
 - type: roleLoadout
   id: JobAU14JobGOVFORVehicleCrewman
@@ -101,23 +114,11 @@
   - CannedDrinksAU14
   - SmokablesRMC
 
-- type: job
-  parent: AU14JobVehicleCrewmanBase
-  id: AU14JobOPFORVehicleCrewman
-  roundSide: Opfor
-  roundForce: OPFOR
-  spawnMenuRoleName: Vehicle Crewman (OPFOR)
-  supervisors: au14-job-supervisors-opfor
-  startingGear: AU14GearOPFORVehicleCrewman
-  dummyStartingGear: AU14GearOPFORVehicleCrewmanDummy
-  accessGroups:
-  - AU14OpforVehicleCrew
-
 - type: startingGear
-  id: AU14GearOPFORVehicleCrewman
+  id: AU14GearGOVFORVehicleCrewmanDummy
   equipment:
     id: AU14IDCardOPFORVehicleCrewman
-    ears: AU14HeadsetOpforMarine
+    ears: AU14HeadsetOpforCommand
 
 - type: startingGear
   id: AU14GearOPFORVehicleCrewmanDummy
@@ -126,7 +127,7 @@
     shoes: AU14BootsJungle
     head: AU14JungleM10Helmet
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetOpforMarine
+    ears: AU14HeadsetOpforCommand
 
 - type: entity
   parent: CMSpawnPointJobBase

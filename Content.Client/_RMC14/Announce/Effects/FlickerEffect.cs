@@ -4,14 +4,14 @@ namespace Content.Client._RMC14.Announce.Effects;
 
 public sealed class FlickerEffect : IAnnouncementVisualEffect
 {
-    private readonly Random _random = new();
-
     public void Apply(AnnouncementEffectContext context, TimeSpan currentTime)
     {
-        var noise = _random.NextDouble();
+        var time = (float) currentTime.TotalSeconds;
+
         foreach (var label in context.Labels)
         {
             var baseColor = label.Modulate;
+            var noise = MathF.Sin(time * 100f) * 0.5f + 0.5f;
             if (noise < context.Style.AnimationConfig.FlickerChance)
             {
                 baseColor = new Color(

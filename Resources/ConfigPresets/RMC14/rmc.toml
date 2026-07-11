@@ -76,6 +76,9 @@ wiki = "https://cm-ss13.com/wiki/Main_Page"
 tickrate = 25
 bindto = "::,0.0.0.0"
 log_late_msg = false
+max_connections = 1024
+sendbuffersize = 1048576
+receivebuffersize = 1048576
 
 [physics]
 grid_splitting = false

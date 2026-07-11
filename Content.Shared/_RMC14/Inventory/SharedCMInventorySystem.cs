@@ -363,6 +363,10 @@ public abstract partial class SharedCMInventorySystem : EntitySystem
         if (!_pickupDroppedItemsQuery.TryComp(user, out var pickupDroppedItems) || HasComp<DevouredComponent>(user))
             return;
 
+        var removed = pickupDroppedItems.DroppedItems.RemoveAll(uid => TerminatingOrDeleted(uid));
+        if (removed > 0)
+            Dirty(user, pickupDroppedItems);
+
         // Sort items by importance
         var sortedItems = pickupDroppedItems.DroppedItems
             .OrderByDescending(item => HasComp<GunComponent>(item))
@@ -371,6 +375,9 @@ public abstract partial class SharedCMInventorySystem : EntitySystem
 
         foreach (var item in sortedItems.Distinct())
         {
+            if (TerminatingOrDeleted(item))
+                continue;
+
             if (!_container.IsEntityInContainer(item) && _interaction.InRangeUnobstructed(user, item))
             {
                 if (_hands.TryPickupAnyHand(user, item))
