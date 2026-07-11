@@ -1,34 +1,32 @@
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Anatomy.Bones.Events;
 using Content.Shared._CMU14.Medical.Anatomy.Organs;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.HUD;
 using Content.Shared._RMC14.Medical.HUD.Components;
 using Content.Shared._RMC14.Xenonids.Parasite;
-using Content.Shared.Body.Components;
-using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Robust.Shared.Configuration;
-using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 
 namespace Content.Server._CMU14.Medical.Diagnostics.Holocards;
 
 /// <summary>
-///     "Upgrade-only" rule: a higher-priority status (manually-set
-///     Permadead, Emergency, Urgent) is never overwritten by a lower-byte
-///     auto-status. Byte ordering of the appended enum values puts
-///     Stable / Trauma / OrganFailure above manual statuses on the byte
-///     axis, so we can't naively pick the higher byte — see <see cref="Priority"/>.
+///     Automatically upgrades holocards for severe injuries without replacing
+///     higher-priority statuses. Automatic injury statuses clear once the patient
+///     has no remaining fracture, internal bleeding, or organ failure.
 /// </summary>
 public sealed partial class AutoHolocardSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _cfg = default!;
-    [Dependency] private SharedBodySystem _body = default!;
-    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
+
+    private const CMUMedicalChangeFlags IndicatorChanges =
+        CMUMedicalChangeFlags.Anatomy |
+        CMUMedicalChangeFlags.Fractures |
+        CMUMedicalChangeFlags.Organs |
+        CMUMedicalChangeFlags.Wounds;
 
     private bool _medicalEnabled;
     private bool _diagnosticsEnabled;
@@ -39,6 +37,7 @@ public sealed partial class AutoHolocardSystem : EntitySystem
         SubscribeLocalEvent<FractureComponent, ComponentStartup>(OnFractureSpawn);
         SubscribeLocalEvent<InternalBleedingComponent, ComponentStartup>(OnInternalBleedSpawn);
         SubscribeLocalEvent<VictimInfectedComponent, ComponentStartup>(OnInfectedSpawn);
+        SubscribeLocalEvent<CMUMedicalChangedEvent>(OnMedicalChanged);
         // Broadcast subscription — <OrganHealthComponent, OrganStageChangedEvent>
         // is already owned by SharedCMUWoundsSystem and SS14's directed bus
         // enforces one handler per (component, event). Broadcast delivery
@@ -79,6 +78,53 @@ public sealed partial class AutoHolocardSystem : EntitySystem
         if (!args.New.IsAtLeast(OrganDamageStage.Failing))
             return;
         UpgradeHolocard(args.Body, HolocardStatus.OrganFailure);
+    }
+
+    private void OnMedicalChanged(ref CMUMedicalChangedEvent args)
+    {
+        if (!IsEnabled() || (args.Changes & IndicatorChanges) == CMUMedicalChangeFlags.None)
+            return;
+
+        var status = GetAutomaticStatus(args.Body);
+        if (status != HolocardStatus.None)
+        {
+            UpgradeHolocard(args.Body, status);
+            return;
+        }
+
+        ClearAutomaticHolocard(args.Body);
+    }
+
+    private HolocardStatus GetAutomaticStatus(EntityUid body)
+    {
+        foreach (var (organUid, _) in _medicalIndex.GetOrgans(body))
+        {
+            if (TryComp<OrganHealthComponent>(organUid, out var organ) &&
+                organ.Stage.IsAtLeast(OrganDamageStage.Failing))
+            {
+                return HolocardStatus.OrganFailure;
+            }
+        }
+
+        foreach (var (partUid, _) in _medicalIndex.GetBodyParts(body))
+        {
+            if (HasComp<FractureComponent>(partUid) || HasComp<InternalBleedingComponent>(partUid))
+                return HolocardStatus.Trauma;
+        }
+
+        return HolocardStatus.None;
+    }
+
+    private void ClearAutomaticHolocard(EntityUid body)
+    {
+        if (!TryComp<HolocardStateComponent>(body, out var holocard) ||
+            holocard.HolocardStatus is not (HolocardStatus.Trauma or HolocardStatus.OrganFailure))
+        {
+            return;
+        }
+
+        holocard.HolocardStatus = HolocardStatus.None;
+        Dirty(body, holocard);
     }
 
     private EntityUid? TryGetBodyForPart(EntityUid part)
