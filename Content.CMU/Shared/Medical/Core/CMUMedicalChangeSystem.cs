@@ -112,6 +112,7 @@ public sealed partial class CMUMedicalChangeSystem : EntitySystem
 
             var ev = new CMUMedicalChangedEvent(body, aggregate.MedicalRevision, changes);
             RaiseLocalEvent(body, ref ev);
+            RaiseLocalEvent(ref ev);
         }
 
         _flushing.Clear();
