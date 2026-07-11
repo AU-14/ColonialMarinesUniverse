@@ -47,22 +47,37 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
 
     [Dependency] private IEntityManager _entityManager = default!;
 
+    /// <summary>
+    /// A run of text that shares the same bold/italic formatting. Runechat's
+    /// bubble is built out of these instead of plain strings so that a single
+    /// bold/italic word or phrase can render as just that span, rather than
+    /// forcing the whole bubble into one style.
+    /// </summary>
+    private readonly record struct TextRun(string Text, bool Bold, bool Italic);
+
     public RunechatSpeechBubble(SpeechType type, ChatMessage message, EntityUid senderEntity)
         : base(
             message,
             senderEntity,
             GetStyleClass(type, message),
             GetTextColor(type, message, senderEntity),
-            GetLifetime(GetPages(GetText(message, GetStyleClass(type, message)))))
+            GetLifetime(GetRunPages(GetRuns(message, GetStyleClass(type, message)))))
     {
         RectClipContent = false;
     }
 
     protected override Control BuildBubble(ChatMessage message, string speechStyleClass, Color? fontColor = null)
     {
-        var text = GetText(message, speechStyleClass);
-        var pages = GetPages(text);
-        var style = GetVisualStyle(message, speechStyleClass, text);
+        var runs = GetRuns(message, speechStyleClass);
+        var (style, forceBold) = GetVisualStyle(message, speechStyleClass, runs);
+
+        // Some styles (announcements, pain, scream, commander speech, full-caps
+        // yell emotes) are always bold regardless of markup - stamp that onto
+        // every run so the per-run renderer picks it up uniformly.
+        if (forceBold)
+            runs = ForceBold(runs);
+
+        var pages = GetRunPages(runs);
 
         return new RunechatTextControl(pages, fontColor ?? DefaultColor, style);
     }
@@ -77,6 +92,8 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
                 ? WhisperStyle
                 : SayStyle;
         }
+
+    
 
         return type switch
         {
@@ -100,8 +117,8 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         if (type == SpeechType.Looc)
             return LoocColor;
 
-        if (type == SpeechType.Radio)
-            return message.Display?.AccentColor ?? RadioColor;
+       if (type == SpeechType.Radio)
+         return message.Display?.AccentColor ?? RadioColor;
 
         var entityManager = IoCManager.Resolve<IEntityManager>();
         if (entityManager.HasComponent<XenoComponent>(senderEntity))
@@ -116,35 +133,51 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             : DefaultColor;
     }
 
-    private static RunechatVisualStyle GetVisualStyle(ChatMessage message, string speechStyleClass, string text)
+    /// <summary>
+    /// Returns the base visual style plus whether every run should be forced
+    /// bold regardless of markup (announcements, pain, scream, commander
+    /// speech, full-caps yell emotes - these were always-bold before markup
+    /// existed and stay that way).
+    /// </summary>
+    private static (RunechatVisualStyle Style, bool ForceBold) GetVisualStyle(
+        ChatMessage message,
+        string speechStyleClass,
+        List<TextRun> runs)
     {
         if (message.SpeechStyleClass == CMURunechatStyles.Scream)
-            return RunechatVisualStyle.Scream;
+            return (RunechatVisualStyle.Scream, true);
 
         if (message.SpeechStyleClass == CMURunechatStyles.Pain)
-            return RunechatVisualStyle.Pain;
+            return (RunechatVisualStyle.Pain, true);
 
         if (speechStyleClass == EmoteStyle)
         {
-            return IsYellEmote(text)
-                ? RunechatVisualStyle.EmoteYell
-                : RunechatVisualStyle.Emote;
+            return IsYellEmote(RunsToPlainText(runs))
+                ? (RunechatVisualStyle.EmoteYell, true)
+                : (RunechatVisualStyle.Emote, false);
         }
 
         if (message.SpeechStyleClass == "megaphoneSpeech")
-            return RunechatVisualStyle.Announce;
+            return (RunechatVisualStyle.Announce, true);
 
-        if (message.SpeechStyleClass == "commanderSpeech" ||
-            speechStyleClass == SayStyle && IsBoldSpeech(message))
-            return RunechatVisualStyle.Bolded;
+        if (message.SpeechStyleClass == "commanderSpeech")
+            return (RunechatVisualStyle.Bolded, true);
 
-        if (speechStyleClass == RadioStyle)
-            return RunechatVisualStyle.Radio;
+        // RMC14: if the ENTIRE message is bold (every word marked with the
+        // bold/italic markup system), keep the old bigger "!!" yell look.
+        // Runs already carry their own Bold flag from parsing, so this branch
+        // doesn't need to force anything - it's already true for every run.
+        if (speechStyleClass == SayStyle && IsWhollyBold(runs))
+            return (RunechatVisualStyle.Bolded, false);
 
-        if (speechStyleClass == WhisperStyle)
-            return RunechatVisualStyle.Whisper;
+        var baseStyle = speechStyleClass switch
+        {
+            RadioStyle => RunechatVisualStyle.Radio,
+            WhisperStyle => RunechatVisualStyle.Whisper,
+            _ => RunechatVisualStyle.Normal,
+        };
 
-        return RunechatVisualStyle.Normal;
+        return (baseStyle, false);
     }
 
     private static bool IsYellEmote(string text)
@@ -155,26 +188,20 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
                text.Contains("corpsman", StringComparison.OrdinalIgnoreCase);
     }
 
-    private static bool IsBoldSpeech(ChatMessage message)
-    {
-        var bubbleContent = SharedChatSystem.GetStringInsideTag(message, "BubbleContent");
-        return bubbleContent.Contains("[bold]", StringComparison.OrdinalIgnoreCase);
-    }
-
-    private static TimeSpan GetLifetime(IReadOnlyList<string> pages)
+    private static TimeSpan GetLifetime(IReadOnlyList<List<TextRun>> pages)
     {
         if (pages.Count <= 1)
         {
-            var length = pages.Count == 0 ? 0 : pages[0].Length;
+            var length = pages.Count == 0 ? 0 : RunsLength(pages[0]);
             return TimeSpan.FromSeconds(length / (float) LongestText * SplitChunkSeconds + 2f);
         }
 
         return TimeSpan.FromSeconds((pages.Count - 1) * SplitChunkSeconds + SplitFinalSeconds);
     }
 
-    private static string GetText(ChatMessage message, string speechStyleClass)
+    private static List<TextRun> GetRuns(ChatMessage message, string speechStyleClass)
     {
-        var text = speechStyleClass switch
+        var raw = speechStyleClass switch
         {
             EmoteStyle => message.Message,
             SayStyle => GetBubbleContent(message),
@@ -184,11 +211,11 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             _ => message.WrappedMessage,
         };
 
-        if (string.IsNullOrWhiteSpace(text))
-            text = message.Message;
+        if (string.IsNullOrWhiteSpace(raw))
+            raw = message.Message;
 
-        text = FormattedMessage.RemoveMarkupPermissive(text);
-        return NormalizeWhitespace(text);
+        var runs = ParseFormattingRuns(raw);
+        return NormalizeRuns(runs);
     }
 
     private static string GetBubbleContent(ChatMessage message)
@@ -215,7 +242,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             return null;
 
         var label = FormattedMessage.RemoveMarkupPermissive(message.Display.ChannelLabel);
-        label = NormalizeWhitespace(label)
+        label = NormalizeWhitespacePlain(label)
             .Trim('[', ']')
             .Trim();
 
@@ -224,39 +251,153 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             : label.ToUpperInvariant();
     }
 
-    private static List<string> GetPages(string text)
+    /// <summary>
+    /// Parses a string that may contain [bold]/[italic] markup (from
+    /// SharedChatSystem's per-word/per-phrase formatting system, resolved
+    /// server-side via ResolveBoldSentinels) into a flat list of TextRuns.
+    /// Any OTHER bracketed text - such as a literal radio channel label like
+    /// "[ALFA]" - is preserved as plain text rather than stripped, matching
+    /// how RemoveMarkupPermissive used to leave unrecognized bracket text
+    /// alone.
+    /// </summary>
+    private static List<TextRun> ParseFormattingRuns(string markupText)
     {
-        var pages = new List<string>();
+        var runs = new List<TextRun>();
+        var boldDepth = 0;
+        var italicDepth = 0;
+        var i = 0;
+        var sb = new StringBuilder();
 
-        if (text.Length <= LongestText)
+        void Flush()
         {
-            pages.Add(text);
-            return pages;
+            if (sb.Length > 0)
+            {
+                runs.Add(new TextRun(sb.ToString(), boldDepth > 0, italicDepth > 0));
+                sb.Clear();
+            }
         }
 
-        var remaining = text;
-        while (remaining.Length > LongestText)
+        while (i < markupText.Length)
         {
-            var split = GetSplitIndex(remaining);
-            pages.Add(remaining[..split].TrimEnd() + "...");
-            remaining = "..." + remaining[split..].TrimStart();
+            var c = markupText[i];
+
+            if (c == '[')
+            {
+                var close = markupText.IndexOf(']', i);
+                if (close < 0)
+                {
+                    sb.Append(c);
+                    i++;
+                    continue;
+                }
+
+                var tag = markupText.Substring(i + 1, close - i - 1);
+                var lowerTag = tag.ToLowerInvariant();
+
+                switch (lowerTag)
+                {
+                    case "bold":
+                        Flush();
+                        boldDepth++;
+                        i = close + 1;
+                        continue;
+                    case "/bold":
+                        Flush();
+                        boldDepth = Math.Max(0, boldDepth - 1);
+                        i = close + 1;
+                        continue;
+                    case "italic":
+                        Flush();
+                        italicDepth++;
+                        i = close + 1;
+                        continue;
+                    case "/italic":
+                        Flush();
+                        italicDepth = Math.Max(0, italicDepth - 1);
+                        i = close + 1;
+                        continue;
+                         case "bolditalic":
+                        Flush();
+                        boldDepth++;
+                        italicDepth++;
+                        i = close + 1;
+                        continue;
+                    case "/bolditalic":
+                        Flush();
+                        boldDepth = Math.Max(0, boldDepth - 1);
+                        italicDepth = Math.Max(0, italicDepth - 1);
+                        i = close + 1;
+                        continue;
+                    default:
+                        // Not our markup - keep the brackets as literal text.
+                        sb.Append(markupText, i, close - i + 1);
+                        i = close + 1;
+                        continue;
+                }
+            }
+
+            sb.Append(c);
+            i++;
         }
 
-        pages.Add(remaining);
-        return pages;
+        Flush();
+        return runs;
     }
 
-    private static int GetSplitIndex(string text)
+    /// <summary>
+    /// Collapses whitespace to single spaces and trims leading/trailing
+    /// whitespace across the whole run sequence, run-boundary aware.
+    /// </summary>
+    private static List<TextRun> NormalizeRuns(List<TextRun> runs)
     {
-        var max = Math.Min(ContinueTextLength, text.Length);
-        var split = text.LastIndexOf(' ', max - 1, max);
+        var result = new List<TextRun>();
+        var previousWasWhitespace = true;
 
-        return split >= LongestText / 2
-            ? split
-            : max;
+        foreach (var run in runs)
+        {
+            var sb = new StringBuilder();
+            foreach (var ch in run.Text)
+            {
+                if (char.IsWhiteSpace(ch))
+                {
+                    if (!previousWasWhitespace)
+                        sb.Append(' ');
+
+                    previousWasWhitespace = true;
+                }
+                else
+                {
+                    sb.Append(ch);
+                    previousWasWhitespace = false;
+                }
+            }
+
+            if (sb.Length > 0)
+                result.Add(run with { Text = sb.ToString() });
+        }
+
+        while (result.Count > 0)
+        {
+            var last = result[^1];
+            var trimmed = last.Text.TrimEnd(' ');
+
+            if (trimmed.Length == last.Text.Length)
+                break;
+
+            if (trimmed.Length == 0)
+            {
+                result.RemoveAt(result.Count - 1);
+                continue;
+            }
+
+            result[^1] = last with { Text = trimmed };
+            break;
+        }
+
+        return result;
     }
 
-    private static string NormalizeWhitespace(string text)
+    private static string NormalizeWhitespacePlain(string text)
     {
         var builder = new StringBuilder(text.Length);
         var previousWasWhitespace = false;
@@ -279,6 +420,199 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         return builder.ToString().Trim();
     }
 
+    private static int RunsLength(IReadOnlyList<TextRun> runs)
+    {
+        var length = 0;
+        foreach (var run in runs)
+            length += run.Text.Length;
+        return length;
+    }
+
+    private static string RunsToPlainText(IReadOnlyList<TextRun> runs)
+    {
+        var sb = new StringBuilder();
+        foreach (var run in runs)
+            sb.Append(run.Text);
+        return sb.ToString();
+    }
+
+    private static bool IsWhollyBold(IReadOnlyList<TextRun> runs)
+    {
+        var hasContent = false;
+        foreach (var run in runs)
+        {
+            if (run.Text.Trim().Length == 0)
+                continue;
+
+            hasContent = true;
+            if (!run.Bold)
+                return false;
+        }
+
+        return hasContent;
+    }
+
+    private static List<TextRun> ForceBold(IReadOnlyList<TextRun> runs)
+    {
+        var result = new List<TextRun>(runs.Count);
+        foreach (var run in runs)
+            result.Add(run with { Bold = true });
+        return result;
+    }
+
+    private static char GetCharAt(IReadOnlyList<TextRun> runs, int index)
+    {
+        var remaining = index;
+        foreach (var run in runs)
+        {
+            if (remaining < run.Text.Length)
+                return run.Text[remaining];
+
+            remaining -= run.Text.Length;
+        }
+
+        throw new ArgumentOutOfRangeException(nameof(index));
+    }
+
+    private static int FindLastSpaceIndex(IReadOnlyList<TextRun> runs, int windowStart, int windowEnd)
+    {
+        var index = windowEnd - 1;
+        while (index >= windowStart)
+        {
+            if (GetCharAt(runs, index) == ' ')
+                return index;
+
+            index--;
+        }
+
+        return -1;
+    }
+
+    private static (List<TextRun> Left, List<TextRun> Right) SplitRuns(IReadOnlyList<TextRun> runs, int index)
+    {
+        var left = new List<TextRun>();
+        var right = new List<TextRun>();
+        var remainingIndex = index;
+
+        foreach (var run in runs)
+        {
+            if (remainingIndex <= 0)
+            {
+                right.Add(run);
+                continue;
+            }
+
+            if (remainingIndex >= run.Text.Length)
+            {
+                left.Add(run);
+                remainingIndex -= run.Text.Length;
+                continue;
+            }
+
+            left.Add(run with { Text = run.Text[..remainingIndex] });
+            right.Add(run with { Text = run.Text[remainingIndex..] });
+            remainingIndex = 0;
+        }
+
+        return (left, right);
+    }
+
+    private static List<TextRun> TrimRunsEnd(List<TextRun> runs)
+    {
+        var result = new List<TextRun>(runs);
+        while (result.Count > 0)
+        {
+            var last = result[^1];
+            var trimmed = last.Text.TrimEnd(' ');
+
+            if (trimmed.Length == last.Text.Length)
+                break;
+
+            if (trimmed.Length == 0)
+            {
+                result.RemoveAt(result.Count - 1);
+                continue;
+            }
+
+            result[^1] = last with { Text = trimmed };
+            break;
+        }
+
+        return result;
+    }
+
+    private static List<TextRun> TrimRunsStart(List<TextRun> runs)
+    {
+        var result = new List<TextRun>(runs);
+        while (result.Count > 0)
+        {
+            var first = result[0];
+            var trimmed = first.Text.TrimStart(' ');
+
+            if (trimmed.Length == first.Text.Length)
+                break;
+
+            if (trimmed.Length == 0)
+            {
+                result.RemoveAt(0);
+                continue;
+            }
+
+            result[0] = first with { Text = trimmed };
+            break;
+        }
+
+        return result;
+    }
+
+    private static List<TextRun> PrependPlainRun(List<TextRun> runs, string text)
+    {
+        var result = new List<TextRun> { new(text, false, false) };
+        result.AddRange(runs);
+        return result;
+    }
+
+    private static List<TextRun> AppendPlainRun(List<TextRun> runs, string text)
+    {
+        var result = new List<TextRun>(runs) { new(text, false, false) };
+        return result;
+    }
+
+    private static List<List<TextRun>> GetRunPages(List<TextRun> runs)
+    {
+        var pages = new List<List<TextRun>>();
+        var length = RunsLength(runs);
+
+        if (length <= LongestText)
+        {
+            pages.Add(runs);
+            return pages;
+        }
+
+        var remaining = runs;
+        while (RunsLength(remaining) > LongestText)
+        {
+            var split = GetRunSplitIndex(remaining);
+            var (left, right) = SplitRuns(remaining, split);
+            pages.Add(AppendPlainRun(TrimRunsEnd(left), "..."));
+            remaining = PrependPlainRun(TrimRunsStart(right), "...");
+        }
+
+        pages.Add(remaining);
+        return pages;
+    }
+
+    private static int GetRunSplitIndex(IReadOnlyList<TextRun> runs)
+    {
+        var length = RunsLength(runs);
+        var max = Math.Min(ContinueTextLength, length);
+        var split = FindLastSpaceIndex(runs, 0, max);
+
+        return split >= LongestText / 2
+            ? split
+            : max;
+    }
+
     private static int ScaleFontSize(int fontSize, float scale)
     {
         return (int) MathF.Round(fontSize * scale);
@@ -286,22 +620,20 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
 
     private readonly record struct RunechatVisualStyle(
         int FontSize,
-        bool UseBold,
         bool PrefixEmoteIcon,
         float MaxWidth,
         float LineHeightOffset = 0f,
-        bool UsePanicShake = false,
-        bool UseItalic = false)
+        bool UsePanicShake = false)
     {
-        public static readonly RunechatVisualStyle Normal = new(7, false, false, CmssLangchatWidth);
-        public static readonly RunechatVisualStyle Whisper = new(4, false, false, CmssLangchatWidth, -1f, UseItalic: false);
-        public static readonly RunechatVisualStyle Radio = new(4, false, false, CmssSplitLangchatWidth, UseItalic: false);
-        public static readonly RunechatVisualStyle Emote = new(6, false, true, CmssLangchatWidth, -1f);
-        public static readonly RunechatVisualStyle EmoteYell = new(9, true, true, CmssLangchatWidth);
-        public static readonly RunechatVisualStyle Bolded = new(8, true, false, CmssLangchatWidth);
-        public static readonly RunechatVisualStyle Announce = new(12, true, false, CmssSplitLangchatWidth);
-        public static readonly RunechatVisualStyle Pain = new(10, true, false, CmssLangchatWidth);
-        public static readonly RunechatVisualStyle Scream = new(10, true, false, CmssLangchatWidth, UsePanicShake: true);
+        public static readonly RunechatVisualStyle Normal = new(7, false, CmssLangchatWidth);
+        public static readonly RunechatVisualStyle Whisper = new(4, false, CmssLangchatWidth, -1f);
+        public static readonly RunechatVisualStyle Radio = new(4, false, CmssSplitLangchatWidth);
+        public static readonly RunechatVisualStyle Emote = new(6, true, CmssLangchatWidth, -1f);
+        public static readonly RunechatVisualStyle EmoteYell = new(9, true, CmssLangchatWidth);
+        public static readonly RunechatVisualStyle Bolded = new(8, false, CmssLangchatWidth);
+        public static readonly RunechatVisualStyle Announce = new(12, false, CmssSplitLangchatWidth);
+        public static readonly RunechatVisualStyle Pain = new(10, false, CmssLangchatWidth);
+        public static readonly RunechatVisualStyle Scream = new(10, false, CmssLangchatWidth, UsePanicShake: true);
 
         public int GetScaledFontSize(float scale)
         {
@@ -324,7 +656,10 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         private const string SmallFontsFamily = "Small Fonts";
         private const string SmallFonts120Family = "Small Fonts (120)";
         private const string FallbackFontPath = "/Fonts/Cozette/CozetteVector.ttf";
-        private const string FallbackItalicFontPath = "/Fonts/RobotoMono/RobotoMono-Italic.ttf";
+
+   
+       private const string FallbackItalicFontPath = "/Fonts/Cozette/CozetteVectorItalic.ttf";
+
         private const float CmuMaxAlpha = 1f;
         private const float SyntheticBoldOffset = 1f;
         private const float TextStrokeAlpha = 0.9f;
@@ -383,11 +718,12 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         [Dependency] private IResourceCache _resourceCache = default!;
         [Dependency] private ISystemFontManager _systemFontManager = default!;
 
-        private readonly IReadOnlyList<string> _pages;
+        private readonly IReadOnlyList<List<TextRun>> _pages;
         private readonly Color _color;
         private readonly RunechatVisualStyle _style;
         private readonly float _scale;
-        private readonly Font _font;
+        private readonly Font _regularFont;
+        private readonly Font _italicFont;
 
         private readonly List<RunechatPageLayout> _layouts = new();
         private Vector2 _cachedSize;
@@ -396,7 +732,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         private float _pageTime;
         private float _animationTime;
 
-        public RunechatTextControl(IReadOnlyList<string> pages, Color color, RunechatVisualStyle style)
+        public RunechatTextControl(IReadOnlyList<List<TextRun>> pages, Color color, RunechatVisualStyle style)
         {
             IoCManager.InjectDependencies(this);
 
@@ -406,7 +742,10 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             _style = style;
             _scale = DefaultRunechatScale *
                      Math.Clamp(_configManager.GetCVar(CCVars.ChatRunechatBubbleScale), MinimumRunechatScale, MaximumRunechatScale);
-            _font = LoadRunechatFont(style.GetScaledFontSize(_scale), style.UseItalic);
+
+            var fontSize = style.GetScaledFontSize(_scale);
+            _regularFont = LoadRunechatFont(fontSize, false);
+            _italicFont = LoadRunechatFont(fontSize, true);
         }
 
         protected override void FrameUpdate(FrameEventArgs args)
@@ -472,7 +811,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
                         textColor);
                 }
 
-                DrawOutlinedString(handle, position, line, textColor);
+                DrawOutlinedLine(handle, position, line, textColor);
                 y += lineHeight;
             }
         }
@@ -508,15 +847,18 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             _layoutDirty = false;
         }
 
-        private RunechatPageLayout LayoutPage(string text)
+        private RunechatPageLayout LayoutPage(List<TextRun> pageRuns)
         {
-            var lines = new List<string>();
+            var lines = new List<List<TextRun>>();
             var lineWidths = new List<float>();
 
-            WrapText(text, lines, lineWidths);
+            WrapRunPage(pageRuns, lines, lineWidths);
 
             if (lines.Count == 0)
-                AddLine(string.Empty, lines, lineWidths);
+            {
+                lines.Add(new List<TextRun>());
+                lineWidths.Add(0f);
+            }
 
             var width = 0f;
             foreach (var lineWidth in lineWidths)
@@ -528,63 +870,147 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             return new RunechatPageLayout(lines, lineWidths, width, height);
         }
 
-        private void WrapText(string text, List<string> lines, List<float> lineWidths)
+        private void WrapRunPage(List<TextRun> pageRuns, List<List<TextRun>> lines, List<float> lineWidths)
         {
-            var words = text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            var line = string.Empty;
+            var words = SplitIntoWords(pageRuns);
+            var currentLine = new List<TextRun>();
+            var currentWidth = 0f;
+            var spaceWidth = MeasureRunWidth(new TextRun(" ", false, false));
 
             foreach (var word in words)
             {
-                if (line.Length == 0)
+                var wordWidth = MeasureRunsWidth(word);
+                var hasContent = currentLine.Count > 0;
+                var neededWidth = hasContent ? currentWidth + spaceWidth + wordWidth : wordWidth;
+
+                if (neededWidth <= GetMaxWidth())
                 {
-                    AppendWordToEmptyLine(word, lines, lineWidths, ref line);
+                    if (hasContent)
+                        currentLine.Add(new TextRun(" ", false, false));
+
+                    currentLine.AddRange(word);
+                    currentWidth = neededWidth;
                     continue;
                 }
 
-                var candidate = $"{line} {word}";
-                if (MeasureLineWidth(candidate) <= GetMaxWidth())
+                if (hasContent)
                 {
-                    line = candidate;
-                    continue;
+                    lines.Add(currentLine);
+                    lineWidths.Add(currentWidth);
+                    currentLine = new List<TextRun>();
+                    currentWidth = 0f;
                 }
 
-                AddLine(line, lines, lineWidths);
-                line = string.Empty;
-                AppendWordToEmptyLine(word, lines, lineWidths, ref line);
+                if (wordWidth <= GetMaxWidth())
+                {
+                    currentLine.AddRange(word);
+                    currentWidth = wordWidth;
+                }
+                else
+                {
+                    var brokenLines = BreakWordAcrossLines(word);
+                    for (var i = 0; i < brokenLines.Count - 1; i++)
+                    {
+                        lines.Add(brokenLines[i]);
+                        lineWidths.Add(MeasureRunsWidth(brokenLines[i]));
+                    }
+
+                    currentLine = brokenLines[^1];
+                    currentWidth = MeasureRunsWidth(currentLine);
+                }
             }
 
-            if (line.Length > 0)
-                AddLine(line, lines, lineWidths);
+            if (currentLine.Count > 0)
+            {
+                lines.Add(currentLine);
+                lineWidths.Add(currentWidth);
+            }
         }
 
-        private void AppendWordToEmptyLine(string word, List<string> lines, List<float> lineWidths, ref string line)
+        private static List<List<TextRun>> SplitIntoWords(IReadOnlyList<TextRun> runs)
         {
-            if (MeasureLineWidth(word) <= GetMaxWidth())
+            var words = new List<List<TextRun>>();
+            var current = new List<TextRun>();
+
+            void FlushWord()
             {
-                line = word;
-                return;
+                if (current.Count > 0)
+                {
+                    words.Add(current);
+                    current = new List<TextRun>();
+                }
             }
 
-            var builder = new StringBuilder();
-            foreach (var rune in word.EnumerateRunes())
+            foreach (var run in runs)
             {
-                var candidate = builder.ToString() + rune;
-                if (builder.Length > 0 && MeasureLineWidth(candidate) > GetMaxWidth())
+                var text = run.Text;
+                var start = 0;
+
+                for (var i = 0; i < text.Length; i++)
                 {
-                    AddLine(builder.ToString(), lines, lineWidths);
-                    builder.Clear();
+                    if (text[i] != ' ')
+                        continue;
+
+                    if (i > start)
+                        current.Add(run with { Text = text[start..i] });
+
+                    FlushWord();
+                    start = i + 1;
                 }
 
-                builder.Append(rune);
+                if (start < text.Length)
+                    current.Add(run with { Text = text[start..] });
             }
 
-            line = builder.ToString();
+            FlushWord();
+            return words;
         }
 
-        private void AddLine(string line, List<string> lines, List<float> lineWidths)
+        /// <summary>
+        /// Breaks a single "word" (no spaces) that's wider than the max width
+        /// on its own into as many fitting lines as needed, rune by rune.
+        /// The last returned line is left in-progress for the caller to keep
+        /// adding subsequent words onto.
+        /// </summary>
+        private List<List<TextRun>> BreakWordAcrossLines(List<TextRun> word)
         {
-            lines.Add(line);
-            lineWidths.Add(MeasureLineWidth(line));
+            var lines = new List<List<TextRun>>();
+            var current = new List<TextRun>();
+            var currentWidth = 0f;
+
+            foreach (var piece in word)
+            {
+                var pieceStartWidth = currentWidth;
+                var builder = new StringBuilder();
+
+                foreach (var rune in piece.Text.EnumerateRunes())
+                {
+                    var candidateText = builder.ToString() + rune;
+                    var candidateWidth = MeasureRunWidth(new TextRun(candidateText, piece.Bold, piece.Italic));
+
+                    if (builder.Length > 0 && pieceStartWidth + candidateWidth > GetMaxWidth())
+                    {
+                        current.Add(new TextRun(builder.ToString(), piece.Bold, piece.Italic));
+                        lines.Add(current);
+
+                        current = new List<TextRun>();
+                        builder.Clear();
+                        builder.Append(rune);
+                        pieceStartWidth = 0f;
+                        currentWidth = MeasureRunWidth(new TextRun(builder.ToString(), piece.Bold, piece.Italic));
+                        continue;
+                    }
+
+                    builder.Append(rune);
+                    currentWidth = pieceStartWidth + candidateWidth;
+                }
+
+                if (builder.Length > 0)
+                    current.Add(new TextRun(builder.ToString(), piece.Bold, piece.Italic));
+            }
+
+            lines.Add(current);
+            return lines;
         }
 
         private float GetMaxWidth()
@@ -592,26 +1018,40 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             return _style.GetScaledMaxWidth(_scale) * UIScale;
         }
 
-        private float MeasureLineWidth(string text)
+        private Font GetFont(bool italic)
+        {
+            return italic ? _italicFont : _regularFont;
+        }
+
+        private float MeasureRunWidth(TextRun run)
         {
             var width = 0f;
+            var font = GetFont(run.Italic);
 
-            foreach (var rune in text.EnumerateRunes())
+            foreach (var rune in run.Text.EnumerateRunes())
             {
-                var metrics = _font.GetCharMetrics(rune, UIScale);
+                var metrics = font.GetCharMetrics(rune, UIScale);
                 if (metrics == null)
                     continue;
 
                 width += metrics.Value.Advance;
             }
 
-            if (_style.UseBold && width > 0f)
+            if (run.Bold && width > 0f)
                 width += GetSyntheticBoldOffset();
 
             return width;
         }
 
-        private (float Left, float Width, float Top, float Height) GetVisibleBounds(string text)
+        private float MeasureRunsWidth(IReadOnlyList<TextRun> runs)
+        {
+            var width = 0f;
+            foreach (var run in runs)
+                width += MeasureRunWidth(run);
+            return width;
+        }
+
+        private (float Left, float Width, float Top, float Height) GetVisibleBounds(List<TextRun> lineRuns)
         {
             var cursor = 0f;
             var left = 0f;
@@ -619,39 +1059,48 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             var top = 0f;
             var bottom = 0f;
             var foundGlyph = false;
-            var ascent = _font.GetAscent(UIScale);
+            var lastRunBold = false;
 
-            foreach (var rune in text.EnumerateRunes())
+            foreach (var run in lineRuns)
             {
-                var metrics = _font.GetCharMetrics(rune, UIScale);
-                if (metrics == null)
-                    continue;
+                var font = GetFont(run.Italic);
+                var ascent = font.GetAscent(UIScale);
 
-                var glyphLeft = cursor + metrics.Value.BearingX;
-                var glyphRight = glyphLeft + metrics.Value.Width;
-                var glyphTop = ascent - metrics.Value.BearingY;
-                var glyphBottom = glyphTop + metrics.Value.Height;
-
-                if (!foundGlyph)
+                foreach (var rune in run.Text.EnumerateRunes())
                 {
-                    left = glyphLeft;
-                    right = glyphRight;
-                    top = glyphTop;
-                    bottom = glyphBottom;
-                    foundGlyph = true;
-                }
-                else
-                {
-                    left = MathF.Min(left, glyphLeft);
-                    right = MathF.Max(right, glyphRight);
-                    top = MathF.Min(top, glyphTop);
-                    bottom = MathF.Max(bottom, glyphBottom);
+                    var metrics = font.GetCharMetrics(rune, UIScale);
+                    if (metrics == null)
+                        continue;
+
+                    var glyphLeft = cursor + metrics.Value.BearingX;
+                    var glyphRight = glyphLeft + metrics.Value.Width;
+                    var glyphTop = ascent - metrics.Value.BearingY;
+                    var glyphBottom = glyphTop + metrics.Value.Height;
+
+                    if (!foundGlyph)
+                    {
+                        left = glyphLeft;
+                        right = glyphRight;
+                        top = glyphTop;
+                        bottom = glyphBottom;
+                        foundGlyph = true;
+                    }
+                    else
+                    {
+                        left = MathF.Min(left, glyphLeft);
+                        right = MathF.Max(right, glyphRight);
+                        top = MathF.Min(top, glyphTop);
+                        bottom = MathF.Max(bottom, glyphBottom);
+                    }
+
+                    cursor += metrics.Value.Advance;
                 }
 
-                cursor += metrics.Value.Advance;
+                if (run.Text.Trim().Length > 0)
+                    lastRunBold = run.Bold;
             }
 
-            if (_style.UseBold && foundGlyph)
+            if (lastRunBold && foundGlyph)
                 right += GetSyntheticBoldOffset();
 
             return foundGlyph
@@ -661,7 +1110,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
 
         private float GetLineHeight()
         {
-            return MathF.Max(1f, _font.GetLineHeight(UIScale) + _style.GetScaledLineHeightOffset(_scale) * UIScale);
+            return MathF.Max(1f, _regularFont.GetLineHeight(UIScale) + _style.GetScaledLineHeightOffset(_scale) * UIScale);
         }
 
         private float GetPadding()
@@ -718,10 +1167,10 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             return (EmoteIconVisibleBottom - EmoteIconVisibleTop) * GetIconPixelSize() * UIScale;
         }
 
-        private void DrawOutlinedString(
+        private void DrawOutlinedLine(
             DrawingHandleScreen handle,
             Vector2 position,
-            string text,
+            List<TextRun> lineRuns,
             Color textColor)
         {
             var strokeOffset = GetTextPixelOffset(TextStrokeOffset);
@@ -729,31 +1178,39 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             var strokeColor = Color.Black.WithAlpha(textColor.A * TextStrokeAlpha);
             var haloColor = Color.Black.WithAlpha(textColor.A * TextHaloAlpha);
 
-            DrawStringPasses(handle, position, text, TextHaloOffsets, haloOffset, haloColor);
-            DrawStringPasses(handle, position, text, TextStrokeOffsets, strokeOffset, strokeColor);
-            DrawStringPass(handle, position, text, textColor);
+            DrawLinePasses(handle, position, lineRuns, TextHaloOffsets, haloOffset, haloColor);
+            DrawLinePasses(handle, position, lineRuns, TextStrokeOffsets, strokeOffset, strokeColor);
+            DrawLineMain(handle, position, lineRuns, textColor);
         }
 
-        private void DrawStringPasses(
+        private void DrawLinePasses(
             DrawingHandleScreen handle,
             Vector2 position,
-            string text,
+            List<TextRun> lineRuns,
             IReadOnlyList<Vector2> offsets,
             float offset,
             Color color)
         {
             foreach (var direction in offsets)
             {
-                DrawStringPass(handle, position + direction * offset, text, color);
+                DrawLineMain(handle, position + direction * offset, lineRuns, color);
             }
         }
 
-        private void DrawStringPass(DrawingHandleScreen handle, Vector2 position, string text, Color color)
+        private void DrawLineMain(DrawingHandleScreen handle, Vector2 position, List<TextRun> lineRuns, Color color)
         {
-            handle.DrawString(_font, position, text, UIScale, color);
+            var cursor = position;
 
-            if (_style.UseBold)
-                handle.DrawString(_font, position + new Vector2(GetSyntheticBoldOffset(), 0f), text, UIScale, color);
+            foreach (var run in lineRuns)
+            {
+                var font = GetFont(run.Italic);
+                handle.DrawString(font, cursor, run.Text, UIScale, color);
+
+                if (run.Bold)
+                    handle.DrawString(font, cursor + new Vector2(GetSyntheticBoldOffset(), 0f), run.Text, UIScale, color);
+
+                cursor += new Vector2(MeasureRunWidth(run), 0f);
+            }
         }
 
         private float GetTextPixelOffset(float pixels)
@@ -864,7 +1321,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         }
 
         private sealed record RunechatPageLayout(
-            IReadOnlyList<string> Lines,
+            IReadOnlyList<List<TextRun>> Lines,
             IReadOnlyList<float> LineWidths,
             float Width,
             float Height);
