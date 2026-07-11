@@ -1,4 +1,5 @@
 using Content.Server.StatusEffectNew;
+using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs;
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
@@ -14,6 +15,7 @@ public sealed partial class CMUAnesthesiaSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedInternalsSystem _internals = default!;
+    [Dependency] private SharedLungsSystem _lungs = default!;
     [Dependency] private SleepingSystem _sleeping = default!;
     [Dependency] private StatusEffectsSystem _status = default!;
 
@@ -64,7 +66,8 @@ public sealed partial class CMUAnesthesiaSystem : EntitySystem
 
     private bool HasActiveInhaledAnesthesia(EntityUid body)
     {
-        if (!TryComp<InternalsComponent>(body, out var internals) ||
+        if (!_lungs.CanReceiveInhaledAnesthesia(body) ||
+            !TryComp<InternalsComponent>(body, out var internals) ||
             !_internals.AreInternalsWorking(body, internals) ||
             internals.GasTankEntity is not { } tankUid ||
             !TryComp<GasTankComponent>(tankUid, out var gasTank))

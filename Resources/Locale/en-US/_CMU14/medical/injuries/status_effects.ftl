@@ -42,3 +42,7 @@ cmu-medical-alert-transplant-rejection-name = Organ rejection
 cmu-medical-alert-transplant-rejection-desc = Your body is fighting the transplanted organ.
 cmu-medical-alert-bone-regen-boost-name     = Bone regeneration
 cmu-medical-alert-bone-regen-boost-desc     = OsteoCalc is accelerating bone healing.
+
+cmu-medical-fracture-movement-complication  = Pain tears through the unstabilized fracture!
+cmu-medical-brain-disorientation             = A splitting headache leaves you disoriented!
+cmu-medical-lungs-cough-blood                = You cough up blood!

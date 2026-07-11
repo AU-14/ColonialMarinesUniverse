@@ -1,6 +1,7 @@
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart.Events;
 using Content.Shared._RMC14.Body;
+using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Body.Events;
 using Content.Shared.Body.Organ;
 using Content.Shared.FixedPoint;
@@ -25,6 +26,7 @@ public abstract partial class SharedHeartSystem : EntitySystem
     [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
     [Dependency] protected SharedRMCBloodstreamSystem Bloodstream = default!;
     [Dependency] protected SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected CMStasisBagSystem Stasis = default!;
 
     private static readonly EntProtoId Tachycardia = "StatusEffectCMUTachycardia";
     private static readonly EntProtoId Arrhythmia = "StatusEffectCMUArrhythmia";
@@ -54,6 +56,7 @@ public abstract partial class SharedHeartSystem : EntitySystem
     private void OnHeartStartup(Entity<HeartComponent> ent, ref ComponentStartup args)
     {
         ent.Comp.NextPulseUpdate = Timing.CurTime + ent.Comp.PulseUpdateInterval;
+        ent.Comp.NextOrganDamageTick = Timing.CurTime + TimeSpan.FromSeconds(1);
     }
 
     private void OnHeartRemovedFromBody(Entity<HeartComponent> ent, ref OrganRemovedFromBodyEvent args)
@@ -64,7 +67,8 @@ public abstract partial class SharedHeartSystem : EntitySystem
             return;
 
         var missing = EnsureComp<MissingHeartComponent>(args.OldBody);
-        missing.NoPulseSince ??= Timing.CurTime;
+        missing.NoPulseElapsed = TimeSpan.Zero;
+        missing.LastCardiacArrestUpdate = Timing.CurTime;
         missing.NextCardiacArrestTick = Timing.CurTime;
 
         Status.TrySetStatusEffectDuration(args.OldBody, CardiacArrest, duration: null);
@@ -95,6 +99,8 @@ public abstract partial class SharedHeartSystem : EntitySystem
         {
             if (heart.Stopped)
                 TickCardiacArrest((uid, heart, oh), now);
+            else
+                TickOrganDamage((uid, heart, oh), now);
 
             if (heart.NextPulseUpdate > now)
                 continue;
@@ -351,27 +357,61 @@ public abstract partial class SharedHeartSystem : EntitySystem
             Status.TrySetStatusEffectDuration(body.Value, Unconscious, TimeSpan.FromSeconds(3));
     }
 
+    private void TickOrganDamage(Entity<HeartComponent, OrganHealthComponent> ent, TimeSpan now)
+    {
+        if (ent.Comp1.NextOrganDamageTick > now)
+            return;
+        ent.Comp1.NextOrganDamageTick = now + TimeSpan.FromSeconds(1);
+
+        ent.Comp1.AsphyxPerSecond.TryGetValue(ent.Comp2.Stage, out var asphyx);
+        ent.Comp1.ToxinPerSecond.TryGetValue(ent.Comp2.Stage, out var toxin);
+        if (asphyx <= FixedPoint2.Zero && toxin <= FixedPoint2.Zero)
+            return;
+
+        var body = GetBody(ent.Owner);
+        if (body is null)
+            return;
+        if (TryComp<MobStateComponent>(body.Value, out var mob) && mob.CurrentState == MobState.Dead)
+            return;
+
+        ApplyHeartOrganDamage(body.Value, ent.Owner, asphyx, toxin);
+    }
+
     private void TickMissingHeart(Entity<MissingHeartComponent> ent, TimeSpan now)
     {
         if (ent.Comp.NextCardiacArrestTick > now)
             return;
+
+        var elapsed = now - ent.Comp.LastCardiacArrestUpdate;
+        ent.Comp.LastCardiacArrestUpdate = now;
         ent.Comp.NextCardiacArrestTick = now + TimeSpan.FromSeconds(1);
+
+        if (!Stasis.CanBodyMetabolize(ent.Owner))
+            return;
 
         if (TryComp<MobStateComponent>(ent.Owner, out var mob) && mob.CurrentState == MobState.Dead)
             return;
 
-        ent.Comp.NoPulseSince ??= now;
+        ent.Comp.NoPulseElapsed += elapsed;
 
         Status.TrySetStatusEffectDuration(ent.Owner, CardiacArrest, duration: null);
 
         if (MissingHeartAsphyxPerSecond > FixedPoint2.Zero)
             ApplyCardiacArrestAsphyx(ent.Owner, ent.Owner, MissingHeartAsphyxPerSecond);
 
-        if (now - ent.Comp.NoPulseSince.Value >= MissingHeartUnconsciousDelay)
+        if (ent.Comp.NoPulseElapsed >= MissingHeartUnconsciousDelay)
             Status.TrySetStatusEffectDuration(ent.Owner, Unconscious, TimeSpan.FromSeconds(3));
     }
 
     protected virtual void ApplyCardiacArrestAsphyx(EntityUid body, EntityUid heart, FixedPoint2 amount)
+    {
+    }
+
+    protected virtual void ApplyHeartOrganDamage(
+        EntityUid body,
+        EntityUid heart,
+        FixedPoint2 asphyx,
+        FixedPoint2 toxin)
     {
     }
 

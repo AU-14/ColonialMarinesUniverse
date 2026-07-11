@@ -17,13 +17,21 @@ public sealed partial class KidneysComponent : Component
     [DataField]
     public Dictionary<OrganDamageStage, FixedPoint2> ToxinPerSecond = new()
     {
-        { OrganDamageStage.Healthy, FixedPoint2.Zero     },
-        { OrganDamageStage.Bruised, FixedPoint2.Zero     },
-        { OrganDamageStage.Damaged, FixedPoint2.Zero     },
-        { OrganDamageStage.Failing, FixedPoint2.New(0.25)},
-        { OrganDamageStage.Dead,    FixedPoint2.New(0.75)},
+        { OrganDamageStage.Healthy, FixedPoint2.Zero },
+        { OrganDamageStage.Bruised, FixedPoint2.New(0.05) },
+        { OrganDamageStage.Damaged, FixedPoint2.New(0.15) },
+        { OrganDamageStage.Failing, FixedPoint2.New(0.25) },
+        { OrganDamageStage.Dead, FixedPoint2.New(0.75) },
     };
 
     [DataField, AutoPausedField]
+    public TimeSpan NextSelfDamageTick;
+}
+
+[RegisterComponent]
+[Access(typeof(SharedKidneysSystem))]
+public sealed partial class MissingKidneysComponent : Component
+{
+    [DataField]
     public TimeSpan NextSelfDamageTick;
 }

@@ -12,9 +12,9 @@ public sealed partial class EyesSystem : SharedEyesSystem
     protected override void UpdateVisionStatus(EntityUid body, OrganDamageStage stage)
     {
         if (stage == OrganDamageStage.Dead)
-            EnsureComp<TemporaryBlindnessComponent>(body);
+            EnsureComp<CMUOrganBlindnessComponent>(body);
         else
-            RemComp<TemporaryBlindnessComponent>(body);
+            RemComp<CMUOrganBlindnessComponent>(body);
 
         ApplyEyeDamageContribution(body, StageToEyeDamage(stage));
     }
@@ -40,7 +40,7 @@ public sealed partial class EyesSystem : SharedEyesSystem
             OrganDamageStage.Bruised => 1,
             OrganDamageStage.Damaged => 2,
             OrganDamageStage.Failing => 3,
-            // Dead → 0: TemporaryBlindnessComponent dominates, and zeroing our
+            // Dead → 0: CMUOrganBlindnessComponent dominates, and zeroing our
             // contribution keeps damage clean if the eyes are revived.
             _ => 0,
         };

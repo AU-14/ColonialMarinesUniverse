@@ -29,3 +29,13 @@ public sealed partial class CMUStomachComponent : Component
         { OrganDamageStage.Dead,    0.15f },
     };
 }
+
+/// <summary>
+///     Tracks that a body had its stomach removed. Without the vanilla stomach
+///     organ the body already cannot consume or absorb food, drink, or oral
+///     medicine; this marker keeps the associated nausea persistent until a
+///     stomach is reinserted.
+/// </summary>
+[RegisterComponent]
+[Access(typeof(SharedStomachSystem))]
+public sealed partial class MissingStomachComponent : Component;

@@ -75,4 +75,12 @@ public abstract partial class SharedFractureSystem : EntitySystem
 
         return sev;
     }
+
+    public void SetNextMovementComplication(
+        Entity<FractureComponent> part,
+        TimeSpan nextComplication)
+    {
+        part.Comp.NextMovementComplication = nextComplication;
+        Dirty(part);
+    }
 }

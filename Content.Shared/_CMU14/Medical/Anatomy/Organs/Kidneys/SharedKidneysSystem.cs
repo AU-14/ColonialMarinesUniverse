@@ -1,5 +1,7 @@
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared._RMC14.Medical.Stasis;
+using Content.Shared.Body.Events;
 using Content.Shared.Body.Organ;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
@@ -18,8 +20,10 @@ public abstract partial class SharedKidneysSystem : EntitySystem
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
     [Dependency] protected SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected CMStasisBagSystem Stasis = default!;
 
     private static readonly EntProtoId RenalFailure = "StatusEffectCMURenalFailure";
+    private static readonly FixedPoint2 MissingKidneysToxinPerSecond = FixedPoint2.New(0.75);
     private const float SelfDamageScanInterval = 1f;
     private float _selfDamageScanAccumulator;
 
@@ -31,6 +35,8 @@ public abstract partial class SharedKidneysSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<KidneysComponent, OrganStageChangedEvent>(OnStageChanged);
         SubscribeLocalEvent<KidneysComponent, ComponentStartup>(OnKidneysStartup);
+        SubscribeLocalEvent<KidneysComponent, OrganRemovedFromBodyEvent>(OnKidneysRemovedFromBody);
+        SubscribeLocalEvent<KidneysComponent, OrganAddedToBodyEvent>(OnKidneysAddedToBody);
 
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
         Cfg.OnValueChanged(CMUMedicalCCVars.OrganEnabled, v => _organEnabled = v, true);
@@ -39,6 +45,30 @@ public abstract partial class SharedKidneysSystem : EntitySystem
     private void OnKidneysStartup(Entity<KidneysComponent> ent, ref ComponentStartup args)
     {
         ent.Comp.NextSelfDamageTick = Timing.CurTime + TimeSpan.FromSeconds(1);
+    }
+
+    private void OnKidneysRemovedFromBody(Entity<KidneysComponent> ent, ref OrganRemovedFromBodyEvent args)
+    {
+        if (!_medicalEnabled || !_organEnabled || TerminatingOrDeleted(args.OldBody))
+            return;
+
+        var missing = EnsureComp<MissingKidneysComponent>(args.OldBody);
+        missing.NextSelfDamageTick = Timing.CurTime;
+        Status.TrySetStatusEffectDuration(args.OldBody, RenalFailure, duration: null);
+    }
+
+    private void OnKidneysAddedToBody(Entity<KidneysComponent> ent, ref OrganAddedToBodyEvent args)
+    {
+        RemCompDeferred<MissingKidneysComponent>(args.Body);
+        if (TryComp<OrganHealthComponent>(ent, out var health) &&
+            health.Stage.IsAtLeast(OrganDamageStage.Damaged))
+        {
+            Status.TrySetStatusEffectDuration(args.Body, RenalFailure, duration: null);
+        }
+        else
+        {
+            Status.TryRemoveStatusEffect(args.Body, RenalFailure);
+        }
     }
 
     private void OnStageChanged(Entity<KidneysComponent> ent, ref OrganStageChangedEvent args)
@@ -63,11 +93,15 @@ public abstract partial class SharedKidneysSystem : EntitySystem
     };
 
     /// <summary>
-    ///     Pair survival via <c>Math.Max</c> across all kidneys. Missing-kidney
-    ///     bodies return 1.0 unchanged.
+    ///     Pair survival via the best functioning kidney. A body whose kidneys
+    ///     were removed has no clearance; bodies without a tracked kidney or
+    ///     removal marker retain the legacy 1.0 fallback.
     /// </summary>
     public float GetClearanceMultiplier(EntityUid body)
     {
+        if (HasComp<MissingKidneysComponent>(body))
+            return 0f;
+
         var best = -1f;
         foreach (var (organId, _) in MedicalIndex.GetOrgans(body))
         {
@@ -109,6 +143,29 @@ public abstract partial class SharedKidneysSystem : EntitySystem
                 continue;
 
             ApplyToxin(body.Value, uid, rate);
+        }
+
+        var missingQuery = EntityQueryEnumerator<MissingKidneysComponent>();
+        while (missingQuery.MoveNext(out var uid, out var missing))
+        {
+            if (MedicalIndex.TryGetOrgan<KidneysComponent>(uid, out _))
+            {
+                RemCompDeferred<MissingKidneysComponent>(uid);
+                continue;
+            }
+
+            if (missing.NextSelfDamageTick > now)
+                continue;
+            missing.NextSelfDamageTick = now + TimeSpan.FromSeconds(1);
+
+            if (!Stasis.CanBodyMetabolize(uid))
+                continue;
+
+            if (TryComp<MobStateComponent>(uid, out var mob) && mob.CurrentState == MobState.Dead)
+                continue;
+
+            Status.TrySetStatusEffectDuration(uid, RenalFailure, duration: null);
+            ApplyToxin(uid, uid, MissingKidneysToxinPerSecond);
         }
     }
 

@@ -14,13 +14,21 @@ public sealed partial class LiverComponent : Component
     [DataField]
     public Dictionary<OrganDamageStage, FixedPoint2> ToxinPerSecond = new()
     {
-        { OrganDamageStage.Healthy, FixedPoint2.Zero    },
-        { OrganDamageStage.Bruised, FixedPoint2.Zero    },
-        { OrganDamageStage.Damaged, FixedPoint2.Zero    },
-        { OrganDamageStage.Failing, FixedPoint2.New(0.5)},
-        { OrganDamageStage.Dead,    FixedPoint2.New(1)  },
+        { OrganDamageStage.Healthy, FixedPoint2.Zero },
+        { OrganDamageStage.Bruised, FixedPoint2.New(0.05) },
+        { OrganDamageStage.Damaged, FixedPoint2.New(0.15) },
+        { OrganDamageStage.Failing, FixedPoint2.New(0.5) },
+        { OrganDamageStage.Dead, FixedPoint2.New(1) },
     };
 
     [DataField, AutoPausedField]
+    public TimeSpan NextSelfDamageTick;
+}
+
+[RegisterComponent]
+[Access(typeof(SharedLiverSystem))]
+public sealed partial class MissingLiverComponent : Component
+{
+    [DataField]
     public TimeSpan NextSelfDamageTick;
 }

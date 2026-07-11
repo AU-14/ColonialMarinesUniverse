@@ -1,4 +1,6 @@
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared._RMC14.Medical.Stasis;
+using Content.Shared.Body.Events;
 using Content.Shared.Body.Organ;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
@@ -20,8 +22,10 @@ public abstract partial class SharedLiverSystem : EntitySystem
     [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
     [Dependency] protected DamageableSystem Damageable = default!;
     [Dependency] protected SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected CMStasisBagSystem Stasis = default!;
 
     private static readonly EntProtoId HepaticFailure = "StatusEffectCMUHepaticFailure";
+    private static readonly FixedPoint2 MissingLiverToxinPerSecond = FixedPoint2.New(1);
 
     private const float SelfDamageScanInterval = 1f;
     private float _selfDamageScanAccumulator;
@@ -34,6 +38,8 @@ public abstract partial class SharedLiverSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<LiverComponent, OrganStageChangedEvent>(OnStageChanged);
         SubscribeLocalEvent<LiverComponent, ComponentStartup>(OnLiverStartup);
+        SubscribeLocalEvent<LiverComponent, OrganRemovedFromBodyEvent>(OnLiverRemovedFromBody);
+        SubscribeLocalEvent<LiverComponent, OrganAddedToBodyEvent>(OnLiverAddedToBody);
 
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
         Cfg.OnValueChanged(CMUMedicalCCVars.OrganEnabled, v => _organEnabled = v, true);
@@ -42,6 +48,30 @@ public abstract partial class SharedLiverSystem : EntitySystem
     private void OnLiverStartup(Entity<LiverComponent> ent, ref ComponentStartup args)
     {
         ent.Comp.NextSelfDamageTick = Timing.CurTime + TimeSpan.FromSeconds(1);
+    }
+
+    private void OnLiverRemovedFromBody(Entity<LiverComponent> ent, ref OrganRemovedFromBodyEvent args)
+    {
+        if (!_medicalEnabled || !_organEnabled || TerminatingOrDeleted(args.OldBody))
+            return;
+
+        var missing = EnsureComp<MissingLiverComponent>(args.OldBody);
+        missing.NextSelfDamageTick = Timing.CurTime;
+        Status.TrySetStatusEffectDuration(args.OldBody, HepaticFailure, duration: null);
+    }
+
+    private void OnLiverAddedToBody(Entity<LiverComponent> ent, ref OrganAddedToBodyEvent args)
+    {
+        RemCompDeferred<MissingLiverComponent>(args.Body);
+        if (TryComp<OrganHealthComponent>(ent, out var health) &&
+            health.Stage.IsAtLeast(OrganDamageStage.Damaged))
+        {
+            Status.TrySetStatusEffectDuration(args.Body, HepaticFailure, duration: null);
+        }
+        else
+        {
+            Status.TryRemoveStatusEffect(args.Body, HepaticFailure);
+        }
     }
 
     private void OnStageChanged(Entity<LiverComponent> ent, ref OrganStageChangedEvent args)
@@ -66,11 +96,15 @@ public abstract partial class SharedLiverSystem : EntitySystem
     };
 
     /// <summary>
-    ///     Returns the worst-stage liver's clearance multiplier (1.0 if no liver
-    ///     organs are present).
+    ///     Returns the worst-stage liver's clearance multiplier. A body whose
+    ///     liver was removed has no clearance; bodies without a tracked liver
+    ///     or removal marker retain the legacy 1.0 fallback.
     /// </summary>
     public float GetClearanceMultiplier(EntityUid body)
     {
+        if (HasComp<MissingLiverComponent>(body))
+            return 0f;
+
         var worst = -1f;
         foreach (var (organId, _) in MedicalIndex.GetOrgans(body))
         {
@@ -131,6 +165,29 @@ public abstract partial class SharedLiverSystem : EntitySystem
                 continue;
 
             ApplyToxin(body.Value, uid, rate);
+        }
+
+        var missingQuery = EntityQueryEnumerator<MissingLiverComponent>();
+        while (missingQuery.MoveNext(out var uid, out var missing))
+        {
+            if (MedicalIndex.TryGetOrgan<LiverComponent>(uid, out _))
+            {
+                RemCompDeferred<MissingLiverComponent>(uid);
+                continue;
+            }
+
+            if (missing.NextSelfDamageTick > now)
+                continue;
+            missing.NextSelfDamageTick = now + TimeSpan.FromSeconds(1);
+
+            if (!Stasis.CanBodyMetabolize(uid))
+                continue;
+
+            if (TryComp<MobStateComponent>(uid, out var mob) && mob.CurrentState == MobState.Dead)
+                continue;
+
+            Status.TrySetStatusEffectDuration(uid, HepaticFailure, duration: null);
+            ApplyToxin(uid, uid, MissingLiverToxinPerSecond);
         }
     }
 

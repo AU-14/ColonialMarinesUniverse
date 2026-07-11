@@ -1,4 +1,5 @@
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.Eye.Blinding.Systems;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared.Body.Events;
 using Content.Shared.Body.Organ;
@@ -6,6 +7,7 @@ using Content.Shared.Body.Systems;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -15,11 +17,12 @@ namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Brain;
 
 public abstract partial class SharedBrainSystem : EntitySystem
 {
-    [Dependency] protected IConfigurationManager Cfg = default!;
-    [Dependency] protected IGameTiming Timing = default!;
-    [Dependency] protected IRobustRandom Rng = default!;
     [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected BlurryVisionSystem BlurryVision = default!;
+    [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] protected IRobustRandom Rng = default!;
     [Dependency] protected SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected RMCUnrevivableSystem Unrevivable = default!;
 
     private static readonly EntProtoId Concussed = "StatusEffectCMUConcussed";
@@ -37,6 +40,8 @@ public abstract partial class SharedBrainSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<CMUBrainComponent, OrganStageChangedEvent>(OnStageChanged);
         SubscribeLocalEvent<CMUBrainComponent, OrganRemovedFromBodyEvent>(OnBrainRemovedFromBody);
+        SubscribeLocalEvent<CMUBrainVisionImpairmentComponent, AfterAutoHandleStateEvent>(OnVisionStateHandled);
+        SubscribeLocalEvent<CMUBrainVisionImpairmentComponent, GetBlurEvent>(OnGetBlur);
 
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
         Cfg.OnValueChanged(CMUMedicalCCVars.OrganEnabled, v => _organEnabled = v, true);
@@ -61,6 +66,7 @@ public abstract partial class SharedBrainSystem : EntitySystem
     private void OnStageChanged(Entity<CMUBrainComponent> ent, ref OrganStageChangedEvent args)
     {
         var body = args.Body;
+        UpdateVisionImpairment(body, ent.Comp, args.New);
         switch (args.New)
         {
             case OrganDamageStage.Healthy:
@@ -87,12 +93,12 @@ public abstract partial class SharedBrainSystem : EntitySystem
                 ApplySlurredSpeech(body);
                 break;
             case OrganDamageStage.Dead:
-                ent.Comp.ActionSpeedMultiplier = 0f;
-                if (!ent.Comp.PermadeathApplied)
-                {
-                    ent.Comp.PermadeathApplied = true;
-                    ApplyPermadeath(body);
-                }
+                // CM brain damage can continue past the scanner's "braindead"
+                // reading without killing the patient. Removing the brain is
+                // still immediately fatal through OnBrainRemovedFromBody.
+                ent.Comp.ActionSpeedMultiplier = 0.5f;
+                Status.TrySetStatusEffectDuration(body, TraumaticBrainInjury, duration: null);
+                ApplySlurredSpeech(body);
                 break;
         }
         Dirty(ent);
@@ -115,22 +121,36 @@ public abstract partial class SharedBrainSystem : EntitySystem
             switch (oh.Stage)
             {
                 case OrganDamageStage.Bruised:
-                    TickDisorientation((uid, brain), now);
+                case OrganDamageStage.Damaged:
+                    TickDisorientation((uid, brain), oh.Stage, now);
                     break;
                 case OrganDamageStage.Failing:
+                case OrganDamageStage.Dead:
+                    TickDisorientation((uid, brain), oh.Stage, now);
                     TickFailingUnconscious((uid, brain), now);
                     break;
             }
         }
     }
 
-    private void TickDisorientation(Entity<CMUBrainComponent> ent, TimeSpan now)
+    private void TickDisorientation(
+        Entity<CMUBrainComponent> ent,
+        OrganDamageStage stage,
+        TimeSpan now)
     {
         if (ent.Comp.NextDisorientCheck > now)
             return;
-        ent.Comp.NextDisorientCheck = now + TimeSpan.FromMinutes(1);
+        ent.Comp.NextDisorientCheck = now + ent.Comp.DisorientationCheckInterval;
 
-        if (!Rng.Prob(ent.Comp.DisorientationChancePerMinute))
+        var chance = stage switch
+        {
+            OrganDamageStage.Bruised => ent.Comp.BruisedDisorientationChance,
+            OrganDamageStage.Damaged => ent.Comp.DamagedDisorientationChance,
+            OrganDamageStage.Failing => ent.Comp.FailingDisorientationChance,
+            OrganDamageStage.Dead => ent.Comp.FailingDisorientationChance,
+            _ => 0f,
+        };
+        if (!Rng.Prob(chance))
             return;
 
         var body = GetBody(ent);
@@ -138,7 +158,7 @@ public abstract partial class SharedBrainSystem : EntitySystem
             return;
         if (Unrevivable.IsUnrevivable(body.Value))
             return;
-        ApplyDisorientation(body.Value);
+        ApplyDisorientation(body.Value, ent.Comp, stage);
     }
 
     private void TickFailingUnconscious(Entity<CMUBrainComponent> ent, TimeSpan now)
@@ -159,7 +179,52 @@ public abstract partial class SharedBrainSystem : EntitySystem
     {
     }
 
-    protected virtual void ApplyDisorientation(EntityUid body)
+    private void UpdateVisionImpairment(
+        EntityUid body,
+        CMUBrainComponent brain,
+        OrganDamageStage stage)
+    {
+        var magnitude = stage switch
+        {
+            OrganDamageStage.Bruised => brain.BruisedVisionBlur,
+            OrganDamageStage.Damaged => brain.DamagedVisionBlur,
+            OrganDamageStage.Failing => brain.FailingVisionBlur,
+            OrganDamageStage.Dead => brain.FailingVisionBlur,
+            _ => 0f,
+        };
+
+        if (!TryComp<CMUBrainVisionImpairmentComponent>(body, out var impairment))
+        {
+            if (magnitude <= 0f)
+                return;
+
+            impairment = EnsureComp<CMUBrainVisionImpairmentComponent>(body);
+        }
+
+        if (MathF.Abs(impairment.Magnitude - magnitude) <= 0.001f)
+            return;
+
+        impairment.Magnitude = magnitude;
+        Dirty(body, impairment);
+        BlurryVision.UpdateBlurMagnitude(body);
+    }
+
+    private void OnVisionStateHandled(
+        Entity<CMUBrainVisionImpairmentComponent> ent,
+        ref AfterAutoHandleStateEvent args)
+    {
+        BlurryVision.UpdateBlurMagnitude(ent.Owner);
+    }
+
+    private void OnGetBlur(Entity<CMUBrainVisionImpairmentComponent> ent, ref GetBlurEvent args)
+    {
+        args.Blur = MathF.Max(args.Blur, ent.Comp.Magnitude);
+    }
+
+    protected virtual void ApplyDisorientation(
+        EntityUid body,
+        CMUBrainComponent brain,
+        OrganDamageStage stage)
     {
     }
 

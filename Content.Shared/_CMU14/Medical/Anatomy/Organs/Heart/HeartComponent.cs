@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
 
@@ -54,6 +55,29 @@ public sealed partial class HeartComponent : Component
 
     [DataField]
     public TimeSpan CardiacArrestUnconsciousDelay = TimeSpan.FromSeconds(5);
+
+    [DataField]
+    public Dictionary<OrganDamageStage, FixedPoint2> AsphyxPerSecond = new()
+    {
+        { OrganDamageStage.Healthy, FixedPoint2.Zero },
+        { OrganDamageStage.Bruised, FixedPoint2.New(0.1) },
+        { OrganDamageStage.Damaged, FixedPoint2.New(0.5) },
+        { OrganDamageStage.Failing, FixedPoint2.New(1.5) },
+        { OrganDamageStage.Dead, FixedPoint2.Zero },
+    };
+
+    [DataField]
+    public Dictionary<OrganDamageStage, FixedPoint2> ToxinPerSecond = new()
+    {
+        { OrganDamageStage.Healthy, FixedPoint2.Zero },
+        { OrganDamageStage.Bruised, FixedPoint2.Zero },
+        { OrganDamageStage.Damaged, FixedPoint2.New(0.5) },
+        { OrganDamageStage.Failing, FixedPoint2.New(0.5) },
+        { OrganDamageStage.Dead, FixedPoint2.Zero },
+    };
+
+    [DataField, AutoPausedField]
+    public TimeSpan NextOrganDamageTick;
 }
 
 [RegisterComponent]
@@ -61,7 +85,10 @@ public sealed partial class HeartComponent : Component
 public sealed partial class MissingHeartComponent : Component
 {
     [DataField]
-    public TimeSpan? NoPulseSince;
+    public TimeSpan NoPulseElapsed;
+
+    [DataField]
+    public TimeSpan LastCardiacArrestUpdate;
 
     [DataField]
     public TimeSpan NextCardiacArrestTick;

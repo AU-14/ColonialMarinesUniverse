@@ -13,6 +13,7 @@ public sealed partial class HeartSystem : SharedHeartSystem
     [Dependency] private IPrototypeManager _proto = default!;
 
     private static readonly ProtoId<DamageTypePrototype> Asphyxiation = "Asphyxiation";
+    private static readonly ProtoId<DamageTypePrototype> Poison = "Poison";
 
     public override void Update(float frameTime)
     {
@@ -26,6 +27,23 @@ public sealed partial class HeartSystem : SharedHeartSystem
             return;
 
         var spec = new DamageSpecifier { DamageDict = { [Asphyxiation.Id] = amount } };
+        _damageable.TryChangeDamage(body, spec, ignoreResistances: true, origin: heart);
+    }
+
+    protected override void ApplyHeartOrganDamage(
+        EntityUid body,
+        EntityUid heart,
+        FixedPoint2 asphyx,
+        FixedPoint2 toxin)
+    {
+        var spec = new DamageSpecifier();
+        if (asphyx > FixedPoint2.Zero && _proto.TryIndex(Asphyxiation, out _))
+            spec.DamageDict[Asphyxiation.Id] = asphyx;
+        if (toxin > FixedPoint2.Zero && _proto.TryIndex(Poison, out _))
+            spec.DamageDict[Poison.Id] = toxin;
+        if (spec.GetTotal() <= FixedPoint2.Zero)
+            return;
+
         _damageable.TryChangeDamage(body, spec, ignoreResistances: true, origin: heart);
     }
 }

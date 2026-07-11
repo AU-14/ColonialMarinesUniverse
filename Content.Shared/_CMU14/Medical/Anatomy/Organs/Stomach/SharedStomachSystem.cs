@@ -1,5 +1,6 @@
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.Body.Events;
 using Content.Shared.Body.Organ;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -31,6 +32,8 @@ public abstract partial class SharedStomachSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<CMUStomachComponent, OrganStageChangedEvent>(OnStageChanged);
         SubscribeLocalEvent<CMUStomachComponent, ComponentStartup>(OnStomachStartup);
+        SubscribeLocalEvent<CMUStomachComponent, OrganRemovedFromBodyEvent>(OnStomachRemovedFromBody);
+        SubscribeLocalEvent<CMUStomachComponent, OrganAddedToBodyEvent>(OnStomachAddedToBody);
 
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
         Cfg.OnValueChanged(CMUMedicalCCVars.OrganEnabled, v => _organEnabled = v, true);
@@ -48,6 +51,30 @@ public abstract partial class SharedStomachSystem : EntitySystem
             Status.TrySetStatusEffectDuration(body, Nausea, duration: null);
         else
             Status.TryRemoveStatusEffect(body, Nausea);
+    }
+
+    private void OnStomachRemovedFromBody(Entity<CMUStomachComponent> ent, ref OrganRemovedFromBodyEvent args)
+    {
+        if (!_medicalEnabled || !_organEnabled || TerminatingOrDeleted(args.OldBody))
+            return;
+
+        EnsureComp<MissingStomachComponent>(args.OldBody);
+        Status.TrySetStatusEffectDuration(args.OldBody, Nausea, duration: null);
+    }
+
+    private void OnStomachAddedToBody(Entity<CMUStomachComponent> ent, ref OrganAddedToBodyEvent args)
+    {
+        RemComp<MissingStomachComponent>(args.Body);
+
+        if (TryComp<OrganHealthComponent>(ent, out var health) &&
+            health.Stage.IsAtLeast(OrganDamageStage.Damaged))
+        {
+            Status.TrySetStatusEffectDuration(args.Body, Nausea, duration: null);
+        }
+        else
+        {
+            Status.TryRemoveStatusEffect(args.Body, Nausea);
+        }
     }
 
     protected void UpdateServer(float frameTime)
@@ -81,6 +108,10 @@ public abstract partial class SharedStomachSystem : EntitySystem
 
             ApplyVomit(body.Value);
         }
+
+        var missingQuery = EntityQueryEnumerator<MissingStomachComponent>();
+        while (missingQuery.MoveNext(out var uid, out _))
+            Status.TrySetStatusEffectDuration(uid, Nausea, duration: null);
     }
 
     protected virtual void ApplyVomit(EntityUid body)

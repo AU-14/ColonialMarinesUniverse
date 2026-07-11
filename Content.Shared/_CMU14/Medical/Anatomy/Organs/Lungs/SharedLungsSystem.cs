@@ -1,6 +1,7 @@
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs.Events;
+using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Body.Events;
 using Content.Shared.Body.Organ;
 using Content.Shared.Damage;
@@ -11,6 +12,7 @@ using Content.Shared.StatusEffectNew;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs;
@@ -21,7 +23,9 @@ public abstract partial class SharedLungsSystem : EntitySystem
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
     [Dependency] protected DamageableSystem Damageable = default!;
+    [Dependency] protected IRobustRandom Random = default!;
     [Dependency] protected SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected CMStasisBagSystem Stasis = default!;
 
     private static readonly EntProtoId PulmonaryEdema = "StatusEffectCMUPulmonaryEdema";
     private static readonly FixedPoint2 MissingLungsAsphyxPerSecond = FixedPoint2.New(5);
@@ -48,6 +52,7 @@ public abstract partial class SharedLungsSystem : EntitySystem
     private void OnLungsStartup(Entity<LungsComponent> ent, ref ComponentStartup args)
     {
         ent.Comp.NextAsphyxTick = Timing.CurTime + TimeSpan.FromSeconds(1);
+        ent.Comp.NextBloodCoughCheck = Timing.CurTime + ent.Comp.BloodCoughInterval;
     }
 
     private void OnLungsRemovedFromBody(Entity<LungsComponent> ent, ref OrganRemovedFromBodyEvent args)
@@ -112,6 +117,30 @@ public abstract partial class SharedLungsSystem : EntitySystem
         args.Multiplier *= best;
     }
 
+    /// <summary>
+    ///     Nitrous anesthesia requires at least one lung that has not ruptured.
+    ///     Other painkillers can still satisfy surgery's pain-suppression check.
+    /// </summary>
+    public bool CanReceiveInhaledAnesthesia(EntityUid body)
+    {
+        if (!_medicalEnabled || !_organEnabled)
+            return true;
+
+        foreach (var (organId, _) in MedicalIndex.GetOrgans(body))
+        {
+            if (!HasComp<LungsComponent>(organId) ||
+                !TryComp<OrganHealthComponent>(organId, out var health))
+            {
+                continue;
+            }
+
+            if (!health.Stage.IsAtLeast(OrganDamageStage.Damaged))
+                return true;
+        }
+
+        return false;
+    }
+
     protected void UpdateServer(float frameTime)
     {
         if (!_medicalEnabled || !_organEnabled)
@@ -130,9 +159,6 @@ public abstract partial class SharedLungsSystem : EntitySystem
                 continue;
             lungs.NextAsphyxTick = now + TimeSpan.FromSeconds(1);
 
-            if (!lungs.AsphyxPerSecond.TryGetValue(oh.Stage, out var rate) || rate <= FixedPoint2.Zero)
-                continue;
-
             var body = GetBody(uid);
             if (body is null)
                 continue;
@@ -140,7 +166,10 @@ public abstract partial class SharedLungsSystem : EntitySystem
             if (TryComp<MobStateComponent>(body.Value, out var mob) && mob.CurrentState == MobState.Dead)
                 continue;
 
-            ApplyAsphyx(body.Value, uid, rate);
+            if (lungs.AsphyxPerSecond.TryGetValue(oh.Stage, out var rate) && rate > FixedPoint2.Zero)
+                ApplyAsphyx(body.Value, uid, rate);
+
+            TickBloodCough((uid, lungs, oh), body.Value, now);
         }
 
         var missingQuery = EntityQueryEnumerator<MissingLungsComponent>();
@@ -162,6 +191,9 @@ public abstract partial class SharedLungsSystem : EntitySystem
             return;
         ent.Comp.NextAsphyxTick = now + TimeSpan.FromSeconds(1);
 
+        if (!Stasis.CanBodyMetabolize(ent.Owner))
+            return;
+
         if (TryComp<MobStateComponent>(ent.Owner, out var mob) && mob.CurrentState == MobState.Dead)
             return;
 
@@ -171,7 +203,30 @@ public abstract partial class SharedLungsSystem : EntitySystem
             ApplyAsphyx(ent.Owner, ent.Owner, MissingLungsAsphyxPerSecond);
     }
 
+    private void TickBloodCough(
+        Entity<LungsComponent, OrganHealthComponent> ent,
+        EntityUid body,
+        TimeSpan now)
+    {
+        if (ent.Comp1.NextBloodCoughCheck > now)
+            return;
+        ent.Comp1.NextBloodCoughCheck = now + ent.Comp1.BloodCoughInterval;
+
+        if (!ent.Comp1.BloodCoughChance.TryGetValue(ent.Comp2.Stage, out var chance) ||
+            chance <= 0f ||
+            !Random.Prob(chance))
+        {
+            return;
+        }
+
+        ApplyBloodCough(body, ent.Owner, ent.Comp1.BloodLossPerCough);
+    }
+
     protected virtual void ApplyAsphyx(EntityUid body, EntityUid lung, FixedPoint2 amount)
+    {
+    }
+
+    protected virtual void ApplyBloodCough(EntityUid body, EntityUid lung, FixedPoint2 bloodLoss)
     {
     }
 

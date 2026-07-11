@@ -127,6 +127,12 @@ public abstract partial class SharedBoneSystem : EntitySystem
             return;
 
         var fracture = EnsureComp<FractureComponent>(ent);
+        fracture.SourceZone = args.TargetZone ?? fracture.SourceZone ?? args.Type switch
+        {
+            BodyPartType.Head => TargetBodyZone.Head,
+            BodyPartType.Torso => TargetBodyZone.Chest,
+            _ => null,
+        };
         Fracture.SetSeverity((ent.Owner, fracture), newSeverity);
 
         var fracEv = new BoneFracturedEvent(args.Body, ent.Owner, current, newSeverity);

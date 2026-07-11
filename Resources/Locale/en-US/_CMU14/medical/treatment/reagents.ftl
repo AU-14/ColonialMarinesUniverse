@@ -5,6 +5,7 @@ cmu-medical-restart-heart-guidebook          = { $chance }% chance per cycle to 
 
 cmu-medical-defib-no-heart                   = No heart detected in patient.
 cmu-medical-defib-heart-destroyed            = Heart is destroyed; cannot revive.
+cmu-medical-defib-heart-failing              = Heart damage is too severe for defibrillation.
 cmu-medical-defib-heart-beating              = Heart is already beating.
 
 reagent-name-cmu-hepatocytin                 = Hepatocytin

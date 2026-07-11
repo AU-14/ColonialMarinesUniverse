@@ -1,10 +1,14 @@
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.Organs;
+using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
 using Content.Shared._RMC14.Medical.Defibrillator;
+using Content.Shared.Damage;
+using Content.Shared.FixedPoint;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
+using Robust.Shared.Random;
 
 namespace Content.Server._CMU14.Medical.Anatomy.Organs.Heart;
 
@@ -13,6 +17,7 @@ public sealed partial class HeartDefibrillatorPatchSystem : EntitySystem
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private SharedHeartSystem _heart = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {
@@ -31,9 +36,9 @@ public sealed partial class HeartDefibrillatorPatchSystem : EntitySystem
             return;
         }
 
-        if (heartHealth.Stage == OrganDamageStage.Dead)
+        if (heartHealth.Stage.IsAtLeast(OrganDamageStage.Damaged))
         {
-            args.Cancel("cmu-medical-defib-heart-destroyed");
+            args.Cancel("cmu-medical-defib-heart-failing");
             return;
         }
 
@@ -43,9 +48,25 @@ public sealed partial class HeartDefibrillatorPatchSystem : EntitySystem
             return;
         }
 
-        // Restart the CMU heart in the same handler — without this the zap
-        // clears entity damage but leaves Stopped=true, perfusion stays at
-        // 0, asphyx accumulates, and the patient re-dies seconds later.
+        // CM-style revival leaves lasting cardiac trauma. Apply it before
+        // restarting so a heart pushed over the safe limit rejects the zap.
+        var defibDamage = new DamageSpecifier
+        {
+            DamageDict = { ["Blunt"] = FixedPoint2.New(_random.Next(3, 6)) },
+        };
+        var damageEvent = new OrganDamagedEvent(
+            ent.Owner,
+            heartId,
+            defibDamage,
+            OrganDamageSource.Direct);
+        RaiseLocalEvent(heartId, ref damageEvent, broadcast: true);
+
+        if (heartHealth.Stage.IsAtLeast(OrganDamageStage.Damaged))
+        {
+            args.Cancel("cmu-medical-defib-heart-failing");
+            return;
+        }
+
         _heart.TryRestartHeart((heartId, heart));
     }
 
