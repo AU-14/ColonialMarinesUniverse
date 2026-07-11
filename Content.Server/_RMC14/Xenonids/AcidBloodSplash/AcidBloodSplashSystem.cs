@@ -98,6 +98,7 @@ public sealed partial class AcidBloodSplashSystem : EntitySystem
 
             ent.Comp.NextSplashAvailable = _timing.CurTime + ent.Comp.SplashCooldown;
             _damageable.TryChangeDamage(target, _xeno.TryApplyXenoAcidDamageMultiplier(target, ent.Comp.Damage), origin: ent.Owner);
+            CMUStainTarget(ent, target); // CMU14
             i++;
 
             _audio.PlayPvs(ent.Comp.AcidSplashSound, target);

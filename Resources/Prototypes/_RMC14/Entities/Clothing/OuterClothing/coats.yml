@@ -34,6 +34,9 @@
     blacklist:
       components:
       - Xeno
+  - type: CMUItemStain
+    wornStates:
+      outerClothing: jacket_blood
 
 - type: entity
   abstract: True

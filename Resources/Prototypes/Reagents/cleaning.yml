@@ -31,6 +31,7 @@
   physicalDesc: reagent-physical-desc-lemony-fresh
   flavor: bitter
   color: "#c8ff69"
+  cleansItemStains: true # CMU14
   recognizable: true
   boilingPoint: 147.0 # Made this up, loosely based on bleach
   meltingPoint: -11.0
@@ -45,6 +46,7 @@
   physicalDesc: reagent-physical-desc-soapy
   flavor: clean
   color: "#c8dfc9"
+  cleansItemStains: true # CMU14
   recognizable: true
   boilingPoint: 100.0
   meltingPoint: 60.0

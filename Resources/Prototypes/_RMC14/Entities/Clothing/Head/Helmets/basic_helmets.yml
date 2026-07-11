@@ -139,6 +139,9 @@
   - type: IntegratedVisors
     visorsToAdd:
     - RMCVisorSquadIntegrated
+  - type: CMUItemStain
+    wornStates:
+      head: m10helmet_blood
 
 - type: entity
   parent: RMCMarineHelmetBase

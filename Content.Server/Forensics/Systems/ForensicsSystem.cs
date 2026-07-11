@@ -4,6 +4,7 @@ using Content.Server.Fluids.EntitySystems;
 using Content.Server.Forensics.Components;
 using Content.Server.Popups;
 using Content.Shared.Body.Events;
+using Content.Shared._CMU14.Item.Stain;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Popups;
 using Content.Shared.Chemistry.Components;
@@ -210,42 +211,42 @@ namespace Content.Server.Forensics
         /// <param name="cleanForensicsEntity">The entity that is being used to clean the target.</param>
         /// <param name="user">The user that is using the cleanForensicsEntity.</param>
         /// <param name="target">The target of the forensics clean.</param>
-        /// <returns>True if the target can be cleaned and has some sort of DNA or fingerprints / fibers and false otherwise.</returns>
+        /// <returns>True if forensic evidence or another cleaning-eligibility handler can be cleaned.</returns>
         public bool TryStartCleaning(Entity<CleansForensicsComponent> cleanForensicsEntity, EntityUid user, EntityUid target)
         {
-            if (!TryComp<ForensicsComponent>(target, out var forensicsComp))
+            const float defaultCleanDistance = 1.5f;
+            var canCleanForensics = false;
+            var cleanDistance = defaultCleanDistance;
+            if (TryComp<ForensicsComponent>(target, out var forensicsComp))
+            {
+                var totalPrintsAndFibers = forensicsComp.Fingerprints.Count + forensicsComp.Fibers.Count;
+                var hasRemovableDNA = forensicsComp.DNAs.Count > 0 && forensicsComp.CanDnaBeCleaned;
+                canCleanForensics = hasRemovableDNA || totalPrintsAndFibers > 0;
+                cleanDistance = forensicsComp.CleanDistance;
+            }
+
+            // CMU14: allow content systems such as item stains to join the existing cleaning interaction.
+            var eligibility = new CMUCleaningEligibilityEvent(canCleanForensics, cleanDistance);
+            RaiseLocalEvent(target, ref eligibility);
+            if (!eligibility.CanClean)
             {
                 _popupSystem.PopupEntity(Loc.GetString("forensics-cleaning-cannot-clean", ("target", target)), user, user, PopupType.MediumCaution);
                 return false;
             }
 
-            var totalPrintsAndFibers = forensicsComp.Fingerprints.Count + forensicsComp.Fibers.Count;
-            var hasRemovableDNA = forensicsComp.DNAs.Count > 0 && forensicsComp.CanDnaBeCleaned;
-
-            if (hasRemovableDNA || totalPrintsAndFibers > 0)
+            var cleanDelay = cleanForensicsEntity.Comp.CleanDelay;
+            var doAfterArgs = new DoAfterArgs(EntityManager, user, cleanDelay, new CleanForensicsDoAfterEvent(), cleanForensicsEntity, target: target, used: cleanForensicsEntity)
             {
-                var cleanDelay = cleanForensicsEntity.Comp.CleanDelay;
-                var doAfterArgs = new DoAfterArgs(EntityManager, user, cleanDelay, new CleanForensicsDoAfterEvent(), cleanForensicsEntity, target: target, used: cleanForensicsEntity)
-                {
-                    NeedHand = true,
-                    BreakOnDamage = true,
-                    BreakOnMove = true,
-                    MovementThreshold = 0.01f,
-                    DistanceThreshold = forensicsComp.CleanDistance,
-                };
+                NeedHand = true,
+                BreakOnDamage = true,
+                BreakOnMove = true,
+                MovementThreshold = 0.01f,
+                DistanceThreshold = eligibility.DistanceThreshold,
+            };
 
-                _doAfterSystem.TryStartDoAfter(doAfterArgs);
-
-                _popupSystem.PopupEntity(Loc.GetString("forensics-cleaning", ("target", target)), user, user);
-
-                return true;
-            }
-            else
-            {
-                _popupSystem.PopupEntity(Loc.GetString("forensics-cleaning-cannot-clean", ("target", target)), user, user, PopupType.MediumCaution);
-                return false;
-            }
-
+            _doAfterSystem.TryStartDoAfter(doAfterArgs);
+            _popupSystem.PopupEntity(Loc.GetString("forensics-cleaning", ("target", target)), user, user);
+            return true;
         }
 
         private void OnCleanForensicsDoAfter(EntityUid uid, ForensicsComponent component, CleanForensicsDoAfterEvent args)

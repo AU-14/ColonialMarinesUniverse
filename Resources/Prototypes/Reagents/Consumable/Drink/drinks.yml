@@ -438,6 +438,7 @@
   physicalDesc: reagent-physical-desc-translucent
   flavor: water
   color: "#0064C8"
+  cleansItemStains: true # CMU14
   recognizable: true
   boilingPoint: 100.0
   meltingPoint: 0.0

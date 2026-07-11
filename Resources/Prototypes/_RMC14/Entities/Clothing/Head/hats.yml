@@ -11,6 +11,9 @@
   - type: Tag
     tags:
     - ClothMade
+  - type: CMUItemStain
+    wornStates:
+      head: beret_blood
 
 - type: entity
   parent: CMHeadBeret
@@ -544,6 +547,9 @@
     sprite: _RMC14/Objects/Clothing/Head/Hats/SurgicalCap/blue.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Head/Hats/SurgicalCap/blue.rsi
+  - type: CMUItemStain
+    wornStates:
+      head: surgcap_blood
 
 - type: entity
   parent: CMHeadCapSurgBlue

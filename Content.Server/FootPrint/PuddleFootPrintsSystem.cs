@@ -41,6 +41,8 @@ public sealed partial class PuddleFootPrintsSystem : EntitySystem
         if (solutions.Contents.Count <= 0)
             return;
 
+        CMUUpdateShoeStain(args.Tripper, solutions); // CMU14
+
         if (!TryGetFootprintReagent(solutions, out var totalSolutionQuantity, out var waterQuantity, out var reagentToTransfer))
             return;
 

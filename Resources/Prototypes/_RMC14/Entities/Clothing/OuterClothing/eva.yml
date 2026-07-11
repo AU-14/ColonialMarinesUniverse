@@ -30,6 +30,9 @@
   - type: RMCMagneticArmor
   - type: RMCArmorSpeedTier
     speedTier: heavy
+  - type: CMUItemStain
+    wornStates:
+      outerClothing: bigsuit_blood
 
 - type: entity
   parent: RMCHardHat

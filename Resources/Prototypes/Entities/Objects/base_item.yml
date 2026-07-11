@@ -6,6 +6,7 @@
   components:
   - type: Item
     size: Small
+  - type: Reactive # CMU14: reagent splashes can reach dropped items for visual staining.
   - type: Animateable
   - type: Clickable
   - type: InteractionOutline

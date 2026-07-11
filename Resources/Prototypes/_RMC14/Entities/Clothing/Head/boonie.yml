@@ -18,6 +18,9 @@
       jungle: _RMC14/Objects/Clothing/Head/Hats/boonie/jungle.rsi
       snow: _RMC14/Objects/Clothing/Head/Hats/boonie/snow.rsi
       urban: _RMC14/Objects/Clothing/Head/Hats/boonie/urban.rsi
+  - type: CMUItemStain
+    wornStates:
+      head: booniehat_blood
 
 - type: entity
   parent: RMCBoonie

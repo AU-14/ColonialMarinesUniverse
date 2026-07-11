@@ -35,6 +35,9 @@
       path: /Audio/_RMC14/Machines/armor_equip.ogg
   - type: MoveOrderArmor
   - type: StoreAfterFailedInteract
+  - type: CMUItemStain
+    wornStates:
+      outerClothing: armor_blood
 
 - type: entity
   parent: [ RMCBaseArmorNoAccessory, RMCBaseUniformAccessoryItemOuterClothing ]

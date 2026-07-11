@@ -39,6 +39,9 @@
   - type: Tag
     tags:
     - GasMask
+  - type: CMUItemStain
+    wornStates:
+      mask: gasmask_blood
 
 - type: entity
   parent: [CMBaseMask, CMUBaseGasMaskFilterSlot]
@@ -61,6 +64,9 @@
   - type: Tag
     tags:
     - GasMask
+  - type: CMUItemStain
+    wornStates:
+      mask: gasmask_blood
 
 - type: Tag
   id: GasMask
@@ -82,6 +88,9 @@
   - type: Tag
     tags:
     - SterileMask
+  - type: CMUItemStain
+    wornStates:
+      mask: sterile_blood
 
 - type: Tag
   id: SterileMask
@@ -96,6 +105,9 @@
     sprite: _RMC14/Objects/Clothing/Mask/medical.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Mask/medical.rsi
+  - type: CMUItemStain
+    wornStates:
+      mask: gasmask_blood
 
 - type: entity
   parent: CMBaseMask

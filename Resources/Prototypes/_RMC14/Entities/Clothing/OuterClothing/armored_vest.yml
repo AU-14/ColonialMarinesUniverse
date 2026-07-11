@@ -19,6 +19,9 @@
   - type: CMHardArmor
   - type: RMCNameItemOnVend
     item: Armor
+  - type: CMUItemStain
+    wornStates:
+      outerClothing: vest_blood
 
 - type: entity
   parent: RMCArmorVest
@@ -148,6 +151,9 @@
     damageCoefficient: 0
     worn: false
   - type: Appearance
+  - type: CMUItemStain
+    wornStates:
+      outerClothing: vest_blood
 
 # MP
 

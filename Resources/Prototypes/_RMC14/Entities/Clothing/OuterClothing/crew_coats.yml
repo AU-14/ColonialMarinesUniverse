@@ -48,6 +48,9 @@
     sprite: _RMC14/Objects/Clothing/OuterClothing/HazardVests/orange.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/HazardVests/orange.rsi
+  - type: CMUItemStain
+    wornStates:
+      outerClothing: vest_blood
 
 - type: entity
   parent: RMCHazardVest
@@ -150,6 +153,9 @@
     sprite: _RMC14/Objects/Clothing/OuterClothing/Labcoats/labcoat.rsi
   - type: CMArmor
     bio: 15
+  - type: CMUItemStain
+    wornStates:
+      outerClothing: coat_blood
 
 - type: entity
   parent: [RMCBaseJacketButtonableOpened, RMCLabcoat]
@@ -264,6 +270,9 @@
     sprite: _RMC14/Objects/Clothing/OuterClothing/Labcoats/medicalapron.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Labcoats/medicalapron.rsi
+  - type: CMUItemStain
+    wornStates:
+      outerClothing: apron_blood
 
 - type: entity
   parent: RMCMedicalApron
