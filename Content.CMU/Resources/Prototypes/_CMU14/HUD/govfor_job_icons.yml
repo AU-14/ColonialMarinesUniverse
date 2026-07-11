@@ -179,3 +179,10 @@
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
     state: govfor_ws
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconGovTankCrewman
+  icon:
+    sprite: _AU14/Interface/au14govforjobicons.rsi
+    state: govfor_vc

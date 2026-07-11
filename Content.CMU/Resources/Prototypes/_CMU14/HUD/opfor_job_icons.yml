@@ -172,3 +172,10 @@
   icon:
     sprite: _AU14/Interface/au14opforjobicons.rsi
     state: lo
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFORTankCrewman
+  icon:
+    sprite: _AU14/Interface/au14opforjobicons.rsi
+    state: vc
