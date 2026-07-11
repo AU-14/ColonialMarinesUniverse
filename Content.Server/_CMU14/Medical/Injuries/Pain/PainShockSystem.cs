@@ -1,5 +1,6 @@
 using Content.Shared._CMU14.Medical.Injuries.Pain;
 using Content.Shared.Popups;
+using Content.Shared.Standing;
 using Content.Shared.Stunnable;
 using Robust.Shared.GameObjects;
 
@@ -8,6 +9,7 @@ namespace Content.Server._CMU14.Medical.Injuries.Pain;
 public sealed partial class PainShockSystem : SharedPainShockSystem
 {
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
     [Dependency] private SharedStunSystem _stun = default!;
 
     private static readonly string[] MildPainReflections =
@@ -53,13 +55,21 @@ public sealed partial class PainShockSystem : SharedPainShockSystem
 
     protected override void ApplyShockEntryEffect(EntityUid body)
     {
-        _stun.TryKnockdown(body, TimeSpan.FromSeconds(1), refresh: false);
+        TryKnockdownStandingPatient(body);
     }
 
     protected override void ApplyPeriodicShockKnockdown(EntityUid body)
     {
-        _stun.TryKnockdown(body, TimeSpan.FromSeconds(1), refresh: false);
+        TryKnockdownStandingPatient(body);
         _popup.PopupEntity(Loc.GetString("cmu-medical-pain-shock-pulse"), body, body, PopupType.LargeCaution);
+    }
+
+    private void TryKnockdownStandingPatient(EntityUid body)
+    {
+        if (_standing.IsDown(body))
+            return;
+
+        _stun.TryKnockdown(body, TimeSpan.FromSeconds(1), refresh: false);
     }
 
     protected override void ApplyPainReflection(EntityUid body, PainTier tier)

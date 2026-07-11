@@ -7,6 +7,8 @@ using Content.Shared._CMU14.Medical.Anatomy.Organs;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._CMU14.Medical.Treatment.FirstAid;
+using Content.Shared._CMU14.Medical.Treatment.Surgery;
+using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Prototypes;
@@ -32,6 +34,7 @@ public sealed partial class CMUMedicalRejuvenateSystem : EntitySystem
     [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
     [Dependency] private IPrototypeManager _protoMgr = default!;
     [Dependency] private SharedStatusEffectsSystem _status = default!;
+    [Dependency] private SharedCMUSurgeryFlowSystem _surgery = default!;
     [Dependency] private SharedCMUWoundsSystem _wounds = default!;
 
     private static readonly EntProtoId[] CmuStatusEffects =
@@ -76,6 +79,10 @@ public sealed partial class CMUMedicalRejuvenateSystem : EntitySystem
     private void OnRejuvenate(Entity<CMUHumanMedicalComponent> ent, ref RejuvenateEvent args)
     {
         var body = ent.Owner;
+
+        if (TryComp<CMUSurgeryArmedStepComponent>(body, out var armed))
+            _surgery.ClearArmed(body, armed, popup: false);
+        _surgery.ClearSurgeryInFlight(body);
 
         RestoreMissingParts(body);
         _handRestoration.RestoreUsableHands(body);
@@ -192,6 +199,12 @@ public sealed partial class CMUMedicalRejuvenateSystem : EntitySystem
 
         if (HasComp<CMUTourniquetComponent>(part))
             RemComp<CMUTourniquetComponent>(part);
+
+        RemComp<CMIncisionOpenComponent>(part);
+        RemComp<CMBleedersClampedComponent>(part);
+        RemComp<CMSkinRetractedComponent>(part);
+        RemComp<CMRibcageSawedComponent>(part);
+        RemComp<CMRibcageOpenComponent>(part);
 
         if (TryComp<BodyPartWoundComponent>(part, out var wounds))
             _wounds.ClearAllWounds((part, wounds));

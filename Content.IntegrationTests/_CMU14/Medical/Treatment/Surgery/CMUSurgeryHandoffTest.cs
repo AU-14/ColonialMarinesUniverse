@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.Server._CMU14.Medical.Treatment.Surgery;
+using Content.Shared._CMU14.Medical.Anatomy.Bones;
 using Content.Shared._CMU14.Medical.Core;
+using Content.Shared._CMU14.Medical.Injuries.Pain;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Marines.Skills;
@@ -9,16 +11,103 @@ using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.DoAfter;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Standing;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Timing;
 
 namespace Content.IntegrationTests._CMU14.Medical.Treatment.Surgery;
 
 [TestFixture]
 public sealed class CMUSurgeryHandoffTest
 {
+    [Test]
+    public async Task PainShockDoesNotCancelSimpleFractureBoneSetting()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var timing = server.ResolveDependency<IGameTiming>();
+        EntityUid patient = default;
+        EntityUid surgeon = default;
+        EntityUid boneSetter = default;
+
+        try
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                var flow = entMan.System<CMUSurgeryFlowSystem>();
+                var fracture = entMan.System<SharedFractureSystem>();
+                var pain = entMan.System<SharedPainShockSystem>();
+                var skills = entMan.System<SkillsSystem>();
+
+                patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+                surgeon = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+                boneSetter = entMan.SpawnEntity("CMBonesetter", MapCoordinates.Nullspace);
+                skills.SetSkill(surgeon, "RMCSkillSurgery", 3);
+                Assert.That(entMan.System<SharedHandsSystem>().TryPickupAnyHand(surgeon, boneSetter), Is.True);
+                entMan.System<StandingStateSystem>().Down(patient, playSound: false, dropHeldItems: false, force: true);
+
+                var arm = FindPart(entMan, patient, BodyPartType.Arm, BodyPartSymmetry.Left);
+                entMan.EnsureComponent<CMIncisionOpenComponent>(arm);
+                entMan.EnsureComponent<CMBleedersClampedComponent>(arm);
+                entMan.EnsureComponent<CMSkinRetractedComponent>(arm);
+
+                var fractured = entMan.EnsureComponent<FractureComponent>(arm);
+                fracture.SetSeverity((arm, fractured), FractureSeverity.Simple);
+
+                var painState = entMan.GetComponent<PainShockComponent>(patient);
+                painState.Pain = painState.PainMax;
+                painState.PainTarget = painState.Pain;
+                painState.NextUpdate = TimeSpan.Zero;
+                pain.TickOne((patient, painState), refreshCache: false);
+                entMan.Dirty(patient, painState);
+
+                var feedback = entMan.GetComponent<CMUPainFeedbackComponent>(patient);
+                feedback.EffectInterval = TimeSpan.FromSeconds(0.25);
+                feedback.NextEffect = timing.CurTime;
+
+                var armed = flow.TryArmStep(
+                    surgeon,
+                    patient,
+                    arm,
+                    "CMUSurgerySetSimpleFracture",
+                    0,
+                    BodyPartType.Arm,
+                    BodyPartSymmetry.Left);
+
+                Assert.That(armed, Is.Not.Null);
+                Assert.That(armed!.RequiredToolCategory, Is.EqualTo("bone_setter"));
+                Assert.That(painState.Tier, Is.EqualTo(PainTier.Shock));
+                Assert.That(entMan.System<CMUSurgeryDispatchSystem>().TryDispatch(surgeon, patient, boneSetter), Is.True);
+            });
+
+            await pair.RunSeconds(3);
+
+            await server.WaitAssertion(() =>
+            {
+                var armed = server.EntMan.GetComponent<CMUSurgeryArmedStepComponent>(patient);
+                Assert.That(armed.RequiredToolCategory, Is.EqualTo("bone_gel"));
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                foreach (var entity in new[] { boneSetter, surgeon, patient })
+                {
+                    if (entMan.EntityExists(entity))
+                        entMan.DeleteEntity(entity);
+                }
+            });
+
+            await pair.CleanReturnAsync();
+        }
+    }
+
     [Test]
     public async Task CancelledDoAfterReturnsToAwaitingActionForAnotherSurgeon()
     {

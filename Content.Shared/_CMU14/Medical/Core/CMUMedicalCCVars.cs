@@ -73,7 +73,7 @@ public sealed partial class CMUMedicalCCVars : CVars
         CVarDef.Create("cmu.medical.body_part.damage_propagation", 1.0f, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<bool> SeveranceHeadDisabled =
-        CVarDef.Create("cmu.medical.severance.head_disabled", true, CVar.REPLICATED | CVar.SERVER);
+        CVarDef.Create("cmu.medical.severance.head_disabled", false, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<bool> SeveranceTorsoDisabled =
         CVarDef.Create("cmu.medical.severance.torso_disabled", true, CVar.REPLICATED | CVar.SERVER);

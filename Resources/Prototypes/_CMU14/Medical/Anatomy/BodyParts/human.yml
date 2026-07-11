@@ -27,7 +27,7 @@
   - type: BodyPartHealth
     max: 60
     current: 60
-    severanceThreshold: 999999  # safety lock — head never severs
+    severanceThreshold: 170  # decapitation requires 170 structural damage past zero health
     resistance:
       Brute: 0.85
   - type: Bone
