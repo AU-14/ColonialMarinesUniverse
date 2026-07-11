@@ -1,6 +1,7 @@
 ﻿using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Shared._CMU14.Threats;
+using Content.Shared.GameTicking.Components;
 
 namespace Content.Server._CMU14.Threats.Rules;
 
@@ -19,7 +20,10 @@ public sealed class InsurgencyEndRuleSystem : GameRuleSystem<InsurgencyRuleCompo
         if (_gameTicker.RunLevel != GameRunLevel.InRound)
             return;
 
-        if (!_gameTicker.IsGameRuleActive<InsurgencyRuleComponent>())
+        EntityQueryEnumerator<ActiveGameRuleComponent, InsurgencyRuleComponent, GameRuleComponent> query =
+            QueryActiveRules();
+
+        if (!query.MoveNext(out _, out _, out _))
             return;
 
         if (_gameTicker.RoundDuration() < RoundTimeLimit)
