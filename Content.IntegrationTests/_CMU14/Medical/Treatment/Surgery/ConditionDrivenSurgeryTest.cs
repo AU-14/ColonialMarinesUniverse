@@ -227,6 +227,7 @@ public sealed class ConditionDrivenSurgeryTest
             var hands = entMan.System<SharedHandsSystem>();
             var organHealth = entMan.System<SharedOrganHealthSystem>();
             var targeting = entMan.System<SharedBodyZoneTargetingSystem>();
+            var traits = entMan.System<SharedCMUSurgicalTraitSystem>();
             var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var surgeon = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var organClamp = entMan.SpawnEntity("CMUOrganClampItem", MapCoordinates.Nullspace);
@@ -246,6 +247,7 @@ public sealed class ConditionDrivenSurgeryTest
                 var heartHealth = entMan.GetComponent<OrganHealthComponent>(heart);
                 SetPublicField(heartHealth, nameof(OrganHealthComponent.Current), (FixedPoint2)8);
                 organHealth.RecomputeStage((heart, heartHealth), human);
+                ClearSurgicalTraits(traits, torso);
 
                 Assert.That(dispatch.TryDispatchUiLess(surgeon, human, organClamp), Is.True);
                 var armed = entMan.GetComponent<CMUSurgeryArmedStepComponent>(human);
@@ -726,6 +728,7 @@ public sealed class ConditionDrivenSurgeryTest
             var entMan = server.EntMan;
             var flow = entMan.System<SharedCMUSurgeryFlowSystem>();
             var fracture = entMan.System<SharedFractureSystem>();
+            var traits = entMan.System<SharedCMUSurgicalTraitSystem>();
             var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
 
             try
@@ -736,6 +739,7 @@ public sealed class ConditionDrivenSurgeryTest
 
                 var fractured = entMan.EnsureComponent<FractureComponent>(torso);
                 fracture.SetSeverity((torso, fractured), FractureSeverity.Compound);
+                ClearSurgicalTraits(traits, torso);
 
                 var state = flow.GetSiteState(torso);
                 Assert.Multiple(() =>

@@ -757,12 +757,14 @@ public sealed class CMUMedicalFieldMixingTest
             var entMan = server.EntMan;
             var ledger = entMan.System<CMUWoundLedgerSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
+            var targeting = entMan.System<SharedBodyZoneTargetingSystem>();
             var user = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var gauze = entMan.SpawnEntity("CMUSealingGauze6", MapCoordinates.Nullspace);
 
             try
             {
+                targeting.SelectZone((user, null), TargetBodyZone.Chest);
                 var torso = GetBodyPart(entMan, patient, BodyPartType.Torso);
                 Assert.That(partHealth.TryApplyPartDamage(
                     patient,
@@ -918,12 +920,14 @@ public sealed class CMUMedicalFieldMixingTest
             var entMan = server.EntMan;
             var ledger = entMan.System<CMUWoundLedgerSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
+            var targeting = entMan.System<SharedBodyZoneTargetingSystem>();
             var user = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var gauze = entMan.SpawnEntity("CMUSealingGauze6", MapCoordinates.Nullspace);
 
             try
             {
+                targeting.SelectZone((user, null), TargetBodyZone.Chest);
                 var torso = GetBodyPart(entMan, patient, BodyPartType.Torso);
                 Assert.That(partHealth.TryApplyPartDamage(
                     patient,
