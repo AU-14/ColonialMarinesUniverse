@@ -36,6 +36,7 @@ public abstract partial class SharedStatusEffectsSystem : EntitySystem
 
         SubscribeLocalEvent<StatusEffectComponent, StatusEffectAppliedEvent>(OnStatusEffectApplied);
         SubscribeLocalEvent<StatusEffectComponent, StatusEffectRemovedEvent>(OnStatusEffectRemoved);
+        SubscribeLocalEvent<StatusEffectComponent, ComponentShutdown>(OnStatusEffectShutdown);
 
         SubscribeLocalEvent<StatusEffectContainerComponent, ComponentGetState>(OnGetState);
 
@@ -154,6 +155,25 @@ public abstract partial class SharedStatusEffectsSystem : EntitySystem
 
         if (ent.Comp is { AppliedTo: not null, Alert: not null })
             _alerts.ClearAlert(ent.Comp.AppliedTo.Value, ent.Comp.Alert.Value);
+    }
+
+    private void OnStatusEffectShutdown(Entity<StatusEffectComponent> ent, ref ComponentShutdown args)
+    {
+        if (ent.Comp.AppliedTo is not { } target
+            || !_containerQuery.TryComp(target, out var container)
+            || !container.ActiveStatusEffects.Remove(ent.Owner))
+        {
+            return;
+        }
+
+        if (TerminatingOrDeleted(target))
+            return;
+
+        var ev = new StatusEffectRemovedEvent(target);
+        RaiseLocalEvent(ent.Owner, ref ev);
+
+        if (_net.IsServer)
+            Dirty(target, container);
     }
 
     private bool CanAddStatusEffect(EntityUid uid, EntProtoId effectProto)
