@@ -791,7 +791,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             || Pain.GetTierSuppression(patient) >= SurgeryPainSuppressionTierMinimum;
     }
 
-    private bool ShouldReactToSurgeryPain(EntityUid patient)
+    private bool ShouldRejectSurgeryStepForPain(EntityUid patient)
     {
         if (IsPainControlledForSurgery(patient))
             return false;
@@ -885,6 +885,12 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             if (RequiresActivatedSurgeryTool(used, armed.RequiredToolCategory))
             {
                 Popup.PopupEntity(Loc.GetString("cmu-medical-surgery-welder-not-lit"), patient, user, PopupType.SmallCaution);
+                return true;
+            }
+
+            if (ShouldRejectSurgeryStepForPain(patient))
+            {
+                ShowSurgeryPainFailure(patient, user, applyReaction: false);
                 return true;
             }
 
@@ -1016,8 +1022,23 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     {
     }
 
-    protected virtual void ApplySurgeryPainReactionFeedback(EntityUid patient)
+    protected virtual void ApplySurgeryPainFailureFeedback(EntityUid patient)
     {
+    }
+
+    private void ShowSurgeryPainFailure(EntityUid patient, EntityUid surgeon, bool applyReaction)
+    {
+        if (!Net.IsServer)
+            return;
+
+        if (applyReaction)
+            ApplySurgeryPainFailureFeedback(patient);
+
+        Popup.PopupEntity(
+            Loc.GetString("cmu-medical-surgery-step-pain-uncontrolled"),
+            surgeon,
+            surgeon,
+            PopupType.MediumCaution);
     }
 
     /// <summary>
@@ -1072,7 +1093,8 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         if (!ArmedMatchesDoAfter(armed, ev)
             || (Net.IsServer && !SurgerySessions.IsAttemptCurrent(patient, ev.Attempt, ev.User, ev.Used, ev.Target, ev.StepId))
             || (Net.IsServer && !IsAttemptTargetStillValid(patient, armed, ev.Target))
-            || !CanOperateOnPatient(patient, ev.User))
+            || !CanOperateOnPatient(patient, ev.User)
+            || ShouldRejectSurgeryStepForPain(patient))
         {
             args.Cancel();
         }
@@ -1101,6 +1123,9 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
                     return;
                 }
 
+                if (ShouldRejectSurgeryStepForPain(patient))
+                    ShowSurgeryPainFailure(patient, args.User, applyReaction: true);
+
                 ReturnToAwaitingAction(patient, armed);
             }
             return;
@@ -1117,6 +1142,14 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             return;
         }
 
+        if (ShouldRejectSurgeryStepForPain(patient))
+        {
+            ShowSurgeryPainFailure(patient, args.User, applyReaction: true);
+            SurgerySessions.TryConsumeAttempt(patient, args.Attempt, args.User, args.Used, args.Target, args.StepId);
+            ReturnToAwaitingAction(patient, armed);
+            return;
+        }
+
         if (!IsAttemptTargetStillValid(patient, armed, args.Target))
         {
             if (SurgerySessions.TryConsumeAttempt(patient, args.Attempt, args.User, args.Used, args.Target, args.StepId))
@@ -1126,16 +1159,6 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
 
         if (!SurgerySessions.TryConsumeAttempt(patient, args.Attempt, args.User, args.Used, args.Target, args.StepId))
             return;
-
-        if (ShouldReactToSurgeryPain(patient))
-        {
-            ApplySurgeryPainReactionFeedback(patient);
-            Popup.PopupEntity(
-                Loc.GetString("cmu-medical-surgery-step-pain-reaction"),
-                patient,
-                args.User,
-                PopupType.MediumCaution);
-        }
 
         RunStepEffect(patient, armed, args.User, args.Used, args.Target, args.StepId);
     }

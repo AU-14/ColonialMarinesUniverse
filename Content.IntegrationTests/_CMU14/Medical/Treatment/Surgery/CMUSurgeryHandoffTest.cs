@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using ClientPopupSystem = Content.Client.Popups.PopupSystem;
 using Content.Server._CMU14.Medical.Treatment.Surgery;
 using Content.Shared._CMU14.Medical.Anatomy.Bones;
 using Content.Shared._CMU14.Medical.Core;
@@ -11,6 +12,7 @@ using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.DoAfter;
+using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Standing;
 using Robust.Shared.Containers;
@@ -24,14 +26,19 @@ namespace Content.IntegrationTests._CMU14.Medical.Treatment.Surgery;
 public sealed class CMUSurgeryHandoffTest
 {
     [Test]
-    public async Task PainShockDoesNotCancelSimpleFractureBoneSetting()
+    public async Task PainShockRejectsSimpleFractureBoneSettingAndExplainsWhy()
     {
-        await using var pair = await PoolManager.GetServerClient();
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            Dirty = true,
+        });
         var server = pair.Server;
         var timing = server.ResolveDependency<IGameTiming>();
         EntityUid patient = default;
         EntityUid surgeon = default;
         EntityUid boneSetter = default;
+        EntityUid? originalAttached = null;
 
         try
         {
@@ -43,9 +50,12 @@ public sealed class CMUSurgeryHandoffTest
                 var pain = entMan.System<SharedPainShockSystem>();
                 var skills = entMan.System<SkillsSystem>();
 
+                var player = server.PlayerMan.Sessions.Single();
+                originalAttached = player.AttachedEntity;
                 patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
                 surgeon = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
                 boneSetter = entMan.SpawnEntity("CMBonesetter", MapCoordinates.Nullspace);
+                server.PlayerMan.SetAttachedEntity(player, surgeon);
                 skills.SetSkill(surgeon, "RMCSkillSurgery", 3);
                 Assert.That(entMan.System<SharedHandsSystem>().TryPickupAnyHand(surgeon, boneSetter), Is.True);
                 entMan.System<StandingStateSystem>().Down(patient, playSound: false, dropHeldItems: false, force: true);
@@ -81,6 +91,79 @@ public sealed class CMUSurgeryHandoffTest
                 Assert.That(armed, Is.Not.Null);
                 Assert.That(armed!.RequiredToolCategory, Is.EqualTo("bone_setter"));
                 Assert.That(painState.Tier, Is.EqualTo(PainTier.Shock));
+            });
+
+            await pair.RunTicksSync(10);
+
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                var sessions = entMan.System<CMUSurgerySessionSystem>();
+                Assert.That(entMan.System<CMUSurgeryDispatchSystem>().TryDispatch(surgeon, patient, boneSetter), Is.True);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(sessions.TryGetSession(patient, out _), Is.False);
+                    Assert.That(
+                        entMan.GetComponent<CMUSurgeryArmedStepComponent>(patient).RequiredToolCategory,
+                        Is.EqualTo("bone_setter"));
+                });
+            });
+
+            await pair.RunTicksSync(5);
+
+            await pair.Client.WaitAssertion(() =>
+            {
+                var popups = pair.Client.EntMan.System<ClientPopupSystem>();
+                Assert.That(
+                    popups.WorldLabels.Any(label => label.Text ==
+                        "The patient is in too much pain to continue surgery. Use anesthesia or strong painkillers before trying again."),
+                    Is.True);
+            });
+
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                var pain = entMan.System<SharedPainShockSystem>();
+                var painState = entMan.GetComponent<PainShockComponent>(patient);
+                painState.Pain = FixedPoint2.Zero;
+                painState.PainTarget = FixedPoint2.Zero;
+                pain.TickOne((patient, painState), refreshCache: false);
+                entMan.Dirty(patient, painState);
+                Assert.That(painState.Tier, Is.LessThan(PainTier.Severe));
+
+                Assert.That(entMan.System<CMUSurgeryDispatchSystem>().TryDispatch(surgeon, patient, boneSetter), Is.True);
+                Assert.That(entMan.System<CMUSurgerySessionSystem>().TryGetSession(patient, out var session), Is.True);
+                Assert.That(session.Phase, Is.EqualTo(CMUSurgerySessionPhase.Performing));
+
+                painState.Pain = painState.PainMax;
+                painState.PainTarget = painState.Pain;
+                pain.TickOne((patient, painState), refreshCache: false);
+                entMan.Dirty(patient, painState);
+                Assert.That(painState.Tier, Is.EqualTo(PainTier.Shock));
+            });
+
+            await pair.RunTicksSync(2);
+
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                Assert.That(entMan.System<CMUSurgerySessionSystem>().TryGetSession(patient, out var session), Is.True);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(session.Phase, Is.EqualTo(CMUSurgerySessionPhase.AwaitingAction));
+                    Assert.That(session.ActiveAttempt, Is.Null);
+                    Assert.That(
+                        entMan.GetComponent<CMUSurgeryArmedStepComponent>(patient).RequiredToolCategory,
+                        Is.EqualTo("bone_setter"));
+                });
+            });
+
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                var pain = entMan.System<SharedPainShockSystem>();
+                pain.AddPainSuppressionProfile(patient, 1f, 4, 0f, TimeSpan.FromSeconds(10));
+                Assert.That(pain.GetTierSuppression(patient), Is.GreaterThanOrEqualTo(2));
                 Assert.That(entMan.System<CMUSurgeryDispatchSystem>().TryDispatch(surgeon, patient, boneSetter), Is.True);
             });
 
@@ -96,13 +179,11 @@ public sealed class CMUSurgeryHandoffTest
         {
             await server.WaitPost(() =>
             {
-                var entMan = server.EntMan;
-                foreach (var entity in new[] { boneSetter, surgeon, patient })
-                {
-                    if (entMan.EntityExists(entity))
-                        entMan.DeleteEntity(entity);
-                }
+                if (server.PlayerMan.Sessions.Any())
+                    server.PlayerMan.SetAttachedEntity(server.PlayerMan.Sessions.Single(), originalAttached);
             });
+
+            await pair.RunTicksSync(2);
 
             await pair.CleanReturnAsync();
         }

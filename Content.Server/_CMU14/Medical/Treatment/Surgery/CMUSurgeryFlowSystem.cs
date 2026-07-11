@@ -237,7 +237,7 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             PopupType.MediumCaution);
     }
 
-    protected override void ApplySurgeryPainReactionFeedback(EntityUid patient)
+    protected override void ApplySurgeryPainFailureFeedback(EntityUid patient)
     {
         ApplySurgeryPainFeedback(patient);
     }

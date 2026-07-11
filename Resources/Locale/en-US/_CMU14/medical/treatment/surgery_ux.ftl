@@ -144,7 +144,7 @@ cmu-medical-surgery-patient-not-controlled = The patient needs anesthesia, stron
 cmu-medical-surgery-self-pain-control = Self-surgery requires strong painkillers first.
 cmu-medical-surgery-self-not-secured = Buckle yourself to a chair, bed, or roller before attempting self-surgery.
 cmu-medical-surgery-self-not-allowed = You can't perform that surgery on yourself.
-cmu-medical-surgery-step-pain-reaction = The patient reacts to the surgical pain, but the step continues.
+cmu-medical-surgery-step-pain-uncontrolled = The patient is in too much pain to continue surgery. Use anesthesia or strong painkillers before trying again.
 cmu-medical-amputation-success = The limb is removed.
 
 # ---- Tool category names (used in the BUI button + armed line) -------
