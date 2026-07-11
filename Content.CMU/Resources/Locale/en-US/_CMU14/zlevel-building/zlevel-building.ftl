@@ -15,3 +15,13 @@ au-scanner-off = You switch the structural scanner off.
 
 # Building overhaul (z-level) - mapper opt-out condition
 construction-step-condition-au14-zbuild-allowed = Vertical building must be allowed on this map.
+
+## Z-Level Toggles admin tool (construction menu > Tools)
+au-zlevel-toggles-title = Z-Level Toggles
+au-zlevel-toggles-search = Search maps...
+au-zlevel-toggles-hint = Yes = players can z-build on this map. Persists across rounds.
+au-zlevel-toggles-yes = Yes
+au-zlevel-toggles-no = No
+au-zlevel-toggles-map-loaded = {$map} (loaded)
+au-zlevel-toggle-enabled = Z-level building ALLOWED on {$map}.
+au-zlevel-toggle-disabled = Z-level building DENIED on {$map}.

@@ -104,6 +104,7 @@ gmod-construction-menu-admin-tools = Admin Tools
 gmod-construction-menu-items-editor = Construction Items Editor
 gmod-construction-menu-tiles-editor = Tiles Editor
 gmod-construction-menu-lathe-editor = Lathe Editor
+gmod-construction-menu-zlevel-toggles = Z-Level Toggles
 construction-menu-editor-not-admin = You are not an admin - the editor won't open.
 
 ## In-menu detail panel: Change Recipe / Remove Item (admins; works for vanilla recipes too)

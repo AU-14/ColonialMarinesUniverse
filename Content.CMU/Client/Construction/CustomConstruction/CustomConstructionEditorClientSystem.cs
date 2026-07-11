@@ -4,6 +4,7 @@
 using Content.Client.Administration.Managers;
 using Content.Client.Players.PlayTimeTracking;
 using Content.Shared._AU14.Construction.CustomConstruction;
+using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared.Popups;
 
 namespace Content.Client._AU14.Construction.CustomConstruction;
@@ -39,6 +40,7 @@ public sealed class CustomConstructionEditorClientSystem : EntitySystem
     private TileEditorWindow? _tileWindow;
     private LatheEditorWindow? _latheWindow;
     private RecipeChooserWindow? _chooser;
+    private ZLevelTogglesWindow? _zTogglesWindow;
 
     /// <summary>
     /// Construction recipe ids the local admin hid via the menu's "Remove Item" button THIS session. The
@@ -54,6 +56,30 @@ public sealed class CustomConstructionEditorClientSystem : EntitySystem
         SubscribeNetworkEvent<OpenCustomConstructionChooserEvent>(OnOpenChooser);
         SubscribeNetworkEvent<OpenCustomTileEditorEvent>(OnOpenTile);
         SubscribeNetworkEvent<OpenCustomLatheEditorEvent>(OnOpenLathe);
+        SubscribeNetworkEvent<OpenZLevelTogglesEvent>(OnOpenZLevelToggles);
+    }
+
+    /// <summary>Admin Tools > Z-Level Toggles: ask the server (which re-checks permission) for the map list.</summary>
+    public void OpenZLevelToggles()
+    {
+        if (!CanUseEditor())
+        {
+            _popup.PopupCursor(Loc.GetString("construction-menu-editor-not-admin"), PopupType.MediumCaution);
+            return;
+        }
+
+        RaiseNetworkEvent(new RequestOpenZLevelTogglesEvent());
+    }
+
+    private void OnOpenZLevelToggles(OpenZLevelTogglesEvent ev)
+    {
+        _zTogglesWindow?.Close();
+        _zTogglesWindow = new ZLevelTogglesWindow();
+        _zTogglesWindow.OnToggle += (mapProtoId, enabled) =>
+            RaiseNetworkEvent(new SetZLevelToggleEvent { MapProtoId = mapProtoId, Enabled = enabled });
+        _zTogglesWindow.OnClose += () => _zTogglesWindow = null;
+        _zTogglesWindow.Populate(ev);
+        _zTogglesWindow.OpenCentered();
     }
 
     private void OnOpenChooser(OpenCustomConstructionChooserEvent ev)

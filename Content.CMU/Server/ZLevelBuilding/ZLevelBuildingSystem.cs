@@ -9,6 +9,7 @@ using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
+using Content.Shared.Tag;
 using Robust.Server.GameObjects;
 using Robust.Shared.Random;
 using Robust.Shared.Map;
@@ -40,6 +41,7 @@ public sealed class ZLevelBuildingSystem : EntitySystem
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly TagSystem _tag = default!;
 
     /// <summary>
     /// Global code switch for the whole building overhaul. Set to <c>false</c> to disable dig-down / lazy
@@ -65,6 +67,9 @@ public sealed class ZLevelBuildingSystem : EntitySystem
     {
         base.Initialize();
         _gridQuery = GetEntityQuery<MapGridComponent>();
+
+        // Keyed by round-scoped map uids; drop with the round so stale entries never accumulate.
+        SubscribeLocalEvent<Content.Shared.GameTicking.RoundRestartCleanupEvent>(_ => _reflectedBorderChunks.Clear());
     }
 
     /// <summary>Whether the building overhaul is allowed to operate on the given map.</summary>
@@ -337,6 +342,17 @@ public sealed class ZLevelBuildingSystem : EntitySystem
                 _map.SetTile(below.Comp.StoneGrid, grid, index, new Tile(floorDef.TileId));
 
                 var coords = _map.GridTileToLocal(below.Comp.StoneGrid, grid, index);
+
+                // Map-border reflection: if an indestructible border wall stands at this spot on the level
+                // above, mirror THAT wall here instead of a mineable rock, so the playfield boundary continues
+                // downward. Because chunks (and levels) only generate as players actually reach them, the
+                // border never propagates into levels nobody has entered.
+                if (TryGetBorderWallAbove(mapUid, _transform.ToMapCoordinates(coords).Position, out var wallProto))
+                {
+                    Spawn(wallProto, coords);
+                    continue;
+                }
+
                 Spawn(settings.StoneRockEntity, coords);
             }
         }
@@ -545,6 +561,136 @@ public sealed class ZLevelBuildingSystem : EntitySystem
         return false;
     }
 
+    /// <summary>An indestructible map-border wall: tagged as a wall but with no Damageable at all (the
+    /// CMBaseWallInvincible family). These mark the playfield boundary.</summary>
+    private bool IsIndestructibleWall(EntityUid uid)
+    {
+        return _tag.HasTag(uid, "Wall") && !HasComp<Content.Shared.Damage.DamageableComponent>(uid);
+    }
+
+    /// <summary>If an indestructible border wall stands at <paramref name="worldPos"/> on the level directly
+    /// above <paramref name="stoneMap"/>, returns its prototype id so the boundary can be mirrored down.</summary>
+    private bool TryGetBorderWallAbove(EntityUid stoneMap, Vector2 worldPos, out string wallProto)
+    {
+        wallProto = string.Empty;
+        var source = GetSourceMapForStone(stoneMap);
+        if (source == stoneMap || !TryComp<MapComponent>(source, out var sourceMapComp))
+            return false;
+
+        var coords = new MapCoordinates(worldPos, sourceMapComp.MapId);
+        if (!_mapManager.TryFindGridAt(coords, out var sourceGridUid, out var sourceGrid))
+            return false;
+
+        var tile = _map.TileIndicesFor(sourceGridUid, sourceGrid, coords);
+        foreach (var anchored in _map.GetAnchoredEntities(sourceGridUid, sourceGrid, tile))
+        {
+            if (IsIndestructibleWall(anchored) && MetaData(anchored).EntityPrototype is { } proto)
+            {
+                wallProto = proto.ID;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // Border reflection on NON-stone z-levels (player-built upper platforms and void levels): which chunks of
+    // which map have already been mirrored, so each area is only processed once. Keyed by round-scoped map uids.
+    private readonly Dictionary<EntityUid, HashSet<Vector2i>> _reflectedBorderChunks = new();
+
+    /// <summary>Side length (in tiles) of the areas the border-reflection pass processes and remembers.</summary>
+    private const int BorderReflectChunk = 8;
+
+    /// <summary>
+    /// Mirrors indestructible map-border walls onto the z-level a player is standing on, from the neighbouring
+    /// level toward the ground (upper levels copy from below, underground copies from above). Runs only around
+    /// actual players, chunk by chunk, so the boundary appears exactly when someone first enters an area of a
+    /// level and never cascades into levels nobody visits.
+    /// </summary>
+    private void ReflectBorderAroundPlayer(EntityUid mapUid, TransformComponent xform)
+    {
+        if (!TryComp<CMUZLevelMapComponent>(mapUid, out var z) || z.Depth == 0)
+            return;
+
+        var source = z.Depth > 0 ? z.MapBelow : z.MapAbove;
+        if (source is not { } sourceMap || !TryComp<MapComponent>(sourceMap, out var sourceMapComp))
+            return;
+
+        if (!TryComp<MapComponent>(mapUid, out var mapComp))
+            return;
+
+        var done = _reflectedBorderChunks.TryGetValue(mapUid, out var set)
+            ? set
+            : _reflectedBorderChunks[mapUid] = new HashSet<Vector2i>();
+
+        var worldPos = _transform.GetWorldPosition(xform);
+        var playerChunk = new Vector2i(
+            FloorDiv((int) MathF.Floor(worldPos.X), BorderReflectChunk),
+            FloorDiv((int) MathF.Floor(worldPos.Y), BorderReflectChunk));
+
+        for (var cx = -1; cx <= 1; cx++)
+        {
+            for (var cy = -1; cy <= 1; cy++)
+            {
+                var chunk = playerChunk + new Vector2i(cx, cy);
+                if (!done.Add(chunk))
+                    continue;
+
+                ReflectBorderChunk(mapUid, mapComp, sourceMap, sourceMapComp, chunk);
+            }
+        }
+    }
+
+    /// <summary>Mirrors every border wall found in one world-space chunk of <paramref name="sourceMap"/> onto
+    /// the same spots of <paramref name="targetMap"/> (laying plating under each wall if the tile is empty).</summary>
+    private void ReflectBorderChunk(EntityUid targetMap, MapComponent targetMapComp, EntityUid sourceMap, MapComponent sourceMapComp, Vector2i chunk)
+    {
+        for (var x = 0; x < BorderReflectChunk; x++)
+        {
+            for (var y = 0; y < BorderReflectChunk; y++)
+            {
+                var worldPos = new Vector2(
+                    chunk.X * BorderReflectChunk + x + 0.5f,
+                    chunk.Y * BorderReflectChunk + y + 0.5f);
+
+                var sourceCoords = new MapCoordinates(worldPos, sourceMapComp.MapId);
+                if (!_mapManager.TryFindGridAt(sourceCoords, out var sourceGridUid, out var sourceGrid))
+                    continue;
+
+                var sourceTile = _map.TileIndicesFor(sourceGridUid, sourceGrid, sourceCoords);
+                string? wallProto = null;
+                foreach (var anchored in _map.GetAnchoredEntities(sourceGridUid, sourceGrid, sourceTile))
+                {
+                    if (IsIndestructibleWall(anchored) && MetaData(anchored).EntityPrototype is { } proto)
+                    {
+                        wallProto = proto.ID;
+                        break;
+                    }
+                }
+
+                if (wallProto == null)
+                    continue;
+
+                // Only mirror onto grids that already exist on the target level; a level with no grid here has
+                // nothing to bound yet (and reflecting would otherwise create endless grids on void levels).
+                var targetCoords = new MapCoordinates(worldPos, targetMapComp.MapId);
+                if (!_mapManager.TryFindGridAt(targetCoords, out var targetGridUid, out var targetGrid))
+                    continue;
+
+                var targetTile = _map.TileIndicesFor(targetGridUid, targetGrid, targetCoords);
+
+                // Anchoring needs a real tile under the wall; the wall sprite fully covers the plating anyway.
+                if ((!_map.TryGetTileRef(targetGridUid, targetGrid, targetTile, out var tileRef) || tileRef.Tile.IsEmpty)
+                    && _tileDef.TryGetDefinition("Plating", out var plating))
+                {
+                    _map.SetTile(targetGridUid, targetGrid, targetTile, new Tile(plating.TileId));
+                }
+
+                SpawnAnchoredOnce(wallProto, targetGridUid, targetGrid, targetTile);
+            }
+        }
+    }
+
     /// <summary>Find the map directly above a stone level (its "source" / parent map) so we can read its settings.</summary>
     private EntityUid GetSourceMapForStone(EntityUid stoneMap)
     {
@@ -564,10 +710,15 @@ public sealed class ZLevelBuildingSystem : EntitySystem
         var query = EntityQueryEnumerator<ActorComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out _, out var xform))
         {
-            if (xform.MapUid is not { } mapUid ||
-                !TryComp<ZGeneratedStoneComponent>(mapUid, out var stone) ||
+            if (xform.MapUid is not { } mapUid)
+                continue;
+
+            if (!TryComp<ZGeneratedStoneComponent>(mapUid, out var stone) ||
                 !_gridQuery.TryComp(stone.StoneGrid, out var grid))
             {
+                // Non-stone z-levels (upper platforms, void levels) still mirror the map-border walls around
+                // players; stone levels get theirs during chunk generation instead.
+                ReflectBorderAroundPlayer(mapUid, xform);
                 continue;
             }
 

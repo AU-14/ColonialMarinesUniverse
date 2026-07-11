@@ -11,11 +11,14 @@ using Content.Shared.Damage;
 using Content.Shared.Database;
 using Content.Shared.FixedPoint;
 using Content.Shared.Popups;
+using Content.Shared.Tag;
 using Content.Shared.Throwing;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -49,6 +52,8 @@ public sealed class ZLevelSupportSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
     [Dependency] private readonly IChatManager _chat = default!;
+    [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
 
     // Per-map cooldown so a cascading floor collapse (many structures at once) logs/alerts admins once, not per
     // tile. Maps the collapsing level -> the time after which the next collapse there alerts again.
@@ -420,8 +425,8 @@ public sealed class ZLevelSupportSystem : EntitySystem
                 continue;
             }
 
-            // Never drop a staircase.
-            if (HasComp<CMUZLevelHighGroundComponent>(ent))
+            // Never drop a staircase, and never drop an indestructible map-border wall.
+            if (HasComp<CMUZLevelHighGroundComponent>(ent) || IsIndestructibleWall(ent))
                 continue;
 
             if (TryComp<TransformComponent>(ent, out var exf) && exf.Anchored)
@@ -435,11 +440,51 @@ public sealed class ZLevelSupportSystem : EntitySystem
                 var offset = _random.NextAngle().ToVec() * _random.NextFloat(0.2f, 0.8f);
                 _transform.SetMapCoordinates(ent, new MapCoordinates(worldPos + offset, belowMapComp.MapId));
                 _throwing.TryThrow(ent, offset, baseThrowSpeed: 4f);
+
+                // Fallen structures are rubble: strip fixture hardness so they can never grind against rocks
+                // the cave later generates (or gets buried under) at the same spot. That constant jitter of a
+                // solid wall stuck inside a solid rock was a physics-contact drain that degraded server TPS
+                // (felt as ever-worsening UI lag) the longer a round ran.
+                MakeFallenDebrisNonHard(ent);
             }
         }
 
         // Pull the floor tile out so the floor visibly collapses (does nothing if it was a void tile already).
         _map.SetTile(grid.Owner, grid.Comp, tile, Tile.Empty);
+    }
+
+    /// <summary>True if a player-built floor marker (TileFloorSupport) is anchored on this tile - i.e. the floor
+    /// tile was laid by a player, not authored by a mapper.</summary>
+    private bool HasPlayerFloorMarker(Entity<MapGridComponent> grid, Vector2i tile)
+    {
+        foreach (var anchored in _map.GetAnchoredEntities(grid.Owner, grid.Comp, tile))
+        {
+            if (HasComp<TileFloorSupportComponent>(anchored))
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>An indestructible map-border wall: tagged as a wall but with no Damageable at all (the
+    /// CMBaseWallInvincible family). These are map boundaries and must never fall or be moved.</summary>
+    private bool IsIndestructibleWall(EntityUid uid)
+    {
+        return _tag.HasTag(uid, "Wall") && !HasComp<DamageableComponent>(uid);
+    }
+
+    /// <summary>Strips fixture hardness from a structure that has fallen through a collapsed floor, so it can
+    /// overlap cave rocks without generating endless physics contacts. It keeps its sprite, damage state and
+    /// interactions - it just no longer blocks or pushes.</summary>
+    private void MakeFallenDebrisNonHard(EntityUid uid)
+    {
+        if (!TryComp<FixturesComponent>(uid, out var fixtures))
+            return;
+
+        foreach (var fixture in fixtures.Fixtures.Values)
+        {
+            _physics.SetHard(uid, fixture, false, manager: fixtures);
+        }
     }
 
     /// <summary>A crash sound at the collapse spot plus a brief screenshake for players on that level - so a
@@ -522,6 +567,16 @@ public sealed class ZLevelSupportSystem : EntitySystem
 
         var onSolid = _map.TryGetTileRef(grid.Owner, grid.Comp, tile, out var tileRef) && !tileRef.Tile.IsEmpty;
         if (onSolid && IsGroundOrBelow(mapUid))
+        {
+            budget = ent.Comp.CantileverSpan;
+            return true;
+        }
+
+        // A solid floor tile on an UPPER level that carries no player-built floor marker is mapper-authored map
+        // content (e.g. the USS Bush's upper decks). Authored floors are self-supporting: anything crafted on
+        // them roots there and must never cave in. Only PLAYER-built upper floors (which always carry a
+        // TileFloorSupport marker) need a beam below.
+        if (onSolid && !IsGroundOrBelow(mapUid) && !HasPlayerFloorMarker(grid, tile))
         {
             budget = ent.Comp.CantileverSpan;
             return true;

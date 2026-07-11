@@ -12,13 +12,17 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Database;
 using Content.Shared.FixedPoint;
 using Content.Shared.Popups;
+using Content.Shared.Tag;
 using Content.Shared.Throwing;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -51,6 +55,9 @@ public sealed class ZCaveInSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
     [Dependency] private readonly IChatManager _chat = default!;
+    [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private readonly IPrototypeManager _protoManager = default!;
 
     private static readonly TimeSpan WarningTime = TimeSpan.FromSeconds(8);
 
@@ -266,6 +273,9 @@ public sealed class ZCaveInSystem : EntitySystem
         if (stoneMap.Comp.CollapseQueue.Count > 0)
             return;
 
+        var settings = GetSettings(stoneMap.Owner);
+        var span = Math.Max(1, settings.MaxRoofSpan);
+
         var region = new List<Vector2i>();
         var seen = new HashSet<Vector2i> { origin };
         var frontier = new Queue<Vector2i>();
@@ -274,6 +284,13 @@ public sealed class ZCaveInSystem : EntitySystem
         while (frontier.TryDequeue(out var t) && region.Count < CollapseTileCap)
         {
             if (IsSolid(grid, t, stoneMap.Comp.GeneratedChunks, chunkSize))
+                continue;
+
+            // Built support beams shut off a spreading collapse like a valve: every open tile within a beam's
+            // protected radius is neither buried NOR traversed, so a beam line that fully seals a passage stops
+            // the cave-in dead there, and a lone beam still keeps its own protected pocket standing even while
+            // the collapse flows around it.
+            if (HasBuiltSupportWithin(grid, t, span))
                 continue;
 
             region.Add(t);
@@ -288,8 +305,6 @@ public sealed class ZCaveInSystem : EntitySystem
 
         if (region.Count == 0)
             return;
-
-        var settings = GetSettings(stoneMap.Owner);
 
         // Accountability: log the cave-in (location + size) and alert admins, attributing it to the nearest
         // player on the level (the most likely over-miner). A whole cavern collapses as ONE event, so this fires
@@ -434,6 +449,15 @@ public sealed class ZCaveInSystem : EntitySystem
             return;
 
         var surfaceTile = _map.TileIndicesFor(surfaceGridUid, surfaceGridComp, surfaceCoords);
+
+        // Indestructible map-border walls (the CMBaseWallInvincible family) are the playfield boundary: never
+        // pull the tile out from under one and never drop it into the cavern.
+        foreach (var anchored in _map.GetAnchoredEntities(surfaceGridUid, surfaceGridComp, surfaceTile))
+        {
+            if (IsIndestructibleWall(anchored))
+                return;
+        }
+
         _map.SetTile(surfaceGridUid, surfaceGridComp, surfaceTile, Tile.Empty);
 
         // The floor that just gave way drops whatever was built on it into the cavern: every anchored (wrenched/
@@ -461,11 +485,40 @@ public sealed class ZCaveInSystem : EntitySystem
             if (HasComp<CMUZLevelHighGroundComponent>(uid))
                 continue; // never drop staircases
 
+            if (IsIndestructibleWall(uid))
+                continue; // never drop map-border walls
+
             if (!TryComp<TransformComponent>(uid, out var xform))
                 continue;
 
             _transform.Unanchor(uid, xform);
             _transform.SetMapCoordinates(uid, belowCoords);
+
+            // Fallen structures are rubble: strip fixture hardness so a wall that lands inside (or later gets
+            // buried under) a cave rock can never sit there grinding contacts forever. That constant jitter was
+            // a physics drain that degraded server TPS (felt as ever-worsening UI lag) as the round ran on.
+            MakeFallenDebrisNonHard(uid);
+        }
+    }
+
+    /// <summary>An indestructible map-border wall: tagged as a wall but with no Damageable at all (the
+    /// CMBaseWallInvincible family). These are map boundaries and must never fall or be moved.</summary>
+    private bool IsIndestructibleWall(EntityUid uid)
+    {
+        return _tag.HasTag(uid, "Wall") && !HasComp<DamageableComponent>(uid);
+    }
+
+    /// <summary>Strips fixture hardness from a structure that has fallen through a collapsed floor, so it can
+    /// overlap cave rocks without generating endless physics contacts. It keeps its sprite, damage state and
+    /// interactions - it just no longer blocks or pushes.</summary>
+    private void MakeFallenDebrisNonHard(EntityUid uid)
+    {
+        if (!TryComp<FixturesComponent>(uid, out var fixtures))
+            return;
+
+        foreach (var fixture in fixtures.Fixtures.Values)
+        {
+            _physics.SetHard(uid, fixture, false, manager: fixtures);
         }
     }
 
@@ -477,9 +530,73 @@ public sealed class ZCaveInSystem : EntitySystem
         if (!generatedChunks.Contains(chunk))
             return true;
 
-        // Any anchored entity (the mined rock of any prototype, a wall, or a built support pillar) holds the roof.
-        foreach (var _ in _map.GetAnchoredEntities(grid.Owner, grid.Comp, tile))
+        // Only genuinely load-bearing anchored entities hold the roof: natural/mined rock and real walls (both
+        // occlude and/or carry the Wall tag) and built support pillars. A merely wrenched-down entity (a chair,
+        // a table, a vending machine) is NOT a natural support and must not stabilise a cavern.
+        foreach (var anchored in _map.GetAnchoredEntities(grid.Owner, grid.Comp, tile))
+        {
+            if (IsLoadBearing(anchored))
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>True if an anchored entity genuinely holds up a cave roof: a built structural support/pillar, or
+    /// an actual WALL - anything whose prototype inherits the vanilla BaseWall (covers mined rock, which loses
+    /// the Wall tag by overriding its Tag list) or the RMC invincible-wall root (covers every CM wall family).</summary>
+    private bool IsLoadBearing(EntityUid uid)
+    {
+        if (HasComp<StructuralSupportComponent>(uid))
             return true;
+
+        return MetaData(uid).EntityPrototype is { } proto && IsWallPrototype(proto.ID);
+    }
+
+    // Prototype id -> "inherits a wall base" verdict, cached because the parent walk runs for every anchored
+    // entity a stability check touches.
+    private readonly Dictionary<string, bool> _wallProtoCache = new();
+
+    private bool IsWallPrototype(string id)
+    {
+        if (_wallProtoCache.TryGetValue(id, out var cached))
+            return cached;
+
+        // EnumerateALLParents, not EnumerateParents: the wall roots (BaseWall, RMCBaseWallInvincibleNoIcon) are
+        // ABSTRACT prototypes, and the plain variant silently skips abstract ancestors - which made mined rock
+        // (mineablesolarisrock -> BaseWall) read as "not a wall" and let whole caves collapse on generation.
+        var isWall = false;
+        foreach (var (parentId, _) in _protoManager.EnumerateAllParents<EntityPrototype>(id, includeSelf: true))
+        {
+            if (parentId is "BaseWall" or "RMCBaseWallInvincibleNoIcon")
+            {
+                isWall = true;
+                break;
+            }
+        }
+
+        _wallProtoCache[id] = isWall;
+        return isWall;
+    }
+
+    /// <summary>True if a built vertical support / anchor stands within <paramref name="span"/> tiles (Manhattan)
+    /// of this tile - the beam's protected radius.</summary>
+    private bool HasBuiltSupportWithin(Entity<MapGridComponent> grid, Vector2i tile, int span)
+    {
+        for (var dx = -span; dx <= span; dx++)
+        {
+            for (var dy = -span; dy <= span; dy++)
+            {
+                if (Math.Abs(dx) + Math.Abs(dy) > span)
+                    continue;
+
+                foreach (var anchored in _map.GetAnchoredEntities(grid.Owner, grid.Comp, tile + new Vector2i(dx, dy)))
+                {
+                    if (TryComp<StructuralSupportComponent>(anchored, out var sup) && (sup.IsVerticalSupport || sup.IsAnchor))
+                        return true;
+                }
+            }
+        }
 
         return false;
     }
