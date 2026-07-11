@@ -37,11 +37,9 @@
   canRotate: false
   isCM: true
   spawnlist: ZLevel
-  # Pre-scaled 32x32 icon: the ghost/menu icon path ignores the entity's 0.5 sprite scale, so deriving the
-  # icon from the (64x64) entity sprite rendered the full 4-tile beam. The _small rsi is the same art at 1 tile.
-  icon:
-    sprite: _AU14/Structures/navalis_support_beam_small.rsi
-    state: support_beam_brown
+  # NOTE: this fork's ConstructionPrototype has no "icon" field - the menu derives the recipe icon from the
+  # target entity's sprite. The 1-tile beam entity (AU14NavalisSupportBeamBrown1Tile) already carries the
+  # half-scale sprite, so the menu icon renders as a single tile without an override here.
   conditions:
   - !type:TileNotBlocked
   # Mappers can forbid vertical building on a map with ZBuildableMap { enabled: false } (e.g. the UNS Almayer).
@@ -77,10 +75,7 @@
   canRotate: false
   isCM: true
   spawnlist: ZLevel
-  # Pre-scaled 1-tile icon (see the wood beam note above).
-  icon:
-    sprite: _AU14/Structures/navalis_support_beam_small.rsi
-    state: support_beam_green
+  # No icon override (see the wood beam note above): the menu icon comes from the target entity's sprite.
   conditions:
   - !type:TileNotBlocked
   # Mappers can forbid vertical building on a map with ZBuildableMap { enabled: false } (e.g. the UNS Almayer).
@@ -116,10 +111,7 @@
   canRotate: false
   isCM: true
   spawnlist: ZLevel
-  # Pre-scaled 1-tile icon (see the wood beam note above).
-  icon:
-    sprite: _AU14/Structures/navalis_support_beam_small.rsi
-    state: support_beam_aqua
+  # No icon override (see the wood beam note above): the menu icon comes from the target entity's sprite.
   conditions:
   - !type:TileNotBlocked
   # Mappers can forbid vertical building on a map with ZBuildableMap { enabled: false } (e.g. the UNS Almayer).
