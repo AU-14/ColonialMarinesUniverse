@@ -52,11 +52,11 @@ public sealed partial class ResinDoorSystem : EntitySystem
                 ? userComp.Hive
                 : null;
 
-            if (doorHive == null || doorHive == EntityUid.Invalid || userHive == null || userHive == EntityUid.Invalid)
-            {
-                Logger.GetSawmill("hive").Debug(
-                    $"Resin door ({door}) is missing a Hive. Door hive: {doorHive}, User ({user}) hive: {userHive}. Permitting access.");
-            }
+            // if (doorHive == null || doorHive == EntityUid.Invalid || userHive == null || userHive == EntityUid.Invalid)
+            // {
+            //     Logger.GetSawmill("hive").Debug(
+            //         $"Resin door ({door}) is missing a Hive. Door hive: {doorHive}, User ({user}) hive: {userHive}. Permitting access.");
+            // }
 
             return true; // IsAllyOfHive early-returns false when Hive is null
         }
