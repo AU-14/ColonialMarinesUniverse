@@ -112,7 +112,7 @@
     repeating: false
     objectivelevel: 1
     custompoints: 10
-    ObjectiveDescription: "Kill the CLF Leader"
+    ObjectiveDescription: "Eliminate the Threat Leader"
     roundEndMessage: "By Killing the Cell Leader"
   - type: KillObjective
     factiontokill: clf
@@ -138,7 +138,7 @@
     objectivelevel: 2
     custompoints: 20
     maxrepeatable: 8
-    ObjectiveDescription: "Kill Insurgents"
+    ObjectiveDescription: "Eliminate Threats"
   - type: KillObjective
     factiontokill: clf
     amounttokill: 2
