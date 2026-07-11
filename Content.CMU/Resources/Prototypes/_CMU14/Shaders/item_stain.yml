@@ -1,0 +1,6 @@
+- type: shader
+  id: CMUItemStain
+  kind: source
+  path: "/Textures/_CMU14/Shaders/item_stain.swsl"
+  params:
+    stainColor: 0.5, 0.0, 0.0, 1.0

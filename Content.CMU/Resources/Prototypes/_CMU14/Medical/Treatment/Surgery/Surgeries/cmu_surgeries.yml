@@ -1,0 +1,537 @@
+# ---- Access / closure primitives ------------------------------------
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryOpenSoftTissue
+  name: Open Incision
+  components:
+  - type: CMSurgery
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryOpenBoneCavity
+  name: Open Bone Cavity
+  components:
+  - type: CMSurgery
+    requirement: CMUSurgeryOpenSoftTissue
+    steps:
+    - CMSurgeryStepSawBones
+    - CMSurgeryStepPriseOpenBones
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryCloseIncision
+  name: Close Incision
+  components:
+  - type: CMSurgery
+    priority: 1
+    steps:
+    - CMUSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryCloseBoneCavity
+  name: Close Bone Cavity
+  components:
+  - type: CMSurgery
+    priority: 1
+    steps:
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMUSurgeryStepCloseIncision
+
+# ---- Bone setting ----------------------------------------------------
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgerySetSimpleFracture
+  name: Set Simple Fracture
+  components:
+  - type: CMSurgery
+    priority: 10
+    requirement: CMUSurgeryOpenSoftTissue
+    steps:
+    - CMUSurgeryStepSetSimpleBone
+    - CMUSurgeryStepApplyBoneGel
+    - CMUSurgeryStepCloseIncision
+  - type: CMUFracturedSurgeryCondition
+    requireAtLeast: Hairline
+    requireAtMost: Simple
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgerySetSimpleFractureCavity
+  name: Set Simple Fracture
+  components:
+  - type: CMSurgery
+    priority: 10
+    requirement: CMUSurgeryOpenBoneCavity
+    steps:
+    - CMUSurgeryStepSetSimpleBone
+    - CMUSurgeryStepApplyBoneGel
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMUSurgeryStepCloseIncision
+  - type: CMUFracturedSurgeryCondition
+    requireAtLeast: Hairline
+    requireAtMost: Simple
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgerySetCompoundFracture
+  name: Set Compound Fracture
+  components:
+  - type: CMSurgery
+    priority: 8
+    requirement: CMUSurgeryOpenSoftTissue
+    steps:
+    - CMUSurgeryStepRealignCompoundBone
+    - CMUSurgeryStepApplyBoneGel
+    - CMUSurgeryStepCloseIncision
+  - type: CMUFracturedSurgeryCondition
+    requireSeverity: Compound
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgerySetCompoundFractureCavity
+  name: Set Compound Fracture
+  components:
+  - type: CMSurgery
+    priority: 8
+    requirement: CMUSurgeryOpenBoneCavity
+    steps:
+    - CMUSurgeryStepRealignCompoundBone
+    - CMUSurgeryStepApplyBoneGel
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMUSurgeryStepCloseIncision
+  - type: CMUFracturedSurgeryCondition
+    requireSeverity: Compound
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgerySetShatteredFracture
+  name: Set Shattered Fracture
+  components:
+  - type: CMSurgery
+    priority: 7
+    requirement: CMUSurgeryOpenSoftTissue
+    steps:
+    - CMUSurgeryStepRealignShatteredBone
+    - CMUSurgeryStepApplyShatteredBoneGel
+    - CMUSurgeryStepInsertBoneGraft
+    - CMUSurgeryStepFinalizeGraftedBone
+    - CMUSurgeryStepCloseIncision
+  - type: CMUFracturedSurgeryCondition
+    requireSeverity: Shattered
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgerySetShatteredFractureCavity
+  name: Set Shattered Fracture
+  components:
+  - type: CMSurgery
+    priority: 7
+    requirement: CMUSurgeryOpenBoneCavity
+    steps:
+    - CMUSurgeryStepRealignShatteredBone
+    - CMUSurgeryStepApplyShatteredBoneGel
+    - CMUSurgeryStepInsertBoneGraft
+    - CMUSurgeryStepFinalizeGraftedBone
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMUSurgeryStepCloseIncision
+  - type: CMUFracturedSurgeryCondition
+    requireSeverity: Shattered
+
+# ---- Condition-driven cleanup steps ----------------------------------
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryTieVascularTear
+  name: Tie Off Torn Vessel
+  components:
+  - type: CMSurgery
+    steps:
+    - CMUSurgeryStepTieVascularTear
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryExtractForeignBody
+  name: Extract Foreign Body
+  components:
+  - type: CMSurgery
+    steps:
+    - CMUSurgeryStepExtractForeignBody
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRelieveCompartmentPressure
+  name: Relieve Compartment Pressure
+  components:
+  - type: CMSurgery
+    steps:
+    - CMUSurgeryStepRelieveCompartmentPressure
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryDebrideContaminatedWound
+  name: Debride Contaminated Tissue
+  components:
+  - type: CMSurgery
+    steps:
+    - CMUSurgeryStepDebrideContaminatedWound
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRemoveBoneFragments
+  name: Remove Bone Fragments
+  components:
+  - type: CMSurgery
+    steps:
+    - CMUSurgeryStepRemoveBoneFragments
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryFreeOrganAdhesions
+  name: Free Organ Adhesions
+  components:
+  - type: CMSurgery
+    steps:
+    - CMUSurgeryStepFreeOrganAdhesions
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryPackOrganBleed
+  name: Pack Organ Bleed
+  components:
+  - type: CMSurgery
+    steps:
+    - CMUSurgeryStepPackOrganBleed
+
+# ---- Internal-bleed clamp + close ------------------------------------
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryCauterizeInternalBleeding
+  name: Stop Internal Bleeding
+  components:
+  - type: CMSurgery
+    priority: 7
+    requirement: CMUSurgeryOpenSoftTissue
+    steps:
+    - CMUSurgeryStepCauterizeBleed
+    - CMUSurgeryStepCloseIncision
+
+# ---- Organ removal (torso, bone-cavity flow) -------------------------
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRemoveLiver
+  name: Remove Liver
+  components:
+  - type: CMSurgery
+    priority: 5
+    requirement: CMUSurgeryOpenBoneCavity
+    steps:
+    - CMUSurgeryStepClampLiverVessels
+    - CMUSurgeryStepExtractLiver
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMUSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRemoveLung
+  name: Remove Lungs
+  components:
+  - type: CMSurgery
+    priority: 5
+    requirement: CMUSurgeryOpenBoneCavity
+    steps:
+    - CMUSurgeryStepClampLungVessels
+    - CMUSurgeryStepExtractLung
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMUSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRemoveKidney
+  name: Remove Kidneys
+  components:
+  - type: CMSurgery
+    priority: 5
+    requirement: CMUSurgeryOpenBoneCavity
+    steps:
+    - CMUSurgeryStepClampKidneyVessels
+    - CMUSurgeryStepExtractKidney
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMUSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRemoveHeart
+  name: Remove Heart
+  components:
+  - type: CMSurgery
+    priority: 4
+    requirement: CMUSurgeryOpenBoneCavity
+    steps:
+    - CMUSurgeryStepClampHeartVessels
+    - CMUSurgeryStepExtractHeart
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMUSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRemoveStomach
+  name: Remove Stomach
+  components:
+  - type: CMSurgery
+    priority: 5
+    requirement: CMUSurgeryOpenBoneCavity
+    steps:
+    - CMUSurgeryStepClampStomachVessels
+    - CMUSurgeryStepExtractStomach
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMUSurgeryStepCloseIncision
+
+# ---- Organ replacement (transplant) ---------------------------------
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryReplaceLiver
+  name: Replace Liver
+  components:
+  - type: CMSurgery
+    priority: 4
+    requirement: CMUSurgeryOpenBoneCavity
+    steps:
+    - CMUSurgeryStepClampLiverVessels
+    - CMUSurgeryStepReinsertLiver
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMUSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryReplaceLung
+  name: Replace Lungs
+  components:
+  - type: CMSurgery
+    priority: 4
+    requirement: CMUSurgeryOpenBoneCavity
+    steps:
+    - CMUSurgeryStepClampLungVessels
+    - CMUSurgeryStepReinsertLung
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMUSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryReplaceKidney
+  name: Replace Kidneys
+  components:
+  - type: CMSurgery
+    priority: 4
+    requirement: CMUSurgeryOpenBoneCavity
+    steps:
+    - CMUSurgeryStepClampKidneyVessels
+    - CMUSurgeryStepReinsertKidney
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMUSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryTransplantHeart
+  name: Transplant Heart
+  components:
+  - type: CMSurgery
+    priority: 4
+    requirement: CMUSurgeryOpenBoneCavity
+    steps:
+    - CMUSurgeryStepClampHeartVessels
+    - CMUSurgeryStepTransplantHeart
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMUSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryReplaceStomach
+  name: Replace Stomach
+  components:
+  - type: CMSurgery
+    priority: 4
+    requirement: CMUSurgeryOpenBoneCavity
+    steps:
+    - CMUSurgeryStepClampStomachVessels
+    - CMUSurgeryStepReinsertStomach
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMUSurgeryStepCloseIncision
+
+# ---- Suture organ (per-slot) ----------------------------------------
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRepairLiver
+  name: Suture Liver
+  components:
+  - type: CMSurgery
+    priority: 6
+    requirement: CMUSurgeryOpenBoneCavity
+    steps:
+    - CMUSurgeryStepClampLiverVessels
+    - CMUSurgeryStepSutureLiver
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMUSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRepairLungs
+  name: Suture Lungs
+  components:
+  - type: CMSurgery
+    priority: 6
+    requirement: CMUSurgeryOpenBoneCavity
+    steps:
+    - CMUSurgeryStepClampLungVessels
+    - CMUSurgeryStepSutureLungs
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMUSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRepairKidneys
+  name: Suture Kidneys
+  components:
+  - type: CMSurgery
+    priority: 6
+    requirement: CMUSurgeryOpenBoneCavity
+    steps:
+    - CMUSurgeryStepClampKidneyVessels
+    - CMUSurgeryStepSutureKidneys
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMUSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRepairHeart
+  name: Suture Heart
+  components:
+  - type: CMSurgery
+    priority: 6
+    requirement: CMUSurgeryOpenBoneCavity
+    steps:
+    - CMUSurgeryStepClampHeartVessels
+    - CMUSurgeryStepSutureHeart
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMUSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRepairStomach
+  name: Suture Stomach
+  components:
+  - type: CMSurgery
+    priority: 6
+    requirement: CMUSurgeryOpenBoneCavity
+    steps:
+    - CMUSurgeryStepClampStomachVessels
+    - CMUSurgeryStepSutureStomach
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMUSurgeryStepCloseIncision
+
+# ---- Brain / eye repair ---------------------------------------------
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRepairBrain
+  name: Repair Brain
+  components:
+  - type: CMSurgery
+    priority: 6
+    requirement: CMUSurgeryOpenBoneCavity
+    steps:
+    - CMUSurgeryStepClampBrainVessels
+    - CMUSurgeryStepRepairBrain
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMUSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRepairEyes
+  name: Repair Eyes
+  components:
+  - type: CMSurgery
+    priority: 6
+    requirement: CMUSurgeryOpenSoftTissue
+    steps:
+    - CMUSurgeryStepClampEyeVessels
+    - CMUSurgeryStepRepairEyes
+    - CMUSurgeryStepCloseIncision
+
+# ---- Larva extraction (torso, bone-cavity flow) ----------------------
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryAlienEmbryoRemoval
+  name: Alien Embryo Removal
+  description: Removal of an alien embryo from the body.
+  components:
+  - type: CMSurgery
+    priority: -1
+    requirement: CMUSurgeryOpenBoneCavity
+    steps:
+    - CMSurgeryStepCutLarvaRoots
+    - CMSurgeryStepRemoveLarva
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMUSurgeryStepCloseIncision
+  - type: CMSurgeryLarvaCondition
+  - type: CMSurgeryPartCondition
+    part: Torso
+
+# ---- Limb reattachment (soft-tissue flow) ----------------------------
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRemoveLimb
+  name: Remove Limb
+  components:
+  - type: CMSurgery
+    priority: 2
+    requirement: CMUSurgeryOpenSoftTissue
+    steps:
+    - CMUSurgeryStepAmputateLimb
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryReattachLimb
+  name: Reattach Limb
+  components:
+  - type: CMSurgery
+    priority: 3
+    requirement: CMUSurgeryOpenSoftTissue
+    steps:
+    - CMUSurgeryStepRemoveStump
+    - CMUSurgeryStepPrepReattachSocket
+    - CMUSurgeryStepReattachLimb
+    - CMUSurgeryStepCloseReattach

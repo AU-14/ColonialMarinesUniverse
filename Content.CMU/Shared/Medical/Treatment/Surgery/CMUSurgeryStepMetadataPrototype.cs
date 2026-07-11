@@ -1,0 +1,85 @@
+using System.Collections.Generic;
+using Content.Shared._RMC14.Medical.Surgery;
+using Content.Shared._RMC14.Medical.Surgery.Steps;
+using Content.Shared.Body.Part;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
+
+namespace Content.Shared._CMU14.Medical.Treatment.Surgery;
+
+/// <summary>
+///     Tool categories are compiled into the surgery registry and matched at
+///     click time. Allowed values include:
+///     <c>scalpel</c>, <c>hemostat</c>, <c>retractor</c>, <c>cautery</c>,
+///     <c>bone_saw</c>, <c>bone_setter</c>, <c>bone_gel</c>,
+///     <c>bone_graft</c>, <c>organ_clamp</c>, <c>scalpel_or_burn_kit</c>.
+/// </summary>
+[Prototype("cmuSurgeryStepMetadata")]
+public sealed partial class CMUSurgeryStepMetadataPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    /// <summary>
+    ///     The CMU surgery prototype id (matches a <c>CMSurgeryComponent</c>
+    ///     entity prototype) this metadata describes.
+    /// </summary>
+    [DataField(required: true)]
+    public EntProtoId<CMSurgeryComponent> Surgery;
+
+    /// <summary>
+    ///     Leave null to fall back to the surgery prototype's
+    ///     <c>MetaDataComponent.EntityName</c>.
+    /// </summary>
+    [DataField]
+    public string? DisplayName;
+
+    [DataField]
+    public List<BodyPartType> ValidParts = new() { BodyPartType.Head, BodyPartType.Torso, BodyPartType.Arm, BodyPartType.Leg };
+
+    [DataField]
+    public string Category = "general";
+
+    /// <summary>
+    ///     Minimum RMCSkillSurgery level required to surface and arm this
+    ///     surgery from the CMU surgery window.
+    /// </summary>
+    [DataField]
+    public int MinSkill = 1;
+
+    /// <summary>
+    ///     Whether this surgery can be performed by the patient on themselves.
+    ///     Self-surgery is intentionally opt-in so organ/head/torso work stays
+    ///     blocked unless explicitly allowed.
+    /// </summary>
+    [DataField]
+    public bool AllowSelfSurgery;
+
+    /// <summary>
+    ///     Optional narrower part set for self-surgery. Empty means use
+    ///     <see cref="ValidParts"/>.
+    /// </summary>
+    [DataField]
+    public List<BodyPartType> SelfSurgeryValidParts = new();
+
+    /// <summary>
+    ///     Optional labels and tool categories keyed by the actual surgery
+    ///     step prototype id. Entry order is irrelevant. An entirely empty
+    ///     list uses the step prototypes' legacy labels and tool components.
+    /// </summary>
+    [DataField]
+    public List<CMUSurgeryStepMetadataEntry> Steps = new();
+}
+
+[Serializable, NetSerializable, DataDefinition]
+public sealed partial class CMUSurgeryStepMetadataEntry
+{
+    [DataField(required: true)]
+    public EntProtoId<CMSurgeryStepComponent> StepId;
+
+    [DataField]
+    public string Label = string.Empty;
+
+    [DataField]
+    public string? ToolCategory;
+}

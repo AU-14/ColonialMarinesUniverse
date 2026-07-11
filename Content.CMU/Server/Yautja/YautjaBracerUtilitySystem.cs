@@ -1,6 +1,7 @@
 using Content.Server.Administration.Logs;
 using Content.Server.Chat.Managers;
-using Content.Shared._CMU14.Medical.BodyPart.Events;
+using Content.Shared._CMU14.Medical.Core;
+using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Stealth;
@@ -8,7 +9,6 @@ using Content.Shared._RMC14.Synth;
 using Content.Shared.Access.Components;
 using Content.Shared.Actions;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.Chat;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -52,7 +52,7 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private InventorySystem _inventory = default!;
@@ -431,17 +431,12 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
 
     private bool TrySeverPart(EntityUid body, BodyPartType type, BodyPartSymmetry symmetry)
     {
-        foreach (var (partUid, part) in _body.GetBodyChildren(body))
-        {
-            if (part.PartType != type || part.Symmetry != symmetry)
-                continue;
+        if (!_medicalIndex.TryGetBodyPart(body, new CMUMedicalBodyPartKey(type, symmetry), out var part))
+            return false;
 
-            var ev = new BodyPartSeveredEvent(body, partUid, type);
-            RaiseLocalEvent(partUid, ref ev);
-            return true;
-        }
-
-        return false;
+        var ev = new BodyPartSeveredEvent(body, part, type);
+        RaiseLocalEvent(part, ref ev);
+        return true;
     }
 
     private bool ToggleLock(Entity<YautjaBracerComponent> bracer, EntityUid user, EntityUid target)
