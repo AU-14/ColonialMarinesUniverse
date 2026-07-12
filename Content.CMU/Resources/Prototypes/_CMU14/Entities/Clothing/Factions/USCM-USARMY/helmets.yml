@@ -163,3 +163,95 @@
     sprite: _AU14/Clothing/US_Army/Helmets/helmet.rsi
   - type: Clothing
     sprite: _AU14/Clothing/US_Army/Helmets/helmet.rsi
+
+# Camo system (ItemCamouflage) conforming variants
+# No Snow/Classic/Urban sprites exist yet - all fall back to the Jungle sprite until dedicated art is made.
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14CamoM10CorpsmanHelmet
+  name: M10 Corpsman Helmet
+  description: Standard Issue Helmet used by USCM. Provides modest protection from bullet and melee attacks at the head. It also has an inbuilt camera allowing for command staff to observe the squad's actions. This one is painted with the red cross.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/m10corpsmanhelmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/m10corpsmanhelmet.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _AU14/Clothing/JungleHats/m10corpsmanhelmet.rsi
+      Desert: _AU14/Clothing/DesertHats/m10corpsmanhelmet.rsi
+      Snow: _AU14/Clothing/JungleHats/m10corpsmanhelmet.rsi
+      Classic: _AU14/Clothing/JungleHats/m10corpsmanhelmet.rsi
+      Urban: _AU14/Clothing/JungleHats/m10corpsmanhelmet.rsi
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14CamoM10Helmet
+  name: M10 Helmet
+  description: Standard Issue Helmet used by USCM. Provides modest protection from bullet and melee attacks at the head. It also has an inbuilt camera allowing for command staff to observe the squad's actions.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/m10helmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/m10helmet.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _AU14/Clothing/JungleHats/m10helmet.rsi
+      Desert: _AU14/Clothing/DesertHats/m10helmet.rsi
+      Snow: _AU14/Clothing/JungleHats/m10helmet.rsi
+      Classic: _AU14/Clothing/JungleHats/m10helmet.rsi
+      Urban: _AU14/Clothing/JungleHats/m10helmet.rsi
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14CamoM11Helmet
+  name: M11 Helmet
+  description: A slightly fancier helmet for USCM leadership. This one contains a small built-in camera and has cushioning to project your fragile brain.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/m11helmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/m11helmet.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _AU14/Clothing/JungleHats/m11helmet.rsi
+      Desert: _AU14/Clothing/DesertHats/m11helmet.rsi
+      Snow: _AU14/Clothing/JungleHats/m11helmet.rsi
+      Classic: _AU14/Clothing/JungleHats/m11helmet.rsi
+      Urban: _AU14/Clothing/JungleHats/m11helmet.rsi
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14CamoM30Helmet
+  name: M30 Helmet
+  description: The M30 tactical helmet has an left eyepiece filter used to filter flight data. It is issued to Pilots and DCCs.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/m30pilothelmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/m30pilothelmet.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _AU14/Clothing/JungleHats/m30pilothelmet.rsi
+      Desert: _AU14/Clothing/DesertHats/m30pilothelmet.rsi
+      Snow: _AU14/Clothing/JungleHats/m30pilothelmet.rsi
+      Classic: _AU14/Clothing/JungleHats/m30pilothelmet.rsi
+      Urban: _AU14/Clothing/JungleHats/m30pilothelmet.rsi
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14CamoM50Helmet #meant to have a built-in welding visor
+  name: M50 Helmet
+  description: A lightweight M50 tanker helmet designed for use by vehicle crewmen in the USCM. It offers low weight protection, and allows agile movement inside the confines of an armored vehicle.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/m50tankerhelmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/m50tankerhelmet.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _AU14/Clothing/JungleHats/m50tankerhelmet.rsi
+      Desert: _AU14/Clothing/DesertHats/m50tankerhelmet.rsi
+      Snow: _AU14/Clothing/JungleHats/m50tankerhelmet.rsi
+      Classic: _AU14/Clothing/JungleHats/m50tankerhelmet.rsi
+      Urban: _AU14/Clothing/JungleHats/m50tankerhelmet.rsi
