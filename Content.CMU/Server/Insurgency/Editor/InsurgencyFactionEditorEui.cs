@@ -68,10 +68,15 @@ public sealed class InsurgencyFactionEditorEui : BaseEui
             .Select(s => new EditorFactionEntry(s.Id, s.IsDefault, s.Definition))
             .ToList();
 
-        // The built-in vanilla CLF lives in code, not the DB, so show it at the top for viewing and as a
-        // starting point. Saving it writes a new DB copy (handled below); it cannot be deleted.
-        _factions.Insert(0, new EditorFactionEntry(
-            InsurgencyBuiltinFactions.VanillaClfId, true, InsurgencyBuiltinFactions.VanillaClf()));
+        // Once the built-in vanilla CLF has been edited and saved it lives in the DB as a normal row marked
+        // as its override. When that row exists, use it (it is a real, editable, updatable faction); only
+        // when it does not do we fall back to showing the code-built copy as an editable starting point.
+        var hasOverride = _factions.Any(f => f.Definition.Metadata.BuiltinOverrideOf == InsurgencyBuiltinFactions.VanillaClfId);
+        if (!hasOverride)
+        {
+            _factions.Insert(0, new EditorFactionEntry(
+                InsurgencyBuiltinFactions.VanillaClfId, true, InsurgencyBuiltinFactions.VanillaClf()));
+        }
 
         StateDirty();
     }
@@ -107,9 +112,21 @@ public sealed class InsurgencyFactionEditorEui : BaseEui
         // The Custom editor can only author Custom factions, whatever the client claims.
         var isDefault = _scope == InsurgencyEditorScope.Default && msg.IsDefault;
 
-        // The built-in vanilla CLF has no DB row, so saving an edited copy of it creates a new faction
-        // rather than trying to update a non-existent id.
-        if (msg.Id is { } id && id != InsurgencyBuiltinFactions.VanillaClfId)
+        // Editing the built-in vanilla CLF upserts a single persistent override row (marked with
+        // BuiltinOverrideOf) instead of spawning a fresh faction every save. After the first save that row
+        // is a normal DB faction that further edits update in place, so the built-in becomes editable.
+        if (msg.Id == InsurgencyBuiltinFactions.VanillaClfId)
+        {
+            def.Metadata.BuiltinOverrideOf = InsurgencyBuiltinFactions.VanillaClfId;
+
+            var stored = await _db.GetFactionsAsync();
+            var existing = stored.FirstOrDefault(s => s.Definition.Metadata.BuiltinOverrideOf == InsurgencyBuiltinFactions.VanillaClfId);
+            if (existing != null)
+                await _db.UpdateFactionAsync(existing.Id, def, true);
+            else
+                await _db.AddFactionAsync(def, true);
+        }
+        else if (msg.Id is { } id)
         {
             // The Custom editor may only touch rows it can see: Custom ones.
             if (_scope == InsurgencyEditorScope.Custom && await IsDefaultRow(id))

@@ -12,9 +12,13 @@ using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Construction.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.GameTicking;
+using Content.Shared.Mind;
+using Content.Shared.Roles.Jobs;
+using Content.Shared.StatusIcon;
 using Content.Shared.UserInterface;
 using Robust.Shared.Audio;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server._AU14.Insurgency;
 
@@ -34,6 +38,8 @@ public sealed class InsurgencyFactionApplySystem : EntitySystem
     [Dependency] private SharedGodmodeSystem _godmode = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private SharedJobSystem _job = default!;
 
     // ---------------------------------------------------------------------
     // Presentation tunables. One place to change how the faction announcement
@@ -300,8 +306,9 @@ public sealed class InsurgencyFactionApplySystem : EntitySystem
     // by late-joining members so both paths behave identically.
     private void ApplyToMember(EntityUid uid, CLFMemberComponent member, ICommonSession session, FactionDefinition definition)
     {
-        // Swap the team status icon so members read as this faction instead of generic CLF.
-        if (definition.Metadata.StatusIcon is { } icon)
+        // Swap the team status icon so members read as this faction instead of generic CLF. A member whose
+        // job has a per-job override uses that; everyone else falls back to the faction-wide icon.
+        if (ResolveJobIcon(uid, definition) is { } icon)
         {
             member.StatusIcon = icon;
             Dirty(uid, member);
@@ -309,6 +316,26 @@ public sealed class InsurgencyFactionApplySystem : EntitySystem
 
         _antag.SendBriefing(session, BuildBriefing(definition), BriefingColor, BriefingSound);
         _eui.OpenEui(new InsurgencyFactionRevealEui(definition), session);
+    }
+
+    /// <summary>
+    ///     Picks the status icon for a member: the override for their job if one is configured, otherwise the
+    ///     faction-wide icon. Null only when the faction sets no icon at all.
+    /// </summary>
+    private ProtoId<FactionIconPrototype>? ResolveJobIcon(EntityUid member, FactionDefinition definition)
+    {
+        if (definition.Metadata.JobStatusIcons.Count > 0 &&
+            _mind.TryGetMind(member, out var mindId, out _) &&
+            _job.MindTryGetJobId(mindId, out var job) && job is { } jobId)
+        {
+            foreach (var entry in definition.Metadata.JobStatusIcons)
+            {
+                if (entry.Icon is { } jobIcon && string.Equals(entry.Role, jobId.Id, StringComparison.OrdinalIgnoreCase))
+                    return jobIcon;
+            }
+        }
+
+        return definition.Metadata.StatusIcon;
     }
 
     /// <summary>

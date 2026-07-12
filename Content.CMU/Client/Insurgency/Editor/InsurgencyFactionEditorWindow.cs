@@ -135,6 +135,7 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
         // is preserved untouched on save so nothing is lost if this comes back.
         // var flag = FlagField("Flag entity", meta.FlagEntity?.Id);
         var icon = IconField("Status icon", meta.StatusIcon?.Id);
+        var jobIcons = JobIconListEditor(meta.JobStatusIcons);
         var dollars = LabeledLine("Dollars to points rate", def.Economy.DollarsToPointsRate.ToString(System.Globalization.CultureInfo.InvariantCulture));
 
         // The Custom editor can only author Custom factions, so the toggle disappears and stays off.
@@ -145,33 +146,37 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
             Visible = _scope == InsurgencyEditorScope.Default,
         };
 
-        foreach (var c in new Control[] { title.Control, recruited.Control, description.Control, roleplay.Control, icon.Control, dollars.Control, isDefault })
-            _pane.AddChild(c);
-
         var opposed = PlatoonListEditor("Opposed GOVFOR factions", meta.OpposedGovforFactions);
-        _pane.AddChild(opposed.Control);
-
         // The well-known CLF machines are ticked on/off here; everything else is a free entity list.
         var machines = DefaultMachinesEditor(def.CellKit.PlaceableEntities.Select(p => p.Id));
-        _pane.AddChild(machines.Control);
-
         var placeables = EntityListEditor("Cell kit: other placeable entities",
             def.CellKit.PlaceableEntities.Select(p => p.Id).Where(id => !IsDefaultMachine(id)));
-        _pane.AddChild(placeables.Control);
-
         // What the analyzer machine accepts for points, and at what ratio. Empty = plain dollars.
         var submissions = PointsSubmissionListEditor(def.Economy.PointsSubmissions);
-        _pane.AddChild(submissions.Control);
-
         // Dollars stay valid alongside any custom submittables unless the author turns them off.
         var includeDollars = new CheckBox { Text = "Also accept plain dollars for points", Pressed = def.Economy.IncludeDollars };
-        _pane.AddChild(includeDollars);
-
         var vendors = VendorListEditor(def.CellKit.VendorDefinitions);
-        _pane.AddChild(vendors.Control);
-
         var loadouts = RoleLoadoutListEditor(def.RoleLoadouts);
-        _pane.AddChild(loadouts.Control);
+
+        // Group the fields into top tabs so the editor is not one long scroll: each category is its own page.
+        // Explicit height: the pane lives inside a ScrollContainer (infinite vertical), so VerticalExpand
+        // alone would collapse the tabs. Each tab page scrolls its own overflow within this height.
+        var tabs = new TabContainer { HorizontalExpand = true, VerticalExpand = true, MinSize = new Vector2(0, 560) };
+        var pages = new (string Title, Control[] Controls)[]
+        {
+            ("Faction Info", new Control[] { title.Control, recruited.Control, description.Control,
+                roleplay.Control, icon.Control, jobIcons.Control, isDefault, opposed.Control }),
+            ("Economy", new Control[] { dollars.Control, submissions.Control, includeDollars }),
+            ("Cell Kit", new Control[] { machines.Control, placeables.Control }),
+            ("Vendors", new Control[] { vendors.Control }),
+            ("Loadouts", new Control[] { loadouts.Control }),
+        };
+        for (var i = 0; i < pages.Length; i++)
+        {
+            tabs.AddChild(TabPage(pages[i].Controls));
+            TabContainer.SetTabTitle(tabs.GetChild(i), pages[i].Title);
+        }
+        _pane.AddChild(tabs);
 
         // Action buttons.
         var buttons = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal };
@@ -189,7 +194,11 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
                 // Flag selection is disabled (see above); carry the existing value through unchanged.
                 FlagEntity = meta.FlagEntity,
                 StatusIcon = ToIconOrNull(icon.Read()),
+                JobStatusIcons = jobIcons.Read(),
                 OpposedGovforFactions = opposed.Read(),
+                // Preserve the built-in override marker so re-saving an edited built-in keeps updating the
+                // same row instead of spawning a fresh faction (the server also re-stamps it).
+                BuiltinOverrideOf = meta.BuiltinOverrideOf,
             },
             Economy =
             {
@@ -702,6 +711,69 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
         return new Editor<List<FactionRoleLoadout>>(box, () => readers.Select(r => r()).Where(l => !string.IsNullOrWhiteSpace(l.Role)).ToList());
     }
 
+    // Per-job status icon overrides: each row is a job (picked, never typed) plus the faction icon its
+    // members should show. Empty list = every job uses the faction-wide status icon. Modelled on the same
+    // job-selection flow as the A Package / role-loadout editor.
+    private Editor<List<FactionJobIcon>> JobIconListEditor(IEnumerable<FactionJobIcon> initial)
+    {
+        var box = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical };
+        box.AddChild(Header("Per-job status icons (empty = all jobs use the faction icon above)"));
+        var rows = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical };
+        var readers = new List<Func<FactionJobIcon>>();
+
+        void AddRow(FactionJobIcon entry)
+        {
+            var row = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal };
+
+            var job = entry.Role;
+            var jobButton = new Button { Text = PickerText(job), HorizontalExpand = true };
+            jobButton.OnPressed += _ => OpenProtoPicker(Loc.GetString("insfor-picker-job-title"), JobOptions(), id =>
+            {
+                job = id;
+                jobButton.Text = PickerText(id);
+            });
+
+            var icon = entry.Icon?.Id ?? string.Empty;
+            var iconButton = new Button { Text = PickerText(icon), HorizontalExpand = true };
+            iconButton.OnPressed += _ => OpenProtoPicker(Loc.GetString("insfor-picker-icon-title"), IconOptions(), id =>
+            {
+                icon = id;
+                iconButton.Text = PickerText(id);
+            });
+
+            var remove = new Button { Text = "X" };
+            Func<FactionJobIcon> reader = () => new FactionJobIcon
+            {
+                Role = job,
+                Icon = ToIconOrNull(icon),
+            };
+            remove.OnPressed += _ =>
+            {
+                rows.RemoveChild(row);
+                readers.Remove(reader);
+            };
+
+            row.AddChild(jobButton);
+            row.AddChild(iconButton);
+            row.AddChild(remove);
+            rows.AddChild(row);
+            readers.Add(reader);
+        }
+
+        foreach (var e in initial)
+            AddRow(e);
+
+        var add = new Button { Text = "+ Add per-job icon" };
+        add.OnPressed += _ => AddRow(new FactionJobIcon());
+
+        box.AddChild(rows);
+        box.AddChild(add);
+        // Keep only rows that named both a job and an icon.
+        return new Editor<List<FactionJobIcon>>(box, () => readers.Select(r => r())
+            .Where(e => !string.IsNullOrWhiteSpace(e.Role) && e.Icon != null)
+            .ToList());
+    }
+
     // ----- default cell-kit machines --------------------------------------------
 
     // The machines the original heavy CLF cell kit deployed. Ticking one adds it to the faction's
@@ -738,6 +810,16 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
     // ----- small helpers --------------------------------------------------------
 
     private static Label Header(string text) => new() { Text = text, StyleClasses = { "LabelHeading" } };
+
+    // One scrollable tab page holding the given controls stacked vertically. Each category tab uses its own
+    // scroll so a long list (vendors, loadouts) never pushes the others off-screen.
+    private static ScrollContainer TabPage(params Control[] controls)
+    {
+        var inner = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, HorizontalExpand = true };
+        foreach (var c in controls)
+            inner.AddChild(c);
+        return new ScrollContainer { Children = { inner }, HorizontalExpand = true, VerticalExpand = true };
+    }
 
     private static Editor<string> LabeledLine(string label, string? value)
     {

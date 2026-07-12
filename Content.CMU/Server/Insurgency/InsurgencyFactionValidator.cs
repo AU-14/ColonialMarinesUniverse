@@ -39,6 +39,7 @@ public static class InsurgencyFactionValidator
         meta.RoleplayText = Clamp(meta.RoleplayText, FactionDefinition.MaxRoleplayTextLength);
         meta.RecruitedMessage = Clamp(meta.RecruitedMessage, FactionDefinition.MaxRoleplayTextLength);
         CapCount(meta.OpposedGovforFactions, FactionDefinition.MaxOpposedGovforFactions);
+        CapCount(meta.JobStatusIcons, FactionDefinition.MaxRoleLoadouts);
 
         definition.Economy.DollarsToPointsRate = Math.Clamp(
             definition.Economy.DollarsToPointsRate,
@@ -75,6 +76,13 @@ public static class InsurgencyFactionValidator
             meta.FlagEntity = null;
         if (meta.StatusIcon is { } icon && !prototypes.HasIndex<FactionIconPrototype>(icon.Id))
             meta.StatusIcon = null;
+
+        // Per-job icon overrides: drop rows whose job or icon the server does not know.
+        meta.JobStatusIcons.RemoveAll(j =>
+            string.IsNullOrWhiteSpace(j.Role) ||
+            !prototypes.HasIndex<JobPrototype>(j.Role) ||
+            j.Icon is not { } jobIcon ||
+            !prototypes.HasIndex<FactionIconPrototype>(jobIcon.Id));
 
         PruneEntities(definition.CellKit.PlaceableEntities, prototypes);
 

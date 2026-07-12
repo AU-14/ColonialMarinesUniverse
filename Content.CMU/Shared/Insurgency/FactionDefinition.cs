@@ -95,10 +95,27 @@ public sealed partial class FactionMetadata
     public EntProtoId? FlagEntity;
 
     /// <summary>
-    ///     Faction membership status icon, picked from the existing catalog.
+    ///     Faction membership status icon, picked from the existing catalog. Used as the fallback for any
+    ///     job that does not have its own entry in <see cref="JobStatusIcons"/>.
     /// </summary>
     [DataField]
     public ProtoId<FactionIconPrototype>? StatusIcon;
+
+    /// <summary>
+    ///     Per-job status icon overrides. A member whose job appears here shows that icon instead of the
+    ///     faction-wide <see cref="StatusIcon"/>. Jobs with no entry fall back to <see cref="StatusIcon"/>.
+    /// </summary>
+    [DataField]
+    public List<FactionJobIcon> JobStatusIcons = new();
+
+    /// <summary>
+    ///     Set on the DB copy that persistently overrides a code-built built-in faction (its
+    ///     <see cref="InsurgencyBuiltinFactions.VanillaClfId"/>-style id). The editor upserts this one row
+    ///     instead of spawning a fresh faction every time the built-in is edited and saved, so the built-in
+    ///     becomes editable like any authored faction. Null on normal factions.
+    /// </summary>
+    [DataField]
+    public int? BuiltinOverrideOf;
 
     /// <summary>
     ///     Which GOVFOR factions this Default faction is allowed to oppose, by platoon id
@@ -108,6 +125,23 @@ public sealed partial class FactionMetadata
     /// </summary>
     [DataField]
     public List<string> OpposedGovforFactions = new();
+}
+
+/// <summary>
+///     One per-job status-icon override: the job whose members should show <see cref="Icon"/> instead of
+///     the faction-wide status icon.
+/// </summary>
+[DataDefinition]
+[Serializable, NetSerializable]
+public sealed partial class FactionJobIcon
+{
+    /// <summary>Job prototype id this override applies to (for example "AU14JobCLFCellLeader").</summary>
+    [DataField]
+    public string Role = string.Empty;
+
+    /// <summary>Status icon shown for members of <see cref="Role"/>.</summary>
+    [DataField]
+    public ProtoId<FactionIconPrototype>? Icon;
 }
 
 /// <summary>

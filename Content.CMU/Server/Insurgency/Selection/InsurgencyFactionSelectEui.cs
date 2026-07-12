@@ -67,16 +67,22 @@ public sealed class InsurgencyFactionSelectEui : BaseEui
 
         var options = new List<DefaultFactionOption>();
 
-        // The built-in vanilla CLF faction is always offered first and always opposes every GOVFOR.
-        var vanilla = InsurgencyBuiltinFactions.VanillaClf().Metadata;
-        options.Add(new DefaultFactionOption(
-            InsurgencyBuiltinFactions.VanillaClfId,
-            vanilla.Title,
-            vanilla.Description,
-            vanilla.RoleplayText,
-            vanilla.FlagEntity?.Id,
-            vanilla.StatusIcon?.Id,
-            true));
+        // The built-in vanilla CLF faction is always offered first and always opposes every GOVFOR - unless
+        // it has been edited and saved, in which case its persistent DB override row (below) stands in for
+        // it, so we skip the code copy to avoid listing the same faction twice.
+        var hasOverride = stored.Any(s => s.Definition.Metadata.BuiltinOverrideOf == InsurgencyBuiltinFactions.VanillaClfId);
+        if (!hasOverride)
+        {
+            var vanilla = InsurgencyBuiltinFactions.VanillaClf().Metadata;
+            options.Add(new DefaultFactionOption(
+                InsurgencyBuiltinFactions.VanillaClfId,
+                vanilla.Title,
+                vanilla.Description,
+                vanilla.RoleplayText,
+                vanilla.FlagEntity?.Id,
+                vanilla.StatusIcon?.Id,
+                true));
+        }
 
         options.AddRange(stored
             .Where(s => s.IsDefault)
