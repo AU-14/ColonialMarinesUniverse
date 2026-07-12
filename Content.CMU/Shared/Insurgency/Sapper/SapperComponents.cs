@@ -29,9 +29,15 @@ public sealed partial class SapperAtmHackingComponent : Component
     // Tunables.
     // ---------------------------------------------------------------------
 
-    /// <summary>How long the hack takes. Long on purpose: it's a vulnerable, committed action.</summary>
+    /// <summary>How long the hack takes on the big finance devices (budget console, ASRS). Long on
+    /// purpose: it's a vulnerable, committed action.</summary>
     [DataField]
     public float HackTime = 60f;
+
+    /// <summary>How long the hack takes on a plain ATM. Shorter than <see cref="HackTime"/> since an ATM
+    /// pays out far less than the console/ASRS drains.</summary>
+    [DataField]
+    public float AtmHackTime = 30f;
 
     /// <summary>Played at the ATM when the hack starts, so the theft isn't silent.</summary>
     [DataField]

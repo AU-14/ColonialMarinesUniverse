@@ -9,9 +9,9 @@ using Robust.Shared.Timing;
 namespace Content.Client._AU14.Insurgency.Sapper;
 
 /// <summary>
-///     A pulsing purple screen-edge vignette shown while the local player is caught in a snare. Same
-///     edge-glow technique as the z-level cave-in warning (<c>StructuralWarningOverlay</c>), but purple and
-///     much heavier so it noticeably crowds the player's vision while they hang in the trap.
+///     A pulsing dark-green screen-edge vignette shown while the local player is caught in a snare. Same
+///     edge-glow technique as the z-level cave-in warning (<c>StructuralWarningOverlay</c>), but dark green
+///     and much heavier so it noticeably crowds the player's vision while they hang in the trap.
 /// </summary>
 public sealed class SapperSnareVignetteOverlay : Overlay
 {
@@ -59,7 +59,7 @@ public sealed class SapperSnareVignetteOverlay : Overlay
         {
             var edgeT = 1f - i / (float) layers; // 1 at the edge, ~0 toward the centre
             var alpha = maxAlpha * edgeT * edgeT;
-            var color = new Color(0.45f, 0.05f, 0.55f, alpha); // purple
+            var color = new Color(0.03f, 0.20f, 0.05f, alpha); // dark green
             var off = i * band;
 
             handle.DrawRect(new UIBox2(left, top + off, right, top + off + band), color);

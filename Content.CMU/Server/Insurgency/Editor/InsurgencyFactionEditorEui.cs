@@ -71,11 +71,19 @@ public sealed class InsurgencyFactionEditorEui : BaseEui
         // Once the built-in vanilla CLF has been edited and saved it lives in the DB as a normal row marked
         // as its override. When that row exists, use it (it is a real, editable, updatable faction); only
         // when it does not do we fall back to showing the code-built copy as an editable starting point.
-        var hasOverride = _factions.Any(f => f.Definition.Metadata.BuiltinOverrideOf == InsurgencyBuiltinFactions.VanillaClfId);
-        if (!hasOverride)
+        var overrideIndex = _factions.FindIndex(f => f.Definition.Metadata.BuiltinOverrideOf == InsurgencyBuiltinFactions.VanillaClfId);
+        if (overrideIndex < 0)
         {
             _factions.Insert(0, new EditorFactionEntry(
                 InsurgencyBuiltinFactions.VanillaClfId, true, InsurgencyBuiltinFactions.VanillaClf()));
+        }
+        else if (overrideIndex > 0)
+        {
+            // Keep the edited built-in pinned at the top where the code copy always sat, so editing it does
+            // not make it appear to jump to the bottom of the list as if a new faction had been created.
+            var overrideEntry = _factions[overrideIndex];
+            _factions.RemoveAt(overrideIndex);
+            _factions.Insert(0, overrideEntry);
         }
 
         StateDirty();

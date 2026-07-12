@@ -82,7 +82,9 @@ public sealed class SapperAtmHackingSystem : EntitySystem
         if (ent.Comp.StartSound is { } start)
             _audio.PlayPvs(start, target);
 
-        var doAfter = new DoAfterArgs(EntityManager, args.User, ent.Comp.HackTime, new SapperAtmHackDoAfterEvent(), ent, target, ent)
+        // An ATM is a quicker, lower-value target than the budget console / ASRS terminal.
+        var hackTime = HasComp<ColonyAtmComponent>(target) ? ent.Comp.AtmHackTime : ent.Comp.HackTime;
+        var doAfter = new DoAfterArgs(EntityManager, args.User, hackTime, new SapperAtmHackDoAfterEvent(), ent, target, ent)
         {
             NeedHand = true,
             BreakOnMove = true,
@@ -125,18 +127,6 @@ public sealed class SapperAtmHackingSystem : EntitySystem
         if (HasComp<SapperAtmHackedComponent>(atm))
             return;
 
-        // The managed pool is the colony budget plus every department's budget (departments deduped by id,
-        // since several consoles share one department).
-        var pool = _budget.GetBudget();
-        var seenDepartments = new HashSet<string>();
-        var deptQuery = EntityQueryEnumerator<DepartmentConsoleComponent>();
-        while (deptQuery.MoveNext(out _, out var dept))
-        {
-            if (dept.DepartmentId is { } deptId && !seenDepartments.Add(deptId))
-                continue;
-            pool += dept.DepartmentBudget;
-        }
-
         var unhacked = 0;
         var atmQuery = EntityQueryEnumerator<ColonyAtmComponent>();
         while (atmQuery.MoveNext(out var uid, out _))
@@ -145,37 +135,82 @@ public sealed class SapperAtmHackingSystem : EntitySystem
                 unhacked++;
         }
 
-        // The pool only SIZES the slice; the actual debit comes off the colony budget, so clamp the
-        // payout to what that budget really holds. Without the clamp the slice could exceed the
-        // colony budget (departments hold most of the pool), driving it negative and minting cash
-        // that was never removed from any department.
-        var payout = unhacked > 0 ? (int) (pool / unhacked) : 0;
-        payout = System.Math.Min(payout, System.Math.Max(0, (int) _budget.GetBudget()));
-        if (payout > 0)
-            _budget.AddToBudget(-payout);
+        // Each ATM hack drains an equal slice (1 / unhacked ATMs) of the COLONY's own funds, and actually
+        // debits every source so nothing is minted: its central budget, plus every colony department budget.
+        // Non-colony departments (GOVFOR/WY/etc., AsrsFaction != "colony") are skipped so the siphon never
+        // steals from other factions. Departments are deduped by id since several consoles share one budget.
+        var slice = unhacked > 0 ? 1f / unhacked : 0f;
+        var haul = 0;
 
-        // Skim 5% off every player account and add it to the haul.
-        payout += SkimAccounts(0.05f);
+        var colonyCut = System.Math.Max(0, (int) (_budget.GetBudget() * slice));
+        if (colonyCut > 0)
+        {
+            _budget.AddToBudget(-colonyCut);
+            haul += colonyCut;
+        }
 
-        if (payout > 0)
-            _stack.SpawnMultiple(ent.Comp.CashPrototype, payout, atm);
+        var seenDepartments = new HashSet<string>();
+        var deptQuery = EntityQueryEnumerator<DepartmentConsoleComponent>();
+        while (deptQuery.MoveNext(out _, out var dept))
+        {
+            if (!string.Equals(dept.AsrsFaction, "colony", System.StringComparison.OrdinalIgnoreCase))
+                continue;
+            if (dept.DepartmentId is { } deptId && !seenDepartments.Add(deptId))
+                continue;
+
+            var cut = System.Math.Max(0, (int) (dept.DepartmentBudget * slice));
+            if (cut <= 0)
+                continue;
+
+            // DepartmentConsoleComponent is server-only (not networked), so its budget is not Dirtied.
+            dept.DepartmentBudget -= cut;
+            haul += cut;
+        }
+
+        // Skim 5% off colony player account balances and add it to the haul.
+        haul += SkimAccounts(0.05f);
+
+        if (haul > 0)
+            _stack.SpawnMultiple(ent.Comp.CashPrototype, haul, atm);
 
         Disrupt(atm);
         if (ent.Comp.SuccessSound is { } success)
             _audio.PlayPvs(success, atm);
-        _popup.PopupEntity(Loc.GetString("insfor-sapper-atm-hacked", ("amount", payout)), atm, user);
+        _popup.PopupEntity(Loc.GetString("insfor-sapper-atm-hacked", ("amount", haul)), atm, user);
     }
 
     // ----- budget console: drain the colony budget in full, big feedback ------------------------------
 
     private void DrainBudgetConsole(Entity<SapperAtmHackingComponent> ent, EntityUid console, EntityUid user)
     {
-        var funds = (int) _budget.GetBudget();
+        // The console is the all-in-one drain: it empties the colony central budget AND every colony
+        // department budget in full. Non-colony departments (GOVFOR/WY/etc., AsrsFaction != "colony") are
+        // left alone so the siphon never steals from other factions. Departments are deduped by id since
+        // several consoles share one budget.
+        var funds = System.Math.Max(0, (int) _budget.GetBudget());
         if (funds > 0)
-        {
             _budget.AddToBudget(-funds);
-            _stack.SpawnMultiple(ent.Comp.CashPrototype, funds, console);
+
+        var seenDepartments = new HashSet<string>();
+        var deptQuery = EntityQueryEnumerator<DepartmentConsoleComponent>();
+        while (deptQuery.MoveNext(out _, out var dept))
+        {
+            if (!string.Equals(dept.AsrsFaction, "colony", System.StringComparison.OrdinalIgnoreCase))
+                continue;
+            if (dept.DepartmentId is { } deptId && !seenDepartments.Add(deptId))
+                continue;
+
+            var cut = System.Math.Max(0, (int) dept.DepartmentBudget);
+            if (cut <= 0)
+                continue;
+
+            // DepartmentConsoleComponent is server-only (not networked), so its budget is not Dirtied.
+            dept.DepartmentBudget -= cut;
+            funds += cut;
         }
+
+        if (funds > 0)
+            _stack.SpawnMultiple(ent.Comp.CashPrototype, funds, console);
 
         Disrupt(console);
         BigDrainFeedback(console);
