@@ -44,7 +44,7 @@ public sealed partial class AU14CallToAttentionAbilityComponent : Component
     /// Maximum sight range of the effect in tiles.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public float Range = ExamineSystemShared.MaxRaycastRange;
+    public float Range = 30f;
 
     /// <summary>
     /// Higher values are chosen as the officer everyone faces when the order is called.

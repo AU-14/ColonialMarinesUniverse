@@ -80,7 +80,7 @@
   id: AU14JobIconPlatoonSgt
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
-    state: old_govfor_platoonsergeant
+    state: govfor_platoonsergeant
 
 - type: jobIcon
   parent: CMJobIconBase
@@ -171,7 +171,7 @@
   id: AU14JobIconGovLO
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
-    state: old_govfor_platco
+    state: govfor_lo
 
 - type: jobIcon
   parent: CMJobIconBase
@@ -179,3 +179,10 @@
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
     state: govfor_ws
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconGovTankCrewman
+  icon:
+    sprite: _AU14/Interface/au14govforjobicons.rsi
+    state: govfor_vc

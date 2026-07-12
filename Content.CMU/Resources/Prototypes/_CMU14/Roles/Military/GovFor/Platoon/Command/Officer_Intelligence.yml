@@ -54,7 +54,7 @@
   - !type:OverallPlaytimeRequirement
     time: 18000 # 5 hours
   - !type:AgeRequirement
-    requiredAge: 30
+    requiredAge: 25
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -64,6 +64,10 @@
     - NonResuscitable
     - Epilepsy
     - NoEnglish
+    - CMUProstheticLeftArm
+    - CMUProstheticRightArm
+    - CMUProstheticLeftLeg
+    - CMUProstheticRightLeg
   ranks:
     RMCRankCivilian: []
   chevrons:

@@ -233,7 +233,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14JOGenericVendor
-  name: junior officer equipment rack
+  name: staff officer equipment rack
   description: An automated rack hooked up to a small storage of junior officer equipment. There's a wooden sign hanging, with a red marker written on it that reads "moved". Behind it the interface shows its barely holding any of the usual stock.
   components:
   - type: AU14VendorJO
@@ -352,7 +352,13 @@
   - type: Sprite
     sprite: _AU14/Structures/Vendors/assortedequipment.rsi
   - type: CMAutomatedVendor
-    jobs: [ AU14JobMilitaryDoctorBase, AU14JobGOVFORMilitaryDoctor, AU14JobOPFORMilitaryDoctor, AU14JobGOVFOROfficerMedical, AU14JobOPFOROfficerMedical ]
+    jobs:
+    - AU14JobGOVFORMilitaryDoctor
+    - AU14JobGOVFOROfficerMedical
+    - AU14JobGOVFORAuxSupportSynth
+    - AU14JobOPFORMilitaryDoctor
+    - AU14JobOPFOROfficerMedical
+    - AU14JobOPFORAuxSupportSynth
     sections:
     - name: Essential Equipment
       takeAll: CMUEssentialEquipment

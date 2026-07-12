@@ -1,0 +1,205 @@
+- type: entity
+  parent: PartSilicon
+  id: CMUPartRoboticLeftArm
+  name: left robotic arm
+  suffix: CMU
+  components:
+  - type: BodyPart
+    partType: Arm
+    symmetry: Left
+  - type: Sprite
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: l_arm
+    drawdepth: Items
+  - type: Icon
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: l_arm
+  - type: BodyPartHealth
+    max: 80
+    current: 80
+    severanceThreshold: 90
+  - type: CMURoboticLimb
+    childPrototype: CMUPartRoboticLeftHand
+    childSlot: left_hand
+    baseLayers:
+      LArm: CMUMobDroneAndroidLArm
+
+- type: entity
+  parent: PartSilicon
+  id: CMUPartRoboticRightArm
+  name: right robotic arm
+  suffix: CMU
+  components:
+  - type: BodyPart
+    partType: Arm
+    symmetry: Right
+  - type: Sprite
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: r_arm
+    drawdepth: Items
+  - type: Icon
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: r_arm
+  - type: BodyPartHealth
+    max: 80
+    current: 80
+    severanceThreshold: 90
+  - type: CMURoboticLimb
+    childPrototype: CMUPartRoboticRightHand
+    childSlot: right_hand
+    baseLayers:
+      RArm: CMUMobDroneAndroidRArm
+
+- type: entity
+  parent: PartSilicon
+  id: CMUPartRoboticLeftHand
+  name: left robotic hand
+  suffix: CMU
+  components:
+  - type: BodyPart
+    partType: Hand
+    symmetry: Left
+  - type: Sprite
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: l_hand
+    drawdepth: Items
+  - type: Icon
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: l_hand
+  - type: BodyPartHealth
+    max: 35
+    current: 35
+    severanceThreshold: 45
+  - type: CMURoboticLimb
+    baseLayers:
+      LHand: CMUMobDroneAndroidLHand
+
+- type: entity
+  parent: PartSilicon
+  id: CMUPartRoboticRightHand
+  name: right robotic hand
+  suffix: CMU
+  components:
+  - type: BodyPart
+    partType: Hand
+    symmetry: Right
+  - type: Sprite
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: r_hand
+    drawdepth: Items
+  - type: Icon
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: r_hand
+  - type: BodyPartHealth
+    max: 35
+    current: 35
+    severanceThreshold: 45
+  - type: CMURoboticLimb
+    baseLayers:
+      RHand: CMUMobDroneAndroidRHand
+
+- type: entity
+  parent: PartSilicon
+  id: CMUPartRoboticLeftLeg
+  name: left robotic leg
+  suffix: CMU
+  components:
+  - type: BodyPart
+    partType: Leg
+    symmetry: Left
+  - type: MovementBodyPart
+    walkSpeed: 2.7
+    sprintSpeed: 5
+  - type: Sprite
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: l_leg
+    drawdepth: Items
+  - type: Icon
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: l_leg
+  - type: BodyPartHealth
+    max: 90
+    current: 90
+    severanceThreshold: 90
+  - type: CMURoboticLimb
+    childPrototype: CMUPartRoboticLeftFoot
+    childSlot: left_foot
+    baseLayers:
+      LLeg: CMUMobDroneAndroidLLeg
+
+- type: entity
+  parent: PartSilicon
+  id: CMUPartRoboticRightLeg
+  name: right robotic leg
+  suffix: CMU
+  components:
+  - type: BodyPart
+    partType: Leg
+    symmetry: Right
+  - type: MovementBodyPart
+    walkSpeed: 2.7
+    sprintSpeed: 5
+  - type: Sprite
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: r_leg
+    drawdepth: Items
+  - type: Icon
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: r_leg
+  - type: BodyPartHealth
+    max: 90
+    current: 90
+    severanceThreshold: 90
+  - type: CMURoboticLimb
+    childPrototype: CMUPartRoboticRightFoot
+    childSlot: right_foot
+    baseLayers:
+      RLeg: CMUMobDroneAndroidRLeg
+
+- type: entity
+  parent: PartSilicon
+  id: CMUPartRoboticLeftFoot
+  name: left robotic foot
+  suffix: CMU
+  components:
+  - type: BodyPart
+    partType: Foot
+    symmetry: Left
+  - type: Sprite
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: l_foot
+    drawdepth: Items
+  - type: Icon
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: l_foot
+  - type: BodyPartHealth
+    max: 45
+    current: 45
+    severanceThreshold: 50
+  - type: CMURoboticLimb
+    baseLayers:
+      LFoot: CMUMobDroneAndroidLFoot
+
+- type: entity
+  parent: PartSilicon
+  id: CMUPartRoboticRightFoot
+  name: right robotic foot
+  suffix: CMU
+  components:
+  - type: BodyPart
+    partType: Foot
+    symmetry: Right
+  - type: Sprite
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: r_foot
+    drawdepth: Items
+  - type: Icon
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
+    state: r_foot
+  - type: BodyPartHealth
+    max: 45
+    current: 45
+    severanceThreshold: 50
+  - type: CMURoboticLimb
+    baseLayers:
+      RFoot: CMUMobDroneAndroidRFoot

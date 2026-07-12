@@ -366,27 +366,6 @@
   - type: BulletBox
     bulletType: CMUBoxBulletsSMGType19
     amount: 0
-#   -- REG 9mm SMG Ammunition Box --
-- type: entity
-  parent: RMCBoxBulletsSMG
-  id: CMUBoxBulletsSMG9MM
-  name: smg ammunition box (9×19mm)
-  description: A 9×19mm ammunition box. Used to refill MP5 magazines. It comes with a leather strap allowing to wear it on the back.
-  components:
-  - type: BulletBox
-    bulletType: CMUBoxBulletsSMG9MM
-
-- type: entity
-  parent: CMUBoxBulletsSMG9MM
-  id: CMUBoxBulletsSMG9MMEmpty
-  suffix: Empty
-  components:
-  - type: Construction
-    graph: RMCBoxMagazine
-    node: CMUBoxBulletsSMG9MMEmpty
-  - type: BulletBox
-    bulletType: CMUBoxBulletsSMG9MM
-    amount: 0
 
 # -- PISTOL AMMUNITION BOXES --
 #   -- REG 7.62x25mm Pistol Ammunition Box --
@@ -427,7 +406,7 @@
 - type: entity
   parent: RMCBoxBulletsPistol
   id: CMUBoxBulletsPistol9MM
-  name: pistol ammunition box (9×19mm Parabellum)
+  name: pistol ammunition box (9×19mm)
   description: A 9×19mm ammunition box. Used to refill 9×19mm pistol magazines. It comes with a leather strap allowing to wear it on the back.
   components:
   - type: Sprite

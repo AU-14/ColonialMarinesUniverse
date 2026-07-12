@@ -50,7 +50,10 @@
     - NonResuscitable
     - Epilepsy
     - NoEnglish
-
+    - CMUProstheticLeftArm
+    - CMUProstheticRightArm
+    - CMUProstheticLeftLeg
+    - CMUProstheticRightLeg
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointGOVFORWorkingJoe

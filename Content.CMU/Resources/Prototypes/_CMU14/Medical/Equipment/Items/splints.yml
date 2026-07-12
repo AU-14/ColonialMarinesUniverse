@@ -1,0 +1,24 @@
+- type: entity
+  parent: BaseItem
+  id: CMUSplintItem
+  name: splint
+  description: An emergency limb stabiliser. Mitigates simple-fracture penalties; does not heal.
+  components:
+  - type: Item
+    size: Small
+    sprite: _CMU14/Objects/Medical/splint.rsi
+  - type: CMUSplintItem
+    applyDelay: 3
+    uses: 4
+    maxSuppressed: Simple
+    applySound:
+      path: /Audio/_RMC14/Medical/splint.ogg
+  - type: Tag
+    tags:
+    - CMUSplintItem
+  - type: Sprite
+    sprite: _CMU14/Objects/Medical/splint.rsi
+    state: icon
+
+- type: Tag
+  id: CMUSplintItem

@@ -1,10 +1,10 @@
 using Content.Server.Administration.Logs;
-using Content.Shared._CMU14.Medical.BodyPart.Events;
+using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
+using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
@@ -50,7 +50,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
     [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
@@ -649,15 +649,11 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         if (!TryGetPartForTrophy(kind, out var type, out var symmetry))
             return;
 
-        foreach (var (partUid, part) in _body.GetBodyChildren(target))
-        {
-            if (part.PartType != type || part.Symmetry != symmetry)
-                continue;
-
-            var ev = new BodyPartSeveredEvent(target, partUid, type);
-            RaiseLocalEvent(partUid, ref ev);
+        if (!_medicalIndex.TryGetBodyPart(target, new CMUMedicalBodyPartKey(type, symmetry), out var part))
             return;
-        }
+
+        var ev = new BodyPartSeveredEvent(target, part, type);
+        RaiseLocalEvent(part, ref ev);
     }
 
     private static bool TryGetPartForTrophy(YautjaTrophyKind kind, out BodyPartType type, out BodyPartSymmetry symmetry)

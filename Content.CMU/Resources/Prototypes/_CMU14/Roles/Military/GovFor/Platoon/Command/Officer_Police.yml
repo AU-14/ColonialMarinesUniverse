@@ -34,7 +34,7 @@
     speechStyleClass: commanderSpeech
   - type: AU14SilenceOrderAbility
   - type: AU14CallToAttentionAbility
-  - type: AU14CallToAttentionWhisperImmune
+  - type: AU14CallToAttentionImmune
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
@@ -44,7 +44,7 @@
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
-        state: old_rfn # TODO: Opfor CMP icon
+        state: cmp
     # UPP:
     # - type: JobPrefix
     #   prefix: au14-job-prefix-govforpolicechiefUPP

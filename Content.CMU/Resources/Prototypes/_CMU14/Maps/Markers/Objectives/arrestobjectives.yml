@@ -41,7 +41,7 @@
     objectivelevel: 1
     custompoints: 25
     maxrepeatable: 3
-    ObjectiveDescription: "Arrest insurgents"
+    ObjectiveDescription: "Arrest Threats"
   - type: ArrestObjective
     factiontoarrest: clf
     amounttoarrest: 2

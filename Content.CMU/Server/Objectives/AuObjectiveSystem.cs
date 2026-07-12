@@ -235,7 +235,7 @@ public sealed partial class AuObjectiveSystem : AuSharedObjectiveSystem
         {
             // Only end the round automatically for final objectives if their FinalType is InstantWin.
             if (objective.FinalType == AuObjectiveComponent.FinalObjectiveType.InstantWin)
-                EndRound(completingFaction, objective.RoundEndMessage);
+                DeclareObjectiveVictory(completingFaction, objective.RoundEndMessage);
             else
                 _logs.Info($"[OBJ FINAL] Final objective '{objective.objectiveDescription}' completed for faction '{completingFaction}' as Boon; not ending the round.");
         }
@@ -275,7 +275,10 @@ public sealed partial class AuObjectiveSystem : AuSharedObjectiveSystem
             _objectivesConsoleSystem.RefreshConsolesForFaction(objective.Faction);
     }
 
-    private void EndRound(string faction, string? roundEndMessage)
+    /// <summary>
+    /// Ends the round with an objective victory for the supplied faction and records the result.
+    /// </summary>
+    public void DeclareObjectiveVictory(string faction, string? roundEndMessage)
     {
         var message = roundEndMessage ?? string.Empty;
         var roundEndText = Loc.GetString("objectives-system-round-end",
