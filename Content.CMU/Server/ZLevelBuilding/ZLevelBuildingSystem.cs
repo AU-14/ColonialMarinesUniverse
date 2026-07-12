@@ -7,6 +7,7 @@ using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
+using Content.Shared.Ghost;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
 using Content.Shared.Tag;
@@ -62,11 +63,13 @@ public sealed class ZLevelBuildingSystem : EntitySystem
     private static readonly TimeSpan StreamInterval = TimeSpan.FromSeconds(1);
 
     private EntityQuery<MapGridComponent> _gridQuery;
+    private EntityQuery<GhostComponent> _ghostQuery;
 
     public override void Initialize()
     {
         base.Initialize();
         _gridQuery = GetEntityQuery<MapGridComponent>();
+        _ghostQuery = GetEntityQuery<GhostComponent>();
 
         // Keyed by round-scoped map uids; drop with the round so stale entries never accumulate.
         SubscribeLocalEvent<Content.Shared.GameTicking.RoundRestartCleanupEvent>(_ => _reflectedBorderChunks.Clear());
@@ -710,6 +713,10 @@ public sealed class ZLevelBuildingSystem : EntitySystem
         var query = EntityQueryEnumerator<ActorComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out _, out var xform))
         {
+            // Ghosts (dead/observers) drift the map freely; only real spawned players should carve caves.
+            if (_ghostQuery.HasComponent(uid))
+                continue;
+
             if (xform.MapUid is not { } mapUid)
                 continue;
 

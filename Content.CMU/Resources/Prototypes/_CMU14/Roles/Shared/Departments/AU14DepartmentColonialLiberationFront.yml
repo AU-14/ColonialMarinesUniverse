@@ -6,6 +6,7 @@
   color: "#e3ce94"
   roles:
   - AU14JobCLFGuerilla
+  - AU14JobCLFSapper
   - AU14JobCLFCellLeader
   - AU14JobCLFPhysician
   - AU14JobCLFSurgeon

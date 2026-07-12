@@ -1,3 +1,4 @@
+using Content.Server._AU14.Insurgency;
 using Content.Server._CMU14.Language;
 using Content.Server.Administration.Logs;
 using Content.Server.Antag;
@@ -31,6 +32,7 @@ public sealed partial class CLFTattooSystem : EntitySystem
 {
     [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private InsurgencyFactionApplySystem _insforApply = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private DialogSystem _dialog = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
@@ -268,10 +270,14 @@ public sealed partial class CLFTattooSystem : EntitySystem
 
             if (mind is { UserId: not null } && _player.TryGetSessionById(mind.UserId, out ICommonSession? session))
             {
-                _antag.SendBriefing(session,
-                    Loc.GetString(comp.Briefing),
-                    Color.Red,
-                    comp.Sound);
+                // Prefer the active INSFOR faction's custom recruit message when one is set; otherwise
+                // fall back to the tattoo gun's default briefing.
+                var factionMessage = _insforApply.GetActiveFaction()?.Metadata.RecruitedMessage;
+                var briefing = string.IsNullOrWhiteSpace(factionMessage)
+                    ? Loc.GetString(comp.Briefing)
+                    : factionMessage;
+
+                _antag.SendBriefing(session, briefing, Color.Red, comp.Sound);
             }
         }
 

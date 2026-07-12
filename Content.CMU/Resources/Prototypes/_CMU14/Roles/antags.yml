@@ -452,6 +452,7 @@
       - AllOpforJobs
       jobBlacklist:
       - AU14JobCLFGuerilla
+      - AU14JobCLFSapper
       - AU14JobCLFCellLeader
       - AU14JobCLFPhysician
       - AU14JobCLFSurgeon

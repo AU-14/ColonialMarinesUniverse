@@ -107,6 +107,12 @@ gmod-construction-menu-lathe-editor = Lathe Editor
 gmod-construction-menu-zlevel-toggles = Z-Level Toggles
 construction-menu-editor-not-admin = You are not an admin - the editor won't open.
 
+## Utilities → INSFOR
+
+gmod-construction-menu-insfor = INSFOR
+gmod-construction-menu-insfor-editor = INSFOR Editor
+gmod-construction-menu-insfor-custom-editor = Custom INSFOR Editor
+
 ## In-menu detail panel: Change Recipe / Remove Item (admins; works for vanilla recipes too)
 
 gmod-construction-menu-change-recipe = Change Recipe

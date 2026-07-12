@@ -1,0 +1,119 @@
+# CLF spy-camera network (Phase 4g rework). A self-contained, portable surveillance loop the cell carries:
+#   - a private radio frequency (SurveillanceCameraCLF) nothing else in the round uses,
+#   - a pocket relay that acts as that subnet's router (the piece the vanilla system needs so a monitor can
+#     find cameras) and stays powered as a handheld,
+#   - pocketable spy cameras that all sit on the CLF frequency, so any camera the cell deploys OR crafts later
+#     is on the same private subnet automatically,
+#   - a handheld monitor that browses that subnet.
+# Because every camera and the monitor share the one private frequency, all cameras auto-appear on the monitor
+# once it is browsing the CLF subnet - no per-camera pairing.
+#
+# NOTE: device-network surveillance can only be verified in a running round; treat this as a first pass.
+#
+# Isolation: every CLF piece sits on the Reserved device net (nothing else in the game uses it), so no
+# station wall monitor (Wired net) or stray wireless monitor (Wireless net) can ever discover the CLF
+# subnet - only the CLF handheld monitor shares the net and the frequency. Range still applies through
+# WirelessNetworkConnection, which works on any net id.
+
+- type: deviceFrequency
+  id: SurveillanceCameraCLF
+  name: device-frequency-prototype-name-surveillance-camera-clf
+  frequency: 1940 # unused elsewhere in the frequency table
+
+# The pocket relay: the CLF subnet's router. Always-on as a handheld (routers go live on init and only a power
+# loss would disable them, and a plain item never receives a power-changed event). Keep it within range.
+- type: entity
+  parent: BaseItem
+  id: AU14CLFCameraRelay
+  name: spy camera relay
+  suffix: CLF, Sapper
+  description: A pocket relay that quietly ties the cell's spy cameras to their monitor. Keep it anywhere in range of both.
+  components:
+  - type: Sprite
+    sprite: Objects/Devices/camera_bug.rsi
+    layers:
+    - state: camera_bug
+    color: "#6a6a4a"
+  - type: Item
+    size: Small
+  - type: DeviceNetwork
+    deviceNetId: Reserved
+    receiveFrequencyId: SurveillanceCamera
+    transmitFrequencyId: SurveillanceCamera
+  - type: WirelessNetworkConnection
+    range: 400
+  - type: SurveillanceCameraRouter
+    subnetName: CLF Spy Cameras
+    subnetFrequency: SurveillanceCameraCLF
+
+# The handheld monitor: browses camera subnets from the hand, wireless. Built like the syndicate camera bug but
+# CLF-themed and not contraband, and wireless so it rides the cell's portable network.
+- type: entity
+  parent: BaseItem
+  id: AU14CLFCameraMonitor
+  name: CLF camera monitor
+  suffix: CLF, Sapper
+  description: A patched-together handheld monitor wired into the cell's hidden spy cameras.
+  components:
+  - type: Sprite
+    sprite: Objects/Devices/camera_bug.rsi
+    layers:
+    - state: camera_bug
+    color: "#3a3a2a"
+  - type: Item
+    sprite: Objects/Devices/camera_bug.rsi
+  - type: ActivatableUI
+    requireActiveHand: false
+    inHandsOnly: true
+    key: enum.SurveillanceCameraMonitorUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.SurveillanceCameraMonitorUiKey.Key:
+        type: SurveillanceCameraMonitorBoundUserInterface
+  - type: DeviceNetwork
+    deviceNetId: Reserved
+    receiveFrequencyId: SurveillanceCamera
+    transmitFrequencyId: SurveillanceCamera
+  - type: WirelessNetworkConnection
+    range: 400
+  - type: SurveillanceCameraMonitor
+
+# The spy camera: a pocketable wireless camera on the private CLF subnet. Carry it, drop it on the ground, or
+# wrench it down to anchor it against a wall - it feeds the cell's monitor either way.
+- type: entity
+  parent: BaseItem
+  id: AU14CLFSpyCamera
+  name: spy camera
+  suffix: CLF, Sapper
+  description: A tiny pinhole camera the cell can pocket, drop, or anchor to watch an approach and feed it back to their monitor.
+  components:
+  - type: Sprite
+    sprite: Objects/Devices/camera_bug.rsi
+    # Draws below items, mobs, and wrenched furniture (beds, tables) so a dropped camera stays concealed
+    # under whatever sits on its tile.
+    drawdepth: FloorObjects
+    # 10% smaller than the base bug so it reads as a discreet pinhole.
+    scale: 0.9, 0.9
+    layers:
+    - map: [ "enum.SurveillanceCameraVisualsKey.Key" ]
+      state: camera_bug
+    color: "#4a4a3a"
+  - type: Item
+    size: Small
+  - type: Eye
+  - type: Anchorable
+  - type: Rotatable
+    rotateWhileAnchored: true
+  - type: WirelessNetworkConnection
+    range: 400
+  - type: DeviceNetwork
+    deviceNetId: Reserved
+    receiveFrequencyId: SurveillanceCameraCLF
+    transmitFrequencyId: SurveillanceCamera
+  - type: SurveillanceCamera
+    networkSet: true
+    nameSet: false
+  - type: UserInterface
+    interfaces:
+      enum.SurveillanceCameraSetupUiKey.Camera:
+        type: SurveillanceCameraSetupBoundUi
