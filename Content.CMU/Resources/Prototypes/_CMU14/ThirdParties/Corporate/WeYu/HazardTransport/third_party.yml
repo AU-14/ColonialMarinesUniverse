@@ -11,6 +11,7 @@
 
 - type: thirdParty
   id: WYHT
+  announceAsSurvivors: true
   partyspawn: WYHTSpawn
   whitelistedgamemodes:
     - insurgency

@@ -21,6 +21,7 @@
 
 - type: thirdParty
   id: PAPInvestigationPartyAlt
+  announceAsSurvivors: true
   partyspawn: PAPInvestigationPartySpawnAlt
   entrymethod: shuttle
   dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_tsepa_shuttle.yml
@@ -32,6 +33,7 @@
 
 - type: thirdParty
   id: PAPInvestigationParty
+  announceAsSurvivors: true
   partyspawn: PAPInvestigationPartySpawn
   entrymethod: shuttle
   dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_tsepa_shuttle.yml

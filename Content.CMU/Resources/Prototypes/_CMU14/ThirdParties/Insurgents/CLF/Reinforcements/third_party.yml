@@ -9,6 +9,7 @@
 
 - type: thirdParty
   id: CLFCellReinforcementsIntel
+  announceAsSurvivors: true
   partyspawn: CLFReinforcementsSpawnIntel
   entrymethod: shuttle
   dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_clf_shuttle.yml
@@ -29,6 +30,7 @@
 
 - type: thirdParty
   id: CLFCellReinforcementsIntelMachineGunner
+  announceAsSurvivors: true
   partyspawn: CLFReinforcementsSpawnIntelMachineGunner
   entrymethod: shuttle
   dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_clf_shuttle.yml
