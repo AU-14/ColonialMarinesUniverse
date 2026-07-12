@@ -15,10 +15,10 @@
         prob: 0.1
 
 - type: entity
-  id: AU14CrateSecureWeYuMindBreaker
+  id: AU14CrateSecureWeYuDrugs
   parent: AU14CrateSecureWeYuXenoEggs
   name: secure We-Yu crate
-  suffix: AU14, MindBreaker
+  suffix: AU14, MindBreaker, Speed Demon
   components:
   - type: StorageFill
     contents:
@@ -27,34 +27,24 @@
       - id: CMUYautjaHivebreaker
       - id: RMCTentUNMCStandardMedicalFolded
       - id: AU14TentBigFoldedSurgical
-
-- type: entity
-  id: AU14CrateSecureWeYuDrug
-  parent: AU14CrateSecureWeYuXenoEggs
-  name: secure We-Yu crate
-  suffix: AU14, Speed Demon
-  components:
-  - type: StorageFill
-    contents:
       - id: AU14DrugDealerDrugBottle
         amount: 7
-      - id: RMCTentUNMCStandardMedicalFolded
-      - id: AU14TentBigFoldedSurgical
 
-- type: entity
-  id: AU14CrateSecureWeYuMMI
-  parent: AU14CrateSecureWeYuXenoEggs
-  name: secure We-Yu crate
-  suffix: AU14, MMI
-  components:
-  - type: StorageFill
-    contents:
-      - id: MMI
-        amount: 1
-      - id: DeathAcidifierImplanter
-        amount: 1
-      - id: RMCTentUNMCStandardMedicalFolded
-      - id: AU14TentBigFoldedSurgical
+# MMI crate is not interesting enough to be the focus of Researcher experiments for an entire round. If some form of robotics is ever added to research, this might be useful again.
+#- type: entity
+#  id: AU14CrateSecureWeYuMMI
+#  parent: AU14CrateSecureWeYuXenoEggs
+#  name: secure We-Yu crate
+#  suffix: AU14, MMI
+#  components:
+#  - type: StorageFill
+#    contents:
+#      - id: MMI
+#        amount: 1
+#      - id: DeathAcidifierImplanter
+#        amount: 1
+#      - id: RMCTentUNMCStandardMedicalFolded
+#      - id: AU14TentBigFoldedSurgical
 
 # Dedicated clotted-syringe crate — six pre-filled syringes for a WYHT
 # squad to use on captured colonists. Folded medical tents come along
