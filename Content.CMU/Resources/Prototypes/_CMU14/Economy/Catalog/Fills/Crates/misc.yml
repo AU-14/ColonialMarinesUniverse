@@ -58,7 +58,7 @@
   parent: RMCSecureCaseMedicalBig
   id: CMUCrateResearchTerminal
   name: Weyland-Yutani research data terminal crate
-  description: A crate containing a computer linked to Weyland-Yutani's research servers. [color=red]WARNING: Cannot be moved after unpacking![/color]
+  description: A crate containing a computer linked to Weyland-Yutani's research servers. WARNING! Cannot be moved after unpacking!
   components:
   - type: SpawnOnTerminate
     spawn: CMUResearchDataTerminal
@@ -67,7 +67,7 @@
   parent: RMCSecureCaseMedicalBig
   id: CMUCrateXRF
   name: x-ray fluorescence spectrometer crate
-  description: A crate containing an X-Ray Fluorescence spectrometer machine. [color=red]WARNING: RADIOACTIVE CONTENTS. WARNING: Cannot be moved after unpacking![/color]
+  description: A crate containing an X-Ray Fluorescence spectrometer machine. WARNING! RADIOACTIVE CONTENTS. WARNING! Cannot be moved after unpacking!
   components:
   - type: SpawnOnTerminate
     spawn: CMUXRFScanner
@@ -76,11 +76,10 @@
   parent: RMCSecureCaseMedicalBig
   id: CMUCrateSim
   name: synthesis simulator crate
-  description: A crate containing a specialized chemical synthesis machine linked to Weyland-Yutani's research servers. [color=red]WARNING: Cannot be moved after unpacking![/color]
+  description: A crate containing a specialized chemical synthesis machine linked to Weyland-Yutani's research servers. WARNING! Cannot be moved after unpacking!
   components:
   - type: SpawnOnTerminate
     spawn: CMUChemSimulator
-
 
 - type: entity
   parent: RMCSecureCaseMedicalBig #Medical Vendor Crate
@@ -90,6 +89,28 @@
   components:
   - type: SpawnOnTerminate
     spawn: AU14VendorBlood
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUMonkeyCubeCrate
+  name: monkey cube crate (x8)
+  description: A crate containing 8 monkey cubes.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMonkeyCubeBox
+      amount: 1
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUExoticCubeCrate
+  name: exotic fauna crate (x4)
+  description: A crate containing 4 exotic fauna cubes.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUExoticCubeBox
+      amount: 1
 
 - type: entity
   parent: RMCCrateWeapons

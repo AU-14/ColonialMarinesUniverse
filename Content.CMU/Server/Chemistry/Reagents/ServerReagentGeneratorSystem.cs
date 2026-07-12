@@ -191,7 +191,24 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
                 data.Info += Loc.GetString("research-report-reaction-header") +
                     "\nDATABASE ERROR. \nWY_FTP RETURN CODE 0b1000100110\n";
                 metabRate = FixedPoint2.Max(0.01f, metabRate);
-                data.Info += chem.LocalizedDescription + '\n';
+                data.Info += '\n';
+                data.Info += chem.LocalizedDescription + "\n";
+                if (chem.Metabolisms is not null)
+                {
+                    string fx = string.Empty;
+                    foreach (var metab in chem.Metabolisms.Values)
+                    {
+                        foreach (var effect in metab.Effects)
+                        {
+                            if (props.TryGetValue(effect.GetType().Name, out var prop) && effect is RMCChemicalEffect ef)
+                            {
+                                fx += $"[bold]{prop.LocalizedName} Level {ef.Potency}[/bold]\n";
+                                fx += $"{prop.LocalizedDescription}\n";
+                            }
+                        }
+                    }
+                    data.Info += fx;
+                }
                 data.Info += Loc.GetString("research-report-overdose", ("OD", overdose)) + '\n';
                 data.Info += Loc.GetString("research-report-crit-overdose", ("COD", critoverdose)) + '\n';
                 data.Info += Loc.GetString("research-report-metab-mult", ("MULT", _defaultChemMetabolism / metabRate)) + '\n';
@@ -218,7 +235,23 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         {
             data.Info += Loc.GetString("research-report-reaction-header") +
                     "\nDATABASE ERROR. \nWY_FTP RETURN CODE 0b1000100110\n";
-            data.Info += chem.LocalizedDescription + '\n';
+            data.Info += chem.LocalizedDescription + "\n";
+            if (chem.Metabolisms is not null)
+            {
+                string fx = string.Empty;
+                foreach (var metab in chem.Metabolisms.Values)
+                {
+                    foreach (var effect in metab.Effects)
+                    {
+                        if (props.TryGetValue(effect.GetType().Name, out var prop) && effect is RMCChemicalEffect ef)
+                        {
+                            fx += $"[bold]{prop.LocalizedName} Level {ef.Potency}[/bold]\n";
+                            fx += $"{prop.LocalizedDescription}\n";
+                        }
+                    }
+                }
+                data.Info += fx;
+            }
             data.Info += Loc.GetString("research-report-overdose", ("OD", overdose)) + '\n';
             data.Info += Loc.GetString("research-report-crit-overdose", ("COD", critoverdose)) + '\n';
             FixedPoint2 metabRate = 0.01;

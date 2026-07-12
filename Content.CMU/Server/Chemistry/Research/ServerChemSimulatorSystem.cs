@@ -198,10 +198,12 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
     }
     private void Add(Entity<ChemSimulatorComponent> ent, ref GeneratedReagentData chem)
     {
+        //this one is haunted
+        _con.EnsureContainer<ContainerSlot>(ent.Owner, "target");
         if (!_con.TryGetContainer(ent, "target", out var targcon) ||
             targcon is null || targcon.Count == 0 ||
             !TryComp<ResearchReportComponent>(targcon.ContainedEntities[0], out var targcomp) ||
-            ent.Comp.TargetProperty is null || targcomp.Data is null || !_con.TryGetContainer(ent, "reference", out var refcon) ||
+            targcomp.Data is null || !_con.TryGetContainer(ent, "reference", out var refcon) ||
             refcon is null || refcon.Count == 0 ||
             !TryComp<ResearchReportComponent>(refcon.ContainedEntities[0], out var refcomp) ||
             ent.Comp.ReferenceProperty is null || refcomp.Data is null)

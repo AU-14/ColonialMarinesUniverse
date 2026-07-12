@@ -88,56 +88,27 @@
   id: CMUCrateSecureWYRandomExp
   table: !type:GroupSelector
     children:
-    - CMUCrateSecureWYEggs
-    - CMUCrateSecureMMI
-    - CMUCrateSecureAbom
-    - CMUCrateSecureMindbreaker
-    - CMUCrateSecureSpeed
-
-- type: entityTable
-  id: CMUCrateSecureWYEggs
-  table: !type:AllSelector
-    children:
-    - id: XenoEgg
-
-- type: entityTable
-  id: CMUcrateSecureMMI
-  table: !type:AllSelector
-    children:
-    - id: MMI
-    - id: DeathAcidifierImplanter
-
-- type: entityTable
-  id: CMUCrateSecureAbom
-  table: !type:AllSelector
-    children:
-    - id: AU14AbominationVenomSyringe
-
-- type: entityTable
-  id: CMUcrateSecureMindbreaker
-  table: !type:AllSelector
-    children:
-    - id: RMCBottleMindbreaker
-    - id: RMCBottleMindbreaker
-    - id: RMCBottleMindbreaker
-    - id: RMCBottleMindbreaker
-    - id: RMCBottleMindbreaker
-  
-- type: entityTable
-  id: CMUcrateSecureSpeed
-  table: !type:AllSelector
-    children:
-    - id: AU14DrugDealerDrugBottle
-    - id: AU14DrugDealerDrugBottle
-    - id: AU14DrugDealerDrugBottle
-    - id: AU14DrugDealerDrugBottle
-    - id: AU14DrugDealerDrugBottle
-
-
-
-
-
-
-
-
-
+    - !type:AllSelector
+      children:
+      - id: XenoEgg
+    - !type:AllSelector
+      children:
+      - id: MMI
+      - id: DeathAcidifierImplanter
+    - !type:AllSelector
+      children:
+      - id: AU14AbominationVenomSyringe
+    - !type:AllSelector
+      children:
+      - id: RMCBottleMindbreaker
+      - id: RMCBottleMindbreaker
+      - id: RMCBottleMindbreaker
+      - id: RMCBottleMindbreaker
+      - id: RMCBottleMindbreaker
+    - !type:AllSelector
+      children:
+      - id: AU14DrugDealerDrugBottle
+      - id: AU14DrugDealerDrugBottle
+      - id: AU14DrugDealerDrugBottle
+      - id: AU14DrugDealerDrugBottle
+      - id: AU14DrugDealerDrugBottle

@@ -158,7 +158,7 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
             $"    Medicine:\n" +
             $"      metabolismRate: {metabRate.ToString()}\n" +
             $"      effects:\n{effectyml}";
-        _sawmill.Info(yamlstr);
+        //_sawmill.Info(yamlstr);
         ChemYamls.Add(args.ID, yamlstr);
         _protoMan.LoadString(yamlstr, true);
         _generatedReagents.Add(args.ID);
@@ -213,7 +213,7 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
             $"  reactants:\n{recipstr}" +
             $"  products:\n" +
             $"    {args.ID}: {args.RecipeYield}\n";
-        _sawmill.Info(yamlstr);
+        //_sawmill.Info(yamlstr);
         _protoMan.LoadString(yamlstr);
         RecipeYamls.Add(args.ID, yamlstr);
         /* UNCOMMENT WHEN https://github.com/space-wizards/RobustToolbox/pull/6609 IS MERGED

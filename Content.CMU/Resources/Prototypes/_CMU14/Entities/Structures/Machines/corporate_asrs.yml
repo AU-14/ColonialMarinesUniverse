@@ -35,6 +35,20 @@
         crate: RMCCrateInflatableBarriers
       - cost: 1500
         crate: RMCCrateEmptySandbags
+    - name: Research
+      entries:
+      - cost: 100
+        crate: CMUCrateResearchTerminal
+      - cost: 900
+        crate: CMUCrateSim
+      - cost: 1000
+        crate: CMUCrateXRF
+      - cost: 8000 #1k per monkey
+        crate: CMUMonkeyCubeCrate
+      - cost: 16000 #4k per exotic cube
+        crate: CMUExoticCubeCrate
+      - cost: 5000
+        crate: CMUCrateSecureWYRandomExp
   - type: ActivatableUIRequiresAccess
   - type: AccessReader
     access: [["AU14AccessCorporateWEYULiaison"], ["AU14AccessCorporateWEYU"]]

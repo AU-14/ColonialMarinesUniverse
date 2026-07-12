@@ -4,6 +4,7 @@
 
 
 using Content.Shared._CMU14.Medical.Anatomy.Organs;
+using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Chemistry.Effects;

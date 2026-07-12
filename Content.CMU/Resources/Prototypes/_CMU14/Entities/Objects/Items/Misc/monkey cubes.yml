@@ -5,7 +5,7 @@
   components:
   - type: Rehydratable
     possibleSpawns:
-    - CMMobMonkey
+    - CMMobSmallHostMonkey
   - type: Tag
     tags:
     - Meat
@@ -34,8 +34,140 @@
   components:
   - type: StorageFill
     contents:
-      - id: MonkeyCubeWrapped
+      - id: CMUMonkeyCubeWrapped
         amount: 8
+  - type: Sprite
+    sprite: Objects/Misc/monkeycube.rsi
+    state: box
+
+- type: entity
+  parent: RehydratableAnimalCube
+  id: CMUYirenCube
+  name: yiren cube
+  components:
+  - type: Rehydratable
+    possibleSpawns:
+    - RMCMobSmallHostYiren
+  - type: Tag
+    tags:
+    - Meat
+    - MonkeyCube
+
+- type: entity
+  parent: RehydratableAnimalCube
+  id: CMUFarwaCube
+  name: farwa cube
+  components:
+  - type: Rehydratable
+    possibleSpawns:
+    - RMCMobSmallHostFarwa
+  - type: Tag
+    tags:
+    - Meat
+    - MonkeyCube
+
+- type: entity
+  parent: RehydratableAnimalCube
+  id: CMUStokCube
+  name: stok cube
+  components:
+  - type: Rehydratable
+    possibleSpawns:
+    - RMCMobSmallHostStok
+  - type: Tag
+    tags:
+    - Meat
+    - MonkeyCube
+
+- type: entity
+  parent: RehydratableAnimalCube
+  id: CMUNeaeraCube
+  name: neaera cube
+  components:
+  - type: Rehydratable
+    possibleSpawns:
+    - RMCMobSmallHostNeaera
+  - type: Tag
+    tags:
+    - Meat
+    - MonkeyCube
+
+- type: entity
+  parent: BaseWrappedCube
+  name: yiren cube
+  id: CMUYirenCubeWrapped
+  description: Unwrap this to get a yiren cube.
+  components:
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUYirenCube
+  - type: Sprite
+    state: wrapper
+  - type: Tag
+    tags:
+    - MonkeyCube
+
+- type: entity
+  parent: BaseWrappedCube
+  name: monkey cube
+  id: CMUStokCubeWrapped
+  description: Unwrap this to get a stok cube.
+  components:
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUStokCube
+  - type: Sprite
+    state: wrapper
+  - type: Tag
+    tags:
+    - MonkeyCube
+
+- type: entity
+  parent: BaseWrappedCube
+  name: farwa cube
+  id: CMUFarwaCubeWrapped
+  description: Unwrap this to get a farwa cube.
+  components:
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUFarwaCube
+  - type: Sprite
+    state: wrapper
+  - type: Tag
+    tags:
+    - MonkeyCube
+
+- type: entity
+  parent: BaseWrappedCube
+  name: neaera cube
+  id: CMUNeaeraCubeWrapped
+  description: Unwrap this to get a neaera cube.
+  components:
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUNeaeraCube
+  - type: Sprite
+    state: wrapper
+  - type: Tag
+    tags:
+    - MonkeyCube
+
+- type: entity
+  parent: BoxCardboard
+  name: monkey cube box
+  id: CMUExoticCubeBox
+  description: Drymate brand premium exotic fauna cubes. Just add water!
+  components:
+  - type: StorageFill
+    contents:
+      - id: CMUYirenCubeWrapped
+        amount: 1
+      - id: CMUFarwaCubeWrapped
+        amount: 1
+      - id: CMUNeaeraCubeWrapped
+        amount: 1
+      - id: CMUStokCubeWrapped
+        amount: 1
   - type: Sprite
     sprite: Objects/Misc/monkeycube.rsi
     state: box
