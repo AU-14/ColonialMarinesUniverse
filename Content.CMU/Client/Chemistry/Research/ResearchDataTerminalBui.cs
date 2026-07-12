@@ -120,7 +120,7 @@ public sealed partial class ResearchDataTerminalBui(EntityUid owner, Enum uiKey)
             RichTextLabel analysisl = new();
             if (analysis)
             {
-                analysisl.Text = Loc.GetString("research-data-ui-analyis-sim");
+                analysisl.Text = Loc.GetString("research-data-ui-analysis-sim");
             }
             else
             {

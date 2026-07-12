@@ -41,6 +41,7 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
     protected List<List<string>> _unfoldedConflicts = [];
     public List<List<string>> UnfoldedConflicts { get => _unfoldedConflicts; }
     protected Dictionary<string, List<string>> _unfoldedCombinations = [];
+    public Dictionary<string, List<string>> UnfoldedCombinations { get => _unfoldedCombinations; }
     [ViewVariables(VVAccess.ReadOnly)]
     protected HashSet<string> _generatedReagents = [];
     public HashSet<string> GeneratedReagents { get => _generatedReagents; }
@@ -55,6 +56,9 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
     [ViewVariables(VVAccess.ReadOnly)]
     public Dictionary<string, int> IdentifiedChemicals = [];
     public Dictionary<string, HashSet<string>> ChemicalGenClassesList = [];
+
+    protected Dictionary<string, string> ChemYamls = [];
+    protected Dictionary<string, string> RecipeYamls = [];
 
     public override void Initialize()
     {
@@ -94,8 +98,13 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         reagent.Add("genTier", args.GenTier.ToString());
 
         SequenceDataNode effects = [];
+        string effectyml = string.Empty;
         foreach (var effect in args.Effects)
         {
+            string effectstr =
+                $"      - !type:{properties[effect.Key].ID}\n" +
+                $"        potency: {effect.Value}\n";
+            effectyml += effectstr;
             MappingDataNode e = [];
             e.Tag = "!type:" + properties[effect.Key].EffectName;
             e.Add("potency", effect.Value.ToString());
@@ -106,17 +115,68 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         }
         reagent.Add("desc", description);
         MappingDataNode medicine = [];
-        medicine.Add("metabolismRate", args.MetabolismRate.ToString());
+        FixedPoint2 metabRate = 0.1f;
+        if (args.Effects.ContainsKey("Intravenous"))
+        {
+            metabRate *= args.Effects["Intravenous"];
+        }
+        if (args.Effects.ContainsKey("Hypermetabolic"))
+        {
+            metabRate *= ((1 + 0.25) * args.Effects["Hypermetabolic"]);
+        }
+        if (args.Effects.ContainsKey("Hypometabolic"))
+        {
+            // 0.01 is as close as you can get to 0.005 with FixedPoint2
+            metabRate = (FixedPoint2)MathF.Max((float)metabRate / ((1f + 0.35f) * args.Effects["Hypometabolic"]), 0.01f);
+        }
+        medicine.Add("metabolismRate", metabRate.ToString());
         medicine.Add("effects", effects);
         MappingDataNode metabolisms = [];
         metabolisms.Add("Medicine", medicine);
         reagent.Add("metabolisms", metabolisms);
+        //string yamlstr = reagent.ToString();
+        string yamlstr =
+            $"- type: reagent\n" +
+            $"  id: {args.ID}\n" +
+            $"  abstract: false\n" +
+            $"  name: {args.Name}\n" +
+            $"  desc: An experimental chemical\n" +
+            $"  color: \"{args.Color.ToHexNoAlpha()}\"\n" +
+            $"  overdose: {args.Overdose}\n" +
+            $"  criticalOverdose: {args.CriticalOverdose}\n" +
+            $"  isCM: true\n" +
+            $"  generated: true\n" +
+            $"  physicalDesc: reagent-physical-desc-unidentifiable\n" +
+            $"  class: {args.Class.ToString()}\n" +
+            $"  unknown: true\n" +
+            $"  group: Generated\n" +
+            $"  flags: Scannable\n" +
+            $"  flavor: flavor-base-horrible\n" +
+            $"  genTier: {args.GenTier}\n" +
+            $"  reward: {args.ScanPointYield}\n" +
+            $"  metabolisms:\n" +
+            $"    Medicine:\n" +
+            $"      metabolismRate: {metabRate.ToString()}\n" +
+            $"      effects:\n{effectyml}";
+        _sawmill.Info(yamlstr);
+        ChemYamls.Add(args.ID, yamlstr);
+        _protoMan.LoadString(yamlstr, true);
+        _generatedReagents.Add(args.ID);
+        CreateRecipe(args);
+        _generatedRecipes.Add(args.ID);
+        Dictionary<Type, HashSet<string>> mod = [];
+        HashSet<string> hashy = [];
+        hashy.Add(args.ID);
+        mod.Add(typeof(ReagentPrototype), hashy);
+        mod.Add(typeof(ReactionPrototype), hashy);
+        _protoMan.ReloadPrototypes(mod);
+        /* //UNCOMMENT WHEN https://github.com/space-wizards/RobustToolbox/pull/6609 IS MERGED
         if (_protoMan.TryLoadDynamic(reagent))
         {
             _generatedReagents.Add(args.ID);
             CreateRecipe(args);
             _generatedRecipes.Add(args.ID);
-        }
+        }*/
     }
     protected void CreateRecipe(GeneratedReagentData args)
     {
@@ -127,20 +187,38 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         recipe.Add("id", args.ID);
         recipe.Add("priority", "99");
         MappingDataNode ingredients = [];
+        string recipstr = string.Empty;
         foreach (var ingredient in args.Recipe)
         {
             var (am, cata) = ingredient.Value;
+            recipstr +=
+                $"    {ingredient.Key}:\n" +
+                $"      amount: {am}\n";
             MappingDataNode ing = [];
             ing.Add("amount", am.ToString());
             if (cata)
-                ing.Add("catalyst", "true");
+                recipstr += "      catalyst: true\n";
+                //ing.Add("catalyst", "true");
             ingredients.Add(reagents[ingredient.Key].ID, ing);
         }
         MappingDataNode product = [];
         product.Add(args.ID, Math.Max(1, args.RecipeYield).ToString());
         recipe.Add("products", product);
         recipe.Add("reactants", ingredients);
+        string yamlstr =
+            $"- type: reaction\n" +
+            $"  id: {args.ID}\n" +
+            $"  abstract: false\n" +
+            $"  priority: 99\n" +
+            $"  reactants:\n{recipstr}" +
+            $"  products:\n" +
+            $"    {args.ID}: {args.RecipeYield}\n";
+        _sawmill.Info(yamlstr);
+        _protoMan.LoadString(yamlstr);
+        RecipeYamls.Add(args.ID, yamlstr);
+        /* UNCOMMENT WHEN https://github.com/space-wizards/RobustToolbox/pull/6609 IS MERGED
         _protoMan.TryLoadDynamic(recipe);
+        */
     }
 
     /// <summary>

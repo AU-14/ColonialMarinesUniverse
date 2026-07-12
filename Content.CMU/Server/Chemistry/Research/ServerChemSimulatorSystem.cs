@@ -208,7 +208,7 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
             return;
         _gen.MakeAlike(ref chem, targcomp.Data.Value.ID);
         _gen.InsertProperty(ref chem, ent.Comp.ReferenceProperty, refcomp.Data.Value.Effects[ent.Comp.ReferenceProperty]);
-        _gen.RetroactiveLockdown(chem);
+        _gen.RetroactiveLockdown(refcomp.Data.Value);
     }
     private void OnFinalize(Entity<ChemSimulatorComponent> ent, ref FinalizeChemSimulatorEvent args)
     {

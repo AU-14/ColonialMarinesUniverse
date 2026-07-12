@@ -50,10 +50,14 @@ public sealed partial class ClientReagentGeneratorSystem : SharedReagentGenerato
             {
                 if (_generatedRecipes.Contains(generatedReagent))
                 {
-                    _protoMan.TryDelete<ReactionPrototype>(generatedReagent);
+                    //UNCOMMENT WHEN https://github.com/space-wizards/RobustToolbox/pull/6609 IS MERGED
+                    //_protoMan.TryDelete<ReactionPrototype>(generatedReagent);
+                    _protoMan.RemoveString(RecipeYamls[generatedReagent]);
                     _generatedRecipes.Remove(generatedReagent);
                 }
-                _protoMan.TryDelete<ReagentPrototype>(generatedReagent);
+                //UNCOMMENT WHEN https://github.com/space-wizards/RobustToolbox/pull/6609 IS MERGED
+                //_protoMan.TryDelete<ReagentPrototype>(generatedReagent);
+                _protoMan.RemoveString(ChemYamls[generatedReagent]);
                 _generatedReagents.Remove(generatedReagent);
             }
         }
@@ -80,7 +84,9 @@ public sealed partial class ClientReagentGeneratorSystem : SharedReagentGenerato
             _sawmill.Info("Clearing procedural reagent recipes.");
             foreach (var recipe in _generatedRecipes)
             {
-                _protoMan.TryDelete<ReactionPrototype>(recipe);
+                //UNCOMMENT WHEN https://github.com/space-wizards/RobustToolbox/pull/6609 IS MERGED
+                //_protoMan.TryDelete<ReactionPrototype>(recipe);
+                _protoMan.RemoveString(RecipeYamls[recipe]);
                 _generatedRecipes.Remove(recipe);
             }
             DebugTools.Assert(_generatedRecipes.Count == 0);
@@ -90,7 +96,9 @@ public sealed partial class ClientReagentGeneratorSystem : SharedReagentGenerato
             _sawmill.Info("Clearing procedural reagents.");
             foreach (var reagent in _generatedReagents)
             {
-                _protoMan.TryDelete<ReagentPrototype>(reagent);
+                //UNCOMMENT WHEN https://github.com/space-wizards/RobustToolbox/pull/6609 IS MERGED
+                //_protoMan.TryDelete<ReagentPrototype>(reagent);
+                _protoMan.RemoveString(ChemYamls[reagent]);
                 _generatedReagents.Remove(reagent);
             }
             DebugTools.Assert(_generatedReagents.Count == 0);

@@ -1,3 +1,5 @@
+#this file is a mess and i apologize for it - MACMAN2003
+
 research-database-details = [bold]Database details:[/bold]
 cmu-paper-header-wy =[italic][bold]Official Weyland-Yutani Document[/bold][/italic]
 # for some really fucked up reason, {"\u000a"} is necessary for newlines
@@ -43,6 +45,11 @@ cmu-paper-header-wy-sim = [italic][bold]Official Company Document[/bold]{"\u000a
 
 cmu-paper-sim-footer = [italic]This report was automatically printed by the Synthesis Simulator.[/italic]
 
+cmu-paper-ciph-hint-header = [italic][bold]Official Company Document[/bold]{"\u000a"}Experiment Notes[/italic]
+cmu-paper-ciph-hint-subheader = [head=3][color=#517087]Weyland-Yutani Biological Weapons Division[/head][/color]
+cmu-paper-ciph-hint = During testing, the theorized component [bold]{$CIPH}[/bold] was found to be made of [bold]{$A}[/bold] and [bold]{$B}[/bold]. Recent discovery made us believe the last piece is [bold]{$C}[/bold].
+cmu-paper-ciph-hint-footer = - [italic]Weyland-Yutani[/italic]
+
 research-chem-terminal-update = Chemical contracts have been updated!
 
 research-data-ui-clearance = [color=#ffbf00][head=2]Clearance Level {$NUM}[/head][/color]
@@ -86,3 +93,35 @@ ui-research-data-terminal-name = Research Data Terminal
 
 research-data-ui-read = [color=#ffbf00][bold]Read[/bold][/color]
 research-data-ui-print = [color=#ffbf00][bold]Print[/bold][/color]
+
+ui-chem-simulator-window-name = Chemical Simulator
+
+research-sim-ui-credits = [bold]RESEARCH CREDITS: {$NUM}[/bold]
+research-sim-ui-cost-null = ESTIMATED SIMULATING COST: NULL
+research-sim-ui-cost = ESTIMATED SIMULATING COST: {$NUM}
+research-sim-ui-target-name = TARGET NAME: {$NAME}
+research-sim-ui-ref-name = REFERENCE NAME: {$NAME}
+research-sim-ui-no-targ-chem = TARGET NAME: CHEMICAL DATA NOT INSERTED
+research-sim-ui-no-ref-chem = REFERENCE NAME: CHEMICAL DATA NOT INSERTED
+research-sim-ui-overdose = OVERDOSE LEVEL AFTER SIMULATION: {$NUM}
+research-sim-ui-no-overdose = OVERDOSE LEVEL AFTER SIMULATION:
+
+research-sim-ui-simulate = SIMULATE
+research-sim-ui-eject-targ = EJECT TARGET
+research-sim-ui-eject-ref = EJECT REFERENCE
+research-sim-ui-override = OVERRIDE
+research-sim-ui-override-tooltip = Disable the protection for relating conflicting properties.
+research-sim-ui-amplify = AMPLIFY
+research-sim-ui-amplify-tooltip = Amplify one level in the chosen property. This operation lowers the OD level.
+research-sim-ui-suppress = SUPPRESS
+research-sim-ui-suppress-tooltip = Suppress one level in the chosen property. This operation lowers the OD level.
+research-sim-ui-relate = RELATE
+research-sim-ui-relate-tooltip = Use the reference chemical to replace one chosen property in the target chemical. The target and reference target property level must be equal, This operation lowers the OD level.
+research-sim-ui-add = ADD
+research-sim-ui-add-tooltip = Use the property in the reference chemical to add a property to the target chemical, with no downsides to the target chemical, however it damages the chemical structure of reference chemical, Making any other modification impossible.
+
+research-sim-ui-no-data = [color=black][bold]No data inserted![/bold][/color]
+
+research-sim-ui-target-data = [head=3]Target Data[/head]
+research-sim-ui-reference-data = [head=3]Reference Data[/head]
+research-sim-ui-price = [bold]Price of the operation: {$COST}[/bold]

@@ -110,6 +110,10 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
             return;
         }
         UpdatePropertyCosts(ent);
+        if (_net.IsClient)
+            return;
+        _ui.SetUiState(ent.Owner, ChemSimulatorUI.Key, GetStateForBui(ent));
+        Dirty(ent);
     }
 
     private void OnInteractHand(Entity<ChemSimulatorComponent> ent, ref InteractHandEvent args)
@@ -422,19 +426,19 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
                                 var refprop = props[ent.Comp.ReferenceProperty];
                                 if (refprop.Category.HasFlag(ReagentPropertyTypeEnum.Anomalous))
                                 {
-                                    ent.Comp.PropertyCosts[ent.Comp.ReferenceProperty] =
-                                        refcomp.Data.Value.Effects[ent.Comp.ReferenceProperty] * 10;
+                                    ent.Comp.PropertyCosts[targprop.Key] =
+                                        targprop.Value * 10;
                                 }
                                 else if (refprop.Rarity < ReagentPropertyRarityEnum.Rare)
                                 {
-                                    ent.Comp.PropertyCosts[ent.Comp.ReferenceProperty] =
-                                        refcomp.Data.Value.Effects[ent.Comp.ReferenceProperty];
+                                    ent.Comp.PropertyCosts[targprop.Key] =
+                                        targprop.Value;
                                 }
                                 else
                                 {
-                                    ent.Comp.PropertyCosts[ent.Comp.ReferenceProperty] =
-                                        (refcomp.Data.Value.Effects[ent.Comp.ReferenceProperty] * MultRare) +
-                                        refcomp.Data.Value.Effects[ent.Comp.ReferenceProperty];
+                                    ent.Comp.PropertyCosts[targprop.Key] =
+                                        (targprop.Value * MultRare) +
+                                        props[targprop.Key].Value;
                                 }
                             }
                             else
@@ -509,19 +513,23 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
 
     protected void CalculateNewODLevel(Entity<ChemSimulatorComponent> ent)
     {
-        ent.Comp.Overdose ??= 1;
-        ent.Comp.Overdose = Math.Max(ent.Comp.Overdose.Value, 1);
-        if (ent.Comp.Mode == ChemSimulatorMode.Add)
-            return;
-        if (ent.Comp.Overdose < 5)
+        
+        if (_con.TryGetContainer(ent, "target", out var targcon) && targcon.Count > 0 &&
+            TryComp<ResearchReportComponent>(targcon.ContainedEntities[0], out var targcomp) && targcomp.Data is not null)
         {
-            ent.Comp.Overdose = Math.Max(ent.Comp.Overdose.Value - 1, 1);
+            ent.Comp.Overdose ??= 1;
+            ent.Comp.Overdose = Math.Max((int)targcomp.Data.Value.Overdose, 1);
+            if (ent.Comp.Mode == ChemSimulatorMode.Add)
+                return;
+            if (ent.Comp.Overdose <= 5)
+            {
+                ent.Comp.Overdose = Math.Max(ent.Comp.Overdose.Value - 1, 1);
+            }
+            else
+            {
+                ent.Comp.Overdose = Math.Max(ent.Comp.Overdose.Value - 5, 5);
+            }
         }
-        else
-        {
-            ent.Comp.Overdose = Math.Max(ent.Comp.Overdose.Value - 5, 5);
-        }
-
     }
     private void OnTargetPick(Entity<ChemSimulatorComponent> ent, ref ChemSimulatorPickTargetPropertyBuiMsg args)
     {
@@ -561,6 +569,9 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
             var ev = new FinalizeChemSimulatorEvent();
             RaiseLocalEvent(ent.Owner, ev);
         }
+        if (_net.IsClient)
+            return;
+        _ui.SetUiState(ent.Owner, ChemSimulatorUI.Key, GetStateForBui(ent));
     }
     private void OnChangeMode(Entity<ChemSimulatorComponent> ent, ref ChemSimulatorPickModeBuiMsg args)
     {

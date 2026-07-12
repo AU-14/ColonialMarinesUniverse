@@ -119,13 +119,13 @@ public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : Boun
         _window.TargPickBox.Visible = false;
         _window.RefPickBox.Visible = false;
         _window.Overdose.Text = (state.Overdose is not null) ?
-            Loc.GetString("research-sim-ui-overdose", ("NUM", state.Overdose.Value)) : Loc.GetString("research-sim-ui-overdose");
+            Loc.GetString("research-sim-ui-overdose", ("NUM", state.Overdose.Value)) : Loc.GetString("research-sim-ui-no-overdose");
         _window.SimCost.Text = (state.Cost is not null) ?
             Loc.GetString("research-sim-ui-sim-cost", ("NUM", state.Cost.Value)) : Loc.GetString("research-sim-ui-cost-null");
         _window.TargetName.Text = (state.TargetProp is not null) ?
-            Loc.GetString("research-sim-ui-target-name", ("NAME", state.TargetProp)) : Loc.GetString("research-sim-ui-no-chem");
+            Loc.GetString("research-sim-ui-target-name", ("NAME", state.TargetProp)) : Loc.GetString("research-sim-ui-no-targ-chem");
         _window.ReferenceName.Text = (state.ReferenceProp is not null) ?
-            Loc.GetString("research-sim-ui-ref-name", ("NAME", state.ReferenceProp)) : Loc.GetString("research-sim-ui-no-chem");
+            Loc.GetString("research-sim-ui-ref-name", ("NAME", state.ReferenceProp)) : Loc.GetString("research-sim-ui-no-ref-chem");
         
 
         switch (state.Mode)
@@ -157,7 +157,11 @@ public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : Boun
                 var propbutton = new Button();
                 propbutton.Access = AccessLevel.Public;
                 //propbutton.Name = "TargProps." + propdat.ID;
-                propbutton.OnPressed += _ => SendPredictedMessage(new ChemSimulatorPickTargetPropertyBuiMsg(kvp.Key));
+                if (state.Mode != ChemSimulatorMode.Add)
+                {
+                    propbutton.OnPressed += _ => SendPredictedMessage(new ChemSimulatorPickTargetPropertyBuiMsg(kvp.Key));
+                    propbutton.Group = targetgroup;
+                }
                 propbutton.StyleClasses.Add("ButtonSquare");
                 propbutton.Text = propdat.Code + " " + kvp.Value.ToString();
                 bool isLocked = false;
@@ -175,7 +179,6 @@ public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : Boun
                         }
                     }
                 }
-                propbutton.Group = targetgroup;
                 propbutton.Disabled = LockControl || (!state.Override ? isLocked : false);
                 if (state.TargetProp is not null && state.TargetProp == kvp.Key)
                     propbutton.Pressed = true;
@@ -229,7 +232,7 @@ public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : Boun
                 _window.TargPickBox.Visible = true;
                 _window.PropPickName.Text = props[state.TargetProp].LocalizedName;
                 _window.PropPickDesc.Text = props[state.TargetProp].LocalizedDescription;
-                _window.SimPrice.Text = Loc.GetString("research-sim-ui-cost", ("COST", state.Costs[state.TargetProp]));
+                _window.SimPrice.Text = Loc.GetString("research-sim-ui-price", ("COST", state.Costs[state.TargetProp]));
             }
         }
         else
@@ -241,12 +244,25 @@ public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : Boun
                 _window.TargetPropertyContainer.Orphan();
                 _window.ModeRelateAddTargDatCon.AddChild(_window.TargetPropertyContainer);
                 _window.TargetPropertyContainer.SetPositionLast();
-                if (state.ReferenceProp is not null)
+                if (state.Mode == ChemSimulatorMode.Add)
                 {
-                    _window.RefPickBox.Visible = true;
-                    _window.RAPropPickName.Text = props[state.ReferenceProp].LocalizedName;
-                    _window.RAPropPickDesc.Text = props[state.ReferenceProp].LocalizedDescription;
-                    _window.RASimPrice.Text = Loc.GetString("research-sim-ui-cost", ("COST", state.Costs[state.ReferenceProp]));
+                    if (state.ReferenceProp is not null)
+                    {
+                        _window.RefPickBox.Visible = true;
+                        _window.RAPropPickName.Text = props[state.ReferenceProp].LocalizedName;
+                        _window.RAPropPickDesc.Text = props[state.ReferenceProp].LocalizedDescription;
+                        _window.RASimPrice.Text = Loc.GetString("research-sim-ui-price", ("COST", state.Costs[state.ReferenceProp]));
+                    }
+                }
+                else
+                {
+                    if (state.TargetProp is not null)
+                    {
+                        _window.RefPickBox.Visible = true;
+                        _window.RAPropPickName.Text = props[state.TargetProp].LocalizedName;
+                        _window.RAPropPickDesc.Text = props[state.TargetProp].LocalizedDescription;
+                        _window.RASimPrice.Text = Loc.GetString("research-sim-ui-price", ("COST", state.Costs[state.TargetProp]));
+                    }
                 }
             }
             

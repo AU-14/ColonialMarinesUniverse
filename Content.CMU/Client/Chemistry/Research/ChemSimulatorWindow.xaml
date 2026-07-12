@@ -51,7 +51,7 @@
                         <Label Text="{Loc research-sim-ui-eject-ref}"/>
                     </BoxContainer>
                 </Button>
-                <Button Name="Override" Access="Public" ToggleMode="True" StyleClasses="ButtonSquare" ToolTip="asdfasfaf">
+                <Button Name="Override" Access="Public" ToggleMode="True" StyleClasses="ButtonSquare" ToolTip="{Loc research-sim-ui-override-tooltip}">
                     <BoxContainer Orientation="Horizontal">
                         <SpriteView Name="OverrideSpr"/>
                         <Label Text="{Loc research-sim-ui-override}"/>

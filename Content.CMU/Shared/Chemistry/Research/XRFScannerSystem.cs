@@ -51,7 +51,7 @@ public abstract partial class XRFScannerSystem : EntitySystem
     {
         if (ent.Comp.Processing)
         {
-            _popups.PopupClient(Loc.GetString("research-xrf-scanner-processing"), args.User);
+            _popups.PopupEntity(Loc.GetString("research-xrf-scanner-processing"), ent);
             return;
         }
         //TODO: skillcheck here
@@ -61,18 +61,18 @@ public abstract partial class XRFScannerSystem : EntitySystem
             return;
         if (!TryComp<VialComponent>(args.Used, out _))
         {
-            _popups.PopupClient(Loc.GetString("research-xrf-scanner-only-vials"), args.User);
+            _popups.PopupEntity(Loc.GetString("research-xrf-scanner-only-vials"), ent);
             return;
         }
         if (sample.ContainedEntities.Count > 0)
         {
-            _popups.PopupClient(Loc.GetString("research-xrf-scanner-full"), args.User);
+            _popups.PopupEntity(Loc.GetString("research-xrf-scanner-full"), ent);
             return;
         }
         if (_consys.Insert(args.Used, sample))
         {
             _appearance.SetData(ent.Owner, XRFScannerVisuals.State, XRFScannerState.Sample);
-            _popups.PopupClient(Loc.GetString("research-xrf-scanner-config"), args.User);
+            _popups.PopupEntity(Loc.GetString("research-xrf-scanner-config", ("USER", args.User)), ent);
             var dargs = new DoAfterArgs(EntityManager, args.User, 1, new XRFDoAfterEvent(), args.Target, args.Target, args.Target)
             {
                 BlockDuplicate = true,

@@ -45,7 +45,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     private bool DDISecured = false;
     private bool ready = false;
     [ViewVariables(VVAccess.ReadWrite)]
-    public int ResearchChemAmount = 3;
+    public int ResearchChemAmount = 6; // for sanity
 
     
     /// <summary>
@@ -146,11 +146,20 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             else cost = (_researchLevelIncreaseMult * Clearance) + 1;
             if (Clearance < 6)
             {
+                bool ciph = false;
+                if (Clearance + 1 == 6)
+                {
+                    ciph = true;
+                }
                 UpdateClearance(Credits - cost, Clearance + 1);
                 var query = EntityQueryEnumerator<ResearchDataTerminalComponent>();
                 while(query.MoveNext(out var ent, out var comp))
                 {
                     UpdateUI(ent);
+                    if (ciph)
+                    {
+                        SpawnNextToOrDrop("CMUCipherHintPaper", ent);
+                    }
                 }
             }
             _upgrading = false;

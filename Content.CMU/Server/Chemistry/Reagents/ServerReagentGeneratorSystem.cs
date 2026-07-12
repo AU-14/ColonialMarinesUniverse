@@ -89,7 +89,9 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
             _sawmill.Info("Clearing procedural reagent recipes.");
             foreach (var recipe in _generatedRecipes)
             {
-                _protoMan.TryDelete<ReactionPrototype>(recipe);
+                //UNCOMMENT WHEN https://github.com/space-wizards/RobustToolbox/pull/6609 IS MERGED
+                //_protoMan.TryDelete<ReactionPrototype>(recipe);
+                _protoMan.RemoveString(RecipeYamls[recipe]);
                 _generatedRecipes.Remove(recipe);
             }
             DebugTools.Assert(_generatedRecipes.Count == 0);
@@ -99,7 +101,9 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
             _sawmill.Info("Clearing procedural reagents.");
             foreach (var reagent in _generatedReagents)
             {
-                _protoMan.TryDelete<ReagentPrototype>(reagent);
+                //UNCOMMENT WHEN https://github.com/space-wizards/RobustToolbox/pull/6609 IS MERGED
+                //_protoMan.TryDelete<ReagentPrototype>(reagent);
+                _protoMan.RemoveString(ChemYamls[reagent]);
                 _generatedReagents.Remove(reagent);
             }
             DebugTools.Assert(_generatedReagents.Count == 0);
@@ -749,7 +753,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
                     int pieces = 0;
                     foreach (var idx in kvp.Value)
                     {
-                        if (idx == prop.Key || data.Effects.ContainsKey(idx))
+                        if (idx == property || data.Effects.ContainsKey(idx))
                             pieces++;
                     }
                     if (pieces >= kvp.Value.Count)
@@ -832,6 +836,39 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
     {
         data.Effects.Remove(propertyName);
     }
+    public void MakeAlike(ref GeneratedReagentData A, GeneratedReagentData B)
+    {
+        A.Class = B.Class;
+        A.Color = B.Color;
+        A.CriticalOverdose = B.CriticalOverdose;
+        A.Effects.Clear();
+        foreach (var effect in B.Effects)
+        {
+            A.Effects.Add(effect.Key, effect.Value);
+        }
+        A.GenTier = B.GenTier;
+        A.ID = B.ID;
+        A.MetabolismRate = B.MetabolismRate;
+        A.ModifiedChems.Clear();
+        foreach (var mod in B.ModifiedChems)
+        {
+            A.ModifiedChems.Add(mod);
+        }
+        A.Name = B.Name;
+        A.OriginalID = B.OriginalID;
+        A.Overdose = B.Overdose;
+        A.PropertyHint = B.PropertyHint;
+        A.Recipe.Clear();
+        foreach (var ing in B.Recipe)
+        {
+            A.Recipe.Add(ing.Key, ing.Value);
+        }
+        A.RecipeHint = B.RecipeHint;
+        A.RecipeYield = B.RecipeYield;
+        A.ScanPointYield = B.ScanPointYield;
+        return;
+    }
+
     public void MakeAlike(ref GeneratedReagentData A, string B)
     {
         if(!(ProceduralReagentData.TryGetValue(B, out var other) || ReagentData.TryGetValue(B, out other)))
@@ -856,9 +893,25 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         A.ID = other.ID;
         A.MetabolismRate = other.MetabolismRate;
         A.ModifiedChems.Clear();
+        var metabRate = other.MetabolismRate;
+        if (metabRate == 0)
+            metabRate = 0.1;
         foreach(var mod in other.ModifiedChems)
         {
             A.ModifiedChems.Add(mod);
+        }
+        if (A.Effects.ContainsKey("Intravenous"))
+        {
+            metabRate *= A.Effects["Intravenous"];
+        }
+        if (A.Effects.ContainsKey("Hypermetabolic"))
+        {
+            metabRate *= ((1 + 0.25) * A.Effects["Hypermetabolic"]);
+        }
+        if (A.Effects.ContainsKey("Hypometabolic"))
+        {
+            // 0.01 is as close as you can get to 0.005 with FixedPoint2
+            metabRate = (FixedPoint2)MathF.Max((float)metabRate / ((1f + 0.35f) * A.Effects["Hypometabolic"]), 0.01f);
         }
         A.Name = other.Name;
         A.OriginalID = other.OriginalID;
