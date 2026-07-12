@@ -35,7 +35,7 @@ public sealed partial class SapperWorkbenchComponent : Component
         new("AU14SapperIED", "Buried IED", 6f, new() { { "CMSteel", 12 }, { "CMPlasteel", 6 }, { "RMCPlastic", 3 } },
             new() { Ied(), AnyElectronics() }),
         new("AU14SapperSnareTrap", "Snare trap", 3f, new() { { "RMCWood", 9 }, { "RMCPlastic", 3 } },
-            new() { Cable(10), AnyElectronics() }),
+            new() { Cable(10), AnyElectronics(), Handcuffs() }),
         new("AU14SapperAudioTrap", "Audio trap", 3f, new() { { "CMSteel", 6 }, { "RMCWood", 3 }, { "RMCPlastic", 3 } },
             new() { Cable(10), AnyElectronics() }),
         new("AU14CLFSpyCamera", "CLF spy camera", 4f, new() { { "CMSteel", 6 }, { "RMCPlastic", 6 } },
@@ -69,6 +69,10 @@ public sealed partial class SapperWorkbenchComponent : Component
 
     private static SapperWorkbenchItemRequirement Ied() =>
         new() { Prototype = "AU14IED", Name = "IED", IconPrototype = "AU14IED" };
+
+    // Any cuffs at all: the Handcuffs tag covers handcuffs, zipties, cablecuffs, and the like.
+    private static SapperWorkbenchItemRequirement Handcuffs() =>
+        new() { Tag = "Handcuffs", Name = "any handcuffs", IconPrototype = "Handcuffs" };
 }
 
 /// <summary>

@@ -1,6 +1,7 @@
 using Content.Client.Eye;
 using Content.Shared._AU14.Insurgency.Sapper;
 using Robust.Client.GameObjects;
+using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.GameObjects;
 
@@ -25,6 +26,7 @@ public sealed class SapperSnareVisualsSystem : EntitySystem
 {
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly SharedEyeSystem _eye = default!;
+    [Dependency] private readonly IOverlayManager _overlay = default!;
 
     public override void Initialize()
     {
@@ -33,9 +35,19 @@ public sealed class SapperSnareVisualsSystem : EntitySystem
         SubscribeLocalEvent<SapperSnaredComponent, ComponentStartup>(OnStartup);
         SubscribeLocalEvent<SapperSnaredComponent, ComponentShutdown>(OnShutdown);
 
+        // Always-present overlay; it only paints while the local player is snared (BeforeDraw gates it).
+        if (!_overlay.HasOverlay<SapperSnareVignetteOverlay>())
+            _overlay.AddOverlay(new SapperSnareVignetteOverlay());
+
         // Run after the eye lerping system so our flip lands on top of the rotation it just set, rather
         // than being immediately overwritten by it.
         UpdatesAfter.Add(typeof(EyeLerpingSystem));
+    }
+
+    public override void Shutdown()
+    {
+        base.Shutdown();
+        _overlay.RemoveOverlay<SapperSnareVignetteOverlay>();
     }
 
     private void OnStartup(Entity<SapperSnaredComponent> ent, ref ComponentStartup args)

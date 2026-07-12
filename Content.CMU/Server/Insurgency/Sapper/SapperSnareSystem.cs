@@ -3,6 +3,7 @@ using Content.Shared._CMU14.Threats.Mobs.CLF;
 using Content.Shared._RMC14.Slow;
 using Content.Server.Explosion.EntitySystems;
 using Content.Shared.Cuffs;
+using Content.Shared.Cuffs.Components;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Kitchen.Components;
@@ -44,6 +45,15 @@ public sealed class SapperSnareSystem : EntitySystem
         SubscribeLocalEvent<SapperSnaredComponent, InteractUsingEvent>(OnSnaredInteractUsing);
         SubscribeLocalEvent<SapperSnaredComponent, SapperStruggleDoAfterEvent>(OnStruggleComplete);
         SubscribeLocalEvent<SapperSnaredComponent, SapperCutFreeDoAfterEvent>(OnCutFreeComplete);
+
+        // The cuffs cannot be wormed out of while snared: block any uncuff attempt (self-breakout or a
+        // helper's) so the only ways out stay the struggle timer or a knife cut-free.
+        SubscribeLocalEvent<SapperSnaredComponent, UncuffAttemptEvent>(OnUncuffAttempt);
+    }
+
+    private void OnUncuffAttempt(Entity<SapperSnaredComponent> ent, ref UncuffAttemptEvent args)
+    {
+        args.Cancelled = true;
     }
 
     private void OnSnareTriggered(EntityUid uid, SapperSnareComponent comp, TriggerEvent args)
@@ -93,9 +103,11 @@ public sealed class SapperSnareSystem : EntitySystem
         RemComp<RMCRootedComponent>(ent);
         _speed.RefreshMovementSpeedModifiers(ent);
 
-        // Take the cuffs back off (no user: they simply drop to the floor).
+        // Take the cuffs off by deleting them - the snare's cuffs are conjured by the trap, so they vanish
+        // with it instead of leaving a free pair on the floor. Removal from the container cleans up the
+        // hand-blocking virtual items and refreshes the cuffed state.
         if (ent.Comp.Cuffs is { } cuffs && !TerminatingOrDeleted(cuffs))
-            _cuffable.Uncuff(ent, null, cuffs);
+            QueueDel(cuffs);
     }
 
     private void OnSnaredInteractUsing(Entity<SapperSnaredComponent> ent, ref InteractUsingEvent args)
