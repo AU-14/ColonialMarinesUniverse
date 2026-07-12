@@ -108,6 +108,10 @@
         crate: RMCCrateGearParachute
       - cost: 800
         crate: RMCCrateAttachmentSmartScope
+    - name: Pouches
+      entries:
+      - cost: 150
+        crate: RMCCrateClothingMagazinePouchesLarge
     - name: Medical
       entries:
       - cost: 3000
