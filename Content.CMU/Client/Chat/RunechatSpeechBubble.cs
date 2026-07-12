@@ -252,13 +252,13 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
     }
 
     /// <summary>
-    /// Parses a string that may contain [bold]/[italic] markup (from
-    /// SharedChatSystem's per-word/per-phrase formatting system, resolved
-    /// server-side via ResolveBoldSentinels) into a flat list of TextRuns.
-    /// Any OTHER bracketed text - such as a literal radio channel label like
-    /// "[ALFA]" - is preserved as plain text rather than stripped, matching
-    /// how RemoveMarkupPermissive used to leave unrecognized bracket text
-    /// alone.
+    /// Parses a string that may contain [bold]/[italic]/[bolditalic] markup
+    /// (from SharedChatSystem's per-word/per-phrase formatting system,
+    /// resolved server-side via ResolveBoldSentinels) into a flat list of
+    /// TextRuns. Other recognized FormattedMessage tags (color, font) are
+    /// stripped without affecting Bold/Italic state. Genuinely unrecognized
+    /// bracketed text - such as a literal radio channel label like "[ALFA]"
+    /// - is preserved as plain text.
     /// </summary>
     private static List<TextRun> ParseFormattingRuns(string markupText)
     {
@@ -329,7 +329,13 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
                         i = close + 1;
                         continue;
                     default:
-                        // Not our markup - keep the brackets as literal text.
+                        var tagName = tag.Split('=')[0].Trim().ToLowerInvariant();
+                        if (tagName is "color" or "/color" or "font" or "/font")
+                        {
+                            i = close + 1;
+                            continue;
+                        }
+
                         sb.Append(markupText, i, close - i + 1);
                         i = close + 1;
                         continue;
