@@ -106,8 +106,6 @@
         amount: 12
       - id: RMCPouchMagazine
         amount: 50
-      - id: RMCPouchMagazineLarge
-        amount: 8
       - id: RMCPouchShotgunLarge
         amount: 8
       - id: RMCPouchGeneralMedium
@@ -116,8 +114,6 @@
         amount: 6
       - id: RMCPouchMagazinePistol
         amount: 25
-      - id: RMCPouchMagazinePistolLarge
-        amount: 6
       - id: RMCPouchPistol
         amount: 20
       - id: AU14PouchIFAKFill
@@ -926,6 +922,28 @@
         amount: 5
       - id: RMCMagazinePistolMK45
         amount: 200
+    - name: Magazine Boxes
+      entries:
+      - id: RMCBoxMagazineRifleM16
+        amount: 2
+      - id: CMUBoxMagazineSMGMP5
+        amount: 2
+      - id: CMUBoxMagazineSMGPDW90
+        amount: 2
+      - id: RMCBoxMagazinePistolM1984
+        amount: 2
+      - id: CMUBoxMagazinePistolMK45
+        amount: 2
+    - name: Ammo Boxes
+      entries:
+      - id: RMCBoxBulletsRifle
+        amount: 5
+      - id: CMUBoxBulletsSMGP90
+        amount: 5
+      - id: CMUBoxBulletsPistol45
+        amount: 5
+      - id: CMUBoxBulletsPistol9MM
+        amount: 5
     - name: explosives
       entries:
       - id: CMPacketGrenadeHighExplosiveFilled
@@ -1010,6 +1028,12 @@
         amount: 4
       - id: RMCOuterClothingExternalWebbing
         amount: 4
+    - name: Pouches
+      entries:
+      - id: RMCPouchMagazineLarge
+        amount: 10
+      - id: RMCPouchMagazinePistolLarge
+        amount: 10
     - name: Devices
       entries:
       - id: RMCIntelDetector
