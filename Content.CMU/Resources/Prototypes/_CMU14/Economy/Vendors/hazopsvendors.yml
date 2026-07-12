@@ -151,6 +151,8 @@
         amount: 40
       - id: CMUGasMaskFilterHAZOPS
         amount: 80
+      - id: AU14PouchGasMaskBag
+        amount: 20
       - id: CMMaskCoif
         amount: 20
       - id: RMCMaskTornScarfGreen
@@ -533,12 +535,12 @@
         amount: 6
       - id: RMCPacketGrenadeIncendiaryFilled
         amount: 3
-      - id: RMCPacketGrenadeWhitePhosphorusFilled
-        amount: 3
       - id: CMPacketGrenadeFragFilled
         amount: 6
       - id: RMCPacketGrenadeSmokeFilled
         amount: 6
+      - id: RMCPacketGrenadeWhitePhosphorusFilled
+        amount: 3
       - id: CMPacketGrenadeFragOldFilled
         amount: 2
       - id: RMCBoxClaymoreMineFilled
