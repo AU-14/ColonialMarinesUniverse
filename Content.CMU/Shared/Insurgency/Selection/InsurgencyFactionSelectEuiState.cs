@@ -49,10 +49,17 @@ public sealed class DefaultFactionOption
     public string? FlagEntity { get; }
     public string? StatusIcon { get; }
 
+    /// <summary>
+    ///     Prototype ids of what this faction's cell kit deploys (placeables, vendor base models, and the
+    ///     items its vendors stock), deduplicated and capped. Shown as a sprite grid when the row is
+    ///     expanded so the leader can see what they are picking.
+    /// </summary>
+    public List<string> CellKitEntities { get; }
+
     /// <summary>Whether this faction opposes the round's chosen GOVFOR platoon. Non-opposing rows are shown greyed.</summary>
     public bool Opposes { get; }
 
-    public DefaultFactionOption(int id, string title, string description, string roleplay, string? flagEntity, string? statusIcon, bool opposes)
+    public DefaultFactionOption(int id, string title, string description, string roleplay, string? flagEntity, string? statusIcon, List<string> cellKitEntities, bool opposes)
     {
         Id = id;
         Title = title;
@@ -60,6 +67,7 @@ public sealed class DefaultFactionOption
         Roleplay = roleplay;
         FlagEntity = flagEntity;
         StatusIcon = statusIcon;
+        CellKitEntities = cellKitEntities;
         Opposes = opposes;
     }
 }

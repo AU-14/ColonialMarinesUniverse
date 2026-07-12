@@ -6,6 +6,7 @@ using Content.Server._AU14.Insurgency.Database;
 using Content.Server._AU14.Insurgency.Editor;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server._AU14.Insurgency.Commands;
 
@@ -49,7 +50,8 @@ public sealed class InsurgencyEditorCommand : IConsoleCommand
             admin,
             entMan.System<InsurgencyFactionDbSystem>(),
             entMan.System<InsurgencyFactionApplySystem>(),
-            entMan.System<PlatoonSpawnRuleSystem>());
+            entMan.System<PlatoonSpawnRuleSystem>(),
+            IoCManager.Resolve<IPrototypeManager>());
 
         eui.OpenEui(editor, player);
     }

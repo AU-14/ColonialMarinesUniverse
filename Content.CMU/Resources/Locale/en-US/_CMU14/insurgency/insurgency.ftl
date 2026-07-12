@@ -20,16 +20,17 @@ insfor-cell-kit-deployed = You set out a piece of the cell's equipment. { $remai
 
 # Leader faction selection popup.
 insfor-select-title = Choose Your Cell's Faction
-insfor-select-default-header = Default Factions
-insfor-select-custom-header = Custom Factions
-insfor-select-custom-refresh = Refresh
+insfor-select-default-header = Factions (click a name to see details)
 insfor-select-govfor = Opposing GOVFOR faction: { $name }
 insfor-select-govfor-unknown = Opposing GOVFOR faction: not chosen yet
-insfor-select-empty = No Default factions are available.
+insfor-select-empty = No factions are available.
 insfor-select-not-opposed = Does not oppose this round's GOVFOR faction.
-insfor-select-custom-locked = You are not authorized to use Custom factions.
-insfor-select-custom-empty = You have no custom factions saved on this machine.
-insfor-select-choose = Choose
+insfor-select-choose = Choose this faction
+insfor-select-untitled = (untitled faction)
+insfor-select-unavailable-tag = [ unavailable this round ]
+insfor-select-playstyle-header = Playstyle
+insfor-select-cellkit-header = Cell kit contents
+insfor-select-cellkit-empty = Nothing listed.
 
 # In-viewport button to reopen the selection popup after it was closed.
 insfor-reopen-faction-select-button = Choose Faction

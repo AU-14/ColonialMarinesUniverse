@@ -1,81 +1,64 @@
 using System;
 using System.Numerics;
-using Content.Client._AU14.Insurgency.CustomFactions;
 using Content.Shared._AU14.Insurgency;
 using Content.Shared._AU14.Insurgency.Selection;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Client._AU14.Insurgency.Selection;
 
 /// <summary>
-///     The CLF-leader faction selection popup. Two columns: Default factions from the round (List A),
-///     with non-matching ones greyed out, and the player's own Custom factions (List B), selectable
-///     only when they hold the authorization flag. The server has the final say on every pick.
+///     The CLF-leader faction selection popup. A single scrolling list of the round's Default factions:
+///     each row shows just the title, and expands on click to reveal its description, playstyle, and a
+///     sprite preview of what its cell kit deploys. Factions that do not oppose the round's GOVFOR are
+///     shown but cannot be chosen. The server has the final say on every pick.
 /// </summary>
 public sealed class InsurgencyFactionSelectWindow : DefaultWindow
 {
     private readonly IPrototypeManager _prototype;
-    private readonly InsurgencyCustomFactionStore _customStore = new();
 
-    private readonly Label _govforLabel;
-    private readonly BoxContainer _defaultList;
-    private readonly BoxContainer _customList;
-
-    private bool _canUseCustom;
+    private readonly RichTextLabel _govforLabel;
+    private readonly BoxContainer _list;
 
     public event Action<int>? OnSelectDefault;
-    public event Action<FactionDefinition>? OnSelectCustom;
 
     public InsurgencyFactionSelectWindow()
     {
         _prototype = IoCManager.Resolve<IPrototypeManager>();
 
         Title = Loc.GetString("insfor-select-title");
-        MinSize = new Vector2(900, 620);
+        MinSize = new Vector2(760, 620);
 
         var root = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, HorizontalExpand = true, VerticalExpand = true };
 
-        _govforLabel = new Label { Text = string.Empty, Margin = new Thickness(4) };
+        _govforLabel = new RichTextLabel { Margin = new Thickness(6, 4) };
         root.AddChild(_govforLabel);
 
-        var columns = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, HorizontalExpand = true, VerticalExpand = true };
+        root.AddChild(new Label { Text = Loc.GetString("insfor-select-default-header"), StyleClasses = { "LabelHeading" }, Margin = new Thickness(6, 2) });
 
-        // Left column: Default factions.
-        var left = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, HorizontalExpand = true };
-        left.AddChild(new Label { Text = Loc.GetString("insfor-select-default-header"), StyleClasses = { "LabelHeading" } });
-        _defaultList = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, VerticalExpand = true };
-        left.AddChild(new ScrollContainer { Children = { _defaultList }, VerticalExpand = true, HorizontalExpand = true });
+        _list = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, HorizontalExpand = true };
+        // HScrollEnabled false so the row content wraps to the viewport width instead of running off it.
+        root.AddChild(new ScrollContainer
+        {
+            Children = { _list },
+            VerticalExpand = true,
+            HorizontalExpand = true,
+            HScrollEnabled = false,
+        });
 
-        // Right column: Custom factions.
-        var right = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, HorizontalExpand = true };
-        var customHeader = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal };
-        customHeader.AddChild(new Label { Text = Loc.GetString("insfor-select-custom-header"), StyleClasses = { "LabelHeading" }, HorizontalExpand = true });
-        var refresh = new Button { Text = Loc.GetString("insfor-select-custom-refresh") };
-        refresh.OnPressed += _ => RebuildCustom();
-        customHeader.AddChild(refresh);
-        right.AddChild(customHeader);
-        _customList = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, VerticalExpand = true };
-        right.AddChild(new ScrollContainer { Children = { _customList }, VerticalExpand = true, HorizontalExpand = true });
-
-        columns.AddChild(left);
-        columns.AddChild(right);
-        root.AddChild(columns);
         Contents.AddChild(root);
     }
 
     public void SetState(InsurgencyFactionSelectEuiState state)
     {
-        _canUseCustom = state.CanUseCustom;
-
-        _govforLabel.Text = state.GovforPlatoonName is { } name
+        _govforLabel.SetMessage(state.GovforPlatoonName is { } name
             ? Loc.GetString("insfor-select-govfor", ("name", name))
-            : Loc.GetString("insfor-select-govfor-unknown");
+            : Loc.GetString("insfor-select-govfor-unknown"));
 
         RebuildDefault(state);
-        RebuildCustom();
 
         // Matches the improved construction menu; safe to re-run per state push.
         InsforUiStyle.Apply(this);
@@ -83,98 +66,133 @@ public sealed class InsurgencyFactionSelectWindow : DefaultWindow
 
     private void RebuildDefault(InsurgencyFactionSelectEuiState state)
     {
-        _defaultList.RemoveAllChildren();
+        _list.RemoveAllChildren();
 
         if (state.Defaults.Count == 0)
         {
-            _defaultList.AddChild(new Label { Text = Loc.GetString("insfor-select-empty") });
+            _list.AddChild(new Label { Text = Loc.GetString("insfor-select-empty") });
             return;
         }
 
         foreach (var option in state.Defaults)
-        {
-            // Only factions that oppose the round's GOVFOR platoon may be picked; others are shown
-            // greyed so the leader can see they exist but understands why they are unavailable.
-            var id = option.Id;
-            var row = BuildRow(
-                option.Title,
-                option.Description,
-                option.FlagEntity,
-                enabled: option.Opposes,
-                disabledReason: Loc.GetString("insfor-select-not-opposed"),
-                onPressed: () => OnSelectDefault?.Invoke(id));
-            _defaultList.AddChild(row);
-        }
+            _list.AddChild(BuildRow(option));
     }
 
-    private void RebuildCustom()
-    {
-        _customList.RemoveAllChildren();
-
-        if (!_canUseCustom)
-        {
-            _customList.AddChild(new Label { Text = Loc.GetString("insfor-select-custom-locked") });
-            return;
-        }
-
-        var customs = _customStore.List();
-        if (customs.Count == 0)
-        {
-            _customList.AddChild(new Label { Text = Loc.GetString("insfor-select-custom-empty") });
-            return;
-        }
-
-        foreach (var custom in customs)
-        {
-            var def = custom.Definition;
-            var title = string.IsNullOrWhiteSpace(def.Metadata.Title) ? custom.Name : def.Metadata.Title;
-            var row = BuildRow(
-                title,
-                def.Metadata.Description,
-                def.Metadata.FlagEntity?.Id,
-                enabled: true,
-                disabledReason: null,
-                onPressed: () => OnSelectCustom?.Invoke(def));
-            _customList.AddChild(row);
-        }
-    }
-
-    // One selectable faction row: flag sprite (if any), title, a short description, and a Choose button.
-    private Control BuildRow(string title, string description, string? flagEntity, bool enabled, string? disabledReason, Action onPressed)
+    // One faction row: a title header that toggles a detail panel (description, playstyle, and a sprite
+    // preview of the cell kit). Non-opposing factions expand the same way but cannot be chosen.
+    private Control BuildRow(DefaultFactionOption option)
     {
         var panel = new PanelContainer { Margin = new Thickness(0, 0, 0, 6), HorizontalExpand = true };
-        var row = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, Margin = new Thickness(6), HorizontalExpand = true };
+        var outer = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, Margin = new Thickness(6), HorizontalExpand = true };
 
-        if (flagEntity != null && _prototype.HasIndex<EntityPrototype>(flagEntity))
+        // Header: optional flag sprite + a full-width toggle button showing the title.
+        var header = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, HorizontalExpand = true };
+        if (option.FlagEntity != null && _prototype.HasIndex<EntityPrototype>(option.FlagEntity))
         {
-            var view = new EntityPrototypeView { MinSize = new Vector2(48, 48) };
-            view.SetPrototype(new EntProtoId(flagEntity));
-            row.AddChild(view);
+            var flag = new EntityPrototypeView { MinSize = new Vector2(32, 32), VerticalAlignment = VAlignment.Center, Margin = new Thickness(0, 0, 6, 0) };
+            flag.SetPrototype(new EntProtoId(option.FlagEntity));
+            header.AddChild(flag);
         }
 
-        var text = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, HorizontalExpand = true, Margin = new Thickness(6, 0) };
-        // ClipText: a long title/description otherwise forces the row's min width past the window,
-        // shoving the Choose button out of view (the reported "have to scroll to Choose" bug).
-        text.AddChild(new Label { Text = title, StyleClasses = { "LabelHeading" }, ClipText = true });
-        if (!string.IsNullOrWhiteSpace(description))
-            text.AddChild(new Label { Text = Truncate(description, 160), ClipText = true });
-        if (!enabled && disabledReason != null)
-            text.AddChild(new Label { Text = disabledReason, StyleClasses = { "LabelSubText" } });
-        row.AddChild(text);
+        var title = string.IsNullOrWhiteSpace(option.Title) ? Loc.GetString("insfor-select-untitled") : option.Title;
+        if (!option.Opposes)
+            title += "  " + Loc.GetString("insfor-select-unavailable-tag");
 
+        var toggle = new Button
+        {
+            Text = title,
+            HorizontalExpand = true,
+            StyleClasses = { "OpenRight" },
+            ClipText = true,
+        };
+        header.AddChild(toggle);
+        outer.AddChild(header);
+
+        // Detail, hidden until the header is clicked.
+        var detail = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            HorizontalExpand = true,
+            Visible = false,
+            Margin = new Thickness(4, 6, 0, 2),
+        };
+
+        // Left: wrapped prose + the Choose button.
+        var textCol = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, HorizontalExpand = true, Margin = new Thickness(0, 0, 8, 0) };
+
+        if (!string.IsNullOrWhiteSpace(option.Description))
+            textCol.AddChild(Wrapped(option.Description));
+
+        if (!string.IsNullOrWhiteSpace(option.Roleplay))
+        {
+            textCol.AddChild(new Label { Text = Loc.GetString("insfor-select-playstyle-header"), StyleClasses = { "LabelHeading" }, Margin = new Thickness(0, 6, 0, 2) });
+            textCol.AddChild(Wrapped(option.Roleplay));
+        }
+
+        if (!option.Opposes)
+            textCol.AddChild(new Label { Text = Loc.GetString("insfor-select-not-opposed"), StyleClasses = { "LabelSubText" }, Margin = new Thickness(0, 6, 0, 0) });
+
+        var id = option.Id;
         var choose = new Button
         {
             Text = Loc.GetString("insfor-select-choose"),
-            Disabled = !enabled,
-            VerticalAlignment = VAlignment.Center,
+            Disabled = !option.Opposes,
+            HorizontalAlignment = HAlignment.Left,
+            Margin = new Thickness(0, 8, 0, 0),
         };
-        choose.OnPressed += _ => onPressed();
-        row.AddChild(choose);
+        choose.OnPressed += _ => OnSelectDefault?.Invoke(id);
+        textCol.AddChild(choose);
 
-        panel.AddChild(row);
+        detail.AddChild(textCol);
+
+        // Right: cell-kit sprite preview.
+        detail.AddChild(BuildCellKit(option.CellKitEntities));
+
+        outer.AddChild(detail);
+
+        toggle.OnPressed += _ => detail.Visible = !detail.Visible;
+
+        panel.AddChild(outer);
         return panel;
     }
 
-    private static string Truncate(string value, int max) =>
-        value.Length <= max ? value : value[..max] + "...";
+    // A fixed-width column previewing the cell kit's contents as a wrapping grid of entity sprites.
+    private Control BuildCellKit(System.Collections.Generic.List<string> entities)
+    {
+        var col = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            MinSize = new Vector2(280, 0),
+            HorizontalExpand = false,
+        };
+        col.AddChild(new Label { Text = Loc.GetString("insfor-select-cellkit-header"), StyleClasses = { "LabelHeading" } });
+
+        var valid = 0;
+        var grid = new GridContainer { Columns = 6 };
+        foreach (var proto in entities)
+        {
+            if (!_prototype.HasIndex<EntityPrototype>(proto))
+                continue;
+            var view = new EntityPrototypeView { MinSize = new Vector2(40, 40), Margin = new Thickness(1) };
+            view.SetPrototype(new EntProtoId(proto));
+            grid.AddChild(view);
+            valid++;
+        }
+
+        if (valid == 0)
+            col.AddChild(new Label { Text = Loc.GetString("insfor-select-cellkit-empty"), StyleClasses = { "LabelSubText" } });
+        else
+            col.AddChild(grid);
+
+        return col;
+    }
+
+    // A word-wrapping prose label. RichTextLabel wraps to its parent width, and the list's ScrollContainer
+    // has horizontal scroll disabled, so text stays inside the window instead of running off it.
+    private static RichTextLabel Wrapped(string text)
+    {
+        var label = new RichTextLabel { HorizontalExpand = true };
+        label.SetMessage(text);
+        return label;
+    }
 }

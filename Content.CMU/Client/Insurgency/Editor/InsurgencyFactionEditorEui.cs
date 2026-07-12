@@ -18,9 +18,21 @@ public sealed class InsurgencyFactionEditorEui : BaseEui
         _window = new InsurgencyFactionEditorWindow(
             onSave: (id, isDefault, def) => SendMessage(new InsurgencyFactionSaveMessage(id, isDefault, def)),
             onDelete: id => SendMessage(new InsurgencyFactionDeleteMessage(id)),
-            onSelect: id => SendMessage(new InsurgencyFactionSelectMessage(id)));
+            onSelect: id => SendMessage(new InsurgencyFactionSelectMessage(id)),
+            onExportTemplate: () => SendMessage(new InsurgencyExportSheetMessage(null)),
+            onExportFaction: id => SendMessage(new InsurgencyExportSheetMessage(id)),
+            onImportFaction: bytes => SendMessage(new InsurgencyImportSheetMessage(bytes)));
 
         _window.OnClose += () => SendMessage(new CloseEuiMessage());
+    }
+
+    public override void HandleMessage(EuiMessageBase msg)
+    {
+        base.HandleMessage(msg);
+
+        // The server returns a generated workbook here; the window saves it to disk.
+        if (msg is InsurgencyExportSheetResultMessage result)
+            _window.SaveWorkbook(result.Workbook, result.FileName);
     }
 
     public override void Opened()

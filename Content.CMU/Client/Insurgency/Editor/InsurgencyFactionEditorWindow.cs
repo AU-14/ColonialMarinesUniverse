@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using Content.Client._AU14.Insurgency.CustomFactions;
@@ -37,8 +38,12 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
     private readonly Action<int?, bool, FactionDefinition> _onSave;
     private readonly Action<int> _onDelete;
     private readonly Action<int> _onSelect;
+    private readonly Action _onExportTemplate;
+    private readonly Action<int> _onExportFaction;
+    private readonly Action<byte[]> _onImportFaction;
 
     private readonly IPrototypeManager _prototype;
+    private readonly IFileDialogManager _fileDialog = IoCManager.Resolve<IFileDialogManager>();
     private readonly InsurgencyCustomFactionStore _customStore = new();
     private readonly BoxContainer _list;
     private readonly BoxContainer _pane;
@@ -50,11 +55,17 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
     public InsurgencyFactionEditorWindow(
         Action<int?, bool, FactionDefinition> onSave,
         Action<int> onDelete,
-        Action<int> onSelect)
+        Action<int> onSelect,
+        Action onExportTemplate,
+        Action<int> onExportFaction,
+        Action<byte[]> onImportFaction)
     {
         _onSave = onSave;
         _onDelete = onDelete;
         _onSelect = onSelect;
+        _onExportTemplate = onExportTemplate;
+        _onExportFaction = onExportFaction;
+        _onImportFaction = onImportFaction;
         _prototype = IoCManager.Resolve<IPrototypeManager>();
 
         Title = "INSFOR Faction Editor";
@@ -76,6 +87,17 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
         var newButton = new Button { Text = "New faction" };
         newButton.OnPressed += _ => BuildPane(null);
         left.AddChild(newButton);
+
+        // Spreadsheet workflow: export a ready-to-fill blank sheet to hand to a player, and import the
+        // filled sheet they send back. No setup or macros - the server bakes the dropdowns and reads the
+        // file, and validates the import like any untrusted payload. (Per-faction export is in the pane.)
+        var exportTemplate = new Button { Text = "Export blank sheet (for a player)" };
+        exportTemplate.OnPressed += _ => _onExportTemplate();
+        left.AddChild(exportTemplate);
+
+        var importFaction = new Button { Text = "Import filled sheet" };
+        importFaction.OnPressed += _ => ImportFactionFromFile();
+        left.AddChild(importFaction);
 
         // Right: editing pane.
         _pane = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, HorizontalExpand = true, VerticalExpand = true };
@@ -235,6 +257,12 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
 
         if (entry != null)
         {
+            // Export this faction to a filled-in spreadsheet, for editing outside the game or handing a
+            // ready-made faction to a player to tweak. The server builds the workbook.
+            var exportSheet = new Button { Text = "Export to sheet" };
+            exportSheet.OnPressed += _ => _onExportFaction(entry.Id);
+            buttons.AddChild(exportSheet);
+
             // Applying a faction to the round is a Default-editor (host) function; the Custom editor
             // also cannot touch host-authored rows. The server enforces both regardless.
             if (_scope == InsurgencyEditorScope.Default)
@@ -254,6 +282,61 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
 
         _pane.AddChild(buttons);
         InsforUiStyle.Apply(this); // restyle the freshly built pane controls
+    }
+
+    // ----- spreadsheet import / export ------------------------------------------
+
+    /// <summary>
+    ///     Called by the EUI when the server returns a generated workbook. Prompts for a save location
+    ///     and writes the .xlsx bytes there, defaulting to the server-suggested file name.
+    /// </summary>
+    public async void SaveWorkbook(byte[] data, string fileName)
+    {
+        // fileName is the server's suggested name; the native dialog does not take a default, so it is
+        // only advisory. The user picks the final path here. Wrapped whole so a locked target path (the
+        // file already open in Excel) is reported as a no-op instead of crashing the client.
+        try
+        {
+            var file = await _fileDialog.SaveFile(new FileDialogFilters(new FileDialogFilters.Group("xlsx")));
+            if (file == null)
+                return;
+
+            await using var stream = file.Value.fileStream;
+            await stream.WriteAsync(data);
+        }
+        catch (Exception)
+        {
+            // Writing the workbook is best-effort; a failed save just means the user picks again.
+        }
+    }
+
+    // Opens a filled-in faction spreadsheet and hands its raw bytes to the server, which reads, validates,
+    // and stores it. Never parses the file locally; the server has the final say.
+    private async void ImportFactionFromFile()
+    {
+        try
+        {
+            // Read-only with a shared lock: the player almost always still has the file open in Excel,
+            // which keeps a write lock. Requesting write access (the default) would throw a sharing
+            // violation; read + FileShare.ReadWrite opens alongside Excel.
+            await using var file = await _fileDialog.OpenFile(
+                new FileDialogFilters(new FileDialogFilters.Group("xlsx")),
+                System.IO.FileAccess.Read,
+                System.IO.FileShare.ReadWrite);
+            if (file == null)
+                return;
+
+            using var ms = new MemoryStream();
+            await file.CopyToAsync(ms);
+            var bytes = ms.ToArray();
+            if (bytes.Length > 0)
+                _onImportFaction(bytes);
+        }
+        catch (Exception)
+        {
+            // A locked, malformed, or unreadable file is ignored rather than crashing the client;
+            // nothing is sent to the server.
+        }
     }
 
     // ----- pickers --------------------------------------------------------------

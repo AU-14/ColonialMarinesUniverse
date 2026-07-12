@@ -73,14 +73,15 @@ public sealed class InsurgencyFactionSelectEui : BaseEui
         var hasOverride = stored.Any(s => s.Definition.Metadata.BuiltinOverrideOf == InsurgencyBuiltinFactions.VanillaClfId);
         if (!hasOverride)
         {
-            var vanilla = InsurgencyBuiltinFactions.VanillaClf().Metadata;
+            var vanilla = InsurgencyBuiltinFactions.VanillaClf();
             options.Add(new DefaultFactionOption(
                 InsurgencyBuiltinFactions.VanillaClfId,
-                vanilla.Title,
-                vanilla.Description,
-                vanilla.RoleplayText,
-                vanilla.FlagEntity?.Id,
-                vanilla.StatusIcon?.Id,
+                vanilla.Metadata.Title,
+                vanilla.Metadata.Description,
+                vanilla.Metadata.RoleplayText,
+                vanilla.Metadata.FlagEntity?.Id,
+                vanilla.Metadata.StatusIcon?.Id,
+                CellKitEntities(vanilla),
                 true));
         }
 
@@ -100,6 +101,7 @@ public sealed class InsurgencyFactionSelectEui : BaseEui
                     meta.RoleplayText,
                     meta.FlagEntity?.Id,
                     meta.StatusIcon?.Id,
+                    CellKitEntities(s.Definition),
                     opposes);
             }));
 
@@ -149,6 +151,38 @@ public sealed class InsurgencyFactionSelectEui : BaseEui
         var def = InsurgencyFactionValidator.SanitizeCustom(msg.Definition, _prototypes);
         _apply.ApplyFaction(def);
         Close();
+    }
+
+    // How many cell-kit sprites the popup previews. A generous cap so the grid never explodes on a
+    // faction with huge vendors, while still showing the bulk of what a normal cell deploys.
+    private const int MaxCellKitPreview = 80;
+
+    // Gathers what a faction's cell kit puts in play, for the sprite preview: the free-placed entities,
+    // each vendor's base model, then the items its vendors stock. Deduplicated, order preserved, capped.
+    private static List<string> CellKitEntities(Content.Shared._AU14.Insurgency.FactionDefinition def)
+    {
+        var seen = new HashSet<string>();
+        var result = new List<string>();
+
+        void Add(string? id)
+        {
+            if (result.Count >= MaxCellKitPreview || string.IsNullOrWhiteSpace(id) || !seen.Add(id))
+                return;
+            result.Add(id);
+        }
+
+        foreach (var placeable in def.CellKit.PlaceableEntities)
+            Add(placeable.Id);
+
+        foreach (var vendor in def.CellKit.VendorDefinitions)
+        {
+            Add(vendor.BaseModel.Id);
+            foreach (var section in vendor.Sections)
+            foreach (var entry in section.Entries)
+                Add(entry.Id.Id);
+        }
+
+        return result;
     }
 
     private bool CanUseCustom() => InsurgencyAuthorization.IsAuthorized(_admin, Player);
