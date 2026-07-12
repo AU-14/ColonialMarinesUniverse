@@ -10,6 +10,7 @@
 
 - type: thirdParty
   id: CLFSurvsBig
+  announceAsSurvivors: true
   partyspawn: CLFSurvsSpawnBig
   blacklistedgamemodes:
     - insurgency
@@ -34,7 +35,8 @@
 
 - type: thirdParty
   id: CLFSurvsMedium
-  partyspawn: CLFSurvsSpawnBig
+  announceAsSurvivors: true
+  partyspawn: CLFSurvsSpawnMedium
   blacklistedgamemodes:
     - insurgency
     - forceonforce
@@ -58,7 +60,8 @@
 
 - type: thirdParty
   id: CLFSurvsSmall
-  partyspawn: CLFSurvsSpawnBig
+  announceAsSurvivors: true
+  partyspawn: CLFSurvsSpawnSmall
   blacklistedgamemodes:
     - insurgency
     - forceonforce

@@ -10,6 +10,7 @@
 
 - type: thirdParty
   id: VAISP
+  announceAsSurvivors: true
   partyspawn: VAISPSpawn
   entrymethod: shuttle
   weight: 20

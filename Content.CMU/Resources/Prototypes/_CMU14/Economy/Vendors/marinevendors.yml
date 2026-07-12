@@ -19,14 +19,8 @@
     sections:
     - name: Fatigues
       entries:
-      - id: AU14DesertFatigues
-        amount: 40
-      - id: AU14JungleFatigues
-        amount: 40
-      - id: AU14SnowFatigues
-        amount: 40
-      - id: AU14MixedSnowFatigues
-        amount: 40
+      - id: AU14CamoUSCMFatigues
+        amount: 120
     - name: Footwear
       entries:
       - id: CMBootsBlack
@@ -61,22 +55,14 @@
         amount: 2
     - name: Headgear
       entries:
-      - id: AU14DesertM10Helmet
+      - id: AU14CamoM10Helmet
+        amount: 65
+      - id: AU14CamoBoonieHat
         amount: 40
-      - id: AU14JungleM10Helmet
-        amount: 25
-      - id: AU14DesertBoonieHat
-        amount: 20
-      - id: AU14JungleBoonieHat
-        amount: 20
-      - id: AU14DesertPatrolCap
-        amount: 25
-      - id: AU14JunglePatrolCap
-        amount: 25
-      - id: AU14DesertFlapCap
-        amount: 15
-      - id: AU14JungleFlapCap
-        amount: 15
+      - id: AU14CamoPatrolCap
+        amount: 50
+      - id: AU14CamoFlapCap
+        amount: 30
       - id: AU14HeadCommandoBeanie
         amount: 10
       - id: RMCM5CameraGear
@@ -89,30 +75,20 @@
         amount: 8
     - name: Armor
       entries:
-      - id: AU14ArmorM3DesertOne
-        amount: 40
-      - id: AU14ArmorM3DesertTwo
-        amount: 40
-      - id: AU14ArmorM3DesertThree
-        amount: 40
-      - id: AU14ArmorM3JungleOne
-        amount: 25
-      - id: AU14ArmorM3JungleTwo
-        amount: 25
-      - id: AU14ArmorM3JungleThree
-        amount: 25
+      - id: AU14CamoArmorM3Smooth
+        amount: 65
+      - id: AU14CamoArmorM3Ribbed
+        amount: 65
+      - id: AU14CamoArmorM3Dimpled
+        amount: 65
     - name: Armor Components
       entries:
-      - id: AU14KitDesertArmor
-        amount: 40
-      - id: AU14KitJungleArmor
-        amount: 25
+      - id: AU14CamoKitArmor
+        amount: 65
       - id: AU14ArmorGarbShotgunShellHolder
         amount: 8
-      - id: AU14ArmorGarbJunglePoncho
-        amount: 25
-      - id: AU14ArmorGarbDesertPoncho
-        amount: 40
+      - id: AU14CamoArmorGarbPoncho
+        amount: 65
     - name: Backpack
       entries:
       - id: CMBackpackMarine
@@ -232,20 +208,14 @@
         amount: 25
     - name: Helmet Garb
       entries:
-      - id: AU14HelmetGarbM10SkrimJungle
-        amount: 15
-      - id: AU14HelmetGarbM10SkrimDesert
-        amount: 15
-      - id: AU14HelmetGarbM10SkrimSnow
-        amount: 15
+      - id: AU14CamoHelmetGarbM10Skrim
+        amount: 45
       - id: AU14HelmetGarbM10RainCover
         amount: 40
       - id: AU14HelmetGarbM10Netting
         amount: 40
-      - id: RMCHelmetGarbGasmaskJungle
-        amount: 20
-      - id: RMCHelmetGarbGasmaskDesert
-        amount: 20
+      - id: AU14CamoHelmetGarbGasmask
+        amount: 40
     - name: Patches
       entries:
       - id: AU14PatchUAFlag
@@ -602,9 +572,15 @@
     - name: Fatigues
       entries:
       - id: CMJumpsuitXOFormal
-        amount: 2
+        amount: 10
       - id: AU14USCMOperationsUniform
-        amount: 3
+        amount: 10
+    - name: Jackets
+      entries:
+      - id: RMCCoatAllWeather
+        amount: 10
+      - id: RMCCoatService
+        amount: 10
     - name: Footwear
       entries:
       - id: CMBootsBlack
@@ -615,10 +591,8 @@
         amount: 5
     - name: Headgear
       entries:
-      - id: AU14DesertM11Helmet
-        amount: 5
-      - id: AU14JungleM11Helmet
-        amount: 5
+      - id: AU14CamoM11Helmet
+        amount: 10
       - id: CMHeadCapPeakedFormal
         amount: 5
       - id: CMHeadCapPeakedService
@@ -626,10 +600,8 @@
       - id: RMCHeadBeretSquad
         amount: 5
         name: Black Beret
-      - id: AU14JunglePatrolCap
-        amount: 5
-      - id: AU14DesertPatrolCap
-        amount: 5
+      - id: AU14CamoPatrolCap
+        amount: 10
     - name: Backpack
       entries:
       - id: RMCBackpackRTO
@@ -693,8 +665,7 @@
     - name: Smartgun Harness
       choices: { SmartgunHarness: 1 }
       entries:
-      - id: AU14ArmorSmartGunDesertCombatHarness
-      - id: AU14ArmorSmartGunJungleCombatHarness
+      - id: AU14CamoArmorSmartGunCombatHarness
     - name: Smartgun Belts
       choices: { SmartgunBelts: 1 }
       entries:
@@ -722,12 +693,10 @@
     - name: Helmets and Hats
       choices: { CMHat: 1 }
       entries:
-      - id: AU14DesertM11Helmet
-      - id: AU14JungleM11Helmet
+      - id: AU14CamoM11Helmet
       - id: RMCHeadBeretSquad
         name: Black Beret
-      - id: AU14JunglePatrolCap
-      - id: AU14DesertPatrolCap
+      - id: AU14CamoPatrolCap
     - name: Equipment
       takeAll: CMStandard
       entries:
@@ -1249,25 +1218,27 @@
     - name: Uniform
       choices: { AU14Uniform: 1 }
       entries:
-      - id: AU14DesertFatigues
+      - id: AU14CamoUSCMFatigues
     - name: Footwear
       choices: { AU14FootWear: 1 }
       entries:
       - id: CMBootsBlack
       - id: CMBootsBrown
     - name: Hat
-      choices: { CMHat: 1 }
+      choices: { CMHat: 2 }
       entries:
       - id: CMHeadCapMP
       - id: CMHeadBeretRed
     - name: Helmet
       choices: { AU14Helmet: 1 }
       entries:
-      - id: AU14DesertM10MPHelmet
+      - id: AU14CamoM10Helmet
     - name: Vest
       choices: { AU14vest: 1 }
       entries:
-      - id: AU14ArmorM3DesertOne
+      - id: AU14CamoArmorM3Smooth
+      - id: AU14CamoArmorM3Ribbed
+      - id: AU14CamoArmorM3Dimpled
     - name: Backpack
       choices: { CMBackpack: 1 }
       entries:

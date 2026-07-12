@@ -31,6 +31,8 @@ namespace Content.Server.AU14.Round
     /// </summary>
     public sealed partial class AuRoundSystem : EntitySystem
     {
+        private const string DistressSignalPresetId = "DistressSignal";
+
         private static readonly HashSet<string> NoThreatPresets = new(StringComparer.OrdinalIgnoreCase)
         {
             "ForceOnForce",
@@ -214,6 +216,7 @@ namespace Content.Server.AU14.Round
             _selectedPlanet = null;
             _selectedPlanetId = null;
             _state.SelectedThreat = null;
+            _state.ResetDistressSignalThirdPartyLock();
             _selectedThirdParties.Clear();
             var sequenceId = _voteSequenceId;
             var presetVote = StartPresetVote(sequenceId, presetId =>
@@ -376,6 +379,17 @@ namespace Content.Server.AU14.Round
 
         private void PreselectThirdParties()
         {
+            if (_state.DistressSignalThirdPartiesLocked &&
+                _selectedPreset?.ID.Equals(DistressSignalPresetId, StringComparison.OrdinalIgnoreCase) == true)
+            {
+                FillLockedDistressSignalThirdPartiesForSelectedThreat();
+                _sawmill.Debug(
+                    $"[AuRoundSystem] Keeping pre-round Distress Signal third-party selection: selected={
+                        _selectedThirdParties.Count}, survivors={_state.DistressSignalSurvivorCount}, fillCompleted={
+                            _state.DistressSignalThirdPartyFillCompleted}.");
+                return;
+            }
+
             _selectedThirdParties.Clear();
             Logger.GetSawmill("content").Debug(
                 $"[AuRoundSystem] PreselectThirdParties start: preset={_selectedPreset?.ID ?? "null"}, planet={_selectedPlanet?.MapId ?? "null"}, threat={SelectedThreat?.ID ?? "null"}.");
@@ -429,11 +443,7 @@ namespace Content.Server.AU14.Round
                 GetThirdPartyBodyCount,
                 out var selectedBodyCount);
 
-            var roundStartParties = selected.Where(party => party.RoundStart).ToList();
-            var delayedParties = selected.Where(party => !party.RoundStart).ToList();
-
-            _selectedThirdParties.AddRange(roundStartParties);
-            _selectedThirdParties.AddRange(delayedParties);
+            SetSelectedThirdPartiesInSpawnOrder(selected);
             if (_sawmill.Level <= Robust.Shared.Log.LogLevel.Debug)
             {
                 _sawmill.Debug(
@@ -479,7 +489,9 @@ namespace Content.Server.AU14.Round
             if (maxThirdParties <= 0 || bodyBudget <= 0 || candidates.Count == 0)
                 return selected;
 
-            var remaining = candidates.ToList();
+            var remaining = candidates
+                .DistinctBy(candidate => candidate.ID, StringComparer.OrdinalIgnoreCase)
+                .ToList();
             while (selected.Count < maxThirdParties &&
                    selectedBodyCount < bodyBudget &&
                    remaining.Count > 0)
@@ -558,6 +570,230 @@ namespace Content.Server.AU14.Round
         public void PreselectThirdPartiesForSelectedThreat()
         {
             PreselectThirdParties();
+        }
+
+        private void FillLockedDistressSignalThirdPartiesForSelectedThreat()
+        {
+            var selectedThreat = SelectedThreat;
+            var selectedPlanet = _selectedPlanet;
+            if (_state.DistressSignalThirdPartyFillCompleted ||
+                selectedThreat == null ||
+                selectedPlanet == null)
+            {
+                return;
+            }
+
+            var playerCount = _playerManager.PlayerCount;
+            var bodyBudget = CalculateThirdPartyBodyBudget(playerCount, selectedThreat.ThirdPartyRatio);
+            if (TryCalculateThreatBodyCount(selectedThreat, playerCount, out var threatBodyCount))
+                bodyBudget = Math.Min(bodyBudget, threatBodyCount.Total);
+            var maxThirdParties = Math.Max(0, selectedThreat.MaxThirdParties);
+
+            var candidates = new List<ThirdPartyPrototype>();
+            foreach (var partyId in selectedPlanet.ThirdParties)
+            {
+                if (!_prototypeManager.TryIndex(partyId, out ThirdPartyPrototype? party))
+                {
+                    _sawmill.Warning($"[AuRoundSystem] Could not find ThirdPartyPrototype for ID: {partyId}");
+                    continue;
+                }
+
+                if (IsThirdPartyAllowedForCurrentContext(party))
+                    candidates.Add(party);
+            }
+
+            List<ThirdPartyPrototype> additional = SelectAdditionalDistressSignalThirdParties(
+                candidates,
+                _selectedThirdParties,
+                maxThirdParties,
+                bodyBudget,
+                PickWeightedThirdParty,
+                GetThirdPartyBodyCount,
+                out var lockedBodyCount,
+                out var additionalBodyCount);
+
+            var lockedPartyCount = _selectedThirdParties.Count;
+            if (lockedPartyCount > maxThirdParties || lockedBodyCount > bodyBudget)
+            {
+                _sawmill.Warning(
+                    $"[AuRoundSystem] Locked Distress Signal third parties exceed the final threat capacity after the player count changed: selected={
+                        lockedPartyCount}/{maxThirdParties}, bodies={lockedBodyCount}/{bodyBudget}. Keeping the announced roster.");
+            }
+
+            if (additional.Count > 0)
+                SetSelectedThirdPartiesInSpawnOrder(_selectedThirdParties.Concat(additional));
+
+            _state.DistressSignalThirdPartyFillCompleted = true;
+            _sawmill.Info(
+                $"[AuRoundSystem] Completed Distress Signal third-party selection for threat {selectedThreat.ID}: locked={
+                    lockedPartyCount}, added={additional.Count}, bodies={lockedBodyCount + additionalBodyCount}/{
+                        bodyBudget}, survivors={_state.DistressSignalSurvivorCount}.");
+
+            int GetThirdPartyBodyCount(ThirdPartyPrototype party)
+                => TryCalculateThirdPartyBodyCount(party, playerCount, out var bodyCount)
+                    ? bodyCount
+                    : 0;
+        }
+
+        internal static List<ThirdPartyPrototype> SelectAdditionalDistressSignalThirdParties(
+            IReadOnlyList<ThirdPartyPrototype> candidates,
+            IReadOnlyCollection<ThirdPartyPrototype> lockedParties,
+            int maxThirdParties,
+            int bodyBudget,
+            Func<IReadOnlyList<ThirdPartyPrototype>, ThirdPartyPrototype?> pickThirdParty,
+            Func<ThirdPartyPrototype, int> getBodyCount,
+            out int lockedBodyCount,
+            out int additionalBodyCount)
+        {
+            lockedBodyCount = lockedParties.Sum(party => Math.Max(0, getBodyCount(party)));
+            var lockedIds = lockedParties
+                .Select(party => party.ID)
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            var fillCandidates = candidates
+                .Where(party =>
+                    !lockedIds.Contains(party.ID) &&
+                    !(party.RoundStart && party.AnnounceAsSurvivors))
+                .ToList();
+
+            return SelectThirdPartiesWithinBodyBudget(
+                fillCandidates,
+                Math.Max(0, maxThirdParties - lockedParties.Count),
+                Math.Max(0, bodyBudget - lockedBodyCount),
+                pickThirdParty,
+                getBodyCount,
+                out additionalBodyCount);
+        }
+
+        private void SetSelectedThirdPartiesInSpawnOrder(IEnumerable<ThirdPartyPrototype> selected)
+        {
+            var parties = selected.ToList();
+            _selectedThirdParties.Clear();
+            _selectedThirdParties.AddRange(parties.Where(party => party.RoundStart));
+            _selectedThirdParties.AddRange(parties.Where(party => !party.RoundStart));
+        }
+
+        /// <summary>
+        ///     Locks a safe Distress Signal third-party roster before the post-roundstart threat vote.
+        ///     The winning threat can fill any remaining capacity without changing the announced survivor count.
+        /// </summary>
+        public bool TryLockDistressSignalThirdParties(out int survivorCount)
+        {
+            survivorCount = _state.DistressSignalSurvivorCount;
+            if (_state.DistressSignalThirdPartiesLocked)
+                return true;
+
+            if (_selectedPreset?.ID.Equals(DistressSignalPresetId, StringComparison.OrdinalIgnoreCase) != true ||
+                _selectedPlanet == null)
+            {
+                return false;
+            }
+
+            var playerCount = _playerManager.PlayerCount;
+            var platoonSpawnRule = _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
+            var govforId = platoonSpawnRule.SelectedGovforPlatoon?.ID;
+            var opforId = platoonSpawnRule.SelectedOpforPlatoon?.ID;
+            var threatLimits = new List<(int MaxThirdParties, int BodyBudget)>();
+            var eligibleThreatIds = new List<string>();
+
+            foreach (var threatId in _selectedPlanet.AllowedThreats)
+            {
+                if (!_prototypeManager.TryIndex(threatId, out ThreatPrototype? threat) ||
+                    !ThreatVoteSelection.IsThreatAllowed(
+                        threat,
+                        DistressSignalPresetId,
+                        govforId,
+                        opforId,
+                        playerCount) ||
+                    !TryCalculateThreatBodyCount(threat, playerCount, out var threatBodyCount) ||
+                    threatBodyCount.Total <= 0)
+                {
+                    continue;
+                }
+
+                eligibleThreatIds.Add(threat.ID);
+                threatLimits.Add((
+                    Math.Max(0, threat.MaxThirdParties),
+                    CalculateThirdPartyBodyBudget(playerCount, threat.ThirdPartyRatio, threatBodyCount)));
+            }
+
+            var (maxThirdParties, bodyBudget) = GetConservativeThirdPartyLimits(threatLimits);
+            var candidates = new List<ThirdPartyPrototype>();
+            foreach (var partyId in _selectedPlanet.ThirdParties)
+            {
+                if (!_prototypeManager.TryIndex(partyId, out ThirdPartyPrototype? party))
+                {
+                    _sawmill.Warning($"[AuRoundSystem] Could not find ThirdPartyPrototype for ID: {partyId}");
+                    continue;
+                }
+
+                var allowedForEveryThreat = eligibleThreatIds.Count > 0 && eligibleThreatIds.All(threatId =>
+                    IsThirdPartyAllowed(
+                        party,
+                        DistressSignalPresetId,
+                        threatId,
+                        govforId,
+                        opforId,
+                        playerCount));
+                if (allowedForEveryThreat)
+                    candidates.Add(party);
+            }
+
+            var bodyCounts = new Dictionary<ThirdPartyPrototype, int>();
+            foreach (var party in candidates)
+            {
+                bodyCounts[party] = TryCalculateThirdPartyBodyCount(party, playerCount, out var count)
+                    ? count
+                    : 0;
+            }
+
+            List<ThirdPartyPrototype> selected = SelectThirdPartiesWithinBodyBudget(
+                candidates,
+                maxThirdParties,
+                bodyBudget,
+                PickWeightedThirdParty,
+                party => bodyCounts[party],
+                out var selectedBodyCount);
+
+            SetSelectedThirdPartiesInSpawnOrder(selected);
+            survivorCount = CalculateAnnouncedSurvivorCount(selected, party => bodyCounts[party]);
+            _state.DistressSignalSurvivorCount = survivorCount;
+            _state.DistressSignalThirdPartiesLocked = true;
+            _state.DistressSignalThirdPartyFillCompleted = false;
+
+            _sawmill.Info(
+                $"[AuRoundSystem] Locked Distress Signal third parties before round start: selected={
+                    selected.Count}, bodies={selectedBodyCount}/{bodyBudget}, survivors={survivorCount}, eligibleThreats=[{
+                        string.Join(", ", eligibleThreatIds)}].");
+
+            return true;
+        }
+
+        internal static (int MaxThirdParties, int BodyBudget) GetConservativeThirdPartyLimits(
+            IReadOnlyCollection<(int MaxThirdParties, int BodyBudget)> threatLimits)
+        {
+            if (threatLimits.Count == 0)
+                return default;
+
+            return (
+                threatLimits.Min(limit => Math.Max(0, limit.MaxThirdParties)),
+                threatLimits.Min(limit => Math.Max(0, limit.BodyBudget)));
+        }
+
+        internal static int CalculateAnnouncedSurvivorCount(
+            IEnumerable<ThirdPartyPrototype> selected,
+            Func<ThirdPartyPrototype, int> getBodyCount)
+        {
+            return selected
+                .Where(party => party.RoundStart && party.AnnounceAsSurvivors)
+                .Sum(getBodyCount);
+        }
+
+        /// <summary>
+        ///     Clears the committed pre-round roster without disturbing ordinary third-party preselection.
+        /// </summary>
+        public void ResetLockedDistressSignalThirdParties()
+        {
+            _state.ResetDistressSignalThirdPartyLock();
         }
 
         private void StartPlatoonVotes(int sequenceId)
