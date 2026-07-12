@@ -508,17 +508,22 @@ public sealed class ZCaveInSystem : EntitySystem
         return _tag.HasTag(uid, "Wall") && !HasComp<DamageableComponent>(uid);
     }
 
-    /// <summary>Strips fixture hardness from a structure that has fallen through a collapsed floor, so it can
-    /// overlap cave rocks without generating endless physics contacts. It keeps its sprite, damage state and
-    /// interactions - it just no longer blocks or pushes.</summary>
+    /// <summary>Turns a structure that has fallen through a collapsed floor into inert rubble: every fixture's
+    /// collision layer/mask is zeroed (non-hard alone still raises contact events, so bullets would still "hit"
+    /// the fallen wall - with no collision bits projectiles pass straight through and cave rocks never grind
+    /// contacts against it). The networked ZFallenDebris marker makes the client draw it battered.</summary>
     private void MakeFallenDebrisNonHard(EntityUid uid)
     {
+        EnsureComp<ZFallenDebrisComponent>(uid);
+
         if (!TryComp<FixturesComponent>(uid, out var fixtures))
             return;
 
-        foreach (var fixture in fixtures.Fixtures.Values)
+        foreach (var (id, fixture) in fixtures.Fixtures)
         {
             _physics.SetHard(uid, fixture, false, manager: fixtures);
+            _physics.SetCollisionLayer(uid, id, fixture, 0, manager: fixtures);
+            _physics.SetCollisionMask(uid, id, fixture, 0, manager: fixtures);
         }
     }
 

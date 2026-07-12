@@ -5,11 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using Content.Client._AU14.UI;
-using Content.Client.UserInterface.Controls;
-using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
-using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client._AU14.Construction.CustomConstruction;
@@ -17,17 +14,15 @@ namespace Content.Client._AU14.Construction.CustomConstruction;
 /// <summary>
 /// Entity-Spawn-Panel-style picker reshaped for SELECTION: a search box over every spawnable entity
 /// prototype and a scrollable list of rows showing each entity's SPRITE next to its name + id. Clicking a
-/// row picks it. Reused by the construction editor (choose a custom material/tool entity) and by the
-/// in-menu "Construction Items Editor" utility (choose an item to add). Fires <see cref="OnEntitySelected"/>.
+/// row picks it. The list is virtualized (<see cref="VirtualEntityList"/>) so it scrolls through the entire
+/// prototype set without lag. Reused by the construction editor (choose a custom material/tool entity) and
+/// by the in-menu "Construction Items Editor" utility. Fires <see cref="OnEntitySelected"/>.
 /// </summary>
 public sealed class EntitySelectorWindow : DefaultWindow
 {
-    // Cap rendered rows so a blank search doesn't try to spin up a sprite view for the entire prototype set.
-    private const int MaxRows = 200;
-
     private readonly IPrototypeManager _prototype;
     private readonly LineEdit _search;
-    private readonly BoxContainer _rows;
+    private readonly VirtualEntityList _list;
 
     // (id, display name, lowercased "name id" haystack) for fast filtering; built once.
     private readonly List<(string Id, string Name, string Haystack)> _all = new();
@@ -46,14 +41,16 @@ public sealed class EntitySelectorWindow : DefaultWindow
             PlaceHolder = Loc.GetString("construction-selector-search"),
             HorizontalExpand = true,
         };
-        _rows = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, HorizontalExpand = true };
-
-        var scroll = new ScrollContainer { VerticalExpand = true, HorizontalExpand = true, HScrollEnabled = false };
-        scroll.AddChild(_rows);
+        _list = new VirtualEntityList();
+        _list.OnRowToggled += (id, _) =>
+        {
+            OnEntitySelected?.Invoke(id);
+            Close();
+        };
 
         var root = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, Margin = new Thickness(8) };
         root.AddChild(_search);
-        root.AddChild(scroll);
+        root.AddChild(_list);
 
         // Dark gmod-style panel behind the picker so it matches the construction menu / editor.
         var panel = new PanelContainer
@@ -87,49 +84,16 @@ public sealed class EntitySelectorWindow : DefaultWindow
 
     private void Refresh(string filter)
     {
-        _rows.RemoveAllChildren();
-
         var needle = filter.Trim().ToLowerInvariant();
-        var count = 0;
+        var items = new List<(string Id, string Name)>();
         foreach (var entry in _all)
         {
             if (needle.Length > 0 && !entry.Haystack.Contains(needle))
                 continue;
 
-            _rows.AddChild(MakeRow(entry.Id, entry.Name));
-
-            if (++count >= MaxRows)
-                break;
+            items.Add((entry.Id, entry.Name));
         }
-    }
 
-    private Control MakeRow(string id, string name)
-    {
-        var view = new EntityPrototypeView
-        {
-            SetSize = new Vector2(32, 32),
-            Margin = new Thickness(0, 0, 6, 0),
-            VerticalAlignment = VAlignment.Center,
-        };
-        view.SetPrototype(id);
-
-        var row = new ContainerButton { HorizontalExpand = true, Margin = new Thickness(0, 0, 0, 2) };
-        row.AddChild(new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            Margin = new Thickness(4, 2, 4, 2),
-            Children =
-            {
-                view,
-                new Label { Text = $"{name}  [{id}]", VerticalAlignment = VAlignment.Center },
-            },
-        });
-        GmodStyle.Modernize(row);
-        row.OnPressed += _ =>
-        {
-            OnEntitySelected?.Invoke(id);
-            Close();
-        };
-        return row;
+        _list.SetItems(items);
     }
 }

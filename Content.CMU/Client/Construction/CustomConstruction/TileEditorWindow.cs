@@ -25,8 +25,6 @@ namespace Content.Client._AU14.Construction.CustomConstruction;
 /// </summary>
 public sealed class TileEditorWindow : DefaultWindow
 {
-    private const int MaxRows = 200;
-
     // Friendly label -> material stack id. The CM material stacks the lathe/construction sheets provide.
     private static readonly (string Label, string Stack)[] Materials =
     {
@@ -163,16 +161,13 @@ public sealed class TileEditorWindow : DefaultWindow
         _rows.RemoveAllChildren();
 
         var needle = filter.Trim().ToLowerInvariant();
-        var count = 0;
+        // Uncapped: the list must be scrollable through every tile (see EntitySelectorWindow).
         foreach (var tile in _tiles)
         {
             if (needle.Length > 0 && !tile.ToLowerInvariant().Contains(needle))
                 continue;
 
             _rows.AddChild(MakeTileRow(tile));
-
-            if (++count >= MaxRows)
-                break;
         }
     }
 

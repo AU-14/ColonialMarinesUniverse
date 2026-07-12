@@ -163,3 +163,17 @@ construction-menu-lathe-added = Added { $item } to the { $lathe }. Applies next 
 construction-menu-lathe-removed = Removed lathe recipe { $recipe }. Applies next restart.
 construction-lathe-editor-existing = Existing added recipes (click to remove)
 construction-lathe-editor-remove = Remove
+
+# Mass Entity Editor (Admin Tools): batch-add many entities under one recipe
+gmod-construction-menu-mass-editor = Mass Entity Editor
+construction-mass-selector-title = Mass Entity Editor - Select Entities
+construction-mass-selector-parent-search = Search parent prototypes...
+construction-mass-selector-parent-all = All parents
+construction-mass-selector-select-all = Select All Shown
+construction-mass-selector-clear = Clear
+construction-mass-selector-confirm = Continue
+construction-mass-selector-count = Selected: {$count}
+construction-menu-mass-item-name = {$count} selected entities
+construction-menu-mass-none = None of the selected entities are valid.
+construction-menu-mass-added = Added {$added} items to {$category} ({$recipe}).
+construction-menu-mass-partial = Added {$added} items, {$failed} failed ({$reason}).

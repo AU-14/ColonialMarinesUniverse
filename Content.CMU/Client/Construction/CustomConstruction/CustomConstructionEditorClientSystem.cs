@@ -41,6 +41,8 @@ public sealed class CustomConstructionEditorClientSystem : EntitySystem
     private LatheEditorWindow? _latheWindow;
     private RecipeChooserWindow? _chooser;
     private ZLevelTogglesWindow? _zTogglesWindow;
+    private MassEntitySelectorWindow? _massSelector;
+    private ConstructionEditorWindow? _massEditor;
 
     /// <summary>
     /// Construction recipe ids the local admin hid via the menu's "Remove Item" button THIS session. The
@@ -57,6 +59,50 @@ public sealed class CustomConstructionEditorClientSystem : EntitySystem
         SubscribeNetworkEvent<OpenCustomTileEditorEvent>(OnOpenTile);
         SubscribeNetworkEvent<OpenCustomLatheEditorEvent>(OnOpenLathe);
         SubscribeNetworkEvent<OpenZLevelTogglesEvent>(OnOpenZLevelToggles);
+        SubscribeNetworkEvent<OpenMassConstructionEditorEvent>(OnOpenMassEditor);
+    }
+
+    /// <summary>
+    /// Admin Tools > Mass Entity Editor: pick MANY entities (with ancestor filtering, e.g. everything under
+    /// BaseWall), then fill in ONE recipe that the server applies to each of them as separate entries.
+    /// </summary>
+    public void OpenMassEditor()
+    {
+        if (!CanUseEditor())
+        {
+            _popup.PopupCursor(Loc.GetString("construction-menu-editor-not-admin"), PopupType.MediumCaution);
+            return;
+        }
+
+        _massSelector?.Close();
+        _massSelector = new MassEntitySelectorWindow();
+        _massSelector.OnEntitiesSelected += ids =>
+        {
+            if (ids.Count > 0)
+                RaiseNetworkEvent(new RequestOpenMassConstructionEditorEvent { ProtoIds = ids });
+        };
+        _massSelector.OnClose += () => _massSelector = null;
+        _massSelector.OpenCentered();
+    }
+
+    private void OnOpenMassEditor(OpenMassConstructionEditorEvent ev)
+    {
+        _massEditor?.Close();
+        _massEditor = new ConstructionEditorWindow();
+        var protoIds = ev.ProtoIds;
+        // One editor form; on confirm the single recipe is fanned out server-side to every entity in the batch.
+        _massEditor.OnSubmit += submit => RaiseNetworkEvent(new SubmitMassConstructionEditorEvent
+        {
+            ProtoIds = protoIds,
+            Spawnlist = submit.Spawnlist,
+            Category = submit.Category,
+            Steps = submit.Steps,
+            DeconstructSteps = submit.DeconstructSteps,
+            Health = submit.Health,
+        });
+        _massEditor.OnClose += () => _massEditor = null;
+        _massEditor.Populate(ev.Editor);
+        _massEditor.OpenCentered();
     }
 
     /// <summary>Admin Tools > Z-Level Toggles: ask the server (which re-checks permission) for the map list.</summary>
