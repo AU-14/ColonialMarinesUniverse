@@ -62,25 +62,32 @@ public sealed class InsurgencyFactionEditorEui : BaseEui
             return;
 
         var stored = await _db.GetFactionsAsync();
+
+        // The built-in vanilla CLF is seeded into the DB (once) the first time the Default editor opens, as a
+        // real Default faction row marked with BuiltinOverrideOf. From then on it is an ordinary editable row
+        // like any faction authored in the editor - no code-only virtual entry, so editing and saving it
+        // updates in place and shows up immediately, exactly like every other faction. Only the host (Default)
+        // editor seeds it; the Custom editor never touches Default rows.
+        if (_scope == InsurgencyEditorScope.Default &&
+            !stored.Any(s => s.Definition.Metadata.BuiltinOverrideOf == InsurgencyBuiltinFactions.VanillaClfId))
+        {
+            var seed = InsurgencyBuiltinFactions.VanillaClf();
+            seed.Metadata.BuiltinOverrideOf = InsurgencyBuiltinFactions.VanillaClfId;
+            await _db.AddFactionAsync(seed, true);
+            stored = await _db.GetFactionsAsync();
+        }
+
         _factions = stored
             // The Custom editor only ever sees Custom factions; Default (host) sees everything.
             .Where(s => _scope == InsurgencyEditorScope.Default || !s.IsDefault)
             .Select(s => new EditorFactionEntry(s.Id, s.IsDefault, s.Definition))
             .ToList();
 
-        // Once the built-in vanilla CLF has been edited and saved it lives in the DB as a normal row marked
-        // as its override. When that row exists, use it (it is a real, editable, updatable faction); only
-        // when it does not do we fall back to showing the code-built copy as an editable starting point.
+        // Keep the built-in CLF pinned at the top where it has always sat, so editing it does not make it
+        // appear to jump around the list.
         var overrideIndex = _factions.FindIndex(f => f.Definition.Metadata.BuiltinOverrideOf == InsurgencyBuiltinFactions.VanillaClfId);
-        if (overrideIndex < 0)
+        if (overrideIndex > 0)
         {
-            _factions.Insert(0, new EditorFactionEntry(
-                InsurgencyBuiltinFactions.VanillaClfId, true, InsurgencyBuiltinFactions.VanillaClf()));
-        }
-        else if (overrideIndex > 0)
-        {
-            // Keep the edited built-in pinned at the top where the code copy always sat, so editing it does
-            // not make it appear to jump to the bottom of the list as if a new faction had been created.
             var overrideEntry = _factions[overrideIndex];
             _factions.RemoveAt(overrideIndex);
             _factions.Insert(0, overrideEntry);
@@ -120,25 +127,19 @@ public sealed class InsurgencyFactionEditorEui : BaseEui
         // The Custom editor can only author Custom factions, whatever the client claims.
         var isDefault = _scope == InsurgencyEditorScope.Default && msg.IsDefault;
 
-        // Editing the built-in vanilla CLF upserts a single persistent override row (marked with
-        // BuiltinOverrideOf) instead of spawning a fresh faction every save. After the first save that row
-        // is a normal DB faction that further edits update in place, so the built-in becomes editable.
-        if (msg.Id == InsurgencyBuiltinFactions.VanillaClfId)
-        {
-            def.Metadata.BuiltinOverrideOf = InsurgencyBuiltinFactions.VanillaClfId;
-
-            var stored = await _db.GetFactionsAsync();
-            var existing = stored.FirstOrDefault(s => s.Definition.Metadata.BuiltinOverrideOf == InsurgencyBuiltinFactions.VanillaClfId);
-            if (existing != null)
-                await _db.UpdateFactionAsync(existing.Id, def, true);
-            else
-                await _db.AddFactionAsync(def, true);
-        }
-        else if (msg.Id is { } id)
+        if (msg.Id is { } id)
         {
             // The Custom editor may only touch rows it can see: Custom ones.
             if (_scope == InsurgencyEditorScope.Custom && await IsDefaultRow(id))
                 return;
+
+            // The built-in CLF is now an ordinary DB row (seeded on first open), so it updates in place like
+            // any faction. Re-stamp its override marker from the stored row so a save can never strip it and
+            // trigger a re-seed duplicate, even if the client ever dropped the field.
+            var stored = await _db.GetFactionsAsync();
+            var existing = stored.FirstOrDefault(s => s.Id == id);
+            if (existing.Definition?.Metadata.BuiltinOverrideOf is { } marker)
+                def.Metadata.BuiltinOverrideOf = marker;
 
             await _db.UpdateFactionAsync(id, def, isDefault);
         }

@@ -89,8 +89,10 @@ public sealed class InsurgencyFactionSelectEui : BaseEui
             .Select(s =>
             {
                 var meta = s.Definition.Metadata;
+                // The built-in CLF override opposes every GOVFOR, like the code copy always did.
                 var opposes = govfor != null &&
-                              meta.OpposedGovforFactions.Any(g => string.Equals(g, govfor, StringComparison.OrdinalIgnoreCase));
+                              (meta.BuiltinOverrideOf == InsurgencyBuiltinFactions.VanillaClfId ||
+                               meta.OpposedGovforFactions.Any(g => string.Equals(g, govfor, StringComparison.OrdinalIgnoreCase)));
                 return new DefaultFactionOption(
                     s.Id,
                     meta.Title,

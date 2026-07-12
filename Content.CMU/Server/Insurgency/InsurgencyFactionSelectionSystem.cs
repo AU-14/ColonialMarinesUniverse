@@ -55,6 +55,11 @@ public sealed class InsurgencyFactionSelectionSystem : EntitySystem
         if (govforPlatoon == null)
             return false;
 
+        // The built-in CLF (now seeded as an ordinary DB row) opposes every GOVFOR, exactly as the
+        // code-built copy always did, regardless of its OpposedGovforFactions list.
+        if (def.Metadata.BuiltinOverrideOf == Content.Shared._AU14.Insurgency.InsurgencyBuiltinFactions.VanillaClfId)
+            return true;
+
         return def.Metadata.OpposedGovforFactions
             .Any(g => string.Equals(g, govforPlatoon, StringComparison.OrdinalIgnoreCase));
     }
