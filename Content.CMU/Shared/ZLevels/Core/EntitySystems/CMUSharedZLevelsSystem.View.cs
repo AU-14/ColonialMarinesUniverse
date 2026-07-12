@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared.Actions;
 using Content.Shared.Maps;
 using Content.Shared.Popups;
@@ -50,7 +51,13 @@ public abstract partial class CMUSharedZLevelsSystem
 
         args.Handled = true;
 
-        if (HasOpaqueAbove(ent))
+        if (!ent.Comp.LookUp && HasComp<XenoNestedComponent>(ent))
+        {
+            _popup.PopupClient(Loc.GetString("cmu-zlevel-look-up-nested"), ent, ent, PopupType.SmallCaution);
+            return;
+        }
+
+        if (!ent.Comp.LookUp && HasOpaqueAbove(ent))
         {
             _popup.PopupClient(Loc.GetString("cmu-zlevel-look-up-fail"), ent, ent, PopupType.SmallCaution);
             return;
@@ -95,13 +102,19 @@ public abstract partial class CMUSharedZLevelsSystem
         if (currentMapUid is null)
             return false;
 
-        if (!TryMapUp(currentMapUid.Value, out var mapAboveUid))
+        return HasOpaqueAbove(currentMapUid.Value, _transform.GetWorldPosition(ent));
+    }
+
+    public bool HasOpaqueAbove(Entity<CMUZLevelMapComponent?> currentMapUid, Vector2 worldPosition)
+    {
+        if (!TryMapUp(currentMapUid, out var mapAboveUid))
             return false;
 
-        if (!_gridQuery.TryComp(mapAboveUid.Value, out var mapAboveGrid))
+        if (!TryGetMapCoordinates(mapAboveUid.Value, worldPosition, out var aboveMapCoordinates) ||
+            !_map.TryFindGridAt(aboveMapCoordinates, out var gridUid, out var mapAboveGrid))
             return false;
 
-        return !CMUZLevelOpeningCache.IsOpeningTile(mapAboveUid.Value, mapAboveGrid, _transform.GetWorldPosition(ent), _map, TilDefMan);
+        return !CMUZLevelOpeningCache.IsOpeningTile(gridUid, mapAboveGrid, worldPosition, _map, TilDefMan);
     }
 
     public bool HasZLevelEye(CMUZLevelViewerComponent viewer, EntityUid targetMap)

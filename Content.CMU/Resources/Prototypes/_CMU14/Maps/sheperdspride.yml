@@ -1,0 +1,72 @@
+- type: gameMap
+  id: Sheperds
+  mapName: LV-112 Sheperds Pride
+  allegiance: Neutral
+  mapPath: /Maps/_CMU14/sheperds.yml
+  mapsBelow:
+  - /Maps/_CMU14/sheperds_below.yml
+  mapsAbove:
+  - /Maps/_CMU14/sheperds_above.yml
+  - /Maps/_CMU14/sheperds_above2.yml
+  minPlayers: 0
+  maxPlayers: 75
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    Sheperds:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'Sheperds'
+        - type: StationJobs
+          availableJobs:
+            AU14JobCivilianColonist: [-1, -1]
+            AU14JobCivilianJournalist: [1, 1]
+
+            # Colony Service
+            AU14JobCivilianHeadOfService: [1, 1]
+            AU14JobCivilianShopkeep: [1, 1]
+            AU14JobCivilianFoodServiceWorker: [2, 2]
+            AU14JobCivilianWasteManagementSpecialist: [2, 2]
+
+            AU14JobCivilianColonySynthetic: [2, 2]
+            AU14JobColonyWorkingJoe: [2, 2]
+
+            # Colony Command (non department)
+            AU14JobCivilianColonyAdministrator: [1, 1]
+            AU14JobCivilianColonyAdminAssistant: [1, 1]
+
+            # Ambassadors
+            AU14JobCivilianUSASFRecruiter: [1, 1]
+
+            # Corporate
+            AU14JobCivilianCorporateLiaison: [1, 1]
+            AU14JobCivilianCorporateAssistant: [1, 1]
+
+            AU14JobCivilianScientist: [3, 3]
+            AU14JobWYGuard: [2, 2]
+
+            # Security/LEO
+            AU14JobCivilianCWPSRanger: [3, 3]
+
+            # Engineering/Logi
+            AU14JobCivilianForeman: [1, 1]
+            AU14JobCivilianFreightSystemsSpecialist: [2, 2]
+
+            AU14JobCivilianEngineer: [3, 3]
+            AU14JobCivilianHeadOfEngineering: [ 1, 1]
+
+            # Medical
+            AU14JobCivilianHeadPhysician : [1, 1]
+            AU14JobCivilianPhysician: [1, 1]
+            AU14JobCivilianNurse: [1, 1]
+            AU14JobCivilianEthicsAndWellnessAdvisor: [1, 1]
+            AU14JobCivilianEmergencyResponseOfficer: [1, 1]
+
+            # Orbital
+            AU14JobCivilianOrbitalArbiter: [1, 1]
+            AU14JobCivilianOrbitalLawyer: [2, 3]
+
+            # Other
+            AU14JobMobBoss : [1, 1]
+            AU14JobMobGoon: [4, 4]

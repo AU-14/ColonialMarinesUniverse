@@ -1,6 +1,7 @@
 using Content.Server.Administration.Logs;
 using Content.Server.Chat.Managers;
-using Content.Shared._CMU14.Medical.BodyPart.Events;
+using Content.Shared._CMU14.Medical.Core;
+using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Stealth;
@@ -8,7 +9,6 @@ using Content.Shared._RMC14.Synth;
 using Content.Shared.Access.Components;
 using Content.Shared.Actions;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.Chat;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -21,6 +21,8 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
 using Content.Shared.UserInterface;
+using Content.Shared.DoAfter;
+using Content.Shared.Traits.Assorted;
 using Content.Shared.Verbs;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
@@ -50,7 +52,7 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private InventorySystem _inventory = default!;
@@ -61,6 +63,7 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private YautjaCloakSystem _cloak = default!;
     [Dependency] private YautjaPowerSystem _power = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
@@ -75,8 +78,8 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
         SubscribeLocalEvent<YautjaBracerComponent, YautjaToggleBracerIdChipActionEvent>(OnToggleIdChip);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaCreateStabilisingCrystalActionEvent>(OnCreateStabilisingCrystal);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaCreateHumanStabilisingCrystalActionEvent>(OnCreateHumanStabilisingCrystal);
-        SubscribeLocalEvent<YautjaBracerComponent, YautjaCreateHealingCapsuleActionEvent>(OnCreateHealingCapsule);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaCreateHuntingTrapActionEvent>(OnCreateHuntingTrap);
+        SubscribeLocalEvent<YautjaBracerComponent, YautjaOverloadBracerDoAfterEvent>(OnOverloadBracerDoAfter);
         SubscribeLocalEvent<YautjaTechItemComponent, YautjaTechMisusedEvent>(OnTechMisused);
 
         Subs.BuiEvents<YautjaBracerComponent>(YautjaTranslatorUIKey.Key, subs =>
@@ -118,6 +121,16 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
             Priority = 4,
             Act = () => ToggleLock(ent, ev.User, ev.Target),
         });
+
+        if (HasComp<UnrevivableComponent>(ev.Target) && !ent.Comp.SelfDestructArmed)
+        {
+            ev.Verbs.Add(new EquipmentVerb
+            {
+                Text = Loc.GetString("cmu-yautja-bracer-overload-verb"),
+                Priority = 3,
+                Act = () => TryOverloadBracer(ent, ev.User, ev.Target),
+            });
+        }
     }
 
     private void OnToggleLock(Entity<YautjaBracerComponent> ent, ref YautjaToggleBracerLockActionEvent args)
@@ -205,18 +218,6 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
         TryCreateHumanStabilisingCrystal(ent, args.Performer);
     }
 
-    private void OnCreateHealingCapsule(Entity<YautjaBracerComponent> ent, ref YautjaCreateHealingCapsuleActionEvent args)
-    {
-        if (args.Handled)
-            return;
-
-        if (!_rmcActions.TryUseAction(args))
-            return;
-
-        args.Handled = true;
-        TryCreateHealingCapsule(ent, args.Performer);
-    }
-
     private void OnCreateHuntingTrap(Entity<YautjaBracerComponent> ent, ref YautjaCreateHuntingTrapActionEvent args)
     {
         if (args.Handled)
@@ -287,19 +288,7 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
         return TryCreateItem(bracer, user, bracer.Comp.HumanStabilisingCrystalPrototype, bracer.Comp.HumanStabilisingCrystalCost, bracer.Comp.StabilisingCrystalCooldown, ref bracer.Comp.NextStabilisingCrystal, "cmu-yautja-bracer-human-crystal-created");
     }
 
-    public bool TryCreateHealingCapsule(Entity<YautjaBracerComponent> bracer, EntityUid user)
-    {
-        if (!TryResolveBracerUse(bracer, user, out var randomFunction))
-            return false;
 
-        if (randomFunction)
-        {
-            RunRandomBracerFunction(bracer, user);
-            return true;
-        }
-
-        return TryCreateItem(bracer, user, bracer.Comp.HealingCapsulePrototype, bracer.Comp.HealingCapsuleCost, bracer.Comp.HealingCapsuleCooldown, ref bracer.Comp.NextHealingCapsule, "cmu-yautja-bracer-healing-capsule-created");
-    }
 
     public bool TryCreateHuntingTrap(Entity<YautjaBracerComponent> bracer, EntityUid user)
     {
@@ -442,17 +431,12 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
 
     private bool TrySeverPart(EntityUid body, BodyPartType type, BodyPartSymmetry symmetry)
     {
-        foreach (var (partUid, part) in _body.GetBodyChildren(body))
-        {
-            if (part.PartType != type || part.Symmetry != symmetry)
-                continue;
+        if (!_medicalIndex.TryGetBodyPart(body, new CMUMedicalBodyPartKey(type, symmetry), out var part))
+            return false;
 
-            var ev = new BodyPartSeveredEvent(body, partUid, type);
-            RaiseLocalEvent(partUid, ref ev);
-            return true;
-        }
-
-        return false;
+        var ev = new BodyPartSeveredEvent(body, part, type);
+        RaiseLocalEvent(part, ref ev);
+        return true;
     }
 
     private bool ToggleLock(Entity<YautjaBracerComponent> bracer, EntityUid user, EntityUid target)
@@ -662,12 +646,55 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
             case 3:
                 TryCreateItem(bracer, user, bracer.Comp.HumanStabilisingCrystalPrototype, bracer.Comp.HumanStabilisingCrystalCost, bracer.Comp.StabilisingCrystalCooldown, ref bracer.Comp.NextStabilisingCrystal, "cmu-yautja-bracer-human-crystal-created");
                 break;
-            case 4:
+            default:
                 TryCreateItem(bracer, user, bracer.Comp.HuntingTrapPrototype, bracer.Comp.HuntingTrapCost, bracer.Comp.HuntingTrapCooldown, ref bracer.Comp.NextHuntingTrap, "cmu-yautja-bracer-hunting-trap-created");
                 break;
-            default:
-                TryCreateItem(bracer, user, bracer.Comp.HealingCapsulePrototype, bracer.Comp.HealingCapsuleCost, bracer.Comp.HealingCapsuleCooldown, ref bracer.Comp.NextHealingCapsule, "cmu-yautja-bracer-healing-capsule-created");
-                break;
         }
+    }
+
+    private void TryOverloadBracer(Entity<YautjaBracerComponent> bracer, EntityUid user, EntityUid target)
+    {
+        if (!HasComp<UnrevivableComponent>(target))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-bracer-overload-not-dead-enough"), user, user, PopupType.SmallCaution);
+            return;
+        }
+
+        var doAfter = new DoAfterArgs(EntityManager, user, bracer.Comp.OverloadDoAfterDuration,
+            new YautjaOverloadBracerDoAfterEvent(), bracer.Owner, target)
+        {
+            BreakOnMove = true,
+            BreakOnDamage = true,
+            NeedHand = false,
+            DistanceThreshold = 1.5f,
+        };
+
+        if (!_doAfter.TryStartDoAfter(doAfter))
+            return;
+
+        _audio.PlayPvs(bracer.Comp.OverloadDoAfterSound, target);
+        _popup.PopupEntity(Loc.GetString("cmu-yautja-bracer-overload-start"), user, user);
+        _adminLog.Add(LogType.Action, LogImpact.High,
+            $"{ToPrettyString(user):player} began overloading dead hunter bracer {ToPrettyString(bracer.Owner):bracer} on {ToPrettyString(target):target}");
+    }
+
+    private void OnOverloadBracerDoAfter(Entity<YautjaBracerComponent> ent, ref YautjaOverloadBracerDoAfterEvent args)
+    {
+        if (args.Cancelled || args.Handled)
+            return;
+
+        args.Handled = true;
+
+        var now = _timing.CurTime;
+        ent.Comp.SelfDestructArmed = true;
+        ent.Comp.SelfDestructAt = now + ent.Comp.OverloadDetonationDelay;
+        ent.Comp.NextSelfDestructWarning = now;
+        Dirty(ent);
+
+        var target = ent.Comp.User ?? ent.Owner;
+        _audio.PlayPvs(ent.Comp.SelfDestructArmSound, target);
+
+        _adminLog.Add(LogType.Action, LogImpact.High,
+            $"Dead hunter bracer {ToPrettyString(ent.Owner):bracer} overloaded, detonation in {ent.Comp.OverloadDetonationDelay.TotalSeconds}s");
     }
 }

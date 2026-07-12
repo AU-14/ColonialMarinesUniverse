@@ -1,0 +1,17 @@
+- type: entity
+  parent: CMArmorM4PMCCorporate
+  id: CMUArmorM4PMCCorporate
+  suffix: CMU14
+  components:
+  - type: RemoveComponents
+    components:
+    - type: ClothingRequireEquipped
+
+- type: entity
+  parent: CMArmorM4PMCCorporateLead
+  id: CMUArmorM4PMCCorporateLead
+  suffix: CMU14
+  components:
+  - type: RemoveComponents
+    components:
+    - type: ClothingRequireEquipped

@@ -6,6 +6,10 @@ using Content.Shared.Access.Components;
 using Content.Shared._RMC14.UniformAccessories;
 using Content.Shared.AU14.Util;
 using Robust.Shared.Containers;
+using Content.Server._AU14.Marines.Roles.Ranks;
+using Content.Shared._AU14.Marines.Roles.Ranks;
+using Content.Server._RMC14.Marines.Roles.Ranks;
+using Content.Shared.Clothing;
 
 namespace Content.Server.AU14.Systems;
 
@@ -14,6 +18,8 @@ public sealed partial class JobTitleChangerSystem : EntitySystem
     [Dependency] private MindSystem _minds = default!;
     [Dependency] private JobSystem _jobs = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private RankChangerSystem _rankChanger = default!;
+    [Dependency] private RankSystem _rank = default!;
 
     public override void Initialize()
     {
@@ -25,6 +31,7 @@ public sealed partial class JobTitleChangerSystem : EntitySystem
         SubscribeLocalEvent<UniformAccessoryHolderComponent, EntRemovedFromContainerMessage>(OnAccessoryRemoved);
         // If the accessory (or clothing with this component) is deleted or the component shuts down, revert titles
         SubscribeLocalEvent<JobTitleChangerComponent, ComponentShutdown>(OnJobTitleChangerShutdown);
+
     }
 
     private void OnJobTitleChangerShutdown(EntityUid uid, JobTitleChangerComponent comp, ComponentShutdown args)
@@ -92,11 +99,9 @@ public sealed partial class JobTitleChangerSystem : EntitySystem
 
     private void OnAccessoryInserted(EntityUid uid, UniformAccessoryHolderComponent comp, EntInsertedIntoContainerMessage args)
     {
-        // Only care about our accessory container
         if (args.Container.ID != comp.ContainerId)
             return;
 
-        // If the inserted entity has a JobTitleChangerComponent, set the job title
         if (TryComp<JobTitleChangerComponent>(args.Entity, out var changer))
         {
             if (!string.IsNullOrWhiteSpace(changer.JobTitle))
@@ -108,6 +113,15 @@ public sealed partial class JobTitleChangerSystem : EntitySystem
                 }
             }
         }
+
+        if (TryComp<RankChangerComponent>(args.Entity, out var rankChanger))
+        {
+            if (_containers.TryGetContainingContainer(uid, out var wearerContainer)
+                && HasComp<InventoryComponent>(wearerContainer.Owner))
+            {
+                _pendingRankApply.Enqueue((wearerContainer.Owner, args.Entity));
+            }
+        }
     }
 
     private void OnAccessoryRemoved(EntityUid uid, UniformAccessoryHolderComponent comp, EntRemovedFromContainerMessage args)
@@ -115,25 +129,39 @@ public sealed partial class JobTitleChangerSystem : EntitySystem
         if (args.Container.ID != comp.ContainerId)
             return;
 
-        // Only revert if the removed entity had a JobTitleChangerComponent and it matches the current override
         if (TryComp(uid, out IdCardComponent? idCard))
         {
-            // Check if the removed entity had a JobTitleChangerComponent
             if (TryComp(args.Entity, out JobTitleChangerComponent? changer) &&
                 idCard._jobTitle == changer.JobTitle)
             {
-                // Try to get the mind's job name
                 if (_minds.TryGetMind(uid, out var mindId, out _) &&
                     _jobs.MindTryGetJobName(mindId, out var jobName))
-                {
                     idCard._jobTitle = jobName;
-                }
                 else
-                {
                     idCard._jobTitle = null;
-                }
                 Dirty(uid, idCard);
             }
         }
+
+        // Handle rank revert on accessory remove
+        if (TryComp<RankChangerComponent>(args.Entity, out var rankChanger))
+        {
+            if (_containers.TryGetContainingContainer(uid, out var wearerContainer))
+                _rankChanger.RevertRank(wearerContainer.Owner, rankChanger);
+        }
     }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        while (_pendingRankApply.Count > 0)
+        {
+            var (wearer, changer) = _pendingRankApply.Dequeue();
+            if (Exists(wearer) && Exists(changer) && TryComp<RankChangerComponent>(changer, out var comp))
+                _rankChanger.ApplyRank(wearer, comp);
+        }
+    }
+
+    private readonly Queue<(EntityUid wearer, EntityUid chevron)> _pendingRankApply = new();
 }

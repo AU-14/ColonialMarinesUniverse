@@ -1,0 +1,121 @@
+- type: loadout
+  id: CivBallCapBlackAU14
+  equipment:
+    head: AU14CivBallCapBlack
+
+- type: loadout
+  id: CivBallCapBlueTruckerAU14
+  equipment:
+    head: AU14CivBallCapBlueTrucker
+
+- type: loadout
+  id: CivBallCapRedTruckerAU14
+  equipment:
+    head: AU14CivBallCapRedTrucker
+
+- type: loadout
+  id: CivFedoraTanAU14
+  equipment:
+    head: AU14CivFedoraTan
+
+- type: loadout
+  id: CivFedoraBrownAU14
+  equipment:
+    head: AU14CivFedoraBrown
+
+- type: loadout
+  id: CivFedoraGrayAU14
+  equipment:
+    head: AU14CivFedoraGray
+
+- type: loadout
+  id: HeadCommandoBeanieAU14
+  equipment:
+    head: AU14HeadCommandoBeanie
+
+- type: loadout
+  id: USCMVeteranCapAU14
+  equipment:
+    head: AU14USCMVeteranCap
+
+- type: loadout
+  id: HeadCapSurgBlueAU14
+  equipment:
+    head: CMHeadCapSurgBlue
+
+- type: loadout
+  id: HeadCapSurgGreenAU14
+  equipment:
+    head: CMHeadCapSurgGreen
+
+- type: loadout
+  id: HardhatRedAU14
+  storage:
+    back:
+    - RMCHardhatRed
+
+- type: loadout
+  id: ArmorHelmetSPPFirefighterAU14
+  storage:
+    back:
+    - RMCArmorHelmetSPPFirefighter
+
+- type: loadout
+  id: JunglePatrolCapAU14
+  equipment:
+    head: AU14JunglePatrolCap
+
+- type: loadout
+  id: BeretUSArmyAU14
+  equipment:
+    head: AU14BeretUSArmy
+
+- type: loadout
+  id: USASFCapAU14
+  equipment:
+    head: AU14USASFCap
+
+- type: loadout
+  id: USASFSECFORBeretAU14
+  equipment:
+    head: AU14USASFSECFORBeret
+
+- type: loadout
+  id: HeadBeretGreenAU14
+  equipment:
+    head: RMCHeadBeretGreen
+
+- type: loadout
+  id: HeadBeretPurpleAU14
+  equipment:
+    head: RMCHeadBeretPurple
+
+- type: loadout
+  id: HeadFlapCapExpeditionAU14
+  equipment:
+    head: CMHeadFlapCap
+
+- type: loadout
+  id: BeretIOAU14
+  equipment:
+    head: AU14HeadBeretIO
+
+- type: loadout
+  id: BeretSOAU14
+  equipment:
+    head: AU14HeadBeretSO
+
+- type: loadout
+  id: BeretADJAU14
+  equipment:
+    head: AU14HeadBeretADJ
+
+- type: loadout
+  id: WYHeadCapWeylandYutaniDarkAU14
+  equipment:
+    head: RMCHeadCapWestonYamadaDark
+
+- type: loadout
+  id: HeadBioHoodWeylandYutaniAU14
+  equipment:
+    head: RMCHoodBioWeYa

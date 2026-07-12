@@ -1,0 +1,43 @@
+- type: accessLevel
+  id: AU14AccessOpfor
+  name: Opfor
+
+- type: accessLevel
+  id: AU14AccessOpforSquad
+  name: Opfor Squad
+
+- type: accessLevel
+  id: AU14AccessOpforCommand
+  name: Opfor Command
+
+- type: accessLevel
+  id: AU14AccessOpforSecurity
+  name: Opfor Security
+
+- type: accessLevel
+  id: AU14AccessOpforMedical
+  name: Opfor Medical
+
+- type: accessLevel
+  id: AU14AccessOpforEngineering
+  name: Opfor Engineering
+
+- type: accessLevel
+  id: AU14AccessOpforFTL
+  name: Opfor Squad Leader
+
+- type: accessLevel
+  id: AU14AccessOpforGunner
+  name: Opfor Smart Gun Operator
+
+- type: accessLevel
+  id: AU14AccessOpforPilot
+  name: Opfor Pilot
+
+- type: accessLevel
+  id: AU14AccessOpforJuniorOfficer
+  name: Staff Officer
+
+- type: accessLevel
+  id: AU14AccessOpforReq
+  name: Opfor Requisitions

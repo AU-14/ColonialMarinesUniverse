@@ -1,0 +1,97 @@
+- type: entity # note to self; add camo inhands to fix sprite bug
+  parent: RMCSmartGun
+  id: AU14SmartGunMinigunHAZOPS
+  name: GAU-19/H handheld minigun
+  description: A beast of a weapon. Once mounted on aircraft hardpoints, this minigun has been made handheld, though IFF systems couldn't be safely implemented into the gun. Unmatched RPM and ammo capacity, but the caliber had to be downgraded to make the gun actually useable, resulting in lacking AP and stopping power.
+  components:
+  - type: RMCSelectiveFire
+    baseFireRate: 11
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/HAZOPS/GAU19E2.rsi
+    layers:
+    - state: base
+      sprite: _AU14/Weapons/Guns/HAZOPS/GAU19E2.rsi
+    - state: mag-0
+      sprite: _AU14/Weapons/Guns/HAZOPS/GAU19E2.rsi
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/HAZOPS/GAU19E2.rsi
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: AU14MagazineMinigunHAZOPS
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_sg_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_sg_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineMinigunHAZOPS
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: RMCPowerCellSmartgun
+        whitelist:
+          components:
+          - SmartGunBattery
+  - type: GunIFF
+    enabled: false
+  - type: IFFToggle
+    showToggleAction: false
+
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: AU14MagazineMinigunHAZOPS
+  name: GAU-19/H drum magazine (9mm)
+  components:
+  - type: Tag
+    tags:
+    - AU14MagazineMinigunHAZOPS
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - AU14CartridgeMinigunHAZOPS9mm
+    proto: AU14CartridgeMinigunHAZOPS9mm
+    capacity: 1500
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/SmartGuns/magazine_smart_gun.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Clothing
+    slots:
+    - suitStorage
+  - type: Item
+    size: Normal
+
+- type: entity
+  parent: CMCartridgePistol9mm
+  id: AU14CartridgeMinigunHAZOPS9mm
+  name: cartridge (9mm)
+  components:
+  - type: CartridgeAmmo
+    proto: AU14BulletMinigunHAZOPS9mm
+  - type: Tag
+    tags:
+    - AU14CartridgeMinigunHAZOPS9mm
+
+- type: entity
+  parent: CMBulletPistol9mm
+  id: AU14BulletMinigunHAZOPS9mm
+  name: bullet (9mm)
+  components:
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 12
+      falloff: 9999
+      ignoreModifiers: true
+    - range: 10
+      falloff: 4
+
+- type: Tag
+  id: AU14MagazineMinigunHAZOPS
+
+- type: Tag
+  id: AU14CartridgeMinigunHAZOPS9mm

@@ -1,4 +1,6 @@
 using System.Linq;
+using Content.Server._CMU14.RoundStatistics;
+using Content.Server._RMC14.Rules;
 using Content.Server.GameTicking;
 using Content.Shared._RMC14.Marines;
 using Content.Server._RMC14.Marines;
@@ -20,11 +22,13 @@ namespace Content.Server.AU14.WithdrawConsole;
 public sealed partial class WithdrawConsoleSystem : EntitySystem
 {
     [Dependency] private AccessReaderSystem _accessReader = default!;
+    [Dependency] private CMDistressSignalRuleSystem _distressSignal = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private MarineAnnounceSystem _marineAnnounce = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private CMURoundStatisticsSystem _roundStats = default!;
 
     public bool IsDropdownBlocked(string faction)
     {
@@ -376,6 +380,14 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
             text = Loc.GetString("withdraw-console-round-end-stalemate");
         else
             text = Loc.GetString("withdraw-console-round-end-withdrawn", ("faction", faction?.ToUpperInvariant() ?? "UNKNOWN"));
+
+        _roundStats.RecordWithdrawal(faction, isStalemate);
+
+        if (!isStalemate &&
+            _distressSignal.TryEndActiveDistressRound(DistressSignalRuleResult.MinorXenoVictory))
+        {
+            return;
+        }
 
         _gameTicker.EndRound(text);
     }

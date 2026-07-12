@@ -1,0 +1,40 @@
+- type: entity
+  abstract: true
+  parent: RMCCommunicationsConsoleBase
+  id: AU14AllianceConsoleBase
+  name: alliance console
+  description: A secured command terminal for managing diplomatic standing with third-party factions. Friendly factions will not be engaged by your sentries.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+  - type: InteractionOutline
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: ActivatableUI
+    key: enum.AllianceConsoleUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.AllianceConsoleUiKey.Key:
+        type: AllianceConsoleBui
+
+- type: entity
+  parent: AU14AllianceConsoleBase
+  id: AU14AllianceConsoleGovfor
+  name: alliance console (GovFor)
+  suffix: GovFor
+  description: A GovFor command terminal for managing diplomatic standing with third-party factions.
+  components:
+  - type: AllianceConsole
+    faction: govfor
+
+- type: entity
+  parent: AU14AllianceConsoleBase
+  id: AU14AllianceConsoleOpfor
+  name: alliance console (OpFor)
+  suffix: OpFor
+  description: An OpFor command terminal for managing diplomatic standing with third-party factions.
+  components:
+  - type: AllianceConsole
+    faction: opfor

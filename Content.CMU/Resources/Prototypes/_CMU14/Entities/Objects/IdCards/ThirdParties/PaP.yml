@@ -1,0 +1,32 @@
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardPAPThirdpartyInvestigator
+  name: UPP PaP Investigator ID card
+  components:
+  - type: PresetIdCard
+    job: AU14PAPThirdpartyInvestigator
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardPAPThirdpartyObserver
+  name: UPP PaP Observer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14PAPThirdpartyObserver
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardPAPThirdpartySeniorInvestigator
+  name: UPP PaP Senior Investigator ID card
+  components:
+  - type: PresetIdCard
+    job: AU14PAPThirdpartySeniorInvestigator
+  - type: ItemIFF
+    factions:
+    - GOVFOR

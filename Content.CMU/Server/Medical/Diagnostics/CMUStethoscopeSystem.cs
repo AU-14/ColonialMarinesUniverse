@@ -1,12 +1,11 @@
-using Content.Shared._CMU14.Medical;
+using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Diagnostics;
-using Content.Shared._CMU14.Medical.Organs;
-using Content.Shared._CMU14.Medical.Organs.Heart;
-using Content.Shared._CMU14.Medical.Organs.Lungs;
-using Content.Shared._CMU14.Medical.StatusEffects;
+using Content.Shared._CMU14.Medical.Anatomy.Organs;
+using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
+using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs;
+using Content.Shared._CMU14.Medical.Injuries.Pain;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Scanner;
-using Content.Shared.Body.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
@@ -20,8 +19,8 @@ public sealed partial class CMUStethoscopeSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedPainShockSystem _pain = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SkillsSystem _skills = default!;
@@ -155,21 +154,19 @@ public sealed partial class CMUStethoscopeSystem : EntitySystem
 
     private HeartComponent? TryGetHeart(EntityUid body)
     {
-        foreach (var organ in _body.GetBodyOrgans(body))
-        {
-            if (TryComp<HeartComponent>(organ.Id, out var heart))
-                return heart;
-        }
-        return null;
+        return _medicalIndex.TryGetOrgan<HeartComponent>(body, out var organ) &&
+               TryComp<HeartComponent>(organ, out var heart)
+            ? heart
+            : null;
     }
 
     private LungsComponent? TryGetLungs(EntityUid body)
     {
         // Pair-survival: take the best (highest efficiency) lung.
         LungsComponent? best = null;
-        foreach (var organ in _body.GetBodyOrgans(body))
+        foreach (var organ in _medicalIndex.GetOrgans(body))
         {
-            if (!TryComp<LungsComponent>(organ.Id, out var lungs))
+            if (!TryComp<LungsComponent>(organ.Owner, out var lungs))
                 continue;
             if (best is null || lungs.Efficiency > best.Efficiency)
                 best = lungs;

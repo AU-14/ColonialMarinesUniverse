@@ -1,0 +1,68 @@
+- type: entity
+  id: AU14TeleBaton
+  parent: RMCStunBatonDamaged
+  name: telescopic baton
+  description: A telescopic baton for incapacitating people with.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Melee/telebaton.rsi
+    layers:
+    - state: telebaton_off
+      map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Melee/telebaton.rsi
+    slots:
+    - Belt
+    - Suitstorage
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+     enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: {state: telebaton_on}
+          False: {state: telebaton_off}
+  - type: Item
+    heldPrefix: on
+    size: Small
+  - type: MeleeRequiresSkill
+    skills:
+      RMCSkillPolice: 1
+  - type: ItemToggle
+    predictable: false
+    soundActivate:
+      path: /Audio/_RMC14/Weapons/unload.ogg
+      params:
+        variation: 0
+    soundDeactivate:
+      path: /Audio/_RMC14/Weapons/flipblade.ogg
+      params:
+        variation: 0
+    soundFailToActivate:
+      path: /Audio/Machines/button.ogg
+      params:
+        variation: 0.250
+  - type: ItemToggleMeleeWeapon
+    activatedSoundOnHit:
+      path: /Audio/_RMC14/Weapons/synthpunch1.ogg
+      params:
+        variation: 0.1
+    activatedSoundOnHitNoDamage:
+      path: /Audio/_RMC14/Weapons/synthpunch1.ogg
+      params:
+        variation: 0.1
+    activatedDamage:
+      types:
+        Blunt: 45 # It's meant to be a very strong melee option for Officers (CO gets one) and Synthetics. Instant stuns utilize flash anyway so I didn't add that as a feature
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    damage:
+      types:
+        Blunt: 5
+    animation: WeaponArcPunch
+  - type: ItemTogglePrefix
+    prefixOn: on
+    prefixOff: off
+  - type: RMCStaminaDamageOnHit
+    damage: 15 # 7 hits
+    jitterDuration: 0.4
+  - type: UseDelay

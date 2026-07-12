@@ -1,0 +1,8 @@
+- type: soundCollection
+  id: AU14M41FireSound
+  files:
+  - /Audio/_AU14/Weapons/m41/gun_m41a_1.ogg
+  - /Audio/_AU14/Weapons/m41/gun_m41a_2.ogg
+  - /Audio/_AU14/Weapons/m41/gun_m41a_3.ogg
+  - /Audio/_AU14/Weapons/m41/gun_m41a_4.ogg
+  - /Audio/_AU14/Weapons/m41/gun_m41a_5.ogg

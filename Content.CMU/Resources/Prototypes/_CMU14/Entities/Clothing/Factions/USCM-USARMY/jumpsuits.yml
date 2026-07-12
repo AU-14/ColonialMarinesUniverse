@@ -1,0 +1,277 @@
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14DesertFatigues
+  name: USCM desert fatigues
+  description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/desertfatigues.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUAFlag
+    - AU14PatchUSCM
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14USArmyDesertFatigues
+  name: US army 1st cavalry division desert fatigues
+  description: Standard-issue US Army fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/desertfatigues.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14Patch1stCav
+    - AU14PatchUSArmy
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14JungleFatigues
+  name: USCM jungle fatigues
+  description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/junglefatigues.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUAFlag
+    - AU14PatchUSCM
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14SnowFatigues
+  name: USCM snow fatigues
+  description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/snowfatigues.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUAFlag
+    - AU14PatchUSCM
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14MixedSnowFatigues
+  name: mixed USCM snow fatigues
+  description: A mix of winter and jungle USCM fatigues. Reservists don't get amazing funding, huh...
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/mixedsnowfatigues.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUAFlag
+    - AU14PatchUSCM
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14TacticalFlightSuit
+  name: Aircrew Flightsuit
+  description: Standard-issue USCM flightsuit. It has integrated life support mechanisms.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/tacticalflightsuit.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14USCMOperationsUniform
+  name: USCM operations uniform
+  description: Standard-issue USCM operations uniform. Used by command and support personnel on USCM installations.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/uscmoperationsuniform.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14UACGFatigues
+  name: UACG fatigues
+  description: Standard-issue UACG fatigues.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/US_Army/Jumpsuits/army.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories: [ AU14PatchUAFlag ]
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14UASFFatigues
+  name: USASF fatigues
+  description: Standard-issue USASF fatigues.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/junglefatigues.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUAFlag
+    - AU14PatchUSASF
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14USASFPilotJumpsuit
+  name: USASF Aircrew Jumpsuit
+  description: A standard USASF Aircrew Jumpsuit. It has shards of light Kevlar to help protect against shrapnel.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USASFSecurityForces/USASFPilot/uniform.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUAFlag
+    - AU14PatchUSASF
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14DesertFatiguesFORECON
+  name: USCM desert fatigues
+  categories: [ HideSpawnMenu ]
+  description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/desertfatigues.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUAFlag
+    - RMCPatchFORECON
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14JungleFatiguesFORECON
+  categories: [ HideSpawnMenu ]
+  name: USCM jungle fatigues
+  description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/junglefatigues.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUAFlag
+    - AU14PatchUSCM
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14ArmyJumpsuit
+  name: US army fatigues
+  description: A standard US Army fatigues. It has shards of light Kevlar to help protect against shrapnel.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/US_Army/Jumpsuits/army.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUAFlag
+    - AU14PatchUSArmy
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14ArmyJumpsuitCavalry
+  suffix: Cavalry
+  components:
+  - type: WebbingClothing
+    startingWebbing: RMCWebbingPouchForecon
+  - type: Sprite
+    sprite: _AU14/Clothing/US_Army/Jumpsuits/army.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14Patch1stCav
+    - AU14PatchUSArmy
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14ArmyJumpsuitArmored
+  suffix: Armored
+  components:
+  - type: WebbingClothing
+    startingWebbing: RMCWebbingPouchForecon
+  - type: Sprite
+    sprite: _AU14/Clothing/US_Army/Jumpsuits/army.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14Patch32ndAB
+    - AU14PatchUSArmy
+
+- type: entity
+  parent: CMJumpsuitMarineTanker
+  id: AU14ArmyJumpsuitTanker
+  name: US army tanker fatigues
+  description: A standard US Army fatigues. It has shards of light Kevlar to help protect against shrapnel.
+  components:
+  - type: WebbingClothing
+    startingWebbing: RMCWebbingPouchForecon
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUAFlag
+    - AU14PatchUSArmy
+
+- type: entity
+  parent: RMCMarineUniformBase
+  id: AU14CBRNSuit
+  suffix: AU14
+  name: M3 MOPP Suit
+  description: M3 MOPP suits are specially designed and engineered to protect the wearer from unshielded exposure to any Chemical, Biological, Radiological, or Nuclear (CBRN) threats in the field. The suit has a recommended lifespan of twenty-four hours once contact with a toxic environment is made, but depending on the severity this can be shortened to eight hours or less.
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Uniforms/Marine/cbrnsuit.rsi
+  - type: CMArmor
+    bullet: 10
+    melee: 10
+    bio: 100
+    explosionArmor: 10
+
+
+- type: entity
+  parent: RMCJumpsuitSurvivorMarineDropPouch
+  id: AU14JumpsuitFORECON
+  suffix: AU14
+  description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/junglefatigues.rsi
+
+- type: entity
+  parent: RMCJumpsuitSurvivorMarineDropPouch
+  id: AU14JumpsuitFORECONDesert
+  suffix: AU14
+  description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/desertfatigues.rsi
+
+- type: entity
+  parent: RMCMarineUniformBase
+  id: AU14MarineUniformDressEnlistedD
+  name: marine enlisted dress blues uniform
+  description: The undershirt and trousers of the legendary Marine dress blues, virtually unchanged since the 19th century. This unadorned variant is for enlisted personnel, E-1 thru E-3. This one is 'D' variant.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMC/Uniform/DressBlues/d_enlisted.rsi
+
+- type: entity
+  parent: RMCMarineUniformBase
+  id: AU14MarineUniformDressSeniorD
+  name: marine senior dress blues uniform
+  description: The undershirt and trousers of the legendary Marine dress blues, virtually unchanged since the 19th century. This variant features the iconic Blood Stripe, worn by NCOs and officers. This one is 'D' variant.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMC/Uniform/DressBlues/d_senior.rsi
+
+# Camo system (ItemCamouflage) conforming variants
+# No Classic/Urban sprites exist yet - both fall back to the Jungle sprite until dedicated art is made.
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CamoUSCMFatigues
+  name: USCM fatigues
+  description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/junglefatigues.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUAFlag
+    - AU14PatchUSCM
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _AU14/Clothing/junglefatigues.rsi
+      Desert: _AU14/Clothing/desertfatigues.rsi
+      Snow: _AU14/Clothing/snowfatigues.rsi
+      Classic: _AU14/Clothing/junglefatigues.rsi
+      Urban: _AU14/Clothing/junglefatigues.rsi

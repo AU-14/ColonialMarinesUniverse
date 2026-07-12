@@ -1,0 +1,173 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobMilitaryPoliceBaseAbstract
+  name: au14-job-name-govformilitarypoliceman
+  description: au14-job-description-govformilitarypoliceman
+  icon: "AU14JobIconMP"
+  spawnMenuRoleName: Military Policeman (GOVFOR)
+  supervisors: au14-job-supervisors-govforplatco
+  startingGear: AU14GearGOVFORMilitaryPoliceMan
+  dummyStartingGear: AU14GearGOVFORMilitaryPoliceManDummy
+  playTimeTracker: AU14JobGOVFORMilitaryPoliceMan
+  requireAdminNotify: true
+  canBeAntag: false
+  displayWeight: 5
+  accessGroups:
+  - AU14GovforSecurity
+  - aulegacygroupmilp # NOTE: should remove & hard migrate
+
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryPoliceBaseAbstract
+  id: AU14JobMilitaryPoliceBase
+  roundRole: MilitaryPolice
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetMilitaryPolice
+  - type: AU14CallToAttentionAbility
+  - type: JobPrefix
+    prefix: au14-job-prefix-govformilitarypoliceman
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: govfor_mp
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
+        state: mp
+
+  requirements:
+  - !type:AgeRequirement
+    requiredAge: 21
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+    - Epilepsy
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankGunnerySergeant:
+      entity: AU14ChevronUSCMGunnerySergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORMilitaryPoliceMan
+        time: 360000 # 100 hours
+    RMCRankStaffSergeant:
+      entity: AU14ChevronUSCMStaffSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORMilitaryPoliceMan
+        time: 180000 # 50 hours
+    RMCRankSergeant:
+      entity: AU14ChevronUSCMSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORMilitaryPoliceMan
+        time: 86400 # 24 hours
+    RMCRankCorporal:
+      entity: AU14ChevronUSCMCorporal
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFORMilitaryPoliceMan
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORMilitaryPoliceMan
+  equipment:
+    id: AU14IDCardGOVFORMilitaryPoliceMan
+    ears: AU14HeadsetGovforMarineMP
+    ears2: RMCM5CameraGear
+  inhand:
+    - AU14StampMP
+
+- type: startingGear
+  id: AU14GearGOVFORMilitaryPoliceManDummy
+  equipment:
+    shoes: CMBootsBlackFilled
+    jumpsuit: AU14JungleFatigues
+    belt: CMBeltSecurityMPFilled
+    head: CMHeadBeretRed
+    ears: AU14HeadsetGovforMarineMP
+    ears2: RMCM5CameraGear
+    outerClothing: AU14ArmorM3JungleThree
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORMilitaryPoliceMan
+  name: Spawn Point GOVFOR Military Policeman
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORMilitaryPoliceMan
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobMilitaryPoliceBase
+  id: AU14JobGOVFORMilitaryPoliceMan
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: roleLoadout
+  id: JobAU14JobGOVFORMilitaryPoliceMan
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+- type: job
+  parent: AU14JobMilitaryPoliceBase
+  id: AU14JobOPFORMilitaryPoliceMan
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORMP"
+  spawnMenuRoleName: Military Policeman (OPFOR)
+  supervisors: au14-job-supervisors-opforplatco
+  startingGear: AU14GearOPFORMilitaryPoliceMan
+  dummyStartingGear: AU14GearOPFORMilitaryPoliceManDummy
+  accessGroups:
+  - AU14OpforSecurity
+  - aulegacygroupmilp
+
+- type: startingGear
+  id: AU14GearOPFORMilitaryPoliceMan
+  equipment:
+    id: AU14IDCardGOVFORMilitaryPoliceMan
+    ears: AU14HeadsetOpforMarineMP
+    ears2: RMCM5CameraGear
+
+- type: startingGear
+  id: AU14GearOPFORMilitaryPoliceManDummy
+  equipment:
+    shoes: CMBootsBlackFilled
+    jumpsuit: AU14JungleFatigues
+    belt: CMBeltSecurityMPFilled
+    head: CMHeadBeretRed
+    ears: AU14HeadsetOpforMarineMP
+    ears2: RMCM5CameraGear
+    outerClothing: AU14ArmorM3JungleThree
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointOPFORMilitaryPoliceMan
+  name: Spawn Point OPFOR Military Policeman
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORMilitaryPoliceMan
+  - type: Sprite
+    state: syn_spawn

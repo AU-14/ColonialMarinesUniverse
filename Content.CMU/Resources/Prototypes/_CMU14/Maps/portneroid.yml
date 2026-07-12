@@ -1,0 +1,67 @@
+- type: gameMap
+  id: portneroid
+  mapName: LV-327 Port Nereid
+  allegiance: UA
+  mapPath: /Maps/_AU14/PortNeroidMultiZ/portneroidmultiz0.yml
+  mapsBelow:
+  - /Maps/_AU14/PortNeroidMultiZ/portneroidmultiz-1.yml
+  mapsAbove:
+  - /Maps/_AU14/PortNeroidMultiZ/portneroidmultiz1.yml
+  - /Maps/_AU14/PortNeroidMultiZ/portneroidmultiz2.yml
+  minPlayers: 0
+  maxPlayers: 200
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    portneroid:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'Port Nereid'
+        - type: StationJobs
+          availableJobs:
+            AU14JobCivilianColonist: [-1, -1]
+            AU14JobCivilianJournalist: [2, 2]
+
+            # Colony Service
+            AU14JobCivilianHeadOfService: [1, 1]
+            AU14JobCivilianShopkeep: [2, 2]
+            AU14JobCivilianFoodServiceWorker: [3, 3]
+            AU14JobCivilianWasteManagementSpecialist: [3, 3]
+
+            AU14JobCivilianColonySynthetic: [2, 2]
+            AU14JobColonyWorkingJoe: [1, 1]
+
+            # Colony Command (non department)
+            AU14JobCivilianColonyAdministrator: [1, 1]
+            AU14JobCivilianColonyAdminAssistant: [1, 1]
+
+            # Ambassadors
+            AU14JobCivilianUSASFRecruiter: [1, 1]
+
+            # Security/LEO
+            AU14JobCivilianNSPAInspector: [1, 1]
+            AU14JobCivilianNSPAConstable: [5, 5]
+
+            # Engineering/Logi
+            AU14JobCivilianForeman: [1, 1]
+            AU14JobCivilianMiner: [8, 8]
+            AU14JobCivilianFreightSystemsSpecialist: [2, 2]
+
+            AU14JobCivilianHeadOfEngineering: [1, 1]
+            AU14JobCivilianEngineer: [4, 4]
+
+            # Medical
+            AU14JobCivilianHeadPhysician : [1, 1]
+            AU14JobCivilianPhysician: [1, 1]
+            AU14JobCivilianNurse: [2, 2]
+            AU14JobCivilianEthicsAndWellnessAdvisor: [1, 1]
+            AU14JobCivilianEmergencyResponseOfficer: [1, 1]
+
+            # Orbital
+            AU14JobCivilianOrbitalArbiter: [1, 1]
+            AU14JobCivilianOrbitalLawyer: [2, 3]
+
+            # Other
+            AU14JobMobBoss: [1, 1]
+            AU14JobMobGoon: [3, 3]

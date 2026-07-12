@@ -1,0 +1,260 @@
+- type: entity
+  parent: CMMobSmallHostMonkey
+  id: CMUMobApe
+  name: Ape
+  description: A capable and dangerous megafauna, high caloric needs.
+  suffix: CMU
+  components:
+  - type: DropshipHijacker
+  - type: NightVision
+    innate: true
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.4
+        density: 80
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: GhostTakeoverAvailable
+  - type: GhostRole
+    name: Ape
+    description: OO OO AH AH
+    prob: 1.0
+    raffle:
+      settings: short
+  - type: Sprite
+    drawdepth: Mobs
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base"]
+      state: alive
+      sprite: _CMU14/Mobs/Ape/ape.rsi
+    - map: [ "mask" ]
+    - map: [ "clownedon" ]
+      sprite: "Effects/creampie.rsi"
+      state: "creampie_human"
+      visible: false
+  - type: MobCollision
+  - type: RMCMobCollision
+  - type: Ape
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      3000: Critical
+      3300: Dead
+  - type: Bloodstream
+    bloodMaxVolume: 1000
+  - type: SlowOnDamage
+    speedModifierThresholds:
+      1000: 0.9
+      1300: 0.8
+      1600: 0.7
+      1900: 0.6
+      2200: 0.5
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Blunt
+        damage: 3000
+      behaviors:
+      - !type:GibBehavior
+        recursive: false
+  - type: Butcherable
+    butcheringType: Spike
+    spawned:
+    - id: FoodMeat
+      amount: 12
+  - type: MobStateActions
+    actions:
+      Alive:
+      - ActionApeLeap
+      - ActionApeDestroy
+      - ActionApeCharge
+      - ActionApeRam
+      - ActionApeHeadbite
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/Weapons/punch1.ogg
+    angle: 0
+    animation: WeaponArcPunch
+    damage:
+      groups:
+        Brute: 80
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4.0
+    baseSprintSpeed: 4.5
+  - type: Stamina
+    critThreshold: 3000
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: alive
+      Critical:
+        Base: dead
+      Dead:
+        Base: dead
+  - type: Body
+    prototype: ApeBody
+    requiredLegs: 1
+  - type: FireVisuals
+    sprite: Mobs/Effects/onfire.rsi
+    normalState: Generic_mob_burning
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: XenoFootstepLarge
+      params:
+        volume: 0
+  - type: TypingIndicator
+    proto: alien
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+    - FootstepSound
+  - type: Inventory
+    templateId: ape
+    speciesId: ape
+  - type: ReplacementAccent
+    accent: genericAggressive
+  - type: Speech
+    speechSounds: Bass
+    speechVerb: LargeMob
+  - type: RemoveComponents
+    components:
+    - type: NameIdentifier
+    - type: Clumsy
+    - type: Deathgasp
+    - type: Cuffable
+    - type: CanHostGuardian
+    - type: IdExaminable
+    - type: Thirst
+    - type: MonkeyAccent
+    - type: Internals
+  - type: Hunger
+    baseDecayRate: 0.08
+  - type: Prying
+    pryPowered: true
+    speedModifier: 2.7
+    useSound: null
+  - type: ApeLeap
+    delay: 0
+    knockdownTime: 2
+    leapSound: /Audio/_AU14/Ape/aperoarshort.ogg
+  - type: Sharp
+    butcherDelayModifier: 0.5
+  - type: NpcFactionMember
+    factions:
+    - CMUAPE
+  - type: ApeDestroy
+    structureDamage:
+      types:
+        Blunt: 1000
+    mobDamage:
+      types:
+        Blunt: 200
+    gibs: false
+    structures:
+      tags:
+      - Structure
+      - Wall
+      - Window
+      components:
+      - Sentry
+      - RMCTeslaCoil
+      - Barricade
+      - Mortar
+      - EntityStorage
+      - ReagentTank
+      - PlaceableSurface
+      - ReagentDispenser
+      - IVDrip
+  # No XenoPlasma for Ape: abilities do not consume plasma
+  - type: XenoCharge
+    plasmaCost: 0
+    damage:
+      types:
+        Blunt: 60
+        Structural: 750
+  - type: XenoFling
+    paralyzeTime: 0
+    slowTime: 8
+  - type: XenoHeadbite
+    # Ape uses default xeno headbite parameters; adjust in future if you want different values
+  - type: Vocal
+    sounds:
+      Unsexed: ApeEmotes
+  - type: NoSlip
+
+- type: emoteSounds
+  id: ApeEmotes
+  params:
+    variation: 0.125
+  sounds:
+    Scream:
+      path: /Audio/_AU14/Ape/aperoarlong.ogg
+
+- type: inventoryTemplate
+  id: ape
+  slots:
+  - name: mask
+    slotTexture: mask
+    slotFlags: MASK
+    uiWindowPos: 0,1
+    strippingWindowPos: 1,1
+    displayName: Mask
+- type: entity
+  id: OrganApeStomach
+  parent: OrganAnimalStomach
+  name: stomach
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Metabolizer
+    metabolizerTypes: [ Animal ]
+
+- type: entity
+  id: OrganApeLiver
+  parent: OrganAnimalLiver
+  name: liver
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Metabolizer
+    metabolizerTypes: [ Animal ]
+
+- type: entity
+  id: OrganApeHeart
+  parent: OrganAnimalHeart
+  name: heart
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Metabolizer
+    metabolizerTypes: [ Animal ]
+
+- type: body
+  id: ApeBody
+  name: "ape"
+  root: torso
+  slots:
+    torso:
+      part: TorsoAnimal
+      connections:
+      - legs
+      organs:
+        lungs: OrganAnimalLungs
+        stomach: OrganApeStomach
+        liver: OrganApeLiver
+        heart: OrganApeHeart
+        kidneys: OrganAnimalKidneys
+    legs:
+      part: LegsAnimal
+      connections:
+      - feet
+    feet:
+      part: FeetAnimal

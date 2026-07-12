@@ -2,6 +2,9 @@
   id: CMUZLevelEye
   save: false
   categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    gridTraversal: false
 
 - type: entity
   id: CMUMultiZStairs
@@ -17,12 +20,30 @@
     sprite: _RMC14/Structures/stairs.rsi
     state: p_stair_full
     drawdepth: FloorTiles
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      slowdown:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        layer:
+        - SlipLayer
+        mask:
+        - ItemMask
+        density: 1000
+        hard: false
   - type: CMUZLevelHighGround
     heightCurve:
     - 1.05
     - 1.05
+    - 0.575
     - 0.1
     stick: true
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.6
+    sprintSpeedModifier: 0.6
 
 - type: entity
   parent: CMUMultiZStairs
@@ -31,3 +52,39 @@
   components:
   - type: CMUZLevelHighGround
     previewUpLevel: false
+
+- type: entity
+  parent: CMUMultiZStairsNoPreview
+  id: CMUMultiZStairsSolo
+  components:
+  - type: Sprite
+    drawdepth: WallMountedItems
+    noRot: true
+    sprite: _CMU14/Structures/stairs.rsi
+    state: p_stair_solo_cap
+    offset: 0,0.5
+
+- type: entity
+  parent: CMUMultiZStairsNoPreview
+  id: CMUMultiZStairsKutjevoSolo
+  components:
+  - type: Sprite
+    drawdepth: WallMountedItems
+    noRot: true
+    sprite: _CMU14/Structures/stairs.rsi
+    state: p_stair_kutjevo_solo_cap
+    offset: 0,0.5
+
+- type: entity
+  parent: BaseItem
+  id: CMUDeployableZLevelLadder
+  name: deployable ladder
+  description: A portable ladder that can be deployed through an open Z-level shaft.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/ladder.rsi
+    state: ladder10
+  - type: Item
+    sprite: _RMC14/Structures/ladder.rsi
+    size: Large
+  - type: CMUDeployableZLevelLadder

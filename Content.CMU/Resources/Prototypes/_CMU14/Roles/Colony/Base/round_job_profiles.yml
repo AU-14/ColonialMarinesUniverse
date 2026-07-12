@@ -1,0 +1,31 @@
+# Round job profiles for this job family.
+
+- type: roundJobProfile
+  id: AU14RoundJobProfileColonyWorkingJoe
+  components:
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - radioAI
+    - Colony
+    - radioWEYU
+    - radioCMB
+  - type: ActiveRadio
+    channels:
+    - radioAI
+    - Colony
+    - radioWEYU
+    - radioCMB
+  - type: Access
+    groups:
+    - auadmin
+    - Colonist
+    - AUPrisonStaff
+    - auwy
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforhud.rsi
+      state: working_joe
+  - type: Language
+    preset: AU14LanguagePresetSynth
+  - type: LanguageLearning
+    preset: AU14LanguageLearningPresetSynth

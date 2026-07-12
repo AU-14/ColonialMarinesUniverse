@@ -1,0 +1,1014 @@
+- type: entity
+  parent: RMCAreaBase
+  id: CMUAreaLV376
+  name: LV-376 Ulixes
+  components:
+  - type: Sprite
+    state: unknown
+  - type: Area
+    buildSpecial: true
+    powerNet: colony
+    minimapColor: '#6c6767D8'
+
+# outside, LEVEL 0
+
+- type: entity
+  parent: CMUAreaLV376
+  id: CMUAreaLV376Outside
+  name: LV-376 Ulixes Surface
+  suffix: Outdoors
+  components:
+  - type: Area
+    weatherEnabled: true
+    CAS: true
+    OB: true
+    mortarPlacement: true
+    lasing: true
+    mortarFire: true
+    medevac: true
+    supplyDrop: true
+    paradropping: true
+
+- type: entity
+  parent: CMUAreaLV376Outside
+  id: CMUAreaLV376NW
+  name: Barker's Lament - Northwest Colony
+  components:
+  - type: Sprite
+    state: northwest
+
+- type: entity
+  parent: CMUAreaLV376NW
+  id: CMUAreaLV376NWO
+  name: Northwest Valley
+  components:
+  - type: Sprite
+    state: valley_north_west
+
+- type: entity
+  parent: CMUAreaLV376Outside
+  id: CMUAreaLV376Scrapyard
+  name: Scrapyard
+  components:
+  - type: Sprite
+    state: mining_living
+
+- type: entity
+  parent: CMUAreaLV376Outside
+  id: CMUAreaLV376N
+  name: Barker's Lament - North Colony
+  components:
+  - type: Sprite
+    state: north
+    
+- type: entity
+  parent: CMUAreaLV376N
+  id: CMUAreaLV376NO
+  name: North Valley
+  components:
+  - type: Sprite
+    state: valley_north
+ 
+- type: entity
+  parent: CMUAreaLV376Outside
+  id: CMUAreaLV376NE
+  name: Barker's Lament - Northeast Colony
+  components:
+  - type: Sprite
+    state: northeast
+
+- type: entity
+  parent: CMUAreaLV376NE
+  id: CMUAreaLV376NEO
+  name: Northeast Valley
+  components:
+  - type: Sprite
+    state: valley_north_east
+
+- type: entity
+  parent: CMUAreaLV376Outside
+  id: CMUAreaLV376W
+  name: Barker's Lament - West Colony
+  components:
+  - type: Sprite
+    state: west
+
+- type: entity
+  parent: CMUAreaLV376W
+  id: CMUAreaLV376WO
+  name: West Valley
+  components:
+  - type: Sprite
+    state: valley_west
+
+- type: entity
+  parent: CMUAreaLV376Outside
+  id: CMUAreaLV376C
+  name: Barker's Lament - Central Colony
+  components:
+  - type: Sprite
+    state: central
+
+- type: entity
+  parent: CMUAreaLV376Outside
+  id: CMUAreaLV376E
+  name: Barker's Lament - East Colony
+  components:
+  - type: Sprite
+    state: east
+
+- type: entity
+  parent: CMUAreaLV376E
+  id: CMUAreaLV376EO
+  name: East Valley
+  components:
+  - type: Sprite
+    state: valley_east
+
+- type: entity
+  parent: CMUAreaLV376Outside
+  id: CMUAreaLV376SW
+  name: Barker's Lament - Southwest Colony
+  components:
+  - type: Sprite
+    state: southwest
+
+- type: entity
+  parent: CMUAreaLV376SW
+  id: CMUAreaLV376SWO
+  name: Southwest Arroyo
+  components:
+  - type: Sprite
+    state: valley_south_west
+
+- type: entity
+  parent: CMUAreaLV376Outside
+  id: CMUAreaLV376S
+  name: Barker's Lament - South Colony
+  components:
+  - type: Sprite
+    state: south
+
+- type: entity
+  parent: CMUAreaLV376S
+  id: CMUAreaLV376SO
+  name: South Arroyo
+  components:
+  - type: Sprite
+    state: valley_south
+
+- type: entity
+  parent: CMUAreaLV376Outside
+  id: CMUAreaLV376SE
+  name: Barker's Lament - Southeast Colony
+  components:
+  - type: Sprite
+    state: southeast
+
+- type: entity
+  parent: CMUAreaLV376SE
+  id: CMUAreaLV376SEO
+  name: Southeast Arroyo
+  components:
+  - type: Sprite
+    state: valley_south_excv
+
+- type: entity
+  parent: CMUAreaLV376Outside
+  id: CMUAreaLV376LZ1
+  name: Barker's Lament - LZ1
+  components:
+  - type: Sprite
+    state: bluenew
+  - type: Area
+    landingZone: true
+    minimapColor: '#EBE5E5E3'
+
+- type: entity
+  parent: CMUAreaLV376Outside
+  id: CMUAreaLV376LZ2
+  name: Barker's Lament - LZ2
+  components:
+  - type: Sprite
+    state: bluenew
+  - type: Area
+    landingZone: true
+    minimapColor: '#EBE5E5E3'
+
+- type: entity
+  parent: CMUAreaLV376Outside
+  id: CMUAreaLV376River
+  components:
+  - type: Area
+    minimapColor: '#83bdc7D8'
+
+- type: entity
+  parent: CMUAreaLV376River
+  id: CMUAreaLV376RiverW
+  name: River - West
+  components:
+  - type: Sprite
+    state: yellow
+
+- type: entity
+  parent: CMUAreaLV376Outside
+  id: CMUAreaLV376RiverIsland
+  name: River - Islet
+  components:
+  - type: Sprite
+    state: theatre
+
+- type: entity
+  parent: CMUAreaLV376River
+  id: CMUAreaLV376RiverC
+  name: River - Central
+  components:
+  - type: Sprite
+    state: blue-red2
+
+- type: entity
+  parent: CMUAreaLV376River
+  id: CMUAreaLV376RiverN
+  name: River - North
+  components:
+  - type: Sprite
+    state: blue-red-d
+
+- type: entity
+  parent: CMUAreaLV376River
+  id: CMUAreaLV376RiverRavine
+  name: River - Ravine
+  components:
+  - type: Sprite
+    state: blue2
+
+- type: entity
+  parent: CMUAreaLV376Outside
+  id: CMUAreaLV376Ravine
+  name: Ravine
+  components:
+  - type: Sprite
+    state: bluenew
+
+- type: entity
+  parent: CMUAreaLV376River
+  id: CMUAreaLV376RiverE
+  name: River - East
+  components:
+  - type: Sprite
+    state: bluenew
+
+- type: entity
+  parent: CMUAreaLV376Outside
+  id: CMUAreaLV376OutsideMB
+  name: Military Base
+  components:
+  - type: Area
+    powerNet: military
+
+- type: entity
+  parent: CMUAreaLV376OutsideMB
+  id: CMUAreaLV376MilitaryCheckpoint
+  name: Military Base - Checkpoint Exterior
+  components:
+  - type: Sprite
+    state: red2
+
+- type: entity
+  parent: CMUAreaLV376OutsideMB
+  id: CMUAreaLV376MBNW
+  name: Military Base - Northwest
+  components:
+  - type: Sprite
+    state: northwest
+
+- type: entity
+  parent: CMUAreaLV376OutsideMB
+  id: CMUAreaLV376MBN
+  name: Military Base - North
+  components:
+  - type: Sprite
+    state: north
+
+- type: entity
+  parent: CMUAreaLV376OutsideMB
+  id: CMUAreaLV376MBNE
+  name: Military Base - Northeast
+  components:
+  - type: Sprite
+    state: northeast
+
+- type: entity
+  parent: CMUAreaLV376OutsideMB
+  id: CMUAreaLV376MBW
+  name: Military Base - West
+  components:
+  - type: Sprite
+    state: west
+
+- type: entity
+  parent: CMUAreaLV376OutsideMB
+  id: CMUAreaLV376MBC
+  name: Military Base - Central
+  components:
+  - type: Sprite
+    state: central
+
+- type: entity
+  parent: CMUAreaLV376OutsideMB
+  id: CMUAreaLV376MBE
+  name: Military Base - East
+  components:
+  - type: Sprite
+    state: east
+
+- type: entity
+  parent: CMUAreaLV376OutsideMB
+  id: CMUAreaLV376MBSW
+  name: Military Base - Southwest
+  components:
+  - type: Sprite
+    state: southwest
+
+- type: entity
+  parent: CMUAreaLV376OutsideMB
+  id: CMUAreaLV376MBS
+  name: Military Base - South
+  components:
+  - type: Sprite
+    state: south
+
+- type: entity
+  parent: CMUAreaLV376OutsideMB
+  id: CMUAreaLV376MBSE
+  name: Military Base - Southeast
+  components:
+  - type: Sprite
+    state: southeast
+
+- type: entity
+  parent: CMUAreaLV376OutsideMB
+  id: CMUAreaLV376MBLZ
+  name: Military Base - Landing Zone
+  components:
+  - type: Sprite
+    state: bluenew
+  - type: Area
+    landingZone: true
+
+# indoors, LEVEL 1
+- type: entity
+  parent: CMUAreaLV376
+  id: CMUAreaLV376Inside
+  suffix: Indoors
+  components:
+  - type: Area
+    weatherEnabled: false
+    lasing: false
+    mortarPlacement: false
+    medevac: false
+    paradropping: false
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376MinerOuthouse
+  name: Kelland Mine - Outhouse
+  components:
+  - type: Sprite
+    state: unexplored
+#  - type: Area
+#    powerNet: mine
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376MinerBunks
+  name: Kelland Mine - Bunks
+  components:
+  - type: Sprite
+    state: mining_living
+#  - type: Area
+#    powerNet: mine
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376MinerCells
+  name: Kelland Mine - Cells
+  components:
+  - type: Sprite
+    state: mining_living
+  - type: Area
+#    powerNet: mine
+    countAsArrestedForEndConditions: true
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376MinerOffice
+  name: Kelland Mine - Office
+  components:
+  - type: Sprite
+    state: mining_outpost
+#  - type: Area
+#    powerNet: mine
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376ScrapyardOffice
+  name: Scrapyard - Office
+  components:
+  - type: Sprite
+    state: mining_outpost
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376WaterTreatment
+  name: Barker's Lament - Water Treatment
+  components:
+  - type: Sprite
+    state: bluenew
+  - type: Area
+    minimapColor: '#C19504E7'
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376Engineering
+  name: Barker's Lament - Engineering
+  components:
+  - type: Sprite
+    state: maint_engineering
+  - type: Area
+    minimapColor: '#C19504E7'
+    
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376EngineeringOuthouse
+  name: Barker's Lament - Engineering Outhouse
+  components:
+  - type: Sprite
+    state: unexplored
+  - type: Area
+    minimapColor: '#C19504E7'
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376Foreman
+  name: Barker's Lament - Foreman Office
+  components:
+  - type: Sprite
+    state: yellow
+  - type: Area
+    minimapColor: '#C19504E7'
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376Hydroponics
+  name: Barker's Lament - Hydroponics
+  components:
+  - type: Sprite
+    state: hydro
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376JournalistOffice
+  name: Barker's Lament - Journalist Office
+  components:
+  - type: Sprite
+    state: hydro
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376Outhouse
+  name: Barker's Lament - Colony Outhouse
+  components:
+  - type: Sprite
+    state: unexplored
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376AdminOffice
+  name: Barker's Lament - Administration
+  components:
+  - type: Sprite
+    state: captain
+  - type: Area
+    minimapColor: '#2D3FA2EE'
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376CorpoOffice
+  name: Barker's Lament - Pizza
+  components:
+  - type: Sprite
+    state: captain
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376Bunks
+  name: Barker's Lament - Bunks
+  components:
+  - type: Sprite
+    state: crew_quarters
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376Bar
+  name: Barker's Lament - Canteen
+  components:
+  - type: Sprite
+    state: bar
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376CrackHome
+  name: Abandoned Shack
+  components:
+  - type: Sprite
+    state: unexplored
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376ATC
+  name: Barker's Lament - ATC & Embassy
+  components:
+  - type: Sprite
+    state: red2
+  - type: Area
+    minimapColor: '#2D3FA2EE'
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376Med
+  name: Barker's Lament - Medical
+  components:
+  - type: Sprite
+    state: medbay
+  - type: Area
+    minimapColor: '#3DBF75EE'
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376MedMorgue
+  name: Barker's Lament - Medical Morgue
+  components:
+  - type: Sprite
+    state: morgue
+  - type: Area
+    minimapColor: '#3DBF75EE'
+
+- type: entity
+  parent: CMUAreaLV376Med
+  id: CMUAreaLV376MedGarage
+  name: Barker's Lament - Medical Garage
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376Cargo
+  name: Barker's Lament - Requisitions
+  components:
+  - type: Sprite
+    state: primarystorage
+  - type: Area
+    minimapColor: '#C19504E7'
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376Waste
+  name: Barker's Lament - Garbage Disposal
+  components:
+  - type: Sprite
+    state: disposal
+  - type: Area
+    minimapColor: '#C19504E7'
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376CMB
+  name: Barker's Lament - Colony Marshall Bureau
+  components:
+  - type: Sprite
+    state: security
+  - type: Area
+    minimapColor: '#A22D2DEE'
+
+- type: entity
+  parent: CMUAreaLV376CMB
+  id: CMUAreaLV376CMBCells
+  name: Barker's Lament - Colony Marshall Bureau Cells
+  components:
+  - type: Sprite
+    state: blue-red-d
+  - type: Area
+    countAsArrestedForEndConditions: true
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376VehicleBay
+  name: Barker's Lament - Vehicle Bay
+  components:
+  - type: Sprite
+    state: yellow
+  - type: Area
+    minimapColor: '#C19504E7'
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376InsideMB
+  name: Military Base Building
+  components:
+  - type: Area
+    powerNet: military
+
+- type: entity
+  parent: CMUAreaLV376InsideMB
+  id: CMUAreaLV376MilitaryBooth
+  name: Military Base - Checkpoint Booth
+  components:
+  - type: Sprite
+    state: security
+
+- type: entity
+  parent: CMUAreaLV376InsideMB
+  id: CMUAreaLV376MilitaryBarracks
+  name: Military Base - Barracks
+  components:
+  - type: Sprite
+    state: crew_quarters
+
+- type: entity
+  parent: CMUAreaLV376InsideMB
+  id: CMUAreaLV376MilitaryCanteen
+  name: Military Base - Cafeteria
+  components:
+  - type: Sprite
+    state: cafeteria
+
+- type: entity
+  parent: CMUAreaLV376InsideMB
+  id: CMUAreaLV376MilitaryArmory
+  name: Military Base - Armory
+  components:
+  - type: Sprite
+    state: armory
+
+- type: entity
+  parent: CMUAreaLV376InsideMB
+  id: CMUAreaLV376MilitaryCIC
+  name: Military Base - Command Center
+  components:
+  - type: Sprite
+    state: bridge
+  - type: Area
+    minimapColor: '#2D3FA2EE'
+
+- type: entity
+  parent: CMUAreaLV376InsideMB
+  id: CMUAreaLV376MilitaryReq
+  name: Military Base - Requisitions
+  components:
+  - type: Sprite
+    state: primarystorage
+  - type: Area
+    minimapColor: '#C19504E7'
+
+- type: entity
+  parent: CMUAreaLV376InsideMB
+  id: CMUAreaLV376MilitaryEngineering
+  name: Military Base - Engineering
+  components:
+  - type: Sprite
+    state: maint_engineering
+  - type: Area
+    minimapColor: '#C19504E7'
+
+- type: entity
+  parent: CMUAreaLV376InsideMB
+  id: CMUAreaLV376MilitaryPolice
+  name: Military Base - Military Police
+  components:
+  - type: Sprite
+    state: brig
+  - type: Area
+    minimapColor: '#A22D2DEE'
+
+- type: entity
+  parent: CMUAreaLV376MilitaryPolice
+  id: CMUAreaLV376Brig
+  name: Military Base - Brig Cells
+  components:
+  - type: Sprite
+    state: blue-red-d
+  - type: Area
+    countAsArrestedForEndConditions: true
+
+- type: entity
+  parent: CMUAreaLV376InsideMB
+  id: CMUAreaLV376MilitaryMedical
+  name: Military Base - Medical
+  components:
+  - type: Sprite
+    state: medbay
+  - type: Area
+    minimapColor: '#3DBF75EE'
+
+- type: entity
+  parent: CMUAreaLV376InsideMB
+  id: CMUAreaLV376MilitaryMorgue
+  name: Military Base - Morgue
+  components:
+  - type: Sprite
+    state: morgue
+  - type: Area
+    minimapColor: '#3DBF75EE'
+
+# Inside, Level 2
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376Building
+  suffix: Level 2 indoors
+  components:
+  - type: Area
+    fulton: false
+    supplyDrop: false
+    mortarFire: false
+
+- type: entity
+  parent: CMUAreaLV376Building
+  id: CMUAreaLV376WYFacade
+  name: Weyland-Yutani Office
+  components:
+  - type: Sprite
+    state: red2
+  - type: Area
+    minimapColor: '#C19504E7'
+    powerNet: weylandyutani
+
+- type: entity
+  parent: CMUAreaLV376Building
+  id: CMUAreaLV376Weymart
+  name: Weymart
+  components:
+  - type: Sprite
+    state: red2
+  - type: Area
+    minimapColor: '#C19504E7'
+    powerNet: weylandyutani
+
+# Inside, Level 3
+- type: entity
+  parent: CMUAreaLV376Building
+  id: CMUAreaLV376SoftUnderground
+  suffix: Underground
+  components:
+  - type: Area
+    CAS: false
+
+- type: entity
+  parent: CMUAreaLV376SoftUnderground
+  id: CMUAreaLV376MobBasement
+  name: Mob Hideout
+  components:
+  - type: Sprite
+    state: yellow
+
+- type: entity
+  parent: CMUAreaLV376SoftUnderground
+  id: CMUAreaLV376WYAccessTunnel
+  name: Weyland-Yutani Facility - South Access Tunnel
+  components:
+  - type: Area
+    minimapColor: '#C19504E7'
+    powerNet: weylandyutani
+  - type: Sprite
+    state: yellow
+
+- type: entity
+  parent: CMUAreaLV376WYAccessTunnel
+  id: CMUAreaLV376WYAccessTunnelNorth
+  name: Weyland-Yutani Facility - North Access Tunnel
+
+- type: entity
+  parent: CMUAreaLV376SoftUnderground
+  id: CMUAreaLV376Atmospherics
+  name: Barker's Lament - Micro Atmospheric Processing Plant
+  components:
+  - type: Sprite
+    state: atmos
+  - type: Area
+    minimapColor: '#C19504E7'
+
+- type: entity
+  parent: CMUAreaLV376SoftUnderground
+  id: CMUAreaLV376ShallowMine
+  name: Kelland Mine - Excavation
+  components:
+  - type: Sprite
+    state: red2
+
+- type: entity
+  parent: CMUAreaLV376SoftUnderground
+  id: CMUAreaLV376Caves
+  name: Cave
+  components:
+  - type: Sprite
+    state: cave
+
+- type: entity
+  parent: CMUAreaLV376SoftUnderground
+  id: CMUAreaLV376Dam
+  name: Barker's Lament - Dam
+  components:
+  - type: Sprite
+    state: substation
+  - type: Area
+    minimapColor: '#C19504E7'
+
+# Inside, level 4
+- type: entity
+  parent: CMUAreaLV376SoftUnderground
+  id: CMUAreaLV376Underground
+  suffix: OB Proof
+  components:
+  - type: Area
+    OB: false
+
+- type: entity
+  parent: CMUAreaLV376Underground
+  id: CMUAreaLV376WYUndergroundTunnel
+  name: Weyland-Yutani Facility - South Access Tunnel
+  components:
+  - type: Sprite
+    state: purple
+  - type: Area
+    powerNet: weylandyutani
+
+- type: entity
+  parent: CMUAreaLV376WYUndergroundTunnel
+  id: CMUAreaLV376WYUndergroundTunnelNorth
+  name: Weyland-Yutani Facility - North Access Tunnel
+
+- type: entity
+  parent: CMUAreaLV376Underground
+  id: CMUAreaLV376WYFacility
+  name: Weyland-Yutani Facility
+  components:
+  - type: Sprite
+    state: yellow
+  - type: Area
+    powerNet: weylandyutani
+
+- type: entity
+  parent: CMUAreaLV376WYFacility
+  name: Weyland-Yutani Facility - Scientist Dorms
+  id: CMUAreaLV376WYFacilitySD
+  components:
+  - type: Sprite
+    state: purple
+
+- type: entity
+  parent: CMUAreaLV376WYFacility
+  name: Weyland-Yutani Facility - Security
+  id: CMUAreaLV376WYFacilitySec
+  components:
+  - type: Sprite
+    state: red2
+  - type: Area
+    minimapColor: '#A22D2DEE'
+
+- type: entity
+  parent: CMUAreaLV376WYFacility
+  name: Weyland-Yutani Facility - Chemical Research
+  id: CMUAreaLV376WYFacilityCR
+  components:
+  - type: Sprite
+    state: purple
+  - type: Area
+    minimapColor: '#812DA2EE'
+
+- type: entity
+  parent: CMUAreaLV376WYFacility
+  name: Weyland-Yutani Facility - Botanical Research
+  id: CMUAreaLV376WYFacilityBR
+  components:
+  - type: Sprite
+    state: purple
+  - type: Area
+    minimapColor: '#812DA2EE'
+
+- type: entity
+  parent: CMUAreaLV376WYFacility
+  name: Weyland-Yutani Facility - AI Core
+  id: CMUAreaLV376WYFacilityAC
+  components:
+  - type: Sprite
+    state: purple
+  - type: Area
+    minimapColor: '#2D3FA2EE'
+
+- type: entity
+  parent: CMUAreaLV376WYFacility
+  name: Weyland-Yutani Facility - Storage
+  id: CMUAreaLV376WYFacilityASRS
+  components:
+  - type: Sprite
+    state: purple
+  - type: Area
+    minimapColor: '#C19504E7'
+
+- type: entity
+  parent: CMUAreaLV376Underground
+  id: CMUAreaLV376WYMedbay
+  name: Weyland-Yutani Facility - Medbay
+  components:
+  - type: Sprite
+    state: medbay
+  - type: Area
+    powerNet: weylandyutani
+    minimapColor: '#3DBF75EE'
+
+- type: entity
+  parent: CMUAreaLV376WYMedbay
+  id: CMUAreaLV376WYMorgue
+  name: Weyland-Yutani Facility - Morgue
+  components:
+  - type: Sprite
+    state: morgue
+
+- type: entity
+  parent: CMUAreaLV376Underground
+  id: CMUAreaLV376WYCIC
+  name: Weyland-Yutani Facility - Command Center
+  components:
+  - type: Sprite
+    state: bridge
+  - type: Area
+    powerNet: weylandyutani
+    minimapColor: '#2D3FA2EE'
+
+- type: entity
+  parent: CMUAreaLV376WYResearch
+  id: CMUAreaLV376WYCells
+  name: Weyland-Yutani Facility - Subject Cells
+  components:
+  - type: Sprite
+    state: blue-red-d
+  - type: Area
+    countAsArrestedForEndConditions: true
+
+- type: entity
+  parent: CMUAreaLV376Underground
+  id: CMUAreaLV376WYResearch
+  name: Weyland-Yutani Facility - Classified
+  components:
+  - type: Sprite
+    state: blue-red2
+  - type: Area
+    powerNet: weylandyutani
+    minimapColor: '#812DA2EE'
+
+- type: entity
+  parent: CMUAreaLV376Underground
+  id: CMUAreaLV376Mine
+  name: Kelland Mine - Excavation
+  components:
+  - type: Sprite
+    state: blue2
+
+- type: entity
+  parent: CMUAreaLV376Underground
+  id: CMUAreaLV376WaterCave
+  name: Underground Lake
+  components:
+  - type: Sprite
+    state: bluenew
+
+- type: entity
+  parent: CMUAreaLV376Underground
+  id: CMUAreaLV376ShipCave
+  name: Cave
+  components:
+  - type: Sprite
+    state: hangar
+
+- type: entity
+  parent: CMUAreaLV376Underground
+  id: CMUAreaLV376Ship
+  name: Alien Structure
+  components:
+  - type: Sprite
+    state: red2
+
+# oob
+- type: entity
+  parent: CMUAreaLV376Underground
+  id: CMUAreaLV376OOB
+  name: Unknown
+  components:
+  - type: Sprite
+    state: noop
+  - type: Area
+    resinConstructionAllowed: false
+    resinAllowed: false
+    noTunnel: true
+    weatherEnabled: false
+    alwaysPowered: true
+    buildSpecial: false
+    unweedable: true

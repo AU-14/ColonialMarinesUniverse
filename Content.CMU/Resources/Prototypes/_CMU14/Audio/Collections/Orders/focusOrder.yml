@@ -1,0 +1,24 @@
+- type: soundCollection
+  id: AU14MaleFocusOrder
+  files:
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Focus/AimShots1.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Focus/AimShots2.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Focus/AimShots3.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Focus/Focus1.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Focus/Focus2.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Focus/Focus3.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Focus/FocusFire1.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Focus/FocusFire2.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Focus/FocusFire3.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Focus/FocusFire3.ogg
+
+
+- type: soundCollection
+  id: AU14FemaleFocusOrder
+  files:   # None as of yet. Will be using these as placeholder for now.
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/femalewarcry6.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_1.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_2.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_3.ogg
+  - /Audio/_AU14/Voice/UpdatedVoice/Female/Classic/Warcry/warcry_female_11.ogg
+

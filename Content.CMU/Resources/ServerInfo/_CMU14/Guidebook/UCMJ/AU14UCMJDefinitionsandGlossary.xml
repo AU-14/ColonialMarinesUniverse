@@ -2,61 +2,67 @@
   # Definitions and Glossary
 
 
- ## Prisoner of War (POW)
-POWs are defined as anyone who is a members of a nation's armed forces or in a militia with all of these four distinctions:
-  - Command structure.
-  - Distinctive signs or uniform.
-  - Carrying arms openly.
-  - Following laws of war.
+  ## Prisoner of War (POW)
+    POWs are defined as anyone who is a members of a nation's armed forces or in a militia with all of these four distinctions:
+    - Command structure.
+    - Distinctive signs or uniform.
+    - Carrying arms openly.
+    - Following laws of war.
 
- ## Commander
-The leader of the faction, interchangeable with the Acting Commander. 
+  ## Commander
+    The leader of the faction, interchangeable with the Acting Commander.
 
- ## Acting Commander
-The person acting in the place of the commander.
+    ## Adjutant
+May be reffered to as the XO, is the 2nd in command of the operation.
 
- ## Command Staff
-Personnel holding senior leadership positions responsible for planning, oversight, and command of operations, including the Commander and subordinate officers.
+  ## Acting Commander
+    The individual acting in place of the Commander holds full command authority and is vested with all powers of the Commander for the duration of their appointment.
 
- ## Delegated Command
-The temporary transfer of authority from a superior officer to a subordinate.
+  ## Command Staff
+    Personnel holding senior leadership positions responsible for planning, oversight, and command of operations, including the Commander and subordinate officers.
 
- ## Area of Operations (AO)
-The designated zone in which operations are being conducted. This is considered anywhere outside of your faction's ship/installation. 
+  ## Delegated Command
+    The temporary transfer of authority from a superior officer to a subordinate.
 
- ## Hostile Personnel
-Any individual or group demonstrating intent or capability to inflict harm on personnel, civilians or objectives.
+  ## Area of Operations (AO)
+    The designated zone in which operations are being conducted. This is considered anywhere outside of your faction's ship/installation.
 
- ## Non-Combatant
-Individuals not actively participating in hostilities, generally civilians.
+  ## Hostile Personnel
+    Any individual or group demonstrating intent or capability to inflict harm on personnel, civilians or objectives.
 
- ## Protected Persons
-Civilians, medical personnel, surrendering combatants and any individual otherwise safeguarded under the laws of war.
+  ## Non-Combatant
+    Individuals not actively participating in hostilities, generally civilians.
 
- ## Lethal Force
-Force intended or reasonably expected to cause death or serious bodily harm.
+  ## Protected Persons
+    Civilians, medical personnel, surrendering combatants and any individual otherwise safeguarded under the laws of war.
 
- ## Non-Lethal Force
-Force intended to incapacitate or compel compliance without causing death. Less-than-lethal weapons that still deal minor amounts of damage such as baton rounds are counted as Non-Lethal force.
+  ## Lethal Force
+    Force intended or reasonably expected to cause death or serious bodily harm.
 
- ## Secure Area
-Any location defended by your faction that has at least one full line of fortifications or five or more posted guards.
+  ## Non-Lethal Force
+    Force intended to incapacitate or compel compliance without causing death. Less-than-lethal weapons that still deal minor amounts of damage such as baton rounds are counted as Non-Lethal force.
 
- ## Personnel
-All members of the applicable faction.
+  ## Secure Area
+    Any location defended by your faction that has at least one full line of fortifications or five or more posted guards.
 
- ## Auxiliary Staff/Support Crew
-Non combat roles that provide logistical, police, medical, or engineering support.
+  ## Personnel
+    All members of the applicable faction.
 
- ## Flight Crew
-Pilots and Dropship Crew Chiefs.
+  ## Auxiliary Staff/Support Crew
+    Non combat roles that provide logistical, police, medical, or engineering support.
 
- ## Third-Party Personnel
-Individuals or groups not affiliated with the primary factions (OPFOR/GOVFOR/CLF) involved in the operation.
+  ## Flight Crew
+    Pilots and Dropship Crew Chiefs.
 
- ## Combat Information Center (CIC)
-The command and control hub of a ship or installation.
+  ## Third-Party Personnel
+    Individuals or groups not affiliated with the primary factions (OPFOR/GOVFOR/CLF) involved in the operation.
 
- ## Special Weapon
-Any weapon not issued to general members of the faction, usually acquired from the special weapons vendor or requisitions. 
+  ## Combat Information Center (CIC)
+    The command and control hub of a ship or installation.
+
+  ## Special Weapon
+    Any weapon not issued to general members of the faction, usually acquired from the special weapons vendor or ASRS.
+
+  ## Heavy Weapon
+    Any weapon thats does not fire a standard rifle, pistol, or smg round. Or uses non-standard pistol, rifle, or smg magazines, for example box magazines on an L/HMG. This includes weapons that fire High Explosive munitions like rockets or grenades. This does not include HEAP magazines.
 </Document>

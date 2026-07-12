@@ -16066,6 +16066,25 @@ entities:
           - 0
           - 0
         chunkSize: 4
+    - type: MapAtmosphere
+      space: False
+      mixture:
+        volume: 2500
+        immutable: True
+        temperature: 293.15
+        moles:
+        - 21.8124
+        - 81.1594
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
     - type: GasTileOverlay
     - type: RadiationGridResistance
     - type: NavMap
@@ -73684,7 +73703,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -125.5,-30.5
       parent: 1
-- proto: AU14SpawnPointCivilianColonist
+- proto: ScenarioClfCivilianColonistSpawnMarker
   entities:
   - uid: 215
     components:
@@ -73865,6 +73884,13 @@ entities:
     - type: Transform
       pos: -81.5,-72.5
       parent: 1
+- proto: AU14SpawnPointCivilianHeadOfEngineering
+  entities:
+  - uid: 24487
+    components:
+    - type: Transform
+      pos: -81.5,-73.5
+      parent: 1
 - proto: AU14SpawnPointCivilianFreightSystemsSpecialist
   entities:
   - uid: 248
@@ -73994,7 +74020,7 @@ entities:
     - type: Transform
       pos: -82.5,-72.5
       parent: 1
-- proto: AU14SpawnPointCLFCellLeader
+- proto: scenarioclfsafehousespawnmarker
   entities:
   - uid: 271
     components:
@@ -94476,7 +94502,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -156.45798,-87.14483
       parent: 1
-- proto: CMM2132Machete
+- proto: AU14ToolMachete
   entities:
   - uid: 3625
     components:
@@ -140360,7 +140386,7 @@ entities:
       parent: 11760
     - type: Physics
       canCollide: False
-- proto: RMCFireAxeCabinetFilled
+- proto: RMCFireAxeCabinet
   entities:
   - uid: 11756
     components:
@@ -154848,7 +154874,7 @@ entities:
     - type: Transform
       pos: -143.5,-85.5
       parent: 1
-- proto: RMCPickaxe
+- proto: AU14ToolPickaxe
   entities:
   - uid: 13891
     components:
@@ -213618,7 +213644,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: thirdpartyentityspawnmarker
+- proto: scenariothirdpartyentityspawnmarker
   entities:
   - uid: 24424
     components:
@@ -213630,7 +213656,7 @@ entities:
     - type: Transform
       pos: -86.5,-4.5
       parent: 1
-- proto: thirdpartyleaderspawnmarker
+- proto: scenariothirdpartyleaderspawnmarker
   entities:
   - uid: 24426
     components:
@@ -213667,7 +213693,7 @@ entities:
     - type: Transform
       pos: -81.5,-4.5
       parent: 1
-- proto: thirdpartymemberspawnmarker
+- proto: scenariothirdpartymemberspawnmarker
   entities:
   - uid: 24433
     components:

@@ -1,0 +1,104 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobWeaponsSpecialistBaseAbstract
+  name: au14-job-name-govforweaponsspecialist
+  description: au14-job-description-govforweaponsspecialist
+  icon: "AU14JobIconGovWeaponsSpecialist"
+  spawnMenuRoleName: Weapons Specialist (GOVFOR)
+  startingGear: AU14GearGOVFORWeaponsSpecialist
+  dummyStartingGear: AU14GearGOVFORRiflemanDummy
+  playTimeTracker: AU14JobGOVFORWeaponsSpecialist
+  displayWeight: 4
+  accessGroups:
+  - AU14GovforWeaponsSpecialist
+
+- type: job
+  abstract: true
+  parent: AU14JobWeaponsSpecialistBaseAbstract
+  id: AU14JobWeaponsSpecialistBase
+  roundRole: WeaponsSpecialist
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetPlatoonRifleman
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforweaponsspecialist
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: govfor_ws
+
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NoEnglish
+    - CMUProstheticLeftArm
+    - CMUProstheticRightArm
+    - CMUProstheticLeftLeg
+    - CMUProstheticRightLeg
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankPrivateFirstClass:
+      entity: AU14ChevronUSCMPrivateFirstClass
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORWeaponsSpecialist
+        time: 36000 # 10 hours
+    RMCRankPrivate:
+      entity: AU14ChevronUSCMPrivate
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFORWeaponsSpecialist
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORWeaponsSpecialist
+  equipment:
+    id: AU14IDCardWeaponsSpecialist
+    ears: AU14HeadsetGovforMarine
+
+- type: startingGear
+  id: AU14GearGOVFORWSDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleThree
+    shoes: AU14BootsJungle
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetGovforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORWeaponsSpecialist
+  name: Spawn Point GOVFOR Weapons Specialist
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORWeaponsSpecialist
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobWeaponsSpecialistBase
+  id: AU14JobGOVFORWeaponsSpecialist
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: roleLoadout
+  id: JobAU14JobGOVFORWeaponsSpecialist
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - WeaponsRMC

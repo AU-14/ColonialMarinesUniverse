@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server._RMC14.Requisitions;
 using Content.Server.Chat.Systems;
 using Content.Server.Stack;
 using Content.Shared.Access.Components;
@@ -55,6 +56,7 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
     [Dependency] private AdminConsoleSystem _adminConsole = default!;
     [Dependency] private StackSystem _stack = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private RequisitionsSystem _requisitions = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private AccessReaderSystem _accessReader = default!;
@@ -534,13 +536,34 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
             if (!_idCard.TryFindIdCard(playerUid, out var idCard))
                 continue;
 
-            if (comp.Members.Contains(idCard.Owner))
+            if (IsDepartmentAnnouncementRecipient(comp, idCard.Owner, idCard.Comp))
                 filter.AddPlayer(session);
         }
 
         var sender = $"{comp.DepartmentName} Dept.";
         var announcementSound = new SoundPathSpecifier("/Audio/Announcements/announce.ogg");
         _chatSystem.DispatchFilteredAnnouncement(filter, msg.Message, uid, sender, true, announcementSound);
+    }
+
+    private static bool IsDepartmentAnnouncementRecipient(
+        DepartmentConsoleComponent comp,
+        EntityUid idCardUid,
+        IdCardComponent idCard)
+    {
+        if (comp.Members.Contains(idCardUid))
+            return true;
+
+        if (comp.DepartmentId is not { } departmentId)
+            return false;
+
+        var departments = idCard.JobDepartments;
+        for (var i = 0; i < departments.Count; i++)
+        {
+            if (departments[i] == departmentId)
+                return true;
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -611,6 +634,9 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
 
         var elevator = FindColonyElevator(uid, comp.AsrsFaction);
         if (elevator == null)
+            return;
+
+        if (!_requisitions.TryReserveStock(nearestComputer.Value, msg.CategoryIndex, msg.EntryIndex))
             return;
 
         var orderedBy = "Unknown";

@@ -1,0 +1,238 @@
+﻿- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateFOBTentCrate
+  name: forward operating base tent crate
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCTentUNMCStandardMedicalFolded
+      amount: 1
+    - id: RMCTentUNMCExtendedMessFolded
+      amount: 1
+    - id: RMCTentUNMCExtendedFolded
+      amount: 1
+    - id: RMCTentUNMCStandardFolded
+      amount: 1
+# AU14 to do: add spawn tent
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateMotionDetectors
+  name: motion detectors crate (x2 motion detector, x2 pocket motion detector)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCPVECaseMotionDetector
+      amount: 1
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateTacticalMonocular
+  name: tactical monocular crate (x5 tactical monocular)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCBinocularsPVE
+      amount: 5
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateTacticalMonocularDesignator
+  name: tactical monocular designator crate (x4 tactical monocular designator)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCLaserDesignatorPVE
+      amount: 5
+
+- type: entity
+  parent: RMCSecureCaseMedicalBig #Medical Vendor Crate
+  id: AU14CrateMedicalVendor
+  name: We-Yu-Med Vendor crate
+  description: A crate containing one We-Yu-Med vendor.
+  components:
+  - type: SpawnOnTerminate
+    spawn: AU14GeneralMedicalVendor
+
+- type: entity
+  parent: RMCSecureCaseMedicalBig
+  id: CMUCrateResearchTerminal
+  name: Weyland-Yutani research data terminal crate
+  description: A crate containing a computer linked to Weyland-Yutani's research servers. [color=red]WARNING: Cannot be moved after unpacking![/color]
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMUResearchDataTerminal
+
+- type: entity
+  parent: RMCSecureCaseMedicalBig
+  id: CMUCrateXRF
+  name: x-ray fluorescence spectrometer crate
+  description: A crate containing an X-Ray Fluorescence spectrometer machine. [color=red]WARNING: RADIOACTIVE CONTENTS. WARNING: Cannot be moved after unpacking![/color]
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMUXRFScanner
+
+- type: entity
+  parent: RMCSecureCaseMedicalBig
+  id: CMUCrateSim
+  name: synthesis simulator crate
+  description: A crate containing a specialized chemical synthesis machine linked to Weyland-Yutani's research servers. [color=red]WARNING: Cannot be moved after unpacking![/color]
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMUChemSimulator
+
+
+- type: entity
+  parent: RMCSecureCaseMedicalBig #Medical Vendor Crate
+  id: AU14CrateMedicalBloodVendor
+  name: WeYu blood dispenser crate
+  description: A crate containing one We-Yu-Med vendor.
+  components:
+  - type: SpawnOnTerminate
+    spawn: AU14VendorBlood
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: AU14CrateM5A1SLAW
+  name: M5A1 SLAW disposable anti-tank launcher crate (x4 M5A1 SLAW)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponLauncherDisposableFolded
+      amount: 4
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: AU14CrateM7SLAW
+  name: M7-SMAW anti-tank launcher crate (x1 M7-SMAW, x2 84mm AP rocket, x2 84mm HE rocket)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponLauncherM5ATL
+      amount: 1
+    - id: RMCRocket84mmAntiArmor
+      amount: 2
+    - id: RMCRocket84mm
+      amount: 2
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: AU14CrateL33DAAMSL
+  name: L33 DAAMSL disposable anti-tank launcher crate (x4 L33 DAAMSL)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponLauncherL33
+      amount: 4
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateM7SLAWMixedRocket
+  name: 84mm mixed rocket crate (x2 84mm HE rocket, x2 84mm AP rocket)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCRocket84mmAntiArmor
+      amount: 2
+    - id: RMCRocket84mm
+      amount: 2
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateM7SLAWAPRocket
+  name: 84mm AP rocket crate (x4 84mm AP rocket)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCRocket84mmAntiArmor
+      amount: 4
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateM7SLAWHERocket
+  name: 84mm HE rocket crate (x4 84mm HE rocket)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCRocket84mm
+      amount: 4
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateCASNapalm
+  name: AGM-99 'Napalm' Munition
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCDropshipAttachmentAmmoRocketNapalm
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: AU14CrateHJRA12
+  name: HJRA-12 anti-tank launcher crate (x1 HJRA-12, x2 AT rocket, x2 HE rocket)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponLauncherHJRA12
+      amount: 1
+    - id: RMCRocketHJRA12AT
+      amount: 2
+    - id: RMCRocketHJRA12HE
+      amount: 2
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateHJRA12MixedRocket
+  name: HJRA-12 mixed rocket crate (x2 HE rocket, x2 AT rocket)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCRocketHJRA12AT
+      amount: 2
+    - id: RMCRocketHJRA12HE
+      amount: 2
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateHJRA12ATRocket
+  name: HJRA-12 AT rocket crate (x4 AT rocket)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCRocketHJRA12AT
+      amount: 4
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateHJRA12HERocket
+  name: HJRA-12 HE rocket crate (x4 HE rocket)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCRocketHJRA12HE
+      amount: 4
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateHJRA12EIIRocket
+  name: HJRA-12 Extreme-Intensity Incendiary rocket crate (x4 EI-I rocket)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCRocketHJRA12Incen
+      amount: 4
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: AU14CrateOG60
+  name: OG60 rotary launcher crate (x1 OG60, x1 Frag Box, x1 Incend Box)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14WeaponLauncherOG60
+      amount: 1
+    - id: AU14BoxHEDPUPP
+      amount: 1
+    - id: AU14BoxHIDPUPP
+      amount: 1

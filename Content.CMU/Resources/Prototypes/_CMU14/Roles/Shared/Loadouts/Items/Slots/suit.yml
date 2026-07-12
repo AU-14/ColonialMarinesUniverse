@@ -1,0 +1,191 @@
+- type: loadout
+  id: DefibrillatorAU14
+  storage:
+    back:
+    - AU14CMDefibrillator
+
+- type: loadout
+  id: JacketCorporateBrownAU14
+  storage:
+    back:
+    - RMCJacketCorporateBrown
+
+- type: loadout
+  id: JacketCorporateBlueAU14
+  storage:
+    back:
+    - RMCJacketCorporateBlue
+
+- type: loadout
+  id: JacketCorporateBlackAU14
+  storage:
+    back:
+    - RMCJacketCorporateBlack
+
+- type: loadout
+  id: JacketCorporateKhakiAU14
+  storage:
+    back:
+    - RMCJacketCorporateKhaki
+
+- type: loadout
+  id: CivilianJacketGrayPufferVestAU14
+  storage:
+    back:
+    - AU14CivilianJacketGrayPufferVest
+
+- type: loadout
+  id: CivilianJacketKhakiPufferVestAU14
+  storage:
+    back:
+    - AU14CivilianJacketKhakiPufferVest
+
+- type: loadout
+  id: CivilianJacketTanPufferVestAU14
+  storage:
+    back:
+    - AU14CivilianJacketTanPufferVest
+
+- type: loadout
+  id: CivilianJacketGrayPufferJacketAU14
+  storage:
+    back:
+    - AU14CivilianJacketGrayPufferJacket
+  
+- type: loadout
+  id: CivilianJacketKhakiPufferJacketAU14
+  storage:
+    back:
+    - AU14CivilianJacketKhakiPufferJacket
+
+- type: loadout
+  id: CivilianJacketOrangePufferJacketAU14
+  storage:
+    back:
+    - AU14CivilianJacketOrangePufferJacket
+
+- type: loadout
+  id: WindbreakerBlueAU14
+  storage:
+    back:
+    - AU14WindbreakerBlue
+
+- type: loadout
+  id: CivilianJacketSnowSuitAU14
+  storage:
+    back:
+    - AU14CivilianJacketSnowSuit
+
+- type: loadout
+  id: CivilianJacketOldCoatAU14
+  storage:
+    back:
+    - AU14CivilianJacketOldCoat
+
+- type: loadout
+  id: CivilianJacketBomberJacketAU14
+  storage:
+    back:
+    - AU14CivilianJacketBomberJacket
+
+- type: loadout
+  id: CivilianTanTrenchCoatAU14
+  storage:
+    back:
+    - AU14CivilianTanTrenchCoat
+
+- type: loadout
+  id: CivilianBrownTrenchCoatAU14
+  storage:
+    back:
+    - AU14CivilianBrownTrenchCoat
+
+- type: loadout
+  id: CivilianGrayTrenchCoatAU14
+  storage:
+    back:
+    - AU14CivilianGrayTrenchCoat
+
+- type: loadout
+  id: CivilianJacketBlueParkaAU14
+  storage:
+    back:
+    - AU14CivilianJacketBlueParka
+
+- type: loadout
+  id: CivilianJacketGreenParkaAU14
+  storage:
+    back:
+    - AU14CivilianJacketGreenParka
+
+- type: loadout
+  id: CivilianJacketRedParkaAU14
+  storage:
+    back:
+    - AU14CivilianJacketRedParka
+
+- type: loadout
+  id: CivilianJacketYellowParkaAU14
+  storage:
+    back:
+    - AU14CivilianJacketYellowParka
+
+- type: loadout
+  id: CivilianFullSuitWeYuEngineerAU14
+  storage:
+    back:
+    - AU14CivilianFullSuitWeYuEngineer
+
+- type: loadout
+  id: CivilianFullSuitParamedicGreenAU14
+  equipment:
+    outerClothing: AU14CivilianFullSuitParamedicGreen
+
+- type: loadout
+  id: CivilianFullSuitParamedicRedAU14
+  equipment:
+    outerClothing: AU14CivilianFullSuitParamedicRed
+
+- type: loadout
+  id: CivilianFullSuitFirefighterAU14
+  equipment:
+    outerClothing: AU14CivilianTurnoutGear
+
+- type: loadout
+  id: CivilianFullSuitFirefighterUPPAU14
+  equipment:
+    outerClothing: RMCArmorSPPFirefighter
+
+- type: loadout
+  id: OuterClothingExternalWebbingBlackAU14
+  storage:
+    back:
+    - RMCOuterClothingExternalWebbingBlack
+
+- type: loadout
+  id: AU14CivilianHazardVestParamedicWhiteAU14
+  storage:
+    back:
+    - AU14CivilianHazardVestParamedicWhite
+
+- type: loadout
+  id: CivilianHazardVestParamedicGreenAU14
+  storage:
+    back:
+    - AU14CivilianHazardVestParamedicGreen
+
+- type: loadout
+  id: WYFancySuitJacketBlackAU14
+  equipment:
+    outerClothing: RMCFancySuitJacketBlack
+
+- type: loadout
+  id: WYFancySuitJacketBrownAU14
+  equipment:
+    outerClothing: RMCFancySuitJacketBrown
+
+- type: loadout
+  id: WYFancySuitJacketLightBrownAU14
+  equipment:
+    outerClothing: RMCFancySuitJacketLightBrown
+

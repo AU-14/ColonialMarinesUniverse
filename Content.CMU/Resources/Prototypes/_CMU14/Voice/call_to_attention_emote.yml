@@ -1,0 +1,13 @@
+- type: emote
+  id: AU14SnapToAttention
+  name: au14-emote-name-snap-to-attention
+  category: Hands
+  icon: Interface/Emotes/salute.png
+  whitelist:
+    components:
+    - Hands
+  chatMessages: ["au14-emote-msg-snap-to-attention"]
+  chatTriggers:
+    - a10
+    - comes to attention
+    - snaps to attention

@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using Robust.Shared.Map;
 
@@ -38,6 +39,17 @@ public sealed partial class CMUProjectedLightComponent : Component
     /// Stale projected lights are deleted during cleanup.
     /// </summary>
     public uint LastActiveFrame;
+
+    /// <summary>
+    /// Tracks the last time this projected light was confirmed active.
+    /// Used to fade through brief visibility-gate misses at portal edges.
+    /// </summary>
+    public TimeSpan LastActiveTime;
+
+    /// <summary>
+    /// Last full-strength projected energy, used as the fade baseline while stale.
+    /// </summary>
+    public float LastProjectedEnergy;
 
     /// <summary>
     /// The receiving map this projected light was last positioned on.

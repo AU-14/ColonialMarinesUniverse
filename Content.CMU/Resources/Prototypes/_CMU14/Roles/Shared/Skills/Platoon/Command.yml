@@ -1,0 +1,172 @@
+- type: entity
+  id: AU14SkillPresetPlatoonCommander
+  name: Commander
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillLeadership: 4
+      RMCSkillJtac: 4
+      RMCSkillNavigations: 1
+      RMCSkillOverwatch: 1
+      RMCSkillIntel: 2
+      RMCSkillCqc: 2
+      RMCSkillFirearms: 2
+      RMCSkillEndurance: 3
+      RMCSkillPilot: 1
+      RMCSkillEngineer: 3
+      RMCSkillConstruction: 3
+      RMCSkillPowerLoader: 2
+      RMCSkillVehicles: 1
+      RMCSkillFireman: 2
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 1
+      RMCSkillPolice: 2
+
+- type: entity
+  id: AU14SkillPresetPlatoonAdvisor
+  name: Advisor
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillConstruction: 4
+      RMCSkillCqc: 4
+      RMCSkillEndurance: 4
+      RMCSkillEngineer: 4
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 3
+      RMCSkillVehicles: 2
+      RMCSkillOverwatch: 1
+      RMCSkillPilot: 2
+      RMCSkillLeadership: 2
+      RMCSkillIntel: 2
+      RMCSkillPowerLoader: 2
+      RMCSkillMedical: 4
+      RMCSkillSurgery: 4
+      RMCSkillNavigations: 1
+      RMCSkillPolice: 2
+      RMCSkillJtac: 4
+
+- type: entity
+  id: AU14SkillPresetPlatoonJuniorOfficer
+  name: Staff Officer
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillLeadership: 3
+      RMCSkillJtac: 3
+      RMCSkillNavigations: 1
+      RMCSkillOverwatch: 1
+      RMCSkillIntel: 2
+      RMCSkillCqc: 2
+      RMCSkillFirearms: 1
+      RMCSkillEndurance: 1
+      RMCSkillPilot: 1
+      RMCSkillEngineer: 2
+      RMCSkillConstruction: 2
+      RMCSkillPowerLoader: 1
+      RMCSkillVehicles: 1
+      RMCSkillFireman: 1
+      RMCSkillMedical: 1
+      RMCSkillSurgery: 1
+      RMCSkillPolice: 2
+
+- type: entity
+  id: AU14SkillPresetOfficerAdjutant
+  name: Adjutant Officer
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillLeadership: 4
+      RMCSkillJtac: 4
+      RMCSkillNavigations: 1
+      RMCSkillOverwatch: 1
+      RMCSkillIntel: 3
+      RMCSkillCqc: 2
+      RMCSkillFirearms: 2
+      RMCSkillEndurance: 3
+      RMCSkillPilot: 1
+      RMCSkillEngineer: 3
+      RMCSkillConstruction: 3
+      RMCSkillPowerLoader: 2
+      RMCSkillVehicles: 1
+      RMCSkillFireman: 2
+      RMCSkillMedical: 2
+      RMCSkillSurgery: 1
+      RMCSkillPolice: 2
+
+- type: entity
+  id: AU14SkillPresetOfficerIntel
+  name: Intelligence Officer
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillLeadership: 3
+      RMCSkillJtac: 2
+      RMCSkillOverwatch: 2
+      RMCSkillIntel: 5
+      RMCSkillNavigations: 2
+      RMCSkillCqc: 1
+      RMCSkillFirearms: 2
+      RMCSkillEndurance: 2
+      RMCSkillPilot: 1
+      RMCSkillEngineer: 1
+      RMCSkillConstruction: 1
+      RMCSkillFireman: 1
+      RMCSkillMedical: 1
+      RMCSkillPolice: 2
+      RMCSkillDomestics: 1
+      RMCSkillResearch: 1
+
+- type: entity
+  id: AU14SkillPresetOfficerEngineer
+  name: Engineering Officer
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillLeadership: 2
+      RMCSkillJtac: 2
+      RMCSkillNavigations: 1
+      RMCSkillOverwatch: 1
+      RMCSkillIntel: 1
+      RMCSkillCqc: 1
+      RMCSkillFirearms: 1
+      RMCSkillEndurance: 2
+      RMCSkillPilot: 1
+      RMCSkillEngineer: 4
+      RMCSkillConstruction: 4
+      RMCSkillPowerLoader: 2
+      RMCSkillVehicles: 2
+      RMCSkillFireman: 2
+      RMCSkillMedical: 1
+      RMCSkillPolice: 1
+
+- type: entity
+  id: AU14SkillPresetOfficerLogistics
+  name: Logistics Officer
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillLeadership: 2
+      RMCSkillJtac: 2
+      RMCSkillNavigations: 1
+      RMCSkillOverwatch: 1
+      RMCSkillIntel: 1
+      RMCSkillCqc: 1
+      RMCSkillFirearms: 1
+      RMCSkillEndurance: 2
+      RMCSkillPilot: 1
+      RMCSkillEngineer: 2
+      RMCSkillConstruction: 2
+      RMCSkillPowerLoader: 3
+      RMCSkillVehicles: 2
+      RMCSkillFireman: 2
+      RMCSkillMedical: 1
+      RMCSkillPolice: 1
+      RMCSkillDomestics: 2

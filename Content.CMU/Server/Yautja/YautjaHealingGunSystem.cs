@@ -1,7 +1,8 @@
 using Content.Shared._CMU14.Yautja;
-using Content.Shared._CMU14.Medical.Bones;
-using Content.Shared._CMU14.Medical.Items;
-using Content.Shared._CMU14.Medical.Wounds;
+using Content.Shared._CMU14.Medical.Anatomy.Bones;
+using Content.Shared._CMU14.Medical.Core;
+using Content.Shared._CMU14.Medical.Treatment.FirstAid;
+using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
@@ -22,14 +23,15 @@ public sealed partial class YautjaHealingGunSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
-    [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private SharedBoneSystem _bone = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedFractureSystem _fracture = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private UseDelaySystem _useDelay = default!;
     [Dependency] private SharedCMUWoundsSystem _wounds = default!;
+    [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
 
     public override void Initialize()
     {
@@ -155,7 +157,7 @@ public sealed partial class YautjaHealingGunSystem : EntitySystem
     private bool TreatWounds(EntityUid target)
     {
         var changed = false;
-        foreach (var (partUid, _) in _body.GetBodyChildren(target))
+        foreach (var (partUid, _) in _medicalIndex.GetBodyParts(target))
         {
             var guard = 0;
             while (guard++ < 128 && _wounds.TryTreatWound(partUid, out _))
@@ -170,7 +172,7 @@ public sealed partial class YautjaHealingGunSystem : EntitySystem
     private bool RepairFractures(EntityUid target)
     {
         var changed = false;
-        foreach (var (partUid, _) in _body.GetBodyChildren(target))
+        foreach (var (partUid, _) in _medicalIndex.GetBodyParts(target))
         {
             if (!TryComp<FractureComponent>(partUid, out var fracture))
                 continue;
@@ -192,16 +194,13 @@ public sealed partial class YautjaHealingGunSystem : EntitySystem
 
     private bool HasUntreatedWounds(EntityUid target)
     {
-        foreach (var (partUid, _) in _body.GetBodyChildren(target))
+        foreach (var (partUid, _) in _medicalIndex.GetBodyParts(target))
         {
             if (!TryComp<BodyPartWoundComponent>(partUid, out var wounds))
                 continue;
 
-            foreach (var wound in wounds.Wounds)
-            {
-                if (!wound.Treated)
-                    return true;
-            }
+            if (_woundLedger.CountUntreatedWounds(wounds) > 0)
+                return true;
         }
 
         return false;
@@ -209,7 +208,7 @@ public sealed partial class YautjaHealingGunSystem : EntitySystem
 
     private bool HasFractures(EntityUid target)
     {
-        foreach (var (partUid, _) in _body.GetBodyChildren(target))
+        foreach (var (partUid, _) in _medicalIndex.GetBodyParts(target))
         {
             if (TryComp<FractureComponent>(partUid, out var fracture) &&
                 fracture.Severity != FractureSeverity.None)

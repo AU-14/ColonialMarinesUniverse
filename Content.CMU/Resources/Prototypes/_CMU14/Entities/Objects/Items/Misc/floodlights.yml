@@ -1,0 +1,268 @@
+# Tall Floodlight & Broken
+
+- type: entity
+  parent: BaseStructure
+  id: AU14TallFloodlight
+  name: tall floodlight
+  description: A pillar of light in the darkness.
+  suffix: AU14
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Anchorable
+    flags:
+    - Anchorable
+  - type: Sprite
+    noRot: true
+    sprite: _RMC14/Objects/Misc/Lights/floodlightbig.rsi
+    layers:
+      - state: bigfloodon
+      - state: bigflood
+        visible: false
+        map: [ "light" ]
+    offset: "0.0,0.5"
+    drawdepth: Mobs
+  - type: Construction
+    graph: AU14FloodlightBroken
+    node: completed
+  - type: InteractionOutline
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: PointLight
+    enabled: true
+    radius: 7
+    netsync: false
+    offset: "0,0.5"
+    color: "#ECFFFF"
+    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+      - !type:ChangeConstructionNodeBehavior
+        node: start
+  - type: Repairable
+  - type: Corrodible # Repairable, not destructible.
+    isCorrodible: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 50
+        mask:
+        - MachineMask
+        layer:
+        - WallLayer
+  - type: Appearance
+  #- type: ToggleableVisuals
+  #  spriteLayer: light
+  #- type: RMCReactorPoweredLight
+  - type: PreventAttackLightOff
+  - type: RequireProjectileTarget
+
+- type: entity
+  parent: BaseStructure
+  id: AU14FloodlightBroken
+  name: tall broken floodlight
+  description: A pasted on note says 'To fix, unscrew the panel, crowbar out the damaged assembly, weld it fixed, add 2 cable, then close the panel.'
+  suffix: AU14
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Anchorable
+    flags:
+    - Anchorable
+  - type: Sprite
+    noRot: true
+    sprite: _RMC14/Objects/Misc/Lights/floodlightbig.rsi
+    state: broken
+    offset: "0.0,0.5"
+    drawdepth: Mobs
+  - type: Construction
+    graph: AU14FloodlightBroken
+    node: start
+  - type: InteractionOutline
+  - type: Corrodible # Repairable, not destructible.
+    isCorrodible: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 155
+        mask:
+        - MachineMask
+        layer:
+        - WallLayer
+
+- type: constructionGraph
+  parent: RMC
+  id: AU14FloodlightBroken
+  start: start
+  graph:
+  - node: start
+    entity: AU14FloodlightBroken
+    edges:
+    - to: panel
+      steps:
+      - tool: Screwing
+        doAfter: 2
+
+  - node: panel
+    entity: AU14FloodlightBroken
+    edges:
+    - to: welding
+      steps:
+      - tool: Prying
+        doAfter: 2
+
+  - node: welding
+    entity: AU14FloodlightBroken
+    edges:
+    - to: cabling
+      steps:
+      - tool: Welding
+        doAfter: 4
+
+  - node: cabling
+    entity: AU14FloodlightBroken
+    edges:
+    - to: finish
+      steps:
+      - material: RMCCable
+        amount: 2
+        doAfter: 2
+
+  - node: finish
+    entity: AU14FloodlightBroken
+    edges:
+    - to: completed
+      steps:
+      - tool: Screwing
+        doAfter: 2
+
+  - node: completed
+    entity: AU14TallFloodlight
+
+# Streetlight & Broken
+- type: entity
+  parent: AU14TallFloodlight
+  id: AU14Streetlight
+  name: colony streetlight
+  suffix: AU14
+  components:
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.1,-0.1,0.1,0.1"
+        density: 50
+        mask:
+        - MachineMask
+        layer:
+        - WallLayer
+  - type: Sprite
+    noRot: true
+    sprite: _RMC14/Objects/Misc/Lights/streetlight.rsi
+    offset: 0.0,0.8
+    layers:
+      - state: street_on
+      - state: street_off
+        visible: false
+        map: [ "light" ]
+    drawdepth: Mobs
+  - type: Construction
+    graph: AU14StreetlightBroken
+    node: completed
+
+- type: entity
+  parent: AU14FloodlightBroken
+  id: AU14StreetlightBroken
+  name: broken colony streetlight
+  description: A pasted on note says 'To fix, unscrew the panel, crowbar out the damaged assembly, weld it fixed, add 2 cable, then close the panel.'
+  suffix: AU14
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: _RMC14/Objects/Misc/Lights/streetlight.rsi
+    offset: 0.0,0.8
+    state: broken
+    drawdepth: Mobs
+  - type: Construction
+    graph: AU14StreetlightBroken
+    node: start
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.1,-0.1,0.1,0.1"
+        density: 50
+        mask:
+        - MachineMask
+        layer:
+        - WallLayer
+
+- type: constructionGraph
+  parent: RMC
+  id: AU14StreetlightBroken
+  start: start
+  graph:
+  - node: start
+    entity: AU14StreetlightBroken
+    edges:
+    - to: panel
+      steps:
+      - tool: Screwing
+        doAfter: 2
+
+  - node: panel
+    entity: AU14StreetlightBroken
+    edges:
+    - to: welding
+      steps:
+      - tool: Prying
+        doAfter: 2
+
+  - node: welding
+    entity: AU14StreetlightBroken
+    edges:
+    - to: cabling
+      steps:
+      - tool: Welding
+        doAfter: 4
+
+  - node: cabling
+    entity: AU14StreetlightBroken
+    edges:
+    - to: finish
+      steps:
+      - material: RMCCable
+        amount: 2
+        doAfter: 2
+
+  - node: finish
+    entity: AU14StreetlightBroken
+    edges:
+    - to: completed
+      steps:
+      - tool: Screwing
+        doAfter: 2
+
+  - node: completed
+    entity: AU14Streetlight

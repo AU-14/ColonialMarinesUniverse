@@ -1,0 +1,139 @@
+- type: entity
+  abstract: true
+  parent: SimpleMobBase
+  id: CMUBaseMobCarp
+  name: genetic ancestor
+  description: The genetic bipedal ancestor of... Uh... Something. Yeah, there's definitely something on the planet that descended from whatever this is.
+  components:
+  - type: CombatMode
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.4
+        density: 80
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: Body
+    prototype: Bloodsucker
+    requiredLegs: 0
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      100: Critical
+      200: Dead
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: alive
+      Critical:
+        Base: crit
+      Dead:
+        Base: dead
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/Effects/bite.ogg
+    angle: 0
+    animation: WeaponArcBite
+    damage:
+      types:
+        Blunt: 3
+        Piercing: 3
+  - type: TypingIndicator
+    proto: alien
+  - type: ReplacementAccent
+    accent: genericAggressive
+  - type: Speech
+    speechVerb: LargeMob
+  - type: Butcherable
+    butcheringType: Knife # Spike
+    spawned:
+    - id: FoodMeatFish
+      amount: 2
+  - type: Reactive
+    groups:
+      Flammable: [ Touch ]
+      Extinguish: [ Touch ]
+  - type: NPCRetaliation
+    attackMemoryLength: 10
+  - type: FactionException
+  - type: NpcFactionMember
+    factions:
+    - Passive
+  - type: Tag
+    tags:
+    - Carp
+    - DoorBumpOpener
+  - type: RemoveComponents
+    components:
+    - type: Internals
+  - type: NoSlip
+
+- type: entity
+  parent: [RMCSimpleMob, CMUBaseMobCarp, RMCSmallHost]
+  id: CMUMobCarp
+  name: carp
+  description: It's a carp. Adapted to migrate up hill both ways.
+  suffix: CMU
+  components:
+  - type: RotationVisuals
+    defaultRotation: 90
+    horizontalRotation: 90
+  - type: Inventory
+    templateId: carp
+    speciesId: carp
+  - type: GhostRole
+    name: Carp
+    description: An endangered species of fish. They are adapted to migrate up hill both ways
+    prob: 0
+  - type: Sprite
+    drawdepth: Mobs
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base"]
+      state: alive
+      sprite: _AU14/Mobs/Animals/carp.rsi
+    - map: [ "enum.HumanoidVisualLayers.Handcuffs" ]
+      color: "#ffffff"
+      sprite: Objects/Misc/handcuffs.rsi
+      state: body-overlay-2
+      visible: false
+    - map: [ "mask" ]
+  - type: InteractionPopup
+    interactSuccessString: petting-success-carp
+    interactFailureString: petting-failure-carp
+    interactFailureSound:
+      path: /Audio/Effects/bite.ogg
+
+- type: inventoryTemplate
+  id: carp
+  slots:
+  - name: mask
+    slotTexture: mask
+    slotFlags: MASK
+    uiWindowPos: 0,1
+    strippingWindowPos: 1,1
+    displayName: Mask
+
+- type: entity
+  name: Carp Spawner
+  id: CMUSpawnMobCarp
+  parent: MarkerBase
+  suffix: CMU
+  components:
+  - type: Sprite
+    layers:
+    - state: carp_spawn
+      sprite: _AU14/Mobs/Animals/carp.rsi
+  - type: ProportionalSpawner
+    id: CMUSpawnMobCarp
+    ratio: 16
+    prototypes:
+    - CMUMobCarp

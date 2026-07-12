@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "license": "CC-BY-NC-SA-4.0",
+  "copyright": "Taken from tgstation/TerraGov-Marine-Corps at https://github.com/tgstation/TerraGov-Marine-Corps/blob/3fc0dc2bf1dd46b3396c2dc3168b0098ff5a2d18/icons/Xeno/2x2building.dmi. License and authorship per TGMC README asset table.",
+  "size": {
+    "x": 64,
+    "y": 64
+  },
+  "states": [
+    {
+      "name": "orb_charge",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "crush_smooth",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "crush_hard",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "orb_idle",
+      "delays": [
+        [
+          0.4,
+          0.7
+        ]
+      ]
+    }
+  ]
+}

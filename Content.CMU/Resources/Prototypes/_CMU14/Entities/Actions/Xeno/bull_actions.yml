@@ -1,0 +1,53 @@
+- type: entity
+  parent: ActionXenoBase
+  id: CMUActionXenoBullPlow
+  name: Plow
+  description: Set your charge to plow through targets without stopping.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/Xeno/bull.rsi
+      state: bull_charge
+    iconOn:
+      sprite: _CMU14/Actions/Xeno/bull.rsi
+      state: bull_ready_charge
+    useDelay: 0.25
+  - type: InstantAction
+    event: !type:CMUXenoBullChargeActionEvent { mode: Plow }
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMUActionXenoBullHeadbutt
+  name: Headbutt
+  description: Set your charge to slam a target aside and end the rush.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/Xeno/bull.rsi
+      state: bull_headbutt
+    iconOn:
+      sprite: _CMU14/Actions/Xeno/bull.rsi
+      state: bull_headbutt
+    useDelay: 0.25
+  - type: InstantAction
+    event: !type:CMUXenoBullChargeActionEvent { mode: Headbutt }
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMUActionXenoBullGore
+  name: Gore
+  description: Set your charge to gore a target for heavier damage and end the rush.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/Xeno/bull.rsi
+      state: bull_gore
+    iconOn:
+      sprite: _CMU14/Actions/Xeno/bull.rsi
+      state: bull_gore
+    useDelay: 0.25
+  - type: InstantAction
+    event: !type:CMUXenoBullChargeActionEvent { mode: Gore }

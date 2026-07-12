@@ -1,0 +1,89 @@
+# base
+- type: entity
+  parent: RMCArmbandBase
+  id: AU14ChevronUSASFBase
+  abstract: true
+  suffix: USASF Chevron
+  description: United States Aerospace Force enlisted rank insignia. This insignia makes you feel comfortable, like in flight lobster dinners and satin cryo pods.
+
+# ├──[ Enlisted - SNCO ]──────────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14ChevronUSASFBase
+  id: AU14ChevronUSASFTechnicalSergeant
+  name: technical sergeant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: AU14RankUSASFTechnicalSergeant
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSASFBase
+  id: AU14ChevronUSASFMasterSergeant
+  name: master sergeant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: AU14RankUSASFMasterSergeant
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSASFBase
+  id: AU14ChevronUSASFSeniorMasterSergeant
+  name: senior master sergeant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: AU14RankUSASFSMSgt
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSASFBase
+  id: AU14ChevronUSASFChiefMasterSergeant
+  name: chief master sergeant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: AU14RankUSASFCMSgt
+    override: true
+
+- type: entity
+  parent: AU14ChevronUSASFBase
+  id: AU14ChevronUSASFCommandChiefMasterSergeant
+  name: command chief master sergeant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: AU14RankUSASFCCMSgt
+    override: true

@@ -1,3 +1,4 @@
+using Content.Shared.Whitelist;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared.AU14.ColonyEconomy;
@@ -41,4 +42,7 @@ public sealed partial class AU14ShopkeeperVendorComponent : Component
 
     public const string StockContainerName = "shopkeeper_stock";
     public const string CashSlotName = "shopkeeper_cash";
+
+    [DataField]
+    public EntityWhitelist? StockBlacklist;
 }

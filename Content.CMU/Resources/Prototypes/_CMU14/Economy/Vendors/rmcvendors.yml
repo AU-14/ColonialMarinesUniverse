@@ -1,0 +1,1364 @@
+# Apparel, equipment, medical, aircrew, command, smartgun, section-leader, weapons, RTO, special-weapons,
+# aircrew-weapons, CT
+- type: entity
+  parent: ColMarTechBase
+  id: AU14RMCclothingequipmentvendor
+  name: Royal Marines apparel vendor
+  description: >-
+    An automated dispenser rack, hooked up to a small storage of Royal Marine Commandos apparel.
+    Standard issue aboard naval vessels, military outposts, corporate-science installations and civilian colonies across the frontier.
+    Manufactured to outfit personnel rapidly following cryogenic hypersleep or emergency mobilization.
+
+    For full operational readiness, select one item from each section: fatigues with a webbing, footwear, gloves, headgear, armor, backpack, belt and a pouch.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Fatigues
+      entries:
+      - id: AU14FatiguesDesertRMC
+        amount: 40
+      - id: AU14FatiguesBlackRMC
+        amount: 40
+    - name: Footwear
+      entries:
+      - id: RMCBootsRoyal
+        amount: 40
+    - name: Gloves
+      entries:
+      - id: AU14HandsRMC
+        amount: 40
+      - id: AU14HandsSilverRMC
+        amount: 30
+    - name: Webbings
+      entries:
+      - id: AU14WebbingMagazine
+        amount: 40
+      - id: AU14WebbingUtility
+        amount: 40
+      - id: AU14WebbingDumpPouch
+        amount: 25
+      - id: AU14WebbingAdminPouchRMC
+        amount: 20
+      - id: AU14WebbingDropPouchRMC
+        amount: 20
+      - id: AU14WebbingKnivesFilled
+        amount: 2
+    - name: Headgear
+      entries:
+      - id: AU14HeadHelmetRMC
+        amount: 40
+      - id: AU14HeadHelmetRMCBallistic
+        amount: 30
+      - id: AU14HeadTurbanRMC
+        amount: 25
+      - id: RMCHeadRoyalBeanie
+        amount: 25
+      - id: AU14HeadBeretRMC
+        amount: 40
+      - id: AU14DesertBoonieHat
+        amount: 20
+      - id: AU14JungleBoonieHat
+        amount: 20
+      - id: AU14JunglePatrolCap
+        amount: 25
+      - id: AU14DesertPatrolCap
+        amount: 25
+      - id: AU14JungleFlapCap
+        amount: 15
+      - id: AU14DesertFlapCap
+        amount: 15
+      - id: RMCM5CameraGear
+        amount: 30
+    - name: Heads Up Display
+      entries:
+      - id: AU14VisorSquadRMC
+        amount: 40
+      - id: RMCVisorWelding
+        amount: 8
+    - name: Armor
+      entries:
+      - id: AU14ArmorRMC
+        amount: 40
+      - id: AU14ArmorLightRMC
+        amount: 30
+      - id: AU14ArmorPaddedRMC
+        amount: 25
+    - name: Armor Components
+      entries:
+      - id: AU14ArmorGarbShinGuardsRMC
+        amount: 40
+      - id: AU14ArmorGarbShoulderPadsRMC
+        amount: 40
+      - id: AU14ArmorGarbMagazineWebbingRMC
+        amount: 8
+      - id: AU14ArmorGarbSmallWebbingRMC
+        amount: 12
+      - id: AU14ArmorGarbDesertPoncho
+        amount: 40
+    - name: Backpack
+      entries:
+      - id: AU14BackpackRMC
+        amount: 40
+      - id: AU14SmallBackpackRMC
+        amount: 25
+      - id: AU14LargeBackpackRMC
+        amount: 15
+      - id: AU14FrameBackpackRMC
+        amount: 10
+      - id: AU14WelderBackpackRMC
+        amount: 5
+      - id: RMCScabbardShotgun
+        amount: 3
+      - id: RMCBackpackAmmo
+        amount: 4
+      - id: CMSatchelMarine
+        amount: 40
+    - name: Belts
+      entries:
+      - id: AU14BeltMarineRMC
+        amount: 40
+      - id: RMCBeltGrenade
+        amount: 4
+      - id: AU14ShotgunShellLoadingRigRMC
+        amount: 6
+      - id: AU14BeltHolsterPistolRMC
+        amount: 20
+      - id: RMCBeltHolsterRevolver
+        amount: 10
+      - id: CMBeltKnifeFilled
+        name: M276 Knife Rig (Full)
+        amount: 2
+      - id: AU14BeltUtilityGeneralRMC
+        amount: 20
+    - name: Pouches
+      entries:
+      - id: RMCPouchBayonet
+        name: Bayonet Sheath
+        amount: 25
+      - id: AU14PouchFlareFilledRMC
+        name: Flare Pouch (Full)
+        amount: 30
+      - id: RMCPouchDocumentSmall
+        amount: 3
+      - id: RMCPouchMagazine
+        amount: 50
+      - id: RMCPouchShotgunLarge
+        amount: 8
+      - id: RMCPouchGeneralMedium
+        amount: 25
+      - id: RMCPouchGeneralLarge
+        amount: 4
+      - id: RMCPouchMagazinePistol
+        amount: 25
+      - id: AU14PouchPistolAlt
+        amount: 20
+      - id: AU14PouchIFAKFill
+        amount: 5
+      - id: RMCPouchConstruction
+        amount: 5
+      - id: RMCPouchExplosive
+        amount: 3
+      - id: RMCPouchFuelTank
+        amount: 2
+      - id: RMCPouchTools
+        amount: 15
+    - name: Mask
+      entries:
+      - id: CMMaskCoif
+        amount: 20
+      - id: RMCMaskScarfBlack
+        amount: 20
+      - id: RMCMaskScarfGray
+        amount: 20
+      - id: RMCMaskScarfTan
+        amount: 20
+      - id: RMCMaskTornScarfGreen
+        amount: 20
+      - id: RMCMaskTornScarfDesert
+        amount: 20
+      - id: RMCMaskTornScarfSnow
+        amount: 20
+      - id: RMCMaskTornScarfBlack
+        amount: 20
+      - id: RMCMaskSmockBlack
+        amount: 20
+      - id: RMCMaskNeckerchiefGray
+        amount: 20
+    - name: Glasses & Goggles
+      entries:
+      - id: AU14GogglesM1A1ClearBallistic
+        amount: 25
+      - id: AU14GogglesM1A1Ballistic
+        amount: 25
+      - id: AU14GogglesM1A1DarkBallistic
+        amount: 25
+      - id: AU14GogglesM1A1LaserBallistic
+        amount: 25
+      - id: AU14GogglesM1A1OrangeBallistic
+        amount: 25
+      - id: AU14GogglesM1A1PolarizedBallistic
+        amount: 25
+      - id: AU14GogglesM60
+        amount: 25
+      - id: RMCGlassesMarineRpg
+        amount: 25
+      - id: AU14GlassesBiMex
+        amount: 25
+      - id: AU14GlassesBiMexOrange
+        amount: 25
+      - id: RMCGlassesTriMaxBronze
+        amount: 25
+    - name: Helmet Garb
+      entries:
+      - id: AU14HelmetGarbM10SkrimJungle
+        amount: 15
+      - id: AU14HelmetGarbM10SkrimDesert
+        amount: 20
+      - id: AU14HelmetGarbM10SkrimSnow
+        amount: 15
+      - id: AU14HelmetGarbM10RainCover
+        amount: 40
+      - id: AU14HelmetGarbM10Netting
+        amount: 40
+      - id: RMCHelmetGarbGasmaskJungle
+        amount: 20
+      - id: RMCHelmetGarbGasmaskDesert
+        amount: 20
+    - name: Patches
+      entries:
+      - id: AU14RMCPatch
+        amount: 80
+      - id: AU14TWEPatch
+        amount: 80
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14RMCequipmentvendor
+  name: Royal Marines equipment vendor
+  description: >-
+    An automated dispenser rack, hooked up to a small storage of Royal Marine Commandos equipment.
+    Stocked with medical supplies and field gear for rapid deployment following cryogenic hypersleep or emergency mobilization.
+    The interface is intentionally simple, even someone with tunnel-vision and frostbite can operate it.
+
+    Rapid-issue protocol: prioritize medical supplies, a ration pack, an e-tool and sandbags.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Food
+      entries:
+      - id: AU14MRETWERMC
+        recommended: true
+        amount: 60
+      - id: AU14BoxMRETWERMC
+        amount: 10
+    - name: Medical Supplies
+      entries:
+      - id: AU14PouchIFAKFill
+        name: infantry first aid kit (Full)
+        recommended: true
+        amount: 30
+      - id: AU14HemostaticGauzePacket
+        amount: 40
+      - id: AU14Tourniquet
+        amount: 40
+      - id: CMOintment10
+        amount: 40
+      - id: CMPacketPillsTricordrazine
+        amount: 40
+      - id: AU14NaloxoneAutoInjector
+        amount: 9
+      - id: AU14PacketPillsTramadol
+        amount: 40
+      - id: AU14FirstAidAutoInjectorNoSkill
+        amount: 20
+      - id: CMUSplintItem
+        amount: 40
+    - name: Tools
+      entries:
+      - id: CMEntrenchingTool
+        recommended: true
+        amount: 30
+      - id: RMCShovel
+        amount: 10
+      - id: RMCTantoA
+        recommended: true
+        amount: 15
+      - id: RMCTantoB
+        recommended: true
+        name: MK3 infantry service tanto (camo)
+        amount: 15
+      - id: CMM11Knife
+        amount: 15
+      - id: RMCScabbardMacheteFilled
+        name: machete scabbard (Full)
+        amount: 6
+      - id: RMCHelmetGarbGunOil
+        amount: 30
+      - id: CMFireExtinguisher
+        amount: 10
+      - id: CMFireExtinguisherPortable
+        amount: 5
+      - id: RMCLightReplacer
+        amount: 10
+      - id: CMScrewdriver
+        amount: 10
+      - id: CMWirecutter
+        amount: 10
+      - id: CMCrowbar
+        amount: 10
+      - id: CMWrench
+        amount: 10
+      - id: CMMultitool
+        amount: 10
+      - id: CMWelderSmall
+        amount: 10
+      - id: CMWelder
+        amount: 4
+      - id: RMCWelderPVE
+        amount: 1
+    - name: Engineering Supplies
+      entries:
+      - id: CMSandbagEmpty50
+        recommended: true
+        amount: 2
+      - id: BarbedWire15
+        amount: 4
+      - id: CMSheetMetal50
+        amount: 2
+      - id: CMSheetPlasteel50
+        amount: 1
+      - id: RMCBoxMagazinePowerCellsHighFilled
+        amount: 2
+      - id: RMCEngineerKit
+        amount: 1
+      - id: RMCPowerCellHigh
+        amount: 2
+      - id: RMCCableCoil
+        amount: 15
+    - name: Flares and lights
+      entries:
+      - id: RMCBoxFlashlights
+        amount: 4
+      - id: RMCFlashlight
+        amount: 20
+      - id: RMCWeaponPistolM82F
+        amount: 4
+      - id: AU14BoxPackFlareRMC
+        amount: 5
+      - id: AU14PackFlareRMC
+        amount: 12
+      - id: RMCPackFlareCAS
+        amount: 8
+    - name: Gas Mask
+      entries:
+      - id: AU14MaskGasRMC
+        amount: 40
+      - id: CMUGasMaskFilter
+        amount: 80
+      - id: AU14PouchGasMaskBag
+        amount: 20
+    - name: Optics
+      entries:
+      - id: RMCLaserDesignatorPVE
+        amount: 2
+      - id: RMCBinocularsPVE
+        amount: 5
+    - name: Miscellaneous
+      entries:
+      - id: RMCZipties
+        recommended: true
+        amount: 60
+      - id: AU14CaseMotionDetectorRMC
+        amount: 1
+      - id: CMRollerBedSpawnFolded
+        amount: 8
+      - id: CMFoldingBarricadesMB6x3
+        amount: 2
+      - id: BedrollFolded
+        amount: 20
+      - id: AU14GuidebookSOP
+        amount: 3
+      - id: AU14GuidebookLawMarine
+        amount: 3
+
+#corpsman
+- type: entity
+  parent: ColMarTechBase
+  id: AU14RMCcorpsmanvendor
+  name: Royal Marines corpsman medical vendor
+  description: >-
+    An automated medical rack, hooked up to a compact stock of Royal Marine Commandos trauma supplies.
+    Standard issue for corpsmen aboard naval vessels, outposts and colonies where casualties arrive faster than reinforcements.
+    Designed for rapid reconstitution of combat medics following cryogenic hypersleep or emergency call-up.
+
+    Corpsman protocol: select the essential equipment set, storage and limited medications.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFORPlatoonCorpsman
+    - AU14JobGOVFOROfficerMedical
+    - AU14JobGOVFORAuxSupportSynth
+    - AU14JobOPFORPlatoonCorpsman
+    - AU14JobOPFOROfficerMedical
+    - AU14JobOPFORAuxSupportSynth
+    sections:
+    - name: Essential Equipment
+      takeAll: CMUEssentialEquipment
+      entries:
+      - id: AU14VendorBundleCorpsmanEssentials
+    - name: Medical Pouches
+      choices: { CMUPlatoonMedicalPouch: 2 }
+      entries:
+      - id: RMCPouchAutoinjector
+      - id: RMCPouchFirstResponder
+      - id: RMCPouchMedical
+      - id: RMCPouchSyringeFill
+      - id: RMCPouchFirstAidSplintsGauzeOintment
+        name: first-aid pouch (gauze, ointment) # TODO RMC14 splints
+      - id: RMCPouchFirstAidPills
+        name: first-aid pouch (pills)
+    - name: Medical Headgear
+      entries:
+      - id: CMArmorHelmetM10Medic
+        amount: 9
+    - name: Medical Storage
+      choices: { CMUPlatoonMedicalStorage: 1 }
+      entries:
+      - id: AU14BeltMedicBagRMC
+    - name: Medical Backpacks
+      entries:
+      - id: AU14CorpsmanBackpackRMC
+        amount: 9
+    - name: General Medical Supplies
+      entries:
+      - id: AU14HemostaticGauzePacket
+        amount: 60
+      - id: AU14Tourniquet
+        amount: 60
+      - id: CMUSplintItem
+        amount: 60
+      - id: CMOintment10
+        amount: 60
+      - id: CMUPlainTraumaDressing10
+        amount: 40
+      - id: CMUCoagulantPowder
+        amount: 30
+      - id: CMUBurnGel
+        amount: 30
+      - id: CMBurnKit10
+        amount: 30
+      - id: CMTraumaKit10
+        amount: 30
+    - name: Limited Pill Medications
+      takeAll: CMULimitedPills
+      entries:
+      - id: AU14PillCanisterMeralyne
+      - id: AU14PillCanisterDermaline
+      - id: AU14PillCanisterAlbuterol
+    - name: Limited Injector Medications
+      choices: { CMUPlatoonMedicalLimitedMedicationsInjectors: 6 }
+      entries:
+      - id: AU14MeraBicAutoInjector
+      - id: AU14KeloDermAutoInjector
+      - id: AU14AlbuDexAutoInjector
+      - id: AU14RevivalMixAutoInjector
+    - name: Pill Bottles
+      entries:
+      - id: CMPillCanisterDexalin
+        amount: 20
+      - id: CMPillCanisterDylovene
+        amount: 20
+      - id: CMPillCanisterInaprovaline
+        amount: 20
+      - id: CMPillCanisterBicaridine
+        amount: 20
+      - id: CMPillCanisterKelotane
+        amount: 20
+      - id: CMPillCanisterTricordrazine
+        amount: 20
+      - id: RMCPillCanisterIron
+        amount: 20
+      - id: AU14PillCanisterParacetamol
+        amount: 20
+      - id: AU14PillCanisterTramadol
+        amount: 20
+      - id: AU14PillCanisterOxycodone
+        amount: 20
+      - id: AU14PillCanisterCardiocaine
+        amount: 20
+      - id: AU14PillCanisterHepatocytin
+        amount: 20
+      - id: AU14PillCanisterNephronate
+        amount: 20
+      - id: AU14PillCanisterOsteoCalc
+        amount: 20
+      - id: AU14PillCanisterPulmovine
+        amount: 20
+    - name: Injectors
+      entries:
+      - id: CMEpinephrineAutoInjector
+        amount: 40
+      - id: AU14NaloxoneAutoInjector
+        amount: 40
+      - id: RMCIronAutoInjector
+        amount: 40
+      - id: CMInaprovalineAutoInjector
+        amount: 40
+      - id: CMDexalinPlusAutoInjector
+        amount: 40
+      - id: CMTricordrazineAutoInjector
+        amount: 40
+      - id: CMBicaridineAutoInjector
+        amount: 40
+      - id: CMKelotaneAutoInjector
+        amount: 40
+      - id: AU14ParacetamolAutoInjector
+        amount: 40
+      - id: AU14TramadolAutoInjector
+        amount: 40
+      - id: AU14OxycodoneAutoInjector
+        amount: 40
+    - name: Medical Gloves
+      choices: { CMUPlatoonMedicalGloves: 1 }
+      entries:
+      - id: CMHandsLatex
+      - id: ClothingHandsGlovesNitrile
+    - name: Medical Masks
+      choices: { CMUPlatoonMedicalMasks: 1 }
+      entries:
+      - id: CMMaskSterile
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14RMCaircrewvendor
+  name: Royal Marines aircrew vendor
+  description: >-
+    An automated dispenser rack, hooked up to a small storage of Royal Marine Commandos aircrew flight and support gear.
+    Engineered to get flight personnel flight-ready in seconds after cryogenic hypersleep or scramble orders.
+
+    Aircrew protocol: select a set of fatigues, the essential medical equipment and storage kit.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforPilot" ], [ "AU14AccessOpforPilot" ] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Fatigues
+      choices: { CMUPlatoonAirCrewFatigues: 1 }
+      entries:
+      - id: AU14PilotJumpsuitRMC
+    - name: Body Armor
+      choices: { CMUPlatoonAirCrewVest: 1 }
+      entries:
+      - id: AU14ICPS2RMC
+      - id: RMCArmorVestSquad
+        amount: 2
+    - name: Footwear
+      choices: { CMUPlatoonAirCrewFootwear: 1 }
+      entries:
+      - id: CMBootsBlack
+    - name: Gloves
+      choices: { CMUPlatoonAirCrewGloves: 1 }
+      entries:
+      - id: AU14PVEHandsInsulatedBlackMarine
+      - id: AU14PVEHandsFingerlessBlackGloves
+    - name: Headgear
+      choices: { CMUPlatoonAirCrewHeadgear: 1 }
+      entries:
+      - id: AU14HeadHelmetRMCAircrew
+      - id: AU14HeadHelmetRMCAircrewAlt
+    - name: Flight Visor
+      choices: { CMUPlatoonAirCrewFlightVisor: 1 }
+      entries:
+      - id: AU14GogglesLAH99VisorHighTech
+      - id: AU14GogglesLACNLAH99VisorClear
+      - id: AU14GogglesLACNLAH99Visor
+      - id: AU14GogglesLACNLAH99VisorMirror
+    - name: Webbings
+      choices: { CMUPlatoonAirCrewWebbings: 1 }
+      entries:
+      - id: AU14WebbingMagazine
+      - id: AU14WebbingUtility
+      - id: AU14WebbingDumpPouch
+      - id: AU14WebbingAdminPouchRMC
+      - id: AU14WebbingDropPouchRMC
+    - name: Backpack
+      choices: { CMUPlatoonAirCrewBackpack: 1 }
+      entries:
+      - id: AU14SmallBackpackRMC
+    - name: Belts
+      choices: { CMUPlatoonAirCrewBelts: 1 }
+      entries:
+      - id: AU14BeltHolsterPistolRMC
+      - id: AU14BeltUtilityGeneralRMC
+    - name: Pouches
+      choices: { CMUPlatoonAirCrewPouches: 2 }
+      entries:
+      - id: RMCPouchBayonet
+        name: Bayonet Sheath
+      - id: AU14PouchFlareFilledRMC
+        name: Flare Pouch (Full)
+      - id: RMCPouchDocumentSmall
+      - id: RMCPouchMagazine
+      - id: RMCPouchGeneralMedium
+      - id: AU14PouchPistolAlt
+      - id: RMCPouchMagazinePistolLarge
+      - id: RMCPouchTools
+    - name: Glasses
+      choices: { CMUPlatoonAirCrewGlasses: 1 }
+      entries:
+      - id: RMCSunglassesBigFake
+      - id: RMCGlassesMarineRpg
+      - id: AU14GlassesBiMex
+      - id: AU14GlassesBiMexOrange
+      - id: RMCGlassesAviators
+    - name: Essential Medical Equipment
+      takeAll: CMUEssentialEquipment
+      entries:
+      - id: AU14VisorMedicalRMC
+      - id: AU14CMDefibrillator
+      - id: CMHealthAnalyzer
+      - id: RMCFlashlightPen
+      - id: ClothingNeckStethoscope
+      - id: CMRollerBedSpawnFolded
+      - id: RMCMedevacStretcherFolded
+      - id: CMSurgicalLine
+      - id: CMSynthGraft
+    - name: Medical Pouches
+      choices: { CMUPlatoonMedicalPouch: 2 }
+      entries:
+      - id: RMCPouchAutoinjector
+      - id: RMCPouchFirstResponder
+      - id: RMCPouchMedical
+    - name: Medical Storage
+      choices: { CMUPlatoonMedicalStorage: 1 }
+      entries:
+      - id: AU14BeltMedicalRMC
+      - id: AU14BeltMedicBagRMC
+    - name: General Medical Supplies
+      entries:
+      - id: AU14HemostaticGauzePacket
+        amount: 60
+      - id: AU14Tourniquet
+        amount: 60
+      - id: CMOintment10
+        amount: 60
+      - id: CMBurnKit10
+        amount: 30
+      - id: CMTraumaKit10
+        amount: 30
+    - name: Pill Bottles
+      entries:
+      - id: CMPillCanisterBicaridine
+        amount: 15
+      - id: CMPillCanisterDexalin
+        amount: 15
+      - id: CMPillCanisterDylovene
+        amount: 15
+      - id: CMPillCanisterInaprovaline
+        amount: 15
+      - id: CMPillCanisterKelotane
+        amount: 15
+      - id: CMPillCanisterTricordrazine
+        amount: 15
+      - id: RMCPillCanisterIron
+        amount: 15
+      - id: AU14PillCanisterParacetamol
+        amount: 15
+      - id: AU14PillCanisterTramadol
+        amount: 15
+      - id: AU14PillCanisterOxycodone
+        amount: 15
+      - id: AU14PillCanisterCardiocaine
+        amount: 15
+      - id: AU14PillCanisterHepatocytin
+        amount: 15
+      - id: AU14PillCanisterNephronate
+        amount: 15
+      - id: AU14PillCanisterOsteoCalc
+        amount: 15
+      - id: AU14PillCanisterPulmovine
+        amount: 15
+    - name: Injectors
+      entries:
+      - id: CMEpinephrineAutoInjector
+        amount: 15
+      - id: AU14NaloxoneAutoInjector
+        amount: 15
+      - id: CMInaprovalineAutoInjector
+        amount: 15
+      - id: CMDexalinPlusAutoInjector
+        amount: 15
+      - id: CMTricordrazineAutoInjector
+        amount: 15
+      - id: CMBicaridineAutoInjector
+        amount: 15
+      - id: CMKelotaneAutoInjector
+        amount: 15
+      - id: AU14ParacetamolAutoInjector
+        amount: 15
+      - id: AU14TramadolAutoInjector
+        amount: 15
+      - id: AU14OxycodoneAutoInjector
+        amount: 15
+    - name: Medical Gloves
+      choices: { CMUPlatoonMedicalGloves: 1 }
+      entries:
+      - id: CMHandsLatex
+      - id: ClothingHandsGlovesNitrile
+    - name: Medical Masks
+      choices: { CMUPlatoonMedicalMasks: 1 }
+      entries:
+      - id: CMMaskSterile
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14RMCcommandequipmentvendor
+  name: Royal Marines command vendor
+  description: >-
+    An automated command rack, hooked up to a restricted storage of Royal Marine Commandos command-leadership equipment.
+    Manufactured to equip commanding personnel following cryogenic hypersleep or an emergency directive is issued.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforCommand" ], [ "AU14AccessOpforCommand" ] ]
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/uscmcommandclothes.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Fatigues
+      entries:
+      - id: AU14FatiguesServiceRMC
+        amount: 3
+      - id: AU14FatiguesBlackRMCTeamlead
+        amount: 2
+      - id: AU14FatiguesDesertRMCTeamlead
+        amount: 2
+    - name: Footwear
+      entries:
+      - id: RMCBootsRoyal
+        amount: 3
+      - id: RMCShoesLaceup
+        amount: 2
+    - name: Headgear
+      entries:
+      - id: AU14HeadHelmetRMC
+        amount: 5
+      - id: AU14HeadHelmetRMCBallistic
+        amount: 5
+      - id: AU14HeadCapOfficerRMC
+        amount: 5
+      - id: AU14HeadBeretRMCOfficer
+        name: Officer Beret
+        amount: 5
+      - id: AU14JunglePatrolCap
+        amount: 5
+      - id: AU14DesertPatrolCap
+        amount: 5
+    - name: Backpack
+      entries:
+      - id: RMCBackpackRTO
+        amount: 5
+    - name: Pouches
+      entries:
+      - id: AU14PouchCommandFill
+        amount: 10
+    - name: Equipment
+      takeAll: CMStandard
+      entries:
+      - id: RMCLaserDesignator
+      - id: RMCWhistle
+      - id: RMCPackFlareCAS
+    - name: Spare Equipment
+      entries:
+      - id: AU14HeadBeretRMCOfficer
+        name: Officer Beret
+        amount: 3
+      - id: RMCExplosiveBreachingCharge
+        amount: 4
+      - id: RMCBinoculars
+        amount: 5
+      - id: RMCLaserDesignator
+        amount: 2
+      - id: RMCFulton20
+        amount: 4
+      - id: RMCWhistle
+        amount: 10
+      - id: RMCBoxPackFlareCAS
+        amount: 1
+      - id: RMCPackFlareCAS
+        amount: 6
+    - name: Chevrons
+      entries:
+      - id: AU14ChevronRMCRecruit
+        amount: 2
+      - id: AU14PortableVendorRMCRanks
+        amount: 1
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14RMCSGequipmentvendor
+  name: Royal Marines smartgunner equipment vendor
+  description: >-
+    An automated smartgunner rack, hooked up to a small armory of Royal Marine Commandos heavy-weapon operator systems.
+    Standard issue for designated smart-gun crews on naval vessels and high-threat outposts.
+    Built to bring heavy fire support online rapidly after cryogenic hypersleep or emergency mobilization.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforGunner" ], [ "AU14AccessOpforGunner" ] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Essential Equipment
+      takeAll: CMUAREssentialEquipment
+      entries:
+      - id: RMCSmartGunRoyal
+      - id: RMCScabbardMacheteSGFilled
+      - id: RMCGlassesSmartGunSight
+      - id: RMCPowerCellSmartgun
+      - id: RMCPouchDrumPMC
+    - name: Helmet
+      choices: { SmartgunHelmet: 1 }
+      entries:
+      - id: AU14HeadHelmetRMCHeavy
+    - name: Smartgun Harness
+      choices: { SmartgunHarness: 1 }
+      entries:
+      - id: AU14ArmorSmartGunDesertCombatHarnessRMC
+    - name: Smartgun Belts
+      choices: { SmartgunBelts: 1 }
+      entries:
+      - id: RMCBeltSmartGunOperatorPistolFilled
+      - id: CMBeltSmartGunOperatorFilled
+    - name: Smartgun Munitions
+      entries:
+      - id: RMCMagazineSmartGun
+        amount: 40
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14RMCsectionleaderequipmentvendor
+  name: Royal Marines section leader vendor
+  description: >-
+    An automated equipment rack, hooked up to a compact storage of Royal Marine Commandos section-leadership equipment.
+    Designed for immediate readiness following cryogenic hypersleep or rapid mobilization orders.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessOpforFTL" ] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Helmets and Hats
+      choices: { CMHat: 1 }
+      entries:
+      - id: AU14HeadHelmetRMC
+      - id: AU14HeadHelmetRMCBallistic
+      - id: AU14HeadBeretRMCLead
+        name: Sergeant Beret
+      - id: AU14JunglePatrolCap
+      - id: AU14DesertPatrolCap
+    - name: Uniforms
+      choices: { AU14Uniform: 1 }
+      entries:
+      - id: AU14FatiguesBlackRMCTeamlead
+      - id: AU14FatiguesDesertRMCTeamlead
+    - name: Equipment
+      takeAll: CMStandard
+      entries:
+      - id: RMCLaserDesignator
+      - id: RMCWhistle
+      - id: RMCPackFlareCAS
+    - name: Spare Equipment
+      entries:
+      - id: AU14HeadBeretRMCLead
+        name: Sergeant Beret
+        amount: 2
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14RMCWeaponsVendor
+  name: Royal Marines weapons rack
+  description: >-
+    An automated weapons rack, hooked up to a small armory of Royal Marine Commandos weaponry.
+    Standard issue across the frontier where threats can appear without warning.
+    Engineered to arm personnel in seconds following cryogenic hypersleep or emergency mobilization.
+
+    For immediate combat readiness: select a primary weapon kit and a sidearm.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Weapons
+      choices: { CMUPrimaryWeapon: 1 }
+      entries:
+      - id: AU14KitWeaponL23
+      - id: AU14KitWeaponL90A2
+    - name: Rifle Ammunition
+      entries:
+      - id: RMCMagazineRifleL24
+        amount: 60
+      - id: AU14MagazineSMGL90A2
+        amount: 60
+    - name: Handguns
+      choices: { CMUHandgunsWeapon: 1 }
+      entries:
+      - id: AU14KitWeaponL54
+      - id: AU14KitWeaponL165A1
+    - name: Handgun Ammunition
+      entries:
+      - id: RMCMagazinePistolL54
+        amount: 60
+      - id: AU14MagazinePistolL165A1
+        amount: 60
+    - name: Attachments
+      choices: { CMUAttachmentsVendor: 1 }
+      entries:
+      - id: RMCAttachmentRailFlashlight
+      - id: AU14AttachmentTwoPointSling
+
+# TODO: Proper RMC RTOs
+- type: entity
+  parent: ColMarTechBase
+  id: AU14RMCRTOVendor
+  name: Royal Marines radio telephone operator rack
+  description: An automated rack hooked up to a small storage of radio equipment.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessOpforFTL" ] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: RTO Backpack
+      choices: { RTOBackpack: 1 }
+      entries:
+      - id: AU14BackpackRTOPackJungle
+      - id: AU14BackpackRTOPackDesert
+      - id: AU14BackpackRTOPackGray
+      - id: AU14BackpackRTOPackBlack
+    - name: Equipment
+      takeAll: CMStandard
+      entries:
+      - id: RMCLaserDesignator
+      - id: RMCWhistle
+      - id: RMCPackFlareCAS
+      - id: AU14SpikeBoots
+    - name: Spare Equipment
+      entries:
+      - id: RMCExplosiveBreachingCharge
+        amount: 2
+      - id: RMCBinoculars
+        amount: 2
+      - id: RMCFulton20
+        amount: 1
+      - id: RMCBoxPackFlareCAS
+        amount: 1
+
+- type: entity
+  parent: AU14SpecVend
+  id: AU14RMCSpecialWeaponsVendor
+  name: Royal Marines weapons specialist rack
+  description: >-
+    An automated special weapons rack, hooked up to a restricted armory of Royal Marine Commandos heavy and breaching ordnance.
+    Standard issue only for qualified operators.
+    Engineered to deliver overwhelming firepower the instant cryogenic hypersleep ends or an emergency mobilization is called.
+
+    Special weapons protocol: one weapon system of choice with a full ammunition loadout and explosives.
+  components:
+  - type: CMAutomatedVendor
+    sections:
+    - name: Weapons Specialist Sets
+      takeOne: SquadSpecKit
+      sharedSpecLimit: 1
+      entries:
+      - id: AU14KitRMCMarksmanL64A3
+        giveSquadRoleName: au14-job-name-govforspecialist-marksmanRMC
+        givePrefix: au14-job-prefix-govforspecialist-marksmanRMC
+        isAppendSquadRoleName: false
+        isAppendPrefix: true
+      - id: AU14KitRMCPointmanL23B
+        giveSquadRoleName: au14-job-name-govforspecialist-pointmanRMC
+        givePrefix: au14-job-prefix-govforspecialist-pointmanRMC
+        isAppendSquadRoleName: false
+        isAppendPrefix: true
+      - id: AU14KitRMCMarksmanL164A3
+        giveSquadRoleName: au14-job-name-govforspecialist-grenadierRMC
+        givePrefix: au14-job-prefix-govforspecialist-grenadierRMC
+        isAppendSquadRoleName: false
+        isAppendPrefix: true
+      - id: RMCSharpSpecEquipmentCase
+        giveSquadRoleName: rmc-job-name-weapons-specialist-sharp
+        isAppendSquadRoleName: false
+        givePrefix: rmc-job-prefix-weapons-specialist-sharp
+        isAppendPrefix: true
+      - id: RMCM707VultureCase
+        giveSquadRoleName: rmc-job-name-weapons-specialist-sniper
+        isAppendSquadRoleName: false
+        givePrefix: rmc-job-prefix-weapons-specialist-sniper
+        isAppendPrefix: true
+      - id: RMCPyroSpecEquipmentCase
+        giveSquadRoleName: rmc-job-name-weapons-specialist-pyro
+        isAppendSquadRoleName: false
+        givePrefix: au14-job-prefix-specialist-pyro
+        isAppendPrefix: true
+
+# AirCrew Weapons
+- type: entity
+  parent: ColMarTechBase
+  id: AU14RMCAircrewWeaponsVendor
+  name: Royal Marines aircrew weapons rack
+  description: >-
+    An automated dispenser rack, hooked up to a small storage of Royal Marine Commandos aircrew flight and support gear.
+    Engineered to get flight personnel flight-ready in seconds after cryogenic hypersleep or scramble orders.
+
+    Aircrew protocol: select a set of fatigues, the essential medical equipment and storage kit.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforPilot" ], [ "AU14AccessOpforPilot" ] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Personal defense weapons
+      entries:
+      - id: AU14WeaponSMGL90A2
+        amount: 2
+    - name: PDW Ammunition
+      entries:
+      - id: AU14MagazineSMGL90A2
+        amount: 20
+    - name: Handguns
+      choices: { CMUHandgunsWeapon: 1 }
+      entries:
+      - id: RMCWeaponPistolL54Empty
+      - id: AU14L165A1
+    - name: Handgun Ammunition
+      entries:
+      - id: RMCMagazinePistolL54
+        amount: 20
+      - id: AU14MagazinePistolL165A1
+        amount: 20
+    - name: Attachments
+      entries:
+      - id: RMCAttachmentS6ReflexSight
+        amount: 2
+
+  # Combat Technicians
+- type: entity
+  parent: ColMarTechBase
+  id: AU14RMCComtechGearVendor
+  name: Royal Marines combat technicians gear rack
+  description: An automated gear rack for combat technicians.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforEngineering" ], [ "AU14AccessOpforEngineering" ] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/combat_technician_gear.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFORSquadCombatTech
+    - AU14JobOPFORSquadCombatTech
+    sections:
+    - name: Engineer Set
+      takeAll: CMEngineerSet
+      entries:
+      - id: AU14VendorBundleCombatTechnicianEssentials
+    - name: Automated Sentry Gun
+      choices:  { CMHandheldDefense : 1 }
+      entries:
+      - id: AU14CaseSentry
+      - id: AU14CaseSentryMini
+      - id: AU14CaseSentrySniper
+    - name: Tool Storage
+      choices: { CMUCTToolStorage: 1 }
+      entries:
+      - id: AU14BeltUtilityCombatRMCFilled
+        name: royal marine combat toolbelt rig (filled)
+        recommended: true
+      - id: AU14PouchToolsFilledComtech
+        name: tactical tools pouch (filled)
+      - id: AU14BeltUtilityFilled
+        name: M276 pattern toolbelt rig (filled)
+    - name: Engineering Storage Bag
+      choices: { CMUPouchesCTBag: 1 }
+      entries:
+      - id: AU14WelderBackpackRMC
+        recommended: true
+    - name: Engineering Storage Pouch
+      choices: { CMUPouchesCT: 1 }
+      entries:
+      - id: RMCPouchConstruction
+        recommended: true
+      - id: RMCPouchElectronics
+    - name: Engineering Supplies
+      entries:
+      - id: CMSheetMetal50
+        name: metal x50
+        points: 8
+        recommended: true
+      - id: CMSheetPlasteel50
+        name: plasteel x50
+        points: 10
+        recommended: true
+      - id: CMAPCElectronics
+        points: 2
+      - id: DoorElectronics
+        points: 2
+      - id: CMUDeployableZLevelLadder
+        points: 10
+      - id: RMCPowerCellHigh
+        points: 3
+      - id: RMCPowerCellSuper
+        points: 8
+      - id: RMCMagazineSMGNailgun
+        points: 5
+    #- id: CMES11MobileFuelCanister
+    #  points: 4
+    - name: Explosives
+      entries:
+      - id: RMCExplosiveBreachingCharge
+        points: 16
+      - id: RMCExplosivePlastic
+        points: 12
+    - name: Utilities
+      entries:
+      - id: RMCSynthResetKey
+        points: 5
+
+- type: entity
+  parent: ColMarTechCargo
+  id: AU14RMCRequisitionVendor
+  name: royal marines automated requisitions vendor
+  description: An automated supply rack hooked up to a big storage of various firearms, ammunitions, explosives, load carrying equipment and other miscellaneous items.
+  components:
+  - type: AccessReader
+    access: [ ["AU14AccessGovforReq"] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+  - type: CMAutomatedVendor
+    baseSprite:
+      sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+      state: base
+    animationSprite:
+      sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+      state: vend
+    sections:
+    - name: Standard issue primaries
+      entries:
+      - id: RMCWeaponRifleL24
+        amount: 30
+      - id: AU14WeaponSMGL90A2
+        amount: 20
+    - name: standard issue secondaries
+      entries:
+      - id: RMCWeaponPistolL54Empty
+        amount: 20
+      - id: AU14L165A1Filled
+        amount: 10
+    - name: special issue firearms
+      entries:
+      - id: RMCL49Case
+        amount: 3
+      - id: RMCWeaponRifleL90A1
+        amount: 5
+      - id: RMCWeaponRifleL90A2
+        amount: 3
+      - id: RMCWeaponRifleL91SWS
+        amount: 1
+      - id: RMCWeaponRifleL89A1
+        amount: 1
+      - id: RMCWeaponRifleL89A2
+        amount: 1
+      - id: AU14Mk86Case
+        amount: 1
+    - name: primary ammunition
+      entries:
+      - id: RMCMagazineRifleL24
+        amount: 200
+      - id: RMCMagazineRifleL24AP
+        amount: 15
+      - id: RMCMagazineRifleL24Extended
+        amount: 10
+      - id: AU14MagazineSMGL90A2
+        amount: 200
+      - id: AU14MagazineSMGL90A2AP
+        amount: 15
+      - id: RMCMagazineRifleL90
+        amount: 200
+      - id: RMCMagazineRifleL90AP
+        amount: 15
+      - id: RMCMagazineRifleL90Drum
+        amount: 10
+      - id: RMCMagazineRifleL90DrumAP
+        amount: 1
+      - id: RMCMagazineRifleL88
+        amount: 16
+      - id: RMCMagazineRifleL88AP
+        amount: 4
+      - id: RMCBoxShotgunBuckshot
+        amount: 20
+      - id: RMCBoxShotgunFlechette
+        amount: 20
+      - id: RMCBoxShotgunSlugs
+        amount: 20
+      - id: RMCMagazineSmartGun
+        amount: 25
+      - id: RMCPowerCellSmartgun
+        amount: 10
+    - name: secondary ammunition
+      entries:
+      - id: RMCMagazinePistolL54
+        amount: 200
+      - id: AU14MagazinePistolL165A1
+        amount: 200
+    - name: Magazine Boxes
+      entries:
+      - id: RMCBoxMagazineRifleL24
+        amount: 2
+      - id: CMUBoxMagazineSMGL90A2
+        amount: 2
+      - id: CMUBoxMagazinePistolL54
+        amount: 2
+      - id: CMUBoxMagazinePistolL165A1
+        amount: 2
+    - name: Ammo Boxes
+      entries:
+      - id: RMCBoxBulletsRifleL24
+        amount: 5
+      - id: RMCBoxBulletsRifleL90
+        amount: 5
+      - id: RMCBoxBulletsSMG
+        amount: 5
+      - id: RMCBoxBulletsSmartGun
+        amount: 5
+      - id: CMUBoxBulletsPistol9MM
+        amount: 5
+      - id: CMUBoxBulletsPistol9MMSH
+        amount: 5
+    - name: explosives
+      entries:
+      - id: AU14PacketGrenadeHighExplosiveRMCFilled
+        amount: 8
+      - id: AU14PacketGrenadeIncendiaryRMCFilled
+        amount: 3
+      - id: RMCPacketGrenadeSmokeFilled
+        amount: 6
+      - id: RMCPacketGrenadeWhitePhosphorusFilled
+        amount: 3
+      - id: AU14PacketGrenadeNeuroRMCFilled
+        amount: 2
+      - id: RMCBoxClaymoreMineFilled
+        amount: 3
+      - id: AU14BoxClaymoreMineIncendiaryFilled
+        amount: 1
+      - id: AU14PacketGrenadeTearGasFilled
+        amount: 2
+      - id: AU14PacketGrenadeTearGasFilledAirburst
+        amount: 1
+      - id: AU14Packet20MMGrenadeHERMCFilled
+        amount: 4
+      - id: AU14Packet20MMGrenadeHESHRMCFilled
+        amount: 4
+      - id: AU14Packet20MMGrenadeFragRMCFilled
+        amount: 4
+      - id: AU14Packet20MMGrenadeHoloRMCFilled
+        amount: 4
+      - id: AU14Packet20MMGrenadeIncendiaryRMCFilled
+        amount: 2
+      - id: RMCExplosiveBreachingCharge
+        amount: 6
+      - id: RMCExplosivePlastic
+        amount: 8
+      - id: RMCWeaponLauncherL33
+        amount: 2
+      - id: RMCRocketM5510Brute
+        amount: 12
+    - name: Barrel Attachments
+      entries:
+      - id: RMCAttachmentExtendedBarrel
+        amount: 5
+      - id: RMCAttachmentShotgunChoke
+        amount: 3
+    - name: Rail Attachments
+      entries:
+      - id: RMCAttachmentTwoPointSling
+        amount: 50
+      - id: RMCAttachmentRailFlashlight
+        amount: 25
+      - id: RMCAttachmentS42xTelescopicMiniscope
+        amount: 2
+      - id: RMCAttachmentS6ReflexSight
+        amount: 2
+    - name: Underbarrel Attachments
+      entries:
+      - id: RMCAttachmentFlashlightGrip
+        amount: 15
+      - id: RMCAttachmentVerticalGrip
+        amount: 5
+      - id: RMCAttachmentBipod
+        amount: 5
+      - id: RMCAttachmentUnderbarrelExtinguisher
+        amount: 5
+      - id: RMCAttachmentU7UnderbarrelShotgun
+        amount: 3
+    - name: Stock Attachments
+      entries:
+      - id: RMCAttachmentM42A2CollapsibleStock
+        amount: 3
+    - name: Load Bearing Equipment
+      entries:
+      - id: RMCOuterClothingExternalWebbingBlack
+        amount: 4
+      - id: RMCOuterClothingExternalWebbing
+        amount: 4
+    - name: Pouches
+      entries:
+      - id: RMCPouchMagazineLarge
+        amount: 10
+      - id: RMCPouchMagazinePistolLarge
+        amount: 10
+    - name: Devices
+      entries:
+      - id: RMCIntelDetector
+        amount: 4
+      - id: RMCFulton20
+        amount: 4
+      - id: RMCSentryLaptop
+        amount: 4
+    - name: RTO Packs
+      entries:
+      - id: AU14BackpackRTOPackJungle
+        amount: 1
+      - id: AU14BackpackRTOPackDesert
+        amount: 1
+      - id: AU14BackpackRTOPackGray
+        amount: 1
+    - name: Tents
+      entries:
+      - id: RMCTentUNMCStandardFolded
+        amount: 2
+      - id: RMCTentUNMCExtendedFolded
+        amount: 1
+      - id: RMCTentUNMCBigFolded
+        amount: 1
+      - id: RMCTentUNMCStandardMedicalFolded
+        amount: 1
+      - id: AU14TentBigFoldedSurgical
+        amount: 1
+      - id: RMCTentUNMCExtendedMessFolded
+        amount: 1

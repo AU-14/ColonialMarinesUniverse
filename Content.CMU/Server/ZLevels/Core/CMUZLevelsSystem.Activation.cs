@@ -39,6 +39,8 @@ public sealed partial class CMUZLevelsSystem
 
     private void OnZPhysicsMove(Entity<CMUZPhysicsComponent> ent, ref MoveEvent args)
     {
+        OnZPhysicsMoveGroundSnap(ent, ref args);
+
         if (!TryGetFallCheckTile(ent, out var map, out var tile))
             return;
 

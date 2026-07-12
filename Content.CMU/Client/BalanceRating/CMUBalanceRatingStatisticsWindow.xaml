@@ -1,0 +1,37 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               Title="{Loc 'cmu-balance-rating-statistics-title'}"
+               MinSize="900 500"
+               SetSize="1120 650">
+    <PanelContainer StyleClasses="CrtPanel" HorizontalExpand="True" VerticalExpand="True">
+        <BoxContainer Orientation="Vertical" Margin="12" SeparationOverride="8"
+                      HorizontalExpand="True" VerticalExpand="True">
+            <BoxContainer Orientation="Horizontal" SeparationOverride="8" HorizontalExpand="True">
+                <LineEdit Name="Search"
+                          PlaceHolder="{Loc 'cmu-balance-rating-statistics-search-placeholder'}"
+                          HorizontalExpand="True" />
+                <Button Name="RefreshButton"
+                        Text="{Loc 'cmu-balance-rating-statistics-refresh'}"
+                        MinWidth="100" />
+            </BoxContainer>
+            <Label Name="SummaryLabel"
+                   Text="{Loc 'cmu-balance-rating-statistics-loading'}"
+                   HorizontalExpand="True" />
+            <Label Name="EmptyLabel"
+                   Text="{Loc 'cmu-balance-rating-statistics-empty'}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   HorizontalExpand="True"
+                   VerticalExpand="True"
+                   Visible="False" />
+            <PanelContainer Name="TablePanel" StyleClasses="CrtInsetPanel"
+                            HorizontalExpand="True" VerticalExpand="True">
+                <ScrollContainer HScrollEnabled="True" VScrollEnabled="True"
+                                 HorizontalExpand="True" VerticalExpand="True">
+                    <GridContainer Name="StatisticsGrid" Columns="12"
+                                   HSeparationOverride="14" VSeparationOverride="6"
+                                   Margin="8" HorizontalExpand="True" />
+                </ScrollContainer>
+            </PanelContainer>
+        </BoxContainer>
+    </PanelContainer>
+</DefaultWindow>

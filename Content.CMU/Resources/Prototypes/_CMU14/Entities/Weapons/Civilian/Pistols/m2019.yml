@@ -1,0 +1,59 @@
+﻿- type: entity
+  parent: RMCWeaponRevolverBase
+  id: AU14WeaponRevolverM2019
+  name: "M2019 'blaster' autorevolver"
+  description: "A revolver originally issued to law enforcement in the early 21st century, most famously used by the now extinct Blade Runners during the height of the Replicant crisis in the early 2000s. Chambered in .357, the weapon is long obsolete but remains popular among collectors and 'fudds' alike. Numerous reproductions have surfaced over the decades, some faithful, others dangerously cheap. While rare, it's not unheard of to spot one tucked into a hip holster on the fringe worlds of the UA and TWE."
+  components:
+  - type: Tag
+    tags:
+    - Sidearm
+    - RMCRevolver
+    - AU14WeaponRevolverM2019
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Civilian/blaster.rsi
+  - type: RevolverAmmoProvider
+    whitelist:
+      tags:
+      - RMCSpeedLoader357
+      - RMCSpeedLoader357Hollowpoint
+      - RMCCartridgeRevolver357
+      - RMCCartridgeRevolver357Hollowpoint
+    proto: RMCCartridgeRevolver357
+    capacity: 6
+    chambers: [ True, True, True, True, True, True ]
+    ammoSlots: [ null, null, null, null, null, null ]
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_cmb_1.ogg
+    soundEmpty:
+      path: /Audio/_RMC14/Weapons/Guns/gun_cmb_click1.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    recoilWielded: 1
+    recoilUnwielded: 3
+    scatterWielded: 8
+    scatterUnwielded: 12
+    baseFireRate: 1
+    burstScatterMult: 4
+
+- type: entity
+  parent: AU14WeaponRevolverM2019
+  id: AU14WeaponRevolverM2019Empty
+  suffix: Empty
+  components:
+  - type: RevolverAmmoProvider
+    proto: null
+    chambers:
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+
+- type: Tag
+  id: AU14WeaponRevolverM2019

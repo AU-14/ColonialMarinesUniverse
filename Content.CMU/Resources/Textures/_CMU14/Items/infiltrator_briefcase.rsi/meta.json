@@ -1,0 +1,28 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/72b36f79fa6b5134101ed128d5d1a5ae42c623fc/icons/obj/items/storage/briefcases.dmi, https://github.com/cmss13-devs/cmss13/blob/72b36f79fa6b5134101ed128d5d1a5ae42c623fc/icons/mob/humans/onmob/inhands/equipment/briefcases_lefthand.dmi",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "icon"
+        },
+        {
+            "name": "inhand-left",
+            "directions": 4
+        },
+        {
+            "name": "inhand-right",
+            "directions": 4
+        },
+        {
+            "name": "open"
+        },
+        {
+            "name": "closed"
+        }
+    ]
+}

@@ -1,0 +1,69 @@
+- type: entity
+  parent: CMXenoParasiteBase
+  id: CMUXenoParasiteRunner
+  name: ???
+  suffix: Runner
+  components:
+  - type: GhostRole
+    name: Parasite Runner
+    description: You are a Parasite with the strain of the Runner caste. Seek out and infect valuable tallhosts, and leave defenseless hosts to variantless Parasites.
+    prob: 1
+    raffle:
+      settings: short
+    rules: You may choose to act independently from the Hive, but you still answer to the Queen Mother. Infect valuable tallhosts or die a glorious death for the Queen Mother.
+  - type: Sprite
+    sprite: _AU14/Mobs/thirdPartiesXenos/parasite_runner.rsi
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Xeno
+    muteOnSpawn: false
+  - type: XenoLeap
+    delay: 0
+  - type: XenoStrain
+    name: cmu-xeno-parasite-runner-name
+    description: cmu-xeno-parasite-runner-description
+    popup: cmu-xeno-parasite-runner-popup
+  - type: RMCActionOrder
+    id: CMUXenoParasiteRunner
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 5.55
+    baseSprintSpeed: 10
+  - type: MobCollision
+    minimumSpeedModifier: 0.1
+  - type: Clothing
+    sprite: _AU14/Mobs/thirdPartiesXenos/parasite_runner.rsi
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-parasite-runner
+    whitelist:
+      components:
+      - Xeno
+  - type: RemoveComponents
+    components:
+    - type: DamageOffWeeds
+    - type: XenoRankNames
+    - type: IntrinsicRadioReceiver
+    - type: IntrinsicRadioTransmitter
+    - type: ActiveRadio
+
+- type: partySpawn
+  id: XenoParasiteRunnerPartySpawn
+  leadersToSpawn:
+    CMUXenoParasiteRunner: 1
+  gruntsToSpawn:
+    CMUXenoParasiteRunner: 1
+  scalewithpop: true
+  spawnTogether: true
+
+- type: thirdParty
+  id: XenoParasiteRunnerParty
+  partyspawn: XenoParasiteRunnerPartySpawn
+  blacklistedgamemodes:
+  - insurgency
+  - forceonforce
+  - DistressSignal
+  entrymethod: ground
+  weight: 10
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 2
+  roundstart: false

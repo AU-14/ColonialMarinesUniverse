@@ -1,0 +1,120 @@
+- type: job
+  parent: CMJobBase
+  id: AU14FORECONCommander
+  roundSide: ThirdParty
+  roundForce: FORECON
+  roundRole: AU14FORECONCommander
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: co
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_command
+  - type: NpcFactionMember
+    factions:
+    - GOVFOR
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - RMCSquadFORECON
+  - type: Skills
+    preset: AU14SkillPresetPlatoonCommander
+  - type: SpotterWhitelist
+  - type: JobPrefix
+    prefix: rmc-job-prefix-forecon-co
+  - type: MarineOrders
+    moveOrderSoundMale:
+      collection: AU14MaleMoveOrder
+    moveOrderSoundFemale:
+      collection: AU14FemaleMoveOrder
+    focusOrderSoundMale:
+      collection: AU14MaleFocusOrder
+    focusOrderSoundFemale:
+      collection: AU14FemaleFocusOrder
+    holdOrderSoundMale:
+      collection: AU14MaleHoldOrder
+    holdOrderSoundFemale:
+      collection: AU14FemaleHoldOrder
+  - type: RMCTrackable
+  - type: RMCPointing
+  - type: LanguagePreset
+    spokenLanguages:
+    - English
+    - TacticalSignLanguage
+    understoodLanguages:
+    - English
+    - TacticalSignLanguage
+    currentLanguage: English
+    defaultLanguage: English
+
+  name: rmc-job-name-forecon-commander
+  description: cm-job-description-commanding-officer
+  playTimeTracker: AU14JobFORECONCommander
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankMajor:
+      entity: AU14ChevronMajor
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORPlatCo
+        time: 18000 # 5 hours
+    RMCRankCaptain:
+      entity: AU14ChevronCaptain
+      requirements: []
+  spawnMenuRoleName: FORECON Commander (AU14, surv)
+  startingGear: AU14GearFORECONCommander
+  greeting: au14-forecon-greeting
+  icon: "RMCJobIconForeconCommander"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - AU14GovforCommand
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicFORECON
+  id: AU14JobFORECONCommander
+  name: FORECON Commander (Surv)
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadFORECON
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rmc-job-name-forecon-commander
+    description: cm-job-description-commanding-officer
+    reregister: false
+    job: AU14FORECONCommander
+    raffle:
+      settings: short
+    rules: au14-forecon-rules
+
+- type: startingGear
+  id: AU14GearFORECONCommander
+  equipment:
+    id: AU14IDCardFORECONCommander
+    outerClothing: RMCJacketWindbreakerForeconFilled
+    jumpsuit: RMCJumpsuitSurvivorMarineDropPouch
+    shoes: CMBootsBlackFilled
+    head: RMCBoonieTan
+    belt: AU14BeltPostelPistolM48A5Surv
+    pocket1: RMCPouchCommand
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelMarineForeconSurvivorCommanderFill
+    ears: RMCHeadsetForecon
+    suitstorage: WeaponRifleM4SPRFilled
+  storage:
+    back:
+    - RMCAttachmentRailFlashlight
+    - CMMagazineRifleM4SPR
+    - CMMagazineRifleM4SPR
+    - CMMagazineRifleM4SPR
+
+- type: playTimeTracker
+  id: AU14JobFORECONCommander

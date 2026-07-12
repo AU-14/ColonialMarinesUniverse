@@ -20,6 +20,12 @@ public sealed partial class GasMaskFilterComponent : Component
     public float NeurotoxinDamageMultiplier = 1f;
 
     /// <summary>
+    /// Multiplier for how much damage chemical irritants do to the filter compared to regular gas
+    /// </summary>
+    [DataField]
+    public float ChemicalIrritantDamageMultiplier = 1f;
+
+    /// <summary>
     /// The "Starting HP" of the filter
     /// </summary>
     [DataField]

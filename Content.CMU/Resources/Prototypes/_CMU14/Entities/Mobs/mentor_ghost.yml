@@ -1,0 +1,15 @@
+- type: entity
+  parent: [ MobObserver, InventoryBase ]
+  id: MentorObserver
+  name: mentor observer
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Inventory
+    templateId: aghost
+  - type: Loadout
+    prototypes: [ AU14GearMobMentorObserver ]
+
+- type: startingGear
+  id: AU14GearMobMentorObserver
+  equipment:
+    head: CMHeadCapDrill

@@ -1,0 +1,43 @@
+uniform sampler2D SCREEN_TEXTURE;
+uniform lowp int count;
+uniform highp vec2[32] position;
+uniform highp float[32] radius;
+uniform highp float[32] strength;
+uniform highp float[32] alpha;
+
+void fragment()
+{
+    highp vec2 coord = FRAGCOORD.xy * SCREEN_PIXEL_SIZE.xy;
+    highp vec4 baseColor = zTextureSpec(SCREEN_TEXTURE, coord);
+    highp vec4 color = baseColor;
+    highp float ratio = SCREEN_PIXEL_SIZE.y / SCREEN_PIXEL_SIZE.x;
+
+    for (int i = 0; i < count; ++i)
+    {
+        highp vec2 center = position[i];
+        highp float dist = distance(
+            vec2(coord.x, coord.y * ratio),
+            vec2(center.x, center.y * ratio)
+        );
+
+        if (dist > radius[i])
+            continue;
+
+        highp float falloff = smoothstep(radius[i], radius[i] * 0.25, dist) * alpha[i];
+        highp vec2 direction = normalize(coord - center);
+        if (length(direction) <= 0.001)
+            direction = vec2(0.0, 1.0);
+
+        highp vec4 blurred = vec4(0.0);
+        blurred += zTextureSpec(SCREEN_TEXTURE, coord + direction * SCREEN_PIXEL_SIZE * strength[i] * 2.5);
+        blurred += zTextureSpec(SCREEN_TEXTURE, coord + direction * SCREEN_PIXEL_SIZE * strength[i] * 1.5);
+        blurred += zTextureSpec(SCREEN_TEXTURE, coord);
+        blurred += zTextureSpec(SCREEN_TEXTURE, coord - direction * SCREEN_PIXEL_SIZE * strength[i] * 1.5);
+        blurred += zTextureSpec(SCREEN_TEXTURE, coord - direction * SCREEN_PIXEL_SIZE * strength[i] * 2.5);
+        blurred /= 5.0;
+
+        color = mix(color, blurred, falloff);
+    }
+
+    COLOR = color;
+}

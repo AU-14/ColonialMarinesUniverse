@@ -8,6 +8,7 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
+using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
@@ -39,6 +40,7 @@ public sealed partial class YautjaItemSystem : EntitySystem
         SubscribeLocalEvent<YautjaHivebreakerComponent, AfterInteractEvent>(OnHivebreakerAfterInteract);
         SubscribeLocalEvent<YautjaHivebreakerComponent, YautjaHivebreakerDoAfterEvent>(OnHivebreakerDoAfter);
         SubscribeLocalEvent<XenoComponent, GetVerbsEvent<AlternativeVerb>>(OnGetXenoVerbs);
+        SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
 
         SubscribeLocalEvent<YautjaRelayBeaconComponent, UseInHandEvent>(OnRelayBeaconUse);
         SubscribeLocalEvent<YautjaHoundPadComponent, UseInHandEvent>(OnHoundPadUse);
@@ -59,6 +61,21 @@ public sealed partial class YautjaItemSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("cmu-yautja-cleanser-crumble", ("target", uid)), uid, PopupType.MediumCaution);
             QueueDel(uid);
         }
+    }
+
+    private void OnMobStateChanged(MobStateChangedEvent args)
+    {
+        if (!HasComp<XenoComponent>(args.Target))
+            return;
+
+        if (args.NewMobState == MobState.Dead)
+        {
+            var death = EnsureComp<YautjaHivebreakerDeathComponent>(args.Target);
+            death.DeadAt = _timing.CurTime;
+            return;
+        }
+
+        RemComp<YautjaHivebreakerDeathComponent>(args.Target);
     }
 
     private void OnCleanerAfterInteract(Entity<YautjaCleanerComponent> cleaner, ref AfterInteractEvent args)
@@ -286,14 +303,25 @@ public sealed partial class YautjaItemSystem : EntitySystem
             return false;
         }
 
-        if (hivebreaker.RequireCritical && !_mobState.IsCritical(target))
+        if (!CanHivebreakDeadXeno(hivebreaker, target))
         {
             if (popup)
-                _popup.PopupEntity(Loc.GetString("cmu-yautja-hivebreaker-requires-critical"), user, user, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("cmu-yautja-hivebreaker-requires-recent-death"), user, user, PopupType.SmallCaution);
             return false;
         }
 
         return true;
+    }
+
+    private bool CanHivebreakDeadXeno(YautjaHivebreakerComponent hivebreaker, EntityUid target)
+    {
+        if (!_mobState.IsDead(target))
+            return false;
+
+        if (!TryComp(target, out YautjaHivebreakerDeathComponent? death))
+            return false;
+
+        return _timing.CurTime <= death.DeadAt + hivebreaker.DeadUseWindow;
     }
 
     private bool HunterHasAnotherThrall(EntityUid hunter, EntityUid target)

@@ -1,0 +1,108 @@
+- type: entity
+  parent:
+  - CMXenoDeveloped
+  - CMXenoTail
+  - CMXenoFlammable
+  - RMCXenoSpeechSounds
+  - RMCXenoCommendationReceiver
+  - RMCXenoMobCollision
+  id: CMXenoBull
+  name: Bull
+  description: A heavy charging xeno with a brutal forward rush.
+  components:
+  - type: GhostRole
+    name: cm-job-name-xeno-bull
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Bull/bull.rsi
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      450: Critical
+      550: Dead
+  - type: Xeno
+    role: CMXenoBull
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailStab
+    - ActionXenoToggleCharging
+    - CMUActionXenoBullPlow
+    - CMUActionXenoBullHeadbutt
+    - CMUActionXenoBullGore
+    - ActionXenoDevolve
+    tier: 2
+    hudOffset: -0.15,0.25
+    unlockAt: 540
+  - type: XenoRegen
+    restHealMultiplier: 1.35
+  - type: XenoLight
+  - type: XenoDevolve
+    devolvesTo:
+    - CMXenoRunner
+  - type: XenoDevour
+  - type: XenoPlasma
+    plasma: 340
+    maxPlasma: 340
+    plasmaRegenOnWeeds: 8
+  - type: XenoToggleCharging
+    minimumSteps: 3
+    speedPerStage: 0.16
+    plasmaPerStep: 6
+    sound:
+      collection: XenoFootstepLarge
+      params:
+        volume: -2
+  - type: CMUXenoBullCharge
+  - type: CMArmor
+    xenoArmor: 15
+    frontalArmor: 15
+    explosionArmor: 40
+  - type: XenoClaws
+    clawType: Sharp
+  - type: MeleeWeapon
+    damage:
+      groups:
+        Brute: 24
+  - type: XenoTailStab
+    tailDamage:
+      groups:
+        Brute: 36
+  - type: Tackle
+    max: 4
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3
+    baseSprintSpeed: 5.2
+  - type: SlowOnPull
+    slowdowns:
+    - multiplier: 0.45
+      whitelist:
+        components:
+        - Marine
+    - multiplier: 0.5
+      whitelist:
+        components:
+        - XenoLight
+    - multiplier: 0.36
+      whitelist:
+        components:
+        - XenoHeavy
+  - type: RMCXenoDamageVisuals
+    prefix: bull
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: warrior
+  - type: IntelRecoverCorpseObjectiveOnDeath
+    value: 0.2
+  - type: FixedIdentity
+    name: cm-job-name-xeno-bull
+  - type: RMCSurgeryXenoHeart
+    item: RMCOrganXenoHeartT2
+  - type: RMCActionOrder
+    id: CMXenoBull

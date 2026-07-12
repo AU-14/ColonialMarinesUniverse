@@ -115,6 +115,9 @@ public sealed partial class AU14CashVendorSystem : EntitySystem
         if (taxRevenue > 0)
             _colonyBudget.AddToBudget(taxRevenue);
 
+        if (comp.ScannedDepartmentConsole == null && comp.PercentToColony > 0)
+            _colonyBudget.AddToBudget(item.BasePrice * comp.PercentToColony);
+
         Spawn(item.ItemId, Transform(uid).Coordinates);
         UpdateUi(uid, comp);
     }

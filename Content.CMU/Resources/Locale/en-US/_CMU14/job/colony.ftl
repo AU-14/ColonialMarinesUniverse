@@ -85,6 +85,14 @@ au14-job-name-civiliancorporateliaison = Liaison
 au14-job-description-civiliancorporateliaison = Ensure corporate interests are upheld and company policy is followed.
 au14-job-prefix-corporateliaison = CL
 
+au14-job-name-civiliancorporateadministrator = Corporate Administrator
+au14-job-description-civiliancorporateadministrator = The senior Weyland-Yutani executive on-colony. Manage corporate interests, coordinate with the Colony Administrator, and oversee all WEYu personnel.
+au14-job-prefix-civiliancorporateadministrator = CORP ADM
+
+au14-job-name-civiliancorporateadminassistant = Corporate Admin Assistant
+au14-job-description-civiliancorporateadminassistant = Support the Corporate Administrator in managing WEYu day-to-day operations on the colony.
+au14-job-prefix-civiliancorporateadminassistant = CORP ASST
+
 au14-job-name-civilianphysician = Physician
 au14-job-name-civiliangeneralpractitioner = General Practitioner
 au14-job-name-civiliansurgeon = Surgeon
@@ -108,6 +116,8 @@ au14-job-name-colonyemergencyresponseofficer = Emergency Response Officer
 au14-job-description-colonyemergencyresponseofficer = Provide medical attention and care in hard to reach areas. Work with local security/law enforcement to do search and rescue.
 au14-job-prefix-emergencyresponseofficer = ERO
 
+au14-med-vendor-locked = Medical supplies are restricted until Government Forces have deployed planetside.
+
 au14-job-name-civiliancmbdeputy = CMB Deputy
 au14-job-description-civiliancmbdeputy = You're a deputy of the Colonial Marshal Bureau. Help the Marshal provide the colony with rule of law and help execute arrests and warrants. (Role avalible on LV-624 and LV-747)
 au14-job-prefix-cmbdeputy = CMBDEP
@@ -115,6 +125,14 @@ au14-job-prefix-cmbdeputy = CMBDEP
 au14-job-name-civiliancmbmarshal = CMB Marshal
 au14-job-description-civiliancmbmarshal = You're a Marshal of the Colonial Marshal Bureau. Provide the colony with rule of law and execute arrests and warrants. (Role avalible on LV-624 and LV-747)
 au14-job-prefix-cmbmarshal = CMBMAR
+
+au14-job-name-colonysecurityofficer = Colony Security Officer
+au14-job-description-colonysecurityofficer = A joint CMB and corporate-backed security officer. Maintain order, enforce colony law, and coordinate with both the Marshal Bureau and Weyland-Yutani on-colony.
+au14-job-prefix-colonysecurityofficer = CSEC
+
+au14-job-name-colonysecurityleader = Colony Security Leader
+au14-job-description-colonysecurityleader = Senior Colony Security Officer. Lead security operations across both the CMB and corporate security apparatus on-colony.
+au14-job-prefix-colonysecurityleader = CSLDR
 
 au14-job-name-civilianscientist = Scientist
 au14-job-description-civilianscientist = You're a scientist employed by the Weyland-Yutani corporation or government institution.

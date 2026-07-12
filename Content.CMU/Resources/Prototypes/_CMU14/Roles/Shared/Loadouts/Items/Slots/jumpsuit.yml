@@ -1,0 +1,174 @@
+- type: loadout
+  id: CivilianWorkwearYellowAU14
+  equipment:
+    jumpsuit: AU14CivilianWorkwearYellow
+
+- type: loadout
+  id: CivilianWorkwearPinkAU14
+  equipment:
+    jumpsuit: AU14CivilianWorkwearPink
+
+- type: loadout
+  id: CivilianWorkwearBlueAU14
+  equipment:
+    jumpsuit: AU14CivilianWorkwearBlue
+
+- type: loadout
+  id: CivilianWorkwearGreenAU14
+  equipment:
+    jumpsuit: AU14CivilianWorkwearGreen
+
+- type: loadout
+  id: JumpsuitDutchBandolierAU14
+  equipment:
+    jumpsuit: RMCJumpsuitDutchBandolier
+
+- type: loadout
+  id: JumpsuitCivilianAU14
+  equipment:
+    jumpsuit: RMCJumpsuitCivilian
+
+- type: loadout
+  id: JumpsuitColonistAU14
+  equipment:
+    jumpsuit: CMJumpsuitColonist
+
+- type: loadout
+  id: JumpsuitTShirtWhiteAU14
+  equipment:
+    jumpsuit: CMJumpsuitTShirtWhite
+
+- type: loadout
+  id: JumpsuitTShirtGrayAU14
+  equipment:
+    jumpsuit: CMJumpsuitTShirtGray
+
+- type: loadout
+  id: JumpsuitTShirtRedAU14
+  equipment:
+    jumpsuit: CMJumpsuitTShirtRed
+
+- type: loadout
+  id: CivilianFloralRedAU14
+  equipment:
+    jumpsuit: AU14CivilianFloralRed
+
+- type: loadout
+  id: CivilianFloralBlueAU14
+  equipment:
+    jumpsuit: AU14CivilianFloralBlue
+
+- type: loadout
+  id: CivilianFloralYellowAU14
+  equipment:
+    jumpsuit: AU14CivilianFloralYellow
+
+- type: loadout
+  id: CivilianFlannelRedAU14
+  equipment:
+    jumpsuit: AU14CivilianFlannelRed
+
+- type: loadout
+  id: CivilianFlannelPurpleAU14
+  equipment:
+    jumpsuit: AU14CivilianFlannelPurple
+
+- type: loadout
+  id: HazardVestAU14
+  equipment:
+    jumpsuit: RMCHazardVest
+
+- type: loadout
+  id: CivilianWeYuEngineerClothesAU14
+  equipment:
+    jumpsuit: AU14CivilianWeYuEngineerClothes
+
+- type: loadout
+  id: CivilianParamedicClothesRedAU14
+  equipment:
+    jumpsuit: AU14CivilianParamedicClothesRed
+
+- type: loadout
+  id: CivilianParamedicClothesGreenAU14
+  equipment:
+    jumpsuit: AU14CivilianParamedicClothesGreen
+
+- type: loadout
+  id: USASFFatiguesAU14
+  equipment:
+    jumpsuit: AU14UASFFatigues
+
+- type: loadout
+  id: FormalWhiteServiceAU14
+  equipment:
+    jumpsuit: RMCJumsuitWhiteService
+
+- type: loadout
+  id: CMJumpsuitXOFormalAU14
+  equipment:
+    jumpsuit: CMJumpsuitXOFormal
+
+- type: loadout
+  id: ArmyJumpsuitAU14
+  equipment:
+    jumpsuit: AU14ArmyJumpsuit
+
+- type: loadout
+  id: ArmyJumpsuitTankerAU14
+  equipment:
+    jumpsuit: AU14ArmyJumpsuitTanker
+
+- type: loadout
+  id: JungleFatiguesAU14
+  equipment:
+    jumpsuit: AU14JungleFatigues
+
+- type: loadout
+  id: CCAFUniformAU14
+  equipment:
+    jumpsuit: AU14CCAFUniform
+
+- type: loadout
+  id: WYJumpsuitLiaisonBlackAU14
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonBlack
+
+- type: loadout
+  id: WYJumpsuitLiaisonBlazerAU14
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonBlazer
+
+- type: loadout
+  id: WYJumpsuitLiaisonAU14
+  equipment:
+    jumpsuit: CMJumpsuitLiaison
+
+- type: loadout
+  id: WYJumpsuitLiaisonCharcoalAU14
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonCharcoal
+
+- type: loadout
+  id: WYJumpsuitLiaisonIvyAU14
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonIvy
+
+- type: loadout
+  id: WYJumpsuitLiaisonFormalAU14
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonFormal
+
+- type: loadout
+  id: WYJumpsuitLiaisonOutingAU14
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonOuting
+
+- type: loadout
+  id: WYJumpsuitLiaisonOutingRedAU14
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonOutingRed
+
+- type: loadout
+  id: WYJumpsuitLiaisonSuspendersAU14
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonSuspenders

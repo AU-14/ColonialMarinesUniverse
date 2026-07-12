@@ -1,0 +1,40 @@
+- type: entity
+  parent: RMCLockerGunBase
+  id: CMULockerGunCWPS
+  suffix: CWPS
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyBrig"]]
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: CMULockerGunCWPSRandomSelection
+
+- type: entityTable
+  id: CMULockerGunCWPSRandomSelection
+  table: !type:AllSelector
+    children:
+    - !type:NestedSelector
+      tableId: CMULockerGunCWPSPistolRandomSelection
+      rolls: 4
+    - !type:NestedSelector
+      tableId: CMULockerGunCWPSLongRandomSelection
+      rolls: 4
+
+- type: entityTable
+  id: CMULockerGunCWPSPistolRandomSelection
+  table: !type:GroupSelector
+    children:
+    - id: AU14KitWeaponM48A4
+    - id: AU14KitWeaponM4A3
+    - id: AU14KitWeaponM4A3
+    - id: AU14GunCasePistolHG45
+    - id: AU14GunCasePistolM44Civ
+
+- type: entityTable
+  id: CMULockerGunCWPSLongRandomSelection
+  table: !type:GroupSelector
+    children:
+    - id: AU14KitWeaponBasira
+    - id: AU14KitWeaponABR40Civ
+    - id: AU14KitWeaponM357

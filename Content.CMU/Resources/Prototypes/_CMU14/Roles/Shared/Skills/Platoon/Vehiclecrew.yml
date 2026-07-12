@@ -1,0 +1,16 @@
+- type: entity
+  id: AU14SkillPresetPlatoonVehicleCrewman
+  name: Vehicle Crewman
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillConstruction: 2
+      RMCSkillCqc: 1
+      RMCSkillEndurance: 1
+      RMCSkillEngineer: 2
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 2
+      RMCSkillJtac: 1
+      RMCSkillPowerLoader: 1
+      RMCSkillVehicles: 3

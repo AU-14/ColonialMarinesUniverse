@@ -1,0 +1,15 @@
+- type: entity
+  parent: CMBootsBlack
+  id: AU14LACNBoots
+  name: LACN Boots
+  description: Standard issue LACN boots.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/LACN/lacnboots.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/LACN/lacnboots.rsi
+
+- type: entity
+  parent: [RMCItemSlotM5Bayonet, CMBootsJungle]
+  id: AU14LACNBootsFilled
+  suffix: Filled

@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Shared._CMU14.Blackfoot;
+using Content.Shared.Ghost;
 using Content.Shared.Interaction;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
@@ -30,6 +31,9 @@ public sealed partial class BlackfootTowSystem : EntitySystem
     private void OnActivate(Entity<BlackfootTowComponent> ent, ref ActivateInWorldEvent args)
     {
         if (args.Handled)
+            return;
+
+        if (IsGhost(args.User))
             return;
 
         if (ent.Comp.CanTow)
@@ -67,7 +71,8 @@ public sealed partial class BlackfootTowSystem : EntitySystem
     {
         if (!args.CanInteract ||
             !args.CanAccess ||
-            args.Using != null)
+            args.Using != null ||
+            IsGhost(args.User))
         {
             return;
         }
@@ -111,6 +116,9 @@ public sealed partial class BlackfootTowSystem : EntitySystem
 
     private void ToggleTug(EntityUid tugUid, EntityUid user)
     {
+        if (IsGhost(user))
+            return;
+
         if (!TryComp(tugUid, out BlackfootTowComponent? tugTow))
             return;
 
@@ -319,6 +327,9 @@ public sealed partial class BlackfootTowSystem : EntitySystem
 
     private void Attach(Entity<BlackfootTowComponent> tug, Entity<BlackfootTowComponent> target, EntityUid user)
     {
+        if (IsGhost(user))
+            return;
+
         tug.Comp.TowedEntity = target.Owner;
         target.Comp.TowVehicle = tug.Owner;
         Dirty(tug);
@@ -335,6 +346,9 @@ public sealed partial class BlackfootTowSystem : EntitySystem
 
     private void Detach(Entity<BlackfootTowComponent> tug, EntityUid user)
     {
+        if (IsGhost(user))
+            return;
+
         var target = tug.Comp.TowedEntity;
         tug.Comp.TowedEntity = null;
         Dirty(tug);
@@ -400,5 +414,10 @@ public sealed partial class BlackfootTowSystem : EntitySystem
     private void Popup(EntityUid user, string message, PopupType type = PopupType.Small)
     {
         _popup.PopupCursor(message, user, type);
+    }
+
+    private bool IsGhost(EntityUid user)
+    {
+        return HasComp<GhostComponent>(user);
     }
 }

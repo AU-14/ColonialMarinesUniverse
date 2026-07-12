@@ -48,6 +48,9 @@ public sealed partial class FishingSystem : SharedFishingSystem
         // Fishing spot logic
         var attachedEnt = args.OtherEntity;
 
+        if (IsVehicleTarget(attachedEnt))
+            return;
+
         if (HasComp<ActiveFishingSpotComponent>(attachedEnt))
             return;
 
@@ -67,7 +70,7 @@ public sealed partial class FishingSystem : SharedFishingSystem
         var fish = _entityTable.GetSpawns(spotComp.FishList).First();
 
         // Get fish difficulty
-        _proto.Index(fish).TryGetComponent(out FishComponent? fishComp, _compFactory);
+        _proto.Index(fish).TryComp(out FishComponent? fishComp, _compFactory);
 
         // Assign things that depend on the fish
         var activeFishSpot = EnsureComp<ActiveFishingSpotComponent>(attachedEnt);

@@ -54,3 +54,12 @@ public sealed partial class YautjaCleanserDoAfterEvent : SimpleDoAfterEvent;
 
 [Serializable, NetSerializable]
 public sealed partial class YautjaHivebreakerDoAfterEvent : SimpleDoAfterEvent;
+
+[Serializable, NetSerializable]
+public sealed partial class YautjaOverloadBracerDoAfterEvent : SimpleDoAfterEvent;
+
+[Serializable, NetSerializable]
+public sealed partial class YautjaApcSiphonDoAfterEvent : SimpleDoAfterEvent;
+
+[Serializable, NetSerializable]
+public sealed partial class YautjaHealthShardUseDoAfterEvent : SimpleDoAfterEvent;

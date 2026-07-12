@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.IdentityManagement;
 using Content.Shared._RMC14.Marines;
@@ -191,7 +192,10 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         if (!ent.Comp.RandomizeSkinColor)
             return;
 
-        var skinColor = new Color(_random.NextFloat(), _random.NextFloat(), _random.NextFloat(), 1f);
+        var hue = _random.NextFloat(ent.Comp.SkinHueMin, ent.Comp.SkinHueMax);
+        var sat = _random.NextFloat(ent.Comp.SkinSaturationMin, ent.Comp.SkinSaturationMax);
+        var val = _random.NextFloat(ent.Comp.SkinValueMin, ent.Comp.SkinValueMax);
+        var skinColor = Color.FromHsv(new Vector4(hue, sat, val, 1f));
         _humanoid.SetSkinColor(ent, skinColor, humanoid: humanoid);
     }
 

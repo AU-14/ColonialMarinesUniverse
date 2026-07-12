@@ -7,6 +7,7 @@ using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
+using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Yautja;
 
@@ -16,6 +17,7 @@ public sealed partial class YautjaCasterSystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private YautjaPowerSystem _power = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {
@@ -73,6 +75,19 @@ public sealed partial class YautjaCasterSystem : EntitySystem
             return;
         }
 
+        var now = _timing.CurTime;
+        if (now < ent.Comp.CooldownUntil)
+        {
+            args.Cancelled = true;
+            var remaining = (int) Math.Ceiling((ent.Comp.CooldownUntil - now).TotalSeconds);
+            _popup.PopupClient(Loc.GetString("cmu-yautja-caster-cooldown", ("seconds", remaining)), args.User, args.User, PopupType.SmallCaution);
+
+            if (ent.Comp.CooldownSound != null)
+                _audio.PlayPredicted(ent.Comp.CooldownSound, ent.Owner, args.User);
+
+            return;
+        }
+
         ApplyMode(ent);
         if (!_power.HasPowerPopup(args.User, GetPowerCost(ent.Comp)))
             args.Cancelled = true;
@@ -83,7 +98,16 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         _audio.PlayPredicted(GetFireSound(ent.Comp), ent.Owner, args.User);
 
         if (!_net.IsClient)
+        {
             _power.TryRemovePower(args.User, GetPowerCost(ent.Comp));
+
+            var mode = GetMode(ent.Comp);
+            if (mode != null && mode.Cooldown > TimeSpan.Zero)
+            {
+                ent.Comp.CooldownUntil = _timing.CurTime + mode.Cooldown;
+                Dirty(ent);
+            }
+        }
     }
 
     private void ApplyMode(Entity<YautjaCasterComponent> ent)

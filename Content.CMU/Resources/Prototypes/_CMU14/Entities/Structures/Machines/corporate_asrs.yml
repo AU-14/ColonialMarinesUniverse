@@ -1,0 +1,53 @@
+# Corporate ASRS — a Weyland-Yutani controlled supply system separate from the colony ASRS.
+# Uses faction: "corporate" so department consoles with asrsFaction: "corporate" route orders here.
+# Orders placed through a corporate department console have sales tax applied (tax → colony budget).
+
+# Corporate ASRS Console
+- type: entity
+  parent: CMASRSConsole
+  id: AU14CorporateASRSConsole
+  name: corporate supply console
+  description: A Weyland-Yutani corporate supply management terminal. Orders placed here are subject to the current sales tax rate.
+  suffix: Corporate, ASRS
+  components:
+  - type: RequisitionsComputer
+    faction: corporate
+    categories:
+    - name: Corporate Equipment
+      entries:
+      - cost: 500
+        crate: RMCCrateElectricalMaintenance
+      - cost: 800
+        crate: RMCCrateMechanicalMaintenance
+      - cost: 1000
+        crate: RMCCrateHighCapacityPowerCell
+      - cost: 600
+        crate: RMCCrateFlashlights
+    - name: Civilian Goods
+      entries:
+      - cost: 400
+        crate: RMCCrateFoodMRE
+      - cost: 600
+        crate: RMCCrateReplacementLights
+    - name: Security
+      entries:
+      - cost: 2000
+        crate: RMCCrateInflatableBarriers
+      - cost: 1500
+        crate: RMCCrateEmptySandbags
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"], ["AU14AccessCorporateWEYU"]]
+
+
+# Corporate ASRS Elevator
+- type: entity
+  parent: CMCargoElevator
+  id: AU14CorporateASRSElevator
+  name: corporate supply elevator
+  description: A Weyland-Yutani corporate supply elevator. Delivers orders placed through the corporate supply system.
+  suffix: Corporate, ASRS
+  components:
+  - type: RequisitionsElevator
+    faction: corporate
+

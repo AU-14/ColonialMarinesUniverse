@@ -77,6 +77,7 @@ public sealed partial class CMUMappingZNetworkCommand : LocalizedEntityCommands
         }
         dict.Add(defaultMapEnt.Value, 0);
         createdMaps.Add(defaultMapEnt.Value.Comp.MapId);
+        EntityManager.AddComponents(defaultMapEnt.Value, mapProto.ZLevelsComponentOverrides);
         _meta.SetEntityName(defaultMapEnt.Value, $"Mapping {mapProto.MapName}");
 
         //Loading maps below first
@@ -91,6 +92,7 @@ public sealed partial class CMUMappingZNetworkCommand : LocalizedEntityCommands
 
             dict.Add(mapEnt.Value, depth);
             createdMaps.Add(mapEnt.Value.Comp.MapId);
+            EntityManager.AddComponents(mapEnt.Value, mapProto.ZLevelsComponentOverrides);
             _meta.SetEntityName(mapEnt.Value, $"Mapping {mapProto.MapName} [{depth}]");
             depth++;
         }
@@ -106,6 +108,7 @@ public sealed partial class CMUMappingZNetworkCommand : LocalizedEntityCommands
 
             dict.Add(mapEnt.Value, depth);
             createdMaps.Add(mapEnt.Value.Comp.MapId);
+            EntityManager.AddComponents(mapEnt.Value, mapProto.ZLevelsComponentOverrides);
             _meta.SetEntityName(mapEnt.Value, $"Mapping {mapProto.MapName} [{depth}]");
             depth++;
         }
@@ -151,6 +154,9 @@ public sealed partial class CMUMappingZNetworkCommand : LocalizedEntityCommands
         //TODO: Autosaves
 
         shell.ExecuteCommand($"tp 0 0 {defaultMapEnt.Value.Comp.MapId}");
+        if (player.AttachedEntity is { Valid: true } attached)
+            _zLevel.RefreshZLevelViewer(attached);
+
         shell.RemoteExecuteCommand("mappingclientsidesetup");
         foreach (var mapId in createdMaps)
         {

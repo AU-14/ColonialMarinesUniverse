@@ -1,0 +1,35 @@
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUACGAmmobearer
+  categories: [ HideSpawnMenu ]
+  name: UACG Ammo Bearer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14UACGAmmobearer
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUACGRifleman
+  categories: [ HideSpawnMenu ]
+  name: UACG Rifleman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14UACGRifleman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUACGSquadleader
+  categories: [ HideSpawnMenu ]
+  name: UACG Squad Leader ID card
+  components:
+  - type: PresetIdCard
+    job: AU14UACGSquadleader
+  - type: ItemIFF
+    factions:
+    - GOVFOR

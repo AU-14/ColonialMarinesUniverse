@@ -1,0 +1,1313 @@
+# Apparel, equipment, medical, aircrew, command, AR, section-leader, weaponry, special-weapons, aircrew-weapons, CT
+- type: entity
+  parent: ColMarTechBase
+  id: AU14UPPclothingapparelvendor
+  name: UPP apparel vendor
+  description: >-
+    An automated dispenser rack, hooked up to a small storage of Union of Progressive Peoples apparel.
+    Standard issue aboard naval vessels, military outposts, corporate-science installations and civilian colonies across the frontier.
+    Manufactured to outfit personnel rapidly following cryogenic hypersleep or emergency mobilization.
+
+    For full operational readiness, select one item from each section: fatigues with a webbing, footwear, gloves, headgear, armor, backpack, belt and a pouch.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Fatigues
+      entries:
+      - id: AU14FatiguesUPP
+        amount: 40
+    - name: Footwear
+      entries:
+      - id: RMCBootsSPPBlack
+        amount: 20
+      - id: RMCBootsSPP
+        amount: 40
+    - name: Gloves
+      entries:
+      - id: RMCHandsBlack
+        amount: 40
+      - id: CMHandsBrown
+        amount: 20
+    - name: Webbings
+      entries:
+      - id: AU14WebbingMagazine
+        amount: 40
+      - id: AU14WebbingUtility
+        amount: 40
+      - id: AU14WebbingDumpPouch
+        amount: 25
+      - id: AU14WebbingAdminPouchUPP
+        amount: 15
+      - id: AU14WebbingDropPouchUPP
+        amount: 20
+    - name: Headgear
+      entries:
+      - id: AU14UPPNavalInfantryHelmet
+        amount: 40
+      - id: AU14UPPPatrolCap
+        amount: 20
+      - id: CMHeadCapSPPBeret
+        amount: 15
+      - id: AU14UPPBoonie
+        amount: 15
+      - id: AU14UPPUshanka
+        amount: 40
+      - id: RMCM5CameraGear
+        amount: 30
+    - name: Heads Up Display
+      entries:
+      - id: RMCVisorSquad
+        amount: 40
+      - id: RMCVisorWelding
+        amount: 8
+    - name: Armor
+      entries:
+      - id: AU14UPPArmor
+        amount: 40
+      - id: AU14UPPArmorMinimalistic
+        amount: 30
+      - id: AU14UPPArmorBulky
+        amount: 25
+    - name: Armor Components
+      entries:
+      - id: AU14ArmorGarbShinGuardsUPP
+        amount: 40
+      - id: AU14ArmorGarbShoulderPadsUPP
+        amount: 40
+      - id: AU14ArmorGarbCrotchPadUPP
+        amount: 40
+      - id: AU14ArmorGarbMagazineWebbingUPP
+        amount: 8
+      - id: AU14ArmorGarbLargeWebbingUPP
+        amount: 6
+      - id: AU14ArmorGarbSmallWebbingUPP
+        amount: 12
+      - id: AU14ArmorGarbJunglePonchoUPP
+        amount: 40
+    - name: Backpack
+      entries:
+      - id: RMCSatchelSPP
+        amount: 80
+      - id: CMBackpackMarine
+        amount: 30
+      - id: AU14IMPBackpackMarine
+        amount: 20
+      - id: RMCSatchelSPPWelder
+        amount: 5
+      - id: RMCScabbardShotgun
+        amount: 3
+      - id: RMCBackpackAmmo
+        amount: 4
+    - name: Belts
+      entries:
+      - id: AU14BeltMarineUPP
+        amount: 40
+      - id: RMCBeltGrenade
+        amount: 4
+      - id: AU14ShotgunShellLoadingRigUPP
+        amount: 6
+      - id: AU14BeltHolsterPistolUPP
+        amount: 20
+      - id: RMCBeltHolsterRevolver
+        amount: 10
+      - id: CMBeltKnifeFilled
+        name: M276 Knife Rig (Full)
+        amount: 2
+      - id: AU14BeltUtilityGeneralUPP
+        amount: 30
+    - name: Pouches
+      entries:
+      - id: RMCPouchBayonet
+        name: Bayonet Sheath
+        amount: 25
+      - id: RMCPouchFlareFilled
+        name: Flare Pouch (Full)
+        amount: 30
+      - id: RMCPouchDocumentSmall
+        amount: 3
+      - id: RMCPouchMagazine
+        amount: 50
+      - id: RMCPouchShotgunLarge
+        amount: 8
+      - id: RMCPouchGeneralMedium
+        amount: 25
+      - id: RMCPouchGeneralLarge
+        amount: 4
+      - id: RMCPouchMagazinePistol
+        amount: 25
+      - id: AU14PouchPistolAlt
+        amount: 20
+      - id: AU14PouchIFAKFill
+        amount: 5
+      - id: RMCPouchConstruction
+        amount: 5
+      - id: RMCPouchExplosive
+        amount: 3
+      - id: RMCPouchFuelTank
+        amount: 2
+      - id: RMCPouchTools
+        amount: 15
+    - name: Mask
+      entries:
+      - id: CMMaskCoif
+        amount: 20
+      - id: RMCMaskScarfBlack
+        amount: 20
+      - id: RMCMaskScarfGray
+        amount: 20
+      - id: RMCMaskTornScarfGreen
+        amount: 20
+      - id: RMCMaskTornScarfDesert
+        amount: 20
+      - id: RMCMaskTornScarfSnow
+        amount: 20
+      - id: RMCMaskTornScarfBlack
+        amount: 20
+      - id: RMCMaskSmockBlack
+        amount: 20
+      - id: RMCMaskNeckerchiefGray
+        amount: 20
+    - name: Glasses & Goggles
+      entries:
+      - id: AU14GogglesM1A1ClearBallistic
+        amount: 25
+      - id: AU14GogglesM1A1Ballistic
+        amount: 25
+      - id: AU14GogglesM1A1DarkBallistic
+        amount: 25
+      - id: AU14GogglesM1A1LaserBallistic
+        amount: 25
+      - id: AU14GogglesM1A1OrangeBallistic
+        amount: 25
+      - id: AU14GogglesM1A1PolarizedBallistic
+        amount: 25
+      - id: AU14GlassesBiMex
+        amount: 25
+      - id: AU14GlassesBiMexOrange
+        amount: 25
+      - id: RMCGlassesTriMaxBronze
+        amount: 25
+    - name: Patches
+      entries:
+      - id: AU14PatchUPP
+        amount: 80
+      - id: AU14PatchUPPNavalInfantry
+        amount: 80
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14UPPequipmentvendor
+  name: UPP equipment vendor
+  description: >-
+    An automated dispenser rack, hooked up to a small storage of Union of Progressive Peoples equipment.
+    Stocked with medical supplies and field gear for rapid deployment following cryogenic hypersleep or emergency mobilization.
+    The interface is intentionally simple, even someone with tunnel-vision and frostbite can operate it.
+
+    Rapid-issue protocol: prioritize medical supplies, a ration pack, an e-tool and sandbags.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Food
+      entries:
+      - id: AU14MREUPP
+        amount: 60
+      - id: AU14BoxMREUPP
+        amount: 10
+    - name: Medical Supplies
+      entries:
+      - id: AU14PouchIFAKFill
+        name: infantry first aid kit (Full)
+        recommended: true
+        amount: 30
+      - id: AU14HemostaticGauzePacket
+        amount: 40
+      - id: AU14Tourniquet
+        amount: 40
+      - id: CMOintment10
+        amount: 40
+      - id: CMPacketPillsTricordrazine
+        amount: 40
+      - id: AU14NaloxoneAutoInjector
+        amount: 9
+      - id: AU14PacketPillsTramadol
+        amount: 40
+      - id: AU14FirstAidAutoInjectorNoSkill
+        amount: 20
+      - id: CMUSplintItem
+        amount: 40
+    - name: Tools
+      entries:
+      - id: CMEntrenchingTool
+        recommended: true
+        amount: 30
+      - id: RMCShovel
+        amount: 10
+      - id: RMCCombatUtilityKnifeA
+        recommended: true
+        amount: 25
+      - id: RMCCombatUtilityKnifeB
+        recommended: true
+        name: "'Druzhina' combat utility knife (ceremony)"
+        amount: 5
+      - id: CMM11Knife
+        amount: 15
+      - id: RMCScabbardMacheteFilled
+        name: machete scabbard (Full)
+        amount: 6
+      - id: RMCHelmetGarbGunOil
+        amount: 30
+      - id: CMFireExtinguisher
+        amount: 10
+      - id: CMFireExtinguisherPortable
+        amount: 5
+      - id: RMCLightReplacer
+        amount: 10
+      - id: CMScrewdriver
+        amount: 10
+      - id: CMWirecutter
+        amount: 10
+      - id: CMCrowbar
+        amount: 10
+      - id: CMWrench
+        amount: 10
+      - id: CMMultitool
+        amount: 10
+      - id: CMWelderSmall
+        amount: 10
+      - id: CMWelder
+        amount: 4
+      - id: RMCWelderPVE
+        amount: 1
+    - name: Engineering Supplies
+      entries:
+      - id: CMSandbagEmpty25
+        recommended: true
+        amount: 2
+      - id: BarbedWire15
+        amount: 6
+      - id: CMSheetMetal50
+        amount: 2
+      - id: CMSheetPlasteel50
+        amount: 1
+      - id: RMCBoxMagazinePowerCellsHighFilled
+        amount: 2
+      - id: RMCEngineerKit
+        amount: 1
+      - id: RMCPowerCellHigh
+        amount: 5
+      - id: RMCCableCoil
+        amount: 15
+    - name: Flares and lights
+      entries:
+      - id: RMCBoxFlashlights
+        amount: 4
+      - id: RMCFlashlight
+        amount: 20
+      - id: RMCWeaponPistolM82F
+        amount: 4
+      - id: RMCBoxPackFlare
+        amount: 5
+      - id: CMPackFlare
+        amount: 12
+      - id: RMCPackFlareCAS
+        amount: 8
+    - name: Gas Mask
+      entries:
+      - id: RMCMaskGasSPP
+        amount: 40
+      - id: CMUGasMaskFilterUPP
+        amount: 80
+      - id: AU14PouchGasMaskBag
+        amount: 20
+    - name: Optics
+      entries:
+      - id: RMCLaserDesignatorPVE
+        amount: 2
+      - id: RMCBinocularsPVE
+        amount: 5
+    - name: Miscellaneous
+      entries:
+      - id: RMCZipties
+        recommended: true
+        amount: 60
+      - id: RMCPVECaseMotionDetector
+        amount: 1
+      - id: CMRollerBedSpawnFolded
+        amount: 8
+      - id: CMFoldingBarricadesMB6x3
+        amount: 2
+      - id: BedrollFolded
+        amount: 20
+      - id: AU14GuidebookLawMarine
+        amount: 3
+      - id: AU14GuidebookSOP
+        amount: 3
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14UPPMedicalVendor
+  name: UPP medical vendor
+  description: >-
+    An automated medical rack, hooked up to a compact stock of Union of Progressive Peoples trauma supplies.
+    Standard issue for corpsmen aboard naval vessels, outposts and colonies where casualties arrive faster than reinforcements.
+    Designed for rapid reconstitution of combat medics following cryogenic hypersleep or emergency call-up.
+
+    Corpsman protocol: select the essential equipment set, storage and limited medications.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFORPlatoonCorpsman
+    - AU14JobGOVFOROfficerMedical
+    - AU14JobGOVFORAuxSupportSynth
+    - AU14JobOPFORPlatoonCorpsman
+    - AU14JobOPFOROfficerMedical
+    - AU14JobOPFORAuxSupportSynth
+    sections:
+    - name: Essential Equipment
+      takeAll: CMUEssentialEquipment
+      entries:
+      - id: AU14VendorBundleCorpsmanEssentials
+    - name: Medical Pouches
+      choices: { CMUPlatoonMedicalPouch: 2 }
+      entries:
+      - id: RMCPouchAutoinjector
+      - id: RMCPouchFirstResponder
+      - id: RMCPouchMedical
+      - id: RMCPouchSyringeFill
+      - id: RMCPouchFirstAidSplintsGauzeOintment
+        name: first-aid pouch (gauze, ointment) # TODO RMC14 splints
+      - id: RMCPouchFirstAidPills
+        name: first-aid pouch (pills)
+    - name: Medical Storage
+      choices: { CMUPlatoonMedicalStorage: 1 }
+      entries:
+      - id: AU14BeltMedicBagUPP
+    - name: General Medical Supplies
+      entries:
+      - id: AU14HemostaticGauzePacket
+        amount: 60
+      - id: AU14Tourniquet
+        amount: 60
+      - id: CMUSplintItem
+        amount: 60
+      - id: CMOintment10
+        amount: 60
+      - id: CMUPlainTraumaDressing10
+        amount: 40
+      - id: CMUCoagulantPowder
+        amount: 30
+      - id: CMUBurnGel
+        amount: 30
+      - id: CMBurnKit10
+        amount: 30
+      - id: CMTraumaKit10
+        amount: 30
+    - name: Limited Pill Medications
+      takeAll: CMULimitedPills
+      entries:
+      - id: AU14PillCanisterMeralyne
+      - id: AU14PillCanisterDermaline
+      - id: AU14PillCanisterAlbuterol
+    - name: Limited Injector Medications
+      choices: { CMUPlatoonMedicalLimitedMedicationsInjectors: 6 }
+      entries:
+      - id: AU14MeraBicAutoInjector
+      - id: AU14KeloDermAutoInjector
+      - id: AU14AlbuDexAutoInjector
+      - id: AU14RevivalMixAutoInjector
+    - name: Pill Bottles
+      entries:
+      - id: CMPillCanisterDexalin
+        amount: 20
+      - id: CMPillCanisterDylovene
+        amount: 20
+      - id: CMPillCanisterInaprovaline
+        amount: 20
+      - id: CMPillCanisterBicaridine
+        amount: 20
+      - id: CMPillCanisterKelotane
+        amount: 20
+      - id: CMPillCanisterTricordrazine
+        amount: 20
+      - id: RMCPillCanisterIron
+        amount: 20
+      - id: AU14PillCanisterParacetamol
+        amount: 20
+      - id: AU14PillCanisterTramadol
+        amount: 20
+      - id: AU14PillCanisterOxycodone
+        amount: 20
+      - id: AU14PillCanisterCardiocaine
+        amount: 20
+      - id: AU14PillCanisterHepatocytin
+        amount: 20
+      - id: AU14PillCanisterNephronate
+        amount: 20
+      - id: AU14PillCanisterOsteoCalc
+        amount: 20
+      - id: AU14PillCanisterPulmovine
+        amount: 20
+    - name: Injectors
+      entries:
+      - id: CMEpinephrineAutoInjector
+        amount: 40
+      - id: AU14NaloxoneAutoInjector
+        amount: 40
+      - id: RMCIronAutoInjector
+        amount: 40
+      - id: CMInaprovalineAutoInjector
+        amount: 40
+      - id: CMDexalinPlusAutoInjector
+        amount: 40
+      - id: CMTricordrazineAutoInjector
+        amount: 40
+      - id: CMBicaridineAutoInjector
+        amount: 40
+      - id: CMKelotaneAutoInjector
+        amount: 40
+      - id: AU14ParacetamolAutoInjector
+        amount: 40
+      - id: AU14TramadolAutoInjector
+        amount: 40
+      - id: AU14OxycodoneAutoInjector
+        amount: 40
+    - name: Medical Gloves
+      choices: { CMUPlatoonMedicalGloves: 1 }
+      entries:
+      - id: CMHandsLatex
+      - id: ClothingHandsGlovesNitrile
+    - name: Medical Masks
+      choices: { CMUPlatoonMedicalMasks: 1 }
+      entries:
+      - id: CMMaskSterile
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14UPPaircrewvendor
+  name: UPP aircrew vendor
+  description: >-
+    An automated dispenser rack, hooked up to a small storage of Union of Progressive Peoples aircrew flight and support gear.
+    Engineered to get flight personnel flight-ready in seconds after cryogenic hypersleep or scramble orders.
+
+    Aircrew protocol: select a set of fatigues, the essential medical equipment and storage kit.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforPilot" ], [ "AU14AccessOpforPilot" ] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Fatigues
+      choices: { CMUPlatoonAirCrewFatigues: 1 }
+      entries:
+      - id: AU14BoilerFatiguesUPP
+    - name: Body Armor
+      choices: { CMUPlatoonAirCrewVest: 1 }
+      entries:
+      - id: AU14ArmorPilotFlakJacket
+      - id: AU14ExternalWebbing
+      - id: RMCArmorVestSquad
+        amount: 2
+    - name: Footwear
+      choices: { CMUPlatoonAirCrewFootwear: 1 }
+      entries:
+      - id: RMCBootsSPPFilled
+    - name: Gloves
+      choices: { CMUPlatoonAirCrewGloves: 1 }
+      entries:
+      - id: AU14PVEHandsInsulatedBlackMarine
+      - id: AU14PVEHandsFingerlessBlackGloves
+    - name: Headgear
+      choices: { CMUPlatoonAirCrewHeadgear: 1 }
+      entries:
+      - id: AU14UPPPatrolCap
+      - id: AU14UPPBoonie
+      - id: AU14UPPUshanka
+      - id: CMHeadCapSPPBeret
+    - name: Webbings
+      choices: { CMUPlatoonAirCrewWebbings: 1 }
+      entries:
+      - id: AU14WebbingMagazine
+      - id: AU14WebbingUtility
+      - id: AU14WebbingDumpPouch
+      - id: AU14WebbingAdminPouch
+      - id: AU14WebbingDropPouch
+    - name: Backpack
+      choices: { CMUPlatoonAirCrewBackpack: 1 }
+      entries:
+      - id: CMSatchelMarine
+    - name: Belts
+      choices: { CMUPlatoonAirCrewBelts: 1 }
+      entries:
+      - id: AU14BeltHolsterPistolUPP
+      - id: AU14BeltUtilityGeneralUPP
+    - name: Pouches
+      choices: { CMUPlatoonAirCrewPouches: 2 }
+      entries:
+      - id: RMCPouchBayonet
+        name: Bayonet Sheath
+      - id: RMCPouchFlareFilled
+        name: Flare Pouch (Full)
+      - id: RMCPouchDocumentSmall
+      - id: RMCPouchMagazine
+      - id: RMCPouchGeneralMedium
+      - id: AU14PouchPistolAlt
+      - id: RMCPouchMagazinePistolLarge
+      - id: RMCPouchTools
+    - name: Glasses
+      choices: { CMUPlatoonAirCrewGlasses: 1 }
+      entries:
+      - id: RMCSunglassesBigFake
+      - id: RMCGlassesMarineRpg
+      - id: AU14GlassesBiMex
+      - id: AU14GlassesBiMexOrange
+      - id: RMCGlassesAviators
+    - name: Essential Medical Equipment
+      takeAll: CMUEssentialEquipment
+      entries:
+      - id: RMCVisorMedical
+      - id: AU14CMDefibrillator
+      - id: CMHealthAnalyzer
+      - id: RMCFlashlightPen
+      - id: ClothingNeckStethoscope
+      - id: CMRollerBedSpawnFolded
+      - id: RMCMedevacStretcherFolded
+      - id: CMSurgicalLine
+      - id: CMSynthGraft
+    - name: Medical Pouches
+      choices: { CMUPlatoonMedicalPouch: 2 }
+      entries:
+      - id: RMCPouchAutoinjector
+      - id: RMCPouchFirstResponder
+      - id: RMCPouchMedical
+    - name: Medical Storage
+      choices: { CMUPlatoonMedicalStorage: 1 }
+      entries:
+      - id: AU14BeltMedicalUPP
+      - id: AU14BeltMedicBagUPP
+    - name: General Medical Supplies
+      entries:
+      - id: AU14HemostaticGauzePacket
+        amount: 60
+      - id: AU14Tourniquet
+        amount: 60
+      - id: CMOintment10
+        amount: 60
+      - id: CMBurnKit10
+        amount: 30
+      - id: CMTraumaKit10
+        amount: 30
+    - name: Pill Bottles
+      entries:
+      - id: CMPillCanisterBicaridine
+        amount: 15
+      - id: CMPillCanisterDexalin
+        amount: 15
+      - id: CMPillCanisterDylovene
+        amount: 15
+      - id: CMPillCanisterInaprovaline
+        amount: 15
+      - id: CMPillCanisterKelotane
+        amount: 15
+      - id: CMPillCanisterTricordrazine
+        amount: 15
+      - id: RMCPillCanisterIron
+        amount: 15
+      - id: AU14PillCanisterParacetamol
+        amount: 15
+      - id: AU14PillCanisterTramadol
+        amount: 15
+      - id: AU14PillCanisterOxycodone
+        amount: 15
+      - id: AU14PillCanisterCardiocaine
+        amount: 15
+      - id: AU14PillCanisterHepatocytin
+        amount: 15
+      - id: AU14PillCanisterNephronate
+        amount: 15
+      - id: AU14PillCanisterOsteoCalc
+        amount: 15
+      - id: AU14PillCanisterPulmovine
+        amount: 15
+    - name: Injectors
+      entries:
+      - id: CMEpinephrineAutoInjector
+        amount: 15
+      - id: AU14NaloxoneAutoInjector
+        amount: 15
+      - id: CMInaprovalineAutoInjector
+        amount: 15
+      - id: CMDexalinPlusAutoInjector
+        amount: 15
+      - id: CMTricordrazineAutoInjector
+        amount: 15
+      - id: CMBicaridineAutoInjector
+        amount: 15
+      - id: CMKelotaneAutoInjector
+        amount: 15
+      - id: AU14ParacetamolAutoInjector
+        amount: 15
+      - id: AU14TramadolAutoInjector
+        amount: 15
+      - id: AU14OxycodoneAutoInjector
+        amount: 15
+    - name: Medical Gloves
+      choices: { CMUPlatoonMedicalGloves: 1 }
+      entries:
+      - id: CMHandsLatex
+      - id: ClothingHandsGlovesNitrile
+    - name: Medical Masks
+      choices: { CMUPlatoonMedicalMasks: 1 }
+      entries:
+      - id: CMMaskSterile
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14UPPcommandvendor
+  name: UPP command vendor
+  description: >-
+    An automated command rack, hooked up to a restricted storage of Union of Progressive Peoples command-leadership equipment.
+    Manufactured to equip commanding personnel following cryogenic hypersleep or an emergency directive is issued.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforCommand" ], [ "AU14AccessOpforCommand" ] ]
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/uscmcommandclothes.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Fatigues
+      entries:
+      - id: AU14JumpsuitOfficerUPP
+        amount: 2
+      - id: AU14JumpsuitMPUPP
+        amount: 5
+      - id: AU14ServiceFatiguesUPP
+        amount: 3
+    - name: Coats
+      entries:
+      - id: AU14CoatUPP
+        amount: 3
+      - id: AU14CoatUPPSenior
+        amount: 2
+      - id: AU14CoatUPPMP
+        amount: 5
+    - name: Footwear
+      entries:
+      - id: RMCBootsSPPFilled
+        amount: 5
+      - id: CMBootsBrown
+        amount: 5
+    - name: Headgear
+      entries:
+      - id: CMHeadCapSPPPeaked
+        amount: 5
+      - id: CMHeadCapSPPBeret
+        amount: 5
+      - id: CMHeadCapSPPUshankaCivilian
+        amount: 10
+    - name: Backpack
+      entries:
+      - id: RMCBackpackRTOSPP
+        amount: 5
+    - name: Pouches
+      entries:
+      - id: AU14PouchCommandFill
+        amount: 10
+    - name: Equipment
+      takeAll: CMStandard
+      entries:
+      - id: RMCLaserDesignator
+      - id: RMCWhistle
+      - id: RMCPackFlareCAS
+    - name: Spare Equipment
+      entries:
+      - id: RMCExplosiveBreachingCharge
+        amount: 4
+      - id: RMCBinoculars
+        amount: 5
+      - id: RMCLaserDesignator
+        amount: 2
+      - id: RMCFulton20
+        amount: 4
+      - id: RMCWhistle
+        amount: 10
+      - id: RMCBoxPackFlareCAS
+        amount: 1
+      - id: RMCPackFlareCAS
+        amount: 6
+      - id: AU14JoeUPP
+        amount: 5
+    - name: Chevrons
+      entries:
+      - id: AU14ChevronUPPNIPrivate
+        amount: 2
+      - id: AU14PortableVendorUPPNIRanks
+        amount: 1
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14UPPgunnerequipment
+  name: UPP automatic rifleman equipment vendor
+  description: >-
+    An automated weapons rack, hooked up to a small armory of Union of Progressive Peoples light-machine gun equipment.
+    Standard issue for designated LMG crews on naval vessels and outposts.
+    Built to bring fire support online rapidly after cryogenic hypersleep or emergency mobilization.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforGunner" ], [ "AU14AccessOpforGunner" ] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Essential Equipment
+      takeAll: CMUAREssentialEquipment
+      entries:
+      - id: AU14ArmorSmartGunDesertCombatHarnessUPP
+
+    - name: Firearm System
+      choices: { CMUPlatoonMG: 1 }
+      entries:
+      - id: AU14SmartGunUPP
+      - id: RMCWeaponLMGQYJ72
+    - name: Belt
+      choices: { CMUPlatoonMGBelt: 1 }
+      entries:
+      - id: AU14BeltSmartGunOperatorUPP
+      - id: AU14BeltSmartGunOperatorPistolUPP
+    - name: Gun Munitions
+      entries:
+      - id: AU14MagazineSmartGunUPP
+        amount: 40
+      - id: AU14PowerCellSmartgunUPP
+        amount: 40
+      - id: RMCMagazineLMGQYJ72
+        amount: 40
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14UPPSectionLeaderVendor
+  name: UPP section leader vendor
+  description: >-
+    An automated equipment rack, hooked up to a compact storage of Union of Progressive Peoples section-leadership equipment.
+    Designed for immediate readiness following cryogenic hypersleep or rapid mobilization orders.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessOpforFTL" ] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Apparel
+      choices: { CMHat: 1 }
+      entries:
+      - id: CMHeadCapSPPBeret
+    - name: Equipment
+      takeAll: CMStandard
+      entries:
+      - id: RMCLaserDesignator
+      - id: RMCWhistle
+      - id: RMCPackFlareCAS
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14UPPWeaponsVendor
+  name: UPP weapons rack
+  description: >-
+    An automated weapons rack, hooked up to a small armory of Union of Progressive Peoples weaponry.
+    Standard issue across the frontier where threats can appear without warning.
+    Engineered to arm personnel in seconds following cryogenic hypersleep or emergency mobilization.
+
+    For immediate combat readiness: select a primary weapon kit and a sidearm.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Weapons
+      choices: { CMUPrimaryWeapon: 1 }
+      entries:
+      - id: AU14KitWeaponAG80
+      - id: AU14KitWeaponType64
+    - name: Weapon Ammunition
+      entries:
+      - id: AU14MagazineRifleAG80
+        amount: 60
+      - id: RMCMagazineSMGType64
+        amount: 60
+    - name: Handguns
+      choices: { CMUHandgunsWeapon: 1 }
+      entries:
+      - id: AU14KitWeaponType74
+      - id: AU14KitWeaponType73
+    - name: Handgun Ammunition
+      entries:
+      - id: RMCMagazinePistolT73
+        amount: 60
+    - name: Attachments
+      choices: { CMUAttachmentsVendor: 1 }
+      entries:
+      - id: RMCAttachmentTwoPointSling
+      - id: RMCAttachmentRailFlashlight
+
+- type: entity
+  parent: AU14SpecVend
+  id: AU14UPPSpecialWeaponsVendor
+  name: UPP weapons specialist rack
+  description: >-
+    An automated special weapons rack, hooked up to a restricted armory of Union of Progressive Peoples heavy and breaching ordnance.
+    Standard issue only for qualified operators.
+    Engineered to deliver overwhelming firepower the instant cryogenic hypersleep ends or an emergency mobilization is called.
+
+    Special weapons protocol: one weapon system of choice with a full ammunition loadout and explosives.
+  components:
+  - type: CMAutomatedVendor
+    sections:
+    - name: Weapons Specialist Sets
+      takeOne: SquadSpecKit
+      sharedSpecLimit: 1
+      entries:
+      - id: AU14KitUPPPointmanType23
+        giveSquadRoleName: au14-job-name-govforspecialist-pointmanUPP
+        givePrefix: au14-job-prefix-govforspecialist-pointmanUPP
+        isAppendSquadRoleName: false
+        isAppendPrefix: true
+      - id: AU14KitUPPHATHJRA12
+        giveSquadRoleName: au14-job-name-govforspecialist-heavyantitankUPP
+        givePrefix: au14-job-prefix-govforspecialist-heavyantitankUPP
+        isAppendSquadRoleName: false
+        isAppendPrefix: true
+      - id: AU14KitUPPMarksmanType88
+        giveSquadRoleName: au14-job-name-govforspecialist-marksmanUPP
+        givePrefix: au14-job-prefix-govforspecialist-marksmanUPP
+        isAppendSquadRoleName: false
+        isAppendPrefix: true
+      - id: CMU14PyroSpecEquipmentCaseUPP
+        giveSquadRoleName: au14-job-name-specialist-pyro
+        givePrefix: au14-job-prefix-specialist-pyro
+        isAppendSquadRoleName: false
+        isAppendPrefix: true
+
+# AirCrew Weapons
+- type: entity
+  parent: ColMarTechBase
+  id: AU14UPPAirCrewWeaponsVendor
+  name: UPP aircrew weapons rack
+  description: An automated rack hooked up to a small storage of aircrew weapons.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforPilot" ], [ "AU14AccessOpforPilot" ] ]
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/genericweaponrack.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Weapons
+      entries:
+      - id: RMCWeaponSMGType19
+        amount: 2
+      - id: RMCWeaponPistolT74
+        amount: 2
+    - name: Ammunition
+      entries:
+      - id: RMCMagazineSMGType19
+        amount: 12
+      - id: RMCMagazinePistolT73
+        amount: 12
+
+# Combat Technicians
+- type: entity
+  parent: ColMarTechBase
+  id: AU14ComtechGearVendorUPP
+  name: UPP combat technicians gear rack
+  description: An automated gear rack for combat technicians.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforEngineering" ], [ "AU14AccessOpforEngineering" ] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/combat_technician_gear.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFORSquadCombatTech
+    - AU14JobOPFORSquadCombatTech
+    sections:
+    - name: Engineer Set
+      takeAll: CMEngineerSet
+      entries:
+      - id: AU14VendorBundleCombatTechnicianEssentials
+    - name: Support Equipment
+      choices:  { CMHandheldDefense : 1 }
+      entries:
+      - id: AU14CaseSentry
+      - id: AU14CaseSentryMini
+      - id: AU14CaseSentrySniper
+      - id: RMCM271A2BruteLauncherRigFilled
+    - name: Engineer Uniform
+      choices: { CMUPlatoonMedicalUniform: 1 }
+      entries:
+      - id: AU14JumpsuitEngiUPP
+    - name: Tool Storage
+      choices: { CMUCTToolStorage: 1 }
+      entries:
+      - id: AU14BeltUtilityCombatFilled
+        name: M276 pattern combat toolbelt rig (filled)
+        recommended: true
+      - id: AU14PouchToolsFilledComtech
+        name: tactical tools pouch (filled)
+      - id: AU14BeltUtilityFilled
+        name: M276 pattern toolbelt rig (filled)
+    - name: Engineering Storage Bag
+      choices: { CMUPouchesCTBag: 1 }
+      entries:
+      - id: RMCSatchelSPPWelder
+        recommended: true
+    - name: Engineering Storage Pouch
+      choices: { CMUPouchesCT: 2 }
+      entries:
+      - id: RMCPouchConstruction
+        recommended: true
+      - id: RMCPouchEngineerKit
+      - id: RMCPouchElectronics
+    - name: Engineering Materials
+      entries:
+      - id: CMSheetMetal50
+        name: metal x50
+        points: 8
+        recommended: true
+      - id: CMSheetPlasteel50
+        name: plasteel x50
+        points: 10
+        recommended: true
+      - id: CMSandbagEmpty50
+        name: sandbags x50
+        points: 4
+      - id: RMCPlankWood
+        name: wood x50
+        points: 2
+    - name: Engineering Supplies
+      entries:
+      - id: CMFoldingBarricadesMB6x3
+        name: MB-6 folding barricade x3
+        points: 5
+      - id: MaintenanceJack
+        points: 5
+      - id: RMCShovel
+        points: 2
+      - id: RMCES11MobileFuelCanister
+        points: 5
+      - id: RMCPowerCell
+        points: 2
+      - id: RMCPowerCellHigh
+        points: 4
+      - id: RMCPowerCellSuper
+        points: 8
+      - id: RMCMagazineSMGNailgun
+        points: 5
+      - id: RMCEngineerKit
+        points: 5
+      - id: CMAPCElectronics
+        points: 2
+      - id: DoorElectronics
+        points: 2
+      - id: RMCPortableGeneratorPacmanMachineCircuitBoard
+        name: PACMAN generator machine board
+        points: 8
+      - id: RMCPortableGeneratorSuperPacmanMachineCircuitboard
+        name: super PACMAN generator machine board
+        points: 12
+      - id: CMSheetPhoron30
+        name: phoron x30
+        points: 12
+    #- id: CMES11MobileFuelCanister
+    #  points: 4
+    - name: Explosives
+      entries:
+      - id: RMCGrenadeCustomMetalFoam
+        points: 10
+      - id: RMCExplosivePlastic
+        points: 5
+      - id: RMCExplosiveBreachingCharge
+        points: 8
+        recommended: true
+    - name: Utilities
+      entries:
+      - id: RMCSynthResetKey
+        points: 5
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14MilitaryPolicemanVendorUPP
+  name: UPP commissariat police equipment rack
+  description: An automated rack hooked up to a small storage of military police equipment.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+  - type: AccessReader
+    access: [["AU14AccessGovforSecurity" ], [ "AU14AccessOpforSecurity" ]]
+  - type: CMAutomatedVendor
+    sections:
+    - name: Standard Equipment
+      takeAll: CMStandard
+      entries:
+      - id: CMGlassesSecurity
+      - id: CMBeltSecurityMPFilled
+      - id: RMCBoxZiptie
+      - id: AU14GuidebookLawMarine
+      - id: AU14GuidebookSOP
+      - id: AU14Scissors
+    - name: Uniform
+      choices: { AU14Uniform: 1 }
+      entries:
+      - id: AU14JumpsuitMPUPP
+    - name: Footwear
+      choices: { AU14FootWear: 1 }
+      entries:
+      - id: RMCBootsSPPFilled
+    - name: Hat
+      choices: { CMHat: 1 }
+      entries:
+      - id: CMHeadCapSPPPeaked
+    - name: Helmet
+      choices: { AU14Helmet: 1 }
+      entries:
+      - id: AU14UPPNavalInfantryHelmet
+    - name: Outerwear
+      choices: { AU14vest: 1 }
+      entries:
+      - id: AU14CoatUPPMP
+    - name: Vest
+      choices: { AU14vest: 1 }
+      entries:
+      - id: AU14UPPArmorMinimalistic
+    - name: Backpack
+      choices: { CMBackpack: 1 }
+      entries:
+      - id: CMSatchelMarine
+      - id: CMSatchelSecurity
+    - name: Pouches
+      choices: { RMCPouch: 2 }
+      entries:
+      - id: RMCPouchGeneralMedium
+      - id: AU14PouchIFAKFill
+      - id: RMCPouchMagazinePistol
+      - id: RMCPouchPistol
+    - name: Record Keeping
+      takeAll: CMRecordKeeping
+      entries:
+      - id: RMCBoxRegulationTapesFull
+      - id: RMCUniversalRecorder
+      - id: CMHandLabeler
+      - id: RMCDigitalClock
+    - name: Inmate Restraining Gear
+      entries:
+      - id: AU14ClothingOuterStraitjacket
+        amount: 5 # TODO: bandaid - remove after mappers have placed this
+
+- type: entity
+  parent: ColMarTechCargo
+  id: AU14UPPRequisitionVendor
+  name: UPP automated requisitions vendor
+  description: An automated supply rack hooked up to a big storage of various firearms, ammunitions, explosives, load carrying equipment and other miscellaneous items.
+  components:
+  - type: AccessReader
+    access: [ ["AU14AccessGovforReq"] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+  - type: CMAutomatedVendor
+    baseSprite:
+      sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+      state: base
+    animationSprite:
+      sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+      state: vend
+    sections:
+    - name: Standard issue primaries
+      entries:
+      - id: AU14WeaponRifleAG80
+        amount: 30
+      - id: RMCWeaponSMGType64
+        amount: 20
+    - name: standard issue secondaries
+      entries:
+      - id: RMCWeaponPistolT73Empty
+        amount: 20
+      - id: RMCWeaponPistolT74
+        amount: 10
+    - name: special issue firearms
+      entries:
+      - id: RMCWeaponRifleType71
+        amount: 6
+      - id: RMCWeaponRifleType71C
+        amount: 3
+      - id: RMCWeaponRifleAK4047
+        amount: 2
+      - id: RMCWeaponPistolNP92Empty
+        amount: 15
+      - id: RMCWeaponPistolNPZ92
+        amount: 2
+      - id: RMCWeaponRevolverZHNK72Empty
+        amount: 3
+      - id: RMCWeaponSMGType19
+        amount: 3
+      - id: RMCWeaponShotgunType23
+        amount: 3
+    - name: primary ammunition
+      entries:
+      - id: AU14MagazineSmartGunUPP
+        amount: 40
+      - id: AU14MagazineRifleAG80
+        amount: 200
+      - id: AU14MagazineRifleAG80AP
+        amount: 15
+      - id: AU14MagazineRifleAG80Ext
+        amount: 10
+      - id: RMCMagazineRifleAK4047
+        amount: 60
+      - id: RMCMagazineRifleAK4047AP
+        amount: 15
+      - id: RMCMagazineRifleType71
+        amount: 150
+      - id: RMCMagazineRifleType71AP
+        amount: 15
+      - id: RMCBoxShotgunHeavyBuckshot
+        amount: 20
+      - id: RMCBoxShotgunHeavyFlechette
+        amount: 20
+      - id: RMCBoxShotgunHeavySlugs
+        amount: 20
+      - id: RMCMagazineLMGQYJ72
+        amount: 25
+      - id: RMCMagazineSMGType64
+        amount: 200
+    - name: secondary ammunition
+      entries:
+      - id: RMCMagazinePistolT73
+        amount: 200
+      - id: RMCMagazinePistolT74Impact
+        amount: 2
+      - id: RMCMagazinePistolNP92
+        amount: 100
+      - id: RMCSpeedLoaderZHNK72
+        amount: 40
+      - id: RMCMagazineSMGType19
+        amount: 100
+      - id: RMCMagazineSMGType19Drum
+        amount: 40
+    - name: Magazine Boxes
+      entries:
+      - id: CMUBoxMagazineRifleAG80
+        amount: 2
+      - id: RMCBoxMagazinePistolType73
+        amount: 2
+    - name: Ammo Boxes
+      entries:
+      - id: CMUBoxBulletsRifleAG80
+        amount: 5
+      - id: RMCBoxBulletsSMG
+        amount: 5
+      - id: CMUBoxBulletsPistolType73
+        amount: 5
+    - name: explosives
+      entries:
+      - id: AU14PacketGrenadeHighExplosiveUPPFilled
+        amount: 10
+      - id: AU14PacketGrenadeIncendiaryUPPFilled
+        amount: 4
+      - id: AU14PacketGrenadeSmokeUPPFilled
+        amount: 6
+      - id: RMCPacketGrenadeWhitePhosphorusFilled
+        amount: 3
+      - id: AU14PacketGrenadeTearGasFilled
+        amount: 3
+      - id: RMCBoxClaymoreMineFilled
+        amount: 3
+      - id: AU14BoxClaymoreMineIncendiaryFilled
+        amount: 1
+      - id: RMCExplosiveBreachingCharge
+        amount: 6
+      - id: RMCExplosivePlastic
+        amount: 8
+      - id: RMCWeaponLauncherDisposableFolded
+        amount: 2
+      - id: RMCRocketM5510Brute
+        amount: 12
+    - name: Barrel Attachments
+      entries:
+      - id: RMCAttachmentExtendedBarrel
+        amount: 5
+    - name: Rail Attachments
+      entries:
+      - id: RMCAttachmentTwoPointSling
+        amount: 50
+      - id: RMCAttachmentRailFlashlight
+        amount: 25
+      - id: RMCAttachmentS42xTelescopicMiniscope
+        amount: 2
+    - name: Underbarrel Attachments
+      entries:
+      - id: RMCAttachmentFlashlightGrip
+        amount: 15
+      - id: RMCAttachmentVerticalGrip
+        amount: 5
+      - id: RMCAttachmentBipod
+        amount: 5
+      - id: RMCAttachmentUnderbarrelExtinguisher
+        amount: 5
+    - name: Load Bearing Equipment
+      entries:
+      - id: RMCOuterClothingExternalWebbingBlack
+        amount: 4
+      - id: RMCOuterClothingExternalWebbing
+        amount: 4
+    - name: Pouches
+      entries:
+      - id: RMCPouchMagazineLarge
+        amount: 10
+      - id: RMCPouchMagazinePistolLarge
+        amount: 10
+    - name: Devices
+      entries:
+      - id: AU14PowerCellSmartgunUPP
+        amount: 20
+      - id: RMCIntelDetector
+        amount: 4
+      - id: RMCFulton20
+        amount: 4
+      - id: RMCSentryLaptop
+        amount: 4
+    - name: RTO Packs
+      entries:
+      - id: AU14BackpackRTOPackJungle
+        amount: 1
+      - id: AU14BackpackRTOPackDesert
+        amount: 1
+      - id: AU14BackpackRTOPackGray
+        amount: 1
+    - name: Tents
+      entries:
+      - id: RMCTentUNMCStandardFolded
+        amount: 2
+      - id: RMCTentUNMCExtendedFolded
+        amount: 1
+      - id: RMCTentUNMCBigFolded
+        amount: 1
+      - id: RMCTentUNMCStandardMedicalFolded
+        amount: 1
+      - id: AU14TentBigFoldedSurgical
+        amount: 1
+      - id: RMCTentUNMCExtendedMessFolded
+        amount: 1
+    - name: Flag
+      entries:
+      - id: AU14FlagCarriableUPP
+        amount: 1

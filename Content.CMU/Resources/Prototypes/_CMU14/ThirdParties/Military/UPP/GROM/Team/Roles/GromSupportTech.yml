@@ -1,0 +1,119 @@
+- type: job
+  parent: CMJobBase
+  id: AU14UPPGROMSupportTech
+  roundSide: ThirdParty
+  roundForce: GROM
+  roundRole: AU14UPPGROMSupportTech
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_med
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - AU14SquadGROM
+  - type: Skills
+    skills:
+      RMCSkillEngineer: 1
+      RMCSkillConstruction: 2
+      RMCSkillMeleeWeapons: 1
+      RMCSkillCqc: 1
+      RMCSkillFireman: 1
+      RMCSkillFirearms: 2
+      RMCSkillJtac: 1
+      RMCSkillMedical: 2
+      RMCSkillSurgery: 1
+      RMCSkillEndurance: 2
+      RMCSkillLeadership: 0
+      RMCSkillVehicles: 0
+  - type: JobPrefix
+    prefix: rmc-job-prefix-forecon-support-tech
+  - type: Language
+    spokenLanguages:
+    - Polish
+    - Russian
+    - Spanish
+    - Mandarin
+    - German
+    - TacticalSignLanguage
+    understoodLanguages:
+    - Polish
+    - Russian
+    - Spanish
+    - Mandarin
+    - German
+    - TacticalSignLanguage
+    currentLanguage: Polish
+    defaultLanguage: Polish
+
+  name: rmc-job-name-forecon-support-tech
+  description: au14-uppgrom-description
+  playTimeTracker: AU14JobUPPGROMSupportTech
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UPP_SeniorSergeant:
+      entity: AU14ChevronUPPNISeniorSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUPPGROMSupportTech
+        time: 36000 # 10 hours
+    UPP_Sergeant:
+      entity: AU14ChevronUPPNISergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUPPGROMSupportTech
+        time: 18000 # 5 hours
+    UPP_Plutonowy:
+      entity: AU14ChevronUPPNIPlutonowy
+      requirements: []
+  spawnMenuRoleName: UPP GROM Support Tech (Survivor)
+  startingGear: AU14GearUPPGROMSupportTech
+  greeting: au14-uppgrom-greeting
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: au-14-job-name-uppgrom-squadleader
+  accessGroups:
+  - AU14GovforCommand
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUPPGROM
+  id: AU14JobUPPGROMSupportTech
+  name: UPP GROM Support Tech
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadGROM
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rmc-job-name-forecon-support-tech
+    description: au14-uppgrom-description
+    reregister: false
+    job: AU14UPPGROMSupportTech
+    raffle:
+      settings: short
+    rules: au14-uppgrom-rules
+
+- type: startingGear
+  id: AU14GearUPPGROMSupportTech
+  equipment:
+    id: AU14IDCardUPPGROMSupportTech
+    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    jumpsuit: AU14FatiguesUPPGROM
+    hands: CMHandsBrown
+    shoes: RMCBootsSPPFilled
+    eyes: RMCWeldingGoggles
+    head: AU14UPPPatrolCap
+    belt: AU14BeltMedicalUPPFullSupportTech
+    pocket1: AU14PouchToolsFilledComtech
+    pocket2: RMCPouchMagazineUPPFull
+    back: AU14CMDefibrillator
+    ears: RMCHeadsetGROM
+    suitstorage: AU14WeaponRifleAG80Filled
+
+- type: playTimeTracker
+  id: AU14JobUPPGROMSupportTech

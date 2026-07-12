@@ -1,0 +1,41 @@
+- type: reaction
+  id: CMUCreateSludgeGC
+  quantized: true
+  reactants:
+    CMBicaridine:
+      amount: 16
+    CMMeralyne:
+      amount: 16
+    CMKelotane:
+      amount: 16
+    CMDermaline:
+      amount: 16
+  products:
+    CMUBlackSludge: 64
+
+- type: reaction
+  id: CMUXenoPlasmaRoyal
+  reactants:
+    CMUXenoRoyalBlood:
+      amount: 1
+    CMUXenoPlasmaEgg:
+      amount: 1
+  products:
+    CMUXenoPlasmaRoyal: 2
+
+- type: reaction
+  id: AU14SpaceCleaner
+  requiredMixerCategories:
+  - Stir
+  reactants:
+    Water:
+      amount: 2
+    Vodka:
+      amount: 1
+    LemonLime:
+      amount: 1
+    TableSalt:
+      amount: 1
+  products:
+    SpaceCleaner: 4
+

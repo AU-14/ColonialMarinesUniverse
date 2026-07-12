@@ -1,0 +1,168 @@
+{
+  "version": 1,
+  "license": "CC-BY-NC-4.0",
+  "copyright": "Taken from tgstation/TerraGov-Marine-Corps at https://github.com/tgstation/TerraGov-Marine-Corps/blob/3fc0dc2bf1dd46b3396c2dc3168b0098ff5a2d18/icons/Xeno/castes/warlock.dmi. License and authorship per TGMC README asset table.",
+  "size": {
+    "x": 64,
+    "y": 64
+  },
+  "states": [
+    {
+      "name": "alive",
+      "directions": 4,
+      "delays": [
+        [
+          0.7,
+          0.3,
+          0.7
+        ],
+        [
+          0.7,
+          0.3,
+          0.7
+        ],
+        [
+          0.7,
+          0.3,
+          0.7
+        ],
+        [
+          0.7,
+          0.3,
+          0.7
+        ]
+      ]
+    },
+    {
+      "name": "running",
+      "directions": 4,
+      "delays": [
+        [
+          0.7,
+          0.3,
+          0.7
+        ],
+        [
+          0.7,
+          0.3,
+          0.7
+        ],
+        [
+          0.7,
+          0.3,
+          0.7
+        ],
+        [
+          0.7,
+          0.3,
+          0.7
+        ]
+      ]
+    },
+    {
+      "name": "sleeping"
+    },
+    {
+      "name": "crit"
+    },
+    {
+      "name": "dead"
+    },
+    {
+      "name": "warlock_walk_3",
+      "directions": 4,
+      "delays": [
+        [
+          0.7,
+          0.3,
+          0.7
+        ],
+        [
+          0.7,
+          0.3,
+          0.7
+        ],
+        [
+          0.7,
+          0.3,
+          0.7
+        ],
+        [
+          0.7,
+          0.3,
+          0.7
+        ]
+      ]
+    },
+    {
+      "name": "warlock_rest_3"
+    },
+    {
+      "name": "warlock_downed_3"
+    },
+    {
+      "name": "warlock_walk_2",
+      "directions": 4,
+      "delays": [
+        [
+          0.7,
+          0.3,
+          0.7
+        ],
+        [
+          0.7,
+          0.3,
+          0.7
+        ],
+        [
+          0.7,
+          0.3,
+          0.7
+        ],
+        [
+          0.7,
+          0.3,
+          0.7
+        ]
+      ]
+    },
+    {
+      "name": "warlock_rest_2"
+    },
+    {
+      "name": "warlock_downed_2"
+    },
+    {
+      "name": "warlock_walk_1",
+      "directions": 4,
+      "delays": [
+        [
+          0.7,
+          0.3,
+          0.7
+        ],
+        [
+          0.7,
+          0.3,
+          0.7
+        ],
+        [
+          0.7,
+          0.3,
+          0.7
+        ],
+        [
+          0.7,
+          0.3,
+          0.7
+        ]
+      ]
+    },
+    {
+      "name": "warlock_rest_1"
+    },
+    {
+      "name": "warlock_downed_1"
+    }
+  ]
+}

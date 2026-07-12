@@ -1,0 +1,41 @@
+- type: entity
+  parent: RehydratableAnimalCube
+  id: CMUMonkeyCube
+  name: monkey cube
+  components:
+  - type: Rehydratable
+    possibleSpawns:
+    - CMMobMonkey
+  - type: Tag
+    tags:
+    - Meat
+    - MonkeyCube
+
+- type: entity
+  parent: BaseWrappedCube
+  name: monkey cube
+  id: CMUMonkeyCubeWrapped
+  description: Unwrap this to get a monkey cube.
+  components:
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMonkeyCube
+  - type: Sprite
+    state: wrapper
+  - type: Tag
+    tags:
+    - MonkeyCube
+
+- type: entity
+  parent: BoxCardboard
+  name: monkey cube box
+  id: CMUMonkeyCubeBox
+  description: Drymate brand monkey cubes. Just add water!
+  components:
+  - type: StorageFill
+    contents:
+      - id: MonkeyCubeWrapped
+        amount: 8
+  - type: Sprite
+    sprite: Objects/Misc/monkeycube.rsi
+    state: box

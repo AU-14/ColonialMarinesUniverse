@@ -25,7 +25,9 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private YautjaPowerSystem _power = default!;
 
     public override void Initialize()
@@ -40,6 +42,13 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         SubscribeLocalEvent<YautjaGearContainerComponent, YautjaToggleShieldActionEvent>(OnToggleShield);
         SubscribeLocalEvent<YautjaGearContainerComponent, YautjaToggleChainGauntletActionEvent>(OnToggleChainGauntlet);
 
+        SubscribeLocalEvent<YautjaBadBloodGearChoiceComponent, GotEquippedEvent>(OnBadBloodBracerEquipped);
+
+        Subs.BuiEvents<YautjaBadBloodGearChoiceComponent>(YautjaBadBloodWeaponChoiceUI.Key, subs =>
+        {
+            subs.Event<YautjaBadBloodWeaponChoiceMsg>(OnBadBloodWeaponChoice);
+        });
+
         SubscribeLocalEvent<YautjaStoredGearComponent, RMCItemDropAttemptEvent>(OnStoredGearDropAttempt);
         SubscribeLocalEvent<YautjaStoredGearComponent, ThrowItemAttemptEvent>(OnStoredGearThrowAttempt);
         SubscribeLocalEvent<YautjaStoredGearComponent, FellDownThrowAttemptEvent>(OnStoredGearFellDownThrowAttempt);
@@ -52,8 +61,15 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
     {
         EnsureContainer(ent);
 
+        HashSet<YautjaGearKind>? deferred = null;
+        if (TryComp(ent.Owner, out YautjaBadBloodGearChoiceComponent? choice) && !choice.Chosen)
+            deferred = new HashSet<YautjaGearKind>(choice.Choices);
+
         foreach (var kind in ent.Comp.GearPrototypes.Keys)
         {
+            if (deferred != null && deferred.Contains(kind))
+                continue;
+
             EnsureGear(ent, kind);
         }
     }
@@ -74,11 +90,20 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         if (args.InHands || args.SlotFlags == null || (args.SlotFlags.Value & ent.Comp.Slots) == 0)
             return;
 
-        args.AddAction(ref ent.Comp.ToggleCasterAction, ent.Comp.ToggleCasterActionId);
-        args.AddAction(ref ent.Comp.ToggleWristBladesAction, ent.Comp.ToggleWristBladesActionId);
-        args.AddAction(ref ent.Comp.ToggleScimitarAction, ent.Comp.ToggleScimitarActionId);
-        args.AddAction(ref ent.Comp.ToggleShieldAction, ent.Comp.ToggleShieldActionId);
-        args.AddAction(ref ent.Comp.ToggleChainGauntletAction, ent.Comp.ToggleChainGauntletActionId);
+        if (ent.Comp.Gear.ContainsKey(YautjaGearKind.Caster))
+            args.AddAction(ref ent.Comp.ToggleCasterAction, ent.Comp.ToggleCasterActionId);
+
+        if (ent.Comp.Gear.ContainsKey(YautjaGearKind.WristBlades))
+            args.AddAction(ref ent.Comp.ToggleWristBladesAction, ent.Comp.ToggleWristBladesActionId);
+
+        if (ent.Comp.Gear.ContainsKey(YautjaGearKind.Scimitar))
+            args.AddAction(ref ent.Comp.ToggleScimitarAction, ent.Comp.ToggleScimitarActionId);
+
+        if (ent.Comp.Gear.ContainsKey(YautjaGearKind.Shield))
+            args.AddAction(ref ent.Comp.ToggleShieldAction, ent.Comp.ToggleShieldActionId);
+
+        if (ent.Comp.Gear.ContainsKey(YautjaGearKind.ChainGauntlet))
+            args.AddAction(ref ent.Comp.ToggleChainGauntletAction, ent.Comp.ToggleChainGauntletActionId);
     }
 
     private void OnBracerUnequipped(Entity<YautjaGearContainerComponent> ent, ref YautjaBracerUnequippedEvent args)
@@ -377,6 +402,76 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
             YautjaGearKind.WristBlades => bracer.WristBladesRetractSound,
             _ => bracer.RetractSound,
         };
+    }
+
+    private void OnBadBloodBracerEquipped(Entity<YautjaBadBloodGearChoiceComponent> ent, ref GotEquippedEvent args)
+    {
+        if (ent.Comp.Chosen)
+            return;
+
+        if (!TryComp(ent.Owner, out YautjaBracerComponent? bracer))
+            return;
+
+        if ((args.SlotFlags & bracer.Slots) == 0)
+            return;
+
+        _ui.TryOpenUi(ent.Owner, YautjaBadBloodWeaponChoiceUI.Key, args.Equipee);
+        UpdateBadBloodChoiceUi(ent);
+    }
+
+    private void OnBadBloodWeaponChoice(Entity<YautjaBadBloodGearChoiceComponent> ent, ref YautjaBadBloodWeaponChoiceMsg args)
+    {
+        if (ent.Comp.Chosen)
+            return;
+
+        if (!ent.Comp.Choices.Contains(args.Choice))
+            return;
+
+        if (ent.Comp.PendingChoice == args.Choice)
+        {
+            ent.Comp.Chosen = true;
+            ent.Comp.PendingChoice = null;
+            Dirty(ent);
+
+            if (TryComp(ent.Owner, out YautjaGearContainerComponent? gear))
+            {
+                EnsureGear((ent.Owner, gear), args.Choice);
+                GrantChosenGearAction((ent.Owner, gear), args.Choice);
+            }
+
+            _ui.CloseUi(ent.Owner, YautjaBadBloodWeaponChoiceUI.Key);
+
+            return;
+        }
+
+        ent.Comp.PendingChoice = args.Choice;
+        Dirty(ent);
+        UpdateBadBloodChoiceUi(ent);
+    }
+
+    private void GrantChosenGearAction(Entity<YautjaGearContainerComponent> gear, YautjaGearKind kind)
+    {
+        if (!TryComp(gear.Owner, out YautjaBracerComponent? bracer) || bracer.User is not { } user)
+            return;
+
+        switch (kind)
+        {
+            case YautjaGearKind.WristBlades:
+                _actions.AddAction(user, ref gear.Comp.ToggleWristBladesAction, gear.Comp.ToggleWristBladesActionId, gear.Owner);
+                break;
+            case YautjaGearKind.Scimitar:
+                _actions.AddAction(user, ref gear.Comp.ToggleScimitarAction, gear.Comp.ToggleScimitarActionId, gear.Owner);
+                break;
+            case YautjaGearKind.ChainGauntlet:
+                _actions.AddAction(user, ref gear.Comp.ToggleChainGauntletAction, gear.Comp.ToggleChainGauntletActionId, gear.Owner);
+                break;
+        }
+    }
+
+    private void UpdateBadBloodChoiceUi(Entity<YautjaBadBloodGearChoiceComponent> ent)
+    {
+        var state = new YautjaBadBloodWeaponChoiceBuiState(ent.Comp.Choices, ent.Comp.PendingChoice);
+        _ui.SetUiState(ent.Owner, YautjaBadBloodWeaponChoiceUI.Key, state);
     }
 
     private bool CanUseYautjaGear(EntityUid user)

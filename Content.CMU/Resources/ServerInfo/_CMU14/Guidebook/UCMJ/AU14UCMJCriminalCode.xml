@@ -1,12 +1,12 @@
 ﻿<Document>
   # Criminal Code
 
-The Criminal Code outlines offenses and punishments under the Uniform Code of Military Justice. Below you will find a list of crimes divided by severity.
+    The Criminal Code outlines offenses and punishments under the Uniform Code of Military Justice. Below you will find a list of crimes divided by severity.
 
- ## Categories
-  - [textlink="Optional Crimes" link="AU14UCMJOptionalCrimes"]
-  - [textlink="Minor Crimes" link="AU14UCMJMinorCrimes"]
-  - [textlink="Major Crimes" link="AU14UCMJMajorCrimes"]
-  - [textlink="Capital Crimes" link="AU14UCMJCapitalCrimes"]
-  - [textlink="Precautionary Charges" link="AU14UCMJPrecautionaryCharges"]
+  ## Categories
+    - [textlink="Optional Crimes" link="AU14UCMJOptionalCrimes"]
+    - [textlink="Minor Crimes" link="AU14UCMJMinorCrimes"]
+    - [textlink="Major Crimes" link="AU14UCMJMajorCrimes"]
+    - [textlink="Capital Crimes" link="AU14UCMJCapitalCrimes"]
+    - [textlink="Precautionary Charges" link="AU14UCMJPrecautionaryCharges"]
 </Document>

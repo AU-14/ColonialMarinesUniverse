@@ -1,0 +1,19 @@
+- files: ["f_grass.png"]
+  license: "CC-BY-SA-3.0"
+  copyright: "made by Nzzy for CMU-14"
+  source: "https://discord.com/users/404564366122287105"
+
+- files: ["single_edge.png"]
+  license: "CC-BY-SA-3.0"
+  copyright: "made by Nzzy for CMU-14"
+  source: "https://discord.com/users/404564366122287105"
+
+- files: ["double_edge.png"]
+  license: "CC-BY-SA-3.0"
+  copyright: "made by Nzzy for CMU-14"
+  source: "https://discord.com/users/404564366122287105"
+
+- files: ["triple_edge.png"]
+  license: "CC-BY-SA-3.0"
+  copyright: "made by Nzzy for CMU-14"
+  source: "https://discord.com/users/404564366122287105"

@@ -1,0 +1,14 @@
+<cc:YautjaBadBloodWeaponChoiceWindow
+    xmlns="https://spacestation14.io"
+    xmlns:cc="clr-namespace:Content.Client._CMU14.Yautja"
+    Title="Choose Your Weapon"
+    MinSize="300 200">
+    <BoxContainer Orientation="Vertical" SeparationOverride="8" Margin="8 8 8 8">
+        <Label Name="WarningLabel" Access="Public"
+               Text="This action is irreversible, are you sure?"
+               Visible="False"
+               StyleClasses="LabelSubText"
+               HorizontalAlignment="Center" />
+        <BoxContainer Orientation="Vertical" Name="WeaponContainer" Access="Public" />
+    </BoxContainer>
+</cc:YautjaBadBloodWeaponChoiceWindow>

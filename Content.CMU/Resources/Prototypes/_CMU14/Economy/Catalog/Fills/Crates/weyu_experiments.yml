@@ -1,0 +1,143 @@
+- type: entity
+  id: AU14CrateSecureWeYuXenoEggs
+  parent: RMCCrateSecureWeYa
+  name: secure We-Yu crate
+  description: A secure crate with We-Yu insignia on it.
+  suffix: AU14, Xeno Eggs
+  components:
+  - type: StorageFill
+    contents:
+      - id: XenoEgg
+        amount: 2
+      - id: RMCTentUNMCStandardMedicalFolded
+      - id: AU14TentBigFoldedSurgical
+      - id: CMUYautjaHivebreaker
+        prob: 0.1
+
+- type: entity
+  id: AU14CrateSecureWeYuMindBreaker
+  parent: AU14CrateSecureWeYuXenoEggs
+  name: secure We-Yu crate
+  suffix: AU14, MindBreaker
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCBottleMindbreaker
+        amount: 7
+      - id: CMUYautjaHivebreaker
+      - id: RMCTentUNMCStandardMedicalFolded
+      - id: AU14TentBigFoldedSurgical
+
+- type: entity
+  id: AU14CrateSecureWeYuDrug
+  parent: AU14CrateSecureWeYuXenoEggs
+  name: secure We-Yu crate
+  suffix: AU14, Speed Demon
+  components:
+  - type: StorageFill
+    contents:
+      - id: AU14DrugDealerDrugBottle
+        amount: 7
+      - id: RMCTentUNMCStandardMedicalFolded
+      - id: AU14TentBigFoldedSurgical
+
+- type: entity
+  id: AU14CrateSecureWeYuMMI
+  parent: AU14CrateSecureWeYuXenoEggs
+  name: secure We-Yu crate
+  suffix: AU14, MMI
+  components:
+  - type: StorageFill
+    contents:
+      - id: MMI
+        amount: 1
+      - id: DeathAcidifierImplanter
+        amount: 1
+      - id: RMCTentUNMCStandardMedicalFolded
+      - id: AU14TentBigFoldedSurgical
+
+# Dedicated clotted-syringe crate — six pre-filled syringes for a WYHT
+# squad to use on captured colonists. Folded medical tents come along
+# for set dressing like the other WY secure crates.
+- type: entity
+  id: AU14CrateSecureWeYuClottedSyringes
+  parent: AU14CrateSecureWeYuXenoEggs
+  name: secure We-Yu crate
+  suffix: AU14, Clotted Syringes
+  components:
+  - type: StorageFill
+    contents:
+      - id: AU14AbominationVenomSyringe
+        amount: 6
+      - id: RMCTentUNMCStandardMedicalFolded
+      - id: AU14TentBigFoldedSurgical
+
+- type: entity
+  id: CMUCrateSecureWYRandomExp
+  parent: RMCCrateSecureWeYa
+  name: secure Wey-Yu crate
+  suffix: CMU, Random
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: CMUCrateSecureWYRandomExp
+        rolls: 1
+
+- type: entityTable
+  id: CMUCrateSecureWYRandomExp
+  table: !type:GroupSelector
+    children:
+    - CMUCrateSecureWYEggs
+    - CMUCrateSecureMMI
+    - CMUCrateSecureAbom
+    - CMUCrateSecureMindbreaker
+    - CMUCrateSecureSpeed
+
+- type: entityTable
+  id: CMUCrateSecureWYEggs
+  table: !type:AllSelector
+    children:
+    - id: XenoEgg
+
+- type: entityTable
+  id: CMUcrateSecureMMI
+  table: !type:AllSelector
+    children:
+    - id: MMI
+    - id: DeathAcidifierImplanter
+
+- type: entityTable
+  id: CMUCrateSecureAbom
+  table: !type:AllSelector
+    children:
+    - id: AU14AbominationVenomSyringe
+
+- type: entityTable
+  id: CMUcrateSecureMindbreaker
+  table: !type:AllSelector
+    children:
+    - id: RMCBottleMindbreaker
+    - id: RMCBottleMindbreaker
+    - id: RMCBottleMindbreaker
+    - id: RMCBottleMindbreaker
+    - id: RMCBottleMindbreaker
+  
+- type: entityTable
+  id: CMUcrateSecureSpeed
+  table: !type:AllSelector
+    children:
+    - id: AU14DrugDealerDrugBottle
+    - id: AU14DrugDealerDrugBottle
+    - id: AU14DrugDealerDrugBottle
+    - id: AU14DrugDealerDrugBottle
+    - id: AU14DrugDealerDrugBottle
+
+
+
+
+
+
+
+
+

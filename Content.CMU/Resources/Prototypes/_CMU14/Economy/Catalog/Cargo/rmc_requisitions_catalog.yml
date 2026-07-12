@@ -1,0 +1,373 @@
+- type: entity
+  abstract: false
+  id: RMCCargoCatalog
+  components:
+  - type: RequisitionsComputer
+    categories:
+    - name: Materials
+      entries:
+      - cost: 250
+        crate: RMCCrateEmptySandbags
+      - cost: 500
+        crate: RMCCrateSandbagsConstructionKit
+      - cost: 700
+        crate: RMCCrateMetalSheets
+      - cost: 800
+        crate: RMCCratePlasteelSheets
+      - cost: 650
+        crate: RMCCrateGlassSheets
+      - cost: 100
+        crate: RMCCrateWoodenPlanks
+    - name: Engineering
+      entries:
+      - cost: 1000
+        crate: AU14CrateFOBTentCrate
+#      - cost: 2000
+#        crate: RMCCrateFoldingBarricades
+#      - cost: 3000
+#        crate: RMCCrateSuperconductingMagneticCoil
+      - cost: 700
+        crate: RMCCrateElectricalMaintenance
+      - cost: 700
+        crate: RMCCrateMechanicalMaintenance
+      - cost: 150
+        crate: RMCCrateInflatableBarriers
+      - cost: 250
+        crate: RMCCrateReplacementLights
+      - cost: 1500
+        crate: RMCCratePacmanParts
+      - cost: 3000
+        crate: RMCCrateSuperPacmanParts
+      - cost: 500
+        crate: RMCCrateFlashlights
+      - cost: 750
+        crate: RMCCrateHighCapacityPowerCell
+      - cost: 1000
+        crate: AU14CrateBoxFirefighting
+    - name: Explosives
+      entries:
+      - cost: 3000
+        crate: AU14CrateGrenadesHighExplosiveRMC
+      - cost: 4000
+        crate: AU14CrateGrenadesIncendiaryRMC
+      - cost: 3000
+        crate: RMCCrateGrenadesFrag # TODO proper RMC HEFA
+      - cost: 1000
+        crate: AU14CrateGrenadesSmokeRMC
+      - cost: 4000
+        crate: RMCCrateGrenadesFragOld
+      - cost: 3000
+        crate: RMCCratePlasticExplosives
+      - cost: 4000
+        crate: RMCCrateBreachingCharges
+      - cost: 10000
+        crate: AU14CrateGrenadesHighExplosiveBoxRMC
+      - cost: 10000
+        crate: AU14CrateGrenadesIncendiaryBoxRMC
+      - cost: 10000
+        crate: AU14Crate20MMGrenadesHESHDoubleRMC
+      - cost: 10000
+        crate: AU14Crate20MMGrenadesFragDoubleRMC
+      - cost: 10000
+        crate: RMCCrateBoxAGMI
+      - cost: 4000
+        crate: AU14Crate20MMGrenadesFragRMC
+      - cost: 4000
+        crate: AU14Crate20MMGrenadesIncendiaryRMC
+      - cost: 6000
+        crate: AU14Crate20MMGrenadesHERMC
+      - cost: 4000
+        crate: AU14Crate20MMGrenadesHoloRMC
+      - cost: 4000
+        crate: RMCCrateGrenadesAirburstStarShell
+      - cost: 6000
+        crate: RMCCrateExplosiveClaymoreMine
+      - cost: 3000
+        crate: RMCCrateM6HBruteRockets
+    - name: Food
+      entries:
+      - cost: 100
+        crate: RMCCrateFoodMRE
+      - cost: 100
+        crate: RMCCrateFoodIngredients
+    - name: Gear
+      entries:
+      - cost: 1200
+        crate: AU14CrateTacticalMonocular
+      - cost: 1700
+        crate: AU14CrateTacticalMonocularDesignator
+      - cost: 400
+        crate: RMCCrateGearPackFlare
+      - cost: 1000
+        crate: AU14CrateMotionDetectors
+      - cost: 800
+        crate: RMCCrateGearPackFlareCAS
+      - cost: 1000
+        crate: RMCCrateGearFulton
+      - cost: 400
+        crate: RMCCrateGearParachute
+      - cost: 800
+        crate: RMCCrateAttachmentSmartScope
+    - name: Pouches
+      entries:
+      - cost: 150
+        crate: RMCCrateClothingMagazinePouchesLarge
+    - name: Medical
+      entries:
+      - cost: 3000
+        crate: AU14CrateMedicalVendor
+      - cost: 1500
+        crate: AU14CrateMedicalBloodVendor
+      - cost: 850
+        crate: CMUCrateMedicalFieldTreatments
+        maxStock: 2
+        stockReplenishDelay: 480
+      - cost: 350
+        crate: RMCCrateMedicalSurgery
+      - cost: 600
+        crate: AU14CrateBoxDefibrillator
+        maxStock: 4
+        stockReplenishDelay: 600
+      - cost: 500
+        crate: RMCCrateMedicalBodyBag
+      - cost: 1000
+        crate: RMCCrateMedicalStasisBag
+      - cost: 400
+        crate: AU14CrateBoxHospitalBeds
+      - cost: 650
+        crate: RMCCrateMedicalPill
+    - name: Mortar
+      entries:
+      - cost: 3000
+        crate: AU14CrateMortarKitRMC
+      - cost: 500
+        crate: AU14CrateMortarShellFlareRMC # 12 shells
+      - cost: 650
+        crate: AU14CrateMortarShellHERMC # 12 shells
+      - cost: 750
+        crate: AU14CrateMortarShellIncendiaryRMC # 12 shells
+      - cost: 800
+        crate: AU14CrateMortarShellHEATRMC # 12 shells
+      - cost: 950
+        crate: AU14CrateMortarMixed # 12 shells
+#    - name: Operations
+#      entries: []
+    - name: Supplies
+      entries:
+      - cost: 200
+        crate: RMCCrateSupplyInternals
+      - cost: 250
+        crate: RMCCrateSupplyEvacuation
+      - cost: 75
+        crate: RMCCrateSuppliesBoxes
+      - cost: 150
+        crate: RMCCrateSupplyJanitor
+    - name: Vehicle Ammo
+      entries:
+      - cost: 2000
+        crate: RMCCrateVehicleAmmoLTBCannon
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1800
+        crate: RMCCrateVehicleAmmoLTAAAP
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1800
+        crate: RMCCrateVehicleAmmoAceAutocannon
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1700
+        crate: RMCCrateVehicleAmmoDragonFlamer
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1800
+        crate: RMCCrateVehicleAmmoBoyarsDualCannon
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 900
+        crate: RMCCrateVehicleAmmoGrenadeLauncher
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 700
+        crate: RMCCrateVehicleAmmoSmokeLauncher
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 2200
+        crate: RMCCrateVehicleAmmoTowLauncher
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1000
+        crate: RMCCrateVehicleAmmoCupola
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1200
+        crate: RMCCrateVehicleAmmoLZRNFlamer
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1000
+        crate: RMCCrateVehicleAmmoFrontalCannon
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 700
+        crate: RMCCrateVehicleAmmoFlareLauncher
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1800
+        crate: RMCCrateVehicleAmmoRotaryCannon
+        maxStock: 2
+        stockReplenishDelay: 300
+    - name: Weapons
+      entries:
+      - cost: 850
+        crate: RMCCrateXM51
+      - cost: 250
+        crate: AU14CrateL165A1
+      - cost: 600
+        crate: RMCCrateXM88
+      - cost: 800
+        crate: RMCCrateMOU53
+      - cost: 400
+        crate: RMCCrateM85A1
+      - cost: 100
+        crate: AU14CrateAssortedKnives
+      - cost: 1500
+        crate: AU14CrateM5A1SLAW
+      - cost: 800
+        crate: RMCCrateM34
+      - cost: 2200
+        crate: AU14CrateM7SLAW
+      - cost: 1500
+        crate: RMCCrateML66D
+      - cost: 1000
+        crate: RMCCrateM2C
+    - name: Ammo
+      entries:
+      - cost: 400
+        crate: RMCCrateBoxShellsShotgunBreaching
+      - cost: 250
+        crate: AU14CrateBoxMagazinePistolL165A1
+      - cost: 4000
+        crate: RMCCrateBoxAmmo458
+      - cost: 600
+        crate: RMCCrateBoxMagazineSentry
+      - cost: 600
+        crate: RMCCrateBoxMagazineSentryShotgun
+      - cost: 600
+        crate: RMCCrateBoxMagazineSentryFire
+      - cost: 300
+        crate: RMCCrateBoxShellsShotgunSlugs
+      - cost: 300
+        crate: RMCCrateBoxShellsShotgunFlechette
+      - cost: 300
+        crate: RMCCrateBoxShellsShotgunBuckshot
+      - cost: 1000
+        crate: AU14CrateM7SLAWAPRocket
+      - cost: 1250
+        crate: AU14CrateM7SLAWMixedRocket
+      - cost: 2000
+        crate: AU14CrateM7SLAWHERocket
+      - cost: 250
+        crate: RMCCrateMagazineML66DDrum
+      - cost: 500
+        crate: RMCCrateMagazineM2C
+      - cost: 200
+        crate: RMCCrateMagazineNapthalUT
+      - cost: 350
+        crate: RMCCrateMagazineFlamerMixed
+      - cost: 500
+        crate: RMCCrateMagazineBGel
+    - name: Specialist Ammo
+      entries:
+      - cost: 2000
+        crate: RMCCratePyroTankMixed
+      # Sniper
+      - cost: 2000
+        crate: AU14CrateMagazineSpecSniperM96S
+      - cost: 2000
+        crate: AU14CrateMagazineSpecSniperM96SIncendiary
+      - cost: 2000
+        crate: AU14CrateMagazineSpecSniperM96SFlak
+      - cost: 1500
+        crate: AU14CrateMagazineSpecSniperM96SMixed
+      # AMR
+      - cost: 2000
+        crate: AU14CrateMagazineSpecAMRXM43E1
+      # SHARP (worst spec ever btw - kenyap)
+      - cost: 2000
+        crate: AU14CrateMagazineSpecSharpHE
+      - cost: 2000
+        crate: AU14CrateMagazineSpecSharpFLC
+      - cost: 2000
+        crate: AU14CrateMagazineSpecSharpINCEN
+      - cost: 1500
+        crate: AU14CrateMagazineSpecSharpMixed
+      # Scout
+      - cost: 2000
+        crate: AU14CrateMagazineSpecScoutStandard
+      - cost: 2000
+        crate: AU14CrateMagazineSpecScoutINCEN
+      - cost: 2000
+        crate: AU14CrateMagazineSpecScoutFLAK
+      - cost: 1500
+        crate: AU14CrateMagazineSpecScoutMixed
+      # CMP
+      - cost: 450
+        crate: AU14CrateBoxRSH9SL
+    - name: AP Ammo
+      entries:
+      - cost: 1000
+        crate: AU14CrateBoxMagazineRifleL24AP
+      - cost: 950
+        crate: AU14CrateBoxMagazineSMGL90A2AP
+    - name: Dropship Parts
+      entries:
+      - cost: 100
+        crate: RMCDropShipSpotlight
+      - cost: 200
+        crate: RMCDropShipLZDetector
+      - cost: 500
+        crate: RMCDropshipAttachmentCoolingSystem
+      - cost: 500
+        crate: RMCDropshipAttachmentFuelEnhancer
+      - cost: 850
+        crate: RMCDropshipTargetingSystem
+    - name: Dropship Munitions
+      entries:
+      - cost: 400
+        crate: RMCDropshipAttachmentAmmoRocketHarpoon
+      - cost: 800
+        crate: RMCDropshipAttachmentAmmoRocketBanshee
+      - cost: 1600
+        crate: AU14DropshipAttachmentAmmoRocketBansheeHorde
+      - cost: 3000
+        crate: RMCDropshipAttachmentAmmoRocketKeeper
+      - cost: 4000
+        crate: RMCDropshipAttachmentAmmoRocketWidowmaker
+      - cost: 1300
+        crate: AU14DropshipAttachmentAmmoRocketThermobaricTwo
+      - cost: 6500
+        crate: AU14DropshipAttachmentAmmoRocketWidowmakerDouble
+      - cost: 4900
+        crate: RMCDropshipAttachmentAmmoRocketThermobaric
+      - cost: 4500
+        crate: RMCDropshipAttachmentAmmoRocketNapalm
+      - cost: 3000
+        crate: RMCDropshipAttachmentAmmoRocketMiniMike
+      - cost: 3500
+        crate: RMCDropshipAttachmentAmmoRocketMiniMikeIncendiary
+      - cost: 3500
+        crate: AU14DropshipAttachmentAmmoCBU607
+      - cost: 3000
+        crate: AU14DropshipAttachmentAmmoCBU250
+      - cost: 9000
+        crate: AU14DropshipAttachmentAmmoMk102JDAM
+      - cost: 11000
+        crate: AU14DropshipAttachmentAmmoGBU89I
+      - cost: 2000
+        crate: RMCDropshipAttachmentAmmoGAU
+      - cost: 2500
+        crate: RMCDropshipAttachmentAmmoGAUAP
+      - cost: 2000
+        crate: RMCDropshipAttachmentAmmoLaserCannon
+      - cost: 600
+        crate: RMCDropshipAttachmentAmmoLaunchableSentry

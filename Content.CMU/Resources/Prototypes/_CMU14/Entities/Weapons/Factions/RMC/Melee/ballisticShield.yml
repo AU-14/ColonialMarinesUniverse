@@ -1,0 +1,81 @@
+- type: entity
+  name: FBS-B ballistic shield
+  parent: [ BaseShield, BaseSecurityContraband ]
+  id: AU14BallisticShieldRMC
+  suffix: RM
+  description: Ballistic shield used by the royal marines commando. This shield is commonly used during boarding actions due to its lightweight but durable design. Does not help against explosives.
+  components:
+    - type: ItemToggle
+    - type: ComponentToggler
+      components:
+      - type: DisarmMalus
+        malus: 0.6
+    - type: Sprite
+      sprite: _AU14/Weapons/Melee/RMC/ballistic_shield.rsi
+      state: rmc-ballistic-icon
+    - type: Item
+      sprite: _AU14/Weapons/Melee/RMC/ballistic_shield.rsi
+      size: Ginormous
+      heldPrefix: rmc-ballistic
+    - type: Tag
+      tags:
+      - AU14BallisticShield
+    - type: Clothing
+      slots:
+      - suitStorage
+      - Back
+      flipDirOffset: true
+      clothingVisuals:
+        back:
+        - sprite: _AU14/Weapons/Melee/RMC/ballistic_shield.rsi
+          state: rmc-ballistic-inhand-right
+          scale: "1.1, 1.1"
+        suitstorage:
+        - sprite: _AU14/Weapons/Melee/RMC/ballistic_shield.rsi
+          state: rmc-ballistic-inhand-right
+          scale: "1.1, 1.1"
+    - type: StaticPrice
+      price: 90
+    - type: Blocking
+      passiveBlockModifier:
+        coefficients:
+          Blunt: 0.7
+          Slash: 0.7
+          Piercing: 0.7
+      activeBlockModifier:
+        coefficients:
+          Blunt: 0.6
+          Slash: 0.6
+          Piercing: 0.6
+        flatReductions:
+          Blunt: 1
+          Slash: 1
+          Piercing: 1
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 1000
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+        - trigger:
+            !type:DamageTrigger
+            damage: 950
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+            - !type:PlaySoundBehavior
+              sound:
+                collection: MetalBreak
+            - !type:SpawnEntitiesBehavior
+              spawn:
+                CMSheetMetal:
+                  min: 2
+                  max: 2
+                CMSheetGlass:
+                  min: 2
+                  max: 2
+
+- type: Tag
+  id: AU14BallisticShield

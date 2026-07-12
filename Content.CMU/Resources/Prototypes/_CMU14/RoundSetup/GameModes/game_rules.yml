@@ -1,0 +1,110 @@
+- type: entity
+  id: PlatoonSpawn
+  parent: BaseGameRule
+  components:
+  - type: PlatoonSpawnRule
+
+- type: entity
+  id: AddGovfor
+  parent: BaseGameRule
+  components:
+  - type: AddJobsRule
+    addToShip: true
+    shipFaction: govfor
+    jobs:
+      AU14JobGOVFORPlatCo: 1
+      AU14JobGOVFORAdjutant: 1
+      AU14JobGOVFORadvisor: 1
+      AU14JobGOVFORPlatOp: 3
+      AU14JobGOVFOROfficerIntel: 1
+      AU14JobGOVFORSquadSergeant: 3
+      AU14JobGOVFORRadioTelephoneOperator: 6
+      AU14JobGOVFORSquadRifleman: 75
+      CMUJobGOVFORDroneOperator: 1
+      AU14JobGOVFORWeaponsSpecialist: 3
+      AU14JobGOVFORSquadAutomaticRifleman: 3
+      AU14JobGOVFORSquadCombatTech: 6
+      AU14JobGOVFOROfficerLogistics: 1
+      AU14JobGOVFORAuxTech: 1
+      AU14JobGOVFOROfficerMedical: 1
+      AU14JobGOVFORMilitaryDoctor: 3
+      AU14JobGOVFORPlatoonCorpsman: 9
+      AU14JobGOVFOROfficerMP: 1
+      AU14JobGOVFORMilitaryPoliceMan: 2
+      AU14JobGOVFOROfficerEngi: 1
+      AU14JobGOVFORVehicleCrewman: 3
+      AU14JobGOVFORDSPilot: 2
+      AU14JobGOVFORDCC: 2
+      AU14JobGOVFORAuxSupportSynth: 2
+      AU14JobGOVFORWorkingJoe: 1
+
+- type: entity
+  id: AddOpfor
+  parent: BaseGameRule
+  components:
+  - type: AddJobsRule
+    shipFaction: opfor
+    addToShip: true
+    jobs:
+      AU14JobOPFORPlatCo: 1
+      AU14JobOPFORAdjutant: 1
+      AU14JobOPFORadvisor: 1
+      AU14JobOPFORPlatOp: 4
+      AU14JobOPFOROfficerIntel: 1
+      AU14JobOPFORSquadSergeant: 3
+      AU14JobOPFORRadioTelephoneOperator: 4
+      AU14JobOPFORSquadRifleman: 75
+#     CMUJobOPFORDroneOperator: 1
+#     AU14JobOPFORWeaponsSpecialist: 3 # TODO
+      AU14JobOPFORSquadAutomaticRifleman: 3
+      AU14JobOPFORSquadCombatTech: 6
+      AU14JobOPFOROfficerLogistics: 1
+      AU14JobOPFORAuxTech: 1
+      AU14JobOPFOROfficerMedical: 1
+      AU14JobOPFORMilitaryDoctor: 3
+      AU14JobOPFORPlatoonCorpsman: 9
+      AU14JobOPFOROfficerMP: 1
+      AU14JobOPFORMilitaryPoliceMan: 2
+      AU14JobOPFOROfficerEngi: 1
+      AU14JobOPFORVehicleCrewman: 2
+      AU14JobOPFORDSPilot: 2
+      AU14JobOPFORDCC: 2
+      AU14JobOPFORAuxSupportSynth: 2
+      AU14JobOPFORWorkingJoe: 1
+
+- type: entity
+  id: AddClf
+  parent: BaseGameRule
+  components:
+  - type: AddJobsRule
+    jobs:
+      AU14JobCLFCellLeader: 1
+      AU14JobCLFPhysician: 1
+      AU14JobCLFSurgeon: 1
+      AU14JobCLFGuerilla: 3
+
+- type: entity
+  id: ColonyAntags
+  parent: BaseGameRule
+  name: Colony Antags
+  description: Randomly rolls for each colony antag to be present this round.
+  components:
+  - type: GameRule
+  - type: ColonyAntagsRule
+
+- type: entity
+  id: AuVoteRule
+  parent: BaseGameRule
+  name: AU Vote Rule
+  description: Loads AU/CMU round votes, planets, platoons, and bioscan.
+  components:
+  - type: AuVoteRule
+  - type: Bioscan
+
+- type: entity
+  id: RemoveAllJobs
+  parent: BaseGameRule
+  name: Remove All Jobs
+  description: Removes all jobs on the planet's main station prior to round start. Optionally removes jobs on ship stations.
+  components:
+  - type: RemoveJobsRule

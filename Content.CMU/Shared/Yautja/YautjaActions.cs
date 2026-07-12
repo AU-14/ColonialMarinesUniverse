@@ -28,8 +28,6 @@ public sealed partial class YautjaCreateStabilisingCrystalActionEvent : InstantA
 
 public sealed partial class YautjaCreateHumanStabilisingCrystalActionEvent : InstantActionEvent;
 
-public sealed partial class YautjaCreateHealingCapsuleActionEvent : InstantActionEvent;
-
 public sealed partial class YautjaCreateHuntingTrapActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaLinkThrallBracerActionEvent : InstantActionEvent;
@@ -61,6 +59,8 @@ public sealed partial class YautjaVoiceLaughActionEvent : InstantActionEvent;
 public sealed partial class YautjaVoiceGrowlActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaVoicePainActionEvent : InstantActionEvent;
+
+public sealed partial class YautjaVoiceDistractActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaVoiceDeathCryActionEvent : InstantActionEvent;
 
@@ -117,7 +117,6 @@ public enum YautjaBracerPanelCommand : byte
     ToggleBracerIdChip,
     CreateStabilisingCrystal,
     CreateHumanStabilisingCrystal,
-    CreateHealingCapsule,
     CreateHuntingTrap,
     ToggleSelfDestruct,
     RefreshTracker,

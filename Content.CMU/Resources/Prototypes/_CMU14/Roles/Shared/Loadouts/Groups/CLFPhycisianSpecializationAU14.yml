@@ -1,0 +1,13 @@
+- type: loadoutGroup
+  id: CLFPhycisianSpecializationAU14
+  name: au14-loadout-group-role-specific-ID
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - CLFPhysicianSpecializationDefaultAU14
+  - CLFPhysicianSpecializationPharmacistAU14
+  - CLFPhysicianSpecializationGeneralPractitionerAU14
+
+# govfor/opfor
+
+# synthetics

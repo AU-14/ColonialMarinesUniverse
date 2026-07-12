@@ -1,24 +1,15 @@
-using System;
-using System.Collections.Generic;
-using Content.Shared.AU14.Objectives.Destroy;
 using Content.Shared.AU14.Objectives;
-using Robust.Shared.GameStates;
-using Robust.Shared.Map;
-using Robust.Shared.Log;
-using System.Runtime.CompilerServices;
-using Robust.Shared.Timing;
+using Content.Shared.AU14.Objectives.Destroy;
+using Content.Shared.AU14.Objectives.Fetch;
+using Timer = Robust.Shared.Timing.Timer;
 
 namespace Content.Server.AU14.Objectives.Destroy;
 
 public sealed partial class AuDestroyObjectiveSystem : EntitySystem
 {
-    [Robust.Shared.IoC.Dependency] private IEntityManager _entManager = default!;
-    [Robust.Shared.IoC.Dependency] private EntityLookupSystem _lookup = default!;
-    [Robust.Shared.IoC.Dependency] private AuObjectiveSystem _objectiveSystem = default!;
-    [Robust.Shared.IoC.Dependency] private SharedTransformSystem _xformSys = default!;
-    [Robust.Shared.IoC.Dependency] private ILogManager _logManager = default!;
+    [Dependency] private AuObjectiveSystem _objectiveSystem = default!;
 
-    private ISawmill _sawmill = default!;
+    private ISawmill _logs = default!;
 
     // Index: proto id (lowercase) -> list of objective uids interested in that proto
     private readonly Dictionary<string, List<EntityUid>> _protoToObjectives = new(StringComparer.OrdinalIgnoreCase);
@@ -28,7 +19,7 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        _sawmill = _logManager.GetSawmill("au14-destroyobj");
+        _logs = Logger.GetSawmill("obj-destroy");
         SubscribeLocalEvent<DestroyObjectiveComponent, ComponentStartup>(OnObjectiveStartup);
         SubscribeLocalEvent<MarkedForDestroyComponent, EntityTerminatingEvent>(OnMarkedEntityDestroyed);
         SubscribeLocalEvent<DestroyObjectiveTrackerComponent, ComponentStartup>(OnTrackerStartup);
@@ -37,16 +28,19 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
         SubscribeLocalEvent<MetaDataComponent, ComponentStartup>(OnEntityMetaStartup);
     }
 
+    private void OnObjectiveStartup(EntityUid uid, DestroyObjectiveComponent component, ref ComponentStartup _) => StartupDestroyObjective(uid, component);
+
     public void ActivateDestroyObjectiveIfNeeded(EntityUid uid, AuObjectiveComponent comp)
     {
-        if (!_entManager.TryGetComponent(uid, out DestroyObjectiveComponent? destroyComp))
+        if (!TryComp(uid, out DestroyObjectiveComponent? destroyComp))
             return;
         if (!comp.Active || destroyComp.EntitiesSpawned)
             return;
-        OnObjectiveStartup(uid, destroyComp, ref Unsafe.NullRef<ComponentStartup>());
+
+        StartupDestroyObjective(uid, destroyComp);
     }
 
-    private void OnObjectiveStartup(EntityUid uid, DestroyObjectiveComponent component, ref ComponentStartup args)
+    private void StartupDestroyObjective(EntityUid uid, DestroyObjectiveComponent component)
     {
         if (component.EntitiesSpawned)
             return;
@@ -57,7 +51,7 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
         // Destroy objectives cannot be faction-neutral
         if (objcomp.FactionNeutral)
         {
-            _sawmill.Warning($"[DESTROY OBJ] Objective {uid} is faction-neutral which is invalid for destroy objectives. Deactivating.");
+            _logs.Warning($"[DESTROY OBJ] Objective ({uid}) is faction-neutral which is invalid for destroy objectives. Deactivating...");
             objcomp.Active = false;
             return;
         }
@@ -68,10 +62,11 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
 
         var markers = new List<EntityUid>();
         var genericMarkers = new List<EntityUid>();
-        var markerQuery = AllEntityQuery<Content.Shared.AU14.Objectives.Fetch.FetchObjectiveMarkerComponent, TransformComponent>();
-        while (markerQuery.MoveNext(out var markerUid, out var markerComp, out _))
+        var objMap = Transform(uid).MapID;
+        var markerQuery = AllEntityQuery<FetchObjectiveMarkerComponent, TransformComponent>();
+        while (markerQuery.MoveNext(out var markerUid, out var markerComp, out var markerXform))
         {
-            if (markerComp.Used)
+            if (markerComp.Used || markerXform.MapID != objMap)
                 continue;
             if (!string.IsNullOrEmpty(markerId) && markerComp.FetchId == markerId)
                 markers.Add(markerUid);
@@ -89,12 +84,12 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
         for (var i = 0; i < toSpawn; i++)
         {
             var markerUid = markers[i];
-            var markerComp = Comp<Content.Shared.AU14.Objectives.Fetch.FetchObjectiveMarkerComponent>(markerUid);
+            var markerComp = Comp<FetchObjectiveMarkerComponent>(markerUid);
             if (markerComp.Used)
                 continue;
             var xform = Comp<TransformComponent>(markerUid);
             var ent = Spawn(entityToSpawn, xform.Coordinates);
-            var tracker = _entManager.EnsureComponent<DestroyObjectiveTrackerComponent>(ent);
+            var tracker = EnsureComp<DestroyObjectiveTrackerComponent>(ent);
             tracker.ObjectiveUid = uid;
             markerComp.Used = true;
             // spawnOther removed by design
@@ -102,12 +97,10 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
         component.EntitiesSpawned = true;
 
         // Register interest in proto or wildcard for efficient marking
-        RegisterObjectiveInterest(uid, component, objcomp);
+        RegisterObjectiveInterest(uid, component);
 
         // Initial scan: only check entities of the protos we're interested in OR wildcard ones
         var objXform = Comp<TransformComponent>(uid);
-        var objMap = objXform.MapID;
-
         var metaQuery = AllEntityQuery<MetaDataComponent, TransformComponent>();
         while (metaQuery.MoveNext(out var entUid, out var meta, out var entXform))
         {
@@ -120,7 +113,7 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
             {
                 if (!string.IsNullOrEmpty(component.EntityToDestroy) && !string.Equals(component.EntityToDestroy, proto, StringComparison.OrdinalIgnoreCase))
                     continue;
-                var mark = _entManager.EnsureComponent<MarkedForDestroyComponent>(entUid);
+                var mark = EnsureComp<MarkedForDestroyComponent>(entUid);
                 mark.AssociatedObjectives[uid] = objcomp.Faction.ToLowerInvariant();
                 continue;
             }
@@ -129,14 +122,14 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
             {
                 if (string.Equals(component.EntityToDestroy, proto, StringComparison.OrdinalIgnoreCase))
                 {
-                    var mark = _entManager.EnsureComponent<MarkedForDestroyComponent>(entUid);
+                    var mark = EnsureComp<MarkedForDestroyComponent>(entUid);
                     mark.AssociatedObjectives[uid] = objcomp.Faction.ToLowerInvariant();
                 }
             }
         }
     }
 
-    private void RegisterObjectiveInterest(EntityUid uid, DestroyObjectiveComponent comp, AuObjectiveComponent auComp)
+    private void RegisterObjectiveInterest(EntityUid uid, DestroyObjectiveComponent comp)
     {
         // Remove existing registration if present to avoid duplicates
         UnregisterObjectiveInterest(uid);
@@ -182,10 +175,12 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
         {
             foreach (var objUid in objectives)
             {
-                var auObj = EntityManager.GetComponentOrNull<AuObjectiveComponent>(objUid);
-                if (auObj == null || !auObj.Active)
+                if (!TryComp(objUid, out AuObjectiveComponent? auObj) || !auObj.Active)
                     continue;
-                var mark = _entManager.EnsureComponent<MarkedForDestroyComponent>(uid);
+                // Check map compatibility
+                if (Transform(uid).MapID != Transform(objUid).MapID)
+                    continue;
+                var mark = EnsureComp<MarkedForDestroyComponent>(uid);
                 mark.AssociatedObjectives[objUid] = auObj.Faction.ToLowerInvariant();
             }
         }
@@ -195,14 +190,17 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
         {
             foreach (var objUid in _wildcardObjectives)
             {
-                var auObj = EntityManager.GetComponentOrNull<AuObjectiveComponent>(objUid);
-                if (auObj == null || !auObj.Active)
+                if (!TryComp(objUid, out AuObjectiveComponent? auObj) || !auObj.Active)
+                    continue;
+                // Map compatibility guard
+                if (Transform(uid).MapID != Transform(objUid).MapID)
                     continue;
                 // If the wildcard objective also specifies a proto filter, respect it
-                var destroyComp = EntityManager.GetComponentOrNull<DestroyObjectiveComponent>(objUid);
-                if (destroyComp != null && !string.IsNullOrEmpty(destroyComp.EntityToDestroy) && !string.Equals(destroyComp.EntityToDestroy, proto, StringComparison.OrdinalIgnoreCase))
+                if (TryComp(objUid, out DestroyObjectiveComponent? destroyComp)
+                    && !string.IsNullOrEmpty(destroyComp.EntityToDestroy)
+                    && !string.Equals(destroyComp.EntityToDestroy, proto, StringComparison.OrdinalIgnoreCase))
                     continue;
-                var mark = _entManager.EnsureComponent<MarkedForDestroyComponent>(uid);
+                var mark = EnsureComp<MarkedForDestroyComponent>(uid);
                 mark.AssociatedObjectives[objUid] = auObj.Faction.ToLowerInvariant();
             }
         }
@@ -220,7 +218,7 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
 
     private void TryMarkForDestroyDelayed(EntityUid uid)
     {
-        var meta = EntityManager.GetComponentOrNull<MetaDataComponent>(uid);
+        TryComp(uid, out MetaDataComponent? meta);
         var protoId = meta?.EntityPrototype?.ID ?? string.Empty;
         if (string.IsNullOrEmpty(protoId))
             return;
@@ -232,10 +230,12 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
         {
             foreach (var objUid in objList)
             {
-                var auObj = EntityManager.GetComponentOrNull<AuObjectiveComponent>(objUid);
-                if (auObj == null || !auObj.Active)
+                if (!TryComp(objUid, out AuObjectiveComponent? auObj) || !auObj.Active)
                     continue;
-                var mark = _entManager.EnsureComponent<MarkedForDestroyComponent>(uid);
+                if (Transform(uid).MapID != Transform(objUid).MapID)
+                    continue;
+
+                var mark = EnsureComp<MarkedForDestroyComponent>(uid);
                 mark.AssociatedObjectives[objUid] = auObj.Faction.ToLowerInvariant();
             }
         }
@@ -243,22 +243,22 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
         // Then handle wildcard objectives
         foreach (var objUid in _wildcardObjectives)
         {
-            var auObj = EntityManager.GetComponentOrNull<AuObjectiveComponent>(objUid);
-            if (auObj == null || !auObj.Active)
+            if (!TryComp(objUid, out AuObjectiveComponent? auObj) || !auObj.Active)
                 continue;
-            var destroyComp = EntityManager.GetComponentOrNull<DestroyObjectiveComponent>(objUid);
-            if (destroyComp != null && !string.IsNullOrEmpty(destroyComp.EntityToDestroy) && !string.Equals(destroyComp.EntityToDestroy, protoId, StringComparison.OrdinalIgnoreCase))
+            if (Transform(uid).MapID != Transform(objUid).MapID)
                 continue;
-            var mark = _entManager.EnsureComponent<MarkedForDestroyComponent>(uid);
+            if (TryComp(objUid, out DestroyObjectiveComponent? destroyComp)
+                && !string.IsNullOrEmpty(destroyComp.EntityToDestroy)
+                && !string.Equals(destroyComp.EntityToDestroy, protoId, StringComparison.OrdinalIgnoreCase))
+                continue;
+            var mark = EnsureComp<MarkedForDestroyComponent>(uid);
             mark.AssociatedObjectives[objUid] = auObj.Faction.ToLowerInvariant();
         }
     }
 
     private void OnMarkedEntityDestroyed(EntityUid uid, MarkedForDestroyComponent comp, ref EntityTerminatingEvent args)
     {
-        var meta = EntityManager.GetComponentOrNull<MetaDataComponent>(uid);
-        var protoId = meta?.EntityPrototype?.ID ?? string.Empty;
-
+        TryComp(uid, out MetaDataComponent? meta);
         var objectivesToRemove = new List<EntityUid>();
         foreach (var kv in comp.AssociatedObjectives)
         {
@@ -271,11 +271,12 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
             var factionKey = factionToCredit.ToLowerInvariant();
 
             destroyComp.AmountDestroyed++;
-            _sawmill.Info($"[DESTROY DEBUG] Objective {objectiveUid} counted destruction of proto {protoId} for faction {factionKey}. Total: {destroyComp.AmountDestroyed}/{destroyComp.AmountToDestroy}");
-
+#if DEBUG
+            _logs.Debug($"[DESTROY DEBUG] Objective ({objectiveUid}) counted destruction of proto '{meta?.EntityPrototype?.ID ?? string.Empty}' for faction '{factionKey}'. Total: {destroyComp.AmountDestroyed}/{destroyComp.AmountToDestroy}");
+#endif
             if (destroyComp.AmountDestroyed >= destroyComp.AmountToDestroy)
             {
-                _sawmill.Info($"[DESTROY DEBUG] Objective {objectiveUid} completed for faction {factionKey}!");
+                _logs.Info($"[DESTROY DEBUG] Objective ({objectiveUid}) completed for faction '{factionKey}'!");
                 _objectiveSystem.CompleteObjectiveForFaction(objectiveUid, auObj, factionToCredit);
                 objectivesToRemove.Add(objectiveUid);
 
@@ -290,4 +291,3 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
         }
     }
 }
-

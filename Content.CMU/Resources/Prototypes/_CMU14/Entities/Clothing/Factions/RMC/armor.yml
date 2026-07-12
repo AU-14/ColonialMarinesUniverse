@@ -1,0 +1,115 @@
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14ArmorRMC
+  name: kestrel armoured vest
+  suffix: AU14
+  description: A customizable personal armor system used by the Royal Crown Marines.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/RMC/armor/armor.rsi
+
+- type: entity
+  parent: AU14BaseArmorLight
+  id: AU14ArmorLightRMC
+  name: kestrel light armoured vest
+  suffix: AU14
+  description: A customizable personal armor system used by the Royal Crown Marines.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/RMC/armor/armor.rsi
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14ArmorPaddedRMC
+  name: kestrel armoured carry vest
+  suffix: AU14
+  description: A customizable personal armor system used by the Royal Crown Marines.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/RMC/armor/padded.rsi
+
+- type: entity
+  parent: [ RMCAllowSuitStorageClothingSmartgunner, AU14BaseArmor ]
+  id: AU14ArmorSmartGunDesertCombatHarnessRMC
+  name: kestrel armoured smart gun harness
+  suffix: AU14
+  description: Kestel smart gun harness specially made for Smartgunners.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/RMC/armor/padded.rsi
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,3,1 # 2 slots
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier
+    walkModifier: .725
+    sprintModifier: .725
+  - type: ClothingBlockBackpack
+  - type: SmartGunArmor
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14ArmorPointmanRMC
+  name: kestrel pointman armour
+  suffix: AU14
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/RMC/armor/pointman.rsi
+  - type: CMArmor
+    melee: 30 # CLOTHING_ARMOR_HIGH
+    bullet: 35 # CLOTHING_ARMOR_HIGHPLUS (bullet)
+    explosionArmor: 35 # CLOTHING_ARMOR_HIGHPLUS
+    bio: 20 # CLOTHING_ARMOR_MEDIUM
+  - type: RMCArmorSpeedTier
+    speedTier: heavy
+  - type: ClothingSpeedModifier # SLOWDOWN_ARMOR_LOWHEAVY
+    walkModifier: 0.64
+    sprintModifier: 0.64
+  - type: AllowSuitStorage
+    whitelist:
+      components:
+      - RMCLighter
+      - Bible
+      - Gun
+      - CassettePlayer
+      tags:
+      - GasTank
+      - Flashlight
+      - DiscreteHealthAnalyzer
+      - CigPack
+      - Knife
+      - RMCG8Pouch
+      - RMCMacheteScabbard
+      - RMCScabbardKatana
+      - RMCM82FHolster
+      - RMCSmartPistolHolster
+      - RMCSMGHolster
+      - RMCSMGPouchHolster
+      - RMCGeneralPistolHolster
+      - RMCGeneralRevolverHolster
+      - RMCBeltHolsterM13
+      - RMCXM51Holster
+      - RMCDetector
+      - RMCMatebaHolster
+      - RMCFoldingBarricade
+      - AU14BallisticShield
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
+  id: AU14ICPS2RMC
+  name: royal marine ICPS-2 Aircrew Armor
+  suffix: RM
+  description: A set of ballistic armor used by RMC aircrew.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USASFSecurityForces/USASFPilot/armor.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: CMArmor
+    melee: 20
+    bullet: 10
+    bio: 10
+    explosionArmor: 10
+  - type: CMHardArmor

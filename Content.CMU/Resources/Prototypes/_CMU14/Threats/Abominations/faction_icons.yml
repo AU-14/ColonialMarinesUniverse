@@ -1,0 +1,15 @@
+# Tags a disguised mimic with a visible faction icon for viewers that
+# either still wear their abomination shell (Abomination) OR are
+# themselves wearing a face (AbominationMimicTransformed). Lets the
+# flesh-hivemind recognise its own kind even when both parties are
+# disguised in the colony.
+- type: factionIcon
+  id: AbominationFaction
+  priority: 11
+  showTo:
+    components:
+    - Abomination
+    - AbominationMimicTransformed
+  icon:
+    sprite: /Textures/Interface/Misc/job_icons.rsi
+    state: Zombie

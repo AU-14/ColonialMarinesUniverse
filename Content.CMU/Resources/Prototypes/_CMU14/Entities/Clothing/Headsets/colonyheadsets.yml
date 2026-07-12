@@ -1,0 +1,326 @@
+# ├──[ ENCRYPTIONKEYS ]──────────────────────────────────────────────┤
+- type: entity
+  abstract: true
+  parent: CMEncryptionKey
+  id: AU14EncryptionKey
+  components:
+  - type: Sprite
+    state: we_ya_key
+
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyAdmin
+  name: colony admin encryption key
+  description: An encryption key used to communicate on colony and CMB radio channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - Colony
+    - radioCMB
+    defaultChannel: Colony
+
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyWEYU
+  name: Weyland colonial encryption key
+  description: An encryption key used to communicate on colony and weyland radio channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - Colony
+    - radioWEYU
+    defaultChannel: Colony
+
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyCMB
+  name: CMB encryption key
+  suffix: Colony, CMB
+  description: An encryption key used to communicate on colony and CMB radio channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - Colony
+    - radioCMB
+    defaultChannel: Colony
+
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyCMBOnly
+  name: CMB encryption key
+  description: An encryption key used to communicate on the CMB radio channel.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioCMB
+    defaultChannel: Colony
+
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyOrbital
+  name: orbital encryption key
+  description: An encryption key used to communicate on colony and Orbital radio channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - Colony
+#   - radioOrbital
+    defaultChannel: Colony
+
+# ├─[ HEADSETS ]────────────────────────────────────────────────────┤
+- type: entity
+  parent: CMHeadset
+  id: AU14HeadsetColonist
+  abstract: true
+  components:
+  - type: GrantAreaInfo
+
+- type: entity
+  parent: RMCHeadsetLiaison
+  id: AU14ColonyAdminHeadset
+  name: colony administration headset
+  description: A headset used by the colony administration to communicate.
+  suffix: CMB, Colony
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyAdmin
+
+- type: entity
+  parent: RMCHeadsetLiaison
+  id: AU14ColonyWeylandHeadset
+  name: colony weyland yutani headset
+  description: A headset used by weyland yutani to communicate.
+  suffix: Colony, WEYU
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyWEYU
+
+- type: entity
+  parent: AU14HeadsetGovforMarine
+  id: AU14CMBHeadset
+  name: CMB headset
+  description: A headset used by the CMB to communicate.
+  suffix: CMB, Colony
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyCMB
+
+- type: entity
+  parent: AU14HeadsetGovforMarine
+  id: AU14CMBHeadsetOnlyCMB
+  name: CMB Earpiece
+  description: A headset used by the CMB to communicate.
+  suffix: CMB
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyCMBOnly
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/headsets.rsi
+    state: cmb_headset
+
+- type: entity
+  parent: AU14HeadsetColonist
+  id: AU14HeadsetWorkingJoe
+  name: Working Joe headset
+  description: A common headset used by Working Joes.
+  components:
+  - type: Sprite
+    state: generic_headset
+
+# ├──[ AMBASSADORHEADSETS ]──────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyTWEAmb
+  name: twe commissioner encryption key
+  description: An encryption key used to communicate on the commissioner's radio channel.
+  suffix: Ambassador
+  components:
+  - type: EncryptionKey
+    channels:
+    - TWESOF
+    defaultChannel: Colony
+
+- type: entity
+  parent: AU14ColonyAdminHeadset
+  id: AU14ColonyAmbassadorTWEHeadset
+  name: twe commissioner headset
+  description: A headset used by TWE's commissioners to communicate.
+  suffix: Colony, Ambassador
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyTWEAmb
+      - AU14EncryptionKeyAdmin
+
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyUAAmb
+  name: ua ambassador encryption key
+  description: An encryption key used to communicate on the ambassador's radio channel.
+  suffix: Ambassador
+  components:
+  - type: EncryptionKey
+    channels:
+    - UASOF
+    defaultChannel: Colony
+
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyUAAmbVAI
+  name: VAI encryption key
+  description: An encryption key used to communicate to the ambassador.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioVAI
+    defaultChannel: Colony
+
+- type: entity
+  parent: AU14ColonyAdminHeadset
+  id: AU14AmbassadorUAHeadset
+  name: ua ambassador headset
+  description: A headset used by UA's ambassadors to communicate.
+  suffix: Colony, Ambassador
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyUAAmb
+      - AU14EncryptionKeyUAAmbVAI
+      - AU14EncryptionKeyAdmin
+
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyUPPAmb
+  name: upp ambassador encryption key
+  description: An encryption key used to communicate on the ambassador's radio channel.
+  suffix: Ambassador
+  components:
+  - type: EncryptionKey
+    channels:
+    - UPPSOF
+    defaultChannel: Colony
+
+- type: entity
+  parent: AU14ColonyAdminHeadset
+  id: AU14AmbassadorUPPHeadset
+  name: upp ambassador headset
+  description: A headset used by UPP's ambassadors to communicate.
+  suffix: Colony, Ambassador
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyUPPAmb
+      - AU14EncryptionKeyAdmin
+
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyICSCAmb
+  name: icsc ambassador encryption key
+  description: An encryption key used to communicate on the ambassador's radio channel.
+  suffix: Ambassador
+  components:
+  - type: EncryptionKey
+    channels:
+    - ICSCSOF
+    defaultChannel: Colony
+
+- type: entity
+  parent: AU14ColonyAdminHeadset
+  id: AU14AmbassadorICSCHeadset
+  name: icsc ambassador headset
+  description: A headset used by ICSC's ambassadors to communicate.
+  suffix: Colony, Ambassador
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyICSCAmb
+      - AU14EncryptionKeyAdmin
+
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyCCAAmb
+  name: cca ambassador encryption key
+  description: An encryption key used to communicate on the ambassador's radio channel.
+  suffix: Ambassador
+  components:
+  - type: EncryptionKey
+    channels:
+    - CCASOF
+    defaultChannel: Colony
+
+- type: entity
+  parent: AU14ColonyAdminHeadset
+  id: AU14AmbassadorCCAHeadset
+  name: cca ambassador headset
+  description: A headset used by CCA's ambassadors to communicate.
+  suffix: Colony, Ambassador
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyCCAAmb
+      - AU14EncryptionKeyAdmin
+
+
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyColonySecurity
+  name: colony security encryption key
+  description: An encryption key used to communicate on colony, CMB, and Weyland radio channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - Colony
+    - radioCMB
+    - radioWEYU
+    defaultChannel: Colony
+
+- type: entity
+  parent: RMCHeadsetLiaison
+  id: AU14ColonySecurityHeadset
+  name: colony security headset
+  description: A headset used by colony security to coordinate on CMB and Weyland channels.
+  suffix: Colony, CMB, WEYU
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyColonySecurity
+
+# ├──[ ORBITAL HEADSETS ]────────────────────────────────────────────┤
+- type: entity
+  parent: AU14HeadsetColonist
+  id: AU14OrbitalHeadset
+  name: orbital personnel headset
+  description: A headset used by orbital personnel to communicate with the colony and the orbital station.
+  suffix: Orbital, Colony
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyOrbital
+
+- type: entity
+  parent: AU14HeadsetColonist
+  id: AU14OrbitalHeadsetManagement
+  name: orbital management headset
+  suffix: Orbital, Colony, Admin
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyOrbital
+      - AU14EncryptionKeyAdmin

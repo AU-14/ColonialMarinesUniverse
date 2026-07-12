@@ -1,4 +1,5 @@
 using Content.Server.Chat.Managers;
+using Content.Server._CMU14.Language;
 using Content.Server.Electrocution;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Actions;
@@ -19,6 +20,7 @@ using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Movement.Systems;
+using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Systems;
@@ -66,6 +68,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private XenoSystem _xeno = default!;
+    [Dependency] private CMUXenoLanguageSystem _xenoLanguage = default!;
 
     public override void Initialize()
     {
@@ -486,6 +489,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         ApplyHivebrokenRegen(target);
         ApplyHivebrokenSpeech(target, hivebreaker);
         ApplyHivebrokenName(target);
+        _xenoLanguage.RefreshEnglish(target);
 
         if (hivebreaker.AuthorizeTechOnConversion)
             EnsureComp<YautjaTechAuthorizedComponent>(target);
@@ -495,8 +499,13 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         if (hivebreaker.BloodOnConversion)
             GrantAllSkills(target, 4);
 
-        if (hivebreaker.HealOnConversion && TryComp(target, out DamageableComponent? damageable))
-            _damage.SetAllDamage(target, damageable, 0);
+        if (hivebreaker.HealOnConversion)
+        {
+            if (TryComp(target, out DamageableComponent? damageable))
+                _damage.SetAllDamage(target, damageable, 0);
+
+            _mob.ChangeMobState(target, MobState.Alive, origin: master);
+        }
 
         BroadcastToYautja(
             Loc.GetString("cmu-yautja-hivebreaker-broadcast",
@@ -763,6 +772,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         RestoreHivebrokenRegen(target, thrall);
         RestoreHivebrokenSpeech(target, thrall);
         RestoreHivebrokenName(target, thrall);
+        _xenoLanguage.RefreshEnglish(target);
         _movement.RefreshMovementSpeedModifiers(target);
     }
 
@@ -1067,7 +1077,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         if (TryComp(bracer, out YautjaBracerComponent? masterBracer))
             return masterBracer.LockSound;
 
-        return new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_bracer.wav");
+        return new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav");
     }
 
     private void SendPrivateChat(EntityUid source, EntityUid target, string text)

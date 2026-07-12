@@ -36,13 +36,19 @@ public sealed partial class CMUZLevelBlurOverlay : Overlay
         if (args.Viewport.Eye is not ScalingViewport.ZEye zeye)
             return false;
 
-        if (zeye.Depth >= 0)
+        if (!ShouldBlurPass(zeye))
             return false;
 
         if (args.MapId == MapId.Nullspace)
             return false;
 
         return true;
+    }
+
+    internal static bool ShouldBlurPass(ScalingViewport.ZEye zEye)
+    {
+        return zEye.Depth < 0 ||
+               zEye.Depth == 0 && zEye.BlurCurrentLevel;
     }
 
     private bool IsBlurEnabled()

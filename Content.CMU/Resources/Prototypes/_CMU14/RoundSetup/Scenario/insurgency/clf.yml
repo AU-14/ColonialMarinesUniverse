@@ -1,0 +1,28 @@
+- type: roundGroup
+  id: InsurgencyClfRoundGroup
+  kind: Clf
+  sourcePrototypeId: AddClf
+  spawn:
+    bodyBuckets:
+      - bucket: CLFCommand
+        count: 3
+        bodies:
+          AU14JobCLFCellLeader: 1
+          AU14JobCLFPhysician: 1
+          AU14JobCLFSurgeon: 1
+      - bucket: CLFGuerilla
+        count: 3
+        bodies:
+          AU14JobCLFGuerilla: 3
+    markerRequirements:
+      - bucket: CLFSafehouse
+        requiredBodyCount: 6
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:clf:safehouse
+      - bucket: CLFCivilianBackup
+        requiredBodyCount: 3
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:clf:civilian-spawn:AU14JobCivilianColonist
+        warningOnly: true

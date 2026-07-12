@@ -1,0 +1,90 @@
+- type: job
+  parent: AU14JobLEOBase
+  id: AU14JobNSPAInvestigationPartyJobConstableSMGArmor
+  roundSide: ThirdParty
+  roundForce: NSPA
+  roundRole: NSPAInvestigationPartyJobConstableSMGArmor
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - NSPA
+  - type: Skills
+    skills:
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 2
+      RMCSkillIntel: 1
+      RMCSkillMedical: 1
+      RMCSkillMeleeWeapons: 1
+      RMCSkillOverwatch: 1
+      RMCSkillPolice: 2
+      RMCSkillVehicles: 1
+      RMCSkillEngineer: 1
+      RMCSkillConstruction: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliannspaConstable
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: synth
+  - type: Language
+    preset: AU14LanguagePresetTWE
+
+  name: au14-job-name-civiliannspaConstable
+  description: You have been sent by the Colonial Administration to investigate unspecified occurrences on this planet. Investigate the area under the orders of your marshal and ensure that the laws of Sol extend far beyond the Solar System.
+  setPreference: false
+  canBeAntag: false
+  requirements:
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    SeniorConstable:
+      entity: AU14ChevronNSPASeniorConstable
+      requirements: []
+  startingGear: AU14GearNSPAConstableInvestigationSMGArmor
+  icon: "RMCJobIconTSEPASeniorConstable"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  spawnMenuRoleName: NSPA Constable (SMG, Armor, 3rd party)
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - aucmb
+  - Colonist
+  - AUPrisonStaff
+  roleWeight: 0.25
+  hidden: false
+
+- type: startingGear
+  id: AU14GearNSPAConstableInvestigationSMGArmor
+  equipment:
+    id: AU14IDCardCivilianNSPAConstable
+    outerClothing: RMCArmorVestTSEPA
+    jumpsuit: RMCJumpsuitTSEPA
+    shoes: RMCBootsPMCFilled
+    head: RMCHeadBeretTSEPA
+    belt: RMCBeltHolsterPistolTSEFilledL54
+    pocket1: AU14PouchPoliceEquipmentSupportSynth
+    pocket2: AU14PouchIFAKFill
+    back: AU14SatchelNSPAShotgun
+    ears: AU14CMBHeadsetOnlyCMB
+    suitstorage: RMCWeaponSMGPDW90
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicNSPA
+  id: NSPAInvestigationPartyJobConstableSMGArmor
+  name: NSPA Constable SMG Armored Officer
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-civiliannspaConstable
+    description: You are a constable of the Neroid Sector Policing Authority on routine patrol through the sector. Patrol the area under the orders of your chief constable and ensure that the law is enforced.
+    reregister: false
+    job: AU14JobNSPAInvestigationPartyJobConstableSMGArmor
+    raffle:
+      settings: short
+    rules: You are a constable of the Neroid Sector Policing Authority on routine patrol through the sector. Patrol the area under the orders of your chief constable and ensure that the law is enforced.

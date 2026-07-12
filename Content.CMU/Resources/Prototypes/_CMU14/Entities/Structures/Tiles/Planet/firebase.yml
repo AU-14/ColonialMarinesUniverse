@@ -1,0 +1,137 @@
+# ├──[ Alkaline Water ]──────────────────────────────────────────────┤
+- type: entity
+  parent: CMFloorDeepWaterEntity
+  id: AU14AlkalineWaterDeep
+  name: alkaline water (deep)
+  components:
+  - type: Sprite
+    sprite: /Textures/_CMU14/Tiles/planet/alkaline_water.rsi
+    layers:
+    - state: deep
+  - type: SyncSprite
+
+- type: entity
+  parent: CMFloorShallowWaterEntity
+  id: AU14AlkalineWaterShallow
+  name: alkaline water
+  components:
+  - type: Sprite
+    sprite: /Textures/_CMU14/Tiles/planet/alkaline_water.rsi
+    layers:
+    - state: shallow
+  - type: SyncSprite
+
+- type: entity
+  parent: AU14AlkalineWaterShallow
+  id: AU14AlkalineWaterShallowEdge
+  name: alkaline water (edge)
+  components:
+  - type: Sprite
+    sprite: /Textures/_CMU14/Tiles/planet/alkaline_water.rsi
+    layers:
+    - state: shallow_edge
+  - type: SyncSprite
+
+- type: entity
+  parent: AU14AlkalineWaterShallow
+  id: AU14AlkalineWaterShallowCorner
+  name: alkaline water (corner)
+  components:
+  - type: Sprite
+    sprite: /Textures/_CMU14/Tiles/planet/alkaline_water.rsi
+    layers:
+    - state: shallow_corner
+  - type: SyncSprite
+
+- type: entity
+  parent: AU14AlkalineWaterShallow
+  id: AU14AlkalineWaterShallowCornerEdge
+  name: alkaline water (corner edge)
+  components:
+  - type: Sprite
+    sprite: /Textures/_CMU14/Tiles/planet/alkaline_water.rsi
+    layers:
+    - state: shallow_corner_edge
+  - type: SyncSprite
+
+# ├──[ Firebase Grass ]──────────────────────────────────────────────┤
+- type: tile
+  parent: CMPlanetGrassWeedable
+  id: AU14FirebaseGrass
+  name: firebase grass
+  sprite: /Textures/_CMU14/Tiles/planet/firebase_grass/f_grass.png
+  variants: 1
+
+- type: tile
+  parent: AU14FirebaseGrass
+  id: AU14FirebaseGrassSingleEdge
+  name: firebase grass (single edge)
+  sprite: /Textures/_CMU14/Tiles/planet/firebase_grass/single_edge.png
+
+- type: tile
+  parent: AU14FirebaseGrass
+  id: AU14FirebaseGrassDoubleEdge
+  name: firebase grass (double edge)
+  sprite: /Textures/_CMU14/Tiles/planet/firebase_grass/double_edge.png
+
+- type: tile
+  parent: AU14FirebaseGrass
+  id: AU14FirebaseGrassTripleEdge
+  name: firebase grass (triple edge)
+  sprite: /Textures/_CMU14/Tiles/planet/firebase_grass/triple_edge.png
+
+# ├──[ Firebase Dirt ]───────────────────────────────────────────────┤
+- type: tile
+  parent: CMPlanetGrassDirtWeedable
+  id: AU14FirebaseDirt
+  name: firebase dirt (0)
+  sprite: /Textures/_CMU14/Tiles/planet/firebase_dirt/dirt_0.png
+  variants: 1
+
+- type: tile
+  parent: AU14FirebaseDirt
+  id: AU14FirebaseDirt1
+  name: firebase dirt (1)
+  sprite: /Textures/_CMU14/Tiles/planet/firebase_dirt/dirt_1.png
+
+- type: tile
+  parent: AU14FirebaseDirt
+  id: AU14FirebaseDirt2
+  name: firebase dirt (2)
+  sprite: /Textures/_CMU14/Tiles/planet/firebase_dirt/dirt_2.png
+
+- type: tile
+  parent: AU14FirebaseDirt
+  id: AU14FirebaseDirt3
+  name: firebase dirt (3)
+  sprite: /Textures/_CMU14/Tiles/planet/firebase_dirt/dirt_3.png
+
+- type: tile
+  parent: AU14FirebaseDirt
+  id: AU14FirebaseDirt4
+  name: firebase dirt (4)
+  sprite: /Textures/_CMU14/Tiles/planet/firebase_dirt/dirt_4.png
+
+- type: tile
+  parent: AU14FirebaseDirt
+  id: AU14FirebaseDirt5
+  name: firebase dirt (5)
+  sprite: /Textures/_CMU14/Tiles/planet/firebase_dirt/dirt_5.png
+
+- type: tile
+  parent: AU14FirebaseDirt
+  id: AU14FirebaseDirt6
+  name: firebase dirt (6)
+  sprite: /Textures/_CMU14/Tiles/planet/firebase_dirt/dirt_6.png
+
+- type: tile
+  parent: AU14FirebaseDirt
+  id: AU14FirebaseDirt7
+  name: firebase dirt (7)
+  sprite: /Textures/_CMU14/Tiles/planet/firebase_dirt/dirt_7.png
+
+- type: tile
+  parent: AU14FirebaseDirt
+  id: AU14FirebaseDirt8
+  name: firebase dirt (8)
+  sprite: /Textures/_CMU14/Tiles/planet/firebase_dirt/dirt_8.png

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Sprites by Nzzy, ambassadors and laselle liaison by potatoed on Discord.",
+  "copyright": "All sprites (unless stated otherwise further in the copyright) have been originally made by Nzzy. As of commit https://github.com/AU-14/ColonialMarinesUniverse/commit/c00734db4327fa5672cbc11494cd2a0cc0e50453 , all sprites in this folder had been changed in some way by hutcrime. Appearance of a sprite name or reference in the following list indicates no visual change, or any change at all made in said sprite as of mentioned commit; colony_pilot, corporate_assistant, all sprites made by potatoed. | Sprite background.png added by hutcrime. | Ambassadors and laselle_liaison made by potatoed. | All authors mentioned are mentioned as their usernames (preferrably), or nicknames (if their username is unknown), on Discord.",
   "size": {
     "x": 32,
     "y": 32
@@ -11,40 +11,22 @@
       "name": "admin"
     },
     {
+      "name": "admin_assistant"
+    },
+    {
       "name": "advisor"
     },
     {
-      "name": "colony_pilot"
+      "name": "background"
     },
     {
       "name": "cca_ambassador"
     },
     {
-      "name": "icsc_ambassador"
-    },
-    {
-      "name": "laselle_liaison"
-    },
-    {
-      "name": "twe_ambassador"
-    },
-    {
-      "name": "ua_ambassador"
-    },
-    {
-      "name": "upp_ambassador"
+      "name": "colony_pilot"
     },
     {
       "name": "corporate_assistant"
-    },
-    {
-      "name": "admin_assistant"
-    },
-    {
-      "name": "orbital_manager"
-    },
-    {
-      "name": "orbital_security"
     },
     {
       "name": "icrc_cmo"
@@ -54,6 +36,27 @@
     },
     {
       "name": "icrc_nurse"
+    },
+    {
+      "name": "icsc_ambassador"
+    },
+    {
+      "name": "laselle_liaison"
+    },
+    {
+      "name": "orbital_manager"
+    },
+    {
+      "name": "orbital_security"
+    },
+    {
+      "name": "twe_ambassador"
+    },
+    {
+      "name": "ua_ambassador"
+    },
+	{
+      "name": "upp_ambassador"
     }
   ]
 }

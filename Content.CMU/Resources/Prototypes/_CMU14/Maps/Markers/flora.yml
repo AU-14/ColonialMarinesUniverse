@@ -1,0 +1,97 @@
+- type: entity
+  id: CMURandomFloraTree
+  name: random tree spawner
+  parent: MarkerBase
+  suffix: CMU
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    layers:
+      - state: red
+      - sprite: Objects/Decoration/Flora/flora_trees.rsi
+        state: tree01
+        offset: 0,0.9
+  - type: RandomSpawner
+    prototypes:
+      - RMCFloraTree01
+      - RMCFloraTree02
+      - RMCFloraTree03
+      - RMCFloraTree04
+      - RMCFloraTree05
+      - RMCFloraTree06
+
+- type: entity
+  id: CMURandomFloraTreeSnow
+  name: random tree snow spawner
+  parent: MarkerBase
+  suffix: CMU
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    layers:
+      - state: red
+      - sprite: Objects/Decoration/Flora/flora_treessnow.rsi
+        state: treesnow01
+        offset: 0,0.7
+  - type: RandomSpawner
+    prototypes:
+      - RMCFloraTreeSnow01
+      - RMCFloraTreeSnow02
+      - RMCFloraTreeSnow03
+      - RMCFloraTreeSnow04
+      - RMCFloraTreeSnow05
+      - RMCFloraTreeSnow06
+      - RMCFloraTreeSnow06
+    chance: 0.95
+    rarePrototypes:
+      - RMCFloraTreeStump
+    rareChance: 0.05
+
+- type: entity
+  id: CMURandomFloraTreeLarge
+  name: random tree large spawner
+  parent: MarkerBase
+  suffix: CMU
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    layers:
+      - state: red
+      - sprite: Objects/Decoration/Flora/flora_treeslarge.rsi
+        state: treelarge01
+        offset: 0,1.55
+  - type: RandomSpawner
+    prototypes:
+      - RMCFloraTreeLarge01
+      - RMCFloraTreeLarge02
+      - RMCFloraTreeLarge03
+      - RMCFloraTreeLarge04
+      - RMCFloraTreeLarge05
+      - RMCFloraTreeLarge06
+
+- type: entity
+  id: CMURandomFloraTreeConifer
+  name: random tree conifer spawner
+  parent: MarkerBase
+  suffix: CMU
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    layers:
+      - state: red
+      - sprite: Objects/Decoration/Flora/flora_treesconifer.rsi
+        state: treechristmas01
+        offset: 0,1.15
+  - type: RandomSpawner
+    prototypes:
+      - RMCFloraTreeConifer01
+      - RMCFloraTreeConifer02
+      - RMCFloraTreeConifer03
+    chance: 0.95
+    rarePrototypes:
+      - RMCFloraTreeStumpConifer
+    rareChance: 0.05

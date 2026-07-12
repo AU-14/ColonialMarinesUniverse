@@ -1,0 +1,35 @@
+- type: entity
+  parent: RMCAreaFlight
+  id: AU14AreaStableGarrisonIndoors
+  name: Stable Garrison - Indoors
+  components:
+  - type: Area
+    CAS: true
+    fulton: false
+    mortarPlacement: false
+    mortarFire: true
+    lasing: true
+    medevac: false
+    paradropping: false
+    OB: true
+    supplyDrop: false
+    weatherEnabled: false
+    noTunnel: true
+
+- type: entity
+  parent: RMCAreaFlight
+  id: AU14AreaStableGarrisonOutdoors
+  name: Stable Garrison - Outdoors
+  components:
+  - type: Area
+    CAS: true
+    fulton: true
+    mortarPlacement: true
+    mortarFire: true
+    lasing: true
+    medevac: true
+    paradropping: true
+    OB: true
+    supplyDrop: true
+    weatherEnabled: true
+    noTunnel: true

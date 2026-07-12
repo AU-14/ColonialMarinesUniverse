@@ -1,0 +1,112 @@
+- type: job
+  parent: CMJobBase
+  id: AU14FORECONSmartGunOperatorBase
+  name: cm-job-name-smart-gun-operator
+  description: au14-job-description-govforadvisor
+  playTimeTracker: AU14JobFORECONSmartGunOperator
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: job
+  parent: AU14FORECONSmartGunOperatorBase
+  id: AU14FORECONSmartGunOperator
+  roundSide: ThirdParty
+  roundForce: FORECON
+  roundRole: AU14FORECONSmartGunOperator
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: smartgunner
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_forecon
+  - type: NpcFactionMember
+    factions:
+    - GOVFOR
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - RMCSquadFORECON
+  - type: Skills
+    preset: AU14SkillPresetPlatoonAutomaticRifleman
+  - type: SpotterWhitelist
+  - type: JobPrefix
+    prefix: cm-job-prefix-gun-operator
+  - type: LanguagePreset
+    spokenLanguages:
+    - English
+    - TacticalSignLanguage
+    understoodLanguages:
+    - English
+    - TacticalSignLanguage
+    currentLanguage: English
+    defaultLanguage: English
+
+  name: cm-job-name-smart-gun-operator
+  description: rmc-job-description-forecon
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankStaffSergeant:
+      entity: AU14ChevronUSCMStaffSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobFORECONSmartGunOperator
+        time: 36000 #10 hours
+    RMCRankSergeant:
+      entity: AU14ChevronUSCMSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobFORECONSmartGunOperator
+        time: 18000 #5 hours
+    RMCRankCorporal:
+      entity: AU14ChevronUSCMCorporal
+      requirements: []
+  spawnMenuRoleName: FORECON Smart Gun Operator (AU14, surv)
+  startingGear: AU14GearFORECONSmartGunOperator
+  greeting: au14-forecon-greeting
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: cm-job-name-squad-leader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicFORECON
+  id: AU14JobFORECONSmartGunOperator
+  name: FORECON Smart Gun Operator (Surv)
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadFORECON
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cm-job-name-smart-gun-operator
+    description: rmc-job-description-forecon
+    reregister: false
+    job: AU14FORECONSmartGunOperator
+    raffle:
+      settings: short
+    rules: au14-forecon-rules
+
+- type: startingGear
+  id: AU14GearFORECONSmartGunOperator
+  equipment:
+    id: AU14IDCardFORECONSmartGunOperator
+    outerClothing: AU14ArmorSmartGunJungleCombatHarnessForeconFilled
+    jumpsuit: RMCJumpsuitSurvivorMarineDropPouch
+    shoes: CMBootsBlackFilled
+    head: RMCHeadCapFlippable
+    belt: AU14BeltSmartGunOperatorPistolForeconFilled
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14PouchIFAKFill
+    ears: RMCHeadsetForecon
+    suitstorage: RMCSmartGun
+
+- type: playTimeTracker
+  id: AU14JobFORECONSmartGunOperator

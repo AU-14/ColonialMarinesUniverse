@@ -1,0 +1,10 @@
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14CCAFHelmetISACV
+  name: CG982 ISACV
+  description: Standard Issue Helmet used by the CCAF. This variant is fitted with an experimental Improved Situational Awareness Combat Visor. Currently undergoing field trials with select CCAF infantry units.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/CCAF/ivashelmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/CCAF/ivashelmet.rsi

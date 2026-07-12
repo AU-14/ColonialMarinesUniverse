@@ -1,0 +1,102 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianDeliveryPizzaBoy
+  roundSide: ThirdParty
+  roundForce: MISC
+  roundRole: CivilianDeliveryPizzaBoy
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliancolonist
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: synth
+
+  name: Pizza Delivery Boy
+  description: You are a Pizza Galaxy deliveryman sent with an assortment of refreshing beverages and a choice of pizza to sell to anyone you may encounter.
+  setPreference: true
+  playTimeTracker: AU14JobCivilianDeliveryPizzaBoy
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearPizzaDeliveryBoy
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loner
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: AU14JobPizzaDeliveryBoy
+  name: Pizza Delivery Boy
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Pizza Delivery Boy
+    description: You are a Pizza Galaxy deliveryman sent with an assortment of refreshing beverages and a choice of pizza to sell to anyone you may encounter.
+    reregister: false
+    job: AU14JobCivilianDeliveryPizzaBoy
+    raffle:
+      settings: short
+    rules: You are a Pizza Galaxy deliveryman sent with an assortment of refreshing beverages and a choice of pizza to sell to anyone you may encounter.
+
+- type: partySpawn
+  id: PizzaDeliveryBoySpawn
+  leadersToSpawn:
+    AU14JobPizzaDeliveryBoy: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: PizzaDeliveryBoyThirdParty
+  partyspawn: PizzaDeliveryBoySpawn
+  entrymethod: shuttle
+  weight: 2
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 2
+  roundstart: false
+
+- type: startingGear
+  id: AU14GearPizzaDeliveryBoy
+  equipment:
+    id: AU14IDCardCivilianPizzaDeliveryBoy
+    jumpsuit: RMCJumpsuitPizzaGalaxy
+    shoes: ClothingShoesColorRed
+    head: RMCHeadCapPizzaGalaxy
+    pocket1: RMCFlashlight
+    pocket2: CMDrinkCanDrGibb
+    back: AU14SlingSatchelBlueFilledPizza
+  inhand:
+  - RMCBoxPizzaGalaxyMystery
+
+- type: entity
+  parent: AU14SlingSatchelBlue
+  id: AU14SlingSatchelBlueFilledPizza
+  suffix: Pizza Boy, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponPistolHoldout
+    - id: RMCBoxPizzaGalaxyMystery
+    - id: RMCBoxPizzaGalaxyMystery
+    - id: RMCBoxPizzaGalaxyMystery
+    - id: CMDrinkCanDrGibb
+    - id: CMDrinkCanDrGibb
+
+- type: playTimeTracker
+  id: AU14JobCivilianDeliveryPizzaBoy
+  isHumanoid: true
