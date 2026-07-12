@@ -112,8 +112,6 @@
         amount: 3
       - id: RMCPouchMagazine
         amount: 50
-      - id: RMCPouchMagazineLargePMC
-        amount: 8
       - id: RMCPouchShotgunLarge
         amount: 8
       - id: RMCPouchGeneralMedium
@@ -122,8 +120,6 @@
         amount: 4
       - id: RMCPouchMagazinePistol
         amount: 25
-      - id: RMCPouchMagazinePistolLarge
-        amount: 6
       - id: RMCPouchPistol
         amount: 20
       - id: AU14PouchIFAKFill
@@ -286,7 +282,13 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
   - type: CMAutomatedVendor
-    jobs: [ AU14JobPlatoonCorpsmanBase, AU14JobGOVFORPlatoonCorpsman, AU14JobOPFORPlatoonCorpsman, AU14JobGOVFOROfficerMedical, AU14JobOPFOROfficerMedical ]
+    jobs:
+    - AU14JobGOVFORPlatoonCorpsman
+    - AU14JobGOVFOROfficerMedical
+    - AU14JobGOVFORAuxSupportSynth
+    - AU14JobOPFORPlatoonCorpsman
+    - AU14JobOPFOROfficerMedical
+    - AU14JobOPFORAuxSupportSynth
     sections:
     - name: Essential Equipment
       takeAll: CMUEssentialEquipment
@@ -822,7 +824,7 @@
         isAppendSquadRoleName: false
         givePrefix: rmc-job-prefix-weapons-specialist-shotgunner
         isAppendPrefix: true
-      - id: RMCPyroSpecEquipmentCase
+      - id: CMU14PyroSpecEquipmentCaseWeylandYutani
         giveSquadRoleName: rmc-job-name-weapons-specialist-pyro
         isAppendSquadRoleName: false
         givePrefix: au14-job-prefix-specialist-pyro
@@ -898,6 +900,24 @@
       entries:
       - id: CMMagazinePistolM77AP
         amount: 200
+    - name: Magazine Boxes
+      entries:
+      - id: CMUBoxMagazineSMGFP9000
+        amount: 2
+      - id: RMCBoxMagazineSMGM63
+        amount: 2
+      - id: RMCBoxMagazinePistolM77AP
+        amount: 2
+    - name: Ammo Boxes
+      entries:
+      - id: RMCBoxBulletsRifle
+        amount: 5
+      - id: RMCBoxBulletsSMG
+        amount: 5
+      - id: RMCBoxBulletsSmartGun
+        amount: 5
+      - id: CMUBoxBulletsSMGP90
+        amount: 5
     - name: explosives
       entries:
       - id: CMPacketGrenadeHighExplosiveFilled
@@ -976,6 +996,12 @@
         amount: 4
       - id: RMCOuterClothingExternalWebbing
         amount: 4
+    - name: Pouches
+      entries:
+      - id: RMCPouchMagazineLargePMC
+        amount: 10
+      - id: RMCPouchMagazinePistolLarge
+        amount: 10
     - name: Devices
       entries:
       - id: RMCIntelDetector

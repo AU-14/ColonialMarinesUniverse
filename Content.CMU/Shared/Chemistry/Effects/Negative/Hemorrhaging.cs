@@ -2,13 +2,13 @@
 /// reason: Because I, (MACMAN2003), the initial coder of this specific file disagree with the AGPL's copyleft approach to
 /// free software and would prefer this code be shared freely without restrictions.
 
-using Content.Shared._CMU14.Medical.Organs;
-using Content.Shared._CMU14.Medical.Wounds;
+using Content.Shared._CMU14.Medical.Anatomy.Organs;
+using Content.Shared._CMU14.Medical.Core;
+using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Chemistry.Effects;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.EntityEffects;
@@ -33,15 +33,14 @@ public sealed partial class Hemorrhaging : RMCChemicalEffect
     protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
     {
         var entman = args.EntityManager;
-        var bodSys = entman.System<SharedBodySystem>();
+        var medicalIndex = entman.System<CMUMedicalBodyIndexSystem>();
         var woundSys = entman.System<SharedCMUWoundsSystem>();
         var targ = args.TargetEntity;
         List<EntityUid> bparts = [];
-        // evil foreach from hell
-        foreach (var item in bodSys.GetBodyChildren(targ))
-        {
-            bparts.Add(item.Id);
-        }
+        foreach (var item in medicalIndex.GetBodyParts(targ))
+            bparts.Add(item.Owner);
+        if (bparts.Count == 0)
+            return;
         var random = IoCManager.Resolve<IRobustRandom>();
         var part = random.Pick(bparts);
         //TODO if (entman.TryComp<LimbComponent>(part, out var limb) && (limb.Robot | limb.Synth)) return;
@@ -55,14 +54,14 @@ public sealed partial class Hemorrhaging : RMCChemicalEffect
     protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
     {
         var entman = args.EntityManager;
-        var bodSys = entman.System<SharedBodySystem>();
+        var medicalIndex = entman.System<CMUMedicalBodyIndexSystem>();
         var orgSys = entman.System<SharedOrganHealthSystem>();
         var targ = args.TargetEntity;
         List<EntityUid> orgs = [];
-        foreach (var item in bodSys.GetBodyOrgans(targ))
-        {
-            orgs.Add(item.Id);
-        }
+        foreach (var item in medicalIndex.GetOrgans(targ))
+            orgs.Add(item.Owner);
+        if (orgs.Count == 0)
+            return;
         var random = IoCManager.Resolve<IRobustRandom>();
         var org = random.Pick(orgs);
         IReadOnlyList<EntityUid> organtodamage = [org];
@@ -75,18 +74,14 @@ public sealed partial class Hemorrhaging : RMCChemicalEffect
     protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
     {
         var entman = args.EntityManager;
-        var bodSys = entman.System<SharedBodySystem>();
-        var orgSys = entman.System<SharedOrganHealthSystem>();
+        var medicalIndex = entman.System<CMUMedicalBodyIndexSystem>();
         var woundSys = entman.System<SharedCMUWoundsSystem>();
         var targ = args.TargetEntity;
         var random = IoCManager.Resolve<IRobustRandom>();
         if (random.Prob((10f * (float)potency) / 100f))
         {
-            List<EntityUid> bparts = [];
-            foreach (var item in bodSys.GetBodyChildren(targ))
-            {
-                woundSys.SeedInternalBleed(item.Id, "Chemical", 0.3f);
-            }
+            foreach (var item in medicalIndex.GetBodyParts(targ))
+                woundSys.SeedInternalBleed(item.Owner, "Chemical", 0.3f);
         }
 
     }

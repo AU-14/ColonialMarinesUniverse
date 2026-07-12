@@ -10,7 +10,7 @@ using Content.Server.NPC.Systems;
 using Content.Server.Prayer;
 using Content.Server.Zombies;
 using Content.Shared._RMC14.NightVision;
-using Content.Shared._CMU14.Medical.BodyPart.Events;
+using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared.Actions.Components;
 using Content.Shared._CMU14.Threats.Mobs.ZombieSummoner;
 using Content.Shared.Body.Components;

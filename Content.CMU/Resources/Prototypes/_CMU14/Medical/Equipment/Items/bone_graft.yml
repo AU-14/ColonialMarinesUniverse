@@ -1,0 +1,20 @@
+- type: entity
+  parent: BaseItem
+  id: CMUBoneGraftItem
+  name: bone graft
+  description: A vial of synthetic bone material for grafting shattered fractures.
+  components:
+  - type: Item
+    size: Small
+  - type: CMUBoneGraft
+  - type: Tag
+    tags:
+    - CMUBoneGraft
+  - type: CMSurgeryTool
+    skill: 1
+  - type: Sprite
+    sprite: _AU14/Objects/Medical/bonegraft.rsi
+    state: bonegraft
+
+- type: Tag
+  id: CMUBoneGraft

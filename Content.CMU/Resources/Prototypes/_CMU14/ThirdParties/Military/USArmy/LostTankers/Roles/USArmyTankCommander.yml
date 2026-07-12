@@ -55,7 +55,7 @@
   spawnMenuRoleName: US Army Tank Commander (AU14, 3rd Party)
   startingGear: AU14GearUSArmyTankCommander
   greeting: au14-usarmy-tank-greeting
-  icon: "AU14JobIconTankCrewman"
+  icon: "AU14JobIconThirdPartyTankCrewman"
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-govfor
   accessGroups:
@@ -106,13 +106,6 @@
     - CMMagazinePistolMK80
     head:
     - RMCGogglesBallisticPolarizedOrange
-
-- type: jobIcon
-  parent: CMJobIconBase
-  id: AU14JobIconTankCrewman
-  icon:
-    sprite: _RMC14/Interface/cm_job_icons.rsi
-    state: hudsquad_tc
 
 - type: playTimeTracker
   id: AU14JobUSArmyTankCommander

@@ -68,6 +68,10 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
+    - CMUProstheticLeftArm
+    - CMUProstheticRightArm
+    - CMUProstheticLeftLeg
+    - CMUProstheticRightLeg
   ranks:
     RMCRankSyntheticColonist: []
   startingGear: AU14GearCivilianColonySynthetic

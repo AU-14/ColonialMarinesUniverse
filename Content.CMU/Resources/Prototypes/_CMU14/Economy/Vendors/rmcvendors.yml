@@ -146,8 +146,6 @@
         amount: 3
       - id: RMCPouchMagazine
         amount: 50
-      - id: RMCPouchMagazineLarge
-        amount: 8
       - id: RMCPouchShotgunLarge
         amount: 8
       - id: RMCPouchGeneralMedium
@@ -156,8 +154,6 @@
         amount: 4
       - id: RMCPouchMagazinePistol
         amount: 25
-      - id: RMCPouchMagazinePistolLarge
-        amount: 6
       - id: AU14PouchPistolAlt
         amount: 20
       - id: AU14PouchIFAKFill
@@ -396,7 +392,13 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
   - type: CMAutomatedVendor
-    jobs: [ AU14JobPlatoonCorpsmanBase, AU14JobGOVFORPlatoonCorpsman, AU14JobOPFORPlatoonCorpsman, AU14JobGOVFOROfficerMedical, AU14JobOPFOROfficerMedical ]
+    jobs:
+    - AU14JobGOVFORPlatoonCorpsman
+    - AU14JobGOVFOROfficerMedical
+    - AU14JobGOVFORAuxSupportSynth
+    - AU14JobOPFORPlatoonCorpsman
+    - AU14JobOPFOROfficerMedical
+    - AU14JobOPFORAuxSupportSynth
     sections:
     - name: Essential Equipment
       takeAll: CMUEssentialEquipment
@@ -413,6 +415,10 @@
         name: first-aid pouch (gauze, ointment) # TODO RMC14 splints
       - id: RMCPouchFirstAidPills
         name: first-aid pouch (pills)
+    - name: Medical Headgear
+      entries:
+      - id: CMArmorHelmetM10Medic
+        amount: 9
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
@@ -1208,6 +1214,30 @@
         amount: 200
       - id: AU14MagazinePistolL165A1
         amount: 200
+    - name: Magazine Boxes
+      entries:
+      - id: RMCBoxMagazineRifleL24
+        amount: 2
+      - id: CMUBoxMagazineSMGL90A2
+        amount: 2
+      - id: CMUBoxMagazinePistolL54
+        amount: 2
+      - id: CMUBoxMagazinePistolL165A1
+        amount: 2
+    - name: Ammo Boxes
+      entries:
+      - id: RMCBoxBulletsRifleL24
+        amount: 5
+      - id: RMCBoxBulletsRifleL90
+        amount: 5
+      - id: RMCBoxBulletsSMG
+        amount: 5
+      - id: RMCBoxBulletsSmartGun
+        amount: 5
+      - id: CMUBoxBulletsPistol9MM
+        amount: 5
+      - id: CMUBoxBulletsPistol9MMSH
+        amount: 5
     - name: explosives
       entries:
       - id: AU14PacketGrenadeHighExplosiveRMCFilled
@@ -1282,6 +1312,12 @@
         amount: 4
       - id: RMCOuterClothingExternalWebbing
         amount: 4
+    - name: Pouches
+      entries:
+      - id: RMCPouchMagazineLarge
+        amount: 10
+      - id: RMCPouchMagazinePistolLarge
+        amount: 10
     - name: Devices
       entries:
       - id: RMCIntelDetector

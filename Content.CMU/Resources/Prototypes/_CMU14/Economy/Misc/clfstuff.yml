@@ -379,7 +379,13 @@
   - type: Physics
     bodyType: Dynamic
 
-
+- type: entity
+  parent: RMCComputerIntelCLF
+  id: CMUComputerIntelCLFClaimable
+  components:
+  - type: ClaimableIntelConsole
+    claimingTeam: govfor
+    requiredPreset: Insurgency
 
 - type: clfSpawnConfig
   id: CLFSpawnConfig
@@ -406,7 +412,7 @@
     areaBlockedCheck: false
     failIfNotSurface: false
     deploySetups:
-    - prototype: RMCComputerIntelCLF
+    - prototype: CMUComputerIntelCLFClaimable
       mode: ReactiveParental
       offset: -1.5, 2
     - prototype: ComputerObjectivesCLF

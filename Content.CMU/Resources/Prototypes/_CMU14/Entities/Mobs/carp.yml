@@ -1,9 +1,9 @@
 - type: entity
-  name: genetic ancestor
-  id: CMUBaseMobCarp
-  parent: SimpleMobBase
-  description: The genetic bipedal ancestor of... Uh... Something. Yeah, there's definitely something on the planet that descended from whatever this is.
   abstract: true
+  parent: SimpleMobBase
+  id: CMUBaseMobCarp
+  name: genetic ancestor
+  description: The genetic bipedal ancestor of... Uh... Something. Yeah, there's definitely something on the planet that descended from whatever this is.
   components:
   - type: CombatMode
   - type: Fixtures
@@ -75,6 +75,7 @@
   - type: RemoveComponents
     components:
     - type: Internals
+  - type: NoSlip
 
 - type: entity
   parent: [RMCSimpleMob, CMUBaseMobCarp, RMCSmallHost]

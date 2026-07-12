@@ -40,7 +40,7 @@
   spawnMenuRoleName: US Army Tank Loader (AU14, 3rd Party)
   startingGear: AU14GearUSArmyTankLoader
   greeting: au14-usarmy-tank-greeting
-  icon: "AU14JobIconTankCrewman"
+  icon: "AU14JobIconThirdPartyTankCrewman"
   joinNotifyCrew: false
   supervisors: au14-job-name-usarmy-tankcommander
   accessGroups:

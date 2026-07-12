@@ -1,0 +1,67 @@
+<examine:CMUInspectInjuriesWindow
+    xmlns="https://spacestation14.io"
+    xmlns:examine="clr-namespace:Content.Client._CMU14.Medical.Diagnostics.Examine"
+    xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    MinSize="320 240"
+    SetSize="400 340">
+    <PanelContainer Name="RootPanel" Access="Public">
+        <PanelContainer.PanelOverride>
+            <graphics:StyleBoxFlat BackgroundColor="#0E1418" BorderColor="#527078" BorderThickness="2" />
+        </PanelContainer.PanelOverride>
+
+        <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="6"
+                      HorizontalExpand="True" VerticalExpand="True">
+            <PanelContainer>
+                <PanelContainer.PanelOverride>
+                    <graphics:StyleBoxFlat BackgroundColor="#121B20" BorderColor="#30434A" BorderThickness="1" />
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Horizontal" Margin="8 6" SeparationOverride="8"
+                              HorizontalExpand="True">
+                    <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                        <Label Text="{Loc cmu-medical-detailed-examine-window-heading}"
+                               StyleClasses="LabelHeading"
+                               Modulate="#F2EEE7"
+                               ClipText="True" />
+                        <Label Name="PatientLabel" Access="Public"
+                               StyleClasses="LabelSubText"
+                               Modulate="#B7B0A5"
+                               ClipText="True"
+                               Margin="0 2 0 0" />
+                    </BoxContainer>
+                    <PanelContainer Name="BleedingBox" Access="Public"
+                                    Visible="False"
+                                    MinSize="126 26"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top">
+                        <PanelContainer.PanelOverride>
+                            <graphics:StyleBoxFlat BackgroundColor="#241416" BorderColor="#8A3A3F" BorderThickness="1" />
+                        </PanelContainer.PanelOverride>
+                        <Label Name="BleedingLabel" Access="Public"
+                               Margin="8 3"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               StyleClasses="LabelSubText"
+                               Modulate="#FFB3B3"
+                               ClipText="False" />
+                    </PanelContainer>
+                </BoxContainer>
+            </PanelContainer>
+
+            <PanelContainer HorizontalExpand="True" VerticalExpand="True">
+                <PanelContainer.PanelOverride>
+                    <graphics:StyleBoxFlat BackgroundColor="#111A20" BorderColor="#263A42" BorderThickness="1" />
+                </PanelContainer.PanelOverride>
+                <ScrollContainer Name="InjuryScroll" Access="Public"
+                                 HScrollEnabled="False"
+                                 VScrollEnabled="True"
+                                 HorizontalExpand="True"
+                                 VerticalExpand="True"
+                                 Margin="4">
+                    <RichTextLabel Name="InjuryText" Access="Public"
+                                   HorizontalExpand="True"
+                                   Margin="4" />
+                </ScrollContainer>
+            </PanelContainer>
+        </BoxContainer>
+    </PanelContainer>
+</examine:CMUInspectInjuriesWindow>

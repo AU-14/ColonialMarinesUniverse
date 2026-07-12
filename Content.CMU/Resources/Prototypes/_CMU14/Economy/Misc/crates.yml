@@ -131,11 +131,19 @@
     children:
     - !type:GroupSelector
       children:
+      - id: CMUMobCarp
+        amount: 3
       - id: MobCow
       - id: MobGoat
       - id: MobGorilla
+        amount: 2
       - id: MobKangaroo
+        amount: 3
       - id: MobPig
+      - id: MobPenguin
+        amount: 3
+      - id: RMCMobOrion
+        amount: 4
       - !type:GroupSelector
         weight: 0.75
         children:
@@ -143,15 +151,11 @@
           amount: 3
         - id: CMMobSmallHostKobold
           amount: 3
-          weight: 2
         - id: CMMobSmallHostMonkey
           amount: 3
-          weight: 4
         - id: RMCMobSmallHostNeaera
           amount: 3
         - id: RMCMobSmallHostStok
           amount: 3
         - id: RMCMobSmallHostYiren
-          amount: 3
-        - id: CMUMobCarp
           amount: 3
