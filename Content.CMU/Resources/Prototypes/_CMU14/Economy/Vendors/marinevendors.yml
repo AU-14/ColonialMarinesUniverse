@@ -606,9 +606,15 @@
     - name: Fatigues
       entries:
       - id: CMJumpsuitXOFormal
-        amount: 2
+        amount: 10
       - id: AU14USCMOperationsUniform
-        amount: 3
+        amount: 10
+    - name: Jackets
+      entries:
+      - id: RMCCoatAllWeather
+        amount: 10
+      - id: RMCCoatService
+        amount: 10
     - name: Footwear
       entries:
       - id: CMBootsBlack
