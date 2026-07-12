@@ -70,14 +70,16 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
     {
         var runs = GetRuns(message, speechStyleClass);
         var (style, forceBold) = GetVisualStyle(message, speechStyleClass, runs);
+        var pages = GetRunPages(runs);
 
         // Some styles (announcements, pain, scream, commander speech, full-caps
         // yell emotes) are always bold regardless of markup - stamp that onto
         // every run so the per-run renderer picks it up uniformly.
         if (forceBold)
-            runs = ForceBold(runs);
-
-        var pages = GetRunPages(runs);
+        {
+            for (int i = 0; i < pages.Count; i++)
+                pages[i] = ForceBold(pages[i]);
+        }
 
         return new RunechatTextControl(pages, fontColor ?? DefaultColor, style);
     }
@@ -92,8 +94,6 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
                 ? WhisperStyle
                 : SayStyle;
         }
-
-    
 
         return type switch
         {
@@ -117,8 +117,8 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         if (type == SpeechType.Looc)
             return LoocColor;
 
-       if (type == SpeechType.Radio)
-         return message.Display?.AccentColor ?? RadioColor;
+        if (type == SpeechType.Radio)
+            return message.Display?.AccentColor ?? RadioColor;
 
         var entityManager = IoCManager.Resolve<IEntityManager>();
         if (entityManager.HasComponent<XenoComponent>(senderEntity))
@@ -163,7 +163,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         if (message.SpeechStyleClass == "commanderSpeech")
             return (RunechatVisualStyle.Bolded, true);
 
-        // RMC14: if the ENTIRE message is bold (every word marked with the
+        // CMU: if the ENTIRE message is bold (every word marked with the
         // bold/italic markup system), keep the old bigger "!!" yell look.
         // Runs already carry their own Bold flag from parsing, so this branch
         // doesn't need to force anything - it's already true for every run.
@@ -193,7 +193,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         if (pages.Count <= 1)
         {
             var length = pages.Count == 0 ? 0 : RunsLength(pages[0]);
-            return TimeSpan.FromSeconds(length / (float) LongestText * SplitChunkSeconds + 2f);
+            return TimeSpan.FromSeconds(length / (float)LongestText * SplitChunkSeconds + 2f);
         }
 
         return TimeSpan.FromSeconds((pages.Count - 1) * SplitChunkSeconds + SplitFinalSeconds);
@@ -316,7 +316,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
                         italicDepth = Math.Max(0, italicDepth - 1);
                         i = close + 1;
                         continue;
-                         case "bolditalic":
+                    case "bolditalic":
                         Flush();
                         boldDepth++;
                         italicDepth++;
@@ -376,25 +376,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
                 result.Add(run with { Text = sb.ToString() });
         }
 
-        while (result.Count > 0)
-        {
-            var last = result[^1];
-            var trimmed = last.Text.TrimEnd(' ');
-
-            if (trimmed.Length == last.Text.Length)
-                break;
-
-            if (trimmed.Length == 0)
-            {
-                result.RemoveAt(result.Count - 1);
-                continue;
-            }
-
-            result[^1] = last with { Text = trimmed };
-            break;
-        }
-
-        return result;
+        return TrimRunsEnd(result);
     }
 
     private static string NormalizeWhitespacePlain(string text)
@@ -615,7 +597,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
 
     private static int ScaleFontSize(int fontSize, float scale)
     {
-        return (int) MathF.Round(fontSize * scale);
+        return (int)MathF.Round(fontSize * scale);
     }
 
     private readonly record struct RunechatVisualStyle(
@@ -656,9 +638,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         private const string SmallFontsFamily = "Small Fonts";
         private const string SmallFonts120Family = "Small Fonts (120)";
         private const string FallbackFontPath = "/Fonts/Cozette/CozetteVector.ttf";
-
-   
-       private const string FallbackItalicFontPath = "/Fonts/Cozette/CozetteVectorItalic.ttf";
+        private const string FallbackItalicFontPath = "/Fonts/Cozette/CozetteVectorItalic.ttf";
 
         private const float CmuMaxAlpha = 1f;
         private const float SyntheticBoldOffset = 1f;
@@ -1236,7 +1216,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
                     {
                         '#' => Color.Black.WithAlpha(iconAlpha),
                         'B' => EmoteIconBlue.WithAlpha(iconAlpha),
-                        _ => (Color?) null,
+                        _ => (Color?)null,
                     };
 
                     if (color is { } iconColor)
