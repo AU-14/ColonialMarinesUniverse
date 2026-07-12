@@ -7,3 +7,18 @@
   id: WebbingSurgicalGreenCMU14
   inhand:
   - CMWebbingSurgicalGreen
+
+- type: loadout
+  id: DropSurgicalGreenCMU14
+  inhand:
+  - CMU14DropSurgicalGreen
+
+- type: loadout
+  id: DropSurgicalBlueCMU14
+  inhand:
+  - CMU14DropSurgicalBlue
+
+- type: loadout
+  id: DropSurgicalBlackCMU14
+  inhand:
+  - CMU14DropSurgicalBlack

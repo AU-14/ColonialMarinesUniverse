@@ -31,7 +31,7 @@
   id: AU14JobIconOPFOROpsOfc
   icon:
     sprite: _AU14/Interface/au14opforjobicons.rsi
-    state: old_platco
+    state: opsofc
 
 - type: jobIcon
   parent: CMJobIconBase
@@ -80,7 +80,7 @@
   id: AU14JobIconOPFORPlatoonSgt
   icon:
     sprite: _AU14/Interface/au14opforjobicons.rsi
-    state: old_platoonsergeant
+    state: platoonsergeant
 
 - type: jobIcon
   parent: CMJobIconBase
@@ -157,18 +157,25 @@
   id: AU14JobIconOPFORCMP
   icon:
     sprite: _AU14/Interface/au14opforjobicons.rsi
-    state: old_platco
+    state: cmp
 
 - type: jobIcon
   parent: CMJobIconBase
   id: AU14JobIconOPFORMO
   icon:
     sprite: _AU14/Interface/au14opforjobicons.rsi
-    state: old_opsofc
+    state: cmo
 
 - type: jobIcon
   parent: CMJobIconBase
   id: AU14JobIconOPFORLO
   icon:
     sprite: _AU14/Interface/au14opforjobicons.rsi
-    state: old_platco
+    state: lo
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFORTankCrewman
+  icon:
+    sprite: _AU14/Interface/au14opforjobicons.rsi
+    state: vc

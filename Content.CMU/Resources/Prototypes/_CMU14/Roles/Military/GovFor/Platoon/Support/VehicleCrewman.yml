@@ -4,7 +4,7 @@
   id: AU14JobVehicleCrewmanBaseAbstract
   name: au14-job-name-vehiclecrewman
   description: au14-job-description-vehiclecrewman
-  icon: "AU14JobIconTankCrewman"
+  icon: "AU14JobIconGovTankCrewman"
   spawnMenuRoleName: Vehicle Crewman (GOVFOR)
   startingGear: AU14GearGOVFORVehicleCrewman
   dummyStartingGear: AU14GearGOVFORVehicleCrewmanDummy
@@ -27,9 +27,9 @@
   - type: JobPrefix
     prefix: au14-job-prefix-vehiclecrewman
   - type: TacticalMapIcon
-    icon:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: vc
+    icon: # TODO: copy paste this for OPFOR but use their version of course
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: govfor_vc
   requirements:
   - !type:TraitsRequirement
     inverted: true
@@ -40,14 +40,20 @@
   ranks:
     RMCRankCivilian: []
   chevrons:
-    RMCRankPrivateFirstClass:
-      entity: AU14ChevronUSCMPrivateFirstClass
+    RMCRankCorporal:
+      entity: AU14ChevronUSCMCorporal
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobGOVFORVehicleCrewman
-        time: 54000 # 15 hours
-    RMCRankPrivate:
-      entity: AU14ChevronUSCMPrivate
+        time: 86400 # 24 hours
+    RMCRankLanceCorporal:
+      entity: AU14ChevronUSCMLanceCorporal
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORVehicleCrewman
+        time: 18000 # 5 hours
+    RMCRankPrivateFirstClass:
+      entity: AU14ChevronUSCMPrivateFirstClass
       requirements: []
 
 - type: playTimeTracker
@@ -67,6 +73,7 @@
   id: AU14JobOPFORVehicleCrewman
   roundSide: Opfor
   roundForce: OPFOR
+  icon: "AU14JobIconOPFORTankCrewman"
   spawnMenuRoleName: Vehicle Crewman (OPFOR)
   supervisors: au14-job-supervisors-opfor
   startingGear: AU14GearOPFORVehicleCrewman

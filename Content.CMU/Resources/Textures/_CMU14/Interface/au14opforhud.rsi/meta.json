@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "All sprites (unless stated otherwise further in the copyright) were originally taken from cmss13-pve at https://github.com/cmss13-devs/cmss13-pve/blob/279b570b35c7715d45541ad752f57a94eba8f949/icons/mob/hud/marine_hud.dmi and modified by Blackburn (nickname) for use in AU14. | As of commit https://github.com/AU-14/ColonialMarinesUniverse/commit/891bf8fd14acca5b6211c746a926f99a52c3467f , almost all sprites in this folder have been changed, reworked or updated in some way by hutcrime. Appearance of a sprite name or reference in the following list indicates no visual change, or any change at all made in said sprite as of mentioned commit; dcc, k9handler, po. | Following sprites have been renamed: rto to auxtech, rfn to mp, platoonsergeant to ftl. | Sprites doctor and ws made, and rifleman added from /Resources/Textures/_AU14/Interface/au14opforjobicons.rsi by hutcrime. | working_joe made by potatoed. | All authors mentioned are mentioned as their usernames (preferrably), or nicknames (if their username is unknown), on Discord.",
+  "copyright": "All sprites (unless stated otherwise further in the copyright) were originally taken from cmss13-pve at https://github.com/cmss13-devs/cmss13-pve/blob/279b570b35c7715d45541ad752f57a94eba8f949/icons/mob/hud/marine_hud.dmi and modified by Blackburn (nickname) for use in AU14. | As of commit https://github.com/AU-14/ColonialMarinesUniverse/commit/891bf8fd14acca5b6211c746a926f99a52c3467f , almost all sprites in this folder have been changed, reworked or updated in some way by hutcrime. Appearance of a sprite name or reference in the following list indicates no visual change, or any change at all made in said sprite as of mentioned commit; dcc, k9handler, po. | Following sprites have been renamed: rto to auxtech, rfn to mp, platoonsergeant to ftl. | Sprites doctor and ws made, and rifleman added from /Resources/Textures/_AU14/Interface/au14opforjobicons.rsi by hutcrime. | cmo, cmp, lo and vc made by hutcrime. | working_joe made by potatoed. | All authors mentioned are mentioned as their usernames (preferrably), or nicknames (if their username is unknown), on Discord.",
   "size": {
     "x": 32,
     "y": 32
@@ -21,6 +21,12 @@
     },
     {
       "name": "background"
+    },
+	{
+      "name": "cmo"
+    },
+	{
+      "name": "cmp"
     },
     {
       "name": "corpsman"
@@ -46,6 +52,9 @@
     {
       "name": "k9handler"
     },
+	{
+      "name": "lo"
+    },
     {
       "name": "mp"
     },
@@ -56,10 +65,10 @@
       "name": "platco"
     },
 	{
-      "name": "po"
+      "name": "platoonsergeant"
     },
 	{
-      "name": "rifleman"
+      "name": "po"
     },
 	{
       "name": "sergeant"
@@ -68,10 +77,10 @@
       "name": "synth"
     },
 	{
-      "name": "weaponsspecialist"
-    },
+	  "name": "vc"
+	},
 	{
-      "name": "working_joe"
+      "name": "ws"
     },
 	{
       "name": "old_afn"
@@ -92,7 +101,10 @@
       "name": "old_sergeant"
     },
 	{
-      "name": "platoonsergeant"
+      "name": "rifleman"
+    },
+	{
+      "name": "working_joe"
     }
   ]
 }

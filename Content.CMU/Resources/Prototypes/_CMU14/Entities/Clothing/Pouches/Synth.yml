@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: RMCPouchToolsSoc
   id: AU14PouchToolsFilledSupportSynthetic
   suffix: Filled, Support Synthetic
@@ -37,6 +37,7 @@
       - Donut
       - RMCGrenadeFlashBang
       - Radio
+      - Grenade
       components:
       - Handcuff
       - Flash

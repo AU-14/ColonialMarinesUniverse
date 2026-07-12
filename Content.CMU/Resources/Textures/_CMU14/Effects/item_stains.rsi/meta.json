@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/4535454235f5c9df26bc540946c701f8d2ddf369/icons/effects/blood.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "itemblood"
+    },
+    {
+      "name": "hands_blood",
+      "directions": 4
+    },
+    {
+      "name": "feet_blood",
+      "directions": 4
+    },
+    {
+      "name": "sterile_blood",
+      "directions": 4
+    },
+    {
+      "name": "gasmask_blood",
+      "directions": 4
+    },
+    {
+      "name": "mask_blood",
+      "directions": 4
+    },
+    {
+      "name": "uniform_blood",
+      "directions": 4
+    },
+    {
+      "name": "uniform_d_blood",
+      "directions": 4
+    },
+    {
+      "name": "uniform_df_blood",
+      "directions": 4
+    },
+    {
+      "name": "uniform_dj_blood",
+      "directions": 4
+    },
+    {
+      "name": "armor_blood",
+      "directions": 4
+    },
+    {
+      "name": "surgcap_blood",
+      "directions": 4
+    },
+    {
+      "name": "beret_blood",
+      "directions": 4
+    },
+    {
+      "name": "booniehat_blood",
+      "directions": 4
+    },
+    {
+      "name": "hardhat_blood",
+      "directions": 4
+    },
+    {
+      "name": "m10helmet_blood",
+      "directions": 4
+    },
+    {
+      "name": "helmet_blood",
+      "directions": 4
+    },
+    {
+      "name": "vest_blood",
+      "directions": 4
+    },
+    {
+      "name": "apron_blood",
+      "directions": 4
+    },
+    {
+      "name": "bigsuit_blood",
+      "directions": 4
+    },
+    {
+      "name": "suit_blood",
+      "directions": 4
+    },
+    {
+      "name": "jacket_blood",
+      "directions": 4
+    },
+    {
+      "name": "coat_blood",
+      "directions": 4
+    }
+  ]
+}

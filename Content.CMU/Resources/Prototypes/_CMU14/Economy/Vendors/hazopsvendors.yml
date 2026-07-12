@@ -123,8 +123,6 @@
         amount: 3
       - id: RMCPouchMagazine
         amount: 50
-      - id: RMCPouchMagazineLarge
-        amount: 8
       - id: RMCPouchShotgunLarge
         amount: 8
       - id: RMCPouchGeneralMedium
@@ -133,8 +131,6 @@
         amount: 4
       - id: RMCPouchMagazinePistol
         amount: 25
-      - id: RMCPouchMagazinePistolLarge
-        amount: 6
       - id: RMCPouchPistol
         amount: 20
       - id: AU14PouchIFAKFill
@@ -323,7 +319,7 @@
         isAppendSquadRoleName: false
         givePrefix: rmc-job-prefix-weapons-specialist-shotgunner
         isAppendPrefix: true
-      - id: AU14KitHAZOPSPyroM240A2
+      - id: CMU14PyroSpecEquipmentCaseHAZOPS
         giveSquadRoleName: au14-job-name-specialist-pyro
         givePrefix: au14-job-prefix-specialist-pyro
         isAppendSquadRoleName: false
@@ -519,6 +515,18 @@
         amount: 100
       - id: RMCSpeedLoader44Marksman
         amount: 10
+    - name: Magazine Boxes
+      entries:
+      - id: CMUBoxMagazineSMGXMP5A6
+        amount: 2
+      - id: RMCBoxMagazinePistolM1984
+        amount: 2
+    - name: Ammo Boxes
+      entries:
+      - id: RMCBoxBulletsRifle
+        amount: 5
+      - id: CMUBoxBulletsPistol9MM
+        amount: 5
     - name: explosives
       entries:
       - id: CMPacketGrenadeHighExplosiveFilled
@@ -601,6 +609,12 @@
         amount: 4
       - id: RMCOuterClothingExternalWebbing
         amount: 4
+    - name: Pouches
+      entries:
+      - id: RMCPouchMagazineLarge
+        amount: 10
+      - id: RMCPouchMagazinePistolLarge
+        amount: 10
     - name: Devices
       entries:
       - id: RMCIntelDetector

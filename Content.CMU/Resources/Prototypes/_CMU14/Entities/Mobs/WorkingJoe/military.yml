@@ -3,6 +3,7 @@
   id: AU14MobWorkingJoeGOVFOR
   suffix: AU14, GOVFOR
   components:
+  - type: AU14CallToAttentionImmune
   # - type: GhostTakeoverAvailable
   # - type: GhostRoleApplySpecial
   # - type: GhostRole
@@ -31,18 +32,19 @@
   id: AU14MobWorkingJoeOPFOR
   suffix: AU14, OPFOR
   components:
-  - type: GhostTakeoverAvailable
-  - type: GhostRoleApplySpecial
-  - type: GhostRole
-    makeSentient: true
-    allowSpeech: true
-    allowMovement: true
-    reregister: false
-    name: Working Joe (OPFOR)
-    description: au14-job-description-workingjoe
-    job: AU14JobOPFORWorkingJoe
-    raffle:
-      settings: short
+  - type: AU14CallToAttentionImmune
+  # - type: GhostTakeoverAvailable
+  # - type: GhostRoleApplySpecial
+  # - type: GhostRole
+  #   makeSentient: true
+  #   allowSpeech: true
+  #   allowMovement: true
+  #   reregister: false
+  #   name: Working Joe (OPFOR)
+  #   description: au14-job-description-workingjoe
+  #   job: AU14JobOPFORWorkingJoe
+  #   raffle:
+  #     settings: short
   - type: Loadout
     prototypes: [AU14GearOPFORWorkingJoe]
 

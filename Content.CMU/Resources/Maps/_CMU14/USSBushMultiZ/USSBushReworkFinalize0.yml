@@ -4,7 +4,7 @@ meta:
   engineVersion: v277.0.0
   forkId: ""
   forkVersion: ""
-  time: 06/17/2026 23:50:12
+  time: 07/08/2026 08:10:32
   entityCount: 6295
 maps:
 - 1
@@ -26480,7 +26480,7 @@ entities:
       lastSignals:
         DoorStatus: True
     - type: Door
-      secondsUntilStateChange: -155921.94
+      secondsUntilStateChange: -156358.27
       state: Opening
   - uid: 3567
     components:
@@ -29568,7 +29568,7 @@ entities:
       pos: -5.5,-11.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -173482.12
+      secondsUntilStateChange: -173918.45
       state: Closing
   - uid: 4102
     components:
@@ -32594,6 +32594,7 @@ entities:
       - CMAccessMarineRifleman
       - CMAccessCombatTechPrep
       - CMAccessQM
+      - RMCAccessVehicleCrew
       - CMAccessDropship
       - CMAccessRequisitions
       - CMAccessBravo

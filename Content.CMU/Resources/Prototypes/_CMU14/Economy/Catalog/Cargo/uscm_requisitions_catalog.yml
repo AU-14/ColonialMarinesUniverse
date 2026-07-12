@@ -108,6 +108,10 @@
         crate: RMCCrateGearParachute
       - cost: 800
         crate: RMCCrateAttachmentSmartScope
+    - name: Pouches
+      entries:
+      - cost: 150
+        crate: RMCCrateClothingMagazinePouchesLarge
     - name: Medical
       entries:
       - cost: 3000
@@ -274,6 +278,8 @@
         crate: RMCCrateMagazineBGel
     - name: Specialist Ammo
       entries:
+      - cost: 2000
+        crate: RMCCratePyroTankMixed
       # Sniper
       - cost: 2000
         crate: AU14CrateMagazineSpecSniperM96S

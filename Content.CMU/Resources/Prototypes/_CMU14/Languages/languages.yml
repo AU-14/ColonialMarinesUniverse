@@ -3,6 +3,8 @@
   id: English
   name: "English"
   description: "The standard galactic English language."
+  hideLanguageName: true
+  hideLanguageIcon: true
   languageIcon:
     sprite: /Textures/_RMC14/Interface/flags.rsi
     state: US

@@ -5,7 +5,7 @@
   name: au14-job-name-govforplatop
   description: au14-job-description-govforplatop
   icon: "AU14JobIconOpsOfc"
-  spawnMenuRoleName: Junior Officer (GOVFOR)
+  spawnMenuRoleName: Staff Officer (GOVFOR)
   startingGear: AU14GearGOVFORPlatOp
   dummyStartingGear: AU14GearGOVFORPlatOpDummy
   playTimeTracker: AU14JobGOVFORPlatOp
@@ -28,7 +28,7 @@
     preset: AU14SkillPresetPlatoonJuniorOfficer
   - type: AU14CallToAttentionAbility
     attentionFocusPriority: 200
-  - type: AU14CallToAttentionWhisperImmune
+  - type: AU14CallToAttentionImmune
   - type: RMCSpeechBubbleSpecificStyle
     speechStyleClass: commanderSpeech
   - type: JobPrefix
@@ -36,13 +36,13 @@
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
-      state: old_govfor_platco
+      state: govfor_opsofc
   roundForceComponents:
     OPFOR:
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
-        state: old_platco
+        state: opsofc
     UPP:
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORPlatOpUPP
@@ -85,7 +85,7 @@
   roundSide: Opfor
   roundForce: OPFOR
   icon: "AU14JobIconOPFOROpsOfc"
-  spawnMenuRoleName: Junior Officer (OPFOR)
+  spawnMenuRoleName: Staff Officer (OPFOR)
   supervisors: au14-job-supervisors-opfor
   startingGear: AU14GearOpforPlatOp
   dummyStartingGear: AU14GearOpforPlatOpDummy
@@ -169,7 +169,7 @@
   id: AU14JobGOVFORPlatOpRMC
   roundForce: RMC
   name: au14-job-name-govforplatopRMC
-  spawnMenuRoleName: Junior Officer (TWE RMC)
+  spawnMenuRoleName: Staff Officer (TWE RMC)
   ranks:
     RMC_2Lieutenant: []
 
@@ -179,7 +179,7 @@
   roundForce: UPP
   requirements: []
   name: Staff Officer
-  spawnMenuRoleName: Junior Officer (UPP)
+  spawnMenuRoleName: Staff Officer (UPP)
   ranks:
     UPP_Lieutenant:
     - !type:RoleTimeRequirement
@@ -194,6 +194,6 @@
   requirements: []
   name: PMC Operations Adjutant
   description: au14-job-description-govforplatop
-  spawnMenuRoleName: Junior Officer (WYPMC)
+  spawnMenuRoleName: Staff Officer (WYPMC)
   ranks:
     AU14RankWeYuAdjutant: []

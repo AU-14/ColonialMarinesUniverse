@@ -160,8 +160,6 @@
         amount: 3
       - id: RMCPouchMagazine
         amount: 50
-      - id: RMCPouchMagazineLarge
-        amount: 8
       - id: RMCPouchShotgunLarge
         amount: 8
       - id: RMCPouchGeneralMedium
@@ -170,8 +168,6 @@
         amount: 4
       - id: RMCPouchMagazinePistol
         amount: 25
-      - id: RMCPouchMagazinePistolLarge
-        amount: 6
       - id: RMCPouchPistol
         amount: 20
       - id: AU14PouchIFAKFill
@@ -273,7 +269,13 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
   - type: CMAutomatedVendor
-    jobs: [ AU14JobPlatoonCorpsmanBase, AU14JobGOVFORPlatoonCorpsman, AU14JobOPFORPlatoonCorpsman, AU14JobGOVFOROfficerMedical, AU14JobOPFOROfficerMedical ]
+    jobs:
+    - AU14JobGOVFORPlatoonCorpsman
+    - AU14JobGOVFOROfficerMedical
+    - AU14JobGOVFORAuxSupportSynth
+    - AU14JobOPFORPlatoonCorpsman
+    - AU14JobOPFOROfficerMedical
+    - AU14JobOPFORAuxSupportSynth
     sections:
     - name: Essential Equipment
       takeAll: CMUEssentialEquipment
@@ -600,9 +602,15 @@
     - name: Fatigues
       entries:
       - id: CMJumpsuitXOFormal
-        amount: 2
+        amount: 10
       - id: AU14USCMOperationsUniform
-        amount: 3
+        amount: 10
+    - name: Jackets
+      entries:
+      - id: RMCCoatAllWeather
+        amount: 10
+      - id: RMCCoatService
+        amount: 10
     - name: Footwear
       entries:
       - id: CMBootsBlack
@@ -1096,12 +1104,13 @@
       - id: RMCSatchelWelderChestrig
       - id: RMCSatchelWelder
     - name: Engineering Storage Pouch
-      choices: { CMUPouchesCT: 1 }
+      choices: { CMUPouchesCT: 2 }
       entries:
       - id: RMCPouchConstruction
         recommended: true
+      - id: RMCPouchEngineerKit
       - id: RMCPouchElectronics
-    - name: Engineering Supplies
+    - name: Engineering Materials
       entries:
       - id: CMSheetMetal50
         name: metal x50
@@ -1111,22 +1120,52 @@
         name: plasteel x50
         points: 10
         recommended: true
-      - id: CMAPCElectronics
+      - id: CMSandbagEmpty50
+        name: sandbags x50
+        points: 4
+      - id: RMCPlankWood
+        name: wood x50
         points: 2
-      - id: DoorElectronics
+    - name: Engineering Supplies
+      entries:
+      - id: CMFoldingBarricadesMB6x3
+        name: MB-6 folding barricade x3
+        points: 5
+      - id: MaintenanceJack
+        points: 5
+      - id: RMCShovel
         points: 2
-      - id: CMUDeployableZLevelLadder
-        points: 10
+      - id: RMCES11MobileFuelCanister
+        points: 5
+      - id: RMCPowerCell
+        points: 2
       - id: RMCPowerCellHigh
-        points: 3
+        points: 4
       - id: RMCPowerCellSuper
         points: 8
       - id: RMCMagazineSMGNailgun
         points: 5
+      - id: RMCEngineerKit
+        points: 5
+      - id: CMAPCElectronics
+        points: 2
+      - id: DoorElectronics
+        points: 2
+      - id: RMCPortableGeneratorPacmanMachineCircuitBoard
+        name: PACMAN generator machine board
+        points: 8
+      - id: RMCPortableGeneratorSuperPacmanMachineCircuitboard
+        name: super PACMAN generator machine board
+        points: 12
+      - id: CMSheetPhoron30
+        name: phoron x30
+        points: 12
     #- id: CMES11MobileFuelCanister
     #  points: 4
     - name: Explosives
       entries:
+      - id: RMCGrenadeCustomMetalFoam
+        points: 10
       - id: RMCExplosivePlastic
         points: 5
       - id: RMCExplosiveBreachingCharge
@@ -1141,7 +1180,7 @@
   parent: CMVendorBundleRiflemanApparel
   id: AU14VendorBundleCombatTechnicianEssentials
   name: essential engineer set
-  description: Contains 50 metal, 50 plasteel, 50 sandbags, a high-capacity power cell, a light replacer, a welding visor, and a nailgun.
+  description: Contains 50 metal, 50 plasteel, 50 sandbags, a high-capacity power cell, a light replacer, a deployable ladder, a welding visor, welding goggles, and a nailgun.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Tools/wrench.rsi
@@ -1149,6 +1188,7 @@
   - type: CMVendorBundle
     bundle:
     - RMCExplosivePlastic
+    - CMUDeployableZLevelLadder
     - RMCEngineerKit
     - CMSandbagEmpty50
     - RMCPlankWood
@@ -1159,6 +1199,7 @@
     - CMAPCElectronics
     - RMCNailgunTactical
     - RMCVisorWelding
+    - RMCWeldingGoggles
     - RMCSentryLaptop
 
 - type: entity
@@ -1172,7 +1213,7 @@
     state: firstaid
   - type: CMVendorBundle
     bundle:
-    - RMCVisorMedical
+    - RMCVisorMedicalAdvanced
     - RMCGlassesMedicalHUDGlasses
     - AU14CMDefibrillator
     - CMHealthAnalyzer
@@ -1357,6 +1398,28 @@
         amount: 100
       - id: RMCSpeedLoader44Marksman
         amount: 10
+    - name: Magazine Boxes
+      entries:
+      - id: CMUBoxMagazineRifleM54CMK1
+        amount: 2
+      - id: RMCBoxMagazineSMGM63
+        amount: 2
+      - id: RMCBoxMagazinePistolM1984
+        amount: 2
+      - id: RMCBoxMagazinePistolM77AP
+        amount: 2
+    - name: Ammo Boxes
+      entries:
+      - id: RMCBoxBulletsRifle
+        amount: 5
+      - id: RMCBoxBulletsSMG
+        amount: 5
+      - id: RMCBoxBulletsSmartGun
+        amount: 5
+      - id: CMUBoxBulletsPistol9MM
+        amount: 5
+      - id: CMUBoxBulletsPistol9MMAP
+        amount: 5
     - name: explosives
       entries:
       - id: CMPacketGrenadeHighExplosiveFilled
@@ -1445,6 +1508,12 @@
         amount: 4
       - id: RMCOuterClothingExternalWebbing
         amount: 4
+    - name: Pouches
+      entries:
+      - id: RMCPouchMagazineLarge
+        amount: 10
+      - id: RMCPouchMagazinePistolLarge
+        amount: 10
     - name: Devices
       entries:
       - id: RMCIntelDetector

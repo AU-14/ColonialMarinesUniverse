@@ -2,13 +2,13 @@
   id: hopesretreat
   mapName: JE-1758 Ascanius
   allegiance: IndependentSystems # ICSC
-  mapPath: /Maps/_CMU14/retreat.yml
+  mapPath: /Maps/_CMU14/HopesRetreatMultiZ/HopesRetreatMultiZ0.yml
   mapsBelow:
-  - /Maps/_CMU14/retreat_below.yml
+  - /Maps/_CMU14/HopesRetreatMultiZ/HopesRetreatMultiZ-1.yml
   mapsAbove:
-  - /Maps/_CMU14/retreat_above.yml
-  - /Maps/_CMU14/retreat_above2.yml
-  - /Maps/_CMU14/retreat_sky.yml
+  - /Maps/_CMU14/HopesRetreatMultiZ/HopesRetreatMultiZ1.yml
+  - /Maps/_CMU14/HopesRetreatMultiZ/HopesRetreatMultiZ2.yml
+  - /Maps/_CMU14/HopesRetreatMultiZ/HopesRetreatMultiZ3.yml
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0
