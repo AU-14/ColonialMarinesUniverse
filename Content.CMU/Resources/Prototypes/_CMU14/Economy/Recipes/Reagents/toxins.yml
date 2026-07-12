@@ -33,7 +33,7 @@
       metabolismRate: 1
       effects:
       - !type:Ciphering
-      potency: 1 # prime hive
+        potency: 1 # prime hive
 
 - type: reagent
   parent: CMUPrimeCipherToxin
