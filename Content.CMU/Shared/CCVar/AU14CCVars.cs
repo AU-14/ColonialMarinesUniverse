@@ -21,7 +21,7 @@ public sealed partial class AU14CCVars : CVars
     /// the middle of the window (at the cost of a slightly narrower viewport).
     /// </summary>
     public static readonly CVarDef<bool> CenterSeparatedViewport =
-        CVarDef.Create("au14.center_separated_viewport", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+        CVarDef.Create("au14.center_separated_viewport", false, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     public static readonly CVarDef<string> SeparatedHudStatusSide =
         CVarDef.Create("au14.separated_hud_status_side", "right", CVar.CLIENTONLY | CVar.ARCHIVE);

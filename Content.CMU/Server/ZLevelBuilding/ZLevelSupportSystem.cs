@@ -5,7 +5,6 @@ using System.Numerics;
 using Content.Server.Chat.Managers;
 using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared._RMC14.CameraShake;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Damage;
 using Content.Shared.Database;
@@ -36,7 +35,7 @@ namespace Content.Server._AU14.ZLevelBuilding;
 ///
 /// Phase 1 is intentionally NON-DESTRUCTIVE: it only computes <see cref="StructuralSupportComponent.Supported"/>
 /// (visible in ViewVariables), logs transitions, and popups newly-unsupported structures. Collapse
-/// scheduling (the 8s warning, bury/shake on lower z, despawn+debris on upper z) lands in a later phase.
+/// scheduling (the 8s warning, lower-z effects, despawn+debris on upper z) lands in a later phase.
 /// </summary>
 public sealed class ZLevelSupportSystem : EntitySystem
 {
@@ -47,7 +46,6 @@ public sealed class ZLevelSupportSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly RMCCameraShakeSystem _shake = default!;
     [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
@@ -70,11 +68,6 @@ public sealed class ZLevelSupportSystem : EntitySystem
 
     /// <summary>Debris that rains onto the level below when a structure caves in.</summary>
     private const string DebrisProto = "AU14RockDebris";
-
-    // Telegraph: while structures count down to collapse, send players on their levels a periodic tremor.
-    private TimeSpan _nextTremor;
-    private static readonly TimeSpan TremorInterval = TimeSpan.FromSeconds(0.9);
-    private readonly HashSet<EntityUid> _tremorMaps = new();
 
     private static readonly Vector2i[] Cardinals =
     {
@@ -186,30 +179,6 @@ public sealed class ZLevelSupportSystem : EntitySystem
                     continue;
 
                 CollapseUnsupportedStructure(uid);
-            }
-        }
-
-        // Telegraph the impending cave-in: a small, repeating tremor for everyone on a level that has a structure
-        // counting down, so you feel it coming and have a chance to shore it up before it drops.
-        if (_pendingUnsupported.Count > 0 && _timing.CurTime >= _nextTremor)
-        {
-            _nextTremor = _timing.CurTime + TremorInterval;
-
-            _tremorMaps.Clear();
-            foreach (var uid in _pendingUnsupported.Keys)
-            {
-                if (!Deleted(uid) && Transform(uid).MapUid is { } map)
-                    _tremorMaps.Add(map);
-            }
-
-            if (_tremorMaps.Count > 0)
-            {
-                var actors = EntityQueryEnumerator<ActorComponent, TransformComponent>();
-                while (actors.MoveNext(out var actor, out var actorXform))
-                {
-                    if (actorXform.MapUid is { } am && _tremorMaps.Contains(am))
-                        _shake.ShakeCamera(actor.Owner, 2, 1);
-                }
             }
         }
     }
@@ -492,8 +461,7 @@ public sealed class ZLevelSupportSystem : EntitySystem
         }
     }
 
-    /// <summary>A crash sound at the collapse spot plus a brief screenshake for players on that level - so a
-    /// cave-in reads as a real, physical event rather than a structure silently vanishing.</summary>
+    /// <summary>A crash sound at the collapse spot plus a brief vignette for nearby players.</summary>
     private void PlayCollapseEffects(EntityCoordinates coords, EntityUid? mapUid)
     {
         // A bad audio path must never crash the support tick.
@@ -509,7 +477,7 @@ public sealed class ZLevelSupportSystem : EntitySystem
         if (mapUid == null)
             return;
 
-        // Local effect only: shake + one grey vignette blink for players near the collapse, not map-wide.
+        // Local effect only: one grey vignette blink for players near the collapse, not map-wide.
         // 🔧 TUNABLE: effect radius in tiles.
         const float effectRange = 33f;
         var collapsePos = _transform.ToMapCoordinates(coords).Position;
@@ -523,11 +491,10 @@ public sealed class ZLevelSupportSystem : EntitySystem
             if ((_transform.GetWorldPosition(uid) - collapsePos).Length() > effectRange)
                 continue;
 
-            _shake.ShakeCamera(uid, 4, 2);
             RaiseNetworkEvent(new ZCollapseVignetteEvent(), actor.PlayerSession);
         }
 
-        // Debris rains onto the level directly below, with its own thud + shake, so the cave-in reads on both
+        // Debris rains onto the level directly below, with its own thud, so the cave-in reads on both
         // levels (rubble actually lands where it would fall).
         if (TryComp<CMUZLevelMapComponent>(mapUid.Value, out var zMap) &&
             zMap.MapBelow is { } below &&
@@ -556,7 +523,6 @@ public sealed class ZLevelSupportSystem : EntitySystem
                 if ((_transform.GetWorldPosition(uid) - worldPos).Length() > 33f)
                     continue;
 
-                _shake.ShakeCamera(uid, 3, 2);
                 RaiseNetworkEvent(new ZCollapseVignetteEvent(), actor.PlayerSession);
             }
         }
