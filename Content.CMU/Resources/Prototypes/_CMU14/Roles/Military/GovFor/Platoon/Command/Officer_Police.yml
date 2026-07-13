@@ -107,7 +107,6 @@
   equipment:
     id: AU14IDCardGOVFOROfficerMP
     ears: AU14HeadsetGovforCommand
-    pocket1: AU14StampCMP
   inhand:
     - AU14KitJOCMPKit
 
@@ -116,7 +115,6 @@
   equipment:
     id: AU14IDCardOPFOROfficerMP
     ears: AU14HeadsetOpforCommand
-    pocket1: AU14StampCMP
   inhand:
     - AU14KitJOCMPKit
 

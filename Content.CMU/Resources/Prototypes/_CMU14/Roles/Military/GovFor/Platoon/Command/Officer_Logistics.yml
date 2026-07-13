@@ -104,7 +104,6 @@
   equipment:
     id: AU14IDCardGOVFOROfficerLogistics
     ears: AU14HeadsetGovforCommand
-    pocket1: AU14StampLO
   inhand:
     - AU14KitJOLogisticsKit
 
@@ -113,7 +112,6 @@
   equipment:
     id: AU14IDCardOPFOROfficerLogistics
     ears: AU14HeadsetOpforCommand
-    pocket1: AU14StampLO
   inhand:
     - AU14KitJOLogisticsKit
 

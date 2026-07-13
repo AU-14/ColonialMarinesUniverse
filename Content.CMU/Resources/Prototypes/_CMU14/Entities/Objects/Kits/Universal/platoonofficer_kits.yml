@@ -159,6 +159,8 @@
         amount: 2
       - id: CMFolderYellowEmpty
         amount: 2
+      - id: AU14StampAO
+        amount: 1
 
 - type: entity
   parent: AU14KitPlatoonOfficer
@@ -209,6 +211,8 @@
         amount: 1
       - id: RMCPouchMedkitFill
         amount: 1
+      - id: AU14StampCMO
+        amount: 1
 
 - type: entity
   parent: AU14KitPlatoonOfficer
@@ -255,6 +259,8 @@
       amount: 1
     - id: CMU14USCMMPBrassard
       amount: 3
+    - id: AU14StampCMP
+      amount: 1
 
 - type: entity
   parent: AU14KitPlatoonOfficer
@@ -285,4 +291,5 @@
       amount: 2
     - id: AU14BackpackRTOPackDesert
       amount: 1
-
+    - id: AU14StampLO
+      amount: 1

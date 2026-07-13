@@ -100,7 +100,6 @@
   equipment:
     id: AU14IDCardGOVFOROfficerEngi
     ears: AU14HeadsetGovforCommand
-    pocket1: AU14StampEO
   inhand:
     - AU14KitJOEngineeringKit
 
@@ -109,7 +108,6 @@
   equipment:
     id: AU14IDCardOPFOROfficerEngi
     ears: AU14HeadsetOpforCommand
-    pocket1: AU14StampEO
   inhand:
     - AU14KitJOEngineeringKit
 
