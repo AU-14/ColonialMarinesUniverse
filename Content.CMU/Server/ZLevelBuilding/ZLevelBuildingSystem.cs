@@ -43,6 +43,7 @@ public sealed class ZLevelBuildingSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private readonly ZBorderSyncSystem _borderSync = default!;
 
     /// <summary>
     /// Global code switch for the whole building overhaul. Set to <c>false</c> to disable dig-down / lazy
@@ -73,6 +74,13 @@ public sealed class ZLevelBuildingSystem : EntitySystem
 
         // Keyed by round-scoped map uids; drop with the round so stale entries never accumulate.
         SubscribeLocalEvent<Content.Shared.GameTicking.RoundRestartCleanupEvent>(_ => _reflectedBorderChunks.Clear());
+        _borderSync.ListsChanged += ClearReflectedBorderChunks;
+    }
+
+    public override void Shutdown()
+    {
+        base.Shutdown();
+        _borderSync.ListsChanged -= ClearReflectedBorderChunks;
     }
 
     /// <summary>Whether the building overhaul is allowed to operate on the given map.</summary>
@@ -126,10 +134,12 @@ public sealed class ZLevelBuildingSystem : EntitySystem
         var depth = TryComp<CMUZLevelMapComponent>(mapUid, out var nowZ) ? nowZ.Depth : 0;
 
         var newMapUid = _map.CreateMap(out _, runMapInit: true);
-        var grid = _mapManager.CreateGridEntity(newMapUid);
 
-        if (_gridQuery.TryComp(sourceGrid, out _))
-            _transform.SetWorldPosition(grid.Owner, _transform.GetWorldPosition(sourceGrid));
+        // The map entity ITSELF must be the grid (a "map-grid", like authored z-level maps and biome planets):
+        // the CMU z-movement code resolves tiles/high-grounds via MapGridComponent ON the map entity. A child
+        // grid entity leaves the level invisible to DistanceToGround/HasTileAbove, so stairs and falling
+        // silently stop working the moment a player stands on a lazily created level.
+        EnsureComp<MapGridComponent>(newMapUid);
 
         if (!_zLevels.TryAddMapsIntoZNetwork(network.Value, new Dictionary<EntityUid, int> { [newMapUid] = depth - 1 }))
         {
@@ -138,7 +148,7 @@ public sealed class ZLevelBuildingSystem : EntitySystem
         }
 
         var stone = EnsureComp<ZGeneratedStoneComponent>(newMapUid);
-        stone.StoneGrid = grid.Owner;
+        stone.StoneGrid = newMapUid;
         below = (newMapUid, stone);
         return true;
     }
@@ -236,6 +246,10 @@ public sealed class ZLevelBuildingSystem : EntitySystem
             var depth = TryComp<CMUZLevelMapComponent>(mapUid, out var nz) ? nz.Depth : 0;
             var newMap = _map.CreateMap(out _, runMapInit: true);
 
+            // Map-grid, not a child grid: the CMU z-movement code only sees tiles/high-grounds on the map
+            // entity's own MapGridComponent (see CreateStoneBelow).
+            EnsureComp<MapGridComponent>(newMap);
+
             if (!_zLevels.TryAddMapsIntoZNetwork(network.Value, new Dictionary<EntityUid, int> { [newMap] = depth + direction }))
             {
                 Del(newMap);
@@ -254,10 +268,8 @@ public sealed class ZLevelBuildingSystem : EntitySystem
         }
         else
         {
-            var grid = _mapManager.CreateGridEntity(targetMap);
-            if (_gridQuery.TryComp(sourceGrid, out _))
-                _transform.SetWorldPosition(grid.Owner, _transform.GetWorldPosition(sourceGrid));
-            targetGrid = grid.Owner;
+            EnsureComp<MapGridComponent>(targetMap);
+            targetGrid = targetMap;
         }
 
         return true;
@@ -281,7 +293,8 @@ public sealed class ZLevelBuildingSystem : EntitySystem
         if (!TryComp<MapComponent>(belowMap, out var belowMapComp))
             return false;
 
-        // Prefer a grid already under the player's x/y on that level; otherwise create one aligned to the source.
+        // Prefer a grid already under the player's x/y on that level; otherwise make the level a map-grid
+        // (the CMU z-movement code only sees tiles on the map entity's own grid - see CreateStoneBelow).
         EntityUid stoneGrid;
         if (_mapManager.TryFindGridAt(new MapCoordinates(worldPos, belowMapComp.MapId), out var foundGrid, out _))
         {
@@ -289,10 +302,8 @@ public sealed class ZLevelBuildingSystem : EntitySystem
         }
         else
         {
-            var grid = _mapManager.CreateGridEntity(belowMap);
-            if (_gridQuery.TryComp(sourceGrid, out _))
-                _transform.SetWorldPosition(grid.Owner, _transform.GetWorldPosition(sourceGrid));
-            stoneGrid = grid.Owner;
+            EnsureComp<MapGridComponent>(belowMap);
+            stoneGrid = belowMap;
         }
 
         var stone = EnsureComp<ZGeneratedStoneComponent>(belowMap);
@@ -587,7 +598,9 @@ public sealed class ZLevelBuildingSystem : EntitySystem
         var tile = _map.TileIndicesFor(sourceGridUid, sourceGrid, coords);
         foreach (var anchored in _map.GetAnchoredEntities(sourceGridUid, sourceGrid, tile))
         {
-            if (IsIndestructibleWall(anchored) && MetaData(anchored).EntityPrototype is { } proto)
+            // Which prototypes count as borders is admin-editable (Z-Sync Lists tool); the default is the
+            // CMBaseWallInvincible family, minus anything blacklisted (e.g. dropship walls sharing the parent).
+            if (MetaData(anchored).EntityPrototype is { } proto && _borderSync.ShouldReflect(proto.ID))
             {
                 wallProto = proto.ID;
                 return true;
@@ -600,6 +613,11 @@ public sealed class ZLevelBuildingSystem : EntitySystem
     // Border reflection on NON-stone z-levels (player-built upper platforms and void levels): which chunks of
     // which map have already been mirrored, so each area is only processed once. Keyed by round-scoped map uids.
     private readonly Dictionary<EntityUid, HashSet<Vector2i>> _reflectedBorderChunks = new();
+
+    private void ClearReflectedBorderChunks()
+    {
+        _reflectedBorderChunks.Clear();
+    }
 
     /// <summary>Side length (in tiles) of the areas the border-reflection pass processes and remembers.</summary>
     private const int BorderReflectChunk = 8;
@@ -664,7 +682,8 @@ public sealed class ZLevelBuildingSystem : EntitySystem
                 string? wallProto = null;
                 foreach (var anchored in _map.GetAnchoredEntities(sourceGridUid, sourceGrid, sourceTile))
                 {
-                    if (IsIndestructibleWall(anchored) && MetaData(anchored).EntityPrototype is { } proto)
+                    // Admin-editable border set (Z-Sync Lists tool) - see TryGetBorderWallAbove.
+                    if (MetaData(anchored).EntityPrototype is { } proto && _borderSync.ShouldReflect(proto.ID))
                     {
                         wallProto = proto.ID;
                         break;

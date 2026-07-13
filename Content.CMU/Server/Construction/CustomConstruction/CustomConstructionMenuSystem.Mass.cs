@@ -29,6 +29,78 @@ public sealed partial class CustomConstructionMenuSystem
     {
         SubscribeNetworkEvent<RequestOpenMassConstructionEditorEvent>(OnRequestOpenMass);
         SubscribeNetworkEvent<SubmitMassConstructionEditorEvent>(OnSubmitMass);
+        SubscribeNetworkEvent<SubmitMassTileEditorEvent>(OnSubmitMassTiles);
+    }
+
+    /// <summary>Tiles mode of the Mass Entity Editor: one cost/category fanned out to every selected tile,
+    /// each as its own independent generated tile recipe (same output as the single Tiles Editor).</summary>
+    private void OnSubmitMassTiles(SubmitMassTileEditorEvent msg, EntitySessionEventArgs args)
+    {
+        var session = args.SenderSession;
+        if (!CanEditConstructionMenu(session) || TilesDir == null)
+            return;
+
+        var material = Fallback(msg.Material, "CMSteel");
+        if (!_prototype.HasIndex<Content.Shared.Stacks.StackPrototype>(material))
+        {
+            PopupTo(session, Loc.GetString("construction-menu-invalid-material", ("material", material)), PopupType.MediumCaution);
+            return;
+        }
+
+        var amount = Math.Clamp(msg.Amount, 1, MaxStepAmount);
+        var spawnlist = msg.ZLevelPage ? TilesSpawnlist : SanitizeName(msg.Spawnlist, DefaultSpawnlist);
+        var category = SanitizeName(msg.Category, DefaultTileCategory);
+
+        var added = 0;
+        var failed = 0;
+        var seen = new HashSet<string>();
+
+        try
+        {
+            Directory.CreateDirectory(TilesDir);
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to create tiles dir for mass add: {e}");
+            PopupTo(session, Loc.GetString("construction-menu-verb-add-failed"), PopupType.MediumCaution);
+            return;
+        }
+
+        foreach (var tileId in msg.TileIds.Take(MaxMassEntities))
+        {
+            if (!seen.Add(tileId) ||
+                string.IsNullOrWhiteSpace(tileId) ||
+                !_prototype.HasIndex<Content.Shared.Maps.ContentTileDefinition>(tileId))
+            {
+                failed++;
+                continue;
+            }
+
+            var key = $"{Sanitize(tileId)}__{Sanitize(spawnlist)}__{Sanitize(category)}";
+            try
+            {
+                var yaml = BuildTileYaml(key, tileId, material, amount, spawnlist, category, msg.ZLevelPage);
+                File.WriteAllText(Path.Combine(TilesDir, $"{TileFilePrefix}{key}.yml"), yaml, Encoding.UTF8);
+                DbUpsert(DbKindTiles, $"{TileFilePrefix}{key}", yaml);
+                PublishYaml(yaml, $"tile {key}");
+                UnhideRecipeId($"{TileFilePrefix}{key}");
+                added++;
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Mass tile add failed for {tileId} (key {key}): {e}");
+                failed++;
+            }
+        }
+
+        _adminLogger.Add(LogType.Action, LogImpact.Medium,
+            $"{session.Name} mass-added {added} construction menu TILES ({failed} failed; spawnlist: {spawnlist}, category: {category}, cost: {amount} {material})");
+
+        PopupTo(session,
+            failed > 0
+                ? Loc.GetString("construction-menu-mass-partial", ("added", added), ("failed", failed), ("reason", "invalid tiles"))
+                : Loc.GetString("construction-menu-mass-tiles-added", ("added", added), ("category", category)),
+            failed > 0 && added == 0 ? PopupType.MediumCaution : PopupType.Medium);
     }
 
     private void OnRequestOpenMass(RequestOpenMassConstructionEditorEvent msg, EntitySessionEventArgs args)

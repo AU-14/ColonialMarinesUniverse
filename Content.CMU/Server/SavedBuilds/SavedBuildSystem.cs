@@ -6,8 +6,11 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using Content.Server._AU14.ZLevelBuilding;
+using Content.Server._CMU14.ZLevels.Core;
 using Content.Server.Administration.Managers;
 using Content.Shared._AU14.SavedBuilds;
+using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared.Administration;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
@@ -56,6 +59,12 @@ public sealed partial class SavedBuildSystem : EntitySystem
     [Dependency] private IAdminManager _adminManager = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private CMUZLevelsSystem _zLevels = default!;
+    [Dependency] private ZLevelBuildingSystem _zBuilding = default!;
+
+    // 🔧 TUNABLE: how many z-levels above/below the selection box are also scanned when saving. A build
+    // that crosses levels (support beams below, platforms above) is captured whole within this range.
+    private const int MaxZRange = 3;
 
     // ============================================
     // 🔧 TUNABLE: selection / naming / upload limits
@@ -191,6 +200,11 @@ public sealed partial class SavedBuildSystem : EntitySystem
         // are used; older saves without it fall back to the physics-body heuristic below, unchanged.
         var anchoredByKey = ReadAnchoredIntent(root);
 
+        // Multi-z: per-entry z-level offsets from the preview. Queued per key because two identical entities
+        // can share the same x/y on DIFFERENT levels (that's exactly what multi-z builds do).
+        var zByKey = ReadZOffsets(root);
+        var skippedZ = 0;
+
         foreach (var rootEnt in roots)
         {
             // WORLD-frame math throughout, not raw transform locals: a map's transform is identity, so for
@@ -202,13 +216,36 @@ public sealed partial class SavedBuildSystem : EntitySystem
             var savedRot = _transform.GetWorldRotation(rootEnt);
 
             var desired = new MapCoordinates(targetMap.Position + rotation.RotateVec(savedWorld - anchor), targetMap.MapId);
-            _transform.SetCoordinates(rootEnt, new EntityCoordinates(gridUid, _transform.ToCoordinates(gridUid, desired).Position));
+
+            var relSave = savedWorld - anchor;
+            var protoId = MetaData(rootEnt).EntityPrototype?.ID ?? string.Empty;
+
+            // Multi-z: entities saved on another level go to the matching level relative to the target (levels
+            // are world-aligned, so the x/y math is identical). Missing levels are created on demand through
+            // the z-building bootstrap; if that fails, the entity is dropped rather than dumped on the wrong level.
+            var placeGrid = gridUid;
+            var placeMapId = targetMap.MapId;
+            if (TakeZOffset(zByKey, protoId, relSave) is { } zOff && zOff != 0)
+            {
+                if (TryResolveLevel(targetMapUid, gridUid, zOff, desired.Position, out var levelGrid, out var levelMapId))
+                {
+                    placeGrid = levelGrid;
+                    placeMapId = levelMapId;
+                }
+                else
+                {
+                    skippedZ++;
+                    QueueDel(rootEnt);
+                    continue;
+                }
+            }
+
+            var desiredOnLevel = new MapCoordinates(desired.Position, placeMapId);
+            _transform.SetCoordinates(rootEnt, new EntityCoordinates(placeGrid, _transform.ToCoordinates(placeGrid, desiredOnLevel).Position));
             _transform.SetWorldRotation(rootEnt, savedRot + rotation);
 
             // Restore the original anchored state. Prefer the recorded intent (handles props anchored without a
             // Static physics body - the mapper-mode case); fall back to "Static body => anchored" for old saves.
-            var relSave = savedWorld - anchor;
-            var protoId = MetaData(rootEnt).EntityPrototype?.ID ?? string.Empty;
             var wasAnchored = anchoredByKey.TryGetValue((protoId, QuantizeOffset(relSave.X), QuantizeOffset(relSave.Y)), out var recorded)
                 ? recorded
                 : TryComp<PhysicsComponent>(rootEnt, out var body) && body.BodyType == BodyType.Static;
@@ -224,8 +261,73 @@ public sealed partial class SavedBuildSystem : EntitySystem
         // TODO (player costed version): strip container contents and consume materials via a ghost build.
 
         _adminLog.Add(LogType.Action, LogImpact.Medium,
-            $"{ToPrettyString(user):player} (user {session.UserId}) placed saved build '{id}' ({roots.Count} roots) at {targetMap}");
-        _popup.PopupEntity(Loc.GetString("saved-build-placed", ("count", roots.Count)), user, user);
+            $"{ToPrettyString(user):player} (user {session.UserId}) placed saved build '{id}' ({roots.Count} roots, {skippedZ} skipped for missing z-levels) at {targetMap}");
+        _popup.PopupEntity(Loc.GetString("saved-build-placed", ("count", roots.Count - skippedZ)), user, user);
+        if (skippedZ > 0)
+            _popup.PopupEntity(Loc.GetString("saved-build-z-skipped", ("count", skippedZ)), user, user, PopupType.MediumCaution);
+    }
+
+    /// <summary>Per-entry z-level offsets from the preview, queued per (proto, x, y) key - identical entities
+    /// legitimately share the same x/y on different levels in a multi-z build.</summary>
+    private Dictionary<(string, int, int), Queue<int>> ReadZOffsets(MappingDataNode root)
+    {
+        var map = new Dictionary<(string, int, int), Queue<int>>();
+        if (!root.TryGet<MappingDataNode>("meta", out var meta) || !meta.TryGet<SequenceDataNode>("preview", out var seq))
+            return map;
+
+        foreach (var node in seq)
+        {
+            if (node is not MappingDataNode m)
+                continue;
+
+            var proto = MetaString(m, "proto");
+            var key = (proto, QuantizeOffset(MetaFloat(m, "x")), QuantizeOffset(MetaFloat(m, "y")));
+            int.TryParse(MetaString(m, "z"), NumberStyles.Integer, CultureInfo.InvariantCulture, out var z);
+            if (!map.TryGetValue(key, out var queue))
+                map[key] = queue = new Queue<int>();
+            queue.Enqueue(z);
+        }
+
+        return map;
+    }
+
+    /// <summary>Consumes the next z offset recorded for this (proto, offset) key; null when unrecorded (old saves).</summary>
+    private static int? TakeZOffset(Dictionary<(string, int, int), Queue<int>> zByKey, string protoId, Vector2 relSave)
+    {
+        if (zByKey.TryGetValue((protoId, QuantizeOffset(relSave.X), QuantizeOffset(relSave.Y)), out var queue) &&
+            queue.TryDequeue(out var z))
+        {
+            return z;
+        }
+
+        return null;
+    }
+
+    /// <summary>Resolves (creating on demand via the z-building bootstrap) the level <paramref name="zOffset"/>
+    /// steps from <paramref name="baseMap"/> and a grid on it under <paramref name="worldPos"/>.</summary>
+    private bool TryResolveLevel(EntityUid baseMap, EntityUid baseGrid, int zOffset, Vector2 worldPos, out EntityUid levelGrid, out MapId levelMapId)
+    {
+        levelGrid = default;
+        levelMapId = MapId.Nullspace;
+
+        var currentMap = baseMap;
+        var currentGrid = baseGrid;
+        var step = Math.Sign(zOffset);
+        for (var i = 0; i < Math.Abs(zOffset); i++)
+        {
+            if (!_zBuilding.EnsureNeighborLevel(currentMap, step, currentGrid, worldPos, out var nextMap, out var nextGrid))
+                return false;
+
+            currentMap = nextMap;
+            currentGrid = nextGrid;
+        }
+
+        if (!TryComp<MapComponent>(currentMap, out var mapComp))
+            return false;
+
+        levelGrid = currentGrid;
+        levelMapId = mapComp.MapId;
+        return true;
     }
 
     /// <summary>Resolves the build's original grid + anchor coordinates (if that grid still exists this round).</summary>
@@ -341,6 +443,20 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
                 var found = new HashSet<EntityUid>();
                 _lookup.GetEntitiesIntersecting(map.MapId, box, found);
+
+                // Multi-z: z-levels are world-aligned, so the same box is also scanned on the linked levels
+                // above/below - a build whose support beams or upper platforms cross levels saves as one.
+                if (_mapManager.GetMapEntityId(map.MapId) is { Valid: true } boxMapUid)
+                {
+                    for (var dz = -MaxZRange; dz <= MaxZRange; dz++)
+                    {
+                        if (dz == 0 || !_zLevels.TryMapOffset(boxMapUid, dz, out _, out var otherMapComp))
+                            continue;
+
+                        _lookup.GetEntitiesIntersecting(otherMapComp.MapId, box, found);
+                    }
+                }
+
                 foreach (var uid in found)
                 {
                     if (CanSave(uid, saverId, mapperMode, includeLoose))
@@ -431,16 +547,32 @@ public sealed partial class SavedBuildSystem : EntitySystem
             return;
         }
 
-        // Bounds + anchor (in grid-local space, matching the serialized transforms) + source naming.
-        var (boundsMin, boundsMax) = ComputeBounds(entities);
+        // Multi-z bookkeeping: each entity's level relative to the BASE level (the level holding the most of
+        // the selection). Levels are world-aligned, so an entity's x/y offsets are valid on every level.
+        var depthByEntity = new Dictionary<EntityUid, int>();
+        var depthCounts = new Dictionary<int, int>();
+        foreach (var uid in entities)
+        {
+            var d = Transform(uid).MapUid is { } m && TryComp<CMUZLevelMapComponent>(m, out var zm) ? zm.Depth : 0;
+            depthByEntity[uid] = d;
+            depthCounts[d] = depthCounts.GetValueOrDefault(d) + 1;
+        }
+        var baseDepth = depthCounts.OrderByDescending(kv => kv.Value).ThenBy(kv => kv.Key).First().Key;
+        var multiZ = depthCounts.Count > 1;
+
+        // Bounds + anchor (in grid-local space, matching the serialized transforms) + source naming. Bounds
+        // come from the BASE level's entities so the footprint matches what the ghost lays on your own level.
+        var baseEntities = entities.Where(e => depthByEntity[e] == baseDepth).ToHashSet();
+        var (boundsMin, boundsMax) = ComputeBounds(baseEntities.Count > 0 ? baseEntities : entities);
         var anchor = (boundsMin + boundsMax) / 2f;
         var relMin = boundsMin - anchor;
         var relMax = boundsMax - anchor;
-        var sample = entities.First();
-        var gridName = ResolveSourceName(sample);
+        var sample = baseEntities.Count > 0 ? baseEntities.First() : entities.First();
+        // Multi-z builds are tagged so the menu category makes their nature obvious.
+        var gridName = ResolveSourceName(sample) + (multiZ ? " (Multi-Z)" : "");
         var sourceGrid = Transform(sample).GridUid;
 
-        // Per-entity preview (prototype + offset from anchor) for the placement ghost.
+        // Per-entity preview (prototype + offset from anchor + z-level offset) for the placement ghost.
         var preview = new SequenceDataNode();
         foreach (var uid in entities)
         {
@@ -456,6 +588,10 @@ public sealed partial class SavedBuildSystem : EntitySystem
             // Record whether the entity was anchored, so placement restores the exact anchored state instead of
             // guessing from physics body type (mapper-mode saves can include props anchored without a Static body).
             entry.Add("anchored", new ValueDataNode(Transform(uid).Anchored ? "true" : "false"));
+            // Which level (relative to the base) this entity belongs on; omitted when on the base level.
+            var zOff = depthByEntity[uid] - baseDepth;
+            if (zOff != 0)
+                entry.Add("z", new ValueDataNode(zOff.ToString(CultureInfo.InvariantCulture)));
             preview.Add(entry);
         }
 
@@ -495,6 +631,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
         if (sourceGrid != null)
             meta.Add("sourceGrid", new ValueDataNode(GetNetEntity(sourceGrid.Value).ToString()));
         meta.Add("entityCount", new ValueDataNode(entities.Count.ToString()));
+        meta.Add("multiZ", new ValueDataNode(multiZ ? "true" : "false"));
         meta.Add("preview", preview);
         root.Add("meta", meta);
         root.Add("build", buildData);

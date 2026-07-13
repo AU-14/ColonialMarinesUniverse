@@ -30,6 +30,10 @@ public sealed class VirtualEntityList : Control
     /// <summary>(entity id, pressed). In non-toggle mode pressed is always true.</summary>
     public event Action<string, bool>? OnRowToggled;
 
+    /// <summary>Builds the 32x32 icon control for an item id. Defaults to an entity sprite view; the mass
+    /// editor's tile mode swaps in a tile-texture factory instead.</summary>
+    public Func<string, Control>? IconFactory;
+
     private static readonly Color SelectedColor = Color.FromHex("#ffd77a"); // amber highlight
 
     private readonly ScrollContainer _scroll;
@@ -119,13 +123,22 @@ public sealed class VirtualEntityList : Control
 
     private Control MakeRow(string id, string name)
     {
-        var view = new EntityPrototypeView
+        Control view;
+        if (IconFactory != null)
         {
-            SetSize = new Vector2(32, 32),
-            Margin = new Thickness(0, 0, 6, 0),
-            VerticalAlignment = VAlignment.Center,
-        };
-        view.SetPrototype(id);
+            view = IconFactory(id);
+        }
+        else
+        {
+            var protoView = new EntityPrototypeView
+            {
+                SetSize = new Vector2(32, 32),
+                Margin = new Thickness(0, 0, 6, 0),
+                VerticalAlignment = VAlignment.Center,
+            };
+            protoView.SetPrototype(id);
+            view = protoView;
+        }
 
         var selected = ToggleMode && (IsSelected?.Invoke(id) ?? false);
         var row = new ContainerButton

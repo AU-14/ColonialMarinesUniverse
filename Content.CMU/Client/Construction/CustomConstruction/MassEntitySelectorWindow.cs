@@ -6,6 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Content.Client._AU14.UI;
+using Content.Shared.Maps;
+using Robust.Client.Graphics;
+using Robust.Client.ResourceManagement;
+using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Prototypes;
@@ -50,7 +54,16 @@ public sealed class MassEntitySelectorWindow : DefaultWindow
     private readonly HashSet<string> _selected = new();
     private string _parentFilterId = string.Empty;
 
+    // Tiles mode: the same browser/selection flow, but over ContentTileDefinitions instead of entities.
+    private readonly Button _tilesToggle;
+    private readonly BoxContainer _parentRow;
+    private readonly List<(string Id, string Name, string Haystack)> _allTiles = new();
+    private bool _tileMode;
+
     public event Action<List<string>>? OnEntitiesSelected;
+
+    /// <summary>Fired instead of <see cref="OnEntitiesSelected"/> when confirming in Tiles mode.</summary>
+    public event Action<List<string>>? OnTilesSelected;
 
     public MassEntitySelectorWindow()
     {
@@ -70,17 +83,35 @@ public sealed class MassEntitySelectorWindow : DefaultWindow
             HorizontalExpand = true,
         };
         _parentDropdown = new OptionButton { HorizontalExpand = true };
-        var parentRow = new BoxContainer
+        _parentRow = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Horizontal,
             HorizontalExpand = true,
             Children = { _parentSearch, _parentDropdown },
         };
 
+        // Entities <-> Tiles mode switch. Tiles reuse the exact same virtualized browser + multi-select flow.
+        _tilesToggle = new Button
+        {
+            Text = Loc.GetString("construction-mass-selector-tiles"),
+            ToggleMode = true,
+        };
+        GmodStyle.Modernize(_tilesToggle);
+
         _list = new VirtualEntityList
         {
             ToggleMode = true,
             IsSelected = id => _selected.Contains(id),
+        };
+        _tilesToggle.OnToggled += args =>
+        {
+            _tileMode = args.Pressed;
+            _selected.Clear();
+            _parentRow.Visible = !_tileMode; // tiles have no prototype parents to filter by
+            if (_tileMode && _allTiles.Count == 0)
+                BuildTileIndex();
+            _list.IconFactory = _tileMode ? MakeTileIcon : null;
+            Refresh();
         };
         _list.OnRowToggled += (id, pressed) =>
         {
@@ -108,9 +139,16 @@ public sealed class MassEntitySelectorWindow : DefaultWindow
             Children = { _countLabel, selectAll, clear, _confirm },
         };
 
+        var searchRow = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            HorizontalExpand = true,
+            Children = { _search, _tilesToggle },
+        };
+
         var root = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, Margin = new Thickness(8) };
-        root.AddChild(_search);
-        root.AddChild(parentRow);
+        root.AddChild(searchRow);
+        root.AddChild(_parentRow);
         root.AddChild(_list);
         root.AddChild(buttons);
 
@@ -141,7 +179,7 @@ public sealed class MassEntitySelectorWindow : DefaultWindow
         {
             // The WHOLE filtered set - this is how "add everything under BaseWall" works: pick the parent
             // in the dropdown, hit Select All Shown, confirm.
-            foreach (var entry in _all)
+            foreach (var entry in CurrentIndex())
             {
                 if (Matches(entry))
                     _selected.Add(entry.Id);
@@ -160,9 +198,48 @@ public sealed class MassEntitySelectorWindow : DefaultWindow
             if (_selected.Count == 0)
                 return;
 
-            OnEntitiesSelected?.Invoke(new List<string>(_selected));
+            var ids = new List<string>(_selected);
+            if (_tileMode)
+                OnTilesSelected?.Invoke(ids);
+            else
+                OnEntitiesSelected?.Invoke(ids);
             Close();
         };
+    }
+
+    /// <summary>The index the current mode browses: entity prototypes or tile definitions.</summary>
+    private List<(string Id, string Name, string Haystack)> CurrentIndex() => _tileMode ? _allTiles : _all;
+
+    private void BuildTileIndex()
+    {
+        foreach (var tile in _prototype.EnumeratePrototypes<ContentTileDefinition>())
+        {
+            if (tile.Abstract || tile.ID == ContentTileDefinition.SpaceID)
+                continue;
+
+            _allTiles.Add((tile.ID, tile.ID, tile.ID.ToLowerInvariant()));
+        }
+
+        _allTiles.Sort((a, b) => string.Compare(a.Id, b.Id, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    /// <summary>Tile-mode row icon: the tile's texture (same preview technique as the Tiles Editor).</summary>
+    private Control MakeTileIcon(string id)
+    {
+        var preview = new TextureRect
+        {
+            MinSize = new Vector2(32, 32),
+            SetSize = new Vector2(32, 32),
+            Stretch = TextureRect.StretchMode.KeepAspectCentered,
+            Margin = new Thickness(0, 0, 6, 0),
+            VerticalAlignment = VAlignment.Center,
+        };
+        if (_prototype.TryIndex<ContentTileDefinition>(id, out var def) && def.Sprite is { } sprite)
+        {
+            try { preview.Texture = IoCManager.Resolve<IResourceCache>().GetResource<TextureResource>(sprite).Texture; }
+            catch { /* missing texture - just show the label */ }
+        }
+        return preview;
     }
 
     private void BuildIndex()
@@ -298,6 +375,9 @@ public sealed class MassEntitySelectorWindow : DefaultWindow
         if (needle.Length > 0 && !entry.Haystack.Contains(needle))
             return false;
 
+        if (_tileMode)
+            return true; // no parent filtering for tiles
+
         if (_parentFilterId.Length > 0 &&
             (!_parentsCache.TryGetValue(entry.Id, out var parents) || !parents.Contains(_parentFilterId)))
         {
@@ -310,7 +390,7 @@ public sealed class MassEntitySelectorWindow : DefaultWindow
     private void Refresh()
     {
         var items = new List<(string Id, string Name)>();
-        foreach (var entry in _all)
+        foreach (var entry in CurrentIndex())
         {
             if (Matches(entry))
                 items.Add((entry.Id, entry.Name));

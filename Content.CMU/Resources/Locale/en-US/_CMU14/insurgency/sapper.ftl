@@ -1,7 +1,9 @@
 # CLF Sapper role.
 au14-job-name-clfsapper = CLF Sapper
 au14-job-description-clfsapper = A guerilla trained in fieldcraft and demolitions. You lay traps, conceal them, and turn the colony's own ground against GOVFOR.
-au14-job-prefix-clfsapper = CLF Sapper
+# Radio prefix must NOT out the sapper: undercover CLF roles all read as ordinary civilians on comms
+# (same "CIV" prefix as au14-job-prefix-civiliancolonist / the CLF guerilla).
+au14-job-prefix-clfsapper = CIV
 
 # Sapper trap deploy / disarm feedback.
 insfor-sapper-trap-deployed = You plant the charge and it settles out of sight.

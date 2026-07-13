@@ -1233,7 +1233,7 @@ public sealed partial class ScalingViewport
         _stairPreviewViewport.ClearColor = Color.Transparent;
         _stairPreviewViewport.Render();
 
-        _faintUpperAlpha = Math.Clamp(_config.GetCVar(CMUZLevelsCVars.FaintUpperAlpha), 0f, 1f);
+        _faintUpperAlpha = Math.Clamp(_config.GetCVar(CMUZLevelsCVars.FaintUpperAlpha), 0.05f, 0.80f);
         _drawFaintUpperComposite = true;
     }
 

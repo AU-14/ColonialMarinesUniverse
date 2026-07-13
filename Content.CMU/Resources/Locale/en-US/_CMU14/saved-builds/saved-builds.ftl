@@ -77,3 +77,6 @@ saved-build-controls-gridalign = Alt (toggle): Grid-aligned ({ $state })
 saved-build-controls-rotate = { $key }: Rotate
 saved-build-controls-place = Left Click: Place
 saved-build-controls-cancel = Right Click: Cancel
+
+# Multi-z placement
+saved-build-z-skipped = {$count} entities could not be placed - their z-level could not be created here.

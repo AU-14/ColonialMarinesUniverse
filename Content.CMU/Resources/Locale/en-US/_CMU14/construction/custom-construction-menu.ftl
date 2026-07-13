@@ -183,3 +183,26 @@ construction-menu-mass-item-name = {$count} selected entities
 construction-menu-mass-none = None of the selected entities are valid.
 construction-menu-mass-added = Added {$added} items to {$category} ({$recipe}).
 construction-menu-mass-partial = Added {$added} items, {$failed} failed ({$reason}).
+
+# Mass Entity Editor - Tiles mode
+construction-mass-selector-tiles = Tiles
+construction-mass-tiles-title = Mass Tile Recipe ({$count} tiles)
+construction-menu-mass-tiles-added = Added {$added} tiles to {$category}.
+
+# Z-Sync Lists (Admin Tools): which walls mirror across z-levels as map borders
+gmod-construction-menu-zsync-lists = Z-Sync Lists
+au-zsync-title = Z-Sync Lists - Multi-Level Border Reflection
+au-zsync-browser-header = All entities (select, then add to a list)
+au-zsync-lists-header = Current lists
+au-zsync-whitelist = Whitelist (reflected across z-levels)
+au-zsync-blacklist = Blacklist (never reflected, overrides whitelist)
+au-zsync-add-whitelist = Add to Whitelist
+au-zsync-add-blacklist = Add to Blacklist
+au-zsync-pick-whitelist = Pick Entity -> Whitelist
+au-zsync-pick-blacklist = Pick Entity -> Blacklist
+au-zsync-remove-selected = Remove Selected
+au-zsync-changed = Z-sync {$list} updated ({$count} changed).
+au-zsync-picked = Added {$proto} to z-sync {$list}.
+au-zsync-pick-instruction = Click an in-round entity to add its prototype to the selected z-sync list. Right-click to cancel.
+au-zsync-pick-no-entity = No entity under cursor.
+au-zsync-pick-cancelled = Z-sync entity pick cancelled.

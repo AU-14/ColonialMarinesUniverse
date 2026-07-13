@@ -45,3 +45,21 @@ public sealed class SubmitMassConstructionEditorEvent : EntityEventArgs
     public List<CustomConstructionStepData> DeconstructSteps = new();
     public int Health;
 }
+
+/// <summary>
+/// Client → server: the Mass Entity Editor's TILES mode was confirmed. One material cost / category is applied
+/// to every tile in <see cref="TileIds"/> - each becomes its own independent generated tile recipe, exactly as
+/// if added one-by-one through the Tiles Editor.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class SubmitMassTileEditorEvent : EntityEventArgs
+{
+    public List<string> TileIds = new();
+    public string Material = string.Empty;
+    public int Amount = 1;
+    public string Spawnlist = string.Empty;
+    public string Category = string.Empty;
+
+    /// <summary>True = file under the Z-Level (Experimental) top-bar page (the "Tiles" spawnlist).</summary>
+    public bool ZLevelPage = true;
+}

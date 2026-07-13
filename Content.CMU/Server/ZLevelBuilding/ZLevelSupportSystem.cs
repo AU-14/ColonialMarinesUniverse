@@ -509,11 +509,22 @@ public sealed class ZLevelSupportSystem : EntitySystem
         if (mapUid == null)
             return;
 
+        // Local effect only: shake + one grey vignette blink for players near the collapse, not map-wide.
+        // 🔧 TUNABLE: effect radius in tiles.
+        const float effectRange = 33f;
+        var collapsePos = _transform.ToMapCoordinates(coords).Position;
+
         var query = EntityQueryEnumerator<ActorComponent, TransformComponent>();
-        while (query.MoveNext(out var actor, out var actorXform))
+        while (query.MoveNext(out var uid, out var actor, out var actorXform))
         {
-            if (actorXform.MapUid == mapUid)
-                _shake.ShakeCamera(actor.Owner, 4, 2);
+            if (actorXform.MapUid != mapUid)
+                continue;
+
+            if ((_transform.GetWorldPosition(uid) - collapsePos).Length() > effectRange)
+                continue;
+
+            _shake.ShakeCamera(uid, 4, 2);
+            RaiseNetworkEvent(new ZCollapseVignetteEvent(), actor.PlayerSession);
         }
 
         // Debris rains onto the level directly below, with its own thud + shake, so the cave-in reads on both
@@ -535,11 +546,18 @@ public sealed class ZLevelSupportSystem : EntitySystem
                 Log.Warning($"[zsupport] below-level collapse sfx failed: {e.Message}");
             }
 
+            // Same local radius as the level above: only players near where the debris lands feel the thud.
             var belowActors = EntityQueryEnumerator<ActorComponent, TransformComponent>();
-            while (belowActors.MoveNext(out var actor, out var actorXform))
+            while (belowActors.MoveNext(out var uid, out var actor, out var actorXform))
             {
-                if (actorXform.MapUid == below)
-                    _shake.ShakeCamera(actor.Owner, 3, 2);
+                if (actorXform.MapUid != below)
+                    continue;
+
+                if ((_transform.GetWorldPosition(uid) - worldPos).Length() > 33f)
+                    continue;
+
+                _shake.ShakeCamera(uid, 3, 2);
+                RaiseNetworkEvent(new ZCollapseVignetteEvent(), actor.PlayerSession);
             }
         }
     }

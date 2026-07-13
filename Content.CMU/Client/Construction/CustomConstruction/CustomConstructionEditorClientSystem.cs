@@ -4,8 +4,11 @@
 using Content.Client.Administration.Managers;
 using Content.Client.Players.PlayTimeTracking;
 using Content.Shared._AU14.Construction.CustomConstruction;
+using Content.Client._AU14.ZLevelBuilding;
 using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared.Popups;
+using Robust.Shared.Input;
+using Robust.Shared.Input.Binding;
 
 namespace Content.Client._AU14.Construction.CustomConstruction;
 
@@ -43,6 +46,9 @@ public sealed class CustomConstructionEditorClientSystem : EntitySystem
     private ZLevelTogglesWindow? _zTogglesWindow;
     private MassEntitySelectorWindow? _massSelector;
     private ConstructionEditorWindow? _massEditor;
+    private ZBorderSyncWindow? _zSyncWindow;
+    private bool _zSyncPickActive;
+    private bool _zSyncPickBlacklist;
 
     /// <summary>
     /// Construction recipe ids the local admin hid via the menu's "Remove Item" button THIS session. The
@@ -60,6 +66,84 @@ public sealed class CustomConstructionEditorClientSystem : EntitySystem
         SubscribeNetworkEvent<OpenCustomLatheEditorEvent>(OnOpenLathe);
         SubscribeNetworkEvent<OpenZLevelTogglesEvent>(OnOpenZLevelToggles);
         SubscribeNetworkEvent<OpenMassConstructionEditorEvent>(OnOpenMassEditor);
+        SubscribeNetworkEvent<OpenZBorderSyncEvent>(OnOpenZSync);
+
+        CommandBinds.Builder
+            .Bind(EngineKeyFunctions.Use, new PointerInputCmdHandler(OnZSyncPickUse, outsidePrediction: true))
+            .Bind(EngineKeyFunctions.UseSecondary, new PointerInputCmdHandler(OnZSyncPickCancel, outsidePrediction: true))
+            .Register<CustomConstructionEditorClientSystem>();
+    }
+
+    public override void Shutdown()
+    {
+        base.Shutdown();
+        CommandBinds.Unregister<CustomConstructionEditorClientSystem>();
+    }
+
+    /// <summary>Admin Tools > Z-Sync Lists: which walls mirror across z-levels as map borders.</summary>
+    public void OpenZSyncLists()
+    {
+        if (!CanUseEditor())
+        {
+            _popup.PopupCursor(Loc.GetString("construction-menu-editor-not-admin"), PopupType.MediumCaution);
+            return;
+        }
+
+        RaiseNetworkEvent(new RequestOpenZBorderSyncEvent());
+    }
+
+    private void OnOpenZSync(OpenZBorderSyncEvent ev)
+    {
+        // The server re-sends the lists after every change; refresh the open window in place.
+        if (_zSyncWindow is { IsOpen: true })
+        {
+            _zSyncWindow.Populate(ev);
+            return;
+        }
+
+        _zSyncWindow = new ZBorderSyncWindow();
+        _zSyncWindow.OnModify += modify => RaiseNetworkEvent(modify);
+        _zSyncWindow.OnPickFromWorld += BeginZSyncPick;
+        _zSyncWindow.OnClose += () => _zSyncWindow = null;
+        _zSyncWindow.Populate(ev);
+        _zSyncWindow.OpenCentered();
+    }
+
+    private void BeginZSyncPick(bool blacklist)
+    {
+        _zSyncPickActive = true;
+        _zSyncPickBlacklist = blacklist;
+        _popup.PopupCursor(Loc.GetString("au-zsync-pick-instruction"), PopupType.Medium);
+    }
+
+    private bool OnZSyncPickUse(in PointerInputCmdHandler.PointerInputCmdArgs args)
+    {
+        if (!_zSyncPickActive || args.State != BoundKeyState.Down)
+            return false;
+
+        if (!args.EntityUid.IsValid() || !EntityManager.EntityExists(args.EntityUid))
+        {
+            _popup.PopupCursor(Loc.GetString("au-zsync-pick-no-entity"), PopupType.MediumCaution);
+            return true;
+        }
+
+        RaiseNetworkEvent(new PickZBorderSyncEntityEvent
+        {
+            Entity = GetNetEntity(args.EntityUid),
+            Blacklist = _zSyncPickBlacklist,
+        });
+        _zSyncPickActive = false;
+        return true;
+    }
+
+    private bool OnZSyncPickCancel(in PointerInputCmdHandler.PointerInputCmdArgs args)
+    {
+        if (!_zSyncPickActive || args.State != BoundKeyState.Down)
+            return false;
+
+        _zSyncPickActive = false;
+        _popup.PopupCursor(Loc.GetString("au-zsync-pick-cancelled"), PopupType.Medium);
+        return true;
     }
 
     /// <summary>
@@ -80,6 +164,20 @@ public sealed class CustomConstructionEditorClientSystem : EntitySystem
         {
             if (ids.Count > 0)
                 RaiseNetworkEvent(new RequestOpenMassConstructionEditorEvent { ProtoIds = ids });
+        };
+        _massSelector.OnTilesSelected += tileIds =>
+        {
+            if (tileIds.Count == 0)
+                return;
+
+            // Tiles mode: one small cost/placement form, then the server fans it out per tile.
+            var config = new MassTileConfigWindow(tileIds.Count);
+            config.OnSubmit += submit =>
+            {
+                submit.TileIds = tileIds;
+                RaiseNetworkEvent(submit);
+            };
+            config.OpenCentered();
         };
         _massSelector.OnClose += () => _massSelector = null;
         _massSelector.OpenCentered();
