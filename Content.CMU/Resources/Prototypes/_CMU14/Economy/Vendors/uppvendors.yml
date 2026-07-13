@@ -153,10 +153,6 @@
         amount: 15
     - name: Mask
       entries:
-      - id: RMCMaskGasSPP
-        amount: 40
-      - id: CMUGasMaskFilterUPP
-        amount: 80
       - id: CMMaskCoif
         amount: 20
       - id: RMCMaskScarfBlack
@@ -241,11 +237,19 @@
         amount: 40
       - id: AU14NaloxoneAutoInjector
         amount: 9
+      - id: AU14PacketPillsTramadol
+        amount: 40
+      - id: AU14FirstAidAutoInjectorNoSkill
+        amount: 20
+      - id: CMUSplintItem
+        amount: 40
     - name: Tools
       entries:
       - id: CMEntrenchingTool
         recommended: true
         amount: 30
+      - id: RMCShovel
+        amount: 10
       - id: RMCCombatUtilityKnifeA
         recommended: true
         amount: 25
@@ -315,6 +319,14 @@
         amount: 12
       - id: RMCPackFlareCAS
         amount: 8
+    - name: Gas Mask
+      entries:
+      - id: RMCMaskGasSPP
+        amount: 40
+      - id: CMUGasMaskFilterUPP
+        amount: 80
+      - id: AU14PouchGasMaskBag
+        amount: 20
     - name: Optics
       entries:
       - id: RMCLaserDesignatorPVE
@@ -1216,6 +1228,8 @@
         amount: 4
       - id: AU14PacketGrenadeSmokeUPPFilled
         amount: 6
+      - id: RMCPacketGrenadeWhitePhosphorusFilled
+        amount: 3
       - id: AU14PacketGrenadeTearGasFilled
         amount: 3
       - id: RMCBoxClaymoreMineFilled
