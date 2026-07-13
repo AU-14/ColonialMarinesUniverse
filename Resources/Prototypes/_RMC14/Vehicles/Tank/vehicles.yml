@@ -236,6 +236,60 @@
 
 - type: entity
   parent: VehicleTankBase
+  id: VehicleTankPMC
+  name: M34A2 Longstreet 'Yutani'
+  description: An older light tank made for all ground forces of the United Americas, although being phased out due to being outdated by the American Army and the CCAF, the longstreet still remains in service with USCM and LACN detachments in colonial sectors. This one seems to have the color scheme of Weyland Yutani PMC.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Vehicles/wytank.rsi
+    layers:
+    - map: [ base ]
+      state: tank_base
+    - map: [ armor ]
+      state: ARMOR
+      visible: false
+    - map: [ primary ]
+      state: tank_turret_0
+    - map: [ secondary ]
+      state: SECONDARY
+      visible: false
+    - map: [ support ]
+      state: SUPPORT
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_1
+  - type: ItemSlots
+    slots:
+      armor:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      primary:
+        startingItem: VehicleTankTurretPMC
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      secondary:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      support:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      wheel-1:
+        startingItem: VehicleTankTreads
+        disableEject: true
+        whitelist:
+          components:
+          - VehicleWheelItem
+
+- type: entity
+  parent: VehicleTankBase
   id: VehicleSPPTank
   name: Cheetah 2A Light Tank
   description: A light-weight tank made for all ground forces of the UPP.

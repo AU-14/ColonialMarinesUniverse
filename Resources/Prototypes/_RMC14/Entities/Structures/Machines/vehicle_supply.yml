@@ -411,6 +411,126 @@
       - VehicleTankRocketLauncher
       - VehicleTankFlareModule
       - VehicleTankArtilleryModule
+    - name: M34A2 Longstreet 'Yutani'
+      vehicle: VehicleTankPMC
+      group: vehicle-tank
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options:
+        - id: VehicleTankLTAAAPMinigun
+          name: LTAAAP minigun
+          item: VehicleTankLTAAAPMinigun
+          slot: primary::turret-cannon
+        - id: VehicleTankAceAutocannon
+          name: ACE autocannon
+          item: VehicleTankAceAutocannon
+          slot: primary::turret-cannon
+        - id: VehicleTankDragonFlamer
+          name: DRG-N flamer
+          item: VehicleTankDragonFlamer
+          slot: primary::turret-cannon
+      - id: secondary
+        name: Secondary
+        options:
+        - id: VehicleTankFlamer
+          name: flamer
+          item: VehicleTankFlamer
+          slot: primary::turret-launcher
+        - id: VehicleTankGrenadeLauncher
+          name: grenade launcher
+          item: VehicleTankGrenadeLauncher
+          slot: primary::turret-launcher
+        - id: VehicleTankTowLauncher
+          name: TOW launcher
+          item: VehicleTankTowLauncher
+          slot: primary::turret-launcher
+        - id: VehicleTankM56Cupola
+          name: M56 cupola
+          item: VehicleTankM56Cupola
+          slot: primary::turret-launcher
+      - id: standardtreads
+        name: Treads
+        options:
+        - id: VehicleTankTreads
+          name: treads
+          item: VehicleTankTreads
+          slot: wheel-1
+      - id: armor
+        name: Armor
+        options:
+        - id: VehicleTankArmorBallistic
+          name: ballistic armor
+          item: VehicleTankArmorBallistic
+          slot: armor
+        - id: VehicleTankArmorConcussive
+          name: concussive armor
+          item: VehicleTankArmorConcussive
+          slot: armor
+        - id: VehicleTankArmorCaustic
+          name: caustic armor
+          item: VehicleTankArmorCaustic
+          slot: armor
+        - id: VehicleTankArmorPaladin
+          name: paladin armor
+          item: VehicleTankArmorPaladin
+          slot: armor
+      - id: auxiliary
+        name: Auxiliary
+        options:
+        - id: VehicleTankSnowplow
+          name: snowplow
+          item: VehicleTankSnowplow
+          slot: armor
+        - id: VehicleTankReinforcedTreads
+          name: reinforced treads
+          item: VehicleTankReinforcedTreads
+          slot: wheel-1
+      - id: support
+        name: Support
+        options:
+        - id: VehicleTankWarningArray
+          name: warning array
+          item: VehicleTankWarningArray
+          slot: support
+        - id: VehicleTankOverdriveEnhancer
+          name: overdrive enhancer
+          item: VehicleTankOverdriveEnhancer
+          slot: support
+        - id: VehicleTankRocketLauncher
+          name: smoke launcher
+          item: VehicleTankRocketLauncher
+          slot: support
+        - id: VehicleTankFlareModule
+          name: flare module
+          item: VehicleTankFlareModule
+          slot: support
+        - id: VehicleTankArtilleryModule
+          name: artillery module
+          item: VehicleTankArtilleryModule
+          slot: support
+      hardpoints:
+      - VehicleTankTurret
+      - VehicleTankTreads
+      - VehicleTankReinforcedTreads
+      - VehicleTankArmorBallistic
+      - VehicleTankArmorConcussive
+      - VehicleTankArmorCaustic
+      - VehicleTankArmorPaladin
+      - VehicleTankSnowplow
+      - VehicleTankLTAAAPMinigun
+      - VehicleTankAceAutocannon
+      - VehicleTankDragonFlamer
+      - VehicleTankFlamer
+      - VehicleTankGrenadeLauncher
+      - VehicleTankTowLauncher
+      - VehicleTankM56Cupola
+      - VehicleTankRERE700
+      - VehicleTankWarningArray
+      - VehicleTankOverdriveEnhancer
+      - VehicleTankRocketLauncher
+      - VehicleTankFlareModule
+      - VehicleTankArtilleryModule
     - name: UPP tank
       vehicle: VehicleSPPTank
       group: vehicle-tank
