@@ -1088,45 +1088,80 @@
       - id: AU14WelderBackpackRMC
         recommended: true
     - name: Engineering Storage Pouch
-      choices: { CMUPouchesCT: 1 }
+      choices: { CMUPouchesCT: 2 }
       entries:
       - id: RMCPouchConstruction
         recommended: true
+      - id: RMCPouchEngineerKit
       - id: RMCPouchElectronics
-    - name: Engineering Supplies
+    - name: Engineering Materials
       entries:
       - id: CMSheetMetal50
         name: metal x50
-        points: 8
+        points: 6
         recommended: true
       - id: CMSheetPlasteel50
         name: plasteel x50
-        points: 10
+        points: 8
         recommended: true
-      - id: CMAPCElectronics
+      - id: CMSandbagEmpty50
+        name: sandbags x50
+        points: 4
+      - id: RMCPlankWood
+        name: wood x50
         points: 2
+    - name: Engineering Supplies
+      entries:
+      - id: CMFoldingBarricadesMB6x3
+        name: MB-6 folding barricade x3
+        points: 4
+      - id: MaintenanceJack
+        points: 2
+      - id: RMCShovel
+        points: 2
+      - id: RMCES11MobileFuelCanister
+        points: 4
+      - id: RMCMagazineSMGNailgun
+        points: 2
+      - id: RMCEngineerKit
+        points: 4
       - id: DoorElectronics
         points: 2
-      - id: CMUDeployableZLevelLadder
-        points: 10
+    - name: Power Generation
+      entries:
+      - id: RMCPowerCell
+        points: 2
       - id: RMCPowerCellHigh
-        points: 3
+        points: 4
       - id: RMCPowerCellSuper
-        points: 8
-      - id: RMCMagazineSMGNailgun
-        points: 5
-    #- id: CMES11MobileFuelCanister
-    #  points: 4
+        points: 6
+      - id: CMAPCElectronics
+        points: 2
+      - id: RMCPortableGeneratorPacmanMachineCircuitBoard
+        name: PACMAN generator machine board
+        points: 4
+      - id: RMCPortableGeneratorSuperPacmanMachineCircuitboard
+        name: super PACMAN generator machine board
+        points: 6
+      - id: CMSheetPhoron
+        name: phoron x50
+        points: 2
+      - id: SheetUranium
+        name: uranium x30
+        points: 4
     - name: Explosives
       entries:
-      - id: RMCExplosiveBreachingCharge
-        points: 16
       - id: RMCExplosivePlastic
-        points: 12
+        points: 5
+      - id: RMCExplosiveBreachingCharge
+        points: 8
+        recommended: true
+      - id: RMCPacketGrenadeMetalFoamFilled
+        points: 8
     - name: Utilities
       entries:
       - id: RMCSynthResetKey
-        points: 5
+        points: 4
 
 - type: entity
   parent: ColMarTechCargo
