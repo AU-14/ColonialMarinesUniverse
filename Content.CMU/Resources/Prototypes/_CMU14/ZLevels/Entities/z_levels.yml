@@ -78,13 +78,35 @@
 - type: entity
   parent: BaseItem
   id: CMUDeployableZLevelLadder
-  name: deployable ladder
-  description: A portable ladder that can be deployed through an open Z-level shaft.
+  name: retractable ladder
+  description: A portable ladder that can be deployed against objects to traverse z-levels.
   components:
   - type: Sprite
-    sprite: _RMC14/Structures/ladder.rsi
-    state: ladder10
+    sprite: _AU14/Structures/deployableladder.rsi
+    state: icon
   - type: Item
-    sprite: _RMC14/Structures/ladder.rsi
+    sprite: _AU14/Structures/deployableladder.rsi
     size: Large
   - type: CMUDeployableZLevelLadder
+    upLadderPrototype: CMUDeployableZLevelLadderThroughUp
+    downLadderPrototype: CMUDeployableZLevelLadderThroughDown
+
+- type: entity
+  parent: CMUZLevelLadderThrough
+  id: CMUDeployableZLevelLadderThroughUp
+  suffix: Deployable, Up
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/deployableladder.rsi
+    drawdepth: WallTops
+    state: deployed
+
+- type: entity
+  parent: CMUZLevelLadderThroughDown
+  id: CMUDeployableZLevelLadderThroughDown
+  suffix: Deployable, Down
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/deployableladder.rsi
+    drawdepth: WallTops
+    state: deployed
