@@ -12,13 +12,14 @@ public sealed partial class CipherHintPaperSystem : EntitySystem
     [Dependency] private SharedReagentGeneratorSystem _gen = default!;
     public override void Initialize()
     {
-        SubscribeLocalEvent<CipherHintPaperComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<CipherHintPaperComponent, MapInitEvent>(OnMapInit, after: [
+            typeof(SharedReagentGeneratorSystem)]);
     }
 
 
     private void OnMapInit(Entity<CipherHintPaperComponent> ent, ref MapInitEvent args)
     {
-        if (TryComp<PaperComponent>(ent.Owner, out var paper))
+        if (TryComp<PaperComponent>(ent.Owner, out var paper) && _gen.UnfoldedCombinations.ContainsKey("Ciphering"))
         {
             var ciph = _gen.UnfoldedCombinations["Ciphering"];
             string content = string.Empty;
