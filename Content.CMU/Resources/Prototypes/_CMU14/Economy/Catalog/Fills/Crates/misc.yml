@@ -91,6 +91,21 @@
     spawn: AU14VendorBlood
 
 - type: entity
+  parent: RMCCrateSecurePhoron
+  id: CMUCratePreciousMetals #you shouldn't eat these
+  name: precious metals crate
+  description: A crate containing gold, silver, and uranium
+  components:
+  #TODO: stacks
+  - type: StorageFill
+    contents:
+    - id: RMCJugGold
+      amount: 1
+    - id: RMCJugSilver
+      amount: 1
+    - id: RMCJugUranium
+
+- type: entity
   parent: RMCCrateScience
   id: CMUCrateLabGlassware
   name: laboratory glassware crate
