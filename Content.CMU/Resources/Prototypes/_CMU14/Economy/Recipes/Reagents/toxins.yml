@@ -1,14 +1,14 @@
 - type: reagent
   parent: CMReagent
   id: CMUBlackSludge
-  name: reagent-name-rmcblackgoo
-  desc: reagent-desc-rmcblackgoo
+  name: reagent-name-black-sludge
+  desc: reagent-desc-black-sludge
   physicalDesc: reagent-physical-desc-unidentifiable
   flavor: bitter
   color: "#0a0b0d"
   unknown: true
   flags: Scannable
-  class: Uncommon
+  class: Hydro
   toxin: true
   metabolisms:
     Poison:
