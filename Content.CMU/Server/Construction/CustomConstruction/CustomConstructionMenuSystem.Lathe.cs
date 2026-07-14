@@ -19,20 +19,17 @@ namespace Content.Server._AU14.Construction.CustomConstruction;
 /// menu's Admin Tools.
 ///
 /// Each added recipe is written as a self-contained <c>latheRecipe</c> file under Generated/Lathe/. The two
-/// lathe machines reference the packs <c>AU14AutolatheRecipes</c> / <c>AU14ArmylatheRecipes</c> (added to their
-/// staticPacks); those pack files are rewritten from the recipe files every time an entry is added. Like the
-/// rest of this system, it is restart-applied (committed to the content tree, shipped to clients).
+/// lathe machines reference the baseline packs <c>AU14AutolatheRecipes</c> / <c>AU14ArmylatheRecipes</c>;
+/// the runtime pack contents are rebuilt from DB/generated recipes and hot-loaded into those pack ids.
 /// </summary>
 public sealed partial class CustomConstructionMenuSystem
 {
     private const string LatheRecipePrefix = "AU14LRecipe_";
     private const string LatheHeader = "# lathe:";
 
-    // The pack ids referenced by lathe.yml / armylathe.yml staticPacks, and the files that define them.
+    // The pack ids referenced by lathe.yml / armylathe.yml staticPacks.
     private const string AutolathePackId = "AU14AutolatheRecipes";
     private const string ArmylathePackId = "AU14ArmylatheRecipes";
-    private const string AutolathePackFile = "AU14AutolathePack.yml";
-    private const string ArmylathePackFile = "AU14ArmylathePack.yml";
 
     private string? LatheDir => _generatedDir == null ? null : Path.Combine(_generatedDir, "Lathe");
 
@@ -218,9 +215,9 @@ public sealed partial class CustomConstructionMenuSystem
     }
 
     /// <summary>
-    /// Rewrites the two pack files from every generated lathe-recipe file, grouping by the <c>#  lathe:</c>
-    /// header so each recipe lands in its machine's pack. Always writes both packs (empty if none) so the
-    /// staticPacks references on the lathes never dangle.
+    /// Rebuilds the two runtime packs from every generated lathe-recipe file, grouping by the
+    /// <c># lathe:</c> header so each recipe lands in its machine's pack. The baseline pack prototypes live
+    /// in normal content YAML; generated files only contain actual admin-added recipes.
     /// </summary>
     private void RegenerateLathePacks()
     {
@@ -245,8 +242,6 @@ public sealed partial class CustomConstructionMenuSystem
 
         var autolatheYaml = BuildPackYaml(AutolathePackId, "CMAutolathe", autolathe);
         var armylatheYaml = BuildPackYaml(ArmylathePackId, "CMArmylathe", armylathe);
-        File.WriteAllText(Path.Combine(LatheDir, AutolathePackFile), autolatheYaml, Encoding.UTF8);
-        File.WriteAllText(Path.Combine(LatheDir, ArmylathePackFile), armylatheYaml, Encoding.UTF8);
 
         // Publish the packs live so lathe UIs (server and every client) reflect the recipe list right away.
         // Callers must have published any newly-added recipe BEFORE this runs (see OnSubmitLathe).
