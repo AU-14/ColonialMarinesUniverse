@@ -13,6 +13,7 @@
 
 - type: thirdParty
   id: VAIPO
+  announceAsSurvivors: true
   partyspawn: VAIPOSpawn
   entrymethod: shuttle
   weight: 20

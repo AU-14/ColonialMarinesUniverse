@@ -15,6 +15,9 @@ internal sealed class AuRoundSelectionState
     public string? SelectedGovforShip { get; set; }
     public string? SelectedOpforShip { get; set; }
     public List<ThirdPartyPrototype> SelectedThirdParties { get; } = new();
+    public bool DistressSignalThirdPartiesLocked { get; set; }
+    public bool DistressSignalThirdPartyFillCompleted { get; set; }
+    public int DistressSignalSurvivorCount { get; set; }
 
     public void Reset()
     {
@@ -25,6 +28,19 @@ internal sealed class AuRoundSelectionState
         SelectedGovforShip = null;
         SelectedOpforShip = null;
         SelectedThirdParties.Clear();
+        DistressSignalThirdPartiesLocked = false;
+        DistressSignalThirdPartyFillCompleted = false;
+        DistressSignalSurvivorCount = 0;
+    }
+
+    public void ResetDistressSignalThirdPartyLock()
+    {
+        if (DistressSignalThirdPartiesLocked)
+            SelectedThirdParties.Clear();
+
+        DistressSignalThirdPartiesLocked = false;
+        DistressSignalThirdPartyFillCompleted = false;
+        DistressSignalSurvivorCount = 0;
     }
 
     public void SetPlanet(string planetId, RMCPlanetMapPrototypeComponent planet)

@@ -104,18 +104,24 @@
   equipment:
     id: AU14IDCardGOVFOROfficerLogistics
     ears: AU14HeadsetGovforCommand
+    outerClothing: RMCHazardVestBlue
+    shoes: CMBootsBlackFilled
+    head: RMCHardhatWhite
+    jumpsuit: CMJumpsuitOrdnanceTech
+    back: CMSatchelMarine
     pocket1: AU14StampLO
-  inhand:
-    - AU14KitJOLogisticsKit
 
 - type: startingGear
   id: AU14GearOPFOROfficerLogistics
   equipment:
     id: AU14IDCardOPFOROfficerLogistics
     ears: AU14HeadsetOpforCommand
+    outerClothing: RMCHazardVestBlue
+    shoes: CMBootsBlackFilled
+    head: RMCHardhatWhite
+    jumpsuit: CMJumpsuitOrdnanceTech
+    back: CMSatchelMarine
     pocket1: AU14StampLO
-  inhand:
-    - AU14KitJOLogisticsKit
 
 - type: roleLoadout
   id: JobAU14JobGOVFOROfficerLogistics

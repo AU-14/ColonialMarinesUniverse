@@ -9,6 +9,7 @@
 
 - type: thirdParty
   id: IPIE
+  announceAsSurvivors: true
   partyspawn: IPIESpawn
   whitelistedgamemodes:
     - insurgency
@@ -32,6 +33,7 @@
 
 - type: thirdParty
   id: IPIESynth
+  announceAsSurvivors: true
   partyspawn: IPIESynthSpawn
   whitelistedgamemodes:
     - insurgency

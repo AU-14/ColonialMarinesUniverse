@@ -1,0 +1,37 @@
+cmu-balance-rating-title = Balance feedback
+cmu-balance-rating-question-weapon-power = How powerful does this weapon feel?
+cmu-balance-rating-question-weapon-fun = How fun is this weapon to use?
+cmu-balance-rating-question-xeno-power = How powerful does this xeno feel?
+cmu-balance-rating-question-xeno-fun = How fun is this xeno to play?
+cmu-balance-rating-question-map-fun = How fun is this map and game mode combination?
+cmu-balance-rating-question-generic = How would you rate this?
+cmu-balance-rating-endpoint-weak = Weak
+cmu-balance-rating-endpoint-powerful = Powerful
+cmu-balance-rating-endpoint-unfun = Unfun
+cmu-balance-rating-endpoint-fun = Fun
+cmu-balance-rating-option-tooltip = Rate {$rating} out of 5
+cmu-balance-rating-time-left = Time left: {$time}
+
+cmd-startbalancerating-desc = Starts a pre-round specialist weapon, xeno, or map balance-rating prompt.
+cmd-startbalancerating-help = Usage: {$command} <target> <power|fun> [duration in seconds]
+cmd-cancelbalancerating-desc = Cancels the active balance-rating prompt.
+cmd-cancelbalancerating-help = Usage: {$command}
+
+cmu-balance-rating-command-lobby-only = Balance ratings can only be started in the pre-round lobby.
+cmu-balance-rating-command-round-unavailable = The current round is not available for balance ratings.
+cmu-balance-rating-command-already-active = A balance-rating prompt is already active.
+cmu-balance-rating-command-duration-range = Duration must be between {$minimum} and {$maximum} seconds.
+cmu-balance-rating-command-invalid-target = No configured balance-rating target has the ID "{$target}".
+cmu-balance-rating-command-map-fun-only = Maps can only be rated in the fun category.
+cmu-balance-rating-command-no-players = There are no eligible lobby players to rate this target.
+cmu-balance-rating-command-lobby-ended = The pre-round lobby ended before the prompt could be opened.
+cmu-balance-rating-command-start-cancelled = The balance-rating prompt was cancelled before it opened.
+cmu-balance-rating-command-started = Started a {$metric} rating for {$target} with {$players} eligible players.
+cmu-balance-rating-command-database-error = The balance-rating prompt could not be saved to the database.
+cmu-balance-rating-command-invalid-metric = Metric must be either power or fun.
+cmu-balance-rating-command-invalid-duration = Duration must be a finite number of seconds.
+cmu-balance-rating-command-target-hint = Specialist weapon, xeno, or map/mode target
+cmu-balance-rating-command-metric-hint = Rating metric
+cmu-balance-rating-command-duration-hint = Prompt duration in seconds
+cmu-balance-rating-command-cancelled = Cancelled the active balance-rating prompt.
+cmu-balance-rating-command-none-active = There is no active balance-rating prompt.

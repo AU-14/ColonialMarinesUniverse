@@ -15,6 +15,7 @@
 
 - type: thirdParty
   id: USArmy
+  announceAsSurvivors: true
   displayName: US Army Infantry (Full Squad)
   partyspawn: USArmySpawn
   blacklistedgamemodes:
@@ -41,6 +42,7 @@
 
 - type: thirdParty
   id: USArmyAlt
+  announceAsSurvivors: true
   displayName: US Army Infantry (Small Team)
   partyspawn: USArmySpawnAlt
   blacklistedgamemodes:
@@ -69,6 +71,7 @@
 
 - type: thirdParty
   id: USArmyAlt2
+  announceAsSurvivors: true
   displayName: US Army Infantry (Medium Team)
   partyspawn: USArmySpawnAlt2
   blacklistedgamemodes:

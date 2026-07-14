@@ -537,6 +537,78 @@
 
 - type: entity
   parent: AU14BaseArmor
+  id: AU14CamoArmorM3Smooth
+  name: M3 pattern smooth USCM armor
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleArmor/uscmarmorone.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _AU14/Clothing/JungleArmor/uscmarmorone.rsi
+      Desert: _AU14/Clothing/DesertArmor/uscmarmorone.rsi
+      Snow: _AU14/Clothing/JungleArmor/uscmarmorone.rsi
+      Classic: _AU14/Clothing/JungleArmor/uscmarmorone.rsi
+      Urban: _AU14/Clothing/JungleArmor/uscmarmorone.rsi
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14CamoArmorM3Ribbed
+  name: M3 pattern ribbed USCM armor
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleArmor/uscmarmortwo.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _AU14/Clothing/JungleArmor/uscmarmortwo.rsi
+      Desert: _AU14/Clothing/DesertArmor/uscmarmortwo.rsi
+      Snow: _AU14/Clothing/JungleArmor/uscmarmortwo.rsi
+      Classic: _AU14/Clothing/JungleArmor/uscmarmortwo.rsi
+      Urban: _AU14/Clothing/JungleArmor/uscmarmortwo.rsi
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14CamoArmorM3Dimpled
+  name: M3 pattern dimpled USCM armor
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleArmor/uscmarmorthree.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _AU14/Clothing/JungleArmor/uscmarmorthree.rsi
+      Desert: _AU14/Clothing/DesertArmor/uscmarmorthree.rsi
+      Snow: _AU14/Clothing/JungleArmor/uscmarmorthree.rsi
+      Classic: _AU14/Clothing/JungleArmor/uscmarmorthree.rsi
+      Urban: _AU14/Clothing/JungleArmor/uscmarmorthree.rsi
+
+- type: entity
+  parent: [ RMCAllowSuitStorageClothingSmartgunner, AU14BaseArmor ]
+  id: AU14CamoArmorSmartGunCombatHarness
+  name: M56 Combat Harness
+  description: An M56 Combat Harness specially made for Smartgunners.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleArmor/uscmarmorsmartgunner.rsi
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,3,1 # 2 slots
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier
+    walkModifier: .725
+    sprintModifier: .725
+  - type: ClothingBlockBackpack
+  - type: SmartGunArmor
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _AU14/Clothing/JungleArmor/uscmarmorsmartgunner.rsi
+      Desert: _AU14/Clothing/DesertArmor/uscmarmorsmartgunner.rsi
+      Snow: _AU14/Clothing/JungleArmor/uscmarmorsmartgunner.rsi
+      Classic: _AU14/Clothing/JungleArmor/uscmarmorsmartgunner.rsi
+      Urban: _AU14/Clothing/JungleArmor/uscmarmorsmartgunner.rsi
+
+- type: entity
+  parent: AU14BaseArmor
   id: AU14ArmorCBRN
   name: CBRN M3-M armor
   description: While lacking the appearance of the M3 pattern armor worn in regular service, this armor piece is still a derivative of it. It has been heavily modified to fit over the MOPP suit with additional padding and Venlar composite layers removed, so as not to restrict the wearer’s movement. However, with the reduction of composite layers, the personal protection offered is less than desired with complaints having been lodged since 2165.

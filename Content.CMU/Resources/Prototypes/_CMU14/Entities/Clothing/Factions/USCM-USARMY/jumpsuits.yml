@@ -253,3 +253,25 @@
   components:
   - type: Sprite
     sprite: _AU14/Clothing/USCMC/Uniform/DressBlues/d_senior.rsi
+
+# Camo system (ItemCamouflage) conforming variants
+# No Classic/Urban sprites exist yet - both fall back to the Jungle sprite until dedicated art is made.
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CamoUSCMFatigues
+  name: USCM fatigues
+  description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/junglefatigues.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUAFlag
+    - AU14PatchUSCM
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _AU14/Clothing/junglefatigues.rsi
+      Desert: _AU14/Clothing/desertfatigues.rsi
+      Snow: _AU14/Clothing/snowfatigues.rsi
+      Classic: _AU14/Clothing/junglefatigues.rsi
+      Urban: _AU14/Clothing/junglefatigues.rsi

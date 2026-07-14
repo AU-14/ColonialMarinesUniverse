@@ -13,6 +13,7 @@
 
 - type: thirdParty
   id: WEYUSurvLarge
+  announceAsSurvivors: true
   displayName: Weyland-Yutani Survivors
   partyspawn: WEYUSurvSpawnLarge
   blacklistedgamemodes:
@@ -40,6 +41,7 @@
 
 - type: thirdParty
   id: WEYUSurvMedium
+  announceAsSurvivors: true
   displayName: Weyland-Yutani Survivors
   partyspawn: WEYUSurvSpawnMedium
   blacklistedgamemodes:
@@ -66,6 +68,7 @@
 
 - type: thirdParty
   id: WEYUSurvSmall
+  announceAsSurvivors: true
   displayName: Weyland-Yutani Survivors
   partyspawn: WEYUSurvSpawnSmall
   blacklistedgamemodes:
@@ -78,4 +81,3 @@
   maxplayers: 50
   GhostsNeeded: 0
   roundstart: true
-

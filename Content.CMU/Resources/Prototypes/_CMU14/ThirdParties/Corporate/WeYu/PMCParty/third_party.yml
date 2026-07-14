@@ -15,6 +15,7 @@
 
 - type: thirdParty
   id: WYPMCParty
+  announceAsSurvivors: true
   partyspawn: WYPMCPartySpawn
   entrymethod: shuttle
   dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml
@@ -39,6 +40,7 @@
 
 - type: thirdParty
   id: WYPMCPartyAlt
+  announceAsSurvivors: true
   partyspawn: WYPMCPartySpawnAlt
   entrymethod: shuttle
   dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml

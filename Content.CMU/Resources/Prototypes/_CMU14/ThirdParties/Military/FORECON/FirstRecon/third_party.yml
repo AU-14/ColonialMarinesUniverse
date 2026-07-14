@@ -11,6 +11,7 @@
 
 - type: thirdParty
   id: FORECONFirstRecon
+  announceAsSurvivors: true
   partyspawn: AU14FORECONFirstReconSpawner
   entrymethod: shuttle 
   dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_response_shuttle.yml

@@ -17,13 +17,16 @@
       "name": "govfor_afn"
     },
     {
-      "name": "govfor_auxtech"
+      "name": "govfor_logisticstech"
     },
     {
       "name": "govfor_background"
     },
     {
       "name": "govfor_cmo"
+    },
+    {
+      "name": "govfor_vcc"
     },
     {
       "name": "govfor_cmp"
@@ -95,7 +98,7 @@
       "name": "old_govfor_rfn"
     },
 	{
-      "name": "old_govfor_rto"
+      "name": "govfor_rto"
     },
 	{
       "name": "old_govfor_sergeant"

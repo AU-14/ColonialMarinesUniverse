@@ -10,6 +10,7 @@
 
 - type: thirdParty
   id: UPPTDLostTeam
+  announceAsSurvivors: true
   partyspawn: UPPTDLostTeamSpawn
   entrymethod: shuttle
   dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_spp_shuttle.yml

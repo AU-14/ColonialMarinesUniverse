@@ -1,0 +1,97 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobRadioTrafficOperatorBaseAbstract
+  name: au14-job-name-radiotrafficoperator
+  description: au14-job-description-radiotrafficoperator
+  icon: "AU14JobIconRTO"
+  spawnMenuRoleName: Radio Traffic Operator (GOVFOR)
+  startingGear: AU14GearGOVFORRadioTrafficOperator
+  dummyStartingGear: AU14GearGOVFORRadioTrafficOperatorDummy
+  playTimeTracker: AU14JobGOVFORRadioTrafficOperator
+  accessGroups:
+  - AU14GovforSquad
+
+- type: job
+  abstract: true
+  parent: AU14JobRadioTrafficOperatorBaseAbstract
+  id: AU14JobRadioTrafficOperatorBase
+  roundRole: RadioTrafficOperator
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetPlatoonRTO
+  - type: JobPrefix
+    prefix: au14-job-prefix-radiotrafficoperator
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: govfor_rto
+
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NonResuscitable
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankLanceCorporal:
+      entity: AU14ChevronUSCMLanceCorporal
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFORRadioTrafficOperator
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORRadioTrafficOperator
+  equipment:
+    id: AU14IDCardGOVFORRadioTrafficOperator
+    ears: AU14HeadsetGovforMarine
+  inhand:
+  - AU14BackpackRTOPackGray
+
+
+- type: startingGear
+  id: AU14GearGOVFORRadioTrafficOperatorDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleThree
+    shoes: AU14BootsJungle
+    head: AU14JungleM10Helmet
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetGovforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORRadioTrafficOperator
+  name: Spawn Point GOVFOR Radio Traffic Operator
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORRadioTrafficOperator
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobRadioTrafficOperatorBase
+  id: AU14JobGOVFORRadioTrafficOperator
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: roleLoadout
+  id: JobAU14JobGOVFORRadioTrafficOperator
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC

@@ -5,7 +5,7 @@
   name: au14-job-name-govforpolicechief
   description: au14-job-description-govforpolicechief
   icon: "AU14JobIconGovCMP"
-  spawnMenuRoleName: Chief MP (GOVFOR)
+  spawnMenuRoleName: Chief Military Police (GOVFOR)
   supervisors: au14-job-supervisors-govforplatco
   startingGear: AU14GearGOVFOROfficerMP
   dummyStartingGear: AU14GearGOVFOROfficerMPDummy
@@ -93,7 +93,7 @@
   roundSide: Opfor
   roundForce: OPFOR
   icon: "AU14JobIconOPFORCMP"
-  spawnMenuRoleName: Chief MP (OPFOR)
+  spawnMenuRoleName: Chief Military Police (OPFOR)
   supervisors: au14-job-supervisors-opforplatco
   startingGear: AU14GearOPFOROfficerMP
   dummyStartingGear: AU14GearOPFOROfficerMPDummy
@@ -107,7 +107,6 @@
   equipment:
     id: AU14IDCardGOVFOROfficerMP
     ears: AU14HeadsetGovforCommand
-    pocket1: AU14StampCMP
   inhand:
     - AU14KitJOCMPKit
 
@@ -116,7 +115,6 @@
   equipment:
     id: AU14IDCardOPFOROfficerMP
     ears: AU14HeadsetOpforCommand
-    pocket1: AU14StampCMP
   inhand:
     - AU14KitJOCMPKit
 

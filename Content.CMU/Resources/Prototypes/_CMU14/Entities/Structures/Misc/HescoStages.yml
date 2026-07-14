@@ -1,0 +1,301 @@
+- type: entity
+  parent: BaseItem
+  id: AU14HescoKit
+  name: HESCO kit
+  description: A collapsible wire-mesh basket. Deploy it on the ground facing the direction you want it to face, then pack it with dirt using an entrenching tool.
+  components:
+  - type: HescoKit
+    builds: AU14HescoUnfilled1
+  - type: Item
+    size: Huge
+    sprite: _AU14/Structures/hesco.rsi
+  - type: Sprite
+    sprite: _AU14/Structures/hesco.rsi
+    state: item_icon
+
+- type: entity
+  id: AU14HescoUnfilled1
+  name: unfilled HESCO basket
+  description: An empty wire-mesh HESCO basket. It needs to be packed with dirt before it will do much of anything.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Climbable
+  - type: Tag
+    tags:
+    - Structure
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: CMSandbag
+  - type: HescoFillable
+    nextStage: AU14HescoUnfilled2
+  - type: HescoDisassemblable
+    instant: true
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Sprite
+    sprite: _AU14/Structures/hesco.rsi
+    layers:
+    - state: sand_wall_1
+    - map: [ "acided" ]
+    drawdepth: WallTops
+  - type: Physics
+    bodyType: Static
+  - type: Appearance
+  - type: Flamability
+    chance: 0.2
+    rate: 18.8
+    range: 0.4
+    spread: 0.2
+
+- type: entity
+  id: AU14HescoUnfilled2
+  name: partially filled HESCO basket
+  description: A HESCO basket half-filled with dirt. It needs more before it becomes useful cover.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Climbable
+  - type: Tag
+    tags:
+    - Structure
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: CMSandbag
+  - type: HescoFillable
+    nextStage: AU14HescoUnfilled3
+  - type: HescoDisassemblable
+    previousStage: AU14HescoUnfilled1
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Sprite
+    sprite: _AU14/Structures/hesco.rsi
+    layers:
+    - state: sand_wall_2
+    - map: [ "acided" ]
+    drawdepth: WallTops
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeAabb
+          bounds: "-0.49,-0.45,0.49,-0.3"
+        density: 500
+        mask:
+        - FullTileMask
+        layer:
+        - TableLayer
+        - BarricadeImpassable
+        - BulletImpassable
+  - type: BarricadeBlock
+    bidirectional: true
+    blocking: 50
+  - type: Appearance
+  - type: Flamability
+    chance: 0.2
+    rate: 18.8
+    range: 0.4
+    spread: 0.2
+
+- type: entity
+  id: AU14HescoUnfilled3
+  name: mostly filled HESCO basket
+  description: A HESCO basket mostly filled with dirt. Almost ready to serve as cover.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Climbable
+  - type: Tag
+    tags:
+    - Structure
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: CMSandbag
+  - type: HescoFillable
+    nextStage: AU14HescoShortComplete
+  - type: HescoDisassemblable
+    previousStage: AU14HescoUnfilled2
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 450
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Sprite
+    sprite: _AU14/Structures/hesco.rsi
+    layers:
+    - state: sand_wall_3
+    - map: [ "acided" ]
+    drawdepth: WallTops
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeAabb
+          bounds: "-0.49,-0.45,0.49,-0.3"
+        density: 500
+        mask:
+        - FullTileMask
+        layer:
+        - TableLayer
+        - BarricadeImpassable
+        - BulletImpassable
+  - type: BarricadeBlock
+    bidirectional: true
+    blocking: 60
+  - type: Appearance
+  - type: Flamability
+    chance: 0.2
+    rate: 18.8
+    range: 0.4
+    spread: 0.2
+
+- type: entity
+  id: AU14HescoShortComplete
+  name: HESCO barricade
+  description: A sand-filled HESCO basket. Sturdy cover, though still low enough to vault over. It can still be extended higher to become a wall.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Climbable
+  - type: Barricade
+  - type: Tag
+    tags:
+    - Structure
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: CMHescoBarricade
+  - type: HescoRaisable
+    nextStage: AU14HescoTallBuilding1
+  - type: HescoDisassemblable
+    previousStage: AU14HescoUnfilled3
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 900
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Sprite
+    sprite: _AU14/Structures/hesco.rsi
+    layers:
+    - state: sand_wall_short_complete
+    - map: [ "acided" ]
+    drawdepth: WallTops
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeAabb
+          bounds: "-0.49,-0.45,0.49,-0.3"
+        density: 500
+        mask:
+        - FullTileMask
+        layer:
+        - TableLayer
+        - BarricadeImpassable
+        - BulletImpassable
+  - type: BarricadeBlock
+    bidirectional: true
+    blocking: 75
+  - type: Appearance
+  - type: Flamability
+    chance: 0.2
+    rate: 18.8
+    range: 0.4
+    spread: 0.2
+
+- type: entity
+  id: AU14HescoTallBuilding1
+  name: raised HESCO basket
+  description: The HESCO basket has been raised higher, but still needs to be packed with more dirt before it will stop bullets or sightlines.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Barricade
+  - type: Tag
+    tags:
+    - Structure
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: CMHescoBarricade
+  - type: HescoFillable
+    nextStage: AU14HESCOBarrier
+  - type: HescoDisassemblable
+    previousStage: AU14HescoShortComplete
+    instant: true
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 700
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Sprite
+    sprite: _AU14/Structures/hesco.rsi
+    layers:
+    - state: sand_wall_tall_building1
+    - map: [ "acided" ]
+    drawdepth: WallTops
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeAabb
+          bounds: "-0.49,-0.45,0.49,-0.3"
+        density: 500
+        mask:
+        - FullTileMask
+        layer:
+        - TableLayer
+        - BarricadeImpassable
+        - BulletImpassable
+  - type: BarricadeBlock
+    bidirectional: true
+    blocking: 90
+  - type: Appearance
+  - type: Flamability
+    chance: 0.2
+    rate: 18.8
+    range: 0.4
+    spread: 0.2

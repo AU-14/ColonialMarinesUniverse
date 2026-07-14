@@ -15,6 +15,7 @@
 
 - type: thirdParty
   id: USArmyArmored
+  announceAsSurvivors: true
   partyspawn: USArmyArmoredSpawn
   entrymethod: shuttle
   dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_response_shuttle.yml

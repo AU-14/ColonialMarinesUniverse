@@ -59,6 +59,12 @@ public sealed partial class ThirdPartyPrototype : IPrototype
     [DataField("roundstart", required: false)]
     public bool RoundStart { get; private set; }
 
+    /// <summary>
+    ///     Whether this party belongs to a faction included in the Distress Signal survivor announcement.
+    /// </summary>
+    [DataField]
+    public bool AnnounceAsSurvivors { get; private set; }
+
     [DataField("partyspawn", required: true)]
     public ProtoId<PartySpawnPrototype> PartySpawn { get; private set; }
 

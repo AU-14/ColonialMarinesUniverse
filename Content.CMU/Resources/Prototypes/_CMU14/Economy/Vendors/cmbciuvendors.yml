@@ -128,10 +128,6 @@
         amount: 15
     - name: Mask
       entries:
-      - id: CMMaskGas
-        amount: 40
-      - id: CMUGasMaskFilter
-        amount: 80
       - id: CMMaskCoif
         amount: 20
       - id: RMCMaskScarfBlack
@@ -195,6 +191,10 @@
       entries:
       - id: RMCM5Bayonet
         amount: 15
+      - id: CMEntrenchingTool
+        amount: 15
+      - id: RMCShovel
+        amount: 10
       - id: CMScrewdriver
         amount: 5
       - id: CMWirecutter
@@ -219,8 +219,20 @@
         amount: 5
       - id: RMCPackFlareCAS
         amount: 2
+    - name: Gas Mask
+      entries:
+      - id: CMMaskGas
+        amount: 40
+      - id: CMUGasMaskFilter
+        amount: 80
+      - id: AU14PouchGasMaskBag
+        amount: 20
     - name: Medical Supplies
       entries:
+      - id: AU14PouchIFAKFill
+        name: infantry first aid kit (Full)
+        recommended: true
+        amount: 30
       - id: AU14HemostaticGauzePacket
         amount: 40
       - id: AU14Tourniquet
@@ -231,6 +243,12 @@
         amount: 12
       - id: AU14NaloxoneAutoInjector
         amount: 2
+      - id: AU14PacketPillsTramadol
+        amount: 40
+      - id: AU14FirstAidAutoInjectorNoSkill
+        amount: 20
+      - id: CMUSplintItem
+        amount: 40
     - name: Miscellaneous
       entries:
       - id: RMCEngineerKit
@@ -954,6 +972,8 @@
         amount: 6
       - id: RMCPacketGrenadeSmokeFilled
         amount: 6
+      - id: RMCPacketGrenadeWhitePhosphorusFilled
+        amount: 3
       - id: CMPacketGrenadeFragOldFilled
         amount: 2
       - id: RMCBoxClaymoreMineFilled
@@ -1049,6 +1069,28 @@
       - id: AU14BackpackRTOPackDesert
         amount: 1
       - id: AU14BackpackRTOPackGray
+        amount: 1
+    - name: Materials
+      entries:
+      - id: CMSheetMetal
+        amount: 4
+      - id: CMSheetPlasteel50
+        amount: 4
+      - id: CMSandbagEmpty50
+        amount: 8
+      - id: AU14HescoKit
+        amount: 30
+      - id: RMCSheetPlastic
+        amount: 4
+      - id: RMCSheetAluminum
+        amount: 4
+      - id: CMSheetGlass
+        amount: 5
+      - id: RMCSheetCardboard
+        amount: 5
+      - id: CMSheetPhoron
+        amount: 1
+      - id: SheetUranium
         amount: 1
     - name: Tents
       entries:

@@ -100,18 +100,23 @@
   equipment:
     id: AU14IDCardGOVFOROfficerEngi
     ears: AU14HeadsetGovforCommand
+    outerClothing: RMCHazardVest
+    shoes: CMBootsBlackFilled
+    head: RMCHardhatWhite
+    jumpsuit: CMJumpsuitOrdnanceTech
+    back: CMSatchelMarine
     pocket1: AU14StampEO
-  inhand:
-    - AU14KitJOEngineeringKit
 
 - type: startingGear
-  id: AU14GearOpforOfficerEngi
+  id: AU14GearGOVFOROfficerEngiDummy
   equipment:
-    id: AU14IDCardOPFOROfficerEngi
-    ears: AU14HeadsetOpforCommand
-    pocket1: AU14StampEO
-  inhand:
-    - AU14KitJOEngineeringKit
+    id: AU14IDCardGOVFOROfficerEngi
+    ears: AU14HeadsetGovforCommand
+    outerClothing: RMCHazardVest
+    shoes: CMBootsBlackFilled
+    head: RMCHardhatWhite
+    jumpsuit: CMJumpsuitOrdnanceTech
+    back: CMSatchelMarine
 
 - type: roleLoadout
   id: JobAU14JobGOVFOROfficerEngi
@@ -128,20 +133,28 @@
   - SmokablesRMC
 
 - type: startingGear
-  id: AU14GearGOVFOROfficerEngiDummy
+  id: AU14GearOpforOfficerEngi
   equipment:
-    shoes: CMBootsBlack
-    head: CMHeadCapPeakedFormal
-    jumpsuit: CMJumpsuitXOFormal
-    ears: AU14HeadsetGovforCommand
+    id: AU14IDCardOPFOROfficerEngi
+    outerClothing: RMCHazardVest
+    shoes: CMBootsBlackFilled
+    head: RMCHardhatWhite
+    jumpsuit: CMJumpsuitOrdnanceTech
+    ears: AU14HeadsetOpforCommand
+    back: CMSatchelMarine
+    pocket1: AU14StampEO
 
 - type: startingGear
   id: AU14GearOpforOfficerEngiDummy
   equipment:
-    shoes: CMBootsBlack
-    head: CMHeadCapPeakedFormal
-    jumpsuit: CMJumpsuitXOFormal
+    id: AU14IDCardOPFOROfficerEngi
+    outerClothing: RMCHazardVest
+    shoes: CMBootsBlackFilled
+    head: RMCHardhatWhite
+    jumpsuit: CMJumpsuitOrdnanceTech
     ears: AU14HeadsetOpforCommand
+    back: CMSatchelMarine
+    pocket1: AU14StampEO
 
 # ├──[ Spawnpoints ]─────────────────────────────────────────────────┤
 - type: entity

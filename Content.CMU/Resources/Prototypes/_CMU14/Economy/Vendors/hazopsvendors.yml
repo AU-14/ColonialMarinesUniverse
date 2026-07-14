@@ -151,6 +151,8 @@
         amount: 40
       - id: CMUGasMaskFilterHAZOPS
         amount: 80
+      - id: AU14PouchGasMaskBag
+        amount: 20
       - id: CMMaskCoif
         amount: 20
       - id: RMCMaskTornScarfGreen
@@ -533,12 +535,12 @@
         amount: 6
       - id: RMCPacketGrenadeIncendiaryFilled
         amount: 3
-      - id: RMCPacketGrenadeWhitePhosphorusFilled
-        amount: 3
       - id: CMPacketGrenadeFragFilled
         amount: 6
       - id: RMCPacketGrenadeSmokeFilled
         amount: 6
+      - id: RMCPacketGrenadeWhitePhosphorusFilled
+        amount: 3
       - id: CMPacketGrenadeFragOldFilled
         amount: 2
       - id: RMCBoxClaymoreMineFilled
@@ -630,6 +632,28 @@
       - id: AU14BackpackRTOPackDesert
         amount: 1
       - id: AU14BackpackRTOPackGray
+        amount: 1
+    - name: Materials
+      entries:
+      - id: CMSheetMetal
+        amount: 4
+      - id: CMSheetPlasteel50
+        amount: 4
+      - id: CMSandbagEmpty50
+        amount: 8
+      - id: AU14HescoKit
+        amount: 30
+      - id: RMCSheetPlastic
+        amount: 4
+      - id: RMCSheetAluminum
+        amount: 4
+      - id: CMSheetGlass
+        amount: 5
+      - id: RMCSheetCardboard
+        amount: 5
+      - id: CMSheetPhoron
+        amount: 1
+      - id: SheetUranium
         amount: 1
     - name: Tents
       entries:

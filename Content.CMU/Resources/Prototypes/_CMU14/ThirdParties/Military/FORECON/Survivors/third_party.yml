@@ -14,6 +14,7 @@
 
 - type: thirdParty
   id: FORECON
+  announceAsSurvivors: true
   partyspawn: FORECONSpawn
   blacklistedgamemodes:
     - insurgency
@@ -42,6 +43,7 @@
 
 - type: thirdParty
   id: FORECONAlt
+  announceAsSurvivors: true
   partyspawn: FORECONSpawnAlt
   blacklistedgamemodes:
     - insurgency
@@ -70,6 +72,7 @@
 
 - type: thirdParty
   id: FORECONAlt2
+  announceAsSurvivors: true
   partyspawn: FORECONSpawnAlt2
   blacklistedgamemodes:
     - insurgency
