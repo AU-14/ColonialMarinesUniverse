@@ -48,7 +48,7 @@
     - 0,0,7,1
   - type: StorageFill
     contents:
-      - id: CMUmonkeycubewrap
+      - id: CMUMonkeyCubeWrapped
         amount: 8
 
 - type: entity
