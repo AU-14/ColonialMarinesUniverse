@@ -1,0 +1,49 @@
+- type: entity
+  parent: CMBarricadeBase
+  id: AU14DirtMound
+  name: dirt mound
+  description: A hasty mound of dirt. It is much weaker than a proper sandbag barricade and can't be reinforced with barbed wire.
+  components:
+  - type: DirtMound
+  - type: Climbable
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        path:
+          "/Audio/Effects/Footsteps/snowstep1.ogg"
+  - type: Sprite
+    sprite: _RMC14/Structures/Walls/Barricades/barricade.rsi
+    layers:
+    - state: snow
+      color: "#4d3e36"
+    - map: [ "acided" ]
+    drawdepth: WallTops
+  - type: GenericVisualizer
+    visuals:
+      enum.SprayAcidedVisuals.Acided:
+        acided:
+          True:
+            sprite: _RMC14/Effects/xeno_spray_acid.rsi
+            state: acid
+            visible: true
+          False:
+            visible: false
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: CMSandbag
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 750
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Flamability
+    chance: 0.3
+    rate: 0.8
+    range: 0.5
+    spread: 0.3
