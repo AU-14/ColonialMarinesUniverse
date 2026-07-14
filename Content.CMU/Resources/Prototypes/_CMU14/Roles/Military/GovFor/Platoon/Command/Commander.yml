@@ -124,6 +124,7 @@
   equipment:
     id: AU14IDCardOPFORPlatCo
     ears: AU14HeadsetOpforCommand
+    pocket1: AU14StampCO
   inhand:
    -  AU14TabletOpfor
 

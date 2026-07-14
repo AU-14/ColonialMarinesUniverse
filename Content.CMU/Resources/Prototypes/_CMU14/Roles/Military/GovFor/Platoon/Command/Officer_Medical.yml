@@ -104,7 +104,6 @@
   equipment:
     id: AU14IDCardGOVFOROfficerMedical
     ears: AU14HeadsetGovforCommand
-    pocket1: AU14StampMO
   inhand:
     - AU14KitJOMedicalOfficerKit
 
@@ -113,7 +112,6 @@
   equipment:
     id: AU14IDCardOPFOROfficerMedical
     ears: AU14HeadsetOpforCommand
-    pocket1: AU14StampMO
   inhand:
     - AU14KitJOMedicalOfficerKit
 
