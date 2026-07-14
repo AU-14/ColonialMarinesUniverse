@@ -35,6 +35,18 @@
         crate: RMCCrateInflatableBarriers
       - cost: 1500
         crate: RMCCrateEmptySandbags
+      - cost: 3000
+        crate: CMUCrateP90
+      - cost: 1500
+        crate: CMUCrateP90Mags
+      - cost: 4500
+        crate: CMUCrateP90APMags
+      - cost: 9000
+        crate: CMUCrateWYSentry
+      - cost: 3000
+        crate: CMUCrateWYSentryAmmo
+      - cost: 3000
+        crate: CMUCrateBiosuitSecurity
     - name: Research
       entries:
       - cost: 100
@@ -51,6 +63,12 @@
         crate: CMUCrateSecureWYRandomExp
       - cost: 500
         crate: CMUCrateChemGlasses
+      - cost: 1000
+        crate: CMUCrateBiosuitWYTSS
+      - cost: 3000
+        crate: CMUCrateTychoRadsuit
+      - cost: 3000
+        crate: CMUCrateGasMaskFilterWY
   - type: ActivatableUIRequiresAccess
   - type: AccessReader
     access: [["AU14AccessCorporateWEYULiaison"], ["AU14AccessCorporateWEYU"]]

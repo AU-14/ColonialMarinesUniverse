@@ -91,7 +91,7 @@
     spawn: AU14VendorBlood
 
 - type: entity
-  parent: RMCCrateMedical
+  parent: RMCCrateScience
   id: CMUCrateLabGlassware
   name: laboratory glassware crate
   description: A crate containing laboratory glassware.
@@ -112,7 +112,7 @@
       amount: 1
 
 - type: entity
-  parent: RMCCrateMedical
+  parent: RMCCrateScience
   id: CMUCrateChemGlasses
   name: reagent scanner HUD goggles crate
   description: A crate containing a pair of reagent scanner HUD goggles.
