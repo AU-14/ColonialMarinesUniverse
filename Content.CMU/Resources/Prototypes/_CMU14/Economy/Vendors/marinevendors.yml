@@ -1152,6 +1152,78 @@
       - id: RMCSynthResetKey
         points: 4
 
+# Engineering Staff (GOVFOR)
+- type: entity
+  parent: ColMarTechBase
+  id: AU14EngineeringStaffVendor
+  name: engineering staff gear rack
+  description: An automated gear rack for engineering officers and technicians.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/combat_technician_gear.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFOROfficerEngi
+    - AU14JobGOVFOREngineeringTech
+    sections:
+    - name: Engineer Set
+      takeAll: CMEngineerSet
+      entries:
+      - id: AU14VendorBundleEngineeringTechnicianEssentials
+    - name: Gloves
+      choices: { CMHands: 1 }
+      entries:
+      - id: CMHandsInsulated
+    - name: Uniform
+      choices: { CMHands: 1 }
+      entries:
+      - id: CMJumpsuitMaintTech
+    - name: Helmet
+      choices: { CMHelmet: 2 }
+      entries:
+      - id: RMCHardhatOrange
+    - name: Suit
+      choices: { CMSuit: 1 }
+      entries:
+      - id: RMCHazardVest
+    - name: Tool Storage
+      choices: { CMUCTToolStorage: 2 }
+      entries:
+      - id: AU14BeltUtilityFilled
+        name: M276 pattern toolbelt rig (filled)
+      - id: AU14PouchToolsFilledComtech
+        name: tactical tools pouch (filled)
+    - name: Engineering Storage Bag
+      choices: { CMUPouchesCTBag: 1 }
+      entries:
+      - id: RMCSatchelWelder
+    - name: Engineering Storage Pouch
+      choices: { CMUPouchesCT: 2 }
+      entries:
+      - id: RMCPouchConstruction
+        recommended: true
+      - id: RMCPouchEngineerKit
+      - id: RMCPouchElectronics
+      - id: RMCPouchGeneralLarge
+    - name: Engineering Materials
+      choices: { CMUEngiStaffMaterials: 4 }
+      entries:
+      - id: CMSheetMetal50
+        name: metal x50
+      - id: CMSheetPlasteel50
+        name: plasteel x50
+        recommended: true
+      - id: CMSheetGlass
+        name: glass x50
+      - id: CMSheetGlassReinforced
+        name: reinforced glass x50
+      - id: RMCPlankWood
+        name: wood x50
+    - name: Utilities
+      choices: { CMUEngiStaffUtility: 1 }
+      entries:
+      - id: RMCSynthResetKey
+
 - type: entity
   parent: CMVendorBundleRiflemanApparel
   id: AU14VendorBundleCombatTechnicianEssentials
@@ -1177,6 +1249,25 @@
     - RMCVisorWelding
     - RMCWeldingGoggles
     - RMCSentryLaptop
+
+- type: entity
+  parent: CMVendorBundleRiflemanApparel
+  id: AU14VendorBundleEngineeringTechnicianEssentials
+  name: essential engineer set
+  description: essential engineering supplies
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Tools/wrench.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - RMCEngineerKit
+    - RMCPowerCellHigh
+    - RMCLightReplacer
+    - CMAPCElectronics
+    - RMCWeldingGoggles
+    - AU14MaintenanceJack
+    - RMCShovel
 
 - type: entity
   parent: CMVendorBundleRiflemanApparel

@@ -99,26 +99,14 @@
   ranks:
     RMCRankCivilian: []
   chevrons:
-    AU14RankUSASFCMSgt:
-      entity: AU14ChevronUSASFChiefMasterSergeant
+    RMCRankStaffSergeant:
+      entity: AU14ChevronUSCMStaffSergeant
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobGOVFORDCC
-        time: 360000
-    AU14RankUSASFSMSgt:
-      entity: AU14ChevronUSASFSeniorMasterSergeant
-      requirements:
-      - !type:RoleTimeRequirement
-        role: AU14JobGOVFORDCC
-        time: 216000
-    AU14RankUSASFMasterSergeant:
-      entity: AU14ChevronUSASFMasterSergeant
-      requirements:
-      - !type:RoleTimeRequirement
-        role: AU14JobGOVFORDCC
-        time: 43200
-    AU14RankUSASFTechnicalSergeant:
-      entity: AU14ChevronUSASFTechnicalSergeant
+        time: 36000 # 10 hours
+    RMCRankSergeant:
+      entity: AU14ChevronUSCMSergeant
       requirements: []
 
 - type: playTimeTracker

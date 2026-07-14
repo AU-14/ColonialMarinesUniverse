@@ -39,14 +39,14 @@
   ranks:
     RMCRankCivilian: []
   chevrons:
-    RMCRankPrivateFirstClass:
-      entity: AU14ChevronUSCMPrivateFirstClass
+    RMCRankStaffSergeant:
+      entity: AU14ChevronUSCMStaffSergeant
       requirements:
       - !type:RoleTimeRequirement
         role: CMUJobGOVFORDroneOperator
-        time: 36000
-    RMCRankPrivate:
-      entity: AU14ChevronUSCMPrivate
+        time: 36000 # 10 hours
+    RMCRankSergeant:
+      entity: AU14ChevronUSCMSergeant
       requirements: []
 
 - type: playTimeTracker

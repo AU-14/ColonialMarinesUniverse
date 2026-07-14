@@ -3,13 +3,16 @@
   jobs:
     - AU14JobGOVFORPlatCo
     - AU14JobGOVFORPlatoonCorpsman
+    - AU14JobGOVFORNurse
     - AU14JobGOVFORDCC
     - AU14JobGOVFORPlatOp
     - AU14JobGOVFORDSPilot
     - AU14JobGOVFORRadioTelephoneOperator
+    - AU14JobGOVFORRadioTrafficOperator
     - AU14JobGOVFORSquadSergeant
     - AU14JobGOVFORSquadAutomaticRifleman
     - AU14JobGOVFORSquadCombatTech
+    - AU14JobGOVFOREngineeringTech
     - AU14JobGOVFORSquadRifleman
     - AU14JobGOVFORAuxSupportSynth
     - AU14JobGOVFORadvisor
@@ -20,6 +23,7 @@
     - AU14JobGOVFORWorkingJoe
     - AU14JobGOVFORWeaponsSpecialist
     - AU14JobGOVFORVehicleCrewman
+    - AU14JobGOVFORVehicleCommander
     - CMUJobGOVFORDroneOperator
 
 - type: antagJobBlacklist

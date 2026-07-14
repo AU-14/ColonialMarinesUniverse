@@ -102,32 +102,14 @@
   ranks:
     RMCRankCivilian: []
   chevrons:
-    RMCRankChiefWarrantOfficer5:
-      entity: AU14ChevronUSCMChiefWarrantOfficer5
-      requirements:
-      - !type:RoleTimeRequirement
-        role: AU14JobGOVFORDSPilot
-        time: 360000
-    RMCRankChiefWarrantOfficer4:
-      entity: AU14ChevronUSCMChiefWarrantOfficer4
-      requirements:
-      - !type:RoleTimeRequirement
-        role: AU14JobGOVFORDSPilot
-        time: 180000
     RMCRankChiefWarrantOfficer3:
       entity: AU14ChevronUSCMChiefWarrantOfficer3
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobGOVFORDSPilot
-        time: 86400
-    RMCRankChiefWarrantOfficer2:
+        time: 36000 #10 hours
+    RMCRankChiefWarrantOfficer:
       entity: AU14ChevronUSCMChiefWarrantOfficer2
-      requirements:
-      - !type:RoleTimeRequirement
-        role: AU14JobGOVFORDSPilot
-        time: 36000
-    RMCRankWarrantOfficer:
-      entity: AU14ChevronUSCMWarrantOfficer
       requirements: []
 
 - type: playTimeTracker

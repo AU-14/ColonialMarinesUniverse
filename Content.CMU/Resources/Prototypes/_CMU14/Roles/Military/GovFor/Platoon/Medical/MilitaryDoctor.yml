@@ -100,7 +100,7 @@
   roundSide: Opfor
   roundForce: OPFOR
   icon: "AU14JobIconOPFORDoctor"
-  spawnMenuRoleName: Military Doctor (OPFOR)
+  spawnMenuRoleName: Medical Officer (OPFOR)
   supervisors: au14-job-supervisors-opfor
   startingGear: AU14GearOPFORMilitaryDoctor
   dummyStartingGear: AU14GearOPFORMilitaryDoctorDummy

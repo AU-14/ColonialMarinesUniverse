@@ -1,5 +1,5 @@
 - type: entity
-  name: improper K92 Maintenance Jack
+  name: K92 Maintenance Jack
   parent: BaseItem
   id: AU14MaintenanceJack
   description: A combination crowbar, wrench, and generally large bludgeoning device that comes in handy in emergencies. Can be used to disengage door jacks. Pretty hefty, though.
