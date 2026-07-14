@@ -39,3 +39,32 @@
   products:
     SpaceCleaner: 4
 
+# TODO: smoking reaction
+- type: reaction
+  id: CMUFormaldehyde
+  products:
+    CMUFormaldehyde: 3
+  reactants:
+    RMCMethane:
+      amount: 1
+    RMCOxygen:
+      amount: 1
+    RMCPhoron:
+      amount: 1
+    RMCSilver:
+      amount: 5
+      catalyst: true
+
+# TODO: ENDOTHERMIC
+- type: reaction
+  id: CMUPhenolFormaldehyde
+  products:
+    CMUPhenolFormaldehyde: 1
+  reactants:
+    CMUFormaldehyde:
+      amount: 2
+    CMUPhenol:
+      amount: 1
+    RMCMethane:
+      amount: 5
+      catalyst: true

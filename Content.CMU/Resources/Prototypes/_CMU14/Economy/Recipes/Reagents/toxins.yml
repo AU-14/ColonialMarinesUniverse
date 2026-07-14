@@ -19,6 +19,27 @@
 
 - type: reagent
   parent: CMReagent
+  id: CMUFormaldehyde # mutant apples / cherries
+  name: reagent-name-formaldehyde
+  desc: reagent-desc-formaldehyde
+  physicalDesc: reagent-physical-desc-unidentifiable
+  flavor: bitter
+  color: "#808080"
+  flags: Scannable
+  class: Hydro
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.5
+      effects:
+        - !type:Toxic
+          potency: 1
+        - !type:Carcinogenic
+          potency: 1
+
+- type: reagent
+  parent: CMReagent
   id: CMUPrimeCipherToxin
   name: reagent-name-ciphertoxin
   desc: reagent-desc-ciphertoxin
