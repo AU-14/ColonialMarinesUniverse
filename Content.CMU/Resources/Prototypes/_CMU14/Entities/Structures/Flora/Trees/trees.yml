@@ -2,6 +2,8 @@
   parent: RMCBaseTree
   id: CMUFloraTree
   components:
+  - type: SpriteFade
+    targetAlpha: 1.0
   - type: Sprite
     layers:
     - state: tree01
@@ -34,14 +36,13 @@
     tags:
     - Tree
     - HideContextMenu
-  - type: RemoveComponents
-    components:
-    - type: SpriteFade
 
 - type: entity
   parent: RMCBaseTreeLarge
   id: CMUFloraTreeLarge
   components:
+  - type: SpriteFade
+    targetAlpha: 1.0
   - type: Sprite
     layers:
     - state: treelarge01
@@ -74,6 +75,3 @@
     tags:
     - Tree
     - HideContextMenu
-  - type: RemoveComponents
-    components:
-    - type: SpriteFade
