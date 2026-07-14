@@ -1,0 +1,105 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobEngineeringTechBaseAbstract
+  name: au14-job-name-govforengineeringtech
+  description: au14-job-description-govforengineeringtech
+  icon: "AU14JobIconGovCT"
+  spawnMenuRoleName: Engineering Technician (GOVFOR)
+  startingGear: AU14GearGOVFOREngineeringTech
+  dummyStartingGear: AU14GearGOVFOREngineeringTechDummy
+  playTimeTracker: AU14JobGOVFOREngineeringTech
+  accessGroups:
+  - AU14GovforEngineer
+
+- type: job
+  abstract: true
+  parent: AU14JobEngineeringTechBaseAbstract
+  id: AU14JobEngineeringTechBase
+  roundRole: EngineeringTech
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetPlatoonCombatTechnician
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforengineeringtech
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: govfor_ct
+
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NonResuscitable
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankPrivateFirstClass:
+      entity: AU14ChevronUSCMPrivateFirstClass
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFOREngineeringTech
+        time: 36000 # 10 hours
+    RMCRankPrivate:
+      entity: AU14ChevronUSCMPrivate
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFOREngineeringTech
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFOREngineeringTech
+  equipment:
+    id: AU14IDCardGOVFOREngineeringTech
+    ears2: RMCM5CameraGear
+    outerClothing: RMCHazardVest
+    shoes: CMBootsBlackFilled
+    head: RMCHardhatOrange
+    jumpsuit: CMJumpsuitMaintTech
+    ears: AU14HeadsetGovforMarine
+
+- type: startingGear
+  id: AU14GearGOVFOREngineeringTechDummy
+  equipment:
+    outerClothing: RMCHazardVest
+    shoes: CMBootsBlackFilled
+    head: RMCHardhatOrange
+    jumpsuit: CMJumpsuitMaintTech
+    ears: AU14HeadsetGovforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFOREngineeringTech
+  name: Spawn Point GOVFOR Engineering Technician
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFOREngineeringTech
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobEngineeringTechBase
+  id: AU14JobGOVFOREngineeringTech
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: roleLoadout
+  id: JobAU14JobGOVFOREngineeringTech
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC

@@ -79,7 +79,7 @@
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobGOVFORPlatCo
-        time: 86400 # 24 hours
+        time: 180000 # 50 hours
     RMCRankMajor:
       entity: AU14ChevronMajor
       requirements: []

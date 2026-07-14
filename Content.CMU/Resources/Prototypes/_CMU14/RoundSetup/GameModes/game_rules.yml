@@ -18,21 +18,25 @@
       AU14JobGOVFORPlatOp: 3
       AU14JobGOVFOROfficerIntel: 1
       AU14JobGOVFORSquadSergeant: 3
-      AU14JobGOVFORRadioTelephoneOperator: 6
+      AU14JobGOVFORRadioTelephoneOperator: 3
+      AU14JobGOVFORRadioTrafficOperator: 3
       AU14JobGOVFORSquadRifleman: 75
       CMUJobGOVFORDroneOperator: 1
       AU14JobGOVFORWeaponsSpecialist: 3
       AU14JobGOVFORSquadAutomaticRifleman: 3
       AU14JobGOVFORSquadCombatTech: 6
+      AU14JobGOVFOREngineeringTech: 2
       AU14JobGOVFOROfficerLogistics: 1
-      AU14JobGOVFORAuxTech: 1
+      AU14JobGOVFORAuxTech: 2
       AU14JobGOVFOROfficerMedical: 1
       AU14JobGOVFORMilitaryDoctor: 3
       AU14JobGOVFORPlatoonCorpsman: 9
+      AU14JobGOVFORNurse: 2
       AU14JobGOVFOROfficerMP: 1
       AU14JobGOVFORMilitaryPoliceMan: 2
       AU14JobGOVFOROfficerEngi: 1
-      AU14JobGOVFORVehicleCrewman: 3
+      AU14JobGOVFORVehicleCrewman: 2
+      AU14JobGOVFORVehicleCommander: 1
       AU14JobGOVFORDSPilot: 2
       AU14JobGOVFORDCC: 2
       AU14JobGOVFORAuxSupportSynth: 2
