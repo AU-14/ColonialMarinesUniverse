@@ -81,6 +81,19 @@ public sealed class BuildSaveWindow : DefaultWindow
             root.AddChild(includeLoose);
         }
 
+        var includeTiles = new CheckBox
+        {
+            Text = Loc.GetString("saved-build-window-include-tiles"),
+            Pressed = mode.IncludeTiles,
+            Modulate = Color.FromHex("#64D66A"),
+        };
+        includeTiles.OnToggled += args =>
+        {
+            _mode.IncludeTiles = args.Pressed;
+            _mode.RefreshSelection();
+        };
+        root.AddChild(includeTiles);
+
         // Name + save.
         _nameEdit = new LineEdit { PlaceHolder = Loc.GetString("saved-build-window-name"), HorizontalExpand = true };
         root.AddChild(_nameEdit);
@@ -120,6 +133,8 @@ public sealed class BuildSaveWindow : DefaultWindow
 
     private void UpdateCount()
     {
-        _countLabel.Text = Loc.GetString("saved-build-window-selected", ("count", _mode.HighlightCount));
+        _countLabel.Text = Loc.GetString("saved-build-window-selected",
+            ("count", _mode.HighlightCount),
+            ("tiles", _mode.HighlightedTiles.Count));
     }
 }

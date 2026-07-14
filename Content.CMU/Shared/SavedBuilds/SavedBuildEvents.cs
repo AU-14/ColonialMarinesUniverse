@@ -51,6 +51,16 @@ public struct BuildSelectionData
     public List<NetEntity> ManualRemoves;
 }
 
+/// <summary>One selected grid tile, used by mapper-mode tile saving.</summary>
+[Serializable, NetSerializable]
+public struct BuildSelectionTile
+{
+    public NetEntity Grid;
+    public int X;
+    public int Y;
+    public string Tile;
+}
+
 /// <summary>Client -> server: resolve this selection and send back the highlight set.</summary>
 [Serializable, NetSerializable]
 public sealed class RequestBuildSelectionEvent : EntityEventArgs
@@ -62,6 +72,9 @@ public sealed class RequestBuildSelectionEvent : EntityEventArgs
 
     /// <summary>Mapper mode only: also select unanchored loose items (default false = anchored structures only).</summary>
     public bool IncludeLoose;
+
+    /// <summary>Also select tiles. Player mode is limited to construction-menu-supported tiles; admin/mapper modes can save any tile.</summary>
+    public bool IncludeTiles;
 }
 
 /// <summary>Server -> client: the resolved, whitelisted entities to highlight.</summary>
@@ -69,6 +82,7 @@ public sealed class RequestBuildSelectionEvent : EntityEventArgs
 public sealed class BuildSelectionResultEvent : EntityEventArgs
 {
     public List<NetEntity> Entities = new();
+    public List<BuildSelectionTile> Tiles = new();
 }
 
 /// <summary>Client -> server: save the resolved selection under <see cref="Name"/>.</summary>
@@ -83,6 +97,9 @@ public sealed class RequestSaveBuildEvent : EntityEventArgs
 
     /// <summary>Mapper mode only: also save unanchored loose items (default false = anchored structures only).</summary>
     public bool IncludeLoose;
+
+    /// <summary>Also save tiles. Player mode is limited to construction-menu-supported tiles; admin/mapper modes can save any tile.</summary>
+    public bool IncludeTiles;
 }
 
 /// <summary>One entity in a build's placement preview: prototype + position relative to the anchor.</summary>
@@ -93,6 +110,16 @@ public struct BuildPreviewEntity
     public float X;
     public float Y;
     public float Rot;
+}
+
+/// <summary>One tile in a saved build's placement preview: tile id + position relative to the anchor.</summary>
+[Serializable, NetSerializable]
+public struct BuildPreviewTile
+{
+    public string Tile;
+    public float X;
+    public float Y;
+    public int Z;
 }
 
 /// <summary>Metadata for one saved build, shown in the "Saved Builds" construction-menu spawnlist.</summary>
@@ -106,6 +133,7 @@ public struct SavedBuildInfo
     public string Source;
     public string Author;
     public int EntityCount;
+    public int TileCount;
 
     /// <summary>Bounding box of the build relative to its anchor, in tiles — used to draw the placement footprint.</summary>
     public float RelMinX;
@@ -115,6 +143,9 @@ public struct SavedBuildInfo
 
     /// <summary>Per-entity preview (prototype + offset from anchor) for the placement ghost.</summary>
     public List<BuildPreviewEntity> Preview;
+
+    /// <summary>Per-tile preview (tile id + offset from anchor) for mapper tile saves.</summary>
+    public List<BuildPreviewTile> Tiles;
 
     /// <summary>The grid this build was saved from (for "place at original"). Invalid if unknown/gone.</summary>
     public NetEntity SourceGrid;

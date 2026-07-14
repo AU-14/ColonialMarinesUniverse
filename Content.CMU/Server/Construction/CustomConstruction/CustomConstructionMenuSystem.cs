@@ -127,6 +127,10 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
         SubscribeNetworkEvent<SubmitCustomLatheEditorEvent>(OnSubmitLathe);
         SubscribeNetworkEvent<RemoveCustomLatheRecipeEvent>(OnRemoveLatheRecipe);
 
+        // These packs are referenced by static lathe prototypes. Keep empty fallbacks available even
+        // when Generated/ is intentionally not part of the repo and the DB has no custom recipes.
+        EnsureLathePackFallbacks();
+
         // The database is the durable store (the Docker filesystem is wiped on redeploy): put back
         // any stored entry whose generated file is gone, and hot-load its prototypes for this boot.
         RestoreFromDatabase();

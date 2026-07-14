@@ -240,11 +240,13 @@ public sealed class SavedBuildListSystem : EntitySystem
             Source = MetaString(meta, "source"),
             Author = MetaString(meta, "author"),
             EntityCount = count,
+            TileCount = MetaInt(meta, "tileCount"),
             RelMinX = MetaFloat(meta, "relMinX"),
             RelMinY = MetaFloat(meta, "relMinY"),
             RelMaxX = MetaFloat(meta, "relMaxX"),
             RelMaxY = MetaFloat(meta, "relMaxY"),
             Preview = ReadPreview(meta),
+            Tiles = ReadTiles(meta),
             SourceGrid = sourceGrid,
             AnchorX = MetaFloat(meta, "anchorX"),
             AnchorY = MetaFloat(meta, "anchorY"),
@@ -259,6 +261,12 @@ public sealed class SavedBuildListSystem : EntitySystem
     private static float MetaFloat(MappingDataNode meta, string key)
     {
         float.TryParse(MetaString(meta, key), NumberStyles.Float, CultureInfo.InvariantCulture, out var value);
+        return value;
+    }
+
+    private static int MetaInt(MappingDataNode meta, string key)
+    {
+        int.TryParse(MetaString(meta, key), NumberStyles.Integer, CultureInfo.InvariantCulture, out var value);
         return value;
     }
 
@@ -279,6 +287,29 @@ public sealed class SavedBuildListSystem : EntitySystem
                 X = MetaFloat(m, "x"),
                 Y = MetaFloat(m, "y"),
                 Rot = MetaFloat(m, "rot"),
+            });
+        }
+
+        return list;
+    }
+
+    private static List<BuildPreviewTile> ReadTiles(MappingDataNode meta)
+    {
+        var list = new List<BuildPreviewTile>();
+        if (!meta.TryGet<SequenceDataNode>("tiles", out var seq))
+            return list;
+
+        foreach (var node in seq)
+        {
+            if (node is not MappingDataNode m)
+                continue;
+
+            list.Add(new BuildPreviewTile
+            {
+                Tile = MetaString(m, "tile"),
+                X = MetaFloat(m, "x"),
+                Y = MetaFloat(m, "y"),
+                Z = MetaInt(m, "z"),
             });
         }
 

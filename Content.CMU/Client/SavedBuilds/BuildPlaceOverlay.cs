@@ -26,6 +26,7 @@ public sealed class BuildPlaceOverlay : Overlay
 
     private static readonly Color FootprintColor = new(0.3f, 1f, 0.4f, 0.9f);
     private static readonly Color GhostModulate = new(0.6f, 1f, 0.7f, 0.55f);
+    private static readonly Color TileGhost = new(0.25f, 1f, 0.35f, 0.38f);
     private static readonly Color HintBg = new(0.055f, 0.06f, 0.047f, 0.78f); // near-black amber-terminal panel
     private static readonly Color HintBorder = Color.FromHex("#FFB000");      // amber accent
     private static readonly Color HintText = Color.FromHex("#E8E0C8");        // terminal text
@@ -90,6 +91,12 @@ public sealed class BuildPlaceOverlay : Overlay
 
             var p = pos0 + rot.RotateVec(new Vector2(ent.X, ent.Y));
             handle.DrawTextureRect(texture, Box2.CenteredAround(p, Vector2.One), GhostModulate);
+        }
+
+        foreach (var tile in _mode.Tiles)
+        {
+            var p = pos0 + rot.RotateVec(new Vector2(tile.X, tile.Y));
+            handle.DrawRect(Box2.CenteredAround(p, Vector2.One), TileGhost);
         }
 
         var min = _mode.RelMin - new Vector2(0.5f, 0.5f);

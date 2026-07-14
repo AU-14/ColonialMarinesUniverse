@@ -10,10 +10,14 @@ using Content.Server._AU14.ZLevelBuilding;
 using Content.Server._CMU14.ZLevels.Core;
 using Content.Server.Administration.Managers;
 using Content.Shared._AU14.SavedBuilds;
+using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared.Administration;
+using Content.Shared.Construction;
+using Content.Shared.Construction.Prototypes;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
+using Content.Shared.Maps;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Robust.Server.Player;
@@ -27,6 +31,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Serialization.Markdown.Mapping;
@@ -61,6 +66,10 @@ public sealed partial class SavedBuildSystem : EntitySystem
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
     [Dependency] private ZLevelBuildingSystem _zBuilding = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
+    [Dependency] private ITileDefinitionManager _tileDef = default!;
 
     // 🔧 TUNABLE: how many z-levels above/below the selection box are also scanned when saving. A build
     // that crosses levels (support beams below, platforms above) is captured whole within this range.
@@ -165,6 +174,17 @@ public sealed partial class SavedBuildSystem : EntitySystem
             return;
 
         var anchor = ReadAnchor(root);
+        var savedTiles = ReadSavedTiles(root);
+        var placedTiles = PlaceSavedTiles(savedTiles, targetMapUid, gridUid, targetMap, rotation);
+        var entityCount = ReadMetaInt(root, "entityCount");
+
+        if (entityCount <= 0)
+        {
+            _adminLog.Add(LogType.Action, LogImpact.Medium,
+                $"{ToPrettyString(user):player} (user {session.UserId}) placed saved build '{id}' ({placedTiles} tiles) at {targetMap}");
+            _popup.PopupEntity(Loc.GetString("saved-build-placed", ("count", placedTiles)), user, user);
+            return;
+        }
 
         LoadResult result;
         try
@@ -261,8 +281,8 @@ public sealed partial class SavedBuildSystem : EntitySystem
         // TODO (player costed version): strip container contents and consume materials via a ghost build.
 
         _adminLog.Add(LogType.Action, LogImpact.Medium,
-            $"{ToPrettyString(user):player} (user {session.UserId}) placed saved build '{id}' ({roots.Count} roots, {skippedZ} skipped for missing z-levels) at {targetMap}");
-        _popup.PopupEntity(Loc.GetString("saved-build-placed", ("count", roots.Count - skippedZ)), user, user);
+            $"{ToPrettyString(user):player} (user {session.UserId}) placed saved build '{id}' ({roots.Count} roots, {placedTiles} tiles, {skippedZ} skipped for missing z-levels) at {targetMap}");
+        _popup.PopupEntity(Loc.GetString("saved-build-placed", ("count", roots.Count - skippedZ + placedTiles)), user, user);
         if (skippedZ > 0)
             _popup.PopupEntity(Loc.GetString("saved-build-z-skipped", ("count", skippedZ)), user, user, PopupType.MediumCaution);
     }
@@ -357,6 +377,79 @@ public sealed partial class SavedBuildSystem : EntitySystem
         return new Vector2(x, y);
     }
 
+    private int ReadMetaInt(MappingDataNode root, string key)
+    {
+        if (!root.TryGet<MappingDataNode>("meta", out var meta))
+            return 0;
+
+        int.TryParse(MetaString(meta, key), NumberStyles.Integer, CultureInfo.InvariantCulture, out var value);
+        return value;
+    }
+
+    private List<BuildPreviewTile> ReadSavedTiles(MappingDataNode root)
+    {
+        var tiles = new List<BuildPreviewTile>();
+        if (!root.TryGet<MappingDataNode>("meta", out var meta) || !meta.TryGet<SequenceDataNode>("tiles", out var seq))
+            return tiles;
+
+        foreach (var node in seq)
+        {
+            if (node is not MappingDataNode m)
+                continue;
+
+            tiles.Add(new BuildPreviewTile
+            {
+                Tile = MetaString(m, "tile"),
+                X = MetaFloat(m, "x"),
+                Y = MetaFloat(m, "y"),
+                Z = ReadInt(m, "z"),
+            });
+        }
+
+        return tiles;
+    }
+
+    private int PlaceSavedTiles(
+        List<BuildPreviewTile> tiles,
+        EntityUid targetMapUid,
+        EntityUid gridUid,
+        MapCoordinates targetMap,
+        Angle rotation)
+    {
+        var placed = 0;
+        foreach (var tile in tiles)
+        {
+            if (!_prototype.TryIndex<ContentTileDefinition>(tile.Tile, out var tileDef))
+                continue;
+
+            var desired = new MapCoordinates(targetMap.Position + rotation.RotateVec(new Vector2(tile.X, tile.Y)), targetMap.MapId);
+            var placeGrid = gridUid;
+            var placeMapId = targetMap.MapId;
+            if (tile.Z != 0)
+            {
+                if (TryResolveLevel(targetMapUid, gridUid, tile.Z, desired.Position, out var levelGrid, out var levelMapId))
+                {
+                    placeGrid = levelGrid;
+                    placeMapId = levelMapId;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+
+            var desiredOnLevel = new MapCoordinates(desired.Position, placeMapId);
+            if (!TryComp<MapGridComponent>(placeGrid, out var grid))
+                continue;
+
+            var indices = _map.TileIndicesFor(placeGrid, grid, desiredOnLevel);
+            _map.SetTile(placeGrid, grid, indices, new Tile(tileDef.TileId));
+            placed++;
+        }
+
+        return placed;
+    }
+
     private static string MetaString(MappingDataNode meta, string key)
     {
         return meta.TryGet<ValueDataNode>(key, out var node) ? node.Value : string.Empty;
@@ -365,6 +458,12 @@ public sealed partial class SavedBuildSystem : EntitySystem
     private static float MetaFloat(MappingDataNode meta, string key)
     {
         float.TryParse(MetaString(meta, key), NumberStyles.Float, CultureInfo.InvariantCulture, out var value);
+        return value;
+    }
+
+    private static int ReadInt(MappingDataNode meta, string key)
+    {
+        int.TryParse(MetaString(meta, key), NumberStyles.Integer, CultureInfo.InvariantCulture, out var value);
         return value;
     }
 
@@ -403,12 +502,13 @@ public sealed partial class SavedBuildSystem : EntitySystem
         RaiseNetworkEvent(new BuildSelectionResultEvent
         {
             Entities = resolved.Select(e => GetNetEntity(e)).ToList(),
+            Tiles = ResolveTiles(args.SenderSession, ev.Selection, ev.Mode, ev.IncludeTiles),
         }, args.SenderSession);
     }
 
     private void OnRequestSave(RequestSaveBuildEvent ev, EntitySessionEventArgs args)
     {
-        SaveBuild(args.SenderSession, ev.Name, ev.Selection, ev.Mode, ev.IncludeLoose);
+        SaveBuild(args.SenderSession, ev.Name, ev.Selection, ev.Mode, ev.IncludeLoose, ev.IncludeTiles);
     }
 
     /// <summary>
@@ -486,12 +586,143 @@ public sealed partial class SavedBuildSystem : EntitySystem
         return result;
     }
 
+    private List<BuildSelectionTile> ResolveTiles(ICommonSession saver, BuildSelectionData selection, BuildSaveMode mode, bool includeTiles)
+    {
+        var result = new List<BuildSelectionTile>();
+        if (!includeTiles)
+            return result;
+
+        var anyTile =
+            mode == BuildSaveMode.Admin && _adminManager.HasAdminFlag(saver, AdminFlags.Spawn) ||
+            mode == BuildSaveMode.Mapper && _adminManager.HasAdminFlag(saver, AdminFlags.Mapping);
+
+        var allowed = anyTile ? null : GetZBuildableTileIds();
+        if ((allowed is { Count: 0 } || selection.Boxes == null))
+            return result;
+
+        var seen = new HashSet<(EntityUid Grid, int X, int Y)>();
+        foreach (var sel in selection.Boxes.Take(MaxSelectionBoxes))
+        {
+            var radius = Math.Clamp(sel.Radius, 0, MaxRadius);
+            var coords = GetCoordinates(sel.Center);
+            if (!coords.IsValid(EntityManager))
+                continue;
+
+            var map = _transform.ToMapCoordinates(coords);
+            if (!_mapManager.TryFindGridAt(map, out var gridUid, out var grid))
+                continue;
+
+            AddTilesInBox(gridUid, grid, map, radius, allowed, seen, result);
+
+            if (_mapManager.GetMapEntityId(map.MapId) is not { Valid: true } boxMapUid)
+                continue;
+
+            for (var dz = -MaxZRange; dz <= MaxZRange; dz++)
+            {
+                if (dz == 0 || !_zLevels.TryMapOffset(boxMapUid, dz, out _, out var otherMapComp))
+                    continue;
+
+                var otherMap = new MapCoordinates(map.Position, otherMapComp.MapId);
+                if (_mapManager.TryFindGridAt(otherMap, out var otherGridUid, out var otherGrid))
+                    AddTilesInBox(otherGridUid, otherGrid, otherMap, radius, allowed, seen, result);
+            }
+        }
+
+        return result;
+    }
+
+    private void AddTilesInBox(
+        EntityUid gridUid,
+        MapGridComponent grid,
+        MapCoordinates center,
+        int radius,
+        HashSet<string>? allowed,
+        HashSet<(EntityUid Grid, int X, int Y)> seen,
+        List<BuildSelectionTile> result)
+    {
+        var centerTile = _map.TileIndicesFor(gridUid, grid, center);
+        for (var x = centerTile.X - radius; x <= centerTile.X + radius; x++)
+        {
+            for (var y = centerTile.Y - radius; y <= centerTile.Y + radius; y++)
+            {
+                if (!seen.Add((gridUid, x, y)))
+                    continue;
+
+                if (!_map.TryGetTileRef(gridUid, grid, new Vector2i(x, y), out var tileRef) || tileRef.Tile.IsEmpty)
+                    continue;
+
+                if (!_tileDef.TryGetDefinition(tileRef.Tile.TypeId, out var tileDef) || tileDef is not ContentTileDefinition contentTile)
+                    continue;
+
+                if (allowed != null && !allowed.Contains(contentTile.ID))
+                    continue;
+
+                result.Add(new BuildSelectionTile
+                {
+                    Grid = GetNetEntity(gridUid),
+                    X = x,
+                    Y = y,
+                    Tile = contentTile.ID,
+                });
+            }
+        }
+    }
+
+    private HashSet<string> GetZBuildableTileIds()
+    {
+        var allowed = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var recipe in _prototype.EnumeratePrototypes<ConstructionPrototype>())
+        {
+            if (!string.Equals(recipe.Spawnlist, "Tiles", StringComparison.Ordinal))
+                continue;
+
+            if (TryGetRecipeTarget(recipe, out var target) &&
+                _prototype.TryIndex<EntityPrototype>(target, out var targetProto) &&
+                targetProto.TryGetComponent<TileApplierComponent>(out var applier, _componentFactory))
+                allowed.Add(applier.Tile);
+        }
+
+        return allowed;
+    }
+
+    private bool TryGetRecipeTarget(ConstructionPrototype recipe, out string targetProto)
+    {
+        targetProto = string.Empty;
+        if (!_prototype.TryIndex(recipe.Graph, out ConstructionGraphPrototype? graph) ||
+            !graph.Nodes.TryGetValue(recipe.TargetNode, out var targetNode))
+            return false;
+
+        var stack = new Stack<ConstructionGraphNode>();
+        stack.Push(targetNode);
+        while (stack.Count > 0)
+        {
+            var node = stack.Pop();
+            if (node.Entity.GetId(null, null, new(EntityManager)) is { } entityId &&
+                _prototype.HasIndex<EntityPrototype>(entityId))
+            {
+                targetProto = entityId;
+                return true;
+            }
+
+            foreach (var edge in node.Edges)
+            {
+                if (graph.Nodes.TryGetValue(edge.Target, out var next))
+                    stack.Push(next);
+            }
+        }
+
+        return false;
+    }
+
     private bool CanSave(EntityUid uid, NetUserId saver, bool mapperMode, bool includeLoose)
     {
         // Only world-placed entities (directly parented to the grid) — never things held in a hand or
         // inside a container, whose LocalPosition is in a different frame and would skew the anchor.
         var xform = Transform(uid);
         if (xform.GridUid is not { } grid || xform.ParentUid != grid)
+            return false;
+
+        if (MetaData(uid).EntityPrototype == null)
             return false;
 
         // Mapper mode: any structure counts no matter who built it (map-placed, admin-spawned, etc.). By default
@@ -525,7 +756,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
         SaveBuild(session, name, selection);
     }
 
-    private void SaveBuild(ICommonSession saver, string rawName, BuildSelectionData selection, BuildSaveMode mode = BuildSaveMode.Player, bool includeLoose = false)
+    private void SaveBuild(ICommonSession saver, string rawName, BuildSelectionData selection, BuildSaveMode mode = BuildSaveMode.Player, bool includeLoose = false, bool includeTiles = false)
     {
         if (saver.AttachedEntity is not { } user)
             return;
@@ -541,7 +772,9 @@ public sealed partial class SavedBuildSystem : EntitySystem
             name = name[..MaxNameLength];
 
         var entities = ResolveSelection(saver, selection, mode, includeLoose);
-        if (entities.Count == 0)
+        var tiles = ResolveTiles(saver, selection, mode, includeTiles);
+        entities = FilterSerializableEntities(entities, name, saver);
+        if (entities.Count == 0 && tiles.Count == 0)
         {
             _popup.PopupEntity(Loc.GetString("saved-build-error-empty"), user, user);
             return;
@@ -557,20 +790,33 @@ public sealed partial class SavedBuildSystem : EntitySystem
             depthByEntity[uid] = d;
             depthCounts[d] = depthCounts.GetValueOrDefault(d) + 1;
         }
+        var tileDepths = new List<int>(tiles.Count);
+        foreach (var tile in tiles)
+        {
+            var depth = 0;
+            if (TryGetEntity(tile.Grid, out var gridUid) &&
+                Transform(gridUid.Value).MapUid is { } mapUid &&
+                TryComp<CMUZLevelMapComponent>(mapUid, out var zMap))
+                depth = zMap.Depth;
+
+            tileDepths.Add(depth);
+            depthCounts[depth] = depthCounts.GetValueOrDefault(depth) + 1;
+        }
         var baseDepth = depthCounts.OrderByDescending(kv => kv.Value).ThenBy(kv => kv.Key).First().Key;
         var multiZ = depthCounts.Count > 1;
 
         // Bounds + anchor (in grid-local space, matching the serialized transforms) + source naming. Bounds
         // come from the BASE level's entities so the footprint matches what the ghost lays on your own level.
         var baseEntities = entities.Where(e => depthByEntity[e] == baseDepth).ToHashSet();
-        var (boundsMin, boundsMax) = ComputeBounds(baseEntities.Count > 0 ? baseEntities : entities);
+        var baseTilePositions = TileLocalPositions(tiles, tileDepths, baseDepth).ToList();
+        var (boundsMin, boundsMax) = ComputeBounds(baseEntities.Count > 0 ? baseEntities : entities, baseTilePositions);
         var anchor = (boundsMin + boundsMax) / 2f;
         var relMin = boundsMin - anchor;
         var relMax = boundsMax - anchor;
-        var sample = baseEntities.Count > 0 ? baseEntities.First() : entities.First();
+        var sample = baseEntities.Count > 0 ? baseEntities.First() : (entities.Count > 0 ? entities.First() : EntityUid.Invalid);
         // Multi-z builds are tagged so the menu category makes their nature obvious.
-        var gridName = ResolveSourceName(sample) + (multiZ ? " (Multi-Z)" : "");
-        var sourceGrid = Transform(sample).GridUid;
+        var gridName = (sample.Valid ? ResolveSourceName(sample) : ResolveTileSourceName(tiles.First())) + (multiZ ? " (Multi-Z)" : "");
+        var sourceGrid = sample.Valid ? Transform(sample).GridUid : TryGetTileGrid(tiles.First());
 
         // Per-entity preview (prototype + offset from anchor + z-level offset) for the placement ghost.
         var preview = new SequenceDataNode();
@@ -595,7 +841,26 @@ public sealed partial class SavedBuildSystem : EntitySystem
             preview.Add(entry);
         }
 
-        MappingDataNode buildData;
+        var tilePreview = new SequenceDataNode();
+        for (var i = 0; i < tiles.Count; i++)
+        {
+            var tile = tiles[i];
+            if (!TryGetTileLocalPosition(tile, out var local))
+                continue;
+
+            var rel = local - anchor;
+            var entry = new MappingDataNode();
+            entry.Add("tile", new ValueDataNode(tile.Tile));
+            entry.Add("x", new ValueDataNode(rel.X.ToString("R", CultureInfo.InvariantCulture)));
+            entry.Add("y", new ValueDataNode(rel.Y.ToString("R", CultureInfo.InvariantCulture)));
+            var zOff = tileDepths[i] - baseDepth;
+            if (zOff != 0)
+                entry.Add("z", new ValueDataNode(zOff.ToString(CultureInfo.InvariantCulture)));
+            tilePreview.Add(entry);
+        }
+
+        MappingDataNode buildData = new();
+        if (entities.Count > 0)
         try
         {
             var opts = SerializationOptions.Default with
@@ -631,8 +896,10 @@ public sealed partial class SavedBuildSystem : EntitySystem
         if (sourceGrid != null)
             meta.Add("sourceGrid", new ValueDataNode(GetNetEntity(sourceGrid.Value).ToString()));
         meta.Add("entityCount", new ValueDataNode(entities.Count.ToString()));
+        meta.Add("tileCount", new ValueDataNode(tilePreview.Sequence.Count.ToString()));
         meta.Add("multiZ", new ValueDataNode(multiZ ? "true" : "false"));
         meta.Add("preview", preview);
+        meta.Add("tiles", tilePreview);
         root.Add("meta", meta);
         root.Add("build", buildData);
 
@@ -658,9 +925,9 @@ public sealed partial class SavedBuildSystem : EntitySystem
         RaiseNetworkEvent(new SavedBuildDataEvent { FileName = fileName, Yaml = yaml }, saver);
 
         _adminLog.Add(LogType.Action, LogImpact.Low,
-            $"{ToPrettyString(user):player} (user {saver.UserId}) saved build '{name}' with {entities.Count} entities (sent to client)");
+            $"{ToPrettyString(user):player} (user {saver.UserId}) saved build '{name}' with {entities.Count} entities and {tilePreview.Sequence.Count} tiles (sent to client)");
         _popup.PopupEntity(
-            Loc.GetString("saved-build-success", ("name", name), ("count", entities.Count)), user, user);
+            Loc.GetString("saved-build-success", ("name", name), ("count", entities.Count), ("tiles", tilePreview.Sequence.Count)), user, user);
     }
 
     /// <summary>
@@ -668,7 +935,32 @@ public sealed partial class SavedBuildSystem : EntitySystem
     /// entity's <see cref="TransformComponent.LocalPosition"/> in, so placement can reposition by
     /// (savedLocal - anchor) without a world/grid frame mismatch.
     /// </summary>
-    private (Vector2 Min, Vector2 Max) ComputeBounds(HashSet<EntityUid> entities)
+    private HashSet<EntityUid> FilterSerializableEntities(HashSet<EntityUid> entities, string name, ICommonSession saver)
+    {
+        var safe = new HashSet<EntityUid>();
+        var opts = SerializationOptions.Default with
+        {
+            Category = FileCategory.Entity,
+            ErrorOnOrphan = false,
+        };
+
+        foreach (var uid in entities)
+        {
+            try
+            {
+                _mapLoader.SerializeEntitiesRecursive(new HashSet<EntityUid> { uid }, opts);
+                safe.Add(uid);
+            }
+            catch (Exception e)
+            {
+                Log.Warning($"Skipping unserializable entity {ToPrettyString(uid)} while saving build '{name}' for {saver.Name}: {e.Message}");
+            }
+        }
+
+        return safe;
+    }
+
+    private (Vector2 Min, Vector2 Max) ComputeBounds(HashSet<EntityUid> entities, IReadOnlyList<Vector2> tilePositions)
     {
         var min = new Vector2(float.MaxValue, float.MaxValue);
         var max = new Vector2(float.MinValue, float.MinValue);
@@ -680,7 +972,55 @@ public sealed partial class SavedBuildSystem : EntitySystem
             max = Vector2.Max(max, local);
         }
 
+        foreach (var local in tilePositions)
+        {
+            min = Vector2.Min(min, local);
+            max = Vector2.Max(max, local);
+        }
+
         return (min, max);
+    }
+
+    private IEnumerable<Vector2> TileLocalPositions(List<BuildSelectionTile> tiles, List<int> depths, int depth)
+    {
+        for (var i = 0; i < tiles.Count; i++)
+        {
+            if (depths[i] != depth)
+                continue;
+
+            if (TryGetTileLocalPosition(tiles[i], out var local))
+                yield return local;
+        }
+    }
+
+    private bool TryGetTileLocalPosition(BuildSelectionTile tile, out Vector2 local)
+    {
+        local = default;
+        if (!TryGetEntity(tile.Grid, out var gridUid) ||
+            !TryComp<MapGridComponent>(gridUid.Value, out var grid))
+            return false;
+
+        local = _map.GridTileToLocal(gridUid.Value, grid, new Vector2i(tile.X, tile.Y)).Position;
+        return true;
+    }
+
+    private EntityUid? TryGetTileGrid(BuildSelectionTile tile)
+    {
+        return TryGetEntity(tile.Grid, out var gridUid) ? gridUid.Value : null;
+    }
+
+    private string ResolveTileSourceName(BuildSelectionTile tile)
+    {
+        if (TryGetTileGrid(tile) is { } grid)
+        {
+            if (!string.IsNullOrWhiteSpace(Name(grid)))
+                return Name(grid);
+
+            if (Transform(grid).MapUid is { } map && !string.IsNullOrWhiteSpace(Name(map)))
+                return Name(map);
+        }
+
+        return "Map";
     }
 
     /// <summary>Friendly name of the build's source grid (falls back to the map) for the menu category.</summary>

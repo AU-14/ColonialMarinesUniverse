@@ -108,11 +108,22 @@ public sealed partial class CustomConstructionMenuSystem
     {
         try
         {
+            _prototype.LoadString(yaml, overwrite: true);
+            _prototype.ResolveResults();
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to load generated prototypes ({what}): {e}");
+            return;
+        }
+
+        try
+        {
             _protoLoad.SendGamePrototype(yaml);
         }
         catch (Exception e)
         {
-            Log.Error($"Failed to publish generated prototypes ({what}): {e}");
+            Log.Debug($"Generated prototypes loaded server-side but could not be queued for live client broadcast yet ({what}): {e}");
         }
     }
 

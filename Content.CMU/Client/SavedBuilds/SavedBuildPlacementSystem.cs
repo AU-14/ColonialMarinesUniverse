@@ -6,6 +6,7 @@ using System.Numerics;
 using Content.Client.Administration.Managers;
 using Content.Client.Construction;
 using Content.Shared._AU14.SavedBuilds;
+using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared.Administration;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Popups;
@@ -40,6 +41,7 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly IComponentFactory _componentFactory = default!;
 
     public bool Active { get; private set; }
     public bool IsAdmin { get; private set; }
@@ -64,10 +66,12 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
 
     // target entity prototype id -> the recipe that builds it (for the player ghost path).
     private Dictionary<string, ConstructionPrototype>? _recipeByTarget;
+    private Dictionary<string, ConstructionPrototype>? _recipeByTile;
 
     public Vector2 RelMin => new(_current.RelMinX, _current.RelMinY);
     public Vector2 RelMax => new(_current.RelMaxX, _current.RelMaxY);
     public IReadOnlyList<BuildPreviewEntity> Preview => _current.Preview ?? new List<BuildPreviewEntity>();
+    public IReadOnlyList<BuildPreviewTile> Tiles => _current.Tiles ?? new List<BuildPreviewTile>();
 
     public override void Initialize()
     {
@@ -245,6 +249,20 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
                 placed++;
         }
 
+        foreach (var tile in Tiles)
+        {
+            if (_recipeByTile == null || !_recipeByTile.TryGetValue(tile.Tile, out var recipe))
+                continue;
+
+            var world = target.Position + Rotation.RotateVec(new Vector2(tile.X, tile.Y));
+            var coords = new MapCoordinates(world, target.MapId);
+            if (!_mapManager.TryFindGridAt(coords, out var gridUid, out _))
+                continue;
+
+            if (construction.TrySpawnGhost(recipe, _transform.ToCoordinates(gridUid, coords), Direction.South, out _))
+                placed++;
+        }
+
         _popup.PopupCursor(Loc.GetString("saved-build-ghosts-placed", ("count", placed)));
     }
 
@@ -255,10 +273,17 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
 
         var construction = EntityManager.System<ConstructionSystem>();
         _recipeByTarget = new Dictionary<string, ConstructionPrototype>();
+        _recipeByTile = new Dictionary<string, ConstructionPrototype>();
         foreach (var recipe in _proto.EnumeratePrototypes<ConstructionPrototype>())
         {
             if (construction.TryGetRecipePrototype(recipe.ID, out var targetId) && targetId != null)
+            {
                 _recipeByTarget.TryAdd(targetId, recipe);
+
+                if (_proto.TryIndex<EntityPrototype>(targetId, out var targetProto) &&
+                    targetProto.TryGetComponent<TileApplierComponent>(out var applier, _componentFactory))
+                    _recipeByTile.TryAdd(applier.Tile, recipe);
+            }
         }
     }
 }

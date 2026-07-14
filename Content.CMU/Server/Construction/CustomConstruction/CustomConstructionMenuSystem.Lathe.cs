@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using Content.Shared._AU14.Construction.CustomConstruction;
 using Content.Shared.Database;
+using Content.Shared.Lathe.Prototypes;
 using Content.Shared.Popups;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -34,6 +35,28 @@ public sealed partial class CustomConstructionMenuSystem
     private const string ArmylathePackFile = "AU14ArmylathePack.yml";
 
     private string? LatheDir => _generatedDir == null ? null : Path.Combine(_generatedDir, "Lathe");
+
+    private void EnsureLathePackFallbacks()
+    {
+        EnsureLathePackFallback(AutolathePackId, "CMAutolathe");
+        EnsureLathePackFallback(ArmylathePackId, "CMArmylathe");
+    }
+
+    private void EnsureLathePackFallback(string packId, string lathe)
+    {
+        if (_prototype.HasIndex<LatheRecipePackPrototype>(packId))
+            return;
+
+        try
+        {
+            _prototype.LoadString(BuildPackYaml(packId, lathe, new List<string>()), overwrite: true);
+            _prototype.ResolveResults();
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to create fallback lathe recipe pack {packId}: {e}");
+        }
+    }
 
     private void OnRequestOpenLathe(RequestOpenCustomLatheEditorEvent msg, EntitySessionEventArgs args)
     {

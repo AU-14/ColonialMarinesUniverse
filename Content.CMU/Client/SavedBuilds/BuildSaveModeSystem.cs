@@ -39,10 +39,14 @@ public sealed class BuildSaveModeSystem : EntitySystem
     /// <summary>Mapper mode only: also include unanchored loose items in the selection (default anchored-only).</summary>
     public bool IncludeLoose { get; set; }
 
+    /// <summary>Mapper mode only: also include supported floor tiles in the selection.</summary>
+    public bool IncludeTiles { get; set; }
+
     public readonly List<BuildSelectionBox> CommittedBoxes = new();
     public readonly HashSet<NetEntity> ManualAdds = new();
     public readonly HashSet<NetEntity> ManualRemoves = new();
     public readonly HashSet<EntityUid> Highlighted = new();
+    public readonly List<BuildSelectionTile> HighlightedTiles = new();
 
     /// <summary>Raised locally whenever the resolved highlight set changes, so the window can update its count.</summary>
     public event Action? SelectionChanged;
@@ -110,6 +114,7 @@ public sealed class BuildSaveModeSystem : EntitySystem
         ManualAdds.Clear();
         ManualRemoves.Clear();
         Highlighted.Clear();
+        HighlightedTiles.Clear();
         _window = null;
     }
 
@@ -145,6 +150,7 @@ public sealed class BuildSaveModeSystem : EntitySystem
             Selection = BuildSelection(includeLive: true),
             Mode = Mode,
             IncludeLoose = IncludeLoose,
+            IncludeTiles = IncludeTiles,
         });
         _window?.Close();
     }
@@ -202,7 +208,13 @@ public sealed class BuildSaveModeSystem : EntitySystem
         if (!Active)
             return;
 
-        RaiseNetworkEvent(new RequestBuildSelectionEvent { Selection = BuildSelection(includeLive: true), Mode = Mode, IncludeLoose = IncludeLoose });
+        RaiseNetworkEvent(new RequestBuildSelectionEvent
+        {
+            Selection = BuildSelection(includeLive: true),
+            Mode = Mode,
+            IncludeLoose = IncludeLoose,
+            IncludeTiles = IncludeTiles,
+        });
     }
 
     private BuildSelectionData BuildSelection(bool includeLive)
@@ -236,11 +248,13 @@ public sealed class BuildSaveModeSystem : EntitySystem
     private void OnSelectionResult(BuildSelectionResultEvent ev)
     {
         Highlighted.Clear();
+        HighlightedTiles.Clear();
         foreach (var net in ev.Entities)
         {
             if (TryGetEntity(net, out var uid))
                 Highlighted.Add(uid.Value);
         }
+        HighlightedTiles.AddRange(ev.Tiles);
 
         SelectionChanged?.Invoke();
     }

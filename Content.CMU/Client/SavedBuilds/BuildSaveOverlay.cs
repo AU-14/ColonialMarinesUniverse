@@ -23,6 +23,7 @@ public sealed class BuildSaveOverlay : Overlay
     private static readonly Color LiveBoxColor = new Color(0.3f, 0.8f, 1f, 0.9f);
     private static readonly Color CommittedBoxColor = new Color(0.3f, 1f, 0.4f, 0.9f);
     private static readonly Color HighlightColor = new Color(1f, 0.85f, 0.2f, 0.35f);
+    private static readonly Color TileHighlightColor = new Color(0.25f, 1f, 0.35f, 0.45f);
     private const float LineThickness = 0.08f;
 
     private readonly BuildSaveModeSystem _mode;
@@ -82,6 +83,23 @@ public sealed class BuildSaveOverlay : Overlay
                 continue;
             var pos = map.Position;
             handle.DrawRect(new Box2(pos - new Vector2(0.5f, 0.5f), pos + new Vector2(0.5f, 0.5f)), HighlightColor);
+        }
+
+        // Highlight resolved tiles separately from entities.
+        foreach (var tile in _mode.HighlightedTiles)
+        {
+            if (!_entMan.TryGetEntity(tile.Grid, out var gridUid) || !_entMan.EntityExists(gridUid))
+                continue;
+
+            if (!_entMan.TryGetComponent<MapGridComponent>(gridUid, out var grid))
+                continue;
+
+            var center = _mapSystem.GridTileToWorld(gridUid.Value, grid, new Vector2i(tile.X, tile.Y));
+            if (center.MapId != args.MapId)
+                continue;
+
+            var half = grid.TileSize * 0.5f;
+            handle.DrawRect(new Box2(center.Position - new Vector2(half, half), center.Position + new Vector2(half, half)), TileHighlightColor);
         }
     }
 

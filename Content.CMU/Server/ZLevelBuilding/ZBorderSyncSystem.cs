@@ -35,6 +35,8 @@ public sealed class ZBorderSyncSystem : EntitySystem
 
     private readonly HashSet<string> _whitelist = new(StringComparer.Ordinal);
     private readonly HashSet<string> _blacklist = new(StringComparer.Ordinal);
+    private Dictionary<string, List<string>>? _descendantsByParent;
+    private Dictionary<string, List<string>>? _nonAbstractByName;
 
     public event Action? ListsChanged;
 
@@ -176,6 +178,7 @@ public sealed class ZBorderSyncSystem : EntitySystem
 
     private List<string> ExpandBlacklistPrototypeIds(List<string> protoIds)
     {
+        EnsurePrototypeExpansionCache();
         var expanded = new HashSet<string>(StringComparer.Ordinal);
         foreach (var id in protoIds)
         {
@@ -188,13 +191,13 @@ public sealed class ZBorderSyncSystem : EntitySystem
             if (string.IsNullOrWhiteSpace(proto.Name))
                 continue;
 
-            foreach (var other in _prototype.EnumeratePrototypes<EntityPrototype>())
-            {
-                if (other.Abstract || !string.Equals(other.Name, proto.Name, StringComparison.Ordinal))
-                    continue;
+            if (!_nonAbstractByName!.TryGetValue(proto.Name, out var sameName))
+                continue;
 
-                expanded.Add(other.ID);
-                AddDescendants(other.ID, expanded);
+            foreach (var otherId in sameName)
+            {
+                expanded.Add(otherId);
+                AddDescendants(otherId, expanded);
             }
         }
 
@@ -203,20 +206,47 @@ public sealed class ZBorderSyncSystem : EntitySystem
 
     private void AddDescendants(string parentId, HashSet<string> expanded)
     {
+        EnsurePrototypeExpansionCache();
+
+        if (!_descendantsByParent!.TryGetValue(parentId, out var descendants))
+            return;
+
+        foreach (var id in descendants)
+            expanded.Add(id);
+    }
+
+    private void EnsurePrototypeExpansionCache()
+    {
+        if (_descendantsByParent != null && _nonAbstractByName != null)
+            return;
+
+        var descendantsByParent = new Dictionary<string, List<string>>(StringComparer.Ordinal);
+        var nonAbstractByName = new Dictionary<string, List<string>>(StringComparer.Ordinal);
+
         foreach (var proto in _prototype.EnumeratePrototypes<EntityPrototype>())
         {
-            if (proto.Abstract || expanded.Contains(proto.ID))
+            if (proto.Abstract)
                 continue;
+
+            if (!string.IsNullOrWhiteSpace(proto.Name))
+            {
+                if (!nonAbstractByName.TryGetValue(proto.Name, out var sameName))
+                    nonAbstractByName[proto.Name] = sameName = new List<string>();
+
+                sameName.Add(proto.ID);
+            }
 
             foreach (var (ancestorId, _) in _prototype.EnumerateAllParents<EntityPrototype>(proto.ID, includeSelf: false))
             {
-                if (!string.Equals(ancestorId, parentId, StringComparison.Ordinal))
-                    continue;
+                if (!descendantsByParent.TryGetValue(ancestorId, out var descendants))
+                    descendantsByParent[ancestorId] = descendants = new List<string>();
 
-                expanded.Add(proto.ID);
-                break;
+                descendants.Add(proto.ID);
             }
         }
+
+        _descendantsByParent = descendantsByParent;
+        _nonAbstractByName = nonAbstractByName;
     }
 
     /// <summary>Loads the lists from user data; a missing file seeds the whitelist with every non-abstract
@@ -272,19 +302,15 @@ public sealed class ZBorderSyncSystem : EntitySystem
 
     private void SeedDefaults()
     {
-        foreach (var proto in _prototype.EnumeratePrototypes<EntityPrototype>())
+        EnsurePrototypeExpansionCache();
+
+        foreach (var parent in DefaultBorderParents)
         {
-            if (proto.Abstract)
+            if (!_descendantsByParent!.TryGetValue(parent, out var descendants))
                 continue;
 
-            foreach (var (parentId, _) in _prototype.EnumerateAllParents<EntityPrototype>(proto.ID, includeSelf: false))
-            {
-                if (Array.IndexOf(DefaultBorderParents, parentId) < 0)
-                    continue;
-
-                _whitelist.Add(proto.ID);
-                break;
-            }
+            foreach (var id in descendants)
+                _whitelist.Add(id);
         }
 
         Log.Info($"Seeded z-border sync whitelist with {_whitelist.Count} invincible border-wall prototypes.");

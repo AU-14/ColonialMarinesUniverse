@@ -11,7 +11,7 @@ build-partner-added = { $name } can now include your builds in their saves.
 build-partner-removed = { $name } can no longer include your builds in their saves.
 
 # Saving builds.
-saved-build-success = Saved build "{ $name }" ({ $count } entities).
+saved-build-success = Saved build "{ $name }" ({ $count } entities, { $tiles } tiles).
 saved-build-error-no-name = Give the build a name first.
 saved-build-error-empty = Nothing you built (or a partner's) is in the selection.
 saved-build-error-serialize = Failed to serialize that build.
@@ -23,10 +23,11 @@ saved-build-window-range = Range
 saved-build-window-size = Selection: { $size }x{ $size } tiles
 saved-build-window-append = Append Range
 saved-build-window-clear = Clear
-saved-build-window-selected = Highlighted: { $count }
+saved-build-window-selected = Highlighted: { $count } entities, { $tiles } tiles
 saved-build-window-name = Build name…
 saved-build-window-save = Save Build
 saved-build-window-open-folder = Open Saved Builds Folder
+saved-build-window-include-tiles = Save tiles
 
 # Saved Builds spawnlist in the construction menu.
 gmod-construction-menu-saved-builds = Saved Builds
