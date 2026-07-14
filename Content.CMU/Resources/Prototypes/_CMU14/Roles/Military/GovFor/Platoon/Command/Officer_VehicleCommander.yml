@@ -1,0 +1,109 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobVehicleCommanderBaseAbstract
+  name: au14-job-name-vehiclecommander
+  description: au14-job-description-vehiclecommander
+  icon: "AU14JobIconGovTankCommander"
+  spawnMenuRoleName: Vehicle Commander (GOVFOR)
+  startingGear: AU14GearGOVFORVehicleCommander
+  dummyStartingGear: AU14GearGOVFORVehicleCommanderDummy
+  playTimeTracker: AU14JobGOVFORVehicleCommander
+  overwatchRoleName: au14-job-name-vehiclecommander
+  overwatchSortPriority: -3
+  accessGroups:
+  - AU14GovforVehicleCrew
+
+- type: job
+  abstract: true
+  parent: AU14JobVehicleCommanderBaseAbstract
+  id: AU14JobVehicleCommanderBase
+  roundRole: VehicleCommander
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetPlatoonVehicleCrewman
+  - type: JobPrefix
+    prefix: au14-job-prefix-vehiclecommander
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: govfor_vcc
+  requirements:
+#  - !type:RoleTimeRequirement
+#    role: AU14JobGOVFORVehicleCrewman
+#    time: 14400 # 4 hours
+#  - !type:RoleTimeRequirement
+#    role: AU14JobGOVFORSquadSergeant
+#    time: 7200 # 2 hours
+  - !type:AgeRequirement
+    requiredAge: 25
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankChiefWarrantOfficer3:
+      entity: AU14ChevronUSCMChiefWarrantOfficer3
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORVehicleCommander
+        time: 36000 #10 hours
+    RMCRankChiefWarrantOfficer:
+      entity: AU14ChevronUSCMChiefWarrantOfficer2
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFORVehicleCommander
+  isHumanoid: true
+
+- type: job
+  parent: AU14JobVehicleCommanderBase
+  id: AU14JobGOVFORVehicleCommander
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: startingGear
+  id: AU14GearGOVFORVehicleCommander
+  equipment:
+    id: AU14IDCardGOVFORVehicleCommander
+    ears: AU14HeadsetGovforCommand
+    head: AU14CamoM50Helmet
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORVehicleCommander
+  name: Spawn Point GOVFOR Vehicle Commander
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORVehicleCommander
+  - type: Sprite
+    state: syn_spawn
+
+- type: roleLoadout
+  id: JobAU14JobGOVFORVehicleCommander
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+- type: startingGear
+  id: AU14GearGOVFORVehicleCommanderDummy
+  equipment:
+    id: AU14IDCardGOVFORVehicleCommander
+    ears: AU14HeadsetGovforCommand

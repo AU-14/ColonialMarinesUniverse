@@ -1,0 +1,10 @@
+- type: loadoutGroup
+  id: GOVFORNurseEquipmentAU14
+  name: au14-loadout-group-doctor-equipment
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - GOVFORNurseSpecializationDefaultAU14
+  - GOVFORNurseSpecializationSurgicalAU14
+  - GOVFORNurseSpecializationPharmaceuticalAU14
+  - GOVFORNurseSpecializationMorgueAU14

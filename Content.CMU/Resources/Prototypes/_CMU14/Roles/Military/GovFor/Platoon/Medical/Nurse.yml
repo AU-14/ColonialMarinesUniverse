@@ -1,0 +1,118 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobNurseBaseAbstract
+  name: au14-job-name-govfornurse
+  description: au14-job-description-govfornurse
+  icon: "AU14JobIconCorpsman"
+  spawnMenuRoleName: Nurse (GOVFOR)
+  startingGear: AU14GearGOVFORNurse
+  dummyStartingGear: AU14GearGOVFORNurseDummy
+  playTimeTracker: AU14JobGOVFORNurse
+  accessGroups:
+  - AU14GovforCorpsman
+  - AU14GovforSquad
+
+- type: job
+  abstract: true
+  parent: AU14JobNurseBaseAbstract
+  id: AU14JobNurseBase
+  roundRole: Nurse
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetPlatoonHospitalCorpsman
+  - type: JobPrefix
+    prefix: au14-job-prefix-govfornurse
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: govfor_corpsman
+
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NonResuscitable
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankSergeant:
+      entity: AU14ChevronUSCMSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORNurse
+        time: 86400 # 24 hours
+    RMCRankCorporal:
+      entity: AU14ChevronUSCMCorporal
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORNurse
+        time: 36000 # 10 hours
+    RMCRankLanceCorporal:
+      entity: AU14ChevronUSCMLanceCorporal
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFORNurse
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORNurse
+  equipment:
+    jumpsuit: RMCScrubsOliveNurse
+    shoes: CMBootsBlackFilled
+    belt: AU14BeltMedicBagSupportSynth
+    pocket1: AU14PouchFirstResponderFilledMilitaryDoctor
+    pocket2: AU14PouchAutoinjectorFilledMilitaryDoctor
+    back: AU14SatchelMilitaryDoctor
+    ears: AU14HeadsetGovforAuxiliary
+    ears2: RMCM5CameraGear
+    neck: ClothingNeckStethoscope
+
+- type: startingGear
+  id: AU14GearGOVFORNurseDummy
+  equipment:
+    jumpsuit: RMCScrubsOliveNurse
+    shoes: CMBootsBlackFilled
+    belt: AU14BeltMedicBagSupportSynth
+    pocket1: AU14PouchFirstResponderFilledMilitaryDoctor
+    pocket2: AU14PouchAutoinjectorFilledMilitaryDoctor
+    back: AU14SatchelMilitaryDoctor
+    ears: AU14HeadsetGovforAuxiliary
+    ears2: RMCM5CameraGear
+    neck: ClothingNeckStethoscope
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORNurse
+  name: Spawn Point GOVFOR Nurse
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORNurse
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobNurseBase
+  id: AU14JobGOVFORNurse
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: roleLoadout
+  id: JobAU14JobGOVFORNurse
+  points: 7
+  groups:
+  - GOVFORNurseEquipmentAU14
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC

@@ -186,3 +186,10 @@
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
     state: govfor_vc
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconGovTankCommander
+  icon:
+    sprite: _AU14/Interface/au14govforjobicons.rsi
+    state: govfor_vcc
