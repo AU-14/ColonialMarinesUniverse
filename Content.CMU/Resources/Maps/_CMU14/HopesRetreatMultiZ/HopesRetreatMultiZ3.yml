@@ -56,7 +56,6 @@ entities:
       name: Mapping JE-1758 Ascanius [3]
     - type: Transform
     - type: Map
-      mapPaused: True
     - type: GridTree
     - type: MapAtmosphere
       space: False

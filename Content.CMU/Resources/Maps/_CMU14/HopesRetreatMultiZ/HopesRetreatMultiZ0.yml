@@ -571,7 +571,6 @@ entities:
     - type: BecomesStation
       id: hopesretreat
     - type: Map
-      mapPaused: True
     - type: GridTree
     - type: OccluderTree
     - type: MapGrid
@@ -125901,18 +125900,6 @@ entities:
     - type: Transform
       pos: 6.5,-38.5
       parent: 1
-    - type: TacticalMapUser
-      action: 624
-      marines: False
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - 624
-    - type: Actions
-      actions:
-      - 624
 - proto: AU14AICoreSubstrateMUTHUR
   entities:
   - uid: 58776
@@ -177237,7 +177224,6 @@ entities:
 - proto: RMCActionOpenTacticalMapMarine
   entities:
   - uid: 624
-    mapInit: true
     paused: true
     components:
     - type: Transform

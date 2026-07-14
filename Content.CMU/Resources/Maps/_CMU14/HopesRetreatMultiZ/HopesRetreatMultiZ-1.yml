@@ -24,7 +24,6 @@ entities:
       name: Mapping JE-1758 Ascanius [-1]
     - type: Transform
     - type: Map
-      mapPaused: True
     - type: GridTree
     - type: OccluderTree
     - type: MapGrid
