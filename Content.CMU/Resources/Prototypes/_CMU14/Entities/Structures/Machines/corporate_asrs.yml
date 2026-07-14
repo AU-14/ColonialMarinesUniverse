@@ -49,6 +49,8 @@
         crate: CMUExoticCubeCrate
       - cost: 5000
         crate: CMUCrateSecureWYRandomExp
+      - cost: 500
+        crate: CMUCrateChemGlasses
   - type: ActivatableUIRequiresAccess
   - type: AccessReader
     access: [["AU14AccessCorporateWEYULiaison"], ["AU14AccessCorporateWEYU"]]

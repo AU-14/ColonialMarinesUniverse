@@ -526,7 +526,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
             // catalyst check unnecessary
 
             (int, bool) compmod = (mod, catalyst);
-            data.Recipe.Add(chemid, compmod);
+            data.Recipe.TryAdd(chemid, compmod);
 
         }
         return chemid;
@@ -843,12 +843,12 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
             }
         }
         useLevel = Math.Min(props[toUse].MaxLevel, useLevel);
-        data.Effects.Add(toUse, useLevel);
+        data.Effects.TryAdd(toUse, useLevel);
 
         if (toUse != property)
         {
             if (props[property].Category == ReagentPropertyTypeEnum.Catalyst)
-                data.Effects.Add(property, useLevel);
+                data.Effects.TryAdd(property, useLevel);
         }
         return true;
     }
@@ -877,7 +877,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         A.Effects.Clear();
         foreach (var effect in B.Effects)
         {
-            A.Effects.Add(effect.Key, effect.Value);
+            A.Effects.TryAdd(effect.Key, effect.Value);
         }
         A.GenTier = B.GenTier;
         A.ID = B.ID;
@@ -894,7 +894,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         A.Recipe.Clear();
         foreach (var ing in B.Recipe)
         {
-            A.Recipe.Add(ing.Key, ing.Value);
+            A.Recipe.TryAdd(ing.Key, ing.Value);
         }
         A.RecipeHint = B.RecipeHint;
         A.RecipeYield = B.RecipeYield;
@@ -920,7 +920,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         A.Effects.Clear();
         foreach(var effect in other.Effects)
         {
-            A.Effects.Add(effect.Key, effect.Value);
+            A.Effects.TryAdd(effect.Key, effect.Value);
         }
         A.GenTier = other.GenTier;
         A.ID = other.ID;
@@ -953,7 +953,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         A.Recipe.Clear();
         foreach(var ing in other.Recipe)
         {
-            A.Recipe.Add(ing.Key, ing.Value);
+            A.Recipe.TryAdd(ing.Key, ing.Value);
         }
         A.RecipeHint = other.RecipeHint;
         A.RecipeYield = other.RecipeYield;
@@ -974,20 +974,20 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
             var sublist = val.Split(',').ToList<string>();
             string name = sublist[0];
             sublist.RemoveAt(0);
-            dict.Add(name, sublist);
+            dict.TryAdd(name, sublist);
         }
         return dict;
     }
     private void PrepareProperties()
     {
         var props = _protoMan.GetInstances<ReagentPropertyPrototype>();
-        _propertiesList.Add("negative", []);
-        _generatedPropertiesList.Add("negative", []);
-        _propertiesList.Add("neutral", []);
-        _generatedPropertiesList.Add("neutral", []);
-        _propertiesList.Add("positive", []);
-        _generatedPropertiesList.Add("positive", []);
-        _propertiesList.Add("rare", []);
+        _propertiesList.TryAdd("negative", []);
+        _generatedPropertiesList.TryAdd("negative", []);
+        _propertiesList.TryAdd("neutral", []);
+        _generatedPropertiesList.TryAdd("neutral", []);
+        _propertiesList.TryAdd("positive", []);
+        _generatedPropertiesList.TryAdd("positive", []);
+        _propertiesList.TryAdd("rare", []);
         foreach (var prop in props)
         {
             if (prop.Value.Rarity > ReagentPropertyRarityEnum.Disabled)
@@ -1032,7 +1032,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
                     }
                 }
                 if (recipe.Count >= 3)
-                    _unfoldedCombinations.Add(prop.Value.ID, recipe);
+                    _unfoldedCombinations.TryAdd(prop.Value.ID, recipe);
             }
         }
     }
@@ -1116,7 +1116,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         if (_reagent.TryIndex(id, out var reagent))
         {
             data = ConvertToGRD(reagent);
-            ReagentData.Add(id, data.Value);
+            ReagentData.TryAdd(id, data.Value);
             return true;
         }
         data = null;

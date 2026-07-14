@@ -1,4 +1,5 @@
 using Content.Shared._AU14.Chemistry.Reagents;
+using Content.Shared._RMC14.Audio;
 using Content.Shared._RMC14.Chemistry;
 using Content.Shared._RMC14.DoAfter;
 using Content.Shared._RMC14.Marines.Skills;
@@ -7,10 +8,13 @@ using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
+using Content.Shared.GameTicking;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Paper;
 using Content.Shared.Popups;
+using Robust.Client.Audio;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
@@ -36,17 +40,60 @@ public abstract partial class XRFScannerSystem : EntitySystem
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private IPrototypeManager _protoman = default!;
     [Dependency] private MetaDataSystem _mets = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
+    //                                              start      end    played audio?
+    private Dictionary<Entity<XRFScannerComponent>, (TimeSpan, TimeSpan, bool)> processing = [];
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<XRFScannerComponent, InteractUsingEvent>(OnInteractUsing);
         SubscribeLocalEvent<XRFScannerComponent, InteractHandEvent>(OnInteractHand);
         SubscribeLocalEvent<XRFScannerComponent, XRFDoAfterEvent>(WhenDoAfterEnds);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRestart);
     }
 
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+        if (processing.Count > 0)
+        {
+            foreach (var kvp in processing)
+            {
+                if (!kvp.Key.Comp.Processing)
+                {
+                    processing.Remove(kvp.Key);
+                    continue;
+                }
+                if (!kvp.Value.Item3 && (_timing.CurTime - kvp.Value.Item1) / (kvp.Value.Item2 - kvp.Value.Item1) > 0.6)
+                {
+                    processing[kvp.Key] = (kvp.Value.Item1, kvp.Value.Item2, true);
+                    _audio.PlayPvs(kvp.Key.Comp.PrintSound, kvp.Key);
+                    continue;
+                }
+                if (_timing.CurTime > kvp.Value.Item2)
+                {
+                    _consys.TryGetContainer(kvp.Key.Owner, "sample", out var sample);
+                    if (sample is null)
+                    {
+                        _audio.PlayPvs(kvp.Key.Comp.FailSound, kvp.Key);
+                        kvp.Key.Comp.Processing = false;
+                        processing.Remove(kvp.Key);
+                        continue;
+                    }
+                    FinishProcess(kvp.Key, sample);
+                    kvp.Key.Comp.Processing = false;
+                    processing.Remove(kvp.Key);
+                    continue;
+                }
+            }
+        }
+    }
 
-
+    private void OnRestart(RoundRestartCleanupEvent args)
+    {
+        processing.Clear();
+    }
     public void OnInteractUsing(Entity<XRFScannerComponent> ent, ref InteractUsingEvent args)
     {
         if (ent.Comp.Processing)
@@ -114,7 +161,8 @@ public abstract partial class XRFScannerSystem : EntitySystem
             _appearance.SetData(ent.Owner, XRFScannerVisuals.State, XRFScannerState.Error);
         }
         if (!_net.IsClient)
-            Timer.Spawn(ent.Comp.Inefficiency, () => FinishProcess(ent, sample));
+            processing.Add(ent, (_timing.CurTime, _timing.CurTime + ent.Comp.Inefficiency, false));
+            //Timer.Spawn(ent.Comp.Inefficiency, () => FinishProcess(ent, sample));
     }
     private void FinishProcess(Entity<XRFScannerComponent> ent, BaseContainer sample)
     {
@@ -126,22 +174,27 @@ public abstract partial class XRFScannerSystem : EntitySystem
                 if (sample.Count == 0)
                 {
                     PrintResult(ent, false, Loc.GetString("xrf-scanner-fail-missing"));
+                    _audio.PlayPvs(ent.Comp.FailSound, ent);
                 }
                 else if (chems.Volume == FixedPoint2.Zero)
                 {
                     PrintResult(ent, false, Loc.GetString("xrf-scanner-fail-empty"));
+                    _audio.PlayPvs(ent.Comp.FailSound, ent);
                 }
                 else if (chems.Volume < 30)
                 {
                     PrintResult(ent, false, Loc.GetString("xrf-scanner-fail-insufficient"));
+                    _audio.PlayPvs(ent.Comp.FailSound, ent);
                 }
                 else if (chems.Contents.Count > 1)
                 {
                     PrintResult(ent, false, Loc.GetString("xrf-scanner-fail-contaminated"));
+                    _audio.PlayPvs(ent.Comp.FailSound, ent);
                 }
                 else
                 {
                     PrintResult(ent, false, Loc.GetString("xrf-scanner-fail-unknown"));
+                    _audio.PlayPvs(ent.Comp.FailSound, ent);
                 }
                 _appearance.SetData(ent.Owner, XRFScannerVisuals.State, XRFScannerState.Failed);
             }
@@ -155,6 +208,7 @@ public abstract partial class XRFScannerSystem : EntitySystem
         {
             PrintResult(ent, false, Loc.GetString("xrf-scanner-fail-invalid"));
             _appearance.SetData(ent.Owner, XRFScannerVisuals.State, XRFScannerState.Failed);
+            _audio.PlayPvs(ent.Comp.FailSound, ent);
         }
         ent.Comp.Sample++;
         ent.Comp.Processing = false;
@@ -200,6 +254,7 @@ public abstract partial class XRFScannerSystem : EntitySystem
             {
                 var ev = new XRFScannedReagentEvent(reagent.ID, ent.Comp.Sample, GetNetEntity(ent.Owner));
                 RaiseLocalEvent(ev);
+                _audio.PlayPvs(ent.Comp.SuccessSound, ent.Owner);
             }
         }
         else

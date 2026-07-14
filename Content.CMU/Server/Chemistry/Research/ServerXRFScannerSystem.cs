@@ -105,7 +105,7 @@ public sealed partial class ServerXRFScannerSystem : XRFScannerSystem
         comp.Completed = dat.Value.Completed;
         if (comp.Valid == true && comp.Completed == true)
         {
-            _rdat.ResearchData.Add(GRD.Value.ID, (contents, _time.CurTime, false, GRD.Value));
+            _rdat.ResearchData.TryAdd(GRD.Value.ID, (contents, _time.CurTime, false, GRD.Value));
         }
         _mets.SetEntityName(realpaper, name);
         _paper.SetContent(realpaper, contents);

@@ -58,7 +58,7 @@
   parent: RMCSecureCaseMedicalBig
   id: CMUCrateResearchTerminal
   name: Weyland-Yutani research data terminal crate
-  description: A crate containing a computer linked to Weyland-Yutani's research servers. WARNING! Cannot be moved after unpacking!
+  description: A crate containing a computer linked to Weyland-Yutani's research servers.
   components:
   - type: SpawnOnTerminate
     spawn: CMUResearchDataTerminal
@@ -67,7 +67,7 @@
   parent: RMCSecureCaseMedicalBig
   id: CMUCrateXRF
   name: x-ray fluorescence spectrometer crate
-  description: A crate containing an X-Ray Fluorescence spectrometer machine. WARNING! RADIOACTIVE CONTENTS. WARNING! Cannot be moved after unpacking!
+  description: A crate containing an X-Ray Fluorescence spectrometer machine. WARNING! CONTENTS ARE RADIOACTIVE.
   components:
   - type: SpawnOnTerminate
     spawn: CMUXRFScanner
@@ -76,7 +76,7 @@
   parent: RMCSecureCaseMedicalBig
   id: CMUCrateSim
   name: synthesis simulator crate
-  description: A crate containing a specialized chemical synthesis machine linked to Weyland-Yutani's research servers. WARNING! Cannot be moved after unpacking!
+  description: A crate containing a specialized chemical synthesis machine linked to Weyland-Yutani's research servers.
   components:
   - type: SpawnOnTerminate
     spawn: CMUChemSimulator
@@ -89,6 +89,38 @@
   components:
   - type: SpawnOnTerminate
     spawn: AU14VendorBlood
+
+- type: entity
+  parent: RMCCrateMedical
+  id: CMUCrateLabGlassware
+  name: laboratory glassware crate
+  description: A crate containing laboratory glassware.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCBoxSyringe
+      amount: 1
+    - id: RMCBoxBeaker
+      amount: 1
+    - id: RMCVialBoxFull
+      amount: 1
+    - id: CMBottleEmpty
+      amount: 3
+    - id: CMBeakerLarge
+      amount: 3
+    - id: RMCBeakerHighCapacity
+      amount: 1
+
+- type: entity
+  parent: RMCCrateMedical
+  id: CMUCrateChemGlasses
+  name: reagent scanner HUD goggles crate
+  description: A crate containing a pair of reagent scanner HUD goggles.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCGlassesReagentHUDGlasses
+      amount: 1
 
 - type: entity
   parent: RMCCrateBase

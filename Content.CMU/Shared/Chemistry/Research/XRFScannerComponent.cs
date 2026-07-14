@@ -1,3 +1,4 @@
+using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 using System;
@@ -21,6 +22,15 @@ public sealed partial class XRFScannerComponent : Component
     //how long it takes to process a sample
     [DataField, AutoNetworkedField]
     public TimeSpan Inefficiency = TimeSpan.FromSeconds(10);
+
+    [DataField]
+    public SoundPathSpecifier PrintSound = new("/Audio/_RMC14/Machines/fax.ogg");
+
+    [DataField]
+    public SoundPathSpecifier SuccessSound = new("/Audio/_CMU14/Machines/twobeep.ogg");
+
+    [DataField]
+    public SoundPathSpecifier FailSound = new("/Audio/_RMC14/Machines/buzz_two.ogg");
 }
 [Serializable, NetSerializable]
 public enum XRFScannerVisuals

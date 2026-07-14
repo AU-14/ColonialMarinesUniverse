@@ -29,3 +29,29 @@
       amount: 1
     - id: RMCTankFlamerLargeCustom
       amount: 1
+
+# WY SEC
+
+- type: entity
+  id: CMUCrateFP9K2
+  parent: RMCCrateWeapons
+  name: FN FP9000/2 rifle crate
+  description: A crate containing one FN FP9000/2 submachine gun and two FMJ magazines.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponSMGFP9000PMC
+      amount: 1
+    - id: RMCMagazineSMGFP9000
+      amount: 2
+
+- type: entity
+  id: CMUCrateFP9KMags
+  parent: RMCCrateWeapons
+  name: FN FP9000 magazine crate
+  description: A crate containing three FN FP9000 submachine gun magazines filled with FMJ ammunition.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineSMGFP9000
+      amount: 3

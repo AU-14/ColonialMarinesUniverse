@@ -198,7 +198,7 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
     }
     private void Add(Entity<ChemSimulatorComponent> ent, ref GeneratedReagentData chem)
     {
-        //this one is haunted
+        //this one was haunted
         _con.EnsureContainer<ContainerSlot>(ent.Owner, "target");
         if (!_con.TryGetContainer(ent, "target", out var targcon) ||
             targcon is null || targcon.Count == 0 ||
