@@ -5,7 +5,7 @@
   name: au14-job-name-govforAuxTech
   description: au14-job-description-govforAuxTech
   icon: "AU14JobIconAuxTech"
-  spawnMenuRoleName: Auxiliary Technician (GOVFOR)
+  spawnMenuRoleName: Logistics Technician (GOVFOR)
   startingGear: AU14GearGOVFORAuxTech
   dummyStartingGear: AU14GearGOVFORAuxTechDummy
   playTimeTracker: AU14JobGOVFORAuxTech
@@ -30,13 +30,13 @@
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
-      state: govfor_auxtech
+      state: govfor_logisticstech
   roundForceComponents:
     OPFOR:
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
-        state: auxtech
+        state: logisticstech
 
   requirements:
   - !type:TraitsRequirement
@@ -49,24 +49,18 @@
   ranks:
     RMCRankCivilian: []
   chevrons:
-    RMCRankStaffSergeant:
-      entity: AU14ChevronUSCMStaffSergeant
-      requirements:
-      - !type:RoleTimeRequirement
-        role: AU14JobGOVFORAuxTech
-        time: 270000 # 75 hours
     RMCRankSergeant:
       entity: AU14ChevronUSCMSergeant
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobGOVFORAuxTech
-        time: 180000 # 50 hours
+        time: 86400 # 24 hours
     RMCRankCorporal:
       entity: AU14ChevronUSCMCorporal
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobGOVFORAuxTech
-        time: 72000 # 24 hours
+        time: 61200 # 17 hours
     RMCRankLanceCorporal:
       entity: AU14ChevronUSCMLanceCorporal
       requirements:
@@ -84,10 +78,13 @@
 - type: startingGear
   id: AU14GearGOVFORAuxTech
   equipment:
-    shoes: CMBootsBlackFilled
     ears: AU14HeadsetGovforAuxiliary
     ears2: RMCM5CameraGear
     id: AU14JobIDCardGOVFORAuxTech
+    jumpsuit: CMJumpsuitMaintTech
+    outerClothing: RMCHazardVestBlue
+    shoes: CMBootsBlackFilled
+    head: RMCHardhatBlue
   storage:
     back:
     - CMStampApproved
@@ -96,17 +93,18 @@
 - type: startingGear
   id: AU14GearGOVFORAuxTechDummy
   equipment:
+    ears: AU14HeadsetGovforAuxiliary
+    ears2: RMCM5CameraGear
+    id: AU14JobIDCardGOVFORAuxTech
+    jumpsuit: CMJumpsuitMaintTech
+    outerClothing: RMCHazardVestBlue
     shoes: CMBootsBlackFilled
-    back: CMSatchelMarine
-  storage:
-    back:
-    - CMStampApproved
-    - AU14StampAUX
+    head: RMCHardhatBlue
 
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointGOVFORAuxTech
-  name: Spawn Point GOVFOR Auxiliary Technician
+  name: Spawn Point GOVFOR Logistics Technician
   components:
   - type: SpawnPoint
     job_id: AU14JobGOVFORAuxTech
@@ -141,7 +139,7 @@
   roundSide: Opfor
   roundForce: OPFOR
   icon: "AU14JobIconOPFORAuxTech"
-  spawnMenuRoleName: Auxiliary Technician (OPFOR)
+  spawnMenuRoleName: Logistics Technician (OPFOR)
   supervisors: au14-job-supervisors-opfor
   startingGear: AU14GearOPFORAuxTech
   dummyStartingGear: AU14GearOPFORAuxTechDummy
@@ -173,7 +171,7 @@
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointOPFORAuxTech
-  name: Spawn Point OPFOR Auxiliary Technician
+  name: Spawn Point OPFOR Logistics Technician
   components:
   - type: SpawnPoint
     job_id: AU14JobOPFORAuxTech

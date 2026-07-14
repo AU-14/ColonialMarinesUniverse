@@ -27,6 +27,10 @@
         points: 5
       - id: RMCZippoGold
         points: 10
+    - name: Edibles
+      entries:
+      - id: CMMRE
+        points: 5
     - name: Drinkables
       entries:
       - id: RMCDrinkAlcoholWhiskey
@@ -56,18 +60,20 @@
         points: 10
       - id: AU14PatchUAFlag
         points: 1
-    - name: Weapons & Ammo
+    - name: Weapons & Ammo # UA = cheaper guns
       entries:
       - id: CMWeaponPistolM1984
-        points: 30
+        points: 15
       - id: CMMagazinePistolM1984
-        points: 15
+        points: 10
       - id: RMCWeaponRevolverM44
-        points: 30
-      - id: RMCSpeedLoaderM44
         points: 15
+      - id: RMCSpeedLoaderM44
+        points: 10
       - id: RMCScabbardCeremonialFilled
-        points: 30
+        points: 25
+      - id: RMCM5Bayonet
+        points: 5
     - name: Radio keys
       entries:
       - id: CMEncryptionKeyColony
@@ -104,6 +110,10 @@
         points: 5
       - id: RMCZippoGold
         points: 10
+    - name: Edibles
+      entries:
+      - id: AU14MRETWERMC
+        points: 5
     - name: Drinkables
       entries:
       - id: RMCDrinkAlcoholSake
@@ -133,14 +143,14 @@
         points: 10
       - id: AU14TWEPatch
         points: 1
-    - name: Weapons & Ammo
+    - name: Weapons & Ammo # TWE = cheap katana
       entries:
       - id: RMCWeaponPistolL54
-        points: 30
+        points: 20
       - id: RMCMagazinePistolL54
-        points: 15
+        points: 10
       - id: RMCScabbardKatanaFilled
-        points: 30
+        points: 20
       - id: RMCTantoB
         points: 5
     - name: Radio keys
@@ -175,6 +185,10 @@
         points: 5
       - id: RMCZippo
         points: 5
+    - name: Edibles
+      entries:
+      - id: AU14MREUPP
+        points: 5
     - name: Drinkables
       entries:
       - id: RMCDrinkAlcoholVodka
@@ -200,18 +214,18 @@
         points: 10
       - id: AU14PatchUPP
         points: 1
-    - name: Weapons & Ammo
+    - name: Weapons & Ammo # UPP = silenced pistol option
       entries:
       - id: RMCWeaponPistolT73
-        points: 30
+        points: 20
       - id: RMCMagazinePistolT73
-        points: 15
+        points: 10
       - id: RMCWeaponPistolNP92
-        points: 30
+        points: 20
       - id: RMCMagazinePistolNP92
-        points: 15
+        points: 10
       - id: RMCWeaponPistolNPZ92
-        points: 30
+        points: 20
       - id: RMCCombatUtilityKnifeB
         points: 5
     - name: Radio keys
@@ -250,6 +264,14 @@
         points: 5
       - id: RMCZippo
         points: 5
+    - name: Edibles
+      entries:
+      - id: WeaponCroissant # croissant
+        points: 5
+      - id: WeaponBaguette # bageutte
+        points: 5
+      - id: FoodBreadGarlicSlice # where is the kebab?
+        points: 5
     - name: Drinkables
       entries:
       - id: RMCDrinkAlcoholPurpleWine
@@ -275,12 +297,12 @@
       - id: RMCHollowCane
         name: hollow cane
         points: 10
-    - name: Weapons & Ammo
+    - name: Weapons & Ammo # ICSC = Blade runner? French? Arabic? I dunno think of something later.
       entries:
       - id: AU14WeaponRevolverM2019
-        points: 30
+        points: 20
       - id: RMCSpeedLoader357
-        points: 15
+        points: 10
       - id: RMCSawtoothDaggerB
         points: 5
     - name: Radio keys
@@ -302,10 +324,9 @@
     sections:
     - name: Incentives
       entries:
-      - id: RMCSpaceCash1000 # CCA IS RICH, UA DOLLARS GETCHO GOOFY ASS OUT
-        amount: 2
-        name: $2000 USD, unmarked bills
-        points: 20
+      - id: RMCSpaceCash1000
+        name: $1000 USD, unmarked bills
+        points: 10 # CCA IS RICH, UA DOLLARS GETCHO GOOFY ASS OUT
     - name: Smokables
       entries:
       - id: RMCCigarettePackLuckySloths
@@ -318,6 +339,14 @@
         points: 5
       - id: RMCZippoGold
         points: 10
+    - name: Edibles
+      entries:
+      - id: CMMRE # PLACEHOLDER
+        points: 5
+      - id: AU14MRETWERMC # PLACEHOLDER
+        points: 5
+      - id: AU14MREUPP # PLACEHOLDER
+        points: 5
     - name: Drinkables
       entries:
       - id: RMCDrinkAlcoholWhiskey
@@ -343,7 +372,7 @@
       - id: RMCHollowCane
         name: hollow cane
         points: 10
-    - name: Weapons & Ammo
+    - name: Weapons & Ammo # CCA military industrial complex is only just getting started. please send new guns
       entries:
       - id: RMCSawtoothDaggerB
         points: 5

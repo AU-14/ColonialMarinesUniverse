@@ -14,6 +14,7 @@
 
 - type: thirdParty
   id: UPPGROM
+  announceAsSurvivors: true
   partyspawn: UPPGROMSpawn
   blacklistedgamemodes:
     - insurgency
@@ -43,6 +44,7 @@
 
 - type: thirdParty
   id: UPPGROMAlt
+  announceAsSurvivors: true
   partyspawn: UPPGROMSpawnAlt
   blacklistedgamemodes:
     - insurgency
@@ -72,6 +74,7 @@
 
 - type: thirdParty
   id: UPPGROMAlt2
+  announceAsSurvivors: true
   partyspawn: UPPGROMSpawnAlt2
   blacklistedgamemodes:
     - insurgency

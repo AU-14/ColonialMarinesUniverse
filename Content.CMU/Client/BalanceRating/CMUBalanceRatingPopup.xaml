@@ -1,0 +1,54 @@
+<Control
+    xmlns="https://spacestation14.io"
+    MinWidth="390"
+    MaxWidth="470"
+    RectClipContent="True">
+    <PanelContainer StyleClasses="CrtPanel" />
+    <BoxContainer Margin="10 8" Orientation="Vertical" SeparationOverride="6">
+        <Label Text="{Loc 'cmu-balance-rating-title'}"
+               StyleClasses="CrtHeading" />
+        <RichTextLabel Name="QuestionLabel"
+                       StyleClasses="CrtRichText"
+                       MaxWidth="450" />
+        <BoxContainer Orientation="Horizontal"
+                      SeparationOverride="8"
+                      HorizontalExpand="True">
+            <TextureRect Name="TargetIcon"
+                         SetSize="48 48"
+                         Stretch="KeepAspectCentered"
+                         VerticalAlignment="Center" />
+            <RichTextLabel Name="TargetLabel"
+                           StyleClasses="CrtRichText"
+                           MaxWidth="390"
+                           VerticalAlignment="Center" />
+        </BoxContainer>
+
+        <BoxContainer Orientation="Horizontal"
+                      HorizontalExpand="True"
+                      SeparationOverride="6">
+            <Label Name="LowEndpointLabel"
+                   MinWidth="70"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Center"
+                   StyleClasses="CrtDimText" />
+            <BoxContainer Orientation="Horizontal"
+                          HorizontalExpand="True"
+                          SeparationOverride="4">
+                <Button Name="Rating1Button" Text="1" MinSize="38 32" HorizontalExpand="True" StyleClasses="CrtButton" />
+                <Button Name="Rating2Button" Text="2" MinSize="38 32" HorizontalExpand="True" StyleClasses="CrtButton" />
+                <Button Name="Rating3Button" Text="3" MinSize="38 32" HorizontalExpand="True" StyleClasses="CrtButton" />
+                <Button Name="Rating4Button" Text="4" MinSize="38 32" HorizontalExpand="True" StyleClasses="CrtButton" />
+                <Button Name="Rating5Button" Text="5" MinSize="38 32" HorizontalExpand="True" StyleClasses="CrtButton" />
+            </BoxContainer>
+            <Label Name="HighEndpointLabel"
+                   MinWidth="70"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   StyleClasses="CrtDimText" />
+        </BoxContainer>
+
+        <Label Name="TimeLeftLabel"
+               HorizontalAlignment="Right"
+               StyleClasses="CrtDimText" />
+    </BoxContainer>
+</Control>

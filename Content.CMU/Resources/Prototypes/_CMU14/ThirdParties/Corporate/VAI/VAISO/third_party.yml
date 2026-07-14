@@ -13,6 +13,7 @@
 
 - type: thirdParty
   id: VAISO
+  announceAsSurvivors: true
   partyspawn: VAISOSpawn
   blacklistedgamemodes:
     - insurgency

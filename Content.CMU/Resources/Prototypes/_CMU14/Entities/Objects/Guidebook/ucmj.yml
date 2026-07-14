@@ -11,7 +11,7 @@
   - AU14UCMJArrestingProcedure
   - AU14UCMJCriminalCode
   - AU14UCMJDefinitionsandGlossary
-  - AU14UCMJWICH
+  - AU14UCMJGENCON
 
 - type: guideEntry
   parent: RMC
@@ -22,10 +22,10 @@
 
 - type: guideEntry
   parent: RMC
-  id: AU14UCMJWICH
-  name: Warfare Interstellar Charter of Humanity (WICH)
+  id: AU14UCMJGENCON
+  name: The Geneva Conventions of 12th August 2106
   priority: 0
-  text: "/ServerInfo/Guidebook/_AU14/UCMJ/Protectionacts/WarfareInterstellarCharterofHumanity.xml"
+  text: "/ServerInfo/Guidebook/_AU14/UCMJ/Protectionacts/TheGenevaConventions.xml"
 
 - type: guideEntry
   parent: RMC

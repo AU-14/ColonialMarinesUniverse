@@ -123,3 +123,59 @@
     sprite: _AU14/Clothing/US_Army/Hats/cavalry.rsi
   - type: Clothing
     sprite: _AU14/Clothing/US_Army/Hats/cavalry.rsi
+
+# Camo system (ItemCamouflage) conforming variants
+# No Snow/Classic/Urban sprites exist yet - all fall back to the Jungle sprite until dedicated art is made.
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14CamoPatrolCap
+  name: Patrol Cap
+  description: A simple patrol cap.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/cap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/cap.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _AU14/Clothing/JungleHats/cap.rsi
+      Desert: _AU14/Clothing/DesertHats/cap.rsi
+      Snow: _AU14/Clothing/JungleHats/cap.rsi
+      Classic: _AU14/Clothing/JungleHats/cap.rsi
+      Urban: _AU14/Clothing/JungleHats/cap.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14CamoFlapCap
+  name: Patrol Flap-Cap
+  description: A simple patrol cap with a sun flap.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/flapcap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/flapcap.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _AU14/Clothing/JungleHats/flapcap.rsi
+      Desert: _AU14/Clothing/DesertHats/flapcap.rsi
+      Snow: _AU14/Clothing/JungleHats/flapcap.rsi
+      Classic: _AU14/Clothing/JungleHats/flapcap.rsi
+      Urban: _AU14/Clothing/JungleHats/flapcap.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14CamoBoonieHat
+  name: Boonie Hat
+  description: A brimmed hat to protect your face from the sun.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/booniehat.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/booniehat.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _AU14/Clothing/JungleHats/booniehat.rsi
+      Desert: _AU14/Clothing/DesertHats/booniehat.rsi
+      Snow: _AU14/Clothing/JungleHats/booniehat.rsi
+      Classic: _AU14/Clothing/JungleHats/booniehat.rsi
+      Urban: _AU14/Clothing/JungleHats/booniehat.rsi

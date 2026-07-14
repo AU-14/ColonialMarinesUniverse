@@ -11,6 +11,7 @@
 
 - type: thirdParty
   id: NSPAInvestigationParty
+  announceAsSurvivors: true
   partyspawn: NSPAInvestigationPartySpawn
   entrymethod: shuttle
   dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_tsepa_shuttle.yml
@@ -31,6 +32,7 @@
 
 - type: thirdParty
   id: NSPAInvestigationPartyArmored
+  announceAsSurvivors: true
   partyspawn: NSPAInvestigationPartySpawnArmored
   entrymethod: shuttle
   dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_tsepa_shuttle.yml
@@ -53,6 +55,7 @@
 
 - type: thirdParty
   id: NSPAInvestigationPartyAlt
+  announceAsSurvivors: true
   partyspawn: NSPAInvestigationPartySpawnAlt
   entrymethod: shuttle
   dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_tsepa_shuttle.yml

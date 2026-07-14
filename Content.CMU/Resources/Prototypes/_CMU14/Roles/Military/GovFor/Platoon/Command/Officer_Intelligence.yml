@@ -107,7 +107,6 @@
   equipment:
     id: AU14IDCardGOVFOROfficerIntel
     ears: AU14HeadsetGovforCommand
-    pocket1: AU14StampIO
   inhand:
     - AU14KitJOIntelligenceOfficer
 
@@ -116,7 +115,6 @@
   equipment:
     id: AU14IDCardOPFOROfficerIntel
     ears: AU14HeadsetOpforCommand
-    pocket1: AU14StampIO
   inhand:
     - AU14KitJOIntelligenceOfficer
 

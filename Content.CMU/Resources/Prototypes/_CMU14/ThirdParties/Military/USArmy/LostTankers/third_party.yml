@@ -11,6 +11,7 @@
 
 - type: thirdParty
   id: USArmyTank
+  announceAsSurvivors: true
   partyspawn: USArmyTankSpawn
   entrymethod: ground
   weight: 20
