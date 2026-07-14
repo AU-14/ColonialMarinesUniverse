@@ -27,6 +27,10 @@
         points: 5
       - id: RMCZippoGold
         points: 10
+    - name: Edibles
+      entries:
+      - id: CMMRE
+        points: 5
     - name: Drinkables
       entries:
       - id: RMCDrinkAlcoholWhiskey
@@ -106,6 +110,10 @@
         points: 5
       - id: RMCZippoGold
         points: 10
+    - name: Edibles
+      entries:
+      - id: AU14MRETWERMC
+        points: 5
     - name: Drinkables
       entries:
       - id: RMCDrinkAlcoholSake
@@ -176,6 +184,10 @@
       - id: RMCCigarCase
         points: 5
       - id: RMCZippo
+        points: 5
+    - name: Edibles
+      entries:
+      - id: AU14MREUPP
         points: 5
     - name: Drinkables
       entries:
@@ -252,6 +264,14 @@
         points: 5
       - id: RMCZippo
         points: 5
+    - name: Edibles
+      entries:
+      - id: WeaponCroissant # croissant
+        points: 5
+      - id: WeaponBaguette # bageutte
+        points: 5
+      - id: FoodBreadGarlicSlice # where is the kebab?
+        points: 5
     - name: Drinkables
       entries:
       - id: RMCDrinkAlcoholPurpleWine
@@ -319,6 +339,14 @@
         points: 5
       - id: RMCZippoGold
         points: 10
+    - name: Edibles
+      entries:
+      - id: CMMRE # PLACEHOLDER
+        points: 5
+      - id: AU14MREUTWE # PLACEHOLDER
+        points: 5
+      - id: AU14MREUPP # PLACEHOLDER
+        points: 5
     - name: Drinkables
       entries:
       - id: RMCDrinkAlcoholWhiskey
