@@ -1093,6 +1093,10 @@
         name: plasteel x50
         points: 8
         recommended: true
+      - id: AU14HescoKit
+        name: HESCO barricade kit
+        points: 4
+        recommended: true
       - id: CMSandbagEmpty50
         name: sandbags x50
         points: 4
@@ -1103,17 +1107,15 @@
       entries:
       - id: CMFoldingBarricadesMB6x3
         name: MB-6 folding barricade x3
-        points: 4
-      - id: MaintenanceJack
         points: 2
-      - id: RMCShovel
+      - id: AU14MaintenanceJack
         points: 2
       - id: RMCES11MobileFuelCanister
         points: 4
       - id: RMCMagazineSMGNailgun
         points: 2
       - id: RMCEngineerKit
-        points: 4
+        points: 2
       - id: DoorElectronics
         points: 2
     - name: Power Generation
@@ -1141,12 +1143,16 @@
     - name: Explosives
       entries:
       - id: RMCExplosivePlastic
-        points: 5
-      - id: RMCExplosiveBreachingCharge
-        points: 8
+        points: 4
+      - id: AU14Bangalore
+        points: 6
         recommended: true
+      - id: RMCExplosiveBreachingCharge
+        points: 6
       - id: RMCPacketGrenadeMetalFoamFilled
         points: 8
+      - id: RMCRocketM5510Brute
+        points: 4
     - name: Utilities
       entries:
       - id: RMCSynthResetKey
@@ -1156,7 +1162,7 @@
   parent: CMVendorBundleRiflemanApparel
   id: AU14VendorBundleCombatTechnicianEssentials
   name: essential engineer set
-  description: Contains 50 metal, 50 plasteel, 50 sandbags, a high-capacity power cell, a light replacer, a deployable ladder, a welding visor, welding goggles, and a nailgun.
+  description: Contains 50 metal, 50 plasteel, 50 sandbags, a shovel, a high-capacity power cell, a light replacer, a deployable ladder, a welding visor, welding goggles, and a nailgun.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Tools/wrench.rsi
@@ -1177,6 +1183,7 @@
     - RMCVisorWelding
     - RMCWeldingGoggles
     - RMCSentryLaptop
+    - RMCShovel
 
 - type: entity
   parent: CMVendorBundleRiflemanApparel
@@ -1507,6 +1514,28 @@
       - id: AU14BackpackRTOPackJungle
         amount: 2
       - id: AU14BackpackRTOPackDesert
+        amount: 1
+    - name: Materials
+      entries:
+      - id: CMSheetMetal
+        amount: 4
+      - id: CMSheetPlasteel50
+        amount: 4
+      - id: CMSandbagEmpty50
+        amount: 8
+      - id: AU14HescoKit
+        amount: 30
+      - id: RMCSheetPlastic
+        amount: 4
+      - id: RMCSheetAluminum
+        amount: 4
+      - id: CMSheetGlass
+        amount: 5
+      - id: RMCSheetCardboard
+        amount: 5
+      - id: CMSheetPhoron
+        amount: 1
+      - id: SheetUranium
         amount: 1
     - name: Tents
       entries:
