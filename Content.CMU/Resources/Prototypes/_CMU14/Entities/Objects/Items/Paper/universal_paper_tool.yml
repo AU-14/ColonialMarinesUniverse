@@ -1,0 +1,60 @@
+- type: entity
+  parent: BaseItem
+  id: CMUUniversalPaperTool
+  name: Universal Paper Tool
+  description: A compact paper template tool capable of printing configured paper forms.
+  components:
+  - type: Sprite
+    sprite: Objects/Tools/hand_labeler.rsi
+    state: hand_labeler
+  - type: Item
+    size: Small
+    sprite: Objects/Tools/hand_labeler.rsi
+  - type: ActivatableUI
+    key: enum.UniversalPaperToolUiKey.Key
+    requiresComplex: false
+  - type: UserInterface
+    interfaces:
+      enum.UniversalPaperToolUiKey.Key:
+        type: UniversalPaperToolBui
+  - type: ItemSlots
+    slots:
+      paper_slot:
+        name: cmu-universal-paper-tool-paper-slot-name
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mar40_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mar40_unload.ogg
+        insertOnInteract: true
+        ejectOnInteract: false
+        whitelist:
+          tags:
+          - Paper
+        insertSuccessPopup: cmu-universal-paper-tool-paper-inserted
+        whitelistFailPopup: cmu-universal-paper-tool-paper-invalid
+  - type: UniversalPaperTool
+    printSound:
+      path: /Audio/Machines/circuitprinter.ogg
+    templates:
+    - prototype: CMPaper
+      name: blank paper
+      description: A plain editable Paper sheet.
+    - prototype: CMUPaperTemplateBlue
+      name: blue lined paper
+      description: A plain editable Paper sheet.
+    - prototype: CMUPaperMedicalSlip
+      name: medication slip
+      description: A plain editable Paper sheet.
+    - prototype: CMUPaperBlack
+      name: black paper
+      description: A plain editable Paper sheet.
+    - prototype: CMPaper
+      name: blank paper
+      description: A plain editable Paper sheet.
+    - prototype: CMUPaperTemplateBlue
+      name: blue lined paper
+      description: A plain editable Paper sheet.
+    - prototype: CMUPaperMedicalSlip
+      name: medication slip
+      description: A plain editable Paper sheet.
+    - prototype: CMUPaperBlack
+      name: black paper
+      description: A plain editable Paper sheet.

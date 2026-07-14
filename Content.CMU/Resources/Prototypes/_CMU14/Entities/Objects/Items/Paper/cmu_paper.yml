@@ -1,0 +1,122 @@
+- type: entity
+  id: CMUPaperMedicalSlip
+  parent: CMPaper
+  name: medication slip
+  suffix: Purple
+  description: A standardized prescription slip produced by the International Committee of the Red Cross. Used by Medical personnel to authorize, track, and strictly ration the distribution of controlled pharmaceuticals.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+      color: "#dbbce3"
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#dbbce3"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: Item
+    size: Tiny
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    heldPrefix: paper_slip
+  - type: Paper
+    content: |
+      [color=#1a1a1a][bold]MEDICATION AUTHORIZATION[/bold]
+      [bold]Patient Name:[/bold] [form]
+      [bold]Medication:[/bold] [form]
+      [bold]Dosage/Amount:[/bold] [form]
+      [bold]Notes / Instructions:[/bold]
+      [form]
+      [bold]Attending Physician:[/bold]
+      [signature][/color]
+  - type: PaperVisuals
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/MedicalSlip.png" #"/Textures/Interface/CMUPaper/MedicalSlip.png"
+    backgroundModulate: "#dbbce3"
+    maxWritableArea: 300, 300
+    contentMargin: 20, 10, 10, 25
+
+- type: entity
+  parent: CMPaper
+  id: CMUPaperTemplateBlue
+  name: blue lined paper
+  description: A configurable paper template printed by the Universal Paper Tool.
+  components:
+  - type: PaperVisuals
+    backgroundImagePath: "/Textures/Interface/Paper/paper_background_default.svg.96dpi.png"
+    contentImagePath: "/Textures/Interface/Paper/paper_content_lined.svg.96dpi.png"
+    backgroundModulate: "#bcd7ff"
+    contentImageModulate: "#bcd7ff"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    contentMargin: 16.0, 16.0, 16.0, 16.0
+
+- type: entity
+  parent: CMPaper
+  id: CMUPaperBlack
+  name: black paper
+  description: A black paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+      color: "#121212"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#121212"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundModulate: "#121212"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    fontAccentColor: "#ffffff"
+
+- type: entity
+  parent: CMPaper
+  id: CMUPaperICSC
+  name: black paper ICSC
+  description: A black paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+      color: "#ffe3c2"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#ffe3c2"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/ICSCHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundModulate: "#ffe3c2"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    fontAccentColor: "#ffffff"
+
+- type: entity
+  parent: CMUPaperICSC
+  id: CMUPaperICSCAlt
+  name: Blue paper ICSC
+  description: A blue paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+      color: "#0349fc"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#0349fc"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#0349fc"
