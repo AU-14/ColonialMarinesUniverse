@@ -49,6 +49,8 @@
       amount: 1
     - id: BerrySeeds
       amount: 1
+    - id: CarrotSeeds
+      amount: 1
     - id: ChiliSeeds
       amount: 1
     - id: CornSeeds
@@ -61,6 +63,8 @@
       amount: 1
     - id: AppleSeeds
       amount: 1
+    - id: LingzhiSeeds
+      amount: 1
     - id: PoppySeeds
       amount: 1
     - id: SugarcaneSeeds
@@ -68,6 +72,12 @@
     - id: WatermelonSeeds
       amount: 1
     - id: LimeSeeds
+      amount: 1
+    - id: RMCMangoSeeds
+      amount: 1
+    - id: SunflowerSeeds
+      amount: 1
+    - id: FlyAmanitaSeeds
       amount: 1
     - id: LemonSeeds
       amount: 1
