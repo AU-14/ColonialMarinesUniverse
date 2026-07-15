@@ -61,11 +61,11 @@
   id: AU14SOPVehicles
   name: Vehicles
   priority: 1
-  text: "/ServerInfo/Guidebook/_AU14/SOP/AU14SOPVehicles"
+  text: "/ServerInfo/Guidebook/_AU14/SOP/AU14SOPVehicles.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14SOPDeployment
   name: Deployment
   priority: 1
-  text: "/ServerInfo/Guidebook/_AU14/SOP/AU14SOPDeployment"
+  text: "/ServerInfo/Guidebook/_AU14/SOP/AU14SOPDeployment.xml"
