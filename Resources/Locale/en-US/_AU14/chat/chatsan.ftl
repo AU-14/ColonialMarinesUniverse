@@ -95,9 +95,6 @@ cm-chatsan-replacement-eorg-xeno = sister harm
 cm-chatsan-word-sniper = sniper
 cm-chatsan-replacement-sniper = long spitter
 
-cm-chatsan-word-m34 = m34
-cm-chatsan-word-replacement-m34 = fire spitter
-
 cm-chatsan-word-flare = flare
 cm-chatsan-replacement-flare = glow stick
 
@@ -119,71 +116,11 @@ cm-chatsan-replacement-human = tall host
 cm-chatsan-word-humans = humans
 cm-chatsan-replacement-humans = tall hosts
 
-cm-chatsan-word-lizard = lizard
-cm-chatsan-replacement-lizard = scaled host
-
-cm-chatsan-word-lizards = lizards
-cm-chatsan-replacement-lizards = scaled hosts
-
-cm-chatsan-word-reptilian = reptilian
-cm-chatsan-replacement-reptilian = scaled host
-
-cm-chatsan-word-reptilians = reptilians
-cm-chatsan-replacement-reptilians = scaled hosts
-
-cm-chatsan-word-dwarf = dwarf
-cm-chatsan-replacement-dwarf = short host
-
-cm-chatsan-word-dwarves = dwarves
-cm-chatsan-replacement-dwarves = short hosts
-
-cm-chatsan-word-slime = slime
-cm-chatsan-replacement-slime = slime host
-
-cm-chatsan-word-slimes = slimes
-cm-chatsan-replacement-slimes = slime hosts
-
-cm-chatsan-word-diona = diona
-cm-chatsan-replacement-diona = plant host
-
-cm-chatsan-word-dionas = dionas
-cm-chatsan-replacement-dionas = plant hosts
-
-cm-chatsan-word-moth = moth
-cm-chatsan-replacement-moth = winged host
-
-cm-chatsan-word-moths = moths
-cm-chatsan-replacement-moths = winged hosts
-
-cm-chatsan-word-mothes = mothes
-cm-chatsan-replacement-mothes = winged hosts
-
-cm-chatsan-word-spider = spider
-cm-chatsan-replacement-spider = webspitter
-
-cm-chatsan-word-spiders = spiders
-cm-chatsan-replacement-spiders = webspitters
-
-cm-chatsan-word-arachnid = arachnid
-cm-chatsan-replacement-arachnid = webspitting host
-
-cm-chatsan-word-arachnids = arachnids
-cm-chatsan-replacement-arachnids = webspitting hosts
-
 cm-chatsan-word-dropship = dropship
 cm-chatsan-replacement-dropship = metal bird
 
 cm-chatsan-word-dropships = dropships
 cm-chatsan-replacement-dropships = metal birds
-
-cm-chatsan-word-alamo = alamo
-cm-chatsan-replacement-alamo = metal bird
-
-cm-chatsan-word-normandy = normandy
-cm-chatsan-replacement-normandy = metal bird
-
-cm-chatsan-word-almayer = almayer
-cm-chatsan-replacement-almayer = metal hive
 
 cm-chatsan-word-ob = ob
 cm-chatsan-replacement-ob = skyfire
@@ -299,12 +236,6 @@ cm-chatsan-replacement-lz = metal bird perch
 cm-chatsan-word-shoot = shoot
 cm-chatsan-replacement-shoot = spit
 
-cm-chatsan-word-felinid = felinid
-cm-chatsan-replacement-felinid = feline host
-
-cm-chatsan-word-felinids = felinids
-cm-chatsan-replacement-felinids = feline hosts
-
 cm-chatsan-word-marine = marine
 cm-chatsan-replacement-marine = tall host
 
@@ -338,67 +269,6 @@ cm-chatsan-replacement-bullets = spits
 cm-chatsan-word-ammo = ammo
 cm-chatsan-replacement-ammo = spits
 
-cm-chatsan-word-vulpkanin = vulpkanin
-cm-chatsan-replacement-vulpkanin = canine host
-
-cm-chatsan-word-vulpkanins = vulpkanins
-cm-chatsan-replacement-vulpkanins = canine hosts
-
-cm-chatsan-word-vulp = vulp
-cm-chatsan-replacement-vulp = canine host
-
-cm-chatsan-word-vulps = vulps
-cm-chatsan-replacement-vulps = canine hosts
-
-cm-chatsan-word-avali = avali
-cm-chatsan-replacement-avali = four-eared host
-
-cm-chatsan-word-avalis = avalis
-cm-chatsan-replacement-avalis = four-eared hosts
-
-cm-chatsan-word-rodentia = rodentia
-cm-chatsan-replacement-rodentia = squeaking host
-
-cm-chatsan-word-rodentias = rodentias
-cm-chatsan-replacement-rodentias = squeaking hosts
-
-cm-chatsan-word-rodentiae = rodentiae
-cm-chatsan-replacement-rodentiae = squeaking hosts
-
-cm-chatsan-word-feroxi = feroxi
-cm-chatsan-replacement-feroxi = aquatic host
-
-cm-chatsan-word-feroxis = feroxis
-cm-chatsan-replacement-feroxis = aquatic hosts
-
-cm-chatsan-word-shark = shark
-cm-chatsan-replacement-shark = aquatic host
-
-cm-chatsan-word-sharks = sharks
-cm-chatsan-replacement-sharks = aquatic hosts
-
-cm-chatsan-word-dog = dog
-cm-chatsan-word-corgi = corgi
-cm-chatsan-word-mrwiggles = mr.wiggles
-cm-chatsan-word-mr-wiggles = mr wiggles
-cm-chatsan-word-mister-wiggles = mister wiggles
-cm-chatsan-word-puppy = puppy
-cm-chatsan-replacement-corgi = canine fuzzy
-
-cm-chatsan-word-dogs = dogs
-cm-chatsan-word-corgies = corgies
-cm-chatsan-word-puppies = puppies
-cm-chatsan-replacement-dogs = canines
-
-cm-chatsan-word-cat = cat
-cm-chatsan-word-kitty = kitty
-cm-chatsan-word-kitten = kitten
-cm-chatsan-replacement-cat = feline
-
-cm-chatsan-word-cats = cats
-cm-chatsan-word-kitties = kitties
-cm-chatsan-word-kittens = kittens
-cm-chatsan-replacement-cats = felines
 
 cm-chatsan-word-fish = fish
 cm-chatsan-word-carp = carp
@@ -558,20 +428,8 @@ cm-chatsan-replacement-bro = sister
 cm-chatsan-word-bruh = bruh
 cm-chatsan-replacement-bruh = sister
 
-cm-chatsan-word-bvro = bvro
-cm-chatsan-replacement-bvro = sister
-
-cm-chatsan-word-xro = xro
-cm-chatsan-replacement-xro = sister
-
-cm-chatsan-word-naur = naur
-cm-chatsan-replacement-naur = no
-
 cm-chatsan-word-dancer = d*ncer
 cm-chatsan-replacement-dancer = dancer
-
-cm-chatsan-word-larba = larba
-cm-chatsan-replacement-larba = larva
 
 cm-chatsan-word-toob = toob
 cm-chatsan-replacement-toob = tube
@@ -584,15 +442,6 @@ cm-chatsan-replacement-cooked = doomed
 
 cm-chatsan-word-xooked = xooked
 cm-chatsan-replacement-xooked = doomed
-
-cm-chatsan-word-xibidi = xibidi
-cm-chatsan-replacement-xibidi = tall seat
-
-cm-chatsan-word-mcxonald = mcxonald
-cm-chatsan-replacement-mcxonald = tall garden
-
-cm-chatsan-word-mcxonalds = mcxonalds
-cm-chatsan-replacement-mcxonalds = tall garden
 
 cm-chatsan-word-slop = slop
 cm-chatsan-replacement-slop = hell
@@ -621,23 +470,11 @@ cm-chatsan-replacement-froot = fruit
 cm-chatsan-word-yung = yung
 cm-chatsan-replacement-yung = young
 
-cm-chatsan-word-croosh = croosh
-cm-chatsan-replacement-croosh = crush
-
-cm-chatsan-word-croosher = croosher
-cm-chatsan-replacement-croosher = crusher
-
 cm-chatsan-word-bald = bald
 cm-chatsan-replacement-bald = crestless
 
-cm-chatsan-word-woyer = woyer
-cm-chatsan-replacement-woyer = warrior
-
 cm-chatsan-word-sigma = sigma
 cm-chatsan-replacement-sigma = prime
-
-cm-chatsan-word-xigma = xigma
-cm-chatsan-replacement-xigma = prime
 
 cm-chatsan-word-para = para
 cm-chatsan-word-parasite = parasite
@@ -757,12 +594,6 @@ cm-chatsan-replacement-flashlight = glow tube
 cm-chatsan-word-flashlights = flashlights
 cm-chatsan-replacement-flashlights = glow tubes
 
-cm-chatsan-word-window = window
-cm-chatsan-replacement-window = tall membrane
-
-cm-chatsan-word-windows = windows
-cm-chatsan-replacement-windows = tall membranes
-
 cm-chatsan-word-light-bulb = light bulb
 cm-chatsan-word-lightbulb = lightbulb
 cm-chatsan-replacement-light-bulb = glow orb
@@ -794,12 +625,6 @@ cm-chatsan-replacement-papers = message sheets
 
 cm-chatsan-word-folders = folders
 cm-chatsan-replacement-folders = sheet holders
-
-cm-chatsan-word-zerker = zerker
-cm-chatsan-word-replacement-zerker = berserker
-
-cm-chatsan-word-zerkers = zerkers
-cm-chatsan-word-replacement-zerkers = berserkers
 
 cm-chatsan-word-rav = rav
 cm-chatsan-word-replacement-rav = ravager
@@ -842,10 +667,6 @@ cm-chatsan-word-replacement-batoned = daze spitted
 
 cm-chatsan-word-batonged = batonged
 cm-chatsan-word-replacement-batonged = daze spitted
-
-cm-chatsan-word-xover = xover
-cm-chatsan-word-xenover = xenover
-cm-chatsan-word-replacement-xover = over
 
 cm-chatsan-word-m2c = m2c
 cm-chatsan-word-replacement-m2c = heavy mounted spitter

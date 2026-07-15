@@ -40,7 +40,6 @@
     cm-chatsan-word-admins-xeno: cm-chatsan-replacement-admins-xeno
     cm-chatsan-word-eorg-xeno: cm-chatsan-replacement-eorg-xeno
     cm-chatsan-word-sniper: cm-chatsan-replacement-sniper
-    cm-chatsan-word-m34: cm-chatsan-replacement-m34
     cm-chatsan-word-flare: cm-chatsan-replacement-flare
     cm-chatsan-word-synth: cm-chatsan-replacement-synth
     cm-chatsan-word-synthetic: cm-chatsan-replacement-synthetic
@@ -48,28 +47,8 @@
     cm-chatsan-word-synthetics: cm-chatsan-replacement-synthetics
     cm-chatsan-word-human: cm-chatsan-replacement-human
     cm-chatsan-word-humans: cm-chatsan-replacement-humans
-    cm-chatsan-word-lizard: cm-chatsan-replacement-lizard
-    cm-chatsan-word-lizards: cm-chatsan-replacement-lizards
-    cm-chatsan-word-reptilian: cm-chatsan-replacement-reptilian
-    cm-chatsan-word-reptilians: cm-chatsan-replacement-reptilians
-    cm-chatsan-word-dwarf: cm-chatsan-replacement-dwarf
-    cm-chatsan-word-dwarves: cm-chatsan-replacement-dwarves
-    cm-chatsan-word-slime: cm-chatsan-replacement-slime
-    cm-chatsan-word-slimes: cm-chatsan-replacement-slimes
-    cm-chatsan-word-diona: cm-chatsan-replacement-diona
-    cm-chatsan-word-dionas: cm-chatsan-replacement-dionas
-    cm-chatsan-word-moth: cm-chatsan-replacement-moth
-    cm-chatsan-word-moths: cm-chatsan-replacement-moths
-    cm-chatsan-word-mothes: cm-chatsan-replacement-mothes
-    cm-chatsan-word-spider: cm-chatsan-replacement-spider
-    cm-chatsan-word-spiders: cm-chatsan-replacement-spiders
-    cm-chatsan-word-arachnid: cm-chatsan-replacement-arachnid
-    cm-chatsan-word-arachnids: cm-chatsan-replacement-arachnids
     cm-chatsan-word-dropship: cm-chatsan-replacement-dropship
     cm-chatsan-word-dropships: cm-chatsan-replacement-dropships
-    cm-chatsan-word-alamo: cm-chatsan-replacement-alamo
-    cm-chatsan-word-normandy: cm-chatsan-replacement-normandy
-    cm-chatsan-word-almayer: cm-chatsan-replacement-almayer
     cm-chatsan-word-ob: cm-chatsan-replacement-ob
     cm-chatsan-word-orbital: cm-chatsan-replacement-orbital
     cm-chatsan-word-orbital-bomb: cm-chatsan-replacement-orbital-bomb
@@ -108,8 +87,6 @@
     rmc-chatsan-word-high-command: rmc-chatsan-replacement-high-command
     cm-chatsan-word-lz: cm-chatsan-replacement-lz
     cm-chatsan-word-shoot: cm-chatsan-replacement-shoot
-    cm-chatsan-word-felinid: cm-chatsan-replacement-felinid
-    cm-chatsan-word-felinids: cm-chatsan-replacement-felinids
     cm-chatsan-word-marine: cm-chatsan-replacement-marine
     cm-chatsan-word-marines: cm-chatsan-replacement-marines
     cm-chatsan-word-ship: cm-chatsan-replacement-ship
@@ -121,33 +98,6 @@
     cm-chatsan-word-bullet: cm-chatsan-replacement-bullet
     cm-chatsan-word-bullets: cm-chatsan-replacement-bullets
     cm-chatsan-word-ammo: cm-chatsan-replacement-ammo
-    cm-chatsan-word-vulpkanin: cm-chatsan-replacement-vulpkanin
-    cm-chatsan-word-vulpkanins: cm-chatsan-replacement-vulpkanins
-    cm-chatsan-word-vulp: cm-chatsan-replacement-vulp
-    cm-chatsan-word-vulps: cm-chatsan-replacement-vulps
-    cm-chatsan-word-avali: cm-chatsan-replacement-avali
-    cm-chatsan-word-avalis: cm-chatsan-replacement-avalis
-    cm-chatsan-word-rodentia: cm-chatsan-replacement-rodentia
-    cm-chatsan-word-rodentias: cm-chatsan-replacement-rodentias
-    cm-chatsan-word-rodentiae: cm-chatsan-replacement-rodentiae
-    cm-chatsan-word-feroxi: cm-chatsan-replacement-feroxi
-    cm-chatsan-word-feroxis: cm-chatsan-replacement-feroxi
-    cm-chatsan-word-shark: cm-chatsan-replacement-shark
-    cm-chatsan-word-sharks: cm-chatsan-replacement-sharks
-    cm-chatsan-word-corgi: cm-chatsan-replacement-corgi
-    cm-chatsan-word-mrwiggles: cm-chatsan-replacement-corgi
-    cm-chatsan-word-mr-wiggles: cm-chatsan-replacement-corgi
-    cm-chatsan-word-mister-wiggles: cm-chatsan-replacement-corgi
-    cm-chatsan-word-puppy: cm-chatsan-replacement-corgi
-    cm-chatsan-word-dogs: cm-chatsan-replacement-dogs
-    cm-chatsan-word-corgies: cm-chatsan-replacement-dogs
-    cm-chatsan-word-puppies: cm-chatsan-replacement-dogs
-    cm-chatsan-word-cat: cm-chatsan-replacement-cat
-    cm-chatsan-word-kitty: cm-chatsan-replacement-cat
-    cm-chatsan-word-kitten: cm-chatsan-replacement-cat
-    cm-chatsan-word-cats: cm-chatsan-replacement-cats
-    cm-chatsan-word-kitties: cm-chatsan-replacement-cats
-    cm-chatsan-word-kittens: cm-chatsan-replacement-cats
     cm-chatsan-word-fish: cm-chatsan-replacement-fish
     cm-chatsan-word-carp: cm-chatsan-replacement-fish
     cm-chatsan-word-rat: cm-chatsan-replacement-rat
@@ -210,20 +160,11 @@
     cm-chatsan-word-survivors: cm-chatsan-replacement-survivors
     cm-chatsan-word-surv: cm-chatsan-replacement-surv
     cm-chatsan-word-survs: cm-chatsan-replacement-survs
-    cm-chatsan-word-bro: cm-chatsan-replacement-bro
-    cm-chatsan-word-bruh: cm-chatsan-replacement-bruh
-    cm-chatsan-word-bvro: cm-chatsan-replacement-bvro
-    cm-chatsan-word-xro: cm-chatsan-replacement-xro
-    cm-chatsan-word-naur: cm-chatsan-replacement-naur
     cm-chatsan-word-dancer: cm-chatsan-replacement-dancer
-    cm-chatsan-word-larba: cm-chatsan-replacement-larba
     cm-chatsan-word-toob: cm-chatsan-replacement-toob
     cm-chatsan-word-toober: cm-chatsan-replacement-toober
     cm-chatsan-word-cooked: cm-chatsan-replacement-cooked
     cm-chatsan-word-xooked: cm-chatsan-replacement-xooked
-    cm-chatsan-word-xibidi: cm-chatsan-replacement-xibidi
-    cm-chatsan-word-mcxonald: cm-chatsan-replacement-mcxonald
-    cm-chatsan-word-mcxonalds: cm-chatsan-replacement-mcxonalds
     cm-chatsan-word-slop: cm-chatsan-replacement-slop
     cm-chatsan-word-spam: cm-chatsan-replacement-spam
     cm-chatsan-word-god: cm-chatsan-replacement-god
@@ -234,12 +175,8 @@
     cm-chatsan-word-jesus-christ: cm-chatsan-replacement-christ
     cm-chatsan-word-froot: cm-chatsan-replacement-froot
     cm-chatsan-word-yung: cm-chatsan-replacement-yung
-    cm-chatsan-word-croosh: cm-chatsan-replacement-croosh
-    cm-chatsan-word-croosher: cm-chatsan-replacement-croosher
     cm-chatsan-word-bald: cm-chatsan-replacement-bald
-    cm-chatsan-word-woyer: cm-chatsan-replacement-woyer
     cm-chatsan-word-sigma: cm-chatsan-replacement-sigma
-    cm-chatsan-word-xigma: cm-chatsan-replacement-xigma
     cm-chatsan-word-para: cm-chatsan-replacement-parasite
     cm-chatsan-word-parasite: cm-chatsan-replacement-parasite
     cm-chatsan-word-paras: cm-chatsan-replacement-parasites
@@ -290,8 +227,6 @@
     cm-chatsan-word-disc: cm-chatsan-replacement-disk
     cm-chatsan-word-flashlight: cm-chatsan-replacement-flashlight
     cm-chatsan-word-flashlights: cm-chatsan-replacement-flashlights
-    cm-chatsan-word-window: cm-chatsan-replacement-window
-    cm-chatsan-word-windows: cm-chatsan-replacement-windows
     cm-chatsan-word-light-bulb: cm-chatsan-replacement-light-bulb
     cm-chatsan-word-lightbulb: cm-chatsan-replacement-light-bulb
     cm-chatsan-word-light-bulbs: cm-chatsan-replacement-light-bulbs
@@ -304,8 +239,6 @@
     cm-chatsan-word-folder: cm-chatsan-replacement-folder
     cm-chatsan-word-papers: cm-chatsan-replacement-papers
     cm-chatsan-word-folders: cm-chatsan-replacement-folders
-    cm-chatsan-word-zerker: cm-chatsan-word-replacement-zerker
-    cm-chatsan-word-zerkers: cm-chatsan-word-replacement-zerkers
     cm-chatsan-word-rav: cm-chatsan-word-replacement-rav
     cm-chatsan-word-ravs: cm-chatsan-word-replacement-ravs
     cm-chatsan-word-prae: cm-chatsan-word-replacement-prae
@@ -320,8 +253,6 @@
     cm-chatsan-word-batongs: cm-chatsan-word-replacement-batongs
     cm-chatsan-word-batoned: cm-chatsan-word-replacement-batoned
     cm-chatsan-word-batonged: cm-chatsan-word-replacement-batonged
-    cm-chatsan-word-xover: cm-chatsan-word-replacement-xover
-    cm-chatsan-word-xenover: cm-chatsan-word-replacement-xover
     cm-chatsan-word-m2c: cm-chatsan-word-replacement-m2c
     cm-chatsan-word-m13: cm-chatsan-word-replacement-m13
     cm-chatsan-word-m63: cm-chatsan-word-replacement-m63
