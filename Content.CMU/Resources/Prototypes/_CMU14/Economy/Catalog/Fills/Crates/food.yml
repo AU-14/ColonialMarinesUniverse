@@ -22,7 +22,7 @@
 
 - type: entity
   parent: RMCCrateHydro
-  id: AU14CrateHydroponics
+  id: AU14CrateHydroponicsEquipment
   suffix: Filled
   components:
   - type: EntityStorage
@@ -45,6 +45,18 @@
       amount: 1
     - id: RMCToolMiniHoe
       amount: 1
+    - id: BoxMouthSwab
+      amount: 1
+
+- type: entity
+  parent: RMCCrateHydro
+  id: AU14CrateHydroSeeds
+  suffix: Filled
+  components:
+  - type: EntityStorage
+    capacity: 32
+  - type: StorageFill
+    contents:
     - id: BananaSeeds
       amount: 1
     - id: BerrySeeds
@@ -98,6 +110,4 @@
     - id: GarlicSeeds
       amount: 1
     - id: OnionRedSeeds
-      amount: 1
-    - id: BoxMouthSwab
       amount: 1

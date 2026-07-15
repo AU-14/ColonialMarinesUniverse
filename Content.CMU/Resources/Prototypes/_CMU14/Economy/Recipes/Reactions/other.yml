@@ -42,8 +42,6 @@
 # TODO: smoking reaction
 - type: reaction
   id: CMUFormaldehyde
-  products:
-    CMUFormaldehyde: 3
   reactants:
     RMCMethane:
       amount: 1
@@ -54,12 +52,12 @@
     RMCSilver:
       amount: 5
       catalyst: true
+  products:
+    CMUFormaldehyde: 3
 
 # TODO: ENDOTHERMIC
 - type: reaction
   id: CMUPhenolFormaldehyde
-  products:
-    CMUPhenolFormaldehyde: 1
   reactants:
     CMUFormaldehyde:
       amount: 2
@@ -68,3 +66,5 @@
     RMCMethane:
       amount: 5
       catalyst: true
+  products:
+    CMUPhenolFormaldehyde: 1

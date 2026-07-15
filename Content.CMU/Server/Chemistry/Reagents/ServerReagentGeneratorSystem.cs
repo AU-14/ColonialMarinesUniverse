@@ -761,7 +761,10 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
                 genName = empty;
             }
         }
-        data.ID = "TAU-" + ChemicalGenClassesList["TAU"].Count + "-" + genName;
+        if (ChemicalGenClassesList.ContainsKey("TAU"))
+            data.ID = "TAU-" + ChemicalGenClassesList["TAU"].Count + "-" + genName;
+        else
+            data.ID = "TAU-" + "ERROR" + "-" + genName;
         data.Name = genName;
     }
     #endregion
