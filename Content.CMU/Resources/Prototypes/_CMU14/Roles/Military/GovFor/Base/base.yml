@@ -7,3 +7,10 @@
   supervisors: au14-job-supervisors-govfor
   hidden: true          # abstract hides by default, but for children/factions to remain hidden
   setPreference: false  # all faction variants are hidden in the loadout menu
+  # UCMJ/SOP grooming standards: forces a regulation hairstyle, hair color, and eye color onto
+  # every GOVFOR job (see RegulationAppearanceComponent), overriding the player's civilian
+  # profile selection without changing the profile itself. Merges down via AlwaysPushInheritance,
+  # so it applies to every GOVFOR job without touching individual job files.
+  roundSideComponents:
+    Govfor:
+    - type: RegulationAppearance
