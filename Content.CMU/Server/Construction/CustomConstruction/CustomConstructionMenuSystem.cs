@@ -558,6 +558,13 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
         if (!_prototype.TryIndex<EntityPrototype>(msg.ProtoId, out var proto))
             return;
 
+        if (IsGeneratedCustomEntityId(proto.ID))
+        {
+            PopupTo(session, Loc.GetString("construction-menu-verb-invalid",
+                ("reason", "that is already a generated custom construction entity")), PopupType.MediumCaution);
+            return;
+        }
+
         var steps = msg.Steps ?? new();
         if (steps.Count == 0)
         {
@@ -601,6 +608,13 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
                 RetireEntryFile(FilePathForKey(msg.EntryKey));
 
             var yaml = BuildGeneratedYaml(proto, newKey, spawnlist, category, steps, deconstructSteps, msg.Health);
+            if (IsUnsafeGeneratedEntryYaml(yaml, out var reason))
+            {
+                Log.Error($"Refusing to write unsafe custom construction entry for {proto.ID} (key {newKey}): {reason}");
+                PopupTo(session, Loc.GetString("construction-menu-verb-invalid", ("reason", reason)), PopupType.MediumCaution);
+                return;
+            }
+
             File.WriteAllText(FilePathForKey(newKey), yaml, Encoding.UTF8);
             DbUpsert(DbKindEntries, $"{FilePrefix}{newKey}", yaml);
 
@@ -697,10 +711,57 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
 
     /// <summary>Prefix of the generated buildable child entity id (see <see cref="BuildGeneratedYaml"/>).</summary>
     private const string ChildEntityPrefix = "AU14CustomEntity_";
+    private const string MidEntityPrefix = "AU14CustomEntityMid_";
 
     /// <summary>An entry is uniquely identified by entity + spawnlist + category.</summary>
     private string MakeEntryKey(string entityId, string spawnlist, string category) =>
         $"{Sanitize(entityId)}__{Sanitize(spawnlist)}__{Sanitize(category)}";
+
+    private static bool IsGeneratedCustomEntityId(string id)
+    {
+        return id.StartsWith(ChildEntityPrefix, StringComparison.Ordinal) ||
+               id.StartsWith(MidEntityPrefix, StringComparison.Ordinal);
+    }
+
+    private static bool IsUnsafeGeneratedEntryYaml(string yaml, out string reason)
+    {
+        reason = string.Empty;
+
+        string? currentEntity = null;
+        foreach (var raw in yaml.Split('\n'))
+        {
+            var trimmed = raw.Trim();
+            if (trimmed.StartsWith(HeaderEntity, StringComparison.Ordinal))
+            {
+                var original = trimmed[HeaderEntity.Length..].Trim();
+                if (IsGeneratedCustomEntityId(original))
+                {
+                    reason = $"generated entries cannot target generated custom entity '{original}'";
+                    return true;
+                }
+
+                continue;
+            }
+
+            if (trimmed.StartsWith("id:", StringComparison.Ordinal))
+            {
+                currentEntity = trimmed["id:".Length..].Trim();
+                continue;
+            }
+
+            if (!trimmed.StartsWith("parent:", StringComparison.Ordinal))
+                continue;
+
+            var parent = trimmed["parent:".Length..].Trim();
+            if (!IsGeneratedCustomEntityId(parent))
+                continue;
+
+            reason = $"generated entity '{currentEntity ?? "<unknown>"}' inherits from generated custom entity '{parent}'";
+            return true;
+        }
+
+        return false;
+    }
 
     private string FilePathForKey(string entryKey) => Path.Combine(_generatedDir!, $"{FilePrefix}{entryKey}.yml");
 

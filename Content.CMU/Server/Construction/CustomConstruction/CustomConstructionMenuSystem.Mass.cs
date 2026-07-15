@@ -186,6 +186,13 @@ public sealed partial class CustomConstructionMenuSystem
             if (!seen.Add(id) || !_prototype.TryIndex<EntityPrototype>(id, out var proto) || proto.Abstract)
                 continue;
 
+            if (IsGeneratedCustomEntityId(proto.ID))
+            {
+                failed++;
+                firstFailReason ??= "generated custom entities cannot be added again";
+                continue;
+            }
+
             // Item vs structure differs per entity, so the recipe is validated against each one.
             var isItemRecipe = proto.TryGetComponent<ItemComponent>(out _, _componentFactory);
             if (!ValidateSteps(steps, isItemRecipe, out var invalidReason))
@@ -207,6 +214,13 @@ public sealed partial class CustomConstructionMenuSystem
             try
             {
                 var yaml = BuildGeneratedYaml(proto, key, spawnlist, category, steps, deconstructSteps, msg.Health);
+                if (IsUnsafeGeneratedEntryYaml(yaml, out var reason))
+                {
+                    failed++;
+                    firstFailReason ??= reason;
+                    continue;
+                }
+
                 File.WriteAllText(FilePathForKey(key), yaml, Encoding.UTF8);
                 DbUpsert(DbKindEntries, $"{FilePrefix}{key}", yaml);
                 PublishYaml(yaml, $"entry {key}");

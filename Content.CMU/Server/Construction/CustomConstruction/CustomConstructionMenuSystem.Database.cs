@@ -66,6 +66,24 @@ public sealed partial class CustomConstructionMenuSystem
             if (path == null)
                 continue;
 
+            if (row.Kind == DbKindEntries && IsUnsafeGeneratedEntryYaml(row.Yaml, out var reason))
+            {
+                Log.Error($"Skipping unsafe custom construction entry {row.Kind}/{row.EntryKey}: {reason}. The DB row will be removed so startup cannot crash on it again.");
+                DbDelete(row.Kind, row.EntryKey);
+
+                try
+                {
+                    if (File.Exists(path))
+                        File.Delete(path);
+                }
+                catch (Exception e)
+                {
+                    Log.Warning($"Failed to delete unsafe restored custom construction file {path}: {e}");
+                }
+
+                continue;
+            }
+
             try
             {
                 if (!File.Exists(path))
