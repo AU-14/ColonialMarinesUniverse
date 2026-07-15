@@ -43,7 +43,7 @@
   id: CMUPrimeCipherToxin
   name: reagent-name-ciphertoxin
   desc: reagent-desc-ciphertoxin
-  physicalDesc: physical-desc-unidentifiable
+  physicalDesc: reagent-physical-desc-unidentifiable
   flavor: horrible
   color: "#331133"
   unknown: true
