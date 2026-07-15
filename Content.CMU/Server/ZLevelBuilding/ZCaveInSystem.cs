@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
-// SPDX-License-Identifier: AGPL-3.0-only
 using System.Numerics;
 using Content.Server.Chat.Managers;
 using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared._RMC14.Dropship;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -71,6 +71,7 @@ public sealed class ZCaveInSystem : EntitySystem
 
     /// <summary>Safety cap on how many tiles one cavern collapse may bury.</summary>
     private const int CollapseTileCap = 600;
+    private const float DropshipCollapseDetectionRadius = 1.25f;
 
     private static readonly Vector2i[] Cardinals =
     {
@@ -81,6 +82,7 @@ public sealed class ZCaveInSystem : EntitySystem
 
     private EntityQuery<MapGridComponent> _gridQuery;
     private EntityQuery<ZGeneratedStoneComponent> _stoneQuery;
+    private List<Entity<MapGridComponent>> _overlappingGrids = new();
 
     // Exact attribution: the last PLAYER to damage something on each underground level (the over-miner), with the
     // time. Used to name the real culprit in the cave-in log/alert instead of just "nearest player".
@@ -443,6 +445,12 @@ public sealed class ZCaveInSystem : EntitySystem
 
         var worldPos = _transform.ToMapCoordinates(_map.GridTileToLocal(grid.Owner, grid.Comp, tile)).Position;
         var surfaceCoords = new MapCoordinates(worldPos, aboveMapComp.MapId);
+
+        // Dropships are their own grids. If one is parked over this cave-in, don't try to pull its tiles or
+        // entities down into the cavern; just trip the flight-safety lockout and leave the ship grid alone.
+        if (MarkDropshipsOverCollapse(surfaceCoords))
+            return;
+
         if (!_mapManager.TryFindGridAt(surfaceCoords, out var surfaceGridUid, out var surfaceGridComp))
             return;
 
@@ -743,6 +751,12 @@ public sealed class ZCaveInSystem : EntitySystem
             var worldPos = _transform.ToMapCoordinates(localCoords).Position;
             var surfaceCoords = new MapCoordinates(worldPos, aboveMapComp.MapId);
 
+            // If this surface point overlaps a landed dropship grid, only mark/disable the ship. Do not damage
+            // or spawn debris on the dropship grid; shuttle grids have their own tile layer and should not be
+            // treated as collapsible terrain.
+            if (MarkDropshipsOverCollapse(surfaceCoords))
+                continue;
+
             if (!_mapManager.TryFindGridAt(surfaceCoords, out var surfaceGridUid, out var surfaceGridComp))
                 continue;
 
@@ -778,6 +792,46 @@ public sealed class ZCaveInSystem : EntitySystem
         }
 
         stoneMap.Comp.LastCollapseRegion.Clear();
+    }
+
+    /// <summary>
+    /// Marks any dropship grid overlapping a cave-in's surface position. This deliberately scans all grids
+    /// around the point instead of relying on TryFindGridAt, because landed dropships can overlap the planet
+    /// grid and TryFindGridAt may return the ground grid first.
+    /// </summary>
+    private bool MarkDropshipsOverCollapse(MapCoordinates impact)
+    {
+        _overlappingGrids.Clear();
+        var min = impact.Position - new Vector2(DropshipCollapseDetectionRadius);
+        var max = impact.Position + new Vector2(DropshipCollapseDetectionRadius);
+        _mapManager.FindGridsIntersecting(impact.MapId, new Box2(min, max), ref _overlappingGrids, approx: true, includeMap: false);
+
+        var marked = false;
+        foreach (var grid in _overlappingGrids)
+        {
+            if (!HasComp<DropshipComponent>(grid.Owner))
+                continue;
+
+            marked = true;
+            if (!HasComp<ZCollapseCompromisedComponent>(grid.Owner))
+            {
+                EnsureComp<ZCollapseCompromisedComponent>(grid.Owner);
+                Log.Info($"[zcavein] Dropship {ToPrettyString(grid.Owner)} structurally compromised by a cave-in below it; takeoff disabled.");
+
+                var computers = EntityQueryEnumerator<DropshipNavigationComputerComponent, TransformComponent>();
+                while (computers.MoveNext(out _, out _, out var xform))
+                {
+                    if (xform.GridUid == grid.Owner)
+                        Spawn("EffectSparks", xform.Coordinates);
+                }
+            }
+        }
+
+        if (marked)
+            Spawn("EffectSparks", impact);
+
+        _overlappingGrids.Clear();
+        return marked;
     }
 
     private ZBuildableMapComponent GetSettings(EntityUid stoneMap)

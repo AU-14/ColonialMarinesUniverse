@@ -5,6 +5,7 @@ using System.Linq;
 using Content.Server._AU14.Construction.CustomConstruction;
 using Content.Server.GameTicking;
 using Content.Server.Maps;
+using Content.Shared._AU14.Administration;
 using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
@@ -83,7 +84,7 @@ public sealed class ZLevelToggleSystem : EntitySystem
 
     private void OnRequestOpen(RequestOpenZLevelTogglesEvent msg, EntitySessionEventArgs args)
     {
-        if (!_menu.CanEditConstructionMenu(args.SenderSession))
+        if (!_menu.CanUseTool(args.SenderSession, AU14ToolPermissions.ZLevelToggles))
             return;
 
         var ev = new OpenZLevelTogglesEvent();
@@ -104,7 +105,7 @@ public sealed class ZLevelToggleSystem : EntitySystem
     private void OnSetToggle(SetZLevelToggleEvent msg, EntitySessionEventArgs args)
     {
         var session = args.SenderSession;
-        if (!_menu.CanEditConstructionMenu(session))
+        if (!_menu.CanUseTool(session, AU14ToolPermissions.ZLevelToggles))
             return;
 
         if (!_prototype.HasIndex<GameMapPrototype>(msg.MapProtoId))

@@ -4,6 +4,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using Content.Shared._AU14.Administration;
 using Content.Shared._AU14.Construction.CustomConstruction;
 using Content.Shared.Database;
 using Content.Shared.Lathe.Prototypes;
@@ -58,7 +59,7 @@ public sealed partial class CustomConstructionMenuSystem
     private void OnRequestOpenLathe(RequestOpenCustomLatheEditorEvent msg, EntitySessionEventArgs args)
     {
         var session = args.SenderSession;
-        if (!CanEditConstructionMenu(session))
+        if (!CanUseTool(session, AU14ToolPermissions.Lathe))
             return;
 
         RaiseNetworkEvent(new OpenCustomLatheEditorEvent { ExistingRecipes = EnumerateLatheRecipes() }, session);
@@ -103,7 +104,7 @@ public sealed partial class CustomConstructionMenuSystem
     private void OnRemoveLatheRecipe(RemoveCustomLatheRecipeEvent msg, EntitySessionEventArgs args)
     {
         var session = args.SenderSession;
-        if (!CanEditConstructionMenu(session) || LatheDir == null)
+        if (!CanUseTool(session, AU14ToolPermissions.Lathe) || LatheDir == null)
             return;
 
         // Only allow deleting our own generated recipe files (prefix-guarded; no path traversal).
@@ -137,7 +138,7 @@ public sealed partial class CustomConstructionMenuSystem
     private void OnSubmitLathe(SubmitCustomLatheEditorEvent msg, EntitySessionEventArgs args)
     {
         var session = args.SenderSession;
-        if (!CanEditConstructionMenu(session))
+        if (!CanUseTool(session, AU14ToolPermissions.Lathe))
             return;
 
         if (LatheDir == null)

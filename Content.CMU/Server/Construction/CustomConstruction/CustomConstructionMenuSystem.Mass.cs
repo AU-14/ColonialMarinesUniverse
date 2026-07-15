@@ -4,6 +4,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using Content.Shared._AU14.Administration;
 using Content.Shared._AU14.Construction.CustomConstruction;
 using Content.Shared.Database;
 using Content.Shared.Item;
@@ -37,7 +38,7 @@ public sealed partial class CustomConstructionMenuSystem
     private void OnSubmitMassTiles(SubmitMassTileEditorEvent msg, EntitySessionEventArgs args)
     {
         var session = args.SenderSession;
-        if (!CanEditConstructionMenu(session) || TilesDir == null)
+        if (!CanUseTool(session, AU14ToolPermissions.Mass) || TilesDir == null)
             return;
 
         var material = Fallback(msg.Material, "CMSteel");
@@ -106,7 +107,7 @@ public sealed partial class CustomConstructionMenuSystem
     private void OnRequestOpenMass(RequestOpenMassConstructionEditorEvent msg, EntitySessionEventArgs args)
     {
         var session = args.SenderSession;
-        if (!CanEditConstructionMenu(session) || _generatedDir == null)
+        if (!CanUseTool(session, AU14ToolPermissions.Mass) || _generatedDir == null)
             return;
 
         // Server-side validation of the batch: drop unknown/abstract ids, dedupe, cap.
@@ -151,7 +152,7 @@ public sealed partial class CustomConstructionMenuSystem
     private void OnSubmitMass(SubmitMassConstructionEditorEvent msg, EntitySessionEventArgs args)
     {
         var session = args.SenderSession;
-        if (!CanEditConstructionMenu(session) || _generatedDir == null)
+        if (!CanUseTool(session, AU14ToolPermissions.Mass) || _generatedDir == null)
             return;
 
         var steps = msg.Steps ?? new();

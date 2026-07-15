@@ -25,9 +25,9 @@ public static class InsurgencyAuthorization
     // constant to gate it on a different whitelist job.
     public const string CustomEditorWhitelistJob = "AU14JobCLFCellLeader";
 
-    // Players job-whitelisted for this marker job (jobwhitelistadd <player> InsforEditor) may open
-    // the INSFOR editor without being admins. The job exists only as a whitelist key.
-    public const string EditorWhitelistJob = "InsforEditor";
+    // AU14: the old InsforEditor job-whitelist gate was replaced by per-tool ckey grants (see
+    // AU14ToolPermissionSystem) because jobwhitelistadd was reachable by lower admin ranks. Trusted
+    // non-admins are now granted the "insfor" tool through the Tool Permissions window / toolperm command.
 
     public static bool IsAuthorized(IAdminManager admin, ICommonSession player)
     {
@@ -35,8 +35,9 @@ public static class InsurgencyAuthorization
         if (data != null && data.HasFlag(AuthorizedFlag))
             return true;
 
-        var jobWhitelist = IoCManager.Resolve<Players.JobWhitelist.JobWhitelistManager>();
-        return jobWhitelist.IsWhitelisted(player.UserId, EditorWhitelistJob);
+        var perms = IoCManager.Resolve<IEntityManager>()
+            .System<_AU14.Administration.AU14ToolPermissionSystem>();
+        return perms.HasGrant(player, Content.Shared._AU14.Administration.AU14ToolPermissions.Insfor);
     }
 
     public static bool IsCustomAuthorized(IAdminManager admin, ICommonSession player)

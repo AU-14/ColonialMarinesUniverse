@@ -4,6 +4,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using Content.Shared._AU14.Administration;
 using Content.Shared._AU14.Construction.CustomConstruction;
 using Content.Shared.Database;
 using Content.Shared.Maps;
@@ -36,7 +37,7 @@ public sealed partial class CustomConstructionMenuSystem
     private void OnRequestOpenTile(RequestOpenCustomTileEditorEvent msg, EntitySessionEventArgs args)
     {
         var session = args.SenderSession;
-        if (!CanEditConstructionMenu(session))
+        if (!CanUseTool(session, AU14ToolPermissions.Tiles))
             return;
 
         var tiles = _prototype.EnumeratePrototypes<ContentTileDefinition>()
@@ -55,7 +56,7 @@ public sealed partial class CustomConstructionMenuSystem
     private void OnSubmitTile(SubmitCustomTileEditorEvent msg, EntitySessionEventArgs args)
     {
         var session = args.SenderSession;
-        if (!CanEditConstructionMenu(session))
+        if (!CanUseTool(session, AU14ToolPermissions.Tiles))
             return;
 
         if (TilesDir == null)

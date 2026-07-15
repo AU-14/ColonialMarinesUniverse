@@ -47,7 +47,7 @@ namespace Content.Server._AU14.Construction.CustomConstruction;
 public sealed partial class CustomConstructionMenuSystem : EntitySystem
 {
     [Dependency] private IAdminManager _adminManager = default!;
-    [Dependency] private JobWhitelistManager _jobWhitelist = default!;
+    [Dependency] private Administration.AU14ToolPermissionSystem _toolPerms = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
@@ -62,12 +62,9 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
     /// </summary>
     public const AdminFlags RequiredFlag = AdminFlags.Host;
 
-    /// <summary>
-    /// Whitelist-only "role" that also unlocks the editor tools, so a trusted non-admin can be granted
-    /// access with <c>jobwhitelistadd &lt;player&gt; JModEditor</c> (see JModEditor.yml) instead of a Host
-    /// admin rank. Checked in addition to <see cref="RequiredFlag"/>.
-    /// </summary>
-    public static readonly ProtoId<JobPrototype> EditorWhitelistJob = "JModEditor";
+    // AU14: the old JModEditor job-whitelist gate was replaced by per-tool ckey grants (see
+    // AU14ToolPermissionSystem) because jobwhitelistadd was reachable by lower admin ranks. Trusted
+    // non-admins are now granted per tool through the Tool Permissions window or the toolperm command.
 
     private const string GeneratedSubDir = "Prototypes/_AU14/CustomConstruction/Generated";
     private const string DefaultSpawnlist = "AU14";
@@ -150,8 +147,14 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
     /// </summary>
     public bool CanEditConstructionMenu(ICommonSession session)
     {
-        return _adminManager.HasAdminFlag(session, RequiredFlag)
-            || _jobWhitelist.IsWhitelisted(session.UserId, EditorWhitelistJob);
+        return CanUseTool(session, Content.Shared._AU14.Administration.AU14ToolPermissions.Construction);
+    }
+
+    /// <summary>Per-tool gate: a Host-flagged admin, or a ckey granted this specific tool through the
+    /// Tool Permissions system (see <see cref="Administration.AU14ToolPermissionSystem"/>).</summary>
+    public bool CanUseTool(ICommonSession session, string tool)
+    {
+        return _adminManager.HasAdminFlag(session, RequiredFlag) || _toolPerms.HasGrant(session, tool);
     }
 
     // -------------------------------------------------------------------------
