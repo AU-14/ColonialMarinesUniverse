@@ -8,6 +8,7 @@
     sprite: _RMC14/Objects/Weapons/Guns/Attachments/rifle_sling/classic-desert-jungle.rsi
     state: pve-sling
   - type: AttachableMagnetic
+    returnOnThrow: false
   - type: AttachableVisuals
   - type: AttachableWeaponRangedMods
     modifiers:
