@@ -145105,20 +145105,6 @@ entities:
     - type: Transform
       pos: 176.5,-51.5
       parent: 1
-    - type: TacticalMapUser
-      action: 1378
-      marines: False
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - 137
-          - 1378
-    - type: Actions
-      actions:
-      - 137
-      - 1378
 - proto: AU14AICoreSubstrateMUTHUR
   entities:
   - uid: 31
