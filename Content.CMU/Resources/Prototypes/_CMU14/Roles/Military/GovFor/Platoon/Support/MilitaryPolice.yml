@@ -50,24 +50,27 @@
     - NonResuscitable
     - Epilepsy
     - NoEnglish
-    - SlowRunner
-    - Anemic
-    - Asthmatic
   ranks:
     RMCRankCivilian: []
   chevrons:
+    RMCRankGunnerySergeant:
+      entity: AU14ChevronUSCMGunnerySergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORMilitaryPoliceMan
+        time: 360000 # 100 hours
     RMCRankStaffSergeant:
       entity: AU14ChevronUSCMStaffSergeant
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobGOVFORMilitaryPoliceMan
-        time: 86400 # 24 hours
+        time: 180000 # 50 hours
     RMCRankSergeant:
       entity: AU14ChevronUSCMSergeant
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobGOVFORMilitaryPoliceMan
-        time: 36000 # 10 hours
+        time: 86400 # 24 hours
     RMCRankCorporal:
       entity: AU14ChevronUSCMCorporal
       requirements: []

@@ -475,10 +475,7 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             return;
         if (!TryComp<BodyPartComponent>(part, out var partComp))
             return;
-        if (partComp.PartType is not (BodyPartType.Arm
-            or BodyPartType.Hand
-            or BodyPartType.Leg
-            or BodyPartType.Foot))
+        if (partComp.PartType is not (BodyPartType.Arm or BodyPartType.Leg))
             return;
         if (HasComp<FractureComponent>(part) || HasComp<CMUCastComponent>(part))
             return;

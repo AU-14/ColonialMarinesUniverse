@@ -17,13 +17,10 @@
       "name": "afn"
     },
     {
-      "name": "logisticstech"
+      "name": "auxtech"
     },
     {
       "name": "background"
-    },
-	{
-      "name": "vcc"
     },
 	{
       "name": "cmo"
@@ -98,7 +95,7 @@
       "name": "old_rfn"
     },
 	{
-      "name": "rto"
+      "name": "old_rto"
     },
 	{
       "name": "old_sergeant"

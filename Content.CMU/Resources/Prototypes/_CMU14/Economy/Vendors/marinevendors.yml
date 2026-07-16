@@ -158,6 +158,10 @@
         amount: 15
     - name: Mask
       entries:
+      - id: CMMaskGas
+        amount: 40
+      - id: CMUGasMaskFilter
+        amount: 80
       - id: CMMaskCoif
         amount: 20
       - id: RMCMaskScarfBlack
@@ -852,17 +856,11 @@
         amount: 40
       - id: AU14NaloxoneAutoInjector
         amount: 9
-      - id: AU14PacketPillsTramadol
-        amount: 40
-      - id: AU14FirstAidAutoInjectorNoSkill
-        amount: 20
     - name: Tools
       entries:
       - id: CMEntrenchingTool
         recommended: true
         amount: 30
-      - id: RMCShovel
-        amount: 10
       - id: RMCM5Bayonet
         recommended: true
         amount: 30
@@ -928,14 +926,6 @@
         amount: 12
       - id: RMCPackFlareCAS
         amount: 8
-    - name: Gas Mask
-      entries:
-      - id: CMMaskGas
-        amount: 40
-      - id: CMUGasMaskFilter
-        amount: 80
-      - id: AU14PouchGasMaskBag
-        amount: 20
     - name: Optics
       entries:
       - id: RMCLaserDesignatorPVE
@@ -1087,15 +1077,11 @@
       entries:
       - id: CMSheetMetal50
         name: metal x50
-        points: 6
+        points: 8
         recommended: true
       - id: CMSheetPlasteel50
         name: plasteel x50
-        points: 8
-        recommended: true
-      - id: AU14HescoKit
-        name: HESCO barricade kit
-        points: 4
+        points: 10
         recommended: true
       - id: CMSandbagEmpty50
         name: sandbags x50
@@ -1107,134 +1093,57 @@
       entries:
       - id: CMFoldingBarricadesMB6x3
         name: MB-6 folding barricade x3
-        points: 2
-      - id: AU14MaintenanceJack
+        points: 5
+      - id: MaintenanceJack
+        points: 5
+      - id: RMCShovel
         points: 2
       - id: RMCES11MobileFuelCanister
-        points: 4
-      - id: RMCMagazineSMGNailgun
-        points: 2
-      - id: RMCEngineerKit
-        points: 2
-      - id: DoorElectronics
-        points: 2
-    - name: Power Generation
-      entries:
+        points: 5
       - id: RMCPowerCell
         points: 2
       - id: RMCPowerCellHigh
         points: 4
       - id: RMCPowerCellSuper
-        points: 6
+        points: 8
+      - id: RMCMagazineSMGNailgun
+        points: 5
+      - id: RMCEngineerKit
+        points: 5
       - id: CMAPCElectronics
+        points: 2
+      - id: DoorElectronics
         points: 2
       - id: RMCPortableGeneratorPacmanMachineCircuitBoard
         name: PACMAN generator machine board
-        points: 4
+        points: 8
       - id: RMCPortableGeneratorSuperPacmanMachineCircuitboard
         name: super PACMAN generator machine board
-        points: 6
-      - id: CMSheetPhoron
-        name: phoron x50
-        points: 2
-      - id: SheetUranium
-        name: uranium x30
-        points: 4
+        points: 12
+      - id: CMSheetPhoron30
+        name: phoron x30
+        points: 12
+    #- id: CMES11MobileFuelCanister
+    #  points: 4
     - name: Explosives
       entries:
+      - id: RMCGrenadeCustomMetalFoam
+        points: 10
       - id: RMCExplosivePlastic
-        points: 4
-      - id: AU14Bangalore
-        points: 6
-        recommended: true
+        points: 5
       - id: RMCExplosiveBreachingCharge
-        points: 6
-      - id: RMCPacketGrenadeMetalFoamFilled
         points: 8
-      - id: RMCRocketM5510Brute
-        points: 4
+        recommended: true
     - name: Utilities
       entries:
       - id: RMCSynthResetKey
-        points: 4
-
-# Engineering Staff (GOVFOR)
-- type: entity
-  parent: ColMarTechBase
-  id: AU14EngineeringStaffVendor
-  name: engineering staff gear rack
-  description: An automated gear rack for engineering officers and technicians.
-  components:
-  - type: Sprite
-    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/combat_technician_gear.rsi
-  - type: CMAutomatedVendor
-    jobs:
-    - AU14JobGOVFOROfficerEngi
-    - AU14JobGOVFOREngineeringTech
-    sections:
-    - name: Engineer Set
-      takeAll: CMEngineerSet
-      entries:
-      - id: AU14VendorBundleEngineeringTechnicianEssentials
-    - name: Gloves
-      choices: { CMHands: 1 }
-      entries:
-      - id: CMHandsInsulated
-    - name: Uniform
-      choices: { CMHands: 1 }
-      entries:
-      - id: CMJumpsuitMaintTech
-    - name: Helmet
-      choices: { CMHelmet: 2 }
-      entries:
-      - id: RMCHardhatOrange
-    - name: Suit
-      choices: { CMSuit: 1 }
-      entries:
-      - id: RMCHazardVest
-    - name: Tool Storage
-      choices: { CMUCTToolStorage: 2 }
-      entries:
-      - id: AU14BeltUtilityFilled
-        name: M276 pattern toolbelt rig (filled)
-      - id: AU14PouchToolsFilledComtech
-        name: tactical tools pouch (filled)
-    - name: Engineering Storage Bag
-      choices: { CMUPouchesCTBag: 1 }
-      entries:
-      - id: RMCSatchelWelder
-    - name: Engineering Storage Pouch
-      choices: { CMUPouchesCT: 2 }
-      entries:
-      - id: RMCPouchConstruction
-        recommended: true
-      - id: RMCPouchEngineerKit
-      - id: RMCPouchElectronics
-      - id: RMCPouchGeneralLarge
-    - name: Engineering Materials
-      choices: { CMUEngiStaffMaterials: 4 }
-      entries:
-      - id: CMSheetMetal50
-        name: metal x50
-      - id: CMSheetPlasteel50
-        name: plasteel x50
-        recommended: true
-      - id: CMSheetGlass
-        name: glass x50
-      - id: CMSheetGlassReinforced
-        name: reinforced glass x50
-      - id: RMCPlankWood
-        name: wood x50
-    - name: Utilities
-      choices: { CMUEngiStaffUtility: 1 }
-      entries:
-      - id: RMCSynthResetKey
+        points: 5
 
 - type: entity
   parent: CMVendorBundleRiflemanApparel
   id: AU14VendorBundleCombatTechnicianEssentials
   name: essential engineer set
-  description: Contains 50 metal, 50 plasteel, 50 sandbags, a shovel, a high-capacity power cell, a light replacer, a deployable ladder, a welding visor, welding goggles, and a nailgun.
+  description: Contains 50 metal, 50 plasteel, 50 sandbags, a high-capacity power cell, a light replacer, a deployable ladder, a welding visor, welding goggles, and a nailgun.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Tools/wrench.rsi
@@ -1255,26 +1164,6 @@
     - RMCVisorWelding
     - RMCWeldingGoggles
     - RMCSentryLaptop
-    - RMCShovel
-
-- type: entity
-  parent: CMVendorBundleRiflemanApparel
-  id: AU14VendorBundleEngineeringTechnicianEssentials
-  name: essential engineer set
-  description: essential engineering supplies
-  components:
-  - type: Sprite
-    sprite: _RMC14/Objects/Tools/wrench.rsi
-    state: icon
-  - type: CMVendorBundle
-    bundle:
-    - RMCEngineerKit
-    - RMCPowerCellHigh
-    - RMCLightReplacer
-    - CMAPCElectronics
-    - RMCWeldingGoggles
-    - AU14MaintenanceJack
-    - RMCShovel
 
 - type: entity
   parent: CMVendorBundleRiflemanApparel
@@ -1506,8 +1395,6 @@
         amount: 6
       - id: RMCPacketGrenadeSmokeFilled
         amount: 6
-      - id: RMCPacketGrenadeWhitePhosphorusFilled
-        amount: 3
       - id: CMPacketGrenadeFragOldFilled
         amount: 2
       - id: RMCBoxClaymoreMineFilled
@@ -1605,28 +1492,6 @@
       - id: AU14BackpackRTOPackJungle
         amount: 2
       - id: AU14BackpackRTOPackDesert
-        amount: 1
-    - name: Materials
-      entries:
-      - id: CMSheetMetal
-        amount: 4
-      - id: CMSheetPlasteel50
-        amount: 4
-      - id: CMSandbagEmpty50
-        amount: 8
-      - id: AU14HescoKit
-        amount: 30
-      - id: RMCSheetPlastic
-        amount: 4
-      - id: RMCSheetAluminum
-        amount: 4
-      - id: CMSheetGlass
-        amount: 5
-      - id: RMCSheetCardboard
-        amount: 5
-      - id: CMSheetPhoron
-        amount: 1
-      - id: SheetUranium
         amount: 1
     - name: Tents
       entries:

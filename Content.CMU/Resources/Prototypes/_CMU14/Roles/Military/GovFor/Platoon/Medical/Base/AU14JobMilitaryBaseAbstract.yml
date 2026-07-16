@@ -5,7 +5,7 @@
   name: au14-job-name-govforMilitaryDoctor
   description: au14-job-description-govforMilitaryDoctor
   icon: "AU14JobIconDoctor"
-  spawnMenuRoleName: Medical Officer (GOVFOR)
+  spawnMenuRoleName: Military Doctor (GOVFOR)
   startingGear: AU14GearGOVFORMilitaryDoctor
   dummyStartingGear: AU14GearGOVFORMilitaryDoctorDummy
   playTimeTracker: AU14JobGOVFORMilitaryDoctor

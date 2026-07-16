@@ -21,11 +21,10 @@
       RMCSkillCqc: 2
       RMCSkillEndurance: 2
       RMCSkillFireman: 2
-      RMCSkillEngineer: 2
+      RMCSkillEngineer: 1
       RMCSkillIntel: 1
       RMCSkillVehicles: 1
       RMCSkillPolice: 2
-      RMCSkillConstruction: 2
   - type: JobPrefix
     prefix: au14-job-prefix-wyguard
   - type: TacticalMapIcon

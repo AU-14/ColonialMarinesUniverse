@@ -5,7 +5,7 @@
   name: Force on Force
   showInVote: true
   description: Two units face each other in combat.
-  minPlayers: 500
+  minPlayers: 125
   requiresOpforVote: true
   requiresGovforVote: true
   supportedPlanets:

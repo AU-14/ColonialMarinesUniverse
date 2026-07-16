@@ -11,30 +11,7 @@
       "name": "icon"
     },
     {
-      "name": "item_icon"
-    },
-    {
-      "name": "sand_wall_1",
-      "directions": 4
-    },
-    {
-      "name": "sand_wall_2",
-      "directions": 4
-    },
-    {
-      "name": "sand_wall_3",
-      "directions": 4
-    },
-    {
-      "name": "sand_wall_short_complete",
-      "directions": 4
-    },
-    {
-      "name": "sand_wall_tall_building1",
-      "directions": 4
-    },
-    {
-      "name": "sand_wall_tall_complete",
+      "name": "sand_wall",
       "directions": 4
     }
   ]

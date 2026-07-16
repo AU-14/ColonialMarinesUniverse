@@ -29,8 +29,6 @@
     - NonResuscitable
     - Epilepsy
     - NoEnglish
-    - SlowRunner
-    - Anemic
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -102,7 +100,7 @@
   roundSide: Opfor
   roundForce: OPFOR
   icon: "AU14JobIconOPFORDoctor"
-  spawnMenuRoleName: Medical Officer (OPFOR)
+  spawnMenuRoleName: Military Doctor (OPFOR)
   supervisors: au14-job-supervisors-opfor
   startingGear: AU14GearOPFORMilitaryDoctor
   dummyStartingGear: AU14GearOPFORMilitaryDoctorDummy

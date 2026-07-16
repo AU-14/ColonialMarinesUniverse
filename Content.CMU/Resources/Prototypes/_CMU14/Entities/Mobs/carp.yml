@@ -111,10 +111,6 @@
     interactFailureString: petting-failure-carp
     interactFailureSound:
       path: /Audio/Effects/bite.ogg
-  - type: Tag
-    tags:
-    - Carp
-    - DoorBumpOpener
 
 - type: inventoryTemplate
   id: carp

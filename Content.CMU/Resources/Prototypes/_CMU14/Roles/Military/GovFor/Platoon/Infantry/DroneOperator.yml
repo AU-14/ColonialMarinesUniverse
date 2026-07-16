@@ -36,20 +36,17 @@
     traits:
     - Epilepsy
     - NoEnglish
-    - SlowRunner
-    - Anemic
-    - Asthmatic
   ranks:
     RMCRankCivilian: []
   chevrons:
-    RMCRankStaffSergeant:
-      entity: AU14ChevronUSCMStaffSergeant
+    RMCRankPrivateFirstClass:
+      entity: AU14ChevronUSCMPrivateFirstClass
       requirements:
       - !type:RoleTimeRequirement
         role: CMUJobGOVFORDroneOperator
-        time: 36000 # 10 hours
-    RMCRankSergeant:
-      entity: AU14ChevronUSCMSergeant
+        time: 36000
+    RMCRankPrivate:
+      entity: AU14ChevronUSCMPrivate
       requirements: []
 
 - type: playTimeTracker

@@ -112,9 +112,6 @@
     - CMUProstheticRightArm
     - CMUProstheticLeftLeg
     - CMUProstheticRightLeg
-    - SlowRunner
-    - Anemic
-    - Asthmatic
   ranks:
     RMCRankCivilian: []
   chevrons:

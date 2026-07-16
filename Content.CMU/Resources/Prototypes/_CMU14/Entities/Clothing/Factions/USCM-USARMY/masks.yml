@@ -24,7 +24,6 @@
     coverage: MOUTH
   - type: Item
     storedRotation: -90
-  - type: BreathMask
   - type: Appearance
   - type: Foldable
     canFoldInsideContainer: true

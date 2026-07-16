@@ -117,12 +117,34 @@
     - CMUProstheticLeftArm
     - CMUProstheticRightArm
     - CMUProstheticLeftLeg
-    - SlowRunner
-    - Anemic
     - CMUProstheticRightLeg
   ranks:
     RMCRankSyntheticColonist: []
   chevrons:
+    RMCRankChiefWarrantOfficer5:
+      entity: AU14ChevronUSCMChiefWarrantOfficer5
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORAuxSupportSynth
+        time: 270000 #75 hours
+    RMCRankChiefWarrantOfficer4:
+      entity: AU14ChevronUSCMChiefWarrantOfficer4
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORAuxSupportSynth
+        time: 180000 #50 hours
+    RMCRankChiefWarrantOfficer3:
+      entity: AU14ChevronUSCMChiefWarrantOfficer3
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORAuxSupportSynth
+        time: 86400 #24 hours
+    RMCRankChiefWarrantOfficer:
+      entity: AU14ChevronUSCMChiefWarrantOfficer2
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORAuxSupportSynth
+        time: 36000 #10 hours
     WarrantOfficer:
       entity: AU14ChevronUSCMWarrantOfficer
       requirements: []

@@ -5,7 +5,7 @@
   name: au14-job-name-govforsquadcombattech
   description: au14-job-description-govforsquadcombattech
   icon: "AU14JobIconGovCT"
-  spawnMenuRoleName: Combat Technician (GOVFOR)
+  spawnMenuRoleName: Combat Tech (GOVFOR)
   playTimeTracker: AU14JobGOVFORSquadCombatTech
   startingGear: AU14GearGOVFORSquadCombatTech
   dummyStartingGear: AU14GearGOVFORCTDummy
@@ -67,18 +67,27 @@
     - CMUProstheticRightArm
     - CMUProstheticLeftLeg
     - CMUProstheticRightLeg
-    - SlowRunner
-    - Anemic
-    - Asthmatic
   ranks:
     RMCRankCivilian: []
   chevrons:
+    RMCRankCorporal:
+      entity: AU14ChevronUSCMCorporal
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORSquadCombatTech
+        time: 216000 # 60 hours
+    RMCRankLanceCorporal:
+      entity: AU14ChevronUSCMLanceCorporal
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORSquadCombatTech
+        time: 108000 # 30 hours
     RMCRankPrivateFirstClass:
       entity: AU14ChevronUSCMPrivateFirstClass
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobGOVFORSquadCombatTech
-        time: 36000 # 10 hours
+        time: 54000 # 15 hours
     RMCRankPrivate:
       entity: AU14ChevronUSCMPrivate
       requirements: []
@@ -139,7 +148,7 @@
   roundSide: Opfor
   roundForce: OPFOR
   icon: "AU14JobIconOPFORCT"
-  spawnMenuRoleName: Combat Technician (OPFOR)
+  spawnMenuRoleName: Combat Tech (OPFOR)
   supervisors: au14-job-supervisors-opfor
   startingGear: AU14GearOPFORSquadCombatTech
   dummyStartingGear: AU14GearOPFORCTDummy
@@ -176,7 +185,7 @@
   id: AU14JobGOVFORSquadCombatTechRMC
   roundForce: RMC
   name: au14-job-name-govforsquadcombattechRMC
-  spawnMenuRoleName: Combat Technician (TWE RMC)
+  spawnMenuRoleName: Combat Tech (TWE RMC)
   ranks:
     RMC_Corporal:
     - !type:RoleTimeRequirement
@@ -192,7 +201,7 @@
   parent: AU14JobSquadCombatTechBase
   id: AU14JobGOVFORSquadCombatTechUPP
   roundForce: UPP
-  spawnMenuRoleName: Combat Technician (UPP)
+  spawnMenuRoleName: Combat Tech (UPP)
   ranks:
     UPP_Corporal:
     - !type:RoleTimeRequirement
@@ -213,7 +222,7 @@
   id: AU14JobGOVFORSquadCombatTechWYPMC
   roundForce: WYPMC
   name: PMC Combat Technician
-  spawnMenuRoleName: Combat Technician (WYPMC)
+  spawnMenuRoleName: Combat Tech (WYPMC)
   ranks:
     AU14RankWeYuSeniorOperator:
     - !type:RoleTimeRequirement

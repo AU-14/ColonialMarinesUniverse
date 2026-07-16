@@ -12,7 +12,6 @@
     Medicine:
       metabolismRate: 0.05
       effects:
-      - !type:Allergenic
       - !type:CMUApplyPainSuppressionEffect
         accumulationSuppression: 0.25
         tierSuppression: 1
@@ -55,7 +54,6 @@
     Medicine:
       metabolismRate: 0.05
       effects:
-      - !type:Allergenic
       - !type:CMUApplyPainSuppressionEffect
         accumulationSuppression: 0.5
         tierSuppression: 2
@@ -103,7 +101,6 @@
     Medicine:
       metabolismRate: 0.1
       effects:
-      - !type:Allergenic
       - !type:CMUApplyPainSuppressionEffect
         accumulationSuppression: 0.75
         tierSuppression: 4

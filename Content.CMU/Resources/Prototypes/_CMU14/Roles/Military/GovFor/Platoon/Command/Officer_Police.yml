@@ -5,7 +5,7 @@
   name: au14-job-name-govforpolicechief
   description: au14-job-description-govforpolicechief
   icon: "AU14JobIconGovCMP"
-  spawnMenuRoleName: Chief Military Police (GOVFOR)
+  spawnMenuRoleName: Chief MP (GOVFOR)
   supervisors: au14-job-supervisors-govforplatco
   startingGear: AU14GearGOVFOROfficerMP
   dummyStartingGear: AU14GearGOVFOROfficerMPDummy
@@ -68,9 +68,6 @@
     - NonResuscitable
     - Epilepsy
     - NoEnglish
-    - SlowRunner
-    - Anemic
-    - Asthmatic
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -96,7 +93,7 @@
   roundSide: Opfor
   roundForce: OPFOR
   icon: "AU14JobIconOPFORCMP"
-  spawnMenuRoleName: Chief Military Police (OPFOR)
+  spawnMenuRoleName: Chief MP (OPFOR)
   supervisors: au14-job-supervisors-opforplatco
   startingGear: AU14GearOPFOROfficerMP
   dummyStartingGear: AU14GearOPFOROfficerMPDummy
@@ -110,6 +107,7 @@
   equipment:
     id: AU14IDCardGOVFOROfficerMP
     ears: AU14HeadsetGovforCommand
+    pocket1: AU14StampCMP
   inhand:
     - AU14KitJOCMPKit
 
@@ -118,6 +116,7 @@
   equipment:
     id: AU14IDCardOPFOROfficerMP
     ears: AU14HeadsetOpforCommand
+    pocket1: AU14StampCMP
   inhand:
     - AU14KitJOCMPKit
 

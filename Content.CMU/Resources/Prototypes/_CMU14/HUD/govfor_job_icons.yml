@@ -87,14 +87,14 @@
   id: AU14JobIconRTO
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
-    state: govfor_rto
+    state: old_govfor_rto
 
 - type: jobIcon
   parent: CMJobIconBase
   id: AU14JobIconAuxTech
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
-    state: govfor_logisticstech
+    state: govfor_auxtech
 
 - type: jobIcon
   parent: CMJobIconBase
@@ -186,10 +186,3 @@
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
     state: govfor_vc
-
-- type: jobIcon
-  parent: CMJobIconBase
-  id: AU14JobIconGovTankCommander
-  icon:
-    sprite: _AU14/Interface/au14govforjobicons.rsi
-    state: govfor_vcc
