@@ -259520,14 +259520,14 @@ entities:
     - type: Transform
       pos: 3.5,-21.375
       parent: 1
-- proto: RMCChemDispenserGround
+- proto: RMCChemDispenserGroundWeYu
   entities:
   - uid: 344744
     components:
     - type: Transform
       pos: 66.5,-143.5
       parent: 1
-- proto: RMCChemStorageGround
+- proto: RMCChemStorageGroundWeYu
   entities:
   - uid: 344739
     components:
