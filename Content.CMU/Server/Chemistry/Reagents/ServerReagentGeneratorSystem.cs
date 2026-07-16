@@ -132,6 +132,11 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
     private void PreMapLoad(LoadingMapsEvent args)
     {
         //CreateEvilDex();
+        Setup();
+    }
+
+    private void Setup()
+    {
         _unfoldedConflicts = UnfoldConflicts();
         _unfoldedCombinations = UnfoldCombinations();
         PrepareProperties();
@@ -139,7 +144,6 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         var knev = new SyncKnownPropertiesEvent(KnownProperties);
         RaiseNetworkEvent(knev);
     }
-
     
     #region Paperwork
 
@@ -538,6 +542,10 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
     #region Reagent Generation
     public bool GenerateStats(ref GeneratedReagentData data, bool noProperties = false)
     {
+        if (_propertiesList.Count == 0 || ChemicalGenClassesList.Count == 0)
+        {
+            Setup();
+        }
         if (!noProperties)
         {
             int GenValue = 0;
