@@ -22,3 +22,48 @@
     sprite: _RMC14/Objects/Clothing/Head/SPP/army_helmet.rsi
   - type: ItemCamouflage
     camouflageVariations: { }
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14_PLACEHOLDERALTYN
+  name: PLACE HOLDER ALTYN
+  description: An old earth design still in use by UPP forces after a century.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/helmets/altyn.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/UPP/helmets/altyn.rsi
+  - type: CMArmor
+    melee: 25
+    bullet: 25
+    bio: 25
+    explosionArmor: 50
+  - type: ParasiteResistance
+    maxCount: 4
+  - type: RemoveComponents
+    components:
+    - type: IngestionBlocker
+  - type: Corrodible
+    isCorrodible: false
+  - type: RMCEarProtection
+  - type: RMCItemToggleClothingVisuals
+  - type: ToggleClothing
+    action: AU14ActionToggleAltynVisor
+  - type: HelmetAccessory
+    rsi:
+      sprite: _AU14/Clothing/UPP/helmets/altyn.rsi
+      state: helmet
+    toggledRsi:
+      sprite: _AU14/Clothing/UPP/helmets/altyn.rsi
+      state: helmet-down
+
+- type: entity
+  parent: ActionMarineBase
+  id: AU14ActionToggleAltynVisor
+  name: Toggle the visor
+  description: Change the positions of the visor on your helmet.
+  components:
+  - type: Action
+    itemIconStyle: BigItem
+  - type: InstantAction
+    event: !type:ToggleActionEvent
