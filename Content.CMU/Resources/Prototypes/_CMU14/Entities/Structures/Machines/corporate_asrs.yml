@@ -35,17 +35,17 @@
         crate: RMCCrateInflatableBarriers
       - cost: 1500
         crate: RMCCrateEmptySandbags
-      - cost: 3000
-        crate: CMUCrateP90
       - cost: 1500
+        crate: CMUCrateP90
+      - cost: 750
         crate: CMUCrateP90Mags
-      - cost: 4500
+      - cost: 2250
         crate: CMUCrateP90APMags
-      - cost: 9000
+      - cost: 4500
         crate: CMUCrateWYSentry
-      - cost: 3000
+      - cost: 1500
         crate: CMUCrateWYSentryAmmo
-      - cost: 3000
+      - cost: 1500
         crate: CMUCrateBiosuitSecurity
     - name: Research
       entries:
@@ -55,19 +55,19 @@
         crate: CMUCrateSim
       - cost: 1000
         crate: CMUCrateXRF
-      - cost: 8000 #1k per monkey
+      - cost: 4000 #500 per monkey
         crate: CMUMonkeyCubeCrate
-      - cost: 16000 #4k per exotic cube
+      - cost: 8000 #2k per exotic cube
         crate: CMUExoticCubeCrate
-      - cost: 5000
+      - cost: 2500
         crate: CMUCrateSecureWYRandomExp
-      - cost: 500
+      - cost: 250
         crate: CMUCrateChemGlasses
-      - cost: 1000
+      - cost: 500
         crate: CMUCrateBiosuitWYTSS
-      - cost: 3000
+      - cost: 1500
         crate: CMUCrateTychoRadsuit
-      - cost: 3000
+      - cost: 1500
         crate: CMUCrateGasMaskFilterWY
   - type: ActivatableUIRequiresAccess
   - type: AccessReader

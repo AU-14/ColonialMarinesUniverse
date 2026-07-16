@@ -5,11 +5,13 @@ using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
 using Content.Shared._AU14.Chemistry.Reagents;
 using Content.Shared._AU14.Chemistry.Research;
+using Content.Shared.CCVar;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.GameTicking;
 using Content.Shared.Paper;
 using Discord.Rest;
 using Robust.Client.UserInterface;
+using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -30,9 +32,9 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     public List<string> IDS = [];
     public TimeSpan NextReroll = TimeSpan.Zero;
 
-    [ViewVariables(VVAccess.ReadWrite)]
+    [ViewVariables(VVAccess.ReadOnly)]
     public TimeSpan RerollTime = TimeSpan.FromSeconds(180); //3 minutes
-    [ViewVariables(VVAccess.ReadWrite)]
+    [ViewVariables(VVAccess.ReadOnly)]
     public TimeSpan PickedRerollTime = TimeSpan.FromSeconds(360); //6 minutes
 
     public TimeSpan LastTime = TimeSpan.Zero;
@@ -44,9 +46,11 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
 
     private bool DDISecured = false;
     private bool ready = false;
-    [ViewVariables(VVAccess.ReadWrite)]
+    [ViewVariables(VVAccess.ReadOnly)]
     public int ResearchChemAmount = 6; // for sanity
 
+    [ViewVariables(VVAccess.ReadOnly)]
+    public float ResearchCashRewardMult = 500;
     
     /// <summary>
     /// key = ID, value = (text, scan/sim time, scan or sim, data)
@@ -63,6 +67,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     [Dependency] private IPrototypeManager _protoman = default!;
     [Dependency] private MetaDataSystem _mets = default!;
     [Dependency] private CorporateConsoleSystem _corpo = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     private Dictionary<Entity<ResearchDataTerminalComponent>, string> _printing = [];
     private HashSet<Entity<ResearchDataTerminalComponent>> _printingLast = [];
@@ -82,6 +87,10 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             subs.Event<ResearchDataTerminalPrintLastBuiMsg>(OnPrintLast);
             subs.Event<ResearchDataTerminalPrintChemBuiMsg>(OnPrintRequest);
         });
+        Subs.CVar(_cfg, CCVars.PickWaitTime, time => PickedRerollTime = TimeSpan.FromSeconds(time), true);
+        Subs.CVar(_cfg, CCVars.RefreshTime, time => RerollTime = TimeSpan.FromSeconds(time), true);
+        Subs.CVar(_cfg, CCVars.TerminalChems, chems => ResearchChemAmount = chems, true);
+        Subs.CVar(_cfg, CCVars.CashRewardMult, dosh => ResearchCashRewardMult = dosh, true);
     }
 
     private void OnTerminalUpdate(UpdateResearchConsoleEvent args)
@@ -211,7 +220,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         RaiseNetworkEvent(ev);
         var ncv = new IdentifyChemicalEvent(proto.ID, proto.Reward);
         RaiseNetworkEvent(ncv);
-        _corpo.AddToCorporateBudget(1000f * proto.Reward);
+        _corpo.AddToCorporateBudget(ResearchCashRewardMult * proto.Reward);
     }
 
     private void OnUiOpen(Entity<ResearchDataTerminalComponent> ent, ref BoundUIOpenedEvent args)
