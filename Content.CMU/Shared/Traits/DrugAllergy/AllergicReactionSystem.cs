@@ -16,7 +16,7 @@ namespace Content.Shared._CMU14.Traits.DrugAllergy;
 
 public sealed partial class AllergicReactionSystem : EntitySystem
 {
-    private static readonly ProtoId<DamageTypePrototype> ToxinType = "Toxin";
+    private static readonly ProtoId<DamageTypePrototype> ToxinType = "Poison";
     private static readonly ProtoId<DamageTypePrototype> AsphyxiationType = "Asphyxiation";
 
     [Dependency] private INetManager _net = default!;
