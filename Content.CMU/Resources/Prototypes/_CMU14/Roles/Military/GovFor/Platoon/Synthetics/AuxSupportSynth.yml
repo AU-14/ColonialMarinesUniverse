@@ -117,6 +117,8 @@
     - CMUProstheticLeftArm
     - CMUProstheticRightArm
     - CMUProstheticLeftLeg
+    - SlowRunner
+    - Anemic
     - CMUProstheticRightLeg
   ranks:
     RMCRankSyntheticColonist: []

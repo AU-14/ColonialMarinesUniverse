@@ -54,6 +54,8 @@
     - CMUProstheticRightArm
     - CMUProstheticLeftLeg
     - CMUProstheticRightLeg
+    - SlowRunner
+    - Anemic
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointGOVFORWorkingJoe
@@ -79,6 +81,8 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
+    - SlowRunner
+    - Anemic
 
 - type: entity
   parent: CMSpawnPointJobBase

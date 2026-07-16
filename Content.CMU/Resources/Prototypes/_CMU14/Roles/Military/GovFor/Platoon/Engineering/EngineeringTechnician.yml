@@ -36,6 +36,8 @@
     - Epilepsy
     - NonResuscitable
     - NoEnglish
+    - SlowRunner
+    - Anemic
   ranks:
     RMCRankCivilian: []
   chevrons:
