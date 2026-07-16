@@ -482,7 +482,7 @@
   parent: CMPaper
   id: CMUPaperTYRELL
   name: Tyrell paper
-  Suffix: Orange
+  suffix: Orange
   description: A sheet of paper bearing the Tyrell Corporation letterhead.
   components:
   - type: PaperVisuals

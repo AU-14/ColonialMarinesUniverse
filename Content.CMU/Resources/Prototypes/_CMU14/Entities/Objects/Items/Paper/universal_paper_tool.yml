@@ -21,7 +21,7 @@
     slots:
       paper_slot:
         name: cmu-universal-paper-tool-paper-slot-name
-        insertSound: /Audio/Machines/scanning.ogg
+        insertSound: /Audio/Machines/terminal_insert_disc.ogg
         ejectSound: /Audio/Machines/tray_eject.ogg
         insertOnInteract: true
         ejectOnInteract: false
@@ -32,7 +32,7 @@
         whitelistFailPopup: cmu-universal-paper-tool-paper-invalid
   - type: UniversalPaperTool
     printSound:
-      path: /Audio/Machines/circuitprinter.ogg
+      path: /Audio/Machines/short_print_and_rip.ogg
     templates:
     - prototype: CMUPaperBase #Regular papers
       name: white paper
@@ -40,36 +40,30 @@
     - prototype: CMUPaperCream
       name: cream paper
       description: A warm-toned sheet with a soft, elegant finish.
-    - prototype: CMUPaperIvory
-      name: ivory paper
-      description: A lightly tinted sheet with a refined look.
-    - prototype: CMUPaperGray
-      name: gray paper
-      description: A muted sheet with a subtle, modern appearance.
-    - prototype: CMUPaperSlate
-      name: slate paper
-      description: A cool-toned sheet with a smooth finish.
     - prototype: CMUPaperBlue
       name: blue paper
       description: A soft blue sheet that's easy on the eyes.
     - prototype: CMUPaperNavy
       name: navy paper
       description: A deep blue sheet with a bold, premium look.
-    - prototype: CMUPaperTeal
-      name: teal paper
-      description: A calming teal sheet with a gentle color.
     - prototype: CMUPaperGreen
       name: green paper
       description: A fresh green sheet with a natural tone.
+    - prototype: CMUPaperCyan
+      name: cyan paper
+      description: A small cyan-colored paper.
+    - prototype: CMUPaperGrey
+      name: grey paper
+      description: A small grey-colored paper.
+    - prototype: CMUPaperTan
+      name: tan paper
+      description: A small tan-colored paper.
     - prototype: CMUPaperOlive
       name: olive paper
       description: A subdued green sheet with an earthy character.
     - prototype: CMUPaperYellow
       name: yellow paper
       description: A pale yellow sheet with a cheerful tint.
-    - prototype: CMUPaperAmber
-      name: amber paper
-      description: A golden sheet with a warm, inviting hue.
     - prototype: CMUPaperOrange
       name: orange paper
       description: A muted orange sheet with a vibrant touch.
@@ -141,13 +135,13 @@
     - prototype: CMUPaperSlipMedication
       name: Medication slip
       description: A standardized prescription slip produced by the International Committee of the Red Cross.
-    - prototype: CMUPaperSlipMedication
+    - prototype: CMUPaperSlipMedicationGreen
       name: Medication slip (Green)
       description: A standardized prescription slip produced by the International Committee of the Red Cross.
-    - prototype: CMUPaperSlipMedicationGreen
+    - prototype: CMUPaperSlipMedicationORed
       name: Medication slip (Red)
       description: A standardized prescription slip produced by the International Committee of the Red Cross.
-    - prototype: CMUPaperSlipMedicationORed
+    - prototype: CMUPaperPhoto
       name: photograph
       description: A photograph of a person, place, or thing. (27x27 pixel space for SS14 to Image needs.)
     - prototype: CMUPaperICSC
