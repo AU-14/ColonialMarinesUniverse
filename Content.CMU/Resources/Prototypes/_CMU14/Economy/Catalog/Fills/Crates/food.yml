@@ -23,6 +23,7 @@
 - type: entity
   parent: RMCCrateHydro
   id: AU14CrateHydroponicsEquipment
+  name: hydroponics equpment crate
   suffix: Filled
   components:
   - type: EntityStorage
@@ -51,6 +52,7 @@
 - type: entity
   parent: RMCCrateHydro
   id: AU14CrateHydroponics
+  name: hydroponics crate
   suffix: Filled
   components:
   - type: EntityStorage
@@ -97,6 +99,7 @@
 - type: entity
   parent: RMCCrateHydro
   id: AU14CrateHydroSeeds
+  name: seeds crate
   suffix: Filled
   components:
   - type: EntityStorage
