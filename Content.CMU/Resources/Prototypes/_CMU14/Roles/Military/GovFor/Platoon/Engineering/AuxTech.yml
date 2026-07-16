@@ -30,13 +30,13 @@
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
-      state: govfor_auxtech
+      state: govfor_logisticstech
   roundForceComponents:
     OPFOR:
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
-        state: auxtech
+        state: logisticstech
 
   requirements:
   - !type:TraitsRequirement
@@ -46,6 +46,8 @@
     - Epilepsy
     - NoEnglish
     - NoEnglish
+    - SlowRunner
+    - Anemic
   ranks:
     RMCRankCivilian: []
   chevrons:

@@ -76,6 +76,17 @@
     offset: 0,0.5
 
 - type: entity
+  parent: CMUMultiZStairsNoPreview
+  id: CMUMultiZStairsStrataSolo
+  components:
+  - type: Sprite
+    drawdepth: WallMountedItems
+    noRot: true
+    sprite: _CMU14/Structures/stairs.rsi
+    state: p_stair_strata_solo_cap
+    offset: 0,0.5
+
+- type: entity
   parent: BaseItem
   id: CMUDeployableZLevelLadder
   name: retractable ladder

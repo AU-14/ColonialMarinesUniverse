@@ -4,9 +4,9 @@
   id: CMUSurgeryStepMetaSetSimpleFracture
   surgery: CMUSurgerySetSimpleFracture
   displayName: Set Fracture
-  validParts: [Arm, Leg]
+  validParts: [Arm, Hand, Leg, Foot]
   allowSelfSurgery: true
-  selfSurgeryValidParts: [Arm, Leg]
+  selfSurgeryValidParts: [Arm, Hand, Leg, Foot]
   category: fracture
 
 - type: cmuSurgeryStepMetadata
@@ -20,9 +20,9 @@
   id: CMUSurgeryStepMetaSetCompoundFracture
   surgery: CMUSurgerySetCompoundFracture
   displayName: Set Fracture
-  validParts: [Arm, Leg]
+  validParts: [Arm, Hand, Leg, Foot]
   allowSelfSurgery: true
-  selfSurgeryValidParts: [Arm, Leg]
+  selfSurgeryValidParts: [Arm, Hand, Leg, Foot]
   category: fracture
 
 - type: cmuSurgeryStepMetadata
@@ -36,9 +36,9 @@
   id: CMUSurgeryStepMetaSetShatteredFracture
   surgery: CMUSurgerySetShatteredFracture
   displayName: Set Fracture
-  validParts: [Arm, Leg]
+  validParts: [Arm, Hand, Leg, Foot]
   allowSelfSurgery: true
-  selfSurgeryValidParts: [Arm, Leg]
+  selfSurgeryValidParts: [Arm, Hand, Leg, Foot]
   category: fracture
 
 - type: cmuSurgeryStepMetadata
@@ -54,9 +54,9 @@
   id: CMUSurgeryStepMetaCauterizeInternalBleeding
   surgery: CMUSurgeryCauterizeInternalBleeding
   displayName: Stop Internal Bleeding
-  validParts: [Head, Torso, Arm, Leg]
+  validParts: [Head, Torso, Arm, Hand, Leg, Foot]
   allowSelfSurgery: true
-  selfSurgeryValidParts: [Arm, Leg]
+  selfSurgeryValidParts: [Arm, Hand, Leg, Foot]
   category: bleed
 
 # ---- Organ removal (torso only) -------------------------------------
@@ -254,9 +254,9 @@
   id: CMUSurgeryStepMetaDebrideEschar
   surgery: CMUSurgeryDebrideEschar
   displayName: Debride Eschar
-  validParts: [Head, Torso, Arm, Leg]
+  validParts: [Head, Torso, Arm, Hand, Leg, Foot]
   allowSelfSurgery: true
-  selfSurgeryValidParts: [Arm, Leg]
+  selfSurgeryValidParts: [Arm, Hand, Leg, Foot]
   category: burn
   steps:
   - stepId: CMUSurgeryStepDebrideEschar

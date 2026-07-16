@@ -11,6 +11,8 @@
   - AU14SOPCommand
   - AU14SOPDropshipsandAircraft
   - AU14SOPThirdParty
+  - AU14SOPDeployment
+  - AU14SOPVehicles
 
 - type: guideEntry
   parent: RMC
@@ -53,3 +55,17 @@
   name: Third-Party Regulations
   priority: 1
   text: "/ServerInfo/Guidebook/_AU14/SOP/AU14SOPThirdParty.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14SOPVehicles
+  name: Vehicles
+  priority: 1
+  text: "/ServerInfo/Guidebook/_AU14/SOP/AU14SOPVehicles.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14SOPDeployment
+  name: Deployment
+  priority: 1
+  text: "/ServerInfo/Guidebook/_AU14/SOP/AU14SOPDeployment.xml"
