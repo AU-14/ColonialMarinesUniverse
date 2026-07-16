@@ -47,8 +47,9 @@
       amount: 1
     RMCOxygen:
       amount: 1
-    RMCPhoron:
-      amount: 1
+# it's haunted
+#    RMCPhoron:
+#      amount: 1
     RMCSilver:
       amount: 5
       catalyst: true
