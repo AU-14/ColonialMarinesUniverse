@@ -89,7 +89,67 @@
     maxWritableArea: 300, 300
     contentMargin: 20, 10, 10, 25
 
-# DEDICATED PAPERS /*//////////////////////////////////////////////////
+- type: entity
+  id: CMUPaperSlipMedicationGreen
+  parent: CMUPaperSlipMedication
+  name: medication slip
+  suffix: Green
+  description: A standardized prescription slip produced by the International Committee of the Red Cross. Used by Medical personnel to authorize, track, and strictly ration the distribution of controlled pharmaceuticals.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+      color: "#8eb372"
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#8eb372"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: Item
+    size: Tiny
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    heldPrefix: paper_slip
+  - type: PaperVisuals
+    backgroundModulate: "#8eb372"
+
+- type: entity
+  id: CMUPaperSlipMedicationORed
+  parent: CMUPaperSlipMedication
+  name: medication slip
+  suffix: Red
+  description: A standardized prescription slip produced by the International Committee of the Red Cross. Used by Medical personnel to authorize, track, and strictly ration the distribution of controlled pharmaceuticals.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+      color: "#c35e51"
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#c35e51"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: Item
+    size: Tiny
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    heldPrefix: paper_slip
+  - type: PaperVisuals
+    backgroundModulate: "#c35e51"
+
+#- type: entity Ehh someone will make it one day
+#  parent: BaseItem
+#  id: CMUPhotoAlbum
+#  name: photo album
+# description: A bound album designed for organizing and preserving photographs.
+# components:
+#  - type: Sprite
+#    sprite: _RMC14/Objects/Misc/paper.rsi
+#    state: album
 
 - type: entity #27x27 pixel image to ss14 goodie with black background. Really nice if you know how to get shit done
   parent: CMPaper
@@ -125,6 +185,8 @@
     - state: paper_words
       map: ["enum.PaperVisualLayers.Writing"]
       visible: false
+    - state: icsc_letterhead
+      visible: true
     - state: paper_stamped
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
@@ -142,6 +204,18 @@
   name: USCM paper
   description: A sheet of paper bearing the United States Colonial Marine Corps letterhead.
   components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: uscm_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
   - type: PaperVisuals
     headerImagePath: "/Textures/_CMU14/Interface/Paper/USCMHeader.png"
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
@@ -156,6 +230,18 @@
   name: UA paper
   description: A sheet of paper bearing the United Americas Flag letterhead.
   components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: ua_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
   - type: PaperVisuals
     headerImagePath: "/Textures/_CMU14/Interface/Paper/UAHeader.png"
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
@@ -170,6 +256,18 @@
   name: UPP paper
   description: A sheet of paper bearing the Union of Progressive Peoples letterhead.
   components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: upp_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
   - type: PaperVisuals
     headerImagePath: "/Textures/_CMU14/Interface/Paper/UPPHeader.png"
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
@@ -183,6 +281,18 @@
   name: UPP Flag paper
   description: A sheet of paper bearing the Union of Progressive Peoples Flag letterhead.
   components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: upp_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
   - type: PaperVisuals
     headerImagePath: "/Textures/_CMU14/Interface/Paper/UPPFLAGHeader.png"
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
@@ -198,6 +308,18 @@
   suffix: Black
   description: A sheet of paper bearing the Hyperdyne Systems letterhead.
   components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: hyperdyne_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
   - type: PaperVisuals
     headerImagePath: "/Textures/_CMU14/Interface/Paper/HYPERDYNEHeader.png"
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
@@ -212,6 +334,18 @@
   suffix: Orange
   description: A premium sheet of paper bearing the Hyperdyne Systems letterhead.
   components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: hyperdyne_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
   - type: PaperVisuals
     headerImagePath: "/Textures/_CMU14/Interface/Paper/HYPERDYNEHeader_alt.png"
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
@@ -227,6 +361,18 @@
   suffix: Black
   description: A sheet of paper bearing the black Weyland-Yutani letterhead.
   components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: wy_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
   - type: PaperVisuals
     headerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDBlackHeader.png"
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
@@ -235,7 +381,7 @@
     footerMargin: 0, 0, 0, 40
 
 - type: entity
-  parent: CMPaper
+  parent: CMUPaperBlackWEYLAND
   id: CMUPaperWEYLAND
   name: Weyland-Yutani paper
   suffix: Regular
@@ -249,7 +395,7 @@
     footerMargin: 0, 0, 0, 40
 
 - type: entity
-  parent: CMPaper
+  parent: CMUPaperBlackWEYLAND
   id: CMUPaperInvertedWEYLAND
   name: Weyland-Yutani paper
   suffix: Inverted
@@ -263,7 +409,7 @@
     footerMargin: 0, 0, 0, 40
 
 - type: entity
-  parent: CMPaper
+  parent: CMUPaperBlackWEYLAND
   id: CMUPaperResearcherWEYLAND
   name: Weyland-Yutani paper
   suffix: Researcher
@@ -277,7 +423,7 @@
     footerMargin: 0, 0, 0, 40
 
 - type: entity
-  parent: CMPaper
+  parent: CMUPaperBlackWEYLAND
   id: CMUPaperPMCWEYLAND
   name: Weyland-Yutani paper
   suffix: PMC
@@ -297,6 +443,18 @@
   name: TWE paper
   description: A sheet of paper bearing the Three World Empire letterhead.
   components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: twe_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
   - type: PaperVisuals
     headerImagePath: "/Textures/_CMU14/Interface/Paper/TWEHeader.png"
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
@@ -341,6 +499,18 @@
   name: Seegson paper
   description: A sheet of paper bearing the Seegson letterhead.
   components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: seegson_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
   - type: PaperVisuals
     headerImagePath: "/Textures/_CMU14/Interface/Paper/SEEGSONHeader.png"
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
@@ -379,6 +549,18 @@
   name: Kelland paper
   description: A sheet of paper bearing the Kelland Mining letterhead.
   components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: kelland_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
   - type: PaperVisuals
     headerImagePath: "/Textures/_CMU14/Interface/Paper/KELLANDHeader.png"
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
@@ -405,6 +587,18 @@
   name: VAI paper
   description: A sheet of paper bearing the Vanguard's Arrow Incorporated letterhead.
   components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: vai_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
   - type: PaperVisuals
     headerImagePath: "/Textures/_CMU14/Interface/Paper/VANGUARDARROWHeader.png"
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
@@ -419,12 +613,48 @@
   name: CCAF paper
   description: A sheet of paper bearing the Canadian Colonial Armed Forces letterhead.
   components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: ccaf_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
   - type: PaperVisuals
     headerImagePath: "/Textures/_CMU14/Interface/Paper/CCAFHeader.png"
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     footerImagePath: "/Textures/_CMU14/Interface/Paper/CCAFFooter.png"
     footerMargin: 0, 0, 0, 40
+
+#CLF
+- type: entity
+  parent: CMPaper
+  id: CMUPaperCLF
+  name: CLF paper
+  description: A sheet of paper bearing the Colonial Liberation Front letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: clf_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/CLFHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
 
 # PAPER SLIPS /*//////////////////////////////////////////////////
 
