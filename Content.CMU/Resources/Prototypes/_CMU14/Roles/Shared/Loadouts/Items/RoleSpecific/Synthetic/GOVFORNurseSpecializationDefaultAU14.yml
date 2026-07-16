@@ -1,0 +1,4 @@
+- type: loadout
+  id: GOVFORNurseSpecializationDefaultAU14
+  equipment:
+    id: AU14IDCardGOVFORNurse

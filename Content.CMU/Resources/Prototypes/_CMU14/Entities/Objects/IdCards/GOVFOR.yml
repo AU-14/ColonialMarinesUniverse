@@ -154,6 +154,38 @@
 
 - type: entity
   parent: AU14IDCardGOVFOR
+  id: AU14IDCardGOVFORNurse
+  name: nurse ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobGOVFORNurse
+
+- type: entity
+  parent: AU14IDCardGOVFORNurse
+  id: AU14IDCardGOVFORNurseSurgical
+  name: surgical attendant ID card
+  components:
+  - type: JobTitleChanger
+    jobTitle: Surgical Attendant
+
+- type: entity
+  parent: AU14IDCardGOVFORNurse
+  id: AU14IDCardGOVFORNursePharmaceutical
+  name: pharmaceutical technician ID card
+  components:
+  - type: JobTitleChanger
+    jobTitle: Pharmaceutical Technician
+
+- type: entity
+  parent: AU14IDCardGOVFORNurse
+  id: AU14IDCardGOVFORNurseMorgue
+  name: morgue attendant ID card
+  components:
+  - type: JobTitleChanger
+    jobTitle: Morgue Attendant
+
+- type: entity
+  parent: AU14IDCardGOVFOR
   id: AU14JobIDCardGOVFORRadioTelephoneOperator
   name: radio telephone operator ID card
   components:
@@ -162,11 +194,27 @@
 
 - type: entity
   parent: AU14IDCardGOVFOR
+  id: AU14IDCardGOVFORRadioTrafficOperator
+  name: radio traffic operator ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobGOVFORRadioTrafficOperator
+
+- type: entity
+  parent: AU14IDCardGOVFOR
   id: AU14JobIDCardGOVFORAuxTech
-  name: auxiliary technician ID card
+  name: logistics technician ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORAuxTech
+
+- type: entity
+  parent: AU14IDCardGOVFOR
+  id: AU14IDCardGOVFOREngineeringTech
+  name: engineering technician ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobGOVFOREngineeringTech
 
 - type: entity
   parent: AU14IDCardGOVFOR
@@ -175,6 +223,14 @@
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORVehicleCrewman
+
+- type: entity
+  parent: AU14IDCardGOVFOR
+  id: AU14IDCardGOVFORVehicleCommander
+  name: vehicle commander ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobGOVFORVehicleCommander
 
 - type: entity
   parent: AU14IDCardGOVFOR

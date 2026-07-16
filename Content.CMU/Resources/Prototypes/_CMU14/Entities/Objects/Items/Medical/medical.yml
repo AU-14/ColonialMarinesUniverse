@@ -658,6 +658,7 @@
       - !type:EqualHealthChange
         damage:
         - Airloss: -4
+      - !type:ClearRespiratoryStrain
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
@@ -687,6 +688,7 @@
       effects:
       - !type:RemoveDamage
         group: Toxin
+      - !type:CureDrugAllergyReaction
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
@@ -737,6 +739,67 @@
     doAfter: 0
   - type: IconLabel
     labelTextLocId: AU14-naloxone-medicine-container-label-text
+
+- type: entity
+  parent: CMAutoInjector
+  id: CMUEpinephrineAutoInjector
+  name: epinephrine autoinjector
+  description: An autoinjector loaded with epinephrine, sometimes referred to as an 'EpiPen'. It is used to treat severe allergic reactions, though it can also be used to help restart someone's heart. Doesn't require any training to use.
+  components:
+  - type: Sprite
+    sprite: _AU14/Items/naloxone_auto_injector.rsi
+    layers:
+    - state: autoinjector
+    - state: autoinjector1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+  - type: Item
+    sprite: null
+  - type: Hypospray
+    transferAmount: 3
+    injectSound: /Audio/_RMC14/Medical/air_release.ogg
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 3
+        reagents:
+        - ReagentId: CMEpinephrine
+          Quantity: 3
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    changeColor: false
+  - type: MedicallyUnskilledDoAfter
+    min: 0
+    doAfter: 0
+  - type: IconLabel
+    labelTextLocId: cmu-epinephrine-container-label-text
+
+- type: entity
+  parent: CMAutoInjector
+  id: CMUAsthmaInhaler
+  name: inhaler
+  description: A small, sealed inhaler pre-loaded with a single dose of albuterol. It cannot be refilled or have its medication removed.
+  components:
+  - type: Item
+    sprite: null
+  - type: Hypospray
+    transferAmount: 20
+    injectSound: /Audio/_RMC14/Medical/air_release.ogg
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 20
+        reagents:
+        - ReagentId: AU14Albuterol
+          Quantity: 20
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    changeColor: false
+  - type: MedicallyUnskilledDoAfter
+    min: 0
+    doAfter: 0
+  - type: IconLabel
+    labelTextLocId: cmu-inhaler-container-label-text
 
 - type: entity
   parent: CMTricordrazineAutoInjector

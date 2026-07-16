@@ -163,7 +163,7 @@
 - type: entity
   parent: AU14IDCardOPFOR
   id: AU14JobIDCardOPFORAuxTech
-  name: auxiliary technician ID card
+  name: logistics technician ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORAuxTech

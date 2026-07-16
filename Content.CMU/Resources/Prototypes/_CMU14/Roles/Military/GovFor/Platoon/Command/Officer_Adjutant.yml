@@ -70,6 +70,9 @@
     - NonResuscitable
     - Epilepsy
     - NoEnglish
+    - SlowRunner
+    - Anemic
+    - Asthmatic
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -108,7 +111,6 @@
   equipment:
     id: AU14IDCardGOVFORAdjutant
     ears: AU14HeadsetGovforCommand
-    pocket1: AU14StampAO
     pocket2: AU14TabletGovfor
   inhand:
     - AU14KitJOAdjutantKit
@@ -118,7 +120,6 @@
   equipment:
     id: AU14IDCardOPFORAdjutant
     ears: AU14HeadsetOpforCommand
-    pocket1: AU14StampAO
     pocket2: AU14TabletOpfor
   inhand:
     - AU14KitJOAdjutantKit
