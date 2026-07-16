@@ -726,6 +726,7 @@
       takeAll: CMUAREssentialEquipment
       entries:
       - id: RMCWeaponRifleM54CE2
+      - id: RMCScabbardMacheteSGFilled
       - id: CMBeltMarine
       - id: RMCAttachmentS5RedDotSight
       - id: RMCAttachmentExtendedCompensator

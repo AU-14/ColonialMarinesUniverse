@@ -710,6 +710,7 @@
       entries:
       - id: AU14WeaponRifleKramerLSW
       - id: AU14LACNAmmoBackpack
+      - id: RMCScabbardMacheteSGFilled
       - id: CMBeltMarine
       - id: RMCPouchMagazineLarge
     - name: Munitions
