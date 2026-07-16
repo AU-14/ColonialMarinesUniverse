@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Numerics;
 using Content.Server.Access.Systems;
 using Content.Server.AU14.Round;
 using Content.Server.AU14.Scenario;
@@ -18,6 +19,8 @@ using Content.Shared.AU14.util;
 using Content.Shared.Ghost;
 using Content.Shared.Humanoid;
 using Content.Shared.Mind;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.ParaDrop;
 using Content.Shared.Players;
 using Content.Shared.Preferences;
@@ -648,6 +651,19 @@ public sealed partial class ThirdPartySystem : EntitySystem
         // If this is a groundside spawn, ensure there are enough *safe* markers (unused and not near alive players).
         if (!useDropship)
         {
+            var alivePlayerPositions = GetAlivePlayerPositions();
+            List<EntityUid> FilterSafeMarkers(List<EntityUid> markers)
+            {
+                var safeMarkers = new List<EntityUid>(markers.Count);
+                foreach (EntityUid marker in markers)
+                {
+                    if (!IsMarkerBlockedByPlayers(marker, alivePlayerPositions))
+                        safeMarkers.Add(marker);
+                }
+
+                return safeMarkers;
+            }
+
             List<EntityUid> safeLeaderMarkers = FilterSafeMarkers(leaderMarkers);
             List<EntityUid> safeGruntMarkers = FilterSafeMarkers(gruntMarkers);
             List<EntityUid> safeEntityMarkers = FilterSafeMarkers(entityMarkers);
@@ -675,18 +691,6 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
         _sawmill.Debug(
             $"[ThirdPartySystem] Final marker pools for third party ({party.ID}): leaders={leaderMarkers.Count}, grunts={gruntMarkers.Count}, entities={entityMarkers.Count}, useDropship={useDropship}, parachuteMode={parachuteMode}.");
-
-        List<EntityUid> FilterSafeMarkers(List<EntityUid> markers)
-        {
-            var safeMarkers = new List<EntityUid>(markers.Count);
-            foreach (EntityUid marker in markers)
-            {
-                if (!IsMarkerBlockedByPlayers(marker))
-                    safeMarkers.Add(marker);
-            }
-
-            return safeMarkers;
-        }
 
         // Spawn leaders
         _sawmill.Debug("[ThirdPartySystem] Spawning leaders...");
@@ -1143,36 +1147,35 @@ public sealed partial class ThirdPartySystem : EntitySystem
         }
     }
 
+    private List<(MapId Map, Vector2 WorldPos)> GetAlivePlayerPositions()
+    {
+        var positions = new List<(MapId, Vector2)>();
+        var query = EntityQueryEnumerator<ActorComponent, MobStateComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out _, out var mobState, out var xform))
+        {
+            if (mobState.CurrentState != MobState.Alive)
+                continue;
+
+            positions.Add((xform.MapID, _transform.GetWorldPosition(xform)));
+        }
+        return positions;
+    }
+
     private bool IsMarkerBlockedByWalls(EntityUid marker)
         => _rmcMap.HasAnchoredEntityEnumerator<RMCDropshipBlockedComponent>(Transform(marker).Coordinates);
 
-    private bool IsMarkerBlockedByPlayers(EntityUid marker)
+    private bool IsMarkerBlockedByPlayers(EntityUid marker, List<(MapId Map, Vector2 WorldPos)> playerPositions)
     {
         const float PlayerAvoidRadius = 8f;
-
-        // Only check main-map/groundside markers; dropship spawns handled elsewhere via useDropship
-        EntityCoordinates markerCoords = _entityManager.GetComponent<TransformComponent>(marker).Coordinates;
-        foreach (ICommonSession session in _playerManager.Sessions)
+        foreach (var (playerMap, playerPos) in playerPositions)
         {
-            if (!session.AttachedEntity.HasValue)
+            if (playerMap != Transform(marker).MapID)
                 continue;
 
-            EntityUid attached = session.AttachedEntity.Value;
-
-            // Skip ghosts
-            if (_entityManager.HasComponent<GhostComponent>(attached))
-                continue;
-
-            if (!_entityManager.TryGetComponent(attached, out TransformComponent? playerXform))
-                continue;
-
-            if (_transform.InRange(playerXform.Coordinates, markerCoords, PlayerAvoidRadius))
-            {
-                _sawmill.Debug($"[ThirdPartySystem] Marker {marker} is blocked by player {attached} within radius {PlayerAvoidRadius}");
+            var diff = _transform.GetWorldPosition(Transform(marker)) - playerPos;
+            if (diff.LengthSquared() <= PlayerAvoidRadius * PlayerAvoidRadius)
                 return true;
-            }
         }
-
         return false;
     }
 
