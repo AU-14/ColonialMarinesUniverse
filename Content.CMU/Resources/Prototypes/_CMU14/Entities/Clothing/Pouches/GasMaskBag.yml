@@ -1,0 +1,73 @@
+- type: entity
+  parent: [RMCPouchOpenClosed, RMCPouchStorage]
+  id: AU14PouchGasMaskBag
+  name: gas mask bag
+  description: A small bag designed to carry a gas mask and a few spare filters. Can be worn in a pocket, attached to a uniform as webbing, or stashed in a backpack.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Items/gas_mask_bag.rsi
+  - type: Item
+    size: Small
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,7,1 #4 slots
+    whitelist:
+      tags:
+      - GasMask
+      - CMUGasMaskFilter
+  - type: FixedItemSizeStorage
+  - type: LimitedStorage
+    limits:
+    - popup: rmc-storage-limit-one-gasmask
+      whitelist:
+        tags:
+        - GasMask
+    - popup: rmc-storage-limit-max-gasmask-filters
+      count: 3
+      whitelist:
+        tags:
+        - CMUGasMaskFilter
+  - type: Webbing
+    playerSprite:
+      sprite: _CMU14/Items/gas_mask_bag.rsi
+      state: equipped
+    components:
+    - type: Storage
+      maxItemSize: Small
+      grid:
+      - 0,0,7,1 #4 slots
+      whitelist:
+        tags:
+        - GasMask
+        - CMUGasMaskFilter
+    - type: FixedItemSizeStorage
+    - type: LimitedStorage
+      limits:
+      - popup: rmc-storage-limit-one-gasmask
+        whitelist:
+          tags:
+          - GasMask
+      - popup: rmc-storage-limit-max-gasmask-filters
+        count: 3
+        whitelist:
+          tags:
+          - CMUGasMaskFilter
+    - type: RMCStorageEjectHand
+      state: Open
+    - type: ExplosionResistance
+      damageCoefficient: 0
+      worn: false
+    - type: StoreAfterFailedInteract
+
+- type: entity
+  parent: AU14PouchGasMaskBag
+  id: AU14PouchGasMaskBagFill
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMaskGas
+    - id: CMUGasMaskFilter
+    - id: CMUGasMaskFilter
+    - id: CMUGasMaskFilter

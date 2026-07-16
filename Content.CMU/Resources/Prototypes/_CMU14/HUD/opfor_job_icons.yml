@@ -87,14 +87,14 @@
   id: AU14JobIconOPFORRTO
   icon:
     sprite: _AU14/Interface/au14opforjobicons.rsi
-    state: old_rto
+    state: rto
 
 - type: jobIcon
   parent: CMJobIconBase
   id: AU14JobIconOPFORAuxTech
   icon:
     sprite: _AU14/Interface/au14opforjobicons.rsi
-    state: auxtech
+    state: logisticstech
 
 - type: jobIcon
   parent: CMJobIconBase

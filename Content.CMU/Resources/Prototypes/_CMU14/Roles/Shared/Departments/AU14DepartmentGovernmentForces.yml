@@ -14,20 +14,24 @@
   - AU14JobGOVFORSectionSergeant
   - AU14JobGOVFORSquadSergeant
   - AU14JobGOVFORRadioTelephoneOperator
+  - AU14JobGOVFORRadioTrafficOperator
   - AU14JobGOVFORSquadRifleman
   - CMUJobGOVFORDroneOperator
   - AU14JobGOVFORWeaponsSpecialist
   - AU14JobGOVFORSquadAutomaticRifleman
   - AU14JobGOVFORSquadCombatTech
+  - AU14JobGOVFOREngineeringTech
   - AU14JobGOVFOROfficerLogistics
   - AU14JobGOVFORAuxTech
   - AU14JobGOVFOROfficerMedical
   - AU14JobGOVFORMilitaryDoctor
   - AU14JobGOVFORPlatoonCorpsman
+  - AU14JobGOVFORNurse
   - AU14JobGOVFOROfficerMP
   - AU14JobGOVFORMilitaryPoliceMan
   - AU14JobGOVFOROfficerEngi
   - AU14JobGOVFORVehicleCrewman
+  - AU14JobGOVFORVehicleCommander
   - AU14JobGOVFORDSPilot
   - AU14JobGOVFORDCC
   - AU14JobGOVFORAuxSupportSynth

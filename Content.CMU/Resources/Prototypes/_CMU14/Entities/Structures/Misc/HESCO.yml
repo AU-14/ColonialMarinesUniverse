@@ -29,17 +29,20 @@
 - type: entity
   parent: AU14BaseStructureDynamicNoAnchor
   id: AU14HESCOBarrier
-  name: HESCO barrier
-  description: A sand filled box designed to stop bullets.
+  name: HESCO wall
+  description: A fully raised and packed HESCO wall. Solid enough to stop bullets and block sight entirely.
   components:
   - type: Transform
     anchored: true
   - type: InteractionOutline
+  - type: Barricade
   - type: Damageable
     damageContainer: Inorganic
   - type: Construction
     graph: AU14HESCOGraph
     node: nodeFilled
+  - type: HescoDisassemblable
+    previousStage: AU14HescoTallBuilding1
   - type: Destructible
     thresholds:
     - trigger:
@@ -57,7 +60,7 @@
         acts: [ "Destruction" ]
   - type: Sprite
     sprite: _AU14/Structures/hesco.rsi
-    state: sand_wall
+    state: sand_wall_tall_complete
   - type: Physics
     bodyType: Static
   - type: Appearance

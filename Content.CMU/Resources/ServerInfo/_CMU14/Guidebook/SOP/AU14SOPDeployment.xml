@@ -1,0 +1,38 @@
+<Document>
+  # Deployment Regulations
+
+    - Medical, Requisitions, Brig, Ordnance Workshop and CIC must have at least one member of their department on the ship/installation for any other members of their department to deploy.
+    - The CMO, CMP and LO may never deploy to the FOB and never to the frontline unless the ship/installation is overrun.
+    - For deployment of staff, the FOB must be declared secure. If it is breached or comes under significant hostile threat, all deployed personnel are to immediately return to the ship or primary installation.
+
+  ### Medical Staff
+    - Doctors, nurses, and any other medical staff who are not the CMO may deploy to the FOB with the permission of the CMO or Commander and only to the frontline if they are within a vehicle.
+    - They are not to operate the vehicle in any capacity and are to remain inside the vehicle at all times; only in the event of danger may they flee from within it.
+
+  ### Requisitions Staff
+    - Auxiliary technicians and other requisition staff who are not the LO may deploy to the FOB with the permission of the LO or Commander and only to the frontline if they are within a vehicle.
+    - They may operate the vehicle and leave the vehicle, but should only do so in the delivery of supplies and remain within view of their vehicle at all times.
+
+  ### Flight Crew
+    - Flight crew may deploy freely to the FOB, but are never to deploy to the frontline
+
+  ### Ordnance Technicians
+    - Ordnance technicians may deploy to the FOB with the permission of the EO or Commander.
+
+  ### Synthetic Units
+    - Auxiliary Synthetics may deploy freely to the FOB and to the frontline
+    - Working Joes are never to be deployed as they will lose connection to APOLLO and cease to function.
+
+  ### Military Police
+    - Military Police and any other Police Staff who are not the CMP may deploy to the FOB with the permission of the CMP or Commander and only to the frontline if they are performing a field arrest.
+
+  ### Advisors
+    - Advisors may deploy freely to the FOB and never to the frontline.
+
+  ### Command Staff
+    - The Commander may never deploy unless the ship/installation has been overrun. 
+    - The Adjutant may deploy to the FOB and to the frontline with permission from the Commander
+    - The Engineering Officer may deploy freely to the FOB and never to the frontline.
+    - The Intelligence Officer may deploy freely and to the frontline, but not for combat purposes, only for gathering intelligence, communication to CIC, or to act as a squad leader.
+    - Junior Officers may only deploy to the FOB with permission from the Commander and if the FOB has, at a minimum, a working Phone and an Overwatch console.
+</Document>
