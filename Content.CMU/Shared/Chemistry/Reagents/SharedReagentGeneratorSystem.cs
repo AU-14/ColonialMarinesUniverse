@@ -1,31 +1,33 @@
 //Pretty please license this under the MIT license :) - MACMAN2003
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Content.Shared._AU14.Chemistry.Research;
 using Content.Shared._CMU14.Chemistry.Effects.Negative;
 using Content.Shared._CMU14.Chemistry.Effects.Neutral;
 using Content.Shared._CMU14.Chemistry.Effects.Positive;
-using Content.Shared._CMU14.Chemistry.Effects.Special;
 using Content.Shared._CMU14.Chemistry.Effects.Reaction;
-using Robust.Shared.Random;
-using Robust.Shared.Prototypes;
-using Content.Shared.Chemistry.Reagent;
-using Content.Shared.Chemistry.Reaction;
-using Content.Shared.GameTicking;
-using Robust.Shared.Utility;
-using System.Diagnostics;
-using Robust.Shared.Serialization.Markdown.Mapping;
-using Robust.Shared.Serialization.Markdown.Value;
+using Content.Shared._CMU14.Chemistry.Effects.Special;
 using Content.Shared._CMU14.Chemistry.Reagent;
-using Robust.Shared.Serialization.Markdown.Sequence;
-using Robust.Shared.Network;
-using Content.Shared._AU14.Chemistry.Research;
-using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Chemistry.Effects;
-using Content.Shared.FixedPoint;
-using System.Reflection;
+using Content.Shared._RMC14.Chemistry.Reagent;
+using Content.Shared.Chemistry.Reaction;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Dataset;
+using Content.Shared.FixedPoint;
+using Content.Shared.GameTicking;
+using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
+using Robust.Shared.Reflection;
+using Robust.Shared.Serialization.Markdown.Mapping;
+using Robust.Shared.Serialization.Markdown.Sequence;
+using Robust.Shared.Serialization.Markdown.Value;
+using Robust.Shared.Utility;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 
 namespace Content.Shared._AU14.Chemistry.Reagents;
 
@@ -185,7 +187,9 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         MappingDataNode recipe = [];
         recipe.Add("type", "reaction");
         recipe.Add("id", args.ID);
-        recipe.Add("priority", "99");
+        IsDuplicate(ref args, out int? prio);
+        prio ??= 0;
+        recipe.Add("priority", (prio.Value + 1).ToString());
         MappingDataNode ingredients = [];
         string recipstr = string.Empty;
         foreach (var ingredient in args.Recipe)
@@ -209,7 +213,7 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
             $"- type: reaction\n" +
             $"  id: {args.ID}\n" +
             $"  abstract: false\n" +
-            $"  priority: 99\n" +
+            $"  priority: {prio.Value + 1}\n" +
             $"  reactants:\n{recipstr}" +
             $"  products:\n" +
             $"    {args.ID}: {args.RecipeYield}\n";
@@ -375,5 +379,27 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
             return;
         var ev = new SyncGenClassesEvent(ChemicalGenClassesList);
         RaiseNetworkEvent(ev);
+    }
+    public bool IsDuplicate(ref GeneratedReagentData data, [NotNullWhen(true)] out int? prio)
+    {
+        var reactions = _protoMan.GetInstances<ReactionPrototype>();
+        prio = null;
+        //this fucking sucks
+        foreach (var reaction in reactions)
+        {
+            int matches = 0;
+            foreach (var ingredient in reaction.Value.Reactants)
+            {
+                if (data.Recipe.ContainsKey(ingredient.Key))
+                    matches++;
+                if (matches >= reaction.Value.Reactants.Count)
+                {
+                    prio = reaction.Value.Priority + 1;
+                    return true;
+                }
+
+            }
+        }
+        return false;
     }
 }

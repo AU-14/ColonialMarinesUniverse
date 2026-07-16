@@ -301,7 +301,10 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
                 break;
             }
         }
-        index ??= (string.Empty, 0, false, false);
+        if (index is null)
+        {
+            index ??= (string.Empty, 0, false, false);
+        }
         if (recipe.Recipe.Count > 2 && !index.Value.Item4)
         {
             recipe.Recipe.Remove(_random.Pick(recipe.Recipe.Keys));
@@ -442,9 +445,15 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
             List<(string, int, bool, bool)> elevated = [];
             for (int i = 0; i < 9; i++)
             {
+
+                if (chem.Recipe.Count > 2)
+                {
+                    chem.Recipe.Remove(_random.Pick(chem.Recipe.Keys));
+                }
                 string newchemid = _gen.AddChemical(ref chem, string.Empty, 0, Math.Max(targcomp.Data.Value.GenTier - 1, 1));
                 var reagentdef = reagents[newchemid];
-                if (_gen.IsDuplicate(ref chem) || _gen.IsAllMedicine(ref chem) || reagentdef.Class >= ReagentClass.Special)
+
+                if (_gen.IsDuplicate(ref chem, out _) || _gen.IsAllMedicine(ref chem) || reagentdef.Class >= ReagentClass.Special)
                 {
                     chem.Recipe.Clear();
                     foreach (var ing in original)

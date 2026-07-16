@@ -424,7 +424,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
             {
                 AddChemical(ref data, string.Empty, modifier, null);
             }
-            if (i == desiredChems && (IsDuplicate(ref data) || IsAllMedicine(ref data)))
+            if (i == desiredChems && (IsDuplicate(ref data, out _) || IsAllMedicine(ref data)))
             {
                 data.Recipe.Clear();
                 if (failedAttempts > 10)
@@ -1085,23 +1085,6 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         lockeddown.Add(data.ID); //just in case
         RaiseNetworkEvent(new RetroactiveLockdownEvent(lockeddown));
         RaiseLocalEvent(new RetroactiveLockdownEvent(lockeddown));
-    }
-    public bool IsDuplicate(ref GeneratedReagentData data)
-    {
-        var reactions = _protoMan.GetInstances<ReactionPrototype>();
-        //this fucking sucks
-        foreach (var reaction in reactions)
-        {
-            int matches = 0;
-            foreach (var ingredient in reaction.Value.Reactants)
-            {
-                if (data.Recipe.ContainsKey(ingredient.Key))
-                    matches++;
-                if (matches >= reaction.Value.Reactants.Count)
-                    return true;
-            }
-        }
-        return false;
     }
 
     public bool GetReagentData(string id, [NotNullWhen(true)] out GeneratedReagentData? data)
