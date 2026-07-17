@@ -62,6 +62,12 @@ public sealed partial class UniversalPaperToolSystem : EntitySystem
 
         if (!_prototype.TryIndex<EntityPrototype>(selected.Prototype, out var prototype))
             return;
+        
+        if (!HasComp<PaperComponent>(selected.Prototype))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-universal-paper-tool-invalid-template"), ent.Owner, msg.Actor, PopupType.SmallCaution);
+            return;
+        }
 
         if (!_itemSlots.TryEject(ent.Owner, UniversalPaperToolComponent.PaperSlotId, msg.Actor, out var paper, excludeUserAudio: true))
         {
@@ -74,13 +80,6 @@ public sealed partial class UniversalPaperToolSystem : EntitySystem
 
         var printed = Spawn(selected.Prototype, Transform(ent.Owner).Coordinates);
         _transform.PlaceNextTo(printed, ent.Owner);
-
-        if (!HasComp<PaperComponent>(printed))
-        {
-            QueueDel(printed);
-            _popup.PopupEntity(Loc.GetString("cmu-universal-paper-tool-invalid-template"), ent.Owner, msg.Actor, PopupType.SmallCaution);
-            return;
-        }
         _audio.PlayPvs(ent.Comp.PrintSound, ent);
         _hands.TryPickupAnyHand(msg.Actor, printed);
         _popup.PopupEntity(
