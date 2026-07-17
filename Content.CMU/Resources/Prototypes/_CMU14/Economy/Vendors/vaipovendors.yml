@@ -240,7 +240,7 @@
         amount: 15
       - id: CMEntrenchingTool
         amount: 15
-      - id: RMCShovel
+      - id: AU14ToolShovel
         amount: 10
       - id: CMScrewdriver
         amount: 5

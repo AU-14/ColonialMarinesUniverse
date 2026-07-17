@@ -248,7 +248,7 @@
       - id: CMEntrenchingTool
         recommended: true
         amount: 30
-      - id: RMCShovel
+      - id: AU14ToolShovel
         amount: 10
       - id: RMCCombatUtilityKnifeA
         recommended: true

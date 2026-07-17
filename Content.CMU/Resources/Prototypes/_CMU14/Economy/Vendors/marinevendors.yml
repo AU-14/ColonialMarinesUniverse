@@ -861,7 +861,7 @@
       - id: CMEntrenchingTool
         recommended: true
         amount: 30
-      - id: RMCShovel
+      - id: AU14ToolShovel
         amount: 10
       - id: RMCM5Bayonet
         recommended: true
@@ -1255,7 +1255,7 @@
     - RMCVisorWelding
     - RMCWeldingGoggles
     - RMCSentryLaptop
-    - RMCShovel
+    - AU14ToolShovel
 
 - type: entity
   parent: CMVendorBundleRiflemanApparel
@@ -1274,7 +1274,7 @@
     - CMAPCElectronics
     - RMCWeldingGoggles
     - AU14MaintenanceJack
-    - RMCShovel
+    - AU14ToolShovel
 
 - type: entity
   parent: CMVendorBundleRiflemanApparel
