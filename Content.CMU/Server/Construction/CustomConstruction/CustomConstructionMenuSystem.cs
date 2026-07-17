@@ -617,7 +617,7 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
         var category = SanitizeName(msg.Category, DefaultCategory);
 
         // An entry is keyed by entity + spawnlist + category. Editing and changing the spawnlist/category
-        // moves the entry, so we delete the old file first; same key just overwrites in place.
+        // moves the entry; the old version remains authoritative until the replacement publishes successfully.
         var newKey = MakeEntryKey(proto.ID, spawnlist, category);
         var isChange = !string.IsNullOrEmpty(msg.EntryKey);
 
@@ -648,17 +648,45 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
 
             Directory.CreateDirectory(_generatedDir);
 
-            if (isChange && !string.Equals(msg.EntryKey, newKey, StringComparison.Ordinal))
-                RetireEntryFile(FilePathForKey(msg.EntryKey));
-
-            File.WriteAllText(FilePathForKey(newKey), yaml, Encoding.UTF8);
-            DbUpsert(DbKindEntries, $"{FilePrefix}{newKey}", yaml);
+            var newPath = FilePathForKey(newKey);
+            var oldPath = isChange ? FilePathForKey(msg.EntryKey) : null;
+            var oldYaml = oldPath != null && File.Exists(oldPath) ? File.ReadAllText(oldPath) : null;
+            var stagedPath = $"{newPath}.{Guid.NewGuid():N}.pending";
+            File.WriteAllText(stagedPath, yaml, Encoding.UTF8);
 
             // Apply live: load on the server (overwrite) and push to every client, so the new/changed
             // recipe shows up this round instead of "after the next restart". Publishing reloads every
             // localization, so the entry and its overrides unhide share ONE publish.
             var overridesYaml = UnhideRecipeIdsPersist(new[] { $"{FilePrefix}{newKey}" });
-            PublishYaml(overridesYaml == null ? yaml : yaml + "\n" + overridesYaml, $"entry {newKey}");
+            var publishYaml = overridesYaml == null ? yaml : yaml + "\n" + overridesYaml;
+            if (!PublishYaml(publishYaml, $"entry {newKey}"))
+            {
+                File.Delete(stagedPath);
+                if (oldYaml != null)
+                    PublishYaml(oldYaml, $"rollback entry {msg.EntryKey}");
+                PopupTo(session, Loc.GetString("construction-menu-verb-add-failed"), PopupType.MediumCaution);
+                return;
+            }
+
+            try
+            {
+                File.Move(stagedPath, newPath, overwrite: true);
+                DbUpsert(DbKindEntries, $"{FilePrefix}{newKey}", yaml);
+            }
+            catch
+            {
+                if (File.Exists(stagedPath))
+                    File.Delete(stagedPath);
+
+                if (oldYaml != null)
+                    PublishYaml(oldYaml, $"rollback entry {msg.EntryKey}");
+                else
+                    UnloadYaml(yaml, $"rollback entry {newKey}");
+                throw;
+            }
+
+            if (oldPath != null && !string.Equals(msg.EntryKey, newKey, StringComparison.Ordinal))
+                RetireEntryFile(oldPath);
         }
         catch (Exception e)
         {

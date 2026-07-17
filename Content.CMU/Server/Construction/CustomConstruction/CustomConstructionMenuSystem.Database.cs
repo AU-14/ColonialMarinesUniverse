@@ -191,7 +191,7 @@ public sealed partial class CustomConstructionMenuSystem
     /// late joiners (same channel the admin <c>loadprototype</c> command uses). This is what makes edits
     /// apply without a full rebuild and what keeps clients in sync with DB-restored entries.
     /// </summary>
-    private void PublishYaml(string yaml, string what)
+    private bool PublishYaml(string yaml, string what)
     {
         try
         {
@@ -201,14 +201,14 @@ public sealed partial class CustomConstructionMenuSystem
         catch (Exception e)
         {
             Log.Error($"Failed to load generated prototypes ({what}): {e}");
-            return;
+            return false;
         }
 
         if (!_publishReady)
         {
             // Startup: the upload manager isn't initialized yet, so queue for the first-tick flush.
             _pendingRestorePublish = (_pendingRestorePublish ?? string.Empty) + yaml + "\n";
-            return;
+            return true;
         }
 
         try
@@ -219,6 +219,8 @@ public sealed partial class CustomConstructionMenuSystem
         {
             Log.Debug($"Generated prototypes loaded server-side but could not be queued for live client broadcast yet ({what}): {e}");
         }
+
+        return true;
     }
 
     /// <summary>
