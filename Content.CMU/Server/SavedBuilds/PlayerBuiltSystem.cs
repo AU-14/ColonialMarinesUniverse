@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 using Content.Shared._AU14.SavedBuilds;
 using Content.Shared.Administration.Logs;
+using Content.Shared.Construction;
 using Content.Shared.Database;
 using Content.Shared.Examine;
 using Robust.Server.Player;
@@ -34,7 +35,11 @@ public sealed partial class PlayerBuiltSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<PlayerBuiltComponent, ExaminedEvent>(OnExamined);
+        SubscribeLocalEvent<ConstructionCompletedEvent>(OnConstructionCompleted);
     }
+
+    private void OnConstructionCompleted(ref ConstructionCompletedEvent args)
+        => MarkBuilt(args.Built, args.Builder);
 
     /// <summary>
     /// Records <paramref name="builder"/> as the player who built <paramref name="target"/>.
