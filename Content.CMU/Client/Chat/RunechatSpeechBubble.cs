@@ -208,7 +208,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             SayStyle => GetBubbleContent(message),
             WhisperStyle => FormatWhisperText(message),
             RadioStyle => FormatRadioText(message),
-            LoocStyle => $"HELP: {message.Message}",
+            LoocStyle => $"LOOC: {message.Message}",
             _ => message.WrappedMessage,
         };
 

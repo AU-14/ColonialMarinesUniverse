@@ -255,7 +255,7 @@
       - id: RMCPouchMedical
       - id: RMCPouchSyringeFill
       - id: RMCPouchFirstAidSplintsGauzeOintment
-        name: first-aid pouch (gauze, ointment) # TODO RMC14 splints
+        name: first-aid pouch (gauze, ointment)
       - id: RMCPouchFirstAidPills
         name: first-aid pouch (pills)
     - name: Medical Storage

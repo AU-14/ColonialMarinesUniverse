@@ -232,6 +232,7 @@
       entries:
       - id: AU14SmartGunMinigunHAZOPS
       - id: AU14HAZOPSBatteryMinigunGAU19Backpack
+      - id: RMCScabbardMacheteSGFilled
     - name: Munitions
       entries:
       - id: AU14MagazineMinigunHAZOPS
