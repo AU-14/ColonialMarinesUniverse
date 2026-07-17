@@ -30,6 +30,8 @@ public sealed class TileApplierSystem : EntitySystem
 
     private EntityQuery<MapGridComponent> _gridQuery;
     private EntityQuery<CMUZLevelMapComponent> _zMapQuery;
+    private readonly Queue<(EntityUid Grid, Vector2i Tile)> _pendingTileRemovals = new();
+    private readonly HashSet<(EntityUid Grid, Vector2i Tile)> _queuedTileRemovals = new();
 
     public override void Initialize()
     {
@@ -70,8 +72,27 @@ public sealed class TileApplierSystem : EntitySystem
             return;
 
         var tile = _map.TileIndicesFor(gridUid, grid, xform.Coordinates);
-        _transform.Unanchor(ent.Owner, xform);
-        _map.SetTile(gridUid, grid, tile, Tile.Empty);
+        if (_queuedTileRemovals.Add((gridUid, tile)))
+            _pendingTileRemovals.Enqueue((gridUid, tile));
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        // Process only work that existed at the start of this update. SetTile can terminate other support
+        // markers, and those callbacks must also escape their current lifecycle traversal before mutating tiles.
+        var count = _pendingTileRemovals.Count;
+        for (var i = 0; i < count; i++)
+        {
+            var pending = _pendingTileRemovals.Dequeue();
+            _queuedTileRemovals.Remove(pending);
+
+            if (TerminatingOrDeleted(pending.Grid) || !_gridQuery.TryComp(pending.Grid, out var grid))
+                continue;
+
+            _map.SetTile(pending.Grid, grid, pending.Tile, Tile.Empty);
+        }
     }
 
     /// <summary>True if the map is an upper z-level (depth above the ground). Ground/underground/no-z = false.</summary>
