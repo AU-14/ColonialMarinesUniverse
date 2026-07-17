@@ -54,6 +54,7 @@ public sealed class InsurgencyFactionApplySystem : EntitySystem
     ///     Cleared on round restart.
     /// </summary>
     private FactionDefinition? _activeFaction;
+    private uint _activeGeneration;
 
     public override void Initialize()
     {
@@ -79,6 +80,7 @@ public sealed class InsurgencyFactionApplySystem : EntitySystem
     private void OnRoundRestart(RoundRestartCleanupEvent ev)
     {
         _activeFaction = null;
+        _activeGeneration = 0;
     }
 
     /// <summary>
@@ -106,6 +108,7 @@ public sealed class InsurgencyFactionApplySystem : EntitySystem
         var runtimeDefinition = CloneFactionDefinition(definition);
         InsurgencyFactionValidator.Sanitize(runtimeDefinition);
         _activeFaction = runtimeDefinition;
+        _activeGeneration++;
 
         // A faction is chosen: clear the leader's pending marker so their client drops the reopen button.
         var pending = EntityQueryEnumerator<InsurgencyPendingFactionSelectionComponent>();
@@ -408,6 +411,12 @@ public sealed class InsurgencyFactionApplySystem : EntitySystem
     // by late-joining members so both paths behave identically.
     private void ApplyToMember(EntityUid uid, CLFMemberComponent member, ICommonSession session, FactionDefinition definition)
     {
+        var application = EnsureComp<InsurgencyFactionApplicationComponent>(uid);
+        if (application.BriefingGeneration == _activeGeneration)
+            return;
+
+        application.BriefingGeneration = _activeGeneration;
+
         // Swap the team status icon so members read as this faction instead of generic CLF. A member whose
         // job has a per-job override uses that; everyone else falls back to the faction-wide icon.
         if (ResolveJobIcon(uid, definition) is { } icon)

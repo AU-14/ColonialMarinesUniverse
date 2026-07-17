@@ -115,6 +115,12 @@ public sealed class APackageSystem : EntitySystem
 
     private void GrantPackage(EntityUid member, ICommonSession session, List<EntProtoId> contents)
     {
+        var application = EnsureComp<InsurgencyFactionApplicationComponent>(member);
+        if (application.PackageGranted)
+            return;
+
+        application.PackageGranted = true;
+
         var package = Spawn(PackagePrototype, Transform(member).Coordinates);
         var comp = EnsureComp<APackageComponent>(package);
         comp.Contents = new List<EntProtoId>(contents);
