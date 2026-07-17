@@ -1,0 +1,15 @@
+- type: entity
+  parent: RMCChemDispenserBase
+  id: RMCChemDispenserGroundWeYu
+  suffix: Ground, WeYu
+  components:
+    - type: RMCChemicalDispenser
+      network: RMCChemStorageGroundWeYu
+
+- type: entity
+  parent: RMCChemStorageBase
+  id: RMCChemStorageGroundWeYu
+  suffix: Ground, WeYu
+  components:
+    - type: RMCChemicalStorage
+      network: RMCChemStorageGroundWeYu

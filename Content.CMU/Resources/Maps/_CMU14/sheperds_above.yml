@@ -4,8 +4,8 @@ meta:
   engineVersion: v278.0.0
   forkId: ""
   forkVersion: ""
-  time: 07/13/2026 22:55:07
-  entityCount: 11437
+  time: 07/16/2026 13:54:21
+  entityCount: 11696
 maps:
 - 1
 grids:
@@ -2329,6 +2329,33 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 17.5,71
+      parent: 1
+- proto: CMSoap
+  entities:
+  - uid: 45
+    components:
+    - type: Transform
+      pos: -39.375,-37.5
+      parent: 1
+  - uid: 46
+    components:
+    - type: Transform
+      pos: 45.25,59.25
+      parent: 1
+  - uid: 47
+    components:
+    - type: Transform
+      pos: 17.25,72.25
+      parent: 1
+  - uid: 48
+    components:
+    - type: Transform
+      pos: 19.5,72
+      parent: 1
+  - uid: 49
+    components:
+    - type: Transform
+      pos: 30.75,98.875
       parent: 1
 - proto: CMTableWoodenFancy
   entities:
@@ -20559,6 +20586,1530 @@ entities:
     - type: Transform
       anchored: False
       pos: -10.5,-150.5
+      parent: 1
+  - uid: 332371
+    components:
+    - type: Transform
+      anchored: False
+      pos: 57.5,38.5
+      parent: 1
+  - uid: 332372
+    components:
+    - type: Transform
+      anchored: False
+      pos: 58.5,38.5
+      parent: 1
+  - uid: 332373
+    components:
+    - type: Transform
+      anchored: False
+      pos: 59.5,38.5
+      parent: 1
+  - uid: 332374
+    components:
+    - type: Transform
+      anchored: False
+      pos: 60.5,38.5
+      parent: 1
+  - uid: 332375
+    components:
+    - type: Transform
+      anchored: False
+      pos: 61.5,38.5
+      parent: 1
+  - uid: 332376
+    components:
+    - type: Transform
+      anchored: False
+      pos: 54.5,37.5
+      parent: 1
+  - uid: 332377
+    components:
+    - type: Transform
+      anchored: False
+      pos: 55.5,37.5
+      parent: 1
+  - uid: 332378
+    components:
+    - type: Transform
+      anchored: False
+      pos: 56.5,37.5
+      parent: 1
+  - uid: 332379
+    components:
+    - type: Transform
+      anchored: False
+      pos: 57.5,37.5
+      parent: 1
+  - uid: 332380
+    components:
+    - type: Transform
+      anchored: False
+      pos: 58.5,37.5
+      parent: 1
+  - uid: 332381
+    components:
+    - type: Transform
+      anchored: False
+      pos: 59.5,37.5
+      parent: 1
+  - uid: 332382
+    components:
+    - type: Transform
+      anchored: False
+      pos: 60.5,37.5
+      parent: 1
+  - uid: 332383
+    components:
+    - type: Transform
+      anchored: False
+      pos: 61.5,37.5
+      parent: 1
+  - uid: 332384
+    components:
+    - type: Transform
+      anchored: False
+      pos: 62.5,37.5
+      parent: 1
+  - uid: 332385
+    components:
+    - type: Transform
+      anchored: False
+      pos: 53.5,36.5
+      parent: 1
+  - uid: 332386
+    components:
+    - type: Transform
+      anchored: False
+      pos: 54.5,36.5
+      parent: 1
+  - uid: 332387
+    components:
+    - type: Transform
+      anchored: False
+      pos: 55.5,36.5
+      parent: 1
+  - uid: 332388
+    components:
+    - type: Transform
+      anchored: False
+      pos: 56.5,36.5
+      parent: 1
+  - uid: 332389
+    components:
+    - type: Transform
+      anchored: False
+      pos: 57.5,36.5
+      parent: 1
+  - uid: 332390
+    components:
+    - type: Transform
+      anchored: False
+      pos: 58.5,36.5
+      parent: 1
+  - uid: 332391
+    components:
+    - type: Transform
+      anchored: False
+      pos: 59.5,36.5
+      parent: 1
+  - uid: 332392
+    components:
+    - type: Transform
+      anchored: False
+      pos: 60.5,36.5
+      parent: 1
+  - uid: 332393
+    components:
+    - type: Transform
+      anchored: False
+      pos: 61.5,36.5
+      parent: 1
+  - uid: 332394
+    components:
+    - type: Transform
+      anchored: False
+      pos: 62.5,36.5
+      parent: 1
+  - uid: 332395
+    components:
+    - type: Transform
+      anchored: False
+      pos: 53.5,35.5
+      parent: 1
+  - uid: 332396
+    components:
+    - type: Transform
+      anchored: False
+      pos: 54.5,35.5
+      parent: 1
+  - uid: 332397
+    components:
+    - type: Transform
+      anchored: False
+      pos: 55.5,35.5
+      parent: 1
+  - uid: 332398
+    components:
+    - type: Transform
+      anchored: False
+      pos: 56.5,35.5
+      parent: 1
+  - uid: 332399
+    components:
+    - type: Transform
+      anchored: False
+      pos: 57.5,35.5
+      parent: 1
+  - uid: 332400
+    components:
+    - type: Transform
+      anchored: False
+      pos: 58.5,35.5
+      parent: 1
+  - uid: 332401
+    components:
+    - type: Transform
+      anchored: False
+      pos: 59.5,35.5
+      parent: 1
+  - uid: 332402
+    components:
+    - type: Transform
+      anchored: False
+      pos: 60.5,35.5
+      parent: 1
+  - uid: 332403
+    components:
+    - type: Transform
+      anchored: False
+      pos: 61.5,35.5
+      parent: 1
+  - uid: 332404
+    components:
+    - type: Transform
+      anchored: False
+      pos: 62.5,35.5
+      parent: 1
+  - uid: 332410
+    components:
+    - type: Transform
+      anchored: False
+      pos: 53.5,34.5
+      parent: 1
+  - uid: 332411
+    components:
+    - type: Transform
+      anchored: False
+      pos: 54.5,34.5
+      parent: 1
+  - uid: 332412
+    components:
+    - type: Transform
+      anchored: False
+      pos: 55.5,34.5
+      parent: 1
+  - uid: 332413
+    components:
+    - type: Transform
+      anchored: False
+      pos: 56.5,34.5
+      parent: 1
+  - uid: 332414
+    components:
+    - type: Transform
+      anchored: False
+      pos: 57.5,34.5
+      parent: 1
+  - uid: 332415
+    components:
+    - type: Transform
+      anchored: False
+      pos: 58.5,34.5
+      parent: 1
+  - uid: 332416
+    components:
+    - type: Transform
+      anchored: False
+      pos: 59.5,34.5
+      parent: 1
+  - uid: 332417
+    components:
+    - type: Transform
+      anchored: False
+      pos: 60.5,34.5
+      parent: 1
+  - uid: 332418
+    components:
+    - type: Transform
+      anchored: False
+      pos: 61.5,34.5
+      parent: 1
+  - uid: 332419
+    components:
+    - type: Transform
+      anchored: False
+      pos: 62.5,34.5
+      parent: 1
+  - uid: 332420
+    components:
+    - type: Transform
+      anchored: False
+      pos: 53.5,33.5
+      parent: 1
+  - uid: 332421
+    components:
+    - type: Transform
+      anchored: False
+      pos: 54.5,33.5
+      parent: 1
+  - uid: 332422
+    components:
+    - type: Transform
+      anchored: False
+      pos: 55.5,33.5
+      parent: 1
+  - uid: 332423
+    components:
+    - type: Transform
+      anchored: False
+      pos: 56.5,33.5
+      parent: 1
+  - uid: 332424
+    components:
+    - type: Transform
+      anchored: False
+      pos: 57.5,33.5
+      parent: 1
+  - uid: 332425
+    components:
+    - type: Transform
+      anchored: False
+      pos: 58.5,33.5
+      parent: 1
+  - uid: 332426
+    components:
+    - type: Transform
+      anchored: False
+      pos: 59.5,33.5
+      parent: 1
+  - uid: 332427
+    components:
+    - type: Transform
+      anchored: False
+      pos: 60.5,33.5
+      parent: 1
+  - uid: 332428
+    components:
+    - type: Transform
+      anchored: False
+      pos: 61.5,33.5
+      parent: 1
+  - uid: 332429
+    components:
+    - type: Transform
+      anchored: False
+      pos: 62.5,33.5
+      parent: 1
+  - uid: 332430
+    components:
+    - type: Transform
+      anchored: False
+      pos: 53.5,32.5
+      parent: 1
+  - uid: 332431
+    components:
+    - type: Transform
+      anchored: False
+      pos: 54.5,32.5
+      parent: 1
+  - uid: 332432
+    components:
+    - type: Transform
+      anchored: False
+      pos: 55.5,32.5
+      parent: 1
+  - uid: 332433
+    components:
+    - type: Transform
+      anchored: False
+      pos: 56.5,32.5
+      parent: 1
+  - uid: 332434
+    components:
+    - type: Transform
+      anchored: False
+      pos: 57.5,32.5
+      parent: 1
+  - uid: 332435
+    components:
+    - type: Transform
+      anchored: False
+      pos: 58.5,32.5
+      parent: 1
+  - uid: 332436
+    components:
+    - type: Transform
+      anchored: False
+      pos: 59.5,32.5
+      parent: 1
+  - uid: 332437
+    components:
+    - type: Transform
+      anchored: False
+      pos: 60.5,32.5
+      parent: 1
+  - uid: 332438
+    components:
+    - type: Transform
+      anchored: False
+      pos: 61.5,32.5
+      parent: 1
+  - uid: 332439
+    components:
+    - type: Transform
+      anchored: False
+      pos: 62.5,32.5
+      parent: 1
+  - uid: 332440
+    components:
+    - type: Transform
+      anchored: False
+      pos: 53.5,31.5
+      parent: 1
+  - uid: 332441
+    components:
+    - type: Transform
+      anchored: False
+      pos: 54.5,31.5
+      parent: 1
+  - uid: 332442
+    components:
+    - type: Transform
+      anchored: False
+      pos: 55.5,31.5
+      parent: 1
+  - uid: 332443
+    components:
+    - type: Transform
+      anchored: False
+      pos: 56.5,31.5
+      parent: 1
+  - uid: 332444
+    components:
+    - type: Transform
+      anchored: False
+      pos: 57.5,31.5
+      parent: 1
+  - uid: 332445
+    components:
+    - type: Transform
+      anchored: False
+      pos: 58.5,31.5
+      parent: 1
+  - uid: 332446
+    components:
+    - type: Transform
+      anchored: False
+      pos: 59.5,31.5
+      parent: 1
+  - uid: 332447
+    components:
+    - type: Transform
+      anchored: False
+      pos: 60.5,31.5
+      parent: 1
+  - uid: 332448
+    components:
+    - type: Transform
+      anchored: False
+      pos: 61.5,31.5
+      parent: 1
+  - uid: 332449
+    components:
+    - type: Transform
+      anchored: False
+      pos: 54.5,30.5
+      parent: 1
+  - uid: 332450
+    components:
+    - type: Transform
+      anchored: False
+      pos: 55.5,30.5
+      parent: 1
+  - uid: 332451
+    components:
+    - type: Transform
+      anchored: False
+      pos: 56.5,30.5
+      parent: 1
+  - uid: 332452
+    components:
+    - type: Transform
+      anchored: False
+      pos: 57.5,30.5
+      parent: 1
+  - uid: 332453
+    components:
+    - type: Transform
+      anchored: False
+      pos: 58.5,30.5
+      parent: 1
+  - uid: 332454
+    components:
+    - type: Transform
+      anchored: False
+      pos: 59.5,30.5
+      parent: 1
+  - uid: 332455
+    components:
+    - type: Transform
+      anchored: False
+      pos: 54.5,29.5
+      parent: 1
+  - uid: 332456
+    components:
+    - type: Transform
+      anchored: False
+      pos: 55.5,29.5
+      parent: 1
+  - uid: 332457
+    components:
+    - type: Transform
+      anchored: False
+      pos: 56.5,29.5
+      parent: 1
+  - uid: 332458
+    components:
+    - type: Transform
+      anchored: False
+      pos: 57.5,29.5
+      parent: 1
+  - uid: 332459
+    components:
+    - type: Transform
+      anchored: False
+      pos: 58.5,29.5
+      parent: 1
+  - uid: 332460
+    components:
+    - type: Transform
+      anchored: False
+      pos: 59.5,29.5
+      parent: 1
+  - uid: 332461
+    components:
+    - type: Transform
+      anchored: False
+      pos: 54.5,28.5
+      parent: 1
+  - uid: 332462
+    components:
+    - type: Transform
+      anchored: False
+      pos: 55.5,28.5
+      parent: 1
+  - uid: 332463
+    components:
+    - type: Transform
+      anchored: False
+      pos: 56.5,28.5
+      parent: 1
+  - uid: 332464
+    components:
+    - type: Transform
+      anchored: False
+      pos: 57.5,28.5
+      parent: 1
+  - uid: 332465
+    components:
+    - type: Transform
+      anchored: False
+      pos: 58.5,28.5
+      parent: 1
+  - uid: 332466
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,36.5
+      parent: 1
+  - uid: 332467
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,35.5
+      parent: 1
+  - uid: 332468
+    components:
+    - type: Transform
+      anchored: False
+      pos: 79.5,35.5
+      parent: 1
+  - uid: 332469
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,34.5
+      parent: 1
+  - uid: 332470
+    components:
+    - type: Transform
+      anchored: False
+      pos: 79.5,34.5
+      parent: 1
+  - uid: 332471
+    components:
+    - type: Transform
+      anchored: False
+      pos: 77.5,33.5
+      parent: 1
+  - uid: 332472
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,33.5
+      parent: 1
+  - uid: 332473
+    components:
+    - type: Transform
+      anchored: False
+      pos: 79.5,33.5
+      parent: 1
+  - uid: 332474
+    components:
+    - type: Transform
+      anchored: False
+      pos: 80.5,33.5
+      parent: 1
+  - uid: 332475
+    components:
+    - type: Transform
+      anchored: False
+      pos: 77.5,32.5
+      parent: 1
+  - uid: 332476
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,32.5
+      parent: 1
+  - uid: 332477
+    components:
+    - type: Transform
+      anchored: False
+      pos: 79.5,32.5
+      parent: 1
+  - uid: 332478
+    components:
+    - type: Transform
+      anchored: False
+      pos: 80.5,32.5
+      parent: 1
+  - uid: 332479
+    components:
+    - type: Transform
+      anchored: False
+      pos: 77.5,31.5
+      parent: 1
+  - uid: 332480
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,31.5
+      parent: 1
+  - uid: 332481
+    components:
+    - type: Transform
+      anchored: False
+      pos: 79.5,31.5
+      parent: 1
+  - uid: 332482
+    components:
+    - type: Transform
+      anchored: False
+      pos: 80.5,31.5
+      parent: 1
+  - uid: 332483
+    components:
+    - type: Transform
+      anchored: False
+      pos: 81.5,31.5
+      parent: 1
+  - uid: 332484
+    components:
+    - type: Transform
+      anchored: False
+      pos: 76.5,30.5
+      parent: 1
+  - uid: 332485
+    components:
+    - type: Transform
+      anchored: False
+      pos: 77.5,30.5
+      parent: 1
+  - uid: 332486
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,30.5
+      parent: 1
+  - uid: 332487
+    components:
+    - type: Transform
+      anchored: False
+      pos: 79.5,30.5
+      parent: 1
+  - uid: 332488
+    components:
+    - type: Transform
+      anchored: False
+      pos: 80.5,30.5
+      parent: 1
+  - uid: 332489
+    components:
+    - type: Transform
+      anchored: False
+      pos: 81.5,30.5
+      parent: 1
+  - uid: 332490
+    components:
+    - type: Transform
+      anchored: False
+      pos: 74.5,29.5
+      parent: 1
+  - uid: 332491
+    components:
+    - type: Transform
+      anchored: False
+      pos: 75.5,29.5
+      parent: 1
+  - uid: 332492
+    components:
+    - type: Transform
+      anchored: False
+      pos: 76.5,29.5
+      parent: 1
+  - uid: 332493
+    components:
+    - type: Transform
+      anchored: False
+      pos: 77.5,29.5
+      parent: 1
+  - uid: 332494
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,29.5
+      parent: 1
+  - uid: 332495
+    components:
+    - type: Transform
+      anchored: False
+      pos: 79.5,29.5
+      parent: 1
+  - uid: 332496
+    components:
+    - type: Transform
+      anchored: False
+      pos: 80.5,29.5
+      parent: 1
+  - uid: 332497
+    components:
+    - type: Transform
+      anchored: False
+      pos: 81.5,29.5
+      parent: 1
+  - uid: 332498
+    components:
+    - type: Transform
+      anchored: False
+      pos: 73.5,28.5
+      parent: 1
+  - uid: 332499
+    components:
+    - type: Transform
+      anchored: False
+      pos: 74.5,28.5
+      parent: 1
+  - uid: 332500
+    components:
+    - type: Transform
+      anchored: False
+      pos: 75.5,28.5
+      parent: 1
+  - uid: 332501
+    components:
+    - type: Transform
+      anchored: False
+      pos: 76.5,28.5
+      parent: 1
+  - uid: 332502
+    components:
+    - type: Transform
+      anchored: False
+      pos: 77.5,28.5
+      parent: 1
+  - uid: 332503
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,28.5
+      parent: 1
+  - uid: 332504
+    components:
+    - type: Transform
+      anchored: False
+      pos: 79.5,28.5
+      parent: 1
+  - uid: 332505
+    components:
+    - type: Transform
+      anchored: False
+      pos: 80.5,28.5
+      parent: 1
+  - uid: 332506
+    components:
+    - type: Transform
+      anchored: False
+      pos: 81.5,28.5
+      parent: 1
+  - uid: 332507
+    components:
+    - type: Transform
+      anchored: False
+      pos: 73.5,27.5
+      parent: 1
+  - uid: 332508
+    components:
+    - type: Transform
+      anchored: False
+      pos: 74.5,27.5
+      parent: 1
+  - uid: 332509
+    components:
+    - type: Transform
+      anchored: False
+      pos: 75.5,27.5
+      parent: 1
+  - uid: 332510
+    components:
+    - type: Transform
+      anchored: False
+      pos: 76.5,27.5
+      parent: 1
+  - uid: 332511
+    components:
+    - type: Transform
+      anchored: False
+      pos: 77.5,27.5
+      parent: 1
+  - uid: 332512
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,27.5
+      parent: 1
+  - uid: 332513
+    components:
+    - type: Transform
+      anchored: False
+      pos: 79.5,27.5
+      parent: 1
+  - uid: 332514
+    components:
+    - type: Transform
+      anchored: False
+      pos: 80.5,27.5
+      parent: 1
+  - uid: 332515
+    components:
+    - type: Transform
+      anchored: False
+      pos: 81.5,27.5
+      parent: 1
+  - uid: 332516
+    components:
+    - type: Transform
+      anchored: False
+      pos: 72.5,26.5
+      parent: 1
+  - uid: 332517
+    components:
+    - type: Transform
+      anchored: False
+      pos: 73.5,26.5
+      parent: 1
+  - uid: 332518
+    components:
+    - type: Transform
+      anchored: False
+      pos: 74.5,26.5
+      parent: 1
+  - uid: 332519
+    components:
+    - type: Transform
+      anchored: False
+      pos: 75.5,26.5
+      parent: 1
+  - uid: 332520
+    components:
+    - type: Transform
+      anchored: False
+      pos: 76.5,26.5
+      parent: 1
+  - uid: 332521
+    components:
+    - type: Transform
+      anchored: False
+      pos: 77.5,26.5
+      parent: 1
+  - uid: 332522
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,26.5
+      parent: 1
+  - uid: 332523
+    components:
+    - type: Transform
+      anchored: False
+      pos: 79.5,26.5
+      parent: 1
+  - uid: 332524
+    components:
+    - type: Transform
+      anchored: False
+      pos: 80.5,26.5
+      parent: 1
+  - uid: 332525
+    components:
+    - type: Transform
+      anchored: False
+      pos: 81.5,26.5
+      parent: 1
+  - uid: 332526
+    components:
+    - type: Transform
+      anchored: False
+      pos: 72.5,25.5
+      parent: 1
+  - uid: 332527
+    components:
+    - type: Transform
+      anchored: False
+      pos: 73.5,25.5
+      parent: 1
+  - uid: 332528
+    components:
+    - type: Transform
+      anchored: False
+      pos: 74.5,25.5
+      parent: 1
+  - uid: 332529
+    components:
+    - type: Transform
+      anchored: False
+      pos: 75.5,25.5
+      parent: 1
+  - uid: 332530
+    components:
+    - type: Transform
+      anchored: False
+      pos: 76.5,25.5
+      parent: 1
+  - uid: 332531
+    components:
+    - type: Transform
+      anchored: False
+      pos: 77.5,25.5
+      parent: 1
+  - uid: 332532
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,25.5
+      parent: 1
+  - uid: 332533
+    components:
+    - type: Transform
+      anchored: False
+      pos: 79.5,25.5
+      parent: 1
+  - uid: 332534
+    components:
+    - type: Transform
+      anchored: False
+      pos: 80.5,25.5
+      parent: 1
+  - uid: 332535
+    components:
+    - type: Transform
+      anchored: False
+      pos: 81.5,25.5
+      parent: 1
+  - uid: 332536
+    components:
+    - type: Transform
+      anchored: False
+      pos: 72.5,24.5
+      parent: 1
+  - uid: 332537
+    components:
+    - type: Transform
+      anchored: False
+      pos: 73.5,24.5
+      parent: 1
+  - uid: 332538
+    components:
+    - type: Transform
+      anchored: False
+      pos: 74.5,24.5
+      parent: 1
+  - uid: 332539
+    components:
+    - type: Transform
+      anchored: False
+      pos: 75.5,24.5
+      parent: 1
+  - uid: 332540
+    components:
+    - type: Transform
+      anchored: False
+      pos: 76.5,24.5
+      parent: 1
+  - uid: 332541
+    components:
+    - type: Transform
+      anchored: False
+      pos: 77.5,24.5
+      parent: 1
+  - uid: 332542
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,24.5
+      parent: 1
+  - uid: 332543
+    components:
+    - type: Transform
+      anchored: False
+      pos: 79.5,24.5
+      parent: 1
+  - uid: 332544
+    components:
+    - type: Transform
+      anchored: False
+      pos: 80.5,24.5
+      parent: 1
+  - uid: 332545
+    components:
+    - type: Transform
+      anchored: False
+      pos: 72.5,23.5
+      parent: 1
+  - uid: 332546
+    components:
+    - type: Transform
+      anchored: False
+      pos: 73.5,23.5
+      parent: 1
+  - uid: 332547
+    components:
+    - type: Transform
+      anchored: False
+      pos: 74.5,23.5
+      parent: 1
+  - uid: 332548
+    components:
+    - type: Transform
+      anchored: False
+      pos: 75.5,23.5
+      parent: 1
+  - uid: 332549
+    components:
+    - type: Transform
+      anchored: False
+      pos: 76.5,23.5
+      parent: 1
+  - uid: 332550
+    components:
+    - type: Transform
+      anchored: False
+      pos: 77.5,23.5
+      parent: 1
+  - uid: 332551
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,23.5
+      parent: 1
+  - uid: 332552
+    components:
+    - type: Transform
+      anchored: False
+      pos: 79.5,23.5
+      parent: 1
+  - uid: 332553
+    components:
+    - type: Transform
+      anchored: False
+      pos: 80.5,23.5
+      parent: 1
+  - uid: 332554
+    components:
+    - type: Transform
+      anchored: False
+      pos: 72.5,22.5
+      parent: 1
+  - uid: 332555
+    components:
+    - type: Transform
+      anchored: False
+      pos: 73.5,22.5
+      parent: 1
+  - uid: 332556
+    components:
+    - type: Transform
+      anchored: False
+      pos: 74.5,22.5
+      parent: 1
+  - uid: 332557
+    components:
+    - type: Transform
+      anchored: False
+      pos: 75.5,22.5
+      parent: 1
+  - uid: 332558
+    components:
+    - type: Transform
+      anchored: False
+      pos: 76.5,22.5
+      parent: 1
+  - uid: 332559
+    components:
+    - type: Transform
+      anchored: False
+      pos: 77.5,22.5
+      parent: 1
+  - uid: 332560
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,22.5
+      parent: 1
+  - uid: 332561
+    components:
+    - type: Transform
+      anchored: False
+      pos: 79.5,22.5
+      parent: 1
+  - uid: 332562
+    components:
+    - type: Transform
+      anchored: False
+      pos: 80.5,22.5
+      parent: 1
+  - uid: 332563
+    components:
+    - type: Transform
+      anchored: False
+      pos: 72.5,21.5
+      parent: 1
+  - uid: 332564
+    components:
+    - type: Transform
+      anchored: False
+      pos: 73.5,21.5
+      parent: 1
+  - uid: 332565
+    components:
+    - type: Transform
+      anchored: False
+      pos: 74.5,21.5
+      parent: 1
+  - uid: 332566
+    components:
+    - type: Transform
+      anchored: False
+      pos: 75.5,21.5
+      parent: 1
+  - uid: 332567
+    components:
+    - type: Transform
+      anchored: False
+      pos: 76.5,21.5
+      parent: 1
+  - uid: 332568
+    components:
+    - type: Transform
+      anchored: False
+      pos: 77.5,21.5
+      parent: 1
+  - uid: 332569
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,21.5
+      parent: 1
+  - uid: 332570
+    components:
+    - type: Transform
+      anchored: False
+      pos: 79.5,21.5
+      parent: 1
+  - uid: 332571
+    components:
+    - type: Transform
+      anchored: False
+      pos: 80.5,21.5
+      parent: 1
+  - uid: 332572
+    components:
+    - type: Transform
+      anchored: False
+      pos: 72.5,20.5
+      parent: 1
+  - uid: 332573
+    components:
+    - type: Transform
+      anchored: False
+      pos: 73.5,20.5
+      parent: 1
+  - uid: 332574
+    components:
+    - type: Transform
+      anchored: False
+      pos: 74.5,20.5
+      parent: 1
+  - uid: 332575
+    components:
+    - type: Transform
+      anchored: False
+      pos: 75.5,20.5
+      parent: 1
+  - uid: 332576
+    components:
+    - type: Transform
+      anchored: False
+      pos: 76.5,20.5
+      parent: 1
+  - uid: 332577
+    components:
+    - type: Transform
+      anchored: False
+      pos: 77.5,20.5
+      parent: 1
+  - uid: 332578
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,20.5
+      parent: 1
+  - uid: 332579
+    components:
+    - type: Transform
+      anchored: False
+      pos: 79.5,20.5
+      parent: 1
+  - uid: 332580
+    components:
+    - type: Transform
+      anchored: False
+      pos: 80.5,20.5
+      parent: 1
+  - uid: 332581
+    components:
+    - type: Transform
+      anchored: False
+      pos: 72.5,19.5
+      parent: 1
+  - uid: 332582
+    components:
+    - type: Transform
+      anchored: False
+      pos: 73.5,19.5
+      parent: 1
+  - uid: 332583
+    components:
+    - type: Transform
+      anchored: False
+      pos: 74.5,19.5
+      parent: 1
+  - uid: 332584
+    components:
+    - type: Transform
+      anchored: False
+      pos: 75.5,19.5
+      parent: 1
+  - uid: 332585
+    components:
+    - type: Transform
+      anchored: False
+      pos: 76.5,19.5
+      parent: 1
+  - uid: 332586
+    components:
+    - type: Transform
+      anchored: False
+      pos: 77.5,19.5
+      parent: 1
+  - uid: 332587
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,19.5
+      parent: 1
+  - uid: 332588
+    components:
+    - type: Transform
+      anchored: False
+      pos: 79.5,19.5
+      parent: 1
+  - uid: 332589
+    components:
+    - type: Transform
+      anchored: False
+      pos: 80.5,19.5
+      parent: 1
+  - uid: 332590
+    components:
+    - type: Transform
+      anchored: False
+      pos: 72.5,18.5
+      parent: 1
+  - uid: 332591
+    components:
+    - type: Transform
+      anchored: False
+      pos: 73.5,18.5
+      parent: 1
+  - uid: 332592
+    components:
+    - type: Transform
+      anchored: False
+      pos: 74.5,18.5
+      parent: 1
+  - uid: 332593
+    components:
+    - type: Transform
+      anchored: False
+      pos: 75.5,18.5
+      parent: 1
+  - uid: 332594
+    components:
+    - type: Transform
+      anchored: False
+      pos: 76.5,18.5
+      parent: 1
+  - uid: 332595
+    components:
+    - type: Transform
+      anchored: False
+      pos: 77.5,18.5
+      parent: 1
+  - uid: 332596
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,18.5
+      parent: 1
+  - uid: 332597
+    components:
+    - type: Transform
+      anchored: False
+      pos: 79.5,18.5
+      parent: 1
+  - uid: 332598
+    components:
+    - type: Transform
+      anchored: False
+      pos: 80.5,18.5
+      parent: 1
+  - uid: 332599
+    components:
+    - type: Transform
+      anchored: False
+      pos: 72.5,17.5
+      parent: 1
+  - uid: 332600
+    components:
+    - type: Transform
+      anchored: False
+      pos: 73.5,17.5
+      parent: 1
+  - uid: 332601
+    components:
+    - type: Transform
+      anchored: False
+      pos: 74.5,17.5
+      parent: 1
+  - uid: 332602
+    components:
+    - type: Transform
+      anchored: False
+      pos: 75.5,17.5
+      parent: 1
+  - uid: 332603
+    components:
+    - type: Transform
+      anchored: False
+      pos: 76.5,17.5
+      parent: 1
+  - uid: 332604
+    components:
+    - type: Transform
+      anchored: False
+      pos: 77.5,17.5
+      parent: 1
+  - uid: 332605
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,17.5
+      parent: 1
+  - uid: 332606
+    components:
+    - type: Transform
+      anchored: False
+      pos: 79.5,17.5
+      parent: 1
+  - uid: 332607
+    components:
+    - type: Transform
+      anchored: False
+      pos: 72.5,16.5
+      parent: 1
+  - uid: 332608
+    components:
+    - type: Transform
+      anchored: False
+      pos: 73.5,16.5
+      parent: 1
+  - uid: 332609
+    components:
+    - type: Transform
+      anchored: False
+      pos: 74.5,16.5
+      parent: 1
+  - uid: 332610
+    components:
+    - type: Transform
+      anchored: False
+      pos: 75.5,16.5
+      parent: 1
+  - uid: 332611
+    components:
+    - type: Transform
+      anchored: False
+      pos: 76.5,16.5
+      parent: 1
+  - uid: 332612
+    components:
+    - type: Transform
+      anchored: False
+      pos: 77.5,16.5
+      parent: 1
+  - uid: 332613
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,16.5
+      parent: 1
+  - uid: 332614
+    components:
+    - type: Transform
+      anchored: False
+      pos: 79.5,16.5
+      parent: 1
+  - uid: 332615
+    components:
+    - type: Transform
+      anchored: False
+      pos: 72.5,15.5
+      parent: 1
+  - uid: 332616
+    components:
+    - type: Transform
+      anchored: False
+      pos: 73.5,15.5
+      parent: 1
+  - uid: 332617
+    components:
+    - type: Transform
+      anchored: False
+      pos: 74.5,15.5
+      parent: 1
+  - uid: 332618
+    components:
+    - type: Transform
+      anchored: False
+      pos: 75.5,15.5
+      parent: 1
+  - uid: 332619
+    components:
+    - type: Transform
+      anchored: False
+      pos: 76.5,15.5
+      parent: 1
+  - uid: 332620
+    components:
+    - type: Transform
+      anchored: False
+      pos: 77.5,15.5
+      parent: 1
+  - uid: 332621
+    components:
+    - type: Transform
+      anchored: False
+      pos: 78.5,15.5
+      parent: 1
+  - uid: 332622
+    components:
+    - type: Transform
+      anchored: False
+      pos: 72.5,14.5
+      parent: 1
+  - uid: 332623
+    components:
+    - type: Transform
+      anchored: False
+      pos: 73.5,14.5
+      parent: 1
+  - uid: 332624
+    components:
+    - type: Transform
+      anchored: False
+      pos: 74.5,14.5
+      parent: 1
+  - uid: 332625
+    components:
+    - type: Transform
+      anchored: False
+      pos: 75.5,14.5
+      parent: 1
+  - uid: 332626
+    components:
+    - type: Transform
+      anchored: False
+      pos: 76.5,14.5
+      parent: 1
+  - uid: 332627
+    components:
+    - type: Transform
+      anchored: False
+      pos: 73.5,13.5
+      parent: 1
+  - uid: 332628
+    components:
+    - type: Transform
+      anchored: False
+      pos: 74.5,13.5
+      parent: 1
+  - uid: 332629
+    components:
+    - type: Transform
+      anchored: False
+      pos: 75.5,13.5
       parent: 1
 - proto: CMWallJungle
   entities:

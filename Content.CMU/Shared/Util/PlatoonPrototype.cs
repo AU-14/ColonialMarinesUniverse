@@ -2,6 +2,7 @@ using Content.Shared.AU14.Allegiance;
 using Robust.Shared.Prototypes;
 using Content.Shared.NPC.Prototypes;
 using Robust.Shared.Utility;
+using Content.Shared._RMC14.Language.Prototypes;
 
 namespace Content.Shared.AU14.util;
 
@@ -28,8 +29,18 @@ public sealed partial class PlatoonPrototype : IPrototype
     [DataField("Allegiance")]
     public ProtoId<AllegiancePrototype>? Allegiance { get; private set; }
 
-    [DataField("language", required: false)]
-    public string Language { get; private set; } = string.Empty;
+    /// <summary>
+    /// Languages immediately known by members of this platoon.
+    /// </summary>
+    [DataField]
+    public List<ProtoId<LanguagePrototype>> Languages { get; private set; } = new();
+
+    /// <summary>
+    /// Languages members can learn from this platoon.
+    /// </summary>
+    [DataField]
+    public List<ProtoId<LanguagePrototype>> LearnableLanguages { get; private set; } = new();
+
     [DataField("name", required: true)]
     public string Name { get; private set; } = string.Empty;
 

@@ -10,6 +10,7 @@
     - state: telebaton_off
       map: [ "enum.ToggleableVisuals.Layer" ]
   - type: Clothing
+    quickEquip: false
     sprite: _RMC14/Objects/Weapons/Melee/telebaton.rsi
     slots:
     - Belt

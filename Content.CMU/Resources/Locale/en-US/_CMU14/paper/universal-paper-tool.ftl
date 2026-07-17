@@ -1,0 +1,10 @@
+cmu-universal-paper-tool-window-title = Universal Paper Tool
+cmu-universal-paper-tool-header = Paper templates
+cmu-universal-paper-tool-paper-loaded = Paper loaded.
+cmu-universal-paper-tool-paper-missing = Insert Paper before printing.
+cmu-universal-paper-tool-paper-slot-name = Paper feed
+cmu-universal-paper-tool-paper-inserted = Paper loaded.
+cmu-universal-paper-tool-paper-invalid = The tool only accepts paper.
+cmu-universal-paper-tool-printed = Printed {$paper}.
+cmu-universal-paper-tool-no-paper = Insert Paper first.
+cmu-universal-paper-tool-invalid-template = That template is not a paper prototype.

@@ -4,8 +4,8 @@ meta:
   engineVersion: v278.0.0
   forkId: ""
   forkVersion: ""
-  time: 07/14/2026 18:40:59
-  entityCount: 13360
+  time: 07/16/2026 13:38:21
+  entityCount: 13363
 maps:
 - 1
 grids:
@@ -11940,6 +11940,23 @@ entities:
     components:
     - type: Transform
       pos: 27.5,-15
+      parent: 1
+- proto: CMSoap
+  entities:
+  - uid: 8373
+    components:
+    - type: Transform
+      pos: 4.125,-21.375
+      parent: 1
+  - uid: 12141
+    components:
+    - type: Transform
+      pos: 27.75,-15.5
+      parent: 1
+  - uid: 12142
+    components:
+    - type: Transform
+      pos: -1.25,-45.5
       parent: 1
 - proto: CMTableReinforcedBlack
   entities:

@@ -4,8 +4,8 @@ meta:
   engineVersion: v278.0.0
   forkId: ""
   forkVersion: ""
-  time: 07/12/2026 23:06:05
-  entityCount: 8104
+  time: 07/16/2026 13:55:03
+  entityCount: 8105
 maps:
 - 1
 grids:
@@ -950,6 +950,15 @@ entities:
         - 0
         - 0
         - 0
+- proto: CMDropshipDestinationThirdPartyWhitelist
+  entities:
+  - uid: 332498
+    components:
+    - type: MetaData
+      name: Logistics Roof
+    - type: Transform
+      pos: 39.5,54.5
+      parent: 1
 - proto: CMWallJungle
   entities:
   - uid: 325046

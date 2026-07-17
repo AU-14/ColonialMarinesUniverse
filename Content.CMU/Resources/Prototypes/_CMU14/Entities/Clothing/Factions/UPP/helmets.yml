@@ -27,7 +27,7 @@
   parent: RMCMarineHelmetBase
   id: AU14Altyn
   name: Altyn-R2M
-  description: An old earth design initially designed for special forces and internal security for use in close quarters combat. Still in use by UPP forces after more than a century.
+  description: An old earth design initially created for special forces and internal security to use in close quarters combat. Still worn by UPP forces after more than a century.
   components:
   - type: Sprite
     sprite: _AU14/Clothing/UPP/helmets/altyn.rsi
