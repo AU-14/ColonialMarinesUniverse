@@ -4,8 +4,8 @@ meta:
   engineVersion: v278.0.0
   forkId: ""
   forkVersion: ""
-  time: 07/17/2026 15:55:37
-  entityCount: 91264
+  time: 07/17/2026 18:11:10
+  entityCount: 91276
 maps:
 - 1
 grids:
@@ -2796,6 +2796,11 @@ entities:
             state: supply
           indices: 12,-33
         16036:
+          image:
+            sprite: /Textures/_RMC14/Interface/map_blips.rsi
+            state: supply
+          indices: 12,-33
+        16041:
           image:
             sprite: /Textures/_RMC14/Interface/map_blips.rsi
             state: supply
@@ -145111,6 +145116,18 @@ entities:
     - type: Transform
       pos: 176.5,-51.5
       parent: 1
+    - type: TacticalMapUser
+      action: 91265
+      marines: False
+    - type: ActionsContainer
+    - type: ContainerContainer
+      containers:
+        actions: !type:Container
+          ents:
+          - 91265
+    - type: Actions
+      actions:
+      - 91265
 - proto: AU14AICoreSubstrateMUTHUR
   entities:
   - uid: 31
@@ -145244,6 +145261,11 @@ entities:
     components:
     - type: Transform
       pos: 20.5,67.5
+      parent: 1
+  - uid: 91275
+    components:
+    - type: Transform
+      pos: 78.5,-106.5
       parent: 1
 - proto: AU14CashVendorKitchenware
   entities:
@@ -152193,6 +152215,36 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 132.5,-95.5
       parent: 1
+    - type: Door
+      bumpOpen: False
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.49,-0.49
+            - 0.49,-0.49
+            - 0.49,0.49
+            - -0.49,0.49
+          mask:
+          - Impassable
+          - MidImpassable
+          - HighImpassable
+          - LowImpassable
+          - InteractImpassable
+          layer:
+          - MidImpassable
+          - HighImpassable
+          - LowImpassable
+          - BulletImpassable
+          - InteractImpassable
+          density: 100
+          hard: True
+          restitution: 0
+          friction: 0.4
+    - type: AirlockReceiverXenoClaws
+      minimumClawStrength: ImpossiblySharp
     - type: AccessReader
       access:
       - - AU14AccessCorporateWEYU
@@ -152202,6 +152254,36 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 132.5,-90.5
       parent: 1
+    - type: Door
+      bumpOpen: False
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.49,-0.49
+            - 0.49,-0.49
+            - 0.49,0.49
+            - -0.49,0.49
+          mask:
+          - Impassable
+          - MidImpassable
+          - HighImpassable
+          - LowImpassable
+          - InteractImpassable
+          layer:
+          - MidImpassable
+          - HighImpassable
+          - LowImpassable
+          - BulletImpassable
+          - InteractImpassable
+          density: 100
+          hard: True
+          restitution: 0
+          friction: 0.4
+    - type: AirlockReceiverXenoClaws
+      minimumClawStrength: ImpossiblySharp
     - type: AccessReader
       access:
       - - AU14AccessCorporateWEYU
@@ -162414,6 +162496,12 @@ entities:
     - type: Transform
       pos: -141.47633,-107.33116
       parent: 1
+  - uid: 91274
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 81.5,-108.5
+      parent: 1
 - proto: CMSemioticCommline_connection
   entities:
   - uid: 2776
@@ -164893,6 +164981,24 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 129.5,-95.5
+      parent: 1
+  - uid: 91270
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 80.5,-109.5
+      parent: 1
+  - uid: 91271
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 80.5,-110.5
+      parent: 1
+  - uid: 91272
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 80.5,-111.5
       parent: 1
 - proto: CMTableReinforcedRequisition
   entities:
@@ -169630,6 +169736,14 @@ entities:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 137.5,-81.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 91266
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 127.5,-85.5
       parent: 1
     - type: Fixtures
       fixtures: {}
@@ -567159,6 +567273,16 @@ entities:
       originalIconColor: '#FFFFFFFF'
       container: 30
       attachedEntity: 30
+  - uid: 91265
+    mapInit: true
+    paused: true
+    components:
+    - type: Transform
+      parent: 30
+    - type: Action
+      originalIconColor: '#FFFFFFFF'
+      container: 30
+      attachedEntity: 30
 - proto: RMCAIConsoleInterface
   entities:
   - uid: 83057
@@ -569829,6 +569953,11 @@ entities:
     - type: Transform
       pos: 76.5,-44.5
       parent: 1
+  - uid: 91273
+    components:
+    - type: Transform
+      pos: 80.5,-109.5
+      parent: 1
 - proto: RMCCommunicationsTowerProp
   entities:
   - uid: 83475
@@ -569957,6 +570086,30 @@ entities:
     components:
     - type: Transform
       pos: 54.5,3.5
+      parent: 1
+- proto: RMCCouchEndLowerBrown
+  entities:
+  - uid: 91267
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 78.5,-111.5
+      parent: 1
+- proto: RMCCouchEndUpperBrown
+  entities:
+  - uid: 91268
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 78.5,-109.5
+      parent: 1
+- proto: RMCCouchMidBrown
+  entities:
+  - uid: 91269
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 78.5,-110.5
       parent: 1
 - proto: RMCCPRDummy
   entities:
@@ -595447,6 +595600,12 @@ entities:
     components:
     - type: Transform
       pos: 151.5,-76.5
+      parent: 1
+  - uid: 91276
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 80.5,-110.5
       parent: 1
 - proto: RMCToolboxElectricalFilled
   entities:
