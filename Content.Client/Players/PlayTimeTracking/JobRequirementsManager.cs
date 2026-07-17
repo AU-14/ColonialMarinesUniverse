@@ -115,6 +115,24 @@ public sealed partial class JobRequirementsManager : ISharedPlaytimeManager
         return false;
     }
     // RMC14-Whitelist-Tweak-End
+
+    public bool CanCustomizeWhitelistedJob(string jobId)
+    {
+        if (_roleBans.Contains($"Job:{jobId}"))
+            return false;
+
+        if (!_prototypes.TryIndex<JobPrototype>(jobId, out var jobPrototype))
+        {
+            _sawmill.Error($"Failed to index job prototype {jobId} during customization whitelist check. Assuming unavailable");
+            return false;
+        }
+
+        if (!_cfg.GetCVar(CCVars.GameRoleWhitelist))
+            return true;
+
+        return !jobPrototype.Whitelisted || IsWhitelistedInternal(jobId);
+    }
+
     public bool IsAllowed(JobPrototype job, HumanoidCharacterProfile? profile, [NotNullWhen(false)] out FormattedMessage? reason)
     {
         reason = null;

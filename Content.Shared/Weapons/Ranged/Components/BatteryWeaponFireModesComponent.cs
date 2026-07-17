@@ -26,6 +26,13 @@ public sealed partial class BatteryWeaponFireModesComponent : Component
     [DataField]
     [AutoNetworkedField]
     public int CurrentFireMode;
+
+    /// <summary>
+    /// Also cycle this battery weapon's firing mode through RMC unique action.
+    /// </summary>
+    [DataField]
+    [AutoNetworkedField]
+    public bool CycleOnUniqueAction;
 }
 
 [DataDefinition, Serializable, NetSerializable]
@@ -42,6 +49,19 @@ public sealed partial class BatteryWeaponFireMode
     /// </summary>
     [DataField]
     public float FireCost = 100;
+
+    /// <summary>
+    /// Optional fire rate to apply while this firing mode is selected.
+    /// Conversion from CMSS13 fire_delay: 1 / (fire_delay / 10).
+    /// </summary>
+    [DataField]
+    public float FireRate;
+
+    /// <summary>
+    /// Optional raw popup shown when this firing mode is selected.
+    /// </summary>
+    [DataField]
+    public string PopupText = string.Empty;
 }
 
 [Serializable, NetSerializable]

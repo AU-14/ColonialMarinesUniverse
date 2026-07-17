@@ -19,6 +19,7 @@ public sealed partial class TacticalMapComponent : Component
        ["OPFOR"] = TimeSpan.FromSeconds(1),
        ["GOVFOR"] = TimeSpan.FromSeconds(1),
        ["CLF"] = TimeSpan.FromSeconds(1),
+       ["YAUTJA"] = TimeSpan.FromSeconds(1),
    };
 
    [DataField]
@@ -57,6 +58,12 @@ public sealed partial class TacticalMapComponent : Component
 
    [DataField]
    public Dictionary<int, TacticalMapBlip> LastUpdateClfBlips = new();
+
+   [DataField]
+   public Dictionary<int, TacticalMapBlip> YautjaBlips = new();
+
+   [DataField]
+   public Dictionary<int, TacticalMapBlip> LastUpdateYautjaBlips = new();
 
    [DataField]
    public List<TacticalMapLine> MarineLines = new();

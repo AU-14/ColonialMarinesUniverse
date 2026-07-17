@@ -4,6 +4,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -16,6 +17,7 @@ public sealed partial class RechargeBasicEntityAmmoSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedGunSystem _gun = default!;
     [Dependency] private MetaDataSystem _metadata = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {
@@ -35,8 +37,24 @@ public sealed partial class RechargeBasicEntityAmmoSystem : EntitySystem
             if (ammo.Count is null || ammo.Count == ammo.Capacity || recharge.NextCharge == null)
                 continue;
 
-            if (recharge.NextCharge > _timing.CurTime)
+            if (recharge.StrictCooldownBoundary
+                ? recharge.NextCharge >= _timing.CurTime
+                : recharge.NextCharge > _timing.CurTime)
                 continue;
+
+            if (_netManager.IsClient && recharge.RechargeChance < 1f)
+                continue;
+
+            if (!_random.Prob(recharge.RechargeChance))
+            {
+                if (recharge.AdvanceOnFailedRecharge)
+                {
+                    recharge.NextCharge = recharge.NextCharge.Value + TimeSpan.FromSeconds(recharge.RechargeCooldown);
+                    Dirty(uid, recharge);
+                }
+
+                continue;
+            }
 
             if (_gun.UpdateBasicEntityAmmoCount(uid, ammo.Count.Value + 1, ammo))
             {
@@ -46,21 +64,27 @@ public sealed partial class RechargeBasicEntityAmmoSystem : EntitySystem
                     _audio.PlayPvs(recharge.RechargeSound, uid);
             }
 
+            var nextCharge = _timing.CurTime + TimeSpan.FromSeconds(recharge.RechargeCooldown);
+
             if (ammo.Count == ammo.Capacity)
             {
-                recharge.NextCharge = null;
+                recharge.NextCharge = recharge.PreserveCooldownWhenFull
+                    ? nextCharge
+                    : null;
                 Dirty(uid, recharge);
                 continue;
             }
 
-            recharge.NextCharge = recharge.NextCharge.Value + TimeSpan.FromSeconds(recharge.RechargeCooldown);
+            recharge.NextCharge = nextCharge;
             Dirty(uid, recharge);
         }
     }
 
     private void OnInit(EntityUid uid, RechargeBasicEntityAmmoComponent component, MapInitEvent args)
     {
-        component.NextCharge = _timing.CurTime;
+        component.NextCharge = component.StartWithCooldown
+            ? _timing.CurTime + TimeSpan.FromSeconds(component.RechargeCooldown)
+            : _timing.CurTime;
         Dirty(uid, component);
     }
 
@@ -86,7 +110,8 @@ public sealed partial class RechargeBasicEntityAmmoSystem : EntitySystem
         if (!Resolve(uid, ref recharge, false))
             return;
 
-        if (recharge.NextCharge == null || recharge.NextCharge < _timing.CurTime)
+        if (recharge.NextCharge == null ||
+            recharge.ResetOverdueCooldown && recharge.NextCharge < _timing.CurTime)
         {
             recharge.NextCharge = _timing.CurTime + TimeSpan.FromSeconds(recharge.RechargeCooldown);
             Dirty(uid, recharge);

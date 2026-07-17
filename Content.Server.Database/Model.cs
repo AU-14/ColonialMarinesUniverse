@@ -669,6 +669,7 @@ namespace Content.Server.Database
         public string? GamemodeJobPriorities { get; set; }
         public string? GamemodeAntagPreferences { get; set; }
         public string? GamemodeThreatPreferences { get; set; }
+        [Column("yautja_profile")] public string? YautjaProfile { get; set; }
     }
 
     public class Job

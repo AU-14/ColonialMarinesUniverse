@@ -1,0 +1,404 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/turf/floors/hybrisafloors.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "hybrisa"
+    },
+    {
+      "name": "asphalt_old"
+    },
+    {
+      "name": "supermartfloor1"
+    },
+    {
+      "name": "supermartfloor2"
+    },
+    {
+      "name": "cuppafloor"
+    },
+    {
+      "name": "tileblue"
+    },
+    {
+      "name": "tilegreen"
+    },
+    {
+      "name": "tileblack"
+    },
+    {
+      "name": "tilewhitecheck"
+    },
+    {
+      "name": "tilelightbeige"
+    },
+    {
+      "name": "tilebeigecheck"
+    },
+    {
+      "name": "tilebeige"
+    },
+    {
+      "name": "tilewhite"
+    },
+    {
+      "name": "tilered"
+    },
+    {
+      "name": "tilegrey"
+    },
+    {
+      "name": "tileblack2"
+    },
+    {
+      "name": "carpet_colorable"
+    },
+    {
+      "name": "carpet_deco_colorable"
+    },
+    {
+      "name": "rug_colorable",
+      "directions": 8
+    },
+    {
+      "name": "carpetfadedred"
+    },
+    {
+      "name": "carpetred_deco"
+    },
+    {
+      "name": "carpetgreen"
+    },
+    {
+      "name": "carpetgreen_deco"
+    },
+    {
+      "name": "carpetbeige"
+    },
+    {
+      "name": "carpetbeige_deco"
+    },
+    {
+      "name": "carpetblack"
+    },
+    {
+      "name": "carpetblack_deco"
+    },
+    {
+      "name": "carpetred"
+    },
+    {
+      "name": "carpetred_deco2"
+    },
+    {
+      "name": "carpetdarkerblue"
+    },
+    {
+      "name": "carpetdarkerblue_deco"
+    },
+    {
+      "name": "carpetorangered"
+    },
+    {
+      "name": "carpetorangered_deco"
+    },
+    {
+      "name": "carpetblue"
+    },
+    {
+      "name": "carpetblue_deco"
+    },
+    {
+      "name": "carpetpatternblue"
+    },
+    {
+      "name": "carpetpatternbrown"
+    },
+    {
+      "name": "greywood"
+    },
+    {
+      "name": "blackwood"
+    },
+    {
+      "name": "darkerwood"
+    },
+    {
+      "name": "redwood"
+    },
+    {
+      "name": "whitewood"
+    },
+    {
+      "name": "fancy_tile"
+    },
+    {
+      "name": "fancy_tile_alt"
+    },
+    {
+      "name": "fancy_tile_large"
+    },
+    {
+      "name": "beige_bigtile"
+    },
+    {
+      "name": "yellow_bigtile"
+    },
+    {
+      "name": "lightbeige_bigtile"
+    },
+    {
+      "name": "greenfull_bigtile"
+    },
+    {
+      "name": "green_bigtile",
+      "directions": 8
+    },
+    {
+      "name": "greencorner_bigtile",
+      "directions": 4
+    },
+    {
+      "name": "darkgrey_bigtile"
+    },
+    {
+      "name": "darkbrown_bigtile",
+      "directions": 8
+    },
+    {
+      "name": "darkbrowncorner_bigtile",
+      "directions": 4
+    },
+    {
+      "name": "asteroidfloor_bigtile"
+    },
+    {
+      "name": "asteroidwarning_bigtile",
+      "directions": 8
+    },
+    {
+      "name": "beigetileshiny"
+    },
+    {
+      "name": "cementflat"
+    },
+    {
+      "name": "blacktileshiny"
+    },
+    {
+      "name": "metalwhitefull"
+    },
+    {
+      "name": "greenmetal1",
+      "directions": 8
+    },
+    {
+      "name": "greenmetalfull"
+    },
+    {
+      "name": "greenmetalcorner",
+      "directions": 4
+    },
+    {
+      "name": "bluemetal1",
+      "directions": 8
+    },
+    {
+      "name": "bluemetalfull"
+    },
+    {
+      "name": "bluemetalcorner",
+      "directions": 4
+    },
+    {
+      "name": "marshallsemblem"
+    },
+    {
+      "name": "NSPAemblem"
+    },
+    {
+      "name": "marshallsemblem_concrete_2x2",
+      "directions": 4
+    },
+    {
+      "name": "NSPA_emblem_concrete_2x2",
+      "directions": 4
+    },
+    {
+      "name": "orangelinecorner",
+      "directions": 4
+    },
+    {
+      "name": "orangeline",
+      "directions": 8
+    },
+    {
+      "name": "big8x8wylogo",
+      "directions": 8
+    },
+    {
+      "name": "zbrownfloor1",
+      "directions": 8
+    },
+    {
+      "name": "zbrownfloor2",
+      "directions": 8
+    },
+    {
+      "name": "zbrownfloorfull1"
+    },
+    {
+      "name": "zbrownfloorcorner1",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "dropshipfloor1"
+    },
+    {
+      "name": "dropshipfloorcorner1"
+    },
+    {
+      "name": "dropshipfloorcorner2"
+    },
+    {
+      "name": "dropshipfloor2"
+    },
+    {
+      "name": "dropshipfloorfull"
+    },
+    {
+      "name": "dropshipfloor3"
+    },
+    {
+      "name": "dropshipfloor4"
+    },
+    {
+      "name": "darkblackmetal1"
+    },
+    {
+      "name": "darkblackmetal2"
+    },
+    {
+      "name": "spaceport1"
+    },
+    {
+      "name": "spaceport2"
+    },
+    {
+      "name": "weylandyutanismall1"
+    },
+    {
+      "name": "weylandyutanismall2"
+    },
+    {
+      "name": "catwalk"
+    },
+    {
+      "name": "darkredfull2"
+    },
+    {
+      "name": "zredcorner",
+      "directions": 4
+    },
+    {
+      "name": "cement1"
+    },
+    {
+      "name": "cement2"
+    },
+    {
+      "name": "cement3"
+    },
+    {
+      "name": "asphalt_old_roadlines"
+    },
+    {
+      "name": "asphalt_old_roadlines2"
+    },
+    {
+      "name": "asphalt_old_roadlines3"
+    },
+    {
+      "name": "asphalt_old_roadlines4"
+    },
+    {
+      "name": "rampsmaller",
+      "directions": 4
+    },
+    {
+      "name": "stripe_red",
+      "directions": 4
+    },
+    {
+      "name": "warning_red_floor"
+    },
+    {
+      "name": "warning_yellow_floor"
+    },
+    {
+      "name": "hybrisadirt_old",
+      "directions": 8
+    },
+    {
+      "name": "hybrisa_dirt_1",
+      "directions": 8
+    },
+    {
+      "name": "underground"
+    },
+    {
+      "name": "sidewalkfull"
+    },
+    {
+      "name": "sidewalk",
+      "directions": 8
+    },
+    {
+      "name": "sidewalkcorner",
+      "directions": 4
+    },
+    {
+      "name": "sidewalkcenter",
+      "directions": 4
+    },
+    {
+      "name": "plating",
+      "directions": 8
+    },
+    {
+      "name": "platingdmg1",
+      "directions": 8
+    },
+    {
+      "name": "platingdmg2",
+      "directions": 8
+    },
+    {
+      "name": "platingdmg3",
+      "directions": 8
+    }
+  ]
+}

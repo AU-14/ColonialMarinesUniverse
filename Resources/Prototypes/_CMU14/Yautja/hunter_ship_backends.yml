@@ -1,0 +1,427 @@
+# Stable Hunter Ship semantic backends.
+#
+# These prototypes are intentionally outside the generated Maps directory. The
+# converter may regenerate the visual wrappers on every source-table batch, but
+# these source-exact gameplay roots must remain available to that generator and
+# to the runtime prototype loader.
+
+- type: entity
+  id: CMUHunterShipStaticLightingProp
+  abstract: true
+  components:
+  - type: Transform
+    anchored: true
+
+- type: entity
+  id: CMUHunterShipStaticGlowEffect
+  abstract: true
+  components:
+  - type: Transform
+    anchored: true
+
+- type: entity
+  parent: BaseItem
+  id: CMUHunterShipSheetCopper
+  abstract: true
+  components:
+  - type: Item
+    size: Normal
+
+- type: entity
+  parent: BaseItem
+  id: CMUHunterShipSheetGold
+  abstract: true
+  components:
+  - type: Item
+    size: Normal
+
+- type: entity
+  parent: BaseItem
+  id: CMUHunterShipSheetLead
+  abstract: true
+  components:
+  - type: Item
+    size: Normal
+
+- type: entity
+  parent: BaseItem
+  id: CMUHunterShipSheetMetallicHydrogen
+  abstract: true
+  components:
+  - type: Item
+    size: Normal
+
+- type: entity
+  parent: BaseItem
+  id: CMUHunterShipSheetPlatinum
+  abstract: true
+  components:
+  - type: Item
+    size: Normal
+
+- type: entity
+  parent: BaseItem
+  id: CMUHunterShipSheetIron
+  abstract: true
+  components:
+  - type: Item
+    size: Normal
+
+- type: entity
+  parent: BaseItem
+  id: CMUHunterShipSheetTritium
+  abstract: true
+  components:
+  - type: Item
+    size: Normal
+
+- type: entity
+  parent: BaseItem
+  id: CMUHunterShipSheetSilver
+  abstract: true
+  components:
+  - type: Item
+    size: Normal
+
+- type: entity
+  parent: BaseItem
+  id: CMUHunterShipSheetOsmium
+  abstract: true
+  components:
+  - type: Item
+    size: Normal
+
+- type: entity
+  id: CMUHunterShipStaticDecal
+  abstract: true
+  components:
+  - type: Transform
+    anchored: true
+
+- type: entity
+  id: CMUHunterShipStaticAlienEffect
+  abstract: true
+  components:
+  - type: Transform
+    anchored: true
+
+- type: entity
+  id: CMUHunterShipStaticSupportLattice
+  abstract: true
+  components:
+  - type: Transform
+    anchored: true
+
+- type: entity
+  parent: BaseItem
+  id: CMUHunterShipChitinCoin
+  abstract: true
+  components:
+  - type: Item
+    size: Tiny
+    sprite: _CMU14/HunterShip/obj/items/economy.rsi
+
+- type: entity
+  parent: BaseItem
+  id: CMUHunterShipSlag
+  abstract: true
+  components:
+  - type: Item
+    size: Small
+    sprite: _CMU14/HunterShip/obj/structures/props/mining.rsi
+
+- type: entity
+  parent: CMFoodBase
+  id: CMUHunterShipFishFingers
+  abstract: true
+  components:
+  - type: FlavorProfile
+    flavors:
+    - fishy
+  - type: Tag
+    tags:
+    - Cooked
+    - Meat
+  - type: Food
+    transferAmount: 5
+  - type: Item
+    size: Small
+    sprite: _CMU14/HunterShip/obj/items/food/fish.rsi
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 5
+        - ReagentId: Protein
+          Quantity: 5
+  - type: Extractable
+    grindableSolutionName: food
+  - type: InjectableSolution
+    solution: food
+  - type: DrawableSolution
+    solution: food
+
+- type: entity
+  parent: CMBeakerLarge
+  id: CMUHunterShipSilverCatalystBeaker
+  name: "Large silver beaker"
+  description: "A large silver beaker. Can hold up to 240 units. The beaker itself acts as a silver catalyst."
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/HunterShip/obj/items/chemistry.rsi
+    layers:
+    - state: "beakersilver"
+  - type: Icon
+    sprite: _CMU14/HunterShip/obj/items/chemistry.rsi
+    state: "beakersilver"
+  - type: Item
+    sprite: _RMC14/Objects/Medical/large_beaker.rsi
+  - type: SolutionContainerManager
+    solutions:
+      beaker:
+        maxVol: 240
+  - type: SolutionTransfer
+    transferAmount: 5
+    maxTransferAmount: 240
+    canChangeTransferAmount: true
+    transferAmounts: [5, 10, 15, 20, 25, 30, 40, 60, 80, 100, 120, 240]
+  - type: PhysicalComposition
+    materialComposition:
+      CMGlass: 5000
+
+- type: entity
+  parent: CableTerminal
+  id: CMUHunterShipPowerTerminal
+  abstract: true
+
+- type: entity
+  parent: CMUYautjaHunterShuttleSupplyTerminal
+  id: CMUHunterShipEngineMonitorConsole
+  abstract: true
+
+- type: entity
+  parent: CMUYautjaStructureYautjaMachinesOverwatch
+  id: CMUHunterShipReactorControlConsole
+  abstract: true
+
+- type: entity
+  parent: CMUYautjaStructureYautjaMachinesOverwatch
+  id: CMUHunterShipShipDefensesConsole
+  abstract: true
+
+- type: entity
+  parent: CMUYautjaStructureYautjaMachinesOverwatch
+  id: CMUHunterShipStasisBayOverwatchConsole
+  abstract: true
+
+- type: entity
+  parent: CMBaseWindowIndestructible
+  id: CMUHunterShipYautjaHullWindow
+  abstract: true
+  components:
+  - type: Corrodible
+    isCorrodible: false
+
+- type: entity
+  parent: RMCHunterReinforcedWindow
+  id: CMUHunterShipYautjaReinforcedWindow
+  abstract: true
+  components:
+  - type: RemoveComponents
+    components:
+    - type: IconSmooth
+
+- type: entity
+  parent: CMUHunterShipYautjaReinforcedWindow
+  id: CMUHunterShipToughenedSafetyGlass
+  abstract: true
+  components:
+  - type: ImmuneToUnarmed
+
+- type: entity
+  parent: [ WeldingFuelTankFull, CMUYautjaStructureYautjaMachinesWeldtank ]
+  id: CMUHunterShipYautjaFuelTank
+  abstract: true
+
+- type: entity
+  parent: [ WaterTankFull, CMUYautjaStructureYautjaMachinesWatertank ]
+  id: CMUHunterShipYautjaWaterTank
+  abstract: true
+
+- type: entity
+  parent: [ OxygenCanister, CMUYautjaStructureYautjaMachinesBlue ]
+  id: CMUHunterShipYautjaOxygenCanister
+  abstract: true
+  components:
+  - type: RemoveComponents
+    components:
+    - type: GenericVisualizer
+      visuals: {}
+
+- type: entity
+  parent: [ CMLockerFridge, CMUYautjaStructureBase ]
+  id: CMUHunterShipYautjaFridge
+  abstract: true
+
+- type: entity
+  parent: [ CMClosetBase, CMUYautjaStructureBase ]
+  id: CMUHunterShipYautjaCloset
+  abstract: true
+
+- type: entity
+  parent: [ CMHydroponicsTray, CMUYautjaStructureBase ]
+  id: CMUHunterShipYautjaHydroponicsTray
+  abstract: true
+
+- type: entity
+  parent: HandheldHealthAnalyzer
+  id: CMUHunterShipYautjaPlantAnalyzer
+  abstract: true
+  components:
+  - type: Item
+    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+
+- type: entity
+  id: CMUHunterShipYautjaFloorDecoration
+  abstract: true
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    noRot: true
+    noDirRot: true
+    noRotWorldOffset: true
+  - type: FTLSmashImmune
+
+- type: entity
+  parent: CMUHunterShipYautjaFloorDecoration
+  id: CMUHunterShipYautjaMultizStairs
+  abstract: true
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUHunterShipYautjaPassivePowerTransformer
+  abstract: true
+  components:
+  - type: Transform
+    anchored: true
+
+- type: entity
+  parent: CMVendorNutri
+  id: CMUHunterShipYautjaVendorNutri
+  abstract: true
+  name: NutriMax
+  description: A plant nutrients vendor.
+  components:
+  - type: VendingMachine
+    pack: CMUHunterShipYautjaNutri
+    offState: "nutri"
+    brokenState: "nutri"
+    normalState: "nutri"
+    denyState: "nutri_deny"
+    ejectState: "nutri"
+
+- type: entity
+  parent: CMVendorSeeds
+  id: CMUHunterShipYautjaVendorSeeds
+  abstract: true
+  name: MegaSeed Servitor
+  description: When you need seeds fast!
+  components:
+  - type: VendingMachine
+    pack: CMUHunterShipYautjaSeeds
+    offState: "seeds"
+    brokenState: "seeds"
+    normalState: "seeds"
+    denyState: "seeds"
+    ejectState: "seeds"
+
+- type: entity
+  parent: CMVendor
+  id: CMUHunterShipYautjaVendorDinnerware
+  abstract: true
+  name: dinnerplate dispenser
+  description: A kitchen and restaurant equipment vendor.
+  components:
+  - type: VendingMachine
+    pack: CMUHunterShipYautjaDinnerware
+    offState: "dinnerware"
+    brokenState: "dinnerware"
+    normalState: "dinnerware-vend"
+    denyState: "dinnerware-deny"
+    ejectState: "dinnerware-vend"
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: Transform
+    anchored: true
+  - type: Anchorable
+    flags: None
+
+- type: vendingMachineInventory
+  id: CMUHunterShipYautjaNutri
+  startingInventory:
+    ChemistryBottleEZNutrient: 35
+    ChemistryBottleLeft4Zed: 25
+    ChemistryBottleRobustHarvest: 15
+    PestSpray: 20
+    Syringe: 5
+    RMCStoragePlantBag: 5
+
+- type: vendingMachineInventory
+  id: CMUHunterShipYautjaSeeds
+  startingInventory:
+    BananaSeeds: 3
+    BerrySeeds: 3
+    CarrotSeeds: 3
+    ChanterelleSeeds: 2
+    ChiliSeeds: 3
+    CornSeeds: 3
+    EggplantSeeds: 3
+    PotatoSeeds: 3
+    SoybeanSeeds: 3
+    SunflowerSeeds: 2
+    TomatoSeeds: 3
+    WheatSeeds: 3
+    AppleSeeds: 3
+    PoppySeeds: 3
+    SugarcaneSeeds: 3
+    PeanutSeeds: 3
+    WhiteBeetSeeds: 3
+    WatermelonSeeds: 3
+    LimeSeeds: 3
+    LemonSeeds: 3
+    OrangeSeeds: 3
+    GrassSeeds: 3
+    CocoaSeeds: 3
+    PlumpSeeds: 2
+    CabbageSeeds: 3
+    GrapeSeeds: 3
+    PumpkinSeeds: 3
+    CherrySeeds: 3
+    RiceSeeds: 3
+    LingzhiSeeds: 3
+  contrabandInventory:
+    AmbrosiaVulgarisSeeds: 1
+    NettleSeeds: 1
+
+- type: vendingMachineInventory
+  id: CMUHunterShipYautjaDinnerware
+  startingInventory:
+    FoodPlateTin: 8
+    RMCFork: 6
+    RMCKitchenKnifeChef: 3
+    DrinkGlass: 8
+    ClothingOuterJacketChef: 2
+    RMCCondimentSmallSalt: 4
+    RMCCondimentSmallPepper: 4
+    RMCCondimentEnzyme: 1
+    RMCCondiment: 8
+  contrabandInventory:
+    RMCSpoon: 2
+    RMCKitchenKnife: 2
+    RMCRollingPin: 2
+    RMCKitchenKnifeButcher: 2

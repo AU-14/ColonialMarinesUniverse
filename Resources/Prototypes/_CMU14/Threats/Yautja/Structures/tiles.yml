@@ -1,4 +1,4 @@
-﻿# Original upstream reference: https://github.com/cmss13-devs/cmss13
+# Original upstream reference: https://github.com/cmss13-devs/cmss13
 
 - type: tile
   abstract: true
@@ -116,6 +116,30 @@
 
 - type: tile
   parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsHunterTile2South
+  name: yautja floor hunter tile 2 south
+  sprite: "/Textures/_CMU14/Tiles/Yautja/hunter_floors/hunter_tile_2_south.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsHunterTile2North
+  name: yautja floor hunter tile 2 north
+  sprite: "/Textures/_CMU14/Tiles/Yautja/hunter_floors/hunter_tile_2_north.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsHunterTile2East
+  name: yautja floor hunter tile 2 east
+  sprite: "/Textures/_CMU14/Tiles/Yautja/hunter_floors/hunter_tile_2_east.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsHunterTile2West
+  name: yautja floor hunter tile 2 west
+  sprite: "/Textures/_CMU14/Tiles/Yautja/hunter_floors/hunter_tile_2_west.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
   id: CMUYautjaTileHunterFloorsN611
   name: yautja floor 6,11
   sprite: "/Textures/_CMU14/Tiles/Yautja/hunter_floors/6,11.png"
@@ -125,6 +149,54 @@
   id: CMUYautjaTileHunterFloorsN612
   name: yautja floor 6,12
   sprite: "/Textures/_CMU14/Tiles/Yautja/hunter_floors/6,12.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsN1715South
+  name: yautja floor 17,15 south
+  sprite: "/Textures/_CMU14/Tiles/Yautja/hunter_floors/17,15_south.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsN1715North
+  name: yautja floor 17,15 north
+  sprite: "/Textures/_CMU14/Tiles/Yautja/hunter_floors/17,15_north.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsN1715East
+  name: yautja floor 17,15 east
+  sprite: "/Textures/_CMU14/Tiles/Yautja/hunter_floors/17,15_east.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsN1715West
+  name: yautja floor 17,15 west
+  sprite: "/Textures/_CMU14/Tiles/Yautja/hunter_floors/17,15_west.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsN66South
+  name: yautja floor 6,6 south
+  sprite: "/Textures/_CMU14/Tiles/Yautja/hunter_floors/6,6_south.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsN66North
+  name: yautja floor 6,6 north
+  sprite: "/Textures/_CMU14/Tiles/Yautja/hunter_floors/6,6_north.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsN66East
+  name: yautja floor 6,6 east
+  sprite: "/Textures/_CMU14/Tiles/Yautja/hunter_floors/6,6_east.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsN66West
+  name: yautja floor 6,6 west
+  sprite: "/Textures/_CMU14/Tiles/Yautja/hunter_floors/6,6_west.png"
 
 - type: tile
   parent: CMUYautjaHunterFloorBase

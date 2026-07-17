@@ -1,0 +1,294 @@
+# CMSS13 military caste static equipment rows from code/modules/cm_preds/mcaste_items.dm.
+
+- type: entity
+  parent: CMUYautjaBracerEbony
+  id: CMUYautjaSoldierBracers
+  name: militarized bracers
+  description: A set of high-tech bracers that are relatively simple when compared to those used in hunting, forgoing most advanced functions in exchange for an auto-self destruct system that activates on death.
+  suffix: Yautja, Military Caste
+  components:
+  - type: Item
+    size: Normal
+  - type: CMArmor
+    melee: 20
+    bullet: 20
+    bio: 20
+    explosionArmor: 25
+  - type: Corrodible
+    isCorrodible: false
+  - type: YautjaTechItem
+  - type: YautjaBracer
+    autoSelfDestructOnUserDeath: true
+    actionWhitelist:
+    - CMUActionYautjaCreateHealingCapsule
+    - CMUActionYautjaCreateStabilisingCrystal
+    - CMUActionYautjaSelfDestruct
+    - CMUActionYautjaTranslator
+  - type: YautjaGearContainer
+    actionWhitelist:
+    - WristBlades
+
+- type: entity
+  parent: BaseStorageItem
+  id: CMUYautjaMcasteHerbContainer
+  name: herbs case
+  description: A small case packed with Yautja trauma poultices and burn salves.
+  suffix: Yautja, Military Caste
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/surgical_case.rsi
+    layers:
+    - state: surgical_case_base
+    - state: surgical_case_open
+      map: [ "openLayer" ]
+      visible: false
+    - state: surgical_case_closed
+      map: [ "closedLayer" ]
+      visible: false
+  - type: Item
+    size: Small
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,3,0
+    whitelist:
+      tags:
+      - CMUYautjaHerbalMedicine
+  - type: FixedItemSizeStorage
+    size: 1,1
+  - type: Tag
+    tags:
+    - CMSurgicalCase
+    - CMUYautjaMedicompItem
+  - type: GenericVisualizer
+    visuals:
+      enum.SharedBagOpenVisuals.BagState:
+        openLayer:
+          Open: { visible: true }
+          Closed: { visible: false }
+        closedLayer:
+          Open: { visible: false }
+          Closed: { visible: true }
+  - type: Appearance
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: PhysicalComposition
+    materialComposition:
+      RMCPlastic: 1000
+
+- type: entity
+  parent: CMUYautjaMcasteHerbContainer
+  id: CMUYautjaMcasteHerbContainerFilled
+  suffix: Yautja, Military Caste, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUYautjaAdvancedBruisePack
+      amount: 2
+    - id: CMUYautjaAdvancedOintment
+      amount: 2
+
+- type: entity
+  parent: CMUYautjaArmorBase
+  id: CMUYautjaPoweredArmor
+  name: Nracha-Dte power armor
+  description: Produced only by artisans overseen directly by the Council of Ancients, the Nracha-Dte-Type is a powered suit of armor built for war rather than hunting. It is heavy, and absurdly protective.
+  suffix: Yautja, Military Caste
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/mcaste_gear.rsi
+    state: fullarmor_soldier
+  - type: Item
+    size: Normal
+  - type: Clothing
+    sprite: _CMU14/Yautja/mcaste_gear.rsi
+    slots: OUTERCLOTHING
+    equipDelay: 10
+    unequipDelay: 10
+  - type: CMArmor
+    melee: 35
+    bullet: 50
+    bio: 35
+    explosionArmor: 40
+  - type: RMCArmorSpeedTier
+    speedTier: heavy
+  - type: ClothingSpeedModifier
+    walkModifier: 0.64
+    sprintModifier: 0.64
+  - type: YautjaTechItem
+  - type: Corrodible
+    isCorrodible: false
+
+- type: entity
+  parent: CMUYautjaPoweredArmor
+  id: CMUYautjaPoweredArmorEnforcer
+  name: Nracha-Dte command power armor
+  description: Produced only by artisans overseen directly by the Council of Ancients, the Nracha-Dte-type is a powered suit of armor built for war rather than hunting. It is heavy, and absurdly protective. This one features a ceremonial pauldron labeling the wearer as an Enforcer.
+  suffix: Yautja, Military Caste, Enforcer
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/mcaste_gear.rsi
+    state: fullarmor_soldier_lead
+
+- type: entity
+  parent: CMUYautjaGreavesBase
+  id: CMUYautjaPoweredGreaves
+  name: Nracha-Dte armored greaves
+  description: The lower half of the M'talt-Type powered armor suit, used exclusively in battle against the most disdainful of dishonorable targets. Like the upper suit, there is very little damage it cannot shrug off.
+  suffix: Yautja, Military Caste
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/mcaste_gear.rsi
+    state: y-boots_powered
+  - type: Item
+    size: Normal
+  - type: Clothing
+    sprite: _CMU14/Yautja/mcaste_gear.rsi
+    slots: FEET
+    equipDelay: 10
+    unequipDelay: 10
+  - type: CMArmor
+    melee: 35
+    bullet: 50
+    bio: 35
+    explosionArmor: 40
+  - type: YautjaTechItem
+  - type: Corrodible
+    isCorrodible: false
+
+- type: entity
+  parent: ClothingHeadBase
+  id: CMUYautjaPoweredHelmet
+  name: Nracha-Dte enclosed helmet
+  description: A fully-enclosed combat helmet that is fitted around the entire head, rather than acting as a facemask. It nonetheless features the same heads-up display as most clan masks.
+  suffix: Yautja, Military Caste
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/mcaste_gear.rsi
+    state: helmet_powered
+  - type: Item
+    size: Normal
+  - type: Clothing
+    sprite: _CMU14/Yautja/mcaste_gear.rsi
+    slots: HEAD
+    equipDelay: 10
+    unequipDelay: 10
+  - type: CMArmor
+    melee: 35
+    bullet: 50
+    bio: 35
+    explosionArmor: 40
+  - type: ParasiteResistance
+    maxCount: 100
+  - type: YautjaMask
+    requiresYautjaWearer: false
+    preserveVisorOnUnequip: true
+    drain: 3
+    drainEvery: 2
+    zoomLevel: 1.6
+    zoomOffset: 14
+    slots: HEAD
+  - type: YautjaTechItem
+    blockPickup: false
+  - type: Corrodible
+    isCorrodible: false
+
+- type: entity
+  parent: CMUYautjaCommunicator
+  id: CMUYautjaMilitaryCommunicator
+  name: Military Communicator
+  suffix: Yautja, Military Caste
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMUYautjaMilitaryEncryptionKey
+  - type: YautjaTechItem
+    blockPickup: false
+    blockUse: true
+    blockMelee: true
+    blockThrow: true
+    blockShoot: true
+  - type: Corrodible
+    isCorrodible: false
+
+- type: entity
+  parent: CMUYautjaEncryptionKey
+  id: CMUYautjaMilitaryEncryptionKey
+  name: Yautja encryption key
+  description: A complicated encryption device.
+  suffix: Yautja, Military Caste
+  components:
+  - type: Item
+    size: Tiny
+  - type: EncryptionKey
+    channels:
+    - CMUYautjaMilitary
+    defaultChannel: CMUYautjaMilitary
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaCannonPack
+  name: plasma cannon pack
+  description: A heavy back-mounted powerpack for supporting a set of dual plasma cannons. The pack's entire volume is taken up by capacitors and electronics used in operating the cannons, remotely linked to a bracer for operation.
+  suffix: Yautja, Military Caste
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/mcaste_gear.rsi
+    state: cannonpack
+  - type: Item
+    size: Normal
+    sprite: _CMU14/Yautja/mcaste_gear.rsi
+    heldPrefix: cannonpack
+  - type: Clothing
+    sprite: _CMU14/Yautja/mcaste_gear.rsi
+    slots: BACK
+    equipDelay: 10
+    unequipDelay: 10
+  - type: YautjaCannonPack
+    charge: 2000
+    maxCharge: 2000
+    regen: 200
+    deployCost: 50
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaDualPlasmaCannons
+  name: dual plasma cannons
+  description: A pair of powerful, shoulder-mounted energy weapons that are remotely operated via bracers. Unlike normal plasma casters, they only feature one fire mode, and are designed to obliterate most targets without leaving any material behind.
+  suffix: Yautja, Military Caste
+  components:
+  - type: YautjaTechItem
+    shootDeniedPopup: cmu-yautja-spike-launcher-denied
+  - type: YautjaPlasmaWeapon
+  - type: Sprite
+    sprite: _CMU14/Yautja/mcaste_gear.rsi
+    state: plasma_cannons
+  - type: Item
+    size: Ginormous
+    sprite: _CMU14/Yautja/mcaste_gear.rsi
+    heldPrefix: plasma_cannons
+  - type: Gun
+    projectileSpeed: 30
+    fireRate: 0.833333
+    minAngle: 10
+    maxAngle: 10
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/_CMU14/Yautja/pred_plasmacaster_fire.wav
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    scatterWielded: 10
+    scatterUnwielded: 10
+    baseFireRate: 0.833333
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1
+    accuracyMultiplierUnwielded: 7
+  - type: YautjaCannonPackLinkedCannon
+    projectile: CMUYautjaCasterLanceBolt
+    chargeCost: 1000

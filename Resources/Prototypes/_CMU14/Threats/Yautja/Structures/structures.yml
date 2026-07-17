@@ -21,7 +21,12 @@
   components:
     - type: Transform
       anchored: true
+    - type: Sprite
+      noRot: true
+      noDirRot: true
+      noRotWorldOffset: true
     - type: Clickable
+    - type: FTLSmashImmune
 
 - type: entity
   parent: CMUYautjaStructureBase
@@ -714,6 +719,32 @@
       state: "hunter_tile_2"
 
 - type: entity
+  parent: CMUYautjaStructureHunterFloorsHunterTile2
+  id: CMUYautjaStructureHunterFloorsHunterTile2North
+  name: yautja floor hunter tile 2 north
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      enableOverrideDir: true
+      overrideDir: North
+      layers:
+        - state: "hunter_tile_2"
+
+- type: entity
+  parent: CMUYautjaStructureHunterFloorsHunterTile2
+  id: CMUYautjaStructureHunterFloorsHunterTile2West
+  name: yautja floor hunter tile 2 west
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      enableOverrideDir: true
+      overrideDir: West
+      layers:
+        - state: "hunter_tile_2"
+
+- type: entity
   parent: CMUYautjaFloorOverlayBase
   id: CMUYautjaStructureHunterFloorsHunterTile3
   name: yautja floor hunter tile 3
@@ -1006,7 +1037,7 @@
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
-      drawdepth: FloorTiles
+      drawdepth: FloorObjects
       layers:
         - state: "hunter_catwalk_new_alpha"
     - type: Icon
@@ -1081,7 +1112,7 @@
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
-      drawdepth: FloorTiles
+      drawdepth: FloorObjects
       layers:
         - state: "hunter_grate_alpha"
     - type: Icon
@@ -1119,6 +1150,58 @@
       state: "6,6"
 
 - type: entity
+  parent: CMUYautjaStructureHunterFloorsN66
+  id: CMUYautjaStructureHunterFloorsN66South
+  name: yautja floor 6,6 south
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      enableOverrideDir: true
+      overrideDir: South
+      layers:
+        - state: "6,6"
+
+- type: entity
+  parent: CMUYautjaStructureHunterFloorsN66
+  id: CMUYautjaStructureHunterFloorsN66North
+  name: yautja floor 6,6 north
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      enableOverrideDir: true
+      overrideDir: North
+      layers:
+        - state: "6,6"
+
+- type: entity
+  parent: CMUYautjaStructureHunterFloorsN66
+  id: CMUYautjaStructureHunterFloorsN66East
+  name: yautja floor 6,6 east
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      enableOverrideDir: true
+      overrideDir: East
+      layers:
+        - state: "6,6"
+
+- type: entity
+  parent: CMUYautjaStructureHunterFloorsN66
+  id: CMUYautjaStructureHunterFloorsN66West
+  name: yautja floor 6,6 west
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      enableOverrideDir: true
+      overrideDir: West
+      layers:
+        - state: "6,6"
+
+- type: entity
   parent: CMUYautjaFloorOverlayBase
   id: CMUYautjaStructureHunterFloorsN1715
   name: yautja floor 17,15
@@ -1132,6 +1215,32 @@
     - type: Icon
       sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "17,15"
+
+- type: entity
+  parent: CMUYautjaStructureHunterFloorsN1715
+  id: CMUYautjaStructureHunterFloorsN1715South
+  name: yautja floor 17,15 south
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      enableOverrideDir: true
+      overrideDir: South
+      layers:
+        - state: "17,15"
+
+- type: entity
+  parent: CMUYautjaStructureHunterFloorsN1715
+  id: CMUYautjaStructureHunterFloorsN1715North
+  name: yautja floor 17,15 north
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
+      drawdepth: FloorTiles
+      enableOverrideDir: true
+      overrideDir: North
+      layers:
+        - state: "17,15"
 
 - type: entity
   parent: CMUYautjaFloorOverlayBase
@@ -1509,7 +1618,15 @@
       state: "borderless_h"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  abstract: true
+  parent: CMBaseWallInvincible
+  id: CMUYautjaStructureHunterShuttleWindowBase
+  components:
+    - type: Occluder
+      enabled: false
+
+- type: entity
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleLeftengine
   name: yautja shuttle leftengine
   description: An ancient Yautja hunting-ground structure.
@@ -1524,7 +1641,7 @@
       state: "leftengine"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleLeftengine1
   name: yautja shuttle leftengine 1
   description: An ancient Yautja hunting-ground structure.
@@ -1539,7 +1656,7 @@
       state: "leftengine_1"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleLeftengine2
   name: yautja shuttle leftengine 2
   description: An ancient Yautja hunting-ground structure.
@@ -1554,7 +1671,7 @@
       state: "leftengine_2"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleLeftengine3
   name: yautja shuttle leftengine 3
   description: An ancient Yautja hunting-ground structure.
@@ -1569,7 +1686,7 @@
       state: "leftengine_3"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleLeftengine4
   name: yautja shuttle leftengine 4
   description: An ancient Yautja hunting-ground structure.
@@ -1584,7 +1701,7 @@
       state: "leftengine_4"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleLeftengine5
   name: yautja shuttle leftengine 5
   description: An ancient Yautja hunting-ground structure.
@@ -1599,7 +1716,7 @@
       state: "leftengine_5"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleLeftengine6
   name: yautja shuttle leftengine 6
   description: An ancient Yautja hunting-ground structure.
@@ -1614,7 +1731,7 @@
       state: "leftengine_6"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleLeftengine7
   name: yautja shuttle leftengine 7
   description: An ancient Yautja hunting-ground structure.
@@ -1629,7 +1746,7 @@
       state: "leftengine_7"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleLeftengine8
   name: yautja shuttle leftengine 8
   description: An ancient Yautja hunting-ground structure.
@@ -1644,7 +1761,7 @@
       state: "leftengine_8"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleLeftengine9
   name: yautja shuttle leftengine 9
   description: An ancient Yautja hunting-ground structure.
@@ -1659,7 +1776,7 @@
       state: "leftengine_9"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleStanLeftengine
   name: yautja shuttle stan leftengine
   description: An ancient Yautja hunting-ground structure.
@@ -1674,7 +1791,7 @@
       state: "stan_leftengine"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleRightengine
   name: yautja shuttle rightengine
   description: An ancient Yautja hunting-ground structure.
@@ -1689,7 +1806,7 @@
       state: "rightengine"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleRightengine1
   name: yautja shuttle rightengine 1
   description: An ancient Yautja hunting-ground structure.
@@ -1704,7 +1821,7 @@
       state: "rightengine_1"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleRightengine2
   name: yautja shuttle rightengine 2
   description: An ancient Yautja hunting-ground structure.
@@ -1719,7 +1836,7 @@
       state: "rightengine_2"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleRightengine3
   name: yautja shuttle rightengine 3
   description: An ancient Yautja hunting-ground structure.
@@ -1734,7 +1851,7 @@
       state: "rightengine_3"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleRightengine4
   name: yautja shuttle rightengine 4
   description: An ancient Yautja hunting-ground structure.
@@ -1749,7 +1866,7 @@
       state: "rightengine_4"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleRightengine5
   name: yautja shuttle rightengine 5
   description: An ancient Yautja hunting-ground structure.
@@ -1764,7 +1881,7 @@
       state: "rightengine_5"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleRightengine6
   name: yautja shuttle rightengine 6
   description: An ancient Yautja hunting-ground structure.
@@ -1779,7 +1896,7 @@
       state: "rightengine_6"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleRightengine7
   name: yautja shuttle rightengine 7
   description: An ancient Yautja hunting-ground structure.
@@ -1794,7 +1911,7 @@
       state: "rightengine_7"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleRightengine8
   name: yautja shuttle rightengine 8
   description: An ancient Yautja hunting-ground structure.
@@ -1809,7 +1926,7 @@
       state: "rightengine_8"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleRightengine9
   name: yautja shuttle rightengine 9
   description: An ancient Yautja hunting-ground structure.
@@ -1824,7 +1941,7 @@
       state: "rightengine_9"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleStanRightengine
   name: yautja shuttle stan rightengine
   description: An ancient Yautja hunting-ground structure.
@@ -1839,7 +1956,42 @@
       state: "stan_rightengine"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  id: CMUYautjaHunterShuttleThruster
+  name: yautja hunter shuttle thruster marker
+  description: Hidden functional thrust marker for the source-ported Yautja hunter shuttle.
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Transform
+      anchored: true
+    - type: Thruster
+      requireSpace: false
+      thrust: 1000
+      damage: null
+    - type: ApcPowerReceiver
+      needsPower: false
+      powerLoad: 0
+    - type: Appearance
+
+- type: entity
+  id: CMUYautjaHunterShuttleGyroscope
+  name: yautja hunter shuttle gyroscope marker
+  description: Hidden functional rotation marker for the source-ported Yautja hunter shuttle.
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Transform
+      anchored: true
+    - type: Thruster
+      thrusterType: Angular
+      requireSpace: false
+      thrust: 2000
+      damage: null
+    - type: ApcPowerReceiver
+      needsPower: false
+      powerLoad: 0
+    - type: Appearance
+
+- type: entity
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleMiddle
   name: yautja shuttle middle
   description: An ancient Yautja hunting-ground structure.
@@ -1854,7 +2006,7 @@
       state: "middle"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter1
   name: yautja shuttle hunter1
   description: An ancient Yautja hunting-ground structure.
@@ -1869,7 +2021,7 @@
       state: "hunter1"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter2
   name: yautja shuttle hunter2
   description: An ancient Yautja hunting-ground structure.
@@ -1884,7 +2036,7 @@
       state: "hunter2"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter3
   name: yautja shuttle hunter3
   description: An ancient Yautja hunting-ground structure.
@@ -1899,7 +2051,7 @@
       state: "hunter3"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunterLW
   name: yautja shuttle hunter l w
   description: An ancient Yautja hunting-ground structure.
@@ -1914,7 +2066,7 @@
       state: "hunter_l_w"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunterRW
   name: yautja shuttle hunter r w
   description: An ancient Yautja hunting-ground structure.
@@ -1929,7 +2081,7 @@
       state: "hunter_r_w"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter4
   name: yautja shuttle hunter4
   description: An ancient Yautja hunting-ground structure.
@@ -1944,7 +2096,7 @@
       state: "hunter4"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunterInnerW2
   name: yautja shuttle hunter inner w 2
   description: An ancient Yautja hunting-ground structure.
@@ -1959,7 +2111,7 @@
       state: "hunter_inner_w_2"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter5
   name: yautja shuttle hunter5
   description: An ancient Yautja hunting-ground structure.
@@ -1974,7 +2126,7 @@
       state: "hunter5"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleInside
   name: yautja shuttle inside
   description: An ancient Yautja hunting-ground structure.
@@ -1989,7 +2141,7 @@
       state: "inside"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter6
   name: yautja shuttle hunter6
   description: An ancient Yautja hunting-ground structure.
@@ -2004,7 +2156,7 @@
       state: "hunter6"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter7
   name: yautja shuttle hunter7
   description: An ancient Yautja hunting-ground structure.
@@ -2019,7 +2171,7 @@
       state: "hunter7"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter8
   name: yautja shuttle hunter8
   description: An ancient Yautja hunting-ground structure.
@@ -2034,7 +2186,7 @@
       state: "hunter8"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter9
   name: yautja shuttle hunter9
   description: An ancient Yautja hunting-ground structure.
@@ -2049,7 +2201,7 @@
       state: "hunter9"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter10
   name: yautja shuttle hunter10
   description: An ancient Yautja hunting-ground structure.
@@ -2064,7 +2216,7 @@
       state: "hunter10"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter11
   name: yautja shuttle hunter11
   description: An ancient Yautja hunting-ground structure.
@@ -2079,7 +2231,7 @@
       state: "hunter11"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter12
   name: yautja shuttle hunter12
   description: An ancient Yautja hunting-ground structure.
@@ -2094,7 +2246,7 @@
       state: "hunter12"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter13
   name: yautja shuttle hunter13
   description: An ancient Yautja hunting-ground structure.
@@ -2109,7 +2261,7 @@
       state: "hunter13"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter14
   name: yautja shuttle hunter14
   description: An ancient Yautja hunting-ground structure.
@@ -2124,7 +2276,7 @@
       state: "hunter14"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter15
   name: yautja shuttle hunter15
   description: An ancient Yautja hunting-ground structure.
@@ -2139,7 +2291,7 @@
       state: "hunter15"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter16
   name: yautja shuttle hunter16
   description: An ancient Yautja hunting-ground structure.
@@ -2154,7 +2306,7 @@
       state: "hunter16"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleLeftFront
   name: yautja shuttle left front
   description: An ancient Yautja hunting-ground structure.
@@ -2169,7 +2321,7 @@
       state: "left_front"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter17
   name: yautja shuttle hunter17
   description: An ancient Yautja hunting-ground structure.
@@ -2184,7 +2336,7 @@
       state: "hunter17"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter18
   name: yautja shuttle hunter18
   description: An ancient Yautja hunting-ground structure.
@@ -2199,7 +2351,7 @@
       state: "hunter18"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter19
   name: yautja shuttle hunter19
   description: An ancient Yautja hunting-ground structure.
@@ -2214,7 +2366,7 @@
       state: "hunter19"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter20
   name: yautja shuttle hunter20
   description: An ancient Yautja hunting-ground structure.
@@ -2229,7 +2381,7 @@
       state: "hunter20"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter21
   name: yautja shuttle hunter21
   description: An ancient Yautja hunting-ground structure.
@@ -2244,7 +2396,7 @@
       state: "hunter21"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter22
   name: yautja shuttle hunter22
   description: An ancient Yautja hunting-ground structure.
@@ -2259,7 +2411,7 @@
       state: "hunter22"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleRightFront
   name: yautja shuttle right front
   description: An ancient Yautja hunting-ground structure.
@@ -2274,7 +2426,7 @@
       state: "right_front"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter23
   name: yautja shuttle hunter23
   description: An ancient Yautja hunting-ground structure.
@@ -2289,7 +2441,7 @@
       state: "hunter23"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter24
   name: yautja shuttle hunter24
   description: An ancient Yautja hunting-ground structure.
@@ -2304,7 +2456,7 @@
       state: "hunter24"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter25
   name: yautja shuttle hunter25
   description: An ancient Yautja hunting-ground structure.
@@ -2319,7 +2471,7 @@
       state: "hunter25"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter26
   name: yautja shuttle hunter26
   description: An ancient Yautja hunting-ground structure.
@@ -2334,7 +2486,7 @@
       state: "hunter26"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter27
   name: yautja shuttle hunter27
   description: An ancient Yautja hunting-ground structure.
@@ -2349,7 +2501,7 @@
       state: "hunter27"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMBaseWallInvincible
   id: CMUYautjaStructureHunterShuttleHunter28
   name: yautja shuttle hunter28
   description: An ancient Yautja hunting-ground structure.
@@ -2364,7 +2516,7 @@
       state: "hunter28"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureHunterShuttleWindowBase
   id: CMUYautjaStructureHunterShuttleFrontMiddleWindow
   name: yautja shuttle front middle window
   description: An ancient Yautja hunting-ground structure.
@@ -2379,7 +2531,7 @@
       state: "front_middle_window"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureHunterShuttleWindowBase
   id: CMUYautjaStructureHunterShuttleHunterw1
   name: yautja shuttle hunterw 1
   description: An ancient Yautja hunting-ground structure.
@@ -2394,7 +2546,7 @@
       state: "hunterw_1"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureHunterShuttleWindowBase
   id: CMUYautjaStructureHunterShuttleHunterw2
   name: yautja shuttle hunterw 2
   description: An ancient Yautja hunting-ground structure.
@@ -2409,7 +2561,7 @@
       state: "hunterw_2"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureHunterShuttleWindowBase
   id: CMUYautjaStructureHunterShuttleHunterw3
   name: yautja shuttle hunterw 3
   description: An ancient Yautja hunting-ground structure.
@@ -2424,7 +2576,7 @@
       state: "hunterw_3"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureHunterShuttleWindowBase
   id: CMUYautjaStructureHunterShuttleHunterw4
   name: yautja shuttle hunterw 4
   description: An ancient Yautja hunting-ground structure.
@@ -2439,7 +2591,7 @@
       state: "hunterw_4"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureHunterShuttleWindowBase
   id: CMUYautjaStructureHunterShuttleHunterw5
   name: yautja shuttle hunterw 5
   description: An ancient Yautja hunting-ground structure.
@@ -2454,7 +2606,7 @@
       state: "hunterw_5"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureHunterShuttleWindowBase
   id: CMUYautjaStructureHunterShuttleHunterw6
   name: yautja shuttle hunterw 6
   description: An ancient Yautja hunting-ground structure.
@@ -2469,7 +2621,7 @@
       state: "hunterw_6"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureHunterShuttleWindowBase
   id: CMUYautjaStructureHunterShuttleHunterw7
   name: yautja shuttle hunterw 7
   description: An ancient Yautja hunting-ground structure.
@@ -2484,7 +2636,7 @@
       state: "hunterw_7"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureHunterShuttleWindowBase
   id: CMUYautjaStructureHunterShuttleHunterw8
   name: yautja shuttle hunterw 8
   description: An ancient Yautja hunting-ground structure.
@@ -2499,7 +2651,7 @@
       state: "hunterw_8"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureHunterShuttleWindowBase
   id: CMUYautjaStructureHunterShuttleLeftWindow
   name: yautja shuttle left window
   description: An ancient Yautja hunting-ground structure.
@@ -2514,7 +2666,7 @@
       state: "left_window"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureHunterShuttleWindowBase
   id: CMUYautjaStructureHunterShuttleHunterw9
   name: yautja shuttle hunterw 9
   description: An ancient Yautja hunting-ground structure.
@@ -2529,7 +2681,7 @@
       state: "hunterw_9"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureHunterShuttleWindowBase
   id: CMUYautjaStructureHunterShuttleHunterw10
   name: yautja shuttle hunterw 10
   description: An ancient Yautja hunting-ground structure.
@@ -2544,7 +2696,7 @@
       state: "hunterw_10"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureHunterShuttleWindowBase
   id: CMUYautjaStructureHunterShuttleHunterw11
   name: yautja shuttle hunterw 11
   description: An ancient Yautja hunting-ground structure.
@@ -2559,7 +2711,7 @@
       state: "hunterw_11"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureHunterShuttleWindowBase
   id: CMUYautjaStructureHunterShuttleRightWindow
   name: yautja shuttle right window
   description: An ancient Yautja hunting-ground structure.
@@ -2574,7 +2726,7 @@
       state: "right_window"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureHunterShuttleWindowBase
   id: CMUYautjaStructureHunterShuttleHunterw12
   name: yautja shuttle hunterw 12
   description: An ancient Yautja hunting-ground structure.
@@ -2589,7 +2741,7 @@
       state: "hunterw_12"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureHunterShuttleWindowBase
   id: CMUYautjaStructureHunterShuttleHunterw13
   name: yautja shuttle hunterw 13
   description: An ancient Yautja hunting-ground structure.
@@ -2604,7 +2756,7 @@
       state: "hunterw_13"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureHunterShuttleWindowBase
   id: CMUYautjaStructureHunterShuttleHunterw14
   name: yautja shuttle hunterw 14
   description: An ancient Yautja hunting-ground structure.
@@ -2619,7 +2771,7 @@
       state: "hunterw_14"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureHunterShuttleWindowBase
   id: CMUYautjaStructureHunterShuttleBottomWindow
   name: yautja shuttle bottom window
   description: An ancient Yautja hunting-ground structure.
@@ -2634,7 +2786,7 @@
       state: "bottom_window"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureHunterShuttleWindowBase
   id: CMUYautjaStructureHunterShuttleHunterw15
   name: yautja shuttle hunterw 15
   description: An ancient Yautja hunting-ground structure.
@@ -2649,7 +2801,7 @@
       state: "hunterw_15"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureHunterShuttleWindowBase
   id: CMUYautjaStructureHunterShuttleHunterw16
   name: yautja shuttle hunterw 16
   description: An ancient Yautja hunting-ground structure.
@@ -2664,7 +2816,7 @@
       state: "hunterw_16"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureHunterShuttleWindowBase
   id: CMUYautjaStructureHunterShuttleHunterw17
   name: yautja shuttle hunterw 17
   description: An ancient Yautja hunting-ground structure.
@@ -3131,8 +3283,8 @@
 - type: entity
   parent: CMUYautjaStructureBase
   id: CMUYautjaStructureYautjaMachinesGlobe
-  name: yautja globe
-  description: An ancient Yautja hunting-ground structure.
+  name: hunter globe
+  description: A globe designed by the hunters to show them the location of prey across the hunting grounds.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -3142,6 +3294,19 @@
     - type: Icon
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "globe"
+    - type: TacticalMapTracked
+      trackDead: true
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_CMU14/Yautja/Structures/yautja_machines.rsi
+        state: globe
+    - type: TacticalMapAlwaysVisible
+      visibleToMarines: true
+      visibleToXenos: true
+      visibleToOpfor: true
+      visibleToGovfor: true
+      visibleToClf: true
+      visibleToYautja: true
 
 - type: entity
   parent: CMUYautjaStructureBase
@@ -3174,19 +3339,32 @@
       state: "autolathe_o"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMAutolathe
   id: CMUYautjaStructureYautjaMachinesAutolathe
   name: yautja autolathe
-  description: An ancient Yautja hunting-ground structure.
+  description: It produces items using metal and glass.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "autolathe"
+          map: [ "enum.LatheVisualLayers.IsRunning" ]
+        - state: "autolathe_o"
+          shader: unshaded
+          map: [ "enum.PowerDeviceVisualLayers.Powered" ]
+        - state: "autolathe_t"
+          map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
     - type: Icon
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "autolathe"
+    - type: MaterialStorage
+      storage:
+        CMSteel: 40000
+        CMGlass: 20000
+    - type: RemoveComponents
+      components:
+        - type: Destructible
 
 - type: entity
   parent: CMUYautjaStructureBase
@@ -3221,17 +3399,26 @@
 - type: entity
   parent: CMUYautjaStructureBase
   id: CMUYautjaStructureYautjaMachinesVat
-  name: yautja vat
-  description: An ancient Yautja hunting-ground structure.
+  name: yautja cauldron
+  description: A large, black machine emitting an ominous hum with an attached pot of boiling fluid. Bits of what appears to be leftover lard and balls of hair can be seen floating inside of it.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "vat"
+          map: [ base ]
     - type: Icon
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "vat"
+    - type: YautjaCauldron
+    - type: Appearance
+    - type: GenericVisualizer
+      visuals:
+        enum.YautjaCauldronVisuals.State:
+          base:
+            vat: { state: "vat" }
+            vat_boiling: { state: "vat_boiling" }
 
 - type: entity
   parent: CMUYautjaStructureBase
@@ -3311,8 +3498,8 @@
 - type: entity
   parent: CMUYautjaStructureBase
   id: CMUYautjaStructureYautjaMachinesJuicer1
-  name: yautja juicer1
-  description: An ancient Yautja hunting-ground structure.
+  name: Bone grinder
+  description: A functional object aboard the Yautja Hunter Ship.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -3322,12 +3509,16 @@
     - type: Icon
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "juicer1"
+    - type: Fixtures
+      fixtures:
+        fix1:
+          hard: false
 
 - type: entity
   parent: CMUYautjaStructureBase
   id: CMUYautjaStructureYautjaMachinesMw
-  name: yautja mw
-  description: An ancient Yautja hunting-ground structure.
+  name: Alien microwave
+  description: Dark alloy sinister machine that heats up cold food.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -3521,8 +3712,8 @@
 - type: entity
   parent: CMUYautjaStructureBase
   id: CMUYautjaStructureYautjaMachinesGrinder
-  name: yautja grinder
-  description: An ancient Yautja hunting-ground structure.
+  name: Gibber
+  description: The name isn't descriptive enough?
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -3596,8 +3787,8 @@
 - type: entity
   parent: CMUYautjaStructureBase
   id: CMUYautjaStructureYautjaMachinesProcessor
-  name: yautja processor
-  description: An ancient Yautja hunting-ground structure.
+  name: Food grinder
+  description: A functional object aboard the Yautja Hunter Ship.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -3611,8 +3802,8 @@
 - type: entity
   parent: CMUYautjaStructureBase
   id: CMUYautjaStructureYautjaMachinesDinnerware
-  name: yautja dinnerware
-  description: An ancient Yautja hunting-ground structure.
+  name: dinnerplate dispenser
+  description: A kitchen and restaurant equipment vendor.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -3656,8 +3847,8 @@
 - type: entity
   parent: CMUYautjaStructureBase
   id: CMUYautjaStructureYautjaMachinesBlue
-  name: yautja blue
-  description: An ancient Yautja hunting-ground structure.
+  name: "Canister: \\[O2\\]"
+  description: A functional object aboard the Yautja Hunter Ship.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -3671,8 +3862,8 @@
 - type: entity
   parent: CMUYautjaStructureBase
   id: CMUYautjaStructureYautjaMachinesMixer0
-  name: yautja mixer0
-  description: An ancient Yautja hunting-ground structure.
+  name: Chemical distributor
+  description: A functional object aboard the Yautja Hunter Ship.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -3731,8 +3922,8 @@
 - type: entity
   parent: CMUYautjaStructureBase
   id: CMUYautjaStructureYautjaMachinesDispenser
-  name: yautja dispenser
-  description: An ancient Yautja hunting-ground structure.
+  name: Chemical dispenser
+  description: A complex machine for mixing elements into chemicals. A Wey-Yu product.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -3821,8 +4012,8 @@
 - type: entity
   parent: CMUYautjaStructureBase
   id: CMUYautjaStructureYautjaMachinesSodaDispenser
-  name: yautja soda dispenser
-  description: An ancient Yautja hunting-ground structure.
+  name: Soda fountain
+  description: A drink fabricating machine, capable of producing many sugary drinks with just one touch.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -3836,8 +4027,8 @@
 - type: entity
   parent: CMUYautjaStructureBase
   id: CMUYautjaStructureYautjaMachinesBoozeDispenser
-  name: yautja booze dispenser
-  description: An ancient Yautja hunting-ground structure.
+  name: Booze dispenser
+  description: A technological marvel, supposedly able to mix just the mixture you'd like to drink the moment you ask for one.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -3896,8 +4087,8 @@
 - type: entity
   parent: CMUYautjaStructureBase
   id: CMUYautjaStructureYautjaMachinesFreezer0
-  name: yautja freezer 0
-  description: An ancient Yautja hunting-ground structure.
+  name: Gas cooling system
+  description: Cools gas when connected to pipe network.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -4060,9 +4251,17 @@
 
 - type: entity
   parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesHardenedConsoleBase
+  abstract: true
+  components:
+    - type: Corrodible
+      isCorrodible: false
+
+- type: entity
+  parent: CMUYautjaStructureYautjaMachinesHardenedConsoleBase
   id: CMUYautjaStructureYautjaMachinesCrew
-  name: yautja crew
-  description: An ancient Yautja hunting-ground structure.
+  name: preserve shutter console
+  description: A console for opening a shutter to another part of the reserve.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -4074,10 +4273,10 @@
       state: "crew"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureYautjaMachinesHardenedConsoleBase
   id: CMUYautjaStructureYautjaMachinesTerminal
-  name: yautja terminal
-  description: An ancient Yautja hunting-ground structure.
+  name: hypersleep bay console
+  description: A large console controlling the ship's hypersleep bay. Most of the options are disabled and locked, although it allows recovery of items from long-term hypersleeping crew.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -4104,10 +4303,10 @@
       state: "cmonitor"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureYautjaMachinesHardenedConsoleBase
   id: CMUYautjaStructureYautjaMachinesCameras
-  name: yautja cameras
-  description: An ancient Yautja hunting-ground structure.
+  name: blooding console
+  description: A console used by Yautja to awaken Youngbloods awaiting their Blooding Ritual.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -4119,7 +4318,7 @@
       state: "cameras"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureYautjaMachinesHardenedConsoleBase
   id: CMUYautjaStructureYautjaMachinesOverwatch
   name: yautja overwatch
   description: An ancient Yautja hunting-ground structure.
@@ -4256,8 +4455,8 @@
 - type: entity
   parent: CMUYautjaStructureBase
   id: CMUYautjaStructureYautjaMachinesWeldtank
-  name: yautja weldtank
-  description: An ancient Yautja hunting-ground structure.
+  name: Fuel tank
+  description: A tank filled with fuel.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -4271,8 +4470,8 @@
 - type: entity
   parent: CMUYautjaStructureBase
   id: CMUYautjaStructureYautjaMachinesWatertank
-  name: yautja watertank
-  description: An ancient Yautja hunting-ground structure.
+  name: Water tank
+  description: A tank filled with water.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -4316,8 +4515,8 @@
 - type: entity
   parent: CMUYautjaStructureBase
   id: CMUYautjaStructureYautjaMachinesSmes
-  name: yautja smes
-  description: An ancient Yautja hunting-ground structure.
+  name: Yautja Energy Core
+  description: A highly advanced power source of Yautja design, utilizing unknown technology to generate and distribute energy efficiently throughout the vessel.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -4330,9 +4529,17 @@
 
 - type: entity
   parent: CMUYautjaStructureBase
+  id: CMUYautjaStructureYautjaMachinesDoorctrlBase
+  abstract: true
+  name: remote door-control
+  description: A remote control-switch for a door.
+  components:
+    - type: Corrodible
+      isCorrodible: false
+
+- type: entity
+  parent: CMUYautjaStructureYautjaMachinesDoorctrlBase
   id: CMUYautjaStructureYautjaMachinesDoorctrl
-  name: yautja doorctrl
-  description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -4344,10 +4551,8 @@
       state: "doorctrl"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureYautjaMachinesDoorctrlBase
   id: CMUYautjaStructureYautjaMachinesDoorctrl0
-  name: yautja doorctrl0
-  description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -4359,10 +4564,8 @@
       state: "doorctrl0"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureYautjaMachinesDoorctrlBase
   id: CMUYautjaStructureYautjaMachinesDoorctrl1
-  name: yautja doorctrl1
-  description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -4374,10 +4577,8 @@
       state: "doorctrl1"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureYautjaMachinesDoorctrlBase
   id: CMUYautjaStructureYautjaMachinesDoorctrlDenied
-  name: yautja doorctrl denied
-  description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -4389,10 +4590,8 @@
       state: "doorctrl-denied"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaStructureYautjaMachinesDoorctrlBase
   id: CMUYautjaStructureYautjaMachinesDoorctrlP
-  name: yautja doorctrl p
-  description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -4496,8 +4695,8 @@
 - type: entity
   parent: CMUYautjaStructureBase
   id: CMUYautjaStructureYautjaMachinesSeeds
-  name: yautja seeds
-  description: An ancient Yautja hunting-ground structure.
+  name: MegaSeed Servitor
+  description: When you need seeds fast!
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -4511,8 +4710,8 @@
 - type: entity
   parent: CMUYautjaStructureBase
   id: CMUYautjaStructureYautjaMachinesNutri
-  name: yautja nutri
-  description: An ancient Yautja hunting-ground structure.
+  name: NutriMax
+  description: A plant nutrients vendor.
   components:
     - type: Sprite
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
@@ -4732,3 +4931,270 @@
     - type: Icon
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "console_shuttle"
+
+- type: entity
+  id: CMUYautjaHunterShuttleConsoleBase
+  name: console base
+  description: A smooth metal alloy base table.
+  suffix: Yautja, Hunter Shuttle
+  components:
+    - type: Transform
+      anchored: true
+    - type: Sprite
+      sprite: _RMC14/Structures/Furniture/Tables/hunter.rsi
+      drawdepth: Objects
+      layers:
+        - state: "full"
+    - type: Icon
+      sprite: _RMC14/Structures/Furniture/Tables/hunter.rsi
+      state: "full"
+
+- type: entity
+  parent: CMComputerDropshipNavigationThirdParty
+  id: CMUYautjaHunterShuttleConsole
+  name: flight console
+  description: An advanced alien flight console.
+  components:
+    - type: RemoveComponents
+      components:
+        - type: ActivatableUIRequiresPower
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "console_shuttle"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "console_shuttle"
+    - type: YautjaShuttleConsole
+    - type: DropshipNavigationComputer
+      hijackable: false
+      canTacticalLand: true
+      tacticalLandFootprintOverride: 7,13
+      directLanding: true
+    - type: ApcPowerReceiver
+      needsPower: false
+    - type: RMCPowerReceiver
+      idleLoad: 0
+      activeLoad: 0
+      channel: Environment
+    - type: Physics
+      bodyType: Static
+      canCollide: false
+    - type: Fixtures
+      fixtures: {}
+
+- type: entity
+  parent: ComputerCrewMonitoring
+  id: CMUYautjaHunterShuttleHealthMonitor
+  name: Yautja health monitor
+  description: Used to monitor active health sensors of all Yautja in the system.
+  suffix: Yautja, Hunter Shuttle
+  components:
+    - type: RemoveComponents
+      components:
+        - type: ActivatableUIRequiresPower
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: SmallObjects
+      offset: -0.25,0
+      layers:
+        - state: "crew"
+          map: [ "computerLayerBody" ]
+        - state: "crew"
+          map: [ "computerLayerKeyboard" ]
+        - state: "crew"
+          shader: unshaded
+          map: [ "computerLayerScreen" ]
+        - state: "crew"
+          shader: unshaded
+          map: [ "computerLayerKeys" ]
+        - state: "crew"
+          map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
+          visible: false
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "crew"
+    - type: ApcPowerReceiver
+      needsPower: false
+    - type: RMCPowerReceiver
+      idleLoad: 0
+      activeLoad: 0
+      channel: Environment
+    - type: Physics
+      bodyType: Static
+      canCollide: false
+    - type: Fixtures
+      fixtures: {}
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaHunterShuttleSupplyTerminal
+  name: Cargo Bay Supply Console
+  description: A console that lists out the ship's cargo manifest.
+  suffix: Yautja, Hunter Shuttle
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: SmallObjects
+      offset: 0.25,0
+      layers:
+        - state: "terminal"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "terminal"
+    - type: Physics
+      bodyType: Static
+      canCollide: false
+    - type: Fixtures
+      fixtures: {}
+
+- type: entity
+  parent: AirlockShuttle
+  id: CMUYautjaHunterShuttleAirlock
+  name: yautja shuttle airlock
+  description: A powered alien external airlock.
+  suffix: Yautja, Hunter Shuttle
+  components:
+    - type: Sprite
+      sprite: _CMU14/HunterShip/obj/structures/doors/hunter/hunter_door.rsi
+      drawdepth: Objects
+      enableOverrideDir: true
+      layers:
+        - state: door_closed
+          map: [ "enum.DoorVisualLayers.Base" ]
+        - state: door_open
+          map: [ "enum.DoorVisualLayers.BaseUnlit" ]
+          visible: false
+        - state: welded
+          map: [ "enum.WeldableLayers.BaseWelded" ]
+          visible: false
+        - state: door_locked
+          shader: unshaded
+          map: [ "enum.DoorVisualLayers.BaseBolted" ]
+        - state: door_spark
+          shader: unshaded
+          map: [ "enum.DoorVisualLayers.BaseEmergencyAccess" ]
+        - state: panel_open
+          map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
+          visible: false
+        - state: electrified_ai
+          sprite: Interface/Misc/ai_hud.rsi
+          shader: unshaded
+          visible: false
+          map: [ "enum.ElectrifiedLayers.HUD" ]
+        - state: electrified
+          sprite: Effects/electricity.rsi
+          shader: unshaded
+          visible: false
+          map: [ "enum.ElectrifiedLayers.Sparks" ]
+    - type: Icon
+      sprite: _CMU14/HunterShip/obj/structures/doors/hunter/hunter_door.rsi
+      state: "door_closed"
+    - type: Door
+      openSpriteState: door_open
+      closedSpriteState: door_closed
+    - type: Airlock
+      powered: true
+      openSpriteState: door_open
+      closedSpriteState: door_closed
+      openingSpriteState: door_opening
+      closingSpriteState: door_closing
+      denySpriteState: door_deny
+    - type: ApcPowerReceiver
+      needsPower: false
+    - type: RMCPowerReceiver
+      idleLoad: 0
+      activeLoad: 0
+      channel: Environment
+
+- type: entity
+  parent: CMUYautjaHunterShuttleAirlock
+  id: CMUYautjaHunterShuttleInteriorAirlock
+  name: yautja shuttle interior airlock
+  description: A powered alien internal airlock.
+  suffix: Yautja, Hunter Shuttle, Interior
+  components:
+    - type: RemoveComponents
+      components:
+        - type: Docking
+        - type: DockingSignalControl
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeAabb
+            bounds: "-0.49,-0.49,0.49,0.49"
+          density: 100
+          mask:
+            - FullTileMask
+          layer:
+            - AirlockLayer
+
+- type: entity
+  parent: RMCShutterAlmayerOpen
+  id: CMUYautjaHunterShuttleLockdownShutter
+  name: yautja shuttle lockdown shutter
+  description: A heavily reinforced Yautja shuttle shutter.
+  suffix: Yautja, Hunter Shuttle
+  components:
+    - type: Sprite
+      sprite: _CMU14/HunterShip/obj/structures/doors/hunter/hunter_shutter.rsi
+      drawdepth: BlastDoors
+      layers:
+        - state: "hdoor1"
+          map: [ "enum.DoorVisualLayers.Base" ]
+    - type: Icon
+      sprite: _CMU14/HunterShip/obj/structures/doors/hunter/hunter_shutter.rsi
+      state: "hdoor1"
+    - type: Door
+      openSpriteState: hdoor0
+      closedSpriteState: hdoor1
+      openingSpriteState: hdoorc0
+      closingSpriteState: hdoorc1
+      state: Open
+    - type: RMCPodDoor
+      id: "yaut_shut_lock"
+    - type: ApcPowerReceiver
+      needsPower: false
+    - type: RMCPowerReceiver
+      idleLoad: 0
+      activeLoad: 0
+      channel: Environment
+
+- type: entity
+  parent: RMCPodDoorButton
+  id: CMUYautjaHunterShuttleLockdownButton
+  name: shuttle lockdown
+  description: A remote control-switch for the Hunter Shuttle lockdown shutters.
+  suffix: Yautja, Hunter Shuttle
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: SmallObjects
+      layers:
+        - state: "doorctrl"
+          map: [ "enum.RMCPodDoorButtonLayers.Animation" ]
+        - state: doorctrl-p
+          visible: false
+          map: [ "enum.PowerDeviceVisualLayers.Powered" ]
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "doorctrl"
+    - type: RMCDoorButton
+      id: "yaut_shut_lock"
+      offState: "doorctrl"
+      onState: "doorctrl1"
+      deniedState: "doorctrl-denied"
+    - type: ApcPowerReceiver
+      needsPower: false
+    - type: RMCPowerReceiver
+      idleLoad: 0
+      activeLoad: 0
+      channel: Environment
+    - type: AccessReader
+      access:
+        - [ "CMUAccessYautjaSecure" ]
+        - [ "CMUAccessYautjaElder" ]
+        - [ "CMUAccessYautjaLeader" ]
+        - [ "CMUAccessYautjaAncient" ]

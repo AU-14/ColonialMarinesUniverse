@@ -1,0 +1,91 @@
+﻿{
+    "version":  1,
+    "license":  "CC-BY-SA-3.0",
+    "copyright":  "Ported from cmss13-devs/cmss13 icons/mob/hud/hud_yautja.dmi",
+    "size":  {
+                 "x":  32,
+                 "y":  32
+             },
+    "states":  [
+                   {
+                       "name":  "powerbar100",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "powerbar90",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "powerbar80",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "powerbar70",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "powerbar60",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "powerbar50",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "powerbar40",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "powerbar30",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "powerbar20",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "powerbar10",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "hunter_hunted",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "hunter_honored",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "hunter_dishonored",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "hunter_gear",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "hunter_thralled",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "hunter_thrall_blooded",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "hunter_thralled_blooded",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "predhud",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "hunter_student",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "hunter_blooded",
+                       "directions":  1
+                   }
+               ]
+}

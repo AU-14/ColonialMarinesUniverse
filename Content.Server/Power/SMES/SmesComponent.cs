@@ -12,6 +12,12 @@ namespace Content.Server.Power.SMES;
 [RegisterComponent, Access(typeof(SmesSystem))]
 public sealed partial class SmesComponent : Component
 {
+    /// <summary>
+    /// If true, client SMES visuals keep their prototype-defined sprite states.
+    /// </summary>
+    [DataField]
+    public bool StaticOverlayStates;
+
     [ViewVariables]
     public ChargeState LastChargeState;
     [ViewVariables]

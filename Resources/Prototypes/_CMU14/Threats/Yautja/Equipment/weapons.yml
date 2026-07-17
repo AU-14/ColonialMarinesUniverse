@@ -44,112 +44,99 @@
   parent: CMUYautjaWeaponBase
   id: CMUYautjaHarpoon
   name: large harpoon
-  description: A weighted Yautja harpoon designed for brutal throws and close finishing work.
+  description: A huge metal spike with a hook at the end. It's carved with mysterious alien writing.
   components:
   - type: Sharp
   - type: Sprite
-    state: harpoon
+    state: spike
   - type: Item
     heldPrefix: harpoon
     size: Large
   - type: MeleeWeapon
     damage:
       types:
-        Piercing: 28
-        Slash: 6
+        Piercing: 10
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
   - type: EmbeddableProjectile
+    embedOnThrow: false
     sound: /Audio/Weapons/star_hit.ogg
-  - type: LandAtCursor
   - type: ThrowingAngle
     angle: 225
+  - type: ItemThrowRange
+    range: 4
   - type: DamageOtherOnHit
     damage:
       types:
-        Piercing: 26
-        Slash: 6
-  - type: DamageImpactProfile
-    melee:
-      contact: Stab
-      penetration: Medium
-    thrown:
-      contact: Stab
-      penetration: Medium
-      energy: Medium
-  - type: YautjaRecallable
-    range: 12
+        Piercing: 30
+  - type: RemoveComponents
+    components:
+    - type: YautjaTechItem
+    - type: DisarmMalus
+    - type: Clothing
+      slots: NONE
 
 - type: entity
   parent: CMUYautjaWeaponBase
   id: CMUYautjaChainwhip
   name: chainwhip
-  description: A barbed chain weapon for pulling blood and keeping prey at a dangerous distance.
+  description: A segmented, lightweight whip made of durable, acid-resistant metal. Not very common among Yautja Hunters, but still a dangerous weapon capable of shredding prey.
   components:
   - type: Sharp
   - type: Sprite
     state: chainwhip
   - type: Item
     heldPrefix: chainwhip
-    size: Large
+    size: Normal
+  - type: Clothing
+    slots:
+    - belt
   - type: MeleeWeapon
-    attackRate: 0.85
+    attackRate: 1.25
     damage:
       types:
-        Slash: 31
-        Blunt: 5
+        Slash: 30
     soundHit:
       collection: CMUYautjaChainWhipHit
   - type: DamageOtherOnHit
     damage:
       types:
-        Slash: 24
-        Blunt: 4
-  - type: DamageImpactProfile
-    melee:
-      contact: Slash
-      penetration: Low
-    thrown:
-      contact: Fragment
-      penetration: Low
-  - type: YautjaRecallable
-    range: 12
+        Slash: 25
+  - type: YautjaChainWrapper
+  - type: YautjaMeleeXenoInterference
 
 - type: entity
   parent: CMUYautjaWeaponBase
   id: CMUYautjaClanSword
   name: clan sword
-  description: A heavy Yautja clan blade with a broad cutting edge.
+  description: An expertly crafted Yautja blade carried by hunters who wish to fight up close. Razor sharp and capable of cutting flesh into ribbons. Commonly carried by aggressive and lethal hunters.
   components:
   - type: Sharp
   - type: Sprite
     state: clan_sword
   - type: Item
     heldPrefix: clan_sword
+  - type: Clothing
+    slots:
+    - back
   - type: MeleeWeapon
-    attackRate: 0.9
+    attackRate: 1
     damage:
       types:
-        Slash: 38
+        Slash: 35
     soundHit:
       collection: CMUYautjaClanSwordHit
   - type: DamageOtherOnHit
     damage:
       types:
-        Slash: 27
-  - type: DamageImpactProfile
-    melee:
-      contact: Slash
-      penetration: Low
-    thrown:
-      contact: Fragment
-      penetration: Low
+        Slash: 25
+  - type: YautjaMeleeXenoInterference
 
 - type: entity
   parent: CMUYautjaClanSword
   id: CMUYautjaRendingSword
   name: rending sword
-  description: A hooked Yautja sword balanced for tearing strokes.
+  description: An expertly crafted Yautja blade carried by hunters who wish to fight up close. Razor sharp and capable of cutting flesh into ribbons. Commonly carried by aggressive and lethal hunters.
   components:
   - type: Sprite
     state: rending_sword
@@ -160,78 +147,60 @@
   parent: CMUYautjaClanSword
   id: CMUYautjaPiercingSword
   name: piercing sword
-  description: A narrow Yautja sword balanced for thrusting.
+  description: An expertly crafted Yautja blade carried by hunters who wish to fight up close. Razor sharp and capable of cutting flesh into ribbons. Commonly carried by aggressive and lethal hunters.
   components:
   - type: Sprite
     state: piercing_sword
   - type: Item
     heldPrefix: piercing_sword
-  - type: MeleeWeapon
-    damage:
-      types:
-        Slash: 27
-        Piercing: 12
-  - type: DamageImpactProfile
-    melee:
-      contact: Stab
-      penetration: Medium
-    thrown:
-      contact: Fragment
-      penetration: Low
 
 - type: entity
   parent: CMUYautjaClanSword
   id: CMUYautjaSeveringSword
   name: severing sword
-  description: A brutal Yautja sword with a chopping profile.
+  description: An expertly crafted Yautja blade carried by hunters who wish to fight up close. Razor sharp and capable of cutting flesh into ribbons. Commonly carried by aggressive and lethal hunters.
   components:
   - type: Sprite
     state: severing_sword
   - type: Item
     heldPrefix: severing_sword
-  - type: MeleeWeapon
-    attackRate: 0.8
-    damage:
-      types:
-        Slash: 44
 
 - type: entity
   parent: CMUYautjaWeaponBase
   id: CMUYautjaDualWarScythe
   name: dual war scythe
-  description: A paired Yautja scythe weapon for ritual close combat.
+  description: A huge, incredibly sharp dual blade used for hunting dangerous prey. This weapon is commonly carried by Yautja who wish to disable and slice apart their foes.
   components:
+  - type: YautjaPounceBlock
   - type: Sharp
   - type: Sprite
     state: dual_war_scythe
   - type: Item
     heldPrefix: dual_war_scythe
-    size: Huge
+    size: Large
+  - type: Clothing
+    slots:
+    - back
+    - belt
   - type: MeleeWeapon
-    attackRate: 0.85
     damage:
       types:
-        Slash: 36
-        Piercing: 5
+        Slash: 30
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
   - type: DamageOtherOnHit
     damage:
       types:
-        Slash: 28
-  - type: DamageImpactProfile
-    melee:
-      contact: Slash
-      penetration: Low
-    thrown:
-      contact: Fragment
-      penetration: Low
+        Slash: 25
+  - type: YautjaMeleeXenoInterference
+    duration: 15
+  - type: YautjaScytheBonusStrike
 
 - type: entity
   parent: CMUYautjaDualWarScythe
   id: CMUYautjaDoubleWarScythe
   name: double war scythe
-  description: A double-headed Yautja scythe with a longer killing arc.
+  description: A huge, incredibly sharp double blade used for hunting dangerous prey. This weapon is commonly carried by Yautja who wish to disable and slice apart their foes.
   components:
   - type: Sprite
     state: double_war_scythe
@@ -242,131 +211,186 @@
   parent: CMUYautjaWeaponBase
   id: CMUYautjaCruelStaff
   name: cruel staff
-  description: A weighted Yautja staff with reinforced striking heads.
+  description: A wicked and battered staff wrapped in worn crimson rags. A crescent shaped blade adorns the top, while the bottom is rounded and blunt.
   components:
+  - type: YautjaPounceBlock
   - type: Sprite
     state: cruel_staff
   - type: Item
     heldPrefix: cruel_staff
-    size: Huge
+    size: Large
+  - type: Clothing
+    slots:
+    - back
   - type: MeleeWeapon
-    attackRate: 0.9
+    attackRate: 1
     damage:
       types:
-        Blunt: 35
-        Structural: 8
+        Slash: 35
     soundHit:
-      path: /Audio/Weapons/smash.ogg
-  - type: StaminaDamageOnHit
-    damage: 15
+      collection: CMUYautjaClanSwordHit
   - type: DamageOtherOnHit
     damage:
       types:
-        Blunt: 26
-  - type: DamageImpactProfile
-    melee:
-      contact: Crush
-      penetration: None
-      energy: Medium
-    thrown:
-      contact: Crush
-      penetration: None
-      energy: Medium
+        Slash: 25
+  - type: Sharp
 
 - type: entity
   parent: CMUYautjaWeaponBase
   id: CMUYautjaCombistick
   name: combi-stick
-  description: A collapsible Yautja spear with a chained haft for retrieval.
+  description: A compact yet deadly personal weapon. Can be concealed when folded. Functions well as a throwing weapon or defensive tool. A common sight in Yautja packs due to its versatility.
   components:
-  - type: Sharp
+  - type: YautjaCombistick
+  - type: YautjaTechItem
+    allowNonYautjaActiveHandUse: true
+  - type: YautjaChainedWeapon
+  - type: YautjaPounceBlock
+  - type: YautjaSourceShieldBlock
+    shieldType: DirectionalTwoHands
+    readiedBlock: High
+    passiveBlock: None
+    projectileBlockFraction: 0.4
+    blocksOnBack: false
   - type: Sprite
-    state: combistick
+    layers:
+    - state: combistick
+      map: [ "enum.ToggleableVisuals.Layer" ]
   - type: Item
     heldPrefix: combistick
-    size: Huge
+    size: Large
+  - type: Clothing
+    slots:
+    - back
+  - type: ItemToggle
+    activated: true
+    toggleOnWield: false
+    soundActivate:
+      path: /Audio/_CMU14/Yautja/wristblades_on.wav
+    soundDeactivate:
+      path: /Audio/_CMU14/Yautja/wristblades_off.wav
+  - type: ItemTogglePrefix
+    prefixOn: combistick
+    prefixOff: combistick_folded
+  - type: ItemToggleSize
+    activatedSize: Large
+    deactivatedSize: Tiny
+  - type: ItemToggleMeleeWeapon
+    activatedSoundOnHit:
+      path: /Audio/Weapons/bladeslice.ogg
+    deactivatedSoundOnHit:
+      path: /Audio/Weapons/bladeslice.ogg
+    activatedDamage:
+      types:
+        Piercing: 10
+    deactivatedDamage:
+      types:
+        Blunt: 5
+  - type: ComponentToggler
+    components:
+    - type: Sharp
   - type: MeleeWeapon
     attackRate: 0.95
     damage:
       types:
-        Piercing: 33
-        Slash: 8
+        Piercing: 10
     animation: WeaponArcThrust
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
+  - type: Wieldable
+    wieldedInhandPrefix: combistick
+  - type: IncreaseDamageOnWield
+    damage:
+      types:
+        Piercing: 20
   - type: DamageOtherOnHit
     damage:
       types:
-        Piercing: 29
-        Slash: 6
-  - type: DamageImpactProfile
-    melee:
-      contact: Stab
-      penetration: Medium
-    thrown:
-      contact: Stab
-      penetration: Medium
-      energy: Medium
+        Piercing: 30
+  - type: Blocking
+    blockSound: !type:SoundPathSpecifier
+      path: /Audio/_CMU14/Yautja/parry.wav
+    passiveBlockFraction: 0
+    activeBlockFraction: 0.4
+    passiveBlockModifier:
+      coefficients:
+        Blunt: 1
+        Slash: 1
+        Piercing: 1
+        Heat: 1
+    activeBlockModifier:
+      coefficients:
+        Blunt: 1
+        Slash: 1
+        Piercing: 1
+        Heat: 1
+  - type: Damageable
+    damageContainer: Shield
+  - type: YautjaMeleeXenoInterference
   - type: EmbeddableProjectile
+    embedOnThrow: false
     sound: /Audio/Weapons/star_hit.ogg
   - type: LandAtCursor
   - type: YautjaRecallable
     range: 12
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: { state: combistick }
+          False: { state: combistick_folded }
 
 - type: entity
   parent: CMUYautjaWeaponBase
   id: CMUYautjaWarAxe
   name: war axe
-  description: A swift Yautja axe designed to gouge and gore prey, with a chain fixed to the hilt.
+  description: A swift weapon designed to gouge and gore the hunter's prey. A chain is attached to the hilt, allowing for a quick retrieval.
   components:
+  - type: YautjaChainedWeapon
   - type: Sharp
   - type: Sprite
     state: war_axe
   - type: Item
     heldPrefix: war_axe
-    size: Huge
+    size: Large
+  - type: Clothing
+    slots:
+    - back
   - type: MeleeWeapon
-    attackRate: 0.8
     damage:
       types:
-        Slash: 35
-        Blunt: 6
+        Slash: 30
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
   - type: DamageOtherOnHit
     damage:
       types:
-        Slash: 28
-        Blunt: 5
-  - type: DamageImpactProfile
-    melee:
-      contact: Slash
-      penetration: Low
-    thrown:
-      contact: Fragment
-      penetration: Low
+        Slash: 30
   - type: LandAtCursor
   - type: YautjaRecallable
     range: 12
+  - type: YautjaMeleeXenoInterference
 
 - type: entity
   parent: CMUYautjaWeaponBase
   id: CMUYautjaCeremonialDagger
   name: ceremonial dagger
-  description: A compact Yautja knife used for rites, trophies, and close kills.
+  description: A viciously sharp dagger inscribed with ancient Yautja markings. Smells thickly of blood. Carried by some hunters.
   components:
   - type: Sharp
   - type: Sprite
     state: ceremonial_dagger
   - type: Item
     heldPrefix: ceremonial_dagger
-    size: Small
+    size: Tiny
+  - type: Clothing
+    slots:
+    - pocket
   - type: MeleeWeapon
-    attackRate: 1.25
     damage:
       types:
         Slash: 25
-        Piercing: 5
     soundHit:
       path: /Audio/Weapons/slash.ogg
   - type: DamageOtherOnHit
@@ -374,13 +398,7 @@
       types:
         Piercing: 16
         Slash: 4
-  - type: DamageImpactProfile
-    melee:
-      contact: Stab
-      penetration: Low
-    thrown:
-      contact: Stab
-      penetration: Medium
+  - type: YautjaCeremonialDagger
 
 - type: entity
   parent: BaseItem
@@ -388,7 +406,15 @@
   abstract: true
   components:
   - type: YautjaTechItem
-    blockMelee: false
+  - type: YautjaShieldBash
+  - type: YautjaShieldHeldPrefix
+    lowered: clan_shield
+    readied: clan_shield_ready
+  - type: YautjaSourceShieldBlock
+    shieldType: Directional
+    readiedBlock: VeryHigh
+    passiveBlock: Medium
+    blocksOnBack: false
   - type: Sprite
     sprite: _CMU14/Yautja/weapons.rsi
     state: clan_shield
@@ -396,6 +422,10 @@
     sprite: _CMU14/Yautja/weapons.rsi
     heldPrefix: clan_shield
     size: Huge
+  - type: Clothing
+    sprite: _CMU14/Yautja/weapons.rsi
+    slots:
+    - back
   - type: Blocking
     blockSound: !type:SoundPathSpecifier
       path: /Audio/_CMU14/Yautja/Weapons/Melee/parry.wav
@@ -431,53 +461,65 @@
   parent: CMUYautjaShieldBase
   id: CMUYautjaClanShield
   name: clan shield
-  description: A heavy Yautja shield made for close hunts and ritual defense.
+  description: A large tribal shield made of a strange metal alloy. The face of the shield bears three skulls, two human, one alien.
 
 - type: entity
   parent: CMUYautjaShieldBase
   id: CMUYautjaAncientShield
   name: ancient shield
-  description: A large ancient shield forged from an unknown golden alloy.
+  description: A large, ancient shield forged from an unknown golden alloy, gleaming with a luminous brilliance. Its worn surface and masterful craftsmanship hint at a forgotten purpose and a history lost to time.
   components:
   - type: Sprite
     state: ancient_shield
   - type: Item
     heldPrefix: ancient_shield
+  - type: YautjaShieldHeldPrefix
+    lowered: ancient_shield
+    readied: ancient_shield_ready
 
 - type: entity
   parent: CMUYautjaAncientShield
   id: CMUYautjaAncientShieldAlt
   name: ancient shield
-  description: An ornate ancient shield dominated by the metal skull of a xenomorph.
+  description: A large, ornately crafted shield forged from an unknown alloy. The colossal metal skull of a Xenomorph dominates the center, its jagged edges and hollow eyes giving it a fearsome presence. The masterful craftsmanship and weathered battle scars whisper of long-forgotten hunts and a legacy etched in blood.
   components:
   - type: Sprite
     state: ancient_shield_alt
   - type: Item
     heldPrefix: ancient_shield_alt
+  - type: YautjaShieldHeldPrefix
+    lowered: ancient_shield_alt
+    readied: ancient_shield_alt_ready
 
 - type: entity
   parent: CMUYautjaAncientShield
   id: CMUYautjaAncientShieldTemple
   name: ancient shield
-  description: A weathered ancient shield with a forgotten ceremonial pattern.
+  description: A large, ancient shield forged from an unknown alloy. Its time-worn surface and masterful craftsmanship hint at a forgotten purpose and a history lost to time.
   components:
   - type: Sprite
     state: ancient_shield_temple
   - type: Item
     heldPrefix: ancient_shield_temple
+  - type: YautjaShieldHeldPrefix
+    lowered: ancient_shield_temple
+    readied: ancient_shield_temple_ready
 
 - type: entity
   parent: CMUYautjaWeaponBase
   id: CMUYautjaHunterSpear
   name: hunter spear
-  description: A spear of exquisite Yautja design, suited for two-handed thrusts.
+  description: A spear of exquisite design, used by an ancient civilisation.
   components:
   - type: Sharp
   - type: Sprite
     state: hunter_spear
   - type: Item
     heldPrefix: hunter_spear
-    size: Ginormous
+    size: Large
+  - type: Clothing
+    slots:
+    - back
   - type: MeleeWeapon
     damage:
       types:
@@ -490,8 +532,7 @@
   - type: IncreaseDamageOnWield
     damage:
       types:
-        Piercing: 28
-        Slash: 6
+        Piercing: 35
   - type: MeleeRequiresWield
   - type: DamageOtherOnHit
     damage:
@@ -512,21 +553,29 @@
   - type: LandAtCursor
   - type: YautjaRecallable
     range: 12
+  - type: YautjaHunterSpearFishing
+  - type: RemoveComponents
+    components:
+    - type: YautjaTechItem
 
 - type: entity
   parent: CMUYautjaWeaponBase
   id: CMUYautjaWarGlaive
   name: war glaive
-  description: Two huge blades on a metallic pole, carved with mysterious writing.
+  description: Two huge, powerful blades on a metallic pole. Mysterious writing is carved into the weapon.
   components:
+  - type: YautjaPounceBlock
   - type: Sharp
   - type: Sprite
     state: war_glaive
   - type: Item
     heldPrefix: war_glaive
-    size: Ginormous
+    size: Large
+  - type: Clothing
+    slots:
+    - back
   - type: MeleeWeapon
-    attackRate: 0.65
+    attackRate: 0.71428573
     damage:
       types:
         Slash: 10
@@ -537,62 +586,74 @@
   - type: IncreaseDamageOnWield
     damage:
       types:
-        Slash: 31
-        Piercing: 5
+        Slash: 35
   - type: MeleeRequiresWield
   - type: DamageOtherOnHit
     damage:
       types:
-        Slash: 28
-        Piercing: 4
-  - type: DamageImpactProfile
-    melee:
-      contact: Slash
-      penetration: Low
-    thrown:
-      contact: Fragment
-      penetration: Low
+        Slash: 10
+  - type: YautjaMeleeXenoInterference
 
 - type: entity
   parent: CMUYautjaWarGlaive
   id: CMUYautjaCleavingGlaive
   name: cleaving glaive
-  description: A huge single-bladed Yautja polearm.
+  description: A huge, powerful blade on a metallic pole. Mysterious writing is carved into the weapon.
   components:
+  - type: YautjaCleavingGlaive
   - type: Sprite
-    state: cleaving_glaive
+    layers:
+    - state: cleaving_glaive
+      map: [ base ]
   - type: Item
     heldPrefix: cleaving_glaive
   - type: Wieldable
     wieldedInhandPrefix: cleaving_glaive
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        base:
+          True: { state: cleaving_glaive_skull }
+          False: { state: cleaving_glaive }
 
 - type: entity
   parent: CMUYautjaWarGlaive
   id: CMUYautjaAncientWarGlaive
   name: ancient war glaive
-  description: An acid-scarred ancient war glaive. Its edge is still dangerous, but far from its prime.
+  description: A huge, powerful blade on a metallic pole. Mysterious writing is carved into the weapon. This one is ancient and has suffered serious acid damage, making it near-useless.
   components:
   - type: Sprite
     state: ancient_war_glaive
   - type: Item
-    heldPrefix: ancient_war_glaive
+    heldPrefix: war_glaive
+    size: Large
   - type: MeleeWeapon
+    attackRate: 0.71428573
     damage:
       types:
-        Slash: 8
-        Blunt: 4
+        Slash: 5
+    soundHit:
+      path: /Audio/Weapons/bladeslice.ogg
   - type: Wieldable
-    wieldedInhandPrefix: ancient_war_glaive
+    wieldedInhandPrefix: war_glaive
   - type: IncreaseDamageOnWield
     damage:
       types:
-        Slash: 24
+        Slash: 15
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Slash: 5
+  - type: RemoveComponents
+    components:
+    - type: YautjaTechItem
 
 - type: entity
   parent: CMUYautjaWarGlaive
   id: CMUYautjaLongaxe
   name: longaxe
-  description: A frighteningly large Yautja axe with a chipped, bone-crushing blade.
+  description: A frighteningly big axe. The blade edge is chipped and gnarled from thousands of bone-crushing blows.
   components:
   - type: Sprite
     state: longaxe
@@ -605,38 +666,37 @@
   parent: CMUYautjaWeaponBase
   id: CMUYautjaDuellingBlade
   name: duelling blade
-  description: A primitive but deadly Yautja blade for ritual combat.
+  description: A primitive yet deadly sword used in yautja rituals and duels. Though crude compared to their advanced weaponry, its sharp edge demands respect.
   components:
   - type: Sharp
   - type: Sprite
     state: duelling_blade
   - type: Item
     heldPrefix: duelling_blade
-    size: Normal
+    size: Large
   - type: MeleeWeapon
-    attackRate: 1.05
+    attackRate: 1.1111112
     damage:
       types:
-        Slash: 32
+        Slash: 30
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
   - type: DamageOtherOnHit
     damage:
       types:
-        Slash: 22
-  - type: DamageImpactProfile
-    melee:
-      contact: Slash
-      penetration: Low
-    thrown:
-      contact: Fragment
-      penetration: Low
+        Slash: 5
+  - type: RemoveComponents
+    components:
+    - type: YautjaTechItem
+    - type: Corrodible
+    - type: Clothing
+      slots: NONE
 
 - type: entity
   parent: CMUYautjaWeaponBase
   id: CMUYautjaDuellingClub
   name: duelling club
-  description: A brutal ceremonial club for settling disputes among Yautja.
+  description: A crude metal club adorned with a skull. Used as a non-lethal training weapon for young yautja honing their combat skills.
   components:
   - type: Sprite
     state: duelling_club
@@ -644,10 +704,9 @@
     heldPrefix: duelling_club
     size: Normal
   - type: MeleeWeapon
-    attackRate: 0.95
     damage:
       types:
-        Blunt: 31
+        Blunt: 30
     soundHit:
       path: /Audio/Weapons/genhit3.ogg
   - type: StaminaDamageOnHit
@@ -655,21 +714,20 @@
   - type: DamageOtherOnHit
     damage:
       types:
-        Blunt: 22
-  - type: DamageImpactProfile
-    melee:
-      contact: Crush
-      penetration: None
-      energy: Medium
-    thrown:
-      contact: Crush
-      penetration: None
+        Blunt: 7
+  - type: LandAtCursor
+  - type: RemoveComponents
+    components:
+    - type: YautjaTechItem
+    - type: Corrodible
+    - type: Clothing
+      slots: NONE
 
 - type: entity
   parent: CMUYautjaWeaponBase
   id: CMUYautjaDuellingHatchet
   name: duelling hatchet
-  description: A short ceremonial hatchet with a keen edge for ritual combat.
+  description: A short ceremonial duelling hatchet. Designed for ritual combat or settling disputes among Yautja. It features a keen edge capable of cleaving flesh or bone. Though smaller than traditional Yautja weapons.
   components:
   - type: Sharp
   - type: Sprite
@@ -678,31 +736,28 @@
     heldPrefix: duelling_hatchet
     size: Small
   - type: MeleeWeapon
-    attackRate: 1.1
     damage:
       types:
-        Slash: 27
-        Blunt: 4
+        Slash: 20
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
   - type: DamageOtherOnHit
     damage:
       types:
-        Slash: 24
-  - type: DamageImpactProfile
-    melee:
-      contact: Slash
-      penetration: Low
-    thrown:
-      contact: Fragment
-      penetration: Low
+        Slash: 20
   - type: LandAtCursor
+  - type: RemoveComponents
+    components:
+    - type: YautjaTechItem
+    - type: Corrodible
+    - type: Clothing
+      slots: NONE
 
 - type: entity
   parent: CMUYautjaWeaponBase
   id: CMUYautjaDuellingKnife
   name: duelling knife
-  description: A crude ritual knife studded with razor-sharp teeth.
+  description: A length of leather-bound wood studded with razor-sharp teeth. How crude.
   components:
   - type: Sharp
   - type: Sprite
@@ -710,26 +765,27 @@
   - type: Item
     heldPrefix: duelling_knife
     size: Small
+  - type: Tag
+    tags:
+    - Knife
+    - CMUYautjaDuellingKnife
   - type: MeleeWeapon
-    attackRate: 1.25
+    attackRate: 0.8333333
     damage:
       types:
         Slash: 25
-        Piercing: 5
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
   - type: DamageOtherOnHit
     damage:
       types:
-        Slash: 18
-        Piercing: 4
-  - type: DamageImpactProfile
-    melee:
-      contact: Stab
-      penetration: Low
-    thrown:
-      contact: Stab
-      penetration: Low
+        Slash: 30
+  - type: RemoveComponents
+    components:
+    - type: YautjaTechItem
+    - type: Corrodible
+    - type: Clothing
+      slots: NONE
 
 - type: entity
   parent: BaseBullet
@@ -751,16 +807,31 @@
     impactEffect: BulletImpactEffect
     damage:
       types:
-        Piercing: 24
-        Slash: 6
+        Piercing: 30
+  - type: CMArmorPiercing
+    amount: 50
+  - type: ProjectileMaxRange
+    max: 12
+  - type: DamageBoosts
+    boosts:
+    - flags: Turf
+      damage:
+        types:
+          Piercing: 25
+    - flags: Breaching
+      damage:
+        types:
+          Piercing: 25
 
 - type: entity
   parent: BaseItem
   id: CMUYautjaSpikeLauncher
   name: spike launcher
-  description: A compact crescent-shaped Yautja device that rapidly forms and fires alloy spikes.
+  description: A compact Yautja device in the shape of a crescent. It can rapidly fire damaging spikes and automatically recharges.
   components:
   - type: YautjaTechItem
+    shootDeniedPopup: cmu-yautja-spike-launcher-denied
+  - type: YautjaSpikeLauncher
   - type: Sprite
     sprite: _CMU14/Yautja/guns.rsi
     layers:
@@ -769,20 +840,42 @@
   - type: Item
     sprite: _CMU14/Yautja/gun_inhands.rsi
     heldPrefix: spike_launcher
-    size: Huge
+    size: Normal
+  - type: Clothing
+    sprite: _CMU14/Yautja/gun_inhands.rsi
+    slots:
+    - belt
+    - back
+  - type: Corrodible
+    isCorrodible: false
   - type: AmmoCounter
   - type: Gun
     projectileSpeed: 28
-    fireRate: 1.2
+    fireRate: 1.666667
     minAngle: 10
-    maxAngle: 18
+    maxAngle: 10
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
     soundGunshot:
-      path: /Audio/Weapons/Guns/Gunshots/harpoon.ogg
+      path: /Audio/_CMU14/Yautja/woodhit.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    scatterWielded: 6
+    scatterUnwielded: 10
+    baseFireRate: 1.666667
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.25
+    accuracyMultiplierUnwielded: 1
   - type: RechargeBasicEntityAmmo
     rechargeCooldown: 10
+    rechargeChance: 0.70
+    startWithCooldown: true
+    strictCooldownBoundary: true
+    advanceOnFailedRecharge: false
+    preserveCooldownWhenFull: true
+    resetOverdueCooldown: false
   - type: BasicEntityAmmoProvider
     proto: CMUYautjaSpikeProjectile
     capacity: 12
@@ -797,9 +890,6 @@
     light: 0.9
     medium: 0.85
     heavy: 0.85
-  - type: GunWieldBonus
-    minAngle: -8
-    maxAngle: -14
   - type: GunRequiresWield
   - type: WieldedCrosshair
     rsi:
@@ -811,9 +901,18 @@
   parent: BaseItem
   id: CMUYautjaPlasmaRifle
   name: plasma rifle
-  description: A rare Yautja energy rifle with an internal self-charging cell.
+  description: A long-barreled heavy plasma weapon. Intended for combat, not hunting. Has an integrated battery that allows for a functionally unlimited amount of shots to be discharged. Equipped with an internal gyroscopic stabilizer allowing its operator to fire the weapon one-handed if desired.
   components:
   - type: YautjaTechItem
+    shootDeniedPopup: cmu-yautja-spike-launcher-denied
+  - type: YautjaPlasmaWeapon
+    nonYautjaExamineText: This thing looks like an alien rifle of some kind. Strange.
+    minimumShootCharge: 7
+    lowPowerWarning: The rifle does not have enough power remaining!
+    maxChargePopup: plasma rifle hums as it achieves maximum charge.
+    refundUnfiredProjectiles: true
+  - type: Corrodible
+    isCorrodible: false
   - type: Sprite
     sprite: _CMU14/Yautja/guns.rsi
     layers:
@@ -823,26 +922,40 @@
     sprite: _CMU14/Yautja/gun_inhands.rsi
     heldPrefix: plasma_rifle
     size: Huge
+  - type: Clothing
+    sprite: _CMU14/Yautja/gun_inhands.rsi
+    slots:
+    - back
   - type: AmmoCounter
   - type: Gun
     projectileSpeed: 30
-    fireRate: 0.75
-    minAngle: 8
-    maxAngle: 16
+    fireRate: 0.625
+    minAngle: 10
+    maxAngle: 10
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
     soundGunshot:
-      path: /Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasma_shot.wav
+      path: /Audio/_CMU14/Yautja/pred_plasma_shot.wav
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    scatterWielded: 10
+    scatterUnwielded: 10
+    baseFireRate: 0.625
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.5
+    accuracyMultiplierUnwielded: 1.5
   - type: ProjectileBatteryAmmoProvider
     proto: CMUYautjaPlasmaRifleBolt
-    fireCost: 175
+    fireCost: 7
   - type: Battery
-    maxCharge: 1000
-    startingCharge: 1000
+    maxCharge: 100
+    startingCharge: 100
   - type: BatterySelfRecharger
     autoRecharge: true
-    autoRechargeRate: 35
+    autoRechargeRate: 1
+    autoRechargeTickInterval: 1
   - type: Wieldable
     wieldedInhandPrefix: plasma_rifle
   - type: WieldDelay
@@ -852,10 +965,6 @@
     light: 0.9
     medium: 0.84
     heavy: 0.84
-  - type: GunWieldBonus
-    minAngle: -7
-    maxAngle: -13
-  - type: GunRequiresWield
   - type: WieldedCrosshair
     rsi:
       sprite: _RMC14/Interface/MousePointer/rifle_mouse.rsi
@@ -864,11 +973,245 @@
 
 - type: entity
   parent: BaseItem
-  id: CMUYautjaPlasmaPistol
-  name: plasma pistol
-  description: A compact Yautja plasma sidearm with a small self-charging cell.
+  id: CMUYautjaPlasmaCarbine
+  name: plasma carbine
+  description: A short-barreled rapid-fire assault weapon only given to military caste soldiers, unsuitable for hunting actual prey. Features a deadly burst-fire mode, alongside incendiary or impact-explosive rounds. Although more accurate when wielded, it can be fired with one hand.
   components:
   - type: YautjaTechItem
+    shootDeniedPopup: cmu-yautja-fancy-grip-safety-denied
+  - type: YautjaPlasmaWeapon
+    showFireMode: true
+    nonYautjaExamineText: This thing looks like a rifle, but there's no mag or proper barrel. What the hell is it?
+    primaryFireModeText: It is set to fire incendiary plasma bolts.
+    secondaryFireModeText: It is set to fire impact-explosive plasma bolts.
+    minimumAmmoCharge: 1
+    maxChargePopup: plasma carbine hums as it achieves maximum charge.
+    refundUnfiredProjectiles: true
+  - type: Corrodible
+    isCorrodible: false
+  - type: Sprite
+    sprite: _CMU14/Yautja/pred_guns.rsi
+    layers:
+    - state: plasmacarbine
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Item
+    sprite: _CMU14/Yautja/pred_guns_inhands.rsi
+    heldPrefix: plasmacarbine
+    size: Large
+  - type: Clothing
+    sprite: _CMU14/Yautja/pred_guns_back.rsi
+    equippedPrefix: plasmacarbine
+    slots:
+    - back
+  - type: AmmoCounter
+  - type: Gun
+    projectileSpeed: 30
+    fireRate: 1.111111
+    minAngle: 10
+    maxAngle: 10
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    - Burst
+    burstFireRate: 0.909091
+    soundGunshot:
+      path: /Audio/_CMU14/Yautja/pred_plasma_shot.wav
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    scatterWielded: 15
+    scatterUnwielded: 10
+    baseFireRate: 1.111111
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.5
+    accuracyMultiplierUnwielded: 1.4
+  - type: ProjectileBatteryAmmoProvider
+    proto: CMUYautjaPlasmaRifleBolt
+    fireCost: 1
+  - type: BatteryWeaponFireModes
+    cycleOnUniqueAction: true
+    fireModes:
+    - proto: CMUYautjaPlasmaRifleBolt
+      fireCost: 1
+      fireRate: 1.25
+      popupText: plasma carbine will now fire incendiary plasma bolts.
+    - proto: CMUYautjaCasterLethalBolt
+      fireCost: 2
+      fireRate: 1.666667
+      popupText: plasma carbine will now fire impact-explosive plasma bolts.
+  - type: Battery
+    maxCharge: 40
+    startingCharge: 40
+  - type: BatterySelfRecharger
+    autoRecharge: true
+    autoRechargeRate: 1
+    autoRechargeTickInterval: 1
+  - type: UniqueAction
+  - type: Wieldable
+    wieldedInhandPrefix: plasmacarbine
+  - type: WieldDelay
+    baseDelay: 0.6
+  - type: WieldableSpeedModifiers
+    base: 0.72
+    light: 0.9
+    medium: 0.84
+    heavy: 0.84
+  - type: WieldedCrosshair
+    rsi:
+      sprite: _RMC14/Interface/MousePointer/rifle_mouse.rsi
+      state: all
+  - type: Appearance
+
+- type: entity
+  parent: RMCWeaponFlamer
+  id: CMUYautjaHeavyGelDefoliator
+  name: heavy gel defoliator
+  description: A high-power incendiary device used to rapidly expunge evidence of hives or dishonorable foes. Unsurprisingly, it is just as effective in direct combat, and lightweight enough to be fired with one hand.
+  suffix: Yautja, Military Caste
+  components:
+  - type: YautjaTechItem
+    shootDeniedPopup: cmu-yautja-fancy-grip-safety-denied
+  - type: YautjaPlasmaWeapon
+    nonYautjaExamineText: Looks like some massively fucked up alien flamethrower.
+  - type: Sprite
+    sprite: _CMU14/Yautja/pred_guns.rsi
+    layers:
+    - state: defoliator
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Item
+    sprite: _CMU14/Yautja/pred_guns_inhands.rsi
+    heldPrefix: defoliator
+    size: Large
+  - type: Clothing
+    sprite: _CMU14/Yautja/pred_guns_back.rsi
+    equippedPrefix: defoliator
+    slots:
+    - back
+  - type: Wieldable
+    wieldedInhandPrefix: defoliator
+  - type: Gun
+    soundGunshot:
+      collection: RMCFlamerFL3Shoot
+  - type: RMCFlamerAmmoProvider
+    dryFireSound:
+      path: /Audio/_RMC14/Weapons/Guns/Flamer/wy_flamer_dryfire.ogg
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Tank
+        startingItem: CMUYautjaDefoliatorFuelTank
+        insertSound: /Audio/_RMC14/Weapons/Guns/Flamer/wy_flamer_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Flamer/wy_flamer_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMUYautjaDefoliatorFuelTank
+  - type: RMCIgniter
+    igniteSound:
+      path: /Audio/_RMC14/Weapons/Guns/Flamer/wy_flamer_ignite.ogg
+    extinguishSound:
+      path: /Audio/_RMC14/Weapons/Guns/Flamer/wy_flamer_extinguish.ogg
+  - type: RemoveComponents
+    components:
+    - type: GunRequiresWield
+    - type: MagazineVisuals
+
+- type: entity
+  parent: CMUYautjaHeavyGelDefoliator
+  id: CMUYautjaHeavyGelDefoliatorDeathsquad
+  suffix: Yautja, Military Caste, EX
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Tank
+        startingItem: CMUYautjaDefoliatorFuelTankDeathsquad
+        insertSound: /Audio/_RMC14/Weapons/Guns/Flamer/wy_flamer_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Flamer/wy_flamer_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMUYautjaDefoliatorFuelTank
+
+- type: entity
+  parent: RMCBaseTankFlamer
+  id: CMUYautjaDefoliatorFuelTank
+  name: gel defoliator fuel tank
+  description: A high-capacity heat-resistant tank of highly-flammable gel fuel for a heavy defoliator.
+  suffix: Yautja, Military Caste
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/pred_gun_ammo.rsi
+    state: defoliator
+    layers:
+    - state: defoliator
+  - type: SolutionContainerManager
+    solutions:
+      rmc_flamer_tank:
+        maxVol: 100
+        reagents:
+        - ReagentId: RMCNapalmUT
+          Quantity: 100
+  - type: RMCFlamerTank
+    maxRange: 8
+    maxIntensity: 70
+    ignoreReagentRange: true
+  - type: RMCSolutionTransferWhitelist
+    popup: rmc-solution-transfer-whitelist-failed-not-reagent-tank
+    targetWhitelist:
+      components:
+      - RMCFlamerBackpack
+      tags:
+      - RMCTankReagent
+      - RMCBackpackFlamer
+  - type: NoMixingReagents
+  - type: Appearance
+  - type: SolutionStorageFillable
+    solution: rmc_flamer_tank
+  - type: Tag
+    tags:
+    - RMCTankFlamer
+    - CMUYautjaDefoliatorFuelTank
+
+- type: entity
+  parent: CMUYautjaDefoliatorFuelTank
+  id: CMUYautjaDefoliatorFuelTankDeathsquad
+  name: gel defoliator fuel tank (EX)
+  description: A high-capacity heat-resistant tank of terrifyingly powerful gelled plasma, capable of burning right through almost anything. Handle with extreme caution.
+  suffix: Yautja, Military Caste, EX
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      rmc_flamer_tank:
+        maxVol: 100
+        reagents:
+        - ReagentId: RMCNapalmEX
+          Quantity: 100
+
+- type: Tag
+  id: CMUYautjaDefoliatorFuelTank
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaPlasmaPistol
+  name: plasma pistol
+  description: A plasma pistol capable of rapid fire. It has an integrated battery. Can be used to set fires, either to braziers or on people.
+  components:
+  - type: YautjaTechItem
+    shootDeniedPopup: cmu-yautja-spike-launcher-denied
+  - type: YautjaPlasmaWeapon
+    showFireMode: true
+    nonYautjaExamineText: This thing looks like an alien gun of some kind. Strange.
+    minimumAmmoCharge: 1
+    maxChargePopup: plasma pistol hums as it achieves maximum charge.
+    refundUnfiredProjectiles: true
+  - type: Tag
+    tags:
+    - CMUYautjaPlasmaPistol
+  - type: AlwaysHot
+  - type: Corrodible
+    isCorrodible: false
   - type: Sprite
     sprite: _CMU14/Yautja/guns.rsi
     layers:
@@ -878,22 +1221,455 @@
     sprite: _CMU14/Yautja/gun_inhands.rsi
     heldPrefix: plasma_pistol
     size: Normal
+  - type: Clothing
+    slots:
+    - belt
   - type: AmmoCounter
   - type: Gun
     projectileSpeed: 25
-    fireRate: 1.4
+    fireRate: 2
+    minAngle: 10
+    maxAngle: 10
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
     soundGunshot:
-      path: /Audio/_CMU14/Yautja/Weapons/Plasma/pulse3.wav
+      path: /Audio/_CMU14/Yautja/pulse3.wav
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    scatterWielded: 6
+    scatterUnwielded: 10
+    baseFireRate: 2
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.5
+    accuracyMultiplierUnwielded: 1.35
   - type: ProjectileBatteryAmmoProvider
     proto: CMUYautjaPlasmaPistolBolt
-    fireCost: 125
+    fireCost: 1
+  - type: BatteryWeaponFireModes
+    cycleOnUniqueAction: true
+    fireModes:
+    - proto: CMUYautjaPlasmaPistolBolt
+      fireCost: 1
+      fireRate: 2
+      popupText: plasma pistol will now fire plasma bolts.
+    - proto: CMUYautjaPlasmaPistolIncendiaryBolt
+      fireCost: 5
+      fireRate: 1.428571
+      popupText: plasma pistol will now fire incendiary plasma bolts.
   - type: Battery
-    maxCharge: 500
-    startingCharge: 500
+    maxCharge: 40
+    startingCharge: 40
   - type: BatterySelfRecharger
     autoRecharge: true
-    autoRechargeRate: 25
+    autoRechargeRate: 1
+    autoRechargeTickInterval: 1
+  - type: UniqueAction
+  - type: Wieldable
+    wieldedInhandPrefix: plasma_pistol
+  - type: GunRequiresWield
   - type: Appearance
+
+- type: entity
+  parent: BaseBow
+  id: CMUYautjaHuntingBow
+  name: hunting bow
+  description: An abnormal-sized weapon with an exceptionally tight string. Requires extraordinary strength to draw.
+  components:
+  - type: YautjaTechItem
+  - type: Corrodible
+    isCorrodible: false
+  - type: ExplosionResistance
+    damageCoefficient: 0
+    worn: false
+  - type: YautjaBow
+  - type: Tag
+    tags:
+    - CMUYautjaBow
+  - type: Sprite
+    sprite: _CMU14/Yautja/bow.rsi
+    layers:
+    - state: unwielded
+      map: [ base ]
+    - state: bow_loaded
+      map: [ arrow ]
+      visible: false
+  - type: Item
+    size: Large
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - Back
+  - type: Gun
+    minAngle: 0
+    maxAngle: 0
+    fireRate: 1.428571
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot: /Audio/_CMU14/Yautja/bow_shot.ogg
+    soundEmpty: null
+  - type: GunPointBlank
+  - type: ItemSlots
+    slots:
+      projectiles:
+        name: Projectiles
+        startingItem: null
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m42a2.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m42a2.ogg
+        whitelist:
+          tags:
+          - CMUYautjaArrow
+  - type: Appearance
+  - type: ItemMapper
+    spriteLayers:
+    - arrow
+    mapLayers:
+      arrow:
+        whitelist:
+          tags:
+          - CMUYautjaArrow
+  - type: GenericVisualizer
+    visuals:
+      enum.WieldableVisuals.Wielded:
+        arrow:
+          True: { state: bow_loaded }
+          False: { state: bow_loaded }
+        base:
+          True: { state: wielded }
+          False: { state: unwielded }
+
+- type: entity
+  parent: BaseArrow
+  id: CMUYautjaArrowBase
+  name: inert arrow
+  description: A heavy arrow made of a strange metal. Used by alien hunters with powerful bows.
+  abstract: true
+  components:
+  - type: Corrodible
+    isCorrodible: false
+  - type: ExplosionResistance
+    damageCoefficient: 0
+    worn: false
+  - type: Tag
+    tags:
+    - Arrow
+    - CMUYautjaArrow
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
+    layers:
+    - state: tail
+      map: [ tail ]
+      color: darkred
+    - state: rod
+      map: [ rod ]
+      color: brown
+    - state: tip
+      map: [ tip ]
+    - state: solution1
+      map: [ mark ]
+      visible: false
+  - type: Item
+    size: Small
+  - type: Sharp
+  - type: MeleeWeapon
+    damage:
+      types:
+        Piercing: 20
+  - type: CartridgeAmmo
+    proto: CMUYautjaArrowProjectile
+    deleteOnSpawn: true
+    muzzleFlash: null
+    soundEject: null
+    soundInsert: /Audio/Weapons/Guns/Misc/arrow_nock.ogg
+  - type: YautjaArrow
+  - type: GenericVisualizer
+    visuals:
+      enum.YautjaArrowVisuals.State:
+        mark:
+          Inert: { visible: false }
+          Explosive: { visible: true }
+          Emp: { visible: true }
+          Dynamic: { visible: true }
+          Snare: { visible: true }
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 35
+
+- type: entity
+  parent: CMUYautjaArrowBase
+  id: CMUYautjaArrow
+
+- type: entity
+  parent: CMUYautjaArrowBase
+  id: CMUYautjaExplosiveArrowActive
+  name: activated explosive arrow
+  components:
+  - type: CartridgeAmmo
+    proto: CMUYautjaExplosiveArrowProjectile
+    muzzleFlash: null
+  - type: YautjaArrow
+    activated: true
+    selectedWarhead: Explosive
+
+- type: entity
+  parent: CMUYautjaArrowBase
+  id: CMUYautjaEmpArrow
+  components:
+  - type: YautjaArrow
+    secondaryWarhead: Emp
+
+- type: entity
+  parent: CMUYautjaArrowBase
+  id: CMUYautjaEmpArrowActive
+  name: activated emp arrow
+  components:
+  - type: CartridgeAmmo
+    proto: CMUYautjaEmpArrowProjectile
+    muzzleFlash: null
+  - type: YautjaArrow
+    secondaryWarhead: Emp
+    activated: true
+    selectedWarhead: Emp
+
+- type: entity
+  parent: CMUYautjaArrowBase
+  id: CMUYautjaDynamicArrow
+  name: inert dynamic arrow
+  components:
+  - type: YautjaArrow
+    dynamic: true
+    secondaryWarhead: null
+
+- type: entity
+  parent: CMUYautjaArrowBase
+  id: CMUYautjaSnareArrow
+  name: snare arrow
+  description: A bow launched snare.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
+    layers:
+    - state: tail
+      map: [ tail ]
+      color: darkred
+    - state: rod
+      map: [ rod ]
+      color: brown
+    - state: tip
+      map: [ tip ]
+    - state: solution1
+      map: [ mark ]
+      visible: false
+    - sprite: _CMU14/Yautja/bow.rsi
+      state: arrow_trap_active
+      map: [ snare-trap ]
+      visible: false
+  - type: CartridgeAmmo
+    proto: CMUYautjaSnareArrowProjectile
+    muzzleFlash: null
+  - type: YautjaArrow
+    primaryWarhead: Snare
+    secondaryWarhead: null
+    activated: true
+    selectedWarhead: Snare
+  - type: GenericVisualizer
+    visuals:
+      enum.YautjaArrowVisuals.State:
+        mark:
+          Inert: { visible: false }
+          Explosive: { visible: true }
+          Emp: { visible: true }
+          Dynamic: { visible: true }
+          Snare: { visible: true }
+      enum.ToggleableVisuals.Enabled:
+        tail:
+          True: { visible: false }
+          False: { visible: true }
+        rod:
+          True: { visible: false }
+          False: { visible: true }
+        tip:
+          True: { visible: false }
+          False: { visible: true }
+        mark:
+          True: { visible: false }
+          False: { visible: true }
+        snare-trap:
+          True: { visible: true }
+          False: { visible: false }
+
+- type: entity
+  parent: ClothingBeltQuiver
+  id: CMUYautjaQuiverStrap
+  name: quiver strap
+  description: A strap that can hold a bow with a quiver for arrows.
+  components:
+  - type: YautjaTechItem
+  - type: Corrodible
+    isCorrodible: false
+  - type: ExplosionResistance
+    damageCoefficient: 0
+    worn: false
+  - type: Clothing
+    slots:
+    - Belt
+    - suitStorage
+    - Back
+  - type: Storage
+    grid:
+    - 0,0,9,5
+    maxItemSize: Large
+    whitelist:
+      tags:
+      - CMUYautjaArrow
+      - CMUYautjaBow
+  - type: LimitedStorage
+    limits:
+    - popup: rmc-storage-limit-cant-fit
+      count: 8
+      whitelist:
+        tags:
+        - CMUYautjaArrow
+        - CMUYautjaBow
+
+- type: entity
+  parent: CMUYautjaQuiverStrap
+  id: CMUYautjaQuiverStrapFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUYautjaHuntingBow
+    - id: CMUYautjaArrow
+      amount: 7
+
+- type: entity
+  parent: CMUYautjaQuiverStrap
+  id: CMUYautjaQuiverStrapDynamic
+  suffix: Dynamic, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUYautjaHuntingBow
+    - id: CMUYautjaDynamicArrow
+      amount: 7
+
+- type: entity
+  parent: BaseBullet
+  id: CMUYautjaArrowProjectile
+  name: arrow
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
+    layers:
+    - state: tail
+      color: darkred
+    - state: rod
+      color: brown
+    - state: tip
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 110
+  - type: CMArmorPiercing
+    amount: 20
+  - type: ProjectileMaxRange
+    max: 14
+
+- type: entity
+  parent: BaseBulletTrigger
+  id: CMUYautjaExplosiveArrowProjectile
+  name: explosive arrow
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
+    layers:
+    - state: tail
+      color: darkred
+    - state: rod
+      color: brown
+    - state: tip
+      color: orange
+  - type: ExplodeOnTrigger
+  - type: Projectile
+    damage:
+      types:
+        Heat: 110
+  - type: CMArmorPiercing
+    amount: 20
+  - type: ProjectileMaxRange
+    max: 14
+  - type: Explosive
+    explosionType: RMC
+    maxIntensity: 50
+    intensitySlope: 4
+    totalIntensity: 150
+    maxTileBreak: 1
+  - type: PointLight
+    radius: 1.5
+    color: orange
+    energy: 0.35
+
+- type: entity
+  parent: BaseBulletTrigger
+  id: CMUYautjaEmpArrowProjectile
+  name: EMP arrow
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
+    layers:
+    - state: tail
+      color: darkred
+    - state: rod
+      color: brown
+    - state: tip
+      color: cyan
+  - type: Projectile
+    damage:
+      types:
+        Heat: 110
+  - type: CMArmorPiercing
+    amount: 20
+  - type: ProjectileMaxRange
+    max: 14
+  - type: EmpOnTrigger
+    range: 4
+    energyConsumption: 50000
+    disableDuration: 10
+  - type: PointLight
+    radius: 1.5
+    color: cyan
+    energy: 0.35
+
+- type: entity
+  parent: CMUYautjaArrowProjectile
+  id: CMUYautjaSnareArrowProjectile
+  name: snare arrow
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
+    layers:
+    - state: tail
+      color: forestgreen
+    - state: rod
+      color: brown
+    - state: tip
+      color: lawngreen
+  - type: StaminaDamageOnCollide
+    damage: 80
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 30
+  - type: CMArmorPiercing
+    amount: 15
+  - type: ProjectileMaxRange
+    max: 7
+  - type: YautjaSnareArrowProjectile

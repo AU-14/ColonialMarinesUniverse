@@ -22,49 +22,63 @@ public sealed partial class DialogSystem : EntitySystem
         });
     }
 
+    public override void Update(float frameTime)
+    {
+        var query = EntityQueryEnumerator<DialogComponent>();
+        while (query.MoveNext(out var uid, out var dialog))
+        {
+            if (dialog.CloseAt is not { } closeAt || _timing.CurTime < closeAt)
+                continue;
+
+            CloseDialog((uid, dialog), false);
+        }
+    }
+
     private void OnDialogOption(Entity<DialogComponent> ent, ref DialogOptionBuiMsg args)
     {
-        _ui.CloseUi(ent.Owner, DialogUiKey.Key);
-
-        if (_net.IsClient)
-            return;
-
         var index = args.Index;
-        if (index < 0 || !ent.Comp.Options.TryGetValue(index, out var option))
+        object? optionEvent = null;
+        var valid = false;
+        if (index >= 0 && ent.Comp.Options.TryGetValue(index, out var option))
+        {
+            optionEvent = option.Event;
+            valid = true;
+        }
+
+        CloseDialog(ent, true);
+
+        if (!valid)
             return;
 
         var ev = new DialogChosenEvent(args.Actor, index);
-        RaiseLocalEvent(ent, ref ev);
+        RaiseLocalEvent(ent.Owner, ref ev);
 
-        if (option.Event != null)
-            RaiseLocalEvent(ent, ref option.Event, true);
+        if (optionEvent != null)
+            RaiseLocalEvent(ent.Owner, ref optionEvent, true);
     }
 
     private void OnDialogInput(Entity<DialogComponent> ent, ref DialogInputBuiMsg args)
     {
-        _ui.CloseUi(ent.Owner, DialogUiKey.Key);
-
-        if (_net.IsClient)
-            return;
-
-        if (ent.Comp.InputEvent == null)
-            return;
-
+        var inputEvent = ent.Comp.InputEvent;
         var msg = TrimToLimit(args.Input, ent.Comp.CharacterLimit, ent.Comp.SmartCheck);
 
-        ent.Comp.InputEvent = ent.Comp.InputEvent with { Message = msg };
-        RaiseLocalEvent(ent, (object) ent.Comp.InputEvent);
+        CloseDialog(ent, true);
+
+        if (inputEvent == null)
+            return;
+
+        inputEvent = inputEvent with { Message = msg };
+        RaiseLocalEvent(ent.Owner, (object) inputEvent);
     }
 
     private void OnDialogConfirm(Entity<DialogComponent> ent, ref DialogConfirmBuiMsg args)
     {
-        _ui.CloseUi(ent.Owner, DialogUiKey.Key);
+        var confirmEvent = ent.Comp.ConfirmEvent;
 
-        if (_net.IsClient)
-            return;
+        CloseDialog(ent, true);
 
-        if (ent.Comp.ConfirmEvent != null)
-            RaiseLocalEvent(ent, ent.Comp.ConfirmEvent);
+        if (confirmEvent != null)
+            RaiseLocalEvent(ent.Owner, confirmEvent);
     }
 
     private void OnDialogClosed(Entity<DialogComponent> ent, ref BoundUIClosedEvent args)
@@ -72,30 +86,53 @@ public sealed partial class DialogSystem : EntitySystem
         if (_timing.ApplyingState)
             return;
 
+        if (!ent.Comp.SuppressCancelEvent && ent.Comp.CancelEvent != null)
+            RaiseLocalEvent(ent, ent.Comp.CancelEvent);
+
         RemComp<DialogComponent>(ent);
     }
 
-    public void OpenOptions(EntityUid target, EntityUid actor, string title, List<DialogOption> options, string message = "")
+    private void CloseDialog(Entity<DialogComponent> ent, bool suppressCancelEvent)
+    {
+        ent.Comp.SuppressCancelEvent = suppressCancelEvent;
+        _ui.CloseUi(ent.Owner, DialogUiKey.Key);
+
+        if (!TryComp(ent.Owner, out DialogComponent? dialog))
+            return;
+
+        if (!dialog.SuppressCancelEvent && dialog.CancelEvent != null)
+            RaiseLocalEvent(ent.Owner, dialog.CancelEvent);
+
+        RemComp<DialogComponent>(ent.Owner);
+    }
+
+    public void OpenOptions(EntityUid target, EntityUid actor, string title, List<DialogOption> options, string message = "", object? cancelEvent = null, TimeSpan? timeout = null)
     {
         var dialog = EnsureComp<DialogComponent>(target);
         dialog.Title = title;
         dialog.Message = new DialogOption(message);
         dialog.DialogType = DialogType.Options;
         dialog.Options = options;
+        dialog.InputEvent = null;
+        dialog.ConfirmEvent = null;
+        dialog.CancelEvent = cancelEvent;
+        dialog.SuppressCancelEvent = false;
+        dialog.CloseAt = timeout != null ? _timing.CurTime + timeout.Value : null;
         Dirty(target, dialog);
 
         _ui.TryOpenUi(target, DialogUiKey.Key, actor);
     }
 
-    public void OpenOptions(EntityUid actor, string title, List<DialogOption> options, string message = "")
+    public void OpenOptions(EntityUid actor, string title, List<DialogOption> options, string message = "", object? cancelEvent = null, TimeSpan? timeout = null)
     {
-        OpenOptions(actor, actor, title, options, message);
+        OpenOptions(actor, actor, title, options, message, cancelEvent, timeout);
     }
 
-    public void OpenInput(EntityUid target, EntityUid actor, string message, DialogInputEvent? ev, bool largeInput = false, int characterLimit = 200, int minCharacterLimit = 0, bool smartCheck = false, bool autoFocus = true)
+    public void OpenInput(EntityUid target, EntityUid actor, string message, DialogInputEvent? ev, bool largeInput = false, int characterLimit = 200, int minCharacterLimit = 0, bool smartCheck = false, bool autoFocus = true, string title = "")
     {
         var dialog = EnsureComp<DialogComponent>(target);
         dialog.DialogType = DialogType.Input;
+        dialog.Title = title;
         dialog.Message = new DialogOption(message, ev);
         dialog.InputEvent = ev;
         dialog.LargeInput = largeInput;
@@ -103,15 +140,19 @@ public sealed partial class DialogSystem : EntitySystem
         dialog.MinCharacterLimit = minCharacterLimit;
         dialog.SmartCheck = smartCheck;
         dialog.AutoFocus = autoFocus;
+        dialog.ConfirmEvent = null;
+        dialog.CancelEvent = null;
+        dialog.SuppressCancelEvent = false;
+        dialog.CloseAt = null;
 
         Dirty(target, dialog);
 
         _ui.TryOpenUi(target, DialogUiKey.Key, actor);
     }
 
-    public void OpenInput(EntityUid actor, string message, DialogInputEvent? ev, bool largeInput = false, int characterLimit = 200, int minCharacterLimit = 0, bool smartCheck = false, bool autoFocus = true)
+    public void OpenInput(EntityUid actor, string message, DialogInputEvent? ev, bool largeInput = false, int characterLimit = 200, int minCharacterLimit = 0, bool smartCheck = false, bool autoFocus = true, string title = "")
     {
-        OpenInput(actor, actor, message, ev, largeInput, characterLimit, minCharacterLimit, smartCheck, autoFocus);
+        OpenInput(actor, actor, message, ev, largeInput, characterLimit, minCharacterLimit, smartCheck, autoFocus, title);
     }
 
     public void OpenConfirmation(EntityUid target, EntityUid actor, string title, string message, object ev)
@@ -121,6 +162,10 @@ public sealed partial class DialogSystem : EntitySystem
         dialog.Title = title;
         dialog.Message = new DialogOption(message, ev);
         dialog.ConfirmEvent = ev;
+        dialog.InputEvent = null;
+        dialog.CancelEvent = null;
+        dialog.SuppressCancelEvent = false;
+        dialog.CloseAt = null;
         Dirty(target, dialog);
 
         _ui.TryOpenUi(target, DialogUiKey.Key, actor);

@@ -1,6 +1,7 @@
 using Content.Shared.Damage;
 using Content.Shared.Damage.Events;
 using Content.Shared._RMC14.Damage;
+using Content.Shared._RMC14.Weapons.Ranged.Flamer;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
@@ -9,12 +10,14 @@ using Content.Shared.Projectiles;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Systems;
+using Content.Shared.Hands.EntitySystems;
 
 namespace Content.Shared._CMU14.Yautja;
 
 public sealed partial class YautjaTechItemSystem : EntitySystem
 {
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
 
     public override void Initialize()
     {
@@ -25,7 +28,7 @@ public sealed partial class YautjaTechItemSystem : EntitySystem
         SubscribeLocalEvent<YautjaTechItemComponent, UseInHandEvent>(OnUseInHand);
         SubscribeLocalEvent<YautjaTechItemComponent, AttemptMeleeEvent>(OnAttemptMelee);
         SubscribeLocalEvent<YautjaTechItemComponent, ThrowItemAttemptEvent>(OnThrowAttempt);
-        SubscribeLocalEvent<YautjaTechItemComponent, AttemptShootEvent>(OnShootAttempt);
+        SubscribeLocalEvent<YautjaTechItemComponent, AttemptShootEvent>(OnShootAttempt, before: [typeof(SharedRMCFlamerSystem)]);
     }
 
     private void OnDamageModifyAfterResist(Entity<DamageableComponent> ent, ref DamageModifyAfterResistEvent args)
@@ -74,8 +77,12 @@ public sealed partial class YautjaTechItemSystem : EntitySystem
 
     private void OnUseInHand(Entity<YautjaTechItemComponent> ent, ref UseInHandEvent args)
     {
-        if (!ent.Comp.BlockUse || IsAllowed(args.User))
+        if (!ent.Comp.BlockUse ||
+            IsAllowed(args.User) ||
+            ent.Comp.AllowNonYautjaActiveHandUse && _hands.GetActiveItem(args.User) == ent.Owner)
+        {
             return;
+        }
 
         Misuse(ent.Owner, args.User, YautjaTechMisuseKind.Use);
         Deny(args.User);
@@ -109,8 +116,8 @@ public sealed partial class YautjaTechItemSystem : EntitySystem
             return;
 
         Misuse(ent.Owner, args.User, YautjaTechMisuseKind.Shoot);
-        Deny(args.User);
         args.Cancelled = true;
+        args.Message = Loc.GetString(ent.Comp.ShootDeniedPopup);
     }
 
     private bool IsAllowed(EntityUid user)

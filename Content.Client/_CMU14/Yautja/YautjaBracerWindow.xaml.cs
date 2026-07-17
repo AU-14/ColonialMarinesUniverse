@@ -49,6 +49,7 @@ public sealed class YautjaBracerWindow : DefaultWindow
     public Button StunThrallButton = default!;
     public Button ThrallSelfDestructButton = default!;
     public Button ThrallLockButton = default!;
+    public Button YoungbloodExecutionButton = default!;
     public Button CrystalButton = default!;
     public Button HumanCrystalButton = default!;
     public Button HuntingTrapButton = default!;
@@ -120,6 +121,7 @@ public sealed class YautjaBracerWindow : DefaultWindow
         Bind(StunThrallButton, YautjaBracerPanelCommand.StunThrall);
         Bind(ThrallSelfDestructButton, YautjaBracerPanelCommand.ToggleThrallSelfDestruct);
         Bind(ThrallLockButton, YautjaBracerPanelCommand.ToggleThrallBracerLock);
+        Bind(YoungbloodExecutionButton, YautjaBracerPanelCommand.RemoteExecuteYoungblood);
         Bind(CrystalButton, YautjaBracerPanelCommand.CreateStabilisingCrystal);
         Bind(HumanCrystalButton, YautjaBracerPanelCommand.CreateHumanStabilisingCrystal);
         Bind(HuntingTrapButton, YautjaBracerPanelCommand.CreateHuntingTrap);
@@ -341,6 +343,14 @@ public sealed class YautjaBracerWindow : DefaultWindow
             out _,
             out _thrallLockButtonDetail);
         grid.AddChild(ThrallLockButton);
+
+        YoungbloodExecutionButton = YautjaBracerUiStyle.ActionButton(
+            Loc.GetString("cmu-yautja-bracer-menu-youngblood-execute"),
+            Loc.GetString("cmu-yautja-bracer-menu-youngblood-execute-detail"),
+            YautjaBracerUiStyle.Amber,
+            out _,
+            out _);
+        grid.AddChild(YoungbloodExecutionButton);
 
         return panel;
     }

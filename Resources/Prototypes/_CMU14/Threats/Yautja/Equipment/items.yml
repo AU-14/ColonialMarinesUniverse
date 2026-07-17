@@ -1,7 +1,7 @@
 - type: radioChannel
   id: CMUYautja
   name: chat-radio-cmu-yautja
-  keycode: "ŷ"
+  keycode: "е"
   frequency: 1541
   color: "#b85440"
   longRange: true
@@ -9,7 +9,7 @@
 - type: radioChannel
   id: CMUYautjaOverseer
   name: chat-radio-cmu-yautja-overseer
-  keycode: "Ŷ"
+  keycode: "н"
   frequency: 1542
   color: "#d4a85b"
   longRange: true
@@ -17,16 +17,44 @@
 - type: radioChannel
   id: CMUYautjaBadBlood
   name: chat-radio-cmu-yautja-badblood
-  keycode: "ƀ"
+  keycode: "г"
   frequency: 1543
   color: "#c44343"
   longRange: true
+
+- type: radioChannel
+  id: CMUYautjaStranded
+  name: chat-radio-cmu-yautja-stranded
+  keycode: "д"
+  frequency: 1544
+  color: "#a88762"
+  longRange: true
+
+- type: radioChannel
+  id: CMUYautjaMilitary
+  name: chat-radio-cmu-yautja-military
+  keycode: "м"
+  frequency: 1545
+  color: "#8db7d4"
+  longRange: true
+
+- type: entity
+  abstract: true
+  id: CMUYautjaTechMarkerOnly
+  components:
+  - type: YautjaTechItem
+    damageMultiplier: 1
+    blockPickup: false
+    blockUse: false
+    blockMelee: false
+    blockThrow: false
+    blockShoot: false
 
 - type: entity
   parent: EncryptionKey
   id: CMUYautjaEncryptionKey
   name: Yautja encryption key
-  description: An alien cipher chip tuned to hunter communicators.
+  description: A complicated encryption device.
   suffix: Yautja
   components:
   - type: EncryptionKey
@@ -41,8 +69,8 @@
 - type: entity
   parent: EncryptionKey
   id: CMUYautjaOverseerEncryptionKey
-  name: Yautja overseer encryption key
-  description: An alien cipher chip tuned to hunter and overseer channels.
+  name: Yautja Overseer encryption key
+  description: A complicated encryption device.
   suffix: Yautja
   components:
   - type: EncryptionKey
@@ -72,10 +100,26 @@
     - state: synd_label
 
 - type: entity
+  parent: EncryptionKey
+  id: CMUYautjaStrandedEncryptionKey
+  name: damaged Yautja encryption key
+  description: An alien cipher chip tuned to stranded hunter channels.
+  suffix: Yautja, Stranded
+  components:
+  - type: EncryptionKey
+    channels:
+    - CMUYautjaStranded
+    defaultChannel: CMUYautjaStranded
+  - type: Sprite
+    layers:
+    - state: crypt_rusted
+    - state: cap_label
+
+- type: entity
   parent: ClothingHeadset
   id: CMUYautjaCommunicator
-  name: communicator
-  description: A compact alien communicator used by Yautja hunters.
+  name: Communicator
+  description: A strange Yautja device used for projecting the Yautja's voice to the others in its pack. Similar in function to a standard human radio.
   suffix: Yautja
   components:
   - type: ContainerFill
@@ -83,19 +127,25 @@
       key_slots:
       - CMUYautjaEncryptionKey
   - type: Sprite
-    sprite: Clothing/Ears/Headsets/base.rsi
+    sprite: _CMU14/HunterShip/obj/items/radio.rsi
+    state: communicator
   - type: Clothing
-    sprite: Clothing/Ears/Headsets/base.rsi
+    sprite: _CMU14/HunterShip/obj/items/radio.rsi
   - type: YautjaTechItem
     blockPickup: false
     blockUse: false
     blockMelee: false
     blockThrow: false
+  - type: YautjaCommunicator
+  - type: StaticPrice
+    price: 100
+  - type: Corrodible
+    isCorrodible: false
 
 - type: entity
   parent: CMUYautjaCommunicator
   id: CMUYautjaOverseerCommunicator
-  name: overseer communicator
+  name: Overseer Communicator
   suffix: Yautja, Overseer
   components:
   - type: ContainerFill
@@ -106,7 +156,8 @@
 - type: entity
   parent: CMUYautjaCommunicator
   id: CMUYautjaBadBloodCommunicator
-  name: bad blood communicator
+  name: Modified Communicator
+  description: A strange Yautja device used for projecting the Yautja's voice to the others in its pack. Similar in function to a standard human radio. This one has been modified in some way.
   suffix: Yautja, Bad Blood
   components:
   - type: ContainerFill
@@ -117,14 +168,20 @@
 - type: entity
   parent: CMUYautjaCommunicator
   id: CMUYautjaStrandedCommunicator
-  name: stranded hunter communicator
+  name: Damaged Communicator
+  description: A strange Yautja device used for projecting the Yautja's voice to the others in its pack. Similar in function to a standard human radio. This one seems damaged and is transmitting on a different frequency.
   suffix: Yautja, Stranded
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMUYautjaStrandedEncryptionKey
 
 - type: entity
   parent: CMBeltBaseStorage
   id: CMUYautjaHuntingPouch
   name: hunting pouch
-  description: A Yautja hunting pouch made from thick tanned hide, used for devices, tools, and trophies.
+  description: A Yautja hunting pouch worn around the waist, made from a thick tanned hide. Capable of holding various devices and tools and used for the transport of trophies.
   suffix: Yautja
   components:
   - type: Sprite
@@ -136,7 +193,7 @@
     - belt
     clothingVisuals:
       belt:
-      - state: equipped-BELT-hunting_pouch
+      - state: beltbag_w
   - type: Item
     size: Large
     sprite: _CMU14/Yautja/yautja_items.rsi
@@ -145,7 +202,33 @@
     grid:
     - 0,0,11,3
   - type: FixedItemSizeStorage
+  - type: LimitedStorage
+    limits:
+    - popup: rmc-storage-limit-cant-fit
+      count: 12
+      whitelist: null
   - type: YautjaTechItem
+  - type: StaticPrice
+    price: 50
+
+- type: entity
+  parent: RMCFlashlightLantern
+  id: CMUYautjaLantern
+  name: lantern
+  description: A mining lantern.
+  suffix: Yautja
+  components:
+  - type: HandheldLight
+    toggleAction: CMUActionYautjaToggleLantern
+    blinkingBehaviourId: blinking
+    radiatingBehaviourId: radiating
+  - type: YautjaTechItem
+    damageMultiplier: 1
+    blockPickup: false
+    blockUse: false
+    blockMelee: false
+    blockThrow: false
+    blockShoot: false
 
 - type: entity
   parent: BaseItem
@@ -155,19 +238,175 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     state: teleporter
   - type: Item
     size: Tiny
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
   - type: YautjaRelayBeacon
+  - type: UserInterface
+    interfaces:
+      enum.YautjaRelayBeaconUIKey.Key:
+        type: YautjaRelayBeaconBui
   - type: YautjaTechItem
+    blockUse: false
+  - type: Corrodible
+    isCorrodible: false
+  - type: StaticPrice
+    price: 100
+
+- type: entity
+  parent: CMUYautjaRelayBeacon
+  id: CMUYautjaSimpleRelayBeacon
+  name: simple relay beacon
+  description: A device covered in sacred text. It whirrs and beeps every couple of seconds.
+  suffix: Yautja, Thrall
+  components:
+  - type: Sprite
+    sprite: _CMU14/HunterShip/obj/items/hunter/thrall_gear.rsi
+    state: thrall_teleporter
+  - type: Item
+    size: Tiny
+    sprite: _CMU14/HunterShip/obj/items/hunter/thrall_gear.rsi
+  - type: YautjaRelayBeacon
+    allowCustomDestinations: false
+    allowedDestinations:
+    - YautjaShip
+  - type: StaticPrice
+    price: 100
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaFalconDrone
+  name: falcon drone
+  description: An agile drone used by Yautja to survey the hunting grounds.
+  suffix: Yautja
+  components:
+  - type: Sprite
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    state: falcon_drone
+  - type: Item
+    size: Small
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+  - type: Clothing
+    slots:
+    - ears
+    clothingVisuals:
+      ears:
+      - state: falcon_drone
+  - type: YautjaFalconDrone
+  - type: ActiveListener
+  - type: YautjaTechItem
+    damageMultiplier: 1
+
+- type: entity
+  parent: CMUYautjaFalconDrone
+  id: CMUYautjaFalconDroneBadBlood
+  components:
+  - type: Sprite
+    state: falcon_drone_badblood
+  - type: Clothing
+    clothingVisuals:
+      ears:
+      - state: falcon_drone_badblood
+  - type: YautjaFalconDrone
+    deployedPrototype: CMUYautjaFalconDroneBadBloodDeployed
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaFalconDroneDestroyed
+  name: destroyed falcon drone
+  description: The wreckage of a Yautja drone.
+  suffix: Yautja
+  components:
+  - type: Sprite
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    state: falcon_drone_destroyed
+  - type: Item
+    size: Small
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+  - type: YautjaTechItem
+    damageMultiplier: 1
+    blockUse: false
+
+- type: entity
+  parent: CMUYautjaFalconDroneDestroyed
+  id: CMUYautjaFalconDroneDisabled
+  name: disabled falcon drone
+  description: An intact Yautja drone. The internal electronics are completely fried.
+  components:
+  - type: Sprite
+    state: falcon_drone_emped
+
+- type: entity
+  parent:
+  - BaseMob
+  id: CMUYautjaFalconDroneDeployed
+  name: falcon drone
+  description: An agile drone used by Yautja to survey the hunting grounds.
+  suffix: Yautja
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: OverMobs
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    layers:
+    - state: falcon_drone_active
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 5.5
+    baseSprintSpeed: 8
+  - type: MovementIgnoreGravity
+  - type: CanMoveInAir
+  - type: MovementAlwaysTouching
+  - type: Physics
+    bodyType: KinematicController
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 10
+        hard: true
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: ActiveInputMover
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+  - type: YautjaFalconDroneDeployed
+  - type: CMUZLevelAutoTransition
+  - type: YautjaFalconHudIcon
+  - type: TimedDespawn
+    lifetime: 600
+
+- type: entity
+  parent: CMUYautjaFalconDroneDeployed
+  id: CMUYautjaFalconDroneBadBloodDeployed
+  components:
+  - type: Sprite
+    drawdepth: OverMobs
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    layers:
+    - state: falcon_drone_badblood_active
+  - type: YautjaFalconHudIcon
+    icon: CMUYautjaIconFalconDroneBadBlood
 
 - type: entity
   parent: BaseItem
   id: CMUYautjaCleanserGelVial
   name: cleanser gel vial
-  description: A small vial of bright blue dissolving gel for destroying loose field equipment.
+  description: A small vial containing a liquid capable of dissolving the gear of the fallen whilst in the field.
   suffix: Yautja
   components:
   - type: Sprite
@@ -178,13 +417,16 @@
     sprite: _CMU14/Yautja/yautja_items.rsi
   - type: YautjaCleaner
   - type: YautjaTechItem
+    damageMultiplier: 1
     blockPickup: false
+  - type: StaticPrice
+    price: 150
 
 - type: entity
   parent: BaseItem
   id: CMUYautjaScalp
   name: scalp
-  description: A grim trophy from a fallen prey.
+  description: This is the scalp of an irrelevant human.
   suffix: Yautja
   components:
   - type: Sprite
@@ -200,10 +442,12 @@
   - type: YautjaTrophy
 
 - type: entity
-  parent: CMCrowbar
+  parent:
+  - CMCrowbar
+  - CMUYautjaTechMarkerOnly
   id: CMUYautjaCrowbar
   name: yautja crowbar
-  description: A prying tool made from an unusual alien alloy.
+  description: Used to remove floors and to pry open doors, made of an unusual alloy.
   suffix: Yautja
   components:
   - type: Sprite
@@ -214,13 +458,14 @@
     sprite: _CMU14/Yautja/yautja_items.rsi
     heldPrefix: bar
     storedRotation: 0
-  - type: YautjaTechItem
 
 - type: entity
-  parent: CMWrench
+  parent:
+  - CMWrench
+  - CMUYautjaTechMarkerOnly
   id: CMUYautjaWrench
   name: alien wrench
-  description: A wrench with many common uses, made from bizarre alien bone and alloy.
+  description: A wrench with many common uses. Made of some bizarre alien bones.
   suffix: Yautja
   components:
   - type: Sprite
@@ -231,16 +476,14 @@
     sprite: _CMU14/Yautja/yautja_items.rsi
     heldPrefix: wrench
     storedRotation: 0
-    storedSprite:
-      sprite: _CMU14/Yautja/yautja_items.rsi
-      state: wrench
-  - type: YautjaTechItem
 
 - type: entity
-  parent: CMWirecutter
+  parent:
+  - CMWirecutter
+  - CMUYautjaTechMarkerOnly
   id: CMUYautjaWirecutters
   name: alien wirecutters
-  description: Alien wirecutters shaped with razor-sharp teeth.
+  description: This cuts wires, also flesh. Made of some razor-sharp animal teeth.
   suffix: Yautja
   components:
   - type: Sprite
@@ -257,13 +500,14 @@
     sprite: _CMU14/Yautja/yautja_items.rsi
     heldPrefix: wirescutter
     storedRotation: 0
-  - type: YautjaTechItem
 
 - type: entity
-  parent: CMScrewdriver
+  parent:
+  - CMScrewdriver
+  - CMUYautjaTechMarkerOnly
   id: CMUYautjaScrewdriver
   name: alien screwdriver
-  description: A high-precision alien screwdriver with a wicked point.
+  description: Some high-tech screwing abilities.
   suffix: Yautja
   components:
   - type: Sprite
@@ -276,7 +520,7 @@
     - enum.DamageStateVisualLayers.Base:
         screwdriver: ""
   - type: Item
-    size: Tiny
+    size: Small
     sprite: _CMU14/Yautja/yautja_items.rsi
     heldPrefix: screwdriver
     storedRotation: 0
@@ -288,13 +532,14 @@
         Piercing: 7
     soundHit:
       path: "/Audio/Weapons/bladeslice.ogg"
-  - type: YautjaTechItem
 
 - type: entity
-  parent: CMMultitool
+  parent:
+  - CMMultitool
+  - CMUYautjaTechMarkerOnly
   id: CMUYautjaMultitool
   name: alien multitool
-  description: Top-notch alien tech for opening and reconfiguring machines.
+  description: Top-notch alien tech for B&E through hacking.
   suffix: Yautja
   components:
   - type: Sprite
@@ -305,13 +550,14 @@
     sprite: _CMU14/Yautja/yautja_items.rsi
     heldPrefix: multitool
     storedRotation: 0
-  - type: YautjaTechItem
 
 - type: entity
-  parent: CMWelder
+  parent:
+  - CMWelder
+  - CMUYautjaTechMarkerOnly
   id: CMUYautjaWelder
   name: alien chem welding tool
-  description: A complex chemical welding device. Keep it away from youngbloods.
+  description: A complex chemical welding device, keep away from youngblood.
   suffix: Yautja
   components:
   - type: Sprite
@@ -350,18 +596,25 @@
         Blunt: 10
     soundHit:
       collection: GenericHit
-  - type: YautjaTechItem
 
 - type: entity
-  parent: CMBeltUtility
+  parent:
+  - CMBeltUtility
+  - CMUYautjaTechMarkerOnly
   id: CMUYautjaToolbelt
   name: alien toolbelt
-  description: A modular alien utility belt with clips for field tools.
+  description: A modular belt with various clips. This version lacks any hunting functionality, and is commonly used by engineers to transport important tools.
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: _CMU14/Yautja/yautja_items.rsi
-    state: beltbag
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    layers:
+    - state: utilitybelt_pred
+    - state: utilitybelt_pred
+      map: [ "openLayer" ]
+      visible: false
+    - state: utilitybelt_pred
+      map: [ "closedLayer" ]
   - type: Clothing
     sprite: _CMU14/Yautja/yautja_items.rsi
     clothingVisuals:
@@ -377,7 +630,6 @@
   - type: Tag
     tags:
     - CMUYautjaToolbelt
-  - type: YautjaTechItem
 
 - type: entity
   parent: CMUYautjaToolbelt
@@ -395,10 +647,12 @@
     - id: CMUYautjaMultitool
 
 - type: entity
-  parent: BaseItem
+  parent:
+  - BaseItem
+  - CMUYautjaTechMarkerOnly
   id: CMUYautjaMetalChains
   name: metal chains
-  description: Heavy alien chains with sharpened links and a brutal weld pattern.
+  description: The weld pattern tells you that these chains were made with heavy weights in mind, the sharp edge implies this was also made to pierce.
   suffix: Yautja
   components:
   - type: Sprite
@@ -407,31 +661,59 @@
   - type: Item
     size: Normal
     sprite: _CMU14/Yautja/yautja_items.rsi
-  - type: YautjaTechItem
-    blockPickup: false
-    blockUse: false
+    heldPrefix: metal_chain
 
 - type: entity
   parent: BaseItem
   id: CMUYautjaHoundObservationPad
   name: Hellhound Observation Pad
-  description: A portable alien camera console used for remotely overwatching hellhounds.
+  description: A portable camera console device, used for remotely overwatching Hellhounds.
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     state: houndpad
   - type: Item
     size: Small
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 1
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Blunt: 1
   - type: YautjaHoundPad
+    internalCameraPrototype: CMUYautjaHoundObservationPadInternalCamera
   - type: YautjaTechItem
+  - type: Corrodible
+    isCorrodible: false
+
+- type: entity
+  id: CMUYautjaHoundObservationPadInternalCamera
+  name: Hellhound Observation Interface
+  description: If you can see this, someone messed up.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+  - type: UserInterface
+    interfaces:
+      enum.RMCCameraUiKey.Key:
+        type: RMCCameraBui
+  - type: RMCCameraComputer
+    protoIds:
+    - CMUYautjaHellhoundCamera
+    networks:
+    - Yautja
+    title: cmu-yautja-houndpad-interface-title
+    viewportSize: 672, 480
 
 - type: entity
   parent: BaseItem
   id: CMUYautjaHivebreaker
   name: hivebreaker
-  description: A bad blood device used to break a xenomorph's hivemind link and enthrall the serpent.
+  description: A device used by fallen Yautja to break a Xenomorph Hivemind and enthrall a serpent.
   suffix: Yautja
   components:
   - type: Sprite
@@ -442,5 +724,11 @@
     sprite: _CMU14/Yautja/yautja_items.rsi
   - type: YautjaHivebreaker
   - type: YautjaTechItem
-    blockPickup: false
-    blockUse: false
+    damageMultiplier: 1
+  - type: Corrodible
+    isCorrodible: false
+  - type: ExplosionResistance
+    damageCoefficient: 0
+    worn: false
+  - type: StaticPrice
+    price: 200

@@ -171,12 +171,25 @@ public abstract partial class CMUSharedZLevelsSystem
         if (offset == 0)
             return false;
 
+        if (TryFindSourceZStairOpening(sourceMap, offset, from, to, out opening))
+            return true;
+
         var openingMap = offset < 0 ? sourceMap : targetMap;
-        if (!_gridQuery.TryComp(openingMap, out var grid))
+        var openingGridUid = openingMap;
+        if (!_gridQuery.TryComp(openingGridUid, out var grid))
+        {
+            if (!_mapQuery.TryComp(openingMap, out var mapComp) ||
+                !_mapManager.TryFindGridAt(mapComp.MapId, from, out openingGridUid, out grid))
+            {
+                return false;
+            }
+        }
+
+        if (grid == null)
             return false;
 
         var sourceTile = preferOpeningAwayFromSource
-            ? _map.WorldToTile(openingMap, grid, from)
+            ? _map.WorldToTile(openingGridUid, grid, from)
             : default;
         var fallbackOpening = Vector2.Zero;
         var hasFallbackOpening = false;
@@ -188,13 +201,17 @@ public abstract partial class CMUSharedZLevelsSystem
 
         bool TryUseOpeningTile(Vector2i tile)
         {
-            if (_map.TryGetTileRef(openingMap, grid, tile, out var tileRef) &&
-                !CMUZLevelOpeningCache.IsOpeningTile(tileRef.Tile, TilDefMan))
+            Vector2 openingCenter;
+            if (_map.TryGetTileRef(openingGridUid, grid, tile, out var tileRef) &&
+                CMUZLevelOpeningCache.IsOpeningTile(tileRef.Tile, TilDefMan))
+            {
+                openingCenter = _map.ToCenterCoordinates(openingGridUid, tile, grid).Position;
+            }
+            else if (!TryFindZStairOpening(openingMap, sourceMap, openingGridUid, grid, tile, offset, out openingCenter))
             {
                 return false;
             }
 
-            var openingCenter = _map.ToCenterCoordinates(openingMap, tile, grid).Position;
             if (Vector2.DistanceSquared(from, openingCenter) > maxSourceDistanceSquared)
                 return false;
 
@@ -214,8 +231,8 @@ public abstract partial class CMUSharedZLevelsSystem
             return true;
         }
 
-        var localFrom = _map.WorldToLocal(openingMap, grid, from) / grid.TileSize;
-        var localTo = _map.WorldToLocal(openingMap, grid, to) / grid.TileSize;
+        var localFrom = _map.WorldToLocal(openingGridUid, grid, from) / grid.TileSize;
+        var localTo = _map.WorldToLocal(openingGridUid, grid, to) / grid.TileSize;
         var localDelta = localTo - localFrom;
         var currentTile = new Vector2i((int) MathF.Floor(localFrom.X), (int) MathF.Floor(localFrom.Y));
         var endTile = new Vector2i((int) MathF.Floor(localTo.X), (int) MathF.Floor(localTo.Y));
@@ -265,6 +282,99 @@ public abstract partial class CMUSharedZLevelsSystem
         }
 
         return false;
+    }
+
+    private bool TryFindSourceZStairOpening(
+        EntityUid sourceMap,
+        int offset,
+        Vector2 from,
+        Vector2 to,
+        out Vector2 opening)
+    {
+        opening = default;
+
+        var delta = to - from;
+        var lengthSquared = delta.LengthSquared();
+        if (lengthSquared <= 0.001f)
+            return false;
+
+        var query = EntityQueryEnumerator<CMUZLevelStairsComponent, TransformComponent>();
+        while (query.MoveNext(out var stairUid, out var stairs, out var xform))
+        {
+            if (xform.MapUid != sourceMap ||
+                stairs.Offset != offset)
+            {
+                continue;
+            }
+
+            var requiredDelta = RequiredZStairDelta(stairs);
+            var candidate = _transform.GetWorldPosition(stairUid) + new Vector2(requiredDelta.X, requiredDelta.Y);
+            var progress = Vector2.Dot(candidate - from, delta) / lengthSquared;
+            if (progress is < 0f or > 1f)
+                continue;
+
+            var closest = from + delta * progress;
+            if (Vector2.DistanceSquared(candidate, closest) > 0.25f)
+                continue;
+
+            opening = candidate;
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool TryFindZStairOpening(
+        EntityUid openingMap,
+        EntityUid sourceMap,
+        EntityUid openingGridUid,
+        MapGridComponent grid,
+        Vector2i tile,
+        int offset,
+        out Vector2 openingCenter)
+    {
+        openingCenter = default;
+
+        var query = EntityQueryEnumerator<CMUZLevelStairsComponent, TransformComponent>();
+        while (query.MoveNext(out var stairUid, out var stairs, out var xform))
+        {
+            var onOpeningMap = xform.MapUid == openingMap;
+            var onSourceMap = xform.MapUid == sourceMap;
+            if (!onOpeningMap && !onSourceMap)
+                continue;
+
+            var stairTile = _map.WorldToTile(openingGridUid, grid, _transform.GetWorldPosition(stairUid));
+            if (onOpeningMap && stairs.Offset == -offset && stairTile == tile ||
+                onSourceMap && stairs.Offset == offset && stairTile + RequiredZStairDelta(stairs) == tile)
+            {
+                openingCenter = _map.ToCenterCoordinates(openingGridUid, tile, grid).Position;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static Vector2i RequiredZStairDelta(CMUZLevelStairsComponent stairs)
+    {
+        var delta = DirectionDelta(stairs.Direction);
+        return stairs.Offset >= 0 ? delta : -delta;
+    }
+
+    private static Vector2i DirectionDelta(Direction direction)
+    {
+        return direction switch
+        {
+            Direction.North => new Vector2i(0, 1),
+            Direction.South => new Vector2i(0, -1),
+            Direction.East => new Vector2i(1, 0),
+            Direction.West => new Vector2i(-1, 0),
+            Direction.NorthEast => new Vector2i(1, 1),
+            Direction.NorthWest => new Vector2i(-1, 1),
+            Direction.SouthEast => new Vector2i(1, -1),
+            Direction.SouthWest => new Vector2i(-1, -1),
+            _ => Vector2i.Zero,
+        };
     }
 }
 

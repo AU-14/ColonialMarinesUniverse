@@ -1,0 +1,210 @@
+- type: entity
+  parent:
+  - RMCSimpleMob
+  - SimpleSpaceMobBase
+  - MobCombat
+  id: CMUMobYautjaHellhound
+  name: Hellhound
+  description: A vicious Yautja hunting beast, all muscle, claw, and ritual scar.
+  suffix: Yautja
+  components:
+  - type: YautjaHellhound
+  - type: RMCCamera
+    id: CMUYautjaHellhoundCamera
+    networks:
+    - Yautja
+    rename: false
+  - type: GhostRole
+    name: cmu-yautja-hellhound-ghost-name
+    description: cmu-yautja-hellhound-ghost-description
+    rules: cmu-yautja-hellhound-ghost-rules
+    allowMovement: true
+  - type: GhostTakeoverAvailable
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _CMU14/HunterShip/mob/humans/onmob/hunter/hellhound.rsi
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base"]
+      state: "Normal Hellhound Walking"
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: "Normal Hellhound Walking"
+      Critical:
+        Base: "Normal Hellhound Knocked Down"
+      Dead:
+        Base: "Normal Hellhound Dead"
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.45
+        density: 160
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      230: Critical
+      330: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: Eye
+    pvsScale: 1.5
+  - type: CombatMode
+    canDisarm: true
+    disarmFailChance: 0
+  - type: Xeno
+    role: CMUYautjaHellhound
+    accessLevels: []
+    tier: 0
+    contributesToVictory: false
+    countedInSlots: false
+    autoAssignHive: false
+    unlockAt: 0
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoHide
+    - CMUActionYautjaHellhoundGorge
+    - CMUActionYautjaHellhoundSenseOwner
+    - ActionXenoZoom
+  - type: XenoDevour
+  - type: XenoHide
+  - type: XenoZoom
+  - type: BodyZoneTargeting
+  - type: RemoveComponents
+    components:
+    - type: Internals
+  - type: Puller
+  - type: Hands
+    examineShowEmpty: false
+  - type: GiveHands
+    hands:
+    - name: Right Paw
+      location: Right
+    - name: Left Paw
+      location: Left
+  - type: SlowOnPull
+    slowdowns:
+    - multiplier: 0.3825
+      whitelist:
+        components:
+        - Marine
+    - multiplier: 0.425
+      whitelist:
+        components:
+        - XenoLight
+    - multiplier: 0.2475
+      whitelist:
+        components:
+        - XenoHeavy
+  - type: PullWhitelist
+    whitelist:
+      components:
+      - Xeno
+      - Infectable
+      - Synth
+      - Yautja
+  - type: RMCAllowXenoPullToggleStop
+  - type: XenoPlasma
+    plasma: 0
+    maxPlasma: 0
+    plasmaRegenOnWeeds: 0
+  - type: XenoRegen
+    restHealMultiplier: 2.5
+    standHealingMultiplier: 1.25
+    critHealMultiplier: 1.25
+    healOffWeeds: true
+  - type: XenoLeap
+    delay: 0
+    canBeShieldBlocked: false
+    knockdownTime: 2
+    leapSound: /Audio/_RMC14/Xeno/alien_pounce.ogg
+    damage:
+      groups:
+        Brute: 30
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 5.55
+    baseSprintSpeed: 10
+  - type: MeleeWeapon
+    autoAttack: true
+    widePrimary: true
+    altDisarm: true
+    soundHit:
+      path: /Audio/Effects/bite.ogg
+    attackRate: 1.4
+    angle: 0
+    animation: WeaponArcBite
+    damage:
+      groups:
+        Brute: 22.5
+  - type: Tackle
+    min: 4
+    max: 5
+    chance: 0.4
+    stunMin: 4
+    stunMax: 4
+  - type: CMArmor
+    xenoArmor: 30
+    explosionArmor: 20
+  - type: Bloodstream
+    bloodMaxVolume: 300
+  - type: Speech
+    speechVerb: LargeMob
+    allowedEmotes:
+    - CMUYautjaHellhoundRoar
+    - CMUYautjaHellhoundGrowl
+    - CMUYautjaHellhoundHiss
+    emoteOverrides:
+      XenoRoar: CMUYautjaHellhoundRoar
+      Growl: CMUYautjaHellhoundGrowl
+      Hiss: CMUYautjaHellhoundHiss
+  - type: PressureImmunity
+  - type: NightVision
+    alert: XenoNightVision
+    overlay: true
+  - type: RMCNightVisionVisible
+  - type: HideHealthBar
+  - type: TypingIndicator
+    proto: alien
+  - type: ReplacementAccent
+    accent: genericAggressive
+  - type: NPCRetaliation
+    attackMemoryLength: 12
+  - type: FactionException
+  - type: NpcFactionMember
+    factions:
+    - CMUYautja
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+    blackboard:
+      NavClimb: !type:Bool
+        true
+      NavInteract: !type:Bool
+        true
+      NavSmash: !type:Bool
+        true
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+  - type: RMCSize
+    size: SmallXeno
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: hellhound
+  - type: VentCrawler
+    ventCrawlIcon: runner

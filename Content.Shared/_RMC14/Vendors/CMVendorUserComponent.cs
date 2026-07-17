@@ -15,6 +15,9 @@ public sealed partial class CMVendorUserComponent : Component
     public Dictionary<string, int> Choices = new();
 
     [DataField, AutoNetworkedField]
+    public HashSet<string>? ChoiceWhitelist;
+
+    [DataField, AutoNetworkedField]
     public HashSet<(string Category, EntProtoId Ent)> TakeAll = new();
 
     [DataField, AutoNetworkedField]

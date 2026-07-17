@@ -208,7 +208,7 @@ public sealed class DialogBui(EntityUid owner, Enum uiKey) : BoundUserInterface(
             OnInputTextChanged(container, string.Empty, s.MinCharacterLimit, s.CharacterLimit, s.SmartCheck);
         }
 
-        _window.Title = string.Empty;
+        _window.Title = s.Title;
         container.MessageLabel.Text = s.Message.Text;
         container.MessageLineEdit.Visible = !s.LargeInput;
         container.MessageTextEdit.Visible = s.LargeInput;

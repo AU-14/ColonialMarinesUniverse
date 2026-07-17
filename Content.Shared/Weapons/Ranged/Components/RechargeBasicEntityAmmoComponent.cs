@@ -15,6 +15,10 @@ public sealed partial class RechargeBasicEntityAmmoComponent : Component
     [AutoNetworkedField]
     public float RechargeCooldown = 1.5f;
 
+    [DataField("rechargeChance")]
+    [AutoNetworkedField]
+    public float RechargeChance = 1f;
+
     [DataField("rechargeSound")]
     [AutoNetworkedField]
     public SoundSpecifier? RechargeSound = new SoundPathSpecifier("/Audio/Magic/forcewall.ogg")
@@ -30,4 +34,19 @@ public sealed partial class RechargeBasicEntityAmmoComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool ShowExamineText = true;
+
+    [DataField, AutoNetworkedField]
+    public bool StartWithCooldown;
+
+    [DataField, AutoNetworkedField]
+    public bool StrictCooldownBoundary;
+
+    [DataField, AutoNetworkedField]
+    public bool AdvanceOnFailedRecharge = true;
+
+    [DataField, AutoNetworkedField]
+    public bool PreserveCooldownWhenFull;
+
+    [DataField, AutoNetworkedField]
+    public bool ResetOverdueCooldown = true;
 }

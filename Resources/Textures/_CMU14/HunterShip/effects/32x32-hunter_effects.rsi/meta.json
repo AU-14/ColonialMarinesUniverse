@@ -1,0 +1,217 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/effects/32x32-hunter_effects.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "bridge_border_corner",
+      "directions": 4
+    },
+    {
+      "name": "bridge_border",
+      "directions": 4
+    },
+    {
+      "name": "bridge_border_edge",
+      "directions": 4
+    },
+    {
+      "name": "small_stair_left",
+      "directions": 4
+    },
+    {
+      "name": "small_stair_right",
+      "directions": 4
+    },
+    {
+      "name": "bridge_border_brown_corner",
+      "directions": 4
+    },
+    {
+      "name": "bridge_brown_border",
+      "directions": 4
+    },
+    {
+      "name": "bridge_border_brown_edge",
+      "directions": 4
+    },
+    {
+      "name": "small_stair_brown_left",
+      "directions": 4
+    },
+    {
+      "name": "small_stair_brown_right",
+      "directions": 4
+    },
+    {
+      "name": "small_stair",
+      "directions": 4
+    },
+    {
+      "name": "large_stair",
+      "directions": 4
+    },
+    {
+      "name": "hunter_rune",
+      "directions": 4
+    },
+    {
+      "name": "hunter_rune_corner",
+      "directions": 4
+    },
+    {
+      "name": "hunter_rune_corner_2",
+      "directions": 4
+    },
+    {
+      "name": "small_arrow",
+      "directions": 4
+    },
+    {
+      "name": "stripes_arrow",
+      "directions": 4
+    },
+    {
+      "name": "TEMPLE"
+    },
+    {
+      "name": "deco border"
+    },
+    {
+      "name": "deco_border1",
+      "directions": 4
+    },
+    {
+      "name": "deco_border2",
+      "directions": 4
+    },
+    {
+      "name": "deco_border3",
+      "directions": 4
+    },
+    {
+      "name": "deco_border4"
+    },
+    {
+      "name": "deco_border5"
+    },
+    {
+      "name": "deco_border6"
+    },
+    {
+      "name": "deco_border7"
+    },
+    {
+      "name": "deco border bronze"
+    },
+    {
+      "name": "bronze_deco_border1",
+      "directions": 4
+    },
+    {
+      "name": "bronze_deco_border2",
+      "directions": 4
+    },
+    {
+      "name": "bronze_deco_border3",
+      "directions": 4
+    },
+    {
+      "name": "bronze_deco_border4"
+    },
+    {
+      "name": "bronze_deco_border5"
+    },
+    {
+      "name": "bronze_deco_border6"
+    },
+    {
+      "name": "bronze_deco_border7"
+    },
+    {
+      "name": "rubble"
+    },
+    {
+      "name": "rubble0"
+    },
+    {
+      "name": "rubble1"
+    },
+    {
+      "name": "rubble2"
+    },
+    {
+      "name": "rubble3"
+    },
+    {
+      "name": "rubble4"
+    },
+    {
+      "name": "rubble5"
+    },
+    {
+      "name": "rubble6"
+    },
+    {
+      "name": "rubble7"
+    },
+    {
+      "name": "tile_edge"
+    },
+    {
+      "name": "floor_edges_1"
+    },
+    {
+      "name": "floor_edges_2"
+    },
+    {
+      "name": "floor_edges_3"
+    },
+    {
+      "name": "floor_edges_4"
+    },
+    {
+      "name": "floor_edges_5"
+    },
+    {
+      "name": "floor_edges_6"
+    },
+    {
+      "name": "floor_edges_7"
+    },
+    {
+      "name": "floor_edges_8"
+    },
+    {
+      "name": "floor_edges_9"
+    },
+    {
+      "name": "floor_edges_10"
+    },
+    {
+      "name": "floor_edges_11"
+    },
+    {
+      "name": "floor_edges_12"
+    },
+    {
+      "name": "corner"
+    },
+    {
+      "name": "floor_corner_1"
+    },
+    {
+      "name": "floor_corner_2"
+    },
+    {
+      "name": "floor_corner_3"
+    },
+    {
+      "name": "floor_corner_4"
+    }
+  ]
+}

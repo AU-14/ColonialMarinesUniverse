@@ -11,6 +11,7 @@ using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.IP;
 using Content.Shared._CMU14.BalanceRating;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.NamedItems;
 using Content.Shared.Administration.Logs;
 using Content.Shared.AU14.Allegiance;
@@ -249,6 +250,7 @@ namespace Content.Server.Database
             var gamemodeJobPriorities = ConvertGamemodeJobPriorities(profile.GamemodeJobPriorities);
             var gamemodeAntagPreferences = ConvertGamemodeAntagPreferences(profile.GamemodeAntagPreferences);
             var gamemodeThreatPreferences = ConvertGamemodeThreatPreferences(profile.GamemodeThreatPreferences);
+            var yautjaProfile = DeserializeYautjaProfile(profile.YautjaProfile);
 
             var gender = sex == Sex.Male ? Gender.Male : Gender.Female;
             if (Enum.TryParse<Gender>(profile.Gender, true, out var genderVal))
@@ -340,8 +342,164 @@ namespace Content.Server.Database
                 threatPreferences,
                 gamemodeJobPriorities,
                 gamemodeAntagPreferences,
-                gamemodeThreatPreferences
+                gamemodeThreatPreferences,
+                yautjaProfile
             );
+        }
+
+        private sealed class SerializedYautjaProfile
+        {
+            public string Name { get; set; } = string.Empty;
+            public int Age { get; set; }
+            public Sex Sex { get; set; }
+            public Gender Gender { get; set; }
+            public string HairStyleId { get; set; } = string.Empty;
+            public string HairColor { get; set; } = string.Empty;
+            public string FacialHairStyleId { get; set; } = string.Empty;
+            public string FacialHairColor { get; set; } = string.Empty;
+            public string EyeColor { get; set; } = string.Empty;
+            public string SkinColor { get; set; } = string.Empty;
+            public List<string> Markings { get; set; } = new();
+            public YautjaQuillStyle? QuillStyle { get; set; }
+            public YautjaSkinColor? SkinColorPreset { get; set; }
+            public YautjaGearMaterial ArmorMaterial { get; set; }
+            public int ArmorStyle { get; set; }
+            public YautjaGearMaterial MaskMaterial { get; set; }
+            public int MaskStyle { get; set; }
+            public int MaskAccessoryStyle { get; set; }
+            public YautjaGearMaterial GreavesMaterial { get; set; }
+            public int GreavesStyle { get; set; }
+            public YautjaBracerMaterial? BracerMaterial { get; set; }
+            public YautjaBracerMaterial? CasterMaterial { get; set; }
+            public YautjaTranslatorType? TranslatorType { get; set; }
+            public YautjaInvisibilitySound? InvisibilitySound { get; set; }
+            public YautjaLegacySet? Legacy { get; set; }
+            public YautjaUniqueSet? Unique { get; set; }
+            public YautjaCapeStyle? CapeStyle { get; set; }
+            public string CapeColor { get; set; } = string.Empty;
+            public string FlavorText { get; set; } = string.Empty;
+        }
+
+        private static YautjaCharacterProfile DeserializeYautjaProfile(string? serialized)
+        {
+            if (string.IsNullOrWhiteSpace(serialized))
+                return YautjaCharacterProfile.Default;
+
+            SerializedYautjaProfile? parsed;
+            try
+            {
+                parsed = JsonSerializer.Deserialize<SerializedYautjaProfile>(serialized);
+            }
+            catch (JsonException)
+            {
+                return YautjaCharacterProfile.Default;
+            }
+
+            if (parsed == null)
+                return YautjaCharacterProfile.Default;
+
+            var markings = new List<Marking>();
+            foreach (var marking in parsed.Markings)
+            {
+                var parsedMarking = Marking.ParseFromDbString(marking);
+                if (parsedMarking != null)
+                    markings.Add(parsedMarking);
+            }
+
+            var appearance = new HumanoidCharacterAppearance(
+                string.IsNullOrWhiteSpace(parsed.HairStyleId) ? HairStyles.DefaultHairStyle : parsed.HairStyleId,
+                ReadColor(parsed.HairColor, Color.Black),
+                string.IsNullOrWhiteSpace(parsed.FacialHairStyleId) ? HairStyles.DefaultFacialHairStyle : parsed.FacialHairStyleId,
+                ReadColor(parsed.FacialHairColor, Color.Black),
+                ReadColor(parsed.EyeColor, Color.Gold),
+                ReadColor(parsed.SkinColor, new Color((byte) 56, (byte) 90, (byte) 48)),
+                markings,
+                HairStyles.DefaultHairStyle,
+                Color.Black,
+                HairStyles.DefaultFacialHairStyle,
+                Color.Black);
+
+            var yautjaProfile = YautjaCharacterProfile.Default
+                .WithName(string.IsNullOrWhiteSpace(parsed.Name) ? YautjaCharacterProfile.Default.Name : parsed.Name)
+                .WithAge(parsed.Age)
+                .WithSex(parsed.Sex)
+                .WithGender(parsed.Gender)
+                .WithAppearance(appearance)
+                .WithArmor(parsed.ArmorMaterial, parsed.ArmorStyle)
+                .WithMask(parsed.MaskMaterial, parsed.MaskStyle)
+                .WithMaskAccessory(parsed.MaskAccessoryStyle)
+                .WithGreaves(parsed.GreavesMaterial, parsed.GreavesStyle)
+                .WithBracer(parsed.BracerMaterial ?? YautjaCharacterProfile.Default.BracerMaterial)
+                .WithCaster(parsed.CasterMaterial ?? YautjaCharacterProfile.Default.CasterMaterial)
+                .WithTranslatorType(parsed.TranslatorType ?? YautjaCharacterProfile.Default.TranslatorType)
+                .WithInvisibilitySound(parsed.InvisibilitySound ?? YautjaCharacterProfile.Default.InvisibilitySound)
+                .WithLegacy(parsed.Legacy ?? YautjaCharacterProfile.Default.Legacy)
+                .WithUnique(parsed.Unique ?? YautjaCharacterProfile.Default.Unique)
+                .WithCapeStyle(parsed.CapeStyle ?? YautjaCharacterProfile.Default.CapeStyle)
+                .WithCapeColor(ReadColor(parsed.CapeColor, YautjaCharacterProfile.Default.CapeColor))
+                .WithFlavorText(parsed.FlavorText ?? string.Empty);
+
+            if (parsed.SkinColorPreset is { } skinColor)
+                yautjaProfile = yautjaProfile.WithSkinColor(skinColor);
+
+            if (parsed.QuillStyle is { } quillStyle)
+                yautjaProfile = yautjaProfile.WithQuillStyle(quillStyle);
+
+            return yautjaProfile;
+        }
+
+        private static string SerializeYautjaProfile(YautjaCharacterProfile profile)
+        {
+            var appearance = profile.Appearance;
+            var serialized = new SerializedYautjaProfile
+            {
+                Name = profile.Name,
+                Age = profile.Age,
+                Sex = profile.Sex,
+                Gender = profile.Gender,
+                HairStyleId = appearance.HairStyleId,
+                HairColor = appearance.HairColor.ToHex(),
+                FacialHairStyleId = appearance.FacialHairStyleId,
+                FacialHairColor = appearance.FacialHairColor.ToHex(),
+                EyeColor = appearance.EyeColor.ToHex(),
+                SkinColor = appearance.SkinColor.ToHex(),
+                Markings = appearance.Markings.Select(marking => marking.ToString()).ToList(),
+                QuillStyle = profile.QuillStyle,
+                SkinColorPreset = profile.SkinColor,
+                ArmorMaterial = profile.ArmorMaterial,
+                ArmorStyle = profile.ArmorStyle,
+                MaskMaterial = profile.MaskMaterial,
+                MaskStyle = profile.MaskStyle,
+                MaskAccessoryStyle = profile.MaskAccessoryStyle,
+                GreavesMaterial = profile.GreavesMaterial,
+                GreavesStyle = profile.GreavesStyle,
+                BracerMaterial = profile.BracerMaterial,
+                CasterMaterial = profile.CasterMaterial,
+                TranslatorType = profile.TranslatorType,
+                InvisibilitySound = profile.InvisibilitySound,
+                Legacy = profile.Legacy,
+                Unique = profile.Unique,
+                CapeStyle = profile.CapeStyle,
+                CapeColor = profile.CapeColor.ToHex(),
+                FlavorText = profile.FlavorText,
+            };
+
+            return JsonSerializer.Serialize(serialized);
+        }
+
+        private static Color ReadColor(string value, Color fallback)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return fallback;
+
+            try
+            {
+                return Color.FromHex(value);
+            }
+            catch (FormatException)
+            {
+                return fallback;
+            }
         }
 
         private static HashSet<ProtoId<ThreatPrototype>> ConvertThreatPreferences(string? raw)
@@ -618,6 +776,7 @@ namespace Content.Server.Database
             profile.GamemodeJobPriorities = SerializeGamemodeJobPriorities(humanoid.GamemodeJobPriorities);
             profile.GamemodeAntagPreferences = SerializeGamemodeSetPreferences(humanoid.GamemodeAntagPreferences);
             profile.GamemodeThreatPreferences = SerializeGamemodeSetPreferences(humanoid.GamemodeThreatPreferences);
+            profile.YautjaProfile = SerializeYautjaProfile(humanoid.YautjaProfile);
 
             return profile;
         }
@@ -837,8 +996,8 @@ namespace Content.Server.Database
 
             var players = updates.Select(u => u.User.UserId).Distinct().ToArray();
             var dbTimes = (await db.DbContext.PlayTime
-                    .Where(p => players.Contains(p.PlayerId))
-                    .ToArrayAsync())
+                .Where(p => players.Contains(p.PlayerId))
+                .ToArrayAsync())
                 .GroupBy(p => p.PlayerId)
                 .ToDictionary(g => g.Key, g => g.ToDictionary(p => p.Tracker, p => p));
 

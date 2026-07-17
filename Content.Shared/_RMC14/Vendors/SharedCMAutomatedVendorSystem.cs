@@ -503,30 +503,38 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         if (!validHoliday)
             return;
 
-        if (section.Choices is { } choices)
+        var choices = entry.Choices ?? section.Choices;
+        if (choices is { } choice)
         {
             user = EnsureComp<CMVendorUserComponent>(actor);
-            if (!user.Choices.TryGetValue(choices.Id, out var playerChoices))
+            if (user.ChoiceWhitelist is { } choiceWhitelist &&
+                !choiceWhitelist.Contains(choice.Id))
             {
-                playerChoices = 0;
-                user.Choices[choices.Id] = playerChoices;
-                Dirty(actor, user);
-            }
-
-            if (playerChoices >= choices.Amount)
-            {
-                Log.Error($"{ToPrettyString(actor)} tried to buy too many choices.");
+                _popup.PopupEntity(Loc.GetString("cm-vending-machine-cannot-buy-category"), vendor, actor);
                 return;
             }
 
-            user.Choices[choices.Id] = ++playerChoices;
+            if (!user.Choices.TryGetValue(choice.Id, out var playerChoices))
+            {
+                playerChoices = 0;
+                user.Choices[choice.Id] = playerChoices;
+                Dirty(actor, user);
+            }
+
+            if (playerChoices >= choice.Amount)
+            {
+                _popup.PopupEntity(Loc.GetString("cm-vending-machine-cannot-buy-category"), vendor, actor);
+                return;
+            }
+
+            user.Choices[choice.Id] = ++playerChoices;
             Dirty(actor, user);
         }
 
         void ResetChoices()
         {
-            if (section.Choices is { } choices && user != null)
-                user.Choices[choices.Id]--;
+            if (choices is { } choice && user != null)
+                user.Choices[choice.Id]--;
             if (section.TakeOne is { } takeOne && user != null)
                 user.TakeOne.Remove(takeOne);
         }
@@ -641,8 +649,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
             {
                 if (user == null)
                 {
-                    Log.Error(
-                        $"{ToPrettyString(actor)} tried to buy {entry.Id} for {entry.Points} points without having points.");
+                    _popup.PopupEntity(Loc.GetString("cm-vending-machine-not-enough-points"), vendor, actor);
                     return;
                 }
 
@@ -651,8 +658,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
                     : user.ExtraPoints?.GetValueOrDefault(vendor.Comp.PointsType) ?? 0;
                 if (userPoints < entry.Points)
                 {
-                    Log.Error(
-                        $"{ToPrettyString(actor)} with {user.Points} tried to buy {entry.Id} for {entry.Points} points without having enough points.");
+                    _popup.PopupEntity(Loc.GetString("cm-vending-machine-not-enough-points"), vendor, actor);
                     return;
                 }
 
@@ -871,6 +877,23 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
     public void SetPoints(Entity<CMVendorUserComponent> user, int points)
     {
         user.Comp.Points = points;
+        Dirty(user);
+    }
+
+    public void SetChoiceWhitelist(Entity<CMVendorUserComponent> user, HashSet<string>? choices)
+    {
+        user.Comp.ChoiceWhitelist = choices;
+        Dirty(user);
+    }
+
+    public void InitializeChoices(Entity<CMVendorUserComponent> user, IReadOnlyDictionary<string, int> choices)
+    {
+        foreach (var (id, value) in choices)
+        {
+            if (!user.Comp.Choices.ContainsKey(id))
+                user.Comp.Choices[id] = value;
+        }
+
         Dirty(user);
     }
 

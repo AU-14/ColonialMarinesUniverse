@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/icons/obj/items/hunter/pred_mask_accessories.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "pred_accessory1_ebony"
+    },
+    {
+      "name": "pred_accessory2_ebony"
+    },
+    {
+      "name": "pred_accessory3_ebony"
+    },
+    {
+      "name": "pred_accessory1_bronze"
+    },
+    {
+      "name": "pred_accessory2_bronze"
+    },
+    {
+      "name": "pred_accessory3_bronze"
+    },
+    {
+      "name": "pred_accessory1_silver"
+    },
+    {
+      "name": "pred_accessory2_silver"
+    },
+    {
+      "name": "pred_accessory3_silver"
+    },
+    {
+      "name": "pred_accessory1_crimson"
+    },
+    {
+      "name": "pred_accessory2_crimson"
+    },
+    {
+      "name": "pred_accessory3_crimson"
+    },
+    {
+      "name": "pred_accessory1_bone"
+    },
+    {
+      "name": "pred_accessory2_bone"
+    },
+    {
+      "name": "pred_accessory3_bone"
+    }
+  ]
+}

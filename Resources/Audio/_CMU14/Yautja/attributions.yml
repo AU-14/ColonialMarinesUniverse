@@ -3,6 +3,16 @@
   copyright: "Converted to mono PCM WAV from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
   source: "https://github.com/cmss13-devs/cmss13/tree/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/sound/effects"
 
+- files: ["pred_zoom_on.ogg", "pred_zoom_off.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
+  source: "https://github.com/cmss13-devs/cmss13/tree/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/sound/effects"
+
+- files: ["pred_cloakon_modern.ogg", "pred_cloakoff_modern.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
+  source: "https://github.com/cmss13-devs/cmss13/tree/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/sound/effects"
+
 - files: ["pred_bracer.wav"]
   license: "CC-BY-SA-3.0"
   copyright: "Converted to mono PCM WAV from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
@@ -22,6 +32,21 @@
   license: "CC-BY-SA-3.0"
   copyright: "Converted to mono PCM WAV from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
   source: "https://github.com/cmss13-devs/cmss13/tree/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/sound/weapons"
+
+- files: ["bow_shot.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
+  source: "https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/sound/weapons/bow_shot.ogg"
+
+- files: ["signal.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
+  source: "https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/sound/ambience/signal.ogg"
+
+- files: ["woodhit.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
+  source: "https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/sound/effects/woodhit.ogg"
 
 - files: ["pred_click1.wav", "pred_click2.wav", "pred_click3.wav", "pred_click4.wav", "pred_click5.wav", "pred_roar1.wav", "pred_roar2.wav", "pred_roar3.wav", "pred_roar4.wav", "pred_roar5.wav", "pred_roar6.wav", "predgrowl.wav", "pred_pain1.wav", "pred_pain2.wav", "pred_pain3.wav", "pred_pain4.wav", "pred_pain5.wav", "pred_pain_rare1.wav", "pred_death1.wav", "pred_death2.wav", "pred_deathlaugh.wav", "pred_laugh1.wav", "pred_laugh2.wav", "pred_laugh3.wav", "pred_laugh4.wav", "pred_laugh5.wav", "pred_laugh6.wav"]
   license: "CC-BY-SA-3.0"
@@ -52,3 +77,13 @@
   license: "CC-BY-SA-3.0"
   copyright: "Taken from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
   source: "https://github.com/cmss13-devs/cmss13/blob/e97c5f08fdcfd60743481011e30ccdccc7fd7c88/sound/voice/predalien_roar.ogg"
+
+- files: ["burn_you.ogg", "forward_marine.ogg", "just_do_it_rookie.ogg", "just_you.ogg", "lucky_you.ogg", "pred_anytime.ogg", "pred_come_on_out.ogg", "pred_helpme.ogg", "pred_itsatrap.ogg", "pred_overhere.ogg", "pred_over_there.ogg", "pred_turnaround.ogg", "pred_ugly_freak.ogg", "tell_me.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
+  source: "https://github.com/cmss13-devs/cmss13/tree/e97c5f08fdcfd60743481011e30ccdccc7fd7c88/sound/voice/pred_voice"
+
+- files: ["i_see_you2.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
+  source: "https://github.com/cmss13-devs/cmss13/blob/e97c5f08fdcfd60743481011e30ccdccc7fd7c88/sound/hallucinations/i_see_you2.ogg"

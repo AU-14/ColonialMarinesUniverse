@@ -1,12 +1,14 @@
 - type: entity
-  parent: XenoAcidNormal
-  id: CMUYautjaCleanserAcid
-  name: blue dissolving gel
-  description: Bright blue Yautja dissolving gel, eating through field equipment.
+  parent: RMCEffectXenoTelegraphGreen
+  id: CMUYautjaLeapWarning
+  categories: [ HideSpawnMenu ]
   components:
+  - type: TimedDespawn
+    lifetime: 1.2
   - type: Sprite
-    sprite: _RMC14/Effects/xeno_acid.rsi
-    drawdepth: WallMountedItems
-    layers:
-    - state: acid_strong
-      color: "#4fdcff"
+    color: "#0B5226"
+
+- type: entity
+  parent: XenoAcidStrong
+  id: CMUYautjaCleanserAcid
+  categories: [ HideSpawnMenu ]

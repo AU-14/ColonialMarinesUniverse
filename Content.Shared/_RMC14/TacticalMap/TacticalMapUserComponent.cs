@@ -40,6 +40,9 @@ public sealed partial class TacticalMapUserComponent : Component
     public bool Clf;
 
     [DataField, AutoNetworkedField]
+    public bool Yautja;
+
+    [DataField, AutoNetworkedField]
     public Dictionary<int, TacticalMapBlip> MarineBlips = new();
 
     [DataField, AutoNetworkedField]
@@ -56,6 +59,9 @@ public sealed partial class TacticalMapUserComponent : Component
 
     [DataField, AutoNetworkedField]
     public Dictionary<int, TacticalMapBlip> ClfBlips = new();
+
+    [DataField, AutoNetworkedField]
+    public Dictionary<int, TacticalMapBlip> YautjaBlips = new();
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan LastAnnounceAt;

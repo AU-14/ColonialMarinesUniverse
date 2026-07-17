@@ -1,0 +1,44 @@
+﻿{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/items/hunter/mcaste_gear.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "ARMOR"
+    },
+    {
+      "name": "fullarmor_soldier"
+    },
+    {
+      "name": "fullarmor_soldier_lead"
+    },
+    {
+      "name": "SHOES"
+    },
+    {
+      "name": "y-boots_powered"
+    },
+    {
+      "name": "HELMET"
+    },
+    {
+      "name": "helmet_powered"
+    },
+    {
+      "name": "BACK"
+    },
+    {
+      "name": "cannonpack"
+    },
+    {
+      "name": "SHOULDER"
+    },
+    {
+      "name": "plasma_cannons"
+    }
+  ]
+}

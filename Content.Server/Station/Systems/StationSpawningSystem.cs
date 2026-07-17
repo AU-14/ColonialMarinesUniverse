@@ -8,8 +8,9 @@ using Content.Server.Jobs;
 using Content.Server.Mind.Commands;
 using Content.Server.PDA;
 using Content.Server.Station.Components;
-using Content.Shared._CMU14.Round.Roles;
+using Content.Server._CMU14.Yautja;
 using Content.Shared._RMC14.Marines;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Access;
@@ -26,6 +27,7 @@ using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Roles;
 using Content.Shared.Station;
+using Content.Shared._CMU14.Round.Roles;
 using JetBrains.Annotations;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
@@ -63,15 +65,18 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     [Dependency] private SquadSystem _squadSystem = default!;
     [Dependency] private NpcFactionSystem _npcFaction = default!;
     [Dependency] private MarkingManager _markingManager = default!;
+    [Dependency] private YautjaProfileApplySystem _yautjaProfile = default!;
 
     private static readonly PlatoonJobClass[] PlatoonJobClasses = Enum.GetValues<PlatoonJobClass>();
-    private static readonly FrozenDictionary<PlatoonJobClass, string> PlatoonJobClassNames = PlatoonJobClasses.ToFrozenDictionary(v => v, v => v.ToString());
+    private static readonly FrozenDictionary<PlatoonJobClass, string> PlatoonJobClassNames =
+        PlatoonJobClasses.ToFrozenDictionary(v => v, v => v.ToString());
 
     // Round-robin rotation indices for squads per side
     private readonly string[] _govforSquads = { "SquadGovfor", "SquadGovforBravo", "SquadGovforCharlie" };
     private readonly string[] _opforSquads = { "SquadOpfor", "SquadOpforBravo", "SquadOpforCharlie" };
     private int _govforNextSquadIndex;
     private int _opforNextSquadIndex;
+    private static readonly ProtoId<NpcFactionPrototype> YautjaBadBloodFaction = "CMUYautjaBadBlood";
 
     private static readonly HashSet<string> NoSquadRoundRoles = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -244,6 +249,13 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             DoJobSpecials(job, jobEntity);
             ApplyRegulationAppearance(jobEntity, profile);
             ApplyTeamFaction(jobEntity, team);
+
+            if (profile != null &&
+                HasComp<YautjaComponent>(jobEntity) &&
+                !IsBadBloodFactionMember(jobEntity))
+            {
+                _yautjaProfile.ApplyProfile(jobEntity, profile.YautjaProfile);
+            }
 
             // Use originalPrototype for access, ID, and faction
             _identity.QueueIdentityUpdate(jobEntity);
@@ -741,6 +753,12 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             : color;
 
         _humanoidSystem.AddMarking(uid, styleId, appliedColor, false, false, humanoid);
+    }
+
+    private bool IsBadBloodFactionMember(EntityUid uid)
+    {
+        return TryComp(uid, out NpcFactionMemberComponent? faction) &&
+               faction.Factions.Contains(YautjaBadBloodFaction);
     }
 
     /// <summary>

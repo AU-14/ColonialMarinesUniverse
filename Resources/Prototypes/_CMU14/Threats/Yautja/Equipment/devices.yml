@@ -6,16 +6,21 @@
   components:
   - type: Sprite
     sprite: _CMU14/Yautja/bracer.rsi
-    state: icon
+    state: bracer
+  - type: Icon
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer1
   - type: Clothing
     sprite: _CMU14/Yautja/bracer.rsi
   - type: YautjaBracer
     charge: 3000
     maxCharge: 3000
-    regen: 2
-    stabilisingCrystalCost: 250
-    humanStabilisingCrystalCost: 250
-    stabilisingCrystalCooldown: 60
+    regen: 60
+    stabilisingCrystalCost: 400
+    humanStabilisingCrystalCost: 400
+    healingCapsuleCost: 600
+    stabilisingCrystalCooldown: 120
+    healingCapsuleCooldown: 240
     huntingTrapCost: 200
     huntingTrapCooldown: 60
   - type: YautjaGearContainer
@@ -29,6 +34,8 @@
         type: YautjaThrallMessageBui
       enum.YautjaTranslatorUIKey.Key:
         type: YautjaTranslatorBui
+      enum.YautjaAudioPanelUIKey.Key:
+        type: YautjaAudioPanelBui
       enum.DialogUiKey.Key:
         type: DialogBui
   - type: TranslatorDevice
@@ -131,6 +138,8 @@
   components:
   - type: YautjaBadBloodGearChoice
   - type: YautjaBracer
+    badBlood: true
+    idChipPrototype: CMUYautjaBadBloodBracerIdChip
     enableRecall: false
     cloakDuration: 20
     cloakCooldown: 20
@@ -171,25 +180,195 @@
         type: YautjaBadBloodWeaponChoiceBui
 
 - type: entity
+  parent: CMUYautjaBracer
+  id: CMUYautjaBracerRetro
+  name: retro clan bracers
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer_retro
+  - type: Icon
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer1_retro
+  - type: Clothing
+    sprite: _CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-retro
+
+- type: entity
+  parent: CMUYautjaBracer
+  id: CMUYautjaBracerEbony
+  name: ebony clan bracers
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer_ebony
+  - type: Icon
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer1_ebony
+  - type: Clothing
+    sprite: _CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-ebony
+
+- type: entity
+  parent: CMUYautjaBracer
+  id: CMUYautjaBracerSilver
+  name: silver clan bracers
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer_silver
+  - type: Icon
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer1_silver
+  - type: Clothing
+    sprite: _CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-silver
+
+- type: entity
+  parent: CMUYautjaBracer
+  id: CMUYautjaBracerBronze
+  name: bronze clan bracers
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer_bronze
+  - type: Icon
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer1_bronze
+  - type: Clothing
+    sprite: _CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-bronze
+
+- type: entity
+  parent: CMUYautjaBracer
+  id: CMUYautjaBracerCrimson
+  name: crimson clan bracers
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer_crimson
+  - type: Icon
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer1_crimson
+  - type: Clothing
+    sprite: _CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-crimson
+
+- type: entity
+  parent: CMUYautjaBracer
+  id: CMUYautjaBracerBone
+  name: bone clan bracers
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer_bone
+  - type: Icon
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer1_bone
+  - type: Clothing
+    sprite: _CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-bone
+
+- type: entity
+  parent: CMUYautjaBracer
+  id: CMUYautjaBracerLegacyDragon
+  name: dragon legacy bracers
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer_dragon
+  - type: Icon
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer1_dragon
+  - type: Clothing
+    sprite: _CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-dragon
+
+- type: entity
+  parent: CMUYautjaBracerLegacyDragon
+  id: CMUYautjaBracerLegacySwamp
+  name: swamp legacy bracers
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer_swamp
+  - type: Icon
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer1_swamp
+  - type: Clothing
+    sprite: _CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-swamp
+
+- type: entity
+  parent: CMUYautjaBracerLegacyDragon
+  id: CMUYautjaBracerLegacyEnforcer
+  name: enforcer legacy bracers
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer_enforcer
+  - type: Icon
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer1_enforcer
+  - type: Clothing
+    sprite: _CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-enforcer
+
+- type: entity
+  parent: CMUYautjaBracerLegacyDragon
+  id: CMUYautjaBracerLegacyCollector
+  name: collector legacy bracers
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer_collector
+  - type: Icon
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer1_collector
+  - type: Clothing
+    sprite: _CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-collector
+
+- type: entity
   parent: CMHandsBlackMarine
   id: CMUYautjaThrallBracer
-  name: thrall bracer
-  description: A simplified alien bracer that binds a thrall to a Yautja hunter.
+  name: thrall bracers
+  description: A pair of strange alien bracers, adapted for human biology.
   suffix: Yautja, Thrall
   components:
   - type: Sprite
     sprite: _CMU14/Yautja/bracer.rsi
-    state: icon
+    state: bracer
     color: "#b85440"
+  - type: Icon
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer1
   - type: Clothing
     sprite: _CMU14/Yautja/bracer.rsi
   - type: YautjaThrallBracer
+  - type: Corrodible
+    isCorrodible: false
   - type: YautjaTechItem
-    blockPickup: false
-    blockUse: false
-    blockMelee: false
-    blockThrow: false
-    blockShoot: false
   - type: UserInterface
     interfaces:
       enum.YautjaThrallMessageUIKey.Key:
@@ -198,23 +377,101 @@
 - type: entity
   parent: CMUYautjaBracer
   id: CMUYautjaBloodedThrallBracer
-  name: blooded thrall bracer
-  description: A full hunting bracer entrusted to a blooded thrall.
+  name: blooded thrall bracers
+  description: A pair of strange alien bracers, adapted for human biology. These contain additional features.
   suffix: Yautja, Thrall, Blooded
   components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer_ebony
+  - type: Icon
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer1_ebony
+  - type: Clothing
+    sprite: _CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-ebony
   - type: YautjaThrallBracer
+  - type: Corrodible
+    isCorrodible: false
+  - type: YautjaTechItem
+
+- type: entity
+  parent: CMUYautjaBloodedThrallBracer
+  id: CMUYautjaBloodedThrallBracerSilver
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer_silver
+  - type: Icon
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer1_silver
+  - type: Clothing
+    sprite: _CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-silver
+
+- type: entity
+  parent: CMUYautjaBloodedThrallBracer
+  id: CMUYautjaBloodedThrallBracerGold
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer_bronze
+  - type: Icon
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer1_bronze
+  - type: Clothing
+    sprite: _CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-bronze
+
+- type: entity
+  parent: CMUYautjaBloodedThrallBracer
+  id: CMUYautjaBloodedThrallBracerCrimson
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer_crimson
+  - type: Icon
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer1_crimson
+  - type: Clothing
+    sprite: _CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-crimson
+
+- type: entity
+  parent: CMUYautjaBloodedThrallBracer
+  id: CMUYautjaBloodedThrallBracerBone
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer_bone
+  - type: Icon
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer1_bone
+  - type: Clothing
+    sprite: _CMU14/Yautja/bracer.rsi
+    clothingVisuals:
+      gloves:
+      - state: equipped-HAND-bone
 
 - type: entity
   parent: BaseStorageItem
   id: CMUYautjaThrallGearBox
-  name: alien bracer box
-  description: A small case containing a thrall bracer and emergency Yautja medical supplies.
+  name: alien box
+  description: A strange, runed box.
   suffix: Yautja, Thrall, Filled
   components:
   - type: Sprite
-    sprite: Objects/Storage/boxes.rsi
+    sprite: _CMU14/HunterShip/obj/structures/closet.rsi
     layers:
-    - state: box
+    - state: pred_coffin
   - type: Item
     size: Normal
   - type: Storage
@@ -224,18 +481,38 @@
   - type: StorageFill
     contents:
     - id: CMUYautjaThrallBracer
-    - id: CMUYautjaAutoInjector
-      amount: 5
-    - id: CMUYautjaHealingGel
-      amount: 2
-    - id: CMUYautjaStabilizerGel
-      amount: 2
+    - id: CMUYautjaThrallAutoInjector
+      amount: 3
+
+- type: entity
+  parent: ClothingEyesBase
+  id: CMUYautjaNightVisionGlasses
+  name: bio-mask nightvision
+  description: A vision overlay generated by the Bio-Mask. Used for low-light conditions.
+  components:
+  - type: Item
+    storedRotation: 0
+  - type: Sprite
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    state: visor_nvg
+  - type: Clothing
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+  - type: NightVisionItem
+    actionId: null
+    toggleable: false
+    slotFlags: EYES
+    defaultState: Full
+    green: false
+    blockScopes: true
+    ignoreUserOnlyHalf: true
+  - type: YautjaMaskVisorGlasses
+  - type: Unremoveable
 
 - type: entity
   parent: [ CMBaseMask, CMUBaseGasMaskFilterSlot ]
   id: CMUYautjaMask
-  name: bio-mask
-  description: An alien hunting mask with a built-in tactical visor.
+  name: clan mask
+  description: A beautifully designed metallic face mask, both ornate and functional.
   components:
   - type: Sprite
     sprite: _CMU14/Yautja/mask.rsi
@@ -254,12 +531,13 @@
   - type: Mask
     enabled: false
   - type: YautjaMask
+    requiresYautjaWearer: true
     drain: 3
     drainEvery: 2
     zoomLevel: 1.6
     zoomOffset: 14
   - type: ParasiteResistance
-    maxCount: 12
+    maxCount: 100
   - type: EyeProtection
     protectionTime: 20
   - type: PressureProtection
@@ -270,31 +548,84 @@
   - type: IngestionBlocker
   - type: IdentityBlocker
   - type: YautjaMaskAccessoryHolder
-  - type: NightVisionItem
-    toggleable: false
-    enableOnEquip: false
-    slotFlags: MASK
-    defaultState: Full
-    green: false
-    blockScopes: true
-    ignoreUserOnlyHalf: true
+  - type: YautjaTechItem
+    blockPickup: false
+  - type: CMArmor
+    melee: 40
+    bullet: 50
+    bio: 45
+    explosionArmor: 50
+  - type: Corrodible
+    isCorrodible: false
+  - type: RMCImmuneToIgnition
+    intensityResistance: 10
+    immuneToDirectHits: false
+  - type: StaticPrice
+    price: 100
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskScalable
+  suffix: Scalable
+  name: clan mask
+  description: A beautifully designed metallic face mask, both ornate and functional.
+  components:
+  - type: YautjaTechItem
+  - type: CMArmor
+    melee: 40
+    bullet: 45
+    bio: 40
+    explosionArmor: 50
+  - type: ParasiteResistance
+    maxCount: 30
+  - type: Corrodible
+    isCorrodible: false
+  - type: YautjaScalableRepair
+    damagedText: It has been worn from long use and poor maintenance.
+
+- type: entity
+  parent: CMBaseMask
+  id: CMUYautjaStoneMask
+  name: alien stone mask
+  description: A beautifully designed face mask, ornate but non-functional and made entirely of stone.
+  suffix: Yautja, Flavor
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask1_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask1_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+  - type: Item
+    size: Small
+  - type: CMArmor
+    melee: 10
+    bullet: 10
+    bio: 0
+    explosionArmor: 10
+  - type: Corrodible
+    isCorrodible: false
 
 - type: entity
   parent: IDCardStandard
   id: CMUYautjaBracerIdChip
-  name: embedded bracer ID chip
-  description: A compact identification wafer deployed from a Yautja bracer.
+  name: bracer ID chip
+  description: A complex cypher chip embedded within a set of clan bracers.
   components:
   - type: Sprite
-    layers:
-    - state: default
-    - state: silver
+    sprite: _CMU14/HunterShip/obj/items/radio.rsi
+    state: upp_key
+  - type: Item
+    size: Tiny
   - type: IdCard
     jobTitle: cmu-yautja-id-chip-job
     jobIcon: JobIconUnknown
   - type: Access
     groups:
-    - AllAccess
+    - CMUYautjaAccessSecure
   - type: YautjaTechItem
     blockPickup: false
     blockUse: false
@@ -304,113 +635,34 @@
   - type: YautjaBracerIdChip
 
 - type: entity
-  parent: BaseItem
-  id: CMUYautjaHealthShard
-  name: health shard
-  description: A crystalline shard pulsing with restorative energy. Split it with both hands free to activate, then plunge both halves into yourself for a burst of healing and a sustained chemical treatment.
+  parent: CMUYautjaBracerIdChip
+  id: CMUYautjaBadBloodBracerIdChip
+  suffix: Yautja, Bad Blood
   components:
-  - type: Sprite
-    sprite: _CMU14/Yautja/health_shard.rsi
-    state: shard_icon
-  - type: Item
-    sprite: _CMU14/Yautja/health_shard.rsi
-    heldPrefix: shard_inhand
-    size: Small
-  - type: YautjaHealthShard
-  - type: YautjaTechItem
-    blockPickup: false
-    blockUse: false
-    blockMelee: false
-    blockThrow: false
-
-- type: entity
-  parent: BaseItem
-  id: CMUYautjaHealthShardHalf
-  name: health shard half
-  description: One half of a split health shard. Use on yourself to plunge it in for immediate healing and a chemical boost.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Sprite
-    sprite: _CMU14/Yautja/health_shard.rsi
-    state: shard_icon_twohand
-  - type: Item
-    sprite: _CMU14/Yautja/health_shard.rsi
-    heldPrefix: shard_inhand
-    size: Tiny
-  - type: YautjaHealthShardHalf
-
-- type: entity
-  parent: ShardCrystalGreen
-  id: CMUYautjaStabilisingCrystal
-  name: stabilising crystal
-  description: A bracer-grown crystal that rapidly stabilises alien biology.
-  suffix: Yautja
-  components:
-  - type: Healing
-    damageContainers:
-    - Biological
-    damage:
-      groups:
-        Airloss: -45
-      types:
-        Bloodloss: -55
-        Asphyxiation: -30
-    bloodlossModifier: -35
-    delay: 0.75
-    selfHealPenaltyMultiplier: 1.25
-    healingBeginSound:
-      path: "/Audio/Items/Medical/ointment_begin.ogg"
-    healingEndSound:
-      path: "/Audio/Items/Medical/ointment_end.ogg"
-  - type: YautjaTechItem
-    blockPickup: false
-    blockUse: false
-    blockMelee: false
-    blockThrow: false
-
-- type: entity
-  parent: ShardCrystalCyan
-  id: CMUYautjaHumanStabilisingCrystal
-  name: human stabilising crystal
-  description: A bracer-grown crystal tuned for humans and thralls.
-  suffix: Yautja
-  components:
-  - type: Healing
-    damageContainers:
-    - Biological
-    damage:
-      groups:
-        Airloss: -35
-        Brute: -15
-        Burn: -15
-      types:
-        Bloodloss: -40
-        Asphyxiation: -25
-    bloodlossModifier: -30
-    delay: 0.75
-    selfHealPenaltyMultiplier: 1.25
-    healingBeginSound:
-      path: "/Audio/Items/Medical/ointment_begin.ogg"
-    healingEndSound:
-      path: "/Audio/Items/Medical/ointment_end.ogg"
-  - type: YautjaTechItem
-    blockPickup: false
-    blockUse: false
-    blockMelee: false
-    blockThrow: false
+  - type: Access
+    groups:
+    - CMUYautjaAccessBadBlood
 
 - type: entity
   parent: CMUYautjaAutoInjector
+  id: CMUYautjaStabilisingCrystal
+  suffix: Yautja, Bracer Fabricated
+
+- type: entity
+  parent: CMUYautjaThrallAutoInjector
+  id: CMUYautjaHumanStabilisingCrystal
+  suffix: Yautja, Thrall, Bracer Fabricated
+
+- type: entity
+  parent: CMUYautjaHealingGel
   id: CMUYautjaHealingCapsule
-  name: healing capsule
-  description: A disposable bracer-fabricated capsule of emergency predator medicine.
-  suffix: Yautja
+  suffix: Yautja, Bracer Fabricated
 
 - type: entity
   parent: BaseItem
   id: CMUYautjaMaskOrnament
-  name: mask ornament
-  description: A small ceremonial ornament that clips into a Yautja bio-mask.
+  name: Mask Ornament
+  description: An ornate addition to your mask.
   components:
   - type: Sprite
     sprite: Objects/Misc/guardian_info.rsi
@@ -418,11 +670,115 @@
   - type: Item
     size: Tiny
   - type: YautjaMaskOrnament
-  - type: YautjaTechItem
-    blockPickup: false
-    blockUse: false
-    blockMelee: false
-    blockThrow: false
+  - type: RemoveComponents
+    components:
+    - type: Corrodible
+
+- type: entity
+  parent: CMUYautjaMaskOrnament
+  id: CMUYautjaMaskAccessory01Ebony
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/mask_accessories.rsi
+    state: pred_accessory1_ebony
+
+- type: entity
+  parent: CMUYautjaMaskAccessory01Ebony
+  id: CMUYautjaMaskAccessory02Ebony
+  components:
+  - type: Sprite
+    state: pred_accessory2_ebony
+
+- type: entity
+  parent: CMUYautjaMaskAccessory01Ebony
+  id: CMUYautjaMaskAccessory03Ebony
+  components:
+  - type: Sprite
+    state: pred_accessory3_ebony
+
+- type: entity
+  parent: CMUYautjaMaskAccessory01Ebony
+  id: CMUYautjaMaskAccessory01Bronze
+  components:
+  - type: Sprite
+    state: pred_accessory1_bronze
+
+- type: entity
+  parent: CMUYautjaMaskAccessory01Ebony
+  id: CMUYautjaMaskAccessory02Bronze
+  components:
+  - type: Sprite
+    state: pred_accessory2_bronze
+
+- type: entity
+  parent: CMUYautjaMaskAccessory01Ebony
+  id: CMUYautjaMaskAccessory03Bronze
+  components:
+  - type: Sprite
+    state: pred_accessory3_bronze
+
+- type: entity
+  parent: CMUYautjaMaskAccessory01Ebony
+  id: CMUYautjaMaskAccessory01Silver
+  components:
+  - type: Sprite
+    state: pred_accessory1_silver
+
+- type: entity
+  parent: CMUYautjaMaskAccessory01Ebony
+  id: CMUYautjaMaskAccessory02Silver
+  components:
+  - type: Sprite
+    state: pred_accessory2_silver
+
+- type: entity
+  parent: CMUYautjaMaskAccessory01Ebony
+  id: CMUYautjaMaskAccessory03Silver
+  components:
+  - type: Sprite
+    state: pred_accessory3_silver
+
+- type: entity
+  parent: CMUYautjaMaskAccessory01Ebony
+  id: CMUYautjaMaskAccessory01Crimson
+  components:
+  - type: Sprite
+    state: pred_accessory1_crimson
+
+- type: entity
+  parent: CMUYautjaMaskAccessory01Ebony
+  id: CMUYautjaMaskAccessory02Crimson
+  components:
+  - type: Sprite
+    state: pred_accessory2_crimson
+
+- type: entity
+  parent: CMUYautjaMaskAccessory01Ebony
+  id: CMUYautjaMaskAccessory03Crimson
+  components:
+  - type: Sprite
+    state: pred_accessory3_crimson
+
+- type: entity
+  parent: CMUYautjaMaskAccessory01Ebony
+  id: CMUYautjaMaskAccessory01Bone
+  components:
+  - type: Sprite
+    state: pred_accessory1_bone
+
+- type: entity
+  parent: CMUYautjaMaskAccessory01Ebony
+  id: CMUYautjaMaskAccessory02Bone
+  components:
+  - type: Sprite
+    state: pred_accessory2_bone
+
+- type: entity
+  parent: CMUYautjaMaskAccessory01Ebony
+  id: CMUYautjaMaskAccessory03Bone
+  components:
+  - type: Sprite
+    state: pred_accessory3_bone
 
 - type: entity
   parent: BaseStorageItem
@@ -485,8 +841,8 @@
 - type: entity
   parent: BaseItem
   id: CMUYautjaSmartDisc
-  name: smart disc
-  description: A razor-edged Yautja throwing disc keyed to its owner.
+  name: smart-disc
+  description: A strange piece of alien technology. It has many jagged, whirring blades and bizarre writing.
   components:
   - type: Sprite
     sprite: _CMU14/Yautja/smart_disc.rsi
@@ -495,10 +851,15 @@
       map: [ "base" ]
   - type: Item
     sprite: _CMU14/Yautja/smart_disc.rsi
-    size: Small
+    size: Tiny
   - type: YautjaTechItem
+    damageMultiplier: 1
     blockPickup: false
     blockUse: false
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 15
   - type: Appearance
   - type: GenericVisualizer
     visuals:
@@ -515,13 +876,13 @@
     soundFailToActivate:
       path: /Audio/Machines/button.ogg
   - type: YautjaSmartDisc
-    searchRange: 8
+    searchRange: 7
     throwSpeed: 13
     spinVelocity: 24
     maxHits: 8
-    hitRange: 0.7
-    hitDelay: 0.45
-    activeTime: 10
+    hitRange: 1
+    hitDelay: 1
+    activeTime: 30
     retargetDelay: 0.35
   - type: Corrodible
     isCorrodible: False
@@ -542,25 +903,20 @@
   - type: DamageOtherOnHit
     damage:
       types:
-        Slash: 15
-        Piercing: 15
-  - type: DamageImpactProfile
-    thrown:
-      contact: Fragment
-      penetration: Low
-      energy: Medium
+        Slash: 12.5
+        Piercing: 12.5
   - type: StaminaDamageOnCollide
-    damage: 67.5
+    damage: 25
   - type: StaminaDamageOnEmbed
-    damage: 15
+    damage: 0
   - type: YautjaRecallable
     range: 12
 
 - type: entity
   parent: BaseWeaponBattery
   id: CMUYautjaPlasmaCaster
-  name: shoulder plasma caster
-  description: A compact alien plasma weapon that draws power from a hunting bracer.
+  name: plasma caster
+  description: A powerful, shoulder-mounted energy weapon.
   components:
   - type: Sprite
     sprite: _CMU14/Yautja/plasma_caster.rsi
@@ -569,8 +925,10 @@
       map: [ "enum.GunVisualLayers.Base" ]
   - type: Item
     sprite: _CMU14/Yautja/plasma_caster.rsi
-    size: Normal
+    size: Huge
   - type: YautjaTechItem
+  - type: AlwaysHot
+  - type: UniqueAction
   - type: Clothing
     sprite: _CMU14/Yautja/plasma_caster.rsi
     quickEquip: false
@@ -579,11 +937,22 @@
   - type: AmmoCounter
   - type: Gun
     projectileSpeed: 28
-    fireRate: 1.1
+    fireRate: 1.666667
+    minAngle: 10
+    maxAngle: 10
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
     soundGunshot: null
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    scatterWielded: 10
+    scatterUnwielded: 10
+    baseFireRate: 1.666667
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1
+    accuracyMultiplierUnwielded: 7
   - type: ProjectileBatteryAmmoProvider
     proto: CMUYautjaCasterStunBolt
     fireCost: 1
@@ -598,54 +967,152 @@
     - name: cmu-yautja-caster-mode-stun
       projectile: CMUYautjaCasterStunBolt
       powerCost: 30
+      examineStrength: stun bolts
+      fireRate: 1.666667
       fireSound:
         path: /Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav
     - name: cmu-yautja-caster-mode-immobilizer
       projectile: CMUYautjaCasterImmobilizerBolt
       powerCost: 150
+      examineStrength: plasma immobilizers
+      fireRate: 0.125
       fireSound:
         path: /Audio/_CMU14/Yautja/Weapons/Plasma/pulse.wav
     - name: cmu-yautja-caster-mode-lethal
       projectile: CMUYautjaCasterLethalBolt
       powerCost: 100
+      examineStrength: plasma bolt
+      fireRate: 0.555556
       fireSound:
         path: /Audio/_CMU14/Yautja/Weapons/Plasma/pred_lasercannon.wav
     - name: cmu-yautja-caster-mode-eradicator
       projectile: CMUYautjaCasterEradicatorBolt
       powerCost: 1000
+      examineStrength: plasma eradicator
+      fireRate: 0.083333
       fireSound:
         path: /Audio/_CMU14/Yautja/Weapons/Plasma/pulse.wav
   - type: Appearance
 
 - type: entity
   parent: CMUYautjaPlasmaCaster
-  id: CMUYautjaBadBloodPlasmaCaster
-  name: damaged plasma caster
-  description: A battered shoulder plasma caster. Its capacitors are failing, requiring time to recharge between shots.
+  id: CMUYautjaPlasmaCasterRetro
+  name: retro shoulder plasma caster
   components:
-  - type: YautjaCaster
-    powerCost: 30
-    cooldownSound:
-      path: /Audio/_CMU14/Yautja/Weapons/Plasma/plasma_caster_no_energy_01.wav
-    modes:
-    - name: cmu-yautja-caster-mode-stun
-      projectile: CMUYautjaCasterStunBolt
-      powerCost: 30
-      cooldown: 10
-      fireSound:
-        path: /Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav
-    - name: cmu-yautja-caster-mode-lethal
-      projectile: CMUYautjaCasterLethalBolt
-      powerCost: 100
-      cooldown: 20
-      fireSound:
-        path: /Audio/_CMU14/Yautja/Weapons/Plasma/pred_lasercannon.wav
+  - type: Sprite
+    sprite: _CMU14/Yautja/plasma_caster_retro.rsi
+    layers:
+    - state: icon
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Item
+    sprite: _CMU14/Yautja/plasma_caster_retro.rsi
+    size: Normal
+  - type: Clothing
+    sprite: _CMU14/Yautja/plasma_caster_retro.rsi
+    quickEquip: false
+    slots:
+    - suitStorage
+
+- type: entity
+  parent: CMUYautjaPlasmaCaster
+  id: CMUYautjaPlasmaCasterEbony
+  name: ebony shoulder plasma caster
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/plasma_caster_ebony.rsi
+    layers:
+    - state: icon
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Item
+    sprite: _CMU14/Yautja/plasma_caster_ebony.rsi
+    size: Normal
+  - type: Clothing
+    sprite: _CMU14/Yautja/plasma_caster_ebony.rsi
+    quickEquip: false
+    slots:
+    - suitStorage
+
+- type: entity
+  parent: CMUYautjaPlasmaCaster
+  id: CMUYautjaPlasmaCasterSilver
+  name: silver shoulder plasma caster
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/plasma_caster_silver.rsi
+    layers:
+    - state: icon
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Item
+    sprite: _CMU14/Yautja/plasma_caster_silver.rsi
+    size: Normal
+  - type: Clothing
+    sprite: _CMU14/Yautja/plasma_caster_silver.rsi
+    quickEquip: false
+    slots:
+    - suitStorage
+
+- type: entity
+  parent: CMUYautjaPlasmaCaster
+  id: CMUYautjaPlasmaCasterBronze
+  name: bronze shoulder plasma caster
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/plasma_caster_bronze.rsi
+    layers:
+    - state: icon
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Item
+    sprite: _CMU14/Yautja/plasma_caster_bronze.rsi
+    size: Normal
+  - type: Clothing
+    sprite: _CMU14/Yautja/plasma_caster_bronze.rsi
+    quickEquip: false
+    slots:
+    - suitStorage
+
+- type: entity
+  parent: CMUYautjaPlasmaCaster
+  id: CMUYautjaPlasmaCasterCrimson
+  name: crimson shoulder plasma caster
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/plasma_caster_crimson.rsi
+    layers:
+    - state: icon
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Item
+    sprite: _CMU14/Yautja/plasma_caster_crimson.rsi
+    size: Normal
+  - type: Clothing
+    sprite: _CMU14/Yautja/plasma_caster_crimson.rsi
+    quickEquip: false
+    slots:
+    - suitStorage
+
+- type: entity
+  parent: CMUYautjaPlasmaCaster
+  id: CMUYautjaPlasmaCasterBone
+  name: bone shoulder plasma caster
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/plasma_caster_bone.rsi
+    layers:
+    - state: icon
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Item
+    sprite: _CMU14/Yautja/plasma_caster_bone.rsi
+    size: Normal
+  - type: Clothing
+    sprite: _CMU14/Yautja/plasma_caster_bone.rsi
+    quickEquip: false
+    slots:
+    - suitStorage
 
 - type: entity
   parent: [ BaseItem, RMCBaseMeleeWeapon ]
   id: CMUYautjaWristBlades
-  name: wrist blades
-  description: Retractable twin blades keyed to a hunting bracer.
+  name: wrist blade
+  description: A huge, serrated blade extending from metal gauntlets.
   components:
   - type: Sharp
   - type: Sprite
@@ -653,17 +1120,17 @@
     state: icon
   - type: Item
     sprite: _CMU14/Yautja/wrist_blades.rsi
-    size: Small
+    size: Huge
   - type: YautjaTechItem
   - type: Prying
     speedModifier: 1.5
     pryPowered: true
   - type: MeleeWeapon
     wideAnimationRotation: -135
+    attackRate: 2
     damage:
       types:
-        Slash: 31
-        Piercing: 5
+        Slash: 20
     soundHit:
       collection: CMUYautjaWristBladesHit
     soundSwing:
@@ -696,8 +1163,8 @@
 - type: entity
   parent: [ BaseItem, RMCBaseMeleeWeapon ]
   id: CMUYautjaScimitar
-  name: combi scimitar
-  description: A long alien hunting blade with a brutal monomolecular edge.
+  name: wrist scimitar
+  description: A huge, serrated blade extending from metal gauntlets.
   components:
   - type: Sharp
   - type: Sprite
@@ -707,6 +1174,8 @@
     sprite: _CMU14/Yautja/scimitar.rsi
     size: Large
   - type: YautjaTechItem
+  - type: YautjaBracerAttachmentSpeedBonus
+    pairedAttackSeconds: 0.6
   - type: Prying
     speedModifier: 1.5
     pryPowered: true
@@ -715,8 +1184,7 @@
     attackRate: 1
     damage:
       types:
-        Slash: 37
-        Piercing: 7
+        Slash: 25
     soundHit:
       collection: CMUYautjaSwordHit
     soundSwing:
@@ -748,10 +1216,19 @@
     kind: Scimitar
 
 - type: entity
+  parent: CMUYautjaScimitar
+  id: CMUYautjaScimitarAlt
+  name: wrist scimitar
+  description: A huge, serrated blade extending from metal gauntlets.
+  components:
+  - type: Sprite
+    state: alt
+
+- type: entity
   parent: [ BaseItem, RMCBaseMeleeWeapon ]
   id: CMUYautjaChainGauntlet
   name: chain gauntlet
-  description: A heavy gauntlet weapon with compact linked chain drives.
+  description: Gauntlets made out of alien alloy, chains wrapped around it imply this was made for hand to hand combat, with some range.
   components:
   - type: Sprite
     sprite: _CMU14/Yautja/chain_gauntlet.rsi
@@ -760,12 +1237,12 @@
     sprite: _CMU14/Yautja/chain_gauntlet.rsi
     size: Normal
   - type: YautjaTechItem
+  - type: YautjaChainGauntlet
   - type: MeleeWeapon
-    attackRate: 0.85
+    attackRate: 1
     damage:
       types:
-        Blunt: 34
-        Structural: 8
+        Blunt: 20
     soundHit:
       collection: CMUYautjaChainGauntletHit
   - type: MeleeDamageMultiplier
@@ -788,10 +1265,49 @@
     kind: ChainGauntlet
 
 - type: entity
+  name: chain
+  id: CMUYautjaChainGauntletBeam
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: /Textures/_RMC14/Effects/beam.rsi
+    drawdepth: Effects
+    state: "chain"
+  - type: Beam
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: BaseBullet
+  name: hook
+  id: CMUYautjaChainGauntletHookProjectile
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    drawdepth: Effects
+    layers:
+    - state: metal_chain
+      shader: unshaded
+  - type: Projectile
+    impactEffect: null
+    damage:
+      types:
+        Blunt: 0
+  - type: TimedDespawn
+    lifetime: 3
+  - type: ProjectileMaxRange
+    max: 4
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
   parent: BaseItem
   id: CMUYautjaBracerShield
   name: bracer shield
-  description: A compact hard-light shield projected from the hunting bracer.
+  description: A shield made of concentric metal alloy plates. The plates fold into one another for compact storage while still providing superior protection.
   components:
   - type: Sprite
     sprite: _CMU14/Yautja/bracer_shield.rsi
@@ -800,39 +1316,119 @@
     sprite: _CMU14/Yautja/bracer_shield.rsi
     size: Large
   - type: YautjaTechItem
-    blockMelee: false
+  - type: YautjaShieldBash
+  - type: YautjaSourceShieldBlock
+    shieldType: Directional
+    readiedBlock: VeryHigh
+    passiveBlock: Medium
+    blocksOnBack: false
   - type: Blocking
     blockSound: !type:SoundPathSpecifier
       path: /Audio/_CMU14/Yautja/Weapons/Melee/parry.wav
     passiveBlockModifier:
       coefficients:
-        Blunt: 0.8
-        Slash: 0.8
-        Piercing: 0.85
-        Heat: 0.85
+        Blunt: 0.75
+        Slash: 0.75
+        Piercing: 0.8
+        Heat: 0.8
     activeBlockModifier:
       coefficients:
-        Blunt: 0.55
-        Slash: 0.55
-        Piercing: 0.65
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.6
         Heat: 0.65
       flatReductions:
-        Blunt: 1
-        Slash: 1
-        Piercing: 1
-        Heat: 1
+        Blunt: 2
+        Slash: 2
+        Piercing: 2
+        Heat: 2
   - type: Damageable
     damageContainer: Shield
   - type: Destructible
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 110
+        damage: 140
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: YautjaStoredGear
     kind: Shield
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaWristBladesAttachment
+  name: wristblade bracer attachment
+  description: A pair of huge, serrated blades.
+  components:
+  - type: Sprite
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    state: wrist
+  - type: Item
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+  - type: YautjaStoredGear
+    kind: WristBlades
+    deployedPrototype: CMUYautjaWristBlades
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaScimitarAttachment
+  name: scimitar bracer attachment
+  description: A pair of huge, serrated blades.
+  components:
+  - type: Sprite
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    state: scim
+  - type: Item
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+  - type: YautjaStoredGear
+    kind: Scimitar
+    deployedPrototype: CMUYautjaScimitar
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaScimitarAltAttachment
+  name: scimitar bracer attachment
+  description: A pair of huge, serrated blades.
+  components:
+  - type: Sprite
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    state: scim_alt
+  - type: Item
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+  - type: YautjaStoredGear
+    kind: Scimitar
+    deployedPrototype: CMUYautjaScimitarAlt
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaChainGauntletsAttachment
+  name: chain gauntlets
+  description: Gauntlets made out of alien alloy, you could probably wrap some chains around this after it's been put into your bracer.
+  components:
+  - type: Sprite
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    state: metal_gauntlet
+  - type: Item
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+  - type: YautjaStoredGear
+    kind: ChainGauntlet
+    deployedPrototype: CMUYautjaChainGauntlet
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaBracerShieldAttachment
+  name: shield bracer attachment
+  description: A shield made of concentric metal alloy plates. The plates fold into one another for compact storage while still providing superior protection.
+  components:
+  - type: Sprite
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    state: bracer_shield_off
+  - type: Item
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+  - type: YautjaStoredGear
+    kind: Shield
+    deployedPrototype: CMUYautjaBracerShield
 
 - type: entity
   parent: CMUpgradedTraumaKit1
@@ -850,6 +1446,10 @@
     min: 0
     doAfter: 0
   - type: YautjaMedicalItem
+  - type: Tag
+    tags:
+    - CMTraumaKit
+    - CMUYautjaHerbalMedicine
   - type: WoundTreater
     doAfterSkillMultipliers: [0.5, 0.45, 0.35, 0.25, 0.2]
     selfTargetDoAfterMultiplier: 1
@@ -870,6 +1470,10 @@
     min: 0
     doAfter: 0
   - type: YautjaMedicalItem
+  - type: Tag
+    tags:
+    - CMBurnKit
+    - CMUYautjaHerbalMedicine
   - type: WoundTreater
     doAfterSkillMultipliers: [0.5, 0.45, 0.35, 0.25, 0.2]
     selfTargetDoAfterMultiplier: 1
@@ -911,6 +1515,10 @@
   - type: Stack
     stackType: CMUYautjaHealingGel
     count: 2
+  - type: Tag
+    tags:
+    - Brutepack
+    - CMUYautjaMedicompItem
 
 - type: stack
   id: CMUYautjaHealingGel
@@ -951,6 +1559,10 @@
   - type: Stack
     stackType: CMUYautjaStabilizerGel
     count: 1
+  - type: Tag
+    tags:
+    - Ointment
+    - CMUYautjaMedicompItem
 
 - type: stack
   id: CMUYautjaStabilizerGel
@@ -964,6 +1576,11 @@
   id: CMUYautjaWoundClamp
   name: wound clamp
   description: A predator surgical clamp made to seal catastrophic bleeding.
+  components:
+  - type: Tag
+    tags:
+    - CMHemostat
+    - CMUYautjaMedicompItem
 
 - type: entity
   parent: BaseItem
@@ -998,6 +1615,9 @@
         variation: 0.125
   - type: UseDelay
     delay: 2
+  - type: Tag
+    tags:
+    - CMUYautjaMedicompItem
 
 - type: entity
   parent: CMHealthAnalyzer
@@ -1005,6 +1625,11 @@
   name: alien health analyzer
   description: A bio-scanner tuned for alien physiology and battlefield triage.
   suffix: Yautja
+  components:
+  - type: Tag
+    tags:
+    - DiscreteHealthAnalyzer
+    - CMUYautjaMedicompItem
 
 - type: entity
   parent: CMAutoInjector
@@ -1049,986 +1674,1704 @@
   - type: MedicallyUnskilledDoAfter
     min: 0
     doAfter: 0
+  - type: YautjaMedicalItem
   - type: UseDelay
     delay: 0.2
+  - type: Tag
+    tags:
+    - CMAutoInjector
+    - CMUYautjaMedicompItem
 
 - type: entity
-  parent: CMSurgicalCase
+  parent: CMUYautjaAutoInjector
+  id: CMUYautjaThrallAutoInjector
+  name: yautja autoinjector
+  description: An alien autoinjector loaded with a strong trauma and burn treatment cocktail adapted for Yautja thralls.
+  suffix: Yautja, Thrall
+
+- type: entity
+  parent: BaseStorageItem
   id: CMUYautjaHerbalCase
   name: herbs case
   description: A small case packed with Yautja trauma poultices and burn salves.
   suffix: Yautja, Filled
   components:
-  - type: Storage
-    maxItemSize: Small
-    grid:
-    - 0,0,7,1
-  - type: StorageFill
-    contents:
-    - id: CMUYautjaAdvancedBruisePack
-      amount: 4
-    - id: CMUYautjaAdvancedOintment
-      amount: 4
-
-- type: entity
-  parent: BaseStorageItem
-  id: CMUYautjaMedicomp
-  name: medicomp
-  description: A predator compact medical kit stocked for solo field recovery.
-  suffix: Yautja, Filled
-  components:
   - type: Sprite
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: _RMC14/Objects/Storage/surgical_case.rsi
     layers:
-    - state: medicomp
-    - state: medicomp_open
+    - state: surgical_case_base
+    - state: surgical_case_open
       map: [ "openLayer" ]
+      visible: false
+    - state: surgical_case_closed
+      map: [ "closedLayer" ]
       visible: false
   - type: Item
     size: Small
-    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: Storage
     maxItemSize: Small
     grid:
-    - 0,0,15,3
-  - type: IgnoreContentsSize
-    items:
+    - 0,0,3,0
+    whitelist:
       tags:
-      - CMSurgicalCase
+      - CMUYautjaHerbalMedicine
   - type: FixedItemSizeStorage
+    size: 1,1
+  - type: Tag
+    tags:
+    - CMSurgicalCase
+    - CMUYautjaMedicompItem
   - type: GenericVisualizer
     visuals:
       enum.SharedBagOpenVisuals.BagState:
         openLayer:
           Open: { visible: true }
           Closed: { visible: false }
+        closedLayer:
+          Open: { visible: false }
+          Closed: { visible: true }
   - type: Appearance
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: PhysicalComposition
+    materialComposition:
+      RMCPlastic: 1000
+  - type: StorageFill
+    contents:
+    - id: CMUYautjaAdvancedBruisePack
+      amount: 2
+    - id: CMUYautjaAdvancedOintment
+      amount: 2
+
+- type: entity
+  parent: BaseStorageItem
+  id: CMUYautjaMedicomp
+  name: medicomp
+  description: A complex kit of alien tools and medicines.
+  suffix: Yautja
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    layers:
+    - state: medicomp
+      map: [ "closedLayer" ]
+    - state: medicomp
+      map: [ "openLayer" ]
+      visible: false
+    - state: medicomp_open
+      map: [ "emptyLayer" ]
+      visible: false
+  - type: Item
+    size: Normal
+    sprite: _CMU14/Yautja/yautja_items.rsi
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - suitStorage
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,23,3
+    whitelist:
+      tags:
+      - CMUYautjaMedicompItem
+  - type: LimitedStorage
+    limits:
+    - popup: rmc-storage-limit-cant-fit
+      count: 12
+      whitelist: null
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - CMSurgicalCase
+  - type: YautjaTechItem
+  - type: FixedItemSizeStorage
+  - type: CMStorageVisualizer
+    storageClosed: closedLayer
+    storageOpen: openLayer
+    storageEmpty: emptyLayer
+  - type: Appearance
+  - type: StaticPrice
+    price: 10
+
+- type: entity
+  parent: CMUYautjaMedicomp
+  id: CMUYautjaMedicompFull
+  suffix: Yautja, Filled
+  components:
   - type: StorageFill
     contents:
     - id: CMUYautjaStabilizerGel
-      amount: 3
     - id: CMUYautjaHealingGun
     - id: CMUYautjaWoundClamp
-      amount: 2
     - id: CMUYautjaAlienHealthAnalyzer
-    - id: CMUYautjaHealthShard
-      amount: 6
-    - id: CMUYautjaStabilisingCrystal
-      amount: 2
+    - id: CMUYautjaAutoInjector
+      amount: 3
     - id: CMUYautjaHealingGel
-      amount: 6
+      amount: 3
+
+- type: entity
+  parent: CMUYautjaMedicompFull
+  id: CMUYautjaMedicompSurvivor
+  suffix: Yautja, Survivor, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUYautjaStabilizerGel
+    - id: CMUYautjaHealingGun
+    - id: CMUYautjaWoundClamp
+    - id: CMUYautjaAlienHealthAnalyzer
+    - id: CMUYautjaAutoInjector
+      amount: 3
+    - id: CMUYautjaHealingGel
+      amount: 3
     - id: CMUYautjaHerbalCase
-      amount: 2
+
+- type: entity
+  parent: CMUYautjaMedicompFull
+  id: CMUYautjaMedicompThrall
+  suffix: Yautja, Thrall, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUYautjaStabilizerGel
+    - id: CMUYautjaHealingGun
+    - id: CMUYautjaWoundClamp
+    - id: CMUYautjaAlienHealthAnalyzer
+    - id: CMUYautjaThrallAutoInjector
+      amount: 3
+    - id: CMUYautjaHealingGel
+      amount: 3
+
+- type: entity
+  id: CMUYautjaHuntingEquipmentBundle
+  name: Hunting Equipment
+  description: Contains the essential hunting equipment issued to a Yautja hunter.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/body_mesh.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaBodyMesh
+    - CMUYautjaHuntingPouch
+    - CMUYautjaMedicompFull
+    - CMUYautjaRelayBeacon
+    - CMUYautjaCleanserGelVial
+
+- type: entity
+  id: CMUYautjaYoungbloodHuntingEquipmentBundle
+  name: Hunting Equipment
+  description: Contains the essential hunting equipment issued to a young Yautja hunter.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/body_mesh.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaBodyMesh
+    - CMUYautjaHuntingPouch
+    - CMUYautjaMedicompFull
+    - CMUYautjaLantern
+
+- type: entity
+  id: CMUYautjaThrallHuntingEquipmentBundle
+  name: Hunting Equipment
+  description: Contains the essential hunting equipment issued to a Yautja thrall.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/body_mesh.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaThrallChainshirt
+    - CMUYautjaHuntingPouch
+    - CMUYautjaLantern
+    - CMUYautjaCommunicator
+
+- type: entity
+  id: CMUYautjaStrandedHuntingEquipmentBundle
+  name: Hunting Equipment
+  description: Contains the essential hunting equipment issued to a stranded Yautja hunter.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/body_mesh.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaBodyMeshScalable
+    - CMUYautjaHuntingPouch
+    - CMUYautjaMedicompFull
+    - CMUYautjaCleanserGelVial
+
+- type: entity
+  id: CMUYautjaArmorBundle
+  name: Armor
+  description: Contains the armor issued to a Yautja hunter.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaClanArmor
+    - CMUYautjaMask
+    - CMUYautjaMaskAccessory01Ebony
+    - CMUYautjaClanGreaves
+
+- type: entity
+  id: CMUYautjaStrandedArmorBundle
+  name: Armor
+  description: Contains the armor issued to a stranded Yautja hunter.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaClanArmorScalable
+    - CMUYautjaMaskScalable
+    - CMUYautjaMaskAccessory01Ebony
+    - CMUYautjaClanGreavesScalable
+
+- type: entity
+  id: CMUYautjaBadBloodHuntingEquipmentBundle
+  name: Hunting Equipment
+  description: Contains the essential hunting equipment issued to a Bad Blood hunter.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/body_mesh.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaBodyMeshScalable
+    - CMUYautjaHuntingPouch
+    - CMUYautjaMedicompSurvivor
+    - CMUYautjaCleanserGelVial
+    - CMUYautjaHivebreaker
+
+- type: entity
+  id: CMUYautjaBadBloodArmorPatchworkBundle
+  name: Patchwork Armor
+  description: Contains the patchwork armor issued to a Bad Blood hunter.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_badblood_patchwork.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaBadBloodArmorPatchwork
+    - CMUYautjaMaskBadBloodPatchwork
+    - CMUYautjaBadBloodGreavesPatchwork
+
+- type: entity
+  id: CMUYautjaBadBloodArmorPatchworkAltBundle
+  name: Patchwork Armor (Alt)
+  description: Contains the alternate patchwork armor issued to a Bad Blood hunter.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_badblood_patchwork_alt.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaBadBloodArmorPatchworkAlt
+    - CMUYautjaMaskBadBloodPatchworkAlt
+    - CMUYautjaBadBloodGreavesPatchworkAlt
+
+- type: entity
+  id: CMUYautjaBadBloodArmorLunaticBundle
+  name: Lunatic Armor
+  description: Contains the lunatic armor issued to a Bad Blood hunter.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_badblood_lunatic.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaBadBloodArmorLunatic
+    - CMUYautjaMaskBadBloodLunatic
+    - CMUYautjaBadBloodGreavesLunatic
+
+- type: entity
+  id: CMUYautjaBadBloodArmorScavengerBundle
+  name: Scavenger Armor
+  description: Contains the scavenger armor issued to a Bad Blood hunter.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_badblood_scavenger.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaBadBloodArmorScavenger
+    - CMUYautjaMaskBadBloodScav
+    - CMUYautjaBadBloodGreavesScavenger
+
+- type: entity
+  id: CMUYautjaBadBloodArmorScavengerAltBundle
+  name: Scavenger Armor (Alt)
+  description: Contains the alternate scavenger armor issued to a Bad Blood hunter.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_badblood_scavenger_alt.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaBadBloodArmorScavengerAlt
+    - CMUYautjaMaskBadBloodScavAlt
+    - CMUYautjaBadBloodGreavesScavengerAlt
+
+- type: entity
+  id: CMUYautjaBadBloodArmorVenatorBundle
+  name: Venator Armor
+  description: Contains the venator armor issued to a Bad Blood hunter.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_badblood_venator.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaBadBloodArmorVenator
+    - CMUYautjaMaskBadBloodVenator
+    - CMUYautjaBadBloodGreavesVenator
+
+- type: entity
+  id: CMUYautjaBadBloodArmorCommandoBundle
+  name: Commando Armor
+  description: Contains the commando armor issued to a Bad Blood hunter.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_badblood_commando.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaBadBloodArmorCommando
+    - CMUYautjaMaskBadBloodCommando
+    - CMUYautjaBadBloodGreavesCommando
+
+- type: entity
+  id: CMUYautjaBadBloodArmorCommandoAltBundle
+  name: Commando Armor (Alt)
+  description: Contains the alternate commando armor issued to a Bad Blood hunter.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_badblood_commando_alt.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaBadBloodArmorCommandoAlt
+    - CMUYautjaMaskBadBloodCommandoAlt
+    - CMUYautjaBadBloodGreavesCommandoAlt
+
+- type: entity
+  id: CMUYautjaBadBloodArmorEmissaryBundle
+  name: Emissary Armor
+  description: Contains the emissary armor issued to a Bad Blood hunter.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_emissary_classic.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaEmissaryArmorCamoConforming
+    - CMUYautjaMaskBadBloodEmissaryClassic
+    - CMUYautjaEmissaryGreavesCamoConforming
+
+- type: entity
+  id: CMUYautjaThrallArmorEbonyBundle
+  name: Ebony
+  description: Contains the ebony armor issued to a Yautja thrall.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_thrall_ebony.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaThrallArmorEbony
+    - CMUYautjaThrallGreavesEbony
+    - CMUYautjaMaskThrallEbony
+
+- type: entity
+  id: CMUYautjaThrallArmorSilverBundle
+  name: Silver
+  description: Contains the silver armor issued to a Yautja thrall.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_thrall_silver.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaThrallArmorSilver
+    - CMUYautjaThrallGreavesSilver
+    - CMUYautjaMaskThrallSilver
+
+- type: entity
+  id: CMUYautjaThrallArmorGoldBundle
+  name: Gold
+  description: Contains the gold armor issued to a Yautja thrall.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_thrall_gold.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaThrallArmorGold
+    - CMUYautjaThrallGreavesGold
+    - CMUYautjaMaskThrallGold
+
+- type: entity
+  id: CMUYautjaThrallArmorCrimsonBundle
+  name: Crimson
+  description: Contains the crimson armor issued to a Yautja thrall.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_thrall_crimson.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaThrallArmorCrimson
+    - CMUYautjaThrallGreavesCrimson
+    - CMUYautjaMaskThrallCrimson
+
+- type: entity
+  id: CMUYautjaThrallArmorBoneBundle
+  name: Bone
+  description: Contains the bone armor issued to a Yautja thrall.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_thrall_bone.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaThrallArmorBone
+    - CMUYautjaThrallGreavesBone
+    - CMUYautjaMaskThrallBone
+
+- type: entity
+  id: CMUYautjaBloodedThrallEquipmentBundle
+  name: Blooded Equipment
+  description: Contains the equipment issued to a blooded Yautja thrall.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/HunterShip/obj/items/hunter/thrall_gear.rsi
+    state: thrall_teleporter
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaSimpleRelayBeacon
+    - CMUYautjaMedicompThrall
+
+- type: entity
+  id: CMUYautjaBloodedThrallBracerEbonyBundle
+  name: Ebony
+  description: Contains the ebony bracer issued to a blooded Yautja thrall.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaBloodedThrallBracer
+    - CMUYautjaWristBladesAttachment
+    - CMUYautjaWristBladesAttachment
+
+- type: entity
+  id: CMUYautjaBloodedThrallBracerSilverBundle
+  name: Silver
+  description: Contains the silver bracer issued to a blooded Yautja thrall.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer_silver
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaBloodedThrallBracerSilver
+    - CMUYautjaWristBladesAttachment
+    - CMUYautjaWristBladesAttachment
+
+- type: entity
+  id: CMUYautjaBloodedThrallBracerGoldBundle
+  name: Gold
+  description: Contains the gold bracer issued to a blooded Yautja thrall.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer_bronze
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaBloodedThrallBracerGold
+    - CMUYautjaWristBladesAttachment
+    - CMUYautjaWristBladesAttachment
+
+- type: entity
+  id: CMUYautjaBloodedThrallBracerCrimsonBundle
+  name: Crimson
+  description: Contains the crimson bracer issued to a blooded Yautja thrall.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer_crimson
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaBloodedThrallBracerCrimson
+    - CMUYautjaWristBladesAttachment
+    - CMUYautjaWristBladesAttachment
+
+- type: entity
+  id: CMUYautjaBloodedThrallBracerBoneBundle
+  name: Bone
+  description: Contains the bone bracer issued to a blooded Yautja thrall.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/bracer.rsi
+    state: bracer_bone
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaBloodedThrallBracerBone
+    - CMUYautjaWristBladesAttachment
+    - CMUYautjaWristBladesAttachment
+
+- type: entity
+  id: CMUYautjaWristBladesBundle
+  name: Wrist Blades
+  description: Contains the paired wrist blades issued as a Yautja bracer attachment.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/wrist_blades.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaWristBladesAttachment
+    - CMUYautjaWristBladesAttachment
+
+- type: entity
+  id: CMUYautjaFearsomeScimitarsBundle
+  name: The Fearsome Scimitars
+  description: Contains the paired fearsome scimitar bracer attachments.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/scimitar.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaScimitarAttachment
+    - CMUYautjaScimitarAttachment
+
+- type: entity
+  id: CMUYautjaSkeweringScimitarsBundle
+  name: The Skewering Scimitars
+  description: Contains the paired skewering scimitar bracer attachments.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/scimitar.rsi
+    state: alt
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaScimitarAltAttachment
+    - CMUYautjaScimitarAltAttachment
+
+- type: entity
+  id: CMUYautjaChainGauntletsBundle
+  name: The Chain Gauntlets
+  description: Contains the paired chain gauntlet bracer attachments and a chainwhip.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/chain_gauntlet.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaChainGauntletsAttachment
+    - CMUYautjaChainGauntletsAttachment
+    - CMUYautjaChainwhip
 
 - type: entity
   parent: ColMarTechBase
   id: CMUYautjaLoadoutVendor
-  name: Yautja hunting gear rack
-  description: A restricted event rack for alien hunter loadout adjustments.
+  name: Yautja Hunting Gear Rack
+  description: A gear rack for hunting.
   suffix: Yautja, Event
   components:
   - type: Sprite
-    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/equipment.rsi
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
+    drawdepth: SmallObjects
+    offset: 0,0.5
+    layers:
+    - state: pred_vendor_left
+      map: [ "enum.VendingMachineVisualLayers.Base" ]
+    - state: pred_vendor_left
+      shader: unshaded
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "rmc_flick_animation" ]
+  - type: Icon
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
+    state: pred_vendor_left
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.YautjaGearRackVisuals.State:
+        enum.VendingMachineVisualLayers.Base:
+          Left: { state: pred_vendor_left }
+          LeftCentre: { state: pred_vendor_lcenter }
+          Centre: { state: pred_vendor_centre }
+          RightCentre: { state: pred_vendor_rcentre }
+          Right: { state: pred_vendor_right }
+        enum.VendingMachineVisualLayers.BaseUnshaded:
+          Left: { state: pred_vendor_left }
+          LeftCentre: { state: pred_vendor_lcenter }
+          Centre: { state: pred_vendor_centre }
+          RightCentre: { state: pred_vendor_rcentre }
+          Right: { state: pred_vendor_right }
+  - type: YautjaGearRack
   - type: CMAutomatedVendor
+    uiStyle: Yautja
     sections:
-    - name: Core Replacement Gear
+    - name: Essential Hunting Supplies
       entries:
-      - id: CMUYautjaBracer
-        amount: 2
-      - id: CMUYautjaMask
-        amount: 2
-      - id: CMUYautjaSmartDisc
-        amount: 2
-      - id: CMUYautjaCloakPack
-        amount: 2
-      - id: CMUYautjaTrophyBelt
-        amount: 2
-      - id: CMUYautjaPolishingRag
-        amount: 4
-      - id: CMUYautjaCommunicator
-        amount: 3
-      - id: CMUYautjaHuntingPouch
-        amount: 2
-      - id: CMUYautjaRelayBeacon
-        amount: 2
-      - id: CMUYautjaCleanserGelVial
-        amount: 2
-      - id: CMUYautjaThrallGearBox
-        amount: 2
-      - id: CMUYautjaBloodedThrallBracer
+      - id: CMUYautjaHuntingEquipmentBundle
+        name: Hunting Equipment
+        choices: { CMUYautjaEssentials: 1 }
         amount: 1
-    - name: Bio-Masks
-      choices: { CMUYautjaMaskVariant: 1 }
+        mandatory: true
+      - id: CMUYautjaArmorBundle
+        name: Armor
+        choices: { CMUYautjaArmor: 1 }
+        amount: 1
+        mandatory: true
+    - name: Main Weapons (CHOOSE 1)
+      choices: { CMUYautjaPrimary: 1 }
       entries:
-      - id: CMUYautjaMask
+      - id: CMUYautjaClanSword
+        name: The Primary Hunting Sword
         amount: 1
         recommended: true
-        replaceSlot: MASK
-      - id: CMUYautjaMaskAncient
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskAncientRedGlow
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskAncientWhite
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskBadBloodBane
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskBadBloodCommando
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskBadBloodCommandoAlt
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskBadBloodEmissaryClassic
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskBadBloodEmissaryDesert
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskBadBloodEmissaryJungle
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskBadBloodEmissarySnow
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskBadBloodEmissaryUrban
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskBadBloodLunatic
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskBadBloodPatchwork
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskBadBloodPatchworkAlt
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskBadBloodScav
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskBadBloodScavAlt
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskBadBloodVenator
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskEliteCleopatra
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskElitePlated
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskLegacyCollector
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskLegacyDragon
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskLegacyEnforcer
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskLegacySwamp
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred01Bone
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred01Bronze
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred01Crimson
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred01Ebony
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred01Silver
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred02Bone
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred02Bronze
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred02Crimson
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred02Ebony
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred02Silver
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred03Bone
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred03Bronze
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred03Crimson
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred03Ebony
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred03Silver
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred04Bone
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred04Bronze
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred04Crimson
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred04Ebony
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred04Silver
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred05Bone
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred05Bronze
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred05Crimson
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred05Ebony
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred05Silver
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred06Bone
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred06Bronze
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred06Crimson
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred06Ebony
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred06Silver
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred07Bone
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred07Bronze
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred07Crimson
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred07Ebony
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred07Silver
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred08Bone
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred08Bronze
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred08Crimson
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred08Ebony
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred08Silver
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred09Bone
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred09Bronze
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred09Crimson
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred09Ebony
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred09Silver
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred10Bone
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred10Bronze
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred10Crimson
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred10Ebony
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred10Silver
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred11Bone
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred11Bronze
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred11Crimson
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred11Ebony
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred11Silver
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred12Bone
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred12Bronze
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred12Crimson
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred12Ebony
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred12Silver
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred13Bone
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred13Bronze
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred13Crimson
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred13Ebony
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred13Silver
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred14Bone
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred14Bronze
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred14Crimson
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred14Ebony
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred14Silver
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred15Bone
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred15Bronze
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred15Crimson
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred15Ebony
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred15Silver
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred16Bone
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred16Bronze
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred16Crimson
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred16Ebony
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred16Silver
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred17Bone
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred17Bronze
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred17Crimson
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred17Ebony
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred17Silver
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred18Bone
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred18Bronze
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred18Crimson
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred18Ebony
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred18Silver
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred19Bone
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred19Bronze
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred19Crimson
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred19Ebony
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred19Silver
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred20Bone
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred20Bronze
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred20Crimson
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred20Ebony
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskPred20Silver
-        amount: 1
-    - name: Hunting Armor
-      choices: { CMUYautjaArmor: 1 }
-      entries:
-      - id: CMUYautjaClanArmor
+      - id: CMUYautjaRendingSword
+        name: The Rending Hunting Sword
         amount: 1
         recommended: true
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorBronze
+      - id: CMUYautjaPiercingSword
+        name: The Piercing Hunting Sword
         amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorSilver
+        recommended: true
+      - id: CMUYautjaSeveringSword
+        name: The Severing Hunting Sword
         amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorCrimson
+        recommended: true
+      - id: CMUYautjaCruelStaff
+        name: The Taruulan Staff
         amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorBone
+        recommended: true
+      - id: CMUYautjaChainwhip
+        name: The Sundering Chain-Whip
         amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmor2
+        recommended: true
+      - id: CMUYautjaDualWarScythe
+        name: The Cleaving War-Scythe
         amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmor3
+        recommended: true
+      - id: CMUYautjaDoubleWarScythe
+        name: The Ripping War-Scythe
         amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmor4
+        recommended: true
+      - id: CMUYautjaCombistick
+        name: The Adaptive Combi-Stick
         amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmor5
+        recommended: true
+      - id: CMUYautjaWarAxe
+        name: The Butchering War Axe
         amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmor6
+        recommended: true
+      - id: CMUYautjaWarGlaive
+        name: The Lumbering Glaive
         amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmor7
+        recommended: true
+      - id: CMUYautjaCleavingGlaive
+        name: The Imposing Glaive
         amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmor8
+        recommended: true
+      - id: CMUYautjaLongaxe
+        name: The Crushing Longaxe
         amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorBronze2
+        recommended: true
+    - name: Bracer Attachments
+      entries:
+      - id: CMUYautjaWristBladesBundle
+        name: Wrist Blades
+        choices: { CMUYautjaBracer: 1 }
         amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorBronze3
+        mandatory: true
+      - id: CMUYautjaBracerShieldAttachment
+        name: The Compact Shield
+        choices: { CMUYautjaBracer: 1 }
         amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorBronze4
+        recommended: true
+      - id: CMUYautjaFearsomeScimitarsBundle
+        name: The Fearsome Scimitars
+        choices: { CMUYautjaPrimary: 1 }
         amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorBronze5
+        recommended: true
+      - id: CMUYautjaSkeweringScimitarsBundle
+        name: The Skewering Scimitars
+        choices: { CMUYautjaPrimary: 1 }
         amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorBronze6
+        recommended: true
+      - id: CMUYautjaChainGauntletsBundle
+        name: The Chain Gauntlets
+        choices: { CMUYautjaPrimary: 1 }
         amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorBronze7
+        recommended: true
+    - name: Support Equipment (CHOOSE 2)
+      choices: { CMUYautjaSupport: 2 }
+      entries:
+      - id: CMUYautjaFalconDrone
+        name: The Agile Drone
         amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorBronze8
+      - id: CMUYautjaClanShield
+        name: The Steadfast Shield
         amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorSilver2
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorSilver3
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorSilver4
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorSilver5
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorSilver6
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorSilver7
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorSilver8
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorCrimson2
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorCrimson3
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorCrimson4
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorCrimson5
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorCrimson6
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorCrimson7
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorCrimson8
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorBone2
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorBone3
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorBone4
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorBone5
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorBone6
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorBone7
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaClanArmorBone8
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaAncientAlienArmor
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaStoneArmor
-        amount: 1
-        replaceSlot: OUTERCLOTHING
       - id: CMUYautjaHeavyClanArmor
+        name: The Formidable Plate Armor
         amount: 1
         replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaHeavyClanArmorBronze
+      - id: CMUYautjaSpikeLauncher
+        name: The Fleeting Spike Launcher
         amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaHeavyClanArmorSilver
+      - id: CMUYautjaSmartDisc
+        name: The Purifying Smart-Disc
         amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaHeavyClanArmorCrimson
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaHeavyClanArmorBone
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaBadBloodArmorPatchwork
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaBadBloodArmorLunatic
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaBadBloodArmorScavenger
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaBadBloodArmorVenator
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaBadBloodArmorCommando
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaBadBloodArmorBane
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaBadBloodArmorPatchworkAlt
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaBadBloodArmorScavengerAlt
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaBadBloodArmorCommandoAlt
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaEmissaryArmorClassic
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaEmissaryArmorDesert
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaEmissaryArmorJungle
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaEmissaryArmorSnow
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaEmissaryArmorUrban
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-    - name: Mesh Suit
-      choices: { CMUYautjaMesh: 1 }
+    - name: Ranged Equipment (CHOOSE 1)
+      choices: { CMUYautjaRanged: 1 }
       entries:
-      - id: CMUYautjaBodyMesh
+      - id: CMUYautjaPlasmaPistol
+        name: The Swift Plasma Pistol
         amount: 1
-        recommended: true
-        replaceSlot: INNERCLOTHING
-      - id: CMUYautjaAncientAlienMesh
+      - id: CMUYautjaQuiverStrapFilled
+        name: The Firm Bow
         amount: 1
-        replaceSlot: INNERCLOTHING
-    - name: Greaves
-      choices: { CMUYautjaGreaves: 1 }
+    - name: Clothing Accessory (CHOOSE 1)
+      choices: { CMUYautjaAccessory: 1 }
       entries:
-      - id: CMUYautjaClanGreaves
-        amount: 1
-        recommended: true
-        replaceSlot: FEET
-      - id: CMUYautjaClanGreavesBronze
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaClanGreavesSilver
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaClanGreavesCrimson
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaClanGreavesBone
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaClanGreaves2
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaClanGreaves3
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaClanGreaves4
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaClanGreavesBronze2
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaClanGreavesBronze3
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaClanGreavesBronze4
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaClanGreavesSilver2
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaClanGreavesSilver3
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaClanGreavesSilver4
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaClanGreavesCrimson2
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaClanGreavesCrimson3
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaClanGreavesCrimson4
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaClanGreavesBone2
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaClanGreavesBone3
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaClanGreavesBone4
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaAncientAlienGreaves
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaStoneGreaves
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaBadBloodGreavesPatchwork
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaBadBloodGreavesLunatic
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaBadBloodGreavesScavenger
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaBadBloodGreavesVenator
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaBadBloodGreavesCommando
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaBadBloodGreavesBane
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaBadBloodGreavesPatchworkAlt
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaBadBloodGreavesScavengerAlt
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaBadBloodGreavesCommandoAlt
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaEmissaryGreavesClassic
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaEmissaryGreavesDesert
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaEmissaryGreavesJungle
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaEmissaryGreavesSnow
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaEmissaryGreavesUrban
-        amount: 1
-        replaceSlot: FEET
-    - name: Thrall Gear
-      entries:
-      - id: CMUYautjaThrallBracer
-        amount: 3
-      - id: CMUYautjaThrallChainshirt
-        amount: 3
-      - id: CMUYautjaMaskThrallBone
-        amount: 1
-      - id: CMUYautjaMaskThrallCrimson
-        amount: 1
-      - id: CMUYautjaMaskThrallEbony
-        amount: 1
-      - id: CMUYautjaMaskThrallGold
-        amount: 1
-      - id: CMUYautjaMaskThrallSilver
-        amount: 1
-      - id: CMUYautjaThrallArmorEbony
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaThrallArmorSilver
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaThrallArmorGold
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaThrallArmorCrimson
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaThrallArmorBone
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaThrallGreavesEbony
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaThrallGreavesSilver
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaThrallGreavesGold
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaThrallGreavesCrimson
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaThrallGreavesBone
-        amount: 1
-        replaceSlot: FEET
-    - name: Capes
-      choices: { CMUYautjaCape: 1 }
-      entries:
-      - id: CMUYautjaCapeFull
-        amount: 1
-        replaceSlot: back
-      - id: CMUYautjaCapeCeremonial
+      - id: CMUYautjaCapeQuarter
+        name: Quarter-Cape
         amount: 1
         replaceSlot: back
       - id: CMUYautjaCapeThird
+        name: Third-Cape
         amount: 1
         replaceSlot: back
       - id: CMUYautjaCapeHalf
-        amount: 1
-        replaceSlot: back
-      - id: CMUYautjaCapeQuarter
+        name: Half-Cape
         amount: 1
         replaceSlot: back
       - id: CMUYautjaCapePoncho
+        name: Poncho
+        amount: 1
+        replaceSlot: back
+    - name: Spare Equipment
+      entries:
+      - id: CMUYautjaFalconDrone
+        name: Falcon Drone
+        points: 20
+      - id: CMUYautjaHuntingTrap
+        name: Hunting Trap
+        points: 10
+      - id: CMUYautjaArrow
+        name: Arrow - Explosive
+        points: 10
+      - id: CMUYautjaSnareArrow
+        name: Arrow - Snare
+        points: 15
+
+- type: entity
+  parent: CMUYautjaLoadoutVendor
+  id: CMUYautjaElderLoadoutVendor
+  name: Yautja Elder Hunting Gear Rack
+  description: A gear rack for hunting.
+  suffix: Yautja, Elder
+  components:
+  - type: Sprite
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
+    drawdepth: SmallObjects
+    offset: 0,0.5
+    layers:
+    - state: pred_vendor_elder_left
+      map: [ "enum.VendingMachineVisualLayers.Base" ]
+    - state: pred_vendor_elder_left
+      shader: unshaded
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "rmc_flick_animation" ]
+  - type: Icon
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
+    state: pred_vendor_elder_left
+  - type: GenericVisualizer
+    visuals:
+      enum.YautjaGearRackVisuals.State:
+        enum.VendingMachineVisualLayers.Base:
+          Left: { state: pred_vendor_elder_left }
+          Right: { state: pred_vendor_elder_right }
+        enum.VendingMachineVisualLayers.BaseUnshaded:
+          Left: { state: pred_vendor_elder_left }
+          Right: { state: pred_vendor_elder_right }
+  - type: YautjaGearRack
+    kind: Elder
+  - type: CMAutomatedVendor
+    uiStyle: Yautja
+    sections:
+    - name: Essential Hunting Supplies
+      entries:
+      - id: CMUYautjaHuntingEquipmentBundle
+        name: Hunting Equipment
+        choices: { CMUYautjaEssentials: 1 }
+        amount: 1
+        mandatory: true
+      - id: CMUYautjaArmorBundle
+        name: Armor
+        choices: { CMUYautjaArmor: 1 }
+        amount: 1
+        mandatory: true
+    - name: Main Weapons (CHOOSE 1)
+      choices: { CMUYautjaPrimary: 1 }
+      entries:
+      - id: CMUYautjaClanSword
+        name: The Primary Hunting Sword
+        amount: 1
+        recommended: true
+      - id: CMUYautjaRendingSword
+        name: The Rending Hunting Sword
+        amount: 1
+        recommended: true
+      - id: CMUYautjaPiercingSword
+        name: The Piercing Hunting Sword
+        amount: 1
+        recommended: true
+      - id: CMUYautjaSeveringSword
+        name: The Severing Hunting Sword
+        amount: 1
+        recommended: true
+      - id: CMUYautjaCruelStaff
+        name: The Taruulan Staff
+        amount: 1
+        recommended: true
+      - id: CMUYautjaChainwhip
+        name: The Sundering Chain-Whip
+        amount: 1
+        recommended: true
+      - id: CMUYautjaDualWarScythe
+        name: The Cleaving War-Scythe
+        amount: 1
+        recommended: true
+      - id: CMUYautjaDoubleWarScythe
+        name: The Ripping War-Scythe
+        amount: 1
+        recommended: true
+      - id: CMUYautjaCombistick
+        name: The Adaptive Combi-Stick
+        amount: 1
+        recommended: true
+      - id: CMUYautjaWarAxe
+        name: The Butchering War Axe
+        amount: 1
+        recommended: true
+      - id: CMUYautjaWarGlaive
+        name: The Lumbering Glaive
+        amount: 1
+        recommended: true
+      - id: CMUYautjaCleavingGlaive
+        name: The Imposing Glaive
+        amount: 1
+        recommended: true
+      - id: CMUYautjaLongaxe
+        name: The Crushing Longaxe
+        amount: 1
+        recommended: true
+    - name: Bracer Attachments
+      entries:
+      - id: CMUYautjaWristBladesBundle
+        name: Wrist Blades
+        choices: { CMUYautjaBracer: 1 }
+        amount: 1
+        mandatory: true
+      - id: CMUYautjaBracerShieldAttachment
+        name: The Compact Shield
+        choices: { CMUYautjaBracer: 1 }
+        amount: 1
+        recommended: true
+      - id: CMUYautjaFearsomeScimitarsBundle
+        name: The Fearsome Scimitars
+        choices: { CMUYautjaPrimary: 1 }
+        amount: 1
+        recommended: true
+      - id: CMUYautjaSkeweringScimitarsBundle
+        name: The Skewering Scimitars
+        choices: { CMUYautjaPrimary: 1 }
+        amount: 1
+        recommended: true
+      - id: CMUYautjaChainGauntletsBundle
+        name: The Chain Gauntlets
+        choices: { CMUYautjaPrimary: 1 }
+        amount: 1
+        recommended: true
+    - name: Support Equipment (CHOOSE 2)
+      choices: { CMUYautjaSupport: 2 }
+      entries:
+      - id: CMUYautjaFalconDrone
+        name: The Agile Drone
+        amount: 1
+      - id: CMUYautjaClanShield
+        name: The Steadfast Shield
+        amount: 1
+      - id: CMUYautjaAncientShield
+        name: "The Gilded Warlord\u2019s Aegis"
+        amount: 1
+      - id: CMUYautjaAncientShieldAlt
+        name: "The Dread Hunter\u2019s Bulwark"
+        amount: 1
+      - id: CMUYautjaHeavyClanArmor
+        name: The Formidable Plate Armor
+        amount: 1
+        replaceSlot: OUTERCLOTHING
+      - id: CMUYautjaSpikeLauncher
+        name: The Fleeting Spike Launcher
+        amount: 1
+      - id: CMUYautjaSmartDisc
+        name: The Purifying Smart-Disc
+        amount: 1
+    - name: Ranged Equipment (CHOOSE 1)
+      choices: { CMUYautjaRanged: 1 }
+      entries:
+      - id: CMUYautjaPlasmaPistol
+        name: The Swift Plasma Pistol
+        amount: 1
+      - id: CMUYautjaQuiverStrapFilled
+        name: The Firm Bow
+        amount: 1
+    - name: Clothing Accessory (CHOOSE 1)
+      choices: { CMUYautjaAccessory: 1 }
+      entries:
+      - id: CMUYautjaCapeQuarter
+        name: Quarter-Cape
+        amount: 1
+        replaceSlot: back
+      - id: CMUYautjaCapeThird
+        name: Third-Cape
+        amount: 1
+        replaceSlot: back
+      - id: CMUYautjaCapeHalf
+        name: Half-Cape
+        amount: 1
+        replaceSlot: back
+      - id: CMUYautjaCapePoncho
+        name: Poncho
         amount: 1
         replaceSlot: back
       - id: CMUYautjaCapeDamaged
+        name: Damaged-Cape
         amount: 1
         replaceSlot: back
-    - name: Primary Weapon
+      - id: CMUYautjaCapeFull
+        name: Full-Cape
+        amount: 1
+        replaceSlot: back
+      - id: CMUYautjaCapeCeremonial
+        name: Ceremonial Cape
+        amount: 1
+        replaceSlot: back
+    - name: Spare Equipment
+      entries:
+      - id: CMUYautjaFalconDrone
+        name: Falcon Drone
+        points: 20
+      - id: CMUYautjaHuntingTrap
+        name: Hunting Trap
+        points: 10
+      - id: CMUYautjaSmartDisc
+        name: Smart-Disc
+        points: 20
+      - id: CMUYautjaArrow
+        name: Arrow - Explosive
+        points: 10
+      - id: CMUYautjaSnareArrow
+        name: Arrow - Snare
+        points: 15
+
+- type: entity
+  parent: CMUYautjaLoadoutVendor
+  id: CMUYautjaYoungbloodLoadoutVendor
+  name: Yautja Young Hunting Gear Rack
+  description: A gear rack for hunting.
+  suffix: Yautja, Youngblood
+  components:
+  - type: YautjaGearRack
+    kind: Youngblood
+  - type: CMAutomatedVendor
+    uiStyle: Yautja
+    jobs:
+    - CMUYautjaYoungblood
+    - CMUYautjaHunter
+    sections:
+    - name: Essential Hunting Supplies
+      entries:
+      - id: CMUYautjaYoungbloodHuntingEquipmentBundle
+        name: Hunting Equipment
+        choices: { CMUYautjaEssentials: 1 }
+        amount: 1
+        mandatory: true
+      - id: CMUYautjaArmorBundle
+        name: Armor
+        choices: { CMUYautjaArmor: 1 }
+        amount: 1
+        mandatory: true
+    - name: Main Weapons (CHOOSE 1)
       choices: { CMUYautjaPrimary: 1 }
       entries:
-      - id: CMUYautjaScimitar
-        amount: 1
-      - id: CMUYautjaChainGauntlet
-        amount: 1
-      - id: CMUYautjaBracerShield
-        amount: 1
       - id: CMUYautjaClanSword
+        name: The Primary Hunting Sword
+        amount: 1
+        recommended: true
+      - id: CMUYautjaRendingSword
+        name: The Rending Hunting Sword
+        amount: 1
+        recommended: true
+      - id: CMUYautjaPiercingSword
+        name: The Piercing Hunting Sword
+        amount: 1
+        recommended: true
+      - id: CMUYautjaSeveringSword
+        name: The Severing Hunting Sword
+        amount: 1
+        recommended: true
+      - id: CMUYautjaChainwhip
+        name: The Sundering Chain-Whip
+        amount: 1
+        recommended: true
+      - id: CMUYautjaDualWarScythe
+        name: The Cleaving War-Scythe
+        amount: 1
+        recommended: true
+      - id: CMUYautjaDoubleWarScythe
+        name: The Ripping War-Scythe
+        amount: 1
+        recommended: true
+      - id: CMUYautjaCombistick
+        name: The Adaptive Combi-Stick
+        amount: 1
+        recommended: true
+      - id: CMUYautjaWarAxe
+        name: The Butchering War Axe
+        amount: 1
+        recommended: true
+      - id: CMUYautjaWarGlaive
+        name: The Lumbering Glaive
+        amount: 1
+        recommended: true
+      - id: CMUYautjaCleavingGlaive
+        name: The Imposing Glaive
+        amount: 1
+        recommended: true
+      - id: CMUYautjaLongaxe
+        name: The Crushing Longaxe
+        amount: 1
+        recommended: true
+    - name: Bracer Attachments
+      entries:
+      - id: CMUYautjaWristBladesBundle
+        name: Wrist Blades
+        choices: { CMUYautjaBracer: 1 }
+        amount: 1
+        mandatory: true
+      - id: CMUYautjaFearsomeScimitarsBundle
+        name: The Fearsome Scimitars
+        choices: { CMUYautjaPrimary: 1 }
+        amount: 1
+        recommended: true
+      - id: CMUYautjaSkeweringScimitarsBundle
+        name: The Skewering Scimitars
+        choices: { CMUYautjaPrimary: 1 }
+        amount: 1
+        recommended: true
+      - id: CMUYautjaChainGauntletsBundle
+        name: The Chain Gauntlets
+        choices: { CMUYautjaPrimary: 1 }
+        amount: 1
+        recommended: true
+
+- type: entity
+  parent: CMUYautjaLoadoutVendor
+  id: CMUYautjaThrallLoadoutVendor
+  name: Yautja Thrall Gear Rack
+  description: A gear rack for hunting.
+  suffix: Yautja, Thrall
+  components:
+  - type: YautjaGearRack
+    kind: Thrall
+  - type: CMAutomatedVendor
+    uiStyle: Yautja
+    sections:
+    - name: Essential Hunting Supplies
+      entries:
+      - id: CMUYautjaThrallHuntingEquipmentBundle
+        name: Hunting Equipment
+        choices: { CMUYautjaEssentials: 1 }
+        amount: 1
+        mandatory: true
+    - name: Armor Material (CHOOSE 1)
+      choices: { CMUYautjaArmor: 1 }
+      entries:
+      - id: CMUYautjaThrallArmorEbonyBundle
+        name: Ebony
+        amount: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorSilverBundle
+        name: Silver
+        amount: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorGoldBundle
+        name: Gold
+        amount: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorCrimsonBundle
+        name: Crimson
+        amount: 1
+        recommended: true
+      - id: CMUYautjaThrallArmorBoneBundle
+        name: Bone
+        amount: 1
+        recommended: true
+    - name: Main Weapons (CHOOSE 1)
+      choices: { CMUYautjaAccessory: 1 }
+      entries:
+      - id: CMUYautjaClanSword
+        name: The Primary Hunting Sword
         amount: 1
       - id: CMUYautjaRendingSword
+        name: The Rending Hunting Sword
         amount: 1
       - id: CMUYautjaPiercingSword
+        name: The Piercing Hunting Sword
         amount: 1
       - id: CMUYautjaSeveringSword
+        name: The Severing Hunting Sword
         amount: 1
       - id: CMUYautjaChainwhip
-        amount: 1
-      - id: CMUYautjaCombistick
-        amount: 1
-      - id: CMUYautjaWarAxe
+        name: The Sundering Chain-Whip
         amount: 1
       - id: CMUYautjaDualWarScythe
+        name: The Cleaving War-Scythe
         amount: 1
       - id: CMUYautjaDoubleWarScythe
+        name: The Ripping War-Scythe
         amount: 1
-      - id: CMUYautjaCruelStaff
+      - id: CMUYautjaCombistick
+        name: The Adaptive Combi-Stick
         amount: 1
-      - id: CMUYautjaHunterSpear
+      - id: CMUYautjaWarAxe
+        name: The Butchering War Axe
         amount: 1
       - id: CMUYautjaWarGlaive
+        name: The Lumbering Glaive
         amount: 1
       - id: CMUYautjaCleavingGlaive
+        name: The Imposing Glaive
         amount: 1
       - id: CMUYautjaLongaxe
+        name: The Crushing Longaxe
         amount: 1
-    - name: Ritual And Side Weapons
-      choices: { CMUYautjaSidearm: 2 }
+
+- type: entity
+  parent: CMUYautjaLoadoutVendor
+  id: CMUYautjaBloodedThrallLoadoutVendor
+  name: Yautja Blooded Thrall Gear Rack
+  description: A gear rack for hunting.
+  suffix: Yautja, Thrall, Blooded
+  components:
+  - type: YautjaGearRack
+    kind: BloodedThrall
+  - type: CMAutomatedVendor
+    uiStyle: Yautja
+    sections:
+    - name: Blooded Equipment
       entries:
-      - id: CMUYautjaHarpoon
-        amount: 2
-      - id: CMUYautjaCeremonialDagger
-        amount: 2
-      - id: CMUYautjaDuellingBlade
-        amount: 2
-      - id: CMUYautjaDuellingClub
-        amount: 2
-      - id: CMUYautjaDuellingHatchet
-        amount: 2
-      - id: CMUYautjaDuellingKnife
-        amount: 2
+      - id: CMUYautjaBloodedThrallEquipmentBundle
+        name: Blooded Equipment
+        choices: { CMUYautjaRanged: 1 }
+        amount: 1
+    - name: Blooded Bracer Material (CHOOSE 1)
+      choices: { CMUYautjaBracer: 1 }
+      entries:
+      - id: CMUYautjaBloodedThrallBracerEbonyBundle
+        name: Ebony
+        amount: 1
+        recommended: true
+      - id: CMUYautjaBloodedThrallBracerSilverBundle
+        name: Silver
+        amount: 1
+        recommended: true
+      - id: CMUYautjaBloodedThrallBracerGoldBundle
+        name: Gold
+        amount: 1
+        recommended: true
+      - id: CMUYautjaBloodedThrallBracerCrimsonBundle
+        name: Crimson
+        amount: 1
+        recommended: true
+      - id: CMUYautjaBloodedThrallBracerBoneBundle
+        name: Bone
+        amount: 1
+        recommended: true
+    - name: Clothing Accessory (CHOOSE 1)
+      choices: { CMUYautjaAccessory: 1 }
+      entries:
+      - id: CMUYautjaCapeQuarter
+        name: Quarter-Cape
+        amount: 1
+        replaceSlot: back
+        mandatory: true
+      - id: CMUYautjaCapeThird
+        name: Third-Cape
+        amount: 1
+        replaceSlot: back
+        mandatory: true
+      - id: CMUYautjaCapeHalf
+        name: Half-Cape
+        amount: 1
+        replaceSlot: back
+        mandatory: true
+      - id: CMUYautjaCapePoncho
+        name: Poncho
+        amount: 1
+        replaceSlot: back
+        mandatory: true
+
+- type: entity
+  parent: CMUYautjaLoadoutVendor
+  id: CMUYautjaBadBloodLoadoutVendor
+  name: Yautja Hunting Gear Rack
+  description: A gear rack for hunting.
+  suffix: Yautja, Bad Blood, Hunting Gear
+  components:
+  - type: Sprite
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
+    drawdepth: SmallObjects
+    offset: 0,0.5
+    layers:
+    - state: pred_vendor_elder_left
+      map: [ "enum.VendingMachineVisualLayers.Base" ]
+    - state: pred_vendor_elder_left
+      shader: unshaded
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "rmc_flick_animation" ]
+  - type: Icon
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
+    state: pred_vendor_elder_left
+  - type: YautjaGearRack
+    kind: BadBlood
+  - type: CMAutomatedVendor
+    uiStyle: Yautja
+    sections:
+    - name: Essential Hunting Supplies
+      entries:
+      - id: CMUYautjaBadBloodHuntingEquipmentBundle
+        name: Hunting Equipment
+        choices: { CMUYautjaEssentials: 1 }
+        amount: 1
+        mandatory: true
+    - name: Armor Set
+      choices: { CMUYautjaArmor: 1 }
+      entries:
+      - id: CMUYautjaBadBloodArmorPatchworkBundle
+        name: Patchwork Armor
+        amount: 1
+        mandatory: true
+      - id: CMUYautjaBadBloodArmorPatchworkAltBundle
+        name: Patchwork Armor (Alt)
+        amount: 1
+        mandatory: true
+      - id: CMUYautjaBadBloodArmorLunaticBundle
+        name: Lunatic Armor
+        amount: 1
+        mandatory: true
+      - id: CMUYautjaBadBloodArmorScavengerBundle
+        name: Scavenger Armor
+        amount: 1
+        mandatory: true
+      - id: CMUYautjaBadBloodArmorScavengerAltBundle
+        name: Scavenger Armor (Alt)
+        amount: 1
+        mandatory: true
+      - id: CMUYautjaBadBloodArmorVenatorBundle
+        name: Venator Armor
+        amount: 1
+        mandatory: true
+      - id: CMUYautjaBadBloodArmorCommandoBundle
+        name: Commando Armor
+        amount: 1
+        mandatory: true
+      - id: CMUYautjaBadBloodArmorCommandoAltBundle
+        name: Commando Armor (Alt)
+        amount: 1
+        mandatory: true
+      - id: CMUYautjaBadBloodArmorEmissaryBundle
+        name: Emissary Armor
+        amount: 1
+        mandatory: true
+    - name: Main Weapons (CHOOSE 1)
+      choices: { CMUYautjaPrimary: 1 }
+      entries:
+      - id: CMUYautjaClanSword
+        name: The Primary Hunting Sword
+        amount: 1
+        recommended: true
+      - id: CMUYautjaRendingSword
+        name: The Rending Hunting Sword
+        amount: 1
+        recommended: true
+      - id: CMUYautjaPiercingSword
+        name: The Piercing Hunting Sword
+        amount: 1
+        recommended: true
+      - id: CMUYautjaSeveringSword
+        name: The Severing Hunting Sword
+        amount: 1
+        recommended: true
+      - id: CMUYautjaCruelStaff
+        name: The Taruulan Staff
+        amount: 1
+        recommended: true
+      - id: CMUYautjaChainwhip
+        name: The Sundering Chain-Whip
+        amount: 1
+        recommended: true
+      - id: CMUYautjaDualWarScythe
+        name: The Cleaving War-Scythe
+        amount: 1
+        recommended: true
+      - id: CMUYautjaDoubleWarScythe
+        name: The Ripping War-Scythe
+        amount: 1
+        recommended: true
+      - id: CMUYautjaCombistick
+        name: The Adaptive Combi-Stick
+        amount: 1
+        recommended: true
+      - id: CMUYautjaWarAxe
+        name: The Butchering War Axe
+        amount: 1
+        recommended: true
+      - id: CMUYautjaWarGlaive
+        name: The Lumbering Glaive
+        amount: 1
+        recommended: true
+      - id: CMUYautjaCleavingGlaive
+        name: The Imposing Glaive
+        amount: 1
+        recommended: true
+      - id: CMUYautjaLongaxe
+        name: The Crushing Longaxe
+        amount: 1
+        recommended: true
+    - name: Bracer Attachments
+      entries:
+      - id: CMUYautjaWristBladesBundle
+        name: Wrist Blades
+        choices: { CMUYautjaBracer: 1 }
+        amount: 1
+        mandatory: true
+      - id: CMUYautjaBracerShieldAttachment
+        name: The Compact Shield
+        choices: { CMUYautjaBracer: 1 }
+        amount: 1
+        recommended: true
+      - id: CMUYautjaFearsomeScimitarsBundle
+        name: The Fearsome Scimitars
+        choices: { CMUYautjaPrimary: 1 }
+        amount: 1
+        recommended: true
+      - id: CMUYautjaSkeweringScimitarsBundle
+        name: The Skewering Scimitars
+        choices: { CMUYautjaPrimary: 1 }
+        amount: 1
+        recommended: true
+      - id: CMUYautjaChainGauntletsBundle
+        name: The Chain Gauntlets
+        choices: { CMUYautjaPrimary: 1 }
+        amount: 1
+        recommended: true
+    - name: Support Equipment (CHOOSE 2)
+      choices: { CMUYautjaSupport: 2 }
+      entries:
+      - id: CMUYautjaFalconDroneBadBlood
+        name: The Agile Drone
+        amount: 1
       - id: CMUYautjaClanShield
+        name: The Steadfast Shield
         amount: 1
-      - id: CMUYautjaAncientShield
+      - id: CMUYautjaHeavyClanArmor
+        name: The Formidable Plate Armor
         amount: 1
-      - id: CMUYautjaAncientShieldAlt
+        replaceSlot: OUTERCLOTHING
+      - id: CMUYautjaSpikeLauncher
+        name: The Fleeting Spike Launcher
         amount: 1
-      - id: CMUYautjaAncientShieldTemple
+      - id: CMUYautjaSmartDisc
+        name: The Purifying Smart-Disc
         amount: 1
-    - name: Restricted Ranged Weapons
+    - name: Ranged Equipment (CHOOSE 1)
       choices: { CMUYautjaRanged: 1 }
       entries:
-      - id: CMUYautjaSpikeLauncher
+      - id: CMUYautjaQuiverStrapDynamic
+        name: The Firm Bow
         amount: 1
-      - id: CMUYautjaPlasmaRifle
-        amount: 1
-      - id: CMUYautjaPlasmaPistol
-        amount: 1
-    - name: Support Gear
-      choices: { CMUYautjaSupport: 4 }
+    - name: Clothing Accessory (CHOOSE 1)
+      choices: { CMUYautjaAccessory: 1 }
       entries:
-      - id: CMUYautjaMedicomp
-        amount: 2
-        recommended: true
-      - id: CMUYautjaHerbalCase
-        amount: 4
-      - id: CMUYautjaHealingGel
-        amount: 6
-      - id: CMUYautjaStabilizerGel
-        amount: 6
-      - id: CMUYautjaHealingGun
-        amount: 2
-      - id: CMUYautjaAutoInjector
-        amount: 6
+      - id: CMUYautjaCapeQuarter
+        name: Quarter-Cape
+        amount: 1
+        replaceSlot: back
+      - id: CMUYautjaCapeThird
+        name: Third-Cape
+        amount: 1
+        replaceSlot: back
+      - id: CMUYautjaCapeHalf
+        name: Half-Cape
+        amount: 1
+        replaceSlot: back
+      - id: CMUYautjaCapePoncho
+        name: Poncho
+        amount: 1
+        replaceSlot: back
+      - id: CMUYautjaCapeDamaged
+        name: Damaged-Cape
+        amount: 1
+        replaceSlot: back
+      - id: CMUYautjaCapeFull
+        name: Full-Cape
+        amount: 1
+        replaceSlot: back
+    - name: Spare Equipment
+      entries:
+      - id: CMUYautjaFalconDroneBadBlood
+        name: Falcon Drone
+        points: 20
       - id: CMUYautjaHuntingTrap
-        amount: 4
-      - id: CMUYautjaPolishingRag
-        amount: 4
-      - id: CMMRE
-        amount: 4
-      - id: RMCMotionDetector
-        amount: 1
-      - id: RMCPouchGeneralMedium
-        amount: 2
-    - name: Yautja Field Tools
+        name: Hunting Trap
+        points: 10
+      - id: CMUYautjaDynamicArrow
+        name: Arrow - Dynamic Warhead
+        points: 10
+      - id: CMUYautjaSnareArrow
+        name: Arrow - Snare
+        points: 15
+
+- type: entity
+  parent: CMUYautjaLoadoutVendor
+  id: CMUYautjaStrandedLoadoutVendor
+  name: Yautja Hunting Gear Rack
+  description: A gear rack for hunting.
+  suffix: Yautja, Stranded, Bow Equipment
+  components:
+  - type: Sprite
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
+    drawdepth: SmallObjects
+    offset: 0,0.5
+    layers:
+    - state: pred_vendor_elder_left
+      map: [ "enum.VendingMachineVisualLayers.Base" ]
+    - state: pred_vendor_elder_left
+      shader: unshaded
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "rmc_flick_animation" ]
+  - type: Icon
+    sprite: _CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
+    state: pred_vendor_elder_left
+  - type: YautjaGearRack
+    kind: Stranded
+  - type: CMAutomatedVendor
+    uiStyle: Yautja
+    sections:
+    - name: Essential Hunting Supplies
       entries:
-      - id: CMUYautjaToolbeltFilled
-        amount: 2
-      - id: CMUYautjaHuntingPouch
-        amount: 2
-      - id: CMUYautjaCleanserGelVial
-        amount: 4
-      - id: CMUYautjaRelayBeacon
-        amount: 2
-      - id: CMUYautjaHoundObservationPad
+      - id: CMUYautjaStrandedHuntingEquipmentBundle
+        name: Hunting Equipment
+        choices: { CMUYautjaEssentials: 1 }
         amount: 1
-      - id: CMUYautjaHivebreaker
+        mandatory: true
+      - id: CMUYautjaStrandedArmorBundle
+        name: Armor
+        choices: { CMUYautjaArmor: 1 }
         amount: 1
-      - id: CMUYautjaMetalChains
-        amount: 2
-      - id: CMUYautjaScalp
-        amount: 4
-      - id: CMUYautjaCommunicator
-        amount: 2
-      - id: CMUYautjaOverseerCommunicator
+        mandatory: true
+    - name: Main Weapons (CHOOSE 1)
+      choices: { CMUYautjaPrimary: 1 }
+      entries:
+      - id: CMUYautjaClanSword
+        name: The Primary Hunting Sword
         amount: 1
-      - id: CMUYautjaBadBloodCommunicator
+        recommended: true
+      - id: CMUYautjaRendingSword
+        name: The Rending Hunting Sword
         amount: 1
-      - id: CMUYautjaStrandedCommunicator
+        recommended: true
+      - id: CMUYautjaPiercingSword
+        name: The Piercing Hunting Sword
         amount: 1
+        recommended: true
+      - id: CMUYautjaSeveringSword
+        name: The Severing Hunting Sword
+        amount: 1
+        recommended: true
+      - id: CMUYautjaCruelStaff
+        name: The Taruulan Staff
+        amount: 1
+        recommended: true
+      - id: CMUYautjaChainwhip
+        name: The Sundering Chain-Whip
+        amount: 1
+        recommended: true
+      - id: CMUYautjaDualWarScythe
+        name: The Cleaving War-Scythe
+        amount: 1
+        recommended: true
+      - id: CMUYautjaDoubleWarScythe
+        name: The Ripping War-Scythe
+        amount: 1
+        recommended: true
+      - id: CMUYautjaCombistick
+        name: The Adaptive Combi-Stick
+        amount: 1
+        recommended: true
+      - id: CMUYautjaWarAxe
+        name: The Butchering War Axe
+        amount: 1
+        recommended: true
+      - id: CMUYautjaWarGlaive
+        name: The Lumbering Glaive
+        amount: 1
+        recommended: true
+      - id: CMUYautjaCleavingGlaive
+        name: The Imposing Glaive
+        amount: 1
+        recommended: true
+      - id: CMUYautjaLongaxe
+        name: The Crushing Longaxe
+        amount: 1
+        recommended: true
+    - name: Bracer Attachments
+      entries:
+      - id: CMUYautjaWristBladesBundle
+        name: Wrist Blades
+        choices: { CMUYautjaBracer: 1 }
+        amount: 1
+        mandatory: true
+      - id: CMUYautjaBracerShieldAttachment
+        name: The Compact Shield
+        choices: { CMUYautjaBracer: 1 }
+        amount: 1
+        recommended: true
+      - id: CMUYautjaFearsomeScimitarsBundle
+        name: The Fearsome Scimitars
+        choices: { CMUYautjaPrimary: 1 }
+        amount: 1
+        recommended: true
+      - id: CMUYautjaSkeweringScimitarsBundle
+        name: The Skewering Scimitars
+        choices: { CMUYautjaPrimary: 1 }
+        amount: 1
+        recommended: true
+      - id: CMUYautjaChainGauntletsBundle
+        name: The Chain Gauntlets
+        choices: { CMUYautjaPrimary: 1 }
+        amount: 1
+        recommended: true
+    - name: Support Equipment (CHOOSE 2)
+      choices: { CMUYautjaSupport: 2 }
+      entries:
+      - id: CMUYautjaFalconDrone
+        name: The Agile Drone
+        amount: 1
+      - id: CMUYautjaClanShield
+        name: The Steadfast Shield
+        amount: 1
+      - id: CMUYautjaHeavyClanArmor
+        name: The Formidable Plate Armor
+        amount: 1
+        replaceSlot: OUTERCLOTHING
+      - id: CMUYautjaSpikeLauncher
+        name: The Fleeting Spike Launcher
+        amount: 1
+      - id: CMUYautjaSmartDisc
+        name: The Purifying Smart-Disc
+        amount: 1
+    - name: Ranged Equipment (CHOOSE 1)
+      choices: { CMUYautjaRanged: 1 }
+      entries:
+      - id: CMUYautjaQuiverStrapFilled
+        name: The Firm Bow
+        amount: 1
+    - name: Clothing Accessory (CHOOSE 1)
+      choices: { CMUYautjaAccessory: 1 }
+      entries:
+      - id: CMUYautjaCapeQuarter
+        name: Quarter-Cape
+        amount: 1
+        replaceSlot: back
+      - id: CMUYautjaCapeThird
+        name: Third-Cape
+        amount: 1
+        replaceSlot: back
+      - id: CMUYautjaCapeHalf
+        name: Half-Cape
+        amount: 1
+        replaceSlot: back
+      - id: CMUYautjaCapePoncho
+        name: Poncho
+        amount: 1
+        replaceSlot: back
+      - id: CMUYautjaCapeDamaged
+        name: Damaged-Cape
+        amount: 1
+        replaceSlot: back
+      - id: CMUYautjaCapeFull
+        name: Full-Cape
+        amount: 1
+        replaceSlot: back
+    - name: Spare Equipment
+      entries:
+      - id: CMUYautjaFalconDrone
+        name: Falcon Drone
+        points: 20
+      - id: CMUYautjaHuntingTrap
+        name: Hunting Trap
+        points: 15
+      - id: CMUYautjaArrow
+        name: Arrow - Explosive
+        points: 15
+      - id: CMUYautjaSnareArrow
+        name: Arrow - Snare
+        points: 20

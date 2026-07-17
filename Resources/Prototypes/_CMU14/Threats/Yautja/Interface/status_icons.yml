@@ -9,47 +9,68 @@
   parent: CMUYautjaIconBase
   id: CMUYautjaIconPrey
   icon:
-    sprite: /Textures/_RMC14/Interface/xeno_leader.rsi
-    state: hudxenoleader
+    sprite: /Textures/_CMU14/Yautja/hud_yautja.rsi
+    state: hunter_hunted
 
 - type: healthIcon
   parent: CMUYautjaIconBase
   id: CMUYautjaIconHonored
   icon:
-    sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
-    state: hudsquad_leader
+    sprite: /Textures/_CMU14/Yautja/hud_yautja.rsi
+    state: hunter_honored
 
 - type: healthIcon
   parent: CMUYautjaIconBase
   id: CMUYautjaIconDishonored
   icon:
-    sprite: /Textures/_RMC14/Interface/health_hud.rsi
-    state: huddead
+    sprite: /Textures/_CMU14/Yautja/hud_yautja.rsi
+    state: hunter_dishonored
 
 - type: healthIcon
   parent: CMUYautjaIconBase
   id: CMUYautjaIconGearCarrier
   icon:
-    sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
-    state: hudRESS
+    sprite: /Textures/_CMU14/Yautja/hud_yautja.rsi
+    state: hunter_gear
 
 - type: healthIcon
   parent: CMUYautjaIconBase
   id: CMUYautjaIconThrall
   icon:
-    sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
-    state: hudCLF
+    sprite: /Textures/_CMU14/Yautja/hud_yautja.rsi
+    state: hunter_thralled
 
 - type: healthIcon
   parent: CMUYautjaIconBase
   id: CMUYautjaIconStudent
   icon:
-    sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
-    state: hudsquad_rifleman
+    sprite: /Textures/_CMU14/Yautja/hud_yautja.rsi
+    state: predhud
 
 - type: healthIcon
   parent: CMUYautjaIconBase
   id: CMUYautjaIconBlooded
   icon:
-    sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
-    state: hudsquad_spec
+    sprite: /Textures/_CMU14/Yautja/hud_yautja.rsi
+    state: hunter_thrall_blooded
+
+- type: healthIcon
+  parent: CMUYautjaIconBase
+  id: CMUYautjaIconBloodedThrall
+  icon:
+    sprite: /Textures/_CMU14/Yautja/hud_yautja.rsi
+    state: hunter_thralled_blooded
+
+- type: healthIcon
+  parent: CMUYautjaIconBase
+  id: CMUYautjaIconFalconDrone
+  icon:
+    sprite: /Textures/_CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    state: falcon_drone_active
+
+- type: healthIcon
+  parent: CMUYautjaIconBase
+  id: CMUYautjaIconFalconDroneBadBlood
+  icon:
+    sprite: /Textures/_CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
+    state: falcon_drone_badblood_active

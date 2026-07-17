@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
@@ -12,27 +13,63 @@ public sealed partial class YautjaHudSystem : EntitySystem
     [Dependency] private IPrototypeManager _prototypes = default!;
 
     private readonly Dictionary<YautjaMarkKind, StatusIconData> _icons = new();
+    private StatusIconData? _bloodedThrallIcon;
     private bool _cached;
 
     public override void Initialize()
     {
         SubscribeLocalEvent<YautjaMarkComponent, GetStatusIconsEvent>(OnGetStatusIcons);
+        SubscribeLocalEvent<YautjaFalconHudIconComponent, GetStatusIconsEvent>(OnFalconGetStatusIcons);
     }
 
     private void OnGetStatusIcons(Entity<YautjaMarkComponent> ent, ref GetStatusIconsEvent args)
     {
-        if (HasComp<YautjaComponent>(ent))
-            return;
-
-        if (_player.LocalEntity is not { } viewer || !HasComp<YautjaHudViewerComponent>(viewer))
+        if (!HasYautjaHudViewer())
             return;
 
         EnsureCached();
-        foreach (var mark in ent.Comp.Marks.Keys)
+        AddIconsForMarks(ent.Comp.Marks.Keys, args.StatusIcons);
+    }
+
+    private void OnFalconGetStatusIcons(Entity<YautjaFalconHudIconComponent> ent, ref GetStatusIconsEvent args)
+    {
+        if (!HasYautjaHudViewer())
+            return;
+
+        if (_prototypes.TryIndex(ent.Comp.Icon, out var icon))
+            args.StatusIcons.Add(icon);
+    }
+
+    public void AddIconsForMarks(IReadOnlyCollection<YautjaMarkKind> marks, List<StatusIconData> icons)
+    {
+        EnsureCached();
+
+        AddIfPresent(marks, icons, YautjaMarkKind.Prey);
+
+        if (marks.Contains(YautjaMarkKind.Dishonored))
+            AddIfPresent(marks, icons, YautjaMarkKind.Dishonored);
+        else
+            AddIfPresent(marks, icons, YautjaMarkKind.Honored);
+
+        var thralled = marks.Contains(YautjaMarkKind.Thrall);
+        var blooded = marks.Contains(YautjaMarkKind.Blooded);
+
+        if (thralled)
         {
-            if (_icons.TryGetValue(mark, out var icon))
-                args.StatusIcons.Add(icon);
+            if (blooded && _bloodedThrallIcon is { } bloodedThrall)
+                icons.Add(bloodedThrall);
+            else
+                AddIfPresent(marks, icons, YautjaMarkKind.Thrall);
         }
+        else
+        {
+            AddIfPresent(marks, icons, YautjaMarkKind.GearCarrier);
+
+            if (blooded)
+                AddIfPresent(marks, icons, YautjaMarkKind.Blooded);
+        }
+
+        AddIfPresent(marks, icons, YautjaMarkKind.Student);
     }
 
     private void EnsureCached()
@@ -48,11 +85,26 @@ public sealed partial class YautjaHudSystem : EntitySystem
         Cache(YautjaMarkKind.Thrall, "CMUYautjaIconThrall");
         Cache(YautjaMarkKind.Student, "CMUYautjaIconStudent");
         Cache(YautjaMarkKind.Blooded, "CMUYautjaIconBlooded");
+
+        var bloodedThrallId = new ProtoId<HealthIconPrototype>("CMUYautjaIconBloodedThrall");
+        if (_prototypes.TryIndex(bloodedThrallId, out var bloodedThrall))
+            _bloodedThrallIcon = bloodedThrall;
     }
 
     private void Cache(YautjaMarkKind kind, ProtoId<HealthIconPrototype> id)
     {
         if (_prototypes.TryIndex(id, out var proto))
             _icons[kind] = proto;
+    }
+
+    private void AddIfPresent(IReadOnlyCollection<YautjaMarkKind> marks, List<StatusIconData> icons, YautjaMarkKind kind)
+    {
+        if (marks.Contains(kind) && _icons.TryGetValue(kind, out var icon))
+            icons.Add(icon);
+    }
+
+    private bool HasYautjaHudViewer()
+    {
+        return _player.LocalEntity is { } viewer && HasComp<YautjaHudViewerComponent>(viewer);
     }
 }

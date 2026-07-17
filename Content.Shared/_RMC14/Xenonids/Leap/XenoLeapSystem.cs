@@ -326,6 +326,9 @@ public sealed partial class XenoLeapSystem : EntitySystem
         if (!TryComp(args.Leaper, out XenoLeapingComponent? leaping))
             return;
 
+        if (TryComp(args.Leaper, out XenoLeapComponent? leap) && !leap.CanBeShieldBlocked)
+            return;
+
         args.Cancelled = AttemptBlockLeap(ent.Owner, ent.Comp.StunDuration, ent.Comp.BlockSound, args.Leaper, leaping.Origin, ent.Comp.FullProtection);
     }
 

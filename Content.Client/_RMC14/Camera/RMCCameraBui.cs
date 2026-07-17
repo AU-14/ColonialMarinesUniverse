@@ -49,6 +49,9 @@ public sealed class RMCCameraBui : RMCPopOutBui<RMCCameraWindow>
         if (computer.Title is { } title)
             Window.Title = Loc.GetString(title);
 
+        if (Window.Viewport.ViewportSize != computer.ViewportSize)
+            Window.Viewport.ViewportSize = computer.ViewportSize;
+
         var currentNetCamera = EntMan.GetNetEntity(computer.CurrentCamera);
         var ids = CollectionsMarshal.AsSpan(computer.CameraIds);
         var names = CollectionsMarshal.AsSpan(computer.CameraNames);

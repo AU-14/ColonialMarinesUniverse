@@ -54,6 +54,9 @@ public sealed partial record CMVendorEntry
     public EntProtoId Id;
 
     [DataField]
+    public (string Id, int Amount)? Choices;
+
+    [DataField]
     public string? Name;
 
     [DataField]
@@ -67,6 +70,9 @@ public sealed partial record CMVendorEntry
 
     [DataField]
     public bool Recommended;
+
+    [DataField]
+    public bool Mandatory;
 
     [DataField]
     public int? Multiplier;

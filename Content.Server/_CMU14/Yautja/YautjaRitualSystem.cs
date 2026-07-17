@@ -3,6 +3,7 @@ using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Database;
 using Content.Shared.Examine;
+using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -31,7 +32,9 @@ public sealed partial class YautjaRitualSystem : EntitySystem
     {
         SubscribeLocalEvent<YautjaRitualDuelComponent, ExaminedEvent>(OnRitualExamined);
         SubscribeLocalEvent<YautjaRitualDuelComponent, MobStateChangedEvent>(OnRitualPreyMobStateChanged);
+        SubscribeLocalEvent<EntityTerminatingEvent>(OnAnyEntityTerminating);
         SubscribeLocalEvent<MobStateChangedEvent>(OnAnyMobStateChanged);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
     }
 
     private void OnRitualExamined(Entity<YautjaRitualDuelComponent> ent, ref ExaminedEvent args)
@@ -70,19 +73,37 @@ public sealed partial class YautjaRitualSystem : EntitySystem
             !HasComp<YautjaComponent>(args.Target))
             return;
 
+        ClearRitualsOwnedBy(args.Target);
+    }
+
+    private void OnAnyEntityTerminating(ref EntityTerminatingEvent args)
+    {
+        if (HasComp<YautjaComponent>(args.Entity))
+            ClearRitualsOwnedBy(args.Entity);
+    }
+
+    private void ClearRitualsOwnedBy(EntityUid hunter)
+    {
         var query = EntityQueryEnumerator<YautjaRitualDuelComponent>();
         while (query.MoveNext(out var uid, out var ritual))
         {
-            if (ritual.Hunter == args.Target)
-            {
+            if (ritual.Hunter == hunter)
                 RemCompDeferred<YautjaRitualDuelComponent>(uid);
-            }
+        }
+    }
+
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
+    {
+        var query = EntityQueryEnumerator<YautjaRitualDuelComponent>();
+        while (query.MoveNext(out var uid, out _))
+        {
+            RemCompDeferred<YautjaRitualDuelComponent>(uid);
         }
     }
 
     public bool TryClaimCaptive(EntityUid hunter, EntityUid target, bool bypassControlRequirement = false)
     {
-        if (!CanClaimCaptive(hunter, target, bypassControlRequirement, true))
+        if (HasActiveCaptive(hunter, target) || !CanClaimCaptive(hunter, target, bypassControlRequirement, true))
             return false;
 
         if (TryComp(target, out YautjaRitualDuelComponent? existing))
@@ -189,6 +210,21 @@ public sealed partial class YautjaRitualSystem : EntitySystem
     private bool IsPulling(EntityUid hunter, EntityUid target)
     {
         return TryComp<PullerComponent>(hunter, out var puller) && puller.Pulling == target;
+    }
+
+    private bool HasActiveCaptive(EntityUid hunter, EntityUid ignoreTarget)
+    {
+        var query = EntityQueryEnumerator<YautjaRitualDuelComponent>();
+        while (query.MoveNext(out var uid, out var ritual))
+        {
+            if (uid == ignoreTarget)
+                continue;
+
+            if (ritual.Hunter == hunter)
+                return true;
+        }
+
+        return false;
     }
 
     private void PopupToWitnesses(EntityUid hunter, EntityUid target, string message, PopupType type)

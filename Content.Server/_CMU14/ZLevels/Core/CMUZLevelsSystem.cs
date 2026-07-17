@@ -1,8 +1,11 @@
 using Content.Server.GameTicking;
+using Content.Server.Shuttles.Components;
+using Content.Server.Shuttles.Systems;
 using Content.Shared._CMU14.ZLevels.Core;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Robust.Server.GameObjects;
 using Robust.Shared.EntitySerialization.Systems;
+using Robust.Shared.Map.Components;
 
 namespace Content.Server._CMU14.ZLevels.Core;
 
@@ -12,6 +15,7 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
     [Dependency] private MapLoaderSystem _mapLoader = default!;
     [Dependency] private TransformSystem _transform = default!;
     [Dependency] private MetaDataSystem _meta = default!;
+    [Dependency] private ShuttleSystem _shuttle = default!;
 
     public CMUZLevelOpeningCache OpeningCache => _zOpeningCache;
 
@@ -87,6 +91,28 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
             depth++;
         }
 
-        TryAddMapsIntoZNetwork(stationNetwork, dict);
+        if (TryAddMapsIntoZNetwork(stationNetwork, dict))
+            StabilizeZLevelDeckGrids(dict.Keys);
+    }
+
+    private void StabilizeZLevelDeckGrids(IEnumerable<EntityUid> maps)
+    {
+        foreach (var mapUid in maps)
+        {
+            if (!TryComp<MapComponent>(mapUid, out var map))
+                continue;
+
+            var query = EntityQueryEnumerator<MapGridComponent, TransformComponent>();
+            while (query.MoveNext(out var gridUid, out _, out var gridXform))
+            {
+                if (gridXform.MapID != map.MapId)
+                    continue;
+
+                _shuttle.Disable(gridUid);
+
+                if (TryComp<ShuttleComponent>(gridUid, out var shuttle))
+                    shuttle.Enabled = false;
+            }
+        }
     }
 }

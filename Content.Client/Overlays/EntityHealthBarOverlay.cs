@@ -7,6 +7,7 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Overlays;
 using Content.Shared.ParaDrop;
 using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
@@ -38,6 +39,7 @@ public sealed class EntityHealthBarOverlay : Overlay
 
     private readonly EntityQuery<CrashLandingComponent> _crashLandingQuery;
     private readonly EntityQuery<ParaDroppingComponent> _paraDroppingQuery;
+    private readonly EntityQuery<HideHealthBarComponent> _hideHealthBarQuery;
     private readonly HashSet<Entity<MobThresholdsComponent>> _healthCandidates = new();
     private readonly Dictionary<EntityUid, CachedHealthProgress> _progressCache = new();
 
@@ -62,6 +64,7 @@ public sealed class EntityHealthBarOverlay : Overlay
         _lookup = _entManager.System<EntityLookupSystem>();
         _crashLandingQuery = _entManager.GetEntityQuery<CrashLandingComponent>();
         _paraDroppingQuery = _entManager.GetEntityQuery<ParaDroppingComponent>();
+        _hideHealthBarQuery = _entManager.GetEntityQuery<HideHealthBarComponent>();
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -91,6 +94,9 @@ public sealed class EntityHealthBarOverlay : Overlay
         {
             var uid = candidate.Owner;
             var mobThresholdsComponent = candidate.Comp;
+            if (_hideHealthBarQuery.HasComp(uid))
+                continue;
+
             if (!mobQuery.TryGetComponent(uid, out var mobStateComponent) ||
                 !damageQuery.TryGetComponent(uid, out var damageableComponent) ||
                 !spriteQuery.TryGetComponent(uid, out var spriteComponent))

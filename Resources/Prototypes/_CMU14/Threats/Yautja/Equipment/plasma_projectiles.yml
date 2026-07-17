@@ -190,25 +190,21 @@
     impactEffect: CMUYautjaPlasmaImpactEffect
     damage:
       types:
-        Heat: 18
-  - type: TriggerOnCollide
-    fixtureID: projectile
-  - type: ExplodeOnTrigger
-  - type: Explosive
-    explosionType: RMC
-    maxIntensity: 8
-    intensitySlope: 5
-    totalIntensity: 24
-    maxTileBreak: 0
-  - type: CMExplosionEffect
-    explosion: CMUYautjaPlasmaImpactEffect
-    shockWave: CMUYautjaPlasmaSmallShockWave
-    minShrapnel: 0
-    maxShrapnel: 0
-  - type: RMCScorchEffect
-    count: 1
-    scatterRadius: 0.5
-    radius: 0
+        Heat: 40
+  - type: ProjectileMaxRange
+    max: 22
+
+- type: entity
+  parent: CMUYautjaPlasmaPistolBolt
+  id: CMUYautjaPlasmaPistolIncendiaryBolt
+  name: incendiary plasma pistol bolt
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Heat: 10
+  - type: YautjaIncendiaryPlasmaProjectile
 
 - type: entity
   parent: CMUYautjaPlasmaBoltBase
@@ -220,29 +216,13 @@
     impactEffect: CMUYautjaPlasmaHeavyImpactEffect
     damage:
       types:
-        Heat: 32
-        Structural: 8
-  - type: IgniteOnCollide
-    fireStacks: 0.35
-  - type: TriggerOnCollide
-    fixtureID: projectile
-  - type: ExplodeOnTrigger
-  - type: Explosive
-    explosionType: RMC
-    maxIntensity: 18
-    intensitySlope: 6
-    totalIntensity: 70
-    maxTileBreak: 1
-  - type: CMExplosionEffect
-    explosion: CMUYautjaPlasmaHeavyImpactEffect
-    shockWave: CMUYautjaPlasmaHeavyShockWave
-    minShrapnel: 3
-    maxShrapnel: 6
-    shrapnelSpeed: 5
-  - type: RMCScorchEffect
-    count: 2
-    scatterRadius: 1
-    radius: 1
+        Heat: 55
+  - type: CMArmorPiercing
+    amount: 50
+  - type: ProjectileMaxRange
+    max: 22
+  - type: YautjaIncendiaryPlasmaProjectile
+  - type: YautjaPlasmaRifleBolt
   - type: PointLight
     color: "#55c7ff"
     radius: 4.25
@@ -254,16 +234,14 @@
   name: stun bolt
   categories: [ HideSpawnMenu ]
   components:
-  - type: StaminaDamageOnCollide
-    damage: 105
-  - type: StunOnCollide
-    stunAmount: 3
-    knockdownAmount: 3
+  - type: YautjaCasterStunProjectile
   - type: Projectile
     impactEffect: CMUYautjaPlasmaImpactEffect
     damage:
       types:
         Heat: 0
+  - type: ProjectileMaxRange
+    max: 22
 
 - type: entity
   parent: CMUYautjaPlasmaBoltBase
@@ -275,19 +253,14 @@
     layers:
     - state: bluespace
       shader: unshaded
-  - type: StaminaDamageOnCollide
-    damage: 142.5
-  - type: StunOnCollide
-    stunAmount: 4
-    knockdownAmount: 4
-    slowdownAmount: 3
-    walkSpeedMultiplier: 0.45
-    runSpeedMultiplier: 0.45
+  - type: YautjaCasterImmobilizerProjectile
   - type: Projectile
     impactEffect: CMUYautjaPlasmaEradicatorImpactEffect
     damage:
       types:
         Heat: 0
+  - type: ProjectileMaxRange
+    max: 20
   - type: PointLight
     color: "#2da4ff"
     radius: 3
@@ -307,16 +280,18 @@
     impactEffect: CMUYautjaPlasmaHeavyImpactEffect
     damage:
       types:
-        Heat: 38
-        Structural: 12
+        Heat: 75
+  - type: ProjectileMaxRange
+    max: 22
+  - type: YautjaCasterSingleLethalProjectile
   - type: TriggerOnCollide
     fixtureID: projectile
   - type: ExplodeOnTrigger
   - type: Explosive
     explosionType: RMC
-    maxIntensity: 30
+    maxIntensity: 50
     intensitySlope: 6
-    totalIntensity: 120
+    totalIntensity: 50
     maxTileBreak: 2
   - type: CMExplosionEffect
     explosion: CMUYautjaPlasmaHeavyImpactEffect
@@ -334,6 +309,12 @@
     energy: 3.2
 
 - type: entity
+  parent: CMUYautjaCasterLethalBolt
+  id: CMUYautjaCasterLanceBolt
+  name: plasma lance bolt
+  categories: [ HideSpawnMenu ]
+
+- type: entity
   parent: CMUYautjaPlasmaBoltBase
   id: CMUYautjaCasterEradicatorBolt
   name: plasma eradicator
@@ -347,16 +328,17 @@
     impactEffect: CMUYautjaPlasmaEradicatorImpactEffect
     damage:
       types:
-        Heat: 70
-        Structural: 24
+        Heat: 55
+  - type: ProjectileMaxRange
+    max: 8
   - type: TriggerOnCollide
     fixtureID: projectile
   - type: ExplodeOnTrigger
   - type: Explosive
     explosionType: RMC
-    maxIntensity: 60
+    maxIntensity: 50
     intensitySlope: 6
-    totalIntensity: 320
+    totalIntensity: 170
     maxTileBreak: 2
   - type: CMExplosionEffect
     explosion: CMUYautjaPlasmaEradicatorImpactEffect

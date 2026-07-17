@@ -1,11 +1,15 @@
 using System.Numerics;
 using Content.Shared._CMU14.Yautja;
+using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Actions;
+using Content.Shared._RMC14.Rules;
 using Content.Shared.Actions;
 using Content.Shared.Item;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.UserInterface;
 using Robust.Shared.Containers;
+using Robust.Shared.Map;
 using Robust.Shared.Timing;
 
 namespace Content.Server._CMU14.Yautja;
@@ -16,10 +20,14 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
     private const int MaxTrackedGear = 12;
     private const float TrackerGroupPrecision = 1f;
     private const float FullCircle = MathF.PI * 2f;
+    private const int MaxClosestSignatureDistance = 900;
+    private const string DeadYautjaBioSignatureName = "deceased Yautja bio signature";
     private static readonly TimeSpan TrackerRefreshEvery = TimeSpan.FromSeconds(1);
 
+    [Dependency] private AreaSystem _areas = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private YautjaMarkSystem _marks = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -28,6 +36,7 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
     [Dependency] private YautjaPowerSystem _power = default!;
     [Dependency] private YautjaSelfDestructSystem _selfDestruct = default!;
     [Dependency] private YautjaThrallSystem _thralls = default!;
+    [Dependency] private YautjaYoungbloodSystem _youngbloods = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     private TimeSpan _nextTrackerRefresh;
@@ -35,6 +44,7 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<YautjaBracerComponent, YautjaOpenBracerMenuActionEvent>(OnOpenMenu);
+        SubscribeLocalEvent<YautjaBracerComponent, YautjaTrackGearActionEvent>(OnTrackGear);
 
         Subs.BuiEvents<YautjaBracerComponent>(YautjaBracerUIKey.Key, subs =>
         {
@@ -62,6 +72,28 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
     }
 
     private void OnOpenMenu(Entity<YautjaBracerComponent> ent, ref YautjaOpenBracerMenuActionEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        if (!_rmcActions.TryUseAction(args))
+            return;
+
+        args.Handled = true;
+        TryOpenTracker(ent, args.Performer);
+    }
+
+    public bool TryOpenTracker(Entity<YautjaBracerComponent> bracer, EntityUid user)
+    {
+        if (!CanUseMenu(bracer, user))
+            return false;
+
+        _ui.TryOpenUi(bracer.Owner, YautjaBracerUIKey.Key, user);
+        UpdateUi(bracer, user);
+        return true;
+    }
+
+    private void OnTrackGear(Entity<YautjaBracerComponent> ent, ref YautjaTrackGearActionEvent args)
     {
         if (args.Handled)
             return;
@@ -110,6 +142,9 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
             case YautjaBracerPanelCommand.ToggleThrallBracerLock:
                 _thralls.TryToggleLinkedThrallBracerLock(ent, args.Actor);
                 break;
+            case YautjaBracerPanelCommand.RemoteExecuteYoungblood:
+                _youngbloods.TryOpenRemoteExecution(ent, args.Actor);
+                break;
             case YautjaBracerPanelCommand.OpenTranslator:
                 _utility.TryOpenTranslator(ent, args.Actor);
                 break;
@@ -129,10 +164,7 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
                 _utility.TryCreateHuntingTrap(ent, args.Actor);
                 break;
             case YautjaBracerPanelCommand.ToggleSelfDestruct:
-                if (ent.Comp.SelfDestructArmed)
-                    _selfDestruct.TryCancelSelfDestruct(ent, args.Actor);
-                else
-                    _selfDestruct.TryArmSelfDestruct(ent, args.Actor);
+                _selfDestruct.TryOpenSelfDestructDialog(ent, args.Actor);
                 break;
             case YautjaBracerPanelCommand.RefreshTracker:
                 break;
@@ -153,6 +185,7 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
             out var thrallSelfDestructArmed,
             out var thrallBracerLocked);
 
+        var tracker = BuildTracker(actor, bracer.Owner);
         var state = new YautjaBracerPanelState(
             (int) bracer.Comp.Charge,
             (int) bracer.Comp.MaxCharge,
@@ -163,48 +196,53 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
             thrallLinked,
             thrallSelfDestructArmed,
             thrallBracerLocked,
-            BuildTracker(actor, bracer.Owner));
+            tracker.Readout,
+            tracker.Entries);
 
         _ui.SetUiState(bracer.Owner, YautjaBracerUIKey.Key, state);
     }
 
-    private List<YautjaGearTrackerEntry> BuildTracker(EntityUid user, EntityUid bracer)
+    private TrackerBuildResult BuildTracker(EntityUid user, EntityUid bracer)
     {
         var origin = _transform.GetMapCoordinates(user);
+        var readout = new TrackerReadoutBuilder();
         var groups = new Dictionary<(int X, int Y), TrackerSignalGroup>();
-        var query = EntityQueryEnumerator<YautjaTechItemComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out _, out _))
+        var query = EntityQueryEnumerator<TransformComponent>();
+        while (query.MoveNext(out var uid, out var xform))
         {
             if (uid == bracer ||
-                Deleted(uid) ||
-                !HasComp<ItemComponent>(uid) ||
-                ShouldHideFromTracker(uid))
+                Deleted(uid))
             {
                 continue;
             }
 
             var coords = _transform.GetMapCoordinates(uid);
-            if (coords.MapId != origin.MapId)
+            if (coords.MapId == MapId.Nullspace)
                 continue;
 
-            var offset = coords.Position - origin.Position;
-            var distance = MathF.Ceiling(offset.Length());
-            var angle = GetBearingRadians(offset);
-            var direction = GetDirection(angle);
-            var bearing = (int) MathF.Round(angle / FullCircle * 360f);
-            if (bearing == 360)
-                bearing = 0;
-
-            var key = GetTrackerGroupKey(coords.Position);
-            if (!groups.TryGetValue(key, out var group))
+            if (HasComp<YautjaComponent>(uid) &&
+                _mobState.IsDead(uid))
             {
-                group = new TrackerSignalGroup((byte) direction, (int) distance, bearing);
-                groups.Add(key, group);
+                readout.AddDead(GetTrackerLevelBucket(uid, xform, coords, origin));
+                if (coords.MapId == origin.MapId)
+                {
+                    AddTrackerSignal(groups, origin, coords, DeadYautjaBioSignatureName, readout, null);
+                }
+
+                continue;
             }
 
-            group.Names.Add(Name(uid));
-            if (distance < group.Distance)
-                group.SetNearest((byte) direction, (int) distance, bearing);
+            if (!HasComp<ItemComponent>(uid) ||
+                !IsTrackedItem(uid) ||
+                xform.Anchored ||
+                ShouldHideFromTracker(uid))
+            {
+                continue;
+            }
+
+            readout.AddGear(GetTrackerLevelBucket(uid, xform, coords, origin));
+            if (coords.MapId == origin.MapId)
+                AddTrackerSignal(groups, origin, coords, Name(uid), readout, Name(uid));
         }
 
         var tracked = new List<YautjaGearTrackerEntry>(groups.Count);
@@ -223,7 +261,101 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
         if (tracked.Count > MaxTrackedGear)
             tracked.RemoveRange(MaxTrackedGear, tracked.Count - MaxTrackedGear);
 
-        return tracked;
+        return new TrackerBuildResult(tracked, readout.Build());
+    }
+
+    private void AddTrackerSignal(
+        Dictionary<(int X, int Y), TrackerSignalGroup> groups,
+        MapCoordinates origin,
+        MapCoordinates coords,
+        string name,
+        TrackerReadoutBuilder readout,
+        string? closestName)
+    {
+        var offset = coords.Position - origin.Position;
+        var distance = MathF.Ceiling(offset.Length());
+        var angle = GetBearingRadians(offset);
+        var direction = GetDirection(angle);
+        var bearing = (int) MathF.Round(angle / FullCircle * 360f);
+        if (bearing == 360)
+            bearing = 0;
+
+        var key = GetTrackerGroupKey(coords.Position);
+        if (!groups.TryGetValue(key, out var group))
+        {
+            group = new TrackerSignalGroup((byte) direction, (int) distance, bearing);
+            groups.Add(key, group);
+        }
+
+        group.Names.Add(name);
+        if (distance < group.Distance)
+            group.SetNearest((byte) direction, (int) distance, bearing);
+
+        readout.TrySetClosest((int) distance, (byte) direction, bearing, closestName, GetTrackerAreaName(coords));
+    }
+
+    private bool IsTrackedItem(EntityUid uid)
+    {
+        if (HasComp<YautjaTrackedItemComponent>(uid))
+            return true;
+
+        return HasComp<YautjaTechItemComponent>(uid) &&
+               !HasComp<YautjaUntrackedItemComponent>(uid);
+    }
+
+    private string GetTrackerAreaName(MapCoordinates coords)
+    {
+        return _areas.TryGetArea(coords, out _, out var areaPrototype)
+            ? areaPrototype.Name
+            : Loc.GetString("rmc-tacmap-alert-no-area");
+    }
+
+    private TrackerLevelBucket GetTrackerLevelBucket(EntityUid uid, TransformComponent xform, MapCoordinates coords, MapCoordinates origin)
+    {
+        if (_areas.TryGetArea(coords, out var area, out var areaPrototype))
+        {
+            if (IsCmss13MainshipTrackerArea(area.Value.Comp.PowerNet, areaPrototype.ID))
+                return TrackerLevelBucket.Orbit;
+
+            if (IsCmss13LowOrbitTrackerArea(area.Value.Comp.PowerNet, areaPrototype.ID))
+                return TrackerLevelBucket.LowOrbit;
+
+            return TrackerLevelBucket.HuntingGrounds;
+        }
+
+        if (IsPlanetOrGroundMap(xform))
+            return TrackerLevelBucket.HuntingGrounds;
+
+        return coords.MapId == origin.MapId
+            ? TrackerLevelBucket.HuntingGrounds
+            : TrackerLevelBucket.LowOrbit;
+    }
+
+    private bool IsPlanetOrGroundMap(TransformComponent xform)
+    {
+        return xform.GridUid is { } grid && HasComp<RMCPlanetComponent>(grid) ||
+               xform.MapUid is { } map && HasComp<RMCPlanetComponent>(map);
+    }
+
+    public static bool IsCmss13MainshipTrackerArea(string? powerNet, string areaPrototypeId)
+    {
+        return IsPowerNet(powerNet, "almayer") ||
+               IsPowerNet(powerNet, "warship") ||
+               IsPowerNet(powerNet, "bush") ||
+               areaPrototypeId.Contains("Almayer", StringComparison.OrdinalIgnoreCase);
+    }
+
+    public static bool IsCmss13LowOrbitTrackerArea(string? powerNet, string areaPrototypeId)
+    {
+        return IsPowerNet(powerNet, "ert") ||
+               IsPowerNet(powerNet, "fax") ||
+               IsPowerNet(powerNet, "faxexterior") ||
+               areaPrototypeId.Contains("Space", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsPowerNet(string? powerNet, string expected)
+    {
+        return string.Equals(powerNet, expected, StringComparison.OrdinalIgnoreCase);
     }
 
     private bool ShouldHideFromTracker(EntityUid uid)
@@ -324,9 +456,7 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
 
     private bool CanUseMenu(Entity<YautjaBracerComponent> bracer, EntityUid user, bool popup = true)
     {
-        if (bracer.Comp.User == user &&
-            _power.TryGetWornBracer(user, out var worn) &&
-            worn.Owner == bracer.Owner)
+        if (IsWornBy(bracer, user))
         {
             return true;
         }
@@ -335,6 +465,13 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("cmu-yautja-bracer-must-be-worn"), user, user, PopupType.SmallCaution);
 
         return false;
+    }
+
+    private bool IsWornBy(Entity<YautjaBracerComponent> bracer, EntityUid user)
+    {
+        return bracer.Comp.User == user &&
+               _power.TryGetWornBracer(user, out var worn) &&
+               worn.Owner == bracer.Owner;
     }
 
     private sealed partial class TrackerSignalGroup(byte direction, int distance, int bearing)
@@ -350,5 +487,102 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
             Distance = distance;
             Bearing = bearing;
         }
+    }
+
+    private sealed class TrackerBuildResult(List<YautjaGearTrackerEntry> entries, YautjaTrackerReadout readout)
+    {
+        public readonly List<YautjaGearTrackerEntry> Entries = entries;
+        public readonly YautjaTrackerReadout Readout = readout;
+    }
+
+    private sealed class TrackerReadoutBuilder
+    {
+        private int _closestDistance = int.MaxValue;
+        private byte _closestDirection;
+        private int _closestBearing;
+        private string? _closestName;
+        private string? _closestArea;
+
+        public int DeadHuntingGrounds;
+        public int DeadOrbit;
+        public int DeadLowOrbit;
+        public int GearHuntingGrounds;
+        public int GearOrbit;
+        public int GearLowOrbit;
+
+        public void AddDead(TrackerLevelBucket bucket)
+        {
+            switch (bucket)
+            {
+                case TrackerLevelBucket.HuntingGrounds:
+                    DeadHuntingGrounds++;
+                    break;
+                case TrackerLevelBucket.Orbit:
+                    DeadOrbit++;
+                    break;
+                case TrackerLevelBucket.LowOrbit:
+                    DeadLowOrbit++;
+                    break;
+            }
+        }
+
+        public void AddGear(TrackerLevelBucket bucket)
+        {
+            switch (bucket)
+            {
+                case TrackerLevelBucket.HuntingGrounds:
+                    GearHuntingGrounds++;
+                    break;
+                case TrackerLevelBucket.Orbit:
+                    GearOrbit++;
+                    break;
+                case TrackerLevelBucket.LowOrbit:
+                    GearLowOrbit++;
+                    break;
+            }
+        }
+
+        public void TrySetClosest(int distance, byte direction, int bearing, string? name, string area)
+        {
+            if (distance >= MaxClosestSignatureDistance)
+                return;
+
+            if (distance > _closestDistance ||
+                distance == _closestDistance && (_closestName != null || name == null))
+            {
+                return;
+            }
+
+            _closestDistance = distance;
+            _closestDirection = direction;
+            _closestBearing = bearing;
+            _closestName = name;
+            _closestArea = area;
+        }
+
+        public YautjaTrackerReadout Build()
+        {
+            var closestPresent = _closestDistance < MaxClosestSignatureDistance;
+            return new YautjaTrackerReadout(
+                DeadHuntingGrounds,
+                DeadOrbit,
+                DeadLowOrbit,
+                GearHuntingGrounds,
+                GearOrbit,
+                GearLowOrbit,
+                closestPresent,
+                _closestName,
+                closestPresent ? _closestDistance : 0,
+                _closestDirection,
+                _closestBearing,
+                _closestArea);
+        }
+    }
+
+    private enum TrackerLevelBucket : byte
+    {
+        HuntingGrounds,
+        Orbit,
+        LowOrbit,
     }
 }

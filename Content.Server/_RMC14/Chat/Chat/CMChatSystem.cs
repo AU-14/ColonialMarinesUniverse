@@ -12,6 +12,7 @@ using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Mentor.ImaginaryFriend;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
+using ManageHiveComponent = Content.Shared._RMC14.Xenonids.ManageHive.ManageHiveComponent;
 using Content.Shared.AU14;
 using Content.Shared.Chat;
 using Content.Shared.Inventory;
@@ -74,6 +75,47 @@ public sealed partial class CMChatSystem : SharedCMChatSystem
             args.Recipients.Remove(session);
     }
 
+    private void OnXenoAfterGetRecipients(Entity<XenoComponent> ent, ref ChatMessageAfterGetRecipients args)
+    {
+        _toRemove.Clear();
+        var hive = _hive.GetHive(ent.Owner);
+        var hivebroken = IsHivebrokenXeno(ent.Owner);
+        foreach (var (session, data) in args.Recipients)
+        {
+            if (data.Observer)
+                continue;
+
+            if (CanHearXenoSpeech(ent.Owner, session.AttachedEntity, hivebroken, hive))
+                continue;
+
+            _toRemove.Add(session);
+        }
+
+        foreach (var session in _toRemove)
+        {
+            args.Recipients.Remove(session);
+        }
+    }
+
+    private bool CanHearXenoSpeech(
+        EntityUid source,
+        EntityUid? listener,
+        bool hivebroken,
+        Entity<HiveComponent>? hive)
+    {
+        if (!hivebroken)
+        {
+            return HasComp<XenoComponent>(listener) ||
+                   HasComp<HasKnowledgeOfXenoLanguageComponent>(listener) ||
+                   (HasComp<ManageHiveComponent>(source) && hive is not null && hive.Value.Comp.Corrupted);
+        }
+
+        return HasComp<XenoComponent>(listener) ||
+               HasComp<HasKnowledgeOfXenoLanguageComponent>(listener) ||
+               HasComp<YautjaComponent>(listener) ||
+               HasComp<YautjaThrallComponent>(listener) ||
+               HasComp<YautjaHivebrokenXenoComponent>(listener);
+    }
 
     public override string SanitizeMessageReplaceWords(EntityUid source, string msg)
     {

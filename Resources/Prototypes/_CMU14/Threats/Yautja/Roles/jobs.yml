@@ -17,6 +17,55 @@
         RMCSkillMedical: 3
         RMCSkillSurgery: 2
 
+- type: job
+  parent: CMJobBase
+  id: CMUYautjaHellhound
+  name: cmu-yautja-job-name-hellhound
+  description: cmu-yautja-job-description-hellhound
+  playTimeTracker: CMUYautjaHellhound
+  icon: CMJobIconEmpty
+  supervisors: cm-job-supervisors-nobody
+  joinNotifyCrew: false
+  hidden: true
+  canBeAntag: false
+  jobEntity: CMUMobYautjaHellhound
+  jobPreviewEntity: CMUMobYautjaHellhound
+  usePlayerProfile: false
+
+- type: job
+  parent: CMJobBase
+  id: CMUYautjaYoungblood
+  name: cmu-yautja-job-name-youngblood
+  description: cmu-yautja-job-description-youngblood
+  playTimeTracker: CMUYautjaYoungblood
+  icon: CMJobIconEmpty
+  supervisors: cm-job-supervisors-nobody
+  joinNotifyCrew: false
+  hidden: true
+  canBeAntag: false
+  whitelisted: false
+  jobEntity: CMUMobYautjaYoungblood
+  jobPreviewEntity: CMUMobYautjaYoungblood
+  startingGear: CMUYautjaYoungbloodGear
+  usePlayerProfile: false
+
+- type: job
+  parent: CMJobBase
+  id: CMUYautjaBadBlood
+  name: cmu-yautja-job-name-badblood
+  description: cmu-yautja-job-description-badblood
+  playTimeTracker: CMUYautjaBadBlood
+  icon: CMJobIconEmpty
+  supervisors: cm-job-supervisors-nobody
+  joinNotifyCrew: false
+  hidden: true
+  canBeAntag: false
+  whitelisted: true
+  jobEntity: CMUMobYautjaBadBlood
+  jobPreviewEntity: CMUMobYautjaBadBlood
+  startingGear: CMUYautjaBadBloodGear
+  usePlayerProfile: false
+
 - type: startingGear
   id: CMUYautjaHunterGear
   equipment:
@@ -40,6 +89,30 @@
     - CMUYautjaHuntingPouch
     - CMUYautjaToolbeltFilled
     - CMUYautjaHoundObservationPad
+
+- type: startingGear
+  id: CMUYautjaYoungbloodGear
+  equipment:
+    ears: CMUYautjaCommunicator
+    gloves: CMUYautjaBracer
+
+- type: startingGear
+  id: CMUYautjaBadBloodGear
+  equipment:
+    ears: CMUYautjaBadBloodCommunicator
+    mask: CMUYautjaMaskBadBloodPatchwork
+    gloves: CMUYautjaBadBloodBracer
+    back: CMUYautjaCloakPack
+    outerClothing: CMUYautjaBadBloodArmorPatchwork
+    jumpsuit: CMUYautjaBodyMeshScalable
+    shoes: CMUYautjaBadBloodGreavesPatchwork
+    belt: CMUYautjaTrophyBelt
+    pocket2: CMUYautjaMedicompSurvivor
+  storage:
+    back:
+    - CMUYautjaHuntingPouch
+    - CMUYautjaCleanserGelVial
+    - CMUYautjaHivebreaker
 
 - type: startingGear
   parent: CMUYautjaHunterGear
@@ -466,6 +539,15 @@
 
 - type: playTimeTracker
   id: CMUYautjaHunter
+
+- type: playTimeTracker
+  id: CMUYautjaHellhound
+
+- type: playTimeTracker
+  id: CMUYautjaYoungblood
+
+- type: playTimeTracker
+  id: CMUYautjaBadBlood
 
 - type: jobIcon
   parent: CMJobIconBase

@@ -6,6 +6,7 @@ using Content.Shared.Roles;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 
 namespace Content.Shared._RMC14.Vendors;
@@ -102,4 +103,14 @@ public sealed partial class CMAutomatedVendorComponent : Component
     /// </summary>
     [AutoNetworkedField]
     public int CachedFactionWinPoints;
+
+    [DataField, AutoNetworkedField]
+    public CMVendorUiStyle UiStyle = CMVendorUiStyle.Default;
+}
+
+[Serializable, NetSerializable]
+public enum CMVendorUiStyle : byte
+{
+    Default,
+    Yautja,
 }

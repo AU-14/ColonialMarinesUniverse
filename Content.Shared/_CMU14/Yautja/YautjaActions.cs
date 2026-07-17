@@ -1,5 +1,6 @@
 using Content.Shared.Actions;
 using Content.Shared.Inventory;
+using Content.Shared._RMC14.Dialog;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._CMU14.Yautja;
@@ -12,21 +13,66 @@ public sealed partial class YautjaToggleCloakActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaOpenMarkPanelActionEvent : InstantActionEvent;
 
+public sealed partial class YautjaMarkForHuntActionEvent : EntityTargetActionEvent;
+
+public sealed partial class YautjaLeapActionEvent : WorldTargetActionEvent;
+
 public sealed partial class YautjaOpenBracerMenuActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaRecallActionEvent : InstantActionEvent;
 
+public sealed partial class YautjaCallDiscActionEvent : InstantActionEvent;
+
+public sealed partial class YautjaCallCombiActionEvent : InstantActionEvent;
+
+public sealed partial class YautjaButcherActionEvent : InstantActionEvent;
+
+public sealed partial class YautjaFalconControlActionEvent : InstantActionEvent;
+
+public sealed partial class YautjaFalconRecallActionEvent : InstantActionEvent;
+
 public sealed partial class YautjaSelfDestructActionEvent : InstantActionEvent;
+
+[ByRefEvent]
+public readonly record struct YautjaSelfDestructArmedEvent(EntityUid Bracer, EntityUid Hunter, EntityUid Victim, bool Remote);
+
+[Serializable, NetSerializable]
+public sealed record YautjaSelfDestructConfirmArmEvent(NetEntity User);
+
+[Serializable, NetSerializable]
+public sealed record YautjaSelfDestructConfirmCancelEvent(NetEntity User);
+
+[Serializable, NetSerializable]
+public sealed record YautjaSelfDestructConfirmRemoteDeadVictimEvent(NetEntity User, NetEntity Victim, NetEntity VictimBracer);
+
+public sealed partial class YautjaChangeExplosionTypeActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaToggleBracerLockActionEvent : InstantActionEvent;
 
+[Serializable, NetSerializable]
+public sealed record YautjaBracerConfirmDeadHunterLockEvent(NetEntity User, NetEntity Victim, NetEntity VictimBracer);
+
 public sealed partial class YautjaTranslatorActionEvent : InstantActionEvent;
 
+public sealed partial class YautjaAudioPanelActionEvent : InstantActionEvent;
+
 public sealed partial class YautjaToggleBracerIdChipActionEvent : InstantActionEvent;
+
+public sealed partial class YautjaToggleBracerNotificationSoundActionEvent : InstantActionEvent;
+
+public sealed partial class YautjaToggleBracerNameActionEvent : InstantActionEvent;
+
+public sealed partial class YautjaTrackGearActionEvent : InstantActionEvent;
+
+public sealed partial class YautjaAddTrackedItemActionEvent : InstantActionEvent;
+
+public sealed partial class YautjaRemoveTrackedItemActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaCreateStabilisingCrystalActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaCreateHumanStabilisingCrystalActionEvent : InstantActionEvent;
+
+public sealed partial class YautjaCreateHealingCapsuleActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaCreateHuntingTrapActionEvent : InstantActionEvent;
 
@@ -38,9 +84,14 @@ public sealed partial class YautjaStunThrallActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaSelfDestructThrallActionEvent : InstantActionEvent;
 
+[Serializable, NetSerializable]
+public sealed record YautjaThrallSelfDestructConfirmEvent(NetEntity Master, NetEntity ThrallBracer);
+
 public sealed partial class YautjaToggleThrallBracerLockActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaToggleCasterActionEvent : InstantActionEvent;
+
+public sealed partial class YautjaUsePlasmaCannonsActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaToggleWristBladesActionEvent : InstantActionEvent;
 
@@ -49,6 +100,19 @@ public sealed partial class YautjaToggleScimitarActionEvent : InstantActionEvent
 public sealed partial class YautjaToggleShieldActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaToggleChainGauntletActionEvent : InstantActionEvent;
+
+public sealed partial class YautjaRemoveBracerAttachmentsActionEvent : InstantActionEvent;
+
+public sealed partial class YautjaGuardChainGauntletActionEvent : InstantActionEvent;
+
+[Serializable, NetSerializable]
+public sealed record YautjaBracerAttachmentSlotSelectedEvent(NetEntity User, NetEntity Gear, YautjaGearKind Kind, bool SecondarySlot);
+
+[Serializable, NetSerializable]
+public sealed record YautjaHivebreakerConsentAcceptedEvent(NetEntity User, NetEntity Target, NetEntity Hivebreaker);
+
+[Serializable, NetSerializable]
+public sealed record YautjaHivebreakerConsentRejectedEvent(NetEntity User);
 
 public sealed partial class YautjaVoiceClickActionEvent : InstantActionEvent;
 
@@ -66,6 +130,12 @@ public sealed partial class YautjaVoiceDeathCryActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaVoiceDeathLaughActionEvent : InstantActionEvent;
 
+public sealed partial class YautjaHellhoundSenseOwnerActionEvent : InstantActionEvent;
+
+public sealed partial class YautjaAddTeleporterLocationActionEvent : InstantActionEvent;
+
+public sealed partial class YautjaFoldCombistickActionEvent : InstantActionEvent;
+
 public sealed partial class YautjaAbominationRushActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaAbominationRoarActionEvent : InstantActionEvent;
@@ -75,6 +145,9 @@ public sealed partial class YautjaAbominationToggleFrenzyModeActionEvent : Insta
 public sealed partial class YautjaAbominationSmashActionEvent : EntityTargetActionEvent;
 
 public sealed partial class YautjaAbominationFrenzyActionEvent : EntityTargetActionEvent;
+
+[Serializable, NetSerializable]
+public sealed record YautjaSleepingHellhoundConfirmEvent(NetEntity User);
 
 [ByRefEvent]
 public readonly record struct YautjaBracerUnequippedEvent(EntityUid User, SlotFlags SlotFlags);
@@ -98,9 +171,37 @@ public enum YautjaTranslatorUIKey : byte
 }
 
 [Serializable, NetSerializable]
+public enum YautjaAudioPanelUIKey : byte
+{
+    Key,
+}
+
+[Serializable, NetSerializable]
+public enum YautjaRelayBeaconUIKey : byte
+{
+    Key,
+}
+
+[Serializable, NetSerializable]
 public enum YautjaBracerUIKey : byte
 {
     Key,
+}
+
+[Serializable, NetSerializable]
+public enum YautjaGearRackVisuals : byte
+{
+    State,
+}
+
+[Serializable, NetSerializable]
+public enum YautjaGearRackVisualState : byte
+{
+    Left,
+    LeftCentre,
+    Centre,
+    RightCentre,
+    Right,
 }
 
 [Serializable, NetSerializable]
@@ -112,6 +213,7 @@ public enum YautjaBracerPanelCommand : byte
     StunThrall,
     ToggleThrallSelfDestruct,
     ToggleThrallBracerLock,
+    RemoteExecuteYoungblood,
     OpenTranslator,
     ToggleBracerLock,
     ToggleBracerIdChip,
@@ -133,6 +235,7 @@ public sealed class YautjaBracerPanelState(
     bool thrallLinked,
     bool thrallSelfDestructArmed,
     bool thrallBracerLocked,
+    YautjaTrackerReadout trackerReadout,
     List<YautjaGearTrackerEntry> trackedGear) : BoundUserInterfaceState
 {
     public readonly int Charge = charge;
@@ -144,7 +247,117 @@ public sealed class YautjaBracerPanelState(
     public readonly bool ThrallLinked = thrallLinked;
     public readonly bool ThrallSelfDestructArmed = thrallSelfDestructArmed;
     public readonly bool ThrallBracerLocked = thrallBracerLocked;
+    public readonly YautjaTrackerReadout TrackerReadout = trackerReadout;
     public readonly List<YautjaGearTrackerEntry> TrackedGear = trackedGear;
+}
+
+[Serializable, NetSerializable]
+public sealed class YautjaTrackerReadout(
+    int deadHuntingGrounds,
+    int deadOrbit,
+    int deadLowOrbit,
+    int gearHuntingGrounds,
+    int gearOrbit,
+    int gearLowOrbit,
+    bool closestPresent,
+    string? closestName,
+    int closestDistance,
+    byte closestDirection,
+    int closestBearing,
+    string? closestArea)
+{
+    public readonly int DeadHuntingGrounds = deadHuntingGrounds;
+    public readonly int DeadOrbit = deadOrbit;
+    public readonly int DeadLowOrbit = deadLowOrbit;
+    public readonly int GearHuntingGrounds = gearHuntingGrounds;
+    public readonly int GearOrbit = gearOrbit;
+    public readonly int GearLowOrbit = gearLowOrbit;
+    public readonly bool ClosestPresent = closestPresent;
+    public readonly string? ClosestName = closestName;
+    public readonly int ClosestDistance = closestDistance;
+    public readonly byte ClosestDirection = closestDirection;
+    public readonly int ClosestBearing = closestBearing;
+    public readonly string? ClosestArea = closestArea;
+
+    public List<string> GetCmss13ReadoutLines()
+    {
+        var lines = new List<string>();
+
+        if (DeadHuntingGrounds > 0 || DeadOrbit > 0 || DeadLowOrbit > 0)
+        {
+            lines.Add("Your bracer shows a readout of deceased Yautja bio signatures" +
+                      $"{GetCmss13BucketReadout(DeadHuntingGrounds, DeadOrbit, DeadLowOrbit)}.");
+        }
+
+        if (GearHuntingGrounds > 0 || GearOrbit > 0 || GearLowOrbit > 0)
+        {
+            lines.Add("Your bracer shows a readout of Yautja technology signatures" +
+                      $"{GetCmss13BucketReadout(GearHuntingGrounds, GearOrbit, GearLowOrbit)}.");
+        }
+
+        if (ClosestPresent)
+        {
+            if (ClosestDistance == 0)
+            {
+                var closestItem = string.IsNullOrWhiteSpace(ClosestName)
+                    ? string.Empty
+                    : $" <b>{ClosestName}</b>'s";
+                lines.Add($"You are directly on top of the{closestItem} signature.");
+            }
+            else
+            {
+                var closestItem = string.IsNullOrWhiteSpace(ClosestName)
+                    ? string.Empty
+                    : $", a <b>{ClosestName}</b>";
+                var distance = ClosestDistance > 10
+                    ? $"approximately <b>{RoundCmss13TrackerDistance(ClosestDistance)}</b>"
+                    : $"<b>{ClosestDistance}</b>";
+                lines.Add($"The closest signature{closestItem}, is {distance} paces " +
+                          $"<b>{GetCmss13DirectionText(ClosestDirection)}</b> in " +
+                          $"<b>{ClosestArea ?? "Unknown"}</b>.");
+            }
+        }
+
+        if (lines.Count == 0)
+            lines.Add("There are no signatures that require your attention.");
+
+        return lines;
+    }
+
+    private static string GetCmss13BucketReadout(int huntingGrounds, int orbit, int lowOrbit)
+    {
+        var entries = new List<string>(3);
+
+        if (huntingGrounds > 0)
+            entries.Add($", <b>{huntingGrounds}</b> in the hunting grounds");
+
+        if (orbit > 0)
+            entries.Add($", <b>{orbit}</b> in orbit");
+
+        if (lowOrbit > 0)
+            entries.Add($", <b>{lowOrbit}</b> in low orbit");
+
+        return string.Concat(entries);
+    }
+
+    private static int RoundCmss13TrackerDistance(int distance)
+    {
+        return distance / 10 * 10;
+    }
+
+    private static string GetCmss13DirectionText(byte direction)
+    {
+        return direction switch
+        {
+            0 => "north",
+            1 => "northeast",
+            2 => "southeast",
+            3 => "south",
+            4 => "southwest",
+            5 => "northwest",
+            _ => "unknown direction",
+        };
+    }
 }
 
 [Serializable, NetSerializable]
@@ -200,6 +413,9 @@ public sealed class YautjaMarkPanelUnmarkMsg(NetEntity target, YautjaMarkKind ki
 }
 
 [Serializable, NetSerializable]
+public sealed record YautjaBloodedThrallNameEvent(NetEntity Hunter, NetEntity Target, string Message = "") : DialogInputEvent(Message);
+
+[Serializable, NetSerializable]
 public sealed class YautjaThrallSendMessageMsg(string message) : BoundUserInterfaceMessage
 {
     public readonly string Message = message;
@@ -220,6 +436,49 @@ public sealed class YautjaTranslatorSendMessageMsg(string message) : BoundUserIn
     public readonly string Message = message;
 }
 
+[Serializable, NetSerializable]
+public sealed class YautjaAudioPanelState(List<YautjaAudioPanelEntry> entries, TimeSpan cooldownRemaining) : BoundUserInterfaceState
+{
+    public readonly List<YautjaAudioPanelEntry> Entries = entries;
+    public readonly TimeSpan CooldownRemaining = cooldownRemaining;
+}
+
+[Serializable, NetSerializable]
+public sealed class YautjaAudioPanelEntry(string emoteId, string name, string category)
+{
+    public readonly string EmoteId = emoteId;
+    public readonly string Name = name;
+    public readonly string Category = category;
+}
+
+[Serializable, NetSerializable]
+public sealed class YautjaAudioPanelEmoteMsg(string emoteId) : BoundUserInterfaceMessage
+{
+    public readonly string EmoteId = emoteId;
+}
+
+[Serializable, NetSerializable]
+public sealed class YautjaRelayBeaconState(List<YautjaRelayBeaconDestinationEntry> destinations) : BoundUserInterfaceState
+{
+    public readonly List<YautjaRelayBeaconDestinationEntry> Destinations = destinations;
+}
+
+[Serializable, NetSerializable]
+public sealed class YautjaRelayBeaconDestinationEntry(YautjaRelayDestinationKind kind, string name, bool available, int customIndex = -1)
+{
+    public readonly YautjaRelayDestinationKind Kind = kind;
+    public readonly string Name = name;
+    public readonly bool Available = available;
+    public readonly int CustomIndex = customIndex;
+}
+
+[Serializable, NetSerializable]
+public sealed class YautjaRelayBeaconDestinationMsg(YautjaRelayDestinationKind destination, int customIndex = -1) : BoundUserInterfaceMessage
+{
+    public readonly YautjaRelayDestinationKind Destination = destination;
+    public readonly int CustomIndex = customIndex;
+}
+
 [ByRefEvent]
 public record struct YautjaMarkAttemptEvent(EntityUid Hunter, EntityUid Target, YautjaMarkKind Kind, string? Reason, bool Cancelled = false);
 
@@ -230,4 +489,9 @@ public record struct YautjaMarkAppliedEvent(EntityUid Hunter, EntityUid Target, 
 public record struct YautjaMarkRemoveAttemptEvent(EntityUid Hunter, EntityUid Target, YautjaMarkKind Kind, bool Cancelled = false);
 
 [ByRefEvent]
-public record struct YautjaMarkRemovedEvent(EntityUid Hunter, EntityUid Target, YautjaMarkKind Kind);
+public record struct YautjaMarkRemovedEvent(
+    EntityUid Hunter,
+    EntityUid Target,
+    YautjaMarkKind Kind,
+    bool CleanupOnly = false,
+    bool TargetDestroyed = false);

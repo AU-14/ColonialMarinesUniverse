@@ -95,6 +95,7 @@ public sealed partial class GhostRoleComponent : Component
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite)]
     [DataField("reregister")]
+    [Access(typeof(GhostRoleSystem), Other = AccessPermissions.ReadWriteExecute)] // Runtime-created roles configure this.
     public bool ReregisterOnGhost { get; set; } = true;
 
     /// <summary>

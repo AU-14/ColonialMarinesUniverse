@@ -1,6 +1,7 @@
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using Content.Client._CMU14.Yautja.Lobby;
 using Content.Client._RMC14.NamedItems;
 using Content.Client.Humanoid;
 using Content.Client.Lobby.UI.Loadouts;
@@ -73,6 +74,8 @@ namespace Content.Client.Lobby.UI
 
         // One at a time.
         private LoadoutWindow? _loadoutWindow;
+
+        private YautjaProfileEditor? _yautjaTab;
 
         private bool _exporting;
         private bool _imaging;
@@ -732,9 +735,39 @@ namespace Content.Client.Lobby.UI
             NamedItems.Armor.OnTextChanged += args => SetItemName(RMCNamedItemType.Armor, args.Text);
             NamedItems.Sentry.OnTextChanged += args => SetItemName(RMCNamedItemType.Sentry, args.Text);
 
+            _requirements.Updated += RefreshYautjaTab;
+            RefreshYautjaTab();
             UpdateSpeciesGuidebookIcon();
             CrtLobbyTheme.Apply(this);
             IsDirty = false;
+        }
+
+        private void RefreshYautjaTab()
+        {
+            if (!_requirements.CanCustomizeWhitelistedJob("CMUYautjaHunter"))
+            {
+                if (_yautjaTab != null)
+                {
+                    TabContainer.RemoveChild(_yautjaTab);
+                    _yautjaTab = null;
+                }
+
+                return;
+            }
+
+            if (_yautjaTab == null)
+            {
+                _yautjaTab = new YautjaProfileEditor();
+                _yautjaTab.OnProfileChanged += profile =>
+                {
+                    Profile = profile;
+                    SetDirty();
+                };
+                TabContainer.AddChild(_yautjaTab);
+                TabContainer.SetTabTitle(TabContainer.ChildCount - 1, Loc.GetString("cmu-yautja-lobby-tab"));
+            }
+
+            _yautjaTab.SetProfile(Profile);
         }
 
         /// <summary>
@@ -1322,6 +1355,7 @@ namespace Content.Client.Lobby.UI
             RefreshOrigins();
             RefreshTraits();
             RefreshFlavorText();
+            RefreshYautjaTab();
             ReloadPreview();
 
             if (Profile != null)
@@ -1954,6 +1988,7 @@ namespace Content.Client.Lobby.UI
 
             _loadoutWindow?.Close();
             _loadoutWindow = null;
+            _requirements.Updated -= RefreshYautjaTab;
         }
 
         protected override void EnteredTree()

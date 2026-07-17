@@ -1,0 +1,490 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/effects/blood.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "thisisfuckingstupid"
+    },
+    {
+      "name": "itemblood"
+    },
+    {
+      "name": "handblood"
+    },
+    {
+      "name": "on_mob blood"
+    },
+    {
+      "name": "hands_blood",
+      "directions": 4
+    },
+    {
+      "name": "feet_blood",
+      "directions": 4
+    },
+    {
+      "name": "sterile_blood",
+      "directions": 4
+    },
+    {
+      "name": "gasmask_blood",
+      "directions": 4
+    },
+    {
+      "name": "mask_blood",
+      "directions": 4
+    },
+    {
+      "name": "uniform_blood",
+      "directions": 4
+    },
+    {
+      "name": "uniform_d_blood",
+      "directions": 4
+    },
+    {
+      "name": "uniform_df_blood",
+      "directions": 4
+    },
+    {
+      "name": "uniform_dj_blood",
+      "directions": 4
+    },
+    {
+      "name": "armor_blood",
+      "directions": 4
+    },
+    {
+      "name": "surgcap_blood",
+      "directions": 4
+    },
+    {
+      "name": "beret_blood",
+      "directions": 4
+    },
+    {
+      "name": "booniehat_blood",
+      "directions": 4
+    },
+    {
+      "name": "hardhat_blood",
+      "directions": 4
+    },
+    {
+      "name": "m10helmet_blood",
+      "directions": 4
+    },
+    {
+      "name": "helmet_blood",
+      "directions": 4
+    },
+    {
+      "name": "vest_blood",
+      "directions": 4
+    },
+    {
+      "name": "apron_blood",
+      "directions": 4
+    },
+    {
+      "name": "bigsuit_blood",
+      "directions": 4
+    },
+    {
+      "name": "suit_blood",
+      "directions": 4
+    },
+    {
+      "name": "jacket_blood",
+      "directions": 4
+    },
+    {
+      "name": "coat_blood",
+      "directions": 4
+    },
+    {
+      "name": "THE REST"
+    },
+    {
+      "name": "gibarm",
+      "directions": 4
+    },
+    {
+      "name": "gibarm_flesh",
+      "directions": 4
+    },
+    {
+      "name": "gibleg",
+      "directions": 4
+    },
+    {
+      "name": "gibleg_flesh",
+      "directions": 4
+    },
+    {
+      "name": "gibtorso",
+      "directions": 4
+    },
+    {
+      "name": "gibtorso_flesh",
+      "directions": 4
+    },
+    {
+      "name": "gibmid1"
+    },
+    {
+      "name": "gib1"
+    },
+    {
+      "name": "gib1_flesh"
+    },
+    {
+      "name": "gib2"
+    },
+    {
+      "name": "gib2_flesh"
+    },
+    {
+      "name": "gib3",
+      "directions": 4
+    },
+    {
+      "name": "gib3_flesh",
+      "directions": 4
+    },
+    {
+      "name": "gib5",
+      "directions": 4
+    },
+    {
+      "name": "gib5_flesh",
+      "directions": 4
+    },
+    {
+      "name": "gib6",
+      "directions": 4
+    },
+    {
+      "name": "gib6_flesh",
+      "directions": 4
+    },
+    {
+      "name": "gibup1"
+    },
+    {
+      "name": "gibup1_flesh"
+    },
+    {
+      "name": "gibdown1"
+    },
+    {
+      "name": "gibdown1_flesh"
+    },
+    {
+      "name": "gibmid2"
+    },
+    {
+      "name": "gibmid2_flesh"
+    },
+    {
+      "name": "gibmid3"
+    },
+    {
+      "name": "gibmid3_flesh"
+    },
+    {
+      "name": "gibhead",
+      "directions": 4
+    },
+    {
+      "name": "u_ketchup",
+      "directions": 4
+    },
+    {
+      "name": "u_guilty",
+      "directions": 4
+    },
+    {
+      "name": "u_madman",
+      "directions": 4
+    },
+    {
+      "name": "u_psycopath",
+      "directions": 4
+    },
+    {
+      "name": "u_ketchup_l"
+    },
+    {
+      "name": "u_guilty_l"
+    },
+    {
+      "name": "u_dangerous_l"
+    },
+    {
+      "name": "u_madman_l"
+    },
+    {
+      "name": "u_psycopath_l"
+    },
+    {
+      "name": "tracks",
+      "directions": 8
+    },
+    {
+      "name": "clown"
+    },
+    {
+      "name": "xgibhead",
+      "directions": 4
+    },
+    {
+      "name": "xgibtorso",
+      "directions": 4
+    },
+    {
+      "name": "xgibup1"
+    },
+    {
+      "name": "xgibdown1"
+    },
+    {
+      "name": "xgibmid1"
+    },
+    {
+      "name": "xgibmid2"
+    },
+    {
+      "name": "xgibmid3"
+    },
+    {
+      "name": "xgibarm",
+      "directions": 4
+    },
+    {
+      "name": "xgibleg",
+      "directions": 4
+    },
+    {
+      "name": "xtracks",
+      "directions": 8
+    },
+    {
+      "name": "xgib1"
+    },
+    {
+      "name": "xgib2"
+    },
+    {
+      "name": "xgib3"
+    },
+    {
+      "name": "xgib4"
+    },
+    {
+      "name": "xgib5"
+    },
+    {
+      "name": "xgib6"
+    },
+    {
+      "name": "remains"
+    },
+    {
+      "name": "remainsxeno"
+    },
+    {
+      "name": "gibbearcore"
+    },
+    {
+      "name": "gibbear1"
+    },
+    {
+      "name": "gibbear2"
+    },
+    {
+      "name": "gibbear3"
+    },
+    {
+      "name": "gibbear4"
+    },
+    {
+      "name": "gibbear5"
+    },
+    {
+      "name": "gibbearhead",
+      "directions": 4
+    },
+    {
+      "name": "vomit_1"
+    },
+    {
+      "name": "vomit_2"
+    },
+    {
+      "name": "vomit_3"
+    },
+    {
+      "name": "vomit_4"
+    },
+    {
+      "name": "vomittox_1"
+    },
+    {
+      "name": "vomittox_2"
+    },
+    {
+      "name": "vomittox_3"
+    },
+    {
+      "name": "vomittox_4"
+    },
+    {
+      "name": "writing2"
+    },
+    {
+      "name": "writing3"
+    },
+    {
+      "name": "writing4"
+    },
+    {
+      "name": "writing5"
+    },
+    {
+      "name": "mgibbl1"
+    },
+    {
+      "name": "mgibbl2"
+    },
+    {
+      "name": "mgibbl3"
+    },
+    {
+      "name": "mgibbl4"
+    },
+    {
+      "name": "mgibbl5"
+    },
+    {
+      "name": "mfloor1"
+    },
+    {
+      "name": "mfloor2"
+    },
+    {
+      "name": "mfloor3"
+    },
+    {
+      "name": "mfloor4"
+    },
+    {
+      "name": "mfloor5"
+    },
+    {
+      "name": "mfloor6"
+    },
+    {
+      "name": "mfloor7"
+    },
+    {
+      "name": "writing1"
+    },
+    {
+      "name": "mucus"
+    },
+    {
+      "name": "gib4",
+      "directions": 4
+    },
+    {
+      "name": "gib4_flesh",
+      "directions": 4
+    },
+    {
+      "name": "splatter1",
+      "directions": 8
+    },
+    {
+      "name": "splatter2",
+      "directions": 8
+    },
+    {
+      "name": "splatter3",
+      "directions": 4
+    },
+    {
+      "name": "splatter4",
+      "directions": 4
+    },
+    {
+      "name": "splatter5",
+      "directions": 4
+    },
+    {
+      "name": "splatter6",
+      "directions": 8
+    },
+    {
+      "name": "xsplatter1",
+      "directions": 8
+    },
+    {
+      "name": "xsplatter2",
+      "directions": 8
+    },
+    {
+      "name": "xsplatter3",
+      "directions": 4
+    },
+    {
+      "name": "xsplatter4",
+      "directions": 4
+    },
+    {
+      "name": "xsplatter5",
+      "directions": 4
+    },
+    {
+      "name": "xsplatter6",
+      "directions": 8
+    },
+    {
+      "name": "csplatter1",
+      "directions": 8
+    },
+    {
+      "name": "csplatter2",
+      "directions": 8
+    },
+    {
+      "name": "csplatter3",
+      "directions": 4
+    },
+    {
+      "name": "csplatter4",
+      "directions": 4
+    },
+    {
+      "name": "csplatter5",
+      "directions": 4
+    },
+    {
+      "name": "csplatter6",
+      "directions": 8
+    },
+    {
+      "name": "gibmid1_flesh",
+      "directions": 4
+    },
+    {
+      "name": "gibhead_flesh",
+      "directions": 4
+    }
+  ]
+}

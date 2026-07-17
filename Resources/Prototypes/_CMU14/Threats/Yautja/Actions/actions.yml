@@ -1,5 +1,5 @@
 - type: entity
-  parent: ActionMarineToggleable
+  parent: ActionMarineBase
   id: CMUYautjaActionBase
   abstract: true
   components:
@@ -10,41 +10,51 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleVisor
+  name: Toggle Visor
+  description: Toggle the mask visor.
   components:
   - type: Action
     icon:
-      sprite: _CMU14/Yautja/mask.rsi
-      state: icon
-    useDelay: 0.5
+      sprite: _CMU14/Yautja/actions.rsi
+      state: visor_framed
+    iconOn:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: visor_on_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleVisorActionEvent
   - type: YautjaPowerAction
     cost: 0
+    requireBracer: false
 
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleMaskZoom
+  name: Toggle Mask Zoom
+  description: Toggle the mask's zoom.
   components:
   - type: Action
     icon:
-      sprite: _CMU14/Yautja/mask.rsi
-      state: icon
-    useDelay: 0.5
+      sprite: _CMU14/Yautja/actions.rsi
+      state: zoom_framed
+    iconOn:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: zoom_on_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleMaskZoomActionEvent
-  - type: YautjaPowerAction
-    cost: 0
-    requireMask: true
 
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleCloak
+  name: Toggle Cloak
+  description: Toggle your cloaking device.
   components:
   - type: Action
     icon:
-      sprite: _CMU14/Yautja/cape_full.rsi
-      state: icon
-    useDelay: 1
+      sprite: _CMU14/Yautja/actions.rsi
+      state: cloak_framed
+    iconOn:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: cloak_on_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleCloakActionEvent
   - type: YautjaPowerAction
@@ -52,13 +62,32 @@
 
 - type: entity
   parent: CMUYautjaActionBase
+  id: CMUActionYautjaToggleLantern
+  name: Toggle Light
+  description: Turn the light on and off.
+  components:
+  - type: Action
+    useDelay: 1
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: lantern_on_framed
+    iconOn:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: lantern_off_framed
+  - type: InstantAction
+    event: !type:ToggleActionEvent
+  - type: ActionBlockIfDevoured
+
+- type: entity
+  parent: CMUYautjaActionBase
   id: CMUActionYautjaOpenBracerMenu
+  name: Open Bracer Menu
+  description: Open the Yautja bracer menu.
   components:
   - type: Action
     icon:
-      sprite: _CMU14/Yautja/bracer.rsi
-      state: icon
-    useDelay: 0.5
+      sprite: _CMU14/Yautja/actions.rsi
+      state: bracer_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaOpenBracerMenuActionEvent
   - type: YautjaPowerAction
@@ -66,13 +95,55 @@
 
 - type: entity
   parent: CMUYautjaActionBase
-  id: CMUActionYautjaToggleBracerLock
+  id: CMUActionYautjaAddTeleporterLocation
+  name: cmu-yautja-relay-add-destination-action-name
+  description: cmu-yautja-relay-add-destination-action-desc
   components:
   - type: Action
     icon:
-      sprite: _CMU14/Yautja/bracer.rsi
-      state: icon
-    useDelay: 1
+      sprite: _CMU14/Yautja/actions.rsi
+      state: bracer_framed
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaAddTeleporterLocationActionEvent
+
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionYautjaFoldCombistick
+  name: cmu-yautja-combistick-fold-action-name
+  description: cmu-yautja-combistick-fold-action-desc
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Yautja/weapons.rsi
+      state: combistick_folded
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaFoldCombistickActionEvent
+
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionYautjaCallCombi
+  name: cmu-yautja-combistick-call-action-name
+  description: cmu-yautja-combistick-call-action-desc
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Yautja/weapons.rsi
+      state: combistick
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaCallCombiActionEvent
+  - type: YautjaPowerAction
+    cost: 0
+
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionYautjaToggleBracerLock
+  name: Toggle Bracer Lock
+  description: Toggle the bracer lock.
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: bracer_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleBracerLockActionEvent
   - type: YautjaPowerAction
@@ -81,26 +152,120 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleBracerIdChip
+  name: Toggle Bracer ID Chip
+  description: Deploy or retract the bracer ID chip.
   components:
   - type: Action
     icon:
-      sprite: Objects/Misc/id_cards.rsi
-      state: default
-    useDelay: 0.5
+      sprite: _CMU14/Yautja/actions.rsi
+      state: bracer_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleBracerIdChipActionEvent
+  - type: YautjaPowerAction
+    cost: 0
+    requireBracer: false
+
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionYautjaChangeExplosionType
+  name: Change Explosion Type
+  description: Change the bracer self-destruct mode.
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: self_destruct_framed
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaChangeExplosionTypeActionEvent
+  - type: YautjaPowerAction
+    cost: 0
+    requireBracer: false
+
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionYautjaToggleBracerNotificationSound
+  name: Toggle Bracer Notification Sound
+  description: Toggle bracer notification sounds.
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: bracer_framed
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaToggleBracerNotificationSoundActionEvent
+  - type: YautjaPowerAction
+    cost: 0
+
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionYautjaToggleBracerName
+  name: Toggle Bracer Name
+  description: Toggle the bracer name display.
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: bracer_framed
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaToggleBracerNameActionEvent
+  - type: YautjaPowerAction
+    cost: 0
+
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionYautjaTrackGear
+  name: Track Gear
+  description: Open the tracked gear list.
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: bracer_framed
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaTrackGearActionEvent
+  - type: YautjaPowerAction
+    cost: 0
+
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionYautjaAddTrackedItem
+  name: Add Tracked Item
+  description: Add an item to the tracked gear list.
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: bracer_framed
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaAddTrackedItemActionEvent
+  - type: YautjaPowerAction
+    cost: 0
+
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionYautjaRemoveTrackedItem
+  name: Remove Tracked Item
+  description: Remove an item from the tracked gear list.
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: bracer_framed
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaRemoveTrackedItemActionEvent
   - type: YautjaPowerAction
     cost: 0
 
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaTranslator
+  name: Translator
+  description: Open the Yautja translator.
   components:
   - type: Action
     icon:
-      sprite: _CMU14/Yautja/bracer.rsi
-      state: icon
-    useDelay: 1
+      sprite: _CMU14/Yautja/actions.rsi
+      state: translator_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaTranslatorActionEvent
   - type: YautjaPowerAction
@@ -108,13 +273,29 @@
 
 - type: entity
   parent: CMUYautjaActionBase
-  id: CMUActionYautjaCreateStabilisingCrystal
+  id: CMUActionYautjaAudioPanel
+  name: Audio Panel
+  description: Open the Yautja audio panel.
   components:
   - type: Action
     icon:
-      sprite: Objects/Materials/Shards/crystal.rsi
-      state: shard1
-    useDelay: 1
+      sprite: _CMU14/Yautja/actions.rsi
+      state: looc_toggle_framed
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaAudioPanelActionEvent
+  - type: YautjaPowerAction
+    cost: 0
+
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionYautjaCreateStabilisingCrystal
+  name: Create Stabilising Crystal
+  description: Create a stabilising crystal.
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: thwei_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaCreateStabilisingCrystalActionEvent
   - type: YautjaPowerAction
@@ -123,12 +304,13 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaCreateHumanStabilisingCrystal
+  name: Create Human Stabilising Crystal
+  description: Create a stabilising crystal for a human.
   components:
   - type: Action
     icon:
-      sprite: Objects/Materials/Shards/crystal.rsi
-      state: shard1
-    useDelay: 1
+      sprite: _CMU14/Yautja/actions.rsi
+      state: thwei_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaCreateHumanStabilisingCrystalActionEvent
   - type: YautjaPowerAction
@@ -136,13 +318,29 @@
 
 - type: entity
   parent: CMUYautjaActionBase
-  id: CMUActionYautjaCreateHuntingTrap
+  id: CMUActionYautjaCreateHealingCapsule
+  name: Create Healing Capsule
+  description: Create a healing capsule.
   components:
   - type: Action
     icon:
-      sprite: _RMC14/Objects/Medical/emergency_auto_injector.rsi
-      state: autoinjector
-    useDelay: 1
+      sprite: _CMU14/Yautja/actions.rsi
+      state: gel_vial_framed
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaCreateHealingCapsuleActionEvent
+  - type: YautjaPowerAction
+    cost: 0
+
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionYautjaCreateHuntingTrap
+  name: Create Hunting Trap
+  description: Create a hunting trap.
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: hunting_trap_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaCreateHuntingTrapActionEvent
   - type: YautjaPowerAction
@@ -151,41 +349,46 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaOpenMarkPanel
+  name: Open Mark Panel
+  description: Open the hunt mark panel.
   components:
   - type: Action
     icon:
-      sprite: _RMC14/Interface/cm_job_icons.rsi
-      state: hudsquad_pve
-    useDelay: 0.5
+      sprite: _CMU14/Yautja/actions.rsi
+      state: mark_panel_framed
+    raiseOnUser: true
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaOpenMarkPanelActionEvent
   - type: YautjaPowerAction
     cost: 0
-    requireMask: true
+    requireMask: false
 
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaLinkThrallBracer
+  name: Link Thrall Bracer
+  description: Link a thrall's bracer.
   components:
   - type: Action
     icon:
-      sprite: _CMU14/Yautja/bracer.rsi
-      state: icon
-    useDelay: 1
+      sprite: _CMU14/Yautja/actions.rsi
+      state: bracer_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaLinkThrallBracerActionEvent
   - type: YautjaPowerAction
     cost: 0
+    requireBracer: false
 
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaTransmitThrallMessage
+  name: Transmit Thrall Message
+  description: Send a message to your thrall.
   components:
   - type: Action
     icon:
-      sprite: _CMU14/Yautja/bracer.rsi
-      state: icon
-    useDelay: 0.5
+      sprite: _CMU14/Yautja/actions.rsi
+      state: bracer_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaTransmitThrallMessageActionEvent
   - type: YautjaPowerAction
@@ -195,12 +398,13 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleThrallBracerLock
+  name: Toggle Thrall Bracer Lock
+  description: Toggle the thrall bracer lock.
   components:
   - type: Action
     icon:
-      sprite: _CMU14/Yautja/bracer.rsi
-      state: icon
-    useDelay: 1
+      sprite: _CMU14/Yautja/actions.rsi
+      state: bracer_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleThrallBracerLockActionEvent
   - type: YautjaPowerAction
@@ -210,12 +414,13 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaStunThrall
+  name: Stun Thrall
+  description: Stun your thrall.
   components:
   - type: Action
     icon:
-      sprite: _CMU14/Yautja/bracer.rsi
-      state: icon
-    useDelay: 10
+      sprite: _CMU14/Yautja/actions.rsi
+      state: bracer_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaStunThrallActionEvent
   - type: YautjaPowerAction
@@ -224,12 +429,13 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaSelfDestructThrall
+  name: Self-Destruct Thrall
+  description: Trigger your thrall's self-destruct.
   components:
   - type: Action
     icon:
-      sprite: _CMU14/Yautja/bracer.rsi
-      state: icon
-    useDelay: 1
+      sprite: _CMU14/Yautja/actions.rsi
+      state: bracer_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaSelfDestructThrallActionEvent
   - type: YautjaPowerAction
@@ -238,12 +444,13 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaRecall
+  name: Recall Gear
+  description: Recall your deployed Yautja gear.
   components:
   - type: Action
     icon:
-      sprite: _CMU14/Yautja/smart_disc.rsi
-      state: icon
-    useDelay: 10
+      sprite: _CMU14/Yautja/actions.rsi
+      state: smartdisc_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaRecallActionEvent
   - type: YautjaPowerAction
@@ -251,13 +458,73 @@
 
 - type: entity
   parent: CMUYautjaActionBase
-  id: CMUActionYautjaSelfDestruct
+  id: CMUActionYautjaCallDisc
+  name: Call Disc
+  description: Recall your smart-disc.
   components:
   - type: Action
     icon:
-      sprite: _CMU14/Yautja/bracer.rsi
-      state: icon
-    useDelay: 1
+      sprite: _CMU14/Yautja/actions.rsi
+      state: smartdisc_framed
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaCallDiscActionEvent
+  - type: YautjaPowerAction
+    cost: 0
+
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionYautjaButcher
+  name: Butcher
+  description: Butcher a corpse you're standing next to for its tasty meats.
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: wristblade_framed
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaButcherActionEvent
+
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionYautjaFalconControl
+  name: Control Falcon Drone
+  description: Activates your falcon drone.
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: falcon_drone
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaFalconControlActionEvent
+
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionYautjaFalconRecall
+  name: Recall falcon drone
+  description: Recall your falcon drone.
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: falcon_drone
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaFalconRecallActionEvent
+  - type: YautjaPowerAction
+    cost: 0
+
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionYautjaSelfDestruct
+  name: Self-Destruct
+  description: Trigger the bracer self-destruct.
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: self_destruct_framed
+    iconOn:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: self_destruct_on_framed
     checkCanInteract: false
     checkConsciousness: false
   - type: InstantAction
@@ -268,12 +535,16 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleCaster
+  name: Toggle Plasma Caster
+  description: Toggle the plasma caster.
   components:
   - type: Action
     icon:
-      sprite: _CMU14/Yautja/plasma_caster.rsi
-      state: icon
-    useDelay: 0.5
+      sprite: _CMU14/Yautja/actions.rsi
+      state: plasma_caster_framed
+    iconOn:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: plasma_caster_on_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleCasterActionEvent
   - type: YautjaPowerAction
@@ -281,13 +552,36 @@
 
 - type: entity
   parent: CMUYautjaActionBase
-  id: CMUActionYautjaToggleWristBlades
+  id: CMUActionYautjaUsePlasmaCannons
+  name: Use Plasma Cannons
+  description: Fire the plasma cannons.
   components:
   - type: Action
     icon:
-      sprite: _CMU14/Yautja/wrist_blades.rsi
-      state: icon
-    useDelay: 0.5
+      sprite: _CMU14/Yautja/actions.rsi
+      state: plasma_caster_framed
+    iconOn:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: plasma_caster_on_framed
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaUsePlasmaCannonsActionEvent
+  - type: YautjaPowerAction
+    cost: 0
+    requireBracer: false
+
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionYautjaToggleWristBlades
+  name: Toggle Wrist Blades
+  description: Toggle your wrist blades.
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: wristblade_framed
+    iconOn:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: wristblade_on_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleWristBladesActionEvent
   - type: YautjaPowerAction
@@ -296,12 +590,16 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleScimitar
+  name: Toggle Scimitar
+  description: Toggle your scimitar.
   components:
   - type: Action
     icon:
-      sprite: _CMU14/Yautja/scimitar.rsi
-      state: icon
-    useDelay: 0.5
+      sprite: _CMU14/Yautja/actions.rsi
+      state: scimitar_framed
+    iconOn:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: scimitar_on_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleScimitarActionEvent
   - type: YautjaPowerAction
@@ -310,12 +608,16 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleShield
+  name: Toggle Shield
+  description: Toggle your bracer shield.
   components:
   - type: Action
     icon:
-      sprite: _CMU14/Yautja/bracer_shield.rsi
-      state: icon
-    useDelay: 0.5
+      sprite: _CMU14/Yautja/actions.rsi
+      state: bracer_shield_framed
+    iconOn:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: bracer_shield_on_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleShieldActionEvent
   - type: YautjaPowerAction
@@ -324,12 +626,16 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleChainGauntlet
+  name: Toggle Chain Gauntlet
+  description: Toggle your chain gauntlet.
   components:
   - type: Action
     icon:
-      sprite: _CMU14/Yautja/chain_gauntlet.rsi
-      state: icon
-    useDelay: 0.5
+      sprite: _CMU14/Yautja/actions.rsi
+      state: combi_framed
+    iconOn:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: combi_on_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleChainGauntletActionEvent
   - type: YautjaPowerAction
@@ -337,11 +643,110 @@
 
 - type: entity
   parent: CMUYautjaActionBase
+  id: CMUActionYautjaGuardChainGauntlet
+  name: cmu-yautja-chain-gauntlet-guard-action-name
+  description: cmu-yautja-chain-gauntlet-guard-action-desc
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Yautja/chain_gauntlet.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaGuardChainGauntletActionEvent
+
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionYautjaRemoveBracerAttachments
+  name: cmu-yautja-remove-bracer-attachments-action-name
+  description: cmu-yautja-remove-bracer-attachments-action-desc
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: wristblade_framed
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaRemoveBracerAttachmentsActionEvent
+
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionYautjaLeap
+  name: Leap
+  description: Leap to a target location.
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: leap_framed
+    useDelay: 15
+  - type: TargetAction
+    range: 7
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaLeapActionEvent
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMUActionYautjaHellhoundGorge
+  name: Gorge
+  description: Pounce and gore prey with your spikes.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: headbite
+    useDelay: 5
+  - type: TargetAction
+    range: 15
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:XenoLeapActionEvent
+  - type: ActionBlockIfResting
+  - type: RMCDazeableAction
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMUActionYautjaHellhoundSenseOwner
+  name: Find Owner
+  description: Sniff out your Yautja handler.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: mark_hosts
+    useDelay: 1
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaHellhoundSenseOwnerActionEvent
+  - type: ActionBlockIfResting
+
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionYautjaMarkForHunt
+  name: Mark for Hunt
+  description: Mark a target for the hunt.
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: mark_for_hunt_framed
+    raiseOnUser: true
+  - type: TargetAction
+    range: 7
+    checkCanAccess: false
+  - type: EntityTargetAction
+    canTargetSelf: false
+    toggleOutline: false
+    event: !type:Content.Shared._CMU14.Yautja.YautjaMarkForHuntActionEvent
+
+- type: entity
+  parent: CMUYautjaActionBase
   id: CMUActionYautjaVoiceClick
   components:
   - type: Action
-    icon: Interface/Emotes/click.png
-    useDelay: 5
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: voice_click_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaVoiceClickActionEvent
 
@@ -350,8 +755,9 @@
   id: CMUActionYautjaVoiceRoar
   components:
   - type: Action
-    icon: Interface/Actions/scream.png
-    useDelay: 5
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: voice_roar_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaVoiceRoarActionEvent
 
@@ -360,8 +766,9 @@
   id: CMUActionYautjaVoiceLaugh
   components:
   - type: Action
-    icon: Interface/Emotes/laugh.png
-    useDelay: 5
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: voice_laugh_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaVoiceLaughActionEvent
 
@@ -370,8 +777,9 @@
   id: CMUActionYautjaVoiceGrowl
   components:
   - type: Action
-    icon: Interface/Emotes/chitter.png
-    useDelay: 5
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: voice_growl_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaVoiceGrowlActionEvent
 
@@ -380,8 +788,9 @@
   id: CMUActionYautjaVoicePain
   components:
   - type: Action
-    icon: Interface/Emotes/cry.png
-    useDelay: 5
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: voice_pain_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaVoicePainActionEvent
 
@@ -400,8 +809,9 @@
   id: CMUActionYautjaVoiceDeathCry
   components:
   - type: Action
-    icon: Interface/Emotes/deathgasp.png
-    useDelay: 5
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: voice_death_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaVoiceDeathCryActionEvent
 
@@ -410,7 +820,8 @@
   id: CMUActionYautjaVoiceDeathLaugh
   components:
   - type: Action
-    icon: Interface/Emotes/deathgasp.png
-    useDelay: 5
+    icon:
+      sprite: _CMU14/Yautja/actions.rsi
+      state: voice_death_framed
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaVoiceDeathLaughActionEvent
