@@ -8,16 +8,7 @@
     combattech: AU14ComtechGearVendor
     JuniorOfficer: AU14JOGenericVendor
     MilitaryDoctor: AU14MilitaryDoctorGenericVendor
-
-- type: platoonVendorSet
-  id: Example
-  parent: AU14BasePlatoonVendorSet
-  vendors:
-    Corpsman: AU14USCMcorpsmanvendor
-    Arifleman: AU14USCMequipmentvendor
-    Dcc: AU14AircrewWeaponsVendor
-    OperationsOfficer: AU14USCMsectionleaderequipmentvendor
-    SectionSergeant: AU14USCMsectionleaderequipmentvendor
+    VehicleCrew: AU14USCMVehicleCrewmanVendor
 
 - type: platoonVendorSet
   id: USCM

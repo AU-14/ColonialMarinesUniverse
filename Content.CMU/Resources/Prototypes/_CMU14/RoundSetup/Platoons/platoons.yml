@@ -1,19 +1,4 @@
 - type: platoon
-  id: exampleplatoon
-  name: exampleplatoon
-  lorePrimer: AU14PrimerPlatoonHAZOPS
-  reqlist: USCMCargoCatalog
-  vendorSet: Example
-  possibleships:
-      - USSBushRedux
-  jobSlotOverride:
-    SquadRifleman: 12
-    PlatoonCorpsman: 1
-    PlatCo: 1
-    DSPilot: 1
-  techTree: RMCIntelTechTree_ua
-
-- type: platoon
   id: USCM
   name: US Colonial Marines
   lorePrimer: AU14PrimerPlatoonUSCM

@@ -11,6 +11,7 @@
   - AU14AccessGovforGunner
   - AU14AccessGovforPilot
   - AU14AccessGovforReq
+  - AU14AccessGovforVehicleCrew
 
 - type: accessGroup
   parent: AU14GovforCommand # NOTE: AA inheritance for MPs
@@ -66,6 +67,7 @@
   tags:
   - AU14AccessGovfor
   - AU14AccessGovforSquad
+  - AU14AccessGovforVehicleCrew
   - CMAccessCrewman
   - RMCAccessVehicleCrew
 

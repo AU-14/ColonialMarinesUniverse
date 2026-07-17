@@ -104,6 +104,14 @@
 
 - type: entity
   parent: VMarkerOpfor
+  id: VMarkerOpforVehicleCrewVendor
+  name: OPFOR vehicle crew vendor marker
+  components:
+  - type: VendorMarker
+    class: VehicleCrew
+
+- type: entity
+  parent: VMarkerOpfor
   id: VMarkerOpforoperationsOfficer
   name: Opfor command marker
   components:
@@ -217,6 +225,14 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
     state: base
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforVehicleCrewVendor
+  name: Govfor vehicle crew vendor marker
+  components:
+  - type: VendorMarker
+    class: VehicleCrew
 
 - type: entity
   parent: VMarkerGovfor
@@ -465,6 +481,14 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
     state: base
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipVehicleCrew
+  name: Ship vehicle crew vendor marker
+  components:
+  - type: VendorMarker
+    class: VehicleCrew
 
 - type: entity
   parent: VmarkerShip
