@@ -45,3 +45,7 @@
 - type: accessLevel
   id: AU14AccessGovforReq
   name: Govfor Requisitions
+
+- type: accessLevel
+  id: AU14AccessGovforVehicleCrew
+  name: Govfor Vehicle Crew

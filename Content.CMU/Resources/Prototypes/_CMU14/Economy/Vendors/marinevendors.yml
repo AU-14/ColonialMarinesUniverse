@@ -1,5 +1,5 @@
 # Apparel, medic, aircrew, command, smartgun, section-leader, weapons, special-weapons,
-# equipment (universal), RTO (universal), aircrew-weapons (universal), CT (universal)
+# equipment (universal), RTO (universal), aircrew-weapons (universal), CT (universal), Crewman (universal)
 - type: entity
   parent: ColMarTechBase
   id: AU14USCMclothingequipmentvendor
@@ -1646,3 +1646,24 @@
       entries:
       - id: AU14FlagCarriableUA
         amount: 1
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14USCMVehicleCrewmanVendor
+  name: vehicle crewman vendor
+  description: >-
+    An automated dispenser rack, hooked up to a small storage of support gear for vehicle crew.
+    Engineered to get vehicle crewmen fight-ready in seconds after cryogenic hypersleep or scramble orders.
+    The console shows many different options available, though they are all marked as temporarily out of stock.
+
+    Vehicle crew protocol: grab the essential maintenance jack.
+  components:
+  - type: AccessReader
+    access: [[ "AU14AccessGovforVehicleCrew" ], [ "AU14AccessOpforVehicleCrew" ]]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Servicing Tools # placeholder
+      entries:
+      - id: AU14MaintenanceJack

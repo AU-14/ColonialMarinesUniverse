@@ -53,6 +53,7 @@ namespace Content.Shared.AU14.util
         GroundsideOps,
         TacticalMap,
         ReqVend,
+        VehicleCrew,
         Analyzer,
         AICore,
         AllianceConsoleGovfor,

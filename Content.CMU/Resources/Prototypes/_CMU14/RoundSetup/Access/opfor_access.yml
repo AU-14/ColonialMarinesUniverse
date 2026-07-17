@@ -41,3 +41,7 @@
 - type: accessLevel
   id: AU14AccessOpforReq
   name: Opfor Requisitions
+
+- type: accessLevel
+  id: AU14AccessOpforVehicleCrew
+  name: Opfor Vehicle Crew
