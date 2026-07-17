@@ -291102,15 +291102,15 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 27.5,-148.75
       parent: 1
-    - type: TacticalMapComputer
-      map: invalid
+    missingComponents:
+    - TacticalMapComputer
   - uid: 287134
     components:
     - type: Transform
       pos: 73.125,-142.375
       parent: 1
-    - type: TacticalMapComputer
-      map: invalid
+    missingComponents:
+    - TacticalMapComputer
 - proto: RMCPersonalDesktop
   entities:
   - uid: 339726
