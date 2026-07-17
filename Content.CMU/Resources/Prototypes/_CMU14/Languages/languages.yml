@@ -95,6 +95,12 @@
     !type:SyllableObfuscation
     replacement: ["tra", "tri", "tru", "cra", "cre", "cri", "cro", "fru", "fra", "fre", "gra", "gri", "glor", "pla", "ple", "pri", "pro", "blu", "bra", "str", "spr", "rex", "vox", "lux", "sol", "mar", "vin", "dom", "fer"]
     maxSyllables: 3
+  sisterLanguages:
+    Spanish: 0.35
+    Italian: 0.4
+    French: 0.35
+    Portuguese: 0.35
+    Romanian: 0.4
 
 - type: language
   id: Portuguese
@@ -108,6 +114,10 @@
     !type:SyllableObfuscation
     replacement: ["lhão", "nhê", "chã", "brio", "grão", "três", "prão", "frão", "vão", "ção", "rê", "dê", "fla", "cro", "gri", "plu", "são", "mão", "nho", "lho", "qui", "gue", "ria", "rio", "mar", "sol", "lua", "bom", "bem", "lar"]
     maxSyllables: 3
+  sisterLanguages:
+    Italian: 0.55
+    French: 0.40
+    Romanian: 0.35
 
 - type: language
   id: Spanish
@@ -122,6 +132,11 @@
     !type:SyllableObfuscation
     replacement: ["el", "la", "de", "que", "los", "las", "por", "con", "una", "para", "bra", "dro", "gre", "flo", "cla", "gri", "plo", "fre", "blo", "dra", "glo", "tre", "vra", "ñe", "ño", "ña", "ñi", "ñó", "brá", "dró", "gré", "fló", "clá", "grí", "pló", "fré", "bló", "drá", "gló", "tré", "vrá", "co", "me", "ra", "to", "pe", "ro", "sa", "mo", "te", "bo", "ca", "fe", "li", "no", "se", "vi", "do", "gu", "le", "ma", "ri", "su", "ta", "ve"]
     maxSyllables: 3
+  sisterLanguages:
+    Portuguese: 0.78
+    Italian: 0.6
+    French: 0.45
+    Romanian: 0.38
 
 - type: language
   id: Arabic
@@ -134,6 +149,9 @@
   obfuscationMethod:
     !type:SyllableObfuscation
     replacement: ["al", "ah", "ba", "da", "fa", "ha", "ja", "ka", "la", "ma", "na", "ra", "sa", "ta", "wa", "ya", "ib", "ad", "ar", "in", "ash", "ayn", "din", "rah", "hak", "nur", "qal", "sul", "bar", "zah"]
+  sisterLanguages:
+    Persian: 0.2
+    Urdu: 0.2
 
 - type: language
   id: French
@@ -148,6 +166,8 @@
     !type:SyllableObfuscation
     replacement: ["le", "de", "un", "ce", "ne", "se", "que", "qui", "son", "une", "vêur", "bônt", "plêux", "râis", "tôir", "mêux", "dâin", "lôir", "gêux", "pônt", "rêur", "bâin", "gôit", "vàis", "têur", "nàit", "fêux", "dôit", "crêt", "flèr", "grôt", "pânt", "bêux", "sônt", "lânt", "drêt"]
     maxSyllables: 3
+  sisterLanguages:
+    Romanian: 0.35
 
 - type: language
   id: German
@@ -174,6 +194,10 @@
   obfuscationMethod:
     !type:SyllableObfuscation
     replacement: ["да", "нет", "что", "как", "где", "кто", "все", "это", "был", "она", "строк", "вреж", "прок", "трел", "бреск", "крош", "грез", "дров", "стрев", "врон", "прос", "здрек", "взлок", "вруж"]
+  sisterLanguages:
+    Serbian: 0.25
+    Czech: 0.20
+    Slovak: 0.20
 
 - type: language
   id: Japanese
@@ -278,6 +302,8 @@
     !type:SyllableObfuscation
     replacement: ["blief", "kraaf", "groof", "snuif", "skoef", "triek", "vlof", "knoef", "snoer", "proef", "bruif", "kloef", "stroel", "vlam", "drief", "bloem", "skryf", "gryn", "zwak", "frak"]
     maxSyllables: 3
+  sisterLanguages:
+    German: 0.35
 
 - type: language
   id: Brazilian
@@ -305,6 +331,11 @@
   obfuscationMethod:
     !type:SyllableObfuscation
     replacement: ["ба", "ве", "ги", "жа", "зі", "кі", "ла", "ме", "но", "па", "ра", "ті", "хо", "чу", "ші", "їв", "єр", "ня", "льо", "врі", "при", "тре", "кри", "зна", "дро", "мле", "плі", "єв", "цю", "ря"]
+  sisterLanguages:
+    Russian: 0.45
+    Serbian: 0.35
+    Czech: 0.38
+    Slovak: 0.35  
 
 - type: language
   id: Korean
@@ -328,6 +359,13 @@
   obfuscationMethod:
     !type:SyllableObfuscation
     replacement: ["szcze", "prze", "strze", "krze", "trze", "czar", "dźwi", "źre", "grze", "wrze", "brze", "pstr", "chrze", "sztr", "rzec", "kąt", "łom", "mrok", "żar", "śnie", "błysk", "grz", "prz", "str", "chr", "dźw", "źć", "ńk", "łk", "rz"]
+  sisterLanguages:
+    Ukrainian: 0.6
+    Czech: 0.60
+    Slovak: 0.65
+    Russian: 0.25
+    Serbian: 0.28
+    Lithuanian: 0.20
 
 - type: language
   id: Czech
@@ -340,6 +378,9 @@
   obfuscationMethod:
     !type:SyllableObfuscation
     replacement: ["čar", "šer", "řek", "třes", "dřev", "přes", "větr", "křik", "žár", "hlub", "střel", "pláš", "smrk", "břeh", "dům", "tich", "chřap", "škr", "řít", "věž", "pln", "křes", "dřím", "stín", "řad", "čel", "šum", "trn", "chrám", "věk"]
+  sisterLanguages:
+    Slovak: 0.75
+    Serbian: 0.20
 
 - type: language
   id: Turkish
@@ -381,6 +422,9 @@
     !type:SyllableObfuscation
     replacement: ["tra", "tre", "tri", "tro", "tra", "fra", "fre", "fri", "fla", "fle", "gli", "gna", "sci", "spa", "spe", "sco", "sta", "ste", "sto", "pre", "pra", "bre", "bri", "cro", "cre", "glo", "gra", "ple", "plo"]
     maxSyllables: 3
+  sisterLanguages:
+    French: 0.5
+    Romanian: 0.45
 
 - type: language
   id: Irish
@@ -450,7 +494,7 @@
   obfuscationMethod:
     !type:SyllableObfuscation
     replacement: ["ба", "ва", "га", "да", "ђа", "жа", "за", "ка", "ља", "на", "ња", "па", "ра", "са", "та", "ћа", "ча", "џа", "ша", "би", "ли", "ђи", "жи", "ки", "љи", "ми", "ни", "њи", "ри", "ћи", "бра", "дра", "гра", "вра", "здр", "шта", "чар", "жар", "њег", "љуб", "ћир"]
-
+    
 - type: language
   id: Lithuanian
   name: "Lithuanian"
@@ -475,6 +519,9 @@
     !type:SyllableObfuscation
     replacement: ["sch", "scho", "schr", "vla", "vle", "gro", "dro", "bro", "kno", "kru", "zw", "stroom", "bloem", "druif", "pruif", "klei", "vrij", "dijk", "koen", "noord", "vaart", "veld", "wind", "zand", "rood", "goed", "huis", "kerk", "meer"]
     maxSyllables: 3
+  sisterLanguages:
+    Afrikaans: 0.8
+    German: 0.5
 
 - type: language
   id: Persian
@@ -499,7 +546,9 @@
   obfuscationMethod:
     !type:SyllableObfuscation
     replacement: ["a", "aa", "ba", "bha", "cha", "da", "dha", "ga", "ha", "ja", "ka", "kha", "la", "ma", "na", "pa", "pha", "ra", "sa", "sha", "ta", "tha", "va", "ya", "raj", "dev", "ram", "krish", "sur", "prem", "dhar", "kar", "nagar", "mandir", "shakti", "ganga", "chandra", "akash"]
-
+  sisterLanguages:
+    Urdu: 0.85
+  
 - type: language
   id: Vietnamese
   name: "Vietnamese"
@@ -526,6 +575,9 @@
     replacement: ["ba", "ca", "da", "ga", "ha", "ja", "ka", "la", "ma", "na", "pa", "ra", "sa", "ta", "wa", "ya", "nga", "ngi", "ngu", "mba", "nda", "ndi", "bri", "tri", "kri", "sri", "mau", "kau", "dia", "aku"]
     minSyllables: 2
     maxSyllables: 5
+  sisterLanguages:
+    Filipino: 0.55
+    Swahili: 0.15
 
 - type: language
   id: Filipino
@@ -581,6 +633,13 @@
     !type:SyllableObfuscation
     replacement: ["ĉa", "ĉe", "ĉi", "ĉo", "ĝa", "ĝe", "ĝo", "ĥa", "ĥo", "ĵa", "ĵe", "ĵo", "ŝa", "ŝe", "ŝo", "ŭa", "ŭe", "pra", "tra", "gra", "kri", "blu", "stel", "mond", "ling", "ver", "bon"]
     maxSyllables: 3
+  sisterLanguages:
+    Spanish: 0.4
+    Italian: 0.4
+    French: 0.35
+    Portuguese: 0.35
+    German: 0.25
+    Polish: 0.2
 
 - type: language
   id: Swedish
@@ -595,6 +654,9 @@
     !type:SyllableObfuscation
     replacement: ["de", "vin", "meg", "og", "vi", "en", "nei", "ing", "gen", "et", "pur", "ke", "er", "nei", "hjort", "tysk", "de", "kjae", "en", "stein", "ja", "ull", "sil", "pa", "hun", "kjo", "erg", "ba", "re", "ol", "kyll", "menn", "esk", "gul", "gronn", "natt", "makt", "to", "fi", "re", "dag", "god", "jul", "ild", "fem", "jeg", "deg", "bjor", "en", "russ", "land", "sve", "rig", "nor", "ge", "dan", "is"]
     minSyllables: 2
+  sisterLanguages:
+    German: 0.4
+    Dutch: 0.3
 
 - type: language
   id: Slovak
@@ -609,6 +671,8 @@
     !type:SyllableObfuscation
     replacement: ["ah", "áno", "nie", "som", "si", "ja", "ty", "on", "ona", "my", "vy", "oni", "dobrý", "zlý", "malý", "veľký", "človek", "meno", "priateľ", "nepriateľ", "pán", "pani", "dom", "voda", "jedlo", "chlieb", "ruka", "oko", "hlava", "srdce", "deň", "noc", "svetlo", "tma", "oheň", "zem", "vzduch", "čas", "teraz", "potom", "kde", "kto", "čo", "ako", "prečo", "tam", "tu", "choď", "poď", "stoj", "čakaj", "pomoc", "nebezpečie", "zbraň", "vojna", "mier", "silný", "slabý", "rýchlo", "pomaly", "dobré", "zlé", "nový", "starý", "pravda", "lož", "vidím", "počujem", "hovorím", "rozumiem"]
     minSyllables: 2
+  sisterLanguages:
+    Serbian: 0.20
 
 - type: language
   id: Romanian

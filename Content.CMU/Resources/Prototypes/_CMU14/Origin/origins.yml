@@ -3,6 +3,8 @@
   id: UAMexico
   name: origin-ua-mexico-name
   description: origin-ua-mexico-description
+  languages:
+    - Spanish
   roundStart: true
 
 - type: Origin
@@ -27,6 +29,8 @@
   id: UACanada
   name: origin-ua-canada-name
   description: origin-ua-canada-description
+  languages:
+    - French
   roundStart: true
 
 - type: Origin
@@ -39,12 +43,17 @@
   id: UABrazil
   name: origin-ua-brazil-name
   description: origin-ua-brazil-description
+  languages:
+    - Brazilian
+    - Portuguese
   roundStart: true
 
 - type: Origin
   id: UAArgentina
   name: origin-ua-argentina-name
   description: origin-ua-argentina-description
+  languages:
+    - Spanish
   roundStart: true
 
 # Three World Empire
@@ -52,12 +61,16 @@
   id: TWEJapan
   name: origin-twe-japan-name
   description: origin-twe-japan-description
+  languages:
+    - Japanese
   roundStart: true
 
 - type: Origin
   id: TWEIndia
   name: origin-twe-india-name
   description: origin-twe-india-description
+  languages:
+    - Hindi
   roundStart: true
 
 - type: Origin
@@ -94,13 +107,58 @@
   id: TWETian
   name: origin-twe-tian-name
   description: origin-twe-tian-description
+  languages:
+    - Mandarin
+  roundStart: true
+
+- type: Origin
+  id: TWENetherlands
+  name: origin-twe-netherlands-name
+  description: origin-twe-netherlands-description
+  languages:
+    - Dutch
+  roundStart: true
+
+- type: Origin
+  id: TWEIndonesia
+  name: origin-twe-indonesia-name
+  description: origin-twe-indonesia-description
+  languages:
+    - Indonesian
+  roundStart: true
+
+- type: Origin
+  id: TWEPhilippines
+  name: origin-twe-philippines-name
+  description: origin-twe-philippines-description
+  languages:
+    - Filipino
+  roundStart: true
+
+- type: Origin
+  id: TWEKenya
+  name: origin-twe-kenya-name
+  description: origin-twe-kenya-description
+  languages:
+    - Swahili
+  roundStart: true
+
+- type: Origin
+  id: TWEIreland
+  name: origin-twe-ireland-name
+  description: origin-twe-ireland-description
+  languages:
+    - Irish
   roundStart: true
 
 # Confederation of Central Africa
+
 - type: Origin
   id: CCASouthAfrica
   name: origin-cca-southafrica-name
   description: origin-cca-southafrica-description
+  languages:
+    - Afrikaans
   roundStart: true
 
 - type: Origin
@@ -113,6 +171,8 @@
   id: CCANigeria
   name: origin-cca-nigeria-name
   description: origin-cca-nigeria-description
+  languages:
+    - Yoruba
   roundStart: true
 
 - type: Origin
@@ -131,6 +191,9 @@
   id: CCATunisia
   name: origin-cca-tunisia-name
   description: origin-cca-tunisia-description
+  languages:
+    - Arabic
+    - French
   roundStart: true
 
 - type: Origin
@@ -145,185 +208,216 @@
   description: origin-cca-luna-description
   roundStart: true
 
+
 # Union of Progressive Peoples
+
 - type: Origin
   id: UPPRussia
   name: origin-upp-russia-name
   description: origin-upp-russia-description
+  languages:
+    - Russian
+  roundStart: true
+
+- type: Origin
+  id: UPPPoland
+  name: origin-upp-poland-name
+  description: origin-upp-poland-description
+  languages:
+    - Polish
+  roundStart: true
+
+- type: Origin
+  id: UPPUkraine
+  name: origin-upp-ukraine-name
+  description: origin-upp-ukraine-description
+  languages:
+    - Ukrainian
   roundStart: true
 
 - type: Origin
   id: UPPGermany
   name: origin-upp-germany-name
   description: origin-upp-germany-description
+  languages:
+    - German
+  roundStart: true
+
+- type: Origin
+  id: UPPHungary
+  name: origin-upp-hungary-name
+  description: origin-upp-hungary-description
+  languages:
+    - Hungarian
+  roundStart: true
+
+- type: Origin
+  id: UPPCzech
+  name: origin-upp-czech-name
+  description: origin-upp-czech-description
+  languages:
+    - Czech
+  roundStart: true
+
+- type: Origin
+  id: UPPSlovakia
+  name: origin-upp-slovakia-name
+  description: origin-upp-slovakia-description
+  languages:
+    - Slovak
+  roundStart: true
+
+- type: Origin
+  id: UPPRomania
+  name: origin-upp-romania-name
+  description: origin-upp-romania-description
+  languages:
+    - Romanian
+  roundStart: true
+
+- type: Origin
+  id: UPPLithuania
+  name: origin-upp-lithuania-name
+  description: origin-upp-lithuania-description
+  languages:
+    - Lithuanian
+  roundStart: true
+
+- type: Origin
+  id: UPPSweden
+  name: origin-upp-sweden-name
+  description: origin-upp-sweden-description
+  languages:
+    - Swedish
+  roundStart: true
+
+- type: Origin
+  id: UPPFinland
+  name: origin-upp-finland-name
+  description: origin-upp-finland-description
+  languages:
+    - Finnish
+  roundStart: true
+
+- type: Origin
+  id: UPPAlbania
+  name: origin-upp-albania-name
+  description: origin-upp-albania-description
+  languages:
+    - Albanian
+  roundStart: true
+
+- type: Origin
+  id: UPPSerbia
+  name: origin-upp-serbia-name
+  description: origin-upp-serbia-description
+  languages:
+    - Serbian
   roundStart: true
 
 - type: Origin
   id: UPPAlgeria
   name: origin-upp-algeria-name
   description: origin-upp-algeria-description
+  languages:
+    - Arabic
+    - French
   roundStart: true
 
 - type: Origin
   id: UPPChina
   name: origin-upp-china-name
   description: origin-upp-china-description
-  roundStart: true
-
-- type: Origin
-  id: UPPIndonesia
-  name: origin-upp-indonesia-name
-  description: origin-upp-indonesia-description
+  languages:
+    - Mandarin
   roundStart: true
 
 - type: Origin
   id: UPPLuna
   name: origin-upp-luna-name
   description: origin-upp-luna-description
+  languages:
+    - Russian
   roundStart: true
 
 - type: Origin
   id: UPPVietnam
   name: origin-upp-vietnam-name
   description: origin-upp-vietnam-description
+  languages:
+    - Vietnamese
   roundStart: true
 
 - type: Origin
   id: UPPKorea
   name: origin-upp-korea-name
   description: origin-upp-korea-description
+  languages:
+    - Korean
   roundStart: true
 
 - type: Origin
   id: UPPColonies
   name: origin-upp-colonies-name
   description: origin-upp-colonies-description
+  languages:
+    - Russian
   roundStart: true
 
 - type: Origin
   id: UPPSpain
   name: origin-upp-spain-name
   description: origin-upp-spain-description
+  languages:
+    - Spanish
   roundStart: true
 
 - type: Origin
   id: UPPItaly
   name: origin-upp-italy-name
   description: origin-upp-italy-description
+  languages:
+    - Italian
   roundStart: true
 
-# Independent Systems
-- type: Origin
-  id: ISVolcus
-  name: origin-is-volcus-name
-  description: origin-is-volcus-description
-  roundStart: true
+# ICSC
 
 - type: Origin
-  id: ISArcturus
-  name: origin-is-arcturus-name
-  description: origin-is-arcturus-description
-  roundStart: true
-
-- type: Origin
-  id: ISTurkey
-  name: origin-is-turkey-name
-  description: origin-is-turkey-description
+  id: ICSCPersia
+  name: origin-icsc-persia-name
+  description: origin-icsc-persia-description
+  languages:
+    - Persian
   roundStart: true
 
 - type: Origin
-  id: ISSouthKorea
-  name: origin-is-southkorea-name
-  description: origin-is-southkorea-description
+  id: ICSCFrance
+  name: origin-icsc-france-name
+  description: origin-icsc-france-description
+  languages:
+    - French
   roundStart: true
 
 - type: Origin
-  id: ISFrance
-  name: origin-is-france-name
-  description: origin-is-france-description
+  id: ICSCKorea
+  name: origin-icsc-korea-name
+  description: origin-icsc-korea-description
+  languages:
+    - Korean
   roundStart: true
 
 - type: Origin
-  id: ISIran
-  name: origin-is-iran-name
-  description: origin-is-iran-description
+  id: ICSCTurkey
+  name: origin-icsc-turkey-name
+  description: origin-icsc-turkey-description
+  languages:
+    - Turkish
   roundStart: true
 
 - type: Origin
-  id: ISOther
-  name: origin-is-other-name
-  description: origin-is-other-description
-  roundStart: true
-
-- type: Origin
-  id: ISSaudiArabia
-  name: origin-is-saudiarabia-name
-  description: origin-is-saudiarabia-description
-  roundStart: true
-
-- type: Origin
-  id: ISPakistan
-  name: origin-is-pakistan-name
-  description: origin-is-pakistan-description
-  roundStart: true
-
-- type: Origin
-  id: ISGhana
-  name: origin-is-ghana-name
-  description: origin-is-ghana-description
-  roundStart: true
-
-- type: Origin
-  id: ISEgypt
-  name: origin-is-egypt-name
-  description: origin-is-egypt-description
-  roundStart: true
-
-- type: Origin
-  id: ICSCColonies
-  name: origin-is-icsc-name
-  description: origin-is-icsc-description
-  roundStart: true
-
-# Corporate
-- type: Origin
-  id: CorpMadagascar
-  name: origin-corp-madagascar-name
-  description: origin-corp-madagascar-description
-  roundStart: true
-
-- type: Origin
-  id: CorpDubai
-  name: origin-corp-dubai-name
-  description: origin-corp-dubai-description
-  roundStart: true
-
-- type: Origin
-  id: CorpMars
-  name: origin-corp-mars-name
-  description: origin-corp-mars-description
-  roundStart: true
-
-- type: Origin
-  id: CorpProdigyCity
-  name: origin-corp-prodigycity-name
-  description: origin-corp-prodigycity-description
-  roundStart: true
-
-- type: Origin
-  id: CorpLuna
-  name: origin-corp-luna-name
-  description: origin-corp-luna-description
-  roundStart: true
-
-- type: Origin
-  id: CorpColonies
-  name: origin-corp-colonies-name
-  description: origin-corp-colonies-description
-  roundStart: true
-
-- type: Origin
-  id: CorpOther
-  name: origin-corp-other-name
-  description: origin-corp-other-description
+  id: ICSCPakistan
+  name: origin-icsc-pakistan-name
+  description: origin-icsc-pakistan-description
+  languages:
+    - Urdu
   roundStart: true
