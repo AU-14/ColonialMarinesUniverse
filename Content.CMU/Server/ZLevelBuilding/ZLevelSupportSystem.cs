@@ -191,8 +191,8 @@ public sealed class ZLevelSupportSystem : EntitySystem
     public void RecomputeGrid(Entity<MapGridComponent> grid)
     {
         // Gather all supports on this grid, indexed by tile, and reset their state.
-        var byTile = new Dictionary<Vector2i, Entity<StructuralSupportComponent>>();
-        var previous = new Dictionary<Vector2i, bool>();
+        var byTile = new Dictionary<Vector2i, List<Entity<StructuralSupportComponent>>>();
+        var previous = new Dictionary<EntityUid, bool>();
 
         var query = EntityQueryEnumerator<StructuralSupportComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var comp, out var xform))
@@ -201,8 +201,14 @@ public sealed class ZLevelSupportSystem : EntitySystem
                 continue;
 
             var tile = _map.TileIndicesFor(grid.Owner, grid.Comp, xform.Coordinates);
-            byTile[tile] = (uid, comp);
-            previous[tile] = comp.Supported;
+            if (!byTile.TryGetValue(tile, out var supports))
+            {
+                supports = new List<Entity<StructuralSupportComponent>>();
+                byTile.Add(tile, supports);
+            }
+
+            supports.Add((uid, comp));
+            previous[uid] = comp.Supported;
             comp.Supported = false;
         }
 
@@ -213,15 +219,18 @@ public sealed class ZLevelSupportSystem : EntitySystem
         var queue = new Queue<(Vector2i Tile, int Budget)>();
         var best = new Dictionary<Vector2i, int>();
 
-        foreach (var (tile, ent) in byTile)
+        foreach (var (tile, supports) in byTile)
         {
-            if (!TryGetSeedBudget(ent, grid, tile, out var budget))
-                continue;
-
-            if (!best.TryGetValue(tile, out var existing) || existing < budget)
+            foreach (var ent in supports)
             {
-                best[tile] = budget;
-                queue.Enqueue((tile, budget));
+                if (!TryGetSeedBudget(ent, grid, tile, out var budget))
+                    continue;
+
+                if (!best.TryGetValue(tile, out var existing) || existing < budget)
+                {
+                    best[tile] = budget;
+                    queue.Enqueue((tile, budget));
+                }
             }
         }
 
@@ -233,18 +242,25 @@ public sealed class ZLevelSupportSystem : EntitySystem
                 continue;
 
             if (byTile.TryGetValue(node.Tile, out var here))
-                here.Comp.Supported = true;
+            {
+                foreach (var ent in here)
+                    ent.Comp.Supported = true;
+            }
 
             foreach (var dir in Cardinals)
             {
                 var next = node.Tile + dir;
-                if (!byTile.TryGetValue(next, out var nEnt))
+                if (!byTile.TryGetValue(next, out var nextSupports))
                     continue;
 
-                // Vertical supports / anchors relay their full span; floors decrement.
-                var nextBudget = nEnt.Comp.IsAnchor || nEnt.Comp.IsVerticalSupport
-                    ? nEnt.Comp.CantileverSpan
-                    : node.Budget - 1;
+                // Every colocated support participates. The strongest vertical support refreshes the relay;
+                // otherwise crossing the tile consumes one unit of cantilever budget.
+                var nextBudget = node.Budget - 1;
+                foreach (var nextSupport in nextSupports)
+                {
+                    if (nextSupport.Comp.IsAnchor || nextSupport.Comp.IsVerticalSupport)
+                        nextBudget = Math.Max(nextBudget, nextSupport.Comp.CantileverSpan);
+                }
 
                 if (nextBudget < 0)
                     continue;
@@ -266,28 +282,31 @@ public sealed class ZLevelSupportSystem : EntitySystem
         var now = _timing.CurTime;
         var isUpperLevel = !IsGroundOrBelow(Transform(grid.Owner).MapUid);
 
-        foreach (var (tile, ent) in byTile)
+        foreach (var (tile, supports) in byTile)
         {
-            if (!isUpperLevel || ent.Comp.Supported)
+            foreach (var ent in supports)
             {
-                // Ground/underground, or genuinely supported: never pending.
-                _pendingUnsupported.Remove(ent.Owner);
-                continue;
-            }
-
-            // Upper-z and currently unsupported: schedule a collapse if not already counting down.
-            if (!_pendingUnsupported.ContainsKey(ent.Owner))
-            {
-                _pendingUnsupported[ent.Owner] = now + TimeSpan.FromSeconds(CollapseWarningSeconds);
-
-                // Popup only on the supported -> unsupported transition, to avoid spamming every recompute.
-                if (previous[tile])
+                if (!isUpperLevel || ent.Comp.Supported)
                 {
-                    Log.Info($"[zsupport] {ToPrettyString(ent.Owner)} at {tile} lost structural support.");
-                    _popup.PopupCoordinates(
-                        Loc.GetString("au-zsupport-unsupported"),
-                        Transform(ent.Owner).Coordinates,
-                        PopupType.MediumCaution);
+                    // Ground/underground, or genuinely supported: never pending.
+                    _pendingUnsupported.Remove(ent.Owner);
+                    continue;
+                }
+
+                // Upper-z and currently unsupported: schedule a collapse if not already counting down.
+                if (!_pendingUnsupported.ContainsKey(ent.Owner))
+                {
+                    _pendingUnsupported[ent.Owner] = now + TimeSpan.FromSeconds(CollapseWarningSeconds);
+
+                    // Popup only on the supported -> unsupported transition, to avoid spamming every recompute.
+                    if (previous[ent.Owner])
+                    {
+                        Log.Info($"[zsupport] {ToPrettyString(ent.Owner)} at {tile} lost structural support.");
+                        _popup.PopupCoordinates(
+                            Loc.GetString("au-zsupport-unsupported"),
+                            Transform(ent.Owner).Coordinates,
+                            PopupType.MediumCaution);
+                    }
                 }
             }
         }
