@@ -3,6 +3,7 @@ using Content.Server.Administration.Logs;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.Radio.EntitySystems;
+using Content.Shared._AU14.CCVar;
 using Content.Shared._AU14.Radio;
 using Content.Shared._RMC14.Chat;
 using Content.Shared.Chat;
@@ -13,6 +14,7 @@ using Content.Shared.Inventory.Events;
 using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
 using Content.Shared.Verbs;
+using Robust.Shared.Configuration;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -31,14 +33,19 @@ public sealed partial class TunableFrequencySystem : EntitySystem
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private SharedCMChatSystem _cmChat = default!;
     [Dependency] private ANPRCGarbleSystem _garble = default!;
+    [Dependency] private IConfigurationManager _config = default!;
 
     private static readonly ProtoId<RadioChannelPrototype> TunableSentinel = "TunableFrequencyChannel";
 
     public const float FullRange = 30f;
     public const float PartialRange = 50f;
 
+    private bool _commsEnabled;
+
     public override void Initialize()
     {
+        Subs.CVar(_config, AU14CCVars.NewCommsSystem, v => _commsEnabled = v, true);
+
         SubscribeLocalEvent<HeadsetComponent, MapInitEvent>(OnHeadsetMapInit);
         SubscribeLocalEvent<TunableHeadsetComponent, GotEquippedEvent>(OnEquipped);
         SubscribeLocalEvent<TunableHeadsetComponent, GotUnequippedEvent>(OnUnequipped);
@@ -92,6 +99,10 @@ public sealed partial class TunableFrequencySystem : EntitySystem
 
         args.Channel = null;
 
+        // with the comms overhaul off the direct frequency layer is dead, :x stays local
+        if (!_commsEnabled)
+            return;
+
         if (!TryComp(ent.Comp.Source, out HeadsetComponent? headset) ||
             !headset.IsEquipped ||
             !headset.Enabled)
@@ -110,6 +121,9 @@ public sealed partial class TunableFrequencySystem : EntitySystem
 
     public void BroadcastOnFrequency(EntityUid sender, int frequency, string message, string? senderName = null)
     {
+        if (!_commsEnabled)
+            return;
+
         if (frequency <= 0 || string.IsNullOrWhiteSpace(message))
             return;
 
@@ -382,7 +396,7 @@ public sealed partial class TunableFrequencySystem : EntitySystem
 
     private void OnGetAltVerbs(Entity<TunableHeadsetComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
     {
-        if (!args.CanAccess || !args.CanInteract)
+        if (!_commsEnabled || !args.CanAccess || !args.CanInteract)
             return;
 
         if (ent.Comp.TunedFrequency <= 0)
@@ -430,7 +444,7 @@ public sealed partial class TunableFrequencySystem : EntitySystem
 
     private void OnGetVerbs(Entity<TunableHeadsetComponent> ent, ref GetVerbsEvent<ActivationVerb> args)
     {
-        if (!args.CanAccess || !args.CanInteract)
+        if (!_commsEnabled || !args.CanAccess || !args.CanInteract)
             return;
 
         var user = args.User;
@@ -445,6 +459,9 @@ public sealed partial class TunableFrequencySystem : EntitySystem
 
     private void OnSetFrequency(Entity<TunableHeadsetComponent> ent, ref TunableFrequencySetMsg args)
     {
+        if (!_commsEnabled)
+            return;
+
         var text = args.FrequencyText
             .Trim()
             .Replace(".", "")
