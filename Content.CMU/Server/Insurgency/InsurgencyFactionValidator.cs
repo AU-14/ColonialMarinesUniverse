@@ -51,9 +51,69 @@ public static class InsurgencyFactionValidator
         CapCount(definition.RoleLoadouts, FactionDefinition.MaxRoleLoadouts);
         CapCount(definition.Economy.PointsSubmissions, FactionDefinition.MaxPlaceableEntities);
 
-        // A ratio of one or less would let a single submission mint points endlessly.
+        // Bound both conversion modes so negative values cannot mint points and extreme values cannot
+        // overflow downstream arithmetic.
         foreach (var submission in definition.Economy.PointsSubmissions)
-            submission.AmountPerPoint = Math.Max(1, submission.AmountPerPoint);
+        {
+            submission.AmountPerPoint = Math.Clamp(submission.AmountPerPoint, 1, FactionDefinition.MaxSubmissionRatio);
+            submission.PointsPerItem = Math.Clamp(submission.PointsPerItem, 1, FactionDefinition.MaxSubmissionRatio);
+        }
+
+        foreach (var vendor in definition.CellKit.VendorDefinitions)
+        {
+            vendor.Name = Clamp(vendor.Name, FactionDefinition.MaxTitleLength);
+            CapCount(vendor.Sections, FactionDefinition.MaxVendorSections);
+
+            foreach (var section in vendor.Sections)
+            {
+                section.Name = Clamp(section.Name, FactionDefinition.MaxTitleLength);
+                CapCount(section.Entries, FactionDefinition.MaxVendorEntries);
+
+                section.Choices = section.Choices is { } choices
+                    ? (Clamp(choices.Id, FactionDefinition.MaxTitleLength),
+                        Math.Clamp(choices.Amount, 0, FactionDefinition.MaxVendorStock))
+                    : null;
+                section.SharedJOLimit = ClampNullable(section.SharedJOLimit, 0, FactionDefinition.MaxVendorStock);
+
+                // These fields are not exposed by the faction editor. Normalize them so a crafted DTO cannot
+                // smuggle job/rank restrictions, boxes, role changes, or special-vendor behavior into runtime.
+                section.TakeAll = null;
+                section.TakeOne = null;
+                section.SharedSpecLimit = null;
+                section.Jobs.Clear();
+                section.Ranks.Clear();
+                section.Holidays.Clear();
+                section.HasBoxes = false;
+
+                foreach (var entry in section.Entries)
+                {
+                    entry.Name = entry.Name == null ? null : Clamp(entry.Name, FactionDefinition.MaxTitleLength);
+                    entry.Points = ClampNullable(entry.Points, 0, FactionDefinition.MaxVendorPoints);
+                    entry.Amount = ClampNullable(entry.Amount, 0, FactionDefinition.MaxVendorStock);
+                    entry.Max = ClampNullable(entry.Max, 0, FactionDefinition.MaxVendorStock);
+                    if (entry.Amount is { } amount && entry.Max is { } max && amount > max)
+                        entry.Amount = max;
+                    entry.Spawn = Math.Clamp(entry.Spawn, 1, FactionDefinition.MaxVendorSpawn);
+                    entry.Multiplier = null;
+                    entry.LinkedEntries.Clear();
+                    entry.Box = null;
+                    entry.BoxAmount = null;
+                    entry.BoxSlots = null;
+                    entry.GiveSquadRoleName = null;
+                    entry.IsAppendSquadRoleName = false;
+                    entry.GivePrefix = null;
+                    entry.GiveIcon = null;
+                    entry.GiveMapBlip = null;
+                    entry.ReplaceSlot = null;
+                }
+            }
+        }
+
+        foreach (var loadout in definition.RoleLoadouts)
+        {
+            loadout.Role = Clamp(loadout.Role, FactionDefinition.MaxTitleLength);
+            CapCount(loadout.Contents, FactionDefinition.MaxRoleLoadoutContents);
+        }
 
         return definition;
     }
@@ -96,6 +156,15 @@ public static class InsurgencyFactionValidator
         definition.CellKit.VendorDefinitions.RemoveAll(v =>
             string.IsNullOrWhiteSpace(v.BaseModel.Id) || !prototypes.HasIndex<EntityPrototype>(v.BaseModel.Id));
 
+        foreach (var vendor in definition.CellKit.VendorDefinitions)
+        {
+            foreach (var section in vendor.Sections)
+            {
+                section.Entries.RemoveAll(e =>
+                    string.IsNullOrWhiteSpace(e.Id.Id) || !prototypes.HasIndex<EntityPrototype>(e.Id.Id));
+            }
+        }
+
         foreach (var loadout in definition.RoleLoadouts)
             PruneEntities(loadout.Contents, prototypes);
 
@@ -114,6 +183,9 @@ public static class InsurgencyFactionValidator
 
     private static string Clamp(string value, int max) =>
         string.IsNullOrEmpty(value) || value.Length <= max ? value : value[..max];
+
+    private static int? ClampNullable(int? value, int min, int max) =>
+        value is { } present ? Math.Clamp(present, min, max) : null;
 
     private static void CapCount<T>(List<T> list, int max)
     {

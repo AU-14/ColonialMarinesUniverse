@@ -31,7 +31,14 @@ public sealed partial class FactionDefinition
     public const int MaxOpposedGovforFactions = 32;
     public const int MaxPlaceableEntities = 256;
     public const int MaxVendorDefinitions = 32;
+    public const int MaxVendorSections = 64;
+    public const int MaxVendorEntries = 512;
     public const int MaxRoleLoadouts = 64;
+    public const int MaxRoleLoadoutContents = 128;
+    public const int MaxVendorStock = 100_000;
+    public const int MaxVendorPoints = 1_000_000;
+    public const int MaxVendorSpawn = 100;
+    public const int MaxSubmissionRatio = 1_000_000;
 
     // Default economy conversion if a definition does not set one.
     public const float DefaultDollarsToPointsRate = 1.0f;
