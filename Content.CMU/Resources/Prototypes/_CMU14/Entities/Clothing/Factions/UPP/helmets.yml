@@ -52,7 +52,7 @@
   - type: HelmetAccessory
     rsi:
       sprite: _AU14/Clothing/UPP/helmets/altyn.rsi
-      state: helmet
+      state: equipped-HELMET
     toggledRsi:
       sprite: _AU14/Clothing/UPP/helmets/altyn.rsi
       state: helmet-down
