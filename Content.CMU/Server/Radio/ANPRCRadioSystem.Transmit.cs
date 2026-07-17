@@ -415,7 +415,7 @@ public sealed partial class ANPRCRadioSystem
             if (otherUid == ent.Owner || !other.Enabled || !other.IsEquipped)
                 continue;
 
-            if (otherXform.MapID != senderMap)
+            if (!_range.InVerticalReach(otherXform.MapID, senderMap, 1))
                 continue;
 
             if (!HasPreset(other, channelId.Id))
@@ -433,7 +433,7 @@ public sealed partial class ANPRCRadioSystem
             if (wearerUid == senderWearer)
                 continue;
 
-            if (wearerXform.MapID != senderMap)
+            if (!_range.InVerticalReach(wearerXform.MapID, senderMap, 1))
                 continue;
 
             if (!TryComp(wearingHeadset.Headset, out EncryptionKeyHolderComponent? keys) ||

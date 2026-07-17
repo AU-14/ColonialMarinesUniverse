@@ -3,6 +3,7 @@ using Content.Server.Power.Components;
 using Content.Server.Radio;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared._AU14.CCVar;
+using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._AU14.Radio;
 using Content.Shared.Ghost;
 using Content.Shared._RMC14.Chat;
@@ -10,6 +11,7 @@ using Content.Shared._RMC14.Radio;
 using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
 using Robust.Shared.Configuration;
+using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
 
@@ -21,6 +23,7 @@ public sealed partial class ANPRCRangeSystem : EntitySystem
     [Dependency] private SharedCMChatSystem _cmChat = default!;
     [Dependency] private ANPRCGarbleSystem _garble = default!;
     [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private SharedMapSystem _map = default!;
 
     public const float FullSignalRange = 30f;
     public const float PartialSignalRange = 45f;
@@ -157,7 +160,7 @@ public sealed partial class ANPRCRangeSystem : EntitySystem
 
         while (query.MoveNext(out var anchorUid, out var anchor, out var anchorXform))
         {
-            if (anchorXform.MapID != entityMap)
+            if (!InVerticalReach(anchorXform.MapID, entityMap, anchor.LevelReach))
                 continue;
 
             if (!anchor.Channels.Contains(channel))
@@ -185,6 +188,34 @@ public sealed partial class ANPRCRangeSystem : EntitySystem
         }
 
         return bestTier;
+    }
+
+    // stacked z-level maps share the same 2D coordinate space, so anchors can cover
+    // nearby levels of their network with the usual distance math. reach 0 = own level
+    // only, -1 = the whole network
+    public bool InVerticalReach(MapId a, MapId b, int levelReach)
+    {
+        if (a == b)
+            return true;
+
+        if (levelReach == 0)
+            return false;
+
+        if (!_map.TryGetMap(a, out var mapA) || mapA is not { } mapAUid ||
+            !_map.TryGetMap(b, out var mapB) || mapB is not { } mapBUid)
+        {
+            return false;
+        }
+
+        if (!TryComp(mapAUid, out CMUZLevelMapComponent? zA) ||
+            !TryComp(mapBUid, out CMUZLevelMapComponent? zB) ||
+            !zA.NetworkUid.IsValid() ||
+            zA.NetworkUid != zB.NetworkUid)
+        {
+            return false;
+        }
+
+        return levelReach < 0 || Math.Abs(zA.Depth - zB.Depth) <= levelReach;
     }
 
     public (float FullRange, float PartialRange) GetAnchorRanges(EntityUid radio)

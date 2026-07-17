@@ -34,6 +34,10 @@ public sealed partial class TunableFrequencySystem : EntitySystem
     [Dependency] private SharedCMChatSystem _cmChat = default!;
     [Dependency] private ANPRCGarbleSystem _garble = default!;
     [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private ANPRCRangeSystem _range = default!;
+
+    // direct frequencies reach one z-level up or down, same as a worn manpack
+    private const int DirectFreqLevelReach = 1;
 
     private static readonly ProtoId<RadioChannelPrototype> TunableSentinel = "TunableFrequencyChannel";
 
@@ -141,7 +145,7 @@ public sealed partial class TunableFrequencySystem : EntitySystem
             if (receiver == sender)
                 continue;
 
-            if (xform.MapID != senderMap)
+            if (!_range.InVerticalReach(xform.MapID, senderMap, DirectFreqLevelReach))
                 continue;
 
             var receiverPos = _transform.GetWorldPosition(xform);
@@ -176,7 +180,7 @@ public sealed partial class TunableFrequencySystem : EntitySystem
             if (!tunedIn)
                 continue;
 
-            if (xform.MapID != senderMap)
+            if (!_range.InVerticalReach(xform.MapID, senderMap, DirectFreqLevelReach))
                 continue;
 
             var wearer = Transform(anprc).ParentUid;
@@ -343,7 +347,7 @@ public sealed partial class TunableFrequencySystem : EntitySystem
             if (!radio.FrequencyOverrides.ContainsValue(frequency))
                 continue;
 
-            if (xform.MapID != mapId)
+            if (!_range.InVerticalReach(xform.MapID, mapId, DirectFreqLevelReach))
                 continue;
 
             var anprcPos = _transform.GetWorldPosition(xform);

@@ -27,4 +27,9 @@ public sealed partial class ANPRCRelayAnchorComponent : Component
 
     [DataField]
     public bool Planted;
+
+    // how many z-levels of vertical separation this anchor still covers within its
+    // z network. 0 = own level only, -1 = every level (whole ship / whole site)
+    [DataField]
+    public int LevelReach = 1;
 }

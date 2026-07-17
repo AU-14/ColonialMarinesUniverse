@@ -85,6 +85,7 @@
   - type: ANPRCRelayAnchor
     fullRange: 200
     partialRange: 250
+    levelReach: -1 # whole-site array covers every deck / z-level of its network
     channels:
     - radioGovforAlpha
     - radioGovforBravo
@@ -102,6 +103,7 @@
   - type: ANPRCRelayAnchor
     fullRange: 200
     partialRange: 250
+    levelReach: -1 # whole-site array covers every deck / z-level of its network
     channels:
     - radioOpforAlpha
     - radioOpforBravo

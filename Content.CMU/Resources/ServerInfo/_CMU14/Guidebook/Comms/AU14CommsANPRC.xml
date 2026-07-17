@@ -557,9 +557,9 @@
 
   ## Fixed Infrastructure
 
-  Powered shipboard [bold]communications arrays[/bold] anchor faction nets across the ship.
+  Powered shipboard [bold]communications arrays[/bold] anchor faction nets across the ship, including every deck.
 
-  Command-post [bold]antenna masts[/bold] provide local coverage without electrical power.
+  Command-post [bold]antenna masts[/bold] provide local coverage without electrical power. Masts, worn radios, and retransmission stations reach one level above or below their own; only an array covers a whole site vertically.
 
   Combat nets require coverage from at least one of the following:
 

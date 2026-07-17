@@ -34,6 +34,8 @@
 
   A worn AN/PRC does not relay while carried by an untrained wearer.
 
+  Coverage reaches one level above or below the anchor, so deep tunnels need their own relay. Shipboard arrays cover every deck.
+
   Support nets, including MILP and colony channels, are not relay-gated and remain available without an anchor.
 
   ### Standard relay range
