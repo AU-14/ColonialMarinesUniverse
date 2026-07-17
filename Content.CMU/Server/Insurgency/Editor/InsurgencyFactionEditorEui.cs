@@ -156,6 +156,9 @@ public sealed class InsurgencyFactionEditorEui : BaseEui
     // stripping) before it is stored - identical trust model to a Custom faction payload.
     private async void HandleImportSheet(InsurgencyImportSheetMessage msg)
     {
+        if (msg.Workbook.Length == 0 || msg.Workbook.Length > InsforSpreadsheet.MaxWorkbookBytes)
+            return;
+
         FactionDefinition? parsed;
         using (var stream = new System.IO.MemoryStream(msg.Workbook))
             parsed = InsforSpreadsheet.Read(stream);

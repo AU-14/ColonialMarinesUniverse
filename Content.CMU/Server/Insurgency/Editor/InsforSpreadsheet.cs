@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using ClosedXML.Excel;
 using Content.Shared._AU14.Insurgency;
@@ -27,6 +28,15 @@ namespace Content.Server._AU14.Insurgency.Editor;
 /// </summary>
 public static class InsforSpreadsheet
 {
+    public const int MaxWorkbookBytes = 5_000_000;
+    private const int MaxArchiveEntries = 256;
+    private const long MaxExpandedBytes = 25_000_000;
+    private const int MaxWorksheets = 32;
+    private const int MaxRowsPerSheet = 10_000;
+    private const int MaxColumnsPerSheet = 64;
+    private const int MaxUsedCells = 100_000;
+    private const int MaxCellTextLength = FactionDefinition.MaxRoleplayTextLength;
+
     // How many rows of each list sheet get dropdown validation. Set above the largest schema cap
     // (MaxPlaceableEntities = 256) so even a maxed-out faction round-trips with every row validated. A
     // filler can still type past these; the values are validated server-side on import regardless.
@@ -323,6 +333,9 @@ public static class InsforSpreadsheet
     // ---------------------------------------------------------------------
     public static FactionDefinition? Read(Stream stream)
     {
+        if (!ValidateArchive(stream))
+            return null;
+
         XLWorkbook wb;
         try
         {
@@ -335,6 +348,9 @@ public static class InsforSpreadsheet
 
         using (wb)
         {
+            if (!ValidateWorkbookShape(wb))
+                return null;
+
             var def = new FactionDefinition();
             var meta = def.Metadata;
 
@@ -393,6 +409,72 @@ public static class InsforSpreadsheet
             ReadLoadouts(wb, def);
 
             return def;
+        }
+    }
+
+    private static bool ValidateArchive(Stream stream)
+    {
+        if (!stream.CanSeek || stream.Length is <= 0 or > MaxWorkbookBytes)
+            return false;
+
+        var originalPosition = stream.Position;
+        try
+        {
+            stream.Position = 0;
+            using var archive = new ZipArchive(stream, ZipArchiveMode.Read, leaveOpen: true);
+            if (archive.Entries.Count > MaxArchiveEntries)
+                return false;
+
+            long expanded = 0;
+            foreach (var entry in archive.Entries)
+            {
+                if (entry.Length < 0 || entry.Length > MaxExpandedBytes - expanded)
+                    return false;
+                expanded += entry.Length;
+            }
+
+            return expanded <= MaxExpandedBytes;
+        }
+        catch (InvalidDataException)
+        {
+            return false;
+        }
+        finally
+        {
+            stream.Position = originalPosition;
+        }
+    }
+
+    private static bool ValidateWorkbookShape(XLWorkbook workbook)
+    {
+        try
+        {
+            if (workbook.Worksheets.Count > MaxWorksheets)
+                return false;
+
+            var usedCells = 0;
+            foreach (var worksheet in workbook.Worksheets)
+            {
+                var range = worksheet.RangeUsed();
+                if (range == null)
+                    continue;
+
+                if (range.RangeAddress.LastAddress.RowNumber > MaxRowsPerSheet ||
+                    range.RangeAddress.LastAddress.ColumnNumber > MaxColumnsPerSheet)
+                    return false;
+
+                foreach (var cell in worksheet.CellsUsed())
+                {
+                    if (++usedCells > MaxUsedCells || cell.GetString().Length > MaxCellTextLength)
+                        return false;
+                }
+            }
+
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
         }
     }
 
