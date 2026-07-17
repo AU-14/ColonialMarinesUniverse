@@ -93,9 +93,17 @@ public sealed class InsurgencyFactionDbSystem : EntitySystem
         return await _db.UpdateFactionDefinition(row);
     }
 
-    public Task<bool> DeleteFactionAsync(int id)
+    public async Task<bool> DeleteFactionAsync(int id)
     {
-        return _db.DeleteFactionDefinition(id);
+        var row = await _db.GetFactionDefinition(id);
+        if (row == null)
+            return false;
+
+        var definition = Deserialize(row.Data);
+        if (definition?.Metadata.BuiltinOverrideOf != null)
+            return false;
+
+        return await _db.DeleteFactionDefinition(id);
     }
 
     // ---------------------------------------------------------------------
