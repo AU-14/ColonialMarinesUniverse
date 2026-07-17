@@ -2,6 +2,7 @@
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
 using Content.Client._AU14.Administration;
+using Content.Client.Construction;
 using Content.Shared._AU14.Administration;
 using Content.Shared._AU14.Construction.CustomConstruction;
 using Content.Client._AU14.ZLevelBuilding;
@@ -9,6 +10,7 @@ using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared.Popups;
 using Robust.Shared.Input;
 using Robust.Shared.Input.Binding;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client._AU14.Construction.CustomConstruction;
 
@@ -22,6 +24,7 @@ public sealed class CustomConstructionEditorClientSystem : EntitySystem
 {
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly ToolPermissionClientSystem _toolPerms = default!;
+    [Dependency] private readonly IPrototypeManager _prototypes = default!;
 
     /// <summary>
     /// Client-side pre-check mirroring the server gate: a Host-flagged admin OR a ckey granted this
@@ -67,11 +70,20 @@ public sealed class CustomConstructionEditorClientSystem : EntitySystem
         SubscribeNetworkEvent<OpenZBorderSyncEvent>(OnOpenZSync);
         SubscribeNetworkEvent<OpenSpawnlistDeleteEvent>(OnOpenSpawnlistDelete);
         SubscribeNetworkEvent<OpenDbSavePreviewEvent>(OnOpenDbPreview);
+        SubscribeLocalEvent<ConstructionMenuFilterEvent>(OnMenuFilter);
 
         CommandBinds.Builder
             .Bind(EngineKeyFunctions.Use, new PointerInputCmdHandler(OnZSyncPickUse, outsidePrediction: true))
             .Bind(EngineKeyFunctions.UseSecondary, new PointerInputCmdHandler(OnZSyncPickCancel, outsidePrediction: true))
             .Register<CustomConstructionEditorClientSystem>();
+    }
+
+    private void OnMenuFilter(ref ConstructionMenuFilterEvent args)
+    {
+        args.HiddenRecipes.UnionWith(HiddenRecipeIds);
+        foreach (var overrides in _prototypes.EnumeratePrototypes<AU14MenuOverridesPrototype>())
+            args.HiddenRecipes.UnionWith(overrides.HiddenRecipes);
+        args.ExcludedSpawnlists.UnionWith(ZLevelPageSpawnlists.Names);
     }
 
     public override void Shutdown()

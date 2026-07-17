@@ -2,6 +2,7 @@
 // Copyright (c) 2026 wray-git
 using System.Numerics;
 using Content.Server.Chat.Managers;
+using Content.Server.Shuttles.Systems;
 using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Dropship;
@@ -100,9 +101,19 @@ public sealed class ZCaveInSystem : EntitySystem
         // region dirty, rather than re-scanning every dug tile every second forever (the old TPS sink).
         SubscribeLocalEvent<TransformComponent, AnchorStateChangedEvent>(OnAnchorChanged);
         SubscribeLocalEvent<DamageableComponent, DamageChangedEvent>(OnDamaged);
+        SubscribeLocalEvent<ShuttleFTLSafetyEvent>(OnShuttleFTLSafety);
 
         // Attribution entries are keyed by map uid; drop them with the round so stale maps don't accumulate.
         SubscribeLocalEvent<Content.Shared.GameTicking.RoundRestartCleanupEvent>(_ => _lastDigger.Clear());
+    }
+
+    private void OnShuttleFTLSafety(ref ShuttleFTLSafetyEvent args)
+    {
+        if (!HasComp<ZCollapseCompromisedComponent>(args.Shuttle))
+            return;
+
+        args.Cancelled = true;
+        args.Reason = Loc.GetString("au14-dropship-collapse-compromised");
     }
 
     /// <summary>Records the last player to deal damage on an underground level (the likely over-miner), for attribution.</summary>

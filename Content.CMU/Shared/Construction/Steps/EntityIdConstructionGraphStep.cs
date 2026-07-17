@@ -6,7 +6,7 @@ using Content.Shared.Construction.Steps;
 using Robust.Shared.IoC;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._AU14.Construction.Steps;
+namespace Content.Shared.Construction.Steps;
 
 /// <summary>
 /// A construction step that requires a held/nearby entity matching a specific entity prototype id,
