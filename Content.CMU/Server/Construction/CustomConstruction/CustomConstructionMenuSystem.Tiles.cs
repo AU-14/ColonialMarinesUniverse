@@ -89,6 +89,12 @@ public sealed partial class CustomConstructionMenuSystem
         {
             Directory.CreateDirectory(TilesDir);
             var yaml = BuildTileYaml(key, msg.TileId, material, amount, spawnlist, category, msg.ZLevelPage);
+            if (IsOversizedYaml(yaml, out var sizeReason))
+            {
+                PopupTo(session, Loc.GetString("construction-menu-verb-invalid", ("reason", sizeReason)), PopupType.MediumCaution);
+                return;
+            }
+
             File.WriteAllText(Path.Combine(TilesDir, $"{TileFilePrefix}{key}.yml"), yaml, Encoding.UTF8);
             DbUpsert(DbKindTiles, $"{TileFilePrefix}{key}", yaml);
 

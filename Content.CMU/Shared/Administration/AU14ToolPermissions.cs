@@ -37,6 +37,9 @@ public static class AU14ToolPermissions
     /// <summary>INSFOR Faction Editor.</summary>
     public const string Insfor = "insfor";
 
+    /// <summary>Spawnlist Delete (removes a whole spawnlist and every generated recipe in it).</summary>
+    public const string SpawnlistDelete = "spawnlistdelete";
+
     /// <summary>Every grantable tool id, with the loc key for its display name.</summary>
     public static readonly (string Id, string NameLoc)[] AllTools =
     {
@@ -47,6 +50,7 @@ public static class AU14ToolPermissions
         (ZLevelToggles, "au14-toolperm-tool-zleveltoggles"),
         (ZSync, "au14-toolperm-tool-zsync"),
         (Insfor, "au14-toolperm-tool-insfor"),
+        (SpawnlistDelete, "au14-toolperm-tool-spawnlistdelete"),
     };
 
     public static bool IsValidTool(string tool)

@@ -33,6 +33,19 @@ public sealed partial class CustomConstructionMenuSystem
     private const string DbKindOverrides = "Overrides";
 
     /// <summary>
+    /// YAML restored from the DB during Initialize that still needs its client broadcast. During system init
+    /// the upload manager is not initialized yet (SendGamePrototype would NRE) and, worse, it reloads ALL
+    /// localizations per call - doing that once per restored entry made a large mass-editor batch stall
+    /// startup for minutes, long enough for connecting clients to hit an engine crash. So restore batches
+    /// everything into ONE document and publishes it on the first Update tick instead.
+    /// </summary>
+    private string? _pendingRestorePublish;
+
+    /// <summary>False until the first Update tick; while false, PublishYaml queues the client broadcast
+    /// into <see cref="_pendingRestorePublish"/> instead of calling the (not yet initialized) upload manager.</summary>
+    private bool _publishReady;
+
+    /// <summary>
     /// Restores DB-stored entries whose files are missing and hot-loads their prototypes. Runs once
     /// at system init, before <see cref="ValidateExistingEntries"/>. The DB read blocks the (one-time)
     /// startup path deliberately: restored files must exist before clients connect and before the
@@ -60,11 +73,22 @@ public sealed partial class CustomConstructionMenuSystem
 
         var restored = 0;
         var anyLathe = false;
+        var loaded = 0;
+        var combined = new StringBuilder();
         foreach (var row in rows)
         {
             var path = DbEntryFilePath(row.Kind, row.EntryKey);
             if (path == null)
                 continue;
+
+            // Bad-data quarantine, applied to EVERY kind: oversized rows (or, for entries, unsafe ones)
+            // are skipped AND deleted so a corrupt/hostile row can never crash or stall startup again.
+            if (IsOversizedYaml(row.Yaml, out var sizeReason))
+            {
+                Log.Error($"Skipping oversized custom construction entry {row.Kind}/{row.EntryKey}: {sizeReason}. The DB row will be removed.");
+                DbDelete(row.Kind, row.EntryKey);
+                continue;
+            }
 
             if (row.Kind == DbKindEntries && IsUnsafeGeneratedEntryYaml(row.Yaml, out var reason))
             {
@@ -93,19 +117,39 @@ public sealed partial class CustomConstructionMenuSystem
                     restored++;
                 }
 
-                // ALWAYS publish, even when the file already exists: the DB is the source of truth. On
+                // ALWAYS load, even when the file already exists: the DB is the source of truth. On
                 // servers whose resource VFS doesn't pick the written files up (packaged/Docker), the
                 // disk copy alone never loads - and plain LoadString would leave every connecting CLIENT
-                // without the prototypes (=> "Unknown LatheRecipePrototype" in the lathe UI). Publishing
-                // through the prototype-upload channel loads it server-side (overwrite) and replays it to
-                // every current and late-joining client. Only YAML we generated ourselves is ever stored.
-                PublishYaml(row.Yaml, $"{row.Kind}/{row.EntryKey}");
+                // without the prototypes (=> "Unknown LatheRecipePrototype" in the lathe UI). Each row is
+                // loaded server-side here; the CLIENT replay goes through one combined publish on the
+                // first Update tick (see _pendingRestorePublish) - per-row publishing reloaded all
+                // localizations once per entry, which stalled startup for minutes on big batches.
+                _prototype.LoadString(row.Yaml, overwrite: true);
+                loaded++;
+                combined.AppendLine(row.Yaml);
+                combined.AppendLine();
                 anyLathe |= row.Kind == DbKindLathe;
             }
             catch (Exception e)
             {
                 Log.Error($"Failed to restore custom construction entry {row.Kind}/{row.EntryKey}: {e}");
             }
+        }
+
+        // One resolve pass for the whole batch (ResolveResults walks every loaded prototype, so doing it
+        // per row would be O(rows * prototypes)).
+        if (loaded > 0)
+        {
+            try
+            {
+                _prototype.ResolveResults();
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to resolve restored custom construction prototypes: {e}");
+            }
+
+            _pendingRestorePublish = combined.ToString();
         }
 
         // The lathe pack files are derived from the recipe files, so rebuild and publish them (the packs
@@ -115,6 +159,31 @@ public sealed partial class CustomConstructionMenuSystem
 
         if (restored > 0)
             Log.Info($"Restored {restored} custom construction entries from the database.");
+    }
+
+    /// <summary>
+    /// Flushes the one combined restore document to the prototype-upload channel once the engine is fully
+    /// initialized (first Update tick). This is what replays DB-restored prototypes to every current and
+    /// late-joining client; calling it during Initialize is both broken (upload manager not initialized)
+    /// and pathologically slow per entry.
+    /// </summary>
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        _publishReady = true;
+        if (_pendingRestorePublish is not { } pending)
+            return;
+
+        _pendingRestorePublish = null;
+        try
+        {
+            _protoLoad.SendGamePrototype(pending);
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to broadcast restored custom construction prototypes to clients: {e}");
+        }
     }
 
     /// <summary>
@@ -132,6 +201,13 @@ public sealed partial class CustomConstructionMenuSystem
         catch (Exception e)
         {
             Log.Error($"Failed to load generated prototypes ({what}): {e}");
+            return;
+        }
+
+        if (!_publishReady)
+        {
+            // Startup: the upload manager isn't initialized yet, so queue for the first-tick flush.
+            _pendingRestorePublish = (_pendingRestorePublish ?? string.Empty) + yaml + "\n";
             return;
         }
 

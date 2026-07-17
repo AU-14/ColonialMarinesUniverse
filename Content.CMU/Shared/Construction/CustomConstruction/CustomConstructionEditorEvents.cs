@@ -164,6 +164,38 @@ public sealed class RemoveCustomConstructionGroupEvent : EntityEventArgs
 }
 
 /// <summary>
+/// Client → server: open the Spawnlist Delete tool (gated by the "spawnlistdelete" tool permission,
+/// re-validated server-side). The server answers with <see cref="OpenSpawnlistDeleteEvent"/>.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class RequestOpenSpawnlistDeleteEvent : EntityEventArgs
+{
+}
+
+/// <summary>
+/// Server → client: opens the Spawnlist Delete window with every spawnlist that currently has generated
+/// recipes (construction entries AND tiles), plus how many recipes each holds so the admin sees the blast
+/// radius before confirming.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class OpenSpawnlistDeleteEvent : EntityEventArgs
+{
+    /// <summary>Spawnlist name → number of generated recipes filed under it.</summary>
+    public Dictionary<string, int> SpawnlistCounts = new();
+}
+
+/// <summary>
+/// Client → server: delete a whole spawnlist - every generated recipe (construction entries and tiles)
+/// filed under it is removed from disk, the database, the server's loaded prototypes, and hidden from
+/// open menus. Destructive; the window arms a confirm delay before sending. Re-validated server-side.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class DeleteSpawnlistEvent : EntityEventArgs
+{
+    public string Spawnlist = string.Empty;
+}
+
+/// <summary>
 /// Client → server: the admin confirmed the editor. The server re-validates permission, writes the
 /// generated prototype file, logs the action, and pops up the result.
 /// </summary>
@@ -184,4 +216,8 @@ public sealed class SubmitCustomConstructionEditorEvent : EntityEventArgs
 
     /// <summary>Optional override for the built structure's health (destruction threshold). 0 = inherit from parent.</summary>
     public int Health;
+
+    /// <summary>True = dry run; the server answers with an OpenDbSavePreviewEvent instead of writing,
+    /// and the client re-sends with Preview = false once the admin confirms.</summary>
+    public bool Preview;
 }

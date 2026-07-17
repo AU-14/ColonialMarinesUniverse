@@ -102,6 +102,14 @@ public sealed partial class FactionMetadata
     public ProtoId<FactionIconPrototype>? StatusIcon;
 
     /// <summary>
+    ///     Status icon given to members recruited in-round (for example tattooed by the tattoo gun) who have
+    ///     no per-job entry in <see cref="JobStatusIcons"/>. Without this such recruits keep the default CLF
+    ///     icon instead of the faction's. Falls back to <see cref="StatusIcon"/> when left empty.
+    /// </summary>
+    [DataField]
+    public ProtoId<FactionIconPrototype>? RecruitStatusIcon;
+
+    /// <summary>
     ///     Per-job status icon overrides. A member whose job appears here shows that icon instead of the
     ///     faction-wide <see cref="StatusIcon"/>. Jobs with no entry fall back to <see cref="StatusIcon"/>.
     /// </summary>

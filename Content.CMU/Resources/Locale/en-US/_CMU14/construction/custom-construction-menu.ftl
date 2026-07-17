@@ -105,7 +105,30 @@ gmod-construction-menu-items-editor = Construction Items Editor
 gmod-construction-menu-tiles-editor = Tiles Editor
 gmod-construction-menu-lathe-editor = Lathe Editor
 gmod-construction-menu-zlevel-toggles = Z-Level Toggles
+gmod-construction-menu-spawnlist-delete = Delete Spawnlist
 construction-menu-editor-not-admin = You are not an admin - the editor won't open.
+
+## Spawnlist Delete tool (Admin Tools → Delete Spawnlist)
+
+construction-spawnlist-delete-title = Delete Spawnlist
+construction-spawnlist-delete-pick = Spawnlist to delete (with its recipe count):
+construction-spawnlist-delete-option = { $spawnlist } ({ $count } recipes)
+construction-spawnlist-delete-none = No spawnlists with generated recipes.
+construction-spawnlist-delete-arm = Delete…
+construction-spawnlist-delete-confirm = CONFIRM DELETE
+construction-spawnlist-delete-warning = This deletes EVERY generated recipe in "{ $spawnlist }". Confirm unlocks shortly…
+construction-spawnlist-delete-ready = Ready - confirming deletes "{ $spawnlist }" and all its recipes.
+construction-menu-spawnlist-deleted = Deleted spawnlist "{ $spawnlist }" ({ $count } recipes removed).
+
+## DB save preview (human-in-the-loop confirm before any Save writes files/database rows)
+
+construction-db-preview-title = Confirm Save - Pending Changes
+construction-db-preview-summary = { $kind }: { $planned } write(s) planned, { $rejected } rejected. Review, then confirm.
+construction-db-preview-confirm = Confirm Save
+construction-db-preview-cancel = Cancel
+construction-db-preview-kind-entry = Construction entry
+construction-db-preview-kind-mass = Mass entities
+construction-db-preview-kind-mass-tiles = Mass tiles
 
 ## Utilities → INSFOR
 
@@ -235,3 +258,4 @@ au14-toolperm-tool-lathe = Lathe Editor
 au14-toolperm-tool-zleveltoggles = Z-Level Toggles
 au14-toolperm-tool-zsync = Z-Sync Lists
 au14-toolperm-tool-insfor = INSFOR Editor
+au14-toolperm-tool-spawnlistdelete = Spawnlist Delete

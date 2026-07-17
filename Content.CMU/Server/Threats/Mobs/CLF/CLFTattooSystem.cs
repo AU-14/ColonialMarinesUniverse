@@ -260,8 +260,12 @@ public sealed partial class CLFTattooSystem : EntitySystem
         _gunIFF.AddUserFaction(target, comp.IFF);
 
         // Add CLF member component
-        EnsureComp<CLFMemberComponent>(target);
+        var memberComp = EnsureComp<CLFMemberComponent>(target);
         _factionLanguage.ApplyFactionLanguageToNewMember(target, "CLF"); // for the lang system
+
+        // Give the recruit the active faction's membership icon (recruit-fallback, else the faction icon).
+        // Without this a tattooed member keeps the default CLF icon instead of the chosen faction's.
+        _insforApply.ApplyRecruitIcon(target, memberComp);
 
         // Add mind role and send briefing
         if (_mind.TryGetMind(target, out EntityUid mindId, out MindComponent? mind))

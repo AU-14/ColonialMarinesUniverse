@@ -44,6 +44,11 @@ public sealed class SubmitMassConstructionEditorEvent : EntityEventArgs
     public List<CustomConstructionStepData> Steps = new();
     public List<CustomConstructionStepData> DeconstructSteps = new();
     public int Health;
+
+    /// <summary>True = dry run. The server validates and answers with <see cref="OpenDbSavePreviewEvent"/>
+    /// listing exactly what WOULD be written (files + database rows) without writing anything. The client
+    /// then re-sends the same submit with Preview = false once the admin confirms.</summary>
+    public bool Preview;
 }
 
 /// <summary>
@@ -62,4 +67,26 @@ public sealed class SubmitMassTileEditorEvent : EntityEventArgs
 
     /// <summary>True = file under the Z-Level (Experimental) top-bar page (the "Tiles" spawnlist).</summary>
     public bool ZLevelPage = true;
+
+    /// <summary>True = dry run; see <see cref="SubmitMassConstructionEditorEvent.Preview"/>.</summary>
+    public bool Preview;
+}
+
+/// <summary>
+/// Server → client: the scrollable human-in-the-loop confirmation shown before a save is committed.
+/// Lists, line by line, exactly which files and database rows the save would write (built by the SAME
+/// validation pass that the real save uses, so what you confirm is what happens). The client re-sends
+/// the original submit with Preview = false on confirm, or drops it on cancel.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class OpenDbSavePreviewEvent : EntityEventArgs
+{
+    /// <summary>Loc id of the window title context ("mass entities" / "mass tiles" / "construction entry").</summary>
+    public string Kind = string.Empty;
+
+    /// <summary>One line per planned file write / DB upsert, plus one per rejected input with the reason.</summary>
+    public List<string> Lines = new();
+
+    public int Planned;
+    public int Rejected;
 }

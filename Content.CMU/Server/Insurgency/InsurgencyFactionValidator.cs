@@ -76,6 +76,8 @@ public static class InsurgencyFactionValidator
             meta.FlagEntity = null;
         if (meta.StatusIcon is { } icon && !prototypes.HasIndex<FactionIconPrototype>(icon.Id))
             meta.StatusIcon = null;
+        if (meta.RecruitStatusIcon is { } recruitIcon && !prototypes.HasIndex<FactionIconPrototype>(recruitIcon.Id))
+            meta.RecruitStatusIcon = null;
 
         // Per-job icon overrides: drop rows whose job or icon the server does not know.
         meta.JobStatusIcons.RemoveAll(j =>

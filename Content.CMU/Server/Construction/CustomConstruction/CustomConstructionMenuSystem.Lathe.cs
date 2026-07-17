@@ -173,6 +173,12 @@ public sealed partial class CustomConstructionMenuSystem
         {
             Directory.CreateDirectory(LatheDir);
             var yaml = BuildLatheRecipeYaml(recipeId, msg.Lathe, msg.ResultId, steel, glass, plastic, time);
+            if (IsOversizedYaml(yaml, out var sizeReason))
+            {
+                PopupTo(session, Loc.GetString("construction-menu-verb-invalid", ("reason", sizeReason)), PopupType.MediumCaution);
+                return;
+            }
+
             File.WriteAllText(Path.Combine(LatheDir, $"{recipeId}.yml"), yaml, Encoding.UTF8);
             DbUpsert(DbKindLathe, recipeId, yaml);
 

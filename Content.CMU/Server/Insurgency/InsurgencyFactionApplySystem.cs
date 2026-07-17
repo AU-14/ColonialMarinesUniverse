@@ -319,6 +319,25 @@ public sealed class InsurgencyFactionApplySystem : EntitySystem
     }
 
     /// <summary>
+    ///     Gives a member recruited in-round (for example tattooed) the active faction's membership icon, so
+    ///     they read as this faction instead of the default CLF. Uses the faction's recruit-fallback icon when
+    ///     set, otherwise a per-job override for their job, otherwise the faction-wide icon. No-op when no
+    ///     faction is active or it configures no icon at all.
+    /// </summary>
+    public void ApplyRecruitIcon(EntityUid member, CLFMemberComponent memberComp)
+    {
+        if (GetActiveFaction() is not { } definition)
+            return;
+
+        var icon = definition.Metadata.RecruitStatusIcon ?? ResolveJobIcon(member, definition);
+        if (icon is not { } resolved)
+            return;
+
+        memberComp.StatusIcon = resolved;
+        Dirty(member, memberComp);
+    }
+
+    /// <summary>
     ///     Picks the status icon for a member: the override for their job if one is configured, otherwise the
     ///     faction-wide icon. Null only when the faction sets no icon at all.
     /// </summary>

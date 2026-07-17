@@ -39,6 +39,12 @@ public sealed class CustomConstructionEditorClientSystem : EntitySystem
     private MassEntitySelectorWindow? _massSelector;
     private ConstructionEditorWindow? _massEditor;
     private ZBorderSyncWindow? _zSyncWindow;
+    private SpawnlistDeleteWindow? _spawnlistDeleteWindow;
+    private DbSavePreviewWindow? _dbPreviewWindow;
+
+    /// <summary>Re-sends the stashed submit (with Preview = false) when the admin confirms the DB save
+    /// preview window. Set when a preview-gated submit is sent; cleared on confirm, cancel, or replacement.</summary>
+    private Action? _pendingDbConfirm;
     private bool _zSyncPickActive;
     private bool _zSyncPickBlacklist;
 
@@ -59,6 +65,8 @@ public sealed class CustomConstructionEditorClientSystem : EntitySystem
         SubscribeNetworkEvent<OpenZLevelTogglesEvent>(OnOpenZLevelToggles);
         SubscribeNetworkEvent<OpenMassConstructionEditorEvent>(OnOpenMassEditor);
         SubscribeNetworkEvent<OpenZBorderSyncEvent>(OnOpenZSync);
+        SubscribeNetworkEvent<OpenSpawnlistDeleteEvent>(OnOpenSpawnlistDelete);
+        SubscribeNetworkEvent<OpenDbSavePreviewEvent>(OnOpenDbPreview);
 
         CommandBinds.Builder
             .Bind(EngineKeyFunctions.Use, new PointerInputCmdHandler(OnZSyncPickUse, outsidePrediction: true))
@@ -167,7 +175,7 @@ public sealed class CustomConstructionEditorClientSystem : EntitySystem
             config.OnSubmit += submit =>
             {
                 submit.TileIds = tileIds;
-                RaiseNetworkEvent(submit);
+                SendWithDbPreview(submit, preview => submit.Preview = preview);
             };
             config.OpenCentered();
         };
@@ -181,18 +189,86 @@ public sealed class CustomConstructionEditorClientSystem : EntitySystem
         _massEditor = new ConstructionEditorWindow();
         var protoIds = ev.ProtoIds;
         // One editor form; on confirm the single recipe is fanned out server-side to every entity in the batch.
-        _massEditor.OnSubmit += submit => RaiseNetworkEvent(new SubmitMassConstructionEditorEvent
+        _massEditor.OnSubmit += submit =>
         {
-            ProtoIds = protoIds,
-            Spawnlist = submit.Spawnlist,
-            Category = submit.Category,
-            Steps = submit.Steps,
-            DeconstructSteps = submit.DeconstructSteps,
-            Health = submit.Health,
-        });
+            var mass = new SubmitMassConstructionEditorEvent
+            {
+                ProtoIds = protoIds,
+                Spawnlist = submit.Spawnlist,
+                Category = submit.Category,
+                Steps = submit.Steps,
+                DeconstructSteps = submit.DeconstructSteps,
+                Health = submit.Health,
+            };
+            SendWithDbPreview(mass, preview => mass.Preview = preview);
+        };
         _massEditor.OnClose += () => _massEditor = null;
         _massEditor.Populate(ev.Editor);
         _massEditor.OpenCentered();
+    }
+
+    /// <summary>
+    /// Preview-first save flow: sends the submit as a dry run (Preview = true) and stashes a re-send
+    /// closure. The server answers with <see cref="OpenDbSavePreviewEvent"/> listing every file/DB write
+    /// the save would do; confirming in the window re-sends the SAME submit with Preview = false.
+    /// </summary>
+    private void SendWithDbPreview<T>(T submit, Action<bool> setPreview) where T : EntityEventArgs
+    {
+        setPreview(true);
+        _pendingDbConfirm = () =>
+        {
+            setPreview(false);
+            RaiseNetworkEvent(submit);
+        };
+        RaiseNetworkEvent(submit);
+    }
+
+    private void OnOpenDbPreview(OpenDbSavePreviewEvent ev)
+    {
+        _dbPreviewWindow?.Close();
+        var window = new DbSavePreviewWindow();
+        _dbPreviewWindow = window;
+        window.OnConfirm += () =>
+        {
+            _pendingDbConfirm?.Invoke();
+            _pendingDbConfirm = null;
+        };
+        // Closing without confirming (cancel or X) drops the pending save entirely. Guarded so closing a
+        // STALE window (replaced by a newer preview above) can't wipe the newer pending confirm.
+        window.OnClose += () =>
+        {
+            if (_dbPreviewWindow != window)
+                return;
+
+            _dbPreviewWindow = null;
+            _pendingDbConfirm = null;
+        };
+        window.Populate(ev);
+        window.OpenCentered();
+    }
+
+    /// <summary>Admin Tools > Delete Spawnlist: ask the server (which re-checks permission) for the
+    /// spawnlists that currently hold generated recipes, then confirm the destructive delete.</summary>
+    public void OpenSpawnlistDelete()
+    {
+        if (!CanUseEditor(AU14ToolPermissions.SpawnlistDelete))
+        {
+            _popup.PopupCursor(Loc.GetString("construction-menu-editor-not-admin"), PopupType.MediumCaution);
+            return;
+        }
+
+        RaiseNetworkEvent(new RequestOpenSpawnlistDeleteEvent());
+    }
+
+    private void OnOpenSpawnlistDelete(OpenSpawnlistDeleteEvent ev)
+    {
+        _spawnlistDeleteWindow?.Close();
+        _spawnlistDeleteWindow = new SpawnlistDeleteWindow();
+        _spawnlistDeleteWindow.OnDeleteSpawnlist += spawnlist =>
+            RaiseNetworkEvent(new DeleteSpawnlistEvent { Spawnlist = spawnlist });
+        _spawnlistDeleteWindow.OnClose += () => _spawnlistDeleteWindow = null;
+        _spawnlistDeleteWindow.Populate(ev);
+        _spawnlistDeleteWindow.OpenCentered();
     }
 
     /// <summary>Admin Tools > Z-Level Toggles: ask the server (which re-checks permission) for the map list.</summary>
@@ -339,7 +415,7 @@ public sealed class CustomConstructionEditorClientSystem : EntitySystem
         _window?.Close();
 
         _window = new ConstructionEditorWindow();
-        _window.OnSubmit += submit => RaiseNetworkEvent(submit);
+        _window.OnSubmit += submit => SendWithDbPreview(submit, preview => submit.Preview = preview);
         _window.OnRemoveGroup += group => RaiseNetworkEvent(new RemoveCustomConstructionGroupEvent { Spawnlist = group.spawnlist, Category = group.category });
         _window.OnClose += () => _window = null;
         _window.Populate(ev);

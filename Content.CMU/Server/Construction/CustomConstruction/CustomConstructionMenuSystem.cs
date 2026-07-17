@@ -117,6 +117,9 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
         // The "Mass Entity Editor" batch tool (see the .Mass.cs partial).
         InitializeMass();
 
+        // The "Spawnlist Delete" tool (see the .SpawnlistDelete.cs partial).
+        InitializeSpawnlistDelete();
+
         // The "Tiles" and "Lathe" sibling editors (see the .Tiles.cs / .Lathe.cs partials).
         SubscribeNetworkEvent<RequestOpenCustomTileEditorEvent>(OnRequestOpenTile);
         SubscribeNetworkEvent<SubmitCustomTileEditorEvent>(OnSubmitTile);
@@ -434,15 +437,32 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
     /// </summary>
     private void UnhideRecipeId(string recipeId)
     {
+        if (UnhideRecipeIdsPersist(new[] { recipeId }) is { } overridesYaml)
+            PublishYaml(overridesYaml, "menu overrides");
+    }
+
+    /// <summary>
+    /// Batch unhide WITHOUT publishing: removes every id from the hidden-overrides list and persists the
+    /// result (file + DB) in one write. Returns the updated overrides YAML so the caller can fold it into
+    /// its own single publish, or null when nothing changed. Publishing is the expensive part (it reloads
+    /// every localization on server and clients), so batch save paths must do it exactly once - calling
+    /// the per-id publish in a loop is what made big mass-editor saves hang the server mid-round.
+    /// </summary>
+    private string? UnhideRecipeIdsPersist(IEnumerable<string> recipeIds)
+    {
         if (_generatedDir == null)
-            return;
+            return null;
 
         var dir = Path.Combine(_generatedDir, OverridesSubDir);
         var path = Path.Combine(dir, OverridesFileName);
 
         var hidden = ReadHiddenRecipes(path);
-        if (!hidden.Remove(recipeId))
-            return;
+        var changed = false;
+        foreach (var recipeId in recipeIds)
+            changed |= hidden.Remove(recipeId);
+
+        if (!changed)
+            return null;
 
         try
         {
@@ -450,11 +470,12 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
             var overridesYaml = BuildOverridesYaml(hidden);
             File.WriteAllText(path, overridesYaml, Encoding.UTF8);
             DbUpsert(DbKindOverrides, Path.GetFileNameWithoutExtension(OverridesFileName), overridesYaml);
-            PublishYaml(overridesYaml, "menu overrides");
+            return overridesYaml;
         }
         catch (Exception e)
         {
-            Log.Warning($"Failed to unhide recipe id {recipeId}: {e}");
+            Log.Warning($"Failed to unhide recipe ids: {e}");
+            return null;
         }
     }
 
@@ -602,26 +623,42 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
 
         try
         {
-            Directory.CreateDirectory(_generatedDir);
-
-            if (isChange && !string.Equals(msg.EntryKey, newKey, StringComparison.Ordinal))
-                RetireEntryFile(FilePathForKey(msg.EntryKey));
-
             var yaml = BuildGeneratedYaml(proto, newKey, spawnlist, category, steps, deconstructSteps, msg.Health);
-            if (IsUnsafeGeneratedEntryYaml(yaml, out var reason))
+            if (IsUnsafeGeneratedEntryYaml(yaml, out var reason) || IsOversizedYaml(yaml, out reason))
             {
                 Log.Error($"Refusing to write unsafe custom construction entry for {proto.ID} (key {newKey}): {reason}");
                 PopupTo(session, Loc.GetString("construction-menu-verb-invalid", ("reason", reason)), PopupType.MediumCaution);
                 return;
             }
 
+            // Dry run: report exactly what WOULD be written and stop. The client shows the scrollable
+            // confirmation window and re-sends with Preview = false.
+            if (msg.Preview)
+            {
+                var preview = new OpenDbSavePreviewEvent { Kind = "construction-db-preview-kind-entry", Planned = 1 };
+                if (isChange && !string.Equals(msg.EntryKey, newKey, StringComparison.Ordinal))
+                {
+                    preview.Lines.Add($"DELETE file {FilePrefix}{msg.EntryKey}.yml + DB row (entries/{FilePrefix}{msg.EntryKey}) - entry moved");
+                }
+                preview.Lines.Add($"WRITE file {FilePrefix}{newKey}.yml ({Encoding.UTF8.GetByteCount(yaml)} bytes)");
+                preview.Lines.Add($"UPSERT DB row (entries/{FilePrefix}{newKey}) - {proto.ID}, spawnlist '{spawnlist}', category '{category}'");
+                RaiseNetworkEvent(preview, session);
+                return;
+            }
+
+            Directory.CreateDirectory(_generatedDir);
+
+            if (isChange && !string.Equals(msg.EntryKey, newKey, StringComparison.Ordinal))
+                RetireEntryFile(FilePathForKey(msg.EntryKey));
+
             File.WriteAllText(FilePathForKey(newKey), yaml, Encoding.UTF8);
             DbUpsert(DbKindEntries, $"{FilePrefix}{newKey}", yaml);
 
             // Apply live: load on the server (overwrite) and push to every client, so the new/changed
-            // recipe shows up this round instead of "after the next restart".
-            PublishYaml(yaml, $"entry {newKey}");
-            UnhideRecipeId($"{FilePrefix}{newKey}");
+            // recipe shows up this round instead of "after the next restart". Publishing reloads every
+            // localization, so the entry and its overrides unhide share ONE publish.
+            var overridesYaml = UnhideRecipeIdsPersist(new[] { $"{FilePrefix}{newKey}" });
+            PublishYaml(overridesYaml == null ? yaml : yaml + "\n" + overridesYaml, $"entry {newKey}");
         }
         catch (Exception e)
         {
@@ -1418,6 +1455,28 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
     private const int MaxStepAmount = 30;
     /// <summary>Max per-step build time in seconds.</summary>
     private const int MaxStepSeconds = 300;
+
+    /// <summary>
+    /// Max size of ONE generated YAML document (file + DB row), in bytes. Generated entries are normally
+    /// a few KB; anything approaching this is corrupt or hostile. Checked on every write AND on every DB
+    /// restore, so an oversized row can never be written, restored, or broadcast to clients.
+    /// </summary>
+    private const int MaxGeneratedYamlBytes = 128 * 1024;
+
+    /// <summary>Single guard every tool's save path runs before persisting generated YAML.</summary>
+    private static bool IsOversizedYaml(string yaml, out string reason)
+    {
+        // UTF-8 length ≈ char count for our generated ASCII yaml; Encoding count is exact and cheap.
+        var bytes = Encoding.UTF8.GetByteCount(yaml);
+        if (bytes <= MaxGeneratedYamlBytes)
+        {
+            reason = string.Empty;
+            return false;
+        }
+
+        reason = $"generated YAML is {bytes / 1024} KiB (max {MaxGeneratedYamlBytes / 1024} KiB)";
+        return true;
+    }
 
     /// <summary>
     /// Whitelists a client-sent spawnlist/category name before it is embedded in generated YAML: letters,

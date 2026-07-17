@@ -152,11 +152,14 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
         var recruited = LabeledMultiline("Recruited message", meta.RecruitedMessage);
         var description = LabeledMultiline("Description", meta.Description);
         var roleplay = LabeledMultiline("Roleplay style", meta.RoleplayText);
-        // DISABLED: picking a flag for an INSFOR faction is cancelled for now - the whole flag
-        // feature (selection + import/export) proved too logically complicated. The stored value
-        // is preserved untouched on save so nothing is lost if this comes back.
-        // var flag = FlagField("Flag entity", meta.FlagEntity?.Id);
+        // Flag: pick any catalog entity to use as the faction flag. Its sprite shows on the leader's
+        // faction-selection rows and in the member reveal popup. This is the catalog picker only - the old
+        // live upload / import-export pipeline stays retired.
+        var flag = EntityField("Flag entity", meta.FlagEntity?.Id);
         var icon = IconField("Status icon", meta.StatusIcon?.Id);
+        // Icon for members recruited in-round (tattooed) who have no per-job icon - without it they keep the
+        // default CLF icon. Falls back to the Status icon above when left empty.
+        var recruitIcon = IconField("Recruited-member icon (no per-job icon)", meta.RecruitStatusIcon?.Id);
         var jobIcons = JobIconListEditor(meta.JobStatusIcons);
         var dollars = LabeledLine("Dollars to points rate", def.Economy.DollarsToPointsRate.ToString(System.Globalization.CultureInfo.InvariantCulture));
 
@@ -187,7 +190,7 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
         var pages = new (string Title, Control[] Controls)[]
         {
             ("Faction Info", new Control[] { title.Control, recruited.Control, description.Control,
-                roleplay.Control, icon.Control, jobIcons.Control, isDefault, opposed.Control }),
+                roleplay.Control, flag.Control, icon.Control, recruitIcon.Control, jobIcons.Control, isDefault, opposed.Control }),
             ("Economy", new Control[] { dollars.Control, submissions.Control, includeDollars }),
             ("Cell Kit", new Control[] { machines.Control, placeables.Control }),
             ("Vendors", new Control[] { vendors.Control }),
@@ -213,9 +216,9 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
                 Description = description.Read(),
                 RoleplayText = roleplay.Read(),
                 RecruitedMessage = recruited.Read(),
-                // Flag selection is disabled (see above); carry the existing value through unchanged.
-                FlagEntity = meta.FlagEntity,
+                FlagEntity = ToEntProtoIdOrNull(flag.Read()),
                 StatusIcon = ToIconOrNull(icon.Read()),
+                RecruitStatusIcon = ToIconOrNull(recruitIcon.Read()),
                 JobStatusIcons = jobIcons.Read(),
                 OpposedGovforFactions = opposed.Read(),
                 // Preserve the built-in override marker so re-saving an edited built-in keeps updating the

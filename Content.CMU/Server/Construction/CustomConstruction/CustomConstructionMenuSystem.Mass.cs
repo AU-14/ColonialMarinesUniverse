@@ -55,16 +55,24 @@ public sealed partial class CustomConstructionMenuSystem
         var added = 0;
         var failed = 0;
         var seen = new HashSet<string>();
+        var preview = msg.Preview ? new OpenDbSavePreviewEvent { Kind = "construction-db-preview-kind-mass-tiles" } : null;
+        // Batched publish: every generated document is folded into ONE combined publish at the end.
+        // Publishing per tile reloads every localization each time, which hung the server mid-round.
+        var combined = new StringBuilder();
+        var recipeIds = new List<string>();
 
-        try
+        if (preview == null)
         {
-            Directory.CreateDirectory(TilesDir);
-        }
-        catch (Exception e)
-        {
-            Log.Error($"Failed to create tiles dir for mass add: {e}");
-            PopupTo(session, Loc.GetString("construction-menu-verb-add-failed"), PopupType.MediumCaution);
-            return;
+            try
+            {
+                Directory.CreateDirectory(TilesDir);
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to create tiles dir for mass add: {e}");
+                PopupTo(session, Loc.GetString("construction-menu-verb-add-failed"), PopupType.MediumCaution);
+                return;
+            }
         }
 
         foreach (var tileId in msg.TileIds.Take(MaxMassEntities))
@@ -74,6 +82,7 @@ public sealed partial class CustomConstructionMenuSystem
                 !_prototype.HasIndex<Content.Shared.Maps.ContentTileDefinition>(tileId))
             {
                 failed++;
+                preview?.Lines.Add($"REJECT '{tileId}' - unknown or duplicate tile");
                 continue;
             }
 
@@ -81,10 +90,24 @@ public sealed partial class CustomConstructionMenuSystem
             try
             {
                 var yaml = BuildTileYaml(key, tileId, material, amount, spawnlist, category, msg.ZLevelPage);
+                if (IsOversizedYaml(yaml, out var sizeReason))
+                {
+                    failed++;
+                    preview?.Lines.Add($"REJECT '{tileId}' - {sizeReason}");
+                    continue;
+                }
+
+                if (preview != null)
+                {
+                    preview.Lines.Add($"WRITE file Tiles/{TileFilePrefix}{key}.yml ({Encoding.UTF8.GetByteCount(yaml)} bytes) + UPSERT DB row (Tiles/{TileFilePrefix}{key})");
+                    added++;
+                    continue;
+                }
+
                 File.WriteAllText(Path.Combine(TilesDir, $"{TileFilePrefix}{key}.yml"), yaml, Encoding.UTF8);
                 DbUpsert(DbKindTiles, $"{TileFilePrefix}{key}", yaml);
-                PublishYaml(yaml, $"tile {key}");
-                UnhideRecipeId($"{TileFilePrefix}{key}");
+                combined.AppendLine(yaml);
+                recipeIds.Add($"{TileFilePrefix}{key}");
                 added++;
             }
             catch (Exception e)
@@ -92,6 +115,22 @@ public sealed partial class CustomConstructionMenuSystem
                 Log.Error($"Mass tile add failed for {tileId} (key {key}): {e}");
                 failed++;
             }
+        }
+
+        if (preview != null)
+        {
+            preview.Planned = added;
+            preview.Rejected = failed;
+            RaiseNetworkEvent(preview, session);
+            return;
+        }
+
+        // ONE publish for the whole batch (recipes + the overrides unhide in the same document).
+        if (recipeIds.Count > 0)
+        {
+            if (UnhideRecipeIdsPersist(recipeIds) is { } overridesYaml)
+                combined.AppendLine(overridesYaml);
+            PublishYaml(combined.ToString(), $"mass tiles ({added})");
         }
 
         _adminLogger.Add(LogType.Action, LogImpact.Medium,
@@ -169,16 +208,24 @@ public sealed partial class CustomConstructionMenuSystem
         var failed = 0;
         string? firstFailReason = null;
         var seen = new HashSet<string>();
+        var preview = msg.Preview ? new OpenDbSavePreviewEvent { Kind = "construction-db-preview-kind-mass" } : null;
+        // Batched publish: every generated document is folded into ONE combined publish at the end.
+        // Publishing per entity reloads every localization each time, which hung the server mid-round.
+        var combined = new StringBuilder();
+        var recipeIds = new List<string>();
 
-        try
+        if (preview == null)
         {
-            Directory.CreateDirectory(_generatedDir);
-        }
-        catch (Exception e)
-        {
-            Log.Error($"Failed to create generated dir for mass add: {e}");
-            PopupTo(session, Loc.GetString("construction-menu-verb-add-failed"), PopupType.MediumCaution);
-            return;
+            try
+            {
+                Directory.CreateDirectory(_generatedDir);
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to create generated dir for mass add: {e}");
+                PopupTo(session, Loc.GetString("construction-menu-verb-add-failed"), PopupType.MediumCaution);
+                return;
+            }
         }
 
         foreach (var id in msg.ProtoIds.Take(MaxMassEntities))
@@ -190,6 +237,7 @@ public sealed partial class CustomConstructionMenuSystem
             {
                 failed++;
                 firstFailReason ??= "generated custom entities cannot be added again";
+                preview?.Lines.Add($"REJECT '{proto.ID}' - already a generated custom entity");
                 continue;
             }
 
@@ -199,6 +247,7 @@ public sealed partial class CustomConstructionMenuSystem
             {
                 failed++;
                 firstFailReason ??= invalidReason;
+                preview?.Lines.Add($"REJECT '{proto.ID}' - {invalidReason}");
                 continue;
             }
 
@@ -207,6 +256,7 @@ public sealed partial class CustomConstructionMenuSystem
             {
                 failed++;
                 firstFailReason ??= deconstructReason;
+                preview?.Lines.Add($"REJECT '{proto.ID}' - {deconstructReason}");
                 continue;
             }
 
@@ -214,17 +264,25 @@ public sealed partial class CustomConstructionMenuSystem
             try
             {
                 var yaml = BuildGeneratedYaml(proto, key, spawnlist, category, steps, deconstructSteps, msg.Health);
-                if (IsUnsafeGeneratedEntryYaml(yaml, out var reason))
+                if (IsUnsafeGeneratedEntryYaml(yaml, out var reason) || IsOversizedYaml(yaml, out reason))
                 {
                     failed++;
                     firstFailReason ??= reason;
+                    preview?.Lines.Add($"REJECT '{proto.ID}' - {reason}");
+                    continue;
+                }
+
+                if (preview != null)
+                {
+                    preview.Lines.Add($"WRITE file {FilePrefix}{key}.yml ({Encoding.UTF8.GetByteCount(yaml)} bytes) + UPSERT DB row (entries/{FilePrefix}{key})");
+                    added++;
                     continue;
                 }
 
                 File.WriteAllText(FilePathForKey(key), yaml, Encoding.UTF8);
                 DbUpsert(DbKindEntries, $"{FilePrefix}{key}", yaml);
-                PublishYaml(yaml, $"entry {key}");
-                UnhideRecipeId($"{FilePrefix}{key}");
+                combined.AppendLine(yaml);
+                recipeIds.Add($"{FilePrefix}{key}");
                 added++;
             }
             catch (Exception e)
@@ -232,6 +290,22 @@ public sealed partial class CustomConstructionMenuSystem
                 Log.Error($"Mass add failed for {proto.ID} (key {key}): {e}");
                 failed++;
             }
+        }
+
+        if (preview != null)
+        {
+            preview.Planned = added;
+            preview.Rejected = failed;
+            RaiseNetworkEvent(preview, session);
+            return;
+        }
+
+        // ONE publish for the whole batch (recipes + the overrides unhide in the same document).
+        if (recipeIds.Count > 0)
+        {
+            if (UnhideRecipeIdsPersist(recipeIds) is { } overridesYaml)
+                combined.AppendLine(overridesYaml);
+            PublishYaml(combined.ToString(), $"mass entries ({added})");
         }
 
         var recipeText = DescribeRecipe(steps);
