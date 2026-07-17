@@ -9,6 +9,9 @@
     state: icon
   - type: Item
     size: Small
+  - type: Tag
+    tags:
+    - MaintenanceJack
   - type: Clothing
     quickEquip: false
     slots:
@@ -70,6 +73,7 @@
     tags:
     - Wrench
     - Crowbar
+    - MaintenanceJack
   - type: Tool
     qualities:
       - Prying
