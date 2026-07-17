@@ -500,6 +500,93 @@
     - id: RMCLightReplacer
       name: Light Replacer
       price: 8
+    - id: CMBeltUtility
+      name: Utility Belt
+      price: 10
+    - id: CMHandsInsulated
+      name: Insulated Gloves
+      price: 20
+    - id: RMCWeldingGoggles
+      name: Welding Goggles
+      price: 20
+    - id: RMCHelmetWelding
+      name: Welding Helmet
+      price: 25
+    - id: CMTRayScanner
+      name: T-Ray Scanner
+      price: 15
+
+# circuitboard - mirrors CMVendorCircuits
+- type: entity
+  id: CMUCashVendorCircuits
+  parent: AU14CashVendorBase
+  name: Circuitboard Vendor
+  suffix: Cash
+  description: A safe storage for pre-programmed circuit boards, it has an internal gyroscope to keep any external force from moving the boards, thick insulation and a custom 2.1mm UPS port for charging various We-Yu exclusive devices (sold separately).
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/robotics.rsi
+    layers:
+    - state: "off"
+    - state: "normal-unshaded"
+      shader: unshaded
+  - type: AU14CashVendor
+    allowDepartmentBudget: true
+    items:
+    - id: DoorElectronics
+      name: Door Electronics
+      price: 20
+    - id: CMAPCElectronics
+      name: APC Electronics
+      price: 50
+    - id: RMCCircuitboardTelevision
+      name: Television Circuit Board
+      price: 25
+    - id: CMSMESMachineCircuitboard
+      name: SMES Circuit Board
+      price: 50
+    - id: CMAutolatheMachineCircuitboard
+      name: Autolathe Circuit Board
+      price: 30
+    - id: CMUCircuitboardRecharger
+      name: Recharger Circuit Board
+      price: 75
+#      - id: CMCircuitboardDispenserBooze
+#        amount: 2
+#      - id: CMCircuitboardDispenserSoda
+#        amount: 2
+#      - id: CMCircuitboardMicrowave
+#        amount: 2
+#      - id: CMCircuitboardChemMaster
+#        amount: 1
+#      - id: CMCircuitboardDispenserChem
+#        amount: 1
+#     - id: RMCFireAlarmCircuitboard
+#       amount: 5
+#     - id: RMCTelecomServerCircuitboard
+#       amount: 1
+#     - id: RMCCrewMonitoringCircuitboard
+#       amount: 2
+#     - id: RMCIDComputerConsoleCircuitboard
+#       amount: 2
+#     - id: RMCSecurityRecordsCircuitboard
+#       amount: 2
+#     - id: RMCSupplyOrderingCircuitboard
+#       amount: 2
+#     - id: RMCReserachDataTerminalCircuitboard
+#       amount: 2
+#     - id: RMCPacmanGeneratorCircuitboard
+#       amount: 1
+#     - id: RMCAirAlarmCircuitboard
+#       amount: 2
+#     - id: RMCSecurityCameraMonitorCircuitboard
+#       amount: 2
+#     - id: RMCStationAlertsConsoleCircuitboard
+#       amount: 2
+#     - id: RMCArcadeCircuitboard
+#       amount: 2
+#     - id: RMCAtmosphericConsoleCircuitboard
+#       amount: 2    
 
 # General medical supplies — mirrors AU14GeneralMedicalVendor field supplies + autoinjectors
 - type: entity
