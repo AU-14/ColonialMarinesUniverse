@@ -205,7 +205,7 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
         BodyPartSymmetry selectedSymmetry,
         CMUSurgeryArmedStepComponent? current)
     {
-        if (!_flowSurgery.TryGetReattachAnchorPart(patient, out var anchor))
+        if (!_flowSurgery.TryGetReattachAnchorPart(patient, selectedType, selectedSymmetry, out var anchor))
         {
             _popup.PopupEntity(Loc.GetString("cmu-medical-surgery-ui-less-select-part"), patient, surgeon);
             return true;
@@ -638,7 +638,7 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
         if (!HasComp<BodyPartComponent>(targetPart))
         {
             if (SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(best.Entry.SurgeryId)
-                && _flowSurgery.TryGetReattachAnchorPart(patient, out var anchor))
+                && _flowSurgery.TryGetReattachAnchorPart(patient, best.Part.Type, best.Part.Symmetry, out var anchor))
             {
                 targetPart = anchor;
             }
@@ -825,7 +825,11 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
         if (!HasComp<BodyPartComponent>(targetPart))
         {
             if (SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(selectedSurgery.SurgeryId)
-                && _flowSurgery.TryGetReattachAnchorPart(marker.Patient, out var anchor))
+                && _flowSurgery.TryGetReattachAnchorPart(
+                    marker.Patient,
+                    selectedPart.Type,
+                    selectedPart.Symmetry,
+                    out var anchor))
             {
                 targetPart = anchor;
             }

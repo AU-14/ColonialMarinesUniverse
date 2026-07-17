@@ -1,5 +1,4 @@
 using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Body.Part;
@@ -167,7 +166,7 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
         }
 
         var limb = Spawn(limbPrototype, Transform(ent.Owner).Coordinates);
-        AttachPrintedExtremity(limb, msg.Kind, msg.Type, msg.Symmetry);
+        EnsurePrintedExtremitySlot(limb, msg.Type, msg.Symmetry);
         _transform.PlaceNextTo(limb, ent.Owner);
 
         StartWorking(ent, TimeSpan.FromSeconds(1.2));
@@ -375,12 +374,20 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
         [
             MakeOption(comp, CMULimbPrinterPrintKind.Organic, BodyPartType.Arm, BodyPartSymmetry.Left, organicCanPrint, organicDisabledReason),
             MakeOption(comp, CMULimbPrinterPrintKind.Robotic, BodyPartType.Arm, BodyPartSymmetry.Left, roboticCanPrint, roboticDisabledReason),
+            MakeOption(comp, CMULimbPrinterPrintKind.Organic, BodyPartType.Hand, BodyPartSymmetry.Left, organicCanPrint, organicDisabledReason),
+            MakeOption(comp, CMULimbPrinterPrintKind.Robotic, BodyPartType.Hand, BodyPartSymmetry.Left, roboticCanPrint, roboticDisabledReason),
             MakeOption(comp, CMULimbPrinterPrintKind.Organic, BodyPartType.Leg, BodyPartSymmetry.Left, organicCanPrint, organicDisabledReason),
             MakeOption(comp, CMULimbPrinterPrintKind.Robotic, BodyPartType.Leg, BodyPartSymmetry.Left, roboticCanPrint, roboticDisabledReason),
+            MakeOption(comp, CMULimbPrinterPrintKind.Organic, BodyPartType.Foot, BodyPartSymmetry.Left, organicCanPrint, organicDisabledReason),
+            MakeOption(comp, CMULimbPrinterPrintKind.Robotic, BodyPartType.Foot, BodyPartSymmetry.Left, roboticCanPrint, roboticDisabledReason),
             MakeOption(comp, CMULimbPrinterPrintKind.Organic, BodyPartType.Arm, BodyPartSymmetry.Right, organicCanPrint, organicDisabledReason),
             MakeOption(comp, CMULimbPrinterPrintKind.Robotic, BodyPartType.Arm, BodyPartSymmetry.Right, roboticCanPrint, roboticDisabledReason),
+            MakeOption(comp, CMULimbPrinterPrintKind.Organic, BodyPartType.Hand, BodyPartSymmetry.Right, organicCanPrint, organicDisabledReason),
+            MakeOption(comp, CMULimbPrinterPrintKind.Robotic, BodyPartType.Hand, BodyPartSymmetry.Right, roboticCanPrint, roboticDisabledReason),
             MakeOption(comp, CMULimbPrinterPrintKind.Organic, BodyPartType.Leg, BodyPartSymmetry.Right, organicCanPrint, organicDisabledReason),
             MakeOption(comp, CMULimbPrinterPrintKind.Robotic, BodyPartType.Leg, BodyPartSymmetry.Right, roboticCanPrint, roboticDisabledReason),
+            MakeOption(comp, CMULimbPrinterPrintKind.Organic, BodyPartType.Foot, BodyPartSymmetry.Right, organicCanPrint, organicDisabledReason),
+            MakeOption(comp, CMULimbPrinterPrintKind.Robotic, BodyPartType.Foot, BodyPartSymmetry.Right, roboticCanPrint, roboticDisabledReason),
         ];
     }
 
@@ -414,10 +421,24 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
             return true;
         }
 
+        if (kind == CMULimbPrinterPrintKind.Organic && type == BodyPartType.Hand && symmetry == BodyPartSymmetry.Left)
+        {
+            prototype = comp.LeftHandPrototype;
+            name = Loc.GetString("cmu-limb-printer-left-hand");
+            return true;
+        }
+
         if (kind == CMULimbPrinterPrintKind.Organic && type == BodyPartType.Leg && symmetry == BodyPartSymmetry.Left)
         {
             prototype = comp.LeftLegPrototype;
             name = Loc.GetString("cmu-limb-printer-left-leg");
+            return true;
+        }
+
+        if (kind == CMULimbPrinterPrintKind.Organic && type == BodyPartType.Foot && symmetry == BodyPartSymmetry.Left)
+        {
+            prototype = comp.LeftFootPrototype;
+            name = Loc.GetString("cmu-limb-printer-left-foot");
             return true;
         }
 
@@ -428,10 +449,24 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
             return true;
         }
 
+        if (kind == CMULimbPrinterPrintKind.Organic && type == BodyPartType.Hand && symmetry == BodyPartSymmetry.Right)
+        {
+            prototype = comp.RightHandPrototype;
+            name = Loc.GetString("cmu-limb-printer-right-hand");
+            return true;
+        }
+
         if (kind == CMULimbPrinterPrintKind.Organic && type == BodyPartType.Leg && symmetry == BodyPartSymmetry.Right)
         {
             prototype = comp.RightLegPrototype;
             name = Loc.GetString("cmu-limb-printer-right-leg");
+            return true;
+        }
+
+        if (kind == CMULimbPrinterPrintKind.Organic && type == BodyPartType.Foot && symmetry == BodyPartSymmetry.Right)
+        {
+            prototype = comp.RightFootPrototype;
+            name = Loc.GetString("cmu-limb-printer-right-foot");
             return true;
         }
 
@@ -442,10 +477,24 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
             return true;
         }
 
+        if (kind == CMULimbPrinterPrintKind.Robotic && type == BodyPartType.Hand && symmetry == BodyPartSymmetry.Left)
+        {
+            prototype = comp.RoboticLeftHandPrototype;
+            name = Loc.GetString("cmu-limb-printer-left-robotic-hand");
+            return true;
+        }
+
         if (kind == CMULimbPrinterPrintKind.Robotic && type == BodyPartType.Leg && symmetry == BodyPartSymmetry.Left)
         {
             prototype = comp.RoboticLeftLegPrototype;
             name = Loc.GetString("cmu-limb-printer-left-robotic-leg");
+            return true;
+        }
+
+        if (kind == CMULimbPrinterPrintKind.Robotic && type == BodyPartType.Foot && symmetry == BodyPartSymmetry.Left)
+        {
+            prototype = comp.RoboticLeftFootPrototype;
+            name = Loc.GetString("cmu-limb-printer-left-robotic-foot");
             return true;
         }
 
@@ -456,6 +505,13 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
             return true;
         }
 
+        if (kind == CMULimbPrinterPrintKind.Robotic && type == BodyPartType.Hand && symmetry == BodyPartSymmetry.Right)
+        {
+            prototype = comp.RoboticRightHandPrototype;
+            name = Loc.GetString("cmu-limb-printer-right-robotic-hand");
+            return true;
+        }
+
         if (kind == CMULimbPrinterPrintKind.Robotic && type == BodyPartType.Leg && symmetry == BodyPartSymmetry.Right)
         {
             prototype = comp.RoboticRightLegPrototype;
@@ -463,55 +519,38 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
             return true;
         }
 
+        if (kind == CMULimbPrinterPrintKind.Robotic && type == BodyPartType.Foot && symmetry == BodyPartSymmetry.Right)
+        {
+            prototype = comp.RoboticRightFootPrototype;
+            name = Loc.GetString("cmu-limb-printer-right-robotic-foot");
+            return true;
+        }
+
         return false;
     }
 
-    private void AttachPrintedExtremity(
+    private void EnsurePrintedExtremitySlot(
         EntityUid limb,
-        CMULimbPrinterPrintKind kind,
         BodyPartType type,
         BodyPartSymmetry symmetry)
     {
-        if (kind == CMULimbPrinterPrintKind.Robotic)
-        {
-            if (TryComp<CMURoboticLimbComponent>(limb, out var robotic))
-                AttachPrintedChild(limb, robotic.ChildSlot, robotic.ChildPrototype);
-
-            return;
-        }
-
-        (string Slot, EntProtoId Prototype)? child = type switch
+        (string Slot, BodyPartType Type)? childSlot = type switch
         {
             BodyPartType.Arm when symmetry == BodyPartSymmetry.Left =>
-                (Slot: "left_hand", Prototype: "CMUPartHumanLeftHand"),
+                (Slot: "left_hand", Type: BodyPartType.Hand),
             BodyPartType.Arm when symmetry == BodyPartSymmetry.Right =>
-                (Slot: "right_hand", Prototype: "CMUPartHumanRightHand"),
+                (Slot: "right_hand", Type: BodyPartType.Hand),
             BodyPartType.Leg when symmetry == BodyPartSymmetry.Left =>
-                (Slot: "left_foot", Prototype: "CMUPartHumanLeftFoot"),
+                (Slot: "left_foot", Type: BodyPartType.Foot),
             BodyPartType.Leg when symmetry == BodyPartSymmetry.Right =>
-                (Slot: "right_foot", Prototype: "CMUPartHumanRightFoot"),
+                (Slot: "right_foot", Type: BodyPartType.Foot),
             _ => null
         };
 
-        if (child is not { } childInfo)
+        if (childSlot is not { } child || !TryComp<BodyPartComponent>(limb, out var limbPart))
             return;
 
-        AttachPrintedChild(limb, childInfo.Slot, childInfo.Prototype);
-    }
-
-    private void AttachPrintedChild(EntityUid limb, string? slot, EntProtoId? prototype)
-    {
-        if (string.IsNullOrWhiteSpace(slot) || prototype is not { } childPrototype)
-            return;
-
-        var childUid = Spawn(childPrototype, Transform(limb).Coordinates);
-        var attached = TryComp<BodyPartComponent>(limb, out var limbPart)
-            && TryComp<BodyPartComponent>(childUid, out var childPart)
-            && (_body.AttachPart(limb, slot, childUid, limbPart, childPart)
-                || _body.TryCreatePartSlotAndAttach(limb, slot, childUid, childPart.PartType, limbPart, childPart));
-
-        if (!attached)
-            QueueDel(childUid);
+        _body.TryCreatePartSlot(limb, child.Slot, child.Type, out _, limbPart);
     }
 
     private bool TryGetSynthesisSolution(EntityUid uid, out Entity<SolutionComponent> solutionEnt, out Solution solution)

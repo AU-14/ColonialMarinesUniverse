@@ -19,8 +19,6 @@
     current: 80
     severanceThreshold: 90
   - type: CMURoboticLimb
-    childPrototype: CMUPartRoboticLeftHand
-    childSlot: left_hand
     baseLayers:
       LArm: CMUMobDroneAndroidLArm
 
@@ -45,8 +43,6 @@
     current: 80
     severanceThreshold: 90
   - type: CMURoboticLimb
-    childPrototype: CMUPartRoboticRightHand
-    childSlot: right_hand
     baseLayers:
       RArm: CMUMobDroneAndroidRArm
 
@@ -122,8 +118,6 @@
     current: 90
     severanceThreshold: 90
   - type: CMURoboticLimb
-    childPrototype: CMUPartRoboticLeftFoot
-    childSlot: left_foot
     baseLayers:
       LLeg: CMUMobDroneAndroidLLeg
 
@@ -151,8 +145,6 @@
     current: 90
     severanceThreshold: 90
   - type: CMURoboticLimb
-    childPrototype: CMUPartRoboticRightFoot
-    childSlot: right_foot
     baseLayers:
       RLeg: CMUMobDroneAndroidRLeg
 

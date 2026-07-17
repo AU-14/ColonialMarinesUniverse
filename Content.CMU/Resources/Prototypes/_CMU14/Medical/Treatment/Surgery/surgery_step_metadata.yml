@@ -221,7 +221,7 @@
   id: CMUSurgeryStepMetaReattachLimb
   surgery: CMUSurgeryReattachLimb
   displayName: Reattach Limb
-  validParts: [Arm, Leg]
+  validParts: [Arm, Hand, Leg, Foot]
   category: reattach
   minSkill: 2
   steps:
