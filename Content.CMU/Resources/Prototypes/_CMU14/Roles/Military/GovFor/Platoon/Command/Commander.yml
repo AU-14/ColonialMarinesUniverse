@@ -71,6 +71,9 @@
     - NonResuscitable
     - Epilepsy
     - NoEnglish
+    - SlowRunner
+    - Anemic
+    - Asthmatic
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -79,7 +82,7 @@
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobGOVFORPlatCo
-        time: 86400 # 24 hours
+        time: 180000 # 50 hours
     RMCRankMajor:
       entity: AU14ChevronMajor
       requirements: []
@@ -124,6 +127,7 @@
   equipment:
     id: AU14IDCardOPFORPlatCo
     ears: AU14HeadsetOpforCommand
+    pocket1: AU14StampCO
   inhand:
    -  AU14TabletOpfor
 

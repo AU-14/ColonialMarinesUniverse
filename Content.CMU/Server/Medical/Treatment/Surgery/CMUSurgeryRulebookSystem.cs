@@ -256,7 +256,12 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
 
     private static bool IsSurgicallySupportedPart(BodyPartType type)
     {
-        return type is BodyPartType.Head or BodyPartType.Torso or BodyPartType.Arm or BodyPartType.Leg;
+        return type is BodyPartType.Head
+            or BodyPartType.Torso
+            or BodyPartType.Arm
+            or BodyPartType.Hand
+            or BodyPartType.Leg
+            or BodyPartType.Foot;
     }
 
     private string BuildConditionSummary(EntityUid part, BodyPartType partType)

@@ -2,6 +2,7 @@
   id: CMUBaseGasMaskFilterSlot
   abstract: true
   components:
+  - type: BreathMask
   - type: ContainerContainer
     containers:
       filter: !type:ContainerSlot

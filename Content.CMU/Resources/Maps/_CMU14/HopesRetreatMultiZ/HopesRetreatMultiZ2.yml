@@ -1,10 +1,10 @@
 meta:
   format: 7
   category: Map
-  engineVersion: v277.0.0
+  engineVersion: v278.0.0
   forkId: ""
   forkVersion: ""
-  time: 07/08/2026 07:47:42
+  time: 07/14/2026 09:32:32
   entityCount: 193
 maps:
 - 1
@@ -25,7 +25,6 @@ entities:
       name: Mapping JE-1758 Ascanius [2]
     - type: Transform
     - type: Map
-      mapPaused: True
     - type: GridTree
     - type: OccluderTree
     - type: MapGrid

@@ -48,12 +48,13 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
     [Dependency] private IEntityManager _entityManager = default!;
 
     /// <summary>
-    /// A run of text that shares the same bold/italic formatting. Runechat's
+    /// A run of text that shares the same bold/italic formatting and, optionally,
+    /// a color override from a [color=...] tag (e.g. chat highlighting). Runechat's
     /// bubble is built out of these instead of plain strings so that a single
-    /// bold/italic word or phrase can render as just that span, rather than
+    /// bold/italic/colored word or phrase can render as just that span, rather than
     /// forcing the whole bubble into one style.
     /// </summary>
-    private readonly record struct TextRun(string Text, bool Bold, bool Italic);
+    private readonly record struct TextRun(string Text, bool Bold, bool Italic, Color? ColorOverride = null);
 
     public RunechatSpeechBubble(SpeechType type, ChatMessage message, EntityUid senderEntity)
         : base(
@@ -252,27 +253,34 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
     }
 
     /// <summary>
-    /// Parses a string that may contain [bold]/[italic]/[bolditalic] markup
-    /// (from SharedChatSystem's per-word/per-phrase formatting system,
-    /// resolved server-side via ResolveBoldSentinels) into a flat list of
-    /// TextRuns. Other recognized FormattedMessage tags (color, font) are
-    /// stripped without affecting Bold/Italic state. Genuinely unrecognized
-    /// bracketed text - such as a literal radio channel label like "[ALFA]"
-    /// - is preserved as plain text.
+    /// Parses a string that may contain [bold]/[italic]/[bolditalic]/[color=...]
+    /// markup into a flat list of TextRuns. Bold/italic come from
+    /// SharedChatSystem's per-word/per-phrase formatting system (resolved
+    /// server-side via ResolveBoldSentinels). Color comes from chat highlighting
+    /// (client-injected via InjectTagAroundString) - unlike bold/italic/font,
+    /// color is NOT discarded: its hex value is parsed and carried on the run so
+    /// the renderer can draw that word/phrase in the highlight color instead of
+    /// the bubble's base color. [font] tags are still stripped with no effect,
+    /// since runechat doesn't support per-run font family swaps. Genuinely
+    /// unrecognized bracketed text - such as a literal radio channel label like
+    /// "[ALFA]" - is preserved as plain text.
     /// </summary>
     private static List<TextRun> ParseFormattingRuns(string markupText)
     {
         var runs = new List<TextRun>();
         var boldDepth = 0;
         var italicDepth = 0;
+        var colorStack = new Stack<Color>();
         var i = 0;
         var sb = new StringBuilder();
+
+        Color? CurrentColor() => colorStack.Count > 0 ? colorStack.Peek() : (Color?)null;
 
         void Flush()
         {
             if (sb.Length > 0)
             {
-                runs.Add(new TextRun(sb.ToString(), boldDepth > 0, italicDepth > 0));
+                runs.Add(new TextRun(sb.ToString(), boldDepth > 0, italicDepth > 0, CurrentColor()));
                 sb.Clear();
             }
         }
@@ -328,9 +336,30 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
                         italicDepth = Math.Max(0, italicDepth - 1);
                         i = close + 1;
                         continue;
+                    case "/color":
+                        Flush();
+                        if (colorStack.Count > 0)
+                            colorStack.Pop();
+                        i = close + 1;
+                        continue;
                     default:
-                        var tagName = tag.Split('=')[0].Trim().ToLowerInvariant();
-                        if (tagName is "color" or "/color" or "font" or "/font")
+                        var equalsIndex = tag.IndexOf('=');
+                        var tagName = (equalsIndex >= 0 ? tag[..equalsIndex] : tag).Trim().ToLowerInvariant();
+
+                        if (tagName == "color")
+                        {
+                            Flush();
+                            var value = equalsIndex >= 0 ? tag[(equalsIndex + 1)..].Trim() : null;
+                            if (!string.IsNullOrEmpty(value) && TryParseColor(value, out var parsedColor))
+                                colorStack.Push(parsedColor);
+                            else
+                                colorStack.Push(colorStack.Count > 0 ? colorStack.Peek() : DefaultColor);
+
+                            i = close + 1;
+                            continue;
+                        }
+
+                        if (tagName is "font" or "/font")
                         {
                             i = close + 1;
                             continue;
@@ -349,6 +378,20 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         Flush();
         return runs;
     }
+
+    private static bool TryParseColor(string value, out Color color)
+{
+    value = value.Trim('"', '\'');
+
+    if (Color.TryFromHex(value) is { } hexColor)
+    {
+        color = hexColor;
+        return true;
+    }
+
+    color = default;
+    return false;
+}
 
     /// <summary>
     /// Collapses whitespace to single spaces and trims leading/trailing
@@ -797,7 +840,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
                         textColor);
                 }
 
-                DrawOutlinedLine(handle, position, line, textColor);
+                DrawOutlinedLine(handle, position, line, textColor, textOpacity);
                 y += lineHeight;
             }
         }
@@ -972,18 +1015,18 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
                 foreach (var rune in piece.Text.EnumerateRunes())
                 {
                     var candidateText = builder.ToString() + rune;
-                    var candidateWidth = MeasureRunWidth(new TextRun(candidateText, piece.Bold, piece.Italic));
+                    var candidateWidth = MeasureRunWidth(new TextRun(candidateText, piece.Bold, piece.Italic, piece.ColorOverride));
 
                     if (builder.Length > 0 && pieceStartWidth + candidateWidth > GetMaxWidth())
                     {
-                        current.Add(new TextRun(builder.ToString(), piece.Bold, piece.Italic));
+                        current.Add(new TextRun(builder.ToString(), piece.Bold, piece.Italic, piece.ColorOverride));
                         lines.Add(current);
 
                         current = new List<TextRun>();
                         builder.Clear();
                         builder.Append(rune);
                         pieceStartWidth = 0f;
-                        currentWidth = MeasureRunWidth(new TextRun(builder.ToString(), piece.Bold, piece.Italic));
+                        currentWidth = MeasureRunWidth(new TextRun(builder.ToString(), piece.Bold, piece.Italic, piece.ColorOverride));
                         continue;
                     }
 
@@ -992,7 +1035,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
                 }
 
                 if (builder.Length > 0)
-                    current.Add(new TextRun(builder.ToString(), piece.Bold, piece.Italic));
+                    current.Add(new TextRun(builder.ToString(), piece.Bold, piece.Italic, piece.ColorOverride));
             }
 
             lines.Add(current);
@@ -1157,16 +1200,20 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             DrawingHandleScreen handle,
             Vector2 position,
             List<TextRun> lineRuns,
-            Color textColor)
+            Color textColor,
+            float textOpacity)
         {
             var strokeOffset = GetTextPixelOffset(TextStrokeOffset);
             var haloOffset = GetTextPixelOffset(TextHaloOffset);
             var strokeColor = Color.Black.WithAlpha(textColor.A * TextStrokeAlpha);
             var haloColor = Color.Black.WithAlpha(textColor.A * TextHaloAlpha);
 
-            DrawLinePasses(handle, position, lineRuns, TextHaloOffsets, haloOffset, haloColor);
-            DrawLinePasses(handle, position, lineRuns, TextStrokeOffsets, strokeOffset, strokeColor);
-            DrawLineMain(handle, position, lineRuns, textColor);
+            // Outline/halo passes always render pure black regardless of any
+            // per-run color override - only the final fill pass below should
+            // pick up a highlighted word's color.
+            DrawLinePasses(handle, position, lineRuns, TextHaloOffsets, haloOffset, haloColor, useRunColor: false, textOpacity);
+            DrawLinePasses(handle, position, lineRuns, TextStrokeOffsets, strokeOffset, strokeColor, useRunColor: false, textOpacity);
+            DrawLineMain(handle, position, lineRuns, textColor, useRunColor: true, textOpacity);
         }
 
         private void DrawLinePasses(
@@ -1175,25 +1222,37 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             List<TextRun> lineRuns,
             IReadOnlyList<Vector2> offsets,
             float offset,
-            Color color)
+            Color color,
+            bool useRunColor,
+            float textOpacity)
         {
             foreach (var direction in offsets)
             {
-                DrawLineMain(handle, position + direction * offset, lineRuns, color);
+                DrawLineMain(handle, position + direction * offset, lineRuns, color, useRunColor, textOpacity);
             }
         }
 
-        private void DrawLineMain(DrawingHandleScreen handle, Vector2 position, List<TextRun> lineRuns, Color color)
+        private void DrawLineMain(
+            DrawingHandleScreen handle,
+            Vector2 position,
+            List<TextRun> lineRuns,
+            Color color,
+            bool useRunColor,
+            float textOpacity)
         {
             var cursor = position;
 
             foreach (var run in lineRuns)
             {
                 var font = GetFont(run.Italic);
-                handle.DrawString(font, cursor, run.Text, UIScale, color);
+                var drawColor = useRunColor && run.ColorOverride is { } runColor
+                    ? runColor.WithAlpha(runColor.A * textOpacity)
+                    : color;
+
+                handle.DrawString(font, cursor, run.Text, UIScale, drawColor);
 
                 if (run.Bold)
-                    handle.DrawString(font, cursor + new Vector2(GetSyntheticBoldOffset(), 0f), run.Text, UIScale, color);
+                    handle.DrawString(font, cursor + new Vector2(GetSyntheticBoldOffset(), 0f), run.Text, UIScale, drawColor);
 
                 cursor += new Vector2(MeasureRunWidth(run), 0f);
             }

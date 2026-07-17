@@ -1,10 +1,10 @@
 meta:
   format: 7
   category: Map
-  engineVersion: v277.0.0
+  engineVersion: v278.0.0
   forkId: ""
   forkVersion: ""
-  time: 07/08/2026 07:55:40
+  time: 07/14/2026 09:35:08
   entityCount: 25634
 maps:
 - 1
@@ -6013,16 +6013,6 @@ entities:
     - type: Transform
       pos: 92.5,117.5
       parent: 1
-  - uid: 10671
-    components:
-    - type: Transform
-      pos: 90.5,111.5
-      parent: 1
-  - uid: 10672
-    components:
-    - type: Transform
-      pos: 90.5,113.5
-      parent: 1
 - proto: CMPaper
   entities:
   - uid: 10398
@@ -6680,49 +6670,63 @@ entities:
       parent: 1
 - proto: CMUAutodocConsole
   entities:
-  - uid: 10289
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 83.5,116.5
-      parent: 1
-  - uid: 10307
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 93.5,116.5
-      parent: 1
   - uid: 10323
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 88.5,116.5
-      parent: 1
-  - uid: 24356
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 89.5,113.5
-      parent: 1
-  - uid: 24357
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 89.5,111.5
       parent: 1
-- proto: CMUBodyScannerPod
+  - uid: 10671
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 89.5,113.5
+      parent: 1
+- proto: CMUAutodocPod
   entities:
+  - uid: 10307
+    components:
+    - type: Transform
+      pos: 90.5,113.5
+      parent: 1
+  - uid: 10321
+    components:
+    - type: Transform
+      pos: 90.5,111.5
+      parent: 1
+- proto: CMUBodyScannerConsole
+  entities:
+  - uid: 10289
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 93.5,116.5
+      parent: 1
   - uid: 10292
     components:
     - type: Transform
-      pos: 84.5,116.5
+      rot: -1.5707963267948966 rad
+      pos: 88.5,116.5
       parent: 1
   - uid: 10300
     components:
     - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 83.5,116.5
+      parent: 1
+- proto: CMUBodyScannerPod
+  entities:
+  - uid: 10672
+    components:
+    - type: Transform
       pos: 94.5,116.5
       parent: 1
-  - uid: 10321
+  - uid: 24356
+    components:
+    - type: Transform
+      pos: 84.5,116.5
+      parent: 1
+  - uid: 24357
     components:
     - type: Transform
       pos: 89.5,116.5

@@ -74,15 +74,12 @@
     - CMUProstheticRightArm
     - CMUProstheticLeftLeg
     - CMUProstheticRightLeg
+    - SlowRunner
+    - Anemic
+    - Asthmatic
   ranks:
     RMCRankCivilian: []
   chevrons:
-    RMCRankLanceCorporal:
-      entity: AU14ChevronUSCMLanceCorporal
-      requirements:
-      - !type:RoleTimeRequirement
-        role: AU14JobGOVFORSquadAutomaticRifleman
-        time: 86400 # 24 hours
     RMCRankPrivateFirstClass:
       entity: AU14ChevronUSCMPrivateFirstClass
       requirements:

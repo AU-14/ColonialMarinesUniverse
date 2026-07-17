@@ -51,6 +51,8 @@
     traits:
     - Epilepsy
     - NoEnglish
+    - SlowRunner
+    - Anemic
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -59,15 +61,33 @@
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobGOVFORadvisor
-        time: 360000
+        time: 180000 # 50 hours
+    RMCRankFirstSergeant:
+      entity: AU14ChevronUSCMFirstSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORadvisor
+        time: 144000 # 40 hours
     RMCRankMasterGunnerySergeant:
       entity: AU14ChevronUSCMMasterGunnerySergeant
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobGOVFORadvisor
-        time: 86400
-    RMCRankFirstSergeant:
-      entity: AU14ChevronUSCMFirstSergeant
+        time: 108000 # 30 hours
+    RMCRankMasterSergeant:
+      entity: AU14ChevronUSCMMasterSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORadvisor
+        time: 72000 # 20 hours
+    RMCRankGunnerySergeant:
+      entity: AU14ChevronUSCMGunnerySergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORadvisor
+        time: 36000 # 10 hours
+    RMCRankStaffSergeant:
+      entity: AU14ChevronUSCMStaffSergeant
       requirements: []
 
 - type: playTimeTracker

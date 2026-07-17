@@ -1,0 +1,38 @@
+- type: entity
+  parent: BaseItem
+  id: AU14Bangalore
+  name: bangalore demolition charge
+  description: A demolition charge used to clear obstacles and breach fortifications. Once placed on the ground it arms itself and detonates after 20 seconds.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Throwable/bangalore.rsi
+    state: icon
+  - type: Item
+    size: Large
+    sprite: _AU14/Weapons/Throwable/bangalore.rsi
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:TriggerBehavior
+  - type: CMUBangalore
+    placementDelay: 4.3
+  - type: RMCExplosiveDelete
+    delay: 20
+    beepSound:
+      path: "/Audio/Effects/beep1.ogg"
+      params:
+        volume: 4
+    initialBeepDelay: 19
+    beepInterval: 5
+  - type: ExplodeOnTrigger
+  - type: Explosive
+    explosionType: CMUBangalore
+    totalIntensity: 230
+    intensitySlope: 5
+    maxIntensity: 20
+    canCreateVacuum: false

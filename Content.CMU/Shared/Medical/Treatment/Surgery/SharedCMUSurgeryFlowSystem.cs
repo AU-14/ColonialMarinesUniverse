@@ -1339,7 +1339,10 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
 
     private static bool IsSelfSurgeryPart(BodyPartType partType)
     {
-        return partType is BodyPartType.Arm or BodyPartType.Leg;
+        return partType is BodyPartType.Arm
+            or BodyPartType.Hand
+            or BodyPartType.Leg
+            or BodyPartType.Foot;
     }
 
     public IEnumerable<CMUSurgeryStepMetadataPrototype> EnumerateMetadata()

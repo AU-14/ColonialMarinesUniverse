@@ -279,7 +279,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14CMBCIUTacticalMedicVendor
-  name: CMB CIU Tactical Medic Vendor
+  name: CMB CIU tactical medic Vendor
   description: >-
     An automated medical rack, hooked up to a compact stock of Crisis Intervention Unit trauma supplies from the Colonial Marshall Bureau.
     Standard issue for corpsmen aboard naval vessels, outposts and colonies where casualties arrive faster than reinforcements.
@@ -301,16 +301,17 @@
     - name: Essential Equipment
       takeAll: CMUEssentialEquipment
       entries:
-      - id: RMCVisorMedical
-      - id: AU14CMDefibrillator
-      - id: CMHealthAnalyzer
-      - id: RMCFlashlightPen
-      - id: ClothingNeckStethoscope
-      - id: CMRollerBedSpawnFolded
-      - id: RMCMedevacStretcherFolded
-      - id: AU14IVFoldableFolded
-      - id: CMSurgicalLine
-      - id: CMSynthGraft
+      - id: AU14VendorBundleCorpsmanEssentials
+    # - id: RMCVisorMedical
+    # - id: AU14CMDefibrillator
+    # - id: CMHealthAnalyzer
+    # - id: RMCFlashlightPen
+    # - id: ClothingNeckStethoscope
+    # - id: CMRollerBedSpawnFolded
+    # - id: RMCMedevacStretcherFolded
+    # - id: AU14IVFoldableFolded
+    # - id: CMSurgicalLine
+    # - id: CMSynthGraft
     - name: Medical Pouches
       choices: { CMUPlatoonMedicalPouch: 2 }
       entries:
@@ -319,7 +320,7 @@
       - id: RMCPouchMedical
       - id: RMCPouchSyringeFill
       - id: RMCPouchFirstAidSplintsGauzeOintment
-        name: first-aid pouch (gauze, ointment) # TODO RMC14 splints
+        name: first-aid pouch (gauze, ointment)
       - id: RMCPouchFirstAidPills
         name: first-aid pouch (pills)
     - name: Medical Storage
@@ -347,14 +348,16 @@
       - id: CMTraumaKit10
         amount: 30
     - name: Limited Pill Medications
-      choices: { CMUPlatoonMedicalLimitedMedications: 2 }
+      takeAll: CMULimitedPills
+    # choices: { CMUPlatoonMedicalLimitedMedications: 6 }
       entries:
       - id: AU14PillCanisterMeralyne
       - id: AU14PillCanisterDermaline
       - id: AU14PillCanisterAlbuterol
-      - id: AU14PillCanisterImidazoline
+    # - id: AU14PillCanisterImidazoline
     - name: Limited Injector Medications
-      choices: { CMUPlatoonMedicalLimitedMedicationsInjectors: 3 }
+      choices: { CMUPlatoonMedicalLimitedMedicationsInjectors: 6 }
+      takeAll: CMULimitedPills
       entries:
       - id: AU14MeraBicAutoInjector
       - id: AU14KeloDermAutoInjector
@@ -362,32 +365,60 @@
       - id: AU14RevivalMixAutoInjector
     - name: Pill Bottles
       entries:
-      - id: CMPillCanisterBicaridine
-        amount: 15
       - id: CMPillCanisterDexalin
-        amount: 15
+        amount: 20
       - id: CMPillCanisterDylovene
-        amount: 15
+        amount: 20
       - id: CMPillCanisterInaprovaline
-        amount: 15
+        amount: 20
+      - id: CMPillCanisterBicaridine
+        amount: 20
       - id: CMPillCanisterKelotane
-        amount: 15
+        amount: 20
       - id: CMPillCanisterTricordrazine
-        amount: 15
-#      - id: CMPillCanisterPeridaxon
-#      - id: CMPillCanisterTramadol
+        amount: 20
+      - id: RMCPillCanisterIron
+        amount: 20
+      - id: AU14PillCanisterParacetamol
+        amount: 20
+      - id: AU14PillCanisterTramadol
+        amount: 20
+      - id: AU14PillCanisterOxycodone
+        amount: 20
+      - id: AU14PillCanisterCardiocaine
+        amount: 20
+      - id: AU14PillCanisterHepatocytin
+        amount: 20
+      - id: AU14PillCanisterNephronate
+        amount: 20
+      - id: AU14PillCanisterOsteoCalc
+        amount: 20
+      - id: AU14PillCanisterPulmovine
+        amount: 20
     - name: Injectors
       entries:
       - id: CMEpinephrineAutoInjector
-        amount: 15
+        amount: 40
       - id: AU14NaloxoneAutoInjector
-        amount: 15
+        amount: 40
+      - id: RMCIronAutoInjector
+        amount: 40
       - id: CMInaprovalineAutoInjector
-        amount: 15
+        amount: 40
       - id: CMDexalinPlusAutoInjector
-        amount: 15
+        amount: 40
       - id: CMTricordrazineAutoInjector
-        amount: 15
+        amount: 40
+      - id: CMBicaridineAutoInjector
+        amount: 40
+      - id: CMKelotaneAutoInjector
+        amount: 40
+      - id: AU14ParacetamolAutoInjector
+        amount: 40
+      - id: AU14TramadolAutoInjector
+        amount: 40
+      - id: AU14OxycodoneAutoInjector
+        amount: 40
     - name: Medical Gloves
       choices: { CMUPlatoonMedicalGloves: 1 }
       entries:
@@ -1069,6 +1100,28 @@
       - id: AU14BackpackRTOPackDesert
         amount: 1
       - id: AU14BackpackRTOPackGray
+        amount: 1
+    - name: Materials
+      entries:
+      - id: CMSheetMetal
+        amount: 4
+      - id: CMSheetPlasteel50
+        amount: 4
+      - id: CMSandbagEmpty50
+        amount: 8
+      - id: AU14HescoKit
+        amount: 30
+      - id: RMCSheetPlastic
+        amount: 4
+      - id: RMCSheetAluminum
+        amount: 4
+      - id: CMSheetGlass
+        amount: 5
+      - id: RMCSheetCardboard
+        amount: 5
+      - id: CMSheetPhoron
+        amount: 1
+      - id: SheetUranium
         amount: 1
     - name: Tents
       entries:

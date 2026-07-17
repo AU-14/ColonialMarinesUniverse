@@ -1,0 +1,17 @@
+- type: entity
+  parent: CMBaseWallInvincible
+  id: CMUWallWoodReinforcedHeavy
+  name: heavy reinforced wood hull
+  description: A huge chunk of ultra-reinforced wood used to separate rooms. Looks virtually indestructible.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Walls/wood.rsi
+  - type: Icon
+    sprite: _RMC14/Structures/Walls/wood.rsi
+    state: wood0
+  - type: IconSmooth
+    key: walls
+    additionalKeys:
+    - windows
+    - doors
+    base: wood

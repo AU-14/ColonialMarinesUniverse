@@ -153,7 +153,7 @@
   parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
   id: AU14LACNICPS2
   name: LACN ICPS-2 Aircrew Armor
-  description: A set of ballistic armor used by LACN aircrew.
+  description: A set of ballistic armor used by LACN aircrew with an attached oxygen tank.
   components:
   - type: Sprite
     sprite: _AU14/Clothing/LACN/PilotGear/armor.rsi
@@ -165,3 +165,24 @@
     bio: 10
     explosionArmor: 10
   - type: CMHardArmor
+  - type: ActivatableUI
+    key: enum.SharedGasTankUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.SharedGasTankUiKey.Key:
+        type: GasTankBoundUserInterface
+  - type: GasTank
+    outputPressure: 21.3
+    air:
+      # 31 minutes
+      volume: 5
+      moles:
+      - 2.051379050 # oxygen
+      temperature: 293.15
+  - type: Tag
+    tags:
+    - GasTank
+  - type: UseDelay
+    delays:
+      gasTank:
+        length: 1.0

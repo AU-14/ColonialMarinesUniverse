@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Numerics;
 using Content.Server.Access.Systems;
 using Content.Server.AU14.Round;
 using Content.Server.AU14.Scenario;
@@ -8,14 +9,18 @@ using Content.Server.GameTicking;
 using Content.Server.IdentityManagement;
 using Content.Server.Preferences.Managers;
 using Content.Shared._CMU14.Threats;
+using Content.Shared._RMC14.Construction;
 using Content.Shared._RMC14.CrashLand;
 using Content.Shared._RMC14.Dropship;
+using Content.Shared._RMC14.Map;
 using Content.Shared.Access.Components;
 using Content.Shared.AU14.Scenario;
 using Content.Shared.AU14.util;
 using Content.Shared.Ghost;
 using Content.Shared.Humanoid;
 using Content.Shared.Mind;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.ParaDrop;
 using Content.Shared.Players;
 using Content.Shared.Preferences;
@@ -52,6 +57,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
     [Dependency] private IdCardSystem _idCard = default!;
     [Dependency] private IdentitySystem _identity = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
     private static readonly ProtoId<JobPrototype> ThirdPartyLeaderJobId = new("AU14JobThirdPartyLeader");
     private static readonly ProtoId<JobPrototype> ThirdPartyMemberJobId = new("AU14JobThirdPartyMember");
     private static readonly ThreatMarkerType[] ThreatMarkerTypes = Enum.GetValues<ThreatMarkerType>();
@@ -199,11 +205,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
         {
             ThirdPartyAssignmentCounts assignmentCounts = ThirdPartySystem.CountThirdPartyAssignments(assignedJobs);
             _sawmill.Debug(
-                $"[ThirdPartySystem] Spawn context: party={party.ID}, spawnProto={spawnProto.ID}, roundStart={roundStart
-                }, preset={presetId}, threat={_currentThreat?.ID ?? "null"}, entryMethod={entryMethod
-                }, coveredScenarioForce={coveredScenarioForce}, assignedJobs={assignedJobs?.Count ?? 0
-                }, assignedThirdPartyLeaders={assignmentCounts.Leaders}, assignedThirdPartyMembers={
-                    assignmentCounts.Members}.");
+                $"[ThirdPartySystem] Spawn context: party={party.ID}, spawnProto={spawnProto.ID}, roundStart={roundStart}, preset={presetId}, threat={_currentThreat?.ID ?? "null"}, entryMethod={entryMethod}, coveredScenarioForce={coveredScenarioForce}, assignedJobs={assignedJobs?.Count ?? 0}, assignedThirdPartyLeaders={assignmentCounts.Leaders}, assignedThirdPartyMembers={assignmentCounts.Members}.");
         }
 
         List<EntityUid> markerEntities = new();
@@ -262,8 +264,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
             }
             catch (Exception ex)
             {
-                _sawmill.Error($"[ThirdPartySystem] Failed to spawn return destination entity at {dropshipMapCoordinates
-                }: {ex}");
+                _sawmill.Error($"[ThirdPartySystem] Failed to spawn return destination entity at {dropshipMapCoordinates}: {ex}");
                 return false;
             }
 
@@ -277,8 +278,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
             EnsureComp<DropshipComponent>(mainGridUid);
             _sharedDropshipSystem.SetDropshipDestination(mainGridUid, returnDestination);
 
-            _sawmill.Debug($"[ThirdPartySystem] Third-party dropship {mainGridUid} loaded and waiting for manual launch to destination {
-                destination}.");
+            _sawmill.Debug($"[ThirdPartySystem] Third-party dropship {mainGridUid} loaded and waiting for manual launch to destination {destination}.");
 
             // Collect markers on dropship grid
             EntityQueryEnumerator<AuInsertMarkerComponent> query = _entityManager
@@ -338,8 +338,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
                             }
                             catch (Exception ex)
                             {
-                                _sawmill.Error($"[ThirdPartySystem] Failed to spawn Dropship Navigation console: {ex
-                                }");
+                                _sawmill.Error($"[ThirdPartySystem] Failed to spawn Dropship Navigation console: {ex}");
                             }
 
                             break;
@@ -359,8 +358,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
                 }
                 catch (Exception ex)
                 {
-                    _sawmill.Debug($"[ThirdPartySystem] Skipping vendor marker {vmarkerUid} (class={vmarkerComp.Class
-                    }) due to component error: {ex}");
+                    _sawmill.Debug($"[ThirdPartySystem] Skipping vendor marker {vmarkerUid} (class={vmarkerComp.Class}) due to component error: {ex}");
                 }
             }
 
@@ -431,8 +429,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
         if (_sawmill.Level <= LogLevel.Debug)
         {
             _sawmill.Debug(
-                $"[ThirdPartySystem] Candidate marker maps for third party ({party.ID}): count={candidateMapIds.Count
-                }, maps=[{string.Join(", ", candidateMapIds)}], initialMap={mapId?.ToString() ?? "null"}.");
+                $"[ThirdPartySystem] Candidate marker maps for third party ({party.ID}): count={candidateMapIds.Count}, maps=[{string.Join(", ", candidateMapIds)}], initialMap={mapId?.ToString() ?? "null"}.");
         }
 
         ResolvedThirdPartySpawnMarkerSet? scenarioMarkers = null;
@@ -465,8 +462,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
         if (scenarioMarkers == null && coveredScenarioForce)
         {
             _sawmill.Error(
-                $"[ThirdPartySystem] Covered Round Group for third party '{party.ID
-                }' resolved without live Spawn Markers; aborting authoritative Scenario Plan third-party spawn instead of using legacy marker lookup.");
+                $"[ThirdPartySystem] Covered Round Group for third party '{party.ID}' resolved without live Spawn Markers; aborting authoritative Scenario Plan third-party spawn instead of using legacy marker lookup.");
             return false;
         }
 
@@ -493,16 +489,14 @@ public sealed partial class ThirdPartySystem : EntitySystem
                     : null;
                 List<EntityUid> filteredScenarioMarkers = FilterScenarioMarkers(markerType, plannedMarkers, time, mapId,
                     gridUid);
-                _sawmill.Debug($"[ThirdPartySystem] GetMarkers({markerType}): Using {filteredScenarioMarkers.Count
-                } Scenario Plan marker(s) on map {mapId}");
+                _sawmill.Debug($"[ThirdPartySystem] GetMarkers({markerType}): Using {filteredScenarioMarkers.Count} Scenario Plan marker(s) on map {mapId}");
                 if (filteredScenarioMarkers.Count > 0 || !useDropship)
                     return filteredScenarioMarkers;
 
                 if (coveredScenarioForce)
                     return filteredScenarioMarkers;
 
-                _sawmill.Warning($"[ThirdPartySystem] Scenario Plan resolved no dropship grid markers for {markerType
-                } on grid {mainGridUid}; falling back to legacy marker lookup.");
+                _sawmill.Warning($"[ThirdPartySystem] Scenario Plan resolved no dropship grid markers for {markerType} on grid {mainGridUid}; falling back to legacy marker lookup.");
             }
 
             string markerId = spawnProto.Markers.TryGetValue(markerType, out string? id) ? id : string.Empty;
@@ -517,6 +511,9 @@ public sealed partial class ThirdPartySystem : EntitySystem
                     || !(comp.ID == markerId || (comp.ID == string.Empty && markerId == string.Empty))
                     || !comp.ThirdParty
                     || comp.NextAvailableAt > time)
+                    continue;
+
+                if (IsMarkerBlockedByWalls(uid))
                     continue;
 
                 if (useDropship && mainGridUid != EntityUid.Invalid)
@@ -537,8 +534,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
                 legacyMarkers.Add(uid);
             }
 
-            _sawmill.Debug($"[ThirdPartySystem] GetMarkers({markerType}): Found {legacyMarkers.Count
-            } unused markers with markerId '{markerId}' on map {mapId}");
+            _sawmill.Debug($"[ThirdPartySystem] GetMarkers({markerType}): Found {legacyMarkers.Count} unused markers with markerId '{markerId}' on map {mapId}");
             return legacyMarkers;
         }
 
@@ -609,31 +605,22 @@ public sealed partial class ThirdPartySystem : EntitySystem
         if (_sawmill.Level <= LogLevel.Debug)
         {
             _sawmill.Debug(
-                $"[ThirdPartySystem] Spawn plan for third party ({party.ID}): force={
-                    scenarioMarkers?.Force.ForceId ?? "legacy"}, leaders[{
-                        ThirdPartySystem.FormatSpawnBodies(leaderBodies)}] requested={leaderReq} markers={
-                            leaderMarkers.Count}, grunts[{ThirdPartySystem.FormatSpawnBodies(gruntBodies)}] requested={
-                                gruntReq} markers={gruntMarkers.Count}, entities[{
-                                    ThirdPartySystem.FormatSpawnBodies(entityBodies)}] requested={entityReq} markers={
-                                        entityMarkers.Count}.");
+                $"[ThirdPartySystem] Spawn plan for third party ({party.ID}): force={scenarioMarkers?.Force.ForceId ?? "legacy"}, leaders[{ThirdPartySystem.FormatSpawnBodies(leaderBodies)}] requested={leaderReq} markers={leaderMarkers.Count}, grunts[{ThirdPartySystem.FormatSpawnBodies(gruntBodies)}] requested={gruntReq} markers={gruntMarkers.Count}, entities[{ThirdPartySystem.FormatSpawnBodies(entityBodies)}] requested={entityReq} markers={entityMarkers.Count}.");
         }
 
         if (leaderReq > 0 && leaderMarkers.Count == 0)
         {
-            _sawmill.Warning($"[ThirdPartySystem] Third party ({party.ID}) requested {leaderReq
-            } leader body/bodies but found no leader markers.");
+            _sawmill.Warning($"[ThirdPartySystem] Third party ({party.ID}) requested {leaderReq} leader body/bodies but found no leader markers.");
         }
 
         if (gruntReq > 0 && gruntMarkers.Count == 0)
         {
-            _sawmill.Warning($"[ThirdPartySystem] Third party ({party.ID}) requested {gruntReq
-            } grunt body/bodies but found no member markers.");
+            _sawmill.Warning($"[ThirdPartySystem] Third party ({party.ID}) requested {gruntReq} grunt body/bodies but found no member markers.");
         }
 
         if (entityReq > 0 && entityMarkers.Count == 0)
         {
-            _sawmill.Warning($"[ThirdPartySystem] Third party ({party.ID}) requested {entityReq
-            } entity spawn(s) but found no entity markers.");
+            _sawmill.Warning($"[ThirdPartySystem] Third party ({party.ID}) requested {entityReq} entity spawn(s) but found no entity markers.");
         }
 
         List<EntityUid> FilterByType(ThreatMarkerType type)
@@ -664,17 +651,26 @@ public sealed partial class ThirdPartySystem : EntitySystem
         // If this is a groundside spawn, ensure there are enough *safe* markers (unused and not near alive players).
         if (!useDropship)
         {
+            var alivePlayerPositions = GetAlivePlayerPositions();
+            List<EntityUid> FilterSafeMarkers(List<EntityUid> markers)
+            {
+                var safeMarkers = new List<EntityUid>(markers.Count);
+                foreach (EntityUid marker in markers)
+                {
+                    if (!IsMarkerBlockedByPlayers(marker, alivePlayerPositions))
+                        safeMarkers.Add(marker);
+                }
+
+                return safeMarkers;
+            }
+
             List<EntityUid> safeLeaderMarkers = FilterSafeMarkers(leaderMarkers);
             List<EntityUid> safeGruntMarkers = FilterSafeMarkers(gruntMarkers);
             List<EntityUid> safeEntityMarkers = FilterSafeMarkers(entityMarkers);
 
-            if (safeLeaderMarkers.Count < leaderReq || safeGruntMarkers.Count < gruntReq
-                || safeEntityMarkers.Count < entityReq)
+            if (safeLeaderMarkers.Count < leaderReq || safeGruntMarkers.Count < gruntReq || safeEntityMarkers.Count < entityReq)
             {
-                _sawmill.Warning($"[ThirdPartySystem] Not enough safe markers to spawn third party ({party.ID
-                }): leaders needed {leaderReq}, safe available {safeLeaderMarkers.Count}; grunts needed {gruntReq
-                }, safe available {safeGruntMarkers.Count}; entities needed {entityReq}, safe available {
-                    safeEntityMarkers.Count}. Aborting spawn.");
+                _sawmill.Warning($"[ThirdPartySystem] Not enough safe markers to spawn third party ({party.ID}): leaders needed {leaderReq}, safe available {safeLeaderMarkers.Count}; grunts needed {gruntReq}, safe available {safeGruntMarkers.Count}; entities needed {entityReq}, safe available {safeEntityMarkers.Count}. Aborting spawn.");
                 return false;
             }
 
@@ -688,30 +684,13 @@ public sealed partial class ThirdPartySystem : EntitySystem
             // For dropship spawns we still require unused markers, as before
             if (leaderMarkers.Count < leaderReq || gruntMarkers.Count < gruntReq || entityMarkers.Count < entityReq)
             {
-                _sawmill.Warning($"[ThirdPartySystem] Not enough unused dropship markers to spawn third party ({party.ID
-                }): leaders needed {leaderReq}, available {leaderMarkers.Count}; grunts needed {gruntReq}, available {
-                    gruntMarkers.Count}; entities needed {entityReq}, available {entityMarkers.Count
-                    }. Aborting spawn.");
+                _sawmill.Warning($"[ThirdPartySystem] Not enough unused dropship markers to spawn third party ({party.ID}): leaders needed {leaderReq}, available {leaderMarkers.Count}; grunts needed {gruntReq}, available {gruntMarkers.Count}; entities needed {entityReq}, available {entityMarkers.Count}. Aborting spawn.");
                 return false;
             }
         }
 
         _sawmill.Debug(
-            $"[ThirdPartySystem] Final marker pools for third party ({party.ID}): leaders={leaderMarkers.Count
-            }, grunts={gruntMarkers.Count}, entities={entityMarkers.Count}, useDropship={useDropship}, parachuteMode={
-                parachuteMode}.");
-
-        List<EntityUid> FilterSafeMarkers(List<EntityUid> markers)
-        {
-            var safeMarkers = new List<EntityUid>(markers.Count);
-            foreach (EntityUid marker in markers)
-            {
-                if (!IsMarkerBlockedByPlayers(marker))
-                    safeMarkers.Add(marker);
-            }
-
-            return safeMarkers;
-        }
+            $"[ThirdPartySystem] Final marker pools for third party ({party.ID}): leaders={leaderMarkers.Count}, grunts={gruntMarkers.Count}, entities={entityMarkers.Count}, useDropship={useDropship}, parachuteMode={parachuteMode}.");
 
         // Spawn leaders
         _sawmill.Debug("[ThirdPartySystem] Spawning leaders...");
@@ -750,9 +729,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
         }
 
         _sawmill.Info(
-            $"[ThirdPartySystem] Third-party spawn result for ({party.ID}): spawnedLeaders={spawnedLeaders.Count}/{
-                leaderReq}, spawnedGrunts={spawnedGrunts.Count}/{gruntReq}, spawnedEntities={spawnedEnts.Count}/{
-                    entityReq}.");
+            $"[ThirdPartySystem] Third-party spawn result for ({party.ID}): spawnedLeaders={spawnedLeaders.Count}/{leaderReq}, spawnedGrunts={spawnedGrunts.Count}/{gruntReq}, spawnedEntities={spawnedEnts.Count}/{entityReq}.");
 
         // After all spawns: if spawnTogether is true, mark nearby unused markers around the last used marker.
         void MarkNeighborsIfNeeded()
@@ -829,8 +806,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
         {
             _chat.DispatchGlobalAnnouncement(party.AnnounceArrival, string.Empty, false,
                 colorOverride: Color.DarkOrange);
-            _sawmill.Info($"[ThirdPartySystem] Announced arrival for third party ({party.ID}): {party.AnnounceArrival
-            }");
+            _sawmill.Info($"[ThirdPartySystem] Announced arrival for third party ({party.ID}): {party.AnnounceArrival}");
         }
 
         return true;
@@ -892,12 +868,16 @@ public sealed partial class ThirdPartySystem : EntitySystem
                     marker.NextAvailableAt > time)
                     continue;
 
+                if (IsMarkerBlockedByWalls(uid))
+                    continue;
+
                 filteredMarkers.Add(uid);
                 continue;
             }
 
-            if (HasStandaloneThirdPartyMarker(uid, markerType) &&
-                IsScenarioMarkerAvailable(uid, time))
+            if (HasStandaloneThirdPartyMarker(uid, markerType)
+                && IsScenarioMarkerAvailable(uid, time)
+                && !IsMarkerBlockedByWalls(uid))
                 filteredMarkers.Add(uid);
         }
 
@@ -970,8 +950,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
             if (_scenarioPlan.TryResolveThirdPartySpawnMarkers(request, party.ID, mapId, out markers,
                 out string diagnostic))
             {
-                _sawmill.Debug($"[ThirdPartySystem] Using Scenario Plan Spawn Markers for third party '{party.ID
-                }' on map {mapId}.");
+                _sawmill.Debug($"[ThirdPartySystem] Using Scenario Plan Spawn Markers for third party '{party.ID}' on map {mapId}.");
                 return true;
             }
 
@@ -980,8 +959,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
                 string backupDiagnostic = coveredScenarioForce
                     ? "covered Round Groups do not use legacy marker lookup"
                     : "falling back to legacy marker lookup";
-                _sawmill.Warning($"[ThirdPartySystem] Could not resolve Scenario Plan Spawn Markers for third party '{
-                    party.ID}' on map {mapId}; {backupDiagnostic}. {diagnostic}");
+                _sawmill.Warning($"[ThirdPartySystem] Could not resolve Scenario Plan Spawn Markers for third party '{party.ID}' on map {mapId}; {backupDiagnostic}. {diagnostic}");
             }
         }
         catch (Exception ex)
@@ -991,8 +969,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
                 string backupDiagnostic = coveredScenarioForce
                     ? "covered Round Groups do not use legacy marker lookup"
                     : "falling back to legacy marker lookup";
-                _sawmill.Error($"[ThirdPartySystem] Scenario Plan Spawn Marker resolution threw for third party '{
-                    party.ID}' on map {mapId}; {backupDiagnostic}. {ex}");
+                _sawmill.Error($"[ThirdPartySystem] Scenario Plan Spawn Marker resolution threw for third party '{party.ID}' on map {mapId}; {backupDiagnostic}. {ex}");
             }
         }
 
@@ -1065,10 +1042,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
         ThirdPartyAssignmentCounts assignmentCounts = ThirdPartySystem.CountThirdPartyAssignments(assignedJobs);
         _sawmill.Info(
-            $"[ThirdPartySystem] Starting third-party queue: threat={threat.ID}, selected={_thirdPartyList.Count
-            }, roundstart={roundstartCount}, interval={_spawnInterval}, assignedJobs={assignedJobs?.Count ?? 0
-            }, assignedThirdPartyLeaders={assignmentCounts.Leaders}, assignedThirdPartyMembers={assignmentCounts.Members
-            }.");
+            $"[ThirdPartySystem] Starting third-party queue: threat={threat.ID}, selected={_thirdPartyList.Count}, roundstart={roundstartCount}, interval={_spawnInterval}, assignedJobs={assignedJobs?.Count ?? 0}, assignedThirdPartyLeaders={assignmentCounts.Leaders}, assignedThirdPartyMembers={assignmentCounts.Members}.");
 
         if (_thirdPartyList.Count == 0)
         {
@@ -1086,8 +1060,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
             if (!party.RoundStart)
                 break;
 
-            _sawmill.Debug($"[ThirdPartySystem] Attempting roundstart third-party ({party.ID}) with PartySpawn={
-                party.PartySpawn}.");
+            _sawmill.Debug($"[ThirdPartySystem] Attempting roundstart third-party ({party.ID}) with PartySpawn={party.PartySpawn}.");
             if (_prototypeManager.TryIndex(party.PartySpawn, out PartySpawnPrototype? spawnProto))
             {
                 if (SpawnThirdParty(party, spawnProto, true, assignedJobs))
@@ -1100,8 +1073,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
             }
             else
             {
-                _sawmill.Error($"[ThirdPartySystem] No spawn proto for roundstart third party ({party.ID}) PartySpawn={
-                    party.PartySpawn}");
+                _sawmill.Error($"[ThirdPartySystem] No spawn proto for roundstart third party ({party.ID}) PartySpawn={party.PartySpawn}");
             }
 
             _nextThirdPartyIndex++;
@@ -1175,34 +1147,35 @@ public sealed partial class ThirdPartySystem : EntitySystem
         }
     }
 
-    private bool IsMarkerBlockedByPlayers(EntityUid marker)
+    private List<(MapId Map, Vector2 WorldPos)> GetAlivePlayerPositions()
+    {
+        var positions = new List<(MapId, Vector2)>();
+        var query = EntityQueryEnumerator<ActorComponent, MobStateComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out _, out var mobState, out var xform))
+        {
+            if (mobState.CurrentState != MobState.Alive)
+                continue;
+
+            positions.Add((xform.MapID, _transform.GetWorldPosition(xform)));
+        }
+        return positions;
+    }
+
+    private bool IsMarkerBlockedByWalls(EntityUid marker)
+        => _rmcMap.HasAnchoredEntityEnumerator<RMCDropshipBlockedComponent>(Transform(marker).Coordinates);
+
+    private bool IsMarkerBlockedByPlayers(EntityUid marker, List<(MapId Map, Vector2 WorldPos)> playerPositions)
     {
         const float PlayerAvoidRadius = 8f;
-
-        // Only check main-map/groundside markers; dropship spawns handled elsewhere via useDropship
-        EntityCoordinates markerCoords = _entityManager.GetComponent<TransformComponent>(marker).Coordinates;
-        foreach (ICommonSession session in _playerManager.Sessions)
+        foreach (var (playerMap, playerPos) in playerPositions)
         {
-            if (!session.AttachedEntity.HasValue)
+            if (playerMap != Transform(marker).MapID)
                 continue;
 
-            EntityUid attached = session.AttachedEntity.Value;
-
-            // Skip ghosts
-            if (_entityManager.HasComponent<GhostComponent>(attached))
-                continue;
-
-            if (!_entityManager.TryGetComponent(attached, out TransformComponent? playerXform))
-                continue;
-
-            if (_transform.InRange(playerXform.Coordinates, markerCoords, PlayerAvoidRadius))
-            {
-                _sawmill.Debug($"[ThirdPartySystem] Marker {marker} is blocked by player {attached} within radius {
-                    PlayerAvoidRadius}");
+            var diff = _transform.GetWorldPosition(Transform(marker)) - playerPos;
+            if (diff.LengthSquared() <= PlayerAvoidRadius * PlayerAvoidRadius)
                 return true;
-            }
         }
-
         return false;
     }
 
@@ -1250,18 +1223,15 @@ public sealed partial class ThirdPartySystem : EntitySystem
             }
             catch (Exception ex)
             {
-                _sawmill.Error($"[ThirdPartySystem] Failed to assign {roleLabel} mind (player {playerNetId}, entity {
-                    entity}): {ex}");
+                _sawmill.Error($"[ThirdPartySystem] Failed to assign {roleLabel} mind (player {playerNetId}, entity {entity}): {ex}");
             }
         }
 
         _sawmill.Info(
-            $"[ThirdPartySystem] Third-party {roleLabel} mind assignment result: players={playerIds.Count}, bodies={
-                spawnedList.Count}, assigned={assigned}, job={jobProto}.");
+            $"[ThirdPartySystem] Third-party {roleLabel} mind assignment result: players={playerIds.Count}, bodies={spawnedList.Count}, assigned={assigned}, job={jobProto}.");
         if (playerIds.Count > spawnedList.Count)
         {
-            _sawmill.Warning($"[ThirdPartySystem] Third-party {roleLabel} assignment had {playerIds.Count
-            } player(s) but only {spawnedList.Count} body/bodies.");
+            _sawmill.Warning($"[ThirdPartySystem] Third-party {roleLabel} assignment had {playerIds.Count} player(s) but only {spawnedList.Count} body/bodies.");
         }
     }
 

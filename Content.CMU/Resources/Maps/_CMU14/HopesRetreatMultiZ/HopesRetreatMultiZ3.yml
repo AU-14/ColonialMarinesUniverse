@@ -1,10 +1,10 @@
 meta:
   format: 7
   category: Map
-  engineVersion: v277.0.0
+  engineVersion: v278.0.0
   forkId: ""
   forkVersion: ""
-  time: 07/08/2026 07:47:42
+  time: 07/14/2026 09:32:32
   entityCount: 2
 maps:
 - 2
@@ -56,7 +56,7 @@ entities:
       name: Mapping JE-1758 Ascanius [3]
     - type: Transform
     - type: Map
-      mapPaused: True
+    - type: GridTree
     - type: MapAtmosphere
       space: False
       mixture:
@@ -76,7 +76,6 @@ entities:
         - 0
         - 0
         - 0
-    - type: GridTree
     - type: Broadphase
     - type: OccluderTree
 ...

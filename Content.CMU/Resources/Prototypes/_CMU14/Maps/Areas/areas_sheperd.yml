@@ -745,6 +745,48 @@
     minimapColor: '#015B6BCC'
 
 - type: entity
+  parent: CMUAreaShepNRiver
+  id: CMUAreaShepNRiverUnder
+  name: North River - Underwater
+  components:
+  - type: Sprite
+    state: n_river
+  - type: Area
+    resinAllowed: true
+    noTunnel: false
+    unweedable: false
+    mortarPlacement: false
+    buildSpecial: false
+
+- type: entity
+  parent: CMUAreaShepCRiver
+  id: CMUAreaShepCRiverUnder
+  name: Central River - Underwater
+  components:
+  - type: Sprite
+    state: c_river
+  - type: Area
+    resinAllowed: true
+    noTunnel: false
+    unweedable: false
+    mortarPlacement: false
+    buildSpecial: false
+
+- type: entity
+  parent: CMUAreaShepSRiver
+  id: CMUAreaShepSRiverUnder
+  name: South River - Underwater
+  components:
+  - type: Sprite
+    state: s_river
+  - type: Area
+    resinAllowed: true
+    noTunnel: false
+    unweedable: false
+    mortarPlacement: false
+    buildSpecial: false
+
+- type: entity
   parent: CMUAreaShepOutdoors
   id: CMUAreaShepNComms
   name: North Colony - Comms

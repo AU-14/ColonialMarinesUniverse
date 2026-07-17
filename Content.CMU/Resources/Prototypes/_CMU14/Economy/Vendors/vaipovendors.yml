@@ -726,6 +726,7 @@
       takeAll: CMUAREssentialEquipment
       entries:
       - id: RMCWeaponRifleM54CE2
+      - id: RMCScabbardMacheteSGFilled
       - id: CMBeltMarine
       - id: RMCAttachmentS5RedDotSight
       - id: RMCAttachmentExtendedCompensator
@@ -1088,6 +1089,28 @@
       - id: AU14BackpackRTOPackDesert
         amount: 1
       - id: AU14BackpackRTOPackGray
+        amount: 1
+    - name: Materials
+      entries:
+      - id: CMSheetMetal
+        amount: 4
+      - id: CMSheetPlasteel50
+        amount: 4
+      - id: CMSandbagEmpty50
+        amount: 8
+      - id: AU14HescoKit
+        amount: 30
+      - id: RMCSheetPlastic
+        amount: 4
+      - id: RMCSheetAluminum
+        amount: 4
+      - id: CMSheetGlass
+        amount: 5
+      - id: RMCSheetCardboard
+        amount: 5
+      - id: CMSheetPhoron
+        amount: 1
+      - id: SheetUranium
         amount: 1
     - name: Tents
       entries:
