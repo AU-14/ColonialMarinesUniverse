@@ -66,7 +66,7 @@
   id: CMUCrateSecureWYRandomExp
   parent: RMCCrateSecureWeYa
   name: Weyland-Yutani Experiment Crate
-  description: A secure Weyland-Yutani crate, you do not know what is in it.
+  description: A secure Weyland-Yutani crate, you do not know what is in it. There is a big "EXPERIMENTAL" label on it.
   suffix: CMU, Random
   components:
   - type: EntityTableContainerFill
@@ -82,13 +82,19 @@
     - !type:AllSelector
       children:
       - id: XenoEgg
-    - !type:AllSelector
-      children:
-      - id: MMI
-      - id: DeathAcidifierImplanter
+      - id: XenoEgg
+      - id: CMUYautjaHivebreaker
+        prob: 0.1
+      weight: 1
     - !type:AllSelector
       children:
       - id: AU14AbominationVenomSyringe
+      - id: AU14AbominationVenomSyringe
+      - id: AU14AbominationVenomSyringe
+      - id: AU14AbominationVenomSyringe
+      - id: AU14AbominationVenomSyringe
+      - id: AU14AbominationVenomSyringe
+      weight: 1
     - !type:AllSelector
       children:
       - id: RMCBottleMindbreaker
@@ -96,10 +102,14 @@
       - id: RMCBottleMindbreaker
       - id: RMCBottleMindbreaker
       - id: RMCBottleMindbreaker
-    - !type:AllSelector
-      children:
+      - id: RMCBottleMindbreaker
+      - id: RMCBottleMindbreaker
       - id: AU14DrugDealerDrugBottle
       - id: AU14DrugDealerDrugBottle
       - id: AU14DrugDealerDrugBottle
       - id: AU14DrugDealerDrugBottle
       - id: AU14DrugDealerDrugBottle
+      - id: AU14DrugDealerDrugBottle
+      - id: AU14DrugDealerDrugBottle
+      weight: 5
+      
