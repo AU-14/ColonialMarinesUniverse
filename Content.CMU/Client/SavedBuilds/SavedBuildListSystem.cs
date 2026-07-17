@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using Content.Shared._AU14.SavedBuilds;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Serialization;
@@ -172,16 +173,27 @@ public sealed class SavedBuildListSystem : EntitySystem
         if (!TryReadRoot(path, out var root))
             return;
 
+        // Keep the author prefix if present so shared files keep their origin.
+        var sep = id.IndexOf("__", StringComparison.Ordinal);
+        var prefix = sep > 0 ? id[..sep] : "local";
+        var newId = $"{prefix}__{SanitizeFileName(newName)}.build.yml";
+        var newPath = dir / newId;
+
+        // User-data backends and host filesystems differ in case sensitivity. Compare the complete directory
+        // case-insensitively and reject any destination owned by a different build before opening it for write.
+        if (_resource.UserData.Exists(dir) && _resource.UserData.DirectoryEntries(dir).Any(entry =>
+                !string.Equals(entry, id, StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(entry, newId, StringComparison.OrdinalIgnoreCase)))
+        {
+            Log.Warning($"Refusing to rename saved build '{id}' to existing build '{newId}'.");
+            return;
+        }
+
         if (root.TryGet<MappingDataNode>("meta", out var meta))
         {
             meta.Remove("name");
             meta.Add("name", new ValueDataNode(newName));
         }
-
-        // Keep the author prefix if present so shared files keep their origin.
-        var sep = id.IndexOf("__", StringComparison.Ordinal);
-        var prefix = sep > 0 ? id[..sep] : "local";
-        var newPath = dir / $"{prefix}__{SanitizeFileName(newName)}.build.yml";
 
         try
         {
