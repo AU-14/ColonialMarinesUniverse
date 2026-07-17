@@ -124,5 +124,5 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: LanguageLearningPreset
-    learnableLanguages: null
-    firstContactLanguages: null
+    learnableLanguages: []
+    firstContactLanguages: []
