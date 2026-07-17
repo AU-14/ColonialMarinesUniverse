@@ -8,8 +8,10 @@ using Content.Server.GameTicking;
 using Content.Server.IdentityManagement;
 using Content.Server.Preferences.Managers;
 using Content.Shared._CMU14.Threats;
+using Content.Shared._RMC14.Construction;
 using Content.Shared._RMC14.CrashLand;
 using Content.Shared._RMC14.Dropship;
+using Content.Shared._RMC14.Map;
 using Content.Shared.Access.Components;
 using Content.Shared.AU14.Scenario;
 using Content.Shared.AU14.util;
@@ -52,6 +54,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
     [Dependency] private IdCardSystem _idCard = default!;
     [Dependency] private IdentitySystem _identity = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
     private static readonly ProtoId<JobPrototype> ThirdPartyLeaderJobId = new("AU14JobThirdPartyLeader");
     private static readonly ProtoId<JobPrototype> ThirdPartyMemberJobId = new("AU14JobThirdPartyMember");
     private static readonly ThreatMarkerType[] ThreatMarkerTypes = Enum.GetValues<ThreatMarkerType>();
@@ -507,6 +510,9 @@ public sealed partial class ThirdPartySystem : EntitySystem
                     || comp.NextAvailableAt > time)
                     continue;
 
+                if (IsMarkerBlockedByWalls(uid))
+                    continue;
+
                 if (useDropship && mainGridUid != EntityUid.Invalid)
                 {
                     if (!_entityManager.TryGetComponent(uid, out TransformComponent? tcomp)
@@ -646,8 +652,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
             List<EntityUid> safeGruntMarkers = FilterSafeMarkers(gruntMarkers);
             List<EntityUid> safeEntityMarkers = FilterSafeMarkers(entityMarkers);
 
-            if (safeLeaderMarkers.Count < leaderReq || safeGruntMarkers.Count < gruntReq
-                || safeEntityMarkers.Count < entityReq)
+            if (safeLeaderMarkers.Count < leaderReq || safeGruntMarkers.Count < gruntReq || safeEntityMarkers.Count < entityReq)
             {
                 _sawmill.Warning($"[ThirdPartySystem] Not enough safe markers to spawn third party ({party.ID}): leaders needed {leaderReq}, safe available {safeLeaderMarkers.Count}; grunts needed {gruntReq}, safe available {safeGruntMarkers.Count}; entities needed {entityReq}, safe available {safeEntityMarkers.Count}. Aborting spawn.");
                 return false;
@@ -859,12 +864,16 @@ public sealed partial class ThirdPartySystem : EntitySystem
                     marker.NextAvailableAt > time)
                     continue;
 
+                if (IsMarkerBlockedByWalls(uid))
+                    continue;
+
                 filteredMarkers.Add(uid);
                 continue;
             }
 
-            if (HasStandaloneThirdPartyMarker(uid, markerType) &&
-                IsScenarioMarkerAvailable(uid, time))
+            if (HasStandaloneThirdPartyMarker(uid, markerType)
+                && IsScenarioMarkerAvailable(uid, time)
+                && !IsMarkerBlockedByWalls(uid))
                 filteredMarkers.Add(uid);
         }
 
@@ -1133,6 +1142,9 @@ public sealed partial class ThirdPartySystem : EntitySystem
             return false;
         }
     }
+
+    private bool IsMarkerBlockedByWalls(EntityUid marker)
+        => _rmcMap.HasAnchoredEntityEnumerator<RMCDropshipBlockedComponent>(Transform(marker).Coordinates);
 
     private bool IsMarkerBlockedByPlayers(EntityUid marker)
     {
