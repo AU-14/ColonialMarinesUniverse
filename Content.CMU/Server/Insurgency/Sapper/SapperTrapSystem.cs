@@ -1,6 +1,7 @@
 using Content.Server.Explosion.EntitySystems;
 using Content.Shared._AU14.Insurgency.Sapper;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Timing;
 
 namespace Content.Server._AU14.Insurgency.Sapper;
 
@@ -23,6 +24,7 @@ public sealed class SapperTrapSystem : SharedSapperTrapSystem
         // Victim feedback when any sapper trap goes off: a sharp sound and an effect right on them,
         // on top of whatever the trap's own payload does.
         SubscribeLocalEvent<SapperTrapComponent, TriggerEvent>(OnTripped);
+        SubscribeLocalEvent<SapperTrapComponent, MapInitEvent>(OnMapInit);
     }
 
     private void OnTripped(Entity<SapperTrapComponent> ent, ref TriggerEvent args)
@@ -37,23 +39,32 @@ public sealed class SapperTrapSystem : SharedSapperTrapSystem
             _audio.PlayPvs(sound, coords);
     }
 
-    public override void Update(float frameTime)
+    private void OnMapInit(Entity<SapperTrapComponent> ent, ref MapInitEvent args)
     {
-        base.Update(frameTime);
+        if (ent.Comp.Deployed && !ent.Comp.Armed && ent.Comp.ArmsAt is { } armsAt)
+            ScheduleArming(ent, armsAt);
+    }
 
-        var now = Timing.CurTime;
+    protected override void ScheduleArming(Entity<SapperTrapComponent> ent, TimeSpan armsAt)
+    {
+        var delay = armsAt - Timing.CurTime;
+        if (delay < TimeSpan.Zero)
+            delay = TimeSpan.Zero;
 
-        // Arming is cheap and should be responsive, so check it every tick.
-        var armQuery = EntityQueryEnumerator<SapperTrapComponent>();
-        while (armQuery.MoveNext(out var uid, out var comp))
-        {
-            if (comp.Deployed && !comp.Armed && comp.ArmsAt is { } armsAt && now >= armsAt)
-            {
-                comp.Armed = true;
-                comp.ArmsAt = null;
-                Dirty(uid, comp);
-            }
-        }
+        var uid = ent.Owner;
+        Timer.Spawn(delay, () => ArmIfCurrent(uid, armsAt));
+    }
 
+    private void ArmIfCurrent(EntityUid uid, TimeSpan expectedArmsAt)
+    {
+        if (!TryComp(uid, out SapperTrapComponent? comp) ||
+            !comp.Deployed ||
+            comp.Armed ||
+            comp.ArmsAt != expectedArmsAt)
+            return;
+
+        comp.Armed = true;
+        comp.ArmsAt = null;
+        Dirty(uid, comp);
     }
 }

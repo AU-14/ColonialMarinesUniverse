@@ -23,7 +23,7 @@ namespace Content.Shared._AU14.Insurgency.Sapper;
 ///     prototype (for example TriggerOnStepTrigger + ExplodeOnTrigger), which fire only after this
 ///     system lets the step-trigger through.
 ///
-///     Arming runs on the server tick (see the server subclass). Hiding/revealing is a purely
+///     Arming is scheduled once by the server subclass when deployment completes. Hiding/revealing is a purely
 ///     per-viewer, client-side decision in SapperTrapVisualsSystem.
 /// </summary>
 public abstract class SharedSapperTrapSystem : EntitySystem
@@ -124,7 +124,15 @@ public abstract class SharedSapperTrapSystem : EntitySystem
         ent.Comp.ArmsAt = Timing.CurTime + TimeSpan.FromSeconds(ent.Comp.ArmingDelay);
         Dirty(ent);
 
+        if (_net.IsServer)
+            ScheduleArming(ent, ent.Comp.ArmsAt.Value);
+
         _popup.PopupClient(Loc.GetString("insfor-sapper-trap-deployed"), ent, args.User);
+    }
+
+    /// <summary>Server hook for scheduling the one arming transition without scanning every trap each tick.</summary>
+    protected virtual void ScheduleArming(Entity<SapperTrapComponent> ent, TimeSpan armsAt)
+    {
     }
 
     private bool CanDeployPopup(Entity<SapperTrapComponent> ent, EntityUid user)
