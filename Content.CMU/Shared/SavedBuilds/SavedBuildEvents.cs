@@ -110,6 +110,7 @@ public struct BuildPreviewEntity
     public float X;
     public float Y;
     public float Rot;
+    public int Z;
 }
 
 /// <summary>One tile in a saved build's placement preview: tile id + position relative to the anchor.</summary>

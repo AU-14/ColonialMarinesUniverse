@@ -299,6 +299,7 @@ public sealed class SavedBuildListSystem : EntitySystem
                 X = MetaFloat(m, "x"),
                 Y = MetaFloat(m, "y"),
                 Rot = MetaFloat(m, "rot"),
+                Z = MetaInt(m, "z"),
             });
         }
 

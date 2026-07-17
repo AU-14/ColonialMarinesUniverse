@@ -76,6 +76,9 @@ public sealed class BuildPlaceOverlay : Overlay
 
         foreach (var ent in _mode.Preview)
         {
+            if (!_mode.TryGetLevelTarget(origin, ent.Z, out var levelOrigin) || levelOrigin.MapId != args.MapId)
+                continue;
+
             if (!_prototype.TryIndex<EntityPrototype>(ent.Proto, out var proto))
                 continue;
 
@@ -89,13 +92,16 @@ public sealed class BuildPlaceOverlay : Overlay
                 continue;
             }
 
-            var p = pos0 + rot.RotateVec(new Vector2(ent.X, ent.Y));
+            var p = levelOrigin.Position + rot.RotateVec(new Vector2(ent.X, ent.Y));
             handle.DrawTextureRect(texture, Box2.CenteredAround(p, Vector2.One), GhostModulate);
         }
 
         foreach (var tile in _mode.Tiles)
         {
-            var p = pos0 + rot.RotateVec(new Vector2(tile.X, tile.Y));
+            if (!_mode.TryGetLevelTarget(origin, tile.Z, out var levelOrigin) || levelOrigin.MapId != args.MapId)
+                continue;
+
+            var p = levelOrigin.Position + rot.RotateVec(new Vector2(tile.X, tile.Y));
             handle.DrawRect(Box2.CenteredAround(p, Vector2.One), TileGhost);
         }
 

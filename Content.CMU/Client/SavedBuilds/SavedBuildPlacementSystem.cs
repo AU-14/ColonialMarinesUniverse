@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using Content.Client.Administration.Managers;
 using Content.Client.Construction;
+using Content.Client._CMU14.ZLevels.Core;
 using Content.Shared._AU14.SavedBuilds;
 using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared.Administration;
@@ -42,6 +43,7 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IComponentFactory _componentFactory = default!;
+    [Dependency] private readonly CMUClientZLevelsSystem _zLevels = default!;
 
     public bool Active { get; private set; }
     public bool IsAdmin { get; private set; }
@@ -174,6 +176,21 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
         return cursor;
     }
 
+    /// <summary>Projects a placement point onto an existing linked level without changing its world X/Y.</summary>
+    public bool TryGetLevelTarget(MapCoordinates target, int zOffset, out MapCoordinates levelTarget)
+    {
+        levelTarget = target;
+        if (zOffset == 0)
+            return true;
+
+        var mapUid = _mapManager.GetMapEntityId(target.MapId);
+        if (!mapUid.Valid || !_zLevels.TryMapOffset(mapUid, zOffset, out _, out var mapComp))
+            return false;
+
+        levelTarget = new MapCoordinates(target.Position, mapComp.MapId);
+        return true;
+    }
+
     private bool OnUse(in PointerInputCmdHandler.PointerInputCmdArgs args)
     {
         if (!Active || args.State != BoundKeyState.Down)
@@ -239,8 +256,11 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
             if (_recipeByTarget == null || !_recipeByTarget.TryGetValue(ent.Proto, out var recipe))
                 continue;
 
-            var world = target.Position + Rotation.RotateVec(new Vector2(ent.X, ent.Y));
-            var coords = new MapCoordinates(world, target.MapId);
+            if (!TryGetLevelTarget(target, ent.Z, out var levelTarget))
+                continue;
+
+            var world = levelTarget.Position + Rotation.RotateVec(new Vector2(ent.X, ent.Y));
+            var coords = new MapCoordinates(world, levelTarget.MapId);
             if (!_mapManager.TryFindGridAt(coords, out var gridUid, out _))
                 continue;
 
@@ -254,8 +274,11 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
             if (_recipeByTile == null || !_recipeByTile.TryGetValue(tile.Tile, out var recipe))
                 continue;
 
-            var world = target.Position + Rotation.RotateVec(new Vector2(tile.X, tile.Y));
-            var coords = new MapCoordinates(world, target.MapId);
+            if (!TryGetLevelTarget(target, tile.Z, out var levelTarget))
+                continue;
+
+            var world = levelTarget.Position + Rotation.RotateVec(new Vector2(tile.X, tile.Y));
+            var coords = new MapCoordinates(world, levelTarget.MapId);
             if (!_mapManager.TryFindGridAt(coords, out var gridUid, out _))
                 continue;
 
