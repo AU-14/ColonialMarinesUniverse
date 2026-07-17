@@ -101,18 +101,120 @@ public sealed class InsurgencyFactionApplySystem : EntitySystem
     /// </summary>
     public void ApplyFaction(FactionDefinition definition)
     {
-        _activeFaction = definition;
+        // Never retain an editor/DB DTO or any of its nested collections. Runtime systems receive a
+        // server-owned copy that can no longer be changed through the caller's object graph.
+        var runtimeDefinition = CloneFactionDefinition(definition);
+        InsurgencyFactionValidator.Sanitize(runtimeDefinition);
+        _activeFaction = runtimeDefinition;
 
         // A faction is chosen: clear the leader's pending marker so their client drops the reopen button.
         var pending = EntityQueryEnumerator<InsurgencyPendingFactionSelectionComponent>();
         while (pending.MoveNext(out var leader, out _))
             RemComp<InsurgencyPendingFactionSelectionComponent>(leader);
 
-        InjectVendorSections(definition);
-        AnnounceToMembers(definition);
+        InjectVendorSections(runtimeDefinition);
+        AnnounceToMembers(runtimeDefinition);
 
-        var ev = new InsurgencyFactionAppliedEvent(definition);
+        var ev = new InsurgencyFactionAppliedEvent(runtimeDefinition);
         RaiseLocalEvent(ref ev);
+    }
+
+    private static FactionDefinition CloneFactionDefinition(FactionDefinition source)
+    {
+        var clone = new FactionDefinition
+        {
+            SchemaVersion = source.SchemaVersion,
+            Metadata = new FactionMetadata
+            {
+                Title = source.Metadata.Title,
+                Description = source.Metadata.Description,
+                RoleplayText = source.Metadata.RoleplayText,
+                RecruitedMessage = source.Metadata.RecruitedMessage,
+                FlagEntity = source.Metadata.FlagEntity,
+                StatusIcon = source.Metadata.StatusIcon,
+                RecruitStatusIcon = source.Metadata.RecruitStatusIcon,
+                BuiltinOverrideOf = source.Metadata.BuiltinOverrideOf,
+                OpposedGovforFactions = new List<string>(source.Metadata.OpposedGovforFactions),
+            },
+            Economy = new FactionEconomy
+            {
+                DollarsToPointsRate = source.Economy.DollarsToPointsRate,
+                IncludeDollars = source.Economy.IncludeDollars,
+            },
+            CellKit = new CellKitManifest
+            {
+                PlaceableEntities = new List<EntProtoId>(source.CellKit.PlaceableEntities),
+                VendorDefinitions = new List<FactionVendorDefinition>(),
+            },
+            RoleLoadouts = new List<FactionRoleLoadout>(),
+        };
+
+        foreach (var icon in source.Metadata.JobStatusIcons)
+            clone.Metadata.JobStatusIcons.Add(new FactionJobIcon { Role = icon.Role, Icon = icon.Icon });
+
+        foreach (var submission in source.Economy.PointsSubmissions)
+        {
+            clone.Economy.PointsSubmissions.Add(new PointsSubmissionEntry
+            {
+                Entity = submission.Entity,
+                PointsPerItemMode = submission.PointsPerItemMode,
+                AmountPerPoint = submission.AmountPerPoint,
+                PointsPerItem = submission.PointsPerItem,
+            });
+        }
+
+        foreach (var vendor in source.CellKit.VendorDefinitions)
+        {
+            clone.CellKit.VendorDefinitions.Add(new FactionVendorDefinition
+            {
+                Name = vendor.Name,
+                BaseModel = vendor.BaseModel,
+                Sections = CloneVendorSections(vendor.Sections),
+                Wrenchable = vendor.Wrenchable,
+                Invulnerable = vendor.Invulnerable,
+                UsesIntelPoints = vendor.UsesIntelPoints,
+                UseBaseModelSections = vendor.UseBaseModelSections,
+            });
+        }
+
+        foreach (var loadout in source.RoleLoadouts)
+        {
+            clone.RoleLoadouts.Add(new FactionRoleLoadout
+            {
+                Role = loadout.Role,
+                Contents = new List<EntProtoId>(loadout.Contents),
+            });
+        }
+
+        return clone;
+    }
+
+    private static List<CMVendorSection> CloneVendorSections(List<CMVendorSection> source)
+    {
+        var sections = new List<CMVendorSection>(source.Count);
+        foreach (var section in source)
+        {
+            var cloned = new CMVendorSection
+            {
+                Name = section.Name,
+                Choices = section.Choices,
+                TakeAll = section.TakeAll,
+                TakeOne = section.TakeOne,
+                SharedSpecLimit = section.SharedSpecLimit,
+                SharedJOLimit = section.SharedJOLimit,
+                Jobs = new(section.Jobs),
+                Ranks = new(section.Ranks),
+                Holidays = new(section.Holidays),
+                HasBoxes = section.HasBoxes,
+            };
+
+            foreach (var entry in section.Entries)
+                cloned.Entries.Add(entry with { LinkedEntries = new(entry.LinkedEntries) });
+
+            sections.Add(cloned);
+        }
+
+        return sections;
     }
 
     /// <summary>
@@ -143,7 +245,7 @@ public sealed class InsurgencyFactionApplySystem : EntitySystem
         }
 
         var comp = EnsureComp<CMAutomatedVendorComponent>(vendor);
-        comp.Sections = definition.Sections;
+        comp.Sections = CloneVendorSections(definition.Sections);
 
         // Any entity can be a faction vendor, so drop the access, job, rank, and faction restrictions.
         // INSFOR members are never on a GOVFOR vendor's ID whitelist, and the faction editor may well
@@ -283,7 +385,7 @@ public sealed class InsurgencyFactionApplySystem : EntitySystem
             if (vendors[marker.VendorIndex].UseBaseModelSections)
                 continue;
 
-            vendor.Sections = vendors[marker.VendorIndex].Sections;
+            vendor.Sections = CloneVendorSections(vendors[marker.VendorIndex].Sections);
             Dirty(uid, vendor);
         }
     }
