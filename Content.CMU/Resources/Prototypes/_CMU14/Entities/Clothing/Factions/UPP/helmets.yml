@@ -25,30 +25,33 @@
 
 - type: entity
   parent: RMCMarineHelmetBase
-  id: AU14_PLACEHOLDERALTYN
-  name: PLACE HOLDER ALTYN
-  description: An old earth design still in use by UPP forces after a century.
+  id: AU14Altyn
+  name: Altyn-R2M
+  description: An old earth design initially designed for special forces and internal security for use in close quarters combat. Still in use by UPP forces after more than a century.
   components:
   - type: Sprite
     sprite: _AU14/Clothing/UPP/helmets/altyn.rsi
   - type: Clothing
     sprite: _AU14/Clothing/UPP/helmets/altyn.rsi
-  - type: CMArmor
-    melee: 25
-    bullet: 25
-    bio: 25
-    explosionArmor: 50
-  - type: ParasiteResistance
-    maxCount: 4
+  - type: ItemToggle
+    activated: true
+  - type: ToggleClothing
+    action: AU14ActionToggleAltynVisor
+  - type: ComponentToggler
+    components:
+    - type: ParasiteResistance
+      maxCount: 6
+  - type: RMCItemToggleClothingVisuals
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: {state: icon-on}
+          False: {state: icon}
+  - type: Appearance
   - type: RemoveComponents
     components:
     - type: IngestionBlocker
-  - type: Corrodible
-    isCorrodible: false
-  - type: RMCEarProtection
-  - type: RMCItemToggleClothingVisuals
-  - type: ToggleClothing
-    action: AU14ActionToggleAltynVisor
   - type: HelmetAccessory
     rsi:
       sprite: _AU14/Clothing/UPP/helmets/altyn.rsi
@@ -56,6 +59,11 @@
     toggledRsi:
       sprite: _AU14/Clothing/UPP/helmets/altyn.rsi
       state: helmet-down
+  - type: CMArmor
+    melee: 25
+    bullet: 40
+    bio: 10
+    explosionArmor: 15
 
 - type: entity
   parent: ActionMarineBase
