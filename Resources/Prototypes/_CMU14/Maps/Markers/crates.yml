@@ -11,10 +11,17 @@
   - type: RandomSpawner
     chance: 1.0
     prototypes:
-      - AU14CrateSecureWeYuXenoEggs
+      - AU14CrateSecureWeYuXenoEggs # x1
+      - AU14CrateSecureWeYuMMI # x2
       - AU14CrateSecureWeYuMMI
-      - AU14CrateSecureWeYuMindBreaker # x2
+      - AU14CrateSecureWeYuMindBreaker # x5
       - AU14CrateSecureWeYuMindBreaker
-      - AU14CrateSecureWeYuDrug # x2
+      - AU14CrateSecureWeYuMindBreaker
+      - AU14CrateSecureWeYuMindBreaker
+      - AU14CrateSecureWeYuMindBreaker
+      - AU14CrateSecureWeYuDrug # x5
+      - AU14CrateSecureWeYuDrug
+      - AU14CrateSecureWeYuDrug
+      - AU14CrateSecureWeYuDrug
       - AU14CrateSecureWeYuDrug
       - AU14CrateSecureWeYuClottedSyringes # x1 abom toxin sucks
