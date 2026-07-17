@@ -1,11 +1,14 @@
 using System.Collections.Generic;
+using System.Linq;
 using Content.Server.AU14.ColonyEconomy;
 using Content.Server.Stack;
 using Content.Shared._AU14.Insurgency.Sapper;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.Access.Components;
+using Content.Shared.Administration.Logs;
 using Content.Shared.AU14.ColonyEconomy;
+using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
@@ -34,6 +37,7 @@ public sealed class SapperAtmHackingSystem : EntitySystem
     [Dependency] private ColonyBudgetSystem _budget = default!;
     [Dependency] private SharedRequisitionsSystem _requisitions = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
 
     // Loud one-shot for the big console/ASRS drains so the theft reads as a major event.
     private static readonly SoundSpecifier BigDrainSound =
@@ -140,13 +144,16 @@ public sealed class SapperAtmHackingSystem : EntitySystem
         // Non-colony departments (GOVFOR/WY/etc., AsrsFaction != "colony") are skipped so the siphon never
         // steals from other factions. Departments are deduped by id since several consoles share one budget.
         var slice = unhacked > 0 ? 1f / unhacked : 0f;
-        var haul = 0;
+        var debits = new List<SiphonDebit>();
 
         var colonyCut = System.Math.Max(0, (int) (_budget.GetBudget() * slice));
         if (colonyCut > 0)
         {
-            _budget.AddToBudget(-colonyCut);
-            haul += colonyCut;
+            debits.Add(new SiphonDebit(
+                colonyCut,
+                "colony budget",
+                () => _budget.AddToBudget(-colonyCut, user),
+                () => _budget.AddToBudget(colonyCut, user)));
         }
 
         var seenDepartments = new HashSet<string>();
@@ -162,18 +169,19 @@ public sealed class SapperAtmHackingSystem : EntitySystem
             if (cut <= 0)
                 continue;
 
-            // DepartmentConsoleComponent is server-only (not networked), so its budget is not Dirtied.
-            dept.DepartmentBudget -= cut;
-            haul += cut;
+            var source = dept.DepartmentId ?? "colony department";
+            debits.Add(new SiphonDebit(
+                cut,
+                source,
+                () => dept.DepartmentBudget -= cut,
+                () => dept.DepartmentBudget += cut));
         }
 
-        // Skim 5% off colony player account balances and add it to the haul.
-        haul += SkimAccounts(0.05f);
+        PlanAccountSkims(0.05f, debits);
 
-        if (haul > 0)
-            _stack.SpawnMultiple(ent.Comp.CashPrototype, haul, atm);
+        if (!TryCommitSiphon("ATM", ent.Comp.CashPrototype, atm, user, debits, out var haul))
+            return;
 
-        Disrupt(atm);
         if (ent.Comp.SuccessSound is { } success)
             _audio.PlayPvs(success, atm);
         _popup.PopupEntity(Loc.GetString("insfor-sapper-atm-hacked", ("amount", haul)), atm, user);
@@ -187,9 +195,16 @@ public sealed class SapperAtmHackingSystem : EntitySystem
         // department budget in full. Non-colony departments (GOVFOR/WY/etc., AsrsFaction != "colony") are
         // left alone so the siphon never steals from other factions. Departments are deduped by id since
         // several consoles share one budget.
-        var funds = System.Math.Max(0, (int) _budget.GetBudget());
-        if (funds > 0)
-            _budget.AddToBudget(-funds);
+        var debits = new List<SiphonDebit>();
+        var colonyFunds = System.Math.Max(0, (int) _budget.GetBudget());
+        if (colonyFunds > 0)
+        {
+            debits.Add(new SiphonDebit(
+                colonyFunds,
+                "colony budget",
+                () => _budget.AddToBudget(-colonyFunds, user),
+                () => _budget.AddToBudget(colonyFunds, user)));
+        }
 
         var seenDepartments = new HashSet<string>();
         var deptQuery = EntityQueryEnumerator<DepartmentConsoleComponent>();
@@ -204,15 +219,17 @@ public sealed class SapperAtmHackingSystem : EntitySystem
             if (cut <= 0)
                 continue;
 
-            // DepartmentConsoleComponent is server-only (not networked), so its budget is not Dirtied.
-            dept.DepartmentBudget -= cut;
-            funds += cut;
+            var source = dept.DepartmentId ?? "colony department";
+            debits.Add(new SiphonDebit(
+                cut,
+                source,
+                () => dept.DepartmentBudget -= cut,
+                () => dept.DepartmentBudget += cut));
         }
 
-        if (funds > 0)
-            _stack.SpawnMultiple(ent.Comp.CashPrototype, funds, console);
+        if (!TryCommitSiphon("budget console", ent.Comp.CashPrototype, console, user, debits, out var funds))
+            return;
 
-        Disrupt(console);
         BigDrainFeedback(console);
         _popup.PopupEntity(Loc.GetString("insfor-sapper-console-drained", ("amount", funds)), console, user, PopupType.LargeCaution);
     }
@@ -230,23 +247,27 @@ public sealed class SapperAtmHackingSystem : EntitySystem
         }
 
         var funds = accountComp.Balance;
+        var debits = new List<SiphonDebit>();
         if (funds > 0)
-        {
-            _requisitions.ChangeBudget(-funds, accountComp.Faction);
-            _stack.SpawnMultiple(ent.Comp.CashPrototype, funds, computer);
-        }
+            debits.Add(new SiphonDebit(
+                funds,
+                $"ASRS {accountComp.Faction}",
+                () => _requisitions.ChangeBudget(-funds, accountComp.Faction),
+                () => _requisitions.ChangeBudget(funds, accountComp.Faction)));
 
-        Disrupt(computer);
+        if (!TryCommitSiphon("ASRS terminal", ent.Comp.CashPrototype, computer, user, debits, out funds))
+            return;
+
         BigDrainFeedback(computer);
         _popup.PopupEntity(Loc.GetString("insfor-sapper-asrs-drained", ("amount", funds)), computer, user, PopupType.LargeCaution);
     }
 
     // ----- helpers ------------------------------------------------------------------------------------
 
-    // Takes the given fraction off every player account balance and returns the total skimmed.
-    private int SkimAccounts(float fraction)
+    // Records account mutations without applying them. The transaction below spawns the payout first and then
+    // applies every debit, rolling back all prior debits if any source fails.
+    private void PlanAccountSkims(float fraction, List<SiphonDebit> debits)
     {
-        var total = 0;
         var query = EntityQueryEnumerator<IdCardComponent>();
         while (query.MoveNext(out var uid, out var card))
         {
@@ -257,21 +278,78 @@ public sealed class SapperAtmHackingSystem : EntitySystem
             if (skim <= 0)
                 continue;
 
-            card.AccountBalance -= skim;
-            Dirty(uid, card);
-            total += skim;
+            debits.Add(new SiphonDebit(
+                skim,
+                $"account {card.FullName ?? uid.ToString()}",
+                () =>
+                {
+                    card.AccountBalance -= skim;
+                    Dirty(uid, card);
+                },
+                () =>
+                {
+                    card.AccountBalance += skim;
+                    Dirty(uid, card);
+                }));
+        }
+    }
+
+    private bool TryCommitSiphon(
+        string sourceKind,
+        string cashPrototype,
+        EntityUid source,
+        EntityUid recipient,
+        List<SiphonDebit> debits,
+        out int amount)
+    {
+        amount = debits.Sum(d => d.Amount);
+        List<EntityUid> payout;
+        try
+        {
+            payout = amount > 0 ? _stack.SpawnMultiple(cashPrototype, amount, source) : new List<EntityUid>();
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Sapper siphon payout failed before debiting {sourceKind} {ToPrettyString(source)}: {e}");
+            _adminLog.Add(LogType.Action, LogImpact.High,
+                $"Sapper siphon FAILED: {ToPrettyString(recipient):player} could not receive {amount} from {sourceKind} {ToPrettyString(source)}; no funds were debited.");
+            return false;
         }
 
-        return total;
-    }
+        var applied = 0;
+        try
+        {
+            foreach (var debit in debits)
+            {
+                debit.Apply();
+                applied++;
+            }
+        }
+        catch (Exception e)
+        {
+            for (var i = applied - 1; i >= 0; i--)
+                debits[i].Rollback();
+            foreach (var cash in payout)
+                QueueDel(cash);
 
-    // Puts an ATM into the temporary disrupted state (sparking, refusing to open) that repairs itself later.
-    private void Disrupt(EntityUid atm)
-    {
-        var comp = EnsureComp<SapperAtmHackedComponent>(atm);
+            Log.Error($"Sapper siphon debit failed and was rolled back for {sourceKind} {ToPrettyString(source)}: {e}");
+            _adminLog.Add(LogType.Action, LogImpact.High,
+                $"Sapper siphon ROLLED BACK: {ToPrettyString(recipient):player}, {amount} from {sourceKind} {ToPrettyString(source)}.");
+            return false;
+        }
+
+        var comp = EnsureComp<SapperAtmHackedComponent>(source);
         comp.RecoverAt = _timing.CurTime + comp.RecoverDelay;
         comp.NextSpark = _timing.CurTime;
+
+        var sources = string.Join(", ", debits.Select(d => $"{d.Source}:{d.Amount}"));
+        _adminLog.Add(LogType.Action, LogImpact.High,
+            $"Sapper siphon COMMITTED: {ToPrettyString(recipient):player} received {amount} from {sourceKind} {ToPrettyString(source)} " +
+            $"(debits: {sources}; cooldown: {comp.RecoverDelay.TotalSeconds:0}s).");
+        return true;
     }
+
+    private readonly record struct SiphonDebit(int Amount, string Source, Action Apply, Action Rollback);
 
     // Heavier one-shot presentation for the console/ASRS drains: sparks and a loud grind.
     private void BigDrainFeedback(EntityUid target)
