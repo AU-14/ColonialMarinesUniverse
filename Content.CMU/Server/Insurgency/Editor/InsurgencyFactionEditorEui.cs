@@ -182,7 +182,9 @@ public sealed class InsurgencyFactionEditorEui : BaseEui
 
     private async void HandleSave(InsurgencyFactionSaveMessage msg)
     {
-        var def = InsurgencyFactionValidator.Sanitize(msg.Definition);
+        var def = _scope == InsurgencyEditorScope.Custom
+            ? InsurgencyFactionValidator.SanitizeCustom(msg.Definition, _prototypes)
+            : InsurgencyFactionValidator.Sanitize(msg.Definition);
 
         // The Custom editor can only author Custom factions, whatever the client claims.
         var isDefault = _scope == InsurgencyEditorScope.Default && msg.IsDefault;
