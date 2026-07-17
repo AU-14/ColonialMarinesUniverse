@@ -145116,6 +145116,11 @@ entities:
     - type: Transform
       pos: 176.5,-51.5
       parent: 1
+    missingComponents:
+    - TacticalMapUser
+    - ActionsContainer
+    - ContainerContainer
+    - Actions
 - proto: AU14AICoreSubstrateMUTHUR
   entities:
   - uid: 31
