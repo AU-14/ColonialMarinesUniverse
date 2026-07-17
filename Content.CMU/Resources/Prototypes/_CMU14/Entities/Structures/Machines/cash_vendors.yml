@@ -512,7 +512,7 @@
     - id: RMCHelmetWelding
       name: Welding Helmet
       price: 25
-    - id: CMTrayScanner
+    - id: CMTRayScanner
       name: T-Ray Scanner
       price: 15
 
@@ -539,7 +539,7 @@
     - id: CMAPCElectronics
       name: APC Electronics
       price: 50
-    - id: RMCCircuitBoardTelevision
+    - id: RMCCircuitboardTelevision
       name: Television Circuit Board
       price: 25
     - id: CMSMESMachineCircuitboard
