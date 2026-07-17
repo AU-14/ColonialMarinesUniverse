@@ -38,7 +38,7 @@
   - type: ToggleClothing
     action: AU14ActionToggleAltynVisor
   - type: ParasiteResistance
-    maxCount: 6
+    maxCount: 3
   - type: RMCItemToggleClothingVisuals
   - type: GenericVisualizer
     visuals:
