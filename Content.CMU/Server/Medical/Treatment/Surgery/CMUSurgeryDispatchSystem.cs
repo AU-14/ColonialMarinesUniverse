@@ -162,6 +162,17 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
             return true;
         }
 
+        if (TryResumeUiLessClosure(
+                surgeon,
+                patient,
+                tool,
+                targetPart,
+                selectedType,
+                selectedSymmetry))
+        {
+            return true;
+        }
+
         if (!TryResolveUiLessAccessAction(tool, targetPart, selectedType, site, out var action))
         {
             if (siteCurrent is not null
@@ -195,6 +206,41 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
             selectedType,
             selectedSymmetry,
             action);
+    }
+
+    private bool TryResumeUiLessClosure(
+        EntityUid surgeon,
+        EntityUid patient,
+        EntityUid tool,
+        EntityUid targetPart,
+        BodyPartType selectedType,
+        BodyPartSymmetry selectedSymmetry)
+    {
+        if (!TryComp<CMUSurgeryInProgressComponent>(patient, out var inProgress)
+            || !inProgress.AwaitingClosureChoice
+            || inProgress.Part != targetPart
+            || inProgress.TargetPartType != selectedType
+            || inProgress.TargetSymmetry != selectedSymmetry
+            || !_flowSurgery.TryResolveNextStep(
+                patient,
+                targetPart,
+                inProgress.LeafSurgeryId,
+                out var resolved,
+                allowOptionalHemostasis: true)
+            || !_flowSurgery.ToolMatchesCategory(tool, resolved.ToolCategory))
+        {
+            return false;
+        }
+
+        return TryStartUiLessAccessAction(
+            surgeon,
+            patient,
+            tool,
+            targetPart,
+            selectedType,
+            selectedSymmetry,
+            new UiLessAccessAction(resolved.ResolvedSurgeryId, resolved.StepIndex),
+            inProgress.LeafSurgeryId);
     }
 
     private bool TryDispatchUiLessMissingSite(
