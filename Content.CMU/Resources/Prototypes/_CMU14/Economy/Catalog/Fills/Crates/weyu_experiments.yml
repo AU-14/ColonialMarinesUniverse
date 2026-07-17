@@ -65,7 +65,8 @@
 - type: entity
   id: CMUCrateSecureWYRandomExp
   parent: RMCCrateSecureWeYa
-  name: secure Wey-Yu crate
+  name: Weyland-Yutani Experiment Crate
+  description: A secure Weyland-Yutani crate, you do not know what is in it.
   suffix: CMU, Random
   components:
   - type: EntityTableContainerFill
