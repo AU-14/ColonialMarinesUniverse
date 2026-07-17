@@ -182,14 +182,32 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
         var anchor = ReadAnchor(root);
         var savedTiles = ReadSavedTiles(root);
-        var placedTiles = PlaceSavedTiles(savedTiles, targetMapUid, gridUid, targetMap, rotation);
+        if (!TryPlanSavedTiles(savedTiles, targetMapUid, gridUid, targetMap, rotation, out var tilePlan) ||
+            !PreflightEntityLevels(root, targetMapUid, gridUid, targetMap, rotation))
+        {
+            _popup.PopupEntity(Loc.GetString("saved-build-error-load"), user, user);
+            return;
+        }
+
         var entityCount = ReadMetaInt(root, "entityCount");
 
         if (entityCount <= 0)
         {
+            int tileOnlyCount;
+            try
+            {
+                tileOnlyCount = ApplyPlannedTiles(tilePlan);
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to apply saved-build tiles '{id}' for {session.Name}: {e}");
+                _popup.PopupEntity(Loc.GetString("saved-build-error-load"), user, user);
+                return;
+            }
+
             _adminLog.Add(LogType.Action, LogImpact.Medium,
-                $"{ToPrettyString(user):player} (user {session.UserId}) placed saved build '{id}' ({placedTiles} tiles) at {targetMap}");
-            _popup.PopupEntity(Loc.GetString("saved-build-placed", ("count", placedTiles)), user, user);
+                $"{ToPrettyString(user):player} (user {session.UserId}) placed saved build '{id}' ({tileOnlyCount} tiles) at {targetMap}");
+            _popup.PopupEntity(Loc.GetString("saved-build-placed", ("count", tileOnlyCount)), user, user);
             return;
         }
 
@@ -230,68 +248,62 @@ public sealed partial class SavedBuildSystem : EntitySystem
         // Multi-z: per-entry z-level offsets from the preview. Queued per key because two identical entities
         // can share the same x/y on DIFFERENT levels (that's exactly what multi-z builds do).
         var zByKey = ReadZOffsets(root);
-        var skippedZ = 0;
-
-        foreach (var rootEnt in roots)
+        int placedTiles;
+        try
         {
-            // WORLD-frame math throughout, not raw transform locals: a map's transform is identity, so for
-            // map-parented roots world == the original saved grid-local (merge offset is zero). For roots the
-            // loader parented onto a grid, world position resolves through that grid's own offset/rotation.
-            // The old local-frame arithmetic silently mixed a MAP-frame offset into GRID-local coordinates,
-            // which scrambled placements whenever the target grid was offset or rotated relative to its map.
-            var savedWorld = _transform.GetWorldPosition(rootEnt);
-            var savedRot = _transform.GetWorldRotation(rootEnt);
-
-            var desired = new MapCoordinates(targetMap.Position + rotation.RotateVec(savedWorld - anchor), targetMap.MapId);
-
-            var relSave = savedWorld - anchor;
-            var protoId = MetaData(rootEnt).EntityPrototype?.ID ?? string.Empty;
-
-            // Multi-z: entities saved on another level go to the matching level relative to the target (levels
-            // are world-aligned, so the x/y math is identical). Missing levels are created on demand through
-            // the z-building bootstrap; if that fails, the entity is dropped rather than dumped on the wrong level.
-            var placeGrid = gridUid;
-            var placeMapId = targetMap.MapId;
-            if (TakeZOffset(zByKey, protoId, relSave) is { } zOff && zOff != 0)
+            foreach (var rootEnt in roots)
             {
-                if (TryResolveLevel(targetMapUid, gridUid, zOff, desired.Position, out var levelGrid, out var levelMapId))
+                // WORLD-frame math throughout, not raw transform locals: a map's transform is identity, so for
+                // map-parented roots world == the original saved grid-local (merge offset is zero). For roots the
+                // loader parented onto a grid, world position resolves through that grid's own offset/rotation.
+                var savedWorld = _transform.GetWorldPosition(rootEnt);
+                var savedRot = _transform.GetWorldRotation(rootEnt);
+                var desired = new MapCoordinates(targetMap.Position + rotation.RotateVec(savedWorld - anchor), targetMap.MapId);
+                var relSave = savedWorld - anchor;
+                var protoId = MetaData(rootEnt).EntityPrototype?.ID ?? string.Empty;
+
+                var placeGrid = gridUid;
+                var placeMapId = targetMap.MapId;
+                if (TakeZOffset(zByKey, protoId, relSave) is { } zOff && zOff != 0)
                 {
+                    if (!TryResolveLevel(targetMapUid, gridUid, zOff, desired.Position, out var levelGrid, out var levelMapId))
+                        throw new InvalidOperationException($"Preflighted z-level {zOff} could not be resolved during placement.");
+
                     placeGrid = levelGrid;
                     placeMapId = levelMapId;
                 }
-                else
-                {
-                    skippedZ++;
-                    QueueDel(rootEnt);
-                    continue;
-                }
+
+                var desiredOnLevel = new MapCoordinates(desired.Position, placeMapId);
+                _transform.SetCoordinates(rootEnt, new EntityCoordinates(placeGrid, _transform.ToCoordinates(placeGrid, desiredOnLevel).Position));
+                _transform.SetWorldRotation(rootEnt, savedRot + rotation);
+
+                var wasAnchored = anchoredByKey.TryGetValue((protoId, QuantizeOffset(relSave.X), QuantizeOffset(relSave.Y)), out var recorded)
+                    ? recorded
+                    : TryComp<PhysicsComponent>(rootEnt, out var body) && body.BodyType == BodyType.Static;
+
+                if (wasAnchored)
+                    _transform.AnchorEntity(rootEnt);
+
+                _playerBuilt.MarkBuilt(rootEnt, user);
             }
 
-            var desiredOnLevel = new MapCoordinates(desired.Position, placeMapId);
-            _transform.SetCoordinates(rootEnt, new EntityCoordinates(placeGrid, _transform.ToCoordinates(placeGrid, desiredOnLevel).Position));
-            _transform.SetWorldRotation(rootEnt, savedRot + rotation);
-
-            // Restore the original anchored state. Prefer the recorded intent (handles props anchored without a
-            // Static physics body - the mapper-mode case); fall back to "Static body => anchored" for old saves.
-            var wasAnchored = anchoredByKey.TryGetValue((protoId, QuantizeOffset(relSave.X), QuantizeOffset(relSave.Y)), out var recorded)
-                ? recorded
-                : TryComp<PhysicsComponent>(rootEnt, out var body) && body.BodyType == BodyType.Static;
-
-            if (wasAnchored)
-                _transform.AnchorEntity(rootEnt);
-
-            // Mark placed entities as built by the placer (accountability + makes them re-saveable).
-            _playerBuilt.MarkBuilt(rootEnt, user);
+            // Tiles commit only after every entity has loaded and reached its final transform.
+            placedTiles = ApplyPlannedTiles(tilePlan);
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to commit saved build '{id}' for {session.Name}; deleting staged entities: {e}");
+            _mapLoader.Delete(result);
+            _popup.PopupEntity(Loc.GetString("saved-build-error-load"), user, user);
+            return;
         }
 
         // NOTE: this is effectively the ADMIN/free placement (instant, free, keeps container contents).
         // TODO (player costed version): strip container contents and consume materials via a ghost build.
 
         _adminLog.Add(LogType.Action, LogImpact.Medium,
-            $"{ToPrettyString(user):player} (user {session.UserId}) placed saved build '{id}' ({roots.Count} roots, {placedTiles} tiles, {skippedZ} skipped for missing z-levels) at {targetMap}");
-        _popup.PopupEntity(Loc.GetString("saved-build-placed", ("count", roots.Count - skippedZ + placedTiles)), user, user);
-        if (skippedZ > 0)
-            _popup.PopupEntity(Loc.GetString("saved-build-z-skipped", ("count", skippedZ)), user, user, PopupType.MediumCaution);
+            $"{ToPrettyString(user):player} (user {session.UserId}) placed saved build '{id}' ({roots.Count} roots, {placedTiles} tiles) at {targetMap}");
+        _popup.PopupEntity(Loc.GetString("saved-build-placed", ("count", roots.Count + placedTiles)), user, user);
     }
 
     /// <summary>Per-entry z-level offsets from the preview, queued per (proto, x, y) key - identical entities
@@ -455,18 +467,24 @@ public sealed partial class SavedBuildSystem : EntitySystem
         return tiles;
     }
 
-    private int PlaceSavedTiles(
+    private readonly record struct PlannedTile(EntityUid Grid, Vector2i Indices, Tile Previous, Tile Desired);
+
+    private bool TryPlanSavedTiles(
         List<BuildPreviewTile> tiles,
         EntityUid targetMapUid,
         EntityUid gridUid,
         MapCoordinates targetMap,
-        Angle rotation)
+        Angle rotation,
+        out List<PlannedTile> plan)
     {
-        var placed = 0;
+        var planned = new Dictionary<(EntityUid Grid, Vector2i Indices), PlannedTile>();
         foreach (var tile in tiles)
         {
             if (!_prototype.TryIndex<ContentTileDefinition>(tile.Tile, out var tileDef))
-                continue;
+            {
+                plan = new();
+                return false;
+            }
 
             var desired = new MapCoordinates(targetMap.Position + rotation.RotateVec(new Vector2(tile.X, tile.Y)), targetMap.MapId);
             var placeGrid = gridUid;
@@ -480,20 +498,86 @@ public sealed partial class SavedBuildSystem : EntitySystem
                 }
                 else
                 {
-                    continue;
+                    plan = new();
+                    return false;
                 }
             }
 
             var desiredOnLevel = new MapCoordinates(desired.Position, placeMapId);
             if (!TryComp<MapGridComponent>(placeGrid, out var grid))
-                continue;
+            {
+                plan = new();
+                return false;
+            }
 
             var indices = _map.TileIndicesFor(placeGrid, grid, desiredOnLevel);
-            _map.SetTile(placeGrid, grid, indices, new Tile(tileDef.TileId));
-            placed++;
+            var key = (placeGrid, indices);
+            var previous = _map.TryGetTileRef(placeGrid, grid, indices, out var tileRef) ? tileRef.Tile : Tile.Empty;
+            if (planned.TryGetValue(key, out var existing))
+                previous = existing.Previous;
+            planned[key] = new PlannedTile(placeGrid, indices, previous, new Tile(tileDef.TileId));
         }
 
-        return placed;
+        plan = planned.Values.ToList();
+        return true;
+    }
+
+    private bool PreflightEntityLevels(
+        MappingDataNode root,
+        EntityUid targetMapUid,
+        EntityUid gridUid,
+        MapCoordinates targetMap,
+        Angle rotation)
+    {
+        if (!root.TryGet<MappingDataNode>("meta", out var meta) ||
+            !meta.TryGet<SequenceDataNode>("preview", out var preview))
+            return true;
+
+        foreach (var node in preview)
+        {
+            if (node is not MappingDataNode mapping)
+                continue;
+
+            var z = ReadInt(mapping, "z");
+            if (z == 0)
+                continue;
+
+            var offset = new Vector2(MetaFloat(mapping, "x"), MetaFloat(mapping, "y"));
+            var position = targetMap.Position + rotation.RotateVec(offset);
+            if (!TryResolveLevel(targetMapUid, gridUid, z, position, out _, out _))
+                return false;
+        }
+
+        return true;
+    }
+
+    private int ApplyPlannedTiles(List<PlannedTile> plan)
+    {
+        var applied = 0;
+        try
+        {
+            foreach (var tile in plan)
+            {
+                if (!TryComp<MapGridComponent>(tile.Grid, out var grid))
+                    throw new InvalidOperationException($"Saved-build target grid {tile.Grid} disappeared before commit.");
+
+                _map.SetTile(tile.Grid, grid, tile.Indices, tile.Desired);
+                applied++;
+            }
+        }
+        catch
+        {
+            for (var i = applied - 1; i >= 0; i--)
+            {
+                var tile = plan[i];
+                if (TryComp<MapGridComponent>(tile.Grid, out var grid))
+                    _map.SetTile(tile.Grid, grid, tile.Indices, tile.Previous);
+            }
+
+            throw;
+        }
+
+        return applied;
     }
 
     private static string MetaString(MappingDataNode meta, string key)
