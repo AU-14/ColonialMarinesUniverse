@@ -1,0 +1,212 @@
+- type: entity
+  parent: BaseItem
+  id: CMUUniversalPaperTool
+  name: universal paper tool
+  description: A compact document fabrication device manufactured by Weyland-Yutani's Communications & Research and Development Division. Designed for rapid field administration, it accepts standardized paper stock and prints pre-authorized corporate, military, and governmental stationery from its internal template library. Do not ask where the ink comes from.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Items/universal_paper_tool.rsi
+    state: icon
+  - type: Item
+    size: Small
+    sprite: _CMU14/Items/universal_paper_tool.rsi
+  - type: ActivatableUI
+    key: enum.UniversalPaperToolUiKey.Key
+    requiresComplex: false
+  - type: UserInterface
+    interfaces:
+      enum.UniversalPaperToolUiKey.Key:
+        type: UniversalPaperToolBui
+  - type: ItemSlots
+    slots:
+      paper_slot:
+        name: cmu-universal-paper-tool-paper-slot-name
+        insertSound: /Audio/Machines/terminal_insert_disc.ogg
+        ejectSound: /Audio/Machines/tray_eject.ogg
+        insertOnInteract: true
+        ejectOnInteract: false
+        whitelist:
+          tags:
+          - Paper
+        insertSuccessPopup: cmu-universal-paper-tool-paper-inserted
+        whitelistFailPopup: cmu-universal-paper-tool-paper-invalid
+  - type: UniversalPaperTool
+    printSound:
+      path: /Audio/Machines/short_print_and_rip.ogg
+    templates:
+    - prototype: CMUPaperBase #Regular papers
+      name: white paper
+      description: A crisp, bright sheet with a timeless appearance.
+    - prototype: CMUPaperCream
+      name: cream paper
+      description: A warm-toned sheet with a soft, elegant finish.
+    - prototype: CMUPaperBlue
+      name: blue paper
+      description: A soft blue sheet that's easy on the eyes.
+    - prototype: CMUPaperNavy
+      name: navy paper
+      description: A deep blue sheet with a bold, premium look.
+    - prototype: CMUPaperGreen
+      name: green paper
+      description: A fresh green sheet with a natural tone.
+    - prototype: CMUPaperCyan
+      name: cyan paper
+      description: A small cyan-colored paper.
+    - prototype: CMUPaperGrey
+      name: grey paper
+      description: A small grey-colored paper.
+    - prototype: CMUPaperTan
+      name: tan paper
+      description: A small tan-colored paper.
+    - prototype: CMUPaperOlive
+      name: olive paper
+      description: A subdued green sheet with an earthy character.
+    - prototype: CMUPaperYellow
+      name: yellow paper
+      description: A pale yellow sheet with a cheerful tint.
+    - prototype: CMUPaperOrange
+      name: orange paper
+      description: A muted orange sheet with a vibrant touch.
+    - prototype: CMUPaperRed
+      name: red paper
+      description: A rich red sheet with a classic appearance.
+    - prototype: CMUPaperPurple
+      name: purple paper
+      description: A soft violet sheet with a distinctive style.
+    - prototype: CMUPaperPink
+      name: pink paper
+      description: A gentle pink sheet with a pleasant pastel tone.
+    - prototype: CMUPaperBrown
+      name: brown paper
+      description: A rustic sheet with a natural paper texture.
+    - prototype: CMUPaperBlack
+      name: black paper
+      description: A striking dark sheet with a sleek finish.
+# PAPER SLIPS
+    - prototype: CMUPaperSlipBase
+      name: paper slip
+      description: A small slip of paper for short notes.
+    - prototype: CMUPaperCreamSlip
+      name: cream paper slip
+      description: A small cream-colored slip of paper.
+    - prototype: CMUPaperTanSlip
+      name: tan paper slip
+      description: A small tan-colored slip of paper.
+    - prototype: CMUPaperBrownSlip
+      name: brown paper slip
+      description: A small brown-colored slip of paper.
+    - prototype: CMUPaperBlackSlip
+      name: black paper slip
+      description: A small black-colored slip of paper.
+    - prototype: CMUPaperGreySlip
+      name: grey paper slip
+      description: A small grey-colored slip of paper.
+    - prototype: CMUPaperBlueSlip
+      name: blue paper slip
+      description: A small blue-colored slip of paper.
+    - prototype: CMUPaperNavySlip
+      name: navy blue paper slip
+      description: A small navy blue-colored slip of paper.
+    - prototype: CMUPaperCyanSlip
+      name: cyan paper slip
+      description: A small cyan-colored slip of paper.
+    - prototype: CMUPaperGreenSlip
+      name: green paper slip
+      description: A small green-colored slip of paper.
+    - prototype: CMUPaperOliveSlip
+      name: olive green paper slip
+      description: A small olive green-colored slip of paper.
+    - prototype: CMUPaperOrangeSlip
+      name: orange paper slip
+      description: A small orange-colored slip of paper.
+    - prototype: CMUPaperPinkSlip
+      name: pink paper slip
+      description: A small pink-colored slip of paper.
+    - prototype: CMUPaperPurpleSlip
+      name: purple paper slip
+      description: A small purple-colored slip of paper.
+    - prototype: CMUPaperRedSlip
+      name: red paper slip
+      description: A small red-colored slip of paper.
+    - prototype: CMUPaperYellowSlip
+      name: yellow paper slip
+      description: A small yellow-colored slip of paper.
+# Dedicated Papers
+    - prototype: CMUPaperSlipMedication
+      name: Medication slip
+      description: A standardized prescription slip produced by the International Committee of the Red Cross.
+    - prototype: CMUPaperSlipMedicationGreen
+      name: Medication slip (Green)
+      description: A standardized prescription slip produced by the International Committee of the Red Cross.
+    - prototype: CMUPaperSlipMedicationORed
+      name: Medication slip (Red)
+      description: A standardized prescription slip produced by the International Committee of the Red Cross.
+    - prototype: CMUPaperPhoto
+      name: photograph
+      description: A photograph of a person, place, or thing. (27x27 pixel space for SS14 to Image needs.)
+    - prototype: CMUPaperICSC
+      name: ICSC paper
+      description: A sheet of paper bearing the Independent Core System Colonies letterhead.
+    - prototype: CMUPaperUSCM
+      name: USCM paper
+      description: A sheet of paper bearing the United States Colonial Marine Corps letterhead.
+    - prototype: CMUPaperFlagUA
+      name: UA paper
+      description: A sheet of paper bearing the United Americas Flag letterhead.
+    - prototype: CMUPaperUPP
+      name: UPP paper
+      description: A sheet of paper bearing the Union of Progressive Peoples letterhead.
+    - prototype: CMUPaperFlagUPP
+      name: UPP Flag paper
+      description: A sheet of paper bearing the Union of Progressive Peoples Flag letterhead.
+    - prototype: CMUPaperHYPERDYNE
+      name: Hyperdyne paper
+      description: A sheet of paper bearing the Hyperdyne Systems letterhead.
+    - prototype: CMUPaperAltHYPERDYNE
+      name: Hyperdyne executive paper
+      description: A premium sheet of paper bearing the Hyperdyne Systems letterhead.
+    - prototype: CMUPaperBlackWEYLAND
+      name: Weyland-Yutani black paper
+      description: A sheet of paper bearing the black Weyland-Yutani letterhead.
+    - prototype: CMUPaperWEYLAND
+      name: Weyland-Yutani paper
+      description: A sheet of paper bearing the Weyland-Yutani letterhead.
+    - prototype: CMUPaperInvertedWEYLAND
+      name: Weyland-Yutani paper (Inverted)
+      description: A sheet of paper bearing the inverted Weyland-Yutani letterhead.
+    - prototype: CMUPaperResearcherWEYLAND
+      name: Weyland-Yutani Research paper
+      description: A sheet of paper bearing the Weyland-Yutani Research Division letterhead.
+    - prototype: CMUPaperPMCWEYLAND
+      name: Weyland-Yutani PMC paper
+      description: A sheet of paper bearing the Weyland-Yutani Private Military Contractors letterhead.
+    - prototype: CMUPaperTWE
+      name: TWE paper
+      description: A sheet of paper bearing the Three World Empire letterhead.
+#    - prototype: CMUPaperBlackTYRELL
+#      name: Tyrell paper
+#      description: A sheet of paper bearing the black Tyrell Corporation letterhead. - NO INGAME METHOD FOR PLAYER TO BE INVOLVED WITH
+#    - prototype: CMUPaperTYRELL
+#      name: Tyrell executive paper
+#      description: A sheet of paper bearing the Tyrell Corporation letterhead.
+    - prototype: CMUPaperSEEGSON
+      name: Seegson paper
+      description: A sheet of paper bearing the Seegson letterhead.
+#    - prototype: CMUPaperLASELLE
+#      name: Laselle Bionational paper
+#      description: A sheet of paper bearing the Laselle Bionational letterhead. - NO INGAME METHOD FOR PLAYER TO BE INVOLVED WITH
+#    - prototype: CMUPaperYAMAHA
+#      name: Yamaha paper
+#      description: A sheet of paper bearing the Yamaha Corporation letterhead. - NO INGAME METHOD FOR PLAYER TO BE INVOLVED WITH
+    - prototype: CMUPaperKELLAND
+      name: Kelland Mining paper
+      description: A sheet of paper bearing the Kelland Mining letterhead.
+    - prototype: CMUPaperCMB
+      name: CMB paper
+      description: A sheet of paper bearing the Colonial Marshal Bureau letterhead.
+    - prototype: CMUPaperVAI
+      name: Vanguard's Arrow Incorporated paper
+      description: A sheet of paper bearing the Vanguard's Arrow Incorporated letterhead.
+#    - prototype: CMUPaperCCAF
+ #     name: CCAF paper
+ #     description: A sheet of paper bearing the Canadian Colonial Armed Forces letterhead. - NO INGAME METHOD FOR PLAYER TO BE INVOLVED WITH
