@@ -149,6 +149,13 @@ public sealed partial class SavedBuildSystem : EntitySystem
             return;
         }
 
+        if (!HasValidZBounds(root))
+        {
+            Log.Warning($"{session.Name} sent saved build '{id}' with a malformed or out-of-range z offset.");
+            _popup.PopupEntity(Loc.GetString("saved-build-error-load"), user, user);
+            return;
+        }
+
         // "Place at original location": resolve the original grid + anchor and place there, unrotated.
         if (atOriginal)
         {
@@ -330,6 +337,9 @@ public sealed partial class SavedBuildSystem : EntitySystem
         levelGrid = default;
         levelMapId = MapId.Nullspace;
 
+        if (zOffset is < -MaxZRange or > MaxZRange)
+            return false;
+
         var currentMap = baseMap;
         var currentGrid = baseGrid;
         var step = Math.Sign(zOffset);
@@ -347,6 +357,42 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
         levelGrid = currentGrid;
         levelMapId = mapComp.MapId;
+        return true;
+    }
+
+    /// <summary>
+    /// Rejects malformed or out-of-range z values before any tile, map, or entity mutation occurs.
+    /// Missing z fields belong to the original 2D format and are treated as zero.
+    /// </summary>
+    private static bool HasValidZBounds(MappingDataNode root)
+    {
+        if (!root.TryGet<MappingDataNode>("meta", out var meta))
+            return true;
+
+        return SequenceHasValidZ(meta, "preview") && SequenceHasValidZ(meta, "tiles");
+    }
+
+    private static bool SequenceHasValidZ(MappingDataNode meta, string key)
+    {
+        if (!meta.TryGet<SequenceDataNode>(key, out var sequence))
+            return true;
+
+        foreach (var node in sequence)
+        {
+            if (node is not MappingDataNode mapping)
+                continue;
+
+            var raw = MetaString(mapping, "z");
+            if (string.IsNullOrWhiteSpace(raw))
+                continue;
+
+            if (!int.TryParse(raw, NumberStyles.Integer, CultureInfo.InvariantCulture, out var z) ||
+                z is < -MaxZRange or > MaxZRange)
+            {
+                return false;
+            }
+        }
+
         return true;
     }
 
