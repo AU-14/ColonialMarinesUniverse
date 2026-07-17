@@ -773,6 +773,7 @@
       takeAll: CMUAREssentialEquipment
       entries:
       - id: AU14ArmorSmartGunDesertCombatHarnessUPP
+      - id: RMCScabbardMacheteSGFilled
 
     - name: Firearm System
       choices: { CMUPlatoonMG: 1 }
