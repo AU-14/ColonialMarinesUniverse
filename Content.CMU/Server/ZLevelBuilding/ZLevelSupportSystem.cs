@@ -213,7 +213,12 @@ public sealed class ZLevelSupportSystem : EntitySystem
         }
 
         if (byTile.Count == 0)
+        {
+            // Removing the last beam is the most important change to propagate. Returning here without dirtying
+            // the level above left its previously-supported floor markers alive forever.
+            MarkAboveDirty(grid.Owner);
             return;
+        }
 
         // Seed the flood from anchors.
         var queue = new Queue<(Vector2i Tile, int Budget)>();
