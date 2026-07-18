@@ -6,13 +6,13 @@
   - type: LanguageLearningPreset
     learnableLanguages:
     - English
-    - SignLanguage
-    - TacticalSignLanguage
+#    - SignLanguage
+#    - TacticalSignLanguage
     - Primitive
 #   - Arcturian
 #   - Xeno
 #   - Yautja
-    - Binary
+#    - Binary
     - Latin
     - Legalese
     - Portuguese
@@ -52,6 +52,6 @@
     - Yoruba
     firstContactLanguages:
     - Arcturian
-    comprehensionThreshold: 0.2
-    learningRange: 4.0
-    baseWordLearningRate: 0.02
+    comprehensionThreshold: 0.02
+    learningRange: 1.0
+    baseWordLearningRate: 0.002

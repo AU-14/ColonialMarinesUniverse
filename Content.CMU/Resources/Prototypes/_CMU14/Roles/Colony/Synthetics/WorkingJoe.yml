@@ -75,7 +75,7 @@
     pocket2: RMCPouchConstructionFillFull
   storage:
       belt:
-      - AU14MaintenanceJack
+      - AU14MaintenanceJackSpecial
       - RMCSynthResetKeySeegson
       back:
       - AU14SprayCleanerExperimental
@@ -159,7 +159,7 @@
     pocket2: RMCPouchConstructionFillFull
   storage:
       belt:
-      - AU14MaintenanceJack
+      - AU14MaintenanceJackSpecial
       - RMCSynthResetKeySeegson
   inhand:
   - CMFireExtinguisher

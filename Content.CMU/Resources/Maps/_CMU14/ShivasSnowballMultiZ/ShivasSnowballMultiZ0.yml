@@ -123506,7 +123506,7 @@ entities:
     - type: Transform
       pos: 105.5,147.5
       parent: 1
-- proto: RMCShovel
+- proto: AU14ToolShovel
   entities:
   - uid: 13637
     components:

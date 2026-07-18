@@ -193,7 +193,7 @@ public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
         {
             if (!TryComp<BodyPartComponent>(held, out var bp))
                 continue;
-            if (bp.PartType is not (BodyPartType.Arm or BodyPartType.Leg))
+            if (!CMUBodyPartSlots.IsReportableMissingPart(bp.PartType))
                 continue;
 
             limb = held;
@@ -208,30 +208,21 @@ public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
         rootPart = default;
         slotId = string.Empty;
 
-        if (!MedicalIndex.TryGetRootPart(body, out var root))
-            return false;
-
-        rootPart = root.Owner;
-        var sideToken = symmetry switch
+        foreach (var (parentId, parentComp) in MedicalIndex.GetBodyParts(body))
         {
-            BodyPartSymmetry.Left => "left",
-            BodyPartSymmetry.Right => "right",
-            _ => null,
-        };
-        if (sideToken is null)
-            return false;
+            foreach (var slot in MedicalIndex.GetBodyPartSlots(parentId))
+            {
+                if (slot.Type != type || slot.Part is not null)
+                    continue;
+                if (!CMUBodyPartSlots.TryGetSymmetry(slot.SlotId, parentComp.Symmetry, out var slotSymmetry))
+                    continue;
+                if (slotSymmetry != symmetry)
+                    continue;
 
-        foreach (var slot in MedicalIndex.GetBodyPartSlots(rootPart))
-        {
-            if (slot.Type != type)
-                continue;
-            if (!slot.SlotId.Contains(sideToken, StringComparison.Ordinal))
-                continue;
-            if (slot.Part is not null)
-                continue;
-
-            slotId = slot.SlotId;
-            return true;
+                rootPart = parentId;
+                slotId = slot.SlotId;
+                return true;
+            }
         }
 
         return false;
@@ -249,8 +240,12 @@ public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
         {
             (BodyPartType.Arm, BodyPartSymmetry.Left) => "StatusEffectCMUMissingArmLeft",
             (BodyPartType.Arm, BodyPartSymmetry.Right) => "StatusEffectCMUMissingArmRight",
+            (BodyPartType.Hand, BodyPartSymmetry.Left) => "StatusEffectCMUMissingHandLeft",
+            (BodyPartType.Hand, BodyPartSymmetry.Right) => "StatusEffectCMUMissingHandRight",
             (BodyPartType.Leg, BodyPartSymmetry.Left) => "StatusEffectCMUMissingLegLeft",
             (BodyPartType.Leg, BodyPartSymmetry.Right) => "StatusEffectCMUMissingLegRight",
+            (BodyPartType.Foot, BodyPartSymmetry.Left) => "StatusEffectCMUMissingFootLeft",
+            (BodyPartType.Foot, BodyPartSymmetry.Right) => "StatusEffectCMUMissingFootRight",
             _ => null,
         };
 

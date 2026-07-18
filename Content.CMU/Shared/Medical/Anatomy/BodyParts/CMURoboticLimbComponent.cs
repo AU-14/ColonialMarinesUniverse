@@ -18,12 +18,6 @@ public sealed partial class CMURoboticLimbComponent : Component
     public Dictionary<HumanoidVisualLayers, ProtoId<HumanoidSpeciesSpriteLayer>> BaseLayers = new();
 
     [DataField, AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
-    public EntProtoId? ChildPrototype;
-
-    [DataField, AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
-    public string? ChildSlot;
-
-    [DataField, AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
     public FixedPoint2 BruteDamage;
 
     [DataField, AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]

@@ -1,5 +1,6 @@
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
+using Content.Shared._RMC14.Language.Prototypes;
 
 namespace Content.Shared.AU14.Origin;
 
@@ -47,6 +48,18 @@ public sealed partial class OriginPrototype : IPrototype
     /// </summary>
     [DataField]
     public List<ProtoId<Content.Shared.Traits.TraitPrototype>> Traits { get; private set; } = new();
+
+    /// <summary>
+    /// Languages immediately known by characters with this origin.
+    /// </summary>
+    [DataField]
+    public List<ProtoId<LanguagePrototype>> Languages { get; private set; } = new();
+
+    /// <summary>
+    /// Languages the character can learn but does not initially understand.
+    /// </summary>
+    [DataField]
+    public List<ProtoId<LanguagePrototype>> LearnableLanguages { get; private set; } = new();
 
     /// <summary>
     /// Whether this origin can be selected at round start.

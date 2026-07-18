@@ -162,8 +162,8 @@
       RMCSkillFirearms: 1
       RMCSkillEndurance: 2
       RMCSkillPilot: 1
-      RMCSkillEngineer: 2
-      RMCSkillConstruction: 2
+      RMCSkillEngineer: 4
+      RMCSkillConstruction: 4
       RMCSkillPowerLoader: 3
       RMCSkillVehicles: 2
       RMCSkillFireman: 2

@@ -1,19 +1,4 @@
 - type: platoon
-  id: exampleplatoon
-  name: exampleplatoon
-  lorePrimer: AU14PrimerPlatoonHAZOPS
-  reqlist: USCMCargoCatalog
-  vendorSet: Example
-  possibleships:
-      - USSBushRedux
-  jobSlotOverride:
-    SquadRifleman: 12
-    PlatoonCorpsman: 1
-    PlatCo: 1
-    DSPilot: 1
-  techTree: RMCIntelTechTree_ua
-
-- type: platoon
   id: USCM
   name: US Colonial Marines
   lorePrimer: AU14PrimerPlatoonUSCM
@@ -21,6 +6,8 @@
   reqlist: USCMCargoCatalog
   vendorSet: USCM
   #platoonflag:  uaflag
+  languages:
+    - English
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
   - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
@@ -35,6 +22,9 @@
   name: LACN Landing Forces
   lorePrimer: AU14PrimerPlatoonLACN
   Allegiance: UA
+  languages:
+    - Spanish
+    - Brazilian
   reqlist: LACNCargoCatalog
   vendorSet: LACN
   possibleships:
@@ -47,10 +37,14 @@
 
 - type: platoon
   id: UPP
-  language: russian
   name: UPP Naval Infantry
   lorePrimer: AU14PrimerPlatoonUPP
   Allegiance: UPP
+  languages:
+    - Russian
+    - German
+    - Mandarin
+    - Spanish
   reqlist: UPPCargoCatalog
   vendorSet: UPP
   possibleships:
@@ -79,6 +73,9 @@
   lorePrimer: AU14PrimerPlatoonWEYU
   reqlist: WEYUCargoCatalog
   vendorSet: WEYU
+  languages:
+    - English
+    - Japanese
   # jobClassOverride:
   #   SquadRifleman: AU14JobGOVFORSquadRiflemanWYPMC
   #   PlatCo: AU14JobGOVFORPlatCoWYPMC
@@ -107,6 +104,8 @@
   name: CMB Crisis Intervention
   lorePrimer: AU14PrimerPlatoonCMBCIU
   Allegiance: UA
+  languages:
+    - English
   reqlist: CMBCIUCargoCatalog
   vendorSet: CMBCIU
   # jobClassOverride:
@@ -136,6 +135,8 @@
   name: USCM Hazardous Operations Unit
   lorePrimer: AU14PrimerPlatoonHAZOPS
   Allegiance: UA
+  languages:
+    - English
   reqlist: HAZOPSCargoCatalog
   vendorSet: HAZOPS
   possibleships:
@@ -153,6 +154,8 @@
   name: Prodigy Security Forces
   lorePrimer: AU14PrimerPlatoonProdigySF
   reqlist: ProdigyCargoCatalog
+  languages:
+    - English
   vendorSet: ProdigySF
   #platoonflag:  uaflag
   CompatibleDropships:
@@ -170,6 +173,8 @@
   name: VAI Primary Operations
   lorePrimer: AU14PrimerPlatoonVAIPO
   reqlist: VAIPOCargoCatalog
+  languages:
+    - English
   vendorSet: VAIPO
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
@@ -186,6 +191,8 @@
   name: TWE Royal Marine Commandos
   lorePrimer: AU14PrimerPlatoonRMC
   Allegiance: TWE
+  languages:
+    - English
   reqlist: RMCCargoCatalog
   vendorSet: RMC
   # jobClassOverride:

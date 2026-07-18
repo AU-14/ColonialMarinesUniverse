@@ -55,6 +55,21 @@ origin-twe-other-description = From elsewhere within the Three World Empire.
 origin-twe-tian-name = TWE - Tian
 origin-twe-tian-description = Raised on Tian, a TWE world.
 
+origin-twe-netherlands-name = TWE - Netherlands
+origin-twe-netherlands-description = Born in the Netherlands, a member of the Three World Empire.
+
+origin-twe-indonesia-name = TWE - Indonesia
+origin-twe-indonesia-description = Born in Indonesia, part of the Three World Empire.
+
+origin-twe-philippines-name = TWE - Philippines
+origin-twe-philippines-description = Born in the Philippines, part of the Three World Empire.
+
+origin-twe-kenya-name = TWE - Kenya
+origin-twe-kenya-description = Born in Kenya, part of the Three World Empire.
+
+origin-twe-ireland-name = TWE - Ireland
+origin-twe-ireland-description = Born in Ireland, part of the Three World Empire.
+
 # Origins - Confederation of Central Africa
 origin-cca-southafrica-name = CCA - South Africa
 origin-cca-southafrica-description = Born in South Africa, part of the Confederation of Central Africa.
@@ -77,7 +92,7 @@ origin-cca-luna-description = Born aboard a CCA vessel or space station.
 origin-upp-russia-name = UPP - Russia
 origin-upp-russia-description = Born in Russia, a founding member of the Union of Progressive Peoples.
 origin-upp-germany-name = UPP - Germany
-origin-upp-germany-description = Born in Germany, part of the Union of Progressive Peoples.
+origin-upp-germany-description = Born in Germany, a founding member of the Union of Progressive Peoples.
 origin-upp-algeria-name = UPP - Algeria
 origin-upp-algeria-description = Born in Algeria, part of the Union of Progressive Peoples.
 origin-upp-china-name = UPP - China
@@ -93,9 +108,42 @@ origin-upp-korea-description = Born in Korea, part of the Union of Progressive P
 origin-upp-colonies-name = UPP - Colonies
 origin-upp-colonies-description = Raised in one of the UPP's extrasolar colonies.
 origin-upp-spain-name = UPP - Spain
-origin-upp-spain-description = Born in Spain, part of the Union of Progressive Peoples.
+origin-upp-spain-description = Born in Spain, a founding member of the Union of Progressive Peoples.
 origin-upp-italy-name = UPP - Italy
 origin-upp-italy-description = Born in Italy, part of the Union of Progressive Peoples.
+
+origin-upp-ukraine-name = UPP - Ukraine
+origin-upp-ukraine-description = Born in Ukraine, part of the Union of Progressive Peoples.
+
+origin-upp-poland-name = UPP - Poland
+origin-upp-poland-description = Born in Poland, part of the Union of Progressive Peoples.
+
+origin-upp-hungary-name = UPP - Hungary
+origin-upp-hungary-description = Born in Hungary, part of the Union of Progressive Peoples.
+
+origin-upp-czech-name = UPP - Czechia
+origin-upp-czech-description = Born in the Czechia, part of the Union of Progressive Peoples.
+
+origin-upp-slovakia-name = UPP - Slovakia
+origin-upp-slovakia-description = Born in Slovakia, part of the Union of Progressive Peoples.
+
+origin-upp-romania-name = UPP - Romania
+origin-upp-romania-description = Born in Romania, part of the Union of Progressive Peoples.
+
+origin-upp-lithuania-name = UPP - Lithuania
+origin-upp-lithuania-description = Born in Lithuania, part of the Union of Progressive Peoples.
+
+origin-upp-sweden-name = UPP - Sweden
+origin-upp-sweden-description = Born in Sweden, part of the Union of Progressive Peoples.
+
+origin-upp-finland-name = UPP - Finland
+origin-upp-finland-description = Born in Finland, part of the Union of Progressive Peoples.
+
+origin-upp-albania-name = UPP - Albania
+origin-upp-albania-description = Born in Albania, part of the Union of Progressive Peoples.
+
+origin-upp-serbia-name = UPP - Serbia
+origin-upp-serbia-description = Born in Serbia, part of the Union of Progressive Peoples.
 
 # Origins - Independent Systems
 origin-is-volcus-name = Independent - Volcus
@@ -138,3 +186,20 @@ origin-corp-colonies-name = Corporate - Colonies
 origin-corp-colonies-description = Raised in a corporate-owned extrasolar colony.
 origin-corp-other-name = Corporate - Other
 origin-corp-other-description = From another corporate-controlled territory.
+
+# Origins - Independent Core Systems Coalition (ICSC)
+
+origin-icsc-persia-name = ICSC - Persia
+origin-icsc-persia-description = Born in Persia, an independent nation within the ICSC.
+
+origin-icsc-france-name = ICSC - France
+origin-icsc-france-description = Born in France, an independent nation within the ICSC.
+
+origin-icsc-korea-name = ICSC - Korea
+origin-icsc-korea-description = Born in Korea, an independent nation within the ICSC.
+
+origin-icsc-turkey-name = ICSC - Turkey
+origin-icsc-turkey-description = Born in Turkey, an independent nation within the ICSC.
+
+origin-icsc-pakistan-name = ICSC - Pakistan
+origin-icsc-pakistan-description = Born in Pakistan, an independent nation within the ICSC.

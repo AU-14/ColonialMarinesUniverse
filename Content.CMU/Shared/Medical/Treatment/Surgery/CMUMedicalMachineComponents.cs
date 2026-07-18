@@ -182,10 +182,22 @@ public sealed partial class CMULimbPrinterComponent : Component
     public EntProtoId RightArmPrototype = "CMUPartHumanRightArm";
 
     [DataField]
+    public EntProtoId LeftHandPrototype = "CMUPartHumanLeftHand";
+
+    [DataField]
+    public EntProtoId RightHandPrototype = "CMUPartHumanRightHand";
+
+    [DataField]
     public EntProtoId LeftLegPrototype = "CMUPartHumanLeftLeg";
 
     [DataField]
     public EntProtoId RightLegPrototype = "CMUPartHumanRightLeg";
+
+    [DataField]
+    public EntProtoId LeftFootPrototype = "CMUPartHumanLeftFoot";
+
+    [DataField]
+    public EntProtoId RightFootPrototype = "CMUPartHumanRightFoot";
 
     [DataField]
     public EntProtoId RoboticLeftArmPrototype = "CMUPartRoboticLeftArm";
@@ -194,10 +206,22 @@ public sealed partial class CMULimbPrinterComponent : Component
     public EntProtoId RoboticRightArmPrototype = "CMUPartRoboticRightArm";
 
     [DataField]
+    public EntProtoId RoboticLeftHandPrototype = "CMUPartRoboticLeftHand";
+
+    [DataField]
+    public EntProtoId RoboticRightHandPrototype = "CMUPartRoboticRightHand";
+
+    [DataField]
     public EntProtoId RoboticLeftLegPrototype = "CMUPartRoboticLeftLeg";
 
     [DataField]
     public EntProtoId RoboticRightLegPrototype = "CMUPartRoboticRightLeg";
+
+    [DataField]
+    public EntProtoId RoboticLeftFootPrototype = "CMUPartRoboticLeftFoot";
+
+    [DataField]
+    public EntProtoId RoboticRightFootPrototype = "CMUPartRoboticRightFoot";
 
     [ViewVariables, AutoPausedField]
     public TimeSpan WorkingUntil;

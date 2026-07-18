@@ -25,9 +25,25 @@
         kidneys: CMUOrganHumanKidneys
     right_arm:
       part: CMUPartRoboticRightArm
+      connections:
+      - right_hand
     left_arm:
       part: CMUPartRoboticLeftArm
+      connections:
+      - left_hand
+    right_hand:
+      part: CMUPartRoboticRightHand
+    left_hand:
+      part: CMUPartRoboticLeftHand
     right_leg:
       part: CMUPartRoboticRightLeg
+      connections:
+      - right_foot
     left_leg:
       part: CMUPartRoboticLeftLeg
+      connections:
+      - left_foot
+    right_foot:
+      part: CMUPartRoboticRightFoot
+    left_foot:
+      part: CMUPartRoboticLeftFoot

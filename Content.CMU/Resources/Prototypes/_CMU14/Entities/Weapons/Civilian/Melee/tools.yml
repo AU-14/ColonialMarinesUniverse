@@ -59,3 +59,24 @@
     failurePenalties:
       retractor: 2
       bone_saw: 1
+
+- type: entity
+  parent: RMCShovel
+  id: AU14ToolShovel
+  suffix: AU14
+  components:
+  - type: MeleeWeapon
+    wideAnimationRotation: 45
+    damage:
+      types:
+        Blunt: 14
+    soundHit:
+      collection: MetalThud
+  - type: MeleeDamageMultiplier
+    whitelist:
+      tags:
+      - Pickaxe
+    multiplier: 4 # base (14)*3=42 -> 168HP/42 = rock in 4 hits
+  - type: Tag
+    tags:
+    - Pickaxe

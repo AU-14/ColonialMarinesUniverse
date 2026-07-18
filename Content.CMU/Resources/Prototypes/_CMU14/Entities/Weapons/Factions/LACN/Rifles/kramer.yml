@@ -2,7 +2,7 @@
   parent: CMBaseWeaponRifle
   name: Kramer Assault Rifle
   id: AU14WeaponRifleKramerAR
-  description: Alternately referred to as the Kramer or KAR, it is an automatic assault rifle manufactured by Kramer Metallarbeiten GmBH and is used by many military forces across the United Americas.
+  description: Alternately referred to as the Kramer or KAR, it is an automatic assault rifle manufactured by Kramer Metallarbeiten GmbH and is used by many military forces across the United Americas.
   components:
   - type: Sprite
     sprite: _AU14/Weapons/Guns/LACN/kramer.rsi

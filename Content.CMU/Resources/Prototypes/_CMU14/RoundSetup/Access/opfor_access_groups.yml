@@ -11,6 +11,7 @@
   - AU14AccessOpforGunner
   - AU14AccessOpforPilot
   - AU14AccessOpforReq
+  - AU14AccessOpforVehicleCrew
 
 - type: accessGroup
   parent: AU14OpforCommand
@@ -59,6 +60,7 @@
   tags:
   - AU14AccessOpfor
   - AU14AccessOpforSquad
+  - AU14AccessOpforVehicleCrew
   - CMAccessCrewman
   - RMCAccessVehicleCrew
 

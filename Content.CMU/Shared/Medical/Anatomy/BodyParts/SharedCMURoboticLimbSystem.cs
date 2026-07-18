@@ -7,7 +7,6 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Repairable;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DoAfter;
@@ -20,7 +19,6 @@ using Content.Shared.Stacks;
 using Content.Shared.Tools.Components;
 using Content.Shared.Tools.Systems;
 using Robust.Shared.Configuration;
-using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -50,9 +48,7 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
     [Dependency] private RMCRepairableSystem _repairable = default!;
     [Dependency] private RMCWeldEffectSystem _weldEffect = default!;
     [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
-    [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private SharedBodyZoneTargetingSystem _zoneTargeting = default!;
-    [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
@@ -117,9 +113,6 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
     {
         if (_net.IsClient)
             return;
-
-        if (TryComp<CMURoboticLimbComponent>(part.Owner, out var robotic))
-            EnsureChildExtremity(part, robotic);
 
         RefreshBodyVisuals(body);
     }
@@ -464,41 +457,6 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
         var missing = health.Max - health.Current;
         var untracked = missing - robotic.BruteDamage - robotic.BurnDamage;
         return tracked + FixedPoint2.Max(FixedPoint2.Zero, untracked);
-    }
-
-    private void EnsureChildExtremity(Entity<BodyPartComponent> part, CMURoboticLimbComponent robotic)
-    {
-        if (_net.IsClient ||
-            robotic.ChildPrototype is not { } prototype ||
-            string.IsNullOrWhiteSpace(robotic.ChildSlot))
-        {
-            return;
-        }
-
-        var containerId = SharedBodySystem.GetPartSlotContainerId(robotic.ChildSlot);
-        if (_containers.TryGetContainer(part.Owner, containerId, out var existing) &&
-            existing.ContainedEntities.Count > 0)
-        {
-            return;
-        }
-
-        var child = Spawn(prototype, Transform(part.Owner).Coordinates);
-        if (!TryComp<BodyPartComponent>(child, out var childPart))
-        {
-            QueueDel(child);
-            return;
-        }
-
-        var attached = _body.AttachPart(part.Owner, robotic.ChildSlot, child, part.Comp, childPart) ||
-                       _body.TryCreatePartSlotAndAttach(part.Owner,
-                           robotic.ChildSlot,
-                           child,
-                           childPart.PartType,
-                           part.Comp,
-                           childPart);
-
-        if (!attached)
-            QueueDel(child);
     }
 
     private void RefreshBodyVisuals(EntityUid body)

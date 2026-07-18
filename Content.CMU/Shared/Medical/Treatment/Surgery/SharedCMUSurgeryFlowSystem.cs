@@ -431,7 +431,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         {
             armedType = t;
             armedSymmetry = s;
-            if (isReattach && !TryGetReattachAnchorPart(patient, out operationPart))
+            if (isReattach && !TryGetReattachAnchorPart(patient, armedType, armedSymmetry, out operationPart))
                 return null;
         }
         else
@@ -974,7 +974,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         anchor = default;
         if (!IsReattachSurgeryId(armed.LeafSurgeryId))
             return false;
-        if (!TryGetReattachAnchorPart(patient, out anchor))
+        if (!TryGetReattachAnchorPart(patient, armed.TargetPartType, armed.TargetSymmetry, out anchor))
             return false;
 
         return clickTarget is null || clickTarget == patient || clickTarget == anchor;
@@ -1206,7 +1206,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
                   && IsReattachSurgeryId(armed.LeafSurgeryId))
                  || IsReattachSurgeryId(session.Procedure.Id))
         {
-            targetAttached = TryGetReattachAnchorPart(ent.Owner, out var anchor)
+            targetAttached = TryGetReattachAnchorPart(ent.Owner, session.Site.Type, session.Site.Symmetry, out var anchor)
                 && IsIndexedBodyPart(ent.Owner, anchor);
         }
         else
@@ -1876,6 +1876,32 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         return true;
     }
 
+    public bool TryGetReattachAnchorPart(
+        EntityUid patient,
+        BodyPartType targetType,
+        BodyPartSymmetry targetSymmetry,
+        out EntityUid anchor)
+    {
+        anchor = default;
+        foreach (var (parentId, parentComp) in MedicalIndex.GetBodyParts(patient))
+        {
+            foreach (var slot in MedicalIndex.GetBodyPartSlots(parentId))
+            {
+                if (slot.Type != targetType || slot.Part is not null)
+                    continue;
+                if (!CMUBodyPartSlots.TryGetSymmetry(slot.SlotId, parentComp.Symmetry, out var slotSymmetry))
+                    continue;
+                if (slotSymmetry != targetSymmetry)
+                    continue;
+
+                anchor = parentId;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public bool LimbMatchesMissingSlot(EntityUid patient, EntityUid heldLimb, BodyPartType targetType, BodyPartSymmetry targetSymmetry)
     {
         if (!TryComp<BodyPartComponent>(heldLimb, out var heldBp))
@@ -1884,34 +1910,10 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             return false;
         if (!CanPatientAcceptLimb(patient, heldLimb))
             return false;
-        if (targetType is not (BodyPartType.Arm or BodyPartType.Leg))
+        if (!CMUBodyPartSlots.IsReportableMissingPart(targetType))
             return false;
 
-        if (!MedicalIndex.TryGetRootPart(patient, out var root))
-            return false;
-
-        var targetSide = targetSymmetry switch
-        {
-            BodyPartSymmetry.Left => "left",
-            BodyPartSymmetry.Right => "right",
-            _ => null,
-        };
-        if (targetSide is null)
-            return false;
-
-        foreach (var slot in MedicalIndex.GetBodyPartSlots(root.Owner))
-        {
-            if (slot.Type != targetType)
-                continue;
-            // Slot id encodes side — left_arm / right_leg / etc.
-            if (!slot.SlotId.Contains(targetSide, System.StringComparison.Ordinal))
-                continue;
-            // Accept the matching slot — if it's filled, the attach call
-            // no-ops with a "slot occupied" popup, which is the right UX.
-            return true;
-        }
-
-        return false;
+        return TryGetReattachAnchorPart(patient, targetType, targetSymmetry, out _);
     }
 
     public bool CanPatientAcceptLimb(EntityUid patient, EntityUid heldLimb)
