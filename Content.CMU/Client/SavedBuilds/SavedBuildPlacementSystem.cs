@@ -261,7 +261,7 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
 
             var world = levelTarget.Position + Rotation.RotateVec(new Vector2(ent.X, ent.Y));
             var coords = new MapCoordinates(world, levelTarget.MapId);
-            if (!_mapManager.TryFindGridAt(coords, out var gridUid, out _))
+            if (!TryGetPlacementGrid(coords, out var gridUid))
                 continue;
 
             var dir = (Rotation + new Angle(ent.Rot)).GetDir();
@@ -279,7 +279,7 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
 
             var world = levelTarget.Position + Rotation.RotateVec(new Vector2(tile.X, tile.Y));
             var coords = new MapCoordinates(world, levelTarget.MapId);
-            if (!_mapManager.TryFindGridAt(coords, out var gridUid, out _))
+            if (!TryGetPlacementGrid(coords, out var gridUid))
                 continue;
 
             if (construction.TrySpawnGhost(recipe, _transform.ToCoordinates(gridUid, coords), Direction.South, out _))
@@ -287,6 +287,27 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
         }
 
         _popup.PopupCursor(Loc.GetString("saved-build-ghosts-placed", ("count", placed)));
+    }
+
+    /// <summary>
+    /// Finds the target grid even on a sparse generated z-level whose map-grid has no tile at this position yet.
+    /// Saved tile/stair ghosts are what populate that empty region, so requiring an existing tile here drops the
+    /// entire adjacent layer from player-mode placement.
+    /// </summary>
+    private bool TryGetPlacementGrid(MapCoordinates coords, out EntityUid gridUid)
+    {
+        if (_mapManager.TryFindGridAt(coords, out gridUid, out _))
+            return true;
+
+        var mapUid = _mapManager.GetMapEntityId(coords.MapId);
+        if (mapUid.Valid && HasComp<MapGridComponent>(mapUid))
+        {
+            gridUid = mapUid;
+            return true;
+        }
+
+        gridUid = default;
+        return false;
     }
 
     private void EnsureRecipeMap()

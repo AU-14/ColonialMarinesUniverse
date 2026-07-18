@@ -66,6 +66,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
     [Dependency] private ZLevelBuildingSystem _zBuilding = default!;
+    [Dependency] private ZStairSystem _zStairs = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IComponentFactory _componentFactory = default!;
@@ -212,6 +213,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
         }
 
         LoadResult result;
+        _zStairs.BeginDeferredSetup();
         try
         {
             // Merge onto the target map so the entities are properly map-initialized (collisions, etc.);
@@ -229,6 +231,10 @@ public sealed partial class SavedBuildSystem : EntitySystem
             Log.Error($"Failed to load saved build '{id}' for {session.Name}: {e}");
             _popup.PopupEntity(Loc.GetString("saved-build-error-load"), user, user);
             return;
+        }
+        finally
+        {
+            _zStairs.EndDeferredSetup();
         }
 
         // After the merge the build's root entities are normally parented to the target map - but if a loaded
@@ -293,6 +299,14 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
             // Tiles commit only after every entity has loaded and reached its final transform.
             placedTiles = ApplyPlannedTiles(tilePlan);
+
+            // Saved roots were map-initialized before relocation, while stair package setup was deliberately
+            // deferred. Rebuild each package now at its final level and coordinates.
+            foreach (var rootEnt in roots)
+            {
+                if (TryComp<ZStairComponent>(rootEnt, out var stair))
+                    _zStairs.EnsureSetup((rootEnt, stair));
+            }
         }
         catch (Exception e)
         {
