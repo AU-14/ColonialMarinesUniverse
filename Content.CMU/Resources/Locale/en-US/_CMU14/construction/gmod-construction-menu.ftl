@@ -10,6 +10,7 @@ gmod-construction-menu-au14 = AU14
 gmod-construction-menu-all-items = All Items
 gmod-construction-menu-favorites = ★ Favorites
 gmod-construction-menu-steps = Steps
+construction-menu-skill-info = You have { $skill } skill points in construction\n{ $discount }% discounted in building
 gmod-construction-menu-tools = Tools
 gmod-construction-menu-construction = Construction
 gmod-construction-menu-advanced-duplicator = AdvancedAtkinsonatorv2

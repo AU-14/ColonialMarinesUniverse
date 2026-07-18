@@ -8,7 +8,7 @@ public sealed partial class AU14ConstructionSkillSystem : EntitySystem
 {
     [Dependency] private SkillsSystem _skills = default!;
 
-    private const float MaterialDiscountPerSkill = 0.10f;
+    public const float MaterialDiscountPerSkill = 0.10f;
     private const float SpeedBonusPerSkill = 0.10f;
 
     private static readonly HashSet<string> DiscountedStacks = new()
@@ -26,18 +26,23 @@ public sealed partial class AU14ConstructionSkillSystem : EntitySystem
 
     private void OnCost(ref RMCConstructionCostEvent args)
     {
-        if (!DiscountedStacks.Contains(args.StackType))
-            return;
-
         var level = _skills.GetSkill(args.User, "RMCSkillConstruction");
-        if (level <= 0)
-            return;
-
-        var multiplier = MathF.Max(0.1f, 1f - MaterialDiscountPerSkill * level);
-        // Material amounts are integral. Floor so every full skill point produces an actual reduction whenever
-        // the recipe costs more than one unit (ceiling made common 5-unit recipes receive no level-one discount).
-        args.Cost = Math.Max(1, (int) MathF.Floor(args.BaseCost * multiplier));
+        args.Cost = GetMaterialCost(args.StackType, args.BaseCost, level);
     }
+
+    /// <summary>Returns the authoritative integral material cost used by both construction and its client guide.</summary>
+    public static int GetMaterialCost(string stackType, int baseCost, int skillLevel)
+    {
+        if (skillLevel <= 0 || !DiscountedStacks.Contains(stackType))
+            return baseCost;
+
+        var multiplier = MathF.Max(0.1f, 1f - MaterialDiscountPerSkill * skillLevel);
+        // Floor so every full skill point produces an actual reduction whenever the recipe costs more than one.
+        return Math.Max(1, (int) MathF.Floor(baseCost * multiplier));
+    }
+
+    public static int GetDiscountPercent(int skillLevel)
+        => Math.Clamp(skillLevel * (int) (MaterialDiscountPerSkill * 100), 0, 90);
 
     private void OnDelay(ref RMCConstructionDelayEvent args)
     {
