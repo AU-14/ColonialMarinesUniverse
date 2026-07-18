@@ -12,11 +12,11 @@ namespace Content.Shared._AU14.Construction;
 [RegisterComponent]
 public sealed partial class AU14MaterialShortfallComponent : Component
 {
-    /// <summary>The stack type id of the discounted material (e.g. CMSteel).</summary>
+    /// <summary>
+    /// Units saved per stack type. A construction graph can consume several discounted materials (for example,
+    /// both CM steel and CM plasteel), so tracking only the last material would allow the others to be duplicated
+    /// by deconstruction.
+    /// </summary>
     [DataField]
-    public string StackTypeId = string.Empty;
-
-    /// <summary>Units of that material saved by the discount = units to remove from any deconstruct refund.</summary>
-    [DataField]
-    public int Missing;
+    public Dictionary<string, int> MissingByStack = new();
 }

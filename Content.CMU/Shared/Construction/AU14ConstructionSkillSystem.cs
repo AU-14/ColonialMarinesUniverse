@@ -34,14 +34,19 @@ public sealed partial class AU14ConstructionSkillSystem : EntitySystem
             return;
 
         var multiplier = MathF.Max(0.1f, 1f - MaterialDiscountPerSkill * level);
-        args.Cost = Math.Max(1, (int) MathF.Ceiling(args.BaseCost * multiplier));
+        // Material amounts are integral. Floor so every full skill point produces an actual reduction whenever
+        // the recipe costs more than one unit (ceiling made common 5-unit recipes receive no level-one discount).
+        args.Cost = Math.Max(1, (int) MathF.Floor(args.BaseCost * multiplier));
     }
 
     private void OnDelay(ref RMCConstructionDelayEvent args)
     {
         var level = _skills.GetSkill(args.User, "RMCSkillConstruction");
         if (level > 0)
-            args.Delay = args.BaseDelay / (1.0 + SpeedBonusPerSkill * level);
+        {
+            var multiplier = Math.Max(0.1, 1.0 - SpeedBonusPerSkill * level);
+            args.Delay = args.BaseDelay * multiplier;
+        }
     }
 
     private void OnTransactionCompleted(ref RMCConstructionTransactionCompletedEvent args)
@@ -50,7 +55,7 @@ public sealed partial class AU14ConstructionSkillSystem : EntitySystem
             return;
 
         var shortfall = EnsureComp<AU14MaterialShortfallComponent>(args.Built);
-        shortfall.StackTypeId = args.StackType;
-        shortfall.Missing = args.MaterialShortfall;
+        shortfall.MissingByStack[args.StackType] =
+            shortfall.MissingByStack.GetValueOrDefault(args.StackType) + args.MaterialShortfall;
     }
 }
