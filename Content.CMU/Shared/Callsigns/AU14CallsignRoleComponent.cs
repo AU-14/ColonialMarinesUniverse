@@ -10,4 +10,8 @@ public sealed partial class AU14CallsignRoleComponent : Component
 
     [DataField]
     public bool CommandElement;
+
+    // short role tag shown before the callsign on radio, e.g. "SL" -> (SL) ALPHA 6
+    [DataField]
+    public string? RadioTag;
 }

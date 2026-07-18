@@ -32,6 +32,7 @@
   - type: CommendationGiver
   - type: InnateCommandSpeech
   - type: ANPRCRadioUser
+  - type: ANPRCCryptoAuthority
   - type: Skills
     preset: AU14SkillPresetPlatoonCommander
   - type: JobPrefix

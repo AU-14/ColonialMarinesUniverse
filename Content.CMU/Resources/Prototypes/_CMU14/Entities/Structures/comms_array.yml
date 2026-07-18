@@ -172,3 +172,89 @@
     - radioOpforCommand
     - radioOpforIntel
     - radioOpforJTAC
+
+# compact transceiver set for vehicle and dropship grids. vehicles are their own
+# grid, so without this riders drop off every combat net the moment they mount up.
+# relays both sides' nets - a captured vehicle keeps talking for its new owners
+- type: entity
+  parent: BaseStructure
+  id: AU14VehicleRadioSet
+  name: vehicle radio set
+  description: A hull-mounted transceiver that keeps everyone aboard on the net. Short whip antenna - do not expect it to cover more than the vehicle and its immediate surroundings.
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 60
+        mask:
+        - None
+  - type: Sprite
+    sprite: Structures/Wallmounts/intercom.rsi
+    state: base
+    drawdepth: WallMountedItems
+  - type: WallMount
+    arc: 360
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: null
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 120
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: ANPRCRelayAnchor
+    fullRange: 8
+    partialRange: 12
+    channels:
+    - radioGovforAlpha
+    - radioGovforBravo
+    - radioGovforCharlie
+    - radioGovforCommand
+    - radioGovforIntel
+    - radioGovforJTAC
+    - radioOpforAlpha
+    - radioOpforBravo
+    - radioOpforCharlie
+    - radioOpforCommand
+    - radioOpforIntel
+    - radioOpforJTAC
+
+# field-built antenna mast, raised from metal by engineering-trained personnel.
+# relays both sides' combat nets: a mast is a mast, whoever stands next to it
+- type: entity
+  parent: AU14CommsMastBase
+  id: AU14CommsMastField
+  name: field antenna mast
+  suffix: Field-Built, Both Sides
+  components:
+  - type: ANPRCRelayAnchor
+    fullRange: 75
+    partialRange: 100
+    channels:
+    - radioGovforAlpha
+    - radioGovforBravo
+    - radioGovforCharlie
+    - radioGovforCommand
+    - radioGovforIntel
+    - radioGovforJTAC
+    - radioOpforAlpha
+    - radioOpforBravo
+    - radioOpforCharlie
+    - radioOpforCommand
+    - radioOpforIntel
+    - radioOpforJTAC

@@ -10,7 +10,14 @@ au14-callsign-console-no-stations = - no stations -
 au14-callsign-console-rename-placeholder = New word
 au14-callsign-console-suffix-placeholder = Suffix
 au14-callsign-console-set-button = SET
-au14-callsign-console-footer = Station callsigns replace names on the net. 6 = leader · 5 = 2IC · 7 = senior NCO · ROMEO = RTO · OPS = staff. Radio-trained personnel can rename elements and reassign suffixes.
+au14-callsign-console-footer = Station callsigns replace names on the net. 6 = leader · 5 = 2IC · 7 = senior NCO · ROMEO = RTO · PAPA = pilot · CHIEF = DCC · OPS = staff · N-N = fireteam-number. Radio-trained personnel can rename elements, reassign suffixes and form task groups.
 au14-callsign-console-not-authorized = You are not trained to administer the comms net.
 au14-callsign-console-wrong-faction = This directory does not answer to your authority.
 au14-callsign-console-suffix-taken = Callsign suffix { $suffix } is already in use in that element.
+au14-callsign-console-group-element = TASK GROUP
+au14-callsign-console-group-taken = That word is unavailable or already on the net.
+au14-callsign-console-group-placeholder = New group word
+au14-callsign-console-create-group-button = CREATE GROUP
+au14-callsign-console-delete-group-button = DISBAND
+au14-callsign-console-group-none = - element -
+au14-callsign-headset-examine = You answer to [color=#6BC7FF]{ $callsign }[/color] on the net.

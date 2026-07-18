@@ -27,6 +27,7 @@
   roundComponents:
   - type: AU14CallsignRole
     suffix: "6"
+    radioTag: SL
   - type: Skills
     preset: AU14SkillPresetPlatoonSergeant
   - type: RMCSpeechBubbleSpecificStyle

@@ -429,4 +429,11 @@ entities:
     - type: Transform
       pos: 3.5,-4.5
       parent: 3
+- proto: AU14VehicleRadioSet
+  entities:
+  - uid: 200
+    components:
+    - type: Transform
+      pos: 0.5,2.5
+      parent: 3
 ...

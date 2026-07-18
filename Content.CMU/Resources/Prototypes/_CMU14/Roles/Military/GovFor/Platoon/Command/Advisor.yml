@@ -29,6 +29,7 @@
     commandElement: true
   - type: SeeNewPlayers
   - type: ANPRCRadioUser
+  - type: ANPRCCryptoAuthority
   - type: Skills
     preset: AU14SkillPresetPlatoonAdvisor
   - type: RMCSpeechBubbleSpecificStyle
@@ -135,7 +136,7 @@
     pocket1: AU14StampSEA # removed by ImaginaryFriend
   storage:
     back:
-    - ANPRCFillCardOPFOR
+    - ANPRCFillCardGOVFOR
 
 - type: startingGear
   id: AU14GearOPFORadvisor
@@ -144,6 +145,9 @@
     ears: AU14HeadsetOpforCommand
     belt: AU14BeltPostelPistolM48A5NoSuper
     back: AU14SatchelMarineAdvisorMilitary
+  storage:
+    back:
+    - ANPRCFillCardOPFOR
 
 - type: roleLoadout
   id: JobAU14JobGOVFORadvisor

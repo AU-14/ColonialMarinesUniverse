@@ -28,6 +28,15 @@ public sealed partial class AU14CallsignConsoleBui : BoundUserInterface
 
         _window.OnSetSuffix += (member, suffix) =>
             SendMessage(new AU14CallsignSetSuffixMsg(member, suffix));
+
+        _window.OnCreateGroup += word =>
+            SendMessage(new AU14CallsignCreateGroupMsg(word));
+
+        _window.OnDeleteGroup += word =>
+            SendMessage(new AU14CallsignDeleteGroupMsg(word));
+
+        _window.OnAssignGroup += (member, group) =>
+            SendMessage(new AU14CallsignAssignGroupMsg(member, group));
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

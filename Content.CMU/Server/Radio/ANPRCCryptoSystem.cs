@@ -112,6 +112,18 @@ public sealed partial class ANPRCCryptoSystem : EntitySystem
 
     private void OnRecrypto(Entity<ANPRCCryptoSlotComponent> ent, ref ANPRCCryptoRecryptoMsg args)
     {
+        // superseding the faction's fills is a command decision, not an operator one
+        if (!HasComp<ANPRCCryptoAuthorityComponent>(args.Actor))
+        {
+            _popup.PopupEntity(
+                Loc.GetString("anprc-recrypto-not-authorized"),
+                args.Actor,
+                args.Actor,
+                PopupType.SmallCaution);
+
+            return;
+        }
+
         if (!TryGetFillCard(ent.Owner, out var card, out var cardUid) || string.IsNullOrEmpty(card.Faction))
         {
             _popup.PopupEntity(

@@ -27,6 +27,12 @@
         <BoxContainer Name="ElementList" Orientation="Vertical" SeparationOverride="8" HorizontalExpand="True" />
       </ScrollContainer>
 
+      <!-- Group creation (editors only) -->
+      <BoxContainer Name="GroupCreateRow" Orientation="Horizontal" SeparationOverride="8" Visible="False">
+        <LineEdit Name="GroupWordEdit" PlaceHolder="{Loc au14-callsign-console-group-placeholder}" HorizontalExpand="True" />
+        <Button Name="GroupCreateButton" Text="{Loc au14-callsign-console-create-group-button}" />
+      </BoxContainer>
+
       <!-- Footer -->
       <PanelContainer>
         <PanelContainer.PanelOverride>

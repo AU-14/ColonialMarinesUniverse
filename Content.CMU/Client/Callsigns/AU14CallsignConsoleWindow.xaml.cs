@@ -14,6 +14,9 @@ public sealed partial class AU14CallsignConsoleWindow : DefaultWindow
 {
     public event Action<NetEntity?, string>? OnRenameElement;
     public event Action<NetEntity, string>? OnSetSuffix;
+    public event Action<string>? OnCreateGroup;
+    public event Action<string>? OnDeleteGroup;
+    public event Action<NetEntity, string?>? OnAssignGroup;
 
     private static readonly Color Accent = Color.FromHex("#6BC7FF");
     private static readonly Color TextBright = Color.FromHex("#C7D7EA");
@@ -22,17 +25,32 @@ public sealed partial class AU14CallsignConsoleWindow : DefaultWindow
     private static readonly Color PanelBorder = Color.FromHex("#1E3450");
 
     private bool _canEdit;
+    private List<string> _groups = new();
 
     public AU14CallsignConsoleWindow()
     {
         RobustXamlLoader.Load(this);
 
         Title = Loc.GetString("au14-callsign-console-title");
+
+        GroupCreateButton.OnPressed += _ =>
+        {
+            var word = GroupWordEdit.Text.Trim();
+
+            if (word.Length == 0)
+                return;
+
+            OnCreateGroup?.Invoke(word);
+            GroupWordEdit.Text = string.Empty;
+        };
     }
 
     public void UpdateState(AU14CallsignConsoleState state, bool canEdit)
     {
         _canEdit = canEdit;
+        _groups = state.Groups;
+
+        GroupCreateRow.Visible = canEdit;
 
         FactionLabel.Text = Loc.GetString("au14-callsign-console-net", ("faction", state.Faction.ToUpperInvariant()));
         EditModeLabel.Text = canEdit
@@ -96,7 +114,7 @@ public sealed partial class AU14CallsignConsoleWindow : DefaultWindow
             HorizontalExpand = true,
         });
 
-        if (_canEdit)
+        if (_canEdit && element.Group == null)
         {
             var renameEdit = new LineEdit
             {
@@ -127,6 +145,20 @@ public sealed partial class AU14CallsignConsoleWindow : DefaultWindow
             header.AddChild(renameButton);
         }
 
+        // custom groups are identified by their word; they get disbanded, not renamed
+        if (_canEdit && element.Group is { } group)
+        {
+            var deleteButton = new Button
+            {
+                Text = Loc.GetString("au14-callsign-console-delete-group-button"),
+                MinWidth = 64,
+            };
+
+            deleteButton.OnPressed += _ => OnDeleteGroup?.Invoke(group);
+
+            header.AddChild(deleteButton);
+        }
+
         body.AddChild(header);
 
         if (element.Rows.Count == 0)
@@ -140,14 +172,14 @@ public sealed partial class AU14CallsignConsoleWindow : DefaultWindow
 
         foreach (var row in element.Rows)
         {
-            body.AddChild(BuildMemberRow(row));
+            body.AddChild(BuildMemberRow(row, element.Group));
         }
 
         panel.AddChild(body);
         return panel;
     }
 
-    private Control BuildMemberRow(AU14CallsignConsoleRow row)
+    private Control BuildMemberRow(AU14CallsignConsoleRow row, string? currentGroup)
     {
         var line = new BoxContainer
         {
@@ -209,8 +241,39 @@ public sealed partial class AU14CallsignConsoleWindow : DefaultWindow
 
             line.AddChild(suffixEdit);
             line.AddChild(suffixButton);
+
+            if (_groups.Count > 0)
+                line.AddChild(BuildGroupSelector(member, currentGroup));
         }
 
         return line;
+    }
+
+    private Control BuildGroupSelector(NetEntity member, string? currentGroup)
+    {
+        var selector = new OptionButton
+        {
+            MinWidth = 90,
+        };
+
+        selector.AddItem(Loc.GetString("au14-callsign-console-group-none"), 0);
+
+        for (var i = 0; i < _groups.Count; i++)
+        {
+            selector.AddItem(_groups[i], i + 1);
+
+            if (string.Equals(_groups[i], currentGroup, StringComparison.OrdinalIgnoreCase))
+                selector.SelectId(i + 1);
+        }
+
+        selector.OnItemSelected += args =>
+        {
+            selector.SelectId(args.Id);
+
+            var group = args.Id == 0 ? null : _groups[args.Id - 1];
+            OnAssignGroup?.Invoke(member, group);
+        };
+
+        return selector;
     }
 }

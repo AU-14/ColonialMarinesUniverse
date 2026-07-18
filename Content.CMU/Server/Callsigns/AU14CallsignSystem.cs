@@ -7,8 +7,11 @@ using Content.Shared._AU14.Radio;
 using Content.Shared._CMU14.Threats.Mobs.CLF;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Squads;
+using Content.Shared._RMC14.Tracker.SquadLeader;
 using Content.Shared.Chat;
+using Content.Shared.Examine;
 using Content.Shared.GameTicking;
+using Content.Shared.Radio.Components;
 using Content.Shared.Roles;
 using Robust.Shared.Configuration;
 using Robust.Shared.Player;
@@ -38,6 +41,9 @@ public sealed partial class AU14CallsignSystem : EntitySystem
     private readonly Dictionary<string, string> _commandWords = new();
     private readonly Dictionary<EntityUid, string> _squadWords = new();
 
+    // custom callsign groups created from the directory console, per faction
+    private readonly Dictionary<string, List<string>> _groups = new();
+
     private readonly List<(EntityUid Mob, LocId Prefix, LocId? Additional, GameTick Tick)> _prefixRestores = new();
 
     private bool _commsEnabled;
@@ -48,7 +54,14 @@ public sealed partial class AU14CallsignSystem : EntitySystem
 
         SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnPlayerSpawnComplete);
         SubscribeLocalEvent<SquadMemberAddedEvent>(OnSquadMemberAdded);
+        SubscribeLocalEvent<FireteamMemberUpdatedEvent>(OnFireteamMemberUpdated);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+
+        // mid-round CLF recruits (tattoo gun, admin verb) never see PlayerSpawnCompleteEvent
+        SubscribeLocalEvent<CLFMemberComponent, ComponentStartup>(OnCLFMemberStartup);
+
+        // check your own callsign by looking at your headset instead of keying the net
+        SubscribeLocalEvent<HeadsetComponent, ExaminedEvent>(OnHeadsetExamined);
 
         SubscribeLocalEvent<AU14CallsignComponent, EntitySpokeEvent>(
             OnCallsignSpeak,
@@ -94,7 +107,38 @@ public sealed partial class AU14CallsignSystem : EntitySystem
     {
         _commandWords.Clear();
         _squadWords.Clear();
+        _groups.Clear();
         _prefixRestores.Clear();
+    }
+
+    private void OnCLFMemberStartup(Entity<CLFMemberComponent> ent, ref ComponentStartup args)
+    {
+        // round-start CLF jobs have no session attached yet and are handled by
+        // OnPlayerSpawnComplete; this catches players converted mid-round
+        if (!_commsEnabled || !HasComp<ActorComponent>(ent.Owner))
+            return;
+
+        TryAssignSwept(ent.Owner, "clf");
+    }
+
+    private void OnFireteamMemberUpdated(ref FireteamMemberUpdatedEvent ev)
+    {
+        if (!_commsEnabled || !TryComp(ev.Member, out AU14CallsignComponent? callsign))
+            return;
+
+        Assign(ev.Member, callsign);
+    }
+
+    private void OnHeadsetExamined(Entity<HeadsetComponent> ent, ref ExaminedEvent args)
+    {
+        if (!_commsEnabled ||
+            !TryComp(args.Examiner, out AU14CallsignComponent? callsign) ||
+            string.IsNullOrEmpty(callsign.Callsign))
+        {
+            return;
+        }
+
+        args.PushMarkup(Loc.GetString("au14-callsign-headset-examine", ("callsign", callsign.Callsign)));
     }
 
     private void OnCommsToggled(bool enabled)
@@ -184,28 +228,35 @@ public sealed partial class AU14CallsignSystem : EntitySystem
 
         if (role != null && !string.IsNullOrEmpty(role.Suffix))
         {
-            callsign.Suffix = MakeUniqueSuffix(callsign.Faction, squad, role.Suffix, uid);
+            callsign.Suffix = MakeUniqueSuffix(callsign.Faction, squad, callsign.Group, role.Suffix, uid);
             callsign.RoleSuffix = true;
         }
         else if (!callsign.RoleSuffix || string.IsNullOrEmpty(callsign.Suffix))
         {
-            callsign.Suffix = NextFreeNumber(callsign.Faction, squad, uid);
+            callsign.Suffix = NextFreeNumber(callsign.Faction, squad, callsign.Group, FireteamNumber(uid), uid);
             callsign.RoleSuffix = false;
         }
         else
         {
             // manually pinned suffix follows them into the new element
-            callsign.Suffix = MakeUniqueSuffix(callsign.Faction, squad, callsign.Suffix, uid);
+            callsign.Suffix = MakeUniqueSuffix(callsign.Faction, squad, callsign.Group, callsign.Suffix, uid);
         }
 
         UpdateFullCallsign(uid, callsign);
     }
 
+    // fireteam index becomes the first half of the numeric suffix: fireteam 2's
+    // riflemen are "2-1", "2-2"; marines without a fireteam stay in the "1-N" block
+    private int FireteamNumber(EntityUid uid)
+    {
+        return CompOrNull<FireteamMemberComponent>(uid)?.Fireteam + 1 ?? 1;
+    }
+
     private void UpdateFullCallsign(EntityUid uid, AU14CallsignComponent callsign)
     {
-        var word = callsign.Squad is { } squad
+        var word = callsign.Group ?? (callsign.Squad is { } squad
             ? GetSquadWord(squad)
-            : GetCommandWord(callsign.Faction);
+            : GetCommandWord(callsign.Faction));
 
         callsign.Callsign = $"{word} {callsign.Suffix}";
         Dirty(uid, callsign);
@@ -231,32 +282,34 @@ public sealed partial class AU14CallsignSystem : EntitySystem
         return Name(squad).ToUpperInvariant();
     }
 
-    private string NextFreeNumber(string faction, EntityUid? squad, EntityUid exclude)
+    private string NextFreeNumber(string faction, EntityUid? squad, string? group, int fireteam, EntityUid exclude)
     {
         for (var n = 1;; n++)
         {
-            var candidate = $"1-{n}";
+            var candidate = $"{fireteam}-{n}";
 
-            if (!SuffixTaken(faction, squad, candidate, exclude))
+            if (!SuffixTaken(faction, squad, group, candidate, exclude))
                 return candidate;
         }
     }
 
-    private string MakeUniqueSuffix(string faction, EntityUid? squad, string wanted, EntityUid exclude)
+    private string MakeUniqueSuffix(string faction, EntityUid? squad, string? group, string wanted, EntityUid exclude)
     {
-        if (!SuffixTaken(faction, squad, wanted, exclude))
+        if (!SuffixTaken(faction, squad, group, wanted, exclude))
             return wanted;
 
         for (var n = 2;; n++)
         {
             var candidate = $"{wanted} {n}";
 
-            if (!SuffixTaken(faction, squad, candidate, exclude))
+            if (!SuffixTaken(faction, squad, group, candidate, exclude))
                 return candidate;
         }
     }
 
-    private bool SuffixTaken(string faction, EntityUid? squad, string suffix, EntityUid exclude)
+    // suffixes are unique within their element: a custom group when set, the
+    // squad otherwise, the command element when neither
+    private bool SuffixTaken(string faction, EntityUid? squad, string? group, string suffix, EntityUid exclude)
     {
         var query = EntityQueryEnumerator<AU14CallsignComponent>();
 
@@ -265,12 +318,17 @@ public sealed partial class AU14CallsignSystem : EntitySystem
             if (uid == exclude)
                 continue;
 
-            if (other.Faction == faction &&
-                other.Squad == squad &&
-                string.Equals(other.Suffix, suffix, StringComparison.OrdinalIgnoreCase))
+            if (other.Faction != faction ||
+                !string.Equals(other.Group, group, StringComparison.OrdinalIgnoreCase))
             {
-                return true;
+                continue;
             }
+
+            if (group == null && other.Squad != squad)
+                continue;
+
+            if (string.Equals(other.Suffix, suffix, StringComparison.OrdinalIgnoreCase))
+                return true;
         }
 
         return false;
@@ -306,7 +364,16 @@ public sealed partial class AU14CallsignSystem : EntitySystem
             return;
         }
 
-        args.VoiceName = ent.Comp.Callsign;
+        // squad leaders and fireteam leaders stay identifiable to new players:
+        // "(SL) ALPHA 6", "(FTL) ALPHA 2-1"
+        var tag = CompOrNull<AU14CallsignRoleComponent>(ent.Owner)?.RadioTag;
+
+        if (tag == null && HasComp<FireteamLeaderComponent>(ent.Owner))
+            tag = "FTL";
+
+        args.VoiceName = tag == null
+            ? ent.Comp.Callsign
+            : $"({tag}) {ent.Comp.Callsign}";
     }
 
 }

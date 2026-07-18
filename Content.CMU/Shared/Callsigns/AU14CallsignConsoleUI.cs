@@ -18,9 +18,12 @@ public sealed class AU14CallsignConsoleRow(NetEntity member, string callsign, st
 }
 
 [Serializable, NetSerializable]
-public sealed class AU14CallsignConsoleElement(NetEntity? squad, string label, string word, List<AU14CallsignConsoleRow> rows)
+public sealed class AU14CallsignConsoleElement(NetEntity? squad, string? group, string label, string word, List<AU14CallsignConsoleRow> rows)
 {
     public readonly NetEntity? Squad = squad;
+
+    // set when this element is a custom callsign group created from the console
+    public readonly string? Group = group;
 
     public readonly string Label = label;
 
@@ -30,11 +33,12 @@ public sealed class AU14CallsignConsoleElement(NetEntity? squad, string label, s
 }
 
 [Serializable, NetSerializable]
-public sealed class AU14CallsignConsoleState(string faction, List<AU14CallsignConsoleElement> elements)
+public sealed class AU14CallsignConsoleState(string faction, List<AU14CallsignConsoleElement> elements, List<string> groups)
     : BoundUserInterfaceState
 {
     public readonly string Faction = faction;
     public readonly List<AU14CallsignConsoleElement> Elements = elements;
+    public readonly List<string> Groups = groups;
 }
 
 [Serializable, NetSerializable]
@@ -49,6 +53,26 @@ public sealed class AU14CallsignSetSuffixMsg(NetEntity member, string suffix) : 
 {
     public readonly NetEntity Member = member;
     public readonly string Suffix = suffix;
+}
+
+[Serializable, NetSerializable]
+public sealed class AU14CallsignCreateGroupMsg(string word) : BoundUserInterfaceMessage
+{
+    public readonly string Word = word;
+}
+
+[Serializable, NetSerializable]
+public sealed class AU14CallsignDeleteGroupMsg(string word) : BoundUserInterfaceMessage
+{
+    public readonly string Word = word;
+}
+
+// group = null moves the member back to their automatic squad/command element
+[Serializable, NetSerializable]
+public sealed class AU14CallsignAssignGroupMsg(NetEntity member, string? group) : BoundUserInterfaceMessage
+{
+    public readonly NetEntity Member = member;
+    public readonly string? Group = group;
 }
 
 public static class AU14Callsigns

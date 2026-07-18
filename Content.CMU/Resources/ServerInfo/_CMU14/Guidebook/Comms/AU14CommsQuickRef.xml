@@ -139,6 +139,8 @@
   - A deployed retransmission station.
   - A command-post antenna mast.
   - A powered communications array.
+  - A vehicle radio set aboard a dropship or vehicle (covers little more than the hull).
+  - A field antenna mast, raised from ten metal sheets by engineering-trained personnel.
 
   Support nets such as MILP and colony channels are not relay-gated.
 
@@ -388,7 +390,7 @@
       <Box Margin="4">[bold]RECRYPTO[/bold]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Makes all older cards from that faction stale, including captured cards.</Box>
+      <Box Margin="4">Makes all older cards from that faction stale, including captured cards. Command authority only: Commander, Adjutant, Advisor.</Box>
     </ColorBox>
 
     <ColorBox>

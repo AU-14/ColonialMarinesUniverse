@@ -24,6 +24,9 @@ public sealed partial class AU14CallsignSystem
             subs.Event<BoundUIOpenedEvent>(OnConsoleOpened);
             subs.Event<AU14CallsignRenameElementMsg>(OnRenameElement);
             subs.Event<AU14CallsignSetSuffixMsg>(OnSetSuffix);
+            subs.Event<AU14CallsignCreateGroupMsg>(OnCreateGroup);
+            subs.Event<AU14CallsignDeleteGroupMsg>(OnDeleteGroup);
+            subs.Event<AU14CallsignAssignGroupMsg>(OnAssignGroup);
         });
     }
 
@@ -89,7 +92,7 @@ public sealed partial class AU14CallsignSystem
         if (string.IsNullOrWhiteSpace(suffix))
             return;
 
-        if (SuffixTaken(callsign.Faction, callsign.Squad, suffix, member.Value))
+        if (SuffixTaken(callsign.Faction, callsign.Squad, callsign.Group, suffix, member.Value))
         {
             _popup.PopupEntity(Loc.GetString("au14-callsign-console-suffix-taken", ("suffix", suffix)), ent.Owner, args.Actor);
             return;
@@ -99,6 +102,106 @@ public sealed partial class AU14CallsignSystem
         callsign.RoleSuffix = true;
 
         UpdateFullCallsign(member.Value, callsign);
+    }
+
+    private void OnCreateGroup(Entity<AU14CallsignConsoleComponent> ent, ref AU14CallsignCreateGroupMsg args)
+    {
+        if (!CanEdit(args.Actor, ent.Comp.Faction))
+            return;
+
+        var word = SanitizeCallsignPart(args.Word, AU14Callsigns.MaxWordLength);
+
+        if (string.IsNullOrWhiteSpace(word) || WordInUse(ent.Comp.Faction, word))
+        {
+            _popup.PopupEntity(Loc.GetString("au14-callsign-console-group-taken", ("word", word)), ent.Owner, args.Actor);
+            return;
+        }
+
+        _groups.GetOrNew(ent.Comp.Faction).Add(word);
+
+        PushConsoleStates(ent.Comp.Faction);
+    }
+
+    private void OnDeleteGroup(Entity<AU14CallsignConsoleComponent> ent, ref AU14CallsignDeleteGroupMsg args)
+    {
+        if (!CanEdit(args.Actor, ent.Comp.Faction))
+            return;
+
+        if (!_groups.TryGetValue(ent.Comp.Faction, out var groups) ||
+            !groups.Remove(args.Word))
+        {
+            return;
+        }
+
+        // members fall back to their automatic squad/command callsign
+        var query = EntityQueryEnumerator<AU14CallsignComponent>();
+
+        while (query.MoveNext(out var uid, out var callsign))
+        {
+            if (callsign.Faction != ent.Comp.Faction ||
+                !string.Equals(callsign.Group, args.Word, StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            callsign.Group = null;
+            Assign(uid, callsign);
+        }
+
+        PushConsoleStates(ent.Comp.Faction);
+    }
+
+    private void OnAssignGroup(Entity<AU14CallsignConsoleComponent> ent, ref AU14CallsignAssignGroupMsg args)
+    {
+        if (!CanEdit(args.Actor, ent.Comp.Faction))
+            return;
+
+        if (!TryGetEntity(args.Member, out var member) ||
+            !TryComp(member, out AU14CallsignComponent? callsign) ||
+            callsign.Faction != ent.Comp.Faction)
+        {
+            return;
+        }
+
+        if (args.Group is { } group)
+        {
+            if (!_groups.TryGetValue(ent.Comp.Faction, out var groups) || !groups.Contains(group))
+                return;
+
+            callsign.Group = group;
+        }
+        else
+        {
+            callsign.Group = null;
+        }
+
+        Assign(member.Value, callsign);
+    }
+
+    private bool WordInUse(string faction, string word)
+    {
+        if (_groups.TryGetValue(faction, out var groups) &&
+            groups.Contains(word, StringComparer.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        if (string.Equals(GetCommandWord(faction), word, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        var group = faction.ToUpperInvariant();
+        var squads = EntityQueryEnumerator<SquadTeamComponent>();
+
+        while (squads.MoveNext(out var squadUid, out var team))
+        {
+            if (team.Group == group &&
+                string.Equals(GetSquadWord(squadUid), word, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private bool CanEdit(EntityUid actor, string faction)
@@ -131,9 +234,9 @@ public sealed partial class AU14CallsignSystem
             if (callsign.Faction != faction)
                 continue;
 
-            var word = callsign.Squad is { } squad
+            var word = callsign.Group ?? (callsign.Squad is { } squad
                 ? GetSquadWord(squad)
-                : GetCommandWord(faction);
+                : GetCommandWord(faction));
 
             callsign.Callsign = $"{word} {callsign.Suffix}";
             Dirty(uid, callsign);
@@ -161,13 +264,14 @@ public sealed partial class AU14CallsignSystem
         var faction = ent.Comp.Faction;
         var group = faction.ToUpperInvariant();
 
-        // command element first, then the squads
+        // command element first, then the squads, then the custom groups
         var elements = new List<AU14CallsignConsoleElement>
         {
             new(null,
+                null,
                 Loc.GetString("au14-callsign-console-command-element"),
                 GetCommandWord(faction),
-                CollectRows(faction, null)),
+                CollectRows(faction, null, null)),
         };
 
         var squads = EntityQueryEnumerator<SquadTeamComponent>();
@@ -179,22 +283,43 @@ public sealed partial class AU14CallsignSystem
 
             elements.Add(new AU14CallsignConsoleElement(
                 GetNetEntity(squadUid),
+                null,
                 Loc.GetString("au14-callsign-console-squad-element", ("squad", Name(squadUid).ToUpperInvariant())),
                 GetSquadWord(squadUid),
-                CollectRows(faction, squadUid)));
+                CollectRows(faction, squadUid, null)));
         }
 
-        _ui.SetUiState(ent.Owner, AU14CallsignConsoleUI.Key, new AU14CallsignConsoleState(faction, elements));
+        var groups = _groups.TryGetValue(faction, out var factionGroups)
+            ? new List<string>(factionGroups)
+            : new List<string>();
+
+        foreach (var groupWord in groups)
+        {
+            elements.Add(new AU14CallsignConsoleElement(
+                null,
+                groupWord,
+                Loc.GetString("au14-callsign-console-group-element"),
+                groupWord,
+                CollectRows(faction, null, groupWord)));
+        }
+
+        _ui.SetUiState(ent.Owner, AU14CallsignConsoleUI.Key, new AU14CallsignConsoleState(faction, elements, groups));
     }
 
-    private List<AU14CallsignConsoleRow> CollectRows(string faction, EntityUid? squad)
+    private List<AU14CallsignConsoleRow> CollectRows(string faction, EntityUid? squad, string? group)
     {
         var rows = new List<(string SortKey, AU14CallsignConsoleRow Row)>();
         var query = EntityQueryEnumerator<AU14CallsignComponent>();
 
         while (query.MoveNext(out var uid, out var callsign))
         {
-            if (callsign.Faction != faction || callsign.Squad != squad)
+            if (callsign.Faction != faction)
+                continue;
+
+            if (!string.Equals(callsign.Group, group, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            if (group == null && callsign.Squad != squad)
                 continue;
 
             rows.Add((SuffixSortKey(callsign.Suffix), new AU14CallsignConsoleRow(
@@ -210,7 +335,8 @@ public sealed partial class AU14CallsignSystem
             .ToList();
     }
 
-    // roster order the way a net is read: 6, 5, 7, ROMEO, OPS, then 1-N by number
+    // roster order the way a net is read: 6, 5, 7, ROMEO, air crew, OPS, then the
+    // fireteam-numbered blocks (1-N, 2-N, ...)
     private static string SuffixSortKey(string suffix)
     {
         var rank = suffix.ToUpperInvariant() switch
@@ -219,19 +345,25 @@ public sealed partial class AU14CallsignSystem
             "5" => 1,
             "7" => 2,
             "ROMEO" => 3,
-            _ when suffix.StartsWith("OPS", StringComparison.OrdinalIgnoreCase) => 4,
-            _ when suffix.StartsWith("1-", StringComparison.Ordinal) => 5,
-            _ => 6,
+            _ when suffix.StartsWith("PAPA", StringComparison.OrdinalIgnoreCase) => 4,
+            _ when suffix.StartsWith("CHIEF", StringComparison.OrdinalIgnoreCase) => 4,
+            _ when suffix.StartsWith("OPS", StringComparison.OrdinalIgnoreCase) => 5,
+            _ when suffix.Length > 1 && char.IsAsciiDigit(suffix[0]) && suffix.Contains('-') => 6,
+            _ => 7,
         };
 
-        // zero-pad trailing numbers so 1-10 sorts after 1-9
+        // zero-pad both halves so 2-1 sorts after 1-10 and 1-10 after 1-9
+        var fireteam = 0;
         var numeric = 0;
         var dash = suffix.LastIndexOf('-');
 
         if (dash >= 0 && int.TryParse(suffix[(dash + 1)..], out var parsed))
             numeric = parsed;
 
-        return $"{rank}-{numeric:D4}-{suffix}";
+        if (dash > 0 && int.TryParse(suffix[..dash], out var parsedTeam))
+            fireteam = parsedTeam;
+
+        return $"{rank}-{fireteam:D2}-{numeric:D4}-{suffix}";
     }
 
     private static string SanitizeCallsignPart(string input, int maxLength)

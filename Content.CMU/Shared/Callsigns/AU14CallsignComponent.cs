@@ -26,5 +26,10 @@ public sealed partial class AU14CallsignComponent : Component
     [DataField]
     public bool RoleSuffix;
 
+    // custom callsign group word set from the directory console, overrides the
+    // squad/command element word while set
+    [DataField]
+    public string? Group;
+
     public GameTick RadioMaskTick;
 }
