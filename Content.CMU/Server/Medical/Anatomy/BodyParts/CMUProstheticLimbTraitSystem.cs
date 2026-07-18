@@ -19,8 +19,12 @@ public sealed partial class CMUProstheticLimbTraitSystem : EntitySystem
 
     private static readonly EntProtoId LeftArmPrototype = "CMUPartRoboticLeftArm";
     private static readonly EntProtoId RightArmPrototype = "CMUPartRoboticRightArm";
+    private static readonly EntProtoId LeftHandPrototype = "CMUPartRoboticLeftHand";
+    private static readonly EntProtoId RightHandPrototype = "CMUPartRoboticRightHand";
     private static readonly EntProtoId LeftLegPrototype = "CMUPartRoboticLeftLeg";
     private static readonly EntProtoId RightLegPrototype = "CMUPartRoboticRightLeg";
+    private static readonly EntProtoId LeftFootPrototype = "CMUPartRoboticLeftFoot";
+    private static readonly EntProtoId RightFootPrototype = "CMUPartRoboticRightFoot";
 
     private readonly Dictionary<EntityUid, ProstheticLimbFlags> _queued = new();
     private readonly List<(EntityUid Body, ProstheticLimbFlags Limbs)> _toApply = new();
@@ -110,19 +114,54 @@ public sealed partial class CMUProstheticLimbTraitSystem : EntitySystem
     private void ApplyQueuedLimbs(EntityUid body, ProstheticLimbFlags limbs)
     {
         if ((limbs & ProstheticLimbFlags.LeftArm) != 0)
-            ReplaceLimb(body, BodyPartType.Arm, BodyPartSymmetry.Left, LeftArmPrototype);
+            ReplaceLimb(
+                body,
+                BodyPartType.Arm,
+                BodyPartSymmetry.Left,
+                LeftArmPrototype,
+                LeftHandPrototype,
+                "left_hand",
+                BodyPartType.Hand);
 
         if ((limbs & ProstheticLimbFlags.RightArm) != 0)
-            ReplaceLimb(body, BodyPartType.Arm, BodyPartSymmetry.Right, RightArmPrototype);
+            ReplaceLimb(
+                body,
+                BodyPartType.Arm,
+                BodyPartSymmetry.Right,
+                RightArmPrototype,
+                RightHandPrototype,
+                "right_hand",
+                BodyPartType.Hand);
 
         if ((limbs & ProstheticLimbFlags.LeftLeg) != 0)
-            ReplaceLimb(body, BodyPartType.Leg, BodyPartSymmetry.Left, LeftLegPrototype);
+            ReplaceLimb(
+                body,
+                BodyPartType.Leg,
+                BodyPartSymmetry.Left,
+                LeftLegPrototype,
+                LeftFootPrototype,
+                "left_foot",
+                BodyPartType.Foot);
 
         if ((limbs & ProstheticLimbFlags.RightLeg) != 0)
-            ReplaceLimb(body, BodyPartType.Leg, BodyPartSymmetry.Right, RightLegPrototype);
+            ReplaceLimb(
+                body,
+                BodyPartType.Leg,
+                BodyPartSymmetry.Right,
+                RightLegPrototype,
+                RightFootPrototype,
+                "right_foot",
+                BodyPartType.Foot);
     }
 
-    private void ReplaceLimb(EntityUid body, BodyPartType type, BodyPartSymmetry symmetry, EntProtoId replacementPrototype)
+    private void ReplaceLimb(
+        EntityUid body,
+        BodyPartType type,
+        BodyPartSymmetry symmetry,
+        EntProtoId replacementPrototype,
+        EntProtoId extremityPrototype,
+        string extremitySlot,
+        BodyPartType extremityType)
     {
         if (!TryFindAttachedLimb(body, type, symmetry, out var currentPart))
             return;
@@ -145,6 +184,18 @@ public sealed partial class CMUProstheticLimbTraitSystem : EntitySystem
             return;
         }
 
+        if (!TryAttachExtremity(
+                replacement,
+                replacementPart,
+                extremityPrototype,
+                extremitySlot,
+                extremityType,
+                symmetry))
+        {
+            QueueDel(replacement);
+            return;
+        }
+
         if (!_containers.Remove(currentPart, container, reparent: false, force: true))
         {
             QueueDel(replacement);
@@ -155,6 +206,39 @@ public sealed partial class CMUProstheticLimbTraitSystem : EntitySystem
 
         if (!_body.AttachPart(parentSlot.Parent, parentSlot.Slot, replacement))
             QueueDel(replacement);
+    }
+
+    private bool TryAttachExtremity(
+        EntityUid parent,
+        BodyPartComponent parentPart,
+        EntProtoId extremityPrototype,
+        string extremitySlot,
+        BodyPartType extremityType,
+        BodyPartSymmetry symmetry)
+    {
+        var extremity = Spawn(extremityPrototype, Transform(parent).Coordinates);
+        if (!TryComp<BodyPartComponent>(extremity, out var extremityPart) ||
+            extremityPart.PartType != extremityType ||
+            extremityPart.Symmetry != symmetry)
+        {
+            QueueDel(extremity);
+            return false;
+        }
+
+        if (_body.AttachPart(parent, extremitySlot, extremity, parentPart, extremityPart) ||
+            _body.TryCreatePartSlotAndAttach(
+                parent,
+                extremitySlot,
+                extremity,
+                extremityType,
+                parentPart,
+                extremityPart))
+        {
+            return true;
+        }
+
+        QueueDel(extremity);
+        return false;
     }
 
     private bool TryFindAttachedLimb(
