@@ -24,6 +24,10 @@ saved-build-window-size = Selection: { $size }x{ $size } tiles
 saved-build-window-append = Append Range
 saved-build-window-clear = Clear
 saved-build-window-selected = Highlighted: { $count } entities, { $tiles } tiles
+saved-build-window-multiz-help = Multi-Z saving is experimental:
+    - Multi-Z builds only work when using "Place at Original".
+    - Place the original build once on each Z-level: build one level, move to the next, then use "Place at Original" again.
+    - For the best stability, make a separate save for each Z-level.
 saved-build-window-name = Build name…
 saved-build-window-save = Save Build
 saved-build-window-open-folder = Open Saved Builds Folder

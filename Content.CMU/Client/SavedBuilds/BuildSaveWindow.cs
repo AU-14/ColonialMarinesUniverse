@@ -64,6 +64,14 @@ public sealed class BuildSaveWindow : DefaultWindow
         _countLabel = new Label { Margin = new Thickness(0, 6, 0, 6) };
         root.AddChild(_countLabel);
 
+        var multiZHelp = new RichTextLabel
+        {
+            HorizontalExpand = true,
+            Margin = new Thickness(0, 0, 0, 8),
+        };
+        multiZHelp.SetMessage(Loc.GetString("saved-build-window-multiz-help"), Color.FromHex("#E5C07B"));
+        root.AddChild(multiZHelp);
+
         // Mapper-mode option: also grab unanchored loose items (default is anchored structures only). Only shown
         // when the build-mode dropdown is on Mapper; for other modes it's irrelevant.
         if (mode.Mode == Content.Shared._AU14.SavedBuilds.BuildSaveMode.Mapper)
