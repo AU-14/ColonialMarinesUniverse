@@ -62,8 +62,10 @@ anprc-battery-empty = The AN/PRC-117G shuts down, battery depleted.
 anprc-battery-insufficient = Insufficient battery charge to transmit.
 
 anprc-unknown-station = UNKNOWN STATION
-anprc-radio-check-report = RADIO CHECK - Clear: { $clear } | Degraded: { $degraded }
-anprc-radio-check-interference = INTERFERENCE DETECTED - strongest emitter bearing { $bearing }.
+anprc-radio-check-call = ALL STATIONS, THIS IS { $station }, RADIO CHECK, OVER.
+anprc-radio-check-report = RADIO CHECK REPLIES - LIMA CHARLIE: { $clear } | WEAK BUT READABLE: { $degraded }
+anprc-radio-check-nothing-heard = NOTHING HEARD
+anprc-radio-check-interference = INTERFERENCE ON NET - strongest emitter bearing { $bearing }.
 
 anprc-verb-plant = Set Up Retrans
 anprc-verb-packup = Pack Up Radio

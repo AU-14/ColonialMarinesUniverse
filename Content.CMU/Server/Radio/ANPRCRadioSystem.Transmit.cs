@@ -393,10 +393,11 @@ public sealed partial class ANPRCRadioSystem
 
         _powerCell.TryUseCharge(ent.Owner, GetTransmitCost(radio));
 
-        // source is the radio itself, OnRadioSpeakerName swaps in the callsign
+        // source is the radio itself, OnRadioSpeakerName swaps in the callsign.
+        // phrased per the voice procedure guidebook: addressee, self-id, request
         _radio.SendRadioMessage(
             ent.Owner,
-            "RADIO CHECK, HOW COPY, OVER",
+            Loc.GetString("anprc-radio-check-call", ("station", GetOnAirName(ent))),
             channel,
             ent.Owner);
 
@@ -452,11 +453,13 @@ public sealed partial class ANPRCRadioSystem
             AddByRange(distance, fullRange, partialRange, label, clear, degraded);
         }
 
+        var nothingHeard = Loc.GetString("anprc-radio-check-nothing-heard");
+
         _cmChat.ChatMessageToOne(
             Loc.GetString(
                 "anprc-radio-check-report",
-                ("clear", clear.Count == 0 ? "NONE" : string.Join(", ", clear)),
-                ("degraded", degraded.Count == 0 ? "NONE" : string.Join(", ", degraded))),
+                ("clear", clear.Count == 0 ? nothingHeard : string.Join(", ", clear)),
+                ("degraded", degraded.Count == 0 ? nothingHeard : string.Join(", ", degraded))),
             args.Actor);
 
         if (_garble.GetJamIntensity(ent.Owner) != RadioJamIntensity.None &&
