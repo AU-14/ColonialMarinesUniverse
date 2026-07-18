@@ -176327,7 +176327,7 @@ entities:
     - type: Transform
       pos: -78.5,34.5
       parent: 1
-- proto: MaintenanceJack
+- proto: AU14MaintenanceJack
   entities:
   - uid: 1251
     components:
