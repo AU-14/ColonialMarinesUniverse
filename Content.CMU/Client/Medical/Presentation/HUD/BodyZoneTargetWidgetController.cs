@@ -1,4 +1,5 @@
 using Content.Client.Gameplay;
+using Content.Client.UserInterface.Systems.Gameplay;
 using Content.Shared._CMU14.Input;
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
@@ -65,6 +66,10 @@ public sealed partial class BodyZoneTargetWidgetController :
             InputCmdHandler.FromDelegate(_ => SelectZoneGroup(TargetBodyZone.LeftLeg, TargetBodyZone.LeftFoot), handle: true));
         _input.SetInputCommand(CMUKeyFunctions.CMUTargetBodyZoneRightLeg,
             InputCmdHandler.FromDelegate(_ => SelectZoneGroup(TargetBodyZone.RightLeg, TargetBodyZone.RightFoot), handle: true));
+
+        var gameplayStateLoad = UIManager.GetUIController<GameplayStateLoadController>();
+        gameplayStateLoad.OnScreenLoad += OnScreenLoad;
+        gameplayStateLoad.OnScreenUnload += OnScreenUnload;
     }
 
     public void OnStateEntered(GameplayState state)
@@ -84,6 +89,20 @@ public sealed partial class BodyZoneTargetWidgetController :
         _cfg.OnValueChanged(CMUMedicalCCVars.HitLocationEnabled, OnGateCvarChanged);
 
         RefreshVisibility();
+    }
+
+    private void OnScreenLoad()
+    {
+        if (_widget == null)
+            return;
+
+        AttachToHud(_widget);
+        RefreshVisibility();
+    }
+
+    private void OnScreenUnload()
+    {
+        _widget?.Orphan();
     }
 
     public void OnStateExited(GameplayState state)
