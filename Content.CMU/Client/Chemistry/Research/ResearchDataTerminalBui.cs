@@ -110,11 +110,11 @@ public sealed partial class ResearchDataTerminalBui(EntityUid owner, Enum uiKey)
             {
                 last = true;
             }
-            var str = datum.Value.Item1;
-            var time = datum.Value.Item2;
-            var analysis = datum.Value.Item3;
-            var name = datum.Value.Item4.Name;
-            var dat = datum.Value.Item4;
+            var str = datum.Value.Item2;
+            var time = datum.Value.Item3;
+            var analysis = datum.Value.Item4;
+            var name = datum.Value.Item5.Name;
+            var dat = datum.Value.Item5;
             RichTextLabel timel = new();
             timel.Text = Loc.GetString("research-data-ui-scan-time-idx", ("TIME", time.ToString(@"h\:mm\:ss")));
             RichTextLabel analysisl = new();

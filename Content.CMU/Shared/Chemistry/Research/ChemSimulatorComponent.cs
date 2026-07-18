@@ -43,7 +43,14 @@ public sealed partial class ChemSimulatorComponent : Component
     public float SecondsPerProcess = 1.5f;
     [AutoNetworkedField, ViewVariables(VVAccess.ReadOnly)]
     public GeneratedReagentData? ChemCache = null;
-
+    [AutoNetworkedField]
+    public float InsertTimeRemaining = 0f;
+    [AutoNetworkedField]
+    public float InsertTime = 1f;
+    [AutoNetworkedField]
+    public float PrintTimeRemaining = 0f;
+    [AutoNetworkedField]
+    public float PrintTime = 1f;
 }
 [Serializable, NetSerializable]
 public enum ChemSimulatorMode
@@ -64,4 +71,21 @@ public enum ChemSimulatorStage
     Stage3 = 3,
     Stage4 = 4,
     Begin = 5
+}
+
+[Serializable, NetSerializable]
+public enum ChemSimulatorVisuals
+{
+    Sim,
+}
+
+[Serializable, NetSerializable]
+public enum ChemSimulatorVisState
+{
+    Normal,
+    Off,
+    Reading,
+    Running,
+    Ready,
+    Printing
 }

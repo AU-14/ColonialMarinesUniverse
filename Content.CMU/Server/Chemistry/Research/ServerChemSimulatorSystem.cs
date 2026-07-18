@@ -28,6 +28,7 @@ namespace Content.Server._AU14.Chemistry.Research;
 public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorSystem
 {
     [Dependency] private SharedContainerSystem _con = default!;
+    [Dependency] private SharedAppearanceSystem _app = default!;
     [Dependency] private SharedPopupSystem _pop = default!;
     [Dependency] private ServerReagentGeneratorSystem _gen = default!;
     [Dependency] private ServerResearchDataTerminalSystem _dat = default!;
@@ -69,6 +70,15 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
                 _finalizing.Remove(ent);
             }
         }
+        var query = EntityQueryEnumerator<ChemSimulatorComponent>();
+        while (query.MoveNext(out var uid, out var acomp))
+        {
+            ProcessPrint(uid, acomp, frameTime);
+            ProcessRead(uid, acomp, frameTime);
+        }
+
+
+
         if (_processing.Count == 0)
             return;
         //awful horrible no good very bad wretched evil vile wicked
@@ -137,7 +147,7 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
                             ent.Comp.ChemCache = modifying;
                             ent.Comp.StatusBar = Loc.GetString("research-sim-status-pick-ready");
                             //play sound here
-                            //todo: visuals
+                            UpdateAppearance(ent.Owner, ent.Comp);
                             Dirty(ent);
                         }
                         else
@@ -259,8 +269,8 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
             targcomp.Data is null)
         {
             //failure
-            //todo: visuals
             ent.Comp.Stage = ChemSimulatorStage.Failure;
+            UpdateAppearance(ent.Owner, ent.Comp);
             Dirty(ent);
             return;
         }
@@ -268,8 +278,8 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
             (ent.Comp.TargetProperty is null && ent.Comp.Mode != ChemSimulatorMode.Add))
         {
             //impressive failure
-            //todo: visuals
             ent.Comp.Stage = ChemSimulatorStage.Failure;
+            UpdateAppearance(ent.Owner, ent.Comp);
             Dirty(ent);
             return;
         }
@@ -284,8 +294,8 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
             if (!_gen.GenerateRecipe(ref rdat, new HashSet<string>()))
             {
                 //failure
-                //todo: visuals
                 ent.Comp.Stage = ChemSimulatorStage.Failure;
+                UpdateAppearance(ent.Owner, ent.Comp);
                 Dirty(ent);
                 return;
             }
@@ -322,8 +332,8 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
             if (ent.Comp.TargetProperty is null)
             {
                 //impressive failure
-                //todo: visuals
                 ent.Comp.Stage = ChemSimulatorStage.Failure;
+                UpdateAppearance(ent.Owner, ent.Comp);
                 Dirty(ent);
                 return;
             }
@@ -334,7 +344,7 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
             if (ent.Comp.ReferenceProperty is null)
             {
                 //failure
-                //todo: visuals
+                UpdateAppearance(ent.Owner, ent.Comp);
                 ent.Comp.Stage = ChemSimulatorStage.Failure;
                 Dirty(ent);
                 return;
@@ -379,12 +389,13 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
 
     private void Print(Entity<ChemSimulatorComponent> ent, string ID)
     {
-        //TODO: visuals
         //todo: sound
         var dat = _gen.CreateReport(ID);
         TrySpawnNextTo("CMUResearchReportSynthesis", ent.Owner, out var paper);
         if (paper is null || dat is null)
             return;
+        ent.Comp.PrintTimeRemaining = ent.Comp.PrintTime;
+        UpdateAppearance(ent.Owner, ent.Comp);
         var realpaper = paper.Value;
         if (TryComp<ResearchReportComponent>(realpaper, out var repcomp))
         {
@@ -401,9 +412,10 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
         contents += Loc.GetString("cmu-paper-sim-footer");
         _mets.SetEntityName(realpaper, name);
         _paper.SetContent(realpaper, contents);
-        if (repcomp is not null && repcomp.Valid && repcomp.Completed && repcomp.Data is not null)
+        if (repcomp is not null && repcomp.Data is not null)
         {
-            _dat.ResearchData.Add(ID, (contents, _time.CurTime, true, repcomp.Data.Value));
+            _dat.ResearchData.TryAdd(_dat.ResearchData.Count - 1,
+                (ID, contents, _time.CurTime, true, repcomp.Data.Value, repcomp.Valid, repcomp.Completed));
         }
         DirtyEntity(realpaper);
         Dirty(ent);
@@ -412,9 +424,9 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
     {
         _processing.Add(ent);
         ent.Comp.NextProcess = _time.CurTime + TimeSpan.FromSeconds(ent.Comp.SecondsPerProcess);
-        //todo: visuals
         ent.Comp.StatusBar = Loc.GetString("research-sim-status-commencing");
         ent.Comp.Stage = ChemSimulatorStage.Begin;
+        UpdateAppearance(ent.Owner, ent.Comp);
         ent.Comp.RecipeChemOptions.Clear();
         ent.Comp.PickedRecipeChem = null;
         _ui.SetUiState(ent.Owner, ChemSimulatorUI.Key, GetStateForBui(ent));
@@ -505,6 +517,71 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
             chem.ID = "TAU-" + _gen.ChemicalGenClassesList["TAU"].Count +
                 "-" + original.Value.Name + "-" + hash.Substring(0, 2) + suffix; //pray to god they didn't put spaces
             chem.Name = original.Value.Name + " " + hash.Substring(0, 2);
+        }
+    }
+
+    private void ProcessPrint(EntityUid ent, ChemSimulatorComponent comp, float delta)
+    {
+        if (comp.PrintTimeRemaining > 0)
+        {
+            comp.PrintTimeRemaining -= delta;
+            UpdateAppearance(ent, comp);
+        }
+    }
+    private void ProcessRead(EntityUid ent, ChemSimulatorComponent comp, float delta)
+    {
+        if (comp.InsertTimeRemaining <= 0)
+            return;
+        comp.InsertTimeRemaining -= delta;
+        UpdateAppearance(ent, comp);
+    }
+
+    private void UpdateAppearance(EntityUid ent, ChemSimulatorComponent? comp = null)
+    {
+        if (!Resolve(ent, ref comp))
+            return;
+
+        ChemSimulatorVisState state = ChemSimulatorVisState.Normal;
+        switch (comp.Stage)
+        {
+            case ChemSimulatorStage.Failure:
+                state = ChemSimulatorVisState.Normal;
+                break;
+            case ChemSimulatorStage.Off:
+                state = ChemSimulatorVisState.Normal;
+                break;
+            case ChemSimulatorStage.Final:
+                state = ChemSimulatorVisState.Normal;
+                break;
+            case ChemSimulatorStage.Wait:
+                state = ChemSimulatorVisState.Ready;
+                break;
+            case ChemSimulatorStage.Stage3:
+                state = ChemSimulatorVisState.Running;
+                break;
+            case ChemSimulatorStage.Stage4:
+                state = ChemSimulatorVisState.Running;
+                break;
+            case ChemSimulatorStage.Begin:
+                state = ChemSimulatorVisState.Running;
+                break;
+            default:
+                state = ChemSimulatorVisState.Normal;
+                break;
+        }
+        if (comp.InsertTimeRemaining > 0)
+        {
+            _app.SetData(ent, ChemSimulatorVisuals.Sim, ChemSimulatorVisState.Reading);
+            Dirty(ent, comp);
+        }
+        else if (comp.PrintTimeRemaining > 0)
+        {
+            _app.SetData(ent, ChemSimulatorVisuals.Sim, ChemSimulatorVisState.Printing);
+            Dirty(ent, comp);
+        }
+        else
+        {
+            _app.SetData(ent, ChemSimulatorVisuals.Sim, state);
         }
     }
 }

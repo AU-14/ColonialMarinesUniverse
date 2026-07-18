@@ -26,6 +26,7 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private ILogManager _log = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedAppearanceSystem _app = default!;
 
 
     private ISawmill _sawmill = default!;
@@ -40,7 +41,6 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<ChemSimulatorComponent, InteractUsingEvent>(OnInteractUsing);
-        SubscribeLocalEvent<ChemSimulatorComponent, InteractHandEvent>(OnInteractHand);
         SubscribeLocalEvent<ChemSimulatorComponent, BoundUIOpenedEvent>(OnBuiOpened);
         Subs.BuiEvents<ChemSimulatorComponent>(ChemSimulatorUI.Key, subs =>
         {
@@ -76,7 +76,7 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
             }
             else
             {
-                _pop.PopupClient(Loc.GetString("research-sim-already-inserted"), args.User);
+                _pop.PopupEntity(Loc.GetString("research-sim-already-inserted"), ent.Owner);
                 return;
             }
         }
@@ -97,29 +97,25 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
             else
             {
                 if (reportComp.Data is not null)
-                    _pop.PopupClient(Loc.GetString("research-sim-already-inserted"), args.User);
+                    _pop.PopupEntity(Loc.GetString("research-sim-already-inserted"), ent.Owner);
                 else
-                    _pop.PopupClient(Loc.GetString("research-sim-refused"), args.User);
+                    _pop.PopupEntity(Loc.GetString("research-sim-refused"), ent.Owner);
                 return;
 
             }
         }
         else
         {
-            _pop.PopupClient(Loc.GetString("research-sim-refuses", ("SCANNER", ent.Owner), ("PAPER", args.Used)), args.User);
+            _pop.PopupEntity(Loc.GetString("research-sim-refuses", ("SCANNER", ent.Owner), ("PAPER", args.Used)), ent.Owner);
             return;
         }
         UpdatePropertyCosts(ent);
+        ent.Comp.InsertTimeRemaining = ent.Comp.InsertTime;
         if (_net.IsClient)
             return;
+        _app.SetData(ent.Owner, ChemSimulatorVisuals.Sim, ChemSimulatorVisState.Reading);
         _ui.SetUiState(ent.Owner, ChemSimulatorUI.Key, GetStateForBui(ent));
         Dirty(ent);
-    }
-
-    private void OnInteractHand(Entity<ChemSimulatorComponent> ent, ref InteractHandEvent args)
-    {
-        //skill check here
-        //open the UI
     }
 
     protected bool CheckReady(Entity<ChemSimulatorComponent> ent)
@@ -611,6 +607,7 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
     }
     private void OnEject(Entity<ChemSimulatorComponent> ent, ref ChemSimulatorEjectBuiMsg args)
     {
+        ent.Comp.PrintTimeRemaining = ent.Comp.PrintTime;
         if (_net.IsClient)
             return;
         _con.TryGetContainer(ent.Owner, "target", out var targcon);

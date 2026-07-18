@@ -12,7 +12,7 @@ public enum ResearchDataTerminalUI
 [Serializable, NetSerializable]
 public sealed class ResearchDataTerminalBuiState(
     List<GeneratedReagentData> ids,
-    Dictionary<string, (string, TimeSpan, bool, GeneratedReagentData)> data,
+    Dictionary<int, (string, string, TimeSpan, bool, GeneratedReagentData, bool, bool)> data,
     TimeSpan nextUpdate,
     TimeSpan lastTime,
     int credits,
@@ -21,7 +21,7 @@ public sealed class ResearchDataTerminalBuiState(
     bool picked) : BoundUserInterfaceState
 {
     public readonly List<GeneratedReagentData> IDs = ids;
-    public readonly Dictionary<string, (string, TimeSpan, bool, GeneratedReagentData)> Data = data;
+    public readonly Dictionary<int, (string, string, TimeSpan, bool, GeneratedReagentData, bool, bool)> Data = data;
     public readonly TimeSpan NextUpdate = nextUpdate;
     public readonly TimeSpan LastTime = lastTime;
     public readonly int Credits = credits;
@@ -44,7 +44,7 @@ public sealed class ResearchDataTerminalAttemptUpgradeBuiMsg : BoundUserInterfac
 public sealed class ResearchDataTerminalPrintLastBuiMsg : BoundUserInterfaceMessage;
 
 [Serializable, NetSerializable]
-public sealed class ResearchDataTerminalPrintChemBuiMsg(string chem) : BoundUserInterfaceMessage
+public sealed class ResearchDataTerminalPrintChemBuiMsg(int idx) : BoundUserInterfaceMessage
 {
-    public readonly string Chem = chem;
+    public readonly int Index = idx;
 }

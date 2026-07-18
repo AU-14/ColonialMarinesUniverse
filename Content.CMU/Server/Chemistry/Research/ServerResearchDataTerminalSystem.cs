@@ -51,11 +51,12 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
 
     [ViewVariables(VVAccess.ReadOnly)]
     public float ResearchCashRewardMult = 500;
-    
+
     /// <summary>
-    /// key = ID, value = (text, scan/sim time, scan or sim, data)
+    /// legend = (ID, text, scan/sim time, scan or sim, data, valid, completed)
     /// </summary>
-    public Dictionary<string, (string, TimeSpan, bool, GeneratedReagentData)> ResearchData = [];
+    [ViewVariables(VVAccess.ReadOnly)]
+    public Dictionary<int, (string, string, TimeSpan, bool, GeneratedReagentData, bool, bool)> ResearchData = [];
 
 
     [Dependency] private ServerReagentGeneratorSystem _generator = default!;
@@ -68,14 +69,18 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     [Dependency] private MetaDataSystem _mets = default!;
     [Dependency] private CorporateConsoleSystem _corpo = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private ILogManager _logman = default!;
 
-    private Dictionary<Entity<ResearchDataTerminalComponent>, string> _printing = [];
+    private Dictionary<Entity<ResearchDataTerminalComponent>, int> _printing = [];
     private HashSet<Entity<ResearchDataTerminalComponent>> _printingLast = [];
+
+    private ISawmill _sawmill = default!;
 
     private bool _upgrading = false;
     public override void Initialize()
     {
         base.Initialize();
+        _sawmill = _logman.GetSawmill("reagent");
         SubscribeLocalEvent<UpdateResearchConsoleEvent>(OnTerminalUpdate);
         SubscribeLocalEvent<PostGameMapLoad>(OnLoadingMaps);
         SubscribeLocalEvent<ResearchDataTerminalComponent, BoundUIOpenedEvent>(OnUiOpen);
@@ -296,12 +301,14 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
 
     private void OnPrintLast(Entity<ResearchDataTerminalComponent> ent, ref ResearchDataTerminalPrintLastBuiMsg args)
     {
+        
         _printingLast.Add(ent);
     }
 
     private void OnPrintRequest(Entity<ResearchDataTerminalComponent> ent, ref ResearchDataTerminalPrintChemBuiMsg args)
     {
-        _printing.Add(ent, args.Chem);
+        _sawmill.Info($"WE ARE TRYING TO PRINT INDEX {args.Index}");
+        _printing.Add(ent, args.Index);
     }
 
     private void PrintLast(Entity<ResearchDataTerminalComponent> ent)
@@ -365,26 +372,26 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         LastPickName = dat.Name;
         LastPick = text;
     }
-    private void PrintData(Entity<ResearchDataTerminalComponent> ent, string id)
+    private void PrintData(Entity<ResearchDataTerminalComponent> ent, int idx)
     {
-        if(ResearchData.TryGetValue(id, out var key))
+        if (ResearchData.TryGetValue(idx, out var value))
         {
             string name = string.Empty;
-            if (key.Item3)
+            if (value.Item4)
             {
-                name = Loc.GetString("research-report-simulation-name", ("ID", key.Item4.Name));
+                name = Loc.GetString("research-report-simulation-name", ("ID", value.Item5.Name));
             }
             else
             {
-                name = Loc.GetString("research-report-analysis-name", ("NAME1", key.Item4.Name), ("NAME2", string.Empty));
+                name = Loc.GetString("research-report-analysis-name", ("NAME1", value.Item5.Name), ("NAME2", string.Empty));
             }
             var paper = SpawnNextToOrDrop("CMUWYPaper", ent.Owner);
             _mets.SetEntityName(paper, name);
-            _paper.SetContent(paper, key.Item1);
+            _paper.SetContent(paper, value.Item2);
             var datcomp = EnsureComp<ResearchReportComponent>(paper);
-            datcomp.Valid = true;
-            datcomp.Completed = true;
-            datcomp.Data = key.Item4;
+            datcomp.Valid = value.Item6;
+            datcomp.Completed = value.Item7;
+            datcomp.Data = value.Item5;
         }
     }
     private void RerollChems()
