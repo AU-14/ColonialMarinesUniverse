@@ -133,7 +133,7 @@
 
   Transmit power and antenna type modify AN/PRC relay range.
 
-  Combat nets, including squad, command, intelligence, and JTAC, require coverage from at least one of the following:
+  Faction nets, including squad, command, intelligence, JTAC, and MP, require coverage from at least one of the following:
 
   - A powered AN/PRC worn by a trained operator.
   - A deployed retransmission station.
@@ -142,7 +142,7 @@
   - A vehicle radio set aboard a dropship or vehicle (covers little more than the hull).
   - A field antenna mast, raised from ten metal sheets by engineering-trained personnel.
 
-  Support nets such as MILP and colony channels are not relay-gated.
+  Colony and civilian channels are not relay-gated and keep stock behavior.
 
   ## Antennas
 

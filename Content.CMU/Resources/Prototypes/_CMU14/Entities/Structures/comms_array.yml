@@ -94,6 +94,7 @@
     - radioGovforCommand
     - radioGovforIntel
     - radioGovforJTAC
+    - radioGovforMILP
 
 - type: entity
   parent: AU14CommsArrayBase
@@ -112,6 +113,7 @@
     - radioOpforCommand
     - radioOpforIntel
     - radioOpforJTAC
+    - radioOpforMILP
 
 # passive CP masts, no power needed, local coverage only
 - type: entity
@@ -156,6 +158,7 @@
     - radioGovforCommand
     - radioGovforIntel
     - radioGovforJTAC
+    - radioGovforMILP
 
 - type: entity
   parent: AU14CommsMastBase
@@ -173,6 +176,7 @@
     - radioOpforCommand
     - radioOpforIntel
     - radioOpforJTAC
+    - radioOpforMILP
 
 # compact transceiver set for vehicle and dropship grids. vehicles are their own
 # grid, so without this riders drop off every combat net the moment they mount up.
@@ -228,12 +232,14 @@
     - radioGovforCommand
     - radioGovforIntel
     - radioGovforJTAC
+    - radioGovforMILP
     - radioOpforAlpha
     - radioOpforBravo
     - radioOpforCharlie
     - radioOpforCommand
     - radioOpforIntel
     - radioOpforJTAC
+    - radioOpforMILP
 
 # field-built antenna mast, raised from metal by engineering-trained personnel.
 # relays both sides' combat nets: a mast is a mast, whoever stands next to it
@@ -253,9 +259,11 @@
     - radioGovforCommand
     - radioGovforIntel
     - radioGovforJTAC
+    - radioGovforMILP
     - radioOpforAlpha
     - radioOpforBravo
     - radioOpforCharlie
     - radioOpforCommand
     - radioOpforIntel
     - radioOpforJTAC
+    - radioOpforMILP

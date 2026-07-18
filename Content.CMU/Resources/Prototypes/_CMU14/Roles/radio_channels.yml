@@ -74,6 +74,7 @@
   longRange: true
   tower: true
   faction: "govfor"
+  anchorGated: true
 
 # ├──[ OPFOR CHANNELS ]──────────────────────────────────────────────┤
 - type: radioChannel
@@ -151,6 +152,7 @@
   longRange: true
   tower: true
   faction: "opfor"
+  anchorGated: true
 
 # ├──[ COLONY ]──────────────────────────────────────────────────────┤
 - type: radioChannel
