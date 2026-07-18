@@ -267,10 +267,11 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
                 var placeGrid = gridUid;
                 var placeMapId = targetMap.MapId;
-                if (TakeZOffset(zByKey, protoId, relSave) is { } zOff && zOff != 0)
+                var zOff = savedPlacement?.ZOffset ?? TakeZOffset(zByKey, protoId, relSave);
+                if (zOff is { } levelOffset && levelOffset != 0)
                 {
-                    if (!TryResolveLevel(targetMapUid, gridUid, zOff, desired.Position, out var levelGrid, out var levelMapId))
-                        throw new InvalidOperationException($"Preflighted z-level {zOff} could not be resolved during placement.");
+                    if (!TryResolveLevel(targetMapUid, gridUid, levelOffset, desired.Position, out var levelGrid, out var levelMapId))
+                        throw new InvalidOperationException($"Preflighted z-level {levelOffset} could not be resolved during placement.");
 
                     placeGrid = levelGrid;
                     placeMapId = levelMapId;
@@ -309,7 +310,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("saved-build-placed", ("count", roots.Count + placedTiles)), user, user);
     }
 
-    private readonly record struct SavedEntityPlacement(Vector2 Offset, Angle Rotation);
+    private readonly record struct SavedEntityPlacement(Vector2 Offset, Angle Rotation, int ZOffset);
 
     /// <summary>
     /// New-format saves record both the serializer's root-local position and the world-aligned placement offset.
@@ -334,7 +335,8 @@ public sealed partial class SavedBuildSystem : EntitySystem
             var key = (MetaString(entry, "proto"), QuantizeOffset(savedX), QuantizeOffset(savedY));
             var placement = new SavedEntityPlacement(
                 new Vector2(MetaFloat(entry, "x"), MetaFloat(entry, "y")),
-                new Angle(MetaFloat(entry, "rot")));
+                new Angle(MetaFloat(entry, "rot")),
+                ReadInt(entry, "z"));
             if (!map.TryGetValue(key, out var queue))
                 map[key] = queue = new Queue<SavedEntityPlacement>();
             queue.Enqueue(placement);
@@ -732,6 +734,10 @@ public sealed partial class SavedBuildSystem : EntitySystem
                             continue;
 
                         _lookup.GetEntitiesIntersecting(otherMapComp.MapId, box, found);
+                        // Sparse/generated z-level grids can have incomplete broadphase bounds around freshly
+                        // built structures. CanSave only accepts direct grid children anyway, so supplement the
+                        // physics lookup with those roots and select them by their world position.
+                        AddGridChildrenInBox(otherMapComp.MapId, box, found);
                     }
                 }
 
@@ -762,6 +768,19 @@ public sealed partial class SavedBuildSystem : EntitySystem
         }
 
         return result;
+    }
+
+    private void AddGridChildrenInBox(MapId mapId, Box2 box, HashSet<EntityUid> found)
+    {
+        foreach (var grid in _mapManager.GetAllGrids(mapId))
+        {
+            var children = Transform(grid).ChildEnumerator;
+            while (children.MoveNext(out var child))
+            {
+                if (box.Contains(_transform.GetWorldPosition(child)))
+                    found.Add(child);
+            }
+        }
     }
 
     private List<BuildSelectionTile> ResolveTiles(ICommonSession saver, BuildSelectionData selection, BuildSaveMode mode, bool includeTiles)
