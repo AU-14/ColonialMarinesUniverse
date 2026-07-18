@@ -381445,7 +381445,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: -103.49481,-73.2511
       parent: 1
-- proto: RMCShovel
+- proto: AU14ToolShovel
   entities:
   - uid: 1179
     components:

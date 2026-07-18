@@ -73,6 +73,7 @@
         amount: 8
       - id: RMCBoxShotgunHeavySlugs
         amount: 8
+      - id: AU14Altyn
 
 - type: entity
   parent: RMCKitBase

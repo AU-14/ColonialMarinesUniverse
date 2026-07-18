@@ -148,7 +148,7 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
 
         foreach (var slot in _medicalIndex.GetBodyPartSlots(arm))
         {
-            if (slot.Type != BodyPartType.Hand)
+            if (slot.Type != BodyPartType.Hand || slot.Part is null)
                 continue;
 
             var location = slotSymmetry switch

@@ -141,19 +141,17 @@ public sealed partial class CMUBodyScannerReadoutSystem : EntitySystem
     public List<(BodyPartType Type, BodyPartSymmetry Symmetry)> GetMissingLimbSlots(EntityUid patient)
     {
         var missing = new List<(BodyPartType Type, BodyPartSymmetry Symmetry)>();
-        if (!_medicalIndex.TryGetRootPart(patient, out var root))
-            return missing;
-
-        foreach (var slot in _medicalIndex.GetBodyPartSlots(root.Owner))
+        foreach (var (parentId, parentComp) in _medicalIndex.GetBodyParts(patient))
         {
-            if (slot.Type is not (BodyPartType.Arm or BodyPartType.Leg))
-                continue;
-
-            if (!CMUBodyPartSlots.TryGetSymmetry(slot.SlotId, BodyPartSymmetry.None, out var symmetry))
-                continue;
-
-            if (slot.Part is null)
-                missing.Add((slot.Type, symmetry));
+            foreach (var slot in _medicalIndex.GetBodyPartSlots(parentId))
+            {
+                if (!CMUBodyPartSlots.IsReportableMissingPart(slot.Type))
+                    continue;
+                if (!CMUBodyPartSlots.TryGetSymmetry(slot.SlotId, parentComp.Symmetry, out var symmetry))
+                    continue;
+                if (slot.Part is null)
+                    missing.Add((slot.Type, symmetry));
+            }
         }
 
         return missing;

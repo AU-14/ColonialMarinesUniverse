@@ -1,10 +1,13 @@
+using System.Linq;
 using Content.Server._RMC14.Language.Systems;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Language;
 using Content.Shared._RMC14.Language.Components;
+using Content.Shared._RMC14.Language.Prototypes;
 using Content.Shared._RMC14.Language.Systems;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server._CMU14.Language;
 
@@ -12,12 +15,44 @@ public sealed partial class CMUXenoLanguageSystem : EntitySystem
 {
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private LanguageSystem _language = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+
+    private static readonly HashSet<string> CorruptedXenoExcludedSpoken = new()
+    {
+        "Primitive",
+        "Binary",
+    };
 
     public override void Initialize()
     {
         SubscribeLocalEvent<XenoComponent, DetermineEntityLanguagesEvent>(OnXenoDetermineEntityLanguages);
         SubscribeLocalEvent<XenoComponent, DetermineLanguageEvent>(OnXenoDetermineLanguage);
+        SubscribeLocalEvent<LanguageComponent, DetermineEntityLanguagesEvent>(OnDetermineCorruptedHiveLanguages);
         SubscribeLocalEvent<LanguageComponent, HiveChangedEvent>(OnLanguageHiveChanged);
+    }
+
+    private void OnDetermineCorruptedHiveLanguages(Entity<LanguageComponent> ent, ref DetermineEntityLanguagesEvent args)
+    {
+        if (!TryComp<HiveMemberComponent>(ent.Owner, out var hiveMember) ||
+            !TryComp<HiveComponent>(hiveMember.Hive, out var hive) ||
+            !hive.Corrupted)
+            return;
+
+        foreach (var proto in _prototypeManager.EnumeratePrototypes<LanguagePrototype>())
+        {
+            var id = new ProtoId<LanguagePrototype>(proto.ID);
+
+            if (!CorruptedXenoExcludedSpoken.Contains(proto.ID))
+                args.SpokenLanguages.Add(id);
+
+            args.UnderstoodLanguages.Add(id);
+        }
+    }
+
+    private void OnLanguageHiveChanged(Entity<LanguageComponent> ent, ref HiveChangedEvent args)
+    {
+        _language.UpdateEntityLanguages(ent.AsNullable());
+        RefreshEnglish(ent.Owner);
     }
 
     private void OnXenoDetermineEntityLanguages(Entity<XenoComponent> ent, ref DetermineEntityLanguagesEvent args)
@@ -42,18 +77,11 @@ public sealed partial class CMUXenoLanguageSystem : EntitySystem
         }
     }
 
-    private void OnLanguageHiveChanged(Entity<LanguageComponent> ent, ref HiveChangedEvent args)
-    {
-        RefreshEnglish(ent.Owner);
-    }
-
     public void RefreshEnglish(EntityUid uid)
     {
         if (!HasComp<XenoComponent>(uid) ||
             !HasComp<LanguageComponent>(uid))
-        {
             return;
-        }
 
         _language.UpdateEntityLanguages(uid);
         if (ShouldUseEnglish(uid) &&
@@ -74,5 +102,4 @@ public sealed partial class CMUXenoLanguageSystem : EntitySystem
         return HasComp<YautjaHivebrokenXenoComponent>(uid) ||
                TryComp(uid, out YautjaThrallComponent? thrall) && thrall.Hivebroken;
     }
-
 }

@@ -162,6 +162,17 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
             return true;
         }
 
+        if (TryResumeUiLessClosure(
+                surgeon,
+                patient,
+                tool,
+                targetPart,
+                selectedType,
+                selectedSymmetry))
+        {
+            return true;
+        }
+
         if (!TryResolveUiLessAccessAction(tool, targetPart, selectedType, site, out var action))
         {
             if (siteCurrent is not null
@@ -197,6 +208,41 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
             action);
     }
 
+    private bool TryResumeUiLessClosure(
+        EntityUid surgeon,
+        EntityUid patient,
+        EntityUid tool,
+        EntityUid targetPart,
+        BodyPartType selectedType,
+        BodyPartSymmetry selectedSymmetry)
+    {
+        if (!TryComp<CMUSurgeryInProgressComponent>(patient, out var inProgress)
+            || !inProgress.AwaitingClosureChoice
+            || inProgress.Part != targetPart
+            || inProgress.TargetPartType != selectedType
+            || inProgress.TargetSymmetry != selectedSymmetry
+            || !_flowSurgery.TryResolveNextStep(
+                patient,
+                targetPart,
+                inProgress.LeafSurgeryId,
+                out var resolved,
+                allowOptionalHemostasis: true)
+            || !_flowSurgery.ToolMatchesCategory(tool, resolved.ToolCategory))
+        {
+            return false;
+        }
+
+        return TryStartUiLessAccessAction(
+            surgeon,
+            patient,
+            tool,
+            targetPart,
+            selectedType,
+            selectedSymmetry,
+            new UiLessAccessAction(resolved.ResolvedSurgeryId, resolved.StepIndex),
+            inProgress.LeafSurgeryId);
+    }
+
     private bool TryDispatchUiLessMissingSite(
         EntityUid surgeon,
         EntityUid patient,
@@ -205,7 +251,7 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
         BodyPartSymmetry selectedSymmetry,
         CMUSurgeryArmedStepComponent? current)
     {
-        if (!_flowSurgery.TryGetReattachAnchorPart(patient, out var anchor))
+        if (!_flowSurgery.TryGetReattachAnchorPart(patient, selectedType, selectedSymmetry, out var anchor))
         {
             _popup.PopupEntity(Loc.GetString("cmu-medical-surgery-ui-less-select-part"), patient, surgeon);
             return true;
@@ -638,7 +684,7 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
         if (!HasComp<BodyPartComponent>(targetPart))
         {
             if (SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(best.Entry.SurgeryId)
-                && _flowSurgery.TryGetReattachAnchorPart(patient, out var anchor))
+                && _flowSurgery.TryGetReattachAnchorPart(patient, best.Part.Type, best.Part.Symmetry, out var anchor))
             {
                 targetPart = anchor;
             }
@@ -825,7 +871,11 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
         if (!HasComp<BodyPartComponent>(targetPart))
         {
             if (SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(selectedSurgery.SurgeryId)
-                && _flowSurgery.TryGetReattachAnchorPart(marker.Patient, out var anchor))
+                && _flowSurgery.TryGetReattachAnchorPart(
+                    marker.Patient,
+                    selectedPart.Type,
+                    selectedPart.Symmetry,
+                    out var anchor))
             {
                 targetPart = anchor;
             }
