@@ -56,6 +56,9 @@
     back: CMSatchel
   inhand:
   - RMCRadioHandheldColonyOff
+  storage:
+    back:
+    - CMUUniversalPaperTool
 
 - type: entity
   parent: CMSpawnPointJobBase
