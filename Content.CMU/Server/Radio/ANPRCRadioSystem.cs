@@ -241,6 +241,9 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         SetBatteryDrawEnabled(ent.Owner, ent.Comp.Enabled);
         GrantReceiveChannels(ent);
         UpdateRelayAnchor(ent);
+        // a panel opened before donning the pack would otherwise stay greyed out on
+        // its stale not-worn state
+        UpdateBuiState(ent);
 
         if (TryComp(ent.Owner, out RTORelayComponent? relay))
         {
@@ -271,6 +274,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         SetBatteryDrawEnabled(ent.Owner, false);
         RevokeReceiveChannels(ent);
         RemComp<ANPRCRelayAnchorComponent>(ent.Owner);
+        UpdateBuiState(ent);
 
         if (TryComp(ent.Owner, out RTORelayComponent? relay))
         {
