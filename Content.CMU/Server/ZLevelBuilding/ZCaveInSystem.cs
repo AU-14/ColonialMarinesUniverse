@@ -457,9 +457,9 @@ public sealed class ZCaveInSystem : EntitySystem
         var worldPos = _transform.ToMapCoordinates(_map.GridTileToLocal(grid.Owner, grid.Comp, tile)).Position;
         var surfaceCoords = new MapCoordinates(worldPos, aboveMapComp.MapId);
 
-        // Dropships are their own grids. A cave-in must therefore remove the impacted tile from the dropship
-        // grid itself (rather than whichever planet grid TryFindGridAt returns) and drop that ship section below.
-        if (MarkDropshipsOverCollapse(surfaceCoords, stoneMap.Owner))
+        // Dropships are their own grids. If one is parked over this cave-in, don't try to pull its tiles or
+        // entities down into the cavern; just trip the flight-safety lockout and leave the ship grid alone.
+        if (MarkDropshipsOverCollapse(surfaceCoords))
             return;
 
         if (!_mapManager.TryFindGridAt(surfaceCoords, out var surfaceGridUid, out var surfaceGridComp))
@@ -810,7 +810,7 @@ public sealed class ZCaveInSystem : EntitySystem
     /// around the point instead of relying on TryFindGridAt, because landed dropships can overlap the planet
     /// grid and TryFindGridAt may return the ground grid first.
     /// </summary>
-    private bool MarkDropshipsOverCollapse(MapCoordinates impact, EntityUid? belowMap = null)
+    private bool MarkDropshipsOverCollapse(MapCoordinates impact)
     {
         _overlappingGrids.Clear();
         var min = impact.Position - new Vector2(DropshipCollapseDetectionRadius);
@@ -824,32 +824,6 @@ public sealed class ZCaveInSystem : EntitySystem
                 continue;
 
             marked = true;
-
-            // During the actual tile-by-tile collapse, tear this coordinate out of the shuttle's own tile layer
-            // and drop its anchored structures into the underground map. The later sampled surface-effects pass
-            // calls this without belowMap and therefore only performs the idempotent compromise check.
-            if (belowMap is { } destination)
-            {
-                var shuttleTile = _map.TileIndicesFor(grid.Owner, grid.Comp, impact);
-                var blockedByBoundary = false;
-                foreach (var anchored in _map.GetAnchoredEntities(grid.Owner, grid.Comp, shuttleTile))
-                {
-                    if (IsIndestructibleWall(anchored))
-                    {
-                        blockedByBoundary = true;
-                        break;
-                    }
-                }
-
-                if (!blockedByBoundary &&
-                    _map.TryGetTileRef(grid.Owner, grid.Comp, shuttleTile, out var tileRef) &&
-                    !tileRef.Tile.IsEmpty)
-                {
-                    DropBuiltEntitiesToLevelBelow(destination, grid.Owner, grid.Comp, shuttleTile, impact.Position);
-                    _map.SetTile(grid.Owner, grid.Comp, shuttleTile, Tile.Empty);
-                }
-            }
-
             if (!HasComp<ZCollapseCompromisedComponent>(grid.Owner))
             {
                 EnsureComp<ZCollapseCompromisedComponent>(grid.Owner);
