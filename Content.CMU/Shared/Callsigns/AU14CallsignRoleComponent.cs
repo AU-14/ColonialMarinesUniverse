@@ -5,7 +5,8 @@ namespace Content.Shared._AU14.Callsigns;
 [RegisterComponent]
 public sealed partial class AU14CallsignRoleComponent : Component
 {
-    [DataField(required: true)]
+    // empty = keep the automatic numbered suffix, only the tag/element applies
+    [DataField]
     public string Suffix = string.Empty;
 
     [DataField]
