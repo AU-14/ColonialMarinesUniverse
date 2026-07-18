@@ -9,31 +9,6 @@ namespace Content.Server._AU14.Radio;
 
 public sealed partial class ANPRCRadioSystem
 {
-    private Dictionary<int, ProtoId<RadioChannelPrototype>>? _channelsByFrequency;
-
-    private void OnPrototypesReloaded(PrototypesReloadedEventArgs args)
-    {
-        _channelsByFrequency = null;
-    }
-
-    private Dictionary<int, ProtoId<RadioChannelPrototype>> GetChannelsByFrequency()
-    {
-        if (_channelsByFrequency != null)
-            return _channelsByFrequency;
-
-        _channelsByFrequency = new Dictionary<int, ProtoId<RadioChannelPrototype>>();
-
-        foreach (var proto in _prototype.EnumeratePrototypes<RadioChannelPrototype>())
-        {
-            if (proto.ID == SharedChatSystem.HivemindChannel.Id)
-                continue;
-
-            _channelsByFrequency.TryAdd(proto.Frequency, new ProtoId<RadioChannelPrototype>(proto.ID));
-        }
-
-        return _channelsByFrequency;
-    }
-
     private void OnGetAltVerbs(Entity<ANPRCRadioComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
     {
         if (!args.CanAccess || !args.CanInteract || args.Hands == null)
@@ -202,7 +177,7 @@ public sealed partial class ANPRCRadioSystem
             return;
         }
 
-        if (GetChannelsByFrequency().TryGetValue(frequency, out var channel))
+        if (_freqPlan.TryGetChannelByFrequency(frequency, out var channel))
         {
             ent.Comp.FrequencyOverrides.Remove(args.Slot);
             ent.Comp.Presets[args.Slot] = channel;

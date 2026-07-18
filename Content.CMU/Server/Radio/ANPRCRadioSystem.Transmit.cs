@@ -175,7 +175,7 @@ public sealed partial class ANPRCRadioSystem
                     logRadio,
                     _timing.CurTime.TotalSeconds,
                     logName,
-                    $"{args.Channel.LocalizedName} ({TunableFrequencySystem.FormatFreq(args.Channel.Frequency)} MHz)",
+                    $"{args.Channel.LocalizedName} ({TunableFrequencySystem.FormatFreq(_freqPlan.GetFrequency(args.Channel))} MHz)",
                     args.Message);
 
                 UpdateBuiState(new Entity<ANPRCRadioComponent>(wearing.Radio, logRadio));
@@ -304,7 +304,7 @@ public sealed partial class ANPRCRadioSystem
             radio,
             _timing.CurTime.TotalSeconds,
             senderName,
-            $"{channel.LocalizedName} ({TunableFrequencySystem.FormatFreq(channel.Frequency)} MHz)",
+            $"{channel.LocalizedName} ({TunableFrequencySystem.FormatFreq(_freqPlan.GetFrequency(channel))} MHz)",
             outMessage);
 
         UpdateBuiState(pack);

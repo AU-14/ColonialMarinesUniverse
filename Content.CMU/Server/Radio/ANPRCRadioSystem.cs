@@ -44,6 +44,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IChatManager _chatManager = default!;
     [Dependency] private ANPRCCryptoSystem _crypto = default!;
+    [Dependency] private ANPRCFrequencyPlanSystem _freqPlan = default!;
     [Dependency] private ANPRCGarbleSystem _garble = default!;
     [Dependency] private ANPRCRangeSystem _range = default!;
     [Dependency] private PowerCellSystem _powerCell = default!;
@@ -125,8 +126,6 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         SubscribeLocalEvent<ANPRCRadioComponent, PowerCellSlotEmptyEvent>(OnBatteryEmpty);
         SubscribeLocalEvent<ANPRCRadioComponent, EntInsertedIntoContainerMessage>(OnAntennaInserted);
         SubscribeLocalEvent<ANPRCRadioComponent, EntRemovedFromContainerMessage>(OnAntennaRemoved);
-
-        SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
     }
 
     private void OnRadioReceive(Entity<ANPRCRadioComponent> ent, ref RadioReceiveEvent args)
@@ -163,7 +162,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
                 radio,
                 _timing.CurTime.TotalSeconds,
                 GetSenderDisplayName(args.MessageSource),
-                $"{args.Channel.LocalizedName} ({TunableFrequencySystem.FormatFreq(args.Channel.Frequency)} MHz)",
+                $"{args.Channel.LocalizedName} ({TunableFrequencySystem.FormatFreq(_freqPlan.GetFrequency(args.Channel))} MHz)",
                 heard);
 
             UpdateBuiState(ent);

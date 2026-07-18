@@ -6,6 +6,9 @@
   components:
   - type: Item
     size: Small
+  - type: ANPRCFreqCard
+    faction: govfor
+  # fallback text only, the server rewrites this from the round's frequency plan
   - type: Paper
     content: |
       [head=2]SIGNAL OPERATING INSTRUCTIONS[/head]
@@ -22,3 +25,11 @@
       Enter a frequency in the radio panel's FREQ tab (with or without the dot, 2592 and 2.592 are the same) to assign the matching net to a preset slot.
 
       [italic]COMSEC NOTICE: This card is a controlled document. Destroy before capture. Frequencies are theatre-wide, assume the enemy holds a copy of their own.[/italic]
+
+- type: entity
+  parent: ANPRCFreqCard
+  id: ANPRCFreqCardOPFOR
+  suffix: OPFOR
+  components:
+  - type: ANPRCFreqCard
+    faction: opfor

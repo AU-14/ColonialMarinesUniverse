@@ -130,7 +130,7 @@
     ears: AU14HeadsetOpforMarine
     back: ANPRC117GRadioOPFORFilled
     pocket1: ANPRCFillCardOPFOR
-    pocket2: ANPRCFreqCard
+    pocket2: ANPRCFreqCardOPFOR
 
 - type: playTimeTracker
   id: AU14JobOPFORRadioTrafficOperator
