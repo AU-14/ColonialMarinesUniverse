@@ -3,6 +3,7 @@
   id: AU14CommsMastFieldBuild
   name: field antenna mast
   prototype: AU14CommsMastField
+  noRotate: true
   doAfterTime: 8
   doAfterTimeMin: 4
   materialCost: 10
