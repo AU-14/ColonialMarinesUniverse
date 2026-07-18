@@ -301,7 +301,11 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
         {
             if (construction.TryGetRecipePrototype(recipe.ID, out var targetId) && targetId != null)
             {
-                _recipeByTarget.TryAdd(targetId, recipe);
+                // Prefer the direct/native recipe when several recipes resolve to the same target. This matters
+                // for setup entities such as z-stairs: their own recipe creates the one ghost that regenerates
+                // the support beam and platform, while an arbitrary alternate recipe may not be placeable here.
+                if (!_recipeByTarget.ContainsKey(targetId) || recipe.ID == targetId)
+                    _recipeByTarget[targetId] = recipe;
 
                 if (_proto.TryIndex<EntityPrototype>(targetId, out var targetProto) &&
                     targetProto.TryGetComponent<TileApplierComponent>(out var applier, _componentFactory))
