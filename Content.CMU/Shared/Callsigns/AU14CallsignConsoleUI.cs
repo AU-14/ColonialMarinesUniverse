@@ -45,9 +45,10 @@ public sealed class AU14CallsignConsoleState(string faction, List<AU14CallsignCo
 }
 
 [Serializable, NetSerializable]
-public sealed class AU14CallsignRenameElementMsg(NetEntity? squad, string word) : BoundUserInterfaceMessage
+public sealed class AU14CallsignRenameElementMsg(NetEntity? squad, string? category, string word) : BoundUserInterfaceMessage
 {
     public readonly NetEntity? Squad = squad;
+    public readonly string? Category = category;
     public readonly string Word = word;
 }
 

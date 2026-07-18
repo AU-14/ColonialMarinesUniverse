@@ -67,6 +67,13 @@ public sealed partial class AU14CallsignSystem
 
             _squadWords[squad.Value] = word;
         }
+        else if (args.Category is { } category)
+        {
+            if (!ConsoleCategories.Contains(category, StringComparer.OrdinalIgnoreCase))
+                return;
+
+            _categoryWords[(ent.Comp.Faction, category.ToUpperInvariant())] = word;
+        }
         else
         {
             _commandWords[ent.Comp.Faction] = word;
@@ -92,7 +99,7 @@ public sealed partial class AU14CallsignSystem
         if (string.IsNullOrWhiteSpace(suffix))
             return;
 
-        if (SuffixTaken(callsign.Faction, callsign.Squad, callsign.Group, suffix, member.Value))
+        if (SuffixTaken(callsign.Faction, callsign.Squad, callsign.Group, callsign.Category, suffix, member.Value))
         {
             _popup.PopupEntity(Loc.GetString("au14-callsign-console-suffix-taken", ("suffix", suffix)), ent.Owner, args.Actor);
             return;
@@ -189,6 +196,12 @@ public sealed partial class AU14CallsignSystem
         if (string.Equals(GetCommandWord(faction), word, StringComparison.OrdinalIgnoreCase))
             return true;
 
+        foreach (var category in ConsoleCategories)
+        {
+            if (string.Equals(GetCategoryWord(faction, category), word, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+
         var group = faction.ToUpperInvariant();
         var squads = EntityQueryEnumerator<SquadTeamComponent>();
 
@@ -234,11 +247,7 @@ public sealed partial class AU14CallsignSystem
             if (callsign.Faction != faction)
                 continue;
 
-            var word = callsign.Group ?? (callsign.Squad is { } squad
-                ? GetSquadWord(squad)
-                : GetCommandWord(faction));
-
-            callsign.Callsign = $"{word} {callsign.Suffix}";
+            callsign.Callsign = $"{GetElementWord(callsign)} {callsign.Suffix}";
             Dirty(uid, callsign);
         }
 
@@ -288,7 +297,7 @@ public sealed partial class AU14CallsignSystem
                 null,
                 category,
                 Loc.GetString($"au14-callsign-console-category-{category.ToLowerInvariant()}"),
-                GetCommandWord(faction),
+                GetCategoryWord(faction, category),
                 rows));
         }
 

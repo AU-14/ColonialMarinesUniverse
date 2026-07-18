@@ -12,7 +12,7 @@ namespace Content.Client._AU14.Callsigns;
 [GenerateTypedNameReferences]
 public sealed partial class AU14CallsignConsoleWindow : DefaultWindow
 {
-    public event Action<NetEntity?, string>? OnRenameElement;
+    public event Action<NetEntity?, string?, string>? OnRenameElement;
     public event Action<NetEntity, string>? OnSetSuffix;
     public event Action<string>? OnCreateGroup;
     public event Action<string>? OnDeleteGroup;
@@ -114,8 +114,8 @@ public sealed partial class AU14CallsignConsoleWindow : DefaultWindow
             HorizontalExpand = true,
         });
 
-        // role sections share the command word and are not renamable
-        if (_canEdit && element.Group == null && element.Category == null)
+        // command, squads and role sections carry renamable element words
+        if (_canEdit && element.Group == null)
         {
             var renameEdit = new LineEdit
             {
@@ -130,6 +130,7 @@ public sealed partial class AU14CallsignConsoleWindow : DefaultWindow
             };
 
             var squad = element.Squad;
+            var category = element.Category;
 
             renameButton.OnPressed += _ =>
             {
@@ -138,7 +139,7 @@ public sealed partial class AU14CallsignConsoleWindow : DefaultWindow
                 if (word.Length == 0)
                     return;
 
-                OnRenameElement?.Invoke(squad, word);
+                OnRenameElement?.Invoke(squad, category, word);
                 renameEdit.Text = string.Empty;
             };
 

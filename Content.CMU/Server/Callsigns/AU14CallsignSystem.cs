@@ -44,6 +44,17 @@ public sealed partial class AU14CallsignSystem : EntitySystem
     // custom callsign groups created from the directory console, per faction
     private readonly Dictionary<string, List<string>> _groups = new();
 
+    // role sections carry their own element words, renamable per faction
+    private static readonly Dictionary<string, string> DefaultCategoryWords = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["AIR"] = "TALON",
+        ["MP"] = "WARDEN",
+        ["MEDICAL"] = "DUSTOFF",
+        ["INTEL"] = "PROPHET",
+    };
+
+    private readonly Dictionary<(string Faction, string Category), string> _categoryWords = new();
+
     private readonly List<(EntityUid Mob, LocId Prefix, LocId? Additional, GameTick Tick)> _prefixRestores = new();
 
     private bool _commsEnabled;
@@ -111,6 +122,7 @@ public sealed partial class AU14CallsignSystem : EntitySystem
         _commandWords.Clear();
         _squadWords.Clear();
         _groups.Clear();
+        _categoryWords.Clear();
         _prefixRestores.Clear();
     }
 
@@ -246,18 +258,18 @@ public sealed partial class AU14CallsignSystem : EntitySystem
 
         if (role != null && !string.IsNullOrEmpty(role.Suffix))
         {
-            callsign.Suffix = MakeUniqueSuffix(callsign.Faction, squad, callsign.Group, role.Suffix, uid);
+            callsign.Suffix = MakeUniqueSuffix(callsign.Faction, squad, callsign.Group, callsign.Category, role.Suffix, uid);
             callsign.RoleSuffix = true;
         }
         else if (!callsign.RoleSuffix || string.IsNullOrEmpty(callsign.Suffix))
         {
-            callsign.Suffix = NextFreeNumber(callsign.Faction, squad, callsign.Group, FireteamNumber(uid), uid);
+            callsign.Suffix = NextFreeNumber(callsign.Faction, squad, callsign.Group, callsign.Category, FireteamNumber(uid), uid);
             callsign.RoleSuffix = false;
         }
         else
         {
             // manually pinned suffix follows them into the new element
-            callsign.Suffix = MakeUniqueSuffix(callsign.Faction, squad, callsign.Group, callsign.Suffix, uid);
+            callsign.Suffix = MakeUniqueSuffix(callsign.Faction, squad, callsign.Group, callsign.Category, callsign.Suffix, uid);
         }
 
         UpdateFullCallsign(uid, callsign);
@@ -272,14 +284,26 @@ public sealed partial class AU14CallsignSystem : EntitySystem
 
     private void UpdateFullCallsign(EntityUid uid, AU14CallsignComponent callsign)
     {
-        var word = callsign.Group ?? (callsign.Squad is { } squad
-            ? GetSquadWord(squad)
-            : GetCommandWord(callsign.Faction));
+        var word = GetElementWord(callsign);
 
         callsign.Callsign = $"{word} {callsign.Suffix}";
         Dirty(uid, callsign);
 
         PushConsoleStates(callsign.Faction);
+    }
+
+    // word precedence: task group, then role section, then squad, then command
+    public string GetElementWord(AU14CallsignComponent callsign)
+    {
+        if (callsign.Group != null)
+            return callsign.Group;
+
+        if (callsign.Category != null)
+            return GetCategoryWord(callsign.Faction, callsign.Category);
+
+        return callsign.Squad is { } squad
+            ? GetSquadWord(squad)
+            : GetCommandWord(callsign.Faction);
     }
 
     public string GetCommandWord(string faction)
@@ -292,6 +316,16 @@ public sealed partial class AU14CallsignSystem : EntitySystem
             : faction.ToUpperInvariant();
     }
 
+    public string GetCategoryWord(string faction, string category)
+    {
+        if (_categoryWords.TryGetValue((faction, category.ToUpperInvariant()), out var word))
+            return word;
+
+        return DefaultCategoryWords.TryGetValue(category, out var fallback)
+            ? fallback
+            : category.ToUpperInvariant();
+    }
+
     public string GetSquadWord(EntityUid squad)
     {
         if (_squadWords.TryGetValue(squad, out var word))
@@ -300,34 +334,34 @@ public sealed partial class AU14CallsignSystem : EntitySystem
         return Name(squad).ToUpperInvariant();
     }
 
-    private string NextFreeNumber(string faction, EntityUid? squad, string? group, int fireteam, EntityUid exclude)
+    private string NextFreeNumber(string faction, EntityUid? squad, string? group, string? category, int fireteam, EntityUid exclude)
     {
         for (var n = 1;; n++)
         {
             var candidate = $"{fireteam}-{n}";
 
-            if (!SuffixTaken(faction, squad, group, candidate, exclude))
+            if (!SuffixTaken(faction, squad, group, category, candidate, exclude))
                 return candidate;
         }
     }
 
-    private string MakeUniqueSuffix(string faction, EntityUid? squad, string? group, string wanted, EntityUid exclude)
+    private string MakeUniqueSuffix(string faction, EntityUid? squad, string? group, string? category, string wanted, EntityUid exclude)
     {
-        if (!SuffixTaken(faction, squad, group, wanted, exclude))
+        if (!SuffixTaken(faction, squad, group, category, wanted, exclude))
             return wanted;
 
         for (var n = 2;; n++)
         {
             var candidate = $"{wanted} {n}";
 
-            if (!SuffixTaken(faction, squad, group, candidate, exclude))
+            if (!SuffixTaken(faction, squad, group, category, candidate, exclude))
                 return candidate;
         }
     }
 
-    // suffixes are unique within their element: a custom group when set, the
-    // squad otherwise, the command element when neither
-    private bool SuffixTaken(string faction, EntityUid? squad, string? group, string suffix, EntityUid exclude)
+    // suffixes are unique within their element: a custom group when set, then the
+    // role section, then the squad, then the command element
+    private bool SuffixTaken(string faction, EntityUid? squad, string? group, string? category, string suffix, EntityUid exclude)
     {
         var query = EntityQueryEnumerator<AU14CallsignComponent>();
 
@@ -342,7 +376,13 @@ public sealed partial class AU14CallsignSystem : EntitySystem
                 continue;
             }
 
-            if (group == null && other.Squad != squad)
+            if (group == null &&
+                !string.Equals(other.Category, category, StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            if (group == null && category == null && other.Squad != squad)
                 continue;
 
             if (string.Equals(other.Suffix, suffix, StringComparison.OrdinalIgnoreCase))

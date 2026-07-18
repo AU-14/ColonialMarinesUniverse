@@ -23,8 +23,8 @@ public sealed partial class AU14CallsignConsoleBui : BoundUserInterface
 
         _window = this.CreateWindow<AU14CallsignConsoleWindow>();
 
-        _window.OnRenameElement += (squad, word) =>
-            SendMessage(new AU14CallsignRenameElementMsg(squad, word));
+        _window.OnRenameElement += (squad, category, word) =>
+            SendMessage(new AU14CallsignRenameElementMsg(squad, category, word));
 
         _window.OnSetSuffix += (member, suffix) =>
             SendMessage(new AU14CallsignSetSuffixMsg(member, suffix));
