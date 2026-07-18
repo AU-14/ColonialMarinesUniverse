@@ -195,7 +195,8 @@ public sealed class ANPRCRadioState(
     List<ANPRCNetLogEntry> netLog,
     float batteryFraction,
     bool hasBattery,
-    string antennaLabel)
+    string antennaLabel,
+    Dictionary<string, int> channelFrequencies)
     : BoundUserInterfaceState
 {
     public readonly Dictionary<int, ProtoId<RadioChannelPrototype>> Presets = presets;
@@ -223,4 +224,8 @@ public sealed class ANPRCRadioState(
     public readonly float BatteryFraction = batteryFraction;
     public readonly bool HasBattery = hasBattery;
     public readonly string AntennaLabel = antennaLabel;
+
+    // the round's signal plan: channel id -> live frequency. prototype frequencies
+    // are only the book values, the plan is rolled per round
+    public readonly Dictionary<string, int> ChannelFrequencies = channelFrequencies;
 }

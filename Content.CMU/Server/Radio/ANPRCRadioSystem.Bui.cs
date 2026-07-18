@@ -329,7 +329,23 @@ public sealed partial class ANPRCRadioSystem
                 new List<ANPRCNetLogEntry>(ent.Comp.NetLog),
                 batteryFraction,
                 hasBattery,
-                antennaLabel));
+                antennaLabel,
+                BuildChannelFrequencies()));
+    }
+
+    private Dictionary<string, int> BuildChannelFrequencies()
+    {
+        var frequencies = new Dictionary<string, int>();
+
+        foreach (var proto in _prototype.EnumeratePrototypes<RadioChannelPrototype>())
+        {
+            if (proto.Frequency <= 0)
+                continue;
+
+            frequencies[proto.ID] = _freqPlan.GetFrequency(proto);
+        }
+
+        return frequencies;
     }
 
     private static string Sanitize(string input, int maxLength)

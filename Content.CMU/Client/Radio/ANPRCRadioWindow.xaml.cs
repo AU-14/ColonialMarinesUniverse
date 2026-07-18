@@ -273,10 +273,10 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
         }
         else if (activeProto != null)
         {
-            FrequencyLabel.Text = FormatFreq(activeProto.Frequency);
+            FrequencyLabel.Text = FormatFreq(PlanFreq(activeProto));
             ChannelNameLabel.Text = activeProto.LocalizedName.ToUpperInvariant();
             ChannelIdLabel.Text = $"CH: {activeProto.ID}";
-            BandLabel.Text = $"BAND: {BandName(activeProto.Frequency)}";
+            BandLabel.Text = $"BAND: {BandName(PlanFreq(activeProto))}";
             WaveformLabel.Text = $"WF: {(activeProto.LongRange ? "SAT" : "LOS")}";
 
             FrequencyLabel.FontColorOverride = ready ? LcdBright : LcdOff;
@@ -504,7 +504,7 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
             if (state.FrequencyOverrides.TryGetValue(slot, out var dynFreq))
                 freqText = $"{FormatFreq(dynFreq)} MHz · DIRECT";
             else if (state.Presets.TryGetValue(slot, out var ch) && _prototype.TryIndex(ch, out var proto))
-                freqText = $"{FormatFreq(proto.Frequency)} MHz · {proto.LocalizedName.ToUpperInvariant()}";
+                freqText = $"{FormatFreq(PlanFreq(proto))} MHz · {proto.LocalizedName.ToUpperInvariant()}";
             else
                 freqText = "--- EMPTY ---";
 
@@ -570,6 +570,16 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
         EntryTabNetButton.Pressed = tab == EntryTab.Net;
     }
 
+
+    // frequencies come from the round's signal plan carried in the BUI state,
+    // the prototype value is only the fallback book number
+    private int PlanFreq(RadioChannelPrototype proto)
+    {
+        return _lastState != null && _lastState.ChannelFrequencies.TryGetValue(proto.ID, out var freq)
+            ? freq
+            : proto.Frequency;
+    }
+
     private void RebuildNetList(ANPRCRadioState state)
     {
         EntryNetList.RemoveAllChildren();
@@ -590,7 +600,7 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
             var capturedProto = proto;
             var btn = new Button
             {
-                Text = $"{proto.LocalizedName.ToUpperInvariant()}  -  {FormatFreq(proto.Frequency)} MHz",
+                Text = $"{proto.LocalizedName.ToUpperInvariant()}  -  {FormatFreq(PlanFreq(proto))} MHz",
                 HorizontalExpand = true,
             };
             btn.OnPressed += _ =>
