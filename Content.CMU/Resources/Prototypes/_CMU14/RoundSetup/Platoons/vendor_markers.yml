@@ -93,6 +93,14 @@
 
 - type: entity
   parent: VMarkerOpfor
+  id: VMarkerOpforShipsideUniform
+  name: Opfor Shipside Uniform marker
+  components:
+  - type: VendorMarker
+    class: ShipsideUniform
+
+- type: entity
+  parent: VMarkerOpfor
   id: VMarkeropforrequisitionsvendor
   name: OPFOR requisitions vendor marker
   components:
@@ -214,6 +222,14 @@
   components:
   - type: VendorMarker
     class: Clothing
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforShipsideUniform
+  name: Gov Shipside Uniform marker
+  components:
+  - type: VendorMarker
+    class: ShipsideUniform
 
 - type: entity
   parent: VMarkerGovfor
@@ -467,6 +483,17 @@
   components:
   - type: VendorMarker
     class: Clothing
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
+    state: base
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkershipShipsideUniform
+  name: Ship Shipside Uniform marker
+  components:
+  - type: VendorMarker
+    class: ShipsideUniform
   - type: Sprite
     sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
     state: base

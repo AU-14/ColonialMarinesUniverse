@@ -4,6 +4,7 @@ namespace Content.Shared.AU14.util
     {
         Corpsman,
         Clothing,
+        ShipsideUniform,
         Weapons,
         SWeapons,
         ObjectivesConsole,

@@ -1126,3 +1126,94 @@
         amount: 1
       - id: RMCTentUNMCExtendedMessFolded
         amount: 1
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14VAIPOShipsideUniformVendor
+  name: VAIPO shipside uniform vendor
+  description: A stripped-down dispenser rack stocked with off-duty uniforms, footwear, and light personal gear for wear aboard ship.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Softcovers
+      entries:
+      - id: AU14DesertPatrolCap
+        amount: 20
+      - id: AU14DesertBoonieHat
+        amount: 20
+      - id: AU14HeadCommandoBeanie
+        amount: 10
+    - name: Fatigues
+      entries:
+      - id: AU14CivilianWorkwearBlue
+        amount: 40
+      - id: RMCJumpsuitLiaisonGreyWorkwear
+        amount: 40
+      - id: AU14CivilianWorkwearPink
+        amount: 40
+      - id: AU14CivilianWorkwearGreen
+        amount: 40
+      - id: RMCJumpsuitKhakiWorkwearJacketless
+        amount: 40
+      - id: CMJumpsuitLiaisonField
+        amount: 40
+      - id: AU14CivilianFlannelWhite
+        amount: 40
+      - id: AU14CivilianFlannelRed
+        amount: 40
+      - id: AU14CivilianFlannelPurple
+        amount: 40
+      - id: AU14CivilianFloralRed
+        amount: 40
+      - id: AU14CivilianFloralBlue
+        amount: 40
+      - id: AU14CivilianFloralYellow
+        amount: 40
+    - name: Footwear
+      entries:
+      - id: CMBootsBlackFilled
+        amount: 25
+      - id: CMBootsBrownFilled
+        amount: 40
+    - name: Mask
+      entries:
+      - id: CMMaskCoif
+        amount: 20
+      - id: RMCMaskScarfBlack
+        amount: 20
+      - id: RMCMaskScarfGray
+        amount: 20
+      - id: RMCMaskScarfTan
+        amount: 20
+      - id: RMCMaskTornScarfGreen
+        amount: 20
+      - id: RMCMaskTornScarfDesert
+        amount: 20
+      - id: RMCMaskTornScarfSnow
+        amount: 20
+      - id: RMCMaskTornScarfBlack
+        amount: 20
+      - id: RMCMaskSmockBlack
+        amount: 20
+      - id: RMCMaskNeckerchiefGray
+        amount: 20
+    - name: Glasses
+      entries:
+      - id: RMCSunglassesBigFake
+        amount: 30
+      - id: RMCGlassesMarineRpg
+        amount: 25
+      - id: AU14GlassesBiMex
+        amount: 25
+      - id: AU14GlassesBiMexOrange
+        amount: 25
+      - id: RMCGlassesTriMaxBronze
+        amount: 25
+    - name: Bag
+      entries:
+      - id: CMSatchelMarine
+        amount: 40
