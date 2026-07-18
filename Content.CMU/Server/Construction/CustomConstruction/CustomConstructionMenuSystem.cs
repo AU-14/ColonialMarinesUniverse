@@ -277,6 +277,11 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
         if (!_prototype.TryIndex<EntityPrototype>(msg.ProtoId, out var proto))
             return;
 
+        // The chooser displays the generated child that is actually built. Recipe files, however, are keyed to
+        // the original prototype recorded in their header. Resolve that child before looking up or editing its
+        // recipe; otherwise submitting "Change Recipe" is rejected by the generated-entity nesting safeguard.
+        proto = ResolveOriginalProto(proto);
+
         // Editing a specific existing entry (Change Recipe from the chooser): straight into the editor.
         if (!string.IsNullOrEmpty(msg.EntryKey))
         {
@@ -308,6 +313,7 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
         if (string.IsNullOrEmpty(msg.EntryKey) || !_prototype.TryIndex<EntityPrototype>(msg.ProtoId, out var proto))
             return;
 
+        proto = ResolveOriginalProto(proto);
         RemoveEntry(session, user, proto, msg.EntryKey);
     }
 
