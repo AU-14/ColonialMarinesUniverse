@@ -63,6 +63,9 @@ public sealed partial class AU14CallsignSystem : EntitySystem
         // check your own callsign by looking at your headset instead of keying the net
         SubscribeLocalEvent<HeadsetComponent, ExaminedEvent>(OnHeadsetExamined);
 
+        // deleted or despawned mobs must drop off open directory consoles
+        SubscribeLocalEvent<AU14CallsignComponent, ComponentShutdown>(OnCallsignShutdown);
+
         SubscribeLocalEvent<AU14CallsignComponent, EntitySpokeEvent>(
             OnCallsignSpeak,
             before: [typeof(HeadsetSystem)]);
@@ -211,9 +214,24 @@ public sealed partial class AU14CallsignSystem : EntitySystem
         Assign(ev.Member, callsign);
     }
 
+    private void OnCallsignShutdown(Entity<AU14CallsignComponent> ent, ref ComponentShutdown args)
+    {
+        if (!string.IsNullOrEmpty(ent.Comp.Faction))
+            PushConsoleStates(ent.Comp.Faction);
+    }
+
     private void Assign(EntityUid uid, AU14CallsignComponent callsign)
     {
         var role = CompOrNull<AU14CallsignRoleComponent>(uid);
+
+        // diplomats and similar roles stay off the net entirely
+        if (role is { Exempt: true })
+        {
+            RemCompDeferred<AU14CallsignComponent>(uid);
+            return;
+        }
+
+        callsign.Category = role?.Category;
 
         EntityUid? squad = null;
 

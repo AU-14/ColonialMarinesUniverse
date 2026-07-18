@@ -29,6 +29,7 @@
   - type: AU14CallsignRole
     suffix: OPS
     commandElement: true
+    category: MEDICAL
   - type: Skills
     preset: AU14SkillPresetOfficerMedical
   - type: JobPrefix

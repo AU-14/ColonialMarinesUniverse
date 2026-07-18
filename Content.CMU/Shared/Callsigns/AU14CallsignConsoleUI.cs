@@ -18,12 +18,15 @@ public sealed class AU14CallsignConsoleRow(NetEntity member, string callsign, st
 }
 
 [Serializable, NetSerializable]
-public sealed class AU14CallsignConsoleElement(NetEntity? squad, string? group, string label, string word, List<AU14CallsignConsoleRow> rows)
+public sealed class AU14CallsignConsoleElement(NetEntity? squad, string? group, string? category, string label, string word, List<AU14CallsignConsoleRow> rows)
 {
     public readonly NetEntity? Squad = squad;
 
     // set when this element is a custom callsign group created from the console
     public readonly string? Group = group;
+
+    // set when this element is a fixed role section (AIR, MP, MEDICAL, INTEL)
+    public readonly string? Category = category;
 
     public readonly string Label = label;
 

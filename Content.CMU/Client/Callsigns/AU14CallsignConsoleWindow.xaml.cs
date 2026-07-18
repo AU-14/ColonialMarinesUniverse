@@ -114,7 +114,8 @@ public sealed partial class AU14CallsignConsoleWindow : DefaultWindow
             HorizontalExpand = true,
         });
 
-        if (_canEdit && element.Group == null)
+        // role sections share the command word and are not renamable
+        if (_canEdit && element.Group == null && element.Category == null)
         {
             var renameEdit = new LineEdit
             {

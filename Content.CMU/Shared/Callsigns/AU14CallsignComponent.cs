@@ -31,5 +31,9 @@ public sealed partial class AU14CallsignComponent : Component
     [DataField]
     public string? Group;
 
+    // directory console section, copied from the role at assignment
+    [DataField]
+    public string? Category;
+
     public GameTick RadioMaskTick;
 }

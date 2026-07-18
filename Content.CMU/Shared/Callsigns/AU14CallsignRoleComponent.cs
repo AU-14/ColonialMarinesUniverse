@@ -15,4 +15,13 @@ public sealed partial class AU14CallsignRoleComponent : Component
     // short role tag shown before the callsign on radio, e.g. "SL" -> (SL) ALPHA 6
     [DataField]
     public string? RadioTag;
+
+    // directory console section this role is listed under (AIR, MP, MEDICAL, INTEL);
+    // null = command element or squad as usual
+    [DataField]
+    public string? Category;
+
+    // diplomats and similar roles get no callsign and never appear on the net directory
+    [DataField]
+    public bool Exempt;
 }

@@ -264,15 +264,33 @@ public sealed partial class AU14CallsignSystem
         var faction = ent.Comp.Faction;
         var group = faction.ToUpperInvariant();
 
-        // command element first, then the squads, then the custom groups
+        // command element first, then role sections, then the squads, then the
+        // custom groups
         var elements = new List<AU14CallsignConsoleElement>
         {
             new(null,
                 null,
+                null,
                 Loc.GetString("au14-callsign-console-command-element"),
                 GetCommandWord(faction),
-                CollectRows(faction, null, null)),
+                CollectRows(faction, null, null, null)),
         };
+
+        foreach (var category in ConsoleCategories)
+        {
+            var rows = CollectRows(faction, null, null, category);
+
+            if (rows.Count == 0)
+                continue;
+
+            elements.Add(new AU14CallsignConsoleElement(
+                null,
+                null,
+                category,
+                Loc.GetString($"au14-callsign-console-category-{category.ToLowerInvariant()}"),
+                GetCommandWord(faction),
+                rows));
+        }
 
         var squads = EntityQueryEnumerator<SquadTeamComponent>();
 
@@ -284,9 +302,10 @@ public sealed partial class AU14CallsignSystem
             elements.Add(new AU14CallsignConsoleElement(
                 GetNetEntity(squadUid),
                 null,
+                null,
                 Loc.GetString("au14-callsign-console-squad-element", ("squad", Name(squadUid).ToUpperInvariant())),
                 GetSquadWord(squadUid),
-                CollectRows(faction, squadUid, null)));
+                CollectRows(faction, squadUid, null, null)));
         }
 
         var groups = _groups.TryGetValue(faction, out var factionGroups)
@@ -298,28 +317,43 @@ public sealed partial class AU14CallsignSystem
             elements.Add(new AU14CallsignConsoleElement(
                 null,
                 groupWord,
+                null,
                 Loc.GetString("au14-callsign-console-group-element"),
                 groupWord,
-                CollectRows(faction, null, groupWord)));
+                CollectRows(faction, null, groupWord, null)));
         }
 
         _ui.SetUiState(ent.Owner, AU14CallsignConsoleUI.Key, new AU14CallsignConsoleState(faction, elements, groups));
     }
 
-    private List<AU14CallsignConsoleRow> CollectRows(string faction, EntityUid? squad, string? group)
+    // fixed order the role sections are listed in below the command element
+    private static readonly string[] ConsoleCategories = ["AIR", "MP", "MEDICAL", "INTEL"];
+
+    private List<AU14CallsignConsoleRow> CollectRows(string faction, EntityUid? squad, string? group, string? category)
     {
         var rows = new List<(string SortKey, AU14CallsignConsoleRow Row)>();
         var query = EntityQueryEnumerator<AU14CallsignComponent>();
 
         while (query.MoveNext(out var uid, out var callsign))
         {
+            if (TerminatingOrDeleted(uid))
+                continue;
+
             if (callsign.Faction != faction)
                 continue;
 
             if (!string.Equals(callsign.Group, group, StringComparison.OrdinalIgnoreCase))
                 continue;
 
-            if (group == null && callsign.Squad != squad)
+            // a task group assignment supersedes the role section; otherwise
+            // categorized personnel appear only under their section
+            if (group == null &&
+                !string.Equals(callsign.Category, category, StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            if (group == null && category == null && callsign.Squad != squad)
                 continue;
 
             rows.Add((SuffixSortKey(callsign.Suffix), new AU14CallsignConsoleRow(

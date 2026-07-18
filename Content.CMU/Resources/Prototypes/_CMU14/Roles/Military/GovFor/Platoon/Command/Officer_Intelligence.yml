@@ -28,6 +28,7 @@
   - type: AU14CallsignRole
     suffix: OPS
     commandElement: true
+    category: INTEL
   - type: Skills
     preset: AU14SkillPresetOfficerIntel
   - type: JobPrefix
