@@ -38,7 +38,7 @@
     cellSlotId: cell_slot
   - type: PowerCellDraw
     enabled: false
-    drawRate: 0.2
+    drawRate: 3
     useRate: 0
   - type: ContainerContainer
     containers:

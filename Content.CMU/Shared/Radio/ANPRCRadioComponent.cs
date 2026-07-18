@@ -77,7 +77,7 @@ public sealed partial class ANPRCRadioComponent : Component
     public string OperatorFaction = string.Empty;
 
     [DataField("transmitChargeCost")]
-    public float TransmitChargeCost = 8f;
+    public float TransmitChargeCost = 30f;
 
     [DataField("dfReportFactions")]
     public List<string> DFReportFactions = new();
