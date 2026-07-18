@@ -385,6 +385,7 @@ public sealed partial class AU14CallsignSystem
         var rank = suffix.ToUpperInvariant() switch
         {
             "6" => 0,
+            "ACTUAL" => 0,
             "5" => 1,
             "7" => 2,
             "ROMEO" => 3,

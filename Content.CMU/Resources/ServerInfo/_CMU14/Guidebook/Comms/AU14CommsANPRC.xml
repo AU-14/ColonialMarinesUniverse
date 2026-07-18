@@ -184,7 +184,7 @@
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">ALPHA 6</Box>
+      <Box Margin="4">ALPHA ACTUAL</Box>
     </ColorBox>
     <ColorBox>
       <Box Margin="4">Alpha squad leader</Box>
@@ -205,9 +205,9 @@
     </ColorBox>
   </Table>
 
-  [bold]ACTUAL[/bold] identifies the person assigned to a station rather than someone transmitting on that station's behalf.
+  [bold]ACTUAL[/bold] identifies the person in charge speaking personally rather than an operator transmitting on their behalf.
 
-  For example, [bold]ALPHA 6 ACTUAL[/bold] identifies the Alpha squad leader personally.
+  Squad leaders answer as their element's ACTUAL station, for example [bold]ALPHA ACTUAL[/bold]. At platoon level, [bold]HAVOC 6 ACTUAL[/bold] means the commander has taken the handset personally instead of the RTO.
 
   ### Comms Net Directory
 

@@ -26,7 +26,7 @@
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
   - type: AU14CallsignRole
-    suffix: "6"
+    suffix: ACTUAL
     radioTag: SL
   - type: Skills
     preset: AU14SkillPresetPlatoonSergeant

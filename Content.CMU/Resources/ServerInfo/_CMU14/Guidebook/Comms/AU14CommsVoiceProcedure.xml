@@ -203,11 +203,11 @@
   - Approximate strength.
   - What the reporting element is doing.
 
-  [color=#a4885c]HAVOC 6, this is ALPHA 6, contact. Infantry, squad strength, east treeline near grid two-four-five. Engaging, over.[/color]
+  [color=#a4885c]HAVOC 6, this is ALPHA ACTUAL, contact. Infantry, squad strength, east treeline near grid two-four-five. Engaging, over.[/color]
 
-  [color=#a4885c]ALPHA 6, HAVOC 6, roger. BRAVO is moving to your flank. Hold your position, over.[/color]
+  [color=#a4885c]ALPHA ACTUAL, HAVOC 6, roger. BRAVO is moving to your flank. Hold your position, over.[/color]
 
-  [color=#a4885c]HAVOC 6, ALPHA 6, wilco, out.[/color]
+  [color=#a4885c]HAVOC 6, ALPHA ACTUAL, wilco, out.[/color]
 
   ## Fire-Support Request
 
@@ -252,11 +252,13 @@
 
   ## Using ACTUAL
 
-  [bold]ACTUAL[/bold] identifies the person assigned to the callsign rather than an RTO or other person speaking on their behalf.
+  [bold]ACTUAL[/bold] identifies the person in charge speaking personally rather than an RTO or other person speaking on their behalf.
 
-  [color=#a4885c]HAVOC 6, this is ALPHA 6 ACTUAL. Interrogative: do we have clearance to move past phase line DODGE? Over.[/color]
+  Squad leaders carry it as their assigned station: [bold]ALPHA ACTUAL[/bold] is the Alpha squad leader. Command stations append it when the officer takes the handset personally.
 
-  Without [bold]ACTUAL[/bold], [bold]ALPHA 6[/bold] identifies the station. With [bold]ACTUAL[/bold], it identifies the squad leader personally.
+  [color=#a4885c]ALPHA ACTUAL, this is HAVOC 6 ACTUAL. Move past phase line DODGE, over.[/color]
+
+  Without [bold]ACTUAL[/bold], [bold]HAVOC 6[/bold] traffic may be the RTO relaying for the commander. With it, the commander is speaking personally.
 
   ## Corrections
 
