@@ -67,6 +67,16 @@ namespace Content.Shared.AU14.util
         CommandTabletGovfor,
         CommandTabletOpfor,
         GroundsideOpsGovfor,
-        GroundsideOpsOpfor
+        GroundsideOpsOpfor,
+        LockedDoubleNormalDoor,
+        LockedDoubleGlassDoor,
+        LockedDoubleCommandDoor,
+        LockedDoubleCommandGlassDoor,
+        LockedDoubleSecurityDoor,
+        LockedDoubleSecurityGlassDoor,
+        LockedDoubleMedicalDoor,
+        LockedDoubleMedicalGlassDoor,
+        LockedDoubleEngineeringDoor,
+        LockedDoubleEngineeringGlassDoor
     }
 }

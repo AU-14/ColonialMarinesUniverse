@@ -17,7 +17,7 @@ public sealed partial class CMUAdjutantLockDoorComponent : Component
     /// If none are found, the door immediately locks open.
     /// </summary>
     [DataField]
-    public TimeSpan CommandCheckTime = TimeSpan.FromMinutes(1);
+    public TimeSpan CommandCheckTime = TimeSpan.FromMinutes(5);
 
     /// <summary>
     /// If the door still hasn't been opened by this point in the round, it locks open regardless of
