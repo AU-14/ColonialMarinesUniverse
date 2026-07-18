@@ -125,9 +125,14 @@ public sealed partial class ANPRCRangeSystem : EntitySystem
         if (!args.Channel.AnchorGated)
             return;
 
-        // observers hear everything regardless of coverage
+        // observers hear everything regardless of coverage. the telephone system may
+        // already have cancelled this receive for want of a comms tower, so un-cancel
+        // instead of just yielding or ghosts go deaf under array/manpack-only coverage
         if (HasComp<GhostHearingComponent>(args.RadioReceiver))
+        {
+            args.Cancelled = false;
             return;
+        }
 
         var tier = GetRangeTier(args.RadioReceiver, args.Channel.ID);
 
