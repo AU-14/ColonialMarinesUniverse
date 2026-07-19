@@ -338,3 +338,16 @@ demonstrates otherwise.
 - Files changed: `Content.Client/Overlays/ShowHealthBarsSystem.cs`, `Content.Client/Overlays/ShowHealthIconsSystem.cs`, `Content.IntegrationTests/Tests/Medical/HealthHudRefreshTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: The client and integration-test projects built with 0 warnings and 0 errors. The connected client regression passed while applying biological, inorganic, and empty active refreshes and cleaning both singleton HUD systems afterward. Removing the bar-filter clear retained both containers; removing the status reset retained `HealthIconFine` after the empty refresh; removing the icon-filter clear retained both icon containers. Restoring all three resets returned the test to green. A non-incremental full solution build completed with 0 warnings and 0 errors.
 - Follow-up/debt: Decide whether RMC's health-icon resolver should intentionally honor `DamageContainers`; if that filter is restored, keep this replacement-on-refresh invariant and add resolver-level coverage.
+
+## CS-0019 — Forward combined access to equipment verbs
+
+- Upstream: [space-wizards/space-station-14#41631](https://github.com/space-wizards/space-station-14/pull/41631), `83ed95952ab8046639436b69e26d68ee3601174c`, 2025-11-30
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `EquipmentVerb` handlers now receive access when either ordinary interaction access or special equipment access succeeds. Nearby visible worn items can provide strip-menu equipment verbs, ordinary loose items retain their verbs, and distant equipment remains inaccessible.
+- RMC/CMU divergence: RMC's adjacent `RMCAdminVerb`, lag-compensated `CanAccessEquipment` implementation, and inventory-relay behavior remain unchanged. RMC dogtags, uniform accessories, and webbing benefit from the corrected combined access; attachable holders that intentionally do not check `CanAccess` retain their existing behavior.
+- Decision and rationale: Port upstream's one-line access combination exactly. Passing only ordinary access hides verbs on worn equipment, while passing only equipment access regresses loose items; the logical OR preserves both valid paths without widening either predicate.
+- Files changed: `Content.Shared/Verbs/SharedVerbSystem.cs`, `Content.IntegrationTests/Tests/Verbs/EquipmentVerbAccessTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: The shared/integration dependency graph built with 0 warnings and 0 errors, and the focused connected integration test passed 1/1. Restoring the old raw-access argument hid the verb on nearby worn equipment; using only equipment access hid it on a loose nearby item; granting access unconditionally exposed it on distant worn equipment. Restoring the combined predicate returned the test to green. `dotnet build SpaceStation14.slnx --configuration DebugOpt --no-restore --nologo --verbosity:minimal --no-incremental --disable-build-servers` completed with 0 warnings and 0 errors.
+- Follow-up/debt: Audit other `EquipmentVerb` consumers for assumptions about the old access value, and review strip-menu slot visibility independently from verb eligibility.
