@@ -1,9 +1,12 @@
 #nullable enable
+using System.Linq;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Log;
+using Robust.UnitTesting;
 
 namespace Content.IntegrationTests.Tests.GameRules;
 
@@ -53,6 +56,8 @@ public sealed class GamePresetFallbackResetTest
         var cfg = server.CfgMan;
         var ticker = server.System<GameTicker>();
         var canceller = server.System<CancelNextFallbackPresetStartSystem>();
+        var rootLog = server.ResolveDependency<ILogManager>().RootSawmill;
+        var logCatcher = new LogCatcher();
         var oldGridFill = cfg.GetCVar(CCVars.GridFill);
         var oldFallbackEnabled = cfg.GetCVar(CCVars.GameLobbyFallbackEnabled);
         var oldFallbackPreset = cfg.GetCVar(CCVars.GameLobbyFallbackPreset);
@@ -66,6 +71,7 @@ public sealed class GamePresetFallbackResetTest
             cfg.SetCVar(CCVars.GameLobbyDefaultPreset, DefaultPreset);
             ticker.SetGamePreset(FailingPreset);
             canceller.CancelNextAttempt = true;
+            rootLog.AddHandler(logCatcher);
 
             await pair.WaitCommand("startround");
             await pair.RunTicksSync(10);
@@ -76,6 +82,16 @@ public sealed class GamePresetFallbackResetTest
                 Assert.That(ticker.CurrentPreset?.ID, Is.EqualTo(FallbackPreset));
                 Assert.That(ticker.Preset?.ID, Is.EqualTo(FallbackPreset));
                 Assert.That(ticker.ResetCountdown, Is.Zero);
+            });
+
+            var messages = logCatcher.CaughtLogs.Select(log => log.RenderMessage()).ToArray();
+            Assert.Multiple(() =>
+            {
+                Assert.That(messages, Does.Contain($"Attempting to start preset '{FailingPreset}'"));
+                Assert.That(messages, Does.Contain("Fallback - Failed to start round, attempting to start fallback presets."));
+                Assert.That(messages, Does.Contain("Fallback - Clearing up gamerules"));
+                Assert.That(messages, Does.Contain($"Fallback - Attempting to start '{FallbackPreset}'"));
+                Assert.That(messages, Does.Not.Contain($"Fallback - '{FallbackPreset}' failed to start."));
             });
 
             await server.WaitPost(() => ticker.RestartRound());
@@ -91,6 +107,7 @@ public sealed class GamePresetFallbackResetTest
         }
         finally
         {
+            rootLog.RemoveHandler(logCatcher);
             canceller.CancelNextAttempt = false;
             ticker.SetGamePreset((GamePresetPrototype?) null);
             cfg.SetCVar(CCVars.GridFill, oldGridFill);

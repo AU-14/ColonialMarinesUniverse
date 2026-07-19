@@ -221,3 +221,16 @@ demonstrates otherwise.
 - Files changed: `Content.Shared/Weapons/Ranged/Upgrades/GunUpgradeSystem.cs`, `Content.IntegrationTests/Tests/Weapons/Ranged/GunUpgradeTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: The integration-test project built with 0 warnings and 0 errors; the focused test passed 1/1 and appeared in discovery. Restoring CMU's old ordering made the test fail with the upgrade inserted but `FireRateModified` still `0.5` instead of `0.75`; restoring the port made it pass again. `dotnet build SpaceStation14.slnx --configuration DebugOpt --no-restore --no-incremental --nologo --verbosity:minimal` completed with 0 warnings and 0 errors.
 - Follow-up/debt: SS14 #44685 later changes popup presentation in the same method but is unrelated to modifier ordering; review and port it independently.
+
+## CS-0010 — Log preset fallback decisions and player-count failures
+
+- Upstream: [space-wizards/space-station-14#41522](https://github.com/space-wizards/space-station-14/pull/41522), `8d4888b726aa51e4fb64b9d1405d3b13c6e1ac0c`, 2025-11-21
+- Areas: GameTicking, Gamerules
+- Status: Adapted
+- Risk: Low
+- Behavior/API delta: Round startup now emits informational diagnostics for the selected preset, fallback entry, cleanup, each fallback attempt and failure, disabled fallback, and gamerules rejected for insufficient ready players.
+- RMC/CMU divergence: CMU retains the older generic `GameRuleSystem<T>` minimum-player validation path, while later SS14 moves it during a broad antagonist-selection rewrite. The log belongs in CMU's current handler. CS-0007's corrected fallback `resetDelay: 0` is preserved instead of reintroducing upstream's off-by-one value.
+- Decision and rationale: Port the upstream messages at their current CMU decision points. These logs make otherwise opaque lobby restarts and fallback selection observable without changing the control flow.
+- Files changed: `Content.Server/GameTicking/GameTicker.GamePreset.cs`, `Content.Server/GameTicking/Rules/GameRuleSystem.cs`, `Content.IntegrationTests/Tests/GameRules/GamePresetFallbackResetTest.cs`, `Content.IntegrationTests/Tests/GameRules/GameRuleLoggingTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: The integration-test project built with 0 warnings and 0 errors; the fallback and minimum-player logging tests passed 2/2 and both appeared in discovery. Removing the fallback-attempt message made the fallback test fail, while removing the rule diagnostic left the minimum-player test's capture empty and made it fail; restoring both messages returned the tests to green. `dotnet build SpaceStation14.slnx --configuration DebugOpt --no-restore --no-incremental --nologo --verbosity:minimal` completed with 0 warnings and 0 errors.
+- Follow-up/debt: SS14 #43191 moves minimum-player validation as part of a much larger antagonist rewrite and should not be pulled in for logging alone. Monitor repeated fallback log volume and remember that configured preset IDs are written to server logs.
