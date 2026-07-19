@@ -416,3 +416,16 @@ demonstrates otherwise.
 - Files changed: `Content.Shared/Weapons/Ranged/Components/AmmoComponent.cs`, `Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.cs`, `Resources/Prototypes/Entities/Objects/Weapons/Guns/Ammunition/Cartridges/pistol.yml`, `Content.IntegrationTests/Tests/Weapons/Ranged/SpentCartridgeTrashTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms the target behavior survives later gun-system refactors and that `CartridgePistolSpent` is the only current prototype initialized with `spent: true`. A regression was added for the default transition, explicit opt-out, pre-spent prototype, and removal when a revolver materializes an unspent cartridge. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
 - Follow-up/debt: During the batch playtest, inspect persistent RMC launcher and vehicle-ammunition entities for intentional reuse and apply the opt-out only where trash collection would conflict with their lifecycle.
+
+## CS-0025 — Default action cooldown checks to current game time
+
+- Upstream: [space-wizards/space-station-14#39329](https://github.com/space-wizards/space-station-14/pull/39329), `21eb662377ed0d267744287c870b0c9916444211`, 2025-08-03
+- Areas: Interactions, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `SharedActionsSystem.IsCooldownActive` now substitutes `GameTiming.CurTime` when its optional timestamp is omitted. The public default path therefore reports active cooldowns correctly instead of evaluating the lifted nullable comparison as false; explicitly supplied timestamps retain their existing boundary behavior.
+- RMC/CMU divergence: Current RMC xeno psychic communication, queen-word, and mindshield callers pass their own current time and are behaviorally unchanged. RMC's `StartUseDelayEvent` override remains intact and continues to control cooldown start/end before this query is made.
+- Decision and rationale: Port the single upstream null-coalescing assignment exactly. Changing the comparison or overwriting non-null timestamps would regress prediction and callers that intentionally query historical or future action state.
+- Files changed: `Content.Shared/Actions/SharedActionsSystem.cs`, `Content.IntegrationTests/Tests/Actions/ActionCooldownDefaultTimeTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms `GameTiming` is already injected, every present CMU/RMC caller supplies a time, and no prerequisite is required. A regression was added for the omitted-time path, an explicit pre-end time, the exact end boundary, and a removed cooldown. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
+- Follow-up/debt: Prefer the default overload for ordinary current-state queries as callers are updated, while retaining explicit timestamps where prediction or replay code needs a deliberate time reference.
