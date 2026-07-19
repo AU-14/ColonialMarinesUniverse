@@ -14,6 +14,8 @@ namespace Content.IntegrationTests.Tests.Chemistry;
 [TestOf(typeof(AdjustReagent))]
 public sealed class IcedCoffeeTheobromineTest
 {
+    private static readonly ProtoId<ReagentPrototype> IcedCoffee = "IcedCoffee";
+
     [Test]
     public async Task IcedCoffeeProducesTheobromineDuringMetabolism()
     {
@@ -24,7 +26,7 @@ public sealed class IcedCoffeeTheobromineTest
         {
             var entMan = server.ResolveDependency<IEntityManager>();
             var protoMan = server.ResolveDependency<IPrototypeManager>();
-            var icedCoffee = protoMan.Index<ReagentPrototype>("IcedCoffee");
+            var icedCoffee = protoMan.Index(IcedCoffee);
 
             var effect = icedCoffee.Metabolisms!.Values
                 .SelectMany(entry => entry.Effects)

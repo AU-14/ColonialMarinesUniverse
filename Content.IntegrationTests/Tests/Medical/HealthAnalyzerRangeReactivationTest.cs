@@ -36,7 +36,9 @@ public sealed class HealthAnalyzerRangeReactivationTest
                 map.GridCoords);
             var patient = entMan.SpawnEntity(null, map.GridCoords);
             var component = entMan.GetComponent<HealthAnalyzerComponent>(analyzer);
+#pragma warning disable RA0002 // Test setup bypasses the private scan-completion path.
             component.ScannedEntity = patient;
+#pragma warning restore RA0002
 
             analyzerSystem.Update(0f);
             Assert.Multiple(() =>

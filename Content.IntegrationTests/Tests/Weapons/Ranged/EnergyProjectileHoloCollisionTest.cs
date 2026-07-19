@@ -1,5 +1,5 @@
 using Content.Shared.Physics;
-using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics;
 
 namespace Content.IntegrationTests.Tests.Weapons.Ranged;
 

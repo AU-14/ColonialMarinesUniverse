@@ -84,9 +84,10 @@ public sealed class DropEventOrderingTest
         private void OnDropped(Entity<DropEventSnapshotComponent> ent, ref DroppedEvent args)
         {
             var transform = Transform(ent);
+            var transformSystem = EntityManager.System<SharedTransformSystem>();
             ent.Comp.Count++;
             ent.Comp.User = args.User;
-            ent.Comp.Coordinates = TransformSystem.GetMapCoordinates(ent, xform: transform);
+            ent.Comp.Coordinates = transformSystem.GetMapCoordinates(ent, xform: transform);
             ent.Comp.Rotation = transform.LocalRotation;
         }
     }

@@ -3,6 +3,7 @@ using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Mind;
 using Content.Server.Roles;
 using Content.Shared.Mind;
+using Content.Shared.Mind.Components;
 using Content.Shared.Roles;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;

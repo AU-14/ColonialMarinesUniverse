@@ -16,6 +16,8 @@ namespace Content.IntegrationTests.Tests.Chemistry;
 [TestOf(typeof(ModifyStatusEffect))]
 public sealed class DiphenhydramineDrowsinessTest
 {
+    private static readonly ProtoId<ReagentPrototype> Diphenhydramine = "Diphenhydramine";
+
     [Test]
     public async Task RepeatedMetabolismDoesNotAccumulateDrowsiness()
     {
@@ -27,7 +29,7 @@ public sealed class DiphenhydramineDrowsinessTest
             var entMan = server.ResolveDependency<IEntityManager>();
             var protoMan = server.ResolveDependency<IPrototypeManager>();
             var status = entMan.System<SharedStatusEffectsSystem>();
-            var reagent = protoMan.Index<ReagentPrototype>("Diphenhydramine");
+            var reagent = protoMan.Index(Diphenhydramine);
 
             var effect = reagent.Metabolisms!.Values
                 .SelectMany(entry => entry.Effects)
