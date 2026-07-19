@@ -1,22 +1,33 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using Content.Client.Actions;
 using Content.Client.Construction;
+using Content.Client.Mapping;
 using Content.Client.UserInterface;
 using Content.Shared.Input;
+using Content.Shared.Maps;
+using Robust.Client.Placement;
 using Robust.Shared.Configuration;
+using Robust.Shared.Enums;
+using Robust.Shared.Localization;
 using Robust.Shared.Log;
+using Robust.Shared.Prototypes;
 using Robust.UnitTesting;
 
 namespace Content.IntegrationTests.Tests;
 
 public sealed class LocalizationWarningTest
 {
+    private static readonly ProtoId<ContentTileDefinition> LiteralNameTile = "RMCFloorHybrisaEngineerShip";
+
     [Test]
     public async Task ClientDoesNotLookUpLiteralTextAsMessageIds()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
         var client = pair.Client;
         var construction = client.System<ConstructionSystem>();
+        var mapping = client.System<MappingSystem>();
 
         await client.WaitPost(() =>
         {
@@ -44,6 +55,44 @@ public sealed class LocalizationWarningTest
                 warmupMethod!.Invoke(construction, null);
 
                 BoundKeyHelper.ShortKeyName(ContentKeyFunctions.FocusChat);
+
+                // RMC tile definitions contain both Fluent IDs and legacy literal names. Exercise the real mapping
+                // action path with a literal tile name so it cannot be passed directly to Loc.GetString again.
+                var prototypeManager = client.ResolveDependency<IPrototypeManager>();
+                var placementManager = client.ResolveDependency<IPlacementManager>();
+                var localization = client.ResolveDependency<ILocalizationManager>();
+                var fillActionMethod = typeof(MappingSystem).GetMethod("OnFillActionSlot",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+
+                Assert.That(fillActionMethod, Is.Not.Null);
+
+                var tile = prototypeManager.Index(LiteralNameTile);
+                placementManager.BeginPlacing(new PlacementInformation
+                {
+                    IsTile = true,
+                    PlacementOption = "AlignTileAny",
+                    TileType = tile.TileId,
+                });
+
+                var fillAction = new FillActionSlotEvent();
+                fillActionMethod!.Invoke(mapping, [fillAction]);
+                Assert.That(fillAction.Action, Is.Not.Null);
+
+                if (fillAction.Action is { } action)
+                    client.EntMan.DeleteEntity(action);
+
+                placementManager.Clear();
+
+                var missingTileNames = prototypeManager.EnumeratePrototypes<ContentTileDefinition>()
+                    .Where(tileDefinition => tileDefinition.Name.StartsWith("tiles-", StringComparison.Ordinal) &&
+                                             !localization.TryGetString(tileDefinition.Name, out _))
+                    .Select(tileDefinition => $"{tileDefinition.ID}: {tileDefinition.Name}")
+                    .Distinct()
+                    .Order()
+                    .ToArray();
+
+                Assert.That(missingTileNames, Is.Empty,
+                    $"Tile localization IDs without en-US messages:\n{string.Join('\n', missingTileNames)}");
             }
             finally
             {

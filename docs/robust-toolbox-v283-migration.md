@@ -101,6 +101,7 @@ Source: [v283.0.0 release](https://github.com/space-wizards/RobustToolbox/releas
 - Applied 15,478 shared/client/server analyzer migrations across dependency injection, partial types, and serialized setters.
 - Replaced literal prototype/tag/tool/faction IDs with typed `ProtoId<T>` fields.
 - Stopped treating legacy literal construction names/descriptions and rendered short-key labels as Fluent message IDs; valid localization IDs still resolve normally while literal fallback text no longer emits warning spam.
+- Added a mixed localization/literal display-name contract for RMC tile prototypes, used it in mapping actions and server pointing, and supplied all 11 missing en-US `tiles-*` messages found in the RMC tile resources.
 - Removed invalid pause generation from components without paused fields.
 - Replaced repeatedly parsed static regex calls; dynamic localized patterns are escaped and compiled once per replacement.
 - Fixed XAML-generated `Label` members that hid `Button.Label`.
@@ -140,7 +141,7 @@ Final verification results:
 - Serial prototype and map validation group: 4 passed, 0 failed.
 - Standalone RMC plating validation: 1 passed, 0 failed; memory remained bounded at approximately 2.8 GB.
 - Guidebook prototype-content validation: 1 passed, 0 failed.
-- Client literal-localization regression: 1 passed, 0 failed.
+- Client literal/tile-localization regression: 1 passed, 0 failed.
 - YAML/prototype linter: no errors.
 
 The all-in-one integration-test process was stopped when its shared fixture pool reached approximately 12 GB. The affected validation groups were then run serially and all passed; this avoids conflating aggregate test-host retention with the standalone plating validator, whose `LoadResult` cleanup now remains bounded.

@@ -283,7 +283,7 @@ namespace Content.Client.Actions
                         PlacementOption = "AlignTileAny",
                         TileId = id
                     });
-                    _metaData.SetEntityName(actionId, Loc.GetString(proto.Name));
+                    _metaData.SetEntityName(actionId, proto.LocalizedName);
                 }
                 else
                 {

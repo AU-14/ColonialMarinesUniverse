@@ -11,6 +11,7 @@ using Content.Shared.IdentityManagement;
 using Content.Shared.Input;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
+using Content.Shared.Maps;
 using Content.Shared.Mind;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Pointing;
@@ -342,9 +343,9 @@ namespace Content.Server.Pointing.EntitySystems
                     tileRef = _map.GetTileRef(gridUid, grid, _map.WorldToTile(gridUid, grid, mapCoordsPointed.Position));
                 }
 
-                var tileDef = _tileDefinitionManager[tileRef?.Tile.TypeId ?? 0];
+                var tileDef = (ContentTileDefinition) _tileDefinitionManager[tileRef?.Tile.TypeId ?? 0];
 
-                var name = Loc.GetString(tileDef.Name);
+                var name = tileDef.LocalizedName;
                 selfMessage = Loc.GetString("pointing-system-point-at-tile", ("tileName", name));
 
                 viewerMessage = Loc.GetString("pointing-system-other-point-at-tile", ("otherName", playerName), ("tileName", name));
