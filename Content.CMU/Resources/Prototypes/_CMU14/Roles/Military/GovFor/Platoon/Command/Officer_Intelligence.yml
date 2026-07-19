@@ -29,6 +29,7 @@
     suffix: OPS
     commandElement: true
     category: INTEL
+  - type: ANPRCRadioUser # command staff are radio trained, backup manpack operators
   - type: Skills
     preset: AU14SkillPresetOfficerIntel
   - type: JobPrefix

@@ -28,6 +28,7 @@
   - type: AU14CallsignRole
     suffix: OPS
     commandElement: true
+  - type: ANPRCRadioUser # command staff are radio trained, backup manpack operators
   - type: Skills
     preset: AU14SkillPresetOfficerEngineer
   - type: RMCSpeechBubbleSpecificStyle
