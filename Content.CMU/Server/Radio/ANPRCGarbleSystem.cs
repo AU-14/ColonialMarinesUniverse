@@ -59,13 +59,22 @@ public sealed partial class ANPRCGarbleSystem : EntitySystem
         if (receiverAnprc != null)
             TryComp(receiverAnprc.Value, out receiverRadio);
 
-        var rangePartial =
-            TryComp(receiver.Owner, out ANPRCInRangeComponent? rxRange) && rxRange.IsPartial ||
-            TryComp(args.RadioSource, out ANPRCInRangeComponent? txRange) && txRange.IsPartial;
+        // the link is only as good as its worst end
+        var rangeQuality = 1f;
 
-        var rangeDegradation = rangePartial
-            ? RadioJamIntensity.Light
-            : RadioJamIntensity.None;
+        if (TryComp(receiver.Owner, out ANPRCInRangeComponent? rxRange))
+            rangeQuality = Math.Min(rangeQuality, rxRange.Quality);
+
+        if (TryComp(args.RadioSource, out ANPRCInRangeComponent? txRange))
+            rangeQuality = Math.Min(rangeQuality, txRange.Quality);
+
+        // clean near the anchor, hiss over the outer full band and inner partial
+        // band, broken fragments at the partial fringe
+        var rangeDegradation = rangeQuality >= 0.65f
+            ? RadioJamIntensity.None
+            : rangeQuality >= 0.25f
+                ? RadioJamIntensity.Light
+                : RadioJamIntensity.Medium;
 
         var rxJam = GetJamIntensity(receiver.Owner);
         var txJam = GetJamIntensity(args.RadioSource);
@@ -109,7 +118,7 @@ public sealed partial class ANPRCGarbleSystem : EntitySystem
         }
 
         var suppressed = receiverRadio != null &&
-                         IsSquelched(receiverRadio.SquelchLevel, needsCryptoGarble, jamIntensity, rangePartial);
+                         IsSquelched(receiverRadio.SquelchLevel, needsCryptoGarble, jamIntensity, rangeDegradation);
 
         if (suppressed)
             garbled = Loc.GetString("anprc-squelch-suppressed");
@@ -125,7 +134,9 @@ public sealed partial class ANPRCGarbleSystem : EntitySystem
         };
     }
 
-    private static bool IsSquelched(int squelch, bool comsecGarble, RadioJamIntensity jam, bool rangePartial)
+    // jamming mutes at lower settings than plain distance: the default setting
+    // drops jammed traffic but keeps fringe stations audible until cranked up
+    private static bool IsSquelched(int squelch, bool comsecGarble, RadioJamIntensity jam, RadioJamIntensity rangeDegradation)
     {
         if (squelch <= 0)
             return false;
@@ -139,7 +150,10 @@ public sealed partial class ANPRCGarbleSystem : EntitySystem
         if (jam == RadioJamIntensity.Light)
             return squelch >= 3;
 
-        if (rangePartial)
+        if (rangeDegradation >= RadioJamIntensity.Medium)
+            return squelch >= 3;
+
+        if (rangeDegradation == RadioJamIntensity.Light)
             return squelch >= 4;
 
         return false;

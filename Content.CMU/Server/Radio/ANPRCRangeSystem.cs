@@ -70,7 +70,7 @@ public sealed partial class ANPRCRangeSystem : EntitySystem
         if (!args.Channel.AnchorGated)
             return;
 
-        var tier = GetRangeTier(args.RadioSource, args.Channel.ID);
+        var tier = GetRangeTier(args.RadioSource, args.Channel.ID, out var quality);
 
         switch (tier)
         {
@@ -97,7 +97,7 @@ public sealed partial class ANPRCRangeSystem : EntitySystem
                     args.Cancelled = false;
 
                 var sendRange = EnsureComp<ANPRCInRangeComponent>(args.RadioSource);
-                sendRange.IsPartial = tier == ANPRCRangeTier.Partial;
+                sendRange.Quality = quality;
 
                 RemCompDeferred<ANPRCInRangeComponent>(args.RadioSource);
                 return;
@@ -134,7 +134,7 @@ public sealed partial class ANPRCRangeSystem : EntitySystem
             return;
         }
 
-        var tier = GetRangeTier(args.RadioReceiver, args.Channel.ID);
+        var tier = GetRangeTier(args.RadioReceiver, args.Channel.ID, out var quality);
 
         switch (tier)
         {
@@ -147,20 +147,21 @@ public sealed partial class ANPRCRangeSystem : EntitySystem
                 args.Cancelled = false;
 
                 var receiveRange = EnsureComp<ANPRCInRangeComponent>(args.RadioReceiver);
-                receiveRange.IsPartial = tier == ANPRCRangeTier.Partial;
+                receiveRange.Quality = quality;
 
                 RemCompDeferred<ANPRCInRangeComponent>(args.RadioReceiver);
                 return;
         }
     }
 
-    private ANPRCRangeTier GetRangeTier(EntityUid entity, string channelId)
+    private ANPRCRangeTier GetRangeTier(EntityUid entity, string channelId, out float quality)
     {
         var entityPos = _transform.GetWorldPosition(entity);
         var entityMap = Transform(entity).MapID;
         var channel = new ProtoId<RadioChannelPrototype>(channelId);
 
         var bestTier = ANPRCRangeTier.OutOfRange;
+        var bestQuality = 0f;
         var query = EntityQueryEnumerator<ANPRCRelayAnchorComponent, TransformComponent>();
 
         while (query.MoveNext(out var anchorUid, out var anchor, out var anchorXform))
@@ -190,9 +191,29 @@ public sealed partial class ANPRCRangeSystem : EntitySystem
 
             if (tier > bestTier)
                 bestTier = tier;
+
+            var linkQuality = GetLinkQuality(distance, fullRange, partialRange);
+
+            if (linkQuality > bestQuality)
+                bestQuality = linkQuality;
         }
 
+        quality = bestQuality;
         return bestTier;
+    }
+
+    // continuous falloff instead of a clean/degraded coin flip: 1 on top of the
+    // anchor sliding to 0.5 at the full-range edge, then 0.5 down to 0 across the
+    // partial band. the garble system maps this onto hiss tiers
+    private static float GetLinkQuality(float distance, float fullRange, float partialRange)
+    {
+        if (distance <= fullRange)
+            return 1f - 0.5f * (distance / Math.Max(fullRange, 0.001f));
+
+        if (distance <= partialRange)
+            return 0.5f * (1f - (distance - fullRange) / Math.Max(partialRange - fullRange, 0.001f));
+
+        return 0f;
     }
 
     // stacked z-level maps share the same 2D coordinate space, so anchors can cover

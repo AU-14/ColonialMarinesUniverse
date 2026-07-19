@@ -35,6 +35,7 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
     public event Action? OnCryptoDestroy;
     public event Action? OnCryptoRecrypto;
     public event Action? OnRadioCheck;
+    public event Action? OnOpenDirectory;
     public event Action<int, string>? OnManualFrequency;
 
     private static readonly Color LcdBright = Color.FromHex("#3FCF8E");
@@ -208,6 +209,7 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
         };
 
         RadioCheckButton.OnPressed += _ => OnRadioCheck?.Invoke();
+        DirectoryButton.OnPressed += _ => OnOpenDirectory?.Invoke();
 
         NetLogChannelFilter.OnItemSelected += args =>
         {

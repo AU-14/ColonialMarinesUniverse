@@ -83,6 +83,13 @@
     interfaces:
       enum.ANPRCRadioUI.Key:
         type: ANPRCRadioBoundUserInterface
+      enum.AU14CallsignConsoleUI.Key:
+        type: AU14CallsignConsoleBui
+  # every pack carries a viewing copy of the faction's comms net directory,
+  # opened from the panel; readOnly locks out edits even for trained operators
+  - type: AU14CallsignConsole
+    faction: govfor
+    readOnly: true
   - type: Appearance
   - type: ClothingSpeedModifier
     walkModifier: 0.95
@@ -97,6 +104,9 @@
   id: ANPRC117GRadioOPFOR
   suffix: OPFOR
   components:
+  - type: AU14CallsignConsole
+    faction: opfor
+    readOnly: true
   - type: ANPRCRadio
     operatorFaction: opfor
     callsignPresets:
@@ -120,6 +130,9 @@
   id: ANPRC117GRadioCLF
   suffix: CLF
   components:
+  - type: AU14CallsignConsole
+    faction: clf
+    readOnly: true
   - type: ANPRCRadio
     operatorFaction: clf
     callsignPresets:

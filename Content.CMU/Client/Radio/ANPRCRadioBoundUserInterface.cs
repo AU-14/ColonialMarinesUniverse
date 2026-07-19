@@ -31,6 +31,7 @@ public sealed class ANPRCRadioBoundUserInterface : BoundUserInterface
         _window.OnCryptoDestroy += () => SendMessage(new ANPRCCryptoDestroyMsg());
         _window.OnCryptoRecrypto += () => SendMessage(new ANPRCCryptoRecryptoMsg());
         _window.OnRadioCheck += () => SendMessage(new ANPRCRadioCheckMsg());
+        _window.OnOpenDirectory += () => SendMessage(new ANPRCOpenDirectoryMsg());
         _window.OnManualFrequency += (slot, text) => SendMessage(new ANPRCManualFrequencyMsg(slot, text));
     }
 

@@ -52,6 +52,10 @@ public sealed partial class AU14CallsignConsoleBui : BoundUserInterface
     // editing needs radio training and matching faction, the server checks this too
     private bool CanEdit(string faction)
     {
+        // read-only terminals (pack directories) never show edit controls
+        if (EntMan.TryGetComponent(Owner, out AU14CallsignConsoleComponent? console) && console.ReadOnly)
+            return false;
+
         if (_player.LocalEntity is not { } local ||
             !EntMan.HasComponent<ANPRCRadioUserComponent>(local))
         {

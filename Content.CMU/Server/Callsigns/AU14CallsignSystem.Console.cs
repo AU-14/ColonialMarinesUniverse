@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Content.Shared._AU14.Callsigns;
 using Content.Shared._AU14.Radio;
 using Content.Shared._CMU14.Threats.Mobs.CLF;
@@ -47,7 +47,7 @@ public sealed partial class AU14CallsignSystem
 
     private void OnRenameElement(Entity<AU14CallsignConsoleComponent> ent, ref AU14CallsignRenameElementMsg args)
     {
-        if (!CanEdit(args.Actor, ent.Comp.Faction))
+        if (!CanEdit(ent, args.Actor))
             return;
 
         var word = SanitizeCallsignPart(args.Word, AU14Callsigns.MaxWordLength);
@@ -79,7 +79,7 @@ public sealed partial class AU14CallsignSystem
 
     private void OnSetSuffix(Entity<AU14CallsignConsoleComponent> ent, ref AU14CallsignSetSuffixMsg args)
     {
-        if (!CanEdit(args.Actor, ent.Comp.Faction))
+        if (!CanEdit(ent, args.Actor))
             return;
 
         if (!TryGetEntity(args.Member, out var member) ||
@@ -108,7 +108,7 @@ public sealed partial class AU14CallsignSystem
 
     private void OnCreateGroup(Entity<AU14CallsignConsoleComponent> ent, ref AU14CallsignCreateGroupMsg args)
     {
-        if (!CanEdit(args.Actor, ent.Comp.Faction))
+        if (!CanEdit(ent, args.Actor))
             return;
 
         var word = SanitizeCallsignPart(args.Word, AU14Callsigns.MaxWordLength);
@@ -126,7 +126,7 @@ public sealed partial class AU14CallsignSystem
 
     private void OnDeleteGroup(Entity<AU14CallsignConsoleComponent> ent, ref AU14CallsignDeleteGroupMsg args)
     {
-        if (!CanEdit(args.Actor, ent.Comp.Faction))
+        if (!CanEdit(ent, args.Actor))
             return;
 
         if (!_groups.TryGetValue(ent.Comp.Faction, out var groups) ||
@@ -155,7 +155,7 @@ public sealed partial class AU14CallsignSystem
 
     private void OnAssignGroup(Entity<AU14CallsignConsoleComponent> ent, ref AU14CallsignAssignGroupMsg args)
     {
-        if (!CanEdit(args.Actor, ent.Comp.Faction))
+        if (!CanEdit(ent, args.Actor))
             return;
 
         if (!TryGetEntity(args.Member, out var member) ||
@@ -212,8 +212,12 @@ public sealed partial class AU14CallsignSystem
         return false;
     }
 
-    private bool CanEdit(EntityUid actor, string faction)
+    private bool CanEdit(Entity<AU14CallsignConsoleComponent> ent, EntityUid actor)
     {
+        // viewing terminals never accept edits, no matter who is asking
+        if (ent.Comp.ReadOnly)
+            return false;
+
         if (!HasComp<ANPRCRadioUserComponent>(actor))
         {
             _popup.PopupEntity(Loc.GetString("au14-callsign-console-not-authorized"), actor, actor);
@@ -224,7 +228,7 @@ public sealed partial class AU14CallsignSystem
             ? "clf"
             : CompOrNull<MarineComponent>(actor)?.Faction;
 
-        if (actorFaction != faction)
+        if (actorFaction != ent.Comp.Faction)
         {
             _popup.PopupEntity(Loc.GetString("au14-callsign-console-wrong-faction"), actor, actor);
             return false;

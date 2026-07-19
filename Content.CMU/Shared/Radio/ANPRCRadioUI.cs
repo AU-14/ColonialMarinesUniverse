@@ -164,6 +164,10 @@ public sealed class ANPRCCryptoRecryptoMsg : BoundUserInterfaceMessage;
 [Serializable, NetSerializable]
 public sealed class ANPRCRadioCheckMsg : BoundUserInterfaceMessage;
 
+// pops the read-only comms net directory carried by the pack
+[Serializable, NetSerializable]
+public sealed class ANPRCOpenDirectoryMsg : BoundUserInterfaceMessage;
+
 [Serializable, NetSerializable]
 public sealed class ANPRCManualFrequencyMsg(int slot, string frequencyText) : BoundUserInterfaceMessage
 {

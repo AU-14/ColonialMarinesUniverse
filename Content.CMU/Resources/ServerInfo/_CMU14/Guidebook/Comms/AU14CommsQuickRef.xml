@@ -307,7 +307,10 @@
 
   ## Squelch
 
-  Squelch filters degraded traffic and static. Clear traffic is unaffected.
+  Signal quality falls off smoothly with distance from the nearest relay:
+  clear close in, light hiss over the outer band, broken fragments at the
+  fringe. Squelch decides how much of that damaged traffic you hear - it
+  never repairs a transmission, it only mutes it.
 
   <Table Columns="2" MinForcedColumnWidth="100">
     <ColorBox Color="#263238">
@@ -342,18 +345,19 @@
       <Box Margin="4">[bold]3[/bold]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Default. Suppresses normal jammer degradation.</Box>
+      <Box Margin="4">Default. Suppresses light jammer degradation and broken fringe-range traffic.</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">[bold]4[/bold]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Maximum filtering. Weak edge-of-range traffic may also be suppressed.</Box>
+      <Box Margin="4">Maximum filtering. Even lightly hissy long-range traffic is suppressed.</Box>
     </ColorBox>
   </Table>
 
-  Lower SQL settings allow more degraded traffic to be heard.
+  Lower SQL settings allow more degraded traffic to be heard. Raising squelch
+  buys quiet at the price of missing weak distant stations entirely.
 
   ## COMSEC Controls
 

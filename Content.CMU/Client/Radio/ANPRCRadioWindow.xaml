@@ -84,6 +84,7 @@
                 <Button Name="CallsignSetButton" Text="SET" MinWidth="48" />
               </BoxContainer>
               <Label Text="Station override. Blank = your assigned callsign (AUTO). SET empty to clear." FontColorOverride="#4A7A55" />
+              <Button Name="DirectoryButton" Text="CALLSIGN DIRECTORY" />
             </BoxContainer>
           </PanelContainer>
 

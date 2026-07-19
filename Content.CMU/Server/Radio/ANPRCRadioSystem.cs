@@ -121,6 +121,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
             subs.Event<ANPRCClearSlotMsg>(OnClearSlot);
             subs.Event<ANPRCManualFrequencyMsg>(OnManualFrequency);
             subs.Event<ANPRCRadioCheckMsg>(OnRadioCheck);
+            subs.Event<ANPRCOpenDirectoryMsg>(OnOpenDirectory);
         });
 
         SubscribeLocalEvent<ANPRCRadioComponent, ANPRCPlantDoAfterEvent>(OnPlantDoAfter);
@@ -597,6 +598,13 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
     private void OnCryptoChanged(Entity<ANPRCRadioComponent> ent, ref ANPRCCryptoChangedEvent args)
     {
         UpdateBuiState(ent);
+    }
+
+    // the pack carries a read-only copy of the faction's comms net directory
+    private void OnOpenDirectory(Entity<ANPRCRadioComponent> ent, ref ANPRCOpenDirectoryMsg args)
+    {
+        if (HasComp<AU14CallsignConsoleComponent>(ent.Owner))
+            _ui.TryOpenUi(ent.Owner, AU14CallsignConsoleUI.Key, args.Actor);
     }
 
     private void OnDirectScanSwitched(Entity<ANPRCRadioComponent> ent, ref ANPRCDirectScanSwitchedEvent args)
