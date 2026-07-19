@@ -1,4 +1,3 @@
-using System.Linq;
 using Content.Client._RMC14.Medical.HUD;
 using Content.Shared.Atmos.Rotting;
 using Content.Shared.Damage;
@@ -34,9 +33,13 @@ public sealed partial class ShowHealthIconsSystem : EquipmentHudSystem<ShowHealt
     {
         base.UpdateInternal(component);
 
-        foreach (var damageContainerId in component.Components.SelectMany(x => x.DamageContainers))
+        DamageContainers.Clear();
+        foreach (var comp in component.Components)
         {
-            DamageContainers.Add(damageContainerId);
+            foreach (var damageContainerId in comp.DamageContainers)
+            {
+                DamageContainers.Add(damageContainerId);
+            }
         }
     }
 
