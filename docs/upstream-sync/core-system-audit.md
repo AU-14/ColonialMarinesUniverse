@@ -325,3 +325,16 @@ demonstrates otherwise.
 - Files changed: `Content.Shared/Chemistry/EntitySystems/SharedSolutionContainerSystem.cs`, `Content.IntegrationTests/Tests/Chemistry/SolutionSystemTests.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: The shared and integration-test projects built with 0 warnings and 0 errors. The focused integration test passed with a 75-unit caller solution and a 50-unit destination, asserting 50 units accepted and the caller still at 75. Removing `Clone()` left the caller at 25 and failed both source assertions; bypassing the available-volume minimum returned 75 instead of 50 and failed the accepted-quantity assertion. Restoring both contracts returned the test to green. A non-incremental full solution build completed with 0 warnings and 0 errors.
 - Follow-up/debt: Audit downstream callers restored from CMU's backup branch for assumptions that `AddSolution` consumes its input, and replace the clone/split implementation with a direct non-consuming reagent transfer if a suitable API is introduced.
+
+## CS-0018 — Replace health HUD caches on active refresh
+
+- Upstream: [space-wizards/space-station-14#39288](https://github.com/space-wizards/space-station-14/pull/39288), `b707110dea2fb4cbb049a5a2ec4654573e55cb93`, 2026-01-11
+- Areas: Medical
+- Status: Adapted
+- Risk: Low
+- Behavior/API delta: Consecutive active equipment-HUD refreshes now replace health-bar damage-container filters, the optional status icon, and health-icon damage-container filters instead of accumulating stale values. An empty active refresh clears all cached presentation state without requiring deactivation first.
+- RMC/CMU divergence: RMC's `CMHealthIconsSystem.GetIcons` resolver and `DamageableComponent` path remain authoritative and are not replaced with later SS14 medical refactors. That resolver currently bypasses `ShowHealthIconsSystem.DamageContainers`, so clearing the icon-system cache is target parity and a future invariant; clearing the health-bar overlay fixes currently visible stale filtering.
+- Decision and rationale: Port the three target-final cache resets at the start of each `UpdateInternal` call and replace the LINQ flattening with the upstream nested loop. Preserve the surrounding RMC resolver, prototype dependency, and inactive cleanup behavior.
+- Files changed: `Content.Client/Overlays/ShowHealthBarsSystem.cs`, `Content.Client/Overlays/ShowHealthIconsSystem.cs`, `Content.IntegrationTests/Tests/Medical/HealthHudRefreshTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: The client and integration-test projects built with 0 warnings and 0 errors. The connected client regression passed while applying biological, inorganic, and empty active refreshes and cleaning both singleton HUD systems afterward. Removing the bar-filter clear retained both containers; removing the status reset retained `HealthIconFine` after the empty refresh; removing the icon-filter clear retained both icon containers. Restoring all three resets returned the test to green. A non-incremental full solution build completed with 0 warnings and 0 errors.
+- Follow-up/debt: Decide whether RMC's health-icon resolver should intentionally honor `DamageContainers`; if that filter is restored, keep this replacement-on-refresh invariant and add resolver-level coverage.
