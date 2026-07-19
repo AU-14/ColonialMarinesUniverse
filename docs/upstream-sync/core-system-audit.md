@@ -247,3 +247,16 @@ demonstrates otherwise.
 - Files changed: `docs/upstream-sync/core-system-audit.md` only; no production code changed.
 - Validation: Static call-path review confirmed that `TryGetAvailableGridSpace` always passes `Angle.Zero` to `ItemStorageLocation`; repository-wide assignment search found no production writes to `StoredRotation`. The exact upstream substitution would only change an unused local in the current RMC fork.
 - Follow-up/debt: If item rotation or `DefaultStorageOrientation` support is restored, port the upstream zero-angle starting rule as part of that work and add complex-shape insertion tests covering both horizontal and vertical storage grids.
+
+## CS-0012 — Type chemistry reaction reagent identifiers
+
+- Upstream: [space-wizards/space-station-14#44653](https://github.com/space-wizards/space-station-14/pull/44653), `928ecf541bcf73f34b65e9148a43012eb913ba20`, 2026-07-13
+- Areas: Chemistry
+- Status: Adapted
+- Risk: Medium
+- Behavior/API delta: `ReactionPrototype.Reactants` and `Products`, reaction caches, and reaction product results now use `ProtoId<ReagentPrototype>` keys instead of untyped strings. The reactant value contract is the typed `ReactantInfo` data record. Existing reaction YAML remains compatible; every current reactant entry explicitly supplies its amount.
+- RMC/CMU divergence: RMC requires guidebook reagent lookups to pass through `IndexReagent` so fork-specific reagent handling is preserved. The server's public JSON DTO must continue converting typed IDs to string keys because its plain `System.Text.Json` serializer has no `ProtoId` property-name converter.
+- Decision and rationale: Adopt typed IDs throughout reaction parsing, caching, execution, and guidebook presentation, while adapting the two fork boundaries instead of copying upstream mechanically. This gains compile-time reagent-ID safety without breaking RMC reagent resolution or reaction JSON generation.
+- Files changed: `Content.Shared/Chemistry/Reaction/ReactionPrototype.cs`, `Content.Shared/Chemistry/Reaction/ChemicalReactionSystem.cs`, `Content.Client/Guidebook/Controls/GuideReagentReaction.xaml.cs`, `Content.Server/GuideGenerator/ReagentEntry.cs`, `Content.IntegrationTests/Tests/Chemistry/ReactionEntryJsonTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Shared, client, server, and integration-test project builds completed with 0 warnings and 0 errors. The existing all-reactions integration test and the new typed-API/JSON export test each passed and the new test appeared in discovery. Replacing RMC's `IndexReagent` call with a direct prototype lookup failed the client build with `RMCA0000`; changing the JSON DTO to typed dictionary keys compiled but made the regression fail with `System.Text.Json`'s unsupported dictionary-key exception. Restoring both adaptations returned the tests to green. A non-incremental full solution build completed with 0 warnings and 0 errors after the production change.
+- Follow-up/debt: Downstream code added from CMU's backup branch must migrate callers from string-key assumptions to `ProtoId<ReagentPrototype>`. Audit broader upstream chemistry effect and metabolism changes separately; they are not implied by this API migration.
