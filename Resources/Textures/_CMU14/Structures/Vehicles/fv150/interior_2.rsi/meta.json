@@ -1,0 +1,32 @@
+{
+    "version": 1,
+    "license": null,
+    "copyright": null,
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "ammo_loader"
+        },
+        {
+            "name": "weapon_console"
+        },
+        {
+            "name": "driver_console"
+        },
+        {
+            "name": "locker_open"
+        },
+        {
+            "name": "locker"
+        },
+        {
+            "name": "hatch"
+        },
+        {
+            "name": "console\u0060s og by dimdimich1996"
+        }
+    ]
+}

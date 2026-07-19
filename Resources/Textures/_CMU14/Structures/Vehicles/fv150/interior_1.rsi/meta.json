@@ -1,0 +1,17 @@
+{
+    "version": 1,
+    "license": null,
+    "copyright": null,
+    "size": {
+        "x": 160,
+        "y": 128
+    },
+    "states": [
+        {
+            "name": "twe_tank_chassis"
+        },
+        {
+            "name": "twe_apc_chassis"
+        }
+    ]
+}

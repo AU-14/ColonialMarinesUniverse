@@ -271,6 +271,75 @@
     vehicleState: m56cupola_0
     damagedVehicleState: m56cupola_1
 
+
+- type: entity
+  parent: VehicleTankHardpointBase
+  id: VehicleTankCupolaTWE
+  name: mounted cupola
+  description: A cupola-mounted weapon hardpoint.
+  components:
+  - type: Sprite
+    state: m56_cupola
+  - type: HardpointItem
+    hardpointType: Launcher
+    vehicleFamily: Tank
+    slotType: Launcher
+    damageMultiplier: 0.0
+    repairRate: 0.0125
+  - type: HardpointIntegrity
+    maxIntegrity: 350
+  - type: VehicleTurretAttachment
+  - type: VehicleTurret
+    offsetRotatesWithTurret: true
+    useDirectionalOffsets: true
+    pixelOffsetNorth: "0,0"
+    pixelOffsetEast: "0,0"
+    pixelOffsetSouth: "0,0"
+    pixelOffsetWest: "0,0"
+    showOverlay: true
+    overlayRsi: _CMU14/Structures/Vehicles/fv150/exterior.rsi
+    overlayState: mounted_cupola_0
+  - type: GunUseGunOrigin
+  - type: GunIgnoreContainerOwnerCollision
+  - type: Gun
+    fireRate: 6
+    minAngle: 3
+    maxAngle: 3
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_ml66a_2.ogg
+    cameraRecoilScalar: 0
+  - type: GunIFF
+    enabled: true
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 5
+    accuracyMultiplierUnwielded: 5
+  - type: BallisticAmmoProvider
+    cycleable: false
+    proto: VehicleCartridgeSentry10x50mm
+    capacity: 500
+  - type: VehicleHardpointAmmo
+    magazineSize: 500
+    maxStoredMagazines: 1
+  - type: GunFireArc
+    arc: 90
+  - type: RefillableByBulletBox
+    bulletType: VehicleAmmoBoxCupola
+  - type: GunMuzzleOffset
+    offset: "0,0"
+    useDirectionalOffsets: true
+    offsetEast: "0,0"
+    offsetWest: "-2,0"
+    offsetSouth: "0,-1"
+    muzzleOffset: "0,0"
+    useAimDirection: true
+    useContainerOwner: false
+  - type: HardpointVisual
+    vehicleState: mounted_cupola_0
+    damagedVehicleState: mounted_cupola_1
+
+
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankRERE700

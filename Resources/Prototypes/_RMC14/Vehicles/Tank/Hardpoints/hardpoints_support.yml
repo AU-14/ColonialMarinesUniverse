@@ -101,6 +101,28 @@
     vehicleState: slauncher_0
 
 - type: entity
+  parent: VehicleTankRocketLauncher
+  id: VehicleTankRocketLauncherTWE
+  name: smoke launcher
+  description: A smoke launcher support attachment for a light tank.
+  components:
+  - type: HardpointItem
+    hardpointType: Support
+    vehicleFamily: Tank
+    slotType: SupportAttachment
+    damageMultiplier: 0.075
+    repairRate: 0.0125
+  - type: VehicleTurret
+    useDirectionalOffsets: true
+    pixelOffsetNorth: "0,-10"
+    pixelOffsetEast: "-10,0"
+    pixelOffsetSouth: "0,10"
+    pixelOffsetWest: "10,0"
+    overlayRsi: _CMU14/Structures/Vehicles/fv150/exterior.rsi
+    overlayState: slauncher_0
+
+
+- type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankFlareModule
   name: flare module

@@ -11,6 +11,14 @@
       "name": "tires"
     },
     {
+     "name": "heavy_autocannon_0",
+     "directions": 4
+    },
+    {
+      "name": "heavy_autocannon_1",
+       "directions": 4
+    },
+    {
       "name": "humveecannon"
     },
     {

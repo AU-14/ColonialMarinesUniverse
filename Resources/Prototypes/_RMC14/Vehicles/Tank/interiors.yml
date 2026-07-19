@@ -428,3 +428,13 @@
   - type: Sprite
     drawdepth: LowFloors
 
+- type: entity
+  parent: VehicleAmmoLoader
+  id: VehicleTankAmmoLoaderTWE
+  name: tank ammo loader
+  description: A loader for tank hardpoint ammunition.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/fv150/interior_2.rsi
+    drawdepth: LowFloors
+
