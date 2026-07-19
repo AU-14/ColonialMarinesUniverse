@@ -54,7 +54,7 @@ public sealed partial class GameTicker
             foreach (var preset in fallbackPresets)
             {
                 ClearGameRules();
-                SetGamePreset(preset);
+                SetGamePreset(preset, resetDelay: 0);
                 AddGamePresetRules();
                 StartGamePresetRules();
 
@@ -123,11 +123,11 @@ public sealed partial class GameTicker
         }
     }
 
-    public void SetGamePreset(string preset, bool force = false)
+    public void SetGamePreset(string preset, bool force = false, int? resetDelay = null)
     {
         var proto = FindGamePreset(preset);
-        if(proto != null)
-            SetGamePreset(proto, force);
+        if (proto != null)
+            SetGamePreset(proto, force, resetDelay);
     }
 
     public GamePresetPrototype? FindGamePreset(string preset)
