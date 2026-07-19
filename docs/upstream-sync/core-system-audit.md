@@ -390,3 +390,16 @@ demonstrates otherwise.
 - Files changed: `Content.Shared/Physics/JointVisualsComponent.cs`, `Content.Client/Physics/JointVisualsOverlay.cs`, `Content.Shared/Weapons/Misc/SharedGrapplingGunSystem.cs`, `Content.IntegrationTests/Tests/Physics/JointVisualsTargetTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms the production hunks match #39987 and no RMC consumer exists. A connected regression was added to assert the public local field type, the grappling-shot assignment on the server, and automatic remapping to the corresponding client-local target. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
 - Follow-up/debt: Re-audit the target's later grappling rework and rope-visual changes in dependency order; retain the local-entity component contract if those larger mechanics need CMU-specific adaptation.
+
+## CS-0023 — Preserve job priorities when randomizing character profiles
+
+- Upstream: [space-wizards/space-station-14#44100](https://github.com/space-wizards/space-station-14/pull/44100), `a19e63fd25f616cac36a6711bf9f2a69c8cb723f`, 2026-05-31
+- Areas: GameTicking, Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: When `ic.random_characters` replaces a selected character profile, the randomized profile now retains the player's job-priority dictionary. Late-join selection and `PlayerBeforeSpawnEvent` consumers therefore see the same eligible jobs instead of an empty preference set that can force an observer spawn.
+- RMC/CMU divergence: RMC's `IsJobAllowedEvent`, inline character-spawn path, station job assignment, and marine-presence announcement remain unchanged. Normal CM rounds are unaffected because random characters default to disabled; custom late-join, respawn, admin, and gamerule paths that enable the CVar receive the corrected profile.
+- Decision and rationale: Port #44100's profile replacement exactly and avoid later unrelated `GameTicker` modularization. Capturing priorities after assigning the random profile would copy an already-empty dictionary, while changing station overflow logic would address a separate allocation policy.
+- Files changed: `Content.Server/GameTicking/GameTicker.Spawning.cs`, `Content.IntegrationTests/Tests/GameRules/RandomizedCharacterJobPrioritiesTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms the isolated hunk and its profile APIs are present without prerequisites. A regression was added that enables randomized characters, intercepts `PlayerBeforeSpawnEvent`, and compares both a CM rifleman and standard passenger priority against the selected profile. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
+- Follow-up/debt: Exercise the full randomized late-join allocation path at the batch checkpoint and separately audit the fork's job-ban null guard and overflow-job behavior; neither is changed by this upstream fix.
