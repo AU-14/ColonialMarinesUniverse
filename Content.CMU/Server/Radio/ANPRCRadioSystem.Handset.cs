@@ -86,6 +86,10 @@ public sealed partial class ANPRCRadioSystem
     {
         _container.EnsureContainer<ContainerSlot>(ent, ANPRCRadioComponent.HandsetContainerId);
 
+        // whatever antenna state exists at init; the antenna-insert event corrects
+        // it if the starting whip lands in the slot after this runs
+        UpdatePackVisuals(ent);
+
         if (!TrySpawnInContainer(ent.Comp.HandsetId, ent, ANPRCRadioComponent.HandsetContainerId, out var handset))
             return;
 

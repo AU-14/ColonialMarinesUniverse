@@ -38,6 +38,7 @@ namespace Content.Server._AU14.Radio;
 public sealed partial class ANPRCRadioSystem : EntitySystem
 {
     [Dependency] private RadioSystem _radio = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedCMChatSystem _cmChat = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
@@ -470,6 +471,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         SetBatteryDrawEnabled(ent.Owner, ent.Comp.Enabled);
         GrantReceiveChannels(ent);
         UpdateRelayAnchor(ent);
+        UpdatePackVisuals(ent);
         UpdateBuiState(ent);
 
         _popup.PopupEntity(Loc.GetString("anprc-retrans-planted"), ent.Owner, args.User);
@@ -492,6 +494,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
             RemComp<ANPRCRelayAnchorComponent>(ent.Owner);
         }
 
+        UpdatePackVisuals(ent);
         UpdateBuiState(ent);
 
         _popup.PopupEntity(Loc.GetString("anprc-retrans-packed"), ent.Owner, args.User);
@@ -549,6 +552,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         var ent = new Entity<ANPRCRadioComponent>(uid, comp);
 
         UpdateRelayAnchor(ent);
+        UpdatePackVisuals(ent);
         UpdateBuiState(ent);
     }
 
@@ -560,7 +564,29 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         var ent = new Entity<ANPRCRadioComponent>(uid, comp);
 
         UpdateRelayAnchor(ent);
+        UpdatePackVisuals(ent);
         UpdateBuiState(ent);
+    }
+
+    // the ground/item sprite tracks the fitted antenna, planting swaps to the tall
+    // deployed station art
+    private void UpdatePackVisuals(Entity<ANPRCRadioComponent> ent)
+    {
+        var mast = false;
+        var state = ANPRCPackVisualState.Bare;
+
+        if (_itemSlots.TryGetSlot(ent.Owner, AntennaSlotId, out var slot) &&
+            TryComp(slot.Item, out ANPRCAntennaComponent? antenna))
+        {
+            // the mast is the only stationary antenna, anything else draws as a whip
+            mast = antenna.RequiresStationary;
+            state = mast ? ANPRCPackVisualState.Mast : ANPRCPackVisualState.Whip;
+        }
+
+        if (ent.Comp.Planted)
+            state = mast ? ANPRCPackVisualState.DeployedMast : ANPRCPackVisualState.DeployedWhip;
+
+        _appearance.SetData(ent.Owner, ANPRCPackVisuals.State, state);
     }
 
     private void OnAdminObserverMapInit(Entity<PropCallerComponent> ent, ref MapInitEvent args)

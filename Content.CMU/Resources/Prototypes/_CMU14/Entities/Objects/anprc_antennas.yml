@@ -16,9 +16,8 @@
     Bends around brush and doorframes without snapping.
   components:
   - type: Sprite
-    sprite: _RMC14/Objects/Misc/flares.rsi
-    state: flare_unlit
-    color: "#6B7A6B"
+    sprite: _AU14/Objects/Radio/anprc117g.rsi
+    state: antenna_w
   - type: ANPRCAntenna
     label: WHIP
     fullRange: 30
@@ -34,8 +33,8 @@
     post or retrans site, not hauled around on patrol.
   components:
   - type: Sprite
-    sprite: _RMC14/Objects/Devices/vulture_spotter.rsi
-    state: vulture_tripod
+    sprite: _AU14/Objects/Radio/anprc117g.rsi
+    state: antenna_m
   - type: ANPRCAntenna
     label: MAST
     fullRange: 55

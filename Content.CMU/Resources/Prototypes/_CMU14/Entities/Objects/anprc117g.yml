@@ -8,14 +8,26 @@
   parent: BaseItem
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/RTOPack/blackrtopack.rsi
+    sprite: _AU14/Objects/Radio/anprc117g.rsi
     layers:
-    - state: icon
+    - state: base
       map: [ "base" ]
+  # worn and in-hand art stays on the old pack rsi, the new rsi only carries
+  # the ground states
   - type: Item
     size: Huge
+    sprite: _AU14/Clothing/RTOPack/blackrtopack.rsi
     shape:
     - 0,0,1,1
+  - type: GenericVisualizer
+    visuals:
+      enum.ANPRCPackVisuals.State:
+        base:
+          Bare: { sprite: _AU14/Objects/Radio/anprc117g.rsi, state: base, offset: "0,0" }
+          Whip: { sprite: _AU14/Objects/Radio/anprc117g.rsi, state: base_w, offset: "0,0" }
+          Mast: { sprite: _AU14/Objects/Radio/anprc117g.rsi, state: base_m, offset: "0,0" }
+          DeployedWhip: { sprite: _AU14/Objects/Radio/anprc117g_deployed.rsi, state: whip_deploy, offset: "0,0.5" }
+          DeployedMast: { sprite: _AU14/Objects/Radio/anprc117g_deployed.rsi, state: mast_deploy, offset: "0,0.5" }
   - type: ANPRCRadio
     activeSlot: -1
     enabled: true
@@ -76,6 +88,7 @@
     walkModifier: 0.95
     sprintModifier: 0.95
   - type: Clothing
+    sprite: _AU14/Clothing/RTOPack/blackrtopack.rsi
     slots:
     - back
 
