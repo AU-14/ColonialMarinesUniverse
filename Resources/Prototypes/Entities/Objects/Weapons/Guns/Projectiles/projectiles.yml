@@ -242,7 +242,6 @@
           bounds: "-0.15,-0.3,0.15,0.3"
         hard: false
         mask:
-        - Opaque
         - Impassable
         - BulletImpassable
   - type: Ammo
@@ -1223,6 +1222,7 @@
           bounds: "-0.15,-0.3,0.15,0.3"
         hard: false
         mask:
+        - Opaque
         - Impassable
         - BulletImpassable
   - type: Ammo
