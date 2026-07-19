@@ -50,7 +50,7 @@
     cellSlotId: cell_slot
   - type: PowerCellDraw
     enabled: false
-    drawRate: 3
+    drawRate: 1
     useRate: 0
   - type: ContainerContainer
     containers:
