@@ -611,3 +611,16 @@ demonstrates otherwise.
 - Files changed: `Content.Shared/Hands/EntitySystems/SharedHandsSystem.cs`, `Content.IntegrationTests/Tests/Hands/HandVisualRemovalTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms the client removal handler exits when the hand definition is absent and the pinned target retains the reordered shutdown. A client-side regression was added with a nullspace-held two-layer crowbar, forcing container shutdown to perform removal and requiring both recorded and sprite-mapped layers to disappear. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
 - Follow-up/debt: Exercise network-reconciled hand removal for borg modules and extra-hand equipment when those systems are revised, and audit other dynamic container metadata for the same synchronous-event lifetime rule.
+
+## CS-0040 — Block zombie outbreaks during locked evacuation
+
+- Upstream: [space-wizards/space-station-14#41863](https://github.com/space-wizards/space-station-14/pull/41863), `83e1a6a8eb4b992f2ed71eb83f814786f7d9deaa`, 2025-12-15
+- Areas: Gamerules, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The standard Zombie Outbreak station event now opts out once evacuation has been requested and the shuttle can no longer be recalled. Initial infected can no longer be selected during a locked evacuation, while the event remains eligible during a recallable call under CS-0036's corrected policy.
+- RMC/CMU divergence: RMC does not reference or override the standard `ZombieOutbreak` prototype, but the inherited basic antagonist event table and administrative rule paths remain available. RMC's delayed final-round handling is unchanged and continues to expose the same round-end request and recall-lock state.
+- Decision and rationale: Port the isolated prototype flag exactly and validate it against both sides of the shared eligibility condition. Blocking throughout the entire shuttle countdown would regress CS-0036; leaving the default `true` would permit a conversion antagonist too late for a viable event.
+- Files changed: `Resources/Prototypes/GameRules/events.yml`, `Content.IntegrationTests/Tests/GameRules/StationEventRoundEndEligibilityTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms the pinned target retains the opt-out flag and the current event manager gates it only when round end is requested and recall is locked. The regression verifies normal availability, creates an immediate locked-evac state, and requires Zombie Outbreak to leave the eligible set. Execution follows immediately in the requested CS-0021–CS-0040 checkpoint.
+- Follow-up/debt: Audit later upstream evacuation opt-outs as separate policy decisions, especially antagonist ghost roles and visitor events, rather than bulk-copying their flags into CMU's round flow.
