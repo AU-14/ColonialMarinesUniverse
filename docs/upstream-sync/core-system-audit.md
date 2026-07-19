@@ -520,3 +520,16 @@ demonstrates otherwise.
 - Files changed: `Content.Shared/Movement/Systems/SharedJetpackSystem.cs`, `Content.IntegrationTests/Tests/Movement/JetpackSwitchingTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms all APIs and filled jetpack prototypes are already present and the pinned target retains this block through later dependency-injection cleanup. A regression was added that enables two packs in sequence and asserts the first is fully inactive and unowned while the second becomes the sole linked pack. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
 - Follow-up/debt: At the checkpoint, verify server fuel consumption and client particles stop for the replaced pack; audit non-jetpack movement devices for the same single-owner invariant separately.
+
+## CS-0033 — Throttle unassigned suit-sensor retries
+
+- Upstream: [space-wizards/space-station-14#41872](https://github.com/space-wizards/space-station-14/pull/41872), `b0b88b216d146e9a401345f058bc7b5d11742d83`, 2025-12-16
+- Areas: Medical, GameTicking
+- Status: Adapted
+- Risk: Low
+- Behavior/API delta: A networked suit sensor that cannot find an owning station now schedules its next attempt before returning. Failed station-discovery retries are therefore limited to the configured update cadence instead of running every server tick once the sensor becomes due.
+- RMC/CMU divergence: Upstream advances the previous deadline, while this fork already schedules from current time to avoid stale timers causing catch-up bursts; that existing `curTime + UpdateRate` policy is preserved. RMC marine uniforms declare `SuitSensor` without `DeviceNetwork`, so they do not enter this two-component update loop and remain unaffected.
+- Decision and rationale: Adapt the upstream scheduling position while retaining the fork's timer formula. Moving the existing assignment before `CheckSensorAssignedStation` throttles both failed and successful passes without changing packet cadence or importing the target's later suit-sensor system split.
+- Files changed: `Content.Server/Medical/SuitSensors/SuitSensorSystem.cs`, `Content.IntegrationTests/Tests/Medical/SuitSensorRetryThrottleTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms the standard uniform supplies both queried components and an initialized transmit frequency, while nullspace guarantees no station assignment. A regression was added that verifies the first failed attempt advances `NextUpdate` and an immediate second pass leaves the deadline unchanged. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
+- Follow-up/debt: Profile station discovery after the checkpoint and revisit the timer formula only alongside a deliberate catch-up policy; separately decide whether RMC sensors should ever join the device network.

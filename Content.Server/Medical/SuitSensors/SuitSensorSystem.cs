@@ -78,11 +78,11 @@ public sealed partial class SuitSensorSystem : EntitySystem
             if (curTime < sensor.NextUpdate)
                 continue;
 
-            if (!CheckSensorAssignedStation(uid, sensor))
-                continue;
-
             // TODO: This would cause imprecision at different tick rates.
             sensor.NextUpdate = curTime + sensor.UpdateRate;
+
+            if (!CheckSensorAssignedStation(uid, sensor))
+                continue;
 
             // get sensor status
             var status = GetSensorState(uid, sensor);
