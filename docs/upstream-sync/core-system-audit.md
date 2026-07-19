@@ -104,3 +104,16 @@ demonstrates otherwise.
 - Files changed: `docs/upstream-sync/core-system-audit.md`
 - Validation: `dotnet build SpaceStation14.slnx --no-restore --nologo --verbosity:minimal` completed at the initial Rebase checkpoint with 0 warnings and 0 errors (86.30 seconds, .NET SDK 10.0.301).
 - Follow-up/debt: Inventory the upstream range by core area, record each merge resolution, run focused tests for touched systems, then replay and reconcile the pre-reset CMU layer.
+
+## CS-0001 — Keep wall mounts visible from every viewing direction
+
+- Upstream: [space-wizards/space-station-14#44770](https://github.com/space-wizards/space-station-14/pull/44770), `f3cff7bb8cc2268a7637b5bef658f740e2bfccbb`, 2026-07-19
+- Areas: Interactions
+- Status: AlreadyPresent
+- Risk: Low
+- Behavior/API delta: SS14 reverted directional visibility for wall-mounted entities, removing its visibility overlay, component tree, replicated CVar, and `WallMountComponent` visibility state while retaining the interaction-obstruction arc.
+- RMC/CMU divergence: RMC never contained the reverted client overlay/tree files or the directional-visibility CVar. Its `WallMountComponent` already matches the post-revert interaction-only shape.
+- Decision and rationale: Keep the existing RMC implementation; applying the revert would be empty and would not change runtime behavior.
+- Files changed: `docs/upstream-sync/core-system-audit.md`
+- Validation: Confirmed all five reverted client wall-visibility files are absent, no wall-visibility CVar or type reference exists, and the current `WallMountComponent` blob matches the upstream post-revert blob.
+- Follow-up/debt: None for this upstream change.
