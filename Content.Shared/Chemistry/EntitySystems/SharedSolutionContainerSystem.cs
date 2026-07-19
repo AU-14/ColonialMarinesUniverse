@@ -588,11 +588,11 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
     }
 
     /// <summary>
-    ///     Adds as much of a solution to a container as can fit.
+    ///     Adds as much of a solution to a container as can fit and updates the container.
     /// </summary>
     /// <param name="targetUid">The entity containing <paramref cref="targetSolution"/></param>
     /// <param name="targetSolution">The solution being added to.</param>
-    /// <param name="toAdd">The solution being added to <paramref cref="targetSolution"/></param>
+    /// <param name="toAdd">The solution being added to <paramref cref="targetSolution"/>. This solution is not modified.</param>
     /// <returns>The quantity of the solution actually added.</returns>
     public FixedPoint2 AddSolution(Entity<SolutionComponent> soln, Solution toAdd)
     {
@@ -604,10 +604,15 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
 
         var quantity = FixedPoint2.Max(FixedPoint2.Zero, FixedPoint2.Min(toAdd.Volume, solution.AvailableVolume));
         if (quantity < toAdd.Volume)
-            TryTransferSolution(soln, toAdd, quantity);
+        {
+            // TODO: This should be made into a function that directly transfers reagents.
+            // Currently this is quite inefficient.
+            solution.AddSolution(toAdd.Clone().SplitSolution(quantity), PrototypeManager);
+        }
         else
-            ForceAddSolution(soln, toAdd);
+            solution.AddSolution(toAdd, PrototypeManager);
 
+        UpdateChemicals(soln);
         return quantity;
     }
 
