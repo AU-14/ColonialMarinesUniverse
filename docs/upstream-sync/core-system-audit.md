@@ -546,3 +546,16 @@ demonstrates otherwise.
 - Files changed: `Resources/Prototypes/Recipes/Reactions/chemicals.yml`, `Content.IntegrationTests/Tests/Chemistry/MuteToxinReactionTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms the pinned target retains the uranium-free recipe and all remaining reagent prototypes resolve. A regression was added for the exact reactant count, explicit uranium absence, intended amounts, and product yield. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
 - Follow-up/debt: Include the YAML/prototype validator, this focused regression, and all-reactions coverage in the CS-0040 checkpoint.
+
+## CS-0035 — Let lethal energy-shotgun pellets hit holograms
+
+- Upstream: [space-wizards/space-station-14#37920](https://github.com/space-wizards/space-station-14/pull/37920), `1b62863e52f129dcc88386b508afbb41c741966b`, 2025-10-08
+- Areas: Shooting, Physics
+- Status: Adapted
+- Risk: Low
+- Behavior/API delta: `BulletLaser` now includes `Opaque` in its projectile collision mask. The lethal wide and narrow energy-shotgun spreads emit this projectile, so their pellets can hit holoparasites, holocarps, and other holographic targets whose collision layer is opaque.
+- RMC/CMU divergence: RMC removed the upstream projectile's separate fly-by fixture; that divergence remains untouched while the single mask bit is ported. Existing `Impassable` and `BulletImpassable` masks are retained, and no RMC-specific prototype directly consumes the standard laser-spread IDs.
+- Decision and rationale: Adapt only upstream's additive `Opaque` mask entry. Replacing either existing mask would let the projectile pass through walls or bullet blockers, while restoring the removed fly-by fixture would combine an unrelated RMC projectile-physics divergence.
+- Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Guns/Projectiles/projectiles.yml`, `Content.IntegrationTests/Tests/Weapons/Ranged/EnergyShotgunHoloCollisionTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms both real hologram prototypes expose an opaque fixture and both energy-shotgun spread prototypes resolve to `BulletLaser`. A regression was added to require all three projectile mask bits and verify collision-mask intersection with holoparasite and holocarp fixtures. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
+- Follow-up/debt: Audit other energy projectiles against opaque-only holograms and decide independently whether RMC's removed fly-by fixture should remain a fork divergence.
