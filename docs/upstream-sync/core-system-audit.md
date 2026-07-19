@@ -208,3 +208,16 @@ demonstrates otherwise.
 - Files changed: `Content.Server/GameTicking/Rules/GameRuleSystem.Utility.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: `dotnet build Content.Server/Content.Server.csproj --configuration DebugOpt --no-restore --nologo --verbosity:minimal` and the integration-test project build both completed with 0 warnings and 0 errors. The existing `Content.IntegrationTests.Tests.GameRules` filter completed with 4 passes, 4 skips, and 0 failures. After a transient post-test file handle exited, `dotnet build SpaceStation14.slnx --configuration DebugOpt --no-restore --no-incremental --nologo --verbosity:minimal` was rerun and completed with 0 warnings and 0 errors.
 - Follow-up/debt: The target SS14 revision later rewrites this method in #44382 (`c0f35ade3e`) and fixes that rewrite in #44668 (`667f7fa8bb`). Port those commits only as a paired, separately tested behavior change; never port the rewrite without its coordinate fix.
+
+## CS-0009 — Refresh gun modifiers after inserting an upgrade
+
+- Upstream: [space-wizards/space-station-14#43856](https://github.com/space-wizards/space-station-14/pull/43856), `f53c7d6a9d9ade810be07612c2d648cc3f5a795e`, 2026-05-05
+- Areas: Shooting, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: A successfully inserted gun upgrade is now inside the upgrade container before modifier refresh events are relayed, so its effects take effect during the same interaction instead of waiting for a later refresh.
+- RMC/CMU divergence: RMC extends the gun modifier event and subscribes additional weapon systems, but retains SS14's upgrade-container relay. Moving insertion earlier preserves those extensions and lets them observe the same complete container state.
+- Decision and rationale: Apply upstream's one-line ordering fix exactly. `GunUpgradeSystem.GetCurrentUpgrades` only enumerates contained entities, so refreshing before insertion cannot include the new upgrade.
+- Files changed: `Content.Shared/Weapons/Ranged/Upgrades/GunUpgradeSystem.cs`, `Content.IntegrationTests/Tests/Weapons/Ranged/GunUpgradeTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: The integration-test project built with 0 warnings and 0 errors; the focused test passed 1/1 and appeared in discovery. Restoring CMU's old ordering made the test fail with the upgrade inserted but `FireRateModified` still `0.5` instead of `0.75`; restoring the port made it pass again. `dotnet build SpaceStation14.slnx --configuration DebugOpt --no-restore --no-incremental --nologo --verbosity:minimal` completed with 0 warnings and 0 errors.
+- Follow-up/debt: SS14 #44685 later changes popup presentation in the same method but is unrelated to modifier ordering; review and port it independently.
