@@ -29,7 +29,7 @@
         </BoxContainer>
       </PanelContainer>
 
-      <ScrollContainer VerticalExpand="True">
+      <ScrollContainer VerticalExpand="True" SizeFlagsStretchRatio="3">
         <BoxContainer Orientation="Vertical" SeparationOverride="5">
 
           <!-- LCD -->
@@ -205,29 +205,29 @@
             </BoxContainer>
           </PanelContainer>
 
-          <!-- Net log -->
-          <BoxContainer Orientation="Horizontal" Margin="2,1,2,0">
-            <Label Text="NET LOG" FontColorOverride="#A9C3E8" HorizontalExpand="True" />
-            <Label Name="NetLogCountLabel" Text="0 entries" FontColorOverride="#687A9A" />
-          </BoxContainer>
-          <BoxContainer Orientation="Horizontal" SeparationOverride="4">
-            <OptionButton Name="NetLogChannelFilter" MinWidth="120" />
-            <LineEdit Name="NetLogSearchEdit"
-                      HorizontalExpand="True"
-                      PlaceHolder="Filter sender / text" />
-            <Button Name="NetLogFilterClearButton" Text="CLR" MinWidth="44" />
-          </BoxContainer>
-          <PanelContainer>
-            <PanelContainer.PanelOverride>
-              <gfx:StyleBoxFlat BackgroundColor="#07130A" BorderColor="#245236" BorderThickness="1" />
-            </PanelContainer.PanelOverride>
-            <ScrollContainer MinHeight="100" MaxHeight="160">
-              <BoxContainer Name="NetLogContainer" Orientation="Vertical" SeparationOverride="2" Margin="4,3" />
-            </ScrollContainer>
-          </PanelContainer>
-
         </BoxContainer>
       </ScrollContainer>
+
+      <!-- Net log: outside the settings scroll so it grows with the window -->
+      <BoxContainer Orientation="Horizontal" Margin="2,1,2,0">
+        <Label Text="NET LOG" FontColorOverride="#A9C3E8" HorizontalExpand="True" />
+        <Label Name="NetLogCountLabel" Text="0 entries" FontColorOverride="#687A9A" />
+      </BoxContainer>
+      <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+        <OptionButton Name="NetLogChannelFilter" MinWidth="120" />
+        <LineEdit Name="NetLogSearchEdit"
+                  HorizontalExpand="True"
+                  PlaceHolder="Filter sender / text" />
+        <Button Name="NetLogFilterClearButton" Text="CLR" MinWidth="44" />
+      </BoxContainer>
+      <PanelContainer VerticalExpand="True" SizeFlagsStretchRatio="2">
+        <PanelContainer.PanelOverride>
+          <gfx:StyleBoxFlat BackgroundColor="#07130A" BorderColor="#245236" BorderThickness="1" />
+        </PanelContainer.PanelOverride>
+        <ScrollContainer VerticalExpand="True" MinHeight="100">
+          <BoxContainer Name="NetLogContainer" Orientation="Vertical" SeparationOverride="2" Margin="4,3" />
+        </ScrollContainer>
+      </PanelContainer>
 
       <!-- Footer -->
       <PanelContainer>
