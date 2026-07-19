@@ -455,3 +455,16 @@ demonstrates otherwise.
 - Files changed: `Resources/Prototypes/Reagents/Consumable/Drink/drinks.yml`, `Content.IntegrationTests/Tests/Chemistry/IcedCoffeeTheobromineTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms the theobromine reagent, effect type, recipe, and metabolism rate are already present and that no RMC override exists. A regression was added to resolve the prototype effect, assert its amount, execute it against a solution, and verify the resulting theobromine quantity. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
 - Follow-up/debt: When porting #42172, replace this effect with the target's typed digestion metabolite mapping and rerun the same output-contract regression across partial metabolism scales.
+
+## CS-0028 — Raise dropped events after final placement
+
+- Upstream: [space-wizards/space-station-14#44372](https://github.com/space-wizards/space-station-14/pull/44372), `de842aace42ba28092f779f5f2f44ee7ecc2be64`, 2026-06-28
+- Areas: Interactions, Physics
+- Status: Adapted
+- Risk: Medium
+- Behavior/API delta: A targeted hand drop now moves the item to its collision-constrained destination before running the dropped interaction. `DroppedEvent` is raised only after the dropper's target-relative rotation is applied, so subscribers observe the authoritative final coordinates and rotation instead of the old hand-container exit position and rotation.
+- RMC/CMU divergence: RMC's special path for users inside containers still calls `DropNextTo` and raises `RMCDroppedEvent`; it does not enter the standard targeted-drop interaction. Existing magnetic, attachable, targeting, detector, CAS-flare, labeler, and gun-cleanup subscribers retain their behavior, while standard drop effects such as drop sounds now use the final location.
+- Decision and rationale: Adapt the upstream ordering change into the fork's expanded `TryDrop` flow by forwarding the optional target through virtual `DoDrop`. This preserves the client override and ensures placement happens after successful hand-container removal but before `DroppedInteraction`; moving only the event below rotation would still expose the pre-target position.
+- Files changed: `Content.Shared/Hands/EntitySystems/SharedHandsSystem.Drop.cs`, `Content.Client/Hands/Systems/HandsSystem.cs`, `Content.Shared/Interaction/SharedInteractionSystem.cs`, `Content.IntegrationTests/Tests/Hands/DropEventOrderingTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the upstream order is preserved around RMC's container-specific branch. A regression was added that records coordinates and rotation from inside `DroppedEvent` and compares them with the final transform. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
+- Follow-up/debt: Audit manual `DroppedEvent` raisers, including stripping paths, for whether they promise the same final-transform contract, and decide separately whether RMC's `RMCDroppedEvent` branch should converge on the standard event.

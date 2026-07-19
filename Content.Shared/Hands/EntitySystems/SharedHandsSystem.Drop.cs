@@ -147,17 +147,7 @@ public abstract partial class SharedHandsSystem
 
         // drop the item with heavy calculations from their hands and place it at the calculated interaction range position
         // The DoDrop is handle if there's no drop target
-        DoDrop(ent, handId, doDropInteraction: doDropInteraction);
-
-        // if there's no drop location stop here
-        if (targetDropLocation == null)
-            return true;
-
-        // otherwise, also move dropped item and rotate it properly according to grid/map
-        var (itemPos, itemRot) = TransformSystem.GetWorldPositionRotation(entity.Value);
-        var origin = new MapCoordinates(itemPos, itemXform.MapID);
-        var target = TransformSystem.ToMapCoordinates(targetDropLocation.Value);
-        TransformSystem.SetWorldPositionRotation(entity.Value, GetFinalDropCoordinates(ent, origin, target, entity.Value), itemRot);
+        DoDrop(ent, handId, doDropInteraction: doDropInteraction, targetDropLocation: targetDropLocation);
         return true;
     }
 
@@ -214,7 +204,8 @@ public abstract partial class SharedHandsSystem
     public virtual void DoDrop(Entity<HandsComponent?> ent,
         string handId,
         bool doDropInteraction = true,
-        bool log = true)
+        bool log = true,
+        EntityCoordinates? targetDropLocation = null)
     {
         if (!Resolve(ent, ref ent.Comp, false))
             return;
@@ -232,6 +223,18 @@ public abstract partial class SharedHandsSystem
         {
             Log.Error($"Failed to remove {ToPrettyString(entity)} from users hand container when dropping. User: {ToPrettyString(ent)}. Hand: {handId}.");
             return;
+        }
+
+        if (targetDropLocation != null)
+        {
+            var (itemPos, itemRot) = TransformSystem.GetWorldPositionRotation(entity.Value);
+            // Otherwise, also move the dropped item and rotate it properly according to its grid or map.
+            var origin = new MapCoordinates(itemPos, Transform(entity.Value).MapID);
+            var target = TransformSystem.ToMapCoordinates(targetDropLocation.Value);
+            TransformSystem.SetWorldPositionRotation(
+                entity.Value,
+                GetFinalDropCoordinates(ent, origin, target, entity.Value),
+                itemRot);
         }
 
         Dirty(ent);
