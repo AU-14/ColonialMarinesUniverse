@@ -3,10 +3,11 @@
   lorePrimer: AU14PrimerThreatWendigo
   roundstartspawns: wendigoParty
   thirdpartyinterval: 9100
-  whitelistedgamemodes:
-  - ColonyFall
+#  whitelistedgamemodes:
+#  - ColonyFall
   blacklistedgamemodes:
   - DistressSignal
+  - ColonyFall
   winconditions:
   - KillAllColonistRule
   - KillAllXenoRule
