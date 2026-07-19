@@ -260,3 +260,16 @@ demonstrates otherwise.
 - Files changed: `Content.Shared/Chemistry/Reaction/ReactionPrototype.cs`, `Content.Shared/Chemistry/Reaction/ChemicalReactionSystem.cs`, `Content.Client/Guidebook/Controls/GuideReagentReaction.xaml.cs`, `Content.Server/GuideGenerator/ReagentEntry.cs`, `Content.IntegrationTests/Tests/Chemistry/ReactionEntryJsonTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Shared, client, server, and integration-test project builds completed with 0 warnings and 0 errors. The existing all-reactions integration test and the new typed-API/JSON export test each passed and the new test appeared in discovery. Replacing RMC's `IndexReagent` call with a direct prototype lookup failed the client build with `RMCA0000`; changing the JSON DTO to typed dictionary keys compiled but made the regression fail with `System.Text.Json`'s unsupported dictionary-key exception. Restoring both adaptations returned the tests to green. A non-incremental full solution build completed with 0 warnings and 0 errors after the production change.
 - Follow-up/debt: Downstream code added from CMU's backup branch must migrate callers from string-key assumptions to `ProtoId<ReagentPrototype>`. Audit broader upstream chemistry effect and metabolism changes separately; they are not implied by this API migration.
+
+## CS-0013 — Tolerate unsupported topical damage types
+
+- Upstream: [space-wizards/space-station-14#43087](https://github.com/space-wizards/space-station-14/pull/43087), `5add0838b16250dd5ae8ec1d02e2b99428536531`, 2026-03-01
+- Areas: Medical, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Checking whether a topical can heal a target now treats damage types absent from the target's damage container as zero damage. Using a topical whose healing specification contains an unsupported type no longer throws `KeyNotFoundException`; supported types retain the same positive-damage check.
+- RMC/CMU divergence: None at this call site. RMC retains the shared-baseline healing flow and damage-container representation, so the target-final guard applies directly without changing do-after, blood, stack, sound, popup, or admin-log behavior.
+- Decision and rationale: Port the exact `TryGetValue` guard. A damage container intentionally defines which damage keys exist, and a missing key cannot represent healable damage.
+- Files changed: `Content.Shared/Medical/Healing/HealingSystem.cs`, `Content.IntegrationTests/Tests/Medical/TopicalHealingTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: The shared and integration-test projects built with 0 warnings and 0 errors. The focused integration test passed with a target container containing only a supported control type and a topical containing only an absent type. Temporarily restoring the direct dictionary index made the same test fail at `HealingSystem.HasDamage` with `KeyNotFoundException` for `TopicalHealingTestUnsupported`; restoring the guard returned it to green. A non-incremental full solution build completed with 0 warnings and 0 errors.
+- Follow-up/debt: Audit other Medical call sites that assume every `DamageSpecifier` key exists in a target container, especially while reconciling later SS14 body and damage-model migrations.
