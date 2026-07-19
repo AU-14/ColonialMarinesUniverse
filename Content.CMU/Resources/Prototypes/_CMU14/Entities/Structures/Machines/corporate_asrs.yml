@@ -87,6 +87,23 @@
         crate: CMUCrateChemGlasses
       - cost: 400
         crate: CMUCrateBiosuitScientist
+      - cost: 4500
+        crate: CMUCratePreciousMetals
+
+- type: entity
+  abstract: true
+  id: CMUASRSGBotanyGoodies
+  components:
+  - type: RequisitionsComputer
+    categories:
+    - name: Botany
+      entries:
+      - cost: 350
+        crate: AU14CrateHydroponicsEquipment
+      - cost: 600
+        crate: AU14CrateHydroSeeds
+      - cost: 340
+        crate: hydroponicsTray
 
 # Corporate ASRS Elevator
 - type: entity
