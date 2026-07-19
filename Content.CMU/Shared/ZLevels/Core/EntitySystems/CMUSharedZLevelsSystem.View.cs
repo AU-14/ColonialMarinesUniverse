@@ -14,8 +14,9 @@ public abstract partial class CMUSharedZLevelsSystem
 {
     [Dependency] protected ITileDefinitionManager TilDefMan = default!;
 
-    private readonly CMUZLevelOpeningCache _sharedOpeningCache = new();
+    private readonly List<(Vector2 Center, float Distance)> _distanceOpeningCandidates = new();
     private readonly List<Entity<MapGridComponent>> _openingGridScratch = new();
+    private readonly CMUZLevelOpeningCache _sharedOpeningCache = new();
 
     private void InitView()
     {
@@ -155,6 +156,61 @@ public abstract partial class CMUSharedZLevelsSystem
             _transform,
             TilDefMan,
             edgeOnly: false);
+    }
+
+    /// <summary>
+    /// Gets the shortest distance between positions on adjacent z-levels by routing through an opening.
+    /// </summary>
+    public bool TryGetDistanceViaAdjacentLevelOpening(
+        EntityUid firstMap,
+        Vector2 firstPosition,
+        EntityUid secondMap,
+        Vector2 secondPosition,
+        float searchRadius,
+        out float distance)
+    {
+        distance = 0f;
+
+        if (!float.IsFinite(searchRadius) ||
+            searchRadius < 0f ||
+            !_zMapQuery.TryComp(firstMap, out var firstZMap) ||
+            !_zMapQuery.TryComp(secondMap, out var secondZMap) ||
+            !firstZMap.NetworkUid.IsValid() ||
+            firstZMap.NetworkUid != secondZMap.NetworkUid ||
+            Math.Abs(firstZMap.Depth - secondZMap.Depth) != 1)
+        {
+            return false;
+        }
+
+        var openingMap = firstZMap.Depth > secondZMap.Depth ? firstMap : secondMap;
+        if (!_mapQuery.TryComp(openingMap, out var openingMapComp))
+            return false;
+
+        _distanceOpeningCandidates.Clear();
+        _sharedOpeningCache.FindOpeningCentersNear(
+            openingMapComp.MapId,
+            firstPosition,
+            searchRadius,
+            _distanceOpeningCandidates,
+            _openingGridScratch,
+            _mapManager,
+            _map,
+            _transform,
+            TilDefMan,
+            edgeOnly: false);
+
+        var shortestDistance = float.PositiveInfinity;
+        foreach (var (opening, firstDistance) in _distanceOpeningCandidates)
+        {
+            var routeDistance = firstDistance + Vector2.Distance(opening, secondPosition);
+            shortestDistance = MathF.Min(shortestDistance, routeDistance);
+        }
+
+        if (float.IsPositiveInfinity(shortestDistance))
+            return false;
+
+        distance = shortestDistance;
+        return true;
     }
 
     public bool TryFindZShotOpening(
