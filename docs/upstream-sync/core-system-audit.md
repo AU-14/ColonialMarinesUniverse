@@ -559,3 +559,16 @@ demonstrates otherwise.
 - Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Guns/Projectiles/projectiles.yml`, `Content.IntegrationTests/Tests/Weapons/Ranged/EnergyShotgunHoloCollisionTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms both real hologram prototypes expose an opaque fixture and both energy-shotgun spread prototypes resolve to `BulletLaser`. A regression was added to require all three projectile mask bits and verify collision-mask intersection with holoparasite and holocarp fixtures. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
 - Follow-up/debt: Audit other energy projectiles against opaque-only holograms and decide independently whether RMC's removed fly-by fixture should remain a fork divergence.
+
+## CS-0036 — Keep recallable-evac station events eligible
+
+- Upstream: [space-wizards/space-station-14#42199](https://github.com/space-wizards/space-station-14/pull/42199), `4b960f4bfb6d68659ddbfa7464d06a459592b163`, 2026-07-15
+- Areas: Gamerules, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: A station event with `OccursDuringRoundEnd: false` is now excluded only after evacuation has been requested and the shuttle can no longer be recalled. During a recallable countdown, the event remains eligible instead of being blocked for the entire evacuation window.
+- RMC/CMU divergence: RMC's delayed final-round handling remains unchanged, and its round-end system exposes the same `CanCallOrRecall` state used by this eligibility check. `SleeperAgents` is currently the only event that opts out, so the immediate content impact is narrow and standard CM event policy is otherwise preserved.
+- Decision and rationale: Port the target's three-part condition and documentation together. Checking only `IsRoundEndRequested` conflates a reversible shuttle call with certain round end; ignoring the opt-out flag would allow restricted events even after recall is locked.
+- Files changed: `Content.Server/StationEvents/Components/StationEventComponent.cs`, `Content.Server/StationEvents/EventManagerSystem.cs`, `Content.IntegrationTests/Tests/GameRules/StationEventRoundEndEligibilityTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms `RoundEndSystem.CanCallOrRecall` already models the required cooldown state and no RMC override bypasses event filtering. A regression was added that enters a recallable evacuation countdown and verifies the opt-out SleeperAgents event remains in the available set. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
+- Follow-up/debt: Port and audit #41863's ZombieOutbreak evacuation restriction separately, then verify non-recallable eligibility once the countdown passes its final recall boundary.
