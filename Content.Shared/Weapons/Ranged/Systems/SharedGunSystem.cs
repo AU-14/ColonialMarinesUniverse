@@ -94,6 +94,8 @@ public abstract partial class SharedGunSystem : EntitySystem
     [Dependency] private   IConfigurationManager _config = default!;
     [Dependency] private   INetConfigurationManager _netConfig = default!;
 
+    private static readonly ProtoId<TagPrototype> TrashTag = "Trash";
+
     // RMC14
     [Dependency] private AttachableHolderSystem _attachableHolder = default!;
     [Dependency] private SharedRMCFlamerSystem _flamer = default!;
@@ -1057,6 +1059,14 @@ public abstract partial class SharedGunSystem : EntitySystem
 
         cartridge.Spent = spent;
         Appearance.SetData(uid, AmmoVisuals.Spent, spent);
+
+        if (!cartridge.MarkSpentAsTrash)
+            return;
+
+        if (spent)
+            TagSystem.AddTag(uid, TrashTag);
+        else
+            TagSystem.RemoveTag(uid, TrashTag);
     }
 
     /// <summary>

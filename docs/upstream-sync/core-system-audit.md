@@ -403,3 +403,16 @@ demonstrates otherwise.
 - Files changed: `Content.Server/GameTicking/GameTicker.Spawning.cs`, `Content.IntegrationTests/Tests/GameRules/RandomizedCharacterJobPrioritiesTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms the isolated hunk and its profile APIs are present without prerequisites. A regression was added that enables randomized characters, intercepts `PlayerBeforeSpawnEvent`, and compares both a CM rifleman and standard passenger priority against the selected profile. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
 - Follow-up/debt: Exercise the full randomized late-join allocation path at the batch checkpoint and separately audit the fork's job-ban null guard and overflow-job behavior; neither is changed by this upstream fix.
+
+## CS-0024 — Mark spent cartridge entities as trash
+
+- Upstream: [space-wizards/space-station-14#40829](https://github.com/space-wizards/space-station-14/pull/40829), `2696fd7cd50cb1ed097875c4edff00a8f2f61f48`, 2025-10-12
+- Areas: Shooting, Interactions
+- Status: Adapted
+- Risk: Medium
+- Behavior/API delta: `CartridgeAmmoComponent` now exposes the networked `MarkSpentAsTrash` opt-out, defaulting to true. Every shared spent-state transition adds or removes the `Trash` tag accordingly, and the pre-spent pistol casing declares the tag because it never passes through that transition on spawn.
+- RMC/CMU divergence: Seventy RMC prototype files declare cartridge ammunition, including conventional casings, shotgun handfuls, flares, and vehicle rounds. They all flow through `SetCartridgeSpent`, retain existing ammunition/caliber tags, and gain generic trash-collection compatibility when an entity remains after firing; caseless entities still follow their existing deletion path. No RMC system directly rewrites `Spent`.
+- Decision and rationale: Port the upstream default and per-prototype escape hatch without bulk-editing RMC ammunition. `TagSystem.AddTag` and `RemoveTag` are additive state changes, so they do not replace fork tags; a reusable special cartridge can explicitly set `markSpentAsTrash: false` if discovered.
+- Files changed: `Content.Shared/Weapons/Ranged/Components/AmmoComponent.cs`, `Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.cs`, `Resources/Prototypes/Entities/Objects/Weapons/Guns/Ammunition/Cartridges/pistol.yml`, `Content.IntegrationTests/Tests/Weapons/Ranged/SpentCartridgeTrashTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms the target behavior survives later gun-system refactors and that `CartridgePistolSpent` is the only current prototype initialized with `spent: true`. A regression was added for the default transition, explicit opt-out, pre-spent prototype, and removal when a revolver materializes an unspent cartridge. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
+- Follow-up/debt: During the batch playtest, inspect persistent RMC launcher and vehicle-ammunition entities for intentional reuse and apply the opt-out only where trash collection would conflict with their lifecycle.
