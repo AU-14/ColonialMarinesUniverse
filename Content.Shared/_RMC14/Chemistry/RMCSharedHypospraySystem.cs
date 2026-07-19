@@ -328,7 +328,7 @@ public abstract partial class RMCSharedHypospraySystem : EntitySystem
             return;
         }
 
-        _popup.PopupClient(Loc.GetString(msgFormat ?? "hypospray-component-inject-other-message", ("other", target)), target, args.User);
+        _popup.PopupClient(Loc.GetString(msgFormat ?? "hypospray-component-inject-other-message", ("other", Identity.Entity(target, EntityManager))), target, args.User);
 
         if (target != args.User)
             _popup.PopupEntity(Loc.GetString("hypospray-component-feel-prick-message"), target, target);
