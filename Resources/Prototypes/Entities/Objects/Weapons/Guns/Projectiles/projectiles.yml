@@ -200,8 +200,9 @@
           bounds: "-0.15,-0.45,0.15,0.15"
         hard: false
         mask:
-          - Impassable
-          - BulletImpassable
+        - Opaque
+        - Impassable
+        - BulletImpassable
   - type: Ammo
   - type: Projectile
     damage:
@@ -242,6 +243,7 @@
           bounds: "-0.15,-0.3,0.15,0.3"
         hard: false
         mask:
+        - Opaque
         - Impassable
         - BulletImpassable
   - type: Ammo
@@ -281,6 +283,7 @@
           bounds: "-0.15,-0.3,0.15,0.3"
         hard: false
         mask:
+        - Opaque
         - Impassable
         - BulletImpassable
   - type: Ammo
@@ -1073,6 +1076,7 @@
           bounds: "-0.15,-0.3,0.15,0.3"
         hard: false
         mask:
+        - Opaque
         - Impassable
         - BulletImpassable
   - type: Ammo

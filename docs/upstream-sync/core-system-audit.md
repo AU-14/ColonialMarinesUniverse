@@ -572,3 +572,16 @@ demonstrates otherwise.
 - Files changed: `Content.Server/StationEvents/Components/StationEventComponent.cs`, `Content.Server/StationEvents/EventManagerSystem.cs`, `Content.IntegrationTests/Tests/GameRules/StationEventRoundEndEligibilityTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms `RoundEndSystem.CanCallOrRecall` already models the required cooldown state and no RMC override bypasses event filtering. A regression was added that enters a recallable evacuation countdown and verifies the opt-out SleeperAgents event remains in the available set. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
 - Follow-up/debt: Port and audit #41863's ZombieOutbreak evacuation restriction separately, then verify non-recallable eligibility once the countdown passes its final recall boundary.
+
+## CS-0037 — Let standard energy projectiles hit holograms
+
+- Upstream: [space-wizards/space-station-14#40782](https://github.com/space-wizards/space-station-14/pull/40782), `df6307fe66f71944c5b3d5ed1e683a2723953181`, 2025-10-08
+- Areas: Shooting, Physics
+- Status: Adapted
+- Risk: Low
+- Behavior/API delta: Taser, disabler, practice-disabler, and disabler-SMG projectiles now include `Opaque` in their collision masks, allowing standard energy weapons to hit opaque-layer holographic creatures. `WatcherBolt` already carried the required opaque mask in this fork and remains unchanged.
+- RMC/CMU divergence: RMC's removed per-projectile fly-by fixtures remain absent, and no RMC-specific prototype directly consumes the affected standard projectile IDs. RMC species and structures that expose opaque collision can now be hit if a standard energy weapon is spawned, while normal RMC weapon loadouts are unchanged.
+- Decision and rationale: Port the four applicable additive mask hunks, treat the already-compliant Watcher hunk as a no-op, and preserve every existing `Impassable` and `BulletImpassable` bit. The predecessor #37581 changed Watcher temperature-gun window and reflectivity behavior and is deferred as a separate audit item.
+- Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Guns/Projectiles/projectiles.yml`, `Content.IntegrationTests/Tests/Weapons/Ranged/EnergyProjectileHoloCollisionTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Prototype-ID-scoped static review confirms `Opaque` is present on the four intended projectiles, CS-0035's `BulletLaser`, and the pre-existing Watcher while wall and bullet masks remain on every applicable projectile. The regression now checks all six projectiles against both real hologram fixtures. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
+- Follow-up/debt: Audit #37581 independently before changing Watcher wall/window behavior, and keep the generalized hologram-collision contract when additional energy projectiles are ported.
