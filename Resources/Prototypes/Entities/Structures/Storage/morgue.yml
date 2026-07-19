@@ -34,7 +34,8 @@
         mask:
         - MachineMask
         layer:
-        - HalfWallLayer
+        - MachineLayer
+        - BulletImpassable
   - type: EntityStorage
     isCollidableWhenOpen: true
     showContents: false
@@ -73,6 +74,7 @@
   - type: AntiRottingContainer
   - type: StaticPrice
     price: 200
+  - type: RequireProjectileTarget
 
 - type: entity
   id: Crematorium
@@ -112,6 +114,7 @@
         - MachineMask
         layer:
         - MachineLayer
+        - BulletImpassable
   - type: EntityStorage
     isCollidableWhenOpen: true
     showContents: false
@@ -143,3 +146,4 @@
           False: { visible: false }
   - type: Transform
     anchored: true
+  - type: RequireProjectileTarget

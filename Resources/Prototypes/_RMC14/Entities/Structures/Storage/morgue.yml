@@ -50,7 +50,8 @@
         mask:
         - MachineMask
         layer:
-        - HalfWallLayer
+        - MachineLayer
+        - BulletImpassable
   - type: Sprite
     sprite: _RMC14/Structures/Storage/morgue.rsi
     layers:
@@ -100,6 +101,7 @@
       entity_storage: !type:Container
   - type: Transform
     anchored: true
+  - type: RequireProjectileTarget
 
 - type: entity
   parent: [ Crematorium, RMCMorgueBase ]
