@@ -507,3 +507,16 @@ demonstrates otherwise.
 - Files changed: `Content.Server/Medical/Components/HealthAnalyzerComponent.cs`, `Content.Server/Medical/HealthAnalyzerSystem.cs`, `Content.IntegrationTests/Tests/Medical/HealthAnalyzerRangeReactivationTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: The exact two-file upstream production patch applies to the fork without conflict. A regression was added that establishes an active scan, moves the patient outside range, verifies the link is retained while inactive, then returns the patient and verifies automatic reactivation. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
 - Follow-up/debt: During the checkpoint, also exercise powered handheld and MedTek UI flows; separately audit whether full-stop paths should reset the server-only active flag before a later scan.
+
+## CS-0032 — Disable the old jetpack when switching packs
+
+- Upstream: [space-wizards/space-station-14#42689](https://github.com/space-wizards/space-station-14/pull/42689), `f5bab1961f70f5bbefdbe3f16a141dd240cb6eb5`, 2026-02-16
+- Areas: Movement, Physics, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Enabling a jetpack for a user who is already linked to a different pack now disables the old pack through the normal teardown path before enabling the new one. The old pack loses its active marker and owner, stops consuming fuel and emitting effects, and the user retains exactly one current jetpack link.
+- RMC/CMU divergence: No RMC-specific code or prototype uses `JetpackComponent`, `JetpackUserComponent`, or `ActiveJetpackComponent`; standard jetpacks share this system unchanged. CMU's nearby divergence is limited to source-generated dependency syntax and does not alter activation behavior.
+- Decision and rationale: Port upstream's exclusivity block exactly inside the enabled branch. Calling the established `SetEnabled(..., false, ...)` path preserves appearance, physics, component-removal, and movement-modifier cleanup; directly overwriting fields would leave those side effects stale.
+- Files changed: `Content.Shared/Movement/Systems/SharedJetpackSystem.cs`, `Content.IntegrationTests/Tests/Movement/JetpackSwitchingTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms all APIs and filled jetpack prototypes are already present and the pinned target retains this block through later dependency-injection cleanup. A regression was added that enables two packs in sequence and asserts the first is fully inactive and unowned while the second becomes the sole linked pack. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
+- Follow-up/debt: At the checkpoint, verify server fuel consumption and client particles stop for the replaced pack; audit non-jetpack movement devices for the same single-owner invariant separately.
