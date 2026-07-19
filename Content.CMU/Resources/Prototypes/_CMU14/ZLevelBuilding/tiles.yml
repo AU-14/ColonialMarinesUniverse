@@ -1,0 +1,168 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright (c) 2026 wray-git
+# SPDX-License-Identifier: AGPL-3.0-only
+# Building overhaul (z-level): placeholder constructable TILES for the construction menu's "Tiles" section.
+# Tiles are not entities, so each recipe builds a tiny "tile applier" entity (TileApplier) that lays the tile and
+# deletes itself. This reuses the normal construction-ghost flow but produces a tile, letting you floor open air.
+# All live in the "Tiles" spawnlist; isCM is required for the menu to list them.
+
+# Invisible per-tile support marker. Lets a laid floor tile take part in the structural-support graph: on an
+# upper z-level the floor needs a beam below (or to cantilever from one) or this marker is collapsed, which
+# removes the floor tile. No sprite, no collision - it is purely a support stand-in for the tile.
+- type: entity
+  id: AU14TileFloorSupport
+  name: floor support
+  suffix: AU14 z-build, tile support
+  components:
+  - type: Transform
+    anchored: true
+  - type: TileFloorSupport
+  - type: StructuralSupport
+    cantileverSpan: 1
+
+# --- Applier entities (built target; each lays one tile then despawns) ---
+- type: entity
+  id: AU14TileApplierPlating
+  name: plating
+  suffix: AU14 z-build, tile
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: Objects/Tiles/tile.rsi
+    state: steel
+  - type: TileApplier
+    tile: Plating
+  - type: Construction
+    graph: AU14TilePlatingGraph
+    node: tile
+
+- type: entity
+  id: AU14TileApplierSteel
+  name: steel floor
+  suffix: AU14 z-build, tile
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: Objects/Tiles/tile.rsi
+    state: steel
+  - type: TileApplier
+    tile: FloorSteel
+  - type: Construction
+    graph: AU14TileSteelGraph
+    node: tile
+
+- type: entity
+  id: AU14TileApplierDirt
+  name: dirt
+  suffix: AU14 z-build, tile
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: Objects/Tiles/tile.rsi
+    state: steel
+  - type: TileApplier
+    tile: CMPlanetMarsDirt
+  - type: Construction
+    graph: AU14TileDirtGraph
+    node: tile
+
+# --- Construction graphs (one per tile) ---
+- type: constructionGraph
+  id: AU14TilePlatingGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: tile
+      steps:
+      - material: CMSteel
+        amount: 1
+        doAfter: 1
+  - node: tile
+    entity: AU14TileApplierPlating
+
+- type: constructionGraph
+  id: AU14TileSteelGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: tile
+      steps:
+      - material: CMSteel
+        amount: 1
+        doAfter: 1
+  - node: tile
+    entity: AU14TileApplierSteel
+
+- type: constructionGraph
+  id: AU14TileDirtGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: tile
+      steps:
+      - material: CMSteel
+        amount: 1
+        doAfter: 1
+  - node: tile
+    entity: AU14TileApplierDirt
+
+# --- Construction recipes (shown in the "Tiles" spawnlist, "Flooring" category) ---
+- type: construction
+  id: AU14TilePlating
+  name: plating
+  description: Lay down metal plating. Can be placed over open space to build floors in the air.
+  graph: AU14TilePlatingGraph
+  startNode: start
+  targetNode: tile
+  category: Flooring
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  canBuildInImpassable: true
+  isCM: true
+  spawnlist: Tiles
+  # Mappers can forbid vertical building on a map with ZBuildableMap { enabled: false } (e.g. the UNS Almayer).
+  conditions:
+  - !type:ZBuildAllowed
+
+- type: construction
+  id: AU14TileSteel
+  name: steel floor
+  description: Lay down a steel floor tile. Can be placed over open space to build floors in the air.
+  graph: AU14TileSteelGraph
+  startNode: start
+  targetNode: tile
+  category: Flooring
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  canBuildInImpassable: true
+  isCM: true
+  spawnlist: Tiles
+  # Mappers can forbid vertical building on a map with ZBuildableMap { enabled: false } (e.g. the UNS Almayer).
+  conditions:
+  - !type:ZBuildAllowed
+
+- type: construction
+  id: AU14TileDirt
+  name: dirt
+  description: Lay down a patch of dirt. Can be placed over open space to build floors in the air.
+  graph: AU14TileDirtGraph
+  startNode: start
+  targetNode: tile
+  category: Flooring
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  canBuildInImpassable: true
+  isCM: true
+  spawnlist: Tiles
+  # Mappers can forbid vertical building on a map with ZBuildableMap { enabled: false } (e.g. the UNS Almayer).
+  conditions:
+  - !type:ZBuildAllowed

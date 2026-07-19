@@ -6,11 +6,11 @@ runawaysynth-role-greeting = You're a runaway synthetic, law enforcement is look
 roles-antag-synth-objective = Do whatever you must to survive.
 
 roles-antag-clf-guerrilla-name = CLF Guerrilla
-roles-antag-clf-guerrilla-greeting = You're a soldier for the Colonial Liberation Front. Listen to your cell leader on how best to free the colony. Do whatever you must to ensure the self-soveriegnty of your home.
+roles-antag-clf-guerrilla-greeting = You are a member of a sleeper cell. Wait until your leader contacts you and organizes the cell before you act.
 roles-antag-clf-guerrilla-objective = Listen to your cell leader. Fight to free your home from the influence of governments and corporations.
 
 roles-antag-clf-physician-name = CLF Physician
-roles-antag-clf-doctor-greeting = You're a doctor for the Colonial Liberation Front. Ensure the health and well being of the other CLF, the colony, and any prisoners of war.
+roles-antag-clf-doctor-greeting = You are a member of a sleeper cell. Wait until your leader contacts you and organizes the cell before you act.
 roles-antag-clf-doctor-objective = Listen to your cell leader. Ensure the health and well being of your cell, the colony, and any prisoners you have captured.
 roles-antag-clf-surgeon-name = CLF Surgeon
 

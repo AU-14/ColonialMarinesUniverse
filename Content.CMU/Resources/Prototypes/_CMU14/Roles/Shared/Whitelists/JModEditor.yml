@@ -1,0 +1,13 @@
+# Whitelist-only "role" that grants access to the restricted tools in the improved construction menu
+# (Construction Editor, Tile Editor, Lathe Editor) without needing the Host admin flag.
+# Grant with: jobwhitelistadd <player> JModEditor
+- type: job
+  parent: CMJobBase
+  id: JModEditor
+  name: JMod Editor
+  playTimeTracker: JModEditor
+  whitelisted: true
+  hidden: true
+
+- type: playTimeTracker
+  id: JModEditor
