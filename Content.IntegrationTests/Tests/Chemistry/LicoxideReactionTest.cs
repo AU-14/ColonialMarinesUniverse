@@ -1,7 +1,8 @@
 using Content.Shared.Chemistry.Reaction;
-using Content.Shared.Chemistry.Reagent;
-using Content.Shared.FixedPoint;
+using Robust.Shared.ContentPack;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
+using YamlDotNet.RepresentationModel;
 
 namespace Content.IntegrationTests.Tests.Chemistry;
 
@@ -10,11 +11,7 @@ namespace Content.IntegrationTests.Tests.Chemistry;
 public sealed class LicoxideReactionTest
 {
     private const string ReactionId = "Licoxide";
-
-    private static readonly ProtoId<ReagentPrototype> Lead = "Lead";
-    private static readonly ProtoId<ReagentPrototype> Licoxide = "Licoxide";
-    private static readonly ProtoId<ReagentPrototype> Lithium = "Lithium";
-    private static readonly ProtoId<ReagentPrototype> Zinc = "Zinc";
+    private static readonly ResPath SourcePath = new("/Prototypes/Recipes/Reactions/fun.yml");
 
     [Test]
     public async Task UsesLithiumInsteadOfLead()
@@ -24,24 +21,27 @@ public sealed class LicoxideReactionTest
 
         await server.WaitAssertion(() =>
         {
-            var reaction = server.ResolveDependency<IPrototypeManager>()
-                .Index<ReactionPrototype>(ReactionId);
+            var reaction = IgnoredReactionSourceTestHelper.LoadReaction(
+                server.ResolveDependency<IResourceManager>(),
+                server.ResolveDependency<IPrototypeManager>(),
+                SourcePath,
+                ReactionId);
+            var reactants = reaction.GetNode<YamlMappingNode>("reactants");
+            var products = reaction.GetNode<YamlMappingNode>("products");
 
             Assert.Multiple(() =>
             {
-                Assert.That(reaction.Reactants, Has.Count.EqualTo(2));
-                Assert.That(reaction.Reactants.ContainsKey(Lead), Is.False);
-                Assert.That(reaction.Reactants.ContainsKey(Lithium), Is.True);
-                Assert.That(reaction.Reactants.ContainsKey(Zinc), Is.True);
+                Assert.That(reactants.Children, Has.Count.EqualTo(2));
+                Assert.That(reactants.HasNode("Lead"), Is.False);
                 Assert.That(
-                    reaction.Reactants[Lithium].Amount,
-                    Is.EqualTo(FixedPoint2.New(1)));
+                    reactants.GetNode<YamlMappingNode>("Lithium").GetNode("amount").AsString(),
+                    Is.EqualTo("1"));
                 Assert.That(
-                    reaction.Reactants[Zinc].Amount,
-                    Is.EqualTo(FixedPoint2.New(1)));
+                    reactants.GetNode<YamlMappingNode>("Zinc").GetNode("amount").AsString(),
+                    Is.EqualTo("1"));
                 Assert.That(
-                    reaction.Products[Licoxide],
-                    Is.EqualTo(FixedPoint2.New(1)));
+                    products.GetNode("Licoxide").AsString(),
+                    Is.EqualTo("1"));
             });
         });
 

@@ -473,14 +473,14 @@ demonstrates otherwise.
 
 - Upstream: [space-wizards/space-station-14#40991](https://github.com/space-wizards/space-station-14/pull/40991), `49860b820cb5fe9953bcff21206c6a2388a4126c`, 2025-10-30
 - Areas: Chemistry
-- Status: Ported
+- Status: Adapted (dormant source sync)
 - Risk: Low
-- Behavior/API delta: The Licoxide reaction now consumes one unit each of lithium and zinc instead of lead and zinc. This restores the intended fun-reagent recipe and stops an unrelated toxic heavy metal from being required.
-- RMC/CMU divergence: Lithium, zinc, lead, and Licoxide prototypes already exist, and no RMC, CMU, or AU reaction override replaces Licoxide. The fork's typed reaction dictionaries deserialize the upstream YAML unchanged.
-- Decision and rationale: Port the isolated upstream reactant substitution exactly. Adding lithium without removing lead would silently create a three-reactant recipe, while changing reagent behavior or product yield would exceed the upstream correction.
-- Files changed: `Resources/Prototypes/Recipes/Reactions/fun.yml`, `Content.IntegrationTests/Tests/Chemistry/LicoxideReactionTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
-- Validation: Static prototype review confirms both reactants and the product exist and the pinned target retains lithium. A regression was added for the exact reactant set, amounts, excluded lead, and Licoxide yield. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
-- Follow-up/debt: Include the YAML/prototype validator, this focused regression, and the existing all-reactions coverage in the CS-0040 checkpoint.
+- Behavior/API delta: The dormant upstream Licoxide source now consumes one unit each of lithium and zinc instead of lead and zinc. CMU gameplay is unchanged while the standard `fun.yml` reaction file remains ignored.
+- RMC/CMU divergence: `Resources/IgnoredPrototypes/cm_ignoredPrototypes.yml` explicitly abstracts every standard SS14 reaction file. RMC supplies a separate active reaction set under `_RMC14`, with no active Licoxide equivalent, so the standard typed reaction never enters the runtime prototype manager.
+- Decision and rationale: Preserve the target-final source correction for later SS14 chemistry convergence, but do not unignore the full standard reaction suite as part of an isolated recipe port. Activating it would import a broad set of recipes that RMC deliberately removed and requires its own compatibility project.
+- Files changed: `Resources/Prototypes/Recipes/Reactions/fun.yml`, `Content.IntegrationTests/Tests/Chemistry/LicoxideReactionTest.cs`, `Content.IntegrationTests/Tests/Chemistry/IgnoredReactionSourceTestHelper.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: The first CS-0040 focused run failed because `Licoxide` was absent from the runtime prototype manager, exposing the ignored-source policy. The corrected regression verifies that the file remains in the ignore manifest, the runtime recipe remains absent, and the actual dormant YAML has exactly lithium and zinc at one unit each, no lead, and one unit of Licoxide product.
+- Follow-up/debt: Decide which standard recipes should be migrated into the active RMC chemistry set. If Licoxide is activated, convert this source-level regression into a runtime prototype test and re-audit reagent availability and balance.
 
 ## CS-0030 — Reuse traitor role briefing components
 
@@ -538,14 +538,14 @@ demonstrates otherwise.
 
 - Upstream: [space-wizards/space-station-14#42787](https://github.com/space-wizards/space-station-14/pull/42787), `381fda04403358d01c491c0aa63ad59b8aa7e978`, 2026-02-04
 - Areas: Chemistry, Medical
-- Status: Ported
+- Status: Adapted (dormant source sync)
 - Risk: Low
-- Behavior/API delta: Mute toxin now requires two units each of Vestine and SpaceGlue and produces two units of product without an unrelated uranium reactant.
-- RMC/CMU divergence: The MuteToxin, Vestine, SpaceGlue, and Uranium reagent prototypes already exist, and no RMC, CMU, or AU reaction override replaces this recipe. The fork's typed reaction dictionaries deserialize the reduced reactant set unchanged.
-- Decision and rationale: Port upstream's two-line reactant removal exactly. Product yield, temperature threshold, reaction impact, and both intended reactant amounts remain untouched.
-- Files changed: `Resources/Prototypes/Recipes/Reactions/chemicals.yml`, `Content.IntegrationTests/Tests/Chemistry/MuteToxinReactionTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
-- Validation: Static review confirms the pinned target retains the uranium-free recipe and all remaining reagent prototypes resolve. A regression was added for the exact reactant count, explicit uranium absence, intended amounts, and product yield. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
-- Follow-up/debt: Include the YAML/prototype validator, this focused regression, and all-reactions coverage in the CS-0040 checkpoint.
+- Behavior/API delta: The dormant upstream MuteToxin source now requires two units each of Vestine and SpaceGlue and produces two units without uranium. CMU gameplay is unchanged while the standard `chemicals.yml` reaction file remains ignored.
+- RMC/CMU divergence: `Resources/IgnoredPrototypes/cm_ignoredPrototypes.yml` explicitly abstracts every standard SS14 reaction file. RMC supplies a separate active reaction set under `_RMC14`, with no active MuteToxin equivalent, so this standard recipe is not deserialized at runtime.
+- Decision and rationale: Preserve upstream's target-final source correction without enabling the entire standard chemistry suite. Product yield, temperature threshold, reaction impact, and intended reactant amounts remain untouched for a future selective migration.
+- Files changed: `Resources/Prototypes/Recipes/Reactions/chemicals.yml`, `Content.IntegrationTests/Tests/Chemistry/MuteToxinReactionTest.cs`, `Content.IntegrationTests/Tests/Chemistry/IgnoredReactionSourceTestHelper.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: The first CS-0040 focused run failed because `MuteToxin` was absent from the runtime prototype manager, exposing the ignored-source policy. The corrected regression verifies that the file remains in the ignore manifest, the runtime recipe remains absent, and the actual dormant YAML has exactly Vestine and SpaceGlue at two units each, no uranium, and two units of MuteToxin product.
+- Follow-up/debt: Decide whether MuteToxin belongs in the active RMC chemistry set. If it is activated, convert this source-level regression into a runtime prototype test and audit its medical balance against RMC reagents.
 
 ## CS-0035 — Let lethal energy-shotgun pellets hit holograms
 

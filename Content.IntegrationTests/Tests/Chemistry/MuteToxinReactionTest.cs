@@ -1,7 +1,8 @@
 using Content.Shared.Chemistry.Reaction;
-using Content.Shared.Chemistry.Reagent;
-using Content.Shared.FixedPoint;
+using Robust.Shared.ContentPack;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
+using YamlDotNet.RepresentationModel;
 
 namespace Content.IntegrationTests.Tests.Chemistry;
 
@@ -10,11 +11,7 @@ namespace Content.IntegrationTests.Tests.Chemistry;
 public sealed class MuteToxinReactionTest
 {
     private const string ReactionId = "MuteToxin";
-
-    private static readonly ProtoId<ReagentPrototype> MuteToxin = "MuteToxin";
-    private static readonly ProtoId<ReagentPrototype> SpaceGlue = "SpaceGlue";
-    private static readonly ProtoId<ReagentPrototype> Uranium = "Uranium";
-    private static readonly ProtoId<ReagentPrototype> Vestine = "Vestine";
+    private static readonly ResPath SourcePath = new("/Prototypes/Recipes/Reactions/chemicals.yml");
 
     [Test]
     public async Task DoesNotRequireUranium()
@@ -24,22 +21,27 @@ public sealed class MuteToxinReactionTest
 
         await server.WaitAssertion(() =>
         {
-            var reaction = server.ResolveDependency<IPrototypeManager>()
-                .Index<ReactionPrototype>(ReactionId);
+            var reaction = IgnoredReactionSourceTestHelper.LoadReaction(
+                server.ResolveDependency<IResourceManager>(),
+                server.ResolveDependency<IPrototypeManager>(),
+                SourcePath,
+                ReactionId);
+            var reactants = reaction.GetNode<YamlMappingNode>("reactants");
+            var products = reaction.GetNode<YamlMappingNode>("products");
 
             Assert.Multiple(() =>
             {
-                Assert.That(reaction.Reactants, Has.Count.EqualTo(2));
-                Assert.That(reaction.Reactants.ContainsKey(Uranium), Is.False);
+                Assert.That(reactants.Children, Has.Count.EqualTo(2));
+                Assert.That(reactants.HasNode("Uranium"), Is.False);
                 Assert.That(
-                    reaction.Reactants[Vestine].Amount,
-                    Is.EqualTo(FixedPoint2.New(2)));
+                    reactants.GetNode<YamlMappingNode>("Vestine").GetNode("amount").AsString(),
+                    Is.EqualTo("2"));
                 Assert.That(
-                    reaction.Reactants[SpaceGlue].Amount,
-                    Is.EqualTo(FixedPoint2.New(2)));
+                    reactants.GetNode<YamlMappingNode>("SpaceGlue").GetNode("amount").AsString(),
+                    Is.EqualTo("2"));
                 Assert.That(
-                    reaction.Products[MuteToxin],
-                    Is.EqualTo(FixedPoint2.New(2)));
+                    products.GetNode("MuteToxin").AsString(),
+                    Is.EqualTo("2"));
             });
         });
 
