@@ -130,6 +130,38 @@ public sealed class SolutionSystemTests
         await pair.CleanReturnAsync();
     }
 
+    [Test]
+    public async Task AddSolutionDoesNotModifySource()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var entityManager = server.ResolveDependency<IEntityManager>();
+        var containerSystem = entityManager.System<SharedSolutionContainerSystem>();
+        var testMap = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var sourceQuantity = FixedPoint2.New(75);
+            var acceptedQuantity = FixedPoint2.New(50);
+            var source = new Solution("TestReagentA", sourceQuantity);
+            var target = entityManager.SpawnEntity("SolutionTarget", testMap.GridCoords);
+
+            Assert.That(containerSystem.TryGetSolution(target, "beaker", out var solutionEnt, out var solution));
+            var accepted = containerSystem.AddSolution(solutionEnt.Value, source);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(accepted, Is.EqualTo(acceptedQuantity));
+                Assert.That(solution.Volume, Is.EqualTo(acceptedQuantity));
+                Assert.That(solution.GetTotalPrototypeQuantity("TestReagentA"), Is.EqualTo(acceptedQuantity));
+                Assert.That(source.Volume, Is.EqualTo(sourceQuantity));
+                Assert.That(source.GetTotalPrototypeQuantity("TestReagentA"), Is.EqualTo(sourceQuantity));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     // Unlike TryAddSolution this adds and two solution without then splits leaving only threshold in original
     [Test]
     public async Task TryMixAndOverflowTooMuchReagent()
