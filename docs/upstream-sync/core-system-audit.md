@@ -494,3 +494,16 @@ demonstrates otherwise.
 - Files changed: `Content.Server/GameTicking/Rules/TraitorRuleSystem.cs`, `Content.IntegrationTests/Tests/GameRules/TraitorRoleBriefingTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms the pinned target retains the idempotent component lookup and no prerequisite is required. A regression was added that assigns a reinforcement traitor twice and asserts both calls succeed while retaining the same briefing component instance. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
 - Follow-up/debt: Audit whether repeated `MakeTraitor` calls should also deduplicate `TraitorMinds`, briefing notifications, objectives, and other side effects; this port intentionally fixes only the upstream component-add failure.
+
+## CS-0031 — Reactivate health analyzers when patients return to range
+
+- Upstream: [space-wizards/space-station-14#42608](https://github.com/space-wizards/space-station-14/pull/42608), `ceb175c92d68a324613b1ebe6e2167bd35e8c9a0`, 2026-01-28
+- Areas: Medical, Interactions, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: A standard health analyzer now pauses continuous updates when its patient leaves range without clearing `ScannedEntity`. It sends one inactive state, retains the patient link, and resumes active updates automatically when the same patient returns to range.
+- RMC/CMU divergence: CMU retains RMC's surrounding power-cell and UI behavior plus the source-generated dependency form. RMC's primary `CMHealthAnalyzer` uses its separate health-scanner system and is unaffected; standard handheld analyzers and dynamically attached MedTek analyzer components receive the corrected behavior.
+- Decision and rationale: Port upstream's server-only active-state field and pause path exactly. Repeated inactive messages are suppressed, while deletion, explicit toggle-off, insertion, and drop still use the full stop path and clear the link.
+- Files changed: `Content.Server/Medical/Components/HealthAnalyzerComponent.cs`, `Content.Server/Medical/HealthAnalyzerSystem.cs`, `Content.IntegrationTests/Tests/Medical/HealthAnalyzerRangeReactivationTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: The exact two-file upstream production patch applies to the fork without conflict. A regression was added that establishes an active scan, moves the patient outside range, verifies the link is retained while inactive, then returns the patient and verifies automatic reactivation. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
+- Follow-up/debt: During the checkpoint, also exercise powered handheld and MedTek UI flows; separately audit whether full-stop paths should reset the server-only active flag before a later scan.
