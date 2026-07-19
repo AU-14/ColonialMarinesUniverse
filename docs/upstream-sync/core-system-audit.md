@@ -481,3 +481,16 @@ demonstrates otherwise.
 - Files changed: `Resources/Prototypes/Recipes/Reactions/fun.yml`, `Content.IntegrationTests/Tests/Chemistry/LicoxideReactionTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype review confirms both reactants and the product exist and the pinned target retains lithium. A regression was added for the exact reactant set, amounts, excluded lead, and Licoxide yield. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
 - Follow-up/debt: Include the YAML/prototype validator, this focused regression, and the existing all-reactions coverage in the CS-0040 checkpoint.
+
+## CS-0030 — Reuse traitor role briefing components
+
+- Upstream: [space-wizards/space-station-14#39261](https://github.com/space-wizards/space-station-14/pull/39261), `3c76b5a8aa7d15413eaa50f13fef0bca7a51d1e9`, 2025-07-28
+- Areas: Gamerules, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `TraitorRuleSystem.MakeTraitor` now ensures and reuses the role entity's `RoleBriefingComponent` before updating its text. Reapplying traitor setup no longer attempts to add a duplicate component and aborts the assignment path.
+- RMC/CMU divergence: RMC does not use the standard traitor rule in its normal CM round flow, but the inherited rule, reinforcement prototype, admin paths, and custom presets remain available. No RMC system overrides `MakeTraitor` or the standard mind-role entity.
+- Decision and rationale: Port upstream's `EnsureComp` change exactly. Removing the existing component first would create avoidable component lifecycle events, while skipping the update when present would retain stale briefing text.
+- Files changed: `Content.Server/GameTicking/Rules/TraitorRuleSystem.cs`, `Content.IntegrationTests/Tests/GameRules/TraitorRoleBriefingTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms the pinned target retains the idempotent component lookup and no prerequisite is required. A regression was added that assigns a reinforcement traitor twice and asserts both calls succeed while retaining the same briefing component instance. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
+- Follow-up/debt: Audit whether repeated `MakeTraitor` calls should also deduplicate `TraitorMinds`, briefing notifications, objectives, and other side effects; this port intentionally fixes only the upstream component-add failure.
