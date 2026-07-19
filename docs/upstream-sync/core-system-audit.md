@@ -468,3 +468,16 @@ demonstrates otherwise.
 - Files changed: `Content.Shared/Hands/EntitySystems/SharedHandsSystem.Drop.cs`, `Content.Client/Hands/Systems/HandsSystem.cs`, `Content.Shared/Interaction/SharedInteractionSystem.cs`, `Content.IntegrationTests/Tests/Hands/DropEventOrderingTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the upstream order is preserved around RMC's container-specific branch. A regression was added that records coordinates and rotation from inside `DroppedEvent` and compares them with the final transform. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
 - Follow-up/debt: Audit manual `DroppedEvent` raisers, including stripping paths, for whether they promise the same final-transform contract, and decide separately whether RMC's `RMCDroppedEvent` branch should converge on the standard event.
+
+## CS-0029 — Use lithium in the Licoxide reaction
+
+- Upstream: [space-wizards/space-station-14#40991](https://github.com/space-wizards/space-station-14/pull/40991), `49860b820cb5fe9953bcff21206c6a2388a4126c`, 2025-10-30
+- Areas: Chemistry
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The Licoxide reaction now consumes one unit each of lithium and zinc instead of lead and zinc. This restores the intended fun-reagent recipe and stops an unrelated toxic heavy metal from being required.
+- RMC/CMU divergence: Lithium, zinc, lead, and Licoxide prototypes already exist, and no RMC, CMU, or AU reaction override replaces Licoxide. The fork's typed reaction dictionaries deserialize the upstream YAML unchanged.
+- Decision and rationale: Port the isolated upstream reactant substitution exactly. Adding lithium without removing lead would silently create a three-reactant recipe, while changing reagent behavior or product yield would exceed the upstream correction.
+- Files changed: `Resources/Prototypes/Recipes/Reactions/fun.yml`, `Content.IntegrationTests/Tests/Chemistry/LicoxideReactionTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype review confirms both reactants and the product exist and the pinned target retains lithium. A regression was added for the exact reactant set, amounts, excluded lead, and Licoxide yield. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
+- Follow-up/debt: Include the YAML/prototype validator, this focused regression, and the existing all-reactions coverage in the CS-0040 checkpoint.
