@@ -6,10 +6,10 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Actions;
 
-public abstract class SharedRMCActionsSystem : EntitySystem
+public abstract partial class SharedRMCActionsSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
 
     private EntityQuery<ActionSharedCooldownComponent> _actionSharedCooldownQuery;
 

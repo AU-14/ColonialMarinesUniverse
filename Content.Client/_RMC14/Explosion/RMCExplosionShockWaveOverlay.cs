@@ -6,10 +6,12 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._RMC14.Explosion;
 
-public sealed class RMCExplosionShockWaveOverlay : Overlay, IEntityEventSubscriber
+public sealed partial class RMCExplosionShockWaveOverlay : Overlay, IEntityEventSubscriber
 {
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    private static readonly ProtoId<ShaderPrototype> ShockWaveShader = "RMCShockWave";
+
+    [Dependency] private IEntityManager _entMan = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     private SharedTransformSystem? _xformSystem;
 
@@ -26,7 +28,7 @@ public sealed class RMCExplosionShockWaveOverlay : Overlay, IEntityEventSubscrib
     public RMCExplosionShockWaveOverlay()
     {
         IoCManager.InjectDependencies(this);
-        _shader = _prototypeManager.Index<ShaderPrototype>("RMCShockWave").Instance().Duplicate();
+        _shader = _prototypeManager.Index(ShockWaveShader).Instance().Duplicate();
     }
 
     private readonly Vector2[] _positions = new Vector2[MaxCount];

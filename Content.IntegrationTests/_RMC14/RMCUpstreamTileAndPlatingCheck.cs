@@ -79,48 +79,60 @@ public sealed class RMCUpstreamTileAndPlatingCheck
                         {
                             var tileErrorsBefore = new HashSet<string>();
                             var tileErrorsAfter = new HashSet<string>();
-                            sMapLoaderSystem.TryLoadGeneric(new ResPath(file), out var map, out var grids, mapLoadOpts);
-                            if (grids == null)
-                                continue;
-                            foreach (var grid in grids)
+                            if (!sMapLoaderSystem.TryLoadGeneric(new ResPath(file), out var result, mapLoadOpts))
                             {
-                                var allTiles = sMapSystem.GetAllTiles(grid, grid.Comp);
-                                foreach (var tile in allTiles)
+                                Assert.Fail($"Failed to load {file}");
+                                continue;
+                            }
+
+                            try
+                            {
+                                foreach (var grid in result.Grids)
                                 {
-                                    if (tile.Tile.TypeId == tileDefinition.TileId)
+                                    var allTiles = sMapSystem.GetAllTiles(grid, grid.Comp);
+                                    foreach (var tile in allTiles)
                                     {
-                                        tileErrorsBefore.Add(tile.GridIndices.ToString());
-                                        continue;
-                                    }
+                                        if (tile.Tile.TypeId == tileDefinition.TileId)
+                                        {
+                                            tileErrorsBefore.Add(tile.GridIndices.ToString());
+                                            continue;
+                                        }
 
-                                    sTileSystem.PryTile(tile);
-                                    if (!sMapSystem.TryGetTile(grid, tile.GridIndices, out var priedTile))
-                                        continue;
+                                        sTileSystem.PryTile(tile);
+                                        if (!sMapSystem.TryGetTile(grid, tile.GridIndices, out var priedTile))
+                                            continue;
 
-                                    if (priedTile.TypeId == tileDefinition.TileId)
-                                    {
-                                        tileErrorsAfter.Add($"{tile.GridIndices.ToString()}, {tile.Tile.TypeId}");
+                                        if (priedTile.TypeId == tileDefinition.TileId)
+                                        {
+                                            tileErrorsAfter.Add($"{tile.GridIndices.ToString()}, {tile.Tile.TypeId}");
+                                        }
                                     }
                                 }
+
+                                if (tileErrorsBefore.Count == 0 && tileErrorsAfter.Count == 0)
+                                    continue;
+
+                                var msg = $"For {file} found:";
+                                if (tileErrorsBefore.Count > 0)
+                                {
+                                    msg +=
+                                        ("\nUpstream Plating was used (use [self gridtile tiletype:FromProtoId \"Plating\" replacetile:FromProtoId \"CMFloorPlating\"] over the grid to fix this issue.)");
+                                }
+
+                                if (tileErrorsAfter.Count > 0)
+                                {
+                                    msg +=
+                                        ($"\nupstream tiles or improperly parented tiles at \n{string.Join("\n", tileErrorsAfter)}\n");
+                                }
+
+                                Assert.Fail(msg);
                             }
-
-                            if (tileErrorsBefore.Count == 0 && tileErrorsAfter.Count == 0)
-                                continue;
-
-                            var msg = $"For {file} found:";
-                            if (tileErrorsBefore.Count > 0)
+                            finally
                             {
-                                msg +=
-                                    ("\nUpstream Plating was used (use [self gridtile tiletype:FromProtoId \"Plating\" replacetile:FromProtoId \"CMFloorPlating\"] over the grid to fix this issue.)");
+                                // This test loads every RMC map. Delete each result immediately so the suite does not
+                                // retain all maps and their tile mutations until the pooled server is returned.
+                                sMapLoaderSystem.Delete(result);
                             }
-
-                            if (tileErrorsAfter.Count > 0)
-                            {
-                                msg +=
-                                    ($"\nupstream tiles or improperly parented tiles at \n{string.Join("\n", tileErrorsAfter)}\n");
-                            }
-
-                            Assert.Fail(msg);
                         }
                     }
                 );

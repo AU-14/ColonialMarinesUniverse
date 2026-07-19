@@ -32,7 +32,7 @@ namespace Content.Shared.Administration
 
             foreach (var value in flags)
             {
-                var name = value.ToString().ToUpper();
+                var name = value.ToString().ToUpperInvariant();
 
                 // If, in the future, somebody adds a combined admin flag or something for convenience,
                 // ignore it.

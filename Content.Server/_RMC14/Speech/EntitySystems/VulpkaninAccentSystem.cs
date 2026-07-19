@@ -5,9 +5,15 @@ using Content.Server.Speech;
 
 namespace Content.Server._RMC14.Speech.EntitySystems;
 
-public sealed class VulpkaninAccentSystem : EntitySystem
+public sealed partial class VulpkaninAccentSystem : EntitySystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [GeneratedRegex("r+")]
+    private static partial Regex LowerRRegex();
+
+    [GeneratedRegex("R+")]
+    private static partial Regex UpperRRegex();
+
+    [Dependency] private IRobustRandom _random = default!;
     
     public override void Initialize()
     {
@@ -19,8 +25,8 @@ public sealed class VulpkaninAccentSystem : EntitySystem
     {
         var message = args.Message;
         
-        message = Regex.Replace(message, "r+", _random.Pick(new List<string> { "rr", "rrr" }));
-        message = Regex.Replace(message, "R+", _random.Pick(new List<string> { "RR", "RRR" }));
+        message = LowerRRegex().Replace(message, _random.Pick(new List<string> { "rr", "rrr" }));
+        message = UpperRRegex().Replace(message, _random.Pick(new List<string> { "RR", "RRR" }));
         
         args.Message = message;
     }

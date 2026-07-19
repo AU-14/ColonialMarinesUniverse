@@ -17,11 +17,13 @@ using Robust.Shared.Utility;
 
 namespace Content.Client._RMC14.Marines;
 
-public sealed class MarineOverlay : Overlay
+public sealed partial class MarineOverlay : Overlay
 {
-    [Dependency] private readonly IEntityManager _entity = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    private static readonly ProtoId<ShaderPrototype> ShadedShader = "shaded";
+
+    [Dependency] private IEntityManager _entity = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     private static readonly SpriteSpecifier.Rsi FireteamOneRsi = new(new ResPath("_RMC14/Interface/fireteam.rsi"), "hudsquad_ft1");
     private static readonly SpriteSpecifier.Rsi FireteamTwoRsi = new(new ResPath("_RMC14/Interface/fireteam.rsi"), "hudsquad_ft2");
@@ -64,7 +66,7 @@ public sealed class MarineOverlay : Overlay
         _paraDroppingQuery = _entity.GetEntityQuery<ParaDroppingComponent>();
         _crashLandingQuery = _entity.GetEntityQuery<CrashLandingComponent>();
 
-        _shader = _prototype.Index<ShaderPrototype>("shaded").Instance();
+        _shader = _prototype.Index(ShadedShader).Instance();
     }
 
     protected override void Draw(in OverlayDrawArgs args)

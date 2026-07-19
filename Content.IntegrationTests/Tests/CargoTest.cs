@@ -117,9 +117,9 @@ public sealed class CargoTest
             foreach (var proto in protoIds)
             {
                 // Sanity check
-                Assert.That(proto.TryGetComponent<StaticPriceComponent>(out var staticPriceComp, compFact), Is.True);
+                Assert.That(proto.TryComp<StaticPriceComponent>(out var staticPriceComp, compFact), Is.True);
 
-                if (proto.TryGetComponent<StackPriceComponent>(out var stackPriceComp, compFact) && stackPriceComp.Price > 0)
+                if (proto.TryComp<StackPriceComponent>(out var stackPriceComp, compFact) && stackPriceComp.Price > 0)
                 {
                     Assert.That(staticPriceComp.Price, Is.EqualTo(0),
                         $"The prototype {proto} has a StackPriceComponent and StaticPriceComponent whose values are not compatible with each other.");
@@ -150,7 +150,7 @@ public sealed class CargoTest
 
         var entManager = server.ResolveDependency<IEntityManager>();
         var mapSystem = server.System<SharedMapSystem>();
-        var mapManager = server.ResolveDependency<IMapManager>();
+        var mapManager = server.System<SharedMapSystem>();
         var protoManager = server.ResolveDependency<IPrototypeManager>();
         var componentFactory = server.ResolveDependency<IComponentFactory>();
         var whitelist = entManager.System<EntityWhitelistSystem>();
@@ -168,7 +168,7 @@ public sealed class CargoTest
             var sliceableEntityProtos = protoManager.EnumeratePrototypes<EntityPrototype>()
                 .Where(p => !p.Abstract)
                 .Where(p => !pair.IsTestPrototype(p))
-                .Where(p => p.TryGetComponent<SliceableFoodComponent>(out _, componentFactory))
+                .Where(p => p.TryComp<SliceableFoodComponent>(out _, componentFactory))
                 .Select(p => p.ID)
                 .ToList();
 

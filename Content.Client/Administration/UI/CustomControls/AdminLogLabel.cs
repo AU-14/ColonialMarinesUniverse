@@ -8,14 +8,14 @@ public sealed class AdminLogLabel : RichTextLabel
 {
     public AdminLogLabel(ref SharedAdminLog log, HSeparator separator)
     {
-        Log = log;
+        Entry = log;
         Separator = separator;
 
         SetMessage($"{log.Date:HH:mm:ss}: {log.Message}");
         OnVisibilityChanged += VisibilityChanged;
     }
 
-    public SharedAdminLog Log { get; }
+    public SharedAdminLog Entry { get; }
 
     public HSeparator Separator { get; }
 

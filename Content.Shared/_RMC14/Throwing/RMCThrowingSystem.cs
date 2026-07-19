@@ -3,9 +3,9 @@ using Content.Shared.Throwing;
 
 namespace Content.Shared._RMC14.Throwing;
 
-public sealed class RMCThrowingSystem : EntitySystem
+public sealed partial class RMCThrowingSystem : EntitySystem
 {
-    [Dependency] private readonly ThrownItemSystem _thrown = default!;
+    [Dependency] private ThrownItemSystem _thrown = default!;
 
     private EntityQuery<ThrownItemComponent> _thrownItemQuery;
 

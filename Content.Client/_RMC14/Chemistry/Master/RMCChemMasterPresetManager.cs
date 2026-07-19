@@ -10,9 +10,9 @@ namespace Content.Client._RMC14.Chemistry.Master;
 /// Manages ChemMaster presets for the client. Uses a simple text-based serialization format.
 /// Format: name|bottleLabel|bottleColor|pillType|usePresetName|quickSlot|quickLabel;...
 /// </summary>
-public sealed class RMCChemMasterPresetManager
+public sealed partial class RMCChemMasterPresetManager
 {
-    [Dependency] private readonly IConfigurationManager _config = default!;
+    [Dependency] private IConfigurationManager _config = default!;
 
     private List<RMCChemMasterPreset> _presets = new();
     private bool _loaded;

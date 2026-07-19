@@ -35,14 +35,16 @@ using Content.Shared.FixedPoint;
 
 namespace Content.Client._RMC14.Xenonids.Hud;
 
-public sealed class XenoHudOverlay : Overlay
+public sealed partial class XenoHudOverlay : Overlay
 {
-    [Dependency] private readonly IEntityManager _entity = default!;
-    [Dependency] private readonly IOverlayManager _overlay = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
+
+    [Dependency] private IEntityManager _entity = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private readonly ContainerSystem _container;
     private readonly CMHealthIconsSystem _healthIcons;
@@ -98,7 +100,7 @@ public sealed class XenoHudOverlay : Overlay
         _xenoQuery = _entity.GetEntityQuery<XenoComponent>();
         _hiveTeamMemberQuery = _entity.GetEntityQuery<HiveTeamMemberComponent>();
 
-        _shader = _prototype.Index<ShaderPrototype>("unshaded").Instance();
+        _shader = _prototype.Index(UnshadedShader).Instance();
         ZIndex = 1;
     }
 

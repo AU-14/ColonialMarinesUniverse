@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using Content.Server.Power.Components;
 using Content.Server.Spawners.Components;
 using Content.Shared._RMC14.Item;
@@ -386,13 +386,13 @@ public sealed partial class CMDistressSignalRuleSystem
 
         foreach (var prototype in _prototypes.EnumeratePrototypes<EntityPrototype>())
         {
-            if (prototype.TryGetComponent(out RMCDistressSignalNamesComponent? names, _compFactory))
+            if (prototype.TryComp(out RMCDistressSignalNamesComponent? names, _compFactory))
                 _operationNames.UnionWith(names.Names);
 
-            if (prototype.TryGetComponent(out RMCDistressSignalPrefixesComponent? prefixes, _compFactory))
+            if (prototype.TryComp(out RMCDistressSignalPrefixesComponent? prefixes, _compFactory))
                 _operationPrefixes.UnionWith(prefixes.Prefixes);
 
-            if (prototype.TryGetComponent(out RMCDistressSignalSuffixesComponent? suffixes, _compFactory))
+            if (prototype.TryComp(out RMCDistressSignalSuffixesComponent? suffixes, _compFactory))
                 _operationSuffixes.UnionWith(suffixes.Suffixes);
         }
     }

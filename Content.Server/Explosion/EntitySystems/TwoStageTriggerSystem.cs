@@ -4,11 +4,11 @@ using Content.Server.Explosion.Components.OnTrigger;
 
 namespace Content.Server.Explosion.EntitySystems;
 
-public sealed class TwoStageTriggerSystem : EntitySystem
+public sealed partial class TwoStageTriggerSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ISerializationManager _serializationManager = default!;
-    [Dependency] private readonly TriggerSystem _triggerSystem = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ISerializationManager _serializationManager = default!;
+    [Dependency] private TriggerSystem _triggerSystem = default!;
 
     public override void Initialize()
     {
@@ -32,7 +32,7 @@ public sealed class TwoStageTriggerSystem : EntitySystem
             var comp = (Component) Factory.GetComponent(name);
             var temp = (object)comp;
 
-            if (EntityManager.TryGetComponent(uid, entry.Component.GetType(), out var c))
+            if (TryComp(uid, entry.Component.GetType(), out var c))
                 RemComp(uid, c);
 
             _serializationManager.CopyTo(entry.Component, ref temp);

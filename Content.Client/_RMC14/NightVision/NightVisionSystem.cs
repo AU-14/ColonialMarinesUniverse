@@ -9,14 +9,14 @@ using Robust.Shared.Player;
 
 namespace Content.Client._RMC14.NightVision;
 
-public sealed class NightVisionSystem : SharedNightVisionSystem
+public sealed partial class NightVisionSystem : SharedNightVisionSystem
 {
-    [Dependency] private readonly IEntityManager _entity = default!;
-    [Dependency] private readonly ILightManager _light = default!;
-    [Dependency] private readonly IOverlayManager _overlay = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly SharedEyeSystem _eye = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
+    [Dependency] private IEntityManager _entity = default!;
+    [Dependency] private ILightManager _light = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
 
     private EntityQuery<XenoComponent> _xenoQuery;
     private EntityQuery<NightVisionComponent> _nvQuery;
@@ -73,11 +73,7 @@ public sealed class NightVisionSystem : SharedNightVisionSystem
 
     private void SetMesons(bool on)
     {
-        return; // TODO RMC14 make this not lag horribly
-        if (_player.LocalEntity == null)
-            return;
-
-        _eye.SetDrawFov(_player.LocalEntity.Value, !on);
+        // TODO RMC14: Re-enable after the meson implementation is made performant.
     }
 
     private void Off()
@@ -118,26 +114,7 @@ public sealed class NightVisionSystem : SharedNightVisionSystem
 
     private void SetMesonSprites(bool mesons)
     {
-        return; // TODO RMC14 make this not lag horribly
-        if (_player.LocalEntity == null)
-            return;
-
-        var isXeno = _xenoQuery.HasComp(_player.LocalEntity.Value);
-
-        var query = EntityQueryEnumerator<RMCMesonsNonviewableComponent, SpriteComponent>();
-        while (query.MoveNext(out var uid, out var viewable, out var sprite))
-        {
-            if (isXeno && viewable.XenoVisible)
-            {
-                sprite.Visible = true;
-                continue;
-            }
-
-            if (TryComp<XenoBurrowComponent>(uid, out var burrow) && burrow.Active)
-                continue;
-
-            sprite.Visible = !mesons || _examine.InRangeUnOccluded(_player.LocalEntity.Value, uid);
-        }
+        // TODO RMC14: Re-enable after the meson implementation is made performant.
     }
 
     public override void Update(float frameTime)

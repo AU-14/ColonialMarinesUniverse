@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+#nullable enable
+
 using Content.Server._RMC14.Rules.DistressSignal;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;

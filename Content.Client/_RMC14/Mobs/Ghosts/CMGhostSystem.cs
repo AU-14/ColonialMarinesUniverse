@@ -4,9 +4,9 @@ using Content.Shared.Actions;
 
 namespace Content.Client._RMC14.Mobs.Ghosts
 {
-    public sealed class CMGhostSystem : EntitySystem
+    public sealed partial class CMGhostSystem : EntitySystem
     {
-        [Dependency] private readonly SharedActionsSystem _actions = default!;
+        [Dependency] private SharedActionsSystem _actions = default!;
         public override void Initialize()
         {
             base.Initialize();

@@ -12,11 +12,11 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Xenonids.Projectile.Parasite;
 
-public abstract class SharedXenoParasiteThrowerSystem : EntitySystem
+public abstract partial class SharedXenoParasiteThrowerSystem : EntitySystem
 {
-    [Dependency] protected readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] protected SharedAppearanceSystem _appearance = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {

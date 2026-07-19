@@ -6,9 +6,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._RMC14.Aura;
 
-public sealed class AuraSystem : SharedAuraSystem
+public sealed partial class AuraSystem : SharedAuraSystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    private static readonly ProtoId<ShaderPrototype> AuraOutlineShader = "RMCAuraOutline";
+
+    [Dependency] private IPrototypeManager _prototypes = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -22,7 +24,7 @@ public sealed class AuraSystem : SharedAuraSystem
         if (!TryComp(ent, out SpriteComponent? sprite))
             return;
 
-        sprite.PostShader = _prototypes.Index<ShaderPrototype>("RMCAuraOutline").InstanceUnique();
+        sprite.PostShader = _prototypes.Index(AuraOutlineShader).InstanceUnique();
     }
 
     private void OnShutdown(Entity<AuraComponent> ent, ref ComponentShutdown args)

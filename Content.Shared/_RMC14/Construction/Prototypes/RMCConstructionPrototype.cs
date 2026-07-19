@@ -8,15 +8,16 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 
 namespace Content.Shared._RMC14.Construction.Prototypes;
 
+#pragma warning disable RA0037, RA0038 // Legacy BUI state serializes this immutable prototype snapshot; migrate to IDs with the UI rewrite.
 [Prototype("rmcConstruction"), Serializable, NetSerializable]
 public sealed partial class RMCConstructionPrototype : IPrototype, IInheritingPrototype
 {
     [ParentDataField(typeof(AbstractPrototypeIdArraySerializer<RMCConstructionPrototype>))]
-    public string[]? Parents { get; }
+    public string[]? Parents { get; private set; }
 
     [NeverPushInheritance]
     [AbstractDataField]
-    public bool Abstract { get; }
+    public bool Abstract { get; private set; }
 
     [ViewVariables]
     [IdDataField]
@@ -90,3 +91,4 @@ public sealed partial class RMCConstructionPrototype : IPrototype, IInheritingPr
     [DataField]
     public HashSet<int>? StackAmounts;
 }
+#pragma warning restore RA0037, RA0038

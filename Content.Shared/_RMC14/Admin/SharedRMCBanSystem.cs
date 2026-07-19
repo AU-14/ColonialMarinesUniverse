@@ -7,7 +7,7 @@ namespace Content.Shared._RMC14.Admin;
 
 public abstract class SharedRMCBanSystem : EntitySystem
 {
-    public bool IsJobBanned(NetUserId user, ProtoId<JobPrototype> job)
+    public virtual bool IsJobBanned(NetUserId user, ProtoId<JobPrototype> job)
     {
         return false;
     }

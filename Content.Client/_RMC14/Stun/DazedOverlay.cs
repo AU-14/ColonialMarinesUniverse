@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Stun;
+using System.Numerics;
 using Content.Shared.StatusEffectNew;
 using Robust.Client.Graphics;
 using Robust.Client.Player;

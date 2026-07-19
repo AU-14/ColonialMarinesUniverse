@@ -2,7 +2,7 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared._RMC14.Xenonids.Crippling;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(XenoCripplingStrikeSystem))]
 public sealed partial class VictimCripplingStrikeDamageComponent : Component
 {

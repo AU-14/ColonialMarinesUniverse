@@ -1,0 +1,20 @@
+<Project>
+  <PropertyGroup>
+    <!--
+      RobustToolbox v283 marks several still-supported transition APIs obsolete while the
+      corresponding content migrations remain incomplete upstream (notably legacy status
+      effects, Control disposal, and component-owned VV setters). Apply this after project-local
+      NoWarn values (Content.Server defines its own baseline); the migration inventory documents
+      the remaining compatibility surface.
+    -->
+    <NoWarn>$(NoWarn);CS0612;CS0618;CS0672</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$([System.String]::Copy('$(MSBuildProjectDirectory)').StartsWith('$(MSBuildThisFileDirectory)RobustToolbox'))">
+    <!--
+      The pinned, published engine release is immutable in this repository. Suppress only the
+      diagnostics emitted by that release when it is built under the repository's .NET 10 SDK.
+    -->
+    <NoWarn>$(NoWarn);CS0184;CS0612;CS0618;CS0672;NU1510;RA0045;RA0051;RA0052</NoWarn>
+  </PropertyGroup>
+</Project>

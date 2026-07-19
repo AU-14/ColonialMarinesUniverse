@@ -15,11 +15,11 @@ using Robust.Shared.Utility;
 namespace Content.Server._RMC14.Marines.Icons;
 
 [ToolshedCommand, AdminCommand(AdminFlags.VarEdit)]
-public sealed class IconCommand : ToolshedCommand
+public sealed partial class IconCommand : ToolshedCommand
 {
     private static readonly ResPath JobIconsRoot = new("/Textures/_RMC14/Interface/job_icons");
 
-    [Dependency] private readonly IResourceManager _resource = default!;
+    [Dependency] private IResourceManager _resource = default!;
 
     private SharedMarineSystem? _marineSystem;
 
@@ -132,9 +132,9 @@ public sealed class IconCommand : ToolshedCommand
     }
 
     // TAB completion of job icon names for icon:set NO " " NEEDED!!
-    public sealed class MarineIconStateParser : CustomTypeParser<string>
+    public sealed partial class MarineIconStateParser : CustomTypeParser<string>
     {
-        [Dependency] private readonly IResourceManager _resource = default!;
+        [Dependency] private IResourceManager _resource = default!;
 
         public override bool TryParse(ParserContext ctx, [NotNullWhen(true)] out string? result)
         {

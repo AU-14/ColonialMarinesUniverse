@@ -17,12 +17,6 @@ public sealed class XenoFruitPlanterVisualsSystem : VisualizerSystem<XenoFruitPl
             return;
         }
 
-        if (color == null)
-        {
-            sprite.LayerSetVisible(layer, false);
-            return;
-        }
-
         sprite.LayerSetVisible(layer, true);
         sprite.LayerSetColor(layer, color);
 

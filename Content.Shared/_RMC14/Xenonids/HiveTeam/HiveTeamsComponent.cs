@@ -13,8 +13,8 @@ public sealed partial class HiveTeamsComponent : Component
     public List<HiveTeamEntry> Teams = [];
 }
 
-[Serializable, NetSerializable]
-public sealed class HiveTeamEntry
+[Serializable, NetSerializable, DataDefinition]
+public sealed partial class HiveTeamEntry
 {
     [DataField]
     public NetEntity? Leader;

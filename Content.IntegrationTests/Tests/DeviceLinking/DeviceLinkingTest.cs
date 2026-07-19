@@ -34,7 +34,7 @@ public sealed class DeviceLinkingTest
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var compFact = server.ResolveDependency<IComponentFactory>();
-        var mapMan = server.ResolveDependency<IMapManager>();
+        var mapMan = server.System<SharedMapSystem>();
         var mapSys = server.System<SharedMapSystem>();
         var deviceLinkSys = server.System<DeviceLinkSystem>();
 
@@ -49,7 +49,7 @@ public sealed class DeviceLinkingTest
                     if (proto.Abstract || pair.IsTestPrototype(proto))
                         continue;
 
-                    if (!proto.TryGetComponent<DeviceLinkSinkComponent>(out var protoSinkComp, compFact))
+                    if (!proto.TryComp<DeviceLinkSinkComponent>(out var protoSinkComp, compFact))
                         continue;
 
                     foreach (var port in protoSinkComp.Ports)

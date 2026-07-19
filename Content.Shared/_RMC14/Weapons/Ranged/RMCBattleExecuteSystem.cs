@@ -28,21 +28,21 @@ using Robust.Shared.Player;
 
 namespace Content.Shared._RMC14.Weapons.Ranged;
 
-public sealed class RMCBattleExecuteSystem : EntitySystem
+public sealed partial class RMCBattleExecuteSystem : EntitySystem
 {
-    [Dependency] private readonly ISharedAdminLogManager _admin = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedCMChatSystem _rmcChat = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
-    [Dependency] private readonly SharedCameraRecoilSystem _cameraRecoil = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly RMCUnrevivableSystem _unrevivable = default!;
+    [Dependency] private ISharedAdminLogManager _admin = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedCMChatSystem _rmcChat = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private SharedCameraRecoilSystem _cameraRecoil = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private RMCUnrevivableSystem _unrevivable = default!;
 
 
     public override void Initialize()
@@ -95,7 +95,7 @@ public sealed class RMCBattleExecuteSystem : EntitySystem
             return;
         }
 
-        var ev = new RMCBattleExecuteEvent(GetNetEntity(user), GetNetEntity(target), executionComponent.Damage);
+        var ev = new RMCBattleExecuteEvent(executionComponent.Damage);
         var doAfterArgs = new DoAfterArgs(EntityManager,
             user,
             executionComponent.BattleExecuteTimeSeconds,
@@ -112,8 +112,9 @@ public sealed class RMCBattleExecuteSystem : EntitySystem
 
     private void ExecuteDoAfter(Entity<MarineComponent> ent, ref RMCBattleExecuteEvent args)
     {
-        var user = GetEntity(args.User);
-        var target = GetEntity(args.Target);
+        var user = args.User;
+        if (args.Target is not { } target)
+            return;
 
         if (args.Cancelled)
         {

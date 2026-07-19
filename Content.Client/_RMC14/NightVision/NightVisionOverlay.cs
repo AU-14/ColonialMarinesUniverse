@@ -11,11 +11,13 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._RMC14.NightVision;
 
-public sealed class NightVisionOverlay : Overlay
+public sealed partial class NightVisionOverlay : Overlay
 {
-    [Dependency] private readonly IEntityManager _entity = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    private static readonly ProtoId<ShaderPrototype> NightVisionShader = "RMCNightVision";
+
+    [Dependency] private IEntityManager _entity = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     private readonly ContainerSystem _container;
     private readonly ExamineSystem _examine;
@@ -36,7 +38,7 @@ public sealed class NightVisionOverlay : Overlay
         _transform = _entity.System<TransformSystem>();
         _xenoQuery = _entity.GetEntityQuery<XenoComponent>();
 
-        _shader = _prototype.Index<ShaderPrototype>("RMCNightVision").Instance().Duplicate();
+        _shader = _prototype.Index(NightVisionShader).Instance().Duplicate();
     }
 
     protected override void Draw(in OverlayDrawArgs args)

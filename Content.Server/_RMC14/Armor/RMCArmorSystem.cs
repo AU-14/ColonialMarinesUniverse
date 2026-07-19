@@ -9,12 +9,12 @@ using Robust.Shared.Player;
 
 namespace Content.Server._RMC14.Armor;
 
-public sealed class RMCArmorSystem : EntitySystem
+public sealed partial class RMCArmorSystem : EntitySystem
 {
-    [Dependency] private readonly IServerPreferencesManager _prefs = default!;
-    [Dependency] protected readonly InventorySystem InventorySystem = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly CMArmorSystem _armorSystem = default!;
+    [Dependency] private IServerPreferencesManager _prefs = default!;
+    [Dependency] private InventorySystem _inventorySystem = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private CMArmorSystem _armorSystem = default!;
 
     private EntityQuery<RMCArmorVariantComponent> _armorVariantQuery;
 
@@ -42,7 +42,7 @@ public sealed class RMCArmorSystem : EntitySystem
 
         var equipmentEntityID = _armorSystem.GetArmorVariant((args.Item, armor), profile.ArmorPreference);
         var equipmentEntity = Spawn(equipmentEntityID, _transform.GetMapCoordinates(ent));
-        InventorySystem.TryEquip(ent, equipmentEntity, "outerClothing", force: true, predicted: false);
+        _inventorySystem.TryEquip(ent, equipmentEntity, "outerClothing", force: true, predicted: false);
 
         var ev = new RMCArmorVariantCreatedEvent(ent, equipmentEntity);
         RaiseLocalEvent(ent, ref ev);

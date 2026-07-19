@@ -58,6 +58,7 @@ public sealed partial class GameMapPrototype : IPrototype
     /// </summary>
     public GameMapPrototype Persistence(ResPath mapPath)
     {
+#pragma warning disable RA0039 // Persistence intentionally creates a detached runtime map configuration.
         return new()
         {
             ID = ID,
@@ -65,5 +66,6 @@ public sealed partial class GameMapPrototype : IPrototype
             MapPath = mapPath,
             _stations = _stations
         };
+#pragma warning restore RA0039
     }
 }

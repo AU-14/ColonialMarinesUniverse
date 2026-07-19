@@ -12,10 +12,10 @@ namespace Content.Client._RMC14.ParaDrop;
 
 public sealed partial class ParaDropSystem : SharedParaDropSystem
 {
-    [Dependency] private readonly AnimationPlayerSystem _animPlayer = default!;
-    [Dependency] private readonly RMCSpriteSystem _rmcSprite = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private AnimationPlayerSystem _animPlayer = default!;
+    [Dependency] private RMCSpriteSystem _rmcSprite = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private TransformSystem _transform = default!;
 
     private const string DroppingAnimationKey = "dropping-animation";
     private const string SkyFallingAnimationKey = "sky-falling-animation";
@@ -164,7 +164,7 @@ public sealed partial class ParaDropSystem : SharedParaDropSystem
         if (timeRemaining > 0 && multiplier is > 0 and < 1)
         {
             var offset = new Vector2();
-            if (EntityManager.TryGetComponent(fallingUid, out SpriteComponent? sprite))
+            if (TryComp(fallingUid, out SpriteComponent? sprite))
                 offset = sprite.Offset;
             _animPlayer.Play(fallingUid, ReturnFallAnimation(adjustedDuration,  adjustedHeight, offset), animationKey);
             if (paraDroppable != null)

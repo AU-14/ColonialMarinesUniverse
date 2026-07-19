@@ -1,6 +1,4 @@
-﻿using Content.Shared._RMC14.Marines.Skills;
-using Content.Shared._RMC14.Weapons.Ranged.IFF;
-using Robust.Shared.Audio;
+using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;

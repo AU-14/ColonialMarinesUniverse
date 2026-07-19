@@ -29,6 +29,7 @@ public sealed partial class HumanoidSpeciesBaseSpritesPrototype : IPrototype
 ///     a humanoid species sprite, and also defines how markings can appear over
 ///     that sprite (or at least, the layer this sprite is on).
 /// </summary>
+#pragma warning disable RA0037, RA0038 // Existing profile serialization requires this value object; migrate the contract to prototype IDs separately.
 [Prototype("humanoidBaseSprite")]
 [Serializable, NetSerializable]
 public sealed partial class HumanoidSpeciesSpriteLayer : IPrototype
@@ -75,3 +76,4 @@ public sealed partial class HumanoidSpeciesSpriteLayer : IPrototype
     [DataField("markingsMatchSkin")]
     public bool MarkingsMatchSkin { get; private set; }
 }
+#pragma warning restore RA0037, RA0038

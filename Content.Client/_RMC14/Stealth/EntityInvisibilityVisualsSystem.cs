@@ -5,9 +5,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._RMC14.Stealth;
 
-public sealed class EntityInvisibilityVisualsSystem : EntitySystem
+public sealed partial class EntityInvisibilityVisualsSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    private static readonly ProtoId<ShaderPrototype> InvisibleShader = "RMCInvisible";
+
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     public override void Initialize()
     {
@@ -22,7 +24,7 @@ public sealed class EntityInvisibilityVisualsSystem : EntitySystem
         if (!TryComp(ent, out SpriteComponent? sprite))
             return;
 
-        sprite.PostShader = _prototypes.Index<ShaderPrototype>("RMCInvisible").InstanceUnique();
+        sprite.PostShader = _prototypes.Index(InvisibleShader).InstanceUnique();
     }
 
     private void OnShutdown(Entity<EntityTurnInvisibleComponent> ent, ref ComponentShutdown args)

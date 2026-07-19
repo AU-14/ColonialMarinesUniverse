@@ -173,6 +173,8 @@ public sealed class BodyPrototypeSerializer : ITypeReader<BodyPrototype, Mapping
             slots.Add(slotId, slot);
         }
 
+#pragma warning disable RA0039 // This is the prototype serializer's construction boundary.
         return new BodyPrototype(id, name, root, slots);
+#pragma warning restore RA0039
     }
 }

@@ -5,9 +5,9 @@ using Robust.Shared.Player;
 
 namespace Content.Client._RMC14.PlayTimeTracking;
 
-public sealed class RMCPlayTimeManager : IPostInjectInit
+public sealed partial class RMCPlayTimeManager : IPostInjectInit
 {
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private INetManager _net = default!;
 
     private readonly HashSet<string> _excluded = [];
 

@@ -8,7 +8,6 @@ using Content.Shared._RMC14.Tools;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Weapons.Ranged.Homing;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
-using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
@@ -20,6 +19,7 @@ using Content.Shared.Item;
 using Content.Shared.Popups;
 using Content.Shared.Tag;
 using Content.Shared.Tools.Systems;
+using Content.Shared.Tools;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
@@ -34,29 +34,31 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Sentry;
 
-public sealed class SentrySystem : EntitySystem
+public sealed partial class SentrySystem : EntitySystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly FixtureSystem _fixture = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly RMCMapSystem _rmcMap = default!;
-    [Dependency] private readonly RMCInteractionSystem _rmcInteraction = default!;
-    [Dependency] private readonly SharedRMCNPCSystem _rmcNpc = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
-    [Dependency] private readonly SharedToolSystem _tools = default!;
-    [Dependency] private readonly DamageableSystem _damageableSystem = default!;
-    [Dependency] private readonly SharedSentryTargetingSystem _targeting = default!;
-    [Dependency] private readonly SharedPointLightSystem _pointLight = default!;
+    private static readonly ProtoId<ToolQualityPrototype> ScrewingQuality = "Screwing";
+
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private FixtureSystem _fixture = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private RMCInteractionSystem _rmcInteraction = default!;
+    [Dependency] private SharedRMCNPCSystem _rmcNpc = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private SharedToolSystem _tools = default!;
+    [Dependency] private DamageableSystem _damageableSystem = default!;
+    [Dependency] private SharedSentryTargetingSystem _targeting = default!;
+    [Dependency] private SharedPointLightSystem _pointLight = default!;
 
     private readonly HashSet<EntityUid> _toUpdate = new();
 
@@ -179,7 +181,7 @@ public sealed class SentrySystem : EntitySystem
             return;
         }
 
-        if (_tools.HasQuality(used, "Screwing"))
+        if (_tools.HasQuality(used, ScrewingQuality))
         {
             if (sentry.Comp.Mode == SentryMode.Off)
             {

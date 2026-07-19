@@ -402,7 +402,7 @@ namespace Content.Client.Lobby.UI
             for (var i = 0; i < squad.SquadPrototypes.Length; i++)
             {
                 var squadProto = squad.SquadPrototypes[i];
-                if (!squadProto.TryGetComponent(out SquadTeamComponent? team) ||
+                if (!squadProto.TryComp(out SquadTeamComponent? team, _entManager.ComponentFactory) ||
                     !team.RoundStart)
                 {
                     continue;

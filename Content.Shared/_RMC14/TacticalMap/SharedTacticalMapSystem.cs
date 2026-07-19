@@ -3,10 +3,10 @@ using Robust.Shared.Configuration;
 
 namespace Content.Shared._RMC14.TacticalMap;
 
-public abstract class SharedTacticalMapSystem : EntitySystem
+public abstract partial class SharedTacticalMapSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     public int LineLimit { get; private set; }
 
@@ -55,7 +55,7 @@ public abstract class SharedTacticalMapSystem : EntitySystem
         UpdateMapData(computer, map);
     }
 
-    protected void UpdateMapData(Entity<TacticalMapComputerComponent> computer, TacticalMapComponent map)
+    protected virtual void UpdateMapData(Entity<TacticalMapComputerComponent> computer, TacticalMapComponent map)
     {
         var ev = new TacticalMapIncludeXenosEvent();
         RaiseLocalEvent(ref ev);
@@ -79,7 +79,7 @@ public abstract class SharedTacticalMapSystem : EntitySystem
         Dirty(computer, lines);
     }
 
-    public void OpenComputerMap(Entity<TacticalMapComputerComponent?> computer, EntityUid user)
+    public virtual void OpenComputerMap(Entity<TacticalMapComputerComponent?> computer, EntityUid user)
     {
         if (!Resolve(computer, ref computer.Comp, false))
             return;

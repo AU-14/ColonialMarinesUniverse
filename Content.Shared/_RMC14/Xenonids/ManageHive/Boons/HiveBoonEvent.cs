@@ -7,7 +7,7 @@ namespace Content.Shared._RMC14.Xenonids.ManageHive.Boons;
 [DataDefinition]
 [ImplicitDataDefinitionForInheritors]
 [Serializable, NetSerializable]
-public partial class HiveBoonEvent
+public abstract partial class HiveBoonEvent
 {
     [NonSerialized]
     public EntityUid Boon;

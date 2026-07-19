@@ -15,21 +15,21 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared._RMC14.PlayingCards;
 
-public abstract class SharedPlayingCardSystem : EntitySystem
+public abstract partial class SharedPlayingCardSystem : EntitySystem
 {
-    [Dependency] protected readonly SharedAudioSystem Audio = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
-    [Dependency] protected readonly SharedHandsSystem Hands = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly MetaDataSystem _meta = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] protected readonly SharedPopupSystem Popup = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] protected readonly SharedUserInterfaceSystem Ui = default!;
+    [Dependency] protected SharedAudioSystem Audio = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] protected SharedHandsSystem Hands = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private MetaDataSystem _meta = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] protected SharedPopupSystem Popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] protected SharedUserInterfaceSystem Ui = default!;
 
     private readonly HashSet<Entity<PlayingCardComponent>> _cardLookup = new();
     private readonly HashSet<Entity<PlayingCardHandComponent>> _handLookup = new();

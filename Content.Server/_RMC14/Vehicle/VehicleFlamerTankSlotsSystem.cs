@@ -6,9 +6,9 @@ using Robust.Shared.Map;
 
 namespace Content.Server._RMC14.Vehicle;
 
-public sealed class VehicleFlamerTankSlotsSystem : EntitySystem
+public sealed partial class VehicleFlamerTankSlotsSystem : EntitySystem
 {
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
 
     public override void Initialize()
     {

@@ -271,16 +271,16 @@ public sealed partial class AdminLogsControl : Control
 
     private bool LogMatchesPlayerFilter(AdminLogLabel label)
     {
-        if (label.Log.Players.Length == 0)
+        if (label.Entry.Players.Length == 0)
             return SelectedPlayers.Count == 0 || IncludeNonPlayerLogs;
 
-        return SelectedPlayers.Overlaps(label.Log.Players);
+        return SelectedPlayers.Overlaps(label.Entry.Players);
     }
 
     private bool ShouldShowLog(AdminLogLabel label)
     {
         // Check log type
-        if (!SelectedTypes.Contains(label.Log.Type))
+        if (!SelectedTypes.Contains(label.Entry.Type))
             return false;
 
         // Check players
@@ -288,11 +288,11 @@ public sealed partial class AdminLogsControl : Control
             return false;
 
         // Check impact
-        if (!SelectedImpacts.Contains(label.Log.Impact))
+        if (!SelectedImpacts.Contains(label.Entry.Impact))
             return false;
 
         // Check search
-        if (!label.Log.Message.Contains(LogSearch.Text, StringComparison.OrdinalIgnoreCase))
+        if (!label.Entry.Message.Contains(LogSearch.Text, StringComparison.OrdinalIgnoreCase))
             return false;
 
         return true;

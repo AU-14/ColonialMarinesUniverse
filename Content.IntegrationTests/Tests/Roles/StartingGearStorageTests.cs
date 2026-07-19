@@ -3,7 +3,6 @@ using Content.Server.Storage.EntitySystems;
 using Content.Shared.Roles;
 using Robust.Shared.Collections;
 using Robust.Shared.GameObjects;
-using Robust.Shared.Collections;
 
 namespace Content.IntegrationTests.Tests.Roles;
 

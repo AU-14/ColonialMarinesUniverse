@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Client.Administration.UI.CustomControls;
 using Content.Client.Eui;
 using Content.Shared._RMC14.Admin;
@@ -15,11 +15,11 @@ using static Robust.Client.UserInterface.Controls.BoxContainer;
 
 namespace Content.Client._RMC14.Admin.Global;
 
-public sealed class RMCGlobalAdminEui : BaseEui
+public sealed partial class RMCGlobalAdminEui : BaseEui
 {
-    [Dependency] private readonly IComponentFactory _compFactory = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     private RMCGlobalAdminWindow _window = default!;
 
@@ -85,7 +85,7 @@ public sealed class RMCGlobalAdminEui : BaseEui
             {
                 squadName = squadPrototype.Name;
 
-                if (squadPrototype.TryGetComponent(out SquadTeamComponent? squadComp, _compFactory))
+                if (squadPrototype.TryComp(out SquadTeamComponent? squadComp, _compFactory))
                     color = squadComp.Color;
             }
 
@@ -105,7 +105,7 @@ public sealed class RMCGlobalAdminEui : BaseEui
         var xenoTiers = new Dictionary<int, int>();
         foreach (var entity in _prototypes.EnumeratePrototypes<EntityPrototype>())
         {
-            if (entity.Abstract || !entity.TryGetComponent(out XenoComponent? xeno, _compFactory))
+            if (entity.Abstract || !entity.TryComp(out XenoComponent? xeno, _compFactory))
                 continue;
 
             xenoTiers.GetOrNew(xeno.Tier);
@@ -114,7 +114,7 @@ public sealed class RMCGlobalAdminEui : BaseEui
         foreach (var xeno in s.Xenos)
         {
             if (_prototypes.TryIndex(xeno.Proto, out var xenoProto) &&
-                xenoProto.TryGetComponent(out XenoComponent? xenoComp, _compFactory))
+                xenoProto.TryComp(out XenoComponent? xenoComp, _compFactory))
             {
                 xenoTiers[xenoComp.Tier] = xenoTiers.GetOrNew(xenoComp.Tier) + 1;
             }

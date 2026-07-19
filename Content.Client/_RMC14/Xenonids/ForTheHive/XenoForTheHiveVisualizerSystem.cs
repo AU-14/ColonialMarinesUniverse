@@ -3,9 +3,9 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client._RMC14.Xenonids.ForTheHive;
 
-public sealed class XenoForTheHiveVisualizerSystem : VisualizerSystem<ForTheHiveComponent>
+public sealed partial class XenoForTheHiveVisualizerSystem : VisualizerSystem<ForTheHiveComponent>
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -48,21 +48,6 @@ public sealed class XenoForTheHiveVisualizerSystem : VisualizerSystem<ForTheHive
 
     protected override void OnAppearanceChange(EntityUid xeno, ForTheHiveComponent component, ref AppearanceChangeEvent args)
     {
-        return; // TODO RMC14 make the animation speed up overtime
-
-        var sprite = args.Sprite;
-
-        if (!HasComp<ActiveForTheHiveComponent>(xeno))
-            return;
-
-        if (sprite == null || !AppearanceSystem.TryGetData<float>(xeno, ForTheHiveVisuals.Time, out var ratio, args.Component))
-            return;
-
-        if (!_sprite.LayerMapTryGet((xeno, sprite), ForTheHiveVisualLayers.Base, out var layer, false))
-            return;
-
-        if (ratio >= 0)
-            sprite.LayerSetAnimationTime(layer, (float)(component.AnimationTimeBase.TotalSeconds * ratio));
-
+        // TODO RMC14: Re-enable once the animation can accelerate over time.
     }
 }
