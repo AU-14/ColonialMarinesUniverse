@@ -30,6 +30,7 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
 
     private static readonly Dictionary<string, string[]> DepartmentFallbacks = new()
     {
+        ["AU14DepartmentColonyMedical"] = new[] { "AU14DepartmentCivilian" },
         ["AU14DepartmentCivilian"] = new[] { "AU14DepartmentServices" },
         ["AU14DepartmentLabor"] = new[] { "AU14DepartmentLumbermill" },
         ["AU14DepartmentServices"] = new[] { "AU14DepartmentHydroponics" },

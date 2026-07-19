@@ -12,6 +12,7 @@ using Content.Server.Radio.EntitySystems;
 using Content.Server._RMC14.Humanoid.Markings;
 using Content.Shared._CMU14.DroneOperator;
 using Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Humanoid.Markings;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Synth;
@@ -89,6 +90,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
     [Dependency] private SharedToolSystem _tool = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private CMUXenoWarlockSystem _warlockParticles = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private static readonly EntProtoId EndControlActionId = "CMUActionDroneEndControl";
     private static readonly TimeSpan LeashCheckInterval = TimeSpan.FromSeconds(0.5);
@@ -1450,7 +1452,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
             return false;
         }
 
-        if (!IsSameMapInRange(user, drone.Owner, tablet.Comp.Range))
+        if (!IsInControlRange(user, drone.Owner, tablet.Comp.Range))
         {
             reason = Loc.GetString("cmu-drone-follow-out-of-range");
             return false;
@@ -1749,7 +1751,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
             return false;
         }
 
-        if (!IsSameMapInRange(user, drone.Owner, tablet.Comp.Range))
+        if (!IsInControlRange(user, drone.Owner, tablet.Comp.Range))
         {
             reason = Loc.GetString("cmu-drone-control-out-of-range");
             return false;
@@ -1792,7 +1794,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
             return;
         }
 
-        if (!TryGetSameMapDistance(drone.Comp.Operator, drone.Owner, out var distance) ||
+        if (!TryGetControlDistance(drone.Comp.Operator, drone.Owner, tablet.Range, out var distance) ||
             distance > tablet.Range)
         {
             QueueEndControl(drone, Loc.GetString("cmu-drone-control-ended-leash"));
@@ -2380,12 +2382,12 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
                !TerminatingOrDeleted(drone);
     }
 
-    private bool IsSameMapInRange(EntityUid first, EntityUid second, float range)
+    private bool IsInControlRange(EntityUid first, EntityUid second, float range)
     {
-        return TryGetSameMapDistance(first, second, out var distance) && distance <= range;
+        return TryGetControlDistance(first, second, range, out var distance) && distance <= range;
     }
 
-    private bool TryGetSameMapDistance(EntityUid first, EntityUid second, out float distance)
+    private bool TryGetControlDistance(EntityUid first, EntityUid second, float maxDistance, out float distance)
     {
         distance = 0f;
 
@@ -2395,14 +2397,26 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         var firstCoords = _transform.GetMapCoordinates(first);
         var secondCoords = _transform.GetMapCoordinates(second);
 
-        if (firstCoords.MapId != secondCoords.MapId ||
-            firstCoords.MapId == MapId.Nullspace)
-        {
+        if (firstCoords.MapId == MapId.Nullspace || secondCoords.MapId == MapId.Nullspace)
             return false;
+
+        if (firstCoords.MapId == secondCoords.MapId)
+        {
+            distance = Vector2.Distance(firstCoords.Position, secondCoords.Position);
+            return true;
         }
 
-        distance = (firstCoords.Position - secondCoords.Position).Length();
-        return true;
+        var firstMap = Transform(first).MapUid;
+        var secondMap = Transform(second).MapUid;
+        return firstMap is { } resolvedFirstMap &&
+               secondMap is { } resolvedSecondMap &&
+               _zLevels.TryGetDistanceViaAdjacentLevelOpening(
+                   resolvedFirstMap,
+                   firstCoords.Position,
+                   resolvedSecondMap,
+                   secondCoords.Position,
+                   maxDistance,
+                   out distance);
     }
 
     private bool TryDistance(EntityUid first, EntityUid second, out float distance)
