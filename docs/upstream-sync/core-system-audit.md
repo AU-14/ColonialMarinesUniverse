@@ -195,3 +195,16 @@ demonstrates otherwise.
 - Files changed: `Content.Server/GameTicking/GameTicker.GamePreset.cs`, `Content.IntegrationTests/Tests/GameRules/GamePresetFallbackResetTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: `dotnet build Content.IntegrationTests/Content.IntegrationTests.csproj --configuration DebugOpt --no-restore --nologo --verbosity:minimal` completed with 0 warnings and 0 errors; the focused integration test passed 1/1 and appeared in test discovery. Mutation testing proved both branches: upstream's `resetDelay: 1` failed with an actual countdown of `1` instead of `0`, and dropping string-overload forwarding failed with `null` instead of `0`; after restoring the adapted implementation, the test passed again. `dotnet build SpaceStation14.slnx --configuration DebugOpt --no-restore --no-incremental --nologo --verbosity:minimal` completed with 0 warnings and 0 errors.
 - Follow-up/debt: Consider porting SS14 #41522's fallback observability logs separately; do not mix those logging-only changes into this behavioral fix.
+
+## CS-0008 — Count station tiles without enumerating them
+
+- Upstream: [space-wizards/space-station-14#43929](https://github.com/space-wizards/space-station-14/pull/43929), `efda3a71d24ecb674022e195c50bc16ff96c2680`, 2026-06-30
+- Areas: GameTicking, Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Grid selection for random station tiles keeps the same filled-tile weighting while obtaining each grid's count from maintained chunk metadata instead of enumerating every filled tile.
+- RMC/CMU divergence: None in this call site. CMU's RobustToolbox revision already provides `SharedMapSystem.GetFilledTileCount(Entity<MapGridComponent>)` and derives it by summing each chunk's maintained `FilledTiles` count.
+- Decision and rationale: Apply the exact upstream substitution. It removes work proportional to every cell in every grid chunk from a gamerule utility path without changing the intended weights or random-selection behavior.
+- Files changed: `Content.Server/GameTicking/Rules/GameRuleSystem.Utility.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: `dotnet build Content.Server/Content.Server.csproj --configuration DebugOpt --no-restore --nologo --verbosity:minimal` and the integration-test project build both completed with 0 warnings and 0 errors. The existing `Content.IntegrationTests.Tests.GameRules` filter completed with 4 passes, 4 skips, and 0 failures. After a transient post-test file handle exited, `dotnet build SpaceStation14.slnx --configuration DebugOpt --no-restore --no-incremental --nologo --verbosity:minimal` was rerun and completed with 0 warnings and 0 errors.
+- Follow-up/debt: The target SS14 revision later rewrites this method in #44382 (`c0f35ade3e`) and fixes that rewrite in #44668 (`667f7fa8bb`). Port those commits only as a paired, separately tested behavior change; never port the rewrite without its coordinate fix.
