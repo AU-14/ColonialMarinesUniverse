@@ -411,7 +411,7 @@ namespace Content.Server.Construction
                     if ((!temperatureChangeStep.MinTemperature.HasValue || temp >= temperatureChangeStep.MinTemperature.Value) &&
                         (!temperatureChangeStep.MaxTemperature.HasValue || temp <= temperatureChangeStep.MaxTemperature.Value))
                     {
-                        return HandleResult.True;
+                        return validation ? HandleResult.Validated : HandleResult.True;
                     }
 
                     return HandleResult.False;
@@ -423,7 +423,7 @@ namespace Content.Server.Construction
                         break;
 
                     if (partAssemblyStep.Condition(uid, EntityManager))
-                        return HandleResult.True;
+                        return validation ? HandleResult.Validated : HandleResult.True;
                     return HandleResult.False;
                 }
 
@@ -571,6 +571,10 @@ namespace Content.Server.Construction
 
                 handled.Handled = true;
             }
+
+            // Make sure the event passes validation before enqueuing it
+            if (HandleEvent(uid, args, true, construction) != HandleResult.Validated)
+                return;
 
             // Enqueue this event so it'll be handled in the next tick.
             // This prevents some issues that could occur from entity deletion, component deletion, etc in a handler.
