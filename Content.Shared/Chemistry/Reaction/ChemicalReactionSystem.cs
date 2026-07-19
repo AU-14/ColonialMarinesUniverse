@@ -34,12 +34,12 @@ namespace Content.Shared.Chemistry.Reaction
         /// A cache of all reactions indexed by at most ONE of their required reactants.
         /// I.e., even if a reaction has more than one reagent, it will only ever appear once in this dictionary.
         /// </summary>
-        private FrozenDictionary<string, List<ReactionPrototype>> _reactionsSingle = default!;
+        private FrozenDictionary<ProtoId<ReagentPrototype>, List<ReactionPrototype>> _reactionsSingle = default!;
 
         /// <summary>
         ///     A cache of all reactions indexed by one of their required reactants.
         /// </summary>
-        private FrozenDictionary<string, List<ReactionPrototype>> _reactions = default!;
+        private FrozenDictionary<ProtoId<ReagentPrototype>, List<ReactionPrototype>> _reactions = default!;
 
         public override void Initialize()
         {
@@ -55,7 +55,7 @@ namespace Content.Shared.Chemistry.Reaction
         private void InitializeReactionCache()
         {
             // Construct single-reaction dictionary.
-            var dict = new Dictionary<string, List<ReactionPrototype>>();
+            var dict = new Dictionary<ProtoId<ReagentPrototype>, List<ReactionPrototype>>();
             foreach (var reaction in _prototypeManager.EnumeratePrototypes<ReactionPrototype>())
             {
                 // For this dictionary we only need to cache based on the first reagent.
@@ -90,7 +90,7 @@ namespace Content.Shared.Chemistry.Reaction
         /// <summary>
         ///     Checks if a solution can undergo a specified reaction.
         /// </summary>
-        /// <param name="solution">The solution to check.</param>
+        /// <param name="soln">The solution to check.</param>
         /// <param name="reaction">The reaction to check.</param>
         /// <param name="lowestUnitReactions">How many times this reaction can occur.</param>
         /// <returns></returns>
@@ -164,7 +164,7 @@ namespace Content.Shared.Chemistry.Reaction
         ///     Perform a reaction on a solution. This assumes all reaction criteria are met.
         ///     Removes the reactants from the solution, adds products, and returns a list of products.
         /// </summary>
-        private List<string> PerformReaction(Entity<SolutionComponent> soln, ReactionPrototype reaction, FixedPoint2 unitReactions)
+        private List<ProtoId<ReagentPrototype>> PerformReaction(Entity<SolutionComponent> soln, ReactionPrototype reaction, FixedPoint2 unitReactions)
         {
             var (uid, comp) = soln;
             var solution = comp.Solution;
@@ -182,7 +182,7 @@ namespace Content.Shared.Chemistry.Reaction
             }
 
             //Create products
-            var products = new List<string>();
+            var products = new List<ProtoId<ReagentPrototype>>();
             foreach (var product in reaction.Products)
             {
                 products.Add(product.Key);
@@ -236,7 +236,7 @@ namespace Content.Shared.Chemistry.Reaction
         private bool ProcessReactions(Entity<SolutionComponent> soln, SortedSet<ReactionPrototype> reactions, ReactionMixerComponent? mixerComponent)
         {
             HashSet<ReactionPrototype> toRemove = new();
-            List<string>? products = null;
+            List<ProtoId<ReagentPrototype>>? products = null;
 
             // attempt to perform any applicable reaction
             foreach (var reaction in reactions)
