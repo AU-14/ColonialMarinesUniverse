@@ -75,7 +75,17 @@ public partial struct ReagentId : IEquatable<ReagentId>
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(Prototype, Data);
+        // Equals treats reagent data as an unordered set while retaining the list count.
+        var dataHash = 0;
+        if (Data != null)
+        {
+            foreach (var data in Data.Distinct())
+            {
+                dataHash ^= data.GetHashCode();
+            }
+        }
+
+        return HashCode.Combine(Prototype, Data?.Count ?? -1, dataHash);
     }
 
     public string ToString(FixedPoint2 quantity)
