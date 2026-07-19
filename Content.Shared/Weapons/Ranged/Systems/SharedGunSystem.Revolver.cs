@@ -152,7 +152,7 @@ public partial class SharedGunSystem
 
                 component.AmmoSlots[index] = ent.Value;
                 Containers.Insert(ent.Value, component.AmmoContainer);
-                SetChamber(index, component, uid);
+                SetChamber(index, component, ent.Value);
 
                 if (ev.Ammo.Count == 0)
                     break;

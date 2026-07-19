@@ -143,3 +143,16 @@ demonstrates otherwise.
 - Files changed: `Content.Shared/Chemistry/Reagent/ReagentQuantity.cs`, `Content.Tests/Shared/Chemistry/ReagentQuantityTests.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: `dotnet build Content.Tests/Content.Tests.csproj --no-restore --nologo --verbosity:minimal` completed with 0 warnings and 0 errors; the filtered `dotnet test` run passed all 3 cases; solution-level `--list-tests` discovery found all 3 cases; `dotnet build SpaceStation14.slnx --no-restore --no-incremental --nologo --verbosity:minimal` completed with 0 warnings and 0 errors.
 - Follow-up/debt: Audit `ReagentId.GetHashCode()` separately; its list-reference hashing is a distinct upstream fix and is intentionally outside this commit.
+
+## CS-0004 — Use the extracted cartridge when loading revolver chambers
+
+- Upstream: [space-wizards/space-station-14#43259](https://github.com/space-wizards/space-station-14/pull/43259), `a80863f9b344cde2bf8de83a2f699d53439654b4`, 2026-07-01
+- Areas: Shooting, Interactions
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: Revolver speedloader insertion now derives each chamber's loaded/spent state from the extracted cartridge entity instead of from the speedloader entity. Spent cartridges loaded through a speedloader no longer appear as live chambers.
+- RMC/CMU divergence: RMC retains the older `SetChamber(int, RevolverAmmoProviderComponent, EntityUid)` signature, but its cartridge-state logic is equivalent to upstream and requires the same corrected entity argument.
+- Decision and rationale: Hand-port the one-argument correction into the older RMC method shape without changing reload ordering, containers, audio, prediction, or RMC gun behavior.
+- Files changed: `Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.Revolver.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: `dotnet build Content.Shared/Content.Shared.csproj --no-restore --nologo --verbosity:minimal` completed with 0 warnings and 0 errors. Neither CMU nor the pinned upstream target has existing revolver/speedloader test coverage; upstream #43259 also shipped as a one-line production fix.
+- Follow-up/debt: Add a focused integration test that loads a spent cartridge through a speedloader and asserts the resulting chamber is empty; separately verify RMC live-speedloader reload/fire/eject behavior in a later Shooting gameplay pass.
