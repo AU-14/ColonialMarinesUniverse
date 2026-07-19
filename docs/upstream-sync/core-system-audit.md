@@ -429,3 +429,16 @@ demonstrates otherwise.
 - Files changed: `Content.Shared/Actions/SharedActionsSystem.cs`, `Content.IntegrationTests/Tests/Actions/ActionCooldownDefaultTimeTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms `GameTiming` is already injected, every present CMU/RMC caller supplies a time, and no prerequisite is required. A regression was added for the omitted-time path, an explicit pre-end time, the exact end boundary, and a removed cooldown. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
 - Follow-up/debt: Prefer the default overload for ordinary current-state queries as callers are updated, while retaining explicit timestamps where prediction or replay code needs a deliberate time reference.
+
+## CS-0026 — Restrict conveyor friction to grounded active conveyance
+
+- Upstream: [space-wizards/space-station-14#37468](https://github.com/space-wizards/space-station-14/pull/37468), `e64b6b03fa1e92e2e2312d0c40107bc0754bf83e`, 2025-11-08
+- Areas: Movement, Physics, GameTicking
+- Status: Adapted
+- Risk: Low
+- Behavior/API delta: A lingering `ConveyedComponent` only suppresses tile friction while its `Conveying` flag is active. The controller clears that flag and skips processing for bodies that are not grounded, and applies matching angular friction alongside linear friction so conveyed items stop residual spinning.
+- RMC/CMU divergence: CMU retains its current `_gravity.IsWeightless(entity, physics, xform)` overload and controller structure instead of importing later dependency-injection cleanups. No RMC-specific conveyor controller or override exists, and the shared client/server path keeps prediction behavior symmetric with RMC's tile-friction controller.
+- Decision and rationale: Port #37468's four behavioral changes onto the current controller while preserving fork wiring. The in-air/weightlessness early return inside the parallel job still reports a processable result, so it does not prevent the later result loop from applying friction; the explicit `BodyStatus.OnGround` guard is still required.
+- Files changed: `Content.Shared/Physics/Controllers/SharedConveyorController.cs`, `Content.IntegrationTests/Tests/Physics/ConveyorFrictionTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms the current controller has the required corner-handling base and no RMC override. A regression was added for inactive conveyed friction, active friction suppression, grounded angular damping, airborne angular preservation, and clearing the active flag. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
+- Follow-up/debt: Reconcile the later stopped-item stacking change in #42829 separately because it edits the same result loop, then recheck both angular damping branches after that merge.
