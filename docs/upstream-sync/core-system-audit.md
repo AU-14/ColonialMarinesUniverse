@@ -598,3 +598,16 @@ demonstrates otherwise.
 - Files changed: `Resources/Prototypes/Reagents/medicine.yml`, `Content.IntegrationTests/Tests/Chemistry/DiphenhydramineDrowsinessTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static API inspection confirms `Add` plus the default refresh path calls `TryUpdateStatusEffectDuration`, which preserves the greater expiry rather than summing duration. A regression was added that applies the parsed reagent effect twice in one tick and requires an unchanged expiry. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
 - Follow-up/debt: Carry the semantic regression through the newer status-effect metabolism API when that refactor is ported, and audit other sedatives that explicitly opt into duration accumulation separately.
+
+## CS-0039 — Clear in-hand visuals before removing hands
+
+- Upstream: [space-wizards/space-station-14#44405](https://github.com/space-wizards/space-station-14/pull/44405), `8b228db4ccc0bed71bbc304821259fe993a751ca`, 2026-06-29
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Removing a hand now shuts down its item container while the hand definition is still present. Container-removal handlers can therefore resolve the hand location, remove its sprite layers, and emit the normal unequip notifications instead of leaving stale in-hand visuals behind.
+- RMC/CMU divergence: The shared hand and client visual handlers match the upstream event contract, while CMU retains RMC's separate drop behavior around the same path. Zombie transformations, borg modules, and dynamically equipped extra hands all call the corrected shared removal method; no RMC override bypasses it.
+- Decision and rationale: Port the target-final ordering change exactly. Moving only the dictionary removal preserves all existing drop, container shutdown, active-hand selection, dirtying, and hand-count behavior while ensuring synchronous shutdown events still see their metadata.
+- Files changed: `Content.Shared/Hands/EntitySystems/SharedHandsSystem.cs`, `Content.IntegrationTests/Tests/Hands/HandVisualRemovalTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms the client removal handler exits when the hand definition is absent and the pinned target retains the reordered shutdown. A client-side regression was added with a nullspace-held two-layer crowbar, forcing container shutdown to perform removal and requiring both recorded and sprite-mapped layers to disappear. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
+- Follow-up/debt: Exercise network-reconciled hand removal for borg modules and extra-hand equipment when those systems are revised, and audit other dynamic container metadata for the same synchronous-event lifetime rule.
