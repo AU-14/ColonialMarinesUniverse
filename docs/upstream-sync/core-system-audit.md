@@ -234,3 +234,16 @@ demonstrates otherwise.
 - Files changed: `Content.Server/GameTicking/GameTicker.GamePreset.cs`, `Content.Server/GameTicking/Rules/GameRuleSystem.cs`, `Content.IntegrationTests/Tests/GameRules/GamePresetFallbackResetTest.cs`, `Content.IntegrationTests/Tests/GameRules/GameRuleLoggingTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: The integration-test project built with 0 warnings and 0 errors; the fallback and minimum-player logging tests passed 2/2 and both appeared in discovery. Removing the fallback-attempt message made the fallback test fail, while removing the rule diagnostic left the minimum-player test's capture empty and made it fail; restoring both messages returned the tests to green. `dotnet build SpaceStation14.slnx --configuration DebugOpt --no-restore --no-incremental --nologo --verbosity:minimal` completed with 0 warnings and 0 errors.
 - Follow-up/debt: SS14 #43191 moves minimum-player validation as part of a much larger antagonist rewrite and should not be pulled in for logging alone. Monitor repeated fallback log volume and remember that configured preset IDs are written to server logs.
+
+## CS-0011 — Complex-shape storage insertion rotation audit
+
+- Upstream: [space-wizards/space-station-14#38896](https://github.com/space-wizards/space-station-14/pull/38896), `3638b2f44e52dbe4e8c20812a9ea98a98b9a9c04`, 2025-08-07
+- Areas: Interactions
+- Status: Superseded by RMC
+- Risk: Low for current behavior; Medium if storage rotation is restored
+- Behavior/API delta: Upstream starts unconstrained storage placement at zero rotation rather than deriving it from an item's stored sprite rotation, preventing complex item shapes from missing otherwise valid slots.
+- RMC/CMU divergence: RMC disabled the placement rotation loop and constructs every candidate `ItemStorageLocation` with `Angle.Zero`. The calculated `startAngle` is therefore dead, and `ItemComponent.StoredRotation` has no production assignments in CMU beyond its zero initializer.
+- Decision and rationale: Do not port a no-op one-line change. CMU already enforces the bug-free zero-angle behavior more strongly, although it also ignores `DefaultStorageOrientation` during actual candidate construction.
+- Files changed: `docs/upstream-sync/core-system-audit.md` only; no production code changed.
+- Validation: Static call-path review confirmed that `TryGetAvailableGridSpace` always passes `Angle.Zero` to `ItemStorageLocation`; repository-wide assignment search found no production writes to `StoredRotation`. The exact upstream substitution would only change an unused local in the current RMC fork.
+- Follow-up/debt: If item rotation or `DefaultStorageOrientation` support is restored, port the upstream zero-angle starting rule as part of that work and add complex-shape insertion tests covering both horizontal and vertical storage grids.
