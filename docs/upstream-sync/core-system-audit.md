@@ -585,3 +585,16 @@ demonstrates otherwise.
 - Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Guns/Projectiles/projectiles.yml`, `Content.IntegrationTests/Tests/Weapons/Ranged/EnergyProjectileHoloCollisionTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Prototype-ID-scoped static review confirms `Opaque` is present on the four intended projectiles, CS-0035's `BulletLaser`, and the pre-existing Watcher while wall and bullet masks remain on every applicable projectile. The regression now checks all six projectiles against both real hologram fixtures. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
 - Follow-up/debt: Audit #37581 independently before changing Watcher wall/window behavior, and keep the generalized hologram-collision contract when additional energy projectiles are ported.
+
+## CS-0038 — Cap diphenhydramine drowsiness duration
+
+- Upstream: [space-wizards/space-station-14#41169](https://github.com/space-wizards/space-station-14/pull/41169), `c8b26adb38473aa83c11c5a337b25b3e573583eb`, 2025-10-28
+- Areas: Chemistry, Medical
+- Status: Adapted
+- Risk: Low
+- Behavior/API delta: Repeated diphenhydramine metabolism now updates drowsiness to the later of its current expiry and 1.5 seconds from the current tick instead of adding another 1.5 seconds every cycle. Continuous exposure therefore keeps the patient drowsy without building an unbounded duration after the reagent is gone.
+- RMC/CMU divergence: This fork retains the older `ModifyStatusEffect` API where additive effects choose between maximum-duration refresh and accumulation with a separate `refresh` field. No RMC or CMU reagent override replaces standard diphenhydramine.
+- Decision and rationale: Remove `refresh: false` so the field returns to its `true` default, while retaining `type: Add`. The target branch removed the additive type after a later API changed its default semantics; copying that deletion literally into this older API would leave the behavior unchanged rather than fix accumulation.
+- Files changed: `Resources/Prototypes/Reagents/medicine.yml`, `Content.IntegrationTests/Tests/Chemistry/DiphenhydramineDrowsinessTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static API inspection confirms `Add` plus the default refresh path calls `TryUpdateStatusEffectDuration`, which preserves the greater expiry rather than summing duration. A regression was added that applies the parsed reagent effect twice in one tick and requires an unchanged expiry. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
+- Follow-up/debt: Carry the semantic regression through the newer status-effect metabolism API when that refactor is ported, and audit other sedatives that explicitly opt into duration accumulation separately.
