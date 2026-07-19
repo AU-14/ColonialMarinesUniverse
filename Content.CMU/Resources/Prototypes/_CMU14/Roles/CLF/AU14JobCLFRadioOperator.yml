@@ -1,0 +1,102 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCLFRadioOperator
+  roundSide: ThirdParty
+  roundForce: CLF
+  roundRole: CLFRadioOperator
+  roundComponents:
+  - type: AU14CallsignRole
+    suffix: ROMEO
+  - type: NpcFactionMember
+    factions:
+    - CLF
+  - type: CLFMember
+  - type: ANPRCRadioUser
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 1
+      RMCSkillFirearms: 2
+      RMCSkillConstruction: 2
+      RMCSkillEngineer: 2
+      RMCSkillFireman: 1
+      RMCSkillJtac: 4
+      RMCSkillLeadership: 1
+      RMCSkillIntel: 1
+      RMCSkillVehicles: 1
+      RMCSkillPolice: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-clfradiooperator
+  - type: StartingMindRole
+    mindRole: MindRoleCLFGuerrilla
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: colonist
+  - type: ShowMarineIcons
+    factions:
+    - CLF
+  - type: FactionLanguageMember
+    factionTag: CLF
+
+  name: au14-job-name-clfradiooperator
+  description: au14-job-description-clfradiooperator
+  setPreference: true
+  ignoreAllegiance: true
+  playTimeTracker: AU14JobCLFRadioOperator
+  basePlaytimeTracker: true
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+    - Epilepsy
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCLFRadioOperator
+  icon: "RMCJobIconCLFSoldier"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-clflrs
+  spawnMenuRoleName: CLF Radio Operator (CMU)
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCLFRadioOperator
+  equipment:
+    id: AU14IDCardCLFCivilian
+    pocket1: ANPRCFreqCardCLF
+  inhand:
+  - AU14CLFHeadset
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCLFRadioOperator
+  name: Spawn Point CLF Radio Operator
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCLFRadioOperator
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCLFRadioOperator
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobAU14JobCLFRadioOperator
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - CivFootwearAU14
+  - CivHatsAU14
+  - CivGlassesAU14
+  - CivJumpsuitAU14
+  - CivJacketAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC

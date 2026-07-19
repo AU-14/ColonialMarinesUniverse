@@ -5,9 +5,10 @@
   spawn:
     bodyBuckets:
       - bucket: CLFCommand
-        count: 3
+        count: 4
         bodies:
           AU14JobCLFCellLeader: 1
+          AU14JobCLFRadioOperator: 1
           AU14JobCLFPhysician: 1
           AU14JobCLFSurgeon: 1
       - bucket: CLFGuerilla
@@ -16,7 +17,7 @@
           AU14JobCLFGuerilla: 3
     markerRequirements:
       - bucket: CLFSafehouse
-        requiredBodyCount: 6
+        requiredBodyCount: 7
         requiredMarkerCount: 1
         requiredTags:
           - force:clf:safehouse

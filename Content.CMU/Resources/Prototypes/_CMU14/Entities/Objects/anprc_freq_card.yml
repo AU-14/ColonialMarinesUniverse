@@ -33,3 +33,11 @@
   components:
   - type: ANPRCFreqCard
     faction: opfor
+
+- type: entity
+  parent: ANPRCFreqCard
+  id: ANPRCFreqCardCLF
+  suffix: CLF
+  components:
+  - type: ANPRCFreqCard
+    faction: clf
