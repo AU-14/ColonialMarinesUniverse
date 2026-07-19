@@ -342,8 +342,6 @@
   impact: Medium
   minTemp: 370
   reactants:
-    Uranium:
-      amount: 1
     Vestine:
       amount: 2
     SpaceGlue:

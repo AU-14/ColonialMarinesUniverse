@@ -533,3 +533,16 @@ demonstrates otherwise.
 - Files changed: `Content.Server/Medical/SuitSensors/SuitSensorSystem.cs`, `Content.IntegrationTests/Tests/Medical/SuitSensorRetryThrottleTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms the standard uniform supplies both queried components and an initialized transmit frequency, while nullspace guarantees no station assignment. A regression was added that verifies the first failed attempt advances `NextUpdate` and an immediate second pass leaves the deadline unchanged. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
 - Follow-up/debt: Profile station discovery after the checkpoint and revisit the timer formula only alongside a deliberate catch-up policy; separately decide whether RMC sensors should ever join the device network.
+
+## CS-0034 — Remove uranium from the mute-toxin recipe
+
+- Upstream: [space-wizards/space-station-14#42787](https://github.com/space-wizards/space-station-14/pull/42787), `381fda04403358d01c491c0aa63ad59b8aa7e978`, 2026-02-04
+- Areas: Chemistry, Medical
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Mute toxin now requires two units each of Vestine and SpaceGlue and produces two units of product without an unrelated uranium reactant.
+- RMC/CMU divergence: The MuteToxin, Vestine, SpaceGlue, and Uranium reagent prototypes already exist, and no RMC, CMU, or AU reaction override replaces this recipe. The fork's typed reaction dictionaries deserialize the reduced reactant set unchanged.
+- Decision and rationale: Port upstream's two-line reactant removal exactly. Product yield, temperature threshold, reaction impact, and both intended reactant amounts remain untouched.
+- Files changed: `Resources/Prototypes/Recipes/Reactions/chemicals.yml`, `Content.IntegrationTests/Tests/Chemistry/MuteToxinReactionTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms the pinned target retains the uranium-free recipe and all remaining reagent prototypes resolve. A regression was added for the exact reactant count, explicit uranium absence, intended amounts, and product yield. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
+- Follow-up/debt: Include the YAML/prototype validator, this focused regression, and all-reactions coverage in the CS-0040 checkpoint.
