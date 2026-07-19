@@ -1,0 +1,22 @@
+- type: entity
+  parent: RMCShutterHybrisa
+  id: CMUShutterHybrisaAdjutantLock
+  name: armory shutters
+  description: A heavy set of shutters designed to keep the armory secure. They can be opened by a button in the CIC. If command is not awake to open these shutters, they will open themselves after a time.
+  suffix: GOVFOR
+  components:
+  - type: RMCPodDoor
+    id: cmu_adjutant_lock
+  - type: CMUAdjutantLockDoor
+
+- type: entity
+  parent: RMCPodDoorButtonCommand
+  id: CMUPodDoorButtonAdjutantLock
+  name: armory shutters control
+  description: A button that locks open on its own if command doesn't show up to operate it.
+  suffix: GOVFOR, Armory
+  components:
+  - type: RMCDoorButton
+    id: cmu_adjutant_lock
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforCommand" ] ]

@@ -165,6 +165,7 @@
   equipment:
     shoes: CMBootsBlackFilled
     back: CMSatchelMarine
+    ears: AU14HeadsetOpforAuxiliary
   storage:
     back:
     - CMStampApproved

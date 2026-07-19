@@ -838,6 +838,46 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                 faction,
                 "CMAirlockGovforLocked",
                 "CMAirlockOpforLocked"),
+            PlatoonMarkerClass.LockedDoubleNormalDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorGovforLocked",
+                "CMDoubleDoorOpforLocked"),
+            PlatoonMarkerClass.LockedDoubleGlassDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorGovforGlassLocked",
+                "CMDoubleDoorOpforGlassLocked"),
+            PlatoonMarkerClass.LockedDoubleCommandDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorCommandGovforLocked",
+                "CMDoubleDoorCommandOpforLocked"),
+            PlatoonMarkerClass.LockedDoubleCommandGlassDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorCommandGovforGlassLocked",
+                "CMDoubleDoorCommandOpforGlassLocked"),
+            PlatoonMarkerClass.LockedDoubleSecurityDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorSecurityGovforLocked",
+                "CMDoubleDoorSecurityOpforLocked"),
+            PlatoonMarkerClass.LockedDoubleSecurityGlassDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorSecurityGovforGlassLocked",
+                "CMDoubleDoorSecurityOpforGlassLocked"),
+            PlatoonMarkerClass.LockedDoubleMedicalDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorMedicalGovforLocked",
+                "CMDoubleDoorMedicalOpforLocked"),
+            PlatoonMarkerClass.LockedDoubleMedicalGlassDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorMedicalGovforGlassLocked",
+                "CMDoubleDoorMedicalOpforGlassLocked"),
+            PlatoonMarkerClass.LockedDoubleEngineeringDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorEngineerGovforLocked",
+                "CMDoubleDoorEngineerOpforLocked"),
+            PlatoonMarkerClass.LockedDoubleEngineeringGlassDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorEngineerGovforGlassLocked",
+                "CMDoubleDoorEngineerOpforGlassLocked"),
             _ => null,
         };
     }

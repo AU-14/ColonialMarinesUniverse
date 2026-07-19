@@ -88,6 +88,7 @@
       AU14JobCLFPhysician: 1
       AU14JobCLFSurgeon: 1
       AU14JobCLFGuerilla: 3
+      AU14JobCLFSapper: 1
 
 - type: entity
   id: ColonyAntags

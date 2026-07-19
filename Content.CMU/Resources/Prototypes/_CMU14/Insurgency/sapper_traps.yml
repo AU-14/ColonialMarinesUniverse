@@ -1,0 +1,545 @@
+# CLF Sapper traps (Phase 4, WIP - not in the active roster yet). A trap is an ordinary item that, when
+# used in hand, plants itself on the floor, hides itself (drawn only faintly to enemies until revealed),
+# arms after a short delay, and then fires through its own trigger components when a non-CLF mob steps on
+# it. The planting / hiding / arming / friendly-immunity behavior lives on the SapperTrap component; the
+# payload (explosion, buckshot, snare) is just the normal vanilla trigger stack, so each trap type is a
+# prototype with a different payload.
+#
+# The trap kit toolbox the Sapper spawns with is at the bottom. It also carries an improvised materials
+# kit for crafting more in the field.
+
+# Shared base for the single-tile pressure-plate traps (buried IED, shotgun trap). Plants on one tile and
+# fires when a non-friendly steps onto it. The two-part tripwire is a separate device further down.
+- type: entity
+  parent: BaseItem
+  id: AU14SapperPressureTrap
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Explosives/Mines/m20_mine.rsi
+    drawdepth: BelowMobs
+    state: icon
+    scale: 0.5, 0.5
+  - type: Item
+    size: Small
+  - type: Fixtures
+    fixtures:
+      # Covers the whole tile so a step from any direction sets it off.
+      trigger:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        hard: false
+        layer:
+        - Opaque
+        mask:
+        - MobLayer
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 20
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2
+  - type: SapperTrap
+  - type: StepTrigger
+    # Trips even at a slow walk.
+    requiredTriggeredSpeed: 0
+  - type: TriggerOnStepTrigger
+  - type: ExplodeOnTrigger
+  - type: DeleteOnTrigger
+  # Moderate anti-personnel blast that will not chew up the tile itself.
+  - type: Explosive
+    explosionType: RMC
+    totalIntensity: 90
+    intensitySlope: 4
+    maxIntensity: 12
+    maxTileBreak: 0
+    canCreateVacuum: false
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 20
+      behaviors:
+      - !type:TriggerBehavior
+  - type: RequireProjectileTarget
+
+# IED (Phase 4d): a buried charge that hits far harder than a tripwire and is allowed to crater the tile.
+# Same plant/hide/arm/friendly rules; only the payload differs.
+- type: entity
+  parent: AU14SapperPressureTrap
+  id: AU14SapperIED
+  name: buried IED
+  description: An improvised explosive device buried under the surface, wired to a hidden pressure plate. It packs enough charge to level whatever unlucky enough to stand on it.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Explosives/Mines/m20_mine.rsi
+    drawdepth: BelowMobs
+    state: icon
+    scale: 0.5, 0.5
+    color: "#6b5636"
+  # Directional like a claymore: the pressure plate sits on the tile directly in front of where it was
+  # planted (the -Y strip = the way the sapper was facing), so it catches whoever advances onto it rather
+  # than only a step on its own tile. See DirectionalTriggerStrip note in the shotgun trap below.
+  - type: Fixtures
+    fixtures:
+      trigger:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-1.5,0.5,-0.2"
+        hard: false
+        layer:
+        - Opaque
+        mask:
+        - MobLayer
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 20
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2
+  # Full IED-grade blast: identical numbers to the AU14IED item (plus its shrapnel burst), so the
+  # buried version hits exactly as hard as the handheld one.
+  - type: Explosive
+    explosionType: RMC
+    totalIntensity: 1400
+    intensitySlope: 1.5
+    maxIntensity: 80
+    canCreateVacuum: false
+  - type: ProjectileGrenade
+    fillPrototype: CMProjectileShrapnel
+    capacity: 25
+
+# Shotgun trap (Phase 4d): no blast, just a point-blank cone of buckshot into whoever trips it. The trigger
+# reaches a little further and needs less overlap than the tripwire, so a fast runner still sets it off.
+- type: entity
+  parent: AU14SapperPressureTrap
+  id: AU14SapperShotgunTrap
+  name: shotgun trap
+  description: A sawn-off barrel lashed to a stake and rigged to a tripline. Step in front and it empties a shell of buckshot into your legs.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Explosives/Mines/m20_mine.rsi
+    drawdepth: BelowMobs
+    state: icon
+    scale: 0.5, 0.5
+    color: "#3a3a3a"
+  # Directional: the barrel points forward, so the trigger is the tile directly in front of where it was
+  # planted (the -Y strip), not its own tile. Because the deploy code rotates the trap to the sapper's
+  # cardinal facing, "-Y" always ends up being the way they were looking. Slightly wider than one tile and
+  # paired with a low intersectRatio below so even a fast runner crossing the front tile still connects.
+  - type: Fixtures
+    fixtures:
+      trigger:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-1.5,0.5,-0.2"
+        hard: false
+        layer:
+        - Opaque
+        mask:
+        - MobLayer
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 20
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2
+  - type: StepTrigger
+    requiredTriggeredSpeed: 0
+    # Less overlap needed than the default 0.3, so a fast pass still trips it.
+    intersectRatio: 0.15
+  # The point-blank shotgun blast, played the instant it fires.
+  - type: SoundOnTrigger
+    removeOnTrigger: true
+    sound:
+      path: /Audio/Weapons/Guns/Gunshots/shotgun.ogg
+  # Drop the tripwire's explosion; fire shrapnel/buckshot in a forward cone instead.
+  - type: Explosive
+    explosionType: RMC
+    totalIntensity: 1
+    intensitySlope: 5
+    maxIntensity: 1
+    canCreateVacuum: false
+  - type: ProjectileGrenade
+    evenSpread: true
+    minVelocity: 0.5
+    maxVelocity: 1.5
+    fillPrototype: RMCShrapnel
+    capacity: 12
+    spreadAngle: 90
+
+# Two-part tripwire (redesign). A firing box you attach grenades/explosives to, wired to a near-invisible
+# tripline that runs a few tiles ahead to a stake. Anything that isn't a friendly crossing the wire sets off
+# the box and everything lashed to it. The wire pieces (segment + end) are spawned by SapperTripwireSystem.
+- type: entity
+  parent: BaseItem
+  id: AU14SapperTripwireTrap
+  name: tripwire charge
+  description: A firing box wired to a near-invisible tripline that runs a few tiles ahead to a stake. Attach grenades or explosives to the box, then plant it - anything that isn't a friendly crossing the wire sets it all off at once. Cut it with wirecutters to make it safe.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Explosives/Mines/m20_mine.rsi
+    drawdepth: BelowMobs
+    state: icon
+    scale: 0.5, 0.5
+    color: "#5a5a3a"
+  - type: Item
+    size: Small
+  # No trigger fixture: the device itself does not trip, only its strung wire does.
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 20
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2
+  - type: SapperTrap
+    # A wire trap's covered area is only known once the wire is strung, so no deploy-area preview.
+    deployPreviewPrototype: null
+  - type: SapperTripwire
+  # Shows the most recently attached explosive perched on the box, shrunk and tinted into its palette.
+  - type: AU14ContainerIconLayer
+    container: tripwire_payload
+    scale: 0.55, 0.55
+    offset: 0.18, 0.06
+    tint: "#9a9a7a"
+  # No built-in charge: ONLY the attached explosives fire (each with its own real effect). The bare
+  # firing box going off on its own was double-exploding alongside the payload.
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 20
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget
+
+# The "other end" the sapper carries after planting a charge, to run the wire to its far point. Using it in
+# hand strings the wire from the charge to wherever they are standing (SapperTripwireSystem).
+- type: entity
+  parent: BaseItem
+  id: AU14SapperTripwireEndPlacer
+  name: tripwire spool
+  description: The loose end of a tripline, trailing wire back to a planted charge. Use it where you want the line to end.
+  suffix: CLF, Sapper
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Explosives/Mines/m20_mine.rsi
+    drawdepth: BelowMobs
+    state: icon
+    scale: 0.45, 0.45
+    color: "#3a3a2a"
+  - type: Item
+    size: Small
+  - type: SapperTripwireEndPlacer
+
+# One tile of the strung tripline. Barely visible, and reports back to its device when crossed.
+- type: entity
+  id: AU14SapperTripwireSegment
+  name: tripline
+  description: A near-invisible wire strung taut between a charge and its stake. Crossing it is a very bad idea.
+  # Not anchored here: SapperTripwireSystem anchors each piece itself once it is placed. Anchoring in the
+  # prototype too would double-anchor it and crash the snap-grid.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Explosives/Mines/m20_mine.rsi
+    drawdepth: BelowMobs
+    state: icon
+    # Near-black and mostly transparent, squashed to a thin strand: hardly visible on the floor.
+    color: "#0a0a0a40"
+    scale: 0.85, 0.05
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      trigger:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        hard: false
+        layer:
+        - Opaque
+        mask:
+        - MobLayer
+  - type: StepTrigger
+    requiredTriggeredSpeed: 0
+    # Low overlap needed so even a fast runner crossing the strand still trips it.
+    intersectRatio: 0.1
+  - type: SapperTripwireSegment
+
+# The far stake the tripline is tied off to - the visible "other end" of the two-part trap.
+- type: entity
+  parent: AU14SapperTripwireSegment
+  id: AU14SapperTripwireEnd
+  name: tripwire stake
+  description: The far stake a tripline is tied off to.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Explosives/Mines/m20_mine.rsi
+    drawdepth: BelowMobs
+    state: icon
+    color: "#3a3a2a"
+    scale: 0.35, 0.35
+
+# Snare trap (Phase 4e): non-lethal. Ensnares whoever trips it - cuffs them, flips their view and sprite,
+# and leaves them to struggle free. Built fresh (not from the tripwire) so it carries no explosive payload.
+- type: entity
+  parent: BaseItem
+  id: AU14SapperSnareTrap
+  name: snare trap
+  description: A hidden tangle of wire and hooks. Step in it and it whips tight, binding your hands and yanking you off your feet.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Explosives/Mines/m20_mine.rsi
+    drawdepth: BelowMobs
+    state: icon
+    scale: 0.5, 0.5
+    color: "#8a7a4a"
+  - type: Item
+    size: Small
+  # Directional like the other traps: the snare covers the tile directly in front of where it was laid
+  # (the -Y strip, which the deploy code rotates to the sapper's facing), so an enemy advancing onto it is
+  # caught rather than only someone standing on the exact tile.
+  - type: Fixtures
+    fixtures:
+      trigger:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-1.5,0.5,-0.2"
+        hard: false
+        layer:
+        - Opaque
+        mask:
+        - MobLayer
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 20
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2
+  - type: SapperTrap
+  - type: SapperSnare
+  - type: StepTrigger
+    requiredTriggeredSpeed: 0
+  - type: TriggerOnStepTrigger
+  # The wire snapping tight, played the instant someone is caught.
+  - type: SoundOnTrigger
+    removeOnTrigger: true
+    sound:
+      path: /Audio/Effects/snap.ogg
+  - type: DeleteOnTrigger
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 20
+      behaviors:
+      - !type:TriggerBehavior
+  - type: RequireProjectileTarget
+
+# Improvised materials + trap workbench-in-a-box (Phase 4c). A stack of scavenged materials that opens the
+# construction menu on use; building a trap consumes materials and drops the finished trap to pick up.
+- type: entity
+  parent: RMCPlankWood
+  id: AU14SapperCraftingKit
+  name: improvised trap materials
+  description: A bundle of scrap, wire, and scavenged explosives. Use it in hand to fabricate CLF traps wherever you stand.
+  suffix: CLF, Sapper
+  components:
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RMCWood
+    count: 30
+  - type: RMCConstructionItem
+    buildable:
+    - AU14SapperCraftTripwire
+    - AU14SapperCraftShotgun
+    - AU14SapperCraftIED
+    - AU14SapperCraftSnare
+    - AU14SapperCraftCamera
+    - AU14SapperCraftMonitor
+
+# CLF surveillance (Phase 4g) lives in sapper_cameras.yml now: a private portable camera network (relay +
+# pocketable cameras + handheld monitor). AU14CLFSpyCamera / AU14CLFCameraMonitor are defined there.
+
+# Trap fabrication recipes. Each drops the finished trap item where the sapper stands (ignore build
+# restrictions so a floor item can be placed anywhere) at a construction-skill-gated material cost.
+- type: rmcConstruction
+  id: AU14SapperCraftTripwire
+  name: tripwire charge
+  prototype: AU14SapperTripwireTrap
+  doAfterTime: 3
+  materialCost: 2
+  ignoreBuildRestrictions: true
+  restrictedCollisionGroup: null
+  skill: RMCSkillConstruction
+  requiredSkillLevel: 1
+
+- type: rmcConstruction
+  id: AU14SapperCraftShotgun
+  name: shotgun trap
+  prototype: AU14SapperShotgunTrap
+  doAfterTime: 4
+  materialCost: 3
+  ignoreBuildRestrictions: true
+  restrictedCollisionGroup: null
+  skill: RMCSkillConstruction
+  requiredSkillLevel: 2
+
+- type: rmcConstruction
+  id: AU14SapperCraftIED
+  name: buried IED
+  prototype: AU14SapperIED
+  doAfterTime: 6
+  materialCost: 5
+  ignoreBuildRestrictions: true
+  restrictedCollisionGroup: null
+  skill: RMCSkillConstruction
+  requiredSkillLevel: 3
+
+- type: rmcConstruction
+  id: AU14SapperCraftSnare
+  name: snare trap
+  prototype: AU14SapperSnareTrap
+  doAfterTime: 3
+  materialCost: 2
+  ignoreBuildRestrictions: true
+  restrictedCollisionGroup: null
+  skill: RMCSkillConstruction
+  requiredSkillLevel: 1
+
+- type: rmcConstruction
+  id: AU14SapperCraftCamera
+  name: improvised spy camera
+  prototype: AU14CLFSpyCamera
+  doAfterTime: 5
+  materialCost: 4
+  ignoreBuildRestrictions: true
+  restrictedCollisionGroup: null
+  skill: RMCSkillConstruction
+  requiredSkillLevel: 2
+
+- type: rmcConstruction
+  id: AU14SapperCraftMonitor
+  name: CLF camera monitor
+  prototype: AU14CLFCameraMonitor
+  noRotate: true
+  doAfterTime: 6
+  materialCost: 6
+  skill: RMCSkillConstruction
+  requiredSkillLevel: 3
+
+# The Sapper's signature trap kit: sensor traps to seed plus the workbench kit for crafting the
+# heavier ordnance in the field. Deliberately no prebuilt IEDs/shotgun traps and no loose materials
+# kit - the lethal stuff must be crafted at the bench. Parented to the insurgent-styled toolbox so
+# it reads as improvised gear.
+- type: entity
+  parent: RMCToolboxSyndicate
+  id: AU14SapperTrapToolbox
+  name: sapper trap kit
+  description: A battered toolbox packed with improvised charges and triplines. Everything a CLF sapper needs to seed a killbox.
+  suffix: CLF, Sapper
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14SapperWorkbenchKit
+    - id: AU14SapperTripwireTrap
+      amount: 3
+    - id: AU14SapperAudioTrap
+      amount: 3
+    - id: AU14SapperSnareTrap
+      amount: 1
+    # Portable spy-camera loop: the handheld monitor, its relay, and two pocket cameras to seed.
+    - id: AU14CLFSpyCamera
+      amount: 2
+    - id: AU14CLFCameraRelay
+    - id: AU14CLFCameraMonitor
+
+# Faint hue shown over the area a trap's trigger will cover, spawned only for the duration of the
+# deploy do-after (SharedSapperTrapSystem). Purely visual: no physics, no interactions.
+- type: entity
+  id: AU14SapperTrapAreaPreview
+  name: trap coverage
+  description: Where the trap being set will trigger.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Explosives/Mines/m20_mine.rsi
+    state: icon
+    drawdepth: FloorObjects
+    # A translucent red pane squashed over the forward trigger strip (the tile ahead of the trap's facing).
+    color: "#aa333340"
+    scale: 0.95, 1.25
+    offset: 0.0, -0.85
+
+# Audio (early-warning) trap: set up exactly like the tripwire charge - plant, carry the other end,
+# string the wire - but it needs no explosives. Crossing the wire blows a loud whistle at the wire and
+# reports the trap's name and area over the CLF radio, then it re-arms after a cooldown. The sapper is
+# asked to name it in a small dialog the moment it is planted.
+- type: entity
+  parent: BaseItem
+  id: AU14SapperAudioTrap
+  name: audio trap
+  description: A whistle alarm wired to a near-invisible tripline. Anything crossing the wire sets off a shrill blast and radios the cell where it happened. Cut it with wirecutters to silence it.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Explosives/Mines/m20_mine.rsi
+    drawdepth: BelowMobs
+    state: icon
+    scale: 0.5, 0.5
+    color: "#7a6a2a"
+  - type: Item
+    size: Small
+  # No trigger fixture: the device itself does not trip, only its strung wire does.
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 20
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2
+  - type: SapperTrap
+    # A wire trap's covered area is only known once the wire is strung, so no deploy-area preview.
+    deployPreviewPrototype: null
+  - type: SapperTripwire
+  - type: SapperAudioTrap
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 20
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget

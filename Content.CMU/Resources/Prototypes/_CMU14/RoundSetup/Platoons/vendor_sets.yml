@@ -15,6 +15,7 @@
   parent: AU14BasePlatoonVendorSet
   vendors:
     Clothing: AU14USCMclothingequipmentvendor
+    ShipsideUniform: AU14USCMShipsideUniformVendor
     Weapons: AU14USCMWeaponsVendor
     SWeapons: AU14USCMSpecialWeaponsVendor
     Corpsman: AU14USCMcorpsmanvendor
@@ -30,6 +31,7 @@
   parent: AU14BasePlatoonVendorSet
   vendors:
     Clothing: AU14LACNclothingequipmentvendor
+    ShipsideUniform: AU14LACNShipsideUniformVendor
     Weapons: AU14LACNWeaponsVendor
     SWeapons: AU14LACNSpecialWeaponsVendor
     Corpsman: AU14LACNcorpsmanvendor
@@ -46,6 +48,7 @@
   vendors:
     Rifleman: AU14UPPequipmentvendor
     Clothing: AU14UPPclothingapparelvendor
+    ShipsideUniform: AU14UPPShipsideUniformVendor
     Weapons: AU14UPPWeaponsVendor
     SWeapons: AU14UPPSpecialWeaponsVendor
     Corpsman: AU14UPPMedicalVendor
@@ -62,6 +65,7 @@
   parent: AU14BasePlatoonVendorSet
   vendors:
     Clothing: AU14WYclothingequipmentvendor
+    ShipsideUniform: AU14WYShipsideUniformVendor
     Weapons: AU14WYWeaponsVendor
     SWeapons: AU14WYSpecialWeaponsVendor
     Corpsman: AU14WYcorpsmanvendor
@@ -77,6 +81,7 @@
   parent: AU14BasePlatoonVendorSet
   vendors:
     Clothing: AU14CMBCIUapparelvendor
+    ShipsideUniform: AU14CMBCIUShipsideUniformVendor
     Weapons: AU14CMBCIUWeaponsVendor
     SWeapons: AU14SpecVend
     Corpsman: AU14CMBCIUTacticalMedicVendor
@@ -93,6 +98,7 @@
   parent: AU14BasePlatoonVendorSet
   vendors:
     Clothing: AU14HAZOPSclothingequipmentvendor
+    ShipsideUniform: AU14HAZOPSShipsideUniformVendor
     Weapons: AU14HAZOPSWeaponsVendor
     SWeapons: AU14HAZOPSSpecialWeaponsVendor
     Corpsman: AU14USCMcorpsmanvendor
@@ -108,6 +114,7 @@
   parent: AU14BasePlatoonVendorSet
   vendors:
     Clothing: AU14prodigyclothingequipmentvendor
+    ShipsideUniform: AU14ProdigyShipsideUniformVendor
     Weapons: AU14prodigyWeaponsVendor
     SWeapons: AU14SpecVend
     Corpsman: AU14prodigycorpsmanvendor
@@ -125,6 +132,7 @@
   parent: AU14BasePlatoonVendorSet
   vendors:
     Clothing: AU14VAIPOclothingequipmentvendor
+    ShipsideUniform: AU14VAIPOShipsideUniformVendor
     Weapons: AU14VAIPOWeaponsVendor
     SWeapons: AU14SpecVend
     Corpsman: AU14VAIPOcorpsmanvendor
@@ -143,6 +151,7 @@
   vendors:
     Rifleman: AU14RMCequipmentvendor
     Clothing: AU14RMCclothingequipmentvendor
+    ShipsideUniform: AU14RMCShipsideUniformVendor
     Weapons: AU14RMCWeaponsVendor
     SWeapons: AU14RMCSpecialWeaponsVendor
     Corpsman: AU14RMCcorpsmanvendor

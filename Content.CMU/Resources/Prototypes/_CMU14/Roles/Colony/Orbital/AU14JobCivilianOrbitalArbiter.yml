@@ -76,7 +76,6 @@
     id: AU14IDCardOrbitalArbiter
     ears: AU14OrbitalHeadsetManagement
     back: CMSatchel
-    pocket1: AU14StampOrbitalArb
   storage:
     back:
     - RMCRadioHandheldColonyOff
@@ -105,5 +104,8 @@
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14
 
 # ├──[ ORBITAL COUNSEL ]─────────────────────────────────────────────┤

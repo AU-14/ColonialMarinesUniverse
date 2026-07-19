@@ -1,0 +1,40 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright (c) 2026 wray-git
+# SPDX-License-Identifier: AGPL-3.0-only
+# AU14 custom-construction recipe generator: the generic "under construction" frame.
+#
+# Multi-step custom recipes used to spawn the FINAL entity after the very first step (the intermediate node
+# parented the real entity, so it looked and worked finished while steps remained). Instead, every multi-step
+# recipe's intermediate node now parents THIS neutral frame: it clearly reads as work-in-progress (a bare
+# girder), blocks the tile, and is replaced by the real entity only once the LAST step is completed. Each
+# recipe emits a tiny child of this frame that adds the per-recipe Construction component (graph + mid node).
+- type: entity
+  parent: BaseStructure
+  id: AU14CustomConstructionFrame
+  name: construction frame
+  description: An unfinished construction. Complete the remaining steps to build it, or pry it apart to cancel.
+  suffix: AU14 Custom Construction
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - GlassAirlockLayer
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: _RMC14/Structures/Walls/girder.rsi
+    state: girder
+  - type: Icon
+    sprite: _RMC14/Structures/Walls/girder.rsi
+    state: girder
