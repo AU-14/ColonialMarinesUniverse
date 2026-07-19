@@ -442,3 +442,16 @@ demonstrates otherwise.
 - Files changed: `Content.Shared/Physics/Controllers/SharedConveyorController.cs`, `Content.IntegrationTests/Tests/Physics/ConveyorFrictionTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms the current controller has the required corner-handling base and no RMC override. A regression was added for inactive conveyed friction, active friction suppression, grounded angular damping, airborne angular preservation, and clearing the active flag. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
 - Follow-up/debt: Reconcile the later stopped-item stacking change in #42829 separately because it edits the same result loop, then recheck both angular damping branches after that merge.
+
+## CS-0027 — Preserve theobromine when coffee is iced
+
+- Upstream: [space-wizards/space-station-14#40063](https://github.com/space-wizards/space-station-14/pull/40063), `a8ba84ecf70eba6c740e641c41ca96392d056d41`, 2025-09-05
+- Areas: Chemistry, Medical
+- Status: Adapted
+- Risk: Low
+- Behavior/API delta: Iced coffee now produces `0.05` units of theobromine during each full metabolism-effect cycle, matching hot coffee and iced tea instead of losing the stimulant metabolite when ice is added.
+- RMC/CMU divergence: No RMC reagent overrides or consumers replace `IcedCoffee`, and the current fork still uses metabolism groups with a default `0.5`-unit rate. The pinned target later represents the same output as a `Digestion` metabolite coefficient of `0.1`, whose rate product is also `0.05`.
+- Decision and rationale: Port #40063's original `AdjustReagent` effect exactly for the current chemistry architecture and defer #42172's broad metabolism-stage migration. Importing only the target-final `metabolites` mapping would not deserialize or execute under the present model.
+- Files changed: `Resources/Prototypes/Reagents/Consumable/Drink/drinks.yml`, `Content.IntegrationTests/Tests/Chemistry/IcedCoffeeTheobromineTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms the theobromine reagent, effect type, recipe, and metabolism rate are already present and that no RMC override exists. A regression was added to resolve the prototype effect, assert its amount, execute it against a solution, and verify the resulting theobromine quantity. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
+- Follow-up/debt: When porting #42172, replace this effect with the target's typed digestion metabolite mapping and rerun the same output-contract regression across partial metabolism scales.
