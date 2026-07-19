@@ -26,6 +26,13 @@
       RMCSkillPowerLoader: 1
       RMCSkillSurgery: 1
       RMCSkillVehicles: 1
+      RMCSkillSpecialistWeapons: 1
+  # Captured-gear training: CLF can use any weapon specialist kit they seize.
+  - type: DemoSpecWhitelist
+  - type: GrenadeSpecWhitelist
+  - type: PyroWhitelist
+  - type: ScoutWhitelist
+  - type: SniperWhitelist
   - type: EquipEntityPreset
     preset: AU14CLFSurvLeaderPreset
   - type: TacticalMapIcon

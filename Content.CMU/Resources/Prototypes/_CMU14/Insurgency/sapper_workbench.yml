@@ -1,0 +1,105 @@
+# The Sapper's Workbench. A one-use kit in the sapper's toolbox unfolds into a field bench that:
+#   - fabricates every sapper trap, the spy-camera pieces, the siphon rig, and the Switch chip from
+#     stored sheets plus loose ingredient items placed on/next to the bench (cable coils, circuit
+#     boards, buckshot handfuls, IEDs - all common AU14 round loot),
+#   - force-fits weapon attachments by broad slot category.
+# All recipe balance lives in SapperWorkbenchComponent.Recipes.
+
+- type: entity
+  parent: BaseItem
+  id: AU14SapperWorkbenchKit
+  name: sapper's workbench kit
+  suffix: CLF, Sapper
+  description: A folded field workbench. Use it in hand to unfold it where you stand. Only a trained sapper knows how.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/autolathe.rsi
+    state: icon
+    scale: 0.5, 0.5
+    color: "#8a7a4a"
+  - type: Item
+    # Small so it packs into the sapper's toolbox alongside the rest of the kit.
+    size: Small
+  - type: SapperWorkbenchKit
+
+- type: entity
+  id: AU14SapperWorkbench
+  name: sapper's workbench
+  suffix: CLF, Sapper
+  description: This workbench seems designed with weapon grips, detailed computer components, and specialized device parts in mind. Feed it sheets of metal, plasteel, plastic, or wood; lay looted parts on top for the fancier recipes.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: Structures/Machines/autolathe.rsi
+    snapCardinals: true
+    layers:
+    - state: icon
+    color: "#8a7a4a"
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: InteractionOutline
+  - type: Clickable
+  - type: Anchorable
+  - type: Pullable
+  - type: Appearance
+  - type: SapperWorkbench
+  # Shows the weapon being worked on lying on the tabletop.
+  - type: AU14ContainerIconLayer
+    container: workbench_weapon
+    scale: 0.9, 0.9
+    offset: 0.0, 0.15
+  - type: MaterialStorage
+  - type: ActivatableUI
+    key: enum.SapperWorkbenchUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.SapperWorkbenchUiKey.Key:
+        type: SapperWorkbenchBui
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 120
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+# (The old latheRecipe blocks were removed: the bench's custom BUI recipes in
+# SapperWorkbenchComponent.Recipes are the single source of truth for fabrication balance.)
+
+# The siphon rig (Phase 5). Built only at the Sapper's Workbench (recipe: sheets + LV cable + any
+# electronics). Using it on a colony ATM runs a long, loud hack that pays out an equal slice of the
+# colony budget and leaves the machine sparking and refusing to open until it self-repairs.
+- type: entity
+  parent: BaseItem
+  id: AU14SapperSiphonRig
+  name: siphon rig
+  suffix: CLF, Sapper
+  description: A skimming rig of scavenged wiring and cloned card readers. Clamp it onto a colony ATM, budget console, or ASRS terminal and it quietly bleeds the funds out into cash.
+  components:
+  - type: Sprite
+    sprite: Objects/Devices/camera_bug.rsi
+    state: camera_bug
+    color: "#8a4a3a"
+  - type: Item
+    size: Small
+  - type: SapperAtmHacking

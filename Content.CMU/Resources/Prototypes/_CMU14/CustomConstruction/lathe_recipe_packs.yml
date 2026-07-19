@@ -1,0 +1,10 @@
+# Baseline packs referenced by CM/RMC lathes.
+# Runtime/admin-added recipes are loaded from the custom construction database and
+# republished into these pack ids without committing generated server state.
+- type: latheRecipePack
+  id: AU14AutolatheRecipes
+  recipes: []
+
+- type: latheRecipePack
+  id: AU14ArmylatheRecipes
+  recipes: []

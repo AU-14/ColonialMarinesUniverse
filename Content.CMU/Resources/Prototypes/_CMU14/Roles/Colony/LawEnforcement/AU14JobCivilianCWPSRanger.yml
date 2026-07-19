@@ -85,7 +85,7 @@
   storage:
     back:
     - AU14GuidebookLawColonial
-  
+
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointCivilianCWPSRanger

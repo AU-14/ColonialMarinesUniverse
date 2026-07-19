@@ -93,6 +93,14 @@
 
 - type: entity
   parent: VMarkerOpfor
+  id: VMarkerOpforShipsideUniform
+  name: Opfor Shipside Uniform marker
+  components:
+  - type: VendorMarker
+    class: ShipsideUniform
+
+- type: entity
+  parent: VMarkerOpfor
   id: VMarkeropforrequisitionsvendor
   name: OPFOR requisitions vendor marker
   components:
@@ -214,6 +222,14 @@
   components:
   - type: VendorMarker
     class: Clothing
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforShipsideUniform
+  name: Gov Shipside Uniform marker
+  components:
+  - type: VendorMarker
+    class: ShipsideUniform
 
 - type: entity
   parent: VMarkerGovfor
@@ -467,6 +483,17 @@
   components:
   - type: VendorMarker
     class: Clothing
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
+    state: base
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkershipShipsideUniform
+  name: Ship Shipside Uniform marker
+  components:
+  - type: VendorMarker
+    class: ShipsideUniform
   - type: Sprite
     sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
     state: base
@@ -788,6 +815,127 @@
     drawdepth: Overdoors
     sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
     state: med
+
+# Ship double door markers
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedDoubleNormalDoor
+  name: Ship double normal door marker
+  components:
+  - type: VendorMarker
+    class: LockedDoubleNormalDoor
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: normal
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedDoubleGlassDoor
+  name: Ship double glass door marker
+  components:
+  - type: VendorMarker
+    class: LockedDoubleGlassDoor
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: glass
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedDoubleCommandDoor
+  name: Ship double command door marker
+  components:
+  - type: VendorMarker
+    class: LockedDoubleCommandDoor
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: com
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedDoubleCommandGlassDoor
+  name: Ship double command glass door marker
+  components:
+  - type: VendorMarker
+    class: LockedDoubleCommandGlassDoor
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: comglass
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedDoubleSecurityDoor
+  name: Ship double security door marker
+  components:
+  - type: VendorMarker
+    class: LockedDoubleSecurityDoor
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: sec
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedDoubleSecurityGlassDoor
+  name: Ship double security glass door marker
+  components:
+  - type: VendorMarker
+    class: LockedDoubleSecurityGlassDoor
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: secglass
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedDoubleMedicalDoor
+  name: Ship double medical door marker
+  components:
+  - type: VendorMarker
+    class: LockedDoubleMedicalDoor
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: med
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedDoubleMedicalGlassDoor
+  name: Ship double medical glass door marker
+  components:
+  - type: VendorMarker
+    class: LockedDoubleMedicalGlassDoor
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: medglass
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedDoubleEngineeringDoor
+  name: Ship double engineering door marker
+  components:
+  - type: VendorMarker
+    class: LockedDoubleEngineeringDoor
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: eng
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedDoubleEngineeringGlassDoor
+  name: Ship double engineering glass door marker
+  components:
+  - type: VendorMarker
+    class: LockedDoubleEngineeringGlassDoor
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: engglass
 
 # Ship console and machine markers
 - type: entity

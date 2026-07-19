@@ -566115,7 +566115,7 @@ entities:
     - type: Transform
       pos: -152.5,-60.5
       parent: 1
-- proto: MaintenanceJack
+- proto: AU14MaintenanceJack
   entities:
   - uid: 82847
     components:

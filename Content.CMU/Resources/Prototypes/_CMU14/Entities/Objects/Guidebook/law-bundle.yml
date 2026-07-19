@@ -27,3 +27,4 @@
       - id: CMStampApproved
       - id: CMStampDenied
       - id: CMClipboard
+      - id: CMUUniversalPaperTool

@@ -18,6 +18,7 @@
       RMCSkillFireman: 1
       RMCSkillVehicles: 1
       RMCSkillPolice: 1
+      RMCSkillSpecialistWeapons: 1
   - type: JobPrefix
     prefix: au14-job-prefix-clfguerilla
   - type: StartingMindRole
@@ -86,3 +87,6 @@
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14
