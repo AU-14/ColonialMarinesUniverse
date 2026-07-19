@@ -377,3 +377,16 @@ demonstrates otherwise.
 - Files changed: `Content.Shared/Chemistry/EntitySystems/HypospraySystem.cs`, `Content.Shared/_RMC14/Chemistry/RMCSharedHypospraySystem.cs`, `Resources/Locale/en-US/chemistry/components/hypospray-component.ftl`, `Content.IntegrationTests/Tests/Chemistry/HyposprayIdentityPopupTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Before the 20-port batch cadence began, the shared and integration-test projects built successfully and the connected regression passed 1/1 for both standard and RMC vial-backed hyposprays. Replacing either identity-aware argument with the raw target leaked the true name; removing `THE` dropped the required article. The full-solution checkpoint is deferred to the CS-0021–CS-0040 batch boundary.
 - Follow-up/debt: Reconcile both paths with the target's unified injector-system migration in dependency order, and audit other duplicated RMC medical popups for raw entity-name arguments that can bypass presented identity.
+
+## CS-0022 — Keep joint-visual targets local between network boundaries
+
+- Upstream: [space-wizards/space-station-14#39987](https://github.com/space-wizards/space-station-14/pull/39987), `af05313f37e45103fcaa51f21e654f9a076a4819`, 2025-10-10
+- Areas: Physics, Shooting
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `JointVisualsComponent.Target` is now an `EntityUid?` in component, system, and overlay code. Auto-generated component state continues to translate that local identifier to `NetEntity?` on the wire and back to the receiving side's local entity, removing manual conversion from grappling-gun and rendering call sites.
+- RMC/CMU divergence: No RMC-specific systems currently consume `JointVisualsComponent`. The existing grappling implementation, projectile lifecycle, rope sprite, joint physics, and prediction behavior remain unchanged; only ownership of the network-boundary conversion moves to the component-state generator.
+- Decision and rationale: Port the three upstream call-site and component changes together. Storing a `NetEntity` directly in a data field leaks transport representation into local ECS code and lets the overlay accidentally query a server identifier on the client.
+- Files changed: `Content.Shared/Physics/JointVisualsComponent.cs`, `Content.Client/Physics/JointVisualsOverlay.cs`, `Content.Shared/Weapons/Misc/SharedGrapplingGunSystem.cs`, `Content.IntegrationTests/Tests/Physics/JointVisualsTargetTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms the production hunks match #39987 and no RMC consumer exists. A connected regression was added to assert the public local field type, the grappling-shot assignment on the server, and automatic remapping to the corresponding client-local target. Per the requested 20-port cadence, execution is deferred to the CS-0021–CS-0040 batch checkpoint.
+- Follow-up/debt: Re-audit the target's later grappling rework and rope-visual changes in dependency order; retain the local-entity component contract if those larger mechanics need CMU-specific adaptation.
