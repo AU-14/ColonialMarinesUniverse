@@ -4,8 +4,8 @@ meta:
   engineVersion: v278.0.0
   forkId: ""
   forkVersion: ""
-  time: 07/19/2026 22:36:58
-  entityCount: 39091
+  time: 07/19/2026 22:44:59
+  entityCount: 39095
 maps:
 - 1
 grids:
@@ -148123,6 +148123,26 @@ entities:
     - type: Transform
       pos: -90.5,53.5
       parent: 1
+  - uid: 448
+    components:
+    - type: Transform
+      pos: -90.5,54.5
+      parent: 1
+  - uid: 456
+    components:
+    - type: Transform
+      pos: -22.5,-30.5
+      parent: 1
+  - uid: 457
+    components:
+    - type: Transform
+      pos: -22.5,-38.5
+      parent: 1
+  - uid: 458
+    components:
+    - type: Transform
+      pos: -22.5,-34.5
+      parent: 1
 - proto: CMUMonitorCameraColonyCMB
   entities:
   - uid: 7434
@@ -182220,7 +182240,7 @@ entities:
       pos: -29.5,-46.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -54035.527
+      secondsUntilStateChange: -54514.98
       state: Closing
   - uid: 9768
     components:
@@ -332082,27 +332102,27 @@ entities:
       parent: 1
 - proto: SpawnPointLatejoin
   entities:
-  - uid: 448
+  - uid: 508
     components:
     - type: Transform
       pos: 66.5,27.5
       parent: 1
-  - uid: 456
+  - uid: 509
     components:
     - type: Transform
       pos: 66.5,23.5
       parent: 1
-  - uid: 457
+  - uid: 10166
     components:
     - type: Transform
       pos: 76.5,9.5
       parent: 1
-  - uid: 458
+  - uid: 10205
     components:
     - type: Transform
       pos: 80.5,9.5
       parent: 1
-  - uid: 508
+  - uid: 10209
     components:
     - type: Transform
       pos: 72.5,9.5
