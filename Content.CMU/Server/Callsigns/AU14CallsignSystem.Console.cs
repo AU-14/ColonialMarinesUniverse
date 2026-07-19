@@ -4,8 +4,8 @@ using Content.Shared._AU14.Radio;
 using Content.Shared._CMU14.Threats.Mobs.CLF;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Squads;
+using Content.Shared._RMC14.Overwatch;
 using Content.Shared.Popups;
-using Content.Shared.Verbs;
 using Robust.Shared.Utility;
 
 namespace Content.Server._AU14.Callsigns;
@@ -17,8 +17,6 @@ public sealed partial class AU14CallsignSystem
 
     private void InitializeConsole()
     {
-        SubscribeLocalEvent<AU14CallsignConsoleComponent, GetVerbsEvent<AlternativeVerb>>(OnConsoleGetVerbs);
-
         Subs.BuiEvents<AU14CallsignConsoleComponent>(AU14CallsignConsoleUI.Key, subs =>
         {
             subs.Event<BoundUIOpenedEvent>(OnConsoleOpened);
@@ -28,21 +26,18 @@ public sealed partial class AU14CallsignSystem
             subs.Event<AU14CallsignDeleteGroupMsg>(OnDeleteGroup);
             subs.Event<AU14CallsignAssignGroupMsg>(OnAssignGroup);
         });
+
+        // overwatch laptops carry the directory too, the comms tab under fireteams
+        // opens it without hunting down a standalone terminal
+        Subs.BuiEvents<AU14CallsignConsoleComponent>(OverwatchConsoleUI.Key, subs =>
+        {
+            subs.Event<AU14CallsignOpenDirectoryMsg>(OnOpenDirectory);
+        });
     }
 
-    private void OnConsoleGetVerbs(Entity<AU14CallsignConsoleComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
+    private void OnOpenDirectory(Entity<AU14CallsignConsoleComponent> ent, ref AU14CallsignOpenDirectoryMsg args)
     {
-        if (!args.CanAccess || !args.CanInteract)
-            return;
-
-        var user = args.User;
-
-        args.Verbs.Add(new AlternativeVerb
-        {
-            Text = Loc.GetString("au14-callsign-console-verb"),
-            Icon = new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/VerbIcons/settings.svg.192dpi.png")),
-            Act = () => _ui.TryOpenUi(ent.Owner, AU14CallsignConsoleUI.Key, user),
-        });
+        _ui.TryOpenUi(ent.Owner, AU14CallsignConsoleUI.Key, args.Actor);
     }
 
     private void OnConsoleOpened(Entity<AU14CallsignConsoleComponent> ent, ref BoundUIOpenedEvent args)

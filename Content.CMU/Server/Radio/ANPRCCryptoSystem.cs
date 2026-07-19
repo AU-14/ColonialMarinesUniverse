@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
+using Content.Server.Administration.Logs;
 using Content.Shared._AU14.Radio;
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.Database;
 using Content.Shared.Examine;
 using Content.Shared.GameTicking;
 using Content.Shared.Popups;
@@ -15,6 +17,7 @@ public sealed partial class ANPRCCryptoSystem : EntitySystem
 
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
 
     private readonly Dictionary<string, int> _generation = new();
 
@@ -80,6 +83,11 @@ public sealed partial class ANPRCCryptoSystem : EntitySystem
         var designation = GetFillDesignation(ent.Owner);
         _itemSlots.TryEjectToHands(ent.Owner, slot, args.Actor);
 
+        _adminLogger.Add(
+            LogType.Action,
+            LogImpact.Medium,
+            $"{ToPrettyString(args.Actor):user} zeroized COMSEC fill {designation} on {ToPrettyString(ent.Owner):radio}");
+
         _popup.PopupEntity(
             Loc.GetString("anprc-crypto-zeroized", ("designation", designation)),
             args.Actor,
@@ -102,6 +110,11 @@ public sealed partial class ANPRCCryptoSystem : EntitySystem
 
         var designation = GetFillDesignation(ent.Owner);
         QueueDel(card);
+
+        _adminLogger.Add(
+            LogType.Action,
+            LogImpact.High,
+            $"{ToPrettyString(args.Actor):user} destroyed COMSEC fill card {designation} in {ToPrettyString(ent.Owner):radio}");
 
         _popup.PopupEntity(
             Loc.GetString("anprc-crypto-destroyed", ("designation", designation)),
@@ -168,11 +181,56 @@ public sealed partial class ANPRCCryptoSystem : EntitySystem
         Dirty(cardUid, card);
         RaiseLocalEvent(ent.Owner, new ANPRCCryptoChangedEvent());
 
+        NotifySupersededRadios(ent.Owner, faction);
+
+        // supersedes every fill card in the faction, admins need to see who pulled
+        // the trigger when comms suddenly go unsecured for everyone
+        _adminLogger.Add(
+            LogType.Action,
+            LogImpact.High,
+            $"{ToPrettyString(args.Actor):user} ordered a COMSEC recrypto for faction {faction} (generation {newGeneration}), superseding all previously issued fill cards");
+
         _popup.PopupEntity(
             Loc.GetString("anprc-recrypto-ordered", ("faction", faction)),
             args.Actor,
             args.Actor,
             PopupType.Large);
+    }
+
+    // a recrypto silently staled every other card in the faction; without this the
+    // other panels keep showing SECURED until something else refreshes them, and
+    // operators only find out from COMSEC warnings mid-transmission
+    private void NotifySupersededRadios(EntityUid orderingRadio, string faction)
+    {
+        var radios = EntityQueryEnumerator<ANPRCCryptoSlotComponent>();
+
+        while (radios.MoveNext(out var radioUid, out _))
+        {
+            if (radioUid == orderingRadio)
+                continue;
+
+            if (!string.Equals(GetFillFaction(radioUid), faction, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            RaiseLocalEvent(radioUid, new ANPRCCryptoChangedEvent());
+
+            if (!IsFillStale(radioUid))
+                continue;
+
+            if (!TryComp(radioUid, out ANPRCRadioComponent? radio) || !radio.IsEquipped)
+                continue;
+
+            var wearer = Transform(radioUid).ParentUid;
+
+            if (!wearer.IsValid())
+                continue;
+
+            _popup.PopupEntity(
+                Loc.GetString("anprc-recrypto-superseded-notice"),
+                wearer,
+                wearer,
+                PopupType.MediumCaution);
+        }
     }
 
     private void OnExamine(Entity<ANPRCCryptoSlotComponent> ent, ref ExaminedEvent args)

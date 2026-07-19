@@ -5,6 +5,7 @@ using Content.Shared._AU14.Radio;
 using Content.Shared._RMC14.Chat;
 using Content.Shared.Chat;
 using Content.Shared.Hands;
+using Content.Shared.Interaction.Events;
 using Content.Shared.Popups;
 using Content.Shared.Radio.Components;
 using Content.Shared.Verbs;
@@ -110,6 +111,31 @@ public sealed partial class ANPRCRadioSystem
         radio.HandsetUser = args.User;
 
         SyncHandsetHearing((args.User, user));
+    }
+
+    // using the handset in hand hangs it back up, so the pack wearer isn't stuck
+    // throwing it or walking the cord out to put it away
+    private void OnHandsetUseInHand(Entity<ANPRCHandsetComponent> ent, ref UseInHandEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        if (!TryComp(args.User, out ANPRCHandsetUserComponent? user) || user.Radio != ent.Comp.Radio)
+            return;
+
+        args.Handled = true;
+
+        var radio = ent.Comp.Radio;
+
+        ReleaseHandset((args.User, user));
+
+        if (radio != null)
+        {
+            _popup.PopupEntity(
+                Loc.GetString("anprc-handset-released", ("radio", radio.Value)),
+                args.User,
+                args.User);
+        }
     }
 
     private void OnHandsetUnequippedHand(Entity<ANPRCHandsetComponent> ent, ref GotUnequippedHandEvent args)

@@ -10,11 +10,13 @@ using Content.Server.Radio.Components;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared._AU14.Radio;
 using Content.Shared._RMC14.Chat;
+using Content.Shared._RMC14.PropCalling;
 using Content.Shared.Chat;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Item;
 using Content.Shared.PowerCell;
@@ -24,6 +26,7 @@ using Content.Shared.Radio.Components;
 using Content.Shared.Verbs;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
+using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -55,6 +58,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private INetManager _netManager = default!;
 
     public static readonly ProtoId<RadioChannelPrototype> ANPRCSentinelChannel = "ANPRCActiveChannel";
 
@@ -94,6 +98,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         SubscribeLocalEvent<ANPRCRadioComponent, MapInitEvent>(OnRadioMapInit);
         SubscribeLocalEvent<ANPRCHandsetComponent, GotEquippedHandEvent>(OnHandsetEquippedHand);
         SubscribeLocalEvent<ANPRCHandsetComponent, GotUnequippedHandEvent>(OnHandsetUnequippedHand);
+        SubscribeLocalEvent<ANPRCHandsetComponent, UseInHandEvent>(OnHandsetUseInHand);
 
         SubscribeLocalEvent<ANPRCRadioComponent, RadioReceiveEvent>(OnRadioReceive);
         SubscribeLocalEvent<ANPRCRadioComponent, GetVerbsEvent<AlternativeVerb>>(OnGetAltVerbs);
@@ -120,6 +125,10 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         SubscribeLocalEvent<ANPRCRadioComponent, ANPRCPlantDoAfterEvent>(OnPlantDoAfter);
         SubscribeLocalEvent<ANPRCRadioComponent, ANPRCPackUpDoAfterEvent>(OnPackUpDoAfter);
         SubscribeLocalEvent<ANPRCRadioComponent, GettingPickedUpAttemptEvent>(OnPickupAttempt);
+
+        // PropCaller only exists on RMCAdminObserver, so this hands aghosts radio
+        // training without editing the upstream prototype file
+        SubscribeLocalEvent<PropCallerComponent, MapInitEvent>(OnAdminObserverMapInit);
 
         SubscribeLocalEvent<ANPRCRadioComponent, ANPRCDirectScanSwitchedEvent>(OnDirectScanSwitched);
         SubscribeLocalEvent<ANPRCRadioComponent, ANPRCCryptoChangedEvent>(OnCryptoChanged);
@@ -154,7 +163,32 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
             return;
         }
 
-        if (args.MessageSource != wearer)
+        // the wearer's headset or their own intrinsic receiver (a held handset)
+        // already delivers this channel, the pack must not double it up
+        var covered = false;
+
+        if (TryComp(wearer, out WearingHeadsetComponent? wearingHeadset) &&
+            TryComp(wearingHeadset.Headset, out EncryptionKeyHolderComponent? keys))
+        {
+            covered = keys.Channels.Contains(args.Channel.ID);
+        }
+
+        if (!covered &&
+            HasComp<IntrinsicRadioReceiverComponent>(wearer) &&
+            TryComp(wearer, out ActiveRadioComponent? wearerRadio) &&
+            wearerRadio.Channels.Contains(args.Channel.ID))
+        {
+            covered = true;
+        }
+
+        if (args.MessageSource == wearer)
+        {
+            // sidetone: the operator hears their own traffic back through the pack on
+            // nets their headset can't receive, proof the message actually went out
+            if (!covered && TryComp(wearer, out ActorComponent? selfActor))
+                _netManager.ServerSendMessage(args.ChatMsg, selfActor.PlayerSession.Channel);
+        }
+        else
         {
             var heard = _garble.ApplyComsecGarble(args.MessageSource, ent.Owner, args.Channel, args.Message);
 
@@ -166,22 +200,6 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
                 heard);
 
             UpdateBuiState(ent);
-
-            var covered = false;
-
-            if (TryComp(wearer, out WearingHeadsetComponent? wearingHeadset) &&
-                TryComp(wearingHeadset.Headset, out EncryptionKeyHolderComponent? keys))
-            {
-                covered = keys.Channels.Contains(args.Channel.ID);
-            }
-
-            if (!covered &&
-                HasComp<IntrinsicRadioReceiverComponent>(wearer) &&
-                TryComp(wearer, out ActiveRadioComponent? wearerRadio) &&
-                wearerRadio.Channels.Contains(args.Channel.ID))
-            {
-                covered = true;
-            }
 
             if (!covered && TryComp(wearer, out ActorComponent? actor))
             {
@@ -543,6 +561,11 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
 
         UpdateRelayAnchor(ent);
         UpdateBuiState(ent);
+    }
+
+    private void OnAdminObserverMapInit(Entity<PropCallerComponent> ent, ref MapInitEvent args)
+    {
+        EnsureComp<ANPRCRadioUserComponent>(ent);
     }
 
     private void OnCryptoChanged(Entity<ANPRCRadioComponent> ent, ref ANPRCCryptoChangedEvent args)

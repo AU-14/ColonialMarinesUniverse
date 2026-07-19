@@ -1,8 +1,10 @@
+using Robust.Shared.GameStates;
+
 namespace Content.Shared._AU14.Callsigns;
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class AU14CallsignConsoleComponent : Component
 {
-    [DataField(required: true)]
+    [DataField(required: true), AutoNetworkedField]
     public string Faction = string.Empty;
 }

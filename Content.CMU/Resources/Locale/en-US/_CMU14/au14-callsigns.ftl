@@ -1,5 +1,4 @@
 au14-callsign-console-title = Comms Net Directory
-au14-callsign-console-verb = Callsign Directory
 au14-callsign-console-net = { $faction } NET
 au14-callsign-console-mode-edit = NET CONTROL
 au14-callsign-console-mode-readonly = READ ONLY
@@ -25,3 +24,4 @@ au14-callsign-console-create-group-button = CREATE GROUP
 au14-callsign-console-delete-group-button = DISBAND
 au14-callsign-console-group-none = - element -
 au14-callsign-headset-examine = You answer to [color=#6BC7FF]{ $callsign }[/color] on the net.
+au14-overwatch-console-comms-directory = Comms Net Directory

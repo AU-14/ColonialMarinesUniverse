@@ -56,6 +56,9 @@ anprc-recrypto-stale-card = This card has already been superseded. Insert a curr
 anprc-recrypto-foreign-card = CHANGEOVER DENIED - loaded fill does not match this radio's issuing authority.
 anprc-recrypto-ordered = COMSEC CHANGEOVER ORDERED: all { $faction } fill cards issued before this order are now superseded. Request replacement fill through the normal resupply channel.
 anprc-recrypto-not-authorized = CHANGEOVER DENIED - recrypto requires command COMSEC authority.
+anprc-recrypto-button = ORDER RECRYPTO - SUPERSEDE FACTION FILL
+anprc-recrypto-button-confirm = PRESS AGAIN TO CONFIRM - SUPERSEDES ALL FACTION FILLS
+anprc-recrypto-superseded-notice = COMSEC CHANGEOVER - your loaded fill has been superseded. Request replacement fill.
 
 anprc-battery-depleted = The radio has no charge. Insert a battery.
 anprc-battery-empty = The AN/PRC-117G shuts down, battery depleted.

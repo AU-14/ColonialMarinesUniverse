@@ -48,11 +48,14 @@ public sealed partial class TacticalMapSystem
 
         var key = _nextIntelBlipKey--;
 
-        if (!TryGetBlipDicts(tacticalMap, viewerFactionUpper, out var live, out var snapshot))
+        if (!TryGetBlipDicts(tacticalMap, viewerFactionUpper, out var live, out _))
             return null;
 
+        // live dict only: DF fixes are realtime SIGINT for the ops consoles (tacmap
+        // computers and overwatch poll the live blips), not part of the snapshot map
+        // updates handed to every rifleman. a manual update pulled while the fix is
+        // up still captures it, which is fine - that update reflects current intel
         live[key] = blip;
-        snapshot[key] = blip;
 
         tacticalMap.MapDirty = true;
         return (gridId, key);

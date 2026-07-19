@@ -2,7 +2,8 @@
                xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
                Title="{Loc anprc-window-title}"
                MinWidth="400"
-               MinHeight="620">
+               MinHeight="420"
+               SetSize="420 680">
 
   <PanelContainer>
     <PanelContainer.PanelOverride>
@@ -200,7 +201,7 @@
                 <Button Name="ZeroizeButton"  Text="ZEROIZE" HorizontalExpand="True" StyleClasses="Caution" />
                 <Button Name="DestroyButton"  Text="DESTROY" HorizontalExpand="True" StyleClasses="Caution" />
               </BoxContainer>
-              <Button Name="RecryptoButton" Text="ORDER RECRYPTO - SUPERSEDE FACTION FILL" StyleClasses="Caution" />
+              <Button Name="RecryptoButton" Text="{Loc anprc-recrypto-button}" StyleClasses="Caution" />
             </BoxContainer>
           </PanelContainer>
 

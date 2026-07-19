@@ -79,6 +79,11 @@ public sealed class AU14CallsignAssignGroupMsg(NetEntity member, string? group) 
     public readonly string? Group = group;
 }
 
+// sent through the overwatch console UI on entities that also carry the
+// directory, pops the comms net directory window for the operator
+[Serializable, NetSerializable]
+public sealed class AU14CallsignOpenDirectoryMsg : BoundUserInterfaceMessage;
+
 public static class AU14Callsigns
 {
     public const int MaxWordLength = 10;
