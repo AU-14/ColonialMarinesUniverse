@@ -2,6 +2,8 @@ using Content.Server._AU14.Chemistry.Reagents;
 using Content.Shared._AU14.Chemistry.Reagents;
 using Content.Shared._AU14.Chemistry.Research;
 using Content.Shared._CMU14.Chemistry.Reagent;
+using Content.Shared._RMC14.Requisitions;
+using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Paper;
 using Robust.Shared.Prototypes;
@@ -20,6 +22,7 @@ public sealed partial class ServerXRFScannerSystem : XRFScannerSystem
     [Dependency] private PaperSystem _paper = default!;
     [Dependency] private ServerResearchDataTerminalSystem _rdat = default!;
     [Dependency] private IGameTiming _time = default!;
+    [Dependency] private SharedRequisitionsSystem _req = default!;
 
     public override void Initialize()
     {
@@ -65,13 +68,18 @@ public sealed partial class ServerXRFScannerSystem : XRFScannerSystem
         }
         if (chem.Class < ReagentClass.Special || (chem.Class >= ReagentClass.Special && dat.Value.Completed))
             _generator.SaveNewProperties(chemprops);
+        EntityUid scanner = GetEntity(args.Scanner);
         if (chem.Class >= ReagentClass.Special && !_generator.IdentifiedChemicals.ContainsKey(chem.ID))
         {
             //todo: statistics
             //todo: do something when DNA Disintegrating is discovered
-            _rdat.CompleteChemical(chem);
+            string faction = string.Empty;
+            if (TryComp<XRFScannerComponent>(scanner, out var scomp))
+            {
+                faction = scomp.Faction;
+            }
+            _rdat.CompleteChemical(chem, faction, scanner);
         }
-        EntityUid scanner = GetEntity(args.Scanner);
         if (scanner == EntityUid.Invalid) //PANIC!!!!!!
             return;
         EntityUid? paper = EntityUid.Invalid;

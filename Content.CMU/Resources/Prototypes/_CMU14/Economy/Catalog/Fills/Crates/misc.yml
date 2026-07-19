@@ -66,11 +66,51 @@
 - type: entity
   parent: RMCSecureCaseMedicalBig
   id: CMUCrateXRF
+  suffix: Corporate
   name: x-ray fluorescence spectrometer crate
   description: A crate containing an X-Ray Fluorescence spectrometer machine. WARNING! CONTENTS ARE RADIOACTIVE.
   components:
   - type: SpawnOnTerminate
     spawn: CMUXRFScanner
+
+- type: entity
+  parent: RMCSecureCaseMedicalBig
+  id: CMUCrateXRFGovfor
+  name: x-ray fluorescence spectrometer crate
+  description: A crate containing an X-Ray Fluorescence spectrometer machine. WARNING! CONTENTS ARE RADIOACTIVE.
+  suffix: GOVFOR
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMUXRFScannerGovfor
+
+- type: entity
+  parent: RMCSecureCaseMedicalBig
+  id: CMUCrateXRFOpfor
+  name: x-ray fluorescence spectrometer crate
+  description: A crate containing an X-Ray Fluorescence spectrometer machine. WARNING! CONTENTS ARE RADIOACTIVE.
+  suffix: OPFOR
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMUXRFScannerOpfor
+
+- type: entity
+  parent: RMCSecureCaseMedicalBig
+  id: CMUCrateXRFColony
+  name: x-ray fluorescence spectrometer crate
+  description: A crate containing an X-Ray Fluorescence spectrometer machine. WARNING! CONTENTS ARE RADIOACTIVE.
+  suffix: Colony
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMUXRFScannerColony
+
+- type: entity
+  parent: RMCSecureCaseMedicalBig
+  id: CMUCrateXRFNobody
+  name: x-ray fluorescence spectrometer crate
+  description: A crate containing an X-Ray Fluorescence spectrometer machine. WARNING! CONTENTS ARE RADIOACTIVE.
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMUXRFScannerNobody
 
 - type: entity
   parent: RMCSecureCaseMedicalBig
@@ -92,7 +132,7 @@
 
 - type: entity
   parent: RMCCrateSecurePhoron
-  id: CMUCratePreciousMetals #you shouldn't eat these
+  id: CMUCratePreciousMetals #you shouldn't eat these, it will get you killed
   name: precious metals crate
   description: A crate containing gold, silver, and uranium
   components:
@@ -104,6 +144,9 @@
     - id: RMCJugSilver
       amount: 1
     - id: RMCJugUranium
+      amount: 1
+    - id: RMCJugPlatinum
+      amount: 1
 
 - type: entity
   parent: RMCCrateScience

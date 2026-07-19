@@ -15,6 +15,18 @@
         prob: 0.1
 
 - type: entity
+  id: CMUCrateSecureCipheringExperiment
+  parent: RMCCrateSecureWeYa
+  name: secure Weyland-Yutani crate
+  description: A secure Weyland-Yutani crate. You don't know what is in it, but there is a rather large "CLASSIFIED" label and a plethora of warning semiotics.
+  suffix: CMU, Xeno Eggs
+  components:
+  - type: StorageFill
+    contents:
+      - id: XenoEgg
+        amount: 1
+
+- type: entity
   id: AU14CrateSecureWeYuDrugs
   parent: AU14CrateSecureWeYuXenoEggs
   name: secure We-Yu crate

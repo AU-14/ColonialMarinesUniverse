@@ -31,6 +31,12 @@ public sealed partial class XRFScannerComponent : Component
 
     [DataField]
     public SoundPathSpecifier FailSound = new("/Audio/_RMC14/Machines/buzz_two.ogg");
+
+    [DataField("faction")]
+    // who does this XRF belong to?
+    // i.e. who gets the money.
+    // if the string is empty then it spits out the money as dollars, rounded.
+    public string Faction = string.Empty;
 }
 [Serializable, NetSerializable]
 public enum XRFScannerVisuals

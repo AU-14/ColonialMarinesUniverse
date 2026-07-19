@@ -45,9 +45,11 @@ cmu-paper-header-wy-sim = [italic][bold]Official Company Document[/bold]{"\u000a
 
 cmu-paper-sim-footer = [italic]This report was automatically printed by the Synthesis Simulator.[/italic]
 
-cmu-paper-ciph-hint-header = [italic][bold]Official Company Document[/bold]{"\u000a"}Experiment Notes[/italic]
+cmu-paper-ciph-hint-header = [italic][bold]Official Company Document[/bold]{"\u000a"}Experiment Notes & Testing Authorization[/italic]
 cmu-paper-ciph-hint-subheader = [head=3][color=#517087]Weyland-Yutani Biological Weapons Division[/head][/color]
 cmu-paper-ciph-hint = During testing, the theorized component [bold]{$CIPH}[/bold] was found to be made of [bold]{$A}[/bold] and [bold]{$B}[/bold]. Recent discovery made us believe the last piece is [bold]{$C}[/bold].
+cmu-paper-xeno-knowledge = Preliminary examination has yielded the hypothesis that [bold]Encrypted[/bold] is in some way related to the xenofauna species DESIGNATION_PENDING.{"\u000a"} Current database knowledge on DESIGNATION_PENDING is that they are eusocial obligate parasitoid lifeforms.{"\u000a"} Data acquired during a salvage mission from 2122 and during a USCMC operation in 2179 indicates they are extremely intelligent and lethal. {"\u000a"} If testing is to be conducted, ensure heavy containment and have security teams on standby with automatic and armor piercing weapons.
+cmu-paper-xeno-sample-deliv =  We have authorized a sample delivery of DESIGNATION_PENDING to the nearest ASRS elevator. Nota bene, Specimen samples of DESIGNATION_PENDING are few and far between. Do [bold]not[/bold] lose it.
 cmu-paper-ciph-hint-footer = - [italic]Weyland-Yutani[/italic]
 
 research-chem-terminal-update = Chemical contracts have been updated!

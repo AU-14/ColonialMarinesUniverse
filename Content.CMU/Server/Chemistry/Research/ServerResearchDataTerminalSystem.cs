@@ -5,6 +5,8 @@ using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
 using Content.Shared._AU14.Chemistry.Reagents;
 using Content.Shared._AU14.Chemistry.Research;
+using Content.Shared._RMC14.Requisitions;
+using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.CCVar;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.GameTicking;
@@ -68,6 +70,8 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     [Dependency] private IPrototypeManager _protoman = default!;
     [Dependency] private MetaDataSystem _mets = default!;
     [Dependency] private CorporateConsoleSystem _corpo = default!;
+    [Dependency] private ColonyBudgetSystem _colbud = default!;
+    [Dependency] private SharedRequisitionsSystem _reqsys = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private ILogManager _logman = default!;
 
@@ -77,6 +81,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     private ISawmill _sawmill = default!;
 
     private bool _upgrading = false;
+    private NetEntity _cipherPicker = NetEntity.Invalid;
     public override void Initialize()
     {
         base.Initialize();
@@ -125,6 +130,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         LastPickName = string.Empty;
         _printing.Clear();
         _printingLast.Clear();
+        _cipherPicker = NetEntity.Invalid;
     }
 
     public void OnLoadingMaps(PostGameMapLoad args)
@@ -143,6 +149,11 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         else cost = (_researchLevelIncreaseMult * Clearance) + 1;
         if (Credits >= cost)
         {
+            if (Clearance == 5)
+            {
+                NetEntity net = GetNetEntity(ent.Owner);
+                _cipherPicker = net;
+            }
             _upgrading = true;
         }
         UpdateUI(ent);
@@ -167,12 +178,20 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
                 }
                 UpdateClearance(Credits - cost, Clearance + 1);
                 var query = EntityQueryEnumerator<ResearchDataTerminalComponent>();
+                EntityUid cip = GetEntity(_cipherPicker);
                 while(query.MoveNext(out var ent, out var comp))
                 {
                     UpdateUI(ent);
                     if (ciph)
                     {
-                        SpawnNextToOrDrop("CMUCipherHintPaper", ent);
+                        if (ent == cip)
+                        {
+                            SpawnNextToOrDrop("CMUCipherHintPaper", ent);
+                        }
+                        else
+                        {
+                            SpawnNextToOrDrop("CMUCipherHintPaperNoSpawn", ent);
+                        }
                     }
                 }
             }
@@ -217,7 +236,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         _generator.ProceduralReagentData.Add(chem.ID, chem);
     }
 
-    public void CompleteChemical(ReagentPrototype proto)
+    public void CompleteChemical(ReagentPrototype proto, string faction, EntityUid? scanner)
     {
         _generator.IdentifiedChemicals.Add(proto.ID, proto.Reward);
         var ev = new UpdateDataTerminalClearanceEvent(-1, Credits + proto.Reward);
@@ -225,7 +244,54 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         RaiseNetworkEvent(ev);
         var ncv = new IdentifyChemicalEvent(proto.ID, proto.Reward);
         RaiseNetworkEvent(ncv);
-        _corpo.AddToCorporateBudget(ResearchCashRewardMult * proto.Reward);
+        if (faction != string.Empty)
+        {
+            if (string.Equals(faction, "corporate", StringComparison.OrdinalIgnoreCase))
+            {
+                _corpo.AddToCorporateBudget(ResearchCashRewardMult * proto.Reward);
+                return;
+            }
+            if (string.Equals(faction, "colony", StringComparison.OrdinalIgnoreCase))
+            {
+                _colbud.AddToBudget(ResearchCashRewardMult * proto.Reward);
+                return;
+            }
+            if (string.Equals(faction, "govfor", StringComparison.OrdinalIgnoreCase))
+            {
+                _reqsys.ChangeBudget((int)MathF.Round(ResearchCashRewardMult * proto.Reward), "govfor");
+                return;
+            }
+            if (string.Equals(faction, "opfor", StringComparison.OrdinalIgnoreCase))
+            {
+                _reqsys.ChangeBudget((int)MathF.Round(ResearchCashRewardMult * proto.Reward), "opfor");
+                return;
+            }
+        }
+        if (scanner is null) // guess they don't *really* need that money then
+            return;
+        int amount = (int)MathF.Round(ResearchCashRewardMult * proto.Reward);
+        while (amount > 0)
+        {
+            switch (amount)
+            {
+                case >= 1000:
+                    SpawnNextToOrDrop("RMCSpaceCash1000", scanner.Value);
+                    amount -= 1000;
+                    break;
+                case >= 100:
+                    SpawnNextToOrDrop("RMCSpaceCash100", scanner.Value);
+                    amount -= 100;
+                    break;
+                case >= 10:
+                    SpawnNextToOrDrop("RMCSpaceCash10", scanner.Value);
+                    amount -= 10;
+                    break;
+                default:
+                    SpawnNextToOrDrop("RMCSpaceCash", scanner.Value);
+                    amount--;
+                    break;
+            }
+        }
     }
 
     private void OnUiOpen(Entity<ResearchDataTerminalComponent> ent, ref BoundUIOpenedEvent args)
@@ -307,7 +373,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
 
     private void OnPrintRequest(Entity<ResearchDataTerminalComponent> ent, ref ResearchDataTerminalPrintChemBuiMsg args)
     {
-        _sawmill.Info($"WE ARE TRYING TO PRINT INDEX {args.Index}");
+        //_sawmill.Info($"WE ARE TRYING TO PRINT INDEX {args.Index}");
         _printing.Add(ent, args.Index);
     }
 

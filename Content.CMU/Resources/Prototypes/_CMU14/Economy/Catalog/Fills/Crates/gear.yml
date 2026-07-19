@@ -112,6 +112,8 @@
       amount: 1
     - id: CMHandsLatex
       amount: 1
+
+
       
 - type: entity
   parent: RMCCrateScience
@@ -137,6 +139,21 @@
   - type: StorageFill
     contents:
     - id: RMCSuitBioWeYa
+      amount: 1
+    - id: RMCHoodBioWeYaAlt
+      amount: 1
+    - id: CMHandsLatex
+      amount: 1
+
+- type: entity
+  parent: RMCCrateScience
+  id: CMUCrateBiosuitWYTSSArmor
+  name: armored WY-TSS MK I biosuit crate
+  description: A crate that contains a Weyland-Yutani TSS MK I biosuit fitted with an armored vest, and a pair of latex gloves.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUSuitBioWYSec
       amount: 1
     - id: RMCHoodBioWeYaAlt
       amount: 1

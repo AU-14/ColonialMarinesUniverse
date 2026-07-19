@@ -92,6 +92,15 @@
 - type: entity
   parent: CMUWYPaper
   id: CMUCipherHintPaper
+  categories: [ HideSpawnMenu ]
+  name: Research Ciphering Breakthrough
+  components:
+  - type: CipherHintPaper
+    spawnCrate: true
+
+- type: entity
+  parent: CMUWYPaper
+  id: CMUCipherHintPaperNoSpawn
   name: Research Ciphering Breakthrough
   components:
   - type: CipherHintPaper
