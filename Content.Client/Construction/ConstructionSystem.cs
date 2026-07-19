@@ -129,8 +129,10 @@ namespace Content.Client.Construction
                     if (!PrototypeManager.TryIndex(entityId, out var proto))
                         continue;
 
-                    var name = recipe.SetName != null ? Loc.GetString(recipe.SetName) : proto.Name;
-                    var desc = recipe.SetDescription != null ? Loc.GetString(recipe.SetDescription) : proto.Description;
+                    var name = recipe.SetName is { } setName ? LocalizeOrUseLiteral(setName) : proto.Name;
+                    var desc = recipe.SetDescription is { } setDescription
+                        ? LocalizeOrUseLiteral(setDescription)
+                        : proto.Description;
 
                     recipe.Name = name;
                     recipe.Description = desc;
@@ -138,6 +140,11 @@ namespace Content.Client.Construction
                     _recipesMetadataCache.Add(constructionProto.ID, entityId);
                 } while (stack.Count > 0);
             }
+        }
+
+        private string LocalizeOrUseLiteral(string value)
+        {
+            return Loc.TryGetString(value, out var localized) ? localized : value;
         }
 
         private void OnConstructionGuideReceived(ResponseConstructionGuide ev)

@@ -100,6 +100,7 @@ Source: [v283.0.0 release](https://github.com/space-wizards/RobustToolbox/releas
 
 - Applied 15,478 shared/client/server analyzer migrations across dependency injection, partial types, and serialized setters.
 - Replaced literal prototype/tag/tool/faction IDs with typed `ProtoId<T>` fields.
+- Stopped treating legacy literal construction names/descriptions and rendered short-key labels as Fluent message IDs; valid localization IDs still resolve normally while literal fallback text no longer emits warning spam.
 - Removed invalid pause generation from components without paused fields.
 - Replaced repeatedly parsed static regex calls; dynamic localized patterns are escaped and compiled once per replacement.
 - Fixed XAML-generated `Label` members that hid `Button.Label`.
@@ -139,9 +140,12 @@ Final verification results:
 - Serial prototype and map validation group: 4 passed, 0 failed.
 - Standalone RMC plating validation: 1 passed, 0 failed; memory remained bounded at approximately 2.8 GB.
 - Guidebook prototype-content validation: 1 passed, 0 failed.
+- Client literal-localization regression: 1 passed, 0 failed.
 - YAML/prototype linter: no errors.
 
 The all-in-one integration-test process was stopped when its shared fixture pool reached approximately 12 GB. The affected validation groups were then run serially and all passed; this avoids conflating aggregate test-host retention with the standalone plating validator, whose `LoadResult` cleanup now remains bounded.
+
+A real client/server replay of the reported warning sequence reached `InGame` over both IPv4 and dual-stack IPv6 with zero localization warnings and zero dropped `MsgStateAck` messages. The remaining `MainLoop: Cannot keep up!` line is emitted by RobustToolbox when Debug startup exceeds its five-tick backlog window; it is an engine startup-timing diagnostic rather than a content failure and was not hidden or patched in the external engine tree.
 
 ## Target release lineage: all 214 commits
 
