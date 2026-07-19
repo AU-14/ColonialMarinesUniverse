@@ -92,7 +92,7 @@
 
 - type: entity
   abstract: true
-  id: CMUASRSGBotanyGoodies
+  id: CMUASRSBotanyGoodies
   components:
   - type: RequisitionsComputer
     categories:
