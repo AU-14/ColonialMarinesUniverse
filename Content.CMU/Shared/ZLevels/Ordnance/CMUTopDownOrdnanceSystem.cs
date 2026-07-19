@@ -139,6 +139,40 @@ public sealed partial class CMUTopDownOrdnanceSystem : EntitySystem
         return false;
     }
 
+    /// <summary>
+    /// Checks whether every connected Z-level above these coordinates is open.
+    /// Maps outside a Z-level network have no additional surfaces above them.
+    /// </summary>
+    public bool IsOpenToSky(MapCoordinates coordinates)
+    {
+        if (!_map.TryGetMap(coordinates.MapId, out var mapUid) ||
+            mapUid is not { } resolvedMapUid)
+        {
+            return false;
+        }
+
+        if (!_zLevels.TryGetZNetwork(resolvedMapUid, out var network))
+            return true;
+
+        if (!_zLevels.TryGetDepthBounds(network.Value, out _, out var maxDepth) ||
+            !TryGetDepth(network.Value, resolvedMapUid, out var currentDepth))
+        {
+            return false;
+        }
+
+        for (var depth = currentDepth + 1; depth <= maxDepth; depth++)
+        {
+            if (!_zLevels.TryGetMapAtDepth(network.Value, depth, out _, out var mapComp))
+                continue;
+
+            var above = new MapCoordinates(coordinates.Position, mapComp.MapId);
+            if (!IsOpening(above))
+                return false;
+        }
+
+        return true;
+    }
+
     public bool IsOpening(MapCoordinates coordinates)
     {
         if (!_map.TryFindGridAt(coordinates, out var gridUid, out var grid))

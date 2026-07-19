@@ -75,7 +75,6 @@
     ears: AU14OrbitalHeadset
     back: CMSatchel
     neck: AU14MedalLawyerBadge
-    pocket1: AU14StampOrbitalCnsl
   storage:
     back:
     - RMCRadioHandheldColonyOff

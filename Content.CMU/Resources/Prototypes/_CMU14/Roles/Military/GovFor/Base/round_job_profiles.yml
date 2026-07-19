@@ -111,7 +111,7 @@
       - DoorBumpOpener
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
         state: working_joe
     - type: Language
       preset: AU14LanguagePresetSynth
