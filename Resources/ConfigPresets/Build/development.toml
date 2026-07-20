@@ -1,8 +1,8 @@
 ﻿[game]
-# Straight in-game baby
-lobbyenabled = false
+# Start in the lobby for development testing
+lobbyenabled = true
 # Dev map for faster loading & convenience
-map = "Dev"
+map = "RMCDev"
 role_timers = false
 admin_job_tracking = true
 role_loadout_timers = false
