@@ -22,6 +22,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.Server.Nuke;
@@ -45,6 +46,7 @@ public sealed partial class NukeSystem : EntitySystem
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private AppearanceSystem _appearance = default!;
     [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     /// <summary>
     ///     Used to calculate when the nuke song should start playing for maximum kino with the nuke sfx
@@ -231,6 +233,12 @@ public sealed partial class NukeSystem : EntitySystem
     {
         if (component.Status != NukeStatus.AWAIT_CODE)
             return;
+
+        var curTime = _timing.CurTime;
+        if (curTime < component.LastCodeEnteredAt + SharedNukeComponent.EnterCodeCooldown)
+            return;
+
+        component.LastCodeEnteredAt = curTime;
 
         UpdateStatus(uid, component);
         UpdateUserInterface(uid, component);

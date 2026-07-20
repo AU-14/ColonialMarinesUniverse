@@ -2984,3 +2984,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Mobs/NPCs/regalrat.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static body/movement review confirms both prototypes explicitly set their base speeds, the shared body system treats zero as an early return, and no other rat definitions changed. YAML/prototype validation plus spawn, map-init, sprint/walk, body initialization, limb changes, slowdown/status stacking, player control, AI movement, and RMC movement-modifier cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1710 as `Ported (CS-0219)` when wave 0009 is committed; restore limb-derived speed only when the rat body gains an accurate leg model and matching movement values.
+
+## CS-0220 — Rate-limit nuclear-code submissions
+
+- Upstream: [space-wizards/space-station-14#41831](https://github.com/space-wizards/space-station-14/pull/41831), `6fc487531cabba44c361873e8d3faa04619f603d`, 2025-12-12
+- Areas: Interactions, GameTicking, Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The server now accepts `NukeKeypadEnterMessage` attempts at most once per second per nuclear device while it awaits a code. Each accepted submission records its game-time timestamp before code validation, preventing a modified client from checking candidate codes every tick.
+- RMC/CMU divergence: RMC disables the standard NukeOps preset and also has a separate `RMCNukeSystem` for map-wide destruction; neither changes this standard nuclear-device keypad path. The cooldown is stored only on `NukeComponent`, so RMC detonation logic, keypad digits/clear, arming, disarming, and countdown behavior remain untouched.
+- Decision and rationale: Port the target-final server-side guard, shared duration, and time-offset serialization together. Client-only button throttling would not constrain crafted network messages, while a per-device authoritative timestamp closes the brute-force path without maintaining session-global state.
+- Files changed: `Content.Server/Nuke/NukeComponent.cs`, `Content.Server/Nuke/NukeSystem.cs`, `Content.Shared/Nuke/NukeUiMessages.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static message-flow review confirms status validation precedes the clock check, failed codes consume the same cooldown as correct codes, and keypad digit and clear messages retain their prior paths. Server/shared compilation plus first, repeated, boundary-time, wrong/correct code, multi-user, multi-device, save/load time-offset, arming/disarming, and RMC nuke cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1974 as `Ported (CS-0220)` when wave 0010 is committed.
