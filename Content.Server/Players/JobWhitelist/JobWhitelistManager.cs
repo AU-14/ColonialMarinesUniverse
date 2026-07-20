@@ -67,13 +67,7 @@ public sealed partial class JobWhitelistManager : IPostInjectInit
         if (!_config.GetCVar(CCVars.GameRoleWhitelist))
             return true;
 
-        if (!_prototypes.Resolve(job, out var jobPrototype) ||
-            !jobPrototype.Whitelisted)
-        {
-            return true;
-        }
-
-        return IsWhitelisted(session.UserId, job);
+        return IsRMCWhitelistAllowed(session.UserId, job);
     }
 
     public bool IsWhitelisted(NetUserId player, ProtoId<JobPrototype> job)
