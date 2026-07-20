@@ -3087,3 +3087,16 @@ Date completed: 2026-07-20
 - Resource validation: `dotnet run --project Content.YAMLLinter/Content.YAMLLinter.csproj --configuration DebugOpt --no-build` completed with `No errors found` in 91.9 seconds.
 - Defects caught: the initial full build reported analyzer RA0051 because CS-0201 declared its injected admin logger `readonly`. Commit `a039a53b4b` restored the established dependency-injection declaration and updated the durable audit; the complete non-incremental build then passed cleanly. Unit, resource, and integration validation found no further defects.
 - Disposition: The 1000–1999 checkpoint is closed. Continue with inventory wave 0011 at index 2000 and defer routine full build/test execution until index 2999 unless a specific risk justifies earlier focused validation.
+
+## CS-0227 — Reactivate neighboring spreaders after deletion
+
+- Upstream: [space-wizards/space-station-14#42016](https://github.com/space-wizards/space-station-14/pull/42016), `503052bca7b5b78aed783d001149eb6553196656`, 2025-12-23
+- Areas: Physics, GameTicking
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: `ActivateSpreadableNeighbors` now distinguishes the terminating origin from its grid and checks `EdgeSpreaderComponent` on each enumerated anchored entity. Non-terminating spreaders on the same tile and four adjacent tiles are reactivated when an origin disappears.
+- RMC/CMU divergence: The standard spreader drives puddles, smoke, and kudzu, while RMC smoke also uses `ActiveEdgeSpreaderComponent` and RMC xeno weeds have additional custom spreading logic. The fix changes only generic neighbor requeueing; RMC smoke lifetime transfer and xeno-specific spread timing remain intact.
+- Decision and rationale: Port the complete target-final method correction, including the origin/grid variable split. The legacy code queried the grid UID in both loops and compared same-tile entities against that grid, so it could never recognize neighboring edge spreaders and could requeue the terminating origin incorrectly.
+- Files changed: `Content.Server/Spreader/SpreaderSystem.cs`, `docs/upstream-sync/inventory-wave-0011.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms both anchored-entity loops query their current entity, the origin is skipped only on its own tile, deleted entities remain excluded, and explicit-position callers still resolve the supplied grid/tile. Server compilation plus puddle, smoke, kudzu, RMC smoke, same-tile windoor, adjacent deletion, terminating neighbor, and explicit-position cases are queued for the index-2999 checkpoint.
+- Follow-up/debt: The custom RMC xeno-weed spread scheduler remains separate and should be assessed with its own target-final dependency chain rather than folded into this generic fix.
