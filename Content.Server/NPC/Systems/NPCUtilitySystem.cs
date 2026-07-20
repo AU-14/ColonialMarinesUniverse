@@ -7,9 +7,6 @@ using Content.Server.NPC.Queries.Considerations;
 using Content.Server.NPC.Queries.Curves;
 using Content.Server.NPC.Queries.Queries;
 using Content.Server.Nutrition.Components;
-using Content.Server.Nutrition.EntitySystems;
-using Content.Server.Storage.Components;
-using Content.Server.Temperature.Components;
 using Content.Shared._RMC14.Interaction;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Burrow;
@@ -22,16 +19,23 @@ using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Atmos.Components;
 using Content.Shared._RMC14.Sentry;
 using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Fluids.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
+using Content.Shared.Stealth;
+using Content.Shared.Stealth.Components;
 using Content.Shared.Standing;
+using Content.Shared.Storage.Components;
 using Content.Shared.Stunnable;
+using Content.Shared.Temperature.Components;
 using Content.Shared.Tools.Systems;
 using Content.Shared.Turrets;
 using Content.Shared.Weapons.Melee;
@@ -52,15 +56,15 @@ public sealed partial class NPCUtilitySystem : EntitySystem
 {
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private ContainerSystem _container = default!;
-    [Dependency] private DrinkSystem _drink = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
-    [Dependency] private FoodSystem _food = default!;
     [Dependency] private HandsSystem _hands = default!;
+    [Dependency] private IngestionSystem _ingestion = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private NpcFactionSystem _npcFaction = default!;
-    [Dependency] private OpenableSystem _openable = default!;
     [Dependency] private PuddleSystem _puddle = default!;
+    [Dependency] private SharedStealthSystem _stealth = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedSolutionContainerSystem _solutions = default!;
     [Dependency] private WeldableSystem _weldable = default!;
@@ -72,8 +76,7 @@ public sealed partial class NPCUtilitySystem : EntitySystem
     [Dependency] private RMCInteractionSystem _rmcInteraction = default!;
     [Dependency] private StandingStateSystem _standing = default!;
 
-    private EntityQuery<PuddleComponent> _puddleQuery;
-    private EntityQuery<TransformComponent> _xformQuery;
+    [Dependency] private EntityQuery<PuddleComponent> _puddleQuery = default!;
 
     private ObjectPool<HashSet<EntityUid>> _entPool =
         new DefaultObjectPool<HashSet<EntityUid>>(new SetPolicy<EntityUid>(), 256);
