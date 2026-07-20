@@ -75,7 +75,7 @@ public sealed partial class RMCStandingSystem : EntitySystem
                             if (_standing.IsDown(ent))
                                 _popup.PopupClient(Loc.GetString("rmc-standing-keep-lying"), ent, ent, PopupType.Medium);
 
-                            if (_standing.Down(ent, downedBy: ent))
+                            if (_standing.Down(ent, changeCollision: false, downedBy: ent))
                             {
                                 rest.Resting = true;
                                 Dirty(ent, rest);
@@ -97,7 +97,7 @@ public sealed partial class RMCStandingSystem : EntitySystem
 
     private void OnDropBuckled(Entity<DropItemsOnRestComponent> drop, ref BuckledEvent args)
     {
-        if (!_standing.IsDown(drop))
+        if (!_standing.IsDown(drop.Owner))
             return;
 
         foreach (var held in _hands.EnumerateHeld(drop.Owner))
@@ -140,7 +140,7 @@ public sealed partial class RMCStandingSystem : EntitySystem
         if (args.Cancelled)
             return false;
 
-        if (_standing.IsDown(drop))
+        if (_standing.IsDown(drop.Owner))
         {
             args.Cancel();
             return true;
@@ -164,7 +164,7 @@ public sealed partial class RMCStandingSystem : EntitySystem
 
     private void OnStandingStateEvasionRefresh(Entity<StandingStateComponent> entity, ref EvasionRefreshModifiersEvent args)
     {
-        if (entity.Owner != args.Entity.Owner || !_standing.IsDown(entity.Owner, entity.Comp))
+        if (entity.Owner != args.Entity.Owner || !_standing.IsDown(entity))
             return;
 
         args.Evasion += (int) EvasionModifiers.Rest;
@@ -206,6 +206,6 @@ public sealed partial class RMCStandingSystem : EntitySystem
         Dirty(rest);
 
         if (!resting)
-            _standing.Stand(rest);
+            _standing.Stand(rest.Owner);
     }
 }

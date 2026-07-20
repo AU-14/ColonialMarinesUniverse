@@ -163,12 +163,12 @@ public sealed partial class TackleSystem : EntitySystem
                     if (_random.Prob(disarm.AccidentalDischargeChance))
                     {
                         var coords = _transform.GetMoverCoordinates(user);
-                        var shotProjectiles = _gunSystem.AttemptShoot((item, gun), target, coords);
+                        var shotProjectiles = _gunSystem.AttemptShoot(target.Owner, (item, gun), coords);
 
                         var ammoCount = new GetAmmoCountEvent();
                         RaiseLocalEvent(item, ref ammoCount);
 
-                        if (shotProjectiles != null && ammoCount.Count > 0)
+                        if (shotProjectiles && ammoCount.Count > 0)
                         {
                             fired = true;
                             doPopups = false; // Disable other popups if the gun was discharged so we dont get stacked popups

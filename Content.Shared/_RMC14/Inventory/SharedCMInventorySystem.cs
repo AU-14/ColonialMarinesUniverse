@@ -549,7 +549,7 @@ public abstract partial class SharedCMInventorySystem : EntitySystem
                 // If holster has StorageComponent
                 // And item can be inserted
                 if (HasComp<StorageComponent>(clothing) &&
-                    _storage.CanInsert(clothing, item, user, out _))
+                    _storage.CanInsert(clothing, item, out _))
                 {
                     validSlots.Add(new HolsterSlot(priority, true, null, clothing, null));
                 }
@@ -591,7 +591,7 @@ public abstract partial class SharedCMInventorySystem : EntitySystem
                 TryComp(slot.Ent, out CMHolsterComponent? holster) &&
                 !holster.Contents.Contains(item) &&
                 _hands.CanDrop(user, item) &&
-                _storage.CanInsert(slot.Ent, item, user, out _, storage))
+                _storage.CanInsert(slot.Ent, item, out _, storage))
             {
                 if (act && _hands.TryDrop(user, item))
                 {
@@ -678,10 +678,23 @@ public abstract partial class SharedCMInventorySystem : EntitySystem
         if (slots.Count == 0)
             return false;
 
-        slots.Sort(ItemSlotsSystem.SortEmpty);
+        slots.Sort(SortEmpty);
 
         itemSlot = slots[0];
         return true;
+    }
+
+    private static int SortEmpty(ItemSlot a, ItemSlot b)
+    {
+        var aEnt = a.ContainerSlot?.ContainedEntity;
+        var bEnt = b.ContainerSlot?.ContainedEntity;
+        if (aEnt == null && bEnt == null)
+            return a.Priority.CompareTo(b.Priority);
+
+        if (aEnt == null)
+            return -1;
+
+        return 1;
     }
 
     // Get last item inserted into holster (can also be used to check if holster is empty)
@@ -806,7 +819,7 @@ public abstract partial class SharedCMInventorySystem : EntitySystem
 
             while (slots.MoveNext(out var slot))
             {
-                if (_inventory.TryEquip(user, clothing, slot.ID, doRangeCheck: doRangeCheck))
+                if (_inventory.TryEquip(user, clothing, slot.ID))
                     return true;
             }
         }
