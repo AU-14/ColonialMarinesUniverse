@@ -1,3 +1,4 @@
+using Content.Server.Light.Components;
 using Content.Shared.Examine;
 using Content.Shared.Explosion.EntitySystems;
 using Content.Shared.Light.Components;
