@@ -1865,3 +1865,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Client/Atmos/UI/GasAnalyzerWindow.xaml.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms only pressure and temperature display formats changed. Client compilation plus zero, fractional, and negative-Celsius display cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Consider centralizing atmos display precision when the broader analyzer and air-alarm UI migration is handled.
+
+## CS-0135 — Make the golden knuckledusters objective selectable
+
+- Upstream: [space-wizards/space-station-14#40096](https://github.com/space-wizards/space-station-14/pull/40096), `348f462b122cfb6cb91be19d0cfa3b533bec9ce3`, 2025-09-04
+- Areas: Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The existing Quartermaster golden-knuckledusters theft objective now participates in the traitor steal-objective weighted group instead of being defined but unreachable.
+- RMC/CMU divergence: CMU retains the upstream traitor objective group and objective prototype alongside its RMC gamerules. This only restores selection for the station traitor ruleset and does not add it to RMC role objectives.
+- Decision and rationale: Add the retained weight of `1`, matching the ordinary steal objectives and preserving the objective's existing job exclusion and steal condition.
+- Files changed: `Resources/Prototypes/Objectives/objectiveGroups.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype review confirms the referenced objective exists and its target steal group remains defined. Prototype loading and weighted objective selection are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None.
