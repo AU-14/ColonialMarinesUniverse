@@ -2776,3 +2776,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Objects/Specific/Janitorial/janitor.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype review confirms only `RagItem` loses `CleansForensics`, its Mop tag and absorbent solution remain, and soaps retain forensic cleaning. YAML validation plus ordinary cleaning, absorption, fingerprints, DNA, fibers, soap, and RMC crate-spawn cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1404 as `Ported (CS-0203)` when wave 0008 is committed.
+
+## CS-0204 — Resolve the Space Villain tie message
+
+- Upstream: [space-wizards/space-station-14#40958](https://github.com/space-wizards/space-station-14/pull/40958), `68ea91d070d24d626f4b485acd74b3b496c598dd`, 2025-10-18
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The simultaneous player/enemy death branch now requests the actual `space-villain-game-enemy-dies-with-player-message` localization key. Removing the trailing space prevents a missing-localization result and displays the enemy name in the intended tie text.
+- RMC/CMU divergence: RMC arcade prototypes reuse the standard Space Villain game component, so the display fix applies without changing RMC arcade rewards, sprites, power, or map placement. The localization resource already exists unchanged.
+- Decision and rationale: Port the exact one-character key correction. The branch and localization contract are otherwise identical, and no fallback or new string is needed.
+- Files changed: `Content.Server/Arcade/SpaceVillainGame/SpaceVillainGame.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static key lookup confirms the corrected identifier exactly matches the existing Fluent message and still supplies `enemyName`. Server compilation plus simultaneous-death, player-loss, enemy-death, localization, and RMC arcade cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1407 as `Ported (CS-0204)` when wave 0008 is committed.
