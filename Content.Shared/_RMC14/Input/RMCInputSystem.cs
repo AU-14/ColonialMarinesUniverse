@@ -19,14 +19,14 @@ public sealed partial class RMCInputSystem : EntitySystem
     {
         _actorQuery = GetEntityQuery<ActorComponent>();
 
-        SubscribeLocalEvent<ActiveInputMoverComponent, MapInitEvent>(OnActiveMapInit);
-        SubscribeLocalEvent<ActiveInputMoverComponent, PlayerAttachedEvent>(OnActiveAttached);
-        SubscribeLocalEvent<ActiveInputMoverComponent, PlayerDetachedEvent>(OnActiveDetached);
+        SubscribeLocalEvent<RMCActiveInputMoverComponent, MapInitEvent>(OnActiveMapInit);
+        SubscribeLocalEvent<RMCActiveInputMoverComponent, PlayerAttachedEvent>(OnActiveAttached);
+        SubscribeLocalEvent<RMCActiveInputMoverComponent, PlayerDetachedEvent>(OnActiveDetached);
 
         Subs.CVar(_config, RMCCVars.RMCActiveInputMoverEnabled, v => _activeInputMoverEnabled = v, true);
     }
 
-    private void OnActiveMapInit(Entity<ActiveInputMoverComponent> ent, ref MapInitEvent args)
+    private void OnActiveMapInit(Entity<RMCActiveInputMoverComponent> ent, ref MapInitEvent args)
     {
         if (!_activeInputMoverEnabled || _net.IsClient)
             return;
@@ -37,7 +37,7 @@ public sealed partial class RMCInputSystem : EntitySystem
             RemCompDeferred<InputMoverComponent>(ent);
     }
 
-    private void OnActiveAttached(Entity<ActiveInputMoverComponent> ent, ref PlayerAttachedEvent args)
+    private void OnActiveAttached(Entity<RMCActiveInputMoverComponent> ent, ref PlayerAttachedEvent args)
     {
         if (!_activeInputMoverEnabled)
             return;
@@ -45,7 +45,7 @@ public sealed partial class RMCInputSystem : EntitySystem
         EnsureComp<InputMoverComponent>(ent);
     }
 
-    private void OnActiveDetached(Entity<ActiveInputMoverComponent> ent, ref PlayerDetachedEvent args)
+    private void OnActiveDetached(Entity<RMCActiveInputMoverComponent> ent, ref PlayerDetachedEvent args)
     {
         if (!_activeInputMoverEnabled)
             return;

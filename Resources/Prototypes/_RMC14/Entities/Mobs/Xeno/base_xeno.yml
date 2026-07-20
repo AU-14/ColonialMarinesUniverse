@@ -306,7 +306,7 @@
     - enum.VendingMachineUiKey.Key
     - enum.PaperUiKey.Key
     - enum.RMCCameraUiKey.Key
-  - type: ActiveInputMover
+  - type: RMCActiveInputMover
   - type: HiveTracker
     trackerModes:
     - Queen

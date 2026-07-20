@@ -277,7 +277,7 @@
             state: human_acid_enhanced
             visible: true
   - type: Spottable
-  - type: ActiveInputMover
+  - type: RMCActiveInputMover
   - type: DropItemsOnRest
   - type: UserBlockShootingInsideContainers
   - type: TacticalMapTracked
