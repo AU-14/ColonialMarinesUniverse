@@ -1969,3 +1969,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Structures/Storage/Closets/big_boxes.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static inheritance review confirms every large-box variant receives the marker while existing body type, fixtures, and input mover remain unchanged. Prototype loading plus gravity/zero-gravity movement cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Compare other input-mover structures for missing gravity markers during the deeper movement audit.
+
+## CS-0143 — Predict APC breaker toggle state
+
+- Upstream: [space-wizards/space-station-14#40273](https://github.com/space-wizards/space-station-14/pull/40273), `164f8a2fad42c459a8d1dff6ee35b536f4e8a10d`, 2025-09-10
+- Areas: Interactions, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The APC main-breaker button now operates as a toggle control, so its pressed state changes immediately and reconciles with authoritative APC state instead of presenting a momentary push-button state.
+- RMC/CMU divergence: CMU retains the older button-based APC UI while target-final later uses a switch control. `ToggleMode` is the compatible semantic fix for this UI version and does not touch RMC power receivers.
+- Decision and rationale: Add only the retained toggle flag; the existing state update already writes `BreakerButton.Pressed` from `MainBreaker` and remains the reconciliation source.
+- Files changed: `Content.Client/Power/APC/UI/ApcMenu.xaml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static UI review confirms click handling, access disabling, and authoritative pressed-state updates remain intact. Client XAML compilation plus click prediction, denial, and state reconciliation are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Adopt target-final `SwitchButton` styling when the broader APC UI migration is reconciled.
