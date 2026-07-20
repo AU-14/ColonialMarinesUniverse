@@ -6,7 +6,7 @@ namespace Content.Shared.Movement.Systems;
 /// <summary>
 /// Applies an occlusion shader for any relevant entities.
 /// </summary>
-public abstract class SharedFloorOcclusionSystem : EntitySystem
+public abstract partial class SharedFloorOcclusionSystem : EntitySystem
 {
     public override void Initialize()
     {
@@ -24,6 +24,9 @@ public abstract class SharedFloorOcclusionSystem : EntitySystem
         {
             return;
         }
+
+        if (!RMCWaterCanCollide(entity.Owner, other))
+            return;
 
         occlusion.Colliding.Add(entity.Owner);
         Dirty(other, occlusion);

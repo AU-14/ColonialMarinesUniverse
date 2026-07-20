@@ -98,6 +98,9 @@ public sealed partial class SpeedModifierContactsSystem : EntitySystem
                 if (_whitelistSystem.IsWhitelistPass(slowContactsComponent.IgnoreWhitelist, uid))
                     continue;
 
+                if (!RMCWaterCanCollide(ent, uid))
+                    continue;
+
                 // Entities that are airborne should not be affected by contact slowdowns that are specified to not affect airborne entities.
                 if (isAirborne && !slowContactsComponent.AffectAirborne)
                     continue;
@@ -155,6 +158,9 @@ public sealed partial class SpeedModifierContactsSystem : EntitySystem
 
     private void OnEntityEnter(EntityUid uid, SpeedModifierContactsComponent component, ref StartCollideEvent args)
     {
+        if (!RMCWaterCanCollide(uid, args.OtherEntity))
+            return;
+
         AddModifiedEntity(args.OtherEntity);
     }
 
