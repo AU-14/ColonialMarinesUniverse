@@ -44,14 +44,14 @@ public sealed class UniversalRecorderRecorderBui(EntityUid owner, Enum uiKey) : 
         _menu?.SetButtons(ConvertToButtons(recorderState.Actions));
     }
 
-    private IEnumerable<RadialMenuActionOption> ConvertToButtons(IEnumerable<UniversalRecorderRecorderAction> actions)
+    private IEnumerable<RadialMenuOptionBase> ConvertToButtons(IEnumerable<UniversalRecorderRecorderAction> actions)
     {
         return actions.Select(action =>
         {
             var data = ActionData[action];
             return new RadialMenuActionOption<UniversalRecorderRecorderAction>(OnActionPressed, action)
             {
-                Sprite = data.Sprite,
+                IconSpecifier = RadialMenuIconSpecifier.With(data.Sprite),
                 ToolTip = Loc.GetString(data.Tooltip),
             };
         });

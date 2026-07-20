@@ -67,7 +67,7 @@ public sealed partial class PlayingCardHandBui : BoundUserInterface
             var suitName = _cards.GetSuitDisplayName(suit);
             var rankName = _cards.GetRankDisplayName(rank);
 
-            var button = new RadialMenuTextureButton
+            var button = new RadialMenuButton
             {
                 StyleClasses = { "RadialMenuButton" },
                 SetSize = new Vector2(64, 64),

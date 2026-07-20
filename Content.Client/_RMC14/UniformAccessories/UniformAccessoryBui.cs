@@ -58,7 +58,7 @@ public sealed partial class UniformAccessoryBui : BoundUserInterface
             if (!EntMan.TryGetComponent(accessory, out MetaDataComponent? metaData))
                 continue;
 
-            var button = new RadialMenuTextureButton
+            var button = new RadialMenuButton
             {
                 StyleClasses = { "RadialMenuButton" },
                 SetSize = new Vector2(64, 64),

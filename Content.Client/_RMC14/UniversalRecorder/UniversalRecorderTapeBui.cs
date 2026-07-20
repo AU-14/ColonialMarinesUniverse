@@ -41,14 +41,14 @@ public sealed class UniversalRecorderTapeBui(EntityUid owner, Enum uiKey) : Boun
         _menu?.SetButtons(ConvertToButtons(tapeState.Actions));
     }
 
-    private IEnumerable<RadialMenuActionOption> ConvertToButtons(IEnumerable<UniversalRecorderTapeAction> actions)
+    private IEnumerable<RadialMenuOptionBase> ConvertToButtons(IEnumerable<UniversalRecorderTapeAction> actions)
     {
         return actions.Select(action =>
         {
             var data = ActionData[action];
             return new RadialMenuActionOption<UniversalRecorderTapeAction>(OnActionPressed, action)
             {
-                Sprite = data.Sprite,
+                IconSpecifier = RadialMenuIconSpecifier.With(data.Sprite),
                 ToolTip = Loc.GetString(data.Tooltip),
             };
         });
