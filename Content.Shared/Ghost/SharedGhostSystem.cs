@@ -1,10 +1,8 @@
-using Content.Shared._RMC14.Ghost;
 using Content.Shared.Emoting;
 using Content.Shared.Examine;
 using Content.Shared.Hands;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
-using Content.Shared.Mind;
 using Content.Shared.Popups;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
@@ -18,6 +16,7 @@ namespace Content.Shared.Ghost
     public abstract partial class SharedGhostSystem : EntitySystem
     {
         [Dependency] protected SharedPopupSystem Popup = default!;
+        [Dependency] protected IGameTiming _gameTiming = default!;
 
         public override void Initialize()
         {
@@ -42,7 +41,7 @@ namespace Content.Shared.Ghost
 
         private void OnAttemptInteract(Entity<GhostComponent> ent, ref InteractionAttemptEvent args)
         {
-            if (!ent.Comp.CanGhostInteract && !HasComp<RMCIgnoreGhostInteractionLimitsComponent>(args.Target)) // RMC14
+            if (!ent.Comp.CanGhostInteract)
                 args.Cancelled = true;
         }
 
@@ -227,12 +226,5 @@ namespace Content.Shared.Ghost
         {
             AvailableGhostRoles = availableGhostRoleCount;
         }
-    }
-
-    public sealed class GhostAttemptHandleEvent(MindComponent mind, bool canReturnGlobal) : HandledEntityEventArgs
-    {
-        public MindComponent Mind { get; } = mind;
-        public bool CanReturnGlobal { get; } = canReturnGlobal;
-        public bool Result { get; set; }
     }
 }

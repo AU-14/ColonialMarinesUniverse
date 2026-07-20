@@ -24,7 +24,6 @@ public abstract partial class AlertsSystem : EntitySystem
         SubscribeLocalEvent<AlertAutoRemoveComponent, EntityUnpausedEvent>(OnAutoRemoveUnPaused);
 
         SubscribeAllEvent<ClickAlertEvent>(HandleClickAlert);
-        SubscribeAllEvent<ClickAlertAltEvent>(HandleClickAlertAlt);
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(HandlePrototypesReloaded);
         LoadPrototypes();
     }
@@ -133,16 +132,14 @@ public abstract partial class AlertsSystem : EntitySystem
     ///     be erased if there is currently a cooldown for the alert)</param>
     /// <param name="autoRemove">if true, the alert will be removed at the end of the cooldown</param>
     /// <param name="showCooldown">if true, the cooldown will be visibly shown over the alert icon</param>
-    /// <param name="dynamicMessage">a custom message that can be dynamically updated or edited</param>
     public void ShowAlert(Entity<AlertsComponent?> entity,
         ProtoId<AlertPrototype> alertType,
         short? severity = null,
         (TimeSpan, TimeSpan)? cooldown = null,
         bool autoRemove = false,
-        bool showCooldown = true,
-        string? dynamicMessage = null)
+        bool showCooldown = true )
     {
-        ShowAlert(entity, new AlertState { Type = alertType, Severity = severity, Cooldown = cooldown, AutoRemove = autoRemove, ShowCooldown = showCooldown, DynamicMessage = dynamicMessage });
+        ShowAlert(entity, new AlertState { Type = alertType, Severity = severity, Cooldown = cooldown, AutoRemove = autoRemove, ShowCooldown = showCooldown});
     }
 
     public void ShowAlert(Entity<AlertsComponent?> entity, AlertState state)
@@ -346,45 +343,28 @@ public abstract partial class AlertsSystem : EntitySystem
         return _typeToAlert.TryGetValue(alertType, out alert);
     }
 
-    private bool TryGetAlert(ProtoId<AlertPrototype> alertType, EntityUid? player, out AlertPrototype? alert, bool activate = true)
-    {
-        alert = null;
-        if (player is null || !HasComp<AlertsComponent>(player))
-            return false;
-
-        if (!IsShowingAlert(player.Value, alertType))
-        {
-            Log.Debug($"User {ToPrettyString(player.Value)} attempted to click alert {alertType} which is not currently showing for them");
-            return false;
-        }
-
-        if (!TryGet(alertType, out alert))
-        {
-            Log.Warning($"Unrecognized encoded alert {alertType}");
-            return false;
-        }
-
-        if (!activate)
-            return true;
-
-        if (ActivateAlert(player.Value, alert) && _timing.IsFirstTimePredicted)
-            HandledAlert();
-
-        return true;
-    }
-
-    private void HandleClickAlert(ClickAlertEvent ev, EntitySessionEventArgs args)
-    {
-        TryGetAlert(ev.Type, args.SenderSession?.AttachedEntity, out _);
-    }
-
-    private void HandleClickAlertAlt(ClickAlertAltEvent ev, EntitySessionEventArgs args)
+    private void HandleClickAlert(ClickAlertEvent msg, EntitySessionEventArgs args)
     {
         var player = args.SenderSession.AttachedEntity;
-        if (!TryGetAlert(ev.Type, player, out var alert, false) || alert == null || player == null)
+        if (player is null || !HasComp<AlertsComponent>(player))
             return;
 
-        ActivateAlertAlt(player.Value, alert);
+        if (!IsShowingAlert(player.Value, msg.Type))
+        {
+            Log.Debug($"User {ToPrettyString(player.Value)} attempted to click alert {msg.Type} which is not currently showing for them");
+            return;
+        }
+
+        if (!TryGet(msg.Type, out var alert))
+        {
+            Log.Warning($"Unrecognized encoded alert {msg.Type}");
+            return;
+        }
+
+        if (ActivateAlert(player.Value, alert) && _timing.IsFirstTimePredicted)
+        {
+            HandledAlert();
+        }
     }
 
     protected virtual void HandledAlert()
@@ -403,19 +383,6 @@ public abstract partial class AlertsSystem : EntitySystem
 
         RaiseLocalEvent(user, (object) clickEvent, true);
         return clickEvent.Handled;
-    }
-
-    public bool ActivateAlertAlt(EntityUid user, AlertPrototype alert)
-    {
-        if (alert.AltClickEvent is not { } altClickEvent)
-            return false;
-
-        altClickEvent.Handled = false;
-        altClickEvent.User = user;
-        altClickEvent.AlertId = alert.ID;
-
-        RaiseLocalEvent(user, (object) altClickEvent, true);
-        return altClickEvent.Handled;
     }
 
     private void OnPlayerAttached(EntityUid uid, AlertsComponent component, PlayerAttachedEvent args)

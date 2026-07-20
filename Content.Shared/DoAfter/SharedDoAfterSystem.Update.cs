@@ -1,22 +1,24 @@
-using Content.Shared._RMC14.DoAfter;
 using Content.Shared.Gravity;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
-using Content.Shared.Physics;
+using Robust.Shared.Exceptions;
 using Robust.Shared.Network;
-using Robust.Shared.Utility;
 
 namespace Content.Shared.DoAfter;
 
 public abstract partial class SharedDoAfterSystem : EntitySystem
 {
     [Dependency] private IDynamicTypeFactory _factory = default!;
+#if EXCEPTION_TOLERANCE
+    [Dependency] private INetManager _netManager = default!;
+    [Dependency] private IRuntimeLog _runtimeLog = default!;
+#endif
     [Dependency] private SharedGravitySystem _gravity = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
-    [Dependency] private INetManager _net = default!;
-    [Dependency] private RMCDoAfterSystem _rmcDoAfter = default!;
+
+    [Dependency] private EntityQuery<HandsComponent> _handsQuery = default!;
 
     private DoAfter[] _doAfters = Array.Empty<DoAfter>();
 
@@ -118,28 +120,7 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
                 continue;
             }
 
-            if (!doAfter.Completed && !doAfter.Cancelled && doAfter.Args.TargetEffect != null)
-            {
-                if (doAfter.LastEffectSpawnTime == null || time - doAfter.LastEffectSpawnTime.Value >= TimeSpan.FromSeconds(1))
-                {
-                    if (xformQuery.TryGetComponent(doAfter.Args.Target, out var targetXform))
-                    {
-                        if (_net.IsServer)
-                            SpawnAttachedTo(doAfter.Args.TargetEffect, targetXform.Coordinates);
-                        doAfter.LastEffectSpawnTime = time;
-                    }
-                }
-            }
-
-            if (ShouldCancel(doAfter, xformQuery, handsQuery))
-            {
-                InternalCancel(doAfter, comp);
-                dirty = true;
-                continue;
-            }
-
-            // RMC14
-            if (_rmcDoAfter.ShouldCancel(doAfter))
+            if (ShouldCancel(doAfter))
             {
                 InternalCancel(doAfter, comp);
                 dirty = true;
@@ -242,7 +223,7 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
         }
 
         // Whether the user and the target are too far apart.
-        if (args.Target != null && args.RangeCheck)
+        if (args.Target != null)
         {
             if (args.DistanceThreshold != null)
             {

@@ -20,6 +20,8 @@ public sealed partial class RepulseAttractSystem : EntitySystem
     [Dependency] private SharedTransformSystem _xForm = default!;
     [Dependency] private UseDelaySystem _delay = default!;
 
+    [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
+
     private HashSet<EntityUid> _entSet = new();
 
     public override void Initialize()

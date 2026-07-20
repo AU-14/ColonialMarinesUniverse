@@ -1,18 +1,17 @@
-using System.Linq;
 using Content.Shared.Interaction;
-using Content.Shared.Interaction.Events;
 using Content.Shared.Verbs;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
-using JetBrains.Annotations;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 using System;
 using System.Linq;
+using Content.Shared.Interaction.Events;
 using Content.Shared.Wieldable;
 using Content.Shared.Wieldable.Components;
+using JetBrains.Annotations;
 
 namespace Content.Shared.Weapons.Ranged.Systems;
 
@@ -149,9 +148,9 @@ public partial class SharedGunSystem
                     continue;
                 }
 
-                component.AmmoSlots[index] = ent.Value;
-                Containers.Insert(ent.Value, component.AmmoContainer);
-                SetChamber(index, component, ent.Value);
+                ent.Comp.AmmoSlots[index] = ammoEnt.Value;
+                Containers.Insert(ammoEnt.Value, ent.Comp.AmmoContainer);
+                SetChamber(ent, ammoEnt.Value, index);
 
                 if (ev.Ammo.Count == 0)
                     break;
@@ -413,7 +412,7 @@ public partial class SharedGunSystem
             }
 
             // Delete the cartridge entity on client
-            if (_netManager.IsClient && IsClientSide(ent.Value))
+            if (_netManager.IsClient)
             {
                 QueueDel(ammoEnt);
             }

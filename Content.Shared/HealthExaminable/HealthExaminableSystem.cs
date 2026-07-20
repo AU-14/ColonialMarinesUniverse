@@ -11,6 +11,7 @@ namespace Content.Shared.HealthExaminable;
 public sealed partial class HealthExaminableSystem : EntitySystem
 {
     [Dependency] private ExamineSystemShared _examineSystem = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
 
     public override void Initialize()
     {
@@ -90,7 +91,7 @@ public sealed partial class HealthExaminableSystem : EntitySystem
             msg.AddMarkupOrThrow(chosenLocStr);
         }
 
-        if (msg.IsEmpty && component.ExamineShowEmpty)
+        if (msg.IsEmpty)
         {
             msg.AddMarkupOrThrow(Loc.GetString($"health-examinable-{component.LocPrefix}-none"));
         }

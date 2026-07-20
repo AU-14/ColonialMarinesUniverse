@@ -1,10 +1,7 @@
 using System.Linq;
 using System.Numerics;
-using Content.Shared._RMC14.Prototypes;
-using Content.Shared._RMC14.Storage;
 using Content.Shared.EntityTable;
 using Content.Shared.Item;
-using Content.Shared.Storage;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 
@@ -15,6 +12,7 @@ public sealed partial class ContainerFillSystem : EntitySystem
     [Dependency] private SharedContainerSystem _containerSystem = default!;
     [Dependency] private EntityTableSystem _entityTable = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedItemSystem _itemSys = default!;
 
     public override void Initialize()
     {
@@ -47,10 +45,7 @@ public sealed partial class ContainerFillSystem : EntitySystem
                 if (!_containerSystem.Insert(ent, container, containerXform: xform))
                 {
                     var alreadyContained = container.ContainedEntities.Count > 0 ? string.Join("\n", container.ContainedEntities.Select(e => $"\t - {ToPrettyString(e)}")) : "< empty >";
-                    // RMC14
-                    if (CMPrototypeExtensions.FilterCM)
-                        Log.Error($"Entity {ToPrettyString(uid)} with a {nameof(ContainerFillComponent)} failed to insert an entity: {ToPrettyString(ent)}.\nCurrent contents:\n{alreadyContained}");
-                    _transform.AttachToGridOrMap(ent);
+                    Log.Error($"Entity {ToPrettyString(uid)} with a {nameof(ContainerFillComponent)} failed to insert an entity: {ToPrettyString(ent)}.\nCurrent contents:\n{alreadyContained}");
                     break;
                 }
             }
@@ -68,7 +63,6 @@ public sealed partial class ContainerFillSystem : EntitySystem
         var xform = Transform(ent);
         var coords = new EntityCoordinates(ent, Vector2.Zero);
 
-        var storage = CompOrNull<StorageComponent>(ent);
         foreach (var (containerId, table) in ent.Comp.Containers)
         {
             if (!_containerSystem.TryGetContainer(ent, containerId, out var container, containerComp))
@@ -87,31 +81,11 @@ public sealed partial class ContainerFillSystem : EntitySystem
 
             foreach (var proto in spawns)
             {
-                // RMC14
-                EntityUid spawn;
-                try
-                {
-                    spawn = Spawn(proto, coords);
-                }
-                catch(Exception e)
-                {
-                    Log.Error($"Error spawning {proto} at {coords}:\n{e}");
-                    continue;
-                }
-                // RMC14
-
-                if (storage != null && TryComp(spawn, out ItemComponent? item))
-                {
-                    var ev = new CMStorageItemFillEvent((spawn, item), storage);
-                    RaiseLocalEvent(ent, ref ev);
-                }
-
+                var spawn = Spawn(proto, coords);
                 if (!_containerSystem.Insert(spawn, container, containerXform: xform))
                 {
                     var alreadyContained = container.ContainedEntities.Count > 0 ? string.Join("\n", container.ContainedEntities.Select(e => $"\t - {ToPrettyString(e)}")) : "< empty >";
-                    // RMC14
-                    if (CMPrototypeExtensions.FilterCM)
-                        Log.Error($"Entity {ToPrettyString(ent)} with a {nameof(EntityTableContainerFillComponent)} failed to insert an entity: {ToPrettyString(spawn)}.\nCurrent contents:\n{alreadyContained}");
+                    Log.Error($"Entity {ToPrettyString(ent)} with a {nameof(EntityTableContainerFillComponent)} failed to insert an entity: {ToPrettyString(spawn)}.\nCurrent contents:\n{alreadyContained}");
                     _transform.AttachToGridOrMap(spawn);
                     break;
                 }

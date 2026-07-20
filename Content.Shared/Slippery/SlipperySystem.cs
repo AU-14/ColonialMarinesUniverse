@@ -22,12 +22,18 @@ namespace Content.Shared.Slippery;
 public sealed partial class SlipperySystem : EntitySystem
 {
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private MovementModStatusSystem _movementMod = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedStunSystem _stun = default!;
-    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private SharedStaminaSystem _stamina = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SpeedModifierContactsSystem _speedModifier = default!;
+
+    [Dependency] private EntityQuery<KnockedDownComponent> _knockedDownQuery = default!;
+    [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
+    [Dependency] private EntityQuery<SlidingComponent> _slidingQuery = default!;
 
     public override void Initialize()
     {

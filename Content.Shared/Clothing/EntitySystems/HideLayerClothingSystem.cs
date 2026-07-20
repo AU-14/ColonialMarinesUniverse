@@ -8,7 +8,7 @@ namespace Content.Shared.Clothing.EntitySystems;
 
 public sealed partial class HideLayerClothingSystem : EntitySystem
 {
-    [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private SharedHideableHumanoidLayersSystem _hideableHumanoidLayers = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()

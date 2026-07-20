@@ -1,8 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Content.Shared._RMC14.Actions;
-using Content.Shared._RMC14.Chat;
-using Content.Shared._RMC14.Movement;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions.Components;
 using Content.Shared.Actions.Events;
@@ -18,8 +15,6 @@ using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
-using Robust.Shared.Network;
-using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -28,18 +23,15 @@ namespace Content.Shared.Actions;
 public abstract partial class SharedActionsSystem : EntitySystem
 {
     [Dependency] protected IGameTiming GameTiming = default!;
-    [Dependency] private   ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private   ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private   ActionContainerSystem _actionContainer = default!;
-    [Dependency] private   EntityWhitelistSystem _whitelist = default!;
-    [Dependency] private   RotateToFaceSystem _rotateToFace = default!;
-    [Dependency] private   SharedAudioSystem _audio = default!;
-    [Dependency] private   SharedInteractionSystem _interaction = default!;
-    [Dependency] private   SharedTransformSystem _transform = default!;
-
-    // RMC14
-    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private SharedRMCLagCompensationSystem _rmcLagCompensation = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private ActionContainerSystem _actionContainer = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private RotateToFaceSystem _rotateToFace = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
 
     [Dependency] private EntityQuery<ActionComponent> _actionQuery = default!;
     [Dependency] private EntityQuery<ActionsComponent> _actionsQuery = default!;
@@ -196,18 +188,7 @@ public abstract partial class SharedActionsSystem : EntitySystem
         if (GetAction(action) is not {} ent || ent.Comp.UseDelay is not {} delay)
             return;
 
-        // RMC14 start
-        var ev = new StartUseDelayEvent()
-        {
-            Delay = delay,
-            Start = GameTiming.CurTime,
-            End = GameTiming.CurTime + delay
-        };
-        RaiseLocalEvent(ent, ref ev);
-        SetCooldown((ent, ent), ev.Start, ev.End);
-        // RMC14 end
-
-        //SetCooldown((ent, ent), delay); // RMC14 replaced by above
+        SetCooldown((ent, ent), delay);
     }
 
     public void SetUseDelay(Entity<ActionComponent?>? action, TimeSpan? delay)
@@ -278,7 +259,6 @@ public abstract partial class SharedActionsSystem : EntitySystem
     /// </summary>
     private void OnActionRequest(RequestPerformActionEvent ev, EntitySessionEventArgs args)
     {
-        _rmcLagCompensation.SetLastRealTick(args.SenderSession.UserId, ev.LastRealTick);
         if (args.SenderSession.AttachedEntity is not { } user)
             return;
 
@@ -345,9 +325,6 @@ public abstract partial class SharedActionsSystem : EntitySystem
             return TryStartActionDoAfter((action, actionDoAfterComp), (user, performerDoAfterComp), action.Comp.UseDelay, ev);
         }
 
-        if (!_rmcActions.CanUseActionPopup(user, actionEnt, GetEntity(ev.EntityTarget)))
-            return;
-
         // All checks passed. Perform the action!
         PerformAction((user, component), action);
         return true;
@@ -391,10 +368,7 @@ public abstract partial class SharedActionsSystem : EntitySystem
             _rotateToFace.TryFaceCoordinates(user, targetWorldPos);
 
         if (!ValidateEntityTarget(user, target, ent))
-        {
-            args.Invalid = true;
             return;
-        }
 
         _adminLogger.Add(LogType.Action,
             $"{ToPrettyString(user):user} is performing the {Name(ent):action} action (provided by {ToPrettyString(args.Provider):provider}) targeted at {ToPrettyString(target):target}.");
@@ -417,10 +391,7 @@ public abstract partial class SharedActionsSystem : EntitySystem
             _rotateToFace.TryFaceCoordinates(user, _transform.ToMapCoordinates(target).Position);
 
         if (!ValidateWorldTarget(user, target, ent))
-        {
-            args.Invalid = true;
             return;
-        }
 
         // if the client specified an entity it needs to be valid
         var targetEntity = GetEntity(args.Input.EntityTarget);
@@ -446,10 +417,7 @@ public abstract partial class SharedActionsSystem : EntitySystem
     {
         var (uid, comp) = ent;
         if (!target.IsValid() || Deleted(target))
-        {
-            RaisePredictiveEvent(new RMCMissedTargetActionEvent(GetNetEntity(ent))); // RMC14
             return false;
-        }
 
         if (_whitelist.IsWhitelistFail(comp.Whitelist, target))
             return false;
@@ -457,10 +425,8 @@ public abstract partial class SharedActionsSystem : EntitySystem
         if (_whitelist.IsWhitelistPass(comp.Blacklist, target))
             return false;
 
-        // RMC14
-        if (_actionQuery.Comp(uid).CheckCanInteract && !_actionBlocker.CanInteract(user, target) && ent.Comp.TargetCheckCanInteract)
+        if (_actionQuery.Comp(uid).CheckCanInteract && !_actionBlocker.CanInteract(user, target))
             return false;
-        // RMC14
 
         if (user == target)
             return comp.CanTargetSelf;
@@ -469,17 +435,15 @@ public abstract partial class SharedActionsSystem : EntitySystem
 
         // not using the ValidateBaseTarget logic since its raycast fails if the target is e.g. a wall
         if (targetAction.CheckCanAccess)
-        {
-            // RMC14
-            return _interaction.InRangeAndAccessible(user, target, range: targetAction.Range, lagCompensated: true) ||
-                   // if not just checking pure range, let stored entities be targeted by actions
-                   // if it's out of range it probably isn't stored anyway...
-                   _interaction.CanAccessViaStorage(user, target);
-        }
+            return _interaction.InRangeAndAccessible(user, target, targetAction.Range, targetAction.AccessMask);
 
-        // RMC14 if CheckCanAccess is false the target should still be valid if it's not in a container.
-        // CanAccessViaStorage returns false if the target is not in a container.
-        return true;
+        // Just check normal in range, allowing <= 0 range to mean infinite range.
+        if (targetAction.Range > 0
+            && !_transform.InRange(user, target, targetAction.Range))
+            return false;
+
+        // If checkCanAccess isn't set, we allow targeting things in containers
+        return _interaction.IsAccessible(user, target);
     }
 
     public bool ValidateWorldTarget(EntityUid user, EntityCoordinates target, Entity<WorldTargetActionComponent> ent)
@@ -1087,13 +1051,4 @@ public abstract partial class SharedActionsSystem : EntitySystem
         ent.Comp.Temporary = temporary;
         Dirty(ent);
     }
-}
-
-// RMC14
-[ByRefEvent]
-public struct StartUseDelayEvent
-{
-    public TimeSpan Delay;
-    public TimeSpan Start;
-    public TimeSpan End;
 }

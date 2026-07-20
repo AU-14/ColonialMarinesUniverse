@@ -15,14 +15,14 @@ namespace Content.Shared.Nutrition.EntitySystems;
 
 public sealed partial class FoodSequenceSystem : SharedFoodSequenceSystem
 {
-    [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
-    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private MobStateSystem _mobState = default!;
-    [Dependency] private TagSystem _tag = default!;
-    [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IngestionSystem _ingestion = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TagSystem _tag = default!;
 
     public override void Initialize()
     {

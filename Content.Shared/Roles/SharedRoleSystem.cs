@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Content.Shared._RMC14.GameStates;
 using Content.Shared.Administration.Logs;
 using Content.Shared.CCVar;
 using Content.Shared.Database;
@@ -21,16 +20,12 @@ namespace Content.Shared.Roles;
 
 public abstract partial class SharedRoleSystem : EntitySystem
 {
-    [Dependency] private   IConfigurationManager _cfg = default!;
-    [Dependency] private   IEntityManager _entityManager = default!;
-    [Dependency] private   IPrototypeManager _prototypes = default!;
-    [Dependency] private   ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] protected ISharedPlayerManager Player = default!;
-    [Dependency] private   SharedAudioSystem _audio = default!;
-
-    // RMC14
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
     [Dependency] private SharedMindSystem _minds = default!;
-    [Dependency] private SharedRMCPvsSystem _rmcPvs = default!;
 
     private JobRequirementOverridePrototype? _requirementOverride;
 
@@ -171,10 +166,6 @@ public abstract partial class SharedRoleSystem : EntitySystem
             DebugTools.Assert(!mindRoleComp.ExclusiveAntag);
         }
 
-        Dirty(mindRoleId, mindRoleComp);
-        mind.MindRoles.Add(mindRoleId);
-        Dirty(mindId, mind);
-
         var update = MindRolesUpdate((mindId, mind));
 
         // RoleType refresh, Role time tracking, Update Admin playerlist
@@ -198,9 +189,6 @@ public abstract partial class SharedRoleSystem : EntitySystem
                 LogImpact.Low,
                 $"{name} added to {ToPrettyString(mindId)}");
         }
-
-        if (mind.OriginalOwnerUserId is { } session)
-            _rmcPvs.AddSessionOverride(mindRoleId, session);
     }
 
     /// <summary>

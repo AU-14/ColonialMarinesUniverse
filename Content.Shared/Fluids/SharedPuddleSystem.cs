@@ -1,5 +1,6 @@
 using System.Linq;
-using Content.Shared._RMC14.Chemistry.Reagent;
+using Content.Shared.Administration.Logs;
+using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reaction;
@@ -29,10 +30,21 @@ namespace Content.Shared.Fluids;
 
 public abstract partial class SharedPuddleSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] protected ISharedAdminLogManager AdminLogger = default!;
+    [Dependency] protected OpenableSystem Openable = default!;
+    [Dependency] protected ReactiveSystem Reactive = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
-    [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] protected SharedAudioSystem Audio = default!;
     [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
+    [Dependency] protected SharedPopupSystem Popups = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private SpeedModifierContactsSystem _speedModContacts = default!;
+    [Dependency] private StepTriggerSystem _stepTrigger = default!;
+    [Dependency] private TileFrictionController _tile = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private TurfSystem _turf = default!;
 
     [Dependency] private EntityQuery<StepTriggerComponent> _stepTriggerQuery = default!;
     [Dependency] private EntityQuery<ReactiveComponent> _reactiveQuery = default!;
@@ -131,7 +143,7 @@ public abstract partial class SharedPuddleSystem : EntitySystem
 
         var reagentId = solution.GetPrimaryReagentId();
         if (!string.IsNullOrWhiteSpace(reagentId?.Prototype)
-            && _prototypeManager.TryIndexReagent(reagentId.Value.Prototype, out ReagentPrototype? proto))
+            && ProtoMan.TryIndex(reagentId.Value.Prototype, out ReagentPrototype? proto))
         {
             args.Sound = proto.FootstepSound;
         }
@@ -226,7 +238,7 @@ public abstract partial class SharedPuddleSystem : EntitySystem
 
                 var interpolateValue = quantity.Float() / solution.Volume.Float();
                 color = Color.InterpolateBetween(color,
-                    _prototypeManager.IndexReagent<ReagentPrototype>(standout).SubstanceColor,
+                    ProtoMan.Index<ReagentPrototype>(standout).SubstanceColor,
                     interpolateValue);
             }
         }
@@ -356,7 +368,7 @@ public abstract partial class SharedPuddleSystem : EntitySystem
         for (var i = solution.Contents.Count - 1; i >= 0; i--)
         {
             var (reagent, quantity) = solution.Contents[i];
-            var proto = _prototypeManager.IndexReagent<ReagentPrototype>(reagent.Prototype);
+            var proto = ProtoMan.Index<ReagentPrototype>(reagent.Prototype);
             var removed = proto.ReactionTile(tileRef, quantity, EntityManager, reagent.Data);
             if (removed <= FixedPoint2.Zero)
                 continue;

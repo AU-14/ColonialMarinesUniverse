@@ -14,6 +14,7 @@ public sealed partial class XAERandomTeleportInvokerSystem : BaseXAESystem<XAERa
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _xform = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedJointSystem _jointSystem = default!;
 
     /// <inheritdoc />
     protected override void OnActivated(Entity<XAERandomTeleportInvokerComponent> ent, ref XenoArtifactNodeActivatedEvent args)

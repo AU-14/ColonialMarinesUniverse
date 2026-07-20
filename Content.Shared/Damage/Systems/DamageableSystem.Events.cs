@@ -237,10 +237,8 @@ public sealed partial class DamageableSystem
             damageDone.DamageDict[type] = newValue - oldValue;
         }
 
-        args.DamageDone = damageDone;
-
         if (!damageDone.Empty)
-            OnEntityDamageChanged((ent, damageable), damageDone, args.InterruptsDoAfters, args.Origin, args.Tool);
+            OnEntityDamageChanged((ent, damageable), damageDone, args.InterruptsDoAfters, args.Origin);
     }
 }
 
@@ -248,11 +246,7 @@ public sealed partial class DamageableSystem
 ///     Raised before damage is done, so stuff can cancel it if necessary.
 /// </summary>
 [ByRefEvent]
-public record struct BeforeDamageChangedEvent(
-    DamageSpecifier Damage,
-    EntityUid? Origin = null,
-    EntityUid? Source = null,
-    bool Cancelled = false);
+public record struct BeforeDamageChangedEvent(DamageSpecifier Damage, EntityUid? Origin = null, bool Cancelled = false);
 
 /// <summary>
 ///     Raised on an entity when damage is about to be dealt,
@@ -261,12 +255,7 @@ public record struct BeforeDamageChangedEvent(
 ///
 ///     For example, armor.
 /// </summary>
-public sealed class DamageModifyEvent(
-    DamageSpecifier damage,
-    EntityUid? origin = null,
-    EntityUid? tool = null,
-    int armorPiercing = 0,
-    bool shouldIgnoreClawLogic = false)
+public sealed class DamageModifyEvent(DamageSpecifier damage, EntityUid? origin = null)
     : EntityEventArgs, IInventoryRelayEvent
 {
     /// <inheritdoc/>
@@ -289,22 +278,7 @@ public sealed class DamageModifyEvent(
     /// <summary>
     ///     Contains the entity which caused the damage, if any was responsible.
     /// </summary>
-    public EntityUid? Origin = origin;
-
-    /// <summary>
-    /// The entity used to deal the damage, if any.
-    /// </summary>
-    public EntityUid? Tool = tool;
-
-    /// <summary>
-    /// RMC14 armor piercing percentage supplied by the damage source.
-    /// </summary>
-    public int ArmorPiercing = armorPiercing;
-
-    /// <summary>
-    /// Whether RMC14 xeno claw restrictions should be bypassed for this damage.
-    /// </summary>
-    public bool ShouldIgnoreClawLogic = shouldIgnoreClawLogic;
+    public readonly EntityUid? Origin = origin;
 }
 
 /// <summary>
@@ -313,16 +287,8 @@ public sealed class DamageModifyEvent(
 /// <param name="Damage">The amount of damage the entity is being subject to.</param>
 /// <param name="Origin">The originator of the damage</param>
 /// <param name="InterruptsDoAfters">If the damage being dealt will interrupt do-afters</param>
-/// <param name="Tool">The entity used to deal the damage, if any</param>
 [ByRefEvent]
-public record struct DamageDealtEvent(
-    DamageSpecifier Damage,
-    EntityUid? Origin,
-    bool InterruptsDoAfters,
-    EntityUid? Tool = null)
-{
-    public DamageSpecifier DamageDone = new();
-}
+public readonly record struct DamageDealtEvent(DamageSpecifier Damage, EntityUid? Origin, bool InterruptsDoAfters);
 
 [Obsolete("Will be replaced with damage-model specific events; general 'took damage' can be served by DamageDealtEvent")]
 public sealed class DamageChangedEvent : EntityEventArgs
@@ -360,23 +326,16 @@ public sealed class DamageChangedEvent : EntityEventArgs
     /// </summary>
     public readonly EntityUid? Origin;
 
-    /// <summary>
-    /// The entity used to deal the damage, if any.
-    /// </summary>
-    public readonly EntityUid? Tool;
-
     public DamageChangedEvent(
         DamageableComponent damageable,
         DamageSpecifier? damageDelta,
         bool interruptsDoAfters,
-        EntityUid? origin,
-        EntityUid? tool = null
+        EntityUid? origin
     )
     {
         Damageable = damageable;
         DamageDelta = damageDelta;
         Origin = origin;
-        Tool = tool;
 
         if (DamageDelta is null)
             return;

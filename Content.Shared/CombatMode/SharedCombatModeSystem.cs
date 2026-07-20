@@ -11,9 +11,10 @@ namespace Content.Shared.CombatMode;
 public abstract partial class SharedCombatModeSystem : EntitySystem
 {
     [Dependency] protected IGameTiming Timing = default!;
-    [Dependency] private   SharedActionsSystem _actionsSystem = default!;
-    [Dependency] private   SharedPopupSystem _popup = default!;
-    [Dependency] private   SharedMindSystem  _mind = default!;
+    [Dependency] private SharedActionsSystem _actionsSystem = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private SharedNPCSystem _npc = default!;
 
     public override void Initialize()
     {

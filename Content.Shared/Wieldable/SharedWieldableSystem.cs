@@ -264,8 +264,7 @@ public abstract partial class SharedWieldableSystem : EntitySystem
             return false;
         }
 
-        // RMC14
-        if (_hands.CountFreeableHands((user, hands), uid) < component.FreeHandsRequired)
+        if (_hands.CountFreeableHands((user, hands), except: wieldable.Owner) < wieldable.Comp.FreeHandsRequired)
         {
             if (!quiet)
             {
@@ -324,7 +323,7 @@ public abstract partial class SharedWieldableSystem : EntitySystem
         for (var i = 0; i < wieldable.Comp.FreeHandsRequired; i++)
         {
             // don't show a popup when dropping items because it will overlap with the popup for wielding
-            if (_virtualItem.TrySpawnVirtualItemInHand(used, user, out var virtualItem, true, silent: true))
+            if (_virtualItem.TrySpawnVirtualItemInHand(wieldable.Owner, user, out var virtualItem, true, silent: true))
             {
                 virtuals.Add(virtualItem.Value);
                 continue;

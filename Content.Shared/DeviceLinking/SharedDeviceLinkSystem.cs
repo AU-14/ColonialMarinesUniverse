@@ -12,11 +12,12 @@ namespace Content.Shared.DeviceLinking;
 
 public abstract partial class SharedDeviceLinkSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private SharedPopupSystem _popupSystem = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IGameTiming _gameTiming = default!;
+
+    [Dependency] private EntityQuery<DeviceLinkSinkComponent> _deviceLinkSinkQuery = default!;
 
     public const string InvokedPort = "link_port";
 

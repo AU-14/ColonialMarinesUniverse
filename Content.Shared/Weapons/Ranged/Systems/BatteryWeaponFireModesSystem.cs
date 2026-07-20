@@ -11,10 +11,10 @@ namespace Content.Shared.Weapons.Ranged.Systems;
 
 public sealed partial class BatteryWeaponFireModesSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
-    [Dependency] private SharedPopupSystem _popupSystem = default!;
     [Dependency] private AccessReaderSystem _accessReaderSystem = default!;
     [Dependency] private SharedAppearanceSystem _appearanceSystem = default!;
+    [Dependency] private SharedGunSystem _gun = default!;
+    [Dependency] private SharedPopupSystem _popupSystem = default!;
 
     public override void Initialize()
     {
@@ -121,7 +121,7 @@ public sealed partial class BatteryWeaponFireModesSystem : EntitySystem
                 _appearanceSystem.SetData(ent, BatteryWeaponFireModeVisuals.State, prototype.ID, appearance);
 
             if (user != null)
-                _popupSystem.PopupClient(Loc.GetString("gun-set-fire-mode-popup", ("mode", prototype.Name)), uid, user.Value);
+                _popupSystem.PopupEntity(Loc.GetString("gun-set-fire-mode-popup", ("mode", prototype.Name)), ent, user.Value);
         }
 
         if (TryComp(ent, out BatteryAmmoProviderComponent? batteryAmmoProviderComponent))

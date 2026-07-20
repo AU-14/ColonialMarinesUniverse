@@ -21,7 +21,8 @@ namespace Content.Shared.Fluids;
 
 public abstract partial class SharedPuddleSystem
 {
-    [Dependency] protected OpenableSystem Openable = default!;
+    private static readonly FixedPoint2 MeleeHitTransferProportion = 0.25;
+    [Dependency] private InjectorSystem _injectorSystem = default!;
 
     protected virtual void InitializeSpillable()
     {

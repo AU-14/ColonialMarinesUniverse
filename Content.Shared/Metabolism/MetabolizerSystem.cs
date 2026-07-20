@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Content.Shared._RMC14.Chemistry.Effects;
 using Content.Shared.Body.Events;
 using Content.Shared.Body;
 using Content.Shared.Chemistry.Components;
@@ -29,7 +28,6 @@ public sealed partial class MetabolizerSystem : EntitySystem
     [Dependency] private SharedEntityConditionsSystem _entityConditions = default!;
     [Dependency] private SharedEntityEffectsSystem _entityEffects = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
-    [Dependency] private RMCChemicalEffectSystem _rmcChemicalEffects = default!;
 
     [Dependency] private EntityQuery<OrganComponent> _organQuery = default!;
     [Dependency] private EntityQuery<SolutionManagerComponent> _solutionQuery = default!;
@@ -208,8 +206,7 @@ public sealed partial class MetabolizerSystem : EntitySystem
                     continue;
 
                 // See if conditions apply
-                if (effect.Conditions != null &&
-                    !CanMetabolizeEffect(actualEntity, ent, solutionEntity.Value, effect.Conditions, reagent.Prototype))
+                if (effect.Conditions != null && !CanMetabolizeEffect(actualEntity, ent, solutionEntity.Value, effect.Conditions))
                     continue;
 
                 ApplyEffect(effect);
@@ -221,16 +218,6 @@ public sealed partial class MetabolizerSystem : EntitySystem
             {
                 switch (effect)
                 {
-                    case RMCChemicalEffect rmcEffect:
-                        _rmcChemicalEffects.ApplyMetabolismEffect(
-                            actualEntity,
-                            rmcEffect,
-                            scale,
-                            ent.Owner,
-                            solution,
-                            mostToRemove,
-                            proto);
-                        break;
                     case ModifyLungGas:
                         _entityEffects.ApplyEffect(ent, effect, scale);
                         break;
@@ -287,14 +274,8 @@ public sealed partial class MetabolizerSystem : EntitySystem
     /// <param name="organ">The organ doing the metabolizing</param>
     /// <param name="solution">The solution we are metabolizing from</param>
     /// <param name="conditions">The conditions that need to be met to metabolize</param>
-    /// <param name="reagent">The reagent currently being metabolized, for conditions that use it implicitly</param>
     /// <returns>True if we can metabolize! False if we cannot!</returns>
-    public bool CanMetabolizeEffect(
-        EntityUid body,
-        EntityUid organ,
-        Entity<SolutionComponent> solution,
-        EntityCondition[] conditions,
-        ProtoId<ReagentPrototype>? reagent = null)
+    public bool CanMetabolizeEffect(EntityUid body, EntityUid organ, Entity<SolutionComponent> solution, EntityCondition[] conditions)
     {
         foreach (var condition in conditions)
         {
@@ -308,16 +289,6 @@ public sealed partial class MetabolizerSystem : EntitySystem
                     break;
                 case ReagentCondition:
                     if (_entityConditions.TryCondition(solution, condition))
-                        continue;
-                    break;
-                case ReagentThreshold reagentThreshold:
-                    var thresholdReagent = reagentThreshold.Reagent ?? reagent;
-                    if (thresholdReagent is not { } reagentId)
-                        continue;
-
-                    var quantity = solution.Comp.Solution.GetTotalPrototypeQuantity(reagentId);
-                    var thresholdMet = quantity >= reagentThreshold.Min && quantity <= reagentThreshold.Max;
-                    if (reagentThreshold.Inverted != thresholdMet)
                         continue;
                     break;
                 default:

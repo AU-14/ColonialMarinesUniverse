@@ -1,6 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using Content.Shared._RMC14.Prying;
-using Content.Shared._RMC14.Doors;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Alert;
 using Content.Shared.Database;
@@ -25,6 +23,7 @@ public sealed partial class PryingSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private SharedAudioSystem _audioSystem = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
 
     public override void Initialize()
     {
@@ -69,10 +68,6 @@ public sealed partial class PryingSystem : EntitySystem
             return;
 
         if (!TryComp<PryingComponent>(args.User, out _))
-            return;
-
-        // RMC14
-        if (!CanPry(uid, args.User, out _))
             return;
 
         args.Verbs.Add(new AlternativeVerb()
@@ -124,15 +119,6 @@ public sealed partial class PryingSystem : EntitySystem
             // to be marked as handled.
             return true;
 
-        if (HasComp<RMCUserPryingRequiresToolComponent>(user))
-        {
-            _popup.PopupClient("You can't pry that with your bare hands!", target, user, PopupType.SmallCaution);
-            return true;
-        }
-
-        if (!HasComp<PryingComponent>(user))
-            return true;
-
         // hand-prying is much slower
         var modifier = CompOrNull<PryingComponent>(user)?.SpeedModifier ?? unpoweredComp.PryModifier;
         return StartPry(target, user, null, modifier, out id);
@@ -157,7 +143,6 @@ public sealed partial class PryingSystem : EntitySystem
             canev = new BeforePryEvent(user, false, false, false);
         }
 
-
         RaiseLocalEvent(target, ref canev);
 
         message = canev.Message;
@@ -172,10 +157,9 @@ public sealed partial class PryingSystem : EntitySystem
         RaiseLocalEvent(target, ref modEv);
         var doAfterArgs = new DoAfterArgs(EntityManager, user, modEv.BaseTime * modEv.PryTimeModifier / toolModifier, new DoorPryDoAfterEvent(), target, target, tool)
         {
-            BreakOnDamage = false,
+            BreakOnDamage = true,
             BreakOnMove = true,
             NeedHand = tool != user,
-            ForceVisible = tool == null,
         };
 
         if (tool != user && tool != null)
@@ -186,10 +170,6 @@ public sealed partial class PryingSystem : EntitySystem
         {
             _adminLog.Add(LogType.Action, LogImpact.Low, $"{ToPrettyString(user)} is prying {ToPrettyString(target)}");
         }
-
-        var doorpry = new RMCDoorPryEvent(user); // RMC14
-        RaiseLocalEvent(target, ref doorpry); // RMC14
-
         return _doAfterSystem.TryStartDoAfter(doAfterArgs, out id);
     }
 

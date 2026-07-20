@@ -34,9 +34,10 @@ public abstract partial class SharedAnomalySystem : EntitySystem
     [Dependency] protected SharedAppearanceSystem Appearance = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] protected SharedPopupSystem Popup = default!;
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedMapSystem _map = default!;
+
+    [Dependency] private EntityQuery<PhysicsComponent> _physQuery = default!;
 
     public override void Initialize()
     {

@@ -5,11 +5,8 @@ using Content.Shared.Weapons.Misc;
 using Content.Shared.Whitelist;
 using JetBrains.Annotations;
 using Robust.Shared.Audio.Systems;
-using Robust.Shared.Network;
 using Robust.Shared.Timing;
-using Content.Shared.Mobs;
-using Content.Shared.Mobs.Components;
-using Content.Shared.Mobs.Systems;
+using Robust.Shared.Utility;
 
 namespace Content.Shared.Chasm;
 
@@ -18,11 +15,14 @@ namespace Content.Shared.Chasm;
 /// </summary>
 public sealed partial class ChasmSystem : EntitySystem
 {
-    [Dependency] private MobStateSystem _mobState = default!;
-    [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private ActionBlockerSystem _blocker = default!;
-    [Dependency] private INetManager _net = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private ActionBlockerSystem _blocker = default!;
+    [Dependency] private SharedGrapplingGunSystem _grapple = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+
+    [Dependency] private EntityQuery<ChasmFallingComponent> _chasmFallingQuery;
+    [Dependency] private EntityQuery<ChasmComponent> _chasmQuery;
 
     public override void Initialize()
     {
@@ -44,11 +44,20 @@ public sealed partial class ChasmSystem : EntitySystem
         {
             if (_timing.CurTime < chasm.NextDeletionTime)
                 continue;
-                
-            if(TryComp<MobStateComponent>(uid, out var comp))
-				_mobState.ChangeMobState(uid, MobState.Dead, comp);
-    
-            QueueDel(uid);
+
+            var chasmEvent = new EntityCompletedFallingIntoChasmEvent((uid, chasm));
+            RaiseLocalEvent(chasm.FallingInto, ref chasmEvent);
+            if (_chasmQuery.TryComp(chasm.FallingInto, out var chasmComp))
+            {
+                var tripperEvent = new CompletedFallingIntoChasmEvent((chasm.FallingInto, chasmComp));
+                RaiseLocalEvent(uid, ref tripperEvent);
+            }
+            else
+            {
+                DebugTools.Assert($"{ToPrettyString(chasm.FallingInto)} is missing {nameof(ChasmComponent)}");
+            }
+
+            PredictedQueueDel(uid);
         }
     }
 

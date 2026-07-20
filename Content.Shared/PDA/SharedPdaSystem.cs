@@ -9,6 +9,7 @@ namespace Content.Shared.PDA
     {
         [Dependency] protected ItemSlotsSystem ItemSlotsSystem = default!;
         [Dependency] protected SharedAppearanceSystem Appearance = default!;
+        [Dependency] private SharedJobStatusSystem _jobStatus = default!;
 
         public override void Initialize()
         {

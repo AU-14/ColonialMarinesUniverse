@@ -20,6 +20,8 @@ public abstract partial class SharedJetpackSystem : EntitySystem
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private ActionContainerSystem _actionContainer = default!;
 
+    [Dependency] private EntityQuery<JetpackComponent> _jetpackQuery = default!;
+
     public override void Initialize()
     {
         base.Initialize();

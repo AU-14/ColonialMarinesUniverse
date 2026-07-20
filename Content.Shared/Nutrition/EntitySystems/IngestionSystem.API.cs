@@ -4,7 +4,6 @@ using Content.Shared.Chemistry.Reagent;
 using Content.Shared.EntityEffects.Effects.Body;
 using Content.Shared.FixedPoint;
 using Content.Shared.Inventory;
-using Content.Shared.Interaction;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.Prototypes;
 using Content.Shared.Verbs;
@@ -21,8 +20,7 @@ public sealed partial class IngestionSystem
     public static readonly ProtoId<EdiblePrototype> Food = "Food";
     public static readonly ProtoId<EdiblePrototype> Drink = "Drink";
 
-    // RMC14: Keep feeding range aligned with normal interaction range.
-    public const float MaxFeedDistance = SharedInteractionSystem.InteractionRange;
+    public const float MaxFeedDistance = 1.0f; // We should really have generic interaction ranges like short, medium, long and use those instead...
     // BodySystem has no way of telling us where the mouth is so we're making some assumptions.
     public const SlotFlags DefaultFlags = SlotFlags.HEAD | SlotFlags.MASK;
 

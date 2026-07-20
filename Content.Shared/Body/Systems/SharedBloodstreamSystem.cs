@@ -1,6 +1,3 @@
-using Content.Shared._RMC14.Damage;
-using Content.Shared._RMC14.Medical.Stasis;
-using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared.Alert;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Events;
@@ -35,7 +32,6 @@ public abstract partial class SharedBloodstreamSystem : EntitySystem
 
     [Dependency] protected SharedSolutionContainerSystem SolutionContainer = default!;
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedPuddleSystem _puddle = default!;
@@ -43,10 +39,6 @@ public abstract partial class SharedBloodstreamSystem : EntitySystem
     [Dependency] private AlertsSystem _alertsSystem = default!;
     [Dependency] private MobStateSystem _mobStateSystem = default!;
     [Dependency] private DamageableSystem _damageableSystem = default!;
-
-    // RMC14
-    [Dependency] private CMStasisBagSystem _cmStasisBag = default!;
-    [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
 
     public override void Initialize()
     {
@@ -78,9 +70,6 @@ public abstract partial class SharedBloodstreamSystem : EntitySystem
             bloodstream.NextUpdate += bloodstream.AdjustedUpdateInterval;
             DirtyField(uid, bloodstream, nameof(BloodstreamComponent.NextUpdate)); // needs to be dirtied on the client so it can be rerolled during prediction
 
-            if (!_cmStasisBag.CanBodyMetabolize(uid))
-                continue;
-
             if (!SolutionContainer.ResolveSolution(uid, bloodstream.BloodSolutionName, ref bloodstream.BloodSolution))
                 continue;
 
@@ -108,14 +97,7 @@ public abstract partial class SharedBloodstreamSystem : EntitySystem
                 else
                 {
                     // If they're healthy, we'll try and heal some bloodloss instead.
-                    // RMC14, avoid raising a no-op damage change.
-                    if (_rmcDamageable.HasAnyDamage(uid, bloodstream.BloodlossHealDamage))
-                    {
-                        _damageableSystem.TryChangeDamage(uid,
-                            bloodstream.BloodlossHealDamage * bloodPercentage,
-                            ignoreResistances: true,
-                            interruptsDoAfters: false);
-                    }
+                    _damageableSystem.TryChangeDamage(uid, bloodstream.BloodlossHealDamage * bloodPercentage, ignoreResistances: true, interruptsDoAfters: false);
 
                     _status.TryRemoveStatusEffect(uid, Bloodloss);
                 }
@@ -206,11 +188,6 @@ public abstract partial class SharedBloodstreamSystem : EntitySystem
         if (_timing.ApplyingState)
             return;
 
-        var ev = new CMBleedEvent(args);
-        RaiseLocalEvent(ent, ref ev);
-        if (ev.Handled)
-            return;
-
         if (args.DamageDelta is null || !args.DamageIncreased)
         {
             return;
@@ -264,7 +241,37 @@ public abstract partial class SharedBloodstreamSystem : EntitySystem
     /// </summary>
     private void OnHealthBeingExamined(Entity<BloodstreamComponent> ent, ref HealthBeingExaminedEvent args)
     {
-        // RMC14 presents blood-loss information through its own medical UI.
+        // Shows massively bleeding at 0.75x the max bleed rate.
+        if (ent.Comp.BleedAmount > ent.Comp.MaxBleedAmount * 0.75f)
+        {
+            args.Message.PushNewline();
+            args.Message.AddMarkupOrThrow(Loc.GetString("bloodstream-component-massive-bleeding", ("target", ent.Owner)));
+        }
+        // Shows bleeding message when bleeding above half the max rate, but less than massively.
+        else if (ent.Comp.BleedAmount > ent.Comp.MaxBleedAmount * 0.5f)
+        {
+            args.Message.PushNewline();
+            args.Message.AddMarkupOrThrow(Loc.GetString("bloodstream-component-strong-bleeding", ("target", ent.Owner)));
+        }
+        // Shows bleeding message when bleeding above 0.25x the max rate, but less than half the max.
+        else if (ent.Comp.BleedAmount > ent.Comp.MaxBleedAmount * 0.25f)
+        {
+            args.Message.PushNewline();
+            args.Message.AddMarkupOrThrow(Loc.GetString("bloodstream-component-bleeding", ("target", ent.Owner)));
+        }
+        // Shows bleeding message when bleeding below 0.25x the max cap
+        else if (ent.Comp.BleedAmount > 0)
+        {
+            args.Message.PushNewline();
+            args.Message.AddMarkupOrThrow(Loc.GetString("bloodstream-component-slight-bleeding", ("target", ent.Owner)));
+        }
+
+        // If the mob's blood level is below the damage threshhold, the pale message is added.
+        if (GetBloodLevel(ent.AsNullable()) < ent.Comp.BloodlossThreshold)
+        {
+            args.Message.PushNewline();
+            args.Message.AddMarkupOrThrow(Loc.GetString("bloodstream-component-looks-pale", ("target", ent.Owner)));
+        }
     }
 
     private void OnBeingGibbed(Entity<BloodstreamComponent> ent, ref GibbedBeforeDeletionEvent args)
@@ -475,14 +482,6 @@ public abstract partial class SharedBloodstreamSystem : EntitySystem
 
         if (tempSolution.Volume > ent.Comp.BleedPuddleThreshold)
         {
-            // Pass some of the chemstream into the spilled blood.
-            if (ent.Comp.SpillChemicals && // RMC14
-                SolutionContainer.ResolveSolution(ent.Owner, ent.Comp.ChemicalSolutionName, ref ent.Comp.ChemicalSolution))
-            {
-                var temp = SolutionContainer.SplitSolution(ent.Comp.ChemicalSolution.Value, tempSolution.Volume / 10);
-                tempSolution.AddSolution(temp, _prototypeManager);
-            }
-
             _puddle.TrySpillAt(ent.Owner, tempSolution, out _, sound: false);
 
             tempSolution.RemoveAllSolution();

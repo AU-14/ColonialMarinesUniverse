@@ -13,9 +13,9 @@ namespace Content.Shared.Disposal.Mailing;
 
 public abstract partial class SharedMailingUnitSystem : EntitySystem
 {
-    [Dependency] private SharedDeviceNetworkSystem _deviceNetworkSystem = default!;
+    [Dependency] private SharedDeviceNetworkSystem _deviceNetwork = default!;
     [Dependency] private SharedPowerReceiverSystem _power = default!;
-    [Dependency] protected SharedUserInterfaceSystem UserInterfaceSystem = default!;
+    [Dependency] private SharedUserInterfaceSystem _userInterface = default!;
 
     private const string MailTag = "mail";
 

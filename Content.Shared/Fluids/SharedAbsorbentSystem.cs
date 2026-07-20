@@ -20,7 +20,6 @@ namespace Content.Shared.Fluids;
 /// </summary>
 public abstract partial class SharedAbsorbentSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedPopupSystem _popups = default!;
     [Dependency] protected SharedPuddleSystem Puddle = default!;
@@ -30,6 +29,7 @@ public abstract partial class SharedAbsorbentSystem : EntitySystem
     [Dependency] private UseDelaySystem _useDelay = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private SharedItemSystem _item = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

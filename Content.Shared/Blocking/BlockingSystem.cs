@@ -25,16 +25,22 @@ namespace Content.Shared.Blocking;
 
 public sealed partial class BlockingSystem : EntitySystem
 {
-    [Dependency] private SharedActionsSystem _actionsSystem = default!;
     [Dependency] private ActionContainerSystem _actionContainer = default!;
-    [Dependency] private SharedTransformSystem _transformSystem = default!;
-    [Dependency] private FixtureSystem _fixtureSystem = default!;
-    [Dependency] private SharedHandsSystem _handsSystem = default!;
-    [Dependency] private SharedPopupSystem _popupSystem = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
-    [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private FixtureSystem _fixtureSystem = default!;
+    [Dependency] private ItemToggleSystem _toggle = default!;
+    [Dependency] private SharedActionsSystem _actionsSystem = default!;
+    [Dependency] private SharedHandsSystem _handsSystem = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedPopupSystem _popupSystem = default!;
+    [Dependency] private SharedTransformSystem _transformSystem = default!;
     [Dependency] private TurfSystem _turf = default!;
+
+    [Dependency] private EntityQuery<BlockingComponent> _blockQuery;
+    [Dependency] private EntityQuery<BlockingUserComponent> _userQuery;
+    [Dependency] private EntityQuery<HandsComponent> _handQuery;
+    [Dependency] private EntityQuery<MobStateComponent> _mobQuery;
 
     public override void Initialize()
     {

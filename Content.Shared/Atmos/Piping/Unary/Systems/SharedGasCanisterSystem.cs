@@ -10,11 +10,11 @@ using GasCanisterComponent = Content.Shared.Atmos.Piping.Unary.Components.GasCan
 
 namespace Content.Shared.Atmos.Piping.Unary.Systems;
 
-public abstract partial class SharedGasCanisterSystem : EntitySystem
+public abstract partial class SharedGasCanisterSystem : GasMaxPressureSystem<GasCanisterComponent>
 {
     [Dependency] protected ISharedAdminLogManager AdminLogger = default!;
-    [Dependency] private   ItemSlotsSystem _slots = default!;
-    [Dependency] private   SharedAppearanceSystem _appearance = default!;
+    [Dependency] private ItemSlotsSystem _slots = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] protected SharedUserInterfaceSystem UI = default!;
 
     public override void Initialize()
@@ -44,6 +44,7 @@ public abstract partial class SharedGasCanisterSystem : EntitySystem
     {
         // Fixes empty canisters not populating UI elements
         DirtyUI(ent.Owner, ent);
+        UpdateAppearance(ent);
     }
 
     private void OnCanisterStartup(Entity<GasCanisterComponent> ent, ref ComponentStartup args)

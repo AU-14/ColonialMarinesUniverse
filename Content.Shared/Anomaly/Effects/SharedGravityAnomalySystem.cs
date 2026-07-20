@@ -17,6 +17,8 @@ public abstract partial class SharedGravityAnomalySystem : EntitySystem
     [Dependency] private SharedTransformSystem _xform = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
 
+    [Dependency] private EntityQuery<PhysicsComponent> _physQuery = default!;
+
     /// <inheritdoc/>
     public override void Initialize()
     {

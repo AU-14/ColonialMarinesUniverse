@@ -60,7 +60,7 @@ public abstract partial class SharedGenpopSystem : EntitySystem
         ent.Comp.LinkedId = EntityUid.Invalid;
 
         _lock.Lock(ent.Owner, args.Actor);
-        _entityStorage.CloseStorage(ent);
+        _entityStorage.CloseStorage(ent.Owner, args.Actor);
 
         CreateId(ent, args.Name, args.Sentence, args.Crime);
     }

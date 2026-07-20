@@ -14,9 +14,11 @@ namespace Content.Shared.SubFloor;
 
 public abstract partial class SharedTrayScannerSystem : EntitySystem
 {
-    [Dependency] private INetManager _netMan = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedEyeSystem _eye = default!;
+    [Dependency] private UseDelaySystem _delay = default!;
+    [Dependency] private INetManager _netMan = default!;
 
     public const float SubfloorRevealAlpha = 0.8f;
 

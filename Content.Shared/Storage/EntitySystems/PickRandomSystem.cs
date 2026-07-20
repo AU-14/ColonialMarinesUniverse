@@ -10,13 +10,13 @@ using Robust.Shared.Random;
 
 namespace Content.Shared.Storage.EntitySystems;
 
-// TODO: move this to shared for verb prediction if/when storage is in shared
 public sealed partial class PickRandomSystem : EntitySystem
 {
+    [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
-    [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
 
     public override void Initialize()
     {

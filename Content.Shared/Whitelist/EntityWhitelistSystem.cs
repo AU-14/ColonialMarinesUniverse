@@ -1,6 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using Content.Shared._RMC14.Marines.Skills;
-using Content.Shared._RMC14.Stun;
 using Content.Shared.Item;
 using Content.Shared.Tag;
 
@@ -9,13 +7,10 @@ namespace Content.Shared.Whitelist;
 public sealed partial class EntityWhitelistSystem : EntitySystem
 {
     [Dependency] private TagSystem _tag = default!;
+    [Dependency] private EntityQuery<ItemComponent> _itemQuery;
 
     private CompName _itemComponentName = default;
     private CompName _tagComponentName = default;
-
-    // RMC14
-    [Dependency] private SkillsSystem _skills = default!;
-    [Dependency] private RMCSizeStunSystem _rmcSizeStun = default!;
 
     public override void Initialize()
     {
@@ -68,18 +63,6 @@ public sealed partial class EntityWhitelistSystem : EntitySystem
                 ? _tag.HasAllTags(uid, list.Tags)
                 : _tag.HasAnyTag(uid, list.Tags);
         }
-
-        // RMC14
-        if (list.Skills != null)
-        {
-            return list.RequireAll ? _skills.HasAllSkills(uid, list.Skills) : _skills.HasAnySkills(uid, list.Skills);
-        }
-
-        if (list.MinMobSize != null)
-        {
-            return _rmcSizeStun.IsXenoSized(uid);
-        }
-        // RMC14
 
         return list.RequireAll;
     }

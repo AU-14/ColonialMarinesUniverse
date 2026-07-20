@@ -8,9 +8,11 @@ namespace Content.Shared.BarSign;
 
 public sealed partial class BarSignSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+
 
     public override void Initialize()
     {

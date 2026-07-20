@@ -1,6 +1,4 @@
 using System.Numerics;
-using Content.Shared.Body.Components;
-using Content.Shared.Body.Systems;
 using Content.Shared.Charges.Components;
 using Content.Shared.Charges.Systems;
 using Content.Shared.Coordinates.Helpers;
@@ -68,6 +66,8 @@ public abstract partial class SharedMagicSystem : EntitySystem
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private TurfSystem _turf = default!;
     [Dependency] private SharedChargesSystem _charges = default!;
+    [Dependency] private ExamineSystemShared _examine= default!;
+    [Dependency] private AliveHumanoidTargetSystem _target = default!;
 
     private static readonly ProtoId<TagPrototype> InvalidForGlobalSpawnSpellTag = "InvalidForGlobalSpawnSpell";
 
@@ -460,7 +460,7 @@ public abstract partial class SharedMagicSystem : EntitySystem
             return;
 
         if (TryComp<BasicEntityAmmoProviderComponent>(wand, out var basicAmmoComp) && basicAmmoComp.Count != null)
-            _gunSystem.UpdateBasicEntityAmmoCount(wand.Value, basicAmmoComp.Count.Value + ev.Charge, basicAmmoComp);
+            _gunSystem.UpdateBasicEntityAmmoCount((wand.Value, basicAmmoComp), basicAmmoComp.Count.Value + ev.Charge);
         else if (TryComp<LimitedChargesComponent>(wand, out var charges))
             _charges.AddCharges((wand.Value, charges), ev.Charge);
     }

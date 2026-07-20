@@ -34,14 +34,28 @@ namespace Content.Shared.Medical.Cryogenics;
 
 public abstract partial class SharedCryoPodSystem : EntitySystem
 {
-    [Dependency] private SharedAppearanceSystem _appearanceSystem = default!;
-    [Dependency] private StandingStateSystem _standingStateSystem = default!;
-    [Dependency] private EmagSystem _emag = default!;
-    [Dependency] private MobStateSystem _mobStateSystem = default!;
-    [Dependency] private SharedPopupSystem _popupSystem = default!;
-    [Dependency] private SharedContainerSystem _containerSystem = default!;
-    [Dependency] private SharedPointLightSystem _light = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] private ClimbSystem _climb = default!;
+    [Dependency] private EmagSystem _emag = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private ReactiveSystem _reactive = default!;
+    [Dependency] protected SharedAppearanceSystem Appearance = default!;
+    [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedPointLightSystem _light = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
+    [Dependency] private SharedToolSystem _tool = default!;
+    [Dependency] protected SharedUserInterfaceSystem UI = default!;
+    [Dependency] private StandingStateSystem _standingState = default!;
+
+    [Dependency] private EntityQuery<BloodstreamComponent> _bloodstreamQuery = default!;
+    [Dependency] private EntityQuery<ItemSlotsComponent> _itemSlotsQuery = default!;
+    [Dependency] private EntityQuery<FitsInDispenserComponent> _dispenserQuery = default!;
 
     public override void Initialize()
     {

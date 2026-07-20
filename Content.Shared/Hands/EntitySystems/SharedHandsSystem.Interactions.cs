@@ -1,5 +1,4 @@
 using System.Linq;
-using Content.Shared._RMC14.Hands;
 using Content.Shared.Examine;
 using Content.Shared.Hands.Components;
 using Content.Shared.IdentityManagement;
@@ -9,19 +8,13 @@ using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Localizations;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Map;
-using Robust.Shared.Network;
 using Robust.Shared.Player;
-using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.Hands.EntitySystems;
 
 public abstract partial class SharedHandsSystem : EntitySystem
 {
-    [Dependency] private INetManager _net = default!;
-    [Dependency] private RMCHandsSystem _rmcHands = default!;
-    [Dependency] private IGameTiming _timing = default!;
-
     private void InitializeInteractions()
     {
         SubscribeAllEvent<RequestSetHandEvent>(HandleSetHand);
@@ -58,13 +51,8 @@ public abstract partial class SharedHandsSystem : EntitySystem
 
     private void HandleMoveItemFromHand(RequestMoveHandItemEvent msg, EntitySessionEventArgs args)
     {
-        if (args.SenderSession.AttachedEntity == null)
-            return;
-
-        if (_rmcHands.TryStorageEjectHand(args.SenderSession.AttachedEntity.Value, msg.HandName))
-            return;
-
-        TryMoveHeldEntityToActiveHand(args.SenderSession.AttachedEntity.Value, msg.HandName);
+        if (args.SenderSession.AttachedEntity != null)
+            TryMoveHeldEntityToActiveHand(args.SenderSession.AttachedEntity.Value, msg.HandName);
     }
 
     private void HandleUseInHand(RequestUseInHandEvent msg, EntitySessionEventArgs args)
@@ -104,20 +92,7 @@ public abstract partial class SharedHandsSystem : EntitySystem
         if (session?.AttachedEntity is not { } player)
             return;
 
-        // if (!_actionBlocker.CanInteract(session.AttachedEntity.Value, null))
-        //     return;
-
-        if (component.ActiveHandId == null || component.Hands.Count < 2)
-            return;
-
-        var currentIndex = component.SortedHands.IndexOf(component.ActiveHandId);
-        var newActiveIndex = (currentIndex + (reverse ? -1 : 1) + component.Hands.Count) % component.Hands.Count;
-        var nextHand = component.SortedHands[newActiveIndex];
-
-        // RMC14
-        if (_net.IsClient && _timing.IsFirstTimePredicted)
-            RaisePredictiveEvent(new RequestSetHandEvent(nextHand));
-        // TrySetActiveHand((session.AttachedEntity.Value, component), nextHand);
+        SwapHands(player, true, true);
     }
 
     private bool DropPressed(ICommonSession? session, EntityCoordinates coords, EntityUid netEntity)
@@ -224,10 +199,6 @@ public abstract partial class SharedHandsSystem : EntitySystem
             .Select(item => FormattedMessage.EscapeText(Identity.Name(item, EntityManager)))
             .Select(itemName => Loc.GetString("comp-hands-examine-wrapper", ("item", itemName)))
             .ToList();
-
-        // RMC14
-        if (heldItemNames.Count == 0 && !handsComp.ExamineShowEmpty)
-            return;
 
         var locKey = heldItemNames.Count != 0 ? "comp-hands-examine" : "comp-hands-examine-empty";
         var locUser = ("user", Identity.Entity(examinedUid, EntityManager));

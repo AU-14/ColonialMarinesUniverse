@@ -1,4 +1,3 @@
-using Content.Shared._RMC14.Movement;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Climbing.Components;
@@ -42,11 +41,13 @@ public sealed partial class ClimbSystem : VirtualController
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedStunSystem _stunSystem = default!;
     [Dependency] private SharedTransformSystem _xformSystem = default!;
-    //RMC14
-    [Dependency] private RMCMovementSystem _rmcMovement = default!;
+
+    [Dependency] private EntityQuery<ClimbableComponent> _climbableQuery = default!;
+    [Dependency] private EntityQuery<FixturesComponent> _fixturesQuery = default!;
+    [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
 
     private const string ClimbingFixtureName = "climb";
-    private const int ClimbingCollisionGroup = (int) (CollisionGroup.TableLayer | CollisionGroup.LowImpassable | CollisionGroup.BarricadeImpassable); // RMC14
+    private const int ClimbingCollisionGroup = (int) (CollisionGroup.TableLayer | CollisionGroup.LowImpassable);
 
 
     public override void Initialize()
@@ -215,9 +216,9 @@ public sealed partial class ClimbSystem : VirtualController
         if (climbing.IsClimbing)
             return true;
 
-        //RMC14
-        var canClimb = _rmcMovement.CanClimbOver(user, entityToMove, climbable);
-        if (!canClimb)
+        var ev = new AttemptClimbEvent(user, entityToMove, climbable);
+        RaiseLocalEvent(climbable, ref ev);
+        if (ev.Cancelled)
             return false;
 
         var args = new DoAfterArgs(EntityManager, user, comp.ClimbDelay, new ClimbDoAfterEvent(),
@@ -226,6 +227,7 @@ public sealed partial class ClimbSystem : VirtualController
             used: entityToMove)
         {
             BreakOnMove = true,
+            BreakOnDamage = true,
             DuplicateCondition = DuplicateConditions.SameTool | DuplicateConditions.SameTarget
         };
 

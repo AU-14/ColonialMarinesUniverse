@@ -1,4 +1,4 @@
-using Content.Shared._RMC14.Attachable.Components;
+using Content.Shared.ActionBlocker;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item.ItemToggle.Components;
@@ -25,6 +25,8 @@ public sealed partial class ItemToggleSystem : EntitySystem
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
 
     [Dependency] private EntityQuery<ItemToggleComponent> _itemToggleQuery = default!;
 
@@ -62,11 +64,6 @@ public sealed partial class ItemToggleSystem : EntitySystem
     private void OnUseInHand(Entity<ItemToggleComponent> ent, ref UseInHandEvent args)
     {
         if (args.Handled || !ent.Comp.OnUse)
-            return;
-
-        // Prevent toggling if item is an attachment that requires being attached to a holder
-        if (TryComp(ent.Owner, out AttachableToggleableComponent? attachable) &&
-            attachable.AttachedOnly && !attachable.Attached)
             return;
 
         args.Handled = true;
@@ -115,14 +112,6 @@ public sealed partial class ItemToggleSystem : EntitySystem
     {
         if (args.Handled || !ent.Comp.OnActivate)
             return;
-
-        // Prevent toggling if item is an attachment that requires being attached to a holder
-        if (TryComp(ent.Owner, out AttachableToggleableComponent? attachable) &&
-            attachable.AttachedOnly && !attachable.Attached)
-        {
-            args.Handled = true;
-            return;
-        }
 
         args.Handled = true;
         Toggle((ent.Owner, ent.Comp), args.User, predicted: ent.Comp.Predictable);

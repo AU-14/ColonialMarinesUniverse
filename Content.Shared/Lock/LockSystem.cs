@@ -27,12 +27,14 @@ namespace Content.Shared.Lock;
 public sealed partial class LockSystem : EntitySystem
 {
     [Dependency] private ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private ActivatableUISystem _activatableUI = default!;
     [Dependency] private EmagSystem _emag = default!;
     [Dependency] private SharedAppearanceSystem _appearanceSystem = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedPopupSystem _sharedPopupSystem = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+
+    private readonly LocId _defaultDenyReason = "lock-comp-has-user-access-fail";
 
     /// <inheritdoc />
     public override void Initialize()
@@ -78,6 +80,23 @@ public sealed partial class LockSystem : EntitySystem
             TryUnlock(uid, args.User, lockComp);
         }
         else if (!lockComp.Locked && lockComp.LockOnClick)
+        {
+            args.Handled = true;
+            TryLock(uid, args.User, lockComp);
+        }
+    }
+
+    private void OnUseInHand(EntityUid uid, LockComponent lockComp, UseInHandEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        if (lockComp.Locked && lockComp.UnlockInHand)
+        {
+            args.Handled = true;
+            TryUnlock(uid, args.User, lockComp);
+        }
+        else if (!lockComp.Locked && lockComp.LockInHand)
         {
             args.Handled = true;
             TryLock(uid, args.User, lockComp);

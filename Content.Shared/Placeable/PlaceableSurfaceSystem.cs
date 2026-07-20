@@ -10,6 +10,7 @@ namespace Content.Shared.Placeable;
 
 public sealed partial class PlaceableSurfaceSystem : EntitySystem
 {
+    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedHandsSystem _handsSystem = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
 

@@ -17,11 +17,11 @@ namespace Content.Shared.Research.TechnologyDisk.Systems;
 
 public sealed partial class TechnologyDiskSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _protoMan = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedResearchSystem _research = default!;
     [Dependency] private SharedLatheSystem _lathe = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private NameModifierSystem _nameModifier = default!;
 
     public override void Initialize()

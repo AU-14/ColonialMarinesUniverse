@@ -38,8 +38,8 @@ public sealed partial class RCDSystem : EntitySystem
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private TileSystem _tile = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
-    [Dependency] private IPrototypeManager _protoManager = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private TagSystem _tags = default!;
@@ -88,7 +88,7 @@ public sealed partial class RCDSystem : EntitySystem
         if (!component.AvailablePrototypes.Contains(args.ProtoId))
             return;
 
-        if (!_protoManager.Resolve<RCDPrototype>(args.ProtoId, out var prototype))
+        if (!ProtoMan.Resolve<RCDPrototype>(args.ProtoId, out var prototype))
             return;
 
         // Set the current RCD prototype to the one supplied

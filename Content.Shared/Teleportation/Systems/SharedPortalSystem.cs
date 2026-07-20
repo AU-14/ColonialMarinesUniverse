@@ -24,15 +24,18 @@ namespace Content.Shared.Teleportation.Systems;
 /// This handles teleporting entities from a portal to a linked portal, or to a random nearby destination.
 /// Uses <see cref="LinkedEntitySystem"/> to get linked portals.
 /// </summary>
+/// <seealso cref="PortalComponent"/>
 public abstract partial class SharedPortalSystem : EntitySystem
 {
-    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private INetManager _netMan = default!;
+    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
-    [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private PullingSystem _pulling = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedJointSystem _joints = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TagSystem _tag = default!;
 
     private const string PortalFixture = "portalFixture";
     private const string ProjectileFixture = "projectile";
@@ -58,8 +61,7 @@ public abstract partial class SharedPortalSystem : EntitySystem
 
         // Don't use the verb with unlinked or with multi-output portals
         // (this is only intended to be useful for ghosts to see where a linked portal leads)
-        var disabled = !TryComp<LinkedEntityComponent>(uid, out var link) || link.LinkedEntities.Count != 1;
-        var subject = args.User;
+        var disabled = !TryComp<LinkedEntityComponent>(ent, out var link) || link.LinkedEntities.Count != 1;
 
         var subject = args.User;
         args.Verbs.Add(new AlternativeVerb
@@ -70,15 +72,13 @@ public abstract partial class SharedPortalSystem : EntitySystem
                 if (link == null || disabled)
                     return;
 
+                // check prediction
+                if (_netMan.IsClient && !CanPredictTeleport((ent, link)))
+                    return;
+
                 var destination = link.LinkedEntities.First();
 
-                if (_netMan.IsClient &&
-                    (!Exists(destination) || Transform(destination).MapID == MapId.Nullspace))
-                {
-                    return;
-                }
-
-                TeleportEntity(uid, subject, Transform(destination).Coordinates, destination, false);
+                TeleportEntity(ent, subject, Transform(destination).Coordinates, destination, false);
             },
             Disabled = disabled,
             Text = Loc.GetString("portal-component-ghost-traverse"),

@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Content.Shared._RMC14.Xenonids.CriticalGrace;
 using Content.Shared.Alert;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -9,7 +8,6 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Events;
 using Robust.Shared.GameStates;
-using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Mobs.Systems;
 
@@ -17,6 +15,7 @@ public sealed partial class MobThresholdSystem : EntitySystem
 {
     [Dependency] private MobStateSystem _mobStateSystem = default!;
     [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
 
     public override void Initialize()
     {
@@ -42,8 +41,7 @@ public sealed partial class MobThresholdSystem : EntitySystem
             component.CurrentThresholdState,
             component.StateAlertDict,
             component.ShowOverlays,
-            component.AllowRevives,
-            component.DisplayDamageInAlert);
+            component.AllowRevives);
     }
 
     private void OnHandleState(EntityUid uid, MobThresholdsComponent component, ref ComponentHandleState args)
@@ -382,15 +380,9 @@ public sealed partial class MobThresholdSystem : EntitySystem
         if (!threshold.TriggersAlerts)
             return;
 
-        var hasIncap = TryGetIncapThreshold(target, out var healthMax, threshold);
-        var state = currentMobState;
-
-        if (hasIncap && HasComp<InCriticalGraceComponent>(target) && damageable.TotalDamage > healthMax)
-            state = MobState.Critical;
-
-        if (!threshold.StateAlertDict.TryGetValue(state, out var currentAlert))
+        if (!threshold.StateAlertDict.TryGetValue(currentMobState, out var currentAlert))
         {
-            Log.Error($"No alert alert for mob state {state} for entity {ToPrettyString(target)}");
+            Log.Error($"No alert alert for mob state {currentMobState} for entity {ToPrettyString(target)}");
             return;
         }
 
@@ -398,14 +390,6 @@ public sealed partial class MobThresholdSystem : EntitySystem
         {
             Log.Error($"Invalid alert type {currentAlert}");
             return;
-        }
-
-        string? healthMessage = null;
-
-        if (threshold.DisplayDamageInAlert && hasIncap && healthMax != null)
-        {
-            int healthCurrent = (int)healthMax - (int)damageable.TotalDamage;
-            healthMessage = healthCurrent + " / " + healthMax;
         }
 
         if (alertPrototype.SupportsSeverity)
@@ -432,11 +416,11 @@ public sealed partial class MobThresholdSystem : EntitySystem
                         _alerts.GetMaxSeverity(currentAlert),
                         percentage.Value.Float()));
             }
-            _alerts.ShowAlert(target, currentAlert, severity, dynamicMessage: healthMessage);
+            _alerts.ShowAlert(target, currentAlert, severity);
         }
         else
         {
-            _alerts.ShowAlert(target, currentAlert, dynamicMessage: healthMessage);
+            _alerts.ShowAlert(target, currentAlert);
         }
     }
 

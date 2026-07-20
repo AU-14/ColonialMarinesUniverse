@@ -20,11 +20,84 @@ namespace Content.Shared.Maps;
 /// </summary>
 public sealed partial class TileSystem : EntitySystem
 {
+    [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IRobustRandom _robustRandom = default!;
     [Dependency] private ITileDefinitionManager _tileDefinitionManager = default!;
     [Dependency] private SharedDecalSystem _decal = default!;
     [Dependency] private SharedMapSystem _maps = default!;
     [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private IGameTiming _timing = default!;
+
+    public const int ChunkSize = 16;
+
+    private int _tileStackLimit;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        SubscribeLocalEvent<GridInitializeEvent>(OnGridStartup);
+        SubscribeLocalEvent<TileHistoryComponent, ComponentGetState>(OnGetState);
+        SubscribeLocalEvent<TileHistoryComponent, ComponentHandleState>(OnHandleState);
+        SubscribeLocalEvent<TileHistoryComponent, FloorTileAttemptEvent>(OnFloorTileAttempt);
+
+        _cfg.OnValueChanged(CCVars.TileStackLimit, t => _tileStackLimit = t, true);
+    }
+
+    private void OnHandleState(EntityUid uid, TileHistoryComponent component, ref ComponentHandleState args)
+    {
+        if (args.Current is not TileHistoryState state && args.Current is not TileHistoryDeltaState)
+            return;
+
+        if (args.Current is TileHistoryState fullState)
+        {
+            component.ChunkHistory.Clear();
+            foreach (var (key, value) in fullState.ChunkHistory)
+            {
+                component.ChunkHistory[key] = new TileHistoryChunk(value);
+            }
+
+            return;
+        }
+
+        if (args.Current is TileHistoryDeltaState deltaState)
+        {
+            deltaState.ApplyToComponent(component);
+        }
+    }
+
+    private void OnGetState(EntityUid uid, TileHistoryComponent component, ref ComponentGetState args)
+    {
+        if (args.FromTick <= component.CreationTick || args.FromTick <= component.ForceTick)
+        {
+            var fullHistory = new Dictionary<Vector2i, TileHistoryChunk>(component.ChunkHistory.Count);
+            foreach (var (key, value) in component.ChunkHistory)
+            {
+                fullHistory[key] = new TileHistoryChunk(value);
+            }
+            args.State = new TileHistoryState(fullHistory);
+            return;
+        }
+
+        var data = new Dictionary<Vector2i, TileHistoryChunk>();
+        foreach (var (index, chunk) in component.ChunkHistory)
+        {
+            if (chunk.LastModified >= args.FromTick)
+                data[index] = new TileHistoryChunk(chunk);
+        }
+
+        args.State = new TileHistoryDeltaState(data, new(component.ChunkHistory.Keys));
+    }
+
+    /// <summary>
+    /// On grid startup, ensure that we have Tile History.
+    /// </summary>
+    private void OnGridStartup(GridInitializeEvent ev)
+    {
+        if (HasComp<MapComponent>(ev.EntityUid))
+            return;
+
+        EnsureComp<TileHistoryComponent>(ev.EntityUid);
+    }
 
     /// <summary>
     ///     Returns a weighted pick of a tile variant.
@@ -206,7 +279,44 @@ public sealed partial class TileSystem : EntitySystem
         var historyComp = EnsureComp<TileHistoryComponent>(gridUid);
         ProtoId<ContentTileDefinition> previousTileId;
 
-        // Destroy any decals on the tile
+        var chunkIndices = SharedMapSystem.GetChunkIndices(indices, ChunkSize);
+
+        //Pop from stack if we have history
+        if (historyComp.ChunkHistory.TryGetValue(chunkIndices, out var chunk) &&
+            chunk.History.TryGetValue(indices, out var stack) && stack.Count > 0)
+        {
+            chunk.LastModified = _timing.CurTick;
+            Dirty(gridUid, historyComp);
+
+            previousTileId = stack.Last();
+            stack.RemoveAt(stack.Count - 1);
+
+            //Clean up empty stacks to avoid memory buildup
+            if (stack.Count == 0)
+            {
+                chunk.History.Remove(indices);
+            }
+
+            // Clean up empty chunks
+            if (chunk.History.Count == 0)
+            {
+                historyComp.ChunkHistory.Remove(chunkIndices);
+            }
+        }
+        else
+        {
+            //No stack? Assume BaseTurf was the layer below
+            previousTileId = tileDef.BaseTurf.Value;
+        }
+
+        if (spawnItem && tileDef.ItemDropPrototypeName != null)
+        {
+            //Actually spawn the relevant tile item at the right position and give it some random offset.
+            var tileItem = Spawn(tileDef.ItemDropPrototypeName, coordinates);
+            Transform(tileItem).LocalRotation = _robustRandom.NextDouble() * Math.Tau;
+        }
+
+        //Destroy any decals on the tile
         var decals = _decal.GetDecalsInRange(gridUid, coordinates.SnapToGrid(EntityManager).Position, 0.5f);
         foreach (var (id, _) in decals)
         {

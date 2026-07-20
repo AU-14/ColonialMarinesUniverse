@@ -15,7 +15,7 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Controllers;
 using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Physics.Systems;
-using Robust.Shared.Timing;
+using Robust.Shared.Utility;
 
 namespace Content.Shared.Friction
 {
@@ -26,9 +26,6 @@ namespace Content.Shared.Friction
         [Dependency] private SharedGravitySystem _gravity = default!;
         [Dependency] private SharedMoverController _mover = default!;
         [Dependency] private SharedMapSystem _map = default!;
-
-        //RMC14
-        [Dependency] private IGameTiming _timing = default!;
 
         [Dependency] private EntityQuery<CanMoveInAirComponent> _canMoveInAirQuery = default!;
         [Dependency] private EntityQuery<TileFrictionModifierComponent> _frictionQuery = default!;
@@ -73,15 +70,12 @@ namespace Content.Shared.Friction
                     continue;
 
                 var xform = ent.Comp2;
-                float friction = 0;
+                float friction;
 
                 // If we're not touching the ground, don't use tileFriction.
-                // TODO: Make IsWeightless event-based; we already have grid traversals tracked so just raise events
-                if (body.BodyStatus == BodyStatus.InAir || _gravity.IsWeightless(uid, body, xform) || !xform.Coordinates.IsValid(EntityManager))
-                {
-                    if (_timing.IsFirstTimePredicted) // RMC14, added first time predicted check
-                        friction = xform.GridUid == null || !_gridQuery.HasComp(xform.GridUid) ? _offGridDamping : _airDamping;
-                }
+                if (body.BodyStatus != BodyStatus.OnGround && !_canMoveInAirQuery.HasComp(uid)
+                    || _gravity.IsWeightless(uid) || !xform.Coordinates.IsValid(EntityManager))
+                    friction = xform.GridUid == null || !_gridQuery.HasComp(xform.GridUid) ? _offGridDamping : _airDamping;
                 else
                     friction = _frictionModifier * GetTileFriction(uid, body, xform);
 

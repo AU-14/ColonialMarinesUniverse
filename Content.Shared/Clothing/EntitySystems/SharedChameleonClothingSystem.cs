@@ -19,14 +19,17 @@ namespace Content.Shared.Clothing.EntitySystems;
 
 public abstract partial class SharedChameleonClothingSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private ClothingSystem _clothingSystem = default!;
     [Dependency] private ContrabandSystem _contraband = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private SharedItemSystem _itemSystem = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private TagSystem _tag = default!;
-    [Dependency] protected IGameTiming _timing = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] private LockSystem _lock = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] protected SharedUserInterfaceSystem UI = default!;
+    [Dependency] private INetManager _net = default!;
 
     private static readonly SlotFlags[] IgnoredSlots =
     {
@@ -40,7 +43,6 @@ public abstract partial class SharedChameleonClothingSystem : EntitySystem
     private readonly Dictionary<SlotFlags, List<EntProtoId>> _data = new();
 
     public readonly Dictionary<SlotFlags, List<string>> ValidVariants = new();
-    [Dependency] protected SharedUserInterfaceSystem UI = default!;
 
     private static readonly ProtoId<TagPrototype> WhitelistChameleonTag = "WhitelistChameleon";
 

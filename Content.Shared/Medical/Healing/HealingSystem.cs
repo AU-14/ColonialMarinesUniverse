@@ -118,11 +118,11 @@ public sealed partial class HealingSystem : EntitySystem
 
         if (!args.Repeat)
         {
-            _popupSystem.PopupClient(Loc.GetString("medical-item-finished-using", ("item", args.Used)), target.Owner, args.User);
+            _popupSystem.PopupEntity(Loc.GetString("medical-item-finished-using", ("item", args.Used)), target.Owner, args.User);
             return;
         }
 
-        // Keep repeated self-treatment proportional to the target's remaining damage.
+        // Update our self heal delay so it shortens as we heal more damage.
         if (args.User == target.Owner)
             args.Args.Delay = healing.Delay * GetScaledHealingPenalty(target.Owner, healing.SelfHealPenaltyMultiplier);
     }
@@ -235,9 +235,9 @@ public sealed partial class HealingSystem : EntitySystem
     /// <summary>
     /// Scales the self-heal penalty based on the amount of damage taken
     /// </summary>
-    /// <param name="ent">Entity being healed.</param>
-    /// <param name="mod">Maximum self-healing delay multiplier.</param>
-    /// <returns>The multiplier applied to the base healing delay.</returns>
+    /// <param name="ent">Entity we're healing</param>
+    /// <param name="mod">Maximum modifier we can have.</param>
+    /// <returns>Modifier we multiply our healing time by</returns>
     public float GetScaledHealingPenalty(Entity<DamageableComponent?, MobThresholdsComponent?> ent, float mod)
     {
         if (!Resolve(ent, ref ent.Comp1, ref ent.Comp2, false))
@@ -246,8 +246,9 @@ public sealed partial class HealingSystem : EntitySystem
         if (!_mobThresholdSystem.TryGetThresholdForState(ent, MobState.Critical, out var amount, ent.Comp2))
             return 1;
 
-        var percentDamage = (float)(ent.Comp1.TotalDamage / amount);
-        // Scale from normal speed at zero damage to the configured multiplier at critical damage.
+        var percentDamage = (float)(_damageable.GetTotalDamage(ent) / amount);
+        //basically make it scale from 1 to the multiplier.
+
         var output = percentDamage * (mod - 1) + 1;
         return Math.Max(output, 1);
     }

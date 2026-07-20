@@ -18,6 +18,7 @@ public abstract partial class SharedWiresSystem : EntitySystem
     [Dependency] protected SharedAppearanceSystem Appearance = default!;
     [Dependency] protected SharedAudioSystem Audio = default!;
     [Dependency] protected SharedToolSystem Tool = default!;
+    [Dependency] protected SharedUserInterfaceSystem UI = default!;
 
     public override void Initialize()
     {

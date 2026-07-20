@@ -17,6 +17,10 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedGravitySystem _gravity = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

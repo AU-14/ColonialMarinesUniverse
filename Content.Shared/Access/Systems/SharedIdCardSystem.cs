@@ -24,14 +24,12 @@ public abstract partial class SharedIdCardSystem : EntitySystem
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private InventorySystem _inventorySystem = default!;
     [Dependency] private MetaDataSystem _metaSystem = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private SharedJobStatusSystem _jobStatus = default!;
+    [Dependency] private SharedAgentIdCardSystem _agentIdCard = default!;
 
     // CCVar.
     private int _maxNameLength;
     private int _maxIdJobLength;
-
-    // RMC14, for ghost roles
-    private readonly List<EntityUid> _toRename = new();
 
     public override void Initialize()
     {
@@ -55,8 +53,8 @@ public abstract partial class SharedIdCardSystem : EntitySystem
         if (HasComp<IdCardComponent>(ev.Uid) || HasComp<PdaComponent>(ev.Uid))
             return;
 
-        // RMC14, for ghost roles
-        _toRename.Add(ev.Uid);
+        if (TryFindIdCard(ev.Uid, out var idCard))
+            TryChangeFullName(idCard, ev.NewName, idCard);
     }
 
     private void OnMapInit(EntityUid uid, IdCardComponent id, MapInitEvent args)
@@ -339,41 +337,5 @@ public abstract partial class SharedIdCardSystem : EntitySystem
 
             ExpireId((uid, comp));
         }
-
-        // RMC14, for ghost roles
-        try
-        {
-            foreach (var rename in _toRename)
-            {
-                if (TerminatingOrDeleted(rename))
-                    continue;
-
-                if (TryFindIdCard(rename, out var idCard))
-                    TryChangeFullName(idCard, Name(rename), idCard);
-            }
-        }
-        finally
-        {
-            _toRename.Clear();
-        }
     }
-
-    //RMC14
-    public bool TryChangeOriginalOwner(EntityUid uid, EntityUid? player, IdCardComponent? id = null)
-    {
-        if (!Resolve(uid, ref id))
-            return false;
-
-        if (player == null)
-            return false;
-
-        if (id.OriginalOwner == player)
-            return true;
-
-        id.OriginalOwner = player.Value;
-        Dirty(uid, id);
-        UpdateEntityName(uid, id);
-        return true;
-    }
-    //RMC14
 }

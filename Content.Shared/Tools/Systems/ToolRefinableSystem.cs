@@ -15,7 +15,6 @@ using Content.Shared.Verbs;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
-using Robust.Shared.Network;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -24,9 +23,15 @@ namespace Content.Shared.Tools.Systems;
 
 public sealed partial class ToolRefinablSystem : EntitySystem
 {
-    [Dependency] private INetManager _net = default!;
-    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedToolSystem _toolSystem = default!;
+    [Dependency] private GibbingSystem _gib = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
+    [Dependency] private SharedDestructibleSystem _destructible = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
 
     public override void Initialize()
     {

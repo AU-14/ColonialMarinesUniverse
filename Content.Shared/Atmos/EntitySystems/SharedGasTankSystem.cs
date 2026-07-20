@@ -6,20 +6,18 @@ using Content.Shared.Timing;
 using Content.Shared.Toggleable;
 using Content.Shared.UserInterface;
 using Content.Shared.Verbs;
-using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using InternalsComponent = Content.Shared.Body.Components.InternalsComponent;
 
 namespace Content.Shared.Atmos.EntitySystems;
 
-public abstract partial class SharedGasTankSystem : EntitySystem
+public abstract partial class SharedGasTankSystem : GasMaxPressureSystem<GasTankComponent>
 {
-    [Dependency] private   SharedActionsSystem _actions = default!;
-    [Dependency] private   SharedAudioSystem _audio = default!;
-    [Dependency] private   SharedContainerSystem _containers = default!;
-    [Dependency] private   SharedInternalsSystem _internals = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedInternalsSystem _internals = default!;
     [Dependency] protected SharedUserInterfaceSystem UI = default!;
-    [Dependency] private   UseDelaySystem _delay = default!;
+    [Dependency] private UseDelaySystem _delay = default!;
 
     public const string GasTankDelay = "gasTank";
 
@@ -162,8 +160,8 @@ public abstract partial class SharedGasTankSystem : EntitySystem
         if (!component.IsConnected)
             return false;
 
-        component.DisconnectStream = _audio.Stop(component.DisconnectStream);
-        component.ConnectStream = _audio.PlayPredicted(component.ConnectSound, owner, user)?.Entity;
+        component.DisconnectStream = Audio.Stop(component.DisconnectStream);
+        component.ConnectStream = Audio.PlayPredicted(component.ConnectSound, owner, user)?.Entity;
         UpdateUserInterface(ent);
         return true;
     }
@@ -231,8 +229,8 @@ public abstract partial class SharedGasTankSystem : EntitySystem
         if (internalsUid != null && internalsComp != null)
             _internals.DisconnectTank((internalsUid.Value, internalsComp), forced: forced);
 
-        component.ConnectStream = _audio.Stop(component.ConnectStream);
-        component.DisconnectStream = _audio.PlayPredicted(component.DisconnectSound, owner, user)?.Entity;
+        component.ConnectStream = Audio.Stop(component.ConnectStream);
+        component.DisconnectStream = Audio.PlayPredicted(component.DisconnectSound, owner, user)?.Entity;
         UpdateUserInterface(ent);
         return true;
     }

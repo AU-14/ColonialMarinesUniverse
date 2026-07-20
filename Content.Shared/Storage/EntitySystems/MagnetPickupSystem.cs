@@ -18,6 +18,7 @@ public sealed partial class MagnetPickupSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedStorageSystem _storage = default!;
     [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
 
     [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
 

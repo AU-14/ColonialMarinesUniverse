@@ -1,6 +1,4 @@
 using System.Linq;
-using Content.Shared._RMC14.Loadout;
-using Content.Shared._RMC14.Storage;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
@@ -15,7 +13,6 @@ namespace Content.Shared.Station;
 
 public abstract partial class SharedStationSpawningSystem : EntitySystem
 {
-    [Dependency] protected IPrototypeManager PrototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] protected InventorySystem InventorySystem = default!;
     [Dependency] private SharedHandsSystem _handsSystem = default!;
@@ -76,14 +73,6 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
 
     public void EquipStartingGear(EntityUid entity, LoadoutPrototype loadout, bool raiseEvent = true)
     {
-        //RMC14
-        if (loadout.ComponentsAdd)
-        {
-            var ev = new LoadoutComponentAddEvent(entity, loadout);
-            RaiseLocalEvent(ref ev);
-            return;
-        }
-        //RMC14
         EquipStartingGear(entity, loadout.StartingGear, raiseEvent);
         EquipStartingGear(entity, (IEquipmentLoadout) loadout, raiseEvent);
     }
@@ -164,11 +153,6 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
                     foreach (var entProto in entProtos)
                     {
                         var spawnedEntity = Spawn(entProto, coords);
-                        if (TryComp(spawnedEntity, out ItemComponent? item))
-                        {
-                            var ev = new CMStorageItemFillEvent((spawnedEntity, item), storage);
-                            RaiseLocalEvent(slotEnt.Value, ref ev);
-                        }
 
                         _storage.Insert(slotEnt.Value, spawnedEntity, out _, storageComp: storage, playSound: false);
                     }

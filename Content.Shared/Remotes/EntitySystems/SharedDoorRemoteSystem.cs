@@ -18,7 +18,17 @@ namespace Content.Shared.Remotes.EntitySystems;
 
 public abstract partial class SharedDoorRemoteSystem : EntitySystem
 {
-    [Dependency] protected SharedPopupSystem Popup = default!;
+    [Dependency] private SharedAirlockSystem _airlock = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedDoorSystem _doorSystem = default!;
+    [Dependency] private SharedElectrocutionSystem _electrify = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private SharedPowerReceiverSystem _powerReceiver = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private TagSystem _tagSystem = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+
 
     public override void Initialize()
     {

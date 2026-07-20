@@ -1,5 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using Content.Shared.Construction.Components;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Construction.Components;
 using Content.Shared.Construction.EntitySystems;
@@ -24,17 +23,16 @@ public abstract partial class SharedFlatpackSystem : EntitySystem
 {
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private INetManager _net = default!;
-    [Dependency] protected IPrototypeManager PrototypeManager = default!;
-    [Dependency] protected SharedAppearanceSystem Appearance = default!;
+    [Dependency] private AnchorableSystem _anchorable = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedContainerSystem _container = default!;
-    [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private SharedMapSystem _map = default!;
-    [Dependency] protected MachinePartSystem MachinePart = default!;
-    [Dependency] protected SharedMaterialStorageSystem MaterialStorage = default!;
-    [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedToolSystem _tool = default!;
+    [Dependency] protected MachinePartSystem MachinePart = default!;
+    [Dependency] protected SharedAppearanceSystem Appearance = default!;
+    [Dependency] protected SharedMaterialStorageSystem MaterialStorage = default!;
 
     /// <inheritdoc/>
     public override void Initialize()

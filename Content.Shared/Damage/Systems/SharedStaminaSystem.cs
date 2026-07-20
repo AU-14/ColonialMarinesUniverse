@@ -31,15 +31,21 @@ namespace Content.Shared.Damage.Systems;
 
 public abstract partial class SharedStaminaSystem : EntitySystem
 {
-    [Dependency] private IGameTiming _timing = default!;
+    public static readonly EntProtoId StaminaLow = "StatusEffectStaminaLow";
+
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] protected IGameTiming Timing = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private AlertsSystem _alerts = default!;
     [Dependency] private MetaDataSystem _metadata = default!;
-    [Dependency] private SharedColorFlashEffectSystem _color = default!;
-    [Dependency] private SharedStunSystem _stunSystem = default!;
+    [Dependency] private MovementModStatusSystem _movementMod = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private SharedColorFlashEffectSystem _color = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] protected SharedStunSystem StunSystem = default!;
+
+    [Dependency] private EntityQuery<StaminaComponent> _stamQuery = default!;
 
     /// <summary>
     /// How much of a buffer is there between the stun duration and when stuns can be re-applied.

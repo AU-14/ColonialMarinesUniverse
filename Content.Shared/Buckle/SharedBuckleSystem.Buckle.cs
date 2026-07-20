@@ -1,9 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using Content.Shared._RMC14.Buckle;
-using Content.Shared._RMC14.Movement;
-using Content.Shared._RMC14.Standing;
-using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Alert;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Cuffs.Components;
@@ -19,17 +15,14 @@ using Content.Shared.Pulling.Events;
 using Content.Shared.Standing;
 using Content.Shared.Storage.Components;
 using Content.Shared.Stunnable;
-using Content.Shared.Tag;
 using Content.Shared.Throwing;
 using Content.Shared.Whitelist;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
-using Robust.Shared.Network;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
-using Content.Shared.Movement.Components;
 
 namespace Content.Shared.Buckle;
 
@@ -37,14 +30,7 @@ public abstract partial class SharedBuckleSystem
 {
     public static ProtoId<AlertCategoryPrototype> BuckledAlertCategory = "Buckled";
 
-    [Dependency] private INetManager _net = default!;
     [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
-
-    // RMC14
-    [Dependency] private RMCBuckleSystem _rmcBuckle = default!;
-    [Dependency] private RMCMovementSystem _rmcMovement = default!;
-    [Dependency] private TagSystem _tags = default!;
-    private static readonly ProtoId<TagPrototype> WallTag = "Wall";
 
     private void InitializeBuckle()
     {
@@ -151,8 +137,7 @@ public abstract partial class SharedBuckleSystem
             return;
         }
 
-        // RMC14
-        var delta = (xform.LocalPosition - strapComp.BuckleOffset - _rmcBuckle.GetOffset(buckle.Owner)).LengthSquared();
+        var delta = (xform.LocalPosition - strapComp.BuckleOffset).LengthSquared();
         if (delta > 1e-5)
             Unbuckle(buckle, (strapUid, strapComp), null);
     }
@@ -169,10 +154,6 @@ public abstract partial class SharedBuckleSystem
     {
         if (args.OtherEntity == component.BuckledTo && component.DontCollide)
             args.Cancelled = true;
-        //RMC14
-        if (component.Buckled && _tags.HasTag(args.OtherEntity, WallTag))
-            args.Cancelled = true;
-        //RMC14
     }
 
     private void OnBuckleDownAttempt(EntityUid uid, BuckleComponent component, DownAttemptEvent args)
@@ -195,17 +176,8 @@ public abstract partial class SharedBuckleSystem
 
     private void OnBuckleUpdateCanMove(EntityUid uid, BuckleComponent component, UpdateCanMoveEvent args)
     {
-        // RMC14
         // If we're relaying then don't cancel.
-        // NOTE: I don't love this solution. It's by far the easiest but i hate having it be a consideration.
-        // We need to have a more logical way of distinguishing between a "physical" movement being blocked
-        // And simply being unable to move due to being unconscious, dead, etc. -EMO
         if (HasComp<RelayInputMoverComponent>(uid))
-            return;
-        // RMC14
-
-        // RMC14
-        if (HasComp<RMCAllowStrapMovementComponent>(component.BuckledTo))
             return;
 
         if (component.Buckled)
@@ -229,10 +201,7 @@ public abstract partial class SharedBuckleSystem
         {
             strapEnt.Comp.BuckledEntities.Add(buckle);
             Dirty(strapEnt);
-
-            //RMC14 null check
-            if (strapEnt.Comp.BuckledAlertType != null)
-                _alerts.ShowAlert(buckle, strapEnt.Comp.BuckledAlertType.Value);
+            _alerts.ShowAlert(buckle.Owner, strapEnt.Comp.BuckledAlertType);
         }
         else
         {
@@ -268,16 +237,6 @@ public abstract partial class SharedBuckleSystem
         strapComp = null;
         if (!Resolve(strapUid, ref strapComp, false))
             return false;
-
-        // RMC14
-        if (!strapComp.Enabled)
-            return false;
-
-        if (!_rmcMovement.CanClimbOver(user, buckleUid, strapUid, false))
-        {
-            return false;
-        }
-        // RMC14
 
         // Does it pass the Whitelist
         if (_whitelistSystem.IsWhitelistFail(strapComp.Whitelist, buckleUid) ||
@@ -364,9 +323,6 @@ public abstract partial class SharedBuckleSystem
             return false;
         }
 
-        if (!_rmcBuckle.CanBuckle(user, buckleUid, popup))
-            return false;
-
         var buckleAttempt = new BuckleAttemptEvent((strapUid, strapComp), (buckleUid, buckleComp), user, popup);
         RaiseLocalEvent(buckleUid, ref buckleAttempt);
         if (buckleAttempt.Cancelled)
@@ -418,7 +374,7 @@ public abstract partial class SharedBuckleSystem
         _rotationVisuals.SetHorizontalAngle(buckle.Owner, strap.Comp.Rotation);
 
         var xform = Transform(buckle);
-        var coords = new EntityCoordinates(strap, strap.Comp.BuckleOffset + _rmcBuckle.GetOffset(buckle.Owner));
+        var coords = new EntityCoordinates(strap, strap.Comp.BuckleOffset);
         _transform.SetCoordinates(buckle, xform, coords, rotation: Angle.Zero);
 
         _joints.SetRelay(buckle, strap);
@@ -429,7 +385,7 @@ public abstract partial class SharedBuckleSystem
                 _standing.Stand(buckle, force: true);
                 break;
             case StrapPosition.Down:
-                _standing.Down(buckle, false, false, force: true, changeCollision: true);
+                _standing.Down(buckle, false, false, force: true);
                 break;
         }
 
@@ -437,7 +393,7 @@ public abstract partial class SharedBuckleSystem
         RaiseLocalEvent(strap, ref ev);
 
         var gotEv = new BuckledEvent(strap, buckle);
-        RaiseLocalEvent(buckle, ref gotEv, true);
+        RaiseLocalEvent(buckle, ref gotEv);
 
         if (TryComp<PhysicsComponent>(buckle, out var physics))
             _physics.ResetDynamics(buckle, physics);
@@ -502,8 +458,6 @@ public abstract partial class SharedBuckleSystem
 
         _audio.PlayPredicted(strap.Comp.UnbuckleSound, strap, user);
 
-        var buckledLocation = _transform.GetMoverCoordinates(buckle); //RMC14
-
         SetBuckledTo(buckle, null);
 
         var buckleXform = Transform(buckle);
@@ -518,10 +472,9 @@ public abstract partial class SharedBuckleSystem
             _transform.SetWorldRotationNoLerp((buckle, buckleXform), oldBuckledToWorldRot);
 
             // TODO: This is doing 4 moveevents this is why I left the warning in, if you're going to remove it make it only do 1 moveevent.
-            var offset = strap.Comp.BuckleOffset + _rmcBuckle.GetOffset(buckle.Owner);
-            if (offset != Vector2.Zero)
+            if (strap.Comp.BuckleOffset != Vector2.Zero)
             {
-                buckleXform.Coordinates = buckledLocation; //RMC14
+                _transform.SetCoordinates(buckle, buckleXform, oldBuckledXform.Coordinates.Offset(strap.Comp.BuckleOffset));
             }
         }
 
@@ -529,15 +482,15 @@ public abstract partial class SharedBuckleSystem
         Appearance.SetData(strap, StrapVisuals.State, strap.Comp.BuckledEntities.Count != 0);
         Appearance.SetData(buckle, BuckleVisuals.Buckled, false);
 
-        if (HasComp<KnockedDownComponent>(buckle) || _mobState.IsIncapacitated(buckle) || TryComp(buckle, out RMCRestComponent? rest) && rest.Resting == true)
-            _standing.Down(buckle, playSound: false, changeCollision: true);
+        if (HasComp<KnockedDownComponent>(buckle) || _mobState.IsIncapacitated(buckle))
+            _standing.Down(buckle, playSound: false);
         else
             _standing.Stand(buckle);
 
         _joints.RefreshRelay(buckle);
 
         var buckleEv = new UnbuckledEvent(strap, buckle);
-        RaiseLocalEvent(buckle, ref buckleEv, true);
+        RaiseLocalEvent(buckle, ref buckleEv);
 
         var strapEv = new UnstrappedEvent(strap, buckle);
         RaiseLocalEvent(strap, ref strapEv);

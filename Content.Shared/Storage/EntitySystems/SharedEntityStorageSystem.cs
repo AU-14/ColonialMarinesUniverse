@@ -1,8 +1,5 @@
 using System.Linq;
 using System.Numerics;
-using Content.Shared._RMC14.Xenonids;
-using Content.Shared.ActionBlocker;
-using Content.Shared.Body.Components;
 using Content.Shared.Destructible;
 using Content.Shared.Foldable;
 using Content.Shared.Hands.Components;
@@ -17,6 +14,8 @@ using Content.Shared.Tools.Systems;
 using Content.Shared.Verbs;
 using Content.Shared.Wall;
 using Content.Shared.Whitelist;
+using Content.Shared.ActionBlocker;
+using Content.Shared.Mobs.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
@@ -30,18 +29,18 @@ namespace Content.Shared.Storage.EntitySystems;
 
 public abstract partial class SharedEntityStorageSystem : EntitySystem
 {
-    [Dependency] private   IGameTiming _timing = default!;
-    [Dependency] private   INetManager _net = default!;
-    [Dependency] private   EntityLookupSystem _lookup = default!;
-    [Dependency] private   SharedAppearanceSystem _appearance = default!;
-    [Dependency] private   SharedAudioSystem _audio = default!;
-    [Dependency] private   SharedContainerSystem _container = default!;
-    [Dependency] private   SharedInteractionSystem _interaction = default!;
-    [Dependency] private   SharedJointSystem _joints = default!;
-    [Dependency] private   SharedPhysicsSystem _physics = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private SharedJointSystem _joints = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] protected SharedPopupSystem Popup = default!;
     [Dependency] protected SharedTransformSystem TransformSystem = default!;
-    [Dependency] private   WeldableSystem _weldable = default!;
+    [Dependency] private WeldableSystem _weldable = default!;
     [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
     [Dependency] private ActionBlockerSystem _actionBlocker = default!;
 
@@ -205,8 +204,7 @@ public abstract partial class SharedEntityStorageSystem : EntitySystem
 
         if (component.Open)
         {
-            if (!HasComp<XenoComponent>(user))
-                TryCloseStorage(target, user);
+            TryCloseStorage(target, user);
         }
         else
         {
@@ -367,7 +365,7 @@ public abstract partial class SharedEntityStorageSystem : EntitySystem
             return false;
 
         // Allow other systems to prevent inserting the item: e.g. the item is actually a ghost.
-        var attemptEvent = new InsertIntoEntityStorageAttemptEvent(toInsert, container);
+        var attemptEvent = new InsertIntoEntityStorageAttemptEvent(component.Contents, toInsert);
         RaiseLocalEvent(toInsert, ref attemptEvent);
 
         if (attemptEvent.Cancelled)

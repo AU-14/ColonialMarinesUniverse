@@ -34,6 +34,7 @@ public sealed partial class FollowerSystem : EntitySystem
     [Dependency] private SharedPhysicsSystem _physicsSystem = default!;
     [Dependency] private INetManager _netMan = default!;
     [Dependency] private ISharedAdminManager _adminManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     private static readonly ProtoId<TagPrototype> ForceableFollowTag = "ForceableFollow";
     private static readonly ProtoId<TagPrototype> PreventGhostnadoWarpTag = "NotGhostnadoWarpable";

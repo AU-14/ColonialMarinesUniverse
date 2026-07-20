@@ -20,6 +20,9 @@ namespace Content.Shared.Entry
         [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private ITileDefinitionManager _tileDefinitionManager = default!;
         [Dependency] private IResourceManager _resMan = default!;
+#if DEBUG
+        [Dependency] private IConfigurationManager _configurationManager = default!;
+#endif
 
         private readonly ResPath _ignoreFileDirectory = new("/IgnoredPrototypes/");
 

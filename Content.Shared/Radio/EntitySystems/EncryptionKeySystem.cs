@@ -1,5 +1,4 @@
 using System.Linq;
-using Content.Shared._RMC14.Radio; // RMC14
 using Content.Shared.Chat;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
@@ -22,7 +21,6 @@ namespace Content.Shared.Radio.EntitySystems;
 /// </summary>
 public sealed partial class EncryptionKeySystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _protoManager = default!;
     [Dependency] private SharedToolSystem _tool = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedContainerSystem _container = default!;
@@ -65,28 +63,18 @@ public sealed partial class EncryptionKeySystem : EntitySystem
             return;
 
         component.Channels.Clear();
-
-        if (!HasComp<RMCStaticDefaultChannelComponent>(uid))
-            component.DefaultChannel = null; // RMC14
-
-        //RMC14
-        component.ReadOnlyChannels.Clear();
+        component.DefaultChannel = null;
 
         foreach (var ent in component.KeyContainer.ContainedEntities)
         {
             if (TryComp<EncryptionKeyComponent>(ent, out var key))
             {
                 component.Channels.UnionWith(key.Channels);
-                component.ReadOnlyChannels.UnionWith(key.ReadOnlyChannels);
-
-                if (!HasComp<RMCStaticDefaultChannelComponent>(uid))
-                    component.DefaultChannel ??= key.DefaultChannel;
+                component.DefaultChannel ??= key.DefaultChannel;
             }
         }
-        //RMC14
 
         RaiseLocalEvent(uid, new EncryptionChannelsChangedEvent(component));
-        Dirty(uid, component);
     }
 
     private void OnContainerModified(EntityUid uid, EncryptionKeyHolderComponent component, ContainerModifiedMessage args)
@@ -178,8 +166,7 @@ public sealed partial class EncryptionKeySystem : EntitySystem
         if (!args.IsInDetailsRange)
             return;
 
-        if (component.KeyContainer.ContainedEntities.Count == 0 &&
-            component.Channels.Count == 0)
+        if (component.KeyContainer.ContainedEntities.Count == 0)
         {
             args.PushMarkup(Loc.GetString("encryption-keys-no-keys"));
             return;
@@ -193,9 +180,8 @@ public sealed partial class EncryptionKeySystem : EntitySystem
                 AddChannelsExamine(component.Channels,
                     component.DefaultChannel,
                     args,
-                    _protoManager,
-                    "examine-encryption-channel",
-                    component.ReadOnlyChannels);
+                    ProtoMan,
+                    "examine-encryption-channel");
             }
         }
     }
@@ -205,10 +191,10 @@ public sealed partial class EncryptionKeySystem : EntitySystem
         if (!args.IsInDetailsRange)
             return;
 
-        if (component.Channels.Count > 0)
+        if(component.Channels.Count > 0)
         {
             args.PushMarkup(Loc.GetString("examine-encryption-channels-prefix"));
-            AddChannelsExamine(component.Channels, component.DefaultChannel, args, _protoManager, "examine-encryption-channel", component.ReadOnlyChannels);
+            AddChannelsExamine(component.Channels, component.DefaultChannel, args, ProtoMan, "examine-encryption-channel");
         }
     }
 
@@ -218,30 +204,22 @@ public sealed partial class EncryptionKeySystem : EntitySystem
     /// <param name="channels">HashSet of channels in headset, encryptionkey or etc.</param>
     /// <param name="protoManager">IPrototypeManager for getting prototypes of channels with their variables.</param>
     /// <param name="channelFTLPattern">String that provide id of pattern in .ftl files to format channel with variables of it.</param>
-    public void AddChannelsExamine(HashSet<string> channels, string? defaultChannel, ExaminedEvent examineEvent, IPrototypeManager protoManager, string channelFTLPattern, HashSet<ProtoId<RadioChannelPrototype>>? ReadonlyChannels)
+    public void AddChannelsExamine(HashSet<ProtoId<RadioChannelPrototype>> channels, string? defaultChannel, ExaminedEvent examineEvent, IPrototypeManager protoManager, string channelFTLPattern)
     {
         RadioChannelPrototype? proto;
         foreach (var id in channels)
         {
-            if (string.IsNullOrEmpty(id) || !_protoManager.TryIndex(id, out proto))
-                continue;
-
-            proto = _protoManager.Index<RadioChannelPrototype>(id);
+            proto = ProtoMan.Index<RadioChannelPrototype>(id);
 
             var key = id == SharedChatSystem.CommonChannel
                 ? SharedChatSystem.RadioCommonPrefix.ToString()
                 : $"{SharedChatSystem.RadioChannelPrefix}{proto.KeyCode}";
 
-
-            var readOnlyMarkup = "";
-            if (ReadonlyChannels != null && ReadonlyChannels.Contains(id))
-                readOnlyMarkup = " Read Only";
-
             examineEvent.PushMarkup(Loc.GetString(channelFTLPattern,
                 ("color", proto.Color),
                 ("key", key),
                 ("id", proto.LocalizedName),
-                ("freq", proto.Frequency / 10f)) + $"{readOnlyMarkup}");
+                ("freq", proto.Frequency / 10f)));
         }
 
         if (defaultChannel != null && ProtoMan.TryIndex(defaultChannel, out proto))

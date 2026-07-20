@@ -8,6 +8,7 @@ namespace Content.Shared.Station;
 
 public abstract partial class SharedStationSystem : EntitySystem
 {
+    [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private MetaDataSystem _meta = default!;
 
     [Dependency] private EntityQuery<StationMemberComponent> _stationMemberQuery = default!;

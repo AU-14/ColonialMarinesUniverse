@@ -1,5 +1,5 @@
 using Content.Shared.CCVar;
-using Content.Shared._RMC14.Standing;
+using Content.Shared.Gravity;
 using Content.Shared.Inventory;
 using Content.Shared.Movement.Components;
 using Content.Shared.Standing;
@@ -11,7 +11,8 @@ namespace Content.Shared.Movement.Systems
     public sealed partial class MovementSpeedModifierSystem : EntitySystem
     {
         [Dependency] private IGameTiming _timing = default!;
-        [Dependency] private   IConfigurationManager _configManager = default!;
+        [Dependency] private IConfigurationManager _configManager = default!;
+        [Dependency] private SharedGravitySystem _gravity = default!;
 
         private float _frictionModifier;
         private float _airDamping;
@@ -38,8 +39,8 @@ namespace Content.Shared.Movement.Systems
             ent.Comp.WeightlessFrictionNoInput = _airDamping * ent.Comp.BaseWeightlessFriction;
             ent.Comp.OffGridFriction = _offGridDamping * ent.Comp.BaseWeightlessFriction;
             ent.Comp.Acceleration = ent.Comp.BaseAcceleration;
-            ent.Comp.Friction = _frictionModifier * 2.5f; // RMC14 ent.Comp.BaseFriction;
-            ent.Comp.FrictionNoInput = _frictionModifier * 2.5f; // RMC14 ent.Comp.BaseFriction;
+            ent.Comp.Friction = _frictionModifier * ent.Comp.BaseFriction;
+            ent.Comp.FrictionNoInput = _frictionModifier * ent.Comp.BaseFriction;
             Dirty(ent);
         }
 
@@ -139,21 +140,8 @@ namespace Content.Shared.Movement.Systems
             var ev = new RefreshMovementSpeedModifiersEvent();
             RaiseLocalEvent(ent, ev);
 
-            if (TryComp(uid, out RMCRestComponent? rest) && rest.Resting)
-            {
-                var walk = rest.RestingSpeed;
-                if (ev.WalkSpeedModifier != 0)
-                    walk = rest.RestingSpeed / ev.WalkSpeedModifier;
-
-                var sprint = rest.RestingSpeed;
-                if (ev.SprintSpeedModifier != 0)
-                    sprint = rest.RestingSpeed / ev.SprintSpeedModifier;
-
-                ev.ModifySpeed(walk, sprint);
-            }
-
-            if (MathHelper.CloseTo(ev.WalkSpeedModifier, move.WalkSpeedModifier) &&
-                MathHelper.CloseTo(ev.SprintSpeedModifier, move.SprintSpeedModifier))
+            if (MathHelper.CloseTo(ev.WalkSpeedModifier, ent.Comp.WalkSpeedModifier) &&
+                MathHelper.CloseTo(ev.SprintSpeedModifier, ent.Comp.SprintSpeedModifier))
                 return;
 
             ent.Comp.WalkSpeedModifier = ev.WalkSpeedModifier;

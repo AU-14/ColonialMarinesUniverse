@@ -24,14 +24,18 @@ namespace Content.Shared.Implants;
 
 public abstract partial class SharedImplanterSystem : EntitySystem
 {
-    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
-    [Dependency] private DamageableSystem _damageableSystem = default!;
-    [Dependency] private SharedUserInterfaceSystem _uiSystem = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+
+    [Dependency] private EntityQuery<SubdermalImplantComponent> _implantCompQuery;
 
     public override void Initialize()
     {

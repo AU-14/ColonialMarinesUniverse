@@ -7,7 +7,6 @@ using Content.Shared.Gibbing;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
-using Content.Shared.Item.ItemToggle;
 using Content.Shared.Light;
 using Content.Shared.Light.Components;
 using Content.Shared.Mind;
@@ -41,10 +40,30 @@ namespace Content.Shared.Silicons.Borgs;
 /// </summary>
 public abstract partial class SharedBorgSystem : EntitySystem
 {
-    [Dependency] protected SharedContainerSystem Container = default!;
-    [Dependency] protected ItemSlotsSystem ItemSlots = default!;
-    [Dependency] protected ItemToggleSystem Toggle = default!;
-    [Dependency] protected SharedPopupSystem Popup = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRoleSystem _roles = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeedModifier = default!;
+    [Dependency] private PowerCellSystem _powerCell = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IConfigurationManager _configuration = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedHandheldLightSystem _handheldLight = default!;
+    [Dependency] private SharedAccessSystem _access = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
     /// <inheritdoc/>
     public override void Initialize()

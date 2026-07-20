@@ -19,6 +19,7 @@ public sealed partial class StethoscopeSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
 
     // The damage type to "listen" for with the stethoscope.
     private const string DamageToListenFor = "Asphyxiation";

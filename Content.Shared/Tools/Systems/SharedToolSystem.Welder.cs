@@ -13,13 +13,11 @@ namespace Content.Shared.Tools.Systems;
 
 public abstract partial class SharedToolSystem
 {
-    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
-
     public void InitializeWelder()
     {
         SubscribeLocalEvent<WelderComponent, MapInitEvent>(OnWelderInit);
         SubscribeLocalEvent<WelderComponent, ExaminedEvent>(OnWelderExamine);
-        // RMC14 SubscribeLocalEvent<WelderComponent, AfterInteractEvent>(OnWelderAfterInteract);
+        SubscribeLocalEvent<WelderComponent, AfterInteractEvent>(OnWelderAfterInteract);
 
         SubscribeLocalEvent<WelderComponent, ToolUseAttemptEvent>((uid, comp, ev) =>
         {
@@ -104,7 +102,7 @@ public abstract partial class SharedToolSystem
             }
         }
     }
-    /* RMC14 comment out, see RMCRepairableSystem
+
     private void OnWelderAfterInteract(Entity<WelderComponent> entity, ref AfterInteractEvent args)
     {
         if (args.Handled)
@@ -138,7 +136,7 @@ public abstract partial class SharedToolSystem
             args.Handled = true;
         }
     }
-    */
+
     private void CanCancelWelderUse(Entity<WelderComponent> entity, EntityUid user, float requiredFuel, CancellableEntityEventArgs ev)
     {
         if (!ItemToggle.IsActivated(entity.Owner))

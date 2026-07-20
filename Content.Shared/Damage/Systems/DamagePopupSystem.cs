@@ -7,6 +7,7 @@ namespace Content.Shared.Damage.Systems;
 public sealed partial class DamagePopupSystem : EntitySystem
 {
     [Dependency] private SharedPopupSystem _popupSystem = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
 
     public override void Initialize()
     {
@@ -37,10 +38,6 @@ public sealed partial class DamagePopupSystem : EntitySystem
 
     private void OnInteractHand(Entity<DamagePopupComponent> ent, ref InteractHandEvent args)
     {
-        //RMC14
-        if (args.Handled)
-            return;
-
         if (ent.Comp.AllowTypeChange)
         {
             var next = (DamagePopupType)(((int)ent.Comp.Type + 1) % Enum.GetValues<DamagePopupType>().Length);

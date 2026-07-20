@@ -1,5 +1,4 @@
 using System.Numerics;
-using Content.Shared._RMC14.Xenonids.Acid;
 using Content.Shared.Examine;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
@@ -59,21 +58,6 @@ public abstract partial class SharedStackSystem : EntitySystem
 
         if (!_stackQuery.TryComp(args.Used, out var recipientStack))
             return;
-
-        // RMC14 - Acided stacks cannot be merged.
-        if (TryGetAcidedStack(ent.Owner, args.Used, out var acidUid))
-        {
-            var popupPos = args.ClickLocation;
-            if (!popupPos.IsValid(EntityManager))
-                popupPos = Transform(args.User).Coordinates;
-
-            _popup.PopupCoordinates(
-                Loc.GetString("rmc-acid-pickup-blocked", ("target", acidUid)),
-                popupPos,
-                args.User);
-            args.Handled = true;
-            return;
-        }
 
         // Transfer stacks from ground to hand
         if (!TryMergeStacks((ent.Owner, ent.Comp), (args.Used, recipientStack), out var transferred))
@@ -235,30 +219,6 @@ public abstract partial class SharedStackSystem : EntitySystem
     }
 
     #endregion
-
-    // RMC14 - Shared check for acid on stack entities.
-    protected bool IsAcidicStack(EntityUid uid)
-    {
-        return HasComp<TimedCorrodingComponent>(uid) || HasComp<DamageableCorrodingComponent>(uid);
-    }
-
-    private bool TryGetAcidedStack(EntityUid donor, EntityUid recipient, out EntityUid acidUid)
-    {
-        if (IsAcidicStack(donor))
-        {
-            acidUid = donor;
-            return true;
-        }
-
-        if (IsAcidicStack(recipient))
-        {
-            acidUid = recipient;
-            return true;
-        }
-
-        acidUid = default;
-        return false;
-    }
 
     /// <remarks>
     ///     OnStackAlternativeInteract() was moved to shared in order to faciliate prediction of stack splitting verbs.

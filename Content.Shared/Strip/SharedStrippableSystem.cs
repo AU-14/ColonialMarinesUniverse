@@ -1,6 +1,5 @@
 using System.Linq;
 using Content.Shared.Administration.Logs;
-using Content.Shared.Administration.Managers;
 using Content.Shared.CombatMode;
 using Content.Shared.Cuffs;
 using Content.Shared.Cuffs.Components;
@@ -19,9 +18,6 @@ using Content.Shared.Popups;
 using Content.Shared.Strip.Components;
 using Content.Shared.Verbs;
 using Robust.Shared.Utility;
-using Content.Shared._RMC14.Clothing;
-using Content.Shared._RMC14.Marines.Skills;
-using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Strip;
 
@@ -39,13 +35,6 @@ public abstract partial class SharedStrippableSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popupSystem = default!;
 
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
-
-    // RMC14
-    [Dependency] private SkillsSystem _skills = default!;
-
-    private static readonly EntProtoId<SkillDefinitionComponent> Skill = "RMCSkillPolice";
-    public const int MinimumStripSkillLevel = 1;
-    private const int MultiStripSkillLevel = 2;
 
     public override void Initialize()
     {
@@ -234,8 +223,7 @@ public abstract partial class SharedStrippableSystem : EntitySystem
             BreakOnDamage = true,
             BreakOnMove = true,
             NeedHand = true,
-            DuplicateCondition = DuplicateConditions.SameTool,
-            ForceVisible = user.Owner != target,
+            DuplicateCondition = DuplicateConditions.SameTool
         };
 
         _doAfterSystem.TryStartDoAfter(doAfterArgs);
@@ -284,14 +272,6 @@ public abstract partial class SharedStrippableSystem : EntitySystem
         if (!_inventorySystem.CanUnequip(user, target, slot, out var reason))
         {
             _popupSystem.PopupCursor(Loc.GetString(reason), user);
-            return false;
-        }
-
-        if (TryComp<RMCUnstrippableComponent>(slotItem, out var unstrippableItem))
-        {
-            if (unstrippableItem.PoliceCanStrip && _skills.HasSkill(user, Skill, MinimumStripSkillLevel))
-                return true;
-            _popupSystem.PopupCursor(Loc.GetString("rmc-unstrippable", ("item", slotItem), ("owner", Identity.Entity(target, EntityManager))));
             return false;
         }
 
@@ -354,8 +334,7 @@ public abstract partial class SharedStrippableSystem : EntitySystem
             BreakOnMove = true,
             NeedHand = true,
             BreakOnHandChange = false, // Allow simultaneously removing multiple items.
-            DuplicateCondition = _skills.HasSkill(user, Skill, MultiStripSkillLevel) ? DuplicateConditions.SameTool : DuplicateConditions.SameEvent, // RMC14
-            ForceVisible = user != target,
+            DuplicateCondition = DuplicateConditions.SameTool
         };
 
         _doAfterSystem.TryStartDoAfter(doAfterArgs);
@@ -458,8 +437,7 @@ public abstract partial class SharedStrippableSystem : EntitySystem
             BreakOnDamage = true,
             BreakOnMove = true,
             NeedHand = true,
-            DuplicateCondition = DuplicateConditions.SameTool,
-            ForceVisible = user != target,
+            DuplicateCondition = DuplicateConditions.SameTool
         };
 
         _doAfterSystem.TryStartDoAfter(doAfterArgs);
@@ -571,8 +549,7 @@ public abstract partial class SharedStrippableSystem : EntitySystem
             BreakOnMove = true,
             NeedHand = true,
             BreakOnHandChange = false, // Allow simultaneously removing multiple items.
-            DuplicateCondition = _skills.HasSkill(user.Owner, Skill, MultiStripSkillLevel) ? DuplicateConditions.SameTool : DuplicateConditions.SameEvent, // RMC14
-            ForceVisible = user != target,
+            DuplicateCondition = DuplicateConditions.SameTool
         };
 
         _doAfterSystem.TryStartDoAfter(doAfterArgs);
