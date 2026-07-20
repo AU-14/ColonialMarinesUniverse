@@ -19,6 +19,7 @@ Date established: 2026-07-19
 | RMC reset baseline | `b6d677947dd8ebcb06194a66798938645fed5a54` | RMC master used to create `Rebase`. |
 | Initial Rebase checkpoint | `29918ff342f3f46c6c953fcf6d0f5523597568af` | RMC plus the content-side RobustToolbox v283 migration and warning fixes. |
 | Initial SS14 audit target | `40ca2c7f90d11d27be5457d177c133f0947d1c08` | SS14 master on 2026-07-19. Pin a new target when starting a later sync session. |
+| Final live SS14 audit target | `887e80fd08a196228765b5b70c72b80d800203f6` | SS14 master verified on 2026-07-20 after the five-subsystem closeout; its three-commit delta from the merged head is classified in CS-0347. |
 | RobustToolbox pin | `7bfa10ec04bfc8f00956419609bd6ec370f9bbac` | External engine boundary; do not resolve a content merge by changing this pointer. |
 
 The complete baseline-to-target range contains 4,144 reachable commits, including
@@ -46,7 +47,9 @@ Use every applicable area; do not force a change into only one category.
 | GameTicking | Tick/update scheduling, pause timing, prediction/reconciliation, entity lifecycle, round timing, and simulation-loop work. |
 | Gamerules | Round start/end, game presets, objectives, antagonists, events, votes, win conditions, and rule-driven spawning. |
 
-## Status and risk
+## Status, audit classification, and risk
+
+Per-change integration status:
 
 - `Inventoried`: identified but not yet behaviorally reconciled.
 - `Ported`: upstream behavior adopted without a downstream semantic change.
@@ -56,9 +59,23 @@ Use every applicable area; do not force a change into only one category.
 - `Rejected`: upstream behavior intentionally does not fit CMU/RMC; give a durable reason.
 - `Superseded`: a later entry replaces the decision; link both entries.
 
-Risk is `Low`, `Medium`, or `High`. Treat prediction, timing, damage, collision,
-round state, and broad prototype-contract changes as high risk unless validation
-demonstrates otherwise.
+Subsystem closeouts classify the resulting behavior separately:
+
+- `Aligned`: CMU's current behavior and ownership match the audited upstream contract.
+- `Adapted`: current SS14 APIs/owners implement an intentional RMC/CMU contract.
+- `Missing`: a required RMC/CMU or beneficial upstream behavior has no current owner.
+- `Behavior changed`: the current behavior intentionally or unavoidably differs; record why.
+- `Deferred`: evidence or design authority is insufficient, so the decision remains queued.
+
+A change can therefore be `Ported` as an integration action while contributing to an
+`Adapted` subsystem outcome because the surrounding RMC/CMU behavior is intentionally
+retained. Neither taxonomy by itself establishes runtime parity.
+
+Risk is `Low`, `Medium`, `High`, or `Critical`. Treat prediction, timing, damage,
+collision, round state, and broad prototype-contract changes as high risk unless
+validation demonstrates otherwise. Use `Critical` when a loss can prevent startup,
+abort broad prototype/component initialization, or disconnect a systemic authority
+or lifecycle owner across a substantial content family.
 
 ## Integration rules
 
@@ -91,7 +108,7 @@ Cadence revised: 2026-07-20, after CS-0048.
 - Upstream: <PR URL>, `<merge SHA>`, <date>
 - Areas: Movement | Shooting | Medical | Chemistry | Interactions | Physics | GameTicking | Gamerules
 - Status: Inventoried | Ported | Adapted | AlreadyPresent | Deferred | Rejected | Superseded
-- Risk: Low | Medium | High
+- Risk: Low | Medium | High | Critical
 - Behavior/API delta:
 - RMC/CMU divergence:
 - Decision and rationale:
@@ -3661,7 +3678,7 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 | Adapted | CS-0256 through CS-0266 restore remote/attachable resolution, battery provider prototypes, RMC speed, single collision authority plus RMC post-hit hooks, moving-gun coordinates, click-only policy, container-owner exemptions, ballistic timing, primed-ammo rejection, ammo-counter corrections, and one shoot-request owner. | These are high-confidence content-side adaptations to current APIs; each still needs its recorded runtime matrix. |
 | Adapted | RMC skills, accuracy, recoil, IFF, falloff, dual-wield, pointblank, aimed/air shot, and attachable relays still subscribe through current `AttemptShootEvent`, `AmmoShotEvent`, `GunShotEvent`, and related modifier events. | Pointblank obstruction/range behavior no longer exactly matches old user-aware checks and should be compared under latency. |
 | Missing | Non-brand-new expendable lights can be loaded because concrete light components are split between Client/Server and no shared load-veto adaptation exists. | High explosive/flare-state risk; add a current `BeforeAmmoLoadedEvent` policy in both concrete light systems or a new shared state contract. |
-| Missing | `ItemPickupSystem.RecentItemPickUp` has no gun-input guard, and the retained `ItemPickedUpEvent` is itself not raised by the current item lifecycle. | Medium input-exploit risk; repair the pickup lifecycle during Interactions before reconnecting the 0.15-second shooting veto. |
+| Superseded | The original pickup-lifecycle and post-pickup shooting-veto loss was repaired by CS-0271 and CS-0272: successful direct world pickup now raises the retained event, and the sole current shoot-request producer observes the 0.15-second client-input veto. | The source gap is closed; runtime pickup/fire timing and prediction coverage remains checkpoint debt. |
 | Missing | `RMCBeforeMuzzleFlashEvent` consumers and `VehicleTurretTrackedMuzzleFlashComponent` remain, but current muzzle-flash creation never raises/creates their data. | Medium presentation risk for vehicles/emplacements; adapt current `MuzzleFlashEvent`/effect creation without changing projectile authority. |
 | Missing | `RMCAutoEjectMagazines` remains defined while empty-magazine handling auto-ejects unconditionally and no current options control restores the preference. | Medium UX/policy risk; restore the replicated preference and per-session gate separately. |
 | Behavior changed | Current provider-to-provider fill moves one round per repeated DoAfter; old RMC moved up to 20. RMC `BulletBoxSystem` retains its own bulk transfer path. | Keep current generic behavior until inventory/interaction timing is playtested; do not reintroduce batching globally from historical code alone. |
@@ -4062,6 +4079,18 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - Validation evidence: Static assignment review confirms every retained `TargetEffect` writer now reaches the single updater, missing/deleted targets do not spawn, and `INetManager.IsServer` guards entity creation. `dotnet build Content.Shared/Content.Shared.csproj --configuration DebugOpt --no-restore --no-dependencies --nologo --verbosity:minimal --disable-build-servers` succeeded with 0 errors and 6 unrelated warnings. Tests remain deferred until the 1,000-upstream-commit checkpoint.
 - Remaining debt: Runtime coverage must verify immediate and one-second cadence, server-only entity counts, target deletion, cancellation on the first tick, repeated DoAfters, state copy/resimulation, attachment coordinates, and all medical/xeno effect prototypes. `ForceVisible` overlay visibility remains separate.
 
+## CS-0296 - Remove a stale client platform import
+
+- Upstreams compared: live SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767`, live RMC `b6d677947dd8ebcb06194a66798938645fed5a54`, and CMU through CS-0295.
+- Areas: Client build compatibility, RMC admin chat bans
+- Classification: Aligned; build-only cleanup with no gameplay behavior delta.
+- Risk: Low.
+- Behavior/API delta: The RMC admin chat-ban window retained an unused `TerraFX.Interop.Xlib` import even though the current window has no Xlib API dependency. The import made the file depend on a platform package that is not part of its content contract.
+- Decision and behavior: Remove only the stale using directive. Window construction, network messages, ban selection, authorization, localization, and server authority remain unchanged.
+- Files changed: `Content.Client/_RMC14/Admin/ChatBans/RMCAdminChatBanWindow.xaml.cs`.
+- Validation evidence: Commit `8bb3140e96f89cb63f3538554d9cf506e0b9dadc` removes exactly one unused import. The following targeted Client build completed with 0 errors and 8 unrelated warnings; no test obligation is added because runtime behavior did not change.
+- Remaining debt: None specific to this cleanup; admin chat-ban behavior remains part of its broader runtime/UI coverage.
+
 ## CS-0297 - Reconcile RMC DoAfter visibility with current presentation
 
 - Upstreams compared: live SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767`, live RMC `b6d677947dd8ebcb06194a66798938645fed5a54`, and CMU through CS-0296.
@@ -4386,7 +4415,7 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - `Adapted`: CS-0303 and CS-0305 through CS-0320 repair legacy solution migration/capability gates; RMC body, blood-volume, organ-stage, and separate `chemicals` routes; `RMCChemicalEffect` context; stasis tick cancellation; RMC wound bleed authority; defibrillator blockers/skills/DoAfter/healing/charge order; current syringe and pill contracts; CM reagent identity/guide filtering; authored solution-transfer menus; all removed Food/Drink declarations; and all retained vapor-hit consumers. The adaptations use current SS14 owners with `_RMC14` partials/events/data where a narrow extension exists.
 - `Missing`: No additional high-confidence Medical/Chemistry hook with a current content-side mapping remains known after the final stale-component, event-raiser, and data-field sweeps. This classification is bounded to reviewed source and resource contracts, not runtime proof.
 - `Behavior changed`: CM food declarations that carried no explicit timing adopt current SS14's one-second unified-ingestion default and current Food presentation; RMC drinks retain their prior 0.5-second timing but use current unified digestion. Empty reusable drinks now return unhandled after the current popup, including the bucket whose old `ignoreEmpty` also suppressed that popup. Current predicted defibrillator charging audio and secondary-operator shock supersede the old server audio lifecycle. Current staged metabolism, flat organs, one-solution vapors, and solution-entity examination intentionally replace their deleted counterparts.
-- `Deferred`: 102 legacy `SolutionContainerManager` declarations remain in the six Medical resource families (`chemical-containers`, `auto_injectors`, `pills`, `beaker`, `bottles`, and `syringes`) and are serviced by the explicitly temporary compatibility loader; 376 remain repository-wide. Defibrillator training-dummy/no-mind/rotten-target nuances, the old charging-audio cleanup contract, broad parent-tree migration, and all prototype/runtime matrices remain for the checkpoint. The compatibility manager adds spawn-time migration and duplicate-solution warning risk and should be removed family by family, not by blind replacement.
+- `Deferred`: 102 legacy `SolutionContainerManager` declarations remain in the six Medical resource families (`chemical-containers`, `auto_injectors`, `pills`, `beaker`, `bottles`, and `syringes`) and are serviced by the explicitly temporary compatibility loader; there are 376 `_RMC14` prototype declarations plus 9 serialized `_RMC14` map instances, for 385 Resources-wide. Defibrillator training-dummy/no-mind/rotten-target nuances, the old charging-audio cleanup contract, broad parent-tree migration, and all prototype/runtime matrices remain for the checkpoint. The compatibility manager adds spawn-time migration and duplicate-solution warning risk and should be removed family by family, not by blind replacement.
 - Intentional CM/RMC divergence retained: separate injectable `chemicals` flow; ten-reagent heart cap; RMC blood volumes; wound-owned bleed rates and both replicated bleed CVars (`rmc.bloodloss_multiplier`, `rmc.bleed_time_multiplier`); hard stasis semantics; medical-skill defibrillation; blocker clothing/targets; grouped/electrogenetic healing; RMC ChemMaster client presets; special syringe timing; pill timing/capacity; drink timing/reusability; custom transfer menus; reagent filtering; and vapor-driven fire/acid/stealth hooks.
 - Upstream betterment retained: current entity-owned solutions remove manager lookups from hot paths; flat organs and explicit stage routing make lifecycle/authority boundaries inspectable; auto-paused staged metabolism avoids catch-up timing surprises; unified shared ingestion removes duplicate Food/Drink authorities; current shared/predicted defibrillation and solution transfer keep client feedback aligned with server revalidation; and current single-solution vapors let RMC consumers avoid legacy enumeration.
 - Validation evidence: targeted Shared builds after the final code waves succeeded with 0 errors and 6 pre-existing warnings; targeted Server builds succeeded with 0 errors and 4 pre-existing warnings; the guide wave's Client build succeeded with 0 errors and 8 pre-existing warnings. Exact-path `git diff --check` ran before every Medical/Chemistry commit. Static searches now find no `_RMC14` entity component declaration named `Food` or `Drink`, no stale RMC metabolism group key, one current `RMCChemicalEffect` dispatch, one current `VaporHitEvent` raiser, and all retained subscribers accounted for.
@@ -4705,3 +4734,26 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - Files changed: `Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.BasicEntity.cs`, `Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.Battery.cs`, `Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.Revolver.cs`, `Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.Solution.cs`, `Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.cs`, `Content.Shared/Sericulture/SericultureSystem.cs`, `Content.Server/Animals/Systems/EggLayerSystem.cs`, `Content.Server/Botany/Systems/BotanySystem.Seed.cs`, `Content.Server/Storage/EntitySystems/SpawnItemsOnUseSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation evidence: Static review accounts for all nine behavior-bearing files in #44764 and confirms the pinned RobustToolbox already exposes `SpawnAtPosition`, `SpawnNextToOrDrop`, transform rotation, and grid/map attachment APIs; no engine change was made. Direct retained reach includes 33 RMC `SpawnItemsOnUse` declarations, 14 RMC revolver-provider declarations, two current RMC battery-provider guns, and casing ejection across RMC guns. Targeted Shared and Server builds succeeded with 0 errors and 6/4 known warnings; exact-path `git diff --check` passed. Tests remain deferred until the 1,000-upstream-commit checkpoint.
 - Remaining debt: Runtime coverage must fire every provider from stationary/moving grids and RMC vehicles, compare predicted/server projectile parents, eject casings while moving/rotating, use spawn-items while held/in containers, lay eggs/harvest/sericulture on grids and vehicles, fill/no-free-hand cases, sound PVS, deletion, stack merging, transform shutdown, and resimulation. Current SS14 itself still has raw coordinate-attached spawn paths in the ballistic provider; RMC air-shot and several vehicle item/key/loader paths also require a separate moving-parent sweep rather than being broadened beyond #44764 without runtime evidence.
+
+## CS-0347 - Close the five-subsystem behavioral source audit
+
+- Upstreams compared: live SS14 `887e80fd08a196228765b5b70c72b80d800203f6`, live RMC `b6d677947dd8ebcb06194a66798938645fed5a54`, and CMU through CS-0346. RobustToolbox remains pinned at `7bfa10ec04bfc8f00956419609bd6ec370f9bbac`.
+- Areas: Shooting, Interactions, Physics, Medical, Chemistry, Movement, GameTicking, Gamerules
+- Classification: all five requested subsystem source audits are complete. This is not a claim of executable, prototype, networking, prediction, timing, or gameplay parity.
+- Risk: High until the queued 1,000-commit validation checkpoint and subsystem runtime matrices execute.
+
+| Subsystem | Closure evidence | Final bounded classification |
+| --- | --- | --- |
+| Shooting | CS-0267, `b4bc654752b09999603e311817c8b457464fc1d4`; later pickup lifecycle/veto corrections CS-0271/CS-0272; moving-parent fix CS-0346. | `Aligned`: current fire timing, request validation, provider state, hitscan, and server projectile authority. `Adapted`: retained RMC skills, IFF, falloff, remote/attachable guns, moving-gun coordinates, provider/reload policy, pickup veto, and stable spawn parenting. `Missing`: expendable-light load veto, RMC muzzle-flash hook, and auto-eject preference. `Behavior changed`: generic provider batching and unmarked hold-to-fire use current SS14 policy. `Deferred`: ordinary RMC projectile correlation/prediction/lag compensation and the remaining raw moving-parent spawn sweep. |
+| Interactions and Physics | CS-0302, `6b6a51439aa1c8266895b490bc8455747802eaf3`; moving-parent interaction/transform correction CS-0346. | `Aligned`: current interaction, hand, DoAfter, pull, throw, construction, storage, collision, and server-validation owners. `Adapted`: RMC vehicles, step/anchor/pickup/drop, construction, carry/buckle, storage, visibility, spray, and collision policy. `Missing`: no additional high-confidence source hook in the bounded map. `Behavior changed`: current timing, throw presentation, and cleanup supersede old fork paths. `Deferred`: presentation/policy edges, stale strap marker, lag compensation, and runtime/prototype matrices. |
+| Medical and Chemistry | CS-0321, `27314f013fb0cf6693f4a97b7dba9b579eec2ae1`. | `Aligned`: current solution, ingestion, body/organ, metabolism, bloodstream, defibrillator, vapor, and machine owners. `Adapted`: retained RMC solution/body/blood/chemical/stasis/wound/defibrillator/syringe/pill/food/drink/vapor contracts. `Missing`: no additional high-confidence source hook in the bounded map. `Behavior changed`: current ingestion defaults, staged metabolism, flat organs, solution entities, and predicted defibrillation. `Deferred`: 385 legacy resource instances, nuanced treatment behavior, and all prototype/runtime matrices. |
+| Movement | CS-0326, `95f84258a622af6b07bc48e61de4195dcb86bd80`. | `Aligned`: current mover relay, speed aggregation, fixed contacts, climb lifecycle, and prediction owners. `Adapted`: RMC vehicle input, carry/buckle/rest/climb/walk/collision/water policy. `Missing`: no additional high-confidence source hook in the bounded map. `Behavior changed`: RMC walk floor is retained while current relays/fixed-step physics supersede old owners. `Deferred`: dynamic water-cover recomputation, stale strap marker removal, lag compensation, and runtime matrices. |
+| GameTicking and Gamerules | CS-0345, `0644b6e20be6f9745c085c40665503d6a3e039cd`. | `Aligned`: current rule lifecycle, job/role authority, spawn events, restart cleanup, status/replay, ghost/admin validation. `Adapted`: RMC round control, loadouts, arrivals, dropships, replay metadata, ghost roles/raffles, greetings, observers, filters, trackers, timers, whitelists, fallback, admin spawn, and Join Xeno. `Missing`: the confirmed profile/stats/commendation client-UI wave. `Behavior changed`: current event ordering, role containers, fallbacks, and status-thread ownership. `Deferred`: safe `planet_map`, UI/policy gaps, dropship edge timing, post-round Join Xeno precision, and runtime/network matrices. |
+
+- Final live-head delta: SS14 advanced three commits after the merged `fbb3c79b2d206eede2210fbbf5ca1c237c262767` head. `4a50966c80de4455b3117e644ff144eeb782f5f0` changes human eye-color policy and is `Deferred` as outside the five core-system scopes. `5c019004ed475746921ecb35267ac2033b0066b3` only splits uplink catalogs and is `Aligned` with no relevant behavior delta, so its structural churn was not replayed. `887e80fd08a196228765b5b70c72b80d800203f6` fixes vehicle-parented spawns and is `Adapted` through CS-0346 using APIs already available in the pinned engine.
+- Upstream betterment retained: current shared prediction plus authoritative revalidation provides one decision owner for firing, interaction, movement, role assignment, and treatment completion; fixed physics contacts and capped impulses improve deterministic ordering; generated component state and explicit lifecycle events make reconciliation inspectable; current solution entities/unified ingestion remove duplicate hot-path managers; current FTL events and replicated dropship state replace transient client-only reads; deterministic role/tracker mappings avoid initialization ambiguity; and cross-thread status isolation avoids unsafe ECS access.
+- Intentional divergence: RMC/CMU balance, role, skill, IFF, wound, chemistry, movement, Distress Signal, xeno, survivor, dropship, scuttle/hijack, and admin policies listed in the five closure entries remain intentional. The audit restored those policies at current SS14 authority seams instead of reviving duplicate legacy systems.
+- Files changed: `docs/upstream-sync/core-system-audit.md`; the exact source/resource files for each material finding are listed in CS-0256 through CS-0346 and their atomic commits.
+- Validation evidence: final targeted DebugOpt builds on the audited tree completed with 0 errors for Shared (6 known warnings), Client (8 known warnings), Server (4 known warnings), Server.Database (0 warnings), and Shared.Database (0 warnings). `git diff --check` was required before every logical commit. No test, prototype, linter, executable-startup, or gameplay suite was run at 853/1,000 upstream commits; compilation demonstrates API compatibility only.
+- Remaining debt: Execute every runtime/prototype/network/prediction matrix recorded by CS-0267, CS-0302, CS-0321, CS-0326, CS-0345, and CS-0346. The highest-confidence known source gaps are the Shooting light/muzzle-flash/auto-eject items and the Gamerules client-UI wave; the highest-risk design debt is ordinary projectile correlation/lag compensation. The temporary solution compatibility layer and moving-parent spawn paths need bounded family-by-family follow-ups.
+- Next recommended subsystem: first reach 1,000 classified upstream commits and run the queued prototype loading, focused integration suites, executable startup, and full solution build. Then implement the deferred Gamerules profile/stats/commendation UI wave, followed by the Shooting prediction and moving-parent debt as a separately designed audit.
