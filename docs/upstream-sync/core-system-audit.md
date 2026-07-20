@@ -1319,3 +1319,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Structures/Machines/Medical/cryo_pod.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype review confirms only `ItemToggle` is removed and the cryopod's UI, health analyzer, cryogenic solution, and interaction components remain. Prototype loading and open/close interaction coverage are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a regression that one interaction produces one cryopod state transition and verify no `ItemToggleComponent` is inherited through future parent changes.
+
+## CS-0093 — Make the trading outpost anchor indestructible
+
+- Upstream: [space-wizards/space-station-14#39389](https://github.com/space-wizards/space-station-14/pull/39389), `1599a6b2713ec8824d81a96c432ff4b59fa2a5c1`, 2025-08-05
+- Areas: Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The Automated Trade Station's map anchor now uses `StationAnchorIndestructible`, preventing damage or machine teardown from disabling the fixed outpost grid.
+- RMC/CMU divergence: CMU has the exact target-final map context at UID `887` and no RMC override for this standard shuttle map or anchor prototype.
+- Decision and rationale: Port the retained one-prototype map substitution after verifying the UID, coordinates, and indestructible prototype all match the fork.
+- Files changed: `Resources/Maps/Shuttles/trading_outpost.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static map tracing confirms only UID `887` changes prototype and remains at `7.5,-22.5` under the same map parent. Map/prototype loading and destruction resistance are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a map invariant that static service outposts use indestructible anchors unless a destructible anchor is explicitly documented as gameplay.
