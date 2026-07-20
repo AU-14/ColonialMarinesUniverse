@@ -161,13 +161,13 @@ behavior to port.
 2342 | 3cec0aa47602e7b84443d059db782ec4608b3d45 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2343 | 7540c8f152670f152da75b644bfb2faff979f88d | Pry open critical Borgs (#42319) | Deferred | Medical, Interactions | Prying open critical borgs adds a six-file mob-state lock-bypass feature crossing retained borg behavior.
 2344 | 0b27da57f47fbd861be25c059cef6d17b648f2c2 | Automatic changelog update | Irrelevant | — | Generated changelog only.
-2345 | c7e4f20f02871641bb5cc00da7dbc4d7fe3c0d12 | Fix tritium fires breaking conservation of mass (#41870) | Deferred | Chemistry, Physics | Tritium fire mass conservation changes core atmos constants and reaction math and begins a multi-commit reaction cluster.
+2345 | c7e4f20f02871641bb5cc00da7dbc4d7fe3c0d12 | Fix tritium fires breaking conservation of mass (#41870) | Ported (CS-0238) | Chemistry, Physics | Ported with its index-2351 correction so both burn branches consume tritium and oxygen from the target-final ratio.
 2346 | ac1870a25f2c90e90e68c37d78336e16223020bc | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2347 | 60e172e12883fc10135a4cf09d42bdfcd0ba0026 | AirtightSystem Tests (#42190) | Deferred | Physics | The 600-line Airtight integration suite also changes server airtight APIs and must land with the later initialization optimization.
 2348 | b5f0dd81fc177507b2867ea551cdda9096be229b | Increase trit-to-frezon ratio from 1:8 to 1:50 (#42400) | Deferred | Chemistry, Physics | The tritium-to-frezon ratio is a major atmos balance change tied to the reaction cluster.
 2349 | 1fdc70aa3decfb3b8c2c8e47235da1bf2710477c | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2350 | 2399b61ca7721fd77615672cdd30a237e238ebbd | EmpResistance cleanup (#42402) | Deferred | Interactions, Gamerules | EMP resistance cleanup changes the new component contract and consumers introduced at index 2331.
-2351 | 6cae5d9c4ae533f460088a09aa864fdeef851f53 | Fix TritiumFireReaction low fuel limiting behavior (#42407) | Deferred | Chemistry, Physics | The low-fuel TritiumFireReaction correction depends on the index-2345 conservation rewrite.
+2351 | 6cae5d9c4ae533f460088a09aa864fdeef851f53 | Fix TritiumFireReaction low fuel limiting behavior (#42407) | Ported (CS-0238) | Chemistry, Physics | Integrated the target-final `Min` limiter atomically with index 2345 instead of retaining its short-lived `Max` regression.
 2352 | 0af56cefcb461b40890802269d14750789ad023f | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2353 | fb133494cc3bedf82e9b60a434574e9029e04244 | Decouple gibbing from the body system (#42405) | Deferred | Medical, Interactions, GameTicking | The 37-file gibbing extraction rewires body, blood, destructible, round-end, borg, magic, kitchen, and test behavior.
 2354 | 9979a08225e084d3c44a85a29be1f481f4b566d8 | Maid uniform sprite change. (#38335) | PortCandidate | — | Self-contained maid and mini-maid uniform sprite refresh.
