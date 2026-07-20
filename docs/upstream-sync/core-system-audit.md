@@ -1449,3 +1449,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Chemistry/EntitySystems/SharedSolutionContainerSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static usage review confirms no CMU/RMC caller consumes these overloads as Boolean, and the success path returns the same quantity used to decide whether `UpdateChemicals` runs. Shared compilation and zero/partial/full removal cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Migrate quantity-sensitive RMC consumers to use the returned amount where accounting currently assumes the requested volume was available.
+
+## CS-0103 — Include entity-effect threshold boundaries
+
+- Upstream: [space-wizards/space-station-14#36289](https://github.com/space-wizards/space-station-14/pull/36289), `f6475bd26419cd46a7eb3fe553ac0262f15f2909`, 2025-07-30
+- Areas: Medical, Chemistry, Interactions
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: Entity-effect conditions for entity temperature, solution temperature, total damage, and hunger now accept values exactly equal to configured minimum or maximum thresholds. Missing required components or reagent sources still fail the condition.
+- RMC/CMU divergence: RMC adds many reagent and medical effects that reuse these shared predicates. Their configured endpoints now behave as inclusive limits, matching guidebook wording and pinned target semantics, without changing the fork's threshold values.
+- Decision and rationale: Port all four retained comparisons together so the same min/max contract applies across effect types rather than leaving chemically equivalent conditions inconsistent.
+- Files changed: `Content.Server/EntityEffects/EntityEffectSystem.cs`, `Content.Shared/EntityEffects/EffectConditions/SolutionTemperature.cs`, `Content.Shared/EntityEffects/EffectConditions/TotalDamage.cs`, `Content.Shared/EntityEffects/EffectConditions/TotalHunger.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static truth-table review confirms values below/above the interval fail, endpoints and interior values pass, and missing data still fails. Shared/server compilation plus endpoint cases for all four predicates and representative RMC reagent effects are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Audit RMC prototypes that may have compensated for the old exclusive behavior by offsetting min/max values, especially overdose and critical-health boundaries.
