@@ -159,7 +159,7 @@ behavior to port.
 2540 | fdd8c2a1f6db2fe5c8d178b9f4353e407b11b05a | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2541 | 52155802e38c10612ca8197ebe98feec7b334053 | Doors can now close on clown spider webs (#42589) | PortCandidate | Interactions, Physics | Focused fixture and collision behavior correction.
 2542 | b33c780a6c5888db376a5aaa92e8472f5ed27c04 | Automatic changelog update | Irrelevant | — | Generated changelog only.
-2543 | fd0f52592788f0e1b0d7485c8c4dd83161d905f2 | Fixes Opporozidone Instarot issues (#42472) | PortCandidate | Medical, Chemistry, GameTicking | CMU's rotting shutdown still resets scheduling incorrectly.
+2543 | fd0f52592788f0e1b0d7485c8c4dd83161d905f2 | Fixes Opporozidone Instarot issues (#42472) | Ported (CS-0247) | Medical, Chemistry, GameTicking | Removing rot no longer resets perishable scheduling and triggers server-age catch-up decay.
 2544 | 36d09f982b40e692851ada4c1b4ba7cf455c16c9 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2545 | 5b9ff83ce5ed68aeda6f2b0b17d273e42c5030a9 | Fix: Make vote call button toggable (#42450) | PortCandidate | Interactions | Focused vote-button UI-state correction.
 2546 | 093257280bd7ea71516553d825aa581f598da570 | Fix InstrumentSystem.Update exception when deleting band lead (#42331) | Ported (CS-0246) | Interactions, GameTicking | Invalid, deleted, or distant band leaders now end follower processing immediately after cleanup.

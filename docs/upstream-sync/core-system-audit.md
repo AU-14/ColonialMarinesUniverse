@@ -3347,3 +3347,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Instruments/InstrumentSystem.cs`, `docs/upstream-sync/inventory-wave-0013.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static control-flow review confirms all three cleanup branches continue the outer instrument query and valid leaders still reach range and playback processing. Server compilation plus leader deletion, component removal, out-of-range separation, valid bands, simultaneous cleanup, MIDI-limit cleanup, and repeated update cases are queued for the index-2999 checkpoint.
 - Follow-up/debt: None; this is the pinned target's final behavior for the affected loop.
+
+## CS-0247 â€” Preserve perishable scheduling when rot is removed
+
+- Upstream: [space-wizards/space-station-14#42472](https://github.com/space-wizards/space-station-14/pull/42472), `fd0f52592788f0e1b0d7485c8c4dd83161d905f2`, 2026-01-26
+- Areas: Medical, Chemistry, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Shutting down `RottingComponent` no longer resets `PerishableComponent.RotNextUpdate` to zero. Opporozidone and other rot-removal paths therefore retain their normal scheduled perishing tick instead of processing one historical interval per server update until they catch up with current game time.
+- RMC/CMU divergence: CMU retains upstream perishing and Opporozidone behavior alongside RMC's tactical-map listener for rotting removal. That listener subscribes independently to `ComponentRemove`, so corpse-marker cleanup still occurs; RMC corpse handling, ammonia generation, cold-storage checks, rejuvenation, and medicine values are unchanged.
+- Decision and rationale: Remove the vestigial shutdown subscription and handler exactly as in the pinned target. The server update advances `RotNextUpdate` by only one interval per frame, so zeroing it after a long-running round creates frame-rate catch-up decay and can immediately undo medical rot reduction. Existing map-init and mob-state transitions already initialize legitimate schedules from current time.
+- Files changed: `Content.Shared/Atmos/Rotting/SharedRottingSystem.cs`, `docs/upstream-sync/inventory-wave-0013.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static lifecycle review confirms no remaining rot-removal path requires the zero reset, map initialization and living/dead transitions still schedule from current game time, and RMC tactical-map removal remains subscribed. Shared/server compilation plus Opporozidone early/late-round treatment, rejuvenation, revival, repeated rot removal, cold storage, map initialization, tactical-map marker cleanup, and ordinary perishing are queued for the index-2999 checkpoint.
+- Follow-up/debt: None; the removed handler was vestigial and the pinned target contains no replacement scheduling hook.
