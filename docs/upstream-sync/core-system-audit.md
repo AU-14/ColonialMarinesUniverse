@@ -2906,3 +2906,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Structures/Lighting/base_lighting.yml`, `Resources/Prototypes/Entities/Structures/Lighting/ground_lighting.yml`, `Resources/Prototypes/Entities/Structures/Lighting/strobe_lighting.yml`, `Resources/Prototypes/Entities/Structures/Walls/railing.yml`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms all six target bounds now satisfy left-bottom-right-top ordering and no neighboring valid railing fixtures changed. YAML/prototype validation plus fixture creation, directional placement, collision, movement obstruction, interaction reach, map-load, and inherited RMC prototype cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1671 as `Ported (CS-0213)` when wave 0009 is committed.
+
+## CS-0214 — Log validated RCD radial-mode selections
+
+- Upstream: [space-wizards/space-station-14#40986](https://github.com/space-wizards/space-station-14/pull/40986), `0ed111d307bdee5a1b967c3490fa01c4b73d293f`, 2025-11-05
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: A valid RCD radial-menu selection now emits a low-impact `LogType.RCD` entry containing the actor, resolved mode, and construction prototype. Prototype existence checking now resolves the selected `RCDPrototype` once so the same validated object supplies the log data.
+- RMC/CMU divergence: CMU keeps RMC's RCD recipes, charge behavior, construction validation, and existing high-impact execution logs. This adds selection intent to the shared audit trail without changing the selected prototype, charging, do-after, or construction outcome; invalid or unavailable selections still return before logging.
+- Decision and rationale: Port the upstream validation-and-log delta exactly and remove the now-unused charges-component import. Mode changes are meaningful administrative context when investigating later RCD construction or deletion logs.
+- Files changed: `Content.Shared/RCD/Systems/RCDSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static event-flow review confirms availability and prototype checks precede the log, the resolved prototype matches the assigned ID, and existing execution logs remain intact. Shared compilation plus valid, invalid, unavailable, null-construction-prototype, client/server, radial-menu, charge, and admin-log cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1641 as `Ported (CS-0214)` when wave 0009 is committed.
