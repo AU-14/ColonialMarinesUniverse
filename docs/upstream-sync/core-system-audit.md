@@ -1813,3 +1813,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Power/Components/ApcPowerReceiverComponent.cs`, `Content.Server/Power/EntitySystems/PowerNetSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static control-flow review confirms RMC receivers remain excluded, internal-battery receivers check pause before all mutation, and ordinary receivers retain the existing pre-event pause check. Server compilation plus paused/unpaused battery discharge, recharge, enabled-state, and unchanged-`NeedsPower` event cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a focused power-net regression that pauses an internally powered receiver across multiple updates and asserts charge, load, appearance, and event counts remain stable.
+
+## CS-0131 — Correct the nuclear operative medic title
+
+- Upstream: [space-wizards/space-station-14#40055](https://github.com/space-wizards/space-station-14/pull/40055), `05a4e6d00cd9e1794caded0f1c402d098f492219`, 2025-09-01
+- Areas: Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The `NukeopsMedic` round-start metadata now formats its generated title as `Corpsman` instead of the generic `Agent` title.
+- RMC/CMU divergence: CMU retains the upstream nuclear-operative medic prototype and metadata format key unchanged, so the localization-only correction applies without adapting RMC roles.
+- Decision and rationale: Port the retained one-line title correction because the role-specific format already exists and no gameplay permissions or loadout behavior changes.
+- Files changed: `Resources/Locale/en-US/random-metadata/random-metadata-formats.ftl` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static reference review confirms only the nuclear-operative medic uses this format key. Localization loading and resolved round-start metadata are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None.
