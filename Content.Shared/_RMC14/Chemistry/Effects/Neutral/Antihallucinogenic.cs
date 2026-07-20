@@ -34,7 +34,7 @@ public sealed partial class Antihallucinogenic : RMCChemicalEffect
         bloodstream.RemoveBloodstreamChemical(args.TargetEntity, MindbreakerToxin, 2.5f);
         bloodstream.RemoveBloodstreamChemical(args.TargetEntity, SpaceDrugs, 2.5f);
 
-        var status = args.EntityManager.System<SharedStatusEffectsSystem>();
+        var status = args.EntityManager.System<StatusEffectsSystem>();
         status.TryAddTime(args.TargetEntity, SeeingRainbows, TimeSpan.FromSeconds(PotencyPerSecond * -10)); // SeeingRainbows is M.druggy in CM13
         // TODO RMC14 Hallucination
     }

@@ -20,7 +20,7 @@ public sealed partial class RainbowOverlay : Overlay
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IEntitySystemManager _sysMan = default!;
     [Dependency] private IGameTiming _timing = default!;
-    private readonly SharedStatusEffectsSystem _statusEffects = default!;
+    private readonly StatusEffectsSystem _statusEffects = default!;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     public override bool RequestScreenTexture => true;

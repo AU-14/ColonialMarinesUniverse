@@ -10,7 +10,7 @@ public sealed partial class DrowsinessSystem : SharedDrowsinessSystem
 {
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private IOverlayManager _overlayMan = default!;
-    [Dependency] private SharedStatusEffectsSystem _statusEffects = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
 
     private DrowsinessOverlay _overlay = default!;
 

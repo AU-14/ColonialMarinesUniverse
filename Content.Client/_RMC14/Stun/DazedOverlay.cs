@@ -16,7 +16,7 @@ public sealed class DazedOverlay : Overlay
 
     private readonly IEntityManager _entManager;
     private readonly IPlayerManager _playerManager;
-    private readonly SharedStatusEffectsSystem _statusEffect;
+    private readonly StatusEffectsSystem _statusEffect;
 
     private readonly ShaderInstance _vignetteShader;
 
@@ -27,7 +27,7 @@ public sealed class DazedOverlay : Overlay
     {
         _entManager = entManager;
         _playerManager = playerManager;
-        _statusEffect = entManager.System<SharedStatusEffectsSystem>();
+        _statusEffect = entManager.System<StatusEffectsSystem>();
 
         _vignetteShader = prototypeManager.Index(CircleMaskShader).InstanceUnique();
     }

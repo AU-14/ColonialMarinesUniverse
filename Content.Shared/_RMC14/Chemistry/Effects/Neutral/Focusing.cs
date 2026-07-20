@@ -32,7 +32,7 @@ public sealed partial class Focusing : RMCChemicalEffect
         var bloodstream = args.EntityManager.System<SharedRMCBloodstreamSystem>();
         var drunkSystem = args.EntityManager.System<SharedDrunkSystem>();
         var stutterSystem = args.EntityManager.System<SharedStutteringSystem>();
-        var statusEffects = args.EntityManager.System<SharedStatusEffectsSystem>();
+        var statusEffects = args.EntityManager.System<StatusEffectsSystem>();
 
         bloodstream.RemoveBloodstreamAlcohols(args.TargetEntity, potency);
         drunkSystem.TryRemoveDrunkenessTime(args.TargetEntity, PotencyPerSecond * 2);

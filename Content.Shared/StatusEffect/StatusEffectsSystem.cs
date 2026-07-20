@@ -9,7 +9,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.StatusEffect
 {
-    [Obsolete("Migration to Content.Shared.StatusEffectNew.SharedStatusEffectsSystem is required")]
+    [Obsolete("Migration to Content.Shared.StatusEffectNew.StatusEffectsSystem is required")]
     public sealed partial class StatusEffectsSystem : EntitySystem
     {
         [Dependency] private IPrototypeManager _prototypeManager = default!;
@@ -354,7 +354,7 @@ namespace Content.Shared.StatusEffect
         /// <param name="uid">The entity to check on.</param>
         /// <param name="key">The status effect ID to check for</param>
         /// <param name="status">The status effect component, should you already have it.</param>
-        [Obsolete("Migration to Content.Shared.StatusEffectNew.SharedStatusEffectsSystem is required")]
+        [Obsolete("Migration to Content.Shared.StatusEffectNew.StatusEffectsSystem is required")]
         public bool CanApplyEffect(EntityUid uid, string key, StatusEffectsComponent? status = null, bool force = false)
         {
             // don't log since stuff calling this prolly doesn't care if we don't actually have it
