@@ -10,6 +10,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Popups;
+using Content.Shared.Station;
 using Content.Shared.Tag;
 using Content.Shared.Tools.Components;
 using Robust.Shared.Map;
@@ -28,6 +29,7 @@ public sealed partial class AnchorableSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private PullingSystem _pulling = default!;
     [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedStationSystem _stationSystem = default!;
     [Dependency] private SharedToolSystem _tool = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
     [Dependency] private TagSystem _tagSystem = default!;
@@ -257,10 +259,7 @@ public sealed partial class AnchorableSystem : EntitySystem
         // Log anchor attempt (server only)
         _adminLogger.Add(LogType.Anchor, LogImpact.Low, $"{ToPrettyString(userUid):user} is trying to anchor {ToPrettyString(uid):entity} to {transform.Coordinates:targetlocation}");
 
-        if (TryComp<PhysicsComponent>(uid, out var anchorBody) &&
-            !TileFree(transform.Coordinates, anchorBody, uid)) //RMC14
-        {
-            _popup.PopupClient(Loc.GetString("anchorable-occupied"), uid, userUid);
+        if (!CanAnchorAt(uid, transform.Coordinates, userUid))
             return;
 
         if (AnyUnstackable(uid, transform.Coordinates))
@@ -321,7 +320,7 @@ public sealed partial class AnchorableSystem : EntitySystem
         if (!Resolve(entity, ref entity.Comp))
             return true;
 
-        if (TileFree(coordinates, entity.Comp))
+        if (TileFree(coordinates, entity.Comp, entity.Owner)) // RMC14
             return true;
 
         _popup.PopupEntity(Loc.GetString("anchorable-occupied"), entity, user);

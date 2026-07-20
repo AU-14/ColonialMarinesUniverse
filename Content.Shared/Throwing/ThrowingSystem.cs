@@ -1,12 +1,10 @@
 using System.Numerics;
 using Content.Shared.Administration.Logs;
-using Content.Shared.Camera;
 using Content.Shared.CCVar;
 using Content.Shared.Construction.Components;
 using Content.Shared.Construction.EntitySystems;
 using Content.Shared.Database;
 using Content.Shared.Friction;
-using Content.Shared.Gravity;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
@@ -21,6 +19,7 @@ using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
+using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 
 namespace Content.Shared.Throwing;
@@ -39,20 +38,22 @@ public sealed partial class ThrowingSystem : EntitySystem
     private float _airDamping;
 
     [Dependency] private IGameTiming _gameTiming = default!;
-    [Dependency] private SharedGravitySystem _gravity = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private ThrownItemSystem _thrownSystem = default!;
-    [Dependency] private SharedCameraRecoilSystem _recoil = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private IConfigurationManager _configManager = default!;
 
-    // TODO RMC14
+    // RMC14
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedMeleeWeaponSystem _melee = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private RotateToFaceSystem _rotateToFace = default!;
+
+    [Dependency] private EntityQuery<AnchorableComponent> _anchorableQuery = default!;
+    [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
+    [Dependency] private EntityQuery<ProjectileComponent> _projectileQuery = default!;
 
     private readonly SoundSpecifier _throwSound = new SoundCollectionSpecifier("RMCThrowing");
 
@@ -76,7 +77,8 @@ public sealed partial class ThrowingSystem : EntitySystem
         bool animated = true,
         bool playSound = true,
         bool doSpin = true,
-        ThrowingUnanchorStrength unanchor = ThrowingUnanchorStrength.None)
+        ThrowingUnanchorStrength unanchor = ThrowingUnanchorStrength.None,
+        bool rotate = true)
     {
         var thrownPos = _transform.GetMapCoordinates(uid);
         var mapPos = _transform.ToMapCoordinates(coordinates);
@@ -84,7 +86,7 @@ public sealed partial class ThrowingSystem : EntitySystem
         if (mapPos.MapId != thrownPos.MapId)
             return;
 
-        TryThrow(uid, mapPos.Position - thrownPos.Position, baseThrowSpeed, user, pushbackRatio, friction, compensateFriction: compensateFriction, recoil: recoil, animated: animated, playSound: playSound, doSpin: doSpin, unanchor: unanchor);
+        TryThrow(uid, mapPos.Position - thrownPos.Position, baseThrowSpeed, user, pushbackRatio, friction, compensateFriction: compensateFriction, recoil: recoil, animated: animated, playSound: playSound, doSpin: doSpin, unanchor: unanchor, rotate: rotate);
     }
 
     /// <summary>
@@ -109,7 +111,7 @@ public sealed partial class ThrowingSystem : EntitySystem
         bool animated = true,
         bool playSound = true,
         bool doSpin = true,
-        bool unanchor = false,
+        ThrowingUnanchorStrength unanchor = ThrowingUnanchorStrength.None,
         bool rotate = true)
     {
         if (!_physicsQuery.TryComp(uid, out var physics))
@@ -150,7 +152,7 @@ public sealed partial class ThrowingSystem : EntitySystem
         bool animated = true,
         bool playSound = true,
         bool doSpin = true,
-        bool unanchor = false,
+        ThrowingUnanchorStrength unanchor = ThrowingUnanchorStrength.None,
         bool rotate = true)
     {
         if (baseThrowSpeed <= 0 || direction == Vector2Helpers.Infinity || direction == Vector2Helpers.NaN || direction == Vector2.Zero || friction < 0)
@@ -245,7 +247,6 @@ public sealed partial class ThrowingSystem : EntitySystem
 
         if (recoil)
         {
-            // _recoil.KickCamera(user.Value, -direction * 0.04f);
             var localPos = Vector2.Transform(transform.LocalPosition + direction, _transform.GetInvWorldMatrix(transform));
 
             if (rotate)
@@ -261,15 +262,22 @@ public sealed partial class ThrowingSystem : EntitySystem
         }
 
         // Give thrower an impulse in the other direction
-        if (pushbackRatio == 0.0f ||
-            physics.Mass == 0f ||
-            !TryComp(user.Value, out PhysicsComponent? userPhysics))
-            return;
-        var msg = new ThrowPushbackAttemptEvent();
-        RaiseLocalEvent(uid, msg);
+        if (pushbackRatio != 0.0f &&
+            physics.Mass != 0f &&
+            TryComp(user.Value, out PhysicsComponent? userPhysics))
+        {
+            var msg = new ThrowPushbackAttemptEvent();
+            RaiseLocalEvent(uid, msg);
 
             if (!msg.Cancelled)
-                _physics.ApplyLinearImpulse(user.Value, -impulseVector / physics.Mass * pushbackRatio * MathF.Min(massLimit, physics.Mass), body: userPhysics);
+            {
+                var pushEv = new ThrowerImpulseEvent();
+                RaiseLocalEvent(user.Value, ref pushEv);
+                const float massLimit = 5f;
+
+                if (pushEv.Push)
+                    _physics.ApplyLinearImpulse(user.Value, -impulseVector / physics.Mass * pushbackRatio * MathF.Min(massLimit, physics.Mass), body: userPhysics);
+            }
         }
 
         var others = Filter.PvsExcept(user.Value);

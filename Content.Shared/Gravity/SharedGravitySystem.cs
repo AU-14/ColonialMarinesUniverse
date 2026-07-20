@@ -25,8 +25,10 @@ public abstract partial class SharedGravitySystem : EntitySystem
 
     public override void Initialize()
     {
-        [Dependency] protected IGameTiming Timing = default!;
-        [Dependency] private AlertsSystem _alerts = default!;
+        base.Initialize();
+        // Grid Gravity
+        SubscribeLocalEvent<GridInitializeEvent>(OnGridInit);
+        SubscribeLocalEvent<GravityChangedEvent>(OnGravityChange);
 
         // Weightlessness
         SubscribeLocalEvent<GravityAffectedComponent, MapInitEvent>(OnMapInit);

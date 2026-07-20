@@ -9,9 +9,12 @@ namespace Content.Shared.Damage.Systems;
 
 public sealed partial class SlowOnDamageSystem : EntitySystem
 {
-    public sealed partial class SlowOnDamageSystem : EntitySystem
+    [Dependency] private MovementSpeedModifierSystem _movementSpeedModifierSystem = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+
+    public override void Initialize()
     {
-        [Dependency] private MovementSpeedModifierSystem _movementSpeedModifierSystem = default!;
+        base.Initialize();
 
         SubscribeLocalEvent<SlowOnDamageComponent, DamageChangedEvent>(OnDamageChanged);
         SubscribeLocalEvent<SlowOnDamageComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMovespeed);
