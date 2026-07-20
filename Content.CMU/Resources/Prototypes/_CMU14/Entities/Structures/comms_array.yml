@@ -223,8 +223,8 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: ANPRCRelayAnchor
-    fullRange: 8
-    partialRange: 12
+    fullRange: 12
+    partialRange: 16
     channels:
     - radioGovforAlpha
     - radioGovforBravo
