@@ -1652,7 +1652,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
 
     private bool ValidateFlareCondition(EntityUid flare, EntityUid pack, EntityUid user, bool suppressPopup)
     {
-        if (!TryComp<ExpendableLightComponent>(flare, out var expendable))
+        if (!TryComp<SharedExpendableLightComponent>(flare, out var expendable))
             return true;
 
         if (expendable.CurrentState != ExpendableLightState.BrandNew)

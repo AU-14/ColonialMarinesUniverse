@@ -56,6 +56,11 @@ public enum ExpendableLightState
 {
     BrandNew,
     Lit,
+    PhaseOne,
+    PhaseTwo,
+    PhaseThree,
+    PhaseFour,
+    PhaseFive,
     Fading,
     Dead
 }

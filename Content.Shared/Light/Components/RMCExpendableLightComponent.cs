@@ -1,10 +1,16 @@
 namespace Content.Shared.Light.Components;
 
 /// <summary>
-///     This is an extension of the upstream ExpendableLightComponent
+///     RMC data shared by the current client and server expendable-light components.
 /// </summary>
-public sealed partial class ExpendableLightComponent
+public abstract partial class SharedExpendableLightComponent
 {
+    [DataField]
+    public bool StartsActivated;
+
+    [DataField]
+    public bool UsesOverlay = true;
+
     /// <summary>
     ///     Can the expendable light be picked up while it's turned on.
     /// </summary>
@@ -46,4 +52,12 @@ public sealed partial class ExpendableLightComponent
 
     [DataField]
     public string PhaseFiveBehaviourID = "phase_5";
+
+    public bool Activated => CurrentState is ExpendableLightState.Lit
+        or ExpendableLightState.PhaseOne
+        or ExpendableLightState.PhaseTwo
+        or ExpendableLightState.PhaseThree
+        or ExpendableLightState.PhaseFour
+        or ExpendableLightState.PhaseFive
+        or ExpendableLightState.Fading;
 }

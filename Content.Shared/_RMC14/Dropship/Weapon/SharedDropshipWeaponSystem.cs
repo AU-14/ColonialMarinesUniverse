@@ -227,7 +227,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
     {
         using (args.PushGroup(nameof(FlareSignalComponent)))
         {
-            if (TryComp(ent, out ExpendableLightComponent? expendable) && expendable.CurrentState != ExpendableLightState.Dead)
+            if (TryComp(ent, out SharedExpendableLightComponent? expendable) && expendable.CurrentState != ExpendableLightState.Dead)
             {
                 args.PushMarkup(Loc.GetString("rmc-laser-designator-signal-flare-examine"));
             }
@@ -1347,7 +1347,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
     private bool IsFlareLit(EntityUid flare)
     {
-        return TryComp(flare, out ExpendableLightComponent? expendable) && expendable.Activated;
+        return TryComp(flare, out SharedExpendableLightComponent? expendable) && expendable.Activated;
     }
 
     private bool TryActivateSignalFlareTarget(Entity<ActiveFlareSignalComponent> ent)
