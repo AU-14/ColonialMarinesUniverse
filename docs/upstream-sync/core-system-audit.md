@@ -2971,3 +2971,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Mobs/NPCs/animals.yml`, `Resources/Prototypes/Entities/Mobs/Player/guardian.yml`, `Resources/Prototypes/Entities/Objects/Specific/Chapel/bibles.yml`, `Resources/Prototypes/Roles/Jobs/Civilian/clown.yml`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype review confirms only the four upstream-selected damage specifiers changed and each retains its existing blunt/piercing or bible behavior. YAML/prototype validation plus clumsy firing for each source, resistance and wound handling, trained/untrained bible use, failure/success healing, damage totals, and RMC mob cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1642 as `Ported (CS-0218)` when wave 0009 is committed.
+
+## CS-0219 — Preserve authored regal-rat movement speeds
+
+- Upstream: [space-wizards/space-station-14#41420](https://github.com/space-wizards/space-station-14/pull/41420), `162a17411febcd048d5ca7bce13a0cfdb5593802`, 2025-11-15
+- Areas: Movement, Medical
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The rat king and rat servant bodies now set `requiredLegs: 0`, which opts them out of body-part-derived base-speed recalculation. Their explicit movement speeds—most notably the king's five-tile sprint speed—are therefore no longer overwritten by the placeholder single-leg rat body definition.
+- RMC/CMU divergence: CMU retains RMC movement modifiers and its older upstream body-part implementation, whose `UpdateMovementSpeed` already returns when `RequiredLegs <= 0`. The port leaves input, mover, combat, slowdown, and RMC status modifiers intact; it only prevents the body system from replacing these prototypes' authored base speeds.
+- Decision and rationale: Port both affected body overrides exactly. The rat body still lacks a proper multi-leg model, so treating its placeholder leg as authoritative produces an unintended base-speed reset; zero is the existing documented opt-out until that body model is corrected.
+- Files changed: `Resources/Prototypes/Entities/Mobs/NPCs/regalrat.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static body/movement review confirms both prototypes explicitly set their base speeds, the shared body system treats zero as an early return, and no other rat definitions changed. YAML/prototype validation plus spawn, map-init, sprint/walk, body initialization, limb changes, slowdown/status stacking, player control, AI movement, and RMC movement-modifier cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1710 as `Ported (CS-0219)` when wave 0009 is committed; restore limb-derived speed only when the rat body gains an accurate leg model and matching movement values.
