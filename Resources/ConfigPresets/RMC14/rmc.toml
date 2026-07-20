@@ -38,6 +38,7 @@ panic_bunker.enabled = false
 round_end_pvs_overrides = false
 round_restart_time = 180
 lobbyduration = 180
+new_character_jobs = "CMRifleman"
 
 [gateway]
 generator_enabled = false

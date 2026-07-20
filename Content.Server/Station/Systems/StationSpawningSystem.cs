@@ -93,7 +93,15 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         RoleLoadout? loadout = null;
 
         // Need to get the loadout up-front to handle names if we use an entity spawn override.
-        var jobLoadout = LoadoutSystem.GetJobPrototype(prototype?.ID);
+        // RMC14: Survivor variants share the customizable loadout of their base survivor job.
+        var loadoutJob = prototype;
+        if (prototype?.UseLoadoutOfJob is { } useLoadoutOfJob &&
+            ProtoMan.Resolve(useLoadoutOfJob, out JobPrototype? inheritedLoadoutJob))
+        {
+            loadoutJob = inheritedLoadoutJob;
+        }
+
+        var jobLoadout = LoadoutSystem.GetJobPrototype(loadoutJob?.ID);
 
         if (ProtoMan.TryIndex(jobLoadout, out RoleLoadoutPrototype? roleProto))
         {
