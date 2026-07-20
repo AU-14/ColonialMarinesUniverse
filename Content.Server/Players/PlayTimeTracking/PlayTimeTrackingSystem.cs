@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server._RMC14.PlayTimeTracking;
 using Content.Server.Administration;
 using Content.Server.Administration.Managers;
 using Content.Server.Afk;
@@ -34,6 +35,7 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IServerPreferencesManager _preferencesManager = default!;
+    [Dependency] private RMCPlayTimeManager _rmcPlayTime = default!;
     [Dependency] private SharedRoleSystem _roles = default!;
     [Dependency] private PlayTimeTrackingManager _tracking = default!;
 
@@ -242,6 +244,9 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
         if (!_cfg.GetCVar(CCVars.GameRoleTimers))
             return true;
 
+        if (_rmcPlayTime.IsExcluded(player, job.Id))
+            return true;
+
         if (!_tracking.TryGetTrackerTimes(player, out var playTimes))
         {
             Log.Error($"Unable to check playtimes {Environment.StackTrace}");
@@ -305,6 +310,7 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
                 roles.Add(job.ID);
         }
 
+        _rmcPlayTime.RemoveWhereExcluded(player, roles);
         return roles;
     }
 
@@ -321,6 +327,7 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
             playTimes ??= new Dictionary<string, TimeSpan>();
         }
 
+        var excluded = _rmcPlayTime.GetExcluded(userId);
         for (var i = 0; i < jobs.Count; i++)
         {
             if (ProtoMan.Resolve(jobs[i], out var job)
@@ -328,6 +335,9 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
             {
                 continue;
             }
+
+            if (job != null && excluded?.Contains(job.ID) == true)
+                continue;
 
             jobs.RemoveSwap(i);
             i--;
