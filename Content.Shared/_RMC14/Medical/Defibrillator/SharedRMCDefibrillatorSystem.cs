@@ -48,7 +48,7 @@ public abstract partial class SharedRMCDefibrillatorSystem : EntitySystem
                 continue;
 
             if (reagent.Metabolisms == null ||
-                !reagent.Metabolisms.TryGetValue(ent.Comp.MetabolismId, out var effects))
+                !reagent.Metabolisms.Metabolisms.TryGetValue(ent.Comp.MetabolismId, out var effects))
             {
                 continue;
             }

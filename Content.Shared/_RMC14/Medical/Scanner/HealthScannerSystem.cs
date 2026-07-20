@@ -10,7 +10,6 @@ using Content.Shared.Interaction;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Content.Shared.Storage.Components;
-using Content.Shared.Storage.EntitySystems;
 using Content.Shared.Timing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
@@ -22,7 +21,6 @@ public sealed partial class HealthScannerSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private SharedEntityStorageSystem _entityStorage = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedRMCBloodstreamSystem _rmcBloodstream = default!;
@@ -111,8 +109,8 @@ public sealed partial class HealthScannerSystem : EntitySystem
     /// <returns></returns>
     private bool CanUseHealthScannerPopup(Entity<HealthScannerComponent> scanner, EntityUid user, ref EntityUid target)
     {
-        SharedEntityStorageComponent? entityStorage = null;
-        if (HasComp<HealthScannableContainerComponent>(target) && _entityStorage.ResolveStorage(target, ref entityStorage))
+        if (HasComp<HealthScannableContainerComponent>(target) &&
+            TryComp<EntityStorageComponent>(target, out var entityStorage))
         {
             foreach (var entity in entityStorage.Contents.ContainedEntities)
             {
