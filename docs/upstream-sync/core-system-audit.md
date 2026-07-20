@@ -4393,3 +4393,15 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - Tests: no test or prototype suite was run at 853/1,000 upstream commits, per the checkpoint rule. Compilation demonstrates API compatibility only.
 - Remaining risk: High-risk runtime matrices remain for solution migration/prototype loading, organ insertion/removal, oral/injected/inhaled metabolism, stasis boundaries, wound/prediction resimulation, defibrillator cancellation/redirection/final-cell behavior, edible inheritance, empty containers, vapor collisions, machine UI round trips, map serialization, and all authored reagent doses/capacities.
 - Next subsystem: Movement, beginning with climb obstacle policy, grounded walk-speed calculation, resting post-processing, and conditional RMC water contacts/occlusion.
+
+## CS-0322 - Restore RMC climb obstacle policy
+
+- Upstreams compared: live SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767`, live RMC `b6d677947dd8ebcb06194a66798938645fed5a54`, and CMU through CS-0321.
+- Areas: Movement, Climbing, Collision masks, Interaction events, Prediction
+- Classification: Missing -> Adapted.
+- Risk: Medium before the fix because the merged climb owner ignored the RMC barricade collision layer and the RMC obstacle preflight; low-to-medium after it pending runtime collision/prediction coverage.
+- Behavior/API delta: Current SS14 owns the shared climb lifecycle and raises `AttemptClimbEvent` on the selected target. Live RMC additionally includes `BarricadeImpassable` in the climb collision mask and rejects paths blocked by RMC obstacles before starting the climb. The bulk merge retained `RMCMovementSystem.CanClimbOver` but disconnected it from the current owner.
+- Decision and behavior: Keep current SS14 climb timing, DoAfter, virtual-controller, animation, cancellation, target event, and prediction paths. A narrow `_RMC14` partial invokes the retained obstacle policy before the current target event and excludes the target from that scan so `AttemptClimbEvent` is not raised twice; the collision mask again includes RMC barricades.
+- Files changed: `Content.Shared/Climbing/Systems/ClimbSystem.cs`, `Content.Shared/_RMC14/Movement/ClimbSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation evidence: Static flow review confirms the RMC preflight runs once before current climb startup, the selected target is still validated by the current event owner, and the mask covers table, low-impassable, and barricade layers. Targeted Shared DebugOpt `--no-dependencies` build succeeded with 0 errors and 6 pre-existing warnings; exact-path `git diff --check` passed. Tests remain deferred until the 1,000-upstream-commit checkpoint.
+- Remaining debt: Runtime coverage must exercise adjacent and intervening barricades, climbable/non-climbable obstacles, cancelled target events, predicted rollback, moving targets, buckled entities, and simultaneous climbs. Live RMC's older buckle-specific preflight ordering is not reproduced without evidence that current buckle validation loses behavior.

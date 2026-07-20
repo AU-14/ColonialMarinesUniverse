@@ -47,7 +47,9 @@ public sealed partial class ClimbSystem : VirtualController
     [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
 
     private const string ClimbingFixtureName = "climb";
-    private const int ClimbingCollisionGroup = (int) (CollisionGroup.TableLayer | CollisionGroup.LowImpassable);
+    private const int ClimbingCollisionGroup = (int) (CollisionGroup.TableLayer |
+                                                        CollisionGroup.LowImpassable |
+                                                        CollisionGroup.BarricadeImpassable);
 
 
     public override void Initialize()
@@ -215,6 +217,9 @@ public sealed partial class ClimbSystem : VirtualController
         // is currently on top of something..
         if (climbing.IsClimbing)
             return true;
+
+        if (!RMCPreflightClimb(user, entityToMove, climbable))
+            return false;
 
         var ev = new AttemptClimbEvent(user, entityToMove, climbable);
         RaiseLocalEvent(climbable, ref ev);
