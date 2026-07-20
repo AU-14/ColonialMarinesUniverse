@@ -279,6 +279,13 @@ public partial class AtmosphereSystem
 
     public bool RemovePipeNet(Entity<GridAtmosphereComponent?> grid, PipeNet pipeNet)
     {
+        // This can be raised even when the grid has no grid-atmosphere component.
+        if (pipeNet.Grid is not null)
+        {
+            var ev = new PipeNodeGroupRemovedEvent(grid, pipeNet.NetId);
+            RaiseLocalEvent(ref ev);
+        }
+
         return _atmosQuery.Resolve(grid, ref grid.Comp, false) && grid.Comp.PipeNets.Remove(pipeNet);
     }
 
@@ -329,3 +336,11 @@ public partial class AtmosphereSystem
     [ByRefEvent] private record struct IsHotspotActiveMethodEvent
         (EntityUid Grid, Vector2i Tile, bool Result = false, bool Handled = false);
 }
+
+/// <summary>
+/// Raised broadcast when a pipe node group within a grid has been removed.
+/// </summary>
+/// <param name="Grid">The grid with the removed node group.</param>
+/// <param name="NetId">The network ID of the removed node group.</param>
+[ByRefEvent]
+public record struct PipeNodeGroupRemovedEvent(EntityUid Grid, int NetId);

@@ -1098,3 +1098,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/SSDIndicator/SSDIndicatorComponent.cs`, `Content.Shared/SSDIndicator/SSDIndicatorSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms MapInit initializes and dirties both deadlines, the update loop respects SSD state, pause-aware times, deletion, and polling cadence, and the current status API exposes `TryUpdateStatusEffectDuration`. Shared compilation and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add an integration regression for map initialization, attach/detach, pause/unpause, delayed sleep, and single permanent status-effect ownership, including the RMC training dummy.
+
+## CS-0076 — Dispose stale atmosphere-monitor pipe networks
+
+- Upstream: [space-wizards/space-station-14#38974](https://github.com/space-wizards/space-station-14/pull/38974), `002afe8056cb3e6e554bec98343506a13eaeacf6`, 2025-07-23
+- Areas: Physics, GameTicking, Interactions
+- Status: Adapted
+- Risk: Medium
+- Behavior/API delta: Removing a pipe network now broadcasts its grid and network ID so atmosphere-monitor caches can delete every matching subnet before topology is rebuilt. Replicated subnet keys also carry `Color` directly, avoiding string serialization and client-side hex reparsing.
+- RMC/CMU divergence: RMC does not override the atmosphere-monitor console or pipe-net lifecycle, while its maps use the same colored piping and grid atmosphere systems. The port preserves CMU's server-owned pipe-color architecture and changes only cache disposal plus the shared network-state representation.
+- Decision and rationale: Port the complete retained four-file contract atomically because the event producer, cache consumer, serialized record, and renderer must agree. Keep the event broadcast before actual set removal so listeners can still associate the old network with its grid.
+- Files changed: `Content.Server/Atmos/EntitySystems/AtmosphereSystem.API.cs`, `Content.Server/Atmos/Consoles/AtmosMonitoringConsoleSystem.cs`, `Content.Shared/Atmos/Consoles/Components/AtmosMonitoringConsoleComponent.cs`, `Content.Client/Atmos/Consoles/AtmosMonitoringConsoleNavMapControl.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms the producer raises for a network with a grid, the console restricts cleanup to that grid and network ID, all subnet construction uses typed color, and the client consumes it directly. Client/shared/server compilation and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a topology regression that removes a monitored pipe net, verifies every affected cached chunk drops the old ID, and round-trips a non-white pipe color through component state.

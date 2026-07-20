@@ -1,4 +1,5 @@
 using Content.Server.Atmos.Components;
+using Content.Server.Atmos.EntitySystems;
 using Content.Server.Atmos.Piping.Components;
 using Content.Server.DeviceNetwork.Components;
 using Content.Server.NodeContainer;
@@ -53,6 +54,7 @@ public sealed partial class AtmosMonitoringConsoleSystem : SharedAtmosMonitoring
 
         // Grid events
         SubscribeLocalEvent<GridSplitEvent>(OnGridSplit);
+        SubscribeLocalEvent<PipeNodeGroupRemovedEvent>(OnPipeNodeGroupRemoved);
     }
 
     #region Event handling
@@ -295,6 +297,22 @@ public sealed partial class AtmosMonitoringConsoleSystem : SharedAtmosMonitoring
 
     #region Pipe net functions
 
+    private void OnPipeNodeGroupRemoved(ref PipeNodeGroupRemovedEvent args)
+    {
+        // Remove cached entries for this network from chunks on the affected grid.
+        if (!_gridAtmosPipeChunks.TryGetValue(args.Grid, out var chunkData))
+            return;
+
+        foreach (var chunk in chunkData.Values)
+        {
+            foreach (var key in chunk.AtmosPipeData.Keys)
+            {
+                if (key.NetId == args.NetId)
+                    chunk.AtmosPipeData.Remove(key);
+            }
+        }
+    }
+
     private void RebuildAtmosPipeGrid(EntityUid gridUid, MapGridComponent grid)
     {
         var allChunks = new Dictionary<Vector2i, AtmosPipeChunk>();
@@ -411,7 +429,7 @@ public sealed partial class AtmosMonitoringConsoleSystem : SharedAtmosMonitoring
                 continue;
 
             var netId = GetPipeNodeNetId(pipeNode);
-            var subnet = new AtmosMonitoringConsoleSubnet(netId, pipeNode.CurrentPipeLayer, pipeColor.Color.ToHex());
+            var subnet = new AtmosMonitoringConsoleSubnet(netId, pipeNode.CurrentPipeLayer, pipeColor.Color);
             var pipeDirection = pipeNode.CurrentPipeDirection;
 
             chunk.AtmosPipeData.TryGetValue(subnet, out var atmosPipeData);
