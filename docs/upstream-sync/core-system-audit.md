@@ -3023,3 +3023,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Client/Shuttles/UI/ShuttleMapControl.xaml.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static coordinate-flow review confirms beacon and free-position clicks now use the same pixel basis, `InverseMapPosition` expects that basis, and parallax bounds match the drawing surface. Client compilation plus UI-scale 1/non-1, free and beacon FTL, zoom, pan, rotation, parallax tiling, edge clicks, standard shuttle, and RMC shuttle-console cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1890 as `Ported (CS-0222)` when wave 0010 is committed.
+
+## CS-0223 — Ignore predicted client-only RCD placement sources
+
+- Upstream: [space-wizards/space-station-14#41648](https://github.com/space-wizards/space-station-14/pull/41648), `61c58a6341821f8d8b988da1899a5e5c0726a1ae`, 2025-12-01
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The client RCD construction-ghost updater now returns while the active-hand RCD is a client-side predicted entity. Temporary predicted RCDs are no longer installed as placement sources or used for rotation network events before their authoritative entity is reconciled.
+- RMC/CMU divergence: RMC's borg modules and predicted inventory behavior make transient client-only RCDs a practical path in CMU. The guard is limited to that transient ownership state; authoritative handheld and borg-provided RCDs still update recipes, direction, range, tile/object mode, and placement overlays through the retained system.
+- Decision and rationale: Port the target-final client-entity guard before component and prototype resolution. Beginning placement against an entity that the server cannot identify leaves permission state tied to an entity that prediction later deletes, which is the source of the stuck overlay.
+- Files changed: `Content.Client/RCD/RCDConstructionGhostSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static update-flow review confirms the guard runs only for non-null client-side entities, authoritative RCDs keep the existing path, and non-RCD hands still clear an active RCD placer. Client compilation plus predicted spawn/reconciliation, borg module, handheld RCD, item switch/drop, recipe/direction change, overlay clear, range, and rotation-event cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1834 as `Ported (CS-0223)` when wave 0010 is committed.
