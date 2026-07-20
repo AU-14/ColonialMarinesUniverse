@@ -1163,3 +1163,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.IntegrationTests/Tests/RoundEndTest.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms the loop returns only after the subscribed round-end event changes the counter and otherwise fails after exactly 60 synchronized ticks. The integration test is queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: If legitimate round transitions exceed 60 ticks after future rule changes, derive the bound from configured durations while keeping it in simulation time.
+
+## CS-0081 — Exercise delayed entity update loops in integration tests
+
+- Upstream: [space-wizards/space-station-14#38901](https://github.com/space-wizards/space-station-14/pull/38901), `c3ff6c9184889bf009a27e736cd4639a8d05ef93`, 2025-07-23
+- Areas: GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The broad entity spawn/delete integration cases now simulate 450 ticks (15 seconds at the expected test tick rate) instead of 15 ticks, allowing most delayed system update loops to execute before entity-state assertions.
+- RMC/CMU divergence: The existing CMU entity-test fixture and fork-specific prototypes remain intact; only the retained target-final simulation windows and adjacent whitespace correction are applied.
+- Decision and rationale: Port the longer tick horizon so cleanup and lifecycle faults hidden behind periodic updates become visible at the checkpoint rather than escaping a short smoke window.
+- Files changed: `Content.IntegrationTests/Tests/EntityTest.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms both target-final spawn/delete waits are 450 ticks. The expanded integration cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Track runtime at the checkpoint; if these cases become a bottleneck, retain the behavioral horizon while optimizing fixture batching rather than shortening coverage.
