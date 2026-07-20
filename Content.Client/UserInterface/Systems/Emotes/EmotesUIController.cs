@@ -18,7 +18,6 @@ namespace Content.Client.UserInterface.Systems.Emotes;
 [UsedImplicitly]
 public sealed partial class EmotesUIController : UIController, IOnStateChanged<GameplayState>
 {
-    [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     
@@ -186,6 +185,6 @@ public sealed partial class EmotesUIController : UIController, IOnStateChanged<G
 
     private void HandleRadialButtonClick(EmotePrototype prototype)
     {
-        _entityManager.RaisePredictiveEvent(new PlayEmoteMessage(prototype.ID));
+        EntityManager.RaisePredictiveEvent(new PlayEmoteMessage(prototype.ID));
     }
 }
