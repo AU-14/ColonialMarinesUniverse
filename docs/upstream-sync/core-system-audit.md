@@ -647,3 +647,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Guns/Battery/battery_guns.yml`, `Resources/Prototypes/Entities/Objects/Weapons/Guns/Pistols/pistols.yml`, `Content.IntegrationTests/Tests/Weapons/Ranged/DefaultAutomaticFireModeTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the pinned target retains both full-auto defaults and both selectable modes. A regression was added that spawns both weapons, verifies full-auto selection with semi-auto still available, and uses the Mk58 as a control for the unchanged base-pistol default. Per the requested 20-port cadence, execution is deferred to the CS-0041–CS-0060 checkpoint.
 - Follow-up/debt: Audit later upstream selective-fire default changes individually; do not normalize RMC marine weapons to SS14 defaults without a separate balance decision.
+
+## CS-0042 — Preserve complete strip-time durations
+
+- Upstream: [space-wizards/space-station-14#43022](https://github.com/space-wizards/space-station-14/pull/43022), `7bc062ee14a6549c961c6d5f4555035ad3a17951`, 2026-02-26
+- Areas: Interactions, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Strip-time modifiers now operate on complete `TimeSpan` values and retain sub-second precision. Durations longer than a minute no longer use only their seconds component, additive fractions are no longer discarded, and a negative final duration still clamps to zero.
+- RMC/CMU divergence: RMC's inventory skill system writes a strip multiplier into the same event, while standard thieving and clothing systems apply additive reductions and delays. The corrected calculation preserves those fork-specific multipliers and makes their fractional results accurate without changing skill tables or do-after cancellation rules.
+- Decision and rationale: Port the target-final tick calculation exactly. Using `TotalSeconds` would also fix the component bug but would introduce an unnecessary floating-point round trip; multiplying and adding `TimeSpan` values before clamping their ticks preserves the upstream precision contract.
+- Files changed: `Content.Shared/Strip/Components/StrippableComponent.cs`, `Content.Tests/Shared/Strip/StripTimeCalculationTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms there are no later target changes to this calculation and all downstream subscribers only mutate `Multiplier`, `Additive`, or `Stealth`. Regressions cover a 90.5-second input with fractional multiplier/additive values and the zero clamp. Per the requested 20-port cadence, execution is deferred to the CS-0041–CS-0060 checkpoint.
+- Follow-up/debt: Audit other interaction timers for accidental use of `TimeSpan.Seconds` or `Milliseconds`, especially RMC skill-adjusted do-afters, before normalizing their arithmetic.
