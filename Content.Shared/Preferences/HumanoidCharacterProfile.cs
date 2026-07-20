@@ -1053,14 +1053,6 @@ namespace Content.Shared.Preferences
             return ReferenceEquals(this, other) || MemberwiseEquals(other);
         }
 
-        public bool Equals(HumanoidCharacterProfile? other)
-        {
-            if (other is null)
-                return false;
-
-            return ReferenceEquals(this, other) || MemberwiseEquals(other);
-        }
-
         public override bool Equals(object? obj)
         {
             return obj is HumanoidCharacterProfile other && Equals(other);
