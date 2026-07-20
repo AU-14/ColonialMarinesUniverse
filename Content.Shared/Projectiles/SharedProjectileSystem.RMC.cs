@@ -1,9 +1,11 @@
 using Content.Shared._RMC14.Projectiles.Penetration;
+using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared._RMC14.Xenonids.Damage;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
+using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
@@ -12,8 +14,9 @@ namespace Content.Shared.Projectiles;
 
 public abstract partial class SharedProjectileSystem
 {
-    [Dependency] private INetManager _rmcNet = default!;
     [Dependency] private DamageableSystem _rmcDamageable = default!;
+    [Dependency] private SharedContainerSystem _rmcContainers = default!;
+    [Dependency] private INetManager _rmcNet = default!;
 
     private void InitializeRMCProjectile()
     {
@@ -34,6 +37,27 @@ public abstract partial class SharedProjectileSystem
         }
 
         ProjectileCollide((projectile.Owner, projectile.Comp, args.OurBody), args.OtherEntity);
+    }
+
+    private void PreventRmcContainerOwnerCollision(ProjectileComponent projectile, ref PreventCollideEvent args)
+    {
+        if (projectile.Weapon is not { } weapon ||
+            !HasComp<GunIgnoreContainerOwnerCollisionComponent>(weapon))
+        {
+            return;
+        }
+
+        var current = weapon;
+        while (_rmcContainers.TryGetContainingContainer((current, null), out var container))
+        {
+            if (args.OtherEntity == container.Owner)
+            {
+                args.Cancelled = true;
+                return;
+            }
+
+            current = container.Owner;
+        }
     }
 
     /// <summary>

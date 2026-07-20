@@ -3580,3 +3580,16 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - Files changed: `Content.Client/Weapons/Ranged/Systems/GunSystem.cs`, `Content.Client/_RMC14/Weapons/Ranged/GunSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation evidence: Repository search confirms exactly two current prototypes carry `GunClickToFire` and no other consumer existed. Static shot-counter review confirms a non-continuous semi-auto request remains capped after one shot until `RequestStopShootEvent` resets it. Client wave compilation and runtime press/hold/release coverage remain required; tests are deferred until the 1,000-upstream-commit checkpoint.
 - Remaining debt: The broader old RMC rearm predicate also varied with selected/available fire modes. This adaptation deliberately preserves current SS14 behavior for unmarked guns; mode-wide policy changes are deferred pending playtesting.
+
+## CS-0262 - Ignore remote weapon container owners
+
+- Upstreams compared: SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767` and RMC `b6d677947dd8ebcb06194a66798938645fed5a54`.
+- Areas: Shooting, Physics, Vehicles
+- Classification: Missing -> Adapted
+- Risk: High for mounted weapons before the fix; low after it.
+- Behavior/API delta: Current projectile collision prevention ignored only the shooter and weapon. Sixteen retained RMC hardpoints still carry `GunIgnoreContainerOwnerCollisionComponent`, but its containing-container traversal was lost, allowing newly fired vehicle projectiles to collide with the hardpoint's vehicle or another enclosing mount before leaving it.
+- RMC/CMU divergence: Unmarked guns retain current SS14 shooter/weapon collision behavior. Marked RMC weapons ignore only owners in their actual containing-container chain; unrelated nearby entities and vehicle occupants remain valid collision candidates.
+- Decision and rationale: Call a fork-specific helper from the existing `ProjectileComponent`/`PreventCollideEvent` owner and walk current container APIs from the projectile's weapon outward. This avoids a second unordered collision-policy system and preserves the original marker contract.
+- Files changed: `Content.Shared/Projectiles/SharedProjectileSystem.cs`, `Content.Shared/Projectiles/SharedProjectileSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation evidence: Exact event-pair review confirms the helper runs in the existing projectile collision-prevention owner. Static prototype and container review finds 16 active hardpoint markers and verifies each owner comparison is limited to the weapon's live containment chain. `dotnet build Content.Shared/Content.Shared.csproj --configuration DebugOpt --no-restore --nologo --verbosity:minimal --disable-build-servers` succeeded with 0 errors and 6 unrelated warnings. Client/Server wave validation and runtime tests remain deferred as recorded for this checkpoint.
+- Remaining debt: Runtime coverage should fire each mounted weapon while nested in its hardpoint and vehicle, then verify collisions resume after the projectile exits and still affect unrelated targets.

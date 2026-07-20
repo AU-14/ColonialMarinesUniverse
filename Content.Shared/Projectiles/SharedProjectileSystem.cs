@@ -205,7 +205,10 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         if (component.IgnoreShooter && (args.OtherEntity == component.Shooter || args.OtherEntity == component.Weapon))
         {
             args.Cancelled = true;
+            return;
         }
+
+        PreventRmcContainerOwnerCollision(component, ref args);
     }
 
     public void SetShooter(EntityUid id, ProjectileComponent component, EntityUid shooterId)
