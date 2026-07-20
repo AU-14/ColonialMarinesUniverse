@@ -2502,3 +2502,16 @@ Date completed: 2026-07-20
 - Files changed: contraband severity and base prototypes, English contraband localization, `docs/upstream-sync/inventory-wave-0003.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype/localization review confirms the new severity resolves, the abstract base references it, existing severities remain unchanged, and the contract has no unresolved consumer. Prototype and localization loading are queued for the index-1999 checkpoint.
 - Follow-up/debt: Port each retained item migration independently; do not bulk-reclassify RMC equipment without a CMU policy review.
+
+## CS-0183 — Classify xenoborg equipment as highly illegal
+
+- Upstream: [space-wizards/space-station-14#39856](https://github.com/space-wizards/space-station-14/pull/39856), `d699a4e985374c6c624d6ef9ccecf75c0ac86dc5`, 2025-09-24
+- Areas: Interactions, Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Every prototype inheriting `BaseXenoborgContraband` now examines as `HighlyIllegal` instead of ordinary `Major` contraband. This covers xenoborg weapons, tools, modules, devices, and specialist equipment through their existing shared parent.
+- RMC/CMU divergence: No `_RMC14` prototype inherits `BaseXenoborgContraband`; RMC marine and xenonid equipment classifications are unchanged. The port relies on the separately committed CS-0182 severity contract.
+- Decision and rationale: Replace the explicit placeholder severity with the retained upstream classification at the common parent. This applies the policy consistently without touching each xenoborg item or altering allowed departments and jobs.
+- Files changed: `Resources/Prototypes/Entities/Objects/base_contraband.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static inheritance review confirms all current xenoborg consumers resolve through the shared base, `HighlyIllegal` now exists locally, and no RMC consumer is affected. Prototype loading and legality examination are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1008 as `Ported (CS-0183)` when wave 0006 is committed.
