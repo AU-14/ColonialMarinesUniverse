@@ -2620,3 +2620,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Traits/Assorted/PermanentBlindnessSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static shutdown-flow review confirms the cleanup runs only when the blindness component is removed and a `BlindableComponent` remains, after lowering its minimum damage. Shared compilation plus blind-form transformation, direct trait removal, normal eye damage, and oculine cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1205 as `Ported (CS-0191)` when wave 0007 is committed.
+
+## CS-0192 — Scan past obstructions for singularity containment
+
+- Upstream: [space-wizards/space-station-14#39593](https://github.com/space-wizards/space-station-14/pull/39593), `766c2b875948851c1944fd22275b267d0b1131d0`, 2025-10-10
+- Areas: Physics, GameTicking
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: A singularity generator's failsafe raycast now skips non-containment hits and continues to the first containment field within range. An unrelated fixture in the ray result set no longer makes the generator report that a valid static field is missing.
+- RMC/CMU divergence: RMC has no singularity-generator or containment-field override. Fork maps and machinery are untouched; any standard containment setup used by CMU receives the corrected query behavior.
+- Decision and rationale: Move the loop break onto the successful containment-field path exactly as retained upstream. The ray is intentionally filtered by component after physics intersection, so stopping on a hit that fails that filter defeats the scan.
+- Files changed: `Content.Server/Singularity/EntitySystems/SingularityGeneratorSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static loop review confirms empty/no-field results still fail, unrelated hits are skipped, the first containment hit is selected, and the existing static-body check remains authoritative. Server compilation plus clear, obstructed, movable, out-of-range, and rotated-grid containment cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1227 as `Ported (CS-0192)` when wave 0007 is committed.
