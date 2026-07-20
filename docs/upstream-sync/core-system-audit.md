@@ -1748,3 +1748,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Medical/Healing/HealingComponent.cs`, `Content.Shared/Medical/Healing/HealingSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static control-flow review confirms other-target treatment retains the base delay, self-treatment uses patient damage, repeats recalculate after each heal, and terminal/depleted-stack paths show completion feedback. Shared compilation plus zero/partial/critical damage, self/other, repeat, depleted-stack, movement-cancel, and prediction reconciliation cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add focused healing-system tests for the computed multiplier and repeated DoAfter delay mutation before deeper integration with RMC wound treatment.
+
+## CS-0126 — Treat Diona sap as artifact blood
+
+- Upstream: [space-wizards/space-station-14#40211](https://github.com/space-wizards/space-station-14/pull/40211), `905935e6edb61311db105bb195fe6872f9804cc5`, 2025-09-15
+- Areas: Chemistry, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Xenoartifact blood-reactive nodes now include the `Sap` reagent, allowing Diona sap contact to satisfy the same artifact trigger as other species blood reagents.
+- RMC/CMU divergence: CMU retains both the Sap reagent and upstream xenoartifact trigger table without fork-specific overrides.
+- Decision and rationale: Add the retained reagent identifier to the existing whitelist; no reaction quantities or other blood chemistry are changed.
+- Files changed: `Resources/Prototypes/XenoArch/triggers.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype review confirms `Sap` exists and is added only to `TriggerBlood`. Prototype loading plus positive Sap and negative non-blood reagent artifact activation cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Audit RMC-specific blood substitutes against this trigger list during the deeper chemistry pass.
