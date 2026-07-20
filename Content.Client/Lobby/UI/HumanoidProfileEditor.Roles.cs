@@ -2,6 +2,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Client.Lobby.UI.Loadouts;
 using Content.Client.Lobby.UI.Roles;
+using Content.Shared._RMC14.Prototypes;
 using Content.Shared.Clothing;
 using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
@@ -119,7 +120,7 @@ public sealed partial class HumanoidProfileEditor
 
         // Get all displayed departments
         var departments = new List<DepartmentPrototype>();
-        foreach (var department in _prototypeManager.EnumeratePrototypes<DepartmentPrototype>())
+        foreach (var department in _prototypeManager.EnumerateCM<DepartmentPrototype>())
         {
             if (department.EditorHidden)
                 continue;
@@ -151,7 +152,9 @@ public sealed partial class HumanoidProfileEditor
                         ("departmentName", departmentName))
                 };
 
-                if (firstCategory)
+                category.Visible = !department.Hidden;
+
+                if (firstCategory && category.Visible)
                 {
                     firstCategory = false;
                 }
@@ -170,7 +173,8 @@ public sealed partial class HumanoidProfileEditor
                         {
                             new Label
                             {
-                                Text = Loc.GetString("humanoid-profile-editor-department-jobs-label",
+                                Text = department.CustomName ?? Loc.GetString(
+                                    "humanoid-profile-editor-department-jobs-label",
                                     ("departmentName", departmentName)),
                                 Margin = new Thickness(5f, 0, 0, 0)
                             }
@@ -183,6 +187,7 @@ public sealed partial class HumanoidProfileEditor
 
             var jobs = department.Roles.Select(jobId => _prototypeManager.Index(jobId))
                 .Where(job => job.SetPreference)
+                .Where(job => !job.Hidden)
                 .ToArray();
 
             Array.Sort(jobs, JobUIComparer.Instance);
