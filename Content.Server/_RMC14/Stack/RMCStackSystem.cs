@@ -11,6 +11,6 @@ public sealed partial class RMCStackSystem : SharedRMCStackSystem
 
     public override EntityUid? Split(Entity<StackComponent?> stack, int amount, EntityCoordinates spawnPosition)
     {
-        return _stack.Split(stack, amount, spawnPosition, stack);
+        return _stack.Split(stack, amount, spawnPosition);
     }
 }

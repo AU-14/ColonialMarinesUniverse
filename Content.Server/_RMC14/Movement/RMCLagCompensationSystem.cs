@@ -12,17 +12,12 @@ namespace Content.Server._RMC14.Movement;
 
 public sealed partial class RMCLagCompensationSystem : SharedRMCLagCompensationSystem
 {
-    [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private LagCompensationSystem _lagCompensation = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
-        Subs.CVar(_config,
-            RMCCVars.RMCLagCompensationMilliseconds,
-            v => _lagCompensation.BufferTime = TimeSpan.FromMilliseconds(v),
-            true);
     }
 
     public override (EntityCoordinates Coordinates, Angle Angle) GetCoordinatesAngle(EntityUid uid,

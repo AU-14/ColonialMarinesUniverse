@@ -35,6 +35,6 @@ public sealed partial class CrashLandSystem : SharedCrashLandSystem
             ApplyFallingDamage(entity);
         }
 
-        _entityStorage.OpenStorage(ent);
+        _entityStorage.OpenStorage(ent.AsNullable());
     }
 }

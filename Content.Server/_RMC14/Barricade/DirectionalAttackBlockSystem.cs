@@ -23,7 +23,7 @@ public sealed class DirectionalAttackBlockSystem : SharedDirectionalAttackBlockS
         if(trigger == null)
             return;
 
-        ent.Comp.MaxHealth = trigger.Damage;
+        ent.Comp.MaxHealth = trigger.Damage.Int();
         Dirty(ent);
     }
 }
