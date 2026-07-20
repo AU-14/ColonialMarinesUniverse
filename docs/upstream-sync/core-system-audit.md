@@ -2372,3 +2372,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Atmos/Portable/SpaceHeaterSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static data-flow review confirms only the clamp bounds change and power, mode, appearance, and UI dirtying remain intact. Server compilation plus requests below, within, and above both limits are queued for the index-1999 checkpoint.
 - Follow-up/debt: None.
+
+## CS-0173 — Move the ATS warp point clear of its wall
+
+- Upstream: [space-wizards/space-station-14#40755](https://github.com/space-wizards/space-station-14/pull/40755), `0805943c9879352aced2b73e2414a4b0ec8ee06f`, 2025-10-08
+- Areas: Movement, Interactions, Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The Automated Trade Station warp point moves two tiles east, from `(5.5, -4.5)` to `(7.5, -4.5)`, so wizard and administrative teleports arrive in open station space instead of inside the ATS wall.
+- RMC/CMU divergence: The retained standard trading-outpost shuttle map is byte-compatible with this upstream hunk and has no RMC-specific override at the affected entity. No other shuttle entity or coordinate changes.
+- Decision and rationale: Apply the exact target-final coordinate correction for warp-point entity 955. Moving only the destination marker fixes teleport placement without altering wall geometry, access, or the shuttle layout.
+- Files changed: `Resources/Maps/Shuttles/trading_outpost.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static map review confirms entity 955 remains parented to grid 2 with the same `Automated Trade Station` warp identity and only its position changes. Map deserialization plus warp arrival and local collision checks are queued for the index-1999 checkpoint.
+- Follow-up/debt: None.
