@@ -26,7 +26,6 @@ namespace Content.Shared.Lock;
 [UsedImplicitly]
 public sealed partial class LockSystem : EntitySystem
 {
-    [Dependency] private AccessReaderSystem _accessReader = default!;
     [Dependency] private ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private ActivatableUISystem _activatableUI = default!;
     [Dependency] private EmagSystem _emag = default!;
