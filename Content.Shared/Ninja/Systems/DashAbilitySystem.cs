@@ -16,7 +16,6 @@ namespace Content.Shared.Ninja.Systems;
 public sealed partial class DashAbilitySystem : EntitySystem
 {
     [Dependency] private ActionContainerSystem _actionContainer = default!;
-    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedChargesSystem _sharedCharges = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
