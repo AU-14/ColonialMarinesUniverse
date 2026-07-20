@@ -3425,3 +3425,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/CriminalRecords/Systems/CriminalRecordsConsoleSystem.cs`, `docs/upstream-sync/inventory-wave-0013.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static control-flow review confirms access, selected-record, duplicate-state, and reason validation all precede mutation and logging, while the actor and target name come from validated server state. Server compilation plus wanted/detained/suspected/paroled/discharged/none changes, rejected access, malformed reasons, no-op input, radio/history behavior, log formatting, and RMC security coexistence are queued for the index-2999 checkpoint.
 - Follow-up/debt: The pinned target later predicts station records and refactors identity lookup; preserve this successful-mutation log when those structural changes are reconciled.
+
+## CS-0253 â€” Toggle a single vote-call menu
+
+- Upstream: [space-wizards/space-station-14#42450](https://github.com/space-wizards/space-station-14/pull/42450), `5b9ff83ce5ed68aeda6f2b0b17d273e42c5030a9`, 2026-01-26
+- Areas: Interactions
+- Status: Ported (adapted)
+- Risk: Low
+- Behavior/API delta: The vote-call button is now a toggle that owns one `VoteCallMenu`. Pressing it again closes the open menu, closing the window clears the button's pressed state, and removing the button from the UI tree closes its menu instead of leaving an orphaned window.
+- RMC/CMU divergence: CMU's dependency field already uses the current non-`readonly` source-generation form, so only the target behavior was added. Standard and RMC lobby/game UIs using this control share the same vote permissions; available vote types, server authorization, cooldowns, vote creation, and tallying are unchanged.
+- Decision and rationale: Port the pinned target's stateful button behavior while preserving CMU's DI declaration. Constructing a fresh window on every press allowed duplicate vote menus and gave the button no way to represent or close the active window. Tracking the instance aligns visual pressed state with the actual menu lifecycle.
+- Files changed: `Content.Client/Voting/UI/VoteCallMenuButton.cs`, `docs/upstream-sync/inventory-wave-0013.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static UI lifecycle review confirms at most one tracked open menu is created per button, second press closes it, all close paths clear `Pressed`, and tree removal closes the window. Client compilation plus repeated clicks, title-bar close, tree removal/re-entry, vote permission changes, active vote creation, lobby and RMC UI use, and focus behavior are queued for the index-2999 checkpoint.
+- Follow-up/debt: `ExitedTree` retains the pinned target's pre-existing `CanCallVoteChanged += UpdateCanCall` line; its apparent subscribe-versus-unsubscribe issue requires a separate upstream audit rather than being silently changed here.

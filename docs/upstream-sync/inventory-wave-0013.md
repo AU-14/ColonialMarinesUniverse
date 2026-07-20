@@ -161,7 +161,7 @@ behavior to port.
 2542 | b33c780a6c5888db376a5aaa92e8472f5ed27c04 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2543 | fd0f52592788f0e1b0d7485c8c4dd83161d905f2 | Fixes Opporozidone Instarot issues (#42472) | Ported (CS-0247) | Medical, Chemistry, GameTicking | Removing rot no longer resets perishable scheduling and triggers server-age catch-up decay.
 2544 | 36d09f982b40e692851ada4c1b4ba7cf455c16c9 | Automatic changelog update | Irrelevant | — | Generated changelog only.
-2545 | 5b9ff83ce5ed68aeda6f2b0b17d273e42c5030a9 | Fix: Make vote call button toggable (#42450) | PortCandidate | Interactions | Focused vote-button UI-state correction.
+2545 | 5b9ff83ce5ed68aeda6f2b0b17d273e42c5030a9 | Fix: Make vote call button toggable (#42450) | Ported (CS-0253) | Interactions | The vote-call button now toggles one tracked menu and resets its pressed state when the menu closes.
 2546 | 093257280bd7ea71516553d825aa581f598da570 | Fix InstrumentSystem.Update exception when deleting band lead (#42331) | Ported (CS-0246) | Interactions, GameTicking | Invalid, deleted, or distant band leaders now end follower processing immediately after cleanup.
 2547 | 9a5c2793261d8f2150ab0272845c9d8d4a3c7a2c | Move job weh plushies to locker loot (#42545) | Deferred | Interactions, Gamerules | Job and locker loot policy.
 2548 | 4981392249bff86aa2ab2745b1ccb22c6382684d | Automatic changelog update | Irrelevant | — | Generated changelog only.
