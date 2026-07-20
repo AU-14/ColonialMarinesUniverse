@@ -2171,9 +2171,9 @@ Date completed: 2026-07-20
 - Areas: Movement, Physics, Interactions
 - Status: Ported
 - Risk: Low
-- Behavior/API delta: Conveyor fixtures now declare `ConveyorMask` directly, allowing door obstruction logic to reliably recognize and ignore conveyor belts while closing.
-- RMC/CMU divergence: CMU's `ConveyorMask` preserves the same four collision flags and its door system already contains the upstream conveyor exception. No RMC collision groups or controller scheduling are changed.
+- Behavior/API delta: Conveyor fixtures now declare the canonical `ConveyorMask` symbol instead of spelling out its four constituent collision flags. Current resolved collision bits and door-closing behavior remain equivalent.
+- RMC/CMU divergence: CMU's door system already compares the resolved layer with `ConveyorMask`, and the expanded prototype flags already produced that numeric value. The server controller's fallback fixture omits `DoorPassable`, but it runs only when no fixture already exists and remains unchanged in the pinned target.
 - Decision and rationale: Replace the expanded flag list with the canonical named mask so the prototype and the door system share one identity and future mask changes cannot silently diverge.
 - Files changed: `Resources/Prototypes/Entities/Structures/conveyor.yml` and `docs/upstream-sync/core-system-audit.md`.
-- Validation: Static collision review confirms `ConveyorMask` resolves to the prior flags and is the exact value checked by `SharedDoorSystem`. Prototype loading plus door closure over a conveyor are queued for the first 1,000-upstream-commit checkpoint.
-- Follow-up/debt: The server conveyor controller still has a fallback fixture creation path with an expanded mask; revisit it when its later upstream cleanup enters scope.
+- Validation: Static collision review confirms `ConveyorMask` resolves to the same prior bits and is the exact value checked by `SharedDoorSystem`. Prototype loading plus door closure over a conveyor are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Reconcile the divergent fallback mask if CMU later permits conveyors without prototype fixtures; the pinned target does not yet remove that path.
