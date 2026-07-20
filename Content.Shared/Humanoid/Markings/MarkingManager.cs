@@ -119,15 +119,15 @@ public sealed partial class MarkingManager
 
     private bool CanBeApplied(MarkingsGroupPrototype group, Sex sex, MarkingPrototype prototype, bool whitelisted)
     {
-        if (prototype.GroupWhitelist == null)
+        if (prototype.GroupWhitelist == null && prototype.SpeciesRestrictions == null)
         {
             if (whitelisted)
                 return false;
         }
-        else
+        else if (prototype.GroupWhitelist?.Contains(group) != true &&
+                 prototype.SpeciesRestrictions?.Contains(group.ID) != true)
         {
-            if (!prototype.GroupWhitelist.Contains(group))
-                return false;
+            return false;
         }
 
         return prototype.SexRestriction == null || prototype.SexRestriction == sex;

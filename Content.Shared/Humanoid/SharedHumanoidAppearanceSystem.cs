@@ -293,9 +293,10 @@ public abstract partial class SharedHumanoidAppearanceSystem : EntitySystem
             return;
         }
 
-        if (verify && !SkinColor.VerifySkinColor(species.SkinColoration, skinColor))
+        var coloration = _proto.Index(species.SkinColoration).Strategy;
+        if (verify && !coloration.VerifySkinColor(skinColor, out _))
         {
-            skinColor = SkinColor.ValidSkinTone(species.SkinColoration, skinColor);
+            skinColor = coloration.EnsureVerified(skinColor);
         }
 
         humanoid.SkinColor = skinColor;
@@ -396,9 +397,14 @@ public abstract partial class SharedHumanoidAppearanceSystem : EntitySystem
 
         humanoid.MarkingSet.Clear();
 
-        // Add markings that doesn't need coloring. We store them until we add all other markings that doesn't need it.
+        var profileMarkings = profile.Appearance.Markings.Values
+            .SelectMany(organ => organ.Values)
+            .SelectMany(markings => markings)
+            .ToList();
+
+        // Add markings that don't need forced coloring first.
         var markingFColored = new Dictionary<Marking, MarkingPrototype>();
-        foreach (var marking in profile.Appearance.Markings)
+        foreach (var marking in profileMarkings)
         {
             if (_markingManager.TryGetMarking(marking, out var prototype))
             {
@@ -413,25 +419,6 @@ public abstract partial class SharedHumanoidAppearanceSystem : EntitySystem
             }
         }
 
-        // Hair/facial hair - this may eventually be deprecated.
-        // We need to ensure hair before applying it or coloring can try depend on markings that can be invalid
-        var hairColor = _markingManager.MustMatchSkin(profile.Species, HumanoidVisualLayers.Hair, out var hairAlpha, _proto)
-            ? profile.Appearance.SkinColor.WithAlpha(hairAlpha) : profile.Appearance.HairColor;
-        var facialHairColor = _markingManager.MustMatchSkin(profile.Species, HumanoidVisualLayers.FacialHair, out var facialHairAlpha, _proto)
-            ? profile.Appearance.SkinColor.WithAlpha(facialHairAlpha) : profile.Appearance.FacialHairColor;
-
-        if (_markingManager.Markings.TryGetValue(profile.Appearance.HairStyleId, out var hairPrototype) &&
-            _markingManager.CanBeApplied(profile.Species, profile.Sex, hairPrototype, _proto))
-        {
-            AddMarking(uid, profile.Appearance.HairStyleId, hairColor, false);
-        }
-
-        if (_markingManager.Markings.TryGetValue(profile.Appearance.FacialHairStyleId, out var facialHairPrototype) &&
-            _markingManager.CanBeApplied(profile.Species, profile.Sex, facialHairPrototype, _proto))
-        {
-            AddMarking(uid, profile.Appearance.FacialHairStyleId, facialHairColor, false);
-        }
-
         humanoid.MarkingSet.EnsureSpecies(profile.Species, profile.Appearance.SkinColor, _markingManager, _proto);
 
         // Finally adding marking with forced colors
@@ -441,7 +428,7 @@ public abstract partial class SharedHumanoidAppearanceSystem : EntitySystem
                 prototype,
                 profile.Appearance.SkinColor,
                 profile.Appearance.EyeColor,
-                humanoid.MarkingSet
+                humanoid.MarkingSet.GetForwardEnumerator().ToList()
             );
             AddMarking(uid, marking.MarkingId, markingColors, false);
         }
