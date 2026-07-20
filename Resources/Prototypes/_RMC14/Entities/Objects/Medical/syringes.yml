@@ -1,3 +1,11 @@
+- type: injectorMode
+  parent: BaseInjectMode
+  id: RMCInjectorModeLethal
+  mobTime: 30
+  delayPerVolume: 0
+  transferAmounts:
+  - 50
+
 - type: entity
   parent: Syringe
   id: CMSyringe
@@ -35,7 +43,7 @@
   suffix: RMC14, Inject
   components:
   - type: Injector
-    toggleState: Inject
+    activeModeProtoId: SyringeInjectMode
 
 - type: entity
   parent: CMSyringe
@@ -49,12 +57,11 @@
     solutions:
       injector:
         maxVol: 50
-  - type: Injector #TODO RMC14 can't draw blood
-    minTransferAmount: 50
-    maxTransferAmount: 50
-    transferAmount: 50
-    delay: 30
-    delayPerVolume: 0
+  - type: Injector
+    currentTransferAmount: 50
+    activeModeProtoId: RMCInjectorModeLethal
+    allowedModes:
+    - RMCInjectorModeLethal
 
 - type: entity
   parent: RMCSyringeLethal
@@ -64,7 +71,7 @@
   - type: Label
     currentLabel: reagent-name-rmc-chloral-hydrate
   - type: Injector
-    toggleState: Inject
+    activeModeProtoId: RMCInjectorModeLethal
   - type: SolutionContainerManager
     solutions:
       injector:
