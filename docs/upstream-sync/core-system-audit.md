@@ -2568,3 +2568,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Chemistry/EntitySystems/ReactionMixerSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static event-flow review confirms failed reach/mix checks leave the event untouched, a valid mix starts the existing do-after and claims the click, and `UtensilSystem` observes `Handled`. Server compilation plus mixable, non-mixable, cancelled, and RMC food targets are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1110 as `Ported (CS-0187)` when wave 0006 is committed; revisit the ordering type only when the later shared ingestion migration is integrated.
+
+## CS-0188 — Preserve the martyr module's self-destruct tool
+
+- Upstream: [space-wizards/space-station-14#40224](https://github.com/space-wizards/space-station-14/pull/40224), `3764a719bfcd444b050639a57a06d593136c91f8`, 2025-10-03
+- Areas: Interactions, Physics, Gamerules
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: `SelfDestructSeq`, the virtual tool supplied by the martyr cyborg module, is no longer deleted by its explosion and no longer latches its `ExplosiveComponent` into a permanently exploded state. The supplied tool remains a valid module item after activation and can be triggered again if its cyborg survives.
+- RMC/CMU divergence: RMC has no separate martyr module or `SelfDestructSeq` override. RMC grenade explosion types, shrapnel, deletion policy, and reusable explosives are untouched; only the standard hidden cyborg tool changes.
+- Decision and rationale: Port both retained explosive flags together. Preventing deletion alone would leave an inert virtual item, while repeatability alone would still allow the trigger path to delete it and invalidate the module-provided hand item.
+- Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Throwable/grenades.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype/component review confirms both fields exist in CMU's current explosion contract, the blast intensity and timer remain unchanged, and only `BorgModuleMartyr` provides this entity. Prototype loading plus activation, module-hand cycling, survival, and repeat-trigger cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1093 as `Ported (CS-0188)` when wave 0006 is committed.
