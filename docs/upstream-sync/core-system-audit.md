@@ -2190,3 +2190,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Recipes/Construction/Graphs/utilities/disposal_pipes.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static graph review confirms all fourteen disposal exits now use `DestroyEntity` and no `DeleteEntity` action remains in this graph. Prototype loading plus welding an occupied pipe and asserting content survival are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None.
+
+## CS-0160 — Clarify the nuclear-operative corpsman objective
+
+- Upstream: [space-wizards/space-station-14#40486](https://github.com/space-wizards/space-station-14/pull/40486), `eabb00a1e2906e32221781ce91c28608db4d6609`, 2025-09-21
+- Areas: Medical, Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The nuclear-operative corpsman's role text now clearly identifies them as the team's medic and directs them to keep the team alive.
+- RMC/CMU divergence: This is the upstream nuclear-operative role, not CMU's separate RMC hospital-corpsman jobs. Their localization and game rules are untouched.
+- Decision and rationale: Port the retained objective copy as the companion to CS131's corrected role title, replacing a vague and grammatically broken description.
+- Files changed: `Resources/Locale/en-US/prototypes/roles/antags.ftl` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static localization review confirms the existing role key resolves to the new text. Fluent parsing and nuclear-operative role prototype resolution are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None.
