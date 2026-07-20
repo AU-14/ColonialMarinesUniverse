@@ -1826,3 +1826,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Locale/en-US/random-metadata/random-metadata-formats.ftl` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static reference review confirms only the nuclear-operative medic uses this format key. Localization loading and resolved round-start metadata are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None.
+
+## CS-0132 — Prevent overlapping wall-light placement
+
+- Upstream: [space-wizards/space-station-14#39939](https://github.com/space-wizards/space-station-14/pull/39939), `e8583da476ee50b77264c6892c1cb84112c772b0`, 2025-09-01
+- Areas: Interactions, Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Always-powered wall lights and their inherited variants now share the `lights` placement-replacement key, preventing map placement from stacking multiple fixtures in the same wall-mounted location.
+- RMC/CMU divergence: RMC uses the same placement-replacement component for its structures and retains the upstream wall-light prototype hierarchy, so no collision masks or RMC light behavior are changed.
+- Decision and rationale: Add the retained prototype component at the shared base so empty, powered, and colored inherited fixtures receive the same editor placement rule without duplicating data.
+- Files changed: `Resources/Prototypes/Entities/Structures/Lighting/base_lighting.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static inheritance review confirms the key reaches wall-light variants while leaving runtime collision and construction unchanged. Prototype loading and overlapping map-editor placement are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None.
