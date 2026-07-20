@@ -2789,3 +2789,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Arcade/SpaceVillainGame/SpaceVillainGame.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static key lookup confirms the corrected identifier exactly matches the existing Fluent message and still supplies `enemyName`. Server compilation plus simultaneous-death, player-loss, enemy-death, localization, and RMC arcade cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1407 as `Ported (CS-0204)` when wave 0008 is committed.
+
+## CS-0205 — Guard AME estimates when no cores exist
+
+- Upstream: [space-wizards/space-station-14#41026](https://github.com/space-wizards/space-station-14/pull/41026), `04a2c2e9685dc78c4eebc61442ea6661fe571b91`, 2025-10-21
+- Areas: Physics, GameTicking, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The AME controller calculates target output only when its node group contains at least one core. An empty group now reports zero cores and zero targeted power instead of passing a zero core count into the power formula and exposing NaN or infinity in the UI.
+- RMC/CMU divergence: CMU uses the standard AME controller and node group with no RMC replacement in this calculation. Injection controls, containment, fuel use, power-net supply, core discovery, and active AME simulation are unchanged.
+- Decision and rationale: Port the single guard at the UI-state calculation boundary. This preserves the existing no-group behavior and avoids inventing a value inside the shared power formula for a physically absent generator.
+- Files changed: `Content.Server/Ame/EntitySystems/AmeControllerSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static branch review confirms populated groups still calculate with their real core count and empty or missing groups retain zero-initialized output. Server compilation plus zero-core, one-core, multi-core, node-loss, injection-change, and UI refresh cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1474 as `Ported (CS-0205)` when wave 0008 is committed.
