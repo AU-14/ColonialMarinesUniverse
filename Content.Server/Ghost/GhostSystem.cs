@@ -272,7 +272,8 @@ namespace Content.Server.Ghost
                 return;
             }
 
-            _mind.UnVisit(actor.PlayerSession);
+            if (!TryReturnToRMCBody(attached))
+                _mind.UnVisit(actor.PlayerSession);
         }
 
         #region Warp
