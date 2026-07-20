@@ -599,6 +599,10 @@ namespace Content.Server.Atmos.EntitySystems
             if (!reconsiderAdjacent)
                 return;
 
+            // Refresh airtight data before rebuilding adjacency so this equalization pass sees closed firelocks.
+            UpdateAirtightData(ent.Owner, ent.Comp1, ent.Comp3, tile);
+            UpdateAirtightData(ent.Owner, ent.Comp1, ent.Comp3, other);
+
             UpdateAdjacentTiles(ent, tile);
             UpdateAdjacentTiles(ent, other);
             InvalidateVisuals(ent, tile);

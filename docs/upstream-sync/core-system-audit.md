@@ -812,3 +812,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Lock/LockSystem.cs`, `Resources/Locale/en-US/lock/lock-component.ftl`, `Resources/Locale/en-US/storage/components/entity-storage-component.ftl`, `Content.IntegrationTests/Tests/Interaction/LockActivationHandledTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the pinned target retains pre-attempt handling on both branches. A queued integration regression uses an access-controlled lock, proves an unauthorized unlock remains rejected, and requires the activation to be consumed. Execution is deferred to the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Audit the target's later in-hand lock activation and renamed lock-policy components separately; they are broader interaction/API changes and are not implied by this popup fix.
+
+## CS-0054 — Refresh airtight data when emergency firelocks close
+
+- Upstream: [space-wizards/space-station-14#38918](https://github.com/space-wizards/space-station-14/pull/38918), `76a7b31c1e59a11b5079d20a3e2feb9c0a7836dd`, 2025-07-15
+- Areas: Physics, GameTicking
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: When Monstermos closes a firelock during depressurization flood-fill, it now refreshes airtight data for both affected tiles before recomputing their adjacency bits. The active equalization pass sees the new barrier immediately instead of flowing through stale tile flags.
+- RMC/CMU divergence: RMC does not override the atmosphere equalization or firelock emergency-stop systems. Its vehicle collision code recognizes firelocks independently and is unaffected; inherited maps and any RMC firelocks using the standard component receive the corrected gas-flow timing.
+- Decision and rationale: Port the two target-final airtight refreshes at the exact state-transition boundary. Do not alter flood-fill limits, firelock thresholds, atmosphere scheduling, or RMC vehicle interaction as part of this stale-cache fix.
+- Files changed: `Content.Server/Atmos/EntitySystems/AtmosphereSystem.Monstermos.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the pinned target retains both pre-adjacency refresh calls and their ordering. The first 1,000-upstream-commit checkpoint will compile the server and run the accumulated focused suite; this private equalization path currently has no narrow integration seam.
+- Follow-up/debt: Add a controlled depressurization/firelock integration scenario when atmosphere test utilities expose deterministic single-cycle equalization, and audit later Monstermos changes independently.
