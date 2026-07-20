@@ -2646,3 +2646,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Voting/Managers/VoteManager.DefaultVotes.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static call-site review confirms ordinary standard votes keep `vote.same_type_timeout`, while votekicks use `votekick.timeout` consistently for both gates. Server compilation plus default, custom, repeated, failed, admin-blocked, and non-votekick vote cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1364 as `Ported (CS-0193)` when wave 0007 is committed.
+
+## CS-0194 — Clear completed magic-mirror interactions
+
+- Upstream: [space-wizards/space-station-14#40329](https://github.com/space-wizards/space-station-14/pull/40329), `6aa0812fa25fde4d20d4287132308a406aa0ab0b`, 2025-10-13
+- Areas: Interactions, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Every magic-mirror do-after callback now clears the component's stored do-after identifier before handling success, cancellation, invalid-target, or already-handled exits. A finished barber action can no longer leave a stale identifier that is cancelled again by the next action.
+- RMC/CMU divergence: CMU uses the upstream magic-mirror system and shared do-after component without a fork override. RMC hairstyles, species markings, clothing checks, timing, sounds, and UI behavior are unchanged.
+- Decision and rationale: Port the four callback resets together because all four actions share the same single active-operation field. Clearing only successful callbacks would preserve the cancellation failure; clearing only one action would leave the same bug in the other paths.
+- Files changed: `Content.Server/MagicMirror/MagicMirrorSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static callback review confirms the stored identifier is cleared before every early return while active-operation replacement still cancels the prior identifier before starting a new action. Server compilation plus completed, cancelled, invalid-target, repeated, and cross-action barber cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1313 as `Ported (CS-0194)` when wave 0007 is committed.
