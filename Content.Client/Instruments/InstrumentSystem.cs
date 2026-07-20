@@ -269,6 +269,7 @@ public sealed partial class InstrumentSystem : SharedInstrumentSystem
             return false;
 
         SetMaster(uid, null);
+        instrument.MidiEventBuffer.Clear();
         instrument.Renderer.OnMidiEvent += instrument.MidiEventBuffer.Add;
         return true;
 
@@ -293,7 +294,6 @@ public sealed partial class InstrumentSystem : SharedInstrumentSystem
         SetMaster(uid, null);
         TrySetChannels(uid, data);
 
-        instrument.MidiEventBuffer.Clear();
         instrument.Renderer.OnMidiEvent += instrument.MidiEventBuffer.Add;
         return true;
     }
