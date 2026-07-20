@@ -14,6 +14,7 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Input;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.IoC;
 using Robust.Shared.Player;
@@ -25,6 +26,8 @@ namespace Content.Client._RMC14.UserInterface.Systems.Language;
 
 public sealed partial class LanguageUIController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>
 {
+    private static readonly BoundKeyFunction OpenLanguageMenu = "OpenLanguageMenu";
+
     [Dependency] private IEntitySystemManager _entitySystemManager = default!;
     [Dependency] private ISharedPlayerManager _player = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
@@ -43,7 +46,7 @@ public sealed partial class LanguageUIController : UIController, IOnStateEntered
         _languageSystem.OnLanguageLearningChanged += OnLanguageLearningChanged;
 
         CommandBinds.Builder
-            .Bind(ContentKeyFunctions.OpenLanguageMenu, InputCmdHandler.FromDelegate(_ => ToggleWindow()))
+            .Bind(OpenLanguageMenu, InputCmdHandler.FromDelegate(_ => ToggleWindow()))
             .Register<LanguageUIController>();
     }
 
@@ -82,11 +85,11 @@ public sealed partial class LanguageUIController : UIController, IOnStateEntered
         {
             Icon = GetLanguageIcon(FallbackLanguageIcon),
             ToolTip = Loc.GetString("game-hud-open-language-menu-button-tooltip"),
-            BoundKey = ContentKeyFunctions.OpenLanguageMenu,
+            BoundKey = OpenLanguageMenu,
             MinSize = new Vector2(42f, 64f),
             HorizontalExpand = true,
         };
-        button.AppendStyleClass = StyleBase.ButtonSquare;
+        button.AppendStyleClass = StyleClass.ButtonSquare;
         button.OnPressed += LanguageButtonPressed;
         if (button.ButtonRoot.Children.FirstOrDefault() is TextureRect icon)
             icon.TextureScale = new Vector2(1.2f, 1.2f);

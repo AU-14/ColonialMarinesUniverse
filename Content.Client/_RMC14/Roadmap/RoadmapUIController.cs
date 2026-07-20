@@ -56,19 +56,19 @@ public sealed partial class RoadmapUIController : UIController, IOnStateEntered<
 
         if (_config.GetCVar(CCVars.InfoLinksDiscord) is { Length: > 0 } discordLink)
         {
-            _window.DiscordButton.StyleClasses.Add(StyleBase.ButtonCaution);
+            _window.DiscordButton.StyleClasses.Add(StyleClass.Negative);
             _window.DiscordButton.Visible = true;
             _window.DiscordButton.OnPressed += _ => _uriOpener.OpenUri(discordLink);
         }
 
         if (_config.GetCVar(CCVars.InfoLinksPatreon) is { Length: > 0 } patreonLink)
         {
-            _window.PatreonButton.StyleClasses.Add(StyleBase.ButtonCaution);
+            _window.PatreonButton.StyleClasses.Add(StyleClass.Negative);
             _window.PatreonButton.Visible = true;
             _window.PatreonButton.OnPressed += _ => _uriOpener.OpenUri(patreonLink);
         }
 
-        _window.CreditsButton.StyleClasses.Add(StyleBase.ButtonCaution);
+        _window.CreditsButton.StyleClasses.Add(StyleClass.Negative);
         _window.CreditsButton.OnPressed += _ => new CreditsWindow().OpenCentered();
 
         _window.OpenCentered();
