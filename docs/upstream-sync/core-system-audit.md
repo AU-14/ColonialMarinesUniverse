@@ -1956,3 +1956,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Client/Verbs/UI/VerbMenuUIController.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms `generic-confirm` exists in the English locale and is resolved only when a confirmation submenu is created. Client compilation and a confirmation-popup interaction are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None.
+
+## CS-0142 — Apply weightless movement to large cardboard boxes
+
+- Upstream: [space-wizards/space-station-14#40260](https://github.com/space-wizards/space-station-14/pull/40260), `2601853791d8fc318d1e57e9420acb2eb7d9eac9`, 2025-09-11
+- Areas: Movement, Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Large cardboard boxes now participate in gravity-dependent movement behavior, including the correct weightless state when used or moved in zero gravity.
+- RMC/CMU divergence: CMU retains the upstream `BaseBigBox` mover and physics hierarchy. The marker is added to that station-content base only and does not alter RMC-specific crates or storage entities.
+- Decision and rationale: Add the retained `GravityAffected` component at the common box base so stealth and inherited variants share the same gravity semantics.
+- Files changed: `Resources/Prototypes/Entities/Structures/Storage/Closets/big_boxes.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static inheritance review confirms every large-box variant receives the marker while existing body type, fixtures, and input mover remain unchanged. Prototype loading plus gravity/zero-gravity movement cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Compare other input-mover structures for missing gravity markers during the deeper movement audit.
