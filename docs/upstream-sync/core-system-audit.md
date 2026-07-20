@@ -786,3 +786,16 @@ Date completed: 2026-07-20
 - Files changed: `docs/upstream-sync/core-system-audit.md`.
 - Validation: The SS14 commit is not an ancestor of `Rebase`, but blame attributes the exact `ev.MaxAngle` comparison in the current shared gun system to RMC commit `ab8af5fb7d3`; the pinned target contains the same comparison. No runtime code changed, so this entry adds no checkpoint test obligation.
 - Follow-up/debt: Add direct gun-modifier refresh coverage when that API receives a stable test seam, especially for independent minimum and maximum attachment modifiers.
+
+## CS-0052 — Retain empty projectile-grenade protection
+
+- Upstream: [space-wizards/space-station-14#38946](https://github.com/space-wizards/space-station-14/pull/38946), `cfe825b0e3d4fea6d63251a22003820873cff343`, 2025-07-12
+- Areas: Shooting, Physics
+- Status: AlreadyPresent
+- Risk: Low
+- Behavior/API delta: Fragmentation returns before calculating a segment angle when a projectile grenade has no contained or pending projectiles, preventing integer division by zero.
+- RMC/CMU divergence: RMC independently added the same guard in `d39173e479b` on 2025-05-10 as part of its airburst-grenade implementation. Its condition accepts all non-positive totals and protects the additional RMC fragment event, cluster event, shot event, and deletion flow around the shared calculation.
+- Decision and rationale: Preserve RMC's earlier, slightly defensive `<= 0` guard and classify the SS14 change as already present. Replacing it with `== 0` would narrow protection without providing any target-final benefit.
+- Files changed: `docs/upstream-sync/core-system-audit.md`.
+- Validation: Blame traces the current pre-division guard to RMC commit `d39173e479b`, which predates the shared baseline; the pinned SS14 target retains its equivalent zero-count guard. No runtime code changed, so this entry adds no checkpoint test obligation.
+- Follow-up/debt: Audit RMC's mutable `FragmentIntoProjectilesEvent.TotalCount` separately because subscribers can alter it after the initial segment angle has already been calculated.
