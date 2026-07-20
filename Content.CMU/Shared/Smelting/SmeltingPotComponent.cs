@@ -82,9 +82,15 @@ public sealed partial class SmeltingPotComponent : Component
 [DataDefinition]
 public sealed partial class SmeltingRecipe
 {
-    /// <summary>Input stack type. Ignored when <see cref="InputAnyElectronics"/> is set.</summary>
+    /// <summary>
+    /// Input stack type. Null for an electronics recipe, which matches on components instead of a stack.
+    ///
+    /// Nullable on purpose: the electronics recipe leaves this unset, and a non-nullable ProtoId serialises
+    /// that as null, which then throws NullNotAllowedException when the prototype is read back. That is what
+    /// broke ServerPrototypeSaveLoadSaveTest / ClientPrototypeSaveLoadSaveTest.
+    /// </summary>
     [DataField]
-    public ProtoId<StackPrototype> Input;
+    public ProtoId<StackPrototype>? Input;
 
     /// <summary>Matches any circuit board instead of a stack type - the same "any electronics" rule the
     /// sapper workbench uses (machine board, computer board or door electronics).</summary>
