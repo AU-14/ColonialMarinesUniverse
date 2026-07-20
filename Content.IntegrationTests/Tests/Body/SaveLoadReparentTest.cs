@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
-using Content.Shared.Body.Components;
-using Content.Shared.Body.Systems;
+using Content.Shared.Body;
 using Robust.Shared.Containers;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.GameObjects;
@@ -20,7 +17,16 @@ public sealed class SaveLoadReparentTest
   id: HumanBodyDummy
   components:
   - type: Body
-    prototype: Human
+  - type: EntityTableContainerFill
+    containers:
+      body_organs: !type:AllSelector
+        children:
+        - id: HumanBodyDummyOrgan
+
+- type: entity
+  id: HumanBodyDummyOrgan
+  components:
+  - type: Organ
 ";
 
     [Test]
@@ -30,153 +36,61 @@ public sealed class SaveLoadReparentTest
         var server = pair.Server;
 
         var entities = server.ResolveDependency<IEntityManager>();
-        var maps = server.System<SharedMapSystem>();
         var mapLoader = entities.System<MapLoaderSystem>();
-        var bodySystem = entities.System<SharedBodySystem>();
         var containerSystem = entities.System<SharedContainerSystem>();
-        var mapSys = entities.System<SharedMapSystem>();
+        var mapSystem = entities.System<SharedMapSystem>();
 
         await server.WaitAssertion(() =>
         {
-            mapSys.CreateMap(out var mapId);
-            maps.CreateGridEntity(mapId);
+            mapSystem.CreateMap(out var mapId);
+            mapSystem.CreateGridEntity(mapId);
             var human = entities.SpawnEntity("HumanBodyDummy", new MapCoordinates(0, 0, mapId));
 
-            Assert.That(entities.HasComponent<BodyComponent>(human), Is.True);
-
-            var parts = bodySystem.GetBodyChildren(human).Skip(1).ToArray();
-            var organs = bodySystem.GetBodyOrgans(human).ToArray();
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(parts, Is.Not.Empty);
-                Assert.That(organs, Is.Not.Empty);
-            });
-
-            foreach (var (id, component) in parts)
-            {
-                Assert.Multiple(() =>
-                {
-                    Assert.That(component.Body, Is.EqualTo(human));
-                    Assert.That(component.Body, Is.Not.Null);
-                    var parent = bodySystem.GetParentPartOrNull(id);
-                    Assert.That(parent, Is.Not.EqualTo(default(EntityUid)));
-                    if (!bodySystem.IsPartRoot(component.Body.Value, id, null, component))
-                    {
-                        Assert.That(parent, Is.Not.Null);
-                    }
-                    else
-                    {
-                        Assert.That(parent, Is.Null);
-                    }
-                });
-
-                foreach (var (slotId, slot) in component.Children)
-                {
-                    Assert.Multiple(() =>
-                    {
-                        Assert.That(slot.Id, Is.EqualTo(slotId));
-                        var container =
-                            containerSystem.GetContainer(id, SharedBodySystem.GetPartSlotContainerId(slotId));
-                        Assert.That(container.ContainedEntities, Is.Not.Empty);
-                    });
-                }
-            }
-
-            foreach (var (id, component) in organs)
-            {
-                var parent = bodySystem.GetParentPartOrNull(id);
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(component.Body, Is.EqualTo(human));
-                    Assert.That(parent, Is.Not.Null);
-                    Assert.That(parent.Value, Is.Not.EqualTo(default(EntityUid)));
-                });
-            }
-
-            // Converts an entity query enumerator to an enumerable.
-            static IEnumerable<(EntityUid Uid, TComp Comp)> EnumerateQueryEnumerator<TComp>(EntityQueryEnumerator<TComp> query)
-                where TComp : Component
-            {
-                while (query.MoveNext(out var uid, out var comp))
-                    yield return (uid, comp);
-            }
-
-            Assert.That(
-                EnumerateQueryEnumerator(
-                    entities.EntityQueryEnumerator<BodyComponent>()
-                ).Where((e) =>
-                    entities.GetComponent<MetaDataComponent>(e.Uid).EntityPrototype!.Name == "HumanBodyDummy"
-                ),
-                Is.Not.Empty
-            );
+            AssertBodyOrgans(human);
 
             var mapPath = new ResPath($"/{nameof(SaveLoadReparentTest)}{nameof(Test)}map.yml");
 
             Assert.That(mapLoader.TrySaveMap(mapId, mapPath));
-            mapSys.DeleteMap(mapId);
+            mapSystem.DeleteMap(mapId);
 
             Assert.That(mapLoader.TryLoadMap(mapPath, out var map, out _), Is.True);
 
-            var query = EnumerateQueryEnumerator(
-                    entities.EntityQueryEnumerator<BodyComponent>()
-                ).Where((e) =>
-                    entities.GetComponent<MetaDataComponent>(e.Uid).EntityPrototype!.Name == "HumanBodyDummy"
-                ).ToArray();
-
-            Assert.That(query, Is.Not.Empty);
-            foreach (var (uid, body) in query)
+            var loadedBodies = entities.EntityQueryEnumerator<BodyComponent>();
+            EntityUid? loadedHuman = null;
+            while (loadedBodies.MoveNext(out var uid, out _))
             {
-                human = uid;
-                parts = bodySystem.GetBodyChildren(human).Skip(1).ToArray();
-                organs = bodySystem.GetBodyOrgans(human).ToArray();
-
-                Assert.Multiple(() =>
+                if (entities.GetComponent<MetaDataComponent>(uid).EntityPrototype?.ID == "HumanBodyDummy")
                 {
-                    Assert.That(parts, Is.Not.Empty);
-                    Assert.That(organs, Is.Not.Empty);
-                });
-
-                foreach (var (id, component) in parts)
-                {
-                    var parent = bodySystem.GetParentPartOrNull(id);
-
-                    Assert.Multiple(() =>
-                    {
-                        Assert.That(component.Body, Is.EqualTo(human));
-                        Assert.That(parent, Is.Not.Null);
-                        Assert.That(parent.Value, Is.Not.EqualTo(default(EntityUid)));
-                    });
-
-                    foreach (var (slotId, slot) in component.Children)
-                    {
-                        Assert.Multiple(() =>
-                        {
-                            Assert.That(slot.Id, Is.EqualTo(slotId));
-                            var container =
-                                containerSystem.GetContainer(id, SharedBodySystem.GetPartSlotContainerId(slotId));
-                            Assert.That(container.ContainedEntities, Is.Not.Empty);
-                        });
-                    }
+                    loadedHuman = uid;
+                    break;
                 }
-
-                foreach (var (id, component) in organs)
-                {
-                    var parent = bodySystem.GetParentPartOrNull(id);
-
-                    Assert.Multiple(() =>
-                    {
-                        Assert.That(component.Body, Is.EqualTo(human));
-                        Assert.That(parent, Is.Not.Null);
-                        Assert.That(parent.Value, Is.Not.EqualTo(default(EntityUid)));
-                    });
-                }
-
-                entities.DeleteEntity(map);
             }
+
+            Assert.That(loadedHuman, Is.Not.Null);
+            AssertBodyOrgans(loadedHuman.Value);
+            entities.DeleteEntity(map);
         });
 
         await pair.CleanReturnAsync();
+
+        return;
+
+        void AssertBodyOrgans(EntityUid bodyUid)
+        {
+            var body = entities.GetComponent<BodyComponent>(bodyUid);
+            Assert.That(body.Organs, Is.Not.Null);
+            Assert.That(body.Organs!.ContainedEntities, Is.Not.Empty);
+
+            var organContainer = containerSystem.GetContainer(bodyUid, BodyComponent.ContainerID);
+            foreach (var organUid in body.Organs.ContainedEntities)
+            {
+                var organ = entities.GetComponent<OrganComponent>(organUid);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(organ.Body, Is.EqualTo(bodyUid));
+                    Assert.That(organContainer.ContainedEntities, Does.Contain(organUid));
+                });
+            }
+        }
     }
 }

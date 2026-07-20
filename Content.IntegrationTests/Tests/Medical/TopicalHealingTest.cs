@@ -1,5 +1,7 @@
 #nullable enable
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Medical.Healing;
 using Robust.Shared.GameObjects;
@@ -57,10 +59,10 @@ public sealed class TopicalHealingTest
             var entMan = server.ResolveDependency<IEntityManager>();
             var target = entMan.SpawnEntity(TargetPrototype, MapCoordinates.Nullspace);
             var topical = entMan.SpawnEntity(TopicalPrototype, MapCoordinates.Nullspace);
-            var damageable = entMan.GetComponent<DamageableComponent>(target);
+            var damage = entMan.System<DamageableSystem>().GetAllDamage(target);
 
-            Assert.That(damageable.Damage.DamageDict.ContainsKey(SupportedDamage), Is.True);
-            Assert.That(damageable.Damage.DamageDict.ContainsKey(UnsupportedDamage), Is.False);
+            Assert.That(damage.DamageDict.ContainsKey(SupportedDamage), Is.True);
+            Assert.That(damage.DamageDict.ContainsKey(UnsupportedDamage), Is.False);
 
             var useEvent = new UseInHandEvent(target);
             entMan.EventBus.RaiseLocalEvent(topical, useEvent);

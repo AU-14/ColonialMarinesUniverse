@@ -1,5 +1,6 @@
 using Content.Server.Medical.SuitSensors;
 using Content.Shared.DeviceNetwork.Components;
+using Content.Shared.Medical.SuitSensors;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
 

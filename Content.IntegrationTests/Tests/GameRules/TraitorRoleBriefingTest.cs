@@ -5,6 +5,7 @@ using Content.Server.Roles;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Roles;
+using Content.Shared.Roles.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 

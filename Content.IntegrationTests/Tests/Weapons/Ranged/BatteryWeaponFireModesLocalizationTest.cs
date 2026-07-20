@@ -90,7 +90,7 @@ public sealed class BatteryWeaponFireModesLocalizationTest
         {
             var component = sEntMan.GetComponent<BatteryWeaponFireModesComponent>(sWeapon);
             var system = sEntMan.System<BatteryWeaponFireModesSystem>();
-            Assert.That(system.TrySetFireMode(sWeapon, component, 1, sPlayer), Is.True);
+            Assert.That(system.TrySetFireMode((sWeapon, component), 1, sPlayer), Is.True);
         });
         await pair.RunTicksSync(5);
 
@@ -103,7 +103,7 @@ public sealed class BatteryWeaponFireModesLocalizationTest
             var component = cEntMan.GetComponent<BatteryWeaponFireModesComponent>(cWeapon);
             var system = cEntMan.System<BatteryWeaponFireModesSystem>();
             Assert.That(component.CurrentFireMode, Is.EqualTo(1));
-            Assert.That(system.TrySetFireMode(cWeapon, component, 1, cPlayer), Is.True);
+            Assert.That(system.TrySetFireMode((cWeapon, component), 1, cPlayer), Is.True);
 
             Assert.That(popups.WorldLabels, Has.Count.EqualTo(1));
             var popup = popups.WorldLabels.Single();

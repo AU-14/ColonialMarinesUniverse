@@ -14,7 +14,7 @@ public sealed class SubfloorAdminInteractionTest
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
-        var map = await pair.CreateTestMap(tile: "FloorSteel");
+        var map = await pair.CreateTestMap(true, "FloorSteel");
 
         await server.WaitAssertion(() =>
         {

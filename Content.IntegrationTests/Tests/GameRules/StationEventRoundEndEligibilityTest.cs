@@ -62,8 +62,8 @@ public sealed class StationEventRoundEndEligibilityTest
             });
 
             var available = eventManager.AvailableEvents(
-                ignoreEarliestStart: true,
-                playerCountOverride: int.MaxValue);
+                playerCountOverride: int.MaxValue,
+                currentTimeOverride: TimeSpan.MaxValue);
 
             var availableIds = available.Keys.Select(prototype => prototype.ID).ToHashSet();
             Assert.Multiple(() =>
@@ -72,7 +72,7 @@ public sealed class StationEventRoundEndEligibilityTest
                     Assert.That(availableIds, Does.Contain(eventId), eventId);
             });
 
-            roundEnd.CancelRoundEndCountdown(checkCooldown: false);
+            roundEnd.CancelRoundEndCountdown(forceRecall: true);
             roundEnd.DefaultCooldownDuration = TimeSpan.FromSeconds(30);
         });
 
@@ -95,8 +95,8 @@ public sealed class StationEventRoundEndEligibilityTest
         await server.WaitAssertion(() =>
         {
             var normallyAvailable = eventManager.AvailableEvents(
-                    ignoreEarliestStart: true,
-                    playerCountOverride: int.MaxValue)
+                    playerCountOverride: int.MaxValue,
+                    currentTimeOverride: TimeSpan.MaxValue)
                 .Keys.Select(prototype => prototype.ID)
                 .ToHashSet();
 
@@ -116,8 +116,8 @@ public sealed class StationEventRoundEndEligibilityTest
             });
 
             var duringLockedEvac = eventManager.AvailableEvents(
-                    ignoreEarliestStart: true,
-                    playerCountOverride: int.MaxValue)
+                    playerCountOverride: int.MaxValue,
+                    currentTimeOverride: TimeSpan.MaxValue)
                 .Keys.Select(prototype => prototype.ID)
                 .ToHashSet();
 
@@ -127,7 +127,7 @@ public sealed class StationEventRoundEndEligibilityTest
                     Assert.That(duringLockedEvac, Does.Not.Contain(eventId), eventId);
             });
 
-            roundEnd.CancelRoundEndCountdown(checkCooldown: false);
+            roundEnd.CancelRoundEndCountdown(forceRecall: true);
             roundEnd.DefaultCooldownDuration = TimeSpan.FromSeconds(30);
         });
 

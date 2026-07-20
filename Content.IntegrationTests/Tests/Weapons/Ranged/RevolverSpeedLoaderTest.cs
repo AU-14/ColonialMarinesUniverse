@@ -42,7 +42,7 @@ public sealed class RevolverSpeedLoaderTest
             var speedLoaderAmmo = entMan.GetComponent<BallisticAmmoProviderComponent>(speedLoader);
 
             Assert.That(speedLoaderAmmo.Count, Is.EqualTo(1));
-            Assert.That(gun.TryRevolverInsert(revolver, revolverAmmo, speedLoader, user: null), Is.True);
+            Assert.That(gun.TryRevolverInsert((revolver, revolverAmmo), speedLoader, null), Is.True);
             Assert.That(speedLoaderAmmo.Count, Is.Zero);
 
             var loadedAmmo = revolverAmmo.AmmoSlots[0];

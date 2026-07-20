@@ -1,10 +1,10 @@
 using System.Linq;
-using Content.Server.Body.Systems;
-using Content.Server.Medical;
+using Content.Shared.Body;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.FixedPoint;
+using Content.Shared.Medical;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.GameObjects;
@@ -34,7 +34,6 @@ public sealed class VomitDeadMobTest
         var server = pair.Server;
         var map = await pair.CreateTestMap();
         var entMan = server.EntMan;
-        var body = server.System<BodySystem>();
         var mobState = server.System<MobStateSystem>();
         var solutions = server.System<SharedSolutionContainerSystem>();
         var vomit = server.System<VomitSystem>();
@@ -42,17 +41,19 @@ public sealed class VomitDeadMobTest
         await server.WaitAssertion(() =>
         {
             var subject = entMan.SpawnEntity(SubjectPrototype, map.GridCoords);
-            var stomach = body.GetBodyOrganEntityComps<StomachComponent>(subject).Single();
+            var body = entMan.GetComponent<BodyComponent>(subject);
+            var stomachUid = body.Organs!.ContainedEntities.Single(entMan.HasComponent<StomachComponent>);
+            var stomach = entMan.GetComponent<StomachComponent>(stomachUid);
 
             Assert.That(solutions.ResolveSolution(
-                stomach.Owner,
+                stomachUid,
                 StomachSystem.DefaultSolutionName,
-                ref stomach.Comp1.Solution,
+                ref stomach.Solution,
                 out var stomachSolution));
 
             var water = FixedPoint2.New(5);
             var solution = stomachSolution!;
-            Assert.That(solutions.TryAddReagent(stomach.Comp1.Solution!.Value, "Water", water));
+            Assert.That(solutions.TryAddReagent(stomach.Solution!.Value, "Water", water));
             mobState.ChangeMobState(subject, MobState.Dead);
 
             vomit.Vomit(subject);

@@ -1,6 +1,7 @@
 using Content.Server.Projectiles;
 using Content.Server.Storage.EntitySystems;
 using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Projectiles;
 using Robust.Shared.Containers;

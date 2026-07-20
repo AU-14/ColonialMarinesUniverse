@@ -1,9 +1,9 @@
 #nullable enable
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Server.Construction.Components;
-using Content.Server.Temperature.Components;
 using Content.Shared.Construction;
 using Content.Shared.Temperature;
+using Content.Shared.Temperature.Components;
 
 namespace Content.IntegrationTests.Tests.Construction.Interaction;
 

@@ -3,7 +3,6 @@
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.EntityEffects;
 using Content.Shared.EntityEffects.Effects.StatusEffects;
-using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Components;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.GameObjects;
@@ -28,37 +27,25 @@ public sealed class DiphenhydramineDrowsinessTest
         {
             var entMan = server.ResolveDependency<IEntityManager>();
             var protoMan = server.ResolveDependency<IPrototypeManager>();
-            var status = entMan.System<SharedStatusEffectsSystem>();
+            var effects = entMan.System<SharedEntityEffectsSystem>();
+            var status = entMan.System<StatusEffectsSystem>();
             var reagent = protoMan.Index(Diphenhydramine);
 
-            var effect = reagent.Metabolisms!.Values
+            var effect = reagent.Metabolisms!.Metabolisms.Values
                 .SelectMany(entry => entry.Effects)
                 .OfType<ModifyStatusEffect>()
                 .Single(entry => entry.EffectProto == "StatusEffectDrowsiness");
 
-            Assert.Multiple(() =>
-            {
-                Assert.That(effect.Type, Is.EqualTo(StatusEffectMetabolismType.Add));
-                Assert.That(effect.Refresh, Is.True);
-            });
+            Assert.That(effect.Type, Is.EqualTo(StatusEffectMetabolismType.Update));
 
             var target = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
             entMan.AddComponent<MobStateComponent>(target);
-            var args = new EntityEffectReagentArgs(
-                target,
-                entMan,
-                null,
-                null,
-                FixedPoint2.New(1),
-                reagent,
-                null,
-                FixedPoint2.New(1));
 
-            effect.Effect(args);
+            effects.ApplyEffect(target, effect);
             Assert.That(status.TryGetTime(target, effect.EffectProto, out var first), Is.True);
             Assert.That(first.EndEffectTime, Is.Not.Null);
 
-            effect.Effect(args);
+            effects.ApplyEffect(target, effect);
             Assert.That(status.TryGetTime(target, effect.EffectProto, out var second), Is.True);
             Assert.That(second.EndEffectTime, Is.EqualTo(first.EndEffectTime));
         });

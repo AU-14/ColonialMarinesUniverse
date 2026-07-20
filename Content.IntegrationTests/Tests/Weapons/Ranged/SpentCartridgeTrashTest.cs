@@ -66,9 +66,9 @@ public sealed class SpentCartridgeTrashTest
             var target = map.GridCoords.Offset(Vector2.UnitX);
 
             var normal = entMan.SpawnEntity("CartridgePistol", map.GridCoords);
-            gun.Shoot(gunUid, gunComponent, normal, map.GridCoords, target, out _);
-
             var normalComponent = entMan.GetComponent<CartridgeAmmoComponent>(normal);
+            gun.Shoot((gunUid, gunComponent), [(normal, normalComponent)], map.GridCoords, target, out _);
+
             Assert.Multiple(() =>
             {
                 Assert.That(normalComponent.Spent, Is.True);
@@ -77,9 +77,9 @@ public sealed class SpentCartridgeTrashTest
             });
 
             var optedOut = entMan.SpawnEntity("TestCartridgePistolNoTrash", map.GridCoords);
-            gun.Shoot(gunUid, gunComponent, optedOut, map.GridCoords, target, out _);
-
             var optedOutComponent = entMan.GetComponent<CartridgeAmmoComponent>(optedOut);
+            gun.Shoot((gunUid, gunComponent), [(optedOut, optedOutComponent)], map.GridCoords, target, out _);
+
             Assert.Multiple(() =>
             {
                 Assert.That(optedOutComponent.Spent, Is.True);
@@ -98,7 +98,7 @@ public sealed class SpentCartridgeTrashTest
             var revolverComponent = entMan.GetComponent<RevolverAmmoProviderComponent>(revolver);
             var beforeReset = GetCartridges(entMan);
 
-            gun.EmptyRevolver(revolver, revolverComponent);
+            gun.EmptyRevolver((revolver, revolverComponent));
 
             var afterReset = GetCartridges(entMan);
             afterReset.ExceptWith(beforeReset);

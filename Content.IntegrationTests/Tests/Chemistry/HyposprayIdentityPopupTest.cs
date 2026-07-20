@@ -119,9 +119,10 @@ public sealed class HyposprayIdentityPopupTest
         await server.WaitAssertion(() =>
         {
             var identity = sEntMan.GetComponent<IdentityComponent>(sTarget);
-            Assert.That(identity.IdentityEntitySlot.ContainedEntity, Is.Not.Null);
-
-            var identityEntity = identity.IdentityEntitySlot.ContainedEntity!.Value;
+            var identitySlot = identity.IdentityEntitySlot ??
+                throw new AssertionException("The target must have an identity slot.");
+            var identityEntity = identitySlot.ContainedEntity ??
+                throw new AssertionException("The target must have an identity entity.");
             sEntMan.System<MetaDataSystem>().SetEntityName(identityEntity, "masked patient");
 
             var grammar = sEntMan.EnsureComponent<GrammarComponent>(identityEntity);

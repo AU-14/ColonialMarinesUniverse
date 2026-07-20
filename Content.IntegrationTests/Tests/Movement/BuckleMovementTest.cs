@@ -16,6 +16,8 @@ public sealed class BuckleMovementTest : MovementTest
         var sAlert = Server.System<AlertsSystem>();
         var buckle = Comp<BuckleComponent>(Player);
         var strap = Comp<StrapComponent>(Target);
+        var buckledAlert = strap.BuckledAlertType ??
+            throw new AssertionException("Chair must define a buckled alert.");
 
 #pragma warning disable RA0002
         buckle.Delay = TimeSpan.Zero;
@@ -26,8 +28,8 @@ public sealed class BuckleMovementTest : MovementTest
         Assert.That(buckle.Buckled, Is.False);
         Assert.That(buckle.BuckledTo, Is.Null);
         Assert.That(strap.BuckledEntities, Is.Empty);
-        Assert.That(cAlert.IsShowingAlert(CPlayer, strap.BuckledAlertType), Is.False);
-        Assert.That(sAlert.IsShowingAlert(SPlayer, strap.BuckledAlertType), Is.False);
+        Assert.That(cAlert.IsShowingAlert(CPlayer, buckledAlert), Is.False);
+        Assert.That(sAlert.IsShowingAlert(SPlayer, buckledAlert), Is.False);
 
         // Interact results in being buckled to the chair
         await Interact();
@@ -35,8 +37,8 @@ public sealed class BuckleMovementTest : MovementTest
         Assert.That(buckle.Buckled, Is.True);
         Assert.That(buckle.BuckledTo, Is.EqualTo(STarget));
         Assert.That(strap.BuckledEntities, Is.EquivalentTo(new[] { SPlayer }));
-        Assert.That(cAlert.IsShowingAlert(CPlayer, strap.BuckledAlertType), Is.True);
-        Assert.That(sAlert.IsShowingAlert(SPlayer, strap.BuckledAlertType), Is.True);
+        Assert.That(cAlert.IsShowingAlert(CPlayer, buckledAlert), Is.True);
+        Assert.That(sAlert.IsShowingAlert(SPlayer, buckledAlert), Is.True);
 
         // Attempting to walk away does nothing
         await Move(DirectionFlag.East, 1);
@@ -44,8 +46,8 @@ public sealed class BuckleMovementTest : MovementTest
         Assert.That(buckle.Buckled, Is.True);
         Assert.That(buckle.BuckledTo, Is.EqualTo(STarget));
         Assert.That(strap.BuckledEntities, Is.EquivalentTo(new[] { SPlayer }));
-        Assert.That(cAlert.IsShowingAlert(CPlayer, strap.BuckledAlertType), Is.True);
-        Assert.That(sAlert.IsShowingAlert(SPlayer, strap.BuckledAlertType), Is.True);
+        Assert.That(cAlert.IsShowingAlert(CPlayer, buckledAlert), Is.True);
+        Assert.That(sAlert.IsShowingAlert(SPlayer, buckledAlert), Is.True);
 
         // Interacting again will unbuckle the player
         await Interact();
@@ -53,8 +55,8 @@ public sealed class BuckleMovementTest : MovementTest
         Assert.That(buckle.Buckled, Is.False);
         Assert.That(buckle.BuckledTo, Is.Null);
         Assert.That(strap.BuckledEntities, Is.Empty);
-        Assert.That(cAlert.IsShowingAlert(CPlayer, strap.BuckledAlertType), Is.False);
-        Assert.That(sAlert.IsShowingAlert(SPlayer, strap.BuckledAlertType), Is.False);
+        Assert.That(cAlert.IsShowingAlert(CPlayer, buckledAlert), Is.False);
+        Assert.That(sAlert.IsShowingAlert(SPlayer, buckledAlert), Is.False);
 
         // And now they can move away
         await Move(DirectionFlag.SouthEast, 1);
