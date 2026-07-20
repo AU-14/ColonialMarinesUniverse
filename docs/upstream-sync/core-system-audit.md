@@ -3010,3 +3010,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Movement/Pulling/Systems/PullingSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static state-machine review confirms `MobStateChangedEvent` carries the assigned final state, fires only on an actual transition, and the existing critical/dead cleanup still resolves the pulled entity before stopping. Shared compilation plus alive-to-critical/dead, unchanged/rejected, revival, RMC critical-grace, fireman carry, retargeting, prediction, joint, hand, and pull-event cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1983 as `Ported (CS-0221)` when wave 0010 is committed.
+
+## CS-0222 — Use pixel coordinates for shuttle FTL controls
+
+- Upstream: [space-wizards/space-station-14#40933](https://github.com/space-wizards/space-station-14/pull/40933), `3944268fe48a76293ecc4820616cc87fff8caacc`, 2025-12-05
+- Areas: Movement, Interactions, Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Free-position FTL clicks now pass `RelativePixelPosition` into the shuttle map's inverse transform, and parallax tiling uses the control's `PixelSize`. Input, world-coordinate conversion, and rendering therefore share the same scaled coordinate space when UI scale differs from one.
+- RMC/CMU divergence: CMU retains RMC shuttle and dropship systems around the standard shuttle map control, but no RMC override replaces these two client coordinate conversions. Beacon selection already uses pixel coordinates and `PixelRect`; this brings free-position FTL and the background extent into alignment without changing server FTL validation or destination policy.
+- Decision and rationale: Port the two target-final substitutions exactly. `MapGridControl` derives its midpoint and minimap scale in pixels, so feeding logical UI coordinates skews click destinations, while drawing pixel-scaled map objects against logical `Size` leaves parallax gaps or overdraw.
+- Files changed: `Content.Client/Shuttles/UI/ShuttleMapControl.xaml.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static coordinate-flow review confirms beacon and free-position clicks now use the same pixel basis, `InverseMapPosition` expects that basis, and parallax bounds match the drawing surface. Client compilation plus UI-scale 1/non-1, free and beacon FTL, zoom, pan, rotation, parallax tiling, edge clicks, standard shuttle, and RMC shuttle-console cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1890 as `Ported (CS-0222)` when wave 0010 is committed.
