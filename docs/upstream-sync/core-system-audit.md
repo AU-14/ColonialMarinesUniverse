@@ -2698,3 +2698,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Research/Systems/ResearchSystem.cs`, `Content.Server/Research/Systems/ResearchSystem.Client.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static ownership review confirms no static mutable lookup collection remains, gridless clients receive an independent empty set, and all callers enumerate only their own result. Server compilation plus simultaneous UI, map-init, re-anchor, gridless, and multiple-server cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1368 as `Ported (CS-0197)` when wave 0007 is committed.
+
+## CS-0198 — Predict destructible entity deletion
+
+- Upstream: [space-wizards/space-station-14#40856](https://github.com/space-wizards/space-station-14/pull/40856), `11525673ba352cdbe0edbafd06c3749d39151ed8`, 2025-10-12
+- Areas: Interactions, GameTicking
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: `SharedDestructibleSystem.DestroyEntity` now queues deletion through the prediction-aware lifecycle. Client-predicted destruction can remove the entity immediately while retaining the engine's rollback/reconciliation semantics, instead of waiting on an ordinary authoritative queue deletion.
+- RMC/CMU divergence: RMC calls the shared destruction API from fork gameplay but does not override its deletion implementation. Destruction-attempt cancellation, destruction events, threshold behaviors, drops, and CMU projectile/damage rules are unchanged.
+- Decision and rationale: Port only the behavioral line from the upstream commit and omit its unrelated XML-comment formatting. The shared system already uses predicted events and CMU's pinned engine exposes `PredictedQueueDel` throughout shared gameplay code.
+- Files changed: `Content.Shared/Destructible/SharedDestructibleSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static lifecycle review confirms cancellation still occurs before the destruction event and deletion, event order is unchanged, and only the queueing primitive changes. Shared compilation plus predicted destruction, cancellation, server authority, rollback, repeated-call, and RMC threshold cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1296 as `Ported (CS-0198)` when wave 0007 is committed.
