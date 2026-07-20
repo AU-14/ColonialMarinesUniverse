@@ -6,7 +6,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Chemistry.Effects;
 
-public sealed partial class RemoveDamage : EntityEffect
+public sealed partial class RemoveDamage : RMCChemicalEffect
 {
     [DataField(required: true)]
     [JsonPropertyName("group")]
@@ -20,9 +20,9 @@ public sealed partial class RemoveDamage : EntityEffect
         return $"Removes all {type.LocalizedName} damage";
     }
 
-    public override void Effect(EntityEffectBaseArgs args)
+    protected override void Apply(RMCChemicalEffectArgs args)
     {
-        if (args is EntityEffectReagentArgs reagent && reagent.Scale < 0.95f)
+        if (args.Reagent != null && args.Scale < 0.95f)
             return;
 
         if (!args.EntityManager.TryGetComponent(args.TargetEntity, out DamageableComponent? damageable))

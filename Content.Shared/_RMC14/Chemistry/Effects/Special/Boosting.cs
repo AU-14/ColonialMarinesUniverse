@@ -10,7 +10,7 @@ public sealed partial class Boosting : RMCChemicalEffect
         return $"Boosts the potency of all other properties in this chemical by [color=yellow]{Potency * 0.5f}[/color]";
     }
 
-    protected override void ReagentBoost(EntityEffectReagentArgs args, ref float boost)
+    protected override void ReagentBoost(RMCChemicalEffectArgs args, ref float boost)
     {
         boost += Potency * 0.5f;
     }

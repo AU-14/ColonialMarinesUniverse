@@ -7,9 +7,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Chemistry.Effects;
 
-public sealed partial class NutrimentOverdose : EntityEffect
+public sealed partial class NutrimentOverdose : RMCChemicalEffect
 {
-    // Do NOT inherit from RMCChemicalEffect to avoid triggering overdose on Neogenetic and Hemogenic.
+    // Override Apply so this does not use RMCChemicalEffect's generic overdose hooks.
     [DataField]
     public FixedPoint2 Overdose = 60;
 
@@ -28,29 +28,26 @@ public sealed partial class NutrimentOverdose : EntityEffect
                $"Removes [color=green]{PercentRate * 100}%[/color] or [color=green]{MinimumRate}u[/color] of Nutriment per second while above [color=yellow]{Overdose}u[/color]";
     }
 
-    public override void Effect(EntityEffectBaseArgs args)
+    protected override void Apply(RMCChemicalEffectArgs args)
     {
-        if (args is not EntityEffectReagentArgs reagentArgs)
-            return;
-
         if (args.EntityManager.TryGetComponent<MobStateComponent>(args.TargetEntity, out var mobState) &&
             mobState.CurrentState == MobState.Dead)
         {
             return;
         }
 
-        if (reagentArgs.Source == null)
+        if (args.Source is not { } source)
             return;
 
-        var nutVolume = reagentArgs.Source.GetTotalPrototypeQuantity("Nutriment");
+        var nutVolume = source.GetTotalPrototypeQuantity("Nutriment");
         if (nutVolume < Overdose)
             return;
 
-        var removalAmount = FixedPoint2.Max(nutVolume * PercentRate, MinimumRate) * reagentArgs.Scale;
-        reagentArgs.Source.RemoveReagent("Nutriment", removalAmount);
+        var removalAmount = FixedPoint2.Max(nutVolume * PercentRate, MinimumRate) * args.Scale;
+        source.RemoveReagent("Nutriment", removalAmount);
 
         // Re-check volume AFTER removal. If removal brought us below threshold, skip the vomit.
-        if (reagentArgs.Source.GetTotalPrototypeQuantity("Nutriment") < Overdose)
+        if (source.GetTotalPrototypeQuantity("Nutriment") < Overdose)
             return;
 
         if (args.EntityManager.HasComponent<RMCVomitComponent>(args.TargetEntity))

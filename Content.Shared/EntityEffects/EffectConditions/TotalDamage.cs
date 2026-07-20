@@ -1,11 +1,23 @@
-using Content.Shared.EntityEffects;
 using Content.Shared.Damage;
+using Content.Shared.EntityConditions;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.EntityEffects.EffectConditions;
+namespace Content.Shared.EntityConditions.Conditions;
 
-public sealed partial class TotalDamage : EntityEffectCondition
+public sealed partial class TotalDamageEntityConditionSystem : EntityConditionSystem<DamageableComponent, TotalDamage>
+{
+    protected override void Condition(Entity<DamageableComponent> entity, ref EntityConditionEvent<TotalDamage> args)
+    {
+        var total = entity.Comp.TotalDamage;
+        args.Result = total >= args.Condition.Min && total <= args.Condition.Max;
+    }
+}
+
+/// <summary>
+/// Checks whether an entity's total damage falls within the configured range.
+/// </summary>
+public sealed partial class TotalDamage : EntityConditionBase<TotalDamage>
 {
     [DataField]
     public FixedPoint2 Max = FixedPoint2.MaxValue;
@@ -13,21 +25,10 @@ public sealed partial class TotalDamage : EntityEffectCondition
     [DataField]
     public FixedPoint2 Min = FixedPoint2.Zero;
 
-    public override bool Condition(EntityEffectBaseArgs args)
-    {
-        if (args.EntityManager.TryGetComponent(args.TargetEntity, out DamageableComponent? damage))
-        {
-            var total = damage.TotalDamage;
-            return total >= Min && total <= Max;
-        }
-
-        return false;
-    }
-
-    public override string GuidebookExplanation(IPrototypeManager prototype)
+    public override string EntityConditionGuidebookText(IPrototypeManager prototype)
     {
         return Loc.GetString("reagent-effect-condition-guidebook-total-damage",
-            ("max", Max == FixedPoint2.MaxValue ? (float) int.MaxValue : Max.Float()),
+            ("max", Max == FixedPoint2.MaxValue ? int.MaxValue : Max.Float()),
             ("min", Min.Float()));
     }
 }

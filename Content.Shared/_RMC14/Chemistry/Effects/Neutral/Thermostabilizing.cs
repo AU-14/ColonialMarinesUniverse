@@ -22,7 +22,7 @@ public sealed partial class Thermostabilizing : RMCChemicalEffect
                $"Critical overdoses cause [color=red]5[/color] seconds of unconsciousness with a [color=red]5%[/color] chance";
     }
 
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, RMCChemicalEffectArgs args)
     {
         var sys = args.EntityManager.EntitySysManager.GetEntitySystem<SharedRMCTemperatureSystem>();
         var current = sys.GetTemperature(args.TargetEntity);
@@ -39,7 +39,7 @@ public sealed partial class Thermostabilizing : RMCChemicalEffect
         sys.ForceChangeTemperature(args.TargetEntity, temp);
     }
 
-    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, RMCChemicalEffectArgs args)
     {
         var status = args.EntityManager.System<StatusEffectsSystem>();
         status.TryAddStatusEffect<RMCUnconsciousComponent>(
@@ -50,7 +50,7 @@ public sealed partial class Thermostabilizing : RMCChemicalEffect
         );
     }
 
-    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, RMCChemicalEffectArgs args)
     {
         // TODO RMC14 Drowsiness. if drowsiness > 10 5% change to paralyze(knockout) for 10 seconds.
         var random = IoCManager.Resolve<IRobustRandom>();

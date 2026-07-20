@@ -29,7 +29,7 @@ public sealed partial class Hemogenic : RMCChemicalEffect
             : baseText;
     }
 
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, RMCChemicalEffectArgs args)
     {
         var entityManager = args.EntityManager;
         var target = args.TargetEntity;
@@ -60,14 +60,14 @@ public sealed partial class Hemogenic : RMCChemicalEffect
         // TODO RMC14 M.reagent_move_delay_modifier += potency
     }
 
-    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, RMCChemicalEffectArgs args)
     {
         var damage = new DamageSpecifier();
         damage.DamageDict[PoisonType] = potency;
         damageable.TryChangeDamage(args.TargetEntity, damage, true, interruptsDoAfters: false);
     }
 
-    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, RMCChemicalEffectArgs args)
     {
         var entityManager = args.EntityManager;
         var target = args.TargetEntity;

@@ -9,7 +9,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Chemistry.Effects;
 
-public sealed partial class EqualHealthChange : EntityEffect
+public sealed partial class EqualHealthChange : RMCChemicalEffect
 {
     [DataField(required: true)]
     [JsonPropertyName("damage")]
@@ -53,11 +53,11 @@ public sealed partial class EqualHealthChange : EntityEffect
             ("healsordeals", healsordeals));
     }
 
-    public override void Effect(EntityEffectBaseArgs args)
+    protected override void Apply(RMCChemicalEffectArgs args)
     {
         var damage = new DamageSpecifier();
         var rmcDamageable = args.EntityManager.System<SharedRMCDamageableSystem>();
-        var scale = (args as EntityEffectReagentArgs)?.Scale ?? 1;
+        var scale = args.Reagent == null ? 1f : args.Scale;
         foreach (var (group, amount) in Damage)
         {
             damage = rmcDamageable.DistributeDamageCached(args.TargetEntity, group, amount * scale, damage);

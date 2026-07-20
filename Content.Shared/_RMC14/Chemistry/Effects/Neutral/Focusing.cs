@@ -27,7 +27,7 @@ public sealed partial class Focusing : RMCChemicalEffect
                $"Critical overdoses cause [color=red]{PotencyPerSecond * 3}[/color] toxin damage";
     }
 
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, RMCChemicalEffectArgs args)
     {
         var bloodstream = args.EntityManager.System<SharedRMCBloodstreamSystem>();
         var drunkSystem = args.EntityManager.System<SharedDrunkSystem>();
@@ -46,14 +46,14 @@ public sealed partial class Focusing : RMCChemicalEffect
         args.EntityManager.RemoveComponent<MutedComponent>(args.TargetEntity);
     }
 
-    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, RMCChemicalEffectArgs args)
     {
         var damage = new DamageSpecifier();
         damage.DamageDict[PoisonType] = potency;
         damageable.TryChangeDamage(args.TargetEntity, damage, true, interruptsDoAfters: false);
     }
 
-    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, RMCChemicalEffectArgs args)
     {
         var damage = new DamageSpecifier();
         damage.DamageDict[PoisonType] = potency * 3;

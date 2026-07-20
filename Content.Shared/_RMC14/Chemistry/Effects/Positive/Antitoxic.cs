@@ -26,7 +26,7 @@ public sealed partial class Antitoxic : RMCChemicalEffect
                $"Critical overdoses cause [color=red]5[/color] seconds of unconsciousness with a [color=red]5%[/color] chance";
     }
 
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, RMCChemicalEffectArgs args)
     {
         var rmcDamageable = args.EntityManager.System<SharedRMCDamageableSystem>();
         var healing = rmcDamageable.DistributeHealingCached(args.TargetEntity, ToxinGroup, potency * 2f);
@@ -39,12 +39,12 @@ public sealed partial class Antitoxic : RMCChemicalEffect
         bloodstream.RemoveBloodstreamToxins(args.TargetEntity, 0.125f);
     }
 
-    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, RMCChemicalEffectArgs args)
     {
         // TODO RMC14 eye damage
     }
 
-    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, RMCChemicalEffectArgs args)
     {
         // TODO RMC14 Drowsiness. if drowsiness > 10 5% change to paralyze(knockout) for 10 seconds.
         var random = IoCManager.Resolve<IRobustRandom>();

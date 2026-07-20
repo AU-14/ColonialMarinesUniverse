@@ -1,18 +1,33 @@
-using Content.Shared._RMC14.Chemistry.Reagent;
+using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Reagent;
+using Content.Shared.EntityConditions;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.EntityEffects.EffectConditions;
+namespace Content.Shared.EntityConditions.Conditions;
 
 /// <summary>
-///     Used for implementing reagent effects that require a certain amount of reagent before it should be applied.
-///     For instance, overdoses.
-///
-///     This can also trigger on -other- reagents, not just the one metabolizing. By default, it uses the
-///     one being metabolized.
+/// Checks a solution for a reagent quantity. During metabolism a null reagent means the reagent currently being metabolized.
 /// </summary>
-public sealed partial class ReagentThreshold : EntityEffectCondition
+public sealed partial class ReagentThresholdEntityConditionSystem : EntityConditionSystem<SolutionComponent, ReagentThreshold>
+{
+    protected override void Condition(Entity<SolutionComponent> entity, ref EntityConditionEvent<ReagentThreshold> args)
+    {
+        if (args.Condition.Reagent is not { } reagent)
+        {
+            args.Result = true;
+            return;
+        }
+
+        var quantity = entity.Comp.Solution.GetTotalPrototypeQuantity(reagent);
+        args.Result = quantity >= args.Condition.Min && quantity <= args.Condition.Max;
+    }
+}
+
+/// <summary>
+/// Compatibility condition for RMC reagent prototypes that use the metabolizing reagent implicitly.
+/// </summary>
+public sealed partial class ReagentThreshold : EntityConditionBase<ReagentThreshold>
 {
     [DataField]
     public FixedPoint2 Min = FixedPoint2.Zero;
@@ -20,38 +35,18 @@ public sealed partial class ReagentThreshold : EntityEffectCondition
     [DataField]
     public FixedPoint2 Max = FixedPoint2.MaxValue;
 
-    // TODO use ReagentId
     [DataField]
-    public string? Reagent;
+    public ProtoId<ReagentPrototype>? Reagent;
 
-    public override bool Condition(EntityEffectBaseArgs args)
-    {
-        if (args is EntityEffectReagentArgs reagentArgs)
-        {
-            var reagent = Reagent ?? reagentArgs.Reagent?.ID;
-            if (reagent == null)
-                return true; // No condition to apply.
-
-            var quant = FixedPoint2.Zero;
-            if (reagentArgs.Source != null)
-                quant = reagentArgs.Source.GetTotalPrototypeQuantity(reagent);
-
-            return quant >= Min && quant <= Max;
-        }
-
-        // TODO: Someone needs to figure out how to do this for non-reagent effects.
-        throw new NotImplementedException();
-    }
-
-    public override string GuidebookExplanation(IPrototypeManager prototype)
+    public override string EntityConditionGuidebookText(IPrototypeManager prototype)
     {
         ReagentPrototype? reagentProto = null;
-        if (Reagent is not null)
-            prototype.TryIndexReagent(Reagent, out reagentProto);
+        if (Reagent is { } reagent)
+            prototype.Resolve(reagent, out reagentProto);
 
         return Loc.GetString("reagent-effect-condition-guidebook-reagent-threshold",
             ("reagent", reagentProto?.LocalizedName ?? Loc.GetString("reagent-effect-condition-guidebook-this-reagent")),
-            ("max", Max == FixedPoint2.MaxValue ? (float) int.MaxValue : Max.Float()),
+            ("max", Max == FixedPoint2.MaxValue ? int.MaxValue : Max.Float()),
             ("min", Min.Float()));
     }
 }

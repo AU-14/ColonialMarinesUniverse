@@ -15,7 +15,7 @@ public sealed partial class Nutritious : RMCChemicalEffect
         return $"Restores [color=green]{updatedFactor * ActualPotency}[/color] nutrients to the body and satiates hunger";
     }
 
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, RMCChemicalEffectArgs args)
     {
         var mobState = args.EntityManager.System<MobStateSystem>();
         if (mobState.IsDead(args.TargetEntity))
