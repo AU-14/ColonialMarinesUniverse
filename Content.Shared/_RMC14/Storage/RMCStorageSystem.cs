@@ -126,7 +126,13 @@ public sealed partial class RMCStorageSystem : EntitySystem
     {
         var tries = 0;
         // Ignore stackables because SharedStorageSystem.OnAttemptInsert does not stack items.
-        while (!_storage.CanInsert(storage, args.Item, null, out var reason, ignoreStacks: true) &&
+        while (!_storage.CanInsert(
+                   storage.Owner,
+                   args.Item.Owner,
+                   out var reason,
+                   args.Storage,
+                   args.Item.Comp,
+                   ignoreStacks: true) &&
                reason == "comp-storage-insufficient-capacity" &&
                tries < 3)
         {
@@ -136,7 +142,9 @@ public sealed partial class RMCStorageSystem : EntitySystem
             if (CMPrototypeExtensions.FilterCM)
                 Log.Warning($"Storage {ToPrettyString(storage)} can't fit {ToPrettyString(args.Item)}");
 
-            foreach (var shape in _item.GetItemShape((storage, args.Storage), (args.Item, args.Item)))
+            foreach (var shape in _item.GetItemShape(
+                         (storage.Owner, args.Storage),
+                         (args.Item.Owner, args.Item.Comp)))
             {
                 var grid = args.Storage.Grid;
                 if (grid.Count == 0)
@@ -202,7 +210,7 @@ public sealed partial class RMCStorageSystem : EntitySystem
             return;
 
         args.Handled = true;
-        _storage.OpenStorageUI(uid.Value, entity.Value, storage, args.Silent, false);
+        _storage.OpenStorageUI(uid.Value, entity.Value, storage, args.Silent);
     }
 
     private void OnStorageSkillOpenAttempt(Entity<StorageSkillRequiredComponent> ent, ref StorageInteractAttemptEvent args)
@@ -216,14 +224,14 @@ public sealed partial class RMCStorageSystem : EntitySystem
 
     private void OnStorageEquip(Entity<StorageCloseOnMoveComponent> ent, ref GotEquippedEvent args)
     {
-        _ui.CloseUi(ent.Owner, StorageUiKey.Key, args.Equipee);
+        _ui.CloseUi(ent.Owner, StorageUiKey.Key, args.EquipTarget);
         if (TryComp<StorageOpenComponent>(ent, out var comp))
-            comp.OpenedAt.Remove(args.Equipee);
+            comp.OpenedAt.Remove(args.EquipTarget);
     }
 
     private void OnBlockInsertIntoEntityStorageAttempt(Entity<BlockEntityStorageComponent> ent, ref InsertIntoEntityStorageAttemptEvent args)
     {
-        if (_entityWhitelist.IsWhitelistPassOrNull(ent.Comp.Whitelist, args.Container))
+        if (_entityWhitelist.IsWhitelistPassOrNull(ent.Comp.Whitelist, args.Container.Owner))
             args.Cancelled = true;
     }
 
@@ -340,7 +348,7 @@ public sealed partial class RMCStorageSystem : EntitySystem
             if (!_entityWhitelist.IsWhitelistPassOrNull(limit.Whitelist, toInsert))
                 continue;
 
-            if (_entityWhitelist.IsBlacklistPass(limit.Blacklist, toInsert))
+            if (_entityWhitelist.IsWhitelistPass(limit.Blacklist, toInsert))
                 continue;
 
             var storedCount = 0;
@@ -352,7 +360,7 @@ public sealed partial class RMCStorageSystem : EntitySystem
                 if (!_entityWhitelist.IsWhitelistPassOrNull(limit.Whitelist, stored))
                     continue;
 
-                if (_entityWhitelist.IsBlacklistPass(limit.Blacklist, stored))
+                if (_entityWhitelist.IsWhitelistPass(limit.Blacklist, stored))
                     continue;
 
                 storedCount++;
@@ -567,7 +575,7 @@ public sealed partial class RMCStorageSystem : EntitySystem
             if (!_entityWhitelist.CheckBoth(slot.ContainedEntity, ent.Comp.Blacklist, ent.Comp.Whitelist))
                 continue;
 
-            _storage.OpenStorageUI(slot.ContainedEntity.Value, ent.Owner, storageComp, doAfter: false);
+            _storage.OpenStorageUI(slot.ContainedEntity.Value, ent.Owner, storageComp);
         }
     }
 
@@ -600,7 +608,7 @@ public sealed partial class RMCStorageSystem : EntitySystem
 
     private void OnMREInteractAttempt(Entity<MRERequireOpenBeforeStorageComponent> ent, ref StorageInteractAttemptEvent args)
     {
-        if (_openable.IsOpen(ent.Owner))
+        if (!_openable.IsClosed(ent.Owner))
             return;
 
         args.Cancelled = true;
