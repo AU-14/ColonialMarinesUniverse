@@ -3075,3 +3075,15 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Structures/Dispensers/base_structuredispensers.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype review confirms the only behavioral delta is removal of the base `StaticPrice`, while power, UI, storage, construction, wires, and deconstruction containers are unchanged. YAML/prototype validation, solution compilation, and the full integration suite are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1986 as `Ported (CS-0226)` when wave 0010 is committed; review the separate five-bounty reward corrections at index 1995 against CMU economy policy.
+
+## Upstream checkpoint — indices 1000–1999
+
+Date completed: 2026-07-20
+
+- Scope: Inventory waves 0006 through 0010, covering the second 1,000 pinned SS14 first-parent commits from indices 1000 through 1999 and every accepted decision through CS-0226. The tranche includes all eight audited areas: Movement, Shooting, Medical, Chemistry, Interactions, Physics, GameTicking, and Gamerules.
+- Unit tests: `dotnet test Content.Tests/Content.Tests.csproj --configuration DebugOpt --no-build --no-restore --nologo --verbosity:minimal` completed with 377 passed, 1 skipped, and 0 failed.
+- Integration tests: `dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj --configuration DebugOpt --no-build --no-restore --nologo --verbosity:minimal --logger "trx;LogFileName=checkpoint-0002.trx" --results-directory <temporary-directory> -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed` completed with 418 passed, 17 skipped, and 0 failed (435 total) in 34 minutes 11 seconds. Its TRX was written outside the repository.
+- Solution build: after the checkpoint correction below, `dotnet build SpaceStation14.slnx --configuration DebugOpt --no-restore --no-incremental --nologo --verbosity:minimal --disable-build-servers` completed in 1 minute 53 seconds with 0 warnings and 0 errors.
+- Resource validation: `dotnet run --project Content.YAMLLinter/Content.YAMLLinter.csproj --configuration DebugOpt --no-build` completed with `No errors found` in 91.9 seconds.
+- Defects caught: the initial full build reported analyzer RA0051 because CS-0201 declared its injected admin logger `readonly`. Commit `a039a53b4b` restored the established dependency-injection declaration and updated the durable audit; the complete non-incremental build then passed cleanly. Unit, resource, and integration validation found no further defects.
+- Disposition: The 1000–1999 checkpoint is closed. Continue with inventory wave 0011 at index 2000 and defer routine full build/test execution until index 2999 unless a specific risk justifies earlier focused validation.
