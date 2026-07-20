@@ -2841,3 +2841,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Xenoarchaeology/Artifact/XAE/XAERemoveCollisionSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static ownership review confirms fixture lookup and `SetHard` now use the same artifact entity while iteration and false-hard state remain unchanged. Shared compilation plus artifact-with-fixtures, missing-fixtures, multi-fixture, repeated activation, movement/collision, and RMC physics cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1559 as `Ported (CS-0208)` when wave 0008 is committed.
+
+## CS-0209 — Reset limited charges on rejuvenation
+
+- Upstream: [space-wizards/space-station-14#41165](https://github.com/space-wizards/space-station-14/pull/41165), `5cbc1cba48ba12067b7a3053393f9cdc4654331b`, 2025-10-30
+- Areas: Medical, Interactions, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Entities with `LimitedChargesComponent` now subscribe to `RejuvenateEvent` and reset to their configured maximum charges using the existing charge API. The reset also restores the recharge timestamp and dirties state through the established path.
+- RMC/CMU divergence: CMU and RMC already use limited charges for standard actions and fork abilities, and several RMC systems perform explicit charge resets for their own state transitions. Those specialized flows remain unchanged; this adds the missing general rejuvenation contract.
+- Decision and rationale: Route rejuvenation through `ResetCharges` rather than assigning fields in the handler. This preserves auto-recharge accounting, networking, maximum-charge configuration, and the existing no-op when already full.
+- Files changed: `Content.Shared/Charges/Systems/SharedChargesSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static event/API review confirms one subscription is added, reset resolves the existing component, and action attempts/consumption/recharge behavior is unchanged. Shared compilation plus empty, partial, full, auto-recharging, repeated rejuvenation, standard action, and RMC charge cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1575 as `Ported (CS-0209)` when wave 0008 is committed.
