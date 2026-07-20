@@ -1176,3 +1176,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.IntegrationTests/Tests/EntityTest.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms both target-final spawn/delete waits are 450 ticks. The expanded integration cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Track runtime at the checkpoint; if these cases become a bottleneck, retain the behavioral horizon while optimizing fixture batching rather than shortening coverage.
+
+## CS-0082 — Supply the blocked magic-mirror target identity
+
+- Upstream: [space-wizards/space-station-14#38907](https://github.com/space-wizards/space-station-14/pull/38907), `cce239dd93b31735707e40713cae038f9d34deb3`, 2025-07-10; target-final correction [#42948](https://github.com/space-wizards/space-station-14/pull/42948), `0b81cfb99eeb264f5d0ef4b01176915818a36597`, 2026-02-16
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Every hat-blocked magic-mirror operation now supplies the required `$target` localization argument. The identity is the person whose clothing blocks the operation, matching the later target-final correction, rather than the acting barber.
+- RMC/CMU divergence: CMU retains four server-side mirror handlers while target-final consolidates the check into the shared system. The final behavior is adapted consistently across all four existing paths without importing the larger appearance refactor.
+- Decision and rationale: Port the missing localization argument and immediately fold in its retained target-final semantic correction so messages format successfully and use the blocked target's identity and grammar.
+- Files changed: `Content.Server/MagicMirror/MagicMirrorSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms all four `magic-mirror-blocked-by-hat-self-target` calls provide the actual target entity. Localization formatting and self/other interaction cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: When the shared magic-mirror refactor is assessed, preserve this target-identity behavior while removing the duplicated server checks.
