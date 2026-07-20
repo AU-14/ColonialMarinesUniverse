@@ -2,7 +2,6 @@
 using Content.Client.Projectiles;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared.Projectiles;
-using Content.Shared.Weapons.Ranged.Events;
 using Robust.Client.GameObjects;
 using Robust.Client.Physics;
 using Robust.Client.Player;
@@ -37,8 +36,6 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
 
         SubscribeLocalEvent<PhysicsUpdateBeforeSolveEvent>(OnBeforeSolve);
         SubscribeLocalEvent<PhysicsUpdateAfterSolveEvent>(OnAfterSolve);
-        SubscribeLocalEvent<RequestShootEvent>(OnShootRequest);
-
         SubscribeLocalEvent<PredictedProjectileClientComponent, UpdateIsPredictedEvent>(OnClientProjectileUpdateIsPredicted);
         SubscribeLocalEvent<PredictedProjectileClientComponent, StartCollideEvent>(OnClientProjectileStartCollide);
 
@@ -68,14 +65,6 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
 
             predicted.Coordinates = null;
         }
-    }
-
-    private void OnShootRequest(RequestShootEvent ev, EntitySessionEventArgs args)
-    {
-        if (_timing.IsFirstTimePredicted)
-            return;
-
-        ShootRequested(ev.Gun, ev.Coordinates, ev.Target, null, args.SenderSession);
     }
 
     private void OnClientProjectileUpdateIsPredicted(Entity<PredictedProjectileClientComponent> ent, ref UpdateIsPredictedEvent args)

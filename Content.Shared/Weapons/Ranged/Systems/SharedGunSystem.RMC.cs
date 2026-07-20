@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.DoAfter;
 using Content.Shared.Trigger.Components;
 using Content.Shared.Weapons.Ranged.Components;
+using Robust.Shared.Map;
 
 namespace Content.Shared.Weapons.Ranged.Systems;
 
@@ -12,7 +13,19 @@ public abstract partial class SharedGunSystem
 {
     [Dependency] private AttachableHolderSystem _rmcAttachableHolder = default!;
     [Dependency] private RMCSharedWeaponControllerSystem _rmcWeaponController = default!;
+    [Dependency] private VehicleRideSurfaceSystem _rmcRideSurface = default!;
     [Dependency] private VehicleWeaponsSystem _rmcVehicleWeapons = default!;
+
+    private EntityUid? GetRmcShootTarget(EntityCoordinates coordinates, EntityUid? target)
+    {
+        if (target is not { } clickedTarget)
+            return null;
+
+        var mapCoordinates = TransformSystem.ToMapCoordinates(coordinates);
+        return _rmcRideSurface.TryGetRiderAtCoordinates(clickedTarget, mapCoordinates, out var rider)
+            ? rider
+            : target;
+    }
 
     private bool TryGetRmcPriorityGun(EntityUid entity, out Entity<GunComponent> gun)
     {

@@ -160,7 +160,7 @@ public abstract partial class SharedGunSystem : EntitySystem
             return;
 
         gun.Comp.ShootCoordinates = GetCoordinates(msg.Coordinates);
-        gun.Comp.Target = GetEntity(msg.Target);
+        gun.Comp.Target = GetRmcShootTarget(gun.Comp.ShootCoordinates.Value, GetEntity(msg.Target));
         AttemptShoot(user.Value, gun);
         if (msg.Continuous)
             gun.Comp.ShotCounter = 0;

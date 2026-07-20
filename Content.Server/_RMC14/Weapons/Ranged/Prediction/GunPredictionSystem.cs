@@ -5,7 +5,6 @@ using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared.GameTicking;
 using Content.Shared.Projectiles;
-using Content.Shared.Weapons.Ranged.Events;
 using Robust.Server.GameObjects;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
@@ -53,7 +52,6 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
         _transformQuery = GetEntityQuery<TransformComponent>();
 
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
-        SubscribeNetworkEvent<RequestShootEvent>(OnShootRequest);
         SubscribeNetworkEvent<PredictedProjectileHitEvent>(OnPredictedProjectileHit);
 
         SubscribeLocalEvent<PredictedProjectileServerComponent, MapInitEvent>(OnPredictedMapInit);
@@ -71,11 +69,6 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         _predicted.Clear();
-    }
-
-    private void OnShootRequest(RequestShootEvent ev, EntitySessionEventArgs args)
-    {
-        ShootRequested(ev.Gun, ev.Coordinates, ev.Target, null, args.SenderSession);
     }
 
     private void OnPredictedMapInit(Entity<PredictedProjectileServerComponent> ent, ref MapInitEvent args)
