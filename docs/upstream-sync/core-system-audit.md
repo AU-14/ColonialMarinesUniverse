@@ -3165,3 +3165,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Resist/ResistLockerSystem.cs`, `docs/upstream-sync/inventory-wave-0012.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static flow review confirms failure returns before state/popup changes, success retains the same DoAfter arguments, and completion/cancellation handling is unchanged. Server compilation plus cuffed, blocked, successful, cancelled, repeated, deleted-locker, bluespace-locker, and RMC restraint cases are queued for the index-2999 checkpoint.
 - Follow-up/debt: None; other DoAfter callers should be audited independently before applying the same ordering pattern.
+
+## CS-0233 — Prevent chemical reactions inside pill solutions
+
+- Upstream: [space-wizards/space-station-14#41457](https://github.com/space-wizards/space-station-14/pull/41457), `766f429fd9a0604e5cc82d27ee829b27f542a541`, 2026-01-15
+- Areas: Medical, Chemistry
+- Status: Ported (adapted)
+- Risk: Medium
+- Behavior/API delta: The `food` solutions on both `Pill` and the fork-specific `CMPill` base now set `canReact: false`. Reagents stored together in a pill remain the prescribed mixture rather than running container reactions before the pill is consumed.
+- RMC/CMU divergence: RMC duplicates the standard pill prototype as `CMPill` and derives its marine medicine catalog from that base, so the one-line upstream change would otherwise miss CMU's main medical pills. Applying the same solution flag to both bases preserves the target rule across standard and RMC content without changing RMC doses, skill-gated examination, sprites, storage, or reagent effects.
+- Decision and rationale: Port the target-final flag and mirror it at the RMC pill base. Pills are delivery containers, not reaction vessels; allowing their contents to react can silently alter a manufactured dose between creation and ingestion. Reaction and metabolism after transfer into an eligible target solution remain controlled by that destination.
+- Files changed: `Resources/Prototypes/Entities/Objects/Specific/chemistry.yml`, `Resources/Prototypes/_RMC14/Entities/Objects/Medical/pills.yml`, `docs/upstream-sync/inventory-wave-0012.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static inheritance review confirms standard pill families derive from `Pill`, RMC pill families derive from `CMPill`, and only the source solution's reaction permission changes. YAML/prototype validation plus mixed-reagent storage, pill creation, ChemMaster output, ingestion, metabolism, grinding, standard medicine, and RMC medicine cases are queued for the index-2999 checkpoint.
+- Follow-up/debt: Audit any independent pill-like prototypes that duplicate both bases before assuming they inherit this contract; stomach solution policy remains a separate medical/chemistry migration.

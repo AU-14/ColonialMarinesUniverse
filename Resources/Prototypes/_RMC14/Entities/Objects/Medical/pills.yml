@@ -36,6 +36,7 @@
     solutions:
       food:
         maxVol: 60
+        canReact: false
   - type: SolutionSpiker
     sourceSolution: food
   - type: Extractable
