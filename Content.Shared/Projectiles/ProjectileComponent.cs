@@ -76,6 +76,12 @@ public sealed partial class ProjectileComponent : Component
     public bool OnlyCollideWhenShot = false;
 
     /// <summary>
+    /// RMC hard cap for projectiles fired at a fixed point.
+    /// </summary>
+    [DataField]
+    public float? MaxFixedRange;
+
+    /// <summary>
     ///     If true, the projectile has hit enough targets and should no longer interact with further collisions pending deletion.
     /// </summary>
     [DataField]
