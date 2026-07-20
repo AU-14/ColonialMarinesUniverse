@@ -13,4 +13,10 @@ public sealed partial class GlobalTimeManagerComponent : Component
     /// </summary>
     [DataField, AutoPausedField, AutoNetworkedField]
     public TimeSpan TimeOffset;
+
+    /// <summary>
+    /// RMC calendar date paired with the global time offset.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public DateTime DateOffset;
 }
