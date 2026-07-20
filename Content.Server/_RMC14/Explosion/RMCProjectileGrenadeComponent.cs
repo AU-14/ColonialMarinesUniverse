@@ -50,4 +50,10 @@ public sealed partial class ProjectileGrenadeComponent
 
     [DataField]
     public bool DirectHit;
+
+    /// <summary>
+    ///     The amount of payload projectiles applied immediately on a direct hit.
+    /// </summary>
+    [DataField]
+    public int DirectHitProjectiles = 5;
 }

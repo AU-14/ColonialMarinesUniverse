@@ -14,6 +14,9 @@ using Content.Shared.Examine;
 using Content.Shared.Humanoid;
 using Content.Shared.Popups;
 using Content.Shared.Sticky;
+using Content.Shared.Trigger;
+using Content.Shared.Trigger.Components;
+using Content.Shared.Trigger.Systems;
 using Robust.Server.Audio;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
@@ -41,8 +44,8 @@ public sealed partial class RMCExplosionSystem : SharedRMCExplosionSystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<TriggerEvent>(OnTrigger);
-        SubscribeLocalEvent<ActiveTimerTriggerEvent>(OnActiveTimerTrigger);
+        SubscribeLocalEvent<MetaDataComponent, TriggerEvent>(OnTrigger);
+        SubscribeLocalEvent<MetaDataComponent, ActiveTimerTriggerEvent>(OnActiveTimerTrigger);
 
         SubscribeLocalEvent<CMVocalizeTriggerComponent, ActiveTimerTriggerEvent>(OnVocalizeTriggered);
 
@@ -56,16 +59,16 @@ public sealed partial class RMCExplosionSystem : SharedRMCExplosionSystem
         CacheDecals("RMCScorchSmall");
     }
 
-    private void OnActiveTimerTrigger(ref ActiveTimerTriggerEvent ev)
+    private void OnActiveTimerTrigger(Entity<MetaDataComponent> ent, ref ActiveTimerTriggerEvent ev)
     {
         var rmcEv = new RMCActiveTimerTriggerEvent();
-        RaiseLocalEvent(ev.Triggered, ref rmcEv);
+        RaiseLocalEvent(ent.Owner, ref rmcEv);
     }
 
-    private void OnTrigger(TriggerEvent ev)
+    private void OnTrigger(Entity<MetaDataComponent> ent, ref TriggerEvent ev)
     {
         var rmcEv = new RMCTriggerEvent(ev.User, ev.Handled);
-        RaiseLocalEvent(ev.Triggered, ref rmcEv);
+        RaiseLocalEvent(ent.Owner, ref rmcEv);
         ev.Handled = rmcEv.Handled;
     }
 
@@ -95,7 +98,16 @@ public sealed partial class RMCExplosionSystem : SharedRMCExplosionSystem
 
     private void OnExplosiveDeleteWallsStuck(Entity<RMCExplosiveDeleteComponent> ent, ref EntityStuckEvent args)
     {
-        _trigger.HandleTimerTrigger(ent, args.User, ent.Comp.Delay, ent.Comp.BeepInterval, null, ent.Comp.BeepSound);
+        var timer = EnsureComp<TimerTriggerComponent>(ent);
+        timer.Delay = TimeSpan.FromSeconds(ent.Comp.Delay);
+        timer.BeepInterval = TimeSpan.FromSeconds(ent.Comp.BeepInterval);
+        timer.InitialBeepDelay = ent.Comp.InitialBeepDelay is { } delay
+            ? TimeSpan.FromSeconds(delay)
+            : null;
+        timer.BeepSound = ent.Comp.BeepSound;
+        Dirty(ent, timer);
+
+        _trigger.ActivateTimerTrigger((ent.Owner, timer), args.User);
     }
 
     private void OnExplosionEffectTriggered(Entity<RMCScorchEffectComponent> ent, ref CMExplosiveTriggeredEvent args)
