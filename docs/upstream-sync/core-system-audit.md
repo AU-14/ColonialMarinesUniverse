@@ -1579,3 +1579,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Clothing/EntitySystems/ToggleableClothingSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static teardown tracing confirms applying-state and attached-component guards remain, terminating owners return before container insertion, and map-initialized owners retain existing behavior. Shared compilation plus delete-while-toggled and ordinary unequip/reinsert cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a regression deleting an equipped RMC hardsuit with its helmet toggled and assert no lifecycle or container exception.
+
+## CS-0113 — Allow temporarily unbound menu controls
+
+- Upstream: [space-wizards/space-station-14#39732](https://github.com/space-wizards/space-station-14/pull/39732), `5a5b81f7dc8434a2ca5000cb3e3a4e031e56c4b2`, 2025-08-18
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Top-menu buttons now accept a nullable bound-key function and display an empty shortcut label while unbound, preventing key-binding add/remove or input-mode refresh events from dereferencing a missing function.
+- RMC/CMU divergence: RMC adds a language menu button through the same control and assigns a concrete key normally. It remains compatible while gaining safety during rebinding and transient control construction.
+- Decision and rationale: Port the retained nullable property and all three label-refresh guards together so no update path can call `ShortKeyName` without a key.
+- Files changed: `Content.Client/UserInterface/Controls/MenuButton.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static usage review confirms every current XAML/RMC caller may still assign a non-null key and no external code requires a non-null getter. Client compilation plus clear/rebind/input-mode changes with all top-menu buttons mounted are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a focused control test that clears and restores `BoundKey` while binding notifications fire, asserting label text and absence of exceptions.
