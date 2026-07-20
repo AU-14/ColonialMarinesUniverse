@@ -121,9 +121,9 @@
       Tongue: OrganHumanTongue
       Appendix: OrganHumanAppendix
       Ears: OrganHumanEars
-      Lungs: OrganHumanLungs
-      Heart: OrganHumanHeart
-      Stomach: OrganHumanStomach
+      Lungs: RMCOrganHumanLungs
+      Heart: RMCOrganHumanHeart
+      Stomach: RMCOrganHumanStomach
       Liver: OrganHumanLiver
       Kidneys: OrganHumanKidneys
   - type: Damageable
