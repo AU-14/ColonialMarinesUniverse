@@ -1,0 +1,163 @@
+- type: entity
+  id: CMURandomWildernessSpawner
+  name: random wilderness spawner
+  suffix: woodland
+  parent: MarkerBase
+  components:
+  - type: Sprite
+    sprite: Markers/atmos.rsi
+    state: base
+  - type: EntityTableSpawner
+    table: !type:GroupSelector
+      children:
+      - !type:GroupSelector
+        prob: 0.23
+        children:
+        - id: RMCFloraTree01
+        - id: RMCFloraTree02
+        - id: RMCFloraTree03
+        - id: RMCFloraTree04
+        - id: RMCFloraTree05
+        - id: RMCFloraTree06
+      - !type:GroupSelector
+        prob: 0.1
+        children:
+        - id: RMCFloraTreeLarge01
+        - id: RMCFloraTreeLarge01
+        - id: RMCFloraTreeLarge01
+        - id: RMCFloraTreeLarge01
+        - id: RMCFloraTreeLarge01
+        - id: RMCFloraTreeTyrargoBald01
+        - id: RMCFloraTreeLarge01
+      - !type:GroupSelector
+        prob: 0.4
+        children:
+        - id: CMUDecalSpawnerGrassTemperate
+      - !type:GroupSelector
+        prob: 0.25
+        children:
+        - id: RMCBusha1
+        - id: RMCBusha2
+        - id: RMCBusha3
+        - id: RMCBushb1
+        - id: RMCBushb2
+        - id: RMCBushb3
+        - id: RMCBushc1
+        - id: RMCBushc2
+        - id: RMCBushc3
+        - id: RMCBushh1
+        - id: RMCBushh2
+        - id: RMCBushh3
+        - id: RMCBushg1
+        - id: RMCBushg2
+        - id: RMCBushg3
+      - !type:GroupSelector
+        prob: 0.1
+        children:
+        - id: RMCTyrargoStick01
+        - id: RMCTyrargoStick02
+        - id: RMCTyrargoStick03
+        - id: RMCTyrargoStick04
+      - !type:GroupSelector
+        prob: 0.01
+        children:
+        - id: RMCTyrargoTrunk01
+        - id: RMCTyrargoTrunk02
+      - !type:GroupSelector
+        prob: 0.06
+        children:
+        - id: RMCFloraTyrargoTreeStump01
+        - id: RMCFloraTreeStump
+      - !type:GroupSelector
+        prob: 0.06
+        children:
+        - id: RMCRock01
+        - id: RMCRock02
+        - id: RMCRock03
+        - id: RMCRock04
+        - id: RMCRock05
+
+- type: entity
+  id: CMURandomWildernessSpawnerNoTrees
+  name: random wilderness spawner
+  suffix: woodland, no trees
+  parent: MarkerBase
+  components:
+  - type: Sprite
+    sprite: Markers/atmos.rsi
+    state: base
+  - type: EntityTableSpawner
+    table: !type:GroupSelector
+      children:
+      - !type:GroupSelector
+        prob: 0.4
+        children:
+        - id: CMUDecalSpawnerGrassTemperate
+      - !type:GroupSelector
+        prob: 0.25
+        children:
+        - id: RMCBusha1
+        - id: RMCBusha2
+        - id: RMCBusha3
+        - id: RMCBushb1
+        - id: RMCBushb2
+        - id: RMCBushb3
+        - id: RMCBushc1
+        - id: RMCBushc2
+        - id: RMCBushc3
+        - id: RMCBushh1
+        - id: RMCBushh2
+        - id: RMCBushh3
+        - id: RMCBushg1
+        - id: RMCBushg2
+        - id: RMCBushg3
+      - !type:GroupSelector
+        prob: 0.1
+        children:
+        - id: RMCTyrargoStick01
+        - id: RMCTyrargoStick02
+        - id: RMCTyrargoStick03
+        - id: RMCTyrargoStick04
+      - !type:GroupSelector
+        prob: 0.01
+        children:
+        - id: RMCTyrargoTrunk01
+        - id: RMCTyrargoTrunk02
+      - !type:GroupSelector
+        prob: 0.06
+        children:
+        - id: RMCFloraTyrargoTreeStump01
+        - id: RMCFloraTreeStump
+      - !type:GroupSelector
+        prob: 0.06
+        children:
+        - id: RMCRock01
+        - id: RMCRock02
+        - id: RMCRock03
+        - id: RMCRock04
+        - id: RMCRock05
+
+- type: entity
+  parent: DecalSpawnerBase
+  id: CMUDecalSpawnerGrassTemperate
+  suffix: grass
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: decal
+  - type: RandomDecalSpawner
+    radius: 0.3
+    zIndex: 5
+    deleteSpawnerAfterSpawn: true
+    decals:
+    - Grassa1
+    - Grassa2
+    - Grassa3
+    - Grassa4
+    - Grassa5
+    - Grassb1
+    - Grassb2
+    - Grassb3
+    - Grassb4
+    - Grassb5

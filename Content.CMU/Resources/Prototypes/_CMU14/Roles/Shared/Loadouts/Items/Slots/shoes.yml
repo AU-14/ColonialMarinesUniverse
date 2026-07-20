@@ -32,3 +32,23 @@
   id: BootsCorporateAU14
   equipment:
     shoes: RMCBootsCorporate
+
+- type: loadout
+  id: ShoesWhiteAU14
+  equipment:
+    shoes: RMCShoesWhite
+
+- type: loadout
+  id: ShoesOrangeAU14
+  equipment:
+    shoes: RMCShoesOrange
+
+- type: loadout
+  id: ShoesLeatherAU14
+  equipment:
+    shoes: RMCShoesLeather
+
+- type: loadout
+  id: BootsPMCAU14
+  equipment:
+    shoes: RMCBootsPMC

@@ -71,6 +71,30 @@
     - AU14WindbreakerBlue
 
 - type: loadout
+  id: WindbreakerGreyAU14
+  storage:
+    back:
+    - RMCJacketWindbreakerGrey
+
+- type: loadout
+  id: WindbreakerAU14
+  storage:
+    back:
+    - RMCJacketWindbreaker
+
+- type: loadout
+  id: WindbreakerFirstResponderAU14
+  storage:
+    back:
+    - RMCJacketWindbreakerFirstResponder
+
+- type: loadout
+  id: WindbreakerBrownAU14
+  storage:
+    back:
+    - RMCJacketWindbreakerBrown
+
+- type: loadout
   id: CivilianJacketSnowSuitAU14
   storage:
     back:
