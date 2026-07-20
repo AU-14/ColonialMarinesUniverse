@@ -747,3 +747,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/GameRules/events.yml`, `Content.IntegrationTests/Tests/GameRules/BureaucraticErrorIgnoredJobsTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms every protected job prototype resolves and the pinned target retains exactly these five ignored IDs. A regression spawns the real rule and requires set equivalence, detecting both missing safeguards and unintended policy expansion. Per the requested 20-port cadence, execution is deferred to the CS-0041–CS-0060 checkpoint.
 - Follow-up/debt: If standard station events are enabled in CMU's primary mode, define an explicit protected-role policy for RMC jobs before allowing Bureaucratic Error to mutate their slots.
+
+## CS-0049 — Stop dead mobs vomiting by default
+
+- Upstream: [space-wizards/space-station-14#40020](https://github.com/space-wizards/space-station-14/pull/40020), `ca29e0a16690a5f827095718afb60cfb44e702a8`, 2025-09-01
+- Areas: Medical, Chemistry
+- Status: Adapted
+- Risk: Low
+- Behavior/API delta: Standard vomiting now exits before changing hunger, thirst, movement, stomach contents, bloodstream chemicals, puddles, sound, or popups when the target is dead. Callers that intentionally need the old behavior can pass the new `force` argument.
+- RMC/CMU divergence: RMC's separate predicted `RMCVomitSystem` already rejects dead entities in both delayed and immediate entry points. Standard reagent effects and administrative smites still use the server `VomitSystem`; their normal calls now inherit the upstream safeguard without changing the RMC sequence.
+- Decision and rationale: Adapt the target-final guard to the current server-owned implementation and keep the optional `force` escape hatch. Importing the pinned target's later shared/predicted vomit rewrite here would mix a much broader API and prediction migration into this isolated medical fix.
+- Files changed: `Content.Server/Medical/VomitSystem.cs`, `Content.IntegrationTests/Tests/Medical/VomitDeadMobTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the pinned target retains the dead-state guard after moving standard vomiting into shared code. A queued integration regression fills a real body stomach, verifies a normal dead-mob call preserves its contents, then verifies `force: true` empties it. Execution is deferred to the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Audit the later shared/predicted vomit rewrite separately, including how its relayed stomach event should coexist with RMC's own predicted vomit sequence.
