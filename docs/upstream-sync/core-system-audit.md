@@ -994,3 +994,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Zombies/ZombieSystem.cs`, `Content.Shared/Zombies/ZombieComponent.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms component state contains only the typed ID and the emote handler resolves it immediately before playback. Shared/server compilation and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint; deterministic prototype reload coverage is not currently exposed by the zombie test seam.
 - Follow-up/debt: Add a live-reload emote regression when prototype reloads are controllable in integration tests, and audit the remaining legacy string prototype fields on `ZombieComponent` separately.
+
+## CS-0068 — Give observers clear distant whispers
+
+- Upstream: [space-wizards/space-station-14#38202](https://github.com/space-wizards/space-station-14/pull/38202), `bd853b60de27889e56033370eb82bdba5266d7db`, 2025-07-14
+- Areas: Interactions
+- Status: Adapted
+- Risk: Low
+- Behavior/API delta: Observer recipients now take the clear-whisper branch regardless of distance, so ghosts no longer receive random readability fragments for whispers they are permitted to monitor.
+- RMC/CMU divergence: RMC moved whisper delivery into its language-aware partial chat system. The guard is applied there, preserving RMC listener-specific language transformation, line-of-sight policy, identity naming, replay capture, and xeno filtering while bypassing only distance-based fragment obfuscation for observers.
+- Decision and rationale: Adapt the target-final `data.Observer` condition at the equivalent RMC branch rather than restoring the obsolete base whisper method. Living listeners retain both clear and muffled distance thresholds.
+- Files changed: `Content.Server/_RMC14/Chat/Chat/ChatSystem.Language.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static control-flow review confirms observers still pass the existing range-transmit and language checks but can no longer enter either distance-obfuscated branch. Server compilation and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add multi-session chat coverage for nearby living, distant living, and observer recipients, including an RMC language the observer does not ordinarily understand.

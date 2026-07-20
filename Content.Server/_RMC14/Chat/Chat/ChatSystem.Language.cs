@@ -205,7 +205,7 @@ public sealed partial class ChatSystem
 
             string actualWrappedMessage;
 
-            if (data.Range <= WhisperClearRange)
+            if (data.Range <= WhisperClearRange || data.Observer)
             {
                 var hidePopup = visibleLanguage && !_language.CanUnderstand(listener, language);
                 var useEmoteSpeechBubble = hidePopup;
