@@ -1,4 +1,3 @@
-using Content.Server.PowerCell;
 using Content.Shared._RMC14.Medical.Defibrillator;
 using Content.Shared.Medical;
 using Content.Shared.PowerCell;
@@ -21,13 +20,13 @@ public sealed partial class RMCDefibrillatorSystem : SharedRMCDefibrillatorSyste
 
     private void OnChangeCharge(Entity<DefibrillatorComponent> entity, ref PowerCellChangedEvent args)
     {
-        if (!_powerCell.TryGetBatteryFromSlot(entity, out var battery) || !TryComp<PowerCellDrawComponent>(entity, out var draw))
+        if (!_powerCell.TryGetBatteryFromSlot(entity.Owner, out var battery) || !TryComp<PowerCellDrawComponent>(entity, out var draw))
             return;
 
-        var frac = battery.CurrentCharge / battery.MaxCharge;
+        var frac = battery.Value.Comp.CurrentCharge / battery.Value.Comp.MaxCharge;
         var level = (byte)ContentHelpers.RoundToLevels(frac, 1, (int)DefibrillatorChargeVisuals.Full);
         level = (byte)Math.Ceiling(frac * (int)DefibrillatorChargeVisuals.Full);
-        if (battery.CurrentCharge < draw.UseRate)
+        if (battery.Value.Comp.CurrentCharge < draw.UseCharge)
             level = 0;
 
         if (!TryComp<AppearanceComponent>(entity, out var appearance))

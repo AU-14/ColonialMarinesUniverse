@@ -28,7 +28,7 @@ public sealed partial class VisorSystem : EntitySystem
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private SharedPowerCellSystem _powerCell = default!;
+    [Dependency] private PowerCellSystem _powerCell = default!;
     [Dependency] private SharedToolSystem _tool = default!;
     [Dependency] private SharedItemSystem _item = default!;
     [Dependency] private SkillsSystem _skills = default!;
@@ -48,7 +48,7 @@ public sealed partial class VisorSystem : EntitySystem
         SubscribeLocalEvent<VisorComponent, ActivateVisorAttemptEvent>(OnVisorAttemptActivate);
         SubscribeLocalEvent<VisorComponent, ActivateVisorEvent>(OnVisorActivate);
         SubscribeLocalEvent<VisorComponent, DeactivateVisorEvent>(OnVisorDeactivate);
-        SubscribeLocalEvent<VisorComponent, PowerCellChangedEvent>(OnCycleableVisorPowerCellChanged, after: [typeof(SharedPowerCellSystem)]);
+        SubscribeLocalEvent<VisorComponent, PowerCellChangedEvent>(OnCycleableVisorPowerCellChanged, after: [typeof(PowerCellSystem)]);
 
         SubscribeLocalEvent<ToggleVisorComponent, ActivateVisorAttemptEvent>(OnToggleVisorAttemptActivate);
         SubscribeLocalEvent<ToggleVisorComponent, ActivateVisorEvent>(OnToggleVisorActivate);
@@ -339,26 +339,8 @@ public sealed partial class VisorSystem : EntitySystem
 
     private void OnCycleableVisorPowerCellChanged(Entity<VisorComponent> ent, ref PowerCellChangedEvent args)
     {
-        if (!args.Ejected && _powerCell.HasDrawCharge(ent))
+        if (!args.Ejected && _powerCell.HasDrawCharge(ent.Owner))
             return;
-
-        // power cell draw is completely broken upstream and does not work AT ALL if
-        // the battery and power cell draw component are on different entities
-        // all because client and server systems for power cell draw are DIFFERENT
-        // despite some of the code being the same and copy pasted
-        // and ALL OF THIS being done JUST to avoid networking a SINGLE NUMBER on battery component
-        // so we manually sync the booleans that the client needs not to mispredict
-        // because having 3 times the code and 2 booleans is easier than networking one float
-        // this is fucking dogshit thank you to whichever soldier did this personal shoutout
-        if (TryComp(ent, out PowerCellDrawComponent? powerCellDraw))
-        {
-            var canDraw = !args.Ejected && _powerCell.HasDrawCharge(ent, powerCellDraw);
-            var canUse = !args.Ejected && _powerCell.HasDrawCharge(ent, powerCellDraw);
-
-            powerCellDraw.CanDraw = canDraw;
-            powerCellDraw.CanUse = canUse;
-            Dirty(ent, powerCellDraw);
-        }
 
         if (!_container.TryGetContainingContainer((ent, null), out var visorContainer) ||
             !TryComp(visorContainer.Owner, out CycleableVisorComponent? cycleable))

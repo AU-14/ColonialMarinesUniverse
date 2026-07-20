@@ -100,7 +100,7 @@
           Full: { state: full }
   - type: PowerCellDraw
     enabled: false
-    useRate: 66
+    useCharge: 66
   - type: RMCPowerUsageDisplay
   - type: UseOnSynthBlocked
     whitelist:
@@ -143,7 +143,7 @@
     sprite: _RMC14/Objects/Medical/compact_defib.rsi
     size: Small
   - type: PowerCellDraw
-    useRate: 132
+    useCharge: 132
 
 - type: entity
   parent: [CMBaseDefibrillator, RMCPowerCellSlotUnremovable]
@@ -160,7 +160,7 @@
       visible: false
   - type: PowerCellDraw
     enabled: false
-    useRate: 1000
+    useCharge: 1000
   - type: RMCPowerUsageDisplay
   - type: RequiresSkill
     skills:

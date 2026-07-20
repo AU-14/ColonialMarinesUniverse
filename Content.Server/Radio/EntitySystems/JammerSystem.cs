@@ -5,10 +5,7 @@ namespace Content.Server.Radio.EntitySystems;
 
 public sealed partial class JammerSystem : SharedJammerSystem
 {
-    [Dependency] private PowerCellSystem _powerCell = default!;
-    [Dependency] private BatterySystem _battery = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private SharedDeviceNetworkJammerSystem _jammer = default!;
 
     public override void Initialize()
     {

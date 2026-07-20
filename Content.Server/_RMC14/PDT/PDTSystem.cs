@@ -1,5 +1,4 @@
 using System.Numerics;
-using Content.Server.PowerCell;
 using Content.Shared._RMC14.Maths;
 using Content.Shared._RMC14.PDT;
 using Content.Shared._RMC14.Storage;
@@ -104,7 +103,7 @@ public sealed partial class PDTSystem : EntitySystem
         if (!TryGetSignal(ent, out var bracelet, out var locatorCoords, out var braceletCoords, args.User))
             return;
 
-        if (!_cell.TryUseCharge(ent, ent.Comp.PingCharge, user: args.User))
+        if (!_cell.TryUseCharge(ent.Owner, ent.Comp.PingCharge, user: args.User))
         {
             UpdateLocatorVisuals(ent);
             return;
@@ -296,17 +295,17 @@ public sealed partial class PDTSystem : EntitySystem
 
     private PDTLocatorScreenVisuals GetLocatorScreen(Entity<PDTLocatorComponent> locator)
     {
-        if (!_cell.TryGetBatteryFromSlot(locator, out _, out var battery) ||
-            battery.MaxCharge <= 0 ||
-            battery.CurrentCharge <= 0)
+        if (!_cell.TryGetBatteryFromSlot(locator.Owner, out var battery) ||
+            battery.Value.Comp.MaxCharge <= 0 ||
+            battery.Value.Comp.CurrentCharge <= 0)
         {
             return PDTLocatorScreenVisuals.Off;
         }
 
-        if (battery.CurrentCharge < locator.Comp.PingCharge)
+        if (battery.Value.Comp.CurrentCharge < locator.Comp.PingCharge)
             return PDTLocatorScreenVisuals.Red;
 
-        if (battery.CurrentCharge < battery.MaxCharge * LowBatteryFraction)
+        if (battery.Value.Comp.CurrentCharge < battery.Value.Comp.MaxCharge * LowBatteryFraction)
             return PDTLocatorScreenVisuals.Yellow;
 
         return PDTLocatorScreenVisuals.Normal;

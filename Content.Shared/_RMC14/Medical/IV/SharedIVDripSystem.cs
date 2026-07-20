@@ -28,7 +28,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private SharedPowerCellSystem _powerCell = default!;
+    [Dependency] private PowerCellSystem _powerCell = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;

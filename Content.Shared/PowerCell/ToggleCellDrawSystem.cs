@@ -10,7 +10,7 @@ namespace Content.Shared.PowerCell;
 public sealed partial class ToggleCellDrawSystem : EntitySystem
 {
     [Dependency] private ItemToggleSystem _toggle = default!;
-    [Dependency] private SharedPowerCellSystem _cell = default!;
+    [Dependency] private PowerCellSystem _cell = default!;
 
     public override void Initialize()
     {

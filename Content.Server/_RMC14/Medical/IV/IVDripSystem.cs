@@ -2,7 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Server._RMC14.Body;
 using Content.Server.Chat.Systems;
-using Content.Server.PowerCell;
 using Content.Shared.PowerCell.Components;
 using Content.Shared._RMC14.Medical.IV;
 using Content.Shared.Body.Components;
@@ -12,6 +11,7 @@ using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
+using Content.Shared.PowerCell;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -216,10 +216,10 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
 
     private DialysisBatteryLevel GetDialysisBatteryLevel(Entity<PortableDialysisComponent> dialysis)
     {
-        if (!_powerCell.TryGetBatteryFromSlot(dialysis, out _, out var battery) || battery.MaxCharge <= 0)
+        if (!_powerCell.TryGetBatteryFromSlot(dialysis.Owner, out var battery) || battery.Value.Comp.MaxCharge <= 0)
             return DialysisBatteryLevel.Battery0;
 
-        var percentCharged = battery.CurrentCharge / battery.MaxCharge;
+        var percentCharged = battery.Value.Comp.CurrentCharge / battery.Value.Comp.MaxCharge;
         return percentCharged switch
         {
             > 0.85f => DialysisBatteryLevel.Battery100,

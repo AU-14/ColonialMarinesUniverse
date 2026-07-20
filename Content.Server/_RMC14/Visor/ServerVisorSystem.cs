@@ -1,5 +1,4 @@
 using System.Linq;
-using Content.Server.PowerCell;
 using Content.Shared._RMC14.Visor;
 using Content.Shared._RMC14.NightVision;
 using Content.Shared.Examine;
@@ -49,7 +48,7 @@ public sealed partial class ServerVisorSystem : EntitySystem
                     {
                         if (_powerCell.TryGetBatteryFromSlot(visorEntity, out var battery))
                         {
-                            var charge = battery.CurrentCharge / battery.MaxCharge * 100;
+                            var charge = battery.Value.Comp.CurrentCharge / battery.Value.Comp.MaxCharge * 100;
                             args.PushMarkup(Loc.GetString("power-cell-component-examine-details", ("currentCharge", $"{charge:F0}")));
                         }
                         else

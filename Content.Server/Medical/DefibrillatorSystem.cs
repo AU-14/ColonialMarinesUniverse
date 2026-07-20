@@ -1,7 +1,7 @@
 using Content.Server.EUI;
 using Content.Server.Ghost;
 using Content.Server.Popups;
-using Content.Server.PowerCell;
+using Content.Shared.PowerCell;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Defibrillator;

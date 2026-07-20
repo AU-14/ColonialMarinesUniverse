@@ -1,5 +1,5 @@
-﻿using Content.Server.PowerCell;
 using Content.Shared._RMC14.Vendors;
+using Content.Shared.PowerCell;
 using Content.Shared.PowerCell.Components;
 using Robust.Server.GameObjects;
 
@@ -20,8 +20,8 @@ public sealed partial class CMAutomatedVendorSystem : SharedCMAutomatedVendorSys
 
     protected override (float currentCharge, float maxCharge) GetBatteryCharge(EntityUid item, PowerCellSlotComponent powerCellSlot)
     {
-        return _powerCell.TryGetBatteryFromSlot(item, out var battery, powerCellSlot)
-            ? (battery.CurrentCharge, battery.MaxCharge)
+        return _powerCell.TryGetBatteryFromSlot((item, powerCellSlot), out var battery)
+            ? (battery.Value.Comp.CurrentCharge, battery.Value.Comp.MaxCharge)
             : (0, 0);
     }
 }

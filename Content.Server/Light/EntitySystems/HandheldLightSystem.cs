@@ -1,7 +1,6 @@
 using Content.Server.Actions;
 using Content.Server.Popups;
 using Content.Server.Power.EntitySystems;
-using Content.Server.PowerCell;
 using Content.Shared._RMC14.Attachable.Components;
 using Content.Shared.Actions;
 using Content.Shared.Interaction;

@@ -15,7 +15,6 @@
   - type: PowerChargerVisuals
     emptyState: "recharger"
     occupiedState: "recharger"
-    chargeLevelState: "recharger-{0}"
   - type: Fixtures
     fixtures:
       fix1:
@@ -39,7 +38,6 @@
     channel: Equipment
   - type: Charger
     chargeRate: 1000
-    chargeLevelSteps: 6
   - type: ItemSlots
     slots:
       charger_slot:

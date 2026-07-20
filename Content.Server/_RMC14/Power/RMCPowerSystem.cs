@@ -2,7 +2,6 @@
 using Content.Server.Popups;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
-using Content.Server.PowerCell;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Power;
 using Content.Shared.Examine;
@@ -66,11 +65,11 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
 
     private void OnUsageDisplayEvent(Entity<RMCPowerUsageDisplayComponent> ent, ref ExaminedEvent args)
     {
-        if (!_cell.TryGetBatteryFromSlot(ent, out var battery) || !TryComp<PowerCellDrawComponent>(ent, out var draw))
+        if (!_cell.TryGetBatteryFromSlot(ent.Owner, out var battery) || !TryComp<PowerCellDrawComponent>(ent, out var draw))
             return;
 
-        var maxUses = (int)(battery.MaxCharge / draw.UseRate);
-        var uses = (int)(battery.CurrentCharge / draw.UseRate);
+        var maxUses = (int)(battery.Value.Comp.MaxCharge / draw.UseCharge);
+        var uses = (int)(battery.Value.Comp.CurrentCharge / draw.UseCharge);
 
         args.PushMarkup(Loc.GetString(ent.Comp.PowerText, ("uses", uses), ("maxuses", maxUses)));
     }
