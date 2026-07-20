@@ -520,7 +520,7 @@
       radius: 1
       interiorCoords: 0.5,0.5
   - type: GridVehicleMover
-    maxSpeed: 3.5
+    maxSpeed: 5
     acceleration: 1.161
     deceleration: 10
     maxReverseSpeed: 3
@@ -546,14 +546,17 @@
     - map: [ base ]
       state: tank_base
     - map: [ armor ]
+      sprite: _CMU14/Structures/Vehicles/fv150/stuff.rsi
       state: ARMOR
       visible: false
     - map: [ primary ]
       state: tank_turret_0
     - map: [ secondary ]
+      sprite: _CMU14/Structures/Vehicles/fv150/stuff.rsi
       state: SECONDARY
       visible: false
     - map: [ support ]
+      sprite: _CMU14/Structures/Vehicles/fv150/stuff.rsi
       state: SUPPORT
       visible: false
     - map: [ rmc-wheels ]
