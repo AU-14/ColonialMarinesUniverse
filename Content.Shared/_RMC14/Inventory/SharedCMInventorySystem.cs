@@ -549,7 +549,7 @@ public abstract partial class SharedCMInventorySystem : EntitySystem
                 // If holster has StorageComponent
                 // And item can be inserted
                 if (HasComp<StorageComponent>(clothing) &&
-                    _storage.CanInsert(clothing, item, out _))
+                    _storage.CanInsert(clothing, item, user, out _))
                 {
                     validSlots.Add(new HolsterSlot(priority, true, null, clothing, null));
                 }
@@ -591,7 +591,7 @@ public abstract partial class SharedCMInventorySystem : EntitySystem
                 TryComp(slot.Ent, out CMHolsterComponent? holster) &&
                 !holster.Contents.Contains(item) &&
                 _hands.CanDrop(user, item) &&
-                _storage.CanInsert(slot.Ent, item, out _, storage))
+                _storage.CanInsert(slot.Ent, item, user, out _, storage))
             {
                 if (act && _hands.TryDrop(user, item))
                 {

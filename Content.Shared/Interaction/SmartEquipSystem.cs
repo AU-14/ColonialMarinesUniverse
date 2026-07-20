@@ -38,6 +38,9 @@ public sealed partial class SmartEquipSystem : EntitySystem
             .Bind(ContentKeyFunctions.SmartEquipPocket1, InputCmdHandler.FromDelegate(HandleSmartEquipPocket1, handle: false, outsidePrediction: false))
             .Bind(ContentKeyFunctions.SmartEquipPocket2, InputCmdHandler.FromDelegate(HandleSmartEquipPocket2, handle: false, outsidePrediction: false))
             .Bind(ContentKeyFunctions.SmartEquipSuitStorage, InputCmdHandler.FromDelegate(HandleSmartEquipSuitStorage, handle: false, outsidePrediction: false))
+            .Bind(ContentKeyFunctions.SmartEquipUniform, InputCmdHandler.FromDelegate(HandleSmartEquipUniform, handle: false, outsidePrediction: false))
+            .Bind(ContentKeyFunctions.SmartEquipArmor, InputCmdHandler.FromDelegate(HandleSmartEquipArmor, handle: false, outsidePrediction: false))
+            .Bind(ContentKeyFunctions.SmartEquipHelmet, InputCmdHandler.FromDelegate(HandleSmartEquipHelmet, handle: false, outsidePrediction: false))
             .Register<SmartEquipSystem>();
     }
 
@@ -141,12 +144,16 @@ public sealed partial class SmartEquipSystem : EntitySystem
 
             _hands.TryDrop((uid, hands), hands.ActiveHandId!);
             _inventory.TryEquip(uid, handItem.Value, equipmentSlot, predicted: true, checkDoafter:true);
+            DisableRMCDetector(handItem.Value);
             return;
         }
 
         // case 2 (storage item):
         if (TryComp<StorageComponent>(slotItem, out var storage))
         {
+            if (!CanUseRMCStorage(uid, (slotItem, storage)))
+                return;
+
             switch (handItem)
             {
                 case null when storage.Container.ContainedEntities.Count == 0:
@@ -159,7 +166,7 @@ public sealed partial class SmartEquipSystem : EntitySystem
                     return;
             }
 
-            if (!_storage.CanInsert(slotItem, handItem.Value, out var reason))
+            if (!_storage.CanInsert(slotItem, handItem.Value, uid, out var reason))
             {
                 if (reason != null)
                     _popup.PopupEntity(Loc.GetString(reason), uid, uid);
@@ -172,7 +179,7 @@ public sealed partial class SmartEquipSystem : EntitySystem
 
             // if the hand item stacked with the things in inventory, but there's no more space left for the rest
             // of the stack, place the stack back in hand rather than dropping it on the floor
-            if (stacked != null && !_storage.CanInsert(slotItem, handItem.Value, out _))
+            if (stacked != null && !_storage.CanInsert(slotItem, handItem.Value, uid, out _))
             {
                 if (TryComp<StackComponent>(handItem.Value, out var handStack) && handStack.Count > 0)
                     _hands.TryPickup(uid, handItem.Value, handsComp: hands);
