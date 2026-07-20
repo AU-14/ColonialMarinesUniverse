@@ -1852,3 +1852,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Guns/Revolvers/revolvers.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype review confirms the Inspector is the sole changed entity and no component data changes. Prototype loading and resolved description text are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None.
+
+## CS-0134 — Stabilize gas-analyzer precision
+
+- Upstream: [space-wizards/space-station-14#40081](https://github.com/space-wizards/space-station-14/pull/40081), `893f4f14036b34505c47bff43f287a19ab4a4d67`, 2025-09-03
+- Areas: Chemistry
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Gas-analyzer pressure now always displays two decimal places and Kelvin/Celsius temperatures always display one, preventing values in the same readout from shifting precision as they change.
+- RMC/CMU divergence: The client gas-analyzer window is unchanged by RMC and consumes the same gas-mix state, so only presentation precision changes; atmospheric calculations and thresholds remain untouched.
+- Decision and rationale: Port the target-final formatting strings exactly while retaining optional precision for volume, gas amount, and percentage fields that upstream did not change.
+- Files changed: `Content.Client/Atmos/UI/GasAnalyzerWindow.xaml.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms only pressure and temperature display formats changed. Client compilation plus zero, fractional, and negative-Celsius display cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Consider centralizing atmos display precision when the broader analyzer and air-alarm UI migration is handled.
