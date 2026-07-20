@@ -282,6 +282,8 @@ public abstract partial class SharedMoverController : VirtualController
             var walkSpeed = moveSpeedComponent?.CurrentWalkSpeed ?? MovementSpeedModifierComponent.DefaultBaseWalkSpeed;
             var sprintSpeed = moveSpeedComponent?.CurrentSprintSpeed ?? MovementSpeedModifierComponent.DefaultBaseSprintSpeed;
 
+            RMCApplyGroundedWalkSpeedFloor(moveSpeedComponent, ref walkSpeed, sprintSpeed);
+
             wishDir = AssertValidWish(mover, walkSpeed, sprintSpeed);
 
             if (wishDir != Vector2.Zero)

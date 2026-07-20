@@ -4405,3 +4405,15 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - Files changed: `Content.Shared/Climbing/Systems/ClimbSystem.cs`, `Content.Shared/_RMC14/Movement/ClimbSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation evidence: Static flow review confirms the RMC preflight runs once before current climb startup, the selected target is still validated by the current event owner, and the mask covers table, low-impassable, and barricade layers. Targeted Shared DebugOpt `--no-dependencies` build succeeded with 0 errors and 6 pre-existing warnings; exact-path `git diff --check` passed. Tests remain deferred until the 1,000-upstream-commit checkpoint.
 - Remaining debt: Runtime coverage must exercise adjacent and intervening barricades, climbable/non-climbable obstacles, cancelled target events, predicted rollback, moving targets, buckled entities, and simultaneous climbs. Live RMC's older buckle-specific preflight ordering is not reproduced without evidence that current buckle validation loses behavior.
+
+## CS-0323 - Preserve RMC grounded walk-speed floor
+
+- Upstreams compared: live SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767`, live RMC `b6d677947dd8ebcb06194a66798938645fed5a54`, and CMU through CS-0322.
+- Areas: Movement, Input, Speed modifiers, Prediction, Timing
+- Classification: Behavior changed -> Adapted; intentional RMC divergence retained.
+- Risk: Medium before and after the fix because this balance rule applies globally to grounded mob movement and is prediction-sensitive.
+- Behavior/API delta: Current SS14 feeds independently modified walk and sprint speeds into grounded wish-direction selection. Live RMC instead walks at the component's base walk speed whenever sprint remains faster, then caps walking to sprint when slows reduce sprint below that floor. The bulk merge silently adopted the SS14 calculation even though the RMC balance rule was explicit.
+- Decision and behavior: Restore the live-RMC calculation at one narrow hook immediately before current grounded wish validation. Current speed-modifier aggregation, action blockers, input state, acceleration/friction, tile modifiers, networking, prediction, and the entire weightless/off-grid branch remain unchanged.
+- Files changed: `Content.Shared/Movement/Systems/SharedMoverController.cs`, `Content.Shared/_RMC14/Movement/SharedMoverController.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation evidence: Static comparison matches live RMC's two-branch formula and confirms the hook is reached only in the grounded path after current speeds are resolved. Targeted Shared DebugOpt `--no-dependencies` build succeeded with 0 errors and 6 pre-existing warnings; exact-path `git diff --check` passed. Tests remain deferred until the 1,000-upstream-commit checkpoint.
+- Remaining debt: Runtime/prediction coverage must combine walk/sprint inputs with buffs, slows, zero-speed blockers, tile friction, pulls, armor, resting, water, and rollback. Because the legacy policy is global rather than component-gated, future balance review should decide whether CM filtering or an explicit capability is preferable.
