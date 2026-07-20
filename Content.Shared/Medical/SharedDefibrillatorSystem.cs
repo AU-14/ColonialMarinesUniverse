@@ -109,6 +109,9 @@ public abstract partial class SharedDefibrillatorSystem : EntitySystem
         if (!targetCanBeAlive && !ent.Comp.CanDefibCrit && _mobState.IsCritical(target, mobState))
             return false;
 
+        if (!CanRMCZap(ent.Owner, target, user))
+            return false;
+
         return true;
     }
 
@@ -131,11 +134,16 @@ public abstract partial class SharedDefibrillatorSystem : EntitySystem
 
         _audio.PlayPredicted(ent.Comp.ChargeSound, ent.Owner, user);
         return _doAfter.TryStartDoAfter(
-            new DoAfterArgs(EntityManager, user, ent.Comp.DoAfterDuration, new DefibrillatorZapDoAfterEvent(),
+            new DoAfterArgs(EntityManager, user, GetRMCDefibrillatorDuration(user, ent.Comp), new DefibrillatorZapDoAfterEvent(),
             ent.Owner, target, ent.Owner)
             {
                 NeedHand = true,
-                BreakOnMove = !ent.Comp.AllowDoAfterMovement
+                BreakOnMove = !ent.Comp.AllowDoAfterMovement,
+                BreakOnHandChange = false,
+                DuplicateCondition = DuplicateConditions.SameEvent,
+                TargetEffect = "RMCEffectHealBusy",
+                MovementThreshold = 0.5f,
+                RootEntity = true
             });
     }
 
