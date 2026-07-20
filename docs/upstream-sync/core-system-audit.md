@@ -981,3 +981,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Objects/Devices/Syndicate_Gadgets/war_declarator.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the pinned target retains the syndicate-contraband parent and the parent resolves locally. Prototype loading and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Audit other antagonist-only rule devices for missing faction contraband parents as a separate prototype pass.
+
+## CS-0067 — Resolve zombie emote sounds on demand
+
+- Upstream: [space-wizards/space-station-14#38979](https://github.com/space-wizards/space-station-14/pull/38979), `45fe7d5093636949b6d060b48d7850d0d00d8438`, 2025-07-13
+- Areas: Medical, Gamerules, Interactions
+- Status: Adapted
+- Risk: Low
+- Behavior/API delta: `ZombieComponent` now stores a typed emote-sounds prototype ID instead of caching an `EmoteSoundsPrototype` object during startup. Each zombie emote resolves the live prototype, so prototype reloads cannot leave existing zombies using stale sound definitions.
+- RMC/CMU divergence: RMC adds flammability and other infection behavior to the standard zombie system but does not replace zombie emote ownership. Those medical/combat additions remain intact, and only the emote lookup moves from component startup to the existing emote handler.
+- Decision and rationale: Adapt the target-final identity-based state to the current system's explicit prototype-manager dependency. Remove the now-unnecessary startup subscription and cached object while preserving emote ordering and handled semantics.
+- Files changed: `Content.Server/Zombies/ZombieSystem.cs`, `Content.Shared/Zombies/ZombieComponent.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms component state contains only the typed ID and the emote handler resolves it immediately before playback. Shared/server compilation and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint; deterministic prototype reload coverage is not currently exposed by the zombie test seam.
+- Follow-up/debt: Add a live-reload emote regression when prototype reloads are controllable in integration tests, and audit the remaining legacy string prototype fields on `ZombieComponent` separately.
