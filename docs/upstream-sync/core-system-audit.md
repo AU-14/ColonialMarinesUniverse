@@ -2516,3 +2516,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Objects/base_contraband.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static inheritance review confirms all current xenoborg consumers resolve through the shared base, `HighlyIllegal` now exists locally, and no RMC consumer is affected. Prototype loading and legality examination are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1008 as `Ported (CS-0183)` when wave 0006 is committed.
+
+## CS-0184 — Keep occupied rollerbeds visually folded out
+
+- Upstream: [space-wizards/space-station-14#40550](https://github.com/space-wizards/space-station-14/pull/40550), `4ea0d517cf8312bef89c2db21eaceea09d8a0881`, 2025-09-26
+- Areas: Medical, Interactions
+- Status: Adapted
+- Risk: Low
+- Behavior/API delta: Rollerbed `unfoldedLayer` visibility is now driven by strap occupancy as well as folding state. Buckling hides the empty-bed layer and unbuckling restores it, while the folded-state visualizer continues to own the folded layer and suppresses the unfolded layer when packed.
+- RMC/CMU divergence: `CMRollerBed` and `RMCMedevacStretcher` replace the parent's complete `GenericVisualizer` mapping, so they would not inherit the standard fix. Their two equivalent mappings receive the same state ownership while preserving medevac beacon/winch visuals and all RMC interaction restrictions.
+- Decision and rationale: Port the target-final mapping to the standard rollerbed and adapt it to both RMC overrides. Leaving the old `FoldedVisuals.False` mapping active lets fold-state updates override an occupied stretcher's strap visual and expose the empty-bed sprite.
+- Files changed: standard and RMC rollerbed prototypes and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static visualizer review confirms all three complete mappings hide `unfoldedLayer` when strapped, restore it when unstrapped, and retain the folded `True` suppression. Prototype loading plus folded, deployed, occupied, and medevac-state visuals are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1023 as `Ported (CS-0184)` when wave 0006 is committed.
