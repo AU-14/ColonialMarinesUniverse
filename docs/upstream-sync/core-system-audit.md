@@ -2424,3 +2424,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/NPC/HTN/HTNSystem.cs`, `Content.Server/NPC/Systems/NPCSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static event-order review confirms startup assigns the owner before map-init wakes a normal NPC and also covers post-map-init additions. Server compilation plus map-spawned, dynamically added, RMC leap, shutdown, and player attach/detach cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: The upstream full-game-save serialization TODOs are nonfunctional notes and remain outside this port.
+
+## CS-0177 — Network magnet-pickup scan timing
+
+- Upstream: [space-wizards/space-station-14#39988](https://github.com/space-wizards/space-station-14/pull/39988), `745c6d0edc2a1271431a4e797134de21fc331e52`, 2025-10-07
+- Areas: Interactions, Physics, GameTicking
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: `MagnetPickupComponent.NextScan` is now auto-networked and dirtied whenever the shared system advances its one-second scan deadline. Predicted clients receive the authoritative cadence instead of independently drifting or repeating pickup scans.
+- RMC/CMU divergence: RMC motion and intel detectors have separate components and scan fields; no RMC prototype or system uses `MagnetPickupComponent`, so their refresh behavior is unchanged.
+- Decision and rationale: Network only the mutable deadline and retain the existing shared scan algorithm, inventory-slot gate, range, storage, and physics checks. This is the minimal target-final prediction correction.
+- Files changed: `Content.Shared/Storage/Components/MagnetPickupComponent.cs`, `Content.Shared/Storage/EntitySystems/MagnetPickupSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static state-flow review confirms the component now generates network and pause state and every runtime deadline advance calls `Dirty`. Shared compilation plus server/client cadence, paused entities, containment, and full-storage cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: None.
