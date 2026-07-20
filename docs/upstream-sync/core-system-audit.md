@@ -877,3 +877,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Chemistry/Components/TransformableContainerComponent.cs`, `Content.Server/Chemistry/EntitySystems/TransformableContainerSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms no prototype object remains in component state and both comparison and refresh use the typed ID. Compilation and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint; reproducing a live prototype reload requires broader prototype-manager integration coverage.
 - Follow-up/debt: Add a reload regression for transformable drink containers when the integration harness exposes deterministic prototype reloads, and remove the RMC compatibility lookup only as part of a dedicated reagent-system migration.
+
+## CS-0059 — Let utility belts hold remote signallers
+
+- Upstream: [space-wizards/space-station-14#35212](https://github.com/space-wizards/space-station-14/pull/35212), `4e59b617490e0709bb6ca496c4eef57bd40b3fb8`, 2025-07-16
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Remote signallers now carry a dedicated storage tag, and the standard utility belt accepts that tag. Engineers can keep the handheld signal-control tool in the same constrained belt used for other basic engineering equipment.
+- RMC/CMU divergence: RMC maps and engineering vendors already use the inherited `RemoteSignaller` entity, while RMC-specific belt whitelists remain independent. Adding the tag to the base signaller also covers its advanced child, without widening the standard utility belt to unrelated device-link items.
+- Decision and rationale: Port the target-final dedicated tag and the narrowly scoped utility-belt whitelist entry. Preserve every existing size, capacity, RMC storage rule, and signaller networking behavior.
+- Files changed: `Resources/Prototypes/Entities/Clothing/Belt/belts.yml`, `Resources/Prototypes/Entities/Objects/Devices/Electronics/signaller.yml`, `Resources/Prototypes/tags.yml`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the pinned target retains the tag on the signaller and its engineering-belt whitelist. Prototype loading and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add resolved-prototype storage whitelist coverage if belt acceptance rules gain a lightweight integration helper; audit RMC engineering belts separately rather than inheriting the standard whitelist implicitly.
