@@ -2815,3 +2815,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Guns/Ammunition/Projectiles/shotgun.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype/RSI review confirms the `uranium` state exists, the layer schema matches other projectiles, and the spread child still inherits the corrected sprite. YAML validation plus direct pellet, spread shell, lighting, collision, and RMC ammunition cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1535 as `Ported (CS-0206)` when wave 0008 is committed.
+
+## CS-0207 — Spill water cups when worn
+
+- Upstream: [space-wizards/space-station-14#41148](https://github.com/space-wizards/space-station-14/pull/41148), `85f607f1e67e398df169e21f5b27a1ec4e1daabd`, 2025-10-27
+- Areas: Chemistry, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Wearing `DrinkWaterCup` in the head slot now drains its `drink` solution into a splash at the wearer's position and blocks access to that solution while the empty cup remains worn. Empty cups continue to function as the novelty water-cup hat.
+- RMC/CMU divergence: CMU's older water-cup prototype already exposes the same head clothing slot and `drink` solution, while the shared spill component/system is present. RMC-specific drinkware and clothing remain untouched.
+- Decision and rationale: Add the retained `SpillWhenWorn` component directly to the current prototype rather than importing upstream's broader drink-parent refactor. The component's existing solution contract matches CMU's cup exactly.
+- Files changed: `Resources/Prototypes/Entities/Objects/Consumable/Drinks/drinks_cups.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static component review confirms the configured solution is `drink`, the cup remains head-wearable, and the shared system drains before marking it worn. YAML validation plus filled, empty, equip, unequip, refill-while-worn, spill placement, and RMC drinkware cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1549 as `Ported (CS-0207)` when wave 0008 is committed.
