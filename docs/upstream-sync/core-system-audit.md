@@ -2659,3 +2659,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/MagicMirror/MagicMirrorSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static callback review confirms the stored identifier is cleared before every early return while active-operation replacement still cancels the prior identifier before starting a new action. Server compilation plus completed, cancelled, invalid-target, repeated, and cross-action barber cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1313 as `Ported (CS-0194)` when wave 0007 is committed.
+
+## CS-0195 — Guard wrapped-parcel interaction verbs
+
+- Upstream: [space-wizards/space-station-14#40838](https://github.com/space-wizards/space-station-14/pull/40838), `b78bfded443ecf4f9f0ee6b6952b1cf4db318133`, 2025-10-11
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The unwrap interaction verb now requires complex-interaction capability and is withheld from an actor contained inside the parcel. Simple animals cannot unwrap parcels through the verb path, and packaged actors cannot unwrap their own container from within it.
+- RMC/CMU divergence: CMU retains upstream parcel containers and verb handling with no fork-specific override. RMC inventory, hand, container, and do-after behavior is unchanged, including ordinary use-in-hand unwrapping for an actor that can actually hold the parcel.
+- Decision and rationale: Port the upstream verb guards at the presentation boundary. This prevents invalid actions before the verb is exposed while preserving destruction-based unwrapping and legitimate hand use.
+- Files changed: `Content.Shared/ParcelWrap/Systems/ParcelWrappingSystem.WrappedParcel.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static path review confirms access and complex-interaction checks run before verb capture, the containment query uses the parcel's authoritative slot, and normal external users still receive the verb. Shared compilation plus human, simple-animal, contained-user, inaccessible, and destroyed-parcel cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1268 as `Ported (CS-0195)` when wave 0007 is committed.
