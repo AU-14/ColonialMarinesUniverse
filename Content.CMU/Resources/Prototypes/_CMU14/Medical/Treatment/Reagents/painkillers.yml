@@ -150,7 +150,7 @@
   id: CMUFentanylPrecursor
   name: reagent-name-cmu-fentanyl-precursor
   desc: reagent-desc-cmu-fentanyl-precursor
-  flavor: acrid
+  flavor: metallic
   physicalDesc: reagent-physical-desc-volatile
   color: "#b8c2cc"
   metabolisms:

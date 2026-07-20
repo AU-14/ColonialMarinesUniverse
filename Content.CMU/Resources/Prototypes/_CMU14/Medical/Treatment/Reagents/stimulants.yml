@@ -3,7 +3,7 @@
   id: CMUMethPrecursor
   name: reagent-name-cmu-meth-precursor
   desc: reagent-desc-cmu-meth-precursor
-  flavor: acrid
+  flavor: sharp
   physicalDesc: reagent-physical-desc-volatile
   color: "#c9c96b"
   metabolisms:
@@ -19,7 +19,7 @@
   id: CMUMethBase
   name: reagent-name-cmu-meth-base
   desc: reagent-desc-cmu-meth-base
-  flavor: acrid
+  flavor: sour
   physicalDesc: reagent-physical-desc-oily
   color: "#e8d98a"
   metabolisms:
