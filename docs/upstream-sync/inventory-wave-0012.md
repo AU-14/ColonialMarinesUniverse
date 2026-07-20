@@ -44,7 +44,7 @@ behavior to port.
 2225 | 4d19496dbdaa990899b7bc989ef45dd19bbd15bc | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2226 | d7219bd499959bf0c34cf284c8056f8eac6391d8 | Update Credits (#42228) | Irrelevant | — | Upstream credits metadata only.
 2227 | fe6a2f07089a3ed64f4aaf7daff0ce0b64fd1f59 | Stable to master (#42238) | Deferred | Movement, Shooting, Interactions, Physics | Effective first-parent delta is non-empty at 24 files, +136/-263, mixing research, projectile penetration, movement assertions, chat, UI, and prototypes; reconcile its target-final behaviors separately.
-2228 | fa7c2be1640f27f3ea79b68d1f55fdaeb75cb34f | Dragon rift no longer deletes all rifts when destroyed (#42234) | PortCandidate | Interactions, Gamerules | The focused dragon-rift fix stops one destroyed rift from deleting every active rift.
+2228 | fa7c2be1640f27f3ea79b68d1f55fdaeb75cb34f | Dragon rift no longer deletes all rifts when destroyed (#42234) | Ported (CS-0240) | Interactions, Gamerules | Destroying one rift now preserves its siblings and the dragon's accumulated objective progress.
 2229 | d3d35000e1a7c4b29849abea223b8e9066b45b13 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2230 | 62c1302a55d6688e1e2e4649e2dbfca0ced7f17b | fixed typo/duplicate adjective (#42249) | PortCandidate | — | One dataset adjective typo and duplication correction.
 2231 | e572d75f045e6b801614966381657e3804118ce9 | STABLE -> MASTER (#42251) | PortCandidate | Interactions | Effective first-parent delta is one file, +1/-1, correcting starting-job localization in the admin name overlay; reconcile with index 2246.
