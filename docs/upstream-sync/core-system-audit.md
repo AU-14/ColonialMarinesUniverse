@@ -864,3 +864,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Chemistry/Reaction/ChemicalReactionSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the pinned target retains server-only PVS emission and removal of the unused set. Compilation and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint; the current reaction test harness has no stable client/server audio replication seam.
 - Follow-up/debt: Add a two-instance audio regression if the integration harness exposes replicated sound events, and separately audit any future conversion to actor-aware predicted reaction audio.
+
+## CS-0058 — Store transformable-container reagent identity
+
+- Upstream: [space-wizards/space-station-14#38988](https://github.com/space-wizards/space-station-14/pull/38988), `2e6549a308f8838fd5fc41981970a806f1d3d9ad`, 2025-07-14
+- Areas: Chemistry, Interactions
+- Status: Adapted
+- Risk: Low
+- Behavior/API delta: `TransformableContainerComponent` now stores the current reagent's prototype ID instead of retaining a `ReagentPrototype` instance. Name refreshes resolve the live prototype, so prototype reloads cannot leave glasses comparing against or displaying data from a stale object.
+- RMC/CMU divergence: RMC resolves reagents through `TryIndexReagent` and its reagent-system compatibility layer rather than relying solely on the base prototype manager. The port keeps that lookup path and stores CMU's existing typed `ProtoId<ReagentPrototype>`, while transformation descriptions and primary-reagent selection remain unchanged.
+- Decision and rationale: Adapt the target-final identity-based component state to the current RMC reagent API. Store the exact primary-reagent ID after successful resolution, and resolve it again only when localized naming needs the prototype object.
+- Files changed: `Content.Server/Chemistry/Components/TransformableContainerComponent.cs`, `Content.Server/Chemistry/EntitySystems/TransformableContainerSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms no prototype object remains in component state and both comparison and refresh use the typed ID. Compilation and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint; reproducing a live prototype reload requires broader prototype-manager integration coverage.
+- Follow-up/debt: Add a reload regression for transformable drink containers when the integration harness exposes deterministic prototype reloads, and remove the RMC compatibility lookup only as part of a dedicated reagent-system migration.
