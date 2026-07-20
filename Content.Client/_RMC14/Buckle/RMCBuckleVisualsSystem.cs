@@ -14,13 +14,25 @@ public sealed partial class RMCBuckleVisualsSystem : EntitySystem
 
     public override void Initialize()
     {
+        SubscribeLocalEvent<BuckleComponent, AfterAutoHandleStateEvent>(OnBuckleState);
         SubscribeLocalEvent<BuckleComponent, BuckledEvent>(OnBuckled);
         SubscribeLocalEvent<BuckleComponent, UnbuckledEvent>(OnUnbuckled);
+        SubscribeLocalEvent<StrapComponent, AfterAutoHandleStateEvent>(OnStrapState);
         SubscribeLocalEvent<StrapComponent, StrappedEvent>(OnStrapped);
         SubscribeLocalEvent<StrapComponent, UnstrappedEvent>(OnUnstrapped);
 
         SubscribeLocalEvent<RMCBuckleDrawDepthComponent, GetDrawDepthEvent>(OnGetDrawDepth, after: [typeof(XenoVisualizerSystem)]);
         SubscribeLocalEvent<RMCStrapDrawDepthComponent, GetDrawDepthEvent>(OnGetDrawDepth, after: [typeof(XenoVisualizerSystem)]);
+    }
+
+    private void OnBuckleState(Entity<BuckleComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        _rmcSprite.UpdateDrawDepth(ent.Owner);
+    }
+
+    private void OnStrapState(Entity<StrapComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        _rmcSprite.UpdateDrawDepth(ent.Owner);
     }
 
     private void OnBuckled(Entity<BuckleComponent> ent, ref BuckledEvent args)

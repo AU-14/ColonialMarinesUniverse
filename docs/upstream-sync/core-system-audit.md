@@ -3853,3 +3853,16 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - Files changed: `Content.Shared/Buckle/SharedBuckleSystem.Buckle.cs`, `Content.Shared/_RMC14/Buckle/SharedBuckleSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation evidence: Static search confirms all live `RMCBuckleOffset` prototypes now reach the single composed helper in transform validation, buckle placement, and unbuckle placement. `git diff --check` passed. Shared compilation is queued behind the disjoint storage patch currently being completed in the shared worktree; no buckle-specific compiler error was reported by the preceding build. Tests remain deferred until the 1,000-upstream-commit checkpoint.
 - Remaining debt: Runtime coverage must buckle/unbuckle each marked xeno size against nests, bodybags, rollerbeds, and vehicle straps, including rotated parents and state reconciliation. Remote draw-depth refresh remains a separate client fix.
+
+## CS-0280 - Reconcile remote RMC buckle draw depth
+
+- Upstreams compared: live SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767`, live RMC `b6d677947dd8ebcb06194a66798938645fed5a54`, and CMU through CS-0279.
+- Areas: Interactions, Buckle, Client presentation, Networking, Lifecycle
+- Classification: Missing -> Adapted
+- Risk: Medium before the fix; low after it.
+- Behavior/API delta: The current RMC buckle visualizer refreshed fork draw-depth policy only from local `BuckledEvent`, `UnbuckledEvent`, `StrappedEvent`, and `UnstrappedEvent` notifications. Remote clients receive generated `BuckleComponent` and `StrapComponent` state without necessarily running those local mutation events, so xenos, weapon mounts, seats, and straps could retain stale layering until another visual event occurred.
+- RMC/CMU divergence: Local predicted and authoritative domain events remain the immediate refresh path. The restored after-state handlers only recompute RMC draw depth after generated network state is applied; they do not mutate buckle state or compete with the shared buckle owner.
+- Decision and rationale: Restore the old RMC after-state presentation seam alongside the current domain-event refreshes. Exact lifecycle-pair search found no other `AfterAutoHandleStateEvent` subscriber for either component, satisfying the single-owner constraint.
+- Files changed: `Content.Client/_RMC14/Buckle/RMCBuckleVisualsSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation evidence: Static review confirms both generated component states now trigger the existing `RMCSpriteSystem.UpdateDrawDepth` path, while local events still update both buckle and strap immediately. `git diff --check` passed. Client compilation is queued behind the disjoint construction patch in the shared worktree; tests remain deferred until the 1,000-upstream-commit checkpoint.
+- Remaining debt: Runtime coverage must compare local prediction and a remote observer while buckling, unbuckling, rotating a strap, changing vehicle seats, and applying explicit RMC buckle/strap draw-depth components.
