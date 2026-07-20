@@ -202,7 +202,7 @@ public sealed partial class RMCSlowSystem : EntitySystem
         if (!HasComp<XenoImmobileVisualsComponent>(ent))
             return;
 
-        if (HasComp<StunnedComponent>(ent) && !_standing.IsDown(ent.Owner))
+        if (HasComp<StunnedComponent>(ent) && !_standing.IsDown(ent))
             return;
 
         RemCompDeferred<XenoImmobileVisualsComponent>(ent);
