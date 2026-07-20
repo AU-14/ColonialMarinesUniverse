@@ -10,7 +10,6 @@ using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Content.Shared.Whitelist;
 using Robust.Shared.Containers;
-using Robust.Shared.GameStates;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -24,7 +23,6 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private RMCReagentSystem _rmcReagent = default!;
     [Dependency] private ScalingSystem _scaling = default!;
     [Dependency] private SharedSolutionContainerSystem _solution = default!;
@@ -34,9 +32,6 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<SolutionComponent, ComponentGetState>(OnSolutionGetState);
-        SubscribeLocalEvent<SolutionComponent, ComponentHandleState>(OnSolutionHandleState);
-
         SubscribeLocalEvent<DetailedExaminableSolutionComponent, ExaminedEvent>(OnDetailedSolutionExamined);
 
         SubscribeLocalEvent<RMCChemicalDispenserComponent, MapInitEvent>(OnDispenserMapInit);
@@ -59,20 +54,6 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
                 subs.Event<RMCChemicalDispenserEjectBeakerBuiMsg>(OnChemicalDispenserEjectBeakerMsg);
                 subs.Event<RMCChemicalDispenserDispenseBuiMsg>(OnChemicalDispenserDispenseMsg);
             });
-    }
-
-    private void OnSolutionGetState(Entity<SolutionComponent> ent, ref ComponentGetState args)
-    {
-        var s = new Solution(ent.Comp.Solution, _prototypes);
-        args.State = new SolutionComponentState(s);
-    }
-
-    private void OnSolutionHandleState(Entity<SolutionComponent> ent, ref ComponentHandleState args)
-    {
-        if (args.Current is not SolutionComponentState s)
-            return;
-
-        ent.Comp.Solution = new Solution(s.Solution, _prototypes);
     }
 
     private void OnDetailedSolutionExamined(Entity<DetailedExaminableSolutionComponent> ent, ref ExaminedEvent args)

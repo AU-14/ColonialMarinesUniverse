@@ -2,6 +2,7 @@ using Content.Shared.Alert;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Events;
 using Content.Shared.Chemistry.Components;
+using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reaction;
 using Content.Shared.Chemistry.Reagent;
@@ -118,6 +119,14 @@ public abstract partial class SharedBloodstreamSystem : EntitySystem
         SolutionContainer.EnsureSolution(entity.Owner, entity.Comp.BloodTemporarySolutionName, out var tempSolution);
         SolutionContainer.EnsureSolution(entity.Owner, entity.Comp.MetabolitesSolutionName, out var metabolitesSolution);
 
+        if (TryComp<InjectableSolutionComponent>(entity, out var injectable) &&
+            injectable.Solution == entity.Comp.ChemicalSolutionName)
+        {
+            SolutionContainer.EnsureSolution(entity.Owner, entity.Comp.ChemicalSolutionName, out var chemicalSolution);
+            chemicalSolution.Comp.Solution.MaxVolume = entity.Comp.ChemicalMaxVolume;
+            entity.Comp.ChemicalSolution = chemicalSolution;
+        }
+
         bloodSolution.Comp.Solution.MaxVolume = entity.Comp.BloodReferenceSolution.Volume * entity.Comp.MaxVolumeModifier;
         metabolitesSolution.Comp.Solution.MaxVolume = bloodSolution.Comp.Solution.MaxVolume;
         tempSolution.Comp.Solution.MaxVolume = entity.Comp.BleedPuddleThreshold * 4; // give some leeway, for chemstream as well
@@ -140,6 +149,9 @@ public abstract partial class SharedBloodstreamSystem : EntitySystem
 
         if (args.Entity == entity.Comp.TemporarySolution?.Owner)
             entity.Comp.TemporarySolution = null;
+
+        if (args.Entity == entity.Comp.ChemicalSolution?.Owner)
+            entity.Comp.ChemicalSolution = null;
     }
 
     private void OnReactionAttempt(Entity<BloodstreamComponent> ent, ref ReactionAttemptEvent args)
@@ -172,7 +184,8 @@ public abstract partial class SharedBloodstreamSystem : EntitySystem
     private void OnReactionAttempt(Entity<BloodstreamComponent> ent, ref SolutionRelayEvent<ReactionAttemptEvent> args)
     {
         if (args.Solution.Comp.Id != ent.Comp.BloodSolutionName
-            && args.Solution.Comp.Id != ent.Comp.BloodTemporarySolutionName)
+            && args.Solution.Comp.Id != ent.Comp.BloodTemporarySolutionName
+            && args.Solution.Comp.Id != ent.Comp.ChemicalSolutionName)
         {
             return;
         }
