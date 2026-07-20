@@ -3,16 +3,18 @@ using Content.Shared.Actions;
 using Content.Shared.Charges.Components;
 using Content.Shared.Charges.Systems;
 using Content.Shared.Speech.EntitySystems;
-using Content.Shared.StatusEffect;
-using Content.Shared.StatusEffectNew;
 using Robust.Shared.Prototypes;
+using CurrentStatusEffectAppliedEvent = Content.Shared.StatusEffectNew.StatusEffectAppliedEvent;
+using CurrentStatusEffectRemovedEvent = Content.Shared.StatusEffectNew.StatusEffectRemovedEvent;
+using CurrentStatusEffectsSystem = Content.Shared.StatusEffectNew.StatusEffectsSystem;
+using LegacyStatusEffectsComponent = Content.Shared.StatusEffect.StatusEffectsComponent;
 
 namespace Content.Shared._RMC14.Stun;
 
 public sealed partial class RMCDazedSystem : EntitySystem
 {
     [Dependency] private SharedChargesSystem _charges = default!;
-    [Dependency] private SharedStatusEffectsSystem _statusEffect = default!;
+    [Dependency] private CurrentStatusEffectsSystem _statusEffect = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedStutteringSystem _stutter = default!;
 
@@ -22,8 +24,8 @@ public sealed partial class RMCDazedSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<RMCDazedComponent, StatusEffectAppliedEvent>(OnDazed);
-        SubscribeLocalEvent<RMCDazedComponent, StatusEffectRemovedEvent>(OnDazedEnd);
+        SubscribeLocalEvent<RMCDazedComponent, CurrentStatusEffectAppliedEvent>(OnDazed);
+        SubscribeLocalEvent<RMCDazedComponent, CurrentStatusEffectRemovedEvent>(OnDazedEnd);
     }
 
     /// <summary>
@@ -31,7 +33,7 @@ public sealed partial class RMCDazedSystem : EntitySystem
     ///     cooldown isn't higher already.
     /// </summary>
     /// <seealso cref="RMCDazeableActionComponent"/>
-    private void OnDazed(Entity<RMCDazedComponent> ent, ref StatusEffectAppliedEvent args)
+    private void OnDazed(Entity<RMCDazedComponent> ent, ref CurrentStatusEffectAppliedEvent args)
     {
         foreach (var (actionId, _) in _actions.GetActions(ent))
         {
@@ -45,7 +47,7 @@ public sealed partial class RMCDazedSystem : EntitySystem
         }
     }
 
-    private void OnDazedEnd(Entity<RMCDazedComponent> ent, ref StatusEffectRemovedEvent args)
+    private void OnDazedEnd(Entity<RMCDazedComponent> ent, ref CurrentStatusEffectRemovedEvent args)
     {
         foreach (var (actionId, _) in _actions.GetActions(ent))
         {
@@ -57,7 +59,7 @@ public sealed partial class RMCDazedSystem : EntitySystem
         }
     }
 
-    public bool TryDaze(EntityUid uid, TimeSpan time, bool refresh = false, StatusEffectsComponent? status = null, bool stutter = false)
+    public bool TryDaze(EntityUid uid, TimeSpan time, bool refresh = false, LegacyStatusEffectsComponent? status = null, bool stutter = false)
     {
         if (!Resolve(uid, ref status, false))
             return false;

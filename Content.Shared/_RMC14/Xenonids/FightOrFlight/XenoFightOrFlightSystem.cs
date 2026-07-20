@@ -4,10 +4,10 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Coordinates;
 using Content.Shared.Jittering;
 using Content.Shared.Popups;
-using Content.Shared.StatusEffect;
-using Content.Shared.StatusEffectNew;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
+using CurrentStatusEffectsSystem = Content.Shared.StatusEffectNew.StatusEffectsSystem;
+using LegacyStatusEffectsSystem = Content.Shared.StatusEffect.StatusEffectsSystem;
 
 namespace Content.Shared._RMC14.Xenonids.FightOrFlight;
 
@@ -18,8 +18,8 @@ public sealed partial class XenoFightOrFlightSystem : EntitySystem
     [Dependency] private XenoEnergySystem _energy = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
-    [Dependency] private SharedStatusEffectsSystem _statusEffect = default!;
-    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private CurrentStatusEffectsSystem _statusEffect = default!;
+    [Dependency] private LegacyStatusEffectsSystem _status = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedPopupSystem _popup = default!;

@@ -9,7 +9,7 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared._RMC14.Xenonids.Strain;
-using Content.Shared.Body.Systems;
+using Content.Shared.Gibbing;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
@@ -20,13 +20,13 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
-using Content.Shared.StatusEffect;
-using Content.Shared.StatusEffectNew;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using CurrentStatusEffectsSystem = Content.Shared.StatusEffectNew.StatusEffectsSystem;
+using LegacyStatusEffectsSystem = Content.Shared.StatusEffect.StatusEffectsSystem;
 
 namespace Content.Shared._RMC14.Xenonids.Heal;
 
@@ -46,15 +46,15 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
     [Dependency] private QueenEyeSystem _queenEye = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
-    [Dependency] private SharedStatusEffectsSystem _statusEffect = default!;
+    [Dependency] private CurrentStatusEffectsSystem _statusEffect = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
     [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
     [Dependency] private XenoEnergySystem _xenoEnergy = default!;
     [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private XenoStrainSystem _xenoStrain = default!;
-    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private LegacyStatusEffectsSystem _status = default!;
 
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
@@ -354,7 +354,7 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
         if (_net.IsServer)
         {
             SpawnAttachedTo(args.HealEffect, target.ToCoordinates());
-            _body.GibBody(ent);
+            _gibbing.Gib(ent, dropGiblets: false);
         }
     }
 
