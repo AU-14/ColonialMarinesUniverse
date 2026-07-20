@@ -2581,3 +2581,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Throwable/grenades.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype/component review confirms both fields exist in CMU's current explosion contract, the blast intensity and timer remain unchanged, and only `BorgModuleMartyr` provides this entity. Prototype loading plus activation, module-hand cycling, survival, and repeat-trigger cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1093 as `Ported (CS-0188)` when wave 0006 is committed.
+
+## CS-0189 — Give the Ian suit a bark accent
+
+- Upstream: [space-wizards/space-station-14#40694](https://github.com/space-wizards/space-station-14/pull/40694), `d9b296a64049343ff5bd493310bee381d5750588`, 2025-10-05
+- Areas: Interactions
+- Status: Adapted
+- Risk: Medium
+- Behavior/API delta: Equipping `ClothingOuterSuitIan` now adds `BarkAccent` to the wearer and removing it removes the accent when this clothing supplied it. The hood, construction graph, step-trigger protection, and chameleon/corgi tags remain unchanged.
+- RMC/CMU divergence: The pinned target later expresses this behavior through a relay-capable `BarkAccent` component, but CMU retains the older `AddAccentClothing` contract. The suit uses that established local pattern; RMC parasite clothing and RMC speech/accent systems are untouched.
+- Decision and rationale: Adapt the retained player behavior to the available clothing-accent API instead of importing the later speech relay architecture as an incidental dependency. `BarkAccent` is registered locally and already used by another clothing prototype.
+- Files changed: `Resources/Prototypes/Entities/Clothing/OuterClothing/suits.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype/system review confirms the component resolves, applies only while equipped when it owns the accent, and does not alter the suit's existing components. Prototype loading plus equip, unequip, pre-existing accent, and clone cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1103 as `Ported (CS-0189)` when wave 0006 is committed. Reconcile this suit with the target's later inventory-relay accent architecture; the current cloning settings can preserve a clothing-supplied bark accent on a clone.
