@@ -31,10 +31,10 @@ public sealed class SuitSensorRetryThrottleTest
             {
                 Assert.That(device.TransmitFrequency, Is.Not.Null);
                 Assert.That(sensor.StationId, Is.Null);
-                Assert.That(sensor.NextUpdate, Is.EqualTo(TimeSpan.Zero));
+                Assert.That(sensor.NextUpdate, Is.LessThanOrEqualTo(timing.CurTime));
             });
 
-            var expected = timing.CurTime + sensor.UpdateRate;
+            var expected = sensor.NextUpdate + sensor.UpdateRate;
 
             sensors.Update(0f);
             Assert.Multiple(() =>

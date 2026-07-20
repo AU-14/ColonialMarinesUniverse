@@ -37,6 +37,10 @@ public sealed class TopicalHealingTest
   id: TopicalHealingTestTarget
   components:
   - type: Damageable
+    damage:
+      types:
+        TopicalHealingTestSupported: 1
+  - type: Injurable
     damageContainer: TopicalHealingTestContainer
 
 - type: entity

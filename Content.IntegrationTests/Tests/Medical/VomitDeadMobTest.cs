@@ -24,7 +24,9 @@ public sealed class VomitDeadMobTest
   components:
   - type: MobState
   - type: Body
-    prototype: Human
+  - type: InitialBody
+    organs:
+      Stomach: OrganHumanStomach
 ";
 
     [Test]
