@@ -8,3 +8,184 @@
     contents:
     - id: AU14BoxPackFlareRMC
       amount: 2
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateGasMaskFilter
+  name: gas mask filter crate
+  description: A crate that contains 7 standard gas mask filters
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUGasMaskFilter
+      amount: 7
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateGasMaskFilterHAZOPS
+  name: CBRN gas mask filter crate
+  description: A crate that contains 7 CBRN rated gas mask filters
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUGasMaskFilterHAZOPS
+      amount: 7
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateGasMaskFilterUPP
+  name: ShMB/4 gas mask filter crate
+  description: A crate that contains 7 ShMB/4 gas mask filters
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUGasMaskFilterUPP
+      amount: 7
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateGasMaskFilterWY
+  name: X-16 gas mask filter crate
+  description: A crate that contains 7 Weyland-Yutani brand X-16 gas mask filters
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUGasMaskFilterWY
+      amount: 7
+
+- type: entity
+  parent: RMCCrateScience
+  id: CMUCrateBiosuitGeneral
+  name: standard biosuit crate
+  description: A crate that contains a standard biosuit and a pair of latex gloves.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSuitBioGeneral
+      amount: 1
+    - id: RMCHoodBioGeneral
+      amount: 1
+    - id: CMHandsLatex
+      amount: 1
+
+- type: entity
+  parent: RMCCrateScience
+  id: CMUCrateBiosuitMedical
+  name: medical biosuit crate
+  description: A crate that contains a medical biosuit and a pair of latex gloves.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSuitBioMedical
+      amount: 1
+    - id: RMCHoodBioMedical
+      amount: 1
+    - id: CMHandsLatex
+      amount: 1
+
+- type: entity
+  parent: RMCCrateScience
+  id: CMUCrateBiosuitScientist
+  name: science biosuit crate
+  description: A crate that contains a science biosuit and a pair of latex gloves.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSuitBioScientist
+      amount: 1
+    - id: RMCHoodBioScientist
+      amount: 1
+    - id: CMHandsLatex
+      amount: 1
+      
+- type: entity
+  parent: RMCCrateScience
+  id: CMUCrateBiosuitSecurity
+  name: security biosuit crate
+  description: A crate that contains a security biosuit and a pair of latex gloves.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSuitBioSecurity
+      amount: 1
+    - id: RMCHoodBioSecurity
+      amount: 1
+    - id: CMHandsLatex
+      amount: 1
+
+
+      
+- type: entity
+  parent: RMCCrateScience
+  id: CMUCrateBiosuitVirology
+  name: virology biosuit crate
+  description: A crate that contains a virology biosuit and a pair of latex gloves.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSuitBioVirology
+      amount: 1
+    - id: RMCHoodBioVirology
+      amount: 1
+    - id: CMHandsLatex
+      amount: 1
+
+- type: entity
+  parent: RMCCrateScience
+  id: CMUCrateBiosuitWYTSS
+  name: WY-TSS MK I biosuit crate
+  description: A crate that contains a Weyland-Yutani TSS MK I biosuit and a pair of latex gloves.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSuitBioWeYa
+      amount: 1
+    - id: RMCHoodBioWeYaAlt
+      amount: 1
+    - id: CMHandsLatex
+      amount: 1
+
+- type: entity
+  parent: RMCCrateScience
+  id: CMUCrateBiosuitWYTSSArmor
+  name: armored WY-TSS MK I biosuit crate
+  description: A crate that contains a Weyland-Yutani TSS MK I biosuit fitted with an armored vest, and a pair of latex gloves.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUSuitBioWYSec
+      amount: 1
+    - id: RMCHoodBioWeYaAlt
+      amount: 1
+    - id: CMHandsLatex
+      amount: 1
+
+- type: entity
+  parent: RMCCrateScience
+  id: CMUCrateRadsuit
+  name: radiation suit crate
+  description: A crate that contains a standard radiation suit.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSuitRadiation
+      amount: 1
+    - id: RMCHeadRadiationHood
+      amount: 1
+
+- type: entity
+  parent: RMCCrateScience
+  id: CMUCrateTychoRadsuit
+  name: Tycho 4000 radiation suit crate
+  description: A crate that contains a full Tycho 4000 radiation protection suit.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSuitTychoRadiationSuit
+      amount: 1
+    - id: RMCHeadTychoRadiationHood
+      amount: 1
+    - id: RMCHandsTychoGloves
+      amount: 1
+    - id: RMCShoesTychoBoots
+      amount: 1

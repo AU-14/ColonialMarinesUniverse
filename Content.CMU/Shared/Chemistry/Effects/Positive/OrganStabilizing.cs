@@ -6,7 +6,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CMU14.Chemistry.Effects.Positive;
 
-public sealed partial class OrganStabilizing : RMCChemicalEffect
+public sealed partial class Organstabilizing : RMCChemicalEffect
 {
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
     {

@@ -1,0 +1,118 @@
+- type: entity
+  parent: CMBasePaper
+  id: CMUWYPaper
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_wy
+    - state: paper_wy_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+
+- type: entity
+  parent: CMUWYPaper
+  id: CMUResearchReportFull
+  components:
+  - type: ResearchReport
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_wy
+    - state: paper_wy_full_report
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+
+- type: entity
+  parent: CMUResearchReportFull
+  id: CMUResearchReportPartial
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_wy
+    - state: paper_wy_partial_report
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+
+- type: entity
+  parent: CMUResearchReportFull
+  id: CMUResearchReportSynthesis
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_wy
+    - state: paper_wy_synthesis
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+
+- type: entity
+  parent: CMUWYPaper
+  id: CMUResearchGrant
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_wy
+    - state: paper_wy_grant
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+
+- type: entity
+  parent: CMUWYPaper
+  id: CMUResearchContract
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_wy
+    - state: paper_wy_contract
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+
+- type: entity
+  parent: CMUWYPaper
+  id: CMUCipherHintPaper
+  categories: [ HideSpawnMenu ]
+  name: Research Ciphering Breakthrough
+  components:
+  - type: CipherHintPaper
+    spawnCrate: true
+
+- type: entity
+  parent: CMUWYPaper
+  id: CMUCipherHintPaperNoSpawn
+  name: Research Ciphering Breakthrough
+  components:
+  - type: CipherHintPaper
+
+
+
+
+
+
+
+
+
+
+
+

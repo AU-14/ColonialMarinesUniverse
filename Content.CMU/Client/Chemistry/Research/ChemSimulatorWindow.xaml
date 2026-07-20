@@ -1,0 +1,209 @@
+<controls:ChemSimulatorWindow
+    xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client._AU14.Chemistry.Research"
+    xmlns:ui="clr-namespace:Content.Client._RMC14.UserInterface"
+    xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    xmlns:uiControls="clr-namespace:Content.Client.UserInterface.Controls"
+    Title="{Loc ui-chem-simulator-window-name}"
+    MinSize="800 450"
+    VerticalExpand="True">
+    <BoxContainer Orientation="Vertical" VerticalExpand="True" SeparationOverride="5">
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" MaxHeight="145" SeparationOverride="10">
+            <PanelContainer HorizontalExpand="True">
+                <PanelContainer.PanelOverride>
+                    <graphics:StyleBoxFlat
+                        BackgroundColor="#1A1A1A">
+                    </graphics:StyleBoxFlat>
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                    <ProgressBar Name ="CreditsBar" Access="Public" MinValue="0" MaxValue="100">
+                        <RichTextLabel
+                            Name="Credits"
+                            Access="Public"
+                            Text="[head=3]RESEARCH CREDITS: 0[/head]"
+                            HorizontalAlignment="Right"
+                            Margin ="5, 0"/>
+                    </ProgressBar>
+                    <RichTextLabel Name="Status" Access="Public" Text="[bold]STATUS: NOT READY[/bold]"/>
+                    <Label Name="SimCost" Access="Public" Text="ESTIMATED SIMULATION COST:"/>
+                    <Label Name="TargetName" Access="Public" Text="TARGET NAME:"/>
+                    <Label Name="ReferenceName" Access="Public" Text="REFERENCE NAME:"/>
+                    <Label Name="Overdose" Access="Public" Text="OVERDOSE LEVEL AFTER SIMULATION:"/>
+                </BoxContainer>
+            </PanelContainer>
+            <WrapContainer EqualSize="True" LayoutAxis="Vertical" SeparationOverride="10" CrossSeparationOverride="5"
+                           Name="Controls" Access="Public" Visible="True">
+                <Button Name="Simulate" Access="Public" StyleClasses="ButtonSquare">
+                    <BoxContainer>
+                        <SpriteView Name="SimSpr"/>
+                        <Label Text="{Loc research-sim-ui-simulate}"/>
+                    </BoxContainer>
+                </Button>
+                <Button Name="EjectTarget" Access="Public" StyleClasses="ButtonSquare">
+                    <BoxContainer Orientation="Horizontal">
+                        <SpriteView Name="EjectTargSpr"/>
+                        <Label Text="{Loc research-sim-ui-eject-targ}"/>
+                    </BoxContainer>
+                </Button>
+                <Button Name="EjectReference" Access="Public" StyleClasses="ButtonSquare">
+                    <BoxContainer Orientation="Horizontal">
+                        <SpriteView Name="EjectRefSpr"/>
+                        <Label Text="{Loc research-sim-ui-eject-ref}"/>
+                    </BoxContainer>
+                </Button>
+                <Button Name="Override" Access="Public" ToggleMode="True" StyleClasses="ButtonSquare" ToolTip="{Loc research-sim-ui-override-tooltip}">
+                    <BoxContainer Orientation="Horizontal">
+                        <SpriteView Name="OverrideSpr"/>
+                        <Label Text="{Loc research-sim-ui-override}"/>
+                    </BoxContainer>
+                </Button>
+                <Button Name="Suppress" Access="Public" StyleClasses="ButtonSquare" ToolTip="{Loc research-sim-ui-suppress-tooltip}">
+                    <BoxContainer Orientation="Horizontal">
+                        <SpriteView Name="SupSpr"/>
+                        <Label Text="{Loc research-sim-ui-suppress}"/>
+                    </BoxContainer>
+                </Button>
+                <Button Name="Amplify" Access="Public" StyleClasses="ButtonSquare" ToolTip="{Loc research-sim-ui-amplify-tooltip}">
+                    <BoxContainer Orientation="Horizontal">
+                        <SpriteView Name="AmpSpr"/>
+                        <Label Text="{Loc research-sim-ui-amplify}"/>
+                    </BoxContainer>
+                </Button>
+                <Button Name="Add" Access="Public" StyleClasses="ButtonSquare" ToolTip="{Loc research-sim-ui-add-tooltip}">
+                    <BoxContainer Orientation="Horizontal">
+                        <SpriteView Name="AddSpr"/>
+                        <Label Text="{Loc research-sim-ui-add}"/>
+                    </BoxContainer>
+                </Button>
+                <Button Name="Relate" Access="Public" StyleClasses="ButtonSquare" ToolTip="{Loc research-sim-ui-relate-tooltip}">
+                    <BoxContainer Orientation="Horizontal">
+                        <SpriteView Name="RelSpr"/>
+                        <Label Text="{Loc research-sim-ui-relate}"/>
+                    </BoxContainer>
+                </Button>
+            </WrapContainer>
+            <BoxContainer Orientation="Vertical" Name="ControlsFinalize" Access="Public" MinWidth="307"
+                          Visible="False">
+                <Button Name="Finalize" Text="{Loc research-sim-ui-finalize}" Access="Public" StyleClasses="ButtonSquare" HorizontalExpand="True"/>
+                <uiControls:HSpacer Spacing="10"/>
+                <BoxContainer Orientation="Vertical" Name="PickRecipeContainer" Access="Public">
+                    
+                </BoxContainer>
+            </BoxContainer>
+        </BoxContainer>
+        <uiControls:HLine Color="#1A1A1A" Thickness="5"/>
+        <PanelContainer Name="NoDat" HorizontalExpand="True" Access="Public" Visible="True">
+            <PanelContainer.PanelOverride>
+                <graphics:StyleBoxFlat
+                    BackgroundColor="#BB9B68">
+                </graphics:StyleBoxFlat>
+            </PanelContainer.PanelOverride>
+            <RichTextLabel Text="{Loc research-sim-ui-no-data}" Margin="5,0"/>
+        </PanelContainer>
+        <BoxContainer Name="ModeChange" Orientation="Horizontal" Access="Public" Margin="40,0" SeparationOverride="10" Visible="False">
+            <BoxContainer MaxWidth="266" Orientation="Vertical" Name="ModeChangeTargDatCon" Access="Public">
+                <PanelContainer HorizontalExpand="True">
+                    <PanelContainer.PanelOverride>
+                        <graphics:StyleBoxFlat
+                            BackgroundColor="#1A1A1AB3">
+                        </graphics:StyleBoxFlat>
+                    </PanelContainer.PanelOverride>
+                    <RichTextLabel Text="{Loc research-sim-ui-target-data}" HorizontalAlignment="Center">
+                    </RichTextLabel>
+                </PanelContainer>
+                <!--<WrapContainer Name="PropertyContainer" Access="Public" EqualSize="True"  SeparationOverride="10" CrossSeparationOverride="5"
+                               HorizontalAlignment="Center" Margin="40,10" Justification="Center">>
+                </WrapContainer>-->
+            </BoxContainer>
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" MaxWidth="440" SeparationOverride="10"
+                          Name="TargPickBox" Access="Public" Visible="False">
+                <PanelContainer>
+                    <PanelContainer.PanelOverride>
+                        <graphics:StyleBoxFlat
+                            BackgroundColor="#1A1A1AB3">
+                        </graphics:StyleBoxFlat>
+                    </PanelContainer.PanelOverride>
+                    <BoxContainer Orientation="Vertical">
+                        <RichTextLabel Name="PropPickName" Access="Public" Text="[color=white][head=3]no data[/head][/color]" Margin="5"/>
+                        <uiControls:HLine Color="#000000" Thickness="5"/>
+                        <RichTextLabel
+                            Name="PropPickDesc"
+                            Text="[color=white]NO DATA[/color]"
+                            HorizontalExpand="False"
+                            Margin="5,0"
+                            Access="Public"/>
+                    </BoxContainer>
+                </PanelContainer>
+                <PanelContainer>
+                    <PanelContainer.PanelOverride>
+                        <graphics:StyleBoxFlat
+                            BackgroundColor="#1A1A1A">
+                        </graphics:StyleBoxFlat>
+                    </PanelContainer.PanelOverride>
+                    <RichTextLabel Name="SimPrice"
+                                   Access="Public" Text="[head=3][color=white]Price of the operation: NO DATA[/head][/color]" Margin="5"/>
+                </PanelContainer>
+            </BoxContainer>
+        </BoxContainer>
+        <BoxContainer Name="ModeRelateAdd" Orientation="Horizontal" Access="Public" Margin="20,0" SeparationOverride="10" Visible="False">
+            <BoxContainer MaxWidth="228" Orientation="Vertical" Name="ModeRelateAddTargDatCon" Access="Public">
+                <PanelContainer HorizontalExpand="True">
+                    <PanelContainer.PanelOverride>
+                        <graphics:StyleBoxFlat
+                            BackgroundColor="#1A1A1AB3">
+                        </graphics:StyleBoxFlat>
+                    </PanelContainer.PanelOverride>
+                    <RichTextLabel Text="{Loc research-sim-ui-target-data}" HorizontalAlignment="Center">
+                    </RichTextLabel>
+                </PanelContainer>
+                <WrapContainer Name="TargetPropertyContainer" Access="Public" EqualSize="True"  SeparationOverride="10" CrossSeparationOverride="5"
+                               HorizontalAlignment="Center" Margin="10,10" Justification="Center">
+                </WrapContainer>
+            </BoxContainer>
+            <BoxContainer MaxWidth="228" Orientation="Vertical">
+                <PanelContainer HorizontalExpand="True">
+                    <PanelContainer.PanelOverride>
+                        <graphics:StyleBoxFlat
+                            BackgroundColor="#1A1A1A">
+                        </graphics:StyleBoxFlat>
+                    </PanelContainer.PanelOverride>
+                    <RichTextLabel Text="{Loc research-sim-ui-reference-data}" HorizontalAlignment="Center">
+                    </RichTextLabel>
+                </PanelContainer>
+                <WrapContainer Name="ReferencePropertyContainer" Access="Public" EqualSize="True"  SeparationOverride="10" CrossSeparationOverride="5"
+                               HorizontalAlignment="Center" Margin="10,10" Justification="Center">
+                </WrapContainer>
+            </BoxContainer>
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" MaxWidth="320" SeparationOverride="10"
+                          Name="RefPickBox" Access="Public" Visible="False">
+                <PanelContainer>
+                    <PanelContainer.PanelOverride>
+                        <graphics:StyleBoxFlat
+                            BackgroundColor="#1A1A1AB3">
+                        </graphics:StyleBoxFlat>
+                    </PanelContainer.PanelOverride>
+                    <BoxContainer Orientation="Vertical">
+                        <RichTextLabel Name="RAPropPickName" Access="Public" Text="[color=white][head=3]no data[/head][/color]" Margin="5"/>
+                        <uiControls:HLine Color="#000000" Thickness="5"/>
+                        <RichTextLabel
+                            Name="RAPropPickDesc"
+                            Text="[color=white]NO DATA[/color]"
+                            HorizontalExpand="False"
+                            Margin="5,0"
+                            Access="Public"/>
+                    </BoxContainer>
+                </PanelContainer>
+                <PanelContainer>
+                    <PanelContainer.PanelOverride>
+                        <graphics:StyleBoxFlat
+                            BackgroundColor="#1A1A1AB3">
+                        </graphics:StyleBoxFlat>
+                    </PanelContainer.PanelOverride>
+                    <RichTextLabel Name="RASimPrice" Access="Public" Text="[head=3][color=white]Price of the operation: NO DATA[/head][/color]" Margin="5"/>
+                </PanelContainer>
+            </BoxContainer>
+        </BoxContainer>
+    </BoxContainer>
+    
+</controls:ChemSimulatorWindow>
+    

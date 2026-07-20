@@ -1,0 +1,231 @@
+- type: reagent
+  parent: CMReagent
+  id: CMUAtropine # mutant poppy / mutant potato / regular potato seeds
+  name: reagent-name-atropine
+  desc: reagent-desc-atropine
+  physicalDesc: reagent-physical-desc-unidentifiable
+  flavor: bitter
+  color: "#B31008"
+  flags: Scannable
+  class: Hydro
+  reward: 2
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.1
+      effects:
+        - !type:Electrogenetic
+          potency: 7
+        - !type:Intravenous
+          potency: 1
+        - !type:Neurotoxic
+          potency: 0.5
+
+- type: reagent
+  parent: CMReagent
+  id: CMUThymol # mutant berries / regular thyme
+  name: reagent-name-thymol
+  desc: reagent-desc-thymol
+  physicalDesc: reagent-physical-desc-unidentifiable
+  flavor: bitter
+  color: "#badb9e"
+  flags: Scannable
+  class: Hydro
+  reward: 2
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.1
+      effects:
+        - !type:Antiparasitic
+          potency: 1.5
+
+- type: reagent
+  parent: CMReagent
+  id: CMUPsoralen # mutant cabbages / regular figs / regular parsley / regular citruses / carrots
+  name: reagent-name-psoralen
+  desc: reagent-desc-psoralen
+  physicalDesc: reagent-physical-desc-unidentifiable
+  flavor: bitter
+  color: "#c9ca75"
+  flags: Scannable
+  class: Hydro
+  reward: 2
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.1
+      effects:
+        - !type:Carcinogenic
+          potency: 6
+
+- type: reagent
+  parent: CMReagent
+  id: CMUConiine # mutant carrots / hemlock
+  name: reagent-name-coniine
+  desc: reagent-desc-coniine
+  physicalDesc: reagent-physical-desc-unidentifiable
+  flavor: bitter
+  color: "#8f947b"
+  flags: Scannable
+  class: Hydro
+  reward: 2
+  overdose: 6
+  criticalOverdose: 10
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.1
+      effects:
+        - !type:Hypnotic
+          potency: 7
+        - !type:Hypoxemic
+          potency: 6
+        - !type:Excreting
+          potency: 2
+        - !type:Hepatopeutic
+          potency: 2
+
+- type: reagent
+  parent: CMReagent
+  id: CMUZygacine # mutant reishi
+  name: reagent-name-zygacine
+  desc: reagent-desc-zygacine
+  physicalDesc: reagent-physical-desc-unidentifiable
+  flavor: bitter
+  color: "#aaaaaa"
+  flags: Scannable
+  class: Hydro
+  reward: 2
+  overdose: 6
+  criticalOverdose: 10
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.1
+      effects:
+        - !type:Cardiotoxic
+          potency: 3
+
+- type: reagent
+  parent: CMReagent
+  id: CMUDigoxin # mutant foxgloves / messa's tears
+  name: reagent-name-digoxin
+  desc: reagent-desc-digoxin
+  physicalDesc: reagent-physical-desc-unidentifiable
+  flavor: bitter
+  color: "#9ec265"
+  flags: Scannable
+  class: Hydro
+  reward: 2
+  overdose: 10.5
+  criticalOverdose: 20
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.1
+      effects:
+        - !type:Cardiopeutic
+          potency: 3
+        - !type:Trichogenic
+          potency: 1
+
+- type: reagent
+  parent: CMReagent
+  id: CMUUrishiol # death nettles / nettles / MANGO
+  name: reagent-name-urishiol
+  desc: reagent-desc-urishiol
+  physicalDesc: reagent-physical-desc-unidentifiable
+  flavor: bitter
+  color: "#c0bf90"
+  flags: Scannable
+  class: Hydro
+  reward: 2
+  overdose: 6
+  criticalOverdose: 10
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.1
+      effects:
+        - !type:Allergenic
+          potency: 6
+        - !type:Corrosive
+          potency: 3
+
+- type: reagent
+  parent: CMReagent
+  id: CMUPhenol # mutant carrots
+  name: reagent-name-phenol
+  desc: reagent-desc-phenol
+  physicalDesc: reagent-physical-desc-unidentifiable
+  flavor: whiskey
+  color: "#c095c9"
+  flags: Scannable
+  class: Hydro
+  reward: 2
+  overdose: 10.5
+  criticalOverdose: 20
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.1
+      effects:
+        - !type:Intravenous
+          potency: 1
+        - !type:Neurotoxic
+          potency: 5
+
+- type: reagent
+  parent: CMReagent
+  id: CMUAmatoxin # mutant reishi / regular fly amanita
+  name: reagent-name-amatoxin
+  desc: reagent-desc-amatoxin
+  physicalDesc: reagent-physical-desc-unidentifiable
+  flavor: bitter
+  color: "#792300"
+  flags: Scannable
+  class: Hydro
+  reward: 2
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.5
+      effects:
+        - !type:Toxic
+          potency: 1
+
+- type: reagent
+  parent: CMReagent
+  id: CMUCyanide # mutant apples / cherries
+  name: reagent-name-cyanide
+  desc: reagent-desc-cyanide
+  physicalDesc: reagent-physical-desc-unidentifiable
+  flavor: bitter
+  color: "#CF3600"
+  flags: Scannable
+  class: Hydro
+  reward: 2
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.2
+      effects:
+        - !type:Hypoxemic
+          potency: 6
+        - !type:Hypnotic
+          potency: 1
+
+- type: reagent
+  parent: CMReagent
+  id: CMUPhenolFormaldehyde # phenol + formaldehyde
+  name: reagent-name-phenol-formaldehyde
+  desc: reagent-desc-phenol-formaldehyde
+  physicalDesc: reagent-physical-desc-unidentifiable
+  flavor: bitter
+  color: "#909648"
+  flags: Scannable
+  class: Hydro
+  reward: 2
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.5
+      effects:
+        - !type:Toxic
+          potency: 3

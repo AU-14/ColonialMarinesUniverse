@@ -31,6 +31,28 @@
     sprite: _RMC14/Objects/Clothing/OuterClothing/Misc/biosuit_weya.rsi
 
 - type: entity
+  id: CMUSuitBioWYSec
+  parent: AU14SuitBioWeYu
+  name: armored WeYu-TSS MK I - bio suit
+  description: The 'Weyland-Yutani TerraScientia bio-suit MK I'. An advanced light-weight bio-suit developed in-house by Weyland-Yutani. It's a suit that protects against biological contamination. This one has been fitted with an armored vest.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Clothing/OuterClothing/Misc/biosuit_wysec.rsi
+  - type: Clothing
+    sprite: _CMU14/Objects/Clothing/OuterClothing/Misc/biosuit_wysec.rsi
+  - type: ClothingSpeedModifier # SLOWDOWN_ARMOR_LIGHT
+    walkModifier: 0.725
+    sprintModifier: 0.725
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: CMHardArmor
+  - type: CMArmor
+    melee: 30
+    bullet: 20 # CLOTHING_ARMOR_MEDIUM
+    bio: 100 # CLOTHING_ARMOR_HARDCORE
+    explosionArmor: 15 # CLOTHING_ARMOR_MEDIUMLOW
+
+- type: entity
   parent: AU14BaseArmor
   id: AU14WYPMCArmorEngineer
   name: WY PMC Engineer Armor

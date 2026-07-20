@@ -1,0 +1,8 @@
+- files:
+  - "monkey_chimper1.ogg"
+  - "monkey_chimper2.ogg"
+  - "monkey_scream.ogg"
+  - "monkey_whimper.ogg"
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from cmss13-devs/cmss13 at commit 9fb881370bbb3ce5f8caf6096949a6c9ef467c65"
+  source: "https://github.com/cmss13-devs/cmss13/tree/9fb881370bbb3ce5f8caf6096949a6c9ef467c65/sound/voice"

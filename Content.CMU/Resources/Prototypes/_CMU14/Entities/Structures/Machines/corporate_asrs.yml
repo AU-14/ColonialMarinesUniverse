@@ -29,16 +29,81 @@
         crate: RMCCrateFoodMRE
       - cost: 600
         crate: RMCCrateReplacementLights
-    - name: Security
+    - name: WEYSEC Gear
       entries:
-      - cost: 2000
-        crate: RMCCrateInflatableBarriers
+      - cost: 700
+        crate: CMUCrateBiosuitWYTSSArmor
+    - name: WEYSEC Weapons
+      entries:
       - cost: 1500
-        crate: RMCCrateEmptySandbags
+        crate: CMUCrateP90
+      - cost: 4500
+        crate: CMUCrateWYSentry
+    - name: WEYSEC Ammo
+      entries:
+      - cost: 750
+        crate: CMUCrateP90Mags
+      - cost: 2250
+        crate: CMUCrateP90APMags
+      - cost: 1500
+        crate: CMUCrateWYSentryAmmo
+    - name: Weyland-Yutani Research
+      entries:
+      # XRF crates are added via code
+      #- cost: 1000
+      #  crate: CMUCrateXRF
+      - cost: 2500
+        crate: CMUCrateSecureWYRandomExp
+      - cost: 350
+        crate: CMUCrateBiosuitWYTSS
+      - cost: 1500
+        crate: CMUCrateTychoRadsuit
+      - cost: 1500
+        crate: CMUCrateGasMaskFilterWY
   - type: ActivatableUIRequiresAccess
   - type: AccessReader
     access: [["AU14AccessCorporateWEYULiaison"], ["AU14AccessCorporateWEYU"]]
 
+# this is for faction agnostic research equipment, e.g. monkeys, biosuits, chem glasses, simulator, data terminal
+- type: entity
+  abstract: true
+  id: CMUASRSResearchGoodies
+  components:
+  - type: RequisitionsComputer
+    categories:
+    - name: Research
+      entries:
+      - cost: 1000
+        crate: RMCCrateInflatableBarriers
+      - cost: 100
+        crate: CMUCrateResearchTerminal
+      - cost: 900
+        crate: CMUCrateSim
+      - cost: 4000
+        crate: CMUMonkeyCubeCrate
+      - cost: 8000
+        crate: CMUExoticCubeCrate
+      - cost: 250
+        crate: CMUCrateChemGlasses
+      - cost: 400
+        crate: CMUCrateBiosuitScientist
+      - cost: 4500
+        crate: CMUCratePreciousMetals
+
+- type: entity
+  abstract: true
+  id: CMUASRSBotanyGoodies
+  components:
+  - type: RequisitionsComputer
+    categories:
+    - name: Botany
+      entries:
+      - cost: 350
+        crate: AU14CrateHydroponicsEquipment
+      - cost: 600
+        crate: AU14CrateHydroSeeds
+      - cost: 340
+        crate: hydroponicsTray
 
 # Corporate ASRS Elevator
 - type: entity

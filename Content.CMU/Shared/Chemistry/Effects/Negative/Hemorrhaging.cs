@@ -2,7 +2,9 @@
 /// reason: Because I, (MACMAN2003), the initial coder of this specific file disagree with the AGPL's copyleft approach to
 /// free software and would prefer this code be shared freely without restrictions.
 
+
 using Content.Shared._CMU14.Medical.Anatomy.Organs;
+using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Chemistry.Effects;
@@ -54,6 +56,7 @@ public sealed partial class Hemorrhaging : RMCChemicalEffect
     protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
     {
         var entman = args.EntityManager;
+
         var medicalIndex = entman.System<CMUMedicalBodyIndexSystem>();
         var orgSys = entman.System<SharedOrganHealthSystem>();
         var targ = args.TargetEntity;
@@ -64,16 +67,16 @@ public sealed partial class Hemorrhaging : RMCChemicalEffect
             return;
         var random = IoCManager.Resolve<IRobustRandom>();
         var org = random.Pick(orgs);
-        IReadOnlyList<EntityUid> organtodamage = [org];
         var damage = new DamageSpecifier();
         damage.DamageDict[BluntType] = potency * 0.5;
-        //forced to do it this way, can't raise local event.
-        orgSys.DistributeOrganDamage(targ, damage, organtodamage);
+        var ev = new OrganDamagedEvent(targ, org, damage, OrganDamageSource.Reagent);
+        entman.EventBus.RaiseLocalEvent(org, ref ev);
     }
 
     protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
     {
         var entman = args.EntityManager;
+
         var medicalIndex = entman.System<CMUMedicalBodyIndexSystem>();
         var woundSys = entman.System<SharedCMUWoundsSystem>();
         var targ = args.TargetEntity;

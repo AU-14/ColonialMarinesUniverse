@@ -29,3 +29,66 @@
       amount: 1
     - id: RMCTankFlamerLargeCustom
       amount: 1
+
+# WY SEC
+
+- type: entity
+  id: CMUCrateP90
+  parent: RMCCrateWeapons
+  name: FN P90 rifle crate
+  description: A crate containing one FN P90 personal defense weapon and two FMJ magazines.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponSMGPDW90
+      amount: 1
+    - id: RMCMagazineSMGPDW90
+      amount: 2
+
+- type: entity
+  id: CMUCrateP90Mags
+  parent: RMCCrateWeapons
+  name: FN P90 magazine crate
+  description: A crate containing three FN P90 personal defense weapon magazines filled with FMJ ammunition.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineSMGPDW90
+      amount: 3
+
+- type: entity
+  id: CMUCrateP90APMags
+  parent: RMCCrateWeapons
+  name: FN P90 AP magazine crate
+  description: A crate containing three FN P90 personal defense weapon magazines filled with AP ammunition.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineSMGPDW90AP
+      amount: 3
+
+- type: entity
+  id: CMUCrateWYSentry
+  parent: RMCCrateWeapons
+  name: 512-M mini sentry crate
+  description: A crate containing a 512-M mini sentry, a single ammunition drum, and a sentry laptop.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSentryMiniWeYa
+      amount: 1
+    - id: RMCSentryLaptop
+      amount: 1
+    - id: RMCMagazineSentry
+      amount: 1
+
+- type: entity
+  id: CMUCrateWYSentryAmmo
+  parent: RMCCrateWeapons
+  name: M30 ammo drum crate
+  description: A crate containing a single M30 ammunition drum.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineSentry
+      amount: 1
