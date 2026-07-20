@@ -11,7 +11,7 @@ public sealed partial class TotalDamageEntityConditionSystem : EntityConditionSy
 
     protected override void Condition(Entity<DamageableComponent> entity, ref EntityConditionEvent<TotalDamage> args)
     {
-        var total = _damageable.GetTotalDamage(entity.AsNullable());
+        var total = _damageable.GetTotalDamage(entity.Owner);
         args.Result = total >= args.Condition.Min && total <= args.Condition.Max;
     }
 }

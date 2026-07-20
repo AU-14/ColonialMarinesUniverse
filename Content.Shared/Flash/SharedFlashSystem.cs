@@ -208,7 +208,7 @@ public abstract partial class SharedFlashSystem : EntitySystem
     /// <param name="displayPopup">Whether or not to show a popup to the target player.</param>
     /// <param name="melee">Was this flash caused by a melee attack? Used for checking for revolutionary conversion.</param>
     /// <param name="stunDuration">The time the target will be stunned. If null the target will be slowed down instead.</param>
-    public void Flash(
+    public bool Flash(
         EntityUid target,
         EntityUid? user,
         EntityUid? used,
@@ -222,11 +222,11 @@ public abstract partial class SharedFlashSystem : EntitySystem
         RaiseLocalEvent(target, ref attempt, true);
 
         if (attempt.Cancelled)
-            return;
+            return false;
 
         // don't paralyze, slowdown or convert to rev if the target is immune to flashes
         if (!_statusEffectsSystem.TryAddStatusEffectDuration(target, FlashedKey, flashDuration))
-            return;
+            return false;
 
         if (stunDuration != null)
             _stun.TryUpdateParalyzeDuration(target, stunDuration.Value);
@@ -246,6 +246,8 @@ public abstract partial class SharedFlashSystem : EntitySystem
             RaiseLocalEvent(user.Value, ref ev);
         if (used != null)
             RaiseLocalEvent(used.Value, ref ev);
+
+        return true;
     }
 
     /// <summary>
