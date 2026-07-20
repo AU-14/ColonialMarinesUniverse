@@ -2542,3 +2542,16 @@ Date completed: 2026-07-20
 - Files changed: hydroponics seed and produce prototypes and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static solution accounting confirms vulgaris totals 14u, deus totals 10u, and glasstle totals 25u; Desoxyephedrine is removed from both ambrosia seed/produce pairs and added to glasstle's pair. Prototype loading, growth yield, grinding, and RMC despawn behavior are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record indices 1065 and 1066 as `Ported (CS-0185)` when wave 0006 is committed.
+
+## CS-0186 — Prefer network configuration on wireless devices
+
+- Upstream: [space-wizards/space-station-14#38938](https://github.com/space-wizards/space-station-14/pull/38938), `37ee54621a492bac36e581d23f0e72a6c5e52763`, 2025-10-01
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: When a multitool target supports both device linking and device networking, automatic mode selection now prefers networking so the device can be saved or configured wirelessly. An already-active linking session remains active through the existing early-return guard, and link-only targets still select linking mode.
+- RMC/CMU divergence: RMC sentries, laptops, requisitions, faxes, and doors reuse the standard device-network components and configurator system. No RMC network identifiers, power requirements, access checks, or linking ports change; mixed-capability RMC devices receive the same mode-selection rule.
+- Decision and rationale: Port the retained ordering change without altering the surrounding interaction flow. Checking networking before falling back to linking exposes wireless configuration while preserving explicit link-mode continuity.
+- Files changed: `Content.Server/DeviceNetwork/Systems/NetworkConfiguratorSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static branch review covers networking-only, linking-only, mixed-capability, device-list, and active-link-mode targets; only mixed targets outside an active linking session choose differently. Server compilation and multitool interaction cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1069 as `Ported (CS-0186)` when wave 0006 is committed.
