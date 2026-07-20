@@ -216,6 +216,9 @@ public sealed partial class MetabolizerSystem : EntitySystem
             // TODO: We should have to do this with metabolism. ReagentEffect struct needs refactoring and so does metabolism!
             void ApplyEffect(EntityEffect effect)
             {
+                if (TryApplyRMCChemicalEffect(actualEntity, ent, solution, mostToRemove, proto, effect, scale))
+                    return;
+
                 switch (effect)
                 {
                     case ModifyLungGas:
