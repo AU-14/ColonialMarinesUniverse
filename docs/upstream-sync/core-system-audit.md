@@ -2164,3 +2164,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Mobs/NPCs/animals.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static inheritance review confirms the component reaches all `MobSpiderBase` descendants without altering `Pullable` or collision fixtures. Prototype loading and a no-hands pull interaction are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None.
+
+## CS-0158 — Identify conveyor fixtures with the canonical collision mask
+
+- Upstream: [space-wizards/space-station-14#40439](https://github.com/space-wizards/space-station-14/pull/40439), `ed89c0e06196a3b3ab0b466ec6dd7ebee2742c9d`, 2025-09-18
+- Areas: Movement, Physics, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Conveyor fixtures now declare `ConveyorMask` directly, allowing door obstruction logic to reliably recognize and ignore conveyor belts while closing.
+- RMC/CMU divergence: CMU's `ConveyorMask` preserves the same four collision flags and its door system already contains the upstream conveyor exception. No RMC collision groups or controller scheduling are changed.
+- Decision and rationale: Replace the expanded flag list with the canonical named mask so the prototype and the door system share one identity and future mask changes cannot silently diverge.
+- Files changed: `Resources/Prototypes/Entities/Structures/conveyor.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static collision review confirms `ConveyorMask` resolves to the prior flags and is the exact value checked by `SharedDoorSystem`. Prototype loading plus door closure over a conveyor are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: The server conveyor controller still has a fallback fixture creation path with an expanded mask; revisit it when its later upstream cleanup enters scope.
