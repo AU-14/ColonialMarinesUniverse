@@ -1709,3 +1709,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Mobs/Player/silicon.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype review confirms the flag is nested under the existing `GhostRole` component and leaves raffle settings and takeover availability unchanged. Prototype loading plus take/release/deletion ghost-role lifecycle checks are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: When importing later derelict cyborg variants, preserve this one-shot registration contract on every variant.
+
+## CS-0123 — Play clown-bag insertion sounds
+
+- Upstream: [space-wizards/space-station-14#39931](https://github.com/space-wizards/space-station-14/pull/39931), `9e22aa4cd5c05d2cabdfb79cc1c1b2b22660cfe8`, 2025-09-06
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Clown backpacks, duffels, and satchels now play the clown-footstep collection when an item is inserted. Their existing bike-horn open sound and new insertion sound both use small pitch variation.
+- RMC/CMU divergence: The three inherited station prototypes and storage audio fields are unchanged by RMC; CMU-specific bags are unaffected.
+- Decision and rationale: Port the complete retained prototype delta across all three clown bag families so storage interactions remain consistent.
+- Files changed: `Resources/Prototypes/Entities/Clothing/Back/backpacks.yml`, `Resources/Prototypes/Entities/Clothing/Back/duffel.yml`, `Resources/Prototypes/Entities/Clothing/Back/satchel.yml`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static inheritance review confirms only the three clown variants override these sounds and the `FootstepClown` collection already exists. Prototype loading plus open/insert playback and mime-bag silence controls are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None.
