@@ -353,6 +353,9 @@ namespace Content.Shared.Interaction
         /// <returns></returns>
         public bool CombatModeCanHandInteract(EntityUid user, EntityUid? target)
         {
+            if (TryRMCCombatModeInteractOverride(user, target, out var canInteract))
+                return canInteract;
+
             // Always allow attack in these cases
             if (target == null || !_handsQuery.TryComp(user, out var hands) || _hands.GetActiveItem((user, hands)) is not null)
                 return false;
