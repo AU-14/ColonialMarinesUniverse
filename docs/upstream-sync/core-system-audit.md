@@ -1644,3 +1644,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Shuttles/Systems/EmergencyShuttleSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static update tracing confirms `base.Update` still runs, only `PreRoundLobby` skips console work, and every other run level preserves the existing call. Server compilation plus idle-lobby, round-start, call, recall, and round-cleanup cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Review whether RMC's custom pre-round run levels or lobby maps require a broader `InRound` predicate when the game-ticker integration is audited deeply.
+
+## CS-0118 — Preserve docking-port radar colors through the BUI
+
+- Upstream: [space-wizards/space-station-14#38942](https://github.com/space-wizards/space-station-14/pull/38942), `9b6cb79fa2e2d554480c1f617529ad3a3d7b4484`, 2025-08-12
+- Areas: Movement, Physics, Interactions
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: `DockingPortState` now carries each docking component's normal and highlighted radar colors. The server populates both fields, and shuttle navigation/docking controls render them instead of fixed purple and magenta values.
+- RMC/CMU divergence: RMC does not replace the shuttle BUI state or either inherited radar control. Custom docking prototypes can now expose their authored colors without changing docking geometry or authority.
+- Decision and rationale: Port the retained serialized state and all producers/consumers atomically so clients never receive a partial color contract. A magenta fallback remains only when no viewed dock state exists.
+- Files changed: `Content.Shared/Shuttles/BUIStates/DockingPortState.cs`, `Content.Server/Shuttles/Systems/ShuttleConsoleSystem.cs`, `Content.Client/Shuttles/UI/ShuttleDockControl.xaml.cs`, `Content.Client/Shuttles/UI/ShuttleNavControl.xaml.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static data-flow review confirms both component colors enter every generated dock state and each rendering branch consumes the intended field. Shared/server/client compilation plus BUI round-trip, normal, hovered, selected, nav-radar, and null-view fallback cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a serialized BUI regression with non-default colors and visually verify color-space conversion remains consistent across both controls.

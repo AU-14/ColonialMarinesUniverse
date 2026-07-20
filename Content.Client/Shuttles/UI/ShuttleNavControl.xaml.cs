@@ -322,7 +322,7 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
                     continue;
                 }
 
-                var color = Color.ToSrgb(Color.Magenta);
+                var color = Color.ToSrgb(state.HighlightedColor);
 
                 var verts = new[]
                 {
