@@ -48,9 +48,11 @@ public sealed partial class AU14CallsignSystem : EntitySystem
     private static readonly Dictionary<string, string> DefaultCategoryWords = new(StringComparer.OrdinalIgnoreCase)
     {
         ["AIR"] = "TALON",
+        ["ARMOR"] = "DRAGOON",
         ["MP"] = "WARDEN",
         ["MEDICAL"] = "DUSTOFF",
         ["INTEL"] = "PROPHET",
+        ["SYNTH"] = "APOLLO",
     };
 
     private readonly Dictionary<(string Faction, string Category), string> _categoryWords = new();

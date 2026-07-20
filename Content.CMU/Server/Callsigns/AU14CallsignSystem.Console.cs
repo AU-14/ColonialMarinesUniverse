@@ -335,7 +335,7 @@ public sealed partial class AU14CallsignSystem
     }
 
     // fixed order the role sections are listed in below the command element
-    private static readonly string[] ConsoleCategories = ["AIR", "MP", "MEDICAL", "INTEL"];
+    private static readonly string[] ConsoleCategories = ["AIR", "ARMOR", "MP", "MEDICAL", "INTEL", "SYNTH"];
 
     private List<AU14CallsignConsoleRow> CollectRows(string faction, EntityUid? squad, string? group, string? category)
     {
