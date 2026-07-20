@@ -144,7 +144,7 @@ behavior to port.
 2525 | e6dedb87a64a91d47e01c633cfffdb33c607b629 | Add EditorHidden member to ContentTileDefinition (#42564) | Deferred | Interactions, Physics | Tile-definition and editor API dependency.
 2526 | 11ac6966d9812e6460b1ba31c5c75e987ba4434d | Fix: Make votes force select maps (#42426) | PortCandidate | GameTicking, Gamerules | Focused map-vote correctness fix.
 2527 | 65b8aafed8aa87e4104efd9b4c726e1eed7fe0bc | Improve sandbox window toggle buttons state handling (#42281) | PortCandidate | Interactions | Self-contained administrative UI state fix.
-2528 | 7b1ed2bd29eb797c594e9354747f5564d0138cfd | Remove duplicate loc getstring calls (#42648) | PortCandidate | Interactions, Gamerules | CMU contains the erroneous nested localization calls.
+2528 | 7b1ed2bd29eb797c594e9354747f5564d0138cfd | Remove duplicate loc getstring calls (#42648) | Ported (CS-0250) | Interactions, Gamerules | Ten command, verb, and event strings now perform exactly one localization lookup.
 2529 | ab2cefaa7f72142a85fe1b9e0e818870c53e1cdf | restore tritium fire energy to reenable maxcaps (#42641) | Deferred | Chemistry, Physics, Gamerules | Atmospherics and explosion balance policy.
 2530 | 18bf23dc7a927b5a2efc835861674345571d4cb2 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2531 | 737889c22f4651d5aa1d3cee53d44218234604bd | Make crowbars consistent with 1x2 item storage (#42585) | PortCandidate | Interactions | Small storage-shape consistency fix.

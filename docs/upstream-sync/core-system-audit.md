@@ -3386,3 +3386,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Atmos/Piping/Unary/Systems/SharedGasCanisterSystem.cs`, `Content.Server/Atmos/Piping/Unary/EntitySystems/GasCanisterSystem.cs`, `docs/upstream-sync/inventory-wave-0013.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static event-flow review confirms the new hooks call the existing client/server `DirtyUI` overrides, full canisters still resolve authoritative node state, and partial entities return without mutation or error logs. Shared/client/server compilation plus empty and filled map canisters, UI open before/after map init, connected/disconnected ports, inserted tanks, unchanged pressure, partial test entities, and RMC canister prototypes are queued for the index-2999 checkpoint.
 - Follow-up/debt: A later pinned-target commit also refreshes initial pressure appearance; integrate it at its own audited history position rather than broadening this UI-state port.
+
+## CS-0250 â€” Remove duplicate localization lookups
+
+- Upstream: [space-wizards/space-station-14#42648](https://github.com/space-wizards/space-station-14/pull/42648), `7b1ed2bd29eb797c594e9354747f5564d0138cfd`, 2026-01-25
+- Areas: Interactions, Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Ten action, objective, map, nuke, forensic-cleaning, and breaker-event strings now pass a localization key through `Loc.GetString` exactly once. Translated output is no longer incorrectly reused as a second key, so errors, completion hints, verb labels, verb descriptions, and event announcement data resolve reliably in every locale.
+- RMC/CMU divergence: CMU retains these standard administrative commands, forensic utility verb, and breaker-flip station event alongside RMC-specific commands and game rules. The change is limited to string lookup boundaries; command permissions and mutations, objective assignment, nuke state, evidence cleaning, random selection, and RMC announcements are unchanged.
+- Decision and rationale: Port the upstream eight-file cleanup as one atomic unit. Every affected expression has the same defect and the pinned target contains no nested lookup at these sites. Keeping the first lookup preserves interpolation and locale behavior while avoiding a second lookup whose key depends on translated user-facing text.
+- Files changed: eight affected `Content.Server` command/system files, `docs/upstream-sync/inventory-wave-0013.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static repository search confirms all ten upstream-targeted `Loc.GetString(Loc.GetString(...))` patterns are gone and no unrelated localization expressions changed. Server compilation plus invalid command arguments, action/objective completion, force-map help, nuke completion, forensic utility verbs, breaker-flip announcements, non-English locales, and RMC command/event coexistence are queued for the index-2999 checkpoint.
+- Follow-up/debt: Continue treating any future nested lookup as suspicious, but audit it independently when the inner call intentionally returns a dynamic localization key.
