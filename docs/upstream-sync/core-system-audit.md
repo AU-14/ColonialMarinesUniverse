@@ -4087,3 +4087,16 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - Files changed: `Content.Server/Fluids/EntitySystems/SpraySystem.cs`, `Content.Server/_RMC14/Fluids/SpraySystem.RMC.cs`, `Content.Shared/Throwing/ThrownItemSystem.cs`, `Content.Shared/_RMC14/Throwing/ThrownItemSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation evidence: Static call review confirms the sole RMC flamer spray producer carries `RMCSprayAmmoProviderComponent` into the current server spawn loop, and unmarked thrown entities retain their existing thrower exemption. A serial `Content.Shared` DebugOpt build succeeded with 0 errors and 6 unrelated warnings; `Content.Server` DebugOpt `--no-dependencies` succeeded with 0 errors and 4 unrelated warnings. Tests remain deferred until the 1,000-upstream-commit checkpoint.
 - Remaining debt: Runtime coverage must compare `HitUser` true/false, close-range and reverse-direction spray, multiple vapor puffs, ordinary spray bottles, ordinary thrown items, server collision ownership, and fire/acid/cloak vapor-hit consumers.
+
+## CS-0299 - Preserve the active hand for RMC other-hand interaction
+
+- Upstreams compared: live SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767`, live RMC `b6d677947dd8ebcb06194a66798938645fed5a54`, and CMU through CS-0298.
+- Areas: Interactions, Hands, Client input, Prediction
+- Classification: Behavior changed -> Adapted.
+- Risk: Medium before the fix because an interaction command could silently change equipment state; low after it pending input/runtime coverage.
+- Behavior/API delta: The restored RMC other-hand binding called current `UIHandClick`, whose empty-other-hand branch switches the active hand. The original command deliberately disabled that branch: it interacts with or moves an item from the other hand but does nothing when that hand is empty.
+- RMC/CMU divergence: Normal hand UI clicks retain current SS14 behavior and switch to an empty selected hand. The optional non-switching policy is used only by `RMCInteractWithOtherHand`; all request messages and shared server validation remain current and predicted.
+- Decision and rationale: Restore the old optional `switchHand` argument with a true default and pass false at the sole fork caller. This is the smallest compatible seam and does not introduce another input or hand-mutation owner.
+- Files changed: `Content.Client/Hands/Systems/HandsSystem.cs`, `Content.Client/_RMC14/Hands/ClientRMCHandsSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation evidence: Static branch review confirms only the empty, non-active-hand branch is suppressed for the fork command; held-item use and move branches remain identical. `dotnet build Content.Client/Content.Client.csproj --configuration DebugOpt --no-restore --no-dependencies --nologo --verbosity:minimal --disable-build-servers` succeeded with 0 errors and 8 unrelated warnings. Tests remain deferred until the 1,000-upstream-commit checkpoint.
+- Remaining debt: Runtime coverage must compare empty/occupied active and other hands, two-handed and multi-hand mobs, key repeat, prediction resimulation, ordinary GUI hand clicks, and current default/rebound input contexts.

@@ -125,7 +125,7 @@ namespace Content.Client.Hands.Systems
         /// <summary>
         ///     Called when a user clicked on their hands GUI
         /// </summary>
-        public void UIHandClick(Entity<HandsComponent> ent, string handName)
+        public void UIHandClick(Entity<HandsComponent> ent, string handName, bool switchHand = true)
         {
             var hands = ent.Comp;
             if (hands.ActiveHandId == null)
@@ -142,7 +142,7 @@ namespace Content.Client.Hands.Systems
                 return;
             }
 
-            if (handName != hands.ActiveHandId && pressedEntity == null)
+            if (switchHand && handName != hands.ActiveHandId && pressedEntity == null)
             {
                 // change active hand
                 RaisePredictiveEvent(new RequestSetHandEvent(handName));
