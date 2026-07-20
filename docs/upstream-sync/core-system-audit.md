@@ -1722,3 +1722,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Clothing/Back/backpacks.yml`, `Resources/Prototypes/Entities/Clothing/Back/duffel.yml`, `Resources/Prototypes/Entities/Clothing/Back/satchel.yml`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static inheritance review confirms only the three clown variants override these sounds and the `FootstepClown` collection already exists. Prototype loading plus open/insert playback and mime-bag silence controls are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None.
+
+## CS-0124 — Prefer military-boot item-slot interactions
+
+- Upstream: [space-wizards/space-station-14#40049](https://github.com/space-wizards/space-station-14/pull/40049), `817a2973e57d745655a86883409ebe85a2bb7265`, 2025-09-08
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The knife/sidearm slot inherited by military boots now has interaction priority 4, ensuring slot insertion and removal wins over lower-priority species or clothing interactions.
+- RMC/CMU divergence: RMC adds species and footwear interactions, including moth behavior, but retains this upstream military-boot base and item-slot priority contract.
+- Decision and rationale: Port the retained one-field ordering fix at the shared base so every military-boot descendant resolves the same ambiguity.
+- Files changed: `Resources/Prototypes/Entities/Clothing/Shoes/base_clothingshoes.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype inheritance review confirms the priority applies only to the named boot item slot and does not alter its knife/sidearm whitelist. Prototype loading plus human and moth insertion/removal interaction selection are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Audit RMC footwear with additional item slots for explicit priority collisions.
