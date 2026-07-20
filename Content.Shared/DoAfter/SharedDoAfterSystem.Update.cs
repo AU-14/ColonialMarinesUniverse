@@ -127,6 +127,13 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
                 continue;
             }
 
+            if (ShouldCancelRMC(doAfter))
+            {
+                InternalCancel(doAfter, comp);
+                dirty = true;
+                continue;
+            }
+
             if (time - doAfter.StartTime >= doAfter.Args.Delay)
             {
                 TryComplete(doAfter, comp);
