@@ -63,6 +63,7 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
     [Dependency] private RMCPullingSystem _rmcPulling = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private SharedDeafnessSystem _deafness = default!;
+    [Dependency] private SharedDrunkSystem _drunk = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -195,7 +196,7 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
 
             //Basic Effects
             _stamina.DoStaminaDamage(uid, neuro.StaminaDamagePerTick, visual: false);
-            _statusEffects.TryAddStatusEffect<DrunkComponent>(uid, "Drunk", neuro.DizzyStrength, true);
+            _drunk.TryApplyDrunkenness(uid, neuro.DizzyStrength);
 
             NeurotoxinNonStackingEffects(uid, neuro, time, out var coughChance, out var stumbleChance);
             NeurotoxinStackingEffects(uid, neuro, time);
@@ -215,7 +216,7 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
                 _popup.PopupEntity(Loc.GetString("rmc-stumble"), uid, uid, PopupType.MediumCaution);
                 _daze.TryDaze(uid, neuro.DazeLength * 5, true, stutter: true);
                 _jitter.DoJitter(uid, neuro.StumbleJitterTime, true);
-                _statusEffects.TryAddStatusEffect<DrunkComponent>(uid, "Drunk", neuro.DizzyStrengthOnStumble, true);
+                _drunk.TryApplyDrunkenness(uid, neuro.DizzyStrengthOnStumble);
                 var ev = new NeurotoxinEmoteEvent() { Emote = neuro.PainId };
                 RaiseLocalEvent(uid, ev);
             }
@@ -380,7 +381,7 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
 
     private void DoNeuroHallucination(EntityUid victim, NeurotoxinComponent neurotoxin)
     {
-        var hallucination = SharedRandomExtensions.Pick(neurotoxin.Hallucinations, _random.GetRandom());
+        var hallucination = _random.Pick(neurotoxin.Hallucinations);
         //Note event times are hardcoded for now since thers alot of them
         switch (hallucination)
         {

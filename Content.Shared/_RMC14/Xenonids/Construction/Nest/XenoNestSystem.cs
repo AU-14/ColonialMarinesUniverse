@@ -172,7 +172,7 @@ public sealed partial class XenoNestSystem : EntitySystem
 
         // TODO RMC14
         if (HasComp<KnockedDownComponent>(ent) || _mobState.IsIncapacitated(ent))
-            _standing.Down(ent, changeCollision: true);
+            _standing.Down(ent);
 
         if (ent.Comp.GhostedId is { } id &&
             _player.TryGetSessionById(id, out var player) &&

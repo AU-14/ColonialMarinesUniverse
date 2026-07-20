@@ -1,4 +1,5 @@
 ﻿using Content.Shared._RMC14.Actions;
+using System.Numerics;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Damage.ObstacleSlamming;
 using Content.Shared._RMC14.Emote;
@@ -516,9 +517,26 @@ public sealed partial class XenoToggleChargingSystem : EntitySystem
             return DirectionFlag.None;
 
         var parentRotation = _moverController.GetParentGridAngle(moverComp);
-        var total = _moverController.DirVecForButtons(button);
+        var total = DirectionVectorForButtons(button);
         var wishDir = _relativeMovement ? parentRotation.RotateVec(total) : total;
         return wishDir.GetDir().AsFlag();
+    }
+
+    private Vector2 DirectionVectorForButtons(MoveButtons buttons)
+    {
+        var x = 0;
+        x -= (buttons & MoveButtons.Left) == MoveButtons.Left ? 1 : 0;
+        x += (buttons & MoveButtons.Right) == MoveButtons.Right ? 1 : 0;
+
+        var y = 0;
+        if (_moverController.DiagonalMovementEnabled || x == 0)
+        {
+            y -= (buttons & MoveButtons.Down) == MoveButtons.Down ? 1 : 0;
+            y += (buttons & MoveButtons.Up) == MoveButtons.Up ? 1 : 0;
+        }
+
+        var direction = new Vector2(x, y);
+        return direction.LengthSquared() > 1.0e-6f ? direction.Normalized() : direction;
     }
 
     private bool TryDefaultStructureCollide(Entity<ActiveXenoToggleChargingComponent> crusher, EntityUid target)

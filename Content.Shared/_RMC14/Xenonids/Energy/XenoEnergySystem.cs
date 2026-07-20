@@ -46,7 +46,7 @@ public sealed partial class XenoEnergySystem : EntitySystem
 
     private void OnXenoEnergyRemove(Entity<XenoEnergyComponent> ent, ref ComponentRemove args)
     {
-        _alerts.ClearAlert(ent, ent.Comp.Alert);
+        _alerts.ClearAlert(ent.Owner, ent.Comp.Alert);
     }
 
     private void OnMeleeHit(Entity<XenoEnergyComponent> xeno, ref MeleeHitEvent args)
@@ -103,8 +103,7 @@ public sealed partial class XenoEnergySystem : EntitySystem
         var level = MathF.Max(0f, xeno.Comp.Current);
         var max = _alerts.GetMaxSeverity(xeno.Comp.Alert);
         var severity = max - ContentHelpers.RoundToLevels(level, xeno.Comp.Max, max + 1);
-        string? energyResourceMessage = (int)xeno.Comp.Current + " / " + xeno.Comp.Max;
-        _alerts.ShowAlert(xeno, xeno.Comp.Alert, (short)severity, dynamicMessage: energyResourceMessage);
+        _alerts.ShowAlert(xeno.Owner, xeno.Comp.Alert, (short)severity);
     }
 
     private void OnXenoActionEnergyUseAttempt(Entity<XenoActionEnergyComponent> action, ref RMCActionUseAttemptEvent args)

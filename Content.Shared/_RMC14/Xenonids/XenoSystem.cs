@@ -475,7 +475,7 @@ public sealed partial class XenoSystem : EntitySystem
             return;
 
         if (!_damageableQuery.Resolve(xeno, ref xeno.Comp, false) ||
-            xeno.Comp.Damage.GetTotal() <= FixedPoint2.Zero)
+            _damageable.GetAllDamage(xeno).GetTotal() <= FixedPoint2.Zero)
         {
             return;
         }

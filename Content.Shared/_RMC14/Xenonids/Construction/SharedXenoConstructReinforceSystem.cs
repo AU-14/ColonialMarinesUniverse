@@ -25,12 +25,11 @@ public sealed partial class SharedXenoConstructReinforceSystem : EntitySystem
         comp.Duration = duration;
     }
 
-    private void ReduceDamage(Entity<XenoConstructReinforceComponent> ent, ref DamageSpecifier damage)
+    private void ReduceDamage(Entity<XenoConstructReinforceComponent> ent, DamageSpecifier damage)
     {
         if (!damage.AnyPositive())
             return;
 
-        damage = new DamageSpecifier(damage);
         foreach (var type in damage.DamageDict)
         {
             if (damage.DamageDict[type.Key] <= 0)
@@ -53,12 +52,14 @@ public sealed partial class SharedXenoConstructReinforceSystem : EntitySystem
 
     private void OnReinforceBeforeExplode(Entity<XenoConstructReinforceComponent> ent, ref BeforeExplodeEvent args)
     {
-        ReduceDamage(ent, ref args.Damage);
+        ReduceDamage(ent, args.Damage);
     }
 
     private void OnReinforceDamageModify(Entity<XenoConstructReinforceComponent> ent, ref DamageModifyEvent args)
     {
-        ReduceDamage(ent, ref args.Damage);
+        var damage = new DamageSpecifier(args.Damage);
+        ReduceDamage(ent, damage);
+        args.Damage = damage;
     }
 
     private void ReinforceRemoved(Entity<XenoConstructReinforceComponent> ent)

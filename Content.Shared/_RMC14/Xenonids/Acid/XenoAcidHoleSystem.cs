@@ -148,7 +148,7 @@ public sealed partial class XenoAcidHoleSystem : EntitySystem
             _receiverClawsQuery.TryComp(wall, out var receiver))
         {
             var targetDamage = FixedPoint2.New(receiver.MaxHealth * 0.9f);
-            if (_damageable.GetTotalDamage((wall.Owner, damageable)) < targetDamage)
+            if (_damageable.GetTotalDamage((wall, damageable)) < targetDamage)
                 SetWallDamage((wall, damageable), targetDamage);
         }
 
