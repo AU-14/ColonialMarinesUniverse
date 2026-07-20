@@ -12,6 +12,6 @@ public sealed class RMCResetAHelpTrackingCommand : ToolshedCommand
     public void Run()
     {
         var bwoink = Sys<BwoinkSystem>();
-        bwoink.RMCRelayMessages.Clear();
+        bwoink.ClearRmcRelayMessages();
     }
 }
