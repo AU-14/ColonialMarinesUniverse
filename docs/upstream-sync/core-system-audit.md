@@ -2138,3 +2138,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Clothing/Back/backpacks.yml`, `Resources/Prototypes/Entities/Clothing/Back/duffel.yml`, `Resources/Prototypes/Entities/Clothing/Back/satchel.yml`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static resolved-prototype review confirms each mime bag has `Storage` with both sounds set to null. Prototype loading plus open and insert interaction checks are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None.
+
+## CS-0156 — Distribute ichor healing evenly within damage groups
+
+- Upstream: [space-wizards/space-station-14#39466](https://github.com/space-wizards/space-station-14/pull/39466), `fbb9c9c524e0e8cc01a90941d61e61e2275ed863`, 2025-09-18
+- Areas: Medical, Chemistry
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: Ichor now spends its Burn, Brute, and Toxin healing budgets proportionally across damage types the consumer actually has, while bloodloss healing is reduced from five to three.
+- RMC/CMU divergence: CMU already contains the shared `EvenHealthChange` effect used by the pinned upstream implementation. Dragon metabolism, blood restoration, bleed reduction, and fork-specific damage systems are otherwise unchanged.
+- Decision and rationale: Replace broad group healing with the retained even-distribution effect so ichor does not over-heal every subtype in a group; use upstream's final per-tick budgets.
+- Files changed: `Resources/Prototypes/Reagents/biological.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static effect review confirms group healing is handled only by `EvenHealthChange` and bloodloss only by `HealthChange`. Prototype loading plus single- and mixed-damage metabolism assertions are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add focused effect coverage for zero-damage groups and mixed damage distributions if the checkpoint exposes edge cases.
