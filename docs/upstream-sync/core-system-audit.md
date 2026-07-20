@@ -2880,3 +2880,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Body/Systems/RespiratorSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static signature and call-path review confirms the named argument binds to `ignoreResistances`, `interruptsDoAfters` remains false, and recovery still follows its prior path. Server compilation plus normal, resistant-species, damage-event, recovery, alert-threshold, and RMC wound cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1786 as `Ported (CS-0211)` when wave 0009 is committed.
+
+## CS-0212 — Suppress rename events for internal solution entities
+
+- Upstream: [space-wizards/space-station-14#41400](https://github.com/space-wizards/space-station-14/pull/41400), `c079fdfbba477a2dbd4df17ad3be97d1c0e97084`, 2025-11-12
+- Areas: Chemistry, Interactions, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Naming a newly created contained-solution entity now sets its metadata with `raiseEvents: false`. The internal entity still receives and networks its diagnostic name, but its creation no longer broadcasts an `EntityRenamedEvent` to unrelated identity, PDA, station-record, mind, and name-modifier listeners.
+- RMC/CMU divergence: RMC's ID-card system globally subscribes to rename events and queues non-card entities for resolution during its next update. Suppressing the internal solution rename also prevents every lazily created solution from entering that RMC-specific per-tick queue; genuine actor and item renames remain eventful.
+- Decision and rationale: Port the upstream named argument directly. A contained solution's generated metadata label is implementation detail rather than a player-visible rename, so publishing it creates false interaction work without a valid consumer.
+- Files changed: `Content.Shared/Chemistry/EntitySystems/SharedSolutionContainerSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static API review confirms the pinned RobustToolbox `SetEntityName` overload accepts `raiseEvents`, still dirties metadata, and only the generated solution-name call suppresses events. Shared compilation plus solution creation, metadata replication, rename-listener, PDA/ID queue, station-record, map initialization, and client prediction cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1689 as `Ported (CS-0212)` when wave 0009 is committed.
