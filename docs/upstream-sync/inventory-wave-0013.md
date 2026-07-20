@@ -162,7 +162,7 @@ behavior to port.
 2543 | fd0f52592788f0e1b0d7485c8c4dd83161d905f2 | Fixes Opporozidone Instarot issues (#42472) | PortCandidate | Medical, Chemistry, GameTicking | CMU's rotting shutdown still resets scheduling incorrectly.
 2544 | 36d09f982b40e692851ada4c1b4ba7cf455c16c9 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2545 | 5b9ff83ce5ed68aeda6f2b0b17d273e42c5030a9 | Fix: Make vote call button toggable (#42450) | PortCandidate | Interactions | Focused vote-button UI-state correction.
-2546 | 093257280bd7ea71516553d825aa581f598da570 | Fix InstrumentSystem.Update exception when deleting band lead (#42331) | PortCandidate | Interactions, GameTicking | CMU's cleanup path does not continue after clearing an invalid band master.
+2546 | 093257280bd7ea71516553d825aa581f598da570 | Fix InstrumentSystem.Update exception when deleting band lead (#42331) | Ported (CS-0246) | Interactions, GameTicking | Invalid, deleted, or distant band leaders now end follower processing immediately after cleanup.
 2547 | 9a5c2793261d8f2150ab0272845c9d8d4a3c7a2c | Move job weh plushies to locker loot (#42545) | Deferred | Interactions, Gamerules | Job and locker loot policy.
 2548 | 4981392249bff86aa2ab2745b1ccb22c6382684d | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2549 | 3172ada5636fc068ac1f85893ba4c4cab0615f26 | Move character preview handling into a specialized control (#41252) | Deferred | Interactions | Structural profile UI refactor tied to Nubody work.

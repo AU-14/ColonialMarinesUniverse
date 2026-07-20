@@ -3334,3 +3334,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Polymorph/Systems/SharedChameleonProjectorSystem.cs`, `docs/upstream-sync/inventory-wave-0013.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static pickup-flow review confirms normal hand interaction remains handled before item pickup, direct/context-menu `TryPickup` reaches the cancellable container event, only real hand containers are rejected, and entity-storage insertion retains its separate cancellation. Shared compilation plus direct click, context verb, drag pickup, alternate hand, full hands, remote pickup, storage insertion, disguise reveal, action cleanup, prediction reconciliation, and RMC hand behavior cases are queued for the index-2999 checkpoint.
 - Follow-up/debt: When index 2491's hands API is integrated, replace this compatibility hook with upstream `BeforeGettingEquippedHandEvent` and remove the temporary `SharedHandsSystem` dependency after equivalent regression coverage.
+
+## CS-0246 â€” Stop processing followers after invalid band-leader cleanup
+
+- Upstream: [space-wizards/space-station-14#42331](https://github.com/space-wizards/space-station-14/pull/42331), `093257280bd7ea71516553d825aa581f598da570`, 2026-01-26
+- Areas: Interactions, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Instrument updates now stop processing a follower immediately after clearing a deleted leader, a leader without an active-instrument component, or a leader outside the ten-tile band range. Cleanup no longer falls through into component or transform queries using an invalid leader reference.
+- RMC/CMU divergence: CMU retains the standard instrument band lifecycle without an RMC replacement in this update path. RMC instruments and maps use the same leader/follower state; MIDI limits, finger-cramp handling, UI requests, range, playback, and cleanup semantics are unchanged.
+- Decision and rationale: Port the target-final control-flow fix exactly. `Clean` removes the follower's master relationship, so the rest of that iteration is both stale and unsafe. Continuing the outer entity query prevents deleted-entity exceptions while leaving valid linked instruments on the existing update path.
+- Files changed: `Content.Server/Instruments/InstrumentSystem.cs`, `docs/upstream-sync/inventory-wave-0013.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static control-flow review confirms all three cleanup branches continue the outer instrument query and valid leaders still reach range and playback processing. Server compilation plus leader deletion, component removal, out-of-range separation, valid bands, simultaneous cleanup, MIDI-limit cleanup, and repeated update cases are queued for the index-2999 checkpoint.
+- Follow-up/debt: None; this is the pinned target's final behavior for the affected loop.
