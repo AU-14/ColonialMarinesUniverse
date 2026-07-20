@@ -9,6 +9,7 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.PowerCell;
 using Content.Shared.PowerCell.Components;
 using Content.Shared.Popups;
+using Content.Shared.Power.EntitySystems;
 using Content.Shared.Timing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
@@ -26,6 +27,7 @@ public sealed partial class PDTSystem : EntitySystem
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedBatterySystem _battery = default!;
     [Dependency] private PowerCellSystem _cell = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -296,16 +298,19 @@ public sealed partial class PDTSystem : EntitySystem
     private PDTLocatorScreenVisuals GetLocatorScreen(Entity<PDTLocatorComponent> locator)
     {
         if (!_cell.TryGetBatteryFromSlot(locator.Owner, out var battery) ||
-            battery.Value.Comp.MaxCharge <= 0 ||
-            battery.Value.Comp.CurrentCharge <= 0)
+            battery.Value.Comp.MaxCharge <= 0)
         {
             return PDTLocatorScreenVisuals.Off;
         }
 
-        if (battery.Value.Comp.CurrentCharge < locator.Comp.PingCharge)
+        var charge = _battery.GetCharge(battery.Value.AsNullable());
+        if (charge <= 0)
+            return PDTLocatorScreenVisuals.Off;
+
+        if (charge < locator.Comp.PingCharge)
             return PDTLocatorScreenVisuals.Red;
 
-        if (battery.Value.Comp.CurrentCharge < battery.Value.Comp.MaxCharge * LowBatteryFraction)
+        if (charge < battery.Value.Comp.MaxCharge * LowBatteryFraction)
             return PDTLocatorScreenVisuals.Yellow;
 
         return PDTLocatorScreenVisuals.Normal;

@@ -9,6 +9,7 @@ using Content.Shared.Popups;
 using Content.Shared.Power;
 using Content.Shared.Power.Components;
 using Content.Shared.PowerCell;
+using Content.Shared.PowerCell.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
@@ -70,7 +71,7 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
             return;
 
         var maxUses = (int)(battery.Value.Comp.MaxCharge / draw.UseCharge);
-        var uses = (int)(battery.Value.Comp.CurrentCharge / draw.UseCharge);
+        var uses = (int)(_battery.GetCharge(battery.Value.AsNullable()) / draw.UseCharge);
 
         args.PushMarkup(Loc.GetString(ent.Comp.PowerText, ("uses", uses), ("maxuses", maxUses)));
     }
@@ -258,18 +259,18 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
                     if (drawn <= 0)
                     {
                         apcComp.ChargeStatus = RMCApcChargeStatus.NotCharging;
-                        _battery.UseCharge(battery, -drawn, battery);
+                        _battery.UseCharge(battery.AsNullable(), -drawn);
                     }
                     else
                     {
-                        _battery.SetCharge(battery, battery.Comp.CurrentCharge + drawn, battery);
+                        _battery.SetCharge(battery.AsNullable(), _battery.GetCharge(battery.AsNullable()) + drawn);
 
-                        apcComp.ChargeStatus = _battery.IsFull(battery, battery)
+                        apcComp.ChargeStatus = _battery.IsFull(battery.AsNullable())
                             ? RMCApcChargeStatus.FullCharge
                             : RMCApcChargeStatus.Charging;
                     }
 
-                    apcComp.ChargePercentage = battery.Comp.CurrentCharge / battery.Comp.MaxCharge;
+                    apcComp.ChargePercentage = _battery.GetCharge(battery.AsNullable()) / battery.Comp.MaxCharge;
                 }
 
                 switch (apcComp.ChargePercentage)

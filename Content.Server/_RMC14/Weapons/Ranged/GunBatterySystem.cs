@@ -58,8 +58,9 @@ public sealed partial class GunBatterySystem : EntitySystem
             if (!_batteryQuery.TryComp(contained, out var cell))
                 continue;
 
-            var change = Math.Min(left, cell.CurrentCharge);
-            _battery.SetCharge(contained, cell.CurrentCharge - change, cell);
+            var charge = _battery.GetCharge((contained, cell));
+            var change = Math.Min(left, charge);
+            _battery.SetCharge((contained, cell), charge - change);
 
             left -= change;
             if (left <= 0)
@@ -106,7 +107,7 @@ public sealed partial class GunBatterySystem : EntitySystem
         foreach (var contained in container.ContainedEntities)
         {
             if (!_batteryQuery.TryComp(contained, out var battery) ||
-                battery.CurrentCharge < gun.Comp.Drain)
+                _battery.GetCharge((contained, battery)) < gun.Comp.Drain)
             {
                 continue;
             }
