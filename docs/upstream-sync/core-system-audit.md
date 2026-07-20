@@ -2893,3 +2893,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Chemistry/EntitySystems/SharedSolutionContainerSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static API review confirms the pinned RobustToolbox `SetEntityName` overload accepts `raiseEvents`, still dirties metadata, and only the generated solution-name call suppresses events. Shared compilation plus solution creation, metadata replication, rename-listener, PDA/ID queue, station-record, map initialization, and client prediction cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1689 as `Ported (CS-0212)` when wave 0009 is committed.
+
+## CS-0213 — Normalize inherited lighting and railing AABBs
+
+- Upstream: [space-wizards/space-station-14#41381](https://github.com/space-wizards/space-station-14/pull/41381), `3dc0d0080d9aea1adc0c68b3de0d2ea5cc646c37`, 2025-11-10
+- Areas: Movement, Interactions, Physics
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: Six `PhysShapeAabb` fixture bounds now use the required left-bottom-right-top ordering. Two wall-light fixtures, the ground light, the strobe light, and two directional railing fixtures therefore deserialize as valid boxes with their intended footprint rather than inverted horizontal or vertical extents.
+- RMC/CMU divergence: CMU retains RMC structures, maps, collision layers, and physics behavior around these upstream base prototypes. Their children inherit these fixture definitions, so the coordinate correction applies without replacing RMC masks, layers, densities, anchoring, or directional railing variants.
+- Decision and rationale: Port the target-final coordinate reorder exactly. Each old box violates `left <= right` or `bottom <= top`; reordering the same endpoints restores the authored geometry without changing its size or collision policy.
+- Files changed: `Resources/Prototypes/Entities/Structures/Lighting/base_lighting.yml`, `Resources/Prototypes/Entities/Structures/Lighting/ground_lighting.yml`, `Resources/Prototypes/Entities/Structures/Lighting/strobe_lighting.yml`, `Resources/Prototypes/Entities/Structures/Walls/railing.yml`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms all six target bounds now satisfy left-bottom-right-top ordering and no neighboring valid railing fixtures changed. YAML/prototype validation plus fixture creation, directional placement, collision, movement obstruction, interaction reach, map-load, and inherited RMC prototype cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1671 as `Ported (CS-0213)` when wave 0009 is committed.
