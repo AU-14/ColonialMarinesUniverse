@@ -1787,3 +1787,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/DoAfter/SharedDoAfterSystem.Update.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static cancellation-path review confirms `RangeCheck = false` still bypasses the target check and enabled checks now account for container accessibility. Shared compilation plus same-container, nested-accessible, sealed-container, out-of-range, and RMC opt-out cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Extend DoAfter regression coverage for container transitions during prediction and reconciliation.
+
+## CS-0129 — Reset hidden clothing layers in both fold states
+
+- Upstream: [space-wizards/space-station-14#40251](https://github.com/space-wizards/space-station-14/pull/40251), `c7406f65abfbd068403130f2da6148e22d2757e2`, 2025-09-17
+- Areas: Interactions
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: Foldable clothing now updates hidden inventory layers whenever either its folded or unfolded layer set is configured. An empty set for the destination state explicitly clears the prior state, fixing stale body-part hiding in both fold directions.
+- RMC/CMU divergence: RMC already added the null reset and dirtying path when unfolding, but the folding path still retained stale layers. The adaptation preserves RMC's nullable reset and replication call in both branches while adopting upstream's combined activation condition.
+- Decision and rationale: Reconcile the two implementations into symmetric destination-state assignment rather than replacing the RMC branch with upstream's non-null-only assignment.
+- Files changed: `Content.Shared/Clothing/EntitySystems/FoldableClothingSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static state-transition review covers nonempty-to-empty and empty-to-nonempty layer sets in both directions and confirms `Dirty` follows every mutation. Shared compilation plus fold/unfold appearance, no-config, equipped-cancellation, and prediction reconciliation cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Replace the component-to-component hidden-layer override with an event or saved previous state during the deeper clothing interaction audit.
