@@ -59,6 +59,7 @@ public sealed partial class XenoResinHoleSystem : SharedXenoResinHoleSystem
     [Dependency] private SharedXenoConstructionSystem _xenoConstruct = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private DestructibleSystem _destructible = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
@@ -327,7 +328,7 @@ public sealed partial class XenoResinHoleSystem : SharedXenoResinHoleSystem
         var destroyed = false;
         if (_destructible.TryGetDestroyedAt(resinHole.Owner, out var totalHealth))
         {
-            destroyed = args.Damageable.TotalDamage + args.DamageDelta.GetTotal() > totalHealth;
+            destroyed = _damageable.GetTotalDamage((resinHole.Owner, args.Damageable)) + args.DamageDelta.GetTotal() > totalHealth;
         }
         ActivateTrap(resinHole, destroyed);
     }
@@ -572,7 +573,7 @@ public sealed partial class XenoResinHoleSystem : SharedXenoResinHoleSystem
 
     private void UpdateInRange(Entity<InResinHoleRangeComponent> tripper, bool stoodUp)
     {
-        if (_standing.IsDown(tripper))
+        if (_standing.IsDown(tripper.Owner))
             return;
 
         for (var i = tripper.Comp.HoleList.Count - 1; i >= 0; i--)

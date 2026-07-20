@@ -102,12 +102,12 @@ public sealed partial class XenoPylonSystem : SharedXenoPylonSystem
             }
         }
 
-        _ghostRole.SetCurrent((uid, spawner), core.LiveLesserDrones.Count);
+        SetCurrentTakeovers((uid, spawner), core.LiveLesserDrones.Count);
 
         if (!_evolution.HasLiving<XenoComponent>(1) &&
             !_evolution.HasLiving<XenoEvolutionGranterComponent>(1))
         {
-            _ghostRole.SetAvailable((uid, spawner), 0);
+            SetAvailableTakeovers((uid, spawner), 0);
             return;
         }
 
@@ -123,7 +123,7 @@ public sealed partial class XenoPylonSystem : SharedXenoPylonSystem
             core.CurrentLesserDrones = Math.Min(core.MaxLesserDrones, core.CurrentLesserDrones + 1);
         }
 
-        _ghostRole.SetAvailable((uid, spawner), core.CurrentLesserDrones);
+        SetAvailableTakeovers((uid, spawner), core.CurrentLesserDrones);
     }
 
     public override void Update(float frameTime)
@@ -144,7 +144,7 @@ public sealed partial class XenoPylonSystem : SharedXenoPylonSystem
                 UpdateGhostRoles((uid, core, spawner));
 
             if (TryComp(uid, out DamageableComponent? damageable) &&
-                damageable.TotalDamage > FixedPoint2.Zero &&
+                _damageable.GetTotalDamage((uid, damageable)) > FixedPoint2.Zero &&
                 time >= core.HealAt)
             {
                 core.HealAt = time + core.HealEvery;
@@ -152,6 +152,24 @@ public sealed partial class XenoPylonSystem : SharedXenoPylonSystem
                 _damageable.TryChangeDamage(uid, damage);
             }
         }
+    }
+
+    private void SetCurrentTakeovers(Entity<GhostRoleMobSpawnerComponent> spawner, int value)
+    {
+        if (spawner.Comp.CurrentTakeovers == value)
+            return;
+
+        spawner.Comp.CurrentTakeovers = value;
+        _ghostRole.UpdateAllEui();
+    }
+
+    private void SetAvailableTakeovers(Entity<GhostRoleMobSpawnerComponent> spawner, int value)
+    {
+        if (spawner.Comp.AvailableTakeovers == value)
+            return;
+
+        spawner.Comp.AvailableTakeovers = value;
+        _ghostRole.UpdateAllEui();
     }
 
     private void OnHiveCoreStepTriggerAttempt(Entity<HiveCoreComponent> core, ref StepTriggerAttemptEvent args)

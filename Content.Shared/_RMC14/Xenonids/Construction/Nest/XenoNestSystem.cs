@@ -163,6 +163,15 @@ public sealed partial class XenoNestSystem : EntitySystem
         _parasite.RefreshIncubationMultipliers(ent.Owner);
     }
 
+    public void SetGhostedId(Entity<XenoNestedComponent?> ent, NetUserId? ghostedId)
+    {
+        if (!Resolve(ent, ref ent.Comp) || ent.Comp.GhostedId == ghostedId)
+            return;
+
+        ent.Comp.GhostedId = ghostedId;
+        Dirty(ent);
+    }
+
     private void OnNestedRemove(Entity<XenoNestedComponent> ent, ref ComponentRemove args)
     {
         DetachNested(null, ent);

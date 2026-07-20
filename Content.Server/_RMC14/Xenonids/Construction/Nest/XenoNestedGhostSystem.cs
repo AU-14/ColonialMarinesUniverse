@@ -8,6 +8,8 @@ namespace Content.Server._RMC14.Xenonids.Construction.Nest;
 /// </summary>
 public sealed class XenoNestedGhostSystem : EntitySystem
 {
+    [Dependency] private XenoNestSystem _nest = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -24,7 +26,6 @@ public sealed class XenoNestedGhostSystem : EntitySystem
             return;
         }
 
-        nested.GhostedId = userId;
-        Dirty(entity, nested);
+        _nest.SetGhostedId((entity, nested), userId);
     }
 }

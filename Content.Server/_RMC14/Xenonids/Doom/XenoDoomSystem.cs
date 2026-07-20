@@ -1,3 +1,4 @@
+using Content.Server.Light.Components;
 using Content.Server.Light.EntitySystems;
 using Content.Shared._RMC14.Xenonids.Doom;
 using Content.Shared.Light.Components;

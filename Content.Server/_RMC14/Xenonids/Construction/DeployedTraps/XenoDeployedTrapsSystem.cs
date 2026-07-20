@@ -9,6 +9,7 @@ namespace Content.Server._RMC14.Xenonids.Construction.DeployedTraps;
 public sealed partial class XenoDeployedTrapsSystem : EntitySystem
 {
     [Dependency] private DestructibleSystem _destructible = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
 
     public override void Initialize()
@@ -27,7 +28,7 @@ public sealed partial class XenoDeployedTrapsSystem : EntitySystem
         if (!_destructible.TryGetDestroyedAt(trap.Owner, out var totalHealth))
             return;
 
-        if (args.Damageable.TotalDamage + args.DamageDelta.GetTotal() > totalHealth)
+        if (_damageable.GetTotalDamage((trap.Owner, args.Damageable)) + args.DamageDelta.GetTotal() > totalHealth)
             QueueDel(trap);
     }
 }

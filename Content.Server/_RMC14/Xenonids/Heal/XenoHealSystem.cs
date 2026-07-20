@@ -4,6 +4,7 @@ using Content.Server.Ghost;
 using Content.Server.Mind;
 using Content.Shared._RMC14.Xenonids.Heal;
 using Content.Shared._RMC14.Xenonids.JoinXeno;
+using Content.Shared.Chat;
 using Content.Shared.Mind;
 using Robust.Shared.Map;
 using Robust.Shared.Player;

@@ -25,6 +25,7 @@ using Content.Shared._RMC14.Sprite;
 using Content.Shared._RMC14.Xenonids.Construction;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Robust.Shared.Serialization.Manager;
 using IConfigurationManager = Robust.Shared.Configuration.IConfigurationManager;
 
