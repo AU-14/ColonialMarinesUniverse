@@ -385,17 +385,17 @@ public sealed partial class CMDistressSignalRuleSystem
         _gameRulesExtras.XenoAwards(ref args);
     }
 
-    protected override void OnStartAttempt(Entity<CMDistressSignalRuleComponent, GameRuleComponent> gameRule, RoundStartAttemptEvent ev)
+    private void OnStartAttempt(RoundStartAttemptEvent ev)
     {
         if (ev.Forced || ev.Cancelled)
-            return;
-
-        if (!gameRule.Comp1.RequireXenoPlayers)
             return;
 
         var query = QueryAllRules();
         while (query.MoveNext(out _, out var distress, out _))
         {
+            if (!distress.RequireXenoPlayers)
+                continue;
+
             var xenoCandidates = 0;
             foreach (var player in ev.Players)
             {
