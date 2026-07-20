@@ -2919,3 +2919,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/RCD/Systems/RCDSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static event-flow review confirms availability and prototype checks precede the log, the resolved prototype matches the assigned ID, and existing execution logs remain intact. Shared compilation plus valid, invalid, unavailable, null-construction-prototype, client/server, radial-menu, charge, and admin-log cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1641 as `Ported (CS-0214)` when wave 0009 is committed.
+
+## CS-0215 — Report combined gas-pipe manifold volume
+
+- Upstream: [space-wizards/space-station-14#41325](https://github.com/space-wizards/space-station-14/pull/41325), `53083ef771634e97dfed25467e7cd2a3eb6896b0`, 2025-11-06
+- Areas: Interactions, Physics, GameTicking
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: Each of the manifold's six pipe nodes now contributes 50 liters, and gas-analyzer sampling scales the shared mixture to the sum of all configured inlet and outlet nodes. The manifold therefore has a 300-liter device volume and reports that combined volume instead of presenting one node as the whole device.
+- RMC/CMU divergence: CMU retains RMC atmospheric networks, maps, analyzer UI, and device monitoring around the upstream manifold prototype. The port changes only the inherited manifold node volumes and its scan projection; layer routing, always-reachable links, pipe gas composition, and RMC map placements remain intact.
+- Decision and rationale: Port the system and prototype halves together. Counting all six names without reducing the per-node volume would inflate the analyzer sample, while changing node volumes alone would still under-report the shared device; the paired delta preserves pressure/composition while exposing the intended aggregate capacity.
+- Files changed: `Content.Server/Atmos/Piping/EntitySystems/GasPipeManifoldSystem.cs`, `Resources/Prototypes/Entities/Structures/Piping/Atmospherics/pipes.yml`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static node-graph review confirms the union contains the three inlet and three outlet names, every corresponding node is 50 liters, and the sample scales moles and volume by the same aggregate factor. Server compilation and YAML validation plus isolated, connected, partially connected, multi-layer, analyzer, pressure, monitoring-console, map-load, and RMC atmos-tick cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1645 as `Ported (CS-0215)` when wave 0009 is committed.
