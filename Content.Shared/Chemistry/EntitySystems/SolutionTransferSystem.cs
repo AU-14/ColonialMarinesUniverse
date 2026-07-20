@@ -332,7 +332,7 @@ public sealed partial class SolutionTransferSystem : EntitySystem
     /// </summary>
     private bool CanTransfer(SolutionTransferData data)
     {
-        var transferAttempt = new SolutionTransferAttemptEvent(data.SourceEntity, data.TargetEntity);
+        var transferAttempt = new SolutionTransferAttemptEvent(data.SourceEntity, data.Source, data.TargetEntity, data.Target);
 
         // Check if the source is cancelling the transfer
         RaiseLocalEvent(data.SourceEntity, ref transferAttempt);
@@ -378,9 +378,9 @@ public sealed partial class SolutionTransferSystem : EntitySystem
 /// <param name="targetEntity">The entity holding the solution container which reagents are being moved to.</param>
 /// <param name="target">The entity holding the solution which reagents are being moved to</param>
 /// <param name="amount">The amount being moved.</param>
-public struct SolutionTransferData(EntityUid user, EntityUid sourceEntity, Entity<SolutionComponent> source, EntityUid targetEntity, Entity<SolutionComponent> target, FixedPoint2 amount)
+public struct SolutionTransferData(EntityUid? user, EntityUid sourceEntity, Entity<SolutionComponent> source, EntityUid targetEntity, Entity<SolutionComponent> target, FixedPoint2 amount)
 {
-    public EntityUid User = user;
+    public EntityUid? User = user;
     public EntityUid SourceEntity = sourceEntity;
     public Entity<SolutionComponent> Source = source;
     public EntityUid TargetEntity = targetEntity;
@@ -394,7 +394,12 @@ public struct SolutionTransferData(EntityUid user, EntityUid sourceEntity, Entit
 /// To not mispredict this should always be cancelled in shared code and not server or client.
 /// </summary>
 [ByRefEvent]
-public record struct SolutionTransferAttemptEvent(EntityUid From, EntityUid To, string? CancelReason = null)
+public record struct SolutionTransferAttemptEvent(
+    EntityUid From,
+    Entity<SolutionComponent> FromSolution,
+    EntityUid To,
+    Entity<SolutionComponent> ToSolution,
+    string? CancelReason = null)
 {
     /// <summary>
     /// Cancels the transfer.
@@ -409,7 +414,7 @@ public record struct SolutionTransferAttemptEvent(EntityUid From, EntityUid To, 
 /// Raised on the target entity when a non-zero amount of solution gets transferred.
 /// </summary>
 [ByRefEvent]
-public record struct SolutionTransferredEvent(EntityUid From, EntityUid To, EntityUid User, FixedPoint2 Amount);
+public record struct SolutionTransferredEvent(EntityUid From, EntityUid To, EntityUid? User, FixedPoint2 Amount);
 
 /// <summary>
 /// Doafter event for solution transfers where the held item is drained into the target. Checks for validity both when initiating and when finishing the event.
