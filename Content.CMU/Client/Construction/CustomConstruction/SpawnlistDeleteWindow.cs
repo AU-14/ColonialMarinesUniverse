@@ -22,10 +22,16 @@ public sealed class SpawnlistDeleteWindow : DefaultWindow
     // 🔧 TUNABLE: seconds the confirm button stays locked after arming, so a double-click can't delete.
     private const float ConfirmDelaySeconds = 3f;
 
-    public event Action<string>? OnDeleteSpawnlist;
+    /// <summary>(spawnlist, category) - an empty category means the whole spawnlist.</summary>
+    public event Action<string, string>? OnDeleteSpawnlist;
 
     private readonly OptionButton _spawnlistDropdown;
     private readonly List<string> _spawnlistValues = new();
+    // Category scope for the selected spawnlist; index 0 is always the whole-spawnlist entry, represented
+    // by an empty string so the server keeps its original "delete everything" path.
+    private readonly OptionButton _categoryDropdown;
+    private readonly List<string> _categoryValues = new();
+    private Dictionary<string, Dictionary<string, int>> _categoryCounts = new();
     private readonly Label _warningLabel;
     private readonly Button _deleteButton;
     private readonly Button _confirmButton;
@@ -39,6 +45,14 @@ public sealed class SpawnlistDeleteWindow : DefaultWindow
         _spawnlistDropdown.OnItemSelected += a =>
         {
             _spawnlistDropdown.SelectId(a.Id);
+            RebuildCategories();
+            ResetArming();
+        };
+
+        _categoryDropdown = new OptionButton { HorizontalExpand = true };
+        _categoryDropdown.OnItemSelected += a =>
+        {
+            _categoryDropdown.SelectId(a.Id);
             ResetArming();
         };
 
@@ -47,6 +61,7 @@ public sealed class SpawnlistDeleteWindow : DefaultWindow
         _deleteButton = new Button { Text = Loc.GetString("construction-spawnlist-delete-arm"), HorizontalExpand = true, Margin = new Thickness(0, 0, 2, 0) };
         _confirmButton = new Button { Text = Loc.GetString("construction-spawnlist-delete-confirm"), HorizontalExpand = true, Visible = false, Disabled = true };
         GmodStyle.Modernize(_spawnlistDropdown);
+        GmodStyle.Modernize(_categoryDropdown);
         GmodStyle.Modernize(_deleteButton);
         GmodStyle.Modernize(_confirmButton);
         _deleteButton.OnPressed += _ => Arm();
@@ -55,6 +70,8 @@ public sealed class SpawnlistDeleteWindow : DefaultWindow
         var root = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, Margin = new Thickness(8) };
         root.AddChild(new Label { Text = Loc.GetString("construction-spawnlist-delete-pick"), Margin = new Thickness(0, 0, 0, 2) });
         root.AddChild(_spawnlistDropdown);
+        root.AddChild(new Label { Text = Loc.GetString("construction-spawnlist-delete-pick-category"), Margin = new Thickness(0, 6, 0, 2) });
+        root.AddChild(_categoryDropdown);
         root.AddChild(_warningLabel);
         root.AddChild(new BoxContainer
         {
@@ -78,6 +95,7 @@ public sealed class SpawnlistDeleteWindow : DefaultWindow
     {
         _spawnlistDropdown.Clear();
         _spawnlistValues.Clear();
+        _categoryCounts = ev.CategoryCounts;
 
         foreach (var (spawnlist, count) in ev.SpawnlistCounts.OrderBy(kv => kv.Key, StringComparer.InvariantCulture))
         {
@@ -95,11 +113,40 @@ public sealed class SpawnlistDeleteWindow : DefaultWindow
         }
 
         _spawnlistDropdown.SelectId(0);
+        RebuildCategories();
         ResetArming();
+    }
+
+    /// <summary>Refills the category dropdown for the currently selected spawnlist. The first entry is
+    /// always "whole spawnlist" so the default behaviour is unchanged from before categories existed.</summary>
+    private void RebuildCategories()
+    {
+        _categoryDropdown.Clear();
+        _categoryValues.Clear();
+
+        _categoryDropdown.AddItem(Loc.GetString("construction-spawnlist-delete-category-all"), 0);
+        _categoryValues.Add(string.Empty);
+
+        if (Selected is { } spawnlist && _categoryCounts.TryGetValue(spawnlist, out var byCategory))
+        {
+            foreach (var (category, count) in byCategory.OrderBy(kv => kv.Key, StringComparer.InvariantCulture))
+            {
+                _categoryDropdown.AddItem(
+                    Loc.GetString("construction-spawnlist-delete-category-option", ("category", category), ("count", count)),
+                    _categoryValues.Count);
+                _categoryValues.Add(category);
+            }
+        }
+
+        _categoryDropdown.Disabled = _categoryValues.Count <= 1;
+        _categoryDropdown.SelectId(0);
     }
 
     private string? Selected =>
         _spawnlistValues.Count > _spawnlistDropdown.SelectedId ? _spawnlistValues[_spawnlistDropdown.SelectedId] : null;
+
+    private string SelectedCategory =>
+        _categoryValues.Count > _categoryDropdown.SelectedId ? _categoryValues[_categoryDropdown.SelectedId] : string.Empty;
 
     private void ResetArming()
     {
@@ -114,20 +161,26 @@ public sealed class SpawnlistDeleteWindow : DefaultWindow
         if (Selected is not { } spawnlist)
             return;
 
+        var armedCategory = SelectedCategory;
+
         _deleteButton.Disabled = true;
         _confirmButton.Visible = true;
         _confirmButton.Disabled = true;
-        _warningLabel.Text = Loc.GetString("construction-spawnlist-delete-warning", ("spawnlist", spawnlist));
+        _warningLabel.Text = armedCategory.Length == 0
+            ? Loc.GetString("construction-spawnlist-delete-warning", ("spawnlist", spawnlist))
+            : Loc.GetString("construction-spawnlist-delete-category-warning", ("spawnlist", spawnlist), ("category", armedCategory));
 
         var armed = spawnlist;
         Timer.Spawn(TimeSpan.FromSeconds(ConfirmDelaySeconds), () =>
         {
-            // The admin may have switched spawnlists (which resets arming) or closed the window meanwhile.
-            if (Disposed || !_confirmButton.Visible || Selected != armed)
+            // The admin may have switched spawnlist or category (either resets arming) or closed the window.
+            if (Disposed || !_confirmButton.Visible || Selected != armed || SelectedCategory != armedCategory)
                 return;
 
             _confirmButton.Disabled = false;
-            _warningLabel.Text = Loc.GetString("construction-spawnlist-delete-ready", ("spawnlist", armed));
+            _warningLabel.Text = armedCategory.Length == 0
+                ? Loc.GetString("construction-spawnlist-delete-ready", ("spawnlist", armed))
+                : Loc.GetString("construction-spawnlist-delete-category-ready", ("spawnlist", armed), ("category", armedCategory));
         });
     }
 
@@ -136,7 +189,7 @@ public sealed class SpawnlistDeleteWindow : DefaultWindow
         if (Selected is not { } spawnlist)
             return;
 
-        OnDeleteSpawnlist?.Invoke(spawnlist);
+        OnDeleteSpawnlist?.Invoke(spawnlist, SelectedCategory);
         Close();
     }
 }

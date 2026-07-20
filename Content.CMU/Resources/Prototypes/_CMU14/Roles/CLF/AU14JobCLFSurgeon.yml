@@ -41,8 +41,8 @@
   ignoreAllegiance: true
   playTimeTracker: AU14JobCLFSurgeon
   requirements:
-  - !type:RoleTimeRequirement
-    role: AU14JobCLFGuerilla
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentColonialLiberationFront
     time: 18000 # 5 hours
   - !type:DepartmentTimeRequirement
     department: AU14DepartmentColonyMedical

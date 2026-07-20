@@ -103,8 +103,18 @@ public sealed class ZCaveInSystem : EntitySystem
         SubscribeLocalEvent<DamageableComponent, DamageChangedEvent>(OnDamaged);
         SubscribeLocalEvent<ShuttleFTLSafetyEvent>(OnShuttleFTLSafety);
 
+        // Load-bearing TERRAIN is indexed by position rather than read from the anchored lookup, because the
+        // terrain that needs it (deep water) is deliberately saved unanchored. See ZLoadBearingTerrainComponent.
+        SubscribeLocalEvent<ZLoadBearingTerrainComponent, ComponentStartup>(OnLoadBearingTerrainStartup);
+        SubscribeLocalEvent<ZLoadBearingTerrainComponent, ComponentShutdown>(OnLoadBearingTerrainShutdown);
+
         // Attribution entries are keyed by map uid; drop them with the round so stale maps don't accumulate.
-        SubscribeLocalEvent<Content.Shared.GameTicking.RoundRestartCleanupEvent>(_ => _lastDigger.Clear());
+        SubscribeLocalEvent<Content.Shared.GameTicking.RoundRestartCleanupEvent>(_ =>
+        {
+            _lastDigger.Clear();
+            _loadBearingTerrain.Clear();
+            _loadBearingTerrainAt.Clear();
+        });
     }
 
     private void OnShuttleFTLSafety(ref ShuttleFTLSafetyEvent args)
@@ -587,6 +597,12 @@ public sealed class ZCaveInSystem : EntitySystem
         if (!generatedChunks.Contains(chunk))
             return true;
 
+        // Mapper-authored load-bearing terrain (see ZLoadBearingTerrainComponent). Checked from the position
+        // index rather than the anchored lookup below, because this terrain is intentionally unanchored - the
+        // reason Shepherd's underground river read as one giant open cavern and kept dropping its bridges.
+        if (_loadBearingTerrain.TryGetValue(grid.Owner, out var terrainTiles) && terrainTiles.Contains(tile))
+            return true;
+
         // Only genuinely load-bearing anchored entities hold the roof: natural/mined rock and real walls (both
         // occlude and/or carry the Wall tag) and built support pillars. A merely wrenched-down entity (a chair,
         // a table, a vending machine) is NOT a natural support and must not stabilise a cavern.
@@ -597,6 +613,47 @@ public sealed class ZCaveInSystem : EntitySystem
         }
 
         return false;
+    }
+
+    // Grid -> tiles carrying load-bearing terrain, plus the reverse map so an entity can be removed again.
+    // Maintained on component start/shutdown because the terrain is unanchored and so never appears in the
+    // grid's anchored lookup that IsSolid otherwise relies on.
+    private readonly Dictionary<EntityUid, HashSet<Vector2i>> _loadBearingTerrain = new();
+    private readonly Dictionary<EntityUid, (EntityUid Grid, Vector2i Tile)> _loadBearingTerrainAt = new();
+
+    private void OnLoadBearingTerrainStartup(Entity<ZLoadBearingTerrainComponent> ent, ref ComponentStartup args)
+    {
+        var xform = Transform(ent);
+        if (xform.GridUid is not { } gridUid || !_gridQuery.TryComp(gridUid, out var gridComp))
+            return;
+
+        var tile = _map.TileIndicesFor(gridUid, gridComp, xform.Coordinates);
+        if (!_loadBearingTerrain.TryGetValue(gridUid, out var tiles))
+            _loadBearingTerrain[gridUid] = tiles = new HashSet<Vector2i>();
+
+        tiles.Add(tile);
+        _loadBearingTerrainAt[ent.Owner] = (gridUid, tile);
+    }
+
+    private void OnLoadBearingTerrainShutdown(Entity<ZLoadBearingTerrainComponent> ent, ref ComponentShutdown args)
+    {
+        if (!_loadBearingTerrainAt.Remove(ent.Owner, out var at))
+            return;
+
+        // Another terrain entity may share the tile (overlapping water sprites), so only clear the tile once
+        // nothing marked is left on it.
+        if (!_loadBearingTerrain.TryGetValue(at.Grid, out var tiles))
+            return;
+
+        foreach (var (_, other) in _loadBearingTerrainAt)
+        {
+            if (other.Grid == at.Grid && other.Tile == at.Tile)
+                return;
+        }
+
+        tiles.Remove(at.Tile);
+        if (tiles.Count == 0)
+            _loadBearingTerrain.Remove(at.Grid);
     }
 
     /// <summary>True if an anchored entity genuinely holds up a cave roof: a built structural support/pillar, or

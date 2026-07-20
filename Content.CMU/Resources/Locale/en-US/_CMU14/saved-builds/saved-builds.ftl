@@ -32,6 +32,7 @@ saved-build-window-name = Build name…
 saved-build-window-save = Save Build
 saved-build-window-open-folder = Open Saved Builds Folder
 saved-build-window-include-tiles = Save tiles
+saved-build-window-include-multiz = Capture other Z-levels (above/below)
 
 # Saved Builds spawnlist in the construction menu.
 gmod-construction-menu-saved-builds = Saved Builds
