@@ -1462,3 +1462,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/EntityEffects/EntityEffectSystem.cs`, `Content.Shared/EntityEffects/EffectConditions/SolutionTemperature.cs`, `Content.Shared/EntityEffects/EffectConditions/TotalDamage.cs`, `Content.Shared/EntityEffects/EffectConditions/TotalHunger.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static truth-table review confirms values below/above the interval fail, endpoints and interior values pass, and missing data still fails. Shared/server compilation plus endpoint cases for all four predicates and representative RMC reagent effects are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Audit RMC prototypes that may have compensated for the old exclusive behavior by offsetting min/max values, especially overdose and critical-health boundaries.
+
+## CS-0104 — Serialize vending inventory entries in saved grids
+
+- Upstream: [space-wizards/space-station-14#38406](https://github.com/space-wizards/space-station-14/pull/38406), `623ea3dd63ae2c1196c2723a9f3dbaec3e3ccf6b`, 2025-07-31
+- Areas: Interactions, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `VendingMachineInventoryEntry` is now a generated data definition with serialized `Type`, `ID`, and `Amount` fields, allowing runtime vending inventories to survive post-map-init grid serialization and reload.
+- RMC/CMU divergence: RMC vending machines add custom inventories but use the inherited entry class and dictionaries. The metadata therefore covers fork-specific stock without changing its values or dispensing rules.
+- Decision and rationale: Port the retained type and field annotations exactly; this is the minimum schema correction needed for save-grid persistence while preserving network serialization and constructors.
+- Files changed: `Content.Shared/VendingMachines/VendingMachineComponent.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static schema review confirms all three persisted entry fields are data fields and the class is partial for source generation, while existing `Serializable` and `NetSerializable` contracts remain. Shared compilation plus save/reload of regular, contraband, and emagged stock are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a post-init save-grid regression using an RMC vending machine with modified stock counts and verify exact inventory restoration.
