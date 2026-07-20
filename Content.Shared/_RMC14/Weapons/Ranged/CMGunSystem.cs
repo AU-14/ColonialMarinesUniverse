@@ -876,7 +876,7 @@ public sealed partial class CMGunSystem : EntitySystem
             return;
         }
 
-        if (!_gun.TryAmmoInsert(reloadReceiver.Weapon.Value, ballisticAmmoProvider, ammo.Owner, user, reloadReceiver.Weapon.Value, ammo.Comp.InsertDelay))
+        if (!_gun.TryAmmoInsert(reloadReceiver.Weapon.Value, ballisticAmmoProvider, ammo.Owner, user, reloadReceiver.Weapon.Value, TimeSpan.FromSeconds(ammo.Comp.InsertDelay)))
         {
             var failFullPopup = Loc.GetString("rmc-assisted-reload-fail-full", ("target", target), ("weapon", reloadReceiver.Weapon));
             _popup.PopupClient(failFullPopup, user, user, PopupType.SmallCaution);
