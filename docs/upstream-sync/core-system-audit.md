@@ -838,3 +838,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/SubFloor/SharedSubFloorHideSystem.cs`, `Content.IntegrationTests/Tests/Interaction/SubfloorAdminInteractionTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the pinned target retains this exact marker gate. A queued integration regression places a real high-voltage cable beneath steel flooring, requires a normal attempt to be cancelled, and permits the same attempt from a marked actor. Execution is deferred to the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Audit other visibility-layer blockers for use of the shared bypass marker, but do not generalize it to damage or anchoring without a separate admin-safety decision.
+
+## CS-0056 — Publish communications cooldown after map initialization
+
+- Upstream: [space-wizards/space-station-14#38305](https://github.com/space-wizards/space-station-14/pull/38305), `d0b798b63fc58138043007f2635b8ac99b80391e`, 2025-07-18
+- Areas: GameTicking, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: A communications console now publishes its initial UI state after `MapInit` assigns the announcement cooldown. Newly spawned consoles no longer advertise that announcements are available during their configured initial delay.
+- RMC/CMU divergence: RMC's communication towers and distress-signal timing use separate components and systems. Inherited standard, syndicate, wizard, and CentComm consoles use this shared server system and retain their individual delay, access, global-announcement, and shuttle policies.
+- Decision and rationale: Move the initial state publication from `ComponentInit` to the existing cooldown-setting `MapInit` handler, matching the pinned target's final ordering. Do not change periodic UI refresh timing or any RMC communication-tower lifecycle.
+- Files changed: `Content.Server/Communications/CommunicationsConsoleSystem.cs`, `Content.IntegrationTests/Tests/Communications/CommunicationsConsoleInitialCooldownTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the pinned target retains this exact lifecycle ordering. A queued integration regression spawns the real standard console, requires its stored cooldown to equal `InitialDelay`, and verifies the first bound-UI state reports `CanAnnounce == false`. Execution is deferred to the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Audit later communications-console logging, access, and identity changes independently; none are required to correct the initial state publication.
