@@ -35,17 +35,26 @@
 
   A worn radio relays traffic only when it is carried by a trained operator. A deployed retransmission station continues relaying without a wearer.
 
-  ### GOVFOR trained roles
+  ### GOVFOR and OPFOR trained roles
 
-  - Radio Traffic Operator
+  Both regular factions field the same set of trained roles.
+
   - Commander
-  - Officer Adjutant
-  - Advisor
-  - Platoon Sergeant
+  - Adjutant
+  - Staff officers
+  - Engineering officers
+  - Intelligence officers
+  - Synthetics
+  - Squad leaders
+  - Fireteam Leaders
+  - Radio Traffic Operators
 
   ### CLF trained roles
 
   - Cell Leader
+  - Radio Operator
+
+  An untrained character can also be trained in the field by reading a [bold]field radio operator's pamphlet[/bold]. This is permanent and works regardless of role.
 
   Nearby headset users do not need radio training. They only need to be within range of a powered radio carrying their net.
 
@@ -64,7 +73,7 @@
 
   Alt-click again to return the handset.
 
-  A squad leader can use an attached RTO's handset to reach a command net that is not available through the squad leader's headset.
+  A squad leader can use an attached Fireteam Leader's handset to reach a command net that is not available through the squad leader's headset.
 
   ## Slots
 
@@ -570,6 +579,26 @@
 
   If all available relays are disabled or removed, the affected net loses coverage.
 
+  ## CLF Nets and Base Station
+
+  The CLF have two combat nets:
+
+  - [bold]CLF[/bold] - the cell net, carried by every CLF earpiece.
+  - [bold]CLF Command[/bold] - carried only on AN/PRC sets, not on any earpiece. The cell leader reaches it through a set's handset or panel.
+
+  Both nets are relay-gated. The CLF have no fixed array or command-post mast, so coverage comes from CLF AN/PRC sets: the operator's manpack in the field and the cell's base station at the safehouse.
+
+  Losing all coverage does not silence the cell. The [bold]Colony[/bold] channel on every CLF earpiece is not gated, so a cell cut off its own nets drops back to colony chatter - which is unencrypted and can be found and read by anyone sweeping the band.
+
+  ### Clandestine base station
+
+  The base station is a CLF AN/PRC set too heavy to wear. It only works set up, so it is carried by hand to a hiding place and deployed there.
+
+  - It comes tuned to both CLF nets, so it works the moment it is set up without opening the panel.
+  - Fitted with a mast antenna, a deployed station anchors both CLF nets across a wide radius - enough to cover a safehouse and its approaches.
+  - The cell leader mans it on the handset while the operator takes the manpack forward. The two sets hold the cell together across the map.
+  - It is the cell's only fixed coverage. Destroying or capturing it collapses the cell onto whatever the forward manpack still reaches.
+
   ## Battery and Antenna
 
   The radio uses a battery in its internal battery slot.
@@ -589,9 +618,35 @@
   - Provides less range than the whip while moving.
   - Is intended for command posts and retransmission sites.
 
+  ## SEARCH (Band Sweep)
+
+  Intercepting a net requires knowing its frequency. Frequencies are reassigned every operation, so a captured frequency card is one way to learn them and the search receiver is the other.
+
+  [bold]START SEARCH[/bold] walks the radio's receiver across the band hunting for anyone transmitting.
+
+  Searching takes the set out of service entirely:
+
+  - The radio drops off [bold]every[/bold] loaded net. You hear nothing.
+  - Transmit is inhibited. You cannot answer traffic while searching.
+  - Battery drain continues for as long as the search runs.
+
+  A single pass rarely finds anything. The receiver only registers a frequency if somebody transmitted on it very recently at the moment the sweep head happened to pass over it, and the contact must be within intercept range.
+
+  Contacts build up over repeated catches:
+
+  - Below half confidence a contact is not shown at all.
+  - Above half confidence the panel shows an approximate frequency only, as [bold]~1.60X MHz[/bold].
+  - At full confidence the contact resolves to an exact frequency and net name, and can be tuned into the active slot with [bold]TUNE[/bold].
+
+  Partial contacts decay. A fix requires a net that keeps talking and an operator willing to stay deaf and silent nearby while it does. Sitting near the enemy is not enough on its own.
+
+  A resolved fix is permanent for the operation.
+
+  Custom direct frequencies are found the same way. A squad net that is off the published plan is not hidden from a search receiver: the set only accepts direct frequencies inside the searchable [bold]1.000-2.999 MHz[/bold] military band or in the colonist softwave band ([bold]30.000+ MHz[/bold]). Softwave sits outside the search receiver's coverage, but it is short-ranged, unencrypted and shared with every handheld on the colony.
+
   ## Intercepting Enemy Traffic
 
-  Enter another faction's frequency with [bold]FREQ[/bold].
+  Enter another faction's frequency with [bold]FREQ[/bold], or tune a resolved [bold]SEARCH[/bold] contact directly.
 
   When the signal reaches the radio, intercepted traffic appears in [color=#FF6B6B]red[/color] and is recorded in the net log.
 
@@ -666,6 +721,16 @@
   - Incoming traffic on all loaded nets while MON or SCAN is enabled.
 
   The log can be used to review missed traffic or confirm that a message was transmitted.
+
+  Traffic on another faction's net is flagged [bold]INTERCEPT[/bold] in the log.
+
+  ### Printing the log
+
+  The log rolls over at 50 entries and dies with the radio. [bold]PRINT LOG[/bold] transcribes it onto paper so it can be carried, handed over or cached.
+
+  [bold]PRINT INTERCEPTS[/bold] prints only the intercepted traffic, which is usually what command actually wants.
+
+  Printing is how a radio operator turns listening into something the rest of the cell can act on.
 
   ## Status Display
 

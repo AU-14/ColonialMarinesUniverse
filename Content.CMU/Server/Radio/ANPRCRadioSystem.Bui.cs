@@ -1,6 +1,8 @@
 using System.Linq;
+using System.Text;
 using Content.Shared._AU14.Radio;
 using Content.Shared.Chat;
+using Content.Shared.Paper;
 using Content.Shared.Radio;
 using Content.Shared.Verbs;
 using Robust.Shared.Prototypes;
@@ -9,6 +11,8 @@ namespace Content.Server._AU14.Radio;
 
 public sealed partial class ANPRCRadioSystem
 {
+    private static readonly EntProtoId LogPaperId = "ANPRCNetLogPrintout";
+
     private void OnGetAltVerbs(Entity<ANPRCRadioComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
     {
         if (!args.CanAccess || !args.CanInteract || args.Hands == null)
@@ -182,10 +186,15 @@ public sealed partial class ANPRCRadioSystem
             ent.Comp.FrequencyOverrides.Remove(args.Slot);
             ent.Comp.Presets[args.Slot] = channel;
         }
-        else
+        else if (InDirectBand(frequency))
         {
             ent.Comp.FrequencyOverrides[args.Slot] = frequency;
             ent.Comp.Presets.Remove(args.Slot);
+        }
+        else
+        {
+            _cmChat.ChatMessageToOne(Loc.GetString("anprc-frequency-out-of-band"), args.Actor);
+            return;
         }
 
         Dirty(ent);
@@ -204,6 +213,17 @@ public sealed partial class ANPRCRadioSystem
                 ("slot", label),
                 ("freq", TunableFrequencySystem.FormatFreq(frequency))),
             args.Actor);
+    }
+
+    // a raw frequency has to land in a band some receiver in the game can reach: the
+    // military band the search receiver walks, or the softwave band the colony's
+    // handhelds and tunable headsets live in. anything else would be a private net
+    // nothing on the planet could ever find
+    private static bool InDirectBand(int frequency)
+    {
+        return frequency
+            is >= ANPRCRadioComponent.SweepBandMin and <= ANPRCRadioComponent.SweepBandMax
+            or >= ANPRCRadioComponent.SoftwaveBandMin and <= ANPRCRadioComponent.SoftwaveBandMax;
     }
 
     private void OnTogglePower(Entity<ANPRCRadioComponent> ent, ref ANPRCTogglePowerMsg args)
@@ -255,6 +275,143 @@ public sealed partial class ANPRCRadioSystem
 
         UpdateEquippedChannels(ent);
         UpdateBuiState(ent);
+    }
+
+    private void OnSetSweep(Entity<ANPRCRadioComponent> ent, ref ANPRCSetSweepMsg args)
+    {
+        if (args.Enabled == ent.Comp.SweepEnabled)
+            return;
+
+        if (!args.Enabled)
+        {
+            _sweep.StopSweep(ent);
+            UpdateEquippedChannels(ent);
+            UpdateBuiState(ent);
+            return;
+        }
+
+        if (!ent.Comp.Enabled || (!ent.Comp.IsEquipped && !ent.Comp.Planted))
+        {
+            _cmChat.ChatMessageToOne(Loc.GetString("anprc-sweep-needs-online"), args.Actor);
+            return;
+        }
+
+        ent.Comp.SweepEnabled = true;
+        ent.Comp.SweepLastUpdate = TimeSpan.Zero;
+        Dirty(ent);
+
+        // dropping every net the moment the search starts is the whole cost of the mode
+        UpdateEquippedChannels(ent);
+        UpdateBuiState(ent);
+
+        _cmChat.ChatMessageToOne(Loc.GetString("anprc-sweep-started"), args.Actor);
+    }
+
+    // tuning a fixed contact writes the raw frequency, so the operator never has to
+    // copy a number off the panel and back into the keypad
+    private void OnTuneContact(Entity<ANPRCRadioComponent> ent, ref ANPRCTuneContactMsg args)
+    {
+        if (!ent.Comp.SlotLabels.ContainsKey(args.Slot))
+            return;
+
+        if (!ent.Comp.DiscoveredFrequencies.Contains(args.Frequency))
+            return;
+
+        if (_freqPlan.TryGetChannelByFrequency(args.Frequency, out var channel))
+        {
+            ent.Comp.FrequencyOverrides.Remove(args.Slot);
+            ent.Comp.Presets[args.Slot] = channel;
+        }
+        else
+        {
+            ent.Comp.FrequencyOverrides[args.Slot] = args.Frequency;
+            ent.Comp.Presets.Remove(args.Slot);
+        }
+
+        Dirty(ent);
+
+        UpdateEquippedChannels(ent);
+        UpdateRelayAnchor(ent);
+        UpdateBuiState(ent);
+
+        _cmChat.ChatMessageToOne(
+            Loc.GetString(
+                "anprc-frequency-set",
+                ("slot", ent.Comp.SlotLabels[args.Slot]),
+                ("freq", TunableFrequencySystem.FormatFreq(args.Frequency))),
+            args.Actor);
+    }
+
+    // the log lives in the set and rolls over at 50 entries. printing is how an
+    // intercept becomes something the cell can act on after the operator moves on
+    private void OnPrintLog(Entity<ANPRCRadioComponent> ent, ref ANPRCPrintLogMsg args)
+    {
+        if (!ent.Comp.Enabled || (!ent.Comp.IsEquipped && !ent.Comp.Planted))
+        {
+            _cmChat.ChatMessageToOne(Loc.GetString("anprc-sweep-needs-online"), args.Actor);
+            return;
+        }
+
+        var interceptsOnly = args.InterceptsOnly;
+
+        var entries = ent.Comp.NetLog
+            .Where(entry => !interceptsOnly || entry.Intercepted)
+            .ToList();
+
+        if (entries.Count == 0)
+        {
+            _cmChat.ChatMessageToOne(Loc.GetString("anprc-log-print-empty"), args.Actor);
+            return;
+        }
+
+        var paper = Spawn(LogPaperId, Transform(ent.Owner).Coordinates);
+
+        if (TryComp(paper, out PaperComponent? paperComp))
+            _paper.SetContent((paper, paperComp), BuildLogReport(ent, entries, interceptsOnly));
+
+        _hands.TryPickupAnyHand(args.Actor, paper);
+
+        _cmChat.ChatMessageToOne(
+            Loc.GetString("anprc-log-printed", ("count", entries.Count)),
+            args.Actor);
+    }
+
+    private string BuildLogReport(
+        Entity<ANPRCRadioComponent> ent,
+        List<ANPRCNetLogEntry> entries,
+        bool interceptsOnly)
+    {
+        var sb = new StringBuilder();
+
+        sb.AppendLine(interceptsOnly
+            ? "[head=2]INTERCEPT LOG[/head]"
+            : "[head=2]NET LOG[/head]");
+
+        var station = !string.IsNullOrEmpty(ent.Comp.Callsign)
+            ? ent.Comp.Callsign
+            : GetWearerCallsign(ent.Owner);
+
+        if (string.IsNullOrEmpty(station))
+            station = "UNKNOWN STATION";
+
+        sb.AppendLine($"[bold]STATION:[/bold] {station}");
+        sb.AppendLine($"[bold]ENTRIES:[/bold] {entries.Count}");
+        sb.AppendLine();
+
+        foreach (var entry in entries)
+        {
+            var ts = TimeSpan.FromSeconds(entry.Timestamp);
+            var time = $"{(int) ts.TotalMinutes:D2}:{ts.Seconds:D2}";
+            var marker = entry.Intercepted ? " [bold](INTERCEPT)[/bold]" : string.Empty;
+
+            sb.AppendLine($"[{time}] {entry.SenderName} - {entry.ChannelDisplay}{marker}");
+            sb.AppendLine($"  {entry.Message}");
+        }
+
+        sb.AppendLine();
+        sb.Append("[italic]Transcribed from an AN/PRC-117G net log. Times are set clock, not local.[/italic]");
+
+        return sb.ToString();
     }
 
     private void OnSetTxPower(Entity<ANPRCRadioComponent> ent, ref ANPRCSetTxPowerMsg args)
@@ -330,10 +487,16 @@ public sealed partial class ANPRCRadioSystem
                 batteryFraction,
                 hasBattery,
                 antennaLabel,
-                BuildChannelFrequencies()));
+                BuildChannelFrequencies(ent.Comp),
+                ent.Comp.SweepEnabled,
+                ent.Comp.SweepPosition,
+                BuildSweepContacts(ent.Comp)));
     }
 
-    private Dictionary<string, int> BuildChannelFrequencies()
+    // the client only ever learns the operator's own nets, the unfactioned ones, and
+    // whatever the search receiver has actually fixed. sending the whole plan would
+    // hand every enemy frequency to anyone willing to read the state off the wire
+    private Dictionary<string, int> BuildChannelFrequencies(ANPRCRadioComponent radio)
     {
         var frequencies = new Dictionary<string, int>();
 
@@ -342,10 +505,54 @@ public sealed partial class ANPRCRadioSystem
             if (proto.Frequency <= 0)
                 continue;
 
-            frequencies[proto.ID] = _freqPlan.GetFrequency(proto);
+            var frequency = _freqPlan.GetFrequency(proto);
+
+            var known = string.IsNullOrEmpty(proto.Faction) ||
+                        string.IsNullOrEmpty(radio.OperatorFaction) ||
+                        string.Equals(proto.Faction, radio.OperatorFaction, StringComparison.OrdinalIgnoreCase) ||
+                        radio.DiscoveredFrequencies.Contains(frequency);
+
+            if (known)
+                frequencies[proto.ID] = frequency;
         }
 
         return frequencies;
+    }
+
+    // unresolved contacts go out with the unearned digits zeroed, so the exact number
+    // is not sitting in the BUI state before the operator has worked for it
+    private List<ANPRCSweepContact> BuildSweepContacts(ANPRCRadioComponent radio)
+    {
+        var contacts = new List<ANPRCSweepContact>();
+        var tierMax = radio.SweepTierThresholds.Count;
+
+        foreach (var (frequency, confidence) in radio.SweepContacts)
+        {
+            var tier = ANPRCSweepSystem.TierOf(radio, confidence);
+
+            if (tier <= 0)
+                continue;
+
+            // the operator's own nets are never a fix, they arrive already identified
+            var known = _freqPlan.IsKnownTo(frequency, radio.OperatorFaction);
+            var resolved = known || radio.DiscoveredFrequencies.Contains(frequency);
+
+            contacts.Add(new ANPRCSweepContact(
+                resolved ? frequency : ANPRCSweepSystem.MaskFrequency(frequency, tier),
+                confidence,
+                resolved,
+                resolved ? _sweep.GetChannelName(frequency) : string.Empty,
+                resolved ? tierMax : tier,
+                tierMax,
+                known));
+        }
+
+        // unknowns first: they are the ones worth the operator's attention
+        return contacts
+            .OrderBy(contact => contact.Known)
+            .ThenByDescending(contact => contact.Resolved)
+            .ThenBy(contact => contact.Frequency)
+            .ToList();
     }
 
     private static string Sanitize(string input, int maxLength)

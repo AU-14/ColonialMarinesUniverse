@@ -24,6 +24,7 @@ anprc-verb-open = Open Radio Panel
 anprc-out-of-range = Static. No relay in range on { $channel }.
 
 anprc-frequency-invalid = Invalid frequency format. Enter a number such as 1606 or 1.606.
+anprc-frequency-out-of-band = No net can live there. Direct frequencies sit in 1.000-2.999 MHz or the 30.000-87.999 softwave band.
 anprc-frequency-not-found = No channel found at frequency { $freq }.
 anprc-frequency-set = [{ $slot }] tuned to { $freq } MHz.
 anprc-frequency-set-dynamic = [{ $slot }] set to { $freq } MHz (direct frequency). Transmit with :r.
@@ -85,3 +86,17 @@ anprc-handset-hands-full = You need a free hand to take the handset.
 anprc-handset-cord = The handset cord yanks out of your hand as you move away.
 anprc-handset-radio-gone = The handset goes dead.
 anprc-handset-hint = Speaking transmits on the pack's active net while you hold the handset. Whisper to stay off the air.
+
+# search receiver
+anprc-sweep-started = The set drops off the net and starts walking the band. You will hear nothing and send nothing until you stop.
+anprc-sweep-needs-online = The set has to be on and worn to search.
+anprc-sweep-aborted = The search stops as the set goes down.
+anprc-sweep-aborted-power = The battery gives out and the search stops.
+anprc-sweep-tx-blocked = The set is searching the band. Stop the search before you transmit.
+anprc-sweep-contact = The search narrows. Something is transmitting on { $freq } MHz.
+anprc-sweep-resolved = FIX: { $freq } MHz - { $net }.
+anprc-sweep-unknown-net = UNIDENTIFIED NET
+
+# net log to paper
+anprc-log-print-empty = Nothing in the log worth writing down.
+anprc-log-printed = You transcribe { $count } log entries onto paper.

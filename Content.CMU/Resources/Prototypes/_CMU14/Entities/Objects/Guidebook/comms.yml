@@ -5,6 +5,7 @@
   text: "/ServerInfo/Guidebook/_AU14/Comms/AU14CommsIndex.xml"
   priority: 2
   children:
+  - AU14CommsFirstNet
   - AU14CommsANPRC
   - AU14CommsHeadsets
   - AU14CommsVoiceProcedure
@@ -12,28 +13,35 @@
 
 - type: guideEntry
   parent: RMC
+  id: AU14CommsFirstNet
+  name: Getting On The Net
+  priority: 0
+  text: "/ServerInfo/Guidebook/_AU14/Comms/AU14CommsFirstNet.xml"
+
+- type: guideEntry
+  parent: RMC
   id: AU14CommsANPRC
   name: "AN/PRC-117G Radio"
-  priority: 0
+  priority: 1
   text: "/ServerInfo/Guidebook/_AU14/Comms/AU14CommsANPRC.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14CommsHeadsets
   name: Field Headsets
-  priority: 1
+  priority: 2
   text: "/ServerInfo/Guidebook/_AU14/Comms/AU14CommsHeadsets.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14CommsVoiceProcedure
   name: Voice Procedure
-  priority: 2
+  priority: 3
   text: "/ServerInfo/Guidebook/_AU14/Comms/AU14CommsVoiceProcedure.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14CommsQuickRef
   name: Comms Quick Reference
-  priority: 3
+  priority: 4
   text: "/ServerInfo/Guidebook/_AU14/Comms/AU14CommsQuickRef.xml"

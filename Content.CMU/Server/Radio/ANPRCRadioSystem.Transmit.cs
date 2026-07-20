@@ -211,6 +211,14 @@ public sealed partial class ANPRCRadioSystem
     {
         var radio = pack.Comp;
 
+        // the set cannot search and talk at once. stay silent or stop sweeping
+        if (radio.SweepEnabled)
+        {
+            args.Channel = null;
+            _cmChat.ChatMessageToOne(Loc.GetString("anprc-sweep-tx-blocked"), speaker);
+            return;
+        }
+
         // callsign goes out as the speaker name, message body carries no prefix
         var outMessage = args.Message;
 
