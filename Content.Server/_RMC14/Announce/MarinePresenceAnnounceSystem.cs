@@ -10,6 +10,7 @@ using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared.Bed.Cryostorage;
 using Content.Shared.StationRecords;
+using Content.Shared.StationRecords.Components;
 using Content.Shared.StationRecords.Systems;
 
 namespace Content.Server._RMC14.Announce
