@@ -17,14 +17,14 @@ namespace Content.Shared.Anomaly;
 /// </summary>
 public sealed partial class AnomalySynchronizerSystem : EntitySystem
 {
-    [Dependency] private AnomalySystem _anomaly = default!;
-    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
-    [Dependency] private DeviceLinkSystem _signal = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private PowerReceiverSystem _power = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedAnomalySystem _anomaly = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedDeviceLinkSystem _deviceLink = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPowerReceiverSystem _power = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

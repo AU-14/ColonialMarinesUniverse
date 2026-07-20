@@ -20,18 +20,22 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.Fluids.EntitySystems;
 
-public sealed partial class DrainSystem : SharedDrainSystem
+/// <summary>
+/// Handles the draining of solutions from containers into drains.
+/// TODO: This system is very bad, and needs to be rewritten.
+/// </summary>
+public sealed partial class DrainSystem : EntitySystem
 {
     [Dependency] private EntityLookupSystem _lookup = default!;
-    [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
-    [Dependency] private SharedAmbientSoundSystem _ambientSoundSystem = default!;
-    [Dependency] private SharedAudioSystem _audioSystem = default!;
-    [Dependency] private PopupSystem _popupSystem = default!;
-    [Dependency] private TagSystem _tagSystem = default!;
-    [Dependency] private DoAfterSystem _doAfterSystem = default!;
-    [Dependency] private PuddleSystem _puddleSystem = default!;
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private SharedAmbientSoundSystem _ambientSound = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPuddleSystem _puddle = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private readonly HashSet<Entity<PuddleComponent>> _puddles = [];
 
