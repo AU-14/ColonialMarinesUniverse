@@ -851,3 +851,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Communications/CommunicationsConsoleSystem.cs`, `Content.IntegrationTests/Tests/Communications/CommunicationsConsoleInitialCooldownTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the pinned target retains this exact lifecycle ordering. A queued integration regression spawns the real standard console, requires its stored cooldown to equal `InitialDelay`, and verifies the first bound-UI state reports `CanAnnounce == false`. Execution is deferred to the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Audit later communications-console logging, access, and identity changes independently; none are required to correct the initial state publication.
+
+## CS-0057 — Prevent duplicate reaction sounds
+
+- Upstream: [space-wizards/space-station-14#38999](https://github.com/space-wizards/space-station-14/pull/38999), `bdf3c891e78193e7217416d3d4e0799cb5667c9a`, 2025-07-15
+- Areas: Chemistry, GameTicking
+- Status: Adapted
+- Risk: Low
+- Behavior/API delta: Chemical reactions still run through the shared predicted path, but their PVS sound is now emitted only by the authoritative server. Clients no longer hear both a locally predicted reaction sound and the replicated server sound. The reaction loop also stops allocating and populating a set that was never read.
+- RMC/CMU divergence: RMC retains additional reagent data and reaction behavior around the shared system, including typed reagent prototype IDs introduced during this sync. None of those changes assign separate sound ownership, so server authority removes the duplicate without changing reaction selection, quantities, effects, or administrative logging.
+- Decision and rationale: Adapt the pinned target's network-side guard to the current typed-reagent implementation and leave all reaction math intact. A fully predicted audio path would require threading an initiating actor through every reaction entry point and is outside this isolated fix.
+- Files changed: `Content.Shared/Chemistry/Reaction/ChemicalReactionSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the pinned target retains server-only PVS emission and removal of the unused set. Compilation and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint; the current reaction test harness has no stable client/server audio replication seam.
+- Follow-up/debt: Add a two-instance audio regression if the integration harness exposes replicated sound events, and separately audit any future conversion to actor-aware predicted reaction audio.

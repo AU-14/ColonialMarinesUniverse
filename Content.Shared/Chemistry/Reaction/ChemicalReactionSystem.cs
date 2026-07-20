@@ -5,6 +5,7 @@ using Content.Shared.Database;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using System.Collections.Frozen;
@@ -25,6 +26,7 @@ namespace Content.Shared.Chemistry.Reaction
         /// </summary>
         private const int MaxReactionIterations = 20;
 
+        [Dependency] private INetManager _net = default!;
         [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private SharedAudioSystem _audio = default!;
         [Dependency] private ISharedAdminLogManager _adminLogger = default!;
@@ -225,7 +227,10 @@ namespace Content.Shared.Chemistry.Reaction
                 effect.Effect(args);
             }
 
-            _audio.PlayPvs(reaction.Sound, soln);
+            // Reaction processing is predicted, so playing this on clients as well as the server
+            // produces a local sound followed by the replicated server sound.
+            if (_net.IsServer)
+                _audio.PlayPvs(reaction.Sound, soln);
         }
 
         /// <summary>
@@ -235,7 +240,6 @@ namespace Content.Shared.Chemistry.Reaction
         /// </summary>
         private bool ProcessReactions(Entity<SolutionComponent> soln, SortedSet<ReactionPrototype> reactions, ReactionMixerComponent? mixerComponent)
         {
-            HashSet<ReactionPrototype> toRemove = new();
             List<ProtoId<ReagentPrototype>>? products = null;
 
             // attempt to perform any applicable reaction
@@ -243,7 +247,6 @@ namespace Content.Shared.Chemistry.Reaction
             {
                 if (!CanReact(soln, reaction, mixerComponent, out var unitReactions))
                 {
-                    toRemove.Add(reaction);
                     continue;
                 }
 
