@@ -76,8 +76,6 @@ public sealed partial class XenoNestSystem : EntitySystem
         _xenoNestSurfaceQuery = GetEntityQuery<XenoNestSurfaceComponent>();
         _xenoWeedableQuery = GetEntityQuery<XenoWeedableComponent>();
 
-        SubscribeLocalEvent<GhostAttemptHandleEvent>(OnNestedGhostAttemptHandle);
-
         SubscribeLocalEvent<XenoComponent, GetUsedEntityEvent>(OnXenoGetUsedEntity);
 
         SubscribeLocalEvent<XenoNestSurfaceComponent, InteractHandEvent>(OnSurfaceInteractHand);
@@ -337,21 +335,6 @@ public sealed partial class XenoNestSystem : EntitySystem
     {
         if (ent.Comp.Running)
             args.Multiply(ent.Comp.IncubationMultiplier);
-    }
-
-    private void OnNestedGhostAttemptHandle(GhostAttemptHandleEvent args)
-    {
-        if (args.Mind.CurrentEntity is not { } ent ||
-            !TryComp(ent, out XenoNestedComponent? nested))
-        {
-            return;
-        }
-
-        if (args.Mind.UserId is not { } userId)
-            return;
-
-        nested.GhostedId = userId;
-        Dirty(ent, nested);
     }
 
     public bool TryStartNesting(EntityUid user, Entity<XenoNestSurfaceComponent> surface, EntityUid victim, out DoAfterId? doAfterId, bool allDirs = false)
