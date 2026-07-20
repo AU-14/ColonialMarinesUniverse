@@ -1,0 +1,37 @@
+# The "Switch": an illegal auto-sear chip crafted at the Sapper's Workbench (40 plasteel + any
+# electronics). Engaging its toggle action is the gun's "Switch" fire mode: rate of fire x4,
+# accuracy quartered, scatter x4, forced mag dump once fired, and every shot risks jamming the gun
+# until it is racked clear (GunSwitchSystem; 1s do-after, 60% fail chance per attempt) or, rarely,
+# blowing it up in the wielder's hands - all tunable on the components.
+- type: entity
+  parent: [ RMCUnderAttachmentBase, RMCAttachableToggleableBase ]
+  id: AU14AttachmentSwitch
+  name: switch
+  suffix: CLF, Sapper
+  description: A tiny inverted sear chip that drops into a trigger group. Flip it on and the gun simply stops asking when to stop firing. Utterly illegal, wildly inaccurate, and prone to jamming.
+  components:
+  - type: Sprite
+    sprite: _AU14/Insurgency/switch.rsi
+    state: switch
+  - type: AttachableVisuals
+  - type: Tag
+    tags:
+    - RMCAttachmentUnderbarrel
+  - type: AttachableToggleable
+    attachedOnly: true
+    userOnly: true
+    actionName: Switch
+    actionDesc: Engage the switch, dumping the magazine as fast as the action cycles.
+    activatePopupText: au14-switch-on
+    deactivatePopupText: au14-switch-off
+  - type: AttachableWeaponRangedMods
+    # FullAuto so the x7 rate of fire actually gets used; the heavy scatter/recoil while engaged
+    # sells the "accuracy by x4" downgrade alongside GunSwitchComponent.AccuracyMultiplier.
+    fireModeMods:
+    - extraFireModes: FullAuto
+    modifiers:
+    - conditions:
+        activeOnly: true
+      scatterFlat: 10
+      recoilFlat: 2
+  - type: GunSwitch

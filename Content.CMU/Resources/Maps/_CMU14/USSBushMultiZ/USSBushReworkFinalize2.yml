@@ -4721,7 +4721,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 20,22.5
       parent: 1
-- proto: MaintenanceJack
+- proto: AU14MaintenanceJack
   entities:
   - uid: 179
     components:

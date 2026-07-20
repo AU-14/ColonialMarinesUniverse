@@ -18,6 +18,13 @@
       RMCSkillSurgery: 3
       RMCSkillFirearms: 2
       RMCSkillPolice: 1
+      RMCSkillSpecialistWeapons: 1
+  # Captured-gear training: CLF can use any weapon specialist kit they seize.
+  - type: DemoSpecWhitelist
+  - type: GrenadeSpecWhitelist
+  - type: PyroWhitelist
+  - type: ScoutWhitelist
+  - type: SniperWhitelist
   - type: EquipEntityPreset
     preset: AU14CLFSurvMedicPreset
   - type: FactionLanguageMember

@@ -12,6 +12,15 @@ public sealed partial class CMUZLevelsCVars : CVars
     public static readonly CVarDef<bool> RenderEnabled =
         CVarDef.Create("cmu.zlevels.render_enabled", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
+    // AU14 (building overhaul): rooftop awareness. Stage 1 of the look-up action cycle ghosts the level
+    // directly above at low alpha while the viewer is not under a ceiling. This cvar force-disables it.
+    public static readonly CVarDef<bool> FaintUpperEnabled =
+        CVarDef.Create("cmu.zlevels.faint_upper_enabled", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    // AU14 🔧 TUNABLE: opacity of the faint upper-level ghost (0 = invisible, 1 = solid).
+    public static readonly CVarDef<float> FaintUpperAlpha =
+        CVarDef.Create("cmu.zlevels.faint_upper_alpha", 0.14f, CVar.CLIENTONLY | CVar.ARCHIVE);
+
     public static readonly CVarDef<int> MaxRenderDepth =
         CVarDef.Create("cmu.zlevels.max_render_depth", 8, CVar.REPLICATED | CVar.SERVER);
 

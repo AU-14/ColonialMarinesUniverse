@@ -51,7 +51,7 @@
   storage:
     back:
     - AU14CivilianJacketGrayPufferJacket
-  
+
 - type: loadout
   id: CivilianJacketKhakiPufferJacketAU14
   storage:
@@ -212,4 +212,3 @@
   id: WYFancySuitJacketLightBrownAU14
   equipment:
     outerClothing: RMCFancySuitJacketLightBrown
-

@@ -1,0 +1,102 @@
+# CLF Sapper role (Phase 4). A Guerilla Fighter variant with high construction skill who spawns with
+# a special trap kit. The trap crafting/deploy behavior is layered on in later Phase 4 chunks; this
+# file defines the role itself, cloned from AU14JobCLFGuerilla so it shares the pre-lobby loadout and
+# civilian spawn behavior (the CLF spawn system routes any "CLF" job through the guerilla/safehouse path).
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobCLFSapper
+  roundSide: ThirdParty
+  roundForce: CLF
+  roundRole: CLFGuerilla
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - CLF
+  - type: CLFMember
+  # Marks the mob as a trained sapper: the only role that can deploy sapper traps.
+  - type: Sapper
+  # Same skill sheet as the CLF Guerilla Fighter, except construction: GOVFOR's Combat Technician
+  # (their combat engineer) has construction 4, and the Sapper gets one better.
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 1
+      RMCSkillFirearms: 2
+      RMCSkillConstruction: 5
+      RMCSkillEngineer: 3
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillPolice: 1
+      RMCSkillSpecialistWeapons: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-clfsapper
+  - type: StartingMindRole
+    mindRole: MindRoleCLFGuerrilla
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: colonist
+  - type: ShowMarineIcons
+    factions:
+    - CLF
+  - type: FactionLanguageMember
+    factionTag: CLF
+
+  name: au14-job-name-clfsapper
+  description: au14-job-description-clfsapper
+  setPreference: true
+  ignoreAllegiance: true
+  playTimeTracker: AU14JobCLFSapper
+  basePlaytimeTracker: true
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCLFSapper
+  icon: "RMCJobIconCLFSoldier"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-clflrs
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCLFSapper
+  equipment:
+    id: AU14IDCardCLFCivilian
+    # A full colonist toolbelt so the sapper can build and disarm without scavenging tools first.
+    belt: CMBeltUtilityFilled
+  inhand:
+  - AU14CLFHeadset
+  # The Sapper's signature trap kit (Phase 4b). Later phases let them refill it by crafting at a workbench.
+  - AU14SapperTrapToolbox
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCLFSapper
+  name: Spawn Point CLF Sapper
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCLFSapper
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCLFSapper
+  isHumanoid: true
+
+# Same lobby loadout as the CLF Guerilla Fighter.
+- type: roleLoadout
+  id: JobAU14JobCLFSapper
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - CivFootwearAU14
+  - CivJumpsuitAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14
