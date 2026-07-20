@@ -31,6 +31,7 @@ namespace Content.Shared._RMC14.Xenonids.Pheromones;
 public abstract partial class SharedXenoPheromonesSystem : EntitySystem
 {
     [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
     [Dependency] private MobStateSystem _mobState = default!;
@@ -154,7 +155,7 @@ public abstract partial class SharedXenoPheromonesSystem : EntitySystem
         }
 
         var wardingThreshold = threshold.Value + (1 + 20 * warding.Comp.Multiplier);
-        if (damageable.TotalDamage >= wardingThreshold)
+        if (_damageable.GetTotalDamage((warding.Owner, damageable)) >= wardingThreshold)
             return;
 
         args.State = MobState.Critical;
@@ -280,7 +281,7 @@ public abstract partial class SharedXenoPheromonesSystem : EntitySystem
              !_damageableQuery.TryGetComponent(ent, out var damageable)))
             return false;
 
-        if (damageable.TotalDamage < critThres)
+        if (_damageable.GetTotalDamage((ent, damageable)) < critThres)
             return false;
 
         if (newWardMult > warding.Multiplier)

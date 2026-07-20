@@ -66,7 +66,7 @@ public sealed partial class XenoLifestealSystem : EntitySystem
         if (!_damageableQuery.TryComp(xeno, out var damageable))
             return;
 
-        var total = damageable.TotalDamage;
+        var total = _damageable.GetTotalDamage((xeno.Owner, damageable));
         if (total == FixedPoint2.Zero)
             return;
 

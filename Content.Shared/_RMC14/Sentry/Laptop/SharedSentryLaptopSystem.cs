@@ -30,6 +30,7 @@ public abstract partial class SharedSentryLaptopSystem : EntitySystem
     [Dependency] private AreaSystem _area = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedDeviceLinkSystem _deviceLink = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
 
     private const float UpdateInterval = 1.0f;
 
@@ -629,7 +630,7 @@ public abstract partial class SharedSentryLaptopSystem : EntitySystem
 
         if (TryComp<DamageableComponent>(sentry, out var damageable))
         {
-            var damage = damageable.TotalDamage.Float();
+            var damage = _damageable.GetTotalDamage((sentry.Owner, damageable)).Float();
             health = Math.Max(0, maxHealth - damage);
         }
 

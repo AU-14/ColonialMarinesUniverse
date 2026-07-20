@@ -21,6 +21,7 @@ namespace Content.Shared._RMC14.Xenonids.Hedgehog;
 
 public sealed partial class XenoShardSystem : EntitySystem
 {
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
     [Dependency] private CMArmorSystem _armor = default!;
@@ -73,7 +74,7 @@ public sealed partial class XenoShardSystem : EntitySystem
 
     private void OnShardHitBy(Entity<XenoShardComponent> ent, ref DamageChangedEvent args)
     {
-        if (args.Damageable.Damage == null || args.Damageable.Damage.GetTotal() <= FixedPoint2.Zero)
+        if (_damageable.GetTotalDamage((ent.Owner, args.Damageable)) <= FixedPoint2.Zero)
             return;
 
         if (!HasComp<ProjectileComponent>(args.Tool))

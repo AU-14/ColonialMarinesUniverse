@@ -137,7 +137,8 @@ public sealed partial class AimedProjectileSystem : EntitySystem
 
                 // Calculate the current health damage
                 var damage = new DamageSpecifier();
-                damage.DamageDict.Add("Piercing", (threshold.Value - damageable.TotalDamage) * currentHealthDamage);
+                var totalDamage = _damageable.GetTotalDamage((target, damageable));
+                damage.DamageDict.Add("Piercing", (threshold.Value - totalDamage) * currentHealthDamage);
 
                 // Apply a multiplier to the bonus damage based on the amount of focus stacks.
                 if (focusedFire)

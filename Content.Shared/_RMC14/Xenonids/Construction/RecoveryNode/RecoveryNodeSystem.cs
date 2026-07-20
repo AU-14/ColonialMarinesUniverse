@@ -67,7 +67,7 @@ public sealed partial class RecoveryNodeSystem : EntitySystem
                 !HasComp<XenoComponent>(nearbyEntity) ||
                 !HasComp<XenoRestingComponent>(nearbyEntity) ||
                 !TryComp<DamageableComponent>(nearbyEntity, out var damageComp) ||
-                damageComp.TotalDamage <= 0 ||
+                _damageable.GetTotalDamage((nearbyEntity, damageComp)) <= 0 ||
                 !HasComp<MobStateComponent>(nearbyEntity) ||
                 _mob.IsDead(nearbyEntity))
             {

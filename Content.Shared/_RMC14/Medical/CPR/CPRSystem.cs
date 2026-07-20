@@ -102,8 +102,11 @@ public sealed partial class CPRSystem : EntitySystem
 
         _unrevivable.AddRevivableTime(target, CPRCooldownSeconds);
 
-        if (!TryComp(target, out DamageableComponent? damageable) ||
-            !damageable.Damage.DamageDict.TryGetValue(HealType, out damage))
+        if (!TryComp(target, out DamageableComponent? damageable))
+            return;
+
+        var currentDamage = _damageable.GetAllDamage((target, damageable));
+        if (!currentDamage.DamageDict.TryGetValue(HealType, out damage))
         {
             return;
         }

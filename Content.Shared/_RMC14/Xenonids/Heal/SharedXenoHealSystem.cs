@@ -152,7 +152,8 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
         if (_flammable.IsOnFire(target))
             failureMessageId = "rmc-xeno-apply-salve-target-on-fire-failure";
 
-        if (TryComp(target, out DamageableComponent? damageComp) && damageComp.TotalDamage == 0)
+        if (TryComp(target, out DamageableComponent? damageComp) &&
+            _damageable.GetTotalDamage((target, damageComp)) == 0)
             failureMessageId = "rmc-xeno-apply-salve-target-full-health-failure";
 
         if (failureMessageId != null)
@@ -259,7 +260,8 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
         if (_mobState.IsDead(target))
             failureMessageId = "rmc-xeno-sacrifice-heal-target-dead-failure";
 
-        if (TryComp(target, out DamageableComponent? targetDamageComp) && targetDamageComp.TotalDamage == 0)
+        if (TryComp(target, out DamageableComponent? targetDamageComp) &&
+            _damageable.GetTotalDamage((target, targetDamageComp)) == 0)
             failureMessageId = "rmc-xeno-sacrifice-heal-target-full-health-failure";
 
         if (failureMessageId != null)
@@ -308,14 +310,14 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
         _popup.PopupPredicted(Loc.GetString("rmc-xeno-sacrifice-heal-target-enviorment", ("healer_xeno", ent), ("target_xeno", target)), target, ent, PopupType.Medium);
 
         // Heal from crit
-        var targetTotalDamage = targetDamageComp.TotalDamage;
+        var targetTotalDamage = _damageable.GetTotalDamage((target, targetDamageComp));
         var diffToThreshold = targetTotalDamage - targetCriticalThreshold.Value;
 
         if (diffToThreshold > 0)
             Heal(target, diffToThreshold);
 
         // Use up user's health to heal target
-        var userTotalDamage = userDamageComp.TotalDamage;
+        var userTotalDamage = _damageable.GetTotalDamage((ent.Owner, userDamageComp));
         var remainingHealth = userDeathThreshold.Value - userTotalDamage;
         var healAmount = remainingHealth * args.TransferProportion;
 

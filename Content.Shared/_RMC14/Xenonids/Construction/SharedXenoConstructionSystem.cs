@@ -1055,7 +1055,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
             return;
         }
 
-        if (xenoStructureDamage.TotalDamage <= 0)
+        if (_damageable.GetTotalDamage((xenoStructure.Owner, xenoStructureDamage)) <= 0)
         {
             var undamagedStructureMessage = Loc.GetString("rmc-xeno-construction-repair-structure-no-damage-failure", ("struct", xenoStructure.Owner));
             _popup.PopupClient(undamagedStructureMessage, xenoStructure.Owner.ToCoordinates(), user);
@@ -1096,7 +1096,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
             !TryComp(xenoStructure, out TransformComponent? xenoStructureTransform) ||
             !TryComp(user, out XenoPlasmaComponent? plasma) ||
             !TryComp(xenoStructure, out DamageableComponent? xenoStructureDamage) ||
-            xenoStructureDamage.TotalDamage <= 0)
+            _damageable.GetTotalDamage((xenoStructure.Owner, xenoStructureDamage)) <= 0)
         {
             return;
         }

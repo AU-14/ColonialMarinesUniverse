@@ -181,7 +181,7 @@ public sealed partial class RMCUpgradeSystem : EntitySystem
         DamageSpecifier? transferredDamage = null;
 
         if (TryComp<DamageableComponent>(ent, out var damageComp))
-            transferredDamage = damageComp.Damage;
+            transferredDamage = _damageable.GetAllDamage((ent, damageComp));
 
         var spawn = Spawn(targetEntity, coordinates, rotation: rotation.GetCardinalDir().ToAngle());
         _popup.PopupEntity(popup, spawn, user);

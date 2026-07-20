@@ -229,7 +229,8 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
             return;
         }
 
-        if (damageable.TotalDamage >= ent.Comp.Max && args.Damage.GetTotal() > FixedPoint2.Zero)
+        if (_damageable.GetTotalDamage((ent, damageable)) >= ent.Comp.Max &&
+            args.Damage.GetTotal() > FixedPoint2.Zero)
             args.Cancelled = true;
     }
 
@@ -238,11 +239,12 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
         if (!_damageableQuery.TryComp(ent, out var damageable))
             return;
 
+        var totalDamage = _damageable.GetTotalDamage((ent, damageable));
         var modifyTotal = args.Damage.GetTotal();
-        if (modifyTotal <= FixedPoint2.Zero || damageable.TotalDamage + modifyTotal <= ent.Comp.Max)
+        if (modifyTotal <= FixedPoint2.Zero || totalDamage + modifyTotal <= ent.Comp.Max)
             return;
 
-        var remaining = ent.Comp.Max - damageable.TotalDamage;
+        var remaining = ent.Comp.Max - totalDamage;
         if (ent.Comp.Max <= FixedPoint2.Zero)
         {
             args.Damage *= 0;
@@ -354,10 +356,11 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
         if (!_prototypes.TryIndex(groupId, out var group))
             return equal;
 
+        var currentDamage = _damageable.GetAllDamage(damageable).DamageDict;
         _types.Clear();
         foreach (var type in group.DamageTypes)
         {
-            if (damageable.Comp.Damage.DamageDict.TryGetValue(type, out var current) &&
+            if (currentDamage.TryGetValue(type, out var current) &&
                 current > FixedPoint2.Zero)
             {
                 _types.Add(type);
@@ -373,7 +376,7 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
             for (var i = _types.Count - 1; i >= 0; i--)
             {
                 var type = _types[i];
-                var current = damageable.Comp.Damage.DamageDict[type];
+                var current = currentDamage[type];
 
                 var existingHeal = add ? -damage.GetValueOrDefault(type) : damage.GetValueOrDefault(type);
                 left += existingHeal;
@@ -505,9 +508,10 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
         if (!_damageableQuery.Resolve(damageable, ref damageable.Comp, false))
             return false;
 
+        var currentDamage = _damageable.GetAllDamage(damageable).DamageDict;
         foreach (var (type, _) in damage.DamageDict)
         {
-            if (damageable.Comp.Damage.DamageDict.TryGetValue(type, out var healValue) &&
+            if (currentDamage.TryGetValue(type, out var healValue) &&
                 healValue > FixedPoint2.Zero)
             {
                 return true;
@@ -528,7 +532,8 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
         if (_mobThresholds.TryGetDeadThreshold(target, out var mobThreshold)
             && TryComp<DamageableComponent>(target, out var damageable))
         {
-            var lethalAmountOfDamage = mobThreshold.Value - damageable.TotalDamage;
+            var totalDamage = _damageable.GetTotalDamage((target, damageable));
+            var lethalAmountOfDamage = mobThreshold.Value - totalDamage;
             var type = _prototypes.Index(LethalDamageType);
             var lethalDamage = new DamageSpecifier(type, lethalAmountOfDamage);
             _damageable.TryChangeDamage(target, lethalDamage, true, origin: origin);

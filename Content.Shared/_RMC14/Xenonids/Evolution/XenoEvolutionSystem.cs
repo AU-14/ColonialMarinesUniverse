@@ -46,6 +46,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
     [Dependency] private ClimbSystem _climb = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
@@ -366,7 +367,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
     private bool DamagedCheckPopup(EntityUid xeno, bool predicted = true, bool doPopup = true)
     {
         if (!TryComp(xeno, out DamageableComponent? damageable) ||
-            damageable.TotalDamage <= 1)
+            _damageable.GetTotalDamage((xeno, damageable)) <= 1)
             return true;
 
         if (predicted)

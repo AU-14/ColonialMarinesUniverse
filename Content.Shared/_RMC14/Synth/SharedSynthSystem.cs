@@ -275,10 +275,10 @@ public abstract partial class SharedSynthSystem : EntitySystem
         if (!TryComp<DamageableComponent>(synth, out var damageable))
             return false;
 
-        if (damageable.Damage.Empty)
+        if (_damageable.GetAllDamage((synth, damageable)).Empty)
             return false;
 
-        var damage = damageable.Damage.GetDamagePerGroup(_prototypes);
+        var damage = _damageable.GetDamagePerGroup((synth, damageable));
         var groupDmg = damage.GetValueOrDefault(group);
 
         if (groupDmg <= FixedPoint2.Zero)

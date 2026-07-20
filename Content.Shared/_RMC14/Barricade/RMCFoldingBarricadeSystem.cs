@@ -338,7 +338,7 @@ public sealed partial class RMCFoldingBarricadeSystem : EntitySystem
 
         var damage = 0f;
         if (TryComp(ent, out DamageableComponent? damageable))
-            damage = damageable.TotalDamage.Float();
+            damage = _damageable.GetTotalDamage((ent.Owner, damageable)).Float();
 
         damage = ClampDamage(damage, ent.Comp.MaxDamage);
 

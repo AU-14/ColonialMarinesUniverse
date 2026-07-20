@@ -23,6 +23,7 @@ namespace Content.Shared._RMC14.Entrenching;
 public sealed partial class BarricadeSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
@@ -108,7 +109,7 @@ public sealed partial class BarricadeSystem : EntitySystem
         if (bagsSalvaged <= 0 && TryComp(full, out FullSandbagComponent? fullSandbag))
             bagsSalvaged = fullSandbag.StackRequired;
         if (TryComp(args.Target, out DamageableComponent? damageable))
-            bagsSalvaged -= Math.Max((int) damageable.TotalDamage / barricade.MaterialLossDamageInterval - 1, 0);
+            bagsSalvaged -= Math.Max((int) _damageable.GetTotalDamage((args.Target, damageable)) / barricade.MaterialLossDamageInterval - 1, 0);
 
         if (TryComp(args.Target, out BarbedComponent? barbed) && barbed.IsBarbed)
             Spawn(barbed.Spawn, GetCoordinates(args.Coordinates));

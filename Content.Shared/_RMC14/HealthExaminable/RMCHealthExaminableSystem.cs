@@ -8,6 +8,8 @@ namespace Content.Shared._RMC14.HealthExaminable;
 
 public sealed class RMCHealthExaminableSystem : EntitySystem
 {
+    [Dependency] private DamageableSystem _damageable = default!;
+
     private readonly ImmutableArray<FixedPoint2> _thresholds = ImmutableArray.Create<FixedPoint2>(25, 50, 75, 100, 200, 300);
 
     public override void Initialize()
@@ -23,11 +25,12 @@ public sealed class RMCHealthExaminableSystem : EntitySystem
         if (!TryComp(ent, out DamageableComponent? damageable))
             return;
 
+        var damagePerGroup = _damageable.GetDamagePerGroup((ent, damageable));
         using (args.PushGroup(nameof(RMCHealthExaminableSystem), -1))
         {
             foreach (var group in ent.Comp.Groups)
             {
-                if (!damageable.DamagePerGroup.TryGetValue(group, out var groupDamage))
+                if (!damagePerGroup.TryGetValue(group, out var groupDamage))
                     continue;
 
                 for (var i = _thresholds.Length - 1; i >= 0; i--)

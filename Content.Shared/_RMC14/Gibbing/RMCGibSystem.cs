@@ -15,6 +15,7 @@ public sealed partial class RMCGibSystem : EntitySystem
     private const float ItemLaunchImpulse = 8f;
     private const float ItemLaunchImpulseVariance = 3f;
 
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private IRobustRandom _random = default!;
@@ -53,7 +54,7 @@ public sealed partial class RMCGibSystem : EntitySystem
 
         if (TryComp<MobThresholdsComponent>(ent, out var thresholds) && TryComp<DamageableComponent>(ent, out var damageable))
         {
-            var damage = damageable.Damage.GetTotal();
+            var damage = _damageable.GetTotalDamage((ent, damageable));
             var dead = _thresholds.GetThresholdForState(ent, MobState.Dead, thresholds);
             gibProbability += (float)(damage - dead) * ent.Comp.DamageGibMultiplier;
         }

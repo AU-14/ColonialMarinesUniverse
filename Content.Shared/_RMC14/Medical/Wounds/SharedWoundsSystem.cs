@@ -429,7 +429,7 @@ public abstract partial class SharedWoundsSystem : EntitySystem
         DamageSpecifier damage,
         FixedPoint2? limit = null)
     {
-        if (wounded.Comp1.DamagePerGroup.GetValueOrDefault(group) <= FixedPoint2.Zero)
+        if (_damageable.GetDamagePerGroup((wounded, wounded.Comp1)).GetValueOrDefault(group) <= FixedPoint2.Zero)
         {
             RemoveWounds((wounded, wounded), type);
         }

@@ -10,6 +10,7 @@ namespace Content.Shared._RMC14.ShootingTarget;
 
 public sealed partial class RMCTargetSystem : EntitySystem
 {
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -25,7 +26,7 @@ public sealed partial class RMCTargetSystem : EntitySystem
     {
         if (!args.DamageIncreased)
         {
-            if (args.Damageable.TotalDamage == FixedPoint2.Zero)
+            if (_damageable.GetTotalDamage((ent.Owner, args.Damageable)) == FixedPoint2.Zero)
                 ResetStats(ent.Comp);
             return;
         }

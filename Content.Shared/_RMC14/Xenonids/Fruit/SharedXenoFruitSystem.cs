@@ -642,7 +642,7 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
         if (!TryComp(user, out DamageableComponent? damage))
             return false;
 
-        if (!fruit.Comp.CanConsumeAtFull && damage.TotalDamage == 0)
+        if (!fruit.Comp.CanConsumeAtFull && _damageable.GetTotalDamage((user, damage)) == 0)
         {
             _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-pick-failed-health-full"), user, user);
             return false;
@@ -714,7 +714,7 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
         if (!TryComp(target, out DamageableComponent? damage))
             return false;
 
-        if (!fruit.Comp.CanConsumeAtFull && damage.TotalDamage == 0)
+        if (!fruit.Comp.CanConsumeAtFull && _damageable.GetTotalDamage((target, damage)) == 0)
         {
             _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-pick-failed-health-full-target"), user, user);
             return false;

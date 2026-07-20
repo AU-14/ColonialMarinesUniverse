@@ -33,13 +33,14 @@ public sealed partial class RemoveDamage : RMCChemicalEffect
             return;
 
         var damage = new DamageSpecifier();
+        var damageableSystem = args.EntityManager.System<DamageableSystem>();
+        var currentDamage = damageableSystem.GetAllDamage((args.TargetEntity, damageable));
         foreach (var type in group.DamageTypes)
         {
-            if (damageable.Damage.DamageDict.TryGetValue(type, out var amount))
+            if (currentDamage.DamageDict.TryGetValue(type, out var amount))
                 damage.DamageDict[type] = -amount;
         }
 
-        args.EntityManager.System<DamageableSystem>()
-            .TryChangeDamage(args.TargetEntity, damage, true, interruptsDoAfters: false);
+        damageableSystem.TryChangeDamage(args.TargetEntity, damage, true, interruptsDoAfters: false);
     }
 }

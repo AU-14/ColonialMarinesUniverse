@@ -17,6 +17,7 @@ namespace Content.Shared._RMC14.Barricade;
 
 public abstract partial class SharedDirectionalAttackBlockSystem : EntitySystem
 {
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -78,7 +79,8 @@ public abstract partial class SharedDirectionalAttackBlockSystem : EntitySystem
 
         if (TryComp(target, out DamageableComponent? damageable))
         {
-            var blockChance = Math.Max(blocker.MinimumBlockChance, (blocker.MaxHealth - (float) damageable.TotalDamage) / blocker.MaxHealth);
+            var damage = _damageable.GetTotalDamage((target, damageable));
+            var blockChance = Math.Max(blocker.MinimumBlockChance, (blocker.MaxHealth - (float) damage) / blocker.MaxHealth);
             var blockRoll = new Xoroshiro64S(seed).NextFloat(0, 1);
 
             if (blockChance < blockRoll)

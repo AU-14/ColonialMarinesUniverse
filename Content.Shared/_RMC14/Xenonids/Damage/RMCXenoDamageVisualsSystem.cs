@@ -8,6 +8,7 @@ namespace Content.Shared._RMC14.Xenonids.Damage;
 public sealed partial class RMCXenoDamageVisualsSystem : EntitySystem
 {
     [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private MobThresholdSystem _thresholds = default!;
 
     private EntityQuery<MobThresholdsComponent> _mobThresholdsQuery;
@@ -27,7 +28,7 @@ public sealed partial class RMCXenoDamageVisualsSystem : EntitySystem
             return;
         }
 
-        var damage = args.Damageable.TotalDamage.Double();
+        var damage = _damageable.GetTotalDamage((ent.Owner, args.Damageable)).Double();
         var max = threshold.Value.Double();
         int level;
         if (damage > threshold)

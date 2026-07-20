@@ -27,6 +27,7 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private DialogSystem _dialog = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private HiveBoonSystem _hiveBoon = default!;
@@ -62,7 +63,7 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
 
     private void OnTowerDamageChanged(Entity<CommunicationsTowerComponent> ent, ref DamageChangedEvent args)
     {
-        if (args.Damageable.TotalDamage > FixedPoint2.Zero)
+        if (_damageable.GetTotalDamage((ent.Owner, args.Damageable)) > FixedPoint2.Zero)
             return;
 
         if (ent.Comp.State != CommunicationsTowerState.Broken)

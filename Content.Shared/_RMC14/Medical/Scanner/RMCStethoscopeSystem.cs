@@ -19,6 +19,7 @@ namespace Content.Shared._RMC14.Medical.Scanner;
 
 public sealed partial class RMCStethoscopeSystem : EntitySystem
 {
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
@@ -142,7 +143,7 @@ public sealed partial class RMCStethoscopeSystem : EntitySystem
             return null;
         }
 
-        var totalDamage = damageable.Damage.GetTotal().Float();
+        var totalDamage = _damageable.GetTotalDamage((target, damageable)).Float();
         var maxHealthThreshold = thresholds.Thresholds.Count > 0
             ? (float)thresholds.Thresholds.Keys.Max()
             : 100f;

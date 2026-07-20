@@ -185,7 +185,7 @@ public sealed partial class XenoToggleChargingSystem : EntitySystem
         if (_net.IsClient &&
             damageable != null &&
             damage.Comp.DestroyDamage > FixedPoint2.Zero &&
-            damageable.TotalDamage >= damage.Comp.DestroyDamage)
+            _damageable.GetTotalDamage((damage.Owner, damageable)) >= damage.Comp.DestroyDamage)
         {
             _transform.DetachEntity(damage, Transform(damage));
         }

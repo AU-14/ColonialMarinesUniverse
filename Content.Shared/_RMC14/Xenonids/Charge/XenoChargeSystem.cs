@@ -213,7 +213,8 @@ public sealed partial class XenoChargeSystem : EntitySystem
             if (TryComp<DamageableComponent>(targetId, out var damageable))
             {
                 if (damage != null && crush.PassOnDestroy &&
-                    crush.DestroyDamage > FixedPoint2.Zero && damageable.TotalDamage >= crush.DestroyDamage)
+                    crush.DestroyDamage > FixedPoint2.Zero &&
+                    _damageable.GetTotalDamage((targetId, damageable)) >= crush.DestroyDamage)
                 {
                     if (_net.IsClient)
                         _transform.DetachEntity(targetId, Transform(targetId));

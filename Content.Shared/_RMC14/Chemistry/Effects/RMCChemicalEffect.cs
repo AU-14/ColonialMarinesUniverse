@@ -19,7 +19,8 @@ public sealed partial class RMCChemicalEffectSystem : EntityEffectSystem<MetaDat
     protected override void Effect(Entity<MetaDataComponent> entity, ref EntityEffectEvent<RMCChemicalEffect> args)
     {
         var context = _metabolismContext;
-        args.Effect.Execute(new RMCChemicalEffectArgs(
+        var effect = args.Effect;
+        effect.Execute(new RMCChemicalEffectArgs(
             entity.Owner,
             EntityManager,
             context?.OrganEntity,

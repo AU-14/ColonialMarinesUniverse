@@ -26,6 +26,7 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedBuckleSystem _buckle = default!;
     [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SentrySystem _sentry = default!;
@@ -368,10 +369,11 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
         if (!TryComp(deployed, out DamageableComponent? damageable))
             return false;
 
-        if (damageable.TotalDamage <= 0)
+        var totalDamage = _damageable.GetTotalDamage((deployed, damageable));
+        if (totalDamage <= 0)
             return false;
 
-        damage = damageable.TotalDamage;
+        damage = totalDamage;
         return true;
     }
 }

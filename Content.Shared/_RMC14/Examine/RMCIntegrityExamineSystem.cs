@@ -8,6 +8,8 @@ namespace Content.Shared._RMC14.Examine;
 
 public sealed class RMCIntegrityExamineSystem : EntitySystem
 {
+    [Dependency] private DamageableSystem _damageable = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -23,7 +25,7 @@ public sealed class RMCIntegrityExamineSystem : EntitySystem
         if (maxDamage == null || maxDamage.Value <= FixedPoint2.Zero || maxDamage.Value == FixedPoint2.MaxValue)
             return;
 
-        var percent = GetIntegrityPercent(damageable.TotalDamage, maxDamage.Value);
+        var percent = GetIntegrityPercent(_damageable.GetTotalDamage((ent, damageable)), maxDamage.Value);
         args.PushMarkup(Loc.GetString(ent.Comp.PercentMessage, ("percent", percent)), -100);
     }
 

@@ -148,7 +148,7 @@ public sealed partial class XenoAcidHoleSystem : EntitySystem
             _receiverClawsQuery.TryComp(wall, out var receiver))
         {
             var targetDamage = FixedPoint2.New(receiver.MaxHealth * 0.9f);
-            if (damageable.TotalDamage < targetDamage)
+            if (_damageable.GetTotalDamage((wall.Owner, damageable)) < targetDamage)
                 SetWallDamage((wall, damageable), targetDamage);
         }
 
@@ -634,7 +634,7 @@ public sealed partial class XenoAcidHoleSystem : EntitySystem
     private bool IsDamageNearCap(Entity<XenoAcidHoleWallComponent> wall, DamageableComponent damageable, ReceiverXenoClawsComponent receiver)
     {
         var threshold = FixedPoint2.New(receiver.MaxHealth * wall.Comp.DamageNearCapRatio);
-        return damageable.TotalDamage >= threshold;
+        return _damageable.GetTotalDamage((wall.Owner, damageable)) >= threshold;
     }
 
     private bool HasRequiredClaws(ReceiverXenoClawsComponent receiver, EntityUid attacker, XenoComponent xeno)
