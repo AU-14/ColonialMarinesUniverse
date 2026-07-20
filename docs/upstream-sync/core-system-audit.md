@@ -1267,3 +1267,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/NameIdentifier/NameIdentifierSystem.cs`, `Content.Shared/NameIdentifier/NameIdentifierGroupPrototype.cs`, `Resources/Locale/en-US/name-identifier.ftl`, `Resources/Prototypes/name_identifier_groups.yml`, `docs/upstream-sync/inventory-wave-0001.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms both generation paths use `Format`, every removed prefix has a matching Fluent key, and prefixless groups remain untouched. Shared/server compilation, prototype loading, and formatted/restored identifier cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add locale completeness coverage for every non-null name-identifier format and verify hot-reloaded prototypes rebuild identifier pools without changing existing names.
+
+## CS-0089 — Stop recursive humanoid-profile equality
+
+- Upstream: [space-wizards/space-station-14#39333](https://github.com/space-wizards/space-station-14/pull/39333), `e307fd69b0153f0172f77e5003c4446077236a6f`, 2025-08-02
+- Areas: Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `HumanoidCharacterProfile` now has a typed equality overload that handles null, reference identity, and memberwise comparison. The object override delegates to it instead of recursively redispatching to itself for distinct profile instances.
+- RMC/CMU divergence: CMU's `MemberwiseEquals` includes squad, rank, armor, named-item, perk, and xeno preference fields beyond upstream. The typed overload deliberately preserves that fork-specific comparison surface.
+- Decision and rationale: Port the retained target-final overload exactly to eliminate stack exhaustion while continuing to treat every CMU preference field as part of profile equality.
+- Files changed: `Content.Shared/Preferences/HumanoidCharacterProfile.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static call tracing confirms distinct profile instances reach `MemberwiseEquals` once, identical references return immediately, and non-profile objects return false. Shared compilation and equality cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add explicit tests for cloned equal profiles, each RMC-specific inequality field, null, same-reference, and unrelated-object comparisons, and verify hash/equality expectations remain aligned.
