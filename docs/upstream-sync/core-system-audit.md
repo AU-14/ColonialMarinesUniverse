@@ -1475,3 +1475,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/VendingMachines/VendingMachineComponent.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static schema review confirms all three persisted entry fields are data fields and the class is partial for source generation, while existing `Serializable` and `NetSerializable` contracts remain. Shared compilation plus save/reload of regular, contraband, and emagged stock are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a post-init save-grid regression using an RMC vending machine with modified stock counts and verify exact inventory restoration.
+
+## CS-0105 — Give DoAfter distance thresholds explicit null semantics
+
+- Upstream: [space-wizards/space-station-14#39276](https://github.com/space-wizards/space-station-14/pull/39276), `c4016b97c5f4df1877ff63246a67a99af44a717c`, 2025-08-06
+- Areas: Movement, Interactions, GameTicking
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: New DoAfters now explicitly default to a 1.5-tile distance threshold. Setting `DistanceThreshold` to null truly disables the target/tool distance check instead of silently falling back to the interaction system's implicit range.
+- RMC/CMU divergence: CMU adds `RangeCheck` for xeno plasma transfer and vehicle climbing. That fork switch remains around the target check, while RMC's explicit extended thresholds for retrieval, vehicles, and powerloaders remain unchanged.
+- Decision and rationale: Adapt the retained target semantics without removing `RangeCheck`; a nullable field must distinguish default construction from an intentional no-distance-check request.
+- Files changed: `Content.Shared/DoAfter/DoAfterArgs.cs`, `Content.Shared/DoAfter/SharedDoAfterSystem.Update.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static call-site review confirms existing RMC custom ranges remain explicit, `RangeCheck = false` paths still bypass target checks, and no current CMU caller explicitly assigns null. Shared compilation plus default, custom, null, target-only, used-item, and RMC range-disabled cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Reconcile the RMC `RangeCheck` Boolean with nullable threshold semantics in a dedicated DoAfter integration review so one mechanism eventually owns distance cancellation.
