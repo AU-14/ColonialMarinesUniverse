@@ -158,9 +158,6 @@ public abstract partial class SharedDefibrillatorSystem : EntitySystem
         if (!Resolve(ent, ref ent.Comp))
             return;
 
-        if (!_powerCell.TryUseActivatableCharge(ent.Owner, user: user))
-            return;
-
         var selfEvent = new SelfBeforeDefibrillatorZapsEvent(user, ent.Owner, target);
         RaiseLocalEvent(user, selfEvent);
 
@@ -179,6 +176,9 @@ public abstract partial class SharedDefibrillatorSystem : EntitySystem
             return;
 
         if (!TryComp<MobStateComponent>(target, out var targetMobState))
+            return;
+
+        if (!_powerCell.TryUseActivatableCharge(ent.Owner, user: user))
             return;
 
         _audio.PlayPredicted(ent.Comp.ZapSound, ent.Owner, user);
@@ -214,7 +214,7 @@ public abstract partial class SharedDefibrillatorSystem : EntitySystem
         else
         {
             if (_mobState.IsDead(target, targetMobState))
-                _damageable.TryChangeDamage(target, ent.Comp.ZapHeal, true, origin: user);
+                _damageable.TryChangeDamage(target, GetRMCDefibrillatorHeal(ent.Owner, ent.Comp, target), true, origin: user);
 
             if (TryComp<MobThresholdsComponent>(target, out var targetThresholds) &&
                 _mobThreshold.TryGetThresholdForState(target, MobState.Dead, out var threshold, targetThresholds) &&

@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Defibrillator;
+using Content.Shared.Damage;
 using Content.Shared.Inventory;
 
 namespace Content.Shared.Medical;
@@ -50,5 +51,15 @@ public abstract partial class SharedDefibrillatorSystem
         return component.DoAfterDuration +
                component.SkillMultiplierDuration *
                _rmcDefibrillatorSkills.GetSkillDelayMultiplier(user, component.Skill);
+    }
+
+    private DamageSpecifier GetRMCDefibrillatorHeal(
+        EntityUid defibrillator,
+        DefibrillatorComponent component,
+        EntityUid target)
+    {
+        var ev = new RMCDefibrillatorDamageModifyEvent(target, new DamageSpecifier(component.ZapHeal));
+        RaiseLocalEvent(defibrillator, ref ev);
+        return ev.Heal;
     }
 }
