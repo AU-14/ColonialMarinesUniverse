@@ -1501,3 +1501,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Species/Systems/ReformSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static lifecycle review confirms server-only spawning, mind transfer, and deletion ordering remain intact while placement is delegated to the shared safe helper. Shared compilation plus open-tile, obstructed-tile, and contained-nymph reform cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a regression proving reform from a container yields an accessible body and retains the same mind exactly once.
+
+## CS-0107 — Audit battery breaker interactions
+
+- Upstream: [space-wizards/space-station-14#39208](https://github.com/space-wizards/space-station-14/pull/39208), `ff7713eceaac2b9439528643f41c69ce4c243a8d`, 2025-07-25
+- Areas: Interactions, Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Changing SMES or substation input/output breakers through the battery UI now writes an action log containing the actor, requested Boolean state, and target machine.
+- RMC/CMU divergence: RMC power machines use the inherited battery interface and network battery components. No fork-specific breaker handler is bypassed or replaced.
+- Decision and rationale: Port the retained logs immediately after each authoritative state mutation so operational power changes are attributable without altering charge or discharge behavior.
+- Files changed: `Content.Server/Power/EntitySystems/BatteryInterfaceSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static handler review confirms both breaker paths log after assigning their existing fields, while rate changes remain outside this upstream change. Server compilation and one input/one output toggle with actor/target log assertions are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Evaluate logging charge/discharge rate changes in the deeper power-interface audit, with throttling to avoid slider spam.
