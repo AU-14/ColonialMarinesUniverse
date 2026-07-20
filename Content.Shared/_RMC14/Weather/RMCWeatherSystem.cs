@@ -23,7 +23,6 @@ public sealed partial class RMCWeatherSystem : EntitySystem
     [Dependency] private SharedWeatherSystem _weather = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private INetManager _net = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private RMCAmbientLightSystem _rmcLight = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
 
@@ -109,12 +108,9 @@ public sealed partial class RMCWeatherSystem : EntitySystem
             if(cycle.LastEventCooldown <= TimeSpan.Zero)
             {
                 var weatherPick = _random.Pick(cycle.WeatherEvents);
-                _proto.TryIndex(weatherPick.WeatherType, out var weatherProto);
-                var endTime = _timing.CurTime + weatherPick.Duration;
-
                 cycle.CurrentEvent = weatherPick;
                 cycle.CurrentEvent.DurationRemaining = weatherPick.Duration;
-                _weather.SetWeather(Transform(uid).MapID, weatherProto, endTime);
+                _weather.TrySetWeather(Transform(uid).MapID, weatherPick.WeatherType, out _, weatherPick.Duration);
 
                 var minTimeVariance = (-cycle.MinTimeVariance * 0.5) + _random.Next(cycle.MinTimeVariance);
                 cycle.LastEventCooldown = weatherPick.Duration + cycle.MinTimeBetweenEvents + minTimeVariance;
