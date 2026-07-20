@@ -160,7 +160,7 @@ public sealed partial class XenoPylonSystem : SharedXenoPylonSystem
             return;
 
         spawner.Comp.CurrentTakeovers = value;
-        _ghostRole.UpdateAllEui();
+        _ghostRole.UpdateRMCSpawnerAvailability(spawner);
     }
 
     private void SetAvailableTakeovers(Entity<GhostRoleMobSpawnerComponent> spawner, int value)
@@ -169,7 +169,7 @@ public sealed partial class XenoPylonSystem : SharedXenoPylonSystem
             return;
 
         spawner.Comp.AvailableTakeovers = value;
-        _ghostRole.UpdateAllEui();
+        _ghostRole.UpdateRMCSpawnerAvailability(spawner);
     }
 
     private void OnHiveCoreStepTriggerAttempt(Entity<HiveCoreComponent> core, ref StepTriggerAttemptEvent args)

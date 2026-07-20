@@ -371,6 +371,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
         // we copy these settings into the component because they would be cumbersome to access otherwise
         raffle.JoinExtendsDurationBy = TimeSpan.FromSeconds(settings.JoinExtendsDurationBy);
         raffle.MaxDuration = TimeSpan.FromSeconds(settings.MaxDuration);
+
     }
 
     private void OnRaffleShutdown(Entity<GhostRoleRaffleComponent> ent, ref ComponentShutdown args)
@@ -803,6 +804,8 @@ public sealed partial class GhostRoleSystem : EntitySystem
 
         if (component.DeleteOnSpawn)
             QueueDel(uid);
+        else
+            UnregisterGhostRole((uid, ghostRole));
 
         args.TookRole = true;
     }
