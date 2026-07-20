@@ -25,6 +25,7 @@
     - gc
     - gc_mode
     - cvar
+    - fuckrules
     - midipanic
     - replay_recording_start
     - replay_recording_stop
@@ -71,9 +72,6 @@
     - detachent
     - localdelete
     - fullstatereset
-    - fuckrules
-    - showautofire
-    - showareas
     - dumpentities
     - showwallmounts
     - showaccessreaders
@@ -100,6 +98,6 @@
   Commands:
     - achatwindow
 
-- Flags: FUN
+- Flags: ADMIN
   Commands:
-  - throwscoreboard
+    - admin_overlay

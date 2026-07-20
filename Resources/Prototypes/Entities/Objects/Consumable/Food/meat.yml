@@ -169,7 +169,6 @@
     tags:
     - Raw
     - Meat
-    - Bacon
   - type: Sprite
     state: bacon
   - type: Solution
@@ -309,12 +308,13 @@
     - Meat
   - type: Sprite
     state: corgi
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        reagents:
-        - ReagentId: CMBicaridine
-          Quantity: 20
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 10
+      - ReagentId: Bicaridine
+        Quantity: 20
   - type: StaticPrice
     price: 750
   - type: StealTarget
@@ -959,11 +959,6 @@
   name: bacon
   description: A delicious piece of cooked bacon.
   components:
-  - type: Tag
-    tags:
-    - Cooked
-    - Meat
-    - Bacon
   - type: Sprite
     layers:
     - state: bacon-cooked

@@ -1185,32 +1185,33 @@
   - type: Item
     heldPrefix: suppermatter-shard
 
-
 - type: entity
   name: cotton cake
-  parent: FoodCakeBase
+  parent: [FoodCakeBase, BaseSlicingRefinableFood]
   id: FoodCakeCotton
   description: A cake with a fiber frosting and a wad of cotton on top.
   components:
   - type: Sprite
     state: cotton
-  - type: SliceableFood
-    slice: FoodCakeCottonSlice
+  - type: ToolRefinable
+    refineResult:
+    - id: FoodCakeCottonSlice
+      amount: 8
   - type: Tag
     tags:
     - Cake
     - ClothMade
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 55
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 30
-        - ReagentId: Vitamin
-          Quantity: 5
-        - ReagentId: Fiber
-          Quantity: 10
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 60
+      - ReagentId: Vitamin
+        Quantity: 10
+      - ReagentId: Sugar
+        Quantity: 10
+      - ReagentId: Fiber
+        Quantity: 10
   - type: Item
     heldPrefix: cotton
 
@@ -1227,17 +1228,17 @@
     - Cake
     - ClothMade
     - Slice
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 8
-        - ReagentId: Vitamin
-          Quantity: 1
-        - ReagentId: Fiber
-          Quantity: 2
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 7.5
+      - ReagentId: Vitamin
+        Quantity: 1.25
+      - ReagentId: Sugar
+        Quantity: 1.25
+      - ReagentId: Fiber
+        Quantity: 1.25
   - type: Item
     heldPrefix: cotton-slice
 
@@ -1245,7 +1246,7 @@
 
 - type: entity
   name: berry delight
-  parent: FoodCakeBase
+  parent: [FoodCakeBase, BaseSlicingRefinableFood]
   id: FoodCakeBerryDelight
   description: This is a cake that is approaching.
   components:
@@ -1253,22 +1254,26 @@
     state: berry_delight
   - type: FlavorProfile
     flavors:
-    - sweet
-    - berry
-    - motivating
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 55
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 40
-        - ReagentId: Vitamin
-          Quantity: 10
-        - ReagentId: Milk
-          Quantity: 10
-  - type: SliceableFood
-    slice: FoodCakeBerryDelightSlice
+      - sweet
+      - berry
+      - motivating
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 70
+      - ReagentId: Vitamin
+        Quantity: 20
+      - ReagentId: Sugar
+        Quantity: 10
+      - ReagentId: Milk
+        Quantity: 10
+      - ReagentId: JuiceBerry
+        Quantity: 10
+  - type: ToolRefinable
+    refineResult:
+    - id: FoodCakeBerryDelightSlice
+      amount: 8
   - type: Tag
     tags:
     - Cake
@@ -1294,20 +1299,22 @@
     state: berry_delight_slice
   - type: FlavorProfile
     flavors:
-    - sweet
-    - berry
-    - motivating
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 12
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 8
-        - ReagentId: Vitamin
-          Quantity: 2
-        - ReagentId: Milk
-          Quantity: 2
+      - sweet
+      - berry
+      - motivating
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 8.75
+      - ReagentId: Vitamin
+        Quantity: 2.5
+      - ReagentId: Sugar
+        Quantity: 1.25
+      - ReagentId: Milk
+        Quantity: 1.25
+      - ReagentId: JuiceBerry
+        Quantity: 1.25
   - type: Tag
     tags:
     - Cake

@@ -24,7 +24,6 @@
   - type: Tag
     tags:
     - Radio
-  - type: ChatRepeatIgnoreSender # RMC14
 
 - type: entity
   name: security radio

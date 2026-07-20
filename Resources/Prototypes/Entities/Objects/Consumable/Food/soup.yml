@@ -107,17 +107,15 @@
     layers:
     - state: bowl
     - state: aesir
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 25
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 8
-        - ReagentId: Vitamin
-          Quantity: 6
-        - ReagentId: CMTricordrazine
-          Quantity: 8
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 30
+      - ReagentId: Vitamin
+        Quantity: 15
+      - ReagentId: Omnizine
+        Quantity: 8
   - type: Tag
     tags:
     - Soup
@@ -137,19 +135,17 @@
     layers:
     - state: bowl
     - state: herb
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 70
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 20
-        - ReagentId: CMKelotane
-          Quantity: 12
-        - ReagentId: CMBicaridine
-          Quantity: 12
-        - ReagentId: Vitamin
-          Quantity: 20
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 19
+      - ReagentId: Vitamin
+        Quantity: 11
+      - ReagentId: Bicaridine
+        Quantity: 15
+      - ReagentId: Kelotane
+        Quantity: 15
   - type: Tag
     tags:
     - Fruit
@@ -325,15 +321,23 @@
     layers:
     - state: bowl
     - state: fruit
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 35
-        reagents:
-        - ReagentId: Sugar
-          Quantity: 8
-        - ReagentId: Vitamin
-          Quantity: 17
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 19
+      - ReagentId: Vitamin
+        Quantity: 13
+      - ReagentId: JuiceBanana
+        Quantity: 5
+      - ReagentId: JuiceApple
+        Quantity: 5
+      - ReagentId: JuiceGrape
+        Quantity: 5
+      - ReagentId: Sugar
+        Quantity: 1
+      - ReagentId: JuiceWatermelon
+        Quantity: 12
   - type: Tag
     tags:
     - Fruit
@@ -385,17 +389,15 @@
     layers:
     - state: bowl
     - state: eden
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 25
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 8
-        - ReagentId: Vitamin
-          Quantity: 5
-        - ReagentId: CMTricordrazine
-          Quantity: 5
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 25
+      - ReagentId: Vitamin
+        Quantity: 15
+      - ReagentId: Omnizine
+        Quantity: 5
 
 # Rice
 
@@ -459,19 +461,17 @@
     layers:
     - state: bowl
     - state: rice-pork
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 40.5
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 18
-        - ReagentId: Vitamin
-          Quantity: 7
-        - ReagentId: CMDexalin ##This is probably a reference to something but I don't get it
-          Quantity: 6.5
-        - ReagentId: CMEpinephrine
-          Quantity: 2
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 42
+      - ReagentId: Protein
+        Quantity: 6
+      - ReagentId: Dexalin #This is probably a reference to something but I don't get it. Same.
+        Quantity: 6.5
+      - ReagentId: Epinephrine
+        Quantity: 2
   - type: Tag
     tags:
     - Meat
@@ -762,21 +762,19 @@
     layers:
     - state: bowl
     - state: nettle
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 40
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 5
-        - ReagentId: Vitamin
-          Quantity: 15
-        - ReagentId: Water
-          Quantity: 10
-        - ReagentId: CMTricordrazine
-          Quantity: 5
-        - ReagentId: Histamine
-          Quantity: 4
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 12
+      - ReagentId: Vitamin
+        Quantity: 5
+      - ReagentId: Omnizine
+        Quantity: 3
+      - ReagentId: SpaceDrugs
+        Quantity: 10
+      - ReagentId: Histamine
+        Quantity: 3
 
 - type: entity
   name: mystery soup

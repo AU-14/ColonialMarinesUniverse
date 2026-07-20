@@ -155,7 +155,7 @@
           inverted: true
         damage:
           types:
-            Poison: 0.01
+            Poison: 0.1
       # dwarves take less toxin damage and heal a marginal amount of brute
       - !type:HealthChange
         conditions:
@@ -167,7 +167,7 @@
         damage:
           types:
             Poison: 0.02
-      - !type:HealthChange
+      - !type:EvenHealthChange
         conditions:
         - !type:ReagentCondition
           reagent: Ethanol
@@ -175,9 +175,8 @@
         - !type:MetabolizerTypeCondition
           type: [ Dwarf ]
         damage:
-          groups:
-            Brute: -0.01
-      - !type:ChemVomit
+          Brute: -0.1
+      - !type:Vomit
         probability: 0.04
         conditions:
         - !type:ReagentCondition
@@ -605,7 +604,7 @@
 - type: reagent
   id: BananaHonk
   name: reagent-name-banana-honk
-  parent: BaseDrink # RMC14
+  parent: BaseAlcohol
   desc: reagent-desc-banana-honk
   physicalDesc: reagent-physical-desc-creamy
   flavor: bananahonk
@@ -877,18 +876,12 @@
         factor: 2
       - !type:SatiateHunger
         factor: -2
-      - !type:AdjustReagent
-        reagent: Ethanol
-        amount: 0.05
-      - !type:EqualHealthChange
+      - !type:EvenHealthChange
         damage:
-        - Brute: -0.13
-        - Burn: -0.13
-        - Toxin: -0.25
-      - !type:HealthChange
-        damage:
-          types:
-            Asphyxiation: -0.25
+          Burn: -1
+          Brute: -1
+          Airloss: -1
+          Toxin: -1
 
 - type: reagent
   id: DriestMartini

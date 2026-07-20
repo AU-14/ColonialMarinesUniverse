@@ -107,19 +107,16 @@
   - type: ReagentTank
   - type: DumpableSolution
     solution: drainBuffer
-  - type: GenericVisualizer
-    visuals:
-      enum.ToiletVisuals.SeatVisualState:
-        SeatVisualState.SeatUp:
-          SeatUp: { state: disposal-up }
-          SeatDown: { state: disposal-down }
-      enum.ToolOpenableVisuals.ToolOpenableVisualState:
-        ToolOpenableVisualState.StashOpen:
-          Open: { state: disposal-open }
-          Closed: { state: disposal-closed }
-  - type: Anchorable
-    flags:
-    - Anchorable
+  - type: Edible
+    edible: Drink
+    solution: tank
+    destroyOnEmpty: false
+    utensil: Spoon
+  - type: SolutionRegeneration
+    generated:
+      reagents:
+      - ReagentId: Water
+        Quantity: 1
 
 # constructed toilets don't come with Rummageable or plungeruse component to avoid infinite item spawning.
 - type: entity

@@ -746,9 +746,15 @@
       - cheesy
   - type: Sprite
     state: cheesewheel
-  - type: SliceableFood
-    count: 6 # RMC14
-    slice: FoodCheeseSlice
+  - type: ToolRefinable
+    refineResult:
+    - id: FoodCheeseSlice
+      amount: 4
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 60
 
 - type: entity
   parent: [SolutionTiny, FoodBakingBase]

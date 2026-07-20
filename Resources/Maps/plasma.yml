@@ -131525,6 +131525,7 @@ entities:
     components:
     - type: Transform
       parent: 2
+      pos: -69.5,-24.5
     - type: MailingUnit
       tag: Bar
     - type: Configuration

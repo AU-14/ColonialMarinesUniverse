@@ -458,8 +458,6 @@
   id: CrateFunScurret
   name: hydrated scurret
   description: Wait, what?
-  id: CrateFunScurret
-  parent: CrateLivestock
   components:
   - type: EntityTableContainerFill
     containers:

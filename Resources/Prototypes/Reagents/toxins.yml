@@ -36,13 +36,12 @@
   - !type:PlantAdjustHealth
     amount: -5
   metabolisms:
-    Poison:
-      metabolismRate: 0.05
+    Bloodstream:
       effects:
       - !type:HealthChange
         damage:
           types:
-            Poison: 0.25
+            Poison: 4
       - !type:PopupMessage
         type: Local
         visualType: MediumCaution

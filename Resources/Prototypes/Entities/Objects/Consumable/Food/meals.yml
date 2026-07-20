@@ -420,11 +420,6 @@
   - type: Tag
     tags:
     - Meat
-    - Egg
-  - type: FoodSequenceElement
-    entries:
-      Burger: MealFriedEgg
-      Taco: MealFriedEgg
 # Tastes like egg, salt, pepper.
 
 - type: entity
@@ -559,21 +554,19 @@
       - sour
   - type: Sprite
     state: melonfruitbowl
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 65
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 30
-        - ReagentId: Vitamin
-          Quantity: 15
-        - ReagentId: Water
-          Quantity: 5
-        - ReagentId: CMBicaridine
-          Quantity: 5
-        - ReagentId: CMKelotane
-          Quantity: 5
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 45
+      - ReagentId: Vitamin
+        Quantity: 60
+      - ReagentId: Water
+        Quantity: 5
+      - ReagentId: Bicaridine
+        Quantity: 5
+      - ReagentId: Kelotane
+        Quantity: 5
   - type: Tag
     tags:
     - Fruit

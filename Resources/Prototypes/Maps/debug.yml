@@ -12,7 +12,6 @@
         - type: StationJobs
           availableJobs:
             Passenger: [ -1, -1 ]
-            CMRifleman: [ -1, -1 ]
 
 - type: gameMap
   id: Dev

@@ -27,7 +27,7 @@
     messages: WindowMessages
   - type: InteractionPopup
     interactSuccessString: comp-window-knock
-    messagePerceivedByOthers: rmc-window-knock-others
+    messagePerceivedByOthers: comp-window-knock
     interactSuccessSound:
       path: /Audio/Effects/glass_knock.ogg
   - type: Appearance

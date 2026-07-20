@@ -2,10 +2,8 @@
   id: Dwarf
   name: species-name-dwarf
   roundStart: true
-  prototype: CMMobDwarf
-  sprites: MobHumanSprites
-  markingLimits: MobHumanMarkingLimits
-  dollPrototype: MobDwarfDummy
+  prototype: MobDwarf
+  dollPrototype: AppearanceDwarf
   skinColoration: HumanToned
   defaultSoundsBySex:
   - UnisexDwarf

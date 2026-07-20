@@ -80,6 +80,8 @@
   - rmgrid
   - rmmap
   - mapinit
+  - savegrid
+  - savemap
   - setambientlight
   - tpgrid
   - gridtc
@@ -92,14 +94,15 @@
 
 - Flags: PII
   Commands:
-  - tippy
-  - tip
-  - throwscoreboard
+  - listplayers
 
 - Flags: SERVER
   Commands:
   - delete
+  - pausemap
   - unpausemap
+  - restart
+  - shutdown
 
 - Flags: SPAWN
   Commands:
@@ -128,12 +131,7 @@
   - fuck
   - replay_recording_start
   - replay_recording_stop
-  - restart
-  - shutdown
-  - pausemap
-  # RMC 14
-  - savemap
-  - savegrid
+  - transfer_test
 
 - Flags: QUERY
   Commands:
@@ -145,9 +143,3 @@
   - "|"
   - loglevel
   - oldhelp
-
-- Flags: RMCMAINTAINER
-  Commands:
-  - tp
-  - tpto
-  - respawn

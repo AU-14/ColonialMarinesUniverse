@@ -119,4 +119,29 @@
         Blunt: 5
     soundHit:
       collection: MetalThud
+  - type: ExplosionResistance
+    damageCoefficient: 0.1
   - type: Airtight
+  - type: GenericVisualizer
+    visuals:
+      enum.PowerDeviceVisuals.Powered:
+        powered-base:
+          True: { visible: true }
+          False: { visible: false }
+        powered-open:
+          True: { visible: true }
+          False: { visible: false }
+        powered-closed:
+          True: { visible: true }
+          False: { visible: false }
+  - type: AmbientMusicMarkerMedical
+
+- type: entity
+  parent: SmartFridge
+  id: SmartFridgeMedical
+  suffix: Medical
+  components:
+  - type: SmartFridge
+    flavorText: smart-fridge-request-chemistry
+  - type: AccessReader
+    access: [["Medical"]]

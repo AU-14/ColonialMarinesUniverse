@@ -7,7 +7,7 @@
   - type: Sprite
     noRot: true
     drawdepth: Mobs
-#  - type: MobCollision # RMC14
+  - type: GravityAffected
   - type: Physics
   - type: Fixtures
     fixtures:
@@ -26,7 +26,6 @@
     context: "human"
   - type: Actions
   - type: Alerts
-  - type: AreaInfo
   - type: Appearance
   - type: RotationVisuals
     defaultRotation: 0
@@ -111,6 +110,8 @@
       behaviors:
       - !type:VomitBehavior
   - type: RadiationReceiver
+  - type: Stamina
+  - type: StunVisuals
   - type: MobState
   - type: MobThresholds
     thresholds:
@@ -125,19 +126,17 @@
       - ActionCritLastWords
   - type: StoreDamageTakenOnMind
   - type: Deathgasp
-#  - type: HealthExaminable # RMC14
-#    examinableTypes:
-#    - Blunt
-#    - Slash
-#    - Piercing
-#    - Heat
-#    - Shock
-#    - Cold
-#    - Caustic
-#    - Asphyxiation
-#    - Radiation
-  - type: RMCHealthExaminable # RMC14
-    speciesType: Humanoid
+  - type: HealthExaminable
+    examinableTypes:
+    - Blunt
+    - Slash
+    - Piercing
+    - Heat
+    - Shock
+    - Cold
+    - Caustic
+    - Asphyxiation
+    - Radiation
   - type: DamageOnHighSpeedImpact
     damage:
       types:
@@ -248,7 +247,7 @@
   id: MobRespirator
   abstract: true
   components:
-#  - type: Internals
+  - type: Internals
   - type: Respirator
     damage:
       types:

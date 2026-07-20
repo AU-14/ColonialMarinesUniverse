@@ -25,14 +25,27 @@
   - PermanentBlindness
   - Snoring
   - Unrevivable
-  # job specific
-  - BibleUser
-  - CommandStaff
-  - Clumsy
-  - MindShield
-  - MimePowers
-  - SpaceNinja
-  - Thieving
+
+- type: cloningSettings
+  parent: [TraitsMental, TraitsPhysical]
+  id: Traits
+
+# for basic physical traits
+- type: cloningSettings
+  id: Body
+  components:
+  # general
+  - CreamPied
+  - DetailExaminable
+  - Dna
+  - Fingerprint
+  - Grammar # Pronouns
+  - HumanoidProfile # Age, Sex, Gender
+  - MeleeWeapon # Attack animation, damage and sound
+  - NpcFactionMember
+  - RandomPrice
+  - TemperatureDamage
+  - TemperatureSpeed
   # accents
   - Accentless
   - BackwardsAccent

@@ -36,10 +36,9 @@
   parent: [SolutionFood, SolutionToolSmall, ClothingMaskBase, BaseSlicingRefinable]
   id: ClothingMaskBaseButcherable
   components:
-  - type: Butcherable
-    butcheringType: Knife
-    spawned:
-    - id: MaterialCotton1 # RMC14
+  - type: ToolRefinable
+    refineResult:
+    - id: MaterialCloth1
       amount: 1
   - type: PhysicalComposition # 50% of the amount of cloth you'd obtain upon butchering
     materialComposition:

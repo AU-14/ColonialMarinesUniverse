@@ -124,10 +124,6 @@ WarpPointBeaconService: null
 ClothingEyesGlassesCosmeticSunglasses: ClothingEyesGlassesSunglasses
 SpawnPointAssistant: SpawnPointPassenger
 
-# 2024-01-04
-#WeaponPistolM4A3: CMWeaponPistolM4A3
-#MagazinePistolM4A3: CMMagazinePistolM4A3
-
 # 2024-01-05
 DrinkGoldschlagerBottleFull: DrinkGildlagerBottleFull
 DrinkGoldschlagerGlass: DrinkGildlagerGlass
@@ -290,23 +286,6 @@ BriefcaseSyndieBase: null
 BodyBag_Container: BodyBag
 BodyBag_Folded: BodyBagFolded
 
-# 2024-04-20
-SpawnPointCombatTech: CMSpawnPointCombatTech
-SpawnPointCommandingOfficer: CMSpawnPointCommandingOfficer
-SpawnPointExecutiveOfficer: CMSpawnPointExecutiveOfficer
-SpawnPointFireteamLeader: CMSpawnPointFireteamLeader
-SpawnPointHospitalCorpsman: CMSpawnPointHospitalCorpsman
-SpawnPointMaintTech: CMSpawnPointMaintTech
-SpawnPointOrdnanceTech: CMSpawnPointOrdnanceTech
-SpawnPointRifleman: CMSpawnPointRifleman
-SpawnPointSeniorEnlistedAdvisor: CMSpawnPointSeniorEnlistedAdvisor
-SpawnPointSquadLeader: CMSpawnPointSquadLeader
-SpawnPointStaffOfficer: CMSpawnPointStaffOfficer
-SpawnPointWeaponsSpecialist: CMSpawnPointWeaponsSpecialist
-
-# 2024-04-25
-CMHypersleepChamber: CMHyperSleepChamber
-
 # 2024-04-26
 BaseBulletRubber: null
 BulletPistolRubber: BulletPistol
@@ -364,26 +343,11 @@ chem_master: ChemMaster
 # 2024-05-21
 CrateJanitorExplosive: ClosetJanitorBombFilled
 
-# 2024-05-21
-CMTricordrazineInjector: CMTricordrazineAutoInjector
-
-# 2024-05-26
-CMBurnKit: CMBurnKit10
-CMTraumaKit: CMTraumaKit10
-CMGauze: CMGauze10
-CMOintment: CMOintment10
-
 # 2024-05-27
 DoorRemoteFirefight: null
 
 # 2024-06-03
 AirlockServiceCaptainLocked: AirlockCaptainLocked
-
-# 2024-06-04
-M40HEDP: CMGrenadeHighExplosive
-M40Smoke: CMGrenadeSmoke
-M40HEFA: CMGrenadeFrag
-ShrapnelProjectile: CMProjectileShrapnel
 
 #2024-06-05
 DisasterVictimSpawner: CommandVisitorSpawner
@@ -392,138 +356,17 @@ ClownTroupeSpawner: VisitorClownSpawner
 TravelingChefSpawner: VisitorChefSpawner
 SyndieDisasterVictimSpawner: SyndieVisitorSpawner
 
-# 2024-06-06
-CMAutoLathe: CMAutolathe
-
 # 2024-06-15
 ClothingOuterCoatInspector: ClothingOuterCoatJensen
 
-# 2024-06-22
-CMSpawnPointSmartGunner: CMSpawnPointSmartGunOperator
-CMFaxUPP: CMFaxSPP
-CMFaxTwE: CMFaxTSE
-CMBoxMagazineRifleM41A: RMCBoxMagazineRifleM54C
-CMBoxMagazineRifleM41AAP: RMCBoxMagazineRifleM54CAP
-CMBoxMagazineRifleM41AExt: RMCBoxMagazineRifleM54CExt
-CMMagazineRifleM41A: CMMagazineRifleM54C
-CMMagazineRifleM41AAP: CMMagazineRifleM54CAP
-CMMagazineRifleM41AExt: CMMagazineRifleM54CExt
-CMAttachmentM41ASolidStock: RMCAttachmentM54CStockSolid
-# WeaponRifleM41A: WeaponRifleM54C
-CMCrateBoxMagazineRifleM41A: RMCCrateBoxMagazineRifleM54C
-CMCrateBoxMagazineRifleM41AAP: RMCCrateBoxMagazineRifleM54CAP
-CMCrateBoxMagazineRifleM41AExt: RMCCrateBoxMagazineRifleM54CExt
-#CMCrateM41A: RMCCrateM54C
-CMCrateM41AE2: RMCCrateM54CE2
-CMMagazineRifleM41AE2: CMMagazineRifleM54CE2
-# WeaponRifleM41AE2: WeaponRifleM54CE2
-
 # 2024-06-23
 FloorTileItemReinforced: PartRodMetal1
-
-# 2024-06-24
-WeaponLauncherM92: WeaponLauncherM83
-CMMagazinePistolM4A3: CMMagazinePistolM1984
-CMCrateBoxMagazinePistolM4A3: RMCCrateBoxMagazinePistolM1984
-CMBoxMagazinePistolM4A3: RMCBoxMagazinePistolM1984
-CMWeaponPistolM4A3: CMWeaponPistolM1984
-#CMWeaponPistol88m4: CMWeaponPistolM77
-CMCrateBoxMagazinePistol88m4AP: RMCCrateBoxMagazinePistolM77AP
-CMBoxMagazinePistol88m4AP: RMCBoxMagazinePistolM77AP
-CMCartridgePistol88m4AP: CMCartridgePistolM77AP
-CMCrateBoxMagazinePistolVP78: RMCCrateBoxMagazinePistolMK80
-CMCrateVP78: RMCCrateMK80
-CMBoxMagazinePistolVP78: RMCBoxMagazinePistolMK80
-CMMagazinePistolVP78: CMMagazinePistolMK80
-#CMWeaponPistolVP78: CMWeaponPistolMK80
-#CMCrateBoxMagazineRifleM4RA: RMCCrateBoxMagazineRifleM4DMR
-#CMCrateBoxMagazineRifleM4RAAP: RMCCrateBoxMagazineRifleM4DMRAP
-#CMCrateBoxMagazineRifleM4RAExt: RMCCrateBoxMagazineRifleM4DMRExt
-#CMMagazineRifleM4RA: CMMagazineRifleM4DMR
-#CMBoxMagazineRifleM4RA: RMCBoxMagazineRifleM4DMR
-#CMBoxMagazineRifleM4RAAP: RMCBoxMagazineRifleM4DMRAP
-#CMBoxMagazineRifleM4RAExt: RMCBoxMagazineRifleM4DMRExt
-#CMMagazineRifleM4RAAP: CMMagazineRifleM4DMRAP
-#CMMagazineRifleM4RAExt: CMMagazineRifleM4DMRExt
-#WeaponRifleM4RA: WeaponRifleM4DMR
-WeaponShotgunM37A2: WeaponShotgunM42A2
-CMCrateBoxMagazineSMGM39: RMCCrateBoxMagazineSMGM63
-CMCrateBoxMagazineSMGM39AP: RMCCrateBoxMagazineSMGM63AP
-CMCrateBoxMagazineSMGM39Ext: RMCCrateBoxMagazineSMGM63Ext
-CMBoxMagazineSMGM39: RMCBoxMagazineSMGM63
-CMBoxMagazineSMGM39AP: RMCBoxMagazineSMGM63AP
-CMBoxMagazineSMGM39Ext: RMCBoxMagazineSMGM63Ext
-CMMagazineSMGM39: CMMagazineSMGM63
-CMMagazineSMGM39AP: CMMagazineSMGM63AP
-CMMagazineSMGM39Ext: CMMagazineSMGM63Ext
-CMAttachmentM39ArmBrace: RMCAttachmentM63ArmBrace
-CMAttachmentM39Stock: RMCAttachmentM63Stock
-CMAttachmentM39StockCollapsible: RMCAttachmentM63StockCollapsible
-WeaponSMGM39: WeaponSMGM63
-CMCrateMagazineM42AMixed: RMCCrateMagazineM96SMixed
-CMCrateMagazineM42AStandard: RMCCrateMagazineM96SStandard
-CMCrateMagazineM42AFlak: RMCCrateMagazineM96SFlak
-CMCrateMagazineM42AIncendiary: RMCCrateMagazineM96SIncendiary
-CMMagazineSniperM42A: CMMagazineSniperM96S
-CMMagazineSniperM42AIncendiary: CMMagazineSniperM96SIncendiary
-CMMagazineSniperM42AFlak: CMMagazineSniperM96SFlak
-CMMagazineSniperM42AAntiMateriel: RMCMagazineSniperXM43E1AntiMateriel
-CMM42ASniperRifle: CMM96SSniperRifle
-CMDrinkCanSoutClassico: CMDrinkCanBobdaClassic
-CMDrinkCanSoutCherryo: CMDrinkCanBobdaCherry
-CMDrinkCanSoutLimeo: CMDrinkCanBobdaLime
-CMDrinkCanSoutGrapeo: CMDrinkCanBobdaGrape
-CMDrinkCanSoutBlueo: CMDrinkCanBobdaBlue
-CMDrinkCanSoutPeacho: CMDrinkCanBobdaPeach
-CMDrinkCanSoutCranberryo: CMDrinkCanBobdaCranberry
-CMDrinkCanSoutVanillao: CMDrinkCanBobdaVanilla
-CMDrinkCanSoutPineappleo: CMDrinkCanBobdaPineapple
-CMDrinkCanSoutDieto: CMDrinkCanBobdaDiet
-CMDrinkCanSoutClassicDieto: CMDrinkCanBobdaClassicDiet
-CMDrinkCanSoutCherryDieto: CMDrinkCanBobdaCherryDiet
-CMDrinkCanSoutLimeDieto: CMDrinkCanBobdaLimeDiet
-CMDrinkCanSoutGrapeDieto: CMDrinkCanBobdaGrapeDiet
-CMDrinkCanSoutBlueDieto: CMDrinkCanBobdaBlueDiet
-CMDrinkCanSoutPeachDieto: CMDrinkCanBobdaPeachDiet
-CMDrinkCanSoutCranberryDieto: CMDrinkCanBobdaCranberryDiet
-CMDrinkCanSoutVanillaDieto: CMDrinkCanBobdaVanillaDiet
-CMDrinkCanSoutPineappleDieto: CMDrinkCanBobdaPineappleDiet
-CMSemioticSynth_storage: CMSemioticSilicon_storage
-CMPosterSynthetic: CMPosterSilicon
-CMPosterSynthetic2: CMPosterSilicon2
-CMCigarettePackLuckyStrikes: RMCCigarettePackLuckySloths
-CMKoorlanderMatchbook: CMElectroMatchbook
-CMPosterKoorlander: CMPosterElectro
-CMCrateBoxMagazineRifleM4DMR: RMCCrateBoxMagazineRifleM4SPR
-CMCrateBoxMagazineRifleM4DMRAP: RMCCrateBoxMagazineRifleM4SPRAP
-CMCrateBoxMagazineRifleM4DMRExt: RMCCrateBoxMagazineRifleM4SPRExt
-CMMagazineRifleM4DMR: CMMagazineRifleM4SPR
-CMBoxMagazineRifleM4DMR: RMCBoxMagazineRifleM4SPR
-CMBoxMagazineRifleM4DMRAP: RMCBoxMagazineRifleM4SPRAP
-CMBoxMagazineRifleM4DMRExt: RMCBoxMagazineRifleM4SPRExt
-CMMagazineRifleM4DMRAP: CMMagazineRifleM4SPRAP
-CMMagazineRifleM4DMRExt: CMMagazineRifleM4SPRExt
-WeaponRifleM4DMR: WeaponRifleM4SPR
-CMCrateBoxMagazineRifleM4RA: RMCCrateBoxMagazineRifleM4SPR
-CMCrateBoxMagazineRifleM4RAAP: RMCCrateBoxMagazineRifleM4SPRAP
-CMCrateBoxMagazineRifleM4RAExt: RMCCrateBoxMagazineRifleM4SPRExt
-CMMagazineRifleM4RA: CMMagazineRifleM4SPR
-CMBoxMagazineRifleM4RA: RMCBoxMagazineRifleM4SPR
-CMBoxMagazineRifleM4RAAP: RMCBoxMagazineRifleM4SPRAP
-CMBoxMagazineRifleM4RAExt: RMCBoxMagazineRifleM4SPRExt
-CMMagazineRifleM4RAAP: CMMagazineRifleM4SPRAP
-CMMagazineRifleM4RAExt: CMMagazineRifleM4SPRExt
-WeaponRifleM4RA: WeaponRifleM4SPR
-ArmatAttachments: CMVendorAttachments
 
 #2024-06-25
 BookChefGaming: BookHowToCookForFortySpaceman
 
 #2024-06-29
 IntercomAssesmbly: IntercomAssembly
-
-# 2024-07-1
-CMDispenserChem : RMCChemDispenserGround
 
 # 2024-07-7
 SignScience1: SignScience
@@ -570,305 +413,6 @@ ClothingBeltSuspenders: ClothingBeltSuspendersRed
 
 # 2024-08-19
 ClothingNeckShockCollar: ClothingBackpackElectropack
-
-# 2024-07-10
-CMLamp: RMCLamp
-
-# 2024-07-14
-CMArmorM56CombatHarness: CMArmorSmartGunCombatHarness
-
-# 2024-07-15
-CMSurgicalCaseFilledAllTools: RMCSurgicalTray
-
-# 2024-07-16
-CMWhistle: RMCWhistle
-RCMTrenchWhistle: RMCWhistle
-
-# 2024-07-31
-CMPouchFirstAid: RMCPouchFirstAid
-CMPouchFirstAidInjectors: RMCPouchFirstAidInjectors
-CMPouchFirstAidSplintsGauzeOintment: RMCPouchFirstAidSplintsGauzeOintment
-CMPouchFirstAidPills: RMCPouchFirstAidPills
-CMPouchFirstAidERT: RMCPouchFirstAidERT
-CMPouchFirstAidERTFill: RMCPouchFirstAidERTFill
-CMPouchMedical: RMCPouchMedical
-CMPouchMedicalFill: RMCPouchMedicalFill
-CMPouchMedicalPills: RMCPouchMedicalPills
-CMPouchMedicalSoc: RMCPouchMedicalSoc
-CMPouchMedicalSocFill: RMCPouchMedicalSocFill
-CMPouchFirstResponder: RMCPouchFirstResponder
-CMPouchFirstResponderFill: RMCPouchFirstResponderFill
-CMPouchVial: RMCPouchVial
-CMPouchVialFill: RMCPouchVialFill
-CMPouchChem: RMCPouchChem
-CMPouchChemFill: RMCPouchChemFill
-CMPouchAutoinjector: RMCPouchAutoinjector
-CMPouchAutoinjectorFill: RMCPouchAutoinjectorFill
-CMPouchSyringe: RMCPouchSyringe
-CMPouchSyringeFill: RMCPouchSyringeFill
-CMPouchMedkit: RMCPouchMedkit
-CMPouchMedkitFill: RMCPouchMedkitFill
-
-CMPouchBayonet: RMCPouchBayonet
-CMPouchBayonetFill: RMCPouchBayonetFill
-CMPouchPistol: RMCPouchPistol
-CMPouchMachete: RMCPouchMachete
-CMPouchMacheteFilled: RMCPouchMacheteFilled
-
-CMPouchGeneral: RMCPouchGeneral
-CMPouchGeneralMedium: RMCPouchGeneralMedium
-CMPouchGeneralLarge: RMCPouchGeneralLarge
-CMPouchSurvival: RMCPouchSurvival
-CMPouchSurvivalFill: RMCPouchSurvivalFill
-CMPouchSurvivalSynth: RMCPouchSurvivalSynth
-CMPouchSurvivalSynthFill: RMCPouchSurvivalSynthFill
-CMPouchCommand: RMCPouchCommand
-CMPouchMagazine: RMCPouchMagazine
-CMPouchMagazineLarge: RMCPouchMagazineLarge
-CMPouchMagazinePistol: RMCPouchMagazinePistol
-CMPouchMagazinePistolLarge: RMCPouchMagazinePistolLarge
-CMPouchShotgun: RMCPouchShotgun
-CMPouchExplosive: RMCPouchExplosive
-CMPouchDocument: RMCPouchDocument
-CMPouchDocumentSmall: RMCPouchDocumentSmall
-CMPouchFlare: RMCPouchFlare
-CMPouchFlareFilled: RMCPouchFlareFilled
-CMPouchRadio: RMCPouchRadio
-CMPouchElectronics: RMCPouchElectronics
-CMPouchConstruction: RMCPouchConstruction
-CMPouchTools: RMCPouchTools
-CMPouchToolsFill: RMCPouchToolsFill
-CMPouchSling: RMCPouchSling
-
-# 2024-07-31
-CMGroundsideOperationsConsole: RMCGroundsideOperationsConsole
-
-# 2024-08-08
-ToolboxEmergency: RMCToolboxEmergency
-ToolboxEmergencyFilled: RMCToolboxEmergencyFilled
-ToolboxElectrical: RMCToolboxElectrical
-ToolboxElectricalFilled: RMCToolboxElectricalFilled
-ToolboxMechanical: RMCToolboxMechanical
-ToolboxMechanicalFilled: RMCToolboxMechanicalFilled
-Bucket: RMCBucket
-CMBucket: RMCBucket
-
-#2024-08-08 Changed a bunch of IDs and dunno whats mapped in so please trim excess when convienient
-CMCrateBoxMagazineRifleM54C: RMCCrateBoxMagazineRifleM54C
-CMCrateBoxMagazineRifleM54CAP: RMCCrateBoxMagazineRifleM54CAP
-CMCrateBoxMagazineRifleM54CExt: RMCCrateBoxMagazineRifleM54CExt
-CMCrateBoxMagazineRifleM4SPR: RMCCrateBoxMagazineRifleM4SPR
-CMCrateBoxMagazineRifleM4SPRAP: RMCCrateBoxMagazineRifleM4SPRAP
-CMCrateBoxMagazineSMGM63: RMCCrateBoxMagazineSMGM63
-CMCrateBoxMagazineSMGM63AP: RMCCrateBoxMagazineSMGM63AP
-CMCrateBoxMagazinePistolM1984: RMCCrateBoxMagazinePistolM1984
-#CMCrateBoxMagazinePistolM1984AP: RMCCrateBoxMagazinePistolM1984AP
-CMCrateBoxShellsShotgunSlugs: RMCCrateBoxShellsShotgunSlugs
-CMCrateBoxShellsShotgunBuckshot: RMCCrateBoxShellsShotgunBuckshot
-CMCrateBoxShellsShotgunFlechette: RMCCrateBoxShellsShotgunFlechette
-CMCrateBoxMagazinePistolM77AP: RMCCrateBoxMagazinePistolM77AP
-CMCrateBoxMagazinePistolMK80: RMCCrateBoxMagazinePistolMK80
-CMCrateAttachmentSmartScope: RMCCrateAttachmentSmartScope
-CMCrateAttachmentRailFlashlight: RMCCrateAttachmentRailFlashlight
-CMCrateAttachmentRedDot: RMCCrateAttachmentRedDot
-CMCrateAttachmentTelescopicScope: RMCCrateAttachmentTelescopicScope
-CMCrateAttachmentMiniScope: RMCCrateAttachmentMiniScope
-CMCrateAttachmentMagneticHarness: RMCCrateAttachmentMagneticHarness
-CMCrateAttachmentSuppressor: RMCCrateAttachmentSuppressor
-CMCrateAttachmentExtendedBarrel: RMCCrateAttachmentExtendedBarrel
-CMCrateAttachmentCompensator: RMCCrateAttachmentCompensator
-CMCrateAttachmentForegrip: RMCCrateAttachmentForegrip
-CMCrateAttachmentGyro: RMCCrateAttachmentGyro
-CMCrateAttachmentBipod: RMCCrateAttachmentBipod
-CMCrateAttachmentUnderbarrelShotgun: RMCCrateAttachmentUnderbarrelShotgun
-CMCrateAttachmentUnderbarrelExtinguisher: RMCCrateAttachmentUnderbarrelExtinguisher
-CMCrateAttachmentUnderbarrelFlamer: RMCCrateAttachmentUnderbarrelFlamer
-CMCrateAttachmentBurstfire: RMCCrateAttachmentBurstfire
-CMCrateAttachmentAllStocks: RMCCrateAttachmentAllStocks
-CMCrateAttachmentRevolverStock: RMCCrateAttachmentRevolverStock
-CMCrateAttachmentRifleStock: RMCCrateAttachmentRifleStock
-CMCrateAttachmentShotgunStock: RMCCrateAttachmentShotgunStock
-CMCrateAttachmentSmgStock: RMCCrateAttachmentSmgStock
-CMCrateClothingLargePouches: RMCCrateClothingLargePouches
-CMCrateClothingMedicalPouches: RMCCrateClothingMedicalPouches
-CMCrateClothingWebbing: RMCCrateClothingWebbing
-CMCrateClothingOfficerOutfit: RMCCrateClothingOfficerOutfit
-CMCrateEmptySandbags: RMCCrateEmptySandbags
-CMCrateSandbagsConstructionKit: RMCCrateSandbagsConstructionKit
-CMCrateMetalSheets: RMCCrateMetalSheets
-CMCratePlasteelSheets: RMCCratePlasteelSheets
-CMCrateGlassSheets: RMCCrateGlassSheets
-#CMCrateWoodenPlanks: RMCCrateWoodenPlanks
-#CMCrateFoldingBarricades: RMCCrateFoldingBarricades
-CMCrateSuperconductingMagneticCoil: RMCCrateSuperconductingMagneticCoil
-CMCrateElectricalMaintenance: RMCCrateElectricalMaintenance
-CMCrateMechanicalMaintenance: RMCCrateMechanicalMaintenance
-#CMCrateInflatableBarriers: RMCCrateInflatableBarriers
-CMCrateReplacementLights: RMCCrateReplacementLights
-CMCratePacmanParts: RMCCratePacmanParts
-CMCrateSuperPacmanParts: RMCCrateSuperPacmanParts
-CMCrateFlashlights: RMCCrateFlashlights
-CMCrateHighCapacityPowerCell: RMCCrateHighCapacityPowerCell
-CMCrateGrenadesHighExplosive: RMCCrateGrenadesHighExplosive
-CMCrateGrenadesFrag: RMCCrateGrenadesFrag
-CMCrateFoodDonuts: RMCCrateFoodDonuts
-CMCrateFoodMRE: RMCCrateFoodMRE
-CMCrateFoodPizza: RMCCrateFoodPizza
-CMCrateFoodIngredients: RMCCrateFoodIngredients
-CMCrateMedicalSurgery: RMCCrateMedicalSurgery
-CMCrateMedicalBodyBag: RMCCrateMedicalBodyBag
-CMCrateMedicalStasisBag: RMCCrateMedicalStasisBag
-CMCrateMedicalFirstAid: RMCCrateMedicalFirstAid
-CMCrateMedicalFilled: RMCCrateMedicalFilled
-CMCrateMedicalPill: RMCCrateMedicalPill
-CMCrateSupplyInternals: RMCCrateSupplyInternals
-CMCrateSupplyEvacuation: RMCCrateSupplyEvacuation
-CMCrateSuppliesBoxes: RMCCrateSuppliesBoxes
-CMCrateSupplyJanitor: RMCCrateSupplyJanitor
-CMCrateSuppliesCrayons: RMCCrateSuppliesCrayons
-#CMCrateM54C: RMCCrateM54C
-CMCrateM54CE2: RMCCrateM54CE2
-CMCrateSU6: RMCCrateSU6
-CMCrateMagazineM96SMixed: RMCCrateMagazineM96SMixed
-CMCrateMagazineM96SStandard: RMCCrateMagazineM96SStandard
-CMCrateMagazineM96SFlak: RMCCrateMagazineM96SFlak
-CMCrateMagazineM96SIncendiary: RMCCrateMagazineM96SIncendiary
-CMCrateMagazineM4SPRCustomIncendiary: RMCCrateMagazineM4SPRCustomIncendiary
-CMBoxShotgunBuckshot: RMCBoxShotgunBuckshot
-CMBoxShotgunSlugs: RMCBoxShotgunSlugs
-CMBoxShotgunBeanbag: RMCBoxShotgunBeanbag
-CMBoxShotgunIncendiary: RMCBoxShotgunIncendiary
-CMBoxShotgunFlechette: RMCBoxShotgunFlechette
-CMBoxShotgunIncendiaryBuckshot: RMCBoxShotgunIncendiaryBuckshot
-CMBoxMRE: RMCBoxMRE
-CMBoxPackFlare: RMCBoxPackFlare
-CMCrateBase: RMCCrateBase
-CMCrateLarge: RMCCrateLarge
-CMCrateWeldable: RMCCrateBase
-CMCrateAlpha: RMCCrateAlpha
-CMCrateBravo: RMCCrateBravo
-CMCrateCharlie: RMCCrateCharlie
-CMCrateDelta: RMCCrateDelta
-CMCrateAmmo: RMCCrateAmmo
-CMCrateGreen: RMCCrateGreen
-CMCrateConstruction: RMCCrateConstruction
-CMCrateExplosives: RMCCrateExplosives
-CMCrateFreezer: RMCCrateFreezer
-CMCrateHydro: RMCCrateHydro
-CMCrateInternals: RMCCrateInternals
-CMCratePlastic: RMCCratePlastic
-CMCrateRadiation: RMCCrateRadiation
-CMCrateScience: RMCCrateScience
-CMCrateSupply: RMCCrateSupply
-CMCrateWeapons: RMCCrateWeapons
-CMCrateMedical: RMCCrateMedical
-CMCrateSecure: RMCCrateSecure
-CMCrateSecureAmmo: RMCCrateSecureAmmo
-CMCrateSecureExplosives: RMCCrateSecureExplosives
-CMCrateSecureGear: RMCCrateSecureGear
-CMCrateSecureHydro: RMCCrateSecureHydro
-CMCrateSecureWeapons: RMCCrateSecureWeapons
-CMCrateSecureWeYa: RMCCrateSecureWeYa
-CMCrateSecurePhoron: RMCCrateSecurePhoron
-CMBoxBodyBag: RMCBoxBodyBag
-CMBoxLatexGloves: RMCBoxLatexGloves
-CMBoxSyringe: RMCBoxSyringe
-CMBoxSterileMask: RMCBoxSterileMask
-CMBoxPillCanister: RMCBoxPillCanister
-
-# 2024-08-09
-CMFogWall: RMCFogWall25
-CMFogWallShort: RMCFogWall15
-
-# 2024-08-12
-CMSeatBase: CMChair
-
-# 2024-08-28
-CMScrubsNurse: RMCScrubsLightBlue
-
-# 2024-09-10
-# Changed a bunch of upstream IDs to RMC ones
-ClothingMaskGas: CMMaskGas
-LampGold: RMCLamp
-Lamp: RMCLamp
-Lantern: RMCFlashlightLantern
-FlashlightLantern: RMCFlashlight
-SpawnMobMonkey: CMSpawnMobMonkey
-SalvageHumanCorpseSpawner: RMCSpawnerCorpseColonist
-PowerCellSmall: RMCPowerCellCrap
-PowerCellSmallPrinted: RMCPowerCellCrapEmpty
-PowerCellMedium: RMCPowerCell
-PowerCellMediumPrinted: RMCPowerCell
-PowerCellHigh: RMCPowerCellHigh
-PowerCellHighPrinted: RMCPowerCellHighEmpty
-PowerCellHyper: RMCPowerCellHyper
-PowerCellHyperPrinted: RMCPowerCellHyperEmpty
-UnfinishedMachineFrame: CMMachineFrameUnfinished
-MachineFrame: CMMachineFrame
-Autolathe: CMAutolathe
-Paper: CMPaper
-Pen: CMPen
-LuxuryPen: CMPenFountain
-
-# 2024-09-13
-TargetHuman: RMCTargetHuman
-TargetSyndicate: RMCTargetSyndicate
-TargetClown: RMCTargetClown
-#TargetStrange: RMCTargetStrange
-
-# 2024-09-15
-FoodBoxDonut: RMCBoxDonut
-
-# 2024-09-20
-BoxHandcuff: RMCBoxHandcuffs
-Handcuffs: RMCHandcuffs
-VendingMachineSec: CMVendorSec
-CMHandcuffs: RMCHandcuffs
-
-# 2024-09-22
-FloraTree01: RMCFloraTree01
-FloraTree02: RMCFloraTree02
-FloraTree03: RMCFloraTree03
-FloraTree04: RMCFloraTree04
-FloraTree05: RMCFloraTree05
-FloraTree06: RMCFloraTree06
-FloraTreeSnow01: RMCFloraTreeSnow01
-FloraTreeSnow02: RMCFloraTreeSnow02
-FloraTreeSnow03: RMCFloraTreeSnow03
-FloraTreeSnow04: RMCFloraTreeSnow04
-FloraTreeSnow05: RMCFloraTreeSnow05
-FloraTreeSnow06: RMCFloraTreeSnow06
-FloraTreeStump: RMCFloraTreeStump
-FloraTreeLarge01: RMCFloraTreeLarge01
-FloraTreeLarge02: RMCFloraTreeLarge02
-FloraTreeLarge03: RMCFloraTreeLarge03
-#FloraTreeLarge04: RMCFloraTreeLarge04
-FloraTreeLarge05: RMCFloraTreeLarge05
-FloraTreeLarge06: RMCFloraTreeLarge06
-FloraTreeConifer01: RMCFloraTreeConifer01
-FloraTreeConifer02: RMCFloraTreeConifer02
-FloraTreeConifer03: RMCFloraTreeConifer03
-#FloraTreeConifer04: RMCFloraTreeConifer04
-#FloraTreeConifer05: RMCFloraTreeConifer05
-#FloraTreeConifer06: RMCFloraTreeConifer06
-FloraTreeStumpConifer: RMCFloraTreeStumpConifer
-
-# 2024-09-23
-FireAxe: RMCFireAxe
-Pickaxe: RMCPickaxe
-
-# 2024-10-07
-ClothingOuterVestHazard: RMCHazardVest
-ClothingHeadHatHardhatYellow: RMCHardHat
-ClothingHeadHatHardhatBlue: RMCHardhatBlue
-
-# 2024-10-11
-Crowbar: CMCrowbar
-CrowbarRed: CMCrowbarRed
-
-# 2024-10-15
-RMCDispenserChemEmpty: RMCChemDispenserGround
-RMCDispenserChem: RMCChemDispenserGround
 
 # 2024-08-22
 ComputerShuttleSalvage: null
@@ -957,27 +501,27 @@ FloraGreyStalagmite3: FloraGreyStalagmite
 FloraGreyStalagmite4: FloraGreyStalagmite
 FloraGreyStalagmite5: FloraGreyStalagmite
 FloraGreyStalagmite6: FloraGreyStalagmite
-#FloraTree01: FloraTree
-#FloraTree02: FloraTree
-#FloraTree03: FloraTree
-#FloraTree04: FloraTree
-#FloraTree05: FloraTree
-#FloraTree06: FloraTree
-#FloraTreeSnow01: FloraTreeSnow
-#FloraTreeSnow02: FloraTreeSnow
-#FloraTreeSnow03: FloraTreeSnow
-#FloraTreeSnow04: FloraTreeSnow
-#FloraTreeSnow05: FloraTreeSnow
-#FloraTreeSnow06: FloraTreeSnow
-#FloraTreeLarge01: FloraTreeLarge
-#FloraTreeLarge02: FloraTreeLarge
-#FloraTreeLarge03: FloraTreeLarge
+FloraTree01: FloraTree
+FloraTree02: FloraTree
+FloraTree03: FloraTree
+FloraTree04: FloraTree
+FloraTree05: FloraTree
+FloraTree06: FloraTree
+FloraTreeSnow01: FloraTreeSnow
+FloraTreeSnow02: FloraTreeSnow
+FloraTreeSnow03: FloraTreeSnow
+FloraTreeSnow04: FloraTreeSnow
+FloraTreeSnow05: FloraTreeSnow
+FloraTreeSnow06: FloraTreeSnow
+FloraTreeLarge01: FloraTreeLarge
+FloraTreeLarge02: FloraTreeLarge
+FloraTreeLarge03: FloraTreeLarge
 FloraTreeLarge04: FloraTreeLarge
-#FloraTreeLarge05: FloraTreeLarge
-#FloraTreeLarge06: FloraTreeLarge
-#FloraTreeConifer01: FloraTreeConifer
-#FloraTreeConifer02: FloraTreeConifer
-#FloraTreeConifer03: FloraTreeConifer
+FloraTreeLarge05: FloraTreeLarge
+FloraTreeLarge06: FloraTreeLarge
+FloraTreeConifer01: FloraTreeConifer
+FloraTreeConifer02: FloraTreeConifer
+FloraTreeConifer03: FloraTreeConifer
 ShadowTree01: ShadowTree
 ShadowTree02: ShadowTree
 ShadowTree03: ShadowTree
@@ -1021,110 +565,6 @@ MagazineBoxAntiMaterielBig: null
 MagazineBoxCaselessRifle10x24: null
 MagazineBoxCaselessRifleBig: null
 MagazinePistolHighCapacityRubber: null
-
-# 2024-10-28
-ColMarTechExecutiveOfficerEquipment: ColMarTechSeniorOfficerEquipment
-
-# 2024-11-2
-ToolboxArtistic: RMCToolboxMechanicalGreen
-ToolboxArtisticFilled: RMCToolboxMechanicalGreenFilled
-ToolboxSyndicate: RMCToolboxSyndicate
-ToolboxSyndicateFilled: RMCToolboxSyndicateFilled
-Bible: RMCBible
-
-# 2024-11-7
-CheapLighter: RMCLighter
-
-# 2024-11-28
-ClosetLegal: RMCClosetBlue
-
-
-# 2024-12-14
-#WeaponRifleM54C: WeaponRifleM54CCamo
-#WeaponRifleM54CE2: WeaponRifleM54CE2Camo
-#WeaponRifleM4SPR: WeaponRifleM4SPRCamo
-#WeaponSMGM63: WeaponSMGM63Camo
-#WeaponShotgunM42A2: WeaponShotgunM42A2Camo
-#CMM96SSniperRifle: WeaponM96SSniperRifleCamo
-#WeaponLauncherM83: WeaponLauncherM83Camo
-#RMCBinoculars: RMCBinocularsCamo
-#RMCMortarKit: RMCMortarKitCamo
-#ArmorHelmetM10: ArmorHelmetM10Camo
-
-# 2024-12-17
-WeldingFuelTank: RMCTankReagentFuel
-WaterTank: RMCTankReagentWater
-
-# 2024-12-22
-WeldingFuelTankFull: RMCTankReagentFuel
-WaterTankFull: RMCTankReagentWater
-
-# 2024-12-24
-#WeaponRifleM54CCamo: WeaponRifleM54C
-#WeaponRifleM54CE2Camo: WeaponRifleM54CE2
-WeaponRifleM4SPRCamo: WeaponRifleM4SPR
-WeaponSMGM63Camo: WeaponSMGM63
-WeaponShotgunM42A2Camo: WeaponShotgunM42A2
-WeaponM96SSniperRifleCamo: CMM96SSniperRifle
-WeaponLauncherM83Camo: WeaponLauncherM83
-RMCBinocularsCamo: RMCBinoculars
-RMCMortarKitCamo: RMCMortarKit
-ArmorHelmetM10Camo: ArmorHelmetM10
-
-# 2024-12-29
-CMWeaponPistolMK80: RMCMK80
-CMWeaponPistolM77: RMCWeaponPistolM77
-CMWeaponPistolM77Empty: RMCWeaponPistolM77Empty
-
-# 2025-01-07
-FoodGoldenApple: RMCFoodGoldenApple
-
-# 2025-01-15
-CrayonBox: RMCCrayonBox
-CrayonRed: RMCCrayonRed
-CrayonOrange: RMCCrayonOrange
-CrayonYellow: RMCCrayonYellow
-CrayonGreen: RMCCrayonGreen
-CrayonBlue: RMCCrayonBlue
-CrayonPurple: RMCCrayonPurple
-
-# 2025-01-16
-RMCBoxMagazineRevolverMarksmanM44: RMCBoxMagazineRevolverM44Marksman
-RMCCrateBoxMagazineM44RevolverMarksman: RMCCrateBoxMagazineRevolverM44Marksman
-
-# 2025-01-19
-RMCCrateM54C: RMCCrateM54CMK1
-
-# 2025-02-10
-BulletRifle5.56x45mm: BulletRifle556x45mm
-CMBulletPistol.22mm: CMBulletPistol22mm
-CMCartridgePistol.22mm: CMCartridgePistol22mm
-
-# 2025-02-12
-RMCAreaSavannahPumpStarboard Quarter: RMCAreaSavannahPumpStarboardQuarter
-
-# 2025-02-21
-RMCWindowFrameHybrisaEngigReinforced: RMCWindowFrameHybrisaEngiReinforced
-RMCWindowHybrisaResearchlReinforced: RMCWindowHybrisaResearchReinforced
-
-# 2025-02-25
-CMAirlockGlassRequisitionsLocked: CMAirlockRequisitionsLocked
-
-# 2025-02-26
-RMCAreaLv759IndoorsWeyyuOffice: RMCAreaLv759IndoorsWeyaOffice
-RMCAreaLv759IndoorsWeyyuOfficeHallway: RMCAreaLv759IndoorsWeyaOfficeHallway
-RMCAreaLv759IndoorsWeyyuOfficeFloor: RMCAreaLv759IndoorsWeyaOfficeFloor
-RMCAreaLv759IndoorsWeyyuOfficeBreakroom: RMCAreaLv759IndoorsWeyaOfficeBreakroom
-RMCAreaLv759IndoorsWeyyuOfficeVip: RMCAreaLv759IndoorsWeyaOfficeVip
-RMCAreaLv759IndoorsWeyyuOfficePressroom: RMCAreaLv759IndoorsWeyaOfficePressroom
-RMCAreaLv759IndoorsWeyyuOfficeSupervisor: RMCAreaLv759IndoorsWeyaOfficeSupervisor
-
-# 2025-03-01
-RMCHeadsetDistressFreelancer: RMCHeadsetDistressDukes
-RMCEncryptionKeyFreelancer: RMCEncryptionKeyDukes
-
-# 2025-03-14
-RMCCrateWeldable: RMCCrateBase
 
 # 2025-03-18
 EpinephrineChemistryBottle: ChemistryBottleEpinephrine
@@ -1266,290 +706,197 @@ BarSignWhiskeyEchoesAlignTile: BarSignWhiskeyEchoes
 # 2025-06-21
 ClothingNeckHeadphones: ClothingMultipleHeadphones
 
-# 2025-04-14
-PlantBag: RMCStoragePlantBag
-
-# 2025-05-04
-CrateTrashCart: RMCTrashCart
-RMCVendorBundleXOShotgun: WeaponShotgunM890
-
-# 2025-05-05
-RMCArmorHelmetM12Dust: CMArmorHelmetM12
-
-# 2025-05-20
-GrenadeFlashBang: RMCGrenadeFlashBang
-
-# 2025-05-21
-CMVendorWalkman: CMVendorCassettes
-CMPosterWalkman: RMCPosterCassettePlayer
-
-# 2025-05-29
-CMBucketJani: RMCBucketJanitorial
-
-# 2025-05-24
-Katana: RMCKatana
-
-# 2025-06-7
-DrinkWhiskeyBottleFull: RMCDrinkAlcoholWhiskey
-DrinkWineBottleFull: RMCDrinkAlcoholPurpleWine
-DrinkVodkaBottleFull: RMCDrinkAlcoholVodka
-DrinkVermouthBottleFull: RMCDrinkAlcoholVermouth
-DrinkSakeBottleFull: RMCDrinkAlcoholSake
-
-# 2025-06-12
-DrinkMelonLiquorBottleFull: RMCDrinkAlcoholMelonLiquor
-DrinkBlueCuracaoBottleFull: RMCDrinkAlcoholBlueCuracao
-
-# 2025-06-15
-ClothingOuterBioGeneral: RMCSuitBioGeneral
-ClothingHeadHatHoodBioGeneral: RMCHoodBioGeneral
-
-# 2025-06-18
-CMWebbingPouch: RMCWebbingDropPouch
-
-# 2025-06-24
-ClothingNeckStethoscope: RMCStethoscope
-
-# 2025-06-30
-ClosetL3Filled: CMClosetBioFilled
-ClosetL3VirologyFilled: CMClosetBioVirologyFilled
-ClosetL3SecurityFilled: CMClosetBioSecurityFilled
-ClosetL3JanitorFilled: CMClosetBioJanitorFilled
-ClosetL3ScienceFilled: CMClosetBioScientistFilled
-ClosetL3: CMClosetBio
-FireAxeCabinet: RMCFireAxeCabinet
-FireAxeCabinetOpen: RMCFireAxeCabinetFilled
-FireAxeCabinetFilled: RMCFireAxeCabinetFilled
-FireAxeCabinetFilledOpen: RMCFireAxeCabinetFilled
-
-# 2025-07-04
-SprayBottleSpaceCleaner: RMCSprayBottleSpaceCleaner
-WallGold: RMCWallGold
-ClosetL3Virology: CMClosetBioVirology
-ClosetL3Security: CMClosetBioSecurity
-ClosetL3Janitor: CMClosetBioJanitor
-ClosetL3Science: CMClosetBioScientist
-
-# 2025-07-05
-DrinkHotCoffee: RMCCoffeeCupFilled
-
-# 2025-07-06
-RMCWindowCorsatResearchHull: RMCWindowCorsatHullResearch
-
-# 2025-07-08
-PortableGeneratorPacman: RMCPortableGenerator
-PortableGeneratorSuperPacman: RMCPortableGenerator2
-BaseBallBat: RMCBaseballBat
-HydroponicsToolSpade: RMCToolSpade
-HydroponicsToolMiniHoe: RMCToolMiniHoe
-HydroponicsToolHatchet: RMCToolHatchet
-ClothingEyesGlassesSunglasses: RMCSunglasses
-CableTerminal: RMCCableTerminal
-ClothingEyesGlassesChemical: RMCGlassesReagentHUDGlasses
-
-# 2025-07-08
-RMCGlassesBiMexYellow: RMCGlassesTriMaxYellow
-RMCGlassesBiMexBronze: RMCGlassesTriMaxBronze
-RMCGlassesBiMexBlack: RMCGlassesTriMaxBlack
-
-# 2025-07-12
-FoamedIronMetal: RMCFoamedIronMetal
-FoamedAluminiumMetal: RMCFoamedAluminiumMetal
-TimerTrigger: RMCTimerTrigger
-
-# 2025-07-15
-Ashtray: RMCAshtray
-
-# 2025-07-19
-FlippoEngravedLighter: RMCZippoGold
-
 # 2025-07-17
-RMCIDCardDeputy: RMCIDCardCMBDeputy
-RMCIDCardMarshal: RMCIDCardCMBMarshal
-
-# 2025-07-20
-RMCJumpsuitMarshal: RMCMarshalCMBUniform
-
-# 2025-07-23
-RMCM79Case: RMCM85A1Case
-CMWeaponLauncherM79: RMCWeaponLauncherM85A1
-RMCCrateM79: RMCCrateM85A1
-
-# 2025-07-30
-BoxBeaker: RMCBoxBeaker
-BoxPillCanister: RMCBoxPillCanister
-BoxSyringe: RMCBoxSyringe
+RipleyChassis: null
+HonkerChassis: null
+HamtrChassis: null
+VimChassis: null
 
 # 2025-08-01
-WeaponRifleSSG45: RMCWeaponRifleSSG45
+FoodDonutJellySlugcat: FoodDonutJellyScurret
 
 # 2025-08-06
-RMCSmartGun: RMCSmartGunUNMC
+TrashBagBlue: TrashBagHolding
+BagOfSummoningGarbage: null
 
-# 2025-08-07
-RMCAttachmentM42A2WoodenStock: RMCAttachmentM42A2CollapsibleStock
+# 2025-08-11
+ClothingUniformJumpsuitChiefEngineerNT: ClothingUniformJumpsuitChiefEngineer
+ClothingUniformJumpsuitParamedicNT: ClothingUniformJumpsuitParamedic
 
-# 2025-08-12
-GasPipeHalf: RMCGasPipeHalf
-GasPipeStraight: RMCGasPipeStraight
-GasPipeBend: RMCGasPipeBend
-GasPipeTJunction: RMCGasPipeTJunction
-GasPipeFourway: RMCGasPipeFourway
+# 2025-08-29
+PrefilledSyringe: Syringe
 
-# 2025-08-17
-WeaponRifleM54C: RMCWeaponRifleM54C
-WeaponRifleM54CE2: RMCWeaponRifleM54CE2
-WeaponRifleM54CMK1: RMCWeaponRifleM54CMK1
-WeaponRifleM54CMK1Unloaded: RMCWeaponRifleM54CMK1Unloaded
-WeaponRifleM54CMK1AP: RMCWeaponRifleM54CMK1AP
-WeaponRifleM54CStripped: RMCWeaponRifleM54CStripped
-WeaponRifleM59A: RMCWeaponRifleM59A
+# 2025-09-12
+BaseChemistryEmptyVial: ChemistryEmptyVial
 
-# 2025-08-27
-RMCTray_empty: RMCTrayEmpty
-CMPosterArious: CMPosterPathos
-CMPosterPulseRifle: CMPosterAssaultRifle
+# 2025-10-6
+BibleTanakh: null
+BibleSatanic: null
 
-# 2025-08-30
-WallInvisible: RMCWallInvisibleBulletPassible
-PottedPlant1: CMPottedPlant1
-PottedPlant2: CMPottedPlant2
-PottedPlant3: CMPottedPlant3
-PottedPlant4: CMPottedPlant4
-PottedPlant5: CMPottedPlant5
-PottedPlant6: CMPottedPlant6
-PottedPlant7: CMPottedPlant7
-PottedPlant8: CMPottedPlant8
-PottedPlant10: CMPottedPlant10
-PottedPlant11: CMPottedPlant11
-PottedPlant12: CMPottedPlant12
-PottedPlant13: CMPottedPlant13
-PottedPlant14: CMPottedPlant14
-PottedPlant15: CMPottedPlant15
-PottedPlant16: CMPottedPlant16
-PottedPlant17: CMPottedPlant17
-PottedPlant18: CMPottedPlant18
-PottedPlant19: CMPottedPlant19
-PottedPlant20: CMPottedPlant20
-PottedPlant21: CMPottedPlant21
-PottedPlant22: CMPottedPlant22
-PottedPlant23: CMPottedPlant23
-PottedPlant24: CMPottedPlant24
-Grille: RMCGrille
-GrilleBroken: RMCGrilleBroken
+# 2025-10-08
+ClothingBeltAssault: ClothingBeltMilitaryWebbing
+WarpPointBombing: null
 
-# 2025-09-20
-RMCTentRoofBase: null
-RMCTentRoofStandard: null
-RMCTentRoofExtended: null
-RMCTentBodyStandard: RMCTentUNMCStandard
-RMCTentBodyExtended: RMCTentUNMCExtended
+# 2025-10-13
+ToyGriffin: ToyFigurineGriffin
+ToyOwlman: ToyFigurineOwlman
+ToySkeleton: ToyFigurineSkeleton
 
-# 2025-09-28
-DeskBell: RMCDeskBell
-SignNoSmoking: CMPosterNoSmoking
-SignSmoking: CMPosterNoSmoking2
-
-# 2025-10-12
-CMLightReplacerEmpty: RMCLightReplacerEmpty
-CMLightReplacer: RMCLightReplacer
-CMLightFixture: RMCLightFixture
-CMLightFixtureSmall:  RMCLightFixtureSmall
-CMLightFixtureAlwaysPowered: RMCLightFixtureAlwaysPowered
-CMLightFixtureSmallAlwaysPowered: RMCLightFixtureSmallAlwaysPowered
-CMLightFixtureSmallOffset: RMCLightFixtureSmallOffset
-CMLightFixtureEmpty: RMCLightFixtureEmpty
-
-# 2025-11-14
-ClothingUniformJumpsuitColorOrange: RMCJumpsuitOrange
-
-# 2025-11-24
-WeaponRifleL83A2: RMCWeaponRifleL83A2
-WeaponRifleL83A3: RMCWeaponRifleL83A3
-
-# 2025-11-27
-RMCToolWebbingSmallERT: RMCToolWebbing
-RMCToolWebbingSmallERTFilled: RMCToolWebbingFilled
-
-# 2025-11-29
-CMWallSuperReinforced: CMWallReinforced
+# 2025-10-28
+DrinkKiraSpecial: DrinkOrangeLimeSodaGlass
 
 # 2025-12-02
-RMCTankFlamerImprovised: RMCTankFlamerColony
-RMCWeaponFlamerImprovised: RMCWeaponFlamerColony
+GhostWarpPoint: null
+DefaultStationBeaconGhost: null
 
-# 2026-1-03
-CMM77BeltFilled: RMCM77BeltFilled
+# 2025-11-08
+DebugSMES: SMESBasicEmpty
+DebugSubstation: SubstationBasicEmpty
+DebugSubstationWall: BaseSubstationWall
+DebugAPC: BaseAPC
+MagazineCaselessRifle: MagazinePistolCaselessRifle
+MagazineCaselessRiflePractice: MagazinePistolCaselessRiflePractice
+SpeedLoaderPistol: null
+SpeedLoaderPistolPractice: null
 
-# 2026-01-04
-CMGasTankOxygen: RMCGasTankOxygenFilled
-RMCGasTankPhoron: RMCGasTankPhoronFilled
+# 2025-12-05
+GlowstickBase: GlowstickGreen
 
-# 2026-1-13
-RMCBoxMagazineRifleAK4047Empty: RMCBoxMagazineRifleType77Empty
-RMCBoxMagazineRifleAK4047: RMCBoxMagazineRifleType77
-RMCAttachmentAK4047StockCollapsible: RMCAttachmentType77StockCollapsible
-RMCWeaponRifleAK4047: RMCWeaponRifleType77
-RMCWeaponRifleAK4047Tactical: RMCWeaponRifleType77Tactical
-RMCMagazineRifleAK4047: RMCMagazineRifleType77
-RMCMagazineRifleAK4047AP: RMCMagazineRifleType77AP
-RMCMagazineRifleAK4047Incendiary: RMCMagazineRifleType77Incendiary
-RMCMagazineRifleAK4047HEAP: RMCMagazineRifleType77HEAP
+# 2025-12-06
+SpawnPointZookeeper: null
+SpawnPointBoxer: null
 
-# 2026-1-15
-ClothingUniformJumpsuitPrisoner: RMCJumpsuitOrange
+# 2025-12-07
+FigureSpawner: MechFigurineSpawner50
+ToySpawner: PlushieSpawner50
+SpacemenFigureSpawner: SpacemenFigurineSpawner90
 
-# 2026-01-27
-RMCJumpsuitUNSecurity: RMCJumpsuitRiotControl
-RMCSpawnPointSurvivorShivasUNPeacekeeper: RMCSpawnPointSurvivorShivasILRCPeacekeeper
-RMCSpawnPointSurvivorSolarisUNPeacekeeper: RMCSpawnPointSurvivorSolarisILRCPeacekeeper
-RMCSpawnPointSurvivorUNPeacekeeper: RMCSpawnPointSurvivorILRCPeacekeeper
+# 2026-01-07
+HandheldHealthAnalyzerUnpowered: HandheldHealthAnalyzer
+HandheldHealthAnalyzerEmpty: HandheldHealthAnalyzer
 
-# 2026-2-1
-CMPosterZSPA1: RMCPosterTSEPA1
-CMPosterZSPA2: RMCPosterTSEPA2
-CMPosterZSPA3: RMCPosterTSEPA3
-RMCSpawnerERTShuttleZSPA: RMCSpawnerERTShuttleTSEPA
+#2026-01-09
+BorgModuleAdvancedChemical: BorgModuleAdvancedTopical
 
-# 2026-02-05
-RMCWeaponSMGP90: RMCWeaponSMGPDW90
-RMCMagazineSMGP90: RMCMagazineSMGPDW90
+# 2026-01-14
+HeadHuman: OrganHumanHead
+HeadSkeleton: OrganSkeletonPersonHead
+LeftArmHuman: OrganHumanArmLeft
+LeftArmSkeleton: OrganSkeletonPersonArmLeft
+LeftHandSkeleton: OrganSkeletonPersonHandLeft
+LeftLegHuman: OrganHumanLegLeft
+LeftLegSkeleton: OrganSkeletonPersonLegLeft
+RightArmHuman: OrganHumanArmRight
+RightHandSkeleton: OrganSkeletonPersonHandRight
+RightLegHuman: OrganHumanLegRight
+TorsoSkeleton: OrganSkeletonPersonTorso
+RightArmSkeleton: OrganSkeletonPersonArmRight
 
-# 2026-03-18
-CMWebbingSurgicalGreen: RMCWebbingSurgicalGreen
-CMWebbingSurgicalBlue: RMCWebbingSurgicalBlue
+# 2026-01-19
+TowelColorPurple: null
+TowelColorRed: null
+TowelColorBlue: null
+TowelColorDarkBlue: null
+TowelColorLightBlue: null
+TowelColorTeal: null
+TowelColorBrown: null
+TowelColorLightBrown: null
+TowelColorGray: null
+TowelColorGreen: null
+TowelColorDarkGreen: null
+TowelColorGold: null
+TowelColorOrange: null
+TowelColorBlack: null
+TowelColorPink: null
+TowelColorYellow: null
+TowelColorMaroon: null
+TowelColorSilver: null
+TowelColorMime: null
 
-# 2026-03-21
-CMUpgradedTraumaKit: CMUpgradedTraumaKit10
+# 2026-02-18
+# Replace cargo order crates which contain exactly one item with the item, parcel wrapped.
+CrateVendingMachineRestockBoozeFilled: VendingMachineRestockBooze
+CrateVendingMachineRestockChefvendFilled: VendingMachineRestockChefvend
+CrateVendingMachineRestockClothesFilled: VendingMachineRestockClothes
+CrateVendingMachineRestockAutoDrobeFilled: VendingMachineRestockCostumes
+CrateVendingMachineRestockCondimentStationFilled: VendingMachineRestockCondimentStation
+CrateVendingMachineRestockDinnerwareFilled: VendingMachineRestockDinnerware
+CrateVendingMachineRestockGamesFilled: VendingMachineRestockGames
+CrateVendingMachineRestockPTechFilled: VendingMachineRestockPTech
+CrateVendingMachineRestockSalvageEquipmentFilled: VendingMachineRestockSalvageEquipment
+CrateVendingMachineRestockVendomatFilled: VendingMachineRestockVendomat
+CrateVendingMachineRestockTankDispenserFilled: VendingMachineRestockTankDispenser
+# The crates below contained _two_ of the restock items, so these are technically not direct migrations. But eh.
+CrateVendingMachineRestockHotDrinksFilled: VendingMachineRestockHotDrinks
+CrateVendingMachineRestockRobustSoftdrinksFilled: VendingMachineRestockRobustSoftdrinks
+CrateVendingMachineRestockSmokesFilled: VendingMachineRestockSmokes
+CrateVendingMachineRestockHappyHonkFilled: VendingMachineRestockHappyHonk
+CrateVendingMachineRestockGetmoreChocolateCorpFilled: VendingMachineRestockGetmoreChocolateCorp
+CrateVendingMachineRestockChangFilled: VendingMachineRestockChang
+CrateVendingMachineRestockDiscountDansFilled: VendingMachineRestockDiscountDans
+CrateVendingMachineRestockDonutFilled: VendingMachineRestockDonut
 
-# 2026-05-19
-RMCFogWallWeed30: RMCFogWallWeed
+# 2026-03-28
+# The great solutions YAML nuke
+FoodMeatSnail: MobSnail
 
-# 2026-05-09
-SpaceVillainArcade: RMCArcadeSpaceVillain
-BlockGameArcade: RMCArcadeBlockGame
+# 2026-04-25
+CratePartsT3: null
+CratePartsT3T4: null
+CratePartsT4: null
 
-#2026-05-20
-RMCHeadCapFerret: RMCHeadCapGrey
-CMPosterRememberIo: CMRandomPosterAny
+#2027-07-17
+WeaponRifleM90GrenadeLauncher: null
 
-#2026-05-22
-DrinkGlass: RMCDrinkGlass
-FoodDonkpocket: RMCFoodDonkpocket
-FoodBoxDonkpocket: RMCBoxDonkpockets
+# 2026-07-18
+SheetGlassLingering0: null
+SheetRGlassLingering0: null
+SheetRPGlassLingering0: null
+SheetSteelLingering0: null
+SheetPlasteelLingering0: null
+SheetPlasmaLingering0: null
+PartRodMetalLingering0: null
+FloorTileItemSteelLingering0: null
+FloorTileItemWhiteLingering0: null
+FloorTileItemDarkLingering0: null
+SoapBorg: Soap
+Ointment10Lingering: Ointment
+RegenerativeMeshLingering0: null
+Brutepack10Lingering: Brutepack
+MedicatedSutureLingering0: null
+Bloodpack10Lingering: Bloodpack
+Gauze10Lingering: Gauze
+BorgVial: ChemistryEmptyVial
+BorgBeaker: Beaker
+CableHVStackLingering10: CableHVStack10
+CableMVStackLingering10: CableMVStack10
+CableApcStackLingering10: CableApcStack10
 
-#2026-06-01
-DrinkSoyMilkCarton: RMCDrinkSoyMilkCarton
-DrinkMilkCarton: RMCDrinkMilkCarton
+# 2026-07-19
+BoxHugNitrogen: BoxSurvivalHugNitrogen
+BoxMime: BoxSurvival
+BoxMimeNitrogen: BoxSurvivalNitrogen
+BoxMimeMoth: BoxSurvival
 
-#2026-06-06
-RMCBeakerHighCapacity: RMCReagentJug
-
-# 2026-07-04
-RMCWeaponShotgunHG3712: RMCWeaponShotgunM12
-
-# 2026-07-11
-RMCJumpsuitSPPPaP: RMCJumpsuitSPPPCG
-RMCIDCardPaP: RMCIDCardPCG
-RMCHeadsetSPPPaP: RMCHeadsetSPPPCG
-RMCCoatPaP: RMCCoatPCG
+# 2026-07-19
+CrateChemistryVials: null
+CrateSecurityHelmet: null
+CrateEmergencyInternals: CrateEmergencyEVA
+CrateEmergencyInternalsLarge: CrateEmergencyEVA
+CrateNitrogenInternals: CrateEmergencyEVA
+CrateServiceCleanerGrenades: CrateJanitorialCleanerGrenades
+CrateServiceColorfulLights: CrateJanitorialColorfulLights
+CrateServiceHolidayLights: CrateJanitorialHolidayLights
+CrateMousetrapBoxes: CrateJanitorialMousetraps
+CrateServiceReplacementLights: CrateJanitorialReplacementLights
+CrateServiceJanitorialSupplies: CrateJanitorialSupplies
+CrateMaterialTextiles: CrateMaterialCloth
+CrateFoodBarSupply: CrateServiceBarSupply
+CrateFoodCooking: CrateServiceCooking
+CrateFoodDinnerware: CrateServiceDinnerware
+CrateFoodGetMore: CrateServiceGetMore
+CrateEngineeringGyroscope: CrateSpaceGyroscope
+CrateEngineeringJetpack: CrateSpaceMiniJetpack
+CrateEngineeringMiniJetpack: CrateSpaceMiniJetpack
+CrateEngineeringShuttle: CrateSpaceShuttlePower
+CrateEngineeringThruster: CrateSpaceThruster

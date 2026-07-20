@@ -6,20 +6,16 @@
   desc: reagent-desc-nutriment
   physicalDesc: reagent-physical-desc-opaque
   flavor: nutriment
-  color: "#664330"
+  color: "#24591F"
   metabolisms:
-    Food:
-      metabolismRate: 0.1
+    Metabolites:
       effects:
-      - !type:Neogenetic
-        potency: 1
-      - !type:Nutritious
-        potency: 2
-        nutFactor: 15
-        nutMetabolism: 0.1
-      - !type:Hemogenic
-        potency: 1
-      - !type:NutrimentOverdose
+      - !type:SatiateHunger
+  plantMetabolism:
+  - !type:PlantAdjustNutrition
+    amount: 1.5
+  - !type:PlantAdjustHealth
+    amount: 0.75
   pricePerUnit: 2
 
 - type: reagent
@@ -31,11 +27,17 @@
   flavor: vitamin
   color: "#D3D3D3"
   metabolisms:
-    Food:
-      metabolismRate: 0.1
+    Metabolites: #This makes it not compete with medicines, a large bonus for something that can heal
       effects:
-      - !type:ConvertToReagent
-        targetReagent: Nutriment
+      - !type:EvenHealthChange
+        probability: 0.5
+        damage:
+          Brute: -0.5
+          Burn: -0.5
+      # Helps you stop bleeding to an extent.
+      - !type:ModifyBleed
+        amount: -0.25
+      - !type:SatiateHunger #Numbers are balanced with this in mind + it helps limit how much healing you can get from food
   # Lets plants benefit too
   plantMetabolism:
   - !type:PlantAdjustNutrition
@@ -53,11 +55,15 @@
   flavor: protein
   color: "#FFFFE5"
   metabolisms:
-    Food:
-      metabolismRate: 0.1
+    Metabolites:
       effects:
-      - !type:ConvertToReagent
-        targetReagent: Nutriment
+      - !type:EvenHealthChange
+        probability: 0.5
+        damage:
+          Brute: -0.4
+      - !type:ModifyBloodLevel
+        amount: 1 # weaker than iron but pretty good all things considered
+      - !type:SatiateHunger
   pricePerUnit: 3
 
 - type: reagent

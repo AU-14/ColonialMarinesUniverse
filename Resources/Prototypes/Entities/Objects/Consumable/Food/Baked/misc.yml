@@ -139,10 +139,6 @@
   components:
   - type: Sprite
     state: bun-honey
-  - type: FlavorProfile
-    flavors:
-    - sweet
-    - bun
 
 - type: entity
   name: hotcross bun
@@ -459,19 +455,6 @@
   components:
   - type: Sprite
     state: cannoli
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 20
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 5
-        - ReagentId: Vitamin
-          Quantity: 1
-  - type: FlavorProfile
-    flavors:
-    - crunchy
-    - creamy
 
 - type: entity
   name: dumplings
@@ -537,8 +520,8 @@
     - cotton
   - type: Sprite
     state: chevrechaud-cotton
-  - type: Food
-    #requiresSpecialDigestion: true - Disabled for RMC
+  - type: Edible
+    requiresSpecialDigestion: true
   - type: Tag
     tags:
     - ClothMade
@@ -741,8 +724,8 @@
     - cotton
   - type: Sprite
     state: croissant-cotton
-  - type: Food
-    # requiresSpecialDigestion: true -Disabled for RMC
+  - type: Edible
+    requiresSpecialDigestion: true
   - type: Tag
     tags:
     - ClothMade
@@ -795,8 +778,8 @@
   - type: Sprite
     sprite: Objects/Consumable/Food/Baked/misc.rsi
     state: grilled-cheese-cotton
-  - type: Food
-    #requiresSpecialDigestion: true -Disabled for RMC
+  - type: Edible
+    requiresSpecialDigestion: true
   - type: Tag
     tags:
     - ClothMade

@@ -88,8 +88,6 @@
         whitelist:
           components:
             - FitsInDispenser
-  - type: HealthAnalyzer
-    scanDelay: 0
   - type: UserInterface
     interfaces:
       enum.CryoPodUiKey.Key:

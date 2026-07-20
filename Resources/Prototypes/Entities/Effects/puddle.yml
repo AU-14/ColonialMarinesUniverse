@@ -141,8 +141,6 @@
   placement:
     mode: SnapgridCenter
   components:
-  - type: TimedDespawn
-    lifetime: 60
   - type: Clickable
   - type: Slippery
     staminaDamage: 0

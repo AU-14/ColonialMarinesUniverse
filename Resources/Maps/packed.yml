@@ -78945,14 +78945,6 @@ entities:
       parent: 2
     - type: ApcPowerReceiver
       powerLoad: 0
-  - uid: 5280
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 60.5,9.5
-      parent: 2
-    - type: ApcPowerReceiver
-      powerLoad: 0
   - uid: 5281
     components:
     - type: Transform
@@ -79199,14 +79191,6 @@ entities:
     components:
     - type: Transform
       pos: 50.5,11.5
-      parent: 2
-    - type: ApcPowerReceiver
-      powerLoad: 0
-  - uid: 7528
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 63.5,9.5
       parent: 2
     - type: ApcPowerReceiver
       powerLoad: 0

@@ -55,6 +55,7 @@
     uiWindowPos: 2,3
     strippingWindowPos: 1,4
     displayName: Pouch
+    stripHidden: true
 
 - type: inventoryTemplate
   id: spacekangaroo
@@ -68,6 +69,7 @@
     uiWindowPos: 2,3
     strippingWindowPos: 1,4
     displayName: Pouch
+    stripHidden: true
 
   - name: gloves
     slotTexture: gloves

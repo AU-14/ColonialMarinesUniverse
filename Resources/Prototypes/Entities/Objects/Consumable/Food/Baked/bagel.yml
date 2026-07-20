@@ -38,15 +38,13 @@
       - medicine
   - type: Sprite
     state: bagel-poppy
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 12
-        reagents:
-        - ReagentId: CMBicaridine
-          Quantity: 5
-        - ReagentId: Nutriment
-          Quantity: 5
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Bicaridine
+        Quantity: 5
+      - ReagentId: Nutriment
+        Quantity: 10
 
 - type: entity
   parent: FoodBagelBase
@@ -60,8 +58,8 @@
     - cotton
   - type: Sprite
     state: bagel-cottondough
-  - type: Food
-    #requiresSpecialDigestion: true -Disabled for RMC
+  - type: Edible
+    requiresSpecialDigestion: true
   - type: Tag
     tags:
     - ClothMade

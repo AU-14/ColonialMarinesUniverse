@@ -57,9 +57,8 @@ baby-jail-account-reason-overall = Your overall playtime on the server must be y
 
 generic-misconfigured = The server is misconfigured and is not accepting players. Please contact the server owner and try again later.
 
-# RMC14 Change
-ipintel-server-ratelimited = You are not banned. This game uses external verification, which has reached its maximum verification limit on new connections. Wait a minute or two, and connect again; no appeal required. If this does not work, rejoin another day or make a ticket.
-ipintel-unknown = This server uses a security system with external verification, but it encountered an error. Please contact the administration team of the server for assistance and try again later.
-ipintel-suspicious = You are connecting through a datacenter or VPN. This is not a ban against your account, turning off your VPN is sufficient. If you are still having a technical issue or need a VPN to be able to play, you can request an exemption at appeal.rouny-ss14.com
+ipintel-server-ratelimited = This server uses an auditing system with external verification, but the server has reached its maximum verification limit with the external service. Please contact the administration team of the server to inform them and for further assistance, or try again later.
+ipintel-unknown = This server uses an auditing system with external verification, but an error was encountered while verifying your connection. Please contact the administration team of the server to inform them and for further assistance, or try again later.
+ipintel-suspicious = You seem to be attempting to connect using a datacenter, proxy, VPN or otherwise suspicious connection. For administrative reasons, we do not allow these connections to play. If you have a VPN or similar enabled, please turn it off and attempt to reconnect or contact the administration team of the server for assistance on how to continue if you believe this is false or require using these services to play.
 
 hwid-required = Your client has refused to send a hardware id. Please contact the administration team for further assistance.

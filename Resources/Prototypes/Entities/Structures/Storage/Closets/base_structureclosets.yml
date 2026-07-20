@@ -50,9 +50,6 @@
       entity_storage: !type:Container
       paper_label: !type:ContainerSlot
   - type: Weldable
-  - type: RMCWeldEffectSource
-    startingOffset: 0.1, -0.45
-    endingOffset: 0.1, 0.45
   - type: PlaceableSurface
     placeCentered: true
     isPlaceable: false
@@ -100,7 +97,6 @@
     stateDoorClosed: generic_door
   - type: StaticPrice
     price: 75
-  - type: IntelContainer
 
 # steel closet base (that can be constructed/deconstructed)
 - type: entity
@@ -125,11 +121,6 @@
   components:
   - type: ResistLocker
   - type: Weldable
-  - type: RMCWeldEffectSource
-    startingOffset: 0.1, -0.45
-    endingOffset: 0.1, 0.45
-  - type: WallMount
-    arc: 175
   - type: StaticPrice
     price: 75
   - type: Sprite
@@ -267,9 +258,6 @@
     containers:
       entity_storage: !type:Container
   - type: Weldable
-  - type: RMCWeldEffectSource
-    startingOffset: 0.1, -0.45
-    endingOffset: 0.1, 0.45
   - type: PlaceableSurface
     placeCentered: true
     isPlaceable: false

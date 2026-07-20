@@ -12,21 +12,19 @@
       - bread
   - type: Sprite
     sprite: Objects/Consumable/Food/Baked/pizza.rsi
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 40
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 30
-        - ReagentId: Vitamin
-          Quantity: 5
-  - type: SliceableFood
-    count: 6
-  #- type: Item -Disabled for RMC to make it consistant with our Pizzas.
-  #  size: Normal
-  #  shape:
-  #  - 0,0,2,1
+  - type: Solution
+    solution:
+      maxVol: 180
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 120
+      - ReagentId: Vitamin
+        Quantity: 12
+  - type: Item
+    size: Normal
+    shape:
+    - 0,0,2,1
+    storedOffset: 0,-5
   - type: Tag
     tags:
     - Pizza

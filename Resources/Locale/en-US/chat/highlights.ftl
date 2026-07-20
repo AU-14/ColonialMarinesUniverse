@@ -1,11 +1,11 @@
 # Command
-highlights-captain = Captain, "Cap", Bridge, Command
-highlights-head-of-personnel = Head Of Personnel, "HoP", Service, Bridge, Command
-# highlights-chief-engineer = Chief Engineer, "CE", Engineering, Engineer, "Engi", Bridge, Command // RMC14
-# highlights-chief-medical-officer = Chief Medical Officer, "CMO", MedBay, "Med", Bridge, Command // RMC14
-highlights-head-of-security = Head of Security, "HoS", Security, "Sec", Bridge, Command
-# highlights-quartermaster = Quartermaster, "QM", Cargo, Bridge, Command // RMC14
-highlights-research-director = Research Director, "RD", Science, "Sci", Bridge, Command
+highlights-captain = Captain, "Cap", "Bridge", "Command"
+highlights-head-of-personnel = Head Of Personnel, "HoP", Service, "Bridge", "Command"
+highlights-chief-engineer = Chief Engineer, "CE", Engineering, Engineer, "Engi", "Bridge", "Command"
+highlights-chief-medical-officer = Chief Medical Officer, "CMO", Medbay, Medical, "Med", "Bridge", "Command"
+highlights-head-of-security = Head of Security, "HoS", Armory, Security, "Sec", "Bridge", "Command"
+highlights-quartermaster = Quartermaster, "QM", Cargo, Supply, "Bridge", "Command"
+highlights-research-director = Research Director, "RD", Science, "Sci", "RND", "R&D", "Bridge", "Command"
 
 # Security
 highlights-detective = Detective, "Det", Armory, Security, "Sec"
@@ -14,8 +14,8 @@ highlights-security-officer = Security Officer, Secoff, Officer, Armory, Securit
 highlights-warden = Warden, "Ward", Brig, Genpop, Jail, "Prison", Armory, Security, "Sec"
 
 # Cargo
-# highlights-cargo-technician = Cargo Technician, Cargo Tech, "Cargo" // RMC14
-highlights-salvage-specialist = Salvage Specialist, Salvager, Salvage, "Salv", "Cargo", Miner
+highlights-cargo-technician = Cargo Technician, Cargo Tech, "Cargo", Supply
+highlights-salvage-specialist = Salvage Specialist, Salvager, Salvage, "Salv", Miner, "Cargo", Supply
 
 # Engineering
 highlights-atmospheric-technician = Atmospheric Technician, Atmos Tech, Atmospheric, Engineering, "Atmos", "Engi"

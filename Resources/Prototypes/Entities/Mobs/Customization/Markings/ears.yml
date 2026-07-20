@@ -1,9 +1,8 @@
 - type: marking
-  id: LongEarsStandard
+  id: HumanLongEars
   bodyPart: HeadTop
   forcedColoring: true
-  followSkinColor: true
-  speciesRestriction: [Human]
+  groupWhitelist: [Human]
   sprites:
   - sprite: Mobs/Customization/ears.rsi
     state: long_ears_standard
@@ -21,8 +20,7 @@
   id: LongEarsSmall
   bodyPart: HeadTop
   forcedColoring: true
-  followSkinColor: true
-  speciesRestriction: [Human]
+  groupWhitelist: [Human]
   sprites:
   - sprite: Mobs/Customization/ears.rsi
     state: long_ears_small
@@ -49,8 +47,7 @@
   id: LongEarsThin
   bodyPart: HeadTop
   forcedColoring: true
-  followSkinColor: true
-  speciesRestriction: [Human]
+  groupWhitelist: [Human]
   sprites:
   - sprite: Mobs/Customization/ears.rsi
     state: long_ears_thin

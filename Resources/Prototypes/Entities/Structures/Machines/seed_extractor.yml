@@ -35,5 +35,3 @@
   - type: SeedExtractor
   - type: Machine
     board: SeedExtractorMachineCircuitboard
-  - type: ApcPowerReceiver
-    needsPower: false

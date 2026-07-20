@@ -1,13 +1,7 @@
 - type: tile
-  id: FloorPlanetDirt
-  name: tiles-dirt-planet-floor
-  sprite: /Textures/Tiles/Planet/Dirt/dirt.png
-  variants: 4
-  placementVariants:
-  - 1.0
-  - 1.0
-  - 1.0
-  - 1.0
+  id: BaseFloorPlanet
+  abstract: true
+  heatCapacity: 10000
   isSubfloor: true
   footstepSounds:
     collection: FootstepAsteroid

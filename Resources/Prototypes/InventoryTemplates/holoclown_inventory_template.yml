@@ -10,6 +10,7 @@
       uiWindowPos: 0,3
       strippingWindowPos: 0,4
       displayName: Pocket 1
+      stripHidden: true
     - name: pocket2
       slotTexture: pocket
       fullTextureName: template_small
@@ -19,4 +20,5 @@
       uiWindowPos: 2,3
       strippingWindowPos: 1,4
       displayName: Pocket 2
+      stripHidden: true
 

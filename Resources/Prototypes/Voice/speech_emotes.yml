@@ -475,11 +475,10 @@
     - SiliconEmotes
   chatMessages: ["chat-emote-msg-chirp"]
   chatTriggers:
-    - placeholderEmoteTrigger #RMC14  chat triggers conflict with RMCAvaliChirp
-    #- chirp
-    #- chirps
-    #- chirped
-    #- chirping
+    - chirp
+    - chirps
+    - chirped
+    - chirping
 
 - type: emote
   id: Flap

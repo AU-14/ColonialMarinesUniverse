@@ -99,9 +99,9 @@
     Butter:
       amount: 10
     Egg:
-      amount: 12
-    RMCSugar: #Changed for RMC
-      amount: 5
+      amount: 6
+    Sugar:
+      amount: 10
     Milk:
       amount: 10
   effects:
@@ -153,7 +153,7 @@
       amount: 15
     MilkSoy:
       amount: 15
-    RMCSugar: #Changed for RMC
+    Sugar:
       amount: 5
   effects:
     - !type:SpawnEntity
@@ -200,7 +200,7 @@
       amount: 4
     Milk:
       amount: 2
-    RMCSugar: #Changed for RMC
+    Sugar:
       amount: 2
   effects:
     - !type:SpawnEntity
@@ -213,7 +213,7 @@
   reactants:
     JuiceTomato:
       amount: 2
-    RMCSugar: #Changed for RMC
+    Sugar:
       amount: 1
   products:
     Ketchup: 3
@@ -243,15 +243,15 @@
     Mayo: 15
 
 # Gas not included
-#- type: reaction # RMC14
-#  id: CookingMustard
-#  reactants:
-#    Bleach:
-#      amount: 1
-#    Ammonia:
-#      amount: 1
-#  products:
-#    Mustard: 2
+- type: reaction
+  id: CookingMustard
+  reactants:
+    Bleach:
+      amount: 1
+    Ammonia:
+      amount: 1
+  products:
+    Mustard: 2
 
 - type: reaction
   id: CookingKetchunaise
@@ -270,7 +270,7 @@
       amount: 1
     Vinegar:
       amount: 1
-    RMCSugar: #Changed for RMC
+    Sugar:
       amount: 1
   products:
     BbqSauce: 3
@@ -331,17 +331,17 @@
   products:
     Vinaigrette: 3
 
-#- type: reaction # RMC14
-#  id: BananaBreakdown
-#  source: true
-#  requiredMixerCategories:
-#  - Centrifuge
-#  reactants:
-#    JuiceBanana:
-#      amount: 10
-#  products:
-#    Sugar: 5
-#    Potassium: 5
+- type: reaction
+  id: BananaBreakdown
+  source: true
+  requiredMixerCategories:
+  - Centrifuge
+  reactants:
+    JuiceBanana:
+      amount: 10
+  products:
+    Sugar: 5
+    Potassium: 5
 
 - type: reaction
   id: OilBreakdown
@@ -367,87 +367,87 @@
 #    Oxygen: 1
 #    Hydrogen: 2
 
-#- type: reaction # rmc14
-#  id: AllicinBreakdown
-#  source: true
-#  requiredMixerCategories:
-#  - Centrifuge
-#  reactants:
-#    Allicin:
-#      amount: 4
-#  products:
-#    Sulfur: 2
-#    Carbon: 1
-#    Water: 1
+- type: reaction
+  id: AllicinBreakdown
+  source: true
+  requiredMixerCategories:
+  - Centrifuge
+  reactants:
+    Allicin:
+      amount: 4
+  products:
+    Sulfur: 2
+    Carbon: 1
+    Water: 1
 
-#- type: reaction # RMC14
-#  id: NutrimentBreakdown
-#  source: true
-#  requiredMixerCategories:
-#  - Centrifuge
-#  reactants:
-#    Nutriment:
-#      amount: 5
-#  products:
-#    Water: 2
-#    Carbon: 2
-#    Sugar: 1
+- type: reaction
+  id: NutrimentBreakdown
+  source: true
+  requiredMixerCategories:
+  - Centrifuge
+  reactants:
+    Nutriment:
+      amount: 5
+  products:
+    Water: 2
+    Carbon: 2
+    Sugar: 1
 
-#- type: reaction # RMC14
-#  id: FatBreakdown
-#  source: true
-#  requiredMixerCategories:
-#  - Electrolysis
-#  reactants:
-#    Fat:
-#      amount: 15
-#  products:
-#    Carbon: 5
-#    Hydrogen: 10
-#    Oxygen: 1
+- type: reaction
+  id: FatBreakdown
+  source: true
+  requiredMixerCategories:
+  - Electrolysis
+  reactants:
+    Fat:
+      amount: 15
+  products:
+    Carbon: 5
+    Hydrogen: 10
+    Oxygen: 1
 
-## Proteins are hydrocarbons # RMC14
-#- type: reaction
-#  id: UncookedAnimalProteinBreakdown
-#  source: true
-#  requiredMixerCategories:
-#  - Electrolysis
-#  reactants:
-#    UncookedAnimalProteins:
-#      amount: 10
-#  products:
-#    Carbon: 2
-#    Hydrogen: 4
-#    Phosphorus: 3
-#    Oxygen: 1
-#
-#- type: reaction
-#  id: ProteinBreakdown
-#  source: true
-#  requiredMixerCategories:
-#  - Electrolysis
-#  reactants:
-#    Protein:
-#      amount: 10
-#  products:
-#    Carbon: 2
-#    Hydrogen: 4
-#    Phosphorus: 3
-#    Oxygen: 1
-#
-## Vitamin = Healthy = Green = Nitrogenous
-#- type: reaction
-#  id: VitaminBreakdown
-#  source: true
-#  requiredMixerCategories:
-#  - Centrifuge
-#  reactants:
-#    Vitamin:
-#      amount: 4
-#  products:
-#    Carbon: 1
-#    Water: 1
-#    Nitrogen: 2
+# Proteins are hydrocarbons
+- type: reaction
+  id: UncookedAnimalProteinBreakdown
+  source: true
+  requiredMixerCategories:
+  - Electrolysis
+  reactants:
+    UncookedAnimalProteins:
+      amount: 10
+  products:
+    Carbon: 2
+    Hydrogen: 4
+    Phosphorus: 3
+    Oxygen: 1
+
+- type: reaction
+  id: ProteinBreakdown
+  source: true
+  requiredMixerCategories:
+  - Electrolysis
+  reactants:
+    Protein:
+      amount: 10
+  products:
+    Carbon: 2
+    Hydrogen: 4
+    Phosphorus: 3
+    Oxygen: 1
+
+# Vitamin = Healthy = Green = Nitrogenous
+- type: reaction
+  id: VitaminBreakdown
+  source: true
+  requiredMixerCategories:
+  - Centrifuge
+  reactants:
+    Vitamin:
+      amount: 4
+  products:
+    Carbon: 1
+    Water: 1
+    Nitrogen: 2
 
 - type: reaction
   id: ReduceMilk #makes Cream renewable

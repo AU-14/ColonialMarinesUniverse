@@ -3,15 +3,14 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: TimedDespawn
-    lifetime: 1.0
+    lifetime: 0.4
   - type: Sprite
     drawdepth: BelowMobs
-    offset: 0.33, 0
     layers:
     - shader: unshaded
       map: ["enum.EffectLayers.Unshaded"]
-      sprite: _RMC14/Objects/Weapons/Guns/Projectiles/projectiles.rsi
-      state: muzzle_bullet_high_RMC
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: muzzle_bullet
   - type: EffectVisuals
   - type: Tag
     tags:
@@ -54,6 +53,7 @@
   abstract: true
   components:
   - type: Reflective
+  - type: FlyBySound
   - type: Clickable
   - type: Sprite
     noRot: false
@@ -75,6 +75,15 @@
         mask:
         - Impassable
         - BulletImpassable
+      fly-by: &flybyfixture
+        shape: !type:PhysShapeCircle
+          radius: 1.5
+        layer:
+        - Impassable
+        - MidImpassable
+        - HighImpassable
+        - LowImpassable
+        hard: False
   - type: Projectile
     impactEffect: BulletImpactEffect
     damage:
@@ -84,7 +93,6 @@
       path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
   - type: TimedDespawn
     lifetime: 10
-  - type: LagCompensation
 
 - type: entity
   id: BaseBulletTrigger # Trigger-on-collide bullets
@@ -108,6 +116,7 @@
         mask:
         - Impassable
         - BulletImpassable
+      fly-by: *flybyfixture
 
 - type: entity
   id: BaseBulletPractice
@@ -145,7 +154,7 @@
 
 - type: entity
   id: BaseBulletAP
-  name: base bullet AP
+  name: base bullet armor-piercing
   parent: BaseBullet
   categories: [ HideSpawnMenu ]
   components:
@@ -210,6 +219,7 @@
         - Opaque
         - Impassable
         - BulletImpassable
+      fly-by: *flybyfixture
   - type: Ammo
   - type: Projectile
     damage:
@@ -288,6 +298,7 @@
         - Opaque
         - Impassable
         - BulletImpassable
+      fly-by: *flybyfixture
   - type: Ammo
   - type: StaminaDamageOnCollide
     damage: 33
@@ -328,6 +339,7 @@
         - Opaque
         - Impassable
         - BulletImpassable
+      fly-by: *flybyfixture
   - type: Ammo
   - type: StaminaDamageOnCollide
     damage: 1
@@ -363,6 +375,7 @@
         hard: false
         mask:
         - Opaque
+      fly-by: *flybyfixture
   - type: Projectile
 #   soundHit:  Waiting on serv3
     damage:
@@ -406,6 +419,7 @@
         - Opaque
         - Impassable
         - BulletImpassable
+      fly-by: *flybyfixture
   - type: Projectile
     #   soundHit:  Waiting on serv3
     impactEffect: BulletImpactEffectDisabler
@@ -506,6 +520,7 @@
         hard: false
         mask:
         - Opaque
+      fly-by: *flybyfixture
   - type: Projectile
     impactEffect: BulletImpactEffectDisabler
     damage:
@@ -649,6 +664,7 @@
         hard: false
         mask:
         - Opaque
+      fly-by: *flybyfixture
   - type: Projectile
     damage:
       types:
@@ -788,6 +804,7 @@
   - type: AnomalousParticle
     particleType: Sigma
 
+# Launcher projectiles (grenade / rocket)
 - type: entity
   id: BulletRocket
   name: rocket
@@ -1144,6 +1161,7 @@
         - Opaque
         - Impassable
         - BulletImpassable
+      fly-by: *flybyfixture
   - type: Ammo
   - type: StaminaDamageOnCollide
     damage: 15
@@ -1185,6 +1203,7 @@
         hard: false
         mask:
         - Opaque
+      fly-by: *flybyfixture
   - type: Ammo
 
 - type: entity
@@ -1294,6 +1313,7 @@
         - Opaque
         - Impassable
         - BulletImpassable
+      fly-by: *flybyfixture
   - type: Ammo
   - type: Projectile
     impactEffect: BulletImpactEffectOrangeDisabler

@@ -138,8 +138,6 @@ ui-options-header-text-other = Text input other
 
 ui-options-hotkey-keymap = Use US QWERTY Keys
 ui-options-hotkey-toggle-walk = Toggle Walk
-ui-options-hold-to-attack-melee = Hold to attack (melee)
-ui-options-hold-to-attack-ranged = Hold to attack (ranged)
 
 ui-options-function-move-up = Move Up
 ui-options-function-move-left = Move Left
@@ -171,9 +169,6 @@ ui-options-function-move-stored-item = Move stored item
 ui-options-function-rotate-stored-item = Rotate stored item
 ui-options-function-save-item-location = Save item location
 ui-options-static-storage-ui = Lock storage window to hotbar
-ui-options-function-smart-equip-suit-storage = Smart-equip to suit storage
-ui-options-function-smart-equip-pocket1 = Smart-equip to pocket 1
-ui-options-function-smart-equip-pocket2 = Smart-equip to pocket 2
 
 ui-options-function-smart-equip-backpack = Smart-equip to backpack
 ui-options-function-smart-equip-belt = Smart-equip to belt
@@ -207,7 +202,7 @@ ui-options-function-open-character-menu = Open character menu
 ui-options-function-open-context-menu = Open context menu
 ui-options-function-open-crafting-menu = Open crafting menu
 ui-options-function-open-inventory-menu = Open inventory
-ui-options-function-open-a-help = Open admin and mentor help
+ui-options-function-open-a-help = Open admin help
 ui-options-function-open-abilities-menu = Open action menu
 ui-options-function-open-emotes-menu = Open emotes menu
 ui-options-function-toggle-round-end-summary-window = Toggle round end summary window

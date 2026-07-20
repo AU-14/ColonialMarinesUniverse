@@ -2,8 +2,7 @@
   id: Skeleton
   name: species-name-skeleton
   roundStart: false
-  prototype: CMMobSkeletonPerson
-  sprites: MobSkeletonSprites
+  prototype: MobSkeletonPerson
   defaultSkinTone: "#fff9e2"
   maleFirstNames: NamesSkeletonFirst
   femaleFirstNames: NamesSkeletonFirst

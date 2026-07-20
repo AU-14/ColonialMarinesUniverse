@@ -1,6 +1,5 @@
 - type: entity
   name: "item"
-  parent: CMCorrodible
   id: BaseItem
   abstract: true
   components:
@@ -45,10 +44,8 @@
     noRot: false
   - type: Pullable
   - type: DamageExaminable
-  - type: RMCItemPickup
-  - type: RMCMesonsNonviewable
-  - type: DestroyedByExplosion
-    isExplodable: false # Not parity, but we opt in for now instead of opt out.
+  - type: Rotatable
+    increment: 30
 
 - type: entity
   name: "storage item"

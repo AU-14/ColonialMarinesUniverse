@@ -63,6 +63,7 @@
       strippingWindowPos: 0,4
       dependsOn: jumpsuit
       displayName: Pocket 1
+      stripHidden: true
     - name: pocket2
       slotTexture: pocket
       fullTextureName: template_small
@@ -73,6 +74,7 @@
       strippingWindowPos: 1,4
       dependsOn: jumpsuit
       displayName: Pocket 2
+      stripHidden: true
     - name: suitstorage
       slotTexture: suit_storage
       slotFlags:   SUITSTORAGE

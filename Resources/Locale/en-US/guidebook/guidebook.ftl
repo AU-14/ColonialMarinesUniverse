@@ -1,9 +1,6 @@
 guidebook-window-title = Guidebook
 guidebook-placeholder-text = Select an entry.
-
-# Modified for RMC14
-guidebook-placeholder-text-2 = If you're new, head over to "New Player Guide"
-
+guidebook-placeholder-text-2 = If you're new, head over to "New? Start here!"
 guidebook-filter-placeholder-text = Filter items
 guidebook-toc-header = Table of Contents
 

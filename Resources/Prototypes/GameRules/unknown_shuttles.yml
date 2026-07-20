@@ -20,7 +20,7 @@
     reoccurrenceDelay: 30
     duration: 1
     occursDuringRoundEnd: false
-    maxOccurrences: 1 # should be the same as [copies] in shuttle_incoming_event.yml
+    maxOccurrences: 1
   - type: RuleGrids
   - type: LoadMapRule
 
@@ -81,33 +81,4 @@
   - type: StationEvent
     weight: 1 # lower because antags
   - type: LoadMapRule
-    preloadedGrid: ManOWar
-
-- type: entity
-  id: UnknownShuttleMeatZone
-  parent: BaseUnknownShuttleRule
-  components:
-  - type: StationEvent
-    startAnnouncement: station-event-unknown-shuttle-incoming #!!
-  - type: LoadMapRule
-    preloadedGrid: Meatzone
-
-- type: entity
-  id: UnknownShuttleMicroshuttle
-  parent: BaseUnknownShuttleRule
-  components:
-  - type: StationEvent
-    startAnnouncement: station-event-unknown-shuttle-incoming #!!
-    weight: 11 # this is higher because its just a little generic personal shuttle
-    maxOccurrences: 4
-  - type: LoadMapRule
-    preloadedGrid: Microshuttle
-
-- type: entity
-  id: UnknownShuttleSpacebus
-  parent: BaseUnknownShuttleRule
-  components:
-  - type: StationEvent
-    startAnnouncement: station-event-unknown-shuttle-incoming #!!
-  - type: LoadMapRule
-    preloadedGrid: Spacebus
+    gridPath: /Maps/Shuttles/ShuttleEvent/manowar.yml

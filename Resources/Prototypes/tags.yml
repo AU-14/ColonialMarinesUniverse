@@ -221,10 +221,7 @@
   id: Candle # Storage whitelist: BoxCandle
 
 - type: Tag
-  id: Chili
-
-- type: Tag
-  id: CaneBlade
+  id: CaneBlade # Storage whitelist: CaneSheath. ItemMapper: CaneSheath
 
 - type: Tag
   id: CannonBall # Ammo: WeaponLauncherPirateCannon, ShuttleGunPirateCannon
@@ -655,10 +652,7 @@
   id: Goat # Reproductive partner key
 
 - type: Tag
-  id: GoldenPlunger
-
-- type: Tag
-  id: Goliath
+  id: GoldenPlunger # Storage whitelist: JanitorialTrolley. ItemMapper: JanitorialTrolley
 
 - type: Tag
   id: Goliath # Blacklist on GoliathTentacle to prevent tagged entity from getting stunned (by itself)
@@ -834,10 +828,7 @@
 ## J ##
 
 - type: Tag
-  id: JanicartKeys
-
-- type: Tag
-  id: JawsOfLife
+  id: JawsOfLife # Storage whitelist: BaseClothingBeltEngineering. ItemMapper: BaseClothingBeltEngineering
 
 - type: Tag
   id: JanicartKeys # Uses for GenericKeyedVehicle of Janicart
@@ -1219,10 +1210,7 @@
   id: ReinforcedGlassShard # ConstructionGraph: ReinforcedShiv, SpearReinforced
 
 - type: Tag
-  id: RemoteSignaller
-
-- type: Tag
-  id: ReptilianFood
+  id: RemoteSignaller # Storage whitelist: BaseClothingBeltEngineering
 
 - type: Tag
   id: ReptilianFood # SpecialDigestible: OrganReptilianStomach

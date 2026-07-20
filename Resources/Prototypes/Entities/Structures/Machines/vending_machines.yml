@@ -966,13 +966,6 @@
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
   - type: AccessReader
     access: [["Medical"]]
-  - type: PointLight
-    radius: 1.5
-    energy: 1.6
-    color: "#9dc5c9"
-  - type: GuideHelp
-    guides:
-    - MedicalDoctor
 
 - type: entity
   parent: VendingMachine

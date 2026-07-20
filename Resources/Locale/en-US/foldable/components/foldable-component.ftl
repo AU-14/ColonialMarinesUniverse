@@ -12,5 +12,5 @@ fold-flip-verb = Flip
 fold-zip-verb = Zip up
 fold-unzip-verb = Unzip
 
-fold-strap-verb = Strap on
-fold-unstrap-verb = Unstrap
+fold-verb-clothing-jacket = Take off jacket
+unfold-verb-clothing-jacket = Put on jacket

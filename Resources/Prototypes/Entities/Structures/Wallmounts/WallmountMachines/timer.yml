@@ -90,7 +90,7 @@
   description: It's a timer for brig cells.
   components:
   - type: AccessReader
-    access: [["CMAccessBrig"]]
+    access: [["Security"]]
   - type: Construction
     graph: Timer
     node: brig
@@ -99,8 +99,6 @@
   - type: ContainerFill
     containers:
       board: [ BrigTimerElectronics ]
-  - type: ApcPowerReceiver
-    needsPower: false # TODO RMC14 power
 
 # Construction Frame
 

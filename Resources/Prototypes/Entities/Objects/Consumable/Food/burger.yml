@@ -24,7 +24,6 @@
   components:
   - type: Item
     size: Normal #patch until there is an adequate resizing system in place
-  - type: Food
   - type: Sprite
     drawdepth: Mobs
     noRot: true
@@ -466,15 +465,15 @@
       - validhunting
   - type: Sprite
     state: ian
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 25
-        reagents:
-        - ReagentId: CMBicaridine #keeping it somewhat consistent with the meat itself
-          Quantity: 7
-        - ReagentId: Vitamin
-          Quantity: 12
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 20
+      - ReagentId: Bicaridine #keeping it somewhat consistent with the meat itself
+        Quantity: 20
+      - ReagentId: Vitamin
+        Quantity: 10
   - type: Tag
     tags:
     - Meat
@@ -820,7 +819,7 @@
   name: BBQ Rib Sandwich
   description: An elusive rib shaped burger with limited availability across the galaxy. Not as good as you remember it.
   components:
-  - type: Food
+  - type: Edible
     trash:
     - FoodKebabSkewer
   - type: FlavorProfile

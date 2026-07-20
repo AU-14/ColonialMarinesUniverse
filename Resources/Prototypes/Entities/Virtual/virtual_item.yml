@@ -7,4 +7,3 @@
   - type: Item
     size: Ginormous # no storage insertion visuals
   - type: VirtualItem
-  - type: CMVirtualItem

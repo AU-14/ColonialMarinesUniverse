@@ -1,9 +1,7 @@
-# added Felinids, Skrell to the species restrictions list
 - type: marking
   id: TattooHiveChest
   bodyPart: Chest
-  markingCategory: Chest
-  speciesRestriction: [Human, Dwarf, Felinid, Skrell]
+  groupWhitelist: [Human]
   coloring:
     default:
       type:
@@ -16,8 +14,7 @@
 - type: marking
   id: TattooNightlingChest
   bodyPart: Chest
-  markingCategory: Chest
-  speciesRestriction: [Human, Dwarf, Felinid, Skrell]
+  groupWhitelist: [Human]
   coloring:
     default:
       type:
@@ -30,8 +27,7 @@
 - type: marking
   id: TattooSilverburghLeftLeg
   bodyPart: LLeg
-  markingCategory: Legs
-  speciesRestriction: [Human, Dwarf, Felinid]
+  groupWhitelist: [Human]
   coloring:
     default:
       type:
@@ -44,8 +40,7 @@
 - type: marking
   id: TattooSilverburghRightLeg
   bodyPart: RLeg
-  markingCategory: Legs
-  speciesRestriction: [Human, Dwarf, Felinid]
+  groupWhitelist: [Human]
   coloring:
     default:
       type:
@@ -58,8 +53,7 @@
 - type: marking
   id: TattooCampbellLeftArm
   bodyPart: LArm
-  markingCategory: Arms
-  speciesRestriction: [Human, Dwarf, Felinid]
+  groupWhitelist: [Human]
   coloring:
     default:
       type:
@@ -72,8 +66,7 @@
 - type: marking
   id: TattooCampbellRightArm
   bodyPart: RArm
-  markingCategory: Arms
-  speciesRestriction: [Human, Dwarf, Felinid]
+  groupWhitelist: [Human]
   coloring:
     default:
       type:
@@ -86,8 +79,7 @@
 - type: marking
   id: TattooCampbellLeftLeg
   bodyPart: LLeg
-  markingCategory: Legs
-  speciesRestriction: [Human, Dwarf, Felinid]
+  groupWhitelist: [Human]
   coloring:
     default:
       type:
@@ -100,8 +92,7 @@
 - type: marking
   id: TattooCampbellRightLeg
   bodyPart: RLeg
-  markingCategory: Legs
-  speciesRestriction: [Human, Dwarf, Felinid]
+  groupWhitelist: [Human]
   coloring:
     default:
       type:
@@ -114,8 +105,7 @@
 - type: marking
   id: TattooEyeRight
   bodyPart: Eyes
-  markingCategory: Head
-  speciesRestriction: [Human, SlimePerson, Reptilian, Dwarf, Felinid, Rodentia]
+  groupWhitelist: [Human, Slime, Reptilian]
   coloring:
     default:
       type:
@@ -128,8 +118,7 @@
 - type: marking
   id: TattooEyeLeft
   bodyPart: Eyes
-  markingCategory: Head
-  speciesRestriction: [Human, SlimePerson, Reptilian, Dwarf, Felinid, Rodentia]
+  groupWhitelist: [Human, Slime, Reptilian]
   coloring:
     default:
       type:

@@ -27,6 +27,7 @@
   - type: Tag
     tags:
     - DoorBumpOpener
+    - StunImmune
   - type: Blindable
 
 - type: entity

@@ -550,17 +550,15 @@
     tags:
     - Carrot
     - Vegetable
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 12
-        reagents:
-        - ReagentId: JuiceCarrot
-          Quantity: 5
-        - ReagentId: Vitamin
-          Quantity: 4
-        - ReagentId: CMImidazoline
-          Quantity: 3
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: JuiceCarrot
+        Quantity: 5
+      - ReagentId: Vitamin
+        Quantity: 7
+      - ReagentId: Oculine
+        Quantity: 3
   - type: Sprite
     sprite: Objects/Specific/Hydroponics/carrot.rsi
   - type: Item
@@ -1462,7 +1460,6 @@
   - type: Tag
     tags:
     - Vegetable
-    - Chili
   - type: FoodSequenceElement
     entries:
       Taco: ChiliPepper
@@ -1545,15 +1542,13 @@
   - type: FlavorProfile
     flavors:
       - medicine
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 22
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 2
-        - ReagentId: CMBicaridine
-          Quantity: 20
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 5
+      - ReagentId: Bicaridine
+        Quantity: 10
   - type: Sprite
     sprite: Objects/Specific/Hydroponics/poppy.rsi
   - type: Produce
@@ -1577,15 +1572,13 @@
   - type: FlavorProfile
     flavors:
       - medicine
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 22
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 2
-        - ReagentId: CMBicaridine
-          Quantity: 20
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 5
+      - ReagentId: Bicaridine
+        Quantity: 10
   - type: Sprite
     sprite: Objects/Specific/Hydroponics/lily.rsi
   - type: Produce
@@ -1610,15 +1603,13 @@
     flavors:
       - mushroom
       - medicine
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 40
-        reagents:
-#        - ReagentId: Ultravasculine
-#          Quantity: 20
-        - ReagentId: CMEpinephrine
-          Quantity: 20
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Ultravasculine
+        Quantity: 20
+      - ReagentId: Epinephrine
+        Quantity: 20
   - type: Sprite
     sprite: Objects/Specific/Hydroponics/lingzhi.rsi
   - type: Item
@@ -1645,19 +1636,17 @@
     flavors:
       - leafy
       - medicine
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 14
-        reagents:
-        - ReagentId: CMBicaridine
-          Quantity: 5
-        - ReagentId: CMKelotane
-          Quantity: 5
-        - ReagentId: Nutriment
-          Quantity: 2
-        - ReagentId: Vitamin
-          Quantity: 2
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Bicaridine
+        Quantity: 5
+      - ReagentId: Kelotane
+        Quantity: 5
+      - ReagentId: Nutriment
+        Quantity: 3
+      - ReagentId: Vitamin
+        Quantity: 2
   - type: Sprite
     sprite: Objects/Specific/Hydroponics/ambrosia_vulgaris.rsi
   - type: Item
@@ -1677,8 +1666,6 @@
     entries:
       Taco: AmbrosiaVulgaris
       Burger: AmbrosiaVulgarisBurger
-  - type: TimedDespawn # RMC14
-    lifetime: 0.5
 
 - type: entity
   name: ambrosia deus
@@ -1690,17 +1677,15 @@
     flavors:
       - leafy
       - medicine
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: Omnizine
-          Quantity: 3
-        - ReagentId: SpaceDrugs
-          Quantity: 5
-        - ReagentId: Nutriment
-          Quantity: 2
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Omnizine
+        Quantity: 3
+      - ReagentId: SpaceDrugs
+        Quantity: 10
+      - ReagentId: Nutriment
+        Quantity: 2
   - type: Sprite
     sprite: Objects/Specific/Hydroponics/ambrosia_deus.rsi
   - type: Item
@@ -1765,15 +1750,13 @@
   - type: FlavorProfile
     flavors:
       - sharp
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 25
-        reagents:
-        - ReagentId: Razorium
-          Quantity: 15
-        - ReagentId: Desoxyephedrine
-          Quantity: 10
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Razorium
+        Quantity: 20
+      - ReagentId: Desoxyephedrine
+        Quantity: 10
   - type: Sprite
     sprite: Objects/Specific/Hydroponics/glasstle.rsi
   - type: Produce

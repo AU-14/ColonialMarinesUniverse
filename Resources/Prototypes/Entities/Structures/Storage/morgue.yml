@@ -35,11 +35,10 @@
         - MachineMask
         layer:
         - MachineLayer
-        - BulletImpassable
   - type: EntityStorage
     isCollidableWhenOpen: true
     showContents: false
-    capacity: 30
+    capacity: 1
     enteringOffset: 0, -1
     closeSound:
       path: /Audio/Items/deconstruct.ogg
@@ -114,11 +113,10 @@
         - MachineMask
         layer:
         - MachineLayer
-        - BulletImpassable
   - type: EntityStorage
     isCollidableWhenOpen: true
     showContents: false
-    capacity: 30
+    capacity: 1
     enteringOffset: 0, -1
     closeSound:
       path: /Audio/Items/deconstruct.ogg

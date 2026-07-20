@@ -72,10 +72,6 @@
   - type: StaticPrice
     price: 300
   - type: RequireProjectileTarget
-  - type: ActivatableUIBlacklist
-    blacklist:
-      components:
-      - Xeno
 
 - type: entity
   abstract: true

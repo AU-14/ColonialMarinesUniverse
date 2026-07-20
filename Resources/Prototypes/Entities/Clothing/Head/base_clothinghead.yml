@@ -10,8 +10,8 @@
     state: icon
   - type: Item
     size: Small
-    storedRotation: 0 # RMC14
-  - type: Food
+    storedRotation: -90
+  - type: Edible
     requiresSpecialDigestion: true
   - type: Solution
     solution:

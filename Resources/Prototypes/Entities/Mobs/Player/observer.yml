@@ -101,35 +101,12 @@
   - type: NightVision
     netsync: false
     enabled: false
-  - type: ActiveInputMover
-  - type: GhostColor
-  # RMC - FindParasite Event
-  - type: FindParasite
-  - type: JoinXeno
-  - type: UserInterface
-    interfaces:
-      enum.XenoFindParasiteUI.Key:
-        type: FindParasiteBoundUserInterface
-        requireInputValidation: false
-      enum.DialogUiKey.Key:
-        type: DialogBui
-        requireInputValidation: false
-      enum.TacticalMapUserUi.Key:
-        type: TacticalMapUserBui
-      enum.ViewIntelObjectivesUI.Key:
-        type: ViewIntelObjectivesBui
-        requireInputValidation: false
-  - type: TacticalMapUser
-    actionId: RMCActionOpenTacticalMapGhost
-    marines: true
-    xenos: true
-  - type: ViewIntelObjectives
-  - type: VentSight
-  - type: IgnoreInteractionRange
-    whitelist:
-      components:
-      - Ladder
-    range: 15
+    prioritized: false
+    relayOverlay: false # In case default values change
+    lightingColor: '#FFFFFF20'
+    overlayColor: '#FFFFFF00'
+    noiseAmount: 0 # In case default values change
+    noiseMultiplier: 0 # In case default values change
 
 # proto for player ghosts specifically
 - type: entity
