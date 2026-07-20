@@ -2854,3 +2854,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Charges/Systems/SharedChargesSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static event/API review confirms one subscription is added, reset resolves the existing component, and action attempts/consumption/recharge behavior is unchanged. Shared compilation plus empty, partial, full, auto-recharging, repeated rejuvenation, standard action, and RMC charge cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1575 as `Ported (CS-0209)` when wave 0008 is committed.
+
+## CS-0210 — Register the cut-wire roundstart variation
+
+- Upstream: [space-wizards/space-station-14#41191](https://github.com/space-wizards/space-station-14/pull/41191), `e74e0b5c03009bacdc6581573e740081cf022d5b`, 2025-10-30
+- Areas: GameTicking, Gamerules, Interactions
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: `BasicRoundstartVariation` now includes `CutWireVariationPass`. On standard station presets, the existing pass may mark eligible wired devices at its configured one-percent chance, capped at twenty, so their established map-init handler cuts one random wire.
+- RMC/CMU divergence: The change affects presets that schedule the standard `BasicRoundstartVariation`; RMC distress-signal rules do not reference that rule in their fork prototype set. The pass already blacklists particle-accelerator control boxes, and its systems/components are present unchanged.
+- Decision and rationale: Port only the target-final one-line registration. Although the upstream PR title mentions a CVar, that part was reverted before merge and is not in the pinned commit delta; inventing a fork-only gate here would not match upstream.
+- Files changed: `Resources/Prototypes/GameRules/roundstart.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static rule-graph review confirms the referenced prototype and handler exist, the pass appears once, and RMC rules do not explicitly schedule `BasicRoundstartVariation`. YAML validation plus standard roundstart, eligibility, blacklist, cap, random selection, map-init ordering, and RMC preset cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1573 as `Ported (CS-0210)` when wave 0008 is committed; consider a CMU-specific enable CVar separately only if operators want policy control beyond pinned upstream behavior.
