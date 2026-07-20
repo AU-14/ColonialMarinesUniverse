@@ -264,6 +264,18 @@ public sealed partial class GunComponent : Component
     /// </summary>
     [DataField]
     public Vector2 DefaultDirection = new Vector2(0, -1);
+
+    /// <summary>
+    /// Whether a melee attack made with this gun also delays shooting.
+    /// </summary>
+    [DataField]
+    public bool MeleeCooldownOnShoot = true;
+
+    /// <summary>
+    /// RMC offset applied to the projectile spawn location.
+    /// </summary>
+    [DataField]
+    public Vector2 ShootOriginOffset = Vector2.Zero;
 }
 
 [Flags]

@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
 using Content.Shared.Administration.Logs;
@@ -131,6 +132,9 @@ public abstract partial class SharedGunSystem : EntitySystem
 
     private void OnGunMelee(Entity<GunComponent> ent, ref MeleeHitEvent args)
     {
+        if (!ent.Comp.MeleeCooldownOnShoot)
+            return;
+
         if (!TryComp<MeleeWeaponComponent>(ent, out var melee))
             return;
 
@@ -330,7 +334,16 @@ public abstract partial class SharedGunSystem : EntitySystem
             shots = Math.Min(shots, gun.Comp.ShotsPerBurstModified - gun.Comp.ShotCounter);
         }
 
-        var attemptEv = new AttemptShootEvent(user, null);
+        var originEntity = HasComp<GunUseGunOriginComponent>(gun) ? gun.Owner : user;
+        var fromCoordinates = Transform(originEntity).Coordinates;
+
+        var shotOriginEv = new BeforeAttemptShootEvent(fromCoordinates, gun.Comp.ShootOriginOffset);
+        RaiseLocalEvent(user, ref shotOriginEv);
+
+        if (shotOriginEv.Handled)
+            fromCoordinates = shotOriginEv.Origin;
+
+        var attemptEv = new AttemptShootEvent(user, null, fromCoordinates, toCoordinates);
         RaiseLocalEvent(gun, ref attemptEv);
 
         if (attemptEv.Cancelled)
@@ -341,11 +354,17 @@ public abstract partial class SharedGunSystem : EntitySystem
             }
             gun.Comp.BurstActivated = false;
             gun.Comp.BurstShotsCount = 0;
-            gun.Comp.NextFire = TimeSpan.FromSeconds(Math.Max(lastFire.TotalSeconds + SafetyNextFire, gun.Comp.NextFire.TotalSeconds));
+            gun.Comp.NextFire = attemptEv.ResetCooldown
+                ? curTime
+                : TimeSpan.FromSeconds(Math.Max(lastFire.TotalSeconds + SafetyNextFire, gun.Comp.NextFire.TotalSeconds));
             return false;
         }
 
-        var fromCoordinates = Transform(user).Coordinates;
+        fromCoordinates = attemptEv.FromCoordinates;
+        toCoordinates = attemptEv.ToCoordinates;
+        if (toCoordinates == null)
+            return false;
+
         // Remove ammo
         var ev = new TakeAmmoEvent(shots, [], fromCoordinates, user);
 
@@ -406,7 +425,7 @@ public abstract partial class SharedGunSystem : EntitySystem
 
         // Shoot confirmed - sounds also played here in case it's invalid (e.g. cartridge already spent).
         Shoot(gun, ev.Ammo, fromCoordinates, toCoordinates.Value, out var userImpulse, user, throwItems: attemptEv.ThrowItems);
-        var shotEv = new GunShotEvent(user, ev.Ammo);
+        var shotEv = new GunShotEvent(user, ev.Ammo, fromCoordinates, toCoordinates.Value);
         RaiseLocalEvent(gun, ref shotEv);
 
         if (!userImpulse || !TryComp<PhysicsComponent>(user, out var userPhysics))
@@ -684,14 +703,25 @@ public abstract partial class SharedGunSystem : EntitySystem
 /// <param name="Cancelled">Set this to true if the shot should be cancelled.</param>
 /// <param name="ThrowItems">Set this to true if the ammo shouldn't actually be fired, just thrown.</param>
 [ByRefEvent]
-public record struct AttemptShootEvent(EntityUid User, string? Message, bool Cancelled = false, bool ThrowItems = false);
+public record struct AttemptShootEvent(
+    EntityUid User,
+    string? Message,
+    EntityCoordinates FromCoordinates,
+    EntityCoordinates? ToCoordinates,
+    bool Cancelled = false,
+    bool ThrowItems = false,
+    bool ResetCooldown = false);
 
 /// <summary>
 ///     Raised directed on the gun after firing.
 /// </summary>
 /// <param name="User">The user that fired this gun.</param>
 [ByRefEvent]
-public record struct GunShotEvent(EntityUid User, List<(EntityUid? Uid, IShootable Shootable)> Ammo);
+public record struct GunShotEvent(
+    EntityUid User,
+    List<(EntityUid? Uid, IShootable Shootable)> Ammo,
+    EntityCoordinates FromCoordinates,
+    EntityCoordinates ToCoordinates);
 
 /// <summary>
 /// Raised on an entity after firing a gun to see if any components or systems would allow this entity to be pushed
