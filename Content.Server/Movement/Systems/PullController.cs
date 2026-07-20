@@ -127,6 +127,9 @@ public sealed partial class PullController : VirtualController
         if (_container.IsEntityInContainer(player))
             return false;
 
+        if (IsRMCFiremanCarried(pulled))
+            return false;
+
         pullerComp.NextThrow = _timing.CurTime + pullerComp.ThrowCooldown;
 
         // Cap the distance
@@ -228,6 +231,12 @@ public sealed partial class PullController : VirtualController
 
         while (movingQuery.MoveNext(out var pullableEnt, out var mover, out var pullable, out var pullableXform))
         {
+            if (IsRMCFiremanCarried(pullableEnt))
+            {
+                RemCompDeferred<PullMovingComponent>(pullableEnt);
+                continue;
+            }
+
             if (!mover.MovingTo.IsValid(EntityManager))
             {
                 RemCompDeferred<PullMovingComponent>(pullableEnt);
