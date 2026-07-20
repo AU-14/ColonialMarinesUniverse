@@ -255,7 +255,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         if (!HasComp<XenoComponent>(operatorUid))
             return;
 
-        args.CanRun = false;
+        args = args with { CanRun = false };
     }
 
     private void OnMoverPreventCollide(Entity<GridVehicleMoverComponent> ent, ref PreventCollideEvent args)

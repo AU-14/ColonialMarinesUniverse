@@ -25,13 +25,11 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
-using Content.Shared.Explosion.Components;
 using Robust.Shared.Utility;
 using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared._RMC14.Explosion;
-using Content.Shared.Explosion.EntitySystems;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Marines.Skills;
 
@@ -55,7 +53,6 @@ public sealed partial class HardpointSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private SharedExplosionSystem _explosion = default!;
     [Dependency] private SharedGunSystem _guns = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
@@ -363,10 +360,17 @@ public sealed partial class HardpointSystem : EntitySystem
         if (!TryComp(hardpointItem, out VehicleArmorHardpointComponent? armor))
             return;
 
+        DamageProtectionBuffComponent? buff = null;
+        if (adding && (armor.ModifierSets.Count > 0 || armor.ExplosionCoefficient != null))
+            buff = EnsureComp<DamageProtectionBuffComponent>(vehicle);
+        else
+            TryComp(vehicle, out buff);
+
+        if (buff == null)
+            return;
+
         if (armor.ModifierSets.Count > 0)
         {
-            var buff = EnsureComp<DamageProtectionBuffComponent>(vehicle);
-
             foreach (var setId in armor.ModifierSets)
             {
                 if (!_prototypeManager.TryIndex(setId, out var modifier))
@@ -381,29 +385,21 @@ public sealed partial class HardpointSystem : EntitySystem
                     buff.Modifiers.Remove(setId);
                 }
             }
-
-            if (!adding && buff.Modifiers.Count == 0)
-            {
-                RemComp<DamageProtectionBuffComponent>(vehicle);
-            }
-            else
-            {
-                Dirty(vehicle, buff);
-            }
         }
 
-        if (armor.ExplosionCoefficient != null)
+        if (armor.ExplosionCoefficient is { } explosionCoefficient)
         {
             if (adding)
-            {
-                _explosion.SetExplosionResistance(vehicle, armor.ExplosionCoefficient.Value, worn: false);
-            }
-            else if (TryComp(vehicle, out ExplosionResistanceComponent? resistance) &&
-                     MathF.Abs(resistance.DamageCoefficient - armor.ExplosionCoefficient.Value) < 0.0001f)
-            {
-                RemComp<ExplosionResistanceComponent>(vehicle);
-            }
+                buff.ExplosionCoefficient = explosionCoefficient;
+            else if (buff.ExplosionCoefficient is { } current &&
+                     MathF.Abs(current - explosionCoefficient) < 0.0001f)
+                buff.ExplosionCoefficient = null;
         }
+
+        if (!adding && buff.Modifiers.Count == 0 && buff.ExplosionCoefficient == null)
+            RemComp<DamageProtectionBuffComponent>(vehicle);
+        else
+            Dirty(vehicle, buff);
     }
 
     private void RaiseHardpointSlotsChanged(EntityUid vehicle)
@@ -425,7 +421,7 @@ public sealed partial class HardpointSystem : EntitySystem
         if (!args.CanRun || HasAllRequired(ent.Owner, ent.Comp))
             return;
 
-        args.CanRun = false;
+        args = args with { CanRun = false };
     }
 
     private void EnsureSlots(EntityUid uid, HardpointSlotsComponent component, ItemSlotsComponent? itemSlots = null)
@@ -457,10 +453,7 @@ public sealed partial class HardpointSystem : EntitySystem
                 var hasComponents = whitelist.Components != null && whitelist.Components.Length > 0;
                 var hasTags = whitelist.Tags != null && whitelist.Tags.Count > 0;
                 var hasSizes = whitelist.Sizes != null && whitelist.Sizes.Count > 0;
-                var hasSkills = whitelist.Skills != null && whitelist.Skills.Count > 0;
-                var hasMinMobSize = whitelist.MinMobSize != null;
-
-                if (!hasComponents && !hasTags && !hasSizes && !hasSkills && !hasMinMobSize)
+                if (!hasComponents && !hasTags && !hasSizes)
                     whitelist.Components = new[] { HardpointItemComponent.ComponentId };
             }
 
@@ -738,7 +731,7 @@ public sealed partial class HardpointSystem : EntitySystem
         var normalized = new DamageSpecifier();
         foreach (var (type, value) in source.DamageDict)
         {
-            if (type is "Slash" or "Piercing" or "Blunt")
+            if (type == "Slash" || type == "Piercing" || type == "Blunt")
                 continue;
 
             normalized.DamageDict[type] = value;

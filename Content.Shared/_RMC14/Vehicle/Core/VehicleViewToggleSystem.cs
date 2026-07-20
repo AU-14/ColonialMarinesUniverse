@@ -36,10 +36,8 @@ public sealed partial class VehicleViewToggleSystem : EntitySystem
 
         if (toggle.Action is { } actionUid && TryComp(actionUid, out ActionComponent? actionComp))
         {
-            actionComp.ItemIconStyle = ItemActionIconStyle.BigAction;
-            actionComp.EntIcon = null;
+            _actions.SetEntityIcon((actionUid, actionComp), null);
             _actions.SetTemporary((actionUid, actionComp), false);
-            Dirty(actionUid, actionComp);
         }
 
         UpdateActionState(toggle);

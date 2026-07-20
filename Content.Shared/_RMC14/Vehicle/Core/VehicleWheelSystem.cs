@@ -63,7 +63,7 @@ public sealed partial class VehicleWheelSystem : EntitySystem
             return;
 
         if (!HasAllWheels(ent.Owner, ent.Comp))
-            args.CanRun = false;
+            args = args with { CanRun = false };
     }
 
     private void EnsureSlots(EntityUid uid, VehicleWheelSlotsComponent component, ItemSlotsComponent? itemSlots = null)

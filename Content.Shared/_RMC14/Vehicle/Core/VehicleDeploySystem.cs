@@ -208,7 +208,7 @@ public sealed partial class VehicleDeploySystem : EntitySystem
             return;
 
         if (ent.Comp.Deploying || ent.Comp.Deployed)
-            args.CanRun = false;
+            args = args with { CanRun = false };
     }
 
     private void UpdateDriverActionState(EntityUid vehicle, VehicleDeployableComponent deployable)
@@ -455,9 +455,7 @@ public sealed partial class VehicleDeploySystem : EntitySystem
                     continue;
 
                 // Mark the shot as targeted so downed entities (RequireProjectileTarget) can be hit.
-                var previousTarget = _guns.SwapTarget((gunUid, gunComp), target);
-                _guns.AttemptShoot((gunUid, gunComp), vehicle, targetCoords);
-                _guns.SwapTarget((gunUid, gunComp), previousTarget);
+                _guns.AttemptShoot(vehicle, (gunUid, gunComp), targetCoords, target);
             }
             else if (deployable.AutoSpinSpeed > 0f)
             {

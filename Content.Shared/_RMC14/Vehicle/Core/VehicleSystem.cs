@@ -994,7 +994,7 @@ public sealed partial class VehicleSystem : EntitySystem
         if (!args.CanRun || ent.Comp.Integrity > 0f)
             return;
 
-        args.CanRun = false;
+        args = args with { CanRun = false };
     }
 
     private void OnVehicleFrameIntegrityChanged(Entity<VehicleInteriorComponent> ent, ref VehicleFrameIntegrityChangedEvent args)

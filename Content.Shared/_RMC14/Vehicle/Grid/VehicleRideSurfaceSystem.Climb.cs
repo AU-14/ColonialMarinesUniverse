@@ -110,7 +110,7 @@ public sealed partial class VehicleRideSurfaceSystem
             BreakOnMove = true,
             BreakOnDamage = true,
             RequireCanInteract = false,
-            RangeCheck = false,
+            DistanceThreshold = null,
             AttemptFrequency = AttemptFrequency.StartAndEnd,
             DuplicateCondition = DuplicateConditions.SameTarget | DuplicateConditions.SameEvent,
         };
@@ -152,7 +152,7 @@ public sealed partial class VehicleRideSurfaceSystem
             BreakOnMove = breakOnMove,
             BreakOnDamage = true,
             RequireCanInteract = false,
-            RangeCheck = false,
+            DistanceThreshold = null,
             AttemptFrequency = AttemptFrequency.StartAndEnd,
             DuplicateCondition = DuplicateConditions.SameTarget | DuplicateConditions.SameEvent,
             CancelDuplicate = false,
