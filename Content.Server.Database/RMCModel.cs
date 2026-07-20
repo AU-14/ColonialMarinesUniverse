@@ -297,3 +297,43 @@ public sealed class RMCChatBans
     public Player? LastEditedBy { get; set; }
     public DateTime? LastEditedAt { get; set; }
 }
+
+public abstract partial class ServerDbContext
+{
+    public DbSet<RMCDiscordAccount> RMCDiscordAccounts { get; set; } = default!;
+    public DbSet<RMCLinkedAccount> RMCLinkedAccounts { get; set; } = default!;
+    public DbSet<RMCPatronTier> RMCPatronTiers { get; set; } = default!;
+    public DbSet<RMCPatron> RMCPatrons { get; set; } = default!;
+    public DbSet<RMCLinkingCodes> RMCLinkingCodes { get; set; } = default!;
+    public DbSet<RMCNamedItems> RMCNamedItems { get; set; } = default!;
+    public DbSet<RMCLinkedAccountLogs> RMCLinkedAccountLogs { get; set; } = default!;
+    public DbSet<RMCPatronLobbyMessage> RMCPatronLobbyMessages { get; set; } = default!;
+    public DbSet<RMCPatronRoundEndMarineShoutout> RMCPatronRoundEndMarineShoutouts { get; set; } = default!;
+    public DbSet<RMCPatronRoundEndXenoShoutout> RMCPatronRoundEndXenoShoutouts { get; set; } = default!;
+    public DbSet<RMCRoleTimerExclude> RMCRoleTimerExcludes { get; set; } = default!;
+    public DbSet<RMCSquadPreference> RMCSquadPreferences { get; set; } = default!;
+    public DbSet<RMCCommendation> RMCCommendations { get; set; } = default!;
+    public DbSet<RMCPlayerStats> RMCPlayerStats { get; set; } = default!;
+    public DbSet<RMCPlayerActionOrder> RMCPlayerActionOrder { get; set; } = default!;
+    public DbSet<RMCChatBans> RMCPlayerChatBans { get; set; } = default!;
+}
+
+public partial class Profile
+{
+    public RMCNamedItems? NamedItems { get; set; }
+    public RMCSquadPreference? SquadPreference { get; set; }
+    public string ArmorPreference { get; set; } = "Random";
+    public List<Rank> Ranks { get; } = new();
+    public bool PlaytimePerks { get; set; } = true;
+    public string XenoPrefix { get; set; } = string.Empty;
+    public string XenoPostfix { get; set; } = string.Empty;
+}
+
+public sealed class Rank
+{
+    public int Id { get; set; }
+    public Profile Profile { get; set; } = default!;
+    public int ProfileId { get; set; }
+    public string JobName { get; set; } = default!;
+    public string RankName { get; set; } = default!;
+}

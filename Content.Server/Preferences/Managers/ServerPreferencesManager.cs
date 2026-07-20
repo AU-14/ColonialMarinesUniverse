@@ -5,6 +5,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Afk;
 using Content.Server.Database;
+using Content.Shared._RMC14.Marines.Roles.Ranks;
+using Content.Shared._RMC14.Marines.Squads;
+using Content.Shared._RMC14.NamedItems;
 using Content.Shared.Body;
 using Content.Shared.CCVar;
 using Content.Shared.Construction.Prototypes;
@@ -96,12 +99,22 @@ namespace Content.Server.Preferences.Managers
             var jobs = profile.Jobs.ToDictionary(j => new ProtoId<JobPrototype>(j.JobName), j => (JobPriority) j.Priority);
             var antags = profile.Antags.Select(a => new ProtoId<AntagPrototype>(a.AntagName));
             var traits = profile.Traits.Select(t => new ProtoId<TraitPrototype>(t.TraitName));
+            var ranks = profile.Ranks.ToDictionary(
+                rank => new ProtoId<JobPrototype>(rank.JobName),
+                rank => (ProtoId<RankPrototype>?) new ProtoId<RankPrototype>(rank.RankName));
 
             var sex = Sex.Male;
             if (Enum.TryParse<Sex>(profile.Sex, true, out var sexVal))
                 sex = sexVal;
 
             var spawnPriority = (SpawnPriorityPreference) profile.SpawnPriority;
+            var squadPreference = profile.SquadPreference?.Squad is { } squad
+                ? new EntProtoId<SquadTeamComponent>(squad)
+                : (EntProtoId<SquadTeamComponent>?) null;
+
+            var armorPreference = ArmorPreference.Random;
+            if (Enum.TryParse<ArmorPreference>(profile.ArmorPreference, true, out var armorValue))
+                armorPreference = armorValue;
 
             var gender = sex == Sex.Male ? Gender.Male : Gender.Female;
             if (Enum.TryParse<Gender>(profile.Gender, true, out var genderVal))
@@ -196,7 +209,19 @@ namespace Content.Server.Preferences.Managers
                 antags.ToHashSet(),
                 traits.ToHashSet(),
                 loadouts
-            );
+            )
+                .WithArmorPreference(armorPreference)
+                .WithRankPreferences(ranks)
+                .WithSquadPreference(squadPreference)
+                .WithNamedItems(new SharedRMCNamedItems(
+                    profile.NamedItems?.PrimaryGunName,
+                    profile.NamedItems?.SidearmName,
+                    profile.NamedItems?.HelmetName,
+                    profile.NamedItems?.ArmorName,
+                    profile.NamedItems?.SentryName))
+                .WithPlaytimePerks(profile.PlaytimePerks)
+                .WithXenoPrefix(profile.XenoPrefix)
+                .WithXenoPostfix(profile.XenoPostfix);
         }
 
         private async void HandleSelectCharacterMessage(MsgSelectCharacter message)

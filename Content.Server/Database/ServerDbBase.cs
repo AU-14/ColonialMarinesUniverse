@@ -22,7 +22,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.Database
 {
-    public abstract class ServerDbBase
+    public abstract partial class ServerDbBase
     {
         private readonly ISawmill _opsLog;
         public event Action<DatabaseNotification>? OnNotificationReceived;
@@ -47,6 +47,9 @@ namespace Content.Server.Database
                 .Include(p => p.Profiles).ThenInclude(h => h.Jobs)
                 .Include(p => p.Profiles).ThenInclude(h => h.Antags)
                 .Include(p => p.Profiles).ThenInclude(h => h.Traits)
+                .Include(p => p.Profiles).ThenInclude(h => h.NamedItems)
+                .Include(p => p.Profiles).ThenInclude(h => h.Ranks)
+                .Include(p => p.Profiles).ThenInclude(h => h.SquadPreference)
                 .Include(p => p.Profiles)
                     .ThenInclude(h => h.Loadouts)
                     .ThenInclude(l => l.Groups)
@@ -105,6 +108,9 @@ namespace Content.Server.Database
                 .Include(p => p.Jobs)
                 .Include(p => p.Antags)
                 .Include(p => p.Traits)
+                .Include(p => p.NamedItems)
+                .Include(p => p.Ranks)
+                .Include(p => p.SquadPreference)
                 .Include(p => p.Loadouts)
                     .ThenInclude(l => l.Groups)
                     .ThenInclude(group => group.Loadouts)
@@ -219,6 +225,9 @@ namespace Content.Server.Database
             profile.EyeColor = appearance.EyeColor.ToHex();
             profile.SkinColor = appearance.SkinColor.ToHex();
             profile.SpawnPriority = (int) humanoid.SpawnPriority;
+            profile.ArmorPreference = humanoid.ArmorPreference.ToString();
+            profile.SquadPreference ??= new RMCSquadPreference();
+            profile.SquadPreference.Squad = humanoid.SquadPreference;
             profile.OrganMarkings = JsonSerializer.SerializeToDocument(dataNode.ToJsonNode());
 
             // support for downgrades - at some point this should be removed
@@ -260,6 +269,17 @@ namespace Content.Server.Database
                         .Select(t => new Trait {TraitName = t})
             );
 
+            profile.Ranks.Clear();
+            profile.Ranks.AddRange(
+                humanoid.RankPreferences
+                    .Where(rank => rank.Value != null)
+                    .Select(rank => new Rank
+                    {
+                        JobName = rank.Key,
+                        RankName = rank.Value!.Value.Id,
+                    })
+            );
+
             profile.Loadouts.Clear();
 
             foreach (var (role, loadouts) in humanoid.Loadouts)
@@ -290,6 +310,16 @@ namespace Content.Server.Database
 
                 profile.Loadouts.Add(dz);
             }
+
+            profile.NamedItems ??= new RMCNamedItems();
+            profile.NamedItems.PrimaryGunName = humanoid.NamedItems.PrimaryGunName;
+            profile.NamedItems.SidearmName = humanoid.NamedItems.SidearmName;
+            profile.NamedItems.HelmetName = humanoid.NamedItems.HelmetName;
+            profile.NamedItems.ArmorName = humanoid.NamedItems.ArmorName;
+            profile.NamedItems.SentryName = humanoid.NamedItems.SentryName;
+            profile.PlaytimePerks = humanoid.PlaytimePerks;
+            profile.XenoPrefix = humanoid.XenoPrefix;
+            profile.XenoPostfix = humanoid.XenoPostfix;
 
             return profile;
         }

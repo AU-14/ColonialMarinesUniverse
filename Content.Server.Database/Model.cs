@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Content.Server.Database
 {
-    public abstract class ServerDbContext : DbContext
+    public abstract partial class ServerDbContext : DbContext
     {
         protected ServerDbContext(DbContextOptions options) : base(options)
         {
@@ -324,7 +324,7 @@ namespace Content.Server.Database
         public List<Profile> Profiles { get; } = new();
     }
 
-    public class Profile
+    public partial class Profile
     {
         public int Id { get; set; }
         public int Slot { get; set; }

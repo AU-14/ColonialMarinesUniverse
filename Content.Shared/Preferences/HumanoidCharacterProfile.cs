@@ -193,6 +193,7 @@ namespace Content.Shared.Preferences
                 new HashSet<ProtoId<TraitPrototype>>(other.TraitPreferences),
                 new Dictionary<string, RoleLoadout>(other.Loadouts))
         {
+            CopyRmcFrom(other);
         }
 
         /// <summary>
@@ -625,6 +626,7 @@ namespace Content.Shared.Preferences
             if (!_traitPreferences.SequenceEqual(other._traitPreferences)) return false;
             if (!Loadouts.SequenceEqual(other.Loadouts)) return false;
             if (FlavorText != other.FlavorText) return false;
+            if (!RmcMemberwiseEquals(other)) return false;
             return Appearance.Equals(other.Appearance);
         }
 
@@ -801,6 +803,8 @@ namespace Content.Shared.Preferences
             {
                 _loadouts.Remove(value);
             }
+
+            EnsureRmcValid(session, collection, prototypeManager);
         }
 
         /// <summary>
@@ -886,6 +890,7 @@ namespace Content.Shared.Preferences
             hashCode.Add(Appearance);
             hashCode.Add((int)SpawnPriority);
             hashCode.Add((int)PreferenceUnavailable);
+            AddRmcHash(ref hashCode);
             return hashCode.ToHashCode();
         }
 
