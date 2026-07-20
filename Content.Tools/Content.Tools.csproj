@@ -10,5 +10,6 @@
     </ItemGroup>
 
   <Import Project="..\RobustToolbox\MSBuild\Robust.Properties.targets" />
+
   <Import Project="..\RobustToolbox\Imports\Shared.props" />
 </Project>
