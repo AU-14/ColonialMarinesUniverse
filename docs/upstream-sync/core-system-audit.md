@@ -73,6 +73,15 @@ demonstrates otherwise.
 5. Record exact upstream PR/commit links, affected files, validation, and remaining
    debt. A successful compile alone does not prove behavioral parity.
 
+## Audit and validation cadence
+
+Cadence revised: 2026-07-20, after CS-0048.
+
+- Inventory the pinned first-parent range in ordered waves of 200 upstream commits. Classify every commit as already present, irrelevant to this fork/scope, deferred or rejected with a reason, or a port candidate.
+- Keep every accepted core-system decision in its own atomic CMU commit even when candidates were discovered in the same inventory wave.
+- Execute the accumulated focused tests and full solution build after each 1,000 upstream commits have been classified. Validate earlier only when a change's risk or static evidence makes deferral unsafe.
+- Earlier CS-0041–CS-0048 references to a CS-0060 checkpoint are superseded by this 1,000-commit cadence; their queued regressions remain part of the next checkpoint.
+
 ## Entry template
 
 ```markdown
