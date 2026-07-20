@@ -27,7 +27,6 @@ namespace Content.Shared.Access.Systems;
 
 public sealed partial class AccessReaderSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private InventorySystem _inventorySystem = default!;
     [Dependency] private IGameTiming _gameTiming = default!;
     [Dependency] private EmagSystem _emag = default!;
@@ -35,7 +34,8 @@ public sealed partial class AccessReaderSystem : EntitySystem
     [Dependency] private SharedGameTicker _gameTicker = default!;
     [Dependency] private SharedHandsSystem _handsSystem = default!;
     [Dependency] private SharedContainerSystem _containerSystem = default!;
-    [Dependency] private SharedStationRecordsSystem _recordsSystem = default!;
+    [Dependency] private StationRecordsSystem _recordsSystem = default!;
+    [Dependency] private IdentitySystem _identity = default!;
 
     private static readonly ProtoId<TagPrototype> PreventAccessLoggingTag = "PreventAccessLogging";
 

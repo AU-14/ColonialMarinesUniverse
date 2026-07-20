@@ -9,7 +9,7 @@ namespace Content.Shared.StationRecords;
 /// </summary>
 [DataDefinition]
 [Serializable, NetSerializable]
-public sealed partial record GeneralStationRecord
+public sealed partial record GeneralStationRecord : StationRecord
 {
     /// <summary>
     ///     Name tied to this station record.
