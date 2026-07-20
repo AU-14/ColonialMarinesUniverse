@@ -1397,3 +1397,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Administration/Commands/VariantizeCommand.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static constructor comparison confirms type, flags, and randomized variant remain unchanged while rotation/mirroring is copied from the source tile. Server compilation and a rotated/mirrored mapping-command case are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add command coverage that variant IDs can change without altering any tile's rotation/mirroring bits.
+
+## CS-0099 — Avoid adding sleeping state during prediction reset
+
+- Upstream: [space-wizards/space-station-14#39061](https://github.com/space-wizards/space-station-14/pull/39061), `1afb37669d4c508f10aec73d496453314cc79178`, 2025-07-24
+- Areas: Medical, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Applying a forced-sleep status effect during authoritative state restoration no longer calls `TrySleeping` and adds a fresh `SleepingComponent`; ordinary status-effect application still starts sleep.
+- RMC/CMU divergence: CMU's sleeping system adds pain-numbness event ordering and retains both legacy and newer status-effect systems. The guard is confined to the shared forced-sleep callback and preserves those fork-specific paths.
+- Decision and rationale: Port the retained `IGameTiming.ApplyingState` guard exactly so prediction reset remains state application rather than triggering new gameplay mutations.
+- Files changed: `Content.Shared/Bed/Sleep/SleepingSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static control-flow review confirms only applying-state callbacks skip `TrySleeping`; normal forced sleep and CMU's surrounding event subscriptions are unchanged. Shared compilation plus predicted-reset and ordinary forced-sleep cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a prediction-reset regression proving restoration neither creates a sleeping component nor emits duplicate sleep-state side effects.
