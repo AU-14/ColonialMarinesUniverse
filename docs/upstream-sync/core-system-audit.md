@@ -2997,3 +2997,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Nuke/NukeComponent.cs`, `Content.Server/Nuke/NukeSystem.cs`, `Content.Shared/Nuke/NukeUiMessages.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static message-flow review confirms status validation precedes the clock check, failed codes consume the same cooldown as correct codes, and keypad digit and clear messages retain their prior paths. Server/shared compilation plus first, repeated, boundary-time, wrong/correct code, multi-user, multi-device, save/load time-offset, arming/disarming, and RMC nuke cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1974 as `Ported (CS-0220)` when wave 0010 is committed.
+
+## CS-0221 — Stop pulls after committed mob-state transitions
+
+- Upstream: [space-wizards/space-station-14#41835](https://github.com/space-wizards/space-station-14/pull/41835), `75bb75539bbe84964be0f3303dc8473d135c4a4a`, 2025-12-12
+- Areas: Movement, Medical, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `PullingSystem` now reacts to `MobStateChangedEvent` and its final `NewMobState` rather than the mutable pre-transition `UpdateMobStateEvent`. A pull is released when the puller actually enters critical or dead state, not merely when a state update proposes one.
+- RMC/CMU divergence: RMC adds critical-grace, suicide, parasite, pheromone, damage-on-pull, fireman-carry, and pull-retargeting behavior around the same mob-state and pulling systems. Waiting for the committed transition lets those pre-update modifiers finish before base pulling cleanup while preserving `TryStopPull` and RMC's pull-stop event propagation.
+- Decision and rationale: Port the target-final event subscription, handler type, and field access together. The post-transition event is raised only after allowed-state checks and state assignment, eliminating premature pull cancellation when another system changes or rejects the proposed state.
+- Files changed: `Content.Shared/Movement/Pulling/Systems/PullingSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static state-machine review confirms `MobStateChangedEvent` carries the assigned final state, fires only on an actual transition, and the existing critical/dead cleanup still resolves the pulled entity before stopping. Shared compilation plus alive-to-critical/dead, unchanged/rejected, revival, RMC critical-grace, fireman carry, retargeting, prediction, joint, hand, and pull-event cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1983 as `Ported (CS-0221)` when wave 0010 is committed.
