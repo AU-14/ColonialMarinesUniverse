@@ -1215,3 +1215,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Mobs/Player/clone.yml`, `docs/upstream-sync/inventory-wave-0001.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms `Thieving` sits in the equivalent special-capability section and the component is registered in CMU. Prototype loading and a component-copy regression are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Cover cloning a thieving actor with both enabled and disabled stealth state to confirm shallow copying preserves the intended runtime flag and alert behavior.
+
+## CS-0085 — Gate thrown melee knockback by use delay
+
+- Upstream: [space-wizards/space-station-14#39018](https://github.com/space-wizards/space-station-14/pull/39018), `975ebac202deb696d1cfb9e6903e1eed62485786`, 2025-07-16
+- Areas: Physics, Interactions
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: `MeleeThrowOnHitComponent` now networks per-throw hit and cooldown state. A legal throw clears both flags, a collision records a hit, landing starts the use delay and closes the throw window, and throws attempted during that delay cannot apply knockback.
+- RMC/CMU divergence: CMU retains the older boolean unanchor and stun APIs in the same system; those are deliberately preserved. The new state machine is otherwise the retained target-final implementation used by Mjollnir.
+- Decision and rationale: Port the two-field lifecycle gate as one coordinated component/system change because either half alone would permit stale or unreplicated throw activation.
+- Files changed: `Content.Shared/Weapons/Melee/Components/MeleeThrowOnHitComponent.cs`, `Content.Shared/Weapons/Melee/MeleeThrowOnHitSystem.cs`, `docs/upstream-sync/inventory-wave-0001.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review traces clean throw, hit, land, and delayed rethrow paths and confirms both fields use delta-generated component state. Shared compilation and a Mjollnir throw-delay regression are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Test a clean miss, a hit followed by immediate rethrow, multiple collision events in one flight, and predicted client reconciliation of both flags.

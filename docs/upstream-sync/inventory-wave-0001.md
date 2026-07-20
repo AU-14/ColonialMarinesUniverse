@@ -106,7 +106,7 @@ are retained so future audits can trace each classifier's original decision.
 0084 | 988a35bc5abc7c65ec816c6bd36ff98104736dff | Automatic changelog update | Non-code/no-op | — | Generated changelog only.
 0085 | 76a7b31c1e59a11b5079d20a3e2feb9c0a7836dd | Fix firelocks failing to drop fast enough (#38918) | Ported (CS-0054) | Physics, GameTicking | Emergency firelocks now refresh airtight data before the current Monstermos flood-fill continues.
 0086 | f6c8bb9b1626315a51059d713a072617da0b669a | Automatic changelog update | Non-code/no-op | — | Generated changelog only.
-0087 | 975ebac202deb696d1cfb9e6903e1eed62485786 | Fix Mjollnir throw while on delay (#39018) | Port candidate | Physics, Interactions | Mjollnir lacks per-throw hit state and can activate incorrectly while UseDelay is active.
+0087 | 975ebac202deb696d1cfb9e6903e1eed62485786 | Fix Mjollnir throw while on delay (#39018) | Ported (CS-0085) | Physics, Interactions | Per-throw hit and cooldown state now prevents Mjollnir knockback while its use delay is active.
 0088 | faa8152bf692f98935ec804d892a2e50580a16cc | Automatic changelog update | Non-code/no-op | — | Generated changelog only.
 0089 | 2a496bf93f56b7fb3b765840ad5bc1112f9e2843 | Give admin bags explosion resistance (#38384) | Port candidate | Physics | Admin ghost gear still lacks the explosion-resistant satchel prototype.
 0090 | 86093a548cc97363aaa68999c6305f4cbb08c08a | Automatic changelog update | Non-code/no-op | — | Generated changelog only.
