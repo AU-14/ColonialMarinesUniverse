@@ -3412,3 +3412,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Singularity/EntitySystems/EmitterSystem.cs`, `docs/upstream-sync/inventory-wave-0013.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static control-flow review confirms the log remains inside the successful anchored/unlocked player interaction path, state text follows completed mutation, and rejected or signal-driven changes are not attributed to a user. Server compilation plus on/off toggles, locked/unanchored rejection, power loss, signal control, RMC emitters, impact filtering, and log formatting are queued for the index-2999 checkpoint.
 - Follow-up/debt: Later target emitter-alert features are independent and should retain this explicit state suffix when integrated.
+
+## CS-0252 â€” Log criminal-record status changes
+
+- Upstream: [space-wizards/space-station-14#42691](https://github.com/space-wizards/space-station-14/pull/42691), `1f8365fe9db8a1f7ccc9fb5d18c92a9e6c9eda32`, 2026-01-29
+- Areas: Interactions, Gamerules
+- Status: Ported (adapted)
+- Risk: Low
+- Behavior/API delta: After a criminal-record status mutation succeeds, the console now emits a low-impact `Identity` admin log containing the operating mob, target record name, and resulting status transition key. Rejected requests and no-op changes still return before logging.
+- RMC/CMU divergence: CMU's current dependency-injection generator requires the logger field to remain non-`readonly`, unlike the historical upstream diff. The standard criminal-record console and security radio flow are retained alongside RMC security systems; access checks, reasons, automatic history, officer identity, radio announcements, record storage, and RMC-specific records are unchanged.
+- Decision and rationale: Port the pinned logging boundary immediately after the successful record update and radio notification. Logging earlier could record invalid, unauthorized, or unchanged requests; logging only the UI action would omit the resolved record name and authoritative resulting state. `Identity` keeps these changes filterable in the admin panel.
+- Files changed: `Content.Server/CriminalRecords/Systems/CriminalRecordsConsoleSystem.cs`, `docs/upstream-sync/inventory-wave-0013.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static control-flow review confirms access, selected-record, duplicate-state, and reason validation all precede mutation and logging, while the actor and target name come from validated server state. Server compilation plus wanted/detained/suspected/paroled/discharged/none changes, rejected access, malformed reasons, no-op input, radio/history behavior, log formatting, and RMC security coexistence are queued for the index-2999 checkpoint.
+- Follow-up/debt: The pinned target later predicts station records and refactors identity lookup; preserve this successful-mutation log when those structural changes are reconciled.

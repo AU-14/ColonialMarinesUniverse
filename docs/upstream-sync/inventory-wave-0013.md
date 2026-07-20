@@ -189,7 +189,7 @@ behavior to port.
 2570 | 57b73101c98bdb2159ea65ec12c965c4ddc8b06e | Lizard Unhappy (#42594) | Deferred | Interactions | CMU and RMC voice prototypes still reference the affected asset.
 2571 | 275facfbb15778c428ce619ce51f969e657a3e39 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2572 | e4e9371c73ffd2e78c38e74d13452396969ebe63 | Update RT to 272.0.0 (#42694) | Superseded | — | CMU already pins a newer RobustToolbox generation.
-2573 | 1f8365fe9db8a1f7ccc9fb5d18c92a9e6c9eda32 | Log Criminal Status changes for admin panel (#42691) | PortCandidate | Interactions, Gamerules | Focused administrative audit logging.
+2573 | 1f8365fe9db8a1f7ccc9fb5d18c92a9e6c9eda32 | Log Criminal Status changes for admin panel (#42691) | Ported (CS-0252) | Interactions, Gamerules | Successful criminal-status changes now identify the operator, record, and resulting status in admin logs.
 2574 | 338503b58e8eac887edeb7f289358f89dc117529 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2575 | 407664a5364b4638be97936e9f77018fec9824ed | Add Cyborg crew indicator (#37038) | Deferred | Interactions, Gamerules | Larger crew-monitoring and borg presentation feature.
 2576 | 236eaa1fe13292455a48d57456d1870290b894ce | Automatic changelog update | Irrelevant | — | Generated changelog only.
