@@ -890,3 +890,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Clothing/Belt/belts.yml`, `Resources/Prototypes/Entities/Objects/Devices/Electronics/signaller.yml`, `Resources/Prototypes/tags.yml`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the pinned target retains the tag on the signaller and its engineering-belt whitelist. Prototype loading and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add resolved-prototype storage whitelist coverage if belt acceptance rules gain a lightweight integration helper; audit RMC engineering belts separately rather than inheriting the standard whitelist implicitly.
+
+## CS-0060 — Avoid false client-side power loss
+
+- Upstream: [space-wizards/space-station-14#38647](https://github.com/space-wizards/space-station-14/pull/38647), `c60910dfa68bbed56a4cad4b0739b532f8930006`, 2025-07-14
+- Areas: Physics, GameTicking, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Client-side power checks now optimistically treat an entity without a local `ApcPowerReceiverComponent` as powered. Terminals and other client interactions no longer mispredict a power failure when the authoritative receiver state is simply absent from client prediction.
+- RMC/CMU divergence: RMC terminals and powered interactables share this client helper but retain their server-authoritative APC and machine logic. Existing receivers still return their replicated `Powered` value; only the missing-component prediction fallback changes.
+- Decision and rationale: Port the pinned target's single fallback change. The server remains authoritative and will reject genuinely unpowered actions, while the client avoids a false negative it cannot establish from local state.
+- Files changed: `Content.Client/Power/EntitySystems/StaticPowerSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the pinned target retains the optimistic missing-receiver fallback. Client compilation and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a client prediction regression covering both absent and explicitly unpowered receivers when the integration harness can instantiate the client-only component manager directly.
