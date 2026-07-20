@@ -2112,3 +2112,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Clothing/Shoes/misc.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static resolved-prototype review confirms the boots no longer contain `NoSlip`. Prototype loading and a standard slipping interaction are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None.
+
+## CS-0154 — Clarify the implant extractor's behavior
+
+- Upstream: [space-wizards/space-station-14#40375](https://github.com/space-wizards/space-station-14/pull/40375), `0e0f01542210e8103001ca4746c5de3bd64e07c3`, 2025-09-18
+- Areas: Medical, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The reusable MedFab implanter is now named `implant extractor`; its description and revolutionary guide explain extraction, re-administration, and catastrophic damage after an invalid selection.
+- RMC/CMU divergence: No implant logic changes are imported. The text documents CMU's existing `DrawCatastrophicFailure` path and preserves all RMC surgery and implant behavior.
+- Decision and rationale: Port the name and guidance together so players can identify the tool and understand the already-existing failure consequence before using it.
+- Files changed: `Resources/Prototypes/Entities/Objects/Misc/implanters.yml`, `Resources/ServerInfo/Guidebook/Antagonist/Revolutionaries.xml`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static code/prototype review confirms the extractor remains injectable after storing an implant and invalid extraction still applies `DeimplantFailureDamage`. Prototype loading and guidebook parsing are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None.
