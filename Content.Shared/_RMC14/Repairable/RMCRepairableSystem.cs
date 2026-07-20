@@ -2,7 +2,6 @@
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Xenonids.ClawSharpness;
 using Content.Shared.Chemistry.Components;
-using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
@@ -296,16 +295,13 @@ public sealed partial class RMCRepairableSystem : EntitySystem
 
     public bool UseFuel(EntityUid tool, EntityUid user, FixedPoint2 fuelUsed, bool attempt = false)
     {
-        if (!TryComp<SolutionContainerManagerComponent>(tool, out var welderCon))
-            return false;
-
         if (!TryComp<ItemToggleComponent>(tool, out var toggle) || !toggle.Activated)
         {
             _popup.PopupClient(Loc.GetString("welder-component-welder-not-lit-message"), user, PopupType.SmallCaution);
             return false;
         }
 
-        if (!_solution.TryGetSolution((tool, welderCon), SolutionWelder, out var solutionComp, out var solution))
+        if (!_solution.TryGetSolution(tool, SolutionWelder, out var solutionComp, out var solution))
             return false;
 
         if (solution.GetTotalPrototypeQuantity(ReagentWelder) == 0 || solution.GetTotalPrototypeQuantity(ReagentWelder) < fuelUsed)

@@ -231,9 +231,9 @@ public sealed partial class HypospraySystem : EntitySystem
         // In SS13 the hypospray ONLY works on mobs, NOT beakers or anything else.
         // But this is 14, we dont do what SS13 does just because SS13 does it.
         return component.OnlyAffectsMobs
-            ? HasComp<SolutionContainerManagerComponent>(entity) &&
+            ? HasComp<InjectableSolutionComponent>(entity) &&
               HasComp<MobStateComponent>(entity)
-            : HasComp<SolutionContainerManagerComponent>(entity);
+            : HasComp<InjectableSolutionComponent>(entity);
     }
 
     #endregion

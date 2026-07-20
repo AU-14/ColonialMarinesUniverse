@@ -3,7 +3,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Xenonids;
-using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
@@ -286,16 +285,10 @@ public sealed partial class SkillsSystem : EntitySystem
             entityToExamine = contained.Value;
         }
 
-        if (!TryComp(entityToExamine, out SolutionContainerManagerComponent? solutionContainerManager))
-            return;
-
         var foundReagents = new List<ReagentQuantity>();
-        foreach (var solutionContainerId in solutionContainerManager.Containers)
+        foreach (var (_, solutionContainer) in _solutionContainerSystem.EnumerateSolutions(entityToExamine))
         {
-            if (!_solutionContainerSystem.TryGetSolution(entityToExamine, solutionContainerId, out _, out var solution))
-                continue;
-
-            foreach (var reagent in solution.Contents)
+            foreach (var reagent in solutionContainer.Comp.Solution.Contents)
             {
                 foundReagents.Add(reagent);
             }
