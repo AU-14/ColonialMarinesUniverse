@@ -3619,3 +3619,16 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - Files changed: `Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.RMC.cs`, `Resources/Locale/en-US/_RMC14/weapons/guns.ftl`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation evidence: Static call-path review confirms both direct interaction and assisted reload reach this guard before DoAfter creation and completion-time stack splitting. Shared wave compilation remains required; tests are deferred until the 1,000-upstream-commit checkpoint.
 - Remaining debt: Non-brand-new expendable-light rejection still needs a cross-client/server adaptation because the current concrete light component is split by project; it remains `Missing` rather than being approximated with prototype checks.
+
+## CS-0265 - Restore RMC client ammo corrections
+
+- Upstreams compared: SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767` and RMC `b6d677947dd8ebcb06194a66798938645fed5a54`.
+- Areas: Shooting, UI, Prediction
+- Classification: Missing -> Adapted
+- Risk: Medium before the fix; low after it.
+- Behavior/API delta: Aimed shots, air shots, and tackle-triggered firing still raise `UpdateClientAmmoEvent`, including an artificial `-1` correction when server-side actions consume a round. The fast-port retained those producers and the current ammo-counter artificial-delta API but dropped the sole client consumer, leaving the displayed count stale until later state reconciliation.
+- RMC/CMU divergence: Only retained RMC correction events trigger this listener. Standard SS14 predicted ammo updates, control creation, provider counts, and authoritative state reconciliation are unchanged.
+- Decision and rationale: Subscribe from the fork-owned client gun partial during the current gun-system lifecycle and forward the event's artificial delta to the existing private ammo-counter updater. No new network event or duplicate ammo state is introduced.
+- Files changed: `Content.Client/Weapons/Ranged/Systems/GunSystem.cs`, `Content.Client/_RMC14/Weapons/Ranged/GunSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation evidence: Repository-wide search finds three live event producers and no pre-fix consumer; the current client updater already carries `ArtificialIncrease` into `UpdateAmmoCounterEvent`. Client wave compilation remains required; tests are deferred until the 1,000-upstream-commit checkpoint.
+- Remaining debt: Runtime UI coverage must verify the correction is applied once under prediction and reconciles cleanly for aimed shots, air shots, and tackle shots.

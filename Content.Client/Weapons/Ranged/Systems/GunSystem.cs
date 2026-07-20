@@ -98,6 +98,7 @@ public sealed partial class GunSystem : SharedGunSystem
 
         InitializeMagazineVisuals();
         InitializeSpentAmmo();
+        InitializeRmcGun();
 
         _comparer = new GunTargetEntityComparer();
     }
