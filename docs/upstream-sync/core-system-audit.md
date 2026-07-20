@@ -1150,3 +1150,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Silicons/StationAi/SharedStationAiSystem.cs`, `Resources/Locale/en-US/silicons/station-ai.ftl`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms the localized name is applied after movement relaying and matches the pinned target-final key and format. Shared compilation and station-AI lifecycle coverage are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a lifecycle regression that inserts a custom-named AI, asserts its eye name, and verifies replacement eyes receive the same derived name.
+
+## CS-0080 — Make round-end event waits tick-deterministic
+
+- Upstream: [space-wizards/space-station-14#39133](https://github.com/space-wizards/space-station-14/pull/39133), `65b4b41928adca08247227844d376567c13374d6`, 2025-07-22
+- Areas: GameTicking, Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `RoundEndTest` now waits for round-system transitions for at most 60 synchronized simulation ticks instead of racing a ten-second wall-clock task while advancing five ticks at a time.
+- RMC/CMU divergence: The older CMU test fixture shape is retained; only the target-final event counter and deterministic wait loop are adapted. Production round flow is unchanged.
+- Decision and rationale: Port the retained test correction because simulation-time bounds are reproducible, faster on failure, and exercise each intermediate tick rather than depending on host scheduling.
+- Files changed: `Content.IntegrationTests/Tests/RoundEndTest.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms the loop returns only after the subscribed round-end event changes the counter and otherwise fails after exactly 60 synchronized ticks. The integration test is queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: If legitimate round transitions exceed 60 ticks after future rule changes, derive the bound from configured durations while keeping it in simulation time.
