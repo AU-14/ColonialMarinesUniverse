@@ -12,7 +12,7 @@ namespace Content.Shared._RMC14.Dropship;
 public sealed partial class DropshipComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public FTLState State;
+    public FTLState State = FTLState.Available;
 
     [DataField, AutoNetworkedField]
     public EntityUid? Destination;

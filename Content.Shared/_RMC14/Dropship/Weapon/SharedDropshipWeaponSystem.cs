@@ -646,8 +646,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             if (!_dropship.TryGetGridDropship(weapon.Value, out dropship))
                 return;
 
-            if (!TryComp(dropship, out FTLComponent? ftl) ||
-                (ftl.State != FTLState.Travelling && ftl.State != FTLState.Arriving))
+            if (!_dropship.IsInFlight(dropship))
             {
                 var msg = Loc.GetString("rmc-dropship-weapons-fire-not-flying");
                 _popup.PopupCursor(msg, actor, PopupType.SmallCaution);
@@ -1025,8 +1024,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         // Only select a target while travelling
         if (!CasDebug)
         {
-            if (!TryComp(dropship, out FTLComponent? ftl) ||
-                ftl.State != FTLState.Travelling)
+            if (dropship.Comp.State != FTLState.Travelling)
             {
                 if (_net.IsClient)
                 {
@@ -1169,8 +1167,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             if (!IsValidTarget(target))
                 return;
 
-            if (!TryComp(dropship, out FTLComponent? ftl) ||
-                ftl.State != FTLState.Travelling)
+            if (dropship.Comp.State != FTLState.Travelling)
             {
                 if (_net.IsClient)
                 {

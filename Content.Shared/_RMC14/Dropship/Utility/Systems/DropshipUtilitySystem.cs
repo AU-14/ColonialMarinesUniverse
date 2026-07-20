@@ -4,8 +4,6 @@ using Content.Shared._RMC14.Dropship.Utility.Components;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Interaction;
-using Content.Shared.Shuttles.Components;
-using Content.Shared.Shuttles.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Timing;
 
@@ -78,8 +76,7 @@ public sealed partial class DropshipUtilitySystem : EntitySystem
             return true;
         }
 
-        if (!TryComp(dropship, out FTLComponent? ftl) ||
-                (ftl.State != FTLState.Travelling && ftl.State != FTLState.Arriving))
+        if (!_dropship.IsInFlight(dropship))
         {
             popup = Loc.GetString("rmc-dropship-utility-activate-not-flying");
             return false;

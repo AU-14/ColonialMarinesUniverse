@@ -2,7 +2,6 @@
 using System.Numerics;
 using Content.Server._RMC14.GameStates;
 using Content.Server._RMC14.Marines;
-using Content.Server._RMC14.Shuttles;
 using Content.Server.Doors.Systems;
 using Content.Server.GameTicking;
 using Content.Server.Shuttles.Components;
@@ -95,7 +94,6 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         SubscribeLocalEvent<DropshipComponent, FTLStartedEvent>(OnFTLStarted);
         SubscribeLocalEvent<DropshipComponent, FTLCompletedEvent>(OnFTLCompleted);
         SubscribeLocalEvent<DropshipComponent, FTLUpdatedEvent>(OnFTLUpdated);
-        SubscribeLocalEvent<DropshipComponent, BeforeFTLStartedEvent>(OnBeforeFTLStarted);
 
         SubscribeLocalEvent<DropshipInFlyByComponent, FTLCompletedEvent>(OnInFlyByFTLCompleted);
 
@@ -118,7 +116,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
 
     private void OnFTLStarted(Entity<DropshipComponent> ent, ref FTLStartedEvent args)
     {
-        OnRefreshUI(ent, ref args);
+        RaiseUpdate(ent);
 
         var map = args.FromMapUid;
         if (HasComp<AlmayerComponent>(map))
@@ -162,7 +160,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         if (ent.Comp.RechargeTime is { } rechargeTime && TryComp(ent, out FTLComponent? ftl))
             ftl.StateTime = StartEndTime.FromCurTime(_timing, rechargeTime);
 
-        OnRefreshUI(ent, ref args);
+        RaiseUpdate(ent);
 
         var map = args.MapUid;
         if (HasComp<RMCPlanetComponent>(map))
@@ -186,21 +184,22 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
 
     private void OnFTLUpdated(Entity<DropshipComponent> ent, ref FTLUpdatedEvent args)
     {
+        var state = FTLState.Available;
         if (TryComp(ent, out FTLComponent? ftl))
         {
-            ent.Comp.State = ftl.State;
-            Dirty(ent);
+            state = ftl.State;
 
             if (ftl.State == FTLState.Starting && ent.Comp.LaunchAlarmEntity != null)
                 TryStopLaunchAlarm(ent);
         }
 
-        RefreshUI();
-    }
+        if (ent.Comp.State != state)
+        {
+            ent.Comp.State = state;
+            Dirty(ent);
+        }
 
-    private void OnBeforeFTLStarted(Entity<DropshipComponent> ent, ref BeforeFTLStartedEvent args)
-    {
-        RelayToMountedEntities(ent, args);
+        RefreshUI();
     }
 
     private void OnRefreshUI<T>(Entity<DropshipComponent> ent, ref T args)
@@ -210,7 +209,10 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
 
     private void OnFtlRequested<T>(Entity<DropshipComponent> ent, ref T args)
     {
-        OnRefreshUI(ent, ref args);
+        if (TryComp(ent, out FTLComponent? ftl))
+            ftl.VisualizerProto = null;
+
+        RaiseUpdate(ent);
 
         var departureLocations = _entityLookup.GetEntitiesInRange<DropshipDestinationComponent>(ent.Owner.ToCoordinates(), DepartureLocationSearchRange);
 
@@ -804,13 +806,24 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
 
         var time = _timing.CurTime;
 
-        var dropships = EntityQueryEnumerator<DropshipComponent, FTLComponent>();
-        while (dropships.MoveNext(out var uid, out var dropship, out var ftl))
+        var dropships = EntityQueryEnumerator<DropshipComponent>();
+        while (dropships.MoveNext(out var uid, out var dropship))
         {
-            if (!dropship.Crashed)
+            if (!TryComp(uid, out FTLComponent? ftl))
+            {
+                if (dropship.State != FTLState.Available)
+                    RaiseUpdate(uid);
+
                 continue;
+            }
 
             ftl.VisualizerProto = null;
+
+            if (dropship.State != ftl.State)
+                RaiseUpdate(uid);
+
+            if (!dropship.Crashed)
+                continue;
 
             if (dropship.Destination == null)
                 continue;

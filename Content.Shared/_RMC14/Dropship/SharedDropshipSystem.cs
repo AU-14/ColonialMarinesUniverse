@@ -839,11 +839,14 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         return true;
     }
 
-    public bool IsInFlight(Entity<DropshipComponent?> dropship)
+    public bool IsInFlight(EntityUid dropship)
     {
-        if (!Resolve(dropship, ref dropship.Comp, false))
-            return false;
+        return TryComp(dropship, out DropshipComponent? component) &&
+               IsInFlight((dropship, component));
+    }
 
+    public bool IsInFlight(Entity<DropshipComponent> dropship)
+    {
         return dropship.Comp.State == FTLState.Travelling || dropship.Comp.State == FTLState.Arriving;
     }
 

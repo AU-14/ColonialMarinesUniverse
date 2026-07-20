@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Shuttles;
 using Content.Shared.Shuttles.Components;
 using Robust.Server.Audio;
 using Robust.Server.GameObjects;
+using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 
 namespace Content.Server._RMC14.Shuttles;
@@ -21,10 +22,9 @@ public sealed partial class RMCShuttleSystem : SharedRMCShuttleSystem
         base.Initialize();
         SubscribeLocalEvent<PlaySoundOnFTLStartComponent, FTLStartedEvent>(OnPlaySoundOnFTLStart);
 
-        SubscribeLocalEvent<RMCSpawnEntityOnFTLStartComponent, BeforeFTLStartedEvent>(BeforeFTLStarted);
         SubscribeLocalEvent<RMCSpawnEntityOnFTLStartComponent, FTLStartedEvent>(OnSpawnEntityOnFTLStart);
 
-        SubscribeLocalEvent<FTLComponent, BeforeFTLFinishedEvent>(BeforeFTLFinished);
+        SubscribeLocalEvent<FTLComponent, FTLCompletedEvent>(OnFTLCompleted);
     }
 
     private void OnPlaySoundOnFTLStart(Entity<PlaySoundOnFTLStartComponent> ent, ref FTLStartedEvent args)
@@ -41,32 +41,27 @@ public sealed partial class RMCShuttleSystem : SharedRMCShuttleSystem
     /// </summary>
     private void OnSpawnEntityOnFTLStart(Entity<RMCSpawnEntityOnFTLStartComponent> ent, ref FTLStartedEvent args)
     {
-        foreach (var coordinate in ent.Comp.Coordinates)
+        if (args.FromMapUid is not { } fromMap ||
+            !TryComp(ent, out MapGridComponent? grid))
         {
-            Spawn(ent.Comp.SpawnedEntity, coordinate);
-        }
-    }
-
-    /// <summary>
-    ///     Get the MapCoordinates for every tile that the grid about to FTL is occupying.
-    /// </summary>
-    private void BeforeFTLStarted(Entity<RMCSpawnEntityOnFTLStartComponent> ent, ref BeforeFTLStartedEvent args)
-    {
-        if (!TryComp(ent, out MapGridComponent? grid))
             return;
+        }
 
+        ent.Comp.Coordinates.Clear();
+        var mapId = _transform.GetMapId(fromMap);
         var enumerator = _mapSystem.GetAllTilesEnumerator(ent, grid);
         while (enumerator.MoveNext(out var tile))
         {
-            if(!TryComp(ent, out MapGridComponent? mapGrid))
-                return;
-
-            var mapCoords = _mapSystem.GridTileToWorld(ent, mapGrid, tile.Value.GridIndices);
-            ent.Comp.Coordinates.Add(mapCoords);
+            var localPosition = _mapSystem.TileCenterToVector(ent, grid, tile.Value.GridIndices);
+            var worldPosition = Vector2.Transform(localPosition, args.FTLFrom);
+            ent.Comp.Coordinates.Add(new MapCoordinates(worldPosition, mapId));
         }
+
+        foreach (var coordinate in ent.Comp.Coordinates)
+            Spawn(ent.Comp.SpawnedEntity, coordinate);
     }
 
-    private void BeforeFTLFinished(Entity<FTLComponent> ent, ref BeforeFTLFinishedEvent args)
+    private void OnFTLCompleted(Entity<FTLComponent> ent, ref FTLCompletedEvent args)
     {
         try
         {
@@ -110,9 +105,3 @@ public sealed partial class RMCShuttleSystem : SharedRMCShuttleSystem
         }
     }
 }
-
-[ByRefEvent]
-public record struct BeforeFTLStartedEvent;
-
-[ByRefEvent]
-public record struct BeforeFTLFinishedEvent;
