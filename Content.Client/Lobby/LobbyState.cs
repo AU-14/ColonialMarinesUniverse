@@ -1,4 +1,5 @@
 using Content.Client.Audio;
+using Content.Client._RMC14.LinkAccount;
 using Content.Client.GameTicking.Managers;
 using Content.Client.LateJoin;
 using Content.Client.Lobby.UI;
@@ -27,6 +28,7 @@ namespace Content.Client.Lobby
         [Dependency] private IResourceCache _resourceCache = default!;
         [Dependency] private IUserInterfaceManager _userInterfaceManager = default!;
         [Dependency] private IGameTiming _gameTiming = default!;
+        [Dependency] private LinkAccountManager _linkAccount = default!;
         [Dependency] private IVoteManager _voteManager = default!;
         [Dependency] private ClientsidePlaytimeTrackingManager _playtimeTracking = default!;
         [Dependency] private IPrototypeManager _protoMan = default!;
@@ -69,6 +71,8 @@ namespace Content.Client.Lobby
             UpdateLobbyUi();
 
             Lobby.CharacterPreview.CharacterSetupButton.OnPressed += OnSetupPressed;
+            Lobby.CharacterPreview.PatronPerks.OnPressed += OnPatronPerksPressed;
+            Lobby.CharacterPreview.PatronPerks.Visible = _linkAccount.CanViewPatronPerks();
             Lobby.ReadyButton.OnPressed += OnReadyPressed;
             Lobby.ReadyButton.OnToggled += OnReadyToggled;
 
@@ -89,6 +93,7 @@ namespace Content.Client.Lobby
             _voteManager.ClearPopupContainer();
 
             Lobby!.CharacterPreview.CharacterSetupButton.OnPressed -= OnSetupPressed;
+            Lobby.CharacterPreview.PatronPerks.OnPressed -= OnPatronPerksPressed;
             Lobby!.ReadyButton.OnPressed -= OnReadyPressed;
             Lobby!.ReadyButton.OnToggled -= OnReadyToggled;
 
@@ -105,6 +110,11 @@ namespace Content.Client.Lobby
         {
             SetReady(false);
             Lobby?.SwitchState(LobbyGui.LobbyGuiState.CharacterSetup);
+        }
+
+        private void OnPatronPerksPressed(BaseButton.ButtonEventArgs args)
+        {
+            _userInterfaceManager.GetUIController<LinkAccountUIController>().TogglePatronPerksWindow();
         }
 
         private void OnReadyPressed(BaseButton.ButtonEventArgs args)
