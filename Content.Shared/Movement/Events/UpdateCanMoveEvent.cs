@@ -27,3 +27,9 @@ public sealed class UpdateCanMoveEvent : CancellableEntityEventArgs
 /// </summary>
 [ByRefEvent]
 public readonly record struct CanMoveUpdatedEvent(bool CanMove);
+
+/// <summary>
+/// Raised on a source entity when its effective movement entity changes.
+/// </summary>
+[ByRefEvent]
+public readonly record struct EffectiveMoverChangedEvent(EntityUid OldMover, EntityUid NewMover);
