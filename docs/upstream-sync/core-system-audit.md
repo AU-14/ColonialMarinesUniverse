@@ -1904,3 +1904,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Mobs/NPCs/scurret.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static inheritance review confirms the delay applies to scurret variants without changing success chance, strings, effects, or sounds. Prototype loading and interactions immediately before and after 2.25 seconds are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None.
+
+## CS-0138 — Suppress duplicate wield-drop popups
+
+- Upstream: [space-wizards/space-station-14#40032](https://github.com/space-wizards/space-station-14/pull/40032), `69b3df03d8ee6a624b675537ec1542c4008bcdb2`, 2025-09-03
+- Areas: Interactions
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: Virtual-item hand allocation can now drop an obstructing held item silently. Wielding uses that option so players receive the wield-success popup without an overlapping automatic-drop popup; all other callers remain noisy by default.
+- RMC/CMU divergence: RMC adds virtual-hand users for power loaders and multi-handed holders. The new optional argument defaults to `false`, preserving their existing feedback and positional `empty` argument behavior.
+- Decision and rationale: Extend both overloads with a trailing optional flag and opt in only at the wielding call site, matching target-final behavior without changing existing fork callers.
+- Files changed: `Content.Shared/Inventory/VirtualItem/SharedVirtualItemSystem.cs`, `Content.Shared/Wieldable/SharedWieldableSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static call-site review confirms RMC and cuff/pulling callers retain popups, while wielding passes `silent: true` and still drops the item before creating virtual hands. Shared compilation plus wield success, failed allocation, multi-hand rollback, and default noisy-drop cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a predicted wield regression asserting exactly one user-facing popup when an occupied hand must be cleared.
