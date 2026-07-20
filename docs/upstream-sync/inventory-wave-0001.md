@@ -86,7 +86,7 @@ are retained so future audits can trace each classifier's original decision.
 0064 | bd853b60de27889e56033370eb82bdba5266d7db | fix: ghosts shouldn't see whisper obfuscation (#38202) | Ported (CS-0068) | Interactions | Ghost listeners now receive unobfuscated whispers.
 0065 | c60910dfa68bbed56a4cad4b0739b532f8930006 | Fix devices in terminal mispredicting power state (#38647) | Ported (CS-0060) | Physics, GameTicking | Terminal-contained devices now preserve their predicted powered state.
 0066 | d9545dd3803333e2865a43b476466fb9eddc4a1c | make biogenerator not accept low-nutrient plants (#38427) | Ported (CS-0062) | Chemistry, Interactions | Biogenerators now reject produce with no positive nutrient yield.
-0067 | 7c7aeffde28baf6cb857914690a6563d92ab1537 | Make RunVerbAs take and return EntityUids (#38155) | Port candidate | — | Admin Toolshed code still converts through NetEntity instead of using the isolated direct EntityUid API.
+0067 | 7c7aeffde28baf6cb857914690a6563d92ab1537 | Make RunVerbAs take and return EntityUids (#38155) | Ported | — | The isolated admin verb command now pipes entity IDs directly without unnecessary network-entity conversion.
 0068 | f535a312974780f28e2f69314e81aaa870de0faf | Automatic changelog update | Non-code/no-op | — | Generated changelog only.
 0069 | dac2537f9c872e177818a9e755d5fe8e091d497a | Buff parrot learn rates and radio chatter (#38984) | Port candidate | — | Parrot memory and radio probabilities retain the older balance values.
 0070 | 2e6549a308f8838fd5fc41981970a806f1d3d9ad | Remove prototype caching from `TransformableContainerComponent` (#38988) | Ported (CS-0058) | Chemistry | Transformable containers now store reagent identity and resolve fresh RMC reagent snapshots.
