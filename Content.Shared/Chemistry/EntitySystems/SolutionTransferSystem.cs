@@ -66,7 +66,7 @@ public sealed partial class SolutionTransferSystem : EntitySystem
         // Add specific transfer verbs according to the container's size
         var priority = 0;
         var user = args.User;
-        foreach (var amount in DefaultTransferAmounts)
+        foreach (var amount in RMCGetTransferAmounts(ent.Comp))
         {
             if (amount < ent.Comp.MinimumTransferAmount || amount > ent.Comp.MaximumTransferAmount)
                 continue;
