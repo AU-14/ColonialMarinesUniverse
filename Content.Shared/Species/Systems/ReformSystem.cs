@@ -17,7 +17,6 @@ public sealed partial class ReformSystem : EntitySystem
     [Dependency] private INetManager _netMan = default!;
     [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private SharedPopupSystem _popupSystem = default!;
-    [Dependency] private IPrototypeManager _protoManager = default!;
     [Dependency] private SharedStunSystem _stunSystem = default!;
     [Dependency] private IGameTiming _gameTiming = default!;
     [Dependency] private SharedMindSystem _mindSystem = default!;
