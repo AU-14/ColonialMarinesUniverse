@@ -1059,3 +1059,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Client/MouseRotator/MouseRotatorSystem.cs`, `Content.Shared/MouseRotator/MouseRotatorComponent.cs`, `Content.Shared/MouseRotator/SharedMouseRotatorSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms both client request sites populate `User` and the handler validates it before component lookup or mutation. Client/shared compilation and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a two-body prediction regression that queues a request for body A, attaches the session to body B, and proves B's goal rotation is unchanged.
+
+## CS-0073 — Clarify nuclear-threat elimination announcements
+
+- Upstream: [space-wizards/space-station-14#39158](https://github.com/space-wizards/space-station-14/pull/39158), `0ab0dadb1d4fc4034d3de04f9ab471fdc653b2f7`, 2025-07-22
+- Areas: Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Both nuclear-operative elimination announcements now use concise wording that distinguishes a newly called emergency shuttle from one already en route while preserving the ETA variables and recall guidance.
+- RMC/CMU divergence: RMC has separate primary-mode round flow but does not override these inherited Fluent keys. Standard nuclear-operations rules and admin-triggered scenarios receive the wording update without changing elimination detection or shuttle timing.
+- Decision and rationale: Port the pinned target's two retained localization values exactly. No game-rule code or announcement dispatch API changes are involved.
+- Files changed: `Resources/Locale/en-US/nukeops/nuke-ops.ftl` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms both strings and their `$time`/`$units` placeholders match the pinned target. Fluent validation is queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None beyond normal localization review for non-English locales.
