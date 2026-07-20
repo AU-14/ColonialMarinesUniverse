@@ -1839,3 +1839,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Structures/Lighting/base_lighting.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static inheritance review confirms the key reaches wall-light variants while leaving runtime collision and construction unchanged. Prototype loading and overlapping map-editor placement are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None.
+
+## CS-0133 — Correct the Inspector revolver action description
+
+- Upstream: [space-wizards/space-station-14#40072](https://github.com/space-wizards/space-station-14/pull/40072), `103c3983df4631fa8c57d22974342211e4f5ce7d`, 2025-09-03
+- Areas: Shooting
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The Inspector revolver description now correctly identifies its existing double-action behavior instead of claiming it is single-action.
+- RMC/CMU divergence: CMU retains this upstream weapon prototype and firing behavior unchanged; the correction does not touch RMC weapon balance, ammunition, or fire modes.
+- Decision and rationale: Port the retained description-only correction so player-facing weapon information matches the implementation.
+- Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Guns/Revolvers/revolvers.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype review confirms the Inspector is the sole changed entity and no component data changes. Prototype loading and resolved description text are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None.
