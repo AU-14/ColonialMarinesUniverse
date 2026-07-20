@@ -1007,3 +1007,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/_RMC14/Chat/Chat/ChatSystem.Language.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static control-flow review confirms observers still pass the existing range-transmit and language checks but can no longer enter either distance-obfuscated branch. Server compilation and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add multi-session chat coverage for nearby living, distant living, and observer recipients, including an RMC language the observer does not ordinarily understand.
+
+## CS-0069 — Prevent permanent carp suicide
+
+- Upstream: [space-wizards/space-station-14#39033](https://github.com/space-wizards/space-station-14/pull/39033), `93e04de36bc965b51bc086cd88fb5a4b332c2782`, 2025-07-17
+- Areas: Medical, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The base space-carp family now carries `CannotSuicide`. A player controlling a carp may still ghost through the shared suicide flow, but the body is not killed and the mind may return, matching other special ghost-role creatures.
+- RMC/CMU divergence: RMC gates suicide with its own configuration variable but retains the shared tag policy once an attempt is allowed. Applying the tag to `BaseMobCarp` covers inherited carp variants without changing their combat AI, health, ghost-role assignment, or RMC suicide enablement.
+- Decision and rationale: Port the target-final tag at the common carp prototype rather than special-casing carp in `SuicideSystem`. Existing generic `CannotSuicide` semantics remain the single policy source.
+- Files changed: `Resources/Prototypes/Entities/Mobs/NPCs/carp.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the pinned target retains the tag on the base carp and the shared suicide system checks it before body death. Prototype loading and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Audit other returnable ghost-role creatures for consistent `CannotSuicide` tagging and add a mind/body suicide regression when the ghost test harness supports session transfer.
