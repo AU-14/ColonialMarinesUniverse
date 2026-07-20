@@ -538,7 +538,7 @@ public sealed class SmeltingPotSystem : EntitySystem
     }
 
     private SmeltingRecipe? FindRecipe(Entity<SmeltingPotComponent> pot, ProtoId<StackPrototype> input) =>
-        pot.Comp.Recipes.FirstOrDefault(r => !r.InputAnyElectronics && r.Input == input);
+        pot.Comp.Recipes.FirstOrDefault(r => !r.InputAnyElectronics && r.Input is { } recipeInput && recipeInput == input);
 
     private bool IsOnLitFire(Entity<SmeltingPotComponent> pot) =>
         pot.Comp.Fire is { } fire &&

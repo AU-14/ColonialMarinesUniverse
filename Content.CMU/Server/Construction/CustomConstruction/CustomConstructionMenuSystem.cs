@@ -943,6 +943,25 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
         return byList.ToDictionary(kv => kv.Key, kv => kv.Value.ToList());
     }
 
+    /// <summary>
+    /// Stack type of an entity prototype, when it is stackable at all (barbed wire, sheets, rods...).
+    /// Recipe amounts for these mean UNITS of the stack, not that many separate items.
+    /// </summary>
+    private bool TryGetStackType(string protoId, out string stackType)
+    {
+        stackType = string.Empty;
+
+        if (!_prototype.TryIndex<EntityPrototype>(protoId, out var proto) ||
+            !proto.TryGetComponent<StackComponent>(out var stack, _componentFactory))
+            return false;
+
+        if (string.IsNullOrWhiteSpace(stack.StackTypeId))
+            return false;
+
+        stackType = stack.StackTypeId;
+        return true;
+    }
+
     private sealed record EntryInfo(string Entity, string Spawnlist, string Category, List<CustomConstructionStepData> Steps, List<CustomConstructionStepData> DeconstructSteps, int Health);
 
     private EntryInfo? ReadHeaders(string path)
@@ -1268,7 +1287,19 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
             switch (step.Kind)
             {
                 case CustomConstructionStepKind.EntityMaterial:
-                    // Require `amount` separate copies of the entity (each insert consumes one).
+                    // A STACKABLE entity means N units of that stack, not N separate one-unit entities.
+                    // Picking BarbedWire1 with an amount of 2 used to emit two entityId steps, so the recipe
+                    // demanded two separate single-wire items and a stack of 2 would not satisfy it. Emit a
+                    // material step against the stack type instead, which counts units the way players expect.
+                    if (TryGetStackType(step.Value, out var stackType))
+                    {
+                        sb.AppendLine($"      - material: {stackType}");
+                        sb.AppendLine($"        amount: {amount}");
+                        sb.AppendLine($"        doAfter: {doAfter}");
+                        break;
+                    }
+
+                    // Non-stackable: require `amount` separate copies of the entity (each insert consumes one).
                     for (var i = 0; i < amount; i++)
                     {
                         sb.AppendLine($"      - entityId: {step.Value}");
