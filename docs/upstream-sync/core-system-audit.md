@@ -2177,3 +2177,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Structures/conveyor.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static collision review confirms `ConveyorMask` resolves to the same prior bits and is the exact value checked by `SharedDoorSystem`. Prototype loading plus door closure over a conveyor are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Reconcile the divergent fallback mask if CMU later permits conveyors without prototype fixtures; the pinned target does not yet remove that path.
+
+## CS-0159 — Destroy welded disposal pipes without deleting contents
+
+- Upstream: [space-wizards/space-station-14#40451](https://github.com/space-wizards/space-station-14/pull/40451), `7c650da7d7659eec0be135ccd3eaef9787e9fb34`, 2025-09-20
+- Areas: Interactions, Physics
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: Welding any of the fourteen disposal-pipe graph nodes into materials now uses the destructible lifecycle instead of directly deleting the entity, allowing normal destruction handling to preserve/eject contained entities.
+- RMC/CMU divergence: CMU retains its existing disposal graph, container, and destructible systems. Only the graph completion action changes; material yields, welding times, and construction nodes remain untouched.
+- Decision and rationale: Replace `DeleteEntity` with `DestroyEntity` consistently across every disposal-pipe exit because direct deletion recursively removes contained entities without their destruction/ejection path.
+- Files changed: `Resources/Prototypes/Recipes/Construction/Graphs/utilities/disposal_pipes.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static graph review confirms all fourteen disposal exits now use `DestroyEntity` and no `DeleteEntity` action remains in this graph. Prototype loading plus welding an occupied pipe and asserting content survival are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None.
