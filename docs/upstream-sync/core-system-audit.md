@@ -2125,3 +2125,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Objects/Misc/implanters.yml`, `Resources/ServerInfo/Guidebook/Antagonist/Revolutionaries.xml`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static code/prototype review confirms the extractor remains injectable after storing an implant and invalid extraction still applies `DeimplantFailureDamage`. Prototype loading and guidebook parsing are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None.
+
+## CS-0155 — Silence mime storage interactions
+
+- Upstream: [space-wizards/space-station-14#40317](https://github.com/space-wizards/space-station-14/pull/40317), `128d06518efbcdae2dd5e0e48a5c01010ab21a0c`, 2025-09-18
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Mime backpacks, satchels, and duffel bags explicitly suppress their inherited open and insert sounds.
+- RMC/CMU divergence: CMU retains its current storage capacities, sprites, and RMC storage interactions. The duffel's old sound keys were incorrectly nested under `Sprite`; the port places all overrides on `Storage`.
+- Decision and rationale: Port the three prototype overrides together because they express one consistent mime-equipment behavior and correct the ineffective duffel serialization at the same time.
+- Files changed: `Resources/Prototypes/Entities/Clothing/Back/backpacks.yml`, `Resources/Prototypes/Entities/Clothing/Back/duffel.yml`, `Resources/Prototypes/Entities/Clothing/Back/satchel.yml`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static resolved-prototype review confirms each mime bag has `Storage` with both sounds set to null. Prototype loading plus open and insert interaction checks are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None.
