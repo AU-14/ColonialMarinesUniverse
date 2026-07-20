@@ -372,6 +372,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
         raffle.JoinExtendsDurationBy = TimeSpan.FromSeconds(settings.JoinExtendsDurationBy);
         raffle.MaxDuration = TimeSpan.FromSeconds(settings.MaxDuration);
 
+        ApplyRMCRaffleSettings(ent, settings);
     }
 
     private void OnRaffleShutdown(Entity<GhostRoleRaffleComponent> ent, ref ComponentShutdown args)
