@@ -3464,3 +3464,14 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Power/EntitySystems/ApcSystem.cs`, `docs/upstream-sync/inventory-wave-0014.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static scheduling review confirms `UpdatesAfter` includes `PowerNetSystem`, every invalidated APC with its required components is refreshed, and `UpdateApcState` clears the flag. Server compilation plus empty/charged APC map start, subsequent charge transitions, breaker toggles, UI-open refresh, delayed appearance thresholds, EMP, event-rule flips, and RMC maps are queued for the index-2999 checkpoint.
 - Follow-up/debt: None; the pinned target retains this invalidation model through later APC structural changes.
+
+## Upstream checkpoint â€” indices 2000â€“2999
+
+Date completed: 2026-07-20
+
+- Scope: Five committed 200-commit inventories covering pinned SS14 first-parent indices 2000 through 2999, plus accepted ports through CS-0255 across Movement, Shooting, Medical, Chemistry, Interactions, Physics, GameTicking, and Gamerules.
+- Solution build: `dotnet build SpaceStation14.slnx --configuration DebugOpt --no-restore --no-incremental --nologo --verbosity:minimal --disable-build-servers` completed in 2 minutes 5 seconds with 0 warnings and 0 errors.
+- Unit tests: `dotnet test Content.Tests/Content.Tests.csproj --configuration DebugOpt --no-build --no-restore --nologo --verbosity:minimal` completed with 377 passed, 1 skipped, and 0 failed.
+- Resource validation: `dotnet run --project Content.YAMLLinter/Content.YAMLLinter.csproj --configuration DebugOpt --no-build` completed with `No errors found` in 94.4 seconds.
+- Integration tests: `dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj --configuration DebugOpt --no-build --no-restore --nologo --verbosity:minimal --logger "trx;LogFileName=checkpoint-0003.trx" --results-directory <temporary-directory> -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed` completed with 418 passed, 17 skipped, and 0 failed (435 total) in 34 minutes 59 seconds. Its TRX is outside the repository.
+- Disposition: The 2000â€“2999 checkpoint is closed. Per the updated integration strategy, subsequent upstream history will be merged directly with fork-conflict resolution instead of receiving per-commit inventory audit.
