@@ -2385,3 +2385,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Maps/Shuttles/trading_outpost.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static map review confirms entity 955 remains parented to grid 2 with the same `Automated Trade Station` warp identity and only its position changes. Map deserialization plus warp arrival and local collision checks are queued for the index-1999 checkpoint.
 - Follow-up/debt: None.
+
+## CS-0174 — Share the hostile faction with space adders
+
+- Upstream: [space-wizards/space-station-14#37424](https://github.com/space-wizards/space-station-14/pull/37424), `3f115fa1d48e3da132119fb5f96ed8a776559a1a`, 2025-10-08
+- Areas: Interactions, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The standard space adder now belongs to both `Xeno` and `SimpleHostile`, preventing simple-hostile cobras from selecting it as an enemy while preserving its xeno-aligned relationships.
+- RMC/CMU divergence: RMC xenonids use the separate `RMCXeno` faction and do not inherit `MobPurpleSnake`; their hive targeting and hostility rules are untouched.
+- Decision and rationale: Add the single target-final faction membership to the affected NPC. The adder uses the simple-hostile HTN task, so sharing that faction aligns target selection with its behavior instead of causing hostile snakes to fight each other.
+- Files changed: `Resources/Prototypes/Entities/Mobs/NPCs/xeno.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype review confirms `MobPurpleSnake` retains `Xeno` and gains only `SimpleHostile`, with no RMC descendant. Prototype loading plus cobra/adder and adder/xeno hostility cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: None.
