@@ -3515,3 +3515,16 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - Files changed: `Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.cs`, `Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation evidence: Static call-path review covers the sole client `RequestShootEvent` producer and both shared request handlers. Each restored lookup revalidates the operator/weapon relationship and a live `GunComponent`. `dotnet build Content.Shared/Content.Shared.csproj --configuration DebugOpt --no-restore --nologo --verbosity:minimal --disable-build-servers` succeeded with 0 errors and 6 pre-existing warnings; Client/Server wave builds remain required before closing Shooting. Tests remain deferred until the 1,000-upstream-commit checkpoint.
 - Remaining debt: Prediction still has duplicate legacy/current request consumers and no longer returns RMC projectile correlation identifiers. That architectural behavior is classified separately as `Behavior changed` and remains deferred pending a prediction-authority reconciliation.
+
+## CS-0257 - Migrate retained RMC battery weapons
+
+- Upstreams compared: SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767` and RMC `b6d677947dd8ebcb06194a66798938645fed5a54`.
+- Areas: Shooting, Prototypes
+- Classification: Missing -> Adapted
+- Risk: High before the fix because the prototypes referenced an unregistered component; low after it.
+- Behavior/API delta: `RMCWeaponTaser` and `RMCWeaponBoilgun` still declared the deleted `ProjectileBatteryAmmoProvider`, and `RMCRecharger` still whitelisted that deleted component. Current SS14 unifies projectile and hitscan battery weapons under `BatteryAmmoProviderComponent`, retaining the same `proto` and `fireCost` contract.
+- RMC/CMU divergence: The taser's charge cost, projectile, visuals, skills, and melee behavior and the boilgun's selectable projectile modes, charge, and self-recharge remain unchanged. The recharger continues to accept these battery weapons through the current provider marker.
+- Decision and rationale: Rename only the two component declarations and their recharger whitelist entry. No compatibility component is needed because all three fields map directly to the current provider and `BatteryWeaponFireModesSystem` already consumes it.
+- Files changed: `Resources/Prototypes/_RMC14/Entities/Objects/Weapons/Guns/Energy/taser.yml`, `Resources/Prototypes/_RMC14/Entities/Objects/Weapons/Guns/Other/boilgun.yml`, `Resources/Prototypes/_RMC14/Entities/Structures/Power/recharger.yml`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation evidence: Repository-wide static search finds no remaining `ProjectileBatteryAmmoProvider` reference and confirms `BatteryAmmoProviderComponent` exposes the retained `proto` and `fireCost` data fields. Targeted builds are recorded at the Shooting-wave boundary; tests and prototype-linter execution remain deferred until the 1,000-upstream-commit checkpoint.
+- Remaining debt: Runtime battery firing, mode switching, recharging, ammo-counter reconciliation, and charger insertion need focused coverage after the checkpoint.

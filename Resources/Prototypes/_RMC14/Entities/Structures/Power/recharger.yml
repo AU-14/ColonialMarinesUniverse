@@ -46,7 +46,7 @@
           components:
           - Stunbaton
           - PowerCell
-          - ProjectileBatteryAmmoProvider
+          - BatteryAmmoProvider
           - Defibrillator
           - Visor
           - PortableDialysis

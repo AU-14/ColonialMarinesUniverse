@@ -20,7 +20,7 @@
     - SemiAuto
     soundGunshot:
       path: /Audio/_RMC14/Xeno/blobattack.ogg
-  - type: ProjectileBatteryAmmoProvider
+  - type: BatteryAmmoProvider
     proto: XenoBombardAcidProjectile
     fireCost: 1
   - type: BatteryWeaponFireModes
