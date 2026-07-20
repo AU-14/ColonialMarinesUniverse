@@ -47,6 +47,10 @@ public abstract partial class SharedMouseRotatorSystem : EntitySystem
 
     private void OnRequestRotation(RequestMouseRotatorRotationEvent msg, EntitySessionEventArgs args)
     {
+        // Ignore stale requests produced while the session was switching controlled entities.
+        if (args.SenderSession.AttachedEntity != GetEntity(msg.User))
+            return;
+
         if (args.SenderSession.AttachedEntity is not { } ent
             || !TryComp<MouseRotatorComponent>(ent, out var rotator))
         {

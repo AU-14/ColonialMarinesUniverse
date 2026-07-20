@@ -1046,3 +1046,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Weapons/Melee/SharedMeleeWeaponSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static control-flow comparison confirms light and heavy attacks now call the same bypass resolver and both forward the result to `TryChangeDamage`. Shared compilation and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a predicted melee regression using a resistant target and an event-modified bypass weapon, covering both light and multi-target heavy attacks.
+
+## CS-0072 — Reject stale mouse-rotation requests
+
+- Upstream: [space-wizards/space-station-14#39071](https://github.com/space-wizards/space-station-14/pull/39071), `cfb0a950359662489cc36115c3de8bad741649f4`, 2025-07-19
+- Areas: Movement, Interactions, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Each predicted mouse-rotation request now identifies the entity controlled when the client generated it. The shared handler ignores the request if the session has attached to a different entity before processing, preventing stale input from rotating the new body or producing component error spam.
+- RMC/CMU divergence: RMC does not override the mouse-rotator request or shared handler. Turrets, vehicles, and other fork systems using the component keep their rotation speed, tolerance, cardinal mode, and prediction behavior; only cross-body stale requests are discarded.
+- Decision and rationale: Port the pinned target's coordinated event-schema, client population, and server validation changes together. Comparing the serialized network entity to the session attachment keeps the sender authoritative only over its current body.
+- Files changed: `Content.Client/MouseRotator/MouseRotatorSystem.cs`, `Content.Shared/MouseRotator/MouseRotatorComponent.cs`, `Content.Shared/MouseRotator/SharedMouseRotatorSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms both client request sites populate `User` and the handler validates it before component lookup or mutation. Client/shared compilation and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a two-body prediction regression that queues a request for body A, attaches the session to body B, and proves B's goal rotation is unchanged.
