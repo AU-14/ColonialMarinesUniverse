@@ -3438,3 +3438,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Client/Voting/UI/VoteCallMenuButton.cs`, `docs/upstream-sync/inventory-wave-0013.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static UI lifecycle review confirms at most one tracked open menu is created per button, second press closes it, all close paths clear `Pressed`, and tree removal closes the window. Client compilation plus repeated clicks, title-bar close, tree removal/re-entry, vote permission changes, active vote creation, lobby and RMC UI use, and focus behavior are queued for the index-2999 checkpoint.
 - Follow-up/debt: `ExitedTree` retains the pinned target's pre-existing `CanCallVoteChanged += UpdateCanCall` line; its apparent subscribe-versus-unsubscribe issue requires a separate upstream audit rather than being silently changed here.
+
+## CS-0254 â€” Restore typed sneeze emotes
+
+- Upstream: [space-wizards/space-station-14#41479](https://github.com/space-wizards/space-station-14/pull/41479), `5a2da2679e11dd9cb5fb1f04c4fe83bf9eff8c45`, 2026-02-11
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The `Sneeze` emote now accepts `sneeze`, `sneezes`, and `sneezed` chat triggers with bare, period, and exclamation variants. It is limited to entities with `VocalComponent` and excludes the `SiliconEmotes` tag, matching other biological disease emotes; the accidental trailing space on the bare `coughed` trigger is also removed.
+- RMC/CMU divergence: CMU has one shared sneeze prototype and no RMC override. Human, xeno, and other RMC voice sets continue to control which emotes they expose through their normal vocal configuration, while silicon-specific emote policy remains authoritative. Disease symptoms, involuntary emotes, chat parsing outside these exact triggers, and sound selection are unchanged.
+- Decision and rationale: Port the target-final YAML exactly. Without triggers the existing sneeze definition cannot be invoked through typed chat, and without the whitelist/blacklist it would not follow the biological-versus-silicon eligibility boundary used by cough and yawn. Trimming `coughed` restores the intended bare cough match without adding new behavior.
+- Files changed: `Resources/Prototypes/Voice/disease_emotes.yml`, `docs/upstream-sync/inventory-wave-0014.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype review confirms all nine target trigger forms are present once, `Vocal` and `SiliconEmotes` dependencies exist locally, and no duplicate sneeze or RMC override conflicts. YAML/prototype lint plus every punctuation variant, non-vocal entities, silicons, RMC species voice sets, disease-triggered emotes, and bare `coughed` are queued for the index-2999 checkpoint.
+- Follow-up/debt: Upstream index 2736 adds species-specific sneeze sounds and should remain a separate content/policy port; this base trigger fix does not depend on it.

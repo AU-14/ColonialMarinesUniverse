@@ -115,7 +115,7 @@ behavior to port.
 2696 | aa4422fcdf19d82bfcc94f6dd97b175098200b8c | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2697 | fc4a96faad438a23df1cba21ec2c2f1fcc185da0 | Add Missing IntercomAssembly Components (#42821) | Deferred | Interactions, Physics | Intercom assembly inheritance fix assumes the newer BaseWallmountMetallic hierarchy absent from CMU.
 2698 | 5f126736a6da29ab98346acb387c7f237fbca3a1 | Automatic changelog update | Irrelevant | — | Generated changelog only.
-2699 | 5a2da2679e11dd9cb5fb1f04c4fe83bf9eff8c45 | (Re)Add sneezing emote. (#41479) | PortCandidate | Interactions | Focused sneeze-emote whitelist/trigger addition applies cleanly to current CMU.
+2699 | 5a2da2679e11dd9cb5fb1f04c4fe83bf9eff8c45 | (Re)Add sneezing emote. (#41479) | Ported (CS-0254) | Interactions | Vocal non-silicon entities can now invoke sneezing through all target chat triggers.
 2700 | 57b248fc26c02b1af836c24be47a67ded1719aae | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2701 | b90c9e4dcf925efa112ace129f112a95d08441bc | fix: cleaning evidence off a person no longer reveals their true identity (#42868) | PortCandidate | Interactions | One identity-safe popup argument prevents forensic cleaning from exposing a disguised person's true metadata name.
 2702 | 09222dd6436580853403c28951cc197348ee5a1e | Automatic changelog update | Irrelevant | — | Generated changelog only.
