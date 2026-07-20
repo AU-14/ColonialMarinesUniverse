@@ -1566,3 +1566,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Objects/Fun/bike_horn.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype review confirms the delay is scoped to `BananiumHorn` and ordinary bike horns are untouched. Prototype loading plus immediate repeat rejection and post-delay success are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Verify non-use sound triggers are intentionally outside `UseDelay`; if they remain spam vectors, handle them through their owning trigger systems rather than expanding this prototype port.
+
+## CS-0112 — Guard toggled-clothing reinsertion by entity lifecycle
+
+- Upstream: [space-wizards/space-station-14#39191](https://github.com/space-wizards/space-station-14/pull/39191), `8034cabbaeed60f7f476d1be193c5d476eac8309`, 2025-08-17
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: When attached clothing is unequipped during deletion, the handler now checks the owning toggleable entity's lifecycle and exits once it is beyond map initialization, avoiding access to teardown-state component lifecycle data and container reinsertion.
+- RMC/CMU divergence: RMC hardsuits and attached helmets use this inherited system extensively but do not override the teardown callback, so the guard protects fork-specific equipment without changing normal equip behavior.
+- Decision and rationale: Port the retained entity-lifecycle check at the exact reinsertion boundary; an entity-level query remains valid while its components are being dismantled.
+- Files changed: `Content.Shared/Clothing/EntitySystems/ToggleableClothingSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static teardown tracing confirms applying-state and attached-component guards remain, terminating owners return before container insertion, and map-initialized owners retain existing behavior. Shared compilation plus delete-while-toggled and ordinary unequip/reinsert cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a regression deleting an equipped RMC hardsuit with its helmet toggled and assert no lifecycle or container exception.
