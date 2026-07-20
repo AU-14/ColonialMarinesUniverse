@@ -13,7 +13,6 @@ namespace Content.Shared.Roles.Jobs;
 /// </summary>
 public abstract partial class SharedJobSystem : EntitySystem
 {
-    [Dependency] private SharedPlayerSystem _playerSystem = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private SharedRoleSystem _roles = default!;
 
