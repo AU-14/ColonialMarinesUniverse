@@ -13,6 +13,9 @@ namespace Content.Shared.Weapons.Melee;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(fieldDeltas: true), AutoGenerateComponentPause]
 public sealed partial class MeleeWeaponComponent : Component
 {
+    [DataField, AutoNetworkedField]
+    public bool WidePrimary;
+
     // TODO: This is becoming bloated as shit.
     // This should just be its own component for alt attacks.
     /// <summary>
