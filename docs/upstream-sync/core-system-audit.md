@@ -3879,3 +3879,16 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - Files changed: `Content.Shared/Verbs/Verb.cs`, `Content.Shared/Verbs/SharedVerbSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation evidence: Static flow review now reaches the sole `GetVerbsEvent<RMCAdminVerb>` subscriber and retains its debug-admin check. `git diff --check` passed. Shared compilation is queued behind the disjoint storage patch; tests remain deferred until the 1,000-upstream-commit checkpoint.
 - Remaining debt: Runtime coverage must compare authorized and unauthorized sessions, local and server-provided verb requests, target deletion, and BUI opening on representative RMC entities.
+
+## CS-0282 - Restore RMC rotation limits
+
+- Upstreams compared: live SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767`, live RMC `b6d677947dd8ebcb06194a66798938645fed5a54`, and CMU through CS-0281.
+- Areas: Interactions, Physics, Rotation, Sentries
+- Classification: Missing -> Adapted
+- Risk: High before the fix for sentry firing arcs; low after it.
+- Behavior/API delta: `MaxRotationComponent` and `RMCInteractionSystem.TryCapWorldRotation` remained live, and retained sentry/emplacement systems continued setting their center and deviation, but current `RotateToFaceSystem.TryRotateTo` never applied the clamp. Automated or assisted rotation could therefore turn a limited weapon beyond its intended arc before current speed/tolerance processing.
+- RMC/CMU divergence: Entities without `MaxRotationComponent` retain current SS14 behavior exactly. Marked entities clamp only the requested world-space goal; current action blockers, rotation speed, tolerance, buckle rotation, and transform authority remain unchanged.
+- Decision and rationale: Invoke a fork helper immediately after resolving the current transform and before calculating angular distance. The helper delegates to the retained RMC policy system, avoiding duplicated angle math or a second rotation owner.
+- Files changed: `Content.Shared/Interaction/RotateToFaceSystem.cs`, `Content.Shared/_RMC14/Interaction/RotateToFaceSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation evidence: Static call-path review confirms the cap now precedes both finite-speed and immediate rotation branches, while the retained helper is a no-op for unmarked entities. `git diff --check` passed. Shared compilation is queued behind the disjoint storage patch; tests remain deferred until the 1,000-upstream-commit checkpoint.
+- Remaining debt: Runtime coverage must exercise both sides of the deviation boundary, wraparound near plus/minus pi, finite-speed convergence at the cap, component removal, and replicated sentry rotation.

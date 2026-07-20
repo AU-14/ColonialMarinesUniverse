@@ -31,6 +31,8 @@ namespace Content.Shared.Interaction
             if (!Resolve(uid, ref xform))
                 return true;
 
+            CapRMCWorldRotation((uid, xform), ref goalRotation);
+
             // If we have a max rotation speed then do that.
             // We'll rotate even if we can't shoot, looks better.
             if (rotationSpeed < float.MaxValue)
