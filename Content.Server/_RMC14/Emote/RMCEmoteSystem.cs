@@ -17,11 +17,14 @@ public sealed partial class RMCEmoteSystem : SharedRMCEmoteSystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<EmoteCooldownComponent, ScreamActionEvent>(OnCooldownScreamAction, before: [typeof(VocalSystem)]);
+        SubscribeLocalEvent<EmoteCooldownComponent, EmoteActionEvent>(OnCooldownScreamAction, before: [typeof(VocalSystem)]);
     }
 
-    private void OnCooldownScreamAction(Entity<EmoteCooldownComponent> ent, ref ScreamActionEvent args)
+    private void OnCooldownScreamAction(Entity<EmoteCooldownComponent> ent, ref EmoteActionEvent args)
     {
+        if (args.Emote != "Scream")
+            return;
+
         // always allow off-cooldown scream action emote
         ResetCooldown((ent, ent));
     }
