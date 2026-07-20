@@ -968,3 +968,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Objects/Fun/Instruments/instruments_wind.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the pinned target retains `size: Small` on `OcarinaInstrument`. Prototype loading and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Audit anomalous inherited item sizes by concrete sprite footprint as a separate data-quality pass.
+
+## CS-0066 — Classify the war declarator as contraband
+
+- Upstream: [space-wizards/space-station-14#38972](https://github.com/space-wizards/space-station-14/pull/38972), `7fd74b08df3f99fda5c0b184d07dd7b485a50d25`, 2025-07-13
+- Areas: Gamerules, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The nuclear-operative war declarator now inherits `BaseSyndicateContraband` alongside `BaseItem`, exposing its intended contraband classification to scanners, examinations, and other policy consumers.
+- RMC/CMU divergence: RMC retains the standard nuclear-operations item and contraband hierarchy but runs its primary distress-signal mode through separate antagonist rules. The added marker does not change declaration timing, access, shuttle delay, telecrystal rewards, or announcement behavior.
+- Decision and rationale: Port the pinned target's additional prototype parent and preserve all concrete war-declarator components. Contraband identity belongs in prototype data rather than special cases in each scanner.
+- Files changed: `Resources/Prototypes/Entities/Objects/Devices/Syndicate_Gadgets/war_declarator.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the pinned target retains the syndicate-contraband parent and the parent resolves locally. Prototype loading and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Audit other antagonist-only rule devices for missing faction contraband parents as a separate prototype pass.
