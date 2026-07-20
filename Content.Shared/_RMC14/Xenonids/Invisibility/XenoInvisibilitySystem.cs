@@ -69,14 +69,14 @@ public sealed partial class XenoInvisibilitySystem : EntitySystem
 
             //Half a second cooldown to prevent double clicks
             StartCooldown((xeno, active), xeno.Comp.ToggleLockoutTime, true);
-            _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+            _movementSpeed.RefreshMovementSpeedModifiers(xeno.Owner);
         }
     }
 
     private void OnXenoActiveInvisibleRemove(Entity<XenoActiveInvisibleComponent> xeno, ref ComponentRemove args)
     {
         if (!TerminatingOrDeleted(xeno))
-            _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+            _movementSpeed.RefreshMovementSpeedModifiers(xeno.Owner);
     }
 
     private void OnXenoActiveInvisibleMeleeHit(Entity<XenoActiveInvisibleComponent> xeno, ref MeleeHitEvent args)
@@ -139,7 +139,7 @@ public sealed partial class XenoInvisibilitySystem : EntitySystem
     {
         RemCompDeferred<XenoActiveInvisibleComponent>(xeno);
         StartCooldown(xeno, cooldownTime, false);
-        _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+        _movementSpeed.RefreshMovementSpeedModifiers(xeno.Owner);
 
         if (!xeno.Comp.DidPopup)
         {

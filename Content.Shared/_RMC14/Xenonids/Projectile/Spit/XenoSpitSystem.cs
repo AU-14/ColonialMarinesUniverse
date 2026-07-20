@@ -122,7 +122,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
     {
         if (!TerminatingOrDeleted(ent))
         {
-            _movementSpeed.RefreshMovementSpeedModifiers(ent);
+            _movementSpeed.RefreshMovementSpeedModifiers(ent.Owner);
             _armor.UpdateArmorValue((ent, null));
         }
     }
@@ -278,7 +278,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
         charging.Speed = xeno.Comp.Speed;
         Dirty(xeno, charging);
 
-        _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+        _movementSpeed.RefreshMovementSpeedModifiers(xeno.Owner);
 
         _popup.PopupClient(Loc.GetString("cm-xeno-charge-spit"), xeno, xeno);
         if(_net.IsServer)

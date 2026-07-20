@@ -177,7 +177,7 @@ public sealed partial class XenoSystem : EntitySystem
         }
 
         if (!MathHelper.CloseTo(_xenoSpeedMultiplier, 1))
-            _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+            _movementSpeed.RefreshMovementSpeedModifiers(xeno.Owner);
 
         if (xeno.Comp.MuteOnSpawn)
             _status.TryAddStatusEffect(xeno, "Muted", _xenoSpawnMuteDuration, true, "Muted");
@@ -310,8 +310,7 @@ public sealed partial class XenoSystem : EntitySystem
     {
         foreach (var hit in args.HitEntities)
         {
-            SharedEntityStorageComponent? storage = null;
-            if (!_entityStorage.ResolveStorage(hit, ref storage))
+            if (!TryComp<EntityStorageComponent>(hit, out _))
                 continue;
 
             if (_weldable.IsWelded(hit))
@@ -411,7 +410,7 @@ public sealed partial class XenoSystem : EntitySystem
         var xenos = EntityQueryEnumerator<XenoComponent, MovementSpeedModifierComponent>();
         while (xenos.MoveNext(out var uid, out _, out var comp))
         {
-            _movementSpeed.RefreshMovementSpeedModifiers(uid, comp);
+            _movementSpeed.RefreshMovementSpeedModifiers((uid, comp));
         }
     }
 
@@ -456,7 +455,7 @@ public sealed partial class XenoSystem : EntitySystem
         FixedPoint2 multiplier;
         if (_mobState.IsCritical(xeno))
             multiplier = xeno.Comp.CritHealMultiplier;
-        else if (_standing.IsDown(xeno) || HasComp<XenoRestingComponent>(xeno))
+        else if (_standing.IsDown(xeno.Owner) || HasComp<XenoRestingComponent>(xeno))
             multiplier = xeno.Comp.RestHealMultiplier;
         else
             multiplier = xeno.Comp.StandHealingMultiplier;

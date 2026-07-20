@@ -114,7 +114,7 @@ public sealed partial class XenoStompSystem : EntitySystem
 
             if (xform.Coordinates.TryDistance(EntityManager, receiver.Owner.ToCoordinates(), out var distance) && distance <= xeno.Comp.ShortRange)
             {
-                if (!_standing.IsDown(receiver))
+                if (!_standing.IsDown(receiver.Owner))
                     continue;
 
                 var damage = _damageable.TryChangeDamage(receiver, _xeno.TryApplyXenoSlashDamageMultiplier(receiver, xeno.Comp.Damage), origin: xeno, tool: xeno);

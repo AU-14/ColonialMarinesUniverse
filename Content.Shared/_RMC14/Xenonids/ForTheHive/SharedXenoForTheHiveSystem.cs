@@ -114,7 +114,7 @@ public abstract partial class SharedXenoForTheHiveSystem : EntitySystem
         var ev = new ForTheHiveActivatedEvent();
         RaiseLocalEvent(xeno, ref ev);
         _pointLight.SetEnabled(xeno, true);
-        _movement.RefreshMovementSpeedModifiers(xeno);
+        _movement.RefreshMovementSpeedModifiers(xeno.Owner);
     }
 
     private void OnForTheHiveRemoved(Entity<ActiveForTheHiveComponent> xeno, ref ComponentShutdown args)
@@ -126,7 +126,7 @@ public abstract partial class SharedXenoForTheHiveSystem : EntitySystem
 
     private void OnForTheHiveGone(Entity<ActiveForTheHiveComponent> xeno, ref ComponentRemove args)
     {
-        _movement.RefreshMovementSpeedModifiers(xeno);
+        _movement.RefreshMovementSpeedModifiers(xeno.Owner);
     }
 
     private void OnRefreshSpeed(Entity<ActiveForTheHiveComponent> xeno, ref RefreshMovementSpeedModifiersEvent args)

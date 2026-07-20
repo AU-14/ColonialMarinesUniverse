@@ -265,7 +265,7 @@ public sealed partial class XenoLeapSystem : EntitySystem
             if (TryComp<SlowedDownComponent>(xeno, out var root) && root.SprintSpeedModifier == 0f)
             {
                 RemComp<SlowedDownComponent>(xeno);
-                _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+                _movementSpeed.RefreshMovementSpeedModifiers(xeno.Owner);
             }
 
             xeno.Comp.LastHit = null;

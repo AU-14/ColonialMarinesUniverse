@@ -41,7 +41,7 @@ public sealed partial class XenoResinWalkerSystem : EntitySystem
         xeno.Comp.NextPlasmaUse = _timing.CurTime + xeno.Comp.PlasmaUseDelay;
         Dirty(xeno);
 
-        _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+        _movementSpeed.RefreshMovementSpeedModifiers(xeno.Owner);
 
         foreach (var action in _rmcActions.GetActionsWithEvent<XenoResinWalkerActionEvent>(xeno))
         {

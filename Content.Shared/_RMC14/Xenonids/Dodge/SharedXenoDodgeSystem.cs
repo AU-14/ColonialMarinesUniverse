@@ -51,7 +51,7 @@ public abstract partial class SharedXenoDodgeSystem : EntitySystem
             dodging.ExpiresAt = _timing.CurTime + xeno.Comp.Duration;
             dodging.CheckCrowd = xeno.Comp.CheckCrowd;
             Dirty(xeno, dodging);
-            _speed.RefreshMovementSpeedModifiers(xeno);
+            _speed.RefreshMovementSpeedModifiers(xeno.Owner);
             //Half a second cooldown to prevent double clicks - longer than lurkers
             StartCooldown((xeno, dodging), xeno.Comp.ToggleLockoutTime, true);
             _popup.PopupClient(Loc.GetString("rmc-xeno-dodge-self"), xeno, xeno, PopupType.Medium);
@@ -73,7 +73,7 @@ public abstract partial class SharedXenoDodgeSystem : EntitySystem
     {
         if (!TerminatingOrDeleted(xeno))
         {
-            _speed.RefreshMovementSpeedModifiers(xeno);
+            _speed.RefreshMovementSpeedModifiers(xeno.Owner);
             foreach (var action in _rmcActions.GetActionsWithEvent<XenoDodgeActionEvent>(xeno))
             {
                 _actions.SetToggled(action.AsNullable(), false);
@@ -120,7 +120,7 @@ public abstract partial class SharedXenoDodgeSystem : EntitySystem
             bool crowd = false;
             foreach (var mob in _crowd)
             {
-                if (_xeno.CanAbilityAttackTarget(uid, mob) && !_standing.IsDown(mob))
+                if (_xeno.CanAbilityAttackTarget(uid, mob) && !_standing.IsDown(mob.Owner))
                 {
                     crowd = true;
                     break;

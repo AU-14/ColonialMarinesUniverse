@@ -61,14 +61,14 @@ public sealed partial class XenoAdrenalineSurgeSystem : EntitySystem
         xeno.Comp.SurgeEndTime = _timing.CurTime + xeno.Comp.SurgeDuration;
         Dirty(xeno);
         _popup.PopupEntity(Loc.GetString("rmc-xeno-adrenaline-surge-start"), xeno, xeno);
-        _speedModifier.RefreshMovementSpeedModifiers(xeno);
+        _speedModifier.RefreshMovementSpeedModifiers(xeno.Owner);
     }
 
     private void EndSurge(Entity<XenoAdrenalineSurgeComponent> xeno)
     {
         xeno.Comp.IsSurging = false;
         Dirty(xeno);
-        _speedModifier.RefreshMovementSpeedModifiers(xeno);
+        _speedModifier.RefreshMovementSpeedModifiers(xeno.Owner);
     }
 
     private void OnRefreshSpeed(Entity<XenoAdrenalineSurgeComponent> xeno, ref RefreshMovementSpeedModifiersEvent args)

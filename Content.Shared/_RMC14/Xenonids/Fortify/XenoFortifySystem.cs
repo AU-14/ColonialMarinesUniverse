@@ -217,7 +217,7 @@ public sealed partial class XenoFortifySystem : EntitySystem
             _transform.AnchorEntity((xeno, Transform(xeno)));
         }
         else
-            _speed.RefreshMovementSpeedModifiers(xeno);
+            _speed.RefreshMovementSpeedModifiers(xeno.Owner);
 
         FortifyUpdated(xeno);
     }
@@ -242,7 +242,7 @@ public sealed partial class XenoFortifySystem : EntitySystem
             _physics.TrySetBodyType(xeno, BodyType.KinematicController);
         }
         else
-            _speed.RefreshMovementSpeedModifiers(xeno);
+            _speed.RefreshMovementSpeedModifiers(xeno.Owner);
 
         FortifyUpdated(xeno);
     }

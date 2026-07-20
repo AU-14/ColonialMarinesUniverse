@@ -123,7 +123,7 @@ public sealed partial class XenoCrestSystem : EntitySystem
 
         _armor.UpdateArmorValue((xeno, null));
 
-        _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+        _movementSpeed.RefreshMovementSpeedModifiers(xeno.Owner);
         _appearance.SetData(xeno, XenoVisualLayers.Crest, xeno.Comp.Lowered);
 
         foreach (var action in _rmcActions.GetActionsWithEvent<XenoToggleCrestActionEvent>(xeno))

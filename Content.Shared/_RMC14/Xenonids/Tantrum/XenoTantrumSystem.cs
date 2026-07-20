@@ -43,7 +43,7 @@ public sealed partial class XenoTantrumSystem : EntitySystem
     private void OnTantrumingAdded(Entity<TantrumingComponent> xeno, ref ComponentStartup args)
     {
         if (HasComp<TantrumSpeedBuffComponent>(xeno))
-            _speed.RefreshMovementSpeedModifiers(xeno);
+            _speed.RefreshMovementSpeedModifiers(xeno.Owner);
     }
 
     private void OnTantrumingRemoved(Entity<TantrumingComponent> xeno, ref ComponentShutdown args)
@@ -52,7 +52,7 @@ public sealed partial class XenoTantrumSystem : EntitySystem
             return;
 
         if (HasComp<TantrumSpeedBuffComponent>(xeno))
-            _speed.RefreshMovementSpeedModifiers(xeno);
+            _speed.RefreshMovementSpeedModifiers(xeno.Owner);
 
         if (_timing.IsFirstTimePredicted)
             _popup.PopupEntity(Loc.GetString("rmc-xeno-tantrum-end"), xeno, xeno, PopupType.SmallCaution);

@@ -69,7 +69,7 @@ public sealed partial class XenoCripplingStrikeSystem : EntitySystem
         Dirty(xeno, active);
 
         _popup.PopupClient(Loc.GetString(xeno.Comp.ActivateText), xeno, xeno);
-        _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+        _movementSpeed.RefreshMovementSpeedModifiers(xeno.Owner);
 
         if (xeno.Comp.AuraColor is { } color)
             _aura.GiveAura(xeno, color, xeno.Comp.ActiveDuration, 1);
@@ -123,7 +123,7 @@ public sealed partial class XenoCripplingStrikeSystem : EntitySystem
     private void OnActiveCripplingRemove(Entity<XenoActiveCripplingStrikeComponent> xeno, ref ComponentRemove args)
     {
         if (!TerminatingOrDeleted(xeno))
-            _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+            _movementSpeed.RefreshMovementSpeedModifiers(xeno.Owner);
     }
 
     private void OnVictimCripplingModify(Entity<VictimCripplingStrikeDamageComponent> victim, ref DamageModifyEvent args)

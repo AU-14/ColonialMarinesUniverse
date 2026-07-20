@@ -49,7 +49,7 @@ public sealed partial class XenoRageSystem : EntitySystem
         xeno.Comp.Rage = Math.Min(xeno.Comp.Rage, xeno.Comp.MaxRage);
         Dirty(xeno);
 
-        _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+        _movementSpeed.RefreshMovementSpeedModifiers(xeno.Owner);
         _armor.UpdateArmorValue(xeno.Owner);
 
         if (xeno.Comp.Rage >= xeno.Comp.MaxRage)
@@ -70,7 +70,7 @@ public sealed partial class XenoRageSystem : EntitySystem
         xeno.Comp.RageLockExpireAt = _timing.CurTime + xeno.Comp.RageLockDuration;
         Dirty(xeno);
 
-        _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+        _movementSpeed.RefreshMovementSpeedModifiers(xeno.Owner);
         _armor.UpdateArmorValue(xeno.Owner);
         _aura.GiveAura(xeno, xeno.Comp.RageLockColor, xeno.Comp.RageLockDuration, 3);
         _popup.PopupClient(Loc.GetString("rmc-xeno-rage-lock"), xeno, xeno, PopupType.Medium);

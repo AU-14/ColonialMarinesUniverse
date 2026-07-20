@@ -87,7 +87,7 @@ public sealed partial class XenoZoomSystem : EntitySystem
             _actions.SetToggled((action, action), xeno.Comp.Enabled);
         }
 
-        _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+        _movementSpeed.RefreshMovementSpeedModifiers(xeno.Owner);
 
         if (TryComp(xeno, out EyeComponent? eye))
             _contentEye.UpdateEyeOffset((xeno.Owner, eye));
@@ -137,7 +137,7 @@ public sealed partial class XenoZoomSystem : EntitySystem
         _contentEye.ResetZoom(ent);
         ent.Comp.Offset = Vector2.Zero;
         Dirty(ent);
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers(ent.Owner);
 
         if (TryComp(ent, out EyeComponent? eye))
             _contentEye.UpdateEyeOffset((ent.Owner, eye));

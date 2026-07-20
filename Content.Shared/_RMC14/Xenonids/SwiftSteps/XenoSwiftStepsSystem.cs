@@ -27,7 +27,7 @@ public sealed partial class XenoSwiftStepsSystem : EntitySystem
 
     private void OnSwiftStepsBeforeAccuracy(Entity<XenoSwiftStepsComponent> xeno, ref RMCBeforeProjectileAccuracyEvent args)
     {
-        if (_xenoRest.IsResting(xeno.Owner) || _standingState.IsDown(xeno) ||
+        if (_xenoRest.IsResting(xeno.Owner) || _standingState.IsDown(xeno.Owner) ||
             !_mob.IsAlive(xeno)) // Lying down or unconscious
         {
             ResetCount(xeno);

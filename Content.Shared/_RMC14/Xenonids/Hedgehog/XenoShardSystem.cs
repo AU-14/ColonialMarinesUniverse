@@ -153,7 +153,7 @@ public sealed partial class XenoShardSystem : EntitySystem
             projectileHitLimit: ent.Comp.ProjectileHitLimit
         );
 
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers(ent.Owner);
 
         args.Handled = true;
     }

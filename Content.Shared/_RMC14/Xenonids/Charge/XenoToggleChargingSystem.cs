@@ -320,7 +320,7 @@ public sealed partial class XenoToggleChargingSystem : EntitySystem
 
     private void OnActiveToggleChargingMapInit(Entity<ActiveXenoToggleChargingComponent> ent, ref MapInitEvent args)
     {
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers(ent.Owner);
 
         foreach (var action in _rmcActions.GetActionsWithEvent<XenoToggleChargingActionEvent>(ent))
         {
@@ -330,7 +330,7 @@ public sealed partial class XenoToggleChargingSystem : EntitySystem
 
     private void OnActiveToggleChargingRemove(Entity<ActiveXenoToggleChargingComponent> ent, ref ComponentRemove args)
     {
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers(ent.Owner);
 
         foreach (var action in _rmcActions.GetActionsWithEvent<XenoToggleChargingActionEvent>(ent))
         {
@@ -451,7 +451,7 @@ public sealed partial class XenoToggleChargingSystem : EntitySystem
         }
 
         Dirty(ent);
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers(ent.Owner);
     }
 
     private void OnActiveToggleChargingCollide(Entity<ActiveXenoToggleChargingComponent> ent,
@@ -486,7 +486,7 @@ public sealed partial class XenoToggleChargingSystem : EntitySystem
             xeno.Comp.Direction = DirectionFlag.None;
 
         Dirty(xeno);
-        _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+        _movementSpeed.RefreshMovementSpeedModifiers(xeno.Owner);
     }
 
     private void ResetStage(Entity<ActiveXenoToggleChargingComponent> xeno)
@@ -496,7 +496,7 @@ public sealed partial class XenoToggleChargingSystem : EntitySystem
         xeno.Comp.Stage = 0;
 
         Dirty(xeno);
-        _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+        _movementSpeed.RefreshMovementSpeedModifiers(xeno.Owner);
     }
 
     private void IncrementStages(Entity<ActiveXenoToggleChargingComponent> ent, int increment)
@@ -507,7 +507,7 @@ public sealed partial class XenoToggleChargingSystem : EntitySystem
             ent.Comp.Stage = Math.Min(charging.MaxStage, ent.Comp.Stage);
 
         Dirty(ent);
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers(ent.Owner);
     }
 
     private DirectionFlag GetHeldButton(EntityUid mover, MoveButtons button)
