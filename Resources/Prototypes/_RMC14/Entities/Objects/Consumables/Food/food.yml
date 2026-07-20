@@ -3,7 +3,7 @@
   parent: BaseItem
   id: CMFoodBase
   components:
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: Item
     size: Small
@@ -17,7 +17,7 @@
   name: frosted jelly donut
   description: You jelly?
   components:
-  - type: Food
+  - type: Edible
     transferAmount: 2 # 3 bites
   - type: Sprite
     state: jellyDonut2
@@ -45,7 +45,7 @@
   name: jelly donut
   description: You jelly?
   components:
-  - type: Food
+  - type: Edible
     transferAmount: 2 # 3 bites
   - type: Sprite
     state: jellyDonut1
@@ -74,7 +74,7 @@
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/misc.rsi
     state: cookie-peanutbutter
-  - type: Food
+  - type: Edible
     transferAmount: 3
   - type: SolutionContainerManager
     solutions:
@@ -96,7 +96,7 @@
   id: RMCFoodPBJSandwich
   description: A sweet and savory sandwich loved by adults and marines alike!
   components:
-  - type: Food
+  - type: Edible
     transferAmount: 4
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/misc.rsi
@@ -127,7 +127,7 @@
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/misc.rsi
     state: onigiri
-  - type: Food
+  - type: Edible
     transferAmount: 3
     trash:
     - FoodBowlBig
@@ -153,7 +153,7 @@
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/misc.rsi
     state: carbonara
-  - type: Food
+  - type: Edible
     transferAmount: 3
   - type: SolutionContainerManager
     solutions:
@@ -198,7 +198,7 @@
     - bread
     - vegetables
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -225,7 +225,7 @@
     - bread
     - vegetables
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -250,7 +250,7 @@
     - bread
     - cheesy
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -280,7 +280,7 @@
     - tomato
     - cheesy
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -307,7 +307,7 @@
     - bread
     - cheesy
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -337,7 +337,7 @@
     - tomato
     - cheesy
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -364,7 +364,7 @@
     - bitter
     - cheesy
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -392,7 +392,7 @@
     - bitter
     - cheesy
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -416,7 +416,7 @@
     - bread
     - cheesy
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -445,7 +445,7 @@
     - bread
     - cheesy
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -484,7 +484,7 @@
         reagents:
         - ReagentId: Nutriment
           Quantity: 5
-  - type: Food
+  - type: Edible
     transferAmount: 5
 
 - type: entity
@@ -501,7 +501,7 @@
     - chocolate
     - creamy
     - cherry
-  - type: Food
+  - type: Edible
     transferAmount: 3
   - type: SolutionContainerManager
     solutions:
@@ -530,7 +530,7 @@
     - creamy
   - type: Item
     size: Tiny
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -552,7 +552,7 @@
   - type: FlavorProfile
     flavors:
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -577,7 +577,7 @@
   - type: FlavorProfile
     flavors:
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -602,7 +602,7 @@
     flavors:
     - meaty
     - bread
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -629,7 +629,7 @@
     - garlic
     - meaty
     - egg
-  - type: Food
+  - type: Edible
     transferAmount: 4
   - type: SolutionContainerManager
     solutions:
@@ -657,7 +657,7 @@
     - fishy
     - egg
     - bitter
-  - type: Food
+  - type: Edible
     transferAmount: 4
   - type: SolutionContainerManager
     solutions:
@@ -684,7 +684,7 @@
     - garlic
     - chicken
     - egg
-  - type: Food
+  - type: Edible
     transferAmount: 4
   - type: SolutionContainerManager
     solutions:
@@ -711,7 +711,7 @@
     - garlic
     - bacon
     - egg
-  - type: Food
+  - type: Edible
     transferAmount: 4
   - type: SolutionContainerManager
     solutions:
@@ -736,7 +736,7 @@
     flavors:
     - potatoes
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 4
   - type: SolutionContainerManager
     solutions:
@@ -762,7 +762,7 @@
     - potatoes
     - meaty
     - butter
-  - type: Food
+  - type: Edible
     transferAmount: 4
   - type: SolutionContainerManager
     solutions:

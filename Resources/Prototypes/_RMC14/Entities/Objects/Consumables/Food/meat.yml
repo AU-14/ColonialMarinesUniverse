@@ -11,7 +11,7 @@
     tags:
     - Raw
     - Meat
-  - type: Food
+  - type: Edible
     transferAmount: 3 # 3 bites
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/misc.rsi
@@ -129,7 +129,7 @@
     tags:
     - Cooked
     - Meat
-  - type: Food
+  - type: Edible
     transferAmount: 3 # 3 bites
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/misc.rsi
@@ -167,7 +167,7 @@
     tags:
     - Cooked
     - Meat
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: Sprite
     sprite: Objects/Consumable/Food/meals.rsi
@@ -200,7 +200,7 @@
   - type: FlavorProfile
     flavors:
     - fishy
-  - type: Food
+  - type: Edible
     transferAmount: 3
   - type: Sprite
     sprite: _RMC14/Objects/Fishing/Food/fish.rsi
@@ -232,7 +232,7 @@
     flavors:
     - fishy
     - spicy
-  - type: Food
+  - type: Edible
     transferAmount: 3
   - type: Sprite
     sprite: Objects/Consumable/Food/meals.rsi
@@ -265,7 +265,7 @@
   - type: FlavorProfile
     flavors:
     - fishy
-  - type: Food
+  - type: Edible
     transferAmount: 2
   - type: Sprite
     sprite: _RMC14/Objects/Fishing/Food/fish.rsi
@@ -308,7 +308,7 @@
   - type: Tag
     tags:
     - Meat
-  - type: Food
+  - type: Edible
     transferAmount: 3 # 3 bites
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/misc.rsi

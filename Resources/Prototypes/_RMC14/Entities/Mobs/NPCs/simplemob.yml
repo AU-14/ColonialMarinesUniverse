@@ -145,7 +145,7 @@
         - SmallMobLayer
   - type: MobState
   - type: Deathgasp
-  - type: Food
+  - type: Edible
   - type: FlavorProfile
     flavors:
     - meaty

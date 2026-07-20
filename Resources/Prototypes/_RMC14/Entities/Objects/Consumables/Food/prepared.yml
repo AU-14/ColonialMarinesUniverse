@@ -30,7 +30,7 @@
   components:
   - type: Sprite
     state: cornbread
-  - type: Food
+  - type: Edible
     transferAmount: 3
   - type: SolutionContainerManager
     solutions:
@@ -48,7 +48,7 @@
   components:
   - type: Sprite
     state: chicken
-  - type: Food
+  - type: Edible
     transferAmount: 3
   - type: SolutionContainerManager
     solutions:
@@ -66,7 +66,7 @@
   components:
   - type: Sprite
     state: pasta
-  - type: Food
+  - type: Edible
     transferAmount: 3
   - type: SolutionContainerManager
     solutions:
@@ -84,7 +84,7 @@
   components:
   - type: Sprite
     state: pizza
-  - type: Food
+  - type: Edible
     transferAmount: 8
   - type: SolutionContainerManager
     solutions:
@@ -102,7 +102,7 @@
   components:
   - type: Sprite
     state: pork
-  - type: Food
+  - type: Edible
     transferAmount: 4.5
   - type: SolutionContainerManager
     solutions:
@@ -120,7 +120,7 @@
   components:
   - type: Sprite
     state: tofu
-  - type: Food
+  - type: Edible
     transferAmount: 1
   - type: SolutionContainerManager
     solutions:
@@ -140,7 +140,7 @@
   components:
   - type: Sprite
     state: spp_banush
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -158,7 +158,7 @@
   components:
   - type: Sprite
     state: spp_chowmein
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -176,7 +176,7 @@
   components:
   - type: Sprite
     state: spp_cuban
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -194,7 +194,7 @@
   components:
   - type: Sprite
     state: spp_frankfurter
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -212,7 +212,7 @@
   components:
   - type: Sprite
     state: spp_jiaozi
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -230,7 +230,7 @@
   components:
   - type: Sprite
     state: spp_luncheon
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -248,7 +248,7 @@
   components:
   - type: Sprite
     state: spp_meatballs
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -266,7 +266,7 @@
   components:
   - type: Sprite
     state: spp_meatballs
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -284,7 +284,7 @@
   components:
   - type: Sprite
     state: spp_wursts
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -311,7 +311,7 @@
   components:
   - type: Sprite
     state: pmc_ikanbakar
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -394,7 +394,7 @@
   components:
   - type: Sprite
     state: cookies
-  - type: Food
+  - type: Edible
     transferAmount: 8
   - type: SolutionContainerManager
     solutions:
@@ -414,7 +414,7 @@
   components:
   - type: Sprite
     state: gingerbread
-  - type: Food
+  - type: Edible
     transferAmount: 8
   - type: SolutionContainerManager
     solutions:
@@ -434,7 +434,7 @@
   components:
   - type: Sprite
     state: fruit_cake
-  - type: Food
+  - type: Edible
     transferAmount: 8
   - type: SolutionContainerManager
     solutions:
@@ -475,7 +475,7 @@
   components:
   - type: Sprite
     state: rmc_fish
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -493,7 +493,7 @@
   components:
   - type: Sprite
     state: rmc_katsu
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -511,7 +511,7 @@
   components:
   - type: Sprite
     state: rmc_sausage
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -529,7 +529,7 @@
   components:
   - type: Sprite
     state: rmc_meat
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -547,7 +547,7 @@
   components:
   - type: Sprite
     state: rmc_tikka
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:

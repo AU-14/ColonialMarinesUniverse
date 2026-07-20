@@ -162,7 +162,7 @@
     sprite: _RMC14/Objects/Fishing/Fish/fish.rsi
   - type: Appearance
   - type: ScaleVisuals
-  - type: Food
+  - type: Edible
     transferAmount: 3
   - type: FlavorProfile
     flavors:

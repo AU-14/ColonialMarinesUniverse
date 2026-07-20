@@ -8,7 +8,7 @@
     flavors:
     - oily
     - bread
-  - type: Food
+  - type: Edible
   - type: Tag
     tags:
     - Pizza

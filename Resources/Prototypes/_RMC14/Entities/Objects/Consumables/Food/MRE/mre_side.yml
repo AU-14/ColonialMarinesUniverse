@@ -54,7 +54,7 @@
   parent: CMMREFoodBase
   id: CMMREFoodSide
   components:
-  - type: Food
+  - type: Edible
     transferAmount: 1.6
   - type: SolutionContainerManager
     solutions:

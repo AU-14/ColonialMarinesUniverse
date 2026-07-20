@@ -3,7 +3,7 @@
   id: RMCFoodSnackBase
   abstract: true
   components:
-  - type: Food
+  - type: Edible
   - type: Tag
     tags:
       - FoodSnack
@@ -226,7 +226,7 @@
         - ReagentId: TableSalt # Holy shit these are salty.
           Quantity: 12
   - type: Item
-  - type: Food
+  - type: Edible
     trash:
     - RMCFoodPacketKeplerCrispsTrash
 
@@ -255,7 +255,7 @@
         - ReagentId: Hotsauce
           Quantity: 8
   - type: Item
-  - type: Food
+  - type: Edible
     trash:
     - RMCFoodPacketKeplerCrispsFlamehotTrash
 
@@ -281,7 +281,7 @@
         - ReagentId: Blackpepper
           Quantity: 1
   - type: Item
-  - type: Food
+  - type: Edible
     trash:
     - RMCFoodPacketPepperChipsTrash
 
@@ -475,7 +475,7 @@
         - ReagentId: TableSalt
           Quantity: 1
   - type: Item
-  - type: Food
+  - type: Edible
     trash:
     - RMCFoodPacketEATBarTrash
 
