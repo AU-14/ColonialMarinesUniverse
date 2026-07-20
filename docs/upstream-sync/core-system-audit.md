@@ -699,3 +699,16 @@ Date completed: 2026-07-20
 - Files changed: the nine specialized files under `Resources/Prototypes/Entities/Structures/Windows/`, `Content.IntegrationTests/Tests/Physics/DiagonalWindowTagTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the pinned target retains every added tag. The CS-0044 runtime regression now covers one concrete prototype from each affected family, including inheritance through the plastitanium diagonal base. Per the requested 20-port cadence, execution is deferred to the CS-0041–CS-0060 checkpoint.
 - Follow-up/debt: Port and validate #39580's diagonal-grille `GlassLayer` change as its own physics decision; audit future tag-list overrides for other inherited semantic identities.
+
+## CS-0046 — Use glass collision for diagonal grilles
+
+- Upstream: [space-wizards/space-station-14#39580](https://github.com/space-wizards/space-station-14/pull/39580), `d58ef22d62795c1c4393c1eb09d33c1ff78087c6`, 2025-08-17
+- Areas: Physics, Shooting
+- Status: Adapted
+- Risk: Medium
+- Behavior/API delta: Standard and clockwork diagonal grilles now expose `GlassLayer` rather than `WallLayer` on their polygon fixture. Raycasts and projectile masks can treat them like their transparent grille family instead of opaque walls while their shape, hard collision mask, construction, and electrification remain unchanged.
+- RMC/CMU divergence: RMC does not override either prototype or their fixture IDs, and inherited maps place the standard diagonal grille. The fork's collision-group definitions match the upstream glass/wall distinction, so no engine or RMC projectile changes are required.
+- Decision and rationale: Port only #39580's two grille-layer replacements after recording its window-tag half in CS-0045. Do not copy later target changes around these prototypes, such as transform rotation metadata, without their own ancestry and behavior audit.
+- Files changed: `Resources/Prototypes/Entities/Structures/Walls/grille.yml`, `Content.IntegrationTests/Tests/Physics/DiagonalGrilleCollisionTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the pinned target retains `GlassLayer` on both `fix1` fixtures. A regression spawns both concrete grilles and requires the exact glass-layer mask while excluding its opaque bit. Per the requested 20-port cadence, execution is deferred to the CS-0041–CS-0060 checkpoint.
+- Follow-up/debt: Audit later diagonal-structure rotation metadata separately and expand collision coverage if RMC introduces custom diagonal grille variants.
