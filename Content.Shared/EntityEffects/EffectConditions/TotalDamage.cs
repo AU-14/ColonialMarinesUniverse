@@ -7,9 +7,11 @@ namespace Content.Shared.EntityConditions.Conditions;
 
 public sealed partial class TotalDamageEntityConditionSystem : EntityConditionSystem<DamageableComponent, TotalDamage>
 {
+    [Dependency] private DamageableSystem _damageable = default!;
+
     protected override void Condition(Entity<DamageableComponent> entity, ref EntityConditionEvent<TotalDamage> args)
     {
-        var total = entity.Comp.TotalDamage;
+        var total = _damageable.GetTotalDamage(entity);
         args.Result = total >= args.Condition.Min && total <= args.Condition.Max;
     }
 }
