@@ -2476,3 +2476,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Objects/Devices/chameleon_projector.yml`, `docs/upstream-sync/inventory-wave-0005.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static whitelist review confirms all five target-final exclusions are present and existing exclusions remain. Prototype loading plus attempted disguises for each rejected family and a normal item control are queued for the index-1999 checkpoint.
 - Follow-up/debt: Revisit blacklist breadth only alongside a deliberate chameleon-projector rendering/state refactor.
+
+## CS-0181 — Prevent grinder material recycling
+
+- Upstream: [space-wizards/space-station-14#39694](https://github.com/space-wizards/space-station-14/pull/39694), `bd05e10a2e9a11317de212a5708a4f1c4ba02307`, 2025-08-16; side-branch fix [#39690](https://github.com/space-wizards/space-station-14/pull/39690), `85158a3d4826a83e0e9ac3ad93d175a7a2995423`
+- Areas: Chemistry, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `MaterialReclaimerComponent` now independently controls material and solution recovery, defaulting both switches to enabled. The industrial reagent grinder disables only material recovery, while still extracting solutions, so its `Extractable` whitelist cannot consume material output and feed it back into an infinite recycling loop.
+- RMC/CMU divergence: No RMC-specific material-reclaimer prototype or system was found. The standard recycler retains both default recovery paths, and the industrial grinder keeps its CMU solution container, whitelist, blacklist, drainability, and efficiency settings.
+- Decision and rationale: Port the complete effective first-parent merge delta atomically. Component defaults preserve all existing reclaimers; the single prototype opt-out fixes the affected machine without weakening chemical extraction or changing generic recycler behavior.
+- Files changed: the shared reclaimer component, server reclaimer system, industrial reagent-grinder prototype, `docs/upstream-sync/inventory-wave-0003.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static control-flow and prototype review confirms material and solution recovery are separately guarded, both defaults remain enabled, and only `ReagentGrinderIndustrial` opts out of material recovery. Compilation, prototype loading, normal recycling, chemical extraction, and anti-loop cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: None.
