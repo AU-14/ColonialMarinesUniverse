@@ -2268,3 +2268,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Structures/Storage/Closets/big_boxes.yml`, `docs/upstream-sync/inventory-wave-0005.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: The first checkpoint integration run reproduced `UnknownComponentException: GravityAffected` for `BigBox` and `StealthBox`. Static review confirms the current `SharedGravitySystem.IsWeightless` handles non-static bodies without the marker; prototype loading and integration tests are rerun after this removal.
 - Follow-up/debt: Port #37971 and #40260 together during the deeper Movement/Physics reconciliation, with explicit regression coverage for boxes, RMC pulls, magboots, projectiles, throws, conveyors, and zero-gravity movement.
+
+## CS-0166 — Complete the golden-plunger storage tag contract
+
+- Upstream: [space-wizards/space-station-14#38494](https://github.com/space-wizards/space-station-14/pull/38494), `cd0960fbd760a9eebf51474616437ab7eee73cc6`; [#39213](https://github.com/space-wizards/space-station-14/pull/39213), `8b104d30d5428682acf4edf15547b033625554e7`; target-final tag inheritance from [#40619](https://github.com/space-wizards/space-station-14/pull/40619), `e1c03249fa0d73f528f8b988f00bb64530278002`
+- Areas: Interactions
+- Status: Adapted
+- Risk: Low
+- Behavior/API delta: `GoldenPlunger` is now a registered tag and the golden-plunger entity explicitly carries it while retaining the parent's `Plunger` and `WhitelistChameleon` tags. Janibelts can accept the item without prototype initialization failing on an unknown whitelist tag.
+- RMC/CMU divergence: CMU already retained the golden-plunger entity and assets, then ported the later janibelt whitelist in isolation. It does not yet carry the upstream janicart mapper or bucket-carp variants, which remain independently deferred.
+- Decision and rationale: Complete the minimal target-final tag contract needed by the accepted janibelt port. Explicitly repeat inherited tags because the derived `Tag` component replaces its parent's serialized tag set.
+- Files changed: `Resources/Prototypes/tags.yml`, `Resources/Prototypes/Entities/Objects/Specific/Janitorial/janitor.yml`, both affected wave inventories, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: The first 1,000-commit integration checkpoint reproduced `Unknown tag: GoldenPlunger` while spawning lathe products. Static review confirms the tag is now declared and assigned with the target-final inherited set; the failing lathe test and full integration suite are rerun after this correction.
+- Follow-up/debt: Reassess the remaining janicart and bucket-carp portion of #38494 separately from this storage-contract fix.

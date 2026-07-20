@@ -147,7 +147,7 @@ are retained so future audits can trace each classifier's original decision.
 0125 | 2c4251dcdcfbeb41114096547d2dc1e5cd592361 | Revert "Don't compile EF Core designer files on release builds" (#39057) | Already present/equivalent | — | CMU already compiles migration designer methods without EF_DESIGNER conditionals.
 0126 | 5ac78ec3148d09b53929361ad03ef8a6620c1ebe | Guidebook changes (#38987) | Non-code/no-op | — | This only changes guide text and layout.
 0127 | ee69f4e5b4b21cbb80385f345dd10493f3aae959 | Automatic changelog update | Non-code/no-op | — | Generated changelog only.
-0128 | cd0960fbd760a9eebf51474616437ab7eee73cc6 | Golden plunger Trolley and Bucket Carp (#38494) | Port candidate | Physics, Interactions | The janicart slot, golden plunger, bucket-carp variants, and assets remain absent.
+0128 | cd0960fbd760a9eebf51474616437ab7eee73cc6 | Golden plunger Trolley and Bucket Carp (#38494) | Partially ported (CS-0166) | Physics, Interactions | The GoldenPlunger tag contract is retained and now complete; the janicart slot, bucket-carp variants, and their assets remain deferred.
 0129 | 89cc8419b12056131c48f86495ee70805f280ed8 | Automatic changelog update | Non-code/no-op | — | Generated changelog only.
 0130 | 23c190e9bcce030dddeabb04c5d96aeeca588de0 | Dehardcoded Air Alarm's UI window title (#39072) | Port candidate | Interactions | The Air Alarm XAML still embeds its English title instead of resolving localization.
 0131 | 2db1ab58e6dc382c536dea7db1238be4b453dcc9 | Fix Bagel Salvage's airlock not being an airlock (#38956) | Port candidate | Physics, Interactions | Bagel's salvage entrance retains the incorrect map entity.

@@ -49,7 +49,7 @@ are retained so future audits can trace each classifier's original decision.
 0227 | c3cab577f6337f84cc1c616a97f968f937bcc70f | Automatic changelog update | Irrelevant | — | Upstream automatic changelog only.
 0228 | 3c76b5a8aa7d15413eaa50f13fef0bca7a51d1e9 | rolebriefingcomponent bugfix (#39261) | AlreadyPresent | Gamerules | Current MakeTraitor already uses EnsureComp<RoleBriefingComponent> and updates the returned component.
 0229 | 901cef43c96ce97c0ab6a43e312a8cb4fb619473 | last words error fix (#39245) | Ported (CS-0100) | Medical, Interactions | Last-words callbacks now return safely when the critical mob was deleted before dialog completion.
-0230 | 8b104d30d5428682acf4edf15547b033625554e7 | allow janibelt to hold golden plunger (#39213) | Ported | Interactions | The janibelt whitelist now accepts the retained GoldenPlunger tag.
+0230 | 8b104d30d5428682acf4edf15547b033625554e7 | allow janibelt to hold golden plunger (#39213) | Ported (CS-0166) | Interactions | The janibelt whitelist accepts GoldenPlunger, and the tag prototype plus item tag now make that whitelist valid and effective.
 0231 | b77b533e1f5ced17b9ec8e46552352ba84e58f4f | Automatic changelog update | Irrelevant | — | Upstream automatic changelog only.
 0232 | e2d96f1f4921d229ef92a3b6dc7850ce720b9748 | Make BoozeDispenserEmpty actually empty (#39067) | PortCandidate | Chemistry, Interactions | Current Empty prototypes inherit filled StorageFill data; target retains empty-as-base and filled-as-child inheritance.
 0233 | b0825c102cec17285ceff01cf912e9e21ef5af18 | Added a network configurator to the Warden's locker. (#39254) | Ported | Interactions | The Warden locker fill now includes the retained NetworkConfigurator entry with CMU's surrounding fill structure preserved.
