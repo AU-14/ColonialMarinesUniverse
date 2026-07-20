@@ -323,7 +323,7 @@ public sealed partial class XenoDevourSystem : EntitySystem
         melee.NextAttack = devoured.Comp.NextDevouredAttackTimeAllowed;
         Dirty(weapon.Value, melee);
 
-        var damage = _damage.TryChangeDamage(container.Owner, totalDamage, true, false, origin: devoured, tool: weapon);
+        var damage = _damage.ChangeDamage(container.Owner, totalDamage, true, false, origin: devoured, tool: weapon);
 
         _audio.PlayPredicted(melee.HitSound, container.Owner.ToCoordinates(), devoured);
 

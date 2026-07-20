@@ -93,7 +93,7 @@ public sealed partial class XenoScissorCutSystem : EntitySystem
 
             if (TryComp<DamageOnXenoScissorsComponent>(des, out var destruct))
             {
-                var dam = _damage.TryChangeDamage(des, destruct.Damage, origin: xeno, tool: xeno);
+                var dam = _damage.ChangeDamage(des, destruct.Damage, origin: xeno, tool: xeno);
 
                 if (dam?.GetTotal() > FixedPoint2.Zero)
                 {
@@ -127,7 +127,7 @@ public sealed partial class XenoScissorCutSystem : EntitySystem
             if (hitEnt == null)
                 hitEnt = victim;
 
-            var change = _damage.TryChangeDamage(victim, xeno.Comp.Damage, origin: xeno, tool: xeno);
+            var change = _damage.ChangeDamage(victim, xeno.Comp.Damage, origin: xeno, tool: xeno);
 
             if (change?.GetTotal() > FixedPoint2.Zero)
             {

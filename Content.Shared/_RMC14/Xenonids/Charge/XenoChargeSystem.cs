@@ -206,7 +206,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
         }
 
         //var finalDamage = _xeno.TryApplyXenoSlashDamageMultiplier(targetId, structDamage);
-        var damage = _damageable.TryChangeDamage(targetId, structDamage, origin: xeno, tool: xeno, shouldIgnoreClawLogic: true);
+        var damage = _damageable.ChangeDamage(targetId, structDamage, origin: xeno, tool: xeno, shouldIgnoreClawLogic: true);
 
         if (damage?.GetTotal() > FixedPoint2.Zero && !TerminatingOrDeleted(targetId))
         {

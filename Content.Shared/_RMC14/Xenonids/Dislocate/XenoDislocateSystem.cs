@@ -65,7 +65,7 @@ public sealed partial class XenoDislocateSystem : EntitySystem
                          HasComp<StunnedComponent>(targetId) ||
                          _standing.IsDown(targetId);
 
-        var damage = _damageable.TryChangeDamage(targetId, xeno.Comp.Damage, ignoreResistances: isDebuffed, origin: xeno, tool: xeno);
+        var damage = _damageable.ChangeDamage(targetId, xeno.Comp.Damage, ignoreResistances: isDebuffed, origin: xeno, tool: xeno);
         if (damage?.GetTotal() > FixedPoint2.Zero)
         {
             var filter = Filter.Pvs(targetId, entityManager: EntityManager).RemoveWhereAttachedEntity(o => o == xeno.Owner);

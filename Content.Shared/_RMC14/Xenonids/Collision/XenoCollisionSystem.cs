@@ -225,7 +225,7 @@ public sealed partial class XenoCollisionSystem : EntitySystem
                 if (HasComp<XenoComponent>(other))
                     continue;
 
-                var damage = _damage.TryChangeDamage(other, comp.Damage, origin: uid, tool: uid);
+                var damage = _damage.ChangeDamage(other, comp.Damage, origin: uid, tool: uid);
                 if (damage?.GetTotal() > FixedPoint2.Zero)
                 {
                     var filter = Filter.Pvs(other, entityManager: EntityManager).RemoveWhereAttachedEntity(o => o == uid);

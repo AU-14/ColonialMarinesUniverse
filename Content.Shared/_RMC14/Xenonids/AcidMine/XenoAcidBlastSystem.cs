@@ -171,7 +171,7 @@ public sealed partial class XenoAcidBlastSystem : EntitySystem
         if (TryComp<XenoCaughtInTrapComponent>(target, out var caught) && caught.Applier == ent.Comp.Attached)
             mobDamage = mobDamage * ent.Comp.TrappedMobDamageMultiplier;
 
-        var change = _damage.TryChangeDamage(target, mobDamage, origin: ent.Comp.Attached);
+        var change = _damage.ChangeDamage(target, mobDamage, origin: ent.Comp.Attached);
         if (change?.GetTotal() > FixedPoint2.Zero)
         {
             var filter = Filter.Pvs(target, entityManager: EntityManager);

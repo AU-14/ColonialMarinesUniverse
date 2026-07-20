@@ -586,7 +586,7 @@ public sealed partial class XenoLeapSystem : EntitySystem
                 SpawnAttachedTo(xeno.Comp.HitEffect, target.ToCoordinates());
         }
 
-        var damage = _damagable.TryChangeDamage(target, _xeno.TryApplyXenoSlashDamageMultiplier(target, xeno.Comp.Damage), origin: xeno, tool: xeno);
+        var damage = _damagable.ChangeDamage(target, _xeno.TryApplyXenoSlashDamageMultiplier(target, xeno.Comp.Damage), origin: xeno, tool: xeno);
         if (damage?.GetTotal() > FixedPoint2.Zero)
         {
             var filter = Filter.Pvs(target, entityManager: EntityManager).RemoveWhereAttachedEntity(o => o == xeno.Owner);
