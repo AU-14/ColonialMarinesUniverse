@@ -2223,11 +2223,11 @@ Date completed: 2026-07-20
 - Areas: Movement, Interactions, Physics
 - Status: Adapted
 - Risk: Low
-- Behavior/API delta: The portal traversal alternative verb captures the requesting ghost entity before registering its delayed action instead of reading the transient verb event from inside the callback.
+- Behavior/API delta: The portal traversal alternative verb captures the requesting ghost before registering its delayed action, then refuses client prediction when the linked destination does not exist locally or is in Nullspace.
 - RMC/CMU divergence: The upstream commit also refactors portal entities and client prediction. CMU retains its older portal API and imports only the lifetime-safe capture needed to prevent the developer crash; collision, pull-breaking, random teleport, and sound behavior are unchanged.
-- Decision and rationale: Capture `args.User` into a local `subject` and use that stable value in the verb action, which is the minimal compatible correction for an event object that no longer belongs to the callback after verb collection.
+- Decision and rationale: Capture `args.User` into a stable local and guard the selected destination before transforming it. This is the minimal compatible correction for both the transient verb-event lifetime and linked portals outside client PVS.
 - Files changed: `Content.Shared/Teleportation/Systems/SharedPortalSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
-- Validation: Static closure review confirms the delayed action no longer captures `args`. Shared compilation plus ghost alt-click traversal on linked, unlinked, and multi-output portals are queued for the first 1,000-upstream-commit checkpoint.
+- Validation: Static closure review confirms the delayed action no longer captures `args`, and the client checks existence before reading the destination transform. Shared compilation plus valid, outside-PVS, Nullspace, unlinked, and multi-output ghost traversal cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Revisit the upstream prediction helper and typed-entity refactor when their dependent portal architecture enters scope.
 
 ## CS-0163 — Stock diagnostic HUDs in EngiVend

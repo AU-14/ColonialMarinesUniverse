@@ -63,8 +63,15 @@ public abstract partial class SharedPortalSystem : EntitySystem
                 if (link == null || disabled)
                     return;
 
-                var ent = link.LinkedEntities.First();
-                TeleportEntity(uid, subject, Transform(ent).Coordinates, ent, false);
+                var destination = link.LinkedEntities.First();
+
+                if (_netMan.IsClient &&
+                    (!Exists(destination) || Transform(destination).MapID == MapId.Nullspace))
+                {
+                    return;
+                }
+
+                TeleportEntity(uid, subject, Transform(destination).Coordinates, destination, false);
             },
             Disabled = disabled,
             Text = Loc.GetString("portal-component-ghost-traverse"),
