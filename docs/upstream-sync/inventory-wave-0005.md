@@ -27,7 +27,7 @@ are retained so future audits can trace each classifier's original decision.
 0805 | 3e2152a59e06284f49e03b2ecf10a8a97663f4c5 | Improve Do Not Map test to whitelist specific prototypes per map and whitelist entire directories (#36117) | Irrelevant | — | Upstream mapping-test policy and whitelist maintenance do not provide standalone gameplay behavior.
 0806 | 35bb5c633c75dd01720817ffd77b3ce2466485f2 | Make Butterflies zombie immune (#40265) | PortCandidate | Medical, Gamerules | Retained infection-immunity behavior needs adaptation to CMU's zombie and species prototype hierarchy.
 0807 | 73499b2a0c6b17d86a36662679f974800de8dd3a | Automatic changelog update | Irrelevant | — | Generated changelog only.
-0808 | 2601853791d8fc318d1e57e9420acb2eb7d9eac9 | Cardboard Box Weightless Fix (#40260) | Ported (CS-0142) | Movement, Physics | Accepted as downstream commit cbe7866dce; CMU large cardboard boxes now participate in gravity-dependent movement.
+0808 | 2601853791d8fc318d1e57e9420acb2eb7d9eac9 | Cardboard Box Weightless Fix (#40260) | Deferred (CS142 reverted by CS165) | Movement, Physics | `GravityAffected` belongs to deferred index 0506's event-based weightlessness rewrite; CMU's current gravity system already evaluates dynamic boxes without that marker.
 0809 | 1736b9bb34999c7742a987c278ee3c8cd8e98e20 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 0810 | 2882fd289f502b9f0b394ee067766191bdc3bf0c | Add admin shuttles (#32139) | Deferred | Movement, Physics, Gamerules | The large shuttle, map, and administration content bundle needs focused reconciliation with CMU shuttle gameplay.
 0811 | ddc428b946c50a929768cf40f42e781aab81966a | Automatic changelog update | Irrelevant | — | Generated changelog only.

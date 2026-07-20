@@ -1961,14 +1961,14 @@ Date completed: 2026-07-20
 
 - Upstream: [space-wizards/space-station-14#40260](https://github.com/space-wizards/space-station-14/pull/40260), `2601853791d8fc318d1e57e9420acb2eb7d9eac9`, 2025-09-11
 - Areas: Movement, Physics
-- Status: Ported
+- Status: Reverted by CS-0165
 - Risk: Low
 - Behavior/API delta: Large cardboard boxes now participate in gravity-dependent movement behavior, including the correct weightless state when used or moved in zero gravity.
 - RMC/CMU divergence: CMU retains the upstream `BaseBigBox` mover and physics hierarchy. The marker is added to that station-content base only and does not alter RMC-specific crates or storage entities.
 - Decision and rationale: Add the retained `GravityAffected` component at the common box base so stealth and inherited variants share the same gravity semantics.
 - Files changed: `Resources/Prototypes/Entities/Structures/Storage/Closets/big_boxes.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static inheritance review confirms every large-box variant receives the marker while existing body type, fixtures, and input mover remain unchanged. Prototype loading plus gravity/zero-gravity movement cases are queued for the first 1,000-upstream-commit checkpoint.
-- Follow-up/debt: Compare other input-mover structures for missing gravity markers during the deeper movement audit.
+- Follow-up/debt: Superseded by CS-0165 after checkpoint prototype loading proved the marker belongs to the deferred event-based weightlessness architecture.
 
 ## CS-0143 — Predict APC breaker toggle state
 
@@ -2255,3 +2255,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Shuttles/Systems/ShuttleConsoleSystem.cs`, `Content.Shared/UserInterface/ActivatableUIEvents.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static event-flow review confirms `TryPilot` runs only after opening and UI close still removes the pilot. Server/shared compilation plus successful, denied, intercepted, and close/reopen console cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None.
+
+## CS-0165 — Defer the large-box gravity marker with its architecture
+
+- Upstream: [space-wizards/space-station-14#40260](https://github.com/space-wizards/space-station-14/pull/40260), `2601853791d8fc318d1e57e9420acb2eb7d9eac9`, 2025-09-11; prerequisite [#37971](https://github.com/space-wizards/space-station-14/pull/37971), `9de76e70c71097241b3b2a2720eef0c1d34aba89`
+- Areas: Movement, Physics
+- Status: Deferred; reverts CS-0142
+- Risk: Medium
+- Behavior/API delta: Remove the unregistered `GravityAffected` marker from `BaseBigBox`. CMU's current gravity system still derives weightlessness for dynamic physics bodies directly, so large boxes retain their pre-rewrite gravity behavior without this newer cached-state component.
+- RMC/CMU divergence: SS14 introduced `GravityAffectedComponent` in its broad event-based weightlessness rewrite at inventory index 0506. CMU deliberately deferred that rewrite because it crosses RMC pulling and movement behavior; importing a later consumer without the component definition makes prototype composition fail.
+- Decision and rationale: Keep the content boundary coherent by reverting only the premature marker and deferring #40260 alongside #37971. Do not copy the component in isolation because its semantics depend on the new gravity system, event subscriptions, movers, throwing, shooting, friction, conveyors, magboots, and RMC-sensitive pulling paths.
+- Files changed: `Resources/Prototypes/Entities/Structures/Storage/Closets/big_boxes.yml`, `docs/upstream-sync/inventory-wave-0005.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: The first checkpoint integration run reproduced `UnknownComponentException: GravityAffected` for `BigBox` and `StealthBox`. Static review confirms the current `SharedGravitySystem.IsWeightless` handles non-static bodies without the marker; prototype loading and integration tests are rerun after this removal.
+- Follow-up/debt: Port #37971 and #40260 together during the deeper Movement/Physics reconciliation, with explicit regression coverage for boxes, RMC pulls, magboots, projectiles, throws, conveyors, and zero-gravity movement.
