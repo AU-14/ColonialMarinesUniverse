@@ -2073,3 +2073,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/silicon-laws.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype review confirms `Drone` remains defined but is absent from `IonStormLawsets`. Prototype loading and weighted-random resolution are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None.
+
+## CS-0151 — Bind stun runes to their rune fixture
+
+- Upstream: [space-wizards/space-station-14#40432](https://github.com/space-wizards/space-station-14/pull/40432), `b41ce9cce666110f4f76d3f4d17695e20efbd1ff`, 2025-09-18
+- Areas: Interactions, Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `StunRune` now tells `StunOnCollide` to listen to its `rune` fixture instead of the component's projectile-fixture default, restoring collision-triggered stuns.
+- RMC/CMU divergence: CMU retains the current server-side collision stun implementation and rune fixture layout; the fix only aligns their existing fixture identifiers.
+- Decision and rationale: Port the isolated prototype field because `TriggerOnCollide` already watches `rune`, while `StunOnCollide` silently ignored those contacts under its default `projectile` fixture.
+- Files changed: `Resources/Prototypes/Magic/Fixtures/runes.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static fixture-flow review confirms both trigger and stun components now select `rune`. Prototype loading and a living-entity collision assertion are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None.
