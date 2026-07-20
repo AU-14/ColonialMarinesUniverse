@@ -673,3 +673,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Zombies/ZombieSystem.Transform.cs`, `Content.IntegrationTests/Tests/GameRules/ZombieSentienceTargetTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms Random Sentience still enumerates `SentienceTargetComponent`, the pinned target retains removal during zombification, and no RMC override re-adds it. A regression spawns an eligible monkey, zombifies it through the public system API, and requires the zombie marker to replace sentience eligibility. Per the requested 20-port cadence, execution is deferred to the CS-0041–CS-0060 checkpoint.
 - Follow-up/debt: Audit other irreversible creature transformations for stale station-event eligibility markers, particularly ghost-role and polymorph transitions.
+
+## CS-0044 — Preserve base diagonal-window identity
+
+- Upstream: [space-wizards/space-station-14#39032](https://github.com/space-wizards/space-station-14/pull/39032), `f7c64ab86c35fbd23dc05ac26002678e45b00a21`, 2025-07-17
+- Areas: Physics, Medical
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `WindowDiagonal` now retains the `Window` tag alongside `Diagonal`. Electrified structures configured to stop working when a window occupies their tile can therefore detect the diagonal base window and avoid shocking through it.
+- RMC/CMU divergence: The standard electrocution system performs its tile obstruction check through the `Window` tag, and RMC has no override for `WindowDiagonal` or that query. Existing inherited maps use the prototype, while its fixture, airtight directions, construction graph, and damage behavior remain unchanged.
+- Decision and rationale: Restore the semantic tag on the prototype rather than special-casing diagonal fixtures in electrocution. The local `Tag` component replaces the parent's tag list, so explicitly carrying both identities is required even though `WindowDiagonal` inherits from `Window`.
+- Files changed: `Resources/Prototypes/Entities/Structures/Windows/window.yml`, `Content.IntegrationTests/Tests/Physics/DiagonalWindowTagTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the pinned target retains both tags and `ElectrocutionSystem` still checks the `Window` tag. A regression spawns the real diagonal prototype and verifies its resolved runtime tag identity. Per the requested 20-port cadence, execution is deferred to the CS-0041–CS-0060 checkpoint.
+- Follow-up/debt: Port #39580's matching tags for specialized diagonal windows separately, together with its distinct diagonal-grille collision-layer correction.
