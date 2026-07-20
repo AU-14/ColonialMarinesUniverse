@@ -1488,3 +1488,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/DoAfter/DoAfterArgs.cs`, `Content.Shared/DoAfter/SharedDoAfterSystem.Update.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static call-site review confirms existing RMC custom ranges remain explicit, `RangeCheck = false` paths still bypass target checks, and no current CMU caller explicitly assigns null. Shared compilation plus default, custom, null, target-only, used-item, and RMC range-disabled cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Reconcile the RMC `RangeCheck` Boolean with nullable threshold semantics in a dedicated DoAfter integration review so one mechanism eventually owns distance cancellation.
+
+## CS-0106 — Reform Diona nymphs with safe adjacent placement
+
+- Upstream: [space-wizards/space-station-14#39505](https://github.com/space-wizards/space-station-14/pull/39505), `3654fcf5ddb194aa749dd6ab9b324a8934e0f70f`, 2025-08-11
+- Areas: Interactions, Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Completing a Diona reform now spawns the new body beside the nymph or drops it through the normal placement helper instead of placing it directly at the old transform coordinates, which can be invalid or inside a container.
+- RMC/CMU divergence: CMU's reform path uses a divergent stun call but otherwise retains upstream spawn and mind-transfer behavior. The stun behavior is preserved; only final entity placement changes.
+- Decision and rationale: Port the retained placement helper exactly because it already handles containment and nearby valid coordinates before the old entity is queued for deletion.
+- Files changed: `Content.Shared/Species/Systems/ReformSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static lifecycle review confirms server-only spawning, mind transfer, and deletion ordering remain intact while placement is delegated to the shared safe helper. Shared compilation plus open-tile, obstructed-tile, and contained-nymph reform cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a regression proving reform from a container yields an accessible body and retains the same mind exactly once.
