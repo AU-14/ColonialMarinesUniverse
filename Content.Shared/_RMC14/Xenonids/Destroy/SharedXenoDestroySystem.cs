@@ -16,12 +16,12 @@ using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.ScissorCut;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
-using Content.Shared.Body.Components;
-using Content.Shared.Body.Systems;
+using Content.Shared.Body;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Explosion;
 using Content.Shared.Hands;
+using Content.Shared.Gibbing;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
@@ -62,7 +62,7 @@ public abstract partial class SharedXenoDestroySystem : EntitySystem
     [Dependency] private EntityWhitelistSystem _whitelist = default!;
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private RMCSizeStunSystem _size = default!;
-    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private RMCGibSystem _rmcGib = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
@@ -212,7 +212,7 @@ public abstract partial class SharedXenoDestroySystem : EntitySystem
             {
                 if (CanGib(xeno, ent))
                 {
-                    if (!xeno.Comp.Gibs || !TryComp<BodyComponent>(ent, out var body))
+                    if (!xeno.Comp.Gibs || !HasComp<BodyComponent>(ent))
                     {
                         //just do a ton of damage instead
                         _damage.TryChangeDamage(ent, xeno.Comp.MobDamage, true, origin: xeno, tool: xeno);
@@ -222,7 +222,7 @@ public abstract partial class SharedXenoDestroySystem : EntitySystem
                     if (_net.IsServer)
                     {
                         _rmcGib.ScatterInventoryItems(ent);
-                        _body.GibBody(ent, true, body);
+                        _gibbing.Gib(ent);
                     }
                     continue;
                 }

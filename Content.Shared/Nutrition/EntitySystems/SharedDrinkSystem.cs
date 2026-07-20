@@ -1,6 +1,6 @@
 using Content.Shared.Administration.Logs;
+using Content.Shared.Body;
 using Content.Shared.Body.Components;
-using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Database;
@@ -21,7 +21,7 @@ namespace Content.Shared.Nutrition.EntitySystems;
 public abstract partial class SharedDrinkSystem : EntitySystem
 {
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private BodySystem _body = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private FlavorProfileSystem _flavorProfile = default!;
     [Dependency] private FoodSystem _food = default!;

@@ -1,7 +1,5 @@
-using Content.Shared.Body.Events;
-using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
-using Content.Shared.Gibbing.Components;
+using Content.Shared.Gibbing;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -21,7 +19,7 @@ public sealed partial class RMCGibSystem : EntitySystem
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
     [Dependency] private MobThresholdSystem _thresholds = default!;
     [Dependency] private INetManager _net = default!;
 
@@ -48,9 +46,6 @@ public sealed partial class RMCGibSystem : EntitySystem
 
     private void OnDeath(Entity<RMCGibOnDeathComponent> ent, ref MobStateChangedEvent args)
     {
-        if (!HasComp<GibbableComponent>(ent))
-            return;
-
         if (args.NewMobState != MobState.Dead)
             return;
 
@@ -69,7 +64,7 @@ public sealed partial class RMCGibSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        _body.GibBody(ent, ent.Comp.DropOrgans);
+        _gibbing.Gib(ent, ent.Comp.DropOrgans);
     }
 
     /// <summary>

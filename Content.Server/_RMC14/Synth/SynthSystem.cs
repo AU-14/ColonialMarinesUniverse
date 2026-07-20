@@ -1,14 +1,13 @@
-using Content.Server.Body.Systems;
 using Content.Server.Explosion.EntitySystems;
 using Content.Shared._RMC14.Humanoid;
 using Content.Shared._RMC14.Synth;
+using Content.Shared.Body;
 using Content.Shared.Body.Components;
-using Content.Shared.Body.Organ;
-using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Explosion.Components;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Metabolism;
 using Content.Shared.Tag;
 using Robust.Shared.Prototypes;
 
@@ -20,7 +19,7 @@ public sealed partial class SynthSystem : SharedSynthSystem
 
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private BloodstreamSystem _bloodstream = default!;
-    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private BodySystem _body = default!;
     [Dependency] private TagSystem _tags = default!;
 
     public override void Initialize()
@@ -47,23 +46,23 @@ public sealed partial class SynthSystem : SharedSynthSystem
         repOverrideComp.Species = ent.Comp.SpeciesName;
         Dirty(ent, repOverrideComp);
 
-        if (!HasComp<BodyComponent>(ent.Owner))
+        if (!TryComp<BodyComponent>(ent.Owner, out var body))
             return;
 
-        var organComps = _body.GetBodyOrganEntityComps<OrganComponent>(ent.Owner);
-
-        foreach (var organ in organComps)
+        if (_body.TryGetOrgansWithComponent<MetabolizerComponent>((ent.Owner, body), out var metabolizers))
         {
-            Del(organ); // Synths do not metabolize chems or breathe
+            foreach (var organ in metabolizers)
+                Del(organ); // Synths do not metabolize chems or breathe
         }
 
-        var headSlots = _body.GetBodyChildrenOfType(ent, BodyPartType.Head);
-
-        foreach (var part in headSlots)
+        if (_body.TryGetOrgansWithComponent<BrainComponent>((ent.Owner, body), out var brains))
         {
-            var newBrain = SpawnNextToOrDrop(ent.Comp.NewBrain, ent);
-            _body.AddOrganToFirstValidSlot(part.Id, newBrain);
+            foreach (var brain in brains)
+                Del(brain);
         }
+
+        var newBrain = SpawnNextToOrDrop(ent.Comp.NewBrain, ent);
+        _body.AddOrganToFirstValidSlot(ent.Owner, newBrain);
     }
 
     private void OnTaggedUseInHand(Entity<TagComponent> ent, ref UseInHandEvent args)

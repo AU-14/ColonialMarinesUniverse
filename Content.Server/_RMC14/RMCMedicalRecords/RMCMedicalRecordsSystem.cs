@@ -7,7 +7,7 @@ using Content.Shared._RMC14.Mobs;
 using Content.Shared._RMC14.RMCMedicalRecords;
 using Content.Shared._RMC14.Temperature;
 using Content.Shared._RMC14.Xenonids.Parasite;
-using Content.Shared.Body.Systems;
+using Content.Shared.Body;
 using Content.Shared.Clock;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
@@ -23,7 +23,7 @@ namespace Content.Server._RMC14.RMCMedicalRecords;
 /// </summary>
 public sealed partial class RMCMedicalRecordsSystem : SharedRMCMedicalRecordsSystem
 {
-    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private BodySystem _body = default!;
     [Dependency] private SharedRMCBloodstreamSystem _rmcBloodstream = default!;
     [Dependency] private RMCPulseSystem _rmcPulse = default!;
     [Dependency] private RMCReagentSystem _rmcReagent = default!;

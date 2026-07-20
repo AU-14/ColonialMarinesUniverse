@@ -1,9 +1,9 @@
 ﻿using Content.Shared.Administration.Logs;
-using Content.Shared.Body.Components;
-using Content.Shared.Body.Systems;
+using Content.Shared.Body;
 using Content.Shared.Database;
 using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
+using Content.Shared.Gibbing;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Kitchen.Components;
@@ -23,7 +23,7 @@ namespace Content.Shared.Kitchen;
 
 public sealed partial class SharpSystem : EntitySystem
 {
-    [Dependency] private SharedBodySystem _bodySystem = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
     [Dependency] private SharedDestructibleSystem _destructibleSystem = default!;
     [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private SharedPopupSystem _popupSystem = default!;
@@ -122,7 +122,7 @@ public sealed partial class SharpSystem : EntitySystem
             popupEnt = Spawn(proto, coords.Offset(_robustRandom.NextVector2(0.25f)));
         }
 
-        var hasBody = TryComp<BodyComponent>(args.Args.Target.Value, out var body);
+        var hasBody = HasComp<BodyComponent>(args.Args.Target.Value);
 
         // only show a big popup when butchering living things.
         var popupType = PopupType.Small;
@@ -133,7 +133,7 @@ public sealed partial class SharpSystem : EntitySystem
             popupEnt, args.Args.User, popupType);
 
         if (hasBody)
-            _bodySystem.GibBody(args.Args.Target.Value, body: body);
+            _gibbing.Gib(args.Args.Target.Value, dropGiblets: false);
 
         _destructibleSystem.DestroyEntity(args.Args.Target.Value);
 

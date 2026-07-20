@@ -1,10 +1,10 @@
-using Content.Server.Body.Systems;
 using Content.Server.Popups;
 using Content.Shared.Actions;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.Guardian;
+using Content.Shared.Gibbing;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.IdentityManagement;
@@ -31,7 +31,7 @@ namespace Content.Server.Guardian
         [Dependency] private SharedActionsSystem _actionSystem = default!;
         [Dependency] private SharedHandsSystem _handsSystem = default!;
         [Dependency] private SharedAudioSystem _audio = default!;
-        [Dependency] private BodySystem _bodySystem = default!;
+        [Dependency] private GibbingSystem _gibbing = default!;
         [Dependency] private SharedContainerSystem _container = default!;
         [Dependency] private SharedTransformSystem _transform = default!;
 
@@ -130,7 +130,7 @@ namespace Content.Server.Guardian
 
             // Ensure held items are dropped before deleting guardian.
             if (HasComp<HandsComponent>(guardian))
-                _bodySystem.GibBody(component.HostedGuardian.Value);
+                _gibbing.Gib(component.HostedGuardian.Value, dropGiblets: false);
 
             QueueDel(guardian);
             QueueDel(component.ActionEntity);

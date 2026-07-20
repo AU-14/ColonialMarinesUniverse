@@ -6,7 +6,7 @@ using Content.Shared._RMC14.Xenonids.Construction;
 using Content.Shared._RMC14.Xenonids.Energy;
 using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared._RMC14.Xenonids.Hive;
-using Content.Shared.Body.Systems;
+using Content.Shared.Gibbing;
 using Content.Shared.Chat;
 using Content.Shared.Damage;
 using Content.Shared.Interaction;
@@ -44,7 +44,7 @@ public abstract partial class SharedXenoForTheHiveSystem : EntitySystem
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] protected SharedTransformSystem _transform = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
-    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private SharedXenoAcidSystem _acid = default!;
@@ -252,7 +252,7 @@ public abstract partial class SharedXenoForTheHiveSystem : EntitySystem
                         ForTheHiveRespawn(xeno, active.CorpseSpawnTime, true, origin);
 
                     _audio.PlayStatic(active.KaboomSound, Filter.PvsExcept(xeno), origin, true);
-                    _body.GibBody(xeno);
+                    _gibbing.Gib(xeno, dropGiblets: false);
                     RemCompDeferred<ActiveForTheHiveComponent>(xeno);
                 }
             }

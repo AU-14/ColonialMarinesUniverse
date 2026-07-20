@@ -1,5 +1,4 @@
 using Content.Server.Administration.Logs;
-using Content.Server.Body.Systems;
 using Content.Server.Kitchen.Components;
 using Content.Server.Popups;
 using Content.Shared.Chat;
@@ -11,6 +10,7 @@ using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Gibbing;
 using Content.Shared.Kitchen;
 using Content.Shared.Kitchen.Components;
 using Content.Shared.Mobs.Components;
@@ -34,7 +34,7 @@ namespace Content.Server.Kitchen.EntitySystems
         [Dependency] private MobStateSystem _mobStateSystem = default!;
         [Dependency] private IRobustRandom _random = default!;
         [Dependency] private TransformSystem _transform = default!;
-        [Dependency] private BodySystem _bodySystem = default!;
+        [Dependency] private GibbingSystem _gibbing = default!;
         [Dependency] private SharedAppearanceSystem _appearance = default!;
         [Dependency] private SharedAudioSystem _audio = default!;
         [Dependency] private MetaDataSystem _metaData = default!;
@@ -172,10 +172,7 @@ namespace Content.Server.Kitchen.EntitySystems
             _transform.SetCoordinates(victimUid, Transform(uid).Coordinates);
             // THE WHAT?
             // TODO: Need to be able to leave them on the spike to do DoT, see ss13.
-            var gibs = _bodySystem.GibBody(victimUid);
-            foreach (var gib in gibs) {
-                QueueDel(gib);
-            }
+            _gibbing.Gib(victimUid, dropGiblets: false);
 
             _audio.PlayPvs(component.SpikeSound, uid);
         }

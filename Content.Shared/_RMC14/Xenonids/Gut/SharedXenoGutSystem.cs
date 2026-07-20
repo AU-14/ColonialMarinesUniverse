@@ -3,9 +3,9 @@ using Content.Shared._RMC14.Gibbing;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.Actions;
-using Content.Shared.Body.Components;
-using Content.Shared.Body.Systems;
+using Content.Shared.Body;
 using Content.Shared.DoAfter;
+using Content.Shared.Gibbing;
 using Content.Shared.Jittering;
 using Content.Shared.Popups;
 using Content.Shared.StatusEffect;
@@ -19,7 +19,7 @@ public sealed partial class SharedXenoGutSystem : EntitySystem
 {
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedBodySystem _bodySystem = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -98,7 +98,7 @@ public sealed partial class SharedXenoGutSystem : EntitySystem
         if (target == xeno.Owner || HasComp<XenoComponent>(target))
             return;
 
-        if (!TryComp<BodyComponent>(target, out var body))
+        if (!HasComp<BodyComponent>(target))
             return;
 
         if (!_xenoPlasma.TryRemovePlasmaPopup(xeno.Owner, xeno.Comp.PlasmaCost))
@@ -108,7 +108,7 @@ public sealed partial class SharedXenoGutSystem : EntitySystem
         if (_net.IsServer)
         {
             _rmcGib.ScatterInventoryItems(target);
-            _bodySystem.GibBody(target, true, body);
+            _gibbing.Gib(target);
             _audio.PlayPvs(xeno.Comp.Sound, xeno);
         }
 

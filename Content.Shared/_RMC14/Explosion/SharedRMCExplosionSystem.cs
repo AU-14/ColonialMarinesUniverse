@@ -5,12 +5,12 @@ using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids.Acid;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
-using Content.Shared.Body.Systems;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Explosion;
 using Content.Shared.FixedPoint;
 using Content.Shared.Flash.Components;
+using Content.Shared.Gibbing;
 using Content.Shared.Inventory;
 using Content.Shared.Standing;
 using Content.Shared.StatusEffect;
@@ -29,7 +29,7 @@ namespace Content.Shared._RMC14.Explosion;
 public abstract partial class SharedRMCExplosionSystem : EntitySystem
 {
     [Dependency] private SharedXenoAcidSystem _acid = default!;
-    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;
@@ -249,7 +249,7 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
             return;
 
         if (!TerminatingOrDeleted(ent))
-            _body.GibBody(ent, true);
+            _gibbing.Gib(ent);
     }
 
     public void DoEffect(Entity<CMExplosionEffectComponent> ent)

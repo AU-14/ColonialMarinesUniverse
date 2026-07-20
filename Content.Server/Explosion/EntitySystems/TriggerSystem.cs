@@ -1,11 +1,11 @@
 using Content.Server.Administration.Logs;
-using Content.Server.Body.Systems;
 using Content.Server.Explosion.Components;
 using Content.Shared.Flash;
 using Content.Server.Electrocution;
 using Content.Server.Pinpointer;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Flash.Components;
+using Content.Shared.Gibbing;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Components.SolutionManager;
@@ -73,7 +73,7 @@ namespace Content.Server.Explosion.EntitySystems
         [Dependency] private SharedBroadphaseSystem _broadphase = default!;
         [Dependency] private IAdminLogManager _adminLogger = default!;
         [Dependency] private SharedContainerSystem _container = default!;
-        [Dependency] private BodySystem _body = default!;
+        [Dependency] private GibbingSystem _gibbing = default!;
         [Dependency] private SharedAudioSystem _audio = default!;
         [Dependency] private SharedTransformSystem _transformSystem = default!;
         [Dependency] private NavMapSystem _navMap = default!;
@@ -218,7 +218,7 @@ namespace Content.Server.Explosion.EntitySystems
                     Del(item);
                 }
             }
-            _body.GibBody(xform.ParentUid, true);
+            _gibbing.Gib(xform.ParentUid);
             args.Handled = true;
         }
 
