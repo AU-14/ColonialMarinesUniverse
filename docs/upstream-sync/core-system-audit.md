@@ -1293,3 +1293,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Bed/SharedBedSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static control-flow review confirms terminating occupants skip entity mutations, normal occupants still lose the sleep action and wake, and the bed marker is always removed. Shared compilation and both unstrap paths are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a teardown regression that deletes a buckled occupant during unstrap and a normal control proving action removal, wake-up, and bed cleanup.
+
+## CS-0091 — Hide timer cycling for empty option lists
+
+- Upstream: [space-wizards/space-station-14#39388](https://github.com/space-wizards/space-station-14/pull/39388), `96d25402c7ee9a5f10f60bd3dfb006815792a0a9`, 2025-08-05
+- Areas: Interactions, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Legacy on-use timer triggers now expose and execute delay cycling only when more than one option exists. Null, empty, and single-entry lists all return before verb construction or list indexing.
+- RMC/CMU divergence: The pinned target uses the post-trigger-refactor non-null list, while CMU still permits nullable options. Both old-system guards therefore retain the null check and adopt target-final's `Count <= 1` semantics; RMC's configured three-option timers remain interactive.
+- Decision and rationale: Apply the boundary check to both verb creation and `CycleDelay` so an empty list is safe even if cycling is invoked outside the verb path.
+- Files changed: `Content.Server/Explosion/EntitySystems/TriggerSystem.OnUse.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static control-flow review confirms no empty list reaches sorting or index access, while lists with two or more options retain their existing cycle order. Server compilation and null/empty/single/multiple cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Preserve these semantics when the trigger refactor is integrated and add a prototype-lint warning for explicitly empty delay-option lists.

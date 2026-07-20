@@ -62,7 +62,7 @@ public sealed partial class TriggerSystem
             });
         }
 
-        if (component.DelayOptions == null || component.DelayOptions.Count == 1)
+        if (component.DelayOptions == null || component.DelayOptions.Count <= 1)
             return;
 
         args.Verbs.Add(new AlternativeVerb()
@@ -114,7 +114,7 @@ public sealed partial class TriggerSystem
 
     private void CycleDelay(OnUseTimerTriggerComponent component, EntityUid user)
     {
-        if (component.DelayOptions == null || component.DelayOptions.Count == 1)
+        if (component.DelayOptions == null || component.DelayOptions.Count <= 1)
             return;
 
         // This is somewhat inefficient, but its good enough. This is run rarely, and the lists should be short.
