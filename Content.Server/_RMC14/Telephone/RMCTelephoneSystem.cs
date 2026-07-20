@@ -13,7 +13,9 @@ using Content.Shared._RMC14.Telephone;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Chat;
 using Content.Shared.Coordinates;
+using Content.Shared.Radio;
 using Content.Shared.Speech;
+using Content.Shared.Speech.Components;
 using Robust.Server.Audio;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
@@ -22,6 +24,30 @@ namespace Content.Server._RMC14.Telephone;
 
 public sealed partial class RMCTelephoneSystem : SharedRMCTelephoneSystem
 {
+    private static readonly HashSet<string> TowerChannels =
+    [
+        "MarineCommon",
+        "MarineCommand",
+        "MarineMedical",
+        "MarineEngineer",
+        "MarineMilitaryPolice",
+        "MarineRequisition",
+        "MarineIntel",
+        "MarineJTAC",
+        "MarineAlpha",
+        "MarineBravo",
+        "MarineCharlie",
+        "MarineDelta",
+        "MarineEcho",
+        "MarineFoxtrot",
+        "MarineSOF",
+        "Colony",
+        "WEYA",
+        "CMB",
+        "Provost",
+        "RoyalMarine",
+    ];
+
     [Dependency] private IAdminManager _adminManager = default!;
     [Dependency] private AudioSystem _audio = default!;
     [Dependency] private IChatManager _chatManager = default!;
@@ -53,13 +79,13 @@ public sealed partial class RMCTelephoneSystem : SharedRMCTelephoneSystem
         if (!_rmcPlanet.IsOnPlanet(ev.RadioSource.ToCoordinates()))
             return;
 
-        if (!ev.Channel.Planet)
+        if (!IsPlanetChannel(ev.Channel))
         {
             ev.Cancelled = true;
             return;
         }
 
-        if (ev.Channel.Tower &&
+        if (TowerChannels.Contains(ev.Channel.ID) &&
             !_communicationsTower.CanTransmit(ev.Channel))
         {
             ev.Cancelled = true;
@@ -77,13 +103,13 @@ public sealed partial class RMCTelephoneSystem : SharedRMCTelephoneSystem
         if (!_rmcPlanet.IsOnPlanet(ev.RadioReceiver.ToCoordinates()))
             return;
 
-        if (!ev.Channel.Planet)
+        if (!IsPlanetChannel(ev.Channel))
         {
             ev.Cancelled = true;
             return;
         }
 
-        if (ev.Channel.Tower &&
+        if (TowerChannels.Contains(ev.Channel.ID) &&
             !_communicationsTower.CanTransmit(ev.Channel))
         {
             ev.Cancelled = true;
@@ -137,6 +163,11 @@ public sealed partial class RMCTelephoneSystem : SharedRMCTelephoneSystem
         var name = GetPhoneName(rotary);
         message = $"{name} says, \"{FormattedMessage.EscapeText(message)}\"";
         var sound = _audio.GetSound(ent.Comp.SpeakSound);
-        _chatManager.ChatMessageToOne(ChatChannel.Local, message, message, otherPhone, false, actor.PlayerSession.Channel, Color.FromHex("#9956D3"), true, sound, -12, hidePopup: true);
+        _chatManager.ChatMessageToOne(ChatChannel.Local, message, message, otherPhone, false, actor.PlayerSession.Channel, Color.FromHex("#9956D3"), true, sound, -12);
+    }
+
+    private static bool IsPlanetChannel(RadioChannelPrototype channel)
+    {
+        return channel.ID != "MarineCommon";
     }
 }

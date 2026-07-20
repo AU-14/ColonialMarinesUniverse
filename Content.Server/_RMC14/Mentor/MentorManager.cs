@@ -2,11 +2,14 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Administration.Managers;
+using Content.Server.Chat.Managers;
 using Content.Server.Database;
+using Content.Server._RMC14.Discord;
 using Content.Server.Players.RateLimiting;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Mentor;
 using Content.Shared.Administration;
+using Content.Shared.Chat;
 using Content.Shared.Players.RateLimiting;
 using Content.Shared.Roles;
 using Robust.Server.Player;
@@ -22,10 +25,13 @@ namespace Content.Server._RMC14.Mentor;
 public sealed partial class MentorManager : IPostInjectInit
 {
     [Dependency] private IAdminManager _admin = default!;
+    [Dependency] private IChatManager _chat = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private RMCDiscordManager _discord = default!;
     [Dependency] private ILogManager _log = default!;
     [Dependency] private INetManager _net = default!;
+    [Dependency] private INetConfigurationManager _netConfig = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private PlayerRateLimitManager _rateLimit = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -44,7 +50,7 @@ public sealed partial class MentorManager : IPostInjectInit
     private async Task LoadData(ICommonSession player, CancellationToken cancel)
     {
         var userId = player.UserId;
-        var isMentor = await _db.IsJobWhitelisted(player.UserId, MentorJob, cancel);
+        var isMentor = await _db.IsJobWhitelisted(player.UserId, MentorJob);
 
         if (!isMentor)
         {
@@ -452,6 +458,35 @@ public sealed partial class MentorManager : IPostInjectInit
     public bool IsMentor(NetUserId player)
     {
         return _mentors.TryGetValue(player, out var mentor) && mentor;
+    }
+
+    public void SendMentorChat(ICommonSession player, string message)
+    {
+        if (!IsMentor(player.UserId) || string.IsNullOrWhiteSpace(message))
+            return;
+
+        var wrappedMessage = Loc.GetString(
+            "chat-manager-send-admin-chat-wrap-message",
+            ("adminChannelName", "MENTOR"),
+            ("playerName", player.Name),
+            ("message", FormattedMessage.EscapeText(message)));
+
+        _discord.SendDiscordMentorMessage(player.Name, message);
+
+        foreach (var mentor in _activeMentors)
+        {
+            var playSound = mentor.Channel != player.Channel;
+            _chat.ChatMessageToOne(
+                ChatChannel.AdminChat,
+                message,
+                wrappedMessage,
+                default,
+                false,
+                mentor.Channel,
+                audioPath: playSound ? _netConfig.GetClientCVar(mentor.Channel, RMCCVars.RMCMentorChatSound) : null,
+                audioVolume: playSound ? _netConfig.GetClientCVar(mentor.Channel, RMCCVars.RMCMentorChatVolume) : 0,
+                author: player.UserId);
+        }
     }
 
     public IEnumerable<ICommonSession> GetActiveMentors()

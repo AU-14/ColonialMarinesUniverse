@@ -19,6 +19,7 @@ using Content.Shared.Item;
 using Content.Shared.Paper;
 using Content.Shared.Popups;
 using Content.Shared.Speech;
+using Content.Shared.Speech.Components;
 using Content.Shared.Tools.Systems;
 using Content.Shared.UserInterface;
 using Content.Shared.Verbs;

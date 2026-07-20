@@ -22,6 +22,8 @@ namespace Content.Server._RMC14.Mentor.ImaginaryFriend;
 
 public sealed partial class ImaginaryFriendSystem : SharedImaginaryFriendSystem
 {
+    private const int ImaginaryFriendVisibilityLayer = 1 << 14;
+
     [Dependency] private AppearanceSystem _appearance = default!;
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private EuiManager _euiManager = default!;
@@ -79,7 +81,7 @@ public sealed partial class ImaginaryFriendSystem : SharedImaginaryFriendSystem
         if (!canSeeFriends)
             return;
 
-        args.VisibilityMask |= (int)VisibilityFlags.ImaginaryFriend;
+        args.VisibilityMask |= ImaginaryFriendVisibilityLayer;
     }
 
     private void OnFriendToggleVisibility(Entity<ImaginaryFriendComponent> ent, ref ImaginaryFriendToggleVisibilityActionEvent args)
@@ -208,7 +210,7 @@ public sealed partial class ImaginaryFriendSystem : SharedImaginaryFriendSystem
         imaginaryFriend.Imaginer = imaginer;
         Dirty(friend, imaginaryFriend);
 
-        _visibility.AddLayer(friend, (int)VisibilityFlags.ImaginaryFriend, false);
+        _visibility.AddLayer(friend, ImaginaryFriendVisibilityLayer, false);
         _visibility.RemoveLayer(friend, (int)VisibilityFlags.Ghost, false);
         _visibility.RefreshVisibility(friend);
 

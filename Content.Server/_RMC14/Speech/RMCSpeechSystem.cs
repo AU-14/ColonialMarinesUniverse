@@ -1,5 +1,7 @@
 ﻿using Content.Server.Speech.Components;
 
+using Content.Shared.Speech.Components;
+
 namespace Content.Server._RMC14.Speech;
 
 public sealed class RMCSpeechSystem : EntitySystem

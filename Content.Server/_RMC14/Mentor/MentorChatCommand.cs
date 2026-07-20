@@ -33,6 +33,6 @@ public sealed partial class MentorChatCommand : IConsoleCommand
         if (string.IsNullOrEmpty(message))
             return;
 
-        IoCManager.Resolve<IChatManager>().TrySendOOCMessage(player, message, OOCChatType.Mentor);
+        _mentor.SendMentorChat(player, message);
     }
 }

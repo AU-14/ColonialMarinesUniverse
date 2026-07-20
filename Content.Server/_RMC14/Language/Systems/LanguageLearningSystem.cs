@@ -91,7 +91,8 @@ public sealed partial class LanguageLearningSystem : SharedLanguageLearningSyste
 
     private void OnEntitySpoke(EntitySpokeEvent args)
     {
-        if (!_prototypeManager.TryIndex(args.Language, out var languageProto))
+        var language = _languages.GetCurrentLanguage(args.Source);
+        if (!_prototypeManager.TryIndex(language, out var languageProto))
             return;
 
         var sourceCoordinates = Transform(args.Source).Coordinates;
@@ -109,13 +110,13 @@ public sealed partial class LanguageLearningSystem : SharedLanguageLearningSyste
             if (!TryComp<LanguageLearningComponent>(potentialLearner, out var learnerComp))
                 continue;
 
-            if (!learnerComp.Languages.ContainsKey(args.Language))
+            if (!learnerComp.Languages.ContainsKey(language))
                 continue;
 
             if (TryComp<LanguageComponent>(potentialLearner, out var langComp))
             {
-                var canSpeak = langComp.SpokenLanguages.Contains(args.Language);
-                var canUnderstand = langComp.UnderstoodLanguages.Contains(args.Language);
+                var canSpeak = langComp.SpokenLanguages.Contains(language);
+                var canUnderstand = langComp.UnderstoodLanguages.Contains(language);
 
                 if (canSpeak && canUnderstand)
                     continue;
@@ -127,7 +128,7 @@ public sealed partial class LanguageLearningSystem : SharedLanguageLearningSyste
                 continue;
             }
 
-            TryHandleFirstContact((potentialLearner, learnerComp), args.Language);
+            TryHandleFirstContact((potentialLearner, learnerComp), language);
 
             if (!sourceCoordinates.TryDistance(EntityManager, Transform(potentialLearner).Coordinates, out var distance))
                 continue;
@@ -135,7 +136,7 @@ public sealed partial class LanguageLearningSystem : SharedLanguageLearningSyste
             if (distance > learnerComp.LearningRange)
                 continue;
 
-            TryLearnWords((potentialLearner, learnerComp), args.Source, args.Message, args.Language, distance);
+            TryLearnWords((potentialLearner, learnerComp), args.Source, args.Message, language, distance);
         }
     }
 

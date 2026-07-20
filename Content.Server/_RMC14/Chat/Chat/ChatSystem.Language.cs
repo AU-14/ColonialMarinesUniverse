@@ -1,14 +1,17 @@
 using Content.Server._RMC14.Chat.Chat;
+using Content.Server._RMC14.Language.Systems;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.IdentityManagement;
 using Content.Shared._RMC14.Language;
 using Content.Shared._RMC14.Language.Prototypes;
 using Content.Shared._RMC14.Language.Systems;
+using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Chat;
 using Content.Shared.Database;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Players;
 using Content.Shared.Radio;
+using Content.Shared.Whitelist;
 using Robust.Server.Player;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
@@ -20,6 +23,10 @@ namespace Content.Server.Chat.Systems;
 
 public sealed partial class ChatSystem
 {
+    [Dependency] private LanguageSystem _language = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
+
     private ProtoId<LanguagePrototype> GetCurrentLanguageForSpeech(EntityUid source)
     {
         var currentLanguage = _language.GetCurrentLanguage(source);
@@ -38,7 +45,7 @@ public sealed partial class ChatSystem
             fixedIdentity.Name != null &&
             _whitelistSystem.IsWhitelistPass(fixedIdentity.Whitelist, listener.Value))
         {
-            return Identity.Name(source, EntityManager, listener.Value).Name;
+            return Identity.Name(source, EntityManager, listener.Value);
         }
 
         return transformedName;
@@ -93,14 +100,12 @@ public sealed partial class ChatSystem
         var languageTypeface = languagePrototype?.TypefaceId;
         var languageSize = languagePrototype?.TextSize;
         var showLanguageName = languagePrototype?.ShowLanguageName ?? false;
-        var languageIcon = languagePrototype?.DisplayedLanguageIcon;
-
         var typefaceToUse = languageTypeface ?? speech.FontId;
         var sizeToUse = languageSize ?? speech.FontSize;
 
         var languageIndicator = string.Empty;
-        if (showLanguageName && languagePrototype != null && string.IsNullOrEmpty(languageIcon))
-            languageIndicator = $" ({languagePrototype.LocalizedName})";
+        if (showLanguageName && languagePrototype != null)
+            languageIndicator = $" ({FormattedMessage.EscapeText(languagePrototype.LocalizedName)})";
 
         var wrappedMessageTemplate = Loc.GetString(
             speech.Bold ? "chat-manager-entity-say-bold-wrap-message" : "chat-manager-entity-say-wrap-message",
@@ -117,13 +122,12 @@ public sealed partial class ChatSystem
             source,
             range,
             language,
-            languageIcon,
             speakerName: name,
             visibleLanguage: !(languagePrototype?.NeedsSpeech ?? true),
             transformedName: transformedName,
             needsLos: needsLos);
 
-        var ev = new EntitySpokeEvent(source, speakerProcessedMessage, null, null, language);
+        var ev = new EntitySpokeEvent(source, speakerProcessedMessage, null, null);
         RaiseLocalEvent(source, ev, true);
 
         if (!HasComp<ActorComponent>(source) || hideLog)
@@ -166,7 +170,7 @@ public sealed partial class ChatSystem
 
         var speakerMessage = _language.ObfuscateMessageForSpeaker(source, message, language);
 
-        var transformedIdentityName = nameOverride ?? Identity.Name(source, EntityManager).Name;
+        var transformedIdentityName = nameOverride ?? Identity.Name(source, EntityManager);
         string name;
         if (nameOverride != null)
         {
@@ -183,25 +187,35 @@ public sealed partial class ChatSystem
         name = FormattedMessage.EscapeText(name);
 
         var showLanguageName = languagePrototype?.ShowLanguageName ?? false;
-        var languageIcon = showLanguageName ? languagePrototype?.DisplayedLanguageIcon : null;
+        var languageIndicator = showLanguageName && languagePrototype != null
+            ? $" ({FormattedMessage.EscapeText(languagePrototype.LocalizedName)})"
+            : string.Empty;
         var visibleLanguage = !(languagePrototype?.NeedsSpeech ?? true);
 
-        foreach (var (session, data) in GetRecipients(source, WhisperMuffledRange, ignoreXenos))
+        foreach (var (session, data) in GetRecipients(source, WhisperMuffledRange))
         {
             if (session.AttachedEntity is not { Valid: true } listener)
+                continue;
+
+            if (ignoreXenos && HasComp<XenoComponent>(listener))
                 continue;
 
             if (MessageRangeCheck(session, data, range) != MessageRangeCheckResult.Full)
                 continue;
 
-            if (needsLos && !data.Observer && listener != source && !data.HasLOS)
+            if (needsLos &&
+                !data.Observer &&
+                listener != source &&
+                !_examineSystem.InRangeUnOccluded(source, listener, WhisperMuffledRange))
+            {
                 continue;
+            }
 
             var listenerMessage = listener == source
                 ? speakerMessage
                 : _language.ObfuscateMessageForListener(listener, speakerMessage, language);
-            var listenerName = FormattedMessage.EscapeText(GetSpeakerNameForListener(source, listener, transformedName));
-            var listenerIdentityName = FormattedMessage.EscapeText(GetSpeakerNameForListener(source, listener, transformedIdentityName));
+            var listenerName = FormattedMessage.EscapeText(GetSpeakerNameForListener(source, listener, transformedName)) + languageIndicator;
+            var listenerIdentityName = FormattedMessage.EscapeText(GetSpeakerNameForListener(source, listener, transformedIdentityName)) + languageIndicator;
 
             string actualWrappedMessage;
 
@@ -225,10 +239,7 @@ public sealed partial class ChatSystem
                     actualWrappedMessage,
                     source,
                     false,
-                    session.Channel,
-                    hidePopup: hidePopup,
-                    useEmoteSpeechBubble: useEmoteSpeechBubble,
-                    languageIcon: languageIcon);
+                    session.Channel);
             }
             else if (_examineSystem.InRangeUnOccluded(source, listener, WhisperMuffledRange))
             {
@@ -251,10 +262,7 @@ public sealed partial class ChatSystem
                     actualWrappedMessage,
                     source,
                     false,
-                    session.Channel,
-                    hidePopup: hidePopup,
-                    useEmoteSpeechBubble: useEmoteSpeechBubble,
-                    languageIcon: languageIcon);
+                    session.Channel);
             }
             else
             {
@@ -268,8 +276,7 @@ public sealed partial class ChatSystem
                     actualWrappedMessage,
                     source,
                     false,
-                    session.Channel,
-                    languageIcon: languageIcon);
+                    session.Channel);
             }
         }
 
@@ -284,13 +291,10 @@ public sealed partial class ChatSystem
                 replayWrappedMessage,
                 GetNetEntity(source),
                 null,
-                MessageRangeHideChatForReplay(range),
-                speechStyleClass: CompOrNull<RMCSpeechBubbleSpecificStyleComponent>(source)?.SpeechStyleClass,
-                repeatCheckSender: !HasComp<ChatRepeatIgnoreSenderComponent>(source),
-                languageIcon: languageIcon));
+                MessageRangeHideChatForReplay(range)));
 
         var muffledMessage = ObfuscateMessageReadability(speakerMessage, 0.2f);
-        var ev = new EntitySpokeEvent(source, speakerMessage, channel, muffledMessage, language);
+        var ev = new EntitySpokeEvent(source, speakerMessage, channel, muffledMessage);
         RaiseLocalEvent(source, ev, true);
 
         if (hideLog)
@@ -320,25 +324,35 @@ public sealed partial class ChatSystem
 
         var needsLos = languagePrototype?.NeedsLOS ?? false;
         var showLanguageName = languagePrototype?.ShowLanguageName ?? false;
-        var languageIcon = showLanguageName ? languagePrototype?.DisplayedLanguageIcon : null;
+        var languageIndicator = showLanguageName && languagePrototype != null
+            ? $" ({FormattedMessage.EscapeText(languagePrototype.LocalizedName)})"
+            : string.Empty;
         var visibleLanguage = !(languagePrototype?.NeedsSpeech ?? true);
-        var transformedName = nameOverride ?? Identity.Name(source, EntityManager).Name;
+        var transformedName = nameOverride ?? Identity.Name(source, EntityManager);
 
-        foreach (var (session, data) in GetRecipients(source, WhisperMuffledRange, ignoreXenos))
+        foreach (var (session, data) in GetRecipients(source, WhisperMuffledRange))
         {
             if (session.AttachedEntity is not { Valid: true } listener)
+                continue;
+
+            if (ignoreXenos && HasComp<XenoComponent>(listener))
                 continue;
 
             if (MessageRangeCheck(session, data, ChatTransmitRange.GhostRangeLimit) != MessageRangeCheckResult.Full)
                 continue;
 
-            if (needsLos && !data.Observer && listener != source && !data.HasLOS)
+            if (needsLos &&
+                !data.Observer &&
+                listener != source &&
+                !_examineSystem.InRangeUnOccluded(source, listener, WhisperMuffledRange))
+            {
                 continue;
+            }
 
             var listenerMessage = listener == source
                 ? message
                 : _language.ObfuscateMessageForListener(listener, message, language);
-            var listenerName = FormattedMessage.EscapeText(GetRadioSpeakerNameForListener(source, listener, transformedName, originalSpeaker));
+            var listenerName = FormattedMessage.EscapeText(GetRadioSpeakerNameForListener(source, listener, transformedName, originalSpeaker)) + languageIndicator;
 
             string actualWrappedMessage;
 
@@ -362,12 +376,9 @@ public sealed partial class ChatSystem
                     actualWrappedMessage,
                     source,
                     false,
-                    session.Channel,
-                    hidePopup: hidePopup,
-                    useEmoteSpeechBubble: useEmoteSpeechBubble,
-                    languageIcon: languageIcon);
+                    session.Channel);
             }
-            else if (data.HasLOS)
+            else if (_examineSystem.InRangeUnOccluded(source, listener, WhisperMuffledRange))
             {
                 var obfuscatedMessage = ObfuscateMessageReadability(listenerMessage, 0.2f);
                 var hidePopup = visibleLanguage && !_language.CanUnderstand(listener, language);
@@ -388,10 +399,7 @@ public sealed partial class ChatSystem
                     actualWrappedMessage,
                     source,
                     false,
-                    session.Channel,
-                    hidePopup: hidePopup,
-                    useEmoteSpeechBubble: useEmoteSpeechBubble,
-                    languageIcon: languageIcon);
+                    session.Channel);
             }
             else
             {
@@ -405,8 +413,7 @@ public sealed partial class ChatSystem
                     actualWrappedMessage,
                     source,
                     false,
-                    session.Channel,
-                    languageIcon: languageIcon);
+                    session.Channel);
             }
         }
 
@@ -421,13 +428,10 @@ public sealed partial class ChatSystem
                 replayWrappedMessage,
                 GetNetEntity(source),
                 null,
-                MessageRangeHideChatForReplay(ChatTransmitRange.GhostRangeLimit),
-                speechStyleClass: CompOrNull<RMCSpeechBubbleSpecificStyleComponent>(source)?.SpeechStyleClass,
-                repeatCheckSender: !HasComp<ChatRepeatIgnoreSenderComponent>(source),
-                languageIcon: languageIcon));
+                MessageRangeHideChatForReplay(ChatTransmitRange.GhostRangeLimit)));
 
         var muffledMessage = ObfuscateMessageReadability(message, 0.2f);
-        var ev = new EntitySpokeEvent(source, message, null, muffledMessage, language);
+        var ev = new EntitySpokeEvent(source, message, null, muffledMessage);
         RaiseLocalEvent(source, ev, true);
     }
 
@@ -449,7 +453,6 @@ public sealed partial class ChatSystem
         EntityUid source,
         ChatTransmitRange range,
         ProtoId<LanguagePrototype> language,
-        string? languageIcon = null,
         string? speakerName = null,
         bool visibleLanguage = false,
         NetUserId? author = null,
@@ -467,8 +470,13 @@ public sealed partial class ChatSystem
             if (session.AttachedEntity is not { Valid: true } listener)
                 continue;
 
-            if (needsLos && !data.Observer && listener != source && !data.HasLOS)
+            if (needsLos &&
+                !data.Observer &&
+                listener != source &&
+                !_examineSystem.InRangeUnOccluded(source, listener, VoiceRange))
+            {
                 continue;
+            }
 
             var canUnderstand = _language.CanUnderstand(listener, language);
             var listenerMessage = listener == source
@@ -511,10 +519,7 @@ public sealed partial class ChatSystem
                 source,
                 ev.EntHideChat,
                 session.Channel,
-                author: author,
-                hidePopup: visibleLanguage && !canUnderstand,
-                useEmoteSpeechBubble: useEmoteSpeechBubble,
-                languageIcon: languageIcon);
+                author: author);
         }
 
         var replayWrappedMessage = string.Format(
@@ -528,9 +533,6 @@ public sealed partial class ChatSystem
                 replayWrappedMessage,
                 GetNetEntity(source),
                 null,
-                MessageRangeHideChatForReplay(range),
-                speechStyleClass: CompOrNull<RMCSpeechBubbleSpecificStyleComponent>(source)?.SpeechStyleClass,
-                repeatCheckSender: !HasComp<ChatRepeatIgnoreSenderComponent>(source),
-                languageIcon: languageIcon));
+                MessageRangeHideChatForReplay(range)));
     }
 }
