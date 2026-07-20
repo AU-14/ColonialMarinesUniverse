@@ -2281,3 +2281,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/tags.yml`, `Resources/Prototypes/Entities/Objects/Specific/Janitorial/janitor.yml`, both affected wave inventories, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: The first 1,000-commit integration checkpoint reproduced `Unknown tag: GoldenPlunger` while spawning lathe products. Static review confirms the tag is now declared and assigned with the target-final inherited set; the failing lathe test and full integration suite are rerun after this correction.
 - Follow-up/debt: Reassess the remaining janicart and bucket-carp portion of #38494 separately from this storage-contract fix.
+
+## Upstream checkpoint — indices 0000–0999
+
+Date completed: 2026-07-20
+
+- Scope: The first five 200-commit inventory waves, covering 1,000 pinned SS14 first-parent commits from indices 0000 through 0999 and every accepted CS decision through CS-0166. This checkpoint exercises all eight audited areas: Movement, Shooting, Medical, Chemistry, Interactions, Physics, GameTicking, and Gamerules.
+- Unit tests: `dotnet test Content.Tests/Content.Tests.csproj --no-restore --nologo --verbosity:minimal` completed with 377 passed, 1 skipped, and 0 failed.
+- Targeted regression: `TestLatheRecipeIngredientsFitLathe` passed 1/1 after CS-0166 completed the golden-plunger tag contract.
+- Integration tests: the full `Content.IntegrationTests` suite completed with 418 passed, 17 skipped, and 0 failed (435 total) in 39 minutes 13 seconds. The passing rerun used `NUnit.ConsoleOut=0` and `NUnit.MapWarningTo=Failed`; its TRX was written outside the repository.
+- Solution build: `dotnet build SpaceStation14.slnx --configuration DebugOpt --no-restore --no-incremental --nologo --verbosity:minimal --disable-build-servers` completed in 1 minute 54 seconds with 0 warnings and 0 errors.
+- Resource validation: `dotnet run --project Content.YAMLLinter/Content.YAMLLinter.csproj --configuration DebugOpt --no-build` completed with `No errors found` in 89.6 seconds.
+- Defects caught: integration compilation exposed invalid analyzer access in `DefaultAutomaticFireModeTest` and was corrected in `f012d2923c`; prototype loading exposed the dependency-gated `GravityAffected` marker and produced CS-0165 (`d88b459437`); lathe entity spawning exposed the incomplete `GoldenPlunger` tag contract and produced CS-0166 (`1c07b0bff9`). Each correction was committed before its focused or full rerun.
+- Disposition: The 0000–0999 checkpoint is closed. Continue with inventory wave 0006 at index 1000 and defer routine build/test execution until index 1999 unless a specific risk makes earlier validation necessary.
