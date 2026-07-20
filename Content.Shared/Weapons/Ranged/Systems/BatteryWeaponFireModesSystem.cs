@@ -5,6 +5,7 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Content.Shared.Weapons.Ranged.Components;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Weapons.Ranged.Systems;
@@ -14,6 +15,7 @@ public sealed partial class BatteryWeaponFireModesSystem : EntitySystem
     [Dependency] private AccessReaderSystem _accessReaderSystem = default!;
     [Dependency] private SharedAppearanceSystem _appearanceSystem = default!;
     [Dependency] private SharedGunSystem _gun = default!;
+    [Dependency] private INetManager _netManager = default!;
     [Dependency] private SharedPopupSystem _popupSystem = default!;
 
     public override void Initialize()
@@ -120,8 +122,8 @@ public sealed partial class BatteryWeaponFireModesSystem : EntitySystem
             if (TryComp<AppearanceComponent>(ent, out var appearance))
                 _appearanceSystem.SetData(ent, BatteryWeaponFireModeVisuals.State, prototype.ID, appearance);
 
-            if (user != null)
-                _popupSystem.PopupEntity(Loc.GetString("gun-set-fire-mode-popup", ("mode", prototype.Name)), ent, user.Value);
+            if (user != null && _netManager.IsClient)
+                _popupSystem.PopupClient(Loc.GetString("gun-set-fire-mode-popup", ("mode", prototype.Name)), ent, user.Value);
         }
 
         if (TryComp(ent, out BatteryAmmoProviderComponent? batteryAmmoProviderComponent))

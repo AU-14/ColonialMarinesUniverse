@@ -35,6 +35,7 @@
         - MachineMask
         layer:
         - MachineLayer
+        - BulletImpassable
   - type: EntityStorage
     isCollidableWhenOpen: true
     showContents: false
@@ -113,6 +114,7 @@
         - MachineMask
         layer:
         - MachineLayer
+        - BulletImpassable
   - type: EntityStorage
     isCollidableWhenOpen: true
     showContents: false
