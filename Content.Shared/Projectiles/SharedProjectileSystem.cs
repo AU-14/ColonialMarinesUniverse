@@ -31,6 +31,7 @@ public abstract partial class SharedProjectileSystem : EntitySystem
     {
         base.Initialize();
 
+        InitializeRMCProjectile();
         SubscribeLocalEvent<ProjectileComponent, PreventCollideEvent>(PreventCollision);
         SubscribeLocalEvent<EmbeddableProjectileComponent, ProjectileHitEvent>(OnEmbedProjectileHit);
         SubscribeLocalEvent<EmbeddableProjectileComponent, ThrowDoHitEvent>(OnEmbedThrowDoHit);
