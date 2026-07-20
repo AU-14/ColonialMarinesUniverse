@@ -1306,3 +1306,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Explosion/EntitySystems/TriggerSystem.OnUse.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static control-flow review confirms no empty list reaches sorting or index access, while lists with two or more options retain their existing cycle order. Server compilation and null/empty/single/multiple cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Preserve these semantics when the trigger refactor is integrated and add a prototype-lint warning for explicitly empty delay-option lists.
+
+## CS-0092 — Remove the redundant cryopod item toggle
+
+- Upstream: [space-wizards/space-station-14#39197](https://github.com/space-wizards/space-station-14/pull/39197), `a2c9612e29d270197bf9045d452a56e7c739f8b1`, 2025-08-05
+- Areas: Medical, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The standard medical `CryoPod` no longer has `ItemToggleComponent`; cryogenic interaction remains owned by the pod system, eliminating a redundant toggle event path with order-dependent behavior.
+- RMC/CMU divergence: RMC requisitions cryostorage and its atmos devices use separate prototypes and do not inherit the standard medical cryopod, so their intentional item-toggle behavior is untouched.
+- Decision and rationale: Port the retained one-component deletion exactly rather than trying to coordinate two independent interaction owners on the same machine.
+- Files changed: `Resources/Prototypes/Entities/Structures/Machines/Medical/cryo_pod.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype review confirms only `ItemToggle` is removed and the cryopod's UI, health analyzer, cryogenic solution, and interaction components remain. Prototype loading and open/close interaction coverage are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a regression that one interaction produces one cryopod state transition and verify no `ItemToggleComponent` is inherited through future parent changes.
