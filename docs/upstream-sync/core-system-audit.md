@@ -2437,3 +2437,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Storage/Components/MagnetPickupComponent.cs`, `Content.Shared/Storage/EntitySystems/MagnetPickupSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static state-flow review confirms the component now generates network and pause state and every runtime deadline advance calls `Dirty`. Shared compilation plus server/client cadence, paused entities, containment, and full-storage cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: None.
+
+## CS-0178 — Correct temperature-bolt collision and reflection
+
+- Upstream: [space-wizards/space-station-14#37581](https://github.com/space-wizards/space-station-14/pull/37581), `92082f80914856cc608817d0449afb7430af99ab`, 2025-10-08; target-final collision state from [#37920](https://github.com/space-wizards/space-station-14/pull/37920), `1b62863e52f129dcc88386b508afbb41c741966b`, and [#40782](https://github.com/space-wizards/space-station-14/pull/40782), `df6307fe66f71944c5b3d5ed1e683a2723953181`
+- Areas: Shooting, Physics
+- Status: Adapted to target-final state
+- Risk: Medium
+- Behavior/API delta: Watcher and temperature-gun bolts now collide with opaque, impassable, and bullet-impassable fixtures; hot and cold bolts reflect from energy-reflective surfaces; the magmawing bolt inherits the watcher collision lifecycle; and watcher/magmawing shots use their intended muzzle flashes.
+- RMC/CMU divergence: No RMC projectile or weapon references these standard projectile IDs. Existing RMC energy ammunition, collision masks, reflection policy, and effects are untouched.
+- Decision and rationale: Port the final combined contract instead of #37581's transient removal of `Opaque`. Retaining all three collision bits covers windows and holographic creatures, while shared watcher inheritance prevents the magmawing variant from silently missing the same physics behavior.
+- Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Guns/Projectiles/projectiles.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static resolved-prototype review confirms watcher masks contain all three target bits, cold/hot bolts reflect `Energy`, and magmawing overrides only its sprite, projectile temperature behavior, and muzzle flash atop `WatcherBolt`. Prototype loading plus windows, walls, holos, reflectors, hot/cold inheritance, and muzzle effects are queued for the index-1999 checkpoint.
+- Follow-up/debt: Revisit only if the later projectile fly-by fixture-anchor architecture is ported; CMU does not currently define that anchor.

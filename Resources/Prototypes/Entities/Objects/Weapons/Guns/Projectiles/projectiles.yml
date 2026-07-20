@@ -351,7 +351,7 @@
     - state: omnilaser
       shader: unshaded
   - type: Ammo
-    muzzleFlash: null
+    muzzleFlash: MuzzleFlashEffectOmnilaser
   - type: Physics
   - type: Fixtures
     fixtures:
@@ -362,6 +362,8 @@
         hard: false
         mask:
         - Opaque
+        - Impassable
+        - BulletImpassable
   - type: Projectile
     #   soundHit:  Waiting on serv3
     impactEffect: BulletImpactEffectDisabler
@@ -379,6 +381,9 @@
   parent: WatcherBolt
   categories: [ HideSpawnMenu ]
   components:
+  - type: Reflective
+    reflective:
+    - Energy
   - type: Projectile
     #   soundHit:  Waiting on serv3
     impactEffect: BulletImpactEffectDisabler
@@ -393,7 +398,7 @@
 - type: entity
   name: magmawing watcher bolt
   id: WatcherBoltMagmawing
-  parent: BaseBullet
+  parent: WatcherBolt
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -402,6 +407,8 @@
     - state: omnilaser_greyscale
       shader: unshaded
       color: orangered
+  - type: Ammo
+    muzzleFlash: MuzzleFlashEffectHeavyLaser
   - type: Projectile
     #   soundHit:  Waiting on serv3
     impactEffect: BulletImpactEffectOrangeDisabler
@@ -417,6 +424,9 @@
   parent: WatcherBoltMagmawing
   categories: [ HideSpawnMenu ]
   components:
+  - type: Reflective
+    reflective:
+    - Energy
   - type: Projectile
     #   soundHit:  Waiting on serv3
     impactEffect: BulletImpactEffectOrangeDisabler
