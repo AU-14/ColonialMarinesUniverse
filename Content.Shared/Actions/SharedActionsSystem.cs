@@ -188,7 +188,10 @@ public abstract partial class SharedActionsSystem : EntitySystem
         if (GetAction(action) is not {} ent || ent.Comp.UseDelay is not {} delay)
             return;
 
-        SetCooldown((ent, ent), delay);
+        var start = GameTiming.CurTime;
+        var ev = new StartUseDelayEvent(delay, start, start + delay);
+        RaiseLocalEvent(ent, ref ev);
+        SetCooldown((ent, ent), ev.Start, ev.End);
     }
 
     public void SetUseDelay(Entity<ActionComponent?>? action, TimeSpan? delay)
