@@ -2763,3 +2763,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/DeviceLinking/Systems/PowerSensorSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static update-flow review confirms gridless or ungrouped sensors still return safely, input/output statistics select the same fields, and transition comparisons and signals are unchanged. Server compilation plus one-network, multi-network, node-switch, gridless, charging, discharging, and steady-state cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1378 as `Ported (CS-0202)` when wave 0007 is committed.
+
+## CS-0203 — Preserve forensic evidence when using rags
+
+- Upstream: [space-wizards/space-station-14#40818](https://github.com/space-wizards/space-station-14/pull/40818), `86880a31942c54b7a092e0418185925eb3804d12`, 2025-10-18
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `RagItem` no longer carries `CleansForensics`. It can still absorb solutions and clean ordinary mop-compatible messes, but it no longer removes fingerprints, DNA, fibers, or other forensic traces through the dedicated forensic-cleaning path.
+- RMC/CMU divergence: RMC supply crates reference the same standard rag, so they receive this correction without changing RMC mop, cleaner, evidence, or janitorial prototypes. Soap and purpose-built forensic cleaners retain their components.
+- Decision and rationale: Port the isolated component removal exactly. A common rag is intentionally a low-tier cleaning tool, while forensic erasure remains an explicit capability on specialized items.
+- Files changed: `Resources/Prototypes/Entities/Objects/Specific/Janitorial/janitor.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype review confirms only `RagItem` loses `CleansForensics`, its Mop tag and absorbent solution remain, and soaps retain forensic cleaning. YAML validation plus ordinary cleaning, absorption, fingerprints, DNA, fibers, soap, and RMC crate-spawn cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1404 as `Ported (CS-0203)` when wave 0008 is committed.
