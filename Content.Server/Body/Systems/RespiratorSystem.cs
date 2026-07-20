@@ -84,6 +84,9 @@ public sealed partial class RespiratorSystem : EntitySystem
 
             respirator.NextUpdate += respirator.AdjustedUpdateInterval;
 
+            if (!CanRMCBodyMetabolize(uid))
+                continue;
+
             if (_mobState.IsDead(uid))
                 continue;
 

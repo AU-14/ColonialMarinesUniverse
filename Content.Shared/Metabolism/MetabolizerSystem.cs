@@ -263,6 +263,9 @@ public sealed partial class MetabolizerSystem : EntitySystem
         _organQuery.Resolve(ent, ref ent.Comp2, logMissing: false);
         _solutionQuery.Resolve(ent, ref ent.Comp3, logMissing: false);
 
+        if (!CanRMCOrganMetabolize(ent))
+            return;
+
         foreach (var stage in ent.Comp1.Stages)
         {
             TryMetabolizeStage(ent, stage);

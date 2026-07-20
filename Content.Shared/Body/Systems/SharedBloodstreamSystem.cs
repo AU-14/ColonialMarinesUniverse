@@ -71,6 +71,9 @@ public abstract partial class SharedBloodstreamSystem : EntitySystem
             bloodstream.NextUpdate += bloodstream.AdjustedUpdateInterval;
             DirtyField(uid, bloodstream, nameof(BloodstreamComponent.NextUpdate)); // needs to be dirtied on the client so it can be rerolled during prediction
 
+            if (!CanRMCBodyMetabolize(uid))
+                continue;
+
             if (!SolutionContainer.ResolveSolution(uid, bloodstream.BloodSolutionName, ref bloodstream.BloodSolution))
                 continue;
 
