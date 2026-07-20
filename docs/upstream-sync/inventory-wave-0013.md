@@ -136,7 +136,7 @@ behavior to port.
 2517 | e4c83a4040804172f202627f39d37ae5884ee250 | Fix roundstart with thief gamerule (#42633) | Deferred | Gamerules | Depends on upstream thief rule and objective state.
 2518 | de3311e9e43eedab36e07a7c92f31d18fc092f76 | Update Credits (#42636) | Irrelevant | — | Upstream credits metadata only.
 2519 | 1682ad243fff96282cd3b3d91a19299140838e8d | Update RT to 271.2.0 (#42646) | PortCandidate | — | The content-side RemoveReadNan setting remains relevant; the RobustToolbox bump is superseded and outside content-port scope.
-2520 | ae5f8d0a6c77b736917c9eed261e254dfc26b777 | Fix emergency shuttle authorization bypass via ID rename (#42640) | PortCandidate | Interactions, GameTicking, Gamerules | High-value authorization correctness fix; CMU's mutable-name lookup remains vulnerable.
+2520 | ae5f8d0a6c77b736917c9eed261e254dfc26b777 | Fix emergency shuttle authorization bypass via ID rename (#42640) | Ported (CS-0244) | Interactions, GameTicking, Gamerules | Authorizations now use immutable card entity identities while retaining captured names only for console display.
 2521 | 6daca9bd9665bc4e85c7dfe78cf9732f7f055f9e | GasLeak and PowerGridCheck rules components cleanup (#42624) | PortCandidate | Physics, GameTicking, Gamerules | Focused component and rule ownership cleanup.
 2522 | f6a06db1fc47324d626bb4e3e225286b529af854 | Translation fix: insulated verbs (#42617) | PortCandidate | Interactions | Final localization correction for index 2448; integrate the pair.
 2523 | 87895770856245557d9d55b9dad08cf6aab67f96 | Add an option for hold-to-attack in settings (#42596) | Deferred | Shooting, Interactions | Input and network behavior addition requiring CMU UX review.

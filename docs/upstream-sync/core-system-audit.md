@@ -3308,3 +3308,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Power/EntitySystems/ApcSystem.cs`, `docs/upstream-sync/inventory-wave-0011.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static call-site review confirms the player BUI path supplies `args.Actor`, access denial returns before mutation, and all four automated/event/EMP call sites omit the optional user. Server compilation plus breaker enable/disable, access denial, repeated UI input, EMP, power-grid event, breaker-flip event, battery discharge, UI refresh, audio, and admin-log formatting cases are queued for the index-2999 checkpoint.
 - Follow-up/debt: If a future administrative or remote-control caller has a real initiating player, pass that actor deliberately; do not fabricate users for autonomous grid events.
+
+## CS-0244 — Key emergency-shuttle authorizations by ID entity
+
+- Upstream: [space-wizards/space-station-14#42640](https://github.com/space-wizards/space-station-14/pull/42640), `ae5f8d0a6c77b736917c9eed261e254dfc26b777`, 2026-01-25
+- Areas: Interactions, GameTicking, Gamerules
+- Status: Ported (adapted)
+- Risk: Medium
+- Behavior/API delta: Emergency-shuttle early-launch authorizations are now a dictionary keyed by the physical ID card's `EntityUid`, with its display name captured as the value. Authorizing rejects an already-used card regardless of later renames, repealing removes that same card identity, and console state exposes only the captured display-name values.
+- RMC/CMU divergence: CMU keeps `EmergencyShuttleConsoleComponent` server-side rather than at the upstream shared path, so the data-contract change was applied in place. Standard and RMC ID cards discovered through the retained ID-card system receive identical identity semantics; access checks, authorization count, repeal-all access, announcements, launch timing, and RMC evacuation policy are unchanged.
+- Decision and rationale: Port the target-final identity model. A metadata name is mutable and non-unique: renaming one authorized card makes its old authorization impossible to repeal and allows the same physical card to add another name. Entity identity closes both paths while a separate captured string preserves the existing operator-facing list.
+- Files changed: `Content.Server/Shuttles/Systems/EmergencyShuttleSystem.Console.cs`, `Content.Server/Shuttles/Components/EmergencyShuttleConsoleComponent.cs`, `docs/upstream-sync/inventory-wave-0013.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static call-site review confirms every add, duplicate check, single repeal, clear, count, launch threshold, and UI enumeration now uses the appropriate dictionary operation. Server compilation plus authorize, rename then reauthorize, rename then repeal, same-name different cards, multiple consoles, repeal all, access denial, deleted card, RMC ID, threshold crossing, and console display cases are queued for the index-2999 checkpoint.
+- Follow-up/debt: Authorization remains tied to the card entity rather than a person or account, matching the pinned target. Any future cloning or card-transfer policy change should be evaluated at the game-rule level rather than weakening this identity key.
