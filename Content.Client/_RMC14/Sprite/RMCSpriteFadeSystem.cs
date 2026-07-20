@@ -99,7 +99,11 @@ public sealed partial class RMCSpriteFadeSystem : EntitySystem
 
             foreach (var (mapPos, excludeBB) in _points)
             {
-                foreach (var ent in state.GetClickableEntities(mapPos, _eyeManager.CurrentEye, excludeFaded: false))
+                foreach (var ent in state.GetClickableEntities(
+                             mapPos,
+                             _eyeManager.CurrentEye,
+                             excludeFaded: false,
+                             ignoreInteractionTransparency: true))
                 {
                     if (ent == player || !_fadeQuery.HasComponent(ent) || !_spriteQuery.TryGetComponent(ent, out var sprite))
                         continue;

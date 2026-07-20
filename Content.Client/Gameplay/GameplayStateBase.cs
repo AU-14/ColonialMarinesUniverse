@@ -143,7 +143,11 @@ namespace Content.Client.Gameplay
             return GetClickableEntities(coordinates, _eyeManager.CurrentEye, excludeFaded);
         }
 
-        public IEnumerable<EntityUid> GetClickableEntities(MapCoordinates coordinates, IEye? eye, bool excludeFaded = true)
+        public IEnumerable<EntityUid> GetClickableEntities(
+            MapCoordinates coordinates,
+            IEye? eye,
+            bool excludeFaded = true,
+            bool ignoreInteractionTransparency = false)
         {
             /*
              * TODO:
@@ -164,6 +168,9 @@ namespace Content.Client.Gameplay
 
             foreach (var entity in entities)
             {
+                if (!ignoreInteractionTransparency && IsRMCInteractionTransparent(entity.Uid, eye))
+                    continue;
+
                 if (clickables.CheckClick((entity.Uid, null, entity.Component, entity.Transform), coordinates.Position, eye, excludeFaded, out var drawDepthClicked, out var renderOrder, out var bottom))
                 {
                     foundEntities.Add((entity.Uid, drawDepthClicked, renderOrder, bottom));
