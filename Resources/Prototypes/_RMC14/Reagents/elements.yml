@@ -10,7 +10,7 @@
   color: "#A8A8A8"
   unknown: true
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:ChemVomit
@@ -28,7 +28,7 @@
   unknown: true
   durationMod: 1
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM? 0.005 would be right but impossible because fixed point 2
       effects:
       - !type:ChemVomit
@@ -63,7 +63,7 @@
   flavor: metallic
   color: "#6E3B08"
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
       - !type:ChemVomit
@@ -110,7 +110,7 @@
   flavor: metallic
   color: "#F7C430"
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:ChemVomit
@@ -129,7 +129,7 @@
   radiusMod: 0.2
   intensityMod: -0.5
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
       - !type:ChemVomit
@@ -147,7 +147,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Hemogenic
@@ -218,7 +218,7 @@
   color: "#A0A0A0"
   unknown: true
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
       - !type:ChemVomit
@@ -238,7 +238,7 @@
   durationMod: 0.1
   radiusMod: -0.12
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
       - !type:ChemVomit
@@ -273,7 +273,7 @@
   color: "#A8A8A8"
   unknown: true
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:ChemVomit
@@ -290,7 +290,7 @@
   color: "#D0D0D0"
   unknown: true
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:ChemVomit
@@ -307,7 +307,7 @@
   color: "#BF8C00"
   unknown: true
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
       - !type:ChemVomit
@@ -324,7 +324,7 @@
   color: "#808080"
   unknown: true
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
       - !type:ChemVomit
@@ -359,7 +359,7 @@
   intensityMod: 0.75
   radiusMod: -0.08
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
       - !type:ChemVomit
@@ -375,7 +375,7 @@
   color: "#808080"
   unknown: true
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
       - !type:ChemVomit

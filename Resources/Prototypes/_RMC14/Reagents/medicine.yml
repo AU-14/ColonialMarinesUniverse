@@ -8,7 +8,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Antitoxic
@@ -26,7 +26,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Focusing
@@ -42,7 +42,7 @@
   overdose: 15
   criticalOverdose: 25
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.03
       effects:
       - !type:Antitoxic
@@ -59,7 +59,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Neogenetic
@@ -94,7 +94,7 @@
   desc: reagent-desc-cmcryoxadone
   color: "#4acaca"
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:EqualHealthChange
@@ -117,7 +117,7 @@
   overdose: 15
   criticalOverdose: 25
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Anticorrosive
@@ -132,7 +132,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Oxygenating
@@ -147,7 +147,7 @@
   overdose: 15
   criticalOverdose: 25
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Oxygenating
@@ -164,7 +164,7 @@
   overdose: 10.5
   criticalOverdose: 20
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.2
       effects:
       - !type:Electrogenetic
@@ -195,7 +195,7 @@
   overdose: 60
   criticalOverdose: 100
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:HealthChange
@@ -239,7 +239,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Anticorrosive
@@ -255,7 +255,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Thermostabilizing
@@ -271,7 +271,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Neogenetic
@@ -292,7 +292,7 @@
   overdose: 15
   criticalOverdose: 25
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Neogenetic
@@ -310,7 +310,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:ChemHealEyeDamage
@@ -339,7 +339,7 @@
   desc: reagent-desc-cmclonexadone
   color: "#51b4db"
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:EqualHealthChange
@@ -362,7 +362,7 @@
   overdose: 20
   criticalOverdose: 30
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.5
       effects:
       - !type:Antitoxic
@@ -380,7 +380,7 @@
   flavor: medicine
   color: "#C8A5DC"
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1, 200 seconds is 0.005, but fixed point 2
       effects:
       - !type:PopupMessage #TODO -2 confusion stat and message in 5 min intervals
@@ -395,7 +395,7 @@
   desc: reagent-desc-rmccitalopram
   color: "#C8A5DC"
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1, 200 seconds
       effects:
       - !type:PopupMessage #TODO -1 confusion stat and message in 5 min intervals
@@ -410,7 +410,7 @@
   desc: reagent-desc-rmcparoxetine
   color: "#C8A5DC"
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1, 200 seconds
       effects:
       - !type:PopupMessage #TODO -3 confusion stat and message in 5 min intervals
@@ -438,7 +438,7 @@
   flavor: medicine
   color: "#5FB0C7"
   metabolisms:
-    Medicine:
+    Bloodstream:
       effects:
         - !type:CureZombieInfection
           innoculate: true
@@ -455,7 +455,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Ketogenic

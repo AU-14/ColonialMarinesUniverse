@@ -104,7 +104,7 @@
   worksOnTheDead: true
   unknown: true
   metabolisms:
-    Medicine:
+    Bloodstream:
       effects:
         - !type:CauseZombieInfection
           conditions:
