@@ -6,6 +6,7 @@ using Content.Shared.Timing;
 using Content.Shared.Toggleable;
 using Content.Shared.UserInterface;
 using Content.Shared.Verbs;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using InternalsComponent = Content.Shared.Body.Components.InternalsComponent;
 
