@@ -82,6 +82,8 @@ public sealed partial class ContainerFillSystem : EntitySystem
             foreach (var proto in spawns)
             {
                 var spawn = Spawn(proto, coords);
+                RaiseCMStorageItemFill(ent.Owner, spawn);
+
                 if (!_containerSystem.Insert(spawn, container, containerXform: xform))
                 {
                     var alreadyContained = container.ContainedEntities.Count > 0 ? string.Join("\n", container.ContainedEntities.Select(e => $"\t - {ToPrettyString(e)}")) : "< empty >";

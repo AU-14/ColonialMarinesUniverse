@@ -153,6 +153,7 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
                     foreach (var entProto in entProtos)
                     {
                         var spawnedEntity = Spawn(entProto, coords);
+                        RaiseCMStorageItemFill(slotEnt.Value, spawnedEntity, storage);
 
                         _storage.Insert(slotEnt.Value, spawnedEntity, out _, storageComp: storage, playSound: false);
                     }

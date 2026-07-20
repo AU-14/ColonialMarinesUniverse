@@ -67,6 +67,8 @@ public sealed partial class StorageSystem
         ClearCantFillReasons();
         foreach (var ent in sortedItems)
         {
+            RaiseCMStorageItemFill(uid, ent, storage);
+
             if (Insert(uid, ent, out _, out var reason, storageComp: storage, playSound: false))
                 continue;
 
