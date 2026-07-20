@@ -103,7 +103,7 @@ are retained so future audits can trace each classifier's original decision.
 0481 | 9b9ea3b40de9b149cafa40314afa3248f3aee018 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 0482 | c0b739d1dc13cfcfe2ba78ad575e7824bcfa19bd | Remove StaminaResistance from cardboard armor (#39727) | Irrelevant | Shooting, Medical | Balance cleanup for the deferred cardboard feature has no current CMU behavior.
 0483 | 0a1c17cbc81b319cf4dcf88f3b36becbaae35c11 | Automatic changelog update | Irrelevant | — | Generated changelog only.
-0484 | ac0c1d518e895fa6863e37cd27220f5118e2032a | PR stable to master (#39729) | Deferred | Movement, Shooting, Medical, Interactions, Physics, Gamerules | Broad aggregate merge requires constituent-level reconciliation and must not be applied wholesale.
+0484 | ac0c1d518e895fa6863e37cd27220f5118e2032a | PR stable to master (#39729) | Ported (CS-0182) | Interactions, Gamerules | Extracted the retained HighlyIllegal severity, abstract base, and localization contract from the merge; superseded Space Law guide wording remains excluded.
 0485 | b31cc6010011a1ed6961884f5d78e1017aea16a8 | add myself to codeowners for the trigger system (#39725) | Irrelevant | — | Repository ownership metadata only.
 0486 | 342fc84f169274aa90b0890ac8245618a82a061c | Hotfix: Camera offset for "Separated Chat" HUD fix & targetting fix (#35087) | PortCandidate | Shooting, Interactions | Target-final retains the camera-offset correction while CMU still has the affected separated-chat targeting path.
 0487 | d38d2e209a97885118dd9e87fbbfac4d4843e728 | Rebalance infiltrator (Nukie ship) (#39091) | Irrelevant | — | SS14 nuke-ship map balance is outside RMC map usage.

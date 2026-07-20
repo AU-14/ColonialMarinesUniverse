@@ -2489,3 +2489,16 @@ Date completed: 2026-07-20
 - Files changed: the shared reclaimer component, server reclaimer system, industrial reagent-grinder prototype, `docs/upstream-sync/inventory-wave-0003.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static control-flow and prototype review confirms material and solution recovery are separately guarded, both defaults remain enabled, and only `ReagentGrinderIndustrial` opts out of material recovery. Compilation, prototype loading, normal recycling, chemical extraction, and anti-loop cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: None.
+
+## CS-0182 — Add the highly-illegal contraband contract
+
+- Upstream: [space-wizards/space-station-14#39729](https://github.com/space-wizards/space-station-14/pull/39729), `ac0c1d518e895fa6863e37cd27220f5118e2032a`, 2025-08-18; side-branch feature [#38176](https://github.com/space-wizards/space-station-14/pull/38176), `9a4247c609e93925b66495cde9c56ee1a0d51f1e`
+- Areas: Interactions, Gamerules
+- Status: Adapted to target-final state
+- Risk: Low
+- Behavior/API delta: Contraband prototypes can now use the distinct `HighlyIllegal` severity directly or inherit `BaseHighlyIllegalContraband`. Its examination text uses the target-final crimson classification, and the retained magical-contraband text capitalization is corrected.
+- RMC/CMU divergence: Existing RMC contraband severities and allowed-job/department rules are untouched. The new severity and abstract base have no consumers until separately accepted upstream item migrations are ported.
+- Decision and rationale: Extract the retained data contract from the merge instead of replaying its obsolete Space Law guidebook wording. The severity, base prototype, and localization survive in the pinned target and form a prerequisite for xenoborg, ninja, and later highly-illegal item classifications.
+- Files changed: contraband severity and base prototypes, English contraband localization, `docs/upstream-sync/inventory-wave-0003.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype/localization review confirms the new severity resolves, the abstract base references it, existing severities remain unchanged, and the contract has no unresolved consumer. Prototype and localization loading are queued for the index-1999 checkpoint.
+- Follow-up/debt: Port each retained item migration independently; do not bulk-reclassify RMC equipment without a CMU policy review.
