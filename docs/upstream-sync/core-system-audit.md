@@ -1371,3 +1371,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Client/Store/Ui/StoreMenu.xaml`, `Resources/Locale/en-US/store/store.ftl`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static XAML and locale comparison confirms the key exists and matches the pinned target-final binding. Client compilation and locale/XAML loading are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Audit the adjacent hardcoded search placeholder in the later store-localization wave rather than expanding this focused port.
+
+## CS-0097 — Correct protected-grid footprint checks
+
+- Upstream: [space-wizards/space-station-14#39271](https://github.com/space-wizards/space-station-14/pull/39271), `9be68a6846f6c529e39ce0e51d6d15d107f892c1`, 2025-07-29
+- Areas: Interactions, Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Floor edits on protected grids are now cancelled when the requested tile is absent from the captured initial-footprint bitmask, rather than cancelling edits to tiles that are inside it.
+- RMC/CMU divergence: The shared protected-grid system has no RMC override. CMU arrivals and emergency shuttle setup use it directly, so both inherit the corrected boundary semantics.
+- Decision and rationale: Port the retained missing negation exactly; the surrounding chunk lookup already rejects chunks outside the initial grid.
+- Files changed: `Content.Shared/Tiles/ProtectedGridSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static truth-table review confirms initial footprint tiles pass and missing tiles/chunks cancel. Shared compilation plus inside/outside tile-edit cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add coverage for negative chunk coordinates and grids whose initial footprint has holes so bitmask translation remains correct.
