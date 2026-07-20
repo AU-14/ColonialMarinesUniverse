@@ -51,7 +51,7 @@ public sealed partial class RMCPlayTimeManager : IPostInjectInit
         if (_excluded.TryGetValue(player, out var trackers))
             trackers.Add(tracker);
 
-        if (excluded && _player.TryGetSessionById(player, out var session))
+        if (excluded && _player.TryGetSessionById(player, out var session) && session != null)
             SendExcludedTimers(session);
 
         return excluded;
@@ -85,7 +85,8 @@ public sealed partial class RMCPlayTimeManager : IPostInjectInit
 
         if (_excluded.TryGetValue(player, out var excluded) &&
             excluded.Remove(tracker) &&
-            _player.TryGetSessionById(player, out var session))
+            _player.TryGetSessionById(player, out var session) &&
+            session != null)
         {
             SendExcludedTimers(session);
         }
