@@ -768,6 +768,8 @@ namespace Content.Shared.Preferences
                     continue;
                 }
 
+                // The dictionary key is authoritative after its prototype has been validated.
+                loadouts.Role = roleName;
                 loadouts.EnsureValid(this, session, collection);
             }
 

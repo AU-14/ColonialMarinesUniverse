@@ -1761,3 +1761,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/XenoArch/triggers.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype review confirms `Sap` exists and is added only to `TriggerBlood`. Prototype loading plus positive Sap and negative non-blood reagent artifact activation cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Audit RMC-specific blood substitutes against this trigger list during the deeper chemistry pass.
+
+## CS-0127 — Restore role identity before loadout validation
+
+- Upstream: [space-wizards/space-station-14#40263](https://github.com/space-wizards/space-station-14/pull/40263), `1666e302c29b2700e7a6bf91b00e371ce8c3159b`, 2025-09-18
+- Areas: Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Character-profile validation now resets each `RoleLoadout.Role` value from its already-validated dictionary key before validating the loadout contents, repairing stale or mismatched role identity loaded from persistence.
+- RMC/CMU divergence: CMU extends character profiles with ranks, named items, armor, and Xeno preferences, but retains the upstream loadout dictionary and validation loop unchanged.
+- Decision and rationale: Port only the retained semantic line from the stable merge and omit its unrelated food-sequence whitespace change. The dictionary key is the authoritative role selected by profile deserialization and prototype validation.
+- Files changed: `Content.Shared/Preferences/HumanoidCharacterProfile.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static data-flow review confirms invalid dictionary keys are still removed first and valid loadouts receive matching role identity before `EnsureValid`. Shared compilation plus mismatched, valid, and missing-role loadout profiles are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a profile deserialization regression where the dictionary key and embedded role differ.
