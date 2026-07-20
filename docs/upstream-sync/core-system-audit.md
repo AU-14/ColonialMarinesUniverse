@@ -955,3 +955,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Catalog/Fills/Crates/fun.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the pinned target retains `CrateLivestock` for this product and the parent prototype resolves locally. Prototype loading and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a resolved-prototype check for living `StorageFill` occupants in non-livestock crates, then review intentional exceptions individually.
+
+## CS-0065 — Size the ocarina as a small item
+
+- Upstream: [space-wizards/space-station-14#38971](https://github.com/space-wizards/space-station-14/pull/38971), `bf1b55e22f11cde064bba01dbad2ca159e62a824`, 2025-07-13
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The ocarina now overrides its inherited item size to `Small`, allowing it to fit the same storage spaces as other compact handheld wind instruments.
+- RMC/CMU divergence: RMC does not override the standard ocarina or base woodwind storage behavior. Instrument playback, loadout placement, arcade rewards, and RMC-specific storage whitelists remain unchanged.
+- Decision and rationale: Port the pinned target's explicit item-size override on the concrete prototype. Changing the woodwind base would resize larger instruments unintentionally.
+- Files changed: `Resources/Prototypes/Entities/Objects/Fun/Instruments/instruments_wind.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the pinned target retains `size: Small` on `OcarinaInstrument`. Prototype loading and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Audit anomalous inherited item sizes by concrete sprite footprint as a separate data-quality pass.
