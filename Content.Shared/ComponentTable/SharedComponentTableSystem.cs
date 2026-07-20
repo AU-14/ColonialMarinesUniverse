@@ -8,8 +8,6 @@ namespace Content.Shared.ComponentTable;
 public sealed partial class SharedComponentTableSystem : EntitySystem
 {
     [Dependency] private EntityTableSystem _entTable = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
-
     public override void Initialize()
     {
         base.Initialize();
