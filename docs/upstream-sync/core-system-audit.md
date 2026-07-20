@@ -2060,3 +2060,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Guns/Battery/battery_guns.yml`, `docs/upstream-sync/inventory-wave-0003.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static inheritance review confirms the practice laser and all three disablers resolve the marker, while `WeaponLaserCarbine` does not inherit it. Prototype loading and pacifist fire-permission checks for lethal versus nonlethal weapons are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None.
+
+## CS-0150 — Exclude drone laws from ion storms
+
+- Upstream: [space-wizards/space-station-14#40374](https://github.com/space-wizards/space-station-14/pull/40374), `1dd977effde65714476abfcdfe36d40849d32601`, 2025-09-17
+- Areas: Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Ion storms no longer select the drone lawset as a random replacement for a silicon's laws.
+- RMC/CMU divergence: CMU retains the drone lawset itself and all fork-specific silicon roles; only its accidental inclusion in the ion-storm random pool is removed.
+- Decision and rationale: Port the isolated weighted-random correction because drone laws are role-specific and unsuitable as a general ion-storm outcome.
+- Files changed: `Resources/Prototypes/silicon-laws.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype review confirms `Drone` remains defined but is absent from `IonStormLawsets`. Prototype loading and weighted-random resolution are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None.
