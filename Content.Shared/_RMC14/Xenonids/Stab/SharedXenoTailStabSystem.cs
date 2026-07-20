@@ -14,12 +14,15 @@ using Content.Shared.FixedPoint;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
+using Content.Shared.Physics;
 using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -36,7 +39,7 @@ public abstract partial class SharedXenoTailStabSystem : EntitySystem
     [Dependency] private SharedColorFlashEffectSystem _colorFlash = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
-    [Dependency] private SharedMeleeWeaponSystem _melee = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedDirectionalAttackBlockSystem _directionBlock = default!;
@@ -132,7 +135,7 @@ public abstract partial class SharedXenoTailStabSystem : EntitySystem
 
                 var targetPosition = _transform.GetMoverCoordinates(hit).Position;
                 var userPosition = _transform.GetMoverCoordinates(stab).Position;
-                var entities = GetNetEntityList(_melee.ArcRayCast(userPosition,
+                var entities = GetNetEntityList(ArcRayCast(userPosition,
                         (targetPosition -
                          userPosition).ToWorldAngle(),
                         0,
@@ -258,6 +261,44 @@ public abstract partial class SharedXenoTailStabSystem : EntitySystem
 
         var attackEv = new MeleeAttackEvent(stab);
         RaiseLocalEvent(stab, ref attackEv);
+    }
+
+    private HashSet<EntityUid> ArcRayCast(
+        Vector2 position,
+        Angle angle,
+        Angle arcWidth,
+        float range,
+        MapId mapId,
+        EntityUid ignore)
+    {
+        const int attackMask = (int) (CollisionGroup.MobMask | CollisionGroup.Opaque);
+        var increments = 1 + 35 * (int) Math.Ceiling(arcWidth / (2 * Math.PI));
+        var increment = arcWidth / increments;
+        var baseAngle = angle - arcWidth / 2;
+        var entities = new HashSet<EntityUid>();
+
+        for (var i = 0; i < increments; i++)
+        {
+            var castAngle = new Angle(baseAngle + increment * i);
+            var results = _physics.IntersectRay(
+                    mapId,
+                    new CollisionRay(position, castAngle.ToWorldVec(), attackMask),
+                    range,
+                    ignore,
+                    false)
+                .ToList();
+
+            if (results.Count == 0)
+                continue;
+
+            foreach (var result in results.Where(result => result.Distance.Equals(results[0].Distance)))
+            {
+                if (_interaction.InRangeUnobstructed(ignore, result.HitEntity, range + 0.1f, overlapCheck: false))
+                    entities.Add(result.HitEntity);
+            }
+        }
+
+        return entities;
     }
 
     protected virtual void DoLunge(Entity<XenoTailStabComponent, TransformComponent> user, Vector2 localPos, EntProtoId animationId)

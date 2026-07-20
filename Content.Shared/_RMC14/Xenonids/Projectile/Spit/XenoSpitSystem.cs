@@ -429,7 +429,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
         Dirty(ent);
         UpdateAppearance(ent);
 
-        _alerts.ShowAlert(ent, FireAlert);
+        _alerts.ShowAlert(ent.Owner, FireAlert);
     }
 
     private void OnUserAcidedRemove(Entity<UserAcidedComponent> ent, ref ComponentRemove args)
@@ -442,7 +442,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
             return;
         }
 
-        _alerts.ClearAlert(ent, FireAlert);
+        _alerts.ClearAlert(ent.Owner, FireAlert);
     }
 
     private void OnUserAcidedShowFireAlert(Entity<UserAcidedComponent> ent, ref ShowFireAlertEvent args)

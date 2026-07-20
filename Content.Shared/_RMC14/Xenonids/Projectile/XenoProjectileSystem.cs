@@ -508,11 +508,7 @@ public sealed partial class XenoProjectileSystem : EntitySystem
             }
 
             if (target != null)
-            {
-                var targeted = EnsureComp<TargetedProjectileComponent>(projectile);
-                targeted.Target = target.Value;
-                Dirty(projectile, targeted);
-            }
+                _gun.SetProjectileTarget(projectile, target.Value);
 
             if (projectileHitLimit != null)
             {
