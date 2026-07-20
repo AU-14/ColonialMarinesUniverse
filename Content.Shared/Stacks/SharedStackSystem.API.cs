@@ -45,10 +45,17 @@ public abstract partial class SharedStackSystem
     {
         // Filter out the non-stacks and separate them by their stack types
         var stacksByType = new Dictionary<ProtoId<StackPrototype>, List<Entity<StackComponent>>>();
+        var acidicStacks = new HashSet<EntityUid>(); // RMC14 - acided stacks must remain independent.
         foreach (var uid in stacks)
         {
             if (!_stackQuery.TryComp(uid, out var stackComponent))
                 continue;
+
+            if (IsAcidicStack(uid))
+            {
+                acidicStacks.Add(uid);
+                continue;
+            }
 
             if (stacksByType.TryGetValue(stackComponent.StackTypeId, out var list))
                 list.Add((uid, stackComponent));
@@ -61,6 +68,7 @@ public abstract partial class SharedStackSystem
         }
 
         stacks.Clear();
+        stacks.UnionWith(acidicStacks);
 
         // Set the count
         foreach (var (type, stackList) in stacksByType)
@@ -130,6 +138,10 @@ public abstract partial class SharedStackSystem
         if (!_stackQuery.Resolve(recipient, ref recipient.Comp, false)
             || !_stackQuery.Resolve(donor, ref donor.Comp, false)
             || recipient.Comp.StackTypeId != donor.Comp.StackTypeId)
+            return false;
+
+        // RMC14 - acid-covered stacks cannot merge through any API path.
+        if (IsAcidicStack(donor.Owner) || IsAcidicStack(recipient.Owner))
             return false;
 
         // The most we can transfer

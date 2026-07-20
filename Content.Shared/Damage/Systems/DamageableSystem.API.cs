@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._RMC14.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
@@ -55,6 +56,70 @@ public sealed partial class DamageableSystem
     }
 
     /// <summary>
+    /// RMC14 compatibility overload for callers that already resolved the component.
+    /// </summary>
+    public void SetDamage(EntityUid uid, DamageableComponent damageable, DamageSpecifier damage)
+    {
+        damageable.Damage = damage;
+        OnEntityDamageChanged((uid, damageable));
+    }
+
+    /// <summary>
+    /// Directly adds damage to a damageable component without running damage modifiers.
+    /// </summary>
+    /// <remarks>RMC14 compatibility API. Prefer <see cref="TryChangeDamage"/> for normal damage.</remarks>
+    public void AddDamage(EntityUid uid, DamageableComponent damageable, DamageSpecifier damage)
+    {
+        damageable.Damage += damage;
+        OnEntityDamageChanged((uid, damageable), interruptsDoAfters: false);
+    }
+
+    /// <summary>
+    /// RMC14 compatibility API for notifying the system after direct component mutation.
+    /// </summary>
+    public void DamageChanged(
+        EntityUid uid,
+        DamageableComponent damageable,
+        DamageSpecifier? damageDelta = null,
+        bool interruptsDoAfters = true,
+        EntityUid? origin = null,
+        EntityUid? tool = null)
+    {
+        OnEntityDamageChanged((uid, damageable), damageDelta, interruptsDoAfters, origin, tool);
+    }
+
+    /// <summary>
+    /// RMC14 compatibility overload retaining the pre-upstream-split argument order.
+    /// </summary>
+    public DamageSpecifier? TryChangeDamage(
+        EntityUid? uid,
+        DamageSpecifier damage,
+        bool ignoreResistances = false,
+        bool interruptsDoAfters = true,
+        DamageableComponent? damageable = null,
+        EntityUid? origin = null,
+        EntityUid? tool = null,
+        int armorPiercing = 0,
+        bool shouldIgnoreClawLogic = false,
+        bool ignoreGlobalModifiers = false)
+    {
+        if (uid == null)
+            return null;
+
+        return ChangeDamageInternal(
+            (uid.Value, damageable),
+            damage,
+            ignoreResistances,
+            interruptsDoAfters,
+            origin,
+            ignoreGlobalModifiers,
+            damageable,
+            tool,
+            armorPiercing,
+            shouldIgnoreClawLogic);
+    }
+
+    /// <summary>
     ///     Applies damage specified via a <see cref="DamageSpecifier"/>.
     /// </summary>
     /// <remarks>
@@ -63,20 +128,32 @@ public sealed partial class DamageableSystem
     ///     stored damage data. Division of group damage into types is managed by <see cref="DamageSpecifier"/>.
     /// </remarks>
     /// <returns>
-    ///     If the attempt was successful or not.
+    ///     The actual damage applied, or null if the target could not take damage or the attempt was cancelled.
     /// </returns>
-    public bool TryChangeDamage(
+    public DamageSpecifier? TryChangeDamage(
         Entity<DamageableComponent?> ent,
         DamageSpecifier damage,
         bool ignoreResistances = false,
         bool interruptsDoAfters = true,
         EntityUid? origin = null,
-        bool ignoreGlobalModifiers = false
+        bool ignoreGlobalModifiers = false,
+        DamageableComponent? damageable = null,
+        EntityUid? tool = null,
+        int armorPiercing = 0,
+        bool shouldIgnoreClawLogic = false
     )
     {
-        //! Empty just checks if the DamageSpecifier is _literally_ empty, as in, is internal dictionary of damage types is empty.
-        // If you deal 0.0 of some damage type, Empty will be false!
-        return TryChangeDamage(ent, damage, out _, ignoreResistances, interruptsDoAfters, origin, ignoreGlobalModifiers);
+        return ChangeDamageInternal(
+            ent,
+            damage,
+            ignoreResistances,
+            interruptsDoAfters,
+            origin,
+            ignoreGlobalModifiers,
+            damageable,
+            tool,
+            armorPiercing,
+            shouldIgnoreClawLogic);
     }
 
     /// <summary>
@@ -97,12 +174,27 @@ public sealed partial class DamageableSystem
         bool ignoreResistances = false,
         bool interruptsDoAfters = true,
         EntityUid? origin = null,
-        bool ignoreGlobalModifiers = false
+        bool ignoreGlobalModifiers = false,
+        DamageableComponent? damageable = null,
+        EntityUid? tool = null,
+        int armorPiercing = 0,
+        bool shouldIgnoreClawLogic = false
     )
     {
         //! Empty just checks if the DamageSpecifier is _literally_ empty, as in, is internal dictionary of damage types is empty.
         // If you deal 0.0 of some damage type, Empty will be false!
-        newDamage = ChangeDamage(ent, damage, ignoreResistances, interruptsDoAfters, origin, ignoreGlobalModifiers);
+        newDamage = ChangeDamageInternal(
+                ent,
+                damage,
+                ignoreResistances,
+                interruptsDoAfters,
+                origin,
+                ignoreGlobalModifiers,
+                damageable,
+                tool,
+                armorPiercing,
+                shouldIgnoreClawLogic)
+            ?? new DamageSpecifier();
         return !newDamage.Empty;
     }
 
@@ -123,22 +215,53 @@ public sealed partial class DamageableSystem
         bool ignoreResistances = false,
         bool interruptsDoAfters = true,
         EntityUid? origin = null,
-        bool ignoreGlobalModifiers = false
+        bool ignoreGlobalModifiers = false,
+        DamageableComponent? damageable = null,
+        EntityUid? tool = null,
+        int armorPiercing = 0,
+        bool shouldIgnoreClawLogic = false
     )
     {
-        var damageDone = new DamageSpecifier();
+        return ChangeDamageInternal(
+                ent,
+                damage,
+                ignoreResistances,
+                interruptsDoAfters,
+                origin,
+                ignoreGlobalModifiers,
+                damageable,
+                tool,
+                armorPiercing,
+                shouldIgnoreClawLogic)
+            ?? new DamageSpecifier();
+    }
+
+    private DamageSpecifier? ChangeDamageInternal(
+        Entity<DamageableComponent?> ent,
+        DamageSpecifier damage,
+        bool ignoreResistances,
+        bool interruptsDoAfters,
+        EntityUid? origin,
+        bool ignoreGlobalModifiers,
+        DamageableComponent? damageable,
+        EntityUid? tool,
+        int armorPiercing,
+        bool shouldIgnoreClawLogic)
+    {
+        if (damageable != null)
+            ent.Comp = damageable;
 
         if (!_damageableQuery.Resolve(ent, ref ent.Comp, false))
-            return damageDone;
+            return null;
 
         if (damage.Empty)
-            return damageDone;
+            return damage;
 
-        var before = new BeforeDamageChangedEvent(damage, origin);
+        var before = new BeforeDamageChangedEvent(damage, origin, tool);
         RaiseLocalEvent(ent, ref before);
 
         if (before.Cancelled)
-            return damageDone;
+            return null;
 
         // Apply resistances
         if (!ignoreResistances)
@@ -148,21 +271,28 @@ public sealed partial class DamageableSystem
 
             // TODO DAMAGE
             // byref struct event.
-            var ev = new DamageModifyEvent(damage, origin);
+            var ev = new DamageModifyEvent(damage, origin, tool, armorPiercing, shouldIgnoreClawLogic);
             RaiseLocalEvent(ent, ev);
             damage = ev.Damage;
 
             if (damage.Empty)
-                return damageDone;
+                return damage;
         }
+
+        var afterResist = new DamageModifyAfterResistEvent(damage, origin, tool);
+        RaiseLocalEvent(ent, afterResist);
+        damage = afterResist.Damage;
+
+        if (damage.Empty)
+            return damage;
 
         if (!ignoreGlobalModifiers)
             damage = ApplyUniversalAllModifiers(damage);
 
-        var evt = new DamageDealtEvent(damage, origin, interruptsDoAfters);
+        var evt = new DamageDealtEvent(damage, origin, interruptsDoAfters, tool);
         RaiseLocalEvent(ent, ref evt);
 
-        return damage;
+        return evt.DamageDone;
     }
 
     /// <summary>
@@ -401,6 +531,14 @@ public sealed partial class DamageableSystem
     }
 
     /// <summary>
+    /// RMC14 compatibility overload for callers that already resolved the component.
+    /// </summary>
+    public void SetAllDamage(EntityUid uid, DamageableComponent damageable, FixedPoint2 newValue)
+    {
+        SetAllDamage((uid, damageable), newValue);
+    }
+
+    /// <summary>
     /// Set's the damage modifier set prototype for this entity.
     /// </summary>
     /// <param name="ent">The entity we're setting the modifier set of.</param>
@@ -413,6 +551,17 @@ public sealed partial class DamageableSystem
         ent.Comp.DamageModifierSetId = damageModifierSetId;
 
         Dirty(ent);
+    }
+
+    /// <summary>
+    /// RMC14 compatibility overload for string prototype IDs and resolved components.
+    /// </summary>
+    public void SetDamageModifierSetId(EntityUid uid, string? damageModifierSetId, DamageableComponent? damageable = null)
+    {
+        ProtoId<DamageModifierSetPrototype>? prototype = damageModifierSetId == null
+            ? null
+            : new ProtoId<DamageModifierSetPrototype>(damageModifierSetId);
+        SetDamageModifierSetId((uid, damageable), prototype);
     }
 
     /// <summary>
