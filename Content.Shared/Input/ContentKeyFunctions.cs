@@ -3,7 +3,7 @@ using Robust.Shared.Input;
 namespace Content.Shared.Input
 {
     [KeyFunctions]
-    public static class ContentKeyFunctions
+    public static partial class ContentKeyFunctions
     {
         public static readonly BoundKeyFunction ToggleKnockdown = "ToggleKnockdown";
         public static readonly BoundKeyFunction UseItemInHand = "ActivateItemInHand";
