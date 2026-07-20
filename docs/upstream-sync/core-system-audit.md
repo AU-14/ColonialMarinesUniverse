@@ -2828,3 +2828,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Objects/Consumable/Drinks/drinks_cups.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static component review confirms the configured solution is `drink`, the cup remains head-wearable, and the shared system drains before marking it worn. YAML validation plus filled, empty, equip, unequip, refill-while-worn, spill placement, and RMC drinkware cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1549 as `Ported (CS-0207)` when wave 0008 is committed.
+
+## CS-0208 — Phase the artifact instead of its effect node
+
+- Upstream: [space-wizards/space-station-14#41160](https://github.com/space-wizards/space-station-14/pull/41160), `39fc0052a44c0fb6a3aeab628b7791c772a6d66e`, 2025-10-28
+- Areas: Physics, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The remove-collision artifact effect now resolves fixtures from `args.Artifact` and marks those fixtures non-hard. The effect-node entity remains configuration/state only; activation actually phases the physical artifact as intended.
+- RMC/CMU divergence: CMU retains the standard xenoartifact node/effect architecture and has no RMC override for this effect. Artifact triggers, node discovery, fixture shapes, collision masks/layers, and other RMC physics systems are unchanged.
+- Decision and rationale: Port both owner substitutions together. Looking up fixtures on the effect node normally returns none, and mixing the artifact's fixtures with the node owner would pass inconsistent entity/component ownership into physics.
+- Files changed: `Content.Shared/Xenoarchaeology/Artifact/XAE/XAERemoveCollisionSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static ownership review confirms fixture lookup and `SetHard` now use the same artifact entity while iteration and false-hard state remain unchanged. Shared compilation plus artifact-with-fixtures, missing-fixtures, multi-fixture, repeated activation, movement/collision, and RMC physics cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1559 as `Ported (CS-0208)` when wave 0008 is committed.
