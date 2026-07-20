@@ -2320,3 +2320,16 @@ Date completed: 2026-07-20
 - Files changed: the fax, instrument, profile-editor, and RMC cassette client importers plus `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static call-site review confirms all four selected streams are only read and the pinned RobustToolbox file-dialog API supports explicit `FileAccess.Read`; no content-side `OpenFile` call remains on the default access mode. Client compilation and importing read-only TXT, MIDI, YAML, and OGG files are queued for the index-1999 checkpoint.
 - Follow-up/debt: Recheck new file-dialog consumers as later upstream and RMC changes are ported.
+
+## CS-0169 — Log construction of every grille variant
+
+- Upstream: [space-wizards/space-station-14#40603](https://github.com/space-wizards/space-station-14/pull/40603), `768870ac686196b946179f5e77959f623b0791a0`, 2025-09-29
+- Areas: Interactions, Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Completing the initial construction edge for clockwork, diagonal, or diagonal clockwork grilles now emits the same high-impact construction admin log as a standard grille. Cutting and rebuilding existing grilles retain their current actions.
+- RMC/CMU divergence: No RMC-specific construction graph duplicates these three standard nodes. RMC construction logging infrastructure consumes the same `AdminLog` graph action, so no fork-only code path changes.
+- Decision and rationale: Add the retained target-final completion action to each missing start edge. Grilles affect movement and secure areas, so variant choice should not bypass the audit trail already applied to standard grille construction.
+- Files changed: `Resources/Prototypes/Recipes/Construction/Graphs/structures/grille_clockwork.yml`, `Resources/Prototypes/Recipes/Construction/Graphs/structures/grille_diagonal.yml`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static graph review confirms all three start edges emit exactly one `Construction` log at `High` impact and cancelled/incomplete paths do not reach the completion action. Graph deserialization and completed/cancelled construction cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: None.
