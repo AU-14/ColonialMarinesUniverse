@@ -9,7 +9,8 @@
     explosionType: RMC
   - type: ExplosionResistance
     damageCoefficient: 0
-  - type: OnUseTimerTrigger
+  - type: TriggerOnUse
+  - type: TimerTrigger
     delay: 4
     beepSound:
       path: "/Audio/_RMC14/Explosion/armbomb.ogg"
@@ -17,7 +18,7 @@
         volume: -5
     initialBeepDelay: 0
     beepInterval: 10
-    doPopup: false
+    popup: null
   - type: IgnorePredictionHide
   - type: Clothing
     slots:
@@ -108,7 +109,7 @@
   name: 30mm HSDP smoke grenade
   description: The 30mm HSDP is a small, but powerful smoke grenade. Based off the same platform as the 30mm HEDP. It is set to detonate in 2 seconds.
   components:
-  - type: OnUseTimerTrigger
+  - type: TimerTrigger
     delay: 2
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m40smoke.rsi
@@ -342,7 +343,7 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m40hidp.rsi
-  - type: OnUseTimerTrigger
+  - type: TimerTrigger
     beepSound: null
   - type: CMVocalizeTrigger
   - type: TileFireOnTrigger
@@ -360,7 +361,7 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m40wpdp.rsi
-  - type: OnUseTimerTrigger
+  - type: TimerTrigger
     delay: 2
     beepSound: null
   - type: CMVocalizeTrigger
@@ -392,7 +393,7 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/molotov.rsi
-  - type: OnUseTimerTrigger
+  - type: TimerTrigger
     examinable: false
   - type: RandomTimerTrigger
     min: 1

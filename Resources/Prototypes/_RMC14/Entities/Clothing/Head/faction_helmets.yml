@@ -237,7 +237,8 @@
           Unprimed: { state: icon }
   - type: ClothingPrefixOnTimerTrigger
     prefix: primed
-  - type: OnUseTimerTrigger
+  - type: TriggerOnUse
+  - type: TimerTrigger
     delay: 4
     beepSound:
       path: "/Audio/_RMC14/Explosion/armbomb.ogg"
@@ -245,7 +246,7 @@
         volume: -5
     initialBeepDelay: 0
     beepInterval: 10
-    doPopup: false
+    popup: null
   - type: ExplodeOnTrigger
   - type: Explosive
     explosionType: RMC
