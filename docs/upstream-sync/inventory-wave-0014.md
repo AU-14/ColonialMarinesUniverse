@@ -94,7 +94,7 @@ behavior to port.
 2675 | 271252c00325d159fee4d13e96dcd3a6e824a3fd | New high pop station - Serpentcrest (#38991) | Deferred | Physics | Very large Serpentcrest station feature needs dedicated map, prototype, atmos, and power review.
 2676 | a882259007c92377769b3af0e6bba0deb9462a6e | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2677 | 9c89a59d961a05a2132ffa08274a19f5f5bafba0 | Update Credits (#42848) | Irrelevant | — | Upstream credits metadata only.
-2678 | a01e7dcf40e8a25028062b763f9147a81809a2e4 | fix: APC sprites stuck in fully drained states on round start (#42852) | PortCandidate | Physics, GameTicking | One APC state-invalidating assignment fixes stale drained sprites; CMU retains the old call path.
+2678 | a01e7dcf40e8a25028062b763f9147a81809a2e4 | fix: APC sprites stuck in fully drained states on round start (#42852) | Ported (CS-0255) | Physics, GameTicking | Battery changes now invalidate APC state for the next post-power-network update instead of refreshing during the event.
 2679 | 0d9d2443ce8d98312fa049bd856f20c0649174da | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2680 | e76a1b5cd67d34608d466b6e5266d881acef81b5 | Minor tweaks to Urist names (#42791) | PortCandidate | — | Small Urist species-name dataset cleanup can be reconciled independently.
 2681 | 865180d7fe6dcc3d69144aa0afe45e8b06bc5293 | Automatic changelog update | Irrelevant | — | Generated changelog only.

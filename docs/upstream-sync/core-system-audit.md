@@ -3451,3 +3451,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Voice/disease_emotes.yml`, `docs/upstream-sync/inventory-wave-0014.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype review confirms all nine target trigger forms are present once, `Vocal` and `SiliconEmotes` dependencies exist locally, and no duplicate sneeze or RMC override conflicts. YAML/prototype lint plus every punctuation variant, non-vocal entities, silicons, RMC species voice sets, disease-triggered emotes, and bare `coughed` are queued for the index-2999 checkpoint.
 - Follow-up/debt: Upstream index 2736 adds species-specific sneeze sounds and should remain a separate content/policy port; this base trigger fix does not depend on it.
+
+## CS-0255 â€” Defer APC charge-state refreshes
+
+- Upstream: [space-wizards/space-station-14#42852](https://github.com/space-wizards/space-station-14/pull/42852), `a01e7dcf40e8a25028062b763f9147a81809a2e4`, 2026-02-09
+- Areas: Physics, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `ChargeChangedEvent` now marks an APC for state refresh instead of immediately reading its network battery and updating UI/appearance. The existing APC update loop consumes that invalidation on the next tick after `PowerNetSystem`, preventing map-start races that left APC sprites displaying a fully drained state.
+- RMC/CMU divergence: CMU retains the standard APC update loop and its earlier CS-0243 user-attributed breaker logging. Standard and RMC APC prototypes share this state path; battery simulation, breaker mutations, UI-open refresh, EMP behavior, access policy, and logging remain unchanged.
+- Decision and rationale: Port the target-final two-line deferral at the event boundary. Startup already uses the same invalidation because power-network state is not valid synchronously, and charge changes during startup have the same ordering hazard. The next-tick query runs after power-net processing and clears `NeedStateUpdate` through the existing authoritative refresh.
+- Files changed: `Content.Server/Power/EntitySystems/ApcSystem.cs`, `docs/upstream-sync/inventory-wave-0014.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static scheduling review confirms `UpdatesAfter` includes `PowerNetSystem`, every invalidated APC with its required components is refreshed, and `UpdateApcState` clears the flag. Server compilation plus empty/charged APC map start, subsequent charge transitions, breaker toggles, UI-open refresh, delayed appearance thresholds, EMP, event-rule flips, and RMC maps are queued for the index-2999 checkpoint.
+- Follow-up/debt: None; the pinned target retains this invalidation model through later APC structural changes.
