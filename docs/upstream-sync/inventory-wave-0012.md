@@ -215,5 +215,5 @@ behavior to port.
 2396 | 6df3ed9682b2e545b77342ddd21a80d07f45d928 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2397 | 897a2d40bc2ec2ba595f6a60f64b12f0b5304010 | Add Mortar and Handheld Juicer (#42019) | Deferred | Chemistry, Interactions | The 42-file mortar and handheld-juicer feature rewrites grinder systems and adds recipes, audio, prototypes, and assets.
 2398 | 57ac7bbe4f8b4dc5c1dcc4797c8cb5084e8e079e | Automatic changelog update | Irrelevant | — | Generated changelog only.
-2399 | d2ac15c76f714144b6ffc583f87b3b097610fb0f | Fix flatpacker exploit ignoring board costs (#42445) | PortCandidate | Interactions | The five-file flatpacker cost validation closes a material exploit but must be adapted to CMU machine-board requirements.
+2399 | d2ac15c76f714144b6ffc583f87b3b097610fb0f | Fix flatpacker exploit ignoring board costs (#42445) | Ported (CS-0237) | Interactions | Ported the target-final cost validation, including tag requirements and safe failure for ingredients without a material price.
 ~~~
