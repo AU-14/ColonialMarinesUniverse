@@ -104,6 +104,9 @@
   - type: Thirst
     baseDecayRate: 0.01666666666
   - type: Body
+  - type: VisualBody
+  - type: HumanoidProfile
+  - type: HideableHumanoidLayers
   - type: InitialBody
     organs:
       Torso: OrganHumanTorso
