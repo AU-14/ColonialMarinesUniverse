@@ -159,6 +159,9 @@ public sealed partial class PullingSystem : EntitySystem
 
     private void OnGotBuckled(Entity<PullableComponent> ent, ref BuckledEvent args)
     {
+        if (TryRetargetBuckledPull(ent))
+            return;
+
         StopPulling(ent, ent);
     }
 
@@ -484,6 +487,9 @@ public sealed partial class PullingSystem : EntitySystem
 
         if (pullable.Comp.Puller == pullerUid)
         {
+            if (HandleRMCPullToggle(pullerUid))
+                return true;
+
             return TryStopPull(pullable, pullable.Comp);
         }
 
@@ -501,6 +507,8 @@ public sealed partial class PullingSystem : EntitySystem
     public bool TryStartPull(EntityUid pullerUid, EntityUid pullableUid,
         PullerComponent? pullerComp = null, PullableComponent? pullableComp = null)
     {
+        RetargetRMCPull(pullerUid, ref pullableUid, ref pullableComp);
+
         if (!Resolve(pullerUid, ref pullerComp, false) ||
             !Resolve(pullableUid, ref pullableComp, false))
         {
