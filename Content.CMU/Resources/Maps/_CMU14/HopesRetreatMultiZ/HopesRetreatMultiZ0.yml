@@ -4,8 +4,8 @@ meta:
   engineVersion: v278.0.0
   forkId: ""
   forkVersion: ""
-  time: 07/14/2026 09:32:27
-  entityCount: 39092
+  time: 07/19/2026 22:44:59
+  entityCount: 39095
 maps:
 - 1
 grids:
@@ -566,11 +566,12 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: Mapping JE-1758 Ascanius
+      name: JE-1758 Ascanius (Hope's Retreat)
     - type: Transform
     - type: BecomesStation
       id: hopesretreat
     - type: Map
+      mapPaused: True
     - type: GridTree
     - type: OccluderTree
     - type: MapGrid
@@ -125900,6 +125901,11 @@ entities:
     - type: Transform
       pos: 6.5,-38.5
       parent: 1
+    missingComponents:
+    - TacticalMapUser
+    - ActionsContainer
+    - ContainerContainer
+    - Actions
 - proto: AU14AICoreSubstrateMUTHUR
   entities:
   - uid: 58776
@@ -126288,6 +126294,58 @@ entities:
     - type: Transform
       pos: -55.5,84.5
       parent: 1
+- proto: AU14MaintenanceJack
+  entities:
+  - uid: 1251
+    components:
+    - type: Transform
+      pos: -23.493723,-42.488037
+      parent: 1
+  - uid: 6044
+    components:
+    - type: Transform
+      pos: -60.475937,17.519217
+      parent: 1
+  - uid: 6085
+    components:
+    - type: Transform
+      pos: -59.5036,17.46418
+      parent: 1
+  - uid: 52448
+    components:
+    - type: Transform
+      pos: 34.5,28.5
+      parent: 1
+    - type: Physics
+      canCollide: False
+  - uid: 52518
+    components:
+    - type: Transform
+      pos: 40.5,25.5
+      parent: 1
+    - type: Physics
+      canCollide: False
+  - uid: 55524
+    components:
+    - type: Transform
+      pos: 63.5,-26.5
+      parent: 1
+    - type: Physics
+      canCollide: False
+  - uid: 56731
+    components:
+    - type: Transform
+      pos: 3.5,19.5
+      parent: 1
+    - type: Physics
+      canCollide: False
+  - uid: 60892
+    components:
+    - type: Transform
+      pos: -35.5,-72.5
+      parent: 1
+    - type: Physics
+      canCollide: False
 - proto: AU14MREUPP
   entities:
   - uid: 9254
@@ -135657,6 +135715,7 @@ entities:
       access:
       - - AU14AccessGovforCommand
       - - AU14AccessGovforEngineering
+      - - AU14AccessGovforReq
   - uid: 70500
     components:
     - type: MetaData
@@ -135669,6 +135728,7 @@ entities:
       access:
       - - AU14AccessGovforCommand
       - - AU14AccessGovforEngineering
+      - - AU14AccessGovforReq
 - proto: CMDoubleDoorEngineerGovforLocked
   entities:
   - uid: 63738
@@ -148056,6 +148116,26 @@ entities:
     - type: Transform
       pos: -90.5,53.5
       parent: 1
+  - uid: 448
+    components:
+    - type: Transform
+      pos: -90.5,54.5
+      parent: 1
+  - uid: 456
+    components:
+    - type: Transform
+      pos: -22.5,-30.5
+      parent: 1
+  - uid: 457
+    components:
+    - type: Transform
+      pos: -22.5,-38.5
+      parent: 1
+  - uid: 458
+    components:
+    - type: Transform
+      pos: -22.5,-34.5
+      parent: 1
 - proto: CMUMonitorCameraColonyCMB
   entities:
   - uid: 7434
@@ -159113,43 +159193,6 @@ entities:
     components:
     - type: Transform
       pos: 53.5,-103.5
-      parent: 1
-- proto: CMUXenoEggNotCF
-  entities:
-  - uid: 447
-    components:
-    - type: Transform
-      pos: -99.5,-121.5
-      parent: 1
-  - uid: 448
-    components:
-    - type: Transform
-      pos: -98.5,-122.5
-      parent: 1
-  - uid: 456
-    components:
-    - type: Transform
-      pos: -99.5,-122.5
-      parent: 1
-  - uid: 457
-    components:
-    - type: Transform
-      pos: -101.5,-123.5
-      parent: 1
-  - uid: 458
-    components:
-    - type: Transform
-      pos: -100.5,-122.5
-      parent: 1
-  - uid: 508
-    components:
-    - type: Transform
-      pos: -101.5,-121.5
-      parent: 1
-  - uid: 509
-    components:
-    - type: Transform
-      pos: -99.5,-123.5
       parent: 1
 - proto: CMUZLevelLadderThroughUp1
   entities:
@@ -172787,6 +172830,7 @@ entities:
     - type: AccessReader
       access:
       - - AU14AccessGovforCommand
+      - - AU14AccessGovforReq
   - uid: 71773
     components:
     - type: Transform
@@ -172799,6 +172843,7 @@ entities:
     - type: AccessReader
       access:
       - - AU14AccessGovforCommand
+      - - AU14AccessGovforReq
   - uid: 75930
     components:
     - type: Transform
@@ -176327,58 +176372,6 @@ entities:
     - type: Transform
       pos: -78.5,34.5
       parent: 1
-- proto: MaintenanceJack
-  entities:
-  - uid: 1251
-    components:
-    - type: Transform
-      pos: -23.493723,-42.488037
-      parent: 1
-  - uid: 6044
-    components:
-    - type: Transform
-      pos: -60.475937,17.519217
-      parent: 1
-  - uid: 6085
-    components:
-    - type: Transform
-      pos: -59.5036,17.46418
-      parent: 1
-  - uid: 52448
-    components:
-    - type: Transform
-      pos: 34.5,28.5
-      parent: 1
-    - type: Physics
-      canCollide: False
-  - uid: 52518
-    components:
-    - type: Transform
-      pos: 40.5,25.5
-      parent: 1
-    - type: Physics
-      canCollide: False
-  - uid: 55524
-    components:
-    - type: Transform
-      pos: 63.5,-26.5
-      parent: 1
-    - type: Physics
-      canCollide: False
-  - uid: 56731
-    components:
-    - type: Transform
-      pos: 3.5,19.5
-      parent: 1
-    - type: Physics
-      canCollide: False
-  - uid: 60892
-    components:
-    - type: Transform
-      pos: -35.5,-72.5
-      parent: 1
-    - type: Physics
-      canCollide: False
 - proto: MUTHURAICoreProcessor
   entities:
   - uid: 58779
@@ -177223,8 +177216,17 @@ entities:
       parent: 1
 - proto: RMCActionOpenTacticalMapMarine
   entities:
-  - uid: 624
+  - uid: 447
+    mapInit: true
     paused: true
+    components:
+    - type: Transform
+      parent: 58742
+    - type: Action
+      originalIconColor: '#FFFFFFFF'
+      container: 58742
+      attachedEntity: 58742
+  - uid: 624
     components:
     - type: Transform
       parent: 58742
@@ -182231,7 +182233,7 @@ entities:
       pos: -29.5,-46.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -53635.14
+      secondsUntilStateChange: -54514.98
       state: Closing
   - uid: 9768
     components:
@@ -332093,6 +332095,31 @@ entities:
       parent: 1
 - proto: SpawnPointLatejoin
   entities:
+  - uid: 508
+    components:
+    - type: Transform
+      pos: 66.5,27.5
+      parent: 1
+  - uid: 509
+    components:
+    - type: Transform
+      pos: 66.5,23.5
+      parent: 1
+  - uid: 10166
+    components:
+    - type: Transform
+      pos: 76.5,9.5
+      parent: 1
+  - uid: 10205
+    components:
+    - type: Transform
+      pos: 80.5,9.5
+      parent: 1
+  - uid: 10209
+    components:
+    - type: Transform
+      pos: 72.5,9.5
+      parent: 1
   - uid: 71465
     components:
     - type: Transform

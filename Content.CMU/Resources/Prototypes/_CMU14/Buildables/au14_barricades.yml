@@ -1,0 +1,477 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright (c) 2026 wray-git
+# SPDX-License-Identifier: AGPL-3.0-only
+# Building overhaul: barricades as normal construction-ghost recipes (instead of the RMC "build here" radial).
+# Each is a child of the real barricade entity (inherits its look/health/fold behavior) plus a Construction
+# component pointing at a clean ghost graph, so it places with the standard construction ghost. Costs mirror the
+# original barricade graphs. All live in the "Barricades" spawnlist.
+
+# --- Metal barricade ---
+- type: constructionGraph
+  id: AU14BarricadeMetalGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 4
+        doAfter: 3
+  - node: built
+    entity: AU14BarricadeMetal
+    edges:
+    # Deconstruct. Mirrors the original RMC barricade graphs: unbolt it first, then unscrew and pry it apart,
+    # refunding less the more damaged it is. These AU14 ghost-build graphs never had a way back out of the
+    # "built" node, so anything raised through the construction menu could not be taken down again.
+    - to: start
+      completed:
+      - !type:ConditionalAction
+        condition:
+          !type:MinHealth
+          threshold: 1
+          byProportion: true
+        action:
+          !type:SpawnPrototype
+          prototype: CMSheetMetal1
+          amount: 4
+        else:
+          !type:ConditionalAction
+          condition:
+            !type:MinHealth
+            threshold: 0.78
+            byProportion: true
+          action:
+            !type:SpawnPrototype
+            prototype: CMSheetMetal1
+            amount: 3
+          else:
+            !type:ConditionalAction
+            condition:
+              !type:MinHealth
+              threshold: 0.56
+              byProportion: true
+            action:
+              !type:SpawnPrototype
+              prototype: CMSheetMetal1
+              amount: 2
+      - !type:ConditionalAction
+        condition:
+          !type:IsBarbed
+        action:
+          !type:SpawnPrototype
+          prototype: BarbedWire1
+          amount: 1
+      - !type:DeleteEntity
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      steps:
+      - tool: Screwing
+        doAfter: 1
+      - tool: Prying
+        doAfter: 2
+
+- type: entity
+  parent: CMBarricadeMetal
+  id: AU14BarricadeMetal
+  suffix: AU14 ghost-build
+  components:
+  - type: Construction
+    graph: AU14BarricadeMetalGraph
+    node: built
+
+- type: construction
+  id: AU14BarricadeMetalRecipe
+  name: metal barricade
+  description: A military-grade metal barricade.
+  graph: AU14BarricadeMetalGraph
+  startNode: start
+  targetNode: built
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear
+
+# --- Folding metal barricade ---
+- type: constructionGraph
+  id: AU14BarricadeMetalDoorGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 5
+        doAfter: 3
+  - node: built
+    entity: AU14BarricadeMetalDoor
+    edges:
+    # Deconstruct. Mirrors the original RMC barricade graphs: unbolt it first, then unscrew and pry it apart,
+    # refunding less the more damaged it is. These AU14 ghost-build graphs never had a way back out of the
+    # "built" node, so anything raised through the construction menu could not be taken down again.
+    - to: start
+      completed:
+      - !type:ConditionalAction
+        condition:
+          !type:MinHealth
+          threshold: 1
+          byProportion: true
+        action:
+          !type:SpawnPrototype
+          prototype: CMSheetMetal1
+          amount: 5
+        else:
+          !type:ConditionalAction
+          condition:
+            !type:MinHealth
+            threshold: 0.78
+            byProportion: true
+          action:
+            !type:SpawnPrototype
+            prototype: CMSheetMetal1
+            amount: 4
+          else:
+            !type:ConditionalAction
+            condition:
+              !type:MinHealth
+              threshold: 0.56
+              byProportion: true
+            action:
+              !type:SpawnPrototype
+              prototype: CMSheetMetal1
+              amount: 3
+      - !type:ConditionalAction
+        condition:
+          !type:IsBarbed
+        action:
+          !type:SpawnPrototype
+          prototype: BarbedWire1
+          amount: 1
+      - !type:DeleteEntity
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      steps:
+      - tool: Screwing
+        doAfter: 1
+      - tool: Prying
+        doAfter: 2
+
+- type: entity
+  parent: CMBarricadeMetalDoor
+  id: AU14BarricadeMetalDoor
+  suffix: AU14 ghost-build
+  components:
+  - type: Construction
+    graph: AU14BarricadeMetalDoorGraph
+    node: built
+
+- type: construction
+  id: AU14BarricadeMetalDoorRecipe
+  name: folding metal barricade
+  description: A barricade that can be folded or opened to allow marines through.
+  graph: AU14BarricadeMetalDoorGraph
+  startNode: start
+  targetNode: built
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear
+
+# --- Plasteel barricade ---
+- type: constructionGraph
+  id: AU14BarricadePlasteelGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMPlasteel
+        amount: 4
+        doAfter: 3
+  - node: built
+    entity: AU14BarricadePlasteel
+    edges:
+    # Deconstruct. Mirrors the original RMC barricade graphs: unbolt it first, then unscrew and pry it apart,
+    # refunding less the more damaged it is. These AU14 ghost-build graphs never had a way back out of the
+    # "built" node, so anything raised through the construction menu could not be taken down again.
+    - to: start
+      completed:
+      - !type:ConditionalAction
+        condition:
+          !type:MinHealth
+          threshold: 1
+          byProportion: true
+        action:
+          !type:SpawnPrototype
+          prototype: CMSheetPlasteel1
+          amount: 4
+        else:
+          !type:ConditionalAction
+          condition:
+            !type:MinHealth
+            threshold: 0.78
+            byProportion: true
+          action:
+            !type:SpawnPrototype
+            prototype: CMSheetPlasteel1
+            amount: 3
+          else:
+            !type:ConditionalAction
+            condition:
+              !type:MinHealth
+              threshold: 0.56
+              byProportion: true
+            action:
+              !type:SpawnPrototype
+              prototype: CMSheetPlasteel1
+              amount: 2
+      - !type:ConditionalAction
+        condition:
+          !type:IsBarbed
+        action:
+          !type:SpawnPrototype
+          prototype: BarbedWire1
+          amount: 1
+      - !type:DeleteEntity
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      steps:
+      - tool: Screwing
+        doAfter: 1
+      - tool: Prying
+        doAfter: 2
+
+- type: entity
+  parent: RMCBarricadePlasteel
+  id: AU14BarricadePlasteel
+  suffix: AU14 ghost-build
+  components:
+  - type: Construction
+    graph: AU14BarricadePlasteelGraph
+    node: built
+
+- type: construction
+  id: AU14BarricadePlasteelRecipe
+  name: plasteel barricade
+  description: A military-grade hardened plasteel barricade.
+  graph: AU14BarricadePlasteelGraph
+  startNode: start
+  targetNode: built
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear
+
+# --- Folding plasteel barricade ---
+- type: constructionGraph
+  id: AU14BarricadePlasteelDoorGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMPlasteel
+        amount: 5
+        doAfter: 3
+  - node: built
+    entity: AU14BarricadePlasteelDoor
+    edges:
+    # Deconstruct. Mirrors the original RMC barricade graphs: unbolt it first, then unscrew and pry it apart,
+    # refunding less the more damaged it is. These AU14 ghost-build graphs never had a way back out of the
+    # "built" node, so anything raised through the construction menu could not be taken down again.
+    - to: start
+      completed:
+      - !type:ConditionalAction
+        condition:
+          !type:MinHealth
+          threshold: 1
+          byProportion: true
+        action:
+          !type:SpawnPrototype
+          prototype: CMSheetPlasteel1
+          amount: 5
+        else:
+          !type:ConditionalAction
+          condition:
+            !type:MinHealth
+            threshold: 0.78
+            byProportion: true
+          action:
+            !type:SpawnPrototype
+            prototype: CMSheetPlasteel1
+            amount: 4
+          else:
+            !type:ConditionalAction
+            condition:
+              !type:MinHealth
+              threshold: 0.56
+              byProportion: true
+            action:
+              !type:SpawnPrototype
+              prototype: CMSheetPlasteel1
+              amount: 3
+      - !type:ConditionalAction
+        condition:
+          !type:IsBarbed
+        action:
+          !type:SpawnPrototype
+          prototype: BarbedWire1
+          amount: 1
+      - !type:DeleteEntity
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      steps:
+      - tool: Screwing
+        doAfter: 1
+      - tool: Prying
+        doAfter: 2
+
+- type: entity
+  parent: CMBarricadePlasteelDoor
+  id: AU14BarricadePlasteelDoor
+  suffix: AU14 ghost-build
+  components:
+  - type: Construction
+    graph: AU14BarricadePlasteelDoorGraph
+    node: built
+
+- type: construction
+  id: AU14BarricadePlasteelDoorRecipe
+  name: folding plasteel barricade
+  description: A barricade that can be folded or opened to allow marines through. Made from hardened plasteel.
+  graph: AU14BarricadePlasteelDoorGraph
+  startNode: start
+  targetNode: built
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear
+
+# --- Wooden barricade ---
+- type: constructionGraph
+  id: AU14BarricadeWoodGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: RMCWood
+        amount: 4
+        doAfter: 3
+  - node: built
+    entity: AU14BarricadeWood
+    edges:
+    # Deconstruct. Mirrors the original RMC barricade graphs: unbolt it first, then unscrew and pry it apart,
+    # refunding less the more damaged it is. These AU14 ghost-build graphs never had a way back out of the
+    # "built" node, so anything raised through the construction menu could not be taken down again.
+    - to: start
+      completed:
+      - !type:ConditionalAction
+        condition:
+          !type:MinHealth
+          threshold: 1
+          byProportion: true
+        action:
+          !type:SpawnPrototype
+          prototype: RMCPlankWood1
+          amount: 4
+        else:
+          !type:ConditionalAction
+          condition:
+            !type:MinHealth
+            threshold: 0.78
+            byProportion: true
+          action:
+            !type:SpawnPrototype
+            prototype: RMCPlankWood1
+            amount: 3
+          else:
+            !type:ConditionalAction
+            condition:
+              !type:MinHealth
+              threshold: 0.56
+              byProportion: true
+            action:
+              !type:SpawnPrototype
+              prototype: RMCPlankWood1
+              amount: 2
+      - !type:ConditionalAction
+        condition:
+          !type:IsBarbed
+        action:
+          !type:SpawnPrototype
+          prototype: BarbedWire1
+          amount: 1
+      - !type:DeleteEntity
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      steps:
+      - tool: Screwing
+        doAfter: 1
+      - tool: Prying
+        doAfter: 2
+
+- type: entity
+  parent: RMCBarricadeWood
+  id: AU14BarricadeWood
+  suffix: AU14 ghost-build
+  components:
+  - type: Construction
+    graph: AU14BarricadeWoodGraph
+    node: built
+
+- type: construction
+  id: AU14BarricadeWoodRecipe
+  name: wooden barricade
+  description: A makeshift wooden barricade.
+  graph: AU14BarricadeWoodGraph
+  startNode: start
+  targetNode: built
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear

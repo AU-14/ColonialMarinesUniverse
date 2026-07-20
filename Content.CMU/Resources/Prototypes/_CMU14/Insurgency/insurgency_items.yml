@@ -1,0 +1,38 @@
+# INSFOR faction featureset items.
+# Sprites reuse the vanilla cardboard box texture (Objects/Storage/boxes.rsi) on purpose so these
+# are their own plain items, not storage boxes: a storage base would open on use and swallow the
+# use interaction these rely on.
+
+- type: entity
+  parent: BaseItem
+  id: AU14APackage
+  name: a package
+  description: A plain package with your name on it. Use it in hand to unpack your gear.
+  components:
+  - type: Sprite
+    sprite: Objects/Storage/boxes.rsi
+    state: box
+  - type: Item
+    size: Normal
+  - type: APackage
+
+- type: entity
+  parent: BaseItem
+  id: AU14HeavyCellKit
+  name: heavy cell kit
+  description: The cell's deployable equipment, packed tight. Use it in hand to open the deploy menu and set out one piece at a time.
+  components:
+  - type: Sprite
+    sprite: Objects/Storage/boxes.rsi
+    state: box
+  - type: Item
+    size: Huge
+  - type: InsurgencyCellKit
+  - type: ActivatableUI
+    inHandsOnly: true
+    requireActiveHand: false
+    key: enum.InsurgencyCellKitUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.InsurgencyCellKitUiKey.Key:
+        type: InsurgencyCellKitBui

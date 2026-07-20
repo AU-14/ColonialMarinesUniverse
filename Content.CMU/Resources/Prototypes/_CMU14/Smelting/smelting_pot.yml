@@ -1,0 +1,123 @@
+# Smelting pot: sits on a lit campfire or brazier and renders ore into sheets.
+# Holds ONE material at a time (that is what removes the need for a recipe picker) and keeps finished sheets
+# in a separate output buffer so an ore load never runs away into plasteel on its own.
+
+- type: entity
+  parent: BaseItem
+  id: AU14SmeltingPot
+  name: smelting crucible
+  description: A squat iron crucible, its rim crusted with old slag. Ore comes out as metal, metal as plasteel, and a handful of ruined circuit boards as plastic - given a decent fire and the patience to sit by it.
+  components:
+  - type: Sprite
+    sprite: _AU14/Objects/Smelting/smelting_pot.rsi
+    noRot: true
+    # Lifted so the crucible reads as sitting up on the fire rather than down in the flames.
+    offset: 0.0,0.22
+    layers:
+    - state: pot
+      map: ["base"]
+    - state: pot_active
+      map: ["active"]
+      visible: false
+  - type: Item
+    size: Large
+  - type: SmeltingPot
+    capacity: 100
+    # Pip sprite while the pot holds scrap boards, since electronics have no stack icon to borrow.
+    electronicsIcon:
+      sprite: Objects/Misc/module.rsi
+      state: door_electronics
+    recipes:
+    # Cave-rock iron ore. SteelOre is what mineablesolarisrocksteel actually drops (display name "iron ore").
+    - input: SteelOre
+      inputAmount: 2
+      output: CMSteel
+      outputAmount: 1
+      duration: 4
+    # RMC hematite, the other iron-bearing ore in the fork.
+    - input: IronOre
+      inputAmount: 2
+      output: CMSteel
+      outputAmount: 1
+      duration: 4
+    # Second refining step, done deliberately by re-inserting the sheets.
+    - input: CMSteel
+      inputAmount: 2
+      output: CMPlasteel
+      outputAmount: 1
+      duration: 8
+    # Scrap electronics rendered down for their polymers. Matches the sapper workbench's "any electronics":
+    # machine boards, computer boards and door electronics.
+    - inputAnyElectronics: true
+      inputAmount: 2
+      output: RMCPlastic
+      outputAmount: 1
+      duration: 6
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.SmeltingPotVisuals.Active:
+        active:
+          True: { visible: true }
+          False: { visible: false }
+  - type: AmbientSound
+    enabled: false
+    volume: -6
+    range: 4
+    sound:
+      path: /Audio/Effects/Chemistry/bubbles.ogg
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+# Steam puff spawned per unit of material a finished batch consumes, at the pot's position.
+- type: entity
+  id: AU14SmeltingSteam
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: /Textures/Effects/chemsmoke.rsi
+    state: chemsmoke_white
+    noRot: true
+    drawdepth: Effects
+    color: "#FFFFFF66"
+    # chemsmoke is a 96x96 cloud; scaled right down it reads as a small hiss off the crucible rather than
+    # a room-filling smoke bank.
+    scale: 0.16,0.16
+  - type: TimedDespawn
+    lifetime: 1.2
+
+# Acrid fume puff from rendering electronics down. Purely the visual - the poison is applied by a radius
+# check in SmeltingPotSystem, so the cloud can never silently miss someone standing in it.
+- type: entity
+  id: AU14SmeltingFumes
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: /Textures/Effects/chemsmoke.rsi
+    state: chemsmoke_white
+    noRot: true
+    drawdepth: Effects
+    # Dark, sickly yellow at low opacity.
+    color: "#9C8B1E77"
+    scale: 0.13,0.13
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.1
+        hard: false
+        mask:
+        - ItemMask
+  - type: TimedDespawn
+    lifetime: 1.0

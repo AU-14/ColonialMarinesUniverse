@@ -22,6 +22,7 @@
       RMCSkillPolice: 2
       RMCSkillJtac: 2
       RMCSkillSmartGun: 1
+      RMCSkillSpecialistWeapons: 1
   - type: JobPrefix
     prefix: au14-job-prefix-clfmachinegunner
   - type: TacticalMapIcon
@@ -93,3 +94,10 @@
        RMCSkillFireman: 2
        RMCSkillVehicles: 1
        RMCSkillPolice: 1
+       RMCSkillSpecialistWeapons: 1
+  # Captured-gear training: CLF can use any weapon specialist kit they seize.
+  - type: DemoSpecWhitelist
+  - type: GrenadeSpecWhitelist
+  - type: PyroWhitelist
+  - type: ScoutWhitelist
+  - type: SniperWhitelist

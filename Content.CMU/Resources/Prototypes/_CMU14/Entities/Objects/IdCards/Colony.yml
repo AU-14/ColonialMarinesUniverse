@@ -423,36 +423,36 @@
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyUSASFRecruiter
-  name: USASF recruiter ID card
+  name: USASF Recruiter ID card
   components:
   - type: JobTitleChanger
-    jobTitle: USASF recruiter
+    jobTitle: USASF Recruiter
   - type: PresetIdCard
     job: AU14JobCivilianUSASFRecruiter
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyUSASFRecruiterMarines
-  name: USCM recruiter ID card
+  name: USCM Recruiter ID card
   components:
   - type: JobTitleChanger
-    jobTitle: USMC recruiter
+    jobTitle: USMC Recruiter
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyUSASFRecruiterUSArmy
-  name: US Army recruiter ID card
+  name: US Army Recruiter ID card
   components:
   - type: JobTitleChanger
-    jobTitle: US Army recruiter
+    jobTitle: US Army Recruiter
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyUSASFRecruiterCCAF
-  name: CCAF recruiter ID card
+  name: CCAF Recruiter ID card
   components:
   - type: JobTitleChanger
-    jobTitle: CCAF recruiter
+    jobTitle: CCAF Recruiter
 
 # ├──[ LEOs ]────────────────────────────────────────────────────────┤
 - type: entity

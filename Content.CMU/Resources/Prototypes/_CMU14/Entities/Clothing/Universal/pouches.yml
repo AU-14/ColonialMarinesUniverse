@@ -65,7 +65,7 @@
     - id: CMRollerBedSpawnFolded
     - id: CMFireExtinguisherPortable
     - id: AU14NaloxoneAutoInjector
-    - id: CMBodyBagFolded 
+    - id: CMBodyBagFolded
     - id: CMStasisBagFolded
 
 - type: entity
@@ -78,7 +78,7 @@
     - id: RMCBinocularsCivPVE
     - id: RMCHandcuffs
     - id: RMCRadioHandheldColonyOff
-  
+
 - type: entity
   parent: RMCPouchPistol
   id: AU14PouchPistolAlt

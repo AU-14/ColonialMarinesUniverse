@@ -1,0 +1,118 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright (c) 2026 wray-git
+# SPDX-License-Identifier: AGPL-3.0-only
+# Building overhaul (z-level): construction recipes for the tiered structural beams used to build UP.
+# Place a beam on the level BELOW your construction to hold up the floor above it. Quality (reach) and cost go
+# wood < metal < plasteel. All live in the ZLevel spawnlist; isCM is required for the menu to enumerate them.
+
+# --- Wood (lowest quality, shortest span) ---
+- type: constructionGraph
+  id: AU14SupportBeamWoodGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: beam
+      completed:
+      - !type:SnapToGrid
+      steps:
+      # CM wood planks (RMCPlankWood1 sheets), NOT the vanilla SS14 WoodPlank stack - CM maps/vendors only
+      # hand out the RMC wood, so a WoodPlank cost was unbuildable in practice.
+      - material: RMCWood
+        amount: 8
+        doAfter: 3
+  - node: beam
+    entity: AU14NavalisSupportBeamBrown1Tile
+
+- type: construction
+  id: AU14SupportBeamWood
+  name: wooden support beam
+  description: A wooden support beam. Place it below an upper-level floor to hold it up - cheap, but only spans a short distance.
+  graph: AU14SupportBeamWoodGraph
+  startNode: start
+  targetNode: beam
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: ZLevel
+  # NOTE: this fork's ConstructionPrototype has no "icon" field - the menu derives the recipe icon from the
+  # target entity's sprite. The 1-tile beam entity (AU14NavalisSupportBeamBrown1Tile) already carries the
+  # half-scale sprite, so the menu icon renders as a single tile without an override here.
+  conditions:
+  - !type:TileNotBlocked
+  # Mappers can forbid vertical building on a map with ZBuildableMap { enabled: false } (e.g. the UNS Almayer).
+  - !type:ZBuildAllowed
+
+# --- Metal (mid quality) ---
+- type: constructionGraph
+  id: AU14SupportBeamMetalGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: beam
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 10
+        doAfter: 4
+  - node: beam
+    entity: AU14NavalisSupportBeamGreen1Tile
+
+- type: construction
+  id: AU14SupportBeamMetal
+  name: metal support beam
+  description: A steel support beam. Place it below an upper-level floor to hold it up - a solid, all-round span.
+  graph: AU14SupportBeamMetalGraph
+  startNode: start
+  targetNode: beam
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: ZLevel
+  # No icon override (see the wood beam note above): the menu icon comes from the target entity's sprite.
+  conditions:
+  - !type:TileNotBlocked
+  # Mappers can forbid vertical building on a map with ZBuildableMap { enabled: false } (e.g. the UNS Almayer).
+  - !type:ZBuildAllowed
+
+# --- Plasteel (highest quality, longest span) ---
+- type: constructionGraph
+  id: AU14SupportBeamPlasteelGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: beam
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMPlasteel
+        amount: 8
+        doAfter: 5
+  - node: beam
+    entity: AU14NavalisSupportBeamAqua1Tile
+
+- type: construction
+  id: AU14SupportBeamPlasteel
+  name: plasteel support beam
+  description: A plasteel support beam. Place it below an upper-level floor to hold it up - expensive, but spans the widest platform.
+  graph: AU14SupportBeamPlasteelGraph
+  startNode: start
+  targetNode: beam
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: ZLevel
+  # No icon override (see the wood beam note above): the menu icon comes from the target entity's sprite.
+  conditions:
+  - !type:TileNotBlocked
+  # Mappers can forbid vertical building on a map with ZBuildableMap { enabled: false } (e.g. the UNS Almayer).
+  - !type:ZBuildAllowed
