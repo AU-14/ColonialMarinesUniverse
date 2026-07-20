@@ -1,9 +1,5 @@
-using Content.Server.Administration.Logs;
-using Content.Server.Chemistry.TileReactions;
 using Content.Server.Fluids.Components;
 using Content.Server.Spreader;
-using Content.Shared.ActionBlocker;
-using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
@@ -30,21 +26,11 @@ namespace Content.Server.Fluids.EntitySystems;
 /// </summary>
 public sealed partial class PuddleSystem : SharedPuddleSystem
 {
-    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private IAdminLogManager _adminLogger = default!;
-    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedMapSystem _map = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private AudioSystem _audio = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
-    [Dependency] private ReactiveSystem _reactive = default!;
     [Dependency] private SharedColorFlashEffectSystem _color = default!;
-    [Dependency] private SharedPopupSystem _popups = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
-    [Dependency] private StepTriggerSystem _stepTrigger = default!;
-    [Dependency] private SpeedModifierContactsSystem _speedModContacts = default!;
-    [Dependency] private TileFrictionController _tile = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private TurfSystem _turf = default!;
 
@@ -274,155 +260,7 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
 
         // Take 15% of the puddle solution
         var splitSol = _solutionContainerSystem.SplitSolution(entity.Comp.Solution.Value, solution.Volume * 0.15f);
-        _reactive.DoEntityReaction(args.Slipped, splitSol, ReactionMethod.Touch);
-    }
-
-    /// <inheritdoc/>
-    public override void Update(float frameTime)
-    {
-        base.Update(frameTime);
-        foreach (var ent in _deletionQueue)
-        {
-            Del(ent);
-        }
-
-        _deletionQueue.Clear();
-
-        TickEvaporation();
-    }
-
-    protected override void OnSolutionUpdate(Entity<PuddleComponent> entity, ref SolutionContainerChangedEvent args)
-    {
-        if (args.SolutionId != entity.Comp.SolutionName)
-            return;
-
-        base.OnSolutionUpdate(entity, ref args);
-
-        if (args.Solution.Volume <= 0)
-        {
-            _deletionQueue.Add(entity);
-            return;
-        }
-
-        _deletionQueue.Remove(entity);
-        UpdateSlip((entity, entity.Comp), args.Solution);
-        UpdateSlow(entity, args.Solution);
-        UpdateEvaporation(entity, args.Solution);
-    }
-
-    private void UpdateSlip(Entity<PuddleComponent> entity, Solution solution)
-    {
-        if (!TryComp<StepTriggerComponent>(entity, out var comp))
-            return;
-
-        // Ensure we actually have the component
-        EnsureComp<TileFrictionModifierComponent>(entity);
-
-        // This is the base amount of reagent needed before a puddle can be considered slippery. Is defined based on
-        // the sprite threshold for a puddle larger than 5 pixels.
-        var smallPuddleThreshold = FixedPoint2.New(entity.Comp.OverflowVolume.Float() * LowThreshold);
-
-        // Stores how many units of slippery reagents a puddle has
-        var slipperyUnits = FixedPoint2.Zero;
-        // Stores how many units of super slippery reagents a puddle has
-        var superSlipperyUnits = FixedPoint2.Zero;
-
-        // These three values will be averaged later and all start at zero so the calculations work
-        // A cumulative weighted amount of minimum speed to slip values
-        var puddleFriction = FixedPoint2.Zero;
-        // A cumulative weighted amount of minimum speed to slip values
-        var slipStepTrigger = FixedPoint2.Zero;
-        // A cumulative weighted amount of launch multipliers from slippery reagents
-        var launchMult = FixedPoint2.Zero;
-        // A cumulative weighted amount of stun times from slippery reagents
-        var stunTimer = TimeSpan.Zero;
-
-        // Check if the puddle is big enough to slip in to avoid doing unnecessary logic
-        if (solution.Volume <= smallPuddleThreshold)
-        {
-            _stepTrigger.SetActive(entity, false, comp);
-            _tile.SetModifier(entity, 1f);
-            return;
-        }
-
-        if (!TryComp<SlipperyComponent>(entity, out var slipComp))
-            return;
-
-        foreach (var (reagent, quantity) in solution.Contents)
-        {
-            var reagentProto = _prototypeManager.IndexReagent<ReagentPrototype>(reagent.Prototype);
-
-            // Calculate the minimum speed needed to slip in the puddle. Average the overall slip thresholds for all reagents
-            var deltaSlipTrigger = reagentProto.SlipData?.RequiredSlipSpeed ?? entity.Comp.DefaultSlippery;
-            slipStepTrigger += quantity * deltaSlipTrigger;
-
-            // Aggregate Friction based on quantity
-            puddleFriction += reagentProto.Friction * quantity;
-
-            if (reagentProto.SlipData == null)
-                continue;
-
-            slipperyUnits += quantity;
-            // Aggregate launch speed based on quantity
-            launchMult += reagentProto.SlipData.LaunchForwardsMultiplier * quantity;
-            // Aggregate stun times based on quantity
-            stunTimer += reagentProto.SlipData.ParalyzeTime * (float)quantity;
-
-            if (reagentProto.SlipData.SuperSlippery)
-                superSlipperyUnits += quantity;
-        }
-
-        // Turn on the step trigger if it's slippery
-        _stepTrigger.SetActive(entity, slipperyUnits > smallPuddleThreshold, comp);
-
-        // This is based of the total volume and not just the slippery volume because there is a default
-        // slippery for all reagents even if they aren't technically slippery.
-        slipComp.SlipData.RequiredSlipSpeed = (float)(slipStepTrigger / solution.Volume);
-        _stepTrigger.SetRequiredTriggerSpeed(entity, slipComp.SlipData.RequiredSlipSpeed);
-
-        // Divide these both by only total amount of slippery reagents.
-        // A puddle with 10 units of lube vs a puddle with 10 of lube and 20 catchup should stun and launch forward the same amount.
-        if (slipperyUnits > 0)
-        {
-            slipComp.SlipData.LaunchForwardsMultiplier = (float)(launchMult / slipperyUnits);
-            slipComp.SlipData.ParalyzeTime = stunTimer / (float)slipperyUnits;
-        }
-
-        // Only make it super slippery if there is enough super slippery units for its own puddle
-        slipComp.SlipData.SuperSlippery = superSlipperyUnits >= smallPuddleThreshold;
-
-        // Lower tile friction based on how slippery it is, lets items slide across a puddle of lube
-        slipComp.SlipData.SlipFriction = (float)(puddleFriction / solution.Volume);
-        _tile.SetModifier(entity, slipComp.SlipData.SlipFriction);
-
-        Dirty(entity, slipComp);
-    }
-
-    private void UpdateSlow(EntityUid uid, Solution solution)
-    {
-        var maxViscosity = 0f;
-        foreach (var (reagent, _) in solution.Contents)
-        {
-            var reagentProto = _prototypeManager.IndexReagent<ReagentPrototype>(reagent.Prototype);
-            maxViscosity = Math.Max(maxViscosity, reagentProto.Viscosity);
-        }
-
-        if (maxViscosity > 0)
-        {
-            var comp = EnsureComp<SpeedModifierContactsComponent>(uid);
-            var speed = 1 - maxViscosity;
-            _speedModContacts.ChangeSpeedModifiers(uid, speed, comp);
-        }
-        else
-        {
-            RemComp<SpeedModifierContactsComponent>(uid);
-        }
-    }
-
-    private void OnAnchorChanged(Entity<PuddleComponent> entity, ref AnchorStateChangedEvent args)
-    {
-        if (!args.Anchored)
-            QueueDel(entity);
+        Reactive.DoEntityReaction(args.Slipped, splitSol, ReactionMethod.Touch);
     }
 
     /// <summary>
