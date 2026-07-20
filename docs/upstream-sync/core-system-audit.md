@@ -2294,3 +2294,16 @@ Date completed: 2026-07-20
 - Resource validation: `dotnet run --project Content.YAMLLinter/Content.YAMLLinter.csproj --configuration DebugOpt --no-build` completed with `No errors found` in 89.6 seconds.
 - Defects caught: integration compilation exposed invalid analyzer access in `DefaultAutomaticFireModeTest` and was corrected in `f012d2923c`; prototype loading exposed the dependency-gated `GravityAffected` marker and produced CS-0165 (`d88b459437`); lathe entity spawning exposed the incomplete `GoldenPlunger` tag contract and produced CS-0166 (`1c07b0bff9`). Each correction was committed before its focused or full rerun.
 - Disposition: The 0000–0999 checkpoint is closed. Continue with inventory wave 0006 at index 1000 and defer routine build/test execution until index 1999 unless a specific risk makes earlier validation necessary.
+
+## CS-0167 — Preserve physics during the chess-dimension smite
+
+- Upstream: [space-wizards/space-station-14#40583](https://github.com/space-wizards/space-station-14/pull/40583), `21a29212ab2c664ad016218bb2802ddace84e909`, 2025-09-29
+- Areas: Movement, Interactions, Physics, Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The chess-dimension smite now keeps the victim's `PhysicsComponent` when making them tabletop-draggable and moving them into the spawned board session. The smite no longer strips the controlled mob's physics state as a prerequisite for dragging.
+- RMC/CMU divergence: CMU retains the standard administrative smite and tabletop systems without an RMC override. RMC movement and physics systems may still observe the victim, so preserving the established body is safer than reconstructing fork-specific state after the transfer.
+- Decision and rationale: Remove only the premature component removal retained by the pinned target. `TabletopDraggableComponent` already supplies tabletop drag behavior; deleting the mob's physics component is unnecessary and invalidates systems that expect its body and fixtures to remain present.
+- Files changed: `Content.Server/Administration/Systems/AdminVerbSystem.Smites.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static flow review confirms the victim keeps physics through `SetMapCoordinates` and tabletop dragging, while the smite still enables godmode, adds tabletop drag state, creates a board session, and resets rotation. Compilation plus smiting, dragging, returning, and RMC movement-state cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: None.
