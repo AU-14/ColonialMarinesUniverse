@@ -1527,3 +1527,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/SurveillanceCamera/Systems/SurveillanceCameraSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static handler review confirms only accepted names within the existing limit are logged and camera/network behavior is untouched. Server compilation plus accepted, empty, and overlength rename cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Review the retained punctuation inside the quoted name and add equivalent audit coverage for camera network changes if administrators need full configuration history.
+
+## CS-0109 — Disable lock verbs rejected by attempt events
+
+- Upstream: [space-wizards/space-station-14#39605](https://github.com/space-wizards/space-station-14/pull/39605), `99ad34ed06985e665bb24fcc1fc9d92eece1fa1b`, 2025-08-13
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Lock and unlock alternative verbs now render disabled when `CanToggleLock` rejects the user or target state, instead of presenting an active control that can only fail when invoked.
+- RMC/CMU divergence: RMC pre-hijack lockers cancel `LockToggleAttemptEvent`; the quiet capability check now reflects that rule in the verb UI while preserving the fork's popup on an actual non-silent attempt.
+- Decision and rationale: Port the retained disabled predicate rather than hiding the verb, preserving discoverability while accurately representing authoritative interaction availability.
+- Files changed: `Content.Shared/Lock/LockSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static event tracing confirms verb construction raises the quiet attempt checks, RMC cancellation disables the verb without a popup, and enabled verbs still invoke existing lock/unlock paths. Shared compilation plus allowed, action-blocked, and pre-hijack-locker cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add predicted verb-state coverage and verify components with stateful attempt handlers do not mutate during quiet capability checks.
