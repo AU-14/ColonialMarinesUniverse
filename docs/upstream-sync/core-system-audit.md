@@ -2333,3 +2333,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Recipes/Construction/Graphs/structures/grille_clockwork.yml`, `Resources/Prototypes/Recipes/Construction/Graphs/structures/grille_diagonal.yml`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static graph review confirms all three start edges emit exactly one `Construction` log at `High` impact and cancelled/incomplete paths do not reach the completion action. Graph deserialization and completed/cancelled construction cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: None.
+
+## CS-0170 — Default status signals to toggle inputs
+
+- Upstream: [space-wizards/space-station-14#37690](https://github.com/space-wizards/space-station-14/pull/37690), `13294a951a665ffcf1a98da38182cbfa391f33f2`, 2025-10-01
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: A device-link source exposing the standard `Status` port now automatically proposes the standard `Toggle` sink when default links are created. Manual linking and every other source/sink combination are unchanged.
+- RMC/CMU divergence: RMC doors and lighting reuse the standard `Toggle` sink alongside upstream devices, so they gain the same default-pairing behavior without changing their device-network or access logic.
+- Decision and rationale: Add the single target-final default link to the shared port prototype. Status transmitters represent an on/off state, making `Toggle` the established compatible sink while retaining explicit user configuration.
+- Files changed: `Resources/Prototypes/DeviceLinking/source_ports.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype review confirms `Toggle` is a registered sink and no other `Status` defaults exist. Prototype loading plus standard and RMC device-link auto-pairing are queued for the index-1999 checkpoint.
+- Follow-up/debt: None.
