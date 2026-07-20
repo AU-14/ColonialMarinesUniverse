@@ -41,7 +41,7 @@ namespace Content.Shared.Ghost
 
         private void OnAttemptInteract(Entity<GhostComponent> ent, ref InteractionAttemptEvent args)
         {
-            if (!ent.Comp.CanGhostInteract)
+            if (!ent.Comp.CanGhostInteract && !IgnoresRMCGhostInteractionLimits(args.Target))
                 args.Cancelled = true;
         }
 
