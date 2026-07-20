@@ -3,6 +3,7 @@ using Content.Server.Chat.Systems;
 using Content.Server.Interaction;
 using Content.Server.Popups;
 using Content.Server.Power.EntitySystems;
+using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Chat;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
@@ -152,6 +153,10 @@ public sealed partial class RadioDeviceSystem : SharedRadioDeviceSystem
     {
         if (HasComp<RadioSpeakerComponent>(args.Source))
             return; // no feedback loops please.
+
+        // RMC14
+        if (component.IgnoreXenos && HasComp<XenoComponent>(args.Source))
+            return;
 
         var channel = ProtoMan.Index<RadioChannelPrototype>(component.BroadcastChannel)!;
         if (_recentlySent.Add((args.Message, args.Source, channel)))

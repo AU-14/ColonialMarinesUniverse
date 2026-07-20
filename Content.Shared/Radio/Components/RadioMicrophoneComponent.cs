@@ -37,4 +37,8 @@ public sealed partial class RadioMicrophoneComponent : Component
     /// </summary>
     [DataField]
     public bool UnobstructedRequired = false;
+
+    // RMC14
+    [DataField]
+    public bool IgnoreXenos;
 }
