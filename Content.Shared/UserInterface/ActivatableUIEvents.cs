@@ -1,19 +1,6 @@
 namespace Content.Shared.UserInterface;
 
 /// <summary>
-/// This is raised before opening a UI. Use <see cref="AfterActivatableUIOpenEvent"/>
-/// to react after a UI has actually opened.
-/// </summary>
-public sealed class ActivatableUIOpenAttemptEvent : CancellableEntityEventArgs
-{
-    public EntityUid User { get; }
-    public ActivatableUIOpenAttemptEvent(EntityUid who)
-    {
-        User = who;
-    }
-}
-
-/// <summary>
 /// Raised on the entity with an activatable UI when attempting to open it.
 /// This is raised BEFORE opening a UI! Do not listen and then open / do something use
 /// <see cref="AfterActivatableUIOpenEvent"/> for that.
