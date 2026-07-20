@@ -753,6 +753,9 @@ public abstract partial class SharedStorageSystem : EntitySystem
         // If the user's active hand is empty, try pick up the item.
         if (!_sharedHandsSystem.TryGetActiveItem(player.AsNullable(), out var activeItem))
         {
+            if (TryRMCStorageEjectHand(player.Owner, item.Owner))
+                return;
+
             _adminLog.Add(
                 LogType.Storage,
                 LogImpact.Low,

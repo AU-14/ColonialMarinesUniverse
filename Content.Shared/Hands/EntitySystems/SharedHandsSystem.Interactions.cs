@@ -51,8 +51,13 @@ public abstract partial class SharedHandsSystem : EntitySystem
 
     private void HandleMoveItemFromHand(RequestMoveHandItemEvent msg, EntitySessionEventArgs args)
     {
-        if (args.SenderSession.AttachedEntity != null)
-            TryMoveHeldEntityToActiveHand(args.SenderSession.AttachedEntity.Value, msg.HandName);
+        if (args.SenderSession.AttachedEntity is not { } user)
+            return;
+
+        if (TryRMCStorageEjectHand(user, msg.HandName))
+            return;
+
+        TryMoveHeldEntityToActiveHand(user, msg.HandName);
     }
 
     private void HandleUseInHand(RequestUseInHandEvent msg, EntitySessionEventArgs args)

@@ -98,6 +98,9 @@ public abstract partial class InventorySystem
         // unequip the item.
         if (itemUid != null)
         {
+            if (TryRMCStorageEjectHand(actor, itemUid.Value))
+                return;
+
             if (!TryUnequip(actor, ev.Slot, out var item, predicted: true, inventory: inventory, checkDoafter: true, triggerHandContact: true))
                 return;
 
