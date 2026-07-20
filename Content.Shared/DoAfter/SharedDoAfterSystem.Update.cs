@@ -120,6 +120,8 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
                 continue;
             }
 
+            UpdateRMCTargetEffect(doAfter, time);
+
             if (ShouldCancel(doAfter))
             {
                 InternalCancel(doAfter, comp);

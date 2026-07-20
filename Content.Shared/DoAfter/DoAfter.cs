@@ -100,6 +100,7 @@ public sealed partial class DoAfter
         Args = new(other.Args);
         StartTime = other.StartTime;
         CancelledTime = other.CancelledTime;
+        LastEffectSpawnTime = other.LastEffectSpawnTime;
         Completed = other.Completed;
         UserPosition = other.UserPosition;
         TargetDistance = other.TargetDistance;
