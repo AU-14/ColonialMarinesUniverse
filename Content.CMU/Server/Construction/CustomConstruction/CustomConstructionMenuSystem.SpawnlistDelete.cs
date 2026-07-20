@@ -38,6 +38,14 @@ public sealed partial class CustomConstructionMenuSystem
 
             ev.SpawnlistCounts.TryGetValue(info.Spawnlist, out var count);
             ev.SpawnlistCounts[info.Spawnlist] = count + 1;
+
+            // Per-category tally so the window can scope a delete down to one category.
+            var category = string.IsNullOrWhiteSpace(info.Category) ? DefaultCategory : info.Category;
+            if (!ev.CategoryCounts.TryGetValue(info.Spawnlist, out var byCategory))
+                ev.CategoryCounts[info.Spawnlist] = byCategory = new Dictionary<string, int>();
+
+            byCategory.TryGetValue(category, out var categoryCount);
+            byCategory[category] = categoryCount + 1;
         }
 
         RaiseNetworkEvent(ev, session);
@@ -53,12 +61,24 @@ public sealed partial class CustomConstructionMenuSystem
         if (spawnlist.Length == 0)
             return;
 
+        // Empty category = the whole spawnlist (original behaviour); otherwise scope to that one category
+        // and delete everything filed under it.
+        var category = (msg.Category ?? string.Empty).Trim();
+        var wholeSpawnlist = category.Length == 0;
+
         var removed = 0;
         var failed = 0;
         foreach (var (file, info) in EnumerateAllGeneratedRecipes())
         {
             if (!string.Equals(info.Spawnlist, spawnlist, StringComparison.Ordinal))
                 continue;
+
+            if (!wholeSpawnlist)
+            {
+                var entryCategory = string.IsNullOrWhiteSpace(info.Category) ? DefaultCategory : info.Category;
+                if (!string.Equals(entryCategory, category, StringComparison.Ordinal))
+                    continue;
+            }
 
             try
             {
@@ -67,16 +87,19 @@ public sealed partial class CustomConstructionMenuSystem
             }
             catch (Exception e)
             {
-                Log.Error($"Failed to delete generated recipe {file} while deleting spawnlist '{spawnlist}': {e}");
+                Log.Error($"Failed to delete generated recipe {file} while deleting spawnlist '{spawnlist}'"
+                          + (wholeSpawnlist ? "" : $" category '{category}'") + $": {e}");
                 failed++;
             }
         }
 
         _adminLogger.Add(LogType.Action, LogImpact.High,
-            $"{session.Name} DELETED spawnlist '{spawnlist}' ({removed} generated recipes removed, {failed} failed)");
+            $"{session.Name} DELETED {(wholeSpawnlist ? $"spawnlist '{spawnlist}'" : $"category '{category}' of spawnlist '{spawnlist}'")} ({removed} generated recipes removed, {failed} failed)");
 
         PopupTo(session,
-            Loc.GetString("construction-menu-spawnlist-deleted", ("spawnlist", spawnlist), ("count", removed)),
+            wholeSpawnlist
+                ? Loc.GetString("construction-menu-spawnlist-deleted", ("spawnlist", spawnlist), ("count", removed))
+                : Loc.GetString("construction-menu-spawnlist-category-deleted", ("spawnlist", spawnlist), ("category", category), ("count", removed)),
             PopupType.LargeCaution);
     }
 

@@ -75,6 +75,10 @@ public sealed class RequestBuildSelectionEvent : EntityEventArgs
 
     /// <summary>Also select tiles. Player mode is limited to construction-menu-supported tiles; admin/mapper modes can save any tile.</summary>
     public bool IncludeTiles;
+
+    /// <summary>Also scan the linked z-levels above/below the selection box. Off by default: capturing
+    /// other levels unasked pulls in structures the builder never meant to select.</summary>
+    public bool IncludeMultiZ;
 }
 
 /// <summary>Server -> client: the resolved, whitelisted entities to highlight.</summary>
@@ -100,6 +104,10 @@ public sealed class RequestSaveBuildEvent : EntityEventArgs
 
     /// <summary>Also save tiles. Player mode is limited to construction-menu-supported tiles; admin/mapper modes can save any tile.</summary>
     public bool IncludeTiles;
+
+    /// <summary>Also save from the linked z-levels above/below the selection box. Must match what the
+    /// selection preview used, or the save captures more than the highlight showed.</summary>
+    public bool IncludeMultiZ;
 }
 
 /// <summary>One entity in a build's placement preview: prototype + position relative to the anchor.</summary>

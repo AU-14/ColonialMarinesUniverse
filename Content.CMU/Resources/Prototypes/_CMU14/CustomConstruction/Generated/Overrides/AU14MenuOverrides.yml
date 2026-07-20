@@ -4,4 +4,5 @@
 - type: au14MenuOverrides
   id: AU14MenuOverrides
   hiddenRecipes:
+  - AU14BuildBarrelGreenRecipe
   - AU14Custom_CMPosterMissApril__AU14__Debug

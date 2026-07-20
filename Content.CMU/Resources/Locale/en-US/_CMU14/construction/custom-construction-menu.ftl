@@ -119,6 +119,12 @@ construction-spawnlist-delete-confirm = CONFIRM DELETE
 construction-spawnlist-delete-warning = This deletes EVERY generated recipe in "{ $spawnlist }". Confirm unlocks shortly…
 construction-spawnlist-delete-ready = Ready - confirming deletes "{ $spawnlist }" and all its recipes.
 construction-menu-spawnlist-deleted = Deleted spawnlist "{ $spawnlist }" ({ $count } recipes removed).
+construction-spawnlist-delete-pick-category = Scope (delete one category, or the whole spawnlist):
+construction-spawnlist-delete-category-all = Whole spawnlist (every category)
+construction-spawnlist-delete-category-option = { $category } ({ $count } recipes)
+construction-spawnlist-delete-category-warning = This deletes EVERY generated recipe in category "{ $category }" of "{ $spawnlist }". Confirm unlocks shortly…
+construction-spawnlist-delete-category-ready = Ready - confirming deletes category "{ $category }" of "{ $spawnlist }" and all its recipes.
+construction-menu-spawnlist-category-deleted = Deleted category "{ $category }" of spawnlist "{ $spawnlist }" ({ $count } recipes removed).
 
 ## DB save preview (human-in-the-loop confirm before any Save writes files/database rows)
 

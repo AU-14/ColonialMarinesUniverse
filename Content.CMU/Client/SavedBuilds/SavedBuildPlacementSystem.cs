@@ -106,7 +106,7 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
     /// <summary>Whether this placement acts as the instant/free flow (Admin or Mapper, with the matching flag).</summary>
     private bool UseAdminPlacement =>
         (Mode == BuildSaveMode.Admin && _admin.HasFlag(AdminFlags.Spawn)) ||
-        (Mode == BuildSaveMode.Mapper && _admin.HasFlag(AdminFlags.Mapping));
+        (Mode == BuildSaveMode.Mapper && (_admin.HasFlag(AdminFlags.Mapping) || _admin.HasFlag(AdminFlags.Spawn)));
 
     public void BeginPlacement(SavedBuildInfo info)
     {

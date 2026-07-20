@@ -102,6 +102,21 @@ public sealed class BuildSaveWindow : DefaultWindow
         };
         root.AddChild(includeTiles);
 
+        // Multi-z capture is opt-in: appending a range used to reach onto the levels above and below
+        // unconditionally, which swallowed whatever happened to sit over or under the selection.
+        var includeMultiZ = new CheckBox
+        {
+            Text = Loc.GetString("saved-build-window-include-multiz"),
+            Pressed = mode.IncludeMultiZ,
+            Modulate = Color.FromHex("#E5C07B"),
+        };
+        includeMultiZ.OnToggled += args =>
+        {
+            _mode.IncludeMultiZ = args.Pressed;
+            _mode.RefreshSelection();
+        };
+        root.AddChild(includeMultiZ);
+
         // Name + save.
         _nameEdit = new LineEdit { PlaceHolder = Loc.GetString("saved-build-window-name"), HorizontalExpand = true };
         root.AddChild(_nameEdit);
