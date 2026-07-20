@@ -929,3 +929,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Materials/ProduceMaterialExtractorSystem.cs`, `Resources/Locale/en-US/materials/material-extractor.ftl`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the pinned target retains the zero-yield early return before storage mutation, sound, deletion, and handled state. Server compilation, localization validation, and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add an interaction regression proving sub-unit produce survives while valid produce is consumed; separately decide whether fractional extraction should accumulate instead of truncate.
+
+## CS-0063 — Correct powered-machine admin logs
+
+- Upstream: [space-wizards/space-station-14#38961](https://github.com/space-wizards/space-station-14/pull/38961), `8b3232f305024876427c1c73ccbc4d14c8bdda07`, 2025-07-12
+- Areas: Interactions, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Administrative action logs for toggling a power-charge machine no longer insert a literal dollar sign before the formatted target entity. The structured entity field remains intact for investigation and filtering.
+- RMC/CMU divergence: RMC uses the shared power-charge system for inherited machines and adds no alternate formatter at this log site. Machine state, power load, UI refresh, and log impact levels are unchanged.
+- Decision and rationale: Port the target-final interpolation correction and adjacent pattern-spacing cleanup exactly; no broader logging or machine-power refactor is needed.
+- Files changed: `Content.Server/Power/EntitySystems/PowerChargeSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the pinned target retains the corrected structured log template. Server compilation and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint; this presentation-only fix adds no runtime test obligation.
+- Follow-up/debt: Consider a structured admin-log formatting test if the logging harness gains capture support, and scan other templates for accidental interpolation-prefix characters separately.
