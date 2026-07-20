@@ -3178,3 +3178,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Objects/Specific/chemistry.yml`, `Resources/Prototypes/_RMC14/Entities/Objects/Medical/pills.yml`, `docs/upstream-sync/inventory-wave-0012.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static inheritance review confirms standard pill families derive from `Pill`, RMC pill families derive from `CMPill`, and only the source solution's reaction permission changes. YAML/prototype validation plus mixed-reagent storage, pill creation, ChemMaster output, ingestion, metabolism, grinding, standard medicine, and RMC medicine cases are queued for the index-2999 checkpoint.
 - Follow-up/debt: Audit any independent pill-like prototypes that duplicate both bases before assuming they inherit this contract; stomach solution policy remains a separate medical/chemistry migration.
+
+## CS-0234 — Refresh containment-generator point lights with connection state
+
+- Upstream: [space-wizards/space-station-14#42289](https://github.com/space-wizards/space-station-14/pull/42289), `d857acfc078098dd09b0f28d47c13444161c530e`, 2026-01-14
+- Areas: Interactions, Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `ChangeOnLightVisualizer` now also calls `UpdateConnectionLights`. Whenever a containment generator's connected-state appearance changes, its actual point light is enabled or disabled from the current connection count instead of remaining stale.
+- RMC/CMU divergence: This is the standard singularity containment system and has no RMC replacement in the affected path. The added refresh is presentation/state synchronization only; field generation, ray casts, power thresholds, breach prevention, connection topology, and fork physics remain unchanged.
+- Decision and rationale: Port the target-final hook exactly. `ChangeOnLightVisualizer` is already invoked for both endpoints and removal paths, making it the complete state-transition point; the previous direct refresh covered only selected source-generator connection flows.
+- Files changed: `Content.Server/Singularity/EntitySystems/ContainmentFieldGeneratorSystem.cs`, `docs/upstream-sync/inventory-wave-0012.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static call-flow review confirms refreshes cover both newly connected generators and all callers that change the on-light appearance, while `UpdateConnectionLights` safely no-ops without a light. Server compilation plus first/multiple connection, remote endpoint, disconnect, grid change, power change, and missing-light cases are queued for the index-2999 checkpoint.
+- Follow-up/debt: None; the existing explicit source refresh may become redundant but is harmless and remains target-compatible.

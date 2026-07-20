@@ -180,7 +180,7 @@ behavior to port.
 2361 | 6bc617ca07b896baff8627098a7f4bfa38f0b3b9 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2362 | acdeac6172b3c436f0609eee83573703d29821bf | Make lathes refund materials when recipe gets cancelled (#42416) | PortCandidate | Interactions | The focused server lathe refund path retains materials when current or queued recipes are cancelled, pending RMC accounting validation.
 2363 | dc47295d24fa2d39053861b55ef5138d696348c1 | Automatic changelog update | Irrelevant | — | Generated changelog only.
-2364 | d857acfc078098dd09b0f28d47c13444161c530e | Fixed Containment Generators not updating pointlight correctly (#42289) | PortCandidate | Interactions, Physics | One visualizer hook refreshes containment-generator point lights whenever connection state changes.
+2364 | d857acfc078098dd09b0f28d47c13444161c530e | Fixed Containment Generators not updating pointlight correctly (#42289) | Ported (CS-0234) | Interactions, Physics | Every containment-generator connection-state visual update now refreshes its point light, including the remote generator and disconnection paths.
 2365 | 48cbd020a870f0fc90e2cfa3333fa5926c6fe58a | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2366 | 14b867dbe1f18db1f5f9bce63bc1bb8b9b230fd3 | allow shuttle to Scan for Objects while FTL is on cooldown (#42283) | PortCandidate | Movement, Interactions, Physics | A focused shuttle UI gate permits object scans during FTL cooldown without enabling FTL itself.
 2367 | f702dc8f2d8e24feb30199d49d0c0b5cf7133043 | Atmos GasSpecificHeats in shared (#42136) | Deferred | Physics | Moving gas-specific heat state into shared Atmos systems changes eleven server, client, shared, benchmark, CVar, and test files.
