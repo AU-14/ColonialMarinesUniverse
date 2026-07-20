@@ -403,7 +403,7 @@ public abstract partial class SharedHumanoidAppearanceSystem : EntitySystem
             .ToList();
 
         // Add markings that don't need forced coloring first.
-        var markingFColored = new Dictionary<Marking, MarkingPrototype>();
+        var markingsWithForcedColoring = new List<(Marking Marking, MarkingPrototype Prototype)>();
         foreach (var marking in profileMarkings)
         {
             if (_markingManager.TryGetMarking(marking, out var prototype))
@@ -414,7 +414,7 @@ public abstract partial class SharedHumanoidAppearanceSystem : EntitySystem
                 }
                 else
                 {
-                    markingFColored.Add(marking, prototype);
+                    markingsWithForcedColoring.Add((marking, prototype));
                 }
             }
         }
@@ -422,7 +422,7 @@ public abstract partial class SharedHumanoidAppearanceSystem : EntitySystem
         humanoid.MarkingSet.EnsureSpecies(profile.Species, profile.Appearance.SkinColor, _markingManager, _proto);
 
         // Finally adding marking with forced colors
-        foreach (var (marking, prototype) in markingFColored)
+        foreach (var (marking, prototype) in markingsWithForcedColoring)
         {
             var markingColors = MarkingColoring.GetMarkingLayerColors(
                 prototype,
