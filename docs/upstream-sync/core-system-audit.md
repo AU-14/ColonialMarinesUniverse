@@ -2555,3 +2555,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/DeviceNetwork/Systems/NetworkConfiguratorSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static branch review covers networking-only, linking-only, mixed-capability, device-list, and active-link-mode targets; only mixed targets outside an active linking session choose differently. Server compilation and multitool interaction cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1069 as `Ported (CS-0186)` when wave 0006 is committed.
+
+## CS-0187 — Prioritize reaction mixing over utensil use
+
+- Upstream: [space-wizards/space-station-14#40704](https://github.com/space-wizards/space-station-14/pull/40704), `326eaad18dc784e66970d0cb04bcd360324f2e9f`, 2025-10-05
+- Areas: Chemistry, Interactions
+- Status: Adapted
+- Risk: Low
+- Behavior/API delta: A reaction mixer used on a mixable solution now runs before the current utensil handler and marks the interaction handled after starting its mixing do-after. Spoon-like mixers no longer fall through into feeding or drinking behavior on the same click.
+- RMC/CMU divergence: CMU retains the older `UtensilSystem` interaction boundary instead of the target's later `IngestionSystem`, so event ordering is adapted to that local consumer. RMC foods and utensils continue using their existing feeding rules whenever the reaction mixer declines the target.
+- Decision and rationale: Port all three parts of the retained fix together: ordering alone would still allow fallthrough, and setting handled without first verifying a mixable target would suppress legitimate utensil use. The discarded first probe result was never consumed.
+- Files changed: `Content.Server/Chemistry/EntitySystems/ReactionMixerSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static event-flow review confirms failed reach/mix checks leave the event untouched, a valid mix starts the existing do-after and claims the click, and `UtensilSystem` observes `Handled`. Server compilation plus mixable, non-mixable, cancelled, and RMC food targets are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1110 as `Ported (CS-0187)` when wave 0006 is committed; revisit the ordering type only when the later shared ingestion migration is integrated.
