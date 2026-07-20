@@ -322,5 +322,10 @@ public enum PopupType : byte
     /// but is not life-threatening.
     /// </summary>
     Large,
-    LargeCaution
+    LargeCaution,
+
+    /// <summary>
+    /// RMC xeno-styled medium popup.
+    /// </summary>
+    MediumXeno
 }
