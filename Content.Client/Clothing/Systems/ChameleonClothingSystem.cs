@@ -1,5 +1,4 @@
-using System.Linq;
-using Content.Client.PDA;
+﻿using Content.Client.PDA;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Clothing.EntitySystems;
 using Robust.Client.GameObjects;

@@ -21,9 +21,8 @@ public sealed partial class MultipartMachineSystem : SharedMultipartMachineSyste
     private readonly Color _partiallyTransparent = new Color(255, 255, 255, 180);
 
     [Dependency] private SpriteSystem _sprite = default!;
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
-    [Dependency] private ISerializationManager _serialization= default!;
+    [Dependency] private ISerializationManager _serialization = default!;
 
     public override void Initialize()
     {

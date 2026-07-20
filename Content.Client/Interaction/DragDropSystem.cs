@@ -37,7 +37,6 @@ public sealed partial class DragDropSystem : SharedDragDropSystem
     [Dependency] private IInputManager _inputManager = default!;
     [Dependency] private IEyeManager _eyeManager = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IConfigurationManager _cfgMan = default!;
     [Dependency] private InteractionOutlineSystem _outline = default!;
     [Dependency] private SharedInteractionSystem _interactionSystem = default!;
@@ -48,6 +47,7 @@ public sealed partial class DragDropSystem : SharedDragDropSystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
     [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private EntityQuery<SpriteComponent> _spriteQuery = default!;
 
     // how often to recheck possible targets (prevents calling expensive
     // check logic each update)

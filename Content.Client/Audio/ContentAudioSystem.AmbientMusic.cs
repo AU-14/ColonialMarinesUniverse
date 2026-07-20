@@ -23,11 +23,10 @@ public sealed partial class ContentAudioSystem
     [Dependency] private IConfigurationManager _configManager = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IPlayerManager _player = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IStateManager _state = default!;
-    [Dependency] private RulesSystem _rules = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedEntityConditionsSystem _conditions = default!;
 
     private readonly TimeSpan _minAmbienceTime = TimeSpan.FromSeconds(40);
     private readonly TimeSpan _maxAmbienceTime = TimeSpan.FromSeconds(100);

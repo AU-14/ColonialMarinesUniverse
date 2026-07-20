@@ -13,7 +13,6 @@ namespace Content.Client.SSDIndicator;
 /// </summary>
 public sealed partial class SSDIndicatorSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private MobStateSystem _mobState = default!;
 

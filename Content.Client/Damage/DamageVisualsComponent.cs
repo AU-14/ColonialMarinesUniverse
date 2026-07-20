@@ -120,16 +120,18 @@ public sealed partial class DamageVisualsComponent : Component
     [DataField("damageOverlay")] public  DamageVisualizerSprite? DamageOverlay;
 
     /// <summary>
-    /// Only applies if overlay is off - requires a zeroth sprite to be defined to work properly
+    /// Applies a displacement map to the damage visuals.
+    /// Is set via <see cref="DamageableComponent.Displacement"/>.
     /// </summary>
-    [DataField] public bool HideIfZero = true; //RMC14
+    [DataField]
+    public DisplacementData? Displacement;
 
     public readonly List<Enum> TargetLayerMapKeys = new();
     public bool Disabled = false;
     public bool Valid = true;
     public FixedPoint2 LastDamageThreshold = FixedPoint2.Zero;
-    public readonly Dictionary<Enum, bool> DisabledLayers = new();
-    public readonly Dictionary<Enum, string> LayerMapKeyStates = new();
+    public readonly Dictionary<object, bool> DisabledLayers = new();
+    public readonly Dictionary<object, string> LayerMapKeyStates = new();
     public readonly Dictionary<string, FixedPoint2> LastThresholdPerGroup = new();
     public string TopMostLayerKey = default!;
 }

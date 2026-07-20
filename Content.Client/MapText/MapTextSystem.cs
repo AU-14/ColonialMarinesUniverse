@@ -16,7 +16,6 @@ public sealed partial class MapTextSystem : SharedMapTextSystem
     [Dependency] private IUserInterfaceManager _uiManager = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IResourceCache _resourceCache = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IOverlayManager _overlayManager = default!;
 
     private MapTextOverlay _overlay = default!;

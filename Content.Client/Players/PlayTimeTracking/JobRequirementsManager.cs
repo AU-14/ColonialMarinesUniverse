@@ -1,14 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using Content.Client._RMC14.PlayTimeTracking;
 using Content.Shared.CCVar;
-using Content.Shared.Localizations;
 using Content.Shared.Players;
 using Content.Shared.Players.JobWhitelist;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
-using Content.Shared.Roles.Jobs;
 using Robust.Client;
 using Robust.Client.Player;
 using Robust.Shared.Configuration;
@@ -27,7 +23,6 @@ public sealed partial class JobRequirementsManager : ISharedPlaytimeManager
     [Dependency] private IEntityManager _entManager = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
-    [Dependency] private RMCPlayTimeManager _rmcPlayTime = default!;
 
     private readonly Dictionary<string, TimeSpan> _roles = new();
     private readonly List<ProtoId<JobPrototype>> _jobBans = new();
@@ -48,7 +43,6 @@ public sealed partial class JobRequirementsManager : ISharedPlaytimeManager
         _net.RegisterNetMessage<MsgJobWhitelist>(RxJobWhitelist);
 
         _client.RunLevelChanged += ClientOnRunLevelChanged;
-        _rmcPlayTime.Updated += () => Updated?.Invoke();
     }
 
     private void ClientOnRunLevelChanged(object? sender, RunLevelChangedEventArgs e)
@@ -99,27 +93,17 @@ public sealed partial class JobRequirementsManager : ISharedPlaytimeManager
         Updated?.Invoke();
     }
 
-    // RMC14-Whitelist-Tweak-Start
-    private bool IsWhitelistedInternal(string jobId)
-    {
-        if (_jobWhitelists.Contains(jobId))
-            return true;
-
-        if (!_prototypes.TryIndex<JobPrototype>(jobId, out var jobPrototype))
-        {
-            _sawmill.Error($"Failed to index job prototype {jobId} during whitelist check. Assuming not whitelisted");
-            return false;
-        }
-
-        if (jobPrototype.WhitelistParent != null)
-        {
-            return IsWhitelistedInternal(jobPrototype.WhitelistParent.Value.Id);
-        }
-
-        return false;
-    }
-    // RMC14-Whitelist-Tweak-End
-    public bool IsAllowed(JobPrototype job, HumanoidCharacterProfile? profile, [NotNullWhen(false)] out FormattedMessage? reason)
+    /// <summary>
+    /// Check a list of job- and antag prototypes against the current player, for requirements and bans.
+    /// </summary>
+    /// <returns>
+    /// False if any of the prototypes are banned or have unmet requirements.
+    /// </returns>>
+    public bool IsAllowed(
+        List<ProtoId<JobPrototype>>? jobs,
+        List<ProtoId<AntagPrototype>>? antags,
+        HumanoidCharacterProfile? profile,
+        [NotNullWhen(false)] out FormattedMessage? reason)
     {
         reason = null;
 
@@ -179,12 +163,23 @@ public sealed partial class JobRequirementsManager : ISharedPlaytimeManager
         HumanoidCharacterProfile? profile,
         [NotNullWhen(false)] out FormattedMessage? reason)
     {
-        reason = null;
-        if (_rmcPlayTime.IsExcluded(job.ID))
-            return true;
+        // Check the player's bans
+        if (_antagBans.Contains(antag.ID))
+        {
+            reason = FormattedMessage.FromUnformatted(Loc.GetString("role-ban"));
+            return false;
+        }
 
-        var reqs = _entManager.System<SharedRoleSystem>().GetJobRequirement(job);
-        return CheckRoleRequirements(reqs, profile, out reason);
+        // Check whitelist requirements
+        if (!CheckWhitelist(antag, out reason))
+            return false;
+
+        // Check other role requirements
+        var reqs = _entManager.System<SharedRoleSystem>().GetRoleRequirements(antag);
+        if (!CheckRoleRequirements(reqs, profile, out reason))
+            return false;
+
+        return true;
     }
 
     // This must be private so code paths can't accidentally skip requirement overrides. Call this through IsAllowed()
@@ -214,13 +209,8 @@ public sealed partial class JobRequirementsManager : ISharedPlaytimeManager
         if (!_cfg.GetCVar(CCVars.GameRoleWhitelist))
             return true;
 
-        // RMC14-Whitelist-Tweak-Start
-        if (job.Whitelisted)
+        if (job.Whitelisted && !_jobWhitelists.Contains(job.ID))
         {
-            if (IsWhitelistedInternal(job.ID))
-                return true;
-        // RMC14-Whitelist-Tweak-Start
-
             reason = FormattedMessage.FromUnformatted(Loc.GetString("role-not-whitelisted"));
             return false;
         }
@@ -242,78 +232,15 @@ public sealed partial class JobRequirementsManager : ISharedPlaytimeManager
         return _roles.TryGetValue("Overall", out var overallPlaytime) ? overallPlaytime : TimeSpan.Zero;
     }
 
-    /// <summary>
-    /// Fetches an IEnumerable of the playtimes this client has, each section being a string and a Timespan.
-    /// The string is either the PlaytimeTracker's name or a list of the jobs that use that tracker.
-    /// </summary>
-    /// <returns>An IEnumerable of the playtimes this client has.</returns>
     public IEnumerable<KeyValuePair<string, TimeSpan>> FetchPlaytimeByRoles()
     {
-        var jobSystem = _entManager.System<SharedJobSystem>();
-
-        var validTrackers = new HashSet<ProtoId<PlayTimeTrackerPrototype>>(); // For trackers that don't have a Job, like Overall
         var jobsToMap = _prototypes.EnumeratePrototypes<JobPrototype>();
 
         foreach (var job in jobsToMap)
         {
-            if (job.PlayTimeTracker is not { } trackerProtoId)
-                continue;
-
-            validTrackers.Add(trackerProtoId);
-        }
-
-        foreach (var trackerProtoId in validTrackers)
-        {
-            var nameList = new List<string>();
-            var trackerProto = _prototypes.Index(trackerProtoId);
-
-            if (!trackerProto.ShowInStatsMenu)
-                continue;
-
-            var jobs = jobSystem.GetJobPrototypes(trackerProtoId);
-
-            if (trackerProto.Name is not { } trackerName)
-            {
-                foreach (var jobProtoId in jobs)
-                {
-                    var jobProto = _prototypes.Index(jobProtoId);
-                    nameList.Add(jobProto.LocalizedName);
-                }
-            }
-            else
-            {
-                nameList.Add(Loc.GetString(trackerName));
-            }
-
-            if (_roles.TryGetValue(trackerProtoId, out var playtime))
-            {
-                var names = ContentLocalizationManager.FormatList(nameList);
-                yield return new KeyValuePair<string, TimeSpan>(names, playtime);
-            }
-        }
-    }
-
-    public IEnumerable<KeyValuePair<string, TimeSpan>> FetchPlaytimeJobIdByRoles()
-    {
-        // RMC14
-        var jobsToMap = _prototypes.EnumeratePrototypes<JobPrototype>().ToArray();
-        var trackers = new HashSet<ProtoId<PlayTimeTrackerPrototype>>();
-        var duplicateTrackers = new HashSet<ProtoId<PlayTimeTrackerPrototype>>();
-
-        foreach (var job in jobsToMap)
-        {
-            if (!trackers.Add(job.PlayTimeTracker))
-                duplicateTrackers.Add(job.PlayTimeTracker);
-        }
-
-        foreach (var job in jobsToMap)
-        {
-            if (duplicateTrackers.Contains(job.PlayTimeTracker) && !job.BasePlaytimeTracker)
-                continue;
-
             if (_roles.TryGetValue(job.PlayTimeTracker, out var locJobName))
             {
-                yield return new KeyValuePair<string, TimeSpan>(job.ID, locJobName);
+                yield return new KeyValuePair<string, TimeSpan>(job.Name, locJobName);
             }
         }
     }

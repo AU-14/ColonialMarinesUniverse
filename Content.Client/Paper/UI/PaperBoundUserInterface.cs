@@ -23,15 +23,10 @@ public sealed class PaperBoundUserInterface : BoundUserInterface
 
         _window = this.CreateWindow<PaperWindow>();
         _window.OnSaved += InputOnTextEntered;
-        _window.OnSignatureRequested += OnSignatureRequested;
 
         if (EntMan.TryGetComponent<PaperComponent>(Owner, out var paper))
         {
             _window.MaxInputLength = paper.ContentSize;
-            _window.BackgroundColor = paper.Color;
-            _window.BorderColor = paper.Color;
-            _window.BorderThickness = new Thickness(paper.Thickness);
-            _window.DefaultTextColor = paper.TextColor;
         }
         if (EntMan.TryGetComponent<PaperVisualsComponent>(Owner, out var visuals))
         {
@@ -54,10 +49,5 @@ public sealed class PaperBoundUserInterface : BoundUserInterface
             _window.Input.TextRope = Rope.Leaf.Empty;
             _window.Input.CursorPosition = new TextEdit.CursorPos(0, TextEdit.LineBreakBias.Top);
         }
-    }
-
-    private void OnSignatureRequested(int signatureIndex)
-    {
-        SendMessage(new PaperSignatureRequestMessage(signatureIndex));
     }
 }

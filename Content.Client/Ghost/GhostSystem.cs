@@ -1,13 +1,10 @@
-using Content.Client._RMC14.NightVision;
 using Content.Client.Movement.Systems;
-using Content.Shared._RMC14.Mentor.ImaginaryFriend;
 using Content.Shared.Actions;
 using Content.Shared.Ghost;
 using Content.Shared.NightVision;
 using Content.Shared.Overlays;
 using Robust.Client.Console;
 using Robust.Client.GameObjects;
-using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Player;
 
@@ -18,11 +15,9 @@ namespace Content.Client.Ghost
         [Dependency] private IClientConsoleHost _console = default!;
         [Dependency] private IPlayerManager _playerManager = default!;
         [Dependency] private SharedActionsSystem _actions = default!;
-        [Dependency] private PointLightSystem _pointLightSystem = default!;
         [Dependency] private ContentEyeSystem _contentEye = default!;
         [Dependency] private SpriteSystem _sprite = default!;
-        //RMC14
-        [Dependency] private IOverlayManager _overlay = default!;
+        [Dependency] private SharedNightVisionSystem _nv = default!;
 
         public int AvailableGhostRoleCount { get; private set; }
 
@@ -43,7 +38,7 @@ namespace Content.Client.Ghost
                 var query = AllEntityQuery<GhostComponent, SpriteComponent>();
                 while (query.MoveNext(out var uid, out _, out var sprite))
                 {
-                    _sprite.SetVisible((uid, sprite), value || uid == _playerManager.LocalEntity || HasComp<ImaginaryFriendComponent>(uid)); //RMC14
+                    _sprite.SetVisible((uid, sprite), value || uid == _playerManager.LocalEntity);
                 }
             }
         }
@@ -83,7 +78,6 @@ namespace Content.Client.Ghost
                 _sprite.SetVisible((uid, sprite), GhostVisibility || uid == _playerManager.LocalEntity);
         }
 
-        //RMC14
         private void OnToggleLighting(EntityUid uid, EyeComponent component, ToggleLightingActionEvent args)
         {
             if (args.Handled)
@@ -95,30 +89,21 @@ namespace Content.Client.Ghost
                 Popup.PopupEntity(Loc.GetString("ghost-gui-toggle-lighting-manager-popup-normal"), args.Performer);
                 _contentEye.RequestEye(component.DrawFov, true);
             }
-            else if ((!light?.Enabled ?? false) && !_overlay.HasOverlay<HalfNightVisionBrightnessOverlay>()) // skip this option if we have no PointLightComponent
+            else if (TryComp<NightVisionComponent>(uid, out var nv) && !nv.Enabled)
             {
                 Popup.PopupEntity(Loc.GetString("ghost-gui-toggle-lighting-manager-popup-half-bright"), args.Performer);
                 _nv.SetEnabled((uid, nv), true);
-            }
-            else if ((light?.Enabled ?? false) && !_overlay.HasOverlay<HalfNightVisionBrightnessOverlay>())
-            {
-                //RMC14 half bright mode
-                Popup.PopupEntity(Loc.GetString("rmc-ghost-gui-toggle-lighting-manager-popup-halfbright"), args.Performer);
-                _pointLightSystem.SetEnabled(uid, false, light);
-                _overlay.AddOverlay(new HalfNightVisionBrightnessOverlay());
             }
             else
             {
                 // fullbright mode
                 Popup.PopupEntity(Loc.GetString("ghost-gui-toggle-lighting-manager-popup-fullbright"), args.Performer);
                 _contentEye.RequestEye(component.DrawFov, false);
-                _pointLightSystem.SetEnabled(uid, false, light);
-                _overlay.RemoveOverlay<HalfNightVisionBrightnessOverlay>();
+                _nv.SetEnabled((uid, nv), false);
             }
 
             args.Handled = true;
         }
-        //RMC14
 
         private void OnToggleFoV(EntityUid uid, EyeComponent component, ToggleFoVActionEvent args)
         {
@@ -153,8 +138,6 @@ namespace Content.Client.Ghost
             if (uid != _playerManager.LocalEntity)
                 return;
 
-            _overlay.RemoveOverlay<HalfNightVisionBrightnessOverlay>(); //RMC14
-
             GhostVisibility = false;
             PlayerRemoved?.Invoke(component);
         }
@@ -180,7 +163,6 @@ namespace Content.Client.Ghost
         {
             GhostVisibility = false;
             PlayerDetached?.Invoke();
-            _overlay.RemoveOverlay<HalfNightVisionBrightnessOverlay>(); //RMC14
         }
 
         private void OnGhostWarpsResponse(GhostWarpsResponseEvent msg)

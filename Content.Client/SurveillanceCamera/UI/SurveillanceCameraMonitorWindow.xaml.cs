@@ -22,6 +22,15 @@ public sealed partial class SurveillanceCameraMonitorWindow : DefaultWindow
 
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IResourceCache _resourceCache = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IEntityNetworkManager _entityNetManager = default!;
+
+    /// <summary>
+    /// Triggered when a camera is selected.
+    /// First parameter contains the camera's address.
+    /// Second optional parameter contains a subnet - if possible, the monitor will switch to this subnet.
+    /// </summary>
+    public event Action<string, string?>? CameraSelected;
 
     public event Action<string>? SubnetOpened;
     public event Action? CameraRefresh;

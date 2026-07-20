@@ -8,7 +8,7 @@ public sealed class AdminLogLabel : RichTextLabel
 {
     public AdminLogLabel(ref SharedAdminLog log, HSeparator separator)
     {
-        Entry = log;
+        Log = log;
         Separator = separator;
 
         var localTime = log.Date.ToLocalTime();
@@ -17,7 +17,7 @@ public sealed class AdminLogLabel : RichTextLabel
         OnVisibilityChanged += VisibilityChanged;
     }
 
-    public SharedAdminLog Entry { get; }
+    public new SharedAdminLog Log { get; }
 
     public HSeparator Separator { get; }
 

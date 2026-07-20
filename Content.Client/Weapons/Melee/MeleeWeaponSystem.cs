@@ -1,9 +1,5 @@
 using System.Linq;
-using Content.Client._RMC14.Movement;
-using Content.Client._RMC14.Weapons.Melee;
 using Content.Client.Gameplay;
-using Content.Shared._RMC14.Input;
-using Content.Shared._RMC14.Tackle;
 using Content.Shared.CCVar;
 using Content.Shared.CombatMode;
 using Content.Shared.Effects;
@@ -39,13 +35,7 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
 
-    private EntityQuery<TransformComponent> _xformQuery;
-
     private const string MeleeLungeKey = "melee-lunge";
-
-    // RMC14
-    [Dependency] private RMCLagCompensationSystem _rmcLagCompensation = default!;
-    [Dependency] private RMCMeleeWeaponSystem _rmcMeleeWeapon = default!;
 
     public override void Initialize()
     {
@@ -86,9 +76,8 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
 
         var useDown = _inputSystem.CmdStates.GetState(EngineKeyFunctions.Use);
         var altDown = _inputSystem.CmdStates.GetState(EngineKeyFunctions.UseSecondary);
-        var wideDown = _inputSystem.CmdStates.GetState(CMKeyFunctions.CMXenoWideSwing);
 
-        if (weapon.AutoAttack || useDown != BoundKeyState.Down && altDown != BoundKeyState.Down && wideDown != BoundKeyState.Down || _cfg.GetCVar(CCVars.ControlHoldToAttackMelee))
+        if (weapon.AutoAttack || useDown != BoundKeyState.Down && altDown != BoundKeyState.Down || _cfg.GetCVar(CCVars.ControlHoldToAttackMelee))
         {
             if (weapon.Attacking)
             {
@@ -112,7 +101,7 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
 
         EntityCoordinates coordinates;
 
-        if (_map.TryFindGridAt(mousePos, out var gridUid, out _))
+        if (Maps.TryFindGridAt(mousePos, out var gridUid, out _))
         {
             coordinates = TransformSystem.ToCoordinates(gridUid, mousePos);
         }
@@ -138,7 +127,7 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
                     break;
 
                 case AltFireAttackType.Disarm:
-                    ClientDisarm(entity, mousePos, coordinates, weapon);
+                    ClientDisarm(entity, mousePos, coordinates);
                     break;
             }
 
@@ -151,7 +140,7 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
             // If it's an unarmed attack then do a disarm
             if (weapon.AltDisarm && weaponUid == entity)
             {
-                ClientDisarm(entity, mousePos, coordinates, weapon);
+                ClientDisarm(entity, mousePos, coordinates);
                 return;
             }
 
@@ -162,9 +151,6 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
         // Light attack
         if (useDown == BoundKeyState.Down)
             ClientLightAttack(entity, mousePos, coordinates, weaponUid, weapon);
-        // Xeno WidePrimary
-        if (wideDown == BoundKeyState.Down)
-            ClientHeavyAttack(entity, coordinates, weaponUid, weapon);
     }
 
     protected override bool InRange(EntityUid user, EntityUid target, float range, ICommonSession? session)
@@ -186,7 +172,7 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
     /// Raises a heavy attack event with the relevant attacked entities.
     /// This is to avoid lag effecting the client's perspective too much.
     /// </summary>
-    public void ClientHeavyAttack(EntityUid user, EntityCoordinates coordinates, EntityUid meleeUid, MeleeWeaponComponent component)
+    private void ClientHeavyAttack(EntityUid user, EntityCoordinates coordinates, EntityUid meleeUid, MeleeWeaponComponent component)
     {
         // Only run on first prediction to avoid the potential raycast entities changing.
         if (!TryComp(user, out TransformComponent? userXform) ||
@@ -207,22 +193,16 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
         // This should really be improved. GetEntitiesInArc uses pos instead of bounding boxes.
         // Server will validate it with InRangeUnobstructed.
         var entities = GetNetEntityList(ArcRayCast(userPos, direction.ToWorldAngle(), component.Angle, distance, userXform.MapID, user).ToList());
-        _rmcLagCompensation.SendLastRealTick(); // RMC14
         RaisePredictiveEvent(new HeavyAttackEvent(GetNetEntity(meleeUid), entities.GetRange(0, Math.Min(MaxTargets, entities.Count)), GetNetCoordinates(coordinates)));
     }
 
-    private void ClientDisarm(EntityUid attacker, MapCoordinates mousePos, EntityCoordinates coordinates, MeleeWeaponComponent meleeComponent)
+    private void ClientDisarm(EntityUid attacker, MapCoordinates mousePos, EntityCoordinates coordinates)
     {
         EntityUid? target = null;
 
         if (_stateManager.CurrentState is GameplayStateBase screen)
             target = screen.GetClickedEntity(mousePos);
 
-        var attackerPos = TransformSystem.GetMapCoordinates(attacker);
-        if (mousePos.MapId != attackerPos.MapId || (attackerPos.Position - mousePos.Position).Length() > meleeComponent.Range)
-            return;
-
-        _rmcLagCompensation.SendLastRealTick(); // RMC14
         RaisePredictiveEvent(new DisarmAttackEvent(GetNetEntity(target), GetNetCoordinates(coordinates)));
     }
 
@@ -230,7 +210,7 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
     {
         var attackerPos = TransformSystem.GetMapCoordinates(attacker);
 
-        if (mousePos.MapId != attackerPos.MapId) // RMC14
+        if (mousePos.MapId != attackerPos.MapId || (attackerPos.Position - mousePos.Position).Length() > meleeComponent.Range)
             return;
 
         EntityUid? target = null;
@@ -238,16 +218,10 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
         if (_stateManager.CurrentState is GameplayStateBase screen)
             target = screen.GetClickedEntity(mousePos);
 
-        // RMC14
-        if ((attackerPos.Position - mousePos.Position).Length() > _rmcMeleeWeapon.GetUserLightAttackRange(attacker, target, meleeComponent))
-            return;
-        // RMC14
-
         // Don't light-attack if interaction will be handling this instead
         if (Interaction.CombatModeCanHandInteract(attacker, target))
             return;
 
-        _rmcLagCompensation.SendLastRealTick(); // RMC14
         RaisePredictiveEvent(new LightAttackEvent(GetNetEntity(target), GetNetEntity(weaponUid), GetNetCoordinates(coordinates)));
     }
 

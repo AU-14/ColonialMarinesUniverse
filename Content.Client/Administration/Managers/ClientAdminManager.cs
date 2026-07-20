@@ -15,6 +15,7 @@ namespace Content.Client.Administration.Managers
         [Dependency] private IPlayerManager _player = default!;
         [Dependency] private IClientNetManager _netMgr = default!;
         [Dependency] private IClientConGroupController _conGroup = default!;
+        [Dependency] private IClientConsoleHost _host = default!;
         [Dependency] private IResourceManager _res = default!;
         [Dependency] private ILogManager _logManager = default!;
         [Dependency] private IUserInterfaceManager _userInterface = default!;

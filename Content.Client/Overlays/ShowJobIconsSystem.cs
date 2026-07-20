@@ -2,52 +2,5 @@ using Content.Shared.Overlays;
 
 namespace Content.Client.Overlays;
 
-public sealed partial class ShowJobIconsSystem : EquipmentHudSystem<ShowJobIconsComponent>
-{
-    [Dependency] private IPrototypeManager _prototype = default!;
-    [Dependency] private AccessReaderSystem _accessReader = default!;
-
-    private static readonly ProtoId<JobIconPrototype> JobIconForNoId = "JobIconNoId";
-
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        SubscribeLocalEvent<StatusIconComponent, GetStatusIconsEvent>(OnGetStatusIconsEvent);
-    }
-
-    private void OnGetStatusIconsEvent(EntityUid uid, StatusIconComponent _, ref GetStatusIconsEvent ev)
-    {
-        if (!IsActive)
-            return;
-
-        var iconId = JobIconForNoId;
-
-        if (_accessReader.FindAccessItemsInventory(uid, out var items))
-        {
-            foreach (var item in items)
-            {
-                // ID Card
-                if (TryComp<IdCardComponent>(item, out var id))
-                {
-                    iconId = id.JobIcon;
-                    break;
-                }
-
-                // PDA
-                if (TryComp<PdaComponent>(item, out var pda)
-                    && pda.ContainedId != null
-                    && TryComp(pda.ContainedId, out id))
-                {
-                    iconId = id.JobIcon;
-                    break;
-                }
-            }
-        }
-
-        if (_prototype.TryIndex(iconId, out var iconPrototype))
-            ev.StatusIcons.Add(iconPrototype);
-        else
-            Log.Error($"Invalid job icon prototype: {iconPrototype}");
-    }
-}
+// The GetStatusIconsEvent subscription is handled in JobStatusSystem
+public sealed class ShowJobIconsSystem : EquipmentHudSystem<ShowJobIconsComponent>;

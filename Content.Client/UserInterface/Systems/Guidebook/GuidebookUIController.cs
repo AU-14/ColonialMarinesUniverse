@@ -7,7 +7,6 @@ using Content.Client.Players.PlayTimeTracking;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.CCVar;
 using Content.Shared.Guidebook;
-using Content.Shared._RMC14.Prototypes;
 using Content.Shared.Input;
 using Robust.Client.State;
 using Robust.Client.UserInterface;
@@ -181,8 +180,8 @@ public sealed partial class GuidebookUIController : UIController, IOnStateEntere
 
         if (guides == null)
         {
-            guides = _prototypeManager.EnumerateCM<GuideEntryPrototype>()
-                .ToDictionary(x => new ProtoId<GuideEntryPrototype>(x.ID), x => (GuideEntry) x);
+            guides = _prototypeManager.EnumeratePrototypes<GuideEntryPrototype>()
+                .ToDictionary(x => new ProtoId<GuideEntryPrototype>(x.ID), x => (GuideEntry)x);
         }
         else if (includeChildren)
         {

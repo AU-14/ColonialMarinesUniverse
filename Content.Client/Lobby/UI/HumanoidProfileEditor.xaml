@@ -3,8 +3,7 @@
          xmlns:humanoid="clr-namespace:Content.Client.Humanoid"
          xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
          xmlns:ui="clr-namespace:Content.Client.Lobby.UI"
-         xmlns:namedItems="clr-namespace:Content.Client._RMC14.NamedItems"
-         xmlns:userInterface="clr-namespace:Content.Client._RMC14.UserInterface"
+         xmlns:profile="clr-namespace:Content.Client.Lobby.UI.ProfileEditorControls"
          HorizontalExpand="True">
         <!-- Left side -->
         <BoxContainer Orientation="Vertical" Margin="10 10 10 10" HorizontalExpand="True">
@@ -68,44 +67,6 @@
                         <!-- appearanceList -->
                         <BoxContainer Orientation="Vertical">
                             <BoxContainer Margin="10" Orientation="Vertical" HorizontalExpand="True">
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-preferred-squad-label'}" />
-                                    <Control HorizontalExpand="True" />
-                                    <OptionButton Name="SquadPreferenceButton" HorizontalAlignment="Right" />
-                                </BoxContainer>
-                                <!-- Armor Preference -->
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-preferred-armor-label'}" />
-                                    <Control HorizontalExpand="True"/>
-                                    <OptionButton Name="ArmorPreferenceButton" HorizontalAlignment="Right" />
-                                </BoxContainer>
-                                <!-- Playtime Perks -->
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-enable-playtime-perks'}" />
-                                    <Control HorizontalExpand="True"/>
-                                    <Button Name="PlaytimePerksButton" Pressed="True" ToggleMode="True" Text="{Loc 'humanoid-profile-editor-enable'}" HorizontalAlignment="Right" />
-                                </BoxContainer>
-                                <!-- Xeno Prefix -->
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-xeno-prefix'}" />
-                                    <Control HorizontalExpand="True"/>
-                                    <TextureButton Name="XenoPrefixInfoButton" Scale="0.3 0.3"
-                                                   VerticalAlignment="Center"
-                                                   ToolTip="{Loc 'humanoid-profile-editor-xeno-prefix-tooltip'}"
-                                                   StyleClasses="SpeciesInfoDefault" />
-                                    <LineEdit Name="XenoPrefix" HorizontalAlignment="Right" MinWidth="100" />
-                                </BoxContainer>
-                                <!-- Xeno Postfix -->
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-xeno-postfix'}" />
-                                    <Control HorizontalExpand="True"/>
-                                    <TextureButton Name="XenoPostfixInfoButton" Scale="0.3 0.3"
-                                                   VerticalAlignment="Center"
-                                                   ToolTip="{Loc 'humanoid-profile-editor-xeno-postfix-tooltip'}"
-                                                   StyleClasses="SpeciesInfoDefault" />
-                                    <LineEdit Name="XenoPostfix" HorizontalAlignment="Right" MinWidth="100" />
-                                </BoxContainer>
-                                <userInterface:BlueHorizontalSeparator Margin="0 5" />
                                 <!-- Species -->
                                 <BoxContainer HorizontalExpand="True">
                                     <Label Text="{Loc 'humanoid-profile-editor-species-label'}" />
@@ -156,7 +117,7 @@
                             <BoxContainer Margin="10" HorizontalExpand="True" Orientation="Vertical">
                                 <Label Text="{Loc 'humanoid-profile-editor-skin-color-label'}" />
                                 <Slider HorizontalExpand="True" Name="Skin" MinValue="0" MaxValue="100" Value="20" />
-                                <BoxContainer Name="RgbSkinColorContainer" Visible="False" Orientation="Vertical" HorizontalExpand="True" />
+                                <BoxContainer Name="RgbSkinColorContainer" Visible="False" Orientation="Vertical" HorizontalExpand="True"></BoxContainer>
                             </BoxContainer>
                             <!-- Eyes -->
                             <BoxContainer Margin="10" Orientation="Vertical">
@@ -188,10 +149,6 @@
                 <BoxContainer Name="MarkingsTab" Orientation="Vertical" Margin="10">
                     <!-- Markings -->
                     <humanoid:MarkingPicker Name="Markings" HorizontalExpand="True" VerticalExpand="True" />
-                </BoxContainer>
-                <BoxContainer Name="NamedItemsTab" Orientation="Vertical" Margin="10">
-                    <!-- Named Items -->
-                    <namedItems:NamedItemsPicker Name="NamedItems" />
                 </BoxContainer>
             </TabContainer>
         </BoxContainer>

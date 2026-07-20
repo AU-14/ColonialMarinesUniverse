@@ -3,8 +3,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Robust.Client.Player;
 using Robust.Shared.Player;
-using Content.Shared.Item;
-using Content.Shared.Item.ItemToggle.Components;
+
 namespace Content.Client.Overlays;
 
 /// <summary>

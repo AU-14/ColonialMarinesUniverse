@@ -6,8 +6,6 @@ namespace Content.Client.Overlays;
 
 public sealed partial class ShowMindShieldIconsSystem : EquipmentHudSystem<ShowMindShieldIconsComponent>
 {
-    [Dependency] private IPrototypeManager _prototype = default!;
-
     public override void Initialize()
     {
         base.Initialize();

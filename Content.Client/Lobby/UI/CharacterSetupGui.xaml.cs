@@ -1,5 +1,3 @@
-using Content.Client._RMC14.Commendations;
-using Content.Client._RMC14.RMCPlaytimeStats;
 using Content.Client.Info;
 using Content.Client.Info.PlaytimeStats;
 using Content.Client.Resources;
@@ -24,10 +22,10 @@ namespace Content.Client.Lobby.UI
     public sealed partial class CharacterSetupGui : Control
     {
         [Dependency] private IClientPreferencesManager _preferencesManager = default!;
-        [Dependency] private IEntityManager _entManager = default!;
         [Dependency] private IPrototypeManager _protomanager = default!;
         [Dependency] private IResourceCache _resourceCache = default!;
         [Dependency] private IConfigurationManager _cfg = default!;
+        [Dependency] private ISharedPlayerManager _playerManager = default!;
 
         private readonly Button _createNewCharacterButton;
 
@@ -64,12 +62,7 @@ namespace Content.Client.Lobby.UI
             CharEditor.AddChild(profileEditor);
             RulesButton.OnPressed += _ => new RulesAndInfoWindow().Open();
 
-            StatsButton.OnPressed += _ => new RMCPlaytimeStatsWindow().OpenCentered(); // RMC-PlaytimeStats-Tweak
-
-            CommendationsReceivedButton.OnPressed += _ =>
-                IoCManager.Resolve<CommendationsManager>().OpenReceivedWindow();
-            CommendationsGivenButton.OnPressed += _ =>
-                IoCManager.Resolve<CommendationsManager>().OpenGivenWindow();
+            StatsButton.OnPressed += _ => new PlaytimeStatsWindow().OpenCentered();
 
             _cfg.OnValueChanged(CCVars.SeeOwnNotes, p => AdminRemarksButton.Visible = p, true);
             _cfg.OnValueChanged(CCVars.GameMaxCharacterSlots, _ => ReloadCharacterPickers());

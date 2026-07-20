@@ -15,6 +15,7 @@ namespace Content.Client.UserInterface.Controls
     public partial class FancyWindow : BaseWindow
     {
         [Dependency] private IEntitySystemManager _sysMan = default!;
+        [Dependency] private IStylesheetManager _styleMan = default!;
         private GuidebookSystem? _guidebookSystem;
         private const int DRAG_MARGIN_SIZE = 7;
 

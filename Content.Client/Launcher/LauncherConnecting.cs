@@ -20,6 +20,7 @@ namespace Content.Client.Launcher
         [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private IConfigurationManager _cfg = default!;
         [Dependency] private IClipboardManager _clipboard = default!;
+        [Dependency] private ILogManager _logManager = default!;
 
         private LauncherConnectingGui? _control;
         private ISawmill _sawmill = default!;

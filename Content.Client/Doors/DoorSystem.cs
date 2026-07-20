@@ -9,7 +9,6 @@ namespace Content.Client.Doors;
 public sealed partial class DoorSystem : SharedDoorSystem
 {
     [Dependency] private AnimationPlayerSystem _animationSystem = default!;
-    [Dependency] private IResourceCache _resourceCache = default!;
     [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()

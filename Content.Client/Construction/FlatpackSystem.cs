@@ -28,7 +28,7 @@ public sealed partial class FlatpackSystem : SharedFlatpackSystem
         if (!ProtoMan.TryIndex<EntityPrototype>(machineBoardId, out var machineBoardPrototype))
             return;
 
-        if (!machineBoardPrototype.TryComp<SpriteComponent>(out var sprite, EntityManager.ComponentFactory))
+        if (!machineBoardPrototype.TryComp(out SpriteComponent? sprite, EntityManager.ComponentFactory))
             return;
 
         Color? color = null;

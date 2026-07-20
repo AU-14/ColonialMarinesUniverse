@@ -18,6 +18,8 @@ namespace Content.Client.IconSmoothing
     {
         [Dependency] private SharedMapSystem _mapSystem = default!;
         [Dependency] private SpriteSystem _sprite = default!;
+        [Dependency] private EntityQuery<IconSmoothComponent> _iconSmoothQuery = default!;
+        [Dependency] private EntityQuery<SpriteComponent> _spriteQuery = default!;
 
         private readonly Queue<EntityUid> _dirtyEntities = new();
         private readonly Queue<EntityUid> _anchorChangedEntities = new();
@@ -282,9 +284,6 @@ namespace Content.Client.IconSmoothing
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
-            var ev = new IconSmoothingUpdatedEvent();
-            RaiseLocalEvent(uid, ref ev);
         }
 
         private void CalculateNewSpriteDiagonal(Entity<MapGridComponent>? gridEntity, IconSmoothComponent smooth,
@@ -369,15 +368,11 @@ namespace Content.Client.IconSmoothing
         {
             while (candidates.MoveNext(out var entity))
             {
-                // TODO RMC14 restore to upstream
-                if (smoothQuery.TryGetComponent(entity, out var other) &&
+                if (_iconSmoothQuery.TryGetComponent(entity, out var other) &&
+                    (other.SmoothKey == smooth.SmoothKey || smooth.AdditionalKeys.Contains(other.SmoothKey)) &&
                     other.Enabled)
                 {
-                    if ((other.SmoothKey != null && (other.SmoothKey == smooth.SmoothKey || smooth.AdditionalKeys.Contains(other.SmoothKey))) ||
-                        (_cmIconSmoothQuery.TryComp(smooth.Owner, out var cmSmooth) && cmSmooth.Smooth && _cmIconSmoothQuery.HasComp(entity)))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 

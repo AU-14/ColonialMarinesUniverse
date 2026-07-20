@@ -1,7 +1,5 @@
 using System.Linq;
 using System.Numerics;
-using Content.Client._RMC14.UniformAccessories;
-using Content.Client._RMC14.Webbing;
 using Content.Client.Gameplay;
 using Content.Client.Hands.Systems;
 using Content.Client.Inventory;
@@ -12,6 +10,7 @@ using Content.Client.UserInterface.Systems.Inventory.Controls;
 using Content.Client.UserInterface.Systems.Inventory.Widgets;
 using Content.Client.UserInterface.Systems.Inventory.Windows;
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.Hands.Components;
 using Content.Shared.Input;
 using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Storage;
@@ -28,7 +27,7 @@ using static Content.Client.Inventory.ClientInventorySystem;
 namespace Content.Client.UserInterface.Systems.Inventory;
 
 public sealed partial class InventoryUIController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>,
-    IOnSystemChanged<ClientInventorySystem>, IOnSystemChanged<HandsSystem>, IOnSystemChanged<WebbingSystem>, IOnSystemChanged<UniformAccessorySystem>
+    IOnSystemChanged<ClientInventorySystem>, IOnSystemChanged<HandsSystem>
 {
     [Dependency] private IEntityManager _entities = default!;
 
@@ -36,6 +35,7 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
     [UISystemDependency] private readonly HandsSystem _handsSystem = default!;
     [UISystemDependency] private readonly ContainerSystem _container = default!;
     [UISystemDependency] private readonly SpriteSystem _sprite = default!;
+
     private EntityUid? _playerUid;
     private InventorySlotsComponent? _playerInventory;
     private readonly Dictionary<string, ItemSlotButtonContainer> _slotGroups = new();
@@ -349,7 +349,7 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
 
         if (!fits && _entities.TryGetComponent<StorageComponent>(container.ContainedEntity, out var storage))
         {
-            fits = _entities.System<StorageSystem>().CanInsert(container.ContainedEntity.Value, held.Value, player.Value, out _, storage);
+            fits = _entities.System<StorageSystem>().CanInsert(container.ContainedEntity.Value, held.Value, out _, storage);
         }
         else if (!fits && _entities.TryGetComponent<ItemSlotsComponent>(container.ContainedEntity, out var itemSlots))
         {
@@ -498,30 +498,5 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
     {
         if (_lastHovered != null)
             UpdateHover(_lastHovered);
-    }
-
-    public void OnSystemLoaded(WebbingSystem system)
-    {
-        system.PlayerWebbingUpdated += InventoryUpdated;
-    }
-
-    public void OnSystemUnloaded(WebbingSystem system)
-    {
-        system.PlayerWebbingUpdated -= InventoryUpdated;
-    }
-
-    public void OnSystemLoaded(UniformAccessorySystem system)
-    {
-        system.PlayerMedalUpdated += InventoryUpdated;
-    }
-
-    public void OnSystemUnloaded(UniformAccessorySystem system)
-    {
-        system.PlayerMedalUpdated -= InventoryUpdated;
-    }
-
-    private void InventoryUpdated()
-    {
-        UpdateInventoryHotbar(_playerInventory);
     }
 }

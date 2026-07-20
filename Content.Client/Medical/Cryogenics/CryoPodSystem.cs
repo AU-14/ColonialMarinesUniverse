@@ -6,7 +6,6 @@ namespace Content.Client.Medical.Cryogenics;
 
 public sealed partial class CryoPodSystem : SharedCryoPodSystem
 {
-    [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()

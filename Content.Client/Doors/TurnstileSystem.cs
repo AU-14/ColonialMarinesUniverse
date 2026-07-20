@@ -15,8 +15,6 @@ public sealed partial class TurnstileSystem : SharedTurnstileSystem
     [Dependency] private AnimationPlayerSystem _animationPlayer = default!;
     [Dependency] private SpriteSystem _sprite = default!;
 
-    private static readonly EntProtoId ExamineArrow = "TurnstileArrow";
-
     private const string AnimationKey = "Turnstile";
 
     public override void Initialize()

@@ -11,6 +11,7 @@ public sealed partial class DrunkSystem : SharedDrunkSystem
 {
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private IOverlayManager _overlayMan = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     private DrunkOverlay _overlay = default!;
 

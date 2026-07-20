@@ -21,6 +21,7 @@ public sealed partial class PlayerTab : Control
     [Dependency] private IEntityManager _entManager = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private IPlayerManager _playerMan = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     private const string ArrowUp = "↑";
     private const string ArrowDown = "↓";

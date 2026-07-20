@@ -5,7 +5,6 @@ using Content.Shared.Maps;
 using Robust.Client.Graphics;
 using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
-using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -26,14 +25,11 @@ public sealed partial class AmbientOcclusionOverlay : Overlay
     [Dependency] private IEntityManager _entManager = default!;
     [Dependency] private IPrototypeManager _proto = default!;
 
+    private List<Entity<MapGridComponent>> _cachedGrids = new();
+
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowEntities;
 
-    private IRenderTexture? _aoTarget;
-    private IRenderTexture? _aoBlurBuffer;
-
-    // Couldn't figure out a way to avoid this so if you can then please do.
-    private IRenderTexture? _aoStencilTarget;
-    private List<Entity<MapGridComponent>> _cachedGrids = new();
+    private readonly OverlayResourceCache<CachedResources> _resources = new ();
 
     public AmbientOcclusionOverlay()
     {
@@ -122,7 +118,6 @@ public sealed partial class AmbientOcclusionOverlay : Overlay
 
                 _cachedGrids.Clear();
                 maps.FindGridsIntersecting(mapId, worldBounds, ref _cachedGrids);
-
                 foreach (var grid in _cachedGrids)
                 {
                     var transform = xformSystem.GetWorldMatrix(grid.Owner);

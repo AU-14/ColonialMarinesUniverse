@@ -1,7 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
-using Content.Client._RMC14.Mentor;
 using Content.Client.Administration.Managers;
 using Content.Client.Administration.Systems;
 using Content.Client.Administration.UI.Bwoink;
@@ -39,16 +38,15 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IClyde _clyde = default!;
     [Dependency] private IUserInterfaceManager _uiManager = default!;
-    [Dependency] private StaffHelpUIController _staffHelp = default!;
+    [Dependency] private IInputManager _input = default!;
     [UISystemDependency] private readonly AudioSystem _audio = default!;
 
     private BwoinkSystem? _bwoinkSystem;
-    public MenuButton? GameAHelpButton => UIManager.GetActiveUIWidgetOrNull<GameTopMenuBar>()?.AHelpButton;
-    public Button? LobbyAHelpButton => (UIManager.ActiveScreen as LobbyGui)?.AHelpButton;
+    private MenuButton? GameAHelpButton => UIManager.GetActiveUIWidgetOrNull<GameTopMenuBar>()?.AHelpButton;
+    private Button? LobbyAHelpButton => (UIManager.ActiveScreen as LobbyGui)?.AHelpButton;
     public IAHelpUIHandler? UIHelper;
     private bool _discordRelayActive;
     private bool _hasUnreadAHelp;
-    private bool _hasUnreadMHelp; // RMC14
     private bool _bwoinkSoundEnabled;
     private string? _aHelpSound;
 
@@ -93,9 +91,8 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
 
     private void AHelpButtonPressed(BaseButton.ButtonEventArgs obj)
     {
-        _staffHelp.ToggleWindow();
-        // EnsureUIHelper();
-        // UIHelper!.ToggleWindow();
+        EnsureUIHelper();
+        UIHelper!.ToggleWindow();
     }
 
     public void OnSystemLoaded(BwoinkSystem system)
@@ -251,49 +248,18 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
         helper.Control.PopOut.Visible = false;
     }
 
-    public void UnreadAHelpReceived()
+    private void UnreadAHelpReceived()
     {
-        _hasUnreadAHelp = true; //RMC14
-        UpdateUnreadState();
+        GameAHelpButton?.StyleClasses.Add(StyleClass.Negative);
+        LobbyAHelpButton?.StyleClasses.Add(StyleClass.Negative);
+        _hasUnreadAHelp = true;
     }
 
-    //RMC14
-    public void UnreadMHelpReceived()
+    private void UnreadAHelpRead()
     {
-        _hasUnreadMHelp = true;
-        UpdateUnreadState();
-    }
-
-    public void UnreadAHelpRead()
-    {
-        _hasUnreadAHelp = false; // RMC14
-        UpdateUnreadState();
-    }
-
-    //RMC14
-    public void UnreadMHelpRead()
-    {
-        _hasUnreadMHelp = false;
-        UpdateUnreadState();
-    }
-
-    // RMC14
-    private void UpdateUnreadState()
-    {
-        var isAdmin = _adminManager.HasFlag(AdminFlags.Adminhelp);
-        var isMentor = _staffHelp.IsMentor;
-        var red = isAdmin && _hasUnreadAHelp || isMentor && _hasUnreadMHelp;
-
-        if (red)
-        {
-            GameAHelpButton?.StyleClasses.Add(MenuButton.StyleClassRedTopButton);
-            LobbyAHelpButton?.StyleClasses.Add(StyleNano.StyleClassButtonColorRed);
-        }
-        else
-        {
-            GameAHelpButton?.StyleClasses.Remove(MenuButton.StyleClassRedTopButton);
-            LobbyAHelpButton?.StyleClasses.Remove(StyleNano.StyleClassButtonColorRed);
-        }
+        GameAHelpButton?.StyleClasses.Remove(StyleClass.Negative);
+        LobbyAHelpButton?.StyleClasses.Remove(StyleClass.Negative);
+        _hasUnreadAHelp = false;
     }
 
     public void OnStateEntered(GameplayState state)
@@ -311,16 +277,6 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
             else
             {
                 UnreadAHelpRead();
-            }
-
-            //RMC14
-            if (_hasUnreadMHelp)
-            {
-                UnreadMHelpReceived();
-            }
-            else
-            {
-                UnreadMHelpRead();
             }
         }
     }
@@ -346,16 +302,6 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
             else
             {
                 UnreadAHelpRead();
-            }
-
-            //RMC14
-            if (_hasUnreadMHelp)
-            {
-                UnreadMHelpReceived();
-            }
-            else
-            {
-                UnreadMHelpRead();
             }
         }
     }

@@ -22,9 +22,9 @@ namespace Content.Client.Inventory
     {
         [Dependency] private IPlayerManager _playerManager = default!;
         [Dependency] private IUserInterfaceManager _ui = default!;
-
         [Dependency] private ClientClothingSystem _clothingVisualsSystem = default!;
         [Dependency] private ExamineSystem _examine = default!;
+        [Dependency] private PointingSystem _pointing = default!;
 
         public Action<SlotData>? EntitySlotUpdate = null;
         public Action<SlotData>? OnSlotAdded = null;

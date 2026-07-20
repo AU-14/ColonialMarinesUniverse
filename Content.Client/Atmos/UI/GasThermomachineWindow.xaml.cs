@@ -12,8 +12,6 @@ public sealed partial class GasThermomachineWindow : FancyWindow
 {
     [Dependency] private IEntityManager _entManager = default!;
 
-    public bool Active = true;
-
     public FloatSpinBox TemperatureSpinbox;
 
     public EntityUid Entity;

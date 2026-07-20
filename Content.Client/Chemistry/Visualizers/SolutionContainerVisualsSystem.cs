@@ -1,5 +1,4 @@
 using Content.Client.Items.Systems;
-using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Reagent;
@@ -14,7 +13,6 @@ namespace Content.Client.Chemistry.Visualizers;
 
 public sealed partial class SolutionContainerVisualsSystem : VisualizerSystem<SolutionContainerVisualsComponent>
 {
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private ItemSystem _itemSystem = default!;
 
     public override void Initialize()
@@ -68,40 +66,8 @@ public sealed partial class SolutionContainerVisualsSystem : VisualizerSystem<So
             fraction = 1f;
         }
 
-                if (AppearanceSystem.TryGetData<string>(uid, SolutionContainerVisuals.BaseOverride,
-                        out var baseOverride,
-                        args.Component))
-                {
-                    _prototype.TryIndexReagent<ReagentPrototype>(baseOverride, out var reagentProto);
-
-                    if (reagentProto?.MetamorphicSprite is { } sprite)
-                    {
-                        SpriteSystem.LayerSetSprite((uid, args.Sprite), baseLayer, sprite);
-                        if (reagentProto.MetamorphicMaxFillLevels > 0)
-                        {
-                            SpriteSystem.LayerSetVisible((uid, args.Sprite), fillLayer, true);
-                            maxFillLevels = reagentProto.MetamorphicMaxFillLevels;
-                            fillBaseName = reagentProto.MetamorphicFillBaseName;
-                            changeColor = reagentProto.MetamorphicChangeColor;
-                            fillSprite = sprite;
-                        }
-                        else
-                            SpriteSystem.LayerSetVisible((uid, args.Sprite), fillLayer, false);
-
-                        if (hasOverlay)
-                            SpriteSystem.LayerSetVisible((uid, args.Sprite), overlayLayer, false);
-                    }
-                    else
-                    {
-                        SpriteSystem.LayerSetVisible((uid, args.Sprite), fillLayer, true);
-                        if (hasOverlay)
-                            SpriteSystem.LayerSetVisible((uid, args.Sprite), overlayLayer, true);
-                        if (component.MetamorphicDefaultSprite != null)
-                            SpriteSystem.LayerSetSprite((uid, args.Sprite), baseLayer, component.MetamorphicDefaultSprite);
-                    }
-                }
-            }
-        }
+        if (!component.Metamorphic)
+            SpriteSystem.LayerSetVisible(ent, fillLayer, true);
         else
         {
             var reagentProto = MetamorphicChanged(uid, component, args, ent, fillLayer);

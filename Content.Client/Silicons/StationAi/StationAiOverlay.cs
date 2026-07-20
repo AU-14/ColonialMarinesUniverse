@@ -21,6 +21,7 @@ public sealed partial class StationAiOverlay : Overlay
     private static readonly ProtoId<ShaderPrototype> StencilDrawShader = "StencilDraw";
 
     [Dependency] private IClyde _clyde = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IEntityManager _entManager = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IPlayerManager _player = default!;

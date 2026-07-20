@@ -5,9 +5,9 @@ using Robust.Shared.Console;
 
 namespace Content.Client.Commands;
 
-internal sealed partial class ShowMarkersCommand : LocalizedCommands
+internal sealed partial class ShowMarkersCommand : LocalizedEntityCommands
 {
-    [Dependency] private IEntitySystemManager _entitySystemManager = default!;
+    [Dependency] private MarkerSystem _markerSystem = default!;
 
     public override string Command => "showmarkers";
 
@@ -17,9 +17,9 @@ internal sealed partial class ShowMarkersCommand : LocalizedCommands
     }
 }
 
-internal sealed partial class ShowSubFloor : LocalizedCommands
+internal sealed partial class ShowSubFloor : LocalizedEntityCommands
 {
-    [Dependency] private IEntitySystemManager _entitySystemManager = default!;
+    [Dependency] private SubFloorHideSystem _subfloorSystem = default!;
 
     public override string Command => "showsubfloor";
 
@@ -29,9 +29,9 @@ internal sealed partial class ShowSubFloor : LocalizedCommands
     }
 }
 
-internal sealed partial class NotifyCommand : LocalizedCommands
+internal sealed partial class NotifyCommand : LocalizedEntityCommands
 {
-    [Dependency] private IEntitySystemManager _entitySystemManager = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
 
     public override string Command => "notify";
 

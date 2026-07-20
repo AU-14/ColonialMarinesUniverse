@@ -112,7 +112,7 @@ public sealed partial class AdminLogsEui : BaseEui
                 if (child is not AdminLogLabel logLabel || !child.Visible)
                     continue;
 
-                var log = logLabel.Entry;
+                var log = logLabel.Log;
 
                 // Date
                 // I swear to god if someone adds ,s or "s to the other fields...

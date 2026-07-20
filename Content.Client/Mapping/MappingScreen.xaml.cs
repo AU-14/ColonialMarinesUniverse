@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Numerics;
 using Content.Client.Decals;
 using Content.Client.Decals.UI;
@@ -19,6 +19,7 @@ namespace Content.Client.Mapping;
 [GenerateTypedNameReferences]
 public sealed partial class MappingScreen : InGameScreen
 {
+    [Dependency] private IPlacementManager _placement = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
 
     public DecalPlacementSystem DecalSystem = default!;

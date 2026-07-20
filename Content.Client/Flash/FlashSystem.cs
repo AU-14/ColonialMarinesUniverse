@@ -11,6 +11,7 @@ public sealed partial class FlashSystem : SharedFlashSystem
 {
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private IOverlayManager _overlayMan = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
 
     private FlashOverlay _overlay = default!;
 

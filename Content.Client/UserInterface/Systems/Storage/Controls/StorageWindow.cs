@@ -5,15 +5,12 @@ using Content.Client.Hands.Systems;
 using Content.Client.Items.Systems;
 using Content.Client.Storage;
 using Content.Client.Storage.Systems;
-using Content.Shared._RMC14.Inventory;
-using Content.Shared._RMC14.Item;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Input;
 using Content.Shared.Item;
 using Content.Shared.Storage;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
-using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
@@ -27,7 +24,6 @@ namespace Content.Client.UserInterface.Systems.Storage.Controls;
 public sealed partial class StorageWindow : BaseWindow
 {
     [Dependency] private IEntityManager _entity = default!;
-    [Dependency] private IPlayerManager _player = default!;
     private readonly StorageUIController _storageController;
 
     public EntityUid? StorageEntity;
@@ -56,11 +52,11 @@ public sealed partial class StorageWindow : BaseWindow
     public event Action<GUIBoundKeyEventArgs, ItemGridPiece>? OnPiecePressed;
     public event Action<GUIBoundKeyEventArgs, ItemGridPiece>? OnPieceUnpressed;
 
-    private readonly string _emptyTexturePath = "Storage/cm_tile_empty";
+    private readonly string _emptyTexturePath = "Storage/tile_empty";
     private Texture? _emptyTexture;
     private readonly string _blockedTexturePath = "Storage/tile_blocked";
     private Texture? _blockedTexture;
-    private readonly string _emptyOpaqueTexturePath = "Storage/cm_tile_empty_opaque";
+    private readonly string _emptyOpaqueTexturePath = "Storage/tile_empty_opaque";
     private Texture? _emptyOpaqueTexture;
     private readonly string _blockedOpaqueTexturePath = "Storage/tile_blocked_opaque";
     private Texture? _blockedOpaqueTexture;
@@ -134,13 +130,6 @@ public sealed partial class StorageWindow : BaseWindow
             }
         };
 
-        var panel = new PanelContainer();
-        panel.PanelOverride = new StyleBoxFlat()
-        {
-            BorderColor = Color.Black,
-            BorderThickness = new Thickness(2),
-        };
-
         var container = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
@@ -158,8 +147,7 @@ public sealed partial class StorageWindow : BaseWindow
                             Children =
                             {
                                 _backgroundGrid,
-                                _pieceGrid,
-                                panel
+                                _pieceGrid
                             }
                         }
                     }
@@ -365,8 +353,6 @@ public sealed partial class StorageWindow : BaseWindow
         _backgroundGrid.Children.Clear();
         _backgroundGrid.Rows = boundingGrid.Height + 1;
         _backgroundGrid.Columns = boundingGrid.Width + 1;
-
-        var fixedSizeX = _entity.GetComponentOrNull<FixedItemSizeStorageComponent>(StorageEntity)?.Size.X;
         for (var y = boundingGrid.Bottom; y <= boundingGrid.Top; y++)
         {
             for (var x = boundingGrid.Left; x <= boundingGrid.Right; x++)
@@ -375,19 +361,11 @@ public sealed partial class StorageWindow : BaseWindow
                     ? emptyTexture
                     : blockedTexture;
 
-                var rect = new TextureRect
+                _backgroundGrid.AddChild(new TextureRect
                 {
                     Texture = texture,
                     TextureScale = new Vector2(2, 2)
-                };
-
-                if (WrapBorders(rect, fixedSizeX, x, boundingGrid.Right) is { } panel)
-                {
-                    _backgroundGrid.AddChild(panel);
-                    continue;
-                }
-
-                _backgroundGrid.AddChild(rect);
+                });
             }
         }
     }
@@ -430,17 +408,6 @@ public sealed partial class StorageWindow : BaseWindow
 
         var boundingGrid = storageComp.Grid.GetBoundingBox();
         var size = _emptyTexture!.Size * 2;
-        var containedEntities = storageComp.Container.ContainedEntities.Reverse().ToArray();
-        if (_lastUpdate.Grid.Equals(boundingGrid) &&
-            _lastUpdate.Contained.SequenceEqual(containedEntities) &&
-            _lastUpdate.Stored.Count == storageComp.StoredItems.Count &&
-            _lastUpdate.Stored.All(kvp => storageComp.StoredItems.TryGetValue(kvp.Key, out var v) && kvp.Value == v))
-        {
-            return;
-        }
-
-        _lastUpdate = (boundingGrid, containedEntities, storageComp.StoredItems);
-
         _contained.Clear();
         _contained.AddRange(storageComp.Container.ContainedEntities.Reverse());
 
@@ -453,7 +420,6 @@ public sealed partial class StorageWindow : BaseWindow
             _pieceGrid.Rows = height;
             _pieceGrid.Columns = width;
             _controlGrid.Clear();
-            var fixedSizeX = _entity.GetComponentOrNull<FixedItemSizeStorageComponent>(StorageEntity)?.Size.X;
 
             for (var y = boundingGrid.Bottom; y <= boundingGrid.Top; y++)
             {
@@ -464,12 +430,8 @@ public sealed partial class StorageWindow : BaseWindow
                         MinSize = size
                     };
 
-                    if (WrapBorders(control, fixedSizeX, x, boundingGrid.Right) is { } panel)
-                        _pieceGrid.AddChild(panel);
-                    else
-                        _pieceGrid.AddChild(control);
-
                     _controlGrid.Add(control);
+                    _pieceGrid.AddChild(control);
                 }
             }
         }
@@ -587,7 +549,7 @@ public sealed partial class StorageWindow : BaseWindow
 
         foreach (var child in _backgroundGrid.Children)
         {
-            child.ModulateSelfOverride = null;
+            child.ModulateSelfOverride = Color.FromHex("#222222");
         }
 
         if (UserInterfaceManager.CurrentlyHovered is StorageWindow con && con != this)
@@ -605,7 +567,7 @@ public sealed partial class StorageWindow : BaseWindow
             currentLocation = dragging.Location;
         }
         else if (handsSystem.GetActiveHandEntity() is { } handEntity &&
-                 storageSystem.CanInsert(StorageEntity.Value, handEntity, _player.LocalEntity, out _, storageComp: storageComponent, ignoreLocation: true))
+                 storageSystem.CanInsert(StorageEntity.Value, handEntity, out _, storageComp: storageComponent, ignoreLocation: true))
         {
             currentEnt = handEntity;
             currentLocation = new ItemStorageLocation(_storageController.DraggingRotation, Vector2i.Zero);
@@ -622,7 +584,6 @@ public sealed partial class StorageWindow : BaseWindow
         var origin = GetMouseGridPieceLocation((currentEnt, itemComp), currentLocation);
 
         var itemShape = itemSystem.GetAdjustedItemShape(
-            (StorageEntity.Value, storageComponent),
             (currentEnt, itemComp),
             currentLocation.Rotation,
             origin);
@@ -644,7 +605,7 @@ public sealed partial class StorageWindow : BaseWindow
 
             foreach (var location in locations.Value)
             {
-                var shape = itemSystem.GetAdjustedItemShape((StorageEntity.Value, storageComponent), currentEnt, location);
+                var shape = itemSystem.GetAdjustedItemShape(currentEnt, location);
                 var bound = shape.GetBoundingBox();
 
                 var spotFree = storageSystem.ItemFitsInGridLocation(currentEnt, StorageEntity.Value, location);
@@ -676,7 +637,7 @@ public sealed partial class StorageWindow : BaseWindow
             {
                 if (TryGetBackgroundCell(x, y, out var cell) && itemShape.Contains(x, y))
                 {
-                    // cell.ModulateSelfOverride = validLocation ? validColor : Color.FromHex("#B40046");
+                    cell.ModulateSelfOverride = validLocation ? validColor : Color.FromHex("#B40046");
                 }
             }
         }
@@ -699,15 +660,13 @@ public sealed partial class StorageWindow : BaseWindow
     {
         var origin = Vector2i.Zero;
 
-        if (!_entity.TryGetComponent(StorageEntity, out StorageComponent? storage))
-            return origin;
-
-        origin = storage.Grid.GetBoundingBox().BottomLeft;
+        if (StorageEntity != null)
+            origin = _entity.GetComponent<StorageComponent>(StorageEntity.Value).Grid.GetBoundingBox().BottomLeft;
 
         var textureSize = (Vector2) _emptyTexture!.Size * 2;
         var position = ((UserInterfaceManager.MousePositionScaled.Position
                          - _backgroundGrid.GlobalPosition
-                         - ItemGridPiece.GetCenterOffset((StorageEntity.Value, storage), entity, location, _entity) * 2
+                         - ItemGridPiece.GetCenterOffset(entity, location, _entity) * 2
                          + textureSize / 2f)
                         / textureSize).Floored() + origin;
         return position;
@@ -748,14 +707,12 @@ public sealed partial class StorageWindow : BaseWindow
         if (args.Function == ContentKeyFunctions.MoveStoredItem && StorageEntity != null)
         {
             if (handsSystem.GetActiveHandEntity() is { } handEntity &&
-                storageSystem.CanInsert(StorageEntity.Value, handEntity, _player.LocalEntity, out _))
+                storageSystem.CanInsert(StorageEntity.Value, handEntity, out _))
             {
-                if (!CMInventoryExtensions.TryGetFirst(StorageEntity.Value, handEntity, out var insertLocation))
-                    return;
-                // var pos = GetMouseGridPieceLocation((handEntity, null),
-                //     new ItemStorageLocation(_storageController.DraggingRotation, Vector2i.Zero));
-                //
-                // var insertLocation = new ItemStorageLocation(_storageController.DraggingRotation, pos);
+                var pos = GetMouseGridPieceLocation((handEntity, null),
+                    new ItemStorageLocation(_storageController.DraggingRotation, Vector2i.Zero));
+
+                var insertLocation = new ItemStorageLocation(_storageController.DraggingRotation, pos);
                 if (storageSystem.ItemFitsInGridLocation(
                         (handEntity, null),
                         (StorageEntity.Value, null),

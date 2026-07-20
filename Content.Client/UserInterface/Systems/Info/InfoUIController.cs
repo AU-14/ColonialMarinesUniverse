@@ -16,7 +16,7 @@ public sealed partial class InfoUIController : UIController, IOnStateExited<Game
     [Dependency] private INetManager _netManager = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
 
-    public RulesPopup? RulesPopup;
+    private RulesPopup? _rulesPopup;
     private RulesAndInfoWindow? _infoWindow;
 
     private static readonly ProtoId<GuideEntryPrototype> DefaultRuleset = "DefaultRuleset";
@@ -24,8 +24,6 @@ public sealed partial class InfoUIController : UIController, IOnStateExited<Game
     public ProtoId<GuideEntryPrototype> RulesEntryId = DefaultRuleset;
 
     protected override string SawmillName => "rules";
-
-    public event Action? Accepted;
 
     public override void Initialize()
     {
@@ -62,18 +60,18 @@ public sealed partial class InfoUIController : UIController, IOnStateExited<Game
 
     private void ShowRules(float time)
     {
-        if (RulesPopup != null)
+        if (_rulesPopup != null)
             return;
 
-        RulesPopup = new RulesPopup
+        _rulesPopup = new RulesPopup
         {
             Timer = time
         };
 
-        RulesPopup.OnQuitPressed += OnQuitPressed;
-        RulesPopup.OnAcceptPressed += OnAcceptPressed;
-        UIManager.WindowRoot.AddChild(RulesPopup);
-        LayoutContainer.SetAnchorPreset(RulesPopup, LayoutContainer.LayoutPreset.Wide);
+        _rulesPopup.OnQuitPressed += OnQuitPressed;
+        _rulesPopup.OnAcceptPressed += OnAcceptPressed;
+        UIManager.WindowRoot.AddChild(_rulesPopup);
+        LayoutContainer.SetAnchorPreset(_rulesPopup, LayoutContainer.LayoutPreset.Wide);
     }
 
     private void OnQuitPressed()
@@ -86,9 +84,8 @@ public sealed partial class InfoUIController : UIController, IOnStateExited<Game
         var message = new RulesAcceptedMessage() { FuckRules = fuckRules };
         _netManager.ClientSendMessage(message);
 
-        RulesPopup?.Orphan();
-        RulesPopup = null;
-        Accepted?.Invoke();
+        _rulesPopup?.Orphan();
+        _rulesPopup = null;
     }
 
     public GuideEntryPrototype GetCoreRuleEntry()

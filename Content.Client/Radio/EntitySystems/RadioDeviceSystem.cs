@@ -6,7 +6,7 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client.Radio.EntitySystems;
 
-public sealed partial class RadioDeviceSystem : EntitySystem
+public sealed partial class RadioDeviceSystem : SharedRadioDeviceSystem
 {
     [Dependency] private UserInterfaceSystem _ui = default!;
 

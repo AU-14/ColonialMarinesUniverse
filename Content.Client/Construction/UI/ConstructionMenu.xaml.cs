@@ -46,7 +46,7 @@ namespace Content.Client.Construction.UI
         event EventHandler NextRecipeInHistoryButtonPressed;
 
         void ClearRecipeInfo();
-        void SetRecipeInfo(string name, string description, EntityPrototype? targetPrototype, Color iconColor, bool isItem, bool isFavorite, ConstructionPrototype prototype);
+        void SetRecipeInfo(string name, string description, EntityPrototype? targetPrototype, bool isItem, bool isFavorite);
         void ResetPlacement();
         void TrySelectCategory(int categoryId);
         void TrySelectListViewButton(ProtoId<ConstructionPrototype> constructionProtoId);
@@ -173,24 +173,17 @@ namespace Content.Client.Construction.UI
             string name,
             string description,
             EntityPrototype? targetPrototype,
-            Color iconColor,
             bool isItem,
-            bool isFavorite,
-            ConstructionPrototype prototype)
+            bool isFavorite)
         {
             BuildButton.Disabled = false;
             BuildButton.Text = Loc.GetString(isItem ? "construction-menu-place-ghost" : "construction-menu-craft");
             TargetName.SetMessage(name);
             TargetDesc.SetMessage(description);
             TargetTexture.SetPrototype(targetPrototype?.ID);
-            TargetTexture.Modulate = iconColor;
             FavoriteButton.Visible = true;
             FavoriteButton.Text = Loc.GetString(
                             isFavorite ? "construction-add-favorite-button" : "construction-remove-from-favorite-button");
-
-            // RMC14
-            if (prototype.RMCPrototype != null)
-                BuildButton.Text = Loc.GetString("rmc-construction-build-here");
         }
 
         public void ClearRecipeInfo()
@@ -199,7 +192,6 @@ namespace Content.Client.Construction.UI
             TargetName.SetMessage(string.Empty);
             TargetDesc.SetMessage(string.Empty);
             TargetTexture.SetPrototype(null);
-            TargetTexture.Modulate = Color.White;
             FavoriteButton.Visible = false;
             RecipeStepList.Clear();
         }

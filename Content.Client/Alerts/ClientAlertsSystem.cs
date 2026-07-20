@@ -15,7 +15,6 @@ public sealed partial class ClientAlertsSystem : AlertsSystem
     public AlertOrderPrototype? AlertOrder { get; set; }
 
     [Dependency] private IPlayerManager _playerManager = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IUserInterfaceManager _ui = default!;
 
     public event EventHandler? ClearAlerts;
@@ -123,10 +122,5 @@ public sealed partial class ClientAlertsSystem : AlertsSystem
     public void AlertClicked(ProtoId<AlertPrototype> alertType)
     {
         RaisePredictiveEvent(new ClickAlertEvent(alertType));
-    }
-
-    public void AlertClickedAlt(ProtoId<AlertPrototype> alertType)
-    {
-        RaisePredictiveEvent(new ClickAlertAltEvent(alertType));
     }
 }

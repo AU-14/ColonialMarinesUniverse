@@ -1,7 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Client.Popups;
-using Content.Shared._RMC14.Construction;
 using Content.Shared.Construction;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Examine;
@@ -29,7 +28,6 @@ namespace Content.Client.Construction
         [Dependency] private SharedTransformSystem _transformSystem = default!;
         [Dependency] private SpriteSystem _sprite = default!;
         [Dependency] private PopupSystem _popupSystem = default!;
-        [Dependency] private RMCConstructionSystem _rmcConstruction = default!;
 
         private readonly Dictionary<int, EntityUid> _ghosts = new();
         private readonly Dictionary<string, ConstructionGuide> _guideCache = new();
@@ -137,22 +135,12 @@ namespace Content.Client.Construction
                     var name = constructionProto.SetName.HasValue ? Loc.GetString(constructionProto.SetName) : proto.Name;
                     var desc = constructionProto.SetDescription.HasValue ? Loc.GetString(constructionProto.SetDescription) : proto.Description;
 
-                    var name = recipe.SetName is { } setName ? LocalizeOrUseLiteral(setName) : proto.Name;
-                    var desc = recipe.SetDescription is { } setDescription
-                        ? LocalizeOrUseLiteral(setDescription)
-                        : proto.Description;
-
-                    recipe.Name = name;
-                    recipe.Description = desc;
+                    constructionProto.Name = name;
+                    constructionProto.Description = desc;
 
                     _recipesMetadataCache.Add(constructionProto.ID, entityId);
                 } while (stack.Count > 0);
             }
-        }
-
-        private string LocalizeOrUseLiteral(string value)
-        {
-            return Loc.TryGetString(value, out var localized) ? localized : value;
         }
 
         private void OnConstructionGuideReceived(ResponseConstructionGuide ev)
@@ -221,9 +209,6 @@ namespace Content.Client.Construction
         private void HandlePlayerAttached(LocalPlayerAttachedEvent msg)
         {
             var available = IsCraftingAvailable(msg.Entity);
-            if (!_rmcConstruction.CanConstruct(msg.Entity))
-                available = false;
-
             UpdateCraftingAvailability(available);
         }
 
@@ -351,17 +336,6 @@ namespace Content.Client.Construction
         private bool CheckConstructionConditions(ConstructionPrototype prototype, EntityCoordinates loc, Direction dir,
             EntityUid user, bool showPopup = false)
         {
-            var attempt = new RMCConstructionAttemptEvent(loc, prototype);
-            RaiseLocalEvent(ref attempt);
-
-            if (attempt.Cancelled)
-            {
-                if (attempt.Popup is { } popup)
-                    _popupSystem.PopupCoordinates(popup, loc);
-
-                return false;
-            }
-
             foreach (var condition in prototype.Conditions)
             {
                 if (!condition.Condition(user, loc, dir))

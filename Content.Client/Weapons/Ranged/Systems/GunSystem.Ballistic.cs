@@ -1,4 +1,3 @@
-using Content.Client.Stack;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Shared.Map;
@@ -7,8 +6,6 @@ namespace Content.Client.Weapons.Ranged.Systems;
 
 public sealed partial class GunSystem
 {
-    [Dependency] private StackSystem _stack = default!;
-
     protected override void InitializeBallistic()
     {
         base.InitializeBallistic();
@@ -19,7 +16,7 @@ public sealed partial class GunSystem
     {
         if (args.Control is DefaultStatusControl control)
         {
-            control.Update(GetBallisticShots(component) + args.ArtificialIncrease, component.Capacity);
+            control.Update(GetBallisticShots(ent.Comp), ent.Comp.Capacity);
         }
     }
 
@@ -41,10 +38,9 @@ public sealed partial class GunSystem
         }
         else if (ent.Comp.UnspawnedCount > 0)
         {
-            component.UnspawnedCount--;
-            ent = Spawn(component.Proto, coordinates);
-            _stack.SetCount(ent.Value, 1);
-            EnsureShootable(ent.Value);
+            ent.Comp.UnspawnedCount--;
+            ammoEnt = Spawn(ent.Comp.Proto, coordinates);
+            EnsureShootable(ammoEnt.Value);
         }
 
         if (ammoEnt != null && IsClientSide(ammoEnt.Value))

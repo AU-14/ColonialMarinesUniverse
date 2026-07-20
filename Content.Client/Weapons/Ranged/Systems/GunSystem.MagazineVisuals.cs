@@ -53,9 +53,7 @@ public sealed partial class GunSystem
                 current = ent.Comp.MagSteps;
             }
 
-            var step = ContentHelpers.RoundToLevels((int) current, (int) capacity, component.MagSteps);
-            if (component.ZeroOnlyOnEmpty && step == 0 && (int) current > 0)
-                step = 1;
+            var step = ContentHelpers.RoundToLevels((int)current, (int)capacity, ent.Comp.MagSteps);
 
             if (step == 0 && !ent.Comp.ZeroVisible)
             {

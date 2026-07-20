@@ -19,13 +19,9 @@
                                                   Access="Public" />
             </BoxContainer>
             <controls:VSpacer/>
-            <BoxContainer Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Name="CharacterSetup" Text="{Loc 'lobby-character-preview-panel-character-setup-button'}"
-                        HorizontalAlignment="Center"
-                        Margin="0 5 0 0" />
-                <Button Name="PatronPerks" Access="Public" Text="{Loc 'rmc-ui-patron-perks'}"
-                        Margin="0 5 0 0" Visible="False" />
-            </BoxContainer>
+            <Button Name="CharacterSetup" Text="{Loc 'lobby-character-preview-panel-character-setup-button'}"
+                    HorizontalAlignment="Center"
+                    Margin="0 5 0 0"/>
         </BoxContainer>
         <Label Name="Unloaded" Text="{Loc 'lobby-character-preview-panel-unloaded-preferences-label'}"/>
     </BoxContainer>

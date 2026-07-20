@@ -37,7 +37,10 @@ namespace Content.Client.Mapping;
 
 public sealed partial class MappingState : GameplayStateBase
 {
+    #if !FULL_RELEASE
     [Dependency] private IClientAdminManager _admin = default!;
+    #endif
+
     [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private IEntityNetworkManager _entityNetwork = default!;
     [Dependency] private IInputManager _input = default!;
@@ -794,7 +797,7 @@ public sealed partial class MappingState : GameplayStateBase
             var mapPos = _transform.ToMapCoordinates(coords);
 
             if (_maps.TryFindGridAt(mapPos, out var gridUid, out var grid) &&
-                _maps.TryGetTileRef(gridUid, grid, coords, out var tileRef) &&
+                _entityManager.System<SharedMapSystem>().TryGetTileRef(gridUid, grid, coords, out var tileRef) &&
                 _allPrototypesDict.TryGetValue(_entityManager.System<TurfSystem>().GetContentTileDefinition(tileRef), out button))
             {
                 OnSelected(button);

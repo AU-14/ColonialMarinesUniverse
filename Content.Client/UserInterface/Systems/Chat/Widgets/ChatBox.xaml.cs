@@ -1,7 +1,3 @@
-// RMC14
-using System.Linq;
-using Content.Client._RMC14.Chat;
-// RMC14
 using Content.Client.UserInterface.Systems.Chat.Controls;
 using Content.Shared.Chat;
 using Content.Shared.Input;
@@ -32,12 +28,6 @@ public partial class ChatBox : UIWidget
     public bool Main { get; set; }
 
     public ChatSelectChannel SelectedChannel => ChatInput.ChannelSelector.SelectedChannel;
-
-    // RMC14
-    public readonly Queue<RepeatedMessage> RepeatQueue = new();
-    // RMC14
-    private readonly HashSet<string> _whitelist = ["mono", "scramble", "bolditalic", "bold", "bullet", "color", "font", "head", "italic", "langicon"];
-    // RMC14
 
     public ChatBox()
     {
@@ -78,9 +68,7 @@ public partial class ChatBox : UIWidget
 
         var color = msg.MessageColorOverride ?? msg.Channel.TextColor();
 
-        // RMC14
-        AddLine(msg.WrappedMessage, color, msg.SenderEntity, msg.Message, msg.Channel, msg.RepeatCheckSender, msg.LanguageIcon);
-        // RMC14
+        AddLine(msg.WrappedMessage, color);
     }
 
     private void OnHighlightsUpdated(string highlights)
@@ -123,50 +111,14 @@ public partial class ChatBox : UIWidget
         _controller.UpdateHighlights(highlighs);
     }
 
-    // RMC14
-    public void AddLine(
-        string message,
-        Color color,
-        NetEntity sender,
-        string unwrapped,
-        ChatChannel channel,
-        bool repeatCheckSender,
-        string? languageIcon = null)
-    // RMC14
+    public void AddLine(string message, Color color)
     {
         var formatted = new FormattedMessage(3);
         formatted.PushColor(color);
-        // RMC14
-        if (!string.IsNullOrWhiteSpace(languageIcon))
-            formatted.AddMarkupOrThrow($"[langicon language=\"{FormattedMessage.EscapeText(languageIcon)}\"][/langicon]");
-        // RMC14
         formatted.AddMarkupOrThrow(message);
         formatted.Pop();
-
-        // RMC14
-        formatted = FilterProblematicTags(formatted);
-        if (_entManager.SystemOrNull<CMChatSystem>()?.TryRepetition(this, Contents, formatted, sender, unwrapped, channel, repeatCheckSender, languageIcon) ?? false)
-            return;
-
-        Contents.AddMessage(formatted);
-
-        // RMC14
-        if (!string.IsNullOrWhiteSpace(languageIcon) && RepeatQueue.Count > 0)
-            RepeatQueue.Last().IconControl = Contents.Children.OfType<LanguageIconTag.LanguageIconControl>().LastOrDefault();
+        Contents.AddMessage(formatted, tagsAllowed: null);
     }
-
-    // RMC14
-    private FormattedMessage FilterProblematicTags(FormattedMessage message)
-    {
-        var output = new FormattedMessage(message.Count);
-        foreach (var tag in message)
-        {
-            if (tag.Name is not { } name || _whitelist.Contains(name))
-                output.PushTag(tag);
-        }
-        return output;
-    }
-    // RMC14
 
     public void Focus(ChatSelectChannel? channel = null)
     {

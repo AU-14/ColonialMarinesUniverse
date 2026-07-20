@@ -16,8 +16,9 @@ public sealed partial class DrunkOverlay : Overlay
     [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
-    [Dependency] private IEntitySystemManager _sysMan = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IConfigurationManager _configManager = default!;
+    private readonly Shared.StatusEffectNew.StatusEffectsSystem _statusEffectsSystem;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     public override bool RequestScreenTexture => true;

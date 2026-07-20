@@ -19,11 +19,10 @@ public sealed partial class DecalPlacementSystem : EntitySystem
 {
     [Dependency] private IInputManager _inputManager = default!;
     [Dependency] private IOverlayManager _overlay = default!;
-    [Dependency] private IPrototypeManager _protoMan = default!;
     [Dependency] private InputSystem _inputSystem = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
-    [Dependency] private SharedMapSystem _maps = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedMapSystem _maps = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SpriteSystem _sprite = default!;
 

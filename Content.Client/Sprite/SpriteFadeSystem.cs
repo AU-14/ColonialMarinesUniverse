@@ -28,6 +28,10 @@ public sealed partial class SpriteFadeSystem : EntitySystem
     [Dependency] private IInputManager _inputManager = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private EntityQuery<SpriteComponent> _spriteQuery = default!;
+    [Dependency] private EntityQuery<SpriteFadeComponent> _fadeQuery = default!;
+    [Dependency] private EntityQuery<FadingSpriteComponent> _fadingQuery = default!;
+    [Dependency] private EntityQuery<FixturesComponent> _fixturesQuery = default!;
 
     private List<(MapCoordinates Point, bool ExcludeBoundingBox)> _points = new();
 

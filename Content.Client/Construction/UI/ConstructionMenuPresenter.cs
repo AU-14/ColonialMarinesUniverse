@@ -3,7 +3,6 @@ using System.Numerics;
 using Content.Client.Lobby;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.MenuBar.Widgets;
-using Content.Shared._RMC14.Prototypes;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Whitelist;
 using Robust.Client.GameObjects;
@@ -31,6 +30,8 @@ namespace Content.Client.Construction.UI
         [Dependency] private IUserInterfaceManager _uiManager = default!;
         [Dependency] private IPlayerManager _playerManager = default!;
         [Dependency] private IClientPreferencesManager _preferencesManager = default!;
+        [Dependency] private ILogManager _logManager = default!;
+
         private readonly SpriteSystem _spriteSystem;
         private readonly ISawmill _sawmill;
 
@@ -173,56 +174,6 @@ namespace Content.Client.Construction.UI
             }
         }
 
-        private void PopulateGrid(GridContainer recipesGrid,
-            IEnumerable<ConstructionMenu.ConstructionMenuListData> actualRecipes)
-        {
-            foreach (var recipe in actualRecipes)
-            {
-                var protoView = new EntityPrototypeView()
-                {
-                    Scale = new Vector2(1.2f),
-                    Modulate = recipe.Prototype.IconColor,
-                };
-                protoView.SetPrototype(recipe.TargetPrototype);
-
-                var itemButton = new ContainerButton()
-                {
-                    VerticalAlignment = Control.VAlignment.Center,
-                    Name = recipe.Prototype.Name,
-                    ToolTip = recipe.Prototype.Name,
-                    ToggleMode = true,
-                    Children = { protoView },
-                };
-
-                var itemButtonPanelContainer = new PanelContainer
-                {
-                    PanelOverride = new StyleBoxFlat { BackgroundColor = StyleNano.ButtonColorDefault },
-                    Children = { itemButton },
-                };
-
-                itemButton.OnToggled += buttonToggledEventArgs =>
-                {
-                    SelectGridButton(itemButton, buttonToggledEventArgs.Pressed);
-
-                    if (buttonToggledEventArgs.Pressed &&
-                        _selected != null &&
-                        _recipeButtons.TryGetValue(_selected.ID, out var oldButton))
-                    {
-                        oldButton.Pressed = false;
-                        SelectGridButton(oldButton, false);
-                    }
-
-                    OnGridViewRecipeSelected(this, buttonToggledEventArgs.Pressed ? recipe.Prototype : null);
-                };
-
-                recipesGrid.AddChild(itemButtonPanelContainer);
-                _recipeButtons[recipe.Prototype.ID] = itemButton;
-                var isCurrentButtonSelected = _selected == recipe.Prototype;
-                itemButton.Pressed = isCurrentButtonSelected;
-                SelectGridButton(itemButton, isCurrentButtonSelected);
-            }
-        }
-
         private List<ConstructionMenu.ConstructionMenuListData> GetAndSortRecipes((string, string) args)
         {
             var recipes = new List<ConstructionMenu.ConstructionMenuListData>();
@@ -231,7 +182,7 @@ namespace Content.Client.Construction.UI
             var isEmptyCategory = string.IsNullOrEmpty(category) || category == ForAllCategoryName;
             _selectedCategory = isEmptyCategory ? string.Empty : category;
 
-            foreach (var recipe in _prototypeManager.EnumerateCM<ConstructionPrototype>())
+            foreach (var recipe in _prototypeManager.EnumeratePrototypes<ConstructionPrototype>())
             {
                 if (recipe.Hide)
                     continue;
@@ -273,62 +224,6 @@ namespace Content.Client.Construction.UI
             return recipes;
         }
 
-        private void SelectGridButton(BaseButton button, bool select)
-        {
-            if (button.Parent is not PanelContainer buttonPanel)
-                return;
-
-            // RMC14
-            //button.Children.Single().Modulate = select ? Color.Green : Color.White;
-            var buttonColor = select ? StyleNano.ButtonColorDefault : Color.Transparent;
-            buttonPanel.PanelOverride = new StyleBoxFlat { BackgroundColor = buttonColor };
-        }
-
-        private void PopulateCategories(string? selectCategory = null)
-        {
-            var uniqueCategories = new HashSet<string>();
-
-            foreach (var prototype in _prototypeManager.EnumerateCM<ConstructionPrototype>())
-            {
-                var category = prototype.Category;
-
-                if (!string.IsNullOrEmpty(category))
-                    uniqueCategories.Add(category);
-            }
-
-            var isFavorites = _favoritedRecipes.Count > 0;
-            var categoriesArray = new string[isFavorites ? uniqueCategories.Count + 2 : uniqueCategories.Count + 1];
-
-            // hard-coded to show all recipes
-            var idx = 0;
-            categoriesArray[idx++] = ForAllCategoryName;
-
-            // hard-coded to show favorites if it need
-            if (isFavorites)
-            {
-                categoriesArray[idx++] = FavoriteCatName;
-            }
-
-            var sortedProtoCategories = uniqueCategories.OrderBy(Loc.GetString);
-
-            foreach (var cat in sortedProtoCategories)
-            {
-                categoriesArray[idx++] = cat;
-            }
-
-            _constructionView.OptionCategories.Clear();
-
-            for (var i = 0; i < categoriesArray.Length; i++)
-            {
-                _constructionView.OptionCategories.AddItem(Loc.GetString(categoriesArray[i]), i);
-
-                if (!string.IsNullOrEmpty(selectCategory) && selectCategory == categoriesArray[i])
-                    _constructionView.OptionCategories.SelectId(i);
-            }
-
-            _constructionView.Categories = categoriesArray;
-        }
-
         private void PopulateInfo(ConstructionPrototype? prototype)
         {
             if (_constructionSystem is null)
@@ -349,10 +244,8 @@ namespace Content.Client.Construction.UI
                 prototype.Name!,
                 prototype.Description!,
                 proto,
-                prototype.IconColor,
                 prototype.Type != ConstructionType.Item,
-                !_favoritedRecipes.Contains(prototype),
-                prototype);
+                !_favoritedRecipes.Contains(prototype));
 
             var stepList = _constructionView.RecipeStepList;
             GenerateStepList(prototype, stepList);
@@ -398,7 +291,7 @@ namespace Content.Client.Construction.UI
                     return;
                 }
 
-                if (_selected.Type == ConstructionType.Item || _selected.RMCPrototype != null)
+                if (_selected.Type == ConstructionType.Item)
                 {
                     _constructionSystem.TryStartItemConstruction(_selected.ID);
                     _constructionView.BuildButtonPressed = false;

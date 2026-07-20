@@ -13,16 +13,30 @@ namespace Content.Client.Flash;
 
 public sealed partial class FlashOverlay : Overlay
 {
-    public sealed partial class FlashOverlay : Overlay
+    private static readonly ProtoId<ShaderPrototype> FlashedEffectShader = "FlashedEffect";
+
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IConfigurationManager _configManager = default!;
+
+    private readonly StatusEffectsSystem _statusSys;
+
+    public override OverlaySpace Space => OverlaySpace.WorldSpace;
+    private readonly ShaderInstance _shader;
+    private bool _reducedMotion;
+    public float PercentComplete;
+    public Texture? ScreenshotTexture;
+
+    public FlashOverlay()
     {
         IoCManager.InjectDependencies(this);
         _shader = _prototypeManager.Index(FlashedEffectShader).InstanceUnique();
         _statusSys = _entityManager.System<StatusEffectsSystem>();
 
-        [Dependency] private IPrototypeManager _prototypeManager = default!;
-        [Dependency] private IEntityManager _entityManager = default!;
-        [Dependency] private IPlayerManager _playerManager = default!;
-        [Dependency] private IGameTiming _timing = default!;
+        _configManager.OnValueChanged(CCVars.DisableFlashEffect, (b) => { _reducedMotion = b; }, invokeImmediately: true);
+    }
 
     protected override void FrameUpdate(FrameEventArgs args)
     {

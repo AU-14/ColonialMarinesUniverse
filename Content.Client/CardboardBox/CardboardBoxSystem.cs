@@ -11,9 +11,9 @@ namespace Content.Client.CardboardBox;
 public sealed partial class CardboardBoxSystem : SharedCardboardBoxSystem
 {
     [Dependency] private EntityLookupSystem _entityLookup = default!;
-    [Dependency] private TransformSystem _transform = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private TransformSystem _transform = default!;
 
     [Dependency] private EntityQuery<MobStateComponent> _mobStateQuery;
 

@@ -21,6 +21,7 @@ namespace Content.Client.Administration.UI.ManageSolutions
         [Dependency] private IClientConsoleHost _consoleHost = default!;
         [Dependency] private IEntityManager _entityManager = default!;
         [Dependency] private IClientGameTiming _timing = default!;
+        [Dependency] private IClientAdminManager _admin = default!;
 
         private NetEntity _target = NetEntity.Invalid;
         private string? _selectedSolution;

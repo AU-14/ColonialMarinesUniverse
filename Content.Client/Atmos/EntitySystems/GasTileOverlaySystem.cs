@@ -9,13 +9,12 @@ namespace Content.Client.Atmos.EntitySystems;
 [UsedImplicitly]
 public sealed class GasTileOverlaySystem : SharedGasTileOverlaySystem
 {
-    [UsedImplicitly]
-    public sealed partial class GasTileOverlaySystem : SharedGasTileOverlaySystem
+    public override void Initialize()
     {
-        [Dependency] private IResourceCache _resourceCache = default!;
-        [Dependency] private IOverlayManager _overlayMan = default!;
-        [Dependency] private SpriteSystem _spriteSys = default!;
-        [Dependency] private SharedTransformSystem _xformSys = default!;
+        base.Initialize();
+        SubscribeNetworkEvent<GasOverlayUpdateEvent>(HandleGasOverlayUpdate);
+        SubscribeLocalEvent<GasTileOverlayComponent, ComponentHandleState>(OnHandleState);
+    }
 
     private void OnHandleState(EntityUid gridUid, GasTileOverlayComponent comp, ref ComponentHandleState args)
     {

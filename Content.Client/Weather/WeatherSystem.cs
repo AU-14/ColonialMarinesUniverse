@@ -20,6 +20,10 @@ public sealed partial class WeatherSystem : SharedWeatherSystem
     [Dependency] private MapSystem _mapSystem = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
+    [Dependency] private EntityQuery<AudioComponent> _audioQuery = default!;
+    [Dependency] private EntityQuery<MapGridComponent> _gridQuery = default!;
+    [Dependency] private EntityQuery<RoofComponent> _roofQuery = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -37,28 +41,6 @@ public sealed partial class WeatherSystem : SharedWeatherSystem
         base.Update(frameTime);
 
         if (!Timing.IsFirstTimePredicted)
-            return true;
-
-        // RMC14
-        if (_playerManager.LocalEntity is not { } localPlayer)
-            return true;
-
-        if (Transform(localPlayer).MapUid != uid)
-        {
-            weather.Stream = _audio.Stop(weather.Stream);
-            return true;
-        }
-        //
-
-        // TODO: Fades (properly)
-        weather.Stream = _audio.Stop(weather.Stream);
-        weather.Stream = _audio.PlayGlobal(weatherProto.Sound, Filter.Local(), true)?.Entity;
-        return true;
-    }
-
-    private void OnWeatherHandleState(EntityUid uid, WeatherComponent component, ref ComponentHandleState args)
-    {
-        if (args.Current is not WeatherComponentState state)
             return;
 
         var player = _playerManager.LocalEntity;

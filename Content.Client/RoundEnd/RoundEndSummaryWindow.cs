@@ -68,7 +68,15 @@ public sealed partial class RoundEndSummaryWindow : DefaultWindow
             Name = Loc.GetString("round-end-summary-window-round-end-summary-tab-title")
         };
 
-            MinSize = new Vector2(520, 580);
+        var roundEndSummaryContainerScrollbox = new ScrollContainer
+        {
+            VerticalExpand = true,
+            Margin = new Thickness(10)
+        };
+        var roundEndSummaryContainer = new BoxContainer
+        {
+            Orientation = LayoutOrientation.Vertical
+        };
 
         //Gamemode Name
         var gamemodeLabel = new RichTextLabel();
@@ -109,16 +117,12 @@ public sealed partial class RoundEndSummaryWindow : DefaultWindow
             Name = Loc.GetString("round-end-summary-window-player-manifest-tab-title")
         };
 
-            var roundEndSummaryContainerScrollbox = new ScrollContainer
-            {
-                VerticalExpand = true,
-                Margin = new Thickness(10),
-                HScrollEnabled = false,
-            };
-            var roundEndSummaryContainer = new BoxContainer
-            {
-                Orientation = LayoutOrientation.Vertical
-            };
+        // Search container
+        var searchContainer = new BoxContainer
+        {
+            Orientation = LayoutOrientation.Horizontal,
+            Margin = new Thickness(10, 10, 10, 5)
+        };
 
         var searchLabel = new Label
         {

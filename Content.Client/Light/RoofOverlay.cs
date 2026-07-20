@@ -2,8 +2,6 @@ using System.Numerics;
 using Content.Shared.Light.Components;
 using Content.Shared.Light.EntitySystems;
 using Content.Shared.Maps;
-using Content.Shared._RMC14.Vehicle.Viewport;
-using Robust.Client.Player;
 using Robust.Client.Graphics;
 using Robust.Shared.Enums;
 using Robust.Shared.Map;
@@ -16,9 +14,6 @@ namespace Content.Client.Light;
 public sealed partial class RoofOverlay : Overlay
 {
     private readonly IEntityManager _entManager;
-    // RMC14
-    [Dependency] private IPlayerManager _player = default!;
-    // RMC14
     [Dependency] private IOverlayManager _overlay = default!;
 
     private readonly EntityLookupSystem _lookup;
@@ -49,11 +44,6 @@ public sealed partial class RoofOverlay : Overlay
     {
         if (args.Viewport.Eye == null || !_entManager.HasComponent<MapLightComponent>(args.MapUid))
             return;
-
-        // RMC14
-        if (IsPeekingThroughRemoteTarget(args.MapId))
-            return;
-        // RMC14
 
         var viewport = args.Viewport;
         var eye = args.Viewport.Eye;
@@ -137,24 +127,4 @@ public sealed partial class RoofOverlay : Overlay
 
         worldHandle.SetTransform(Matrix3x2.Identity);
     }
-
-    // RMC14
-    private bool IsPeekingThroughRemoteTarget(MapId drawnMap)
-    {
-        if (_player.LocalEntity is not { } player ||
-            !_entManager.TryGetComponent(player, out VehicleViewportUserComponent? viewport) ||
-            !_entManager.TryGetComponent(player, out EyeComponent? eye) ||
-            !_entManager.TryGetComponent(player, out TransformComponent? playerXform) ||
-            viewport.PeekTarget is not { } peekTarget ||
-            eye.Target != peekTarget ||
-            !_entManager.TryGetComponent(peekTarget, out TransformComponent? targetXform))
-        {
-            return false;
-        }
-
-        return targetXform.MapID != MapId.Nullspace &&
-               targetXform.MapID != playerXform.MapID &&
-               targetXform.MapID == drawnMap;
-    }
-    // RMC14
 }

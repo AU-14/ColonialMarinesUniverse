@@ -27,6 +27,7 @@ public sealed partial class AmbientSoundSystem : SharedAmbientSoundSystem
     [Dependency] private SharedTransformSystem _xformSystem = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private IOverlayManager _overlayManager = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IRobustRandom _random = default!;
 

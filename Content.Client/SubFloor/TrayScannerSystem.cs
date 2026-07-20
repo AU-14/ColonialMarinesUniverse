@@ -1,5 +1,11 @@
-using Content.Shared._RMC14.Vents;
-using Content.Shared.Hands.EntitySystems;
+using Content.Client.Items;
+using Content.Client.Items.UI;
+using Content.Client.Message;
+using Content.Client.Power.Visualizers;
+using Content.Client.Stylesheets;
+using Content.Shared.Atmos.Components;
+using Content.Shared.Disposal.Tube;
+using Content.Shared.Input;
 using Content.Shared.Inventory;
 using Content.Shared.SubFloor;
 using Robust.Client.Animations;
@@ -20,10 +26,12 @@ public sealed partial class TrayScannerSystem : SharedTrayScannerSystem
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
-    [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private TrayScanRevealSystem _trayScanReveal = default!;
+    [Dependency] private IInputManager _inputManager = default!;
+    [Dependency] private EntityQuery<TrayScannerComponent> _trayScannerQuery = default!;
+    [Dependency] private EntityQuery<SubFloorHideComponent> _subFloorHideQuery = default!;
 
     private const string TRayAnimationKey = "trays";
     private const double AnimationLength = 0.3;
@@ -54,8 +62,6 @@ public sealed partial class TrayScannerSystem : SharedTrayScannerSystem
         var range = 0f;
         var mode = TrayScannerMode.All;
         HashSet<Entity<SubFloorHideComponent>> inRange;
-        var scannerQuery = GetEntityQuery<TrayScannerComponent>();
-        var crawlerQuery = GetEntityQuery<RMCTrayCrawlerComponent>();
 
         // TODO: Should probably sub to player attached changes / inventory changes but inventory's
         // API is extremely skrungly. If this ever shows up on dottrace ping me and laugh.
@@ -63,38 +69,13 @@ public sealed partial class TrayScannerSystem : SharedTrayScannerSystem
 
         foreach (var item in _inventory.GetHandOrInventoryEntities(player.Value, SlotFlags.POCKET))
         {
-            while (enumerator.MoveNext(out var slot))
-            {
-                foreach (var ent in slot.ContainedEntities)
-                {
-                    if (!scannerQuery.TryGetComponent(ent, out var sneakScanner) || !sneakScanner.Enabled)
-                        continue;
+            if (!_trayScannerQuery.TryGetComponent(item, out var scanner) || !scanner.Enabled)
+                continue;
 
-                    canSee = true;
-                    range = MathF.Max(range, sneakScanner.Range);
-                }
-            }
-        }
-
-        if (crawlerQuery.TryGetComponent(player.Value, out var scanner) && scanner.Enabled)
-        {
             range = MathF.Max(scanner.Range, range);
+            mode = scanner.Mode;
             canSee = true;
-        }
-        else
-        {
-            foreach (var hand in _hands.EnumerateHands(player.Value))
-            {
-                if (!_hands.TryGetHeldItem(player.Value, hand, out var heldEntity))
-                    continue;
-
-                if (!scannerQuery.TryGetComponent(heldEntity, out var heldScanner) || !heldScanner.Enabled)
-                    continue;
-
-                range = MathF.Max(heldScanner.Range, range);
-                canSee = true;
-                break;
-            }
+            break;
         }
 
         inRange = new HashSet<Entity<SubFloorHideComponent>>();

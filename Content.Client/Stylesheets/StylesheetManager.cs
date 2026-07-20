@@ -10,8 +10,9 @@ namespace Content.Client.Stylesheets
 {
     public sealed partial class StylesheetManager : IStylesheetManager
     {
+        [Dependency] private ILogManager _logManager = default!;
         [Dependency] private IUserInterfaceManager _userInterfaceManager = default!;
-        [Dependency] private IResourceCache _resourceCache = default!;
+        [Dependency] private IReflectionManager _reflection = default!;
 
         [Dependency]
         private IResourceCache

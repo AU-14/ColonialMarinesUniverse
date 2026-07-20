@@ -13,6 +13,8 @@ public sealed partial class BeforeLightTargetOverlay : Overlay
 
     [Dependency] private IClyde _clyde = default!;
 
+    private readonly OverlayResourceCache<CachedResources> _resources = new();
+
     public Box2Rotated EnlargedBounds;
 
     /// <summary>

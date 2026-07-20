@@ -16,7 +16,7 @@ public sealed partial class FtlArrivalOverlay : Overlay
 {
     private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
 
-    public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV; // RMC14
+    public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowEntities;
 
     private EntityLookupSystem _lookups;
     private SharedMapSystem _maps;

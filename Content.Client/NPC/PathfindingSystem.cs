@@ -19,6 +19,7 @@ namespace Content.Client.NPC
         [Dependency] private IEyeManager _eyeManager = default!;
         [Dependency] private IGameTiming _timing = default!;
         [Dependency] private IInputManager _inputManager = default!;
+        [Dependency] private IOverlayManager _overlayManager = default!;
         [Dependency] private IResourceCache _cache = default!;
         [Dependency] private NPCSteeringSystem _steering = default!;
         [Dependency] private MapSystem _mapSystem = default!;
@@ -37,7 +38,7 @@ namespace Content.Client.NPC
                 }
                 else if (!_overlayManager.HasOverlay<PathfindingOverlay>())
                 {
-                    overlayManager.AddOverlay(new PathfindingOverlay(EntityManager, _eyeManager, _inputManager, _cache, this, _mapSystem, _transformSystem));
+                    _overlayManager.AddOverlay(new PathfindingOverlay(EntityManager, _eyeManager, _inputManager, _cache, this, _mapSystem, _transformSystem));
                 }
 
                 if ((value & PathfindingDebugMode.Steering) != 0x0)

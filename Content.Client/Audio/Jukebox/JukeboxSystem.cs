@@ -8,7 +8,6 @@ namespace Content.Client.Audio.Jukebox;
 
 public sealed partial class JukeboxSystem : SharedJukeboxSystem
 {
-    [Dependency] private IPrototypeManager _protoManager = default!;
     [Dependency] private AnimationPlayerSystem _animationPlayer = default!;
     [Dependency] private SharedAppearanceSystem _appearanceSystem = default!;
     [Dependency] private SharedUserInterfaceSystem _uiSystem = default!;

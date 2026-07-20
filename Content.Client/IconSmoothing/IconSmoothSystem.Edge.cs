@@ -1,5 +1,4 @@
 using System.Numerics;
-using Content.Shared._RMC14.IconSmoothing;
 using Content.Shared.IconSmoothing;
 using Robust.Client.GameObjects;
 
@@ -8,12 +7,9 @@ namespace Content.Client.IconSmoothing;
 public sealed partial class IconSmoothSystem
 {
     // Handles drawing edge sprites on the non-smoothed edges.
-    private EntityQuery<CMIconSmoothComponent> _cmIconSmoothQuery;
 
     private void InitializeEdge()
     {
-        _cmIconSmoothQuery = GetEntityQuery<CMIconSmoothComponent>();
-
         SubscribeLocalEvent<SmoothEdgeComponent, ComponentStartup>(OnEdgeStartup);
         SubscribeLocalEvent<SmoothEdgeComponent, ComponentShutdown>(OnEdgeShutdown);
     }

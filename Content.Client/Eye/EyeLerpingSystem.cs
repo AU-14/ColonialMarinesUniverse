@@ -1,5 +1,4 @@
 using System.Numerics;
-using Content.Shared._RMC14.Camera;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
 using JetBrains.Annotations;
@@ -183,16 +182,13 @@ public sealed partial class EyeLerpingSystem : EntitySystem
             // Handle zoom
             var zoomDiff = Vector2.Lerp(lerpInfo.LastZoom, lerpInfo.TargetZoom, tickFraction);
 
-            if (!HasComp<RMCStaticZoomLevelComponent>(entity)) // RMC14, only this if statement
+            if ((zoomDiff - lerpInfo.TargetZoom).Length() < lerpMinimum)
             {
-                if ((zoomDiff - lerpInfo.TargetZoom).Length() < lerpMinimum)
-                {
-                    _eye.SetZoom(entity, lerpInfo.TargetZoom, eye);
-                }
-                else
-                {
-                    _eye.SetZoom(entity, zoomDiff, eye);
-                }
+                _eye.SetZoom(entity, lerpInfo.TargetZoom, eye);
+            }
+            else
+            {
+                _eye.SetZoom(entity, zoomDiff, eye);
             }
 
             // Handle Rotation

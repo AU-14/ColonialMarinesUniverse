@@ -39,6 +39,9 @@ namespace Content.Client.Inventory
     {
         [Dependency] private IPlayerManager _player = default!;
         [Dependency] private IUserInterfaceManager _ui = default!;
+        [Dependency] private IClientAdminManager _admin = default!;
+        [Dependency] private IPrototypeManager _proto = default!;
+        [Dependency] private IConfigurationManager _cvar = default!;
 
         private readonly ExamineSystem _examine;
         private readonly HandsSystem _hands;

@@ -5,6 +5,7 @@ using Content.Client.Parallax.Data;
 using Content.Shared.CCVar;
 using Nett;
 using Robust.Client.Graphics;
+using Robust.Shared.Collections;
 using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Utility;
@@ -194,6 +195,7 @@ public sealed partial class GeneratedParallaxCache : IPostInjectInit
         public required ResPath ConfigPath;
         public required Task<Texture> LoadTask;
         public required CancellationTokenSource CancellationSource;
+
         public int RefCount;
     }
 }

@@ -12,7 +12,6 @@ namespace Content.Client.Stack
     {
         [Dependency] private AppearanceSystem _appearanceSystem = default!;
         [Dependency] private ItemCounterSystem _counterSystem = default!;
-        [Dependency] private SpriteSystem _sprite = default!;
 
         public override void Initialize()
         {
@@ -26,8 +25,7 @@ namespace Content.Client.Stack
 
         private void OnAppearanceChange(Entity<StackComponent> ent, ref AppearanceChangeEvent args)
         {
-            if (!Resolve(uid, ref component, false))
-                return;
+            var (uid, comp) = ent;
 
             if (args.Sprite == null || comp.LayerStates.Count < 1)
                 return;

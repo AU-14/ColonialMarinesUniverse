@@ -1,5 +1,3 @@
-using Content.Client._RMC14.LinkAccount;
-using Content.Client._RMC14.Lobby;
 using Content.Client.Audio;
 using Content.Client.GameTicking.Managers;
 using Content.Client.LateJoin;
@@ -12,7 +10,6 @@ using Content.Shared.CCVar;
 using Robust.Client;
 using Robust.Client.Console;
 using Robust.Client.ResourceManagement;
-using Robust.Client.State;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Configuration;
@@ -21,7 +18,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.Lobby
 {
-    public sealed partial class LobbyState : State
+    public sealed partial class LobbyState : Robust.Client.State.State
     {
         [Dependency] private IBaseClient _baseClient = default!;
         [Dependency] private IConfigurationManager _cfg = default!;
@@ -32,9 +29,7 @@ namespace Content.Client.Lobby
         [Dependency] private IGameTiming _gameTiming = default!;
         [Dependency] private IVoteManager _voteManager = default!;
         [Dependency] private ClientsidePlaytimeTrackingManager _playtimeTracking = default!;
-
-        // RMC14
-        [Dependency] private LinkAccountManager _linkAccount = default!;
+        [Dependency] private IPrototypeManager _protoMan = default!;
 
         private ClientGameTicker _gameTicker = default!;
         private ContentAudioSystem _contentAudioSystem = default!;
@@ -74,18 +69,12 @@ namespace Content.Client.Lobby
             UpdateLobbyUi();
 
             Lobby.CharacterPreview.CharacterSetupButton.OnPressed += OnSetupPressed;
-            Lobby.CharacterPreview.PatronPerks.OnPressed += OnPatronPerksPressed;
             Lobby.ReadyButton.OnPressed += OnReadyPressed;
             Lobby.ReadyButton.OnToggled += OnReadyToggled;
 
             _gameTicker.InfoBlobUpdated += UpdateLobbyUi;
             _gameTicker.LobbyStatusUpdated += LobbyStatusUpdated;
             _gameTicker.LobbyLateJoinStatusUpdated += LobbyLateJoinStatusUpdated;
-
-            // RMC14
-            Lobby.JoinXenoButton.OnPressed += _ =>
-                _userInterfaceManager.GetUIController<RMCLobbyUIController>().OpenJoinXenoWindow();
-            Lobby.JoinXenoButton.AddStyleClass("OpenRight");
         }
 
         protected override void Shutdown()
@@ -100,7 +89,6 @@ namespace Content.Client.Lobby
             _voteManager.ClearPopupContainer();
 
             Lobby!.CharacterPreview.CharacterSetupButton.OnPressed -= OnSetupPressed;
-            Lobby.CharacterPreview.PatronPerks.OnPressed -= OnPatronPerksPressed;
             Lobby!.ReadyButton.OnPressed -= OnReadyPressed;
             Lobby!.ReadyButton.OnToggled -= OnReadyToggled;
 
@@ -117,11 +105,6 @@ namespace Content.Client.Lobby
         {
             SetReady(false);
             Lobby?.SwitchState(LobbyGui.LobbyGuiState.CharacterSetup);
-        }
-
-        private void OnPatronPerksPressed(BaseButton.ButtonEventArgs obj)
-        {
-            _userInterfaceManager.GetUIController<LinkAccountUIController>().TogglePatronPerksWindow();
         }
 
         private void OnReadyPressed(BaseButton.ButtonEventArgs args)
@@ -195,18 +178,12 @@ namespace Content.Client.Lobby
 
         private void UpdateLobbyUi()
         {
-            Lobby!.CharacterPreview.PatronPerks.Visible = _linkAccount.CanViewPatronPerks();
-
             if (_gameTicker.IsGameStarted)
             {
                 Lobby!.ReadyButton.Text = Loc.GetString("lobby-state-ready-button-join-state");
                 Lobby!.ReadyButton.ToggleMode = false;
                 Lobby!.ReadyButton.Pressed = false;
                 Lobby!.ObserveButton.Disabled = false;
-
-                // RMC14
-                Lobby.ReadyButton.AddStyleClass("OpenLeft");
-                Lobby.JoinXenoButton.Visible = true;
             }
             else
             {
@@ -216,10 +193,6 @@ namespace Content.Client.Lobby
                 Lobby!.ReadyButton.ToggleMode = true;
                 Lobby!.ReadyButton.Disabled = false;
                 Lobby!.ObserveButton.Disabled = true;
-
-                // RMC14
-                Lobby.ReadyButton.RemoveStyleClass("OpenLeft");
-                Lobby.JoinXenoButton.Visible = false;
             }
 
             if (_gameTicker.ServerInfoBlob != null)
@@ -230,7 +203,7 @@ namespace Content.Client.Lobby
             var minutesToday = _playtimeTracking.PlaytimeMinutesToday;
             if (minutesToday > 60)
             {
-                Lobby!.PlaytimeComment.Visible = false; // RMC14
+                Lobby!.PlaytimeComment.Visible = true;
 
                 var hoursToday = Math.Round(minutesToday / 60f, 1);
 

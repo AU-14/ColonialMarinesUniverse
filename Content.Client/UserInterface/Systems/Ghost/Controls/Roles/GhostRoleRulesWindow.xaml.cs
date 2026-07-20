@@ -27,10 +27,6 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
                 TopBanner.SetMessage(FormattedMessage.FromMarkupPermissive(rules + "\n" + Loc.GetString("ghost-roles-window-rules-footer", ("time", ghostRoleTime))));
                 RequestButton.Disabled = true;
             }
-            else
-            {
-                TopBanner.SetMessage(FormattedMessage.FromMarkupPermissive(rules));
-            }
 
             RequestButton.OnPressed += requestAction;
         }

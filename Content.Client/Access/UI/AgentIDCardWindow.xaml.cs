@@ -29,9 +29,9 @@ public sealed partial class AgentIDCardWindow : FancyWindow
 
     public AgentIDCardWindow()
     {
-        [Dependency] private IPrototypeManager _prototypeManager = default!;
-        [Dependency] private IEntitySystemManager _entitySystem = default!;
-        private readonly SpriteSystem _spriteSystem;
+        RobustXamlLoader.Load(this);
+        IoCManager.InjectDependencies(this);
+        _spriteSystem = _entitySystem.GetEntitySystem<SpriteSystem>();
 
         NameLineEdit.OnTextEntered += e => CommitName(e.Text);
         NameLineEdit.OnFocusExit += e => CommitName(e.Text);

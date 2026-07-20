@@ -1,6 +1,5 @@
 using System.Numerics;
 using Content.Shared.Mobs;
-using System.Numerics;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Enums;

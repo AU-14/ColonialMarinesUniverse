@@ -9,6 +9,9 @@ namespace Content.Client.Anomaly.Effects;
 public sealed partial class ClientInnerBodyAnomalySystem : SharedInnerBodyAnomalySystem
 {
     [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private DisplacementMapSystem _displacement = default!;
+
+    [Dependency] private EntityQuery<InnerBodyAnomalyVisualsComponent> _visualsQuery = default!;
 
     public override void Initialize()
     {

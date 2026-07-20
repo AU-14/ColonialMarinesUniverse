@@ -10,10 +10,8 @@ namespace Content.Client.Silicons.Laws.Ui;
 [GenerateTypedNameReferences]
 public sealed partial class LawDisplay : Button
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
-    [Dependency] private IChatManager _chatManager = default!;
-    [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private EntityManager _entityManager = default!;
+    private const string LawDisplayUnselectedTexturePath = "/Textures/Interface/Alerts/Abilities/silenced.png";
+    private const string LawDisplaySelectedTexturePath = "/Textures/Interface/Emotes/vocal.png";
 
     /// <summary>
     /// The SiliconLaw tracked by this display.

@@ -19,6 +19,7 @@ public sealed partial class HolopadWindow : FancyWindow
 {
     [Dependency] private IEntityManager _entManager = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private ILogManager _logManager = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     private readonly SharedHolopadSystem _holopadSystem = default!;

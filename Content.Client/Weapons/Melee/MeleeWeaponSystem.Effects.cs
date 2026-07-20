@@ -20,9 +20,6 @@ public sealed partial class MeleeWeaponSystem
     /// </summary>
     public override void DoLunge(EntityUid user, EntityUid weapon, Angle angle, Vector2 localPos, string? animation, bool predicted = true)
     {
-        if (localPos == Vector2.Zero) // RMC14
-            return;
-
         if (!Timing.IsFirstTimePredicted)
             return;
 
@@ -242,7 +239,7 @@ public sealed partial class MeleeWeaponSystem
         var query = EntityQueryEnumerator<TrackUserComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var arcComponent, out var xform))
         {
-            if (arcComponent.User == null || TerminatingOrDeleted(arcComponent.User))
+            if (arcComponent.User == null || EntityManager.Deleted(arcComponent.User))
                 continue;
 
             var targetPos = TransformSystem.GetWorldPosition(arcComponent.User.Value);
@@ -251,12 +248,6 @@ public sealed partial class MeleeWeaponSystem
             {
                 var entRotation = TransformSystem.GetWorldRotation(xform);
                 targetPos += entRotation.RotateVec(arcComponent.Offset);
-            }
-            // RMC14
-            if (arcComponent.OriginOffset != null && arcComponent.OriginOffset != Vector2.Zero)
-            {
-                var userRotation = TransformSystem.GetWorldRotation(arcComponent.User.Value);
-                targetPos += userRotation.RotateVec(arcComponent.OriginOffset.Value);
             }
 
             TransformSystem.SetWorldPosition(uid, targetPos);

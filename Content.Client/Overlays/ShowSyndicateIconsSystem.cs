@@ -7,8 +7,6 @@ namespace Content.Client.Overlays;
 
 public sealed partial class ShowSyndicateIconsSystem : EquipmentHudSystem<ShowSyndicateIconsComponent>
 {
-    [Dependency] private IPrototypeManager _prototype = default!;
-
     public override void Initialize()
     {
         base.Initialize();

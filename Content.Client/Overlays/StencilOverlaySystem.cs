@@ -14,14 +14,12 @@ public sealed partial class StencilOverlaySystem : EntitySystem
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private WeatherSystem _weather = default!;
-
-    //RMC14
-    [Dependency] private EntityLookupSystem _entLookup = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        _overlay.AddOverlay(new StencilOverlay(_parallax, _transform, _map, _sprite, _weather, _entLookup));
+        _overlay.AddOverlay(new StencilOverlay(_parallax, _transform, _map, _sprite, _weather, _status));
     }
 
     public override void Shutdown()

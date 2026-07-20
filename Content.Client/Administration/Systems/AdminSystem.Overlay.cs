@@ -17,7 +17,6 @@ namespace Content.Client.Administration.Systems
         [Dependency] private IUserInterfaceManager _userInterfaceManager = default!;
         [Dependency] private IConfigurationManager _configurationManager = default!;
         [Dependency] private SharedRoleSystem _roles = default!;
-        [Dependency] private IPrototypeManager _proto = default!;
 
         private AdminNameOverlay _adminNameOverlay = default!;
 

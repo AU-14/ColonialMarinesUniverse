@@ -27,7 +27,7 @@ namespace Content.Client.Tabletop
         [Dependency] private IPlayerManager _playerManager = default!;
         [Dependency] private IGameTiming _gameTiming = default!;
         [Dependency] private AppearanceSystem _appearance = default!;
-        [Dependency] private SharedTransformSystem _transformSystem = default!;
+        [Dependency] private SharedTransformSystem _transform = default!;
         [Dependency] private SpriteSystem _sprite = default!;
 
         // Time in seconds to wait until sending the location of a dragged entity to the server again

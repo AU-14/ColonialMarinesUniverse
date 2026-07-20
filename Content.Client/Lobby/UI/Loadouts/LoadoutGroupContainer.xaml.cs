@@ -220,15 +220,6 @@ public sealed partial class LoadoutGroupContainer : BoxContainer
 
         var enabled = loadout.IsValid(profile, session, proto.ID, collection, out var reason);
 
-        if (proto.Cost != null && loadout.Points != null)
-        {
-            if (loadout.Points < proto.Cost && pressed)
-            {
-                reason = null;
-                enabled = true;
-            }
-        }
-
         var cont = new LoadoutContainer(proto, !enabled, reason);
 
         cont.Text = loadoutSystem.GetName(proto);

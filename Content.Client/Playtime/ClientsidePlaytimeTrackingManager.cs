@@ -1,7 +1,7 @@
 using Content.Shared.CCVar;
 using Robust.Client.Player;
-using Robust.Shared.Configuration;
 using Robust.Shared.Network;
+using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
 
 namespace Content.Client.Playtime;
@@ -103,14 +103,6 @@ public sealed partial class ClientsidePlaytimeTrackingManager
 
         _sawmill.Info($"Recorded {timeDiffMinutes} minutes of living playtime!");
 
-        // RMC14
-        try
-        {
-            _configurationManager.SaveToFile(); // We don't like that we have to save the entire config just to store playtime stats '^'
-        }
-        catch
-        {
-            // ignored
-        }
+        _configurationManager.SaveToFile(); // We don't like that we have to save the entire config just to store playtime stats '^'
     }
 }

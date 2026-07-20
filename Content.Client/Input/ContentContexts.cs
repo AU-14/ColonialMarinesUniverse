@@ -1,4 +1,3 @@
-using Content.Shared._RMC14.Input;
 using Content.Shared.Input;
 using Robust.Shared.Input;
 
@@ -79,11 +78,6 @@ namespace Content.Client.Input
             human.AddFunction(ContentKeyFunctions.SmartEquipPocket1);
             human.AddFunction(ContentKeyFunctions.SmartEquipPocket2);
             human.AddFunction(ContentKeyFunctions.SmartEquipSuitStorage);
-            //RMC14
-            human.AddFunction(ContentKeyFunctions.SmartEquipUniform);
-            human.AddFunction(ContentKeyFunctions.SmartEquipArmor);
-            human.AddFunction(ContentKeyFunctions.SmartEquipHelmet);
-            //RMC14
             human.AddFunction(ContentKeyFunctions.OpenBackpack);
             human.AddFunction(ContentKeyFunctions.OpenBelt);
             human.AddFunction(ContentKeyFunctions.MouseMiddle);
@@ -137,34 +131,6 @@ namespace Content.Client.Input
             common.AddFunction(ContentKeyFunctions.OpenDecalSpawnWindow);
             common.AddFunction(ContentKeyFunctions.OpenAdminMenu);
             common.AddFunction(ContentKeyFunctions.OpenGuidebook);
-
-
-            CMFunctions(contexts);
-        }
-
-        private static void CMFunctions(IInputContextContainer contexts)
-        {
-            var human = contexts.GetContext("human");
-            human.AddFunction(CMKeyFunctions.RMCActivateAttachableBarrel);
-            human.AddFunction(CMKeyFunctions.RMCActivateAttachableRail);
-            human.AddFunction(CMKeyFunctions.RMCActivateAttachableStock);
-            human.AddFunction(CMKeyFunctions.RMCActivateAttachableUnderbarrel);
-            human.AddFunction(CMKeyFunctions.RMCFieldStripHeldItem);
-            human.AddFunction(CMKeyFunctions.RMCCycleFireMode);
-            human.AddFunction(CMKeyFunctions.CMUniqueAction);
-            human.AddFunction(CMKeyFunctions.CMHolsterPrimary);
-            human.AddFunction(CMKeyFunctions.CMHolsterSecondary);
-            human.AddFunction(CMKeyFunctions.CMHolsterTertiary);
-            human.AddFunction(CMKeyFunctions.CMHolsterQuaternary);
-            human.AddFunction(CMKeyFunctions.RMCPickUpDroppedItems);
-            human.AddFunction(CMKeyFunctions.RMCInteractWithOtherHand);
-            human.AddFunction(CMKeyFunctions.RMCRest);
-            human.AddFunction(CMKeyFunctions.RMCResist);
-
-            //Xenonid
-            var xenonid = contexts.New("xenonid", "human");
-            xenonid.AddFunction(CMKeyFunctions.CMXenoWideSwing);
-            xenonid.AddFunction(CMKeyFunctions.RMCXenoRest);
         }
     }
 }

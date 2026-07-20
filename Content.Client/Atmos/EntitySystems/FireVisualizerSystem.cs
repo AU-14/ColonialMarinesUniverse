@@ -1,5 +1,5 @@
 using Content.Client.Atmos.Components;
-using Content.Shared._RMC14.Atmos; // RMC14
+using Content.Client.DisplacementMap;
 using Content.Shared.Atmos;
 using Content.Shared.DisplacementMap;
 using Robust.Client.GameObjects;
@@ -14,23 +14,13 @@ namespace Content.Client.Atmos.EntitySystems;
 public sealed partial class FireVisualizerSystem : VisualizerSystem<FireVisualsComponent>
 {
     [Dependency] private PointLightSystem _lights = default!;
-
-    // RMC14 start
-    private EntityQuery<RMCFireColorComponent> _fireColorQuery;
-    // RMC14 end
+    [Dependency] private DisplacementMapSystem _displacement = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
-        // RMC14 start
-        _fireColorQuery = GetEntityQuery<RMCFireColorComponent>();
-        // RMC14 end
-
         SubscribeLocalEvent<FireVisualsComponent, ComponentInit>(OnComponentInit);
-        // RMC14 start
-        SubscribeLocalEvent<FireVisualsComponent, ComponentStartup>(OnComponentStartup);
-        // RMC14 end
         SubscribeLocalEvent<FireVisualsComponent, ComponentShutdown>(OnShutdown);
     }
 
@@ -61,18 +51,9 @@ public sealed partial class FireVisualizerSystem : VisualizerSystem<FireVisualsC
         sprite.LayerSetShader(FireVisualLayers.Fire, "unshaded");
         if (component.Sprite != null)
             SpriteSystem.LayerSetRsi((uid, sprite), FireVisualLayers.Fire, new ResPath(component.Sprite));
-    }
-
-    // RMC14 start
-    // Delay the initial update until startup so client-side light children are not attached to an initializing parent.
-    private void OnComponentStartup(EntityUid uid, FireVisualsComponent component, ComponentStartup args)
-    {
-        if (!TryComp<SpriteComponent>(uid, out var sprite) || !TryComp(uid, out AppearanceComponent? appearance))
-            return;
 
         UpdateAppearance(uid, component, sprite, appearance);
     }
-    // RMC14 end
 
     protected override void OnAppearanceChange(EntityUid uid, FireVisualsComponent component, ref AppearanceChangeEvent args)
     {
@@ -106,26 +87,20 @@ public sealed partial class FireVisualizerSystem : VisualizerSystem<FireVisualsC
         else
             SpriteSystem.LayerSetRsiState((uid, sprite), index, component.NormalState);
 
-        // RMC14 start
-        var fireColor = component.LightColor;
-        if (_fireColorQuery.TryComp(uid, out var fireColorComp))
+        if (component.CurrentDisplacement != fireDisplacement)
         {
-            fireColor = fireColorComp.Color;
-            SpriteSystem.LayerSetColor((uid, sprite), index, fireColor);
-        }
-        // RMC14 end
+            if (fireDisplacement != null && ProtoMan.Resolve<DisplacementDataPrototype>(fireDisplacement, out var displacementProto))
+                _displacement.TryAddDisplacement(displacementProto.Displacement, (uid, sprite), index, FireVisualLayers.Fire, out _);
+            else
+                _displacement.EnsureDisplacementIsNotOnSprite((uid, sprite), FireVisualLayers.Fire);
 
-        // RMC14 start
-        if (!MetaData(uid).EntityInitialized)
-            return;
-        // RMC14 end
+            component.CurrentDisplacement = fireDisplacement;
+        }
 
         component.LightEntity ??= Spawn(null, new EntityCoordinates(uid, default));
         var light = EnsureComp<PointLightComponent>(component.LightEntity.Value);
 
-        // RMC14 start
-        _lights.SetColor(component.LightEntity.Value, fireColor, light);
-        // RMC14 end
+        _lights.SetColor(component.LightEntity.Value, component.LightColor, light);
 
         // light needs a minimum radius to be visible at all, hence the + 1.5f
         _lights.SetRadius(component.LightEntity.Value, Math.Clamp(1.5f + component.LightRadiusPerStack * fireStacks, 0f, component.MaxLightRadius), light);

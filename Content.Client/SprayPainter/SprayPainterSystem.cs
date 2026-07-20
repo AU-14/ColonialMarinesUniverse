@@ -15,9 +15,12 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.SprayPainter;
 
+/// <summary>
+/// Client-side spray painter functions. Caches information for spray painter windows and updates the UI to reflect component state.
+/// </summary>
 public sealed partial class SprayPainterSystem : SharedSprayPainterSystem
 {
-    [Dependency] private IResourceCache _resourceCache = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
 
     public List<SprayPainterDecalEntry> Decals = [];
     public Dictionary<string, List<string>> PaintableGroupsByCategory = new();

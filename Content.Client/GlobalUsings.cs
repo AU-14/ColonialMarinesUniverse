@@ -2,7 +2,6 @@
 
 global using System;
 global using System.Collections.Generic;
-global using System.Linq;
 global using Robust.Shared.Analyzers;
 global using Robust.Shared.Log;
 global using Robust.Shared.Localization;

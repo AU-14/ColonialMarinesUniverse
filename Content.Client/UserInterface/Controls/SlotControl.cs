@@ -1,20 +1,17 @@
 using System.Numerics;
 using Content.Client.Cooldown;
 using Content.Client.UserInterface.Systems.Inventory.Controls;
-using Content.Shared._RMC14.IconLabel;
+using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Input;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Client.UserInterface.Controls
 {
-    public abstract partial class SlotControl : Control, IEntityControl
+    public abstract class SlotControl : Control, IEntityControl
     {
-        [Dependency] private IEntityManager _entities = default!;
-        [Dependency] private IPrototypeManager _prototype = default!;
-        [Dependency] private ILocalizationManager _loc = default!;
-
         public static int DefaultButtonSize = 64;
 
         public TextureRect ButtonRect { get; }
@@ -24,8 +21,6 @@ namespace Content.Client.UserInterface.Controls
         public Control AdminOverlays { get; }
         public TextureButton StorageButton { get; }
         public CooldownGraphic CooldownDisplay { get; }
-        // RMC14 - Declare icon label
-        public Label IconLabel { get; }
 
         private SpriteView SpriteView { get; }
         private EntityPrototypeView ProtoView { get; }
@@ -78,7 +73,7 @@ namespace Content.Client.UserInterface.Controls
             set
             {
                 _buttonTexturePath = value;
-                UpdateChildren();
+                UpdateButtonTexture();
             }
         }
 
@@ -89,7 +84,7 @@ namespace Content.Client.UserInterface.Controls
             set
             {
                 _fullButtonTexturePath = value;
-                UpdateChildren();
+                UpdateButtonTexture();
             }
         }
 
@@ -127,14 +122,12 @@ namespace Content.Client.UserInterface.Controls
         public SlotControl()
         {
             IoCManager.InjectDependencies(this);
-
             Name = "SlotButton_null";
             MinSize = new Vector2(DefaultButtonSize, DefaultButtonSize);
-
             AddChild(ButtonRect = new TextureRect
             {
                 TextureScale = new Vector2(2, 2),
-                MouseFilter = MouseFilterMode.Stop,
+                MouseFilter = MouseFilterMode.Stop
             });
             AddChild(HighlightRect = new TextureRect
             {
@@ -165,15 +158,6 @@ namespace Content.Client.UserInterface.Controls
                 Scale = new Vector2(2, 2),
                 SetSize = new Vector2(DefaultButtonSize, DefaultButtonSize),
                 OverrideDirection = Direction.South
-            });
-            // RMC14 - Add icon label
-            AddChild(IconLabel = new Label
-            {
-                Text = "",
-                HorizontalAlignment = HAlignment.Left,
-                VerticalAlignment = VAlignment.Center,
-                Visible = true,
-                Margin = new Thickness(10, 0, 0, 0),
             });
 
             AddChild(StorageButton = new TextureButton
@@ -244,37 +228,46 @@ namespace Content.Client.UserInterface.Controls
         public void SetEntity(EntityUid? ent)
         {
             SpriteView.SetEntity(ent);
-            UpdateChildren();
+            SpriteView.Visible = true;
+            ProtoView.Visible = false;
+            UpdateButtonTexture();
         }
 
-        private void UpdateChildren()
+        /// <summary>
+        /// Add an overlay to in the admin overlays location
+        /// </summary>
+        /// <param name="texturePath">The texture path to overlay.</param>
+        /// <param name="color">Color to modulate the texture with - if null no modulation.</param>
+        public void AddAdminOverlay(ResPath texturePath, Color? color = null)
+        {
+            AdminOverlays.AddChild(new SimpleSlotOverlay(texturePath.CanonPath, color));
+        }
+
+        /// <summary>
+        /// Causes the control to display a placeholder prototype, optionally faded
+        /// </summary>
+        public void SetPrototype(EntProtoId? proto, bool fade)
+        {
+            ProtoView.SetPrototype(proto);
+            SpriteView.Visible = false;
+            ProtoView.Visible = true;
+
+            UpdateButtonTexture();
+
+            if (ProtoView.Entity is not { } ent || !fade)
+                return;
+
+            var sprites = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<SpriteSystem>();
+            sprites.SetColor((ent.Owner, ent.Comp1), Color.DarkGray.WithAlpha(0.65f));
+        }
+
+        private void UpdateButtonTexture()
         {
             var fullTexture = Theme.ResolveTextureOrNull(_fullButtonTexturePath);
             var texture = Entity.HasValue && fullTexture != null
                 ? fullTexture.Texture
                 : Theme.ResolveTextureOrNull(_buttonTexturePath)?.Texture;
             ButtonRect.Texture = texture;
-            // RMC14 - Refresh icon label
-            IconLabel.Text = "";
-            IconLabel.FontColorOverride = Color.White;
-            if (_entities.TryGetComponent(Entity, out IconLabelComponent? iconLabel))
-            {
-                if (iconLabel.LabelTextLocId is not null && _loc.TryGetString(iconLabel.LabelTextLocId, out var labelText, iconLabel.LabelTextParams.ToArray()))
-                {
-                    if (labelText.Length > iconLabel.LabelMaxSize)
-                        labelText = labelText[..iconLabel.LabelMaxSize];
-
-                    IconLabel.Text = labelText;
-                }
-
-                if (Color.TryFromName(iconLabel.TextColor, out Color color))
-                {
-                    IconLabel.FontColorOverride = color;
-                }
-
-                IconLabel.SetSize = new Vector2(iconLabel.TextSize);
-            }
-            // RMC14 - End Refresh icon label
         }
 
         private void OnButtonPressed(GUIBoundKeyEventArgs args)
@@ -310,7 +303,7 @@ namespace Content.Client.UserInterface.Controls
 
             StorageButton.TextureNormal = Theme.ResolveTextureOrNull(_storageTexturePath)?.Texture;
             HighlightRect.Texture = Theme.ResolveTextureOrNull(_highlightTexturePath)?.Texture;
-            UpdateChildren();
+            UpdateButtonTexture();
         }
 
         EntityUid? IEntityControl.UiEntity => Entity;

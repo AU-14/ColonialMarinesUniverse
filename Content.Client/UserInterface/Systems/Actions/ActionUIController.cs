@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Numerics;
-using Content.Client._RMC14.Actions;
 using Content.Client.Actions;
 using Content.Client.Construction;
 using Content.Client.Gameplay;
@@ -12,8 +11,6 @@ using Content.Client.UserInterface.Systems.Actions.Controls;
 using Content.Client.UserInterface.Systems.Actions.Widgets;
 using Content.Client.UserInterface.Systems.Actions.Windows;
 using Content.Client.UserInterface.Systems.Gameplay;
-using Content.Shared._RMC14.Actions;
-using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Charges.Systems;
@@ -42,9 +39,7 @@ using static Robust.Shared.Input.Binding.PointerInputCmdHandler;
 
 namespace Content.Client.UserInterface.Systems.Actions;
 
-// RMC14
 public sealed partial class ActionUIController : UIController, IOnStateChanged<GameplayState>, IOnSystemChanged<ActionsSystem>
-// RMC14
 {
     [Dependency] private IOverlayManager _overlays = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -238,21 +233,17 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
 
     private void TriggerAction(int index)
     {
-        // RMC14
-        var activeActions = GetActiveHotbarActions();
-        if (index < 0 || index >= activeActions.Count)
+        if (!_actions.TryGetValue(index, out var actionId) ||
+            _actionsSystem?.GetAction(actionId) is not {} action)
+        {
             return;
-
-        if (activeActions[index] is not { } actionId ||
-            _actionsSystem?.GetAction(actionId) is not { } action)
-            return;
+        }
 
         // TODO: probably should have a clientside event raised for flexibility
-        if (EntityManager.TryGetComponent<TargetActionComponent>(actionId, out var target))
-            ToggleTargeting((actionId, action.Comp, target));
+        if (EntityManager.TryGetComponent<TargetActionComponent>(action, out var target))
+            ToggleTargeting((action, action, target));
         else
             _actionsSystem?.TriggerAction(action);
-        // RMC14
     }
 
     private void OnActionAdded(EntityUid actionId)
@@ -265,51 +256,29 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
         if (action.Comp.Toggled && EntityManager.TryGetComponent<TargetActionComponent>(actionId, out var target))
             StartTargeting((action, action, target));
 
-        // RMC14
-        if (EntityManager.HasComponent<VehicleHardpointActionComponent>(actionId))
-        {
-            RefreshVehicleHotbarOverride(forceUpdate: true);
-            return;
-        }
-        // RMC14
-
         if (_actions.Contains(action))
             return;
 
         _actions.Add(action);
-        // RMC14
-        RefreshVehicleHotbarOverride(forceUpdate: true);
-        // RMC14
     }
 
     private void OnActionRemoved(EntityUid actionId)
     {
+        if (_container == null)
+            return;
+
         if (actionId == SelectingTargetFor)
             StopTargeting();
 
-        // RMC14
-        if (EntityManager.HasComponent<VehicleHardpointActionComponent>(actionId))
-        {
-            _vehicleActions.RemoveAll(x => x == actionId);
-            RefreshVehicleHotbarOverride(forceUpdate: true);
-            return;
-        }
-
-        _vehicleActions.RemoveAll(x => x == actionId);
-        // RMC14
-
         _actions.RemoveAll(x => x == actionId);
-        // RMC14
-        RefreshVehicleHotbarOverride(forceUpdate: true);
-        // RMC14
     }
 
     private void OnActionsUpdated()
     {
         QueueWindowUpdate();
-        // RMC14
-        RefreshVehicleHotbarOverride(forceUpdate: true);
-        // RMC14
+
+        if (_actionsSystem != null)
+            _container?.SetActionData(_actionsSystem, _actions.ToArray());
     }
 
     private void ActionButtonPressed(ButtonEventArgs args)
@@ -457,21 +426,11 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
         PopulateActions(actions);
     }
 
-    // RMC14
-    private void SetAction(
-        ActionButton button,
-        EntityUid? actionId,
-        bool updateSlots = true,
-        bool allowOverrideClear = false)
+    private void SetAction(ActionButton button, EntityUid? actionId, bool updateSlots = true)
     {
         if (_actionsSystem == null)
             return;
 
-        if (_vehicleHotbarOverride && actionId == null && !allowOverrideClear)
-            return;
-
-        var actionList = GetEditableHotbarActions();
-        // RMC14
         int position;
 
         if (actionId == null)
@@ -479,30 +438,26 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
             button.ClearData();
             if (_container?.TryGetButtonIndex(button, out position) ?? false)
             {
-                if (actionList.Count > position && position >= 0)
-                    actionList.RemoveAt(position);
+                if (_actions.Count > position && position >= 0)
+                    _actions.RemoveAt(position);
             }
         }
         else if (button.TryReplaceWith(actionId.Value, _actionsSystem) &&
             _container != null &&
             _container.TryGetButtonIndex(button, out position))
         {
-            if (position >= actionList.Count)
+            if (position >= _actions.Count)
             {
-                actionList.Add(actionId);
+                _actions.Add(actionId);
             }
             else
             {
-                actionList[position] = actionId;
+                _actions[position] = actionId;
             }
         }
 
         if (updateSlots)
-            _container?.SetActionData(_actionsSystem, GetActiveHotbarActions().ToArray());
-
-        if (!_vehicleHotbarOverride)
-            EntityManager.SystemOrNull<RMCActionsSystem>()?.ActionsChanged(_actions);
-        // RMC14
+            _container?.SetActionData(_actionsSystem, _actions.ToArray());
     }
 
     private void DragAction()
@@ -522,10 +477,10 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
         }
 
         if (dragged.Parent is ActionButtonContainer)
-            SetAction(dragged, swapAction, false, allowOverrideClear: true);
+            SetAction(dragged, swapAction, false);
 
         if (_actionsSystem != null)
-            _container?.SetActionData(_actionsSystem, GetActiveHotbarActions().ToArray());
+            _container?.SetActionData(_actionsSystem, _actions.ToArray());
 
         _menuDragHelper.EndDrag();
     }
@@ -577,14 +532,6 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
     {
         if (args.Function == EngineKeyFunctions.UIRightClick)
         {
-            // RMC14
-            if (_vehicleHotbarOverride)
-            {
-                args.Handle();
-                return;
-            }
-            // RMC14
-
             SetAction(button, null);
             args.Handle();
             return;
@@ -747,12 +694,6 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
 
     private void ClearActions()
     {
-        _actions.Clear();
-        // RMC14
-        _vehicleActions.Clear();
-        _vehicleHotbarOverride = false;
-        _vehicleOutsideView = false;
-        // RMC14
         _container?.ClearActionData();
     }
 
@@ -764,17 +705,10 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
         _actions.Clear();
         foreach (var assign in assignments)
         {
-            // RMC14
-            if (EntityManager.HasComponent<VehicleHardpointActionComponent>(assign.ActionId))
-                continue;
-            // RMC14
-
             _actions.Add(assign.ActionId);
         }
 
-        // RMC14
-        RefreshVehicleHotbarOverride(forceUpdate: true);
-        // RMC14
+        _container?.SetActionData(_actionsSystem, _actions.ToArray());
     }
 
     public void RemoveActionContainer()
@@ -801,9 +735,6 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
     public override void FrameUpdate(FrameEventArgs args)
     {
         _menuDragHelper.Update(args.DeltaSeconds);
-        // RMC14
-        RefreshVehicleHotbarOverride();
-        // RMC14
         if (_window is {UpdateNeeded: true})
             SearchAndDisplay();
     }
@@ -814,19 +745,12 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
             return;
 
         LoadDefaultActions();
-        // RMC14
-        RefreshVehicleHotbarOverride(forceUpdate: true);
-        // RMC14
+        _container?.SetActionData(_actionsSystem, _actions.ToArray());
         QueueWindowUpdate();
     }
 
     private void OnComponentUnlinked()
     {
-        // RMC14
-        _vehicleHotbarOverride = false;
-        _vehicleOutsideView = false;
-        _vehicleActions.Clear();
-        // RMC14
         _container?.ClearActionData();
         QueueWindowUpdate();
         StopTargeting();
@@ -843,11 +767,6 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
         _actions.Clear();
         foreach (var (action, _) in actions)
         {
-            // RMC14
-            if (EntityManager.HasComponent<VehicleHardpointActionComponent>(action))
-                continue;
-            // RMC14
-
             if (!_actions.Contains(action))
                 _actions.Add(action);
         }
@@ -912,11 +831,8 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
         // - Add a yes/no checkmark where the HandItemOverlay usually is
 
         // Highlight valid entity targets
-        if (!EntityManager.TryGetComponent<EntityTargetActionComponent>(uid, out var entity) ||
-            !entity.ToggleOutline)
-        {
+        if (!EntityManager.TryGetComponent<EntityTargetActionComponent>(uid, out var entity))
             return;
-        }
 
         Func<EntityUid, bool>? predicate = null;
         var attachedEnt = action.AttachedEntity;

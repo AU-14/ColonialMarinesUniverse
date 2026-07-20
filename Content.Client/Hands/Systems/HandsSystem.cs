@@ -94,7 +94,8 @@ namespace Content.Client.Hands.Systems
             string handId,
             bool doDropInteraction = true,
             bool log = true,
-            EntityCoordinates? targetDropLocation = null)
+            EntityCoordinates? targetDropLocation = null
+        )
         {
             base.DoDrop(ent, handId, doDropInteraction, log, targetDropLocation);
 
@@ -124,7 +125,7 @@ namespace Content.Client.Hands.Systems
         /// <summary>
         ///     Called when a user clicked on their hands GUI
         /// </summary>
-        public void UIHandClick(Entity<HandsComponent> ent, string handName, bool switchHand = true)
+        public void UIHandClick(Entity<HandsComponent> ent, string handName)
         {
             var hands = ent.Comp;
             if (hands.ActiveHandId == null)
@@ -141,7 +142,7 @@ namespace Content.Client.Hands.Systems
                 return;
             }
 
-            if (switchHand && handName != hands.ActiveHandId && pressedEntity == null)
+            if (handName != hands.ActiveHandId && pressedEntity == null)
             {
                 // change active hand
                 RaisePredictiveEvent(new RequestSetHandEvent(handName));

@@ -1,5 +1,4 @@
 using Content.Shared.Chat.TypingIndicator;
-using System.Numerics;
 using Content.Shared.Holopad;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -12,7 +11,6 @@ namespace Content.Client.Holopad;
 
 public sealed partial class HolopadSystem : SharedHolopadSystem
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SpriteSystem _sprite = default!;
 

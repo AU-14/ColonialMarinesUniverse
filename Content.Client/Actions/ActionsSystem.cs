@@ -1,7 +1,5 @@
 using System.IO;
 using System.Linq;
-using Content.Client._RMC14.Movement;
-using Content.Shared._RMC14.Actions;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Charges.Systems;
@@ -31,9 +29,9 @@ namespace Content.Client.Actions
 
         [Dependency] private SharedChargesSystem _sharedCharges = default!;
         [Dependency] private IPlayerManager _playerManager = default!;
-        [Dependency] private IPrototypeManager _proto = default!;
         [Dependency] private IResourceManager _resources = default!;
         [Dependency] private MetaDataSystem _metaData = default!;
+        [Dependency] private ISerializationManager _serialization = default!;
 
         public event Action<EntityUid>? OnActionAdded;
         public event Action<EntityUid>? OnActionRemoved;
@@ -47,9 +45,6 @@ namespace Content.Client.Actions
         private readonly List<Entity<ActionComponent>> _added = new();
 
         public static readonly EntProtoId MappingEntityAction = "BaseMappingEntityAction";
-
-        // RMC14
-        [Dependency] private RMCLagCompensationSystem _rmcLagCompensation = default!;
 
         public override void Initialize()
         {
@@ -214,7 +209,7 @@ namespace Content.Client.Actions
             }
             else
             {
-                var request = new RequestPerformActionEvent(GetNetEntity(action), _rmcLagCompensation.GetLastRealTick(null));
+                var request = new RequestPerformActionEvent(GetNetEntity(action));
                 RaisePredictiveEvent(request);
             }
         }
@@ -282,7 +277,7 @@ namespace Content.Client.Actions
                         PlacementOption = "AlignTileAny",
                         TileId = id
                     });
-                    _metaData.SetEntityName(actionId, proto.LocalizedName);
+                    _metaData.SetEntityName(actionId, Loc.GetString(proto.Name));
                 }
                 else
                 {
@@ -332,7 +327,8 @@ namespace Content.Client.Actions
             // this is the actual entity-world targeting magic
             EntityUid? targetEnt = null;
             if (TryComp<EntityTargetActionComponent>(ent, out var entity) &&
-                ValidateEntityTarget(user, args.Input.EntityUid, (uid, entity)))
+                args.Input.EntityUid is { Valid: true } entityUid &&
+                ValidateEntityTarget(user, entityUid, (uid, entity)))
             {
                 targetEnt = entityUid;
             }
@@ -349,7 +345,7 @@ namespace Content.Client.Actions
                 PerformAction((user, user.Comp), (uid, action));
             }
             else
-                RaisePredictiveEvent(new RequestPerformActionEvent(GetNetEntity(uid), GetNetEntity(targetEnt), GetNetCoordinates(coords), _rmcLagCompensation.GetLastRealTick(null)));
+                RaisePredictiveEvent(new RequestPerformActionEvent(GetNetEntity(uid), GetNetEntity(targetEnt), GetNetCoordinates(coords)));
 
             args.FoundTarget = true;
         }
@@ -359,12 +355,10 @@ namespace Content.Client.Actions
             if (args.Handled)
                 return;
 
+            args.Handled = true;
+
             if (args.Input.EntityUid is not { Valid: true } entity)
-            {
-                RaisePredictiveEvent(new RMCMissedTargetActionEvent(GetNetEntity(ent))); // RMC14
-                args.Handled = true; // RMC14
                 return;
-            }
 
             // let world target component handle it
             var (uid, comp) = ent;
@@ -388,16 +382,10 @@ namespace Content.Client.Actions
             }
             else
             {
-                RaisePredictiveEvent(new RequestPerformActionEvent(GetNetEntity(uid), GetNetEntity(entity), _rmcLagCompensation.GetLastRealTick(null)));
+                RaisePredictiveEvent(new RequestPerformActionEvent(GetNetEntity(uid), GetNetEntity(entity)));
             }
 
             args.FoundTarget = true;
-        }
-
-        public void SetAssignments(List<SlotAssignment> actions)
-        {
-            ClearAssignments?.Invoke();
-            AssignSlot?.Invoke(actions);
         }
 
         public record struct SlotAssignment(byte Hotbar, byte Slot, EntityUid ActionId);

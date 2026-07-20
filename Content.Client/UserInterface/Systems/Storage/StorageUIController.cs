@@ -247,11 +247,10 @@ public sealed partial class StorageUIController : UIController, IOnSystemChanged
 
         if (args.Function == ContentKeyFunctions.MoveStoredItem)
         {
-            // DraggingRotation = control.Location.Rotation;
-            // _menuDragHelper.MouseDown(control);
-            // _menuDragHelper.Update(0f);
+            DraggingRotation = control.Location.Rotation;
+            _menuDragHelper.MouseDown(control);
+            _menuDragHelper.Update(0f);
 
-            // This Handle here is what prevents always inserting and allows InteractUsing on items in storage.
             args.Handle();
         }
         else if (args.Function == ContentKeyFunctions.SaveItemLocation)
@@ -378,7 +377,6 @@ public sealed partial class StorageUIController : UIController, IOnSystemChanged
         // If we just clicked, then take it out of the bag.
         else
         {
-            window.Reclaim(control.Location, control);
             EntityManager.RaisePredictiveEvent(new StorageInteractWithItemEvent(
                 EntityManager.GetNetEntity(control.Entity),
                 EntityManager.GetNetEntity(sourceStorage)));
@@ -426,15 +424,7 @@ public sealed partial class StorageUIController : UIController, IOnSystemChanged
         if (DraggingGhost == null)
             return;
 
-        var containerSystem = EntityManager.System<ContainerSystem>();
-        if (!containerSystem.TryGetContainingContainer((DraggingGhost.Entity, null), out var container) ||
-            !EntityManager.TryGetComponent(container.Owner, out StorageComponent? storageComp))
-        {
-            return;
-        }
-
         var offset = ItemGridPiece.GetCenterOffset(
-            (container.Owner, storageComp),
             (DraggingGhost.Entity, null),
             new ItemStorageLocation(DraggingRotation, Vector2i.Zero),
             EntityManager);

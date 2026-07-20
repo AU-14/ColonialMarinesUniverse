@@ -12,7 +12,6 @@ namespace Content.Client.Access.UI
     public sealed partial class IdCardConsoleBoundUserInterface : BoundUserInterface
     {
         [Dependency] private IPrototypeManager _prototypeManager = default!;
-        [Dependency] private IConfigurationManager _cfgManager = default!;
         private readonly SharedIdCardConsoleSystem _idCardConsoleSystem = default!;
 
         private IdCardConsoleWindow? _window;

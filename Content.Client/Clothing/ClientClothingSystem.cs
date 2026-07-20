@@ -202,15 +202,7 @@ public sealed partial class ClientClothingSystem : ClothingSystem
         // may eventually bloat the player with lots of invisible layers.
         foreach (var layer in revealedLayers)
         {
-            // RMC14
-            try
-            {
-                _sprite.RemoveLayer(entity.AsNullable(), layer);
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Error removing layer:\n{e}");
-            }
+            _sprite.RemoveLayer(entity.AsNullable(), layer);
         }
         revealedLayers.Clear();
     }
@@ -309,7 +301,6 @@ public sealed partial class ClientClothingSystem : ClothingSystem
                 index++;
                 // note that every insertion requires reshuffling & remapping all the existing layers.
                 _sprite.AddBlankLayer((equipee, sprite), index);
-                _sprite.LayerMapRemove((equipee, sprite), key); // RMC14
                 _sprite.LayerMapSet((equipee, sprite), key, index);
 
                 if (layerData.Color != null)

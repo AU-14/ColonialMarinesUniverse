@@ -32,22 +32,14 @@ public sealed partial class AlertsUIController : UIController, IOnStateEntered<G
     {
         var widget = UI;
         if (widget != null)
-        {
             widget.AlertPressed -= OnAlertPressed;
-            widget.AlertAltPressed += OnAlertAltPressed;
-        }
-
     }
 
     private void OnScreenLoad()
     {
         var widget = UI;
         if (widget != null)
-        {
             widget.AlertPressed += OnAlertPressed;
-            widget.AlertAltPressed += OnAlertAltPressed;
-        }
-
 
         SyncAlerts();
     }
@@ -55,11 +47,6 @@ public sealed partial class AlertsUIController : UIController, IOnStateEntered<G
     private void OnAlertPressed(object? sender, ProtoId<AlertPrototype> e)
     {
         _alertsSystem?.AlertClicked(e);
-    }
-
-    private void OnAlertAltPressed(object? sender, ProtoId<AlertPrototype> e)
-    {
-        _alertsSystem?.AlertClickedAlt(e);
     }
 
     private void SystemOnClearAlerts(object? sender, EventArgs e)

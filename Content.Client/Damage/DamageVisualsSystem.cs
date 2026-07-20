@@ -30,7 +30,8 @@ namespace Content.Client.Damage;
 /// </summary>
 public sealed partial class DamageVisualsSystem : VisualizerSystem<DamageVisualsComponent>
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private DisplacementMapSystem _displacement = default!;
 
     public override void Initialize()
     {
@@ -614,7 +615,7 @@ public sealed partial class DamageVisualsSystem : VisualizerSystem<DamageVisuals
     ///     it assumes you're updating a layer that is tracking all
     ///     damage.
     /// </summary>
-    private void UpdateTargetLayer(Entity<SpriteComponent> spriteEnt, DamageVisualsComponent damageVisComp, Enum layerMapKey, FixedPoint2 threshold)
+    private void UpdateTargetLayer(Entity<SpriteComponent> spriteEnt, DamageVisualsComponent damageVisComp, object layerMapKey, FixedPoint2 threshold)
     {
         if (damageVisComp.Overlay && damageVisComp.DamageOverlayGroups != null)
         {
@@ -627,26 +628,28 @@ public sealed partial class DamageVisualsSystem : VisualizerSystem<DamageVisuals
                     spriteLayer,
                     $"{layerState}",
                     threshold,
-                    true);
+                    $"{layerMapKey}trackDamage",
+                    damageVisComp.Displacement);
             }
         }
         else if (!damageVisComp.Overlay)
         {
             var layerState = damageVisComp.LayerMapKeyStates[layerMapKey];
-            SpriteSystem.LayerMapTryGet(spriteEnt.AsNullable(), layerMapKey, out var spriteLayer, false);
+            SpriteSystem.LayerMapTryGet(spriteEnt.AsNullable(), $"{layerMapKey}", out var spriteLayer, false);
 
             UpdateDamageLayerState(spriteEnt,
                 spriteLayer,
                 $"{layerState}",
                 threshold,
-                damageVisComp.HideIfZero);
+                $"{layerMapKey}",
+                damageVisComp.Displacement);
         }
     }
 
     /// <summary>
     ///     Updates a target layer by damage group.
     /// </summary>
-    private void UpdateTargetLayer(Entity<SpriteComponent, DamageVisualsComponent> entity, Enum layerMapKey, string damageGroup, FixedPoint2 threshold)
+    private void UpdateTargetLayer(Entity<SpriteComponent, DamageVisualsComponent> entity, object layerMapKey, string damageGroup, FixedPoint2 threshold)
     {
         var spriteComponent = entity.Comp1;
         var damageVisComp = entity.Comp2;
@@ -663,20 +666,22 @@ public sealed partial class DamageVisualsSystem : VisualizerSystem<DamageVisuals
                     spriteLayer,
                     $"{layerState}_{damageGroup}",
                     threshold,
-                    true);
+                    $"{layerMapKey}{damageGroup}",
+                    entity.Comp2.Displacement);
             }
         }
         else if (!damageVisComp.Overlay)
         {
             var layerState = damageVisComp.LayerMapKeyStates[layerMapKey];
-            SpriteSystem.LayerMapTryGet((entity, spriteComponent), layerMapKey, out var spriteLayer, false);
+            SpriteSystem.LayerMapTryGet((entity, spriteComponent), $"{layerMapKey}", out var spriteLayer, false);
 
             UpdateDamageLayerState(
                 (entity, spriteComponent),
                 spriteLayer,
                 $"{layerState}_{damageGroup}",
                 threshold,
-                damageVisComp.HideIfZero);
+                $"{layerMapKey}",
+                entity.Comp2.Displacement);
         }
     }
 
@@ -691,7 +696,8 @@ public sealed partial class DamageVisualsSystem : VisualizerSystem<DamageVisuals
             spriteLayer,
             $"DamageOverlay",
             threshold,
-            true);
+            $"DamageOverlay",
+            displacement);
     }
 
     /// <summary>
@@ -713,7 +719,8 @@ public sealed partial class DamageVisualsSystem : VisualizerSystem<DamageVisuals
                     spriteLayer,
                     $"DamageOverlay_{damageGroup}",
                     threshold,
-                    true);
+                    $"DamageOverlay{damageGroup}",
+                    displacement);
             }
         }
     }
@@ -724,9 +731,9 @@ public sealed partial class DamageVisualsSystem : VisualizerSystem<DamageVisuals
     ///     function calls it), and what threshold
     ///     was passed into it.
     /// </summary>
-    private void UpdateDamageLayerState(Entity<SpriteComponent> spriteEnt, int spriteLayer, string statePrefix, FixedPoint2 threshold, bool hideIfZero)
+    private void UpdateDamageLayerState(Entity<SpriteComponent> spriteEnt, int spriteLayer, string statePrefix, FixedPoint2 threshold, string layerKey, DisplacementData? displacement)
     {
-        if (threshold == 0 && hideIfZero)
+        if (threshold == 0)
         {
             SpriteSystem.LayerSetVisible(spriteEnt.AsNullable(), spriteLayer, false);
         }
@@ -745,21 +752,6 @@ public sealed partial class DamageVisualsSystem : VisualizerSystem<DamageVisuals
             {
                 _displacement.EnsureDisplacementIsNotOnSprite(spriteEnt, layerKey);
             }
-        }
-    }
-
-    /// RMC14
-    public void ChangeDamageGroupColor(SpriteComponent spriteComponent, DamageVisualsComponent damageVisuals, string group, string color)
-    {
-        if (damageVisuals.TargetLayers != null && damageVisuals.DamageOverlayGroups != null)
-        {
-            foreach (var layerMapKey in damageVisuals.TargetLayerMapKeys)
-            {
-                if (spriteComponent.LayerMapTryGet($"{layerMapKey}{group}", out var spriteLayer))
-                    spriteComponent.LayerSetColor(spriteLayer, Color.FromHex(color));
-            }
-
-            damageVisuals.DamageOverlayGroups[group].Color = color;
         }
     }
 }

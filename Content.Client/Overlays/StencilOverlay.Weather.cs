@@ -1,5 +1,4 @@
 using System.Numerics;
-using Content.Shared._RMC14.Weather;
 using Content.Shared.Light.Components;
 using Content.Shared.StatusEffectNew.Components;
 using Content.Shared.Weather;
@@ -27,15 +26,8 @@ public sealed partial class StencilOverlay
         // Cut out the irrelevant bits via stencil
         // This is why we don't just use parallax; we might want specific tiles to get drawn over
         // particularly for planet maps or stations.
-        worldHandle.RenderInRenderTarget(_blep!, () =>
-        {
-            var xformQuery = _entManager.GetEntityQuery<TransformComponent>();
-            _grids.Clear();
-
-            // idk if this is safe to cache in a field and clear sloth help
-            _map.FindGridsIntersecting(mapId, worldAABB, ref _grids);
-
-            foreach (var grid in _grids)
+        worldHandle.RenderInRenderTarget(res.Blep!,
+            () =>
             {
                 var xformQuery = _entManager.GetEntityQuery<TransformComponent>();
                 _grids.Clear();
@@ -62,26 +54,8 @@ public sealed partial class StencilOverlay
                         worldHandle.DrawRect(gridTile, Color.White);
                     }
                 }
-            }
-
-            // RMC14
-            if (_entManager.TryGetComponent(_playerManager.LocalEntity, out TransformComponent? playerXform))
-            {
-                var playerPos = _transform.GetMapCoordinates(_playerManager.LocalEntity!.Value, playerXform).Position;
-
-                var query = _entManager.EntityQueryEnumerator<RMCBlockWeatherComponent>();
-                while (query.MoveNext(out var entity, out _))
-                {
-                    var roofBounds = _entLookup.GetAABBNoContainer(entity,
-                        _transform.GetWorldPosition(entity),
-                        _transform.GetWorldRotation(entity));
-
-                    if (roofBounds.Contains(playerPos))
-                        worldHandle.DrawRect(roofBounds, Color.White);
-                }
-            }
-
-        }, Color.Transparent);
+            },
+            Color.Transparent);
 
         worldHandle.SetTransform(Matrix3x2.Identity);
         worldHandle.UseShader(_protoManager.Index(StencilMask).Instance());
