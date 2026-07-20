@@ -11,8 +11,8 @@
     - type: Sprite
       sprite: Objects/Specific/Chemistry/jug.rsi
       layers:
-        - state: jug
-        - state: jug1
+        - state: icon_empty
+        - state: fill-1
           map: [ "enum.SolutionContainerLayers.Fill" ]
           visible: false
     - type: Item
@@ -48,7 +48,7 @@
     - type: Appearance
     - type: SolutionContainerVisuals
       maxFillLevels: 6
-      fillBaseName: jug
+      fillBaseName: fill-
       inHandsMaxFillLevels: 5
       inHandsFillBaseName: -fill-
     - type: StaticPrice

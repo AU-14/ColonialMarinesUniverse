@@ -6,6 +6,9 @@
   parent: GasTankBase
   id: CMGasTankBase
   components:
+  - type: Sprite
+    layers:
+    - state: icon
   - type: PhysicalComposition
     materialComposition: {}
 
