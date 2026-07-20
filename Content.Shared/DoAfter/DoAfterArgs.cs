@@ -1,4 +1,5 @@
 using Content.Shared.FixedPoint;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.DoAfter;
@@ -7,6 +8,12 @@ namespace Content.Shared.DoAfter;
 [DataDefinition]
 public sealed partial class DoAfterArgs
 {
+    /// <summary>
+    /// Whether RMC movement should root the user for this do-after.
+    /// </summary>
+    [DataField]
+    public bool RootEntity;
+
     /// <summary>
     ///     The entity invoking do_after
     /// </summary>
@@ -46,6 +53,12 @@ public sealed partial class DoAfterArgs
     [DataField]
     public bool Hidden;
 
+    /// <summary>
+    /// Whether the progress bar should remain visible regardless of other visibility checks.
+    /// </summary>
+    [DataField]
+    public bool ForceVisible;
+
     #region Event options
     /// <summary>
     ///     The event that will get raised when the DoAfter has finished. If null, this will simply raise a <see cref="SimpleDoAfterEvent"/>
@@ -74,6 +87,12 @@ public sealed partial class DoAfterArgs
     /// </summary>
     [DataField]
     public bool Broadcast;
+
+    /// <summary>
+    /// Prototype to spawn as an RMC progress effect.
+    /// </summary>
+    [DataField]
+    public EntProtoId? TargetEffect;
     #endregion
 
     #region Break/Cancellation Options
@@ -111,6 +130,12 @@ public sealed partial class DoAfterArgs
     /// </summary>
     [DataField]
     public bool BreakOnWeightlessMove = true;
+
+    /// <summary>
+    /// Whether resting interrupts this do-after.
+    /// </summary>
+    [DataField]
+    public bool BreakOnRest = true;
 
     /// <summary>
     ///     Threshold for user and target movement
@@ -248,13 +273,16 @@ public sealed partial class DoAfterArgs
         Target = other.Target;
         Used = other.Used;
         Hidden = other.Hidden;
+        ForceVisible = other.ForceVisible;
         EventTarget = other.EventTarget;
         Broadcast = other.Broadcast;
+        TargetEffect = other.TargetEffect;
         NeedHand = other.NeedHand;
         BreakOnHandChange = other.BreakOnHandChange;
         BreakOnDropItem = other.BreakOnDropItem;
         BreakOnMove = other.BreakOnMove;
         BreakOnWeightlessMove = other.BreakOnWeightlessMove;
+        BreakOnRest = other.BreakOnRest;
         MovementThreshold = other.MovementThreshold;
         DistanceThreshold = other.DistanceThreshold;
         BreakOnDamage = other.BreakOnDamage;
@@ -264,6 +292,7 @@ public sealed partial class DoAfterArgs
         BlockDuplicate = other.BlockDuplicate;
         CancelDuplicate = other.CancelDuplicate;
         DuplicateCondition = other.DuplicateCondition;
+        RootEntity = other.RootEntity;
 
         // Networked
         NetUser = other.NetUser;
