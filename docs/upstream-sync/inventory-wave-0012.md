@@ -111,7 +111,7 @@ behavior to port.
 2292 | a7fc17dfc48beca3807155d9cc443f6f707a66d5 | Add the Syndicate Delivery Console + Corpsman Medicine Bundle (#41201) | Deferred | Medical, Chemistry, Interactions, Gamerules | The Syndicate delivery console, catalog, medicine bundle, UI assets, and store data form an eleven-file antagonist feature.
 2293 | 32dafcf2ea7567cf7745e7b18abe99810bd2bdd3 | Foldable wig on clowns mask (#42208) | PortCandidate | Interactions | Self-contained foldable clown-mask prototype and sprite states.
 2294 | 4ebdbff86b03749dcfd0d60bd63be4b6ac460dca | Automatic changelog update | Irrelevant | — | Generated changelog only.
-2295 | 319617f6ba923f31c8a14b5cc12e0a0f42d0c23d | Use NextByte to properly construct colours (#42335) | PortCandidate | Interactions | A three-line client color-generation fix uses byte-valued random channels.
+2295 | 319617f6ba923f31c8a14b5cc12e0a0f42d0c23d | Use NextByte to properly construct colours (#42335) | Ported (CS-0236) | Interactions | Ported the exact byte-valued channel fix so network-link colors use the intended normalized color constructor.
 2296 | c3d7652620cf85c1a0c591d96790462ac48c4a02 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2297 | 5d9371931a00e9c2811f6f0869ec2b23e1099015 | Predict Mind State Examine (#42253) | Deferred | Medical, Interactions, Gamerules | Mind-state examine prediction moves SSD and examinable state across seven divergent client, shared, and prototype files.
 2298 | 46e86149e9111ce278a9a9dc713a77777b540043 | Automatic changelog update | Irrelevant | — | Generated changelog only.

@@ -3204,3 +3204,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Client/UserInterface/Systems/Actions/Controls/ActionButton.cs`, `docs/upstream-sync/inventory-wave-0012.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms name/description still use permissive markup, null metadata still returns early, and charge/requirement text remains on its existing path. Client compilation plus prototype action, dynamic RMC action, localized text, markup, missing-key warning, charges, cooldown, and empty-description cases are queued for the index-2999 checkpoint.
 - Follow-up/debt: The nearby charge strings interpolate resolved runtime values into `Loc.GetString`; review that separate legacy path when its upstream replacement reaches the pinned history.
+
+## CS-0236 — Generate network-link colors from byte channels
+
+- Upstream: [space-wizards/space-station-14#42335](https://github.com/space-wizards/space-station-14/pull/42335), `319617f6ba923f31c8a14b5cc12e0a0f42d0c23d`, 2026-01-10
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The network-configurator link overlay now generates each random RGB channel with `IRobustRandom.NextByte`. Byte arguments select `Color(byte, byte, byte)`, which normalizes channels to the 0–1 rendering range; the previous integer values selected the float constructor and supplied values as high as 254 directly.
+- RMC/CMU divergence: CMU retains the standard device-network overlay and uses it with both upstream and fork-specific networked machinery. This changes only the client-side color assigned per linked source entity; device discovery, link state, interaction range, network packets, and RMC machinery behavior are unchanged.
+- Decision and rationale: Port the target-final three-call replacement exactly. The random range was expressed in byte units, so constructing byte channels is the type-correct boundary and avoids mostly over-range colors being clamped or rendered incorrectly.
+- Files changed: `Content.Client/NetworkConfigurator/NetworkConfiguratorLinkOverlay.cs`, `docs/upstream-sync/inventory-wave-0012.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static overload review confirms `NextByte` selects the byte color constructor while preserving the same exclusive upper bound and one cached color per source. Client compilation plus multiple-link color diversity, persistence, deletion, nullspace, reconnect, and fork-specific device cases are queued for the index-2999 checkpoint.
+- Follow-up/debt: None; other random-color callers should be evaluated independently because normalized-float callers are valid when their ranges are already 0–1.
