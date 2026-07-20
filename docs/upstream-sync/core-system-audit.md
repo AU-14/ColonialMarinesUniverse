@@ -4113,3 +4113,16 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - Files changed: `Content.Shared/Movement/Systems/SharedMobCollisionSystem.cs`, `Content.Shared/_RMC14/Movement/SharedMobCollisionSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation evidence: Static flow review confirms the mass override affects the same ratio operand as old RMC, the RMC penetration CVar replaces only the old geometry constant, and cancellation is limited to big-xeno mover versus smaller-xeno target. `dotnet build Content.Shared/Content.Shared.csproj --configuration DebugOpt --no-restore --no-dependencies --nologo --verbosity:minimal --disable-build-servers` succeeded with 0 errors and 6 unrelated warnings after one missing namespace import was corrected. Tests remain deferred until the 1,000-upstream-commit checkpoint.
 - Remaining debt: Runtime coverage must compare human/human, human/xeno, small/big xeno in both movement directions, zero/large mass caps, both RMC CVar values, overlapping centers, stationary contacts, prediction reconciliation, and fixture-mass changes.
+
+## CS-0301 - Restore RMC construction icon tint contracts
+
+- Upstreams compared: live SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767`, live RMC `b6d677947dd8ebcb06194a66798938645fed5a54`, and CMU through CS-0300.
+- Areas: Interactions, Construction, Client UI, Prototypes
+- Classification: Missing -> Adapted.
+- Risk: Low-to-medium before the fix because multiple magazine-box recipes became visually indistinguishable; low after it.
+- Behavior/API delta: `ConstructionPrototype.IconColor` and 43 retained RMC YAML assignments survived, but the current list, grid, and selected-recipe views rendered every target with the prototype's untinted sprite. Recipe variants that share art but rely on color modulation lost their authored visual identity.
+- RMC/CMU divergence: Current SS14 recipe filtering, sorting, history, favorites, entity prototype views, and build action remain unchanged. The retained fork field only modulates the three existing preview controls and defaults to white, making non-RMC recipes behaviorally identical.
+- Decision and rationale: Thread the existing color through the current passive view contract and set `EntityPrototypeView.Modulate` at each render owner. This restores a pure presentation contract without changing recipe authority or duplicating the menu.
+- Files changed: `Content.Client/Construction/UI/ConstructionMenu.xaml.cs`, `Content.Client/Construction/UI/ConstructionMenuPresenter.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation evidence: Static reference review accounts for all three construction preview surfaces and confirms white remains the default. `dotnet build Content.Client/Content.Client.csproj --configuration DebugOpt --no-restore --no-dependencies --nologo --verbosity:minimal --disable-build-servers` succeeded with 0 errors and 8 unrelated warnings. Tests remain deferred until the 1,000-upstream-commit checkpoint.
+- Remaining debt: Runtime/prototype coverage must open list and grid modes, select tinted and untinted recipes, switch categories/search/history, and confirm all 43 magazine-box declarations render their intended colors.

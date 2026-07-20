@@ -244,6 +244,7 @@ namespace Content.Client.Construction.UI
                 prototype.Name!,
                 prototype.Description!,
                 proto,
+                prototype.IconColor,
                 prototype.Type != ConstructionType.Item,
                 !_favoritedRecipes.Contains(prototype),
                 GetRMCConstructionActionText(prototype));
@@ -345,6 +346,7 @@ namespace Content.Client.Construction.UI
                 var protoView = new EntityPrototypeView()
                 {
                     Scale = new Vector2(1.2f),
+                    Modulate = recipe.ConstructionProto.IconColor,
                 };
                 protoView.SetPrototype(recipe.EntityProto);
 

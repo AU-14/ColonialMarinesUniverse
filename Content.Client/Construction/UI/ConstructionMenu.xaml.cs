@@ -50,6 +50,7 @@ namespace Content.Client.Construction.UI
             string name,
             string description,
             EntityPrototype? targetPrototype,
+            Color iconColor,
             bool isItem,
             bool isFavorite,
             string? actionText);
@@ -122,6 +123,7 @@ namespace Content.Client.Construction.UI
                     Stretch = SpriteView.StretchMode.Fill,
                     Scale = new(2),
                     Margin = new(0, 2),
+                    Modulate = prototype.IconColor,
                 };
                 entProtoView.SetPrototype(targetPrototype);
 
@@ -179,6 +181,7 @@ namespace Content.Client.Construction.UI
             string name,
             string description,
             EntityPrototype? targetPrototype,
+            Color iconColor,
             bool isItem,
             bool isFavorite,
             string? actionText)
@@ -186,8 +189,9 @@ namespace Content.Client.Construction.UI
             BuildButton.Disabled = false;
             BuildButton.Text = actionText ?? Loc.GetString(isItem ? "construction-menu-place-ghost" : "construction-menu-craft");
             TargetName.SetMessage(name);
-            TargetDesc.SetMessage(description);
-            TargetTexture.SetPrototype(targetPrototype?.ID);
+              TargetDesc.SetMessage(description);
+              TargetTexture.SetPrototype(targetPrototype?.ID);
+              TargetTexture.Modulate = iconColor;
             FavoriteButton.Visible = true;
             FavoriteButton.Text = Loc.GetString(
                             isFavorite ? "construction-add-favorite-button" : "construction-remove-from-favorite-button");
