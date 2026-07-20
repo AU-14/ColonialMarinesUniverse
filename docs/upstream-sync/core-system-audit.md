@@ -2463,3 +2463,16 @@ Date completed: 2026-07-20
 - Files changed: the shared cuff handler, pulling event and pulling system, `docs/upstream-sync/inventory-wave-0005.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static event-flow review confirms the same `msg` instance is raised, mutated by the cuff handler, and checked before `StopPulling`. Shared compilation plus self-release, normal release, cancellable third-party release, prediction, and RMC fireman-carry cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Add the upstream UX feedback for a blocked self-release only as a separate interaction design change.
+
+## CS-0180 — Reject invalid chameleon-projector disguises
+
+- Upstream: [space-wizards/space-station-14#40512](https://github.com/space-wizards/space-station-14/pull/40512), `8e9aa1dbb6121c4fdf04db51ebe79611f1f871c1`, 2025-09-23; side-branch hotfix [#40509](https://github.com/space-wizards/space-station-14/pull/40509), `add531a434aca51152f0d9f2df4749c67be712c9`
+- Areas: Interactions, Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Chameleon projectors now reject targets carrying `Door` or `SubFloorHide` and targets tagged `Catwalk`, `Wall`, or `Window`. Existing bans on disguises, minds, and PDAs remain, preventing structural copies that become invisible or behave invalidly.
+- RMC/CMU divergence: RMC has no separate chameleon-projector prototype or override. The five referenced standard tags/components are registered locally, and no RMC disguise behavior changes.
+- Decision and rationale: Port the complete retained blacklist expansion from the merge's effective first-parent delta. These target types rely on structural rendering, subfloor, or door state that the hard-light disguise cannot safely reproduce.
+- Files changed: `Resources/Prototypes/Entities/Objects/Devices/chameleon_projector.yml`, `docs/upstream-sync/inventory-wave-0005.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static whitelist review confirms all five target-final exclusions are present and existing exclusions remain. Prototype loading plus attempted disguises for each rejected family and a normal item control are queued for the index-1999 checkpoint.
+- Follow-up/debt: Revisit blacklist breadth only alongside a deliberate chameleon-projector rendering/state refactor.
