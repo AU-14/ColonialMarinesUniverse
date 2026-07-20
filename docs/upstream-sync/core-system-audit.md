@@ -1514,3 +1514,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Power/EntitySystems/BatteryInterfaceSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static handler review confirms both breaker paths log after assigning their existing fields, while rate changes remain outside this upstream change. Server compilation and one input/one output toggle with actor/target log assertions are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Evaluate logging charge/discharge rate changes in the deeper power-interface audit, with throttling to avoid slider spam.
+
+## CS-0108 — Audit entertainment-camera renames
+
+- Upstream: [space-wizards/space-station-14#39239](https://github.com/space-wizards/space-station-14/pull/39239), `8fdfb9deaeb985731c2375d473a84f37fe0dfeaf`, 2025-07-27
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: A successful wireless entertainment-camera rename now records a low-impact chat log containing the actor, camera entity, and accepted name.
+- RMC/CMU divergence: CMU uses the inherited surveillance-camera setup message and validation flow, with no RMC rename handler to reconcile.
+- Decision and rationale: Port the retained log after validation and interface-state update so rejected or malformed names do not create misleading audit events.
+- Files changed: `Content.Server/SurveillanceCamera/Systems/SurveillanceCameraSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static handler review confirms only accepted names within the existing limit are logged and camera/network behavior is untouched. Server compilation plus accepted, empty, and overlength rename cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Review the retained punctuation inside the quoted name and add equivalent audit coverage for camera network changes if administrators need full configuration history.
