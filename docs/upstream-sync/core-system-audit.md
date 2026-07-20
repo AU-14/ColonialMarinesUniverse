@@ -2802,3 +2802,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Ame/EntitySystems/AmeControllerSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static branch review confirms populated groups still calculate with their real core count and empty or missing groups retain zero-initialized output. Server compilation plus zero-core, one-core, multi-core, node-loss, injection-change, and UI refresh cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1474 as `Ported (CS-0205)` when wave 0008 is committed.
+
+## CS-0206 — Correct the .50 uranium projectile sprite
+
+- Upstream: [space-wizards/space-station-14#41068](https://github.com/space-wizards/space-station-14/pull/41068), `737a4f308eddb26b5bcbadef859c6f310feedb80`, 2025-10-26
+- Areas: Shooting
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `PelletShotgunUranium` now renders with the animated green `uranium` state and an unshaded layer instead of the static `depleted-uranium` state. Projectile damage, spread, collision, range, and ammunition behavior are unchanged.
+- RMC/CMU divergence: This is the standard .50 uranium shotgun pellet; RMC ammunition and projectile prototypes remain separate and untouched. CMU's retained `projectiles2.rsi` already contains the target animated state, so no binary resource port is required.
+- Decision and rationale: Port the exact sprite-layer correction because the referenced state exists in the current RSI metadata. The unshaded shader preserves the intended emissive visibility without altering projectile mechanics.
+- Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Guns/Ammunition/Projectiles/shotgun.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype/RSI review confirms the `uranium` state exists, the layer schema matches other projectiles, and the spread child still inherits the corrected sprite. YAML validation plus direct pellet, spread shell, lighting, collision, and RMC ammunition cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1535 as `Ported (CS-0206)` when wave 0008 is committed.
