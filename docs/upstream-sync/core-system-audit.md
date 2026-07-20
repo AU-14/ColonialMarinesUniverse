@@ -1241,3 +1241,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Clothing/Back/satchel.yml`, `Resources/Prototypes/Entities/Mobs/Player/admin_ghost.yml`, `Resources/Prototypes/Roles/Jobs/Fun/misc_startinggear.yml`, `docs/upstream-sync/inventory-wave-0001.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype tracing confirms `MobAghostGear` resolves the new satchel and both entities have `damageCoefficient: 0`. Prototype loading and explosion-damage coverage are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Verify container contents inherit the intended blast protection semantics rather than only preserving the satchel entity itself.
+
+## CS-0087 — Restore Plasma bar mail routing
+
+- Upstream: [space-wizards/space-station-14#38098](https://github.com/space-wizards/space-station-14/pull/38098), `d8881ad4c6f2c880fd4234546c447ec8dc781b9a`, 2025-07-18
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Plasma station's bar mailing unit now has both runtime `MailingUnit.tag` and persisted `Configuration.config.tag` set to `Bar`, allowing mail routing to recognize and retain that destination.
+- RMC/CMU divergence: The exact map entity UID, coordinates, neighboring departmental units, and target-final component structure all match CMU, so the five-line map hunk applies without remapping fork entities.
+- Decision and rationale: Port the retained target-final map override only after verifying UID `15708` still identifies the untagged bar mailing unit in CMU.
+- Files changed: `Resources/Maps/plasma.yml`, `docs/upstream-sync/inventory-wave-0001.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static map comparison confirms UID `15708` now matches the pinned target-final `Bar` components while adjacent Botany and Security units are untouched. Map/prototype loading and routing behavior are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a map-level assertion that every departmental mailing unit has matching runtime and persisted routing tags.

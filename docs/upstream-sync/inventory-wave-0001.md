@@ -132,7 +132,7 @@ are retained so future audits can trace each classifier's original decision.
 0110 | 63e22feb727ceda72cbf268bf2256f5c0d001a74 | Adds Estoc DMR magazines to the syndicate ammo bundle (#38413) | Port candidate | Shooting | The standard syndicate ammunition bundle lacks Estoc magazine entries.
 0111 | 68831c18a3ce40870c88d312e39b2d10d11e9090 | Automatic changelog update | Non-code/no-op | — | Generated changelog only.
 0112 | 1bc1d71d4253c93950736c2d18cda8a4d2d4f9b3 | Allow GenPop access perms on the AccessConfigurator (#39043) | Ported (CS-0070) | Interactions | Access configurators now expose the inherited General Population access level.
-0113 | d8881ad4c6f2c880fd4234546c447ec8dc781b9a | Fix bar mailing unit tag on plasma (#38098) | Port candidate | Interactions | Plasma's bar mailing unit lacks the intended routing tag.
+0113 | d8881ad4c6f2c880fd4234546c447ec8dc781b9a | Fix bar mailing unit tag on plasma (#38098) | Ported (CS-0087) | Interactions | Plasma's bar mailing unit now advertises and persists the `Bar` routing tag.
 0114 | 04e44aaa70a579d51d7170d976a9103fc19ce2c4 | Automatic changelog update | Non-code/no-op | — | Generated changelog only.
 0115 | 4dd9f06fefd5c705263f38277324dfed23cbbe7c | Remove omnizine from unwarmed honk pockets, honk pockets make you honk (#38152) | Port candidate | Chemistry, Interactions | Honk pockets retain the old reagent contents and lack honk behavior.
 0116 | 4e99f0552249b535b01075c12a807b3c3b2d1fee | Automatic changelog update | Non-code/no-op | — | Generated changelog only.
