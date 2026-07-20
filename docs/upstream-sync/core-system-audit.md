@@ -916,3 +916,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Structures/Windows/plastitanium.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the pinned target retains `messages: null` on exactly the square and diagonal indestructible variants. Prototype loading and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Audit other indestructible children that inherit damage examination without damage state, preferably with a resolved-prototype linter rule instead of broad runtime suppression.
+
+## CS-0062 — Preserve produce with no extractable yield
+
+- Upstream: [space-wizards/space-station-14#38427](https://github.com/space-wizards/space-station-14/pull/38427), `d9545dd3803333e2865a43b476466fb9eddc4a1c`, 2025-07-14
+- Areas: Chemistry, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: A produce material extractor now rejects plants whose matching reagent quantity truncates to zero, shows the user a specific popup, and leaves the produce intact. It no longer plays the extraction sound and deletes an item while adding no biomass.
+- RMC/CMU divergence: RMC retains the standard produce extractor and typed reagent IDs used by its inherited botany content. The guard runs after the existing RMC-compatible reagent match, so extraction recipes, valid yields, power checks, and material storage behavior are unchanged.
+- Decision and rationale: Port the pinned target's zero-yield boundary and user feedback at the point where fractional reagent quantity becomes an integer material amount. Preserve the existing truncation rule for valid positive yields rather than changing material balance.
+- Files changed: `Content.Server/Materials/ProduceMaterialExtractorSystem.cs`, `Resources/Locale/en-US/materials/material-extractor.ftl`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the pinned target retains the zero-yield early return before storage mutation, sound, deletion, and handled state. Server compilation, localization validation, and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add an interaction regression proving sub-unit produce survives while valid produce is consumed; separately decide whether fractional extraction should accumulate instead of truncate.
