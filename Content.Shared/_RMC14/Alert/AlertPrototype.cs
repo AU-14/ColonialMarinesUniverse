@@ -5,11 +5,4 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 
 namespace Content.Shared.Alert;
 
-public sealed partial class AlertPrototype : IInheritingPrototype
-{
-    [ParentDataField(typeof(PrototypeIdArraySerializer<AlertPrototype>))]
-    public string[]? Parents { get; private set; }
-
-    [AbstractDataField]
-    public bool Abstract { get; private set; }
-}
+public sealed partial class AlertPrototype;

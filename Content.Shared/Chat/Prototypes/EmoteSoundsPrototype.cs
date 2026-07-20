@@ -14,15 +14,6 @@ public sealed partial class EmoteSoundsPrototype : IPrototype, IInheritingProtot
     [IdDataField]
     public string ID { get; private set; } = default!;
 
-    /// <inheritdoc/>
-    [ParentDataField(typeof(AbstractPrototypeIdArraySerializer<EmoteSoundsPrototype>))]
-    public string[]? Parents { get; private set; }
-
-    /// <inheritdoc/>
-    [AbstractDataField]
-    [NeverPushInheritance]
-    public bool Abstract { get; private set; }
-
     /// <summary>
     /// The name used for the Voice selector in the character editor UI.
     /// </summary>

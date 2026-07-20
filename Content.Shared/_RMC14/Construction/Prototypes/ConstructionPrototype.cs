@@ -6,15 +6,8 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 // ReSharper disable once CheckNamespace
 namespace Content.Shared.Construction.Prototypes;
 
-public sealed partial class ConstructionPrototype : IInheritingPrototype, ICMSpecific
+public sealed partial class ConstructionPrototype : ICMSpecific
 {
-    [ParentDataField(typeof(AbstractPrototypeIdArraySerializer<ConstructionPrototype>))]
-    public string[]? Parents { get; private set; }
-
-    [NeverPushInheritance]
-    [AbstractDataField]
-    public bool Abstract { get; private set; }
-
     [DataField]
     public bool IsCM { get; private set; }
 
