@@ -725,3 +725,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/GameRules/events.yml`, `Resources/Prototypes/GameRules/pests.yml`, `Resources/Prototypes/GameRules/unknown_shuttles.yml`, `Content.IntegrationTests/Tests/GameRules/StationEventRoundEndEligibilityTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms no later pinned-target commit changes these flags. The shared evacuation regression now resolves twelve restricted concrete events, verifies every flag, keeps all events eligible during recallable evacuation, and excludes all during locked evacuation; `UnknownShuttleCargoLost` proves base inheritance. Per the requested 20-port cadence, execution is deferred to the CS-0041–CS-0060 checkpoint.
 - Follow-up/debt: Audit remaining station events for explicit evacuation policy instead of bulk-disabling them, especially non-antagonist supply, weather, and emergency-response events.
+
+## CS-0048 — Protect apprentice jobs from Bureaucratic Error
+
+- Upstream: [space-wizards/space-station-14#40001](https://github.com/space-wizards/space-station-14/pull/40001), `3e63e4590d8d9df78eaf0dafc3cc601c12b73bd0`, 2025-09-03
+- Areas: Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Bureaucratic Error now preserves Research Assistant, Medical Intern, Security Cadet, and Technical Assistant slots alongside Station AI. Its random branches can no longer remove or mutate every department-entry job and leave Passenger as the only practical late-join choice.
+- RMC/CMU divergence: All four standard job prototypes exist, and no RMC prototype or system overrides this event or those IDs. The event remains available to inherited standard presets and admin/custom rules; the primary RMC distress-signal preset does not schedule standard station events, so its normal job flow is unchanged.
+- Decision and rationale: Port the exact four target-final exclusions and retain the existing Station AI exclusion. RMC-specific roles are not added without a separate event-policy audit, and event probability, timing, random branches, and job-slot APIs remain untouched.
+- Files changed: `Resources/Prototypes/GameRules/events.yml`, `Content.IntegrationTests/Tests/GameRules/BureaucraticErrorIgnoredJobsTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms every protected job prototype resolves and the pinned target retains exactly these five ignored IDs. A regression spawns the real rule and requires set equivalence, detecting both missing safeguards and unintended policy expansion. Per the requested 20-port cadence, execution is deferred to the CS-0041–CS-0060 checkpoint.
+- Follow-up/debt: If standard station events are enabled in CMU's primary mode, define an explicit protected-role policy for RMC jobs before allowing Bureaucratic Error to mutate their slots.
