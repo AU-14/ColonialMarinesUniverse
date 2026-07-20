@@ -201,7 +201,9 @@ public abstract partial class SharedBuckleSystem
         {
             strapEnt.Comp.BuckledEntities.Add(buckle);
             Dirty(strapEnt);
-            _alerts.ShowAlert(buckle.Owner, strapEnt.Comp.BuckledAlertType);
+
+            if (strapEnt.Comp.BuckledAlertType is { } alert)
+                _alerts.ShowAlert(buckle.Owner, alert);
         }
         else
         {
@@ -236,6 +238,9 @@ public abstract partial class SharedBuckleSystem
     {
         strapComp = null;
         if (!Resolve(strapUid, ref strapComp, false))
+            return false;
+
+        if (!strapComp.Enabled || !CanRMCUserBuckle(user, buckleUid, popup))
             return false;
 
         // Does it pass the Whitelist

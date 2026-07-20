@@ -5,7 +5,6 @@ using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Movement.Systems;
-using Content.Shared.Popups;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Whitelist;
 using Robust.Shared.Physics.Events;
@@ -19,7 +18,6 @@ public sealed partial class RMCBuckleSystem : EntitySystem
     [Dependency] private SharedCrashLandSystem _crashLand = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;
-    [Dependency] private SharedPopupSystem _popup = default!;
 
     private readonly HashSet<EntityUid> _intersecting = new();
 
@@ -92,22 +90,6 @@ public sealed partial class RMCBuckleSystem : EntitySystem
             return Vector2.Zero;
 
         return offset.Comp.Offset;
-    }
-
-    public bool CanBuckle(EntityUid? user, EntityUid buckle, bool popup = true)
-    {
-        if (!HasComp<XenoComponent>(user))
-            return true;
-
-        if (popup)
-        {
-            _popup.PopupPredicted("You don't have the dexterity to do that, try a nest.",
-                buckle,
-                user.Value,
-                PopupType.SmallCaution);
-        }
-
-        return false;
     }
 
     public override void Update(float frameTime)

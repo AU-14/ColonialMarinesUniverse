@@ -47,7 +47,8 @@ public abstract partial class SharedBuckleSystem
                 !CanBuckle(args.Dragged, args.User, uid, true, out var _, buckle))
                 return;
 
-            var doAfterArgs = new DoAfterArgs(EntityManager, args.User, component.BuckleDoafterTime, new BuckleDoAfterEvent(), args.Dragged, args.Dragged, uid)
+            var delay = buckle.BuckleDelay ?? component.BuckleDoafterTime;
+            var doAfterArgs = new DoAfterArgs(EntityManager, args.User, delay, new BuckleDoAfterEvent(), args.Dragged, args.Dragged, uid)
             {
                 BreakOnMove = true,
                 BreakOnDamage = true,
@@ -71,6 +72,9 @@ public abstract partial class SharedBuckleSystem
         {
             return false;
         }
+
+        if (!strapComp.Enabled)
+            return false;
 
         bool Ignored(EntityUid entity) => entity == userUid || entity == buckleUid || entity == targetUid;
 
@@ -116,6 +120,9 @@ public abstract partial class SharedBuckleSystem
     private void OnBuckleInteractHand(Entity<BuckleComponent> ent, ref InteractHandEvent args)
     {
         if (args.Handled)
+            return;
+
+        if (!ent.Comp.ClickUnbuckle)
             return;
 
         if (ent.Comp.BuckledTo != null)
