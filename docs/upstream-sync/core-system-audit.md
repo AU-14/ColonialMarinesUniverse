@@ -760,3 +760,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Medical/VomitSystem.cs`, `Content.IntegrationTests/Tests/Medical/VomitDeadMobTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the pinned target retains the dead-state guard after moving standard vomiting into shared code. A queued integration regression fills a real body stomach, verifies a normal dead-mob call preserves its contents, then verifies `force: true` empties it. Execution is deferred to the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Audit the later shared/predicted vomit rewrite separately, including how its relayed stomach event should coexist with RMC's own predicted vomit sequence.
+
+## CS-0050 — Correct zero-gravity push-off surfaces
+
+- Upstream: [space-wizards/space-station-14#44053](https://github.com/space-wizards/space-station-14/pull/44053), `e3c10b36b1a41bff03c05ba196e6f56d224cdac6`, 2026-06-26
+- Areas: Movement, Physics, GameTicking
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: The per-tick weightless near-surface query now considers only approximate dynamic/static physics candidates, ignores fixtures belonging to the mover's transform descendants, and requires the mover's collision mask to accept the contacted fixture's layer. A surface that only collides in the reverse direction no longer grants push-off movement.
+- RMC/CMU divergence: RMC adds carried entities, relay movers, vehicles, and collision groups around the shared controller but does not override this near-surface check. Ignoring descendants prevents carried or attached static fixtures from becoming a private movement surface, while the one-way test respects RMC's asymmetric projectile, mob, and vehicle masks.
+- Decision and rationale: Port the pinned target's complete query and filter contract while retaining CS-0006's reusable per-controller result set. Use the existing cached `PullableQuery` instead of a fresh generic component lookup; no RMC speed, relay, or movement-input policy changes are included.
+- Files changed: `Content.Shared/Movement/Systems/SharedMoverController.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the pinned target retains the same lookup flags, descendant exclusion, one-way mask test, and cached pullable query. Compilation and focused movement/physics execution are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a behavioral integration fixture for asymmetric layers and mover-owned static children if the controller gains a test seam; separately audit later zero-gravity and relay-movement changes rather than expanding this collision fix.
