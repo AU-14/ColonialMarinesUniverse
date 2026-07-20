@@ -1,4 +1,6 @@
-﻿using Content.Shared.Chemistry.Components.SolutionManager;
+﻿using System.Diagnostics.CodeAnalysis;
+using Content.Shared.Chemistry.Components;
+using Content.Shared.Chemistry.Components.SolutionManager;
 using Robust.Shared.Containers;
 
 namespace Content.Shared.Chemistry.EntitySystems;
@@ -12,6 +14,67 @@ namespace Content.Shared.Chemistry.EntitySystems;
 /// </summary>
 public abstract partial class SharedSolutionContainerSystem
 {
+    /// <summary>
+    /// Compatibility overload for callers that still cache the legacy solution manager component.
+    /// </summary>
+    public bool TryGetSolution(
+        (EntityUid Owner, SolutionContainerManagerComponent? Component) entity,
+        string? name,
+        [NotNullWhen(true)] out Entity<SolutionComponent>? solutionEnt,
+        [NotNullWhen(true)] out Solution? solution,
+        bool errorOnMissing = false)
+    {
+        if (!TryGetSolution(entity, name, out solutionEnt, errorOnMissing))
+        {
+            solution = null;
+            return false;
+        }
+
+        solution = solutionEnt.Value.Comp.Solution;
+        return true;
+    }
+
+    /// <summary>
+    /// Compatibility overload for callers that still cache the legacy solution manager component.
+    /// </summary>
+    public bool TryGetSolution(
+        (EntityUid Owner, SolutionContainerManagerComponent? Component) entity,
+        string? name,
+        [NotNullWhen(true)] out Entity<SolutionComponent>? solutionEnt,
+        bool errorOnMissing = false)
+    {
+        if (name is null)
+        {
+            if (SolutionQuery.TryComp(entity.Owner, out var solution))
+            {
+                solutionEnt = (entity.Owner, solution);
+                return true;
+            }
+
+            solutionEnt = null;
+            if (errorOnMissing)
+                Log.Error($"{ToPrettyString(entity.Owner)} does not have a solution on itself.");
+
+            return false;
+        }
+
+        return TryGetSolution(
+            (entity.Owner, (SolutionManagerComponent?) null),
+            name,
+            out solutionEnt,
+            errorOnMissing);
+    }
+
+    /// <summary>
+    /// Compatibility overload for callers that still cache the legacy solution manager component.
+    /// </summary>
+    public IEnumerable<(string? Name, Entity<SolutionComponent> Solution)> EnumerateSolutions(
+        (EntityUid Owner, SolutionContainerManagerComponent? Component) entity,
+        bool includeSelf = true)
+    {
+        return EnumerateSolutions((entity.Owner, (SolutionManagerComponent?) null), includeSelf);
+    }
+
     public void InitializeContainerManager()
     {
         SubscribeLocalEvent<SolutionContainerManagerComponent, MapInitEvent>(OnSolutionContainerInit);
