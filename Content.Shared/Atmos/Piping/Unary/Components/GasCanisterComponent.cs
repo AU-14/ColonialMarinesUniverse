@@ -6,7 +6,7 @@ using Robust.Shared.GameStates;
 namespace Content.Shared.Atmos.Piping.Unary.Components;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
-public sealed partial class GasCanisterComponent : Component, IGasMixtureHolder
+public sealed partial class GasCanisterComponent : GasMaxPressureHolderComponent
 {
     [DataField("port")]
     public string PortName { get; set; } = "port";
