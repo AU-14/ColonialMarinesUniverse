@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
-using Content.Shared.Buckle.Components;
 using Content.Shared.CombatMode;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Chat;
@@ -48,12 +47,9 @@ public sealed partial class VehicleDeploySystem : EntitySystem
     [Dependency] private VehicleTopologySystem _topology = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private VehicleTurretSystem _turret = default!;
-    [Dependency] private VehicleSystem _vehicle = default!;
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<StrapComponent, StrappedEvent>(OnDriverStrapped);
-        SubscribeLocalEvent<StrapComponent, UnstrappedEvent>(OnDriverUnstrapped);
         SubscribeLocalEvent<VehicleDeployActionComponent, VehicleDeployActionEvent>(OnDeployAction);
         SubscribeLocalEvent<VehicleDeployActionComponent, ComponentShutdown>(OnDeployActionShutdown);
         SubscribeLocalEvent<VehicleDeployableComponent, VehicleCanRunEvent>(OnVehicleCanRun);
@@ -61,50 +57,19 @@ public sealed partial class VehicleDeploySystem : EntitySystem
         SubscribeLocalEvent<HardpointItemComponent, AttemptShootEvent>(OnDeployableAttemptShoot);
     }
 
-    private void OnDriverStrapped(Entity<StrapComponent> ent, ref StrappedEvent args)
-    {
-        if (_net.IsClient)
-            return;
-
-        if (!HasComp<VehicleDriverSeatComponent>(ent.Owner))
-            return;
-
-        if (!_vehicle.TryGetVehicleFromInterior(ent.Owner, out var vehicle) || vehicle == null)
-            return;
-
-        if (!TryComp(vehicle.Value, out VehicleDeployableComponent? deployable))
-            return;
-
-        EnableDeployAction(args.Buckle.Owner, vehicle.Value, deployable);
-    }
-
-    private void OnDriverUnstrapped(Entity<StrapComponent> ent, ref UnstrappedEvent args)
-    {
-        if (_net.IsClient)
-            return;
-
-        if (!HasComp<VehicleDriverSeatComponent>(ent.Owner))
-            return;
-
-        if (!_vehicle.TryGetVehicleFromInterior(ent.Owner, out var vehicle) || vehicle == null)
-            return;
-
-        DisableDeployAction(args.Buckle.Owner, vehicle.Value);
-    }
-
-    private void EnableDeployAction(EntityUid user, EntityUid vehicle, VehicleDeployableComponent deployable)
+    public void EnableDeployAction(EntityUid user, Entity<VehicleDeployableComponent> vehicle)
     {
         var actionComp = EnsureComp<VehicleDeployActionComponent>(user);
-        actionComp.Vehicle = vehicle;
+        actionComp.Vehicle = vehicle.Owner;
 
         if (actionComp.Action == null)
             actionComp.Action = _actions.AddAction(user, actionComp.ActionId);
 
-        UpdateDeployActionState(user, actionComp, deployable);
+        UpdateDeployActionState(user, actionComp, vehicle.Comp);
         Dirty(user, actionComp);
     }
 
-    private void DisableDeployAction(EntityUid user, EntityUid vehicle)
+    public void DisableDeployAction(EntityUid user, EntityUid vehicle)
     {
         if (!TryComp(user, out VehicleDeployActionComponent? actionComp))
             return;

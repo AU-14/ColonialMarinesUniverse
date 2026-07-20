@@ -60,6 +60,7 @@ public sealed partial class VehicleSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private TurfSystem _turf = default!;
     [Dependency] private VehicleLockSystem _vehicleLock = default!;
+    [Dependency] private VehicleDeploySystem _vehicleDeploy = default!;
     [Dependency] private Content.Shared.Vehicle.VehicleSystem _vehicles = default!;
     [Dependency] private VehicleViewToggleSystem _viewToggle = default!;
 
@@ -924,6 +925,9 @@ public sealed partial class VehicleSystem : EntitySystem
 
         EnsureComp<VehicleOperatorComponent>(args.Buckle.Owner);
         _vehicleLock.EnableLockAction(args.Buckle.Owner, vehicle.Value);
+
+        if (TryComp(vehicle.Value, out VehicleDeployableComponent? deployable))
+            _vehicleDeploy.EnableDeployAction(args.Buckle.Owner, (vehicle.Value, deployable));
     }
 
     private void OnDriverSeatUnstrapped(Entity<VehicleDriverSeatComponent> ent, ref UnstrappedEvent args)
@@ -938,6 +942,7 @@ public sealed partial class VehicleSystem : EntitySystem
         }
 
         _vehicleLock.DisableLockAction(args.Buckle.Owner, vehicle.Value);
+        _vehicleDeploy.DisableDeployAction(args.Buckle.Owner, vehicle.Value);
 
         if (vehicleComp.Operator != args.Buckle.Owner)
             return;

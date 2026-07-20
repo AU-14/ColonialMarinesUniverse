@@ -33,7 +33,7 @@ public sealed partial class ThermalCloakSystem : EntitySystem
 {
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedHumanoidAppearanceSystem _humanoidSystem = default!;
+    [Dependency] private SharedHideableHumanoidLayersSystem _hideableHumanoidLayers = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -294,7 +294,7 @@ public sealed partial class ThermalCloakSystem : EntitySystem
     {
         foreach (HumanoidVisualLayers layer in layers)
         {
-            _humanoidSystem.SetLayerVisibility(equipee, layer, showLayers);
+            _hideableHumanoidLayers.SetLayerOcclusion(equipee, layer, !showLayers, SlotFlags.BACK);
         }
     }
 
