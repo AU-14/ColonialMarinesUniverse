@@ -182,6 +182,10 @@ public sealed class OpenSpawnlistDeleteEvent : EntityEventArgs
 {
     /// <summary>Spawnlist name → number of generated recipes filed under it.</summary>
     public Dictionary<string, int> SpawnlistCounts = new();
+
+    /// <summary>Spawnlist name → (category name → number of generated recipes in that category), so the
+    /// window can offer deleting a single category instead of the whole spawnlist.</summary>
+    public Dictionary<string, Dictionary<string, int>> CategoryCounts = new();
 }
 
 /// <summary>
@@ -193,6 +197,10 @@ public sealed class OpenSpawnlistDeleteEvent : EntityEventArgs
 public sealed class DeleteSpawnlistEvent : EntityEventArgs
 {
     public string Spawnlist = string.Empty;
+
+    /// <summary>When set, only recipes in this category of <see cref="Spawnlist"/> are deleted (the
+    /// category's whole contents). Empty means the entire spawnlist, as before.</summary>
+    public string Category = string.Empty;
 }
 
 /// <summary>

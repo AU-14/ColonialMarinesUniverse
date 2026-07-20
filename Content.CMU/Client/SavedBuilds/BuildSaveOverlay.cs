@@ -73,29 +73,51 @@ public sealed class BuildSaveOverlay : Overlay
                 DrawBox(handle, playerMap, _mode.Radius, LiveBoxColor);
         }
 
+        // Everything below is per-highlight work, and a big selection (hundreds of entities, thousands of
+        // tiles) is mostly off-screen at any moment. Cull to the viewport first: without this the overlay
+        // paid a transform plus a draw call for every single highlight every frame, which is what made a
+        // large range selection stutter. Enlarged slightly so a highlight straddling the edge still draws.
+        var bounds = args.WorldAABB.Enlarged(1f);
+
         // Highlight resolved entities.
         foreach (var uid in _mode.Highlighted)
         {
             if (!_entMan.EntityExists(uid))
                 continue;
             var map = _transform.GetMapCoordinates(uid);
-            if (map.MapId != args.MapId)
+            if (map.MapId != args.MapId || !bounds.Contains(map.Position))
                 continue;
             var pos = map.Position;
             handle.DrawRect(new Box2(pos - new Vector2(0.5f, 0.5f), pos + new Vector2(0.5f, 0.5f)), HighlightColor);
         }
 
-        // Highlight resolved tiles separately from entities.
+        // Highlight resolved tiles separately from entities. Grid lookups are memoised for the duration of
+        // the draw because a tile selection is overwhelmingly made up of runs on the same few grids.
+        EntityUid? cachedGridUid = null;
+        MapGridComponent? cachedGrid = null;
+        NetEntity cachedNet = default;
+
         foreach (var tile in _mode.HighlightedTiles)
         {
-            if (!_entMan.TryGetEntity(tile.Grid, out var gridUid) || !_entMan.EntityExists(gridUid))
+            if (cachedGrid == null || tile.Grid != cachedNet)
+            {
+                cachedNet = tile.Grid;
+                cachedGridUid = null;
+                cachedGrid = null;
+
+                if (_entMan.TryGetEntity(tile.Grid, out var lookedUp) &&
+                    _entMan.TryGetComponent<MapGridComponent>(lookedUp, out var gridComp))
+                {
+                    cachedGridUid = lookedUp;
+                    cachedGrid = gridComp;
+                }
+            }
+
+            if (cachedGridUid is not { } gridUid || cachedGrid is not { } grid)
                 continue;
 
-            if (!_entMan.TryGetComponent<MapGridComponent>(gridUid, out var grid))
-                continue;
-
-            var center = _mapSystem.GridTileToWorld(gridUid.Value, grid, new Vector2i(tile.X, tile.Y));
-            if (center.MapId != args.MapId)
+            var center = _mapSystem.GridTileToWorld(gridUid, grid, new Vector2i(tile.X, tile.Y));
+            if (center.MapId != args.MapId || !bounds.Contains(center.Position))
                 continue;
 
             var half = grid.TileSize * 0.5f;

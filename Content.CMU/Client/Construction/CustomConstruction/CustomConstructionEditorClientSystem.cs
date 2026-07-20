@@ -276,8 +276,8 @@ public sealed class CustomConstructionEditorClientSystem : EntitySystem
     {
         _spawnlistDeleteWindow?.Close();
         _spawnlistDeleteWindow = new SpawnlistDeleteWindow();
-        _spawnlistDeleteWindow.OnDeleteSpawnlist += spawnlist =>
-            RaiseNetworkEvent(new DeleteSpawnlistEvent { Spawnlist = spawnlist });
+        _spawnlistDeleteWindow.OnDeleteSpawnlist += (spawnlist, category) =>
+            RaiseNetworkEvent(new DeleteSpawnlistEvent { Spawnlist = spawnlist, Category = category });
         _spawnlistDeleteWindow.OnClose += () => _spawnlistDeleteWindow = null;
         _spawnlistDeleteWindow.Populate(ev);
         _spawnlistDeleteWindow.OpenCentered();

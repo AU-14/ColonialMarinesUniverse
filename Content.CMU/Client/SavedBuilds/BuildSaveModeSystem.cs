@@ -42,6 +42,10 @@ public sealed class BuildSaveModeSystem : EntitySystem
     /// <summary>Mapper mode only: also include supported floor tiles in the selection.</summary>
     public bool IncludeTiles { get; set; }
 
+    /// <summary>Also reach onto the z-levels above/below the selection box. Off by default so a range
+    /// append only captures the level you are standing on.</summary>
+    public bool IncludeMultiZ { get; set; }
+
     public readonly List<BuildSelectionBox> CommittedBoxes = new();
     public readonly HashSet<NetEntity> ManualAdds = new();
     public readonly HashSet<NetEntity> ManualRemoves = new();
@@ -55,6 +59,39 @@ public sealed class BuildSaveModeSystem : EntitySystem
     private BuildSaveWindow? _window;
     private Vector2i _lastTile;
     private MapId _lastMap = MapId.Nullspace;
+
+    // 🔧 TUNABLE: minimum seconds between selection resolves sent to the server.
+    //
+    // Every request re-resolves EVERY committed box server-side and ships the whole highlight set back.
+    // On a large selection (hundreds of entities across dozens of boxes) firing that on each tile step
+    // and each append is what made range selection crawl. Requests are coalesced into one per interval:
+    // the live box still tracks the player locally via the overlay, so the delay is not visible as input
+    // lag - only the authoritative highlight set lands a fraction later.
+    private const float RefreshIntervalSeconds = 0.2f;
+
+    // 🔧 TUNABLE: ceiling on that interval, and the selection size at which it is reached.
+    //
+    // A resolve carries the whole highlight set back (a 2000-tile selection is a large payload to rebuild
+    // and ship), so the interval scales with how much is currently selected: small selections stay snappy,
+    // huge ones back off instead of hammering the server while you drag the range around.
+    private const float MaxRefreshIntervalSeconds = 1f;
+    private const int RefreshBackoffAtCount = 2000;
+
+    private bool _refreshPending;
+    private float _refreshCooldown;
+
+    private float CurrentRefreshInterval
+    {
+        get
+        {
+            var count = Highlighted.Count + HighlightedTiles.Count;
+            if (count <= 0)
+                return RefreshIntervalSeconds;
+
+            var t = Math.Clamp(count / (float) RefreshBackoffAtCount, 0f, 1f);
+            return float.Lerp(RefreshIntervalSeconds, MaxRefreshIntervalSeconds, t);
+        }
+    }
 
     public override void Initialize()
     {
@@ -151,6 +188,7 @@ public sealed class BuildSaveModeSystem : EntitySystem
             Mode = Mode,
             IncludeLoose = IncludeLoose,
             IncludeTiles = IncludeTiles,
+            IncludeMultiZ = IncludeMultiZ,
         });
         _window?.Close();
     }
@@ -160,19 +198,25 @@ public sealed class BuildSaveModeSystem : EntitySystem
         if (!Active)
             return;
 
+        if (_refreshCooldown > 0f)
+            _refreshCooldown -= frameTime;
+
         // Only re-query the server when the player moves to a new tile (the live box follows them),
         // rather than every frame.
-        if (_player.LocalEntity is not { } player || !EntityManager.EntityExists(player))
-            return;
+        if (_player.LocalEntity is { } player && EntityManager.EntityExists(player))
+        {
+            var map = _transform.GetMapCoordinates(player);
+            var tile = new Vector2i((int) MathF.Floor(map.Position.X), (int) MathF.Floor(map.Position.Y));
+            if (tile != _lastTile || map.MapId != _lastMap)
+            {
+                _lastTile = tile;
+                _lastMap = map.MapId;
+                RequestRefresh();
+            }
+        }
 
-        var map = _transform.GetMapCoordinates(player);
-        var tile = new Vector2i((int) MathF.Floor(map.Position.X), (int) MathF.Floor(map.Position.Y));
-        if (tile == _lastTile && map.MapId == _lastMap)
-            return;
-
-        _lastTile = tile;
-        _lastMap = map.MapId;
-        RequestRefresh();
+        if (_refreshPending && _refreshCooldown <= 0f)
+            SendRefresh();
     }
 
     /// <summary>Left-click handler (active only in selection mode): toggle the clicked entity.</summary>
@@ -203,10 +247,20 @@ public sealed class BuildSaveModeSystem : EntitySystem
     /// <summary>Re-resolves the current selection against the server (e.g. after toggling Include-loose).</summary>
     public void RefreshSelection() => RequestRefresh();
 
+    /// <summary>Queues a resolve. Coalesced by <see cref="RefreshIntervalSeconds"/> so a burst of appends
+    /// or a run across tiles produces one request instead of one per event.</summary>
     private void RequestRefresh()
     {
         if (!Active)
             return;
+
+        _refreshPending = true;
+    }
+
+    private void SendRefresh()
+    {
+        _refreshPending = false;
+        _refreshCooldown = CurrentRefreshInterval;
 
         RaiseNetworkEvent(new RequestBuildSelectionEvent
         {
@@ -214,6 +268,7 @@ public sealed class BuildSaveModeSystem : EntitySystem
             Mode = Mode,
             IncludeLoose = IncludeLoose,
             IncludeTiles = IncludeTiles,
+            IncludeMultiZ = IncludeMultiZ,
         });
     }
 

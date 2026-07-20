@@ -1,0 +1,41 @@
+# Resin floor patch: lets drones, hivelords and the queen spin a crossing over a hole a cave-in punched out.
+# Inherits XenoBaseFloorResin, so it is cut apart in melee exactly like fast resin is.
+
+# The tile laid under a scab resin patch. Its texture is deliberately blank - the resin entity above supplies
+# all the visuals, and because that sprite has gaps, nothing is drawn behind them. A plated tile here put a
+# metal deck under the webbing and ruined the effect.
+#
+# The texture has to EXIST though: a tile with no sprite at all renders as the missing-texture checkerboard,
+# not as nothing. Hence a fully transparent 32x32 png rather than an omitted field.
+#
+# It is a REAL tile, not space - isSpace would drop anyone standing on it straight through, which is the whole
+# thing the patch exists to prevent. "transparent" is likewise left false: in this fork that flag marks a tile
+# as a z-level OPENING (see CMUZLevelOpeningCache.IsOpeningTile), which is the opposite of load-bearing.
+- type: tile
+  parent: CMTileBaseUnpryable
+  id: AU14ResinScabFloor
+  name: tiles-au14-scab-resin
+  sprite: /Textures/_AU14/Tiles/scab_resin_blank.png
+  isSubfloor: true
+  indestructible: true
+  friction: 1
+
+- type: entity
+  parent: XenoBaseFloorResin
+  id: XenoCollapseResin
+  name: scab resin
+  description: A dark crust of hardened resin, spun thick across a hole in the floor. It holds weight, barely.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Xenos/xeno_collapse_resin.rsi
+    drawdepth: FloorObjects
+    state: collapse
+  - type: ResinFloorPatch
+    tile: AU14ResinScabFloor
+  # Built into holes, not onto floor: inverts the usual weeds-and-solid-tile placement rules.
+  - type: XenoOpenSpaceConstruction
+  # NOTE: deliberately NO TileFloorSupport / StructuralSupport. Marking it as a player-built floor made the
+  # support graph treat the tile beneath as an unsupported upper floor, collapse it, and drop anyone walking
+  # over the patch to the level below.
+  - type: XenoConstructionPlasmaCost
+    plasma: 45

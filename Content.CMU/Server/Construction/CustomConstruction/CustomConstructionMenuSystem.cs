@@ -19,6 +19,7 @@ using Content.Shared.Tools;
 using Content.Shared.Verbs;
 using Robust.Server.GameObjects;
 using Robust.Shared.Configuration;
+using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
@@ -53,6 +54,7 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IComponentFactory _componentFactory = default!;
+    [Dependency] private ITileDefinitionManager _tileDefManager = default!;
 
     /// <summary>
     /// The admin flag required to use the feature. Single permission extension point: swap this (or

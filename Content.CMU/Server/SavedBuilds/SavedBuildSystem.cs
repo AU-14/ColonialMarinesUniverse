@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using System.Text;
 using Content.Server._AU14.ZLevelBuilding;
 using Content.Server._CMU14.ZLevels.Core;
@@ -15,6 +16,7 @@ using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared.Administration;
 using Content.Shared.Construction;
 using Content.Shared.Construction.Prototypes;
+using Content.Shared.Ghost;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Maps;
@@ -72,6 +74,12 @@ public sealed partial class SavedBuildSystem : EntitySystem
     [Dependency] private IComponentFactory _componentFactory = default!;
     [Dependency] private ITileDefinitionManager _tileDef = default!;
 
+    /// <summary>Saved builds part-way through placement, advanced a slice per tick by <see cref="Update"/>.</summary>
+    private readonly List<PendingPlacement> _pendingPlacements = new();
+
+    /// <summary>Component type -> YAML keys of its required data fields. Reflection is done once per type.</summary>
+    private readonly Dictionary<Type, string[]> _requiredDataFields = new();
+
     // 🔧 TUNABLE: how many z-levels above/below the selection box are also scanned when saving. A build
     // that crosses levels (support beams below, platforms above) is captured whole within this range.
     private const int MaxZRange = 3;
@@ -84,6 +92,10 @@ public sealed partial class SavedBuildSystem : EntitySystem
     private const int MaxManualEntities = 512; // manual add/remove entities per request (spam cap)
     private const int MaxNameLength = 64; // build name length (also bounds the file name)
     private const int MaxBuildYamlLength = 4_000_000; // max chars of client-uploaded build YAML (~4 MB)
+    // 🔧 TUNABLE: roots repositioned per tick when placing a saved build. A 300-entity build doing all of
+    // its re-parenting, rotating and anchoring in one tick was enough to take a server down; slicing it
+    // trades a visible fraction of a second on huge builds for not stalling everyone else.
+    private const int PlacementRootsPerTick = 25;
     private const int FormatVersion = 1;
 
     public override void Initialize()
@@ -150,6 +162,12 @@ public sealed partial class SavedBuildSystem : EntitySystem
             return;
         }
 
+        // Drop component entries the deserializer would choke on before handing the node to the loader.
+        // Applied on LOAD (not just on save) so builds saved before this existed are still placeable.
+        var stripped = StripUnreadableComponents(buildNode);
+        if (stripped > 0)
+            Log.Info($"Saved build '{id}': dropped {stripped} incomplete component entries that would not deserialize.");
+
         if (!HasValidZBounds(root))
         {
             Log.Warning($"{session.Name} sent saved build '{id}' with a malformed or out-of-range z offset.");
@@ -182,6 +200,9 @@ public sealed partial class SavedBuildSystem : EntitySystem
             return;
 
         var anchor = ReadAnchor(root);
+        // Shift applied to the whole build at load time so it materialises at the cursor rather than at the
+        // saved grid's local origin. Subtracted back out below to recover serializer-frame positions.
+        var loadOffset = targetMap.Position - anchor;
         var savedTiles = ReadSavedTiles(root);
         if (!TryPlanSavedTiles(savedTiles, targetMapUid, gridUid, targetMap, rotation, out var tilePlan) ||
             !PreflightEntityLevels(root, targetMapUid, gridUid, targetMap, rotation))
@@ -218,7 +239,18 @@ public sealed partial class SavedBuildSystem : EntitySystem
         {
             // Merge onto the target map so the entities are properly map-initialized (collisions, etc.);
             // they end up parented to the map, and we then re-parent each root onto the grid below.
-            var loadOpts = MapLoadOptions.Default with { MergeMap = targetMap.MapId };
+            //
+            // The serialized transforms are GRID-LOCAL to the grid the build was saved on, so loading them
+            // unshifted makes the engine read them as MAP coordinates. For a build saved on an admin/custom
+            // grid those coordinates sit near the grid origin, which dumped the whole build on top of map
+            // 0,0 - every entity map-initialized in one pile before being teleported out again (the "spawns
+            // at 0,0" bug, and a large part of why a big build could take the server down). Shifting the
+            // load by (target - anchor) lands each root at its final spot immediately instead.
+            var loadOpts = MapLoadOptions.Default with
+            {
+                MergeMap = targetMap.MapId,
+                Offset = loadOffset,
+            };
             if (!_mapLoader.TryLoadGeneric(buildNode, $"savedbuild:{id}", out var loaded, loadOpts))
             {
                 _popup.PopupEntity(Loc.GetString("saved-build-error-load"), user, user);
@@ -250,90 +282,342 @@ public sealed partial class SavedBuildSystem : EntitySystem
         // preview (keyed by prototype + quarter-tile offset). Only entries that actually recorded "anchored"
         // are used; older saves without it fall back to the physics-body heuristic below, unchanged.
         var anchoredByKey = ReadAnchoredIntent(root);
-        var savedOffsets = ReadSavedEntityOffsets(root);
+        var savedOffsets = ReadSavedEntityOffsets(root, out var savedOffsetsByProto);
 
         // Multi-z: per-entry z-level offsets from the preview. Queued per key because two identical entities
         // can share the same x/y on DIFFERENT levels (that's exactly what multi-z builds do).
         var zByKey = ReadZOffsets(root);
-        int placedTiles;
-        try
+
+        var job = new PendingPlacement
         {
-            foreach (var rootEnt in roots)
-            {
-                // WORLD-frame math throughout, not raw transform locals: a map's transform is identity, so for
-                // map-parented roots world == the original saved grid-local (merge offset is zero). For roots the
-                // loader parented onto a grid, world position resolves through that grid's own offset/rotation.
-                var savedWorld = _transform.GetWorldPosition(rootEnt);
-                var savedRot = _transform.GetWorldRotation(rootEnt);
-                var protoId = MetaData(rootEnt).EntityPrototype?.ID ?? string.Empty;
-                var savedPlacement = TakeSavedEntityOffset(savedOffsets, protoId, Transform(rootEnt).LocalPosition);
-                var relSave = savedPlacement?.Offset ?? savedWorld - anchor;
-                var relativeRotation = savedPlacement?.Rotation ?? savedRot;
-                var desired = new MapCoordinates(targetMap.Position + rotation.RotateVec(relSave), targetMap.MapId);
+            Session = session,
+            User = user,
+            Id = id,
+            Result = result,
+            Roots = roots,
+            SavedOffsets = savedOffsets,
+            SavedOffsetsByProto = savedOffsetsByProto,
+            ZByKey = zByKey,
+            AnchoredByKey = anchoredByKey,
+            LoadOffset = loadOffset,
+            Anchor = anchor,
+            TargetMap = targetMap,
+            TargetMapUid = targetMapUid,
+            GridUid = gridUid,
+            Rotation = rotation,
+            TilePlan = tilePlan,
+        };
 
-                var placeGrid = gridUid;
-                var placeMapId = targetMap.MapId;
-                var zOff = savedPlacement?.ZOffset ?? TakeZOffset(zByKey, protoId, relSave);
-                if (zOff is { } levelOffset && levelOffset != 0)
-                {
-                    if (!TryResolveLevel(targetMapUid, gridUid, levelOffset, desired.Position, out var levelGrid, out var levelMapId))
-                        throw new InvalidOperationException($"Preflighted z-level {levelOffset} could not be resolved during placement.");
-
-                    placeGrid = levelGrid;
-                    placeMapId = levelMapId;
-                }
-
-                var desiredOnLevel = new MapCoordinates(desired.Position, placeMapId);
-                _transform.SetCoordinates(rootEnt, new EntityCoordinates(placeGrid, _transform.ToCoordinates(placeGrid, desiredOnLevel).Position));
-                _transform.SetWorldRotation(rootEnt, relativeRotation + rotation);
-
-                var wasAnchored = anchoredByKey.TryGetValue((protoId, QuantizeOffset(relSave.X), QuantizeOffset(relSave.Y)), out var recorded)
-                    ? recorded
-                    : TryComp<PhysicsComponent>(rootEnt, out var body) && body.BodyType == BodyType.Static;
-
-                if (wasAnchored)
-                    _transform.AnchorEntity(rootEnt);
-
-                _playerBuilt.MarkBuilt(rootEnt, user);
-            }
-
-            // Tiles commit only after every entity has loaded and reached its final transform.
-            placedTiles = ApplyPlannedTiles(tilePlan);
-
-            // Saved roots were map-initialized before relocation, while stair package setup was deliberately
-            // deferred. Rebuild each package now at its final level and coordinates.
-            foreach (var rootEnt in roots)
-            {
-                if (TryComp<ZStairComponent>(rootEnt, out var stair))
-                    _zStairs.EnsureSetup((rootEnt, stair));
-            }
-        }
-        catch (Exception e)
+        // Small builds finish in the same tick they were requested, exactly as before - the multi-tick path
+        // only earns its keep once the repositioning work is big enough to blow a tick budget on its own.
+        if (roots.Count <= PlacementRootsPerTick)
         {
-            Log.Error($"Failed to commit saved build '{id}' for {session.Name}; deleting staged entities: {e}");
-            _mapLoader.Delete(result);
-            _popup.PopupEntity(Loc.GetString("saved-build-error-load"), user, user);
+            AdvancePlacement(job, roots.Count);
             return;
         }
 
-        // NOTE: this is effectively the ADMIN/free placement (instant, free, keeps container contents).
-        // TODO (player costed version): strip container contents and consume materials via a ghost build.
-
-        _adminLog.Add(LogType.Action, LogImpact.Medium,
-            $"{ToPrettyString(user):player} (user {session.UserId}) placed saved build '{id}' ({roots.Count} roots, {placedTiles} tiles) at {targetMap}");
-        _popup.PopupEntity(Loc.GetString("saved-build-placed", ("count", roots.Count + placedTiles)), user, user);
+        _pendingPlacements.Add(job);
     }
 
-    private readonly record struct SavedEntityPlacement(Vector2 Offset, Angle Rotation, int ZOffset);
+    /// <summary>
+    /// Drains queued placements a slice at a time. A large saved build (hundreds of roots, each one a
+    /// re-parent + rotate + anchor) does far too much work to run in a single tick without stalling the
+    /// server, so the reposition pass is spread across ticks and the tiles/stairs/logging only commit
+    /// once the last root has landed.
+    /// </summary>
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        for (var i = _pendingPlacements.Count - 1; i >= 0; i--)
+        {
+            if (AdvancePlacement(_pendingPlacements[i], PlacementRootsPerTick))
+                _pendingPlacements.RemoveAt(i);
+        }
+    }
+
+    /// <summary>Places up to <paramref name="budget"/> more roots. Returns true when the job is finished
+    /// (successfully or not) and should be dropped from the queue.</summary>
+    private bool AdvancePlacement(PendingPlacement job, int budget)
+    {
+        var user = job.User;
+        try
+        {
+            var end = Math.Min(job.Index + budget, job.Roots.Count);
+            for (; job.Index < end; job.Index++)
+            {
+                var rootEnt = job.Roots[job.Index];
+                // Entities can be deleted between slices (admin cleanup, a cave-in, gibbing).
+                if (!EntityManager.EntityExists(rootEnt))
+                    continue;
+
+                PlaceOneRoot(job, rootEnt);
+            }
+
+            if (job.Index < job.Roots.Count)
+                return false;
+
+            // Tiles commit only after every entity has loaded and reached its final transform.
+            var placedTiles = ApplyPlannedTiles(job.TilePlan);
+
+            // Anchoring happens LAST, after the build's own floor exists. AddToSnapGridCell refuses an empty
+            // tile, so anchoring during the reposition pass silently failed for anything standing on floor
+            // this build had not laid yet - which is why part of a build arrived wrenched and part did not.
+            // (An occupied tile is fine; the engine happily stacks anchored entities.)
+            var anchorWanted = 0;
+            foreach (var (ent, anchored) in job.AnchorIntents)
+            {
+                if (!EntityManager.EntityExists(ent))
+                    continue;
+
+                var xform = Transform(ent);
+                if (anchored)
+                {
+                    anchorWanted++;
+                    if (!xform.Anchored && !_transform.AnchorEntity(ent, xform))
+                    {
+                        job.AnchorFailures++;
+                        Log.Warning($"Saved build '{job.Id}': could not anchor {ToPrettyString(ent)} at {_transform.GetMapCoordinates(ent)} - grid={xform.GridUid}, tile empty or off-grid.");
+                    }
+                }
+                else if (xform.Anchored)
+                {
+                    // Force the saved state both ways: an entity saved loose must not arrive anchored just
+                    // because its prototype or physics body says otherwise.
+                    _transform.Unanchor(ent, xform);
+                }
+            }
+
+            // Saved roots were map-initialized before relocation, while stair package setup was deliberately
+            // deferred. Rebuild each package now at its final level and coordinates.
+            foreach (var rootEnt in job.Roots)
+            {
+                if (EntityManager.EntityExists(rootEnt) && TryComp<ZStairComponent>(rootEnt, out var stair))
+                    _zStairs.EnsureSetup((rootEnt, stair));
+            }
+
+            // NOTE: this is effectively the ADMIN/free placement (instant, free, keeps container contents).
+            // TODO (player costed version): strip container contents and consume materials via a ghost build.
+
+            // One line that says whether the saved state actually survived the round trip: how many roots
+            // failed to match a preview entry (so their rotation/anchored state was guessed) and how many
+            // anchors were refused. Both should be 0; anything else points straight at the culprit.
+            Log.Info($"Saved build '{job.Id}': {job.Roots.Count} roots, {placedTiles} tiles, {anchorWanted} wanted anchoring, {job.AnchorFailures} anchor failures, {job.UnmatchedRoots} roots unmatched to preview.");
+
+            _adminLog.Add(LogType.Action, LogImpact.Medium,
+                $"{ToPrettyString(user):player} (user {job.Session.UserId}) placed saved build '{job.Id}' ({job.Roots.Count} roots, {placedTiles} tiles) at {job.TargetMap}");
+
+            if (EntityManager.EntityExists(user))
+                _popup.PopupEntity(Loc.GetString("saved-build-placed", ("count", job.Roots.Count + placedTiles)), user, user);
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to commit saved build '{job.Id}' for {job.Session.Name}; deleting staged entities: {e}");
+            _mapLoader.Delete(job.Result);
+            if (EntityManager.EntityExists(user))
+                _popup.PopupEntity(Loc.GetString("saved-build-error-load"), user, user);
+
+            return true;
+        }
+    }
+
+    private void PlaceOneRoot(PendingPlacement job, EntityUid rootEnt)
+    {
+        // WORLD-frame math throughout, not raw transform locals: a map's transform is identity, so for
+        // map-parented roots world == the original saved grid-local (merge offset is zero). For roots the
+        // loader parented onto a grid, world position resolves through that grid's own offset/rotation.
+        var savedWorld = _transform.GetWorldPosition(rootEnt);
+        var savedRot = _transform.GetWorldRotation(rootEnt);
+        var protoId = MetaData(rootEnt).EntityPrototype?.ID ?? string.Empty;
+        // Undo the load shift to get back to the serializer-frame position the preview was keyed on.
+        // World frame (not LocalPosition) so roots the loader parented onto a grid resolve the same
+        // way as map-parented ones - a grid-frame local would miss the key and silently fall through
+        // to the offset fallback below, which is exactly how a whole build ends up misplaced.
+        var savedSerialized = savedWorld - job.LoadOffset;
+        var savedPlacement = TakeSavedEntityOffset(job.SavedOffsets, job.SavedOffsetsByProto, protoId, savedSerialized);
+        if (savedPlacement == null)
+            job.UnmatchedRoots++;
+        var relSave = savedPlacement?.Offset ?? savedSerialized - job.Anchor;
+        var relativeRotation = savedPlacement?.Rotation ?? savedRot;
+        var desired = new MapCoordinates(job.TargetMap.Position + job.Rotation.RotateVec(relSave), job.TargetMap.MapId);
+
+        var placeGrid = job.GridUid;
+        var placeMapId = job.TargetMap.MapId;
+        var zOff = savedPlacement?.ZOffset ?? TakeZOffset(job.ZByKey, protoId, relSave);
+        if (zOff is { } levelOffset && levelOffset != 0)
+        {
+            if (!TryResolveLevel(job.TargetMapUid, job.GridUid, levelOffset, desired.Position, out var levelGrid, out var levelMapId))
+                throw new InvalidOperationException($"Preflighted z-level {levelOffset} could not be resolved during placement.");
+
+            placeGrid = levelGrid;
+            placeMapId = levelMapId;
+        }
+
+        var desiredOnLevel = new MapCoordinates(desired.Position, placeMapId);
+        _transform.SetCoordinates(rootEnt, new EntityCoordinates(placeGrid, _transform.ToCoordinates(placeGrid, desiredOnLevel).Position));
+        _transform.SetWorldRotation(rootEnt, relativeRotation + job.Rotation);
+
+        // Prefer the anchored flag carried on the matched preview entry: it shares the key that already
+        // resolved this entity's position, so it cannot drift the way the separate offset-keyed lookup can.
+        // That lookup stays as the fallback for saves written before the flag moved onto the entry, and the
+        // physics-body guess is the last resort for saves older still.
+        var wasAnchored = savedPlacement?.Anchored
+                          ?? (job.AnchoredByKey.TryGetValue((protoId, QuantizeOffset(relSave.X), QuantizeOffset(relSave.Y)), out var recorded)
+                              ? recorded
+                              : TryComp<PhysicsComponent>(rootEnt, out var body) && body.BodyType == BodyType.Static);
+
+        // Deferred to the anchoring pass, once the build's tiles are down (see AdvancePlacement).
+        job.AnchorIntents.Add((rootEnt, wasAnchored));
+
+        _playerBuilt.MarkBuilt(rootEnt, job.User);
+    }
+
+    /// <summary>One saved build mid-placement: the staged entities plus everything needed to keep
+    /// repositioning them on later ticks.</summary>
+    private sealed class PendingPlacement
+    {
+        public required ICommonSession Session;
+        public required EntityUid User;
+        public required string Id;
+        public required LoadResult Result;
+        public required List<EntityUid> Roots;
+        public required Dictionary<(string, int, int), Queue<SavedEntityPlacement>> SavedOffsets;
+        public required Dictionary<string, Queue<SavedEntityPlacement>> SavedOffsetsByProto;
+        public required Dictionary<(string, int, int), Queue<int>> ZByKey;
+        public required Dictionary<(string, int, int), bool> AnchoredByKey;
+        public required Vector2 LoadOffset;
+        public required Vector2 Anchor;
+        public required MapCoordinates TargetMap;
+        public required EntityUid TargetMapUid;
+        public required EntityUid GridUid;
+        public required Angle Rotation;
+        public required List<PlannedTile> TilePlan;
+
+        /// <summary>How many roots have already been repositioned.</summary>
+        public int Index;
+
+        /// <summary>Saved anchored state per repositioned root, applied after the tiles are down.</summary>
+        public readonly List<(EntityUid Ent, bool Anchored)> AnchorIntents = new();
+
+        /// <summary>Diagnostics for the placement summary log.</summary>
+        public int UnmatchedRoots;
+        public int AnchorFailures;
+    }
+
+    /// <summary>
+    /// Removes component entries that the deserializer would reject, so one bad component cannot abort the
+    /// whole build load.
+    ///
+    /// The entity serializer writes each component as a DELTA against its prototype, but a field marked
+    /// <c>[DataField(required: true)]</c> must be present for the mapping to read back at all. A drink whose
+    /// only divergence is a runtime <c>nextAttack</c> therefore serialises as a MeleeWeapon component with no
+    /// <c>damage</c> field - valid to write, impossible to read. That threw mid-load, and the engine's own
+    /// cleanup then threw on top of it ("anchored but has no parent?"), leaving half-initialised entities
+    /// alive in the world; a microwave among them took the server down on the next power tick.
+    ///
+    /// Dropping the entry means the entity keeps its prototype's values for that component, which is what the
+    /// delta was implicitly relying on for every field it left out anyway.
+    /// </summary>
+    private int StripUnreadableComponents(MappingDataNode buildNode)
+    {
+        if (!buildNode.TryGet<SequenceDataNode>("entities", out var protoGroups))
+            return 0;
+
+        var stripped = 0;
+        foreach (var groupNode in protoGroups)
+        {
+            if (groupNode is not MappingDataNode group ||
+                !group.TryGet<SequenceDataNode>("entities", out var entities))
+                continue;
+
+            foreach (var entityNode in entities)
+            {
+                if (entityNode is not MappingDataNode entity ||
+                    !entity.TryGet<SequenceDataNode>("components", out var components))
+                    continue;
+
+                for (var i = components.Count - 1; i >= 0; i--)
+                {
+                    if (components[i] is not MappingDataNode comp ||
+                        !comp.TryGet<ValueDataNode>("type", out var typeNode))
+                        continue;
+
+                    if (!IsComponentMappingReadable(typeNode.Value, comp))
+                    {
+                        components.RemoveAt(i);
+                        stripped++;
+                    }
+                }
+            }
+        }
+
+        return stripped;
+    }
+
+    /// <summary>True when every required data field of <paramref name="compName"/> is present in the written
+    /// mapping. Unknown component names are left alone - the loader has its own handling for those.</summary>
+    private bool IsComponentMappingReadable(string compName, MappingDataNode comp)
+    {
+        if (!_componentFactory.TryGetRegistration(compName, out var registration))
+            return true;
+
+        foreach (var field in GetRequiredDataFields(registration.Type))
+        {
+            if (!comp.Has(field))
+                return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>YAML keys of a component's required data fields, walked once per type and cached.</summary>
+    private string[] GetRequiredDataFields(Type type)
+    {
+        if (_requiredDataFields.TryGetValue(type, out var cached))
+            return cached;
+
+        var required = new List<string>();
+        for (var t = type; t != null && t != typeof(object); t = t.BaseType)
+        {
+            const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+            foreach (var member in t.GetFields(flags).Cast<MemberInfo>().Concat(t.GetProperties(flags)))
+            {
+                if (member.GetCustomAttribute<DataFieldAttribute>() is not { Required: true } attr)
+                    continue;
+
+                // Tag wins, else the member name with a lowercased first letter (the serializer's rule).
+                required.Add(attr.Tag ?? char.ToLowerInvariant(member.Name[0]) + member.Name[1..]);
+            }
+        }
+
+        var result = required.ToArray();
+        _requiredDataFields[type] = result;
+        return result;
+    }
+
+    /// <summary><paramref name="Anchored"/> is null for saves written before the flag was recorded on the
+    /// preview entry itself; those fall back to the separate offset-keyed anchored lookup.</summary>
+    /// <summary>Mapper mode is open to mappers and to admins: Spawn already grants free placement of anything,
+    /// so withholding the mapper SELECTION ruleset from them bought no safety, only friction.</summary>
+    private bool CanUseMapperMode(ICommonSession session) =>
+        _adminManager.HasAdminFlag(session, AdminFlags.Mapping) ||
+        _adminManager.HasAdminFlag(session, AdminFlags.Spawn);
+
+    private readonly record struct SavedEntityPlacement(Vector2 Offset, Angle Rotation, int ZOffset, bool? Anchored);
 
     /// <summary>
     /// New-format saves record both the serializer's root-local position and the world-aligned placement offset.
     /// This lookup reconnects a loaded root to that offset without assuming that every z-level grid has the same
     /// local origin. Older files have no savedX/savedY fields and continue through the original fallback path.
     /// </summary>
-    private Dictionary<(string, int, int), Queue<SavedEntityPlacement>> ReadSavedEntityOffsets(MappingDataNode root)
+    private Dictionary<(string, int, int), Queue<SavedEntityPlacement>> ReadSavedEntityOffsets(
+        MappingDataNode root,
+        out Dictionary<string, Queue<SavedEntityPlacement>> byProto)
     {
         var map = new Dictionary<(string, int, int), Queue<SavedEntityPlacement>>();
+        byProto = new Dictionary<string, Queue<SavedEntityPlacement>>();
         if (!root.TryGet<MappingDataNode>("meta", out var meta) || !meta.TryGet<SequenceDataNode>("preview", out var seq))
             return map;
 
@@ -346,14 +630,25 @@ public sealed partial class SavedBuildSystem : EntitySystem
                 !float.TryParse(savedYNode.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var savedY))
                 continue;
 
-            var key = (MetaString(entry, "proto"), QuantizeOffset(savedX), QuantizeOffset(savedY));
+            var proto = MetaString(entry, "proto");
+            var key = (proto, QuantizeOffset(savedX), QuantizeOffset(savedY));
+            bool? anchored = entry.TryGet<ValueDataNode>("anchored", out var anchoredNode) &&
+                             bool.TryParse(anchoredNode.Value, out var anchoredValue)
+                ? anchoredValue
+                : null;
+
             var placement = new SavedEntityPlacement(
                 new Vector2(MetaFloat(entry, "x"), MetaFloat(entry, "y")),
                 new Angle(MetaFloat(entry, "rot")),
-                ReadInt(entry, "z"));
+                ReadInt(entry, "z"),
+                anchored);
             if (!map.TryGetValue(key, out var queue))
                 map[key] = queue = new Queue<SavedEntityPlacement>();
             queue.Enqueue(placement);
+
+            if (!byProto.TryGetValue(proto, out var protoQueue))
+                byProto[proto] = protoQueue = new Queue<SavedEntityPlacement>();
+            protoQueue.Enqueue(placement);
         }
 
         return map;
@@ -361,12 +656,21 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
     private static SavedEntityPlacement? TakeSavedEntityOffset(
         Dictionary<(string, int, int), Queue<SavedEntityPlacement>> offsets,
+        Dictionary<string, Queue<SavedEntityPlacement>> byProto,
         string proto,
         Vector2 savedLocal)
     {
-        return offsets.TryGetValue((proto, QuantizeOffset(savedLocal.X), QuantizeOffset(savedLocal.Y)), out var queue) &&
-               queue.TryDequeue(out var placement)
-            ? placement
+        if (offsets.TryGetValue((proto, QuantizeOffset(savedLocal.X), QuantizeOffset(savedLocal.Y)), out var queue) &&
+            queue.TryDequeue(out var placement))
+            return placement;
+
+        // Position key missed. Rather than drop to guessing anchored state from the physics body - which
+        // reads Dynamic on a freshly loaded structure and therefore guesses "not anchored" for things that
+        // were saved anchored - take the next unused entry recorded for this prototype. Identical prototypes
+        // in one build share their anchored state in practice, so this recovers it even when the coordinate
+        // key does not line up.
+        return byProto.TryGetValue(proto, out var protoQueue) && protoQueue.TryDequeue(out var byProtoPlacement)
+            ? byProtoPlacement
             : null;
     }
 
@@ -692,33 +996,33 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
     private void OnRequestSelection(RequestBuildSelectionEvent ev, EntitySessionEventArgs args)
     {
-        var resolved = ResolveSelection(args.SenderSession, ev.Selection, ev.Mode, ev.IncludeLoose);
+        var resolved = ResolveSelection(args.SenderSession, ev.Selection, ev.Mode, ev.IncludeLoose, ev.IncludeMultiZ);
         RaiseNetworkEvent(new BuildSelectionResultEvent
         {
             Entities = resolved.Select(e => GetNetEntity(e)).ToList(),
-            Tiles = ResolveTiles(args.SenderSession, ev.Selection, ev.Mode, ev.IncludeTiles),
+            Tiles = ResolveTiles(args.SenderSession, ev.Selection, ev.Mode, ev.IncludeTiles, ev.IncludeMultiZ),
         }, args.SenderSession);
     }
 
     private void OnRequestSave(RequestSaveBuildEvent ev, EntitySessionEventArgs args)
     {
-        SaveBuild(args.SenderSession, ev.Name, ev.Selection, ev.Mode, ev.IncludeLoose, ev.IncludeTiles);
+        SaveBuild(args.SenderSession, ev.Name, ev.Selection, ev.Mode, ev.IncludeLoose, ev.IncludeTiles, ev.IncludeMultiZ);
     }
 
     /// <summary>
     /// Resolves a selection descriptor to the concrete set of entities the given player may save. In Player/Admin
-    /// mode that is anything they (or a build partner) built; in Mapper mode (requires AdminFlags.Mapping) it is
+    /// mode that is anything they (or a build partner) built; in Mapper mode (requires Mapping or Spawn) it is
     /// ANY world structure/item regardless of who built it (map-placed, admin-spawned, etc.) minus mobs/players.
     /// The privileged mode is re-validated here against the caller's real flags, so a client can't spoof it.
     /// </summary>
-    public HashSet<EntityUid> ResolveSelection(ICommonSession saver, BuildSelectionData selection, BuildSaveMode mode = BuildSaveMode.Player, bool includeLoose = false)
+    public HashSet<EntityUid> ResolveSelection(ICommonSession saver, BuildSelectionData selection, BuildSaveMode mode = BuildSaveMode.Player, bool includeLoose = false, bool includeMultiZ = false)
     {
         var result = new HashSet<EntityUid>();
         var saverId = saver.UserId;
 
-        // Mapper mode only takes effect if the caller actually holds the Mapping flag; otherwise fall back to the
-        // normal player-built rules (no error - the dropdown just shouldn't have offered it to them).
-        var mapperMode = mode == BuildSaveMode.Mapper && _adminManager.HasAdminFlag(saver, AdminFlags.Mapping);
+        // Mapper mode only takes effect if the caller actually holds the flags for it; otherwise fall back to
+        // the normal player-built rules (no error - the dropdown just shouldn't have offered it to them).
+        var mapperMode = mode == BuildSaveMode.Mapper && CanUseMapperMode(saver);
 
         if (selection.Boxes != null)
         {
@@ -740,7 +1044,9 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
                 // Multi-z: z-levels are world-aligned, so the same box is also scanned on the linked levels
                 // above/below - a build whose support beams or upper platforms cross levels saves as one.
-                if (_mapManager.GetMapEntityId(map.MapId) is { Valid: true } boxMapUid)
+                // Opt-in, because scanning other levels unconditionally swept in structures directly above
+                // or below the selection that the builder never intended to capture.
+                if (includeMultiZ && _mapManager.GetMapEntityId(map.MapId) is { Valid: true } boxMapUid)
                 {
                     for (var dz = -MaxZRange; dz <= MaxZRange; dz++)
                     {
@@ -797,7 +1103,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
         }
     }
 
-    private List<BuildSelectionTile> ResolveTiles(ICommonSession saver, BuildSelectionData selection, BuildSaveMode mode, bool includeTiles)
+    private List<BuildSelectionTile> ResolveTiles(ICommonSession saver, BuildSelectionData selection, BuildSaveMode mode, bool includeTiles, bool includeMultiZ = false)
     {
         var result = new List<BuildSelectionTile>();
         if (!includeTiles)
@@ -805,7 +1111,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
         var anyTile =
             mode == BuildSaveMode.Admin && _adminManager.HasAdminFlag(saver, AdminFlags.Spawn) ||
-            mode == BuildSaveMode.Mapper && _adminManager.HasAdminFlag(saver, AdminFlags.Mapping);
+            mode == BuildSaveMode.Mapper && CanUseMapperMode(saver);
 
         var allowed = anyTile ? null : GetZBuildableTileIds();
         if ((allowed is { Count: 0 } || selection.Boxes == null))
@@ -824,6 +1130,10 @@ public sealed partial class SavedBuildSystem : EntitySystem
                 continue;
 
             AddTilesInBox(gridUid, grid, map, radius, allowed, seen, result);
+
+            // Same opt-in as the entity scan above: only reach onto other levels when asked to.
+            if (!includeMultiZ)
+                continue;
 
             if (_mapManager.GetMapEntityId(map.MapId) is not { Valid: true } boxMapUid)
                 continue;
@@ -936,15 +1246,18 @@ public sealed partial class SavedBuildSystem : EntitySystem
         if (MetaData(uid).EntityPrototype == null)
             return false;
 
+        // Creatures and observers are never part of a build, in ANY mode. MobState covers living mobs;
+        // Ghost covers both ghosts and aghosts (an aghost is a ghost with extra powers, same component);
+        // Actor covers anything a client is currently attached to, which catches observer shells and any
+        // other player-controlled entity that carries neither of the first two.
+        if (HasComp<MobStateComponent>(uid) || HasComp<GhostComponent>(uid) || HasComp<ActorComponent>(uid))
+            return false;
+
         // Mapper mode: any structure counts no matter who built it (map-placed, admin-spawned, etc.). By default
         // only ANCHORED structures are captured (a clean building); the "include loose items" toggle also grabs
-        // unanchored floor items. Mobs/players are always excluded - you save builds, not creatures.
+        // unanchored floor items.
         if (mapperMode)
-        {
-            if (HasComp<MobStateComponent>(uid))
-                return false;
             return includeLoose || xform.Anchored;
-        }
 
         if (!TryComp<PlayerBuiltComponent>(uid, out var built))
             return false;
@@ -967,7 +1280,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
         SaveBuild(session, name, selection);
     }
 
-    private void SaveBuild(ICommonSession saver, string rawName, BuildSelectionData selection, BuildSaveMode mode = BuildSaveMode.Player, bool includeLoose = false, bool includeTiles = false)
+    private void SaveBuild(ICommonSession saver, string rawName, BuildSelectionData selection, BuildSaveMode mode = BuildSaveMode.Player, bool includeLoose = false, bool includeTiles = false, bool includeMultiZ = false)
     {
         if (saver.AttachedEntity is not { } user)
             return;
@@ -982,8 +1295,8 @@ public sealed partial class SavedBuildSystem : EntitySystem
         if (name.Length > MaxNameLength)
             name = name[..MaxNameLength];
 
-        var entities = ResolveSelection(saver, selection, mode, includeLoose);
-        var tiles = ResolveTiles(saver, selection, mode, includeTiles);
+        var entities = ResolveSelection(saver, selection, mode, includeLoose, includeMultiZ);
+        var tiles = ResolveTiles(saver, selection, mode, includeTiles, includeMultiZ);
         ExcludeGeneratedStairParts(entities, tiles);
         entities = FilterSerializableEntities(entities, name, saver);
         if (entities.Count == 0 && tiles.Count == 0)
