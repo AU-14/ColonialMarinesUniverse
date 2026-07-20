@@ -87,6 +87,8 @@ public sealed partial class StandingStateSystem : EntitySystem
         bool playSound = true,
         bool dropHeldItems = true,
         bool force = false,
+        bool changeCollision = true,
+        EntityUid? downedBy = null,
         StandingStateComponent? standingState = null,
         AppearanceComponent? appearance = null,
         HandsComponent? hands = null)
@@ -112,13 +114,14 @@ public sealed partial class StandingStateSystem : EntitySystem
 
         standingState.Standing = false;
         Dirty(uid, standingState);
-        RaiseLocalEvent(uid, new DownedEvent(), false);
+        RaiseLocalEvent(uid, new DownedEvent(downedBy), false);
 
         // Seemed like the best place to put it
         _appearance.SetData(uid, RotationVisuals.RotationState, RotationState.Horizontal, appearance);
 
         // Change collision masks to allow going under certain entities like flaps and tables
-        ChangeLayers((uid, standingState));
+        if (changeCollision)
+            ChangeLayers((uid, standingState));
 
         // check if component was just added or streamed to client
         // if true, no need to play sound - mob was down before player could seen that
@@ -227,9 +230,11 @@ public sealed class StoodEvent : EntityEventArgs, IInventoryRelayEvent
 /// <summary>
 /// Raised when an entity is not standing
 /// </summary>
-public sealed class DownedEvent : EntityEventArgs, IInventoryRelayEvent
+public sealed class DownedEvent(EntityUid? downedBy = null) : EntityEventArgs, IInventoryRelayEvent
 {
     public SlotFlags TargetSlots { get; } = SlotFlags.FEET;
+
+    public readonly EntityUid? DownedBy = downedBy;
 }
 
 /// <summary>

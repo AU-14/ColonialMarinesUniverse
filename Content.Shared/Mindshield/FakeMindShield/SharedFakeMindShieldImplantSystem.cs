@@ -34,8 +34,7 @@ public sealed partial class SharedFakeMindShieldImplantSystem : EntitySystem
     }
     private void ImplantCheck(EntityUid uid, FakeMindShieldImplantComponent component ,ref ImplantImplantedEvent ev)
     {
-        if (ev.Implanted != null)
-            EnsureComp<FakeMindShieldComponent>(ev.Implanted.Value);
+        EnsureComp<FakeMindShieldComponent>(ev.Implanted);
     }
 
     private void ImplantDraw(Entity<FakeMindShieldImplantComponent> ent, ref EntGotRemovedFromContainerMessage ev)

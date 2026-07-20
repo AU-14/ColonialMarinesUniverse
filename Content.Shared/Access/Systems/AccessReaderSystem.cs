@@ -486,7 +486,7 @@ public sealed partial class AccessReaderSystem : EntitySystem
     /// </summary>
     /// <param name="ent">The access reader entity which is having its list of access permissions replaced.</param>
     /// <param name="accesses">The list of access permissions replacing the original one.</param>
-    private void SetAccesses(Entity<AccessReaderComponent> ent, List<HashSet<ProtoId<AccessLevelPrototype>>> accesses)
+    public void SetAccesses(Entity<AccessReaderComponent> ent, List<HashSet<ProtoId<AccessLevelPrototype>>> accesses)
     {
         ent.Comp.AccessLists.Clear();
         AddAccesses(ent, accesses);
@@ -502,7 +502,7 @@ public sealed partial class AccessReaderSystem : EntitySystem
     }
 
     /// <inheritdoc cref = "SetAccesses"/>
-    private void SetAccesses(Entity<AccessReaderComponent> ent, List<ProtoId<AccessLevelPrototype>> accesses)
+    public void SetAccesses(Entity<AccessReaderComponent> ent, List<ProtoId<AccessLevelPrototype>> accesses)
     {
         ent.Comp.AccessLists.Clear();
         AddAccesses(ent, accesses);

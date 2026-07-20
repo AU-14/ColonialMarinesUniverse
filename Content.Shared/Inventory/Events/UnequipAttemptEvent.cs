@@ -12,6 +12,11 @@ public abstract class UnequipAttemptEventBase(EntityUid user, EntityUid unEquipT
     public readonly EntityUid User = user;
 
     /// <summary>
+    /// Legacy RMC name for <see cref="User"/>.
+    /// </summary>
+    public EntityUid Unequipee => User;
+
+    /// <summary>
     /// The entity being unequipped from.
     /// </summary>
     public readonly EntityUid UnEquipTarget = unEquipTarget;

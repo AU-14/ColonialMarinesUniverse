@@ -40,7 +40,7 @@ public sealed partial class SharpSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<SharpComponent, AfterInteractEvent>(OnAfterInteract, before: [typeof(UtensilSystem)]);
+        SubscribeLocalEvent<SharpComponent, AfterInteractEvent>(OnAfterInteract);
         SubscribeLocalEvent<SharpComponent, SharpDoAfterEvent>(OnDoAfter);
 
         SubscribeLocalEvent<ButcherableComponent, GetVerbsEvent<InteractionVerb>>(OnGetInteractionVerbs);
@@ -81,7 +81,14 @@ public sealed partial class SharpSystem : EntitySystem
         var needHand = user != knife;
 
         var doAfter =
-            new DoAfterArgs(EntityManager, user, sharp.ButcherDelayModifier * butcher.ButcherDelay, new SharpDoAfterEvent(), knife, target: target, used: knife)
+            new DoAfterArgs(
+                EntityManager,
+                user,
+                TimeSpan.FromSeconds(sharp.ButcherDelayModifier * butcher.ButcherDelay),
+                new SharpDoAfterEvent(),
+                knife,
+                target: target,
+                used: knife)
             {
                 BreakOnDamage = true,
                 BreakOnMove = true,
@@ -91,7 +98,7 @@ public sealed partial class SharpSystem : EntitySystem
         return true;
     }
 
-    private void OnDoAfter(EntityUid uid, SharpComponent component, DoAfterEvent args)
+    private void OnDoAfter(EntityUid uid, SharpComponent component, ref SharpDoAfterEvent args)
     {
         if (args.Handled || !TryComp<ButcherableComponent>(args.Args.Target, out var butcher))
             return;
