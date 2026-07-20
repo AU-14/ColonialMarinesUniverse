@@ -2633,3 +2633,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Singularity/EntitySystems/SingularityGeneratorSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static loop review confirms empty/no-field results still fail, unrelated hits are skipped, the first containment hit is selected, and the existing static-body check remains authoritative. Server compilation plus clear, obstructed, movable, out-of-range, and rotated-grid containment cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1227 as `Ported (CS-0192)` when wave 0007 is committed.
+
+## CS-0193 — Apply the configured votekick cooldown in seconds
+
+- Upstream: [space-wizards/space-station-14#40622](https://github.com/space-wizards/space-station-14/pull/40622), `6fbcc6d0fb797651fba29ded7ad126b8aeb7176f`, 2025-10-15
+- Areas: GameTicking, Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `votekick.timeout`, documented and defaulted in seconds, now controls both the initiator's cooldown and the same-type votekick timeout using seconds. The default `60` no longer becomes a sixty-minute initiator cooldown, and votekicks no longer fall back to the generic same-vote timeout.
+- RMC/CMU divergence: CMU defines no fork-specific override for either timeout and uses the standard vote manager. Votekick eligibility, admin-online policy, thresholds, webhooks, and RMC round/game rules are unchanged.
+- Decision and rationale: Port the unit correction and optional timeout override together. Fixing only the `VoteOptions` field would leave the server-wide votekick gate on a different CVar; overriding all standard votes would incorrectly change restart and preset cooldowns.
+- Files changed: `Content.Server/Voting/Managers/VoteManager.DefaultVotes.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static call-site review confirms ordinary standard votes keep `vote.same_type_timeout`, while votekicks use `votekick.timeout` consistently for both gates. Server compilation plus default, custom, repeated, failed, admin-blocked, and non-votekick vote cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1364 as `Ported (CS-0193)` when wave 0007 is committed.
