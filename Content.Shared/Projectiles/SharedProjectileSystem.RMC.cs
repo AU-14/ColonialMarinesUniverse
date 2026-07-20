@@ -2,6 +2,7 @@ using Content.Shared._RMC14.Projectiles.Penetration;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared._RMC14.Xenonids.Damage;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Components;
@@ -68,8 +69,8 @@ public abstract partial class SharedProjectileSystem
         DamageSpecifier? damage = new DamageSpecifier(hit.Damage);
         if (_rmcNet.IsServer)
         {
-            damage = _rmcDamageable.TryChangeDamage(
-                target,
+            damage = _rmcDamageable.ChangeDamage(
+                (target, (DamageableComponent?) null),
                 hit.Damage,
                 component.IgnoreResistances,
                 origin: component.Shooter,
