@@ -3100,3 +3100,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Spreader/SpreaderSystem.cs`, `docs/upstream-sync/inventory-wave-0011.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms both anchored-entity loops query their current entity, the origin is skipped only on its own tile, deleted entities remain excluded, and explicit-position callers still resolve the supplied grid/tile. Server compilation plus puddle, smoke, kudzu, RMC smoke, same-tile windoor, adjacent deletion, terminating neighbor, and explicit-position cases are queued for the index-2999 checkpoint.
 - Follow-up/debt: The custom RMC xeno-weed spread scheduler remains separate and should be assessed with its own target-final dependency chain rather than folded into this generic fix.
+
+## CS-0228 — Serialize loadout-specific entity names
+
+- Upstream: [space-wizards/space-station-14#41891](https://github.com/space-wizards/space-station-14/pull/41891), `b4fa6f4a07a1cf6f1871cebaaa3d677ef94f7f8c`, 2025-12-18
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `RoleLoadout.EntityName` is now marked as a data field. A customized entity name attached to a role loadout is included in serialization and therefore survives preference export/import instead of silently reverting to null.
+- RMC/CMU divergence: CMU retains SS14's role-loadout preference object alongside extensive RMC job and equipment data. The field and equality/copy behavior already exist locally; this adds only the missing serialization metadata and does not change loadout selection, slot validation, or RMC role policy.
+- Decision and rationale: Port the target-final attribute exactly. The serializer cannot persist an unannotated public field in this data definition, so the current in-memory value works only until the loadout crosses the save/export boundary.
+- Files changed: `Content.Shared/Preferences/Loadouts/RoleLoadout.cs`, `docs/upstream-sync/inventory-wave-0011.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static data-contract review confirms the field is already consumed by role-loadout equality and entity customization and that nearby persisted members use the same attribute. Serialization round-trip coverage and the shared/content build are queued for the index-2999 checkpoint.
+- Follow-up/debt: None; this is the complete target-final persistence fix.

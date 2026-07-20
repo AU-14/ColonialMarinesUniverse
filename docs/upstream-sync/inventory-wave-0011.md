@@ -89,7 +89,7 @@ or empty-merge changes with no standalone content behavior to port.
 2072 | 1bb4b935af3d9898bed2c8a20a19c8d2940a18b6 | Fix xenoborg modules (#41625) | PortCandidate | Shooting, Interactions | The three prototype-file fixes are bounded but require RMC xenoborg module and lathe validation.
 2073 | 13ddce2a09c50119cc1a311ffcc274c611a8bc78 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2074 | c93fea42dd52f704f413d31da7eefdb3c3520d3c | [Bugfix/Optimization] Metabolize Foreign Blood (#41892) | Deferred | Medical, Chemistry | Foreign-blood metabolism changes bloodstream events and exclusion rules on top of the deferred index-2065 rewrite.
-2075 | b4fa6f4a07a1cf6f1871cebaaa3d677ef94f7f8c | Fix loadout entity names not being exported/imported (#41891) | PortCandidate | Interactions | Adding serialization to the loadout-specific entity name is a focused persistence fix.
+2075 | b4fa6f4a07a1cf6f1871cebaaa3d677ef94f7f8c | Fix loadout entity names not being exported/imported (#41891) | Ported (CS-0228) | Interactions | `RoleLoadout.EntityName` is now a data field, so customized loadout entity names survive preference export and import.
 2076 | a1f4ea8365905b0d1e58c088270ad84850fbd75b | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2077 | ecd876cab9647a8b741706d7cefbbd75c9bc5ef3 | Mirror contrib guidelines to GitHub (#41896) | Irrelevant | — | Upstream contribution-process documentation only.
 2078 | 4fe48ec3cc868ef7bb8d42b3228664fdb3bae10f | Adds debug wizard's grimoire (#41900) | PortCandidate | Interactions, Gamerules | The debug-item prototype adjustment is bounded and can be checked against CMU admin spawn policy.
