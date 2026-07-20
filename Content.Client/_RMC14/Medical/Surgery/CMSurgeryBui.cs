@@ -1,7 +1,7 @@
 ﻿using Content.Client._RMC14.Xenonids.UI;
 using Content.Client.Administration.UI.CustomControls;
 using Content.Shared._RMC14.Medical.Surgery;
-using Content.Shared.Body.Part;
+using Content.Shared.Body;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
@@ -114,11 +114,11 @@ public sealed partial class CMSurgeryBui : BoundUserInterface
         _part = null;
         _surgery = null;
 
-        var parts = new List<Entity<BodyPartComponent>>(state.Choices.Keys.Count);
+        var parts = new List<Entity<OrganComponent>>(state.Choices.Keys.Count);
         foreach (var choice in state.Choices.Keys)
         {
             if (_entities.TryGetEntity(choice, out var ent) &&
-                _entities.TryGetComponent(ent, out BodyPartComponent? part))
+                _entities.TryGetComponent(ent, out OrganComponent? part))
             {
                 parts.Add((ent.Value, part));
             }
@@ -126,19 +126,18 @@ public sealed partial class CMSurgeryBui : BoundUserInterface
 
         parts.Sort((a, b) =>
         {
-            int GetScore(Entity<BodyPartComponent> part)
+            int GetScore(Entity<OrganComponent> part)
             {
-                return part.Comp.PartType switch
+                return part.Comp.Category?.Id switch
                 {
-                    BodyPartType.Head => 1,
-                    BodyPartType.Torso => 2,
-                    BodyPartType.Arm => 3,
-                    BodyPartType.Hand => 4,
-                    BodyPartType.Leg => 5,
-                    BodyPartType.Foot => 6,
-                    BodyPartType.Tail => 7,
-                    BodyPartType.Other => 8,
-                    _ => 0
+                    "Head" => 1,
+                    "Torso" => 2,
+                    "ArmLeft" or "ArmRight" => 3,
+                    "HandLeft" or "HandRight" => 4,
+                    "LegLeft" or "LegRight" => 5,
+                    "FootLeft" or "FootRight" => 6,
+                    "Tail" => 7,
+                    _ => 8,
                 };
             }
 
@@ -284,7 +283,7 @@ public sealed partial class CMSurgeryBui : BoundUserInterface
     {
         if (_window == null ||
             !_entities.HasComponent<CMSurgeryComponent>(_surgery?.Ent) ||
-            !_entities.TryGetComponent(_part, out BodyPartComponent? part))
+            !_entities.TryGetComponent(_part, out OrganComponent? part))
         {
             return;
         }
@@ -327,7 +326,7 @@ public sealed partial class CMSurgeryBui : BoundUserInterface
             {
                 stepButton.Button.Modulate = Color.White;
                 if (_player.LocalEntity is { } player &&
-                    !_system.CanPerformStep(player, Owner, part.PartType, stepButton.Step, false, out var popup, out var reason, out _))
+                    !_system.CanPerformStep(player, Owner, part.Category, stepButton.Step, false, out var popup, out var reason, out _))
                 {
                     stepButton.ToolTip = popup;
                     stepButton.Button.Disabled = true;

@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.Light.Components;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared.Item;
 using Content.Shared.Light.Components;

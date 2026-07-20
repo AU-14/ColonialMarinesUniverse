@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Medical.HUD.Components;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.StatusIcon;
 using Robust.Shared.Prototypes;
