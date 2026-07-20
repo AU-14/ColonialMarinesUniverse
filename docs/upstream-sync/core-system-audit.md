@@ -686,3 +686,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Structures/Windows/window.yml`, `Content.IntegrationTests/Tests/Physics/DiagonalWindowTagTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the pinned target retains both tags and `ElectrocutionSystem` still checks the `Window` tag. A regression spawns the real diagonal prototype and verifies its resolved runtime tag identity. Per the requested 20-port cadence, execution is deferred to the CS-0041–CS-0060 checkpoint.
 - Follow-up/debt: Port #39580's matching tags for specialized diagonal windows separately, together with its distinct diagonal-grille collision-layer correction.
+
+## CS-0045 — Preserve specialized diagonal-window identity
+
+- Upstream: [space-wizards/space-station-14#39580](https://github.com/space-wizards/space-station-14/pull/39580), `d58ef22d62795c1c4393c1eb09d33c1ff78087c6`, 2025-08-17
+- Areas: Physics, Medical
+- Status: Adapted
+- Risk: Low
+- Behavior/API delta: Clockwork, mining, plasma, plastitanium, reinforced, reinforced-plasma, reinforced-uranium, shuttle, and uranium diagonal windows now retain the `Window` tag alongside `Diagonal`. Tag-driven electrocution and other window-presence checks recognize every specialized diagonal family in the pinned target.
+- RMC/CMU divergence: RMC does not override these standard structure prototypes or the tag query. Several inherited maps use the affected concrete prototypes, and the plastitanium tag is applied at its abstract diagonal base so both destructible and indestructible variants inherit the identity.
+- Decision and rationale: Port only #39580's nine window-tag hunks here and audit its grille collision-layer change separately. The two changes share a PR but have different consumers and regression contracts; splitting them keeps each commit independently reversible without changing target-final behavior.
+- Files changed: the nine specialized files under `Resources/Prototypes/Entities/Structures/Windows/`, `Content.IntegrationTests/Tests/Physics/DiagonalWindowTagTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the pinned target retains every added tag. The CS-0044 runtime regression now covers one concrete prototype from each affected family, including inheritance through the plastitanium diagonal base. Per the requested 20-port cadence, execution is deferred to the CS-0041–CS-0060 checkpoint.
+- Follow-up/debt: Port and validate #39580's diagonal-grille `GlassLayer` change as its own physics decision; audit future tag-list overrides for other inherited semantic identities.
