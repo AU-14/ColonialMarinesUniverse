@@ -42,7 +42,7 @@ public abstract partial class SharedHumanoidAppearanceSystem : EntitySystem
     [Dependency] private GrammarSystem _grammarSystem = default!;
     [Dependency] private IdentitySystem _identity = default!;
 
-    public static readonly ProtoId<SpeciesPrototype> DefaultSpecies = "Human";
+    public static readonly ProtoId<SpeciesPrototype> DefaultSpecies = HumanoidCharacterProfile.DefaultSpecies;
 
     public override void Initialize()
     {
@@ -54,7 +54,7 @@ public abstract partial class SharedHumanoidAppearanceSystem : EntitySystem
 
     public DataNode ToDataNode(HumanoidCharacterProfile profile)
     {
-        var export = new HumanoidProfileExport()
+        var export = new HumanoidProfileExportV2()
         {
             ForkId = _cfgManager.GetCVar(CVars.BuildForkId),
             Profile = profile,
@@ -71,7 +71,7 @@ public abstract partial class SharedHumanoidAppearanceSystem : EntitySystem
         yamlStream.Load(reader);
 
         var root = yamlStream.Documents[0].RootNode;
-        var export = _serManager.Read<HumanoidProfileExport>(root.ToDataNode(), notNullableOverride: true);
+        var export = _serManager.Read<HumanoidProfileExportV2>(root.ToDataNode(), notNullableOverride: true);
 
         /*
          * Add custom handling here for forks / version numbers if you care.
@@ -95,12 +95,6 @@ public abstract partial class SharedHumanoidAppearanceSystem : EntitySystem
         {
             LoadProfile(uid, HumanoidCharacterProfile.DefaultWithSpecies(humanoid.Species), humanoid);
             return;
-        }
-
-        // Do this first, because profiles currently do not support custom base layers
-        foreach (var (layer, info) in startingSet.CustomBaseLayers)
-        {
-            humanoid.CustomBaseLayers.Add(layer, info);
         }
 
         LoadProfile(uid, startingSet.Profile, humanoid);
@@ -362,10 +356,8 @@ public abstract partial class SharedHumanoidAppearanceSystem : EntitySystem
         if (!Resolve(uid, ref humanoid) || humanoid.Sex == sex)
             return;
 
-        var oldSex = humanoid.Sex;
         humanoid.Sex = sex;
         humanoid.MarkingSet.EnsureSexes(sex, _markingManager);
-        RaiseLocalEvent(uid, new SexChangedEvent(oldSex, sex));
 
         if (sync)
         {
