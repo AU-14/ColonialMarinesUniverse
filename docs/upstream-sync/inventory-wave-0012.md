@@ -82,7 +82,7 @@ behavior to port.
 2263 | 74ead53ceb9e25c9db547e63011b8f3c556dbffd | Remove yaml'd non-existent components + test for that (#38878) | Deferred | Medical, Physics | The stronger unknown-component integration test and prototype removals must be adapted to CMU's current component-registration and RMC prototype layout.
 2264 | da7bbe5918754a6c11e18e28ba76122324af7825 | Warden Suit Tail Fix (#42276) | PortCandidate | — | Isolated Warden hardsuit reptilian sprite correction.
 2265 | 142ce2a59b2fc3f1e28c31bc538bf9cce1bfc28a | Fix Capitalization on HoP's Fountain Pen (#42300) | PortCandidate | — | Two capitalization corrections on the HoP fountain pen prototype.
-2266 | 350c67c73ee0188e948da9de70d675c1d7d82784 | Fix Internals Sounds not working.  (#42304) | PortCandidate | Interactions, Physics | A focused predicted-audio fix stops the opposite internals stream when connecting or disconnecting.
+2266 | 350c67c73ee0188e948da9de70d675c1d7d82784 | Fix Internals Sounds not working.  (#42304) | Ported (CS-0230) | Interactions, Physics | Connecting now stops the outstanding disconnect stream and disconnecting stops the outstanding connect stream before predicted playback, preserving rapid internals-toggle audio.
 2267 | 7aba244b389d869b3fe0e1044e6922b6bb413666 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2268 | e27ae3d42866ba254975b194c700e1a987e2e836 | Goliath Hardsuit Fixes (#42303) | PortCandidate | — | Small Goliath hardsuit prototype and Vox sprite correction.
 2269 | 80d38c51b376f9185eb1e8a8d0f5b96f03d53ec5 | fix electrify sound effects being reversed (#42294) | PortCandidate | Interactions, Physics | The focused electrification fix aligns enabled and disabled airlock sounds across remotes and station AI.

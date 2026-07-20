@@ -3126,3 +3126,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Atmos/EntitySystems/FlammableSystem.cs`, `docs/upstream-sync/inventory-wave-0011.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms fixture shape, identifier, collision mask, non-hard state, and body association are unchanged, and only density becomes zero. Server compilation plus mass-before/after, collision fire transfer, CS-0224 unequal-mass equalization, movement, pulling, throwing, RMC mob, ignition, and extinguishing cases are queued for the index-2999 checkpoint.
 - Follow-up/debt: None; preserve explicit physical fixture density on real collision fixtures rather than copying this sensor-only setting elsewhere.
+
+## CS-0230 — Stop the opposite internals audio stream on state changes
+
+- Upstream: [space-wizards/space-station-14#42304](https://github.com/space-wizards/space-station-14/pull/42304), `350c67c73ee0188e948da9de70d675c1d7d82784`, 2026-01-08
+- Areas: Interactions, Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Connecting a gas tank to internals stops any outstanding disconnect sound before playing the predicted connect sound; disconnecting performs the inverse. Rapid toggles no longer cancel the sound that is about to be replayed while leaving the opposite transition audible.
+- RMC/CMU divergence: RMC breathing gear and loadouts use the shared gas-tank/internals state machine, but add their own equipment and atmosphere balance. This changes only the two predicted audio stream handles after the authoritative connection state succeeds; tank ownership, pressure, breath tools, and RMC equipment behavior are unchanged.
+- Decision and rationale: Port the target-final two stream assignments exactly. Each transition must stop audio from the previous state, whereas the legacy code stopped its own same-state handle and could overlap or suppress feedback during quick connect/disconnect sequences.
+- Files changed: `Content.Shared/Atmos/EntitySystems/SharedGasTankSystem.cs`, `docs/upstream-sync/inventory-wave-0012.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms audio changes remain after successful state mutation, stream handles are cleared through `Stop`, predicted playback still uses the same owner/user, and UI updates are unchanged. Shared compilation plus connect, disconnect, rapid toggle, forced disconnect, prediction reconciliation, null sounds, RMC masks, and tank transfer cases are queued for the index-2999 checkpoint.
+- Follow-up/debt: None; this is the complete target-final audio-stream correction.
