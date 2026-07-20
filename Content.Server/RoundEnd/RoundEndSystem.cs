@@ -10,6 +10,7 @@ using Content.Server.Screens.Components;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Station.Systems;
+using Content.Shared._RMC14.CCVar;
 using Content.Shared.Database;
 using Content.Shared.DeviceNetwork;
 using Content.Shared.GameTicking;
@@ -286,6 +287,9 @@ namespace Content.Server.RoundEnd
 
         public void EndRound(TimeSpan? countdownTime = null)
         {
+            // RMC14
+            if (_cfg.GetCVar(RMCCVars.RMCDelayRoundEnd)) return;
+
             if (_gameTicker.RunLevel != GameRunLevel.InRound) return;
             LastCountdownStart = null;
             ExpectedCountdownEnd = null;
@@ -354,6 +358,10 @@ namespace Content.Server.RoundEnd
         private void AfterEndRoundRestart()
         {
             if (_gameTicker.RunLevel != GameRunLevel.PostRound) return;
+
+            // RMC14
+            if (_cfg.GetCVar(RMCCVars.RMCDelayRoundEnd)) return;
+
             Reset();
             _gameTicker.RestartRound();
         }
