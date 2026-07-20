@@ -3,13 +3,10 @@ using Content.Server.Body.Components;
 using Content.Server.Popups;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Alert;
-using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
-using Content.Shared.DoAfter;
 using Content.Shared.Internals;
-using Content.Shared.Inventory;
 using Content.Shared.Roles;
 
 namespace Content.Server.Body.Systems;
@@ -25,9 +22,6 @@ public sealed partial class InternalsSystem : SharedInternalsSystem
     public override void Initialize()
     {
         base.Initialize();
-
-        _internalsQuery = GetEntityQuery<InternalsComponent>();
-
         SubscribeLocalEvent<InternalsComponent, InhaleLocationEvent>(OnInhaleLocation);
         SubscribeLocalEvent<InternalsComponent, StartingGearEquippedEvent>(OnStartingGear);
     }
@@ -49,7 +43,7 @@ public sealed partial class InternalsSystem : SharedInternalsSystem
             return;
 
         // Could the entity metabolise the air in the linked gas tank?
-        if (!_respirator.CanMetabolizeGas(uid, tank.Value.Comp.Air))
+        if (!_respirator.CanMetabolizeInhaledAir(uid, tank.Value.Comp.Air))
             return;
 
         ToggleInternals(uid, uid, force: false, component, ToggleMode.On);
@@ -60,9 +54,10 @@ public sealed partial class InternalsSystem : SharedInternalsSystem
         if (AreInternalsWorking(ent))
         {
             var gasTank = Comp<GasTankComponent>(ent.Comp.GasTankEntity!.Value);
-            args.Gas = _gasTank.RemoveAirVolume((ent.Comp.GasTankEntity.Value, gasTank), args.Respirator.BreathVolume);
-            // TODO: Should listen to gas tank updates instead I guess?
-            _alerts.ShowAlert(ent, ent.Comp.InternalsAlert, GetSeverity(ent));
+            // TODO ATMOS: TODO BODY: This is an incredibly stupid workaround to stop Urist McHands from horfing all 5 litres of the gas tank in 10 seconds.
+            args.Gas = _gasTank.RemoveAirOutput((ent.Comp.GasTankEntity.Value, gasTank), args.Respirator.BreathVolume);
+            // TODO ATMOS: Should listen to gas tank updates instead I guess?
+            _alerts.ShowAlert(ent.Owner, ent.Comp.InternalsAlert, GetSeverity(ent));
         }
     }
 }

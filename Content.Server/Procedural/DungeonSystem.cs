@@ -1,6 +1,5 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Content.Server.Construction;
 using Robust.Shared.CPUJob.JobQueues.Queues;
 using Content.Server.Decals;
 using Content.Server.GameTicking.Events;
@@ -10,9 +9,6 @@ using Content.Shared.GameTicking;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
 using Content.Shared.Procedural;
-using Content.Shared.Tag;
-using Robust.Server.GameObjects;
-using Robust.Shared.Collections;
 using Robust.Shared.Configuration;
 using Robust.Shared.Console;
 using Robust.Shared.EntitySerialization;
@@ -99,7 +95,7 @@ public sealed partial class DungeonSystem : SharedDungeonSystem
             return;
 
         // Force all templates to be setup.
-        foreach (var room in _prototype.EnumeratePrototypes<DungeonRoomPrototype>())
+        foreach (var room in ProtoMan.EnumeratePrototypes<DungeonRoomPrototype>())
         {
             GetOrCreateTemplate(room);
         }
@@ -205,7 +201,7 @@ public sealed partial class DungeonSystem : SharedDungeonSystem
             Log,
             DungeonJobTime,
             EntityManager,
-            _prototype,
+            ProtoMan,
             _tileDefManager,
             _anchorable,
             _decals,
@@ -238,7 +234,7 @@ public sealed partial class DungeonSystem : SharedDungeonSystem
             Log,
             DungeonJobTime,
             EntityManager,
-            _prototype,
+            ProtoMan,
             _tileDefManager,
             _anchorable,
             _decals,

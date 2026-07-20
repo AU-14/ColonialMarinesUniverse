@@ -7,7 +7,7 @@ using Robust.Shared.GameObjects;
 namespace Content.IntegrationTests.Tests
 {
     [TestFixture]
-    public sealed class RoundEndTest
+    public sealed class RoundEndTest : GameTest
     {
         private sealed class RoundEndTestSystem : EntitySystem
         {
@@ -25,15 +25,18 @@ namespace Content.IntegrationTests.Tests
             }
         }
 
+
+        public override PoolSettings PoolSettings => new PoolSettings
+        {
+            DummyTicker = false,
+            Connected = true,
+            Dirty = true
+        };
+
         [Test]
         public async Task Test()
         {
-            await using var pair = await PoolManager.GetServerClient(new PoolSettings
-            {
-                DummyTicker = false,
-                Connected = true,
-                Dirty = true
-            });
+            var pair = Pair;
 
             var server = pair.Server;
 
@@ -151,7 +154,6 @@ namespace Content.IntegrationTests.Tests
                 roundEndSystem.DefaultCountdownDuration = TimeSpan.FromMinutes(4);
                 ticker.RestartRound();
             });
-            await pair.CleanReturnAsync();
         }
     }
 }

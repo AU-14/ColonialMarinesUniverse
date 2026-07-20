@@ -3,7 +3,10 @@ using Content.Server.RoundEnd;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
-namespace Content.Server.GameTicking.Commands
+namespace Content.Server.GameTicking.Commands;
+
+[AdminCommand(AdminFlags.Round)]
+public sealed partial class RestartRoundCommand : LocalizedEntityCommands
 {
     [AdminCommand(AdminFlags.Round)]
     public sealed partial class RestartRoundCommand : IConsoleCommand
@@ -16,30 +19,19 @@ namespace Content.Server.GameTicking.Commands
 
         public void Execute(IConsoleShell shell, string argStr, string[] args)
         {
-            var ticker = _e.System<GameTicker>();
-
-            if (ticker.RunLevel != GameRunLevel.InRound)
-            {
-                shell.WriteLine("This can only be executed while the game is in a round - try restartroundnow");
-                return;
-            }
-
-            _e.System<RoundEndSystem>().EndRound();
+            shell.WriteLine(Loc.GetString("shell-can-only-run-while-round-is-active"));
+            return;
         }
-    }
 
     [AdminCommand(AdminFlags.Round)]
     public sealed partial class RestartRoundNowCommand : IConsoleCommand
     {
         [Dependency] private IEntityManager _e = default!;
 
-        public string Command => "restartroundnow";
-        public string Description => "Moves the server from PostRound to a new PreRoundLobby.";
-        public string Help => String.Empty;
+    public override string Command => "restartroundnow";
 
-        public void Execute(IConsoleShell shell, string argStr, string[] args)
-        {
-            _e.System<GameTicker>().RestartRound();
-        }
+    public override void Execute(IConsoleShell shell, string argStr, string[] args)
+    {
+        _gameTicker.RestartRound();
     }
 }

@@ -5,9 +5,7 @@ using Content.Shared.Parallax.Biomes.Layers;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Noise;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.Manager;
-using Robust.Shared.Utility;
 
 namespace Content.Shared.Parallax.Biomes;
 
@@ -128,7 +126,7 @@ public abstract partial class SharedBiomeSystem : EntitySystem
             // Check if the tile is from meta layer, otherwise fall back to default layers.
             if (layer is BiomeMetaLayer meta)
             {
-                if (TryGetBiomeTile(indices, ProtoManager.Index<BiomeTemplatePrototype>(meta.Template).Layers, seed, grid, out tile))
+                if (TryGetBiomeTile(indices, ProtoMan.Index<BiomeTemplatePrototype>(meta.Template).Layers, seed, grid, out tile))
                 {
                     return true;
                 }
@@ -139,7 +137,7 @@ public abstract partial class SharedBiomeSystem : EntitySystem
             if (layer is not BiomeTileLayer tileLayer)
                 continue;
 
-            if (TryGetTile(indices, noiseCopy, tileLayer.Invert, tileLayer.Threshold, ProtoManager.Index(tileLayer.Tile), tileLayer.Variants, out tile))
+            if (TryGetTile(indices, noiseCopy, tileLayer.Invert, tileLayer.Threshold, ProtoMan.Index(tileLayer.Tile), tileLayer.Variants, out tile))
             {
                 return true;
             }
@@ -246,7 +244,7 @@ public abstract partial class SharedBiomeSystem : EntitySystem
 
             if (layer is BiomeMetaLayer meta)
             {
-                if (TryGetEntity(indices, ProtoManager.Index<BiomeTemplatePrototype>(meta.Template).Layers, tileRef, seed, grid, out entity))
+                if (TryGetEntity(indices, ProtoMan.Index<BiomeTemplatePrototype>(meta.Template).Layers, tileRef, seed, grid, out entity))
                 {
                     return true;
                 }
@@ -321,7 +319,7 @@ public abstract partial class SharedBiomeSystem : EntitySystem
 
             if (layer is BiomeMetaLayer meta)
             {
-                if (TryGetDecals(indices, ProtoManager.Index<BiomeTemplatePrototype>(meta.Template).Layers, seed, grid, out decals))
+                if (TryGetDecals(indices, ProtoMan.Index<BiomeTemplatePrototype>(meta.Template).Layers, seed, grid, out decals))
                 {
                     return true;
                 }

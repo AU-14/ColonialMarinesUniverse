@@ -2,9 +2,7 @@ using Content.Server.Administration.Logs;
 using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Station.Systems;
-using Content.Server.Warps;
 using Content.Shared.Database;
-using Content.Shared.Examine;
 using Content.Shared.Localizations;
 using Content.Shared.Maps;
 using Content.Shared.Pinpointer;
@@ -32,10 +30,6 @@ public sealed partial class NavMapSystem : SharedNavMapSystem
     public const float CloseDistance = 15f;
     public const float FarDistance = 30f;
 
-    private EntityQuery<AirtightComponent> _airtightQuery;
-    private EntityQuery<MapGridComponent> _gridQuery;
-    private EntityQuery<NavMapComponent> _navQuery;
-
     public override void Initialize()
     {
         base.Initialize();
@@ -43,10 +37,6 @@ public sealed partial class NavMapSystem : SharedNavMapSystem
         var categories = Enum.GetNames(typeof(NavMapChunkType)).Length - 1; // -1 due to "Invalid" entry.
         if (Categories != categories)
             throw new Exception($"{nameof(Categories)} must be equal to the number of chunk types");
-
-        _airtightQuery = GetEntityQuery<AirtightComponent>();
-        _gridQuery = GetEntityQuery<MapGridComponent>();
-        _navQuery = GetEntityQuery<NavMapComponent>();
 
         // Initialization events
         SubscribeLocalEvent<StationGridAddedEvent>(OnStationInit);
@@ -62,7 +52,6 @@ public sealed partial class NavMapSystem : SharedNavMapSystem
         SubscribeLocalEvent<NavMapBeaconComponent, AnchorStateChangedEvent>(OnNavMapBeaconAnchor);
         SubscribeLocalEvent<ConfigurableNavMapBeaconComponent, NavMapBeaconConfigureBuiMessage>(OnConfigureMessage);
         SubscribeLocalEvent<ConfigurableNavMapBeaconComponent, MapInitEvent>(OnConfigurableMapInit);
-        SubscribeLocalEvent<ConfigurableNavMapBeaconComponent, ExaminedEvent>(OnConfigurableExamined);
     }
 
     private void OnStationInit(StationGridAddedEvent ev)
@@ -169,11 +158,11 @@ public sealed partial class NavMapSystem : SharedNavMapSystem
 
     private void OnNavMapBeaconMapInit(EntityUid uid, NavMapBeaconComponent component, MapInitEvent args)
     {
-        if (component.DefaultText == null || component.Text != null)
-            return;
-
-        component.Text = Loc.GetString(component.DefaultText);
-        Dirty(uid, component);
+        if (component.DefaultText != null && component.Text == null)
+        {
+            component.Text = Loc.GetString(component.DefaultText);
+            Dirty(uid, component);
+        }
 
         UpdateNavMapBeaconData(uid, component);
     }
@@ -221,17 +210,6 @@ public sealed partial class NavMapSystem : SharedNavMapSystem
             warpPoint.Location = navMap.Text;
 
         UpdateBeaconEnabledVisuals((ent, navMap));
-    }
-
-    private void OnConfigurableExamined(Entity<ConfigurableNavMapBeaconComponent> ent, ref ExaminedEvent args)
-    {
-        if (!args.IsInDetailsRange || !TryComp<NavMapBeaconComponent>(ent, out var navMap))
-            return;
-
-        args.PushMarkup(Loc.GetString("nav-beacon-examine-text",
-            ("enabled", navMap.Enabled),
-            ("color", navMap.Color.ToHexNoAlpha()),
-            ("label", navMap.Text ?? string.Empty)));
     }
 
     #endregion

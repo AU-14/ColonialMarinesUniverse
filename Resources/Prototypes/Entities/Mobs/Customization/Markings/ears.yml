@@ -1,7 +1,6 @@
 - type: marking
   id: LongEarsStandard
   bodyPart: HeadTop
-  markingCategory: HeadTop
   forcedColoring: true
   followSkinColor: true
   speciesRestriction: [Human]
@@ -12,10 +11,8 @@
 - type: marking
   id: LongEarsWide
   bodyPart: HeadTop
-  markingCategory: HeadTop
   forcedColoring: true
-  followSkinColor: true
-  speciesRestriction: [Human]
+  groupWhitelist: [Human]
   sprites:
   - sprite: Mobs/Customization/ears.rsi
     state: long_ears_wide
@@ -23,7 +20,6 @@
 - type: marking
   id: LongEarsSmall
   bodyPart: HeadTop
-  markingCategory: HeadTop
   forcedColoring: true
   followSkinColor: true
   speciesRestriction: [Human]
@@ -34,10 +30,8 @@
 - type: marking
   id: LongEarsUpwards
   bodyPart: HeadTop
-  markingCategory: HeadTop
   forcedColoring: true
-  followSkinColor: true
-  speciesRestriction: [Human]
+  groupWhitelist: [Human]
   sprites:
   - sprite: Mobs/Customization/ears.rsi
     state: long_ears_upwards
@@ -45,10 +39,8 @@
 - type: marking
   id: LongEarsTall
   bodyPart: HeadTop
-  markingCategory: HeadTop
   forcedColoring: true
-  followSkinColor: true
-  speciesRestriction: [Human]
+  groupWhitelist: [Human]
   sprites:
   - sprite: Mobs/Customization/ears.rsi
     state: long_ears_tall
@@ -56,7 +48,6 @@
 - type: marking
   id: LongEarsThin
   bodyPart: HeadTop
-  markingCategory: HeadTop
   forcedColoring: true
   followSkinColor: true
   speciesRestriction: [Human]

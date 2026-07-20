@@ -3,7 +3,6 @@ using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.NameModifier.EntitySystems;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server.Chemistry.EntitySystems;
 
@@ -19,7 +18,7 @@ public sealed partial class TransformableContainerSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<TransformableContainerComponent, MapInitEvent>(OnMapInit);
-        SubscribeLocalEvent<TransformableContainerComponent, SolutionContainerChangedEvent>(OnSolutionChange);
+        SubscribeLocalEvent<TransformableContainerComponent, SolutionChangedEvent>(OnSolutionChange);
         SubscribeLocalEvent<TransformableContainerComponent, RefreshNameModifiersEvent>(OnRefreshNameModifiers);
     }
 
@@ -32,7 +31,7 @@ public sealed partial class TransformableContainerSystem : EntitySystem
         }
     }
 
-    private void OnSolutionChange(Entity<TransformableContainerComponent> entity, ref SolutionContainerChangedEvent args)
+    private void OnSolutionChange(Entity<TransformableContainerComponent> entity, ref SolutionChangedEvent args)
     {
         if (!_solutionsSystem.TryGetFitsInDispenser(entity.Owner, out _, out var solution))
             return;

@@ -1,6 +1,5 @@
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
 namespace Content.Shared.Tiles;
@@ -42,7 +41,7 @@ public sealed partial class ReplaceFloorOnSpawnSystem : EntitySystem
                 continue;
 
             var tileToSet = _random.Pick(ent.Comp.ReplacementTiles);
-            _map.SetTile(grid, gridComp, tile.GridIndices, new Tile(_prototype.Index(tileToSet).TileId));
+            _map.SetTile(grid, gridComp, tile.GridIndices, new Tile(ProtoMan.Index(tileToSet).TileId));
         }
     }
 }

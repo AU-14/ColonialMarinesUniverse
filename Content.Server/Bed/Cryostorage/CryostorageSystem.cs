@@ -1,11 +1,7 @@
 using System.Globalization;
 using Content.Server._RMC14.Announce;
 using Content.Server.Chat.Managers;
-using Content.Server.Chat.Systems;
 using Content.Server.Ghost;
-using Content.Server.Hands.Systems;
-using Content.Server.Inventory;
-using Content.Server.Popups;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Server.StationRecords;
@@ -15,20 +11,26 @@ using Content.Shared.Access.Systems;
 using Content.Shared.Bed.Cryostorage;
 using Content.Shared.Chat;
 using Content.Shared.Climbing.Systems;
+using Content.Shared.Clothing.Components;
 using Content.Shared.Database;
 using Content.Shared.GameTicking;
 using Content.Shared.Hands.Components;
 using Content.Shared.Mind.Components;
 using Content.Shared.StationRecords;
 using Content.Shared.UserInterface;
-using Robust.Server.Audio;
-using Robust.Server.Containers;
-using Robust.Server.GameObjects;
 using Robust.Server.Player;
 using Robust.Shared.Containers;
 using Robust.Shared.Enums;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
+using System.Globalization;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Inventory;
+using Content.Shared.Popups;
+using Content.Shared.Station;
+using Content.Shared.StationRecords.Components;
+using Content.Shared.StationRecords.Systems;
+using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.Bed.Cryostorage;
 
@@ -343,7 +345,7 @@ public sealed partial class CryostorageSystem : SharedCryostorageSystem
 
         foreach (var hand in _hands.EnumerateHands(uid))
         {
-            if (!_hands.TryGetHeldItem(uid, hand, out var heldEntity))
+            if (!_hands.TryGetHeldItem(uid, hand, out var heldEntity, true))
                 continue;
 
             // RMC14: keep unavailable stock gear out of the upstream chamber UI as well.

@@ -1,7 +1,8 @@
 using System.Numerics;
 using Content.Shared.CCVar;
 using Content.Shared.Gravity;
-using Content.Shared.Interaction.Events;
+using Content.Shared.Interaction.Components;
+using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Systems;
@@ -29,11 +30,15 @@ namespace Content.Shared.Friction
         //RMC14
         [Dependency] private IGameTiming _timing = default!;
 
-        private EntityQuery<TileFrictionModifierComponent> _frictionQuery;
-        private EntityQuery<TransformComponent> _xformQuery;
-        private EntityQuery<PullerComponent> _pullerQuery;
-        private EntityQuery<PullableComponent> _pullableQuery;
-        private EntityQuery<MapGridComponent> _gridQuery;
+        [Dependency] private EntityQuery<CanMoveInAirComponent> _canMoveInAirQuery = default!;
+        [Dependency] private EntityQuery<TileFrictionModifierComponent> _frictionQuery = default!;
+        [Dependency] private EntityQuery<PullerComponent> _pullerQuery = default!;
+        [Dependency] private EntityQuery<PullableComponent> _pullableQuery = default!;
+        [Dependency] private EntityQuery<MapGridComponent> _gridQuery = default!;
+
+        // For debug purposes only
+        [Dependency] private EntityQuery<InputMoverComponent> _moverQuery = default!;
+        [Dependency] private EntityQuery<BlockMovementComponent> _blockMoverQuery = default!;
 
         private float _frictionModifier;
         private float _minDamping;
@@ -48,11 +53,6 @@ namespace Content.Shared.Friction
             Subs.CVar(_configManager, CCVars.MinFriction, value => _minDamping = value, true);
             Subs.CVar(_configManager, CCVars.AirFriction, value => _airDamping = value, true);
             Subs.CVar(_configManager, CCVars.OffgridFriction, value => _offGridDamping = value, true);
-            _frictionQuery = GetEntityQuery<TileFrictionModifierComponent>();
-            _xformQuery = GetEntityQuery<TransformComponent>();
-            _pullerQuery = GetEntityQuery<PullerComponent>();
-            _pullableQuery = GetEntityQuery<PullableComponent>();
-            _gridQuery = GetEntityQuery<MapGridComponent>();
         }
 
         public override void UpdateBeforeSolve(bool prediction, float frameTime)
@@ -114,7 +114,16 @@ namespace Content.Shared.Friction
                 PhysicsSystem.SetAngularDamping(uid, body, friction);
 
                 if (body.BodyType != BodyType.KinematicController)
+                {
+                    /*
+                     * Extra catch for input movers that may be temporarily unable to move for whatever reason.
+                     * Block movement shouldn't be added and removed frivolously so it should be reliable to use this
+                     * as a check for brains and such which have input mover purely for ghosting behavior.
+                     */
+                    DebugTools.Assert(!_moverQuery.HasComp(uid) || _blockMoverQuery.HasComp(uid),
+                        $"Input mover: {ToPrettyString(uid)} in TileFrictionController is not the correct BodyType, BodyType found: {body.BodyType}, expected: KinematicController.");
                     continue;
+                }
 
                 // Physics engine doesn't apply damping to Kinematic Controllers so we have to do it here.
                 // BEWARE YE TRAVELLER:

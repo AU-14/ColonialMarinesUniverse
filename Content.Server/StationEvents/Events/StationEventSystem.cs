@@ -8,7 +8,6 @@ using Content.Shared.Database;
 using Content.Shared.GameTicking.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server.StationEvents.Events;
 
@@ -29,7 +28,7 @@ public abstract partial class StationEventSystem<T> : GameRuleSystem<T> where T 
     {
         base.Initialize();
 
-        Sawmill = Logger.GetSawmill("stationevents");
+        Sawmill = LogManager.GetSawmill("stationevents");
     }
 
     /// <inheritdoc/>

@@ -1,13 +1,13 @@
 using Content.Shared.Bed.Sleep;
-using Content.Shared.Damage;
 using Content.Shared.Damage.Events;
 using Content.Shared.Damage.ForceSay;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Stunnable;
 using Robust.Shared.Player;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -61,7 +61,7 @@ public sealed partial class DamageForceSaySystem : EntitySystem
         var ev = new BeforeForceSayEvent(component.ForceSayStringDataset);
         RaiseLocalEvent(uid, ev);
 
-        if (!_prototype.TryIndex(ev.Prefix, out var prefixList))
+        if (!ProtoMan.Resolve(ev.Prefix, out var prefixList))
             return;
 
         var suffix = Loc.GetString(_random.Pick(prefixList.Values));
@@ -87,6 +87,9 @@ public sealed partial class DamageForceSaySystem : EntitySystem
         if (!args.FellAsleep)
             return;
 
+        if (Comp<MobStateComponent>(uid).CurrentState != MobState.Alive)
+            return;
+
         TryForceSay(uid, component);
         AllowNextSpeech(uid);
     }
@@ -104,7 +107,7 @@ public sealed partial class DamageForceSaySystem : EntitySystem
         if (component.ValidDamageGroups != null)
         {
             var totalApplicableDamage = FixedPoint2.Zero;
-            foreach (var (group, value) in args.DamageDelta.GetDamagePerGroup(_prototype))
+            foreach (var (group, value) in args.DamageDelta.GetDamagePerGroup(ProtoMan))
             {
                 if (!component.ValidDamageGroups.Contains(group))
                     continue;

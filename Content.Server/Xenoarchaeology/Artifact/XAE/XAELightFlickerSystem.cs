@@ -1,6 +1,6 @@
 using Content.Server.Ghost;
-using Content.Server.Light.Components;
 using Content.Server.Xenoarchaeology.Artifact.XAE.Components;
+using Content.Shared.Light.Components;
 using Content.Shared.Xenoarchaeology.Artifact;
 using Content.Shared.Xenoarchaeology.Artifact.XAE;
 using Robust.Shared.Random;
@@ -22,21 +22,13 @@ public sealed partial class XAELightFlickerSystem : BaseXAESystem<XAELightFlicke
     private readonly HashSet<EntityUid> _entities = new();
 
     /// <inheritdoc />
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        _lights = GetEntityQuery<PoweredLightComponent>();
-    }
-
-    /// <inheritdoc />
     protected override void OnActivated(Entity<XAELightFlickerComponent> ent, ref XenoArtifactNodeActivatedEvent args)
     {
         _entities.Clear();
         _lookup.GetEntitiesInRange(ent.Owner, ent.Comp.Radius, _entities, LookupFlags.StaticSundries);
         foreach (var light in _entities)
         {
-            if (!_lights.HasComponent(light))
+            if (!_poweredLightsQuery.HasComponent(light))
                 continue;
 
             if (!_random.Prob(ent.Comp.FlickerChance))

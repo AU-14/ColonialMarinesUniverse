@@ -1,3 +1,5 @@
+using System.Collections.Frozen;
+using System.Linq;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Reagent;
@@ -8,9 +10,6 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
-using System.Collections.Frozen;
-using System.Linq;
-
 
 namespace Content.Shared.Chemistry.Reaction
 {
@@ -68,7 +67,7 @@ namespace Content.Shared.Chemistry.Reaction
             _reactionsSingle = dict.ToFrozenDictionary();
 
             dict.Clear();
-            foreach (var reaction in _prototypeManager.EnumeratePrototypes<ReactionPrototype>())
+            foreach (var reaction in ProtoMan.EnumeratePrototypes<ReactionPrototype>())
             {
                 foreach (var reagent in reaction.Reactants.Keys)
                 {
@@ -171,7 +170,7 @@ namespace Content.Shared.Chemistry.Reaction
             var (uid, comp) = soln;
             var solution = comp.Solution;
 
-            var energy = reaction.ConserveEnergy ? solution.GetThermalEnergy(_prototypeManager) : 0;
+            var energy = reaction.ConserveEnergy ? solution.GetThermalEnergy(ProtoMan) : 0;
 
             //Remove reactants
             foreach (var reactant in reaction.Reactants)
@@ -193,7 +192,7 @@ namespace Content.Shared.Chemistry.Reaction
 
             if (reaction.ConserveEnergy)
             {
-                var newCap = solution.GetHeatCapacity(_prototypeManager);
+                var newCap = solution.GetHeatCapacity(ProtoMan);
                 if (newCap > 0)
                     solution.Temperature = energy / newCap;
             }
@@ -205,17 +204,12 @@ namespace Content.Shared.Chemistry.Reaction
 
         private void OnReaction(Entity<SolutionComponent> soln, ReactionPrototype reaction, ReagentPrototype? reagent, FixedPoint2 unitReactions)
         {
-            var args = new EntityEffectReagentArgs(soln, EntityManager, null, soln.Comp.Solution, unitReactions, reagent, null, 1f);
-
             var posFound = _transformSystem.TryGetMapOrGridCoordinates(soln, out var gridPos);
 
             _adminLogger.Add(LogType.ChemicalReaction, reaction.Impact,
                 $"Chemical reaction {reaction.ID:reaction} occurred with strength {unitReactions:strength} on entity {ToPrettyString(soln):metabolizer} at Pos:{(posFound ? $"{gridPos:coordinates}" : "[Grid or Map not Found]")}");
 
-            foreach (var effect in reaction.Effects)
-            {
-                if (!effect.ShouldApply(args))
-                    continue;
+            _entityEffects.ApplyEffects(soln, reaction.Effects, unitReactions);
 
                 if (effect.ShouldLog)
                 {

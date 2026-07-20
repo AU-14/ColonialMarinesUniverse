@@ -1,14 +1,26 @@
 using Content.Shared.Armor;
 using Content.Shared.Explosion.Components;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Explosion.EntitySystems;
 
+// TODO some sort of struct like DamageSpecifier but for explosions.
 /// <summary>
 /// Lets code in shared trigger explosions and handles explosion resistance examining.
 /// All processing is still done clientside.
 /// </summary>
 public abstract class SharedExplosionSystem : EntitySystem
 {
+    /// <summary>
+    ///     The "default" explosion prototype.
+    /// </summary>
+    /// <remarks>
+    ///     Generally components should specify an explosion prototype via a yaml datafield, so that the yaml-linter can
+    ///     find errors. However some components, like rogue arrows, or some commands like the admin-smite need to have
+    ///     a "default" option specified outside of yaml data-fields. Hence this const string.
+    /// </remarks>
+    public static readonly ProtoId<ExplosionPrototype> DefaultExplosionPrototypeId = "Default";
+
     public override void Initialize()
     {
         base.Initialize();

@@ -1,11 +1,8 @@
 using System.Linq;
-using Content.Shared.Ghost;
-using Content.Shared.Humanoid;
-using Content.Shared.StatusIcon;
+using Content.Shared.Body;
 using Content.Shared.StatusIcon.Components;
 using Content.Shared.Zombies;
 using Robust.Client.GameObjects;
-using Robust.Shared.Prototypes;
 
 namespace Content.Client.Zombies;
 
@@ -25,7 +22,7 @@ public sealed partial class ZombieSystem : SharedZombieSystem
 
     private void GetZombieIcon(Entity<ZombieComponent> ent, ref GetStatusIconsEvent args)
     {
-        var iconPrototype = _prototype.Index(ent.Comp.StatusIcon);
+        var iconPrototype = ProtoMan.Index(ent.Comp.StatusIcon);
         args.StatusIcons.Add(iconPrototype);
     }
 
@@ -34,13 +31,13 @@ public sealed partial class ZombieSystem : SharedZombieSystem
         if (HasComp<ZombieComponent>(ent))
             return;
 
-        var iconPrototype = _prototype.Index(ent.Comp.StatusIcon);
+        var iconPrototype = ProtoMan.Index(ent.Comp.StatusIcon);
         args.StatusIcons.Add(iconPrototype);
     }
 
     private void OnStartup(EntityUid uid, ZombieComponent component, ComponentStartup args)
     {
-        if (HasComp<HumanoidAppearanceComponent>(uid))
+        if (HasComp<VisualBodyComponent>(uid))
             return;
 
         if (!TryComp<SpriteComponent>(uid, out var sprite))

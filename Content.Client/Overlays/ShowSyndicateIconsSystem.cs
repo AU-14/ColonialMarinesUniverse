@@ -2,7 +2,6 @@ using Content.Shared.Overlays;
 using Content.Shared.NukeOps;
 using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
-using Robust.Shared.Prototypes;
 
 namespace Content.Client.Overlays;
 
@@ -22,7 +21,7 @@ public sealed partial class ShowSyndicateIconsSystem : EquipmentHudSystem<ShowSy
         if (!IsActive)
             return;
 
-        if (_prototype.TryIndex<FactionIconPrototype>(component.SyndStatusIcon, out var iconPrototype))
+        if (ProtoMan.TryIndex<FactionIconPrototype>(component.SyndStatusIcon, out var iconPrototype))
             ev.StatusIcons.Add(iconPrototype);
     }
 }

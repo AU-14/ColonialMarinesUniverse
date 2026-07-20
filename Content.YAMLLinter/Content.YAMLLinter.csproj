@@ -6,7 +6,11 @@
         <OutputPath>..\bin\Content.YAMLLinter\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <ServerGarbageCollection>true</ServerGarbageCollection>
+        <IsTestingPlatformApplication>false</IsTestingPlatformApplication>
+      <Nullable>disable</Nullable>
     </PropertyGroup>
+
+  <Import Project="../MSBuild/Content.props" />
 
   <ItemGroup>
       <ProjectReference Include="..\Content.Client\Content.Client.csproj" />

@@ -4,7 +4,6 @@ using Content.Server.GameTicking;
 using Content.Shared.CCVar;
 using Content.Shared.Holiday;
 using Robust.Shared.Configuration;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server.Holiday
 {
@@ -40,7 +39,7 @@ namespace Content.Server.Holiday
 
             var now = DateTime.Now;
 
-            foreach (var holiday in _prototypeManager.EnumeratePrototypes<HolidayPrototype>())
+            foreach (var holiday in ProtoMan.EnumeratePrototypes<HolidayPrototype>())
             {
                 if (holiday.ShouldCelebrate(now))
                 {
@@ -74,7 +73,7 @@ namespace Content.Server.Holiday
 
         public bool IsCurrentlyHoliday(string holiday)
         {
-            if (!_prototypeManager.TryIndex(holiday, out HolidayPrototype? prototype))
+            if (!ProtoMan.TryIndex(holiday, out HolidayPrototype? prototype))
                 return false;
 
             return _currentHolidays.Contains(prototype);

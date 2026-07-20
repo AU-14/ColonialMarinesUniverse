@@ -3,16 +3,24 @@ using System.Numerics;
 using Content.Client.Construction;
 using Content.Client.Examine;
 using Content.Client.Gameplay;
-using Content.IntegrationTests.Pair;
+using Content.Client.Interaction;
+using Content.IntegrationTests.Fixtures;
+using Content.IntegrationTests.Fixtures.Attributes;
 using Content.Server.Hands.Systems;
 using Content.Server.Stack;
 using Content.Server.Tools;
+using Content.Shared.CombatMode;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.Components;
 using Content.Shared.Interaction;
+using Content.Shared.Item.ItemToggle;
 using Content.Shared.Mind;
 using Content.Shared.Players;
+using Content.Shared.Weapons.Melee;
+using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Client.Input;
+using Robust.Client.State;
+using Robust.Client.Timing;
 using Robust.Client.UserInterface;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Log;
@@ -20,30 +28,35 @@ using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
-using Robust.UnitTesting;
-using Content.Shared.Item.ItemToggle;
-using Robust.Client.State;
+using Robust.Shared.Utility;
 
 namespace Content.IntegrationTests.Tests.Interaction;
 
 /// <summary>
-/// This is a base class designed to make it easier to test various interactions like construction & DoAfters.
-///
+/// This is a base class designed to make it easier to test various interactions like construction &amp; DoAfters.
+/// </summary>
+/// <remarks>
 /// For construction tests, the interactions are intentionally hard-coded and not pulled automatically from the
 /// construction graph, even though this may be a pain to maintain. This is because otherwise these tests could not
 /// detect errors in the graph pathfinding (e.g., infinite loops, missing steps, etc).
-/// </summary>
+/// </remarks>
 [TestFixture]
 [FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
-public abstract partial class InteractionTest
+public abstract partial class InteractionTest : GameTest
 {
+    /// <summary>
+    /// The prototype that will be spawned for the player entity at <see cref="PlayerCoords"/>.
+    /// This is not a full humanoid and only has one hand by default.
+    /// </summary>
     protected virtual string PlayerPrototype => "InteractionTestMob";
 
-    protected TestPair Pair = default!;
-    protected TestMapData MapData => Pair.TestMap!;
+    /// <summary>
+    /// The map path to load for the integration test.
+    /// If null an empty map with a single 1x1 plating grid will be generated.
+    /// </summary>
+    protected virtual ResPath? TestMapPath => null;
 
-    protected RobustIntegrationTest.ServerIntegrationInstance Server => Pair.Server;
-    protected RobustIntegrationTest.ClientIntegrationInstance Client => Pair.Client;
+    protected TestMapData MapData => TestMap!;
 
     protected MapId MapId => MapData.MapId;
 
@@ -67,7 +80,6 @@ public abstract partial class InteractionTest
     protected EntityUid CPlayer;
 
     protected ICommonSession ClientSession = default!;
-    protected ICommonSession ServerSession = default!;
 
     /// <summary>
     /// The current target entity. This is the default entity for various helper functions.
@@ -106,25 +118,29 @@ public abstract partial class InteractionTest
     protected SharedTransformSystem Transform = default!;
     protected SharedMapSystem MapSystem = default!;
     protected ISawmill SLogger = default!;
-    protected SharedUserInterfaceSystem SUiSys = default!;
+    [SidedDependency(Side.Server)] protected SharedUserInterfaceSystem SUiSys = default!;
+    [SidedDependency(Side.Server)] protected SharedCombatModeSystem SCombatMode = default!;
+    [SidedDependency(Side.Server)] protected SharedGunSystem SGun = default!;
+    [SidedDependency(Side.Server)] protected SharedMeleeWeaponSystem SMelee = default!;
 
     // CLIENT dependencies
-    protected IEntityManager CEntMan = default!;
-    protected IGameTiming CTiming = default!;
-    protected IUserInterfaceManager UiMan = default!;
-    protected IInputManager InputManager = default!;
-    protected Robust.Client.GameObjects.InputSystem InputSystem = default!;
-    protected ConstructionSystem CConSys = default!;
-    protected ExamineSystem ExamineSys = default!;
-    protected InteractionTestSystem CTestSystem = default!;
+    protected IClientGameTiming CTiming => CGameTiming;
+    [SidedDependency(Side.Client)] protected IUserInterfaceManager UiMan = default!;
+    [SidedDependency(Side.Client)] protected IInputManager InputManager = default!;
+    [SidedDependency(Side.Client)] protected Robust.Client.GameObjects.InputSystem InputSystem = default!;
+    [SidedDependency(Side.Client)] protected ConstructionSystem CConSys = default!;
+    [SidedDependency(Side.Client)] protected ExamineSystem ExamineSys = default!;
+    [SidedDependency(Side.Client)] protected InteractionTestSystem CTestSystem = default!;
+    [SidedDependency(Side.Client)] protected ILogManager CLogMan = default!;
     protected ISawmill CLogger = default!;
-    protected SharedUserInterfaceSystem CUiSys = default!;
+    [SidedDependency(Side.Client)] protected SharedUserInterfaceSystem CUiSys = default!;
+    [SidedDependency(Side.Client)] protected DragDropSystem CDragDropSys = default!;
 
     // player components
-    protected HandsComponent Hands = default!;
-    protected DoAfterComponent DoAfters = default!;
+    protected HandsComponent? Hands;
+    protected DoAfterComponent? DoAfters;
 
-    public float TickPeriod => (float) STiming.TickPeriod.TotalSeconds;
+    public float TickPeriod => (float)STiming.TickPeriod.TotalSeconds;
 
     // Simple mob that has one hand and can perform misc interactions.
     [TestPrototypes]
@@ -144,6 +160,7 @@ public abstract partial class InteractionTest
   - type: Stripping
   - type: Puller
   - type: Physics
+  - type: GravityAffected
   - type: Tag
     tags:
     - CanPilot
@@ -151,10 +168,22 @@ public abstract partial class InteractionTest
   - type: Sprite
 ";
 
-    [SetUp]
+    protected static PoolSettings Default => new()
+    {
+        Connected = true,
+        Dirty = true
+    };
+
+    public override PoolSettings PoolSettings => Default;
+
+    /// <summary>
+    /// This is here for backward-compatibility.
+    /// You probably should switch to <see cref="DoSetup"/>.
+    /// </summary>
     public virtual async Task Setup()
     {
-        Pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
+        //
+    }
 
         // server dependencies
         SEntMan = Server.ResolveDependency<IEntityManager>();
@@ -189,7 +218,10 @@ public abstract partial class InteractionTest
         CUiSys = Client.System<SharedUserInterfaceSystem>();
 
         // Setup map.
-        await Pair.CreateTestMap();
+        if (TestMapPath == null)
+            await Pair.CreateTestMap();
+        else
+            await Pair.LoadTestMap(TestMapPath.Value);
 
         PlayerCoords = SEntMan.GetNetCoordinates(Transform.WithEntityId(MapData.GridCoords.Offset(new Vector2(0.5f, 0.5f)), MapData.MapUid));
         TargetCoords = SEntMan.GetNetCoordinates(Transform.WithEntityId(MapData.GridCoords.Offset(new Vector2(1.5f, 0.5f)), MapData.MapUid));
@@ -201,22 +233,24 @@ public abstract partial class InteractionTest
         if (Client.Session == null)
             Assert.Fail("No player");
         ClientSession = Client.Session!;
-        ServerSession = sPlayerMan.GetSessionById(ClientSession.UserId);
+
+        SLogger = SLogMan.RootSawmill;
+        CLogger = CLogMan.RootSawmill;
 
         // Spawn player entity & attach
-        EntityUid? old = default;
+        NetEntity? old = default;
         await Server.WaitPost(() =>
         {
             // Fuck you mind system I want an hour of my life back
             // Mind system is a time vampire
-            SEntMan.System<SharedMindSystem>().WipeMind(ServerSession.ContentData()?.Mind);
+            SEntMan.System<SharedMindSystem>().WipeMind(ServerSession!.ContentData()?.Mind);
 
-            old = cPlayerMan.LocalEntity;
+            CEntMan.TryGetNetEntity(cPlayerMan.LocalEntity, out old);
             SPlayer = SEntMan.SpawnEntity(PlayerPrototype, SEntMan.GetCoordinates(PlayerCoords));
             Player = SEntMan.GetNetEntity(SPlayer);
             Server.PlayerMan.SetAttachedEntity(ServerSession, SPlayer);
-            Hands = SEntMan.GetComponent<HandsComponent>(SPlayer);
-            DoAfters = SEntMan.GetComponent<DoAfterComponent>(SPlayer);
+            Hands = SEntMan.GetComponentOrNull<HandsComponent>(SPlayer);
+            DoAfters = SEntMan.GetComponentOrNull<DoAfterComponent>(SPlayer);
         });
 
         // Check player got attached.
@@ -227,8 +261,8 @@ public abstract partial class InteractionTest
         // Delete old player entity.
         await Server.WaitPost(() =>
         {
-            if (old != null)
-                SEntMan.DeleteEntity(old.Value);
+            if (SEntMan.TryGetEntity(old, out var uid))
+                SEntMan.DeleteEntity(uid);
         });
 
         // Change UI state to in-game.
@@ -237,19 +271,20 @@ public abstract partial class InteractionTest
 
         // Final player asserts/checks.
         await Pair.ReallyBeIdle(5);
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(CEntMan.GetNetEntity(cPlayerMan.LocalEntity), Is.EqualTo(Player));
             Assert.That(sPlayerMan.GetSessionById(ClientSession.UserId).AttachedEntity, Is.EqualTo(SEntMan.GetEntity(Player)));
-        });
+        }
     }
 
-    [TearDown]
-    public async Task TearDownInternal()
+    public override async Task DoTeardown()
     {
         await Server.WaitPost(() => MapSystem.DeleteMap(MapId));
-        await Pair.CleanReturnAsync();
+
         await TearDown();
+
+        await base.DoTeardown();
     }
 
     protected virtual Task TearDown()

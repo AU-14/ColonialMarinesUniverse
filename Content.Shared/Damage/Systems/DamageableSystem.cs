@@ -1,22 +1,19 @@
 using System.Linq;
-using Content.Shared.CCVar;
 using Content.Shared.Chemistry;
 using Content.Shared._RMC14.Damage;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.Explosion.EntitySystems;
 using Content.Shared.FixedPoint;
-using Content.Shared.Inventory;
-using Content.Shared.Mind.Components;
-using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.Radiation.Events;
-using Content.Shared.Rejuvenate;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameStates;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Shared.Damage
+namespace Content.Shared.Damage.Systems;
+
+public sealed partial class DamageableSystem : EntitySystem
 {
     public sealed partial class DamageableSystem : EntitySystem
     {
@@ -27,90 +24,23 @@ namespace Content.Shared.Damage
         [Dependency] private IConfigurationManager _config = default!;
         [Dependency] private SharedChemistryGuideDataSystem _chemistryGuideData = default!;
 
-        private EntityQuery<AppearanceComponent> _appearanceQuery;
-        private EntityQuery<DamageableComponent> _damageableQuery;
-        private EntityQuery<MindContainerComponent> _mindContainerQuery;
-
-        public float UniversalAllDamageModifier { get; private set; } = 1f;
-        public float UniversalAllHealModifier { get; private set; } = 1f;
-        public float UniversalMeleeDamageModifier { get; private set; } = 1f;
-        public float UniversalProjectileDamageModifier { get; private set; } = 1f;
-        public float UniversalHitscanDamageModifier { get; private set; } = 1f;
-        public float UniversalReagentDamageModifier { get; private set; } = 1f;
-        public float UniversalReagentHealModifier { get; private set; } = 1f;
-        public float UniversalExplosionDamageModifier { get; private set; } = 1f;
-        public float UniversalThrownDamageModifier { get; private set; } = 1f;
-        public float UniversalTopicalsHealModifier { get; private set; } = 1f;
-        public float UniversalMobDamageModifier { get; private set; } = 1f;
-
-        public override void Initialize()
+        if (damageDelta != null && _appearanceQuery.TryGetComponent(ent, out var appearance))
         {
-            SubscribeLocalEvent<DamageableComponent, ComponentInit>(DamageableInit);
-            SubscribeLocalEvent<DamageableComponent, ComponentHandleState>(DamageableHandleState);
-            SubscribeLocalEvent<DamageableComponent, ComponentGetState>(DamageableGetState);
-            SubscribeLocalEvent<DamageableComponent, OnIrradiatedEvent>(OnIrradiated);
-            SubscribeLocalEvent<DamageableComponent, RejuvenateEvent>(OnRejuvenate);
+            _appearance.SetData(
+                ent,
+                DamageVisualizerKeys.DamageUpdateGroups,
+                new DamageVisualizerGroupData(ent.Comp.DamagePerGroup.Keys.ToList()),
+                appearance
+            );
 
-            _appearanceQuery = GetEntityQuery<AppearanceComponent>();
-            _damageableQuery = GetEntityQuery<DamageableComponent>();
-            _mindContainerQuery = GetEntityQuery<MindContainerComponent>();
-
-            // Damage modifier CVars are updated and stored here to be queried in other systems.
-            // Note that certain modifiers requires reloading the guidebook.
-            Subs.CVar(_config, CCVars.PlaytestAllDamageModifier, value =>
+            if (ent.Comp.Displacement != null)
             {
-                UniversalAllDamageModifier = value;
-                _chemistryGuideData.ReloadAllReagentPrototypes();
-            }, true);
-            Subs.CVar(_config, CCVars.PlaytestAllHealModifier, value =>
-            {
-                UniversalAllHealModifier = value;
-                _chemistryGuideData.ReloadAllReagentPrototypes();
-            }, true);
-            Subs.CVar(_config, CCVars.PlaytestProjectileDamageModifier, value => UniversalProjectileDamageModifier = value, true);
-            Subs.CVar(_config, CCVars.PlaytestMeleeDamageModifier, value => UniversalMeleeDamageModifier = value, true);
-            Subs.CVar(_config, CCVars.PlaytestProjectileDamageModifier, value => UniversalProjectileDamageModifier = value, true);
-            Subs.CVar(_config, CCVars.PlaytestHitscanDamageModifier, value => UniversalHitscanDamageModifier = value, true);
-            Subs.CVar(_config, CCVars.PlaytestReagentDamageModifier, value =>
-            {
-                UniversalReagentDamageModifier = value;
-                _chemistryGuideData.ReloadAllReagentPrototypes();
-            }, true);
-            Subs.CVar(_config, CCVars.PlaytestReagentHealModifier, value =>
-            {
-                 UniversalReagentHealModifier = value;
-                 _chemistryGuideData.ReloadAllReagentPrototypes();
-            }, true);
-            Subs.CVar(_config, CCVars.PlaytestExplosionDamageModifier, value => UniversalExplosionDamageModifier = value, true);
-            Subs.CVar(_config, CCVars.PlaytestThrownDamageModifier, value => UniversalThrownDamageModifier = value, true);
-            Subs.CVar(_config, CCVars.PlaytestTopicalsHealModifier, value => UniversalTopicalsHealModifier = value, true);
-            Subs.CVar(_config, CCVars.PlaytestMobDamageModifier, value => UniversalMobDamageModifier = value, true);
-        }
-
-        /// <summary>
-        ///     Initialize a damageable component
-        /// </summary>
-        private void DamageableInit(EntityUid uid, DamageableComponent component, ComponentInit _)
-        {
-            if (component.DamageContainerID != null &&
-                _prototypeManager.TryIndex<DamageContainerPrototype>(component.DamageContainerID,
-                out var damageContainerPrototype))
-            {
-                // Initialize damage dictionary, using the types and groups from the damage
-                // container prototype
-                foreach (var type in damageContainerPrototype.SupportedTypes)
-                {
-                    component.Damage.DamageDict.TryAdd(type, FixedPoint2.Zero);
-                }
-
-                foreach (var groupId in damageContainerPrototype.SupportedGroups)
-                {
-                    var group = _prototypeManager.Index<DamageGroupPrototype>(groupId);
-                    foreach (var type in group.DamageTypes)
-                    {
-                        component.Damage.DamageDict.TryAdd(type, FixedPoint2.Zero);
-                    }
-                }
+                _appearance.SetData(
+                    ent,
+                    DamageVisualizerKeys.Displacement,
+                    ent.Comp.Displacement.Value.Id,
+                    appearance
+                );
             }
             else
             {
@@ -337,54 +267,14 @@ namespace Content.Shared.Damage
             }
         }
 
-        private void OnIrradiated(EntityUid uid, DamageableComponent component, OnIrradiatedEvent args)
-        {
-            var damageValue = FixedPoint2.New(args.TotalRads);
-
-            // Radiation should really just be a damage group instead of a list of types.
-            DamageSpecifier damage = new();
-            foreach (var typeId in component.RadiationDamageTypeIDs)
-            {
-                damage.DamageDict.Add(typeId, damageValue);
-            }
-
-            TryChangeDamage(uid, damage, interruptsDoAfters: false, origin: args.Origin);
-        }
-
-        private void OnRejuvenate(EntityUid uid, DamageableComponent component, RejuvenateEvent args)
-        {
-            TryComp<MobThresholdsComponent>(uid, out var thresholds);
-            _mobThreshold.SetAllowRevives(uid, true, thresholds); // do this so that the state changes when we set the damage
-            SetAllDamage(uid, component, 0);
-            _mobThreshold.SetAllowRevives(uid, false, thresholds);
-        }
-
-        private void DamageableHandleState(EntityUid uid, DamageableComponent component, ref ComponentHandleState args)
-        {
-            if (args.Current is not DamageableComponentState state)
-            {
-                return;
-            }
-
-            component.DamageContainerID = state.DamageContainerId;
-            component.DamageModifierSetId = state.ModifierSetId;
-            component.HealthBarThreshold = state.HealthBarThreshold;
-
-            // Has the damage actually changed?
-            DamageSpecifier newDamage = new() { DamageDict = new(state.DamageDict) };
-            var delta = newDamage - component.Damage;
-            delta.TrimZeros();
-
-            if (!delta.Empty)
-            {
-                component.Damage = newDamage;
-                DamageChanged(uid, component, delta);
-            }
-        }
+        // TODO DAMAGE
+        // byref struct event.
+        RaiseLocalEvent(ent, new DamageChangedEvent(ent.Comp, damageDelta, interruptsDoAfters, origin));
     }
 
     /// <summary>
-    ///     Raised before damage is done, so stuff can cancel it if necessary.
+    /// Goes through an entity damage's and saves them inside a dictionary if the value is higher than 0
+    /// The dictionary is structured with a string for the name of the damage type, and a FixedPoint2 for the numeric damage value
     /// </summary>
     [ByRefEvent]
     public record struct BeforeDamageChangedEvent(DamageSpecifier Damage, EntityUid? Origin = null, EntityUid? Source = null, bool Cancelled = false); //RMC14
@@ -398,8 +288,7 @@ namespace Content.Shared.Damage
     /// </summary>
     public sealed class DamageModifyEvent : EntityEventArgs, IInventoryRelayEvent
     {
-        // Whenever locational damage is a thing, this should just check only that bit of armour.
-        public SlotFlags TargetSlots { get; } = ~SlotFlags.POCKET;
+        var damageTypes = new Dictionary<ProtoId<DamageTypePrototype>, FixedPoint2>();
 
         public readonly DamageSpecifier OriginalDamage;
         public DamageSpecifier Damage;
@@ -468,13 +357,12 @@ namespace Content.Shared.Damage
 
             foreach (var damageChange in DamageDelta.DamageDict.Values)
             {
-                if (damageChange > 0)
-                {
-                    DamageIncreased = true;
-                    break;
-                }
+                if (!damage.DamageDict.TryGetValue(type, out var damageValue) || damageValue == 0) //get value and make sure it isn't 0
+                    continue;
+
+                damageTypes.Add(type, damageValue);
             }
-            InterruptsDoAfters = interruptsDoAfters && DamageIncreased;
         }
+        return damageTypes;
     }
 }

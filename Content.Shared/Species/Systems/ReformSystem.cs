@@ -6,7 +6,6 @@ using Content.Shared.Stunnable;
 using Content.Shared.Mind;
 using Content.Shared.Zombies;
 using Robust.Shared.Network;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 
@@ -39,7 +38,7 @@ public sealed partial class ReformSystem : EntitySystem
     private void OnMapInit(EntityUid uid, ReformComponent comp, MapInitEvent args)
     {
         // When the map is initialized, give them the action
-        if (comp.ActionPrototype != default && !_protoManager.TryIndex<EntityPrototype>(comp.ActionPrototype, out var actionProto))
+        if (comp.ActionPrototype != default && !ProtoMan.HasIndex(comp.ActionPrototype))
             return;
 
         _actionsSystem.AddAction(uid, ref comp.ActionEntity, out var reformAction, comp.ActionPrototype);
@@ -63,8 +62,8 @@ public sealed partial class ReformSystem : EntitySystem
     {
         // Stun them when they use the action for the amount of reform time.
         if (comp.ShouldStun)
-            _stunSystem.TryStun(uid, TimeSpan.FromSeconds(comp.ReformTime), true);
-        _popupSystem.PopupClient(Loc.GetString(comp.PopupText, ("name", uid)), uid, uid);
+            _stunSystem.TryUpdateStunDuration(uid, TimeSpan.FromSeconds(comp.ReformTime));
+        _popupSystem.PopupEntity(Loc.GetString(comp.PopupText, ("name", uid)), uid, uid);
 
         // Create a doafter & start it
         var doAfter = new DoAfterArgs(EntityManager, uid, comp.ReformTime, new ReformDoAfterEvent(), uid)
@@ -106,7 +105,7 @@ public sealed partial class ReformSystem : EntitySystem
     }
 
     public sealed partial class ReformEvent : InstantActionEvent { }
-    
+
     [Serializable, NetSerializable]
     public sealed partial class ReformDoAfterEvent : SimpleDoAfterEvent { }
 }

@@ -6,7 +6,6 @@ using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Placement;
 using Robust.Client.Placement.Modes;
-using Robust.Client.Utility;
 using Robust.Shared.Enums;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -133,7 +132,7 @@ public sealed partial class AlignAtmosPipeLayers : SnapgridCenter
 
         var newProtoId = altPrototypes[(int)layer];
 
-        if (!_protoManager.TryIndex(newProtoId, out var newProto))
+        if (!_protoManager.Resolve(newProtoId, out var newProto))
             return;
 
         if (newProto.Type != ConstructionType.Structure)

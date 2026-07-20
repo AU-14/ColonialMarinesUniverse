@@ -2,7 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Content.Shared.Humanoid.Markings;
-using Content.Shared.IoC;
 using Content.Shared.Maps;
 using Robust.Shared;
 using Robust.Shared.Configuration;
@@ -26,8 +25,7 @@ namespace Content.Shared.Entry
 
         public override void PreInit()
         {
-            IoCManager.InjectDependencies(this);
-            SharedContentIoC.Register();
+            Dependencies.InjectDependencies(this);
         }
 
         public override void Shutdown()
@@ -45,13 +43,12 @@ namespace Content.Shared.Entry
             base.PostInit();
 
             InitTileDefinitions();
-            IoCManager.Resolve<MarkingManager>().Initialize();
+            Dependencies.Resolve<MarkingManager>().Initialize();
 
 #if DEBUG
-            var configMan = IoCManager.Resolve<IConfigurationManager>();
-            configMan.OverrideDefault(CVars.NetFakeLagMin, 0.075f);
-            configMan.OverrideDefault(CVars.NetFakeLoss, 0.005f);
-            configMan.OverrideDefault(CVars.NetFakeDuplicates, 0.005f);
+            _configurationManager.OverrideDefault(CVars.NetFakeLagMin, 0.075f);
+            _configurationManager.OverrideDefault(CVars.NetFakeLoss, 0.005f);
+            _configurationManager.OverrideDefault(CVars.NetFakeDuplicates, 0.005f);
 #endif
         }
 

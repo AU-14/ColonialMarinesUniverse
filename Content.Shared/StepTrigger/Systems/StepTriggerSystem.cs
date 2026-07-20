@@ -37,12 +37,11 @@ public sealed partial class StepTriggerSystem : EntitySystem
 
     public override void Update(float frameTime)
     {
-        var query = GetEntityQuery<PhysicsComponent>();
         var enumerator = EntityQueryEnumerator<StepTriggerActiveComponent, StepTriggerComponent, TransformComponent>();
 
         while (enumerator.MoveNext(out var uid, out var active, out var trigger, out var transform))
         {
-            if (!Update(uid, trigger, transform, query))
+            if (!Update(uid, trigger, transform))
             {
                 continue;
             }
@@ -51,7 +50,7 @@ public sealed partial class StepTriggerSystem : EntitySystem
         }
     }
 
-    private bool Update(EntityUid uid, StepTriggerComponent component, TransformComponent transform, EntityQuery<PhysicsComponent> query)
+    private bool Update(EntityUid uid, StepTriggerComponent component, TransformComponent transform)
     {
         if (!component.Active ||
             component.Colliding.Count == 0)
@@ -69,7 +68,7 @@ public sealed partial class StepTriggerSystem : EntitySystem
                 if (ent == uid)
                     continue;
 
-                if (_whitelistSystem.IsBlacklistPass(component.Blacklist, ent.Value))
+                if (_whitelistSystem.IsWhitelistPass(component.Blacklist, ent.Value))
                 {
                     return false;
                 }
@@ -78,15 +77,15 @@ public sealed partial class StepTriggerSystem : EntitySystem
 
         foreach (var otherUid in component.Colliding)
         {
-            UpdateColliding(uid, component, transform, otherUid, query);
+            UpdateColliding(uid, component, transform, otherUid);
         }
 
         return false;
     }
 
-    private void UpdateColliding(EntityUid uid, StepTriggerComponent component, TransformComponent ownerXform, EntityUid otherUid, EntityQuery<PhysicsComponent> query)
+    private void UpdateColliding(EntityUid uid, StepTriggerComponent component, TransformComponent ownerXform, EntityUid otherUid)
     {
-        if (!query.TryGetComponent(otherUid, out var otherPhysics))
+        if (!_physicsquery.TryComp(otherUid, out var otherPhysics))
             return;
 
         var otherXform = Transform(otherUid);
@@ -139,7 +138,7 @@ public sealed partial class StepTriggerSystem : EntitySystem
         // and the entity is flying or currently weightless
         // Makes sense simulation wise to have this be part of steptrigger directly IMO
         if (!component.IgnoreWeightless && TryComp<PhysicsComponent>(otherUid, out var physics) &&
-            (physics.BodyStatus == BodyStatus.InAir || _gravity.IsWeightless(otherUid, physics)))
+            (physics.BodyStatus == BodyStatus.InAir || _gravity.IsWeightless(otherUid)))
             return false;
 
         var msg = new StepTriggerAttemptEvent { Source = uid, Tripper = otherUid };

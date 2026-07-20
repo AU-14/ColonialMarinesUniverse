@@ -10,7 +10,6 @@
                 <CheckBox Name="RMCUseAlternateSpritesCheckBox" Text="{Loc 'rmc-ui-options-alternate-sprites'}" />
                 <Label Text="{Loc 'ui-options-accessability-header-visuals'}"
                        StyleClasses="LabelKeyText"/>
-                <CheckBox Name="ReducedMotionCheckBox" Text="{Loc 'ui-options-reduced-motion'}" />
                 <CheckBox Name="EnableColorNameCheckBox" Text="{Loc 'ui-options-enable-color-name'}" />
                 <CheckBox Name="ColorblindFriendlyCheckBox" Text="{Loc 'ui-options-colorblind-friendly'}" />
                 <CheckBox Name="XenoAbilityPreviewsCheckBox" Text="{Loc 'rmc-ui-options-xeno-ability-previews'}" />
@@ -23,7 +22,7 @@
                 <ui:OptionColorSlider Name="HighlightsColorSlider"
                     Title="{Loc 'ui-options-highlights-color'}"
                     Example="{Loc 'ui-options-highlights-color-example'}"/>
-                <Label Text="{Loc 'ui-options-accessability-header-content'}"
+                <Label Text="{Loc 'ui-options-accessibility-header-content'}"
                        StyleClasses="LabelKeyText"/>
                 <CheckBox Name="CensorNudityCheckBox" Text="{Loc 'ui-options-censor-nudity'}" />
             </BoxContainer>

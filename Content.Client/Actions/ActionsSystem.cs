@@ -19,7 +19,6 @@ using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Serialization.Markdown.Mapping;
 using Robust.Shared.Serialization.Markdown.Sequence;
 using Robust.Shared.Serialization.Markdown.Value;
-using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using YamlDotNet.RepresentationModel;
 
@@ -261,12 +260,12 @@ namespace Content.Client.Actions
                 else if (map.TryGet<ValueDataNode>("entity", out var entityNode))
                 {
                     var id = new EntProtoId(entityNode.Value);
-                    var proto = _proto.Index(id);
+                    var proto = ProtoMan.Index(id);
                     actionId = Spawn(MappingEntityAction);
                     SetIcon(actionId, new SpriteSpecifier.EntityPrototype(id));
                     SetEvent(actionId, new StartPlacementActionEvent()
                     {
-                        PlacementOption = "SnapgridCenter",
+                        PlacementOption = proto.PlacementMode,
                         EntityType = id
                     });
                     _metaData.SetEntityName(actionId, proto.Name);
@@ -274,7 +273,7 @@ namespace Content.Client.Actions
                 else if (map.TryGet<ValueDataNode>("tileId", out var tileNode))
                 {
                     var id = new ProtoId<ContentTileDefinition>(tileNode.Value);
-                    var proto = _proto.Index(id);
+                    var proto = ProtoMan.Index(id);
                     actionId = Spawn(MappingEntityAction);
                     if (proto.Sprite is {} sprite)
                         SetIcon(actionId, new SpriteSpecifier.Texture(sprite));
@@ -291,8 +290,27 @@ namespace Content.Client.Actions
                     continue;
                 }
 
+                if (assignmentNode is SequenceDataNode sequenceAssignments)
+                {
+                    try
+                    {
+                        var nodeAssignments = _serialization.Read<List<(byte Hotbar, byte Slot)>>(sequenceAssignments, notNullableOverride: true);
+
+                        foreach (var index in nodeAssignments)
+                        {
+                            assignments.Add(new SlotAssignment(index.Hotbar, index.Slot, actionId));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"Failed to parse action assignments: {ex}");
+                    }
+                }
+
                 AddActionDirect((user, actions), actionId);
             }
+
+            AssignSlot?.Invoke(assignments);
         }
 
         private void OnWorldTargetAttempt(Entity<WorldTargetActionComponent> ent, ref ActionTargetAttemptEvent args)
@@ -316,7 +334,7 @@ namespace Content.Client.Actions
             if (TryComp<EntityTargetActionComponent>(ent, out var entity) &&
                 ValidateEntityTarget(user, args.Input.EntityUid, (uid, entity)))
             {
-                targetEnt = args.Input.EntityUid;
+                targetEnt = entityUid;
             }
 
             if (action.ClientExclusive)
@@ -355,8 +373,6 @@ namespace Content.Client.Actions
                 DebugTools.Assert(HasComp<WorldTargetActionComponent>(ent), $"Action {ToPrettyString(ent)} requires WorldTargetActionComponent for entity-world targeting");
                 return;
             }
-
-            args.Handled = true;
 
             var action = args.Action;
             var user = args.User;

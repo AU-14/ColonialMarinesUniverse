@@ -50,7 +50,7 @@ public sealed partial class RandomMetadataSystem : EntitySystem
         _outputSegments.Clear();
         for (var i = 0; i < segments.Count; ++i)
         {
-            var localizedProto = _prototype.Index(segments[i]);
+            var localizedProto = ProtoMan.Index(segments[i]);
             _outputSegments.Add(($"part{i}", _random.Pick(localizedProto)));
         }
 

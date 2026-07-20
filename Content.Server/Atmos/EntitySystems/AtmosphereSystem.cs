@@ -1,9 +1,13 @@
+using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Server.Atmos.Components;
-using Content.Server.Body.Systems;
+using Content.Server.Atmos.Reactions;
 using Content.Server.Fluids.EntitySystems;
 using Content.Server.NodeContainer.EntitySystems;
+using Content.Shared.Atmos;
+using Content.Shared.Atmos.Components;
 using Content.Shared.Atmos.EntitySystems;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Decals;
 using Content.Shared.Doors.Components;
 using Content.Shared.Maps;
@@ -14,7 +18,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
-using System.Linq;
+using Robust.Shared.Threading;
 
 namespace Content.Server.Atmos.EntitySystems;
 
@@ -40,10 +44,6 @@ public sealed partial class AtmosphereSystem : SharedAtmosphereSystem
     private const float ExposedUpdateDelay = 1f;
     private float _exposedTimer = 0f;
 
-    private EntityQuery<GridAtmosphereComponent> _atmosQuery;
-    private EntityQuery<MapAtmosphereComponent> _mapAtmosQuery;
-    private EntityQuery<AirtightComponent> _airtightQuery;
-    private EntityQuery<FirelockComponent> _firelockQuery;
     private HashSet<EntityUid> _entSet = new();
 
     private string[] _burntDecals = [];
@@ -60,15 +60,11 @@ public sealed partial class AtmosphereSystem : SharedAtmosphereSystem
         InitializeGridAtmosphere();
         InitializeMap();
 
-        _mapAtmosQuery = GetEntityQuery<MapAtmosphereComponent>();
-        _atmosQuery = GetEntityQuery<GridAtmosphereComponent>();
-        _airtightQuery = GetEntityQuery<AirtightComponent>();
-        _firelockQuery = GetEntityQuery<FirelockComponent>();
-
         SubscribeLocalEvent<TileChangedEvent>(OnTileChanged);
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
 
         CacheDecals();
+        CacheGases();
     }
 
     public override void Shutdown()
@@ -90,6 +86,8 @@ public sealed partial class AtmosphereSystem : SharedAtmosphereSystem
     {
         if (ev.WasModified<DecalPrototype>())
             CacheDecals();
+        if (ev.WasModified<GasReactionPrototype>())
+            CacheGases();
     }
 
     public override void Update(float frameTime)
@@ -121,6 +119,6 @@ public sealed partial class AtmosphereSystem : SharedAtmosphereSystem
 
     private void CacheDecals()
     {
-        _burntDecals = _protoMan.EnumeratePrototypes<DecalPrototype>().Where(x => x.Tags.Contains("burnt")).Select(x => x.ID).ToArray();
+        _burntDecals = ProtoMan.EnumeratePrototypes<DecalPrototype>().Where(x => x.Tags.Contains("burnt")).Select(x => x.ID).ToArray();
     }
 }

@@ -41,10 +41,10 @@ public sealed partial class RainbowOverlay : Overlay
     {
         IoCManager.InjectDependencies(this);
 
-        _statusEffects = _sysMan.GetEntitySystem<SharedStatusEffectsSystem>();
+        _statusEffects = _sysMan.GetEntitySystem<StatusEffectsSystem>();
 
         _rainbowShader = _prototypeManager.Index(Shader).InstanceUnique();
-        _config.OnValueChanged(CCVars.ReducedMotion, OnReducedMotionChanged, invokeImmediately: true);
+        _config.OnValueChanged(CCVars.DisableRainbowOverlay, OnReducedMotionChanged, invokeImmediately: true);
     }
 
     private void OnReducedMotionChanged(bool reducedMotion)

@@ -24,8 +24,6 @@ public sealed partial class TagSystem : EntitySystem
     {
         base.Initialize();
 
-        _tagQuery = GetEntityQuery<TagComponent>();
-
 #if DEBUG
         SubscribeLocalEvent<TagComponent, ComponentInit>(OnTagInit);
 #endif
@@ -710,6 +708,6 @@ public sealed partial class TagSystem : EntitySystem
 
     private void AssertValidTag(string id)
     {
-        DebugTools.Assert(_proto.HasIndex<TagPrototype>(id), $"Unknown tag: {id}");
+        DebugTools.Assert(ProtoMan.HasIndex<TagPrototype>(id), $"Unknown tag: {id}");
     }
 }

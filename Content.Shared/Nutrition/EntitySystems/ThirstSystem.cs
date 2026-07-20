@@ -55,7 +55,7 @@ public sealed partial class ThirstSystem : EntitySystem
         DirtyFields(uid, component, null, nameof(ThirstComponent.NextUpdateTime), nameof(ThirstComponent.CurrentThirstThreshold), nameof(ThirstComponent.LastThirstThreshold));
 
         TryComp(uid, out MovementSpeedModifierComponent? moveMod);
-            _movement.RefreshMovementSpeedModifiers(uid, moveMod);
+            _movement.RefreshMovementSpeedModifiers((uid, moveMod));
     }
 
     private void OnRefreshMovespeed(EntityUid uid, ThirstComponent component, RefreshMovementSpeedModifiersEvent args)
@@ -120,15 +120,15 @@ public sealed partial class ThirstSystem : EntitySystem
         switch (component.CurrentThirstThreshold)
         {
             case ThirstThreshold.OverHydrated:
-                _prototype.TryIndex(ThirstIconOverhydratedId, out prototype);
+                ProtoMan.Resolve(ThirstIconOverhydratedId, out prototype);
                 break;
 
             case ThirstThreshold.Thirsty:
-                _prototype.TryIndex(ThirstIconThirstyId, out prototype);
+                ProtoMan.Resolve(ThirstIconThirstyId, out prototype);
                 break;
 
             case ThirstThreshold.Parched:
-                _prototype.TryIndex(ThirstIconParchedId, out prototype);
+                ProtoMan.Resolve(ThirstIconParchedId, out prototype);
                 break;
 
             default:
@@ -144,7 +144,7 @@ public sealed partial class ThirstSystem : EntitySystem
         if (IsMovementThreshold(component.LastThirstThreshold) != IsMovementThreshold(component.CurrentThirstThreshold) &&
                 TryComp(uid, out MovementSpeedModifierComponent? movementSlowdownComponent))
         {
-            _movement.RefreshMovementSpeedModifiers(uid, movementSlowdownComponent);
+            _movement.RefreshMovementSpeedModifiers((uid, movementSlowdownComponent));
         }
 
         // Update UI

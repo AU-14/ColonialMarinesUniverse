@@ -1,5 +1,4 @@
 using Robust.Shared.Containers;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Shared.Containers;
@@ -24,7 +23,7 @@ public sealed partial class ContainerCompSystem : EntitySystem
         if (args.Container.ID != ent.Comp.Container || _timing.ApplyingState)
             return;
 
-        if (_proto.TryIndex(ent.Comp.Proto, out var entProto))
+        if (ProtoMan.Resolve(ent.Comp.Proto, out var entProto))
         {
             EntityManager.RemoveComponents(args.Entity, entProto.Components);
         }
@@ -35,7 +34,7 @@ public sealed partial class ContainerCompSystem : EntitySystem
         if (args.Container.ID != ent.Comp.Container || _timing.ApplyingState)
             return;
 
-        if (_proto.TryIndex(ent.Comp.Proto, out var entProto))
+        if (ProtoMan.Resolve(ent.Comp.Proto, out var entProto))
         {
             EntityManager.AddComponents(args.Entity, entProto.Components);
         }

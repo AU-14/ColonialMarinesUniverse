@@ -1,11 +1,12 @@
 using Content.Server.Antag;
 using Content.Server.GameTicking.Rules.Components;
-using Content.Server.Mind;
 using Content.Server.Roles;
 using Content.Server.Shuttles.Systems;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Mind;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Objectives.Systems;
+using Content.Shared.Roles.Components;
 using Content.Shared.Survivor.Components;
 using Content.Shared.Tag;
 using Robust.Server.GameObjects;
@@ -37,7 +38,7 @@ public sealed partial class SurvivorRuleSystem : GameRuleSystem<SurvivorRuleComp
     {
         base.Started(uid, component, gameRule, args);
 
-        var allAliveHumanMinds = _mind.GetAliveHumans();
+        var allAliveHumanMinds = _target.GetMinds();
 
         foreach (var humanMind in allAliveHumanMinds)
         {
@@ -105,6 +106,7 @@ public sealed partial class SurvivorRuleSystem : GameRuleSystem<SurvivorRuleComp
         args.AddLine(Loc.GetString("survivor-round-end-dead-count", ("deadCount", deadSurvivors)));
         args.AddLine(Loc.GetString("survivor-round-end-alive-count", ("aliveCount", aliveMarooned)));
         args.AddLine(Loc.GetString("survivor-round-end-alive-on-shuttle-count", ("aliveCount", aliveOnShuttle)));
+        args.AddLine("");
 
         // Player manifest at EOR shows who's a survivor so no need for extra info here.
     }

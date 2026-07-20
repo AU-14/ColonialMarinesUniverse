@@ -17,6 +17,8 @@ public sealed partial class ChatUIController : IOnSystemChanged<CharacterInfoSys
     [Dependency] private ILocalizationManager _loc = default!;
     [UISystemDependency] private readonly CharacterInfoSystem _characterInfo = default!;
 
+    private string _chatSpeechDoubleQuoteBegin = default!;
+
     private static readonly Regex StartDoubleQuote = new("\"$");
     private static readonly Regex EndDoubleQuote = new("^\"|(?<=^@)\"");
     private static readonly Regex StartAtSign = new("^@");
@@ -53,6 +55,8 @@ public sealed partial class ChatUIController : IOnSystemChanged<CharacterInfoSys
         {
             UpdateHighlights(highlights, true);
         }
+
+        _chatSpeechDoubleQuoteBegin = _loc.GetString("chat-manager-speech-double-quote-begin");
     }
 
     public void OnSystemLoaded(CharacterInfoSystem system)
@@ -116,8 +120,10 @@ public sealed partial class ChatUIController : IOnSystemChanged<CharacterInfoSys
                 keyword = EndDoubleQuote.Replace(keyword, "(?<!\\w)");
             }
 
-            // Make sure any name tagged as ours gets highlighted only when others say it.
-            keyword = StartAtSign.Replace(keyword, "(?<=(?<=/name.*)|(?<=,.*\"\".*))");
+            // Make sure the character's name is highlighted only when mentioned directly (eg. it's said by someone),
+            // for example in 'Name Surname says, "..."' 'Name Surname' won't be highlighted.
+            keyword = StartAtSign.Replace(keyword,
+                $"(?<=(?<=^.?OOC:.*:.*)|(?<=,.*{_chatSpeechDoubleQuoteBegin}.*)|(?<=\\n.*)|(?<=:.*))");
 
             _highlights.Add(keyword);
         }

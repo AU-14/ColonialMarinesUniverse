@@ -3,7 +3,6 @@ using Content.Server.Decals;
 using Content.Server.Spawners.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
 namespace Content.Server.Spawners.EntitySystems;
@@ -89,7 +88,7 @@ public sealed partial class RandomDecalSpawnerSystem : EntitySystem
             }
 
             var decalProtoId = _random.Pick(comp.Decals);
-            var decalProto = _prototypes.Index(decalProtoId);
+            var decalProto = ProtoMan.Index(decalProtoId);
             var snapPosition = comp.SnapPosition ?? decalProto.DefaultSnap;
             if (snapPosition)
             {

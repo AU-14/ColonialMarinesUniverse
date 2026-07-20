@@ -1,8 +1,11 @@
-﻿using Content.Server.Administration;
+using Content.Server.Administration;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
-namespace Content.Server.GameTicking.Commands
+namespace Content.Server.GameTicking.Commands;
+
+[AdminCommand(AdminFlags.Round)]
+sealed class DelayStartCommand : LocalizedEntityCommands
 {
     [AdminCommand(AdminFlags.RMCMaintainer)] //RMC14
     [AdminCommand(AdminFlags.Round)]
@@ -16,37 +19,33 @@ namespace Content.Server.GameTicking.Commands
 
         public void Execute(IConsoleShell shell, string argStr, string[] args)
         {
-            var ticker = _e.System<GameTicker>();
-            if (ticker.RunLevel != GameRunLevel.PreRoundLobby)
-            {
-                shell.WriteLine("This can only be executed while the game is in the pre-round lobby.");
-                return;
-            }
+            shell.WriteLine(Loc.GetString("delaystart-preround-only"));
+            return;
+        }
 
-            if (args.Length == 0)
-            {
-                var paused = ticker.TogglePause();
-                shell.WriteLine(paused ? "Paused the countdown." : "Resumed the countdown.");
-                return;
-            }
+        if (args.Length == 0)
+        {
+            var paused = ticker.TogglePause();
+            shell.WriteLine(paused ? Loc.GetString("delaystart-paused") : Loc.GetString("delaystart-resumed"));
+            return;
+        }
 
-            if (args.Length != 1)
-            {
-                shell.WriteLine("Need zero or one arguments.");
-                return;
-            }
+        if (args.Length != 1)
+        {
+            shell.WriteLine(Loc.GetString("shell-need-between-arguments", ("lower", 0), ("upper", 1)));
+            return;
+        }
 
-            if (!uint.TryParse(args[0], out var seconds) || seconds == 0)
-            {
-                shell.WriteLine($"{args[0]} isn't a valid amount of seconds.");
-                return;
-            }
+        if (!int.TryParse(args[0], out var seconds) || seconds == 0)
+        {
+            shell.WriteLine(Loc.GetString("delaystart-invalid-seconds", ("seconds", args[0])));
+            return;
+        }
 
-            var time = TimeSpan.FromSeconds(seconds);
-            if (!ticker.DelayStart(time))
-            {
-                shell.WriteLine("An unknown error has occurred.");
-            }
+        var time = TimeSpan.FromSeconds(seconds);
+        if (!ticker.DelayStart(time))
+        {
+            shell.WriteLine(Loc.GetString("shell-unknown-error"));
         }
     }
 }

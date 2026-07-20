@@ -1,4 +1,3 @@
-using Content.Shared.Clothing.Components;
 using Content.Shared.Ninja.Components;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Events;
@@ -15,13 +14,11 @@ public abstract partial class SharedSpaceNinjaSystem : EntitySystem
     [Dependency] protected SharedNinjaSuitSystem Suit = default!;
     [Dependency] protected SharedPopupSystem Popup = default!;
 
-    public EntityQuery<SpaceNinjaComponent> NinjaQuery;
+    [Dependency] public EntityQuery<SpaceNinjaComponent> NinjaQuery = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-
-        NinjaQuery = GetEntityQuery<SpaceNinjaComponent>();
 
         SubscribeLocalEvent<SpaceNinjaComponent, AttackedEvent>(OnNinjaAttacked);
         SubscribeLocalEvent<SpaceNinjaComponent, MeleeAttackEvent>(OnNinjaAttack);
@@ -107,7 +104,7 @@ public abstract partial class SharedSpaceNinjaSystem : EntitySystem
     /// </summary>
     private void OnShotAttempted(Entity<SpaceNinjaComponent> ent, ref ShotAttemptedEvent args)
     {
-        Popup.PopupClient(Loc.GetString("gun-disabled"), ent, ent);
+        Popup.PopupEntity(Loc.GetString("gun-disabled"), ent, ent);
         args.Cancel();
     }
 }

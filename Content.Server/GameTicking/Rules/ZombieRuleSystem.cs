@@ -4,7 +4,6 @@ using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Popups;
 using Content.Server.Roles;
 using Content.Server.RoundEnd;
-using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Server.Zombies;
 using Content.Shared.GameTicking.Components;
@@ -14,10 +13,12 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Roles;
+using Content.Shared.Roles.Components;
 using Content.Shared.Zombies;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using System.Globalization;
+using System.Linq;
 
 namespace Content.Server.GameTicking.Rules;
 
@@ -76,7 +77,7 @@ public sealed partial class ZombieRuleSystem : GameRuleSystem<ZombieRuleComponen
         else
             args.AddLine(Loc.GetString("zombie-round-end-amount-all"));
 
-        var antags = _antag.GetAntagIdentifiers(uid);
+        var antags = _antag.GetAntagIdentifiers(uid).ToList();
         args.AddLine(Loc.GetString("zombie-round-end-initial-count", ("initialCount", antags.Count)));
         foreach (var (_, data, entName) in antags)
         {
@@ -106,6 +107,7 @@ public sealed partial class ZombieRuleSystem : GameRuleSystem<ZombieRuleComponen
                 ("name", meta.EntityName),
                 ("username", username)));
         }
+        args.AddLine("");
     }
 
     /// <summary>
@@ -123,7 +125,7 @@ public sealed partial class ZombieRuleSystem : GameRuleSystem<ZombieRuleComponen
             {
                 _chat.DispatchStationAnnouncement(station, Loc.GetString("zombie-shuttle-call"), colorOverride: Color.Crimson);
             }
-            _roundEnd.RequestRoundEnd(null, false);
+            _roundEnd.RequestRoundEnd(checkCooldown: false);
         }
 
         // we include dead for this count because we don't want to end the round
@@ -165,7 +167,7 @@ public sealed partial class ZombieRuleSystem : GameRuleSystem<ZombieRuleComponen
     {
         var players = GetHealthyHumans(includeOffStation);
         var zombieCount = 0;
-        var query = EntityQueryEnumerator<HumanoidAppearanceComponent, ZombieComponent, MobStateComponent>();
+        var query = EntityQueryEnumerator<HumanoidProfileComponent, ZombieComponent, MobStateComponent>();
         while (query.MoveNext(out _, out _, out _, out var mob))
         {
             if (!includeDead && mob.CurrentState == MobState.Dead)
@@ -190,19 +192,18 @@ public sealed partial class ZombieRuleSystem : GameRuleSystem<ZombieRuleComponen
         {
             foreach (var station in _station.GetStationsSet())
             {
-                if (TryComp<StationDataComponent>(station, out var data) && _station.GetLargestGrid(data) is { } grid)
+                if (_station.GetLargestGrid(station) is { } grid)
                     stationGrids.Add(grid);
             }
         }
 
-        var players = AllEntityQuery<HumanoidAppearanceComponent, ActorComponent, MobStateComponent, TransformComponent>();
-        var zombers = GetEntityQuery<ZombieComponent>();
+        var players = AllEntityQuery<HumanoidProfileComponent, ActorComponent, MobStateComponent, TransformComponent>();
         while (players.MoveNext(out var uid, out _, out _, out var mob, out var xform))
         {
             if (!_mobState.IsAlive(uid, mob))
                 continue;
 
-            if (zombers.HasComponent(uid))
+            if (_zombieQuery.HasComponent(uid))
                 continue;
 
             if (!includeOffStation && !stationGrids.Contains(xform.GridUid ?? EntityUid.Invalid))

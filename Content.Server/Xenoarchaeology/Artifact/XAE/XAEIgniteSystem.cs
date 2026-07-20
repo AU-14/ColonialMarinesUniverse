@@ -22,14 +22,6 @@ public sealed partial class XAEIgniteSystem : BaseXAESystem<XAEIgniteComponent>
     private readonly HashSet<EntityUid> _entities = new();
 
     /// <inheritdoc />
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        _flammables = GetEntityQuery<FlammableComponent>();
-    }
-
-    /// <inheritdoc />
     protected override void OnActivated(Entity<XAEIgniteComponent> ent, ref XenoArtifactNodeActivatedEvent args)
     {
         var component = ent.Comp;

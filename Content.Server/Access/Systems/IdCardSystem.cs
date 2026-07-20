@@ -6,9 +6,10 @@ using Content.Server.Popups;
 using Content.Shared.Access;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
+using Content.Shared.Chat;
 using Content.Shared.Database;
+using Content.Shared.Kitchen;
 using Content.Shared.Popups;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Content.Server.Kitchen.EntitySystems;
 
@@ -80,7 +81,7 @@ public sealed partial class IdCardSystem : SharedIdCardSystem
             }
 
             // Give them a wonderful new access to compensate for everything
-            var ids = _prototypeManager.EnumeratePrototypes<AccessLevelPrototype>().Where(x => x.CanAddToIdCard).ToArray();
+            var ids = ProtoMan.EnumeratePrototypes<AccessLevelPrototype>().Where(x => x.CanAddToIdCard).ToArray();
 
             if (ids.Length == 0)
                 return;

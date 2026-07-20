@@ -4,7 +4,10 @@ using Content.Shared._RMC14.CCVar;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
-namespace Content.Server.GameTicking.Commands
+namespace Content.Server.GameTicking.Commands;
+
+[AdminCommand(AdminFlags.Round)]
+public sealed partial class EndRoundCommand : LocalizedEntityCommands
 {
     [AdminCommand(AdminFlags.Round)]
     sealed partial class EndRoundCommand : IConsoleCommand
@@ -33,5 +36,7 @@ namespace Content.Server.GameTicking.Commands
 
             ticker.EndRound();
         }
+
+        _gameTicker.EndRound();
     }
 }

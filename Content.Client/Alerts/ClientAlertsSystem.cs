@@ -39,7 +39,7 @@ public sealed partial class ClientAlertsSystem : AlertsSystem
     {
         base.LoadPrototypes();
 
-        AlertOrder = _prototypeManager.EnumeratePrototypes<AlertOrderPrototype>().FirstOrDefault();
+        AlertOrder = ProtoMan.EnumeratePrototypes<AlertOrderPrototype>().FirstOrDefault();
         if (AlertOrder == null)
             Log.Error("No alertOrder prototype found, alerts will be in random order");
     }

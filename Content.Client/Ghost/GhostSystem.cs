@@ -3,6 +3,8 @@ using Content.Client.Movement.Systems;
 using Content.Shared._RMC14.Mentor.ImaginaryFriend;
 using Content.Shared.Actions;
 using Content.Shared.Ghost;
+using Content.Shared.NightVision;
+using Content.Shared.Overlays;
 using Robust.Client.Console;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -87,8 +89,6 @@ namespace Content.Client.Ghost
             if (args.Handled)
                 return;
 
-            TryComp<PointLightComponent>(uid, out var light);
-
             if (!component.DrawLight)
             {
                 // normal lighting
@@ -97,9 +97,8 @@ namespace Content.Client.Ghost
             }
             else if ((!light?.Enabled ?? false) && !_overlay.HasOverlay<HalfNightVisionBrightnessOverlay>()) // skip this option if we have no PointLightComponent
             {
-                // enable personal light
-                Popup.PopupEntity(Loc.GetString("ghost-gui-toggle-lighting-manager-popup-personal-light"), args.Performer);
-                _pointLightSystem.SetEnabled(uid, true, light);
+                Popup.PopupEntity(Loc.GetString("ghost-gui-toggle-lighting-manager-popup-half-bright"), args.Performer);
+                _nv.SetEnabled((uid, nv), true);
             }
             else if ((light?.Enabled ?? false) && !_overlay.HasOverlay<HalfNightVisionBrightnessOverlay>())
             {
@@ -116,6 +115,7 @@ namespace Content.Client.Ghost
                 _pointLightSystem.SetEnabled(uid, false, light);
                 _overlay.RemoveOverlay<HalfNightVisionBrightnessOverlay>();
             }
+
             args.Handled = true;
         }
         //RMC14

@@ -20,13 +20,11 @@ public sealed partial class RepulseAttractSystem : EntitySystem
     [Dependency] private SharedTransformSystem _xForm = default!;
     [Dependency] private UseDelaySystem _delay = default!;
 
-    private EntityQuery<PhysicsComponent> _physicsQuery;
     private HashSet<EntityUid> _entSet = new();
+
     public override void Initialize()
     {
         base.Initialize();
-
-        _physicsQuery = GetEntityQuery<PhysicsComponent>();
 
         SubscribeLocalEvent<RepulseAttractComponent, MeleeHitEvent>(OnMeleeAttempt, before: [typeof(UseDelayOnMeleeHitSystem)], after: [typeof(SharedWieldableSystem)]);
         SubscribeLocalEvent<RepulseAttractComponent, RepulseAttractActionEvent>(OnRepulseAttractAction);
@@ -44,7 +42,7 @@ public sealed partial class RepulseAttractSystem : EntitySystem
     {
         if (args.Handled)
             return;
-        
+
         var position = _xForm.GetMapCoordinates(args.Performer);
         args.Handled = TryRepulseAttract(position, args.Performer, ent.Comp.Speed, ent.Comp.Range, ent.Comp.Whitelist, ent.Comp.CollisionMask);
     }

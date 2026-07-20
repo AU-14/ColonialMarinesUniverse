@@ -45,13 +45,12 @@ public sealed partial class DamageContactsSystem : EntitySystem
         if (!TryComp<PhysicsComponent>(otherUid, out var body))
             return;
 
-        var damageQuery = GetEntityQuery<DamageContactsComponent>();
         foreach (var ent in _physics.GetContactingEntities(otherUid, body))
         {
             if (ent == uid)
                 continue;
 
-            if (damageQuery.HasComponent(ent))
+            if (_damageQuery.HasComponent(ent))
                 return;
         }
 

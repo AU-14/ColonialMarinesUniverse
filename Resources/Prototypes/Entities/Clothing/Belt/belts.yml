@@ -540,6 +540,7 @@
         ejectVerbText: sheath-eject-verb
         insertSound: /Audio/Items/sheath.ogg
         ejectSound: /Audio/Items/unsheath.ogg
+        ejectOnBreak: true
         whitelist:
           tags:
           - CaptainSabre
@@ -551,7 +552,36 @@
           - CaptainSabre
   - type: Appearance
 
-# Belts without visualizers
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: ClothingBeltQuiver
+  name: quiver
+  description: Can hold up to 16 arrows, and fits snug around your waist.
+  components:
+  - type: Sprite
+    sprite: Clothing/Belt/quiver.rsi
+    layers:
+    - state: icon
+    - map: [ "enum.StorageContainerVisualLayers.Fill" ]
+      visible: false
+  - type: Clothing
+  - type: Storage
+    grid:
+    - 0,0,7,3
+    maxItemSize: Small
+    whitelist:
+      tags:
+      - Arrow
+      - Plunger
+  - type: Appearance
+  - type: StorageContainerVisuals
+    maxFillLevels: 3
+    fillBaseName: fill-
+  - type: Construction
+    graph: Quiver
+    node: Quiver
+
+## Belts without visualizers
 
 - type: entity
   parent: [ClothingBeltAmmoProviderBase, BaseSecurityBartenderContraband]
@@ -572,19 +602,24 @@
     capacity: 14
 
 - type: entity
-  parent: ClothingBeltBase
-  id: ClothingBeltChampion
-  name: championship belt
-  description: Proves to the world that you are the strongest!
+  parent: [ ClothingBeltStorageBase, BaseMagicalContraband ]
+  id: ClothingBeltWand
+  name: wand belt
+  description: A belt designed to hold various rods of power. A veritable fanny pack of exotic magic.
   components:
   - type: Sprite
-    sprite: Clothing/Belt/champion.rsi
+    sprite: Clothing/Belt/wand.rsi
   - type: Clothing
-    sprite: Clothing/Belt/champion.rsi
-    quickEquip: true
-  - type: Tag
-    tags:
-    - Kangaroo
+    sprite: Clothing/Belt/wand.rsi
+  - type: Storage
+    grid:
+    - 0,0,15,1
+    whitelist:
+      tags:
+      - WizardWand
+      - WhitelistChameleon
+
+## Holsters
 
 - type: entity
   parent: ClothingBeltStorageBase
@@ -610,20 +645,22 @@
     sprite: Clothing/Belt/syndieholster.rsi
   - type: Clothing
     sprite: Clothing/Belt/syndieholster.rsi
-  - type: Item
-    size: Ginormous
   - type: Storage
     maxItemSize: Huge
     grid:
     - 0,0,3,3
     whitelist:
       components:
-        - Gun
-        - BallisticAmmoProvider
-        - CartridgeAmmo
+      - Gun
+      - BallisticAmmoProvider
+      - CartridgeAmmo
   - type: StaticPrice
     price: 500
 
+## Webbing
+
+# Weirdly the only webbing with a storage whitelist and item mapper.
+# Might be worth making less common (armory only?) and removing the whitelist to eliminate the inconsistency.
 - type: entity
   parent: ClothingBeltSecurity
   id: ClothingBeltSecurityWebbing
@@ -682,50 +719,14 @@
     sprite: Clothing/Belt/militarywebbingmed.rsi
   - type: Clothing
     sprite: Clothing/Belt/militarywebbingmed.rsi
-  - type: Item
-    size: Huge
-  - type: ExplosionResistance
-    damageCoefficient: 0.1
 
 - type: entity
-  parent: ClothingBeltBase
-  id: ClothingBeltSuspendersRed
-  name: red suspenders
-  description: For holding your pants up.
-  components:
-  - type: Tag
-    tags:
-    - MimeBelt
-  - type: Sprite
-    sprite: Clothing/Belt/suspenders_red.rsi
-    state: icon
-  - type: Clothing
-    sprite: Clothing/Belt/suspenders_red.rsi
-    quickEquip: true
-
-- type: entity
-  parent: ClothingBeltSuspendersRed
-  id: ClothingBeltSuspendersBlack
-  name: black suspenders
+  parent: [ BaseCentcommContraband, ClothingBeltMilitaryWebbing ]
+  id: ClothingBeltMilitaryWebbingERT
+  name: ERT chest rig
+  description: A set of tactical webbing worn by Emergency Response Team operatives.
   components:
   - type: Sprite
-    sprite: Clothing/Belt/suspenders_black.rsi
+    sprite: Clothing/Belt/militarywebbingert.rsi
   - type: Clothing
-    sprite: Clothing/Belt/suspenders_black.rsi
-
-- type: entity
-  parent: [ ClothingBeltStorageBase, BaseMagicalContraband ]
-  id: ClothingBeltWand
-  name: wand belt
-  description: A belt designed to hold various rods of power. A veritable fanny pack of exotic magic.
-  components:
-  - type: Sprite
-    sprite: Clothing/Belt/wand.rsi
-  - type: Clothing
-    sprite: Clothing/Belt/wand.rsi
-  - type: Storage
-    grid:
-    - 0,0,15,1
-    whitelist:
-      tags:
-      - WizardWand
+    sprite: Clothing/Belt/militarywebbingert.rsi

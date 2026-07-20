@@ -58,7 +58,7 @@ public sealed partial class MultipartMachineSystem : SharedMultipartMachineSyste
             var entityCoords = new EntityCoordinates(ent.Owner, part.Offset);
             var ghostEnt = Spawn(_ghostPrototype, entityCoords);
 
-            if (!XformQuery.TryGetComponent(ghostEnt, out var xform))
+            if (!TryComp(ghostEnt, out TransformComponent? xform))
                 break;
 
             xform.LocalRotation = part.Rotation;
@@ -70,7 +70,7 @@ public sealed partial class MultipartMachineSystem : SharedMultipartMachineSyste
             if (part.GhostProto == null)
                 continue;
 
-            var entProto = _prototype.Index(part.GhostProto.Value);
+            var entProto = ProtoMan.Index(part.GhostProto.Value);
             if (!entProto.Components.TryGetComponent("Sprite", out var s) || s is not SpriteComponent protoSprite)
                 return;
 

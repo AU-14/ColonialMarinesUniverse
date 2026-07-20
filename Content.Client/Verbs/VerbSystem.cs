@@ -159,10 +159,9 @@ namespace Content.Client.Verbs
             if (container == null && (visibility & MenuVisibility.InContainer) == 0)
                 return entities.Count != 0;
 
-            var spriteQuery = GetEntityQuery<SpriteComponent>();
             for (var i = entities.Count - 1; i >= 0; i--)
             {
-                if (!spriteQuery.TryGetComponent(entities[i], out var spriteComponent) || !spriteComponent.Visible)
+                if (!_spriteQuery.TryGetComponent(entities[i], out var spriteComponent) || !spriteComponent.Visible)
                     entities.RemoveSwap(i);
             }
 

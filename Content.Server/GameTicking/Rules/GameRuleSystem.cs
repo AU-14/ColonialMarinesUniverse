@@ -1,5 +1,4 @@
 using Content.Server.Atmos.EntitySystems;
-using Content.Server.Chat.Managers;
 using Content.Shared.GameTicking.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.Random;
@@ -22,7 +21,6 @@ public abstract partial class GameRuleSystem<T> : EntitySystem where T : ICompon
     {
         base.Initialize();
 
-        SubscribeLocalEvent<RoundStartAttemptEvent>(OnStartAttempt);
         SubscribeLocalEvent<T, GameRuleAddedEvent>(OnGameRuleAdded);
         SubscribeLocalEvent<T, GameRuleStartedEvent>(OnGameRuleStarted);
         SubscribeLocalEvent<T, GameRuleEndedEvent>(OnGameRuleEnded);
@@ -65,33 +63,33 @@ public abstract partial class GameRuleSystem<T> : EntitySystem where T : ICompon
 
     private void OnGameRuleAdded(EntityUid uid, T component, ref GameRuleAddedEvent args)
     {
-        if (!TryComp<GameRuleComponent>(uid, out var ruleData))
+        if (!GameRuleQuery.TryComp(uid, out var ruleData))
             return;
+
         Added(uid, component, ruleData, args);
     }
 
     private void OnGameRuleStarted(EntityUid uid, T component, ref GameRuleStartedEvent args)
     {
-        if (!TryComp<GameRuleComponent>(uid, out var ruleData))
+        if (!GameRuleQuery.TryComp(uid, out var ruleData))
             return;
+
         Started(uid, component, ruleData, args);
     }
 
     private void OnGameRuleEnded(EntityUid uid, T component, ref GameRuleEndedEvent args)
     {
-        if (!TryComp<GameRuleComponent>(uid, out var ruleData))
+        if (!GameRuleQuery.TryComp(uid, out var ruleData))
             return;
+
         Ended(uid, component, ruleData, args);
     }
 
     private void OnRoundEndTextAppend(RoundEndTextAppendEvent ev)
     {
-        var query = AllEntityQuery<T>();
-        while (query.MoveNext(out var uid, out var comp))
+        var query = QueryAllRules();
+        while (query.MoveNext(out var uid, out var comp, out var ruleData))
         {
-            if (!TryComp<GameRuleComponent>(uid, out var ruleData))
-                continue;
-
             AppendRoundEndText(uid, comp, ruleData, ref ev);
         }
     }

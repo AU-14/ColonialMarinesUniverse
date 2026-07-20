@@ -1,10 +1,7 @@
 using Content.Client.Markers;
 using Content.Client.Popups;
 using Content.Client.SubFloor;
-using Content.Shared.SubFloor;
-using Robust.Client.GameObjects;
 using Robust.Shared.Console;
-using DrawDepth = Content.Shared.DrawDepth.DrawDepth;
 
 namespace Content.Client.Commands;
 
@@ -14,11 +11,9 @@ internal sealed partial class ShowMarkersCommand : LocalizedCommands
 
     public override string Command => "showmarkers";
 
-    public override string Help => LocalizationManager.GetString($"cmd-{Command}-help", ("command", Command));
-
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        _entitySystemManager.GetEntitySystem<MarkerSystem>().MarkersVisible ^= true;
+        _markerSystem.MarkersVisible ^= true;
     }
 }
 
@@ -28,11 +23,9 @@ internal sealed partial class ShowSubFloor : LocalizedCommands
 
     public override string Command => "showsubfloor";
 
-    public override string Help => LocalizationManager.GetString($"cmd-{Command}-help", ("command", Command));
-
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        _entitySystemManager.GetEntitySystem<SubFloorHideSystem>().ShowAll ^= true;
+        _subfloorSystem.ShowAll ^= true;
     }
 }
 
@@ -42,12 +35,8 @@ internal sealed partial class NotifyCommand : LocalizedCommands
 
     public override string Command => "notify";
 
-    public override string Help => LocalizationManager.GetString($"cmd-{Command}-help", ("command", Command));
-
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        var message = args[0];
-
-        _entitySystemManager.GetEntitySystem<PopupSystem>().PopupCursor(message);
+        _popupSystem.PopupCursor(args[0]);
     }
 }

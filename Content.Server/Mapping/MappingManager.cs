@@ -23,6 +23,7 @@ public sealed partial class MappingManager : IPostInjectInit
 
     private ISawmill _sawmill = default!;
     private ZStdCompressionContext _zstd = default!;
+#endif
 
     public void PostInject()
     {

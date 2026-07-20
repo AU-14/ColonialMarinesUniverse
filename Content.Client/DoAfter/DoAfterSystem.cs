@@ -1,10 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using Content.Client.Examine;
 using Content.Shared.DoAfter;
-using Content.Shared.Hands.Components;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
-using Robust.Shared.Prototypes;
 
 namespace Content.Client.DoAfter;
 
@@ -52,9 +50,7 @@ public sealed partial class DoAfterSystem : SharedDoAfterSystem
 
         var time = GameTiming.CurTime;
         var comp = Comp<DoAfterComponent>(playerEntity.Value);
-        var xformQuery = GetEntityQuery<TransformComponent>();
-        var handsQuery = GetEntityQuery<HandsComponent>();
-        Update(playerEntity.Value, active, comp, time, xformQuery, handsQuery);
+        Update(playerEntity.Value, active, comp, time);
     }
 
     /// <summary>

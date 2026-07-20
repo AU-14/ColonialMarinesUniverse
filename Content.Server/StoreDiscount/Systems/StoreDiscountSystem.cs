@@ -80,7 +80,7 @@ public sealed partial class StoreDiscountSystem : EntitySystem
         // each category, and after that - roll exact items in categories
         // and their cost
 
-        var prototypes = _prototypeManager.EnumeratePrototypes<DiscountCategoryPrototype>();
+        var prototypes = ProtoMan.EnumeratePrototypes<DiscountCategoryPrototype>();
         var categoriesWithCumulativeWeight = new CategoriesWithCumulativeWeightMap(prototypes);
         var uniqueListingItemCountByCategory = PickCategoriesToRoll(totalAvailableDiscounts, categoriesWithCumulativeWeight);
 

@@ -1,7 +1,9 @@
 using System.Linq;
+using Content.Shared.Atmos;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Temperature.Components;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Timing;
 
 namespace Content.Shared.Temperature.Systems;
@@ -73,8 +75,23 @@ public sealed partial class SharedTemperatureSystem : EntitySystem
                 continue;
 
             temp.NextSlowdownUpdate = null;
-            _movementSpeedModifier.RefreshMovementSpeedModifiers(uid, movement);
+            _movementSpeedModifier.RefreshMovementSpeedModifiers((uid, movement));
             Dirty(uid, temp);
         }
+    }
+
+    public virtual void ChangeHeat(EntityUid uid, float heatAmount, bool ignoreHeatResistance = false, TemperatureComponent? temperature = null)
+    {
+
+    }
+
+    public float GetHeatCapacity(EntityUid uid, TemperatureComponent? comp = null, PhysicsComponent? physics = null)
+    {
+        if (!TemperatureQuery.Resolve(uid, ref comp) || !Resolve(uid, ref physics, false) || physics.FixturesMass <= 0)
+        {
+            return Atmospherics.MinimumHeatCapacity;
+        }
+
+        return comp.SpecificHeat * physics.FixturesMass;
     }
 }

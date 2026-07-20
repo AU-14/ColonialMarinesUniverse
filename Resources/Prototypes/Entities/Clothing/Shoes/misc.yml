@@ -73,15 +73,13 @@
       reagents:
       - ReagentId: JuiceThatMakesYouWeh
         Quantity: 60
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 40
-        reagents:
-        - ReagentId: Fiber
-          Quantity: 20
-        - ReagentId: JuiceThatMakesYouWeh
-          Quantity: 20
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Fiber # Lose some fiber from gutting the lizard and turning it into a shoe. You monster.
+        Quantity: 20
+      - ReagentId: JuiceThatMakesYouWeh
+        Quantity: 20
 
 - type: entity
   parent: ClothingShoesBaseButcherable
@@ -134,6 +132,7 @@
   - type: ClothingSpeedModifier
     walkModifier: 1.5
     sprintModifier: 1.5
+    standing: true
   - type: Appearance
   - type: GenericVisualizer
     visuals:
@@ -181,7 +180,7 @@
     price: 75
   - type: Tag
     tags: [ ]
-   
+
 - type: entity
   parent: ClothingShoesBase
   id: ClothingShoesBootsJump
@@ -199,7 +198,7 @@
     jumpSound: /Audio/Effects/stealthoff.ogg
   - type: ActionGrant
     actions:
-    - ActionGravityJump 
+    - ActionGravityJump
   - type: ItemActionGrant
     actions:
     - ActionGravityJump

@@ -1,5 +1,6 @@
-using Content.Server.Speech.Components;
 using System.Text.RegularExpressions;
+using Content.Server.Speech.Components;
+using Content.Shared.Speech.EntitySystems;
 
 namespace Content.Server.Speech.EntitySystems;
 
@@ -14,14 +15,7 @@ public sealed partial class FrenchAccentSystem : EntitySystem
     private static readonly Regex RegexStartH = new(@"(?<!\w)h", RegexOptions.IgnoreCase);
     private static readonly Regex RegexSpacePunctuation = new(@"(?<=\w\w)[!?;:](?!\w)", RegexOptions.IgnoreCase);
 
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        SubscribeLocalEvent<FrenchAccentComponent, AccentGetEvent>(OnAccentGet);
-    }
-
-    public string Accentuate(string message, FrenchAccentComponent component)
+    public override string Accentuate(string message, Entity<FrenchAccentComponent>? ent = null)
     {
         var msg = message;
 
@@ -32,7 +26,7 @@ public sealed partial class FrenchAccentSystem : EntitySystem
 
         // spaces out ! ? : and ;.
         msg = RegexSpacePunctuation.Replace(msg, " $&");
-        
+
         // replaces th with 'z or 's depending on the case
         foreach (Match match in RegexTh.Matches(msg))
         {
@@ -51,10 +45,5 @@ public sealed partial class FrenchAccentSystem : EntitySystem
         }
 
         return msg;
-    }
-
-    private void OnAccentGet(EntityUid uid, FrenchAccentComponent component, AccentGetEvent args)
-    {
-        args.Message = Accentuate(args.Message, component);
     }
 }

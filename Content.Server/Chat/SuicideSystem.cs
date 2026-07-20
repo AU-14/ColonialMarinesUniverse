@@ -3,7 +3,7 @@ using Content.Server.Hands.Systems;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Chat;
-using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Database;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction.Events;
@@ -76,6 +76,9 @@ public sealed partial class SuicideSystem : EntitySystem
         if (!suicideGhostEvent.Handled || _tagSystem.HasTag(victim, CannotSuicideTag))
             return false;
 
+        // TODO: fix this
+        // This is a handled event, but the result is never used
+        // It looks like TriggerOnMobstateChange is supposed to prevent you from suiciding
         var suicideEvent = new SuicideEvent(victim);
         RaiseLocalEvent(victim, suicideEvent);
 
@@ -138,11 +141,10 @@ public sealed partial class SuicideSystem : EntitySystem
 
         // Try to suicide by nearby entities, like Microwaves or Crematoriums, by raising an event on it
         // Returns upon being handled by any entity
-        var itemQuery = GetEntityQuery<ItemComponent>();
         foreach (var entity in _entityLookupSystem.GetEntitiesInRange(victim, 1, LookupFlags.Approximate | LookupFlags.Static))
         {
             // Skip any nearby items that can be picked up, we already checked the active held item above
-            if (itemQuery.HasComponent(entity))
+            if (_itemQuery.HasComponent(entity))
                 continue;
 
             RaiseLocalEvent(entity, suicideByEnvironmentEvent);
@@ -162,11 +164,9 @@ public sealed partial class SuicideSystem : EntitySystem
         if (args.Handled)
             return;
 
-        var othersMessage = Loc.GetString("suicide-command-default-text-others", ("name", Identity.Entity(victim, EntityManager)));
-        _popup.PopupEntity(othersMessage, victim, Filter.PvsExcept(victim), true);
-
         var selfMessage = Loc.GetString("suicide-command-default-text-self");
-        _popup.PopupEntity(selfMessage, victim, victim);
+        var othersMessage = Loc.GetString("suicide-command-default-text-others", ("name", Identity.Entity(victim, EntityManager)));
+        _popup.PopupEntity(selfMessage, othersMessage, victim, victim);
 
         if (args.DamageSpecifier != null)
         {

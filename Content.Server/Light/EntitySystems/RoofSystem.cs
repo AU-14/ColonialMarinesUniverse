@@ -14,7 +14,6 @@ public sealed partial class RoofSystem : SharedRoofSystem
     public override void Initialize()
     {
         base.Initialize();
-        _gridQuery = GetEntityQuery<MapGridComponent>();
         SubscribeLocalEvent<SetRoofComponent, ComponentStartup>(OnFlagStartup);
     }
 
@@ -22,7 +21,7 @@ public sealed partial class RoofSystem : SharedRoofSystem
     {
         var xform = Transform(ent.Owner);
 
-        if (_gridQuery.TryComp(xform.GridUid, out var grid))
+        if (_mapGridQuery.TryComp(xform.GridUid, out var grid))
         {
             var index = _maps.LocalToTile(xform.GridUid.Value, grid, xform.Coordinates);
             SetRoof((xform.GridUid.Value, grid, null), index, ent.Comp.Value);

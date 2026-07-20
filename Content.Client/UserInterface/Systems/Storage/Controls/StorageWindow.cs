@@ -115,7 +115,7 @@ public sealed partial class StorageWindow : BaseWindow
             HorizontalExpand = true,
             Name = "StorageLabel",
             ClipText = true,
-            Text = "Dummy",
+            Text = Loc.GetString("comp-storage-window-dummy"),
             StyleClasses =
             {
                 "FancyWindowTitle",

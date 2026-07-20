@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Shared.Mobs;
 using System.Numerics;
 using Robust.Client.Graphics;

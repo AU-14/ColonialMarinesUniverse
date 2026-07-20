@@ -2,7 +2,10 @@
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
-namespace Content.Server.GameTicking.Commands
+namespace Content.Server.GameTicking.Commands;
+
+[AdminCommand(AdminFlags.Round)]
+public sealed partial class StartRoundCommand : LocalizedEntityCommands
 {
     [AdminCommand(AdminFlags.RMCMaintainer)] //RMC14
     [AdminCommand(AdminFlags.Round)]
@@ -16,15 +19,10 @@ namespace Content.Server.GameTicking.Commands
 
         public void Execute(IConsoleShell shell, string argStr, string[] args)
         {
-            var ticker = _e.System<GameTicker>();
-
-            if (ticker.RunLevel != GameRunLevel.PreRoundLobby)
-            {
-                shell.WriteLine("This can only be executed while the game is in the pre-round lobby.");
-                return;
-            }
-
-            ticker.StartRound();
+            shell.WriteLine(Loc.GetString("shell-can-only-run-from-pre-round-lobby"));
+            return;
         }
+
+        _gameTicker.StartRound();
     }
 }

@@ -97,8 +97,8 @@ public sealed partial class StatusIconOverlay : Overlay
                         accOffsetL += texture.Height;
                         countL++;
                     }
-                    yOffset = (bounds.Height + sprite.Offset.Y) / 2f - (float)(accOffsetL - proto.Offset) / EyeManager.PixelsPerMeter;
-                    xOffset = -(bounds.Width + sprite.Offset.X) / 2f;
+                    yOffset = sprite.Offset.Y + bounds.Height / 2f - (float)(accOffsetL - proto.Offset) / EyeManager.PixelsPerMeter;
+                    xOffset = sprite.Offset.X - bounds.Width / 2f + (float)proto.OffsetHorizontal / EyeManager.PixelsPerMeter;
 
                     if (_entity.HasComponent<CrashLandingComponent>(uid) ||
                         _entity.HasComponent<ParaDroppingComponent>(uid))

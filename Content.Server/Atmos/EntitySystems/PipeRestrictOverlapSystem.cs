@@ -1,6 +1,5 @@
 using System.Linq;
 using Content.Server.Atmos.Components;
-using Content.Server.NodeContainer;
 using Content.Server.NodeContainer.Nodes;
 using Content.Server.Popups;
 using Content.Shared.Atmos;
@@ -23,15 +22,12 @@ public sealed partial class PipeRestrictOverlapSystem : EntitySystem
     [Dependency] private TransformSystem _xform = default!;
 
     private readonly List<EntityUid> _anchoredEntities = new();
-    private EntityQuery<NodeContainerComponent> _nodeContainerQuery;
 
     /// <inheritdoc/>
     public override void Initialize()
     {
         SubscribeLocalEvent<PipeRestrictOverlapComponent, AnchorStateChangedEvent>(OnAnchorStateChanged);
         SubscribeLocalEvent<PipeRestrictOverlapComponent, AnchorAttemptEvent>(OnAnchorAttempt);
-
-        _nodeContainerQuery = GetEntityQuery<NodeContainerComponent>();
     }
 
     private void OnAnchorStateChanged(Entity<PipeRestrictOverlapComponent> ent, ref AnchorStateChangedEvent args)

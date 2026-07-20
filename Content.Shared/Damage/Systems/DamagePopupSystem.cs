@@ -19,7 +19,7 @@ public sealed partial class DamagePopupSystem : EntitySystem
     {
         if (args.DamageDelta != null)
         {
-            var damageTotal = args.Damageable.TotalDamage;
+            var damageTotal = _damageable.GetTotalDamage((ent, args.Damageable));
             var damageDelta = args.DamageDelta.GetTotal();
 
             var msg = ent.Comp.Type switch
@@ -31,7 +31,7 @@ public sealed partial class DamagePopupSystem : EntitySystem
                 _ => "Invalid type",
             };
 
-            _popupSystem.PopupPredicted(msg, ent.Owner, args.Origin);
+            _popupSystem.PopupEntity(msg, ent.Owner);
         }
     }
 
@@ -46,7 +46,7 @@ public sealed partial class DamagePopupSystem : EntitySystem
             var next = (DamagePopupType)(((int)ent.Comp.Type + 1) % Enum.GetValues<DamagePopupType>().Length);
             ent.Comp.Type = next;
             Dirty(ent);
-            _popupSystem.PopupPredicted(Loc.GetString("damage-popup-component-switched", ("setting", ent.Comp.Type)), ent.Owner, args.User);
+            _popupSystem.PopupEntity(Loc.GetString("damage-popup-component-switched", ("setting", ent.Comp.Type)), ent.Owner);
         }
     }
 }

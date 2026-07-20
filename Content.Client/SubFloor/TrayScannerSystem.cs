@@ -4,7 +4,10 @@ using Content.Shared.Inventory;
 using Content.Shared.SubFloor;
 using Robust.Client.Animations;
 using Robust.Client.GameObjects;
+using Robust.Client.Input;
 using Robust.Client.Player;
+using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Timing;
 
 namespace Content.Client.SubFloor;
@@ -27,6 +30,12 @@ public sealed partial class TrayScannerSystem : SharedTrayScannerSystem
 
     public const LookupFlags Flags = LookupFlags.Static | LookupFlags.Sundries | LookupFlags.Approximate;
 
+    public override void Initialize()
+    {
+        base.Initialize();
+        Subs.ItemStatus<TrayScannerComponent>(OnCollectItemStatus);
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -36,14 +45,14 @@ public sealed partial class TrayScannerSystem : SharedTrayScannerSystem
 
         // TODO: Multiple viewports or w/e
         var player = _player.LocalEntity;
-        var xformQuery = GetEntityQuery<TransformComponent>();
 
-        if (!xformQuery.TryGetComponent(player, out var playerXform))
+        if (!TryComp(player, out TransformComponent? playerXform))
             return;
 
-        var playerPos = _transform.GetWorldPosition(playerXform, xformQuery);
+        var playerPos = _transform.GetWorldPosition(playerXform);
         var playerMap = playerXform.MapID;
         var range = 0f;
+        var mode = TrayScannerMode.All;
         HashSet<Entity<SubFloorHideComponent>> inRange;
         var scannerQuery = GetEntityQuery<TrayScannerComponent>();
         var crawlerQuery = GetEntityQuery<RMCTrayCrawlerComponent>();
@@ -52,8 +61,7 @@ public sealed partial class TrayScannerSystem : SharedTrayScannerSystem
         // API is extremely skrungly. If this ever shows up on dottrace ping me and laugh.
         var canSee = false;
 
-        // TODO: Common iterator for both systems.
-        if (_inventory.TryGetContainerSlotEnumerator(player.Value, out var enumerator))
+        foreach (var item in _inventory.GetHandOrInventoryEntities(player.Value, SlotFlags.POCKET))
         {
             while (enumerator.MoveNext(out var slot))
             {
@@ -93,23 +101,28 @@ public sealed partial class TrayScannerSystem : SharedTrayScannerSystem
 
         if (canSee)
         {
-            _lookup.GetEntitiesInRange(playerMap, playerPos, range, inRange, flags: Flags);
+            var entitiesInRange = new HashSet<Entity<SubFloorHideComponent>>();
+            _lookup.GetEntitiesInRange(playerMap, playerPos, range, entitiesInRange, flags: Flags);
 
-            foreach (var (uid, comp) in inRange)
+            foreach (var (uid, comp) in entitiesInRange)
             {
+                if (!MatchesMode(uid, mode))
+                    continue;
+
+                inRange.Add((uid, comp));
+
                 if (comp.IsUnderCover || _trayScanReveal.IsUnderRevealingEntity(uid))
                     EnsureComp<TrayRevealedComponent>(uid);
             }
         }
 
         var revealedQuery = AllEntityQuery<TrayRevealedComponent, SpriteComponent>();
-        var subfloorQuery = GetEntityQuery<SubFloorHideComponent>();
 
         while (revealedQuery.MoveNext(out var uid, out _, out var sprite))
         {
             // Revealing
             // Add buffer range to avoid flickers.
-            if (subfloorQuery.TryGetComponent(uid, out var subfloor) &&
+            if (_subFloorHideQuery.TryGetComponent(uid, out var subfloor) &&
                 inRange.Contains((uid, subfloor)))
             {
                 // Due to the fact client is predicting this server states will reset it constantly
@@ -184,4 +197,66 @@ public sealed partial class TrayScannerSystem : SharedTrayScannerSystem
     {
         _appearance.SetData(uid, SubFloorVisuals.ScannerRevealed, value);
     }
+
+    private bool MatchesMode(EntityUid uid, TrayScannerMode mode)
+    {
+        return mode switch
+        {
+            TrayScannerMode.All => true,
+            TrayScannerMode.Wiring => HasComp<CableVisualizerComponent>(uid),
+            TrayScannerMode.Piping => HasComp<AtmosPipeLayersComponent>(uid) || HasComp<DisposalTubeComponent>(uid),
+            _ => false,
+        };
+    }
+
+    #region UI
+    private Control OnCollectItemStatus(Entity<TrayScannerComponent> entity)
+    {
+        _inputManager.TryGetKeyBinding((ContentKeyFunctions.AltUseItemInHand), out var binding);
+        return new StatusControl(entity, binding?.GetKeyString() ?? "");
+    }
+
+    private sealed class StatusControl : PollingItemStatusControl<StatusControl.TRayData>
+    {
+        private readonly RichTextLabel _label;
+        private readonly TrayScannerComponent _scanner;
+        private readonly string _keyBindingName;
+
+        public StatusControl(TrayScannerComponent scanner, string keyBindingName)
+        {
+            _scanner = scanner;
+            _keyBindingName = keyBindingName;
+            _label = new RichTextLabel { StyleClasses = { StyleClass.ItemStatus } };
+            AddChild(_label);
+        }
+
+        protected override TRayData PollData()
+        {
+            return new TRayData(_scanner.Enabled, _scanner.Mode);
+        }
+
+        protected override void Update(in TRayData data)
+        {
+            if (!data.Enabled)
+            {
+                _label.SetMarkup(string.Empty);
+                return;
+            }
+
+            var modeLocString = data.Mode switch
+            {
+                TrayScannerMode.All => "tray-scanner-examine-mode-all",
+                TrayScannerMode.Wiring => "tray-scanner-examine-mode-wiring",
+                TrayScannerMode.Piping => "tray-scanner-examine-mode-piping",
+                _ => "",
+            };
+
+            _label.SetMarkup(Robust.Shared.Localization.Loc.GetString("tray-scanner-item-status-label",
+                ("mode", Robust.Shared.Localization.Loc.GetString(modeLocString)),
+                ("keybinding", _keyBindingName)));
+        }
+
+        public readonly record struct TRayData(bool Enabled, TrayScannerMode Mode);
+    }
+    #endregion
 }

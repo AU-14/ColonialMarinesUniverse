@@ -1,8 +1,6 @@
 using Content.Shared.Access.Components;
 using Content.Shared.Roles;
-using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization;
 
 namespace Content.Shared.Access.Systems
 {
@@ -23,7 +21,7 @@ namespace Content.Shared.Access.Systems
             // Add all tags in groups to the list of tags.
             foreach (var group in component.Groups)
             {
-                if (!_prototypeManager.TryIndex<AccessGroupPrototype>(group, out var proto))
+                if (!ProtoMan.Resolve<AccessGroupPrototype>(group, out var proto))
                     continue;
 
                 component.Tags.UnionWith(proto.Tags);
@@ -79,7 +77,7 @@ namespace Content.Shared.Access.Systems
 
             foreach (var group in newGroups)
             {
-                if (!_prototypeManager.TryIndex<AccessGroupPrototype>(group, out var proto))
+                if (!ProtoMan.Resolve<AccessGroupPrototype>(group, out var proto))
                     continue;
 
                 access.Tags.UnionWith(proto.Tags);

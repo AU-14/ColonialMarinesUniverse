@@ -1,7 +1,3 @@
-using Content.Server.Atmos.Rotting;
-using Content.Server.Chat.Systems;
-using Content.Server.DoAfter;
-using Content.Server.Electrocution;
 using Content.Server.EUI;
 using Content.Server.Ghost;
 using Content.Server.Popups;
@@ -54,8 +50,7 @@ public sealed partial class DefibrillatorSystem : EntitySystem
     [Dependency] private SharedRMCDefibrillatorSystem _rmcDefibrillator = default!;
     [Dependency] private SkillsSystem _skills = default!;
 
-    /// <inheritdoc/>
-    public override void Initialize()
+    protected override void OpenReturnToBodyEui(Entity<MindComponent> mind, ICommonSession session)
     {
         SubscribeLocalEvent<DefibrillatorComponent, AfterInteractEvent>(OnAfterInteract);
         SubscribeLocalEvent<DefibrillatorComponent, DefibrillatorZapDoAfterEvent>(OnDoAfter);

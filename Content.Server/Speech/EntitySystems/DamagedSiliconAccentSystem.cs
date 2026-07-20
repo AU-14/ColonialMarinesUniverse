@@ -1,9 +1,12 @@
 ﻿using System.Text;
 using Content.Server.Destructible;
-using Content.Server.PowerCell;
 using Content.Shared.Speech.Components;
-using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
+using Content.Shared.Power.EntitySystems;
+using Content.Shared.PowerCell;
+using Content.Shared.Speech.EntitySystems;
 using Robust.Shared.Random;
 
 namespace Content.Server.Speech.EntitySystems;
@@ -14,46 +17,48 @@ public sealed partial class DamagedSiliconAccentSystem : EntitySystem
     [Dependency] private PowerCellSystem _powerCell = default!;
     [Dependency] private DestructibleSystem _destructibleSystem = default!;
 
-    public override void Initialize()
-    {
-        base.Initialize();
-        SubscribeLocalEvent<DamagedSiliconAccentComponent, AccentGetEvent>(OnAccent, after: [typeof(ReplacementAccentSystem)]);
-    }
+    protected override Type[]? AccentAfter => [typeof(ReplacementAccentSystem)];
+    protected override Type[]? RelayAccentAfter => [typeof(ReplacementAccentSystem)];
 
-    private void OnAccent(Entity<DamagedSiliconAccentComponent> ent, ref AccentGetEvent args)
+    public override string Accentuate(string message, Entity<DamagedSiliconAccentComponent>? ent = null)
     {
-        var uid = ent.Owner;
+        if (ent == null)
+            return message;
 
-        if (ent.Comp.EnableChargeCorruption)
+        var uid = ent.Value.Owner;
+
+        if (ent.Value.Comp.EnableChargeCorruption)
         {
             var currentChargeLevel = 0.0f;
-            if (ent.Comp.OverrideChargeLevel.HasValue)
+            if (ent.Value.Comp.OverrideChargeLevel.HasValue)
             {
-                currentChargeLevel = ent.Comp.OverrideChargeLevel.Value;
+                currentChargeLevel = ent.Value.Comp.OverrideChargeLevel.Value;
             }
             else if (_powerCell.TryGetBatteryFromSlot(uid, out var battery))
             {
-                currentChargeLevel = battery.CurrentCharge / battery.MaxCharge;
+                currentChargeLevel = _battery.GetChargeLevel(battery.Value.AsNullable());
             }
             currentChargeLevel = Math.Clamp(currentChargeLevel, 0.0f, 1.0f);
             // Corrupt due to low power (drops characters on longer messages)
-            args.Message = CorruptPower(args.Message, currentChargeLevel, ent.Comp);
+            message = CorruptPower(message, currentChargeLevel, ent.Value.Comp);
         }
 
-        if (ent.Comp.EnableDamageCorruption)
+        if (ent.Value.Comp.EnableDamageCorruption)
         {
             var damage = FixedPoint2.Zero;
-            if (ent.Comp.OverrideTotalDamage.HasValue)
+            if (ent.Value.Comp.OverrideTotalDamage.HasValue)
             {
-                damage = ent.Comp.OverrideTotalDamage.Value;
+                damage = ent.Value.Comp.OverrideTotalDamage.Value;
             }
             else if (TryComp<DamageableComponent>(uid, out var damageable))
             {
-                damage = damageable.TotalDamage;
+                damage = _damageable.GetTotalDamage((uid, damageable));
             }
             // Corrupt due to damage (drop, repeat, replace with symbols)
-            args.Message = CorruptDamage(args.Message, damage, ent);
+            message = CorruptDamage(message, damage, ent.Value);
         }
+
+        return message;
     }
 
     public string CorruptPower(string message, float chargeLevel, DamagedSiliconAccentComponent comp)

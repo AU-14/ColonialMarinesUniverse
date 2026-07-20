@@ -40,6 +40,7 @@
   components:
     - type: TriggerOnCollide
       fixtureID: floortrap
+      maxTriggers: 1
     - type: ExplodeOnTrigger
     - type: Explosive
       explosionType: Default
@@ -67,6 +68,7 @@
   components:
     - type: TriggerOnCollide
       fixtureID: floortrap
+      maxTriggers: 1
     - type: SpawnOnTrigger
       proto: MobCarp
     - type: DeleteOnTrigger
@@ -78,6 +80,7 @@
   components:
     - type: TriggerOnCollide
       fixtureID: floortrap
+      maxTriggers: 1
     - type: SpawnOnTrigger
       proto: MobBearSpace
     - type: DeleteOnTrigger
@@ -89,6 +92,7 @@
   components:
     - type: TriggerOnCollide
       fixtureID: floortrap
+      maxTriggers: 1
     - type: SpawnOnTrigger
       proto: MobKangarooSpace
     - type: DeleteOnTrigger
@@ -100,6 +104,7 @@
   components:
     - type: TriggerOnCollide
       fixtureID: floortrap
+      maxTriggers: 1
     - type: SpawnOnTrigger
       proto: MobXenoDrone
     - type: DeleteOnTrigger
@@ -111,6 +116,7 @@
   components:
     - type: TriggerOnCollide
       fixtureID: floortrap
+      maxTriggers: 1
     - type: SpawnOnTrigger
       proto: MobXeno
     - type: DeleteOnTrigger

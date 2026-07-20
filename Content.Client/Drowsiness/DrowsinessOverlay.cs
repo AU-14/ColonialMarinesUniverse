@@ -33,7 +33,7 @@ public sealed partial class DrowsinessOverlay : Overlay
     {
         IoCManager.InjectDependencies(this);
 
-        _statusEffects = _sysMan.GetEntitySystem<SharedStatusEffectsSystem>();
+        _statusEffects = _sysMan.GetEntitySystem<StatusEffectsSystem>();
 
         _drowsinessShader = _prototypeManager.Index(Shader).InstanceUnique();
     }

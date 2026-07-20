@@ -39,10 +39,10 @@ public abstract partial class SharedObjectivesSystem : EntitySystem
         // only check for duplicate prototypes if it's unique
         if (comp.Unique)
         {
-            var proto = _metaQuery.GetComponent(uid).EntityPrototype?.ID;
+            var proto = MetaData(uid).EntityPrototype?.ID;
             foreach (var objective in mind.Objectives)
             {
-                if (_metaQuery.GetComponent(objective).EntityPrototype?.ID == proto)
+                if (MetaData(objective).EntityPrototype?.ID == proto)
                     return false;
             }
         }
@@ -57,7 +57,7 @@ public abstract partial class SharedObjectivesSystem : EntitySystem
     /// </summary>
     public EntityUid? TryCreateObjective(EntityUid mindId, MindComponent mind, string proto)
     {
-        if (!_protoMan.HasIndex<EntityPrototype>(proto))
+        if (!ProtoMan.HasIndex<EntityPrototype>(proto))
             return null;
 
         var uid = Spawn(proto);
@@ -141,7 +141,7 @@ public abstract partial class SharedObjectivesSystem : EntitySystem
         if (ev.Progress != null)
             return ev.Progress;
 
-        Log.Error($"Objective {ToPrettyString(uid):objective} of {_mind.MindOwnerLoggingString(mind.Comp)} didn't set a progress value!");
+        Log.Error($"Objective {ToPrettyString(uid):objective} of {_mind.MindOwnerLoggingString(mind)} didn't set a progress value!");
         return null;
     }
 

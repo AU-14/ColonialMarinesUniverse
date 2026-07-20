@@ -1,11 +1,4 @@
-using Content.Server.Audio;
-using Content.Server.Explosion.EntitySystems;
-using Content.Shared.Damage.Systems;
-using Content.Shared.Hands.Components;
-using Content.Shared.Hands.EntitySystems;
 using Content.Shared.HotPotato;
-using Content.Shared.Popups;
-using Content.Shared.Weapons.Melee.Events;
 
 namespace Content.Server.HotPotato;
 

@@ -33,15 +33,13 @@ public sealed partial class AnchorableSystem : EntitySystem
     [Dependency] private TagSystem _tagSystem = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
 
-    private EntityQuery<PhysicsComponent> _physicsQuery;
+    [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
 
     public readonly ProtoId<TagPrototype> Unstackable = "Unstackable";
 
     public override void Initialize()
     {
         base.Initialize();
-
-        _physicsQuery = GetEntityQuery<PhysicsComponent>();
 
         SubscribeLocalEvent<AnchorableComponent, InteractUsingEvent>(OnInteractUsing,
             before: new[] { typeof(ItemSlotsSystem) }, after: new[] { typeof(SharedConstructionSystem) });
@@ -50,11 +48,22 @@ public sealed partial class AnchorableSystem : EntitySystem
         SubscribeLocalEvent<AnchorableComponent, ExaminedEvent>(OnAnchoredExamine);
         SubscribeLocalEvent<AnchorableComponent, ComponentStartup>(OnAnchorStartup);
         SubscribeLocalEvent<AnchorableComponent, AnchorStateChangedEvent>(OnAnchorStateChange);
+
+        SubscribeLocalEvent<AnchorOnlyOnStationComponent, AnchorAttemptEvent>(OnAnchorOnStation);
     }
 
     private void OnAnchorStartup(EntityUid uid, AnchorableComponent comp, ComponentStartup args)
     {
         _appearance.SetData(uid, AnchorVisuals.Anchored, Transform(uid).Anchored);
+    }
+
+    private void OnAnchorOnStation(Entity<AnchorOnlyOnStationComponent> ent, ref AnchorAttemptEvent args)
+    {
+        if (_stationSystem.IsOnStation(ent, ent.Comp.OnlyCountLargestGrid))
+            return;
+
+        args.FailMessage = Loc.GetString(ent.Comp.PopupMessageAnchorFail);
+        args.Cancel();
     }
 
     private void OnAnchorStateChange(EntityUid uid, AnchorableComponent comp, AnchorStateChangedEvent args)
@@ -77,8 +86,12 @@ public sealed partial class AnchorableSystem : EntitySystem
         if (!Resolve(usingUid, ref usingTool))
             return;
 
-        if (!Valid(uid, userUid, usingUid, false))
+        if (!Valid(uid, userUid, usingUid, false, out var failMessage))
+        {
+            if (failMessage != null)
+                _popup.PopupEntity(failMessage, uid, userUid);
             return;
+        }
 
         // Log unanchor attempt (server only)
         _adminLogger.Add(LogType.Anchor, LogImpact.Low, $"{ToPrettyString(userUid):user} is trying to unanchor {ToPrettyString(uid):entity} from {transform.Coordinates:targetlocation}");
@@ -108,6 +121,13 @@ public sealed partial class AnchorableSystem : EntitySystem
         }
 
         var isAnchored = Comp<TransformComponent>(uid).Anchored;
+
+        if (isAnchored && (component.Flags & AnchorableFlags.Unanchorable) == 0x0)
+            return;
+
+        if (!isAnchored && (component.Flags & AnchorableFlags.Anchorable) == 0x0)
+            return;
+
         var messageId = isAnchored ? "examinable-anchored" : "examinable-unanchored";
         args.PushMarkup(Loc.GetString(messageId, ("target", uid)));
     }
@@ -123,7 +143,7 @@ public sealed partial class AnchorableSystem : EntitySystem
         _transformSystem.Unanchor(uid, xform);
         RaiseLocalEvent(uid, new UserUnanchoredEvent(args.User, used));
 
-        _popup.PopupClient(Loc.GetString("anchorable-unanchored"), uid, args.User);
+        _popup.PopupEntity(Loc.GetString("anchorable-unanchored"), uid, args.User);
 
         _adminLogger.Add(
             LogType.Unanchor,
@@ -141,7 +161,7 @@ public sealed partial class AnchorableSystem : EntitySystem
         if (TryComp<PhysicsComponent>(uid, out var anchorBody) &&
             !TileFree(xform.Coordinates, anchorBody, uid)) // RMC14
         {
-            _popup.PopupClient(Loc.GetString("anchorable-occupied"), uid, args.User);
+            _popup.PopupEntity(Loc.GetString("anchorable-occupied"), uid, args.User);
             return;
         }
 
@@ -161,7 +181,7 @@ public sealed partial class AnchorableSystem : EntitySystem
 
             if (AnyUnstackable(uid, coordinates))
             {
-                _popup.PopupClient(Loc.GetString("construction-step-condition-no-unstackable-in-tile"), uid, args.User);
+                _popup.PopupEntity(Loc.GetString("construction-step-condition-no-unstackable-in-tile"), uid, args.User);
                 return;
             }
 
@@ -175,7 +195,7 @@ public sealed partial class AnchorableSystem : EntitySystem
 
         RaiseLocalEvent(uid, new UserAnchoredEvent(args.User, used));
 
-        _popup.PopupClient(Loc.GetString("anchorable-anchored"), uid, args.User);
+        _popup.PopupEntity(Loc.GetString("anchorable-anchored"), uid, args.User);
 
         _adminLogger.Add(
             LogType.Anchor,
@@ -227,8 +247,12 @@ public sealed partial class AnchorableSystem : EntitySystem
         if (!Resolve(usingUid, ref usingTool))
             return;
 
-        if (!Valid(uid, userUid, usingUid, true, anchorable, usingTool))
+        if (!Valid(uid, userUid, usingUid, true, out var failMessage, anchorable, usingTool))
+        {
+            if (failMessage != null)
+                _popup.PopupEntity(Loc.GetString(failMessage), uid, userUid);
             return;
+        }
 
         // Log anchor attempt (server only)
         _adminLogger.Add(LogType.Anchor, LogImpact.Low, $"{ToPrettyString(userUid):user} is trying to anchor {ToPrettyString(uid):entity} to {transform.Coordinates:targetlocation}");
@@ -238,11 +262,10 @@ public sealed partial class AnchorableSystem : EntitySystem
         {
             _popup.PopupClient(Loc.GetString("anchorable-occupied"), uid, userUid);
             return;
-        }
 
         if (AnyUnstackable(uid, transform.Coordinates))
         {
-            _popup.PopupClient(Loc.GetString("construction-step-condition-no-unstackable-in-tile"), uid, userUid);
+            _popup.PopupEntity(Loc.GetString("construction-step-condition-no-unstackable-in-tile"), uid, userUid);
             return;
         }
 
@@ -254,9 +277,12 @@ public sealed partial class AnchorableSystem : EntitySystem
         EntityUid userUid,
         EntityUid usingUid,
         bool anchoring,
+        out string? failMessage,
         AnchorableComponent? anchorable = null,
         ToolComponent? usingTool = null)
     {
+        failMessage = null;
+
         if (!Resolve(uid, ref anchorable))
             return false;
 
@@ -280,7 +306,26 @@ public sealed partial class AnchorableSystem : EntitySystem
 
         anchorable.Delay += attempt.Delay;
 
+        failMessage = attempt.FailMessage;
+
         return !attempt.Cancelled;
+    }
+
+    public bool CanAnchorAt(Entity<PhysicsComponent?> entity, EntityUid? user = null)
+    {
+        return CanAnchorAt(entity, Transform(entity).Coordinates, user);
+    }
+
+    public bool CanAnchorAt(Entity<PhysicsComponent?> entity, EntityCoordinates coordinates, EntityUid? user = null)
+    {
+        if (!Resolve(entity, ref entity.Comp))
+            return true;
+
+        if (TileFree(coordinates, entity.Comp))
+            return true;
+
+        _popup.PopupEntity(Loc.GetString("anchorable-occupied"), entity, user);
+        return false;
     }
 
     /// <summary>

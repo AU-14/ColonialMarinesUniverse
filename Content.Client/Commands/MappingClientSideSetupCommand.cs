@@ -1,8 +1,7 @@
 using Content.Client.Mapping;
 using Content.Client.Markers;
-using JetBrains.Annotations;
+using Content.Client.SubFloor;
 using Robust.Client.Graphics;
-using Robust.Client.State;
 using Robust.Shared.Console;
 
 namespace Content.Client.Commands;
@@ -14,8 +13,6 @@ internal sealed partial class MappingClientSideSetupCommand : LocalizedCommands
     [Dependency] private ILightManager _lightManager = default!;
 
     public override string Command => "mappingclientsidesetup";
-
-    public override string Help => LocalizationManager.GetString($"cmd-{Command}-help", ("command", Command));
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {

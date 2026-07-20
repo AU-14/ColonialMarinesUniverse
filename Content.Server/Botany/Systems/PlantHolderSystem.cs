@@ -1,7 +1,6 @@
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Botany.Components;
 using Content.Server.Hands.Systems;
-using Content.Server.Kitchen.Components;
 using Content.Server.Popups;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Administration.Logs;
@@ -15,7 +14,6 @@ using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Database;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
-using Content.Shared.Hands.Components;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Kitchen.Components;
@@ -29,6 +27,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Shared.Labels.Components;
+using Content.Shared.Tools.Systems;
 
 namespace Content.Server.Botany.Systems;
 
@@ -52,6 +51,7 @@ public sealed partial class PlantHolderSystem : EntitySystem
 
     public const float HydroponicsSpeedMultiplier = 1f;
     public const float HydroponicsConsumptionMultiplier = 2f;
+    public readonly FixedPoint2 PlantMetabolismRate = FixedPoint2.New(1);
 
     private static readonly ProtoId<TagPrototype> HoeTag = "Hoe";
     private static readonly ProtoId<TagPrototype> PlantSampleTakerTag = "PlantSampleTaker";
@@ -219,7 +219,7 @@ public sealed partial class PlantHolderSystem : EntitySystem
 
             args.Handled = true;
             _popup.PopupCursor(Loc.GetString("plant-holder-component-already-seeded-message",
-                ("name", Comp<MetaDataComponent>(uid).EntityName)), args.User, PopupType.Medium);
+                ("name", uid)), args.User, PopupType.Medium);
             return;
         }
 
@@ -229,9 +229,9 @@ public sealed partial class PlantHolderSystem : EntitySystem
             if (component.WeedLevel > 0)
             {
                 _popup.PopupCursor(Loc.GetString("plant-holder-component-remove-weeds-message",
-                    ("name", Comp<MetaDataComponent>(uid).EntityName)), args.User, PopupType.Medium);
+                    ("name", uid)), args.User, PopupType.Medium);
                 _popup.PopupEntity(Loc.GetString("plant-holder-component-remove-weeds-others-message",
-                    ("otherName", Comp<MetaDataComponent>(args.User).EntityName)), uid, Filter.PvsExcept(args.User), true);
+                    ("otherName", Identity.Entity(args.User, EntityManager))), uid, Filter.PvsExcept(args.User), true);
                 component.WeedLevel = 0;
                 UpdateSprite(uid, component);
             }
@@ -249,15 +249,15 @@ public sealed partial class PlantHolderSystem : EntitySystem
             if (component.Seed != null)
             {
                 _popup.PopupCursor(Loc.GetString("plant-holder-component-remove-plant-message",
-                    ("name", Comp<MetaDataComponent>(uid).EntityName)), args.User, PopupType.Medium);
+                    ("name", uid)), args.User, PopupType.Medium);
                 _popup.PopupEntity(Loc.GetString("plant-holder-component-remove-plant-others-message",
-                    ("name", Comp<MetaDataComponent>(args.User).EntityName)), uid, Filter.PvsExcept(args.User), true);
+                    ("name", Identity.Entity(args.User, EntityManager))), uid, Filter.PvsExcept(args.User), true);
                 RemovePlant(uid, component);
             }
             else
             {
                 _popup.PopupCursor(Loc.GetString("plant-holder-component-no-plant-message",
-                    ("name", Comp<MetaDataComponent>(uid).EntityName)), args.User);
+                    ("name", uid)), args.User);
             }
 
             return;
@@ -301,6 +301,7 @@ public sealed partial class PlantHolderSystem : EntitySystem
             {
                 healthOverride = component.Health;
             }
+            component.Seed.Unique = false;
             var packetSeed = component.Seed;
             var seed = _botany.SpawnSeedPacket(packetSeed, Transform(args.User).Coordinates, args.User, healthOverride);
             _randomHelper.RandomOffset(seed, 0.25f);
@@ -320,7 +321,8 @@ public sealed partial class PlantHolderSystem : EntitySystem
             return;
         }
 
-        if (HasComp<SharpComponent>(args.Used))
+        var harvestToolQuality = entity.Comp.HarvestToolQuality;
+        if (harvestToolQuality.HasValue && _tool.HasQuality(args.Used, harvestToolQuality.Value))
         {
             args.Handled = true;
             DoHarvest(uid, args.User, component);
@@ -426,6 +428,7 @@ public sealed partial class PlantHolderSystem : EntitySystem
             && component.WeedLevel >= component.Seed.WeedHighLevelThreshold)
         {
             Spawn(component.Seed.KudzuPrototype, Transform(uid).Coordinates.SnapToGrid(EntityManager));
+            EnsureUniqueSeed(uid, component);
             component.Seed.TurnIntoKudzu = false;
             component.Health = 0;
         }
@@ -884,12 +887,15 @@ public sealed partial class PlantHolderSystem : EntitySystem
 
         if (solution.Volume > 0 && component.MutationLevel < 25)
         {
-            var amt = FixedPoint2.New(1);
-            foreach (var entry in _solutionContainerSystem.RemoveEachReagent(component.SoilSolution.Value, amt))
+            // Don't apply any effects to a non-unique seed ever! Remove this when botany code is sane...
+            EnsureUniqueSeed(uid, component);
+            foreach (var entry in solution.Contents)
             {
                 var reagentProto = _prototype.IndexReagent<ReagentPrototype>(entry.Reagent.Prototype);
                 reagentProto.ReactionPlant(uid, entry, solution);
             }
+
+            _solutionContainerSystem.RemoveEachReagent(component.SoilSolution.Value, PlantMetabolismRate);
         }
 
         CheckLevelSanity(uid, component);

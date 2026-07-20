@@ -57,32 +57,12 @@ public sealed partial class MaskSystem : EntitySystem
 
         var dir = mask.IsToggled ? "down" : "up";
         var msg = $"action-mask-pull-{dir}-popup-message";
-        _popupSystem.PopupClient(Loc.GetString(msg, ("mask", uid)), args.Performer, args.Performer);
+        _popupSystem.PopupEntity(Loc.GetString(msg, ("mask", uid)), args.Performer, args.Performer);
     }
 
     private void OnGotUnequipped(EntityUid uid, MaskComponent mask, GotUnequippedEvent args)
     {
-        if (!mask.IsToggled || !mask.IsToggleable)
-            return;
-
-        mask.IsToggled = false;
-        ToggleMaskComponents(uid, mask, args.Equipee, mask.EquippedPrefix, true);
-    }
-
-    /// <summary>
-    /// Called after setting IsToggled, raises events and dirties.
-    /// </summary>
-    private void ToggleMaskComponents(EntityUid uid, MaskComponent mask, EntityUid wearer, string? equippedPrefix = null, bool isEquip = false)
-    {
-        Dirty(uid, mask);
-        if (mask.ToggleActionEntity is { } action)
-            _actionSystem.SetToggled(action, mask.IsToggled);
-
-        var maskEv = new ItemMaskToggledEvent((uid, mask), wearer);
-        RaiseLocalEvent(uid, ref maskEv);
-
-        var wearerEv = new WearerMaskToggledEvent((uid, mask));
-        RaiseLocalEvent(wearer, ref wearerEv);
+        SetToggled(uid, false);
     }
 
     private void OnFolded(Entity<MaskComponent> ent, ref FoldedEvent args)

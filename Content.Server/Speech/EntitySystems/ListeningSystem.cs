@@ -33,9 +33,8 @@ public sealed partial class ListeningSystem : EntitySystem
         // TODO whispering / audio volume? Microphone sensitivity?
         // for now, whispering just arbitrarily reduces the listener's max range.
 
-        var xformQuery = GetEntityQuery<TransformComponent>();
-        var sourceXform = xformQuery.GetComponent(source);
-        var sourcePos = _xforms.GetWorldPosition(sourceXform, xformQuery);
+        var sourceXform = Transform(source);
+        var sourcePos = _xforms.GetWorldPosition(sourceXform);
 
         var attemptEv = new ListenAttemptEvent(source);
         var ev = new ListenEvent(message, source);
@@ -49,7 +48,7 @@ public sealed partial class ListeningSystem : EntitySystem
 
             // range checks
             // TODO proper speech occlusion
-            var distance = (sourcePos - _xforms.GetWorldPosition(xform, xformQuery)).LengthSquared();
+            var distance = (sourcePos - _xforms.GetWorldPosition(xform)).LengthSquared();
             if (distance > listener.Range * listener.Range)
                 continue;
 

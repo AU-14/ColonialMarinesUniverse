@@ -1,5 +1,4 @@
-﻿using Content.Shared.Body.Systems;
-using Content.Shared.Buckle.Components;
+﻿using Content.Shared.Buckle.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Standing;
@@ -32,7 +31,6 @@ public sealed partial class LegsParalyzedSystem : EntitySystem
     private void OnShutdown(EntityUid uid, LegsParalyzedComponent component, ComponentShutdown args)
     {
         _standingSystem.Stand(uid);
-        _bodySystem.UpdateMovementSpeed(uid);
     }
 
     private void OnBuckled(EntityUid uid, LegsParalyzedComponent component, ref BuckledEvent args)

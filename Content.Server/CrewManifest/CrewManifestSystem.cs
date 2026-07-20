@@ -1,21 +1,20 @@
 using System.Linq;
 using Content.Server.Administration;
 using Content.Server.EUI;
-using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
-using Content.Server.StationRecords;
-using Content.Server.StationRecords.Systems;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
 using Content.Shared.CrewManifest;
 using Content.Shared.GameTicking;
 using Content.Shared.Roles;
+using Content.Shared.Station.Components;
 using Content.Shared.StationRecords;
+using Content.Shared.StationRecords.Components;
+using Content.Shared.StationRecords.Events;
+using Content.Shared.StationRecords.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Console;
 using Robust.Shared.Player;
-using Robust.Shared.Prototypes;
-using Robust.Shared.Utility;
 
 namespace Content.Server.CrewManifest;
 
@@ -38,7 +37,7 @@ public sealed partial class CrewManifestSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<AfterGeneralRecordCreatedEvent>(AfterGeneralRecordCreated);
+        SubscribeLocalEvent<GeneralRecordCreatedEvent>(GeneralRecordCreated);
         SubscribeLocalEvent<RecordModifiedEvent>(OnRecordModified);
         SubscribeLocalEvent<RecordRemovedEvent>(OnRecordRemoved);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
@@ -76,19 +75,19 @@ public sealed partial class CrewManifestSystem : EntitySystem
     // Not a big fan of this one. Rebuilds the crew manifest every time
     // somebody spawns in, meaning that at round start, it rebuilds the crew manifest
     // wrt the amount of players readied up.
-    private void AfterGeneralRecordCreated(AfterGeneralRecordCreatedEvent ev)
+    private void GeneralRecordCreated(ref GeneralRecordCreatedEvent ev)
     {
         BuildCrewManifest(ev.Key.OriginStation);
         UpdateEuis(ev.Key.OriginStation);
     }
 
-    private void OnRecordModified(RecordModifiedEvent ev)
+    private void OnRecordModified(ref RecordModifiedEvent ev)
     {
         BuildCrewManifest(ev.Key.OriginStation);
         UpdateEuis(ev.Key.OriginStation);
     }
 
-    private void OnRecordRemoved(RecordRemovedEvent ev)
+    private void OnRecordRemoved(ref RecordRemovedEvent ev)
     {
         BuildCrewManifest(ev.Key.OriginStation);
         UpdateEuis(ev.Key.OriginStation);
@@ -240,7 +239,7 @@ public sealed partial class CrewManifestSystem : EntitySystem
             var record = recordObject.Item2;
             var entry = new CrewManifestEntry(record.Name, record.JobTitle, record.JobIcon, record.JobPrototype, record.Squad, record.SquadColor);
 
-            _prototypeManager.TryIndex(record.JobPrototype, out JobPrototype? job);
+            ProtoMan.TryIndex(record.JobPrototype, out JobPrototype? job);
             entriesSort.Add((job, entry));
         }
 

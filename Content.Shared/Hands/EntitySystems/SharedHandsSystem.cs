@@ -7,8 +7,10 @@ using Content.Shared.Interaction;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Storage.EntitySystems;
+using Content.Shared.Whitelist;
 using Robust.Shared.Containers;
 using Robust.Shared.Input.Binding;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.Hands.EntitySystems;
@@ -36,6 +38,7 @@ public abstract partial class SharedHandsSystem
         InitializeDrop();
         InitializePickup();
         InitializeRelay();
+        InitializeEventListeners();
 
         SubscribeLocalEvent<HandsComponent, ComponentInit>(OnInit);
         SubscribeLocalEvent<HandsComponent, MapInitEvent>(OnMapInit);
@@ -65,9 +68,9 @@ public abstract partial class SharedHandsSystem
     /// <summary>
     /// Adds a hand with the given container id and supplied location to the specified entity.
     /// </summary>
-    public void AddHand(Entity<HandsComponent?> ent, string handName, HandLocation handLocation)
+    public void AddHand(Entity<HandsComponent?> ent, string handName, HandLocation handLocation, LocId? emptyLabel = null, EntProtoId? emptyRepresentative = null, EntityWhitelist? whitelist = null, EntityWhitelist? blacklist = null)
     {
-        AddHand(ent, handName, new Hand(handLocation));
+        AddHand(ent, handName, new Hand(handLocation, emptyLabel, emptyRepresentative, whitelist, blacklist));
     }
 
     /// <summary>
@@ -86,6 +89,8 @@ public abstract partial class SharedHandsSystem
 
         ent.Comp.Hands.Add(handName, hand);
         ent.Comp.SortedHands.Add(handName);
+        // we use LINQ + ToList instead of the list sort because it's a stable sort vs the list sort
+        ent.Comp.SortedHands = ent.Comp.SortedHands.OrderBy(handId => ent.Comp.Hands[handId].Location).ToList();
         Dirty(ent);
 
         OnPlayerAddHand?.Invoke((ent, ent.Comp), handName, hand.Location);
@@ -164,6 +169,26 @@ public abstract partial class SharedHandsSystem
         }
 
         return false;
+    }
+
+    /// <summary>
+    ///     Does this entity have any empty hands, and how many?
+    /// </summary>
+    public int GetEmptyHandCount(Entity<HandsComponent?> entity)
+    {
+        if (!Resolve(entity, ref entity.Comp, false) || entity.Comp.Count == 0)
+            return 0;
+
+        var hands = 0;
+
+        foreach (var hand in EnumerateHands(entity))
+        {
+            if (!HandIsEmpty(entity, hand))
+                continue;
+            hands++;
+        }
+
+        return hands;
     }
 
     /// <summary>
@@ -315,6 +340,44 @@ public abstract partial class SharedHandsSystem
         return true;
     }
 
+    /// <summary>
+    ///     Cycles the currently active hand.
+    /// </summary>
+    public void SwapHands(Entity<HandsComponent?> ent, bool checkActionBlocker = false, bool reverse = false)
+    {
+        if (!Resolve(ent, ref ent.Comp))
+            return;
+
+        if (checkActionBlocker && !_actionBlocker.CanInteract(ent.Owner, null))
+            return;
+
+        if (ent.Comp.ActiveHandId == null || ent.Comp.Hands.Count < 2)
+            return;
+
+        var currentIndex = ent.Comp.SortedHands.IndexOf(ent.Comp.ActiveHandId);
+        var newActiveIndex = (currentIndex + (reverse ? -1 : 1) + ent.Comp.Hands.Count) % ent.Comp.Hands.Count;
+        var nextHand = ent.Comp.SortedHands[newActiveIndex];
+
+        TrySetActiveHand(ent, nextHand);
+    }
+
+    /// <summary>
+    /// Checks if an item is being held by another entity.
+    /// </summary>
+    /// <param name="item">Item that we are checking.</param>
+    /// <param name="user">User who is holding our item.</param>
+    /// <returns>Returns true if our item is being held.</returns>
+    public bool IsHeld(Entity<TransformComponent?> item, [NotNullWhen(true)] out EntityUid? user)
+    {
+        user = null;
+        item.Comp ??= Transform(item);
+        if (!IsHolding(item.Comp.ParentUid, item))
+            return false;
+
+        user = item.Comp.ParentUid;
+        return true;
+    }
+
     public bool IsHolding(Entity<HandsComponent?> entity, [NotNullWhen(true)] EntityUid? item)
     {
         return IsHolding(entity, item, out _);
@@ -362,18 +425,27 @@ public abstract partial class SharedHandsSystem
     }
 
     /// <summary>
-    /// Gets the item currently held in the entity's specified hand. Returns null if no hands are present or there is no item.
+    /// Retrieves the item currently held in the specified hand of an entity.
     /// </summary>
-    public EntityUid? GetHeldItem(Entity<HandsComponent?> ent, string? handId)
+    /// <param name="ent">The entity whose hands are being checked.</param>
+    /// <param name="handId">The ID of the specific hand to check.</param>
+    /// <param name="hideVirtualItems">If true, treats hands holding virtual items as if they are empty.</param>
+    /// <returns>The UID of the held item, or null if the hand is empty, the hand ID is invalid, or the entity has no hands.</returns>
+    public EntityUid? GetHeldItem(Entity<HandsComponent?> ent, string? handId, bool hideVirtualItems = false)
     {
-        TryGetHeldItem(ent, handId, out var held);
+        TryGetHeldItem(ent, handId, out var held, hideVirtualItems);
         return held;
     }
 
     /// <summary>
-    /// Gets the item currently held in the entity's specified hand. Returns false if no hands are present or there is no item.
+    /// Attempts to retrieve the item currently held in the specified hand of an entity.
     /// </summary>
-    public bool TryGetHeldItem(Entity<HandsComponent?> ent, string? handId, [NotNullWhen(true)] out EntityUid? held)
+    /// <param name="ent">The entity whose hands are being checked.</param>
+    /// <param name="handId">The ID of the specific hand to check.</param>
+    /// <param name="held">Outputs the UID of the held item, if one is found.</param>
+    /// <param name="hideVirtualItems">If true, ignores virtual items and returns false if only a virtual item is present.</param>
+    /// <returns>True if a valid item is found in the hand; otherwise, false.</returns>
+    public bool TryGetHeldItem(Entity<HandsComponent?> ent, string? handId, [NotNullWhen(true)] out EntityUid? held, bool hideVirtualItems = false)
     {
         held = null;
         if (!Resolve(ent, ref ent.Comp, false))
@@ -387,6 +459,10 @@ public abstract partial class SharedHandsSystem
             return false;
 
         held = container.ContainedEntities.FirstOrNull();
+
+        if (hideVirtualItems && HasComp<VirtualItemComponent>(held))
+            held = null;
+
         return held != null;
     }
 
@@ -395,6 +471,9 @@ public abstract partial class SharedHandsSystem
         return GetHeldItem(ent, handId) == null;
     }
 
+    /// <summary>
+    /// Counts the number of hands on this entity.
+    /// </summary>
     public int GetHandCount(Entity<HandsComponent?> ent)
     {
         if (!Resolve(ent, ref ent.Comp, false))
@@ -403,6 +482,9 @@ public abstract partial class SharedHandsSystem
         return ent.Comp.Hands.Count;
     }
 
+    /// <summary>
+    /// Counts the number of hands that are empty.
+    /// </summary>
     public int CountFreeHands(Entity<HandsComponent?> ent)
     {
         if (!Resolve(ent, ref ent.Comp, false))

@@ -21,13 +21,13 @@ public sealed partial class JukeboxSystem : SharedJukeboxSystem
         SubscribeLocalEvent<JukeboxComponent, AnimationCompletedEvent>(OnAnimationCompleted);
         SubscribeLocalEvent<JukeboxComponent, AfterAutoHandleStateEvent>(OnJukeboxAfterState);
 
-        _protoManager.PrototypesReloaded += OnProtoReload;
+        ProtoMan.PrototypesReloaded += OnProtoReload;
     }
 
     public override void Shutdown()
     {
         base.Shutdown();
-        _protoManager.PrototypesReloaded -= OnProtoReload;
+        ProtoMan.PrototypesReloaded -= OnProtoReload;
     }
 
     private void OnProtoReload(PrototypesReloadedEventArgs obj)

@@ -4,6 +4,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared.Item.ItemToggle.Components;
 using Content.Shared.Movement.Systems;
+using Content.Shared.Standing;
 using Content.Shared.Verbs;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
@@ -115,8 +116,11 @@ public sealed partial class ClothingSpeedModifierSystem : EntitySystem
 
     private void OnToggled(Entity<ClothingSpeedModifierComponent> ent, ref ItemToggledEvent args)
     {
+        if (!ent.Comp.RequireActivated)
+            return;
+
         // make sentient boots slow or fast too
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers(ent.Owner);
 
         if (_container.TryGetContainingContainer((ent.Owner, null, null), out var container))
         {

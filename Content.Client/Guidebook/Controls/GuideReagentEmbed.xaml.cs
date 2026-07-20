@@ -16,6 +16,7 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
+using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
@@ -33,6 +34,7 @@ public sealed partial class GuideReagentEmbed : BoxContainer, IDocumentTag, ISea
     [Dependency] private IComponentFactory _componentFactory = default!;
 
     private readonly ChemistryGuideDataSystem _chemistryGuideData;
+    private readonly ContrabandSystem _contraband;
     private readonly ISawmill _sawmill;
 
     public IPrototype? RepresentedPrototype { get; private set; }
@@ -43,6 +45,7 @@ public sealed partial class GuideReagentEmbed : BoxContainer, IDocumentTag, ISea
         IoCManager.InjectDependencies(this);
         _sawmill = _logManager.GetSawmill("guidebook.reagent");
         _chemistryGuideData = _systemManager.GetEntitySystem<ChemistryGuideDataSystem>();
+        _contraband = _systemManager.GetEntitySystem<ContrabandSystem>();
         MouseFilter = MouseFilterMode.Stop;
     }
 
@@ -130,12 +133,13 @@ public sealed partial class GuideReagentEmbed : BoxContainer, IDocumentTag, ISea
         #region Effects
         if (_chemistryGuideData.ReagentGuideRegistry.TryGetValue(reagent.ID, out var guideEntryRegistry) &&
             guideEntryRegistry.GuideEntries != null &&
-            guideEntryRegistry.GuideEntries.Values.Any(pair => pair.EffectDescriptions.Any()))
+            guideEntryRegistry.GuideEntries.Values.Any(pair => pair.EffectDescriptions.Any() || pair.Metabolites?.Any() == true))
         {
             EffectsDescriptionContainer.Children.Clear();
-            foreach (var (group, effect) in guideEntryRegistry.GuideEntries)
+            foreach (var (stage, effect) in guideEntryRegistry.GuideEntries)
             {
-                if (!effect.EffectDescriptions.Any())
+                var hasMetabolites = effect.Metabolites?.Any() == true;
+                if (!effect.EffectDescriptions.Any() && !hasMetabolites)
                     continue;
 
                 var groupLabel = new RichTextLabel();
@@ -156,8 +160,19 @@ public sealed partial class GuideReagentEmbed : BoxContainer, IDocumentTag, ISea
                 {
                     descMsg.AddMarkupOrThrow(effectString);
                     i++;
-                    if (i < descriptionsCount)
+                    if (i < descriptionsCount || hasMetabolites)
                         descMsg.PushNewline();
+                }
+                if (hasMetabolites)
+                {
+                    var metabolites = new List<string>();
+                    foreach (var (metabolite, ratio) in effect.Metabolites!)
+                    {
+                        metabolites.Add(Loc.GetString("guidebook-reagent-effects-metabolite-item", ("rate", (double)ratio), ("reagent", _prototype.Index(metabolite).LocalizedName)));
+                    }
+                    metabolites.Sort();
+
+                    descMsg.AddMarkupOrThrow(Loc.GetString("guidebook-reagent-effects-metabolites", ("items", ContentLocalizationManager.FormatList(metabolites))));
                 }
                 descriptionLabel.SetMessage(descMsg);
 
@@ -245,6 +260,25 @@ public sealed partial class GuideReagentEmbed : BoxContainer, IDocumentTag, ISea
         description.PushNewline();
         description.AddMarkupOrThrow(Loc.GetString("guidebook-reagent-physical-description",
             ("description", reagent.LocalizedPhysicalDescription)));
+
+        if (_config.GetCVar(CCVars.ContrabandExamine))
+        {
+            // Department-restricted text
+            if (reagent.AllowedJobs.Count > 0 || reagent.AllowedDepartments.Count > 0)
+            {
+                description.PushNewline();
+                description.AddMarkupPermissive(
+                    _contraband.GenerateDepartmentExamineMessage(reagent.AllowedDepartments, reagent.AllowedJobs, Color.Yellow, ContrabandItemType.Reagent));
+            }
+            // Other contraband text
+            else if (reagent.ContrabandSeverity != null &&
+                     _prototype.Resolve(reagent.ContrabandSeverity.Value, out var severity))
+            {
+                description.PushNewline();
+                description.AddMarkupPermissive(Loc.GetString(severity.ExamineText, ("type", ContrabandItemType.Reagent), ("color", severity.Color)));
+            }
+        }
+
         ReagentDescription.SetMessage(description);
     }
 

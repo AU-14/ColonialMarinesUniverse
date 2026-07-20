@@ -46,7 +46,7 @@ public sealed partial class TileEmissionOverlay : Overlay
         var worldHandle = args.WorldHandle;
         var lightoverlay = _overlay.GetOverlay<BeforeLightTargetOverlay>();
         var bounds = lightoverlay.EnlargedBounds;
-        var target = lightoverlay.EnlargedLightTarget;
+        var target = lightoverlay.GetCachedForViewport(args.Viewport).EnlargedLightTarget;
         var viewport = args.Viewport;
         _grids.Clear();
         _mapSystem.FindGridsIntersecting(mapId, bounds, ref _grids, approx: true);

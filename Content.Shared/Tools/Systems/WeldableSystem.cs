@@ -24,8 +24,6 @@ public sealed partial class WeldableSystem : EntitySystem
         SubscribeLocalEvent<WeldableComponent, WeldFinishedEvent>(OnWeldFinished);
         SubscribeLocalEvent<LayerChangeOnWeldComponent, WeldableChangedEvent>(OnWeldChanged);
         SubscribeLocalEvent<WeldableComponent, ExaminedEvent>(OnExamine);
-
-        _query = GetEntityQuery<WeldableComponent>();
     }
 
     public bool IsWelded(EntityUid uid, WeldableComponent? component = null)

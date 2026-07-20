@@ -33,10 +33,9 @@ namespace Content.Client.Tabletop
         // Time in seconds to wait until sending the location of a dragged entity to the server again
         private const float Delay = 1f / 10; // 10 Hz
 
-        private float _timePassed; // Time passed since last update sent to the server.
         private EntityUid? _draggedEntity; // Entity being dragged
         private ScalingViewport? _viewport; // Viewport currently being used
-        private DefaultWindow? _window; // Current open tabletop window (only allow one at a time)
+        private BaseWindow? _window; // Current open tabletop window (only allow one at a time)
         private EntityUid? _table; // The table entity of the currently open game session
 
         public override void Initialize()
@@ -60,8 +59,11 @@ namespace Content.Client.Tabletop
                 StopDragging(false);
         }
 
-        public override void FrameUpdate(float frameTime)
+        public override void Update(float frameTime)
         {
+            base.Update(frameTime);
+            if (!_gameTiming.IsFirstTimePredicted)
+                return;
             if (_window == null)
                 return;
 
@@ -101,17 +103,10 @@ namespace Content.Client.Tabletop
             var clampedCoords = ClampPositionToViewport(coords, _viewport);
             if (clampedCoords.Equals(MapCoordinates.Nullspace)) return;
 
-            // Move the entity locally every update
-            _transformSystem.SetWorldPosition(_draggedEntity.Value, clampedCoords.Position);
-
-            // Increment total time passed
-            _timePassed += frameTime;
-
             // Only send new position to server when Delay is reached
-            if (_timePassed >= Delay && _table != null)
+            if (_table != null)
             {
                 RaisePredictiveEvent(new TabletopMoveEvent(GetNetEntity(_draggedEntity.Value), clampedCoords, GetNetEntity(_table.Value)));
-                _timePassed -= Delay;
             }
         }
 
@@ -260,7 +255,7 @@ namespace Content.Client.Tabletop
             // Set the dragging player on the component to noone
             if (broadcast && _draggedEntity != null && HasComp<TabletopDraggableComponent>(_draggedEntity.Value))
             {
-                RaisePredictiveEvent(new TabletopMoveEvent(GetNetEntity(_draggedEntity.Value), Transforms.GetMapCoordinates(_draggedEntity.Value), GetNetEntity(_table!.Value)));
+                RaisePredictiveEvent(new TabletopMoveEvent(GetNetEntity(_draggedEntity.Value), _transform.GetMapCoordinates(_draggedEntity.Value), GetNetEntity(_table!.Value)));
                 RaisePredictiveEvent(new TabletopDraggingPlayerChangedEvent(GetNetEntity(_draggedEntity.Value), false));
             }
 

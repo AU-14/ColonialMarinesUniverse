@@ -1,27 +1,24 @@
 using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.Components;
-using Content.Shared.Chemistry.Reagent;
-using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Whitelist;
 using Robust.Shared.GameStates;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
-namespace Content.Shared.Body.Components
+namespace Content.Shared.Body.Components;
+
+[RegisterComponent, NetworkedComponent, Access(typeof(StomachSystem))]
+public sealed partial class StomachComponent : Component
 {
-    [RegisterComponent, NetworkedComponent, Access(typeof(StomachSystem), typeof(FoodSystem))]
-    public sealed partial class StomachComponent : Component
-    {
-        /// <summary>
-        ///     The next time that the stomach will try to digest its contents.
-        /// </summary>
-        [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
-        public TimeSpan NextUpdate;
+    /// <summary>
+    /// The solution inside of this stomach
+    /// </summary>
+    [ViewVariables]
+    public Entity<SolutionComponent>? Solution;
 
-        /// <summary>
-        ///     The interval at which this stomach digests its contents.
-        /// </summary>
-        [DataField]
-        public TimeSpan UpdateInterval = TimeSpan.FromSeconds(1);
+    /// <summary>
+    ///     A whitelist for what special-digestible-required foods this stomach is capable of eating.
+    /// </summary>
+    [DataField]
+    public EntityWhitelist? SpecialDigestible = null;
 
         /// <summary>
         /// Multiplier applied to <see cref="UpdateInterval"/> for adjusting based on metabolic rate multiplier.

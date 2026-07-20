@@ -24,6 +24,7 @@ public abstract partial class SharedRevolutionarySystem : EntitySystem
         SubscribeLocalEvent<RevolutionaryComponent, ComponentStartup>(DirtyRevComps);
         SubscribeLocalEvent<HeadRevolutionaryComponent, ComponentStartup>(DirtyRevComps);
         SubscribeLocalEvent<ShowAntagIconsComponent, ComponentStartup>(DirtyRevComps);
+        SubscribeLocalEvent<RevolutionaryComponent, AttemptConvertRevolutionaryEvent>(OnAttemptConvert);
     }
 
     /// <summary>
@@ -42,7 +43,7 @@ public abstract partial class SharedRevolutionarySystem : EntitySystem
             var stunTime = TimeSpan.FromSeconds(4);
             var name = Identity.Entity(uid, EntityManager);
             RemComp<RevolutionaryComponent>(uid);
-            _sharedStun.TryParalyze(uid, stunTime, true);
+            _sharedStun.TryUpdateParalyzeDuration(uid, stunTime);
             _popupSystem.PopupEntity(Loc.GetString("rev-break-control", ("name", name)), uid);
         }
     }
@@ -99,5 +100,10 @@ public abstract partial class SharedRevolutionarySystem : EntitySystem
         {
             Dirty(uid, comp);
         }
+    }
+
+    private void OnAttemptConvert(Entity<RevolutionaryComponent> ent, ref AttemptConvertRevolutionaryEvent args)
+    {
+        args.Cancelled = true;
     }
 }

@@ -21,12 +21,14 @@ namespace Content.Client.UserInterface.Controls
         public TextureRect BlockedRect { get; }
         public TextureRect HighlightRect { get; }
         public SpriteView HoverSpriteView { get; }
+        public Control AdminOverlays { get; }
         public TextureButton StorageButton { get; }
         public CooldownGraphic CooldownDisplay { get; }
         // RMC14 - Declare icon label
         public Label IconLabel { get; }
 
         private SpriteView SpriteView { get; }
+        private EntityPrototypeView ProtoView { get; }
 
         public EntityUid? Entity => SpriteView.Entity;
 
@@ -150,6 +152,13 @@ namespace Content.Client.UserInterface.Controls
                 SetSize = new Vector2(DefaultButtonSize, DefaultButtonSize),
                 OverrideDirection = Direction.South
             });
+            AddChild(ProtoView = new EntityPrototypeView
+            {
+                Visible = false,
+                Scale = new Vector2(2, 2),
+                SetSize = new Vector2(DefaultButtonSize, DefaultButtonSize),
+                OverrideDirection = Direction.South
+            });
 
             AddChild(HoverSpriteView = new SpriteView
             {
@@ -174,6 +183,8 @@ namespace Content.Client.UserInterface.Controls
                 VerticalAlignment = VAlignment.Bottom,
                 Visible = false,
             });
+
+            AddChild(AdminOverlays = new Control());
 
             StorageButton.OnKeyBindDown += args =>
             {
@@ -227,6 +238,9 @@ namespace Content.Client.UserInterface.Controls
             HoverSpriteView.SetEntity(null);
         }
 
+        /// <summary>
+        /// Causes the control to display a placeholder prototype, optionally faded
+        /// </summary>
         public void SetEntity(EntityUid? ent)
         {
             SpriteView.SetEntity(ent);

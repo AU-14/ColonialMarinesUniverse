@@ -1,5 +1,4 @@
 using Content.Shared.EntityTable;
-using Robust.Shared.Prototypes;
 
 namespace Content.Shared.ComponentTable;
 
@@ -24,7 +23,7 @@ public sealed partial class SharedComponentTableSystem : EntitySystem
 
         foreach (var entity in spawns)
         {
-            if (_proto.TryIndex(entity, out var entProto))
+            if (ProtoMan.Resolve(entity, out var entProto))
             {
                 EntityManager.AddComponents(ent, entProto.Components);
             }

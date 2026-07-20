@@ -27,8 +27,6 @@ public sealed partial class StationAiVisionSystem : EntitySystem
     private readonly HashSet<Entity<StationAiVisionComponent>> _seeds = new();
     private readonly HashSet<Vector2i> _viewportTiles = new();
 
-    private EntityQuery<OccluderComponent> _occluderQuery;
-
     // Dummy set
     private readonly HashSet<Vector2i> _singleTiles = new();
 
@@ -44,8 +42,6 @@ public sealed partial class StationAiVisionSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-
-        _occluderQuery = GetEntityQuery<OccluderComponent>();
 
         _seedJob = new()
         {

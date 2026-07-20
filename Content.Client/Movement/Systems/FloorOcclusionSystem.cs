@@ -18,8 +18,6 @@ public sealed partial class FloorOcclusionSystem : SharedFloorOcclusionSystem
     {
         base.Initialize();
 
-        _spriteQuery = GetEntityQuery<SpriteComponent>();
-
         SubscribeLocalEvent<FloorOcclusionComponent, ComponentStartup>(OnOcclusionStartup);
         SubscribeLocalEvent<FloorOcclusionComponent, ComponentShutdown>(OnOcclusionShutdown);
         SubscribeLocalEvent<FloorOcclusionComponent, AfterAutoHandleStateEvent>(OnOcclusionAuto);
@@ -50,7 +48,7 @@ public sealed partial class FloorOcclusionSystem : SharedFloorOcclusionSystem
         if (!_spriteQuery.Resolve(sprite.Owner, ref sprite.Comp, false))
             return;
 
-        var shader = _proto.Index(HorizontalCut).Instance();
+        var shader = ProtoMan.Index(HorizontalCut).Instance();
 
         if (sprite.Comp.PostShader is not null && sprite.Comp.PostShader != shader)
             return;

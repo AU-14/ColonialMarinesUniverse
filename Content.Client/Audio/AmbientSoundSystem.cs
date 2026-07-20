@@ -3,17 +3,13 @@ using Content.Shared.CCVar;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Audio;
-using Robust.Shared.Log;
 using Robust.Shared.Configuration;
-using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using System.Linq;
 using System.Numerics;
-using Robust.Client.GameObjects;
-using Robust.Shared.Audio.Effects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
 
@@ -65,18 +61,19 @@ public sealed partial class AmbientSoundSystem : SharedAmbientSoundSystem
         get => _overlayEnabled;
         set
         {
-            if (_overlayEnabled == value) return;
+            if (_overlayEnabled == value)
+                return;
+
             _overlayEnabled = value;
-            var overlayManager = IoCManager.Resolve<IOverlayManager>();
 
             if (_overlayEnabled)
             {
                 _overlay = new AmbientSoundOverlay(EntityManager, this, EntityManager.System<EntityLookupSystem>());
-                overlayManager.AddOverlay(_overlay);
+                _overlayManager.AddOverlay(_overlay);
             }
             else
             {
-                overlayManager.RemoveOverlay(_overlay!);
+                _overlayManager.RemoveOverlay(_overlay!);
                 _overlay = null;
             }
         }
@@ -237,8 +234,6 @@ public sealed partial class AmbientSoundSystem : SharedAmbientSoundSystem
     /// </summary>
     private void ProcessNearbyAmbience(TransformComponent playerXform)
     {
-        var query = GetEntityQuery<TransformComponent>();
-        var metaQuery = GetEntityQuery<MetaDataComponent>();
         var mapPos = _xformSystem.GetMapCoordinates(playerXform);
 
         // Remove out-of-range ambiences
@@ -251,9 +246,9 @@ public sealed partial class AmbientSoundSystem : SharedAmbientSoundSystem
             if (comp.Enabled &&
                 // Don't keep playing sounds that have changed since.
                 sound.Sound == comp.Sound &&
-                query.TryGetComponent(owner, out var xform) &&
+                TryComp(owner, out TransformComponent? xform) &&
                 xform.MapID == playerXform.MapID &&
-                !metaQuery.GetComponent(owner).EntityPaused)
+                !Paused(owner))
             {
                 // TODO: This is just trydistance for coordinates.
                 var distance = (xform.ParentUid == playerXform.ParentUid)
@@ -296,7 +291,7 @@ public sealed partial class AmbientSoundSystem : SharedAmbientSoundSystem
                 var comp = sourceEntity.Comp;
 
                 if (_playingSounds.ContainsKey(sourceEntity) ||
-                    metaQuery.GetComponent(uid).EntityPaused)
+                    Paused(uid))
                     continue;
 
                 var audioParams = _params

@@ -43,7 +43,7 @@ public sealed partial class DecalPlacementSystem : EntitySystem
     public (DecalPrototype? Decal, bool Snap, Angle Angle, Color Color) GetActiveDecal()
     {
         return _active && _decalId != null ?
-            (_protoMan.Index<DecalPrototype>(_decalId), _snap, _decalAngle, _decalColor) :
+            (ProtoMan.Index<DecalPrototype>(_decalId), _snap, _decalAngle, _decalColor) :
             (null, false, Angle.Zero, Color.Wheat);
     }
 
@@ -144,7 +144,7 @@ public sealed partial class DecalPlacementSystem : EntitySystem
         if (ev.Action != null)
             return;
 
-        if (_decalId == null || !_protoMan.TryIndex<DecalPrototype>(_decalId, out var decalProto))
+        if (_decalId == null || !ProtoMan.TryIndex<DecalPrototype>(_decalId, out var decalProto))
             return;
 
         var actionEvent = new PlaceDecalActionEvent()

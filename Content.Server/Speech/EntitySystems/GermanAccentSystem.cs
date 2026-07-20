@@ -1,7 +1,9 @@
 using System.Text;
-using Content.Server.Speech.Components;
-using Robust.Shared.Random;
 using System.Text.RegularExpressions;
+using Content.Server.Speech.Components;
+using Content.Shared.Speech;
+using Content.Shared.Speech.EntitySystems;
+using Robust.Shared.Random;
 
 namespace Content.Server.Speech.EntitySystems;
 
@@ -13,12 +15,7 @@ public sealed partial class GermanAccentSystem : EntitySystem
     private static readonly Regex RegexTh = new(@"(?<=\s|^)th", RegexOptions.IgnoreCase);
     private static readonly Regex RegexThe = new(@"(?<=\s|^)the(?=\s|$)", RegexOptions.IgnoreCase);
 
-    public override void Initialize()
-    {
-        SubscribeLocalEvent<GermanAccentComponent, AccentGetEvent>(OnAccent);
-    }
-
-    public string Accentuate(string message)
+    public override string Accentuate(string message, Entity<GermanAccentComponent>? ent = null)
     {
         var msg = message;
 
@@ -76,10 +73,5 @@ public sealed partial class GermanAccentSystem : EntitySystem
         }
 
         return msgBuilder.ToString();
-    }
-
-    private void OnAccent(Entity<GermanAccentComponent> ent, ref AccentGetEvent args)
-    {
-        args.Message = Accentuate(args.Message);
     }
 }

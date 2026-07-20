@@ -1,5 +1,4 @@
 using Content.Client.Interactable.Components;
-using Content.Client.StatusIcon;
 using Content.Shared.Stealth;
 using Content.Shared.Stealth.Components;
 using Robust.Client.GameObjects;
@@ -22,7 +21,7 @@ public sealed partial class StealthSystem : SharedStealthSystem
     {
         base.Initialize();
 
-        _shader = _protoMan.Index(Shader).InstanceUnique();
+        _shader = ProtoMan.Index(Shader).InstanceUnique();
 
         SubscribeLocalEvent<StealthComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<StealthComponent, ComponentStartup>(OnStartup);
@@ -94,6 +93,7 @@ public sealed partial class StealthSystem : SharedStealthSystem
 
         _shader.SetParameter("reference", reference);
         _shader.SetParameter("visibility", visibility);
+        _shader.SetParameter("shimmer_frequency", component.ShimmerFrequency);
 
         visibility = MathF.Max(0, visibility);
         _sprite.SetColor((uid, args.Sprite), new Color(visibility, visibility, 1, 1));

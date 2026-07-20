@@ -1,5 +1,6 @@
 using Content.Client.Parallax;
 using Content.Client.Weather;
+using Content.Shared.StatusEffectNew;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 

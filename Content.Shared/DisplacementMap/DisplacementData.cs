@@ -14,4 +14,7 @@ public sealed partial class DisplacementData
 
     [DataField]
     public string? ShaderOverride = "DisplacedDraw";
+
+    [DataField]
+    public string ShaderOverrideUnshaded = "DisplacedDrawUnshaded";
 }

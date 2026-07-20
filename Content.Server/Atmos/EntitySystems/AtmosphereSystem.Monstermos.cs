@@ -605,6 +605,7 @@ namespace Content.Server.Atmos.EntitySystems
 
             UpdateAdjacentTiles(ent, tile);
             UpdateAdjacentTiles(ent, other);
+
             InvalidateVisuals(ent, tile);
             InvalidateVisuals(ent, other);
         }

@@ -4,6 +4,9 @@ lobbyenabled = false
 # Dev map for faster loading & convenience
 map = "RMCDev"
 role_timers = false
+admin_job_tracking = true
+role_loadout_timers = false
+new_character_jobs = "Passenger, Captain"
 
 [events]
 enabled = false
@@ -40,8 +43,13 @@ emergency = false
 arrivals = false
 preload_grids = false
 
+[afk]
+time = 0
+
 [admin]
+afk_time = 0
 see_own_notes = true
+new_player_threshold = 120
 
 [rmc]
 automatic_commander_promotion = false

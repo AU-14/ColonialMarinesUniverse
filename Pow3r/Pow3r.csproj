@@ -1,9 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>$(TargetFramework)</TargetFramework>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+      <Nullable>disable</Nullable>
     </PropertyGroup>
+
+    <Import Project="../MSBuild/Content.props" />
 
     <ItemGroup>
       <PackageReference Include="ImGui.NET" />

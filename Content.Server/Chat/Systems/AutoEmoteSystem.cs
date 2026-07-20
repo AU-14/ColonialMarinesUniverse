@@ -1,6 +1,6 @@
 using System.Linq;
+using Content.Shared.Chat;
 using Content.Shared.Chat.Prototypes;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
@@ -38,7 +38,7 @@ public sealed partial class AutoEmoteSystem : EntitySystem
                 if (time > curTime)
                     continue;
 
-                var autoEmotePrototype = _prototypeManager.Index<AutoEmotePrototype>(key);
+                var autoEmotePrototype = ProtoMan.Index<AutoEmotePrototype>(key);
                 ResetTimer(uid, key, autoEmote, autoEmotePrototype);
 
                 if (!_random.Prob(autoEmotePrototype.Chance))
@@ -46,7 +46,11 @@ public sealed partial class AutoEmoteSystem : EntitySystem
 
                 if (autoEmotePrototype.WithChat)
                 {
-                    _chatSystem.TryEmoteWithChat(uid, autoEmotePrototype.EmoteId, autoEmotePrototype.HiddenFromChatWindow ? ChatTransmitRange.HideChat : ChatTransmitRange.Normal);
+                    _chatSystem.TryEmoteWithChat(uid,
+                        autoEmotePrototype.EmoteId,
+                        autoEmotePrototype.HiddenFromChatWindow ? ChatTransmitRange.HideChat : ChatTransmitRange.Normal,
+                        ignoreActionBlocker: autoEmotePrototype.IgnoreActionBlocker,
+                        forceEmote: autoEmotePrototype.Force);
                 }
                 else
                 {
@@ -101,7 +105,7 @@ public sealed partial class AutoEmoteSystem : EntitySystem
         if (!Resolve(uid, ref autoEmote, logMissing: false))
             return false;
 
-        DebugTools.Assert(_prototypeManager.HasIndex<AutoEmotePrototype>(autoEmotePrototypeId), "Prototype not found. Did you make a typo?");
+        DebugTools.Assert(ProtoMan.HasIndex<AutoEmotePrototype>(autoEmotePrototypeId), "Prototype not found. Did you make a typo?");
 
         if (!autoEmote.EmoteTimers.Remove(autoEmotePrototypeId))
             return false;
@@ -127,7 +131,7 @@ public sealed partial class AutoEmoteSystem : EntitySystem
         if (!autoEmote.Emotes.Contains(autoEmotePrototypeId))
             return false;
 
-        autoEmotePrototype ??= _prototypeManager.Index<AutoEmotePrototype>(autoEmotePrototypeId);
+        autoEmotePrototype ??= ProtoMan.Index<AutoEmotePrototype>(autoEmotePrototypeId);
 
         var curTime = _gameTiming.CurTime;
         var time = curTime + autoEmotePrototype.Interval;

@@ -14,8 +14,6 @@ public sealed partial class ExaminableHungerSystem : EntitySystem
     {
         base.Initialize();
 
-        _hungerQuery = GetEntityQuery<HungerComponent>();
-
         SubscribeLocalEvent<ExaminableHungerComponent, ExaminedEvent>(OnExamine);
     }
 

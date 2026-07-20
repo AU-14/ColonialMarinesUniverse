@@ -1,7 +1,6 @@
 using System.Numerics;
 using Content.Server.Chat.Systems;
 using Content.Server.GameTicking.Rules;
-using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Server.StationEvents.Components;
 using Content.Shared.GameTicking.Components;
@@ -49,7 +48,7 @@ public sealed partial class MeteorSwarmSystem : GameRuleSystem<MeteorSwarmCompon
             return;
 
         var station = RobustRandom.Pick(_station.GetStations());
-        if (_station.GetLargestGrid(Comp<StationDataComponent>(station)) is not { } grid)
+        if (_station.GetLargestGrid(station) is not { } grid)
             return;
 
         var mapId = Transform(grid).MapID;
@@ -60,14 +59,23 @@ public sealed partial class MeteorSwarmSystem : GameRuleSystem<MeteorSwarmCompon
 
         var center = playableArea.Center;
 
+        IRobustRandom random;
+        if (component.NonDirectional)
+        {
+            random = RobustRandom;
+        }
+        else
+        {
+            random = new RobustRandom();
+            random.SetSeed(uid.Id);
+        }
+
         var meteorsToSpawn = component.MeteorsPerWave.Next(RobustRandom);
         for (var i = 0; i < meteorsToSpawn; i++)
         {
             var spawnProto = RobustRandom.Pick(component.Meteors);
 
-            var angle = component.NonDirectional
-                ? RobustRandom.NextAngle()
-                : new Random(uid.Id).NextAngle();
+            var angle = random.NextAngle();
 
             var offset = angle.RotateVec(new Vector2((maximumDistance - minimumDistance) * RobustRandom.NextFloat() + minimumDistance, 0));
 

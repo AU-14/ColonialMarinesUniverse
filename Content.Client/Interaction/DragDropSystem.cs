@@ -111,8 +111,8 @@ public sealed partial class DragDropSystem : SharedDragDropSystem
 
         Subs.CVar(_cfgMan, CCVars.DragDropDeadZone, SetDeadZone, true);
 
-        _dropTargetInRangeShader = _prototypeManager.Index(ShaderDropTargetInRange).Instance();
-        _dropTargetOutOfRangeShader = _prototypeManager.Index(ShaderDropTargetOutOfRange).Instance();
+        _dropTargetInRangeShader = ProtoMan.Index(ShaderDropTargetInRange).Instance();
+        _dropTargetOutOfRangeShader = ProtoMan.Index(ShaderDropTargetOutOfRange).Instance();
         // needs to fire on mouseup and mousedown so we can detect a drag / drop
         CommandBinds.Builder
             .BindBefore(EngineKeyFunctions.Use, new PointerInputCmdHandler(OnUse, false, true), new[] { typeof(SharedInteractionSystem) })
@@ -433,11 +433,9 @@ public sealed partial class DragDropSystem : SharedDragDropSystem
         var bounds = new Box2(mousePos.Position - expansion, mousePos.Position + expansion);
         var pvsEntities = _lookup.GetEntitiesIntersecting(mousePos.MapId, bounds);
 
-        var spriteQuery = GetEntityQuery<SpriteComponent>();
-
         foreach (var entity in pvsEntities)
         {
-            if (!spriteQuery.TryGetComponent(entity, out var inRangeSprite) ||
+            if (!_spriteQuery.TryGetComponent(entity, out var inRangeSprite) ||
                 !inRangeSprite.Visible ||
                 entity == _draggedEntity)
             {

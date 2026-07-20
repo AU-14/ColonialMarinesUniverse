@@ -557,7 +557,7 @@ public sealed partial class MappingState : GameplayStateBase
 
                 var placement = new PlacementInformation
                 {
-                    PlacementOption = placementId > 0 ? EntitySpawnWindow.InitOpts[placementId] : entity.PlacementMode,
+                    PlacementOption = placementId > 0 ? _placement.AllModeNames[placementId] : entity.PlacementMode,
                     EntityType = entity.ID,
                     IsTile = false
                 };
@@ -656,7 +656,7 @@ public sealed partial class MappingState : GameplayStateBase
         {
             var placement = new PlacementInformation
             {
-                PlacementOption = EntitySpawnWindow.InitOpts[args.Id],
+                PlacementOption = _placement.AllModeNames[args.Id],
                 EntityType = _placement.CurrentPermission!.EntityType,
                 TileType = _placement.CurrentPermission.TileType,
                 Range = 2,
@@ -747,12 +747,13 @@ public sealed partial class MappingState : GameplayStateBase
     {
 #if FULL_RELEASE
         return false;
-#endif
+#else
         if (!_admin.IsAdmin(true) || !_admin.HasFlag(AdminFlags.Host))
             return false;
 
         SaveMap();
         return true;
+#endif
     }
 
     private bool HandleEnablePick(ICommonSession? session, EntityCoordinates coords, EntityUid uid)
@@ -862,7 +863,7 @@ public sealed partial class MappingState : GameplayStateBase
         }
         else
         {
-            button.ChildrenPrototypes.DisposeAllChildren();
+            button.ChildrenPrototypes.RemoveAllChildren();
             button.CollapseButton.Label.Text = "▶";
         }
     }

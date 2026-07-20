@@ -28,6 +28,12 @@ namespace Content.Server.NodeContainer.Nodes
             }
         }
 
+        [Obsolete("Use the overload that passes in Entity<MapGridComponent> and SharedMapSystem")]
+        public static IEnumerable<Node> GetNodesInTile(EntityQuery<NodeContainerComponent> nodeQuery, MapGridComponent grid, Vector2i coords)
+        {
+            return GetNodesInTile(nodeQuery, (grid.Owner, grid), coords, IoCManager.Resolve<IEntityManager>().System<SharedMapSystem>());
+        }
+
         public static IEnumerable<(Direction dir, Node node)> GetCardinalNeighborNodes(
             EntityQuery<NodeContainerComponent> nodeQuery,
             Entity<MapGridComponent> grid,
@@ -45,6 +51,16 @@ namespace Content.Server.NodeContainer.Nodes
                     yield return (dir, node);
                 }
             }
+        }
+
+        [Obsolete("Use the overload that passes in Entity<MapGridComponent> and SharedMapSystem")]
+        public static IEnumerable<(Direction dir, Node node)> GetCardinalNeighborNodes(
+            EntityQuery<NodeContainerComponent> nodeQuery,
+            MapGridComponent grid,
+            Vector2i coords,
+            bool includeSameTile = true)
+        {
+            return GetCardinalNeighborNodes(nodeQuery, (grid.Owner, grid), coords, IoCManager.Resolve<IEntityManager>().System<SharedMapSystem>(), includeSameTile);
         }
 
         [SuppressMessage("ReSharper", "EnforceForeachStatementBraces")]

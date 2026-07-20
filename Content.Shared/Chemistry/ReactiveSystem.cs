@@ -1,13 +1,10 @@
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Chemistry.Components;
-using Content.Shared.Chemistry.Reaction;
 using Content.Shared.Chemistry.Reagent;
-using Content.Shared.Database;
-using Content.Shared.EntityEffects;
+using Content.Shared.FixedPoint;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Random;
 
 namespace Content.Shared.Chemistry;
 
@@ -18,15 +15,16 @@ public sealed partial class ReactiveSystem : EntitySystem
     [Dependency] private IRobustRandom _robustRandom = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
 
+    // TODO: Someone add documentation, I beg you
     public void DoEntityReaction(EntityUid uid, Solution solution, ReactionMethod method)
     {
         foreach (var reagent in solution.Contents.ToArray())
         {
-            ReactionEntity(uid, method, reagent, solution);
+            ReactionEntity(uid, method, reagent);
         }
     }
 
-    public void ReactionEntity(EntityUid uid, ReactionMethod method, ReagentQuantity reagentQuantity, Solution? source)
+    public void ReactionEntity(EntityUid uid, ReactionMethod method, ReagentQuantity reagentQuantity)
     {
         // We throw if the reagent specified doesn't exist.
         var proto = _prototypeManager.IndexReagent<ReagentPrototype>(reagentQuantity.Reagent.Prototype);
@@ -39,71 +37,12 @@ public sealed partial class ReactiveSystem : EntitySystem
         if (!TryComp(uid, out ReactiveComponent? reactive))
             return;
 
-        // custom event for bypassing reactivecomponent stuff
-        var ev = new ReactionEntityEvent(method, proto, reagentQuantity, source);
+        // We throw if the reagent specified doesn't exist.
+        if (!ProtoMan.Resolve<ReagentPrototype>(reagentQuantity.Reagent.Prototype, out var proto))
+            return;
+
+        var ev = new ReactionEntityEvent(method, reagentQuantity, proto);
         RaiseLocalEvent(uid, ref ev);
-
-        // If we have a source solution, use the reagent quantity we have left. Otherwise, use the reaction volume specified.
-        var args = new EntityEffectReagentArgs(uid, EntityManager, null, source, source?.GetReagentQuantity(reagentQuantity.Reagent) ?? reagentQuantity.Quantity, proto, method, 1f);
-
-        // First, check if the reagent wants to apply any effects.
-        if (proto.ReactiveEffects != null && reactive.ReactiveGroups != null)
-        {
-            foreach (var (key, val) in proto.ReactiveEffects)
-            {
-                if (!val.Methods.Contains(method))
-                    continue;
-
-                if (!reactive.ReactiveGroups.ContainsKey(key))
-                    continue;
-
-                if (!reactive.ReactiveGroups[key].Contains(method))
-                    continue;
-
-                foreach (var effect in val.Effects)
-                {
-                    if (!effect.ShouldApply(args, _robustRandom))
-                        continue;
-
-                    if (effect.ShouldLog)
-                    {
-                        var entity = args.TargetEntity;
-                        _adminLogger.Add(LogType.ReagentEffect, effect.LogImpact,
-                            $"Reactive effect {effect.GetType().Name:effect} of reagent {proto.ID:reagent} with method {method} applied on entity {ToPrettyString(entity):entity} at {Transform(entity).Coordinates:coordinates}");
-                    }
-
-                    effect.Effect(args);
-                }
-            }
-        }
-
-        // Then, check if the prototype has any effects it can apply as well.
-        if (reactive.Reactions != null)
-        {
-            foreach (var entry in reactive.Reactions)
-            {
-                if (!entry.Methods.Contains(method))
-                    continue;
-
-                if (entry.Reagents != null && !entry.Reagents.Contains(proto.ID))
-                    continue;
-
-                foreach (var effect in entry.Effects)
-                {
-                    if (!effect.ShouldApply(args, _robustRandom))
-                        continue;
-
-                    if (effect.ShouldLog)
-                    {
-                        var entity = args.TargetEntity;
-                        _adminLogger.Add(LogType.ReagentEffect, effect.LogImpact,
-                            $"Reactive effect {effect.GetType().Name:effect} of {ToPrettyString(entity):entity} using reagent {proto.ID:reagent} with method {method} at {Transform(entity).Coordinates:coordinates}");
-                    }
-
-                    effect.Effect(args);
-                }
-            }
-        }
     }
 }
 public enum ReactionMethod
@@ -114,9 +53,4 @@ Ingestion,
 }
 
 [ByRefEvent]
-public readonly record struct ReactionEntityEvent(
-    ReactionMethod Method,
-    ReagentPrototype Reagent,
-    ReagentQuantity ReagentQuantity,
-    Solution? Source
-);
+public readonly record struct ReactionEntityEvent(ReactionMethod Method, ReagentQuantity ReagentQuantity, ReagentPrototype Reagent);

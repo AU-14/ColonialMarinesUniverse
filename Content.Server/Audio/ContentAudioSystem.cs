@@ -36,7 +36,7 @@ public sealed partial class ContentAudioSystem : SharedContentAudioSystem
             {
                 //Checks to see if the sound collection exists. If it does change it if not defaults to null
                 // as the new _lobbyMusicCollection meaning it wont play anything in the lobby.
-                if(_prototypeManager.TryIndex<SoundCollectionPrototype>(x, out var outputSoundCollection))
+                if(ProtoMan.TryIndex<SoundCollectionPrototype>(x, out var outputSoundCollection))
                 {
                     _lobbyMusicCollection = outputSoundCollection;
                 }

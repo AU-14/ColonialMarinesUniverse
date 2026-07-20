@@ -1,7 +1,3 @@
-using Content.Server.DeviceLinking.Systems;
-using Content.Server.DeviceNetwork;
-using Content.Server.DeviceNetwork.Systems;
-using Content.Server.Emp;
 using Content.Server.Ghost;
 using Content.Server.Light.Components;
 using Content.Server.Power.Components;
@@ -25,7 +21,12 @@ using Content.Shared.DeviceNetwork;
 using Content.Shared.DeviceNetwork.Events;
 using Content.Shared.Power;
 
-namespace Content.Server.Light.EntitySystems
+namespace Content.Server.Light.EntitySystems;
+
+/// <summary>
+///     System for the PoweredLightComponents
+/// </summary>
+public sealed class PoweredLightSystem : SharedPoweredLightSystem
 {
     /// <summary>
     ///     System for the PoweredLightComponents
@@ -44,10 +45,32 @@ namespace Content.Server.Light.EntitySystems
         [Dependency] private SharedAppearanceSystem _appearance = default!;
         [Dependency] private DamageOnInteractSystem _damageOnInteractSystem = default!;
 
-        private static readonly TimeSpan ThunkDelay = TimeSpan.FromSeconds(2);
-        public const string LightBulbContainer = "light_bulb";
+        SubscribeLocalEvent<PoweredLightComponent, GhostBooEvent>(OnGhostBoo);
+    }
 
-        public override void Initialize()
+    private void OnGhostBoo(EntityUid uid, PoweredLightComponent light, GhostBooEvent args)
+    {
+        if (light.IgnoreGhostsBoo || HasComp<BlinkingPoweredLightComponent>(uid))
+            return; // The light is immune or already blinking.
+
+        // check cooldown first to prevent abuse
+        var curTime = GameTiming.CurTime;
+        if (light.LastGhostBlink != null && curTime <= light.LastGhostBlink + light.GhostBlinkingCooldown)
+            return;
+
+        light.LastGhostBlink = curTime;
+
+        var blinkingComp = EnsureComp<BlinkingPoweredLightComponent>(uid);
+        blinkingComp.StopBlinkingTime = curTime + light.GhostBlinkingTime;
+        Dirty(uid, blinkingComp);
+
+        args.Handled = true;
+    }
+
+    private void OnMapInit(EntityUid uid, PoweredLightComponent light, MapInitEvent args)
+    {
+        // TODO: Use ContainerFill dog
+        if (light.HasLampOnSpawn != null)
         {
             base.Initialize();
             SubscribeLocalEvent<PoweredLightComponent, ComponentInit>(OnInit);
@@ -439,5 +462,7 @@ namespace Content.Server.Light.EntitySystems
             if (TryDestroyBulb(uid, component))
                 args.Affected = true;
         }
+        // need this to update visualizers
+        UpdateLight(uid, light);
     }
 }

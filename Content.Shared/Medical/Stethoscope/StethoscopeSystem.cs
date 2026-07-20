@@ -1,5 +1,6 @@
 using Content.Shared.Actions;
-using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
 using Content.Shared.Inventory;
@@ -95,12 +96,11 @@ public sealed partial class StethoscopeSystem : EntitySystem
     {
         // TODO: Add check for respirator component when it gets moved to shared.
         // If the mob is dead or cannot asphyxiation damage, the popup shows nothing.
-        if (!TryComp<MobStateComponent>(target, out var mobState)                        ||
-            !TryComp<DamageableComponent>(target, out var damageComp) ||
-            _mobState.IsDead(target, mobState)                                           ||
-            !damageComp.Damage.DamageDict.TryGetValue(DamageToListenFor, out var asphyxDmg))
+        if (!TryComp<MobStateComponent>(target, out var mobState)
+            || _mobState.IsDead(target, mobState)
+            || !_damageable.GetAllDamage(target).DamageDict.TryGetValue(DamageToListenFor, out var asphyxDmg))
         {
-            _popup.PopupPredicted(Loc.GetString("stethoscope-nothing"), target, user);
+            _popup.PopupEntity(Loc.GetString("stethoscope-nothing"), target, user);
             stethoscope.Comp.LastMeasuredDamage = null;
             return;
         }
@@ -110,12 +110,12 @@ public sealed partial class StethoscopeSystem : EntitySystem
         // Don't show the change if this is the first time listening.
         if (stethoscope.Comp.LastMeasuredDamage == null)
         {
-            _popup.PopupPredicted(absString, target, user);
+            _popup.PopupEntity(absString, target, user);
         }
         else
         {
             var deltaString = GetDeltaDamageString(stethoscope.Comp.LastMeasuredDamage.Value, asphyxDmg);
-            _popup.PopupPredicted(Loc.GetString("stethoscope-combined-status", ("absolute", absString), ("delta", deltaString)), target, user);
+            _popup.PopupEntity(Loc.GetString("stethoscope-combined-status", ("absolute", absString), ("delta", deltaString)), target, user);
         }
 
         stethoscope.Comp.LastMeasuredDamage = asphyxDmg;

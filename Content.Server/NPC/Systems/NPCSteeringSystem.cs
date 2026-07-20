@@ -30,11 +30,16 @@ using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Content.Shared.Prying.Systems;
 using Microsoft.Extensions.ObjectPool;
+using Prometheus;
 
 namespace Content.Server.NPC.Systems;
 
 public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
 {
+    private static readonly Gauge ActiveSteeringGauge = Metrics.CreateGauge(
+        "npc_steering_active_count",
+        "Amount of NPCs trying to actively do steering");
+
     /*
      * We use context steering to determine which way to move.
      * This involves creating an array of possible directions and assigning a value for the desireability of each direction.
@@ -63,11 +68,11 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedCombatModeSystem _combat = default!;
 
-    private EntityQuery<FixturesComponent> _fixturesQuery;
-    private EntityQuery<MovementSpeedModifierComponent> _modifierQuery;
-    private EntityQuery<NpcFactionMemberComponent> _factionQuery;
-    private EntityQuery<PhysicsComponent> _physicsQuery;
-    private EntityQuery<TransformComponent> _xformQuery;
+    [Dependency] private EntityQuery<FixturesComponent> _fixturesQuery = default!;
+    [Dependency] private EntityQuery<MovementSpeedModifierComponent> _modifierQuery = default!;
+    [Dependency] private EntityQuery<NpcFactionMemberComponent> _factionQuery = default!;
+    [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
+    [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
 
     private ObjectPool<HashSet<EntityUid>> _entSetPool =
         new DefaultObjectPool<HashSet<EntityUid>>(new SetPolicy<EntityUid>());
@@ -87,16 +92,13 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
 
     private object _obstacles = new();
 
+    private int _activeSteeringCount;
+
     public override void Initialize()
     {
         base.Initialize();
 
         Log.Level = LogLevel.Info;
-        _fixturesQuery = GetEntityQuery<FixturesComponent>();
-        _modifierQuery = GetEntityQuery<MovementSpeedModifierComponent>();
-        _factionQuery = GetEntityQuery<NpcFactionMemberComponent>();
-        _physicsQuery = GetEntityQuery<PhysicsComponent>();
-        _xformQuery = GetEntityQuery<TransformComponent>();
 
         for (var i = 0; i < InterestDirections; i++)
         {
@@ -244,12 +246,15 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         };
         var curTime = _timing.CurTime;
 
+        _activeSteeringCount = 0;
+
         Parallel.For(0, index, options, i =>
         {
             var (uid, steering, mover, xform) = npcs[i];
             Steer(uid, steering, mover, xform, frameTime, curTime);
         });
 
+        ActiveSteeringGauge.Set(_activeSteeringCount);
 
         if (_subscribedSessions.Count > 0)
         {
@@ -323,6 +328,8 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
             steering.Status = SteeringStatus.NoPath;
             return;
         }
+
+        Interlocked.Increment(ref _activeSteeringCount);
 
         var agentRadius = steering.Radius;
         var worldPos = _transform.GetWorldPosition(xform);

@@ -1,13 +1,12 @@
-using Content.Shared.DeviceNetwork;
-using JetBrains.Annotations;
-using Robust.Shared.Prototypes;
-using Robust.Shared.Random;
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
+using Content.Shared.DeviceNetwork;
 using Content.Shared.DeviceNetwork.Components;
 using Content.Shared.DeviceNetwork.Events;
 using Content.Shared.DeviceNetwork.Systems;
 using Content.Shared.Examine;
+using JetBrains.Annotations;
+using Robust.Shared.Random;
 
 namespace Content.Server.DeviceNetwork.Systems
 {
@@ -107,14 +106,14 @@ namespace Content.Server.DeviceNetwork.Systems
         {
             if (device.ReceiveFrequency == null
                 && device.ReceiveFrequencyId != null
-                && _protoMan.TryIndex<DeviceFrequencyPrototype>(device.ReceiveFrequencyId, out var receive))
+                && ProtoMan.TryIndex<DeviceFrequencyPrototype>(device.ReceiveFrequencyId, out var receive))
             {
                 device.ReceiveFrequency = receive.Frequency;
             }
 
             if (device.TransmitFrequency == null
                 && device.TransmitFrequencyId != null
-                && _protoMan.TryIndex<DeviceFrequencyPrototype>(device.TransmitFrequencyId, out var xmit))
+                && ProtoMan.TryIndex<DeviceFrequencyPrototype>(device.TransmitFrequencyId, out var xmit))
             {
                 device.TransmitFrequency = xmit.Frequency;
             }
@@ -349,7 +348,7 @@ namespace Content.Server.DeviceNetwork.Systems
                 if (connection.Owner == packet.Sender)
                     continue;
 
-                BeforePacketSentEvent beforeEv = new(packet.Sender, xform, senderPos, connection.NetIdEnum.ToString());
+                BeforePacketSentEvent beforeEv = new(packet.Sender, xform, senderPos, connection.NetIdEnum.ToString(), packet.Frequency);
                 RaiseLocalEvent(connection.Owner, beforeEv, false);
 
                 if (!beforeEv.Cancelled)

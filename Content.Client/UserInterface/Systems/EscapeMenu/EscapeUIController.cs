@@ -77,6 +77,12 @@ public sealed partial class EscapeUIController : UIController, IOnStateEntered<G
         _escapeWindow.OnClose += DeactivateButton;
         _escapeWindow.OnOpen += ActivateButton;
 
+        _escapeWindow.FeedbackButton.OnPressed += _ =>
+        {
+            CloseEscapeWindow();
+            _feedback.ToggleWindow();
+        };
+
         _escapeWindow.ChangelogButton.OnPressed += _ =>
         {
             CloseEscapeWindow();

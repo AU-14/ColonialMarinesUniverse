@@ -29,14 +29,6 @@ public sealed partial class XAEThrowThingsAroundSystem : BaseXAESystem<XAEThrowT
     private readonly HashSet<EntityUid> _entities = new();
 
     /// <inheritdoc />
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        _physQuery = GetEntityQuery<PhysicsComponent>();
-    }
-
-    /// <inheritdoc />
     protected override void OnActivated(Entity<XAEThrowThingsAroundComponent> ent, ref XenoArtifactNodeActivatedEvent args)
     {
         var component = ent.Comp;

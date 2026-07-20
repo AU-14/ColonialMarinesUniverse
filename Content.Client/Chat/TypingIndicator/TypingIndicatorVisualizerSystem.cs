@@ -1,6 +1,5 @@
 ﻿using Content.Shared.Chat.TypingIndicator;
 using Robust.Client.GameObjects;
-using Robust.Shared.Prototypes;
 using Content.Shared.Inventory;
 
 namespace Content.Client.Chat.TypingIndicator;
@@ -27,7 +26,7 @@ public sealed partial class TypingIndicatorVisualizerSystem : VisualizerSystem<T
         if (overrideIndicator != null)
             currentTypingIndicator = overrideIndicator.Value;
 
-        if (!_prototypeManager.TryIndex(currentTypingIndicator, out var proto))
+        if (!ProtoMan.Resolve(currentTypingIndicator, out var proto))
         {
             Log.Error($"Unknown typing indicator id: {component.TypingIndicatorPrototype}");
             return;
@@ -37,8 +36,7 @@ public sealed partial class TypingIndicatorVisualizerSystem : VisualizerSystem<T
         if (!layerExists)
             layer = SpriteSystem.LayerMapReserve((uid, args.Sprite), TypingIndicatorLayers.Base);
 
-        SpriteSystem.LayerSetRsi((uid, args.Sprite), layer, proto.SpritePath);
-        SpriteSystem.LayerSetRsiState((uid, args.Sprite), layer, proto.TypingState);
+        SpriteSystem.LayerSetRsi((uid, args.Sprite), layer, proto.SpritePath, proto.TypingState);
         args.Sprite.LayerSetShader(layer, proto.Shader);
         SpriteSystem.LayerSetOffset((uid, args.Sprite), layer, proto.Offset);
 

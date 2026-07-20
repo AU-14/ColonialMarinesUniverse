@@ -1,6 +1,7 @@
 using Content.Client.Atmos.Components;
 using Content.Shared._RMC14.Atmos; // RMC14
 using Content.Shared.Atmos;
+using Content.Shared.DisplacementMap;
 using Robust.Client.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Utility;
@@ -86,6 +87,7 @@ public sealed partial class FireVisualizerSystem : VisualizerSystem<FireVisualsC
 
         AppearanceSystem.TryGetData<bool>(uid, FireVisuals.OnFire, out var onFire, appearance);
         AppearanceSystem.TryGetData<float>(uid, FireVisuals.FireStacks, out var fireStacks, appearance);
+        AppearanceSystem.TryGetData<string?>(uid, FireVisuals.FireDisplacement, out var fireDisplacement, appearance);
         SpriteSystem.LayerSetVisible((uid, sprite), index, onFire);
 
         if (!onFire)

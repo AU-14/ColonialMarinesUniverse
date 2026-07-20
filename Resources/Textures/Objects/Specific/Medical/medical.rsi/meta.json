@@ -49,6 +49,9 @@
 		{
 			"name": "ointment"
 		},
+        {
+            "name": "ointment-storage"
+        },
 		{
 			"name": "ointment-inhand-left",
 			"directions": 4

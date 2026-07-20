@@ -7,6 +7,7 @@
     - id: SnailMigrationLowPop
     - id: CockroachMigration
     - id: MouseMigration
+    - id: RandomCritterHorde
 
 - type: entityTable
   id: SpicyPestEventsTable
@@ -22,9 +23,6 @@
   parent: BaseStationEventShortDelay
   components:
   - type: StationEvent
-    startAnnouncement: station-event-vent-creatures-start-announcement
-    startAudio:
-      path: /Audio/Announcements/attention.ogg
     earliestStart: 15
     weight: 6
     duration: 50
@@ -45,15 +43,12 @@
   parent: BaseStationEventShortDelay
   components:
   - type: StationEvent
-    startAnnouncement: station-event-vent-creatures-start-announcement
-    startAudio:
-      path: /Audio/Announcements/attention.ogg
     earliestStart: 15
     weight: 6
     duration: 50
     occursDuringRoundEnd: false
     minimumPlayers: 30 # Hopefully this is enough for the Rat King's potential Army (it was not, raised from 15 -> 30)
-  - type: VentCrittersRule
+  - type: VentCrittersRule # We don't use Horde here to make RK spawns less predictable.
     entries:
     - id: MobMouse
       prob: 0.02
@@ -72,9 +67,6 @@
   parent: BaseStationEventShortDelay
   components:
   - type: StationEvent
-    startAnnouncement: station-event-vent-creatures-start-announcement
-    startAudio:
-      path: /Audio/Announcements/attention.ogg
     weight: 6
     duration: 50
   - type: VentCrittersRule
@@ -83,15 +75,14 @@
       prob: 0.03
     - id: MobMothroach
       prob: 0.008
+    - id: MobMoproach
+      prob: 0.004
 
 - type: entity
   id: SnailMigrationLowPop
   parent: BaseStationEventShortDelay
   components:
   - type: StationEvent
-    startAnnouncement: station-event-vent-creatures-start-announcement
-    startAudio:
-      path: /Audio/Announcements/attention.ogg
     weight: 6
     duration: 50
   - type: VentCrittersRule
@@ -108,9 +99,6 @@
   parent: BaseStationEventShortDelay
   components:
   - type: StationEvent
-    startAnnouncement: station-event-vent-creatures-start-announcement
-    startAudio:
-      path: /Audio/Announcements/attention.ogg
     earliestStart: 15
     weight: 6
     duration: 50

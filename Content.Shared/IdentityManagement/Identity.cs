@@ -41,7 +41,7 @@ public static class Identity
         if (!ent.TryGetComponent<IdentityComponent>(uid, out var identity))
             return new IdentityEntity(uid, uidName);
 
-        var ident = identity.IdentityEntitySlot.ContainedEntity;
+        var ident = identity.IdentityEntitySlot?.ContainedEntity;
         if (ident is null)
             return new IdentityEntity(uid, uidName);
 
@@ -66,6 +66,7 @@ public static class Identity
     /// <param name="viewer">
     ///     If this entity can see through identities, this method will always return the actual target entity.
     /// </param>
+    /// <inheritdoc cref="Name" path="remarks" />
     public static EntityUid Entity(EntityUid uid, IEntityManager ent, EntityUid? viewer = null)
     {
         if (!ent.TryGetComponent<IdentityComponent>(uid, out var identity))
@@ -74,7 +75,7 @@ public static class Identity
         if (viewer != null && CanSeeThroughIdentity(uid, viewer.Value, ent))
             return uid;
 
-        return identity.IdentityEntitySlot.ContainedEntity ?? uid;
+        return identity.IdentityEntitySlot?.ContainedEntity ?? uid;
     }
 
     public static bool CanSeeThroughIdentity(EntityUid uid, EntityUid viewer, IEntityManager ent)

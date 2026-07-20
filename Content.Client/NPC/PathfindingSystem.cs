@@ -29,15 +29,13 @@ namespace Content.Client.NPC
             get => _modes;
             set
             {
-                var overlayManager = IoCManager.Resolve<IOverlayManager>();
-
                 if (value == PathfindingDebugMode.None)
                 {
                     Breadcrumbs.Clear();
                     Polys.Clear();
-                    overlayManager.RemoveOverlay<PathfindingOverlay>();
+                    _overlayManager.RemoveOverlay<PathfindingOverlay>();
                 }
-                else if (!overlayManager.HasOverlay<PathfindingOverlay>())
+                else if (!_overlayManager.HasOverlay<PathfindingOverlay>())
                 {
                     overlayManager.AddOverlay(new PathfindingOverlay(EntityManager, _eyeManager, _inputManager, _cache, this, _mapSystem, _transformSystem));
                 }

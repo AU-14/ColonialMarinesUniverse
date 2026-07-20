@@ -282,6 +282,14 @@ binds:
   type: State
   key: v
   mod1: Alt
+- function: InspectServerComponent
+  type: State
+  key: b
+  mod1: Alt
+- function: InspectClientComponent
+  type: State
+  key: c
+  mod1: Alt
 - function: MouseMiddle
   type: State
   key: MouseMiddle
@@ -483,7 +491,7 @@ binds:
   type: State
   key: F8
 - function: ToggleRoundEndSummaryWindow
-  type: Toggle
+  type: State
   key: F9
 - function: OpenSandboxWindow
   type: State
@@ -539,6 +547,9 @@ binds:
 - function: Arcade3
   type: State
   key: Z
+- function: ToggleKnockdown
+  type: State
+  key: C
 - function: OpenAbilitiesMenu
   type: State
   key: K

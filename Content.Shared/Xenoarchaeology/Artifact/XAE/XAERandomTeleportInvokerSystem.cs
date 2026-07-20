@@ -1,7 +1,10 @@
 using Content.Shared.Popups;
+using Content.Shared.Xenoarchaeology.Artifact.Components;
 using Content.Shared.Xenoarchaeology.Artifact.XAE.Components;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Systems;
 
 namespace Content.Shared.Xenoarchaeology.Artifact.XAE;
 
@@ -20,10 +23,13 @@ public sealed partial class XAERandomTeleportInvokerSystem : BaseXAESystem<XAERa
         // todo: teleport person who activated artifact with artifact itself
         var component = ent.Comp;
 
-        var xform = Transform(ent.Owner);
+        var xform = Transform(args.Artifact);
         _popup.PopupCoordinates(Loc.GetString("blink-artifact-popup"), xform.Coordinates, PopupType.Medium);
 
         var offsetTo = _random.NextVector2(component.MinRange, component.MaxRange);
-        _xform.SetCoordinates(ent.Owner, xform, xform.Coordinates.Offset(offsetTo));
+
+        _xform.AttachToGridOrMap(args.Artifact);
+        _jointSystem.ClearJoints(args.Artifact);
+        _xform.SetCoordinates(args.Artifact, xform, xform.Coordinates.Offset(offsetTo));
     }
 }

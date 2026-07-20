@@ -1,6 +1,6 @@
 using Content.Shared.Species.Components;
 using Content.Shared.Actions;
-using Content.Shared.Body.Systems;
+using Content.Shared.Gibbing;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
@@ -26,13 +26,12 @@ public sealed partial class GibActionSystem : EntitySystem
 
     private void OnMobStateChanged(EntityUid uid, GibActionComponent comp, MobStateChangedEvent args)
     {
-        // When the mob changes state, check if they're dead and give them the action if so. 
+        // When the mob changes state, check if they're dead and give them the action if so.
         if (!TryComp<MobStateComponent>(uid, out var mobState))
             return;
 
-        if (!_protoManager.TryIndex<EntityPrototype>(comp.ActionPrototype, out var actionProto))
+        if (!ProtoMan.TryIndex<EntityPrototype>(comp.ActionPrototype, out var actionProto))
             return;
-
 
         foreach (var allowedState in comp.AllowedStates)
         {
@@ -47,15 +46,15 @@ public sealed partial class GibActionSystem : EntitySystem
         // If they aren't given the action, remove it.
         _actionsSystem.RemoveAction(uid, comp.ActionEntity);
     }
-    
+
     private void OnGibAction(EntityUid uid, GibActionComponent comp, GibActionEvent args)
     {
         // When they use the action, gib them.
-        _popupSystem.PopupClient(Loc.GetString(comp.PopupText, ("name", uid)), uid, uid);
-        _bodySystem.GibBody(uid, true);
+        _popupSystem.PopupEntity(Loc.GetString(comp.PopupText, ("name", uid)), uid, uid);
+        _gibbing.Gib(uid, user: args.Performer);
     }
-       
 
 
-    public sealed partial class GibActionEvent : InstantActionEvent { } 
+
+    public sealed partial class GibActionEvent : InstantActionEvent { }
 }

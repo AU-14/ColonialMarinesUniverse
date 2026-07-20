@@ -1,10 +1,4 @@
-using Content.Shared.Access.Components;
-using Content.Shared.Access.Systems;
 using Content.Shared.Overlays;
-using Content.Shared.PDA;
-using Content.Shared.StatusIcon;
-using Content.Shared.StatusIcon.Components;
-using Robust.Shared.Prototypes;
 
 namespace Content.Client.Overlays;
 

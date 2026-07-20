@@ -2,6 +2,8 @@
 using Content.Server.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Power;
+using Content.Shared.Power.Components;
+using Content.Shared.Power.EntitySystems;
 using Robust.Server.GameObjects;
 
 namespace Content.Server.Power.EntitySystems;
@@ -89,13 +91,14 @@ public sealed partial class BatteryInterfaceSystem : EntitySystem
         if (!_uiSystem.IsUiOpen(uid, BatteryUiKey.Key))
             return;
 
+        var currentCharge = _battery.GetCharge((uid, battery));
         _uiSystem.SetUiState(
             uid,
             BatteryUiKey.Key,
             new BatteryBuiState
             {
                 Capacity = battery.MaxCharge,
-                Charge = battery.CurrentCharge,
+                Charge = currentCharge,
                 CanCharge = netBattery.CanCharge,
                 CanDischarge = netBattery.CanDischarge,
                 CurrentReceiving = netBattery.CurrentReceiving,

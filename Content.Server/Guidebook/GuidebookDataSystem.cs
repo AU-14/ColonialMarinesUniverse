@@ -72,7 +72,7 @@ public sealed partial class GuidebookDataSystem : EntitySystem
         }
 
         // Scan entity prototypes for the component-member pairs we noted
-        var entityPrototypes = _protoMan.EnumeratePrototypes<EntityPrototype>();
+        var entityPrototypes = ProtoMan.EnumeratePrototypes<EntityPrototype>();
         foreach (var prototype in entityPrototypes)
         {
             foreach (var (component, entry) in prototype.Components)

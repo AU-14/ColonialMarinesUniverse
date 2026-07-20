@@ -22,9 +22,9 @@ public sealed partial class DeliveryVisualizerSystem : VisualizerSystem<Delivery
         if (string.IsNullOrEmpty(job))
             job = UnknownIcon;
 
-        if (!_prototype.TryIndex<JobIconPrototype>(job, out var icon))
+        if (!ProtoMan.TryIndex<JobIconPrototype>(job, out var icon))
         {
-            SpriteSystem.LayerSetTexture((uid, args.Sprite), DeliveryVisualLayers.JobStamp, SpriteSystem.Frame0(_prototype.Index(UnknownIcon).Icon));
+            SpriteSystem.LayerSetTexture((uid, args.Sprite), DeliveryVisualLayers.JobStamp, SpriteSystem.Frame0(ProtoMan.Index(UnknownIcon).Icon));
             return;
         }
 

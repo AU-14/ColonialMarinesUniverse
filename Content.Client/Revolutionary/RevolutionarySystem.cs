@@ -1,7 +1,6 @@
 using Content.Shared.Revolutionary.Components;
 using Content.Shared.Revolutionary;
 using Content.Shared.StatusIcon.Components;
-using Robust.Shared.Prototypes;
 
 namespace Content.Client.Revolutionary;
 
@@ -25,13 +24,13 @@ public sealed partial class RevolutionarySystem : SharedRevolutionarySystem
         if (HasComp<HeadRevolutionaryComponent>(ent))
             return;
 
-        if (_prototype.TryIndex(ent.Comp.StatusIcon, out var iconPrototype))
+        if (ProtoMan.Resolve(ent.Comp.StatusIcon, out var iconPrototype))
             args.StatusIcons.Add(iconPrototype);
     }
 
     private void GetHeadRevIcon(Entity<HeadRevolutionaryComponent> ent, ref GetStatusIconsEvent args)
     {
-        if (_prototype.TryIndex(ent.Comp.StatusIcon, out var iconPrototype))
+        if (ProtoMan.Resolve(ent.Comp.StatusIcon, out var iconPrototype))
             args.StatusIcons.Add(iconPrototype);
     }
 }

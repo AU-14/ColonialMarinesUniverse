@@ -1,9 +1,8 @@
 using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
-using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Standing;
-using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
 
 namespace Content.Shared.Mobs.Systems;
@@ -20,12 +19,11 @@ public partial class MobStateSystem : EntitySystem
     [Dependency] private DamageableSystem _damageable = default!;
     private ISawmill _sawmill = default!;
 
-    private EntityQuery<MobStateComponent> _mobStateQuery;
+    [Dependency] private EntityQuery<MobStateComponent> _mobStateQuery = default!;
 
     public override void Initialize()
     {
-        _sawmill = _logManager.GetSawmill("MobState");
-        _mobStateQuery = GetEntityQuery<MobStateComponent>();
+        _sawmill = LogManager.GetSawmill("MobState");
         base.Initialize();
         SubscribeEvents();
     }

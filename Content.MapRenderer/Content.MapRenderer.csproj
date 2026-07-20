@@ -4,9 +4,11 @@
     <StartupObject>Content.MapRenderer.Program</StartupObject>
     <OutputPath>..\bin\Content.MapRenderer\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <Nullable>enable</Nullable>
     <ServerGarbageCollection>true</ServerGarbageCollection>
+    <IsTestingPlatformApplication>false</IsTestingPlatformApplication>
   </PropertyGroup>
+
+  <Import Project="../MSBuild/Content.props" />
 
   <ItemGroup>
     <ProjectReference Include="..\Content.IntegrationTests\Content.IntegrationTests.csproj" />
@@ -14,6 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="NUnit" />
+    <PackageReference Include="Moq" />
     <PackageReference Include="SixLabors.ImageSharp" />
   </ItemGroup>
 

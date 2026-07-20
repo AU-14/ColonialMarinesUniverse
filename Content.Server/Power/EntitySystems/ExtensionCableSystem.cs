@@ -255,25 +255,22 @@ namespace Content.Server.Power.EntitySystems
 
             var coordinates = xform.Coordinates;
             var nearbyEntities = _map.GetCellsInSquareArea(xform.GridUid.Value, grid, coordinates, (int)Math.Ceiling(range / grid.TileSize));
-            var cableQuery = GetEntityQuery<ExtensionCableProviderComponent>();
-            var metaQuery = GetEntityQuery<MetaDataComponent>();
-            var xformQuery = GetEntityQuery<TransformComponent>();
 
             Entity<ExtensionCableProviderComponent>? closestCandidate = null;
             var closestDistanceFound = float.MaxValue;
             foreach (var entity in nearbyEntities)
             {
-                if (entity == owner || !cableQuery.TryGetComponent(entity, out var provider) || !provider.Connectable)
+                if (entity == owner || !_cableProviderQuery.TryGetComponent(entity, out var provider) || !provider.Connectable)
                     continue;
 
                 if (EntityManager.IsQueuedForDeletion(entity))
                     continue;
 
-                if (!metaQuery.TryGetComponent(entity, out var meta) || meta.EntityLifeStage > EntityLifeStage.MapInitialized)
+                if (!TryComp(entity, out MetaDataComponent? meta) || meta.EntityLifeStage > EntityLifeStage.MapInitialized)
                     continue;
 
                 // Find the closest provider
-                if (!xformQuery.TryGetComponent(entity, out var entityXform))
+                if (!TryComp(entity, out TransformComponent? entityXform))
                     continue;
                 var distance = (entityXform.LocalPosition - xform.LocalPosition).Length();
                 if (distance >= closestDistanceFound)

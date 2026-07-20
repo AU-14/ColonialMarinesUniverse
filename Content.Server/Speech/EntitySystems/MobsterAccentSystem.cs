@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using Content.Server.Speech.Components;
+using Content.Shared.Speech.EntitySystems;
 using Robust.Shared.Random;
 
 namespace Content.Server.Speech.EntitySystems;
@@ -18,14 +19,7 @@ public sealed partial class MobsterAccentSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private ReplacementAccentSystem _replacement = default!;
 
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        SubscribeLocalEvent<MobsterAccentComponent, AccentGetEvent>(OnAccentGet);
-    }
-
-    public string Accentuate(string message, MobsterAccentComponent component)
+    public override string Accentuate(string message, Entity<MobsterAccentComponent>? ent = null)
     {
         // Order:
         // Do text manipulations first
@@ -72,7 +66,7 @@ public sealed partial class MobsterAccentSystem : EntitySystem
             //So the suffix can be allcapped
             var lastWordAllCaps = !RegexLastWord.Match(msg).Value.Any(char.IsLower);
             var suffix = "";
-            if (component.IsBoss)
+            if (ent.HasValue && ent.Value.Comp.IsBoss)
             {
                 var pick = _random.Next(1, 4);
                 suffix = Loc.GetString($"accent-mobster-suffix-boss-{pick}");
@@ -94,10 +88,5 @@ public sealed partial class MobsterAccentSystem : EntitySystem
         }
 
         return msg;
-    }
-
-    private void OnAccentGet(EntityUid uid, MobsterAccentComponent component, AccentGetEvent args)
-    {
-        args.Message = Accentuate(args.Message, component);
     }
 }

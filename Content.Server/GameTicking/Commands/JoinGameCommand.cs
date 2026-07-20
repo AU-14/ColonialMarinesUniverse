@@ -25,7 +25,10 @@ namespace Content.Server.GameTicking.Commands
         public JoinGameCommand()
         {
             IoCManager.InjectDependencies(this);
+
+            _sawmill = _logManager.GetSawmill("security");
         }
+
         public void Execute(IConsoleShell shell, string argStr, string[] args)
         {
             if (args.Length != 2)
@@ -46,8 +49,8 @@ namespace Content.Server.GameTicking.Commands
 
             if (ticker.PlayerGameStatuses.TryGetValue(player.UserId, out var status) && status == PlayerGameStatus.JoinedGame)
             {
-                Logger.InfoS("security", $"{player.Name} ({player.UserId}) attempted to latejoin while in-game.");
-                shell.WriteError($"{player.Name} is not in the lobby.   This incident will be reported.");
+                _sawmill.Info($"{player.Name} ({player.UserId}) attempted to latejoin while in-game.");
+                shell.WriteError($"{player.Name} is not in the lobby. This incident will be reported.");
                 return;
             }
 
@@ -56,33 +59,27 @@ namespace Content.Server.GameTicking.Commands
                 shell.WriteLine("Round has not started.");
                 return;
             }
-            else if (ticker.RunLevel == GameRunLevel.InRound)
+
+            var id = args[0];
+            if (!int.TryParse(args[1], out var sid))
             {
-                string id = args[0];
+                shell.WriteError(Loc.GetString("shell-argument-must-be-number"));
+            }
 
-                if (!int.TryParse(args[1], out var sid))
-                {
-                    shell.WriteError(Loc.GetString("shell-argument-must-be-number"));
-                }
-
-                var station = _entManager.GetEntity(new NetEntity(sid));
-                var jobPrototype = _prototypeManager.Index<JobPrototype>(id);
-                if(stationJobs.TryGetJobSlot(station, jobPrototype, out var slots) == false || slots == 0)
-                {
-                    shell.WriteLine($"{jobPrototype.LocalizedName} has no available slots.");
-                    return;
-                }
-
-                if (_adminManager.IsAdmin(player) && _cfg.GetCVar(CCVars.AdminDeadminOnJoin))
-                {
-                    _adminManager.DeAdmin(player);
-                }
-
-                ticker.MakeJoinGame(player, station, id);
+            var station = _entManager.GetEntity(new NetEntity(sid));
+            var jobPrototype = _prototypeManager.Index<JobPrototype>(id);
+            if (stationJobs.TryGetJobSlot(station, jobPrototype, out var slots) == false || slots == 0)
+            {
+                shell.WriteLine($"{jobPrototype.LocalizedName} has no available slots.");
                 return;
             }
 
-            ticker.MakeJoinGame(player, EntityUid.Invalid);
+            if (_adminManager.IsAdmin(player) && _cfg.GetCVar(CCVars.AdminDeadminOnJoin))
+            {
+                _adminManager.DeAdmin(player);
+            }
+
+            ticker.MakeJoinGame(player, station, id);
         }
     }
 }

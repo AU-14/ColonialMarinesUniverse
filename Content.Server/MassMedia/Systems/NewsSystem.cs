@@ -170,9 +170,7 @@ public sealed partial class NewsSystem : SharedNewsSystem
         ent.Comp.PublishEnabled = false;
         ent.Comp.NextPublish = _timing.CurTime + TimeSpan.FromSeconds(ent.Comp.PublishCooldown);
 
-        var tryGetIdentityShortInfoEvent = new TryGetIdentityShortInfoEvent(ent, msg.Actor);
-        RaiseLocalEvent(tryGetIdentityShortInfoEvent);
-        string? authorName = tryGetIdentityShortInfoEvent.Title;
+        var authorName = _identity.GetIdentityShortInfo(msg.Actor, ent);
 
         var title = msg.Title.Trim();
         var content = msg.Content.Trim();

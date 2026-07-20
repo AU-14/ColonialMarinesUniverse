@@ -9,18 +9,24 @@
 ## Technical details
 <!-- Summary of code changes for easier review. -->
 
+## Test plan
+<!--
+Describe how you tested the pull request, and how someone reviewing this PR can test it themselves.
+-->
+
 ## Media
 <!-- Attach media if the PR makes ingame changes (clothing, items, features, etc).
 Small fixes/refactors are exempt. Media may be used in RMC14 progress reports with credit. -->
 
 ## Requirements
-<!-- Confirm the following by placing an X in the brackets [X]: -->
+<!-- Confirm the following by placing an X in the brackets without spaces inside (for example: [X] ): -->
 - [ ] I have read and am following the [Pull Request and Changelog Guidelines](https://docs.spacestation14.com/en/general-development/codebase-info/pull-request-guidelines.html).
-- [ ] I have added media to this PR or it does not require an ingame showcase.
+- [ ] I have tested this pull request and written instructions on how to test it
+- [ ] I have added media to this PR or it does not require an in-game showcase.
 <!-- You should understand that not following the above may get your PR closed at maintainer’s discretion -->
 - [ ] By submitting this code and/or assets, I confirm that I either own them or have provided the correct necessary licenses to use and distribute them. I agree to be fully responsible for any legal claims or issues arising from the use of these materials.
 
-**Changelog**
+## Changelog
 <!-- Add a Changelog entry to make players aware of new features or changes that could affect gameplay.
 Admin changes may be listed for admins to see with admin:
 Coding changes with no changes visible in-game may be listed for other contributors with code:

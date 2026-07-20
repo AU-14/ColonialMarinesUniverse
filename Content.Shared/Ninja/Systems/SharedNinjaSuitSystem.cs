@@ -1,7 +1,7 @@
 using Content.Shared.Actions;
 using Content.Shared.Clothing;
 using Content.Shared.Clothing.Components;
-using Content.Shared.Clothing.EntitySystems;
+using Content.Shared.Emp;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared.Item.ItemToggle.Components;
@@ -98,7 +98,7 @@ public abstract partial class SharedNinjaSuitSystem : EntitySystem
     /// </summary>
     private void OnUnequipped(Entity<NinjaSuitComponent> ent, ref GotUnequippedEvent args)
     {
-        var user = args.Equipee;
+        var user = args.EquipTarget;
         if (_ninja.NinjaQuery.TryComp(user, out var ninja))
             UserUnequippedSuit(ent, (user, ninja));
     }
@@ -118,7 +118,7 @@ public abstract partial class SharedNinjaSuitSystem : EntitySystem
 
         // previously cloaked, disable abilities for a short time
         _audio.PlayPredicted(comp.RevealSound, uid, user);
-        Popup.PopupClient(Loc.GetString("ninja-revealed"), user, user, PopupType.MediumCaution);
+        Popup.PopupEntity(Loc.GetString("ninja-revealed"), user, user, PopupType.MediumCaution);
         _useDelay.TryResetDelay(uid, id: comp.DisableDelayId);
     }
 
@@ -168,7 +168,7 @@ public abstract partial class SharedNinjaSuitSystem : EntitySystem
         // mark the user as not wearing a suit
         _ninja.AssignSuit(user, null);
         // disable glove abilities
-        if (user.Comp.Gloves is {} uid)
+        if (user.Comp.Gloves is { } uid)
             _toggle.TryDeactivate(uid, user: user);
     }
 }

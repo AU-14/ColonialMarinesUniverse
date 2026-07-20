@@ -8,9 +8,7 @@ using Content.Shared.Gravity;
 using Content.Shared.Input;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Events;
-using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Rotatable;
-using Robust.Server.Physics;
 using Robust.Shared.Containers;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Map;
@@ -77,21 +75,11 @@ public sealed partial class PullController : VirtualController
     /// </summary>
     private const float ThresholdRotAngle = 22.5f;
 
-    private EntityQuery<PhysicsComponent> _physicsQuery;
-    private EntityQuery<PullableComponent> _pullableQuery;
-    private EntityQuery<PullerComponent> _pullerQuery;
-    private EntityQuery<TransformComponent> _xformQuery;
-
     public override void Initialize()
     {
         CommandBinds.Builder
             .Bind(ContentKeyFunctions.MovePulledObject, new PointerInputCmdHandler(OnRequestMovePulledObject))
             .Register<PullController>();
-
-        _physicsQuery = GetEntityQuery<PhysicsComponent>();
-        _pullableQuery = GetEntityQuery<PullableComponent>();
-        _pullerQuery = GetEntityQuery<PullerComponent>();
-        _xformQuery = GetEntityQuery<TransformComponent>();
 
         UpdatesAfter.Add(typeof(MoverController));
         SubscribeLocalEvent<PullMovingComponent, PullStoppedMessage>(OnPullStop);
@@ -206,8 +194,8 @@ public sealed partial class PullController : VirtualController
         if (!rotatable.RotateWhilePulling)
             return;
 
-        var pulledXform = _xformQuery.GetComponent(pulled);
-        var pullerXform = _xformQuery.GetComponent(puller);
+        var pulledXform = Transform(pulled);
+        var pullerXform = Transform(puller);
 
         var pullerData = TransformSystem.GetWorldPositionRotation(pullerXform);
         var pulledData = TransformSystem.GetWorldPositionRotation(pulledXform);
@@ -257,7 +245,7 @@ public sealed partial class PullController : VirtualController
             if (pullable.Puller is not {Valid: true} puller)
                 continue;
 
-            var pullerXform = _xformQuery.Get(puller);
+            var pullerXform = Transform(puller);
             var pullerPosition = TransformSystem.GetMapCoordinates(pullerXform);
 
             var movingTo = TransformSystem.ToMapCoordinates(mover.MovingTo);
@@ -317,7 +305,7 @@ public sealed partial class PullController : VirtualController
             // if the puller is weightless or can't move, then we apply the inverse impulse (Newton's third law).
             // doing it under gravity produces an unsatisfying wiggling when pulling.
             // If player can't move, assume they are on a chair and we need to prevent pull-moving.
-            if (_gravity.IsWeightless(puller) && pullerXform.Comp.GridUid == null || !_actionBlockerSystem.CanMove(puller))
+            if (_gravity.IsWeightless(puller) && pullerXform.GridUid == null || !_actionBlockerSystem.CanMove(puller))
             {
                 PhysicsSystem.WakeBody(puller);
                 PhysicsSystem.ApplyLinearImpulse(puller, -impulse);

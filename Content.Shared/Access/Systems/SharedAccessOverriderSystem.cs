@@ -18,7 +18,7 @@ namespace Content.Shared.Access.Systems
         public override void Initialize()
         {
             base.Initialize();
-            _sawmill = _log.GetSawmill(Sawmill);
+            _sawmill = LogManager.GetSawmill(Sawmill);
 
             SubscribeLocalEvent<AccessOverriderComponent, ComponentInit>(OnComponentInit);
             SubscribeLocalEvent<AccessOverriderComponent, ComponentRemove>(OnComponentRemove);

@@ -1,5 +1,8 @@
 ﻿using Content.Shared.Explosion.Components;
 using Content.Shared.Throwing;
+using Content.Shared.Trigger;
+using Content.Shared.Trigger.Systems;
+using Content.Shared.Trigger.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
@@ -30,6 +33,9 @@ public sealed partial class ScatteringGrenadeSystem : SharedScatteringGrenadeSys
     /// </summary>
     private void OnScatteringTrigger(Entity<ScatteringGrenadeComponent> entity, ref TriggerEvent args)
     {
+        if (args.Key != entity.Comp.TriggerKey)
+            return;
+
         entity.Comp.IsTriggered = true;
         args.Handled = true;
     }
@@ -91,10 +97,9 @@ public sealed partial class ScatteringGrenadeSystem : SharedScatteringGrenadeSys
                     if (component.TriggerContents)
                     {
                         additionalIntervalDelay += _random.NextFloat(component.IntervalBetweenTriggersMin, component.IntervalBetweenTriggersMax);
-                        var contentTimer = EnsureComp<ActiveTimerTriggerComponent>(contentUid);
-                        contentTimer.TimeRemaining = component.DelayBeforeTriggerContents + additionalIntervalDelay;
-                        var ev = new ActiveTimerTriggerEvent(contentUid, uid);
-                        RaiseLocalEvent(contentUid, ref ev);
+
+                        _trigger.SetDelay((contentUid, contentTimer), TimeSpan.FromSeconds(component.DelayBeforeTriggerContents + additionalIntervalDelay));
+                        _trigger.ActivateTimerTrigger((contentUid, contentTimer));
                     }
                 }
 

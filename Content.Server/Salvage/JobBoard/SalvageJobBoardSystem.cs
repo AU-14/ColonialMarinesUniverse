@@ -78,7 +78,7 @@ public sealed partial class SalvageJobBoardSystem : EntitySystem
             availableGroups.Add(rank.BountyGroup.Value);
         }
 
-        foreach (var bounty in _prototypeManager.EnumeratePrototypes<CargoBountyPrototype>())
+        foreach (var bounty in ProtoMan.EnumeratePrototypes<CargoBountyPrototype>())
         {
             if (ent.Comp.CompletedJobs.Contains(bounty))
                 continue;
@@ -110,7 +110,7 @@ public sealed partial class SalvageJobBoardSystem : EntitySystem
             // don't worry abooouuuuut it (it'll be O K !)
             var high = i != ent.Comp.RankThresholds.Count - 1
                 ? ent.Comp.RankThresholds.Keys.ElementAt(i + 1)
-                :  _prototypeManager.EnumeratePrototypes<CargoBountyPrototype>()
+                :  ProtoMan.EnumeratePrototypes<CargoBountyPrototype>()
                 .Count(p => ent.Comp.RankThresholds.Values
                     .Select(r => r.BountyGroup)
                     .Contains(p.Group));
@@ -160,7 +160,7 @@ public sealed partial class SalvageJobBoardSystem : EntitySystem
         if (!GetAvailableJobs(ent).Contains(job))
             return false;
 
-        var jobProto = _prototypeManager.Index(job);
+        var jobProto = ProtoMan.Index(job);
 
         var oldRank = GetRank(ent);
 
@@ -262,7 +262,7 @@ public sealed partial class SalvageJobBoardSystem : EntitySystem
             !TryComp<SalvageJobsDataComponent>(station, out var jobsData))
             return;
 
-        if (!_prototypeManager.TryIndex<CargoBountyPrototype>(args.JobId, out var job))
+        if (!ProtoMan.TryIndex<CargoBountyPrototype>(args.JobId, out var job))
             return;
 
         if (!GetAvailableJobs((station, jobsData)).Contains(args.JobId))

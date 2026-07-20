@@ -17,8 +17,6 @@ public sealed partial class ClientSpriteMovementSystem : SharedSpriteMovementSys
     {
         base.Initialize();
 
-        _spriteQuery = GetEntityQuery<SpriteComponent>();
-
         SubscribeLocalEvent<SpriteMovementComponent, AfterAutoHandleStateEvent>(OnAfterAutoHandleState);
     }
 

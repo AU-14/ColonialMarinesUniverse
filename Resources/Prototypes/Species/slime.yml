@@ -5,8 +5,7 @@
   prototype: CMMobSlimePerson
   sprites: MobSlimeSprites
   defaultSkinTone: "#b8b8b8"
-  markingLimits: MobSlimeMarkingLimits
-  dollPrototype: MobSlimePersonDummy
+  dollPrototype: AppearanceSlimePerson
   skinColoration: Hues
 
 - type: speciesBaseSprites

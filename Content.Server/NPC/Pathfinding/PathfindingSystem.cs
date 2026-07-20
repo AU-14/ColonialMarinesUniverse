@@ -68,26 +68,9 @@ namespace Content.Server.NPC.Pathfinding
         private int _portalIndex;
         private readonly Dictionary<int, PathPortal> _portals = new();
 
-        private EntityQuery<AccessReaderComponent> _accessQuery;
-        private EntityQuery<DestructibleComponent> _destructibleQuery;
-        private EntityQuery<DoorComponent> _doorQuery;
-        private EntityQuery<ClimbableComponent> _climbableQuery;
-        private EntityQuery<FixturesComponent> _fixturesQuery;
-        private EntityQuery<MapGridComponent> _gridQuery;
-        private EntityQuery<TransformComponent> _xformQuery;
-
         public override void Initialize()
         {
             base.Initialize();
-
-            _accessQuery = GetEntityQuery<AccessReaderComponent>();
-            _destructibleQuery = GetEntityQuery<DestructibleComponent>();
-            _doorQuery = GetEntityQuery<DoorComponent>();
-            _climbableQuery = GetEntityQuery<ClimbableComponent>();
-            _fixturesQuery = GetEntityQuery<FixturesComponent>();
-            _gridQuery = GetEntityQuery<MapGridComponent>();
-            _xformQuery = GetEntityQuery<TransformComponent>();
-
             _playerManager.PlayerStatusChanged += OnPlayerChange;
             InitializeGrid();
             SubscribeNetworkEvent<RequestPathfindingDebugMessage>(OnBreadcrumbs);

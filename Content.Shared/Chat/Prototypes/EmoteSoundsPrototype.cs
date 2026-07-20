@@ -24,6 +24,21 @@ public sealed partial class EmoteSoundsPrototype : IPrototype, IInheritingProtot
     public bool Abstract { get; private set; }
 
     /// <summary>
+    /// The name used for the Voice selector in the character editor UI.
+    /// </summary>
+    [DataField]
+    public LocId VoiceSelectorName { get; private set; } = "humanoid-profile-editor-voice-none";
+
+    /// <inheritdoc/>
+    [ParentDataField(typeof(AbstractPrototypeIdArraySerializer<EmoteSoundsPrototype>))]
+    public string[]? Parents { get; private set; }
+
+    /// <inheritdoc/>
+    [AbstractDataField]
+    [NeverPushInheritance]
+    public bool Abstract { get; private set; }
+
+    /// <summary>
     ///     Optional fallback sound that will play if collection
     ///     doesn't have specific sound for this emote id.
     /// </summary>

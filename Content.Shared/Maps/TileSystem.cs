@@ -1,10 +1,16 @@
 using System.Linq;
 using System.Numerics;
+using Content.Shared.CCVar;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Decals;
+using Content.Shared.Tiles;
+using Robust.Shared.Configuration;
+using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.Maps;
@@ -25,7 +31,7 @@ public sealed partial class TileSystem : EntitySystem
     /// </summary>
     public byte PickVariant(ContentTileDefinition tile)
     {
-        return PickVariant(tile, _robustRandom.GetRandom());
+        return PickVariant(tile, _robustRandom);
     }
 
     /// <summary>
@@ -33,15 +39,20 @@ public sealed partial class TileSystem : EntitySystem
     /// </summary>
     public byte PickVariant(ContentTileDefinition tile, int seed)
     {
-        var rand = new System.Random(seed);
+        var rand = new RobustRandom();
+        rand.SetSeed(seed);
         return PickVariant(tile, rand);
     }
 
     /// <summary>
     ///     Returns a weighted pick of a tile variant.
     /// </summary>
-    public byte PickVariant(ContentTileDefinition tile, System.Random random)
+    public byte PickVariant(ContentTileDefinition tile, IRobustRandom random)
     {
+        // Null variants? Uniform distribution.
+        if (tile.PlacementVariants == null)
+            return random.NextByte(tile.Variants);
+
         var variants = tile.PlacementVariants;
 
         var sum = variants.Sum();
@@ -63,7 +74,7 @@ public sealed partial class TileSystem : EntitySystem
     /// <summary>
     ///     Returns a tile with a weighted random variant.
     /// </summary>
-    public Tile GetVariantTile(ContentTileDefinition tile, System.Random random)
+    public Tile GetVariantTile(ContentTileDefinition tile, IRobustRandom random)
     {
         return new Tile(tile.TileId, variant: PickVariant(tile, random));
     }
@@ -73,7 +84,8 @@ public sealed partial class TileSystem : EntitySystem
     /// </summary>
     public Tile GetVariantTile(ContentTileDefinition tile, int seed)
     {
-        var rand = new System.Random(seed);
+        var rand = new RobustRandom();
+        rand.SetSeed(seed);
         return new Tile(tile.TileId, variant: PickVariant(tile, rand));
     }
 
@@ -84,7 +96,7 @@ public sealed partial class TileSystem : EntitySystem
         return PryTile(tileRef);
     }
 
-	public bool PryTile(TileRef tileRef)
+    public bool PryTile(TileRef tileRef)
     {
         return PryTile(tileRef, false);
     }
@@ -96,7 +108,7 @@ public sealed partial class TileSystem : EntitySystem
         if (tile.IsEmpty)
             return false;
 
-        var tileDef = (ContentTileDefinition) _tileDefinitionManager[tile.TypeId];
+        var tileDef = (ContentTileDefinition)_tileDefinitionManager[tile.TypeId];
 
         if (!tileDef.CanCrowbar)
             return false;
@@ -111,33 +123,73 @@ public sealed partial class TileSystem : EntitySystem
         return ReplaceTile(tileref, replacementTile, tileref.GridUid, grid);
     }
 
-    public bool ReplaceTile(TileRef tileref, ContentTileDefinition replacementTile, EntityUid grid, MapGridComponent? component = null)
+    public bool ReplaceTile(TileRef tileref, ContentTileDefinition replacementTile, EntityUid grid, MapGridComponent? component = null, byte? variant = null)
     {
         DebugTools.Assert(tileref.GridUid == grid);
 
         if (!Resolve(grid, ref component))
             return false;
 
+        var key = tileref.GridIndices;
+        var currentTileDef = (ContentTileDefinition) _tileDefinitionManager[tileref.Tile.TypeId];
 
-        var variant = PickVariant(replacementTile);
+        // If the tile we're placing has a baseTurf that matches the tile we're replacing, we don't need to create a history
+        // unless the tile already has a history.
+        var history = EnsureComp<TileHistoryComponent>(grid);
+        var chunkIndices = SharedMapSystem.GetChunkIndices(key, ChunkSize);
+        history.ChunkHistory.TryGetValue(chunkIndices, out var chunk);
+        var historyExists = chunk != null && chunk.History.ContainsKey(key);
+
+        if (replacementTile.BaseTurf != currentTileDef.ID || historyExists)
+        {
+            if (chunk == null)
+            {
+                chunk = new TileHistoryChunk();
+                history.ChunkHistory[chunkIndices] = chunk;
+            }
+
+            chunk.LastModified = _timing.CurTick;
+            Dirty(grid, history);
+
+            //Create stack if needed
+            if (!chunk.History.TryGetValue(key, out var stack))
+            {
+                stack = new List<ProtoId<ContentTileDefinition>>();
+                chunk.History[key] = stack;
+            }
+
+            //Prevent the doomstack
+            if (stack.Count >= _tileStackLimit && _tileStackLimit != 0)
+                return false;
+
+            //Push current tile to the stack, if not empty
+            if (!tileref.Tile.IsEmpty)
+            {
+                stack.Add(currentTileDef.ID);
+            }
+        }
+
+        variant ??= PickVariant(replacementTile);
         var decals = _decal.GetDecalsInRange(tileref.GridUid, _turf.GetTileCenter(tileref).Position, 0.5f);
         foreach (var (id, _) in decals)
         {
             _decal.RemoveDecal(tileref.GridUid, id);
         }
 
-        _maps.SetTile(grid, component, tileref.GridIndices, new Tile(replacementTile.TileId, 0, variant));
+        _maps.SetTile(grid, component, tileref.GridIndices, new Tile(replacementTile.TileId, 0, variant.Value));
         return true;
     }
 
-    public bool DeconstructTile(TileRef tileRef)
+
+    public bool DeconstructTile(TileRef tileRef, bool spawnItem = true)
     {
         if (tileRef.Tile.IsEmpty)
             return false;
 
-        var tileDef = (ContentTileDefinition) _tileDefinitionManager[tileRef.Tile.TypeId];
+        var tileDef = (ContentTileDefinition)_tileDefinitionManager[tileRef.Tile.TypeId];
 
-        if (string.IsNullOrEmpty(tileDef.BaseTurf))
+        //Can't deconstruct anything that doesn't have a base turf.
+        if (tileDef.BaseTurf == null)
             return false;
 
         var gridUid = tileRef.GridUid;
@@ -151,9 +203,8 @@ public sealed partial class TileSystem : EntitySystem
                 (_robustRandom.NextFloat() - 0.5f) * bounds,
                 (_robustRandom.NextFloat() - 0.5f) * bounds));
 
-        //Actually spawn the relevant tile item at the right position and give it some random offset.
-        var tileItem = Spawn(tileDef.ItemDropPrototypeName, coordinates);
-        Transform(tileItem).LocalRotation = _robustRandom.NextDouble() * Math.Tau;
+        var historyComp = EnsureComp<TileHistoryComponent>(gridUid);
+        ProtoId<ContentTileDefinition> previousTileId;
 
         // Destroy any decals on the tile
         var decals = _decal.GetDecalsInRange(gridUid, coordinates.SnapToGrid(EntityManager).Position, 0.5f);
@@ -162,9 +213,21 @@ public sealed partial class TileSystem : EntitySystem
             _decal.RemoveDecal(tileRef.GridUid, id);
         }
 
-        var plating = _tileDefinitionManager[tileDef.BaseTurf];
-        _maps.SetTile(gridUid, mapGrid, tileRef.GridIndices, new Tile(plating.TileId));
+        //Replace tile with the one it was placed on
+        var previousDef = (ContentTileDefinition)_tileDefinitionManager[previousTileId];
+        _maps.SetTile(gridUid, mapGrid, indices, new Tile(previousDef.TileId));
 
         return true;
+    }
+
+    private void OnFloorTileAttempt(Entity<TileHistoryComponent> ent, ref FloorTileAttemptEvent args)
+    {
+        if (_tileStackLimit == 0)
+            return;
+        var chunkIndices = SharedMapSystem.GetChunkIndices(args.GridIndices, ChunkSize);
+        if (!ent.Comp.ChunkHistory.TryGetValue(chunkIndices, out var chunk) ||
+            !chunk.History.TryGetValue(args.GridIndices, out var stack))
+            return;
+        args.Cancelled = stack.Count >= _tileStackLimit; // greater or equals because the attempt itself counts as a tile we're trying to place
     }
 }

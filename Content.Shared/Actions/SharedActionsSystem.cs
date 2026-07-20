@@ -8,6 +8,7 @@ using Content.Shared.Actions.Components;
 using Content.Shared.Actions.Events;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
+using Content.Shared.DoAfter;
 using Content.Shared.Hands;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory.Events;
@@ -40,17 +41,14 @@ public abstract partial class SharedActionsSystem : EntitySystem
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private SharedRMCLagCompensationSystem _rmcLagCompensation = default!;
 
-    private EntityQuery<ActionComponent> _actionQuery;
-    private EntityQuery<ActionsComponent> _actionsQuery;
-    private EntityQuery<MindComponent> _mindQuery;
+    [Dependency] private EntityQuery<ActionComponent> _actionQuery = default!;
+    [Dependency] private EntityQuery<ActionsComponent> _actionsQuery = default!;
+    [Dependency] private EntityQuery<MindComponent> _mindQuery = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-
-        _actionQuery = GetEntityQuery<ActionComponent>();
-        _actionsQuery = GetEntityQuery<ActionsComponent>();
-        _mindQuery = GetEntityQuery<MindComponent>();
+        InitializeActionDoAfter();
 
         SubscribeLocalEvent<ActionComponent, MapInitEvent>(OnActionMapInit);
 
@@ -276,7 +274,7 @@ public abstract partial class SharedActionsSystem : EntitySystem
     #region Execution
     /// <summary>
     ///     When receiving a request to perform an action, this validates whether the action is allowed. If it is, it
-    ///     will raise the relevant <see cref="InstantActionEvent"/>
+    ///     will raise the relevant action event
     /// </summary>
     private void OnActionRequest(RequestPerformActionEvent ev, EntitySessionEventArgs args)
     {
@@ -284,13 +282,24 @@ public abstract partial class SharedActionsSystem : EntitySystem
         if (args.SenderSession.AttachedEntity is not { } user)
             return;
 
+        TryPerformAction(ev, user);
+    }
+
+    /// <summary>
+    /// <see cref="OnActionRequest"/>
+    /// </summary>
+    /// <param name="ev">The Request Perform Action Event</param>
+    /// <param name="user">The user/performer of the action</param>
+    /// <param name="skipDoActionRequest">Should this skip the initial doaction request?</param>
+    private bool TryPerformAction(RequestPerformActionEvent ev, EntityUid user, bool skipDoActionRequest = false)
+    {
         if (!_actionsQuery.TryComp(user, out var component))
-            return;
+            return false;
 
         var actionEnt = GetEntity(ev.Action);
 
         if (!TryComp(actionEnt, out MetaDataComponent? metaData))
-            return;
+            return false;
 
         var name = Name(actionEnt, metaData);
 
@@ -299,26 +308,25 @@ public abstract partial class SharedActionsSystem : EntitySystem
         {
             _adminLogger.Add(LogType.Action,
                 $"{ToPrettyString(user):user} attempted to perform an action that they do not have: {name}.");
-            return;
+            return false;
         }
 
         if (GetAction(actionEnt) is not {} action)
-            return;
+            return false;
 
         DebugTools.Assert(action.Comp.AttachedEntity == user);
         if (!action.Comp.Enabled)
-            return;
+            return false;
 
         var curTime = GameTiming.CurTime;
         if (IsCooldownActive(action, curTime))
-            return;
+            return false;
 
         // check for action use prevention
-        // TODO: make code below use this event with a dedicated component
         var attemptEv = new ActionAttemptEvent(user);
         RaiseLocalEvent(action, ref attemptEv);
         if (attemptEv.Cancelled)
-            return;
+            return false;
 
         // Validate request by checking action blockers and the like
         var provider = action.Comp.Container ?? user;
@@ -330,13 +338,19 @@ public abstract partial class SharedActionsSystem : EntitySystem
         };
         RaiseLocalEvent(action, ref validateEv);
         if (validateEv.Invalid)
-            return;
+            return false;
+
+        if (TryComp<DoAfterArgsComponent>(action, out var actionDoAfterComp) && TryComp<DoAfterComponent>(user, out var performerDoAfterComp) && !skipDoActionRequest)
+        {
+            return TryStartActionDoAfter((action, actionDoAfterComp), (user, performerDoAfterComp), action.Comp.UseDelay, ev);
+        }
 
         if (!_rmcActions.CanUseActionPopup(user, actionEnt, GetEntity(ev.EntityTarget)))
             return;
 
         // All checks passed. Perform the action!
         PerformAction((user, component), action);
+        return true;
     }
 
     private void OnValidate(Entity<ActionComponent> ent, ref ActionValidateEvent args)
@@ -440,7 +454,7 @@ public abstract partial class SharedActionsSystem : EntitySystem
         if (_whitelist.IsWhitelistFail(comp.Whitelist, target))
             return false;
 
-        if (_whitelist.IsBlacklistPass(comp.Blacklist, target))
+        if (_whitelist.IsWhitelistPass(comp.Blacklist, target))
             return false;
 
         // RMC14
@@ -452,6 +466,7 @@ public abstract partial class SharedActionsSystem : EntitySystem
             return comp.CanTargetSelf;
 
         var targetAction = Comp<TargetActionComponent>(uid);
+
         // not using the ValidateBaseTarget logic since its raycast fails if the target is e.g. a wall
         if (targetAction.CheckCanAccess)
         {
@@ -566,8 +581,6 @@ public abstract partial class SharedActionsSystem : EntitySystem
     {
         var handled = false;
 
-        var toggledBefore = action.Comp.Toggled;
-
         // Note that attached entity and attached container are allowed to be null here.
         if (action.Comp.AttachedEntity != null && action.Comp.AttachedEntity != performer)
         {
@@ -588,6 +601,7 @@ public abstract partial class SharedActionsSystem : EntitySystem
         ev.Performer = performer;
         ev.Action = action;
 
+        // TODO: This is where we'd add support for event lists
         if (!action.Comp.RaiseOnUser && action.Comp.Container is {} container && !_mindQuery.HasComp(container))
             target = container;
 
@@ -600,13 +614,12 @@ public abstract partial class SharedActionsSystem : EntitySystem
         if (!handled)
             return; // no interaction occurred.
 
-        // play sound, reduce charges, start cooldown
-        if (ev?.Toggle == true)
+        // play sound, start cooldown
+        if (ev.Toggle)
             SetToggled((action, action), !action.Comp.Toggled);
 
         _audio.PlayPredicted(action.Comp.Sound, performer, predicted ? performer : null);
 
-        // TODO: move to ActionCooldown ActionPerformedEvent?
         RemoveCooldown((action, action));
         StartUseDelay((action, action));
 
@@ -946,7 +959,7 @@ public abstract partial class SharedActionsSystem : EntitySystem
         if (GameTiming.ApplyingState)
             return;
 
-        var ev = new GetItemActionsEvent(_actionContainer, args.Equipee, args.Equipment, args.SlotFlags);
+        var ev = new GetItemActionsEvent(_actionContainer, args.EquipTarget, args.Equipment, args.SlotFlags);
         RaiseLocalEvent(args.Equipment, ev);
 
         if (ev.Actions.Count == 0)

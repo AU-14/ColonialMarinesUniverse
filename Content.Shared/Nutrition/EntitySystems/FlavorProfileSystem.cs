@@ -19,21 +19,29 @@ public sealed partial class FlavorProfileSystem : EntitySystem
 
     private int FlavorLimit => _configManager.GetCVar(CCVars.FlavorLimit);
 
-    public string GetLocalizedFlavorsMessage(EntityUid uid, EntityUid user, Solution solution,
-        FlavorProfileComponent? flavorProfile = null)
+    public string GetLocalizedFlavorsMessage(Entity<FlavorProfileComponent?> entity, EntityUid user, Solution? solution)
     {
-        if (!Resolve(uid, ref flavorProfile, false))
+        HashSet<ProtoId<FlavorPrototype>> flavors = new();
+        HashSet<string>? ignore = null;
+
+        if (Resolve(entity, ref entity.Comp, false))
         {
-            return Loc.GetString(BackupFlavorMessage);
+            flavors = entity.Comp.Flavors;
+            ignore = entity.Comp.IgnoreReagents;
         }
 
-        var flavors = new HashSet<string>(flavorProfile.Flavors);
-        flavors.UnionWith(GetFlavorsFromReagents(solution, FlavorLimit - flavors.Count, flavorProfile.IgnoreReagents));
+
+        if (solution != null)
+            flavors.UnionWith(GetFlavorsFromReagents(solution, FlavorLimit - flavors.Count, ignore));
 
         var ev = new FlavorProfileModificationEvent(user, flavors);
+
         RaiseLocalEvent(ev);
-        RaiseLocalEvent(uid, ev);
+        RaiseLocalEvent(entity, ev);
         RaiseLocalEvent(user, ev);
+
+        if (flavors.Count == 0)
+            return Loc.GetString(BackupFlavorMessage);
 
         return FlavorsToFlavorMessage(flavors);
     }
@@ -47,17 +55,12 @@ public sealed partial class FlavorProfileSystem : EntitySystem
         return FlavorsToFlavorMessage(flavors);
     }
 
-    private string FlavorsToFlavorMessage(HashSet<string> flavorSet)
+    private string FlavorsToFlavorMessage(HashSet<ProtoId<FlavorPrototype>> flavorSet)
     {
-        var flavors = new List<FlavorPrototype>();
+        var flavors = new List<FlavorPrototype>(flavorSet.Count);
         foreach (var flavor in flavorSet)
         {
-            if (string.IsNullOrEmpty(flavor) || !_prototypeManager.TryIndex<FlavorPrototype>(flavor, out var flavorPrototype))
-            {
-                continue;
-            }
-
-            flavors.Add(flavorPrototype);
+            flavors.Add(ProtoMan.Index(flavor));
         }
 
         flavors.Sort((a, b) => a.FlavorType.CompareTo(b.FlavorType));
@@ -77,10 +80,10 @@ public sealed partial class FlavorProfileSystem : EntitySystem
         return Loc.GetString(BackupFlavorMessage);
     }
 
-    private HashSet<string> GetFlavorsFromReagents(Solution solution, int desiredAmount, HashSet<string>? toIgnore = null)
+    private HashSet<ProtoId<FlavorPrototype>> GetFlavorsFromReagents(Solution solution, int desiredAmount, HashSet<string>? toIgnore = null)
     {
-        var flavors = new HashSet<string>();
-        foreach (var (reagent, quantity) in solution.GetReagentPrototypes(_prototypeManager))
+        var flavors = new HashSet<ProtoId<FlavorPrototype>>();
+        foreach (var (reagent, quantity) in solution.GetReagentPrototypes(ProtoMan))
         {
             if (toIgnore != null && toIgnore.Contains(reagent.ID))
             {
@@ -99,7 +102,7 @@ public sealed partial class FlavorProfileSystem : EntitySystem
             }
 
             if (reagent.Flavor != null)
-                flavors.Add(reagent.Flavor);
+                flavors.Add(reagent.Flavor.Value);
         }
 
         return flavors;
@@ -108,12 +111,12 @@ public sealed partial class FlavorProfileSystem : EntitySystem
 
 public sealed class FlavorProfileModificationEvent : EntityEventArgs
 {
-    public FlavorProfileModificationEvent(EntityUid user, HashSet<string> flavors)
+    public FlavorProfileModificationEvent(EntityUid user, HashSet<ProtoId<FlavorPrototype>> flavors)
     {
         User = user;
         Flavors = flavors;
     }
 
     public EntityUid User { get; }
-    public HashSet<string> Flavors { get; }
+    public HashSet<ProtoId<FlavorPrototype>> Flavors { get; }
 }

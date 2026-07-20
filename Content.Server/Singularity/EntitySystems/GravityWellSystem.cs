@@ -34,20 +34,11 @@ public sealed partial class GravityWellSystem : SharedGravityWellSystem
     /// </summary>
     public const float MinGravPulseRange = 0.00001f;
 
-    private EntityQuery<GravityWellComponent> _wellQuery;
-    private EntityQuery<MapComponent> _mapQuery;
-    private EntityQuery<MapGridComponent> _gridQuery;
-    private EntityQuery<PhysicsComponent> _physicsQuery;
-
     private HashSet<EntityUid> _entSet = new();
 
     public override void Initialize()
     {
         base.Initialize();
-        _wellQuery = GetEntityQuery<GravityWellComponent>();
-        _mapQuery = GetEntityQuery<MapComponent>();
-        _gridQuery = GetEntityQuery<MapGridComponent>();
-        _physicsQuery = GetEntityQuery<PhysicsComponent>();
         SubscribeLocalEvent<GravityWellComponent, MapInitEvent>(OnGravityWellMapInit);
 
         var vvHandle = _vvManager.GetTypeHandler<GravityWellComponent>();
@@ -73,9 +64,6 @@ public sealed partial class GravityWellSystem : SharedGravityWellSystem
     /// <param name="frameTime">The time elapsed since the last set of updates.</param>
     public override void Update(float frameTime)
     {
-        if(!_timing.IsFirstTimePredicted)
-            return;
-
         var query = EntityQueryEnumerator<GravityWellComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var gravWell, out var xform))
         {

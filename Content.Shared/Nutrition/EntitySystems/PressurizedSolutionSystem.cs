@@ -31,11 +31,10 @@ public sealed partial class PressurizedSolutionSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<PressurizedSolutionComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<PressurizedSolutionComponent, ShakeEvent>(OnShake);
         SubscribeLocalEvent<PressurizedSolutionComponent, OpenableOpenedEvent>(OnOpened);
         SubscribeLocalEvent<PressurizedSolutionComponent, LandEvent>(OnLand);
-        SubscribeLocalEvent<PressurizedSolutionComponent, SolutionContainerChangedEvent>(OnSolutionUpdate);
+        SubscribeLocalEvent<PressurizedSolutionComponent, SolutionChangedEvent>(OnSolutionUpdate);
     }
 
     /// <summary>
@@ -180,8 +179,8 @@ public sealed partial class PressurizedSolutionSystem : EntitySystem
         var solution = _solutionContainer.SplitSolution(soln.Value, interactions.Volume);
 
         // Spray the solution onto the ground and anyone nearby
-        if (TryComp(entity, out TransformComponent? transform))
-            _puddle.TrySplashSpillAt(entity, transform.Coordinates, solution, out _, sound: false);
+        var coordinates = Transform(entity).Coordinates;
+        _puddle.TrySplashSpillAt(entity.Owner, coordinates, solution, out _, sound: false);
 
         var drinkName = Identity.Entity(entity, EntityManager);
 
@@ -191,7 +190,7 @@ public sealed partial class PressurizedSolutionSystem : EntitySystem
 
             var selfMessage = Loc.GetString(entity.Comp.SprayHolderMessageSelf, ("victim", victimName), ("drink", drinkName));
             var othersMessage = Loc.GetString(entity.Comp.SprayHolderMessageOthers, ("victim", victimName), ("drink", drinkName));
-            _popup.PopupPredicted(selfMessage, othersMessage, target.Value, target.Value);
+            _popup.PopupEntity(selfMessage, othersMessage, target.Value, target.Value);
         }
         else
         {
@@ -243,10 +242,6 @@ public sealed partial class PressurizedSolutionSystem : EntitySystem
     #endregion
 
     #region Event Handlers
-    private void OnMapInit(Entity<PressurizedSolutionComponent> entity, ref MapInitEvent args)
-    {
-        RollSprayThreshold(entity);
-    }
 
     private void OnOpened(Entity<PressurizedSolutionComponent> entity, ref OpenableOpenedEvent args)
     {
@@ -266,9 +261,13 @@ public sealed partial class PressurizedSolutionSystem : EntitySystem
         SprayOrAddFizziness(entity, entity.Comp.SprayChanceModOnLand, entity.Comp.FizzinessAddedOnLand);
     }
 
-    private void OnSolutionUpdate(Entity<PressurizedSolutionComponent> entity, ref SolutionContainerChangedEvent args)
+    private void OnSolutionUpdate(Entity<PressurizedSolutionComponent> entity, ref SolutionChangedEvent args)
     {
-        if (args.SolutionId != entity.Comp.Solution)
+        // The changes are already networked as part of the same game state.
+        if (_timing.ApplyingState)
+            return;
+
+        if (args.Solution.Comp.Id != entity.Comp.Solution)
             return;
 
         // If the solution is no longer capable of being fizzy, clear any built up fizziness

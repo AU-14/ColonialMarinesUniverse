@@ -4,8 +4,11 @@ using System.Threading.Tasks;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Maps;
 using Content.Shared.CCVar;
+using Content.Shared.GameTicking.Components;
+using Content.Shared.Maps;
 using JetBrains.Annotations;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.GameTicking;
 
@@ -17,6 +20,11 @@ public sealed partial class GameTicker
     /// The selected preset that will be used at the start of the next round.
     /// </summary>
     public GamePresetPrototype? Preset { get; private set; }
+
+    /// <summary>
+    /// The selected preset that will be shown at the lobby screen to fool players.
+    /// </summary>
+    public GamePresetPrototype? Decoy { get; private set; }
 
     /// <summary>
     /// The preset that's currently active.
@@ -47,10 +55,10 @@ public sealed partial class GameTicker
             DelayStart(TimeSpan.FromSeconds(PresetFailedCooldownIncrease));
         }
 
-            if (_cfg.GetCVar(CCVars.GameLobbyFallbackEnabled))
-            {
-                var fallbackPresets = _cfg.GetCVar(CCVars.GameLobbyFallbackPreset).Split(",");
-                var startFailed = true;
+        if (_cfg.GetCVar(CCVars.GameLobbyFallbackEnabled))
+        {
+            var fallbackPresets = _cfg.GetCVar(CCVars.GameLobbyFallbackPreset).Split(",");
+            var startFailed = true;
 
             _sawmill.Info($"Fallback - Failed to start round, attempting to start fallback presets.");
             foreach (var preset in fallbackPresets)
@@ -95,12 +103,12 @@ public sealed partial class GameTicker
         return true;
     }
 
-        private void InitializeGamePreset()
-        {
-            SetGamePreset(LobbyEnabled ? _cfg.GetCVar(CCVars.GameLobbyDefaultPreset) : "sandbox");
-        }
+    private void InitializeGamePreset()
+    {
+        SetGamePreset(LobbyEnabled ? _cfg.GetCVar(CCVars.GameLobbyDefaultPreset) : "sandbox");
+    }
 
-    public void SetGamePreset(GamePresetPrototype? preset, bool force = false, int? resetDelay = null)
+    public void SetGamePreset(GamePresetPrototype? preset, bool force = false, GamePresetPrototype? decoy = null, int? resetDelay = null)
     {
         // Do nothing if this game ticker is a dummy!
         if (DummyTicker)
@@ -120,6 +128,7 @@ public sealed partial class GameTicker
         }
 
         Preset = preset;
+        Decoy = decoy;
         ValidateMap();
         UpdateInfoText();
 
@@ -138,10 +147,10 @@ public sealed partial class GameTicker
 
     public GamePresetPrototype? FindGamePreset(string preset)
     {
-        if (_prototypeManager.TryIndex(preset, out GamePresetPrototype? presetProto))
+        if (ProtoMan.TryIndex(preset, out GamePresetPrototype? presetProto))
             return presetProto;
 
-        foreach (var proto in _prototypeManager.EnumeratePrototypes<GamePresetPrototype>())
+        foreach (var proto in ProtoMan.EnumeratePrototypes<GamePresetPrototype>())
         {
             foreach (var alias in proto.Alias)
             {
@@ -165,7 +174,7 @@ public sealed partial class GameTicker
         if (Preset == null)
             return true;
 
-        if (Preset.MapPool == null || !_prototypeManager.TryIndex<GameMapPoolPrototype>(Preset.MapPool, out var pool))
+        if (Preset.MapPool == null || !ProtoMan.TryIndex<GameMapPoolPrototype>(Preset.MapPool, out var pool))
             return true;
 
         return pool.Maps.Contains(map.ID);
@@ -177,7 +186,7 @@ public sealed partial class GameTicker
             return;
 
         if (Preset.MapPool == null ||
-            !_prototypeManager.TryIndex<GameMapPoolPrototype>(Preset.MapPool, out var pool))
+            !ProtoMan.TryIndex<GameMapPoolPrototype>(Preset.MapPool, out var pool))
             return;
 
         if (pool.Maps.Contains(map.ID))
@@ -186,7 +195,6 @@ public sealed partial class GameTicker
         _gameMapManager.SelectMapRandom();
     }
 
-    [PublicAPI]
     private bool AddGamePresetRules()
     {
         if (DummyTicker || Preset == null)
@@ -195,7 +203,7 @@ public sealed partial class GameTicker
         CurrentPreset = Preset;
         foreach (var rule in Preset.Rules)
         {
-            AddGameRule(rule);
+            AddFilteredGameRule(rule);
         }
 
         return true;
@@ -220,19 +228,53 @@ public sealed partial class GameTicker
         }
     }
 
-        private void IncrementRoundNumber()
-        {
-            var playerIds = _playerGameStatuses.Keys.Select(player => player.UserId).ToArray();
-            var serverName = _cfg.GetCVar(CCVars.AdminLogsServerName);
-
-    // TODO FIXME AAAAAAAAAAAAAAAAAAAH THIS IS BROKEN
-    // Task.Run as a terrible dirty workaround to avoid synchronization context deadlock from .Result here.
-    // This whole setup logic should be made asynchronous so we can properly wait on the DB AAAAAAAAAAAAAH
-    var task = Task.Run(async () =>
+    /// <inhereitdoc cref="GetMinimumPlayerCount(GamePresetPrototype)"/>
+    [PublicAPI]
+    public int GetMinimumPlayerCount(ProtoId<GamePresetPrototype> proto)
     {
-        var server = await _dbEntryManager.ServerEntity;
-        return await _db.AddNewRound(server, playerIds);
-    });
+        if (!ProtoMan.Resolve(proto, out var preset))
+            return 0;
+
+        return GetMinimumPlayerCount(preset);
+    }
+
+    /// <summary>
+    /// Gets the minimum number of players required for a game preset to start.
+    /// Checks both the preset itself, and all rules to find the minimum.
+    /// </summary>
+    /// <param name="proto">Game preset prototype we're checking.</param>
+    /// <returns>Minimum number of players required for the rule to start.</returns>
+    [PublicAPI]
+    public int GetMinimumPlayerCount(GamePresetPrototype proto)
+    {
+        var min = proto.MinPlayers ?? 0;
+        foreach (var entProto in proto.Rules)
+        {
+            if (!ProtoMan.Resolve(entProto, out var ent))
+                continue;
+
+            if (!ent.TryComp<GameRuleComponent>(out var rule, Factory))
+                continue;
+
+            min = Math.Max(min, rule.MinPlayers);
+        }
+
+        return min;
+    }
+
+    private void IncrementRoundNumber()
+    {
+        var playerIds = _playerGameStatuses.Keys.Select(player => player.UserId).ToArray();
+        var serverName = _cfg.GetCVar(CCVars.AdminLogsServerName);
+
+        // TODO FIXME AAAAAAAAAAAAAAAAAAAH THIS IS BROKEN
+        // Task.Run as a terrible dirty workaround to avoid synchronization context deadlock from .Result here.
+        // This whole setup logic should be made asynchronous so we can properly wait on the DB AAAAAAAAAAAAAH
+        var task = Task.Run(async () =>
+        {
+            var server = await _dbEntryManager.ServerEntity;
+            return await _db.AddNewRound(server, playerIds);
+        });
 
         _taskManager.BlockWaitOnTask(task);
         RoundId = task.GetAwaiter().GetResult();

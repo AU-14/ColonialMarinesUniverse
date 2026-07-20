@@ -86,12 +86,12 @@ namespace Content.Client.Administration.Managers
         private void UpdateMessageRx(MsgUpdateAdminStatus message)
         {
             _availableCommands.Clear();
-            var host = IoCManager.Resolve<IClientConsoleHost>();
 
             // Anything marked as Any we'll just add even if the server doesn't know about it.
-            foreach (var (command, instance) in host.AvailableCommands)
+            foreach (var (command, instance) in _host.AvailableCommands)
             {
-                if (Attribute.GetCustomAttribute(instance.GetType(), typeof(AnyCommandAttribute)) == null) continue;
+                if (Attribute.GetCustomAttribute(instance.GetType(), typeof(AnyCommandAttribute)) == null)
+                    continue;
                 _availableCommands.Add(command);
             }
 
