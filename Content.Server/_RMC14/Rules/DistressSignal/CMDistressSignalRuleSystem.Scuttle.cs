@@ -6,7 +6,7 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
-using Content.Server.Temperature.Components;
+using Content.Shared.Temperature.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
@@ -312,11 +312,12 @@ public sealed partial class CMDistressSignalRuleSystem
                 {
                     _temperature.ChangeHeat(target, heatJoules, temperature: temperature);
 
-                    // RMC mobs currently carry body temperature state, but their base Temperature
-                    // component does not define HeatDamage, so keep scuttle lethal without broad
-                    // changes to every temperature source in RMC.
-                    if (temperature.HeatDamage.Empty)
+                    // Keep scuttle lethal for mobs that do not define upstream temperature damage.
+                    if (!TryComp<TemperatureDamageComponent>(target, out var temperatureDamage) ||
+                        temperatureDamage.HeatDamage.Empty)
+                    {
                         _damageable.TryChangeDamage(target, fallbackDamage, true, false, origin: reactorUid);
+                    }
                 }
                 else
                 {

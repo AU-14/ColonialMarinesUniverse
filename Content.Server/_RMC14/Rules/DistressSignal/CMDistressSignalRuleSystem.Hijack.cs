@@ -13,6 +13,7 @@ using Content.Shared.Mind.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Content.Shared.Roles;
+using Content.Shared.Roles.Components;
 using Content.Shared.StatusEffect;
 using Robust.Shared.Collections;
 using Robust.Shared.Player;
@@ -134,7 +135,7 @@ public sealed partial class CMDistressSignalRuleSystem
             if (!TryComp<MindComponent>(mindContainer.Mind, out var mind))
                 continue;
 
-            foreach (var roleId in mind.MindRoles)
+            foreach (var roleId in mind.MindRoleContainer.ContainedEntities)
             {
                 if (!TryComp<MindRoleComponent>(roleId, out var mindRole))
                     continue;

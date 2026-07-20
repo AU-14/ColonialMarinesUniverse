@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Server._RMC14.Stations;
 using Content.Server.GameTicking;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
@@ -34,6 +35,7 @@ namespace Content.Server._RMC14.Rules.DistressSignal;
 public sealed partial class CMDistressSignalRuleSystem
 {
     private static readonly ProtoId<JobPrototype> VehicleCrewmanJob = "CMVehicleCrewman";
+    private static readonly EntProtoId<JobSlotScalingComponent> JobSlotScalingPrototype = "RMCJobSlotScaling";
     private static readonly EntProtoId VehicleHumveeArcUnlock = "VehicleHumveeARC";
     private static readonly EntProtoId VehicleTankUnlock = "VehicleTank";
 
@@ -146,8 +148,7 @@ public sealed partial class CMDistressSignalRuleSystem
         while (stations.MoveNext(out var stationId, out var stationJobs, out _))
         {
             if (doJobSlotScaling &&
-                stationJobs.JobSlotScaling is { } scalingProto &&
-                scalingProto.TryGet(out var scalingComp, _prototypes, _compFactory))
+                JobSlotScalingPrototype.TryGet(out var scalingComp, _prototypes, _compFactory))
             {
                 foreach (var (job, scaling) in scalingComp.Jobs)
                 {
