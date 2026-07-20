@@ -143,7 +143,7 @@ are retained so future audits can trace each classifier's original decision.
 0121 | 006f3abfd70d0595fec48ce304702a46c4f47191 | Automatic changelog update | Non-code/no-op | — | Generated changelog only.
 0122 | 2ce03ad65154e6ca81918114a30385c941f8c136 | Fix the max scanner distances (#39041) | Port candidate | Physics, Interactions | Shuttle scanner range is calculated from display-transformed coordinates instead of grid-local distance.
 0123 | e7b68d9722320bc2081ba7dd1feeb03bba69ab49 | Automatic changelog update | Non-code/no-op | — | Generated changelog only.
-0124 | ffbc813179291286dda2dcfdfd58648f909ab1c2 | make name identifier prefix LocId (#39035) | Port candidate | Interactions | Name-identifier groups still store raw prefix strings rather than localizable IDs.
+0124 | ffbc813179291286dda2dcfdfd58648f909ab1c2 | make name identifier prefix LocId (#39035) | Ported (CS-0088) | Interactions | Name-identifier groups now format their numbers through localizable format IDs.
 0125 | 2c4251dcdcfbeb41114096547d2dc1e5cd592361 | Revert "Don't compile EF Core designer files on release builds" (#39057) | Already present/equivalent | — | CMU already compiles migration designer methods without EF_DESIGNER conditionals.
 0126 | 5ac78ec3148d09b53929361ad03ef8a6620c1ebe | Guidebook changes (#38987) | Non-code/no-op | — | This only changes guide text and layout.
 0127 | ee69f4e5b4b21cbb80385f345dd10493f3aae959 | Automatic changelog update | Non-code/no-op | — | Generated changelog only.

@@ -1254,3 +1254,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Maps/plasma.yml`, `docs/upstream-sync/inventory-wave-0001.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static map comparison confirms UID `15708` now matches the pinned target-final `Bar` components while adjacent Botany and Security units are untouched. Map/prototype loading and routing behavior are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a map-level assertion that every departmental mailing unit has matching runtime and persisted routing tags.
+
+## CS-0088 — Localize generated name-identifier formats
+
+- Upstream: [space-wizards/space-station-14#39035](https://github.com/space-wizards/space-station-14/pull/39035), `ffbc813179291286dda2dcfdfd58648f909ab1c2`, 2025-07-18
+- Areas: Interactions
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: `NameIdentifierGroupPrototype` replaces raw `Prefix` strings with optional `LocId Format` values. Fresh and restored identifiers now format through Fluent with `$number`, while prefixless groups continue returning the numeric value alone.
+- RMC/CMU divergence: CMU's additional `Bounty` group is prefixless and remains compatible. No RMC-specific name-identifier group uses the removed field; the eight inherited formatted groups are migrated together.
+- Decision and rationale: Port code, prototype schema, values, and locale keys atomically to avoid a load-time field mismatch or partially localized identifiers.
+- Files changed: `Content.Server/NameIdentifier/NameIdentifierSystem.cs`, `Content.Shared/NameIdentifier/NameIdentifierGroupPrototype.cs`, `Resources/Locale/en-US/name-identifier.ftl`, `Resources/Prototypes/name_identifier_groups.yml`, `docs/upstream-sync/inventory-wave-0001.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms both generation paths use `Format`, every removed prefix has a matching Fluent key, and prefixless groups remain untouched. Shared/server compilation, prototype loading, and formatted/restored identifier cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add locale completeness coverage for every non-null name-identifier format and verify hot-reloaded prototypes rebuild identifier pools without changing existing names.
