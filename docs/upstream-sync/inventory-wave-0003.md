@@ -90,7 +90,7 @@ are retained so future audits can trace each classifier's original decision.
 0468 | 79072d7d6a213e8a980fbfa4bd9f855a7a2b4cdd | Automatic changelog update | Irrelevant | — | Generated changelog only.
 0469 | 8034cabbaeed60f7f476d1be193c5d476eac8309 | Fix error when deleting a toggled `ToggleableClothingComponent` (#39191) | Ported (CS-0112) | Interactions | Accepted as downstream commit 141365833e; terminating toggleable clothing now skips teardown-time reinsertion.
 0470 | 81aef0fb1c6f3bd232238a2af9844327b27c8a80 | update oasis -- AI rework (#39592) | Irrelevant | — | SS14 Oasis map-only change is outside RMC map usage.
-0471 | dc86665c2420549ddc3402d831576c40940d52fb | Stable (#39712) | Deferred | Movement, Medical, Interactions, Physics, Gamerules | This broad stable merge must be decomposed and reconciled rather than ported as an aggregate.
+0471 | dc86665c2420549ddc3402d831576c40940d52fb | Stable (#39712) | Irrelevant | — | Its effective first-parent tree delta is empty; side-branch history introduced no change at this merge boundary.
 0472 | 9d32e7db4ea8a5d5f35cc5f0dcf9980159b14ca0 | Atmos Firesuit Vox sprites (#39705) | Deferred | — | Binary Vox equipment assets require comparison with RMC's customized species and suit art.
 0473 | e16bca5b181c4d72070513f675cd0d320f7b04ff | Hand pickup and drop triggers (#39663) | Deferred | Interactions | Hand trigger behavior depends on the unported shared keyed trigger architecture.
 0474 | d9f125787e64e5931ed210083611bc0210311089 | Teaches tacos how to spell (#39717) | AlreadyPresent | — | Current CMU already contains the corrected taco text.
