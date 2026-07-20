@@ -149,6 +149,7 @@ public abstract partial class SharedHandsSystem
         if (isInContainer)
         {
             TransformSystem.DropNextTo((entity.Value, itemXform), (ent, userXform));
+            RaiseRmcDropped(entity.Value, ent.Owner);
             return true;
         }
 

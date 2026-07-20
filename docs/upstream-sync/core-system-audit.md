@@ -3736,3 +3736,16 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - Files changed: `Content.Client/Weapons/Ranged/Systems/GunSystem.cs`, `Content.Client/_RMC14/Weapons/Ranged/GunSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation evidence: Static flow review traces CS-0271's post-success pickup event to the local-client timer and this guard to the sole current `RequestShootEvent` producer. A diagnostic `Content.Client` targeted build compiled the touched Client and Shared paths with 0 errors and 14 unrelated warnings after temporarily supplying the baseline TerraFX reference used by retained source; the committed project file was restored unchanged. Tests remain deferred until the 1,000-upstream-commit checkpoint.
 - Remaining debt: Runtime prediction coverage must pick up and immediately fire, fire after 0.15 seconds, release fire during the veto, and verify programmatic/verb pickups retain their current scope.
+
+## CS-0273 - Restore contained-user drop cleanup
+
+- Upstreams compared: live SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767`, live RMC `b6d677947dd8ebcb06194a66798938645fed5a54`, and current CMU.
+- Areas: Interactions, Hands, Containers, Inventory, Item lifecycle
+- Classification: Missing -> Adapted
+- Risk: High before the fix; low after it.
+- Behavior/API delta: Current hand dropping returns early after `DropNextTo` when the user is inside another container, bypassing the normal `DroppedInteraction` notification. Old RMC raised `RMCDroppedEvent` in that branch, and retained consumers still depend on it to deactivate targeting, motion/intel detectors and rangefinders, return magnetic equipment, and track RMC pickup-managed items.
+- RMC/CMU divergence: Ordinary world drops continue through current `DoDrop` and its standard `DroppedEvent`; they do not receive an extra fork event. The restored notification is limited to the contained-user early-return branch where the standard dropped interaction is absent, matching old RMC event scope and avoiding duplicate cleanup.
+- Decision and rationale: Keep current transform/container mutation first, then broadcast the retained event against the dropped item immediately before the early return. A fork-owned helper isolates the event contract while leaving hand authority, range calculation, logging, and normal drop sequencing untouched.
+- Files changed: `Content.Shared/Hands/EntitySystems/SharedHandsSystem.Drop.cs`, `Content.Shared/_RMC14/Hands/SharedHandsSystem.Drop.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation evidence: Exact lifecycle review confirms all live `RMCDroppedEvent` consumers also handle ordinary drop-related state, while only this contained-user path skips `DroppedInteraction`. The raise point matches old RMC after `DropNextTo` and before return. `Content.Shared` targeted compilation succeeded with 0 errors and 6 unrelated warnings; tests remain deferred until the 1,000-upstream-commit checkpoint.
+- Remaining debt: Runtime coverage must drop each retained consumer item while buckled/inside a vehicle or other container, verify cleanup occurs once, and confirm ordinary world drops still emit only the standard interaction event.
