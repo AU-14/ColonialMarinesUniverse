@@ -942,3 +942,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Power/EntitySystems/PowerChargeSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the pinned target retains the corrected structured log template. Server compilation and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint; this presentation-only fix adds no runtime test obligation.
 - Follow-up/debt: Consider a structured admin-log formatting test if the logging harness gains capture support, and scan other templates for accidental interpolation-prefix characters separately.
+
+## CS-0064 — Ship live scurrets in ventilated crates
+
+- Upstream: [space-wizards/space-station-14#38951](https://github.com/space-wizards/space-station-14/pull/38951), `31c84eaf20b3cea8af6b49336489a0c9e2b4ee27`, 2025-07-13
+- Areas: Medical, Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The hydrated-scurret cargo product now inherits the livestock crate instead of the sealed plastic crate. Its living occupant receives the same ventilation behavior as other shipped animals and no longer suffocates before delivery.
+- RMC/CMU divergence: RMC inherits both the cargo product and crate families without overriding `CrateFunScurret`. Its atmosphere and mob-respiration systems therefore receive the data correction without changes to scurret physiology, cargo price, crate contents, or storage interaction.
+- Decision and rationale: Port the pinned target's parent replacement at the cargo prototype. Changing scurret respiration or globally ventilating plastic crates would alter unrelated gameplay.
+- Files changed: `Resources/Prototypes/Catalog/Fills/Crates/fun.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the pinned target retains `CrateLivestock` for this product and the parent prototype resolves locally. Prototype loading and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a resolved-prototype check for living `StorageFill` occupants in non-livestock crates, then review intentional exceptions individually.
