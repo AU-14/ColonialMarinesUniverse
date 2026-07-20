@@ -2411,3 +2411,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Objects/Devices/pda.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static inheritance review confirms the base and RMC admin PDA inherit radius `1.7` and falloff `3` without changing enabled state. Prototype loading and visual range checks are queued for the index-1999 checkpoint.
 - Follow-up/debt: None.
+
+## CS-0176 — Initialize HTN owners at component startup
+
+- Upstream: [space-wizards/space-station-14#40244](https://github.com/space-wizards/space-station-14/pull/40244), `4b51b2953d780fba56fd9721b4a91f44d3f8fbfa`, 2025-10-07
+- Areas: Movement, Interactions, GameTicking
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: Every `HTNComponent` now records its entity in `NPCBlackboard.Owner` during component startup. Map initialization continues to wake the NPC, but no longer owns the identity initialization that post-map-init component additions would skip.
+- RMC/CMU divergence: RMC HTN operators, including `LeapOperator`, read the same owner key and gain a valid identity when HTN is added dynamically. Their planning tasks, wake policy, and faction behavior are otherwise unchanged.
+- Decision and rationale: Split identity setup from map lifecycle exactly as retained upstream. Component startup runs for both map-spawned and dynamically added HTN components, while waking remains a map-init concern.
+- Files changed: `Content.Server/NPC/HTN/HTNSystem.cs`, `Content.Server/NPC/Systems/NPCSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static event-order review confirms startup assigns the owner before map-init wakes a normal NPC and also covers post-map-init additions. Server compilation plus map-spawned, dynamically added, RMC leap, shutdown, and player attach/detach cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: The upstream full-game-save serialization TODOs are nonfunctional notes and remain outside this port.
