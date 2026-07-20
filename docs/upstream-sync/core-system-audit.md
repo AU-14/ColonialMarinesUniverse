@@ -1358,3 +1358,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Client/Rotation/RotationVisualizerSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static branch review confirms missing state enters the existing `Vertical` switch case while explicit horizontal and vertical values remain unchanged. Client compilation and replay/live appearance cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add replay coverage with an old frame lacking rotation state and verify later explicit horizontal state still overrides the fallback.
+
+## CS-0096 — Localize the store refund control
+
+- Upstream: [space-wizards/space-station-14#39346](https://github.com/space-wizards/space-station-14/pull/39346), `819e342a4f4dfef0953ebfc76a030a196765ce0c`, 2025-08-03
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The store refund button now resolves `store-ui-refund-text` through Fluent instead of embedding English in XAML.
+- RMC/CMU divergence: RMC stores reuse the inherited `StoreMenu`; no fork-specific label or refund behavior is replaced.
+- Decision and rationale: Port the retained XAML/key pair atomically so every locale can translate the interaction without changing its layout or message handling.
+- Files changed: `Content.Client/Store/Ui/StoreMenu.xaml`, `Resources/Locale/en-US/store/store.ftl`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static XAML and locale comparison confirms the key exists and matches the pinned target-final binding. Client compilation and locale/XAML loading are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Audit the adjacent hardcoded search placeholder in the later store-localization wave rather than expanding this focused port.
