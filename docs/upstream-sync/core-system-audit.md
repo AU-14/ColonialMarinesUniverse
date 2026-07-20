@@ -1683,3 +1683,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Structures/Dispensers/base_structuredispensers.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static inheritance and container-ID review confirms both named containers exist on the base and the component/system contract is already used by other CMU machines. Prototype loading plus deconstruction with stored bottles and an inserted beaker are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Audit RMC-specific dispenser descendants for extra private containers that should also be emptied.
+
+## CS-0121 — Prevent forensic-scan verbs from creating evidence
+
+- Upstream: [space-wizards/space-station-14#39964](https://github.com/space-wizards/space-station-14/pull/39964), `6a22ee7d39be79f9929dde64e1e66b847ca6d640`, 2025-09-05
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The forensic scanner's utility verb explicitly disables the generic contact-interaction callback, preventing a scan from depositing the user's fingerprints or fibers on the scanned object.
+- RMC/CMU divergence: CMU retains the same server scanner verb and shared verb execution default, so the upstream one-property fix applies without changing RMC forensic data or scan timing.
+- Decision and rationale: Mark only the observational verb as non-contact. Direct interaction paths and all other utility verbs preserve their existing contact semantics.
+- Files changed: `Content.Server/Forensics/Systems/ForensicScannerSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static execution tracing confirms `SharedVerbSystem` skips `DoContactInteraction` when the nullable override is false while still invoking the scan action. Server compilation plus verb-scan evidence preservation and direct-contact controls are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a forensic regression that compares evidence before and after verb scanning to protect this interaction contract.
