@@ -13,6 +13,7 @@ using Content.Shared._RMC14.Telephone;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Chat;
 using Content.Shared.Coordinates;
+using Content.Shared.Speech;
 using Robust.Server.Audio;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;

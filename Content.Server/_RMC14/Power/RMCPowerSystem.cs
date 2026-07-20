@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Power;
 using Content.Shared.Examine;
 using Content.Shared.Popups;
 using Content.Shared.Power;
+using Content.Shared.Power.Components;
 using Content.Shared.PowerCell;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;

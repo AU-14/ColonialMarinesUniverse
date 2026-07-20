@@ -2,6 +2,7 @@
 using Content.Shared._RMC14.Xenonids.Construction.DeployedTraps;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 
 namespace Content.Server._RMC14.Xenonids.Construction.DeployedTraps;
 

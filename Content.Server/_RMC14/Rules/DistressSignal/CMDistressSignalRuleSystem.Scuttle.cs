@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Power;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Content.Server.Temperature.Components;

@@ -5,6 +5,8 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Hijack;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Explosion;
 using Content.Shared.FixedPoint;
 using Content.Shared.GameTicking;

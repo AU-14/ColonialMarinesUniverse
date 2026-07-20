@@ -1,5 +1,5 @@
-using Content.Server.Explosion.EntitySystems;
 using Content.Shared._RMC14.Explosion;
+using Content.Shared.Trigger.Systems;
 
 namespace Content.Server._RMC14.Explosion;
 

@@ -12,6 +12,7 @@ using Content.Shared._RMC14.Xenonids.Watch;
 using Content.Shared.Body.Events;
 using Content.Shared.Chat;
 using Content.Shared.Database;
+using Content.Shared.Gibbing;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Robust.Server.Audio;

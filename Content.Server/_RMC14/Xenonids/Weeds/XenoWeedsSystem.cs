@@ -11,6 +11,7 @@ using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Atmos;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
 using Content.Shared.Tag;

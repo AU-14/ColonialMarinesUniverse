@@ -1,6 +1,8 @@
 ﻿using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Shared._RMC14.Weapons.Ranged.Battery;
+using Content.Shared.Power;
+using Content.Shared.Power.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Containers;
 

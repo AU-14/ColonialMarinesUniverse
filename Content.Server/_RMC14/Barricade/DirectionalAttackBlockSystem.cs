@@ -1,7 +1,7 @@
 using System.Linq;
 using Content.Server.Destructible;
-using Content.Server.Destructible.Thresholds.Triggers;
 using Content.Shared._RMC14.Barricade;
+using Content.Shared.Destructible.Thresholds.Triggers;
 
 namespace Content.Server._RMC14.Barricade;
 
