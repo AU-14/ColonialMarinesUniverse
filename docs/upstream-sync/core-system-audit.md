@@ -1618,3 +1618,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Silicons/Laws/SiliconLawSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static data-flow review confirms initialized runtime laws reach every updater target and an uninitialized provider still resolves its prototype. Server compilation plus prototype, custom runtime, ion-modified, and emag-modified provider uploads are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add an upload regression that modifies a provider at runtime and verifies law order, text, obedience target, and notification sound on every connected silicon.
+
+## CS-0116 — Prioritize cane-sheath item-slot verbs
+
+- Upstream: [space-wizards/space-station-14#39795](https://github.com/space-wizards/space-station-14/pull/39795), `b124d0def58aea3fa16489c6b5bc85c3b1351095`, 2025-08-20
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The cane sheath's blade slot now uses verb priority 3, allowing its insert/eject interaction to win ordering against lower-priority verbs when several actions are available.
+- RMC/CMU divergence: CMU retains an older sheath parent/component layout but uses the same `ItemSlots` entry and cane-blade tag. Only that slot's priority is adapted; no newer voice-lock or slot-lock behavior is imported.
+- Decision and rationale: Port the retained field at the existing slot definition so the interaction fix does not drag in unrelated prototype evolution.
+- Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Melee/cane.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype review confirms whitelist, sounds, and item mapping are unchanged and only the blade slot receives priority 3. Prototype loading plus insert/eject ordering with competing verbs is queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Compare CMU's older cane-sheath parent set with target-final separately before importing voice-lock or item-slot-lock behavior.
