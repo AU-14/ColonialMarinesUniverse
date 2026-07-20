@@ -3866,3 +3866,16 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - Files changed: `Content.Client/_RMC14/Buckle/RMCBuckleVisualsSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation evidence: Static review confirms both generated component states now trigger the existing `RMCSpriteSystem.UpdateDrawDepth` path, while local events still update both buckle and strap immediately. `git diff --check` passed. Client compilation is queued behind the disjoint construction patch in the shared worktree; tests remain deferred until the 1,000-upstream-commit checkpoint.
 - Remaining debt: Runtime coverage must compare local prediction and a remote observer while buckling, unbuckling, rotating a strap, changing vehicle seats, and applying explicit RMC buckle/strap draw-depth components.
+
+## CS-0281 - Restore the RMC admin context verb
+
+- Upstreams compared: live SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767`, live RMC `b6d677947dd8ebcb06194a66798938645fed5a54`, and CMU through CS-0280.
+- Areas: Interactions, Verbs, Admin UI, Networking
+- Classification: Missing -> Adapted
+- Risk: Medium before the fix; low after it.
+- Behavior/API delta: `RMCAdminVerb` and `SharedRMCAdminSystem` still defined the debug-admin action and subscribed to `GetVerbsEvent<RMCAdminVerb>`, but the type was absent from `Verb.VerbTypes` and `SharedVerbSystem` never collected it. The verb could therefore neither participate in the network type mapping nor be requested for the context menu, making the retained RMC actions UI unreachable through its intended entry point.
+- RMC/CMU divergence: Current SS14 access, interaction, hand, and context-menu collection values are passed unchanged. The RMC system still performs its own `AdminFlags.Debug` authorization before adding the action; no privilege is inferred from the generic verb access result.
+- Decision and rationale: Restore the type registration and one current-style collection branch. This reconnects the existing authorized consumer without altering generic verb execution or introducing a parallel menu path.
+- Files changed: `Content.Shared/Verbs/Verb.cs`, `Content.Shared/Verbs/SharedVerbSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation evidence: Static flow review now reaches the sole `GetVerbsEvent<RMCAdminVerb>` subscriber and retains its debug-admin check. `git diff --check` passed. Shared compilation is queued behind the disjoint storage patch; tests remain deferred until the 1,000-upstream-commit checkpoint.
+- Remaining debt: Runtime coverage must compare authorized and unauthorized sessions, local and server-provided verb requests, target deletion, and BUI opening on representative RMC entities.
