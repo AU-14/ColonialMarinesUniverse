@@ -3036,3 +3036,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Client/RCD/RCDConstructionGhostSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static update-flow review confirms the guard runs only for non-null client-side entities, authoritative RCDs keep the existing path, and non-RCD hands still clear an active RCD placer. Client compilation plus predicted spawn/reconciliation, borg module, handheld RCD, item switch/drop, recipe/direction change, overlay clear, range, and rotation-event cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1834 as `Ported (CS-0223)` when wave 0010 is committed.
+
+## CS-0224 — Conserve mass-weighted fire stacks on collision
+
+- Upstream: [space-wizards/space-station-14#41636](https://github.com/space-wizards/space-station-14/pull/41636), `3d32dab66116e5bab547f4b571a4c11da4503fb5`, 2025-11-30
+- Areas: Medical, Physics, GameTicking
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: When two fire-spreading entities collide and either is burning, the system now averages their mass-weighted fire-stack quantities and sets each entity's stacks to that shared quantity divided by its own mass. Before per-entity clamps, total fire-stack mass is conserved and lighter entities receive more stacks than heavier ones.
+- RMC/CMU divergence: RMC extends `SetFireStacks` with ignition-attempt cancellation, stack caps, fire intensity/duration, damage, and stop-drop-roll behavior. The new collision calculation still enters that retained setter once per entity, so RMC cancellation and clamping remain authoritative while the erroneous source/destination delta math is replaced.
+- Decision and rationale: Port the target-final equalization formula as one block. The previous average divided unweighted stacks by combined mass and then applied cross-mass deltas, which could create or remove fire and move stacks in the wrong direction; directly setting the two mass-normalized results expresses the intended conservation rule.
+- Files changed: `Content.Server/Atmos/EntitySystems/FlammableSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static arithmetic review confirms the two unclamped final mass-weighted quantities sum to the original total, collision de-duplication and fixture checks are unchanged, and both values still pass through RMC-aware `SetFireStacks`. Server compilation plus equal/unequal mass, one/both burning, stack caps, ignition cancellation, non-physics, collision ordering, fire damage, extinguish, and RMC fire cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1832 as `Ported (CS-0224)` when wave 0010 is committed.
