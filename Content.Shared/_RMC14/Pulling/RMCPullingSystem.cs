@@ -355,7 +355,7 @@ public sealed partial class RMCPullingSystem : EntitySystem
             if (attack is LightAttackEvent { Target: not null } light)
             {
                 var target = GetEntity(light.Target.Value);
-                _melee.AttemptLightAttack(ent, ent, ent.Comp, target, false);
+                _melee.AttemptLightAttack(ent, ent, ent.Comp, target);
             }
 
             args.Cancelled = true;

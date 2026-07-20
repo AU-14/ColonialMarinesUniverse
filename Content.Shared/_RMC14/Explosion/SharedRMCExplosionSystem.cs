@@ -114,7 +114,7 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
         factor = Math.Min(20, factor);
 
         // TODO RMC14 don't reduce if explosion is on same tile
-        if (_standing.IsDown(ent))
+        if (_standing.IsDown(ent.Owner))
             factor *= 0.5;
 
         _sizeStun.TryGetSize(ent, out var size);
@@ -132,7 +132,7 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
             var bombArmorMult = (100 - ev.ExplosionArmor) * 0.01;
             var severity = factor * 5;
 
-            _statusEffects.TryAddStatusEffect<FlashedComponent>(ent, FlashedKey, ent.Comp.BlindTime * bombArmorMult, true);
+            _statusEffects.TryAddStatusEffect<FlashedStatusEffectComponent>(ent, FlashedKey, ent.Comp.BlindTime * bombArmorMult, true);
             _deafness.TryDeafen(ent, TimeSpan.FromSeconds(severity * 0.5), true);
 
             var knockBackDistance = (float) Math.Clamp(severity / 5 / dir.Length(), 0.5, Math.Max(severity / 10, 0.5));
@@ -160,7 +160,7 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
         {
             var stunTime = TimeSpan.FromSeconds(factor / 2.5);
             _stun.TryStun(ent, stunTime, true);
-            _stun.TryKnockdown(ent, stunTime, true);
+            _stun.TryKnockdown(ent.Owner, stunTime, true);
 
             if (size < RMCSizes.Big)
             {
@@ -177,7 +177,7 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
             factor /= 5;
             var stunTime = TimeSpan.FromSeconds(factor / 5);
             _stun.TryStun(ent, stunTime, true);
-            _stun.TryKnockdown(ent, stunTime, true);
+            _stun.TryKnockdown(ent.Owner, stunTime, true);
             if (size < RMCSizes.Big)
             {
                 _slow.TrySlowdown(ent, TimeSpan.FromSeconds(factor));

@@ -77,7 +77,7 @@ public sealed partial class RMCDazedSystem : EntitySystem
             appliedEffect = true;
 
         if (appliedEffect && stutter)
-            _stutter.DoStutter(uid, time, true, status);
+            _stutter.DoStutter(uid, time, true);
 
         return false;
     }

@@ -202,7 +202,7 @@ public sealed partial class RMCSlowSystem : EntitySystem
         if (!HasComp<XenoImmobileVisualsComponent>(ent))
             return;
 
-        if (HasComp<StunnedComponent>(ent) && !_standing.IsDown(ent))
+        if (HasComp<StunnedComponent>(ent) && !_standing.IsDown(ent.Owner))
             return;
 
         RemCompDeferred<XenoImmobileVisualsComponent>(ent);
@@ -210,7 +210,7 @@ public sealed partial class RMCSlowSystem : EntitySystem
 
     private void OnModifierStun(Entity<RMCSpeciesSlowdownModifierComponent> ent, ref StunnedEvent args)
     {
-        if (_standing.IsDown(ent))
+        if (_standing.IsDown(ent.Owner))
             return;
 
         EnsureComp<XenoImmobileVisualsComponent>(ent);
@@ -231,7 +231,7 @@ public sealed partial class RMCSlowSystem : EntitySystem
 
         if (args.Key != "KnockedDown" && !HasComp<RMCRootedComponent>(ent))
             RemCompDeferred<XenoImmobileVisualsComponent>(ent);
-        else if ((args.Key == "KnockedDown" || !_standing.IsDown(ent)) && HasComp<StunnedComponent>(ent))
+        else if ((args.Key == "KnockedDown" || !_standing.IsDown(ent.Owner)) && HasComp<StunnedComponent>(ent))
             EnsureComp<XenoImmobileVisualsComponent>(ent);
     }
 
