@@ -773,3 +773,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Movement/Systems/SharedMoverController.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the pinned target retains the same lookup flags, descendant exclusion, one-way mask test, and cached pullable query. Compilation and focused movement/physics execution are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a behavioral integration fixture for asymmetric layers and mover-owned static children if the controller gains a test seam; separately audit later zero-gravity and relay-movement changes rather than expanding this collision fix.
+
+## CS-0051 — Retain maximum gun-spread modifier updates
+
+- Upstream: [space-wizards/space-station-14#38960](https://github.com/space-wizards/space-station-14/pull/38960), `f3ce4281656b120fa2f4f7ee48ffaaf09e329e55`, 2025-07-12
+- Areas: Shooting
+- Status: AlreadyPresent
+- Risk: Low
+- Behavior/API delta: Refreshing gun modifiers compares the cached maximum spread against the event's new maximum spread before updating and dirtying it. A maximum-only modifier change is no longer skipped merely because the old maximum happens to equal the new minimum.
+- RMC/CMU divergence: RMC independently carried the identical two-byte comparator fix in `ab8af5fb7d3` on 2025-01-28, before the shared SS14 baseline. RMC's attachment and weapon-controller subscribers continue to use the corrected shared refresh path.
+- Decision and rationale: Keep the existing RMC implementation and classify the later SS14 commit as already present. Reapplying it would be empty; changing modifier ordering or RMC attachment behavior would exceed the upstream bug fix.
+- Files changed: `docs/upstream-sync/core-system-audit.md`.
+- Validation: The SS14 commit is not an ancestor of `Rebase`, but blame attributes the exact `ev.MaxAngle` comparison in the current shared gun system to RMC commit `ab8af5fb7d3`; the pinned target contains the same comparison. No runtime code changed, so this entry adds no checkpoint test obligation.
+- Follow-up/debt: Add direct gun-modifier refresh coverage when that API receives a stable test seam, especially for independent minimum and maximum attachment modifiers.
