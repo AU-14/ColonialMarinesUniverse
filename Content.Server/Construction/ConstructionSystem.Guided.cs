@@ -24,7 +24,7 @@ namespace Content.Server.Construction
 
         private void OnGuideRequested(RequestConstructionGuide msg, EntitySessionEventArgs args)
         {
-            if (!ProtoMan.TryIndex(msg.ConstructionId, out ConstructionPrototype? prototype))
+            if (!TryRMCConstructionPrototype(msg.ConstructionId, out var prototype))
                 return;
 
             if (GetGuide(prototype) is { } guide)

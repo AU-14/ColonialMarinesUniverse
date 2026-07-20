@@ -208,7 +208,7 @@ namespace Content.Client.Construction
 
         private void HandlePlayerAttached(LocalPlayerAttachedEvent msg)
         {
-            var available = IsCraftingAvailable(msg.Entity);
+            var available = IsCraftingAvailable(msg.Entity) && RMCUserCanConstruct(msg.Entity);
             UpdateCraftingAvailability(available);
         }
 
@@ -273,7 +273,8 @@ namespace Content.Client.Construction
         {
             ghost = null;
             if (_playerManager.LocalEntity is not { } user ||
-                !user.IsValid())
+                !user.IsValid() ||
+                !RMCUserCanConstruct(user))
             {
                 return false;
             }
@@ -336,6 +337,9 @@ namespace Content.Client.Construction
         private bool CheckConstructionConditions(ConstructionPrototype prototype, EntityCoordinates loc, Direction dir,
             EntityUid user, bool showPopup = false)
         {
+            if (!RMCCheckConstructionAttempt(prototype, loc, user, showPopup))
+                return false;
+
             foreach (var condition in prototype.Conditions)
             {
                 if (!condition.Condition(user, loc, dir))
@@ -373,6 +377,9 @@ namespace Content.Client.Construction
 
         public void TryStartConstruction(EntityUid ghostId, ConstructionGhostComponent? ghostComp = null)
         {
+            if (_playerManager.LocalEntity is not { } user || !RMCUserCanConstruct(user))
+                return;
+
             if (!Resolve(ghostId, ref ghostComp))
                 return;
 
@@ -391,6 +398,9 @@ namespace Content.Client.Construction
         /// </summary>
         public void TryStartItemConstruction(string prototypeName)
         {
+            if (_playerManager.LocalEntity is not { } user || !RMCUserCanConstruct(user))
+                return;
+
             RaiseNetworkEvent(new TryStartItemConstructionMessage(prototypeName));
         }
 

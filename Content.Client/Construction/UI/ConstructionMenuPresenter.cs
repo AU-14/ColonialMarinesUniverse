@@ -182,7 +182,7 @@ namespace Content.Client.Construction.UI
             var isEmptyCategory = string.IsNullOrEmpty(category) || category == ForAllCategoryName;
             _selectedCategory = isEmptyCategory ? string.Empty : category;
 
-            foreach (var recipe in _prototypeManager.EnumeratePrototypes<ConstructionPrototype>())
+            foreach (var recipe in EnumerateRMCConstructionPrototypes())
             {
                 if (recipe.Hide)
                     continue;
@@ -245,7 +245,8 @@ namespace Content.Client.Construction.UI
                 prototype.Description!,
                 proto,
                 prototype.Type != ConstructionType.Item,
-                !_favoritedRecipes.Contains(prototype));
+                !_favoritedRecipes.Contains(prototype),
+                GetRMCConstructionActionText(prototype));
 
             var stepList = _constructionView.RecipeStepList;
             GenerateStepList(prototype, stepList);
@@ -291,7 +292,7 @@ namespace Content.Client.Construction.UI
                     return;
                 }
 
-                if (_selected.Type == ConstructionType.Item)
+                if (_selected.Type == ConstructionType.Item || IsRMCConstruction(_selected))
                 {
                     _constructionSystem.TryStartItemConstruction(_selected.ID);
                     _constructionView.BuildButtonPressed = false;
@@ -396,7 +397,7 @@ namespace Content.Client.Construction.UI
         {
             var uniqueCategories = new HashSet<string>();
 
-            foreach (var prototype in _prototypeManager.EnumeratePrototypes<ConstructionPrototype>())
+            foreach (var prototype in EnumerateRMCConstructionPrototypes())
             {
                 var category = prototype.Category;
 

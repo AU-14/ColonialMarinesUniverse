@@ -46,7 +46,13 @@ namespace Content.Client.Construction.UI
         event EventHandler NextRecipeInHistoryButtonPressed;
 
         void ClearRecipeInfo();
-        void SetRecipeInfo(string name, string description, EntityPrototype? targetPrototype, bool isItem, bool isFavorite);
+        void SetRecipeInfo(
+            string name,
+            string description,
+            EntityPrototype? targetPrototype,
+            bool isItem,
+            bool isFavorite,
+            string? actionText);
         void ResetPlacement();
         void TrySelectCategory(int categoryId);
         void TrySelectListViewButton(ProtoId<ConstructionPrototype> constructionProtoId);
@@ -174,10 +180,11 @@ namespace Content.Client.Construction.UI
             string description,
             EntityPrototype? targetPrototype,
             bool isItem,
-            bool isFavorite)
+            bool isFavorite,
+            string? actionText)
         {
             BuildButton.Disabled = false;
-            BuildButton.Text = Loc.GetString(isItem ? "construction-menu-place-ghost" : "construction-menu-craft");
+            BuildButton.Text = actionText ?? Loc.GetString(isItem ? "construction-menu-place-ghost" : "construction-menu-craft");
             TargetName.SetMessage(name);
             TargetDesc.SetMessage(description);
             TargetTexture.SetPrototype(targetPrototype?.ID);

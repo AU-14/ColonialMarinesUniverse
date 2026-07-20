@@ -432,7 +432,7 @@ namespace Content.Server.Construction
             if (!Resolve(uid, ref construction))
                 return false;
 
-            if (!ProtoMan.TryIndex<ConstructionGraphPrototype>(graphId, out var graph))
+            if (!TryRMCConstructionGraph(graphId, out var graph))
                 return false;
 
             if (GetNodeFromGraph(graph, nodeId) is not { })

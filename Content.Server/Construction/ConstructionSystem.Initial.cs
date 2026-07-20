@@ -324,11 +324,17 @@ namespace Content.Server.Construction
         // LEGACY CODE. See warning at the top of the file!
         public async Task<bool> TryStartItemConstruction(string prototype, EntityUid user)
         {
-            if (!ProtoMan.TryIndex(prototype, out ConstructionPrototype? constructionPrototype))
+            if (!TryRMCConstructionPrototype(prototype, out var constructionPrototype))
             {
                 Log.Error($"Tried to start construction of invalid recipe '{prototype}'!");
                 return false;
             }
+
+            if (!RMCUserCanConstruct(user))
+                return false;
+
+            if (TryStartRMCConstruction(constructionPrototype, user, out var rmcResult))
+                return rmcResult;
 
             if (!ProtoMan.TryIndex(constructionPrototype.Graph,
                     out ConstructionGraphPrototype? constructionGraph))
@@ -403,16 +409,9 @@ namespace Content.Server.Construction
         // LEGACY CODE. See warning at the top of the file!
         private async void HandleStartStructureConstruction(TryStartStructureConstructionMessage ev, EntitySessionEventArgs args)
         {
-            if (!ProtoMan.TryIndex(ev.PrototypeName, out ConstructionPrototype? constructionPrototype))
+            if (!TryRMCConstructionPrototype(ev.PrototypeName, out var constructionPrototype))
             {
                 Log.Error($"Tried to start construction of invalid recipe '{ev.PrototypeName}'!");
-                RaiseNetworkEvent(new AckStructureConstructionMessage(ev.Ack));
-                return;
-            }
-
-            if (!ProtoMan.TryIndex(constructionPrototype.Graph, out ConstructionGraphPrototype? constructionGraph))
-            {
-                Log.Error($"Invalid construction graph '{constructionPrototype.Graph}' in recipe '{ev.PrototypeName}'!");
                 RaiseNetworkEvent(new AckStructureConstructionMessage(ev.Ack));
                 return;
             }
@@ -420,6 +419,20 @@ namespace Content.Server.Construction
             if (args.SenderSession.AttachedEntity is not {Valid: true} user)
             {
                 Log.Error($"Client sent {nameof(TryStartStructureConstructionMessage)} with no attached entity!");
+                return;
+            }
+
+            if (!RMCUserCanConstruct(user))
+                return;
+
+            var location = GetCoordinates(ev.Location);
+            if (!RMCCheckConstructionAttempt(constructionPrototype, location, user))
+                return;
+
+            if (!ProtoMan.TryIndex(constructionPrototype.Graph, out ConstructionGraphPrototype? constructionGraph))
+            {
+                Log.Error($"Invalid construction graph '{constructionPrototype.Graph}' in recipe '{ev.PrototypeName}'!");
+                RaiseNetworkEvent(new AckStructureConstructionMessage(ev.Ack));
                 return;
             }
 
@@ -453,8 +466,6 @@ namespace Content.Server.Construction
                 var newSet = new HashSet<int> {ev.Ack};
                 _beingBuilt[args.SenderSession] = newSet;
             }
-
-            var location = GetCoordinates(ev.Location);
 
             foreach (var condition in constructionPrototype.Conditions)
             {
