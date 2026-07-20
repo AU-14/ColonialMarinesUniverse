@@ -689,7 +689,11 @@ public abstract partial class SharedCMInventorySystem : EntitySystem
         var aEnt = a.ContainerSlot?.ContainedEntity;
         var bEnt = b.ContainerSlot?.ContainedEntity;
         if (aEnt == null && bEnt == null)
-            return a.Priority.CompareTo(b.Priority);
+        {
+            var aPriority = a.Priority;
+            var bPriority = b.Priority;
+            return aPriority.CompareTo(bPriority);
+        }
 
         if (aEnt == null)
             return -1;

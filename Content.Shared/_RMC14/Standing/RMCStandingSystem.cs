@@ -164,7 +164,8 @@ public sealed partial class RMCStandingSystem : EntitySystem
 
     private void OnStandingStateEvasionRefresh(Entity<StandingStateComponent> entity, ref EvasionRefreshModifiersEvent args)
     {
-        if (entity.Owner != args.Entity.Owner || !_standing.IsDown(entity))
+        if (entity.Owner != args.Entity.Owner ||
+            !_standing.IsDown((entity.Owner, (StandingStateComponent?) entity.Comp)))
             return;
 
         args.Evasion += (int) EvasionModifiers.Rest;
