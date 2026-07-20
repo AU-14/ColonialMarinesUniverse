@@ -903,3 +903,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Client/Power/EntitySystems/StaticPowerSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the pinned target retains the optimistic missing-receiver fallback. Client compilation and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a client prediction regression covering both absent and explicitly unpowered receivers when the integration harness can instantiate the client-only component manager directly.
+
+## CS-0061 — Suppress damage examination for indestructible windows
+
+- Upstream: [space-wizards/space-station-14#38950](https://github.com/space-wizards/space-station-14/pull/38950), `dd87e7ef644fa2e0ed3d2003151e1fbcaf0afcbb`, 2025-07-12
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Square and diagonal indestructible plastitanium windows now override their inherited `ExaminableDamage` message set with `null`. Examining them no longer asks the damage-examine system to describe structural damage on entities that intentionally have no damageable/destructible state.
+- RMC/CMU divergence: RMC adds knock interaction messaging to the common plastitanium-window base but does not replace these inherited standard prototypes or the examination system. Knock feedback remains available; only the invalid damage description is suppressed on the two indestructible children.
+- Decision and rationale: Port the target-final per-prototype override rather than weakening `ExaminableDamageSystem` for every entity. Destructible plastitanium windows keep their normal damage messages and thresholds.
+- Files changed: `Resources/Prototypes/Entities/Structures/Windows/plastitanium.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the pinned target retains `messages: null` on exactly the square and diagonal indestructible variants. Prototype loading and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Audit other indestructible children that inherit damage examination without damage state, preferably with a resolved-prototype linter rule instead of broad runtime suppression.
