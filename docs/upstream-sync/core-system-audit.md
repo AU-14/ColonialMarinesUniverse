@@ -799,3 +799,16 @@ Date completed: 2026-07-20
 - Files changed: `docs/upstream-sync/core-system-audit.md`.
 - Validation: Blame traces the current pre-division guard to RMC commit `d39173e479b`, which predates the shared baseline; the pinned SS14 target retains its equivalent zero-count guard. No runtime code changed, so this entry adds no checkpoint test obligation.
 - Follow-up/debt: Audit RMC's mutable `FragmentIntoProjectilesEvent.TotalCount` separately because subscribers can alter it after the initial segment angle has already been calculated.
+
+## CS-0053 — Consume failed lock activations once
+
+- Upstream: [space-wizards/space-station-14#39039](https://github.com/space-wizards/space-station-14/pull/39039), `a093a2dd289c8edeb973f6aca8a4bcc4321efa48`, 2025-07-17
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Clicking a lock configured to toggle on activation now marks the activation handled before attempting the lock change. Failed access or interaction checks still produce their own feedback, but later activation handlers no longer also attempt to open the storage and display a second failure popup.
+- RMC/CMU divergence: RMC uses the same shared lock and activation ordering for many access-controlled lockers, vendors, and storage structures, including RMC access groups. No fork-specific handler depends on a configured lock-toggle activation falling through after the attempt fails.
+- Decision and rationale: Port the target-final handled-state ordering for both lock and unlock paths, plus the same punctuation/capitalization cleanup for their user-facing messages. Preserve all existing access rules, do-after durations, RMC access IDs, and storage behavior.
+- Files changed: `Content.Shared/Lock/LockSystem.cs`, `Resources/Locale/en-US/lock/lock-component.ftl`, `Resources/Locale/en-US/storage/components/entity-storage-component.ftl`, `Content.IntegrationTests/Tests/Interaction/LockActivationHandledTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the pinned target retains pre-attempt handling on both branches. A queued integration regression uses an access-controlled lock, proves an unauthorized unlock remains rejected, and requires the activation to be consumed. Execution is deferred to the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Audit the target's later in-hand lock activation and renamed lock-policy components separately; they are broader interaction/API changes and are not implied by this popup fix.
