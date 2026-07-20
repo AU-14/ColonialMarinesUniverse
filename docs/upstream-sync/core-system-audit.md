@@ -2685,3 +2685,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Holopad/HolopadSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static verb-flow review confirms only entities carrying `StationAiCoreComponent` return early and ordinary holopads retain all existing power, engagement, held-AI, and control-lock checks. Server compilation plus core, powered remote, unpowered remote, engaged, and non-AI-user cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1247 as `Ported (CS-0196)` when wave 0007 is committed.
+
+## CS-0197 — Isolate research server lookup state
+
+- Upstream: [space-wizards/space-station-14#40917](https://github.com/space-wizards/space-station-14/pull/40917), `68f9d748a2f4398a9d60bc42e19e272b7162c358`, 2025-10-15
+- Areas: GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Research server discovery now returns a fresh set for each call instead of clearing and reusing one static mutable set. Concurrent or nested lookups can no longer modify a collection while another caller enumerates it; first-server registration and name/id projections consume the per-call result directly.
+- RMC/CMU divergence: CMU uses the upstream research client/server systems and has no RMC-specific replacement for grid lookup. Research point generation, technology databases, recipes, access checks, and console synchronization are unchanged.
+- Decision and rationale: Port the complete lookup cleanup because every adjusted caller depended on the shared scratch set's lifetime. Per-call allocation establishes ownership clearly and removes the cross-call race without introducing locks around game-state queries.
+- Files changed: `Content.Server/Research/Systems/ResearchSystem.cs`, `Content.Server/Research/Systems/ResearchSystem.Client.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static ownership review confirms no static mutable lookup collection remains, gridless clients receive an independent empty set, and all callers enumerate only their own result. Server compilation plus simultaneous UI, map-init, re-anchor, gridless, and multiple-server cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1368 as `Ported (CS-0197)` when wave 0007 is committed.
