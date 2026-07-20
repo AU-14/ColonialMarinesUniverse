@@ -2151,3 +2151,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Reagents/biological.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static effect review confirms group healing is handled only by `EvenHealthChange` and bloodloss only by `HealthChange`. Prototype loading plus single- and mixed-damage metabolism assertions are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add focused effect coverage for zero-damage groups and mixed damage distributions if the checkpoint exposes edge cases.
+
+## CS-0157 — Let tarantulas pull without hands
+
+- Upstream: [space-wizards/space-station-14#40433](https://github.com/space-wizards/space-station-14/pull/40433), `5a67e3c26a23f0d6432c5a88e4b8df7e5dbf1f51`, 2025-09-18
+- Areas: Movement, Interactions, Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: All descendants of `MobSpiderBase` can initiate pulling despite lacking hands, enabling player-controlled tarantulas and their variants to drag entities.
+- RMC/CMU divergence: The capability is scoped to the retained upstream spider base; RMC xenonid pulling and fork-specific mob movement are unchanged.
+- Decision and rationale: Add `Puller` with `needsHands: false` at the shared spider base, matching the existing component contract and intentionally covering pet, hostile, clown, and wizard-derived spiders.
+- Files changed: `Resources/Prototypes/Entities/Mobs/NPCs/animals.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static inheritance review confirms the component reaches all `MobSpiderBase` descendants without altering `Pullable` or collision fixtures. Prototype loading and a no-hands pull interaction are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None.
