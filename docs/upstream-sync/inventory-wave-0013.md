@@ -153,7 +153,7 @@ behavior to port.
 2534 | 202b844967de80b4aed8bfc6c536d2820d876383 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2535 | e4ce0a7fbe1fc73946db995cc85c272e6e0eb927 | Fix dev map med APC overload (#42157) | Deferred | Physics | Upstream map-specific generated change.
 2536 | a35a48c351c24ea2230e8646d38da942880407ee | Fix sound issues with arti crusher. (#42406) | Deferred | Interactions | Moves behavior into newer shared and predicted audio architecture.
-2537 | a237493841100673de05dc05c018fc0d02afd3a0 | Prevent picking up chameleon projector disguises via context menu (#42656) | PortCandidate | Interactions, Gamerules | Focused context-menu exploit fix absent locally.
+2537 | a237493841100673de05dc05c018fc0d02afd3a0 | Prevent picking up chameleon projector disguises via context menu (#42656) | Ported (CS-0245) | Interactions, Gamerules | CMU's pre-rewrite hands hook now cancels hand-container insertion and reveals the disguise, closing context-menu pickup.
 2538 | 235ad21f22edf2d02c59c86fafdc1e2daee5d300 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2539 | 256ecd3c468e023ae5f4071e62b6b0f2e356c999 | Refresh gas canister UI on canister startup (#42616) | PortCandidate | Interactions, Physics | CMU's canister system lacks the MapInit and UIOpened refresh hooks.
 2540 | fdd8c2a1f6db2fe5c8d178b9f4353e407b11b05a | Automatic changelog update | Irrelevant | — | Generated changelog only.

@@ -2,6 +2,7 @@ using Content.Shared.Actions;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
 using Content.Shared.Hands;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Item;
 using Content.Shared.Polymorph.Components;
@@ -25,6 +26,7 @@ public abstract partial class SharedChameleonProjectorSystem : EntitySystem
 {
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private ISerializationManager _serMan = default!;
@@ -43,6 +45,7 @@ public abstract partial class SharedChameleonProjectorSystem : EntitySystem
         SubscribeLocalEvent<ChameleonDisguiseComponent, DamageChangedEvent>(OnDisguiseDamaged);
         SubscribeLocalEvent<ChameleonDisguiseComponent, InsertIntoEntityStorageAttemptEvent>(OnDisguiseInsertAttempt);
         SubscribeLocalEvent<ChameleonDisguiseComponent, ComponentShutdown>(OnDisguiseShutdown);
+        SubscribeLocalEvent<ChameleonDisguiseComponent, ContainerGettingInsertedAttemptEvent>(OnDisguiseGettingInserted);
 
         SubscribeLocalEvent<ChameleonDisguisedComponent, EntGotInsertedIntoContainerMessage>(OnDisguisedInserted);
 
@@ -80,6 +83,15 @@ public abstract partial class SharedChameleonProjectorSystem : EntitySystem
     private void OnDisguiseShutdown(Entity<ChameleonDisguiseComponent> ent, ref ComponentShutdown args)
     {
         _actions.RemoveProvidedActions(ent.Comp.User, ent.Comp.Projector);
+    }
+
+    private void OnDisguiseGettingInserted(Entity<ChameleonDisguiseComponent> ent, ref ContainerGettingInsertedAttemptEvent args)
+    {
+        if (!_hands.TryGetHand(args.Container.Owner, args.Container.ID, out _))
+            return;
+
+        args.Cancel();
+        TryReveal(ent.Comp.User);
     }
 
     #endregion
