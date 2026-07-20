@@ -260,7 +260,8 @@ namespace Content.Server.GameTicking
 
             DoSpawn(player, character, station, jobId, silent, out var mob, out var jobPrototype, out var jobName);
 
-            if (lateJoin && !silent)
+            // RMC14: CM jobs use faction-aware ARES and radio arrival announcements.
+            if (lateJoin && !silent && !jobPrototype.IsCM)
             {
                 if (jobPrototype.JoinNotifyCrew)
                 {

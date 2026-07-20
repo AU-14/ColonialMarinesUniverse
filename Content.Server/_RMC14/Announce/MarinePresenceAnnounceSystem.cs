@@ -2,6 +2,9 @@ using System.Globalization;
 using System.Linq;
 using Robust.Shared.Timing;
 using Content.Server._RMC14.Marines;
+using Content.Server._RMC14.Rules.DistressSignal;
+using Content.Server.Chat.Managers;
+using Content.Shared.GameTicking;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 using Content.Shared._RMC14.ARES;
@@ -18,6 +21,8 @@ namespace Content.Server._RMC14.Announce
     public sealed partial class MarinePresenceAnnounceSystem : EntitySystem
     {
         [Dependency] private ARESCoreSystem _aresCore = default!;
+        [Dependency] private IChatManager _chatManager = default!;
+        [Dependency] private CMDistressSignalRuleSystem _distressSignal = default!;
         [Dependency] private MarineAnnounceSystem _marineAnnounce = default!;
         [Dependency] private SharedRankSystem _rankSystem = default!;
         [Dependency] private SquadSystem _squad = default!;
@@ -26,6 +31,31 @@ namespace Content.Server._RMC14.Announce
 
         [ValidatePrototypeId<RadioChannelPrototype>]
         public readonly ProtoId<RadioChannelPrototype> CommonChannel = "MarineCommon";
+
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnPlayerSpawnComplete);
+        }
+
+        private void OnPlayerSpawnComplete(PlayerSpawnCompleteEvent ev)
+        {
+            if (ev.JobId is not { } jobId ||
+                !_prototypeManager.TryIndex(jobId, out JobPrototype? job) ||
+                !job.IsCM)
+            {
+                return;
+            }
+
+            AnnounceLateJoin(ev.LateJoin, ev.Silent, ev.Mob, jobId, Loc.GetString(job.Name), job);
+
+            if (_distressSignal.SelectedPlanetMapName is { } planetName)
+            {
+                _chatManager.DispatchServerMessage(ev.Player,
+                    Loc.GetString("job-greet-planet-name", ("planetName", planetName)));
+            }
+        }
 
         public void AnnounceLateJoin(bool lateJoin, bool silent, EntityUid mob, string jobId, string jobName, JobPrototype jobPrototype)
         {
