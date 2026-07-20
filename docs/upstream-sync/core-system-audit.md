@@ -1280,3 +1280,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Preferences/HumanoidCharacterProfile.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static call tracing confirms distinct profile instances reach `MemberwiseEquals` once, identical references return immediately, and non-profile objects return false. Shared compilation and equality cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add explicit tests for cloned equal profiles, each RMC-specific inequality field, null, same-reference, and unrelated-object comparisons, and verify hash/equality expectations remain aligned.
+
+## CS-0090 — Guard bed cleanup for terminating occupants
+
+- Upstream: [space-wizards/space-station-14#39410](https://github.com/space-wizards/space-station-14/pull/39410), `4a466c5dbe5885c9d80decadc290725581bff4e4`, 2025-08-06
+- Areas: Medical, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Heal-on-buckle unstrapping no longer removes an action or wakes an occupant whose entity is already terminating, when those dependent components may have been removed. Bed healing state is still cleaned unconditionally.
+- RMC/CMU divergence: RMC bed prototypes use the shared `HealOnBuckle` flow and have no overriding unstrap system, so the lifecycle guard applies without altering fork-specific medical values.
+- Decision and rationale: Port the retained teardown guard at the action/sleep boundary while keeping bed-side cleanup outside the guard to avoid leaking `HealOnBuckleHealingComponent`.
+- Files changed: `Content.Shared/Bed/SharedBedSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static control-flow review confirms terminating occupants skip entity mutations, normal occupants still lose the sleep action and wake, and the bed marker is always removed. Shared compilation and both unstrap paths are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a teardown regression that deletes a buckled occupant during unstrap and a normal control proving action removal, wake-up, and bed cleanup.
