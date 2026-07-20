@@ -1553,3 +1553,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/EntityEffects/EntityEffectSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static handler comparison confirms both mutation algorithms and random ranges are unchanged and only their selected dictionaries are corrected. Server compilation plus distinct consume/exude dictionary mutation cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add deterministic tests with seeded randomness proving each effect mutates only its namesake dictionary.
+
+## CS-0111 — Throttle bananium horn activation
+
+- Upstream: [space-wizards/space-station-14#39674](https://github.com/space-wizards/space-station-14/pull/39674), `01f4f0cf1492a80eee16dfb88a09078b7c49729f`, 2025-08-17
+- Areas: Interactions, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The bananium horn now has a three-second `UseDelay`, preventing immediate repeated activation while leaving its use, land, trigger, activate, collide, and melee sounds unchanged.
+- RMC/CMU divergence: No RMC/CMU prototype overrides `BananiumHorn`; inherited clown equipment receives the same retained throttle.
+- Decision and rationale: Port the isolated target-final component rather than modifying shared horn systems, keeping the cooldown specific to the unusually disruptive bananium horn.
+- Files changed: `Resources/Prototypes/Entities/Objects/Fun/bike_horn.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype review confirms the delay is scoped to `BananiumHorn` and ordinary bike horns are untouched. Prototype loading plus immediate repeat rejection and post-delay success are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Verify non-use sound triggers are intentionally outside `UseDelay`; if they remain spam vectors, handle them through their owning trigger systems rather than expanding this prototype port.
