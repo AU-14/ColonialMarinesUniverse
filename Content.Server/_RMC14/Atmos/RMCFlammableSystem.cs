@@ -34,9 +34,6 @@ public sealed partial class RMCFlammableSystem : SharedRMCFlammableSystem
             EnsureComp<RMCFireBypassActiveComponent>(flammable);
         }
 
-        flammable.Comp.Intensity = intensity;
-        flammable.Comp.Duration = duration;
-        flammable.Comp.TileDamage = tileDamage;
         return true;
     }
 
@@ -62,10 +59,6 @@ public sealed partial class RMCFlammableSystem : SharedRMCFlammableSystem
     {
         if (!Resolve(flammable, ref flammable.Comp, false))
             return;
-
-        flammable.Comp.Intensity = 30;
-        flammable.Comp.Duration = 20;
-        Dirty(flammable);
 
         _flammable.AdjustFireStacks(flammable, stacks, flammable);
     }

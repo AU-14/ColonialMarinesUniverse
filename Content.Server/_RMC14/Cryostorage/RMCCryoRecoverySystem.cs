@@ -9,6 +9,7 @@ using Content.Shared._RMC14.Webbing;
 using Content.Shared.Access.Systems;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Bed.Cryostorage;
+using Content.Shared.Clothing.Components;
 using Content.Shared.Database;
 using Content.Shared.Hands.Components;
 using Content.Shared.Roles;
@@ -28,7 +29,6 @@ public sealed partial class RMCCryoRecoverySystem : EntitySystem
 {
     [Dependency] private AccessReaderSystem _accessReader = default!;
     [Dependency] private ContainerSystem _container = default!;
-    [Dependency] private CryostorageSystem _cryostorage = default!;
     [Dependency] private HandsSystem _hands = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
@@ -74,7 +74,7 @@ public sealed partial class RMCCryoRecoverySystem : EntitySystem
             return;
 
         if (TryRecoverItem(console.Owner, args.Actor, player, item, true))
-            _cryostorage.RefreshCryostorageUI(cryostorage);
+            RefreshCryostorageUI(cryostorage);
 
         UpdateAllOpenUIs();
     }
@@ -99,7 +99,7 @@ public sealed partial class RMCCryoRecoverySystem : EntitySystem
         }
 
         if (recovered)
-            _cryostorage.RefreshCryostorageUI(cryostorage);
+            RefreshCryostorageUI(cryostorage);
 
         UpdateAllOpenUIs();
     }
@@ -107,7 +107,7 @@ public sealed partial class RMCCryoRecoverySystem : EntitySystem
     private void OnEnteredCryostorage(Entity<CryostorageContainedComponent> ent, ref EnteredCryostorageEvent args)
     {
         if (ent.Comp.Cryostorage is { } cryostorage)
-            _cryostorage.RefreshCryostorageUI(cryostorage);
+            RefreshCryostorageUI(cryostorage);
 
         UpdateAllOpenUIs();
     }
@@ -134,6 +134,44 @@ public sealed partial class RMCCryoRecoverySystem : EntitySystem
             if (_ui.IsUiOpen(uid, RMCCryoRecoveryUiKey.Key))
                 UpdateUI((uid, console));
         }
+    }
+
+    private void RefreshCryostorageUI(EntityUid cryostorage)
+    {
+        if (!TryComp<CryostorageComponent>(cryostorage, out var component))
+            return;
+
+        var players = new List<CryostorageContainedPlayerData>(component.StoredPlayers.Count);
+        foreach (var player in component.StoredPlayers)
+            players.Add(GetCryostoragePlayerData(player));
+
+        _ui.SetUiState(cryostorage, CryostorageUIKey.Key, new CryostorageBuiState(players));
+    }
+
+    private CryostorageContainedPlayerData GetCryostoragePlayerData(EntityUid player)
+    {
+        var data = new CryostorageContainedPlayerData
+        {
+            PlayerName = Name(player),
+            PlayerEnt = GetNetEntity(player),
+        };
+
+        var enumerator = _inventory.GetSlotEnumerator(player);
+        while (enumerator.NextItem(out var item, out var slotDef))
+        {
+            if (HasComp<AttachedClothingComponent>(item))
+                continue;
+
+            data.ItemSlots.Add((slotDef.Name, slotDef.DisplayName, Name(item)));
+        }
+
+        foreach (var hand in _hands.EnumerateHands(player))
+        {
+            if (_hands.TryGetHeldItem(player, hand, out var held, true))
+                data.HeldItems.Add(hand, Name(held.Value));
+        }
+
+        return data;
     }
 
     private void UpdateUI(Entity<RMCCryoRecoveryConsoleComponent> console)

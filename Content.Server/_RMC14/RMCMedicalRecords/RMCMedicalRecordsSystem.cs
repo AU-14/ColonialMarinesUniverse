@@ -10,7 +10,9 @@ using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Body;
 using Content.Shared.Clock;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.GameTicking;
 using Robust.Shared.Prototypes;
@@ -24,6 +26,7 @@ namespace Content.Server._RMC14.RMCMedicalRecords;
 public sealed partial class RMCMedicalRecordsSystem : SharedRMCMedicalRecordsSystem
 {
     [Dependency] private BodySystem _body = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedRMCBloodstreamSystem _rmcBloodstream = default!;
     [Dependency] private RMCPulseSystem _rmcPulse = default!;
     [Dependency] private RMCReagentSystem _rmcReagent = default!;
@@ -93,22 +96,26 @@ public sealed partial class RMCMedicalRecordsSystem : SharedRMCMedicalRecordsSys
 
         if (TryComp<DamageableComponent>(target, out var damageable))
         {
-            if (damageable.DamagePerGroup.GetValueOrDefault(BruteGroup) > 0)
+            var damagePerGroup = _damageable.GetDamagePerGroup((target, damageable));
+            if (damagePerGroup.GetValueOrDefault(BruteGroup) > 0)
                 autodocData.Add(new RMCAutodocScanData(RMCAutodocProcedures.Brute, Loc.GetString("rmc-records-autodoc-brute")));
 
-            if (damageable.DamagePerGroup.GetValueOrDefault(BurnGroup) > 0)
+            if (damagePerGroup.GetValueOrDefault(BurnGroup) > 0)
                 autodocData.Add(new RMCAutodocScanData(RMCAutodocProcedures.Burn, Loc.GetString("rmc-records-autodoc-burn")));
 
-            if (damageable.DamagePerGroup.GetValueOrDefault(ToxinGroup) > 0)
+            if (damagePerGroup.GetValueOrDefault(ToxinGroup) > 0)
                 autodocData.Add(new RMCAutodocScanData(RMCAutodocProcedures.Toxin, Loc.GetString("rmc-records-autodoc-toxin")));
         }
 
-        foreach (var part in _body.GetBodyChildren(target))
+        if (_body.TryGetOrgansWithComponent<OrganComponent>((target, null), out var organs))
         {
-            if (HasComp<CMIncisionOpenComponent>(part.Id))
+            foreach (var organ in organs)
             {
-                autodocData.Add(new RMCAutodocScanData(RMCAutodocProcedures.CloseIncisions, Loc.GetString("rmc-records-autodoc-incision")));
-                break;
+                if (HasComp<CMIncisionOpenComponent>(organ.Owner))
+                {
+                    autodocData.Add(new RMCAutodocScanData(RMCAutodocProcedures.CloseIncisions, Loc.GetString("rmc-records-autodoc-incision")));
+                    break;
+                }
             }
         }
 

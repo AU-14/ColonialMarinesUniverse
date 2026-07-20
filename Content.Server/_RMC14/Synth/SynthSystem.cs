@@ -12,6 +12,10 @@ using Content.Shared.Explosion.Components;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Metabolism;
 using Content.Shared.Tag;
+using Content.Shared.Trigger.Components;
+using Content.Shared.Trigger.Components.Triggers;
+using Content.Shared.Trigger.Systems;
+using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._RMC14.Synth;
@@ -23,6 +27,7 @@ public sealed partial class SynthSystem : SharedSynthSystem
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private BodySystem _body = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private TagSystem _tags = default!;
 
     public override void Initialize()
@@ -65,7 +70,9 @@ public sealed partial class SynthSystem : SharedSynthSystem
         }
 
         var newBrain = SpawnNextToOrDrop(ent.Comp.NewBrain, ent);
-        _body.AddOrganToFirstValidSlot(ent.Owner, newBrain);
+        var organContainer = _container.EnsureContainer<Container>(ent.Owner, BodyComponent.ContainerID);
+        if (!_container.Insert(newBrain, organContainer))
+            QueueDel(newBrain);
     }
 
     private void OnTaggedUseInHand(Entity<TagComponent> ent, ref UseInHandEvent args)
@@ -79,7 +86,7 @@ public sealed partial class SynthSystem : SharedSynthSystem
         if (!_tags.HasTag(ent.Owner, GrenadeTag))
             return;
 
-        if (!HasComp<OnUseTimerTriggerComponent>(ent.Owner))
+        if (!HasComp<TriggerOnUseComponent>(ent.Owner) || !HasComp<TimerTriggerComponent>(ent.Owner))
             return;
 
         DoSynthUnableToUsePopup(args.User, ent.Owner);

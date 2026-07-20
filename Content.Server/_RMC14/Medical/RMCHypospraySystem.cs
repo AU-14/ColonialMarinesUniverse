@@ -1,5 +1,7 @@
 using Content.Shared._RMC14.Chemistry;
 using Content.Shared.Chemistry.Components;
+using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Chemistry.Prototypes;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.FixedPoint;
 using Content.Shared.IdentityManagement;
@@ -9,6 +11,8 @@ namespace Content.Server._RMC14.Medical;
 
 public sealed class RMCHypospraySystem : RMCSharedHypospraySystem
 {
+    [Dependency] private InjectorSystem _injector = default!;
+
     protected override void OnInteractUsing(Entity<RMCHyposprayComponent> ent, ref InteractUsingEvent args)
     {
         base.OnInteractUsing(ent, ref args);
@@ -88,8 +92,11 @@ public sealed class RMCHypospraySystem : RMCSharedHypospraySystem
 
         Entity<SolutionComponent>? vialSolutionComp;
         Solution? vialSolution;
+        if (!ProtoMan.Resolve(syringe.ActiveModeProtoId, out InjectorModePrototype? activeMode))
+            return;
 
-        if (syringe.ToggleState == InjectorToggleMode.Inject)
+        var injecting = activeMode.Behavior.HasFlag(InjectorBehavior.Inject);
+        if (injecting)
         {
             if (!_solution.TryGetInjectableSolution(vial, out vialSolutionComp, out vialSolution))
                 return;
@@ -100,20 +107,22 @@ public sealed class RMCHypospraySystem : RMCSharedHypospraySystem
                 return;
         }
 
-        var transferAmount = syringe.ToggleState == InjectorToggleMode.Inject ?
-            FixedPoint2.Min(syringe.TransferAmount, vialSolution.AvailableVolume) :
-            FixedPoint2.Min(syringe.TransferAmount, syringeSolution.AvailableVolume);
+        var configuredAmount = syringe.CurrentTransferAmount ??
+            (injecting ? syringeSolution.Volume : vialSolution.Volume);
+        var transferAmount = injecting ?
+            FixedPoint2.Min(configuredAmount, vialSolution.AvailableVolume) :
+            FixedPoint2.Min(configuredAmount, syringeSolution.AvailableVolume);
 
         if (transferAmount <= 0)
         {
-            if (syringe.ToggleState == InjectorToggleMode.Inject)
+            if (injecting)
                 _popup.PopupEntity(Loc.GetString("rmc-hypospray-full", ("vial", vial)), ent, user);
             else
                 _popup.PopupEntity(Loc.GetString("rmc-hypospray-full", ("vial", injector)), ent, user);
             return;
         }
 
-        if (syringe.ToggleState == InjectorToggleMode.Draw)
+        if (!injecting)
         {
             var removed = _solution.Draw(vial, vialSolutionComp.Value, transferAmount);
             if (!_solution.TryAddSolution(syringeSolutionComp.Value, removed))
@@ -123,10 +132,7 @@ public sealed class RMCHypospraySystem : RMCSharedHypospraySystem
                                 ("target", Identity.Entity(vial, EntityManager))), injector, user);
 
             if (syringeSolution.Volume == syringeSolution.MaxVolume)
-            {
-                syringe.ToggleState = InjectorToggleMode.Inject;
-                Dirty(injector, syringe);
-            }
+                SetInjectorMode((injector, syringe), user, InjectorBehavior.Inject);
         }
         else
         {
@@ -137,15 +143,24 @@ public sealed class RMCHypospraySystem : RMCSharedHypospraySystem
                                 ("target", Identity.Entity(vial, EntityManager))), injector, user);
 
             if (syringeSolution.Volume == 0)
-            {
-                syringe.ToggleState = InjectorToggleMode.Draw;
-                Dirty(injector, syringe);
-            }
+                SetInjectorMode((injector, syringe), user, InjectorBehavior.Draw);
         }
 
         Dirty(syringeSolutionComp.Value);
         Dirty(vialSolutionComp.Value);
 
         UpdateAppearance(ent);
+    }
+
+    private void SetInjectorMode(Entity<InjectorComponent> injector, EntityUid user, InjectorBehavior behavior)
+    {
+        foreach (var modeId in injector.Comp.AllowedModes)
+        {
+            if (!ProtoMan.Resolve(modeId, out InjectorModePrototype? mode) || !mode.Behavior.HasFlag(behavior))
+                continue;
+
+            _injector.ToggleMode(injector, user, mode, false);
+            return;
+        }
     }
 }

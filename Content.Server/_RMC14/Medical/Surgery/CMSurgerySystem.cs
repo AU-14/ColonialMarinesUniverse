@@ -64,15 +64,18 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
             if (GetSingleton(surgery) is not { } surgeryEnt)
                 continue;
 
-            foreach (var part in _body.GetBodyChildren(body))
+            if (!_body.TryGetOrgansWithComponent<OrganComponent>((body, null), out var organs))
+                continue;
+
+            foreach (var part in organs)
             {
-                var ev = new CMSurgeryValidEvent(body, part.Id);
+                var ev = new CMSurgeryValidEvent(body, part.Owner);
                 RaiseLocalEvent(surgeryEnt, ref ev);
 
                 if (ev.Cancelled)
                     continue;
 
-                surgeries.GetOrNew(GetNetEntity(part.Id)).Add(surgery);
+                surgeries.GetOrNew(GetNetEntity(part.Owner)).Add(surgery);
             }
         }
 
@@ -168,9 +171,10 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
         if (!TryComp(args.Body, out TransformComponent? xform))
             return;
 
-        foreach (var entity in _body.GetBodyOrganEntityComps<XenoHeartComponent>(args.Body))
+        if (_body.TryGetOrgansWithComponent<XenoHeartComponent>((args.Body, null), out var hearts))
         {
-            QueueDel(entity.Owner);
+            foreach (var entity in hearts)
+                QueueDel(entity.Owner);
         }
 
         SpawnAtPosition(heart.Item, xform.Coordinates);

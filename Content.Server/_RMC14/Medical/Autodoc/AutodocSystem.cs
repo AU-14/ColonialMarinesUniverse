@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.Body.Systems;
 using Content.Shared._RMC14.Body;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Medical.Autodoc;
@@ -31,6 +32,7 @@ public sealed partial class AutodocSystem : SharedAutodocSystem
 {
     [Dependency] private AudioSystem _audio = default!;
     [Dependency] private BodySystem _body = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private MobThresholdSystem _mobThreshold = default!;
@@ -377,9 +379,12 @@ public sealed partial class AutodocSystem : SharedAutodocSystem
 
     private bool HasOpenIncisions(EntityUid occupant)
     {
-        foreach (var part in _body.GetBodyChildren(occupant))
+        if (!_body.TryGetOrgansWithComponent<OrganComponent>((occupant, null), out var organs))
+            return false;
+
+        foreach (var part in organs)
         {
-            if (HasComp<CMIncisionOpenComponent>(part.Id))
+            if (HasComp<CMIncisionOpenComponent>(part.Owner))
                 return true;
         }
         return false;
@@ -388,14 +393,17 @@ public sealed partial class AutodocSystem : SharedAutodocSystem
     private void PerformCloseIncisions(EntityUid uid, AutodocComponent autodoc, EntityUid occupant)
     {
         var closedAny = false;
-        foreach (var part in _body.GetBodyChildren(occupant))
+        if (_body.TryGetOrgansWithComponent<OrganComponent>((occupant, null), out var organs))
         {
-            if (HasComp<CMIncisionOpenComponent>(part.Id))
+            foreach (var part in organs)
             {
-                RemComp<CMIncisionOpenComponent>(part.Id);
-                RemCompDeferred<CMBleedersClampedComponent>(part.Id);
-                RemCompDeferred<CMSkinRetractedComponent>(part.Id);
-                RemCompDeferred<CMRibcageOpenComponent>(part.Id);
+                if (!HasComp<CMIncisionOpenComponent>(part.Owner))
+                    continue;
+
+                RemComp<CMIncisionOpenComponent>(part.Owner);
+                RemCompDeferred<CMBleedersClampedComponent>(part.Owner);
+                RemCompDeferred<CMSkinRetractedComponent>(part.Owner);
+                RemCompDeferred<CMRibcageOpenComponent>(part.Owner);
                 closedAny = true;
             }
         }
@@ -456,17 +464,18 @@ public sealed partial class AutodocSystem : SharedAutodocSystem
                 else
                     occupantState = AutodocOccupantMobState.Alive;
 
-                var totalDamage = damageable.TotalDamage;
+                var totalDamage = _damageable.GetTotalDamage((occupant.Value, damageable));
+                var damagePerGroup = _damageable.GetDamagePerGroup((occupant.Value, damageable));
                 if (_mobThreshold.TryGetThresholdForState(occupant.Value, MobState.Critical, out var critThreshold))
                 {
                     maxHealth = (float) critThreshold;
                     health = (float) (critThreshold - totalDamage);
                 }
 
-                bruteLoss = damageable.DamagePerGroup.GetValueOrDefault(BruteGroup).Float();
-                burnLoss = damageable.DamagePerGroup.GetValueOrDefault(BurnGroup).Float();
-                toxinLoss = damageable.DamagePerGroup.GetValueOrDefault(ToxinGroup).Float();
-                oxyLoss = damageable.DamagePerGroup.GetValueOrDefault(AirlossGroup).Float();
+                bruteLoss = damagePerGroup.GetValueOrDefault(BruteGroup).Float();
+                burnLoss = damagePerGroup.GetValueOrDefault(BurnGroup).Float();
+                toxinLoss = damagePerGroup.GetValueOrDefault(ToxinGroup).Float();
+                oxyLoss = damagePerGroup.GetValueOrDefault(AirlossGroup).Float();
             }
 
             if (TryComp<BloodstreamComponent>(occupant, out var blood) &&
@@ -560,15 +569,16 @@ public sealed partial class AutodocSystem : SharedAutodocSystem
             // Life support: keep patient alive during surgery
             if (TryComp<DamageableComponent>(occupant, out var damageable))
             {
-                if (damageable.DamagePerGroup.GetValueOrDefault(ToxinGroup) > 0)
+                if (_damageable.GetDamagePerGroup((occupant, damageable)).GetValueOrDefault(ToxinGroup) > 0)
                 {
                     var healing = _rmcDamageable.DistributeHealingCached(occupant, ToxinGroup, 0.25);
                     _damageable.TryChangeDamage(occupant, healing, true, false);
                 }
 
-                if (damageable.DamagePerGroup.GetValueOrDefault(AirlossGroup) > 0)
+                var airloss = _damageable.GetDamagePerGroup((occupant, damageable)).GetValueOrDefault(AirlossGroup);
+                if (airloss > 0)
                 {
-                    var healing = _rmcDamageable.DistributeHealingCached(occupant, AirlossGroup, damageable.DamagePerGroup.GetValueOrDefault(AirlossGroup));
+                    var healing = _rmcDamageable.DistributeHealingCached(occupant, AirlossGroup, airloss);
                     _damageable.TryChangeDamage(occupant, healing, true, false);
                 }
             }
@@ -576,7 +586,8 @@ public sealed partial class AutodocSystem : SharedAutodocSystem
             var anyTreatmentRemaining = false;
             if (autodoc.HealingBrute)
             {
-                if (damageable != null && damageable.DamagePerGroup.GetValueOrDefault(BruteGroup) > 0)
+                if (damageable != null &&
+                    _damageable.GetDamagePerGroup((occupant, damageable)).GetValueOrDefault(BruteGroup) > 0)
                 {
                     var healing = _rmcDamageable.DistributeHealingCached(occupant, BruteGroup, autodoc.BruteHealAmount);
                     _damageable.TryChangeDamage(occupant, healing, true, false);
@@ -591,7 +602,8 @@ public sealed partial class AutodocSystem : SharedAutodocSystem
 
             if (autodoc.HealingBurn)
             {
-                if (damageable != null && damageable.DamagePerGroup.GetValueOrDefault(BurnGroup) > 0)
+                if (damageable != null &&
+                    _damageable.GetDamagePerGroup((occupant, damageable)).GetValueOrDefault(BurnGroup) > 0)
                 {
                     var healing = _rmcDamageable.DistributeHealingCached(occupant, BurnGroup, autodoc.BurnHealAmount);
                     _damageable.TryChangeDamage(occupant, healing, true, false);
@@ -606,7 +618,8 @@ public sealed partial class AutodocSystem : SharedAutodocSystem
 
             if (autodoc.HealingToxin)
             {
-                if (damageable != null && damageable.DamagePerGroup.GetValueOrDefault(ToxinGroup) > 0)
+                if (damageable != null &&
+                    _damageable.GetDamagePerGroup((occupant, damageable)).GetValueOrDefault(ToxinGroup) > 0)
                 {
                     var healing = _rmcDamageable.DistributeHealingCached(occupant, ToxinGroup, autodoc.ToxinHealAmount);
                     _damageable.TryChangeDamage(occupant, healing, true, false);
@@ -626,7 +639,9 @@ public sealed partial class AutodocSystem : SharedAutodocSystem
                     _solution.TryGetSolution(occupant, blood.BloodSolutionName, out var bloodSolEnt, out var bloodSol) &&
                     bloodSol.Volume < bloodSol.MaxVolume)
                 {
-                    _solution.TryAddReagent(bloodSolEnt.Value, blood.BloodReagent, autodoc.BloodTransfusionAmount);
+                    _bloodstream.TryRegulateBloodLevel(
+                        (occupant, blood),
+                        FixedPoint2.Min(autodoc.BloodTransfusionAmount, bloodSol.AvailableVolume));
                     anyTreatmentRemaining = true;
                 }
                 else

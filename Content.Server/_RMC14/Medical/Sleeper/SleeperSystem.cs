@@ -9,7 +9,9 @@ using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Mobs;
@@ -25,6 +27,7 @@ namespace Content.Server._RMC14.Medical.Sleeper;
 public sealed partial class SleeperSystem : SharedSleeperSystem
 {
     [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private MobThresholdSystem _mobThreshold = default!;
     [Dependency] private SharedRMCBloodstreamSystem _rmcBloodstream = default!;
@@ -83,7 +86,8 @@ public sealed partial class SleeperSystem : SharedSleeperSystem
 
         if (isEmergency && !isAvailable)
         {
-            if (!TryComp<DamageableComponent>(occupant, out var damageable) || damageable.TotalDamage <= sleeper.Comp.PercentHealthThreshold)
+            if (!TryComp<DamageableComponent>(occupant, out var damageable) ||
+                _damageable.GetTotalDamage((occupant, damageable)) <= sleeper.Comp.PercentHealthThreshold)
                 return;
         }
 
@@ -187,7 +191,8 @@ public sealed partial class SleeperSystem : SharedSleeperSystem
                 else
                     occupantState = SleeperOccupantMobState.Alive;
 
-                totalDamage = damageable.TotalDamage;
+                totalDamage = _damageable.GetTotalDamage((occupant.Value, damageable));
+                var damagePerGroup = _damageable.GetDamagePerGroup((occupant.Value, damageable));
 
                 if (_mobThreshold.TryGetThresholdForState(occupant.Value, MobState.Critical, out var critThreshold) &&
                     _mobThreshold.TryGetThresholdForState(occupant.Value, MobState.Dead, out var deadThreshold))
@@ -197,10 +202,10 @@ public sealed partial class SleeperSystem : SharedSleeperSystem
                     emergencyHealthThreshold = (float)(deadThreshold - deadThreshold * sleeper.Comp.PercentHealthThreshold);
                 }
 
-                bruteLoss = damageable.DamagePerGroup.GetValueOrDefault(BruteGroup).Float();
-                burnLoss = damageable.DamagePerGroup.GetValueOrDefault(BurnGroup).Float();
-                toxinLoss = damageable.DamagePerGroup.GetValueOrDefault(ToxinGroup).Float();
-                oxyLoss = damageable.DamagePerGroup.GetValueOrDefault(AirlossGroup).Float();
+                bruteLoss = damagePerGroup.GetValueOrDefault(BruteGroup).Float();
+                burnLoss = damagePerGroup.GetValueOrDefault(BurnGroup).Float();
+                toxinLoss = damagePerGroup.GetValueOrDefault(ToxinGroup).Float();
+                oxyLoss = damagePerGroup.GetValueOrDefault(AirlossGroup).Float();
             }
 
             if (TryComp<BloodstreamComponent>(occupant, out var blood) &&

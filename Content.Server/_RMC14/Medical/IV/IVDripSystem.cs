@@ -11,6 +11,7 @@ using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
+using Content.Shared.Power.EntitySystems;
 using Content.Shared.PowerCell;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -21,6 +22,7 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
 {
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private SharedBatterySystem _battery = default!;
     [Dependency] private PowerCellSystem _powerCell = default!;
     [Dependency] private RMCBloodstreamSystem _rmcBloodstream = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
@@ -219,7 +221,7 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
         if (!_powerCell.TryGetBatteryFromSlot(dialysis.Owner, out var battery) || battery.Value.Comp.MaxCharge <= 0)
             return DialysisBatteryLevel.Battery0;
 
-        var percentCharged = battery.Value.Comp.CurrentCharge / battery.Value.Comp.MaxCharge;
+        var percentCharged = _battery.GetCharge(battery.Value.AsNullable()) / battery.Value.Comp.MaxCharge;
         return percentCharged switch
         {
             > 0.85f => DialysisBatteryLevel.Battery100,
