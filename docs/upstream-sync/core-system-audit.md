@@ -2398,3 +2398,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Mobs/NPCs/xeno.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype review confirms `MobPurpleSnake` retains `Xeno` and gains only `SimpleHostile`, with no RMC descendant. Prototype loading plus cobra/adder and adder/xeno hostility cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: None.
+
+## CS-0175 — Correct PDA flashlight falloff
+
+- Upstream: [space-wizards/space-station-14#40687](https://github.com/space-wizards/space-station-14/pull/40687), `250c1392fc590d9ef24c106320b32e06b4f86256`, 2025-10-03
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: PDA flashlights now use radius `1.7` and falloff `3`, replacing the shorter radius with an unspecified/default falloff. Their disabled initial state, softness, rotation, and toggle behavior remain unchanged.
+- RMC/CMU divergence: `RMCAdminPDA` inherits the standard PDA light through `CentcomPDA` and has no point-light override, so it intentionally receives the same corrected beam profile. Other RMC lights are independent.
+- Decision and rationale: Port the retained two-field visual correction at the shared PDA base so every derivative resolves one consistent flashlight profile.
+- Files changed: `Resources/Prototypes/Entities/Objects/Devices/pda.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static inheritance review confirms the base and RMC admin PDA inherit radius `1.7` and falloff `3` without changing enabled state. Prototype loading and visual range checks are queued for the index-1999 checkpoint.
+- Follow-up/debt: None.
