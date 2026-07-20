@@ -6,46 +6,45 @@ namespace Content.Shared.Vehicle;
 
 public sealed partial class VehicleSystem
 {
-    public void InitializeOperator()
-    {
-        SubscribeLocalEvent<StrapVehicleComponent, StrappedEvent>(OnVehicleStrapped);
-        SubscribeLocalEvent<StrapVehicleComponent, UnstrappedEvent>(OnVehicleUnstrapped);
-
-        SubscribeLocalEvent<ContainerVehicleComponent, EntInsertedIntoContainerMessage>(OnContainerEntInserted);
-        SubscribeLocalEvent<ContainerVehicleComponent, EntRemovedFromContainerMessage>(OnContainerEntRemoved);
-    }
-
+    [SubscribeLocalEvent]
     private void OnVehicleStrapped(Entity<StrapVehicleComponent> ent, ref StrappedEvent args)
     {
-        if (!TryComp<VehicleComponent>(ent, out var vehicle))
+        if (!_vehicleQuery.TryComp(ent, out var vehicle))
             return;
         TrySetOperator((ent, vehicle), args.Buckle);
     }
 
+    [SubscribeLocalEvent]
     private void OnVehicleUnstrapped(Entity<StrapVehicleComponent> ent, ref UnstrappedEvent args)
     {
-        if (!TryComp<VehicleComponent>(ent, out var vehicle))
+        if (!_vehicleQuery.TryComp(ent, out var vehicle))
             return;
-        TrySetOperator((ent, vehicle), null);
+
+        if (vehicle.Operator != args.Buckle)
+            return;
+
+        TryRemoveOperator((ent, vehicle));
     }
 
+    [SubscribeLocalEvent]
     private void OnContainerEntInserted(Entity<ContainerVehicleComponent> ent, ref EntInsertedIntoContainerMessage args)
     {
         if (_timing.ApplyingState || args.Container.ID != ent.Comp.ContainerId)
             return;
 
-        if (!TryComp<VehicleComponent>(ent, out var vehicle))
+        if (!_vehicleQuery.TryComp(ent, out var vehicle))
             return;
 
-        TrySetOperator((ent, vehicle), args.Entity, removeExisting: false);
+        TrySetOperator((ent, vehicle), args.Entity);
     }
 
+    [SubscribeLocalEvent]
     private void OnContainerEntRemoved(Entity<ContainerVehicleComponent> ent, ref EntRemovedFromContainerMessage args)
     {
         if (_timing.ApplyingState || args.Container.ID != ent.Comp.ContainerId)
             return;
 
-        if (!TryComp<VehicleComponent>(ent, out var vehicle))
+        if (!_vehicleQuery.TryComp(ent, out var vehicle))
             return;
 
         if (vehicle.Operator != args.Entity)

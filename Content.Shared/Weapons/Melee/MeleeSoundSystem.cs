@@ -66,12 +66,12 @@ public sealed partial class MeleeSoundSystem : EntitySystem
         // Use weapon sounds if the thing being hit doesn't specify its own sounds.
         if (!playedSound)
         {
-            if (hitSoundOverride != null && damageType != null)
+            if (hitSoundOverride != null)
             {
                 _audio.PlayPredicted(hitSoundOverride, coords, userUid, hitSoundOverride.Params.WithVariation(DamagePitchVariation));
                 playedSound = true;
             }
-            else if (hitSound != null && damageType != null)
+            else if (hitSound != null)
             {
                 _audio.PlayPredicted(hitSound, coords, userUid, hitSound.Params.WithVariation(DamagePitchVariation));
                 playedSound = true;

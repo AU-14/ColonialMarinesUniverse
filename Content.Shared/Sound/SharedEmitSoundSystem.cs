@@ -32,8 +32,8 @@ public abstract partial class SharedEmitSoundSystem : EntitySystem
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] private INetManager _netMan = default!;
     [Dependency] protected IRobustRandom Random = default!;
-    [Dependency] private   SharedAmbientSoundSystem _ambient = default!;
-    [Dependency] private   SharedAudioSystem _audioSystem = default!;
+    [Dependency] private SharedAmbientSoundSystem _ambient = default!;
+    [Dependency] private SharedAudioSystem _audioSystem = default!;
     [Dependency] protected SharedPopupSystem Popup = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
@@ -110,19 +110,8 @@ public abstract partial class SharedEmitSoundSystem : EntitySystem
             args.Handled = true;
     }
 
-    private void OnEmitSoundOnThrown(EntityUid uid, EmitSoundOnThrowComponent component, ref ThrownEvent args)
+    private void OnEmitSoundOnThrown(EntityUid uid, BaseEmitSoundComponent component, ref ThrownEvent args)
     {
-        // RMC14
-        if (component.Cooldown > TimeSpan.Zero)
-        {
-            var time = Timing.CurTime;
-            if (time < component.Last + component.Cooldown)
-                return;
-
-            component.Last = time;
-            Dirty(uid, component);
-        }
-
         TryEmitSound(uid, component, args.User, false);
     }
 
@@ -152,7 +141,7 @@ public abstract partial class SharedEmitSoundSystem : EntitySystem
             TryEmitSound(ent, ent.Comp, args.User);
         }
     }
-    public void TryEmitSound(EntityUid uid, BaseEmitSoundComponent component, EntityUid? user=null, bool predict=true)
+    protected void TryEmitSound(EntityUid uid, BaseEmitSoundComponent component, EntityUid? user=null, bool predict=true)
     {
         if (component.Sound == null)
             return;

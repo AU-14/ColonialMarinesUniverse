@@ -7,7 +7,7 @@ namespace Content.Shared.Roles.Components;
 /// <summary>
 /// This holds data for, and indicates, a Mind Role entity
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent]
 public sealed partial class MindRoleComponent : BaseMindRoleComponent
 {
     /// <summary>
@@ -44,8 +44,8 @@ public sealed partial class MindRoleComponent : BaseMindRoleComponent
     /// <summary>
     /// The Job prototype of this role.
     /// </summary>
-    [DataField, AutoNetworkedField]
-    public ProtoId<JobPrototype>? JobPrototype { get; set; }
+    [DataField]
+    public ProtoId<JobPrototype>? JobPrototype;
 
     /// <summary>
     /// Used to order the characters on by role/antag status. Highest numbers are shown first.

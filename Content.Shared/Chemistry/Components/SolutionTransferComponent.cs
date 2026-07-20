@@ -42,10 +42,6 @@ public sealed partial class SolutionTransferComponent : Component
     /// <summary>
     /// Whether you're allowed to change the transfer amount.
     /// </summary>
-    [DataField("canChangeTransferAmount")]
-    [ViewVariables(VVAccess.ReadWrite)]
-    public bool CanChangeTransferAmount { get; set; } = false;
-
     [DataField, AutoNetworkedField]
-    public FixedPoint2[]? TransferAmounts;
+    public bool CanChangeTransferAmount = false;
 }

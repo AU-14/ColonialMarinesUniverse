@@ -21,7 +21,6 @@ namespace Content.Shared.Atmos.EntitySystems;
 public abstract partial class SharedAtmosPipeLayersSystem : EntitySystem
 {
     [Dependency] private SharedAppearanceSystem _appearance = default!;
-    [Dependency] private IPrototypeManager _protoManager = default!;
     [Dependency] private SharedToolSystem _tool = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedPopupSystem _popup = default!;

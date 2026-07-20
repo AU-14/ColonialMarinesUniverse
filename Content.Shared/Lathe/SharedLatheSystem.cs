@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Emag.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Lathe.Prototypes;
@@ -18,7 +17,6 @@ namespace Content.Shared.Lathe;
 /// </summary>
 public abstract partial class SharedLatheSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private SharedMaterialStorageSystem _materialStorage = default!;
     [Dependency] private EmagSystem _emag = default!;
 
@@ -162,7 +160,7 @@ public abstract partial class SharedLatheSystem : EntitySystem
         if (proto.ResultReagents is { } resultReagents)
         {
             return ContentLocalizationManager.FormatList(resultReagents
-                .Select(p => Loc.GetString("lathe-menu-result-reagent-display", ("reagent", _proto.IndexReagent(p.Key).LocalizedName), ("amount", p.Value)))
+                .Select(p => Loc.GetString("lathe-menu-result-reagent-display", ("reagent", ProtoMan.Index(p.Key).LocalizedName), ("amount", p.Value)))
                 .ToList());
         }
 
@@ -189,7 +187,7 @@ public abstract partial class SharedLatheSystem : EntitySystem
         {
             // We only use the first one for the description since these descriptions don't combine very well.
             var reagent = resultReagents.First().Key;
-            return _proto.IndexReagent(reagent).LocalizedDescription;
+            return ProtoMan.Index(reagent).LocalizedDescription;
         }
 
         return string.Empty;

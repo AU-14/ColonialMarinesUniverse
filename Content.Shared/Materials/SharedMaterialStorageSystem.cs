@@ -19,7 +19,6 @@ public abstract partial class SharedMaterialStorageSystem : EntitySystem
 {
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
 
     /// <summary>

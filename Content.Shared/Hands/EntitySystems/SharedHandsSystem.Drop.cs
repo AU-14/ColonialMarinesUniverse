@@ -1,5 +1,4 @@
 using System.Numerics;
-using Content.Shared._RMC14.Inventory;
 using Content.Shared.Database;
 using Content.Shared.Hands.Components;
 using Content.Shared.Interaction;
@@ -84,7 +83,7 @@ public abstract partial class SharedHandsSystem
         if (!ContainerSystem.CanRemove(held, container))
             return false;
 
-        if (checkActionBlocker && !_actionBlocker.CanDrop(uid, held))
+        if (checkActionBlocker && !_actionBlocker.CanDrop(uid))
             return false;
 
         return true;
@@ -150,8 +149,6 @@ public abstract partial class SharedHandsSystem
         if (isInContainer)
         {
             TransformSystem.DropNextTo((entity.Value, itemXform), (ent, userXform));
-            var ev = new RMCDroppedEvent(ent);
-            RaiseLocalEvent(entity.Value, ref ev, true);
             return true;
         }
 
@@ -229,7 +226,8 @@ public abstract partial class SharedHandsSystem
         string handId,
         bool doDropInteraction = true,
         bool log = true,
-        EntityCoordinates? targetDropLocation = null)
+        EntityCoordinates? targetDropLocation = null
+    )
     {
         if (!Resolve(ent, ref ent.Comp, false))
             return;
@@ -252,13 +250,10 @@ public abstract partial class SharedHandsSystem
         if (targetDropLocation != null)
         {
             var (itemPos, itemRot) = TransformSystem.GetWorldPositionRotation(entity.Value);
-            // Otherwise, also move the dropped item and rotate it properly according to its grid or map.
+            // otherwise, also move dropped item and rotate it properly according to grid/map
             var origin = new MapCoordinates(itemPos, Transform(entity.Value).MapID);
             var target = TransformSystem.ToMapCoordinates(targetDropLocation.Value);
-            TransformSystem.SetWorldPositionRotation(
-                entity.Value,
-                GetFinalDropCoordinates(ent, origin, target, entity.Value),
-                itemRot);
+            TransformSystem.SetWorldPositionRotation(entity.Value, GetFinalDropCoordinates(ent, origin, target, entity.Value), itemRot);
         }
 
         Dirty(ent);

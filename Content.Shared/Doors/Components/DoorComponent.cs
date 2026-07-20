@@ -266,7 +266,6 @@ public sealed partial class DoorComponent : Component
     #endregion
 
     [DataField, ViewVariables(VVAccess.ReadWrite)]
-    [AutoNetworkedField]
     public bool CanPry = true;
 
     [DataField]

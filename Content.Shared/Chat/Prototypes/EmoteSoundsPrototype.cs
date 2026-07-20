@@ -34,7 +34,6 @@ public sealed partial class EmoteSoundsPrototype : IPrototype, IInheritingProtot
     ///     doesn't have specific sound for this emote id.
     /// </summary>
     [DataField("sound")]
-    [AlwaysPushInheritance]
     public SoundSpecifier? FallbackSound;
 
     /// <summary>
@@ -42,7 +41,6 @@ public sealed partial class EmoteSoundsPrototype : IPrototype, IInheritingProtot
     ///     This will overwrite any params that may be set in sound specifiers.
     /// </summary>
     [DataField("params")]
-    [AlwaysPushInheritance]
     public AudioParams? GeneralParams;
 
     /// <summary>

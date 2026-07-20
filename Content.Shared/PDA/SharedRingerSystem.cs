@@ -27,6 +27,7 @@ public abstract partial class SharedRingerSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedPdaSystem _pda = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] protected SharedStoreSystem Store = default!;
     [Dependency] private SharedTransformSystem _xform = default!;
     [Dependency] protected SharedUserInterfaceSystem UI = default!;
 

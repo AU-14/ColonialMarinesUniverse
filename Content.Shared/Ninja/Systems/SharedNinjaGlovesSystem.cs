@@ -16,7 +16,6 @@ namespace Content.Shared.Ninja.Systems;
 /// </summary>
 public abstract partial class SharedNinjaGlovesSystem : EntitySystem
 {
-    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedCombatModeSystem _combatMode = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;

@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Alert;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
@@ -9,6 +8,7 @@ using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Content.Shared.Nutrition.EntitySystems;
 
@@ -16,7 +16,6 @@ namespace Content.Shared.Nutrition.EntitySystems;
 public sealed partial class ThirstSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private AlertsSystem _alerts = default!;
     [Dependency] private MovementSpeedModifierSystem _movement = default!;
@@ -60,7 +59,12 @@ public sealed partial class ThirstSystem : EntitySystem
 
     private void OnRefreshMovespeed(EntityUid uid, ThirstComponent component, RefreshMovementSpeedModifiersEvent args)
     {
-        // RMC14 does not apply thirst movement penalties.
+        // TODO: This should really be taken care of somewhere else
+        if (_jetpack.IsUserFlying(uid))
+            return;
+
+        var mod = component.CurrentThirstThreshold <= ThirstThreshold.Parched ? 0.75f : 1.0f;
+        args.ModifySpeed(mod, mod);
     }
 
     private void OnRejuvenate(EntityUid uid, ThirstComponent component, RejuvenateEvent args)

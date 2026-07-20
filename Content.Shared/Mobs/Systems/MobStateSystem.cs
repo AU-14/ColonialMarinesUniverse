@@ -14,7 +14,6 @@ public partial class MobStateSystem : EntitySystem
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private StandingStateSystem _standing = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private ILogManager _logManager = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     private ISawmill _sawmill = default!;

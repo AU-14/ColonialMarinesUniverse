@@ -4,9 +4,7 @@ using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
-using Content.Shared.Tag;
 using Robust.Shared.Physics.Components;
-using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Foldable;
 
@@ -16,14 +14,6 @@ public sealed partial class DeployFoldableSystem : EntitySystem
     [Dependency] private FoldableSystem _foldable = default!;
     [Dependency] private AnchorableSystem _anchorable = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-
-    // RMC14
-    [Dependency] private TagSystem _tag = default!;
-
-    private static readonly ProtoId<TagPrototype> CatwalkTag = "Catwalk";
-    private static readonly ProtoId<TagPrototype> StairsTag = "RMCStairs";
-    private static readonly ProtoId<TagPrototype> CarpetTag = "Carpet";
-    // RMC14
 
     public override void Initialize()
     {
@@ -46,9 +36,6 @@ public sealed partial class DeployFoldableSystem : EntitySystem
 
     private void OnDragDropDragged(Entity<DeployFoldableComponent> ent, ref DragDropDraggedEvent args)
     {
-        if (args.User != args.Target)
-            return;
-
         if (!TryComp<FoldableComponent>(ent, out var foldable)
             || !_foldable.TrySetFolded(ent, foldable, true, args.User))
             return;
@@ -73,7 +60,7 @@ public sealed partial class DeployFoldableSystem : EntitySystem
             return;
 
         // Don't do anything unless you clicked on the floor.
-        if (args.Target.HasValue && !_tag.HasAnyTag(args.Target.Value, CatwalkTag, StairsTag, CarpetTag)) // RMC14
+        if (args.Target.HasValue)
             return;
 
         if (!TryComp<FoldableComponent>(ent, out var foldable))

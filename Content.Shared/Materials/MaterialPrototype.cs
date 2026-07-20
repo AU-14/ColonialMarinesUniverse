@@ -34,14 +34,13 @@ namespace Content.Shared.Materials
         [DataField]
         public string Name = string.Empty;
 
-        // RMC14 until localized
         /// <summary>
         /// Locale id for the unit of this material.
         /// Lathe recipe tooltips and material storage display use this to let you change a material to sound nicer.
         /// For example, 5 bars of gold is better than 5 sheets of gold.
         /// </summary>
         [DataField]
-        public string Unit = "materials-unit-sheet";
+        public LocId Unit = "materials-unit-sheet";
 
         [DataField]
         public Color Color { get; private set; } = Color.Gray;

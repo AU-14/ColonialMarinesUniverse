@@ -2,7 +2,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.Reaction;
@@ -68,7 +67,6 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
 {
     public static readonly EntProtoId DefaultSolution = "Solution";
 
-    [Dependency] protected IPrototypeManager PrototypeManager = default!;
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected INetManager Net = default!;
     [Dependency] protected ChemicalReactionSystem ChemicalReactionSystem = default!;
@@ -534,8 +532,8 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
         }
         else
         {
-            var proto = PrototypeManager.IndexReagent<ReagentPrototype>(reagentQuantity.Reagent.Prototype);
-            solution.AddReagent(proto, acceptedQuantity, temperature.Value, PrototypeManager);
+            var proto = ProtoMan.Index<ReagentPrototype>(reagentQuantity.Reagent.Prototype);
+            solution.AddReagent(proto, acceptedQuantity, temperature.Value, ProtoMan);
         }
 
         UpdateChemicals(soln);
@@ -695,10 +693,10 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
         {
             // TODO: This should be made into a function that directly transfers reagents.
             // Currently this is quite inefficient.
-            solution.AddSolution(toAdd.Clone().SplitSolution(quantity), PrototypeManager);
+            solution.AddSolution(toAdd.Clone().SplitSolution(quantity), ProtoMan);
         }
         else
-            solution.AddSolution(toAdd, PrototypeManager);
+            solution.AddSolution(toAdd, ProtoMan);
 
         UpdateChemicals(soln);
         return quantity;
@@ -897,7 +895,7 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
 
             // If there's no primary reagent, assume the solution is empty and exit early
             if (string.IsNullOrEmpty(primaryReagent?.Prototype) ||
-                !PrototypeManager.TryIndexReagent(primaryReagent.Value.Prototype, out var primary))
+                !ProtoMan.Resolve<ReagentPrototype>(primaryReagent.Value.Prototype, out var primary))
             {
                 args.PushMarkup(Loc.GetString(entity.Comp.LocVolume, ("fillLevel", ExaminedVolumeDisplay.Empty)));
                 return;

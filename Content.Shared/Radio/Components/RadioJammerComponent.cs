@@ -12,7 +12,7 @@ namespace Content.Shared.Radio.Components;
 public sealed partial class RadioJammerComponent : Component
 {
     [DataDefinition]
-    public partial struct RadioJamSetting()
+    public partial struct RadioJamSetting
     {
         /// <summary>
         /// Power usage per second when enabled.

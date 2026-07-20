@@ -37,7 +37,7 @@ public sealed partial class FoldableClothingSystem : EntitySystem
         }
 
         // Setting hidden layers while equipped is not currently supported.
-        if (ent.Comp.FoldedHideLayers.Count != 0 || ent.Comp.UnfoldedHideLayers.Count != 0)
+        if (ent.Comp.FoldedHideLayers.Count != 0|| ent.Comp.UnfoldedHideLayers.Count != 0)
             args.Cancelled = true;
     }
 
@@ -67,13 +67,7 @@ public sealed partial class FoldableClothingSystem : EntitySystem
             // TODO CLOTHING fix this.
             if ((ent.Comp.FoldedHideLayers.Count != 0 || ent.Comp.UnfoldedHideLayers.Count != 0) &&
                 TryComp<HideLayerClothingComponent>(ent.Owner, out var hideLayerComp))
-            {
-                hideLayerComp.Slots = ent.Comp.FoldedHideLayers.Count != 0
-                    ? ent.Comp.FoldedHideLayers
-                    : null;
-                Dirty(ent.Owner, hideLayerComp);
-            }
-
+                hideLayerComp.Slots = ent.Comp.FoldedHideLayers;
         }
         else
         {
@@ -86,15 +80,10 @@ public sealed partial class FoldableClothingSystem : EntitySystem
             if (ent.Comp.FoldedHeldPrefix != null)
                 _itemSystem.SetHeldPrefix(ent.Owner, null, false, itemComp);
 
-            // RMC14 - preserve null resets while applying both configured fold states.
+            // TODO CLOTHING fix this.
             if ((ent.Comp.FoldedHideLayers.Count != 0 || ent.Comp.UnfoldedHideLayers.Count != 0) &&
                 TryComp<HideLayerClothingComponent>(ent.Owner, out var hideLayerComp))
-            {
-                hideLayerComp.Slots = ent.Comp.UnfoldedHideLayers.Count != 0
-                    ? ent.Comp.UnfoldedHideLayers
-                    : null;
-                Dirty(ent.Owner, hideLayerComp);
-            }
+                hideLayerComp.Slots = ent.Comp.UnfoldedHideLayers;
         }
     }
 }

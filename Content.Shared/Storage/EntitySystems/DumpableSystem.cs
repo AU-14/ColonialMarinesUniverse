@@ -1,6 +1,4 @@
 using System.Linq;
-using Content.Shared.Administration.Logs;
-using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Item;
@@ -19,7 +17,6 @@ public sealed partial class DumpableSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
-    [Dependency] private ISharedAdminLogManager _adminLog = default!; //RMC14
 
     [Dependency] private EntityQuery<ItemComponent> _itemQuery = default!;
 
@@ -130,8 +127,6 @@ public sealed partial class DumpableSystem : EntitySystem
     {
         if (args.Handled || args.Cancelled || !TryComp<StorageComponent>(uid, out var storage) || storage.Container.ContainedEntities.Count == 0 || args.Args.Target is not { } target)
             return;
-
-        _adminLog.Add(LogType.Drop, $"{ToPrettyString(args.User):actor} dumped {ToPrettyString(args.Target):entity}"); //RMC14
 
         // TODO: Remove OrderBy when this issue is fixed in RT https://github.com/space-wizards/RobustToolbox/issues/6241
         var dumpQueue = new Queue<EntityUid>(storage.Container.ContainedEntities.OrderBy(e => GetNetEntity(e)));

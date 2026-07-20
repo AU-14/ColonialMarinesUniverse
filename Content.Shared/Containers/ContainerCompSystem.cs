@@ -1,5 +1,4 @@
 using Robust.Shared.Containers;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Shared.Containers;
@@ -10,7 +9,6 @@ namespace Content.Shared.Containers;
 public sealed partial class ContainerCompSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
 
     public override void Initialize()
     {

@@ -1,5 +1,4 @@
 using Content.Shared.Movement.Components;
-using Content.Shared._RMC14.Water;
 using Content.Shared.Movement.Events;
 using Content.Shared.Gravity;
 using Content.Shared.Slippery;
@@ -16,7 +15,6 @@ public sealed partial class SpeedModifierContactsSystem : EntitySystem
     [Dependency] private SharedGravitySystem _gravity = default!;
     [Dependency] private MovementSpeedModifierSystem _speedModifierSystem = default!;
     [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
-    [Dependency] private RMCWaterSystem _rmcWater = default!;
 
     // TODO full-game-save
     // Either these need to be processed before a map is saved, or slowed/slowing entities need to update on init.
@@ -100,9 +98,6 @@ public sealed partial class SpeedModifierContactsSystem : EntitySystem
                 if (_whitelistSystem.IsWhitelistPass(slowContactsComponent.IgnoreWhitelist, uid))
                     continue;
 
-                if (!_rmcWater.CanCollide(ent, uid))
-                    continue;
-
                 // Entities that are airborne should not be affected by contact slowdowns that are specified to not affect airborne entities.
                 if (isAirborne && !slowContactsComponent.AffectAirborne)
                     continue;
@@ -160,9 +155,6 @@ public sealed partial class SpeedModifierContactsSystem : EntitySystem
 
     private void OnEntityEnter(EntityUid uid, SpeedModifierContactsComponent component, ref StartCollideEvent args)
     {
-        if (!_rmcWater.CanCollide(uid, args.OtherEntity))
-            return;
-
         AddModifiedEntity(args.OtherEntity);
     }
 

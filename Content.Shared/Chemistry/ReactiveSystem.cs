@@ -9,25 +9,17 @@ namespace Content.Shared.Chemistry;
 [UsedImplicitly]
 public sealed partial class ReactiveSystem : EntitySystem
 {
+
     // TODO: Someone add documentation, I beg you
     public void DoEntityReaction(EntityUid uid, Solution solution, ReactionMethod method)
     {
         foreach (var reagent in solution.Contents.ToArray())
         {
-            ReactionEntity(uid, method, reagent, solution);
+            ReactionEntity(uid, method, reagent);
         }
     }
 
     public void ReactionEntity(EntityUid uid, ReactionMethod method, ReagentQuantity reagentQuantity)
-    {
-        ReactionEntity(uid, method, reagentQuantity, null);
-    }
-
-    public void ReactionEntity(
-        EntityUid uid,
-        ReactionMethod method,
-        ReagentQuantity reagentQuantity,
-        Solution? source)
     {
         if (reagentQuantity.Quantity == FixedPoint2.Zero)
             return;
@@ -36,20 +28,7 @@ public sealed partial class ReactiveSystem : EntitySystem
         if (!ProtoMan.Resolve<ReagentPrototype>(reagentQuantity.Reagent.Prototype, out var proto))
             return;
 
-        ReactionEntity(uid, method, proto, reagentQuantity, source);
-    }
-
-    public void ReactionEntity(
-        EntityUid uid,
-        ReactionMethod method,
-        ReagentPrototype proto,
-        ReagentQuantity reagentQuantity,
-        Solution? source)
-    {
-        if (reagentQuantity.Quantity == FixedPoint2.Zero)
-            return;
-
-        var ev = new ReactionEntityEvent(method, reagentQuantity, proto, source);
+        var ev = new ReactionEntityEvent(method, reagentQuantity, proto);
         RaiseLocalEvent(uid, ref ev);
     }
 }
@@ -61,8 +40,4 @@ Ingestion,
 }
 
 [ByRefEvent]
-public readonly record struct ReactionEntityEvent(
-    ReactionMethod Method,
-    ReagentQuantity ReagentQuantity,
-    ReagentPrototype Reagent,
-    Solution? Source = null);
+public readonly record struct ReactionEntityEvent(ReactionMethod Method, ReagentQuantity ReagentQuantity, ReagentPrototype Reagent);

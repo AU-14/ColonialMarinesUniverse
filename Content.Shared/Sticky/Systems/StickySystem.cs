@@ -95,7 +95,6 @@ public sealed partial class StickySystem : EntitySystem
         {
             BreakOnMove = true,
             NeedHand = true,
-            ForceVisible = true,
         });
 
         return true;

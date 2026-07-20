@@ -10,7 +10,7 @@ namespace Content.Shared.Buckle.Components;
 /// <summary>
 /// This component allows an entity to be buckled to an entity with a <see cref="StrapComponent"/>.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true), AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 [Access(typeof(SharedBuckleSystem))]
 public sealed partial class BuckleComponent : Component
 {
@@ -70,12 +70,6 @@ public sealed partial class BuckleComponent : Component
     /// Used for client rendering
     /// </summary>
     [ViewVariables] public int? OriginalDrawDepth;
-
-    [DataField, AutoNetworkedField]
-    public float? BuckleDelay;
-
-    [DataField, AutoNetworkedField]
-    public bool ClickUnbuckle = true;
 }
 
 public sealed partial class UnbuckleAlertEvent : BaseAlertEvent;

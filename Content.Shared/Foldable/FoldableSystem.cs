@@ -53,7 +53,7 @@ public sealed partial class FoldableSystem : EntitySystem
 
     public void OnStrapAttempt(EntityUid uid, FoldableComponent comp, ref StrapAttemptEvent args)
     {
-        if (comp.IsFolded && !comp.FitIntoEntityStorage)
+        if (comp.IsFolded)
             args.Cancelled = true;
     }
 
@@ -83,10 +83,7 @@ public sealed partial class FoldableSystem : EntitySystem
         component.IsFolded = folded;
         Dirty(uid, component);
         _appearance.SetData(uid, FoldedVisuals.State, folded);
-
-        //RMC14
-        if (component.EnableStrapOnUnfold)
-            _buckle.StrapSetEnabled(uid, !component.IsFolded);
+        _buckle.StrapSetEnabled(uid, !component.IsFolded);
 
         var ev = new FoldedEvent(folded, user);
         RaiseLocalEvent(uid, ref ev);
@@ -121,11 +118,7 @@ public sealed partial class FoldableSystem : EntitySystem
             return false;
 
         if (!TryComp(uid, out PhysicsComponent? body) ||
-            !_anchorable.TileFree(Transform(uid).Coordinates, body, uid)) //RMC14
-            return false;
-
-        // RMC14
-        if (fold.IsLocked)
+            !_anchorable.TileFree(Transform(uid).Coordinates, body))
             return false;
 
         var ev = new FoldAttemptEvent(fold);
@@ -153,10 +146,6 @@ public sealed partial class FoldableSystem : EntitySystem
     private void AddFoldVerb(EntityUid uid, FoldableComponent component, GetVerbsEvent<AlternativeVerb> args)
     {
         if (!args.CanAccess || !args.CanInteract || args.Hands == null)
-            return;
-
-        //RMC14
-        if (component.IsLocked)
             return;
 
         AlternativeVerb verb = new()

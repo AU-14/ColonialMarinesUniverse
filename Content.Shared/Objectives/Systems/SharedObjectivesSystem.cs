@@ -12,16 +12,6 @@ namespace Content.Shared.Objectives.Systems;
 public abstract partial class SharedObjectivesSystem : EntitySystem
 {
     [Dependency] private SharedMindSystem _mind = default!;
-    [Dependency] private IPrototypeManager _protoMan = default!;
-
-    private EntityQuery<MetaDataComponent> _metaQuery;
-
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        _metaQuery = GetEntityQuery<MetaDataComponent>();
-    }
 
     /// <summary>
     /// Checks requirements and duplicate objectives to see if an objective can be assigned.

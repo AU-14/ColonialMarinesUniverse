@@ -1,5 +1,3 @@
-using Content.Shared._RMC14.Hands;
-using Content.Shared._RMC14.Throwing;
 using Content.Shared.Body.Events;
 using Content.Shared.Emoting;
 using Content.Shared.Hands;
@@ -47,10 +45,8 @@ namespace Content.Shared.ActionBlocker
                 Dirty(uid, component);
 
             component.CanMove = !ev.Cancelled;
-            // RMC14
             var updatedEv = new CanMoveUpdatedEvent(component.CanMove);
             RaiseLocalEvent(uid, ref updatedEv);
-            // RMC14
             return component.CanMove;
         }
 
@@ -154,20 +150,10 @@ namespace Content.Shared.ActionBlocker
             return !ev.Cancelled;
         }
 
-        public bool CanDrop(EntityUid uid, EntityUid? held = null)
+        public bool CanDrop(EntityUid uid)
         {
             var ev = new DropAttemptEvent();
             RaiseLocalEvent(uid, ev);
-
-            // RMC14
-            if (held != null)
-            {
-                var rmcEv = new RMCItemDropAttemptEvent();
-                RaiseLocalEvent(held.Value, ref rmcEv);
-                if (rmcEv.Cancelled)
-                    return false;
-            }
-            // RMC14
 
             return !ev.Cancelled;
         }

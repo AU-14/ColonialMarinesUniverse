@@ -9,7 +9,6 @@ namespace Content.Shared.Access.Systems
     public abstract partial class SharedIdCardConsoleSystem : EntitySystem
     {
         [Dependency] private ItemSlotsSystem _itemSlotsSystem = default!;
-        [Dependency] private ILogManager _log = default!;
 
         public const string Sawmill = "idconsole";
         protected ISawmill _sawmill = default!;

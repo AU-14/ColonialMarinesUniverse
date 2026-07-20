@@ -82,6 +82,7 @@ namespace Content.Shared.SubFloor
 
         private void OnInteractionAttempt(EntityUid uid, SubFloorHideComponent component, ref GettingInteractedWithAttemptEvent args)
         {
+            // Allow admins (e.g., mappers/aghosts) to twiddle with stuff under subfloors
             if (HasComp<BypassInteractionChecksComponent>(args.Uid))
                 return;
 

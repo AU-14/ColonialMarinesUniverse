@@ -1,4 +1,3 @@
-using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Alert;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Atmos.EntitySystems;
@@ -43,10 +42,6 @@ public abstract partial class SharedInternalsSystem : EntitySystem
         Entity<InternalsComponent> ent,
         ref GetVerbsEvent<InteractionVerb> args)
     {
-        // RMC14
-        if (HasComp<XenoComponent>(args.User))
-            return;
-
         if (!args.CanAccess || !args.CanInteract || args.Hands is null)
             return;
 

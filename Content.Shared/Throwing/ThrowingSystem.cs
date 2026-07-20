@@ -1,24 +1,17 @@
 using System.Numerics;
 using Content.Shared.Administration.Logs;
+using Content.Shared.Camera;
 using Content.Shared.CCVar;
 using Content.Shared.Construction.Components;
 using Content.Shared.Construction.EntitySystems;
 using Content.Shared.Database;
 using Content.Shared.Friction;
-using Content.Shared.IdentityManagement;
-using Content.Shared.Interaction;
-using Content.Shared.Popups;
 using Content.Shared.Projectiles;
-using Content.Shared.Weapons.Melee;
-using Robust.Shared.Audio;
-using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
-using Robust.Shared.Network;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
-using Robust.Shared.Player;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 
@@ -41,21 +34,13 @@ public sealed partial class ThrowingSystem : EntitySystem
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private ThrownItemSystem _thrownSystem = default!;
+    [Dependency] private SharedCameraRecoilSystem _recoil = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private IConfigurationManager _configManager = default!;
-
-    // RMC14
-    [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedMeleeWeaponSystem _melee = default!;
-    [Dependency] private INetManager _net = default!;
-    [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private RotateToFaceSystem _rotateToFace = default!;
 
     [Dependency] private EntityQuery<AnchorableComponent> _anchorableQuery = default!;
     [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
     [Dependency] private EntityQuery<ProjectileComponent> _projectileQuery = default!;
-
-    private readonly SoundSpecifier _throwSound = new SoundCollectionSpecifier("RMCThrowing");
 
     public override void Initialize()
     {
@@ -77,8 +62,7 @@ public sealed partial class ThrowingSystem : EntitySystem
         bool animated = true,
         bool playSound = true,
         bool doSpin = true,
-        ThrowingUnanchorStrength unanchor = ThrowingUnanchorStrength.None,
-        bool rotate = true)
+        ThrowingUnanchorStrength unanchor = ThrowingUnanchorStrength.None)
     {
         var thrownPos = _transform.GetMapCoordinates(uid);
         var mapPos = _transform.ToMapCoordinates(coordinates);
@@ -86,7 +70,7 @@ public sealed partial class ThrowingSystem : EntitySystem
         if (mapPos.MapId != thrownPos.MapId)
             return;
 
-        TryThrow(uid, mapPos.Position - thrownPos.Position, baseThrowSpeed, user, pushbackRatio, friction, compensateFriction: compensateFriction, recoil: recoil, animated: animated, playSound: playSound, doSpin: doSpin, unanchor: unanchor, rotate: rotate);
+        TryThrow(uid, mapPos.Position - thrownPos.Position, baseThrowSpeed, user, pushbackRatio, friction, compensateFriction: compensateFriction, recoil: recoil, animated: animated, playSound: playSound, doSpin: doSpin, unanchor: unanchor);
     }
 
     /// <summary>
@@ -111,8 +95,7 @@ public sealed partial class ThrowingSystem : EntitySystem
         bool animated = true,
         bool playSound = true,
         bool doSpin = true,
-        ThrowingUnanchorStrength unanchor = ThrowingUnanchorStrength.None,
-        bool rotate = true)
+        ThrowingUnanchorStrength unanchor = ThrowingUnanchorStrength.None)
     {
         if (!_physicsQuery.TryComp(uid, out var physics))
             return;
@@ -125,7 +108,7 @@ public sealed partial class ThrowingSystem : EntitySystem
             baseThrowSpeed,
             user,
             pushbackRatio,
-            friction, compensateFriction: compensateFriction, recoil: recoil, animated: animated, playSound: playSound, doSpin: doSpin, unanchor: unanchor, rotate: rotate);
+            friction, compensateFriction: compensateFriction, recoil: recoil, animated: animated, playSound: playSound, doSpin: doSpin, unanchor: unanchor);
     }
 
     /// <summary>
@@ -152,8 +135,7 @@ public sealed partial class ThrowingSystem : EntitySystem
         bool animated = true,
         bool playSound = true,
         bool doSpin = true,
-        ThrowingUnanchorStrength unanchor = ThrowingUnanchorStrength.None,
-        bool rotate = true)
+        ThrowingUnanchorStrength unanchor = ThrowingUnanchorStrength.None)
     {
         if (baseThrowSpeed <= 0 || direction == Vector2Helpers.Infinity || direction == Vector2Helpers.NaN || direction == Vector2.Zero || friction < 0)
             return;
@@ -246,51 +228,25 @@ public sealed partial class ThrowingSystem : EntitySystem
             return;
 
         if (recoil)
-        {
-            var localPos = Vector2.Transform(transform.LocalPosition + direction, _transform.GetInvWorldMatrix(transform));
-
-            if (rotate)
-            {
-                _rotateToFace.TryFaceCoordinates(user.Value, _transform.ToMapCoordinates(transform.Coordinates.Offset(direction)).Position);
-
-                if (_net.IsServer)
-                    _audio.PlayPvs(_throwSound, user.Value);
-            }
-
-            localPos = transform.LocalRotation.RotateVec(localPos);
-            _melee.DoLunge(user.Value, user.Value, Angle.Zero, localPos, null, predicted: false);
-        }
+            _recoil.KickCamera(user.Value, -direction * 0.04f);
 
         // Give thrower an impulse in the other direction
-        if (pushbackRatio != 0.0f &&
-            physics.Mass != 0f &&
-            TryComp(user.Value, out PhysicsComponent? userPhysics))
-        {
-            var msg = new ThrowPushbackAttemptEvent();
-            RaiseLocalEvent(uid, msg);
+        if (pushbackRatio == 0.0f ||
+            physics.Mass == 0f ||
+            !TryComp(user.Value, out PhysicsComponent? userPhysics))
+            return;
+        var msg = new ThrowPushbackAttemptEvent();
+        RaiseLocalEvent(uid, msg);
 
-            if (!msg.Cancelled)
-            {
-                var pushEv = new ThrowerImpulseEvent();
-                RaiseLocalEvent(user.Value, ref pushEv);
-                const float massLimit = 5f;
+        if (msg.Cancelled)
+            return;
 
-                if (pushEv.Push)
-                    _physics.ApplyLinearImpulse(user.Value, -impulseVector / physics.Mass * pushbackRatio * MathF.Min(massLimit, physics.Mass), body: userPhysics);
-            }
-        }
+        var pushEv = new ThrowerImpulseEvent();
+        RaiseLocalEvent(user.Value, ref pushEv);
+        const float massLimit = 5f;
 
-        var others = Filter.PvsExcept(user.Value);
-        foreach (var other in others.Recipients)
-        {
-            if (other.AttachedEntity is not { } otherEnt)
-                continue;
-
-            var popup = Loc.GetString("throwing-user-threw-others",
-                ("user", Identity.Name(user.Value, EntityManager, otherEnt)),
-                ("thrown", Identity.Name(uid, EntityManager, otherEnt)));
-            _popup.PopupEntity(popup, user.Value, otherEnt, PopupType.SmallCaution);
-        }
+        if (pushEv.Push)
+            _physics.ApplyLinearImpulse(user.Value, -impulseVector / physics.Mass * pushbackRatio * MathF.Min(massLimit, physics.Mass), body: userPhysics);
     }
 
 

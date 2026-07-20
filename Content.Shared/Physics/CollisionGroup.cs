@@ -25,16 +25,6 @@ public enum CollisionGroup
     // Y dis door passable when all the others impassable / collision.
     DoorPassable       = 1 << 8, // 256 Allows door to close over top, Like blast doors over conveyors for disposals rooms/cargo.
 
-    // RMC14
-    Marine = 1 << 23,
-    MobCollision = 1 << 24,
-    BarbedBarricade = 1 << 25,
-    BarricadeImpassable = 1 << 26,
-    XenoProjectileImpassable = 1 << 27,
-    DropshipImpassable = 1 << 28,
-    VaporLayer = 1 << 29,
-    Vehicle = 1 << 30,
-
     MapGrid = MapGridHelpers.CollisionGroup, // Map grids, like shuttles. This is the actual grid itself, not the walls or other entities connected to the grid.
 
     // 32 possible groups
@@ -59,7 +49,7 @@ public enum CollisionGroup
 
     // Machines, computers
     MachineMask = Impassable | MidImpassable | LowImpassable,
-    MachineLayer = Opaque | MidImpassable | LowImpassable, // RMC14 removed BulletImpassable
+    MachineLayer = Opaque | MidImpassable | LowImpassable | BulletImpassable,
     ConveyorMask = Impassable | MidImpassable | LowImpassable | DoorPassable,
 
     // Crates
@@ -84,8 +74,6 @@ public enum CollisionGroup
     // Soap, spills
     SlipLayer = MidImpassable | LowImpassable,
     ItemMask = Impassable | HighImpassable,
-    // #RMC Vapor-only collision mask for extinguishers on items.
-    VaporMask = VaporLayer,
     ThrownItem = Impassable | HighImpassable | BulletImpassable,
     WallLayer = Opaque | Impassable | HighImpassable | MidImpassable | LowImpassable | BulletImpassable | InteractImpassable,
     GlassLayer = Impassable | HighImpassable | MidImpassable | LowImpassable | BulletImpassable | InteractImpassable,
@@ -100,5 +88,5 @@ public enum CollisionGroup
     // FlyingMob can go past
     FullTileLayer = Opaque | HighImpassable | MidImpassable | LowImpassable | BulletImpassable | InteractImpassable,
 
-    SubfloorMask = Impassable | LowImpassable,
+    SubfloorMask = Impassable | LowImpassable
 }

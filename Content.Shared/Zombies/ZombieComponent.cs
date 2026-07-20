@@ -76,12 +76,6 @@ public sealed partial class ZombieComponent : Component
     [DataField]
     public Dictionary<ProtoId<OrganCategoryPrototype>, Dictionary<HumanoidVisualLayers, List<Marking>>> BeforeZombifiedMarkings;
 
-    /// <summary>
-    /// The eye color of the humanoid to restore in case of cloning
-    /// </summary>
-    [DataField("beforeZombifiedEyeColor")]
-    public Color BeforeZombifiedEyeColor;
-
     [DataField("emoteId")]
     public ProtoId<EmoteSoundsPrototype>? EmoteSoundsId = "Zombie";
 

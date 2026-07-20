@@ -20,8 +20,4 @@ public sealed partial class HealthExaminableComponent : Component
     /// </summary>
     [DataField]
     public string LocPrefix = "carbon";
-
-    // RMC14
-    [DataField]
-    public bool ExamineShowEmpty = true;
 }

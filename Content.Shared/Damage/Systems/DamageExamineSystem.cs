@@ -12,7 +12,6 @@ namespace Content.Shared.Damage.Systems;
 public sealed partial class DamageExamineSystem : EntitySystem
 {
     [Dependency] private ExamineSystemShared _examine = default!;
-    [Dependency] private IPrototypeManager _prototype = default!;
 
     public override void Initialize()
     {

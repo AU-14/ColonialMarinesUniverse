@@ -284,16 +284,4 @@ public abstract partial class SharedFlashSystem : EntitySystem
 
         _audio.PlayPredicted(sound, source, user, AudioParams.Default.WithVolume(1f).WithMaxDistance(3f));
     }
-
-    public virtual bool Flash(EntityUid target,
-        EntityUid? user,
-        EntityUid? used,
-        float flashDuration,
-        float slowTo = 0.8f,
-        bool displayPopup = true,
-        bool melee = false,
-        TimeSpan? stunDuration = null)
-    {
-        return false;
-    }
 }

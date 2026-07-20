@@ -1,6 +1,5 @@
 using Content.Shared.FixedPoint;
 using Robust.Shared.Serialization;
-using Robust.Shared.Prototypes;
 
 namespace Content.Shared.DoAfter;
 
@@ -8,10 +7,6 @@ namespace Content.Shared.DoAfter;
 [DataDefinition]
 public sealed partial class DoAfterArgs
 {
-    //RMC
-    [DataField]
-    public bool RootEntity;
-
     /// <summary>
     ///     The entity invoking do_after
     /// </summary>
@@ -51,13 +46,6 @@ public sealed partial class DoAfterArgs
     [DataField]
     public bool Hidden;
 
-    /// <summary>
-    /// RMC14
-    /// Whether the progress bar for this DoAfter should be visible regardless of other conditions.
-    /// </summary>
-    [DataField]
-    public bool ForceVisible;
-
     #region Event options
     /// <summary>
     ///     The event that will get raised when the DoAfter has finished. If null, this will simply raise a <see cref="SimpleDoAfterEvent"/>
@@ -86,12 +74,6 @@ public sealed partial class DoAfterArgs
     /// </summary>
     [DataField]
     public bool Broadcast;
-
-    /// <summary>
-    ///     Prototype to spawn as an effect every second.
-    /// </summary>
-    [DataField]
-    public EntProtoId? TargetEffect;
     #endregion
 
     #region Break/Cancellation Options
@@ -159,26 +141,6 @@ public sealed partial class DoAfterArgs
     /// </summary>
     [DataField]
     public bool RequireCanInteract = true;
-
-    /// <summary>
-    ///     RMC14
-    ///     If the doafter should break when the user rests.
-    /// </summary>
-    [DataField]
-    public bool BreakOnRest = true;
-
-    /// <summary>
-    ///     RMC14
-    ///     Whether to use the position compensated by lag for the target, with the user as the reference.
-    /// </summary>
-    [DataField]
-    public bool LagCompensated;
-
-    /// <summary>
-    ///     RMC14
-    /// </summary>
-    [DataField]
-    public bool RangeCheck = true;
     #endregion
 
     #region Duplicates
@@ -302,12 +264,6 @@ public sealed partial class DoAfterArgs
         BlockDuplicate = other.BlockDuplicate;
         CancelDuplicate = other.CancelDuplicate;
         DuplicateCondition = other.DuplicateCondition;
-        ForceVisible = other.ForceVisible;
-        BreakOnRest = other.BreakOnRest;
-        LagCompensated = other.LagCompensated;
-
-        //RMC
-        RootEntity = other.RootEntity;
 
         // Networked
         NetUser = other.NetUser;

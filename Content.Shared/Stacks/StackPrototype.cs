@@ -14,22 +14,21 @@ public sealed partial class StackPrototype : IPrototype, IInheritingPrototype
     [IdDataField]
     public string ID { get; private set; } = default!;
 
-    /// <inheritdoc />
+    ///  <inheritdoc />
     [ParentDataField(typeof(AbstractPrototypeIdArraySerializer<StackPrototype>))]
     public string[]? Parents { get; private set; }
 
-    /// <inheritdoc />
+    ///  <inheritdoc />
     [NeverPushInheritance]
     [AbstractDataField]
     public bool Abstract { get; private set; }
 
-    // RMC14 until localized
     /// <summary>
     /// Human-readable name for this stack type e.g. "Steel"
     /// </summary>
     /// <remarks>This is a localization string ID.</remarks>
     [DataField]
-    public string Name { get; private set; } = string.Empty;
+    public LocId Name { get; private set; } = string.Empty;
 
     /// <summary>
     /// An icon that will be used to represent this stack type.

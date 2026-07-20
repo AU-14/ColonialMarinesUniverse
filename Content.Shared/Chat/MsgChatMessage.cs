@@ -38,20 +38,10 @@ namespace Content.Shared.Chat
         public string? AudioPath;
         public float AudioVolume;
 
-        // RMC14
-        public bool HidePopup;
-        public bool UseEmoteSpeechBubble;
-        public string? SpeechStyleClass;
-        public bool RepeatCheckSender;
-        public string? LanguageIcon;
-        // RMC14
-
         [NonSerialized]
         public bool Read;
 
-        // RMC14
-        public ChatMessage(ChatChannel channel, string message, string wrappedMessage, NetEntity source, int? senderKey, bool hideChat = false, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, bool hidePopup = false, bool useEmoteSpeechBubble = false, string? speechStyleClass = null, bool repeatCheckSender = true,
-            string? languageIcon = null)
+        public ChatMessage(ChatChannel channel, string message, string wrappedMessage, NetEntity source, int? senderKey, bool hideChat = false, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0)
         {
             Channel = channel;
             Message = message;
@@ -62,13 +52,21 @@ namespace Content.Shared.Chat
             MessageColorOverride = colorOverride;
             AudioPath = audioPath;
             AudioVolume = audioVolume;
-            HidePopup = hidePopup;
-            UseEmoteSpeechBubble = useEmoteSpeechBubble;
-            SpeechStyleClass = speechStyleClass;
-            RepeatCheckSender = repeatCheckSender;
-            LanguageIcon = languageIcon;
         }
-        // RMC14
+
+        public ChatMessage(ChatMessage copyFrom)
+        {
+            Channel = copyFrom.Channel;
+            Message = copyFrom.Message;
+            WrappedMessage = copyFrom.WrappedMessage;
+            SenderEntity = copyFrom.SenderEntity;
+            SenderKey = copyFrom.SenderKey;
+            HideChat = copyFrom.HideChat;
+            MessageColorOverride = copyFrom.MessageColorOverride;
+            AudioPath = copyFrom.AudioPath;
+            AudioVolume = copyFrom.AudioVolume;
+            Read = copyFrom.Read;
+        }
     }
 
     /// <summary>

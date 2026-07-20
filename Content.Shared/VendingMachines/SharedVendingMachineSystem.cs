@@ -24,15 +24,14 @@ namespace Content.Shared.VendingMachines;
 public abstract partial class SharedVendingMachineSystem : EntitySystem
 {
     [Dependency] protected IGameTiming Timing = default!;
-    [Dependency] protected IPrototypeManager PrototypeManager = default!;
-    [Dependency] private   AccessReaderSystem _accessReader = default!;
-    [Dependency] private   SharedAppearanceSystem _appearanceSystem = default!;
+    [Dependency] private AccessReaderSystem _accessReader = default!;
+    [Dependency] private SharedAppearanceSystem _appearanceSystem = default!;
     [Dependency] protected SharedAudioSystem Audio = default!;
-    [Dependency] private   SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] protected SharedPointLightSystem Light = default!;
-    [Dependency] private   SharedPowerReceiverSystem _receiver = default!;
+    [Dependency] private SharedPowerReceiverSystem _receiver = default!;
     [Dependency] protected SharedPopupSystem Popup = default!;
-    [Dependency] private   SharedSpeakOnUIClosedSystem _speakOn = default!;
+    [Dependency] private SharedSpeakOnUIClosedSystem _speakOn = default!;
     [Dependency] protected SharedUserInterfaceSystem UISystem = default!;
     [Dependency] protected IRobustRandom Randomizer = default!;
     [Dependency] private EmagSystem _emag = default!;

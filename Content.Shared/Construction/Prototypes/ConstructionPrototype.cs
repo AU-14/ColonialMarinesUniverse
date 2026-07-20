@@ -25,21 +25,19 @@ public sealed partial class ConstructionPrototype : IPrototype, IInheritingProto
     [DataField]
     public bool Hide = false;
 
-    // RMC14 until localized
     /// <summary>
     ///     Friendly name displayed in the construction GUI.
     /// </summary>
     [DataField("name")]
-    public string? SetName;
+    public LocId? SetName;
 
     public string? Name;
 
-    // RMC14 until localized
     /// <summary>
     ///     "Useful" description displayed in the construction GUI.
     /// </summary>
     [DataField("description")]
-    public string? SetDescription;
+    public LocId? SetDescription;
 
     public string? Description;
 

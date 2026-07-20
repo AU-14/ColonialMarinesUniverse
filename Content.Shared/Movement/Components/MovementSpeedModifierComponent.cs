@@ -51,7 +51,7 @@ namespace Content.Shared.Movement.Components
         /// The body's base friction modifier that is applied in *all* circumstances.
         /// </summary>
         [AutoNetworkedField, DataField]
-        public float BaseFriction = 1; // RMC14 DefaultFriction;
+        public float BaseFriction = DefaultFriction;
 
         /// <summary>
         /// Minimum speed a mob has to be moving before applying movement friction.

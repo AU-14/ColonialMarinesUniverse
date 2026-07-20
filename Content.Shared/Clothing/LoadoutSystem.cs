@@ -21,7 +21,6 @@ public sealed partial class LoadoutSystem : EntitySystem
 
     [Dependency] private ActorSystem _actors = default!;
     [Dependency] private SharedStationSpawningSystem _station = default!;
-    [Dependency] private IPrototypeManager _protoMan = default!;
     [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()

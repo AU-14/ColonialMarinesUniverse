@@ -10,8 +10,7 @@ namespace Content.Shared.Explosion.Components;
 /// Use this component if the grenade splits into entities that make use of Timers
 /// or if you just want it to throw entities out in the world
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, Access(typeof(SharedScatteringGrenadeSystem),
-     typeof(RMCSharedScatteringGrenadeSystem))]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, Access(typeof(SharedScatteringGrenadeSystem))]
 public sealed partial class ScatteringGrenadeComponent : Component
 {
     public Container Container = default!;

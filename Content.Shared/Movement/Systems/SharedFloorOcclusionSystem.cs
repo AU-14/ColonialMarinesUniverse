@@ -1,4 +1,3 @@
-using Content.Shared._RMC14.Water;
 using Content.Shared.Movement.Components;
 using Robust.Shared.Physics.Events;
 
@@ -7,10 +6,8 @@ namespace Content.Shared.Movement.Systems;
 /// <summary>
 /// Applies an occlusion shader for any relevant entities.
 /// </summary>
-public abstract partial class SharedFloorOcclusionSystem : EntitySystem
+public abstract class SharedFloorOcclusionSystem : EntitySystem
 {
-    [Dependency] private RMCWaterSystem _rmcWater = default!;
-
     public override void Initialize()
     {
         base.Initialize();
@@ -27,9 +24,6 @@ public abstract partial class SharedFloorOcclusionSystem : EntitySystem
         {
             return;
         }
-
-        if (!_rmcWater.CanCollide(entity.Owner, other))
-            return;
 
         occlusion.Colliding.Add(entity.Owner);
         Dirty(other, occlusion);

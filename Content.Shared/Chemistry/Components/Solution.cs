@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Linq;
-using Content.Shared._RMC14.Chemistry.Reagent;
-using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.FixedPoint;
 using JetBrains.Annotations;
@@ -92,8 +90,8 @@ namespace Content.Shared.Chemistry.Components
             _heatCapacity = 0;
             foreach (var (reagent, quantity) in Contents)
             {
-                _heatCapacity += (float) quantity *
-                                    protoMan.IndexReagent<ReagentPrototype>(reagent.Prototype).SpecificHeat;
+                _heatCapacity += (float)quantity *
+                                    protoMan.Index<ReagentPrototype>(reagent.Prototype).SpecificHeat;
             }
 
             _heatCapacityUpdateCounter = 0;
@@ -160,7 +158,7 @@ namespace Content.Shared.Chemistry.Components
             ValidateSolution();
         }
 
-        public Solution(Solution solution, IPrototypeManager? prototypes = null)
+        public Solution(Solution solution)
         {
             Contents = new(solution.Contents.Count);
             foreach (var item in solution.Contents)
@@ -175,7 +173,7 @@ namespace Content.Shared.Chemistry.Components
             _heatCapacity = solution._heatCapacity;
             _heatCapacityDirty = solution._heatCapacityDirty;
             _heatCapacityUpdateCounter = solution._heatCapacityUpdateCounter;
-            ValidateSolution(prototypes);
+            ValidateSolution();
         }
 
         public Solution Clone()
@@ -189,7 +187,7 @@ namespace Content.Shared.Chemistry.Components
         }
 
         [AssertionMethod]
-        public void ValidateSolution(IPrototypeManager? prototypes = null)
+        public void ValidateSolution()
         {
             // sandbox forbids: [Conditional("DEBUG")]
 #if DEBUG
@@ -207,7 +205,7 @@ namespace Content.Shared.Chemistry.Components
             {
                 var cur = _heatCapacity;
                 _heatCapacityDirty = true;
-                UpdateHeatCapacity(prototypes);
+                UpdateHeatCapacity(null);
                 DebugTools.Assert(MathHelper.CloseTo(_heatCapacity, cur, tolerance: 0.01));
             }
 #endif
@@ -900,7 +898,7 @@ namespace Content.Shared.Chemistry.Components
 
                 runningTotalQuantity += quantity;
 
-                if (!protoMan.TryIndexReagent(reagent.Prototype, out ReagentPrototype? proto))
+                if (!protoMan.TryIndex(reagent.Prototype, out ReagentPrototype? proto))
                 {
                     continue;
                 }
@@ -943,7 +941,7 @@ namespace Content.Shared.Chemistry.Components
 
                 runningTotalQuantity += quantity;
 
-                if (!protoMan.TryIndexReagent(reagent.Prototype, out ReagentPrototype? proto))
+                if (!protoMan.TryIndex(reagent.Prototype, out ReagentPrototype? proto))
                 {
                     continue;
                 }
@@ -996,7 +994,7 @@ namespace Content.Shared.Chemistry.Components
             var dict = new Dictionary<ReagentPrototype, FixedPoint2>(Contents.Count);
             foreach (var (reagent, quantity) in Contents)
             {
-                var proto = protoMan.IndexReagent<ReagentPrototype>(reagent.Prototype);
+                var proto = protoMan.Index<ReagentPrototype>(reagent.Prototype);
                 dict[proto] = quantity + dict.GetValueOrDefault(proto);
             }
             return dict;

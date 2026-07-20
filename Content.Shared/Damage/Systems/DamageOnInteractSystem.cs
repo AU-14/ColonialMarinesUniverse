@@ -1,4 +1,3 @@
-using Content.Shared._RMC14.Light;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Damage.Components;
 using Content.Shared.Database;
@@ -73,13 +72,6 @@ public sealed partial class DamageOnInteractSystem : EntitySystem
             if (protectiveEntity.Comp != null)
             {
                 totalDamage = DamageSpecifier.ApplyModifierSet(totalDamage, protectiveEntity.Comp.DamageProtection);
-            }
-            else
-            {
-                var ev = new LightBurnHandAttemptEvent(args.User, entity);
-                RaiseLocalEvent(ref ev);
-                if (ev.Cancelled)
-                    return;
             }
         }
 

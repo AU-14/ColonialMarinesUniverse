@@ -1,4 +1,3 @@
-using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Examine;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Verbs;
@@ -19,9 +18,6 @@ public sealed partial class DetailExaminableSystem : EntitySystem
 
     private void OnGetExamineVerbs(Entity<DetailExaminableComponent> ent, ref GetVerbsEvent<ExamineVerb> args)
     {
-        if (HasComp<XenoComponent>(args.User))
-            return;
-
         if (Identity.Name(args.Target, EntityManager) != MetaData(args.Target).EntityName)
             return;
 

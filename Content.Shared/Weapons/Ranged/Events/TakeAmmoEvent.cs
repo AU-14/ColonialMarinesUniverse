@@ -8,7 +8,7 @@ namespace Content.Shared.Weapons.Ranged.Events;
 public sealed class TakeAmmoEvent : EntityEventArgs
 {
     public readonly EntityUid? User;
-    public int Shots; // RMC14
+    public readonly int Shots;
     public List<(EntityUid? Entity, IShootable Shootable)> Ammo;
 
     /// <summary>

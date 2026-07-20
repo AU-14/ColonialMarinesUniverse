@@ -192,11 +192,7 @@ public sealed partial class StatusEffectsSystem
 
         foreach (var e in container.ActiveStatusEffects?.ContainedEntities ?? [])
         {
-            // RMC14
-            if (!TryComp(e, out MetaDataComponent? meta))
-                continue;
-
-            // var meta = MetaData(e);
+            var meta = MetaData(e);
             if (meta.EntityPrototype is not null && meta.EntityPrototype == effectProto)
             {
                 effect = e;

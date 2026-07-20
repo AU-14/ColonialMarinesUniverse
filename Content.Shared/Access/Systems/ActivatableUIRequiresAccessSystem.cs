@@ -1,6 +1,6 @@
-using Content.Shared.Access.Components;
 using Content.Shared.Popups;
 using Content.Shared.UserInterface;
+using Content.Shared.Access.Components;
 
 namespace Content.Shared.Access.Systems;
 public sealed partial class ActivatableUIRequiresAccessSystem : EntitySystem

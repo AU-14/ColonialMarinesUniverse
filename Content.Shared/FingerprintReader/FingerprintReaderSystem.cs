@@ -13,6 +13,32 @@ public sealed partial class FingerprintReaderSystem : EntitySystem
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
 
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<FingerprintReaderComponent, FindAvailableLocksEvent>(OnFindAvailableLocks);
+        SubscribeLocalEvent<FingerprintReaderComponent, CheckUserHasLockAccessEvent>(OnCheckLockAccess);
+    }
+
+    private void OnFindAvailableLocks(Entity<FingerprintReaderComponent> ent, ref FindAvailableLocksEvent args)
+    {
+        args.FoundReaders |= LockTypes.Fingerprint;
+    }
+
+    private void OnCheckLockAccess(Entity<FingerprintReaderComponent> ent, ref CheckUserHasLockAccessEvent args)
+    {
+        // Are we looking for a fingerprint lock?
+        if (!args.FoundReaders.HasFlag(LockTypes.Fingerprint))
+            return;
+
+        // If the user has access to this lock, we pass it into the event.
+        if (IsAllowed(ent.Owner, args.User, out var denyReason))
+            args.HasAccess |= LockTypes.Fingerprint;
+        else
+            args.DenyReason = denyReason;
+    }
+
     /// <summary>
     /// Checks if the given user has fingerprint access to the target entity.
     /// </summary>

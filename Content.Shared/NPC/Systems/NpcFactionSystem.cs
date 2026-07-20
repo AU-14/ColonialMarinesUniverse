@@ -12,7 +12,6 @@ namespace Content.Shared.NPC.Systems;
 public sealed partial class NpcFactionSystem : EntitySystem
 {
     [Dependency] private EntityLookupSystem _lookup = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private SharedTransformSystem _xform = default!;
 
     /// <summary>

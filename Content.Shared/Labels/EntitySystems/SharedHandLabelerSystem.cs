@@ -7,7 +7,6 @@ using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Content.Shared.Whitelist;
 using Robust.Shared.GameStates;
-using Robust.Shared.Utility;
 
 namespace Content.Shared.Labels.EntitySystems;
 
@@ -66,7 +65,7 @@ public abstract partial class SharedHandLabelerSystem : EntitySystem
             return;
         }
 
-        _labelSystem.Label(target, FormattedMessage.EscapeText(ent.Comp.AssignedLabel)); // RMC14
+        _labelSystem.Label(target, ent.Comp.AssignedLabel);
 
         _popupSystem.PopupEntity(Loc.GetString("hand-labeler-successfully-applied"), user, user);
 

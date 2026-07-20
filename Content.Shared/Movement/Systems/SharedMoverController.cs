@@ -34,19 +34,19 @@ namespace Content.Shared.Movement.Systems;
 /// </summary>
 public abstract partial class SharedMoverController : VirtualController
 {
-    [Dependency] private   IConfigurationManager _configManager = default!;
+    [Dependency] private IConfigurationManager _configManager = default!;
     [Dependency] protected IGameTiming Timing = default!;
-    [Dependency] private   ITileDefinitionManager _tileDefinitionManager = default!;
-    [Dependency] private   ActionBlockerSystem _blocker = default!;
-    [Dependency] private   EntityLookupSystem _lookup = default!;
-    [Dependency] private   InventorySystem _inventory = default!;
-    [Dependency] private   MobStateSystem _mobState = default!;
-    [Dependency] private   SharedAudioSystem _audio = default!;
-    [Dependency] private   SharedContainerSystem _container = default!;
-    [Dependency] private   SharedMapSystem _mapSystem = default!;
-    [Dependency] private   SharedGravitySystem _gravity = default!;
-    [Dependency] private   SharedTransformSystem _transform = default!;
-    [Dependency] private   TagSystem _tags = default!;
+    [Dependency] private ITileDefinitionManager _tileDefinitionManager = default!;
+    [Dependency] private ActionBlockerSystem _blocker = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private SharedGravitySystem _gravity = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TagSystem _tags = default!;
 
     [Dependency] protected EntityQuery<CanMoveInAirComponent> CanMoveInAirQuery = default!;
     [Dependency] protected EntityQuery<FootstepModifierComponent> FootstepModifierQuery = default!;
@@ -74,8 +74,6 @@ public abstract partial class SharedMoverController : VirtualController
     private float _frictionModifier;
 
     private const LookupFlags _touchingFlags = LookupFlags.Approximate | LookupFlags.Dynamic | LookupFlags.Static;
-
-    private const LookupFlags TouchingFlags = LookupFlags.Approximate | LookupFlags.Dynamic | LookupFlags.Static;
 
     /// <summary>
     /// Cache the mob movement calculation to re-use elsewhere.
@@ -171,11 +169,7 @@ public abstract partial class SharedMoverController : VirtualController
             return;
 
         RelayTargetQuery.TryComp(uid, out var relayTarget);
-        // RMC14
-        EntityUid? relaySource = null;
-        if (relayTarget != null && EnsureValidRelayTarget(uid, relayTarget))
-            relaySource = relayTarget.Source;
-        // RMC14
+        var relaySource = relayTarget?.Source;
 
         // If we're not the target of a relay then handle lerp data.
         if (relaySource == null)
@@ -287,15 +281,6 @@ public abstract partial class SharedMoverController : VirtualController
 
             var walkSpeed = moveSpeedComponent?.CurrentWalkSpeed ?? MovementSpeedModifierComponent.DefaultBaseWalkSpeed;
             var sprintSpeed = moveSpeedComponent?.CurrentSprintSpeed ?? MovementSpeedModifierComponent.DefaultBaseSprintSpeed;
-
-            // RMC14
-            var baseWalkSpeed = moveSpeedComponent?.BaseWalkSpeed ?? MovementSpeedModifierComponent.DefaultBaseWalkSpeed;
-            // Keep the walk speed unchanged if the modified sprint speed is higher than the base walk speed.
-            if (baseWalkSpeed < sprintSpeed)
-                walkSpeed = baseWalkSpeed;
-            // If the sprint speed drops below the walk speed, lower the walk speed to match the sprint speed.
-            else
-                walkSpeed = sprintSpeed;
 
             wishDir = AssertValidWish(mover, walkSpeed, sprintSpeed);
 
@@ -487,7 +472,7 @@ public abstract partial class SharedMoverController : VirtualController
         var enlargedAABB = _lookup.GetWorldAABB(entity.Owner, transform).Enlarged(mover.GrabRange);
 
         _aroundColliderSet.Clear();
-        _lookup.GetEntitiesIntersecting(transform.MapID, enlargedAABB, _aroundColliderSet, TouchingFlags);
+        _lookup.GetEntitiesIntersecting(transform.MapID, enlargedAABB, _aroundColliderSet, _touchingFlags);
         foreach (var otherEntity in _aroundColliderSet)
         {
             if (otherEntity == uid || _transform.IsParentOf(transform, otherEntity))
@@ -497,7 +482,7 @@ public abstract partial class SharedMoverController : VirtualController
                 continue;
 
             // Only allow pushing off of anchored things that have collision.
-            // Collision is one-way: the mover must collide with the surface, not merely the surface with the mover.
+            // NOTE: collision is one-way - we want the mover to push off (collide with) walls, not vice versa (consider bullets and lasers)
             if (otherCollider.BodyType != BodyType.Static ||
                 !otherCollider.CanCollide ||
                 (collider.CollisionMask & otherCollider.CollisionLayer) == 0 ||

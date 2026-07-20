@@ -1,9 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Content.Shared._RMC14.CombatMode;
-using Content.Shared._RMC14.Ghost;
-using Content.Shared._RMC14.Movement;
-using Content.Shared._RMC14.Storage;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
 using Content.Shared.CCVar;
@@ -103,9 +99,6 @@ namespace Content.Shared.Interaction
         private static readonly ProtoId<TagPrototype> BypassInteractionRangeChecksTag = "BypassInteractionRangeChecks";
 
         public delegate bool Ignored(EntityUid entity);
-
-        [Dependency] private SharedRMCLagCompensationSystem _rmcLagCompensation = default!;
-        [Dependency] private INetManager _net = default!;
 
         public override void Initialize()
         {
@@ -268,7 +261,6 @@ namespace Content.Shared.Interaction
 
         private bool HandleTryPullObject(ICommonSession? session, EntityCoordinates coords, EntityUid uid)
         {
-            _rmcLagCompensation.SendLastRealTick();
             if (!ValidateClientInput(session, coords, uid, out var userEntity))
             {
                 Log.Info($"TryPullObject input validation failed");
@@ -319,7 +311,6 @@ namespace Content.Shared.Interaction
 
         public bool HandleAltUseInteraction(ICommonSession? session, EntityCoordinates coords, EntityUid uid)
         {
-            _rmcLagCompensation.SendLastRealTick();
             // client sanitization
             if (!ValidateClientInput(session, coords, uid, out var user))
             {
@@ -334,7 +325,6 @@ namespace Content.Shared.Interaction
 
         public bool HandleUseInteraction(ICommonSession? session, EntityCoordinates coords, EntityUid uid)
         {
-            _rmcLagCompensation.SendLastRealTick();
             // client sanitization
             if (!ValidateClientInput(session, coords, uid, out var userEntity))
             {
@@ -362,12 +352,6 @@ namespace Content.Shared.Interaction
         /// <returns></returns>
         public bool CombatModeCanHandInteract(EntityUid user, EntityUid? target)
         {
-            // RMC14
-            var ev = new RMCCombatModeInteractOverrideUserEvent(target);
-            RaiseLocalEvent(user, ref ev);
-            if (ev.Handled)
-                return ev.CanInteract;
-
             // Always allow attack in these cases
             if (target == null || !_handsQuery.TryComp(user, out var hands) || _hands.GetActiveItem((user, hands)) is not null)
                 return false;
@@ -380,7 +364,7 @@ namespace Content.Shared.Interaction
             if (!_itemQuery.HasComp(target))
                 return false;
 
-            var combatEv = new CombatModeShouldHandInteractEvent(user);
+            var combatEv = new CombatModeShouldHandInteractEvent();
             RaiseLocalEvent(target.Value, ref combatEv);
 
             if (combatEv.Cancelled)
@@ -443,24 +427,17 @@ namespace Content.Shared.Interaction
                 return;
             }
 
-            // RMC14
-            var ignoreGhostInteractionLimits =
-                target != null &&
-                HasComp<GhostComponent>(user) &&
-                HasComp<RMCIgnoreGhostInteractionLimitsComponent>(target.Value);
-
-            if (checkCanInteract && !ignoreGhostInteractionLimits && !_actionBlockerSystem.CanInteract(user, target))
+            if (checkCanInteract && !_actionBlockerSystem.CanInteract(user, target))
                 return;
 
             // Check if interacted entity is in the same container, the direct child, or direct parent of the user.
             // Also checks if the item is accessible via some storage UI (e.g., open backpack)
-            if (checkAccess && target != null && !ignoreGhostInteractionLimits && !IsAccessible(user, target.Value))
+            if (checkAccess && target != null && !IsAccessible(user, target.Value))
                 return;
 
             var inRangeUnobstructed = target == null
                 ? !checkAccess || InRangeUnobstructed(user, coordinates)
-                : !checkAccess || ignoreGhostInteractionLimits || InRangeUnobstructed(user, target.Value); // permits interactions with wall mounted entities
-            // RMC14
+                : !checkAccess || InRangeUnobstructed(user, target.Value); // permits interactions with wall mounted entities
 
             // empty-hand interactions
             // combat mode hand interactions will always be true here -- since
@@ -717,9 +694,7 @@ namespace Content.Shared.Interaction
             CollisionGroup collisionMask = InRangeUnobstructedMask,
             Ignored? predicate = null,
             bool popup = false,
-            bool overlapCheck = true,
-            EntityUid? user = null,
-            bool lagCompensate = true)
+            bool overlapCheck = true)
         {
             if (!Resolve(other, ref other.Comp))
                 return false;
@@ -732,17 +707,10 @@ namespace Content.Shared.Interaction
                 return ev.InRange;
             }
 
-            // RMC14
-            var otherCoordinates = other.Comp.Coordinates;
-            var otherAngle = other.Comp.LocalRotation;
-            if (lagCompensate && TryComp(user ?? origin, out ActorComponent? originActor))
-                (otherCoordinates, otherAngle) = _rmcLagCompensation.GetCoordinatesAngle(other, originActor.PlayerSession);
-            // RMC14
-
             return InRangeUnobstructed(origin,
                 other,
-                otherCoordinates,
-                otherAngle,
+                other.Comp.Coordinates,
+                other.Comp.LocalRotation,
                 range,
                 collisionMask,
                 predicate,
@@ -789,19 +757,6 @@ namespace Content.Shared.Interaction
             bool popup = false,
             bool overlapCheck = true)
         {
-            if (_net.IsServer &&
-                Resolve(other, ref other.Comp, false) &&
-                !_transform.InRange(otherCoordinates, other.Comp.Coordinates, 0.01f))
-            {
-                range += _rmcLagCompensation.MarginTiles;
-            }
-
-            if (origin.Owner == other.Owner && Resolve(other, ref other.Comp, false))
-            {
-                otherCoordinates = other.Comp.Coordinates;
-                otherAngle = other.Comp.LocalRotation;
-            }
-
             Ignored combinedPredicate = e => e == origin.Owner || (predicate?.Invoke(e) ?? false);
             var inRange = true;
             MapCoordinates originPos = default;
@@ -854,7 +809,7 @@ namespace Content.Shared.Interaction
                 // Out of range so don't raycast.
                 else if (distance > range)
                 {
-                    originPos = _transform.GetMapCoordinates(origin, xform: origin.Comp); // RMC14
+                    inRange = false;
                 }
                 else
                 {
@@ -950,19 +905,7 @@ namespace Content.Shared.Interaction
                 }
 
                 if (ignoreAnchored && _map.TryFindGridAt(targetCoords, out var gridUid, out var grid))
-                {
                     ignored.UnionWith(_map.GetAnchoredEntities((gridUid, grid), targetCoords));
-                    foreach (var ent in _lookup.GetEntitiesInRange(targetCoords, 0.2f))
-                    {
-                        if (!TryComp(ent, out TransformComponent? xform) ||
-                            !xform.Anchored)
-                        {
-                            continue;
-                        }
-
-                        ignored.Add(ent);
-                    }
-                }
             }
 
             Ignored combinedPredicate = e => e == target || (predicate?.Invoke(e) ?? false) || ignored.Contains(e);
@@ -1182,7 +1125,6 @@ namespace Content.Shared.Interaction
         #region ActivateItemInWorld
         private bool HandleActivateItemInWorld(ICommonSession? session, EntityCoordinates coords, EntityUid uid)
         {
-            _rmcLagCompensation.SendLastRealTick();
             if (!ValidateClientInput(session, coords, uid, out var user))
             {
                 Log.Info($"ActivateItemInWorld input validation failed");
@@ -1220,22 +1162,16 @@ namespace Content.Shared.Interaction
             if (checkUseDelay && delayComponent != null && _useDelay.IsDelayed((used, delayComponent)))
                 return false;
 
-            // RMC14
-            var ignoreGhostInteractionLimits =
-                HasComp<GhostComponent>(user) &&
-                HasComp<RMCIgnoreGhostInteractionLimitsComponent>(used);
-
-            if (checkCanInteract && !ignoreGhostInteractionLimits && !_actionBlockerSystem.CanInteract(user, used))
+            if (checkCanInteract && !_actionBlockerSystem.CanInteract(user, used))
                 return false;
 
-            if (checkAccess && !ignoreGhostInteractionLimits && !InRangeUnobstructed(user, used))
+            if (checkAccess && !InRangeUnobstructed(user, used))
                 return false;
 
             // Check if interacted entity is in the same container, the direct child, or direct parent of the user.
             // This is bypassed IF the interaction happened through an item slot (e.g., backpack UI)
-            if (checkAccess && !ignoreGhostInteractionLimits && !IsAccessible(user, used))
+            if (checkAccess && !IsAccessible(user, used))
                 return false;
-            // RMC14
 
             complexInteractions ??= _actionBlockerSystem.CanComplexInteract(user);
             var activateMsg = new ActivateInWorldEvent(user, used, complexInteractions.Value);
@@ -1357,8 +1293,7 @@ namespace Content.Shared.Interaction
             Entity<TransformComponent?> target,
             float range = InteractionRange,
             CollisionGroup collisionMask = InRangeUnobstructedMask,
-            Ignored? predicate = null,
-            bool lagCompensated = false)
+            Ignored? predicate = null)
         {
             if (user == target)
                 return true;
@@ -1416,8 +1351,7 @@ namespace Content.Shared.Interaction
                 return false;
 
             // we don't check if the user can access the storage entity itself. This should be handed by the UI system.
-            return _ui.IsUiOpen(container.Owner, StorageComponent.StorageUiKey.Key, user) ||
-                   HasComp<RMCItemKeepUIOpenOnStorageClosedComponent>(target); // RMC14
+            return _ui.IsUiOpen(container.Owner, StorageComponent.StorageUiKey.Key, user);
         }
 
         /// <summary>
@@ -1603,7 +1537,7 @@ namespace Content.Shared.Interaction
     /// </summary>
     /// <param name="Cancelled">Whether the hand interaction should be cancelled.</param>
     [ByRefEvent]
-    public record struct CombatModeShouldHandInteractEvent(EntityUid User, bool Cancelled = false);
+    public record struct CombatModeShouldHandInteractEvent(bool Cancelled = false);
 
     /// <summary>
     /// Override event raised directed on the user to say the target is accessible.

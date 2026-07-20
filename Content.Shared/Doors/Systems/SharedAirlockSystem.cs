@@ -12,12 +12,12 @@ namespace Content.Shared.Doors.Systems;
 
 public abstract partial class SharedAirlockSystem : EntitySystem
 {
-    [Dependency] private   IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
     [Dependency] protected SharedAppearanceSystem Appearance = default!;
     [Dependency] protected SharedAudioSystem Audio = default!;
     [Dependency] protected SharedDoorSystem DoorSystem = default!;
     [Dependency] protected SharedPopupSystem Popup = default!;
-    [Dependency] private   SharedWiresSystem _wiresSystem = default!;
+    [Dependency] private SharedWiresSystem _wiresSystem = default!;
 
     public override void Initialize()
     {

@@ -64,7 +64,7 @@ public sealed partial class EdibleComponent : Component
     /// How long it takes to eat the food personally.
     /// </summary>
     [DataField]
-    public float Delay = 0.5f;
+    public TimeSpan Delay = TimeSpan.FromSeconds(1f);
 
     /// <summary>
     ///     This is how many seconds it takes to force-feed someone this food.

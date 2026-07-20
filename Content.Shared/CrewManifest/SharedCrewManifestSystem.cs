@@ -1,6 +1,5 @@
 using Content.Shared.Eui;
 using Robust.Shared.Serialization;
-using Color = Robust.Shared.Maths.Color; // RMC14
 
 namespace Content.Shared.CrewManifest;
 
@@ -54,28 +53,12 @@ public sealed class CrewManifestEntry
 
     public string JobPrototype { get; }
 
-    public string? Squad { get; }
-
-    public Color? SquadColor { get; }
-
-
     public CrewManifestEntry(string name, string jobTitle, string jobIcon, string jobPrototype)
     {
         Name = name;
         JobTitle = jobTitle;
         JobIcon = jobIcon;
         JobPrototype = jobPrototype;
-    }
-
-    // RMC14 ADD
-    public CrewManifestEntry(string name, string jobTitle, string jobIcon, string jobPrototype, string? squad, Color? squadColor)
-    {
-        Name = name;
-        JobTitle = jobTitle;
-        JobIcon = jobIcon;
-        JobPrototype = jobPrototype;
-        Squad = squad;
-        SquadColor = squadColor;
     }
 }
 

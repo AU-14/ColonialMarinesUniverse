@@ -1,17 +1,13 @@
-using Content.Shared._RMC14.CCVar;
 using Content.Shared.Examine;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Verbs;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Shared.Containers;
-using Robust.Shared.Player;
 
 namespace Content.Shared.Weapons.Ranged.Systems;
 
 public abstract partial class SharedGunSystem
 {
-    public const string MagazineSlot = "gun_magazine";
-
     protected virtual void InitializeMagazine()
     {
         SubscribeLocalEvent<MagazineAmmoProviderComponent, MapInitEvent>(OnMagazineMapInit);
@@ -151,12 +147,9 @@ public abstract partial class SharedGunSystem
     {
         // If no ammo then check for autoeject
         var ejectMag = component.AutoEject && count == 0;
-        if (ejectMag && TryComp(user, out ActorComponent? actor))
-            ejectMag = _netConfig.GetClientCVar(actor.PlayerSession.Channel, RMCCVars.RMCAutoEjectMagazines);
-
         if (ejectMag)
         {
-            EjectMagazine(uid, component, user); //RMC14
+            EjectMagazine(uid, component);
             Audio.PlayPredicted(component.SoundAutoEject, uid, user);
         }
 
@@ -193,13 +186,13 @@ public abstract partial class SharedGunSystem
         Appearance.SetData(uid, AmmoVisuals.AmmoMax, capacity, appearance);
     }
 
-    private void EjectMagazine(EntityUid uid, MagazineAmmoProviderComponent component, EntityUid? user) //RMC14
+    private void EjectMagazine(EntityUid uid, MagazineAmmoProviderComponent component)
     {
         var ent = GetMagazineEntity(uid);
 
         if (ent == null)
             return;
 
-        _slots.TryEject(uid, MagazineSlot, user, out var a, excludeUserAudio: true); //RMC14
+        _slots.TryEject(uid, MagazineSlot, null, out var a, excludeUserAudio: true);
     }
 }

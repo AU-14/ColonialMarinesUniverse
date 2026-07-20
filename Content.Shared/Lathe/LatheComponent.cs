@@ -1,3 +1,4 @@
+using Content.Shared.Construction.Prototypes;
 using Content.Shared.Lathe.Prototypes;
 using Content.Shared.Research.Prototypes;
 using Robust.Shared.Audio;
@@ -82,10 +83,6 @@ namespace Content.Shared.Lathe
         [DataField, ViewVariables(VVAccess.ReadWrite), AutoNetworkedField]
         public float MaterialUseMultiplier = 1;
         #endregion
-
-        // RMC14
-        [DataField, AutoNetworkedField]
-        public int MaxQueue = 6;
     }
 
     public sealed class LatheGetRecipesEvent : EntityEventArgs

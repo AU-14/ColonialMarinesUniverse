@@ -1,7 +1,7 @@
-using Content.Shared._RMC14.Admin;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Hands.Components;
 using Content.Shared.Interaction;
+using Content.Shared.Inventory.VirtualItem;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 
@@ -141,13 +141,6 @@ namespace Content.Shared.Verbs
                 var access = canAccess || _interactionSystem.CanAccessEquipment(user, target);
                 var verbEvent = new GetVerbsEvent<EquipmentVerb>(user, target, @using, hands, canInteract: canInteract, canComplexInteract: canComplexInteract, canAccess: access, extraCategories);
                 RaiseLocalEvent(target, verbEvent);
-                verbs.UnionWith(verbEvent.Verbs);
-            }
-
-            if (types.Contains(typeof(RMCAdminVerb)))
-            {
-                var verbEvent = new GetVerbsEvent<RMCAdminVerb>(user, target, @using, hands, canInteract: canInteract, canComplexInteract: canComplexInteract, canAccess: canAccess, extraCategories);
-                RaiseLocalEvent(target, verbEvent, true);
                 verbs.UnionWith(verbEvent.Verbs);
             }
 

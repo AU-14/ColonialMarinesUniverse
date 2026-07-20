@@ -78,7 +78,7 @@ public sealed partial class ProjectileComponent : Component
     /// <summary>
     ///     If true, the projectile has hit enough targets and should no longer interact with further collisions pending deletion.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public bool ProjectileSpent;
 
     /// <summary>
@@ -98,15 +98,4 @@ public sealed partial class ProjectileComponent : Component
     /// </summary>
     [DataField]
     public FixedPoint2 PenetrationAmount = FixedPoint2.Zero;
-
-    /// <summary>
-    /// Sets the maximum range for a projectile fired with ShootAtFixedPointComponent.
-    /// This can be set on both the Projectile and ShootAtFixedPoint Components.
-    /// The default value is null for no cap. The minimum value between the two is used.
-    /// </summary>
-    [DataField, AutoNetworkedField]
-    public float? MaxFixedRange;
-
-    [DataField, AutoNetworkedField]
-    public bool QueueDeletion;
 }

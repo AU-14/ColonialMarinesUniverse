@@ -29,7 +29,7 @@ public sealed partial class SolutionComponent : Component
     /// <summary>
     /// <para>The reagents the entity is composed of and their temperature.</para>
     /// </summary>
-    [DataField]
+    [DataField, AlwaysPushInheritance]
     public Solution Solution = new();
 }
 

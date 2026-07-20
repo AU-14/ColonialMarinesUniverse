@@ -8,7 +8,6 @@ namespace Content.Shared.EntityTable;
 
 public sealed partial class EntityTableSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
 
     /// <summary>

@@ -8,9 +8,6 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.CartridgeLoader.Cartridges;
 
-/// <summary>
-///     Server-side class implementing the core UI logic of NanoTask
-/// </summary>
 public sealed partial class NanoTaskCartridgeSystem : EntitySystem
 {
     [Dependency] private CartridgeLoaderSystem _cartridgeLoader = default!;

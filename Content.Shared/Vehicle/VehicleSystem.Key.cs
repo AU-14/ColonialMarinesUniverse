@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Shared.Vehicle.Components;
 using Robust.Shared.Containers;
 
@@ -5,14 +6,7 @@ namespace Content.Shared.Vehicle;
 
 public sealed partial class VehicleSystem
 {
-    public void InitializeKey()
-    {
-        SubscribeLocalEvent<GenericKeyedVehicleComponent, ContainerIsInsertingAttemptEvent>(OnGenericKeyedInsertAttempt);
-        SubscribeLocalEvent<GenericKeyedVehicleComponent, EntInsertedIntoContainerMessage>(OnGenericKeyedEntInserted);
-        SubscribeLocalEvent<GenericKeyedVehicleComponent, EntRemovedFromContainerMessage>(OnGenericKeyedEntRemoved);
-        SubscribeLocalEvent<GenericKeyedVehicleComponent, VehicleCanRunEvent>(OnGenericKeyedCanRun);
-    }
-
+    [SubscribeLocalEvent]
     private void OnGenericKeyedInsertAttempt(Entity<GenericKeyedVehicleComponent> ent, ref ContainerIsInsertingAttemptEvent args)
     {
         if (args.Cancelled || _timing.ApplyingState || !ent.Comp.PreventInvalidInsertion || args.Container.ID != ent.Comp.ContainerId)
@@ -24,38 +18,46 @@ public sealed partial class VehicleSystem
         args.Cancel();
     }
 
+    [SubscribeLocalEvent]
     private void OnGenericKeyedEntInserted(Entity<GenericKeyedVehicleComponent> ent, ref EntInsertedIntoContainerMessage args)
     {
         if (_timing.ApplyingState || args.Container.ID != ent.Comp.ContainerId)
             return;
-        RefreshCanRun(ent.Owner);
+
+        if (!_vehicleQuery.TryComp(ent, out var vehicle))
+            return;
+
+        RefreshCanRun((ent.Owner, vehicle));
     }
 
+    [SubscribeLocalEvent]
     private void OnGenericKeyedEntRemoved(Entity<GenericKeyedVehicleComponent> ent, ref EntRemovedFromContainerMessage args)
     {
         if (_timing.ApplyingState || args.Container.ID != ent.Comp.ContainerId)
             return;
-        RefreshCanRun(ent.Owner);
+
+        if (!_vehicleQuery.TryComp(ent, out var vehicle))
+            return;
+
+        RefreshCanRun((ent.Owner, vehicle));
     }
 
+    [SubscribeLocalEvent]
     private void OnGenericKeyedCanRun(Entity<GenericKeyedVehicleComponent> ent, ref VehicleCanRunEvent args)
     {
         if (!args.CanRun)
             return;
-        // We cannot run by default
-        args.CanRun = false;
 
         if (!_container.TryGetContainer(ent.Owner, ent.Comp.ContainerId, out var container))
-            return;
-
-        foreach (var contained in container.ContainedEntities)
         {
-            if (_entityWhitelist.IsWhitelistFail(ent.Comp.KeyWhitelist, contained))
-                continue;
-
-            // If we find a valid key, permit running and exit early.
-            args.CanRun = true;
-            break;
+            args = args with { CanRun = false };
+            return;
         }
+
+        var hasKey = container.ContainedEntities.Any(contained =>
+            _entityWhitelist.IsWhitelistPass(ent.Comp.KeyWhitelist, contained));
+
+        if (!hasKey)
+            args = args with { CanRun = false };
     }
 }

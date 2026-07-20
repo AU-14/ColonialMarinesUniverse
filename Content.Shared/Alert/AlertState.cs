@@ -7,8 +7,7 @@ namespace Content.Shared.Alert;
 public record struct AlertState
 {
     public short? Severity;
-    public (TimeSpan, TimeSpan)? Cooldown;
-    public string? DynamicMessage;
+    public (TimeSpan startTime, TimeSpan endTime)? Cooldown;
     public bool AutoRemove;
     public bool ShowCooldown;
     public ProtoId<AlertPrototype> Type;

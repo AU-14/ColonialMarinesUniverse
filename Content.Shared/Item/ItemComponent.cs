@@ -52,7 +52,7 @@ public sealed partial class ItemComponent : Component
     /// <summary>
     /// An additional angle offset, in degrees, applied to the visual depiction of the item when displayed in the storage UI.
     /// </summary>
-    [AutoNetworkedField]
+    [DataField, AutoNetworkedField]
     public float StoredRotation = 0;
 
     /// <summary>
@@ -60,10 +60,6 @@ public sealed partial class ItemComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public Vector2i StoredOffset;
-
-    // RMC14
-    [DataField("storedRotation")]
-    private float _unusedStoredRotation;
 }
 
 /// <summary>

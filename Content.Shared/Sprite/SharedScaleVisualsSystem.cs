@@ -32,31 +32,42 @@ public abstract partial class SharedScaleVisualsSystem : EntitySystem
         RaiseLocalEvent(ent.Owner, ref ev);
     }
 
+    /// <summary>
+    /// Used to set the <see cref="Robust.Client.GameObjects.SpriteComponent.Scale"/> datafield to a certain value from the server.
+    /// </summary>
     public void SetSpriteScale(EntityUid uid, Vector2 scale)
     {
         var comp = EnsureComp<ScaleVisualsComponent>(uid);
         comp.Scale = scale;
         Dirty(uid, comp);
 
-        var appearance = EnsureComp<AppearanceComponent>(uid);
-        _appearance.SetData(uid, ScaleVisuals.Scale, scale, appearance);
+        var appearanceComponent = EnsureComp<AppearanceComponent>(uid);
+        _appearance.SetData(uid, ScaleVisuals.Scale, scale, appearanceComponent);
 
+        // Raise an event for content use.
         var ev = new ScaleEntityEvent(uid, scale);
         RaiseLocalEvent(uid, ref ev);
     }
 
+    /// <summary>
+    /// Gets the current scale set by <see cref="SetSpriteScale"/>.
+    /// This does not include any direct changes made to the SpriteComponent.
+    /// </summary>
     public Vector2 GetSpriteScale(EntityUid uid)
     {
-        if (!TryComp<AppearanceComponent>(uid, out var appearance) ||
-            !_appearance.TryGetData<Vector2>(uid, ScaleVisuals.Scale, out var scale, appearance))
-        {
+        if (!TryComp<AppearanceComponent>(uid, out var appearanceComponent))
             return Vector2.One;
-        }
+
+        if (!_appearance.TryGetData<Vector2>(uid, ScaleVisuals.Scale, out var scale, appearanceComponent))
+            scale = Vector2.One;
 
         return scale;
     }
 }
 
+/// <summary>
+/// Raised when a sprite scale is changed.
+/// </summary>
 [ByRefEvent]
 public readonly record struct ScaleEntityEvent(EntityUid Uid, Vector2 Scale);
 

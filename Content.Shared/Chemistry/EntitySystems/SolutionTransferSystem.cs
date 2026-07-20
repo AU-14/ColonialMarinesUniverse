@@ -66,8 +66,7 @@ public sealed partial class SolutionTransferSystem : EntitySystem
         // Add specific transfer verbs according to the container's size
         var priority = 0;
         var user = args.User;
-        var amounts = ent.Comp.TransferAmounts ?? DefaultTransferAmounts;
-        foreach (var amount in amounts)
+        foreach (var amount in DefaultTransferAmounts)
         {
             if (amount < ent.Comp.MinimumTransferAmount || amount > ent.Comp.MaximumTransferAmount)
                 continue;
@@ -329,24 +328,11 @@ public sealed partial class SolutionTransferSystem : EntitySystem
     }
 
     /// <summary>
-    /// Compatibility overload for RMC pressurized solution containers.
-    /// </summary>
-    public FixedPoint2 Transfer(EntityUid user,
-        EntityUid sourceEntity,
-        Entity<SolutionComponent> source,
-        EntityUid targetEntity,
-        Entity<SolutionComponent> target,
-        FixedPoint2 amount)
-    {
-        return Transfer(new SolutionTransferData(user, sourceEntity, source, targetEntity, target, amount));
-    }
-
-    /// <summary>
     /// Check if the source solution can transfer the amount to the target solution, and display a pop-up if it fails.
     /// </summary>
     private bool CanTransfer(SolutionTransferData data)
     {
-        var transferAttempt = new SolutionTransferAttemptEvent(data.SourceEntity, data.Source, data.TargetEntity, data.Target);
+        var transferAttempt = new SolutionTransferAttemptEvent(data.SourceEntity, data.TargetEntity);
 
         // Check if the source is cancelling the transfer
         RaiseLocalEvent(data.SourceEntity, ref transferAttempt);
@@ -408,7 +394,7 @@ public struct SolutionTransferData(EntityUid user, EntityUid sourceEntity, Entit
 /// To not mispredict this should always be cancelled in shared code and not server or client.
 /// </summary>
 [ByRefEvent]
-public record struct SolutionTransferAttemptEvent(EntityUid From, Entity<SolutionComponent> FromSolution, EntityUid To, Entity<SolutionComponent> ToSolution, string? CancelReason = null)
+public record struct SolutionTransferAttemptEvent(EntityUid From, EntityUid To, string? CancelReason = null)
 {
     /// <summary>
     /// Cancels the transfer.

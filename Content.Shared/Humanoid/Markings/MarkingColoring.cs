@@ -35,8 +35,6 @@ public static class MarkingColoring
     )
     {
         var colors = new List<Color>();
-        if (!prototype.RMCFollowSkinColor)
-            return colors;
 
         // Coloring from default properties
         var defaultColor = prototype.Coloring.Default.GetColor(skinColor, eyeColor, otherMarkings);

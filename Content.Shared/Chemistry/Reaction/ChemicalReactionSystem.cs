@@ -211,8 +211,9 @@ namespace Content.Shared.Chemistry.Reaction
 
             _entityEffects.ApplyEffects(soln, reaction.Effects, unitReactions);
 
-            // Reaction processing is predicted, so playing this on clients as well as the server
-            // produces a local sound followed by the replicated server sound.
+            // Someday, some brave soul will thread through an optional actor
+            // argument in from every call of OnReaction up, all just to pass
+            // it to PlayPredicted. I am not that brave soul.
             if (_netMan.IsServer)
                 _audio.PlayPvs(reaction.Sound, soln);
         }

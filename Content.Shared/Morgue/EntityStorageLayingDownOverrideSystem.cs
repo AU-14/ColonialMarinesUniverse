@@ -17,9 +17,6 @@ public sealed partial class EntityStorageLayingDownOverrideSystem : EntitySystem
 
     private void OnBeforeClose(EntityUid uid, EntityStorageLayingDownOverrideComponent component, ref StorageBeforeCloseEvent args)
     {
-        if (!component.Enabled)
-            return;
-
         foreach (var ent in args.Contents)
         {
             // Explicitly check for standing state component, as entities without it will return false for IsDown()

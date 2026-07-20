@@ -1,5 +1,4 @@
 using System.Numerics;
-using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Audio;
@@ -10,7 +9,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Shared.Weapons.Ranged.Components;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(fieldDeltas: true), AutoGenerateComponentPause]
-[Access(typeof(SharedGunSystem), typeof(RMCSelectiveFireSystem))]
+[Access(typeof(SharedGunSystem))]
 public sealed partial class GunComponent : Component
 {
     #region Sound
@@ -213,7 +212,7 @@ public sealed partial class GunComponent : Component
     /// The base value for how fast the projectile moves.
     /// </summary>
     [DataField]
-    public float ProjectileSpeed = 53f; //RMC14 changed from 62
+    public float ProjectileSpeed = SharedGunSystem.ProjectileSpeed;
 
     /// <summary>
     /// How fast the projectile moves.
@@ -264,18 +263,6 @@ public sealed partial class GunComponent : Component
     /// </summary>
     [DataField]
     public Vector2 DefaultDirection = new Vector2(0, -1);
-
-    // RMC14
-    [DataField]
-    public bool MeleeCooldownOnShoot = true;
-
-    // RMC14
-    /// <summary>
-    /// Offsets the spawn location of the projectile.
-    /// </summary>
-    /// <example>[0, -1] means the projectile spawns 1 tile in front of the shooter</example>
-    [DataField]
-    public Vector2 ShootOriginOffset = Vector2.Zero;
 }
 
 [Flags]

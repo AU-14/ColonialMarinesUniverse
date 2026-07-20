@@ -1,5 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using Content.Shared._RMC14.StatusEffect;
 using Content.Shared.Alert;
 using Content.Shared.Rejuvenate;
 using Content.Shared.StatusEffectNew;
@@ -12,7 +11,6 @@ namespace Content.Shared.StatusEffect
     [Obsolete("Migration to Content.Shared.StatusEffectNew.StatusEffectsSystem is required")]
     public sealed partial class StatusEffectsSystem : EntitySystem
     {
-        [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private IGameTiming _gameTiming = default!;
         [Dependency] private AlertsSystem _alertsSystem = default!;
         private List<EntityUid> _toRemove = new();
@@ -108,20 +106,17 @@ namespace Content.Shared.StatusEffect
         /// <typeparam name="T">The component type to add and remove from the entity.</typeparam>
         [Obsolete("Migration to Content.Shared.StatusEffectNew.StatusEffectsSystem is required")]
         public bool TryAddStatusEffect<T>(EntityUid uid, string key, TimeSpan time, bool refresh,
-            StatusEffectsComponent? status = null, bool force = false)
+            StatusEffectsComponent? status = null)
             where T : IComponent, new()
         {
             if (!Resolve(uid, ref status, false))
                 return false;
 
-            if (!TryAddStatusEffect(uid, key, time, refresh, status, force: force))
+            if (!TryAddStatusEffect(uid, key, time, refresh, status))
                 return false;
 
             if (HasComp<T>(uid))
-            {
-                status.ActiveEffects[key].RelevantComponent = Factory.GetComponentName<T>();
                 return true;
-            }
 
             AddComp<T>(uid);
             status.ActiveEffects[key].RelevantComponent = Factory.GetComponentName<T>();
@@ -175,17 +170,12 @@ namespace Content.Shared.StatusEffect
             TimeSpan time,
             bool refresh,
             StatusEffectsComponent? status = null,
-            TimeSpan? startTime = null,
-            bool force = false)
+            TimeSpan? startTime = null)
         {
             if (!Resolve(uid, ref status, false))
                 return false;
-            if (!CanApplyEffect(uid, key, status, force))
+            if (!CanApplyEffect(uid, key, status))
                 return false;
-
-            var ev = new RMCStatusEffectTimeEvent(key, time);
-            RaiseLocalEvent(uid, ref ev);
-            time = ev.Duration;
 
             // we already checked if it has the index in CanApplyEffect so a straight index and not tryindex here
             // is fine
@@ -355,19 +345,16 @@ namespace Content.Shared.StatusEffect
         /// <param name="key">The status effect ID to check for</param>
         /// <param name="status">The status effect component, should you already have it.</param>
         [Obsolete("Migration to Content.Shared.StatusEffectNew.StatusEffectsSystem is required")]
-        public bool CanApplyEffect(EntityUid uid, string key, StatusEffectsComponent? status = null, bool force = false)
+        public bool CanApplyEffect(EntityUid uid, string key, StatusEffectsComponent? status = null)
         {
             // don't log since stuff calling this prolly doesn't care if we don't actually have it
             if (!Resolve(uid, ref status, false))
                 return false;
 
-            if (!force)
-            {
-                var ev = new BeforeStatusEffectAddedEvent(key);
-                RaiseLocalEvent(uid, ref ev);
-                if (ev.Cancelled)
-                    return false;
-            }
+            var ev = new BeforeOldStatusEffectAddedEvent(key);
+            RaiseLocalEvent(uid, ref ev);
+            if (ev.Cancelled)
+                return false;
 
             if (!ProtoMan.TryIndex<StatusEffectPrototype>(key, out var proto))
                 return false;

@@ -15,7 +15,7 @@ public sealed partial class ForceGunComponent : BaseForceGunComponent
     [DataField, AutoNetworkedField]
     public float ThrowForce = 30f;
 
-    [ViewVariables(VVAccess.ReadWrite), DataField("soundLaunch")]
+    [DataField("soundLaunch")]
     public SoundSpecifier? LaunchSound = new SoundPathSpecifier("/Audio/Weapons/soup.ogg")
     {
         Params = AudioParams.Default.WithVolume(5f),

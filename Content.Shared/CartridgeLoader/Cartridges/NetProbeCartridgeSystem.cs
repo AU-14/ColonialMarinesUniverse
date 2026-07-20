@@ -4,14 +4,12 @@ using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
-using Robust.Shared.Random;
 
 namespace Content.Shared.CartridgeLoader.Cartridges;
 
 public sealed partial class NetProbeCartridgeSystem : EntitySystem
 {
     [Dependency] private CartridgeLoaderSystem _cartridgeLoaderSystem = default!;
-    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedPopupSystem _popupSystem = default!;
     [Dependency] private SharedAudioSystem _audioSystem = default!;
 

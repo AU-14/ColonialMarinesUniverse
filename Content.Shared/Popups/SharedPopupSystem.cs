@@ -322,7 +322,5 @@ public enum PopupType : byte
     /// but is not life-threatening.
     /// </summary>
     Large,
-    LargeCaution,
-
-    MediumXeno,
+    LargeCaution
 }

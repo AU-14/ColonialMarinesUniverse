@@ -293,17 +293,6 @@ public sealed partial class SleepingSystem : EntitySystem
             TrySleeping(args.Target);
     }
 
-    private void Wake(Entity<SleepingComponent> ent)
-    {
-        RemComp<SleepingComponent>(ent);
-        _actionsSystem.RemoveAction(ent.Owner, ent.Comp.WakeAction);
-
-        var ev = new SleepStateChangedEvent(false);
-        RaiseLocalEvent(ent, ref ev);
-
-        _blindableSystem.UpdateIsBlind(ent.Owner);
-    }
-
     /// <summary>
     /// Try sleeping. Only mobs can sleep.
     /// </summary>

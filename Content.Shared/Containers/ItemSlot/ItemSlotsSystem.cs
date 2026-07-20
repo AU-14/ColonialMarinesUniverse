@@ -491,7 +491,7 @@ namespace Content.Shared.Containers.ItemSlots
             return true;
         }
 
-        public static int SortEmpty(ItemSlot a, ItemSlot b)
+        private static int SortEmpty(ItemSlot a, ItemSlot b)
         {
             var aEnt = a.ContainerSlot?.ContainedEntity;
             var bEnt = b.ContainerSlot?.ContainedEntity;

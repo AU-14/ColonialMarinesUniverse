@@ -76,7 +76,7 @@ public sealed partial class HandsComponent : Component
     ///     The minimum time inbetween throws.
     /// </summary>
     [DataField]
-    public TimeSpan ThrowCooldown = TimeSpan.FromSeconds(0.25f);
+    public TimeSpan ThrowCooldown = TimeSpan.FromSeconds(0.5f);
 
     /// <summary>
     ///     Fallback displacement map applied to all sprites in the hand, unless otherwise specified
@@ -101,10 +101,6 @@ public sealed partial class HandsComponent : Component
     /// </summary>
     [DataField]
     public bool CanBeStripped = true;
-
-    // RMC14
-    [DataField]
-    public bool ExamineShowEmpty = true;
 }
 
 [DataDefinition]

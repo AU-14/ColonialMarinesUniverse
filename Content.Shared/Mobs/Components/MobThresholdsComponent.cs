@@ -46,13 +46,6 @@ public sealed partial class MobThresholdsComponent : Component
     /// </summary>
     [DataField("allowRevives")]
     public bool AllowRevives;
-
-    /// <summary>
-    /// Whether or not the exact health is displayed in the Alert for the entity.
-    /// </summary>
-    /// 
-    [DataField("displayDamageInAlert")]
-    public bool DisplayDamageInAlert = false;
 }
 
 [Serializable, NetSerializable]
@@ -70,16 +63,13 @@ public sealed class MobThresholdsComponentState : ComponentState
 
     public bool AllowRevives;
 
-    public bool DisplayDamageInAlert;
-
     public MobThresholdsComponentState(Dictionary<FixedPoint2, MobState> unsortedThresholds,
         bool triggersAlerts,
         MobState currentThresholdState,
         Dictionary<MobState,
         ProtoId<AlertPrototype>> stateAlertDict,
         bool showOverlays,
-        bool allowRevives,
-        bool displayDamageInAlert)
+        bool allowRevives)
     {
         UnsortedThresholds = unsortedThresholds;
         TriggersAlerts = triggersAlerts;
@@ -87,6 +77,5 @@ public sealed class MobThresholdsComponentState : ComponentState
         StateAlertDict = stateAlertDict;
         ShowOverlays = showOverlays;
         AllowRevives = allowRevives;
-        DisplayDamageInAlert = displayDamageInAlert;
     }
 }

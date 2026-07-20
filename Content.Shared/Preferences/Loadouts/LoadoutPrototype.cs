@@ -32,12 +32,6 @@ public sealed partial class LoadoutPrototype : IPrototype, IEquipmentLoadout
     public ProtoId<StartingGearPrototype>? StartingGear;
 
     /// <summary>
-    /// How much point cost this loadout costs.
-    /// </summary>
-    [DataField]
-    public int? Cost;
-
-    /// <summary>
     /// Effects to be applied when the loadout is applied.
     /// These can also return true or false for validation purposes.
     /// </summary>
@@ -55,10 +49,4 @@ public sealed partial class LoadoutPrototype : IPrototype, IEquipmentLoadout
     /// <inheritdoc />
     [DataField]
     public Dictionary<string, List<EntProtoId>> Storage { get; set; } = new();
-
-    /// <summary>
-    /// RMC14, basically this ignores the equipment part of the loadout system and just raises an event and adds the components from the equipment to the person.
-    /// </summary>
-    [DataField]
-    public bool ComponentsAdd = false;
 }

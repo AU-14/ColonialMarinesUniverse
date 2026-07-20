@@ -1,4 +1,3 @@
-using Content.Shared._RMC14.Folded;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared.Foldable;
@@ -10,7 +9,7 @@ namespace Content.Shared.Foldable;
 /// Will prevent any insertions into containers while this item is unfolded.
 /// </remarks>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
-[Access(typeof(FoldableSystem), typeof(RMCFoldableSystem))]
+[Access(typeof(FoldableSystem))]
 public sealed partial class FoldableComponent : Component
 {
     [DataField("folded"), AutoNetworkedField]
@@ -24,7 +23,4 @@ public sealed partial class FoldableComponent : Component
 
     [DataField]
     public LocId FoldVerbText = "fold-verb";
-
-    [DataField, AutoNetworkedField]
-    public bool FitIntoEntityStorage;
 }

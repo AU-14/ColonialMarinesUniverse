@@ -1,5 +1,3 @@
-using Content.Shared._RMC14.Fireman;
-using Content.Shared._RMC14.Pulling;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Alert;
@@ -55,9 +53,6 @@ public sealed partial class PullingSystem : EntitySystem
     [Dependency] private HeldSpeedModifierSystem _clothingMoveSpeed = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedVirtualItemSystem _virtual = default!;
-
-    // RMC14
-    [Dependency] private RMCPullingSystem _rmcPulling = default!;
 
     public override void Initialize()
     {
@@ -164,13 +159,6 @@ public sealed partial class PullingSystem : EntitySystem
 
     private void OnGotBuckled(Entity<PullableComponent> ent, ref BuckledEvent args)
     {
-        if (ent.Comp.Puller is { } puller &&
-            _rmcPulling.TryRetargetPull(puller, ent) is { } retarget)
-        {
-            TryStartPull(puller, retarget);
-            return;
-        }
-
         StopPulling(ent, ent);
     }
 
@@ -257,9 +245,6 @@ public sealed partial class PullingSystem : EntitySystem
 
     private void OnVirtualItemDeleted(EntityUid uid, PullerComponent component, VirtualItemDeletedEvent args)
     {
-        if (_timing.ApplyingState)
-            return;
-
         // If client deletes the virtual hand then stop the pull.
         if (component.Pulling == null)
             return;
@@ -499,11 +484,6 @@ public sealed partial class PullingSystem : EntitySystem
 
         if (pullable.Comp.Puller == pullerUid)
         {
-            var ev = new RMCPullToggleEvent();
-            RaiseLocalEvent(pullerUid, ref ev);
-            if (ev.Handled)
-                return true;
-
             return TryStopPull(pullable, pullable.Comp);
         }
 
@@ -521,15 +501,6 @@ public sealed partial class PullingSystem : EntitySystem
     public bool TryStartPull(EntityUid pullerUid, EntityUid pullableUid,
         PullerComponent? pullerComp = null, PullableComponent? pullableComp = null)
     {
-        var ev = new RMCGetPullTargetEvent(pullerUid, pullableUid);
-        RaiseLocalEvent(pullableUid, ref ev);
-
-        if (pullableUid != ev.Target)
-        {
-            pullableUid = ev.Target;
-            pullableComp = CompOrNull<PullableComponent>(pullableUid);
-        }
-
         if (!Resolve(pullerUid, ref pullerComp, false) ||
             !Resolve(pullableUid, ref pullableComp, false))
         {
@@ -591,7 +562,7 @@ public sealed partial class PullingSystem : EntitySystem
         {
             var joint = _joints.CreateDistanceJoint(pullableUid, pullerUid,
                     pullablePhysics.LocalCenter, pullerPhysics.LocalCenter,
-                    id: pullableComp.PullJointId, minimumDistance: 1);
+                    id: pullableComp.PullJointId);
             joint.CollideConnected = false;
             // This maximum has to be there because if the object is constrained too closely, the clamping goes backwards and asserts.
             // Internally, the joint length has been set to the distance between the pivots.

@@ -14,7 +14,6 @@ namespace Content.Shared.Salvage;
 public abstract partial class SharedSalvageSystem : EntitySystem
 {
     [Dependency] protected IConfigurationManager CfgManager = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
 
     /// <summary>
     /// Main loot table for salvage expeditions.

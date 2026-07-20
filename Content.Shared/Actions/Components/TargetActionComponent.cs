@@ -1,6 +1,5 @@
-using Content.Shared.Actions;
-using Content.Shared._RMC14.Actions; // RMC14
 using Content.Shared.Interaction;
+using Content.Shared.Physics;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -10,22 +9,21 @@ namespace Content.Shared.Actions.Components;
 /// An action that targets an entity or map.
 /// Requires <see cref="ActionComponent"/>.
 /// </summary>
-[RegisterComponent, NetworkedComponent, Access(typeof(SharedActionsSystem), typeof(SwappableActionSystem))] // RMC14
+[RegisterComponent, NetworkedComponent, Access(typeof(SharedActionsSystem))]
 [EntityCategory("Actions")]
-[AutoGenerateComponentState] // RMC14
 public sealed partial class TargetActionComponent : Component
 {
     /// <summary>
     ///     For entity- or map-targeting actions, if this is true the action will remain selected after it is used, so
     ///     it can be continuously re-used. If this is false, the action will be deselected after one use.
     /// </summary>
-    [DataField, AutoNetworkedField] // RMC14
+    [DataField]
     public bool Repeat;
 
     /// <summary>
     ///     For  entity- or map-targeting action, determines whether the action is deselected if the user doesn't click a valid target.
     /// </summary>
-    [DataField, AutoNetworkedField] // RMC14
+    [DataField]
     public bool DeselectOnMiss;
 
     /// <summary>
@@ -36,10 +34,20 @@ public sealed partial class TargetActionComponent : Component
     /// <remarks>
     ///     Even if this is false, the <see cref="Range"/> will still be checked.
     /// </remarks>
-    [DataField, AutoNetworkedField] // RMC14
+    [DataField]
     public bool CheckCanAccess = true;
 
-    [DataField, AutoNetworkedField] // RMC14
+    /// <summary>
+    ///     The collision group to use to check for accessibility if <see cref="CheckCanAccess" /> is true.
+    /// </summary>
+    [DataField]
+    public CollisionGroup AccessMask = SharedInteractionSystem.InRangeUnobstructedMask;
+
+    /// <summary>
+    ///     The allowed range for a target to be. If zero or negative, the range check is skipped,
+    ///     unless <see cref="CheckCanAccess"/> is true.
+    /// </summary>
+    [DataField]
     public float Range = SharedInteractionSystem.InteractionRange;
 
     /// <summary>
@@ -48,13 +56,13 @@ public sealed partial class TargetActionComponent : Component
     /// <remarks>
     ///     Interactions will still be blocked if the target-validation generates a pop-up
     /// </remarks>
-    [DataField, AutoNetworkedField] // RMC14
+    [DataField]
     public bool InteractOnMiss;
 
     /// <summary>
     ///     If true, and if <see cref="ShowHandItemOverlay"/> is enabled, then this action's icon will be drawn by that
     ///     over lay in place of the currently held item "held item".
     /// </summary>
-    [DataField, AutoNetworkedField] // RMC14
+    [DataField]
     public bool TargetingIndicator = true;
 }

@@ -418,7 +418,7 @@ public sealed partial class IngestionSystem : EntitySystem
             BreakOnHandChange = false,
             BreakOnMove = forceFeed,
             BreakOnDamage = true,
-            MovementThreshold = 0.3f, // RMC14
+            MovementThreshold = 0.01f,
             DistanceThreshold = MaxFeedDistance,
             // do-after will stop if item is dropped when trying to feed someone else
             // or if the item started out in the user's own hands

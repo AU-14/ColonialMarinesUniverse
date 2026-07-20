@@ -10,7 +10,6 @@ namespace Content.Shared.StoryGen;
 /// </summary>
 public sealed partial class StoryGeneratorSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _protoMan = default!;
     [Dependency] private IRobustRandom _random = default!;
 
     /// <summary>

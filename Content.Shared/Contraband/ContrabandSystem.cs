@@ -18,7 +18,6 @@ namespace Content.Shared.Contraband;
 public sealed partial class ContrabandSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _configuration = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private SharedIdCardSystem _id = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
 

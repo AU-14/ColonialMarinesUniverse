@@ -15,15 +15,14 @@ using Content.Shared.Prying.Systems;
 using Content.Shared.Stunnable;
 using Content.Shared.Tag;
 using Content.Shared.Tools.Systems;
-using Content.Shared._RMC14.Doors;
 using Robust.Shared.Audio;
-using Robust.Shared.Audio.Systems;
-using Robust.Shared.Map.Components;
-using Robust.Shared.Network;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Network;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Doors.Systems;
@@ -222,14 +221,6 @@ public abstract partial class SharedDoorSystem : EntitySystem
     {
         if (door.State == DoorState.Welded || !door.CanPry)
             args.Cancelled = true;
-
-         // RMC14
-        var beforepry = new RMCBeforePryEvent(args.User);
-        RaiseLocalEvent(uid, ref beforepry);
-
-        if (beforepry.Cancelled)
-            args.Cancelled = true;
-        // RMC14
     }
 
     /// <summary>
@@ -603,9 +594,6 @@ public abstract partial class SharedDoorSystem : EntitySystem
                 continue;
 
             if ((physics.CollisionMask & otherPhysics.Comp.CollisionLayer) == 0 && (otherPhysics.Comp.CollisionMask & physics.CollisionLayer) == 0)
-                continue;
-
-            if (otherPhysics.Comp.CollisionLayer == (int) CollisionGroup.DropshipImpassable)
                 continue;
 
             yield return otherPhysics.Owner;

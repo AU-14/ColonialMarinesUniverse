@@ -1,7 +1,5 @@
-﻿using Content.Shared._RMC14.IdentityManagement;
-using Content.Shared.Ghost;
+﻿using Content.Shared.Ghost;
 using Content.Shared.IdentityManagement.Components;
-using Content.Shared.Whitelist;
 
 namespace Content.Shared.IdentityManagement;
 
@@ -15,47 +13,41 @@ public static class Identity
     /// <summary>
     ///     Returns the name that should be used for this entity for identity purposes.
     /// </summary>
-    public static IdentityEntity Name(EntityUid uid, IEntityManager ent, EntityUid? viewer=null)
+    /// <remarks>
+    /// This will return the true identity of the entity if called before the
+    /// identity component has been initialized — this may occur for example if
+    /// the client raises an event in response to an entity entering PVS for
+    /// the first time.
+    /// </remarks>
+    public static string Name(EntityUid uid, IEntityManager ent, EntityUid? viewer = null)
     {
         if (!uid.IsValid())
-            return new IdentityEntity(uid, string.Empty);
+            return string.Empty;
 
         var meta = ent.GetComponent<MetaDataComponent>(uid);
         if (meta.EntityLifeStage <= EntityLifeStage.Initializing)
-            return new IdentityEntity(uid, meta.EntityName); // Identity component and such will not yet have initialized and may throw NREs
+            return meta.EntityName; // Identity component and such will not yet have initialized and may throw NREs
 
         var uidName = meta.EntityName;
 
-        var whitelistSystem = ent.System<EntityWhitelistSystem>();
-        if (viewer != null &&
-            ent.TryGetComponent(uid, out FixedIdentityComponent? fixedIdentity) &&
-            fixedIdentity.Name is { } nameId &&
-            whitelistSystem.IsWhitelistPass(fixedIdentity.Whitelist, viewer.Value))
-        {
-            var name = Loc.GetString(nameId);
-            var ev = new RMCGetFixedIdentityEvent(name);
-            ent.EventBus.RaiseLocalEvent(uid, ref ev);
-            return new IdentityEntity(uid, ev.Name);
-        }
-
         if (!ent.TryGetComponent<IdentityComponent>(uid, out var identity))
-            return new IdentityEntity(uid, uidName);
+            return uidName;
 
         var ident = identity.IdentityEntitySlot?.ContainedEntity;
         if (ident is null)
-            return new IdentityEntity(uid, uidName);
+            return uidName;
 
         var identName = ent.GetComponent<MetaDataComponent>(ident.Value).EntityName;
         if (viewer == null || !CanSeeThroughIdentity(uid, viewer.Value, ent))
         {
-            return new IdentityEntity(uid, identName);
+            return identName;
         }
         if (uidName == identName)
         {
-            return new IdentityEntity(uid, uidName);
+            return uidName;
         }
 
-        return new IdentityEntity(uid, $"{uidName} ({identName})");
+        return $"{uidName} ({identName})";
     }
 
     /// <summary>

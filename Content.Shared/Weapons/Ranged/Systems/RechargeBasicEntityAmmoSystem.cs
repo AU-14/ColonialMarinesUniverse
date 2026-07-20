@@ -10,9 +10,9 @@ public sealed partial class RechargeBasicEntityAmmoSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private INetManager _netManager = default!;
+    [Dependency] private MetaDataSystem _metadata = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedGunSystem _gun = default!;
-    [Dependency] private MetaDataSystem _metadata = default!;
 
     public override void Initialize()
     {

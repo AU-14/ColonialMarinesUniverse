@@ -7,23 +7,21 @@ using Content.Shared.Nutrition;
 using Content.Shared.Prototypes;
 using Content.Shared.Rejuvenate;
 using Content.Shared.Slippery;
+using Content.Shared.StatusEffect;
+using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
-using CurrentBeforeStatusEffectAddedEvent = Content.Shared.StatusEffectNew.BeforeStatusEffectAddedEvent;
-using LegacyBeforeStatusEffectAddedEvent = Content.Shared.StatusEffect.BeforeOldStatusEffectAddedEvent;
 
 namespace Content.Shared.Damage.Systems;
 
 public abstract partial class SharedGodmodeSystem : EntitySystem
 {
-    [Dependency] private DamageableSystem _damageable = default!;
-
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<GodmodeComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);
-        SubscribeLocalEvent<GodmodeComponent, CurrentBeforeStatusEffectAddedEvent>(OnBeforeStatusEffect);
-        SubscribeLocalEvent<GodmodeComponent, LegacyBeforeStatusEffectAddedEvent>(OnBeforeOldStatusEffect);
+        SubscribeLocalEvent<GodmodeComponent, BeforeStatusEffectAddedEvent>(OnBeforeStatusEffect);
+        SubscribeLocalEvent<GodmodeComponent, BeforeOldStatusEffectAddedEvent>(OnBeforeOldStatusEffect);
         SubscribeLocalEvent<GodmodeComponent, BeforeStaminaDamageEvent>(OnBeforeStaminaDamage);
         SubscribeLocalEvent<GodmodeComponent, IngestibleEvent>(BeforeEdible);
         SubscribeLocalEvent<GodmodeComponent, SlipAttemptEvent>(OnSlipAttempt);
@@ -40,13 +38,13 @@ public abstract partial class SharedGodmodeSystem : EntitySystem
         args.Cancelled = true;
     }
 
-    private void OnBeforeStatusEffect(EntityUid uid, GodmodeComponent component, ref CurrentBeforeStatusEffectAddedEvent args)
+    private void OnBeforeStatusEffect(EntityUid uid, GodmodeComponent component, ref BeforeStatusEffectAddedEvent args)
     {
         if (ProtoMan.Index(args.Effect).HasComp<RejuvenateRemovedStatusEffectComponent>(Factory))
             args.Cancelled = true;
     }
 
-    private void OnBeforeOldStatusEffect(Entity<GodmodeComponent> ent, ref LegacyBeforeStatusEffectAddedEvent args)
+    private void OnBeforeOldStatusEffect(Entity<GodmodeComponent> ent, ref BeforeOldStatusEffectAddedEvent args)
     {
         // Old status effect system doesn't distinguish between good and bad status effects
         args.Cancelled = true;

@@ -1,5 +1,4 @@
 using System.Diagnostics.Contracts;
-using Content.Shared._RMC14.Areas;
 using Content.Shared.Light.Components;
 using Content.Shared.Maps;
 using Robust.Shared.Map;
@@ -13,7 +12,6 @@ namespace Content.Shared.Light.EntitySystems;
 public abstract partial class SharedRoofSystem : EntitySystem
 {
     [Dependency] private EntityLookupSystem _lookup = default!;
-    [Dependency] private AreaSystem _area = default!;
 
     private HashSet<Entity<IsRoofComponent>> _roofSet = new();
 
@@ -83,10 +81,6 @@ public abstract partial class SharedRoofSystem : EntitySystem
 
             return isRoofEnt.Comp.Color ?? roof.Color;
         }
-
-        //RMC14 - This goes last so we can still use upstream methods to define additional roof colors
-        if (_area.IsLightBlocked(grid, index))
-            return roof.Color;
 
         return null;
     }

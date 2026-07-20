@@ -18,8 +18,8 @@ namespace Content.Shared.Ninja.Systems;
 public abstract partial class SharedNinjaSuitSystem : EntitySystem
 {
     [Dependency] private ActionContainerSystem _actionContainer = default!;
-    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private ItemToggleSystem _toggle = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] protected SharedPopupSystem Popup = default!;
     [Dependency] private SharedSpaceNinjaSystem _ninja = default!;
     [Dependency] private UseDelaySystem _useDelay = default!;

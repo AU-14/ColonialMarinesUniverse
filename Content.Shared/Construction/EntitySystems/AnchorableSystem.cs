@@ -1,21 +1,21 @@
-using Content.Shared._RMC14.Construction;
+using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Administration.Logs;
+using Content.Shared.Examine;
 using Content.Shared.Construction.Components;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
-using Content.Shared.Examine;
 using Content.Shared.Interaction;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Station;
-using Content.Shared.Tag;
 using Content.Shared.Tools.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
+using Content.Shared.Tag;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
@@ -29,7 +29,7 @@ public sealed partial class AnchorableSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private PullingSystem _pulling = default!;
     [Dependency] private SharedMapSystem _map = default!;
-    [Dependency] private SharedStationSystem _stationSystem = default!;
+    [Dependency] private SharedStationSystem _stationSystem = null!;
     [Dependency] private SharedToolSystem _tool = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
     [Dependency] private TagSystem _tagSystem = default!;
@@ -116,12 +116,6 @@ public sealed partial class AnchorableSystem : EntitySystem
 
     private void OnAnchoredExamine(EntityUid uid, AnchorableComponent component, ExaminedEvent args)
     {
-        if (component.Flags == AnchorableFlags.None)
-        {
-            args.PushMarkup(Loc.GetString("rmc-construction-non-anchorable"));
-            return;
-        }
-
         var isAnchored = Comp<TransformComponent>(uid).Anchored;
 
         if (isAnchored && (component.Flags & AnchorableFlags.Unanchorable) == 0x0)
@@ -161,7 +155,7 @@ public sealed partial class AnchorableSystem : EntitySystem
 
         var xform = Transform(uid);
         if (TryComp<PhysicsComponent>(uid, out var anchorBody) &&
-            !TileFree(xform.Coordinates, anchorBody, uid)) // RMC14
+            !TileFree(xform.Coordinates, anchorBody))
         {
             _popup.PopupEntity(Loc.GetString("anchorable-occupied"), uid, args.User);
             return;
@@ -320,7 +314,7 @@ public sealed partial class AnchorableSystem : EntitySystem
         if (!Resolve(entity, ref entity.Comp))
             return true;
 
-        if (TileFree(coordinates, entity.Comp, entity.Owner)) // RMC14
+        if (TileFree(coordinates, entity.Comp))
             return true;
 
         _popup.PopupEntity(Loc.GetString("anchorable-occupied"), entity, user);
@@ -330,7 +324,7 @@ public sealed partial class AnchorableSystem : EntitySystem
     /// <summary>
     /// Returns true if no hard anchored entities exist on the coordinate tile that would collide with the provided physics body.
     /// </summary>
-    public bool TileFree(EntityCoordinates coordinates, PhysicsComponent anchorBody, EntityUid? anchoringEntity = null) // RMC14
+    public bool TileFree(EntityCoordinates coordinates, PhysicsComponent anchorBody)
     {
         // Probably ignore CanCollide on the anchoring body?
         var gridUid = _transformSystem.GetGrid(coordinates);
@@ -339,14 +333,14 @@ public sealed partial class AnchorableSystem : EntitySystem
             return false;
 
         var tileIndices = _map.TileIndicesFor((gridUid.Value, grid), coordinates);
-        return TileFree((gridUid.Value, grid), tileIndices, anchorBody.CollisionLayer, anchorBody.CollisionMask, anchoringEntity); //RMC14
+        return TileFree((gridUid.Value, grid), tileIndices, anchorBody.CollisionLayer, anchorBody.CollisionMask);
     }
 
     /// <summary>
     /// Returns true if no hard anchored entities match the collision layer or mask specified.
     /// </summary>
     /// <param name="grid"></param>
-    public bool TileFree(Entity<MapGridComponent> grid, Vector2i gridIndices, int collisionLayer = 0, int collisionMask = 0, EntityUid? anchoringEntity = null) //RMC14
+    public bool TileFree(Entity<MapGridComponent> grid, Vector2i gridIndices, int collisionLayer = 0, int collisionMask = 0)
     {
         var enumerator = _map.GetAnchoredEntitiesEnumerator(grid, grid.Comp, gridIndices);
 
@@ -362,17 +356,6 @@ public sealed partial class AnchorableSystem : EntitySystem
             if ((body.CollisionMask & collisionLayer) != 0x0 ||
                 (body.CollisionLayer & collisionMask) != 0x0)
             {
-                // RMC14
-                if (anchoringEntity != null)
-                {
-                    var ev = new RMCCheckTileFreeEvent(ent.Value);
-                    RaiseLocalEvent(anchoringEntity.Value, ref ev);
-
-                    if (ev.IsTileFree)
-                        continue;
-                }
-                //
-
                 return false;
             }
         }

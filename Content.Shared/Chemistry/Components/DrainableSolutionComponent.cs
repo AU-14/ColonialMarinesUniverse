@@ -7,13 +7,13 @@ namespace Content.Shared.Chemistry.Components;
 /// easily "drained". This means things with taps/spigots, or easily poured
 /// items.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent]
 public sealed partial class DrainableSolutionComponent : Component
 {
     /// <summary>
     /// Solution name that can be drained.
     /// </summary>
-    [DataField, AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
+    [DataField]
     public string Solution = "default";
 
     /// <summary>

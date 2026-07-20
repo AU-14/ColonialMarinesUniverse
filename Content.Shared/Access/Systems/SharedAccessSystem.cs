@@ -6,8 +6,6 @@ namespace Content.Shared.Access.Systems
 {
     public abstract partial class SharedAccessSystem : EntitySystem
     {
-        [Dependency] private IPrototypeManager _prototypeManager = default!;
-
         public override void Initialize()
         {
             base.Initialize();
