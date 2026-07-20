@@ -53,6 +53,7 @@ public abstract partial class SharedPortalSystem : EntitySystem
         // Don't use the verb with unlinked or with multi-output portals
         // (this is only intended to be useful for ghosts to see where a linked portal leads)
         var disabled = !TryComp<LinkedEntityComponent>(uid, out var link) || link.LinkedEntities.Count != 1;
+        var subject = args.User;
 
         args.Verbs.Add(new AlternativeVerb
         {
@@ -63,7 +64,7 @@ public abstract partial class SharedPortalSystem : EntitySystem
                     return;
 
                 var ent = link.LinkedEntities.First();
-                TeleportEntity(uid, args.User, Transform(ent).Coordinates, ent, false);
+                TeleportEntity(uid, subject, Transform(ent).Coordinates, ent, false);
             },
             Disabled = disabled,
             Text = Loc.GetString("portal-component-ghost-traverse"),

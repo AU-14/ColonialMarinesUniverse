@@ -2216,3 +2216,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Clothing/Head/helmets.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static resolved-prototype review confirms regular/atmos coefficients are `0.5/0.8` and `0.3/0.8`, respectively. Prototype loading plus burning-temperature comparisons for helmet-only and full-suit wear are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None.
+
+## CS-0162 — Keep portal ghost-verb subjects stable
+
+- Upstream: [space-wizards/space-station-14#37540](https://github.com/space-wizards/space-station-14/pull/37540), `7102da139b74776b5d1b0875ccaab2bad0fe141f`, 2025-09-23
+- Areas: Movement, Interactions, Physics
+- Status: Adapted
+- Risk: Low
+- Behavior/API delta: The portal traversal alternative verb captures the requesting ghost entity before registering its delayed action instead of reading the transient verb event from inside the callback.
+- RMC/CMU divergence: The upstream commit also refactors portal entities and client prediction. CMU retains its older portal API and imports only the lifetime-safe capture needed to prevent the developer crash; collision, pull-breaking, random teleport, and sound behavior are unchanged.
+- Decision and rationale: Capture `args.User` into a local `subject` and use that stable value in the verb action, which is the minimal compatible correction for an event object that no longer belongs to the callback after verb collection.
+- Files changed: `Content.Shared/Teleportation/Systems/SharedPortalSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static closure review confirms the delayed action no longer captures `args`. Shared compilation plus ghost alt-click traversal on linked, unlinked, and multi-output portals are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Revisit the upstream prediction helper and typed-entity refactor when their dependent portal architecture enters scope.
