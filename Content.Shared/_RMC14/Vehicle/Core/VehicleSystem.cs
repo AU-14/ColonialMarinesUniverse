@@ -952,6 +952,8 @@ public sealed partial class VehicleSystem : EntitySystem
 
     private void OnVehicleOperatorEntered(Entity<VehicleOperatorComponent> ent, ref OnVehicleEnteredEvent args)
     {
+        OnRmcGridVehicleOperatorEntered(ent, args);
+
         if (_net.IsClient)
             return;
 
@@ -964,6 +966,8 @@ public sealed partial class VehicleSystem : EntitySystem
 
     private void OnVehicleOperatorExited(Entity<VehicleOperatorComponent> ent, ref OnVehicleExitedEvent args)
     {
+        OnRmcGridVehicleOperatorExited(ent, args);
+
         if (_net.IsClient)
             return;
 
