@@ -25,6 +25,16 @@ public enum CollisionGroup
     // Y dis door passable when all the others impassable / collision.
     DoorPassable       = 1 << 8, // 256 Allows door to close over top, Like blast doors over conveyors for disposals rooms/cargo.
 
+    // RMC14 fork-specific collision layers. Keep these in the upper free bits so upstream groups can grow independently.
+    Marine = 1 << 23,
+    MobCollision = 1 << 24,
+    BarbedBarricade = 1 << 25,
+    BarricadeImpassable = 1 << 26,
+    XenoProjectileImpassable = 1 << 27,
+    DropshipImpassable = 1 << 28,
+    VaporLayer = 1 << 29,
+    Vehicle = 1 << 30,
+
     MapGrid = MapGridHelpers.CollisionGroup, // Map grids, like shuttles. This is the actual grid itself, not the walls or other entities connected to the grid.
 
     // 32 possible groups
@@ -49,7 +59,7 @@ public enum CollisionGroup
 
     // Machines, computers
     MachineMask = Impassable | MidImpassable | LowImpassable,
-    MachineLayer = Opaque | MidImpassable | LowImpassable | BulletImpassable,
+    MachineLayer = Opaque | MidImpassable | LowImpassable,
     ConveyorMask = Impassable | MidImpassable | LowImpassable | DoorPassable,
 
     // Crates
@@ -74,6 +84,7 @@ public enum CollisionGroup
     // Soap, spills
     SlipLayer = MidImpassable | LowImpassable,
     ItemMask = Impassable | HighImpassable,
+    VaporMask = VaporLayer,
     ThrownItem = Impassable | HighImpassable | BulletImpassable,
     WallLayer = Opaque | Impassable | HighImpassable | MidImpassable | LowImpassable | BulletImpassable | InteractImpassable,
     GlassLayer = Impassable | HighImpassable | MidImpassable | LowImpassable | BulletImpassable | InteractImpassable,
