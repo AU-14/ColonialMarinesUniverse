@@ -2346,3 +2346,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/DeviceLinking/source_ports.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype review confirms `Toggle` is a registered sink and no other `Status` defaults exist. Prototype loading plus standard and RMC device-link auto-pairing are queued for the index-1999 checkpoint.
 - Follow-up/debt: None.
+
+## CS-0171 — Log makeshift stun-prod construction
+
+- Upstream: [space-wizards/space-station-14#40709](https://github.com/space-wizards/space-station-14/pull/40709), `24753a78db1720b70dd4195e29a0887dd61b6a3c`, 2025-10-05
+- Areas: Interactions, Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Completing a makeshift stun prod now emits a high-impact construction admin log. Merely starting or cancelling the fifteen-second assembly does not log a completed weapon.
+- RMC/CMU divergence: CMU uses the retained standard stun-prod graph and construction logging action; no RMC-specific duplicate graph or alternate completion path is changed.
+- Decision and rationale: Add the target-final completion action to close an audit gap for an improvised incapacitating weapon, matching the established logging policy for other dangerous constructions.
+- Files changed: `Resources/Prototypes/Recipes/Crafting/Graphs/improvised/makeshiftstunprod.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static graph review confirms the log runs exactly once on the `start` to `msstunprod` completion edge with `High` impact. Graph deserialization and complete/cancelled construction cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: None.
