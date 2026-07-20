@@ -2359,3 +2359,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Recipes/Crafting/Graphs/improvised/makeshiftstunprod.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static graph review confirms the log runs exactly once on the `start` to `msstunprod` completion edge with `High` impact. Graph deserialization and complete/cancelled construction cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: None.
+
+## CS-0172 — Clamp portable heaters to their own limits
+
+- Upstream: [space-wizards/space-station-14#40453](https://github.com/space-wizards/space-station-14/pull/40453), `80c66c02bedf47da0b96d4aec0594d3a286c1b74`, 2025-10-07
+- Areas: Interactions, Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Portable-heater UI temperature changes now clamp the target against `SpaceHeaterComponent.MinTemperature` and `MaxTemperature`, rather than the broader limits of the attached generic gas thermo-machine.
+- RMC/CMU divergence: `RMCSpaceHeater` is an independent item-toggle structure and does not use either the standard `SpaceHeater` or `GasThermoMachine` component, so its behavior is unchanged.
+- Decision and rationale: Use the bounds owned by the UI-facing portable-heater component. Those values define the device's supported control range; accepting the generic machine range can set targets the portable heater was not designed to expose.
+- Files changed: `Content.Server/Atmos/Portable/SpaceHeaterSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static data-flow review confirms only the clamp bounds change and power, mode, appearance, and UI dirtying remain intact. Server compilation plus requests below, within, and above both limits are queued for the index-1999 checkpoint.
+- Follow-up/debt: None.
