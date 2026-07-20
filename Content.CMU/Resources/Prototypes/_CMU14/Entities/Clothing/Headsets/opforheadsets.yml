@@ -135,9 +135,8 @@
   components:
   - type: ContainerFill
     containers:
-      key_slots:
+      key_slots: # no command key, SLs talk to command through the RTO's manpack
       - AU14EncryptionKeyOpfor
-      - AU14EncryptionKeyOpforCommandOnly
       - AU14EncryptionKeyOpforJTAC
 
 - type: entity

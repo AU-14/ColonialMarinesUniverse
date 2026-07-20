@@ -56,7 +56,8 @@
       AU14JobOPFORPlatOp: 4
       AU14JobOPFOROfficerIntel: 1
       AU14JobOPFORSquadSergeant: 3
-      AU14JobOPFORRadioTelephoneOperator: 4
+      AU14JobOPFORRadioTelephoneOperator: 3
+      AU14JobOPFORRadioTrafficOperator: 3
       AU14JobOPFORSquadRifleman: 75
 #     CMUJobOPFORDroneOperator: 1
 #     AU14JobOPFORWeaponsSpecialist: 3 # TODO
@@ -83,6 +84,7 @@
   - type: AddJobsRule
     jobs:
       AU14JobCLFCellLeader: 1
+      AU14JobCLFRadioOperator: 1
       AU14JobCLFPhysician: 1
       AU14JobCLFSurgeon: 1
       AU14JobCLFGuerilla: 3

@@ -5,6 +5,8 @@
   roundForce: CCA
   roundRole: CivilianAmbassadorCCA
   roundComponents:
+  - type: AU14CallsignRole
+    exempt: true
   - type: Skills
     skills:
       RMCSkillFireman: 1
@@ -97,6 +99,8 @@
   roundForce: ICSC
   roundRole: CivilianAmbassadorICSC
   roundComponents:
+  - type: AU14CallsignRole
+    exempt: true
   - type: Skills
     skills:
       RMCSkillFireman: 1
@@ -189,6 +193,8 @@
   roundForce: TWE
   roundRole: CivilianAmbassadorTWE
   roundComponents:
+  - type: AU14CallsignRole
+    exempt: true
   - type: Skills
     skills:
       RMCSkillFireman: 1
@@ -279,6 +285,8 @@
   roundForce: UA
   roundRole: CivilianAmbassadorUA
   roundComponents:
+  - type: AU14CallsignRole
+    exempt: true
   - type: Skills
     skills:
       RMCSkillFireman: 1
@@ -370,6 +378,8 @@
   roundForce: UPP
   roundRole: CivilianAmbassadorUPP
   roundComponents:
+  - type: AU14CallsignRole
+    exempt: true
   - type: Skills
     skills:
       RMCSkillFireman: 1

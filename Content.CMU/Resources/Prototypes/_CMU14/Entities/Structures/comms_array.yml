@@ -1,0 +1,269 @@
+# fixed relay anchors for the comms system. the powered array covers the whole site
+# (ship / main base), the passive mast is the smaller unpowered CP variant. combat
+# nets have no coverage without a manpack, retrans or one of these, so destroying
+# them cuts the site off the net
+
+- type: entity
+  abstract: true
+  parent: BaseStructure
+  id: AU14CommsArrayBase
+  name: comms array
+  description: A high-power communications array. As long as it stands and hums, the garrison stays on the net.
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,1.49,1.49"
+        density: 200
+        mask:
+        - MobLayer
+  - type: Sprite
+    sprite: _RMC14/Structures/communications_tower.rsi
+    offset: 0.5, 1.5
+    layers:
+    - state: static1
+      map: [ "base" ]
+  - type: Appearance
+  - type: AU14CommsStructureVisuals
+  - type: GenericVisualizer
+    visuals:
+      enum.AU14CommsStructureVisuals.Damaged:
+        base:
+          True: { state: static1_broken }
+          False: { state: static1 }
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: null
+  - type: MaxDamage
+    max: 500
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 450
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RMCRepairable
+    heal: 150
+    skillRequired: 1
+    delay: 5
+    fuelUsed: 0
+  - type: ApcPowerReceiver
+  - type: RMCPowerReceiver
+    idleLoad: 0
+    activeLoad: 5000
+    channel: Equipment
+  - type: MarineMapTracked
+  - type: TacticalMapTracked
+  - type: ActiveTacticalMapTracked
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: supply
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: supply
+
+- type: entity
+  parent: AU14CommsArrayBase
+  id: AU14CommsArrayGovfor
+  name: GOVFOR comms array
+  suffix: GOVFOR, All Nets
+  components:
+  - type: ANPRCRelayAnchor
+    fullRange: 200
+    partialRange: 250
+    levelReach: -1 # whole-site array covers every deck / z-level of its network
+    channels:
+    - radioGovforAlpha
+    - radioGovforBravo
+    - radioGovforCharlie
+    - radioGovforCommand
+    - radioGovforIntel
+    - radioGovforJTAC
+    - radioGovforMILP
+
+- type: entity
+  parent: AU14CommsArrayBase
+  id: AU14CommsArrayOpfor
+  name: OPFOR comms array
+  suffix: OPFOR, All Nets
+  components:
+  - type: ANPRCRelayAnchor
+    fullRange: 200
+    partialRange: 250
+    levelReach: -1 # whole-site array covers every deck / z-level of its network
+    channels:
+    - radioOpforAlpha
+    - radioOpforBravo
+    - radioOpforCharlie
+    - radioOpforCommand
+    - radioOpforIntel
+    - radioOpforJTAC
+    - radioOpforMILP
+
+# passive CP masts, no power needed, local coverage only
+- type: entity
+  abstract: true
+  parent: AU14CommsArrayBase
+  id: AU14CommsMastBase
+  name: antenna mast
+  description: A guyed field antenna mast, the kind two signalmen can raise in an hour. Keeps the command post talking.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/communications_tower_alt.rsi
+    offset: 0, 1
+    layers:
+    - state: comm_tower_off
+      map: [ "base" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.AU14CommsStructureVisuals.Damaged:
+        base:
+          True: { state: comm_tower_destroyed }
+          False: { state: comm_tower_off }
+  - type: ApcPowerReceiver
+    needsPower: false
+  - type: RMCPowerReceiver
+    idleLoad: 0
+    activeLoad: 0
+    channel: Equipment
+
+- type: entity
+  parent: AU14CommsMastBase
+  id: AU14CommsMastGovfor
+  name: GOVFOR antenna mast
+  suffix: GOVFOR, CP
+  components:
+  - type: ANPRCRelayAnchor
+    fullRange: 75
+    partialRange: 100
+    channels:
+    - radioGovforAlpha
+    - radioGovforBravo
+    - radioGovforCharlie
+    - radioGovforCommand
+    - radioGovforIntel
+    - radioGovforJTAC
+    - radioGovforMILP
+
+- type: entity
+  parent: AU14CommsMastBase
+  id: AU14CommsMastOpfor
+  name: OPFOR antenna mast
+  suffix: OPFOR, CP
+  components:
+  - type: ANPRCRelayAnchor
+    fullRange: 75
+    partialRange: 100
+    channels:
+    - radioOpforAlpha
+    - radioOpforBravo
+    - radioOpforCharlie
+    - radioOpforCommand
+    - radioOpforIntel
+    - radioOpforJTAC
+    - radioOpforMILP
+
+# compact transceiver set for vehicle and dropship grids. vehicles are their own
+# grid, so without this riders drop off every combat net the moment they mount up.
+# relays both sides' nets - a captured vehicle keeps talking for its new owners
+- type: entity
+  parent: BaseStructure
+  id: AU14VehicleRadioSet
+  name: vehicle radio set
+  description: A hull-mounted transceiver that keeps everyone aboard on the net. Short whip antenna - do not expect it to cover more than the vehicle and its immediate surroundings.
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 60
+        mask:
+        - None
+  - type: Sprite
+    sprite: Structures/Wallmounts/intercom.rsi
+    state: base
+    drawdepth: WallMountedItems
+  - type: WallMount
+    arc: 360
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: null
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 120
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: ANPRCRelayAnchor
+    fullRange: 12
+    partialRange: 16
+    channels:
+    - radioGovforAlpha
+    - radioGovforBravo
+    - radioGovforCharlie
+    - radioGovforCommand
+    - radioGovforIntel
+    - radioGovforJTAC
+    - radioGovforMILP
+    - radioOpforAlpha
+    - radioOpforBravo
+    - radioOpforCharlie
+    - radioOpforCommand
+    - radioOpforIntel
+    - radioOpforJTAC
+    - radioOpforMILP
+
+# field-built antenna mast, raised from metal by engineering-trained personnel.
+# relays both sides' combat nets: a mast is a mast, whoever stands next to it
+- type: entity
+  parent: AU14CommsMastBase
+  id: AU14CommsMastField
+  name: field antenna mast
+  suffix: Field-Built, Both Sides
+  components:
+  - type: ANPRCRelayAnchor
+    fullRange: 75
+    partialRange: 100
+    channels:
+    - radioGovforAlpha
+    - radioGovforBravo
+    - radioGovforCharlie
+    - radioGovforCommand
+    - radioGovforIntel
+    - radioGovforJTAC
+    - radioGovforMILP
+    - radioOpforAlpha
+    - radioOpforBravo
+    - radioOpforCharlie
+    - radioOpforCommand
+    - radioOpforIntel
+    - radioOpforJTAC
+    - radioOpforMILP

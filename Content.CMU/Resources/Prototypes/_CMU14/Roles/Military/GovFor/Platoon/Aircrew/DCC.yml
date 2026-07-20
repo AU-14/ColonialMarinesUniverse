@@ -24,6 +24,10 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallsignRole
+    suffix: CHIEF
+    commandElement: true
+    category: AIR
   - type: Skills
     preset: AU14SkillPresetPlatoonDCC
   - type: JobPrefix

@@ -1,0 +1,334 @@
+<Document>
+  # Voice Procedure
+
+  Voice procedure is a standard way to pass information over a shared radio net.
+
+  Using consistent callsigns and prowords makes transmissions shorter, clearer, and easier to acknowledge.
+
+  ## Basic Rules
+
+  - [bold]Listen before transmitting.[/bold] Do not interrupt traffic already in progress unless the message is urgent.
+  - [bold]Plan the message first.[/bold] Know what you need to say before opening the channel.
+  - [bold]Use callsigns.[/bold] Do not identify personnel by character name or rank over the radio.
+  - [bold]Keep transmissions brief.[/bold] Split long messages into clear sections.
+  - [bold]Acknowledge orders and requests.[/bold] Confirm that important traffic was received and understood.
+  - [bold]Use plain language.[/bold] Use prowords where they apply, but avoid unnecessary jargon.
+
+  ## Basic Call Format
+
+  Address the receiving station first, then identify the transmitting station.
+
+  [color=#a4885c]HAVOC 6, this is ALPHA ROMEO, message, over.[/color]
+
+  A complete call normally contains:
+
+  - The callsign being addressed.
+  - [bold]THIS IS[/bold].
+  - The transmitting callsign.
+  - The message.
+  - [bold]OVER[/bold] or [bold]OUT[/bold].
+
+  The receiving station answers using the same order:
+
+  [color=#a4885c]ALPHA ROMEO, this is HAVOC 6, send it, over.[/color]
+
+  After both stations have established contact, [bold]THIS IS[/bold] may be omitted:
+
+  [color=#a4885c]ALPHA ROMEO, HAVOC 6, send it, over.[/color]
+
+  ## Prowords
+
+  Prowords are standardized words with specific meanings.
+
+  <Table Columns="2" MinForcedColumnWidth="110">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Proword[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Meaning[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">THIS IS</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">The callsign that follows identifies the transmitting station.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">OVER</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">The transmission is complete and a reply is expected.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">OUT</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">The exchange is complete and no reply is expected. Do not use “over and out.”</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">ROGER</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">The previous transmission was received and understood. It does not mean the instruction will be carried out.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">WILCO</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">The instruction was understood and will be carried out. WILCO already includes the meaning of ROGER.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">SAY AGAIN</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Repeat the previous transmission, or a specified part of it.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">CORRECTION</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">An error was made. The corrected information follows.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">DISREGARD</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Ignore the previous transmission.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">BREAK</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Separates sections of a message or traffic addressed to different stations.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">WAIT</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Pause briefly. The transmitting station will continue shortly.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">WAIT OUT</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">A longer pause is required. The transmitting station will call again later.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">HOW COPY</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Confirm whether the preceding message was received clearly.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">RADIO CHECK</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Report signal strength and readability.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">LIMA CHARLIE</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Loud and clear.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">ACTUAL</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Identifies the person assigned to a command station rather than someone transmitting on their behalf.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">INTERROGATIVE</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">The following traffic is a question.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">BE ADVISED</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">The following traffic is information that may affect the receiving station.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">ALL STATIONS</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">The message is addressed to every station on the net.</Box>
+    </ColorBox>
+  </Table>
+
+  Use [bold]SAY AGAIN[/bold] instead of “repeat” when requesting a repeated radio message. On a fire-support net, [bold]REPEAT[/bold] may be interpreted as an instruction to fire the previous mission again.
+
+  ## Radio Check
+
+  A radio check confirms that two stations can hear each other.
+
+  [color=#a4885c]HAVOC ROMEO, this is ALPHA ROMEO, radio check, over.[/color]
+
+  [color=#a4885c]ALPHA ROMEO, this is HAVOC ROMEO, Lima Charlie. How me? Over.[/color]
+
+  [color=#a4885c]Lima Charlie, out.[/color]
+
+  When the signal is not clear, describe the problem instead:
+
+  - Weak but readable.
+  - Broken.
+  - Distorted.
+  - Unreadable.
+
+  ## Contact Report
+
+  A contact report should state:
+
+  - What was seen.
+  - Where it was seen.
+  - Approximate strength.
+  - What the reporting element is doing.
+
+  [color=#a4885c]HAVOC 6, this is ALPHA ACTUAL, contact. Infantry, squad strength, east treeline near grid two-four-five. Engaging, over.[/color]
+
+  [color=#a4885c]ALPHA ACTUAL, HAVOC 6, roger. BRAVO is moving to your flank. Hold your position, over.[/color]
+
+  [color=#a4885c]HAVOC 6, ALPHA ACTUAL, wilco, out.[/color]
+
+  ## Fire-Support Request
+
+  Establish contact before sending the full request.
+
+  [color=#a4885c]HAVOC OPS, this is ALPHA ROMEO, fire mission, over.[/color]
+
+  [color=#a4885c]ALPHA ROMEO, HAVOC OPS, send it, over.[/color]
+
+  The request should identify:
+
+  - The target.
+  - The target location.
+  - The position of friendly forces.
+  - The requested effect.
+
+  [color=#a4885c]Enemy machine-gun position on the north ridge beside the communications tower. Friendlies are two-five-zero meters east, marked by smoke. Request suppression, over.[/color]
+
+  [color=#a4885c]ALPHA ROMEO, HAVOC OPS, roger. Rounds out, impact in three-zero seconds, over.[/color]
+
+  [color=#a4885c]HAVOC OPS, ALPHA ROMEO, impact observed. Target suppressed. End of mission, out.[/color]
+
+  ## Casualty Evacuation Request
+
+  Establish contact before sending casualty details.
+
+  [color=#a4885c]HAVOC ROMEO, this is BRAVO ROMEO, casualty evacuation request, over.[/color]
+
+  [color=#a4885c]BRAVO ROMEO, HAVOC ROMEO, send it, over.[/color]
+
+  Include:
+
+  - Number of casualties.
+  - Medical priority.
+  - Pickup location.
+  - Condition of the pickup area.
+  - Identification or marking.
+
+  [color=#a4885c]Two casualties. One urgent surgical, one walking wounded. Pickup at the landing zone south of the bridge. Area is secure and marked with green smoke, over.[/color]
+
+  [color=#a4885c]BRAVO ROMEO, HAVOC ROMEO, good copy. Evacuation craft inbound in five minutes, out.[/color]
+
+  ## Using ACTUAL
+
+  [bold]ACTUAL[/bold] identifies the person in charge speaking personally rather than an RTO or other person speaking on their behalf.
+
+  Squad leaders carry it as their assigned station: [bold]ALPHA ACTUAL[/bold] is the Alpha squad leader. Command stations append it when the officer takes the handset personally.
+
+  [color=#a4885c]ALPHA ACTUAL, this is HAVOC 6 ACTUAL. Move past phase line DODGE, over.[/color]
+
+  Without [bold]ACTUAL[/bold], [bold]HAVOC 6[/bold] traffic may be the RTO relaying for the commander. With it, the commander is speaking personally.
+
+  ## Corrections
+
+  Use [bold]CORRECTION[/bold] when an error is noticed during the transmission.
+
+  [color=#a4885c]Enemy infantry west of the bridge, CORRECTION, east of the bridge, squad strength, over.[/color]
+
+  Use [bold]DISREGARD[/bold] when the entire previous message should be ignored.
+
+  [color=#a4885c]DISREGARD my last, out.[/color]
+
+  ## Common Mistakes
+
+  <Table Columns="2" MinForcedColumnWidth="120">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Avoid[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Reason[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Using names or ranks</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Radio traffic should identify stations by callsign.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Calling “command” without a callsign</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">The intended receiving station may be unclear.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Long unbroken transmissions</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Other stations cannot acknowledge or pass urgent traffic.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">“Over and out”</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">OVER requests a reply, while OUT ends the exchange.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">“Roger wilco”</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">WILCO already confirms receipt and compliance.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">“Can you repeat that?”</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Use SAY AGAIN to avoid confusion on fire-support nets.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Vague reports</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">State the event, location, strength, and required action clearly.</Box>
+    </ColorBox>
+  </Table>
+
+  Brief, structured transmissions leave the net available for acknowledgements and urgent traffic.
+</Document>

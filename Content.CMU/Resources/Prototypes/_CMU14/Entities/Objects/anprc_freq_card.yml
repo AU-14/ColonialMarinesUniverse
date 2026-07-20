@@ -1,0 +1,43 @@
+- type: entity
+  parent: CMPaperWritten
+  id: ANPRCFreqCard
+  name: AN/PRC-117G frequency assignment card
+  description: A laminated card of signal operating instructions, sized to tape to a forearm. The lamination has seen better days.
+  components:
+  - type: Item
+    size: Small
+  - type: ANPRCFreqCard
+    faction: govfor
+  # fallback text only, the server rewrites this from the round's frequency plan
+  - type: Paper
+    content: |
+      [head=2]SIGNAL OPERATING INSTRUCTIONS[/head]
+      [head=3]AN/PRC-117G NET FREQUENCY ASSIGNMENTS[/head]
+
+      [bold]GOVFOR Command[/bold] - 2.592 MHz
+      [bold]GOVFOR Alpha[/bold]   - 2.502 MHz
+      [bold]GOVFOR Bravo[/bold]   - 1.606 MHz
+      [bold]GOVFOR Charlie[/bold] - 1.607 MHz
+      [bold]GOVFOR Intel[/bold]   - 1.605 MHz
+      [bold]GOVFOR JTAC[/bold]    - 2.598 MHz
+      [bold]GOVFOR MILP[/bold]    - 2.595 MHz
+
+      Enter a frequency in the radio panel's FREQ tab (with or without the dot, 2592 and 2.592 are the same) to assign the matching net to a preset slot.
+
+      [italic]COMSEC NOTICE: This card is a controlled document. Destroy before capture. Frequencies are theatre-wide, assume the enemy holds a copy of their own.[/italic]
+
+- type: entity
+  parent: ANPRCFreqCard
+  id: ANPRCFreqCardOPFOR
+  suffix: OPFOR
+  components:
+  - type: ANPRCFreqCard
+    faction: opfor
+
+- type: entity
+  parent: ANPRCFreqCard
+  id: ANPRCFreqCardCLF
+  suffix: CLF
+  components:
+  - type: ANPRCFreqCard
+    faction: clf

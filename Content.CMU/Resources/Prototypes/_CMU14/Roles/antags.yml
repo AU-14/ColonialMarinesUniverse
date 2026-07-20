@@ -458,6 +458,7 @@
       - AU14JobCLFGuerilla
       - AU14JobCLFSapper
       - AU14JobCLFCellLeader
+      - AU14JobCLFRadioOperator
       - AU14JobCLFPhysician
       - AU14JobCLFSurgeon
       briefing:

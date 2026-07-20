@@ -25,6 +25,10 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallsignRole
+    suffix: ACTUAL
+    radioTag: SL
+  - type: ANPRCRadioUser # radio trained so an SL can run the manpack if the RTO drops, they don't spawn with one
   - type: Skills
     preset: AU14SkillPresetPlatoonSergeant
   - type: RMCSpeechBubbleSpecificStyle
