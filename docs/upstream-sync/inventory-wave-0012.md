@@ -92,7 +92,7 @@ behavior to port.
 2273 | a42eb5695cc23d8004f2e2c5af2d7c0f09553e78 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2274 | 5d5c61fefc13c36f1d4d14101edb23fa129c83a0 | Bring back shrug sanitization in a different form (#41236) | PortCandidate | Interactions | A small chat sanitizer entry restores the shrug shorthand without broad chat-system changes.
 2275 | acc95fae5eaf9aba67171667dae3665142bc35e5 | Automatic changelog update | Irrelevant | — | Generated changelog only.
-2276 | f8ff3a92aa97a5a13d32296c7606698cb464769e | Fix broken state when attempting to escape a locker while cuffed (#42313) | PortCandidate | Interactions | The locker-resist state is now set only after its DoAfter successfully starts.
+2276 | f8ff3a92aa97a5a13d32296c7606698cb464769e | Fix broken state when attempting to escape a locker while cuffed (#42313) | Ported (CS-0232) | Movement, Interactions | Locker resistance now marks the user as resisting and shows its start popup only after the escape DoAfter starts successfully, avoiding a permanent stuck state when setup is rejected.
 2277 | d0e981626150b27e78aedb44cf9ee7e3fff5f429 | Fland: Fix atmos right side apc (#42314) | Deferred | Physics | Generated Fland APC and atmos map delta belongs to the deferred map and powernet cluster.
 2278 | b406193372b3216f7f2853fd5b6c804bd914d1ac | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2279 | 8ec4669bf93155bbc81aa365ad2143ad62989ab2 | Allow items spawned in the smart fridge to show up as an entry. (#42268) | Deferred | Interactions | The five-file smart-fridge state and UI change begins a cluster completed by index 2285.

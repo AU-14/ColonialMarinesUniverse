@@ -3152,3 +3152,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Electrocution/Components/ElectrifiedComponent.cs`, `Content.Shared/Silicons/StationAi/SharedStationAiSystem.Airlock.cs`, `docs/upstream-sync/inventory-wave-0012.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms Station AI mutates state before selecting sound, enabled maps to `airlock_electrify_on.ogg`, disabled maps to `airlock_electrify_off.ogg`, and shock sounds are separate. Shared compilation plus AI enable/disable, prototype override, prediction, access denial, power loss, and RMC airlock cases are queued for the index-2999 checkpoint.
 - Follow-up/debt: When the upstream door-remote electrify mode is integrated, port its selector using these corrected field semantics. Index 2099's Station AI access/logging hardening remains separate and must preserve this selection.
+
+## CS-0232 — Commit locker resistance state only after DoAfter startup
+
+- Upstream: [space-wizards/space-station-14#42313](https://github.com/space-wizards/space-station-14/pull/42313), `f8ff3a92aa97a5a13d32296c7606698cb464769e`, 2026-01-08
+- Areas: Movement, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: A locker escape attempt now returns when its DoAfter cannot start. `ResistLockerComponent.IsResisting` and the start popup are committed only after successful scheduling, so rejected attempts do not leave the user permanently treated as already resisting.
+- RMC/CMU divergence: CMU retains the standard locker-resistance system alongside RMC restraints, storage prototypes, and interaction restrictions. The change respects whatever local DoAfter blockers reject the attempt and does not alter escape duration, damage, cancellation rules, storage opening, or RMC restraint policy.
+- Decision and rationale: Port the target-final ordering exactly. The DoAfter scheduler is the authority on whether an attempt exists; setting state before checking its return value creates a latch with no completion/cancellation event available to clear it.
+- Files changed: `Content.Server/Resist/ResistLockerSystem.cs`, `docs/upstream-sync/inventory-wave-0012.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static flow review confirms failure returns before state/popup changes, success retains the same DoAfter arguments, and completion/cancellation handling is unchanged. Server compilation plus cuffed, blocked, successful, cancelled, repeated, deleted-locker, bluespace-locker, and RMC restraint cases are queued for the index-2999 checkpoint.
+- Follow-up/debt: None; other DoAfter callers should be audited independently before applying the same ordering pattern.
