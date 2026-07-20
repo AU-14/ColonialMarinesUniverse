@@ -1345,3 +1345,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Client/Instruments/InstrumentSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static lifecycle review confirms song open retains queued events and attaches the new renderer, while full close still clears the buffer. Client compilation and a two-client song-switch/note-off regression are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Cover rapid file switching and verify the retained buffer drains without replaying stale note-on events after the renderer transition.
+
+## CS-0095 — Default missing rotation visuals to vertical
+
+- Upstream: [space-wizards/space-station-14#39338](https://github.com/space-wizards/space-station-14/pull/39338), `615f63e13bb03f14befba9866169d9e4958cf28e`, 2025-08-02
+- Areas: Movement
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: When appearance state lacks `RotationVisuals.RotationState`, the client visualizer now applies the normal vertical state rather than leaving the sprite's previous rotation and offset untouched.
+- RMC/CMU divergence: RMC movement and downed-state systems still publish explicit rotation states during live play. The fallback only covers missing or older appearance data, notably replay frames, and does not change authoritative movement state.
+- Decision and rationale: Port the retained one-line fallback so absent data produces the component's neutral visual orientation instead of stale horizontal presentation.
+- Files changed: `Content.Client/Rotation/RotationVisualizerSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static branch review confirms missing state enters the existing `Vertical` switch case while explicit horizontal and vertical values remain unchanged. Client compilation and replay/live appearance cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add replay coverage with an old frame lacking rotation state and verify later explicit horizontal state still overrides the fallback.
