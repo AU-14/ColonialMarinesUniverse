@@ -1631,3 +1631,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Melee/cane.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype review confirms whitelist, sounds, and item mapping are unchanged and only the blade slot receives priority 3. Prototype loading plus insert/eject ordering with competing verbs is queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Compare CMU's older cane-sheath parent set with target-final separately before importing voice-lock or item-slot-lock behavior.
+
+## CS-0117 — Skip emergency-shuttle ticking in the lobby
+
+- Upstream: [space-wizards/space-station-14#38732](https://github.com/space-wizards/space-station-14/pull/38732), `b317d7514f34c56a989c661668290857fdef6f57`, 2025-08-20
+- Areas: GameTicking, Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `EmergencyShuttleSystem.Update` no longer advances emergency-console logic while the game ticker is in `PreRoundLobby`; normal round states continue updating it every server tick.
+- RMC/CMU divergence: RMC uses different primary round objectives and shuttle content but retains the inherited emergency shuttle system and ticker run levels. The guard affects only pre-round execution and does not enable the system when its CVar is disabled.
+- Decision and rationale: Port the retained run-level check at the outer update boundary so no console timer or associated emergency-shuttle work executes before round start.
+- Files changed: `Content.Server/Shuttles/Systems/EmergencyShuttleSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static update tracing confirms `base.Update` still runs, only `PreRoundLobby` skips console work, and every other run level preserves the existing call. Server compilation plus idle-lobby, round-start, call, recall, and round-cleanup cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Review whether RMC's custom pre-round run levels or lobby maps require a broader `InRound` predicate when the game-ticker integration is audited deeply.
