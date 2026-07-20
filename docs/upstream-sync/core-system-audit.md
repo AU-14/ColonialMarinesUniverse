@@ -1605,3 +1605,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Clothing/LoadoutSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static event tracing confirms every branch through `Equip` reaches one `GearEquipped` call, while the starting-gear helper no longer emits an earlier duplicate. Shared compilation plus jetpack/internals, starting-gear-only, and combined role-loadout cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Audit all RMC `EquipStartingGear` callers for explicit ownership of the completion event and document which layer should raise it.
+
+## CS-0115 — Upload active silicon laws instead of stale prototypes
+
+- Upstream: [space-wizards/space-station-14#39756](https://github.com/space-wizards/space-station-14/pull/39756), `a26a18243f0bcbefdf75c830d38ec0183a38e43f`, 2025-08-19
+- Areas: Interactions, Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Inserting a silicon law provider into an upload console now copies its active runtime `Lawset` when present, falling back to its configured lawset prototype only for an uninitialized provider.
+- RMC/CMU divergence: CMU retains upstream silicon law providers and adds role interactions around subverted silicons. Runtime modifications such as ion, emag, or custom laws are now preserved through upload without changing those fork-specific role hooks.
+- Decision and rationale: Port the retained null-coalescing selection at the upload boundary; `provider.Laws` identifies the default prototype, while `provider.Lawset` is the authoritative mutable state.
+- Files changed: `Content.Server/Silicons/Laws/SiliconLawSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static data-flow review confirms initialized runtime laws reach every updater target and an uninitialized provider still resolves its prototype. Server compilation plus prototype, custom runtime, ion-modified, and emag-modified provider uploads are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add an upload regression that modifies a provider at runtime and verifies law order, text, obedience target, and notification sound on every connected silicon.

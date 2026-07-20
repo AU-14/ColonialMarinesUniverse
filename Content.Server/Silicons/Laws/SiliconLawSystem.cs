@@ -298,12 +298,13 @@ public sealed partial class SiliconLawSystem : SharedSiliconLawSystem
         if (!TryComp(args.Entity, out SiliconLawProviderComponent? provider))
             return;
 
-        var lawset = GetLawset(provider.Laws).Laws;
+        var lawset = provider.Lawset ?? GetLawset(provider.Laws);
+
         var query = EntityManager.CompRegistryQueryEnumerator(ent.Comp.Components);
 
         while (query.MoveNext(out var update))
         {
-            SetLaws(lawset, update, provider.LawUploadSound);
+            SetLaws(lawset.Laws, update, provider.LawUploadSound);
         }
     }
 }
