@@ -2750,3 +2750,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/TurretController/DeployableTurretControllerSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static flow review confirms logging occurs only after required network/targeting components resolve, before the unchanged packet queue, and covers both armament and access paths. Server compilation plus armament, single/multiple exemption, missing-device, null-user, and RMC turret cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1361 as `Ported (CS-0201)` when wave 0007 is committed.
+
+## CS-0202 — Read power sensors from their selected cable network
+
+- Upstream: [space-wizards/space-station-14#40934](https://github.com/space-wizards/space-station-14/pull/40934), `b10dd2edca91c99c6590ff974edca2414a7d5b36`, 2025-10-16
+- Areas: GameTicking, Interactions
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: A power sensor now reads statistics directly from its configured `CableDeviceNode.NodeGroup` instead of walking reachable cable nodes and using the first grouped node encountered. Its charging/discharging output therefore follows the selected electrical network even when the sensor can reach multiple networks.
+- RMC/CMU divergence: CMU uses the standard power sensor and device-linking system; RMC's area-power abstraction is separate and is not modified. Port selection, input/output mode, signal ports, cable topology, and network-statistics calculations remain unchanged.
+- Decision and rationale: Port the direct-node lookup and remove the now-unnecessary reachable-node loop as one change. The selected node is already authoritative for the sensor configuration, while traversal order cannot reliably identify the intended network. CMU's newer tuple-based cable traversal adaptation disappears with that obsolete traversal.
+- Files changed: `Content.Server/DeviceLinking/Systems/PowerSensorSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static update-flow review confirms gridless or ungrouped sensors still return safely, input/output statistics select the same fields, and transition comparisons and signals are unchanged. Server compilation plus one-network, multi-network, node-switch, gridless, charging, discharging, and steady-state cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1378 as `Ported (CS-0202)` when wave 0007 is committed.
