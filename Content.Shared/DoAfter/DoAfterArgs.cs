@@ -138,6 +138,18 @@ public sealed partial class DoAfterArgs
     public bool BreakOnRest = true;
 
     /// <summary>
+    /// Whether target distance and accessibility should be checked while this do-after runs.
+    /// </summary>
+    [DataField]
+    public bool RangeCheck = true;
+
+    /// <summary>
+    /// Marks RMC do-afters whose target selection was lag compensated.
+    /// </summary>
+    [DataField]
+    public bool LagCompensated;
+
+    /// <summary>
     ///     Threshold for user and target movement
     /// </summary>
     [DataField]
@@ -283,6 +295,8 @@ public sealed partial class DoAfterArgs
         BreakOnMove = other.BreakOnMove;
         BreakOnWeightlessMove = other.BreakOnWeightlessMove;
         BreakOnRest = other.BreakOnRest;
+        RangeCheck = other.RangeCheck;
+        LagCompensated = other.LagCompensated;
         MovementThreshold = other.MovementThreshold;
         DistanceThreshold = other.DistanceThreshold;
         BreakOnDamage = other.BreakOnDamage;
