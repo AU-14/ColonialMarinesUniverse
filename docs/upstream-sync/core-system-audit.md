@@ -3049,3 +3049,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Atmos/EntitySystems/FlammableSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static arithmetic review confirms the two unclamped final mass-weighted quantities sum to the original total, collision de-duplication and fixture checks are unchanged, and both values still pass through RMC-aware `SetFireStacks`. Server compilation plus equal/unequal mass, one/both burning, stack caps, ignition cancellation, non-physics, collision ordering, fire damage, extinguish, and RMC fire cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1832 as `Ported (CS-0224)` when wave 0010 is committed.
+
+## CS-0225 — Make base simple mobs blindable
+
+- Upstream: [space-wizards/space-station-14#41788](https://github.com/space-wizards/space-station-14/pull/41788), `dc616f67e7436d65ba28b0e118de21b37c1f9885`, 2025-12-09
+- Areas: Medical, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `BaseSimpleMob` now includes `Blindable`, allowing its existing temporary-blindness status and eye-damage systems to maintain blindness state, vision overlays, eye PVS scaling, UI vision restrictions, blindfolds, and eye healing for derived NPCs.
+- RMC/CMU divergence: RMC's `RMCSimpleMob` derives from `BaseSimpleMob` and already permits `TemporaryBlindness`, `Blinded`, and related medical statuses but lacked the component that implements their eye state. RMC species and xeno bases that explicitly define `Blindable` retain their existing component data through prototype composition.
+- Decision and rationale: Port the target-final base-component addition. Advertising blindness statuses without a `BlindableComponent` makes flashes, chemicals, eye damage, and cures silently ineffective on many simple mobs; the shared base is the narrowest common point that restores the contract.
+- Files changed: `Resources/Prototypes/Entities/Mobs/NPCs/simplemob.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static inheritance review confirms `RMCSimpleMob` and standard simple-mob families derive from the changed base, the blindness systems are component-gated, and no status or threshold data changed. YAML/prototype validation plus flash, temporary/permanent blindness, eye damage/healing, blindfold, UI vision gate, player-controlled NPC, AI, robotic simple mob, RMC simple mob, species, and xeno cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1959 as `Ported (CS-0225)` when wave 0010 is committed; prototype-specific opt-outs can remove `Blindable` if a genuinely sightless simple-mob family is identified.

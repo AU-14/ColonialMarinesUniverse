@@ -32,6 +32,7 @@
   - type: Tag
     tags:
     - DoorBumpOpener
+  - type: Blindable
 
 - type: entity
   abstract: true
