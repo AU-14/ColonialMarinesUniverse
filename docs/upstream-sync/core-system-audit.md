@@ -2958,3 +2958,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Nutrition/EntitySystems/FoodSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static subscription and handler review confirms UI executes first, both handlers honor `Handled`, and failed UI activation can still fall through to existing ingestion. Shared compilation plus ordinary food, standard paper, RMC paper, UI accepted/rejected, openable, inventory, eat-verb, prediction, and force-feed cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1773 as `Ported (CS-0217)` when wave 0009 is committed; revisit the adaptation when CMU adopts upstream's `EdibleComponent`/`IngestionSystem` refactor.
+
+## CS-0218 — Narrow clumsy and untrained-bible burns to heat
+
+- Upstream: [space-wizards/space-station-14#41307](https://github.com/space-wizards/space-station-14/pull/41307), `5a5031750200fa349e1803fa51268df46b54043a`, 2025-11-05
+- Areas: Shooting, Medical, Interactions
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: Clumsy gun-failure damage on the affected monkey, kobold, guardian-host, and clown definitions now adds three Heat damage instead of three damage to every type in the Burn group. Untrained standard-bible use similarly deals ten Heat rather than ten each of Heat, Shock, Cold, and Caustic.
+- RMC/CMU divergence: CMU retains RMC's extended damage modification, armor, wound, and weapon behavior, but these standard `DamageSpecifier` prototypes still feed those paths. Narrowing the authored damage types prevents accidental multi-type amplification while preserving all RMC-side processing for the resulting Heat damage.
+- Decision and rationale: Port the four target-final prototype corrections exactly. These effects describe an explosion burn or holy sizzle, not simultaneous electrical, cold, and acid injury; using the broad group multiplied their intended burn value across four independent damage types.
+- Files changed: `Resources/Prototypes/Entities/Mobs/NPCs/animals.yml`, `Resources/Prototypes/Entities/Mobs/Player/guardian.yml`, `Resources/Prototypes/Entities/Objects/Specific/Chapel/bibles.yml`, `Resources/Prototypes/Roles/Jobs/Civilian/clown.yml`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype review confirms only the four upstream-selected damage specifiers changed and each retains its existing blunt/piercing or bible behavior. YAML/prototype validation plus clumsy firing for each source, resistance and wound handling, trained/untrained bible use, failure/success healing, damage totals, and RMC mob cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1642 as `Ported (CS-0218)` when wave 0009 is committed.
