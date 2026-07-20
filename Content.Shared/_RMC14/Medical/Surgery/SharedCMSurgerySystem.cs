@@ -4,8 +4,7 @@ using Content.Shared._RMC14.Medical.Surgery.Conditions;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
 using Content.Shared._RMC14.Xenonids.Organs;
 using Content.Shared._RMC14.Xenonids.Parasite;
-using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
+using Content.Shared.Body;
 using Content.Shared.Buckle.Components;
 using Content.Shared.DoAfter;
 using Content.Shared.GameTicking;
@@ -24,7 +23,7 @@ namespace Content.Shared._RMC14.Medical.Surgery;
 public abstract partial class SharedCMSurgerySystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private BodySystem _body = default!;
     [Dependency] private IComponentFactory _compFactory = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
@@ -68,7 +67,7 @@ public abstract partial class SharedCMSurgerySystem : EntitySystem
             args.Target is not { } target ||
             !IsSurgeryValid(ent, target, args.Surgery, args.Step, out var surgery, out var part, out var step) ||
             !PreviousStepsComplete(ent, part, surgery, args.Step) ||
-            !CanPerformStep(args.User, ent, part.Comp.PartType, step, false))
+            !CanPerformStep(args.User, ent, part.Comp.Category, step, false))
         {
             Log.Warning($"{ToPrettyString(args.User)} tried to start invalid surgery.");
             return;
@@ -102,7 +101,7 @@ public abstract partial class SharedCMSurgerySystem : EntitySystem
 
     private void OnPartConditionValid(Entity<CMSurgeryPartConditionComponent> ent, ref CMSurgeryValidEvent args)
     {
-        if (CompOrNull<BodyPartComponent>(args.Part)?.PartType != ent.Comp.Part)
+        if (CompOrNull<OrganComponent>(args.Part)?.Category != ent.Comp.Part)
             args.Cancelled = true;
     }
 
@@ -115,11 +114,11 @@ public abstract partial class SharedCMSurgerySystem : EntitySystem
     private void OnXenoHeartValid(Entity<RMCSurgeryXenoHeartConditionComponent> ent, ref CMSurgeryValidEvent args)
     {
         if (!HasComp<RMCSurgeryXenoHeartComponent>(args.Body) ||
-            _body.GetBodyOrganEntityComps<XenoHeartComponent>(args.Body).Count == 0)
+            !_body.TryGetOrgansWithComponent<XenoHeartComponent>(args.Body, out _))
             args.Cancelled = true;
     }
 
-    protected bool IsSurgeryValid(EntityUid body, EntityUid targetPart, EntProtoId surgery, EntProtoId stepId, out Entity<CMSurgeryComponent> surgeryEnt, out Entity<BodyPartComponent> part, out EntityUid step)
+    protected bool IsSurgeryValid(EntityUid body, EntityUid targetPart, EntProtoId surgery, EntProtoId stepId, out Entity<CMSurgeryComponent> surgeryEnt, out Entity<OrganComponent> part, out EntityUid step)
     {
         surgeryEnt = default;
         part = default;
@@ -127,7 +126,7 @@ public abstract partial class SharedCMSurgerySystem : EntitySystem
 
         if (!HasComp<CMSurgeryTargetComponent>(body) ||
             !IsLyingDown(body) ||
-            !TryComp(targetPart, out BodyPartComponent? partComp) ||
+            !TryComp(targetPart, out OrganComponent? partComp) ||
             GetSingleton(surgery) is not { } surgeryEntId ||
             !TryComp(surgeryEntId, out CMSurgeryComponent? surgeryComp) ||
             !surgeryComp.Steps.Contains(stepId) ||

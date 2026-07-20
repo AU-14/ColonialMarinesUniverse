@@ -31,17 +31,18 @@ namespace Content.Shared.Body.Systems;
 
 public abstract partial class SharedBloodstreamSystem : EntitySystem
 {
+    public static readonly EntProtoId Bloodloss = "StatusEffectBloodloss";
+
     [Dependency] protected SharedSolutionContainerSystem SolutionContainer = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedPuddleSystem _puddle = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
     [Dependency] private AlertsSystem _alertsSystem = default!;
     [Dependency] private MobStateSystem _mobStateSystem = default!;
     [Dependency] private DamageableSystem _damageableSystem = default!;
-    [Dependency] private SharedDrunkSystem _drunkSystem = default!;
-    [Dependency] private SharedStutteringSystem _stutteringSystem = default!;
 
     // RMC14
     [Dependency] private CMStasisBagSystem _cmStasisBag = default!;
@@ -80,7 +81,7 @@ public abstract partial class SharedBloodstreamSystem : EntitySystem
             if (!_cmStasisBag.CanBodyMetabolize(uid))
                 continue;
 
-            if (!SolutionContainer.ResolveSolution(uid, bloodstream.BloodSolutionName, ref bloodstream.BloodSolution, out var bloodSolution))
+            if (!SolutionContainer.ResolveSolution(uid, bloodstream.BloodSolutionName, ref bloodstream.BloodSolution))
                 continue;
 
             // Blood level regulation. Must be alive.
@@ -107,63 +108,21 @@ public abstract partial class SharedBloodstreamSystem : EntitySystem
                 else
                 {
                     // If they're healthy, we'll try and heal some bloodloss instead.
-                    _damageableSystem.TryChangeDamage(uid, bloodstream.BloodlossHealDamage * bloodPercentage, ignoreResistances: true, interruptsDoAfters: false);
+                    // RMC14, avoid raising a no-op damage change.
+                    if (_rmcDamageable.HasAnyDamage(uid, bloodstream.BloodlossHealDamage))
+                    {
+                        _damageableSystem.TryChangeDamage(uid,
+                            bloodstream.BloodlossHealDamage * bloodPercentage,
+                            ignoreResistances: true,
+                            interruptsDoAfters: false);
+                    }
 
                     _status.TryRemoveStatusEffect(uid, Bloodloss);
                 }
             }
             else
             {
-                // Blood is removed from the bloodstream at a 1-1 rate with the bleed amount
-                TryModifyBloodLevel((uid, bloodstream), -bloodstream.BleedAmount);
-                // Bleed rate is reduced by the bleed reduction amount in the bloodstream component.
-                TryModifyBleedAmount((uid, bloodstream), -bloodstream.BleedReductionAmount);
-            }
-
-            // deal bloodloss damage if their blood level is below a threshold.
-            var bloodPercentage = GetBloodLevelPercentage((uid, bloodstream));
-            if (bloodPercentage < bloodstream.BloodlossThreshold && !_mobStateSystem.IsDead(uid))
-            {
-                // bloodloss damage is based on the base value, and modified by how low your blood level is.
-                var amt = bloodstream.BloodlossDamage / (0.1f + bloodPercentage);
-
-                _damageableSystem.TryChangeDamage(uid, amt,
-                    ignoreResistances: false, interruptsDoAfters: false);
-
-                // Apply dizziness as a symptom of bloodloss.
-                // The effect is applied in a way that it will never be cleared without being healthy.
-                // Multiplying by 2 is arbitrary but works for this case, it just prevents the time from running out
-                _drunkSystem.TryApplyDrunkenness(
-                    uid,
-                    (float)bloodstream.AdjustedUpdateInterval.TotalSeconds * 2,
-                    applySlur: false);
-                _stutteringSystem.DoStutter(uid, bloodstream.AdjustedUpdateInterval * 2, refresh: false);
-
-                // storing the drunk and stutter time so we can remove it independently from other effects additions
-                bloodstream.StatusTime += bloodstream.AdjustedUpdateInterval * 2;
-                DirtyField(uid, bloodstream, nameof(BloodstreamComponent.StatusTime));
-            }
-            else if (!_mobStateSystem.IsDead(uid))
-            {
-                // If they're healthy, we'll try and heal some bloodloss instead.
-                // RMC14, to call change damage less often
-                if (_rmcDamageable.HasAnyDamage(uid, bloodstream.BloodlossHealDamage))
-                {
-                    _damageableSystem.TryChangeDamage(
-                        uid,
-                        bloodstream.BloodlossHealDamage * bloodPercentage,
-                        ignoreResistances: true,
-                        interruptsDoAfters: false
-                    );
-                }
-                // RMC14
-
-                // Remove the drunk effect when healthy. Should only remove the amount of drunk and stutter added by low blood level
-                _drunkSystem.TryRemoveDrunkenessTime(uid, bloodstream.StatusTime.TotalSeconds);
-                _stutteringSystem.DoRemoveStutterTime(uid, bloodstream.StatusTime.TotalSeconds);
-                // Reset the drunk and stutter time to zero
-                bloodstream.StatusTime = TimeSpan.Zero;
-                DirtyField(uid, bloodstream, nameof(BloodstreamComponent.StatusTime));
+                TickBleed((uid, bloodstream));
             }
         }
     }

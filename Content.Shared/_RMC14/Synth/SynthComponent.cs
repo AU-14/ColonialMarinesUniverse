@@ -1,5 +1,5 @@
 ﻿using Content.Shared._RMC14.Medical.HUD.Components;
-using Content.Shared.Body.Organ;
+using Content.Shared.Body;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;

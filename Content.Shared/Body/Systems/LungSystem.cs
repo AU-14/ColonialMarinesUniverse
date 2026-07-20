@@ -13,11 +13,9 @@ namespace Content.Shared.Body.Systems;
 
 public sealed partial class LungSystem : EntitySystem
 {
-    [Dependency] private AtmosphereSystem _atmos = default!;
-    [Dependency] private InternalsSystem _internals = default!;
+    [Dependency] private SharedAtmosphereSystem _atmos = default!;
+    [Dependency] private SharedInternalsSystem _internals = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
-
-    public static string LungSolutionName = "Lung";
 
     public override void Initialize()
     {

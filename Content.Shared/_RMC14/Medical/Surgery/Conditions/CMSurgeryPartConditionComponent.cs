@@ -1,5 +1,6 @@
-﻿using Content.Shared.Body.Part;
+using Content.Shared.Body;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Medical.Surgery.Conditions;
 
@@ -7,5 +8,5 @@ namespace Content.Shared._RMC14.Medical.Surgery.Conditions;
 public sealed partial class CMSurgeryPartConditionComponent : Component
 {
     [DataField]
-    public BodyPartType Part;
+    public ProtoId<OrganCategoryPrototype> Part;
 }

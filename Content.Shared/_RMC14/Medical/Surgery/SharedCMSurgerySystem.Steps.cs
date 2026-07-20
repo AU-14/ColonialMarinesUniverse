@@ -2,7 +2,7 @@
 using Content.Shared._RMC14.Medical.Surgery.Steps;
 using Content.Shared._RMC14.Medical.Surgery.Tools;
 using Content.Shared._RMC14.Xenonids.Parasite;
-using Content.Shared.Body.Part;
+using Content.Shared.Body;
 using Content.Shared.Buckle.Components;
 using Content.Shared.DoAfter;
 using Content.Shared.Inventory;
@@ -198,7 +198,7 @@ public abstract partial class SharedCMSurgerySystem
             return;
         }
 
-        if (!CanPerformStep(user, body, part.Comp.PartType, step, true, out _, out _, out var validTools))
+        if (!CanPerformStep(user, body, part.Comp.Category, step, true, out _, out _, out var validTools))
             return;
 
         if (_net.IsServer && validTools?.Count > 0)
@@ -283,18 +283,16 @@ public abstract partial class SharedCMSurgerySystem
         return true;
     }
 
-    public bool CanPerformStep(EntityUid user, EntityUid body, BodyPartType part, EntityUid step, bool doPopup, out string? popup, out StepInvalidReason reason, out HashSet<EntityUid>? validTools)
+    public bool CanPerformStep(EntityUid user, EntityUid body, ProtoId<OrganCategoryPrototype>? part, EntityUid step, bool doPopup, out string? popup, out StepInvalidReason reason, out HashSet<EntityUid>? validTools)
     {
-        var slot = part switch
+        var slot = part?.Id switch
         {
-            BodyPartType.Head => SlotFlags.HEAD,
-            BodyPartType.Torso => SlotFlags.OUTERCLOTHING | SlotFlags.INNERCLOTHING,
-            BodyPartType.Arm => SlotFlags.OUTERCLOTHING | SlotFlags.INNERCLOTHING,
-            BodyPartType.Hand => SlotFlags.GLOVES,
-            BodyPartType.Leg => SlotFlags.OUTERCLOTHING | SlotFlags.LEGS,
-            BodyPartType.Foot => SlotFlags.FEET,
-            BodyPartType.Tail => SlotFlags.NONE,
-            BodyPartType.Other => SlotFlags.NONE,
+            "Head" => SlotFlags.HEAD,
+            "Torso" => SlotFlags.OUTERCLOTHING | SlotFlags.INNERCLOTHING,
+            "ArmLeft" or "ArmRight" => SlotFlags.OUTERCLOTHING | SlotFlags.INNERCLOTHING,
+            "HandLeft" or "HandRight" => SlotFlags.GLOVES,
+            "LegLeft" or "LegRight" => SlotFlags.OUTERCLOTHING | SlotFlags.LEGS,
+            "FootLeft" or "FootRight" => SlotFlags.FEET,
             _ => SlotFlags.NONE
         };
 
@@ -316,7 +314,7 @@ public abstract partial class SharedCMSurgerySystem
         return true;
     }
 
-    public bool CanPerformStep(EntityUid user, EntityUid body, BodyPartType part, EntityUid step, bool doPopup)
+    public bool CanPerformStep(EntityUid user, EntityUid body, ProtoId<OrganCategoryPrototype>? part, EntityUid step, bool doPopup)
     {
         return CanPerformStep(user, body, part, step, doPopup, out _, out _, out _);
     }

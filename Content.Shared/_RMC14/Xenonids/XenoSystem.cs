@@ -27,7 +27,7 @@ using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Access.Components;
 using Content.Shared.Actions;
 using Content.Shared.Atmos;
-using Content.Shared.Body.Events;
+using Content.Shared.Gibbing;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Chat;
 using Content.Shared.CombatMode;
