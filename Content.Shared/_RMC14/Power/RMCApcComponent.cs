@@ -1,6 +1,6 @@
 ﻿using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Access;
-using Content.Shared.PowerCell;
+using Content.Shared.PowerCell.Components;
 using Content.Shared.Tools;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
