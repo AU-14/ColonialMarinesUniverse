@@ -5,6 +5,7 @@ using Content.Shared.Weapons.Misc;
 using Content.Shared.Whitelist;
 using JetBrains.Annotations;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Network;
 using Robust.Shared.Timing;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;

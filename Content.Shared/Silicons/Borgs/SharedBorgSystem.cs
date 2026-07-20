@@ -7,6 +7,7 @@ using Content.Shared.Gibbing;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
+using Content.Shared.Item.ItemToggle;
 using Content.Shared.Light;
 using Content.Shared.Light.Components;
 using Content.Shared.Mind;

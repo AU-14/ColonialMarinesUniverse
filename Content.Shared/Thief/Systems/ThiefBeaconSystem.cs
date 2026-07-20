@@ -18,7 +18,7 @@ public sealed partial class ThiefBeaconSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
     [Dependency] private SharedRoleSystem _roles = default!;
     public override void Initialize()
     {
