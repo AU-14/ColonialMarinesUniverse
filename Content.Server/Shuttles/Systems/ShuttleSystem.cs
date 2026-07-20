@@ -40,7 +40,7 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
     [Dependency] private IPrototypeManager _protoManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private BiomeSystem _biomes = default!;
-    [Dependency] private BodySystem _bobby = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
     [Dependency] private BuckleSystem _buckle = default!;
     [Dependency] private DamageableSystem _damageSys = default!;
     [Dependency] private DockingSystem _dockSystem = default!;

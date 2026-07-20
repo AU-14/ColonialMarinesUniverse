@@ -1,11 +1,8 @@
-﻿using System.Linq;
-using Content.Server.Administration;
-using Content.Server.Body.Systems;
+﻿using Content.Server.Administration;
 using Content.Server.Cargo.Components;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Administration;
 using Content.Shared.Cargo;
-using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Materials;
@@ -29,7 +26,7 @@ public sealed partial class PricingSystem : EntitySystem
 {
     [Dependency] private IConsoleHost _consoleHost = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
-    [Dependency] private BodySystem _bodySystem = default!;
+    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private MobStateSystem _mobStateSystem = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
 
@@ -109,11 +106,15 @@ public sealed partial class PricingSystem : EntitySystem
             var modifier = _random.NextDouble();
             switch (entity.Comp.PricingCurve)
             {
-                if (!_prototypeManager.TryIndexReagent<ReagentPrototype>(reagent.Prototype, out var reagentProto))
-                    continue;
-
-                // TODO check ReagentData for price information?
-                price += (float) quantity * reagentProto.PricePerUnit;
+                default:
+                case RandomPricingCurve.Linear:
+                    break;
+                case RandomPricingCurve.Squared:
+                    modifier = modifier * modifier;
+                    break;
+                case RandomPricingCurve.Cubed:
+                    modifier = modifier * modifier * modifier;
+                    break;
             }
 
             entity.Comp.RandomPrice = modifier * entity.Comp.MaxRandomPrice;
@@ -126,19 +127,7 @@ public sealed partial class PricingSystem : EntitySystem
         if (args.Handled)
             return;
 
-        foreach (var (_, prototype) in _solutionContainerSystem.EnumerateSolutions(component))
-        {
-            foreach (var (reagent, quantity) in prototype.Contents)
-            {
-                if (!_prototypeManager.TryIndexReagent<ReagentPrototype>(reagent.Prototype, out var reagentProto))
-                    continue;
-
-                // TODO check ReagentData for price information?
-                price += (float) quantity * reagentProto.PricePerUnit;
-            }
-        }
-
-        return price;
+        args.Price += entity.Comp.RandomPrice ?? 0;
     }
 
     private double GetMaterialPrice(PhysicalCompositionComponent component)
@@ -297,7 +286,7 @@ public sealed partial class PricingSystem : EntitySystem
             var solution = soln.Comp.Solution;
             foreach (var (reagent, quantity) in solution.Contents)
             {
-                if (!ProtoMan.TryIndex<ReagentPrototype>(reagent.Prototype, out var reagentProto))
+                if (!_prototypeManager.TryIndexReagent<ReagentPrototype>(reagent.Prototype, out var reagentProto))
                     continue;
 
                 // TODO check ReagentData for price information?
@@ -319,7 +308,7 @@ public sealed partial class PricingSystem : EntitySystem
         {
             foreach (var (reagent, quantity) in solution.Contents)
             {
-                if (!ProtoMan.TryIndex<ReagentPrototype>(reagent.Prototype, out var reagentProto))
+                if (!_prototypeManager.TryIndexReagent<ReagentPrototype>(reagent.Prototype, out var reagentProto))
                     continue;
 
                 // TODO check ReagentData for price information?

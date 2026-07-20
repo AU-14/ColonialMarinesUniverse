@@ -45,7 +45,6 @@ namespace Content.Server.Kitchen.EntitySystems
 {
     public sealed partial class MicrowaveSystem : EntitySystem
     {
-        [Dependency] private BodySystem _bodySystem = default!;
         [Dependency] private DeviceLinkSystem _deviceLink = default!;
         [Dependency] private SharedPopupSystem _popupSystem = default!;
         [Dependency] private PowerReceiverSystem _power = default!;

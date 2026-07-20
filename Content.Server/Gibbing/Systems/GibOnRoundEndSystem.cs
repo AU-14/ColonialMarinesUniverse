@@ -7,7 +7,7 @@ using Content.Shared.Gibbing;
 namespace Content.Server.Gibbing.Systems;
 public sealed partial class GibOnRoundEndSystem : EntitySystem
 {
-    [Dependency] private BodySystem _body = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
     [Dependency] private SharedMindSystem _mind = default!;
     [Dependency] private SharedObjectivesSystem _objectives = default!;
 

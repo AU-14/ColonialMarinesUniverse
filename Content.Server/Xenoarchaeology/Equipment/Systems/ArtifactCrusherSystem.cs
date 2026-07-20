@@ -12,12 +12,9 @@ namespace Content.Server.Xenoarchaeology.Equipment.Systems;
 /// <inheritdoc/>
 public sealed partial class ArtifactCrusherSystem : SharedArtifactCrusherSystem
 {
-    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private BodySystem _body = default!;
-    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
     [Dependency] private StackSystem _stack = default!;
-    [Dependency] private PopupSystem _popup = default!;
     [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
 
     // TODO: Move to shared once StackSystem spawning is in Shared and we have RandomPredicted

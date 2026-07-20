@@ -23,7 +23,7 @@ public sealed partial class InnerBodyAnomalySystem : SharedInnerBodyAnomalySyste
     [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private AnomalySystem _anomaly = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private BodySystem _body = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private ISharedPlayerManager _player = default!;
     [Dependency] private EntityWhitelistSystem _whitelist = default!;

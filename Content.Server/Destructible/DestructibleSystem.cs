@@ -27,24 +27,47 @@ namespace Content.Server.Destructible;
 [UsedImplicitly]
 public sealed partial class DestructibleSystem : SharedDestructibleSystem
 {
-    [UsedImplicitly]
-    public sealed partial class DestructibleSystem : SharedDestructibleSystem
-    {
-        [Dependency] public IRobustRandom Random = default!;
-        public new IEntityManager EntityManager => base.EntityManager;
+    [Dependency] public IAdminLogManager AdminLogger = default!;
+    [Dependency] public IRobustRandom Random = default!;
+    public new IEntityManager EntityManager => base.EntityManager;
+    public IPrototypeManager PrototypeManager => ProtoMan;
 
-        [Dependency] public AtmosphereSystem AtmosphereSystem = default!;
-        [Dependency] public AudioSystem AudioSystem = default!;
-        [Dependency] public BodySystem BodySystem = default!;
-        [Dependency] public ConstructionSystem ConstructionSystem = default!;
-        [Dependency] public ExplosionSystem ExplosionSystem = default!;
-        [Dependency] public StackSystem StackSystem = default!;
-        [Dependency] public TriggerSystem TriggerSystem = default!;
-        [Dependency] public SharedSolutionContainerSystem SolutionContainerSystem = default!;
-        [Dependency] public PuddleSystem PuddleSystem = default!;
-        [Dependency] public SharedContainerSystem ContainerSystem = default!;
-        [Dependency] public IPrototypeManager PrototypeManager = default!;
-        [Dependency] public IAdminLogManager _adminLogger = default!;
+    [Dependency] public AtmosphereSystem AtmosphereSystem = default!;
+    [Dependency] public ConstructionSystem ConstructionSystem = default!;
+    [Dependency] public ExplosionSystem ExplosionSystem = default!;
+    [Dependency] public GibbingSystem Gibbing = default!;
+    [Dependency] public PuddleSystem PuddleSystem = default!;
+    [Dependency] public SharedContainerSystem ContainerSystem = default!;
+    [Dependency] public SharedSolutionContainerSystem SolutionContainerSystem = default!;
+    [Dependency] public StackSystem StackSystem = default!;
+    [Dependency] public TriggerSystem TriggerSystem = default!;
+
+    /// <summary>
+    /// Minimum damage to invoke overkill behavior.
+    /// </summary>
+    private const int MinimumOverkill = 100;
+
+    /// <summary>
+    /// Multiplier over normal damage to invoke overkill.
+    /// </summary>
+    private const double OverkillMultiplier = 2.0;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        SubscribeLocalEvent<DestructibleComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<DestructibleComponent, DamageChangedEvent>(OnDamageChanged);
+    }
+
+    /// <summary>
+    /// Map Initialization function for <see cref="DestructibleComponent"/>, adding automatic overkill threshold.
+    /// </summary>
+    /// <param name="entity">The uid, component tuple.</param>
+    /// <param name="args">The event arguments.</param>
+    private void OnMapInit(Entity<DestructibleComponent> entity, ref MapInitEvent args)
+    {
+        AddOverkillThreshold(entity);
+    }
 
     /// <summary>
     /// Check if any thresholds were reached. if they were, execute them.
