@@ -18,6 +18,7 @@ using Content.Shared.Damage;
 using Content.Shared.Drugs;
 using Content.Shared.Drunk;
 using Content.Shared.Eye.Blinding.Components;
+using Content.Shared.Eye.Blinding.Systems;
 using Content.Shared.Jittering;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
@@ -36,6 +37,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using NewStatusEffectsSystem = Content.Shared.StatusEffectNew.StatusEffectsSystem;
 
 namespace Content.Shared._RMC14.Xenonids.Neurotoxin;
 
@@ -49,6 +51,7 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private NewStatusEffectsSystem _newStatusEffects = default!;
     [Dependency] private SharedSlurredSystem _slurred = default!;
     [Dependency] private SharedStutteringSystem _stutter = default!;
     [Dependency] private RMCDazedSystem _daze = default!;
@@ -358,7 +361,7 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
 
         if (neurotoxin.NeurotoxinAmount >= 20)
         {
-            _statusEffects.TryAddStatusEffect<TemporaryBlindnessComponent>(victim, "TemporaryBlindness", neurotoxin.BlindTime, true);
+            _newStatusEffects.TryUpdateStatusEffectDuration(victim, BlindnessSystem.BlindingStatusEffect, neurotoxin.BlindTime);
         }
 
         if (neurotoxin.NeurotoxinAmount >= 27)
