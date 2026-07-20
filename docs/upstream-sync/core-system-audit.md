@@ -2307,3 +2307,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Administration/Systems/AdminVerbSystem.Smites.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static flow review confirms the victim keeps physics through `SetMapCoordinates` and tabletop dragging, while the smite still enables godmode, adds tabletop drag state, creates a board session, and resets rotation. Compilation plus smiting, dragging, returning, and RMC movement-state cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: None.
+
+## CS-0168 — Open imported content files read-only
+
+- Upstream: [space-wizards/space-station-14#37779](https://github.com/space-wizards/space-station-14/pull/37779), `52430df55f20578817df29638752debb219a4a0d`, 2025-09-29
+- Areas: Interactions
+- Status: Adapted
+- Risk: Low
+- Behavior/API delta: Fax text, MIDI instruments, character-profile imports, and RMC cassette audio now request read-only streams from the platform file picker instead of accepting its read/write default.
+- RMC/CMU divergence: Upstream has three consumers; CMU adds the RMC cassette OGG importer, which also only reads its selected stream and therefore receives the same explicit access mode. File parsing, size limits, and UI flow are unchanged.
+- Decision and rationale: Pass `FileAccess.Read` at every content-side import call site. None of these paths writes to the selected file, and unnecessarily requesting write access can reject otherwise readable files or grant broader handles than the operation needs.
+- Files changed: the fax, instrument, profile-editor, and RMC cassette client importers plus `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static call-site review confirms all four selected streams are only read and the pinned RobustToolbox file-dialog API supports explicit `FileAccess.Read`; no content-side `OpenFile` call remains on the default access mode. Client compilation and importing read-only TXT, MIDI, YAML, and OGG files are queued for the index-1999 checkpoint.
+- Follow-up/debt: Recheck new file-dialog consumers as later upstream and RMC changes are ported.

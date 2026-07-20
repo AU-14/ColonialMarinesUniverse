@@ -1,3 +1,4 @@
+using System.IO;
 using Content.Shared._RMC14.Cassette;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared.GameTicking;
@@ -109,7 +110,7 @@ public sealed partial class CassetteSystem : SharedCassetteSystem
                 return;
 
             var filters = new FileDialogFilters(new FileDialogFilters.Group("ogg"));
-            await using var file = await _dialogs.OpenFile(filters);
+            await using var file = await _dialogs.OpenFile(filters, FileAccess.Read);
             if (file == null)
                 return;
 
