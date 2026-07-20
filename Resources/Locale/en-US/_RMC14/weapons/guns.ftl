@@ -62,6 +62,7 @@ gun-ballistic-cycle-delayed = You begin unloading {CAPITALIZE(THE($entity))}. Ho
 gun-ballistic-cycle-delayed-cancelled = You stop unloading {CAPITALIZE(THE($entity))}.
 gun-ballistic-cycle-delayed-empty = {CAPITALIZE(THE($entity))} is already unloaded.
 gun-ballistic-transfer-cancelled = Your reload was interrupted!
+gun-ballistic-transfer-primed = You can't load a primed {$ammoEntity}!
 
 rmc-gun-stacks-hit-single = Bullseye!
 rmc-gun-stacks-hit-multiple = Bullseye! {$hits} hits in a row!

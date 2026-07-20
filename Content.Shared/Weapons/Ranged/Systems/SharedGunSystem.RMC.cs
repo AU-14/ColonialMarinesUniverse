@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Emplacements;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.DoAfter;
+using Content.Shared.Trigger.Components;
 using Content.Shared.Weapons.Ranged.Components;
 
 namespace Content.Shared.Weapons.Ranged.Systems;
@@ -93,6 +94,15 @@ public abstract partial class SharedGunSystem
         EntityUid weapon,
         TimeSpan insertDelay)
     {
+        if (HasComp<ActiveTimerTriggerComponent>(ammo))
+        {
+            PopupSystem.PopupEntity(
+                Loc.GetString("gun-ballistic-transfer-primed", ("ammoEntity", ammo)),
+                providerUid,
+                loader);
+            return false;
+        }
+
         if (!CanInsertBallistic((providerUid, provider), ammo))
             return false;
 
