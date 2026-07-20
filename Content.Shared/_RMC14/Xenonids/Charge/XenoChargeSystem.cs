@@ -15,6 +15,7 @@ using Content.Shared.Effects;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Movement.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
@@ -38,6 +39,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MovementModStatusSystem _movementStatus = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
@@ -101,7 +103,12 @@ public sealed partial class XenoChargeSystem : EntitySystem
             Hidden = true,
         };
 
-        _stun.TrySlowdown(xeno, TimeSpan.FromSeconds(1.75f), false, 0f, 0f);
+        _movementStatus.TryAddMovementSpeedModDuration(
+            xeno,
+            MovementModStatusSystem.TaserSlowdown,
+            TimeSpan.FromSeconds(1.75f),
+            0f,
+            0f);
         _doAfter.TryStartDoAfter(doAfter);
     }
 

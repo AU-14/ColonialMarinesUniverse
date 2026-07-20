@@ -8,6 +8,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.Effects;
 using Content.Shared.Interaction;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
 using Robust.Shared.Audio.Systems;
@@ -23,6 +24,7 @@ public sealed partial class XenoEviscerateSystem : EntitySystem
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private INetManager _net = default!;
+    [Dependency] private MovementModStatusSystem _movementStatus = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private SharedXenoHealSystem _xenoHeal = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -61,7 +63,7 @@ public sealed partial class XenoEviscerateSystem : EntitySystem
         {
             BreakOnMove = true,
             Hidden = true,
-            RootEntity =  true,
+            RootEntity = true,
             MovementThreshold = 0.5f,
         };
 
@@ -69,7 +71,12 @@ public sealed partial class XenoEviscerateSystem : EntitySystem
         {
             args.Handled = true;
 
-            _stun.TrySlowdown(xeno, windupTime, false, 0f, 0f);
+            _movementStatus.TryAddMovementSpeedModDuration(
+                xeno,
+                MovementModStatusSystem.TaserSlowdown,
+                windupTime,
+                0f,
+                0f);
             _rage.IncrementRage(xeno.Owner, -1);
 
             if (rage > 1)

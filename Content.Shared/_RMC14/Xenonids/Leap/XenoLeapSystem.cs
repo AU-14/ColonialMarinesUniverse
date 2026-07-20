@@ -36,6 +36,7 @@ using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Pulling.Events;
 using Content.Shared.Standing;
+using Content.Shared.StatusEffectNew;
 using Content.Shared.Stunnable;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Audio;
@@ -60,13 +61,14 @@ public sealed partial class XenoLeapSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
-    [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private MovementModStatusSystem _movementStatus = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedRMCLagCompensationSystem _rmcLagCompensation = default!;
     [Dependency] private RMCPullingSystem _rmcPulling = default!;
     [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -262,11 +264,7 @@ public sealed partial class XenoLeapSystem : EntitySystem
             if (!_xeno.CanAbilityAttackTarget(xeno, entity))
                 return;
 
-            if (TryComp<SlowedDownComponent>(xeno, out var root) && root.SprintSpeedModifier == 0f)
-            {
-                RemComp<SlowedDownComponent>(xeno);
-                _movementSpeed.RefreshMovementSpeedModifiers(xeno.Owner);
-            }
+            _statusEffects.TryRemoveStatusEffect(xeno, MovementModStatusSystem.TaserSlowdown);
 
             xeno.Comp.LastHit = null;
             xeno.Comp.LastHitAt = null;
@@ -571,7 +569,12 @@ public sealed partial class XenoLeapSystem : EntitySystem
             victim.RecoverAt = _timing.CurTime + xeno.Comp.ParalyzeTime;
             Dirty(target, victim);
 
-            _stun.TrySlowdown(xeno, xeno.Comp.MoveDelayTime, true, 0f, 0f);
+            _movementStatus.TryUpdateMovementSpeedModDuration(
+                xeno,
+                MovementModStatusSystem.TaserSlowdown,
+                xeno.Comp.MoveDelayTime,
+                0f,
+                0f);
 
             if (_net.IsServer)
                 _stun.TryParalyze(target, _xeno.TryApplyXenoDebuffMultiplier(target, xeno.Comp.ParalyzeTime), true);

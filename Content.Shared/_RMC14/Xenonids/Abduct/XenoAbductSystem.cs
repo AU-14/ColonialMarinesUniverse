@@ -12,9 +12,10 @@ using Content.Shared.Actions.Components;
 using Content.Shared.Coordinates;
 using Content.Shared.DoAfter;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Standing;
-using Content.Shared.StatusEffect;
+using Content.Shared.StatusEffectNew;
 using Content.Shared.Stunnable;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -33,6 +34,7 @@ public sealed partial class XenoAbductSystem : EntitySystem
     [Dependency] private LineSystem _line = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private MobStateSystem _mob = default!;
+    [Dependency] private MovementModStatusSystem _movementStatus = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private XenoPlasmaSystem _plasma = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -93,7 +95,12 @@ public sealed partial class XenoAbductSystem : EntitySystem
 
         if (_doafter.TryStartDoAfter(doAfter))
         {
-            _stun.TrySlowdown(xeno, xeno.Comp.DoafterTime, false, 0f, 0f);
+            _movementStatus.TryAddMovementSpeedModDuration(
+                xeno,
+                MovementModStatusSystem.TaserSlowdown,
+                xeno.Comp.DoafterTime,
+                0f,
+                0f);
 
             if (_net.IsClient)
                 return;
@@ -116,7 +123,7 @@ public sealed partial class XenoAbductSystem : EntitySystem
             CleanUpTiles(xeno);
 
             DoCooldown(xeno);
-            _status.TryRemoveStatusEffect(xeno, "SlowedDown");
+            _status.TryRemoveStatusEffect(xeno, MovementModStatusSystem.TaserSlowdown);
             return;
         }
 
