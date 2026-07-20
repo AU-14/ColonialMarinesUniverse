@@ -2203,3 +2203,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Locale/en-US/prototypes/roles/antags.ftl` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static localization review confirms the existing role key resolves to the new text. Fluent parsing and nuclear-operative role prototype resolution are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None.
+
+## CS-0161 — Correct standalone fire-helmet temperature protection
+
+- Upstream: [space-wizards/space-station-14#40481](https://github.com/space-wizards/space-station-14/pull/40481), `3f575a64f3ff0fbcaa308ad55670c76ec7b2a5d8`, 2025-09-23
+- Areas: Medical, Physics
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: A regular fire helmet now passes through half of environmental heating and an atmos fire helmet passes through thirty percent; both cool at eighty percent of the unprotected rate. Wearing only a helmet no longer almost freezes body temperature while the wearer burns.
+- RMC/CMU divergence: The values apply only to retained upstream fire helmets. RMC firefighter helmets use separate prototypes and CM armor behavior and are not changed.
+- Decision and rationale: Port the tested upstream coefficients as one balance correction while preserving each helmet's existing fire-damage and pressure protection.
+- Files changed: `Resources/Prototypes/Entities/Clothing/Head/helmets.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static resolved-prototype review confirms regular/atmos coefficients are `0.5/0.8` and `0.3/0.8`, respectively. Prototype loading plus burning-temperature comparisons for helmet-only and full-suit wear are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None.
