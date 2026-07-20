@@ -3062,3 +3062,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Mobs/NPCs/simplemob.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static inheritance review confirms `RMCSimpleMob` and standard simple-mob families derive from the changed base, the blindness systems are component-gated, and no status or threshold data changed. YAML/prototype validation plus flash, temporary/permanent blindness, eye damage/healing, blindfold, UI vision gate, player-controlled NPC, AI, robotic simple mob, RMC simple mob, species, and xeno cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1959 as `Ported (CS-0225)` when wave 0010 is committed; prototype-specific opt-outs can remove `Blindable` if a genuinely sightless simple-mob family is identified.
+
+## CS-0226 — Remove the reagent-dispenser base resale price
+
+- Upstream: [space-wizards/space-station-14#41756](https://github.com/space-wizards/space-station-14/pull/41756), `6f5e6445b6c65d15300b5e5098cda64abc295931`, 2025-12-13
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `ReagentDispenserBase` no longer contributes a fixed 1,000-credit `StaticPrice`. Constructed dispensers therefore cannot duplicate value by being sold or deconstructed while child prototypes remain free to declare intentional prices.
+- RMC/CMU divergence: CMU retains the standard dispenser construction, storage, and cargo-pricing components alongside RMC chemistry content. No RMC override depends on the inherited base price, and explicit prices on unrelated RMC medical containers and machines are unchanged.
+- Decision and rationale: Port the target-final two-line removal exactly. A price on the abstract reusable base rewards the completed structure independently of its materials and creates an economy arbitrage path; removing only that inherited component preserves dispenser operation and explicit child pricing.
+- Files changed: `Resources/Prototypes/Entities/Structures/Dispensers/base_structuredispensers.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype review confirms the only behavioral delta is removal of the base `StaticPrice`, while power, UI, storage, construction, wires, and deconstruction containers are unchanged. YAML/prototype validation, solution compilation, and the full integration suite are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1986 as `Ported (CS-0226)` when wave 0010 is committed; review the separate five-bounty reward corrections at index 1995 against CMU economy policy.
