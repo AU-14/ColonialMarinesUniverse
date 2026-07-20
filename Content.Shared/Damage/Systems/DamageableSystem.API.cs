@@ -71,12 +71,16 @@ public sealed partial class DamageableSystem
         bool ignoreResistances = false,
         bool interruptsDoAfters = true,
         EntityUid? origin = null,
-        bool ignoreGlobalModifiers = false
+        bool ignoreGlobalModifiers = false,
+        EntityUid? tool = null,
+        int armorPiercing = 0,
+        bool shouldIgnoreClawLogic = false
     )
     {
         //! Empty just checks if the DamageSpecifier is _literally_ empty, as in, is internal dictionary of damage types is empty.
         // If you deal 0.0 of some damage type, Empty will be false!
-        return TryChangeDamage(ent, damage, out _, ignoreResistances, interruptsDoAfters, origin, ignoreGlobalModifiers);
+        return TryChangeDamage(ent, damage, out _, ignoreResistances, interruptsDoAfters, origin, ignoreGlobalModifiers,
+            tool, armorPiercing, shouldIgnoreClawLogic);
     }
 
     /// <summary>
@@ -97,12 +101,16 @@ public sealed partial class DamageableSystem
         bool ignoreResistances = false,
         bool interruptsDoAfters = true,
         EntityUid? origin = null,
-        bool ignoreGlobalModifiers = false
+        bool ignoreGlobalModifiers = false,
+        EntityUid? tool = null,
+        int armorPiercing = 0,
+        bool shouldIgnoreClawLogic = false
     )
     {
         //! Empty just checks if the DamageSpecifier is _literally_ empty, as in, is internal dictionary of damage types is empty.
         // If you deal 0.0 of some damage type, Empty will be false!
-        newDamage = ChangeDamage(ent, damage, ignoreResistances, interruptsDoAfters, origin, ignoreGlobalModifiers);
+        newDamage = ChangeDamage(ent, damage, ignoreResistances, interruptsDoAfters, origin, ignoreGlobalModifiers,
+            tool, armorPiercing, shouldIgnoreClawLogic);
         return !newDamage.Empty;
     }
 
@@ -123,7 +131,10 @@ public sealed partial class DamageableSystem
         bool ignoreResistances = false,
         bool interruptsDoAfters = true,
         EntityUid? origin = null,
-        bool ignoreGlobalModifiers = false
+        bool ignoreGlobalModifiers = false,
+        EntityUid? tool = null,
+        int armorPiercing = 0,
+        bool shouldIgnoreClawLogic = false
     )
     {
         var damageDone = new DamageSpecifier();
@@ -134,7 +145,7 @@ public sealed partial class DamageableSystem
         if (damage.Empty)
             return damageDone;
 
-        var before = new BeforeDamageChangedEvent(damage, origin);
+        var before = new BeforeDamageChangedEvent(damage, origin, tool);
         RaiseLocalEvent(ent, ref before);
 
         if (before.Cancelled)
@@ -148,7 +159,7 @@ public sealed partial class DamageableSystem
 
             // TODO DAMAGE
             // byref struct event.
-            var ev = new DamageModifyEvent(damage, origin);
+            var ev = new DamageModifyEvent(damage, origin, tool, armorPiercing, shouldIgnoreClawLogic);
             RaiseLocalEvent(ent, ev);
             damage = ev.Damage;
 
@@ -156,10 +167,17 @@ public sealed partial class DamageableSystem
                 return damageDone;
         }
 
+        var afterResist = new DamageModifyAfterResistEvent(damage, origin, tool);
+        RaiseLocalEvent(ent, afterResist);
+        damage = afterResist.Damage;
+
+        if (damage.Empty)
+            return damageDone;
+
         if (!ignoreGlobalModifiers)
             damage = ApplyUniversalAllModifiers(damage);
 
-        var evt = new DamageDealtEvent(damage, origin, interruptsDoAfters);
+        var evt = new DamageDealtEvent(damage, origin, interruptsDoAfters, tool);
         RaiseLocalEvent(ent, ref evt);
 
         return damage;
