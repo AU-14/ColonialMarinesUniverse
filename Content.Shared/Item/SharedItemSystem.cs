@@ -108,6 +108,8 @@ public abstract partial class SharedItemSystem : EntitySystem
             return;
 
         args.Handled = _handsSystem.TryPickup(args.User, uid, null, animateUser: false);
+        if (args.Handled)
+            RaiseRmcItemPickedUp(uid, args.User);
     }
 
     private void AddPickupVerb(EntityUid uid, ItemComponent component, GetVerbsEvent<InteractionVerb> args)

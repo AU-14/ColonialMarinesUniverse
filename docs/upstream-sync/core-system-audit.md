@@ -3710,3 +3710,16 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - Files changed: `Content.Shared/Construction/EntitySystems/AnchorableSystem.cs`, `Content.Shared/_RMC14/Construction/Anchored/AnchorableSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation evidence: Repository-wide event-pair review found one retained producer contract and one `WeaponMountComponent` consumer; the pre-fix producer was absent. Static flow review confirms both collision checks now evaluate the same per-obstruction event and that the default remains blocked. Shared targeted compilation succeeded with 0 errors and 6 unrelated baseline warnings; runtime tests remain deferred until the 1,000-upstream-commit checkpoint.
 - Remaining debt: Runtime coverage must deploy a weapon mount over a barricade, reject it over another hard obstruction, recheck after the tool delay when occupancy changes, and confirm ordinary anchorables still reject barricades.
+
+## CS-0271 - Restore the RMC direct-pickup lifecycle event
+
+- Upstreams compared: live SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767`, live RMC `b6d677947dd8ebcb06194a66798938645fed5a54`, and current CMU.
+- Areas: Interactions, Hands, Prediction, Item presentation
+- Classification: Missing -> Adapted
+- Risk: Medium before the fix; low after it.
+- Behavior/API delta: The retained broadcast `ItemPickedUpEvent` had live client and shared consumers, but current `SharedItemSystem.OnHandInteract` only assigned the result of `TryPickup` and no longer raised the event after a successful direct world interaction. The client pickup timer never started and fork items with a stored world-sprite offset never reset that offset when picked up through this path.
+- RMC/CMU divergence: The event is raised only after the same direct `InteractHandEvent` pickup that old RMC covered. Programmatic hand insertion, pickup verbs, inventory transfers, and failed interactions do not gain a new notification, so current SS14 hand/container authority and prediction breadth remain unchanged.
+- Decision and rationale: Keep current `SharedHandsSystem.TryPickup` as the sole state mutation and call a fork-owned event helper only when it succeeds. This restores the historical event timing without introducing a parallel pickup implementation or raising success before the hand container accepts the item.
+- Files changed: `Content.Shared/Item/SharedItemSystem.cs`, `Content.Shared/_RMC14/Hands/SharedItemSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation evidence: Exact producer/consumer review found no producer before this change, one local-player timing consumer, and one component-targeted sprite-offset consumer. The raise point matches old RMC's post-success branch and broadcasts against the picked-up item. `dotnet build Content.Shared/Content.Shared.csproj --configuration DebugOpt --no-restore --nologo --verbosity:minimal --disable-build-servers` succeeded with 0 errors and 6 unrelated warnings; tests remain deferred until the 1,000-upstream-commit checkpoint.
+- Remaining debt: The restored client timer is not yet consulted by current gun input; reconnect that veto separately. Pickup verbs and programmatic pickups intentionally retain current behavior unless playtest evidence requires a broader event contract.
