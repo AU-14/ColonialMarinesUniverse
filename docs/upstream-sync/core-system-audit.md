@@ -2008,3 +2008,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Movement/Systems/SharedMoverController.Input.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static event review confirms anchored transitions are ignored and unanchored movers receive the expected body type without changing fixtures or prediction ownership. Shared compilation plus chameleon projection, normal humanoid, relay mover, repeated anchor/unanchor, and client reconciliation cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Audit input-mover prototypes that intentionally require a non-kinematic unanchored body before broadening this rule further.
+
+## CS-0146 — Recharge limited-charge wizard wands
+
+- Upstream: [space-wizards/space-station-14#40347](https://github.com/space-wizards/space-station-14/pull/40347), `9c3af67cd1535c3d9060bc74ec14b5c712ed783b`, 2025-09-14
+- Areas: Shooting, Interactions
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: The wizard recharge spell now replenishes held wands backed by `LimitedChargesComponent` in addition to legacy ammo-provider wands, restoring recharge behavior for both current staff implementations.
+- RMC/CMU divergence: CMU retains RMC charge consumers and the same shared charge system. The new branch is limited to held items carrying the existing wizard-wand tag, and legacy entity-ammo providers keep precedence.
+- Decision and rationale: Resolve the tagged wand first, update legacy ammo when available, then fall back to `SharedChargesSystem.AddCharges`; this preserves existing behavior while supporting the retained wand architecture.
+- Files changed: `Content.Shared/Magic/SharedMagicSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static data-flow review confirms the action remains handled after prerequisites, null/no-provider wands remain no-ops, ammo wands use their old path, and limited charges respect the shared cap. Shared compilation plus both provider types, capped recharge, untagged item, and prediction cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a focused recharge-spell test covering mixed held items and both charge providers.
