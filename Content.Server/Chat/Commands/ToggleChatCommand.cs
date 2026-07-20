@@ -6,7 +6,7 @@ using Robust.Shared.Console;
 
 namespace Content.Server.Chat.Commands;
 
-[AdminCommand(AdminFlags.Server)]
+[AdminCommand(AdminFlags.Admin)] // RMC14
 public sealed partial class ToggleChatCommand : LocalizedCommands
 {
     [Dependency] private IConfigurationManager _configManager = default!;

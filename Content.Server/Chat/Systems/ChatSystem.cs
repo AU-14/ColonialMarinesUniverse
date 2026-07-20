@@ -1,4 +1,5 @@
 using System.Globalization;
+using Content.Server._RMC14.Emote;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
@@ -7,6 +8,7 @@ using Content.Server.Speech.EntitySystems;
 using Content.Server.Station.Systems;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Administration;
+using Content.Shared._RMC14.Voicelines;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Examine;
@@ -14,6 +16,7 @@ using Content.Shared.Ghost;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Players.RateLimiting;
 using Robust.Server.Player;
+using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Console;
@@ -45,6 +48,8 @@ public sealed partial class ChatSystem : SharedChatSystem
     [Dependency] private ReplacementAccentSystem _wordreplacement = default!;
     [Dependency] private ExamineSystemShared _examineSystem = default!;
     [Dependency] private EntityQuery<GhostHearingComponent> _ghostHearingQuery = default!;
+    [Dependency] private HumanoidVoicelinesSystem _humanoidVoicelines = default!;
+    [Dependency] private RMCEmoteSystem _rmcEmote = default!;
 
     private bool _loocEnabled = true;
     private bool _deadLoocEnabled;
@@ -117,6 +122,21 @@ public sealed partial class ChatSystem : SharedChatSystem
                     _configurationManager.SetCVar(CCVars.OocEnabled, true);
                 break;
         }
+    }
+
+    protected override bool CanUseChatEmote(EntityUid source)
+    {
+        return _rmcEmote.TryEmote(source);
+    }
+
+    protected override bool PlayEmoteSound(EntityUid uid, SoundSpecifier sound, AudioParams audioParams)
+    {
+        var filter = Filter.Pvs(uid).RemoveWhere(session => !_humanoidVoicelines.ShouldPlayEmote(uid, session));
+        if (filter.Count == 0)
+            return false;
+
+        _audio.PlayEntity(sound, filter, uid, true, audioParams);
+        return true;
     }
 
     /// <inheritdoc />

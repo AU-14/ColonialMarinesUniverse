@@ -156,9 +156,15 @@ public abstract partial class SharedChatSystem
 
         // optional override params > general params for all sounds in set > individual sound params
         var param = audioParams ?? proto.GeneralParams ?? sound.Params;
-        _audio.PlayPvs(sound, uid, param);
+        return PlayEmoteSound(uid, sound, param);
+    }
+
+    protected virtual bool PlayEmoteSound(EntityUid uid, SoundSpecifier sound, AudioParams audioParams)
+    {
+        _audio.PlayPvs(sound, uid, audioParams);
         return true;
     }
+
     /// <summary>
     /// Checks if a valid emote was typed, to play sounds and etc and invokes an event.
     /// </summary>
@@ -174,9 +180,18 @@ public abstract partial class SharedChatSystem
         if (!AllowedToUseEmote(source, emote))
             return true;
 
+        if (!CanUseChatEmote(source))
+            return false;
+
         return TryInvokeEmoteEvent(source, emote);
 
     }
+
+    protected virtual bool CanUseChatEmote(EntityUid source)
+    {
+        return true;
+    }
+
     /// <summary>
     /// Checks if we can use this emote based on the emotes whitelist, blacklist, and availability to the entity.
     /// </summary>
