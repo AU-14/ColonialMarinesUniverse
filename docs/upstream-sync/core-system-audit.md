@@ -1020,3 +1020,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Mobs/NPCs/carp.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the pinned target retains the tag on the base carp and the shared suicide system checks it before body death. Prototype loading and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Audit other returnable ghost-role creatures for consistent `CannotSuicide` tagging and add a mind/body suicide regression when the ghost test harness supports session transfer.
+
+## CS-0070 — Configure general-population access
+
+- Upstream: [space-wizards/space-station-14#39043](https://github.com/space-wizards/space-station-14/pull/39043), `1bc1d71d4253c93950736c2d18cda8a4d2d4f9b3`, 2025-07-18
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The standard access configurator can now assign both `GenpopEnter` and `GenpopLeave`, allowing authorized users to configure the two directional general-population permissions on supported doors.
+- RMC/CMU divergence: RMC defines additional access levels and devices but does not override the inherited standard configurator or these two security access prototypes. Universal/admin configurator behavior and RMC-specific access policy remain unchanged.
+- Decision and rationale: Port the two target-final allowlist entries to the normal configurator. This exposes already-defined access prototypes without widening privilege checks or teaching the tool every RMC access level implicitly.
+- Files changed: `Resources/Prototypes/Entities/Objects/Tools/access_configurator.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms both access prototypes resolve locally and the pinned target retains them in the configurator list. Prototype loading and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Define an explicit RMC configurator policy before adding any faction-specific access IDs; add a resolved allowlist test if access-prototype validation is not already covered by YAML linting.
