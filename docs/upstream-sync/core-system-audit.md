@@ -1917,3 +1917,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Inventory/VirtualItem/SharedVirtualItemSystem.cs`, `Content.Shared/Wieldable/SharedWieldableSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static call-site review confirms RMC and cuff/pulling callers retain popups, while wielding passes `silent: true` and still drops the item before creating virtual hands. Shared compilation plus wield success, failed allocation, multi-hand rollback, and default noisy-drop cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a predicted wield regression asserting exactly one user-facing popup when an occupied hand must be cleared.
+
+## CS-0139 — Localize crew-monitor map coordinates
+
+- Upstream: [space-wizards/space-station-14#40247](https://github.com/space-wizards/space-station-14/pull/40247), `da210e812b0c4d8af906090b5a6e59f950d54fd3`, 2025-09-09
+- Areas: Medical
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The focused crew-monitor nav-map label now formats its location through the `navmap-location` localization key instead of embedding the English `Location` label in client code.
+- RMC/CMU divergence: CMU retains the upstream crew-monitor nav-map control and RMC medical tracking does not override this label, so coordinate rounding and tracked-entity selection stay unchanged.
+- Decision and rationale: Port the retained localization seam and English fallback text together, leaving the separately hardcoded unknown-name fallback for its own localization pass.
+- Files changed: `Content.Client/Medical/CrewMonitoring/CrewMonitoringNavMapControl.cs`, `Resources/Locale/en-US/ui/navmap.ftl`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms both rounded coordinates are passed as Fluent arguments and the message retains its name/newline layout. Client compilation and localization loading are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Localize the `Unknown` tracked-name fallback when its target-final replacement is reached.
