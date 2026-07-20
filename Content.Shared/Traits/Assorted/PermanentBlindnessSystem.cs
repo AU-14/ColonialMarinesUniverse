@@ -38,6 +38,11 @@ public sealed partial class PermanentBlindnessSystem : EntitySystem
         {
             _blinding.SetMinDamage((blindness.Owner, blindable), 0);
         }
+
+        // Heal all eye damage when the component is removed.
+        // Otherwise you would still be blind, but not permanently blind, and would have to heal it with oculine.
+        // This is needed for changelings that transform from a blind player to a non-blind one.
+        _blinding.AdjustEyeDamage((blindness.Owner, blindable), -blindable.EyeDamage);
     }
 
     private void OnMapInit(Entity<PermanentBlindnessComponent> blindness, ref MapInitEvent args)

@@ -2607,3 +2607,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Mobs/NPCs/animals.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static inheritance review confirms the component is added only to `MobGorilla`, uses an established local data contract, and does not change its faction, HTN, damage, or movement values. Prototype loading plus pull start, movement, release, incapacitation, and AI cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1147 as `Ported (CS-0190)` when wave 0006 is committed.
+
+## CS-0191 — Clear residual blindness when its permanent source is removed
+
+- Upstream: [space-wizards/space-station-14#40517](https://github.com/space-wizards/space-station-14/pull/40517), `8e3243a15648077aad082d5fc299e71d5267defe`, 2025-10-09
+- Areas: Medical, Gamerules
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: Removing `PermanentBlindnessComponent` now clears both its minimum eye-damage floor and the accumulated eye damage. Changelings transforming away from a blind form no longer remain ordinarily blind and require oculine despite losing the permanent-blindness source.
+- RMC/CMU divergence: No RMC prototype or system directly uses `PermanentBlindnessComponent`; RMC eye damage, vision, and medical reagents remain unchanged. Standard trait removal and any future component-removal path receive the same cleanup.
+- Decision and rationale: Port only the retained medical cleanup call and explanatory context, leaving unrelated formatting and dependency changes out. Resetting the minimum alone removes permanence but preserves the damage that permanence forced to its maximum.
+- Files changed: `Content.Shared/Traits/Assorted/PermanentBlindnessSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static shutdown-flow review confirms the cleanup runs only when the blindness component is removed and a `BlindableComponent` remains, after lowering its minimum damage. Shared compilation plus blind-form transformation, direct trait removal, normal eye damage, and oculine cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1205 as `Ported (CS-0191)` when wave 0007 is committed.
