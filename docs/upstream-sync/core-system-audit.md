@@ -3483,10 +3483,10 @@ Date recorded: 2026-07-20
 This is a non-audit checkpoint for the direct fast-port. It does not add per-commit
 entries or claim deeper behavioral parity.
 
-- SS14 target: `b2c5ac13dd4fbf8dd0bc56b896220619cd24aa11`.
-- Direct merge commit: `3376262730`.
+- SS14 target: `fbb3c79b2d206eede2210fbbf5ca1c237c262767`.
+- Direct merge commits: `3376262730`, `a3f7de91f5`.
 - RobustToolbox remains untouched at `7bfa10ec04bfc8f00956419609bd6ec370f9bbac`.
-- Integrated range: 3,850 SS14 first-parent commits; the target is an ancestor of the current branch.
+- Integrated range: 3,853 SS14 first-parent commits; the target is an ancestor of the current branch.
 
 | Area | Implemented or deferred semantic note |
 | --- | --- |
@@ -3494,11 +3494,11 @@ entries or claim deeper behavioral parity.
 | Shooting | Prediction can return an empty projectile list; assisted reload is immediate; legacy vehicle and attachable lookup is not retained. |
 | Medical | Fork code uses current damage, battery, body-organ, entity-storage, defibrillator, and cryostorage APIs; synth brains now use the flat organ container. |
 | Chemistry | Medicine solution handling moved to `Bloodstream`; transfers, injectors, and blood regulation use current solution APIs. |
-| Interactions | Legacy lag-compensation and user-aware storage prechecks are not retained; dynamic alert text remains deferred. |
+| Interactions | Legacy lag-compensation and user-aware storage prechecks are not retained; dynamic alert text remains deferred. The removed upstream gateway system has no remaining RMC/CMU references. |
 | Physics | Fork code uses current collision and projectile APIs; deeper behavior comparison is deferred. |
 | GameTicking | The upstream base is aligned; deeper game-ticking behavior comparison is deferred. |
 | Gamerules | The Distress start-attempt hook moved to a global event; mind roles and scuttle temperature use current components. Removed per-station job-slot scaling falls back to `RMCJobSlotScaling`. |
 
 Validation at this checkpoint: `Content.Shared`, `Content.Client`, `Content.Server`,
 and `Content.Server.Database` compile successfully with zero errors. Tests were not
-run because this port is at 850 of the 1,000-upstream-commit test checkpoint.
+run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
