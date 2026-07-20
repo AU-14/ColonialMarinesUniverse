@@ -1878,3 +1878,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Objectives/objectiveGroups.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype review confirms the referenced objective exists and its target steal group remains defined. Prototype loading and weighted objective selection are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None.
+
+## CS-0136 — Preserve the purchasing account on telepad orders
+
+- Upstream: [space-wizards/space-station-14#39975](https://github.com/space-wizards/space-station-14/pull/39975), `ed12c1d3f5607db906712e3a5d13d7342dec7fc0`, 2025-09-04
+- Areas: Interactions
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: When a cargo telepad fulfills a queued order, the spawned shipment label and receipt now use the account recorded on that order rather than whichever cargo console is currently linked to the telepad.
+- RMC/CMU divergence: CMU retains the upstream multi-account cargo order model and telepad loop. RMC cargo additions do not alter this fulfillment seam, and the linked console is still required to operate the pad.
+- Decision and rationale: Pass the order's authoritative account into `FulfillOrder`; using mutable console state could mislabel a queued purchase after relinking or when accounts differ.
+- Files changed: `Content.Server/Cargo/Systems/CargoSystem.Telepad.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static data-flow review confirms fulfillment, label creation, and receipt generation receive `currentOrder.Account`, while telepad linkage and queue removal remain unchanged. Server compilation plus a two-account telepad fulfillment case are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Audit shutdown recovery at the same telepad seam, which still supplies the linked console account to `TryFulfillOrder` in this older cargo implementation.
