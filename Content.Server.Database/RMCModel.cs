@@ -329,6 +329,187 @@ public partial class Profile
     public string XenoPostfix { get; set; } = string.Empty;
 }
 
+public partial class Player
+{
+    public RMCLinkedAccount? LinkedAccount { get; set; }
+    public RMCPatron? Patron { get; set; }
+    public RMCLinkingCodes? LinkingCodes { get; set; }
+    public List<RMCLinkedAccountLogs> LinkedAccountLogs { get; set; } = default!;
+    public List<RMCRoleTimerExclude> RoleTimerExcludes { get; set; } = default!;
+    public List<RMCCommendation> CommendationsGiven { get; set; } = default!;
+    public List<RMCCommendation> CommendationsReceived { get; set; } = default!;
+    public List<RMCCommendation> CommendationsDeleted { get; set; } = default!;
+    public RMCPlayerStats Stats { get; set; } = default!;
+    public List<RMCPlayerActionOrder> ActionOrder { get; set; } = default!;
+    public List<RMCChatBans> ChatBans { get; set; } = default!;
+    public List<RMCChatBans> AdminChatBansCreated { get; set; } = default!;
+    public List<RMCChatBans> AdminChatBansLastEdited { get; set; } = default!;
+    public List<RMCChatBans> AdminChatBansPardoned { get; set; } = default!;
+}
+
+public partial class Round
+{
+    public List<RMCCommendation> Commendations { get; set; } = default!;
+}
+
+internal static class RMCModelConfiguration
+{
+    public static void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Profile>()
+            .Property(p => p.PlaytimePerks)
+            .HasDefaultValue(true);
+
+        modelBuilder.Entity<Profile>()
+            .Property(p => p.XenoPrefix)
+            .HasDefaultValue(string.Empty);
+
+        modelBuilder.Entity<Profile>()
+            .Property(p => p.XenoPostfix)
+            .HasDefaultValue(string.Empty);
+
+        modelBuilder.Entity<RMCLinkedAccount>()
+            .HasOne(l => l.Player)
+            .WithOne(p => p.LinkedAccount)
+            .HasForeignKey<RMCLinkedAccount>(l => l.PlayerId)
+            .HasPrincipalKey<Player>(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCLinkedAccount>()
+            .HasOne(l => l.Discord)
+            .WithOne(d => d.LinkedAccount)
+            .HasForeignKey<RMCLinkedAccount>(l => l.DiscordId)
+            .HasPrincipalKey<RMCDiscordAccount>(d => d.Id)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCPatron>()
+            .HasOne(p => p.Player)
+            .WithOne(p => p.Patron)
+            .HasForeignKey<RMCPatron>(p => p.PlayerId)
+            .HasPrincipalKey<Player>(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCPatron>()
+            .HasOne(p => p.Tier)
+            .WithMany(t => t.Patrons)
+            .HasForeignKey(p => p.TierId)
+            .HasPrincipalKey(p => p.Id)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCPatronTier>()
+            .HasIndex(t => t.DiscordRole)
+            .IsUnique();
+
+        modelBuilder.Entity<RMCLinkingCodes>()
+            .HasOne(l => l.Player)
+            .WithOne(p => p.LinkingCodes)
+            .HasForeignKey<RMCLinkingCodes>(l => l.PlayerId)
+            .HasPrincipalKey<Player>(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCLinkedAccountLogs>()
+            .HasOne(l => l.Player)
+            .WithMany(p => p.LinkedAccountLogs)
+            .HasForeignKey(l => l.PlayerId)
+            .HasPrincipalKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCLinkedAccountLogs>()
+            .HasOne(l => l.Discord)
+            .WithMany(p => p.LinkedAccountLogs)
+            .HasForeignKey(l => l.DiscordId)
+            .HasPrincipalKey(p => p.Id)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCRoleTimerExclude>()
+            .HasOne(r => r.Player)
+            .WithMany(p => p.RoleTimerExcludes)
+            .HasForeignKey(r => r.PlayerId)
+            .HasPrincipalKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCCommendation>()
+            .HasKey(c => c.Id);
+
+        modelBuilder.Entity<RMCCommendation>()
+            .Property(c => c.Id)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<RMCCommendation>()
+            .HasOne(r => r.Giver)
+            .WithMany(p => p.CommendationsGiven)
+            .HasForeignKey(r => r.GiverId)
+            .HasPrincipalKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCCommendation>()
+            .HasOne(r => r.Receiver)
+            .WithMany(p => p.CommendationsReceived)
+            .HasForeignKey(r => r.ReceiverId)
+            .HasPrincipalKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCCommendation>()
+            .HasOne(r => r.DeletedBy)
+            .WithMany(p => p.CommendationsDeleted)
+            .HasForeignKey(r => r.DeletedById)
+            .HasPrincipalKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<RMCPlayerStats>()
+            .HasOne(s => s.Player)
+            .WithOne(p => p.Stats)
+            .HasForeignKey<RMCPlayerStats>(p => p.PlayerId)
+            .HasPrincipalKey<Player>(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCPlayerActionOrder>()
+            .HasOne(a => a.Player)
+            .WithMany(p => p.ActionOrder)
+            .HasForeignKey(a => a.PlayerId)
+            .HasPrincipalKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCChatBans>()
+            .HasOne(b => b.Player)
+            .WithMany(p => p.ChatBans)
+            .HasForeignKey(b => b.PlayerId)
+            .HasPrincipalKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCChatBans>()
+            .HasOne(b => b.BanningAdmin)
+            .WithMany(p => p.AdminChatBansCreated)
+            .HasForeignKey(b => b.BanningAdminId)
+            .HasPrincipalKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<RMCChatBans>()
+            .HasOne(b => b.UnbanningAdmin)
+            .WithMany(p => p.AdminChatBansPardoned)
+            .HasForeignKey(b => b.UnbanningAdminId)
+            .HasPrincipalKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<RMCChatBans>()
+            .HasOne(b => b.LastEditedBy)
+            .WithMany(p => p.AdminChatBansLastEdited)
+            .HasForeignKey(b => b.LastEditedById)
+            .HasPrincipalKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<RMCChatBans>()
+            .OwnsOne(b => b.HWId)
+            .Property(h => h.Hwid)
+            .HasColumnName("hwid");
+
+        modelBuilder.Entity<RMCChatBans>()
+            .OwnsOne(b => b.HWId)
+            .Property(h => h.Type)
+            .HasDefaultValue(HwidType.Legacy);
+    }
+}
+
 public sealed class Rank
 {
     public int Id { get; set; }

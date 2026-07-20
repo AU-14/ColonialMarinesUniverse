@@ -297,6 +297,7 @@ namespace Content.Server.Database
                 .Property(p => p.Type)
                 .HasDefaultValue(HwidType.Legacy);
 
+            RMCModelConfiguration.OnModelCreating(modelBuilder);
             ModelBan.OnModelCreating(modelBuilder);
             ModelCustomVoteLog.OnModelCreating(modelBuilder);
         }
@@ -488,7 +489,7 @@ namespace Content.Server.Database
     }
 
     [Table("player")]
-    public class Player
+    public partial class Player
     {
         public int Id { get; set; }
 
@@ -588,7 +589,7 @@ namespace Content.Server.Database
         public AdminRank Rank { get; set; } = default!;
     }
 
-    public class Round
+    public partial class Round
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }

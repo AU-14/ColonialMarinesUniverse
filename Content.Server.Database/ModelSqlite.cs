@@ -63,6 +63,12 @@ namespace Content.Server.Database
                 .HasColumnType("TEXT")
                 .HasConversion(ipMaskConverter);
 
+            modelBuilder
+                .Entity<RMCChatBans>()
+                .Property(e => e.Address)
+                .HasColumnType("TEXT")
+                .HasConversion(ipMaskConverter);
+
             var jsonStringConverter = new ValueConverter<JsonDocument, string>(
                 v => JsonDocumentToString(v),
                 v => StringToJsonDocument(v));

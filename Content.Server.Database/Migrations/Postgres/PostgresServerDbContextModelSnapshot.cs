@@ -1112,6 +1112,11 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("integer")
                         .HasColumnName("age");
 
+                    b.Property<string>("ArmorPreference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("armor_preference");
+
                     b.Property<string>("CharacterName")
                         .IsRequired()
                         .HasColumnType("text")
@@ -1160,6 +1165,12 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("jsonb")
                         .HasColumnName("organ_markings");
 
+                    b.Property<bool>("PlaytimePerks")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true)
+                        .HasColumnName("playtime_perks");
+
                     b.Property<int>("PreferenceId")
                         .HasColumnType("integer")
                         .HasColumnName("preference_id");
@@ -1194,6 +1205,20 @@ namespace Content.Server.Database.Migrations.Postgres
                     b.Property<string>("Voice")
                         .HasColumnType("text")
                         .HasColumnName("voice");
+
+                    b.Property<string>("XenoPostfix")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("")
+                        .HasColumnName("xeno_postfix");
+
+                    b.Property<string>("XenoPrefix")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("")
+                        .HasColumnName("xeno_prefix");
 
                     b.HasKey("Id")
                         .HasName("PK_profile");
@@ -1288,6 +1313,517 @@ namespace Content.Server.Database.Migrations.Postgres
                     b.HasIndex("ProfileId");
 
                     b.ToTable("profile_role_loadout", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCChatBans", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("rmc_chat_bans_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<NpgsqlInet?>("Address")
+                        .HasColumnType("inet")
+                        .HasColumnName("address");
+
+                    b.Property<DateTime>("BannedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("banned_at");
+
+                    b.Property<Guid?>("BanningAdminId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("banning_admin_id");
+
+                    b.Property<DateTime?>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<DateTime?>("LastEditedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_edited_at");
+
+                    b.Property<Guid?>("LastEditedById")
+                        .HasColumnType("uuid")
+                        .HasColumnName("last_edited_by_id");
+
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("player_id");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("reason");
+
+                    b.Property<int?>("RoundId")
+                        .HasColumnType("integer")
+                        .HasColumnName("round_id");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
+
+                    b.Property<DateTime?>("UnbannedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("unbanned_at");
+
+                    b.Property<Guid?>("UnbanningAdminId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("unbanning_admin_id");
+
+                    b.HasKey("Id")
+                        .HasName("PK_rmc_chat_bans");
+
+                    b.HasIndex("Address")
+                        .HasDatabaseName("IX_rmc_chat_bans_address");
+
+                    b.HasIndex("BanningAdminId");
+
+                    b.HasIndex("LastEditedById");
+
+                    b.HasIndex("PlayerId")
+                        .HasDatabaseName("IX_rmc_chat_bans_player_id");
+
+                    b.HasIndex("RoundId")
+                        .HasDatabaseName("IX_rmc_chat_bans_round_id");
+
+                    b.HasIndex("UnbanningAdminId");
+
+                    b.ToTable("rmc_chat_bans", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCCommendation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("rmc_commendations_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("deleted");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<Guid?>("DeletedById")
+                        .HasColumnType("uuid")
+                        .HasColumnName("deleted_by_id");
+
+                    b.Property<Guid>("GiverId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("giver_id");
+
+                    b.Property<string>("GiverName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("giver_name");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<Guid>("ReceiverId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("receiver_id");
+
+                    b.Property<string>("ReceiverName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("receiver_name");
+
+                    b.Property<int>("RoundId")
+                        .HasColumnType("integer")
+                        .HasColumnName("round_id");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("text");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id")
+                        .HasName("PK_rmc_commendations");
+
+                    b.HasIndex("DeletedById");
+
+                    b.HasIndex("GiverId");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("RoundId")
+                        .HasDatabaseName("IX_rmc_commendations_round_id");
+
+                    b.ToTable("rmc_commendations", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCDiscordAccount", b =>
+                {
+                    b.Property<decimal>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("numeric(20,0)")
+                        .HasColumnName("rmc_discord_accounts_id");
+
+                    b.HasKey("Id")
+                        .HasName("PK_rmc_discord_accounts");
+
+                    b.ToTable("rmc_discord_accounts", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCLinkedAccount", b =>
+                {
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("player_id");
+
+                    b.Property<decimal>("DiscordId")
+                        .HasColumnType("numeric(20,0)")
+                        .HasColumnName("discord_id");
+
+                    b.HasKey("PlayerId")
+                        .HasName("PK_rmc_linked_accounts");
+
+                    b.HasIndex("DiscordId")
+                        .IsUnique();
+
+                    b.ToTable("rmc_linked_accounts", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCLinkedAccountLogs", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("rmc_linked_accounts_logs_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("At")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("at");
+
+                    b.Property<decimal>("DiscordId")
+                        .HasColumnType("numeric(20,0)")
+                        .HasColumnName("discord_id");
+
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("player_id");
+
+                    b.HasKey("Id")
+                        .HasName("PK_rmc_linked_accounts_logs");
+
+                    b.HasIndex("At")
+                        .HasDatabaseName("IX_rmc_linked_accounts_logs_at");
+
+                    b.HasIndex("DiscordId")
+                        .HasDatabaseName("IX_rmc_linked_accounts_logs_discord_id");
+
+                    b.HasIndex("PlayerId")
+                        .HasDatabaseName("IX_rmc_linked_accounts_logs_player_id");
+
+                    b.ToTable("rmc_linked_accounts_logs", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCLinkingCodes", b =>
+                {
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("player_id");
+
+                    b.Property<Guid>("Code")
+                        .HasColumnType("uuid")
+                        .HasColumnName("code");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("creation_time");
+
+                    b.HasKey("PlayerId")
+                        .HasName("PK_rmc_linking_codes");
+
+                    b.HasIndex("Code")
+                        .HasDatabaseName("IX_rmc_linking_codes_code");
+
+                    b.ToTable("rmc_linking_codes", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCNamedItems", b =>
+                {
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("integer")
+                        .HasColumnName("profile_id");
+
+                    b.Property<string>("ArmorName")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("armor_name");
+
+                    b.Property<string>("HelmetName")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("helmet_name");
+
+                    b.Property<string>("PrimaryGunName")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("primary_gun_name");
+
+                    b.Property<string>("SentryName")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("sentry_name");
+
+                    b.Property<string>("SidearmName")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("sidearm_name");
+
+                    b.HasKey("ProfileId")
+                        .HasName("PK_rmc_named_items");
+
+                    b.ToTable("rmc_named_items", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCPatron", b =>
+                {
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("player_id");
+
+                    b.Property<int?>("GhostColor")
+                        .HasColumnType("integer")
+                        .HasColumnName("ghost_color");
+
+                    b.Property<int>("TierId")
+                        .HasColumnType("integer")
+                        .HasColumnName("tier_id");
+
+                    b.HasKey("PlayerId")
+                        .HasName("PK_rmc_patrons");
+
+                    b.HasIndex("TierId")
+                        .HasDatabaseName("IX_rmc_patrons_tier_id");
+
+                    b.ToTable("rmc_patrons", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCPatronLobbyMessage", b =>
+                {
+                    b.Property<Guid>("PatronId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("patron_id");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("message");
+
+                    b.HasKey("PatronId")
+                        .HasName("PK_rmc_patron_lobby_messages");
+
+                    b.ToTable("rmc_patron_lobby_messages", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCPatronRoundEndMarineShoutout", b =>
+                {
+                    b.Property<Guid>("PatronId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("patron_id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.HasKey("PatronId")
+                        .HasName("PK_rmc_patron_round_end_marine_shoutouts");
+
+                    b.ToTable("rmc_patron_round_end_marine_shoutouts", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCPatronRoundEndXenoShoutout", b =>
+                {
+                    b.Property<Guid>("PatronId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("patron_id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.HasKey("PatronId")
+                        .HasName("PK_rmc_patron_round_end_xeno_shoutouts");
+
+                    b.ToTable("rmc_patron_round_end_xeno_shoutouts", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCPatronTier", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("rmc_patron_tiers_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("DiscordRole")
+                        .HasColumnType("numeric(20,0)")
+                        .HasColumnName("discord_role");
+
+                    b.Property<bool>("Figurines")
+                        .HasColumnType("boolean")
+                        .HasColumnName("figurines");
+
+                    b.Property<bool>("GhostColor")
+                        .HasColumnType("boolean")
+                        .HasColumnName("ghost_color");
+
+                    b.Property<bool>("LobbyMessage")
+                        .HasColumnType("boolean")
+                        .HasColumnName("lobby_message");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<bool>("NamedItems")
+                        .HasColumnType("boolean")
+                        .HasColumnName("named_items");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("integer")
+                        .HasColumnName("priority");
+
+                    b.Property<bool>("RoundEndShoutout")
+                        .HasColumnType("boolean")
+                        .HasColumnName("round_end_shoutout");
+
+                    b.Property<bool>("ShowOnCredits")
+                        .HasColumnType("boolean")
+                        .HasColumnName("show_on_credits");
+
+                    b.HasKey("Id")
+                        .HasName("PK_rmc_patron_tiers");
+
+                    b.HasIndex("DiscordRole")
+                        .IsUnique();
+
+                    b.ToTable("rmc_patron_tiers", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCPlayerActionOrder", b =>
+                {
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("player_id");
+
+                    b.Property<string>("Id")
+                        .HasColumnType("text")
+                        .HasColumnName("rmc_player_action_order_id");
+
+                    b.PrimitiveCollection<List<string>>("Actions")
+                        .IsRequired()
+                        .HasColumnType("text[]")
+                        .HasColumnName("actions");
+
+                    b.HasKey("PlayerId", "Id")
+                        .HasName("PK_rmc_player_action_order");
+
+                    b.ToTable("rmc_player_action_order", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCPlayerStats", b =>
+                {
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("player_id");
+
+                    b.Property<int>("ParasiteInfects")
+                        .HasColumnType("integer")
+                        .HasColumnName("parasite_infects");
+
+                    b.HasKey("PlayerId")
+                        .HasName("PK_rmc_player_stats");
+
+                    b.ToTable("rmc_player_stats", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCRoleTimerExclude", b =>
+                {
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("player_id");
+
+                    b.Property<string>("Tracker")
+                        .HasColumnType("text")
+                        .HasColumnName("tracker");
+
+                    b.HasKey("PlayerId", "Tracker")
+                        .HasName("PK_rmc_role_timer_excludes");
+
+                    b.ToTable("rmc_role_timer_excludes", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCSquadPreference", b =>
+                {
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("integer")
+                        .HasColumnName("profile_id");
+
+                    b.Property<string>("Squad")
+                        .HasColumnType("text")
+                        .HasColumnName("squad");
+
+                    b.HasKey("ProfileId")
+                        .HasName("PK_rmc_squad_preferences");
+
+                    b.ToTable("rmc_squad_preferences", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.Rank", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("rank_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("JobName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("job_name");
+
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("integer")
+                        .HasColumnName("profile_id");
+
+                    b.Property<string>("RankName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("rank_name");
+
+                    b.HasKey("Id")
+                        .HasName("PK_rank");
+
+                    b.HasIndex("ProfileId");
+
+                    b.ToTable("rank", (string)null);
                 });
 
             modelBuilder.Entity("Content.Server.Database.RoleWhitelist", b =>
@@ -2025,6 +2561,312 @@ namespace Content.Server.Database.Migrations.Postgres
                     b.Navigation("Profile");
                 });
 
+            modelBuilder.Entity("Content.Server.Database.RMCChatBans", b =>
+                {
+                    b.HasOne("Content.Server.Database.Player", "BanningAdmin")
+                        .WithMany("AdminChatBansCreated")
+                        .HasForeignKey("BanningAdminId")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("FK_rmc_chat_bans_player_banning_admin_id1");
+
+                    b.HasOne("Content.Server.Database.Player", "LastEditedBy")
+                        .WithMany("AdminChatBansLastEdited")
+                        .HasForeignKey("LastEditedById")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("FK_rmc_chat_bans_player_last_edited_by_id1");
+
+                    b.HasOne("Content.Server.Database.Player", "Player")
+                        .WithMany("ChatBans")
+                        .HasForeignKey("PlayerId")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_rmc_chat_bans_player_player_id");
+
+                    b.HasOne("Content.Server.Database.Round", "Round")
+                        .WithMany()
+                        .HasForeignKey("RoundId")
+                        .HasConstraintName("FK_rmc_chat_bans_round_round_id");
+
+                    b.HasOne("Content.Server.Database.Player", "UnbanningAdmin")
+                        .WithMany("AdminChatBansPardoned")
+                        .HasForeignKey("UnbanningAdminId")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("FK_rmc_chat_bans_player_unbanning_admin_id1");
+
+                    b.OwnsOne("Content.Server.Database.TypedHwid", "HWId", b1 =>
+                        {
+                            b1.Property<int>("RMCChatBansId")
+                                .HasColumnType("integer")
+                                .HasColumnName("rmc_chat_bans_id");
+
+                            b1.Property<byte[]>("Hwid")
+                                .IsRequired()
+                                .HasColumnType("bytea")
+                                .HasColumnName("hwid");
+
+                            b1.Property<int>("Type")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer")
+                                .HasDefaultValue(0)
+                                .HasColumnName("hwid_type");
+
+                            b1.HasKey("RMCChatBansId");
+
+                            b1.ToTable("rmc_chat_bans");
+
+                            b1.WithOwner()
+                                .HasForeignKey("RMCChatBansId")
+                                .HasConstraintName("FK_rmc_chat_bans_rmc_chat_bans_rmc_chat_bans_id");
+                        });
+
+                    b.Navigation("BanningAdmin");
+
+                    b.Navigation("HWId");
+
+                    b.Navigation("LastEditedBy");
+
+                    b.Navigation("Player");
+
+                    b.Navigation("Round");
+
+                    b.Navigation("UnbanningAdmin");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCCommendation", b =>
+                {
+                    b.HasOne("Content.Server.Database.Player", "DeletedBy")
+                        .WithMany("CommendationsDeleted")
+                        .HasForeignKey("DeletedById")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("FK_rmc_commendations_player_deleted_by_id");
+
+                    b.HasOne("Content.Server.Database.Player", "Giver")
+                        .WithMany("CommendationsGiven")
+                        .HasForeignKey("GiverId")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_rmc_commendations_player_giver_id");
+
+                    b.HasOne("Content.Server.Database.Player", "Receiver")
+                        .WithMany("CommendationsReceived")
+                        .HasForeignKey("ReceiverId")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_rmc_commendations_player_receiver_id");
+
+                    b.HasOne("Content.Server.Database.Round", "Round")
+                        .WithMany("Commendations")
+                        .HasForeignKey("RoundId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_rmc_commendations_round_round_id");
+
+                    b.Navigation("DeletedBy");
+
+                    b.Navigation("Giver");
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Round");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCLinkedAccount", b =>
+                {
+                    b.HasOne("Content.Server.Database.RMCDiscordAccount", "Discord")
+                        .WithOne("LinkedAccount")
+                        .HasForeignKey("Content.Server.Database.RMCLinkedAccount", "DiscordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_rmc_linked_accounts_rmc_discord_accounts_discord_id");
+
+                    b.HasOne("Content.Server.Database.Player", "Player")
+                        .WithOne("LinkedAccount")
+                        .HasForeignKey("Content.Server.Database.RMCLinkedAccount", "PlayerId")
+                        .HasPrincipalKey("Content.Server.Database.Player", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_rmc_linked_accounts_player_player_id");
+
+                    b.Navigation("Discord");
+
+                    b.Navigation("Player");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCLinkedAccountLogs", b =>
+                {
+                    b.HasOne("Content.Server.Database.RMCDiscordAccount", "Discord")
+                        .WithMany("LinkedAccountLogs")
+                        .HasForeignKey("DiscordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_rmc_linked_accounts_logs_rmc_discord_accounts_discord_id");
+
+                    b.HasOne("Content.Server.Database.Player", "Player")
+                        .WithMany("LinkedAccountLogs")
+                        .HasForeignKey("PlayerId")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_rmc_linked_accounts_logs_player_player_id1");
+
+                    b.Navigation("Discord");
+
+                    b.Navigation("Player");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCLinkingCodes", b =>
+                {
+                    b.HasOne("Content.Server.Database.Player", "Player")
+                        .WithOne("LinkingCodes")
+                        .HasForeignKey("Content.Server.Database.RMCLinkingCodes", "PlayerId")
+                        .HasPrincipalKey("Content.Server.Database.Player", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_rmc_linking_codes_player_player_id");
+
+                    b.Navigation("Player");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCNamedItems", b =>
+                {
+                    b.HasOne("Content.Server.Database.Profile", "Profile")
+                        .WithOne("NamedItems")
+                        .HasForeignKey("Content.Server.Database.RMCNamedItems", "ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_rmc_named_items_profile_profile_id");
+
+                    b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCPatron", b =>
+                {
+                    b.HasOne("Content.Server.Database.Player", "Player")
+                        .WithOne("Patron")
+                        .HasForeignKey("Content.Server.Database.RMCPatron", "PlayerId")
+                        .HasPrincipalKey("Content.Server.Database.Player", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_rmc_patrons_player_player_id");
+
+                    b.HasOne("Content.Server.Database.RMCPatronTier", "Tier")
+                        .WithMany("Patrons")
+                        .HasForeignKey("TierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_rmc_patrons_rmc_patron_tiers_tier_id");
+
+                    b.Navigation("Player");
+
+                    b.Navigation("Tier");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCPatronLobbyMessage", b =>
+                {
+                    b.HasOne("Content.Server.Database.RMCPatron", "Patron")
+                        .WithOne("LobbyMessage")
+                        .HasForeignKey("Content.Server.Database.RMCPatronLobbyMessage", "PatronId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_rmc_patron_lobby_messages_rmc_patrons_patron_id");
+
+                    b.Navigation("Patron");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCPatronRoundEndMarineShoutout", b =>
+                {
+                    b.HasOne("Content.Server.Database.RMCPatron", "Patron")
+                        .WithOne("RoundEndMarineShoutout")
+                        .HasForeignKey("Content.Server.Database.RMCPatronRoundEndMarineShoutout", "PatronId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_rmc_patron_round_end_marine_shoutouts_rmc_patrons_patron_id");
+
+                    b.Navigation("Patron");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCPatronRoundEndXenoShoutout", b =>
+                {
+                    b.HasOne("Content.Server.Database.RMCPatron", "Patron")
+                        .WithOne("RoundEndXenoShoutout")
+                        .HasForeignKey("Content.Server.Database.RMCPatronRoundEndXenoShoutout", "PatronId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_rmc_patron_round_end_xeno_shoutouts_rmc_patrons_patron_id");
+
+                    b.Navigation("Patron");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCPlayerActionOrder", b =>
+                {
+                    b.HasOne("Content.Server.Database.Player", "Player")
+                        .WithMany("ActionOrder")
+                        .HasForeignKey("PlayerId")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_rmc_player_action_order_player_player_id");
+
+                    b.Navigation("Player");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCPlayerStats", b =>
+                {
+                    b.HasOne("Content.Server.Database.Player", "Player")
+                        .WithOne("Stats")
+                        .HasForeignKey("Content.Server.Database.RMCPlayerStats", "PlayerId")
+                        .HasPrincipalKey("Content.Server.Database.Player", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_rmc_player_stats_player_player_id");
+
+                    b.Navigation("Player");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCRoleTimerExclude", b =>
+                {
+                    b.HasOne("Content.Server.Database.Player", "Player")
+                        .WithMany("RoleTimerExcludes")
+                        .HasForeignKey("PlayerId")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_rmc_role_timer_excludes_player_player_id");
+
+                    b.Navigation("Player");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCSquadPreference", b =>
+                {
+                    b.HasOne("Content.Server.Database.Profile", "Profile")
+                        .WithOne("SquadPreference")
+                        .HasForeignKey("Content.Server.Database.RMCSquadPreference", "ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_rmc_squad_preferences_profile_profile_id");
+
+                    b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.Rank", b =>
+                {
+                    b.HasOne("Content.Server.Database.Profile", "Profile")
+                        .WithMany("Ranks")
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_rank_profile_profile_id");
+
+                    b.Navigation("Profile");
+                });
+
             modelBuilder.Entity("Content.Server.Database.RoleWhitelist", b =>
                 {
                     b.HasOne("Content.Server.Database.Player", "Player")
@@ -2158,6 +3000,14 @@ namespace Content.Server.Database.Migrations.Postgres
 
             modelBuilder.Entity("Content.Server.Database.Player", b =>
                 {
+                    b.Navigation("ActionOrder");
+
+                    b.Navigation("AdminChatBansCreated");
+
+                    b.Navigation("AdminChatBansLastEdited");
+
+                    b.Navigation("AdminChatBansPardoned");
+
                     b.Navigation("AdminLogs");
 
                     b.Navigation("AdminMessagesCreated");
@@ -2188,7 +3038,28 @@ namespace Content.Server.Database.Migrations.Postgres
 
                     b.Navigation("AdminWatchlistsReceived");
 
+                    b.Navigation("ChatBans");
+
+                    b.Navigation("CommendationsDeleted");
+
+                    b.Navigation("CommendationsGiven");
+
+                    b.Navigation("CommendationsReceived");
+
                     b.Navigation("JobWhitelists");
+
+                    b.Navigation("LinkedAccount");
+
+                    b.Navigation("LinkedAccountLogs");
+
+                    b.Navigation("LinkingCodes");
+
+                    b.Navigation("Patron");
+
+                    b.Navigation("RoleTimerExcludes");
+
+                    b.Navigation("Stats")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Content.Server.Database.Preference", b =>
@@ -2204,6 +3075,12 @@ namespace Content.Server.Database.Migrations.Postgres
 
                     b.Navigation("Loadouts");
 
+                    b.Navigation("NamedItems");
+
+                    b.Navigation("Ranks");
+
+                    b.Navigation("SquadPreference");
+
                     b.Navigation("Traits");
                 });
 
@@ -2217,9 +3094,33 @@ namespace Content.Server.Database.Migrations.Postgres
                     b.Navigation("Groups");
                 });
 
+            modelBuilder.Entity("Content.Server.Database.RMCDiscordAccount", b =>
+                {
+                    b.Navigation("LinkedAccount")
+                        .IsRequired();
+
+                    b.Navigation("LinkedAccountLogs");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCPatron", b =>
+                {
+                    b.Navigation("LobbyMessage");
+
+                    b.Navigation("RoundEndMarineShoutout");
+
+                    b.Navigation("RoundEndXenoShoutout");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.RMCPatronTier", b =>
+                {
+                    b.Navigation("Patrons");
+                });
+
             modelBuilder.Entity("Content.Server.Database.Round", b =>
                 {
                     b.Navigation("AdminLogs");
+
+                    b.Navigation("Commendations");
 
                     b.Navigation("CustomVoteLogs");
                 });

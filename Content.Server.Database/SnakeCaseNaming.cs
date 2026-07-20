@@ -109,15 +109,15 @@ namespace Content.Server.Database
                         if (match.Value == "HWI")
                             return (match.Index == 0 ? "" : "_") + "hwi";
                         if (match.Index == 0)
-                            return match.Value.ToLower();
+                            return match.Value.ToLowerInvariant();
                         if (match.Length > 1)
-                            return $"_{match.Value[..^1].ToLower()}_{match.Value[^1..^0].ToLower()}";
+                            return $"_{match.Value[..^1].ToLowerInvariant()}_{match.Value[^1..^0].ToLowerInvariant()}";
 
                         // Do not add a _ if there is already one before this. This happens with owned entities.
                         if (name[match.Index - 1] == '_')
-                            return match.Value.ToLower();
+                            return match.Value.ToLowerInvariant();
 
-                        return "_" + match.Value.ToLower();
+                        return "_" + match.Value.ToLowerInvariant();
                     }
                 );
         }
