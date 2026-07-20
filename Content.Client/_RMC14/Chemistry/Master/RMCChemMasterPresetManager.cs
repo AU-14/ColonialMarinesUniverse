@@ -109,14 +109,18 @@ public sealed partial class RMCChemMasterPresetManager
         // Format: name|bottleLabel|bottleColor|pillType|usePresetName|quickSlot|quickLabel
         var quickSlot = preset.QuickAccessSlot?.ToString(CultureInfo.InvariantCulture) ?? string.Empty;
 
-        return string.Join(FieldDelimiter.ToString(),
+        var fields = new[]
+        {
             EscapeField(preset.Name),
             EscapeField(preset.BottleLabel),
             ((int)preset.BottleColor).ToString(CultureInfo.InvariantCulture),
             preset.PillType.ToString(CultureInfo.InvariantCulture),
             preset.UsePresetNameAsLabel ? "1" : "0",
             quickSlot,
-            EscapeField(preset.QuickAccessLabel));
+            EscapeField(preset.QuickAccessLabel)
+        };
+
+        return string.Join(FieldDelimiter.ToString(), fields);
     }
 
     private static RMCChemMasterPreset? DeserializePreset(string data)

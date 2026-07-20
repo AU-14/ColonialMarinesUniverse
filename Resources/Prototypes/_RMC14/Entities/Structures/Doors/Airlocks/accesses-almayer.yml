@@ -7,8 +7,6 @@
   components:
   - type: AccessReader
     access: [ ["CMAccessRequisitions"], ["RMCAccessCommand"] ]
-  - type: PaintableAirlock
-    department: CMRequisitions
 
 - type: entity
   parent: CMAirlockMaint
@@ -17,8 +15,6 @@
   components:
   - type: AccessReader
     access: [ [ "CMAccessRequisitions" ], ["RMCAccessCommand"] ]
-  - type: PaintableAirlock
-    department: CMRequisitions
 
 - type: entity
   parent: CMAirlock
@@ -27,8 +23,6 @@
   components:
   - type: AccessReader
     access: [ [ "CMAccessKitchen" ] ]
-  - type: PaintableAirlock
-    department: CMRequisitions
 
 - type: entity
   parent: CMAirlockGlass
@@ -37,8 +31,6 @@
   components:
   - type: AccessReader
     access: [ [ "CMAccessKitchen" ] ]
-  - type: PaintableAirlock
-    department: CMRequisitions
 
 - type: entity
   parent: CMAirlockMaint
@@ -47,8 +39,6 @@
   components:
   - type: AccessReader
     access: [ [ "CMAccessKitchen" ] ]
-  - type: PaintableAirlock
-    department: CMRequisitions
 
 # Engi
 - type: entity
@@ -74,8 +64,6 @@
   components:
   - type: AccessReader
     access: [ [ "CMAccessEngineering" ], ["RMCAccessCommand"] ]
-  - type: PaintableAirlock
-    department: CMEngineering
 
 - type: entity
   parent: CMAirlockEngineer
@@ -109,8 +97,6 @@
   components:
   - type: AccessReader
     access: [ [ "CMAccessMedical" ] ]
-  - type: PaintableAirlock
-    department: CMMedbay
 
 - type: entity
   parent: CMAirlockMedical
@@ -176,8 +162,6 @@
   components:
   - type: AccessReader
     access: [ [ "CMAccessPress" ] ]
-  - type: PaintableAirlock
-    department: CMOther
 
 - type: entity
   parent: CMAirlockGlass
@@ -186,8 +170,6 @@
   components:
   - type: AccessReader
     access: [ [ "CMAccessPress" ] ]
-  - type: PaintableAirlock
-    department: CMOther
 
 - type: entity
   parent: CMAirlockMaint
@@ -196,8 +178,6 @@
   components:
   - type: AccessReader
     access: [ [ "CMAccessPress" ] ]
-  - type: PaintableAirlock
-    department: CMOther
 
 # Security
 - type: entity

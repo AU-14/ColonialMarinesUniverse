@@ -1,5 +1,5 @@
 - type: entity
-  parent: [DrinkCartonVisualsOpenable, DrinkCartonBaseFull]
+  parent: DrinkCartonBaseFull
   id: RMCDrinkMilkCarton
   name: milk
   description: It's milk. White and nutritious goodness!

@@ -82,9 +82,8 @@
   - type: IconSmooth
     key: doors
     mode: NoSprite
-  - type: PaintableAirlock
-    group: Standard
-    department: CMSquad
+  - type: Paintable
+    group: AirlockStandard
   - type: AccessReader
   - type: StaticPrice
     price: 150

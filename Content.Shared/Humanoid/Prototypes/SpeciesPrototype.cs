@@ -124,6 +124,8 @@ public enum SpeciesNaming : byte
 {
     First,
     FirstLast,
+    FirstLastCombined,
     FirstDashFirst,
+    LastFirst,
     TheFirstofLast,
 }

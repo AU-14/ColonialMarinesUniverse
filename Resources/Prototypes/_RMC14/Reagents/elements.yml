@@ -13,7 +13,7 @@
     Bloodstream:
       metabolismRate: 0.1
       effects:
-      - !type:ChemVomit
+      - !type:Vomit
         probability: 0
 
 - type: reagent
@@ -31,7 +31,7 @@
     Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM? 0.005 would be right but impossible because fixed point 2
       effects:
-      - !type:ChemVomit
+      - !type:Vomit
         probability: 0
 
 - type: reagent
@@ -66,7 +66,7 @@
     Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
-      - !type:ChemVomit
+      - !type:Vomit
         probability: 0
 
 - type: reagent
@@ -113,7 +113,7 @@
     Bloodstream:
       metabolismRate: 0.1
       effects:
-      - !type:ChemVomit
+      - !type:Vomit
         probability: 0
 
 - type: reagent
@@ -132,7 +132,7 @@
     Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
-      - !type:ChemVomit
+      - !type:Vomit
         probability: 0
 
 - type: reagent #TODO if over blood limit take limb damage, oxy damage, move slower
@@ -221,7 +221,7 @@
     Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
-      - !type:ChemVomit
+      - !type:Vomit
         probability: 0
 
 - type: reagent
@@ -241,7 +241,7 @@
     Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
-      - !type:ChemVomit
+      - !type:Vomit
         probability: 0
 
 - type: reagent
@@ -276,7 +276,7 @@
     Bloodstream:
       metabolismRate: 0.1
       effects:
-      - !type:ChemVomit
+      - !type:Vomit
         probability: 0
 
 - type: reagent
@@ -293,7 +293,7 @@
     Bloodstream:
       metabolismRate: 0.1
       effects:
-      - !type:ChemVomit
+      - !type:Vomit
         probability: 0
 
 - type: reagent
@@ -310,7 +310,7 @@
     Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
-      - !type:ChemVomit
+      - !type:Vomit
         probability: 0
 
 - type: reagent
@@ -327,7 +327,7 @@
     Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
-      - !type:ChemVomit
+      - !type:Vomit
         probability: 0
 
 - type: reagent
@@ -362,7 +362,7 @@
     Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
-      - !type:ChemVomit
+      - !type:Vomit
         probability: 0
 
 - type: reagent
@@ -378,7 +378,7 @@
     Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
-      - !type:ChemVomit
+      - !type:Vomit
         probability: 0
 
 - type: reagent # TODO rmc14
@@ -411,7 +411,7 @@
           groups:
             Toxin: 0.625
             Airloss: 1.25
-      - !type:ChemVomit
+      - !type:Vomit
         conditions:
         - !type:ReagentThreshold
           min: 60
@@ -429,7 +429,7 @@
           groups:
             Toxin: 1.2
             Airloss: 2.5
-      - !type:ChemVomit
+      - !type:Vomit
         conditions:
         - !type:ReagentThreshold
           min: 100

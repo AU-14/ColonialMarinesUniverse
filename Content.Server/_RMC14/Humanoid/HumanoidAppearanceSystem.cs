@@ -8,7 +8,7 @@ namespace Content.Server.Humanoid;
 /// </summary>
 public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
 {
-    [Dependency] private readonly MarkingManager _markingManager = default!;
+    [Dependency] private MarkingManager _markingManager = default!;
 
     public void SetMarkingId(
         EntityUid uid,

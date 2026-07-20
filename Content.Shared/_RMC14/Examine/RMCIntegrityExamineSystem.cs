@@ -6,7 +6,7 @@ using Content.Shared.FixedPoint;
 
 namespace Content.Shared._RMC14.Examine;
 
-public sealed class RMCIntegrityExamineSystem : EntitySystem
+public sealed partial class RMCIntegrityExamineSystem : EntitySystem
 {
     [Dependency] private DamageableSystem _damageable = default!;
 

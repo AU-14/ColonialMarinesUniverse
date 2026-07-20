@@ -52,7 +52,10 @@
       whitelist:
         skills:
           RMCSkillPolice: 2
-  - type: SoundOnTrigger
+  - type: EmitSoundOnTrigger
+    keysIn:
+    - timer
+    positional: true
     sound:
       path: "/Audio/Effects/flash_bang.ogg"
   - type: DeleteOnTrigger
@@ -115,7 +118,10 @@
     sprite: _RMC14/Objects/Weapons/Grenades/m40smoke.rsi
   - type: SpawnOnTrigger
     proto: RMCSmoke
-  - type: SoundOnTrigger
+  - type: EmitSoundOnTrigger
+    keysIn:
+    - timer
+    positional: true
     sound: /Audio/Effects/smoke.ogg
   - type: DeleteOnTrigger
   - type: TimerTriggerVisuals
@@ -323,7 +329,10 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m07training.rsi
-  - type: SoundOnTrigger
+  - type: EmitSoundOnTrigger
+    keysIn:
+    - timer
+    positional: true
     sound: /Audio/Effects/snap.ogg
   - type: Tag
     tags:
@@ -371,7 +380,10 @@
       path: /Audio/Effects/Smoke-grenade.ogg
   - type: SpawnOnTrigger
     proto: RMCSmokePhosphorusWeak
-  - type: SoundOnTrigger
+  - type: EmitSoundOnTrigger
+    keysIn:
+    - timer
+    positional: true
     sound: /Audio/Effects/smoke.ogg
 
 - type: entity

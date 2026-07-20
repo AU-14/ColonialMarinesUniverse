@@ -64,9 +64,6 @@
     materialComposition:
       RMCPlastic: 1250
 
-- type: Tag
-  id: Hypospray
-
 - type: entity
   parent: CMHypospray
   id: CMHyposprayWithVial

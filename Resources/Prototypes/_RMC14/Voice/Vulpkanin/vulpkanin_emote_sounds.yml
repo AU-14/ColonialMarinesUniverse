@@ -2,13 +2,13 @@
   id: RMCUnisexVulpkanin
   sounds:
     Growl:
-      collection: VulpkaninGrowls
+      collection: RMCVulpkaninGrowls
     Snarl:
-      collection: VulpkaninSnarls
+      collection: RMCVulpkaninSnarls
     Bark:
-      collection: VulpkaninBarks
+      collection: RMCVulpkaninBarks
     Whine:
-      collection: VulpkaninWhines
+      collection: RMCVulpkaninWhines
     Yip:
       path: /Audio/Animals/fox_squeak.ogg
 

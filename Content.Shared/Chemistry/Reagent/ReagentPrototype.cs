@@ -22,6 +22,7 @@ namespace Content.Shared.Chemistry.Reagent
 {
     [Prototype]
     [DataDefinition]
+    [Virtual]
     public partial class ReagentPrototype : IPrototype, IInheritingPrototype
     {
         [ViewVariables]

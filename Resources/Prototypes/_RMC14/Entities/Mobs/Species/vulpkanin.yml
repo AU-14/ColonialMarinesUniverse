@@ -18,7 +18,7 @@
     state: full
   - type: VulpkaninAccent
   - type: Speech
-    speechVerb: Vulpkanin
+    speechVerb: RMCVulpkanin
     allowedEmotes: [ 'Bark', 'Snarl', 'Whine', 'Growl', 'Yip' ]
   - type: Vocal
     sounds:

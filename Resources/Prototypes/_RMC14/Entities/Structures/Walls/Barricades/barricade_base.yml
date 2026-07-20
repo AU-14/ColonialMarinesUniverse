@@ -1,10 +1,8 @@
-- type: examinableDamage
+- type: localizedDataset
   id: RMCBarricadeMessages
-  messages:
-    - rmc-barricade-damaged-1
-    - rmc-barricade-damaged-2
-    - rmc-barricade-damaged-3
-    - rmc-barricade-damaged-4
+  values:
+    prefix: rmc-barricade-damaged-
+    count: 4
 
 - type: entity
   abstract: true

@@ -7,9 +7,6 @@ namespace Content.Shared.Humanoid.Markings;
 
 public partial record struct Marking
 {
-    [DataField("visible")]
-    public bool Visible = true;
-
     public Marking(Marking other)
     {
         this = other;

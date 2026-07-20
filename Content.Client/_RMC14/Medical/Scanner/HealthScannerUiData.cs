@@ -12,6 +12,7 @@ using Content.Shared._RMC14.Medical.Scanner;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared._RMC14.Xenonids.Parasite;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
@@ -54,6 +55,13 @@ public sealed partial class HealthScannerUiData
     private static readonly ProtoId<DamageGroupPrototype> ToxinGroup = "Toxin";
     private static readonly ProtoId<DamageGroupPrototype> AirlossGroup = "Airloss";
     private static readonly ProtoId<DamageGroupPrototype> GeneticGroup = "Genetic";
+    private static readonly ProtoId<ReagentPrototype> Bicaridine = "CMBicaridine";
+    private static readonly ProtoId<ReagentPrototype> Dexalin = "CMDexalin";
+    private static readonly ProtoId<ReagentPrototype> Dylovene = "CMDylovene";
+    private static readonly ProtoId<ReagentPrototype> Epinephrine = "CMEpinephrine";
+    private static readonly ProtoId<ReagentPrototype> Inaprovaline = "Inaprovaline";
+    private static readonly ProtoId<ReagentPrototype> Kelotane = "CMKelotane";
+    private static readonly ProtoId<ReagentPrototype> Nutriment = "Nutriment";
 
     public HealthScannerUiData()
     {
@@ -299,7 +307,7 @@ public sealed partial class HealthScannerUiData
                 var totalDamage = _damageable.GetTotalDamage(target.AsNullable());
                 if (deadThreshold + 30 < totalDamage &&
                     uiState.Chemicals != null &&
-                    !uiState.Chemicals.ContainsReagent("CMEpinephrine", null))
+                    !uiState.Chemicals.ContainsReagent(Epinephrine, null))
                 {
                     AddAdvice(Loc.GetString("rmc-health-analyzer-advice-epinephrine"), window);
                 }
@@ -353,7 +361,7 @@ public sealed partial class HealthScannerUiData
                 AddAdvice(bloodPack, window);
             }
 
-            if (bloodPercent < 0.9 && uiState.Chemicals != null && !uiState.Chemicals.ContainsReagent("Nutriment", null))
+            if (bloodPercent < 0.9 && uiState.Chemicals != null && !uiState.Chemicals.ContainsReagent(Nutriment, null))
                 AddAdvice(Loc.GetString("rmc-health-analyzer-advice-food"), window);
         }
 
@@ -372,13 +380,13 @@ public sealed partial class HealthScannerUiData
             if (airloss > 10 && _mob.IsCritical(target))
                 AddAdvice(Loc.GetString("rmc-health-analyzer-advice-cpr-crit"), window);
 
-            if (airloss > 30 && uiState.Chemicals != null && !uiState.Chemicals.ContainsReagent("CMDexalin", null))
+            if (airloss > 30 && uiState.Chemicals != null && !uiState.Chemicals.ContainsReagent(Dexalin, null))
                 AddAdvice(Loc.GetString("rmc-health-analyzer-advice-dexalin"), window);
         }
 
         if (brute > 30 &&
             uiState.Chemicals != null &&
-            !uiState.Chemicals.ContainsReagent("CMBicaridine", null) &&
+            !uiState.Chemicals.ContainsReagent(Bicaridine, null) &&
             !_mob.IsDead(target))
         {
             AddAdvice(Loc.GetString("rmc-health-analyzer-advice-bicaridine"), window);
@@ -386,7 +394,7 @@ public sealed partial class HealthScannerUiData
 
         if (burn > 30 &&
             uiState.Chemicals != null &&
-            !uiState.Chemicals.ContainsReagent("CMKelotane", null) &&
+            !uiState.Chemicals.ContainsReagent(Kelotane, null) &&
             !_mob.IsDead(target))
         {
             AddAdvice(Loc.GetString("rmc-health-analyzer-advice-kelotane"), window);
@@ -394,8 +402,8 @@ public sealed partial class HealthScannerUiData
 
         if (toxin > 10 &&
             uiState.Chemicals != null &&
-            !uiState.Chemicals.ContainsReagent("CMDylovene", null) &&
-            !uiState.Chemicals.ContainsReagent("Inaprovaline", null) &&
+            !uiState.Chemicals.ContainsReagent(Dylovene, null) &&
+            !uiState.Chemicals.ContainsReagent(Inaprovaline, null) &&
             !_mob.IsDead(target))
         {
             AddAdvice(Loc.GetString("rmc-health-analyzer-advice-dylovene"), window);

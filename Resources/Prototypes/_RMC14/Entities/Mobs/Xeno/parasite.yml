@@ -124,9 +124,9 @@
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: parasite
-  - type: AddAccentClothing
-    accent: ReplacementAccent
-    replacement: mumble
+  - type: ReplacementAccent
+    accent: mumble
+    relayAccent: true
   - type: Blindfold
   - type: StandingState
     downSound: null

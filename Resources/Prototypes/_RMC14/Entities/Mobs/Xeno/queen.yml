@@ -287,7 +287,6 @@
     canVote: true
   - type: RemoveComponents
     components:
-    - type: Gibbable
     - type: CanBeLarvaQueued
 
 - type: entity

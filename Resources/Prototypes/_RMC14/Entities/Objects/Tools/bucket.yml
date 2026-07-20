@@ -61,8 +61,6 @@
     fillBaseName: bucket-
   - type: MixableSolution
     solution: bucket
-  - type: ExaminableSolution
-    solution: bucket
   - type: FitsInDispenser
     solution: bucket
   - type: Tag

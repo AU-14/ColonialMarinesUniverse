@@ -8,12 +8,6 @@ namespace Content.Server.Light.Components
     [RegisterComponent]
     public sealed partial class ExpendableLightComponent : SharedExpendableLightComponent
     {
-        /// <summary>
-        ///     Status of light, whether or not it is emitting light.
-        /// </summary>
-        [ViewVariables]
-        public bool Activated => CurrentState is ExpendableLightState.Lit or ExpendableLightState.Fading;
-
         [ViewVariables] public float StateExpiryTime = default;
     }
 }

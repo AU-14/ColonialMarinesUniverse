@@ -1,4 +1,6 @@
 species-name-rodentia = Rodentia
+namepreset-lastfirst = {$last} {$first}
+
 # head markings
 
 ## patterns

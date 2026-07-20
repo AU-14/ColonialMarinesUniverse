@@ -1,11 +1,11 @@
 - type: speechVerb
-  id: Vulpkanin
-  name: chat-speech-verb-name-vulpkanin
+  id: RMCVulpkanin
+  name: rmc-chat-speech-verb-name-vulpkanin
   speechVerbStrings:
-  - chat-speech-verb-vulpkanin-1
-  - chat-speech-verb-vulpkanin-2
-  - chat-speech-verb-vulpkanin-3
-  - chat-speech-verb-vulpkanin-4
+  - rmc-chat-speech-verb-vulpkanin-1
+  - rmc-chat-speech-verb-vulpkanin-2
+  - rmc-chat-speech-verb-vulpkanin-3
+  - rmc-chat-speech-verb-vulpkanin-4
 
 - type: speechVerb
   id: Rodentia

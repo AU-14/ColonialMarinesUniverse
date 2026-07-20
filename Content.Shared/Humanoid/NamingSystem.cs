@@ -31,6 +31,12 @@ namespace Content.Shared.Humanoid
                 case SpeciesNaming.First:
                     return Loc.GetString("namepreset-first",
                         ("first", GetFirstName(speciesProto, gender)));
+                case SpeciesNaming.FirstLastCombined:
+                    return Loc.GetString("rmc-namepreset-firstlastcombined",
+                        ("first", GetFirstName(speciesProto, gender)), ("last", GetLastName(speciesProto)));
+                case SpeciesNaming.LastFirst:
+                    return Loc.GetString("namepreset-lastfirst",
+                        ("first", GetFirstName(speciesProto, gender)), ("last", GetLastName(speciesProto)));
                 case SpeciesNaming.TheFirstofLast:
                     return Loc.GetString("namepreset-thefirstoflast",
                         ("first", GetFirstName(speciesProto, gender)), ("last", GetLastName(speciesProto)));

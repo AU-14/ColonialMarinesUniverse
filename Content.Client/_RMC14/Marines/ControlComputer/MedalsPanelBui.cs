@@ -89,7 +89,7 @@ public sealed partial class MedalsPanelBui(EntityUid owner, Enum uiKey) : BoundU
 
         // Recommender: Rank and Name
         var recommenderLabelText = Loc.GetString("rmc-medal-panel-recommender-label");
-        var recommenderText = $"{recommenderLabelText} {string.Join(" ", recommendation.RecommenderRank, recommendation.RecommenderName)}";
+        var recommenderText = $"{recommenderLabelText} {recommendation.RecommenderRank} {recommendation.RecommenderName}";
         var recommenderLabel = new RichTextLabel
         {
             HorizontalExpand = true
@@ -100,7 +100,7 @@ public sealed partial class MedalsPanelBui(EntityUid owner, Enum uiKey) : BoundU
         // Job: Squad (if exists) and Job
         var jobLabelText = Loc.GetString("rmc-medal-panel-job-label");
         var squadPart = string.IsNullOrEmpty(recommendation.RecommenderSquad) ? null : $"({recommendation.RecommenderSquad})";
-        var jobText = $"{jobLabelText} {string.Join(" ", squadPart, recommendation.RecommenderJob)}";
+        var jobText = $"{jobLabelText} {squadPart} {recommendation.RecommenderJob}";
         var jobLabel = new RichTextLabel
         {
             HorizontalExpand = true
@@ -256,7 +256,7 @@ public sealed partial class MedalsPanelBui(EntityUid owner, Enum uiKey) : BoundU
             return null;
 
         var squadPart = string.IsNullOrEmpty(firstRec.RecommendedSquad) ? null : $"({firstRec.RecommendedSquad})";
-        var headerText = string.Join(" ", firstRec.RecommendedRank, squadPart, firstRec.RecommendedJob, firstRec.RecommendedName);
+        var headerText = $"{firstRec.RecommendedRank} {squadPart} {firstRec.RecommendedJob} {firstRec.RecommendedName}";
         var headerLabel = new RichTextLabel
         {
             HorizontalExpand = true

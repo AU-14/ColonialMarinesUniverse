@@ -479,6 +479,14 @@
     - chirps
     - chirped
     - chirping
+    - tweet
+    - tweets
+    - tweeted
+    - tweeting
+    - cheep
+    - cheeps
+    - cheeped
+    - cheeping
 
 - type: emote
   id: Flap

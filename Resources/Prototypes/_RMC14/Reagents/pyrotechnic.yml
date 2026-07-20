@@ -17,7 +17,7 @@
     Flammable:
       methods: [ Touch ]
       effects:
-      - !type:FlammableReaction
+      - !type:Flammable
         multiplier: 0.2
   metabolisms:
     Bloodstream:
@@ -27,7 +27,7 @@
         damage:
           types:
             Poison: 0.25
-      - !type:FlammableReaction
+      - !type:Flammable
         multiplier: 0.2
 
 - type: reagent

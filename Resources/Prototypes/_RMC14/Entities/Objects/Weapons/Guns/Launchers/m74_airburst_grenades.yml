@@ -284,7 +284,10 @@
       path: /Audio/Effects/gen_hit.ogg
   - type: SpawnOnTerminate
     spawn: RMCSmoke
-  - type: SoundOnTrigger
+  - type: EmitSoundOnTrigger
+    keysIn:
+    - timer
+    positional: true
     sound: /Audio/Effects/smoke.ogg
   - type: DeleteOnTrigger
 

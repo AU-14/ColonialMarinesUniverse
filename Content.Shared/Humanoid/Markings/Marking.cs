@@ -30,6 +30,10 @@ public partial record struct Marking
     /// </summary>
     public bool Forced;
 
+    // RMC14
+    [DataField]
+    public bool Visible = true;
+
     public Marking()
     {
         _markingColors = new();

@@ -34,7 +34,6 @@ using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
-using System.Linq;
 
 namespace Content.Shared._RMC14.Dropship;
 

@@ -1,4 +1,5 @@
 ﻿using Content.Client.IconSmoothing;
+using Content.Shared._RMC14.IconSmoothing;
 using Content.Shared.Sprite;
 using Robust.Client.GameObjects;
 using Robust.Shared.Reflection;

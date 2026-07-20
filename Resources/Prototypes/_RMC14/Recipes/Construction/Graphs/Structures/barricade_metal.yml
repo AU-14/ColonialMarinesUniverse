@@ -22,7 +22,7 @@
       completed:
       - !type:ConditionalAction
         condition:
-          !type:MinHealth
+          !type:RMCMinHealth
           threshold: 1
           byProportion: true
         action:
@@ -32,7 +32,7 @@
         else:
           !type:ConditionalAction
           condition:
-            !type:MinHealth
+            !type:RMCMinHealth
             threshold: 0.78
             byProportion: true
           action:
@@ -42,7 +42,7 @@
           else:
             !type:ConditionalAction
             condition:
-              !type:MinHealth
+              !type:RMCMinHealth
               threshold: 0.56
               byProportion: true
             action:

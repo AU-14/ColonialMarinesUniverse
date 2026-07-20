@@ -1,10 +1,8 @@
-- type: examinableDamage
+- type: localizedDataset
   id: RMCWallMessages
-  messages:
-    - rmc-wall-integrity-1
-    - rmc-wall-integrity-2
-    - rmc-wall-integrity-3
-    - rmc-wall-integrity-4
+  values:
+    prefix: rmc-wall-integrity-
+    count: 4
 
 # Standard
 - type: entity

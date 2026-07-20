@@ -6,7 +6,7 @@ namespace Content.Server._RMC14.Xenonids.Construction.Nest;
 /// <summary>
 /// Records a nested player's identity when the server handles their ghost attempt.
 /// </summary>
-public sealed class XenoNestedGhostSystem : EntitySystem
+public sealed partial class XenoNestedGhostSystem : EntitySystem
 {
     [Dependency] private XenoNestSystem _nest = default!;
 

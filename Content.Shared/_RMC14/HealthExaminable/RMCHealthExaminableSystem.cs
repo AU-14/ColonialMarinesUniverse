@@ -1,16 +1,15 @@
-﻿using System.Collections.Immutable;
-using Content.Shared.Damage;
+﻿using Content.Shared.Damage;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.IdentityManagement;
 
 namespace Content.Shared._RMC14.HealthExaminable;
 
-public sealed class RMCHealthExaminableSystem : EntitySystem
+public sealed partial class RMCHealthExaminableSystem : EntitySystem
 {
     [Dependency] private DamageableSystem _damageable = default!;
 
-    private readonly ImmutableArray<FixedPoint2> _thresholds = ImmutableArray.Create<FixedPoint2>(25, 50, 75, 100, 200, 300);
+    private static readonly FixedPoint2[] Thresholds = new FixedPoint2[] { 25, 50, 75, 100, 200, 300 };
 
     public override void Initialize()
     {
@@ -33,9 +32,9 @@ public sealed class RMCHealthExaminableSystem : EntitySystem
                 if (!damagePerGroup.TryGetValue(group, out var groupDamage))
                     continue;
 
-                for (var i = _thresholds.Length - 1; i >= 0; i--)
+                for (var i = Thresholds.Length - 1; i >= 0; i--)
                 {
-                    var threshold = _thresholds[i];
+                    var threshold = Thresholds[i];
                     if (groupDamage < threshold)
                         continue;
 

@@ -232,7 +232,7 @@
     Blood:
       amount: 5
   effects:
-  - !type:CreateEntityReactionEffect
+  - !type:SpawnEntity
     entity: FoodMeat
 
 - type: reaction
@@ -248,7 +248,7 @@
     EggCooked:
       amount: 5
   effects:
-  - !type:CreateEntityReactionEffect
+  - !type:SpawnEntity
     entity: FoodMealFriedegg
 
 - type: reaction

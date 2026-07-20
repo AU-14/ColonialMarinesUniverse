@@ -38,7 +38,9 @@
     autoDrain: false
   - type: StaticPrice
     price: 25
-  - type: RatKingRummageable
+  - type: Rummageable
+    table: !type:NestedSelector
+      tableId: RatKingLoot
   - type: SolutionContainerManager
     solutions:
       drainBuffer:

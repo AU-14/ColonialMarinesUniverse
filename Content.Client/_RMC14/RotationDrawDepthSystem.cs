@@ -1,5 +1,7 @@
 ﻿using Robust.Client.GameObjects;
 
+using Content.Shared._RMC14;
+
 namespace Content.Client._RMC14;
 
 public sealed class RotationDrawDepthSystem : EntitySystem

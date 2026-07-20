@@ -1,5 +1,5 @@
 - type: localizedDataset
-  id: names_vulpkanin_last
+  id: rmc_names_vulpkanin_last
   values:
     prefix: rmc-name-vulpkanin-last-
     count: 252

@@ -186,7 +186,7 @@
 
 - type: entity
   name: banh mi
-  parent: CMFoodBase
+  parent: [CMFoodBase, BaseSlicingRefinableFood]
   id: FoodBanhMi
   description: Banh Mi, for Banh You
   components:
@@ -207,9 +207,10 @@
         reagents:
         - ReagentId: Nutriment
           Quantity: 30
-  - type: SliceableFood
-    slice: FoodBanhMiHalf
-    count: 2
+  - type: ToolRefinable
+    refineResult:
+    - id: FoodBanhMiHalf
+      amount: 2
 
 - type: entity
   name: banh mi half
@@ -237,7 +238,7 @@
 
 - type: entity
   name: chicken parm hero
-  parent: CMFoodBase
+  parent: [CMFoodBase, BaseSlicingRefinableFood]
   id: FoodChickenParmHero
   description: Now thats a sandwich, fuggedaboutit!
   components:
@@ -261,9 +262,10 @@
           Quantity: 16
         - ReagentId: Protein
           Quantity: 10
-  - type: SliceableFood
-    slice: FoodChickenParmHalf
-    count: 2
+  - type: ToolRefinable
+    refineResult:
+    - id: FoodChickenParmHalf
+      amount: 2
 
 - type: entity
   name: chicken parm half
@@ -294,7 +296,7 @@
 
 - type: entity
   name: meatball sub
-  parent: CMFoodBase
+  parent: [CMFoodBase, BaseSlicingRefinableFood]
   id: FoodMeatballSub
   description: Made with the secrets of Death Kwon Do!
   components:
@@ -318,9 +320,10 @@
           Quantity: 16
         - ReagentId: Protein
           Quantity: 10
-  - type: SliceableFood
-    slice: FoodMeatballSubHalf
-    count: 2
+  - type: ToolRefinable
+    refineResult:
+    - id: FoodMeatballSubHalf
+      amount: 2
 
 - type: entity
   name: meatball sub half
@@ -351,7 +354,7 @@
 
 - type: entity
   name: gabagool sandwich
-  parent: CMFoodBase
+  parent: [CMFoodBase, BaseSlicingRefinableFood]
   id: FoodGabagool
   description: Woke up this morning, got yourself a sandwich.
   components:
@@ -373,9 +376,10 @@
         reagents:
         - ReagentId: Nutriment
           Quantity: 30
-  - type: SliceableFood
-    slice: FoodGabagoolHalf
-    count: 2
+  - type: ToolRefinable
+    refineResult:
+    - id: FoodGabagoolHalf
+      amount: 2
 
 - type: entity
   name: gabagool sandwich half
@@ -404,7 +408,7 @@
 
 - type: entity
   name: cheesesteak
-  parent: CMFoodBase
+  parent: [CMFoodBase, BaseSlicingRefinableFood]
   id: FoodCheesesteak
   description: If your hands aren't greasy holding it, is it really a cheesesteak?
   components:
@@ -427,9 +431,10 @@
           Quantity: 16
         - ReagentId: Protein
           Quantity: 10
-  - type: SliceableFood
-    slice: FoodCheesesteakHalf
-    count: 2
+  - type: ToolRefinable
+    refineResult:
+    - id: FoodCheesesteakHalf
+      amount: 2
 
 - type: entity
   name: cheesesteak half
@@ -489,7 +494,7 @@
 
 - type: entity
   name: black forest cake
-  parent: CMFoodBase
+  parent: [CMFoodBase, BaseSlicingRefinableFood]
   id: FoodCakeBlackForest
   description: The cake is a lie no more!
   components:
@@ -510,9 +515,10 @@
         reagents:
         - ReagentId: Nutriment
           Quantity: 30
-  - type: SliceableFood
-    slice: FoodBlackForestSlice
-    count: 6
+  - type: ToolRefinable
+    refineResult:
+    - id: FoodBlackForestSlice
+      amount: 6
 
 - type: entity
   name: black forest cake slice

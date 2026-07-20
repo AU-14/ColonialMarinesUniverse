@@ -9,4 +9,10 @@ public sealed partial class RadioChannelPrototype
 
     [DataField]
     public char RadioPrefix = ':';
+
+    [DataField]
+    public bool Tower;
+
+    [DataField]
+    public bool Planet = true;
 }
