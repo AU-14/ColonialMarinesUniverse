@@ -37,9 +37,17 @@
       types:
         Blunt: 0
   - type: Clickable
-  - type: Drink
+  - type: Edible
+    edible: Drink
     solution: bucket
-    ignoreEmpty: true
+    destroyOnEmpty: false
+    transferAmount: 5
+    utensil: None
+    delay: 0.5
+    forceFeedDelay: 3
+    useSound: /Audio/Items/drink.ogg
+  - type: ExaminableSolution
+    solution: bucket
   - type: Spillable
     solution: bucket
   - type: DrawableSolution

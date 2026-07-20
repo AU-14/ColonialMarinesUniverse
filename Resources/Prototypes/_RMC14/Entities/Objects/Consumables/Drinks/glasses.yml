@@ -8,7 +8,15 @@
     solutions:
       drink:
         maxVol: 100
-  - type: Drink
+  - type: Edible
+    edible: Drink
+    solution: drink
+    destroyOnEmpty: false
+    transferAmount: 5
+    utensil: None
+    delay: 0.5
+    forceFeedDelay: 3
+    useSound: /Audio/Items/drink.ogg
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/pint_glass.rsi
     layers:
@@ -56,7 +64,15 @@
     solutions:
       drink:
         maxVol: 50
-  - type: Drink
+  - type: Edible
+    edible: Drink
+    solution: drink
+    destroyOnEmpty: false
+    transferAmount: 5
+    utensil: None
+    delay: 0.5
+    forceFeedDelay: 3
+    useSound: /Audio/Items/drink.ogg
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/drink_glass.rsi
     layers:

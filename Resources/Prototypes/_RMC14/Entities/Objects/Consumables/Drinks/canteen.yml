@@ -7,7 +7,15 @@
     sprite: _RMC14/Objects/Consumable/Drinks/canteen.rsi
   - type: Item
     size: Small
-  - type: Drink
+  - type: Edible
+    edible: Drink
+    solution: drink
+    destroyOnEmpty: false
+    transferAmount: 5
+    utensil: None
+    delay: 0.5
+    forceFeedDelay: 3
+    useSound: /Audio/Items/drink.ogg
   - type: InteractedBlacklist
     blacklist:
       components:

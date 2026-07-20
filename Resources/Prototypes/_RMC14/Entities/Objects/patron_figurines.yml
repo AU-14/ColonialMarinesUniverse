@@ -348,7 +348,17 @@
         solution: drink
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
-  - type: Drink
+  - type: Edible
+    edible: Drink
+    solution: drink
+    destroyOnEmpty: false
+    transferAmount: 5
+    utensil: None
+    delay: 0.5
+    forceFeedDelay: 3
+    useSound: /Audio/Items/drink.ogg
+  - type: ExaminableSolution
+    solution: drink
   - type: SolutionContainerManager
     solutions:
       drink:
@@ -458,7 +468,15 @@
     id: 0e3c7afc-4366-48a1-af0c-a9a8c1ecf0e6
   - type: Item
     size: Small
-  - type: Drink
+  - type: Edible
+    edible: Drink
+    solution: drink
+    destroyOnEmpty: false
+    transferAmount: 5
+    utensil: None
+    delay: 0.5
+    forceFeedDelay: 3
+    useSound: /Audio/Items/drink.ogg
   - type: SolutionContainerManager
     solutions:
       drink:
@@ -1650,7 +1668,17 @@
     state: valerie_hawkins
   - type: PatronFigurine
     id: bb15fc57-32ca-40f6-aef6-b9bba1a3c69f
-  - type: Drink
+  - type: Edible
+    edible: Drink
+    solution: drink
+    destroyOnEmpty: false
+    transferAmount: 5
+    utensil: None
+    delay: 0.5
+    forceFeedDelay: 3
+    useSound: /Audio/Items/drink.ogg
+  - type: ExaminableSolution
+    solution: drink
   - type: SolutionContainerManager
     solutions:
       drink:

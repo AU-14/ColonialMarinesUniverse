@@ -8,7 +8,17 @@
     state: icon
   - type: Item
     size: Small
-  - type: Drink
+  - type: Edible
+    edible: Drink
+    solution: drink
+    destroyOnEmpty: false
+    transferAmount: 5
+    utensil: None
+    delay: 0.5
+    forceFeedDelay: 3
+    useSound: /Audio/Items/drink.ogg
+  - type: ExaminableSolution
+    solution: drink
   - type: SolutionContainerManager
     solutions:
       drink:

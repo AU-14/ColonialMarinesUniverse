@@ -24,7 +24,15 @@
     solutions:
       drink:
         maxVol: 30
-  - type: Drink
+  - type: Edible
+    edible: Drink
+    solution: drink
+    destroyOnEmpty: false
+    transferAmount: 5
+    utensil: None
+    delay: 0.5
+    forceFeedDelay: 3
+    useSound: /Audio/Items/drink.ogg
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/coffee_cup.rsi
     layers:
@@ -165,7 +173,15 @@
     solutions:
       drink:
         maxVol: 10
-  - type: Drink
+  - type: Edible
+    edible: Drink
+    solution: drink
+    destroyOnEmpty: false
+    transferAmount: 5
+    utensil: None
+    delay: 0.5
+    forceFeedDelay: 3
+    useSound: /Audio/Items/drink.ogg
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/water_cup.rsi
     layers:

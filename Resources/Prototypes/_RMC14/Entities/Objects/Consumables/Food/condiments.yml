@@ -16,7 +16,16 @@
     solution: food
   - type: DrainableSolution
     solution: food
-  - type: Drink
+  - type: Edible
+    edible: Drink
+    solution: food
+    destroyOnEmpty: false
+    transferAmount: 5
+    utensil: None
+    delay: 0.5
+    forceFeedDelay: 3
+    useSound: /Audio/Items/drink.ogg
+  - type: ExaminableSolution
     solution: food
   - type: Openable
     sound:

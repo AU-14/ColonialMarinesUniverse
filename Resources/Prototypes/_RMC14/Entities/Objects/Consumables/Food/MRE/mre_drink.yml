@@ -4,7 +4,15 @@
   parent: DrinkBase
   id: RMCMREInstantPowderBase
   components:
-  - type: Drink
+  - type: Edible
+    edible: Drink
+    solution: drink
+    destroyOnEmpty: false
+    transferAmount: 5
+    utensil: None
+    delay: 0.5
+    forceFeedDelay: 3
+    useSound: /Audio/Items/drink.ogg
   - type: SolutionContainerManager
     solutions:
       drink:
