@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Weather;
 using Content.Shared.Light.Components;
@@ -16,12 +17,11 @@ namespace Content.Shared.Weather;
 public abstract partial class SharedWeatherSystem : EntitySystem
 {
     [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected SharedAudioSystem Audio = default!;
     [Dependency] private ITileDefinitionManager _tileDefManager = default!;
-    [Dependency] private MetaDataSystem _metadata = default!;
-    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private SharedRoofSystem _roof = default!;
-    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
     [Dependency] private RMCWeatherSystem _rmcWeather = default!;
 
     [Dependency] private EntityQuery<BlockWeatherComponent> _blockQuery = default!;
@@ -33,8 +33,14 @@ public abstract partial class SharedWeatherSystem : EntitySystem
     public bool CanWeatherAffect(Entity<MapGridComponent?, RoofComponent?> ent, TileRef tileRef)
     {
         //RMC14 - This goes first, if the grid uses areas, we use the RMC Area Weather system instead of upstream.
-        if (TryComp<AreaGridComponent>(uid, out _))
-            return _rmcWeather.CanWeatherAffectArea(uid, grid, tileRef, roofComp);
+        if (HasComp<AreaGridComponent>(ent))
+        {
+            if (!Resolve(ent, ref ent.Comp1))
+                return false;
+
+            Resolve(ent, ref ent.Comp2, false);
+            return _rmcWeather.CanWeatherAffectArea(ent, ent.Comp1, tileRef, ent.Comp2);
+        }
 
         if (tileRef.Tile.IsEmpty)
             return true;

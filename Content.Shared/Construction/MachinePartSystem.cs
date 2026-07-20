@@ -11,7 +11,6 @@ namespace Content.Shared.Construction
     /// </summary>
     public sealed partial class MachinePartSystem : EntitySystem
     {
-        [Dependency] private IPrototypeManager _prototype = default!;
         [Dependency] private SharedLatheSystem _lathe = default!;
         [Dependency] private SharedConstructionSystem _construction = default!;
 
@@ -113,7 +112,7 @@ namespace Content.Shared.Construction
                         materials[mat] += matAmount * amount * coefficient;
                     }
                 }
-                else if (_prototype.TryIndex(defaultProtoId, out var defaultProto) &&
+                else if (ProtoMan.Resolve(defaultProtoId, out var defaultProto) &&
                          defaultProto.TryComp<PhysicalCompositionComponent>(out var physComp, EntityManager.ComponentFactory))
                 {
                     foreach (var (mat, matAmount) in physComp.MaterialComposition)

@@ -22,17 +22,13 @@ namespace Content.Shared.SprayPainter;
 /// </summary>
 public abstract partial class SharedSprayPainterSystem : EntitySystem
 {
-    [Dependency] protected IPrototypeManager Proto = default!;
-    [Dependency] private   ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] protected ISharedAdminLogManager AdminLogger = default!;
     [Dependency] protected SharedAppearanceSystem Appearance = default!;
     [Dependency] protected SharedAudioSystem Audio = default!;
+    [Dependency] protected SharedChargesSystem Charges = default!;
     [Dependency] protected SharedDoAfterSystem DoAfter = default!;
-    [Dependency] private   SharedPopupSystem _popup = default!;
-
-    public List<AirlockStyle> Styles { get; private set; } = new();
-    public List<AirlockGroupPrototype> Groups { get; private set; } = new();
-
-    private static readonly ProtoId<AirlockDepartmentsPrototype> Departments = "Departments";
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

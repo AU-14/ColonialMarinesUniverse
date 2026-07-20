@@ -1,9 +1,6 @@
 using System.Linq;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
-using Content.Shared.Disposal;
-using Content.Shared.Disposal.Components;
-using Content.Shared.Disposal.Unit;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Item;
@@ -18,10 +15,8 @@ namespace Content.Shared.Storage.EntitySystems;
 
 public sealed partial class DumpableSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
-    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedDisposalUnitSystem _disposalUnitSystem = default!;
     [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
     [Dependency] private ISharedAdminLogManager _adminLog = default!; //RMC14
@@ -138,7 +133,8 @@ public sealed partial class DumpableSystem : EntitySystem
 
         _adminLog.Add(LogType.Drop, $"{ToPrettyString(args.User):actor} dumped {ToPrettyString(args.Target):entity}"); //RMC14
 
-        var dumpQueue = new Queue<EntityUid>(storage.Container.ContainedEntities);
+        // TODO: Remove OrderBy when this issue is fixed in RT https://github.com/space-wizards/RobustToolbox/issues/6241
+        var dumpQueue = new Queue<EntityUid>(storage.Container.ContainedEntities.OrderBy(e => GetNetEntity(e)));
 
         var evt = new DumpEvent(dumpQueue, args.Args.User, false, false);
         RaiseLocalEvent(target, ref evt);

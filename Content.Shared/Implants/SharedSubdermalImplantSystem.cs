@@ -9,15 +9,10 @@ namespace Content.Shared.Implants;
 
 public abstract partial class SharedSubdermalImplantSystem : EntitySystem
 {
-    [Dependency] private SharedActionsSystem _actionsSystem = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedContainerSystem _container = default!;
-    [Dependency] private TagSystem _tag = default!;
-    [Dependency] private SharedTransformSystem _transformSystem = default!;
-
-    public const string BaseStorageId = "storagebase";
-
-    private static readonly ProtoId<TagPrototype> MicroBombTag = "MicroBomb";
-    private static readonly ProtoId<TagPrototype> MacroBombTag = "MacroBomb";
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {
