@@ -155,7 +155,7 @@ public sealed partial class AnchorableSystem : EntitySystem
 
         var xform = Transform(uid);
         if (TryComp<PhysicsComponent>(uid, out var anchorBody) &&
-            !TileFree(xform.Coordinates, anchorBody))
+            !TileFree(xform.Coordinates, anchorBody, uid))
         {
             _popup.PopupEntity(Loc.GetString("anchorable-occupied"), uid, args.User);
             return;
@@ -314,7 +314,7 @@ public sealed partial class AnchorableSystem : EntitySystem
         if (!Resolve(entity, ref entity.Comp))
             return true;
 
-        if (TileFree(coordinates, entity.Comp))
+        if (TileFree(coordinates, entity.Comp, entity.Owner))
             return true;
 
         _popup.PopupEntity(Loc.GetString("anchorable-occupied"), entity, user);
@@ -324,7 +324,7 @@ public sealed partial class AnchorableSystem : EntitySystem
     /// <summary>
     /// Returns true if no hard anchored entities exist on the coordinate tile that would collide with the provided physics body.
     /// </summary>
-    public bool TileFree(EntityCoordinates coordinates, PhysicsComponent anchorBody)
+    public bool TileFree(EntityCoordinates coordinates, PhysicsComponent anchorBody, EntityUid? anchoringEntity = null)
     {
         // Probably ignore CanCollide on the anchoring body?
         var gridUid = _transformSystem.GetGrid(coordinates);
@@ -333,14 +333,19 @@ public sealed partial class AnchorableSystem : EntitySystem
             return false;
 
         var tileIndices = _map.TileIndicesFor((gridUid.Value, grid), coordinates);
-        return TileFree((gridUid.Value, grid), tileIndices, anchorBody.CollisionLayer, anchorBody.CollisionMask);
+        return TileFree((gridUid.Value, grid), tileIndices, anchorBody.CollisionLayer, anchorBody.CollisionMask, anchoringEntity);
     }
 
     /// <summary>
     /// Returns true if no hard anchored entities match the collision layer or mask specified.
     /// </summary>
     /// <param name="grid"></param>
-    public bool TileFree(Entity<MapGridComponent> grid, Vector2i gridIndices, int collisionLayer = 0, int collisionMask = 0)
+    public bool TileFree(
+        Entity<MapGridComponent> grid,
+        Vector2i gridIndices,
+        int collisionLayer = 0,
+        int collisionMask = 0,
+        EntityUid? anchoringEntity = null)
     {
         var enumerator = _map.GetAnchoredEntitiesEnumerator(grid, grid.Comp, gridIndices);
 
@@ -356,6 +361,9 @@ public sealed partial class AnchorableSystem : EntitySystem
             if ((body.CollisionMask & collisionLayer) != 0x0 ||
                 (body.CollisionLayer & collisionMask) != 0x0)
             {
+                if (anchoringEntity is { } anchoring && RMCAllowsAnchorOverlap(anchoring, ent.Value))
+                    continue;
+
                 return false;
             }
         }

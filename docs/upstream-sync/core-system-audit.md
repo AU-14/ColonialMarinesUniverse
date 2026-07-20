@@ -3697,3 +3697,16 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - Files changed: `Content.Shared/StepTrigger/Systems/StepTriggerImmuneSystem.cs`, `Content.Shared/_RMC14/StepTrigger/StepTriggerImmuneSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation evidence: Exact event-pair review confirms the existing system remains the sole owner of this protection decision. Prototype search finds the marker on the retained human-species and xeno bases, and component registration/networking remain live. `dotnet build Content.Shared/Content.Shared.csproj --configuration DebugOpt --no-restore --nologo --verbosity:minimal --disable-build-servers` succeeded with 0 errors and 6 unrelated warnings. Runtime tests remain deferred until the 1,000-upstream-commit checkpoint.
 - Remaining debt: Verify representative glass/shard and other `PreventableStepTrigger` hazards against barefoot humans, xenos, protected non-RMC mobs, and unprotected control entities after tests are authorized.
+
+## CS-0270 - Restore emplacement anchoring over barricades
+
+- Upstreams compared: live SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767`, live RMC `b6d677947dd8ebcb06194a66798938645fed5a54`, and current CMU.
+- Areas: Interactions, Physics, Construction, Emplacements
+- Classification: Missing -> Adapted
+- Risk: High before the fix; low after it.
+- Behavior/API delta: `SharedWeaponMountSystem` still subscribed to `RMCCheckTileFreeEvent` and explicitly allowed a weapon mount to overlap an anchored `BarricadeComponent`, but the current anchoring collision scan never raised that retained event. Deployed emplacements were therefore rejected as occupying a blocked tile when positioned over the intended barricade support.
+- RMC/CMU divergence: Current SS14 collision-layer and hard-body checks remain authoritative for every ordinary anchorable and every non-barricade obstruction. Only an anchoring entity whose fork-owned handler explicitly accepts the particular blocking entity can bypass that one overlap.
+- Decision and rationale: Thread the anchoring entity through the current `TileFree` API and invoke a fork-owned overlap predicate from the existing collision branch. Both the initial `CanAnchorAt` precheck and the post-tool completion check pass the entity, preserving the same policy across the full action lifecycle and avoiding a second anchoring owner.
+- Files changed: `Content.Shared/Construction/EntitySystems/AnchorableSystem.cs`, `Content.Shared/_RMC14/Construction/Anchored/AnchorableSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation evidence: Repository-wide event-pair review found one retained producer contract and one `WeaponMountComponent` consumer; the pre-fix producer was absent. Static flow review confirms both collision checks now evaluate the same per-obstruction event and that the default remains blocked. Shared targeted compilation succeeded with 0 errors and 6 unrelated baseline warnings; runtime tests remain deferred until the 1,000-upstream-commit checkpoint.
+- Remaining debt: Runtime coverage must deploy a weapon mount over a barricade, reject it over another hard obstruction, recheck after the tool delay when occupancy changes, and confirm ordinary anchorables still reject barricades.
