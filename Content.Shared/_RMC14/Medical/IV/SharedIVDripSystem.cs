@@ -57,7 +57,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
 
         SubscribeLocalEvent<BloodPackComponent, MapInitEvent>(OnBloodPackMapInit);
         SubscribeLocalEvent<BloodPackComponent, AfterAutoHandleStateEvent>(OnBloodPackAfterState);
-        SubscribeLocalEvent<BloodPackComponent, SolutionContainerChangedEvent>(OnBloodPackSolutionChanged);
+        SubscribeLocalEvent<BloodPackComponent, SolutionChangedEvent>(OnBloodPackSolutionChanged);
         SubscribeLocalEvent<BloodPackComponent, AfterInteractEvent>(OnBloodPackAfterInteract);
         SubscribeLocalEvent<BloodPackComponent, AttachBloodPackDoAfterEvent>(OnBloodPackAttachDoAfter);
         SubscribeLocalEvent<BloodPackComponent, GotUnequippedHandEvent>(OnBloodPackUnequippedHand);
@@ -177,7 +177,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
         UpdatePackVisuals(pack);
     }
 
-    private void OnBloodPackSolutionChanged(Entity<BloodPackComponent> pack, ref SolutionContainerChangedEvent args)
+    private void OnBloodPackSolutionChanged(Entity<BloodPackComponent> pack, ref SolutionChangedEvent args)
     {
         UpdatePackVisuals(pack);
     }

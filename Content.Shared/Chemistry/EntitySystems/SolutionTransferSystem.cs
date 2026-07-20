@@ -7,6 +7,7 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared.Chemistry.EntitySystems;
 
@@ -20,6 +21,10 @@ public sealed partial class SolutionTransferSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedSolutionContainerSystem _solution = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+
+    [Dependency] private EntityQuery<RefillableSolutionComponent> _refillableQuery = default!;
+    [Dependency] private EntityQuery<DrainableSolutionComponent> _drainableQuery = default!;
 
     /// <summary>
     ///     Default transfer amounts for the set-transfer verb.
@@ -300,14 +305,10 @@ public sealed partial class SolutionTransferSystem : EntitySystem
     /// Includes a pop-up if the transfer failed.
     /// </summary>
     /// <returns>The actual amount transferred.</returns>
-    public FixedPoint2 Transfer(EntityUid? user,
-        EntityUid sourceEntity,
-        Entity<SolutionComponent> source,
-        EntityUid targetEntity,
-        Entity<SolutionComponent> target,
-        FixedPoint2 amount)
+    public FixedPoint2 Transfer(SolutionTransferData data)
     {
-        var transferAttempt = new SolutionTransferAttemptEvent(sourceEntity, source, targetEntity, target);
+        var sourceSolution = data.Source.Comp.Solution;
+        var targetSolution = data.Target.Comp.Solution;
 
         if (!CanTransfer(data))
             return FixedPoint2.Zero;
@@ -328,11 +329,24 @@ public sealed partial class SolutionTransferSystem : EntitySystem
     }
 
     /// <summary>
+    /// Compatibility overload for RMC pressurized solution containers.
+    /// </summary>
+    public FixedPoint2 Transfer(EntityUid user,
+        EntityUid sourceEntity,
+        Entity<SolutionComponent> source,
+        EntityUid targetEntity,
+        Entity<SolutionComponent> target,
+        FixedPoint2 amount)
+    {
+        return Transfer(new SolutionTransferData(user, sourceEntity, source, targetEntity, target, amount));
+    }
+
+    /// <summary>
     /// Check if the source solution can transfer the amount to the target solution, and display a pop-up if it fails.
     /// </summary>
     private bool CanTransfer(SolutionTransferData data)
     {
-        var transferAttempt = new SolutionTransferAttemptEvent(data.SourceEntity, data.TargetEntity);
+        var transferAttempt = new SolutionTransferAttemptEvent(data.SourceEntity, data.Source, data.TargetEntity, data.Target);
 
         // Check if the source is cancelling the transfer
         RaiseLocalEvent(data.SourceEntity, ref transferAttempt);
@@ -409,4 +423,36 @@ public record struct SolutionTransferAttemptEvent(EntityUid From, Entity<Solutio
 /// Raised on the target entity when a non-zero amount of solution gets transferred.
 /// </summary>
 [ByRefEvent]
-public record struct SolutionTransferredEvent(EntityUid From, EntityUid To, EntityUid? User, FixedPoint2 Amount);
+public record struct SolutionTransferredEvent(EntityUid From, EntityUid To, EntityUid User, FixedPoint2 Amount);
+
+/// <summary>
+/// Doafter event for solution transfers where the held item is drained into the target. Checks for validity both when initiating and when finishing the event.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed partial class SolutionDrainTransferDoAfterEvent : DoAfterEvent
+{
+    public FixedPoint2 Amount;
+
+    public SolutionDrainTransferDoAfterEvent(FixedPoint2 amount)
+    {
+        Amount = amount;
+    }
+
+    public override DoAfterEvent Clone() => this;
+}
+
+/// <summary>
+/// Doafter event for solution transfers where the held item is filled from the target. Checks for validity both when initiating and when finishing the event.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed partial class SolutionRefillTransferDoAfterEvent : DoAfterEvent
+{
+    public FixedPoint2 Amount;
+
+    public SolutionRefillTransferDoAfterEvent(FixedPoint2 amount)
+    {
+        Amount = amount;
+    }
+
+    public override DoAfterEvent Clone() => this;
+}
