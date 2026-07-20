@@ -3191,3 +3191,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Singularity/EntitySystems/ContainmentFieldGeneratorSystem.cs`, `docs/upstream-sync/inventory-wave-0012.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static call-flow review confirms refreshes cover both newly connected generators and all callers that change the on-light appearance, while `UpdateConnectionLights` safely no-ops without a light. Server compilation plus first/multiple connection, remote endpoint, disconnect, grid change, power change, and missing-light cases are queued for the index-2999 checkpoint.
 - Follow-up/debt: None; the existing explicit source refresh may become redundant but is harmless and remains target-compatible.
+
+## CS-0235 — Stop relocalizing resolved action tooltip metadata
+
+- Upstream: [space-wizards/space-station-14#42361](https://github.com/space-wizards/space-station-14/pull/42361), `716e5ace87e4c0d44015e767adfd413057f477a7`, 2026-01-11
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Action-button tooltips now pass `MetaDataComponent.EntityName` and `EntityDescription` directly to permissive markup parsing. These values are already resolved display text, so the client no longer treats dynamic names/descriptions as localization keys or emits lookup warnings.
+- RMC/CMU divergence: RMC frequently assigns action metadata dynamically for xeno abilities, vehicles, equipment, and marine systems. Direct parsing preserves those runtime strings and their markup instead of attempting a second localization pass; action activation, cooldowns, charges, requirements, and icons are unchanged.
+- Decision and rationale: Port the target-final removal of both localization calls while retaining CMU's local description-variable name. Entity metadata is the presentation boundary and may contain localized or runtime-generated text; resolving it again is semantically incorrect and noisy.
+- Files changed: `Content.Client/UserInterface/Systems/Actions/Controls/ActionButton.cs`, `docs/upstream-sync/inventory-wave-0012.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms name/description still use permissive markup, null metadata still returns early, and charge/requirement text remains on its existing path. Client compilation plus prototype action, dynamic RMC action, localized text, markup, missing-key warning, charges, cooldown, and empty-description cases are queued for the index-2999 checkpoint.
+- Follow-up/debt: The nearby charge strings interpolate resolved runtime values into `Loc.GetString`; review that separate legacy path when its upstream replacement reaches the pinned history.

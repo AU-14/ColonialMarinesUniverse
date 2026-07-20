@@ -120,7 +120,7 @@ behavior to port.
 2301 | 5025e0d28695f01fcb049dc61ddaded2dde72a8b | Janiborg Module Cleanup (#42330) | Deferred | Interactions | Janiborg tool and module cleanup must preserve RMC borg modules and local tool qualities.
 2302 | 3a0049e5349b7f3d377b0c40611414f278a3fca0 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2303 | b707110dea2fb4cbb049a5a2ec4654573e55cb93 | fix: clear health bar/icon overlay damage containers on update (#39288) | AlreadyPresent | Medical | CMU already clears health bar and health icon damage-container state on refresh and deactivation, including its RMC HUD extension.
-2304 | 716e5ace87e4c0d44015e767adfd413057f477a7 | Fix action tooltip warnings (#42361) | PortCandidate | Interactions | Two redundant action-tooltip localization calls can be removed independently after checking CMU metadata semantics.
+2304 | 716e5ace87e4c0d44015e767adfd413057f477a7 | Fix action tooltip warnings (#42361) | Ported (CS-0235) | Interactions | Action tooltips now parse the already resolved metadata name and description directly, avoiding redundant localization lookups and missing-key warnings for dynamic actions.
 2305 | 9338834b1b8d21c78b4159bc3b9086919fcf9f6c | Add admin logs for connecting/disconnecting players (#42363) | PortCandidate | GameTicking | Focused connection and disconnection admin logs add a durable GameTicker audit trail.
 2306 | a92702e780c3052ad7708a463246a64d6eb9de45 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2307 | 4fafb55477b04eb12900068c1bae3f1d9ef524c5 | Predict BarSignBoundUserinterface (#42364) | Deferred | Interactions | Bar-sign UI prediction moves client visual and selection state into a shared system across five files.
