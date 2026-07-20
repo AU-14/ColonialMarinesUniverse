@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Content.Shared.Localizations;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Preferences;
@@ -14,6 +15,8 @@ namespace Content.Shared.Roles;
 [Serializable, NetSerializable]
 public sealed partial class RoleTimeRequirement : JobRequirement
 {
+    private static readonly Color DefaultDepartmentColor = Color.Yellow;
+
     /// <summary>
     /// What particular role they need the time requirement with.
     /// </summary>
@@ -32,24 +35,24 @@ public sealed partial class RoleTimeRequirement : JobRequirement
     {
         reason = new FormattedMessage();
 
-        string proto = Role;
+        var trackerPrototype = protoManager.Index(Role);
+        var jobSystem = entManager.EntitySysManager.GetEntitySystem<SharedJobSystem>();
 
-        playTimes.TryGetValue(proto, out var roleTime);
+        playTimes.TryGetValue(Role, out var roleTime);
         var roleDiffSpan = Time - roleTime;
         var roleDiff = roleDiffSpan.TotalMinutes;
         var formattedRoleDiff = ContentLocalizationManager.FormatPlaytime(roleDiffSpan);
-        var departmentColor = Color.Yellow;
+        var jobList = jobSystem.GetJobPrototypes(Role);
+        var departmentColor = DefaultDepartmentColor;
 
-        if (!entManager.EntitySysManager.TryGetEntitySystem(out SharedJobSystem? jobSystem))
-            return false;
+        if (jobSystem.TryGetListHighestWeightDepartment(jobList, out var department))
+            departmentColor = department.Color;
 
-        var jobProto = jobSystem.GetJobPrototype(proto);
+        var localizedNames = jobList.Select(jobId => protoManager.Index(jobId).LocalizedName).ToList();
+        var names = ContentLocalizationManager.FormatListToOr(localizedNames);
 
-        if (jobSystem.TryGetDepartment(jobProto, out var departmentProto))
-            departmentColor = departmentProto.Color;
-
-        if (!protoManager.TryIndex<JobPrototype>(jobProto, out var indexedJob))
-            return false;
+        if (trackerPrototype.Name is { } trackerName)
+            names = Loc.GetString(trackerName);
 
         if (!Inverted)
         {
@@ -59,7 +62,7 @@ public sealed partial class RoleTimeRequirement : JobRequirement
             reason = FormattedMessage.FromMarkupPermissive(Loc.GetString(
                 "role-timer-role-insufficient",
                 ("time", formattedRoleDiff),
-                ("job", indexedJob.LocalizedName),
+                ("job", names),
                 ("departmentColor", departmentColor.ToHex())));
             return false;
         }
@@ -69,7 +72,7 @@ public sealed partial class RoleTimeRequirement : JobRequirement
             reason = FormattedMessage.FromMarkupPermissive(Loc.GetString(
                 "role-timer-role-too-high",
                 ("time", formattedRoleDiff),
-                ("job", indexedJob.LocalizedName),
+                ("job", names),
                 ("departmentColor", departmentColor.ToHex())));
             return false;
         }

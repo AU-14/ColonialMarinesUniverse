@@ -1,10 +1,13 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Content.Shared.CCVar;
+using Content.Shared.Localizations;
 using Content.Shared.Players;
 using Content.Shared.Players.JobWhitelist;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
+using Content.Shared.Roles.Jobs;
 using Robust.Client;
 using Robust.Client.Player;
 using Robust.Shared.Configuration;
@@ -234,14 +237,33 @@ public sealed partial class JobRequirementsManager : ISharedPlaytimeManager
 
     public IEnumerable<KeyValuePair<string, TimeSpan>> FetchPlaytimeByRoles()
     {
-        var jobsToMap = _prototypes.EnumeratePrototypes<JobPrototype>();
+        var jobSystem = _entManager.System<SharedJobSystem>();
+        var validTrackers = _prototypes.EnumeratePrototypes<JobPrototype>()
+            .Select(job => job.PlayTimeTracker)
+            .Distinct()
+            .OrderBy(tracker => tracker.Id, StringComparer.Ordinal);
 
-        foreach (var job in jobsToMap)
+        foreach (var trackerProtoId in validTrackers)
         {
-            if (_roles.TryGetValue(job.PlayTimeTracker, out var locJobName))
+            var trackerProto = _prototypes.Index(trackerProtoId);
+            if (!trackerProto.ShowInStatsMenu ||
+                !_roles.TryGetValue(trackerProtoId, out var playtime))
+                continue;
+
+            string names;
+            if (trackerProto.Name is { } trackerName)
             {
-                yield return new KeyValuePair<string, TimeSpan>(job.Name, locJobName);
+                names = Loc.GetString(trackerName);
             }
+            else
+            {
+                var jobNames = jobSystem.GetJobPrototypes(trackerProtoId)
+                    .Select(jobId => _prototypes.Index(jobId).LocalizedName)
+                    .ToList();
+                names = ContentLocalizationManager.FormatList(jobNames);
+            }
+
+            yield return new KeyValuePair<string, TimeSpan>(names, playtime);
         }
     }
 
