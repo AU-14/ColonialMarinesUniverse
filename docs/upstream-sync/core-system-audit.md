@@ -1410,3 +1410,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Bed/Sleep/SleepingSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static control-flow review confirms only applying-state callbacks skip `TrySleeping`; normal forced sleep and CMU's surrounding event subscriptions are unchanged. Shared compilation plus predicted-reset and ordinary forced-sleep cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a prediction-reset regression proving restoration neither creates a sleeping component nor emits duplicate sleep-state side effects.
+
+## CS-0100 — Stop last-words callbacks for deleted mobs
+
+- Upstream: [space-wizards/space-station-14#39245](https://github.com/space-wizards/space-station-14/pull/39245), `901cef43c96ce97c0ab6a43e312a8cb4fb619473`, 2025-07-28
+- Areas: Medical, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The asynchronous critical-state last-words callback now exits when its mob was gibbed or deleted while the quick dialog was open, before reading critical state or attempting chat and ghost commands on that entity.
+- RMC/CMU divergence: CMU retains the inherited critical-mob action flow and has no RMC override at this callback; RMC-specific death and gib paths can therefore hit the same delayed-dialog lifecycle race.
+- Decision and rationale: Port the retained deletion guard at the start of the callback so all subsequent entity-dependent operations share one safe lifecycle boundary.
+- Files changed: `Content.Server/Mobs/CritMobActionsSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static callback tracing confirms deleted mobs return before component lookup, speech, or ghosting, while attached critical mobs retain the exact last-words flow. Server compilation plus delete/gib-before-submit and normal-submit cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add an asynchronous regression that opens the dialog, deletes the mob, then submits without errors or emitted chat.
