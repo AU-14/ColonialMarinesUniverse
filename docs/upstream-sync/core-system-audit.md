@@ -1423,3 +1423,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Mobs/CritMobActionsSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static callback tracing confirms deleted mobs return before component lookup, speech, or ghosting, while attached critical mobs retain the exact last-words flow. Server compilation plus delete/gib-before-submit and normal-submit cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add an asynchronous regression that opens the dialog, deletes the mob, then submits without errors or emitted chat.
+
+## CS-0101 — Allocate tabletop worlds on a correct Ulam spiral
+
+- Upstream: [space-wizards/space-station-14#39327](https://github.com/space-wizards/space-station-14/pull/39327), `c376e695184ec53f3d0a7e0966aad1bfa2eee013`, 2025-08-01
+- Areas: Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Tabletop grids now start at the one-based entry required by the Ulam mapping and calculate each ring by dividing before applying `Ceiling`; successive minigames therefore receive distinct, correctly spaced coordinates.
+- RMC/CMU divergence: CMU retains the inherited isolated tabletop map and round-cleanup counter. No RMC tabletop placement override exists, so only the flawed coordinate allocator changes.
+- Decision and rationale: Port both retained corrections atomically because fixing either the initial index or the arithmetic precedence alone does not restore the intended spiral sequence.
+- Files changed: `Content.Server/Tabletop/TabletopSystem.Map.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static evaluation of the initial sequence confirms one-based inputs and distinct positions separated by `TabletopSeparation`; map creation and round-reset behavior remain unchanged. Server compilation plus multi-tabletop placement and reset cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a deterministic sequence test covering enough values to cross several spiral corners and assert no duplicate coordinates.
