@@ -2737,3 +2737,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Structures/Specific/Atmospherics/sensor.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static inheritance review confirms concrete `AirSensor` keeps both tags, `AirSensorBase` keeps monitoring components, and multi-parent vents/scrubbers no longer inherit sensor identity. YAML validation plus construction, rotation repair, special vent, scrubber, gas-pipe sensor, and map-load cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1345 as `Ported (CS-0200)` when wave 0007 is committed.
+
+## CS-0201 — Log deployable-turret configuration changes
+
+- Upstream: [space-wizards/space-station-14#40884](https://github.com/space-wizards/space-station-14/pull/40884), `e92b48c1fa90b95bf694feeba2d2bc97618f2efe`, 2025-10-14
+- Areas: Shooting, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Deployable-turret controllers now emit medium-impact `ItemConfigure` admin logs when a user changes armament state or enables/disables each access exemption. Logs identify the actor, controller, requested state, and affected access prototype before the device-network update is broadcast.
+- RMC/CMU divergence: This is the standard deployable turret controller, not RMC vehicle hardpoints or fork sentry systems. RMC weapon targeting, ammunition, IFF, access semantics, network payloads, and actual turret firing behavior are unchanged.
+- Decision and rationale: Port logging at the authoritative controller methods so UI-originated changes share one audit point and the recorded values match the payload. One access log per requested exemption preserves useful granularity.
+- Files changed: `Content.Server/TurretController/DeployableTurretControllerSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static flow review confirms logging occurs only after required network/targeting components resolve, before the unchanged packet queue, and covers both armament and access paths. Server compilation plus armament, single/multiple exemption, missing-device, null-user, and RMC turret cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1361 as `Ported (CS-0201)` when wave 0007 is committed.
