@@ -2748,7 +2748,7 @@ Date completed: 2026-07-20
 - RMC/CMU divergence: This is the standard deployable turret controller, not RMC vehicle hardpoints or fork sentry systems. RMC weapon targeting, ammunition, IFF, access semantics, network payloads, and actual turret firing behavior are unchanged.
 - Decision and rationale: Port logging at the authoritative controller methods so UI-originated changes share one audit point and the recorded values match the payload. One access log per requested exemption preserves useful granularity.
 - Files changed: `Content.Server/TurretController/DeployableTurretControllerSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
-- Validation: Static flow review confirms logging occurs only after required network/targeting components resolve, before the unchanged packet queue, and covers both armament and access paths. Server compilation plus armament, single/multiple exemption, missing-device, null-user, and RMC turret cases are queued for the index-1999 checkpoint.
+- Validation: Static flow review confirms logging occurs only after required network/targeting components resolve, before the unchanged packet queue, and covers both armament and access paths. The index-1999 solution build caught the injected admin logger being declared `readonly`; removing that modifier restores the established dependency-injection contract and clears analyzer RA0051. Armament, single/multiple exemption, missing-device, null-user, and RMC turret cases remain covered by the checkpoint integration suite.
 - Follow-up/debt: Record index 1361 as `Ported (CS-0201)` when wave 0007 is committed.
 
 ## CS-0202 — Read power sensors from their selected cable network
