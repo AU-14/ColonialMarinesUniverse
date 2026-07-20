@@ -17,7 +17,7 @@ public sealed partial class DefibrillatorComponent
     /// Metabolism stage searched for RMC electrogenetic effects.
     /// </summary>
     [DataField]
-    public ProtoId<MetabolismStagePrototype> MetabolismId = "Medicine";
+    public ProtoId<MetabolismStagePrototype> MetabolismId = "Bloodstream";
 
     /// <summary>
     /// Skill used to modify the RMC defibrillation delay.
