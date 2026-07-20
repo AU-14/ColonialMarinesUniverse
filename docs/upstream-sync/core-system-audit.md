@@ -624,3 +624,13 @@ demonstrates otherwise.
 - Files changed: `Resources/Prototypes/GameRules/events.yml`, `Content.IntegrationTests/Tests/GameRules/StationEventRoundEndEligibilityTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms the pinned target retains the opt-out flag and the current event manager gates it only when round end is requested and recall is locked. The regression verifies normal availability, creates an immediate locked-evac state, and requires Zombie Outbreak to leave the eligible set. Execution follows immediately in the requested CS-0021–CS-0040 checkpoint.
 - Follow-up/debt: Audit later upstream evacuation opt-outs as separate policy decisions, especially antagonist ghost roles and visitor events, rather than bulk-copying their flags into CMU's round flow.
+
+## Batch checkpoint — CS-0021–CS-0040
+
+Date completed: 2026-07-20
+
+- Scope: 20 audited upstream items. Eighteen affect active CMU/RMC content; CS-0029 and CS-0034 synchronize intentionally dormant standard-reaction sources without enabling RMC's ignored SS14 chemistry suite.
+- Project build: `dotnet build Content.IntegrationTests/Content.IntegrationTests.csproj --no-restore --verbosity minimal` completed with 0 warnings and 0 errors.
+- Focused validation: 19 integration-test cases covering all 20 entries passed with 0 failures. The initial run passed 17 and failed the two chemistry cases because the standard reaction prototypes are deliberately abstracted; the tests and audit were corrected to validate the ignored source contract before the passing rerun.
+- Solution build: `dotnet build SpaceStation14.slnx --no-restore --verbosity minimal` completed with 0 warnings and 0 errors.
+- Disposition: The batch is closed. Continue with CS-0041 and defer the next build/test execution until CS-0060 unless a change is high-risk or static review exposes a reason to validate earlier.
