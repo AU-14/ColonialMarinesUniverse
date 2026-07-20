@@ -17,6 +17,9 @@ public abstract partial class SharedProjectileSystem
 
     private void InitializeRMCProjectile()
     {
+        if (!_rmcNet.IsClient)
+            return;
+
         SubscribeLocalEvent<ProjectileComponent, StartCollideEvent>(OnRMCStartCollide);
     }
 

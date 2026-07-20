@@ -48,6 +48,8 @@ public sealed partial class ProjectileSystem : SharedProjectileSystem
 
         var ev = new ProjectileHitEvent(component.Damage * _damageableSystem.UniversalProjectileDamageModifier, target, component.Shooter);
         RaiseLocalEvent(uid, ref ev);
+        if (ev.Handled)
+            return;
 
         var otherName = ToPrettyString(target);
         var damageRequired = _destructibleSystem.DestroyedAt(target);
@@ -58,7 +60,13 @@ public sealed partial class ProjectileSystem : SharedProjectileSystem
         }
         var deleted = Deleted(target);
 
-        if (_damageableSystem.TryChangeDamage((target, damageableComponent), ev.Damage, out var damage, component.IgnoreResistances, origin: component.Shooter) && Exists(component.Shooter))
+        var damageChanged = _damageableSystem.TryChangeDamage(
+            (target, damageableComponent),
+            ev.Damage,
+            out var damage,
+            component.IgnoreResistances,
+            origin: component.Shooter);
+        if (damageChanged && Exists(component.Shooter))
         {
             if (!deleted)
             {
@@ -75,6 +83,9 @@ public sealed partial class ProjectileSystem : SharedProjectileSystem
         {
             component.ProjectileSpent = true;
         }
+
+        RaiseRmcProjectileDamageDealt(target, component.Shooter, damage);
+        RaiseRmcAfterProjectileHit((uid, component), target);
 
         if (!deleted)
         {
