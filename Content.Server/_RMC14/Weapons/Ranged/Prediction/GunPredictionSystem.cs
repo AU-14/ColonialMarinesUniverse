@@ -23,7 +23,6 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedProjectileSystem _projectile = default!;
-    [Dependency] private RMCLagCompensationSystem _rmcLagCompensation = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private TransformSystem _transform = default!;
 
@@ -76,8 +75,7 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
 
     private void OnShootRequest(RequestShootEvent ev, EntitySessionEventArgs args)
     {
-        _rmcLagCompensation.SetLastRealTick(args.SenderSession.UserId, ev.LastRealTick);
-        ShootRequested(ev.Gun, ev.Coordinates, ev.Target, ev.Shot, args.SenderSession, ev.RearmSemiAuto);
+        ShootRequested(ev.Gun, ev.Coordinates, ev.Target, null, args.SenderSession);
     }
 
     private void OnPredictedMapInit(Entity<PredictedProjectileServerComponent> ent, ref MapInitEvent args)
