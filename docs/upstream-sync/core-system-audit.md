@@ -1540,3 +1540,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Lock/LockSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static event tracing confirms verb construction raises the quiet attempt checks, RMC cancellation disables the verb without a popup, and enabled verbs still invoke existing lock/unlock paths. Shared compilation plus allowed, action-blocked, and pre-hijack-locker cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add predicted verb-state coverage and verify components with stateful attempt handlers do not mutate during quiet capability checks.
+
+## CS-0110 — Mutate the correct plant gas dictionaries
+
+- Upstream: [space-wizards/space-station-14#39688](https://github.com/space-wizards/space-station-14/pull/39688), `201bc6cc5ce8b6132f663c501a96866478acf26b`, 2025-08-17
+- Areas: Chemistry, Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `PlantMutateConsumeGasses` now changes a seed's `ConsumeGasses` values, while `PlantMutateExudeGasses` changes `ExudeGasses`; the old handlers applied each effect to the opposite dictionary.
+- RMC/CMU divergence: No RMC entity effect or seed implementation overrides these inherited mutation handlers. Fork-specific plants retain their gas values and receive the corrected mutation direction.
+- Decision and rationale: Port the retained two-reference swap atomically so effect names, prototype intent, and modified runtime state agree.
+- Files changed: `Content.Server/EntityEffects/EntityEffectSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static handler comparison confirms both mutation algorithms and random ranges are unchanged and only their selected dictionaries are corrected. Server compilation plus distinct consume/exude dictionary mutation cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add deterministic tests with seeded randomness proving each effect mutates only its namesake dictionary.
