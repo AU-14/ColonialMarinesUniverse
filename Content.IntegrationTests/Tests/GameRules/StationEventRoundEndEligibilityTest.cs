@@ -18,9 +18,9 @@ public sealed class StationEventRoundEndEligibilityTest
         "RevenantSpawn",
         "WizardSpawn",
         "LoneOpsSpawn",
-        "DerelictCyborgSpawn",
+        "DerelictMedicalCyborgSpawn",
         "KingRatMigration",
-        "UnknownShuttleCargoLost",
+        "UnknownShuttleInstigator",
     };
 
     [Test]
