@@ -40,7 +40,7 @@ public abstract partial class SharedHumanoidAppearanceSystem : EntitySystem
     [Dependency] private ISerializationManager _serManager = default!;
     [Dependency] private MarkingManager _markingManager = default!;
     [Dependency] private GrammarSystem _grammarSystem = default!;
-    [Dependency] private SharedIdentitySystem _identity = default!;
+    [Dependency] private IdentitySystem _identity = default!;
 
     public static readonly ProtoId<SpeciesPrototype> DefaultSpecies = "Human";
 
