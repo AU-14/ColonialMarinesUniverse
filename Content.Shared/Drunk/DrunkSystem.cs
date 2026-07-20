@@ -36,10 +36,6 @@ public abstract partial class SharedDrunkSystem : EntitySystem
         }
     }
 
-    public void TryRemoveDrunkenness(EntityUid uid)
-    {
-        _statusEffectsSystem.TryRemoveStatusEffect(uid, DrunkKey);
-    }
     public void TryRemoveDrunkenessTime(EntityUid uid, double timeRemoved)
     {
         _statusEffectsSystem.TryRemoveTime(uid, DrunkKey, TimeSpan.FromSeconds(timeRemoved));
