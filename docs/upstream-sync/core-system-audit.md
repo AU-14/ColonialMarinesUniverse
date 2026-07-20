@@ -1124,3 +1124,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Mobs/NPCs/animals.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the pinned target retains the base name and removes it from `MobParrot`, while named descendants still override it. Prototype loading is queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None beyond normal prototype-inheritance linting.
+
+## CS-0078 — Correct debug command permissions
+
+- Upstream: [space-wizards/space-station-14#39167](https://github.com/space-wizards/space-station-14/pull/39167), `de576a429d9461badb3e8a2a01721f62e0ed4b2d`, 2025-07-23
+- Areas: Movement, Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The debug permission group now grants the active `showvel`, `showrot`, `showangvel`, and `showplayervelocity` commands instead of the obsolete `showvelocities` command.
+- RMC/CMU divergence: CMU keeps its additional debug permissions and only updates the five upstream command entries; no RMC-specific command implementation is changed.
+- Decision and rationale: Port the retained permission-list correction exactly. This restores access to the engine's split velocity and rotation diagnostics without broadening non-debug roles.
+- Files changed: `Resources/engineCommandPerms.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the five entries match the pinned target-final permission list. Permission loading and command availability are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Verify each diagnostic command remains registered after future RobustToolbox pointer updates so stale permission names do not accumulate again.
