@@ -3492,13 +3492,13 @@ entries or claim deeper behavioral parity.
 | --- | --- |
 | Movement | Typed refresh, direction, and climbing adapters are in place. |
 | Shooting | Prediction can return an empty projectile list; assisted reload is immediate; legacy vehicle and attachable lookup is not retained. |
-| Medical | Fork code uses the current damage, entity-storage, and defibrillator APIs. |
-| Chemistry | Medicine solution handling moved to `Bloodstream`; transfers use current solution ownership. |
+| Medical | Fork code uses current damage, battery, body-organ, entity-storage, defibrillator, and cryostorage APIs; synth brains now use the flat organ container. |
+| Chemistry | Medicine solution handling moved to `Bloodstream`; transfers, injectors, and blood regulation use current solution APIs. |
 | Interactions | Legacy lag-compensation and user-aware storage prechecks are not retained; dynamic alert text remains deferred. |
 | Physics | Fork code uses current collision and projectile APIs; deeper behavior comparison is deferred. |
 | GameTicking | The upstream base is aligned; deeper game-ticking behavior comparison is deferred. |
-| Gamerules | The Distress start-attempt hook moved to a global event; deeper gamerule parity is deferred. |
+| Gamerules | The Distress start-attempt hook moved to a global event; mind roles and scuttle temperature use current components. Removed per-station job-slot scaling falls back to `RMCJobSlotScaling`. |
 
-Validation at this checkpoint: `Content.Shared` and `Content.Server.Database` compile
-successfully. Client and server compilation work remains in progress. Tests were not
+Validation at this checkpoint: `Content.Shared`, `Content.Client`, `Content.Server`,
+and `Content.Server.Database` compile successfully with zero errors. Tests were not
 run because this port is at 850 of the 1,000-upstream-commit test checkpoint.
