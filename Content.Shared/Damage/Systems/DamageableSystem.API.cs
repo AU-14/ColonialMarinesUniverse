@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._RMC14.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
