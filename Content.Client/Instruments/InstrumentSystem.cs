@@ -269,7 +269,6 @@ public sealed partial class InstrumentSystem : SharedInstrumentSystem
             return false;
 
         SetMaster(uid, null);
-        instrument.MidiEventBuffer.Clear();
         instrument.Renderer.OnMidiEvent += instrument.MidiEventBuffer.Add;
         return true;
 

@@ -1332,3 +1332,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Maps/Shuttles/trading_outpost.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static map tracing confirms only UID `887` changes prototype and remains at `7.5,-22.5` under the same map parent. Map/prototype loading and destruction resistance are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a map invariant that static service outposts use indestructible anchors unless a destructible anchor is explicitly documented as gameplay.
+
+## CS-0094 — Preserve pending MIDI note events when switching songs
+
+- Upstream: [space-wizards/space-station-14#39335](https://github.com/space-wizards/space-station-14/pull/39335), `90f4f365dfa99209aa76b1d4b1daa737c80907d4`, 2025-08-02
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Opening or switching a MIDI file no longer clears the instrument's pending event buffer before subscribing the new renderer, allowing already-generated note-off/reset events to reach remote listeners instead of leaving notes stuck.
+- RMC/CMU divergence: CMU's instrument and network-event flow matches the retained target-final method. Buffer clears for explicit close, input open, and player-tick seeking remain unchanged because they represent different lifecycle boundaries.
+- Decision and rationale: Port only the retained `OpenMidi` deletion so a song transition does not discard cleanup events while preserving intentional buffer resets elsewhere.
+- Files changed: `Content.Client/Instruments/InstrumentSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static lifecycle review confirms song open retains queued events and attaches the new renderer, while full close still clears the buffer. Client compilation and a two-client song-switch/note-off regression are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Cover rapid file switching and verify the retained buffer drains without replaying stale note-on events after the renderer transition.
