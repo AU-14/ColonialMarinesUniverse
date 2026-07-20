@@ -2047,3 +2047,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Guns/Battery/battery_guns.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static resolved-prototype review confirms both rifles retain their sprite, wielding, clothing, firing mode, charge cost, and current size; only lethal inherits security contraband, and only practice resolves `RedLaserPractice` at price 300. Prototype loading plus resolved-component assertions, firing, contraband, and inherited-tag checks are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Revisit item size/naming with index 0417 and migrate the provider/tag fields with the later predicted battery-gun architecture.
+
+## CS-0149 — Allow pacifists to use nonlethal energy guns
+
+- Upstream: [space-wizards/space-station-14#37164](https://github.com/space-wizards/space-station-14/pull/37164), `3d35435747bb6080a2cdcfe65c6d34afcfdf2be0`, 2025-08-17
+- Areas: Shooting, Interactions
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: Practice laser rifles, practice disablers, standard disablers, and disabler SMGs now carry `PacifismAllowedGun`, allowing pacifist users to fire their nonlethal ammunition.
+- RMC/CMU divergence: The earlier CMU hierarchy made the lethal laser rifle inherit the practice rifle, which would have leaked this permission. CS148 first made the rifles siblings, so the marker now remains confined to the harmless practice laser while the lethal rifle stays blocked.
+- Decision and rationale: Apply the upstream marker to the four explicitly approved nonlethal weapons after resolving the inheritance hazard. Preserve all current ammo providers, charge costs, contraband, and RMC gun behavior.
+- Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Guns/Battery/battery_guns.yml`, `docs/upstream-sync/inventory-wave-0003.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static inheritance review confirms the practice laser and all three disablers resolve the marker, while `WeaponLaserCarbine` does not inherit it. Prototype loading and pacifist fire-permission checks for lethal versus nonlethal weapons are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None.

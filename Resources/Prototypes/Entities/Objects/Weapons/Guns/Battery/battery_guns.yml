@@ -249,6 +249,7 @@
   - type: HitscanBatteryAmmoProvider
     proto: RedLaserPractice
     fireCost: 62.5
+  - type: PacifismAllowedGun
 
 - type: entity
   name: pulse pistol
@@ -481,6 +482,7 @@
     tags:
     - Taser
     - Sidearm
+  - type: PacifismAllowedGun
 
 - type: entity
   name: disabler
@@ -509,6 +511,7 @@
     guides:
     - Security
     - Antagonists
+  - type: PacifismAllowedGun
 
 - type: entity
   name: disabler SMG
@@ -547,6 +550,7 @@
   - type: Appearance
   - type: StaticPrice
     price: 260
+  - type: PacifismAllowedGun
 
 - type: entity
   name: taser

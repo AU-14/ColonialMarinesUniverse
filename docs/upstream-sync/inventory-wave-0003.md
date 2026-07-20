@@ -84,7 +84,7 @@ are retained so future audits can trace each classifier's original decision.
 0462 | 5630bf6bde3cb6cc5a2f4817ed463c3e10b54619 | Removes duplicate CE and paramedic jumpsuits (#39520) | Deferred | — | Uniform deletion and loadout cleanup require review against divergent RMC jobs and clothing assets.
 0463 | 497a5956a046070575b1ea747c51a17955a2bff8 | fix cl (#39706) | Irrelevant | — | Changelog correction only.
 0464 | 26badb79142fb7227c1ed1897595e40ad6bfd8d9 | Update OpenTK to latest (#39227) | Superseded | — | Later dependency versions replace this package update.
-0465 | 3d35435747bb6080a2cdcfe65c6d34afcfdf2be0 | Allows disabler, practice disabler, disabler SMG, and practice laser rifle to be used by pacifists (#37164) | Deferred | Shooting, Interactions | CMU's lethal laser carbine inherits the practice prototype, so adding the pacifism marker now would leak permission to a lethal weapon.
+0465 | 3d35435747bb6080a2cdcfe65c6d34afcfdf2be0 | Allows disabler, practice disabler, disabler SMG, and practice laser rifle to be used by pacifists (#37164) | Ported (CS149) | Shooting, Interactions | Ported after CS148 separated lethal and practice laser inheritance; only harmless practice/disabler weapons receive the permission marker.
 0466 | af8295413bbea92f1a72f262392ec149e25bc075 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 0467 | 02f37a8eecaf1ad3fa0ae1b7c968e2754c569f6b | Allow hamster cages to sit on tables (#37953) | PortCandidate | Interactions, Physics | Target-final retains the cage asset and placement changes that are absent from CMU.
 0468 | 79072d7d6a213e8a980fbfa4bd9f855a7a2b4cdd | Automatic changelog update | Irrelevant | — | Generated changelog only.
