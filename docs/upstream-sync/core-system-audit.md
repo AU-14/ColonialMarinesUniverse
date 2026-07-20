@@ -1033,3 +1033,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Objects/Tools/access_configurator.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms both access prototypes resolve locally and the pinned target retains them in the configurator list. Prototype loading and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Define an explicit RMC configurator policy before adding any faction-specific access IDs; add a resolved allowlist test if access-prototype validation is not already covered by YAML linting.
+
+## CS-0071 — Honor resistance bypass on wide melee swings
+
+- Upstream: [space-wizards/space-station-14#38496](https://github.com/space-wizards/space-station-14/pull/38496), `80c6650730d3d019b318ca0af8ed1269431746f8`, 2025-07-10
+- Areas: Shooting, Medical, Interactions
+- Status: Adapted
+- Risk: Medium
+- Behavior/API delta: Heavy/wide melee attacks now resolve the weapon's effective resistance-bypass policy and pass it to every target's damage application. Weapons configured or modified to bypass resistances behave consistently between light and wide attacks.
+- RMC/CMU divergence: RMC subscribers can alter damage and `ResistanceBypass` through the existing melee-damage event, and the current fork additionally supplies the attacking tool to damage processing. The port uses that event-derived bypass value while retaining RMC range, skill, lunge, stamina, and tool-attribution behavior.
+- Decision and rationale: Adapt the target-final two-line fix at the current heavy-attack path. Do not copy the older target call verbatim because dropping CMU's `tool: meleeUid` argument would regress downstream attribution.
+- Files changed: `Content.Shared/Weapons/Melee/SharedMeleeWeaponSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static control-flow comparison confirms light and heavy attacks now call the same bypass resolver and both forward the result to `TryChangeDamage`. Shared compilation and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a predicted melee regression using a resistant target and an event-modified bypass weapon, covering both light and multi-target heavy attacks.
