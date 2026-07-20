@@ -1995,3 +1995,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Cuffs/SharedCuffableSystem.cs`, `Content.Shared/Movement/Pulling/Systems/PullingSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static control-flow review confirms the cuff exists before eligibility is recomputed, valid handless pullers remain active, invalid hand-dependent pulls stop, and `AttemptStopPullingEvent` can still cancel release. Shared compilation plus self-release, cuff-during-pull, `NeedsHands = false`, cancellation, prediction, and RMC fireman-carry cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add focused pull/cuff prediction tests covering event order and virtual-hand cleanup.
+
+## CS-0145 — Restore movable physics after unanchoring input movers
+
+- Upstream: [space-wizards/space-station-14#37960](https://github.com/space-wizards/space-station-14/pull/37960), `ab40b1ab734f664d18f96066e2c6e65a515866c9`, 2025-09-13
+- Areas: Movement, Physics
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: When an entity with `InputMover` becomes unanchored, its physics body is restored to `KinematicController`, preventing projected or temporarily anchored movers from remaining immobile with a static body.
+- RMC/CMU divergence: RMC extends mover relays and prediction but uses the same shared mover controller and physics service. The handler runs only on unanchor and leaves fork relay selection and `CanMove` state untouched.
+- Decision and rationale: Subscribe at the common input-mover seam and restore the body type through `PhysicsSystem`; anchoring remains owned by the transform/physics path, while unanchoring must re-establish a controller body for movement input.
+- Files changed: `Content.Shared/Movement/Systems/SharedMoverController.Input.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static event review confirms anchored transitions are ignored and unanchored movers receive the expected body type without changing fixtures or prediction ownership. Shared compilation plus chameleon projection, normal humanoid, relay mover, repeated anchor/unanchor, and client reconciliation cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Audit input-mover prototypes that intentionally require a non-kinematic unanchored body before broadening this rule further.
