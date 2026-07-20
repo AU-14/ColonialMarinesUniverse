@@ -74,7 +74,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Narcotic:
+    Bloodstream:
       metabolismRate: 0.0167
       effects:
       - !type:MovespeedModifier

@@ -20,7 +20,7 @@
       - !type:FlammableReaction
         multiplier: 0.2
   metabolisms:
-    Poison:
+    Bloodstream:
       metabolismRate: 0.05
       effects:
       - !type:HealthChange
@@ -197,7 +197,7 @@
   radiusMod: -0.09
   # TODO RMC14: IGNITING = 1
   metabolisms:
-    Poison:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Corrosive
@@ -221,7 +221,7 @@
   durationMod: 0.25
   radiusMod: 0.095
   metabolisms:
-    Poison:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Toxic

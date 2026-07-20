@@ -8,7 +8,7 @@
   unknown: true
   toxin: true
   metabolisms:
-    Poison:
+    Bloodstream:
       metabolismRate: 0.05
       effects:
       - !type:Toxic
@@ -24,7 +24,7 @@
   unknown: true
   toxin: true
   metabolisms:
-    Poison:
+    Bloodstream:
       #TODO hurts on inject equal to amount
       metabolismRate: 0.05
       effects:
@@ -49,7 +49,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Poison:
+    Bloodstream:
       metabolismRate: 0.05
       effects:
       - !type:Hypoxemic
@@ -68,7 +68,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Poison:
+    Bloodstream:
       metabolismRate: 0.05
       effects: #TODO Hallucinations +2 max 40.
       - !type:ModifyStatusEffect
@@ -124,7 +124,7 @@
   overdose: 15
   criticalOverdose: 25
   metabolisms:
-    Poison:
+    Bloodstream:
       metabolismRate: 0.05
       effects:
       - !type:Toxic
@@ -159,7 +159,7 @@
   color: "#CF3600"
   toxin: true
   metabolisms:
-    Poison:
+    Bloodstream:
       metabolismRate: 0.2
       effects:
       - !type:Hypoxemic

@@ -104,7 +104,7 @@
   color: "#731008"
   recognizable: true
   metabolisms:
-    Food:
+    Digestion:
       metabolismRate: 0.1
       effects:
       - !type:Nutritious
@@ -138,7 +138,7 @@
   color: "#792300"
   recognizable: true
   metabolisms:
-    Food:
+    Digestion:
       metabolismRate: 0.1
       effects:
       - !type:Nutritious
@@ -172,7 +172,7 @@
   color: "#302000"
   recognizable: true
   metabolisms:
-    Food:
+    Digestion:
       metabolismRate: 0.1
       effects:
       - !type:Nutritious

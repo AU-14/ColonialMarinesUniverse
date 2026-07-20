@@ -47,7 +47,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Poison:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Biocidic
@@ -81,7 +81,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Poison:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Toxic
@@ -170,7 +170,7 @@
   durationMod: -0.1
   radiusMod: -0.01
   metabolisms:
-    Poison:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:HealthChange
@@ -196,7 +196,7 @@
   color: "#484848"
   unknown: true
   metabolisms:
-    Poison:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:GenericStatusEffect
@@ -255,7 +255,7 @@
   color: "#C7C7C7"
   unknown: true
   metabolisms:
-    Poison:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Carcinogenic
@@ -341,7 +341,7 @@
   color: "#B8B8C0"
   unknown: true
   metabolisms:
-    Poison:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Carcinogenic
@@ -392,8 +392,9 @@
   flavor: alcohol
   color: "#404030"
   metabolisms:
-    Alcohol:
-      metabolismRate: 0.1
+    Metabolites:
+      # RMC's Alcohol organ group applied a 0.1 rate modifier to this 0.1 rate.
+      metabolismRate: 0.01
       effects:
       - !type:Drunk
         boozePower: 6.38
@@ -445,7 +446,7 @@
   color: white
   unknown: true # Yes a health analyzer can't detect sugar. How about that
   metabolisms:
-    Food:
+    Digestion:
       metabolismRate: 0.1
       effects:
       - !type:Nutritious
@@ -470,7 +471,7 @@
   toxin: true
   metabolisms:
     #TODO hurts on inject equal to amount
-    Poison:
+    Bloodstream:
       metabolismRate: 0.05
       effects:
       - !type:Toxic

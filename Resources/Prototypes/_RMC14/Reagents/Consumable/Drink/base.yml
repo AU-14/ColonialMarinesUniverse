@@ -6,7 +6,7 @@
   color: "#E78108"
   unknown: true
   metabolisms:
-    Drink:
+    Digestion:
       metabolismRate: 0.2
       effects:
       - !type:SatiateHunger

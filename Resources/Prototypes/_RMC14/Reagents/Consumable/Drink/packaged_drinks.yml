@@ -33,11 +33,10 @@
   desc: rmc-reagent-desc-chocolate-drink
   physicalDesc: reagent-physical-desc-creamy
   metabolisms:
-    Drink:
+    Digestion:
       metabolismRate: 0.1
       effects:
       - !type:SatiateHunger
         factor: 4
       - !type:SatiateThirst
         factor: 0.2
-

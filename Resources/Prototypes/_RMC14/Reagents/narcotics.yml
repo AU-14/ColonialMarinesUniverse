@@ -9,7 +9,7 @@
   unknown: true
   toxin: true
   metabolisms:
-    Narcotic:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Emote
@@ -42,7 +42,7 @@
   desc: reagent-desc-rmcpsilocybin
   color: "#E700E7"
   metabolisms:
-    Narcotic:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Emote
