@@ -1891,3 +1891,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Cargo/Systems/CargoSystem.Telepad.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static data-flow review confirms fulfillment, label creation, and receipt generation receive `currentOrder.Account`, while telepad linkage and queue removal remain unchanged. Server compilation plus a two-account telepad fulfillment case are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Audit shutdown recovery at the same telepad seam, which still supplies the linked console account to `TryFulfillOrder` in this older cargo implementation.
+
+## CS-0137 — Throttle scurret petting interactions
+
+- Upstream: [space-wizards/space-station-14#40097](https://github.com/space-wizards/space-station-14/pull/40097), `df4d923a9b709c9f3b5f123ce743db57c713351a`, 2025-09-04
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Scurret petting now observes a 2.25-second interaction delay, preventing rapid repeated heart effects, popups, and animal sounds.
+- RMC/CMU divergence: CMU retains the upstream scurret prototype and shared `InteractionPopup` cooldown field. RMC-specific mobs and their interaction timing are unaffected.
+- Decision and rationale: Add the retained prototype value at the scurret base's existing popup component so all inherited scurrets share the same spam guard.
+- Files changed: `Resources/Prototypes/Entities/Mobs/NPCs/scurret.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static inheritance review confirms the delay applies to scurret variants without changing success chance, strings, effects, or sounds. Prototype loading and interactions immediately before and after 2.25 seconds are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None.
