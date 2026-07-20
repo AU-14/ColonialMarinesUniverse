@@ -36,8 +36,11 @@
   - type: RMCStamina
   - type: RMCPulse
   - type: Bloodstream
-    bloodReagent: Blood
-    bloodMaxVolume: 560
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Blood
+        Quantity: 560
+    maxVolumeModifier: 1
     maxBleedAmount: 50
     bleedReductionAmount: 0
     bloodRefreshAmount: 0.15

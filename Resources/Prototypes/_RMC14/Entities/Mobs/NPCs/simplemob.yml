@@ -47,7 +47,11 @@
     baseWalkSpeed: 2.7
     baseSprintSpeed: 5
   - type: Bloodstream
-    bloodMaxVolume: 150
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Blood
+        Quantity: 150
+    maxVolumeModifier: 1
   - type: StatusEffects
     allowed:
     - Stun
@@ -196,7 +200,11 @@
       types:
         Piercing: 0
   - type: Bloodstream
-    bloodMaxVolume: 50
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Blood
+        Quantity: 50
+    maxVolumeModifier: 1
   - type: BadFood
   - type: ZombieImmune
   - type: FireVisuals
