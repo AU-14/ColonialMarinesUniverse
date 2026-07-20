@@ -1696,3 +1696,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Forensics/Systems/ForensicScannerSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static execution tracing confirms `SharedVerbSystem` skips `DoContactInteraction` when the nullable override is false while still invoking the scan action. Server compilation plus verb-scan evidence preservation and direct-contact controls are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a forensic regression that compares evidence before and after verb scanning to protect this interaction contract.
+
+## CS-0122 — Stop derelict cyborg ghost-role duplication
+
+- Upstream: [space-wizards/space-station-14#39992](https://github.com/space-wizards/space-station-14/pull/39992), `c7a10e8bce0d80db8a0ae480b4aa5ef4b2df63a0`, 2025-09-06
+- Areas: Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The retained derelict cyborg ghost role no longer re-registers after being taken, preventing duplicate ghost-role listings for the same cyborg entity.
+- RMC/CMU divergence: Upstream later defines several derelict cyborg variants; current CMU has one matching ghost-role prototype. RMC already uses `reregister: false` broadly for one-shot event roles, confirming the schema and intended lifecycle.
+- Decision and rationale: Apply the lifecycle flag only to CMU's existing `PlayerBorgDerelictGhostRole`; absent upstream variants are not introduced as part of this bug fix.
+- Files changed: `Resources/Prototypes/Entities/Mobs/Player/silicon.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype review confirms the flag is nested under the existing `GhostRole` component and leaves raffle settings and takeover availability unchanged. Prototype loading plus take/release/deletion ghost-role lifecycle checks are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: When importing later derelict cyborg variants, preserve this one-shot registration contract on every variant.

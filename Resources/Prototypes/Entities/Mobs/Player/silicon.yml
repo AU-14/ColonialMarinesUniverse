@@ -401,6 +401,7 @@
       rules: ghost-role-information-silicon-rules
       raffle:
         settings: default
+      reregister: false
     - type: GhostTakeoverAvailable
 
 - type: entity
