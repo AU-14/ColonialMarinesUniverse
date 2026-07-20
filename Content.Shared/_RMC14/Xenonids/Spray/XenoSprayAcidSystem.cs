@@ -125,15 +125,8 @@ public sealed partial class XenoSprayAcidSystem : EntitySystem
     private void OnSprayAcidedVaporHit(Entity<SprayAcidedComponent> ent, ref VaporHitEvent args)
     {
         // this would use tile reactions if those had any way of telling what caused a reaction, imagine that
-        var solEnt = args.Solution;
-        foreach (var (_, solution) in _solutionContainer.EnumerateSolutions((solEnt, solEnt)))
-        {
-            if (!solution.Comp.Solution.ContainsReagent(AcidRemovedBy, null))
-                continue;
-
+        if (args.Solution.Comp.Solution.ContainsReagent(AcidRemovedBy, null))
             RemCompDeferred<SprayAcidedComponent>(ent);
-            break;
-        }
     }
 
     private void OnAcidSplatterExtinguishFireAttempt(Entity<XenoAcidSplatterComponent> ent, ref ExtinguishFireAttemptEvent args)

@@ -29,7 +29,6 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Physics;
-using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared._RMC14.Chemistry;
 
 namespace Content.Shared._RMC14.Xenonids.Acid;
@@ -258,27 +257,22 @@ public abstract partial class SharedXenoAcidSystem : EntitySystem
         if (!HasComp<ItemComponent>(ent.Owner))
             return;
 
-        var vaporSolution = (args.Solution.Owner, (SolutionContainerManagerComponent?) args.Solution.Comp);
-        foreach (var (_, solution) in _solutionContainer.EnumerateSolutions(vaporSolution))
+        if (!args.Solution.Comp.Solution.ContainsReagent(AcidRemovedBy, null))
+            return;
+
+        if (!TryComp(ent.Owner, out GunSecondWindComponent? secondWind) || !secondWind.HasSecondWind)
         {
-            if (!solution.Comp.Solution.ContainsReagent(AcidRemovedBy, null))
-                continue;
-
-            if (!TryComp(ent.Owner, out GunSecondWindComponent? secondWind) || !secondWind.HasSecondWind)
+            if (secondWind != null)
             {
-                if (secondWind != null)
-                {
-                    _popup.PopupEntity(
-                        Loc.GetString("rmc-acid-gun-second-wind-spent", ("target", ent.Owner)),
-                        ent.Owner,
-                        PopupType.SmallCaution);
-                }
-                return;
+                _popup.PopupEntity(
+                    Loc.GetString("rmc-acid-gun-second-wind-spent", ("target", ent.Owner)),
+                    ent.Owner,
+                    PopupType.SmallCaution);
             }
-
-            RemoveAcid(ent.Owner);
-            break;
+            return;
         }
+
+        RemoveAcid(ent.Owner);
     }
 
     private void OnPickupAttempt(PickupAttemptEvent args)

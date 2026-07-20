@@ -455,23 +455,17 @@ public sealed partial class XenoSpitSystem : EntitySystem
         if (ent.Comp.AllowVaporHitAfter > _timing.CurTime)
             return;
 
-        var solEnt = args.Solution;
-        foreach (var (_, solution) in _solution.EnumerateSolutions((solEnt, solEnt)))
+        if (!args.Solution.Comp.Solution.ContainsReagent(AcidRemovedBy, null))
+            return;
+
+        if (--ent.Comp.ResistsNeeded <= 0)
         {
-            if (!solution.Comp.Solution.ContainsReagent(AcidRemovedBy, null))
-                continue;
-
-            if (--ent.Comp.ResistsNeeded <= 0)
-            {
-                RemCompDeferred<UserAcidedComponent>(ent);
-            }
-            else
-            {
-                ent.Comp.AllowVaporHitAfter = _timing.CurTime + ent.Comp.ExtinguishGracePeriod;
-                Dirty(ent);
-            }
-
-            break;
+            RemCompDeferred<UserAcidedComponent>(ent);
+        }
+        else
+        {
+            ent.Comp.AllowVaporHitAfter = _timing.CurTime + ent.Comp.ExtinguishGracePeriod;
+            Dirty(ent);
         }
     }
 

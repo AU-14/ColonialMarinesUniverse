@@ -36,8 +36,9 @@ namespace Content.Server.Chemistry.EntitySystems
 
         private void HandleCollide(Entity<VaporComponent> entity, ref StartCollideEvent args)
         {
-            var solution = Comp<SolutionComponent>(entity).Solution;
-            _reactive.DoEntityReaction(args.OtherEntity, solution, ReactionMethod.Touch);
+            var solution = Comp<SolutionComponent>(entity);
+            _reactive.DoEntityReaction(args.OtherEntity, solution.Solution, ReactionMethod.Touch);
+            RMCRaiseVaporHit(entity, (entity, solution), args.OtherEntity);
 
             // Check for collision with a impassable object (e.g. wall) and stop
             if ((args.OtherFixture.CollisionLayer & (int)CollisionGroup.Impassable) != 0 && args.OtherFixture.Hard)

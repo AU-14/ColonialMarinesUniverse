@@ -153,20 +153,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        var water = false;
-        foreach (var container in args.Solution.Comp.Containers)
-        {
-            if (!_solutionContainer.TryGetSolution(args.Solution.Owner, container, out _, out var solution))
-                continue;
-
-            if (solution.ContainsPrototype(WaterReagent))
-            {
-                water = true;
-                break;
-            }
-        }
-
-        if (!water)
+        if (!args.Solution.Comp.Solution.ContainsPrototype(WaterReagent))
             return;
 
         if (ent.Comp.ExtinguishInstantly)
