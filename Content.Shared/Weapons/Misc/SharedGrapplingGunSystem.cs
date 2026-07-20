@@ -22,7 +22,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.Weapons.Misc;
 
-public abstract partial class SharedGrapplingGunSystem : EntitySystem
+public abstract partial class SharedGrapplingGunSystem : VirtualController
 {
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] private INetManager _netManager = default!;
@@ -32,6 +32,9 @@ public abstract partial class SharedGrapplingGunSystem : EntitySystem
     [Dependency] private SharedJointSystem _joints = default!;
     [Dependency] private SharedGunSystem _gun = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedGravitySystem _gravity = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
 
     /// <summary>
     /// Name of the joint between a grappling gun and its hook.
@@ -114,9 +117,8 @@ public abstract partial class SharedGrapplingGunSystem : EntitySystem
             entity.Comp.Projectile = shotUid.Value;
             DirtyField(entity.AsNullable(), nameof(GrapplingGunComponent.Projectile));
             var visuals = EnsureComp<JointVisualsComponent>(shotUid.Value);
-            visuals.Sprite = component.RopeSprite;
-            visuals.OffsetA = new Vector2(0f, 0.5f);
-            visuals.Target = uid;
+            visuals.Sprite = entity.Comp.RopeSprite;
+            visuals.Target = entity.Owner;
             Dirty(shotUid.Value, visuals);
         }
 

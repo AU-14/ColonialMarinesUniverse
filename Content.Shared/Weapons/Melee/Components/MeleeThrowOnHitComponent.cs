@@ -1,3 +1,4 @@
+using Content.Shared.Throwing;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared.Weapons.Melee.Components;
