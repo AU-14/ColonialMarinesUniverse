@@ -2932,3 +2932,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Atmos/Piping/EntitySystems/GasPipeManifoldSystem.cs`, `Resources/Prototypes/Entities/Structures/Piping/Atmospherics/pipes.yml`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static node-graph review confirms the union contains the three inlet and three outlet names, every corresponding node is 50 liters, and the sample scales moles and volume by the same aggregate factor. Server compilation and YAML validation plus isolated, connected, partially connected, multi-layer, analyzer, pressure, monitoring-console, map-load, and RMC atmos-tick cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1645 as `Ported (CS-0215)` when wave 0009 is committed.
+
+## CS-0216 — Correct the burn-decal variation prototype ID
+
+- Upstream: [space-wizards/space-station-14#41444](https://github.com/space-wizards/space-station-14/pull/41444), `fd2f5f7e450ef6de26411acf6f33404da157adca`, 2025-11-15
+- Areas: GameTicking, Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The burn-decal variation pass and its roundstart reference are renamed from the misspelled `BasicDecalBrunsVariationPass` to `BasicDecalBurnsVariationPass`. The referenced pass, probability, exclusivity group, density, and spawned burn decals are otherwise unchanged.
+- RMC/CMU divergence: Standard station variation rules retain this pass, while RMC distress-signal presets do not explicitly schedule `BasicRoundstartVariation`. Repository-wide lookup found no CMU or RMC references to the misspelled ID beyond the definition and matching standard-rule entry changed together.
+- Decision and rationale: Port both sides of the upstream identifier correction atomically. Keeping a fork-only typo adds needless prototype-name divergence and makes future rule reconciliation harder even though the current paired typo resolves internally.
+- Files changed: `Resources/Prototypes/GameRules/roundstart.yml`, `Resources/Prototypes/GameRules/variation.yml`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static reference review confirms the old ID has no remaining repository references and the corrected ID has exactly one definition and one roundstart reference. YAML/prototype validation plus standard variation selection, probability/or-group, decal spawning, map initialization, and RMC preset cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1713 as `Ported (CS-0216)` when wave 0009 is committed.
