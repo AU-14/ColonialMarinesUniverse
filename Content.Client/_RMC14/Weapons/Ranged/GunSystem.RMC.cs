@@ -1,3 +1,4 @@
+using Content.Client._RMC14.ItemPickup;
 using Content.Client.Weapons.Ranged.Components;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Weapons.Ranged.Components;
@@ -7,6 +8,8 @@ namespace Content.Client.Weapons.Ranged.Systems;
 
 public sealed partial class GunSystem
 {
+    [Dependency] private ItemPickupSystem _rmcItemPickup = default!;
+
     private void InitializeRmcGun()
     {
         SubscribeLocalEvent<AmmoCounterComponent, UpdateClientAmmoEvent>(OnRmcUpdateClientAmmo);
@@ -25,5 +28,10 @@ public sealed partial class GunSystem
     private EntityUid GetRmcShootCoordinateEntity(EntityUid user, Entity<GunComponent> gun)
     {
         return HasComp<GunUseGunOriginComponent>(gun) ? gun.Owner : user;
+    }
+
+    private bool RMCRecentlyPickedUpItem()
+    {
+        return _rmcItemPickup.RecentItemPickUp;
     }
 }

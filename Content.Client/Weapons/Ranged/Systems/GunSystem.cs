@@ -214,6 +214,9 @@ public sealed partial class GunSystem : SharedGunSystem
         var coordinateEntity = GetRmcShootCoordinateEntity(entity, gun);
         var coordinates = TransformSystem.ToCoordinates(coordinateEntity, mousePos);
 
+        if (RMCRecentlyPickedUpItem())
+            return;
+
         Log.Debug($"Sending shoot request tick {Timing.CurTick} / {Timing.CurTime}");
 
 

@@ -3723,3 +3723,16 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - Files changed: `Content.Shared/Item/SharedItemSystem.cs`, `Content.Shared/_RMC14/Hands/SharedItemSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation evidence: Exact producer/consumer review found no producer before this change, one local-player timing consumer, and one component-targeted sprite-offset consumer. The raise point matches old RMC's post-success branch and broadcasts against the picked-up item. `dotnet build Content.Shared/Content.Shared.csproj --configuration DebugOpt --no-restore --nologo --verbosity:minimal --disable-build-servers` succeeded with 0 errors and 6 unrelated warnings; tests remain deferred until the 1,000-upstream-commit checkpoint.
 - Remaining debt: The restored client timer is not yet consulted by current gun input; reconnect that veto separately. Pickup verbs and programmatic pickups intentionally retain current behavior unless playtest evidence requires a broader event contract.
+
+## CS-0272 - Restore the post-pickup shooting veto
+
+- Upstreams compared: live SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767`, live RMC `b6d677947dd8ebcb06194a66798938645fed5a54`, and current CMU after CS-0271.
+- Areas: Shooting, Interactions, Client input, Prediction, Timing
+- Classification: Missing -> Adapted
+- Risk: Medium before the fix; low after it.
+- Behavior/API delta: RMC's client pickup system still tracked a successful local direct pickup for 0.15 seconds, but current gun input no longer consulted that state before raising `RequestShootEvent`. A player could therefore combine pickup and firing in the interval the fork intentionally reserved for hand-state reconciliation.
+- RMC/CMU divergence: The veto remains client-input-only, lasts the retained 0.15 seconds, and is reset by the retained `RequestStopShootEvent` path. Server gun authority, current cooldown/burst state, non-gun interactions, and pickup paths that do not raise `ItemPickedUpEvent` are unchanged.
+- Decision and rationale: Query the retained fork timer from a small client gun partial immediately before request emission. All current target/coordinate calculation remains intact, but no predicted request is sent during the protected interval; this matches old RMC without reviving its deleted projectile-correlation request schema.
+- Files changed: `Content.Client/Weapons/Ranged/Systems/GunSystem.cs`, `Content.Client/_RMC14/Weapons/Ranged/GunSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation evidence: Static flow review traces CS-0271's post-success pickup event to the local-client timer and this guard to the sole current `RequestShootEvent` producer. A diagnostic `Content.Client` targeted build compiled the touched Client and Shared paths with 0 errors and 14 unrelated warnings after temporarily supplying the baseline TerraFX reference used by retained source; the committed project file was restored unchanged. Tests remain deferred until the 1,000-upstream-commit checkpoint.
+- Remaining debt: Runtime prediction coverage must pick up and immediately fire, fire after 0.15 seconds, release fire during the veto, and verify programmatic/verb pickups retain their current scope.
