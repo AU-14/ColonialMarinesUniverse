@@ -1228,3 +1228,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Weapons/Melee/Components/MeleeThrowOnHitComponent.cs`, `Content.Shared/Weapons/Melee/MeleeThrowOnHitSystem.cs`, `docs/upstream-sync/inventory-wave-0001.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review traces clean throw, hit, land, and delayed rethrow paths and confirms both fields use delta-generated component state. Shared compilation and a Mjollnir throw-delay regression are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Test a clean miss, a hit followed by immediate rethrow, multiple collision events in one flight, and predicted client reconciliation of both flags.
+
+## CS-0086 — Make admin ghosts and satchels explosion-proof
+
+- Upstream: [space-wizards/space-station-14#38384](https://github.com/space-wizards/space-station-14/pull/38384), `2a496bf93f56b7fb3b765840ad5bc1112f9e2843`, 2025-07-16
+- Areas: Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Admin ghosts now have zero-coefficient explosion resistance, and their loadout uses a dedicated administration satchel with the same resistance instead of the ordinary satchel of holding.
+- RMC/CMU divergence: CMU's extra admin interaction, pull, and skill bypass components remain unchanged. The dedicated bag inherits the fork's existing holding-satchel storage behavior.
+- Decision and rationale: Port all three retained prototype links together so the admin entity and its carried diagnostic contents survive the same explosion event.
+- Files changed: `Resources/Prototypes/Entities/Clothing/Back/satchel.yml`, `Resources/Prototypes/Entities/Mobs/Player/admin_ghost.yml`, `Resources/Prototypes/Roles/Jobs/Fun/misc_startinggear.yml`, `docs/upstream-sync/inventory-wave-0001.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype tracing confirms `MobAghostGear` resolves the new satchel and both entities have `damageCoefficient: 0`. Prototype loading and explosion-damage coverage are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Verify container contents inherit the intended blast protection semantics rather than only preserving the satchel entity itself.
