@@ -2086,3 +2086,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Magic/Fixtures/runes.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static fixture-flow review confirms both trigger and stun components now select `rune`. Prototype loading and a living-entity collision assertion are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None.
+
+## CS-0152 — Stock chemical-analysis goggles in ChemDrobe
+
+- Upstream: [space-wizards/space-station-14#40236](https://github.com/space-wizards/space-station-14/pull/40236), `8cf5c3f6bc9f62eb7dc76de180ad029e0c79a2f6`, 2025-09-18; target-final quantity from [#42423](https://github.com/space-wizards/space-station-14/pull/42423), `820fdca6efa9ea4c8390a5b9b8bb783b2759791b`
+- Areas: Chemistry, Medical
+- Status: Adapted
+- Risk: Low
+- Behavior/API delta: ChemDrobe now stocks one pair of chemical-analysis goggles, making solution-scanning equipment available through the chemistry wardrobe.
+- RMC/CMU divergence: CMU keeps its current ChemDrobe inventory and job loadouts. The pinned target's final quantity of one is used instead of transient upstream quantity two, without importing the later broad medical equipment rebalance.
+- Decision and rationale: Port the isolated stock entry in its target-final form to provide the intended chemistry tool while avoiding later inventory churn.
+- Files changed: `Resources/Prototypes/Catalog/VendingMachines/Inventories/chemdrobe.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static inventory review confirms the referenced goggles prototype exists and appears once in starting inventory. Prototype loading and vending-inventory resolution are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Reassess the rest of ChemDrobe when auditing target commit `820fdca6ef`.
