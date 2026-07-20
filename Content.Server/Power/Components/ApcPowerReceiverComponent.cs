@@ -27,12 +27,7 @@ namespace Content.Server.Power.Components
         public override bool NeedsPower
         {
             get => _needsPower;
-            set
-            {
-                _needsPower = value;
-                // Reset this so next tick will do a power update.
-                Recalculate = true;
-            }
+            set => _needsPower = value;
         }
 
         [DataField("needsPower")]
@@ -47,9 +42,6 @@ namespace Content.Server.Power.Components
             get => !NetworkLoad.Enabled;
             set => NetworkLoad.Enabled = !value;
         }
-
-        // TODO Is this needed? It forces a PowerChangedEvent when NeedsPower is toggled even if it changes to the same state.
-        public bool Recalculate;
 
         [ViewVariables]
         public PowerState.Load NetworkLoad { get; } = new PowerState.Load

@@ -1800,3 +1800,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Clothing/EntitySystems/FoldableClothingSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static state-transition review covers nonempty-to-empty and empty-to-nonempty layer sets in both directions and confirms `Dirty` follows every mutation. Shared compilation plus fold/unfold appearance, no-config, equipped-cancellation, and prediction reconciliation cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Replace the component-to-component hidden-layer override with an event or saved previous state during the deeper clothing interaction audit.
+
+## CS-0130 — Respect pause state in APC battery receivers
+
+- Upstream: [space-wizards/space-station-14#40188](https://github.com/space-wizards/space-station-14/pull/40188), `499dde1ec1b43c2cb52468200e2493b0adfc2ef0`, 2025-09-07
+- Areas: Physics, GameTicking
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: APC receivers with internal batteries now stop before changing their requested load, charge, enabled state, appearance, or power events while their entity is paused. Toggling `NeedsPower` no longer forces a redundant `PowerChangedEvent` when the computed powered state is unchanged.
+- RMC/CMU divergence: CMU excludes RMC power receivers from this upstream loop. That fork-specific early exit remains first, while the pause guard is added only to the retained station APC-battery path.
+- Decision and rationale: Port the target-final pause ordering and remove the obsolete recalculation flag together. Checking pause after battery mutation allowed paused maps and containers to advance power state, while keeping the flag would preserve duplicate events upstream deliberately removed.
+- Files changed: `Content.Server/Power/Components/ApcPowerReceiverComponent.cs`, `Content.Server/Power/EntitySystems/PowerNetSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static control-flow review confirms RMC receivers remain excluded, internal-battery receivers check pause before all mutation, and ordinary receivers retain the existing pre-event pause check. Server compilation plus paused/unpaused battery discharge, recharge, enabled-state, and unchanged-`NeedsPower` event cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a focused power-net regression that pauses an internally powered receiver across multiple updates and asserts charge, load, appearance, and event counts remain stable.
