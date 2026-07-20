@@ -8,6 +8,7 @@
   - type: Corrodible
     isCorrodible: false
   - type: Organ
+    category: Heart
   - type: Sprite
     sprite: _RMC14/Objects/Xeno/xeno_organs.rsi
     state: heart_t1

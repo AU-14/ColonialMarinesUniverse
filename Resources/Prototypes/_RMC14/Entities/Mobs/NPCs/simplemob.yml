@@ -22,7 +22,15 @@
     angle: 0
     animation: WeaponArcBite
   - type: Body
-    prototype: Animal
+  - type: EntityTableContainerFill
+    containers:
+      body_organs: !type:AllSelector
+        children:
+        - id: OrganAnimalLungs
+        - id: OrganAnimalHeart
+        - id: OrganAnimalStomach
+        - id: OrganAnimalLiver
+        - id: OrganAnimalKidneys
   - type: Climbing
   - type: RMCRevivable
   - type: RMCMedicalExamine
@@ -95,7 +103,15 @@
   suffix: CM
   components:
   - type: Body
-    prototype: Mouse
+  - type: EntityTableContainerFill
+    containers:
+      body_organs: !type:AllSelector
+        children:
+        - id: OrganRatLungs
+        - id: OrganAnimalHeart
+        - id: OrganAnimalStomach
+        - id: OrganAnimalLiver
+        - id: OrganAnimalKidneys
   - type: Speech
     speechSounds: Squeak
     speechVerb: SmallMob
@@ -270,8 +286,6 @@
             state: human_acid_enhanced
             visible: true
   - type: Body
-    prototype: Primate
-    requiredLegs: 1
   - type: CreamPied
   - type: FireVisuals
     sprite: Mobs/Effects/onfire.rsi

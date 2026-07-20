@@ -104,6 +104,15 @@
   id: OrganHuman
   abstract: true
   suffix: human
+  components:
+  - type: Solution
+    solution:
+      maxVol: 80
+      reagents:
+      - ReagentId: UncookedAnimalProteins
+        Quantity: 5
+      - ReagentId: GreyMatter
+        Quantity: 75
 
 - type: entity
   id: OrganHumanMetabolizer
