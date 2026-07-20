@@ -16,7 +16,7 @@ or empty-merge changes with no standalone content behavior to port.
 ~~~text
 2000 | 231a93e742fb2cbab906e418f62b6ff18df0a6dd | TriggerOnUserInteractHand and TriggerOnUserInteractUsing (#41843) | Deferred | Interactions | The seven-file trigger and interaction-event rewrite crosses RMC's retained trigger consumers and needs a focused API reconciliation.
 2001 | 482e963227ca6f6c7a7260332b98ee99a6083fec | Automatic changelog update | Irrelevant | — | Generated changelog only.
-2002 | f20288046193abbf67a940f1faee73e88a3a41a8 | Admin log now shows APC power toggle interactions (#41839) | PortCandidate | Interactions | APC breaker logging is a focused auditability fix that can be adapted to CMU's APC handler signature.
+2002 | f20288046193abbf67a940f1faee73e88a3a41a8 | Admin log now shows APC power toggle interactions (#41839) | Ported (CS-0243) | Interactions | Successful user-authorized APC breaker toggles now log the actor, APC, and resulting state without attributing automated toggles.
 2003 | c5148750d56f8f132b16aa84998155ffb411eda1 | Automatic changelog update | Irrelevant | — | Generated admin changelog only.
 2004 | 6fc13a5875ea2cc7d46a4bcbc822cecef0dfd577 | Adding a random gate (#41627) | Deferred | Interactions, Gamerules | The new linked-gate component, UI, systems, and prototypes require target-final device-network and map-policy reconciliation.
 2005 | 368fa40f5c44c306dd29b89544a34592d1baa0ef | Automatic changelog update | Irrelevant | — | Generated changelog only.

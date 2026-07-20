@@ -3295,3 +3295,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Client/Security/Ui/GenpopLockerBoundUserInterface.cs`, `Content.Shared/Security/Systems/SharedGenpopSystem.cs`, `docs/upstream-sync/inventory-wave-0012.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static control-flow review confirms the same serializable message and validation gates are retained, the actor comes from the BUI event, and `LockSystem.Lock` uses it only for scoped popup/audio while dirtying the authoritative lock state normally. Client/shared compilation plus valid configuration, denied access, invalid fields, prediction reconciliation, lock popup/audio, storage closing, ID creation, duplicate input, and disconnect cases are queued for the index-2999 checkpoint.
 - Follow-up/debt: The nearby comment notes that verb-driven entity-storage opening is not predicted; keep that separate until its own upstream prediction path is integrated.
+
+## CS-0243 — Log player-authorized APC breaker toggles
+
+- Upstream: [space-wizards/space-station-14#41839](https://github.com/space-wizards/space-station-14/pull/41839), `f20288046193abbf67a940f1faee73e88a3a41a8`, 2025-12-14
+- Areas: Interactions
+- Status: Ported (adapted)
+- Risk: Low
+- Behavior/API delta: `ApcToggleBreaker` accepts an optional initiating user. The authorized APC UI handler supplies its actor and records a medium-impact `ItemConfigure` admin log containing the player, APC, and resulting enabled/disabled state after a successful toggle. Non-user callers retain the same toggle behavior without a log attribution.
+- RMC/CMU divergence: CMU keeps the shared APC system but has event-rule and EMP callers that programmatically flip breakers. Leaving the new parameter optional preserves those paths and prevents them from being misreported as player actions. The injected logger is non-`readonly` to satisfy CMU's current dependency-injection analyzer; access, battery discharge, UI state, sound, power-network behavior, and RMC maps are unchanged.
+- Decision and rationale: Port the target-final logging boundary at the successful state mutation. Logging in the BUI handler before toggling could record rejected or failed changes, while logging every `ApcToggleBreaker` call would lack an accountable actor. Passing only the access-approved actor produces a filterable audit record with the authoritative resulting state.
+- Files changed: `Content.Server/Power/EntitySystems/ApcSystem.cs`, `docs/upstream-sync/inventory-wave-0011.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static call-site review confirms the player BUI path supplies `args.Actor`, access denial returns before mutation, and all four automated/event/EMP call sites omit the optional user. Server compilation plus breaker enable/disable, access denial, repeated UI input, EMP, power-grid event, breaker-flip event, battery discharge, UI refresh, audio, and admin-log formatting cases are queued for the index-2999 checkpoint.
+- Follow-up/debt: If a future administrative or remote-control caller has a real initiating player, pass that actor deliberately; do not fabricate users for autonomous grid events.
