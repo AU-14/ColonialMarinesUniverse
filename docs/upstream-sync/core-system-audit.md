@@ -1930,3 +1930,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Client/Medical/CrewMonitoring/CrewMonitoringNavMapControl.cs`, `Resources/Locale/en-US/ui/navmap.ftl`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms both rounded coordinates are passed as Fluent arguments and the message retains its name/newline layout. Client compilation and localization loading are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Localize the `Unknown` tracked-name fallback when its target-final replacement is reached.
+
+## CS-0140 — Restore RGB staff target validation
+
+- Upstream: [space-wizards/space-station-14#40258](https://github.com/space-wizards/space-station-14/pull/40258), `960174acc5f90e6735f877d1715db699878814e6`, 2025-09-10
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The RGB staff action now includes the base `TargetAction` component required by entity-target validation, allowing its existing point-light whitelist and component-change spell to execute.
+- RMC/CMU divergence: RMC extends shared target validation with interaction and storage-access rules. Adding the missing base component makes this action participate in those fork checks instead of bypassing or failing them.
+- Decision and rationale: Port the retained prototype component exactly; `EntityTargetAction` supplies the target/event while shared validation reads range and access settings from `TargetAction`.
+- Files changed: `Resources/Prototypes/Magic/staves.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static system review confirms `ValidateEntityTarget` resolves `TargetActionComponent` after whitelist checks and the RGB action already inherits `BaseAction`. Prototype loading plus valid light, invalid entity, inaccessible target, and predicted activation cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Audit other `EntityTargetAction` prototypes for the same missing base component during the deeper actions migration.
