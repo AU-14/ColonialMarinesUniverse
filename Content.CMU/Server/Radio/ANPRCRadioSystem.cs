@@ -2,6 +2,7 @@ using Content.Server._RMC14.Marines.Roles.Ranks;
 using Content.Server._RMC14.TacticalMap;
 using Content.Server.Chat.Managers;
 using Content.Shared._AU14.CCVar;
+using Content.Server._AU14.Callsigns;
 using Content.Shared._AU14.Callsigns;
 using Content.Server.Chat.Systems;
 using Content.Server.PowerCell;
@@ -42,6 +43,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
     [Dependency] private SharedCMChatSystem _cmChat = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedAU14CallsignConsoleSystem _consoleAccess = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private TunableFrequencySystem _tunable = default!;
@@ -600,11 +602,20 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         UpdateBuiState(ent);
     }
 
-    // the pack carries a read-only copy of the faction's comms net directory
+    // the pack carries a read-only copy of the faction's comms net directory. a captured
+    // enemy pack stays shut: CanView gates on the viewer's own faction
     private void OnOpenDirectory(Entity<ANPRCRadioComponent> ent, ref ANPRCOpenDirectoryMsg args)
     {
-        if (HasComp<AU14CallsignConsoleComponent>(ent.Owner))
-            _ui.TryOpenUi(ent.Owner, AU14CallsignConsoleUI.Key, args.Actor);
+        if (!TryComp(ent.Owner, out AU14CallsignConsoleComponent? directory))
+            return;
+
+        if (!_consoleAccess.CanView((ent.Owner, directory), args.Actor))
+        {
+            _popup.PopupEntity(Loc.GetString("au14-callsign-console-wrong-faction"), ent.Owner, args.Actor);
+            return;
+        }
+
+        _ui.TryOpenUi(ent.Owner, AU14CallsignConsoleUI.Key, args.Actor);
     }
 
     private void OnDirectScanSwitched(Entity<ANPRCRadioComponent> ent, ref ANPRCDirectScanSwitchedEvent args)

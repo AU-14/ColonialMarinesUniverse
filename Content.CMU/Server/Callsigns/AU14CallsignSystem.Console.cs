@@ -14,6 +14,7 @@ public sealed partial class AU14CallsignSystem
 {
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedAU14CallsignConsoleSystem _consoleAccess = default!;
 
     private void InitializeConsole()
     {
@@ -33,15 +34,54 @@ public sealed partial class AU14CallsignSystem
         {
             subs.Event<AU14CallsignOpenDirectoryMsg>(OnOpenDirectory);
         });
+
+        // standalone directory terminals open on left click through ActivatableUI. that
+        // refusal has to be predicted, so it lives in SharedAU14CallsignConsoleSystem -
+        // subscribing here as well would double up the handler on the server
+        SubscribeLocalEvent<AU14CallsignConsoleComponent, BoundUIClosedEvent>(OnConsoleClosed);
+    }
+
+    // the roster lives in the terminal's stored BUI state, and UserInterfaceComponent
+    // replicates States to every client holding the entity in PVS - not just the ones
+    // with it open. leaving the last roster parked there means an enemy standing near
+    // the terminal has it on their client without ever touching it, so blank the state
+    // once nobody is looking at it
+    private void OnConsoleClosed(Entity<AU14CallsignConsoleComponent> ent, ref BoundUIClosedEvent args)
+    {
+        if (!args.UiKey.Equals(AU14CallsignConsoleUI.Key))
+            return;
+
+        if (_ui.IsUiOpen(ent.Owner, AU14CallsignConsoleUI.Key))
+            return;
+
+        _ui.SetUiState(
+            ent.Owner,
+            AU14CallsignConsoleUI.Key,
+            new AU14CallsignConsoleState(ent.Comp.Faction, new List<AU14CallsignConsoleElement>(), new List<string>()));
     }
 
     private void OnOpenDirectory(Entity<AU14CallsignConsoleComponent> ent, ref AU14CallsignOpenDirectoryMsg args)
     {
+        if (!CanView(ent, args.Actor))
+        {
+            _popup.PopupEntity(Loc.GetString("au14-callsign-console-wrong-faction"), ent.Owner, args.Actor);
+            return;
+        }
+
         _ui.TryOpenUi(ent.Owner, AU14CallsignConsoleUI.Key, args.Actor);
     }
 
+    // every open path funnels through here, so this is the gate that actually holds:
+    // the roster is only ever pushed after the viewer clears CanView
     private void OnConsoleOpened(Entity<AU14CallsignConsoleComponent> ent, ref BoundUIOpenedEvent args)
     {
+        if (!CanView(ent, args.Actor))
+        {
+            _popup.PopupEntity(Loc.GetString("au14-callsign-console-wrong-faction"), ent.Owner, args.Actor);
+            _ui.CloseUi(ent.Owner, AU14CallsignConsoleUI.Key, args.Actor);
+            return;
+        }
+
         UpdateConsoleState(ent);
     }
 
@@ -224,17 +264,18 @@ public sealed partial class AU14CallsignSystem
             return false;
         }
 
-        var actorFaction = HasComp<CLFMemberComponent>(actor)
-            ? "clf"
-            : CompOrNull<MarineComponent>(actor)?.Faction;
-
-        if (actorFaction != ent.Comp.Faction)
+        if (_consoleAccess.GetActorFaction(actor) != ent.Comp.Faction)
         {
             _popup.PopupEntity(Loc.GetString("au14-callsign-console-wrong-faction"), actor, actor);
             return false;
         }
 
         return true;
+    }
+
+    private bool CanView(Entity<AU14CallsignConsoleComponent> ent, EntityUid actor)
+    {
+        return _consoleAccess.CanView(ent, actor);
     }
 
     private void RefreshFaction(string faction)
@@ -247,7 +288,6 @@ public sealed partial class AU14CallsignSystem
                 continue;
 
             callsign.Callsign = $"{GetElementWord(callsign)} {callsign.Suffix}";
-            Dirty(uid, callsign);
         }
 
         PushConsoleStates(faction);

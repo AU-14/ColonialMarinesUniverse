@@ -289,7 +289,6 @@ public sealed partial class AU14CallsignSystem : EntitySystem
         var word = GetElementWord(callsign);
 
         callsign.Callsign = $"{word} {callsign.Suffix}";
-        Dirty(uid, callsign);
 
         PushConsoleStates(callsign.Faction);
     }

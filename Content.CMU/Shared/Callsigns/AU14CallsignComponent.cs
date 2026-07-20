@@ -1,23 +1,27 @@
-using Robust.Shared.GameStates;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._AU14.Callsigns;
 
 // a faction member's assigned radio callsign ("ALPHA 6", "HAVOC ROMEO"), assigned
-// automatically at spawn from job and squad
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+// automatically at spawn from job and squad.
+//
+// deliberately NOT networked: a networked callsign ships every faction member's
+// callsign, suffix and job title to every client that has them in PVS, which hands
+// the enemy roster to anyone reading their own client's state. the directory console
+// is the only way this data reaches a player, and it gates on faction
+[RegisterComponent]
 public sealed partial class AU14CallsignComponent : Component
 {
-    [DataField, AutoNetworkedField]
+    [DataField]
     public string Faction = string.Empty;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public string Callsign = string.Empty;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public string Suffix = string.Empty;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public string JobTitle = string.Empty;
 
     [DataField]
