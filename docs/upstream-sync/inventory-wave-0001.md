@@ -39,7 +39,7 @@ are retained so future audits can trace each classifier's original decision.
 0017 | 97fcebb92b85c73b59fc806665c70512ebd976b2 | Kobold/monkey AI holograms (#38888) | Port candidate | — | The retained hologram content is absent downstream.
 0018 | 0d9659e8101d8c6bf4b87723945bdea6ff3b67f7 | Automatic changelog update | Non-code/no-op | — | Generated changelog only.
 0019 | cce239dd93b31735707e40713cae038f9d34deb3 | Fix localization error when trying to change hair on someone with a hat (#38907) | Ported (CS-0082) | Interactions | All blocked mirror paths now supply the covered target's identity, including the retained target-final grammar correction.
-0020 | a97223bc70471140a5507e2523a9b4e7ad0df291 | change Identity.Name to Identity.Entity for delivery popups (#38909) | Port candidate | Interactions | Delivery popups still use the stale identity-name argument rather than the entity-aware value.
+0020 | a97223bc70471140a5507e2523a9b4e7ad0df291 | change Identity.Name to Identity.Entity for delivery popups (#38909) | Ported (CS-0083) | Interactions | Delivery open and unlock popups now pass the entity-aware recipient value used by Fluent selectors.
 0021 | ecbff409b6ef7b54a0033afb816a5ba43b0862a4 | Replace `AdvertiseComponent` with `DatasetVocalizerComponent` (#38887) | Dependency-blocked/deferred | GameTicking | The old advertising system has more than fifty consumers and needs a coordinated ownership and prototype migration.
 0022 | 615c4afbcc38fcf8c520adac82b97b271cde615b | Bagel genpop (#38829) | Dependency-blocked/deferred | — | The map change should be reconciled against the target-final Bagel snapshot.
 0023 | 8026f7fd508b4241428d646bea9d1807adb3e70f | Automatic changelog update | Non-code/no-op | — | Generated changelog only.

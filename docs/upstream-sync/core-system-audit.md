@@ -1189,3 +1189,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/MagicMirror/MagicMirrorSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms all four `magic-mirror-blocked-by-hat-self-target` calls provide the actual target entity. Localization formatting and self/other interaction cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: When the shared magic-mirror refactor is assessed, preserve this target-identity behavior while removing the duplicated server checks.
+
+## CS-0083 — Pass entity-aware delivery popup identities
+
+- Upstream: [space-wizards/space-station-14#38909](https://github.com/space-wizards/space-station-14/pull/38909), `a97223bc70471140a5507e2523a9b4e7ad0df291`, 2025-07-10
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Predicted delivery unlock and open messages now pass `Identity.Entity` as `$recipient` rather than flattening the actor through `Identity.Name`, preserving entity-aware Fluent capitalization, grammar, and identity masking.
+- RMC/CMU divergence: The standard delivery system has no RMC override in these paths; CMU's existing popup prediction and possessive entity argument remain unchanged.
+- Decision and rationale: Port the retained two-call target-final correction exactly because the localization contract expects an entity-like value, not an already-rendered name.
+- Files changed: `Content.Shared/Delivery/SharedDeliverySystem.cs`, `docs/upstream-sync/inventory-wave-0001.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms both other-viewer delivery messages use the entity-aware identity while their self messages and `$possadj` argument are unchanged. Shared compilation and delivery popup formatting are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add masked-identity coverage so delivery popups prove that observer-specific identity rendering remains intact.
