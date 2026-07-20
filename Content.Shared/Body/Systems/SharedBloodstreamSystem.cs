@@ -204,6 +204,9 @@ public abstract partial class SharedBloodstreamSystem : EntitySystem
         if (_timing.ApplyingState)
             return;
 
+        if (!CanApplyRMCGenericBleeding(ent, args))
+            return;
+
         if (args.DamageDelta is null || !args.DamageIncreased)
         {
             return;
