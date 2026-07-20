@@ -1735,3 +1735,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Clothing/Shoes/base_clothingshoes.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype inheritance review confirms the priority applies only to the named boot item slot and does not alter its knife/sidearm whitelist. Prototype loading plus human and moth insertion/removal interaction selection are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Audit RMC footwear with additional item slots for explicit priority collisions.
+
+## CS-0125 — Scale topical self-treatment from patient damage
+
+- Upstream: [space-wizards/space-station-14#39883](https://github.com/space-wizards/space-station-14/pull/39883), `e8320cc9d8c96eda04420e74b26b1b4802b8633c`, 2025-09-01
+- Areas: Medical, Interactions, GameTicking
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: Topical healing delays are now stored as `TimeSpan`. Self-treatment calculates its penalty from the patient's damage and configured multiplier instead of querying the healing item, updates the delay between repeated applications as damage falls, and always shows the completion popup when repetition ends.
+- RMC/CMU divergence: RMC's separate wound-treatment system and skill multipliers do not use `HealingComponent`; the station topical path remains structurally compatible and no RMC-specific treatment timing was replaced.
+- Decision and rationale: Port the complete retained timing fix atomically because correcting only the initial calculation would leave repeat applications stale, while correcting only the helper would preserve the accidental base-delay squaring fallback.
+- Files changed: `Content.Shared/Medical/Healing/HealingComponent.cs`, `Content.Shared/Medical/Healing/HealingSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static control-flow review confirms other-target treatment retains the base delay, self-treatment uses patient damage, repeats recalculate after each heal, and terminal/depleted-stack paths show completion feedback. Shared compilation plus zero/partial/critical damage, self/other, repeat, depleted-stack, movement-cancel, and prediction reconciliation cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add focused healing-system tests for the computed multiplier and repeated DoAfter delay mutation before deeper integration with RMC wound treatment.
