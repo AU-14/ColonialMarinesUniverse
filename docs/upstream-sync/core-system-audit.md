@@ -2724,3 +2724,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Structures/Machines/smartfridge.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype review confirms `Airtight` is added only to `SmartFridge`, the fixture remains static and machine-layered, and RMC smart storage is untouched. YAML validation plus atmosphere flow, open/closed storage, destruction, inherited prototype, and RMC fridge cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1318 as `Ported (CS-0199)` when wave 0007 is committed; separately audit the prerequisite standard SmartFridge rework before adopting its construction and vending behavior.
+
+## CS-0200 — Scope air-sensor tags to the concrete sensor
+
+- Upstream: [space-wizards/space-station-14#36326](https://github.com/space-wizards/space-station-14/pull/36326), `1e14b94da66b1a7f75e1015f8bf58581bac0f41b`, 2025-10-14
+- Areas: Interactions, Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `AirSensor` and `ForceFixRotations` tags now live on the concrete `AirSensor` prototype instead of the shared `AirSensorBase`. Gas vents, scrubbers, and other devices that inherit the network-monitoring base no longer masquerade as buildable air sensors or inherit the sensor-only rotation repair tag.
+- RMC/CMU divergence: CMU inherits the standard atmospheric prototype graph and retains RMC-specific atmos devices separately. Device networking, monitoring thresholds, construction graphs, vent/scrubber-specific tags, and map prototypes are unchanged.
+- Decision and rationale: Port the tag relocation as an inseparable remove/add pair. The abstract base represents monitoring capability, while the two tags describe only the concrete wall/floor sensor's construction and transform behavior.
+- Files changed: `Resources/Prototypes/Entities/Structures/Specific/Atmospherics/sensor.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static inheritance review confirms concrete `AirSensor` keeps both tags, `AirSensorBase` keeps monitoring components, and multi-parent vents/scrubbers no longer inherit sensor identity. YAML validation plus construction, rotation repair, special vent, scrubber, gas-pipe sensor, and map-load cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1345 as `Ported (CS-0200)` when wave 0007 is committed.
