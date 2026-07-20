@@ -68,6 +68,7 @@ public abstract partial class SharedMobCollisionSystem : EntitySystem
         SubscribeLocalEvent<MobCollisionComponent, RefreshMovementSpeedModifiersEvent>(OnMoveModifier);
 
         UpdatesBefore.Add(typeof(SharedPhysicsSystem));
+        InitializeRMC();
     }
 
     private void UpdatePushCap()
@@ -223,6 +224,7 @@ public abstract partial class SharedMobCollisionSystem : EntitySystem
         var contactCount = 0;
         var ourMass = physics.FixturesMass;
         var speedMod = 1f;
+        var rmcCancelledDirection = Vector2.Zero;
 
         while (contacts.MoveNext(out var contact))
         {
@@ -266,7 +268,7 @@ public abstract partial class SharedMobCollisionSystem : EntitySystem
             // Clamp so we don't get a heap of penetration depth and suddenly lurch other mobs.
             // This is also so we don't have to trigger the speed-cap above.
             // Maybe we just do speedcap and dump this? Though it's less configurable and the cap is just there for cheaters.
-            var penDepth = Math.Clamp(0.7f - diff.Length(), 0f, _penCap);
+            var penDepth = Math.Clamp(GetRMCPenetrationBase() - diff.Length(), 0f, _penCap);
 
             // Sum the strengths so we get pushes back the same amount (impulse-wise, ignoring prediction).
             var mobMovement = penDepth * diff.Normalized() * (entity.Comp1.Strength + otherComp.Strength);
@@ -275,7 +277,7 @@ public abstract partial class SharedMobCollisionSystem : EntitySystem
             if (_massDiffCap > 0f)
             {
                 var modifier = Math.Clamp(
-                    otherPhysics.FixturesMass / ourMass,
+                    GetRMCCollisionMass(other, otherPhysics.FixturesMass) / ourMass,
                     1f / _massDiffCap,
                     _massDiffCap);
 
@@ -293,6 +295,9 @@ public abstract partial class SharedMobCollisionSystem : EntitySystem
             // Need the push strength proportional to penetration depth.
             direction += mobMovement;
             contactCount++;
+
+            if (ShouldCancelRMCMovement(entity.Owner, other))
+                rmcCancelledDirection += mobMovement;
         }
 
         if (direction == Vector2.Zero)
@@ -300,6 +305,7 @@ public abstract partial class SharedMobCollisionSystem : EntitySystem
             return contactCount > 0;
         }
 
+        direction -= rmcCancelledDirection;
         direction *= frameTime;
         RaiseCollisionEvent(entity.Owner, direction, speedMod);
         return true;
