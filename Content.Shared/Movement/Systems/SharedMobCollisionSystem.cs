@@ -247,7 +247,7 @@ public abstract partial class SharedMobCollisionSystem : EntitySystem
                 continue;
             }
 
-            var targetEv = new AttemptMobTargetCollideEvent();
+            var targetEv = new AttemptMobTargetCollideEvent(entity);
             RaiseLocalEvent(other, ref targetEv);
 
             if (targetEv.Cancelled)
@@ -331,7 +331,7 @@ public record struct AttemptMobCollideEvent
 /// Raised on the other entity when attempting mob collisions.
 /// </summary>
 [ByRefEvent]
-public record struct AttemptMobTargetCollideEvent
+public record struct AttemptMobTargetCollideEvent(EntityUid Entity)
 {
     public bool Cancelled;
 }
