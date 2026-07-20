@@ -2099,3 +2099,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Catalog/VendingMachines/Inventories/chemdrobe.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static inventory review confirms the referenced goggles prototype exists and appears once in starting inventory. Prototype loading and vending-inventory resolution are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Reassess the rest of ChemDrobe when auditing target commit `820fdca6ef`.
+
+## CS-0153 — Remove hidden no-slip behavior from snakeskin boots
+
+- Upstream: [space-wizards/space-station-14#40201](https://github.com/space-wizards/space-station-14/pull/40201), `d9d968a4793a3d00694f13d2720127efad3915b9`, 2025-09-18
+- Areas: Movement, Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Snakeskin boots no longer grant unadvertised slip immunity, and their description reflects their reduced value.
+- RMC/CMU divergence: CMU retains all RMC footwear and slip mechanics; only the upstream snakeskin prototype's accidental `NoSlip` component is removed.
+- Decision and rationale: Port the isolated prototype correction so a cosmetic rare drop cannot silently bypass wet-floor movement hazards.
+- Files changed: `Resources/Prototypes/Entities/Clothing/Shoes/misc.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static resolved-prototype review confirms the boots no longer contain `NoSlip`. Prototype loading and a standard slipping interaction are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None.
