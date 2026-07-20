@@ -1657,3 +1657,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Shuttles/BUIStates/DockingPortState.cs`, `Content.Server/Shuttles/Systems/ShuttleConsoleSystem.cs`, `Content.Client/Shuttles/UI/ShuttleDockControl.xaml.cs`, `Content.Client/Shuttles/UI/ShuttleNavControl.xaml.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static data-flow review confirms both component colors enter every generated dock state and each rendering branch consumes the intended field. Shared/server/client compilation plus BUI round-trip, normal, hovered, selected, nav-radar, and null-view fallback cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a serialized BUI regression with non-default colors and visually verify color-space conversion remains consistent across both controls.
+
+## CS-0119 — Keep grenade trigger sounds after source deletion
+
+- Upstream: [space-wizards/space-station-14#39815](https://github.com/space-wizards/space-station-14/pull/39815), `d61ebf2c87547f7ed6fb2a6e0041d8ad8b5875aa`, 2025-08-28
+- Areas: Shooting, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The eight projectile and scattering grenade prototypes that use `EmitSoundOnTrigger` now request positional playback, so their detonation sound survives deletion of the grenade entity and remains anchored to the trigger coordinates.
+- RMC/CMU divergence: Four other affected upstream grenade families still use CMU's older `SoundOnTrigger`, which already calls positional PVS playback and has no `positional` data field. Those prototypes were deliberately left unchanged.
+- Decision and rationale: Port only the retained data flags supported by CMU's current shared emit-sound component. This fixes silent detonations without migrating the fork's broader trigger architecture.
+- Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Throwable/projectile_grenades.yml`, `Resources/Prototypes/Entities/Objects/Weapons/Throwable/scattering_grenades.yml`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype review confirms exactly three projectile-grenade and five scattering-grenade `EmitSoundOnTrigger` components gained the flag, while all legacy `SoundOnTrigger` users remain untouched. Prototype loading plus one-shot spatial playback after source deletion are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Reconcile the fork's old and keyed trigger sound components as one migration before adopting later trigger-key-dependent grenade changes.

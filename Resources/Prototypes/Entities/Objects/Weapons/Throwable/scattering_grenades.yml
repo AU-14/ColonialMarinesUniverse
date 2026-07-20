@@ -73,6 +73,7 @@
   - type: EmitSoundOnTrigger
     sound:
       path: "/Audio/Machines/door_lock_off.ogg"
+    positional: true
 
 - type: entity
   parent: [ScatteringGrenadeBase, BaseSyndicateContraband]
@@ -98,6 +99,7 @@
   - type: EmitSoundOnTrigger
     sound:
       path: "/Audio/Machines/door_lock_off.ogg"
+    positional: true
   - type: StaticPrice
     price: 2500
 
@@ -122,6 +124,7 @@
   - type: EmitSoundOnTrigger
     sound:
       path: "/Audio/Items/bikehorn.ogg"
+    positional: true
 
 - type: entity
   parent: [SoapSyndie, ScatteringGrenadeBase, BaseSyndicateContraband]
@@ -147,6 +150,7 @@
   - type: EmitSoundOnTrigger
     sound:
       path: "/Audio/Effects/flash_bang.ogg"
+    positional: true
   - type: StaticPrice
     price: 1000
 
@@ -177,3 +181,4 @@
   - type: EmitSoundOnTrigger
     sound:
       path: "/Audio/Weapons/Guns/Gunshots/batrifle.ogg"
+    positional: true

@@ -46,6 +46,7 @@
   - type: EmitSoundOnTrigger
     sound:
       path: "/Audio/Effects/flash_bang.ogg"
+    positional: true
   - type: SpawnOnTrigger
     proto: GrenadeFlashEffect
   - type: OnUseTimerTrigger
@@ -81,6 +82,7 @@
   - type: EmitSoundOnTrigger
     sound:
       path: "/Audio/Weapons/Guns/Gunshots/batrifle.ogg"
+    positional: true
   - type: StaticPrice
     price: 1500
 
@@ -109,5 +111,6 @@
   - type: EmitSoundOnTrigger
     sound:
       path: "/Audio/Weapons/Guns/Gunshots/batrifle.ogg"
+    positional: true
   - type: StaticPrice
     price: 1500
