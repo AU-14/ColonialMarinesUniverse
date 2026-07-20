@@ -211,7 +211,7 @@ behavior to port.
 2592 | 66615bf6aab832183c9e9495941f2cc7c6bfba50 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2593 | a0e6d0553aac174de0ad817b973aecbf651e4af4 | Atmos GetAirflowDirections API (#42668) | Deferred | Physics | New API has no CMU consumer and belongs with later atmospherics work.
 2594 | 118b83165bda29e3651e97796976558f3cd42bb0 | Gas device power switches use switch buttons (#42619) | Deferred | Interactions, Physics | Depends on the index-2482 SwitchButton framework.
-2595 | ce97c45dc29de1333702c4b71846843736289d21 | Admin log new state on emitter toggle (#42736) | PortCandidate | Interactions, Physics, Gamerules | Focused administrative logging improvement.
+2595 | ce97c45dc29de1333702c4b71846843736289d21 | Admin log new state on emitter toggle (#42736) | Ported (CS-0251) | Interactions, Physics, Gamerules | Emitter toggle logs now include the authoritative resulting on/off state.
 2596 | c42a04b81b69a07dd5cd6fd572190c1be2d84a30 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2597 | a85711a1cdeed59378c8deabccf0a9a005c6806f | Give HoP genpop enter and leave access (#42729) | PortCandidate | Interactions, Gamerules | Small isolated access correction, subject to CMU access policy.
 2598 | 1fa968e34183391f533c6425d0f0c567647e6a8f | Atmospherics DeltaPressure Bulk Processing (#41553) | Deferred | Physics, GameTicking | Large atmospherics performance and behavior change requiring profiling and simulation tests.

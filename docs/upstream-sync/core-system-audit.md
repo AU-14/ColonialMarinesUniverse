@@ -3399,3 +3399,16 @@ Date completed: 2026-07-20
 - Files changed: eight affected `Content.Server` command/system files, `docs/upstream-sync/inventory-wave-0013.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static repository search confirms all ten upstream-targeted `Loc.GetString(Loc.GetString(...))` patterns are gone and no unrelated localization expressions changed. Server compilation plus invalid command arguments, action/objective completion, force-map help, nuke completion, forensic utility verbs, breaker-flip announcements, non-English locales, and RMC command/event coexistence are queued for the index-2999 checkpoint.
 - Follow-up/debt: Continue treating any future nested lookup as suspicious, but audit it independently when the inner call intentionally returns a dynamic localization key.
+
+## CS-0251 â€” Include emitter state in toggle logs
+
+- Upstream: [space-wizards/space-station-14#42736](https://github.com/space-wizards/space-station-14/pull/42736), `ce97c45dc29de1333702c4b71846843736289d21`, 2026-02-01
+- Areas: Interactions, Physics, Gamerules
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Successful in-world emitter toggles now record whether the emitter ended `on` or `off` in the existing `FieldGeneration` admin log. The state is read after `SwitchOn` or `SwitchOff`, so the record describes the authoritative result rather than only the attempted interaction.
+- RMC/CMU divergence: CMU retains the standard emitter system alongside RMC maps and machinery prototypes. Only player complex-interaction logging changes; anchoring, locking, power, device signals, projectile selection, appearance, popup feedback, and automated emitter state transitions are unchanged and do not gain misleading player logs.
+- Decision and rationale: Port the target-final two-line observability improvement exactly. The existing impact level already distinguishes enabling from disabling, but operators should not need to infer state from impact metadata. Capturing `component.IsOn` after mutation makes the record explicit and resilient to future impact-policy changes.
+- Files changed: `Content.Server/Singularity/EntitySystems/EmitterSystem.cs`, `docs/upstream-sync/inventory-wave-0013.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static control-flow review confirms the log remains inside the successful anchored/unlocked player interaction path, state text follows completed mutation, and rejected or signal-driven changes are not attributed to a user. Server compilation plus on/off toggles, locked/unanchored rejection, power loss, signal control, RMC emitters, impact filtering, and log formatting are queued for the index-2999 checkpoint.
+- Follow-up/debt: Later target emitter-alert features are independent and should retain this explicit state suffix when integrated.
