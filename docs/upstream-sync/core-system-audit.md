@@ -2672,3 +2672,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/ParcelWrap/Systems/ParcelWrappingSystem.WrappedParcel.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static path review confirms access and complex-interaction checks run before verb capture, the containment query uses the parcel's authoritative slot, and normal external users still receive the verb. Shared compilation plus human, simple-animal, contained-user, inaccessible, and destroyed-parcel cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1268 as `Ported (CS-0195)` when wave 0007 is committed.
+
+## CS-0196 — Hide projection activation on Station AI cores
+
+- Upstream: [space-wizards/space-station-14#39937](https://github.com/space-wizards/space-station-14/pull/39937), `3df66219d6d3be46e1a167ab18dcd3d47f440637`, 2025-10-10
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: A holopad entity that is also a Station AI core no longer exposes the alternative verb for activating its own projector. Remote holopads continue to expose that verb when powered, available, and used by a valid AI.
+- RMC/CMU divergence: CMU retains the standard Station AI core/holopad composition and has no RMC override in this verb path. AI holder, telephone, power, hologram, and remote projection behavior are unchanged.
+- Decision and rationale: Port the component guard before telephone and user eligibility work. A core is a projection source/controller, not a remote destination, so suppressing the impossible verb is safer than allowing it to enter the later activation path.
+- Files changed: `Content.Server/Holopad/HolopadSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static verb-flow review confirms only entities carrying `StationAiCoreComponent` return early and ordinary holopads retain all existing power, engagement, held-AI, and control-lock checks. Server compilation plus core, powered remote, unpowered remote, engaged, and non-AI-user cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1247 as `Ported (CS-0196)` when wave 0007 is committed.
