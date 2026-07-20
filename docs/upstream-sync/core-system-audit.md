@@ -2229,3 +2229,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Teleportation/Systems/SharedPortalSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static closure review confirms the delayed action no longer captures `args`. Shared compilation plus ghost alt-click traversal on linked, unlinked, and multi-output portals are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Revisit the upstream prediction helper and typed-entity refactor when their dependent portal architecture enters scope.
+
+## CS-0163 — Stock diagnostic HUDs in EngiVend
+
+- Upstream: [space-wizards/space-station-14#40461](https://github.com/space-wizards/space-station-14/pull/40461), `7c39b4595f9512aa49ae5085fce5f39988b89d7f`, 2025-09-23
+- Areas: Medical, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: EngiVend starting inventory now includes four diagnostic HUDs, giving engineering direct access to inorganic and silicon integrity displays.
+- RMC/CMU divergence: The retained upstream vendor and HUD prototypes remain separate from RMC engineering vendors and medical HUD overlays; no fork-specific inventory is replaced.
+- Decision and rationale: Port the isolated inventory entry because the referenced diagnostic HUD already resolves and its functionality directly supports engineering maintenance.
+- Files changed: `Resources/Prototypes/Catalog/VendingMachines/Inventories/engivend.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static inventory review confirms `ClothingEyesHudDiagnostic` exists and EngiVend stocks four. Prototype loading and vending inventory resolution are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None.
