@@ -201,6 +201,9 @@ public abstract partial class SharedGunSystem : EntitySystem
     {
         gun = default;
 
+        if (TryGetRmcPriorityGun(entity, out gun))
+            return true;
+
         if (_hands.GetActiveItem(entity) is { } held &&
             TryComp(held, out GunComponent? gunComp))
         {
@@ -215,7 +218,7 @@ public abstract partial class SharedGunSystem : EntitySystem
             return true;
         }
 
-        return false;
+        return TryGetRmcFallbackGun(entity, out gun);
     }
 
     private void StopShooting(Entity<GunComponent> ent)

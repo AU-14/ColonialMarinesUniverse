@@ -3502,3 +3502,16 @@ entries or claim deeper behavioral parity.
 Validation at this checkpoint: `Content.Shared`, `Content.Client`, `Content.Server`,
 and `Content.Server.Database` compile successfully with zero errors. Tests were not
 run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
+
+## CS-0256 - Restore RMC gun resolution paths
+
+- Upstreams compared: SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767` and RMC `b6d677947dd8ebcb06194a66798938645fed5a54`.
+- Areas: Shooting, Interactions, Vehicles
+- Classification: Missing -> Adapted
+- Risk: High before the fix; low-to-medium after it.
+- Behavior/API delta: The merged `SharedGunSystem.TryGetGun` only resolved an active-hand gun or the queried entity itself. The client shoot-input path uses this resolver before emitting `RequestShootEvent`, so vehicle port guns, an operator's selected hardpoint weapon, an in-hand attachable that supersedes its host gun, and a remotely controlled emplacement could no longer receive ordinary player shoot requests.
+- RMC/CMU divergence: These are retained RMC control modes, not intentional divergence. Ordinary SS14 active-hand and self-gun resolution remains unchanged. The RMC paths keep their previous precedence: port gun, selected vehicle weapon, superceding attachable, normal hand/self, then controlled emplacement fallback.
+- Decision and rationale: Add two narrow hooks to the current SS14 resolver and implement the fork-specific lookups in `SharedGunSystem.RMC.cs`. This preserves current `Entity<GunComponent>` APIs and central request validation while avoiding duplicate input handlers or broad changes to vehicle, attachable, and emplacement systems.
+- Files changed: `Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.cs`, `Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation evidence: Static call-path review covers the sole client `RequestShootEvent` producer and both shared request handlers. Each restored lookup revalidates the operator/weapon relationship and a live `GunComponent`. `dotnet build Content.Shared/Content.Shared.csproj --configuration DebugOpt --no-restore --nologo --verbosity:minimal --disable-build-servers` succeeded with 0 errors and 6 pre-existing warnings; Client/Server wave builds remain required before closing Shooting. Tests remain deferred until the 1,000-upstream-commit checkpoint.
+- Remaining debt: Prediction still has duplicate legacy/current request consumers and no longer returns RMC projectile correlation identifiers. That architectural behavior is classified separately as `Behavior changed` and remains deferred pending a prediction-authority reconciliation.
