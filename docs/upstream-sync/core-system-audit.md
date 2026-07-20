@@ -1774,3 +1774,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Preferences/HumanoidCharacterProfile.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static data-flow review confirms invalid dictionary keys are still removed first and valid loadouts receive matching role identity before `EnsureValid`. Shared compilation plus mismatched, valid, and missing-role loadout profiles are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a profile deserialization regression where the dictionary key and embedded role differ.
+
+## CS-0128 — Cancel DoAfters across inaccessible containers
+
+- Upstream: [space-wizards/space-station-14#39880](https://github.com/space-wizards/space-station-14/pull/39880), `327f217e18925d03f72b898e038592cdd548da95`, 2025-09-18
+- Areas: Movement, Physics, Interactions, GameTicking
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: Ongoing target-based DoAfters now require the target to remain both in range and accessible, so placing either participant behind an incompatible container boundary cancels the action instead of allowing it to complete through storage.
+- RMC/CMU divergence: RMC adds the per-DoAfter `RangeCheck` escape hatch. That outer guard is preserved exactly; only enabled target checks use the stronger shared accessibility predicate.
+- Decision and rationale: Replace the target predicate at the existing distance-check seam while leaving movement thresholds, tool-range checks, lag compensation, and RMC opt-outs unchanged.
+- Files changed: `Content.Shared/DoAfter/SharedDoAfterSystem.Update.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static cancellation-path review confirms `RangeCheck = false` still bypasses the target check and enabled checks now account for container accessibility. Shared compilation plus same-container, nested-accessible, sealed-container, out-of-range, and RMC opt-out cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Extend DoAfter regression coverage for container transitions during prediction and reconciliation.
