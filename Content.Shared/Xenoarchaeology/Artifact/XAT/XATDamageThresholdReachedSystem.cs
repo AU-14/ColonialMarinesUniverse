@@ -9,8 +9,6 @@ namespace Content.Shared.Xenoarchaeology.Artifact.XAT;
 /// </summary>
 public sealed partial class XATDamageThresholdReachedSystem : BaseXATSystem<XATDamageThresholdReachedComponent>
 {
-    [Dependency] private IPrototypeManager _prototype = default!;
-
     /// <inheritdoc/>
     public override void Initialize()
     {
