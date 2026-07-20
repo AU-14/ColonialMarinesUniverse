@@ -13,7 +13,7 @@ public sealed class HealthAnalyzerRangeReactivationTest
     private const string Prototypes = @"
 - type: entity
   id: HealthAnalyzerRangeReactivationTestAnalyzer
-  parent: HandheldHealthAnalyzerUnpowered
+  parent: HandheldHealthAnalyzer
   components:
   - type: HealthAnalyzer
     updateInterval: 0
