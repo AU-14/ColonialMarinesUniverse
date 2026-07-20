@@ -3567,3 +3567,16 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - Files changed: `Content.Client/Weapons/Ranged/Systems/GunSystem.cs`, `Content.Client/_RMC14/Weapons/Ranged/GunSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation evidence: Static prototype search finds 16 retained APC, tank, and Humvee hardpoints with `GunUseGunOrigin`; the server uses the same marker when selecting `fromCoordinates`. The committed Client project first stopped on one unrelated missing TerraFX reference; a diagnostic build supplying that existing baseline dependency compiled the touched Client/Shared path with 0 errors and 8 unrelated warnings, after which `Content.Client.csproj` was restored unchanged. Tests remain deferred until the 1,000-upstream-commit checkpoint.
 - Remaining debt: Vehicle turret muzzle presentation still has orphaned RMC before-muzzle-flash/tracking hooks and is classified `Missing`/`Deferred` for a separate client presentation adaptation.
+
+## CS-0261 - Honor RMC click-to-fire weapons
+
+- Upstreams compared: SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767` and RMC `b6d677947dd8ebcb06194a66798938645fed5a54`.
+- Areas: Shooting, Input, Prediction
+- Classification: Missing -> Adapted
+- Risk: Medium before the fix; low after it.
+- Behavior/API delta: The current client copied the global hold-to-fire preference directly into every `RequestShootEvent`. `GunClickToFireComponent` survived on the SU-6 and M1984 pistols but had no consumer, so holding the attack key repeatedly rearmed their semi-automatic shot counter instead of requiring a release and new click.
+- RMC/CMU divergence: Current SS14 hold-to-fire behavior remains unchanged for every unmarked gun. The two retained RMC click-only weapons suppress only the request's `Continuous` flag and continue to use current predicted request, cooldown, and shot-counter APIs.
+- Decision and rationale: Apply the marker as a narrow client request policy in the fork-owned gun partial. Restoring the deleted `RearmSemiAuto` field or the old request schema would conflict with current SS14 prediction; suppressing `Continuous` expresses the same release-to-rearm behavior through the live API.
+- Files changed: `Content.Client/Weapons/Ranged/Systems/GunSystem.cs`, `Content.Client/_RMC14/Weapons/Ranged/GunSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation evidence: Repository search confirms exactly two current prototypes carry `GunClickToFire` and no other consumer existed. Static shot-counter review confirms a non-continuous semi-auto request remains capped after one shot until `RequestStopShootEvent` resets it. Client wave compilation and runtime press/hold/release coverage remain required; tests are deferred until the 1,000-upstream-commit checkpoint.
+- Remaining debt: The broader old RMC rearm predicate also varied with selected/available fire modes. This adaptation deliberately preserves current SS14 behavior for unmarked guns; mode-wide policy changes are deferred pending playtesting.
