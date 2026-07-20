@@ -16,7 +16,7 @@ public sealed partial class GunSystem
     {
         if (args.Control is DefaultStatusControl control)
         {
-            control.Update(GetBallisticShots(ent.Comp), ent.Comp.Capacity);
+            control.Update(GetBallisticShots(ent.Comp) + args.ArtificialIncrease, ent.Comp.Capacity);
         }
     }
 

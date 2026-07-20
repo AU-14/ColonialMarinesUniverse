@@ -42,20 +42,21 @@ public sealed partial class GunSystem
         UpdateAmmoCount(ent);
     }
 
-    private void UpdateAmmoCount(Entity<AmmoCounterComponent> ent)
+    private void UpdateAmmoCount(Entity<AmmoCounterComponent> ent, int artificialIncrease = 0)
     {
         if (ent.Comp.Control == null)
             return;
 
         var ev = new UpdateAmmoCounterEvent()
         {
-            Control = ent.Comp.Control
+            Control = ent.Comp.Control,
+            ArtificialIncrease = artificialIncrease,
         };
 
         RaiseLocalEvent(ent, ev, false);
     }
 
-    protected override void UpdateAmmoCount(EntityUid uid, bool prediction = true)
+    public override void UpdateAmmoCount(EntityUid uid, bool prediction = true, int artificialIncrease = 0)
     {
         // Don't use resolves because the method is shared and there's no compref and I'm trying to
         // share as much code as possible
@@ -65,7 +66,7 @@ public sealed partial class GunSystem
             return;
         }
 
-        UpdateAmmoCount((uid, clientComp));
+        UpdateAmmoCount((uid, clientComp), artificialIncrease);
     }
 
     /// <summary>
@@ -82,6 +83,7 @@ public sealed partial class GunSystem
     public sealed class UpdateAmmoCounterEvent : HandledEntityEventArgs
     {
         public Control Control = default!;
+        public int ArtificialIncrease;
     }
 
     #region Controls

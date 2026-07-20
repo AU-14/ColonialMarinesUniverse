@@ -121,6 +121,7 @@ public sealed partial class ChatUIController : UIController
     private const int SpeechBubbleCap = 4;
 
     private LayoutContainer _speechBubbleRoot = default!;
+    private bool _speechBubblesSuppressed;
 
     /// <summary>
     ///     Speech bubbles that are currently visible on screen.
@@ -421,7 +422,32 @@ public sealed partial class ChatUIController : UIController
         _speechBubbleRoot.Orphan();
         root.AddChild(_speechBubbleRoot);
         LayoutContainer.SetAnchorPreset(_speechBubbleRoot, LayoutContainer.LayoutPreset.Wide);
+        _speechBubbleRoot.Visible = !_speechBubblesSuppressed;
         _speechBubbleRoot.SetPositionLast();
+    }
+
+    public void SetSpeechBubblesSuppressed(bool suppressed)
+    {
+        if (_speechBubblesSuppressed == suppressed)
+            return;
+
+        _speechBubblesSuppressed = suppressed;
+        _speechBubbleRoot.Visible = !suppressed;
+
+        if (!suppressed)
+            return;
+
+        _queuedSpeechBubbles.Clear();
+        foreach (var bubbles in _activeSpeechBubbles.Values)
+        {
+            foreach (var bubble in bubbles)
+            {
+                bubble.OnDied -= SpeechBubbleDied;
+                bubble.Orphan();
+            }
+        }
+
+        _activeSpeechBubbles.Clear();
     }
 
     private void OnAttachedChanged(EntityUid uid)
@@ -433,6 +459,9 @@ public sealed partial class ChatUIController : UIController
 
     private void AddSpeechBubble(ChatMessage msg, SpeechBubble.SpeechType speechType)
     {
+        if (_speechBubblesSuppressed)
+            return;
+
         var ent = EntityManager.GetEntity(msg.SenderEntity);
 
         if (!EntityManager.EntityExists(ent))

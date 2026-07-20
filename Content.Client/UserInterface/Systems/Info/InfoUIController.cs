@@ -16,12 +16,14 @@ public sealed partial class InfoUIController : UIController, IOnStateExited<Game
     [Dependency] private INetManager _netManager = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
 
-    private RulesPopup? _rulesPopup;
+    public RulesPopup? RulesPopup;
     private RulesAndInfoWindow? _infoWindow;
 
     private static readonly ProtoId<GuideEntryPrototype> DefaultRuleset = "DefaultRuleset";
 
     public ProtoId<GuideEntryPrototype> RulesEntryId = DefaultRuleset;
+
+    public event Action? Accepted;
 
     protected override string SawmillName => "rules";
 
@@ -60,18 +62,18 @@ public sealed partial class InfoUIController : UIController, IOnStateExited<Game
 
     private void ShowRules(float time)
     {
-        if (_rulesPopup != null)
+        if (RulesPopup != null)
             return;
 
-        _rulesPopup = new RulesPopup
+        RulesPopup = new RulesPopup
         {
             Timer = time
         };
 
-        _rulesPopup.OnQuitPressed += OnQuitPressed;
-        _rulesPopup.OnAcceptPressed += OnAcceptPressed;
-        UIManager.WindowRoot.AddChild(_rulesPopup);
-        LayoutContainer.SetAnchorPreset(_rulesPopup, LayoutContainer.LayoutPreset.Wide);
+        RulesPopup.OnQuitPressed += OnQuitPressed;
+        RulesPopup.OnAcceptPressed += OnAcceptPressed;
+        UIManager.WindowRoot.AddChild(RulesPopup);
+        LayoutContainer.SetAnchorPreset(RulesPopup, LayoutContainer.LayoutPreset.Wide);
     }
 
     private void OnQuitPressed()
@@ -84,8 +86,9 @@ public sealed partial class InfoUIController : UIController, IOnStateExited<Game
         var message = new RulesAcceptedMessage() { FuckRules = fuckRules };
         _netManager.ClientSendMessage(message);
 
-        _rulesPopup?.Orphan();
-        _rulesPopup = null;
+        RulesPopup?.Orphan();
+        RulesPopup = null;
+        Accepted?.Invoke();
     }
 
     public GuideEntryPrototype GetCoreRuleEntry()

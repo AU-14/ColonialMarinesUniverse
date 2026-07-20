@@ -31,6 +31,7 @@ public sealed partial class PopupSystem : SharedPopupSystem
 
     private readonly Dictionary<WorldPopupData, WorldPopupLabel> _aliveWorldLabels = new();
     private readonly Dictionary<CursorPopupData, CursorPopupLabel> _aliveCursorLabels = new();
+    private bool _popupsSuppressed;
 
     /// <summary>
     /// List of popups that have been predicted by the client.
@@ -65,6 +66,19 @@ public sealed partial class PopupSystem : SharedPopupSystem
         _overlay.RemoveOverlay<PopupOverlay>();
     }
 
+    public void SetPopupsSuppressed(bool suppressed)
+    {
+        if (_popupsSuppressed == suppressed)
+            return;
+
+        _popupsSuppressed = suppressed;
+        if (suppressed)
+        {
+            _aliveCursorLabels.Clear();
+            _aliveWorldLabels.Clear();
+        }
+    }
+
     /// <summary>
     /// If the same popup is repeated, this will make show x2, x3, x4, ... at the end of the message instead of creating a new, overlapping popup.
     /// </summary>
@@ -93,6 +107,9 @@ public sealed partial class PopupSystem : SharedPopupSystem
                 _replayRecording.RecordClientMessage(new PopupCoordinatesEvent(message, type, Timing.CurTick, GetNetCoordinates(coordinates), 0));
         }
 
+        if (_popupsSuppressed)
+            return;
+
         var popupData = new WorldPopupData(message, type, coordinates, entity);
         if (_aliveWorldLabels.TryGetValue(popupData, out var existingLabel))
         {
@@ -119,6 +136,9 @@ public sealed partial class PopupSystem : SharedPopupSystem
 
         if (recordReplay && _replayRecording.IsRecording)
             _replayRecording.RecordClientMessage(new PopupCursorEvent(message, type, Timing.CurTick));
+
+        if (_popupsSuppressed)
+            return;
 
         var popupData = new CursorPopupData(message, type);
         if (_aliveCursorLabels.TryGetValue(popupData, out var existingLabel))

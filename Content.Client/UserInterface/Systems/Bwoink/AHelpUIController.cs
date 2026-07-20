@@ -42,8 +42,8 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
     [UISystemDependency] private readonly AudioSystem _audio = default!;
 
     private BwoinkSystem? _bwoinkSystem;
-    private MenuButton? GameAHelpButton => UIManager.GetActiveUIWidgetOrNull<GameTopMenuBar>()?.AHelpButton;
-    private Button? LobbyAHelpButton => (UIManager.ActiveScreen as LobbyGui)?.AHelpButton;
+    public MenuButton? GameAHelpButton => UIManager.GetActiveUIWidgetOrNull<GameTopMenuBar>()?.AHelpButton;
+    public Button? LobbyAHelpButton => (UIManager.ActiveScreen as LobbyGui)?.AHelpButton;
     public IAHelpUIHandler? UIHelper;
     private bool _discordRelayActive;
     private bool _hasUnreadAHelp;
