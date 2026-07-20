@@ -1085,3 +1085,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Voting/VoteCommands.cs`, `Resources/Locale/en-US/voting/vote-commands.ftl`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms the win and tie paths both supply `title` and their templates consume it. Server compilation, Fluent validation, and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a vote-manager regression that completes one winning vote and one tie and captures both server announcements with their original titles.
+
+## CS-0075 — Initialize and pace SSD sleep state
+
+- Upstream: [space-wizards/space-station-14#38891](https://github.com/space-wizards/space-station-14/pull/38891), `f16175a6e314e0f8534cda18d4a6eda234468e79`, 2025-07-22
+- Areas: Medical, GameTicking
+- Status: Adapted
+- Risk: Medium
+- Behavior/API delta: SSD entities now initialize networked, pause-aware sleep and polling deadlines during map initialization and dirty the component immediately. Once eligible, the system refreshes the permanent SSD sleep effect at a one-second interval instead of attempting to recreate it every tick.
+- RMC/CMU divergence: RMC also places `SSDIndicator` on its training dummy and retains the current shared status-effect compatibility system. The port preserves that API and all attach/detach behavior while giving both standard mobs and RMC prototypes correctly replicated deadlines.
+- Decision and rationale: Adapt the target-final component state and update cadence to the fork's `SharedStatusEffectsSystem` type. Use `TimeOffsetSerializer` plus auto-pause fields so map pauses and late joins observe consistent absolute times.
+- Files changed: `Content.Shared/SSDIndicator/SSDIndicatorComponent.cs`, `Content.Shared/SSDIndicator/SSDIndicatorSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms MapInit initializes and dirties both deadlines, the update loop respects SSD state, pause-aware times, deletion, and polling cadence, and the current status API exposes `TryUpdateStatusEffectDuration`. Shared compilation and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add an integration regression for map initialization, attach/detach, pause/unpause, delayed sleep, and single permanent status-effect ownership, including the RMC training dummy.
